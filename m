@@ -2,87 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E95D47CB61
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 03:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A4A47CB6A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 03:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238713AbhLVCew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 21:34:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
+        id S241857AbhLVCs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 21:48:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbhLVCeu (ORCPT
+        with ESMTP id S238762AbhLVCs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 21:34:50 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1ECDC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 18:34:50 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id m6so1751830oim.2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 18:34:50 -0800 (PST)
+        Tue, 21 Dec 2021 21:48:28 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D004C061746
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 18:48:28 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id j124so1725644oih.12
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 18:48:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=sYPQxNDiwc1p2YuAwucmO/dt08S/FnPHNQdar04dxQo=;
-        b=NzYwld7OJDu775p2JXn6igTIenucDLGsCSIdXQWsw2GxoS6GSAC8XbohtdYpm9SxFc
-         /4QCdAdd/k5LvUiRhKqVAfEBfIXfJrW+a+ds6jjBMbHRvFxc6sv6OLo0gIEYczEFY6hK
-         u1DPP0ZjJ+mgWwUo5pUF/zkuqINhiYVEKwSM5mkxuQostGDdK6Fq6kaLeDV7J0ddqzog
-         Du0OrHbNEdYuv6+TwJ58DPNmWlDKWnp6k1w461Qz/gzHKUAqiTCLDh/Rwv3SsCQFpVxf
-         g5/USiBSMFEkha/QEaYYjVwtvdHcey2S2gWga6L+0GOIScsvZjVfeRPvrGAHNH+q9pnE
-         BtjQ==
+        bh=/FZUFL2wLkEGZGFTbPONkk6mLWd8J6cDzMFXomn323A=;
+        b=Niimf1jllbIyv3wnG8/DrqRRpShYICD8EWAfwYqJY8qcVGHPp/f2EqajPpp/OQ55iX
+         7avYtd0TmboDXiqV4tshfdp7cv/Y4/zbfmr6GhPhXYMEd3RJyNmCADsOeW/Vpwl+ZvIT
+         LCNinerXlMPpFLuJvTQh3YrZ3jK8M543vM7IfidOglerQpDjrYzdYHBP6gSN8eYW9nG8
+         ezvZHL4Eh4mkMiiOTgSwT3gL+IUApU4GILXtkZatXC0KV1jRk+jCLVJ86BMVK9p+m7zu
+         F5KqUESKLmMKEKql51KlJO9x+//yei5FefBnN6rCNbYCyK6dNQmRq+6xk8cp/8TH+Z84
+         sG1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=sYPQxNDiwc1p2YuAwucmO/dt08S/FnPHNQdar04dxQo=;
-        b=ri3/Jc41AIDm1qDampQ8KyqrG8Xu7M6nqJT4ILWQO12JxnJWMSGMUuBQyiOsc7IjGs
-         BtN4hbzQznEFcoQmxcorCeim32sl8XC0K2Hv+JfE3II3xbx+GuMbG7VOhnh/VjRoybd5
-         m/jSj2/VYboZml5pJ8zofwW9qmdxeptsNDFks8489JdUIABHKCHrY5LJXB+HapTrBo6B
-         OOgFm+VUlQ91Lixnj+4hc1IMltMwxrZ7mNs/W1Ab21XEUYZMSo5NWLLgKZNSAn100g00
-         UyJxMv8cgH7kHMK1ytuByLUk6RvO4mtRnbzgszYj8iV0dbMExoQlCWIryN7CdcChlbFu
-         aSag==
-X-Gm-Message-State: AOAM531uor4+gMR0HJldzlSgP3wBKWmOP62tdUazQhvojNk28IhPVWPq
-        SpxqmDaZh1z5B8/axUSHc3IN9P+b3woxOBqJT1liwA==
-X-Google-Smtp-Source: ABdhPJzuu+8qR8C7MuThUoAx534VTus4YzW/1YoxFZhnsl8yazni3G1exxc2PXE0Ft8YQ/k6hTwpVr0PehWtqReo2uM=
-X-Received: by 2002:a05:6808:60e:: with SMTP id y14mr703199oih.162.1640140490110;
- Tue, 21 Dec 2021 18:34:50 -0800 (PST)
+        bh=/FZUFL2wLkEGZGFTbPONkk6mLWd8J6cDzMFXomn323A=;
+        b=RwpbPJnfaVRTfVxYtfoVVBOebEgxmcD04JgauF4QGOGvfoh8NRAxnibqfbB647xiHR
+         ux58oPkZuUvStYo/zd43AekEYy0kqzFrwCTGYl1QUlcnZ3BZSPZRAZvMRYiNhpdESEPt
+         E/da9hLkeXE7aJTNBY4JJ6ZEt0y3Ot3G3IwLLf1JExDxtvs8XYMye2zqiVM+Me4HLGkl
+         snu15/qrIEZu9UJZ+ChQQGjCBEH1juE8zFt4vatjo8GnYXcCzgARhOL9ptUueLCp8Ll4
+         TGLOHCTaD1Lc2YHkSdTf8KXM+tXHuIQTjnmgm+yBMUEGHrFVw1p8hu65reEVuqpi1nVu
+         7HtQ==
+X-Gm-Message-State: AOAM5308KopMq6kw8p2q+z0wvOxCr6nDretHpySA45rl7wIT8zI0Kmxy
+        hIM6djY1uum2sE4xbbln1iaNuvhdSDCe/JekSFOPig==
+X-Google-Smtp-Source: ABdhPJzgjgZvCZer+0qK1pclgej1TT1RDlfQKfCQvqjVS3qOHMzJGGAXe5nK0e/t6ph4iTgc1ECudtqKVJBwg9u1Q/o=
+X-Received: by 2002:aca:120f:: with SMTP id 15mr742282ois.132.1640141307641;
+ Tue, 21 Dec 2021 18:48:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20211220211854.89452-1-nbd@nbd.name> <20211220211854.89452-14-nbd@nbd.name>
- <CAK8P3a3jVd5VmsRB81CuFxbjwVwVrisicsjK8VtN3saHsto-HQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a3jVd5VmsRB81CuFxbjwVwVrisicsjK8VtN3saHsto-HQ@mail.gmail.com>
+References: <20211221181526.53798-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20211221181526.53798-1-andriy.shevchenko@linux.intel.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 22 Dec 2021 03:34:38 +0100
-Message-ID: <CACRpkdZE0XPBrssuu7etVNQRz_ohPTX7VNFZF5e8-3VYeak96A@mail.gmail.com>
-Subject: Re: [PATCH v8 13/14] gpio: Add support for Airoha EN7523 GPIO controller
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Felix Fietkau <nbd@nbd.name>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        John Crispin <john@phrozen.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Date:   Wed, 22 Dec 2021 03:48:15 +0100
+Message-ID: <CACRpkdbLk1aHEaiumq3d4qmg007QtZcitmCwdyFyLxyY=H7MXQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/8] platform/x86: introduce p2sb_bar() helper
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 2:50 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Mon, Dec 20, 2021 at 10:18 PM Felix Fietkau <nbd@nbd.name> wrote:
-> >
-> > From: John Crispin <john@phrozen.org>
-> >
-> > Airoha's GPIO controller on their ARM EN7523 SoCs consists of two banks of 32
-> > GPIOs. Each instance in DT is for a single bank.
-> >
-> > Signed-off-by: John Crispin <john@phrozen.org>
-> > Signed-off-by: Felix Fietkau <nbd@nbd.name>
->
-> This looks ok to me. If you want to merge the entire series through
-> the SoC tree,
-> it does need to be reviewed by the GPIO maintainers though. If you want to
-> go through individual subsystem trees, I would suggest you post this patch
-> and the DT binding separately from the rest.
+On Tue, Dec 21, 2021 at 7:21 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-I reviewed a v7 version I think, anyways:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Please, comment on the approach and individual patches.
+
+This approach looks reasonable to me so FWIW:
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+for the series.
 
 Yours,
 Linus Walleij

@@ -2,82 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7BCA47D35F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:05:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3DC647D368
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:12:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245604AbhLVOFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 09:05:01 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45368 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245575AbhLVOEz (ORCPT
+        id S245595AbhLVOMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 09:12:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236943AbhLVOMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:04:55 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 841D361A51;
-        Wed, 22 Dec 2021 14:04:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AD2DC36AE5;
-        Wed, 22 Dec 2021 14:04:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640181893;
-        bh=75UqRnXbLJitl8WtJNjYmGOc6EmcXbtKbaBt7Oupp08=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=sV3YLiSjoHeqLL0ckh1isztaGLB9gKFHasRNqEwFMyg0ar9/WmJh4qkN/P5oesGUz
-         LwtnqkCfkzeJdfjeYIDrsgOyXfbE9vg+RkZo2PEOdR0fuuh/XDTIV/wdPLVt+9BsNX
-         hkUdQxXTR2CUnX4pr/1l/q5Y8RwWLdKxT6+Nbwwt/vk/mSWHmqEMvv+f0TUwQbub+G
-         U0t0p2WPdsamcDNDp0cVNWuzEfWjbBZWEojKYi+NheT0J0kajMRBgmZ+RBV4q2f67p
-         crqZtWswU61HImrZVjXYzjBmuxAz612EU5QZh68Vz1YiN4FAkDLX80mLY4jvUVHBeb
-         iCfko6J5IgJlg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Oskari Lemmela <oskari@lemmela.net>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-In-Reply-To: <20211222055958.1383233-1-oskari@lemmela.net>
-References: <20211222055958.1383233-1-oskari@lemmela.net>
-Subject: Re: (subset) [PATCH 0/2] spi: ar934x: fix transfer size and delays
-Message-Id: <164018189202.2906173.12739449799192637785.b4-ty@kernel.org>
-Date:   Wed, 22 Dec 2021 14:04:52 +0000
+        Wed, 22 Dec 2021 09:12:00 -0500
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C5EC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:11:59 -0800 (PST)
+Received: by mail-qk1-x72e.google.com with SMTP id 69so2376867qkd.6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:11:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:reply-to:mime-version
+         :content-disposition;
+        bh=thDdHAXO4Fu5Yivc3/wFyA8Rxn+/3gkNfZ5obxoRWYU=;
+        b=aSRzk8PsYg5OEqACaRj37BdmaZNDEfamridrJ7FSCCY7BxmTM9TgzpPOphGmkiQEZX
+         o4ClgE9aHorWdoN2vE0O9K7qSPHrm0WQaDGYrUQ0GpUAq+x2hOZCdbYArY8LZ7G4ekMg
+         eXE5rF6eQmeDXcFpN932T0lM+b0U87n6hQmhR8PoQMoz2PEkj2PWnWBUB8gVzatM1mFm
+         9spez2okTmbE2WlgzCYuMIWXuAtF8DkUjKyyRE0JYWTPTSy9W4gpgyWGEmC7x6EvKxkH
+         DOsz8KJLHy4+pOh1D8r95EinWHn/wSfrBzcu0QhYB/RF4ng9uHZo5l43xwvnYLyfzecL
+         CR7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :reply-to:mime-version:content-disposition;
+        bh=thDdHAXO4Fu5Yivc3/wFyA8Rxn+/3gkNfZ5obxoRWYU=;
+        b=wOyoEmsztxaKOCG7hG+HdTzR+vVchJIjul85iWm+jwYbdsnLRyVHrnXNZ/sWuEFhFw
+         JHtRblyhMQHdamjbjjCPHoWje7optRYEg7dTj2OEjQc8SlSSLdBEWSwmp10P2XLbDxx4
+         a4miGjkpDyOFKWGXr1ZVWdCm8DB2EefUzFngHJbcbrklC1SLudVJZ4LSR2hDOre1nyEk
+         zZray4/RV5GBGiixop2LeAErl9629EJI95Y904iZOr8BfwD+W7GwFMH188S1Y4oVYqyR
+         uxKZMETDEL5ssS9X0wjbDxu/iu+uhyHlkUjZKQQAiRdW+4QAw3GntkX5Pb9NAo9FDIN1
+         jKWA==
+X-Gm-Message-State: AOAM531wecsfwce44FpIVOysVUBjNzM/x2ZeSedf2a5Dg1ZYKMM3BaDg
+        Z306UftfQTOmVc0xj90CdTxStxbQUA==
+X-Google-Smtp-Source: ABdhPJxw3IroCNT/flsfagqPGSgGaYVU1sdDdIIcq759rwx2qtItxf4EbHEyQc+sIFrmvmoc/TXJbg==
+X-Received: by 2002:a05:620a:1a01:: with SMTP id bk1mr2017307qkb.539.1640182318098;
+        Wed, 22 Dec 2021 06:11:58 -0800 (PST)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id bj32sm1812363qkb.75.2021.12.22.06.11.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 06:11:57 -0800 (PST)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:a994:7eee:8e73:4087])
+        by serve.minyard.net (Postfix) with ESMTPSA id DAA19180013;
+        Wed, 22 Dec 2021 14:11:56 +0000 (UTC)
+Date:   Wed, 22 Dec 2021 08:11:55 -0600
+From:   Corey Minyard <minyard@acm.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        openipmi-developer@lists.sourceforge.net
+Subject: [GIT PULL] IPMI bug fixes for 5.16 (3)
+Message-ID: <20211222141155.GV14936@minyard.net>
+Reply-To: minyard@acm.org
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Dec 2021 07:59:56 +0200, Oskari Lemmela wrote:
-> Some of slow SPI devices can not handle 32 bits transfers or need
-> delay between words/transfers.
-> 
-> Series is tested with ATSAMD20J15 slave device which is running @8Mhz.
-> Limiting bits per word to 16 bits and adding delay between transfers,
-> gives slave device enough extra time to process reply.
-> 
-> [...]
+The following changes since commit 12119cfa1052d512a92524e90ebee85029a918f8:
 
-Applied to
+  Merge tag 'vfio-v5.16-rc4' of git://github.com/awilliam/linux-vfio (2021-12-03 12:27:08 -0800)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+are available in the Git repository at:
 
-Thanks!
+  https://github.com/cminyard/linux-ipmi.git tags/for-linus-5.16-3
 
-[2/2] spi: ar934x: fix transfer and word delays
-      commit: c70282457c380db7deb57c81a6894debc8f88efa
+for you to fetch changes up to ffb76a86f8096a8206be03b14adda6092e18e275:
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+  ipmi: Fix UAF when uninstall ipmi_si and ipmi_msghandler module (2021-12-21 08:04:42 -0600)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+----------------------------------------------------------------
+Fix some IPMI crashes
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Some crash fixes have come in dealing with various error handling
+issues.  They have sat in next for 5 days or more without issue, and
+they are fairly critical.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-corey

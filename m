@@ -2,242 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4814047D3E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21DA947D3ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:47:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343567AbhLVOq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 09:46:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37980 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343545AbhLVOq2 (ORCPT
+        id S1343569AbhLVOq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 09:46:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32925 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1343587AbhLVOq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:46:28 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB86EC061574;
-        Wed, 22 Dec 2021 06:46:27 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id o6so9659937edc.4;
-        Wed, 22 Dec 2021 06:46:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5iP0cwT3bhm1wv/SCJZNX3eXAec5s+GXcjileA9F27Q=;
-        b=j+iLD08U4k29OZOTR400HLmz2obEtO7D3ChDq2ufdQRwoSee564zTXYkax3kXedW5x
-         iYSAkPWnWh0HmsGCYxgqB6v6rjq1J6RfbA6vdp4LqBhOQgTHCW8SJqXMQZoJdZnduOpd
-         +biLV62u++nkpKm3GHt3Wazm+d406xWf+r6xfrPIs3XFT6PdOANhi9NTNXW2pBEPseDs
-         O8fmCGSqVVXdUxHi/8Yd1osnSYTPPotOKVL37Mpw78cL+ilGurCLByJKVrMSZBrLHbP1
-         yF62XgDREqMBjMkc8HOrWcV5QL4YTGRgWxUVtLVW7P80eWy5Am70dRmng4BwwqDAhZJW
-         LUUQ==
+        Wed, 22 Dec 2021 09:46:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640184415;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9gcyPWh8veARTOFyykIJ1v+FqxdAa2cAjT6Y8PmLnx8=;
+        b=jIpkH6yO3R5f0ZKunGDDGl2S1PnOU6JIEEl6nLZGfYYtPBX2Uvfb87INiU1D6qbGOXKyHv
+        jLcVOFB3GcYoe1/1yBcwe/GBAjXLqoEt1RABq2xqZzTVKUrzXhd3J0obXfE+1xAO35XkZa
+        nJNeBGodYZhN/3/jZecqTiinUEVm+ag=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-54-pwk20qI_NEGNa1n3QWA0eQ-1; Wed, 22 Dec 2021 09:46:54 -0500
+X-MC-Unique: pwk20qI_NEGNa1n3QWA0eQ-1
+Received: by mail-oo1-f69.google.com with SMTP id v2-20020a4ae6c2000000b002c622008d77so1255055oot.12
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:46:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5iP0cwT3bhm1wv/SCJZNX3eXAec5s+GXcjileA9F27Q=;
-        b=5r7nDF4uv+8CtZmEedbF3kZoM1/QCp0xFxDPgYf+WqUQtHOzq5/L9+msdIk5TlIQfp
-         2ChvsaJZxFm5+v+bAHCo733S1e6IhP9YrOX12fitG75C1JZWKxQFuKKaGU3YXkT4s63M
-         yiU2xUL/BjEPLFYc4CsXNOHrWGQ36K2TN3jY9RpnhdW1hrvzaS0Cp6ZP1RNkVRdWmSPh
-         td7HYKx7I6pZ/aFvx0aLSaU4mRRXxT1222/Y1muDyYNHOfW73QxYeyWhXVQnRYo8no6N
-         G/MG+0lqj7+KhNMBg4YxWkZ8gIXYVP2zf+RXnRdRIjqn98AOQA8K5pboiPeuOL7RNNCm
-         fkYw==
-X-Gm-Message-State: AOAM531JFApLXFIhGenfEx7B93itg0sMz3qkrZyDqN4//BiPHd4mb/Kh
-        L1o/Yppa53r1seUPimEB62k=
-X-Google-Smtp-Source: ABdhPJyI+1PK2apwf17miH9QRLuhsilpq9fl9aPP5UQVakVob9Glo6g/RHpSyvLUZIsAbgPzbGdAww==
-X-Received: by 2002:a17:906:1d58:: with SMTP id o24mr2586115ejh.121.1640184386450;
-        Wed, 22 Dec 2021 06:46:26 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312::4fa? ([2001:b07:6468:f312::4fa])
-        by smtp.googlemail.com with ESMTPSA id l16sm864404edb.3.2021.12.22.06.46.24
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=9gcyPWh8veARTOFyykIJ1v+FqxdAa2cAjT6Y8PmLnx8=;
+        b=xJSlHclNgiLMOegV2D/3q4cb8hCj0JGSa01M/vMGtooxV6NefbjySOGTBg11JeNOyD
+         nxdNUtzmUzus50/P2DW7fogKwvf/O8OECZwJZDmk/IER7B6Bt44cgIm1iLRI+I+jOlgH
+         k4RPafGDcwz3DAzXpSJIXFiApTTXO47Q4Eow6WpMa41PGfCteKFVIO4imUp3tFmEKHLQ
+         ITHiLEnWF5lLzZiQRxPTv18IHf7WfVYcD4TuASXF2c48pOEfobakO6o+KD4P0BbpGBLo
+         Xf7oSCoFjitRRIh4OvvMdcXXe6IeP6vODW8S7HxGUHPWoY7aTpJG4TKpkVd0NTqmFlu8
+         /pyg==
+X-Gm-Message-State: AOAM530505pY721AUyOuRi1xNUlggOfwofV0v2p4vUmZXx4XXgLWnqJM
+        HTJVJd8AzFJnD2+oSfv1bKWg0tOxDzjp9ZKegCKow7NRLkjjDd/q5DmvsYKzwJ4neLijM/JrPlM
+        FG9tCWJnXS5rWhKtA9oKYTulw
+X-Received: by 2002:a9d:64d4:: with SMTP id n20mr2169954otl.328.1640184413996;
+        Wed, 22 Dec 2021 06:46:53 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzWGq5v3Wbtrh4PeU7H62cWTdK5USh26sBwa/v72QaoEC128SxOE0jV+vaOf9/lS2lEuLJKNg==
+X-Received: by 2002:a9d:64d4:: with SMTP id n20mr2169944otl.328.1640184413798;
+        Wed, 22 Dec 2021 06:46:53 -0800 (PST)
+Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id e20sm388241oiw.32.2021.12.22.06.46.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 06:46:26 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <b651b14f-9ad2-811d-0d16-21d23a65eba4@redhat.com>
-Date:   Wed, 22 Dec 2021 15:46:24 +0100
+        Wed, 22 Dec 2021 06:46:53 -0800 (PST)
+Subject: Re: [PATCH] crypto: cleanup warning in qm_get_qos_value()
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     wangzhou1@hisilicon.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, ndesaulniers@google.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <20211221205953.3128923-1-trix@redhat.com>
+ <YcJHoqXXVFZatIla@archlinux-ax161>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <73952545-2236-6065-3016-543e8d503c06@redhat.com>
+Date:   Wed, 22 Dec 2021 06:46:51 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC PATCH 00/10] KVM: selftests: Add support for test-selectable
- ucall implementations
-Content-Language: en-US
-To:     Michael Roth <michael.roth@amd.com>,
-        linux-kselftest@vger.kernel.org
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
-        Nathan Tempelman <natet@google.com>,
-        Marc Orr <marcorr@google.com>,
-        Steve Rutherford <srutherford@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Ricardo Koller <ricarkol@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        kvmarm@lists.cs.columbia.edu
-References: <20211210164620.11636-1-michael.roth@amd.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211210164620.11636-1-michael.roth@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <YcJHoqXXVFZatIla@archlinux-ax161>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 17:46, Michael Roth wrote:
-> These patches are based on kvm/next, and are also available at:
-> 
->    https://github.com/mdroth/linux/commits/sev-selftests-ucall-rfc1
 
-Thanks, this is a nice implementation of the concept.  I'll check s390 
-before the next merge window, as I intend to merge this and the SEV 
-tests (which I have already confirmed to work; I haven't yet checked 
-SEV-ES because it's a bit harder for me to install new kernels on the 
-SEV-ES machine I have access to).
+On 12/21/21 1:31 PM, Nathan Chancellor wrote:
+> On Tue, Dec 21, 2021 at 12:59:53PM -0800, trix@redhat.com wrote:
+>> From: Tom Rix <trix@redhat.com>
+>>
+>> Building with clang static analysis returns this warning:
+>>
+>> qm.c:4382:11: warning: The left operand of '==' is a garbage value
+>>          if (*val == 0 || *val > QM_QOS_MAX_VAL || ret) {
+>>              ~~~~ ^
+>>
+>> The call to qm_qos_value_init() can return an error without setting
+>> *val.  So check ret before checking *val.
+>>
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>
+> Should this have a fixes tag?
 
-Paolo
+I was debating that, the existing if-check will catch this, just not as 
+efficiently.
 
-> == BACKGROUND ==
-> 
-> These patches are a prerequisite for adding selftest support for SEV guests
-> and possibly other confidential computing implementations in the future.
-> They were motivated by a suggestion Paolo made in response to the initial
-> SEV selftest RFC:
-> 
->    https://lore.kernel.org/lkml/20211025035833.yqphcnf5u3lk4zgg@amd.com/T/#m959b56f9fb4ae6ab973f6ab50fe3ddfacd7c5617
-> 
-> Since the changes touch multiple archs and ended up creating a bit more churn
-> than expected, I thought it would be a good idea to carve this out into a
-> separate standalone series for reviewers who may be more interested in the
-> ucall changes than anything SEV-related.
-> 
-> To summarize, x86 relies on a ucall based on using PIO intructions to generate
-> an exit to userspace and provide the GVA of a dynamically-allocated ucall
-> struct that resides in guest memory and contains information about how to
-> handle/interpret the exit. This doesn't work for SEV guests for 3 main reasons:
-> 
->    1) The guest memory is generally encrypted during run-time, so the guest
->       needs to ensure the ucall struct is allocated in shared memory.
->    2) The guest page table is also encrypted, so the address would need to be a
->       GPA instead of a GVA.
->    3) The guest vCPU register may also be encrypted in the case of
->       SEV-ES/SEV-SNP, so the approach of examining vCPU register state has
->       additional requirements such as requiring guest code to implement a #VC
->       handler that can provide the appropriate registers via a vmgexit.
-> 
-> To address these issues, the SEV selftest RFC1 patchset introduced a set of new
-> SEV-specific interfaces that closely mirrored the functionality of
-> ucall()/get_ucall(), but relied on a pre-allocated/static ucall buffer in
-> shared guest memory so it that guest code could pass messages/state to the host
-> by simply writing to this pre-arranged shared memory region and then generating
-> an exit to userspace (via a halt instruction).
-> 
-> Paolo suggested instead implementing support for test/guest-specific ucall
-> implementations that could be used as an alternative to the default PIO-based
-> ucall implementations as-needed based on test/guest requirements, while still
-> allowing for tests to use a common set interfaces like ucall()/get_ucall().
-> 
-> == OVERVIEW ==
-> 
-> This series implements the above functionality by introducing a new ucall_ops
-> struct that can be used to register a particular ucall implementation as need,
-> then re-implements x86/arm64/s390x in terms of the ucall_ops.
-> 
-> But for the purposes of introducing a new ucall_ops implementation appropriate
-> for SEV, there are a couple issues that resulted in the need for some additional
-> ucall interfaces as well:
-> 
->    a) ucall() doesn't take a pointer to the ucall struct it modifies, so to make
->       it work in the case of an implementation that relies a pre-allocated ucall
->       struct in shared guest memory some sort of global lookup functionality
->       would be needed to locate the appropriate ucall struct for a particular
->       VM/vcpu combination, and this would need to be made accessible for use by
->       the guest as well. guests would then need some way of determining what
->       VM/vcpu identifiers they need to use to do the lookup, which to do reliably
->       would likely require seeding the guest with those identifiers in advance,
->       which is possible, but much more easily achievable by simply adding a
->       ucall() alternative that accepts a pointer to the ucall struct for that
->       particular VM/vcpu.
-> 
->    b) get_ucall() *does* take a pointer to a ucall struct, but currently zeroes
->       it out and uses it to copy the guest's ucall struct into. It *could* be
->       re-purposed to handle the case where the pointer is an actual pointer to
->       the ucall struct in shared guest memory, but that could cause problems
->       since callers would need some idea of what the underlying ucall
->       implementation expects. Ideally the interfaces would be agnostic to the
->       ucall implementation.
-> 
-> So to address those issues, this series also allows ucall implementations to
-> optionally be extended to support a set of 'shared' ops that are used in the
-> following manner:
-> 
->    host:
->      uc_gva = ucall_shared_alloc()
->      setup_vm_args(vm, uc_gva)
-> 
->    guest:
->      ucall_shared(uc_gva, ...)
-> 
->    host:
->      uget_ucall_shared(uc_gva, ...)
-> 
-> and then implements a new ucall implementation, ucall_ops_halt, based around
-> these shared interfaces and halt instructions.
-> 
-> While this doesn't really meet the initial goal of re-using the existing
-> ucall interfaces as-is, the hope is that these *_shared interfaces are
-> general enough to be re-usable things other than SEV, or at least improve on
-> code readability over the initial SEV-specific interfaces.
-> 
-> Any review/comments are greatly appreciated!
-> 
-> ----------------------------------------------------------------
-> Michael Roth (10):
->        kvm: selftests: move base kvm_util.h declarations to kvm_util_base.h
->        kvm: selftests: move ucall declarations into ucall_common.h
->        kvm: selftests: introduce ucall_ops for test/arch-specific ucall implementations
->        kvm: arm64: selftests: use ucall_ops to define default ucall implementation
->        (COMPILE-TESTED ONLY) kvm: s390: selftests: use ucall_ops to define default ucall implementation
->        kvm: selftests: add ucall interfaces based around shared memory
->        kvm: selftests: add ucall_shared ops for PIO
->        kvm: selftests: introduce ucall implementation based on halt instructions
->        kvm: selftests: add GUEST_SHARED_* macros for shared ucall implementations
->        kvm: selftests: add ucall_test to test various ucall functionality
-> 
->   tools/testing/selftests/kvm/.gitignore             |   1 +
->   tools/testing/selftests/kvm/Makefile               |   5 +-
->   .../testing/selftests/kvm/include/aarch64/ucall.h  |  18 +
->   tools/testing/selftests/kvm/include/kvm_util.h     | 408 +--------------------
->   .../testing/selftests/kvm/include/kvm_util_base.h  | 368 +++++++++++++++++++
->   tools/testing/selftests/kvm/include/s390x/ucall.h  |  18 +
->   tools/testing/selftests/kvm/include/ucall_common.h | 147 ++++++++
->   tools/testing/selftests/kvm/include/x86_64/ucall.h |  19 +
->   tools/testing/selftests/kvm/lib/aarch64/ucall.c    |  43 +--
->   tools/testing/selftests/kvm/lib/s390x/ucall.c      |  45 +--
->   tools/testing/selftests/kvm/lib/ucall_common.c     | 133 +++++++
->   tools/testing/selftests/kvm/lib/x86_64/ucall.c     |  82 +++--
->   tools/testing/selftests/kvm/ucall_test.c           | 182 +++++++++
->   13 files changed, 982 insertions(+), 487 deletions(-)
->   create mode 100644 tools/testing/selftests/kvm/include/aarch64/ucall.h
->   create mode 100644 tools/testing/selftests/kvm/include/kvm_util_base.h
->   create mode 100644 tools/testing/selftests/kvm/include/s390x/ucall.h
->   create mode 100644 tools/testing/selftests/kvm/include/ucall_common.h
->   create mode 100644 tools/testing/selftests/kvm/include/x86_64/ucall.h
->   create mode 100644 tools/testing/selftests/kvm/lib/ucall_common.c
->   create mode 100644 tools/testing/selftests/kvm/ucall_test.c
-> 
-> 
+I'll add the line.
+
+Tom
+
+>
+> Fixes: 72b010dc33b9 ("crypto: hisilicon/qm - supports writing QoS int the host")
+>
+>> ---
+>>   drivers/crypto/hisilicon/qm.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+>> index b1fe9c7b8cc89..c906f2e59277b 100644
+>> --- a/drivers/crypto/hisilicon/qm.c
+>> +++ b/drivers/crypto/hisilicon/qm.c
+>> @@ -4379,7 +4379,7 @@ static ssize_t qm_get_qos_value(struct hisi_qm *qm, const char *buf,
+>>   		return -EINVAL;
+>>   
+>>   	ret = qm_qos_value_init(val_buf, val);
+>> -	if (*val == 0 || *val > QM_QOS_MAX_VAL || ret) {
+>> +	if (ret || *val == 0 || *val > QM_QOS_MAX_VAL) {
+>>   		pci_err(qm->pdev, "input qos value is error, please set 1~1000!\n");
+>>   		return -EINVAL;
+>>   	}
+>> -- 
+>> 2.26.3
+>>
 

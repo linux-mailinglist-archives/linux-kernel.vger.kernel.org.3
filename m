@@ -2,262 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7885247D09A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D629947D09E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244475AbhLVLO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 06:14:57 -0500
-Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:56361 "EHLO
-        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244463AbhLVLOz (ORCPT
+        id S244485AbhLVLPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 06:15:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244487AbhLVLPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 06:14:55 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R971e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V.QKPu1_1640171691;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V.QKPu1_1640171691)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 22 Dec 2021 19:14:52 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     sj@kernel.org, akpm@linux-foundation.org
-Cc:     ying.huang@intel.com, dave.hansen@linux.intel.com, ziy@nvidia.com,
-        shy828301@gmail.com, zhongjiang-ali@linux.alibaba.com,
-        xlpang@linux.alibaba.com, baolin.wang@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] mm/damon: Add a new scheme to support demotion on tiered memory system
-Date:   Wed, 22 Dec 2021 19:14:41 +0800
-Message-Id: <281085c714a4bda62d7b1efb3355fe3a45085225.1640171137.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <cover.1640171137.git.baolin.wang@linux.alibaba.com>
-References: <cover.1640171137.git.baolin.wang@linux.alibaba.com>
-In-Reply-To: <cover.1640171137.git.baolin.wang@linux.alibaba.com>
-References: <cover.1640171137.git.baolin.wang@linux.alibaba.com>
+        Wed, 22 Dec 2021 06:15:05 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5339EC061401
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:15:05 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id n14so3905460wra.9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:15:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=FErqBbW53lt1oYTJBI4ZMRwKkKRNvMor2XnjX9IKwDU=;
+        b=c2j7wENPJfouxeo0X0JNGqK5MSNayxWWjDKqBkLjkxANAx9QVtWwwNLmS918cfsfih
+         h3jImAnqPjf5kMghD/Sme/V9R/rCFPbsnfiZManJs18asjZEnb25PBIOXwXDzfmyrAA2
+         6KGH+OHFVm78p0G0c1eE2GWYVfQTwRqqdmT0FGv9g8Ow6GSEcZzpM36TspHc8ikHh6dT
+         9i1fycnI+kJR+cSgnLVFFndJ8JxK45n0fiig+dXCo1t1n0qHEBa66JmS7QOhcOyj3sX3
+         hu68bDe0i5pclpmjrnyOa7gTu7tJz9Xz0+3anEPTz4tcqYro8wZHRWAM8M9NB7mxQwTj
+         PqLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=FErqBbW53lt1oYTJBI4ZMRwKkKRNvMor2XnjX9IKwDU=;
+        b=lm0TkmHWvhekgPfijdLfSfYailYO3ic1km/Wxd4rdldJ31wyQNtmTK2MZHg65O6Wqn
+         xQOMS2SI14AaUOhRP5LmMjlPy0wLnleuyqdjZhJEl6AgpMtK9IXu9hlEtDh5F532rN3F
+         kgNTgEp2uIf4DCjP3bJazYGxa9g4jn/KDw1jYTVarTqCDDr0gcddzNYfhn1ltat8FUbZ
+         mNNhN1F81Umrf2RpaS17eS2hziyOvxFtmda9nqhJQQlk87EExngm/dvH6in+lqvhJJrK
+         K4sW/lJLBRvtc+K6Z2bVhsot6J8AcEppNPOlh9oSp/V8ea5BKlz3VAyxLSk6JEhDduPe
+         RKAg==
+X-Gm-Message-State: AOAM532xoQuKXBNYpFMYNmOmY+9U3JbNqjr8lwKkd/xZUzLDgS3xSo5f
+        h6YKt4f+LmBNHtOOh3/iHCraoQ==
+X-Google-Smtp-Source: ABdhPJwkdRz0NAGllckMzltDZM3x4h9FXDVnPJctfuKkz0c09O8W+4cxjS2dPDGLW5sgYxbyOUW+oA==
+X-Received: by 2002:a5d:53c5:: with SMTP id a5mr1821540wrw.328.1640171703882;
+        Wed, 22 Dec 2021 03:15:03 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id p23sm1443007wms.3.2021.12.22.03.15.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 03:15:03 -0800 (PST)
+Date:   Wed, 22 Dec 2021 11:15:01 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Pavel Dubrova <pashadubrova@gmail.com>,
+        Kiran Gunda <kgunda@codeaurora.org>,
+        Bryan Wu <cooloney@gmail.com>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH v3 1/9] backlight: qcom-wled: Validate enabled string
+ indices in DT
+Message-ID: <YcMIteikWuR8S4Vk@google.com>
+References: <20211115203459.1634079-1-marijn.suijten@somainline.org>
+ <20211115203459.1634079-2-marijn.suijten@somainline.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211115203459.1634079-2-marijn.suijten@somainline.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On tiered memory system, the reclaim path in shrink_page_list() already
-support demoting pages to slow memory node instead of discarding the
-pages. However, at that time the fast memory node memory wartermark is
-already tense, which will increase the memory allocation latency during
-page demotion.
+On Mon, 15 Nov 2021, Marijn Suijten wrote:
 
-We can rely on the DAMON in user space to help to monitor the cold
-memory on fast memory node, and demote the cold pages to slow memory
-node proactively to keep the fast memory node in a healthy state.
-Thus this patch introduces a new scheme named DAMOS_DEMOTE to support
-this feature.
+> The strings passed in DT may possibly cause out-of-bounds register
+> accesses and should be validated before use.
+> 
+> Fixes: 775d2ffb4af6 ("backlight: qcom-wled: Restructure the driver for WLED3")
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+> ---
+>  drivers/video/backlight/qcom-wled.c | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
 
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
----
- include/linux/damon.h |   3 ++
- mm/damon/dbgfs.c      |   1 +
- mm/damon/vaddr.c      | 147 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 151 insertions(+)
+Applied, thanks.
 
-diff --git a/include/linux/damon.h b/include/linux/damon.h
-index af64838..ec46c7a 100644
---- a/include/linux/damon.h
-+++ b/include/linux/damon.h
-@@ -87,6 +87,8 @@ struct damon_target {
-  * @DAMOS_PAGEOUT:	Call ``madvise()`` for the region with MADV_PAGEOUT.
-  * @DAMOS_HUGEPAGE:	Call ``madvise()`` for the region with MADV_HUGEPAGE.
-  * @DAMOS_NOHUGEPAGE:	Call ``madvise()`` for the region with MADV_NOHUGEPAGE.
-+ * @DAMOS_DEMOTE:	Migrate cold pages from fast memory node (DRAM) to slow
-+ *			memory node (persistent memory).
-  * @DAMOS_STAT:		Do nothing but count the stat.
-  */
- enum damos_action {
-@@ -96,6 +98,7 @@ enum damos_action {
- 	DAMOS_HUGEPAGE,
- 	DAMOS_NOHUGEPAGE,
- 	DAMOS_STAT,		/* Do nothing but only record the stat */
-+	DAMOS_DEMOTE,
- };
- 
- /**
-diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
-index 58dbb96..3bd0b0e 100644
---- a/mm/damon/dbgfs.c
-+++ b/mm/damon/dbgfs.c
-@@ -169,6 +169,7 @@ static bool damos_action_valid(int action)
- 	case DAMOS_HUGEPAGE:
- 	case DAMOS_NOHUGEPAGE:
- 	case DAMOS_STAT:
-+	case DAMOS_DEMOTE:
- 		return true;
- 	default:
- 		return false;
-diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
-index 9e213a1..bcdc602 100644
---- a/mm/damon/vaddr.c
-+++ b/mm/damon/vaddr.c
-@@ -14,6 +14,10 @@
- #include <linux/page_idle.h>
- #include <linux/pagewalk.h>
- #include <linux/sched/mm.h>
-+#include <linux/migrate.h>
-+#include <linux/mm_inline.h>
-+#include <linux/swapops.h>
-+#include "../internal.h"
- 
- #include "prmtv-common.h"
- 
-@@ -693,6 +697,147 @@ static unsigned long damos_madvise(struct damon_target *target,
- }
- #endif	/* CONFIG_ADVISE_SYSCALLS */
- 
-+static void damos_isolate_page(struct page *page, struct list_head *demote_list)
-+{
-+	struct page *head = compound_head(page);
-+
-+	/* Do not interfere with other mappings of this page */
-+	if (page_mapcount(head) != 1)
-+		return;
-+
-+	/* No need migration if the target demotion node is empty. */
-+	if (next_demotion_node(page_to_nid(head)) == NUMA_NO_NODE)
-+		return;
-+
-+	if (isolate_lru_page(head))
-+		return;
-+
-+	list_add_tail(&head->lru, demote_list);
-+	mod_node_page_state(page_pgdat(head),
-+			    NR_ISOLATED_ANON + page_is_file_lru(head),
-+			    thp_nr_pages(head));
-+}
-+
-+static int damos_isolate_pmd_entry(pmd_t *pmd, unsigned long addr,
-+				   unsigned long end, struct mm_walk *walk)
-+{
-+	struct vm_area_struct *vma = walk->vma;
-+	struct list_head *demote_list = walk->private;
-+	spinlock_t *ptl;
-+	struct page *page;
-+	pte_t *pte, *mapped_pte;
-+
-+	if (!vma_migratable(vma))
-+		return -EFAULT;
-+
-+	ptl = pmd_trans_huge_lock(pmd, vma);
-+	if (ptl) {
-+		/* Bail out if THP migration is not supported. */
-+		if (!thp_migration_supported())
-+			goto thp_out;
-+
-+		/* If the THP pte is under migration, do not bother it. */
-+		if (unlikely(is_pmd_migration_entry(*pmd)))
-+			goto thp_out;
-+
-+		page = damon_get_page(pmd_pfn(*pmd));
-+		if (!page)
-+			goto thp_out;
-+
-+		damos_isolate_page(page, demote_list);
-+
-+		put_page(page);
-+thp_out:
-+		spin_unlock(ptl);
-+		return 0;
-+	}
-+
-+	/* regular page handling */
-+	if (pmd_none(*pmd) || unlikely(pmd_bad(*pmd)))
-+		return -EINVAL;
-+
-+	mapped_pte = pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
-+	for (; addr != end; pte++, addr += PAGE_SIZE) {
-+		if (pte_none(*pte) || !pte_present(*pte))
-+			continue;
-+
-+		page = damon_get_page(pte_pfn(*pte));
-+		if (!page)
-+			continue;
-+
-+		damos_isolate_page(page, demote_list);
-+		put_page(page);
-+	}
-+	pte_unmap_unlock(mapped_pte, ptl);
-+	cond_resched();
-+
-+	return 0;
-+}
-+
-+static const struct mm_walk_ops damos_isolate_pages_walk_ops = {
-+	.pmd_entry              = damos_isolate_pmd_entry,
-+};
-+
-+/*
-+ * damos_demote() - demote cold pages from fast memory to slow memory
-+ * @target:    the given target
-+ * @r:         region of the target
-+ *
-+ * On tiered memory system, if DAMON monitored cold pages on fast memory
-+ * node (DRAM), we can demote them to slow memory node proactively in case
-+ * accumulating much more cold memory on fast memory node (DRAM) to reclaim.
-+ *
-+ * Return the bytes of the region that the DAMOS_DEMOTE action is successfully
-+ * applied.
-+ */
-+static unsigned long damos_demote(struct damon_target *target,
-+				  struct damon_region *r)
-+{
-+	struct mm_struct *mm;
-+	LIST_HEAD(demote_pages);
-+	LIST_HEAD(pagelist);
-+	unsigned int nr_succeeded, demoted_pages = 0;
-+	struct page *page, *next;
-+
-+	/* Validate if allowing to do page demotion */
-+	if (!numa_demotion_enabled)
-+		return 0;
-+
-+	mm = damon_get_mm(target);
-+	if (!mm)
-+		return 0;
-+
-+	mmap_read_lock(mm);
-+	walk_page_range(mm, r->ar.start, r->ar.end,
-+			&damos_isolate_pages_walk_ops, &demote_pages);
-+	mmap_read_unlock(mm);
-+
-+	mmput(mm);
-+	if (list_empty(&demote_pages))
-+		return 0;
-+
-+	list_for_each_entry_safe(page, next, &demote_pages, lru) {
-+		list_add(&page->lru, &pagelist);
-+
-+		nr_succeeded = demote_page_list(&pagelist, page_pgdat(page));
-+		if (!nr_succeeded) {
-+			if (!list_empty(&pagelist)) {
-+				list_del(&page->lru);
-+				mod_node_page_state(page_pgdat(page),
-+						    NR_ISOLATED_ANON + page_is_file_lru(page),
-+						    -thp_nr_pages(page));
-+				putback_lru_page(page);
-+			}
-+		} else {
-+			demoted_pages += nr_succeeded;
-+		}
-+
-+		cond_resched();
-+	}
-+
-+	return demoted_pages * PAGE_SIZE;
-+}
-+
- static unsigned long damon_va_apply_scheme(struct damon_ctx *ctx,
- 		struct damon_target *t, struct damon_region *r,
- 		struct damos *scheme)
-@@ -717,6 +862,8 @@ static unsigned long damon_va_apply_scheme(struct damon_ctx *ctx,
- 		break;
- 	case DAMOS_STAT:
- 		return 0;
-+	case DAMOS_DEMOTE:
-+		return damos_demote(t, r);
- 	default:
- 		return 0;
- 	}
 -- 
-1.8.3.1
-
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

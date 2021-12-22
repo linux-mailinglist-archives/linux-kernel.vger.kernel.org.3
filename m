@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D583047D556
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:44:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E021D47D554
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:44:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344221AbhLVQoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 11:44:23 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:59848 "EHLO
+        id S1344176AbhLVQoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 11:44:21 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:44444 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343948AbhLVQn1 (ORCPT
+        with ESMTP id S1344166AbhLVQn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 11:43:27 -0500
+        Wed, 22 Dec 2021 11:43:26 -0500
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
- id dd4f28774a78a843; Wed, 22 Dec 2021 17:43:26 +0100
+ id fe6e77a9aaadc893; Wed, 22 Dec 2021 17:43:24 +0100
 Received: from kreacher.localnet (unknown [213.134.181.48])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id B275E66AF2B;
-        Wed, 22 Dec 2021 17:43:25 +0100 (CET)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 17FAF66AF5C;
+        Wed, 22 Dec 2021 17:43:24 +0100 (CET)
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux ACPI <linux-acpi@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Bob Moore <robert.moore@intel.com>
-Subject: [PATCH 02/19] ACPICA: Use original data_table_region pointer for accesses
-Date:   Wed, 22 Dec 2021 17:21:25 +0100
-Message-ID: <1804750.tdWV9SEqCh@kreacher>
+Subject: [PATCH 03/19] ACPICA: Use original pointer for virtual origin tables
+Date:   Wed, 22 Dec 2021 17:22:28 +0100
+Message-ID: <12919205.uLZWGnKmhe@kreacher>
 In-Reply-To: <11889746.O9o76ZdvQC@kreacher>
 References: <11889746.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
@@ -36,7 +36,7 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 213.134.181.48
 X-CLIENT-HOSTNAME: 213.134.181.48
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddruddtiedgkeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefgkedtheeuheetffeuleelhefhfffgjedthedvtdefteejffevteehhedvjefgudenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedvudefrddufeegrddukedurdegkeenucevlhhushhtvghrufhiiigvpeefnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurdegkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohgsvghrthdrmhhoohhrvgesihhnthgvlhdrtghomh
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddruddtiedgkeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefgkedtheeuheetffeuleelhefhfffgjedthedvtdefteejffevteehhedvjefgudenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedvudefrddufeegrddukedurdegkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurdegkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohgsvghrthdrmhhoohhrvgesihhnthgvlhdrtghomh
 X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
@@ -44,7 +44,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jessica Clarke <jrtc27@jrtc27.com>
 
-ACPICA commit d9eb82bd7515989f0b29d79deeeb758db4d6529c
+ACPICA commit dfa3feffa8f760b686207d09dc880cd2f26c72af
 
 Currently the pointer to the table is cast to acpi_physical_address and
 later cast back to a pointer to be dereferenced. Whether or not this is
@@ -60,207 +60,498 @@ address equal to the integer) that will trap on any dereference. As a
 result, this is an implementation where acpi_physical_address cannot be
 used as a hack to store real pointers.
 
-Thus, add a new field to struct acpi_object_region to store the pointer for
-table regions, and propagate it to acpi_ex_data_table_space_handler via the
-region context, to use a more portable implementation that supports
-CHERI.
+Thus, alter the lifecycle of table descriptors. Internal physical tables
+keep the current behaviour where only the address is set on install, and
+the pointer is set on acquire. Virtual tables (internal and external)
+now store the pointer on initialisation and use that on acquire (which
+will redundantly set *table_ptr to itself, but changing that is both
+unnecessary and overly complicated as acpi_tb_acquire_table is called with
+both a pointer to a variable and a pointer to Table->Pointer itself).
 
-Link: https://github.com/acpica/acpica/commit/d9eb82bd
+This requires propagating the (possible) table pointer everywhere in
+order to make sure pointers make it through to acpi_tb_acquire_temp_table,
+which requires a change to the acpi_install_table interface. Instead of
+taking an ACPI_PHYSADDR_TYPE and a boolean indicating whether it's
+physical or virtual, it is now split into acpi_install_table (that takes
+an external virtual table pointer) and acpi_install_physical_table (that
+takes an ACPI_PHYSADDR_TYPE for an internal physical table address).
+This also has the benefit of providing a cleaner API.
+
+Link: https://github.com/acpica/acpica/commit/dfa3feff
 Signed-off-by: Bob Moore <robert.moore@intel.com>
+[ rjw: Adjust the code in tables.c to match interface changes ]
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/acpi/acpica/acevents.h  |  5 ++++
- drivers/acpi/acpica/acobject.h  |  1 +
- drivers/acpi/acpica/dsopcode.c  |  1 +
- drivers/acpi/acpica/evhandler.c |  2 +-
- drivers/acpi/acpica/evrgnini.c  | 52 +++++++++++++++++++++++++++++++++
- drivers/acpi/acpica/excreate.c  |  1 +
- drivers/acpi/acpica/exregion.c  | 15 +++++++---
- include/acpi/actypes.h          |  4 +++
- 8 files changed, 76 insertions(+), 5 deletions(-)
+ drivers/acpi/acpica/actables.h |  8 ++-
+ drivers/acpi/acpica/exconfig.c |  2 +-
+ drivers/acpi/acpica/tbdata.c   | 93 +++++++++++++++++++++++-----------
+ drivers/acpi/acpica/tbfadt.c   |  6 +--
+ drivers/acpi/acpica/tbinstal.c | 15 ++++--
+ drivers/acpi/acpica/tbutils.c  |  2 +-
+ drivers/acpi/acpica/tbxfload.c | 52 ++++++++++++++-----
+ drivers/acpi/tables.c          |  4 +-
+ include/acpi/acpixf.h          |  6 ++-
+ 9 files changed, 129 insertions(+), 59 deletions(-)
 
-diff --git a/drivers/acpi/acpica/acevents.h b/drivers/acpi/acpica/acevents.h
-index 82a75964343b..b29ba436944a 100644
---- a/drivers/acpi/acpica/acevents.h
-+++ b/drivers/acpi/acpica/acevents.h
-@@ -223,6 +223,11 @@ acpi_ev_pci_bar_region_setup(acpi_handle handle,
- 			     u32 function,
- 			     void *handler_context, void **region_context);
+diff --git a/drivers/acpi/acpica/actables.h b/drivers/acpi/acpica/actables.h
+index e2d0046799a2..533802fe73e9 100644
+--- a/drivers/acpi/acpica/actables.h
++++ b/drivers/acpi/acpica/actables.h
+@@ -35,7 +35,8 @@ acpi_tb_init_table_descriptor(struct acpi_table_desc *table_desc,
  
-+acpi_status
-+acpi_ev_data_table_region_setup(acpi_handle handle,
-+				u32 function,
-+				void *handler_context, void **region_context);
-+
  acpi_status
- acpi_ev_default_region_setup(acpi_handle handle,
- 			     u32 function,
-diff --git a/drivers/acpi/acpica/acobject.h b/drivers/acpi/acpica/acobject.h
-index 9db5ae0f79ea..0aa0d847cb25 100644
---- a/drivers/acpi/acpica/acobject.h
-+++ b/drivers/acpi/acpica/acobject.h
-@@ -138,6 +138,7 @@ struct acpi_object_region {
- 	union acpi_operand_object *next;
- 	acpi_physical_address address;
- 	u32 length;
-+	void *pointer;		/* Only for data table regions */
- };
+ acpi_tb_acquire_temp_table(struct acpi_table_desc *table_desc,
+-			   acpi_physical_address address, u8 flags);
++			   acpi_physical_address address,
++			   u8 flags, struct acpi_table_header *table);
  
- struct acpi_object_method {
-diff --git a/drivers/acpi/acpica/dsopcode.c b/drivers/acpi/acpica/dsopcode.c
-index 639635291ab7..44c448269861 100644
---- a/drivers/acpi/acpica/dsopcode.c
-+++ b/drivers/acpi/acpica/dsopcode.c
-@@ -531,6 +531,7 @@ acpi_ds_eval_table_region_operands(struct acpi_walk_state *walk_state,
+ void acpi_tb_release_temp_table(struct acpi_table_desc *table_desc);
  
- 	obj_desc->region.address = ACPI_PTR_TO_PHYSADDR(table);
- 	obj_desc->region.length = table->length;
-+	obj_desc->region.pointer = table;
+@@ -86,6 +87,7 @@ acpi_tb_release_table(struct acpi_table_header *table,
+ acpi_status
+ acpi_tb_install_standard_table(acpi_physical_address address,
+ 			       u8 flags,
++			       struct acpi_table_header *table,
+ 			       u8 reload, u8 override, u32 *table_index);
  
- 	ACPI_DEBUG_PRINT((ACPI_DB_EXEC, "RgnObj %p Addr %8.8X%8.8X Len %X\n",
- 			  obj_desc,
-diff --git a/drivers/acpi/acpica/evhandler.c b/drivers/acpi/acpica/evhandler.c
-index c0cd7147a5a3..8f43d38dc4ca 100644
---- a/drivers/acpi/acpica/evhandler.c
-+++ b/drivers/acpi/acpica/evhandler.c
-@@ -386,7 +386,7 @@ acpi_ev_install_space_handler(struct acpi_namespace_node *node,
- 		case ACPI_ADR_SPACE_DATA_TABLE:
+ void acpi_tb_uninstall_table(struct acpi_table_desc *table_desc);
+@@ -95,7 +97,9 @@ acpi_tb_load_table(u32 table_index, struct acpi_namespace_node *parent_node);
  
- 			handler = acpi_ex_data_table_space_handler;
--			setup = NULL;
-+			setup = acpi_ev_data_table_region_setup;
- 			break;
+ acpi_status
+ acpi_tb_install_and_load_table(acpi_physical_address address,
+-			       u8 flags, u8 override, u32 *table_index);
++			       u8 flags,
++			       struct acpi_table_header *table,
++			       u8 override, u32 *table_index);
  
- 		default:
-diff --git a/drivers/acpi/acpica/evrgnini.c b/drivers/acpi/acpica/evrgnini.c
-index 984c172453bf..d28dee929e61 100644
---- a/drivers/acpi/acpica/evrgnini.c
-+++ b/drivers/acpi/acpica/evrgnini.c
-@@ -406,6 +406,58 @@ acpi_ev_cmos_region_setup(acpi_handle handle,
- 	return_ACPI_STATUS(AE_OK);
+ acpi_status acpi_tb_unload_table(u32 table_index);
+ 
+diff --git a/drivers/acpi/acpica/exconfig.c b/drivers/acpi/acpica/exconfig.c
+index 0cd9b3738e76..6c2685a6a4c1 100644
+--- a/drivers/acpi/acpica/exconfig.c
++++ b/drivers/acpi/acpica/exconfig.c
+@@ -411,7 +411,7 @@ acpi_ex_load_op(union acpi_operand_object *obj_desc,
+ 	acpi_ex_exit_interpreter();
+ 	status = acpi_tb_install_and_load_table(ACPI_PTR_TO_PHYSADDR(table),
+ 						ACPI_TABLE_ORIGIN_INTERNAL_VIRTUAL,
+-						TRUE, &table_index);
++						table, TRUE, &table_index);
+ 	acpi_ex_enter_interpreter();
+ 	if (ACPI_FAILURE(status)) {
+ 
+diff --git a/drivers/acpi/acpica/tbdata.c b/drivers/acpi/acpica/tbdata.c
+index ebbca109edcb..89f08de67e6d 100644
+--- a/drivers/acpi/acpica/tbdata.c
++++ b/drivers/acpi/acpica/tbdata.c
+@@ -89,14 +89,27 @@ acpi_tb_init_table_descriptor(struct acpi_table_desc *table_desc,
+ {
+ 
+ 	/*
+-	 * Initialize the table descriptor. Set the pointer to NULL, since the
+-	 * table is not fully mapped at this time.
++	 * Initialize the table descriptor. Set the pointer to NULL for external
++	 * tables, since the table is not fully mapped at this time.
+ 	 */
+ 	memset(table_desc, 0, sizeof(struct acpi_table_desc));
+ 	table_desc->address = address;
+ 	table_desc->length = table->length;
+ 	table_desc->flags = flags;
+ 	ACPI_MOVE_32_TO_32(table_desc->signature.ascii, table->signature);
++
++	switch (table_desc->flags & ACPI_TABLE_ORIGIN_MASK) {
++	case ACPI_TABLE_ORIGIN_INTERNAL_VIRTUAL:
++	case ACPI_TABLE_ORIGIN_EXTERNAL_VIRTUAL:
++
++		table_desc->pointer = table;
++		break;
++
++	case ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL:
++	default:
++
++		break;
++	}
  }
  
-+/*******************************************************************************
-+ *
-+ * FUNCTION:    acpi_ev_data_table_region_setup
-+ *
-+ * PARAMETERS:  handle              - Region we are interested in
-+ *              function            - Start or stop
-+ *              handler_context     - Address space handler context
-+ *              region_context      - Region specific context
-+ *
-+ * RETURN:      Status
-+ *
-+ * DESCRIPTION: Setup a data_table_region
-+ *
-+ * MUTEX:       Assumes namespace is not locked
-+ *
-+ ******************************************************************************/
-+
-+acpi_status
-+acpi_ev_data_table_region_setup(acpi_handle handle,
-+				u32 function,
-+				void *handler_context, void **region_context)
-+{
-+	union acpi_operand_object *region_desc =
-+	    (union acpi_operand_object *)handle;
-+	struct acpi_data_table_space_context *local_region_context;
-+
-+	ACPI_FUNCTION_TRACE(ev_data_table_region_setup);
-+
-+	if (function == ACPI_REGION_DEACTIVATE) {
-+		if (*region_context) {
-+			ACPI_FREE(*region_context);
-+			*region_context = NULL;
-+		}
-+		return_ACPI_STATUS(AE_OK);
-+	}
-+
-+	/* Create a new context */
-+
-+	local_region_context =
-+	    ACPI_ALLOCATE_ZEROED(sizeof(struct acpi_data_table_space_context));
-+	if (!(local_region_context)) {
-+		return_ACPI_STATUS(AE_NO_MEMORY);
-+	}
-+
-+	/* Save the data table pointer for use in the handler */
-+
-+	local_region_context->pointer = region_desc->region.pointer;
-+
-+	*region_context = local_region_context;
-+	return_ACPI_STATUS(AE_OK);
-+}
-+
  /*******************************************************************************
-  *
-  * FUNCTION:    acpi_ev_default_region_setup
-diff --git a/drivers/acpi/acpica/excreate.c b/drivers/acpi/acpica/excreate.c
-index 80b52ad55775..deb3674ae726 100644
---- a/drivers/acpi/acpica/excreate.c
-+++ b/drivers/acpi/acpica/excreate.c
-@@ -279,6 +279,7 @@ acpi_ex_create_region(u8 * aml_start,
- 	obj_desc->region.space_id = space_id;
- 	obj_desc->region.address = 0;
- 	obj_desc->region.length = 0;
-+	obj_desc->region.pointer = NULL;
- 	obj_desc->region.node = node;
- 	obj_desc->region.handler = NULL;
- 	obj_desc->common.flags &=
-diff --git a/drivers/acpi/acpica/exregion.c b/drivers/acpi/acpica/exregion.c
-index 82b713a9a193..48c19908fa4e 100644
---- a/drivers/acpi/acpica/exregion.c
-+++ b/drivers/acpi/acpica/exregion.c
-@@ -509,8 +509,15 @@ acpi_ex_data_table_space_handler(u32 function,
- 				 u64 *value,
- 				 void *handler_context, void *region_context)
- {
-+	struct acpi_data_table_space_context *mapping;
-+	char *pointer;
-+
- 	ACPI_FUNCTION_TRACE(ex_data_table_space_handler);
+@@ -132,9 +145,7 @@ acpi_tb_acquire_table(struct acpi_table_desc *table_desc,
+ 	case ACPI_TABLE_ORIGIN_INTERNAL_VIRTUAL:
+ 	case ACPI_TABLE_ORIGIN_EXTERNAL_VIRTUAL:
  
-+	mapping = (struct acpi_data_table_space_context *) region_context;
-+	pointer = ACPI_CAST_PTR(char, mapping->pointer) +
-+	    (address - ACPI_PTR_TO_PHYSADDR(mapping->pointer));
-+
- 	/*
- 	 * Perform the memory read or write. The bit_width was already
- 	 * validated.
-@@ -518,14 +525,14 @@ acpi_ex_data_table_space_handler(u32 function,
- 	switch (function) {
- 	case ACPI_READ:
- 
--		memcpy(ACPI_CAST_PTR(char, value),
--		       ACPI_PHYSADDR_TO_PTR(address), ACPI_DIV_8(bit_width));
-+		memcpy(ACPI_CAST_PTR(char, value), pointer,
-+		       ACPI_DIV_8(bit_width));
- 		break;
- 
- 	case ACPI_WRITE:
- 
--		memcpy(ACPI_PHYSADDR_TO_PTR(address),
--		       ACPI_CAST_PTR(char, value), ACPI_DIV_8(bit_width));
-+		memcpy(pointer, ACPI_CAST_PTR(char, value),
-+		       ACPI_DIV_8(bit_width));
+-		table = ACPI_CAST_PTR(struct acpi_table_header,
+-				      ACPI_PHYSADDR_TO_PTR(table_desc->
+-							   address));
++		table = table_desc->pointer;
  		break;
  
  	default:
-diff --git a/include/acpi/actypes.h b/include/acpi/actypes.h
-index 248242dca28d..700c2449e85a 100644
---- a/include/acpi/actypes.h
-+++ b/include/acpi/actypes.h
-@@ -1221,6 +1221,10 @@ struct acpi_mem_space_context {
- 	struct acpi_mem_mapping *first_mm;
- };
+@@ -196,6 +207,8 @@ acpi_tb_release_table(struct acpi_table_header *table,
+  * PARAMETERS:  table_desc          - Table descriptor to be acquired
+  *              address             - Address of the table
+  *              flags               - Allocation flags of the table
++ *              table               - Pointer to the table (required for virtual
++ *                                    origins, optional for physical)
+  *
+  * RETURN:      Status
+  *
+@@ -208,49 +221,52 @@ acpi_tb_release_table(struct acpi_table_header *table,
  
-+struct acpi_data_table_space_context {
-+	void *pointer;
-+};
+ acpi_status
+ acpi_tb_acquire_temp_table(struct acpi_table_desc *table_desc,
+-			   acpi_physical_address address, u8 flags)
++			   acpi_physical_address address,
++			   u8 flags, struct acpi_table_header *table)
+ {
+-	struct acpi_table_header *table_header;
++	u8 mapped_table = FALSE;
+ 
+ 	switch (flags & ACPI_TABLE_ORIGIN_MASK) {
+ 	case ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL:
+ 
+ 		/* Get the length of the full table from the header */
+ 
+-		table_header =
+-		    acpi_os_map_memory(address,
+-				       sizeof(struct acpi_table_header));
+-		if (!table_header) {
+-			return (AE_NO_MEMORY);
++		if (!table) {
++			table =
++			    acpi_os_map_memory(address,
++					       sizeof(struct
++						      acpi_table_header));
++			if (!table) {
++				return (AE_NO_MEMORY);
++			}
 +
- /*
-  * struct acpi_memory_list is used only if the ACPICA local cache is enabled
++			mapped_table = TRUE;
+ 		}
+ 
+-		acpi_tb_init_table_descriptor(table_desc, address, flags,
+-					      table_header);
+-		acpi_os_unmap_memory(table_header,
+-				     sizeof(struct acpi_table_header));
+-		return (AE_OK);
++		break;
+ 
+ 	case ACPI_TABLE_ORIGIN_INTERNAL_VIRTUAL:
+ 	case ACPI_TABLE_ORIGIN_EXTERNAL_VIRTUAL:
+ 
+-		table_header = ACPI_CAST_PTR(struct acpi_table_header,
+-					     ACPI_PHYSADDR_TO_PTR(address));
+-		if (!table_header) {
+-			return (AE_NO_MEMORY);
++		if (!table) {
++			return_ACPI_STATUS(AE_BAD_PARAMETER);
+ 		}
+ 
+-		acpi_tb_init_table_descriptor(table_desc, address, flags,
+-					      table_header);
+-		return (AE_OK);
++		break;
+ 
+ 	default:
+ 
+-		break;
++		/* Table is not valid yet */
++
++		return (AE_NO_MEMORY);
+ 	}
+ 
+-	/* Table is not valid yet */
++	acpi_tb_init_table_descriptor(table_desc, address, flags, table);
++	if (mapped_table) {
++		acpi_os_unmap_memory(table, sizeof(struct acpi_table_header));
++	}
+ 
+-	return (AE_NO_MEMORY);
++	return (AE_OK);
+ }
+ 
+ /*******************************************************************************
+@@ -335,7 +351,19 @@ void acpi_tb_invalidate_table(struct acpi_table_desc *table_desc)
+ 
+ 	acpi_tb_release_table(table_desc->pointer, table_desc->length,
+ 			      table_desc->flags);
+-	table_desc->pointer = NULL;
++
++	switch (table_desc->flags & ACPI_TABLE_ORIGIN_MASK) {
++	case ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL:
++
++		table_desc->pointer = NULL;
++		break;
++
++	case ACPI_TABLE_ORIGIN_INTERNAL_VIRTUAL:
++	case ACPI_TABLE_ORIGIN_EXTERNAL_VIRTUAL:
++	default:
++
++		break;
++	}
+ 
+ 	return_VOID;
+ }
+@@ -959,6 +987,9 @@ acpi_tb_load_table(u32 table_index, struct acpi_namespace_node *parent_node)
+  *
+  * PARAMETERS:  address                 - Physical address of the table
+  *              flags                   - Allocation flags of the table
++ *              table                   - Pointer to the table (required for
++ *                                        virtual origins, optional for
++ *                                        physical)
+  *              override                - Whether override should be performed
+  *              table_index             - Where table index is returned
+  *
+@@ -970,7 +1001,9 @@ acpi_tb_load_table(u32 table_index, struct acpi_namespace_node *parent_node)
+ 
+ acpi_status
+ acpi_tb_install_and_load_table(acpi_physical_address address,
+-			       u8 flags, u8 override, u32 *table_index)
++			       u8 flags,
++			       struct acpi_table_header *table,
++			       u8 override, u32 *table_index)
+ {
+ 	acpi_status status;
+ 	u32 i;
+@@ -979,7 +1012,7 @@ acpi_tb_install_and_load_table(acpi_physical_address address,
+ 
+ 	/* Install the table and load it into the namespace */
+ 
+-	status = acpi_tb_install_standard_table(address, flags, TRUE,
++	status = acpi_tb_install_standard_table(address, flags, table, TRUE,
+ 						override, &i);
+ 	if (ACPI_FAILURE(status)) {
+ 		goto exit;
+diff --git a/drivers/acpi/acpica/tbfadt.c b/drivers/acpi/acpica/tbfadt.c
+index 5174abfa8af9..047bd094ba68 100644
+--- a/drivers/acpi/acpica/tbfadt.c
++++ b/drivers/acpi/acpica/tbfadt.c
+@@ -313,7 +313,7 @@ void acpi_tb_parse_fadt(void)
+ 	acpi_tb_install_standard_table((acpi_physical_address)acpi_gbl_FADT.
+ 				       Xdsdt,
+ 				       ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL,
+-				       FALSE, TRUE, &acpi_gbl_dsdt_index);
++				       NULL, FALSE, TRUE, &acpi_gbl_dsdt_index);
+ 
+ 	/* If Hardware Reduced flag is set, there is no FACS */
+ 
+@@ -322,14 +322,14 @@ void acpi_tb_parse_fadt(void)
+ 			acpi_tb_install_standard_table((acpi_physical_address)
+ 						       acpi_gbl_FADT.facs,
+ 						       ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL,
+-						       FALSE, TRUE,
++						       NULL, FALSE, TRUE,
+ 						       &acpi_gbl_facs_index);
+ 		}
+ 		if (acpi_gbl_FADT.Xfacs) {
+ 			acpi_tb_install_standard_table((acpi_physical_address)
+ 						       acpi_gbl_FADT.Xfacs,
+ 						       ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL,
+-						       FALSE, TRUE,
++						       NULL, FALSE, TRUE,
+ 						       &acpi_gbl_xfacs_index);
+ 		}
+ 	}
+diff --git a/drivers/acpi/acpica/tbinstal.c b/drivers/acpi/acpica/tbinstal.c
+index 8d1e5b572493..5649f493a1ed 100644
+--- a/drivers/acpi/acpica/tbinstal.c
++++ b/drivers/acpi/acpica/tbinstal.c
+@@ -79,6 +79,8 @@ acpi_tb_install_table_with_override(struct acpi_table_desc *new_table_desc,
+  * PARAMETERS:  address             - Address of the table (might be a virtual
+  *                                    address depending on the table_flags)
+  *              flags               - Flags for the table
++ *              table               - Pointer to the table (required for virtual
++ *                                    origins, optional for physical)
+  *              reload              - Whether reload should be performed
+  *              override            - Whether override should be performed
+  *              table_index         - Where the table index is returned
+@@ -96,6 +98,7 @@ acpi_tb_install_table_with_override(struct acpi_table_desc *new_table_desc,
+ acpi_status
+ acpi_tb_install_standard_table(acpi_physical_address address,
+ 			       u8 flags,
++			       struct acpi_table_header *table,
+ 			       u8 reload, u8 override, u32 *table_index)
+ {
+ 	u32 i;
+@@ -106,7 +109,8 @@ acpi_tb_install_standard_table(acpi_physical_address address,
+ 
+ 	/* Acquire a temporary table descriptor for validation */
+ 
+-	status = acpi_tb_acquire_temp_table(&new_table_desc, address, flags);
++	status =
++	    acpi_tb_acquire_temp_table(&new_table_desc, address, flags, table);
+ 	if (ACPI_FAILURE(status)) {
+ 		ACPI_ERROR((AE_INFO,
+ 			    "Could not acquire table length at %8.8X%8.8X",
+@@ -209,7 +213,8 @@ void acpi_tb_override_table(struct acpi_table_desc *old_table_desc)
+ 	if (ACPI_SUCCESS(status) && table) {
+ 		acpi_tb_acquire_temp_table(&new_table_desc,
+ 					   ACPI_PTR_TO_PHYSADDR(table),
+-					   ACPI_TABLE_ORIGIN_EXTERNAL_VIRTUAL);
++					   ACPI_TABLE_ORIGIN_EXTERNAL_VIRTUAL,
++					   table);
+ 		ACPI_ERROR_ONLY(override_type = "Logical");
+ 		goto finish_override;
+ 	}
+@@ -220,7 +225,8 @@ void acpi_tb_override_table(struct acpi_table_desc *old_table_desc)
+ 						 &address, &length);
+ 	if (ACPI_SUCCESS(status) && address && length) {
+ 		acpi_tb_acquire_temp_table(&new_table_desc, address,
+-					   ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL);
++					   ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL,
++					   NULL);
+ 		ACPI_ERROR_ONLY(override_type = "Physical");
+ 		goto finish_override;
+ 	}
+@@ -289,7 +295,8 @@ void acpi_tb_uninstall_table(struct acpi_table_desc *table_desc)
+ 
+ 	if ((table_desc->flags & ACPI_TABLE_ORIGIN_MASK) ==
+ 	    ACPI_TABLE_ORIGIN_INTERNAL_VIRTUAL) {
+-		ACPI_FREE(ACPI_PHYSADDR_TO_PTR(table_desc->address));
++		ACPI_FREE(table_desc->pointer);
++		table_desc->pointer = NULL;
+ 	}
+ 
+ 	table_desc->address = ACPI_PTR_TO_PHYSADDR(NULL);
+diff --git a/drivers/acpi/acpica/tbutils.c b/drivers/acpi/acpica/tbutils.c
+index 4b9b329a5a92..5e8d50a4b6a9 100644
+--- a/drivers/acpi/acpica/tbutils.c
++++ b/drivers/acpi/acpica/tbutils.c
+@@ -328,7 +328,7 @@ acpi_tb_parse_root_table(acpi_physical_address rsdp_address)
+ 
+ 		status = acpi_tb_install_standard_table(address,
+ 							ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL,
+-							FALSE, TRUE,
++							NULL, FALSE, TRUE,
+ 							&table_index);
+ 
+ 		if (ACPI_SUCCESS(status) &&
+diff --git a/drivers/acpi/acpica/tbxfload.c b/drivers/acpi/acpica/tbxfload.c
+index 38623049b962..87356d9ad613 100644
+--- a/drivers/acpi/acpica/tbxfload.c
++++ b/drivers/acpi/acpica/tbxfload.c
+@@ -227,9 +227,7 @@ acpi_status acpi_tb_load_namespace(void)
+  *
+  * FUNCTION:    acpi_install_table
+  *
+- * PARAMETERS:  address             - Address of the ACPI table to be installed.
+- *              physical            - Whether the address is a physical table
+- *                                    address or not
++ * PARAMETERS:  table               - Pointer to the ACPI table to be installed.
+  *
+  * RETURN:      Status
+  *
+@@ -240,28 +238,54 @@ acpi_status acpi_tb_load_namespace(void)
+  ******************************************************************************/
+ 
+ acpi_status ACPI_INIT_FUNCTION
+-acpi_install_table(acpi_physical_address address, u8 physical)
++acpi_install_table(struct acpi_table_header *table)
+ {
+ 	acpi_status status;
+-	u8 flags;
+ 	u32 table_index;
+ 
+ 	ACPI_FUNCTION_TRACE(acpi_install_table);
+ 
+-	if (physical) {
+-		flags = ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL;
+-	} else {
+-		flags = ACPI_TABLE_ORIGIN_EXTERNAL_VIRTUAL;
+-	}
+-
+-	status = acpi_tb_install_standard_table(address, flags,
+-						FALSE, FALSE, &table_index);
++	status = acpi_tb_install_standard_table(ACPI_PTR_TO_PHYSADDR(table),
++						ACPI_TABLE_ORIGIN_EXTERNAL_VIRTUAL,
++						table, FALSE, FALSE,
++						&table_index);
+ 
+ 	return_ACPI_STATUS(status);
+ }
+ 
+ ACPI_EXPORT_SYMBOL_INIT(acpi_install_table)
+ 
++/*******************************************************************************
++ *
++ * FUNCTION:    acpi_install_physical_table
++ *
++ * PARAMETERS:  address             - Address of the ACPI table to be installed.
++ *
++ * RETURN:      Status
++ *
++ * DESCRIPTION: Dynamically install an ACPI table.
++ *              Note: This function should only be invoked after
++ *                    acpi_initialize_tables() and before acpi_load_tables().
++ *
++ ******************************************************************************/
++acpi_status ACPI_INIT_FUNCTION
++acpi_install_physical_table(acpi_physical_address address)
++{
++	acpi_status status;
++	u32 table_index;
++
++	ACPI_FUNCTION_TRACE(acpi_install_physical_table);
++
++	status = acpi_tb_install_standard_table(address,
++						ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL,
++						NULL, FALSE, FALSE,
++						&table_index);
++
++	return_ACPI_STATUS(status);
++}
++
++ACPI_EXPORT_SYMBOL_INIT(acpi_install_physical_table)
++
+ /*******************************************************************************
+  *
+  * FUNCTION:    acpi_load_table
+@@ -298,7 +322,7 @@ acpi_status acpi_load_table(struct acpi_table_header *table, u32 *table_idx)
+ 	ACPI_INFO(("Host-directed Dynamic ACPI Table Load:"));
+ 	status = acpi_tb_install_and_load_table(ACPI_PTR_TO_PHYSADDR(table),
+ 						ACPI_TABLE_ORIGIN_EXTERNAL_VIRTUAL,
+-						FALSE, &table_index);
++						table, FALSE, &table_index);
+ 	if (table_idx) {
+ 		*table_idx = table_index;
+ 	}
+diff --git a/drivers/acpi/tables.c b/drivers/acpi/tables.c
+index 71419eb16e09..2fa8f611d0a7 100644
+--- a/drivers/acpi/tables.c
++++ b/drivers/acpi/tables.c
+@@ -723,7 +723,7 @@ static void __init acpi_table_initrd_scan(void)
+ 		/*
+ 		 * Mark the table to avoid being used in
+ 		 * acpi_table_initrd_override(). Though this is not possible
+-		 * because override is disabled in acpi_install_table().
++		 * because override is disabled in acpi_install_physical_table().
+ 		 */
+ 		if (test_and_set_bit(table_index, acpi_initrd_installed)) {
+ 			acpi_os_unmap_memory(table, ACPI_HEADER_SIZE);
+@@ -734,7 +734,7 @@ static void __init acpi_table_initrd_scan(void)
+ 			table->signature, table->oem_id,
+ 			table->oem_table_id);
+ 		acpi_os_unmap_memory(table, ACPI_HEADER_SIZE);
+-		acpi_install_table(acpi_tables_addr + table_offset, TRUE);
++		acpi_install_physical_table(acpi_tables_addr + table_offset);
+ next_table:
+ 		table_offset += table_length;
+ 		table_index++;
+diff --git a/include/acpi/acpixf.h b/include/acpi/acpixf.h
+index 73ba13914321..987bb0aa042e 100644
+--- a/include/acpi/acpixf.h
++++ b/include/acpi/acpixf.h
+@@ -454,9 +454,11 @@ ACPI_EXTERNAL_RETURN_STATUS(acpi_status
+  * ACPI table load/unload interfaces
   */
+ ACPI_EXTERNAL_RETURN_STATUS(acpi_status ACPI_INIT_FUNCTION
+-			    acpi_install_table(acpi_physical_address address,
+-					       u8 physical))
++			    acpi_install_table(struct acpi_table_header *table))
+ 
++ACPI_EXTERNAL_RETURN_STATUS(acpi_status ACPI_INIT_FUNCTION
++			    acpi_install_physical_table(acpi_physical_address
++							address))
+ ACPI_EXTERNAL_RETURN_STATUS(acpi_status
+ 			    acpi_load_table(struct acpi_table_header *table,
+ 					    u32 *table_idx))
 -- 
 2.26.2
 

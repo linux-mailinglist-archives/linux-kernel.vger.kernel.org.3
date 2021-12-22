@@ -2,137 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD3F47D50B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4517D47D507
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:19:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241746AbhLVQUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 11:20:40 -0500
-Received: from mga01.intel.com ([192.55.52.88]:40847 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241647AbhLVQUi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 11:20:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640190038; x=1671726038;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MXvEvTDY3wXxjdpwc1zjX86H1PjRuybykzxgW93brTo=;
-  b=NMULG771sR7YFcw+FgIw5/s4CRNqtCiYBTTX8JeqloIvsK7KHkIeNPb4
-   XgluAU7BocsO+Nw1x81et5W7rTD4aa4QYWrGKC6hdL/vOnNORF7+4cGqP
-   86ZtJ7Ze9iIHY5qU/s5cEw02ATnSdNZ+EJyGUGVNcCEO9DiFoDpPVfweu
-   AOR3ZnPMMHhgdx/VEtoc31Vfuvw4HHJjsp/Rgcsy416hT0IuTB5/QrQ9p
-   iQUSR0boLNQkmZVpnYkHPoxCFpzIWy3jog8BpEhnv8+jNbQurPdpuEICO
-   E1qO8BFmvqxUUsIOg8UhLk03GFQ4/vJmhAQm4KG/YF68LIj/KO8nGwkTs
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="264852528"
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="264852528"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 08:20:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="607457623"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Dec 2021 08:20:35 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 3A95137D; Wed, 22 Dec 2021 18:20:44 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Ajay Gupta <ajayg@nvidia.com>,
-        "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
-Subject: [PATCH v2 5/5] i2c: designware-pci: Switch to use i2c_new_ccgx_ucsi()
-Date:   Wed, 22 Dec 2021 18:20:41 +0200
-Message-Id: <20211222162041.64625-5-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211222162041.64625-1-andriy.shevchenko@linux.intel.com>
-References: <20211222162041.64625-1-andriy.shevchenko@linux.intel.com>
+        id S241665AbhLVQTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 11:19:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241647AbhLVQTu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 11:19:50 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D3BC061401
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 08:19:50 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id bk14so4668923oib.7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 08:19:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KsMTQnn2hVgwCV9VL0XIlVRgqcd6Mo49QGleKB40N5s=;
+        b=cQVNdfsOqPCgMRnpZ0vVEr7mTW/MTssqV1D9ipzpq53tZlNfHfiR2jQX9ATxWwO57B
+         ug4flrFT5GFR7ZOAQRLcNl/p+vJ0bDvacacR+cpdbhiJUT7pwlpkjlZfWwKntvy3EzLo
+         FlunzdW5Uibrs1BYdkHDJ3Q0Oa9xAlYMRywQUdJpETp98GWMz+StCV+72xm8D6+LaWDK
+         uGApUA8b49e8Gm6ba4GjF+A9Y2YBVYcHAEIWrBhxT9Tpqtl41N6LXhsw0qUT9EiUBjs5
+         BNLnOHdObbi53/3r3VkNSgik4FZCz/LtftdqvSJSvmxhlhHMZFLdnZykIUhGcIGgxxEh
+         BH3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KsMTQnn2hVgwCV9VL0XIlVRgqcd6Mo49QGleKB40N5s=;
+        b=hoTuOXdFz6cFjnWZQ9SDeSjCCF4H6pEji40E1SYo/O3aA5PHy2FR1wI779uZBfdq+I
+         +ESscGKfqcgoXZGgPgwWkV4s/hVjErDJ+X6hUbSBBI5Ppj63aeKk2+GYHO1ZDehFliJQ
+         2foPyZFjTcQyv7rHAeGRIZImvOR/28xdoi6FwTk6dcGeuUHtg8mN3MzNbvyKeuT8Y9UL
+         ueeReBmKP+Kqa7b6m7J3qMdCfQGM+CnGBwvj+LziyvVoQaiEQBAnVNn/xAcClf+pz4Xb
+         LFxVjOkErPeNDF5ZDNGc43BEIxW9pvYPjvQsmCxmoAsCUB1+KClESAWcGHbX1QZXArK6
+         wTCA==
+X-Gm-Message-State: AOAM531ae3cv78a4vih/GsLNQWamLnG4uMbBF16RJgPNlt3ldlbpVTd/
+        nKxVgS0Ki7WiKqxVLBP5MuEQYA==
+X-Google-Smtp-Source: ABdhPJwPyqUJva4dUMwe/PvgCVq/e0xZr9cuEL+q1BiOzdSMfIV5QbD689pDIUyrxX1aZxfvwmMaqA==
+X-Received: by 2002:a05:6808:a84:: with SMTP id q4mr1296759oij.28.1640189989523;
+        Wed, 22 Dec 2021 08:19:49 -0800 (PST)
+Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id h1sm433376oog.26.2021.12.22.08.19.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 08:19:49 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] arm64: dts: qcom: sm8350: Correct UFS symbol clocks
+Date:   Wed, 22 Dec 2021 08:20:58 -0800
+Message-Id: <20211222162058.3418902-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of open coded variant switch to use i2c_new_ccgx_ucsi().
+The introduction of '9a61f813fcc8 ("clk: qcom: regmap-mux: fix parent
+clock lookup")' broke UFS support on SM8350.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+The cause for this is that the symbol clocks have a specified rate in
+the "freq-table-hz" table in the UFS node, which causes the UFS code to
+request a rate change, for which the "bi_tcxo" happens to provide the
+closest rate.  Prior to the change in regmap-mux it was determined
+(incorrectly) that no change was needed and everything worked.
+
+The rates of 75 and 300MHz matches the documentation for the symbol
+clocks, but we don't represent the parent clocks today. So let's mimic
+the configuration found in other platforms, by omitting the rate for the
+symbol clocks as well to avoid the rate change.
+
+While at it also fill in the dummy symbol clocks that was dropped from
+the GCC driver as it was upstreamed.
+
+Fixes: 59c7cf814783 ("arm64: dts: qcom: sm8350: Add UFS nodes")
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
-v2: rebased on top of current i2c/for-next
 
- drivers/i2c/busses/Kconfig                 |  1 +
- drivers/i2c/busses/i2c-designware-pcidrv.c | 30 ++++------------------
- 2 files changed, 6 insertions(+), 25 deletions(-)
+Changes since v1:
+- Updated commit message to clarify that the removed numbers are correct.
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 0c9b089d1456..e2e8ae7ed2a7 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -578,6 +578,7 @@ config I2C_DESIGNWARE_PCI
- 	tristate "Synopsys DesignWare PCI"
- 	depends on PCI
- 	select I2C_DESIGNWARE_CORE
-+	select I2C_CCGX_UCSI
- 	help
- 	  If you say yes to this option, support will be included for the
- 	  Synopsys DesignWare I2C adapter. Only master mode is supported.
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index ef4250f8852b..2782dddfb087 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -24,6 +24,7 @@
- #include <linux/slab.h>
+ arch/arm64/boot/dts/qcom/sm8350.dtsi | 28 +++++++++++++++++++++++-----
+ 1 file changed, 23 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+index bc176c252bca..ceb064a83038 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+@@ -38,6 +38,24 @@ sleep_clk: sleep-clk {
+ 			clock-frequency = <32000>;
+ 			#clock-cells = <0>;
+ 		};
++
++		ufs_phy_rx_symbol_0_clk: ufs-phy-rx-symbol-0 {
++			compatible = "fixed-clock";
++			clock-frequency = <1000>;
++			#clock-cells = <0>;
++		};
++
++		ufs_phy_rx_symbol_1_clk: ufs-phy-rx-symbol-1 {
++			compatible = "fixed-clock";
++			clock-frequency = <1000>;
++			#clock-cells = <0>;
++		};
++
++		ufs_phy_tx_symbol_0_clk: ufs-phy-tx-symbol-0 {
++			compatible = "fixed-clock";
++			clock-frequency = <1000>;
++			#clock-cells = <0>;
++		};
+ 	};
  
- #include "i2c-designware-core.h"
-+#include "i2c-ccgx-ucsi.h"
+ 	cpus {
+@@ -606,9 +624,9 @@ gcc: clock-controller@100000 {
+ 				 <0>,
+ 				 <0>,
+ 				 <0>,
+-				 <0>,
+-				 <0>,
+-				 <0>,
++				 <&ufs_phy_rx_symbol_0_clk>,
++				 <&ufs_phy_rx_symbol_1_clk>,
++				 <&ufs_phy_tx_symbol_0_clk>,
+ 				 <0>,
+ 				 <0>;
+ 		};
+@@ -2079,8 +2097,8 @@ ufs_mem_hc: ufshc@1d84000 {
+ 				<75000000 300000000>,
+ 				<0 0>,
+ 				<0 0>,
+-				<75000000 300000000>,
+-				<75000000 300000000>;
++				<0 0>,
++				<0 0>;
+ 			status = "disabled";
+ 		};
  
- #define DRIVER_NAME "i2c-designware-pci"
- #define AMD_CLK_RATE_HZ	100000
-@@ -125,26 +126,6 @@ static int mfld_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
- 	return -ENODEV;
- }
- 
-- /*
--  * TODO find a better way how to deduplicate instantiation
--  * of USB PD slave device from nVidia GPU driver.
--  */
--static int navi_amd_register_client(struct dw_i2c_dev *dev)
--{
--	struct i2c_board_info	info;
--
--	memset(&info, 0, sizeof(struct i2c_board_info));
--	strscpy(info.type, "ccgx-ucsi", I2C_NAME_SIZE);
--	info.addr = 0x08;
--	info.irq = dev->irq;
--
--	dev->slave = i2c_new_client_device(&dev->adapter, &info);
--	if (IS_ERR(dev->slave))
--		return PTR_ERR(dev->slave);
--
--	return 0;
--}
--
- static int navi_amd_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
- {
- 	struct dw_i2c_dev *dev = dev_get_drvdata(&pdev->dev);
-@@ -325,11 +306,10 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 	}
- 
- 	if ((dev->flags & MODEL_MASK) == MODEL_AMD_NAVI_GPU) {
--		r = navi_amd_register_client(dev);
--		if (r) {
--			dev_err(dev->dev, "register client failed with %d\n", r);
--			return r;
--		}
-+		dev->slave = i2c_new_ccgx_ucsi(&dev->adapter, dev->irq, NULL);
-+		if (IS_ERR(dev->slave))
-+			return dev_err_probe(dev->dev, PTR_ERR(dev->slave),
-+					     "register UCSI failed\n");
- 	}
- 
- 	pm_runtime_set_autosuspend_delay(&pdev->dev, 1000);
 -- 
-2.34.1
+2.33.1
 

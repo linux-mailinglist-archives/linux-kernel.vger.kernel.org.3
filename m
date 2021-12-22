@@ -2,103 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA0647D2F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93DC347D2FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:20:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240898AbhLVNQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 08:16:46 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:37512 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236982AbhLVNQo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 08:16:44 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 16E271EC053B;
-        Wed, 22 Dec 2021 14:16:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640178998;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=ldBbr5F47BRkNwI3KCFQS/UodY8GZ2FSKRo/NdAeHoA=;
-        b=e69K3Rot7r+DAZgXj9o0t3pGLM4ORQDocgHgt/iL0f+XvQ11GV/SzjuIH9Zjvnw9lvaLp4
-        fmyEq6Rixyg4hGNaZ1bl0Tcga3404uXxPkVRnzjAke6Q6llvGHEkMlJBlaYa+JCKI+w0dv
-        9a0WJ1k2HOZsvuXUs5ZjYmGdvr7X/zs=
-Date:   Wed, 22 Dec 2021 14:16:40 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v8 11/40] x86/sev: Register GHCB memory when SEV-SNP is
- active
-Message-ID: <YcMlOOPp2rTFKkeW@zn.tnic>
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-12-brijesh.singh@amd.com>
+        id S240917AbhLVNUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 08:20:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236585AbhLVNUK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 08:20:10 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BBCC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 05:20:10 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id g17so6483945ybe.13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 05:20:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=j1goV5aAlMyw5R8emZiAZx447+jdj41qItWe+35D124=;
+        b=jrchVVYCdWsktlqGCWjwZ1v1nkvcmwuQpyp6dw1rbAOesVS48vJ/3AMJLHLTPt8+H3
+         55oFx4O2+e1JzsWICdze5pWlgOPiPVuL4aB4vDNxhLU5kx1frOqUwmwg3lMJThOl7SZN
+         sRjFXF4dVzb5qE2Ae4w3uykCcKE/AwLTGdDLbMF+X52pcWRFLFSATkJockrIXweHCThX
+         BMm2bAbLSeHDuLwUBRO/I9JrnGQuyqAXA1nMdzVj4aYK9X3maVeziqeVAUGIG+D/cEDz
+         SzLYPjtfM0EZhf0pfdIZQJTYzg2bN7RGS9dlkFPgDtovuWc2KLYklFnHa5+jK+jMHuK+
+         50oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=j1goV5aAlMyw5R8emZiAZx447+jdj41qItWe+35D124=;
+        b=fFnYYtMjl8fkrCrg5l87QFx9Xo/ZIEmnmt8pX3Qppfr1UJbbPO9dB6tWb+kqzt7R7I
+         G+GhrqmahxGcsAfc+v8PMkQoXAgVpK93zovwjLkq9+r/790hpOXa9Vv52D+Cfz4VISku
+         VPCoZWMkujrqdI/vngnqonvhu1Mq8nadpmkBAroL7BAQW0IBi6NYUsGFnJMinSERtbog
+         DGuiKPkDBRnf7vTT5+8Gw9+HVjDYrut/21ZZxw/SNdLJBb4Pz5HujtoQdxatxpioTjWG
+         dA/DrvwH5AhLAbtcYMnhW5NOu9LzPQIPhxrPR9wDwRJYCG0hT9+z5T0fT0kcIKXilUjh
+         +ZKA==
+X-Gm-Message-State: AOAM531W4PHuvQtLGKmM2VAW4KVrleNW3zCMKmw9V3yS8aSuSrbeDifn
+        P1uTnxI6YrP+1ywH0jnhJWXGWcx+qEJu3eUD2UnACDo3eHYE7g==
+X-Google-Smtp-Source: ABdhPJzV7Q7oVy5TFBaPsvS9bSSY0IIXErDsF3neEXO3xKp5bdC9y9YZcL2gJ2ew0gMm7WD6kGv87ChvXAlwxxaOjr8=
+X-Received: by 2002:a25:9a84:: with SMTP id s4mr4116211ybo.405.1640179209684;
+ Wed, 22 Dec 2021 05:20:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211210154332.11526-12-brijesh.singh@amd.com>
+References: <20211220144654.926112-1-pgwipeout@gmail.com> <trinity-c54ecce4-7a39-4143-b136-f53c9b40ffd1-1640018026851@3c-app-gmx-bap45>
+ <YcGU6pQqfEPBqjrO@google.com> <4963E4A2-63B4-48A1-BDDD-5F9D07D71598@public-files.de>
+ <YcMHhJTsQMLDRRsN@google.com> <trinity-4d94e8dd-1499-4d5f-84c3-85075a4085dd-1640172673779@3c-app-gmx-bs44>
+ <YcMf56MvFv0ym7E5@google.com>
+In-Reply-To: <YcMf56MvFv0ym7E5@google.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Wed, 22 Dec 2021 08:19:57 -0500
+Message-ID: <CAMdYzYpYumXLEZYNadfHHGZN16ismT2JOMO8bGEegXP69sT3sw@mail.gmail.com>
+Subject: Re: Re: [PATCH v3] mfd: rk808: add reboot support to rk808.c
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 09:43:03AM -0600, Brijesh Singh wrote:
-> @@ -652,7 +652,7 @@ static enum es_result vc_handle_msr(struct ghcb *ghcb, struct es_em_ctxt *ctxt)
->   * This function runs on the first #VC exception after the kernel
->   * switched to virtual addresses.
->   */
-> -static bool __init sev_es_setup_ghcb(void)
-> +static bool __init setup_ghcb(void)
->  {
->  	/* First make sure the hypervisor talks a supported protocol. */
->  	if (!sev_es_negotiate_protocol())
+On Wed, Dec 22, 2021 at 7:54 AM Lee Jones <lee.jones@linaro.org> wrote:
+>
+> On Wed, 22 Dec 2021, Frank Wunderlich wrote:
+>
+> > > Gesendet: Mittwoch, 22. Dezember 2021 um 12:09 Uhr
+> > > Von: "Lee Jones" <lee.jones@linaro.org>
+> > > An: "Frank Wunderlich" <frank-w@public-files.de>
+> > > > Here i have squashed the change in:
+> > > >
+> > > > https://github.com/frank-w/BPI-R2-4.14/commit/06430ffcb6d58d33014fb=
+940256de77807ed620f
+> > > >
+> > > > With the change i can compile it...
+> > >
+> > > Not sure I understand.
+> > >
+> > > Please make sure all patches you send for inclusion into the Linux
+> > > kernel are fully tested.  They should also be bisectable i.e. not
+> > > depend on patches applied *on top*.
+> > >
+> > > > But in v4 (patch is tagged as v3 too) the of_property_read_bool was=
+ dropped completely.
+> > > > regards Frank
+> >
+> > only v1 was sent by me :)
+> >
+> > v4 is compilable and works on rk809 (Bananapi r2 pro)
+>
+> My comments are directed at whoever sent patches without testing.
 
-Ok, let me stare at this for a while:
+Apologies, due to an unfortunate set of circumstances I missed the
+build failed and I was using a stale kernel.
 
-This gets called by handle_vc_boot_ghcb() which gets set at build time:
-
-arch/x86/kernel/head_64.S:372:SYM_DATA(initial_vc_handler,      .quad handle_vc_boot_ghcb)
-
-initial_vc_handler() gets called by vc_boot_ghcb() which gets set in
-
-early_setup_idt()
-
-and that function already does sev_snp_register_ghcb().
-
-So why don't you concentrate the work setup_ghcb() does before the first
-#VC and call it in early_setup_idt(), before the IDT is set?
-
-And then you get rid of yet another setup-at-first-use case?
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+>
+> --
+> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
+> Senior Technical Lead - Developer Services
+> Linaro.org =E2=94=82 Open source software for Arm SoCs
+> Follow Linaro: Facebook | Twitter | Blog

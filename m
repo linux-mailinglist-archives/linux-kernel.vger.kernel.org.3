@@ -2,95 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8065C47D6E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1590247D6EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344744AbhLVScz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 13:32:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32866 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233997AbhLVScy (ORCPT
+        id S1344750AbhLVSfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 13:35:32 -0500
+Received: from mail-qv1-f44.google.com ([209.85.219.44]:45917 "EHLO
+        mail-qv1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233997AbhLVSfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 13:32:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BFBC061574;
-        Wed, 22 Dec 2021 10:32:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8736561C1E;
-        Wed, 22 Dec 2021 18:32:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1803C36AE5;
-        Wed, 22 Dec 2021 18:32:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640197973;
-        bh=oFYOckPrfQfT+uCoOEZdyGToL0hqy4zg5P6iJUy3w1U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dyMhwi0LEaJGm8qABqcqgBke3EtgOYjBBVJEZeAtY8BmH6px+WmDk82rO7+W92Mu1
-         8pO0dmA5kBM97u0Ox7C8kmNWqYAGx3Ys+BwUOoZmCoLs94h2uroISKAda33lnQlX/r
-         18JpPiEJx+Pyq7FMqec5mGNQHIOOSTy0AMeZEfUFh+LcIgcqRsxmB6Z3eWIBzrjjc2
-         8E+UCxMEdv23dVEa9yEXG3JY1ZLZMWbr+g9NLfdfKq/VNKiG7HEMYCkUFYrWYCBGAU
-         uQQba9SLIef6ahPwmBppHOBZvlD8IC0MZN109fOl4hkV8VjDLrlgHLw0tfxtPvD6b5
-         4MC2yQgkebysQ==
-Date:   Wed, 22 Dec 2021 11:32:48 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     llvm@lists.linux.dev, open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [next] arm: current.h:53:6: error: out of range pc-relative
- fixup value
-Message-ID: <YcNvUAMaRKBzUUcy@archlinux-ax161>
-References: <CA+G9fYuz1Bfkfga7xVPVdTLETBQK3=4UsXq15kZW8C85DhyXJQ@mail.gmail.com>
+        Wed, 22 Dec 2021 13:35:31 -0500
+Received: by mail-qv1-f44.google.com with SMTP id a9so3071473qvd.12;
+        Wed, 22 Dec 2021 10:35:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wddvJKAjEcziM4JqMrIWh39VyvuNvYrlg87KqL78R3k=;
+        b=tifJlH84BhxhIY7lq/s52QZzvuk1xHcyi4wKhW3aprARQ4Vr8mqO1TjE0z2xhb5qnQ
+         gdek0F8+wd/bwkSs2/Mb2kjqP9oNA8ZF2DGrM/n0yKeJyHW7e/Sts7w02aXyECfbVFhG
+         L13JFiSj2LNPSeCdotwgATO0vHYHlp6r2/FBPPXiXB+ELp9Ea029dLO1226VW/jJrATU
+         8svw5ZSqdQJHPW0DDUIKtzoXfl3Fu+OPuoETFy/xphBoawQy5SnRI3y2l1uYZYwGaugL
+         B25TjfoREDpYFKAwqQ1UgT8k7jB2Fn+D37PBo17kbOwUBlgSYmokJ2SnsKpGcofPZEyF
+         V7Tw==
+X-Gm-Message-State: AOAM530rRBLIWu9tcpkHjpdTnWEx2NVQvDWd6PSPua1B7PmpyfZVsAkx
+        itvX87xZZ6621PEkYmpCNRXRdXIJcrXd
+X-Google-Smtp-Source: ABdhPJxhIH2nLhxHUmJ9ealzrumRvQGjwfnGIcUS/n07yDQLdGrm95e8KglsOX+17uY9I9UC3ku9CA==
+X-Received: by 2002:ad4:5be5:: with SMTP id k5mr3545749qvc.124.1640198130421;
+        Wed, 22 Dec 2021 10:35:30 -0800 (PST)
+Received: from robh.at.kernel.org ([24.55.105.145])
+        by smtp.gmail.com with ESMTPSA id d27sm2157772qko.132.2021.12.22.10.35.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 10:35:29 -0800 (PST)
+Received: (nullmailer pid 2475434 invoked by uid 1000);
+        Wed, 22 Dec 2021 18:35:27 -0000
+Date:   Wed, 22 Dec 2021 14:35:27 -0400
+From:   Rob Herring <robh@kernel.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, kbuild-all@lists.01.org, bbasu@nvidia.com,
+        vsethi@nvidia.com, jsequeira@nvidia.com,
+        Thierry Reding <treding@nvidia.com>
+Subject: Re: [Patch v3 3/9] dt-bindings: arm: tegra: Add NVIDIA Tegra194
+ axi2apb binding
+Message-ID: <YcNv7xm19sFTlfjW@robh.at.kernel.org>
+References: <20211221125117.6545-1-sumitg@nvidia.com>
+ <20211221125117.6545-4-sumitg@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYuz1Bfkfga7xVPVdTLETBQK3=4UsXq15kZW8C85DhyXJQ@mail.gmail.com>
+In-Reply-To: <20211221125117.6545-4-sumitg@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 11:57:20PM +0530, Naresh Kamboju wrote:
-> [ Please ignore this email if it is already reported ]
+On Tue, Dec 21, 2021 at 06:21:11PM +0530, Sumit Gupta wrote:
+> Add device-tree binding documentation to represent the axi2apb bridges
+> used by Control Backbone (CBB) 1.0 in Tegra194 SOC. All errors for APB
+> slaves are reported as slave error because APB bas single bit to report
+> error. So, CBB driver needs to further check error status registers of
+> all the axi2apb bridges to find error type.
 > 
-> On Linux next 20211220 (and  20211222) tag following arm config builds failed
-> with clang-11, clang-12, clang-13 and clang-nightly.
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> ---
+>  .../arm/tegra/nvidia,tegra194-axi2apb.yaml    | 40 +++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-axi2apb.yaml
 > 
-> Build errors:
-> -------------
-> In file included from /builds/linux/kernel/sched/core.c:10:
-> In file included from /builds/linux/include/trace/events/sched.h:8:
-> In file included from /builds/linux/include/linux/kthread.h:6:
-> In file included from /builds/linux/include/linux/sched.h:12:
-> /builds/linux/arch/arm/include/asm/current.h:53:6: error: out of range
-> pc-relative fixup value
->         asm(LOAD_SYM_ARMV6(%0, __current) : "=r"(cur));
->             ^
-> /builds/linux/arch/arm/include/asm/insn.h:25:2: note: expanded from
-> macro 'LOAD_SYM_ARMV6'
->         "       ldr     " #reg ", =" #sym "                     \n\t"   \
->         ^
-> <inline asm>:1:3: note: instantiated into assembly here
->                 ldr     r2, =__current
->                 ^
+> diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-axi2apb.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-axi2apb.yaml
+> new file mode 100644
+> index 000000000000..788a13f8aa93
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-axi2apb.yaml
+> @@ -0,0 +1,40 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/arm/tegra/nvidia,tegra194-axi2apb.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: NVIDIA Tegra194 AXI2APB bridge
+> +
+> +maintainers:
+> +  - Sumit Gupta <sumitg@nvidia.com>
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^axi2apb@([0-9a-f]+)$"
+> +
+> +  compatible:
+> +    enum:
+> +      - nvidia,tegra194-axi2apb
+> +
+> +  reg:
+> +    maxItems: 6
+> +    description: Physical base address and length of registers for all bridges
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +    axi2apb: axi2apb@2390000 {
 
-Report on our issue tracker with discussion:
+As axi2apb appears to be a bus, then all the child nodes (APB devices) 
+should be under this node.
 
-https://github.com/ClangBuiltLinux/linux/issues/1551
+Is NVidia still putting all the devices at the root level rather than 
+under a bus node which is preferred?
 
-Ard has a fix that should resolve this here:
-
-https://lore.kernel.org/r/20211222104939.1154570-1-ardb@kernel.org/
-
-I am about to reply with a Tested-by tag, I have tested LLVM 12 and 13
-and my 14 build is running right now. Might be helpful for you to run
-that patch through your matrix as well.
-
-Cheers,
-Nathan
+> +      compatible = "nvidia,tegra194-axi2apb";
+> +      reg = <0x02390000 0x1000>,
+> +            <0x023a0000 0x1000>,
+> +            <0x023b0000 0x1000>,
+> +            <0x023c0000 0x1000>,
+> +            <0x023d0000 0x1000>,
+> +            <0x023e0000 0x1000>;
+> +    };
+> -- 
+> 2.17.1
+> 
+> 

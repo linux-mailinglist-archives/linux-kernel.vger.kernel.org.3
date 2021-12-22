@@ -2,224 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E7347DB7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 00:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A34647DB8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 00:47:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345480AbhLVXcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 18:32:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46160 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345474AbhLVXcB (ORCPT
+        id S243625AbhLVXrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 18:47:10 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:59583 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241033AbhLVXrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 18:32:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640215921;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XfI7gqBYYhaYDC/XKjIvpYFWGl28/kPgLuT23IL8FM0=;
-        b=P1oc1fVNcmVIZHtfMFqVYat+SMIZ+1xPwCeq/Ht5ITBcOmzO4Eysr3D0JhV8keRx+QBIwy
-        DJwpt0lMi/Ell/QwZcP0W4whXfeojMil3w0CuJkZV/pKLloyYnSU9rhT9QeTQldHL8uDXE
-        fwz8JLVAlRB9FCjxwVDmcKS9tJXP31s=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-82-xqCE2pPyOEe1DQYWm9JOXg-1; Wed, 22 Dec 2021 18:31:58 -0500
-X-MC-Unique: xqCE2pPyOEe1DQYWm9JOXg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 22 Dec 2021 18:47:09 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C7F358042E0;
-        Wed, 22 Dec 2021 23:31:55 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.165])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9B6667EFC3;
-        Wed, 22 Dec 2021 23:31:48 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v4 68/68] 9p, afs, ceph, cifs,
- nfs: Use current_is_kswapd() rather than gfpflags_allow_blocking()
-From:   David Howells <dhowells@redhat.com>
-To:     linux-cachefs@redhat.com
-Cc:     Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, dhowells@redhat.com,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 22 Dec 2021 23:31:47 +0000
-Message-ID: <164021590773.640689.16777975200823659231.stgit@warthog.procyon.org.uk>
-In-Reply-To: <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk>
-References: <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/0.23
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JK93H23tsz4xZ1;
+        Thu, 23 Dec 2021 10:47:06 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1640216828;
+        bh=34nDuBhsacLhqyEbLB21aao7b8KPXpJzCaQIVuvITmE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=LUov80UI5aIfp4Kt5cOe4Fa7ren5ZsWS36frHOcmD0+3hb9kftVXQeIEHjRk+Nvsr
+         qenO3EyUqfXS+ja6GfQab1KJx1KymvzrljRf8NcovParFDfbma8M4MivnP8+P4Xg55
+         kqsayjOXxl47VPWojMix5ZTnzeQSs2XUp1jHBFHqGebYba1yKlKJ3zYYbP0abvbCat
+         xCLZWHFHSLFu6ZZLL2RJEoYSx4DKNY91QXIJ3t0ebpC3tbKQF0pHTOSyJGD8/g1bb8
+         yJvoeyt9oUrU+sZyAQEMC+Ptvuu/g/ISIVGNr9VhDqFxXiw429MacPZvik/wKupA9X
+         YZRmv7qcqMuXw==
+Date:   Thu, 23 Dec 2021 10:47:04 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Roger Quadros <rogerq@kernel.org>
+Subject: linux-next: manual merge of the nand tree with the drivers-memory
+ tree
+Message-ID: <20211223104704.35fa3a41@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: multipart/signed; boundary="Sig_/IzdqL2uUTP76_L0plyVbCWR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In 9p, afs ceph, cifs and nfs, gfpflags_allow_blocking() (which wraps a
-test for __GFP_DIRECT_RECLAIM being set) is used to determine if
-->releasepage() should wait for the completion of a DIO write to fscache
-with something like:
+--Sig_/IzdqL2uUTP76_L0plyVbCWR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-	if (folio_test_fscache(folio)) {
-		if (!gfpflags_allow_blocking(gfp) || !(gfp & __GFP_FS))
-			return false;
-		folio_wait_fscache(folio);
-	}
+Hi all,
 
-Instead, current_is_kswapd() should be used instead.
+Today's linux-next merge of the nand tree got a conflict in:
 
-Note that this is based on a patch originally by Zhaoyang Huang[1].  In
-addition to extending it to the other network filesystems and putting it on
-top of my fscache rewrite, it also needs to include linux/swap.h in a bunch
-of places.  Can current_is_kswapd() be moved to linux/mm.h?
+  drivers/mtd/nand/raw/omap2.c
 
-Originally-signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-Co-developed-by: David Howells <dhowells@redhat.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-cc: Dominique Martinet <asmadeus@codewreck.org>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: Steve French <sfrench@samba.org>
-cc: Trond Myklebust <trond.myklebust@hammerspace.com>
-cc: linux-cachefs@redhat.com
-cc: v9fs-developer@lists.sourceforge.net
-cc: linux-afs@lists.infradead.org
-cc: ceph-devel@vger.kernel.org
-cc: linux-cifs@vger.kernel.org
-cc: linux-nfs@vger.kernel.org
-cc: linux-mm@kvack.org
-Link: https://lore.kernel.org/r/1638952658-20285-1-git-send-email-huangzhaoyang@gmail.com/ [1]
+between commit:
+
+  f2f8115fe8b3 ("memory: omap-gpmc: Use a compatible match table when check=
+ing for NAND controller")
+
+from the drivers-memory tree and commit:
+
+  0137c74ad873 ("mtd: rawnand: omap2: Add compatible for AM64 SoC")
+
+from the nand tree.
+
+I fixed it up (I used the former version and added the following patch)
+and can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 23 Dec 2021 10:41:35 +1100
+Subject: [PATCH] fixup for "memory: omap-gpmc: Use a compatible match table=
+ when checking for NAND controller"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
+ include/linux/platform_data/mtd-nand-omap2.h | 1 +
+ 1 file changed, 1 insertion(+)
 
- fs/9p/vfs_addr.c |    3 ++-
- fs/afs/file.c    |    3 ++-
- fs/ceph/addr.c   |    3 ++-
- fs/cifs/file.c   |    2 +-
- fs/nfs/fscache.h |    3 ++-
- 5 files changed, 9 insertions(+), 5 deletions(-)
+diff --git a/include/linux/platform_data/mtd-nand-omap2.h b/include/linux/p=
+latform_data/mtd-nand-omap2.h
+index 92f011805ad4..8c2f1f185353 100644
+--- a/include/linux/platform_data/mtd-nand-omap2.h
++++ b/include/linux/platform_data/mtd-nand-omap2.h
+@@ -65,6 +65,7 @@ struct gpmc_nand_regs {
+=20
+ static const struct of_device_id omap_nand_ids[] =3D {
+ 	{ .compatible =3D "ti,omap2-nand", },
++	{ .compatible =3D "ti,am64-nand", },
+ 	{},
+ };
+=20
+--=20
+2.33.0
 
-diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
-index f3f349f460e5..c72e9f8f5f32 100644
---- a/fs/9p/vfs_addr.c
-+++ b/fs/9p/vfs_addr.c
-@@ -16,6 +16,7 @@
- #include <linux/pagemap.h>
- #include <linux/idr.h>
- #include <linux/sched.h>
-+#include <linux/swap.h>
- #include <linux/uio.h>
- #include <linux/netfs.h>
- #include <net/9p/9p.h>
-@@ -143,7 +144,7 @@ static int v9fs_release_page(struct page *page, gfp_t gfp)
- 		return 0;
- #ifdef CONFIG_9P_FSCACHE
- 	if (folio_test_fscache(folio)) {
--		if (!gfpflags_allow_blocking(gfp) || !(gfp & __GFP_FS))
-+		if (current_is_kswapd() || !(gfp & __GFP_FS))
- 			return 0;
- 		folio_wait_fscache(folio);
- 	}
-diff --git a/fs/afs/file.c b/fs/afs/file.c
-index 572063dad0b3..5b98db127a1b 100644
---- a/fs/afs/file.c
-+++ b/fs/afs/file.c
-@@ -14,6 +14,7 @@
- #include <linux/gfp.h>
- #include <linux/task_io_accounting_ops.h>
- #include <linux/mm.h>
-+#include <linux/swap.h>
- #include <linux/netfs.h>
- #include "internal.h"
- 
-@@ -517,7 +518,7 @@ static int afs_releasepage(struct page *page, gfp_t gfp)
- 	 * elected to wait */
- #ifdef CONFIG_AFS_FSCACHE
- 	if (folio_test_fscache(folio)) {
--		if (!gfpflags_allow_blocking(gfp) || !(gfp & __GFP_FS))
-+		if (current_is_kswapd() || !(gfp & __GFP_FS))
- 			return false;
- 		folio_wait_fscache(folio);
- 	}
-diff --git a/fs/ceph/addr.c b/fs/ceph/addr.c
-index e836f8f1d4f8..b3d9459c9bbd 100644
---- a/fs/ceph/addr.c
-+++ b/fs/ceph/addr.c
-@@ -4,6 +4,7 @@
- #include <linux/backing-dev.h>
- #include <linux/fs.h>
- #include <linux/mm.h>
-+#include <linux/swap.h>
- #include <linux/pagemap.h>
- #include <linux/slab.h>
- #include <linux/pagevec.h>
-@@ -174,7 +175,7 @@ static int ceph_releasepage(struct page *page, gfp_t gfp)
- 		return 0;
- 
- 	if (PageFsCache(page)) {
--		if (!gfpflags_allow_blocking(gfp) || !(gfp & __GFP_FS))
-+		if (current_is_kswapd() || !(gfp & __GFP_FS))
- 			return 0;
- 		wait_on_page_fscache(page);
- 	}
-diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index 22b66ce10115..d872f6fe8e7d 100644
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -4809,7 +4809,7 @@ static int cifs_release_page(struct page *page, gfp_t gfp)
- 	if (PagePrivate(page))
- 		return 0;
- 	if (PageFsCache(page)) {
--		if (!gfpflags_allow_blocking(gfp) || !(gfp & __GFP_FS))
-+		if (current_is_kswapd() || !(gfp & __GFP_FS))
- 			return false;
- 		wait_on_page_fscache(page);
- 	}
-diff --git a/fs/nfs/fscache.h b/fs/nfs/fscache.h
-index e0220fc40366..25a5c0f82392 100644
---- a/fs/nfs/fscache.h
-+++ b/fs/nfs/fscache.h
-@@ -8,6 +8,7 @@
- #ifndef _NFS_FSCACHE_H
- #define _NFS_FSCACHE_H
- 
-+#include <linux/swap.h>
- #include <linux/nfs_fs.h>
- #include <linux/nfs_mount.h>
- #include <linux/nfs4_mount.h>
-@@ -52,7 +53,7 @@ extern void __nfs_readpage_to_fscache(struct inode *, struct page *);
- static inline int nfs_fscache_release_page(struct page *page, gfp_t gfp)
- {
- 	if (PageFsCache(page)) {
--		if (!gfpflags_allow_blocking(gfp) || !(gfp & __GFP_FS))
-+		if (current_is_kswapd() || !(gfp & __GFP_FS))
- 			return false;
- 		wait_on_page_fscache(page);
- 		fscache_note_page_release(nfs_i_fscache(page->mapping->host));
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/IzdqL2uUTP76_L0plyVbCWR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHDuPkACgkQAVBC80lX
+0GxlNgf/bDolQqo7UGnffq0BLDiPOuvIihfG9FxkWOc2jc386JOAR5i5bKetxuuz
+G++xf2sKJqWTMkztH5rwaf3oPAjUwyKGFEM76kKS/YpeF6GZRN/VcIi4AZg0bl8y
+/Z/eDXQSM9FnmRX77m4uedwh122d/qc+ldHuVVWooO+CW+kBZX8JsDQWgdnpcvSw
+ev57m0expuEKvpyvoip2MHkBatjnxP8j9Z8drXr1H9lwwsXEfN2d0Ug9/toXidQs
+akJE5o0zca8xwZkLmgFy22wZMT76Ul1oJ5VmiXqbwEx57rp1cKBe723tWrPyPYqW
+7seHvJBxt38QTzlFxFM9nszVTsYvGA==
+=tFy9
+-----END PGP SIGNATURE-----
+
+--Sig_/IzdqL2uUTP76_L0plyVbCWR--

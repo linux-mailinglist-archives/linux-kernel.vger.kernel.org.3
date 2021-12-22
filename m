@@ -2,80 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB0347D3DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:45:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A43747D3E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343537AbhLVOpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 09:45:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343513AbhLVOpD (ORCPT
+        id S1343555AbhLVOqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 09:46:14 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35638 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343540AbhLVOqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:45:03 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837DCC06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:45:03 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id y22so9677760edq.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:45:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=J64IZF9PVQr8R+mvV6ce9ekiJ1rmezsroOUDCf2tvvE=;
-        b=lrCP8RNTd1d7ZM3SOiBHTLW0fzByBufKnK1C4cwdLNi1Yu3ZjuVAEFRBd6gDon/K0y
-         /HxXuIWtI5IuWN1Vzyba9PI1lNVkX39icCFqVr3U7DKDhp847SH6b10sQlpVWvuLEDp9
-         jarhBLTQZQ49ibmhA2F6q85CCkLOCgtXcW5/ju748+saDA5swp+euCCQKesjhFv2bO5H
-         KgcRV+/xW3zu4o8mcywPu19X7Tg0FmBmWMBgFLq1fZ636VgbilNLWYPsAVaJ99HRzs+L
-         QgpyCCl8jZHJCwYNlF467vwcPiCm33EFVqqbG/TS6pG3zoP6m0Ru0u+YGwsIU9j8m6a2
-         42og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=J64IZF9PVQr8R+mvV6ce9ekiJ1rmezsroOUDCf2tvvE=;
-        b=4WjvTXWNqHJAVYhuNKuIB7ZFrqQ0G2C7bIE/XIn8hMheB2rmhAci/FyZAUpUamLHUv
-         QfHzbvWmYxoqdtmahtGuKuV/LBBgUu+v4wksZHyAtM5mOGkuCKtonfgAEgZkwo4l2x9s
-         oFXpF9tGKpWbELUWzox8PXPsTnufIxLp7LJ0ba+97jHqWjB9dtDb08kKEhGrgnktbIvo
-         fr37w5fjsKjYS/Irb9lMvVKo/Q3jLH9aQI3Zrrmm1uDwLmbEHeDUiOBsD9vnCm+y5WNY
-         XulHclomw4VJrgYgzwZYUPpIYb7/A0rV4/K0YVHf/Y6Fk0NWSBCymKz8tecNVZyLQqs6
-         ZmiA==
-X-Gm-Message-State: AOAM530lc2gk/uWx9Ra+zMCxxgkZG8oi/yeBX2ZELmkx5SccOYQjGdut
-        RYBgpNT1eW4GFlK/XjV1VLQQ2LQF3Rjuqy2jask=
-X-Google-Smtp-Source: ABdhPJzSLjtgTmOaykt83S9JxokiT/t6Dc937PST3BSDkHDJjBMHrsTGH38Na0TaJ0n+e+N+FYwSvDrkrTz3c3YjcS8=
-X-Received: by 2002:a17:907:6d99:: with SMTP id sb25mr2904977ejc.540.1640184301533;
- Wed, 22 Dec 2021 06:45:01 -0800 (PST)
+        Wed, 22 Dec 2021 09:46:12 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB1BC61A56;
+        Wed, 22 Dec 2021 14:46:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B570C36AE5;
+        Wed, 22 Dec 2021 14:46:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640184371;
+        bh=phXrYZ26uqRrRtL9psmNpU8/i8O7+uPas2TndxpCdWM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=syWCh5I+BWgkLbeSip6eVBzW5xIc5oQWqcPbwwtFWkjBbrMbojgmN+UKwvr3JmuiR
+         Ec84zGxyPFNT8vWV8hVZxVfF5XV0zF1KMGt/CddpkbwLIeP0vD53UYP7J0R9Y0zzqy
+         oI9rS3NZPtVeJZYbGd8k9pzvWnzynxaDbhNTXC/usUHp6/ukv3sHq067iOH5ePz6AB
+         trn3JhMWFmEfntsv0E3zejTIqDyZBpSeXy8qYfBefzVJxGhdV0aR3b6xDRFxYZvXjL
+         4VX5Fal3iUf5muKYstZxH/BuXd/koM6k742hU0w5KE713O04DixAyuyLZXxHvjGFC8
+         wKCTmoSEJHeZw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1n02sV-0002Bx-Sa; Wed, 22 Dec 2021 15:46:03 +0100
+Date:   Wed, 22 Dec 2021 15:46:03 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Marc Ferland <ferlandm@amotus.ca>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] gnss: usb: add support for Sierra Wireless XM1210
+Message-ID: <YcM6KwkBo6lvdkZQ@hovoldconsulting.com>
+References: <20211220111901.23206-1-johan@kernel.org>
+ <20211220111901.23206-3-johan@kernel.org>
+ <CAMRMzCAe1B66vyhXRsiew2=NDM+FbzFU8O9wXsrod64KaYrZ1Q@mail.gmail.com>
 MIME-Version: 1.0
-Reply-To: josephmarks20201@gmail.com
-Sender: mariamacessay2415@gmail.com
-Received: by 2002:a05:6400:248c:0:0:0:0 with HTTP; Wed, 22 Dec 2021 06:45:01
- -0800 (PST)
-From:   "Dr. Joseph Mark" <josephmark00011@gmail.com>
-Date:   Wed, 22 Dec 2021 14:45:01 +0000
-X-Google-Sender-Auth: aWptKudGYw2cUDaXYp8k5Fg20kA
-Message-ID: <CAPh=awgnkcLRCuCe46en9uSqz2LykXtQVTmwd__77ekjf8B44A@mail.gmail.com>
-Subject: Dear Friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMRMzCAe1B66vyhXRsiew2=NDM+FbzFU8O9wXsrod64KaYrZ1Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Dear Friend,
+On Mon, Dec 20, 2021 at 02:04:49PM -0500, Marc Ferland wrote:
+> On Mon, Dec 20, 2021 at 6:19 AM Johan Hovold <johan@kernel.org> wrote:
+> >
+> > Add support for the USB interface of the Sierra Wireless XM1210
+> > receiver.
+> >
+> > Note that the device only supports NMEA.
 
-I am Dr. Joseph Mark Work in bank. I Discovered the sum of seven
-million, two hundred thousand dollars (usd7.2) belonging to a deceased
-customer of this bank the fund has been lying in a suspense account
-without anybody coming to put claim over the money since the account
-late owner from Lebanese who was involved in car crash.
+> > Reported-by: Marc Ferland <ferlandm@amotus.ca>
+> > Link: https://lore.kernel.org/r/20211027200223.72701-1-ferlandm@amotus.ca
+> > Signed-off-by: Johan Hovold <johan@kernel.org>
+> > ---
+> >  drivers/gnss/usb.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/gnss/usb.c b/drivers/gnss/usb.c
+> > index 5c0251034def..792235a688ea 100644
+> > --- a/drivers/gnss/usb.c
+> > +++ b/drivers/gnss/usb.c
+> > @@ -17,6 +17,7 @@
+> >  #define GNSS_USB_WRITE_TIMEOUT 1000
+> >
+> >  static const struct usb_device_id gnss_usb_id_table[] = {
+> > +       { USB_DEVICE(0x1199, 0xb000) },         /* Sierra Wireless XM1210 */
+> >         { }
+> >  };
+> >  MODULE_DEVICE_TABLE(usb, gnss_usb_id_table);
+> > --
+> > 2.32.0
+> >
+> Thank you Johan! Much appreciated!
+> 
+> With your patches applied on my platform (featuring the XM1210) , I get:
+> 
+> # lsmod | grep gnss
+> gnss_usb 16384 0 - Live 0xffffffffc011b000
+> gnss 16384 3 gnss_usb, Live 0xffffffffc0082000
+> 
+> # dmesg | grep gnss
+> gnss: GNSS driver registered with major 244
+> usbcore: registered new interface driver gnss-usb
+> 
+> # ls -l /dev/gnss0
+> crw-rw----    1 root     root      244,   0 Apr  8 08:39 /dev/gnss0
+> 
+> I also tested with gpsd and everything is working as expected, hence:
+> 
+> Tested-by: Marc Ferland <ferlandm@amotus.ca>
 
-Therefore, I am soliciting for your assistance to come forward as the
-next of kin. I have agreed that 40% of this money will be for you as
-the beneficiary respect of the provision of your account and service
-rendered, 60% will be for me. Then immediately the money transferred
-to your account from this bank, I will proceed to your country for the
-sharing of the fund.  If you think you are capable and will be
-committed to making this deal successes send me an email as soon as
-possible to confirm your interest.
+Thanks for testing, Marc!
 
-Yours faithful,
-Dr. Joseph Mark
+I've applied this series now after adding your Tested-by tag to both
+patches.
+
+Johan

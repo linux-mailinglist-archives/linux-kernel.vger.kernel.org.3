@@ -2,82 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A40F647D344
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:56:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC6747D30B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245549AbhLVN4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 08:56:36 -0500
-Received: from mout.kundenserver.de ([217.72.192.74]:42237 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245500AbhLVN4e (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 08:56:34 -0500
-Received: from mail-wm1-f51.google.com ([209.85.128.51]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MWBC8-1mxKAd1Vrm-00Xf5B; Wed, 22 Dec 2021 14:56:33 +0100
-Received: by mail-wm1-f51.google.com with SMTP id n14-20020a7bcbce000000b00332f4abf43fso2345269wmi.0;
-        Wed, 22 Dec 2021 05:56:33 -0800 (PST)
-X-Gm-Message-State: AOAM533JNhWpGmeRcXqOoOCADiHIBByeCy8O4cTuOkZ0pssBO7ZfEdah
-        uMBjfyinhg1v+J7xiDnyMNqG0e0PkFAvFnNi84o=
-X-Google-Smtp-Source: ABdhPJxHZHEwLAEwqHridYfJm7TlWCGLjIEDeHHUir8Cs1kP3HuMbH2jN9G4hTgoKteiOAzPC+bhvI86kuxZaYPixlc=
-X-Received: by 2002:a7b:c198:: with SMTP id y24mr961837wmi.1.1640179840757;
- Wed, 22 Dec 2021 05:30:40 -0800 (PST)
+        id S241228AbhLVNcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 08:32:07 -0500
+Received: from mga03.intel.com ([134.134.136.65]:6584 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240256AbhLVNcG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 08:32:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640179926; x=1671715926;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HgoHbSGfRtVfVRTG1MYphNWo0vtqovBzp6z/tt3OdpA=;
+  b=cg/mKWMgxmiZNNl4GP1AlPvZvCPnem/ts/2Gt5MnpK2GZ1b9nEqtVtHL
+   UvtmKK1lMtQMwHrDIQ5tbxxsmvPMFuPmEGWshbh2TW1Z7psrKxq4xhu2O
+   DMa15B+YxsP07JtspMBtl8VuHNGJtpdOutKIJ0r/5IpIkpWMnjIGXWtKb
+   m++5L9cIEn9AIT4IWdXcT2NOi56Zocs7VM1j/JjSyIzbdvAI0Idz5q28v
+   /DJWqfsrx1JziK43JfZFieokDAVfLuhOdbb/+vqAz/tTpGvIAPLS474Wp
+   8/xRp517kWkwpwoIobF2nZtjoU4fexDUIwLYc6HAmBW1JSbm3gkW38ENc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240569293"
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="240569293"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 05:31:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="617134199"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 22 Dec 2021 05:31:43 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n01iY-0000Tn-Jx; Wed, 22 Dec 2021 13:31:42 +0000
+Date:   Wed, 22 Dec 2021 21:30:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jonas =?iso-8859-1?Q?Dre=DFler?= <verdre@v0yd.nl>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>
+Subject: drivers/net/wireless/marvell/mwifiex/pcie.c:659:13: warning:
+ variable 'retval' set but not used
+Message-ID: <202112222102.0Qk7vOl2-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-3-guoren@kernel.org>
- <CAK8P3a3dS=Ne0Pd2qZc8vB2whM7AUcJ1BNbhtf6EEboWAPpSug@mail.gmail.com>
- <CAJF2gTTN1HZeycK-WOFH0EjmjtBB4T=9de6Qrjs=uhAsLoOFaQ@mail.gmail.com>
- <CAK8P3a3m2Mz4Tvu+3cdji6iq_wvFZsYoyKvnaNKTEjE+ivex6A@mail.gmail.com> <CAJF2gTQEp0hEousuEyp5cPCa5Remb_8HMZ-BXZ393_z7hbne7g@mail.gmail.com>
-In-Reply-To: <CAJF2gTQEp0hEousuEyp5cPCa5Remb_8HMZ-BXZ393_z7hbne7g@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 22 Dec 2021 14:30:24 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a165oWeGOgsM=U3F54e4HFvhJxr2sG0qoGLOe_WK8qAtw@mail.gmail.com>
-Message-ID: <CAK8P3a165oWeGOgsM=U3F54e4HFvhJxr2sG0qoGLOe_WK8qAtw@mail.gmail.com>
-Subject: Re: [PATCH 02/13] riscv: Fixup difference with defconfig
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:V+ui7Qfh5UJ5wbdFKKqnkMcn70JhiC8cXqClgW8RetvDqfobO2L
- nJNBiUoYiMSgGcBgIoFbvNzV4iyvOwJoCHSfUysVAcS0qOlYaqSn5iPStgLG6K5fwoFYIWB
- 7ZksIhUT1ZOFaZ6REI17gMhvZA48aZRFXVXtlTP8swf3ozv4wqOCtitSQBZxcM90wj1KuYc
- ebkyGDtDMSRDNyXD6+CWw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DHOosCbS8YU=:Egea1T/Zw6a6fxhPsEta8x
- IaumnO5BQwpM0o6upnzhacoNM4/qTKod0UGv0YzxsLS1UgCFs0IPRtwvXxoUnj7vNs30OJh02
- ZwrjLh+tSsi44/3L7LpaXIM9NEhRbpBpomokY/uVzYU0i0lo+P78Q6z81pTDhIEl0cm7PrIE9
- bbUWY0o8z66aQPUFnMuXaxTqiZM2Pjl++WEjIn7JCDbJ9pyfUHpyOouxk760dTDJciFuBAzSZ
- LROUsB2+Lbil6TLTxi/DqeFsM66r5j+9/8LIVdmO7I6XF1AHMn2lttqEAnviYPqqCjB6ZFJde
- IqKoi6CQWDYVXAaDq/8VolA1hIEeGFtdx+W+CSyjn3XvnLPL80qYa6Fo0Ims6pjIHfwRzQkfQ
- 9udGcJwEaMNbiNDEO03iVpQX55CkZ4NnUfOSLCeAukOgKHlXmwt915Z3RLVluaa2Yn0O2eoas
- J0dfzTaCPB/ri4HeZqVJS0iNu8mK4g6AO6zqzC2FmqDf02wxIwvP1857ht4h9jhz3G4rzkIhd
- U8Hu98VRS1ENfVsdbpdwmgw26mwvd0Yvxj6W9qhWQiKHk7exStgCCvU7WMgpu7NiDzLppduxi
- 1fBAhGuNn53MjyEwquE005h62lVzGePtMrQebKMf3ejjnYcrYWK5hOEM97ftgdPY6VgwvmCjB
- 3urzxwB5wCDx5nzfq8XO5RWdR6mbYd97kXGugxubRVnOKZC/LtBrc3RwHebPIbWRvfR+yzkJ4
- lK8g13Ohq+oXmo3ExSpzrTXGUPlMXK3mmO6BMKNmE2qNYjaFAj133fpLL/eaevxbgKv/AozCa
- 7Jh3LQ+ilRqqwFgm627kgtyidDeUWIFbk4tdqdhgBEm6K8rJQU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 2:06 PM Guo Ren <guoren@kernel.org> wrote:
-> On Wed, Dec 22, 2021 at 8:51 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > On Wed, Dec 22, 2021 at 12:34 PM Guo Ren <guoren@kernel.org> wrote:
-> > Given that there are no specific rv32 SoC implementations supported
-> > by the kernel today (other than SOC_VIRT), the number of users
-> > would be close to zero anyway.
-> I really agree with you, but we still need the rv32 user mode
-> ecosystem for memory footprint.
+Hi Jonas,
 
-Sure, I just meant there are few users that would have to relearn typing
-"make defconfig 32-bit.config" instead of "make rv32_defconfig" even
-without the added Makefile target.
+FYI, the error/warning still remains.
 
-         Arnd
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2f47a9a4dfa3674fad19a49b40c5103a9a8e1589
+commit: 8e3e59c31fea5de95ffc52c46f0c562c39f20c59 mwifiex: Try waking the firmware until we get an interrupt
+date:   9 weeks ago
+config: powerpc64-buildonly-randconfig-r005-20211222 (https://download.01.org/0day-ci/archive/20211222/202112222102.0Qk7vOl2-lkp@intel.com/config)
+compiler: powerpc64le-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8e3e59c31fea5de95ffc52c46f0c562c39f20c59
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8e3e59c31fea5de95ffc52c46f0c562c39f20c59
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/wireless/marvell/mwifiex/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/net/wireless/marvell/mwifiex/pcie.c: In function 'mwifiex_pm_wakeup_card':
+>> drivers/net/wireless/marvell/mwifiex/pcie.c:659:13: warning: variable 'retval' set but not used [-Wunused-but-set-variable]
+     659 |         int retval;
+         |             ^~~~~~
+
+
+vim +/retval +659 drivers/net/wireless/marvell/mwifiex/pcie.c
+
+   653	
+   654	/* This function wakes up the card by reading fw_status register. */
+   655	static int mwifiex_pm_wakeup_card(struct mwifiex_adapter *adapter)
+   656	{
+   657		struct pcie_service_card *card = adapter->card;
+   658		const struct mwifiex_pcie_card_reg *reg = card->pcie.reg;
+ > 659		int retval;
+   660	
+   661		mwifiex_dbg(adapter, EVENT,
+   662			    "event: Wakeup device...\n");
+   663	
+   664		if (reg->sleep_cookie)
+   665			mwifiex_pcie_dev_wakeup_delay(adapter);
+   666	
+   667		/* The 88W8897 PCIe+USB firmware (latest version 15.68.19.p21) sometimes
+   668		 * appears to ignore or miss our wakeup request, so we continue trying
+   669		 * until we receive an interrupt from the card.
+   670		 */
+   671		if (read_poll_timeout(mwifiex_write_reg, retval,
+   672				      READ_ONCE(adapter->int_status) != 0,
+   673				      500, 500 * N_WAKEUP_TRIES_SHORT_INTERVAL,
+   674				      false,
+   675				      adapter, reg->fw_status, FIRMWARE_READY_PCIE)) {
+   676			if (read_poll_timeout(mwifiex_write_reg, retval,
+   677					      READ_ONCE(adapter->int_status) != 0,
+   678					      10000, 10000 * N_WAKEUP_TRIES_LONG_INTERVAL,
+   679					      false,
+   680					      adapter, reg->fw_status, FIRMWARE_READY_PCIE)) {
+   681				mwifiex_dbg(adapter, ERROR,
+   682					    "Firmware didn't wake up\n");
+   683				return -EIO;
+   684			}
+   685		}
+   686	
+   687		if (reg->sleep_cookie) {
+   688			mwifiex_pcie_dev_wakeup_delay(adapter);
+   689			mwifiex_dbg(adapter, INFO,
+   690				    "PCIE wakeup: Setting PS_STATE_AWAKE\n");
+   691			adapter->ps_state = PS_STATE_AWAKE;
+   692		}
+   693	
+   694		return 0;
+   695	}
+   696	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

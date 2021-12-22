@@ -2,165 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 139AC47CA3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 01:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 842D647CA3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 01:25:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239371AbhLVAYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 19:24:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41874 "EHLO
+        id S230217AbhLVAZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 19:25:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbhLVAYo (ORCPT
+        with ESMTP id S239434AbhLVAZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 19:24:44 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07BD4C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 16:24:44 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id u16so520937plg.9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 16:24:44 -0800 (PST)
+        Tue, 21 Dec 2021 19:25:36 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A073C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 16:25:36 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso612702ots.6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 16:25:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id;
-        bh=6VcCCa/uNyu5klYi1x3xHgmWoLaBIpIlwVyG80i3crM=;
-        b=ouuDwtP9G+3UVD9uHW4khTzY0tcWhe4PqAJJb5Mlss1XklMPskVdIpyGS9E/BJWTbq
-         6taCXHEzKKIXGt1KvJdmGhH0+fvdGtotn57vsaRp+AbyZemRVIWSEbbyIgjUlI27PjZf
-         eMc2fTu/xKkBEQNJlMwMalVPT1/7gMdSB8x+iJ/7CZdjlifOLmAmVbVdj0y4qIl+dYiV
-         B96mjX61NEPsrUdkvuFSp3fdroyzL1D+27To7CIZo3yLmKjTFfGhtMxHiqDO40k2D2/W
-         9laH3wHcaqOd75rGVjuiJJDkeEURG0Iwb9FnHGkPMg3S5WNts3PCYwt1KAl1kp3+k6WE
-         Sw+Q==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GlatAavy7Fomh56/ZYdtVg3JLbpH742/1IfeF1igMjE=;
+        b=oYA99ve50DOz/uXnvujpBooTpUsPQakmp5rPxdw6ZC/osg4KyMsxdywztJFqb1RnGf
+         T5Lt2jpEcD9HKmiISCn0tGRI+nx1fw7h+i+OG+Zl8E3Qx7mmWmRELRjpQ2xXJ7YXZp3L
+         bmHuyn5a7rP/EErf6fIuoAadJRqb8BP13Whf653hHeiwbxVbgK9N7/KIypT/hBWKVJjj
+         K7mRY+7PEXChx5AcuYqS2Qypa+MBgMyhGPuRy4ESXu99ZwL+BsLQQMFb00rney2W9MeC
+         k4oegx7BfOZglF7wOuBGxfUYtRbR9pX+j7NsyiRkbrCQSysAi4drDtdovPfJzfU+jMQ3
+         YBog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=6VcCCa/uNyu5klYi1x3xHgmWoLaBIpIlwVyG80i3crM=;
-        b=tSyAzKHejXplqOtO8uzS+vNHrznK51CEIhGssEAjhUQ2onInJupF/sotvi+LpCcNm9
-         2fVWXo4LpK3gO2CM/x9X1ms5FBx6Z1OzWo62dVDyYR+MROeZBFJU2jXBBF7CbPzLTC/Y
-         UjdwoT6F8D9e+35T+dXSSHLWmk/kUTu8oyL/D7TLemii++JFuENnFvWW7rYdH8jbmgav
-         Lyis6ZTv51GLY0XumpTAYAq7Vnj1A8w1Hkcr1sraXVCvNwocOzHPT3LxjxChNV3E1TbH
-         BV+ljH8Dclwzz/VQHQAg2luu3MA6LLTh6SZvhTklU9kAnm3O4sJB5LY2Bt9zHbU/BKcF
-         JOaQ==
-X-Gm-Message-State: AOAM533bWW9XVSb93Z2L3nGDt3WAQnJOjRwQ1V2lu7kmisQtDDrCw/B7
-        MQaonQqqxAtevhcJuslCRCw=
-X-Google-Smtp-Source: ABdhPJwNX5Epbm+IoS4Lp2LJLLSVPOkEOIERxa7U8zVMkAyf4l33ukzgulA5C0IsoCfSTRSHX0B16A==
-X-Received: by 2002:a17:90a:e7cb:: with SMTP id kb11mr719921pjb.75.1640132683559;
-        Tue, 21 Dec 2021 16:24:43 -0800 (PST)
-Received: from bj03382pcu.spreadtrum.com ([117.18.48.102])
-        by smtp.gmail.com with ESMTPSA id s34sm225625pfg.198.2021.12.21.16.24.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 21 Dec 2021 16:24:43 -0800 (PST)
-From:   Huangzhaoyang <huangzhaoyang@gmail.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] psi: fix possible trigger missing in the window
-Date:   Wed, 22 Dec 2021 08:24:28 +0800
-Message-Id: <1640132668-28249-1-git-send-email-huangzhaoyang@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GlatAavy7Fomh56/ZYdtVg3JLbpH742/1IfeF1igMjE=;
+        b=OmAp631mnhAKFLPcsGTHGU/5E8olz44wAaunwTJRjZYNq0rRs51FLhWHlP+ab35d8G
+         gJabKAk39bzQdVWrYsrm3XURer5obrwawktkCmnMKQvxByYBlG5e0neXbB7hpX32rQGz
+         pju0FRGtXlAFzdLWfzVZZH3WD9ifNd42HNgwLEkadJh8hUygalGu3Ca3DfX6ak4WFSXN
+         EIq33Y7X+dcqusO28RTti4Agl4xWV9xeY/rECwZ4mu731ecRdZlk4goDA4uO/4rOChXs
+         bCcfziV9Zg/jfcGKt+tC2zJaJixiABYJDxIiv9ZoQ2V1Lxwtq1KYDMZcH50do2Y/Z+bm
+         pDJw==
+X-Gm-Message-State: AOAM531n2j12BOhf6shGhxHUQg8CYtBE7oDYXSCUv7sHjL7Nd3mByKfq
+        fUCrhY7Wp15RDokGgNrc87kwJw==
+X-Google-Smtp-Source: ABdhPJyM+6fi4zx1ka4RK/IUEJiQdwsWJkQb6v4yBj0cz4YQNrb0EevT/CzP60g5aj83xPDo+44vXg==
+X-Received: by 2002:a05:6830:183:: with SMTP id q3mr505352ota.285.1640132735532;
+        Tue, 21 Dec 2021 16:25:35 -0800 (PST)
+Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id q2sm83086otg.64.2021.12.21.16.25.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 16:25:35 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: sm8350: Correct UFS symbol clocks
+Date:   Tue, 21 Dec 2021 16:26:44 -0800
+Message-Id: <20211222002644.3396011-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.33.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+The introduction of '9a61f813fcc8 ("clk: qcom: regmap-mux: fix parent
+clock lookup")' broke UFS support on SM8350.
 
-When a new threshold breaching stall happens after a psi event was
-generated and within the window duration, the new event is not
-generated because the events are rate-limited to one per window. If
-after that no new stall is recorded then the event will not be
-generated even after rate-limiting duration has passed. This is
-happening because with no new stall, window_update will not be called
-even though threshold was previously breached. To fix this, record
-threshold breaching occurrence and generate the event once window
-duration is passed.
+The cause for this is that the symbol clocks have a specified rate in
+the "freq-table-hz" table in the UFS node, which causes the UFS code to
+request a rate change, for which the "bi_tcxo" happens to provide the
+closest rate.  Prior to the change in regmap-mux it was determined
+(incorrectly) that no change was needed and everything worked. Instead
+mimic the configuration found in other platforms, by omitting the rate
+for the symbol clocks as well to avoid the rate change.
 
-Suggested-by: Suren Baghdasaryan <surenb@google.com>
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
----
-v2: modify the logic according to Suren's suggestion
-v3: update commit message
----
----
- include/linux/psi_types.h |  2 ++
- kernel/sched/psi.c        | 38 +++++++++++++++++++++++---------------
- 2 files changed, 25 insertions(+), 15 deletions(-)
+While at it also fill in the dummy symbol clocks that was dropped from
+the GCC driver as it was upstreamed.
 
-diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
-index 0a23300..87b694a 100644
---- a/include/linux/psi_types.h
-+++ b/include/linux/psi_types.h
-@@ -132,6 +132,8 @@ struct psi_trigger {
- 
- 	/* Refcounting to prevent premature destruction */
- 	struct kref refcount;
+Fixes: 59c7cf814783 ("arm64: dts: qcom: sm8350: Add UFS nodes")
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sm8350.dtsi | 28 +++++++++++++++++++++++-----
+ 1 file changed, 23 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+index bc176c252bca..ceb064a83038 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+@@ -38,6 +38,24 @@ sleep_clk: sleep-clk {
+ 			clock-frequency = <32000>;
+ 			#clock-cells = <0>;
+ 		};
 +
-+	bool threshold_breach;
- };
- 
- struct psi_group {
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index 1652f2b..5c67ab9 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -524,24 +524,29 @@ static u64 update_triggers(struct psi_group *group, u64 now)
- 	 */
- 	list_for_each_entry(t, &group->triggers, node) {
- 		u64 growth;
-+		bool trigger_stalled =
-+			group->polling_total[t->state] != total[t->state];
- 
--		/* Check for stall activity */
--		if (group->polling_total[t->state] == total[t->state])
--			continue;
--
--		/*
--		 * Multiple triggers might be looking at the same state,
--		 * remember to update group->polling_total[] once we've
--		 * been through all of them. Also remember to extend the
--		 * polling time if we see new stall activity.
--		 */
--		new_stall = true;
--
--		/* Calculate growth since last update */
--		growth = window_update(&t->win, now, total[t->state]);
--		if (growth < t->threshold)
-+		/* Check for stall activity or a previous threshold breach */
-+		if (!trigger_stalled && !t->threshold_breach)
- 			continue;
- 
-+		if (trigger_stalled) {
-+			/*
-+			 * Multiple triggers might be looking at the same state,
-+			 * remember to update group->polling_total[] once we've
-+			 * been through all of them. Also remember to extend the
-+			 * polling time if we see new stall activity.
-+			 */
-+			new_stall = true;
++		ufs_phy_rx_symbol_0_clk: ufs-phy-rx-symbol-0 {
++			compatible = "fixed-clock";
++			clock-frequency = <1000>;
++			#clock-cells = <0>;
++		};
 +
-+			/* Calculate growth since last update */
-+			growth = window_update(&t->win, now, total[t->state]);
-+			if (growth < t->threshold)
-+				continue;
++		ufs_phy_rx_symbol_1_clk: ufs-phy-rx-symbol-1 {
++			compatible = "fixed-clock";
++			clock-frequency = <1000>;
++			#clock-cells = <0>;
++		};
 +
-+			t->threshold_breach = true;
-+		}
- 		/* Limit event signaling to once per window */
- 		if (now < t->last_event_time + t->win.size)
- 			continue;
-@@ -550,6 +555,8 @@ static u64 update_triggers(struct psi_group *group, u64 now)
- 		if (cmpxchg(&t->event, 0, 1) == 0)
- 			wake_up_interruptible(&t->event_wait);
- 		t->last_event_time = now;
-+		/* Reset threshold breach flag once event got generated */
-+		t->threshold_breach = false;
- 	}
++		ufs_phy_tx_symbol_0_clk: ufs-phy-tx-symbol-0 {
++			compatible = "fixed-clock";
++			clock-frequency = <1000>;
++			#clock-cells = <0>;
++		};
+ 	};
  
- 	if (new_stall)
-@@ -1152,6 +1159,7 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
- 	t->last_event_time = 0;
- 	init_waitqueue_head(&t->event_wait);
- 	kref_init(&t->refcount);
-+	t->threshold_breach = false;
- 
- 	mutex_lock(&group->trigger_lock);
+ 	cpus {
+@@ -606,9 +624,9 @@ gcc: clock-controller@100000 {
+ 				 <0>,
+ 				 <0>,
+ 				 <0>,
+-				 <0>,
+-				 <0>,
+-				 <0>,
++				 <&ufs_phy_rx_symbol_0_clk>,
++				 <&ufs_phy_rx_symbol_1_clk>,
++				 <&ufs_phy_tx_symbol_0_clk>,
+ 				 <0>,
+ 				 <0>;
+ 		};
+@@ -2079,8 +2097,8 @@ ufs_mem_hc: ufshc@1d84000 {
+ 				<75000000 300000000>,
+ 				<0 0>,
+ 				<0 0>,
+-				<75000000 300000000>,
+-				<75000000 300000000>;
++				<0 0>,
++				<0 0>;
+ 			status = "disabled";
+ 		};
  
 -- 
-1.9.1
+2.33.1
 

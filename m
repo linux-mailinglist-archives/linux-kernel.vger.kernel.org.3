@@ -2,81 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9E447D4D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:07:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6816547D4DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:08:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232446AbhLVQHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 11:07:44 -0500
-Received: from foss.arm.com ([217.140.110.172]:48418 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229951AbhLVQHn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 11:07:43 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 696DFD6E;
-        Wed, 22 Dec 2021 08:07:42 -0800 (PST)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.196.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3054E3F774;
-        Wed, 22 Dec 2021 08:07:41 -0800 (PST)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Josef Bacik <josef@toxicpanda.com>
-Cc:     peterz@infradead.org, vincent.guittot@linaro.org,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, guro@fb.com, clm@fb.com
-Subject: Re: [REGRESSION] 5-10% increase in IO latencies with nohz balance patch
-In-Reply-To: <99452126-661e-9a0c-6b51-d345ed0f76ee@leemhuis.info>
-References: <YaUH5GFFoLiS4/3/@localhost.localdomain> <87ee6yc00j.mognet@arm.com> <YaUYsUHSKI5P2ulk@localhost.localdomain> <87bl22byq2.mognet@arm.com> <YaUuyN3h07xlEx8j@localhost.localdomain> <878rx6bia5.mognet@arm.com> <87wnklaoa8.mognet@arm.com> <YappSLDS2EvRJmr9@localhost.localdomain> <87lf0y9i8x.mognet@arm.com> <87v8zx8zia.mognet@arm.com> <YbJWBGaGAW/MenOn@localhost.localdomain> <99452126-661e-9a0c-6b51-d345ed0f76ee@leemhuis.info>
-Date:   Wed, 22 Dec 2021 16:07:35 +0000
-Message-ID: <87tuf07hdk.mognet@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S232749AbhLVQIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 11:08:04 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:32134 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229951AbhLVQID (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 11:08:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1640189284; x=1671725284;
+  h=from:to:cc:subject:date:message-id;
+  bh=r3lEt8Gkain1TWNfcDUXk8ZAKI4ZCOg3/oSgolx8HoM=;
+  b=m28UIXig56Y0vHD9G0zLGwLdrP3FRORO89snsVBEHwI+bKl3s2s/qoN/
+   1PcJv0+xBV1FlstQV6ueGor8H5WcJRqfGJ/EbuBYmrzzBDrb5GxPrmRp8
+   zGmhRb9ryi+9vz7DCOcwNAZkN0dkusV0MEfoC9bYgKZo63yXMV0PAGLys
+   s=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 22 Dec 2021 08:08:04 -0800
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 22 Dec 2021 08:08:02 -0800
+X-QCInternal: smtphost
+Received: from pmaliset-linux.qualcomm.com ([10.206.64.233])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 22 Dec 2021 21:37:46 +0530
+Received: by pmaliset-linux.qualcomm.com (Postfix, from userid 3848298)
+        id 583FD21198; Wed, 22 Dec 2021 21:37:45 +0530 (IST)
+From:   Prasad Malisetty <quic_c_pmaliset@quicinc.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
+        manivannan.sadhasivam@linaro.org, swboyd@chromium.org,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>
+Subject: [PATCH v1] PCI: qcom: Add system PM support
+Date:   Wed, 22 Dec 2021 21:37:42 +0530
+Message-Id: <1640189262-9699-1-git-send-email-quic_c_pmaliset@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Prasad Malisetty <quic_pmaliset@quicinc.com>
 
-Hi,
+Add suspend_noirq and resume_noirq callbacks to handle
+System suspend and resume in dwc pcie controller driver.
 
-On 22/12/21 13:42, Thorsten Leemhuis wrote:
-> What's the status here? Just wondering, because there hasn't been any
-> activity in this thread since 11 days and the festive season is upon us.
->
-> Was the discussion moved elsewhere? Or is this still a mystery? And if
-> it is: how bad is it, does it need to be fixed before Linus releases 5.16?
->
+When system suspends, send PME turnoff message to enter
+link into L2 state. Along with powerdown the PHY, disable
+pipe clock, switch gcc_pcie_1_pipe_clk_src to XO if mux is
+supported and disable the pcie clocks, regulators.
 
-I got to the end of bisect #3 yesterday, the incriminated commit doesn't
-seem to make much sense but I've just re-tested it and there is a clear
-regression between that commit and its parent (unlike bisect #1 and #2):
+When system resumes, PCIe link will be re-established and
+setup rc settings.
 
-2127d22509aec3a83dffb2a3c736df7ba747a7ce mm, slub: fix two bugs in slab_debug_trace_open()
-write_clat_ns_p99     195395.92     199638.20      4797.01    2.17%
-write_iops             17305.79      17188.24       250.66   -0.68%
+Signed-off-by: Prasad Malisetty <quic_pmaliset@quicinc.com>
+---
+ drivers/pci/controller/dwc/pcie-qcom.c | 103 +++++++++++++++++++++++++++++++++
+ 1 file changed, 103 insertions(+)
 
-write_clat_ns_p99     195543.84     199996.70      5122.88    2.28%
-write_iops             17300.61      17241.86       251.56   -0.34%
+diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+index c19cd506..24dcf5a 100644
+--- a/drivers/pci/controller/dwc/pcie-qcom.c
++++ b/drivers/pci/controller/dwc/pcie-qcom.c
+@@ -73,6 +73,8 @@
+ 
+ #define PCIE20_PARF_Q2A_FLUSH			0x1AC
+ 
++#define PCIE20_PARF_PM_STTS                     0x24
++
+ #define PCIE20_MISC_CONTROL_1_REG		0x8BC
+ #define DBI_RO_WR_EN				1
+ 
+@@ -1616,6 +1618,107 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
++static int qcom_pcie_send_pme_turnoff_msg(struct qcom_pcie *pcie)
++{
++	int ret = 0;
++	u32 val = 0, poll_val = 0;
++	uint64_t l23_rdy_poll_timeout = 100000;
++	struct dw_pcie *pci = pcie->pci;
++	struct device *dev = pci->dev;
++
++	val = readl(pcie->elbi + PCIE20_ELBI_SYS_CTRL);
++	val |= BIT(4);
++	writel(val, pcie->elbi + PCIE20_ELBI_SYS_CTRL);
++
++	ret = readl_poll_timeout((pcie->parf + PCIE20_PARF_PM_STTS), poll_val,
++			(poll_val & BIT(5)), 10000, l23_rdy_poll_timeout);
++	if (!ret)
++		dev_dbg(dev, "PCIe: PM_Enter_L23 is received\n");
++	else
++		dev_err(dev, "PM_Enter_L23 is NOT received.PARF_PM_STTS 0x%x\n",
++			readl_relaxed(pcie->parf + PCIE20_PARF_PM_STTS));
++
++	return ret;
++}
++
++static void qcom_pcie_host_disable(struct qcom_pcie *pcie)
++{
++	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
++
++	/*Assert the reset of endpoint */
++	qcom_ep_reset_assert(pcie);
++
++	/* Put PHY into POWER DOWN state */
++	phy_power_off(pcie->phy);
++
++	writel(1, pcie->parf + PCIE20_PARF_PHY_CTRL);
++
++	/* Disable pipe clock */
++	pcie->ops->post_deinit(pcie);
++
++	/* Change GCC_PCIE_1_PIPE_MUXR register to 0x2 for XO as parent */
++	if (pcie->pipe_clk_need_muxing)
++		clk_set_parent(res->pipe_clk_src, res->ref_clk_src);
++
++	/* Disable PCIe clocks and regulators*/
++	pcie->ops->deinit(pcie);
++}
++
++static int __maybe_unused qcom_pcie_pm_suspend_noirq(struct device *dev)
++{
++	int ret = 0;
++	struct qcom_pcie *pcie = dev_get_drvdata(dev);
++	struct dw_pcie *pci = pcie->pci;
++
++	if (!dw_pcie_link_up(pci)) {
++		dev_err(dev, "Power has been turned off already\n");
++		return ret;
++	}
++
++	/* Send PME turnoff msg */
++	ret = qcom_pcie_send_pme_turnoff_msg(pcie);
++	if (ret)
++		return ret;
++
++	/* Power down the PHY, disable clock and regulators */
++	qcom_pcie_host_disable(pcie);
++
++	dev_info(dev, "PM: PCI is suspended\n");
++	return ret;
++}
++
++/* Resume the PCIe link */
++static int __maybe_unused qcom_pcie_pm_resume_noirq(struct device *dev)
++{
++	int ret = 0;
++	struct qcom_pcie *pcie = dev_get_drvdata(dev);
++	struct dw_pcie *pci = pcie->pci;
++	struct pcie_port *pp = &pci->pp;
++
++	dev_info(dev, "PM: Resuming\n");
++
++	/* Initialize PCIe host */
++	ret = qcom_pcie_host_init(pp);
++	if (ret)
++		dev_err(dev, "cannot initialize host\n");
++
++	dw_pcie_iatu_detect(pci);
++	dw_pcie_setup_rc(pp);
++
++	/* Start the PCIe link */
++	qcom_pcie_start_link(pci);
++
++	ret = dw_pcie_wait_for_link(pci);
++	if (ret)
++		dev_err(dev, "Link never came up, Resume failed\n");
++
++	return ret;
++}
++
++static const struct dev_pm_ops qcom_pcie_pm_ops = {
++	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(qcom_pcie_pm_suspend_noirq, qcom_pcie_pm_resume_noirq)
++};
++
+ static const struct of_device_id qcom_pcie_match[] = {
+ 	{ .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
+ 	{ .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+of Code Aurora Forum, hosted by The Linux Foundation
 
-write_clat_ns_p99     195543.84     200724.48      5122.88    2.65%
-write_iops             17300.61      17246.63       251.56   -0.31%
-
-write_clat_ns_p99     195543.84     200445.41      5122.88    2.51%
-write_iops             17300.61      17215.47       251.56   -0.49%
-
-6d2aec9e123bb9c49cb5c7fc654f25f81e688e8c mm/mempolicy: do not allow illegal MPOL_F_NUMA_BALANCING | MPOL_LOCAL in mbind() 
-write_clat_ns_p99     195395.92     197942.30      4797.01    1.30%
-write_iops             17305.79      17246.56       250.66   -0.34%
-
-write_clat_ns_p99     195543.84     196183.92      5122.88    0.33%
-write_iops             17300.61      17310.33       251.56    0.06%
-
-write_clat_ns_p99     195543.84     196990.71      5122.88    0.74%
-write_iops             17300.61      17346.32       251.56    0.26%
-
-write_clat_ns_p99     195543.84     196362.24      5122.88    0.42%
-write_iops             17300.61      17315.71       251.56    0.09%
-
-It's pure debug stuff and AFAICT is a correct fix...
-@Josef, could you test that on your side?
-
-> Ciao, Thorsten
->

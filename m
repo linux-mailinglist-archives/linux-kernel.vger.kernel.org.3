@@ -2,217 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D351147D7F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA40A47D7FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:50:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345324AbhLVTso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 14:48:44 -0500
-Received: from foss.arm.com ([217.140.110.172]:53342 "EHLO foss.arm.com"
+        id S1345330AbhLVTt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 14:49:57 -0500
+Received: from mga07.intel.com ([134.134.136.100]:25635 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345312AbhLVTsl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 14:48:41 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4363C1FB;
-        Wed, 22 Dec 2021 11:48:41 -0800 (PST)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.196.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AEF423F5A1;
-        Wed, 22 Dec 2021 11:48:39 -0800 (PST)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        John Keeping <john@metanate.com>
-Cc:     linux-rt-users@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RT] BUG in sched/cpupri.c
-In-Reply-To: <31a47e99-6de3-76ec-62ad-9c98d092ead5@arm.com>
-References: <Yb3vXx3DcqVOi+EA@donbot> <71ddbe51-2b7f-2b13-5f22-9013506471dc@arm.com> <87zgou6iq1.mognet@arm.com> <20211221164528.3c84543f.john@metanate.com> <31a47e99-6de3-76ec-62ad-9c98d092ead5@arm.com>
-Date:   Wed, 22 Dec 2021 19:48:33 +0000
-Message-ID: <87r1a4775a.mognet@arm.com>
+        id S1345312AbhLVTtv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 14:49:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640202591; x=1671738591;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+u45g5FS9ncjvOzB2qszi41Ir5iwmdP/6PPp75iwrjs=;
+  b=B3zIJNi/ko5XbykmlWpMM6sAX5FqonzaGJecFHZbPaDeFuY4RHN87brj
+   54ySmnlf4ddPX0rVf3vEXwE1mM3DuG+o3S+BCEW0tlwc2wl+6Sycbt6sH
+   efMCd0rxsxm3TS8IjiVwz6yeN1BWH7Q8Hso4k3tHQHHa4VfhhOm7o7cnL
+   ZIClPhK9saEOwyRi9D2GYag9nl7fR5ciK7hUbMprFk1ZVL1fnkh6BJZdG
+   VI2gUVRcpRpr3QZsC9SK7j3xWB5q2LjwObhUI8cUMqv57XLRWxbwcQbj8
+   /rZj82zBIP+lcmaOhlBepB4cE/rOI6kCBjKGIPhDhqRd+uViX9m2G3vrv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="304067528"
+X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
+   d="scan'208";a="304067528"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 11:49:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
+   d="scan'208";a="664375492"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 22 Dec 2021 11:49:36 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 1C601FE; Wed, 22 Dec 2021 21:49:44 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Mark Gross <markgross@kernel.org>
+Subject: [PATCH v1 1/1] platform/x86/intel: Remove X86_PLATFORM_DRIVERS_INTEL
+Date:   Wed, 22 Dec 2021 21:49:41 +0200
+Message-Id: <20211222194941.76054-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/12/21 18:46, Dietmar Eggemann wrote:
-> On 21.12.21 17:45, John Keeping wrote:
->> On Tue, 21 Dec 2021 16:11:34 +0000
->> Valentin Schneider <valentin.schneider@arm.com> wrote:
->>
->>> On 20/12/21 18:35, Dietmar Eggemann wrote:
->
-> [...]
->
->>> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
->>> index fd7c4f972aaf..7d61ceec1a3b 100644
->>> --- a/kernel/sched/deadline.c
->>> +++ b/kernel/sched/deadline.c
->>> @@ -2467,10 +2467,13 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
->>>      * this is the right place to try to pull some other one
->>>      * from an overloaded CPU, if any.
->>>      */
->>> -	if (!task_on_rq_queued(p) || rq->dl.dl_nr_running)
->>> +	if (!task_on_rq_queued(p))
->>>             return;
->>>
->>> -	deadline_queue_pull_task(rq);
->>> +	if (!rq->dl.dl_nr_running)
->>> +		deadline_queue_pull_task(rq);
->>> +	else if (task_current(rq, p) && (p->sched_class < &dl_sched_class))
->>> +		resched_curr(rq);
->>>  }
->>>
->>>  /*
->>> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
->>> index ef8228d19382..1ea2567612fb 100644
->>> --- a/kernel/sched/rt.c
->>> +++ b/kernel/sched/rt.c
->>> @@ -2322,10 +2322,13 @@ static void switched_from_rt(struct rq *rq, struct task_struct *p)
->>>      * we may need to handle the pulling of RT tasks
->>>      * now.
->>>      */
->>> -	if (!task_on_rq_queued(p) || rq->rt.rt_nr_running)
->>> +	if (!task_on_rq_queued(p))
->>>             return;
->>>
->>> -	rt_queue_pull_task(rq);
->>> +	if (!rq->rt.rt_nr_running)
->>> +		rt_queue_pull_task(rq);
->>> +	else if (task_current(rq, p) && (p->sched_class < &rt_sched_class))
->>> +		resched_curr(rq);
->
-> switched_from_rt() -> rt_queue_pull_task(, pull_rt_task)
->   pull_rt_task()->tell_cpu_to_push()->irq_work_queue_on(&rq->rd->rto_push_work,)
->     rto_push_irq_work_func() -> push_rt_task(rq, true)
->
-> seems to be the only way with pull=true.
->
-> In my tests, rq->rt.rt_nr_running seems to be 0 when it happens.
->
-> [   22.288537] CPU3 switched_to_rt: p=[ksoftirqd/3 35]
-> [   22.288554] rt_mutex_setprio: CPU3 p=[ksoftirqd/3 35] pi_task=[rcu_preempt 11] queued=1 running=0 prio=98 oldprio=120
-> [   22.288636] CPU3 switched_from_rt: p=[ksoftirqd/3 35] rq->rt.rt_nr_running=0
->                                                          ^^^^^^^^^^^^^^^^^^^^^^
-> [   22.288649] rt_mutex_setprio: CPU3 p=[ksoftirqd/3 35] queued=1 running=1 prio=120 oldprio=98
-> [   22.288681] CPU3 push_rt_task: next_task=[rcu_preempt 11] migr_dis=1 rq->curr=[ksoftirqd/3 35] pull=1
->                                                              ^^^^^^^^^^                           ^^^^^^
+While introduction of this menu brings a nice view in the configuration tools,
+it brought more issues than solves, i.e. it prevents to locate files in the
+intel/ subfolder without touching non-related Kconfig dependencies elsewhere.
+Drop X86_PLATFORM_DRIVERS_INTEL altogether.
 
-mark_wakeup_next_waiter() first deboosts the previous owner and then
-wakeups the next top waiter. Seems like you somehow have the wakeup happen
-before the push_rt_task IRQ work is run. Also, tell_cpu_to_push() should
-only pick a CPU that is in rq->rd->rto_mask, which requires having at least
-2 RT tasks there...
+Note, on x86 it's enabled by default and it's quite unlikely anybody wants to
+disable all of the modules in this submenu.
 
-Now, that wakeup from the rtmutex unlock would give us a resched_curr() via
-check_preempt_curr() if required, which is good, though I think we are
-still missing some for sched_setscheduler() (there are no wakeups
-there). So if we just have to live with an IRQ work popping in before we
-get to preempt_schedule_irq() (or somesuch), then perhaps the below would
-be sufficient.
-
-> What about slightly changing the layout in switched_from_rt() (only lightly tested):
->
->
-> @@ -2322,7 +2338,15 @@ static void switched_from_rt(struct rq *rq, struct task_struct *p)
->          * we may need to handle the pulling of RT tasks
->          * now.
->          */
-> -       if (!task_on_rq_queued(p) || rq->rt.rt_nr_running)
-> +       if (!task_on_rq_queued(p))
-> +               return;
-> +
-> +       if (task_current(rq, p) && (p->sched_class < &rt_sched_class)) {
-> +               resched_curr(rq);
-> +               return;
-> +       }
-> +
-> +       if (rq->rt.rt_nr_running)
->                 return;
->
->         rt_queue_pull_task(rq);
-
-If !rq->rt.rt_nr_running then there's no point in issuing a reschedule (at
-least from RT's perspective; p->sched_class->switched_to() takes care of
-the rest)
-
+Fixes: 8bd836feb6ca ("platform/x86: intel_skl_int3472: Move to intel/ subfolder")
+Suggested-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
+ drivers/platform/x86/Makefile      |  2 +-
+ drivers/platform/x86/intel/Kconfig | 15 ---------------
+ 2 files changed, 1 insertion(+), 16 deletions(-)
 
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index fd7c4f972aaf..7d61ceec1a3b 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -2467,10 +2467,13 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
- 	 * this is the right place to try to pull some other one
- 	 * from an overloaded CPU, if any.
- 	 */
--	if (!task_on_rq_queued(p) || rq->dl.dl_nr_running)
-+	if (!task_on_rq_queued(p))
- 		return;
+diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+index dfb7ca88f012..18b11769073b 100644
+--- a/drivers/platform/x86/Makefile
++++ b/drivers/platform/x86/Makefile
+@@ -69,7 +69,7 @@ obj-$(CONFIG_THINKPAD_ACPI)	+= thinkpad_acpi.o
+ obj-$(CONFIG_THINKPAD_LMI)	+= think-lmi.o
  
--	deadline_queue_pull_task(rq);
-+	if (!rq->dl.dl_nr_running)
-+		deadline_queue_pull_task(rq);
-+	else if (task_current(rq, p) && (p->sched_class < &dl_sched_class))
-+		resched_curr(rq);
- }
+ # Intel
+-obj-$(CONFIG_X86_PLATFORM_DRIVERS_INTEL)		+= intel/
++obj-y				+= intel/
  
- /*
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index ef8228d19382..8f3e3a1367b6 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -1890,6 +1890,16 @@ static int push_rt_task(struct rq *rq, bool pull)
- 	if (!next_task)
- 		return 0;
+ # MSI
+ obj-$(CONFIG_MSI_LAPTOP)	+= msi-laptop.o
+diff --git a/drivers/platform/x86/intel/Kconfig b/drivers/platform/x86/intel/Kconfig
+index e0cc64dcf72c..f8b53f24f6f2 100644
+--- a/drivers/platform/x86/intel/Kconfig
++++ b/drivers/platform/x86/intel/Kconfig
+@@ -3,19 +3,6 @@
+ # Intel x86 Platform Specific Drivers
+ #
  
-+	/*
-+	 * It's possible that the next_task slipped in of higher priority than
-+	 * current, or current has *just* changed priority.  If that's the case
-+	 * just reschedule current.
-+	 */
-+	if (unlikely(next_task->prio < rq->curr->prio)) {
-+		resched_curr(rq);
-+		return 0;
-+	}
-+
- retry:
- 	if (is_migration_disabled(next_task)) {
- 		struct task_struct *push_task = NULL;
-@@ -1922,16 +1932,6 @@ static int push_rt_task(struct rq *rq, bool pull)
- 	if (WARN_ON(next_task == rq->curr))
- 		return 0;
- 
--	/*
--	 * It's possible that the next_task slipped in of
--	 * higher priority than current. If that's the case
--	 * just reschedule current.
--	 */
--	if (unlikely(next_task->prio < rq->curr->prio)) {
--		resched_curr(rq);
--		return 0;
--	}
+-menuconfig X86_PLATFORM_DRIVERS_INTEL
+-	bool "Intel x86 Platform Specific Device Drivers"
+-	default y
+-	help
+-	  Say Y here to get to see options for device drivers for
+-	  various Intel x86 platforms, including vendor-specific
+-	  drivers. This option alone does not add any kernel code.
 -
- 	/* We might release rq lock */
- 	get_task_struct(next_task);
+-	  If you say N, all options in this submenu will be skipped
+-	  and disabled.
+-
+-if X86_PLATFORM_DRIVERS_INTEL
+-
+ source "drivers/platform/x86/intel/atomisp2/Kconfig"
+ source "drivers/platform/x86/intel/int1092/Kconfig"
+ source "drivers/platform/x86/intel/int33fe/Kconfig"
+@@ -195,5 +182,3 @@ config INTEL_UNCORE_FREQ_CONTROL
  
-@@ -2322,10 +2322,13 @@ static void switched_from_rt(struct rq *rq, struct task_struct *p)
- 	 * we may need to handle the pulling of RT tasks
- 	 * now.
- 	 */
--	if (!task_on_rq_queued(p) || rq->rt.rt_nr_running)
-+	if (!task_on_rq_queued(p))
- 		return;
- 
--	rt_queue_pull_task(rq);
-+	if (!rq->rt.rt_nr_running)
-+		rt_queue_pull_task(rq);
-+	else if (task_current(rq, p) && (p->sched_class < &rt_sched_class))
-+		resched_curr(rq);
- }
- 
- void __init init_sched_rt_class(void)
+ 	  To compile this driver as a module, choose M here: the module
+ 	  will be called intel-uncore-frequency.
+-
+-endif # X86_PLATFORM_DRIVERS_INTEL
+-- 
+2.34.1
+

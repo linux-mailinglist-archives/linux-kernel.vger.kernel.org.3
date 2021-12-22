@@ -2,222 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E3647CE8C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 09:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 414D347CE8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236422AbhLVI6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 03:58:48 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:32966 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236068AbhLVI6r (ORCPT
+        id S243502AbhLVJAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:00:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236068AbhLVJAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 03:58:47 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C392061917;
-        Wed, 22 Dec 2021 08:58:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3221CC36AE5;
-        Wed, 22 Dec 2021 08:58:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640163526;
-        bh=rkAS+OCqMkmXDfYk1BVI4Q62pHtiYuu18uaXrbLk5Fo=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=qb0ZUa+3LoO4zlzI3RmokRpDSpFK4D4Evm3e6uoz199S3EECyojnIda3t19EcEISe
-         yqRsiH8iHbHm2yJCGx/4xMh6STx6f4Oi2epPiwDa0NWHZMtBxfZm2Otvq9d7zPqKO0
-         shx/k+clH3Ko1WIwcOIIGZSAMSfl/MeG1JLibQS79sQTikOMguV5JneqG8bJtJZYv8
-         T/kkiAam+BCwJ/AXWEOXPEGv8YtKJGsXLqM4KIPw5qg0ceFL1EyLmjP2NVOb/qiaof
-         rAyNtpbC9eCF7M7YwjALfITtZR/7PEorG7J5tnOuacXC/AoIvYeayXIryR8Nn2YDik
-         VFQriQjaRubQA==
-Received: by mail-yb1-f177.google.com with SMTP id y68so4665955ybe.1;
-        Wed, 22 Dec 2021 00:58:46 -0800 (PST)
-X-Gm-Message-State: AOAM5311nzvCLRD0/9VxYz7xyeljLNZmcx1OGa2z/aKzbAlmxcKh3/8o
-        98tMlfVZHgrvr22oC6wLAvuZPiY6daFRC0IbRvo=
-X-Google-Smtp-Source: ABdhPJyciTSJG0DxNn+uCfpu0CJJEfXLfpOOtn/Ni/wJFHEnc5NEAbHT1vecCdxYsj7z0UGsybBjHm6YYroywi2BwiI=
-X-Received: by 2002:a25:d647:: with SMTP id n68mr3154876ybg.529.1640163525287;
- Wed, 22 Dec 2021 00:58:45 -0800 (PST)
+        Wed, 22 Dec 2021 04:00:08 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEACEC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:00:07 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id z8so2664730ljz.9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:00:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=KspBUSbJLNlP0yC6HNjWEU5tJDHzB7XxdNZVksoaM+s=;
+        b=G3Po6n+t0dCNiTjiHl28JFRRtIomiIo2s6plI3GN4f4W4/w8pC2YgvHsY7hITuw7Na
+         W74jwjf4kLIkWsm9SnP+s2ZjQv3pfszbulf9B88JEPdUbTbiSjEGF4uMHDgshsUVwFds
+         2ZBAhnuQWPg25wELT26N2/TzsLKkhbmSPtrUA3la9SzSkGz4j1nlt05y2g4n+mar/+9R
+         Eg637tdVLlWtYfGT0x93IqYI0Wqh0Q9jK98SZXcD0PI3ceesyN2ghKsMcGgm2gZE6t/T
+         Dzjxc2Ry4l5pyRW6r4nC16Fex4pPWss2m6AW4komcqxeeg/rAGCvUmkKdT2AbPzI7jS8
+         tXaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KspBUSbJLNlP0yC6HNjWEU5tJDHzB7XxdNZVksoaM+s=;
+        b=eq/ow1wTk+NWvWf5W/usmu0IHVL4kxRakiGkmW1m7mhr7eRiWlvg23m+bAox49aeUP
+         nFA+o8XYafbL3lSLUSBLyBG+wtVm+/EcUzO7mZM1o1TJXoxVycqwrjLPimrEelI3PQjn
+         KcGb51I07QRv7ibGRK/qcEekzigZ2NUdrBvVLyEQ51+HEE92Ffz7SpFpKUYVk5GsNbuO
+         vs0da748Wy/+zvurIc4DI1rbKVw9mWUTdIXa0y6VzsKG77hMKOV/Mny9+9fpp64o41n3
+         q1/nS9wBaB9RPLKLNUtopwayAYTMJJTeDDAM6fVjtGCWjthE5WCo7vCzADSzVSGAMUxN
+         vmfA==
+X-Gm-Message-State: AOAM530IlFg7oj9LfLDv4fDdiyLNYRl+XyuSOuBBJIeNueq7GGT8F1/8
+        2haZcEkw1byRbc8ZH2oaCpg=
+X-Google-Smtp-Source: ABdhPJyCDHsw+B07eiZ2g13OQKG81eBXRjy+goqYNCSXXFoiPZV6XHY9JP5U3ouaZAp0OdTG1c3WFg==
+X-Received: by 2002:a05:651c:4c6:: with SMTP id e6mr1583072lji.303.1640163606198;
+        Wed, 22 Dec 2021 01:00:06 -0800 (PST)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id p18sm151341lfc.297.2021.12.22.01.00.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 01:00:05 -0800 (PST)
+Message-ID: <52a2a318-0efe-94af-b8b9-308c2fbb1fab@gmail.com>
+Date:   Wed, 22 Dec 2021 10:00:03 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:7110:1313:b0:11b:f4cd:b869 with HTTP; Wed, 22 Dec 2021
- 00:58:44 -0800 (PST)
-In-Reply-To: <c6fcbdb7-f232-f888-674b-7a45d98ad92a@virtuozzo.com>
-References: <e2aef4e7-a9b9-e44e-94a2-29ed6bc20091@virtuozzo.com>
- <CAKYAXd8pCfUBPRXT-44N_g2GD_BKtjboiepgTGz5DQ93YEiz-A@mail.gmail.com>
- <bf92bd1f-d03b-1fb6-ff62-53cca4b441e8@virtuozzo.com> <CAKYAXd_z9i6VtMsHmR_FQDwBzGHcjHLv=zicAsddjur=_A071g@mail.gmail.com>
- <f210483a-69f7-1983-65cf-f3f5bd4112ac@virtuozzo.com> <CAKYAXd97orfDc7VA+fae7tLjTufMksQTepYKazY=gX7UkG0+rw@mail.gmail.com>
- <c6fcbdb7-f232-f888-674b-7a45d98ad92a@virtuozzo.com>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Wed, 22 Dec 2021 17:58:44 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd-zBBF_J-z1Ph4ruRD3Fb3EORsKfDjKw0yX42D0SCD_Ow@mail.gmail.com>
-Message-ID: <CAKYAXd-zBBF_J-z1Ph4ruRD3Fb3EORsKfDjKw0yX42D0SCD_Ow@mail.gmail.com>
-Subject: Re: [PATCH] ksmbd: use F_SETLK to force vfs_file_lock() to return asynchronously
-To:     Vasily Averin <vvs@virtuozzo.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steve French <sfrench@samba.org>,
-        Hyunchul Lee <hyc.lee@gmail.com>, kernel@openvz.org,
-        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH] nvmem: fix unregistering device in nvmem_register() error
+ path
+To:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20211221154550.11455-1-zajec5@gmail.com>
+ <YcH7fw5S6aSXswvb@kroah.com> <9e94f0fd-e2d5-4d9e-5759-a5f591191785@gmail.com>
+ <YcLXbPzyhtMnP0YQ@kroah.com> <YcLkA0e48+xuGsHk@hovoldconsulting.com>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <YcLkA0e48+xuGsHk@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2021-12-22 15:51 GMT+09:00, Vasily Averin <vvs@virtuozzo.com>:
-> On 22.12.2021 08:25, Namjae Jeon wrote:
->> 2021-12-22 13:32 GMT+09:00, Vasily Averin <vvs@virtuozzo.com>:
->>> On 22.12.2021 05:50, Namjae Jeon wrote:
->>>> 2021-12-21 22:08 GMT+09:00, Vasily Averin <vvs@virtuozzo.com>:
->>>>> On 21.12.2021 15:02, Namjae Jeon wrote:
->>>>>> 2021-12-19 18:34 GMT+09:00, Vasily Averin <vvs@virtuozzo.com>:
->>>>>>> To avoid possible deadlock ksmbd should process locks
->>>>>>> asynchronously.
->>>>>>> Callers expecting vfs_file_locks() to return asynchronously should
->>>>>>> only
->>>>>>> use F_SETLK, not F_SETLKW.
->>>>>> Should I check this patch instead of
->>>>>> [PATCH] ksmbd: force "fail immediately" flag on fs with its own
->>>>>> ->lock
->>>>>> ?
+On 22.12.2021 09:38, Johan Hovold wrote:
+> On Wed, Dec 22, 2021 at 08:44:44AM +0100, Greg Kroah-Hartman wrote:
+>> On Tue, Dec 21, 2021 at 06:46:01PM +0100, Rafał Miłecki wrote:
+>>> On 21.12.2021 17:06, Greg Kroah-Hartman wrote:
+>>>> On Tue, Dec 21, 2021 at 04:45:50PM +0100, Rafał Miłecki wrote:
+>>>>> From: Rafał Miłecki <rafal@milecki.pl>
 >>>>>
->>>>> no, these patches are independent and both ones are required.
->>>>> current patch fixes incorrect kernel thread behaviour:
->>>>> kernel threads should not use F_SETLKW for locking requests.
->>>> How does this patch work? posix_lock_file in vfs_lock_file() does not
->>>> use
->>>> cmd.
->>>> And your patch still leaves FL_SLEEP.
+>>>>> 1. Drop incorrect put_device() calls
+>>>>>
+>>>>> If device_register() fails then underlaying device_add() takes care of
+>>>>> calling put_device() if needed. There is no need to do that in a driver.
+>>>>
+>>>> Did you read the documentation for device_register() that says:
+>>>>
+>>>>    * NOTE: _Never_ directly free @dev after calling this function, even
+>>>>    * if it returned an error! Always use put_device() to give up the
+>>>>    * reference initialized in this function instead.
 >>>
->>> "use F_SETLK, not F_SETLKW" was copy-pasted from requirement described
->>> in
->>> comment above vfs_lock_file().
+>>> I clearly tried to be too smart and ignored documentation.
 >>>
->>> posix_lock_file() is not used in all ->lock() functions, and use
->>> F_SETLKW
->>> forces some of affected filesystem use blocking locks:
->> What I'm saying is that when we apply "ksmbd: force "fail immediately"
->> flag on fs with its own ->lock ", this patch is meaningless. How is
->> ->lock() with F_SETLKW called?
->
-> I got your point finally,
-> yes, you are right, now this cannot happen.
-> However I'm going to fix all affected filesystems and then revert
-> "ksmbd: force "fail immediately" flag on fs with its own ->lock"
-> When this happen and ksmbd will still use IS_SETLKW it will trigger the
-> problems described below.
-If so, You can include one patch(this patch + revert patch) in patch
-series for fixing ->lock of all filesystem. But I can still not
-understand why we need to revert the patch and apply this patch.
-Maybe, I need to check your next patches.
+>>> I'd say device_add() behaviour is rather uncommon and a bit unintuitive.
+>>> Most kernel functions are safe to assume to do nothing that requires
+>>> cleanup if they fail.
+>>>
+>>> E.g. if I call platform_device_register() and it fails I don't need to
+>>> call anything like platform_device_put(). I just free previously
+>>> allocated memory.
+>>
+>> And that is wrong.
+> 
+> It seems Rafał is mistaken here too; you certainly need to call
+> platform_device_put() if platform_device_register() fail, even if many
+> current users do appear to get this wrong.
 
-Thanks!
->
-> Thank you,
-> 	Vasily Averin
->
->>> fs/ceph/locks.c::ceph_lock()
->>>         /* set wait bit as appropriate, then make command as Ceph
->>> expects
->>> it*/
->>>         if (IS_GETLK(cmd))
->>>                 op = CEPH_MDS_OP_GETFILELOCK;
->>>         else if (IS_SETLKW(cmd))
->>>                 wait = 1
->>>
->>> nfs v3 handles it in nlmclnt_proc
->>> fs/lockd/clntproc.c::nlmclnt_proc
->>>         if (IS_SETLK(cmd) || IS_SETLKW(cmd)) {
->>>                 if (fl->fl_type != F_UNLCK) {
->>>                         call->a_args.block = IS_SETLKW(cmd) ? 1 : 0;
->>>
->>>
->>> nvs v4 handles it in nfs4_retry_setlk()
->>> fs/nfs/nfs4proc.c()::nfs4_retry_setlk()
->>>         while(!signalled()) {
->>>                 status = nfs4_proc_setlk(state, cmd, request);
->>>                 if ((status != -EAGAIN) || IS_SETLK(cmd))
->>>                         break;
->>>
->>> gfs2_lock and ocfs calls dlm_posix_lock()
->>> dlm_posix_lock::dlm_posix_lock()
->>> op->info.wait           = IS_SETLKW(cmd)
->>>
->>> So if ksmbd will try to export these file systems it can be deadlocked
->>> on
->>> blocking locks processing,
->>> even with my patch dropped FL_SLEEP.
->>>
->>> To be honest, some other filesystems, contrary, ignores cmd and handles
->>> FL_SLEEP instead:
->>> cifs_lock and fuse_setlk.  Moreover, locks_lock_file_wait() is widely
->>> used
->>> too,
->>> (and can block if FL_SLEEP is set). Some of these cases looks like bugs,
->>> its careful processing requires some time, therefore right now, to
->>> quickly
->>> work around
->>> all these cases kernel export threads  (nfsd/lockd/ksmbd) can drop to
->>> FL_SLEEP flag).
->>>
->>> I think it makes sense to create new bug on bugzilla.kernel.org, explain
->>> all
->>> details of this problem,
->>> and keep you informed about progress with filesystems fixes. When all
->>> file
->>> systems will be fixed,
->>> it allows you to revert "ksmbd: force "fail immediately" flag on fs with
->>> its
->>> own ->lock"
->>>
->>> Thank you,
->>> 	Vasily Averin
->>>
->>>>> "[PATCH] ksmbd: force "fail immediately" flag on fs with its own
->>>>> ->lock"
->>>>> tries to workaround the incorrect behaviour of some exported
->>>>> filesystems.
->>>>>
->>>>> Currently this way is used in nfsd and lockd, however it is not fully
->>>>> correct,
->>>>> and I still search some better solution, so perhaps
->>>>> '[PATCH] ksmbd: force "fail immediately" flag on fs with its own
->>>>> ->lock'
->>>>> will be dropped later.
->>>>>
->>>>> Thank you,
->>>>> 	Vasily Averin
->>>>>
->>>>>>> Signed-off-by: Vasily Averin <vvs@virtuozzo.com>
->>>>>>> ---
->>>>>>>  fs/ksmbd/smb2pdu.c | 4 ++--
->>>>>>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>>>>>>
->>>>>>> diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
->>>>>>> index 0c020deb76bb..34f333549767 100644
->>>>>>> --- a/fs/ksmbd/smb2pdu.c
->>>>>>> +++ b/fs/ksmbd/smb2pdu.c
->>>>>>> @@ -6646,13 +6646,13 @@ static int smb2_set_flock_flags(struct
->>>>>>> file_lock
->>>>>>> *flock, int flags)
->>>>>>>  	switch (flags) {
->>>>>>>  	case SMB2_LOCKFLAG_SHARED:
->>>>>>>  		ksmbd_debug(SMB, "received shared request\n");
->>>>>>> -		cmd = F_SETLKW;
->>>>>>> +		cmd = F_SETLK;
->>>>>>>  		flock->fl_type = F_RDLCK;
->>>>>>>  		flock->fl_flags |= FL_SLEEP;
->>>>>>>  		break;
->>>>>>>  	case SMB2_LOCKFLAG_EXCLUSIVE:
->>>>>>>  		ksmbd_debug(SMB, "received exclusive request\n");
->>>>>>> -		cmd = F_SETLKW;
->>>>>>> +		cmd = F_SETLK;
->>>>>>>  		flock->fl_type = F_WRLCK;
->>>>>>>  		flock->fl_flags |= FL_SLEEP;
->>>>>>>  		break;
->>>>>>> --
->>>>>>> 2.25.1
->>>>>>>
->>>>>>>
->>>>>
->>>>>
->>>
->>>
->
->
+Yes I was! Gosh I made up that "platform_device_put()" name and only
+now I realized it actually exists!
+
+I stand by saying this design is really misleading. Even though
+platform_device_put() was obviously a bad example.
+
+Please remember I'm just a minor kernel developer however in my humble
+opinion behaviour of device_register() and platform_device_register()
+should be changed.
+
+If any function fails I expect:
+1. That function to clean up its mess if any
+2. Me to be responsible to clean up my mess if any
+
+This is how "most" code (whatever it means) works.
+1. If POSIX snprintf() fails I'm not expected to call *printf_put() sth
+2. If POSIX bind() fails I'm not expected to call bind_put() sth
+3. (...)
+
+I'm not sure if those are the best examples but you should get my point.

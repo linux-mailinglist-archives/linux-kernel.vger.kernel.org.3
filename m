@@ -2,101 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B82E047D115
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:34:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4424847D117
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244706AbhLVLe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 06:34:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244700AbhLVLe2 (ORCPT
+        id S244712AbhLVLf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 06:35:28 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4318 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236667AbhLVLf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 06:34:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E296FC061574;
-        Wed, 22 Dec 2021 03:34:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6EA2FB81B9C;
-        Wed, 22 Dec 2021 11:34:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EA0FC36AF2;
-        Wed, 22 Dec 2021 11:34:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640172865;
-        bh=Fi3+odhuzWqyoIOsS4HSOvfce+S3ltBSyG1ZwqaAFn4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=foAIuKLE8FYEQkEdzpCYiOLK6T3NsAXvweIXkdoDP0AQlA60YQUvNdKHX73qrQ3+r
-         3XligsoacZsbDkGcOGekamcCtPfav66NAXrDCoULGRo82yGsLOHSJYAxjWCLn2SPXA
-         OtakQV2IKdorX1Ylu9I8F+GL8ghaCuG628jLZnkh7Ha61yr8t+djNhMQfvp7LUlTQ5
-         YwIbePOX9xbXYfhteuHkueGTVY9h0lIwXnA17yNfiUl4As4v1pCY5ttgTt+wgYHXwR
-         PaYEYquR3xiuYBaDsuXzYCy8zl1INANPsJ1kJMgaUzu13UzLIie9QccZJyb6hPm6EO
-         cN/OhiqistNUQ==
-Received: by mail-vk1-f170.google.com with SMTP id g65so1125605vkf.4;
-        Wed, 22 Dec 2021 03:34:25 -0800 (PST)
-X-Gm-Message-State: AOAM531QTVf+BggOjgPwsZ592gf2XhCNbTK0YJ54EfN5a6gybclWsVY5
-        u1NJKtk45rIsZgqLN9O7sQxXOin/78ZxUTCy1xc=
-X-Google-Smtp-Source: ABdhPJxWEYRFXCwuHnukSTxHmYrUUDGyLCBZ+l40ti0zYBeaZ5biPhi2e3rHjJN/vnHepBjKUq7jC8D3B0E33xwBH1o=
-X-Received: by 2002:a05:6122:a17:: with SMTP id 23mr853099vkn.8.1640172864086;
- Wed, 22 Dec 2021 03:34:24 -0800 (PST)
+        Wed, 22 Dec 2021 06:35:26 -0500
+Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JJrjl1Wg8z67b01;
+        Wed, 22 Dec 2021 19:30:51 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.20; Wed, 22 Dec 2021 12:35:24 +0100
+Received: from [10.195.32.222] (10.195.32.222) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 22 Dec 2021 11:35:23 +0000
+Subject: Re: [PATCH RFT] blk-mq: optimize queue tag busy iter for shared_tags
+To:     Kashyap Desai <kashyap.desai@broadcom.com>, <axboe@kernel.dk>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <ming.lei@redhat.com>,
+        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>
+References: <20211221123157.14052-1-kashyap.desai@broadcom.com>
+ <e9174a89-b3a4-d737-c5a9-ff3969053479@huawei.com>
+ <7028630054e9cd0e8c84670a27c2b164@mail.gmail.com>
+ <e7288bcd-cc4d-8f57-a0c8-eadd53732177@huawei.com>
+ <c26b40bac76ec1bfbab2419aece544ca@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <e50cfdcd-110b-d778-6e3f-edfed9b1c5a4@huawei.com>
+Date:   Wed, 22 Dec 2021 11:35:22 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-3-guoren@kernel.org>
- <CAK8P3a3dS=Ne0Pd2qZc8vB2whM7AUcJ1BNbhtf6EEboWAPpSug@mail.gmail.com>
-In-Reply-To: <CAK8P3a3dS=Ne0Pd2qZc8vB2whM7AUcJ1BNbhtf6EEboWAPpSug@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 22 Dec 2021 19:34:13 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTN1HZeycK-WOFH0EjmjtBB4T=9de6Qrjs=uhAsLoOFaQ@mail.gmail.com>
-Message-ID: <CAJF2gTTN1HZeycK-WOFH0EjmjtBB4T=9de6Qrjs=uhAsLoOFaQ@mail.gmail.com>
-Subject: Re: [PATCH 02/13] riscv: Fixup difference with defconfig
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <c26b40bac76ec1bfbab2419aece544ca@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.195.32.222]
+X-ClientProxiedBy: lhreml750-chm.china.huawei.com (10.201.108.200) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 1:09 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
-> >
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Let's follow the origin patch's spirit.
-> >
-> > The only difference between rv32_defconfig and defconfig is that
-> > rv32_defconfig has  CONFIG_ARCH_RV32I=y.
-> >
-> > This is helpful to compare rv64-compat-rv32 v.s. rv32-linux.
-> >
->
-> If the intention is to keep them in sync, maybe use a fragment for 32-bit
-> mode, like powerpc or mips do.
->
->       Arnd
+On 22/12/2021 11:20, Kashyap Desai wrote:
+> Yes, above is the same changes I was looking for. I did very basic mistake.
+> I applied your above commit while doing megaraid_sas testing.
+>   While I move to mpi3mr testing, I did not apply your patch set. 
 
-Some people are familiar with "make rv32_defconfig". There has a
-32-bit.config fragment config in arch/riscv/configs/.
+But I did not think that my patch would help mpi3mr since it does not 
+use host_tagset.
 
-I've tested with:
+> We can drop
+> request of this RFT since I tested above series and it serve the same
+> purpose.
 
-make ARCH=riscv CROSS_COMPILE=riscv32-buildroot-linux-gnu-
-EXTRA_CFLAGS+=-g O=../build-rv32/ defconfig 32-bit.config
+ok, fine.
 
-The above is tested Okay, do you mean we should delete rv32_defconfig?
-I think it's another topic, I just want them the same in "compat"
-patchset.
+And just to confirm, do you now think that we need to fix any older 
+kernel with some backport of my changes? I think that we would just need 
+to consider 5.16 (when it becomes stable), 5.15, and and 5.10
 
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Thanks,
+John

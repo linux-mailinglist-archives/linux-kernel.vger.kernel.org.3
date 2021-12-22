@@ -2,173 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B515847CF48
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:32:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E600C47CF56
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:34:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243957AbhLVJcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 04:32:11 -0500
-Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:35365 "EHLO
-        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243935AbhLVJcK (ORCPT
+        id S236379AbhLVJes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:34:48 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48512 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229987AbhLVJer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:32:10 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R641e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V.Pguqk_1640165527;
-Received: from 30.21.164.53(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V.Pguqk_1640165527)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 22 Dec 2021 17:32:08 +0800
-Message-ID: <17421c73-2124-63c2-1925-dcea5c976711@linux.alibaba.com>
-Date:   Wed, 22 Dec 2021 17:32:52 +0800
+        Wed, 22 Dec 2021 04:34:47 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60E71B81B76
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 09:34:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CEC6C36AE5;
+        Wed, 22 Dec 2021 09:34:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640165685;
+        bh=QDLWRIQCIAjLuMF59M7Y1CcRGawIZ8LHf20ZW949kt4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UvWEYPuXdfeyqUISQMS57BU9YQG9G1HzU/iA9Y6F7GeY0qcye8jUE8oAUKTGRZPo2
+         VFL+HcOdnMc5/yIQMXPnU2APHUIiYwsaGnmHqH1yPTUht1OlTqGJ1eVllnm8VVQCrq
+         kuGckSyHU02KrMvt6q7fGLH6NIocRziXVpa4TX9U=
+Date:   Wed, 22 Dec 2021 10:34:42 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH] nvmem: fix unregistering device in nvmem_register()
+ error path
+Message-ID: <YcLxMr3XCIpndmWr@kroah.com>
+References: <20211221154550.11455-1-zajec5@gmail.com>
+ <YcH7fw5S6aSXswvb@kroah.com>
+ <9e94f0fd-e2d5-4d9e-5759-a5f591191785@gmail.com>
+ <YcLXbPzyhtMnP0YQ@kroah.com>
+ <YcLkA0e48+xuGsHk@hovoldconsulting.com>
+ <YcLoPV6A9XJImBXa@kroah.com>
+ <YcLp1PtcX0QCp2BZ@hovoldconsulting.com>
+ <YcLu0VAMXpiw6l+T@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2] mm/damon: Add access checking for hugetlb pages
-To:     SeongJae Park <sj@kernel.org>
-Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20211222091007.16495-1-sj@kernel.org>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20211222091007.16495-1-sj@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YcLu0VAMXpiw6l+T@hovoldconsulting.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/22/2021 5:10 PM, SeongJae Park wrote:
-> Hi Baolin,
+On Wed, Dec 22, 2021 at 10:24:33AM +0100, Johan Hovold wrote:
+> On Wed, Dec 22, 2021 at 10:03:17AM +0100, Johan Hovold wrote:
+> > On Wed, Dec 22, 2021 at 09:56:29AM +0100, Greg Kroah-Hartman wrote:
+> > > On Wed, Dec 22, 2021 at 09:38:27AM +0100, Johan Hovold wrote:
+> > > > On Wed, Dec 22, 2021 at 08:44:44AM +0100, Greg Kroah-Hartman wrote:
+> > > > > On Tue, Dec 21, 2021 at 06:46:01PM +0100, Rafał Miłecki wrote:
+> > > > > > On 21.12.2021 17:06, Greg Kroah-Hartman wrote:
+> > > > > > > On Tue, Dec 21, 2021 at 04:45:50PM +0100, Rafał Miłecki wrote:
+> > > > > > > > From: Rafał Miłecki <rafal@milecki.pl>
+> > > > > > > > 
+> > > > > > > > 1. Drop incorrect put_device() calls
+> > > > > > > > 
+> > > > > > > > If device_register() fails then underlaying device_add() takes care of
+> > > > > > > > calling put_device() if needed. There is no need to do that in a driver.
+> > > > > > > 
+> > > > > > > Did you read the documentation for device_register() that says:
+> > > > > > > 
+> > > > > > >   * NOTE: _Never_ directly free @dev after calling this function, even
+> > > > > > >   * if it returned an error! Always use put_device() to give up the
+> > > > > > >   * reference initialized in this function instead.
+> > > > > > 
+> > > > > > I clearly tried to be too smart and ignored documentation.
+> > > > > > 
+> > > > > > I'd say device_add() behaviour is rather uncommon and a bit unintuitive.
+> > > > > > Most kernel functions are safe to assume to do nothing that requires
+> > > > > > cleanup if they fail.
+> > > > > > 
+> > > > > > E.g. if I call platform_device_register() and it fails I don't need to
+> > > > > > call anything like platform_device_put(). I just free previously
+> > > > > > allocated memory.
+> > > > > 
+> > > > > And that is wrong.
+> > > > 
+> > > > It seems Rafał is mistaken here too; you certainly need to call
+> > > > platform_device_put() if platform_device_register() fail, even if many
+> > > > current users do appear to get this wrong.
+> > > 
+> > > A short search found almost everyone getting this wrong.  Arguably
+> > > platform_device_register() can clean up properly on its own if we want
+> > > it to do so.  Will take a lot of auditing of the current codebase first
+> > > to see if it's safe...
+> > 
+> > Right, but I found at least a couple of callers getting it it right, so
+> > changing the behaviour now risks introducing a double free (which is
+> > worse than a memleak on registration failure). But yeah, a careful
+> > review might suffice.
 > 
+> Actually, I'm not sure we can (should) change
+> platform_device_register(). The platform device has been allocated by
+> the caller and it would be quite counterintuitive to have the
+> registration function deallocate that memory if registration fails.
 > 
-> Basically, the code looks ok to me.  I left so trivial cosmetic nitpicks below,
-> though.
-> 
-> On Thu, 16 Dec 2021 18:38:03 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
-> 
->> The process's VMAs can be mapped by hugetlb page, but now the DAMON
->> did not implement the access checking for hugetlb pte, so we can not
->> get the actual access count like below if a process VMAs were mapped
->> by hugetlb.
->>
->> damon_aggregated: target_id=18446614368406014464
->> nr_regions=12 4194304-5476352: 0 545
->> damon_aggregated: target_id=18446614368406014464
->> nr_regions=12 140662370467840-140662372970496: 0 545
->> damon_aggregated: target_id=18446614368406014464
->> nr_regions=12 140662372970496-140662375460864: 0 545
->> damon_aggregated: target_id=18446614368406014464
->> nr_regions=12 140662375460864-140662377951232: 0 545
->> damon_aggregated: target_id=18446614368406014464
->> nr_regions=12 140662377951232-140662380449792: 0 545
->> damon_aggregated: target_id=18446614368406014464
->> nr_regions=12 140662380449792-140662382944256: 0 545
->> ......
-> 
-> I'd prefer indenting the program output with 4 spaces and not wrapping it.
-> e.g.,
-> 
->      damon_aggregated: target_id=18446614368406014464 nr_regions=12 4194304-5476352: 0 545
->      damon_aggregated: target_id=18446614368406014464 nr_regions=12 140662370467840-140662372970496: 0 545
+> Heh, we even have statically allocated structures being registered with
+> this function and we certainly don't want the helper to try to free
+> those.
 
-Sure.
+Yeah, it's a mess.  I'll try to look at it this break if things calm
+down...
 
->>
->> Thus this patch adds hugetlb access checking support, with this patch
->> we can see below VMA mapped by hugetlb access count.
->>
->> damon_aggregated: target_id=18446613056935405824
->> nr_regions=12 140296486649856-140296489914368: 1 3
->> damon_aggregated: target_id=18446613056935405824
->> nr_regions=12 140296489914368-140296492978176: 1 3
->> damon_aggregated: target_id=18446613056935405824
->> nr_regions=12 140296492978176-140296495439872: 1 3
->> damon_aggregated: target_id=18446613056935405824
->> nr_regions=12 140296495439872-140296498311168: 1 3
->> damon_aggregated: target_id=18446613056935405824
->> nr_regions=12 140296498311168-140296501198848: 1 3
->> damon_aggregated: target_id=18446613056935405824
->> nr_regions=12 140296501198848-140296504320000: 1 3
->> damon_aggregated: target_id=18446613056935405824
->> nr_regions=12 140296504320000-140296507568128: 1 2
->> ......
-> 
-> ditto.
-
-Sure.
-
->> +static int damon_mkold_hugetlb_entry(pte_t *pte, unsigned long hmask,
->> +				     unsigned long addr, unsigned long end,
->> +				     struct mm_walk *walk)
->> +{
->> +	struct hstate *h = hstate_vma(walk->vma);
->> +	spinlock_t *ptl;
->> +	pte_t entry;
->> +
->> +	ptl = huge_pte_lock(h, walk->mm, pte);
->> +	entry = huge_ptep_get(pte);
->> +	if (!pte_present(entry))
->> +		goto out;
->> +
->> +	damon_hugetlb_mkold(pte, walk->mm, walk->vma, addr);
->> +
->> +out:
->> +	spin_unlock(ptl);
->> +	return 0;
->> +}
->> +#else
->> +#define damon_mkold_hugetlb_entry NULL
->> +#endif
-> 
-> Could we append a comment saying this #endif is for #ifdef CONFIG_HUGETLB_PAGE,
-> like below?
-> 
->      #endif	/* CONFIG_HUGETLB_PAGE */
-
-Sure.
-
->> +#ifdef CONFIG_HUGETLB_PAGE
->> +static int damon_young_hugetlb_entry(pte_t *pte, unsigned long hmask,
->> +				     unsigned long addr, unsigned long end,
->> +				     struct mm_walk *walk)
->> +{
->> +	struct damon_young_walk_private *priv = walk->private;
->> +	struct hstate *h = hstate_vma(walk->vma);
->> +	struct page *page;
->> +	spinlock_t *ptl;
->> +	pte_t entry;
->> +
->> +	ptl = huge_pte_lock(h, walk->mm, pte);
->> +	entry = huge_ptep_get(pte);
->> +	if (!pte_present(entry))
->> +		goto out;
->> +
->> +	page = pte_page(entry);
->> +	if (!page)
->> +		goto out;
->> +
->> +	get_page(page);
->> +
->> +	if (pte_young(entry) || !page_is_idle(page) ||
->> +	    mmu_notifier_test_young(walk->mm, addr)) {
->> +		*priv->page_sz = huge_page_size(h);
->> +		priv->young = true;
->> +	}
->> +
->> +	put_page(page);
->> +
->> +out:
->> +	spin_unlock(ptl);
->> +	return 0;
->> +}
->> +#else
->> +#define damon_young_hugetlb_entry NULL
->> +#endif
-> 
-> ditto.
-
-Sure.
-
-But I saw Andrew had applied this version into his branch.
-
-Andrew, would you like me to send a new version? or an increment patch 
-to fix the coding style issue? Thanks.
+greg k-h

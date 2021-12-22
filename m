@@ -2,134 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE1447D247
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1527447D24C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241051AbhLVMnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 07:43:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240717AbhLVMni (ORCPT
+        id S236770AbhLVMoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 07:44:25 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:44782 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231523AbhLVMoX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:43:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3F8C061761;
-        Wed, 22 Dec 2021 04:43:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A567CB81054;
-        Wed, 22 Dec 2021 12:43:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 795F7C36AEA;
-        Wed, 22 Dec 2021 12:43:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640177015;
-        bh=spRwUCGiSSG8n6qeVEE9aN2Iq6VFzAj957YT2tK8Kqs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XOAUZhCycs8P/F/IgB41mY0S24xJyBhBueU6B2STDwK6SWiYp9SFmsTMDZUwf0WlS
-         XuGelJ1kDkiPKATKBgPNXcBwUcC0Qi2ZaErDTa1EcLQgSantLXY0oWuTcUXnERnHqG
-         PHwPJE3Gc9PccipxJLHsMflbauYYRzS+hjqeLI3jxpvkAkIYc2d2igdTSXOJYTHrxL
-         p5IIoIGZLKlbmMVRcBfrRy/YmlQTsYG666UvZpVq7zLs9GoEWvtnRVdSvgoERT9zus
-         nnfJvRLhGTzkiPreYUb/purRFnEOQilR8tA4kyBTlksVtapPJgMg637B6GGV6+ZfuX
-         nkamUJNP2aBKA==
-Received: by mail-vk1-f177.google.com with SMTP id s144so1223614vkb.8;
-        Wed, 22 Dec 2021 04:43:35 -0800 (PST)
-X-Gm-Message-State: AOAM531TEvvdpNxHN4xwr3s9qo1h5YUOgtyZFLXNsh1eHexVQPc3TTSS
-        4a3G0TvKDleyotkeqEgEqCu9oe09/R3HHuJGVUY=
-X-Google-Smtp-Source: ABdhPJzC3viZd1a1jd6xOFjIMdxvyj8zxpI+z9Ie7iUhyHVWlvCpwXNy8RLLG5OJvKtf/gKMdK2si6m9Ls6Z9GIn+oY=
-X-Received: by 2002:a1f:a4c5:: with SMTP id n188mr846875vke.35.1640177006825;
- Wed, 22 Dec 2021 04:43:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-6-guoren@kernel.org>
- <CAK8P3a2XOVYB1Fm5TBdjtKx9DXoG93Zrw7TiquYL_Zy916dLwQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a2XOVYB1Fm5TBdjtKx9DXoG93Zrw7TiquYL_Zy916dLwQ@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 22 Dec 2021 20:43:15 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR2fAU=+0fvW_VCqaZfDkSTAxQ=cKE9iAYOoGORb3m+4g@mail.gmail.com>
-Message-ID: <CAJF2gTR2fAU=+0fvW_VCqaZfDkSTAxQ=cKE9iAYOoGORb3m+4g@mail.gmail.com>
-Subject: Re: [PATCH 05/13] riscv: compat: syscall: Add compat_sys_call_table implementation
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
+        Wed, 22 Dec 2021 07:44:23 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 80D5E2112B;
+        Wed, 22 Dec 2021 12:44:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1640177061; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qy9gFIp2QxGl6WSv0UolBUI85R2Q8lLoLh2lTwoavFk=;
+        b=gPSZWtxqFRZZ4KYSXRQOlHU1Vtzaz1MVqqA9I2kvB7ngleLRUnJ0pKIZFbByHTkRhNAhhf
+        JsB3sZtNH4drYNDmMY53AP59YzK0mOQRF9rNJZdPIdY/Lz8ty0td2+IHTTZ3GzrJKbsr5u
+        7S7EVOkAIeUr0UbGMWRmmlw8KcNhjas=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1640177061;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qy9gFIp2QxGl6WSv0UolBUI85R2Q8lLoLh2lTwoavFk=;
+        b=0GCk4fJ1+0SXjygAjwsjRaLC7Mu6dmG1KrJSOe+cpupyUT24+CFPMoDzHQkFsNRVH+mSIS
+        IgVCteXCYXE8/0Ag==
+Received: from quack2.suse.cz (unknown [10.163.28.18])
+        by relay2.suse.de (Postfix) with ESMTP id 66E23A3B83;
+        Wed, 22 Dec 2021 12:44:21 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id 4517C1F2CEF; Wed, 22 Dec 2021 13:44:21 +0100 (CET)
+Date:   Wed, 22 Dec 2021 13:44:21 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Nadav Amit <namit@vmware.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+Message-ID: <20211222124421.GB685@quack2.suse.cz>
+References: <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
+ <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
+ <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+ <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
+ <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
+ <20211221010312.GC1432915@nvidia.com>
+ <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
+ <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
+ <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
+ <20211221235916.GI1432915@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221235916.GI1432915@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 2:15 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
-> >
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Implement compat_syscall_table.c with compat_sys_call_table & fixup
-> > system call such as truncate64,pread64,fallocate which need two
-> > regs to indicate 64bit-arg (copied from arm64).
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > ---
-> >  arch/riscv/include/asm/syscall.h         |  3 +
-> >  arch/riscv/kernel/compat_syscall_table.c | 84 ++++++++++++++++++++++++
->
-> Same here, I think most of these should go next to the actual syscalls, with the
-> duplicates removed from other platforms,
-Agree, I will try that next version.
+On Tue 21-12-21 19:59:16, Jason Gunthorpe wrote:
+> On Tue, Dec 21, 2021 at 06:40:30PM +0100, David Hildenbrand wrote:
+> 
+> > What adds complexity to correctly maintain the "exclusive" state are at
+> > least:
+> > * KSM (might be harder, have to think about it)
+> 
+> I know little about it, but isn't KSM like fork where it is trying to
+> WP pages with the intention of copying them? Shouldn't KSM completely
+> reject WP'ing a page that is under any kind of writable GUP?
 
->
-> > +#define __SYSCALL_COMPAT
-> > +#undef __LP64__
->
-> What is the #undef for?
+I know little about KSM as well but I think fundamentally it has similar
+requirements for anon pages as filesystems have for page cache pages e.g.
+when doing block deduplication or data checksumming... I.e., it needs to
+make sure data in the page is stable and nobody can modify it.
 
-See arch/riscv/include/uapi/asm/unistd.h:
-
-#ifdef __LP64__
-#define __ARCH_WANT_NEW_STAT
-#define __ARCH_WANT_SET_GET_RLIMIT
-#endif /* __LP64__ */
-
-
->
-> > +SYSCALL_DEFINE6(mmap2, unsigned long, addr, unsigned long, len,
-> > +       unsigned long, prot, unsigned long, flags,
-> > +       unsigned long, fd, unsigned long, offset)
-> > +{
-> > +       if ((prot & PROT_WRITE) && (prot & PROT_EXEC))
-> > +               if (unlikely(!(prot & PROT_READ)))
-> > +                       return -EINVAL;
-> > +
-> > +       return ksys_mmap_pgoff(addr, len, prot, flags, fd, offset);
-> > +}
->
-> This is one that we may have to deal with separately, introducing
-> sys_mmap_pgoff() was a mistake in my opinion, and we should just have
-#if __BITS_PER_LONG == 32 || defined(__SYSCALL_COMPAT)
-#define __SC_3264(_nr, _32, _64) __SYSCALL(_nr, _32)
-#else
-#define __SC_3264(_nr, _32, _64) __SYSCALL(_nr, _64)
-#endif
-
-#define __NR3264_mmap 222
-__SC_3264(__NR3264_mmap, sys_mmap2, sys_mmap)
-
-> added a sys_mmap2() for all architectures that don't explicitly override it.
-That should be another patch, right? Let's keep it here.
-
->
->        Arnd
-
-
-
+								Honza
 -- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

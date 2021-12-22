@@ -2,142 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E9047D5FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 18:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E7D47D607
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 18:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344405AbhLVRrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 12:47:15 -0500
-Received: from foss.arm.com ([217.140.110.172]:51080 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234475AbhLVRrN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 12:47:13 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DAD1F1FB;
-        Wed, 22 Dec 2021 09:47:12 -0800 (PST)
-Received: from [192.168.178.2] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 156063F5A1;
-        Wed, 22 Dec 2021 09:47:10 -0800 (PST)
-Subject: Re: [RT] BUG in sched/cpupri.c
-To:     John Keeping <john@metanate.com>,
-        Valentin Schneider <valentin.schneider@arm.com>
-Cc:     linux-rt-users@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org
-References: <Yb3vXx3DcqVOi+EA@donbot>
- <71ddbe51-2b7f-2b13-5f22-9013506471dc@arm.com> <87zgou6iq1.mognet@arm.com>
- <20211221164528.3c84543f.john@metanate.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <31a47e99-6de3-76ec-62ad-9c98d092ead5@arm.com>
-Date:   Wed, 22 Dec 2021 18:46:57 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1344417AbhLVRuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 12:50:21 -0500
+Received: from mail-qk1-f173.google.com ([209.85.222.173]:36841 "EHLO
+        mail-qk1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234375AbhLVRuS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 12:50:18 -0500
+Received: by mail-qk1-f173.google.com with SMTP id i130so2055397qke.3;
+        Wed, 22 Dec 2021 09:50:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=G0Bo2xi487zsjbvsxUHGM60Jt3WTXGtaD5AP/5FQrYU=;
+        b=U1DRQ1kyz3tC1gqyuCFbkXgWUH0kb8lnL9SZw0Aon7ymbzCDayP+dytcedCCW5enb1
+         93g2QNKvKmuNw7KKDqCaINW9/JRBwQma/W+r4i1q36TKmVMO51JpUGiaDLMs9hQdPv61
+         P2o1pTTCKEfkixWwQPh1hmxgxZ4MxhG1oiYxSNFXZnrF8gKaOypgLj5v7ZdvVLHpW7Xq
+         7us32IGd9iI5c0szbp5+welX1sWvshnRE/bS+XWyC3J9ScUIIY0WWekjB6QOr/QckjtY
+         5JJtrgHqO7kyUd81kGmp85Lju8P6tFE6zP1QuVIwCDdGFCKPGtzWj68+vvmhMIbKceIo
+         qWQg==
+X-Gm-Message-State: AOAM530s36eZFWgKXPkaszVP98soKAQQRrz6EqeN53Z2kReLSyy0ZKo8
+        xdfoaGa1JLXq260QgyIg9A==
+X-Google-Smtp-Source: ABdhPJyvAAEpmHO21h+BgfeOi40PfsFEpHcNduiO7Js5mzx8z/J1daeSExKuDA/ssJQ+ZFmLU9Ujqg==
+X-Received: by 2002:a05:620a:15cb:: with SMTP id o11mr2820061qkm.371.1640195417674;
+        Wed, 22 Dec 2021 09:50:17 -0800 (PST)
+Received: from robh.at.kernel.org ([24.55.105.145])
+        by smtp.gmail.com with ESMTPSA id f18sm2518981qko.34.2021.12.22.09.50.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 09:50:16 -0800 (PST)
+Received: (nullmailer pid 2400088 invoked by uid 1000);
+        Wed, 22 Dec 2021 17:50:15 -0000
+Date:   Wed, 22 Dec 2021 13:50:15 -0400
+From:   Rob Herring <robh@kernel.org>
+To:     Tinghan Shen <tinghan.shen@mediatek.com>
+Cc:     broonie@kernel.org, sean.wang@mediatek.com,
+        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
+        bgolaszewski@baylibre.com, linux-mediatek@lists.infradead.org,
+        bayi.cheng@mediatek.com, linux-arm-kernel@lists.infradead.org,
+        linus.walleij@linaro.org, gch981213@gmail.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 3/4] dt-bindings: pinctrl: mt8195: add wrapping node
+ of pin configurations
+Message-ID: <YcNlVzSZAWCM9eKO@robh.at.kernel.org>
+References: <20211220121825.6446-1-tinghan.shen@mediatek.com>
+ <20211220121825.6446-4-tinghan.shen@mediatek.com>
 MIME-Version: 1.0
-In-Reply-To: <20211221164528.3c84543f.john@metanate.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211220121825.6446-4-tinghan.shen@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.12.21 17:45, John Keeping wrote:
-> On Tue, 21 Dec 2021 16:11:34 +0000
-> Valentin Schneider <valentin.schneider@arm.com> wrote:
+On Mon, 20 Dec 2021 20:18:24 +0800, Tinghan Shen wrote:
+> On mt8195, the pinctrl node has pinctrl groups to group pin
+> configurations by users' need. In each pinctrl group, it has
+> subnode(s) to list pins needed and pin configurations. By supporting
+> multiple subnodes, we can configure different pin characteristics
+> (driving/pull-up/pull-down/etc.) in a pinctrl group.
 > 
->> On 20/12/21 18:35, Dietmar Eggemann wrote:
+> Update pinctrl-mt8195.yaml to add subnode in pinctrl groups and an
+> example to illustrate the usage.
+> 
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> ---
+>  .../bindings/pinctrl/pinctrl-mt8195.yaml      | 338 ++++++++++--------
+>  1 file changed, 188 insertions(+), 150 deletions(-)
+> 
 
-[...]
-
->> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
->> index fd7c4f972aaf..7d61ceec1a3b 100644
->> --- a/kernel/sched/deadline.c
->> +++ b/kernel/sched/deadline.c
->> @@ -2467,10 +2467,13 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
->>  	 * this is the right place to try to pull some other one
->>  	 * from an overloaded CPU, if any.
->>  	 */
->> -	if (!task_on_rq_queued(p) || rq->dl.dl_nr_running)
->> +	if (!task_on_rq_queued(p))
->>  		return;
->>  
->> -	deadline_queue_pull_task(rq);
->> +	if (!rq->dl.dl_nr_running)
->> +		deadline_queue_pull_task(rq);
->> +	else if (task_current(rq, p) && (p->sched_class < &dl_sched_class))
->> +		resched_curr(rq);
->>  }
->>  
->>  /*
->> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
->> index ef8228d19382..1ea2567612fb 100644
->> --- a/kernel/sched/rt.c
->> +++ b/kernel/sched/rt.c
->> @@ -2322,10 +2322,13 @@ static void switched_from_rt(struct rq *rq, struct task_struct *p)
->>  	 * we may need to handle the pulling of RT tasks
->>  	 * now.
->>  	 */
->> -	if (!task_on_rq_queued(p) || rq->rt.rt_nr_running)
->> +	if (!task_on_rq_queued(p))
->>  		return;
->>  
->> -	rt_queue_pull_task(rq);
->> +	if (!rq->rt.rt_nr_running)
->> +		rt_queue_pull_task(rq);
->> +	else if (task_current(rq, p) && (p->sched_class < &rt_sched_class))
->> +		resched_curr(rq);
-
-switched_from_rt() -> rt_queue_pull_task(, pull_rt_task)
-  pull_rt_task()->tell_cpu_to_push()->irq_work_queue_on(&rq->rd->rto_push_work,)
-    rto_push_irq_work_func() -> push_rt_task(rq, true)
-
-seems to be the only way with pull=true.
-
-In my tests, rq->rt.rt_nr_running seems to be 0 when it happens.
-
-[   22.288537] CPU3 switched_to_rt: p=[ksoftirqd/3 35]
-[   22.288554] rt_mutex_setprio: CPU3 p=[ksoftirqd/3 35] pi_task=[rcu_preempt 11] queued=1 running=0 prio=98 oldprio=120
-[   22.288636] CPU3 switched_from_rt: p=[ksoftirqd/3 35] rq->rt.rt_nr_running=0
-                                                         ^^^^^^^^^^^^^^^^^^^^^^ 
-[   22.288649] rt_mutex_setprio: CPU3 p=[ksoftirqd/3 35] queued=1 running=1 prio=120 oldprio=98
-[   22.288681] CPU3 push_rt_task: next_task=[rcu_preempt 11] migr_dis=1 rq->curr=[ksoftirqd/3 35] pull=1
-                                                             ^^^^^^^^^^                           ^^^^^^ 
-[   22.288698] CPU: 3 PID: 35 Comm: ksoftirqd/3 Not tainted 5.15.10-rt24-dirty #36
-[   22.288711] Hardware name: ARM Juno development board (r0) (DT)
-[   22.288718] Call trace:
-[   22.288722]  dump_backtrace+0x0/0x1ac
-[   22.288747]  show_stack+0x1c/0x70
-[   22.288763]  dump_stack_lvl+0x68/0x84
-[   22.288777]  dump_stack+0x1c/0x38
-[   22.288788]  push_rt_task.part.0+0x364/0x370
-[   22.288805]  rto_push_irq_work_func+0x180/0x190
-[   22.288821]  irq_work_single+0x34/0xa0
-[   22.288836]  flush_smp_call_function_queue+0x138/0x244
-[   22.288852]  generic_smp_call_function_single_interrupt+0x18/0x24
-[   22.288867]  ipi_handler+0xb0/0x15c
-...
-
-What about slightly changing the layout in switched_from_rt() (only lightly tested):
-
-
-@@ -2322,7 +2338,15 @@ static void switched_from_rt(struct rq *rq, struct task_struct *p)
-         * we may need to handle the pulling of RT tasks
-         * now.
-         */
--       if (!task_on_rq_queued(p) || rq->rt.rt_nr_running)
-+       if (!task_on_rq_queued(p))
-+               return;
-+
-+       if (task_current(rq, p) && (p->sched_class < &rt_sched_class)) {
-+               resched_curr(rq);
-+               return;
-+       }
-+
-+       if (rq->rt.rt_nr_running)
-                return;
- 
-        rt_queue_pull_task(rq);
+Reviewed-by: Rob Herring <robh@kernel.org>

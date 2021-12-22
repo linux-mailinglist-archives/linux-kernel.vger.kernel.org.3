@@ -2,103 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1322A47D15B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A27547D160
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240401AbhLVLyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 06:54:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
+        id S240272AbhLVL4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 06:56:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238070AbhLVLyp (ORCPT
+        with ESMTP id S231163AbhLVL4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 06:54:45 -0500
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1ACC06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:54:45 -0800 (PST)
-Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id F279D3EEEF;
-        Wed, 22 Dec 2021 12:54:42 +0100 (CET)
-Date:   Wed, 22 Dec 2021 12:54:41 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        robdclark@gmail.com, sean@poorly.run, airlied@linux.ie,
-        daniel@ffwll.ch, abhinavk@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, martin.botka@somainline.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        paul.bouchara@somainline.org
-Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Fix timeout issues on command mode
- panels
-Message-ID: <20211222115441.7c5e55svs6inabrl@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, robdclark@gmail.com,
-        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
-        abhinavk@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
-        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, paul.bouchara@somainline.org
-References: <20210911163919.47173-1-angelogioacchino.delregno@somainline.org>
- <20210911163919.47173-2-angelogioacchino.delregno@somainline.org>
- <b325fc8d-e06b-36de-b40a-b5ffbcebb1c5@linaro.org>
- <94bedea3-0e5f-5ae8-79d1-ceb17ccdea23@somainline.org>
- <20211211213528.uroqfdksvokspbxf@SoMainline.org>
- <CAA8EJprT5gcWOsS5jJk8egUpxutBpUdW2Pnh-8FFXhgOd3hr=A@mail.gmail.com>
- <20211211215718.pe675o5wvculxavc@SoMainline.org>
- <33d44631-f0d7-83cc-569d-d6d6f82d6808@somainline.org>
+        Wed, 22 Dec 2021 06:56:10 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D91C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:56:09 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so2479279oto.13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:56:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=OI3yHFx2lc1Ab7BbG+FKFnAunZKFmjRfSuDnaa4zZ98=;
+        b=JPo/LluRpa6EkOD154ik/z8EAASao4BMl9uO9Lnd2/8ir8S0EIZ5i8eUtm2TiSmoN7
+         sat+RJw9R+rZIr7QIXjTTMJ57sV8srvU/EVquWVozH8yIw0KVE/Llx64FQl5vMHXnlE3
+         aOXR/sUi5wJXeCgycLiy5/5yvkAf25rDKROssVHeJG52XCrvNYiLqERGnweQxujOX/p4
+         gGv/aW1jM8w0dSbX7sfDkviU4l4PfndFDn6Q5ECFHSA3dcDyLyrCNmCqW9hQKv2lE8tH
+         alf3jKYEiYyiXiTLxDGqsvflhFFbiuNdUGv6PJzOiJB9wGkcyKDlacmv4C1tm2FX/jrj
+         EKqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=OI3yHFx2lc1Ab7BbG+FKFnAunZKFmjRfSuDnaa4zZ98=;
+        b=5v3tArgTO6UodhffKCWyxdJlji4glBaOXVqPA7pQFaaHBzjpPhRUpJVBDN0EkislAL
+         yVwidp5TgNoJQ+qtVLxdYKAItc8+Ys+W2EQkIZkTsVhgncOHyfMJnzToNB/vwWH702IL
+         4IrA8hqeQ6o62kJ5UdhioJjAku+YdiMMECDSZBlYGWrdlScRk3tbfbqJeWpuUzxaYC5C
+         xIF3daJvRT3hYtvdohhowB+xPF19jnjRUHaAxQBQHYOS63MbOqBhapA29/IFUfzbNC0z
+         uOk67Zg1yULCbINQKy4SGcw/YUrZUOqrzhhD+vtRAaMo/RmZ/xswSn0DiFTYzsLYxSKq
+         1vGA==
+X-Gm-Message-State: AOAM5305UGqR45lFsc4pEZfO6sbClq4LAspMkKOtKkeJnZ2wKlZTHeYD
+        V8lucI1QKpZs7AcZLPxSPi7EtENYIBntQPmJeG8=
+X-Google-Smtp-Source: ABdhPJz0M2p16vg0d6W80ZdlJVvNOVd/kmXyZRdAqx8l6bChR9HNdiWgdIdtFC++4yoJ5R7cXdXvvG5vZOCRXHqIDlM=
+X-Received: by 2002:a9d:f04:: with SMTP id 4mr1855429ott.326.1640174168975;
+ Wed, 22 Dec 2021 03:56:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <33d44631-f0d7-83cc-569d-d6d6f82d6808@somainline.org>
+Reply-To: kmark@iname.com
+From:   koffi mark <2020kmark@gmail.com>
+Date:   Wed, 22 Dec 2021 12:55:34 +0100
+Message-ID: <CAL4FxPdP0Qbr6Qg_ktJeGH6wuWZ6vieLqwQjebCfRyt0R=d_xg@mail.gmail.com>
+Subject: =?UTF-8?B?RsO2cnN0ZXI=?=
+To:     ferienhaeuser-foerster@freenet.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-22 12:28:52, AngeloGioacchino Del Regno wrote:
-> Il 11/12/21 22:57, Marijn Suijten ha scritto:
-> > On 2021-12-12 00:49:09, Dmitry Baryshkov wrote:
-> >> On Sun, 12 Dec 2021 at 00:35, Marijn Suijten
-> >> <marijn.suijten@somainline.org> wrote:
-> >>> [..]
-> >>> On this note, does it perhaps make more sense to call the "internal"
-> >>> _dpu_encoder_phys_cmd_wait_for_idle function directly, instead of going
-> >>> through the "public" dpu_encoder_phys_cmd_wait_for_tx_complete which
-> >>> seems solely intended to handle the wait_for_tx_complete callback?
-> >>
-> >> Either one would work. The main difference is the error message. Do
-> >> you want to see it here if the wait times out or not?
-> > 
-> > I prefer calling _dpu_encoder_phys_cmd_wait_for_idle directly and
-> > optionally adding our own error message.  IIRC DRM_ERROR prints source
-> > information such as the function this originated from, and that makes it
-> > impossible to distinguish between the wait_for_tx_complete callback or
-> > the invocation through dpu_encoder_phys_cmd_wait_for_commit_done anyway.
-> > 
-> > - Marijn
-> > 
-> 
-> I wouldn't be happy to find myself in a situation in which I get strange
-> display slowness without any print to help me; for this reason, I find
-> having the print in place useful for debugging of both perf and fault.
-
-Same thought here, though dpu_encoder_phys_cmd_wait_for_tx_complete
-exists for the sole reason of printing a nice debug message, which I
-wouldn't want to be misused by dpu_encoder_phys_cmd_wait_for_commit_done
-punting its errors on wait_for_tx_complete - if that happens the first
-thing I'd do during debugging is assign individual messages to both,
-otherwise it is impossible to know which two functions is the cause: we
-might as well "duplicate" the error message right now and prevent such
-confusion from occurring in the first place?
-
-- Marijn
-
-> 
-> Cheers,
-> - Angelo
+CHRISTMAS GREETING TO YOU :
+I am contacting you to assist  in retrieving  a fund of US$ 10.5m
+deposited by Mr. F=C3=B6rster  which was deposited  in the bank before it
+got confiscated by the bank. if you are willing to carry on with it
+Get back to me for more details
+Regards
+MarK

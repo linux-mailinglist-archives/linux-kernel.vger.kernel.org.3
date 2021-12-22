@@ -2,93 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4551F47CD54
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:09:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D149A47CD67
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237536AbhLVHJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 02:09:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241825AbhLVHJh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 02:09:37 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B603CC061574;
-        Tue, 21 Dec 2021 23:09:37 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so1688074pjp.0;
-        Tue, 21 Dec 2021 23:09:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=9GdW/41SP4WrMLD62L5i1Oi6nl/ztOuq8F7Z8uPVG5M=;
-        b=d4xX+3wfxCkfdGqTy8rJxAzpQr5osvD4jWUvj06/jX7cTZCMpr9oUsuI6ui82n7U1D
-         sx7f0A2Xg6Z7MN/C/tZTEMzSu6D8BNtjQk3bfYORQFJwPbmUN6Hrz5H49gc7+YxRVZKs
-         plo2+CvVgPK4uj4I3ZPSDoyO3FY8VWde4O/+tT4jbakkywcnra9dPmcD11tVF+0TJ7kZ
-         m9zwbT+CrQMhvsA/FToYb6gXl1aaSHyuQ8Vu8gWJI0wUlfhMlsBH+R0g2lRcK1TlbqtT
-         Ltz+fHUrez6g+FyOtbX2uk9Ja3BIwVvDPuc8cw9wFZ+bq6u4jL4Q+L9ZuQrhMuGY8YgH
-         qCow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=9GdW/41SP4WrMLD62L5i1Oi6nl/ztOuq8F7Z8uPVG5M=;
-        b=yP3WRmCQTjeu0mNqnLDwEKMwqXpHzF5+b4RmiPA2qihjgz10XQ/UTOUtuStrTh9qnP
-         XuUBT0Lm/J7ZZsPsSesMRaeSqdyIJVQ1nvdUNrX73BBt2qUHKLfhNe+FyfRNidvGzDWd
-         jKLzv53OplRk+r2pXD8jUpIS4N3sw6FJ56iupjXnGDnnDaYn36EOaRM7QdVXTKqEsXXH
-         FPjJk2i+EcHn8edeD/0bK4iQQiK6dGGwqMlA3/YZ8cfQOtmHfqsWB+KwNO1HYl3SAiNb
-         XxRZVKH8xBpgRa8b5A2X+doPIpNZBfTebOD3csJftH8mlGdJsun/ia1hibmMMtwdi0A1
-         IxSA==
-X-Gm-Message-State: AOAM530q1QiArwoHJKmI08WVyyhwOljhToWDpDrKvOnRfYWw6BfPxAzL
-        UzaocV292+9zAGLpuTLon0Y=
-X-Google-Smtp-Source: ABdhPJwZMIWyuezHxoS0eEV1QyePk8qBBpAvONjwkpZ0nJM/hOCtaZAmf0Gi3iURX9rUP4RvQ8bBXw==
-X-Received: by 2002:a17:902:848b:b0:148:a2e8:2c53 with SMTP id c11-20020a170902848b00b00148a2e82c53mr1563940plo.162.1640156977237;
-        Tue, 21 Dec 2021 23:09:37 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id q10sm4546268pjd.0.2021.12.21.23.09.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 23:09:36 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Stanley Chu <stanley.chu@mediatek.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-scsi@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2] scsi: ufs: ufs-mediatek : Fix NULL vs IS_ERR checking in ufs_mtk_init_va09_pwr_ctrl
-Date:   Wed, 22 Dec 2021 07:09:30 +0000
-Message-Id: <20211222070930.9449-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <CAGXv+5GF1WOeXVtnknAa4GYXE3Hd-UzcCBCyQzT6KY3tJCrVGA@mail.gmail.com>
-References: <CAGXv+5GF1WOeXVtnknAa4GYXE3Hd-UzcCBCyQzT6KY3tJCrVGA@mail.gmail.com>
-To:     unlisted-recipients:; (no To-header on input)
+        id S242917AbhLVHMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 02:12:32 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:55642 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239307AbhLVHMa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 02:12:30 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowABHT1fJz8Jhj1K7BA--.45313S2;
+        Wed, 22 Dec 2021 15:12:09 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     davem@davemloft.net, kuba@kernel.org, yangyingliang@huawei.com,
+        sashal@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] fjes: Check for error irq
+Date:   Wed, 22 Dec 2021 15:12:07 +0800
+Message-Id: <20211222071207.1072787-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowABHT1fJz8Jhj1K7BA--.45313S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7XFWUAFyfCF1fZr1rtF4fKrg_yoWDWrc_Cw
+        1vga17uw4jk34qkF1UKr43Zasakr1qqr10gw1IkFZaq393Wa47X3srurs8G34UW390yF9r
+        KasrXr43Aw15ZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8CwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbhiSPUUUUU==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function regulator_get() return error pointer,
-use IS_ERR() to check if has error.
+I find that platform_get_irq() will not always succeed.
+It will return error irq in case of the failure.
+Therefore, it might be better to check it if order to avoid the use of
+error irq.
 
-Fixes: cf137b3ea49a ("scsi: ufs-mediatek: Support VA09 regulator operations")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Fixes: 658d439b2292 ("fjes: Introduce FUJITSU Extended Socket Network Device driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- drivers/scsi/ufs/ufs-mediatek.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/fjes/fjes_main.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-mediatek.c
-index 5393b5c9dd9c..86a938075f30 100644
---- a/drivers/scsi/ufs/ufs-mediatek.c
-+++ b/drivers/scsi/ufs/ufs-mediatek.c
-@@ -557,7 +557,7 @@ static void ufs_mtk_init_va09_pwr_ctrl(struct ufs_hba *hba)
- 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
- 
- 	host->reg_va09 = regulator_get(hba->dev, "va09");
--	if (!host->reg_va09)
-+	if (IS_ERR(host->reg_va09))
- 		dev_info(hba->dev, "failed to get va09");
- 	else
- 		host->caps |= UFS_MTK_CAP_VA09_PWR_CTRL;
+diff --git a/drivers/net/fjes/fjes_main.c b/drivers/net/fjes/fjes_main.c
+index e449d9466122..2a569eea4ee8 100644
+--- a/drivers/net/fjes/fjes_main.c
++++ b/drivers/net/fjes/fjes_main.c
+@@ -1269,6 +1269,11 @@ static int fjes_probe(struct platform_device *plat_dev)
+ 	hw->hw_res.start = res->start;
+ 	hw->hw_res.size = resource_size(res);
+ 	hw->hw_res.irq = platform_get_irq(plat_dev, 0);
++	if (hw->hw_res.irq < 0) {
++		err = hw->hw_res.irq;
++		goto err_free_control_wq;
++	}
++
+ 	err = fjes_hw_init(&adapter->hw);
+ 	if (err)
+ 		goto err_free_control_wq;
 -- 
-2.17.1
+2.25.1
 

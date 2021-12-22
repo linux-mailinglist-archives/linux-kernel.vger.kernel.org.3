@@ -2,97 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5D347D3DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:44:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB0347D3DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:45:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343527AbhLVOof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 09:44:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
+        id S1343537AbhLVOpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 09:45:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237489AbhLVOoc (ORCPT
+        with ESMTP id S1343513AbhLVOpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:44:32 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6B8C061574;
-        Wed, 22 Dec 2021 06:44:31 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id o20so9501155eds.10;
-        Wed, 22 Dec 2021 06:44:31 -0800 (PST)
+        Wed, 22 Dec 2021 09:45:03 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837DCC06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:45:03 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id y22so9677760edq.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:45:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=M0W3ib0yUWKffn+66baA9u4RAHv05Mx8JpMmpcIbPy0=;
-        b=jULZK8rXUozv+IugcKX4w+Q9gB9zc+Z+qUN6whcQsFy3N0GUaP27vOEvf0kIzE5Bct
-         fmUEIuOZGQm5r9jxnkNwnMGvixhy8+EtOxsniaCTEHINIC5d+eb0dS8nVvdeqChzJpF+
-         ME82UK3F219/29J++ZZinUq3kd7grrAvt8ABmSQKto4z9g1U2U1+emJSEUNLDagavAMm
-         PdfbbnhzdIg3HM8ZLj+JutH5OzR+7ALwh5L+hlNNdmDD1quupnkR4hl8byHCewx9zyKd
-         3oXV/L9NfSF4TSlRjdlwBcnUrIyQZWvrRv7PqOrDv9jETekCaSGH3ELCTHSKT6PZ/HUg
-         xLcg==
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=J64IZF9PVQr8R+mvV6ce9ekiJ1rmezsroOUDCf2tvvE=;
+        b=lrCP8RNTd1d7ZM3SOiBHTLW0fzByBufKnK1C4cwdLNi1Yu3ZjuVAEFRBd6gDon/K0y
+         /HxXuIWtI5IuWN1Vzyba9PI1lNVkX39icCFqVr3U7DKDhp847SH6b10sQlpVWvuLEDp9
+         jarhBLTQZQ49ibmhA2F6q85CCkLOCgtXcW5/ju748+saDA5swp+euCCQKesjhFv2bO5H
+         KgcRV+/xW3zu4o8mcywPu19X7Tg0FmBmWMBgFLq1fZ636VgbilNLWYPsAVaJ99HRzs+L
+         QgpyCCl8jZHJCwYNlF467vwcPiCm33EFVqqbG/TS6pG3zoP6m0Ru0u+YGwsIU9j8m6a2
+         42og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=M0W3ib0yUWKffn+66baA9u4RAHv05Mx8JpMmpcIbPy0=;
-        b=bSX71K6txwYc0g/K19UdW57ID4nSTat6HpCgAytqNBjdUos6jkOvfKZvK61g3HHE7o
-         4//CXgDF2Ge8T/iq4SJTg4brFWiY9zzoWMT5clB7YOe1Cz4PKXl8+7v+nLiUAzkhuLwF
-         s7tWNG8K69is8BSmrwRtit3230icNoogCyM+C39aSEldhpPsch51htdy+nAkbaJvRW1P
-         P+6Dd/aYYM0vKQJ9Y5qMkWS+xv5ipkWY51duZfhDtokrmc/SQKdZC9Z+dCgdF+UQ4wh+
-         mmSRh79UdPn3TenDfp7EunQuRIsHtMUagAnaFtViwmzaNac20JYUmHxIY2ct9VrV7c80
-         yyTw==
-X-Gm-Message-State: AOAM532hEzn7cFOEP/I8CxnQ3kpqSOy7cv7T+qsMqT4gY92lbkg624Ss
-        pumezBdGd1X2gJP3HN+ST+w=
-X-Google-Smtp-Source: ABdhPJxO3W6CToKsonK/WtJBwNfKsT/2zWqs8DdFQ3C5364BuUVNbBWKexbY13Xx/rw42Gq/ZB2vaQ==
-X-Received: by 2002:a05:6402:50c6:: with SMTP id h6mr3138872edb.228.1640184269744;
-        Wed, 22 Dec 2021 06:44:29 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312::4fa? ([2001:b07:6468:f312::4fa])
-        by smtp.googlemail.com with ESMTPSA id 23sm807196ejg.213.2021.12.22.06.44.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 06:44:29 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <a17363b8-41d7-af74-f66f-362bfc2c6c9e@redhat.com>
-Date:   Wed, 22 Dec 2021 15:44:27 +0100
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=J64IZF9PVQr8R+mvV6ce9ekiJ1rmezsroOUDCf2tvvE=;
+        b=4WjvTXWNqHJAVYhuNKuIB7ZFrqQ0G2C7bIE/XIn8hMheB2rmhAci/FyZAUpUamLHUv
+         QfHzbvWmYxoqdtmahtGuKuV/LBBgUu+v4wksZHyAtM5mOGkuCKtonfgAEgZkwo4l2x9s
+         oFXpF9tGKpWbELUWzox8PXPsTnufIxLp7LJ0ba+97jHqWjB9dtDb08kKEhGrgnktbIvo
+         fr37w5fjsKjYS/Irb9lMvVKo/Q3jLH9aQI3Zrrmm1uDwLmbEHeDUiOBsD9vnCm+y5WNY
+         XulHclomw4VJrgYgzwZYUPpIYb7/A0rV4/K0YVHf/Y6Fk0NWSBCymKz8tecNVZyLQqs6
+         ZmiA==
+X-Gm-Message-State: AOAM530lc2gk/uWx9Ra+zMCxxgkZG8oi/yeBX2ZELmkx5SccOYQjGdut
+        RYBgpNT1eW4GFlK/XjV1VLQQ2LQF3Rjuqy2jask=
+X-Google-Smtp-Source: ABdhPJzSLjtgTmOaykt83S9JxokiT/t6Dc937PST3BSDkHDJjBMHrsTGH38Na0TaJ0n+e+N+FYwSvDrkrTz3c3YjcS8=
+X-Received: by 2002:a17:907:6d99:: with SMTP id sb25mr2904977ejc.540.1640184301533;
+ Wed, 22 Dec 2021 06:45:01 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: State Component 18 and Palette 1 (Re: [PATCH 16/19] kvm: x86:
- Introduce KVM_{G|S}ET_XSAVE2 ioctl)
-Content-Language: en-US
-To:     "Nakajima, Jun" <jun.nakajima@intel.com>
-Cc:     "Zhong, Yang" <yang.zhong@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
-        "Liu, Jing2" <jing2.liu@intel.com>
-References: <20211208000359.2853257-1-yang.zhong@intel.com>
- <20211208000359.2853257-17-yang.zhong@intel.com>
- <d16aab21-0f81-f758-a61e-5919f223be78@redhat.com>
- <26ea7039-3186-c23f-daba-d039bb8d6f48@redhat.com>
- <24CFD156-5093-4833-8516-526A90FF350E@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <24CFD156-5093-4833-8516-526A90FF350E@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Reply-To: josephmarks20201@gmail.com
+Sender: mariamacessay2415@gmail.com
+Received: by 2002:a05:6400:248c:0:0:0:0 with HTTP; Wed, 22 Dec 2021 06:45:01
+ -0800 (PST)
+From:   "Dr. Joseph Mark" <josephmark00011@gmail.com>
+Date:   Wed, 22 Dec 2021 14:45:01 +0000
+X-Google-Sender-Auth: aWptKudGYw2cUDaXYp8k5Fg20kA
+Message-ID: <CAPh=awgnkcLRCuCe46en9uSqz2LykXtQVTmwd__77ekjf8B44A@mail.gmail.com>
+Subject: Dear Friend
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/20/21 18:54, Nakajima, Jun wrote:
-> Hi Paolo,
-> 
-> I would like to confirm that the state component 18 will remain 8KB and palette 1 will remain the same.
+-- 
+Dear Friend,
 
-Great!  Can you also confirm that XCR0 bits will control which palettes 
-can be chosen by LDTILECFG?
+I am Dr. Joseph Mark Work in bank. I Discovered the sum of seven
+million, two hundred thousand dollars (usd7.2) belonging to a deceased
+customer of this bank the fund has been lying in a suspense account
+without anybody coming to put claim over the money since the account
+late owner from Lebanese who was involved in car crash.
 
-Thanks,
+Therefore, I am soliciting for your assistance to come forward as the
+next of kin. I have agreed that 40% of this money will be for you as
+the beneficiary respect of the provision of your account and service
+rendered, 60% will be for me. Then immediately the money transferred
+to your account from this bank, I will proceed to your country for the
+sharing of the fund.  If you think you are capable and will be
+committed to making this deal successes send me an email as soon as
+possible to confirm your interest.
 
-Paolo
+Yours faithful,
+Dr. Joseph Mark

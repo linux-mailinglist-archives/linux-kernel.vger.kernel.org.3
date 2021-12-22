@@ -2,122 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E6F47D8C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 22:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D558747D8D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 22:34:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240047AbhLVVbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 16:31:23 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46722 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239173AbhLVVbW (ORCPT
+        id S234914AbhLVVeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 16:34:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231946AbhLVVeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 16:31:22 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BMKB4jU013930;
-        Wed, 22 Dec 2021 21:31:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=LMCKsYDSgWU68Pq4F970el0OH2FT6dTQlCiEQzzpTOk=;
- b=L0jxOjMTJ25mvTUplhfFHHH6AR+g8x2nykbBr/01H1/BKT/AFnD+Nv67knMFEgkbiaCZ
- MRRvc1mKbS1uBO1DMvtUGtYiTI9hE/p0eC4RY2BB/Mmh6NN9DTRFVftlTKh3yeuy7ff0
- uddP/PIQVLPG/h0IuOBI+Ovrb7TNWf59c8yRw0js/k8TPASbTcmO7hwcwuCm26W9efeA
- Mnil5ZkoHIsnk2eeUpOQJ0Jeo7R9io01PN2RqD148/FiEflZ1IQ2kin2AQGYP2rtyzjB
- Pqb1ElonET2Kfrcvm2X8L/oxR7fAx8GOskK75iTGgE3MbOR5TrSUuvBlusOMSaBG/lz1 HQ== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d47ssmukw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Dec 2021 21:31:14 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BMLM5JE004516;
-        Wed, 22 Dec 2021 21:31:12 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03fra.de.ibm.com with ESMTP id 3d179a865s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Dec 2021 21:31:11 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BMLV8Hg47448448
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Dec 2021 21:31:08 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B785811C054;
-        Wed, 22 Dec 2021 21:31:08 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8C01211C04A;
-        Wed, 22 Dec 2021 21:31:07 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.65.95.213])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 22 Dec 2021 21:31:07 +0000 (GMT)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Petr Vorel <pvorel@suse.cz>,
-        Nageswara Sastry <rnsastry@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, Takashi Iwai <tiwai@suse.de>,
-        Joey Lee <jlee@suse.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] selftests/kexec: update searching for the Kconfig
-Date:   Wed, 22 Dec 2021 16:30:52 -0500
-Message-Id: <20211222213052.6771-3-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20211222213052.6771-1-zohar@linux.ibm.com>
-References: <20211222213052.6771-1-zohar@linux.ibm.com>
+        Wed, 22 Dec 2021 16:34:24 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1612CC061574;
+        Wed, 22 Dec 2021 13:34:24 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id y22so13721298edq.2;
+        Wed, 22 Dec 2021 13:34:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BQlQlYrZXdOlmemUUXiF4Fhovo2L1S/LzruvfN712uY=;
+        b=br4b7Dx3l6Zfp65HGNkqUIOl6r/hzzYAYN2NdDkPMpX0mGBSMDJh7KeVbsx8yT7QTR
+         Ex5+LyzbOoGmM//h1zL/FSTfdOe6Im+MWg49HVf3yg0R61kP3Y4ryyBzk3qPUHMuLnvE
+         oPbLLiZQ0ICHlTkTsV/f3gkmZAXBsjODurvhCCGiWRTdWUBXffBYlYWUy9a9IGxc2MlP
+         dbQqsqsHrMtP/0ClN2GWH2W7SCveLV5d4s9e9o6A0FeDoxwJamNN+Slbgn/To6H8sf/z
+         vkyb+1skGRbW4rNR8rLLokkhnvZSNqQm/ZCCBgd5L24nIKTJ9kQRO/sDk8MZUUqO6bkO
+         /C0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BQlQlYrZXdOlmemUUXiF4Fhovo2L1S/LzruvfN712uY=;
+        b=cSO+MUVeHSSJsRGUzqA7H5lmjZH3qlnBHdbCsbALbH8Op3BbtwVLh96XGzXlqJ3UlA
+         2Kgoh5VrGkVHo6PdyL6ZkCbmvW9up7VFLzh62WEd1g/1/R9T1Uh0IRINUQNGHouIdvMp
+         DyOgSP/hi3XVe3vZdXhp+MjN/gTzh8q1oe5bGrjK0DK76FtE+YJqtBlEdLot52KNtddg
+         sdZlFw33ZXV/AJMuF4wXM05azUE5IyGC+ibEpVmQ7qoihZzLQoxvKXQuO9jSR+n4dq2x
+         FFbYwfgxvA0ZTQoefQOldO0kw4CfHdtk8K1ft6dNmVHDMJftgzU+zFJOOkvezjLHTnKr
+         RS9Q==
+X-Gm-Message-State: AOAM530MWS9bifgi+BFR7W7Lns8LIczDQY4mt+E3598fFFAqyrP4iOEI
+        1t3Wn+Vz3GCYwvxJy99LUcQylId/n1aYTqXSpXk=
+X-Google-Smtp-Source: ABdhPJxPcjYs5SH3P+Dvg2BhIowtF8SCyB4m0E2WIuGCd+CxC0ZdFvR74vmCCjoZgGk3P++JhhtkmIQ57SBR0JaSFUc=
+X-Received: by 2002:a17:906:c450:: with SMTP id ck16mr3745748ejb.579.1640208862599;
+ Wed, 22 Dec 2021 13:34:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: i3CDj2thOqffQSG8bXbv7X51QwWISv09
-X-Proofpoint-ORIG-GUID: i3CDj2thOqffQSG8bXbv7X51QwWISv09
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-22_09,2021-12-22_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 adultscore=0 mlxscore=0 phishscore=0 spamscore=0
- mlxlogscore=857 impostorscore=0 priorityscore=1501 clxscore=1015
- bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112220112
+References: <20211222034646.222189-1-liambeguin@gmail.com> <20211222034646.222189-10-liambeguin@gmail.com>
+ <CAHp75Vc0aWrFtNK1ZkHkwP62zNXQJaDcn9pc8Uhfq0kOnWzmJg@mail.gmail.com>
+ <YcNwt5RFMNFUimD/@shaak> <CAHp75VdrLTNLWZRgWkLXD23RAF28zh29XybywAPyMtb=GNxXbw@mail.gmail.com>
+ <YcODglDWiknz2oeV@shaak>
+In-Reply-To: <YcODglDWiknz2oeV@shaak>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 22 Dec 2021 23:32:24 +0200
+Message-ID: <CAHp75Vejfr_S7iK7fAvs7ELxE1TJUECvmKv0-G5Zwunyc6nDQA@mail.gmail.com>
+Subject: Re: [PATCH v11 09/15] iio: afe: rescale: reduce risk of integer overflow
+To:     Liam Beguin <liambeguin@gmail.com>
+Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-First check /lib/modules/`uname -r`/config, before using the IKCONFIG.
-In addition, the configs.ko might be compressed.  Fix the configs.ko
-name.
+On Wed, Dec 22, 2021 at 9:59 PM Liam Beguin <liambeguin@gmail.com> wrote:
+> On Wed, Dec 22, 2021 at 08:56:12PM +0200, Andy Shevchenko wrote:
+> > On Wed, Dec 22, 2021 at 8:38 PM Liam Beguin <liambeguin@gmail.com> wrote:
+> > > On Wed, Dec 22, 2021 at 02:29:04PM +0200, Andy Shevchenko wrote:
+> > > > On Wed, Dec 22, 2021 at 5:47 AM Liam Beguin <liambeguin@gmail.com> wrote:
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
----
-Distros: is storing the Kconfig in /lib/modules/`uname -r`/config common?
+...
 
- tools/testing/selftests/kexec/kexec_common_lib.sh | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+> > > > > -               tmp = 1 << *val2;
+> > > >
+> > > > At some point this should be BIT()
+> >
+> > Forgot to add, If it's 64-bit, then BIT_ULL().
+> >
+> > > I'm not against changing this, but (to me at least) 1 << *val2 seems
+> > > more explicit as we're not working with bitfields. No?
+> >
+> > You may add a comment. You may use int_pow(), but it will be suboptimal.
+> >
+> > > > Rule of thumb (in accordance with C standard), always use unsigned
+> > > > value as left operand of the _left_ shift.
+> > >
+> > > Right, that makes sense! In practice though, since we'll most likely
+> > > never use higher bits of *val2 with IIO_VAL_FRACTIONAL_LOG2, would it be
+> > > enough to simply typecast?
+> > >
+> > >         tmp = 1 << (unsigned int)*val2;
+> >
+> > No, it's about the _left_ operand.
+> > I haven't checked if tmp is 64-bit, then even that would be still wrong.
+>
+> Okay so your recommendation is to not use a left shift?
 
-diff --git a/tools/testing/selftests/kexec/kexec_common_lib.sh b/tools/testing/selftests/kexec/kexec_common_lib.sh
-index 43017cfe88f7..5a1b8ae04c64 100755
---- a/tools/testing/selftests/kexec/kexec_common_lib.sh
-+++ b/tools/testing/selftests/kexec/kexec_common_lib.sh
-@@ -138,15 +138,20 @@ kconfig_enabled()
- 	return 0
- }
- 
--# Attempt to get the kernel config first via proc, and then by
--# extracting it from the kernel image or the configs.ko using
--# scripts/extract-ikconfig.
-+# Attempt to get the kernel config first by checking the modules directory
-+# then via proc, and finally by extracting it from the kernel image or the
-+# configs.ko using scripts/extract-ikconfig.
- # Return 1 for found.
- get_kconfig()
- {
- 	local proc_config="/proc/config.gz"
- 	local module_dir="/lib/modules/`uname -r`"
--	local configs_module="$module_dir/kernel/kernel/configs.ko"
-+	local configs_module="$module_dir/kernel/kernel/configs.ko*"
-+
-+	if [ -f $module_dir/config ]; then
-+		IKCONFIG=$module_dir/config
-+		return 1
-+	fi
- 
- 	if [ ! -f $proc_config ]; then
- 		modprobe configs > /dev/null 2>&1
+No, I recommend not to use int type as a _leftside_ operand.
+BIT() / BIT_ULL() does a left shift anyway.
+
+> I can look into that but given how unlikely it is to fall into those bad
+> cases, I'd rather keep things as they are. Would that be okay?
+
+> Also, I don't think using BIT() or BIT_ULL() would address this as they
+> both do the same shift, with no extra checks.
+
+They do slightly different versions of it. They use an unsigned int type.
+
+Open coded or not, it's up to you. Just convert to unsigned int.
+
 -- 
-2.27.0
-
+With Best Regards,
+Andy Shevchenko

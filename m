@@ -2,105 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E5C47CF0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A362847CF13
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243865AbhLVJTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 04:19:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243856AbhLVJTQ (ORCPT
+        id S243873AbhLVJT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:19:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37367 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243856AbhLVJT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:19:16 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6CBC061401
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:19:16 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id c2so1851816pfc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:19:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IdSO8jSbku57GoEt6LVkQ1tixUnyu5ct/xRZpyTqiy0=;
-        b=fJgbtLjUAOl3BxZ00Vjl5kqR+2lxh6O+5WD6Nb7XDaHvwoeyaIUF8fPAU4q22E701P
-         Z+rjGiMN6u2i7IMttMjc5v22KcSIxHt9kPDdjurufp3Ki1K8LCNQTjqlQQgx9B2bO5SI
-         +IBPuD72WzA4C9LMnQDgvPIgFn2BDdb0nnGuKa+O4H/xqxpd8JMLyTVXjbEj1Gd/ILx+
-         b3pYp3VcZYTkaK4Gu/4zCzakK6iM0IcNn+QoCq+VIHp7wC+T4k/rx0CV5t+zriTfvLs/
-         ZZZo/nZkW/UN7b9+lGRFaqpa0DZmPws91J3j+Nbz1cKJwNhhrczSTi/KMJ4oQ4yOLGsr
-         1pmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IdSO8jSbku57GoEt6LVkQ1tixUnyu5ct/xRZpyTqiy0=;
-        b=p2u2C5WNVQjsdHj+MAZxyWjkoWlbrI0hNeKxFdWBG9zSIADbJd1KusuACsuvtFHdJh
-         QPh4ZAPlbk6SxRTZ3qt7oe0mziwHsr7c82tuhpch6uEkpyQ+EWkscXWFpIYzU8ZvF7bl
-         ex/bZi3jDtqUuPNGJianbhdzOTjH2qvoqaOMMZlUTKOFYsZts9XRdK+NdyY9CgnJ+P0C
-         gWedUQfBP1u8b44n1lmDV1j3h9W4NvfvVG+FKbqM6TzfYQSKtca4aXg8MaUHgGu0XFOk
-         gbpbpmQQkzoTubhDN8qgKVMZQ14rphanmXev0tO0uHgPwhMAfSR8v+mb6kf0kwLnSpUX
-         K99Q==
-X-Gm-Message-State: AOAM5316+K3s6+uwpzXvKpqutzcijuOeuIqSm4Ulv9UEeLc7+HfQJCuG
-        1zx1CnrQMVcx8V84imKdghSQ
-X-Google-Smtp-Source: ABdhPJwV2yZYiWQh6AAhTL56gld2ZPjl8HqiRaRi6S4Xir+hBVSg6tEif1XsJNuPDQhcKv8VkcFzIg==
-X-Received: by 2002:a05:6a00:a1d:b0:4ba:ac85:5b07 with SMTP id p29-20020a056a000a1d00b004baac855b07mr2343668pfh.9.1640164755963;
-        Wed, 22 Dec 2021 01:19:15 -0800 (PST)
-Received: from thinkpad ([202.21.42.200])
-        by smtp.gmail.com with ESMTPSA id mw8sm1680513pjb.42.2021.12.22.01.19.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 01:19:15 -0800 (PST)
-Date:   Wed, 22 Dec 2021 14:49:10 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        agross@kernel.org, bjorn.andersson@linaro.org
-Subject: Re: Question about node naming in [PATCH v3 13/18] ARM: dts: qcom:
- sdx55: Add spmi node
-Message-ID: <20211222091910.GA5159@thinkpad>
-References: <HTKF4R.5S1PY4MCM4QS@ixit.cz>
- <20211221071219.GD26872@thinkpad>
+        Wed, 22 Dec 2021 04:19:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640164798;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HW6P5aqMvgJy6ygBO3Phm4zEMTRrHSBikFoLdf1Jgbg=;
+        b=cMzj7gW1NCDqWmQ+gwn3AuLxIyuQmBtB3KbxCcJDsVwoGnU/zQJqkWHIaidwITw/JhZ5Zu
+        hXpjqykClsEhgsetNeQZYZXmR8SFqvK6R2clTIAS5hVvvHeQFLf8Y7uQgC4XWrfjFwXQvV
+        ycoWffII9F/WKwzXy5hYIBDbiMMInrM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-638-3ZvPHLPpNqSh_bo4KCMVUQ-1; Wed, 22 Dec 2021 04:19:54 -0500
+X-MC-Unique: 3ZvPHLPpNqSh_bo4KCMVUQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 763611800D50;
+        Wed, 22 Dec 2021 09:19:53 +0000 (UTC)
+Received: from work (unknown [10.40.193.216])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id AAC5357BE;
+        Wed, 22 Dec 2021 09:19:51 +0000 (UTC)
+Date:   Wed, 22 Dec 2021 10:19:47 +0100
+From:   Lukas Czerner <lczerner@redhat.com>
+To:     yebin <yebin10@huawei.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz
+Subject: Re: [PATCH -next] ext4: Fix remount with 'abort' option isn't
+ effective
+Message-ID: <20211222091947.chmg6mcetocrmygd@work>
+References: <20211221123214.2410593-1-yebin10@huawei.com>
+ <20211221144305.nlryh7q2cgdbpmi5@work>
+ <61C27A0E.9050900@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211221071219.GD26872@thinkpad>
+In-Reply-To: <61C27A0E.9050900@huawei.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 12:42:25PM +0530, Manivannan Sadhasivam wrote:
-> On Mon, Dec 20, 2021 at 09:27:17PM +0100, David Heidelberg wrote:
-> > Hello Manivannan,
-> > 
-> > I'd like to ask, if you had any particular reason to name node `qcom,spmi@`
-> > instead of basic `spmi@`.
-> > 
+On Wed, Dec 22, 2021 at 09:06:22AM +0800, yebin wrote:
 > 
-> "spmi" node label was not documented by devicetree spec at that time. So I was
-> using "qcom,spmi" but it was not correct either.
 > 
-> I've submitted a PR now to devicetree-spec repo [1] for listing it as the
-> generic node name. So once it got accepted, we can use "spmi@" for the node
-> name.
+> On 2021/12/21 22:43, Lukas Czerner wrote:
+> > Hi,
+> > 
+> > nice catch. This is a bug indeed. However I am currently in a process of
+> > changing the ctx_set/clear/test_ helpers because currently it generates
+> > functions that are unused.
+> > 
+> > While I am at it I can just create a custom ctx_set_mount_flags()
+> > helper that would behave as expected so that we won't have to specify
+> > "1 < EXT4_MF_FS_ABORTED" which is not really obvious and hence error
+> > prone.
+> Actually, I fixed the first version as follows:
+
+Allright, this looks better.
+
+> 
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index b72d989b77fb..199920ffc7d3 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -2049,8 +2049,8 @@ struct ext4_fs_context {
+>  	unsigned int	mask_s_mount_opt;
+>  	unsigned int	vals_s_mount_opt2;
+>  	unsigned int	mask_s_mount_opt2;
+> -	unsigned int	vals_s_mount_flags;
+> -	unsigned int	mask_s_mount_flags;
+> +	unsigned long	vals_s_mount_flags;
+> +	unsigned long	mask_s_mount_flags;
+>  	unsigned int	opt_flags;	/* MOPT flags */
+>  	unsigned int	spec;
+>  	u32		s_max_batch_time;
+> @@ -2166,7 +2166,12 @@ static inline bool ctx_test_##name(struct ext4_fs_context *ctx, int flag)\
+>  EXT4_SET_CTX(flags);
+>  EXT4_SET_CTX(mount_opt);
+>  EXT4_SET_CTX(mount_opt2);
+> -EXT4_SET_CTX(mount_flags);
+> +
+> +static inline void ctx_set_mount_flags(struct ext4_fs_context *ctx, int bit)
+
+Maybe ctx_set_mount_flag since you can't really set more than one this
+way?
+
+> +{
+> +	set_bit(bit, &ctx->mask_s_mount_flags);
+> +	set_bit(bit, &ctx->vals_s_mount_flags);
+> +}
+> 
+> 
+> I think 'mask_s_mount_flags' is useless now.
+
+So how would we know what flags have changed ? Sure, there is currently
+no need to clear the flag but that can come in future and once it does
+we'll only need to create a clear helper, the rest will be ready.
+I'd rather keep it.
+
+-Lukas
+
+> > 
+> > My plan is to send my patch set including this one tomorrow, will that
+> > be fine with you ?
+> > 
+> > -Lukas
+> > 
+> > On Tue, Dec 21, 2021 at 08:32:14PM +0800, Ye Bin wrote:
+> > > We test remount with 'abort' option as follows:
+> > > [root@localhost home]# mount  /dev/sda test
+> > > [root@localhost home]# mount | grep test
+> > > /dev/sda on /home/test type ext4 (rw,relatime)
+> > > [root@localhost home]# mount -o remount,abort test
+> > > [root@localhost home]# mount | grep test
+> > > /dev/sda on /home/test type ext4 (rw,relatime)
+> > > 
+> > > Obviously, remount 'abort' option isn't effective.
+> > > After 6e47a3cc68fc commit we process abort option with 'ctx_set_mount_flags':
+> > > static inline void ctx_set_mount_flags(struct ext4_fs_context *ctx, int flag)
+> > > {
+> > > 	ctx->mask_s_mount_flags |= flag;
+> > > 	ctx->vals_s_mount_flags |= flag;
+> > > }
+> > > 
+> > > But we test 'abort' option with 'ext4_test_mount_flag':
+> > > static inline int ext4_test_mount_flag(struct super_block *sb, int bit)
+> > > {
+> > >          return test_bit(bit, &EXT4_SB(sb)->s_mount_flags);
+> > > }
+> > > 
+> > > To solve this issue, pass (1 <<  EXT4_MF_FS_ABORTED) to 'ctx_set_mount_flags'.
+> > > 
+> > > Fixes:6e47a3cc68fc("ext4: get rid of super block and sbi from handle_mount_ops()")
+> > > Signed-off-by: Ye Bin <yebin10@huawei.com>
+> > > ---
+> > >   fs/ext4/super.c | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> > > index b72d989b77fb..071b7b3c5678 100644
+> > > --- a/fs/ext4/super.c
+> > > +++ b/fs/ext4/super.c
+> > > @@ -2236,7 +2236,7 @@ static int ext4_parse_param(struct fs_context *fc, struct fs_parameter *param)
+> > >   			 param->key);
+> > >   		return 0;
+> > >   	case Opt_abort:
+> > > -		ctx_set_mount_flags(ctx, EXT4_MF_FS_ABORTED);
+> > > +		ctx_set_mount_flags(ctx, 1 << EXT4_MF_FS_ABORTED);
+> > >   		return 0;
+> > >   	case Opt_i_version:
+> > >   		ctx_set_flags(ctx, SB_I_VERSION);
+> > > -- 
+> > > 2.31.1
+> > > 
+> > .
+> > 
 > 
 
-PR is merged now. So you can proceed with using "spmi" node name in all dts.
-
-Thanks,
-Mani
-
-> Thanks,
-> Mani
-> 
-> [1] https://github.com/devicetree-org/devicetree-specification/pull/50
-> 
-> > I'm currently converting binding for
-> > Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb and I'm
-> > considering adding qcom,spmi into qcom,spmi-pmic-arb or just rename this and
-> > arch/arm64/boot/dts/qcom/msm8996.dtsi `qcom,spmi@` occurences to `spmi@`.
-> > 
-> > Ideas, inputs?
-> > 
-> > Thank you
-> > David
-> > 
-> > 

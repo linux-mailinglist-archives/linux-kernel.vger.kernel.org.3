@@ -2,92 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9265647CDB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:54:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA00D47CDB7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:55:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243099AbhLVHyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 02:54:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:38386 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243081AbhLVHyl (ORCPT
+        id S243107AbhLVHzA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Dec 2021 02:55:00 -0500
+Received: from coyote.holtmann.net ([212.227.132.17]:41931 "EHLO
+        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231422AbhLVHy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 02:54:41 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0369E618D6;
-        Wed, 22 Dec 2021 07:54:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADF50C36AE5;
-        Wed, 22 Dec 2021 07:54:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640159680;
-        bh=YjXqL4Z0rW6HSakPTtDSodXM3P36BkzOc2Oo3D5+UGk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qQeh5J/+jP4kK7r4iUVD7DRT0WToGrb4umMhhW0yAcnRAr9sG7/1AORO5bsC3rVin
-         /rdrTxTKqe0UaCK2bfmTeyGtK6nV9IcFgOVpm5uDHQWI3yOUC844g/gl3Yt+nJgGqA
-         ZhWgHXO6/BKk6t9u/yWmOJMRCYen3K9zpf0nuAs4=
-Date:   Wed, 22 Dec 2021 08:54:37 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        linux-hyperv@vger.kernel.org,
-        Michael Kelley <mikelley@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 4.19 18/56] hv: utils: add PTP_1588_CLOCK to Kconfig to
- fix build
-Message-ID: <YcLZvcoiPVVmWhu4@kroah.com>
-References: <20211220143023.451982183@linuxfoundation.org>
- <20211220143024.049888083@linuxfoundation.org>
- <20211220203136.GA4116@duo.ucw.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220203136.GA4116@duo.ucw.cz>
+        Wed, 22 Dec 2021 02:54:58 -0500
+Received: from smtpclient.apple (p5b3d2e91.dip0.t-ipconnect.de [91.61.46.145])
+        by mail.holtmann.org (Postfix) with ESMTPSA id 26DC1CED08;
+        Wed, 22 Dec 2021 08:54:57 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
+Subject: Re: [PATCH v4] arm64: dts: qcom: sc7280: Add bluetooth node on SC7280
+ IDP boards
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <1639587963-22503-1-git-send-email-bgodavar@codeaurora.org>
+Date:   Wed, 22 Dec 2021 08:54:56 +0100
+Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        Hemantg <hemantg@codeaurora.org>,
+        MSM <linux-arm-msm@vger.kernel.org>,
+        Rocky Liao <rjliao@codeaurora.org>, hbandi@codeaurora.org,
+        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+        mcchou@chromium.org, saluvala@codeaurora.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <580E8974-EB7F-4493-BECC-4B09765A954D@holtmann.org>
+References: <1639587963-22503-1-git-send-email-bgodavar@codeaurora.org>
+To:     Balakrishna Godavarthi <bgodavar@codeaurora.org>
+X-Mailer: Apple Mail (2.3693.40.0.1.81)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 09:31:36PM +0100, Pavel Machek wrote:
-> Hi!
-> 
-> > From: Randy Dunlap <rdunlap@infradead.org>
-> > 
-> > [ Upstream commit 1dc2f2b81a6a9895da59f3915760f6c0c3074492 ]
-> > 
-> > The hyperv utilities use PTP clock interfaces and should depend a
-> > a kconfig symbol such that they will be built as a loadable module or
-> > builtin so that linker errors do not happen.
-> > 
-> > Prevents these build errors:
-> > 
-> > ld: drivers/hv/hv_util.o: in function `hv_timesync_deinit':
-> > hv_util.c:(.text+0x37d): undefined reference to `ptp_clock_unregister'
-> > ld: drivers/hv/hv_util.o: in function `hv_timesync_init':
-> > hv_util.c:(.text+0x738): undefined reference to `ptp_clock_register'
-> 
-> This is bad idea for 4.19:
-> 
-> > +++ b/drivers/hv/Kconfig
-> > @@ -16,6 +16,7 @@ config HYPERV_TSCPAGE
-> >  config HYPERV_UTILS
-> >  	tristate "Microsoft Hyper-V Utilities driver"
-> >  	depends on HYPERV && CONNECTOR && NLS
-> > +	depends on PTP_1588_CLOCK_OPTIONAL
-> >  	help
-> >  	  Select this option to enable the Hyper-V Utilities.
-> 
-> grep -ri PTP_1588_CLOCK_OPTIONAL .
-> 
-> Results in no result in 4.19. So this will break hyperv. No results in
-> 5.10, either, so it is bad idea there, too.
+Hi Balakrishna,
 
-Thanks, I will go delete it from all queues.
+> Add bluetooth SoC WCN6750 node for SC7280 IDP boards.
+> 
+> Signed-off-by: Balakrishna Godavarthi <bgodavar@codeaurora.org>
+> ---
+> v4:
+>  * updated commit subject
+>  * Removed drive strength for bt_en
+>  * updated swctrl_gpio name to sw_ctrl
+> 
+> v3:
+>  * Addressed reviewers comments
+>  * Added pin config for sw_ctrl line.
+> v2:
+>  * merged two patches into one
+>  * Removed unused comments
+>  * Removed pinmux & pin conf.
+>  * Addressed reviewers comments
+> 
+> v1: initial patch
+> ---
+> arch/arm64/boot/dts/qcom/sc7280-idp.dts  |  4 ++++
+> arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 36 ++++++++++++++++++++++++++++++++
+> arch/arm64/boot/dts/qcom/sc7280-idp2.dts |  4 ++++
+> 3 files changed, 44 insertions(+)
 
-greg k-h
+patch has been applied to bluetooth-next tree.
+
+Regards
+
+Marcel
+

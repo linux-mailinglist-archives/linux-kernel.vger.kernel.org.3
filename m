@@ -2,102 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC8647D29D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:05:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5656647D2A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:06:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245212AbhLVNFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 08:05:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
+        id S245224AbhLVNGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 08:06:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236759AbhLVNFA (ORCPT
+        with ESMTP id S236364AbhLVNGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 08:05:00 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363A1C061574;
-        Wed, 22 Dec 2021 05:05:00 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id d9so4898504wrb.0;
-        Wed, 22 Dec 2021 05:05:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=BPLpHI4x5W/zhC1d5lONCVDS5FWmiD7fkkKWzxlNBok=;
-        b=FR9nipHfFmygSK7LvpaJW3XLs2pCFB+JHlQwqaDkr2rtngrLQSr5/R+z1nVhXtFHP/
-         2SomlihLnbEpn33PbGvf3RCY4wnYiXrD6kEcXGnobDQT4Cod2A+ruZoKxgGTokGXTcKL
-         e5jTQFbdFRnBRHqKFtcpa8zmPOFYGjE8a/gOb06wnSMbEKbteCZmjmNvFM1gr+twpIe8
-         o5uqSTpBuAmsdat9pgm04X+EVuysRSLcxzVJnMB8gTvlkxqC/s8ThkiTPwifbEFy6G7Z
-         Tt1A+siNzRuSzwxGV2uzTQZwafGKuGlp/lWJQAql/Zm8ua95LcHv/wAc7JzrN9ckyP7j
-         rK3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to:user-agent;
-        bh=BPLpHI4x5W/zhC1d5lONCVDS5FWmiD7fkkKWzxlNBok=;
-        b=Mjd1mMtlyMeipV1LF2FQICPDjJ3+ELzNM0368Am1vyk+u2AgnkatpYC+UztZpwRWcl
-         484FtraPcfn4+vklK5glfspe2L5v50FAvcukW4bvNHexDjJzT1rYqAZZHVqY1EvmenpE
-         J4SvBe62sMQtk5WF5kd7GIFbr1tZHf0KDV/FBmqtZpPexZTrMcjp25czZ999p6Wua9PC
-         2YLzJLNsUgOiWPPE0Jh7TXAOwra94W9bpI5AACJHXpGeIsGP/k/Bo6eSQvoXuTntaYc8
-         +V3g9PekII1H3KeYUS9HqB0W666BEhTLpmiuFlWGUVdmXPqYho3HrgTtjGEkAezZQBpp
-         v0ig==
-X-Gm-Message-State: AOAM531SUzBsAEGN6ilr+44TNsWwJCJ7QjeEZrpcDmY3s8zUCtWgEbsM
-        a4AYUe4RubvbTxlwACXPPI8=
-X-Google-Smtp-Source: ABdhPJxnFFs4JhWrAl/oYfF3s/L3vExb1S9IoTiSLpR8jxNtTTwYdhPryXTHl90ldWSN74Tnf5mjQw==
-X-Received: by 2002:adf:f70f:: with SMTP id r15mr2038881wrp.552.1640178298874;
-        Wed, 22 Dec 2021 05:04:58 -0800 (PST)
-Received: from gmail.com ([81.168.73.77])
-        by smtp.gmail.com with ESMTPSA id e12sm1936510wrg.110.2021.12.22.05.04.58
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 22 Dec 2021 05:04:58 -0800 (PST)
-Date:   Wed, 22 Dec 2021 13:04:56 +0000
-From:   Martin Habets <habetsm.xilinx@gmail.com>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     ecree.xilinx@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sfc: falcon: Check null pointer of rx_queue->page_ring
-Message-ID: <20211222130456.3lbrgx3p47fzjnzi@gmail.com>
-Mail-Followup-To: Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        ecree.xilinx@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211220140344.978408-1-jiasheng@iscas.ac.cn>
+        Wed, 22 Dec 2021 08:06:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD029C061574;
+        Wed, 22 Dec 2021 05:06:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 49AC461A88;
+        Wed, 22 Dec 2021 13:06:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ED43C36AEF;
+        Wed, 22 Dec 2021 13:06:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640178409;
+        bh=+Bphm/tiPEFDYNkambYOvXEj7vwizPLJU5NueAxpGbU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jTXhOqo97ggpdKdhYZ0zO3hadSNcDpkK8jqvVEQOd2EOusUvNPlO8UFb1cUEYXQ03
+         wMypA+fWhX+CK21LnEBBg59okmpcazUWC4q0J6TEKwPOIlQAp7+JwhZs/tvmwr/YK6
+         7D/FtbUewcVF9B4b0piIOlOYIG8FVuLnwzIrSkAhdRyhb1Y0RZT+TcG6WzkoE42062
+         Nk4LUDLrlKMrw71mLbqkyAZ3V6fR6K80WIyksz1/PIHDi1XqHdCzWVNuJVENJ1mV00
+         Zd1uk1CfPBl+lVoe+IDPzGVb4DsVxVgbKixNyyPHRkw8dd1mDgYMvM5fP82ClysgHS
+         yrnxpKbim7G/w==
+Received: by mail-ua1-f53.google.com with SMTP id i6so4042386uae.6;
+        Wed, 22 Dec 2021 05:06:49 -0800 (PST)
+X-Gm-Message-State: AOAM533npzXvWfGdxm4hBevaM3xIzBU0fPZ+gV/W0Rw1SIso7ca0zjAR
+        d7ZQfqAO+Glx5G6tgxdRV6IlpkWn5OuDEhuDvOQ=
+X-Google-Smtp-Source: ABdhPJyDkkqn4EX2hxcOREHl7ssuLgmpk5Qt11X/aLujji1sgU4cXkTBKmYGzlUZVU2QcCBFU9wGQL/zH2P4rpz0fQk=
+X-Received: by 2002:a05:6102:a83:: with SMTP id n3mr1059249vsg.2.1640178408618;
+ Wed, 22 Dec 2021 05:06:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220140344.978408-1-jiasheng@iscas.ac.cn>
-User-Agent: NeoMutt/20170113 (1.7.2)
+References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-3-guoren@kernel.org>
+ <CAK8P3a3dS=Ne0Pd2qZc8vB2whM7AUcJ1BNbhtf6EEboWAPpSug@mail.gmail.com>
+ <CAJF2gTTN1HZeycK-WOFH0EjmjtBB4T=9de6Qrjs=uhAsLoOFaQ@mail.gmail.com> <CAK8P3a3m2Mz4Tvu+3cdji6iq_wvFZsYoyKvnaNKTEjE+ivex6A@mail.gmail.com>
+In-Reply-To: <CAK8P3a3m2Mz4Tvu+3cdji6iq_wvFZsYoyKvnaNKTEjE+ivex6A@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 22 Dec 2021 21:06:37 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQEp0hEousuEyp5cPCa5Remb_8HMZ-BXZ393_z7hbne7g@mail.gmail.com>
+Message-ID: <CAJF2gTQEp0hEousuEyp5cPCa5Remb_8HMZ-BXZ393_z7hbne7g@mail.gmail.com>
+Subject: Re: [PATCH 02/13] riscv: Fixup difference with defconfig
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 10:03:44PM +0800, Jiasheng Jiang wrote:
-> Because of the possible failure of the kcalloc, it should be better to
-> set rx_queue->page_ptr_mask to 0 when it happens in order to maintain
-> the consistency.
-> 
-> Fixes: 5a6681e22c14 ("sfc: separate out SFC4000 ("Falcon") support into new sfc-falcon driver")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+On Wed, Dec 22, 2021 at 8:51 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Wed, Dec 22, 2021 at 12:34 PM Guo Ren <guoren@kernel.org> wrote:
+> > On Wed, Dec 22, 2021 at 1:09 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
+> > > If the intention is to keep them in sync, maybe use a fragment for 32-bit
+> > > mode, like powerpc or mips do.
+> >
+> > Some people are familiar with "make rv32_defconfig". There has a
+> > 32-bit.config fragment config in arch/riscv/configs/.
+> >
+> > I've tested with:
+> >
+> > make ARCH=riscv CROSS_COMPILE=riscv32-buildroot-linux-gnu-
+> > EXTRA_CFLAGS+=-g O=../build-rv32/ defconfig 32-bit.config
+> >
+> > The above is tested Okay, do you mean we should delete rv32_defconfig?
+> > I think it's another topic, I just want them the same in "compat"
+> > patchset.
+>
+> I think what you can do is to add rv32_defconfig as a target in
+> arch/riscv/Makefile the same way as rv32_randconfig, and then
+> delete the other file, that will keep the existing process working
+> for any existing users.
+Good idea, I would try.
 
-Acked-by: Martin Habets <habetsm.xilinx@gmail.com>
+>
+> Given that there are no specific rv32 SoC implementations supported
+> by the kernel today (other than SOC_VIRT), the number of users
+> would be close to zero anyway.
+I really agree with you, but we still need the rv32 user mode
+ecosystem for memory footprint.
 
-> ---
->  drivers/net/ethernet/sfc/falcon/rx.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/sfc/falcon/rx.c b/drivers/net/ethernet/sfc/falcon/rx.c
-> index 966f13e7475d..11a6aee852e9 100644
-> --- a/drivers/net/ethernet/sfc/falcon/rx.c
-> +++ b/drivers/net/ethernet/sfc/falcon/rx.c
-> @@ -728,7 +728,10 @@ static void ef4_init_rx_recycle_ring(struct ef4_nic *efx,
->  					    efx->rx_bufs_per_page);
->  	rx_queue->page_ring = kcalloc(page_ring_size,
->  				      sizeof(*rx_queue->page_ring), GFP_KERNEL);
-> -	rx_queue->page_ptr_mask = page_ring_size - 1;
-> +	if (!rx_queue->page_ring)
-> +		rx_queue->page_ptr_mask = 0;
-> +	else
-> +		rx_queue->page_ptr_mask = page_ring_size - 1;
->  }
->  
->  void ef4_init_rx_queue(struct ef4_rx_queue *rx_queue)
-> -- 
-> 2.25.1
+>
+>        Arnd
+
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

@@ -2,97 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C65047D477
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 16:57:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5BC47D4A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 16:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343788AbhLVP5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 10:57:39 -0500
-Received: from mga18.intel.com ([134.134.136.126]:50990 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1343765AbhLVP5g (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 10:57:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640188655; x=1671724655;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=cH+SPBYsfFuuHbv9XNShzanFxeXA/W1PKBHvRD1wzMs=;
-  b=KdhtgZKh1i0GJ2x0JZtom70seKxhK3Jy5q4Nx86Y2r12HKCiQlvnLUfH
-   xEmtqskHMqtHttz82GFZxUDrwwsVujsoYz8nqmqLHd9HpS9Q770e+PUZ1
-   qPfz2IVl1YcsUnrpDkCugZjEUopmSnnEA7Hq2DZN2mtvQWJY2zP+9R/cO
-   w0kXT9awdKE3w0tMjLEryJQ7PYYtPHWQ1jQW5RYsLywLxAu2wa+8YhaUN
-   HidvHkvGDYPzIyEWUevPlXTT1eqvEZvmdsynFRL6kTerHlPTvT7MLVu5P
-   jDD0qu8fpsc2SIshMGHWuUT5ZFvWSWOc4cwy/lpRphEhVKFNwWcxXOWlf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="227495764"
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="227495764"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 07:57:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="570608655"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 22 Dec 2021 07:57:32 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 0AA33FE; Wed, 22 Dec 2021 17:57:40 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: [PATCH v2 1/3] spi: dln2: Propagate firmware node
-Date:   Wed, 22 Dec 2021 17:57:37 +0200
-Message-Id: <20211222155739.7699-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        id S1343942AbhLVP62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 10:58:28 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:59117 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343902AbhLVP6G (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 10:58:06 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 3C0786000C;
+        Wed, 22 Dec 2021 15:58:04 +0000 (UTC)
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        linux-wpan@vger.kernel.org
+Cc:     David Girault <david.girault@qorvo.com>,
+        Romuald Despres <romuald.despres@qorvo.com>,
+        Frederic Blain <frederic.blain@qorvo.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        <linux-kernel@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [net-next 13/18] net: mac802154: Inform device drivers about the scanning operation
+Date:   Wed, 22 Dec 2021 16:57:38 +0100
+Message-Id: <20211222155743.256280-14-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20211222155743.256280-1-miquel.raynal@bootlin.com>
+References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Propagate firmware node by using a specific API call, i.e. device_set_node().
+Let's create a couple of driver hooks in order to tell the device
+drivers that a scan is ongoing, if they need to apply a particular
+configuration. These hooks are optional.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Co-developed-by: David Girault <david.girault@qorvo.com>
+Signed-off-by: David Girault <david.girault@qorvo.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
-v2: included property.h to avoid compilation error (Mark)
- drivers/spi/spi-dln2.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ include/net/mac802154.h    | 13 +++++++++++++
+ net/mac802154/driver-ops.h | 33 +++++++++++++++++++++++++++++++++
+ net/mac802154/scan.c       |  7 +++++++
+ net/mac802154/trace.h      | 28 ++++++++++++++++++++++++++++
+ 4 files changed, 81 insertions(+)
 
-diff --git a/drivers/spi/spi-dln2.c b/drivers/spi/spi-dln2.c
-index 3ff63ab82f4f..0a1fb2bc9e54 100644
---- a/drivers/spi/spi-dln2.c
-+++ b/drivers/spi/spi-dln2.c
-@@ -8,6 +8,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
- #include <linux/mfd/dln2.h>
- #include <linux/spi/spi.h>
- #include <linux/pm_runtime.h>
-@@ -688,6 +689,8 @@ static int dln2_spi_probe(struct platform_device *pdev)
- 	if (!master)
- 		return -ENOMEM;
+diff --git a/include/net/mac802154.h b/include/net/mac802154.h
+index 19bfbf591ea1..97aefba7bf96 100644
+--- a/include/net/mac802154.h
++++ b/include/net/mac802154.h
+@@ -204,6 +204,16 @@ enum ieee802154_hw_flags {
+  *
+  * set_promiscuous_mode
+  *	  Enables or disable promiscuous mode.
++ *
++ * enter_scan_mode
++ *	  Enters the scan mode, may then refuse certain operations.
++ *	  Can be NULL, if the driver has no internal configuration to do.
++ *	  Returns either zero, or negative errno.
++ *
++ * exit_scan_mode
++ *	  Exits the scan mode and returns to a fully functioning state.
++ *	  Should only be provided if ->enter_scan_mode() is populated.
++ *	  Returns either zero, or negative errno.
+  */
+ struct ieee802154_ops {
+ 	struct module	*owner;
+@@ -230,6 +240,9 @@ struct ieee802154_ops {
+ 					     s8 retries);
+ 	int             (*set_promiscuous_mode)(struct ieee802154_hw *hw,
+ 						const bool on);
++	int		(*enter_scan_mode)(struct ieee802154_hw *hw,
++					   struct cfg802154_scan_request *request);
++	int		(*exit_scan_mode)(struct ieee802154_hw *hw);
+ };
  
-+	device_set_node(&master->dev, dev_fwnode(dev));
+ /**
+diff --git a/net/mac802154/driver-ops.h b/net/mac802154/driver-ops.h
+index d23f0db98015..2f5650f7bf91 100644
+--- a/net/mac802154/driver-ops.h
++++ b/net/mac802154/driver-ops.h
+@@ -282,4 +282,37 @@ drv_set_promiscuous_mode(struct ieee802154_local *local, bool on)
+ 	return ret;
+ }
+ 
++static inline int drv_enter_scan_mode(struct ieee802154_local *local,
++				      struct cfg802154_scan_request *request)
++{
++	int ret;
 +
- 	platform_set_drvdata(pdev, master);
++	might_sleep();
++
++	if (!local->ops->enter_scan_mode || !local->ops->exit_scan_mode)
++		return 0;
++
++	trace_802154_drv_enter_scan_mode(local, request);
++	ret = local->ops->enter_scan_mode(&local->hw, request);
++	trace_802154_drv_return_int(local, ret);
++
++	return ret;
++}
++
++static inline int drv_exit_scan_mode(struct ieee802154_local *local)
++{
++	int ret;
++
++	might_sleep();
++
++	if (!local->ops->exit_scan_mode)
++		return 0;
++
++	trace_802154_drv_exit_scan_mode(local);
++	ret = local->ops->exit_scan_mode(&local->hw);
++	trace_802154_drv_return_int(local, ret);
++
++	return ret;
++}
++
+ #endif /* __MAC802154_DRIVER_OPS */
+diff --git a/net/mac802154/scan.c b/net/mac802154/scan.c
+index c5b85eaec319..1382489d4e58 100644
+--- a/net/mac802154/scan.c
++++ b/net/mac802154/scan.c
+@@ -87,6 +87,8 @@ int mac802154_abort_scan_locked(struct ieee802154_local *local)
+ 	if (!local->scanning)
+ 		return -ESRCH;
  
- 	dln2 = spi_master_get_devdata(master);
-@@ -699,7 +702,6 @@ static int dln2_spi_probe(struct platform_device *pdev)
- 	}
++	drv_exit_scan_mode(local);
++
+ 	cancel_delayed_work(&local->scan_work);
  
- 	dln2->master = master;
--	dln2->master->dev.of_node = dev->of_node;
- 	dln2->pdev = pdev;
- 	dln2->port = pdata->port;
- 	/* cs/mode can never be 0xff, so the first transfer will set them */
+ 	return mac802154_end_of_scan(local);
+@@ -186,6 +188,11 @@ int mac802154_trigger_scan_locked(struct ieee802154_sub_if_data *sdata,
+ 	else
+ 		local->scan_addr = cpu_to_le64(get_unaligned_be64(sdata->dev->dev_addr));
+ 
++	/* Inform the hardware about the scanning operation starting */
++	ret = drv_enter_scan_mode(local, request);
++	if (ret)
++		return ret;
++
+ 	local->scan_channel_idx = -1;
+ 	local->scanning = true;
+ 
+diff --git a/net/mac802154/trace.h b/net/mac802154/trace.h
+index df855c33daf2..9c0a4f07ced1 100644
+--- a/net/mac802154/trace.h
++++ b/net/mac802154/trace.h
+@@ -264,6 +264,34 @@ TRACE_EVENT(802154_drv_set_promiscuous_mode,
+ 		  BOOL_TO_STR(__entry->on))
+ );
+ 
++TRACE_EVENT(802154_drv_enter_scan_mode,
++	TP_PROTO(struct ieee802154_local *local,
++		 struct cfg802154_scan_request *request),
++	TP_ARGS(local, request),
++	TP_STRUCT__entry(
++		LOCAL_ENTRY
++		__field(u8, page)
++		__field(u32, channels)
++		__field(u8, duration)
++		__field(u64, addr)
++	),
++	TP_fast_assign(
++		LOCAL_ASSIGN;
++		__entry->page = request->page;
++		__entry->channels = request->channels;
++		__entry->duration = request->duration;
++		__entry->addr = local->scan_addr;
++	),
++	TP_printk(LOCAL_PR_FMT ", scan, page: %d, channels: %x, duration %d, addr: 0x%llx",
++		  LOCAL_PR_ARG, __entry->page, __entry->channels,
++		  __entry->duration, __entry->addr)
++);
++
++DEFINE_EVENT(local_only_evt4, 802154_drv_exit_scan_mode,
++	TP_PROTO(struct ieee802154_local *local),
++	TP_ARGS(local)
++);
++
+ #endif /* !__MAC802154_DRIVER_TRACE || TRACE_HEADER_MULTI_READ */
+ 
+ #undef TRACE_INCLUDE_PATH
 -- 
-2.34.1
+2.27.0
 

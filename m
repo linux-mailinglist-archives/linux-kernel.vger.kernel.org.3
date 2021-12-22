@@ -2,162 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6A347D2A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB2EF47D2BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245236AbhLVNHi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Dec 2021 08:07:38 -0500
-Received: from mail-eopbgr120072.outbound.protection.outlook.com ([40.107.12.72]:23017
-        "EHLO FRA01-PR2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236364AbhLVNHe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 08:07:34 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=htk6iZ9/q6+NZrwlCNbAOBh619G5whyLaQ/NWBoBGR/hhmJG72S9sHv3dgMFf0/hD8+S8mdhtsFn3ReWeSQZ995ZCeBI+Axz1N8l8GM08mLTAeI0atEpo6FItBv+mXkSE2fM0QmnukhOplGQI2ueI5Qi3Lz4jOoLo4URTCZfvL6zqVfIgTgpYXHKCRbmhbAd5zHtKBnf1RlyXuHB9LhtiLa6qgU8rrK8hLQWom63asH44tmL7BkF5gitELt5InF2BxWrO/t6i1PlCrEZGZFNFSnciWC5QbGFrCrYf/PMlNdxojBvUnQA9XM9urajBjDtK4n6nbkWmloouOq0tLwS3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QJxvT4w3APTENeCkeumempsVVsuseo8lKJJm8KOv2HA=;
- b=GYTY5yNXHqzFZF3BPoU6cWElx10ASwjnE3Vbx6uMXJC6PP+OCjfq2WfrvKhyfHEMN26kY3ze2XCLFmujw6l1ILx6AZlBpmFCuONLE2KFOb+6kUNSRlNFCR261RTMRUNsAUrc7/71jgU+0h73eEYtmY3dc4nuLszV3SAXMMk7qf77nR5EEQWZzvJq10SVMAZQyI5ZIopqI/CqHB0StzDNiAAF2Ut0jgVLIzlDocFkllFJqIzPtQCQeeuaObR/HHDQsf+cAg6P6GmPgyu9e2uYXX0eNfjNL3mQVnZkU+v4SCUijYFOszbCT8wabTF7Bt+c78EX8TPSurpZ+9f/u813rw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB2691.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:38::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.18; Wed, 22 Dec
- 2021 13:07:31 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::f0ef:856d:b0de:e85d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::f0ef:856d:b0de:e85d%7]) with mapi id 15.20.4823.018; Wed, 22 Dec 2021
- 13:07:31 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Erhard Furtner <erhard_f@mailbox.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Emese Revfy <re.emese@gmail.com>
-Subject: [PATCH] powerpc/32: Fix boot failure with GCC latent entropy plugin
-Thread-Topic: [PATCH] powerpc/32: Fix boot failure with GCC latent entropy
- plugin
-Thread-Index: AQHX9zTg0ZucU0S3NkiOSQU+B0LkiQ==
-Date:   Wed, 22 Dec 2021 13:07:31 +0000
-Message-ID: <2bac55483b8daf5b1caa163a45fa5f9cdbe18be4.1640178426.git.christophe.leroy@csgroup.eu>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2cff732f-717c-40ce-b0e7-08d9c54c0343
-x-ms-traffictypediagnostic: MR1P264MB2691:EE_
-x-microsoft-antispam-prvs: <MR1P264MB2691CBE7C80C270D23BB7E19ED7D9@MR1P264MB2691.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0TqfSMN9WmKjdQ53kYLE14pOOVUsS6dZDSX8Ey5CsYF2r7Ri+m1tTcW9Nuul3adHof69IErBruQoZu8i2No5V6jJ/nfMwI4A/gHZxhj1k1zk+71RA7Z7UnYFWpk6tAXOUNzqg16XEQB0vbEFW5sIAxzxemCvxbLs2xti96/Sc5mVFCjv8uDfPqjPzt9lE70RdGEOraqXVOs1NdLb8gcw2xp0o7s9qks5Ji3KWZan3UwUBRIHGFHxJNTkZjC1Es/cCy0w69KCUuKIAHaw9JqPZ/m12/SAQ4IO62NmjB6aPe8WWaqjPFelyLTqsNLT4/WoTNhBej/nPX1vpomIr/IINFSo3l9jIpcXWAPdIHxajcuOg6rFTdTKEYaIaF4HD9ATEF/YIzED32qTqAUFL/9K+mF2VBNhdLu8TfqWQZhfn/xr7fSSJl9PwmyCy8mld+bFRY1BYhEXCukgA6RJqvYl967xW2z19E3be/pPXgDI4XGZfBvy1FxHa5LJ730+BY5cQlsNc8aqPI5leIMnaBV9+4Kju+d5tpPnlR2i/jnAJwRG3F7xzFHIPkYFNNnZBGOcroR0LcVftV34O6OBwgJEixOO3G4fYmgizZVRcKxOQJfqcdZIe6jE8N4NhJOWPOCiwhl4SVp3U2weY9vrp3ctAtZUqk/1jk6fHiUx3FiGFM91E6vzNTlopLGYtZLX+UX3TFK/nbwA9SzDvoqzdN/hzY6KSYh9rfSxKlbB9nXEoChrGnXtB3S49UPQU4bJAlxf/H6BQ88useUWIx9002VyxSVj5WfO530b5Bt79fj7o4s=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(4326008)(71200400001)(54906003)(86362001)(6486002)(8676002)(2906002)(8936002)(122000001)(316002)(966005)(508600001)(76116006)(186003)(36756003)(6512007)(44832011)(38070700005)(5660300002)(110136005)(66946007)(91956017)(26005)(6506007)(66556008)(66476007)(66446008)(2616005)(83380400001)(64756008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?bXMEWbhxwDyJBrB05hDwBytmyhnB+fEgHpHGSp9MKD8en4QSkKfmOQ0LtV?=
- =?iso-8859-1?Q?oHi5Y1o3Sx5vuyjr7qK0eV4CyU0wy3iyAdJsMrZkabae4L+PzZY3sxW+rz?=
- =?iso-8859-1?Q?+zESjwRLsFF9v7LTKKRHsiqoHU02VwtmpFZkdDPzf/RLiH5rSXAFe3hcg1?=
- =?iso-8859-1?Q?YJ9xSvaRoGUSAPOVsinvSkCXd0J/rkQ3cJuzja/RRyVtjfmdb9Sn6D4ror?=
- =?iso-8859-1?Q?zA0ANuVl1lYoJfKTEsdgBsMjgtq9aNaMqxkuO13dUMVpWfa94eNLduEV25?=
- =?iso-8859-1?Q?QMHvBxLBIgZoN9NhU5mswZfH/5s0V5KQFlpaRN6Y/vNhv9QryXTZyd37eI?=
- =?iso-8859-1?Q?SFtL4ho46vyr6EzzRGzEtszBUwNFgDnt8H5CPr74RjBa5DO8si7C3BKq0b?=
- =?iso-8859-1?Q?9O6HfdGjjN9VGp7MUJKWK3Wk1z6TAtSwTs8HTI1u0ENDboajSb6GR0GeTr?=
- =?iso-8859-1?Q?ytnHBKW3tQZcEfuX4zO0NB89Nm4W+4v1vNaLEscP1B6vqjHZ/edmIPA3N3?=
- =?iso-8859-1?Q?QcJWSI102NutJXXiI5X1CF4u1mhcqM6tsNyuZvvwgMvxcBrfGNr/KKiUN2?=
- =?iso-8859-1?Q?BCz96neI8RgrqrZg/ezpQWxMAyBZ+svhHPuCDgCbPfIQvZ4cYZVZYOyvva?=
- =?iso-8859-1?Q?L8qRv9/nobHj/shKwSNhvxxUKvqp/t/nVEYh92xNS0IjNOuzHY0W/rlIDF?=
- =?iso-8859-1?Q?+NdWZRIQlC7L+ivb1ArcPoHbjurkxz+3y1czCytjNQHDWuXlQHwvpbJs92?=
- =?iso-8859-1?Q?DNFIfXfD+R+ZmBOEBfOvb0Ir8hSUTm+/6greGi827hqe8wkW/AZds5DkXx?=
- =?iso-8859-1?Q?jgkzOBsQ3Y/ApeUW65gMaoO65gwZbiG3R1z9Vk75ikt5WlOvOlLBVUCc4E?=
- =?iso-8859-1?Q?vaMSQStErYlzzE6YCHEPR/9hXOZkaOFNuNYcPpBR3Z2UXImdi49Ngo+qYm?=
- =?iso-8859-1?Q?WlqQDUSd122E/0UcHN97BCVmgKaqcqMyjEfzMLvTRkl9QcXuzJHOsQgzkn?=
- =?iso-8859-1?Q?ozK9Ta5a2ZmckK5UjPFoFc/UOM07mFMXUojhot6VYr1/YUSEQ5I9B/7g+d?=
- =?iso-8859-1?Q?+iOnlnwIqYqbcudodLoXT5bLl7b10ih+Co2ADzaPszKwCN/N7W4GvRWle+?=
- =?iso-8859-1?Q?o8WzIsUFS3dobdVUFRZ7qFk16mUtT8MXSKX1kTqiG1BaOd0nPMx2+04Ntg?=
- =?iso-8859-1?Q?Vgy7/16kb3RNLrWlcpBABnfLYXIlIxc56Y5bN0nESjtY0Z3AV1TkHCnMpT?=
- =?iso-8859-1?Q?PlVHzCHloRQDMPVRHsgeF9e2p8FP06sCQpAdbUzN/5CW56tCvMn+JfA1TV?=
- =?iso-8859-1?Q?0xn+dlu6kWD9yoA7bGD2o+6txyc5FL+r0uDSY7hd/CaYzO8OH8k17J0Wyj?=
- =?iso-8859-1?Q?W4J0WxoR9+ah7EA0sZkQNf5nfulo+hS1hMtrwcnE62qgnzrmSPzOLeDJZj?=
- =?iso-8859-1?Q?pF8cAYGFqGN7pZ+2AQrra72s8+QHBWXQjLi4vpJLEVDxmkrJEctoYV9yqU?=
- =?iso-8859-1?Q?ucsClt1cysf1AXB34yTJiFz0IX47QyeD50kn/duIKauESIgUNToRE53x5A?=
- =?iso-8859-1?Q?8XRo2fAmuyNc9mDhD5GoxcDrh8MNJi884JfquZY5X44CPnKlIjMkhLO++4?=
- =?iso-8859-1?Q?cRF3QTVFJFlHAZs3gCa0zzXvuaX6aYvTRGMpX6NGOvsiIdJmVMnwclOirZ?=
- =?iso-8859-1?Q?RwhXHpE/lU/MYLevTCLmCqY5nUnnTVnbN424+iM61hpmGOoWpNQmzh4J+J?=
- =?iso-8859-1?Q?peH6WYIOqXg5k9KO/VKOZwl4E=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        id S245311AbhLVNMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 08:12:24 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:30089 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245283AbhLVNMW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 08:12:22 -0500
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JJtv93txFz1DK7S;
+        Wed, 22 Dec 2021 21:09:09 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 22 Dec 2021 21:12:18 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 22 Dec 2021 21:12:17 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        "John Donnelly" <John.p.donnelly@oracle.com>
+Subject: [PATCH v18 00/17] support reserving crashkernel above 4G on arm64 kdump
+Date:   Wed, 22 Dec 2021 21:08:03 +0800
+Message-ID: <20211222130820.1754-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2cff732f-717c-40ce-b0e7-08d9c54c0343
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Dec 2021 13:07:31.1808
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uAAQHNhGvIRk+xK7JMMghzaHmK4RXW7FxVwuntkNnPRJDvPJHhTd6ukcT3yLaZzKM3Q5u3sqsA3iQIOwWR8/qu/QmPAUifyKastFS3CUuK8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2691
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Boot fails with GCC latent entropy plugin enabled.
+There are following issues in arm64 kdump:
+1. We use crashkernel=X to reserve crashkernel below 4G, which
+will fail when there is no enough low memory.
+2. If reserving crashkernel above 4G, in this case, crash dump
+kernel will boot failure because there is no low memory available
+for allocation.
 
-This is due to early boot functions trying to access 'latent_entropy'
-global data while the kernel is not relocated at its final
-destination yet.
+To solve these issues, change the behavior of crashkernel=X.
+crashkernel=X tries low allocation in DMA zone and fall back to high
+allocation if it fails.
 
-As there is no way to tell GCC to use PTRRELOC() to access it,
-disable latent entropy plugin in early_32.o and feature-fixups.o and
-code-patching.o
+We can also use "crashkernel=X,high" to select a high region above
+DMA zone, which also tries to allocate at least 256M low memory in
+DMA zone automatically and "crashkernel=Y,low" can be used to allocate
+specified size low memory.
 
-Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215217
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Fixes: 38addce8b600 ("gcc-plugins: Add latent_entropy plugin")
-Cc: stable@vger.kernel.org
-Cc: Emese Revfy <re.emese@gmail.com>
----
- arch/powerpc/kernel/Makefile | 1 +
- arch/powerpc/lib/Makefile    | 3 +++
- 2 files changed, 4 insertions(+)
+When reserving crashkernel in high memory, some low memory is reserved
+for crash dump kernel devices. So there may be two regions reserved for
+crash dump kernel.
+In order to distinct from the high region and make no effect to the use
+of existing kexec-tools, rename the low region as "Crash kernel (low)",
+and pass the low region by reusing DT property
+"linux,usable-memory-range". We made the low memory region as the last
+range of "linux,usable-memory-range" to keep compatibility with existing
+user-space and older kdump kernels.
 
-diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
-index 5fa68c2ef1f8..36f3f5a8868d 100644
---- a/arch/powerpc/kernel/Makefile
-+++ b/arch/powerpc/kernel/Makefile
-@@ -11,6 +11,7 @@ CFLAGS_prom_init.o      += -fPIC
- CFLAGS_btext.o		+= -fPIC
- endif
- 
-+CFLAGS_early_32.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
- CFLAGS_cputable.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
- CFLAGS_prom_init.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
- CFLAGS_btext.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
-diff --git a/arch/powerpc/lib/Makefile b/arch/powerpc/lib/Makefile
-index 9e5d0f413b71..0b08e85d3839 100644
---- a/arch/powerpc/lib/Makefile
-+++ b/arch/powerpc/lib/Makefile
-@@ -19,6 +19,9 @@ CFLAGS_code-patching.o += -DDISABLE_BRANCH_PROFILING
- CFLAGS_feature-fixups.o += -DDISABLE_BRANCH_PROFILING
- endif
- 
-+CFLAGS_code-patching.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
-+CFLAGS_feature-fixups.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
-+
- obj-y += alloc.o code-patching.o feature-fixups.o pmem.o test_code-patching.o
- 
- ifndef CONFIG_KASAN
+Besides, we need to modify kexec-tools:
+arm64: support more than one crash kernel regions(see [1])
+
+Another update is document about DT property 'linux,usable-memory-range':
+schemas: update 'linux,usable-memory-range' node schema(see [2])
+
+This patchset contains the following 17 patches:
+
+0001-0003 are some x86 cleanups which prepares for making functionsreserve_crashkernel[_low]() generic.
+0004-0006 Add helper parse_crashkernel_in_order() and refact reserve_crashkernel{_low}
+0007 cleanup
+0008-0009 makes functions reserve_crashkernel[_low]() generic.
+0010-0012 do some cleanups for parse_crashkernel_{high|low} and __parse_crashkernel()
+0013-0014 reimplements arm64 crashkernel=X.
+0015-0016 adds memory for devices by DT property linux,usable-memory-range.
+0017 updates the doc.
+
+Changes since [v17]
+The patches 0013-0016 have no change, 0017 see below, all other 0001-0012 patches
+are rewritten or new. The main change is patches 0004-0005, which refact
+reserve_crashkernel{_low}. Patch 0009 reduced some unnecessary changes compared
+with 0005 in v17, two other differences are broken down into 0001 and 0008.
+
+New Changes in 0017:
+-			It will be ignored if crashkernel=X is specified.
++			It will be ignored if crashkernel=X is correctly specified.
+
+Changes since [v16]
+- Because no functional changes in this version, so add
+  "Tested-by: Dave Kleikamp <dave.kleikamp@oracle.com>" for patch 1-9
+- Add "Reviewed-by: Rob Herring <robh@kernel.org>" for patch 8
+- Update patch 9 based on the review comments of Rob Herring
+- As Catalin Marinas's suggestion, merge the implementation of
+  ARCH_WANT_RESERVE_CRASH_KERNEL into patch 5. Ensure that the
+  contents of X86 and ARM64 do not overlap, and reduce unnecessary
+  temporary differences.
+
+Changes since [v15]
+-  Aggregate the processing of "linux,usable-memory-range" into one function.
+   Only patch 9-10 have been updated.
+
+Changes since [v14]
+- Recovering the requirement that the CrashKernel memory regions on X86
+  only requires 1 MiB alignment.
+- Combine patches 5 and 6 in v14 into one. The compilation warning fixed
+  by patch 6 was introduced by patch 5 in v14.
+- As with crashk_res, crashk_low_res is also processed by
+  crash_exclude_mem_range() in patch 7.
+- Due to commit b261dba2fdb2 ("arm64: kdump: Remove custom linux,usable-memory-range handling")
+  has removed the architecture-specific code, extend the property "linux,usable-memory-range"
+  in the platform-agnostic FDT core code. See patch 9.
+- Discard the x86 description update in the document, because the description
+  has been updated by commit b1f4c363666c ("Documentation: kdump: update kdump guide").
+- Change "arm64" to "ARM64" in Doc.
+
+
+Changes since [v13]
+- Rebased on top of 5.11-rc5.
+- Introduce config CONFIG_ARCH_WANT_RESERVE_CRASH_KERNEL.
+Since reserve_crashkernel[_low]() implementations are quite similar on
+other architectures, so have CONFIG_ARCH_WANT_RESERVE_CRASH_KERNEL in
+arch/Kconfig and select this by X86 and ARM64.
+- Some minor cleanup.
+
+Changes since [v12]
+- Rebased on top of 5.10-rc1.
+- Keep CRASH_ALIGN as 16M suggested by Dave.
+- Drop patch "kdump: add threshold for the required memory".
+- Add Tested-by from John.
+
+Changes since [v11]
+- Rebased on top of 5.9-rc4.
+- Make the function reserve_crashkernel() of x86 generic.
+Suggested by Catalin, make the function reserve_crashkernel() of x86 generic
+and arm64 use the generic version to reimplement crashkernel=X.
+
+Changes since [v10]
+- Reimplement crashkernel=X suggested by Catalin, Many thanks to Catalin.
+
+Changes since [v9]
+- Patch 1 add Acked-by from Dave.
+- Update patch 5 according to Dave's comments.
+- Update chosen schema.
+
+Changes since [v8]
+- Reuse DT property "linux,usable-memory-range".
+Suggested by Rob, reuse DT property "linux,usable-memory-range" to pass the low
+memory region.
+- Fix kdump broken with ZONE_DMA reintroduced.
+- Update chosen schema.
+
+Changes since [v7]
+- Move x86 CRASH_ALIGN to 2M
+Suggested by Dave and do some test, move x86 CRASH_ALIGN to 2M.
+- Update Documentation/devicetree/bindings/chosen.txt.
+Add corresponding documentation to Documentation/devicetree/bindings/chosen.txt
+suggested by Arnd.
+- Add Tested-by from Jhon and pk.
+
+Changes since [v6]
+- Fix build errors reported by kbuild test robot.
+
+Changes since [v5]
+- Move reserve_crashkernel_low() into kernel/crash_core.c.
+- Delete crashkernel=X,high.
+- Modify crashkernel=X,low.
+If crashkernel=X,low is specified simultaneously, reserve spcified size low
+memory for crash kdump kernel devices firstly and then reserve memory above 4G.
+In addition, rename crashk_low_res as "Crash kernel (low)" for arm64, and then
+pass to crash dump kernel by DT property "linux,low-memory-range".
+- Update Documentation/admin-guide/kdump/kdump.rst.
+
+Changes since [v4]
+- Reimplement memblock_cap_memory_ranges for multiple ranges by Mike.
+
+Changes since [v3]
+- Add memblock_cap_memory_ranges back for multiple ranges.
+- Fix some compiling warnings.
+
+Changes since [v2]
+- Split patch "arm64: kdump: support reserving crashkernel above 4G" as
+two. Put "move reserve_crashkernel_low() into kexec_core.c" in a separate
+patch.
+
+Changes since [v1]:
+- Move common reserve_crashkernel_low() code into kernel/kexec_core.c.
+- Remove memblock_cap_memory_ranges() i added in v1 and implement that
+in fdt_enforce_memory_region().
+There are at most two crash kernel regions, for two crash kernel regions
+case, we cap the memory range [min(regs[*].start), max(regs[*].end)]
+and then remove the memory range in the middle.
+
+[1]: http://lists.infradead.org/pipermail/kexec/2020-June/020737.html
+[2]: https://github.com/robherring/dt-schema/pull/19 
+[v1]: https://lkml.org/lkml/2019/4/2/1174
+[v2]: https://lkml.org/lkml/2019/4/9/86
+[v3]: https://lkml.org/lkml/2019/4/9/306
+[v4]: https://lkml.org/lkml/2019/4/15/273
+[v5]: https://lkml.org/lkml/2019/5/6/1360
+[v6]: https://lkml.org/lkml/2019/8/30/142
+[v7]: https://lkml.org/lkml/2019/12/23/411
+[v8]: https://lkml.org/lkml/2020/5/21/213
+[v9]: https://lkml.org/lkml/2020/6/28/73
+[v10]: https://lkml.org/lkml/2020/7/2/1443
+[v11]: https://lkml.org/lkml/2020/8/1/150
+[v12]: https://lkml.org/lkml/2020/9/7/1037
+[v13]: https://lkml.org/lkml/2020/10/31/34
+[v14]: https://lkml.org/lkml/2021/1/30/53
+[v15]: https://lkml.org/lkml/2021/10/19/1405
+[v16]: https://lkml.org/lkml/2021/11/23/435
+[v17}: https://lkml.org/lkml/2021/12/10/38
+
+Chen Zhou (9):
+  x86/setup: Move CRASH_ALIGN and CRASH_ADDR_{LOW|HIGH}_MAX to
+    asm/kexec.h
+  x86/setup: Move xen_pv_domain() check and insert_resource() to
+    setup_arch()
+  x86/setup: Eliminate a magic number in reserve_crashkernel()
+  x86/setup: Add build option ARCH_WANT_RESERVE_CRASH_KERNEL
+  x86/setup: Move reserve_crashkernel[_low]() into crash_core.c
+  arm64: kdump: introduce some macros for crash kernel reservation
+  arm64: kdump: reimplement crashkernel=X
+  of: fdt: Add memory for devices by DT property
+    "linux,usable-memory-range"
+  kdump: update Documentation about crashkernel
+
+Zhen Lei (8):
+  x86/setup: Adjust the range of codes separated by CONFIG_X86_64
+  x86/setup: Add helper parse_crashkernel_in_order()
+  x86/setup: Use parse_crashkernel_in_order() to make code logic clear
+  x86/setup: Update comments in reserve_crashkernel()
+  kdump: Simplify the parameters of __parse_crashkernel()
+  kdump: Make parse_crashkernel_{high|low} static
+  kdump: Reduce unused parameters of parse_crashkernel_{high|low}
+  of: fdt: Aggregate the processing of "linux,usable-memory-range"
+
+ Documentation/admin-guide/kdump/kdump.rst     |  11 +-
+ .../admin-guide/kernel-parameters.txt         |  13 +-
+ arch/Kconfig                                  |   3 +
+ arch/arm64/Kconfig                            |   1 +
+ arch/arm64/include/asm/kexec.h                |  10 +
+ arch/arm64/kernel/machine_kexec_file.c        |  12 +-
+ arch/arm64/kernel/setup.c                     |  13 +-
+ arch/arm64/mm/init.c                          |  59 +----
+ arch/x86/Kconfig                              |   2 +
+ arch/x86/include/asm/kexec.h                  |  28 +++
+ arch/x86/kernel/setup.c                       | 166 +-------------
+ drivers/of/fdt.c                              |  42 +++-
+ include/linux/crash_core.h                    |   4 -
+ kernel/crash_core.c                           | 207 ++++++++++++++++--
+ 14 files changed, 328 insertions(+), 243 deletions(-)
+
 -- 
-2.33.1
+2.25.1
+

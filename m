@@ -2,96 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5490647D31A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9449247D31C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:41:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245451AbhLVNkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 08:40:21 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:48696 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245436AbhLVNkU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 08:40:20 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 63CBA21138;
-        Wed, 22 Dec 2021 13:40:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1640180419; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eTaxaFkbJsGD0UKpX1p5LowYqe85cdydNwhkvZF77V8=;
-        b=sEywVZzT+0QPJXhMV1oPnePsrdrO/hUCNkwnULQvbgoGGxE8mYVz26k92Gu7Axm/dIpxoQ
-        hWDX/Q1z//2ej5Wq6ZqkhJd4W13nUyPdsJBe8q2voRVxYnag91wP2sggdkrG5oX8ppBXHc
-        qEvsyiekfZEP0UO9liNLDLOoCz0mSY4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1640180419;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eTaxaFkbJsGD0UKpX1p5LowYqe85cdydNwhkvZF77V8=;
-        b=DAVGc4PDBd0W8s2QT8UxxYbxR9r7BzPpfcufAu3K4EtDVb2c6aZMWAuNCCPjbmAlU3EJ/X
-        IePlL/w3m1Zqq1Ag==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 33678A3B81;
-        Wed, 22 Dec 2021 13:40:19 +0000 (UTC)
-Date:   Wed, 22 Dec 2021 14:40:19 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     David Vernet <void@manifault.com>
-cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jpoimboe@redhat.com, pmladek@suse.com, jikos@kernel.org,
-        joe.lawrence@redhat.com, corbet@lwn.net
-Subject: Re: [PATCH v3] livepatch: Fix kobject refcount bug on klp_init_patch_early
- failure path
-In-Reply-To: <20211221153930.137579-1-void@manifault.com>
-Message-ID: <alpine.LSU.2.21.2112221439520.18494@pobox.suse.cz>
-References: <20211221153930.137579-1-void@manifault.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        id S245462AbhLVNlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 08:41:00 -0500
+Received: from foss.arm.com ([217.140.110.172]:45876 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245436AbhLVNk7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 08:40:59 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2729DD6E;
+        Wed, 22 Dec 2021 05:40:58 -0800 (PST)
+Received: from bogus (unknown [10.57.36.205])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ADFD33F5A1;
+        Wed, 22 Dec 2021 05:40:56 -0800 (PST)
+Date:   Wed, 22 Dec 2021 13:40:53 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     linux-kernel@vger.kernel.org, Jassi Brar <jassisinghbrar@gmail.com>
+Cc:     linux-acpi@vger.kernel.org, Justin He <justin.he@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH] mailbox: pcc: Handle all PCC subtypes correctly in
+ pcc_mbox_irq
+Message-ID: <20211222134053.7yibtok42iluc5go@bogus>
+References: <20211209092146.620024-1-sudeep.holla@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209092146.620024-1-sudeep.holla@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Dec 2021, David Vernet wrote:
+Hi Jassi,
 
-> When enabling a klp patch with klp_enable_patch(), klp_init_patch_early()
-> is invoked to initialize the kobjects for the patch itself, as well as the
-> 'struct klp_object' and 'struct klp_func' objects that comprise it.
-> However, there are some error paths in klp_enable_patch() where some
-> kobjects may have been initialized with kobject_init(), but an error code
-> is still returned due to e.g. a 'struct klp_object' having a NULL funcs
-> pointer.
+On Thu, Dec 09, 2021 at 09:21:46AM +0000, Sudeep Holla wrote:
+> Commit c45ded7e1135 ("mailbox: pcc: Add support for PCCT extended PCC
+> subspaces(type 3/4)") enabled the type3/4 of PCCT, but the change in
+> pcc_mbox_irq breaks the other PCC subtypes.
 > 
-> In these paths, the initial reference of the kobject of the 'struct
-> klp_patch' may never be released, along with one or more of its objects and
-> their functions, as kobject_put() is not invoked on the cleanup path if
-> klp_init_patch_early() returns an error code.
+> The kernel reports a warning on an Ampere eMag server
 > 
-> For example, if an object entry such as the following were added to the
-> sample livepatch module's klp patch, it would cause the vmlinux klp_object,
-> and its klp_func which updates 'cmdline_proc_show', to never be released:
+> -->8
+>  CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.16.0-rc4 #127
+>  Hardware name: MiTAC RAPTOR EV-883832-X3-0001/RAPTOR, BIOS 0.14 02/22/2019
+>  Call trace:
+>   dump_backtrace+0x0/0x200
+>   show_stack+0x20/0x30
+>   dump_stack_lvl+0x68/0x84
+>   dump_stack+0x18/0x34
+>   __report_bad_irq+0x54/0x17c
+>   note_interrupt+0x330/0x428
+>   handle_irq_event_percpu+0x90/0x98
+>   handle_irq_event+0x4c/0x148
+>   handle_fasteoi_irq+0xc4/0x188
+>   generic_handle_domain_irq+0x44/0x68
+>   gic_handle_irq+0x84/0x2ec
+>   call_on_irq_stack+0x28/0x34
+>   do_interrupt_handler+0x88/0x90
+>   el1_interrupt+0x48/0xb0
+>   el1h_64_irq_handler+0x18/0x28
+>   el1h_64_irq+0x7c/0x80
+> ---
 > 
-> static struct klp_object objs[] = {
-> 	{
-> 		/* name being NULL means vmlinux */
-> 		.funcs = funcs,
-> 	},
-> 	{
-> 		/* NULL funcs -- would cause reference leak */
-> 		.name = "kvm",
-> 	}, { }
-> };
+> The main reason for that is the command complete register is read as 0
+> if the GAS register doesn't exist for the same which is the case for
+> PCC subtypes 0-2. Fix it by checking for non-zero value before masking
+> with the status flag and checking for command completion.
 > 
-> Without this change, if CONFIG_DEBUG_KOBJECT is enabled, and the sample klp
-> patch is loaded, the kobjects (the patch, the vmlinux 'struct klp_object',
-> and its func) are observed as initialized, but never released, in the dmesg
-> log output.  With the change, these kobject references no longer fail to be
-> released as the error case is properly handled before they are initialized.
-> 
-> Signed-off-by: David Vernet <void@manifault.com>
+> Fixes: c45ded7e1135 ("mailbox: pcc: Add support for PCCT extended PCC subspaces(type 3/4)")
 
-Acked-by: Miroslav Benes <mbenes@suse.cz>
+Can you take this patch and [1] for v5.17 ? This one is a bug fix and good
+to get it merged ASAP.
 
-M
+-- 
+Regards,
+Sudeep
+
+[1]  https://lore.kernel.org/r/20211209082143.619354-1-sudeep.holla@arm.com

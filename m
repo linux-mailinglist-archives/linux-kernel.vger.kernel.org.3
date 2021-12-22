@@ -2,78 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C809247D04B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 11:49:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1EC47D04E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 11:49:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244284AbhLVKtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 05:49:06 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46436 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239538AbhLVKtE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 05:49:04 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8151B817BF;
-        Wed, 22 Dec 2021 10:49:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D570C36AE8;
-        Wed, 22 Dec 2021 10:49:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640170141;
-        bh=q9AiZpmHTBiVf5ICrBjV0PfC2Y0veW5ycB704qqI/Zs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=g9nP3zltP8RhP2Nr9zqFPLqNoLOJQpCPhbyFygCmLxEykzHnNvZMYt6iQo4o1vS80
-         wqmRyQxm0yOCUG7lfwtcrVg2l4IW6CiuVCeF9BJMuTQtpLF6SZL50mMetcHPfy2rwg
-         cZv18ZobzWTNcAIauaFCO0KH8Xzjtj2cJFdfP2q1N0IgwiYcepLQX36wk+Pq6r5JU5
-         /Rg7cah2dsjOx3DeMK+Nc30X6kilkVHs7JKNdAvZlM7FFSSbWWvclXb4dvpsJLc+CM
-         5ZcHpMn/DoNHLBX2weiqoJFEGSaYCo39x6hElaMvAx86K5KtXcnT8wjaZvbydkxf9F
-         e4PD4dWH7aUUA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mzzAy-0001bF-Nm; Wed, 22 Dec 2021 11:48:53 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH] can: softing_cs: fix memleak on registration failure
-Date:   Wed, 22 Dec 2021 11:48:43 +0100
-Message-Id: <20211222104843.6105-1-johan@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        id S244255AbhLVKty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 05:49:54 -0500
+Received: from foss.arm.com ([217.140.110.172]:43550 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239538AbhLVKtw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 05:49:52 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3CC511FB;
+        Wed, 22 Dec 2021 02:49:52 -0800 (PST)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DF26B3F5A1;
+        Wed, 22 Dec 2021 02:49:50 -0800 (PST)
+Date:   Wed, 22 Dec 2021 10:49:47 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Michael Wu <michael@allwinnertech.com>
+Cc:     ulf.hansson@linaro.org, mripard@kernel.org, wens@csie.org,
+        samuel@sholland.org, jernej.skrabec@gmail.com,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] mmc: sunxi-mmc: use pll to increase clock speed
+Message-ID: <20211222104947.1d978864@donnerap.cambridge.arm.com>
+In-Reply-To: <20211222031557.34242-1-michael@allwinnertech.com>
+References: <20211222031557.34242-1-michael@allwinnertech.com>
+Organization: ARM
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case device registration fails during probe, the driver state and the
-embedded platform device structure needs to be freed using
-platform_device_put() to properly free all resources (e.g. the device
-name).
+On Wed, 22 Dec 2021 11:15:57 +0800
+Michael Wu <michael@allwinnertech.com> wrote:
 
-Fixes: 0a0b7a5f7a04 ("can: add driver for Softing card")
-Cc: stable@vger.kernel.org      # 2.6.38
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/net/can/softing/softing_cs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Michael,
 
-diff --git a/drivers/net/can/softing/softing_cs.c b/drivers/net/can/softing/softing_cs.c
-index 2e93ee792373..e5c939b63fa6 100644
---- a/drivers/net/can/softing/softing_cs.c
-+++ b/drivers/net/can/softing/softing_cs.c
-@@ -293,7 +293,7 @@ static int softingcs_probe(struct pcmcia_device *pcmcia)
- 	return 0;
- 
- platform_failed:
--	kfree(dev);
-+	platform_device_put(pdev);
- mem_failed:
- pcmcia_bad:
- pcmcia_failed:
--- 
-2.32.0
+> Default clock soucre is 24M,if we want clock over 24M
+> We should use pll as clock source
+
+Can you say what this patch actually fixes? What is the problem?
+
+As far as I know, we don't have any issues with MMC clock frequencies, and
+are basically always using the PLL as the clock source. This is
+handled automatically by the common clock framework, which knows about all
+possible muxes and their parents:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/clk/sunxi-ng/ccu-sun50i-a64.c#n417
+In fact that also probably explains the issue you address in patch 2/3.
+
+One more comment below.
+
+> 
+> Signed-off-by: Michael Wu <michael@allwinnertech.com>
+> ---
+>  drivers/mmc/host/sunxi-mmc.c | 57 +++++++++++++++++++++++++++++++++++-
+>  1 file changed, 56 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mmc/host/sunxi-mmc.c b/drivers/mmc/host/sunxi-mmc.c
+> index 7b47ec453fb6..0039ee58b303 100644
+> --- a/drivers/mmc/host/sunxi-mmc.c
+> +++ b/drivers/mmc/host/sunxi-mmc.c
+> @@ -756,6 +756,57 @@ static int sunxi_mmc_clk_set_phase(struct sunxi_mmc_host *host,
+>  	return 0;
+>  }
+>  
+> +/**
+> + *
+> + * sunxi_clk_get_parent() - get parent pll from dts
+> + * @host:		sunxi_mmc_host struct point
+> + * @@clock:		the clock frequency that requested
+> + *
+> + * Default clock source is 24M,if we want clock over 24M,We should use
+> + * pll as clock soure
+> + *
+> + * Return:the 0:ok,other:failed
+> + */
+> +static int sunxi_clk_get_parent(struct sunxi_mmc_host *host, u32 clock)
+> +{
+> +	struct clk *sclk = NULL;
+> +	char *sclk_name = NULL;
+> +	u32 src_clk = 0;
+> +	s32 err = 0;
+> +	struct device *dev = mmc_dev(host->mmc);
+> +
+> +	sclk = clk_get(dev, "osc24m");
+> +	sclk_name = "osc24m";
+
+This "getting clocks by their global name" is not the way it should work,
+you just reference clocks you get from your very own DT node (devm_clk_get()).
+This is probably something that the BSP kernel does very differently?
+
+Cheers,
+Andre
+
+> +
+> +	if (IS_ERR(sclk)) {
+> +		dev_err(mmc_dev(host->mmc), "Error to get source clock %s\n",
+> +				sclk_name);
+> +		return PTR_ERR(sclk);
+> +	}
+> +
+> +	src_clk = clk_get_rate(sclk);
+> +	if (clock > src_clk) {
+> +		clk_put(sclk);
+> +		sclk = clk_get(dev, "pll_periph");
+> +		sclk_name = "pll_periph";
+> +	}
+> +	if (IS_ERR(sclk)) {
+> +		dev_err(mmc_dev(host->mmc), "Error to get source clock %s\n",
+> +				sclk_name);
+> +		return PTR_ERR(sclk);
+> +	}
+> +
+> +	err = clk_set_parent(host->clk_mmc, sclk);
+> +	if (err) {
+> +		dev_err(mmc_dev(host->mmc), "set parent failed\n");
+> +		clk_put(sclk);
+> +		return err;
+> +	}
+> +	clk_put(sclk);
+> +	return 0;
+> +}
+> +
+> +
+>  static int sunxi_mmc_clk_set_rate(struct sunxi_mmc_host *host,
+>  				  struct mmc_ios *ios)
+>  {
+> @@ -801,7 +852,11 @@ static int sunxi_mmc_clk_set_rate(struct sunxi_mmc_host *host,
+>  			return ret;
+>  		}
+>  	}
+> -
+> +	/**
+> +	 * No check return value,because dts may not have osc24M, and pll_periph,
+> +	 * at that time,use default value from clk system
+> +	 */
+> +	sunxi_clk_get_parent(host, clock);
+>  	rate = clk_round_rate(host->clk_mmc, clock);
+>  	if (rate < 0) {
+>  		dev_err(mmc_dev(mmc), "error rounding clk to %d: %ld\n",
 

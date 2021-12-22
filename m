@@ -2,117 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEAA547CCD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 07:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB0347CCDB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 07:10:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242692AbhLVGKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 01:10:41 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:55989 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbhLVGKj (ORCPT
+        id S242704AbhLVGK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 01:10:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242700AbhLVGKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 01:10:39 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1BM65Bfb064928;
-        Wed, 22 Dec 2021 14:05:11 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from [192.168.2.115] (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 22 Dec
- 2021 14:10:37 +0800
-Message-ID: <aa3cae53-38bb-e8a8-62df-aeda0272f1f4@aspeedtech.com>
-Date:   Wed, 22 Dec 2021 14:10:37 +0800
+        Wed, 22 Dec 2021 01:10:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523D8C06173F;
+        Tue, 21 Dec 2021 22:10:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB91261862;
+        Wed, 22 Dec 2021 06:10:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B69D7C36AE5;
+        Wed, 22 Dec 2021 06:10:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640153449;
+        bh=PRueReowiqN/glmJ/igdfzlq6ZtCOukzZLZI+1fvlK0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kDImUZXPVtH54GwI2E27kxhwJ/V8B4JXrtkWT8/7SDL2CXlqrlVJb4mbSh+N+pf+9
+         UoXrDkf0eZM02Q4twUtaqyUjkzGFzkB4nUas32xL0iGQdSaaK7Ii8KDEJBc6GhDSF1
+         MFtNSRToXv619JdkHgTgCxH4n0KYT+24q/z5L004=
+Date:   Wed, 22 Dec 2021 07:10:44 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH] usb: renesas_usbhs: Fix unused variable warning
+Message-ID: <YcLBZBwIZkhhKxGD@kroah.com>
+References: <20211221171532.29881-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 4/4] media: aspeed: Fix timing polarity incorrect
-Content-Language: en-US
-To:     Joel Stanley <joel@jms.id.au>
-CC:     Eddie James <eajames@linux.ibm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20211217095403.2618-1-jammy_huang@aspeedtech.com>
- <20211217095403.2618-5-jammy_huang@aspeedtech.com>
- <CACPK8Xf7rsjgCv=Honyf8gwDWbG67dPVjE+z_tXD4yEu1WaE5w@mail.gmail.com>
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-In-Reply-To: <CACPK8Xf7rsjgCv=Honyf8gwDWbG67dPVjE+z_tXD4yEu1WaE5w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1BM65Bfb064928
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221171532.29881-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joel,
+On Tue, Dec 21, 2021 at 05:15:32PM +0000, Lad Prabhakar wrote:
+> This patch fixes the below warning:
+> 
+> drivers/usb/renesas_usbhs/mod.c: In function 'usbhs_status_get_each_irq':
+> drivers/usb/renesas_usbhs/mod.c:195:13: warning: variable 'intenb0'
+> set but not used [-Wunused-but-set-variable]
+>   195 |         u16 intenb0, intenb1;
+>       |
+> 
+> Fixes: 33e4245ee919 ("usb: renesas_usbhs: Use platform_get_irq() to get the interrupt")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  drivers/usb/renesas_usbhs/mod.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/renesas_usbhs/mod.c b/drivers/usb/renesas_usbhs/mod.c
+> index f2ea3e1412d2..3919e350b487 100644
+> --- a/drivers/usb/renesas_usbhs/mod.c
+> +++ b/drivers/usb/renesas_usbhs/mod.c
+> @@ -192,13 +192,12 @@ static int usbhs_status_get_each_irq(struct usbhs_priv *priv,
+>  				     struct usbhs_irq_state *state)
+>  {
+>  	struct usbhs_mod *mod = usbhs_mod_get_current(priv);
+> -	u16 intenb0, intenb1;
+>  	unsigned long flags;
+> +	u16 intenb1;
+>  
+>  	/********************  spin lock ********************/
+>  	usbhs_lock(priv, flags);
+>  	state->intsts0 = usbhs_read(priv, INTSTS0);
+> -	intenb0 = usbhs_read(priv, INTENB0);
 
-OK, I will update in next patch as you advised.
-Thanks for your review.
+Did you just break the hardware?  Reading is often times needed and
+clang has no idea about hardware issues.  We need proof in the changlog
+that this really is safe to do.
 
-On 2021/12/22 上午 09:22, Joel Stanley wrote:
-> On Fri, 17 Dec 2021 at 09:54, Jammy Huang <jammy_huang@aspeedtech.com> wrote:
->> This is a workaround for polarity unstable.
->> Sync value get by VR09C counts from sync's rising edge, which means
->> sync's polarity is negative if sync value is bigger than total/2.
->>
->> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
->> ---
->>   drivers/media/platform/aspeed-video.c | 18 ++++++++++++++++++
->>   1 file changed, 18 insertions(+)
->>
->> diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
->> index 5ad3a20c5bac..f628f69bb7dd 100644
->> --- a/drivers/media/platform/aspeed-video.c
->> +++ b/drivers/media/platform/aspeed-video.c
->> @@ -989,6 +989,15 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
->>                  video->frame_top = FIELD_GET(VE_SRC_TB_EDGE_DET_TOP,
->>                                               src_tb_edge);
->>                  det->vsync = FIELD_GET(VE_SYNC_STATUS_VSYNC, sync);
->> +               /*
->> +                * Workaround for polarity detection
->> +                * Use sync(VR098) counts from sync's rising edge till falling
->> +                * edge to tell sync polarity.
->> +                */
->> +               if (det->vsync > (FIELD_GET(VE_MODE_DETECT_V_LINES, mds) >> 1))
-> Are you right shifting as this is the value / 2? I think it's clearer
-> to write / 2 instead of >> 1.
->
-> Mention in the comment that this is a workaround for when the sync
-> value is larger than half.
->
->> +                       det->polarities &= ~V4L2_DV_VSYNC_POS_POL;
->> +               else
->> +                       det->polarities |= V4L2_DV_VSYNC_POS_POL;
->>                  if (det->polarities & V4L2_DV_VSYNC_POS_POL) {
->>                          det->vbackporch = video->frame_top - det->vsync;
->>                          det->vfrontporch =
->> @@ -1010,6 +1019,15 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
->>                  video->frame_left = FIELD_GET(VE_SRC_LR_EDGE_DET_LEFT,
->>                                                src_lr_edge);
->>                  det->hsync = FIELD_GET(VE_SYNC_STATUS_HSYNC, sync);
->> +               /*
->> +                * Workaround for polarity detection
->> +                * Use sync(VR098) counts from sync's rising edge till falling
->> +                * edge to tell sync polarity.
->> +                */
->> +               if (det->hsync > (htotal >> 1))
->> +                       det->polarities &= ~V4L2_DV_HSYNC_POS_POL;
->> +               else
->> +                       det->polarities |= V4L2_DV_HSYNC_POS_POL;
->>                  if (det->polarities & V4L2_DV_HSYNC_POS_POL) {
->>                          det->hbackporch = video->frame_left - det->hsync;
->>                          det->hfrontporch = htotal - video->frame_right;
->> --
->> 2.25.1
->>
--- 
-Best Regards
-Jammy
+How did you test your change?
 
+thanks,
+
+greg k-h

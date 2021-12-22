@@ -2,110 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC0B47D0A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2CD47D0AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:16:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232043AbhLVLPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 06:15:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232937AbhLVLPw (ORCPT
+        id S244506AbhLVLQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 06:16:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57228 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233429AbhLVLQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 06:15:52 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE09C061401
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:15:52 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id t18so4115662wrg.11
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:15:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Wm7ceiBo2JszsCIJkrhp1xhqeVltfP3wlNwXPrRjP24=;
-        b=JuDGpd4Hf730Hy1xkZzdm7Jm917/6CwrXFdCWLv4thxaPaEAifEYweXoJTV2dVFxiq
-         5xNyIY8uwWCzHqo0fIzTfrz0TCDGF/U3IMQMKFidXd7Wya1wS/CDmt9LGkmKh9VOdxwg
-         mJABWKYoU0c636DwooyIxlIV1WtLmeZtbP7evZqI20Ft33qK8PHZFj/UWPobzGv+fL6j
-         eJ1MR6XCqEs61xqgDGX08pWrOy9fzmd3qJ/tz8fZ5a86CY4EoTFamlTp0O7xsPvU2RVv
-         M5W+bMyn1VJxWuoY5gA8vqSqAuUF/dmwjl+6S7X8vOkqg6XTljUe/M6I4lBeR79ZS6G0
-         mt8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Wm7ceiBo2JszsCIJkrhp1xhqeVltfP3wlNwXPrRjP24=;
-        b=ercov1QvO+vesvJKlMZf1Qh865Uh78L9h8LqnNm9nUvRoNhJm7XkIybQ1rrW4rgHph
-         fMWsjgQOQvx73MR3qSxR3YcJNm2nM/0fdxdrQy6j8EuW46mZpOIYCKowunx3Zbddx5Uf
-         ra2LXduu2l7oVTNphAlzMDRDzU4aqAa3qiiQEtybtGoJkgigiKjSL9wi7nf9n2/ZcDSE
-         3lcIpAAoDj1jf+oKFEh0TokhspGm/EXI32CdE1eFW6sblquBV4DvHKYIo5Ij9rUmejtb
-         A8E2q7XMRSCteZrXiLndDCAFm2X5aCncL9b2KwEme4z6uHzaJpz2ha6jucKjRFQ/0kr3
-         sWGg==
-X-Gm-Message-State: AOAM530zrWCS7IrxIy5Jjm16Pt122t17kMVBDMMTondx2XnXaW+mgWp1
-        j+0D6nZ+E5rVg0PLcjkl7uLbMQ==
-X-Google-Smtp-Source: ABdhPJyaGzs1v4cpza6jVqOa8pif0o1C0RknC0vja0TI23nk6gWPNt71MTTcv4gmRcsLQ98s4nzF8A==
-X-Received: by 2002:adf:9d8c:: with SMTP id p12mr1755010wre.622.1640171751048;
-        Wed, 22 Dec 2021 03:15:51 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id 14sm1801429wry.23.2021.12.22.03.15.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 03:15:50 -0800 (PST)
-Date:   Wed, 22 Dec 2021 11:15:48 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Pavel Dubrova <pashadubrova@gmail.com>,
-        Kiran Gunda <kgunda@codeaurora.org>,
-        Bryan Wu <cooloney@gmail.com>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH v3 2/9] backlight: qcom-wled: Pass number of elements to
- read to read_u32_array
-Message-ID: <YcMI5Oq3jOIFQvKc@google.com>
-References: <20211115203459.1634079-1-marijn.suijten@somainline.org>
- <20211115203459.1634079-3-marijn.suijten@somainline.org>
+        Wed, 22 Dec 2021 06:16:25 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFAB7B81BBF;
+        Wed, 22 Dec 2021 11:16:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C4C3C36AF3;
+        Wed, 22 Dec 2021 11:16:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640171782;
+        bh=9c47US/IBTSpcaTa6A9sohSlsGJgoac4lsSRerkjTaY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rAwOapawARY4124h9997jUAYZGl8ZbZ6EIHFd5ga3NKlP1QtUijfWLS1Sb0BbnbD1
+         skkzKp4Rs1OB7RkijJR2y8I+rPE2bSfmQZ0XYD936tCfGUqWr7jmkjBkeD/KTdtPGo
+         yjNWFqu2wdYZmDF81jgndPbY9JZgH6OsOnDbuAtpXeoo+AU+s1TFjZ+M3q698sknmS
+         KrNBv1vAAfGvWSENhuHjsk+4NRDR1DB9SAXYEqJWY+zxR6U9lW2QRlI0tAJ7QKRFka
+         JabKFDuThabc7+jtrrDLtw/NdUbdPY1DWWL5BCCz6Ltzkg/ANsIl0ENM4TFeX5yKiP
+         hoIMWD5uzs3UQ==
+Received: by mail-vk1-f174.google.com with SMTP id s1so1082751vks.9;
+        Wed, 22 Dec 2021 03:16:22 -0800 (PST)
+X-Gm-Message-State: AOAM5323tCH7VbST4JAXE3MYknY0dezf5//TPjI7hV798NBSDog7qd+e
+        oHb5WaNfCrdRXgQN6qbzO3SUtExeClhGcfMeO0g=
+X-Google-Smtp-Source: ABdhPJxj1PzhyTI98cL1Srb70bXWLzUyQMiVzIdGh0LdKJMqyS7sLEVMCA+fdiZdr9wtUMSXc7/oy/tQPd/D8KKPRhU=
+X-Received: by 2002:a1f:ae91:: with SMTP id x139mr867231vke.2.1640171781375;
+ Wed, 22 Dec 2021 03:16:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211115203459.1634079-3-marijn.suijten@somainline.org>
+References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-2-guoren@kernel.org>
+ <CAK8P3a1fC8aro3kHLvGMVDdvVYjaQdxJeGur9ac=11+6=r0Xyg@mail.gmail.com>
+In-Reply-To: <CAK8P3a1fC8aro3kHLvGMVDdvVYjaQdxJeGur9ac=11+6=r0Xyg@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 22 Dec 2021 19:16:10 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQciNaXk+_am=kS2uSwg6oGM4aJqiw_O5KN-DrHetf8nA@mail.gmail.com>
+Message-ID: <CAJF2gTQciNaXk+_am=kS2uSwg6oGM4aJqiw_O5KN-DrHetf8nA@mail.gmail.com>
+Subject: Re: [PATCH 01/13] syscalls: compat: Fix the missing part for __SYSCALL_COMPAT
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 Nov 2021, Marijn Suijten wrote:
+On Wed, Dec 22, 2021 at 1:09 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
+> > diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+> > index 4557a8b6086f..aafe5cfeb27c 100644
+> > --- a/include/uapi/asm-generic/unistd.h
+> > +++ b/include/uapi/asm-generic/unistd.h
+> > @@ -383,7 +383,7 @@ __SYSCALL(__NR_syslog, sys_syslog)
+> >
+> >  /* kernel/ptrace.c */
+> >  #define __NR_ptrace 117
+> > -__SYSCALL(__NR_ptrace, sys_ptrace)
+> > +__SC_COMP(__NR_ptrace, sys_ptrace, compat_sys_ptrace)
+> >
+>
+> Right. We could merge sys_ptrace and compat_sys_ptrace() by adding
+> a in_compat_syscall() check, but either way works.
+>
+> >  /* kernel/sched/core.c */
+> >  #define __NR_sched_setparam 118
+> > @@ -779,7 +779,7 @@ __SYSCALL(__NR_rseq, sys_rseq)
+> >  #define __NR_kexec_file_load 294
+> >  __SYSCALL(__NR_kexec_file_load,     sys_kexec_file_load)
+> >  /* 295 through 402 are unassigned to sync up with generic numbers, don't use */
+> > -#if __BITS_PER_LONG == 32
+> > +#if defined(__SYSCALL_COMPAT) || __BITS_PER_LONG == 32
+> >  #define __NR_clock_gettime64 403
+> >  __SYSCALL(__NR_clock_gettime64, sys_clock_gettime)
+>
+> This part looks wrong, you expose clock_gettime64 to user space this way, both
+> in asm/unistd.h and in the table.
+>
+>          Arnd
 
-> of_property_read_u32_array takes the number of elements to read as last
-> argument. This does not always need to be 4 (sizeof(u32)) but should
-> instead be the size of the array in DT as read just above with
-> of_property_count_elems_of_size.
-> 
-> To not make such an error go unnoticed again the driver now bails
-> accordingly when of_property_read_u32_array returns an error.
-> Surprisingly the indentation of newlined arguments is lining up again
-> after prepending `rc = `.
-> 
-> Fixes: 775d2ffb4af6 ("backlight: qcom-wled: Restructure the driver for WLED3")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
-> ---
->  drivers/video/backlight/qcom-wled.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
+No, we only define __SYSCALL_COMPAT in compat_syscall_table.c. It
+won't be expose to user space, because there is no __SYSCALL_COMPAT.
 
-Applied, thanks.
+$ grep __SYSCALL_COMPAT * -r
+arch/riscv/kernel/compat_syscall_table.c:#define __SYSCALL_COMPAT
+                           ^^^^^^^^^^^^^^^^^^^^^^
+include/uapi/asm-generic/unistd.h:#if __BITS_PER_LONG == 32 ||
+defined(__SYSCALL_COMPAT)
+include/uapi/asm-generic/unistd.h:#ifdef __SYSCALL_COMPAT
+include/uapi/asm-generic/unistd.h:#if defined(__SYSCALL_COMPAT) ||
+__BITS_PER_LONG == 32
+include/uapi/asm-generic/unistd.h:#if __BITS_PER_LONG == 64 &&
+!defined(__SYSCALL_COMPAT)
+tools/include/uapi/asm-generic/unistd.h:#if __BITS_PER_LONG == 32 ||
+defined(__SYSCALL_COMPAT)
+tools/include/uapi/asm-generic/unistd.h:#ifdef __SYSCALL_COMPAT
+tools/include/uapi/asm-generic/unistd.h:#if defined(__SYSCALL_COMPAT)
+|| __BITS_PER_LONG == 32
+tools/include/uapi/asm-generic/unistd.h:#if __BITS_PER_LONG == 64 &&
+!defined(__SYSCALL_COMPAT)
 
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

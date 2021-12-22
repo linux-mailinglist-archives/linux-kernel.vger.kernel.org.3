@@ -2,147 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 506BD47CFCF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 11:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D4647CFD4
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 11:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244113AbhLVKRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 05:17:43 -0500
-Received: from mga03.intel.com ([134.134.136.65]:58682 "EHLO mga03.intel.com"
+        id S244115AbhLVKTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 05:19:22 -0500
+Received: from www.zeus03.de ([194.117.254.33]:44918 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234441AbhLVKRn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 05:17:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640168263; x=1671704263;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=epYEwYOZgIPJXASGul5ZHxymCUvH/Gw2nSb6TlgYV/8=;
-  b=b8qeTPXlIVMmrn43ipwvOy0r4Yz5sY5lz4/bman444tzSOA4n3s8UcGF
-   cdPFL3469cjVBoincpR8dFxot5ht6ugaY4fUezvxNrXmGcCrqirr7K6Va
-   C/M/1VamgWwZ0AKFg+g/5q88FZ4z23ThMsitEfYPSW5Qy8h9Fq4U61dmx
-   aWw5wCGQEMcUdJ61LMU/zM4dGBYHiWnsrcjmrEUKWgBhgk+3X81r0Lkzp
-   wa8NVCSTluujfYtZ3jzJIe8nzkG7sNu3tJRun/MpTarHsI4rC+0Hr3n8h
-   2eC69uVzvgP2rp/gTF5962sKDutCYVJnhNIzEA0+U0tG1/rj2nvajrkbD
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240544081"
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="240544081"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 02:17:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="617088377"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 22 Dec 2021 02:17:40 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzygl-0000LT-8G; Wed, 22 Dec 2021 10:17:39 +0000
-Date:   Wed, 22 Dec 2021 18:16:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
-Subject: kernel/time/hrtimer.c:276:20: warning: unused function
- 'is_migration_base'
-Message-ID: <202112221841.gfrIYr9j-lkp@intel.com>
+        id S236558AbhLVKTU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 05:19:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=R5JyNbV41eVlN2rpLYyTGZBmbf0D
+        gJKsxksorKk3WpM=; b=D1Ru1GyHecO5uI+4F743tKOu7AkcOEvxiZCU2kE0y++K
+        dYhZsOIfjDoa6PlviH23EVg4EvjZwaYoa3o2V2DIAaJjUps3x5vvwDNEum4H++Y8
+        UQ8sGrPmAsO03P7wlwnvHZjIK6R7Er4ZCSVFFp/p72L6Sh2J2yCBjySBhgJb2V4=
+Received: (qmail 1711019 invoked from network); 22 Dec 2021 11:19:19 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Dec 2021 11:19:19 +0100
+X-UD-Smtp-Session: l3s3148p1@Vz9rdLnTYLYgAQnoAFCUAc+q0T6Ni/m/
+Date:   Wed, 22 Dec 2021 11:19:19 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 1/1] gpio: add sloppy logic analyzer using polling
+Message-ID: <YcL7p5nzZs8vnojl@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211219132442.4080-1-wsa+renesas@sang-engineering.com>
+ <20211219132442.4080-2-wsa+renesas@sang-engineering.com>
+ <CAMuHMdVh60ocfzkJKz8zR1hODr8SWp=sbyHrR3KGx2ntLmuFGQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1KCfx6qEZh2LZMVG"
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAMuHMdVh60ocfzkJKz8zR1hODr8SWp=sbyHrR3KGx2ntLmuFGQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marcelo,
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2f47a9a4dfa3674fad19a49b40c5103a9a8e1589
-commit: 81d741d3460ca422843ce0ec8351083f259c6166 hrtimer: Avoid unnecessary SMP function calls in clock_was_set()
-date:   4 months ago
-config: mips-buildonly-randconfig-r003-20211222 (https://download.01.org/0day-ci/archive/20211222/202112221841.gfrIYr9j-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project de4e0195ae1c39f1c3b07834b8e32c113f4f20eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=81d741d3460ca422843ce0ec8351083f259c6166
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 81d741d3460ca422843ce0ec8351083f259c6166
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/ kernel/time/ sound/pci/hda/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_REALTIME,
-   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_MONOTONIC,
-   ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_BOOTTIME,
-   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_TAI,
-   ^~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
->> kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base'
-   static inline bool is_migration_base(struct hrtimer_clock_base
-   ^
->> kernel/time/hrtimer.c:1816:20: warning: unused function '__hrtimer_peek_ahead_timers'
-   static inline void __hrtimer_peek_ahead_timers(void)
-   ^
-   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $0, $1
-   or $0, $2
-   sc $0, $1
-   beqz $0, 1b
-   .set pop
-   '
-   clang-14: error: clang frontend command failed with exit code 70 (use -v to see invocation)
-   clang version 14.0.0 (git://gitmirror/llvm_project de4e0195ae1c39f1c3b07834b8e32c113f4f20eb)
-   Target: mipsel-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-de4e0195ae/bin
-   clang-14: note: diagnostic msg:
-   Makefile arch drivers fs include kernel mm nr_bisected scripts sound source usr
+--1KCfx6qEZh2LZMVG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 
-vim +/is_migration_base +276 kernel/time/hrtimer.c
+> Anyone with a clue? Thanks!
 
-c0a3132963db68 kernel/hrtimer.c      Thomas Gleixner           2006-01-09  275  
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04 @276  static inline bool is_migration_base(struct hrtimer_clock_base *base)
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  277  {
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  278  	return false;
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  279  }
-5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  280  
+Yes, the search engines helped[1]. I run a minimal system, so when I
+mount cpusets, it will actually mount cgroups with a default mount
+option of "noprefix". But you likely run a rootfs with cgroups already,
+so it gets mounted directly without "noprefix". Then, when the logic
+analyzer tries to mount again, the implied default "noprefix" is
+discarded.
 
-:::::: The code at line 276 was first introduced by commit
-:::::: 5d2295f3a93b04986d069ebeaf5b07725f9096c1 hrtimer: Add a missing bracket and hide `migration_base' on !SMP
+[1] https://cgroups.vger.kernel.narkive.com/20fAhMNN/noprefix-mount-option
 
-:::::: TO: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+So, I will update the script to mount "cgroups" instead of "cpuset" and
+use the newer filenames instead. This seems to be the proper way.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks for testing, Geert!
+
+
+--1KCfx6qEZh2LZMVG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHC+6YACgkQFA3kzBSg
+KbYZ/hAAhaxLkQWTonCJs1G98B3/mfZNfYHQDq+pWhpe7vyBmMo7ah1mAaqRnP/a
+c6hXnhvMchXz0jsJUEMi6PVYN46QZsBXJYsCTMvWeBiiKYFEZgJTrDSwMpU6cQXj
+ZJ4bq/1EI00d3jlITnMs1BJPjo9jvgJgJ7L0pULBxg9U9z/3d8qnwfRg5/uF4f3E
+y6f/ogbv6QCqiOXBwz3e7esIfICuYJrU/4jFhl52TKUEITCdYrujdcpc19vF9NG+
+gB4Tvbds81QbE7vL0yzMNlV/8kk0iG/nEylxBr/8C6UQ0TdlSpXc+CekrFkaWyrn
+wgyj5L2hp5inLhTGyWr3QLi9GKpgs2+Uy6VS0HhDLD3AISMfGRS96AhlnaLQ2vWj
+mC6o0AdWqJh64P+SpeWhND9/SgcFneTw/rGyvlCGnI2ohS8GrkrFnyGDyvVjKt/9
+K9Y6licQti5S3JMNh26+P2Jbkoamhe/PGdb3RSOWPPd3YuAWUknAb10iKPqHjAvG
+mML6xLdEeeItxsQXCelnTbLUaIqC3s6QtiOWLEHRnrXwif/oq1PljOWQZ6GFzK/A
+u3ce9zKci9vp+PDYGoChRQWEk/PQ6/vRlBAhJSHASnuRU/2rjXVaq5Wxlwic6aJJ
+izl120QmSEIiuIctzC0DhfQhHkjUZDok1WOTSBzLXK8wLziMw4s=
+=W980
+-----END PGP SIGNATURE-----
+
+--1KCfx6qEZh2LZMVG--

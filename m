@@ -2,132 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A44947DA06
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 00:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0ED547DA00
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 00:18:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244139AbhLVXSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 18:18:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60629 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244173AbhLVXS1 (ORCPT
+        id S243978AbhLVXSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 18:18:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243957AbhLVXSU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 18:18:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640215107;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kuTPa8P/cAl868s0t2AGsIkXSm9noWfjyMp3BuA9+Z8=;
-        b=e6V7ekjMKAQYp9xNQyVuAVzZ2XVHsgtyMUr/H9MrxPUFAgKSHpKn/cpicEjBzulCEnz58f
-        q1GHfH3t79fqt0jIZgVZ9ZpAUNydx0+vyA6cc3Wzm3HnSlY1xVlx+LESQBc+fElsaQKBcW
-        cykLl/9hv+nrvJtFXS6pm4uHEyBbMrw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-28--hdo8IF-OFqDAkUGqxJ0JQ-1; Wed, 22 Dec 2021 18:18:23 -0500
-X-MC-Unique: -hdo8IF-OFqDAkUGqxJ0JQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 22 Dec 2021 18:18:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C6FC061395;
+        Wed, 22 Dec 2021 15:18:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CBDBA2F27;
-        Wed, 22 Dec 2021 23:18:21 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.165])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3C8147EFF9;
-        Wed, 22 Dec 2021 23:18:09 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v4 16/68] fscache: Add a function for a cache backend to note
- an I/O error
-From:   David Howells <dhowells@redhat.com>
-To:     linux-cachefs@redhat.com
-Cc:     Jeff Layton <jlayton@kernel.org>, dhowells@redhat.com,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 22 Dec 2021 23:18:08 +0000
-Message-ID: <164021508840.640689.11902836226570620424.stgit@warthog.procyon.org.uk>
-In-Reply-To: <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk>
-References: <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/0.23
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2749C61D39;
+        Wed, 22 Dec 2021 23:18:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4503CC36AE8;
+        Wed, 22 Dec 2021 23:18:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640215098;
+        bh=XL2F2sIMNd3mEbXg4dyXDlA3WIZvGQ21ponLFx80OCc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WKebl9A1kBsJYUZIKPLD8z1wMtz24RCXKjWTNcf7+/Zm4JQm0Y2+aGw9FHYotJVdX
+         2i+GzPGBdkO/OrC9orqNKMLXpfZrTkz5kM6MqwpnnF5TM8p3YzYWRWfuRzyintkU8p
+         TXSuNh0XBtOqGsTwcVg9X9qaAMsbrmmnsoY6M2b+eXou5Z1hq5+2sSJMQoSt/JRBZ0
+         DB68cpPjw6sak6SAx3THQiZyB2KiEWXA7rfyLhlmjaeYIDLM06w7GZb2x/w686G2Sw
+         mX83wlZq1Cod4nAnbM0Fwz0OxgBmTvLmUkUf4pyxRCTTj475EcZdChXYHNIG9XvsgC
+         ACXQJi7cXm9Qg==
+Date:   Thu, 23 Dec 2021 08:18:14 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 10/12] user_events: Add sample code for typical usage
+Message-Id: <20211223081814.1ca544cdf18e29a93f60c597@kernel.org>
+In-Reply-To: <20211216173511.10390-11-beaub@linux.microsoft.com>
+References: <20211216173511.10390-1-beaub@linux.microsoft.com>
+        <20211216173511.10390-11-beaub@linux.microsoft.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a function to the backend API to note an I/O error in a cache.
+On Thu, 16 Dec 2021 09:35:09 -0800
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
-cc: linux-cachefs@redhat.com
-Link: https://lore.kernel.org/r/163819598741.215744.891281275151382095.stgit@warthog.procyon.org.uk/ # v1
-Link: https://lore.kernel.org/r/163906901316.143852.15225412215771586528.stgit@warthog.procyon.org.uk/ # v2
-Link: https://lore.kernel.org/r/163967100721.1823006.16435671567428949398.stgit@warthog.procyon.org.uk/ # v3
----
+> Add sample code for user_events typical usage to show how to register
+> and monitor status, as well as to write out data.
 
- fs/fscache/cache.c            |   20 ++++++++++++++++++++
- include/linux/fscache-cache.h |    2 ++
- 2 files changed, 22 insertions(+)
+Ah, here is the sample code. OK.
 
-diff --git a/fs/fscache/cache.c b/fs/fscache/cache.c
-index bbd102be91c4..25eac61f1c29 100644
---- a/fs/fscache/cache.c
-+++ b/fs/fscache/cache.c
-@@ -321,6 +321,26 @@ void fscache_end_cache_access(struct fscache_cache *cache, enum fscache_access_t
- 		wake_up_var(&cache->n_accesses);
- }
- 
-+/**
-+ * fscache_io_error - Note a cache I/O error
-+ * @cache: The record describing the cache
-+ *
-+ * Note that an I/O error occurred in a cache and that it should no longer be
-+ * used for anything.  This also reports the error into the kernel log.
-+ *
-+ * See Documentation/filesystems/caching/backend-api.rst for a complete
-+ * description.
-+ */
-+void fscache_io_error(struct fscache_cache *cache)
-+{
-+	if (fscache_set_cache_state_maybe(cache,
-+					  FSCACHE_CACHE_IS_ACTIVE,
-+					  FSCACHE_CACHE_GOT_IOERROR))
-+		pr_err("Cache '%s' stopped due to I/O error\n",
-+		       cache->name);
-+}
-+EXPORT_SYMBOL(fscache_io_error);
-+
- /**
-  * fscache_withdraw_cache - Withdraw a cache from the active service
-  * @cache: The cache cookie
-diff --git a/include/linux/fscache-cache.h b/include/linux/fscache-cache.h
-index a10b66ca3544..936ef731bbc7 100644
---- a/include/linux/fscache-cache.h
-+++ b/include/linux/fscache-cache.h
-@@ -73,6 +73,8 @@ extern int fscache_add_cache(struct fscache_cache *cache,
- extern void fscache_withdraw_cache(struct fscache_cache *cache);
- extern void fscache_withdraw_volume(struct fscache_volume *volume);
- 
-+extern void fscache_io_error(struct fscache_cache *cache);
-+
- extern void fscache_end_volume_access(struct fscache_volume *volume,
- 				      struct fscache_cookie *cookie,
- 				      enum fscache_access_trace why);
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+
+Thanks!
+
+> 
+> Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+> ---
+>  samples/user_events/Makefile  |  5 ++
+>  samples/user_events/example.c | 91 +++++++++++++++++++++++++++++++++++
+>  2 files changed, 96 insertions(+)
+>  create mode 100644 samples/user_events/Makefile
+>  create mode 100644 samples/user_events/example.c
+> 
+> diff --git a/samples/user_events/Makefile b/samples/user_events/Makefile
+> new file mode 100644
+> index 000000000000..7252b589db57
+> --- /dev/null
+> +++ b/samples/user_events/Makefile
+> @@ -0,0 +1,5 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +CFLAGS += -Wl,-no-as-needed -Wall -I../../usr/include
+> +
+> +example: example.o
+> +example.o: example.c
+> diff --git a/samples/user_events/example.c b/samples/user_events/example.c
+> new file mode 100644
+> index 000000000000..4f5778e441c0
+> --- /dev/null
+> +++ b/samples/user_events/example.c
+> @@ -0,0 +1,91 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2021, Microsoft Corporation.
+> + *
+> + * Authors:
+> + *   Beau Belgrave <beaub@linux.microsoft.com>
+> + */
+> +
+> +#include <errno.h>
+> +#include <sys/ioctl.h>
+> +#include <sys/mman.h>
+> +#include <fcntl.h>
+> +#include <stdio.h>
+> +#include <unistd.h>
+> +#include <linux/user_events.h>
+> +
+> +/* Assumes debugfs is mounted */
+> +const char *data_file = "/sys/kernel/debug/tracing/user_events_data";
+> +const char *status_file = "/sys/kernel/debug/tracing/user_events_status";
+> +
+> +static int event_status(char **status)
+> +{
+> +	int fd = open(status_file, O_RDONLY);
+> +
+> +	*status = mmap(NULL, sysconf(_SC_PAGESIZE), PROT_READ,
+> +		       MAP_SHARED, fd, 0);
+> +
+> +	close(fd);
+> +
+> +	if (*status == MAP_FAILED)
+> +		return -1;
+> +
+> +	return 0;
+> +}
+> +
+> +static int event_reg(int fd, const char *command, int *status, int *write)
+> +{
+> +	struct user_reg reg = {0};
+> +
+> +	reg.size = sizeof(reg);
+> +	reg.name_args = (__u64)command;
+> +
+> +	if (ioctl(fd, DIAG_IOCSREG, &reg) == -1)
+> +		return -1;
+> +
+> +	*status = reg.status_index;
+> +	*write = reg.write_index;
+> +
+> +	return 0;
+> +}
+> +
+> +int main(int argc, char **argv)
+> +{
+> +	int data_fd, status, write;
+> +	char *status_page;
+> +	struct iovec io[2];
+> +	__u32 count = 0;
+> +
+> +	if (event_status(&status_page) == -1)
+> +		return errno;
+> +
+> +	data_fd = open(data_file, O_RDWR);
+> +
+> +	if (event_reg(data_fd, "test u32 count", &status, &write) == -1)
+> +		return errno;
+> +
+> +	/* Setup iovec */
+> +	io[0].iov_base = &write;
+> +	io[0].iov_len = sizeof(write);
+> +	io[1].iov_base = &count;
+> +	io[1].iov_len = sizeof(count);
+> +
+> +ask:
+> +	printf("Press enter to check status...\n");
+> +	getchar();
+> +
+> +	/* Check if anyone is listening */
+> +	if (status_page[status]) {
+> +		/* Yep, trace out our data */
+> +		writev(data_fd, (const struct iovec *)io, 2);
+> +
+> +		/* Increase the count */
+> +		count++;
+> +
+> +		printf("Something was attached, wrote data\n");
+> +	}
+> +
+> +	goto ask;
+> +
+> +	return 0;
+> +}
+> -- 
+> 2.17.1
+> 
 
 
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

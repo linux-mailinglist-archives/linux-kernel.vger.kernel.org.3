@@ -2,100 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CADAF47D08B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E898C47D090
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244425AbhLVLLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 06:11:45 -0500
-Received: from ivanoab7.miniserver.com ([37.128.132.42]:34678 "EHLO
-        www.kot-begemot.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244418AbhLVLLn (ORCPT
+        id S244431AbhLVLNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 06:13:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235117AbhLVLNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 06:11:43 -0500
-Received: from [192.168.18.6] (helo=jain.kot-begemot.co.uk)
-        by www.kot-begemot.co.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1mzzWz-000AHl-4O; Wed, 22 Dec 2021 11:11:39 +0000
-Received: from madding.kot-begemot.co.uk ([192.168.3.98])
-        by jain.kot-begemot.co.uk with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1mzzWu-00AAhH-VX; Wed, 22 Dec 2021 11:11:35 +0000
-Subject: Re: [PATCH] um: virtio_uml: allow probing from devicetree
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Johannes Berg <johannes@sipsolutions.net>
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Rob Herring <robh+dt@kernel.org>, kernel <kernel@axis.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20211221090447.1567-1-vincent.whitchurch@axis.com>
- <5f104044649ec60ba93648e68c3df2183e032072.camel@sipsolutions.net>
- <20211222103417.GB25135@axis.com>
-From:   Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Organization: Cambridge Greys
-Message-ID: <38342157-f9c5-42dd-db04-3a13756bd70b@cambridgegreys.com>
-Date:   Wed, 22 Dec 2021 11:11:32 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 22 Dec 2021 06:13:21 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7215C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:13:20 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id i22so4082161wrb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:13:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=HfBElawJtzhNrSHmlCYD39sP+XP1qxUfo+mL3a/bM8I=;
+        b=Jjh1I9O7WdU7g2btQnmG84PwI44V9yfLrmt77SFDSJuEFNhQCFzqj9rVN99KvAWCUr
+         REojul4yGIg8zLsYJ8OrToOFrPD4eJhnuL0CidyU2PaEKC0mj9kumW76q9TRVlmkFWRq
+         Uvza4ZHd7FJOa1t6Oa+ZDlJlJ7zA4M3YWI//rUfCusEcfGnIb0lg3ItRHsc3t/S6PwOD
+         fmomfU5WQGcjxYizt1fXbIvK7qA7y5K9fPaEGii7gfWSF4olAEBKxObnnI+iR2aokbfi
+         HEcvuvsn3aehnWxmRY76jJAFsNCkrmuZMp1LmKXlIzZi7u9C519mAvn0Rh0RN00TAFah
+         D63g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=HfBElawJtzhNrSHmlCYD39sP+XP1qxUfo+mL3a/bM8I=;
+        b=zvF5Pb/TZjYe+LQZ9B7t7nbLXEGCw2qQqgHkFwk66sQyesOCQE4XxHFtHsr6w5O7CK
+         wuYbsfdOP9TF6OGJaRiwkDj+g4vnsvnpkkWzjhWC6UcJNV5GktSj5sBH1q+LT1QE8dUJ
+         EbnQFtsqrTPoIDK4xwy6zAr0SBefmyKd/Hhq9gsBJ+z78uUngTm5pOm27w9UOL8fgZiz
+         h8s03l/PRv+t9C3X/zLVBEmxbFXrcShjwd2eA5SaB10EZVOexx7O9MVrKsRCu444pU8x
+         lMKKuck4q0C2BdBvn4gTMgcWfEycwCJw8r0DWGXX5xc6KnpDdxfy93NjxyE8u6yrudkn
+         nmnw==
+X-Gm-Message-State: AOAM532AN7eFDKPA7tzuoR+oIB4yin4alwwnRVjTq0n18eWa4oxssro+
+        iUTuYb+3FoEZJ6D4lnCfiHWQdw==
+X-Google-Smtp-Source: ABdhPJzUUG4cG1zv1O67xCVnRg6aEBix0K14FY3aVSgrCUzZxhWS8d9KxrvjQ8RV7gKNXmf+y2j35Q==
+X-Received: by 2002:adf:fb05:: with SMTP id c5mr1710185wrr.497.1640171599177;
+        Wed, 22 Dec 2021 03:13:19 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id g6sm1641465wri.67.2021.12.22.03.13.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 03:13:18 -0800 (PST)
+Date:   Wed, 22 Dec 2021 11:13:17 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] backlight: lp855x: Move device_config setting out
+ of lp855x_configure()
+Message-ID: <YcMITVYgx6MXP9Kd@google.com>
+References: <20211102225504.18920-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20211222103417.GB25135@axis.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -2.0
-X-Spam-Score: -1.0
-X-Clacks-Overhead: GNU Terry Pratchett
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211102225504.18920-1-hdegoede@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/12/2021 10:34, Vincent Whitchurch wrote:
-> On Tue, Dec 21, 2021 at 09:48:26PM +0100, Johannes Berg wrote:
->> On Tue, 2021-12-21 at 10:04 +0100, Vincent Whitchurch wrote:
->>> Allow the virtio_uml device to be probed from the devicetree so that
->>> sub-devices can be specified using the standard virtio bindings, for
->>> example:
->>>
->>>    virtio@1 {
->>>      compatible = "virtio,uml";
->>>      socket-path = "i2c.sock";
->>>      virtio-device-id = <0x22>;
->>>
->>
->> Given this, maybe it should modify
->> Documentation/devicetree/bindings/virtio/virtio-device.yaml? Or actually
->> add a new Documentation/devicetree/bindings/virtio/uml.yaml I guess?
->>
->> +Rob, because I'm not really into any of this.
->>
->> Also, I'm not even sure we should/need to document the DT bits that are
->> basically only used for testing in the first place?
-> 
-> I wasn't sure either, but Rob was OK with not documenting some other
-> bindings which are only used for testing[0], so I assumed that that
-> applied here too:
-> 
->   [0] https://lore.kernel.org/all/5baa1ae6.1c69fb81.847f2.3ab1@mx.google.com/
-> 
-> Also, DT bindings are supposed to be generic and based on what the
-> hardware has, but here we have no hardware and something very Linux and
-> UML-specific.
+On Tue, 02 Nov 2021, Hans de Goede wrote:
 
-This will probably need to be added to the general UML documentation. I 
-will take care of that once the patches are in the tree.
-
-Brgds,
-
+> Move the setting of the lp->cfg pointer to the chip specific
+> lp855x_device_config struct from lp855x_configure() to
+> lp855x_probe(), before calling lp855x_parse_dt().
 > 
->> Code looks good to me.
+> This is a preperation patch for adding ACPI enumeration support.
 > 
-> Thanks!
-> 
+> Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
+Please keep sign-offs in chronological order.
+
+Applied, thanks.
 
 -- 
-Anton R. Ivanov
-Cambridgegreys Limited. Registered in England. Company Number 10273661
-https://www.cambridgegreys.com/
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

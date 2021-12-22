@@ -2,86 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84CCD47CADE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:42:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D372747CADB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234026AbhLVBmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 20:42:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
+        id S232532AbhLVBmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 20:42:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232269AbhLVBmQ (ORCPT
+        with ESMTP id S232269AbhLVBmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 20:42:16 -0500
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E24C061574;
-        Tue, 21 Dec 2021 17:42:16 -0800 (PST)
-Received: by mail-qk1-x735.google.com with SMTP id de30so935471qkb.0;
-        Tue, 21 Dec 2021 17:42:16 -0800 (PST)
+        Tue, 21 Dec 2021 20:42:09 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE028C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 17:42:08 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id e5so1559617wrc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 17:42:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PCN9MbBbsSLQre2+oydcyhTYZYw9WIy7kClZtsQdVGI=;
-        b=Hodil8n7Mt8VfemZoZNHNMvamNcrtiYAv02Ce8X4y5Pxv0KHIIS4S6OUmNqR6VKb/I
-         2LvR5VCXlnjf/AuA1RVpV/PP+6zIP1znHhVk84y+/7LhCHBd2xcKYqmwBgZyF4N0nYEc
-         mE10s6w7CgRCvZ16BzPQcs9k0rUOhLG3P8bH4=
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=TOXuJKyxYwyPSVVAHpJebdVbn4Xism88qWlHJWvV60rOJ1qIV5bea6lFNNHWWz8A8z
+         QAnt8TS/6fTIMWWmdn283951qQJbEocZUGrDEiTNua5X3FiGkLVnBxtM+SwaMudSH97H
+         BlUldEzNuhuG6vhZph9lRb1Wbg+7dlHJNTSA/rrbe/XJ8dxhgrjmxqVRZxZqld1rgakA
+         RT0YLkOqbiu2APNbgf0hSHWNvATtBddwF9OAvMTpOL6MCkz84DE1wr11Fej3O86Shmhd
+         WfxcACXqsLGCLpiK7v6e5NHt1ghijI9FDVBMj8gz6QweYiukW+R+jYeYuCPLPTu3dY2n
+         fDQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PCN9MbBbsSLQre2+oydcyhTYZYw9WIy7kClZtsQdVGI=;
-        b=H+EpOmkZPXO3k/71/klRWyEyPzghy3nA71o9Jq1g9hs/ev1+UT35g9+PnUo2/GPDJg
-         fLk3J/IRuYIXF0TJK03eXNk16b0A7knNSwKX8hAAFHvaRMO+mz44YL5CpoP4107tSe0e
-         AJuWSsixIym1zm1Bxy4wEVgCGF2f/dF2eqbfv4rbTJTl8hdPw6ZD40PbHdGRHE4AIs0j
-         IZp6e3CHwmojfMTVL+YIPEtC1jYDbLgI+gv2S1GD5SDAw98nJXfyTQhf+Ug1oLZyGEdN
-         aMwFgVwoHL0UXDK6ns4SCjo7lTLobeoLVMsoW+uyr95fyk3WIpfrYhNxti/yCN8l3e7/
-         DzPQ==
-X-Gm-Message-State: AOAM530VPU6wC+4lCI1HWHYEz9sWaOAFmzvYleCQEqpqkwTJM5dzxQ3F
-        cjjL8T7nKDdKdm5GK3miz/i0zs39Tjoj4vKAwi0=
-X-Google-Smtp-Source: ABdhPJwmJ9i4jMsvi4V6fz7AloWq/zVOcLqmADCy9D0Hm4pUYF7rzmNHvE+3eh7PMM5aKtpxu3YC39924vWtAqxG3uU=
-X-Received: by 2002:a37:94c2:: with SMTP id w185mr746817qkd.666.1640137335360;
- Tue, 21 Dec 2021 17:42:15 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=RyiJqtSJzym/43HYPNMWlhLBaZEjv5EoJHuYr8UiiGIg0hQ1PJ4DHgCZwaP0UqPzBj
+         EBMAh84pv7qsfgsh/UyJ522MH8Kxa+Gb7ixZ+2mpsRL1KD/lBmmhDmZfboU/TnvZWP7v
+         BcmI5WoThwlWgUPeUtr2LVyvXGKppfP0XEcJFXRepHRafhAZYwAYALf+ut9OCQHhGQdU
+         velGRDz8kbSP9zyxKQ6HE/3K7gSGFr8FLsUnGKOH+QYS5WFN8Ykw9S+JTkllIPqpf0wg
+         bQc58ZZFsXdo+8YBCzkW+L2ixj5bfoLgtfbFP9vaOvEHwZt5BHB/pqmYDVKDMsh/n5Ac
+         WDag==
+X-Gm-Message-State: AOAM533s2hEy5v2Qo8IZJbRV8WR2pHdAh73lnoJTCNQ5Tbexa8yZZY/g
+        q62QRM0OpCOGw2VY+7Ha4SbeGa5lStJQX33NuBs=
+X-Google-Smtp-Source: ABdhPJwhvh6cowQhcL9c8BC9vmN6sR5jmrhhJFv/SiN+ZdrE5quOeMCAKMrfUFLvEJ5qgmAFGgBgjT7DxwS5I8zMIJM=
+X-Received: by 2002:adf:e3d1:: with SMTP id k17mr521957wrm.610.1640137327335;
+ Tue, 21 Dec 2021 17:42:07 -0800 (PST)
 MIME-Version: 1.0
-References: <20211207094923.422422-1-howard.chiu@quantatw.com>
- <CACPK8XddhFn3PreJM3D=djkREgqGD7yZhS7YoqxxXsNfhZpLhQ@mail.gmail.com> <YcH2MSByPLAvw5mI@heinlein>
-In-Reply-To: <YcH2MSByPLAvw5mI@heinlein>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 22 Dec 2021 01:42:02 +0000
-Message-ID: <CACPK8XcNSO9pwJiL_-0jyCSZ5jxdY6HdU5MDReByMcRbyeA6yQ@mail.gmail.com>
-Subject: Re: [PATCH v8] ARM: dts: aspeed: Adding Facebook Bletchley BMC
-To:     Patrick Williams <patrick@stwcx.xyz>
-Cc:     Howard Chiu <howard10703049@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?UG90aW4gTGFpICjos7Tmn4/lu7cp?= <Potin.Lai@quantatw.com>,
-        Howard Chiu <howard.chiu@quantatw.com>
+Received: by 2002:a5d:64ef:0:0:0:0:0 with HTTP; Tue, 21 Dec 2021 17:42:06
+ -0800 (PST)
+Reply-To: avamedicinemed3@gmail.com
+From:   Dr Ava Smith <tracywilliam887@gmail.com>
+Date:   Tue, 21 Dec 2021 17:42:06 -0800
+Message-ID: <CAPQjm41tmGmqi_5Mdbf1708USzLAmu8NKuwS1kv5sZ8M7CSK6w@mail.gmail.com>
+Subject: From Dr Ava Smith from United States
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Dec 2021 at 15:43, Patrick Williams <patrick@stwcx.xyz> wrote:
->
-> On Tue, Dec 21, 2021 at 04:37:55AM +0000, Joel Stanley wrote:
-> > Hi Patrick,
-> >
-> > On Tue, 7 Dec 2021 at 09:52, Howard Chiu <howard10703049@gmail.com> wrote:
-> > >
-> > > Initial introduction of Facebook Bletchley equipped with
-> > > Aspeed 2600 BMC SoC.
-> > >
-> > > Signed-off-by: Howard Chiu <howard.chiu@quantatw.com>
-> >
-> > Are you ok for this one to go in for v5.17?
->
-> Yes.
->
-> Reviewed-by: Patrick Williams <patrick@stwcx.xyz>
->
-> Would also appreciate if you could apply to your Aspeed tree for OpenBMC.
-
-Thanks. I've done both.
+-- 
+Hello Dear,
+how are you today?hope you are fine
+My name is Dr Ava Smith ,Am an English and French nationalities.
+I will give you pictures and more details about me as soon as i hear from you
+Thanks
+Ava

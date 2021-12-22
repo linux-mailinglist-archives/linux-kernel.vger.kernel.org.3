@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F54747D2C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A5547D2C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245384AbhLVNMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 08:12:38 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:16851 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245305AbhLVNMY (ORCPT
+        id S245354AbhLVNMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 08:12:39 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:30163 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245316AbhLVNM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 08:12:24 -0500
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JJtxw0zbpz91s6;
-        Wed, 22 Dec 2021 21:11:32 +0800 (CST)
+        Wed, 22 Dec 2021 08:12:26 -0500
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JJtwC0WRgz8vyV;
+        Wed, 22 Dec 2021 21:10:03 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 22 Dec 2021 21:12:22 +0800
+ 15.1.2308.20; Wed, 22 Dec 2021 21:12:23 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 22 Dec 2021 21:12:21 +0800
+ 15.1.2308.20; Wed, 22 Dec 2021 21:12:22 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -44,9 +44,9 @@ CC:     Zhen Lei <thunder.leizhen@huawei.com>,
         Kefeng Wang <wangkefeng.wang@huawei.com>,
         Chen Zhou <dingguo.cz@antgroup.com>,
         "John Donnelly" <John.p.donnelly@oracle.com>
-Subject: [PATCH v18 04/17] x86/setup: Add helper parse_crashkernel_in_order()
-Date:   Wed, 22 Dec 2021 21:08:07 +0800
-Message-ID: <20211222130820.1754-5-thunder.leizhen@huawei.com>
+Subject: [PATCH v18 05/17] x86/setup: Use parse_crashkernel_in_order() to make code logic clear
+Date:   Wed, 22 Dec 2021 21:08:08 +0800
+Message-ID: <20211222130820.1754-6-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20211222130820.1754-1-thunder.leizhen@huawei.com>
 References: <20211222130820.1754-1-thunder.leizhen@huawei.com>
@@ -61,87 +61,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, there are two possible combinations of configurations.
-(1) crashkernel=X[@offset]
-(2) crashkernel=X,high, with or without crashkernel=X,low
+Currently, the parsing of "crashkernel=X,high" and the parsing of
+"crashkernel=X,low" are not in the same function, but they are strongly
+dependent, which affects readability. Use parse_crashkernel_in_order() to
+bring them together.
 
-(1) has the highest priority, if it is configured correctly, (2) will be
-ignored. Similarly, in combination (2), crashkernel=X,low is valid only
-when crashkernel=X,high is valid.
-
-Putting the operations of parsing all "crashkernel=" configurations in one
-function helps to sort out the strong dependency.
-
-So add helper parse_crashkernel_in_order(). The "__maybe_unused" will be
-removed in the next patch.
+In addition, the operation to ensure at least 256M low memory is moved out
+of reserve_craskernel_low() so that it only needs to focus on low memory
+allocation.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- arch/x86/kernel/setup.c | 51 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ arch/x86/kernel/setup.c | 69 ++++++++++++++++++-----------------------
+ 1 file changed, 30 insertions(+), 39 deletions(-)
 
 diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index d9080bfa131a654..f997074d36f2484 100644
+index f997074d36f2484..07a58313db5c5f7 100644
 --- a/arch/x86/kernel/setup.c
 +++ b/arch/x86/kernel/setup.c
-@@ -439,6 +439,57 @@ static int __init reserve_crashkernel_low(void)
- }
- #endif
+@@ -393,32 +393,16 @@ static void __init memblock_x86_reserve_range_setup_data(void)
+ #ifdef CONFIG_KEXEC_CORE
  
-+#define CRASHKERNEL_MEM_NONE		0x0	/* crashkernel= is not exist or invalid */
-+#define CRASHKERNEL_MEM_CLASSIC		0x1	/* crashkernel=X[@offset] is valid */
-+#define CRASHKERNEL_MEM_HIGH		0x2	/* crashkernel=X,high is valid */
-+#define CRASHKERNEL_MEM_LOW		0x4	/* crashkernel=X,low is valid */
-+
-+/**
-+ * parse_crashkernel_in_order - Parse all "crashkernel=" configurations in
-+ *				priority order until a valid combination is found.
-+ * @cmdline:	The bootup command line.
-+ * @system_ram: Total system memory size.
-+ * @crash_size: Save the memory size specified by "crashkernel=X[@offset]" or
-+ *		"crashkernel=X,high".
-+ * @crash_base: Save the base address specified by "crashkernel=X@offset"
-+ * @low_size:	Save the memory size specified by "crashkernel=X,low"
-+ *
-+ * Returns the status flag of the parsing result of "crashkernel=", such as
-+ * CRASHKERNEL_MEM_NONE, CRASHKERNEL_MEM_HIGH.
-+ */
-+__maybe_unused
-+static int __init parse_crashkernel_in_order(char *cmdline,
-+					     unsigned long long system_ram,
-+					     unsigned long long *crash_size,
-+					     unsigned long long *crash_base,
-+					     unsigned long long *low_size)
-+{
-+	int ret, flag = CRASHKERNEL_MEM_NONE;
-+
-+	BUG_ON(!crash_size || !crash_base || !low_size);
-+
-+	/* crashkernel=X[@offset] */
-+	ret = parse_crashkernel(cmdline, system_ram, crash_size, crash_base);
-+	if (!ret && crash_size > 0)
-+		return CRASHKERNEL_MEM_CLASSIC;
-+
-+#ifdef CONFIG_X86_64
-+	/* crashkernel=X,high */
-+	ret = parse_crashkernel_high(cmdline, system_ram, crash_size, crash_base);
-+	if (ret || crash_size <= 0)
-+		return CRASHKERNEL_MEM_NONE;
-+
-+	flag = CRASHKERNEL_MEM_HIGH;
-+
-+	/* crashkernel=Y,low */
-+	ret = parse_crashkernel_low(cmdline, system_ram, low_size, crash_base);
-+	if (!ret)
-+		flag |= CRASHKERNEL_MEM_LOW;
-+#endif
-+
-+	return flag;
-+}
-+
+ #ifdef CONFIG_X86_64
+-static int __init reserve_crashkernel_low(void)
++static int __init reserve_crashkernel_low(unsigned long long low_size)
+ {
+-	unsigned long long base, low_base = 0, low_size = 0;
++	unsigned long long low_base = 0;
+ 	unsigned long low_mem_limit;
+-	int ret;
+ 
+ 	low_mem_limit = min(memblock_phys_mem_size(), CRASH_ADDR_LOW_MAX);
+ 
+-	/* crashkernel=Y,low */
+-	ret = parse_crashkernel_low(boot_command_line, low_mem_limit, &low_size, &base);
+-	if (ret) {
+-		/*
+-		 * two parts from kernel/dma/swiotlb.c:
+-		 * -swiotlb size: user-specified with swiotlb= or default.
+-		 *
+-		 * -swiotlb overflow buffer: now hardcoded to 32k. We round it
+-		 * to 8M for other buffers that may need to stay low too. Also
+-		 * make sure we allocate enough extra low memory so that we
+-		 * don't run out of DMA buffers for 32-bit devices.
+-		 */
+-		low_size = max(swiotlb_size_or_default() + (8UL << 20), 256UL << 20);
+-	} else {
+-		/* passed with crashkernel=0,low ? */
+-		if (!low_size)
+-			return 0;
+-	}
++	/* passed with crashkernel=0,low ? */
++	if (!low_size)
++		return 0;
+ 
+ 	low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, 0, CRASH_ADDR_LOW_MAX);
+ 	if (!low_base) {
+@@ -457,7 +441,6 @@ static int __init reserve_crashkernel_low(void)
+  * Returns the status flag of the parsing result of "crashkernel=", such as
+  * CRASHKERNEL_MEM_NONE, CRASHKERNEL_MEM_HIGH.
+  */
+-__maybe_unused
+ static int __init parse_crashkernel_in_order(char *cmdline,
+ 					     unsigned long long system_ram,
+ 					     unsigned long long *crash_size,
+@@ -492,22 +475,15 @@ static int __init parse_crashkernel_in_order(char *cmdline,
+ 
  static void __init reserve_crashkernel(void)
  {
- 	unsigned long long crash_size, crash_base, total_mem;
+-	unsigned long long crash_size, crash_base, total_mem;
+-	bool high = false;
+-	int ret;
++	unsigned long long crash_size, crash_base, total_mem, low_size;
++	int flag;
+ 
+ 	total_mem = memblock_phys_mem_size();
+ 
+-	/* crashkernel=XM */
+-	ret = parse_crashkernel(boot_command_line, total_mem, &crash_size, &crash_base);
+-	if (ret != 0 || crash_size <= 0) {
+-		/* crashkernel=X,high */
+-		ret = parse_crashkernel_high(boot_command_line, total_mem,
+-					     &crash_size, &crash_base);
+-		if (ret != 0 || crash_size <= 0)
+-			return;
+-		high = true;
+-	}
++	flag = parse_crashkernel_in_order(boot_command_line, total_mem,
++					  &crash_size, &crash_base, &low_size);
++	if (flag == CRASHKERNEL_MEM_NONE)
++		return;
+ 
+ 	/* 0 means: find the address automatically */
+ 	if (!crash_base) {
+@@ -519,7 +495,7 @@ static void __init reserve_crashkernel(void)
+ 		 * So try low memory first and fall back to high memory
+ 		 * unless "crashkernel=size[KMG],high" is specified.
+ 		 */
+-		if (!high)
++		if (!(flag & CRASHKERNEL_MEM_HIGH))
+ 			crash_base = memblock_phys_alloc_range(crash_size,
+ 						CRASH_ALIGN, CRASH_ALIGN,
+ 						CRASH_ADDR_LOW_MAX);
+@@ -543,9 +519,24 @@ static void __init reserve_crashkernel(void)
+ 	}
+ 
+ #ifdef CONFIG_X86_64
+-	if (crash_base >= (1ULL << 32) && reserve_crashkernel_low()) {
+-		memblock_phys_free(crash_base, crash_size);
+-		return;
++	if (crash_base >= (1ULL << 32)) {
++		if (!(flag & CRASHKERNEL_MEM_LOW)) {
++			/*
++			 * two parts from kernel/dma/swiotlb.c:
++			 * -swiotlb size: user-specified with swiotlb= or default.
++			 *
++			 * -swiotlb overflow buffer: now hardcoded to 32k. We round it
++			 * to 8M for other buffers that may need to stay low too. Also
++			 * make sure we allocate enough extra low memory so that we
++			 * don't run out of DMA buffers for 32-bit devices.
++			 */
++			low_size = max(swiotlb_size_or_default() + (8UL << 20), 256UL << 20);
++		}
++
++		if (reserve_crashkernel_low(low_size)) {
++			memblock_phys_free(crash_base, crash_size);
++			return;
++		}
+ 	}
+ #endif
+ 
 -- 
 2.25.1
 

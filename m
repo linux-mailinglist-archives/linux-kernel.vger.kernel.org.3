@@ -2,559 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E021D47D554
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:44:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B6D47D515
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344176AbhLVQoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 11:44:21 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:44444 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344166AbhLVQn0 (ORCPT
+        id S241756AbhLVQX3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Dec 2021 11:23:29 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:53741 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236333AbhLVQX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 11:43:26 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
- id fe6e77a9aaadc893; Wed, 22 Dec 2021 17:43:24 +0100
-Received: from kreacher.localnet (unknown [213.134.181.48])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 17FAF66AF5C;
-        Wed, 22 Dec 2021 17:43:24 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>
-Subject: [PATCH 03/19] ACPICA: Use original pointer for virtual origin tables
-Date:   Wed, 22 Dec 2021 17:22:28 +0100
-Message-ID: <12919205.uLZWGnKmhe@kreacher>
-In-Reply-To: <11889746.O9o76ZdvQC@kreacher>
-References: <11889746.O9o76ZdvQC@kreacher>
+        Wed, 22 Dec 2021 11:23:28 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 48046200005;
+        Wed, 22 Dec 2021 16:23:25 +0000 (UTC)
+Date:   Wed, 22 Dec 2021 17:23:23 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        Han Xu <han.xu@nxp.com>, Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org
+Subject: Re: [RFC PATCH 4/4] mtd: rawnand: gpmi: validate controller clock
+ rate
+Message-ID: <20211222172323.1bc565c0@xps13>
+In-Reply-To: <20211217155512.1877408-5-dario.binacchi@amarulasolutions.com>
+References: <20211217155512.1877408-1-dario.binacchi@amarulasolutions.com>
+        <20211217155512.1877408-5-dario.binacchi@amarulasolutions.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.181.48
-X-CLIENT-HOSTNAME: 213.134.181.48
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddruddtiedgkeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefgkedtheeuheetffeuleelhefhfffgjedthedvtdefteejffevteehhedvjefgudenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedvudefrddufeegrddukedurdegkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurdegkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohgsvghrthdrmhhoohhrvgesihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jessica Clarke <jrtc27@jrtc27.com>
+Hi Dario,
 
-ACPICA commit dfa3feffa8f760b686207d09dc880cd2f26c72af
+dario.binacchi@amarulasolutions.com wrote on Fri, 17 Dec 2021 16:55:12
++0100:
 
-Currently the pointer to the table is cast to acpi_physical_address and
-later cast back to a pointer to be dereferenced. Whether or not this is
-supported is implementation-defined.
+> What to do when the real rate of the gpmi clock is not equal to the
+> required one? The solutions proposed in [1] did not lead to a conclusion
+> on how to validate the clock rate, so, inspired by the document [2], I
+> consider the rate correct only if not greater than the rate of the
+> previous edo.
 
-On CHERI, and thus Arm's experimental Morello prototype architecture,
-pointers are represented as capabilities, which are unforgeable bounded
-pointers, providing always-on fine-grained spatial memory safety. This
-means that any pointer cast to a plain integer will lose all its
-associated metadata, and when cast back to a pointer it will give a
-null-derived pointer (one that has the same metadata as null but an
-address equal to the integer) that will trap on any dereference. As a
-result, this is an implementation where acpi_physical_address cannot be
-used as a hack to store real pointers.
+Not greater? what are you talking about here, if it's a rate, are you
+sure "not greater" is what you mean?
 
-Thus, alter the lifecycle of table descriptors. Internal physical tables
-keep the current behaviour where only the address is set on install, and
-the pointer is set on acquire. Virtual tables (internal and external)
-now store the pointer on initialisation and use that on acquire (which
-will redundantly set *table_ptr to itself, but changing that is both
-unnecessary and overly complicated as acpi_tb_acquire_table is called with
-both a pointer to a variable and a pointer to Table->Pointer itself).
+> In fact, in chapter 4.16.2 (NV-DDR) of the document [2],
+> it is written that "If the host selects timing mode n, then its clock
+> period shall be faster than the clock period of timing mode n-1 and
 
-This requires propagating the (possible) table pointer everywhere in
-order to make sure pointers make it through to acpi_tb_acquire_temp_table,
-which requires a change to the acpi_install_table interface. Instead of
-taking an ACPI_PHYSADDR_TYPE and a boolean indicating whether it's
-physical or virtual, it is now split into acpi_install_table (that takes
-an external virtual table pointer) and acpi_install_physical_table (that
-takes an ACPI_PHYSADDR_TYPE for an internal physical table address).
-This also has the benefit of providing a cleaner API.
+faster? is that the real wording in the document? seems inaccurate when
+referring to a clock period.
 
-Link: https://github.com/acpica/acpica/commit/dfa3feff
-Signed-off-by: Bob Moore <robert.moore@intel.com>
-[ rjw: Adjust the code in tables.c to match interface changes ]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/acpica/actables.h |  8 ++-
- drivers/acpi/acpica/exconfig.c |  2 +-
- drivers/acpi/acpica/tbdata.c   | 93 +++++++++++++++++++++++-----------
- drivers/acpi/acpica/tbfadt.c   |  6 +--
- drivers/acpi/acpica/tbinstal.c | 15 ++++--
- drivers/acpi/acpica/tbutils.c  |  2 +-
- drivers/acpi/acpica/tbxfload.c | 52 ++++++++++++++-----
- drivers/acpi/tables.c          |  4 +-
- include/acpi/acpixf.h          |  6 ++-
- 9 files changed, 129 insertions(+), 59 deletions(-)
+> slower than or equal to the clock period of timing mode n.". I thought
+> that it could therefore also be used in this case, without therefore
+> having to define the valid rate ranges empirically.
 
-diff --git a/drivers/acpi/acpica/actables.h b/drivers/acpi/acpica/actables.h
-index e2d0046799a2..533802fe73e9 100644
---- a/drivers/acpi/acpica/actables.h
-+++ b/drivers/acpi/acpica/actables.h
-@@ -35,7 +35,8 @@ acpi_tb_init_table_descriptor(struct acpi_table_desc *table_desc,
- 
- acpi_status
- acpi_tb_acquire_temp_table(struct acpi_table_desc *table_desc,
--			   acpi_physical_address address, u8 flags);
-+			   acpi_physical_address address,
-+			   u8 flags, struct acpi_table_header *table);
- 
- void acpi_tb_release_temp_table(struct acpi_table_desc *table_desc);
- 
-@@ -86,6 +87,7 @@ acpi_tb_release_table(struct acpi_table_header *table,
- acpi_status
- acpi_tb_install_standard_table(acpi_physical_address address,
- 			       u8 flags,
-+			       struct acpi_table_header *table,
- 			       u8 reload, u8 override, u32 *table_index);
- 
- void acpi_tb_uninstall_table(struct acpi_table_desc *table_desc);
-@@ -95,7 +97,9 @@ acpi_tb_load_table(u32 table_index, struct acpi_namespace_node *parent_node);
- 
- acpi_status
- acpi_tb_install_and_load_table(acpi_physical_address address,
--			       u8 flags, u8 override, u32 *table_index);
-+			       u8 flags,
-+			       struct acpi_table_header *table,
-+			       u8 override, u32 *table_index);
- 
- acpi_status acpi_tb_unload_table(u32 table_index);
- 
-diff --git a/drivers/acpi/acpica/exconfig.c b/drivers/acpi/acpica/exconfig.c
-index 0cd9b3738e76..6c2685a6a4c1 100644
---- a/drivers/acpi/acpica/exconfig.c
-+++ b/drivers/acpi/acpica/exconfig.c
-@@ -411,7 +411,7 @@ acpi_ex_load_op(union acpi_operand_object *obj_desc,
- 	acpi_ex_exit_interpreter();
- 	status = acpi_tb_install_and_load_table(ACPI_PTR_TO_PHYSADDR(table),
- 						ACPI_TABLE_ORIGIN_INTERNAL_VIRTUAL,
--						TRUE, &table_index);
-+						table, TRUE, &table_index);
- 	acpi_ex_enter_interpreter();
- 	if (ACPI_FAILURE(status)) {
- 
-diff --git a/drivers/acpi/acpica/tbdata.c b/drivers/acpi/acpica/tbdata.c
-index ebbca109edcb..89f08de67e6d 100644
---- a/drivers/acpi/acpica/tbdata.c
-+++ b/drivers/acpi/acpica/tbdata.c
-@@ -89,14 +89,27 @@ acpi_tb_init_table_descriptor(struct acpi_table_desc *table_desc,
- {
- 
- 	/*
--	 * Initialize the table descriptor. Set the pointer to NULL, since the
--	 * table is not fully mapped at this time.
-+	 * Initialize the table descriptor. Set the pointer to NULL for external
-+	 * tables, since the table is not fully mapped at this time.
- 	 */
- 	memset(table_desc, 0, sizeof(struct acpi_table_desc));
- 	table_desc->address = address;
- 	table_desc->length = table->length;
- 	table_desc->flags = flags;
- 	ACPI_MOVE_32_TO_32(table_desc->signature.ascii, table->signature);
-+
-+	switch (table_desc->flags & ACPI_TABLE_ORIGIN_MASK) {
-+	case ACPI_TABLE_ORIGIN_INTERNAL_VIRTUAL:
-+	case ACPI_TABLE_ORIGIN_EXTERNAL_VIRTUAL:
-+
-+		table_desc->pointer = table;
-+		break;
-+
-+	case ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL:
-+	default:
-+
-+		break;
-+	}
- }
- 
- /*******************************************************************************
-@@ -132,9 +145,7 @@ acpi_tb_acquire_table(struct acpi_table_desc *table_desc,
- 	case ACPI_TABLE_ORIGIN_INTERNAL_VIRTUAL:
- 	case ACPI_TABLE_ORIGIN_EXTERNAL_VIRTUAL:
- 
--		table = ACPI_CAST_PTR(struct acpi_table_header,
--				      ACPI_PHYSADDR_TO_PTR(table_desc->
--							   address));
-+		table = table_desc->pointer;
- 		break;
- 
- 	default:
-@@ -196,6 +207,8 @@ acpi_tb_release_table(struct acpi_table_header *table,
-  * PARAMETERS:  table_desc          - Table descriptor to be acquired
-  *              address             - Address of the table
-  *              flags               - Allocation flags of the table
-+ *              table               - Pointer to the table (required for virtual
-+ *                                    origins, optional for physical)
-  *
-  * RETURN:      Status
-  *
-@@ -208,49 +221,52 @@ acpi_tb_release_table(struct acpi_table_header *table,
- 
- acpi_status
- acpi_tb_acquire_temp_table(struct acpi_table_desc *table_desc,
--			   acpi_physical_address address, u8 flags)
-+			   acpi_physical_address address,
-+			   u8 flags, struct acpi_table_header *table)
- {
--	struct acpi_table_header *table_header;
-+	u8 mapped_table = FALSE;
- 
- 	switch (flags & ACPI_TABLE_ORIGIN_MASK) {
- 	case ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL:
- 
- 		/* Get the length of the full table from the header */
- 
--		table_header =
--		    acpi_os_map_memory(address,
--				       sizeof(struct acpi_table_header));
--		if (!table_header) {
--			return (AE_NO_MEMORY);
-+		if (!table) {
-+			table =
-+			    acpi_os_map_memory(address,
-+					       sizeof(struct
-+						      acpi_table_header));
-+			if (!table) {
-+				return (AE_NO_MEMORY);
-+			}
-+
-+			mapped_table = TRUE;
- 		}
- 
--		acpi_tb_init_table_descriptor(table_desc, address, flags,
--					      table_header);
--		acpi_os_unmap_memory(table_header,
--				     sizeof(struct acpi_table_header));
--		return (AE_OK);
-+		break;
- 
- 	case ACPI_TABLE_ORIGIN_INTERNAL_VIRTUAL:
- 	case ACPI_TABLE_ORIGIN_EXTERNAL_VIRTUAL:
- 
--		table_header = ACPI_CAST_PTR(struct acpi_table_header,
--					     ACPI_PHYSADDR_TO_PTR(address));
--		if (!table_header) {
--			return (AE_NO_MEMORY);
-+		if (!table) {
-+			return_ACPI_STATUS(AE_BAD_PARAMETER);
- 		}
- 
--		acpi_tb_init_table_descriptor(table_desc, address, flags,
--					      table_header);
--		return (AE_OK);
-+		break;
- 
- 	default:
- 
--		break;
-+		/* Table is not valid yet */
-+
-+		return (AE_NO_MEMORY);
- 	}
- 
--	/* Table is not valid yet */
-+	acpi_tb_init_table_descriptor(table_desc, address, flags, table);
-+	if (mapped_table) {
-+		acpi_os_unmap_memory(table, sizeof(struct acpi_table_header));
-+	}
- 
--	return (AE_NO_MEMORY);
-+	return (AE_OK);
- }
- 
- /*******************************************************************************
-@@ -335,7 +351,19 @@ void acpi_tb_invalidate_table(struct acpi_table_desc *table_desc)
- 
- 	acpi_tb_release_table(table_desc->pointer, table_desc->length,
- 			      table_desc->flags);
--	table_desc->pointer = NULL;
-+
-+	switch (table_desc->flags & ACPI_TABLE_ORIGIN_MASK) {
-+	case ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL:
-+
-+		table_desc->pointer = NULL;
-+		break;
-+
-+	case ACPI_TABLE_ORIGIN_INTERNAL_VIRTUAL:
-+	case ACPI_TABLE_ORIGIN_EXTERNAL_VIRTUAL:
-+	default:
-+
-+		break;
-+	}
- 
- 	return_VOID;
- }
-@@ -959,6 +987,9 @@ acpi_tb_load_table(u32 table_index, struct acpi_namespace_node *parent_node)
-  *
-  * PARAMETERS:  address                 - Physical address of the table
-  *              flags                   - Allocation flags of the table
-+ *              table                   - Pointer to the table (required for
-+ *                                        virtual origins, optional for
-+ *                                        physical)
-  *              override                - Whether override should be performed
-  *              table_index             - Where table index is returned
-  *
-@@ -970,7 +1001,9 @@ acpi_tb_load_table(u32 table_index, struct acpi_namespace_node *parent_node)
- 
- acpi_status
- acpi_tb_install_and_load_table(acpi_physical_address address,
--			       u8 flags, u8 override, u32 *table_index)
-+			       u8 flags,
-+			       struct acpi_table_header *table,
-+			       u8 override, u32 *table_index)
- {
- 	acpi_status status;
- 	u32 i;
-@@ -979,7 +1012,7 @@ acpi_tb_install_and_load_table(acpi_physical_address address,
- 
- 	/* Install the table and load it into the namespace */
- 
--	status = acpi_tb_install_standard_table(address, flags, TRUE,
-+	status = acpi_tb_install_standard_table(address, flags, table, TRUE,
- 						override, &i);
- 	if (ACPI_FAILURE(status)) {
- 		goto exit;
-diff --git a/drivers/acpi/acpica/tbfadt.c b/drivers/acpi/acpica/tbfadt.c
-index 5174abfa8af9..047bd094ba68 100644
---- a/drivers/acpi/acpica/tbfadt.c
-+++ b/drivers/acpi/acpica/tbfadt.c
-@@ -313,7 +313,7 @@ void acpi_tb_parse_fadt(void)
- 	acpi_tb_install_standard_table((acpi_physical_address)acpi_gbl_FADT.
- 				       Xdsdt,
- 				       ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL,
--				       FALSE, TRUE, &acpi_gbl_dsdt_index);
-+				       NULL, FALSE, TRUE, &acpi_gbl_dsdt_index);
- 
- 	/* If Hardware Reduced flag is set, there is no FACS */
- 
-@@ -322,14 +322,14 @@ void acpi_tb_parse_fadt(void)
- 			acpi_tb_install_standard_table((acpi_physical_address)
- 						       acpi_gbl_FADT.facs,
- 						       ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL,
--						       FALSE, TRUE,
-+						       NULL, FALSE, TRUE,
- 						       &acpi_gbl_facs_index);
- 		}
- 		if (acpi_gbl_FADT.Xfacs) {
- 			acpi_tb_install_standard_table((acpi_physical_address)
- 						       acpi_gbl_FADT.Xfacs,
- 						       ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL,
--						       FALSE, TRUE,
-+						       NULL, FALSE, TRUE,
- 						       &acpi_gbl_xfacs_index);
- 		}
- 	}
-diff --git a/drivers/acpi/acpica/tbinstal.c b/drivers/acpi/acpica/tbinstal.c
-index 8d1e5b572493..5649f493a1ed 100644
---- a/drivers/acpi/acpica/tbinstal.c
-+++ b/drivers/acpi/acpica/tbinstal.c
-@@ -79,6 +79,8 @@ acpi_tb_install_table_with_override(struct acpi_table_desc *new_table_desc,
-  * PARAMETERS:  address             - Address of the table (might be a virtual
-  *                                    address depending on the table_flags)
-  *              flags               - Flags for the table
-+ *              table               - Pointer to the table (required for virtual
-+ *                                    origins, optional for physical)
-  *              reload              - Whether reload should be performed
-  *              override            - Whether override should be performed
-  *              table_index         - Where the table index is returned
-@@ -96,6 +98,7 @@ acpi_tb_install_table_with_override(struct acpi_table_desc *new_table_desc,
- acpi_status
- acpi_tb_install_standard_table(acpi_physical_address address,
- 			       u8 flags,
-+			       struct acpi_table_header *table,
- 			       u8 reload, u8 override, u32 *table_index)
- {
- 	u32 i;
-@@ -106,7 +109,8 @@ acpi_tb_install_standard_table(acpi_physical_address address,
- 
- 	/* Acquire a temporary table descriptor for validation */
- 
--	status = acpi_tb_acquire_temp_table(&new_table_desc, address, flags);
-+	status =
-+	    acpi_tb_acquire_temp_table(&new_table_desc, address, flags, table);
- 	if (ACPI_FAILURE(status)) {
- 		ACPI_ERROR((AE_INFO,
- 			    "Could not acquire table length at %8.8X%8.8X",
-@@ -209,7 +213,8 @@ void acpi_tb_override_table(struct acpi_table_desc *old_table_desc)
- 	if (ACPI_SUCCESS(status) && table) {
- 		acpi_tb_acquire_temp_table(&new_table_desc,
- 					   ACPI_PTR_TO_PHYSADDR(table),
--					   ACPI_TABLE_ORIGIN_EXTERNAL_VIRTUAL);
-+					   ACPI_TABLE_ORIGIN_EXTERNAL_VIRTUAL,
-+					   table);
- 		ACPI_ERROR_ONLY(override_type = "Logical");
- 		goto finish_override;
- 	}
-@@ -220,7 +225,8 @@ void acpi_tb_override_table(struct acpi_table_desc *old_table_desc)
- 						 &address, &length);
- 	if (ACPI_SUCCESS(status) && address && length) {
- 		acpi_tb_acquire_temp_table(&new_table_desc, address,
--					   ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL);
-+					   ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL,
-+					   NULL);
- 		ACPI_ERROR_ONLY(override_type = "Physical");
- 		goto finish_override;
- 	}
-@@ -289,7 +295,8 @@ void acpi_tb_uninstall_table(struct acpi_table_desc *table_desc)
- 
- 	if ((table_desc->flags & ACPI_TABLE_ORIGIN_MASK) ==
- 	    ACPI_TABLE_ORIGIN_INTERNAL_VIRTUAL) {
--		ACPI_FREE(ACPI_PHYSADDR_TO_PTR(table_desc->address));
-+		ACPI_FREE(table_desc->pointer);
-+		table_desc->pointer = NULL;
- 	}
- 
- 	table_desc->address = ACPI_PTR_TO_PHYSADDR(NULL);
-diff --git a/drivers/acpi/acpica/tbutils.c b/drivers/acpi/acpica/tbutils.c
-index 4b9b329a5a92..5e8d50a4b6a9 100644
---- a/drivers/acpi/acpica/tbutils.c
-+++ b/drivers/acpi/acpica/tbutils.c
-@@ -328,7 +328,7 @@ acpi_tb_parse_root_table(acpi_physical_address rsdp_address)
- 
- 		status = acpi_tb_install_standard_table(address,
- 							ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL,
--							FALSE, TRUE,
-+							NULL, FALSE, TRUE,
- 							&table_index);
- 
- 		if (ACPI_SUCCESS(status) &&
-diff --git a/drivers/acpi/acpica/tbxfload.c b/drivers/acpi/acpica/tbxfload.c
-index 38623049b962..87356d9ad613 100644
---- a/drivers/acpi/acpica/tbxfload.c
-+++ b/drivers/acpi/acpica/tbxfload.c
-@@ -227,9 +227,7 @@ acpi_status acpi_tb_load_namespace(void)
-  *
-  * FUNCTION:    acpi_install_table
-  *
-- * PARAMETERS:  address             - Address of the ACPI table to be installed.
-- *              physical            - Whether the address is a physical table
-- *                                    address or not
-+ * PARAMETERS:  table               - Pointer to the ACPI table to be installed.
-  *
-  * RETURN:      Status
-  *
-@@ -240,28 +238,54 @@ acpi_status acpi_tb_load_namespace(void)
-  ******************************************************************************/
- 
- acpi_status ACPI_INIT_FUNCTION
--acpi_install_table(acpi_physical_address address, u8 physical)
-+acpi_install_table(struct acpi_table_header *table)
- {
- 	acpi_status status;
--	u8 flags;
- 	u32 table_index;
- 
- 	ACPI_FUNCTION_TRACE(acpi_install_table);
- 
--	if (physical) {
--		flags = ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL;
--	} else {
--		flags = ACPI_TABLE_ORIGIN_EXTERNAL_VIRTUAL;
--	}
--
--	status = acpi_tb_install_standard_table(address, flags,
--						FALSE, FALSE, &table_index);
-+	status = acpi_tb_install_standard_table(ACPI_PTR_TO_PHYSADDR(table),
-+						ACPI_TABLE_ORIGIN_EXTERNAL_VIRTUAL,
-+						table, FALSE, FALSE,
-+						&table_index);
- 
- 	return_ACPI_STATUS(status);
- }
- 
- ACPI_EXPORT_SYMBOL_INIT(acpi_install_table)
- 
-+/*******************************************************************************
-+ *
-+ * FUNCTION:    acpi_install_physical_table
-+ *
-+ * PARAMETERS:  address             - Address of the ACPI table to be installed.
-+ *
-+ * RETURN:      Status
-+ *
-+ * DESCRIPTION: Dynamically install an ACPI table.
-+ *              Note: This function should only be invoked after
-+ *                    acpi_initialize_tables() and before acpi_load_tables().
-+ *
-+ ******************************************************************************/
-+acpi_status ACPI_INIT_FUNCTION
-+acpi_install_physical_table(acpi_physical_address address)
-+{
-+	acpi_status status;
-+	u32 table_index;
-+
-+	ACPI_FUNCTION_TRACE(acpi_install_physical_table);
-+
-+	status = acpi_tb_install_standard_table(address,
-+						ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL,
-+						NULL, FALSE, FALSE,
-+						&table_index);
-+
-+	return_ACPI_STATUS(status);
-+}
-+
-+ACPI_EXPORT_SYMBOL_INIT(acpi_install_physical_table)
-+
- /*******************************************************************************
-  *
-  * FUNCTION:    acpi_load_table
-@@ -298,7 +322,7 @@ acpi_status acpi_load_table(struct acpi_table_header *table, u32 *table_idx)
- 	ACPI_INFO(("Host-directed Dynamic ACPI Table Load:"));
- 	status = acpi_tb_install_and_load_table(ACPI_PTR_TO_PHYSADDR(table),
- 						ACPI_TABLE_ORIGIN_EXTERNAL_VIRTUAL,
--						FALSE, &table_index);
-+						table, FALSE, &table_index);
- 	if (table_idx) {
- 		*table_idx = table_index;
- 	}
-diff --git a/drivers/acpi/tables.c b/drivers/acpi/tables.c
-index 71419eb16e09..2fa8f611d0a7 100644
---- a/drivers/acpi/tables.c
-+++ b/drivers/acpi/tables.c
-@@ -723,7 +723,7 @@ static void __init acpi_table_initrd_scan(void)
- 		/*
- 		 * Mark the table to avoid being used in
- 		 * acpi_table_initrd_override(). Though this is not possible
--		 * because override is disabled in acpi_install_table().
-+		 * because override is disabled in acpi_install_physical_table().
- 		 */
- 		if (test_and_set_bit(table_index, acpi_initrd_installed)) {
- 			acpi_os_unmap_memory(table, ACPI_HEADER_SIZE);
-@@ -734,7 +734,7 @@ static void __init acpi_table_initrd_scan(void)
- 			table->signature, table->oem_id,
- 			table->oem_table_id);
- 		acpi_os_unmap_memory(table, ACPI_HEADER_SIZE);
--		acpi_install_table(acpi_tables_addr + table_offset, TRUE);
-+		acpi_install_physical_table(acpi_tables_addr + table_offset);
- next_table:
- 		table_offset += table_length;
- 		table_index++;
-diff --git a/include/acpi/acpixf.h b/include/acpi/acpixf.h
-index 73ba13914321..987bb0aa042e 100644
---- a/include/acpi/acpixf.h
-+++ b/include/acpi/acpixf.h
-@@ -454,9 +454,11 @@ ACPI_EXTERNAL_RETURN_STATUS(acpi_status
-  * ACPI table load/unload interfaces
-  */
- ACPI_EXTERNAL_RETURN_STATUS(acpi_status ACPI_INIT_FUNCTION
--			    acpi_install_table(acpi_physical_address address,
--					       u8 physical))
-+			    acpi_install_table(struct acpi_table_header *table))
- 
-+ACPI_EXTERNAL_RETURN_STATUS(acpi_status ACPI_INIT_FUNCTION
-+			    acpi_install_physical_table(acpi_physical_address
-+							address))
- ACPI_EXTERNAL_RETURN_STATUS(acpi_status
- 			    acpi_load_table(struct acpi_table_header *table,
- 					    u32 *table_idx))
--- 
-2.26.2
+Can you give empirical values in your case so that we understand better
+the problem that you are trying to solve and how you solve it?
+
+Also, I don't know if the NV-DDR logic applies to SDR EDO modes, but if
+it works and if Han acknowledges it, it's fine for me.
+
+> [1] https://lore.kernel.org/r/20210702065350.209646-5-ebiggers@kernel.org
+> [2] http://www.onfi.org/-/media/client/onfi/specs/onfi_3_0_gold.pdf?la=en
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+
+You need Michael's Signed-off-by.
+
+> 
+> ---
+> 
+>  drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c | 70 +++++++++++++++++-----
+>  1 file changed, 54 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+> index 0517b81bb24c..3d37cd49abd5 100644
+> --- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+> +++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+> @@ -570,6 +570,27 @@ static int bch_set_geometry(struct gpmi_nand_data *this)
+>  	return ret;
+>  }
+>  
+> +struct edo_mode {
+> +	u32 tRC_min;
+> +	long clk_rate;
+> +	u8 wrn_dly_sel;
+> +};
+> +
+> +static const struct edo_mode edo_modes[] = {
+> +	{.tRC_min = 30000, .clk_rate = 22000000,
+
+Do you really need to provide a tRC_min here? It is already part of the
+nand_timings structure.
+
+> +	 .wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_4_TO_8NS},
+> +	{.tRC_min = 30000, .clk_rate = 22000000,
+> +	 .wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_4_TO_8NS},
+> +	{.tRC_min = 30000, .clk_rate = 22000000,
+> +	 .wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_4_TO_8NS},
+> +	{.tRC_min = 30000, .clk_rate = 22000000,
+
+Not sure to get the difference between these three first modes.
+
+> +	 .wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_4_TO_8NS},
+> +	{.tRC_min = 25000, .clk_rate = 80000000,
+> +	 .wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_NO_DELAY},
+> +	{.tRC_min = 20000, .clk_rate = 100000000,
+> +	 .wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_NO_DELAY},
+
+I am also tempted to say that I don't really understand what this is
+all about, maybe an explanation would be good in a comment.
+> +};
+> +
+>  /*
+>   * <1> Firstly, we should know what's the GPMI-clock means.
+>   *     The GPMI-clock is the internal clock in the gpmi nand controller.
+> @@ -644,8 +665,8 @@ static int bch_set_geometry(struct gpmi_nand_data *this)
+>   *         RDN_DELAY = -----------------------     {3}
+>   *                           RP
+>   */
+> -static void gpmi_nfc_compute_timings(struct gpmi_nand_data *this,
+> -				     const struct nand_sdr_timings *sdr)
+> +static int gpmi_nfc_compute_timings(struct gpmi_nand_data *this,
+> +				    const struct nand_sdr_timings *sdr)
+>  {
+>  	struct gpmi_nfc_hardware_timing *hw = &this->hw;
+>  	struct resources *r = &this->resources;
+> @@ -657,22 +678,35 @@ static void gpmi_nfc_compute_timings(struct gpmi_nand_data *this,
+>  	int sample_delay_ps, sample_delay_factor;
+>  	u16 busy_timeout_cycles;
+>  	u8 wrn_dly_sel;
+> +	long clk_rate;
+> +	int i, emode = -1;
+>  
+> -	if (sdr->tRC_min >= 30000) {
+> -		/* ONFI non-EDO modes [0-3] */
+> -		hw->clk_rate = 22000000;
+> -		wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_4_TO_8NS;
+> -	} else if (sdr->tRC_min >= 25000) {
+> -		/* ONFI EDO mode 4 */
+> -		hw->clk_rate = 80000000;
+> -		wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_NO_DELAY;
+> -	} else {
+> -		/* ONFI EDO mode 5 */
+> -		hw->clk_rate = 100000000;
+> -		wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_NO_DELAY;
+
+I would rather prefer a preparation patch which changes nothing in the
+behavior, but prepares the following change where you actually do
+something different so that we don't mi the wrn_dly_sel change with the
+clock rate approximation.
+
+Also, please consider using the ONFI modes now provided in the timings
+structure if it helps.
+
+> +	/* Search the required EDO mode */
+> +	for (i = 0; i < ARRAY_SIZE(edo_modes); i++) {
+> +		if (sdr->tRC_min >= edo_modes[i].tRC_min) {
+> +			emode = i;
+> +			break;
+> +		}
+> +	}
+> +
+> +	if (emode < 0) {
+> +		dev_err(this->dev, "tRC_min %d not supported\n", sdr->tRC_min);
+> +		return -ENOTSUPP;
+> +	}
+> +
+> +	clk_rate = clk_round_rate(r->clock[0], edo_modes[emode].clk_rate);
+> +	if (emode > 0 && !(clk_rate <= edo_modes[emode].clk_rate &&
+> +			   clk_rate > edo_modes[emode - 1].clk_rate)) {
+> +		dev_err(this->dev,
+> +			"edo mode %d clock setting: expected %ld, got %ld\n",
+> +			emode, edo_modes[emode].clk_rate, clk_rate);
+> +		return -ENOTSUPP;
+>  	}
+>  
+> -	hw->clk_rate = clk_round_rate(r->clock[0], hw->clk_rate);
+> +	dev_dbg(this->dev, "edo mode %d @ %ld Hz\n", emode, clk_rate);
+> +
+> +	hw->clk_rate = clk_rate;
+> +	wrn_dly_sel = edo_modes[emode].wrn_dly_sel;
+>  
+>  	/* SDR core timings are given in picoseconds */
+>  	period_ps = div_u64((u64)NSEC_PER_SEC * 1000, hw->clk_rate);
+> @@ -714,6 +748,7 @@ static void gpmi_nfc_compute_timings(struct gpmi_nand_data *this,
+>  		hw->ctrl1n |= BF_GPMI_CTRL1_RDN_DELAY(sample_delay_factor) |
+>  			      BM_GPMI_CTRL1_DLL_ENABLE |
+>  			      (use_half_period ? BM_GPMI_CTRL1_HALF_PERIOD : 0);
+
+Space
+
+> +	return 0;
+>  }
+>  
+>  static int gpmi_nfc_apply_timings(struct gpmi_nand_data *this)
+> @@ -769,6 +804,7 @@ static int gpmi_setup_interface(struct nand_chip *chip, int chipnr,
+>  {
+>  	struct gpmi_nand_data *this = nand_get_controller_data(chip);
+>  	const struct nand_sdr_timings *sdr;
+> +	int ret;
+>  
+>  	/* Retrieve required NAND timings */
+>  	sdr = nand_get_sdr_timings(conf);
+> @@ -784,7 +820,9 @@ static int gpmi_setup_interface(struct nand_chip *chip, int chipnr,
+>  		return 0;
+>  
+>  	/* Do the actual derivation of the controller timings */
+> -	gpmi_nfc_compute_timings(this, sdr);
+> +	ret = gpmi_nfc_compute_timings(this, sdr);
+> +	if (ret)
+> +		return ret;
+>  
+>  	this->hw.must_apply_timings = true;
+>  
 
 
-
-
+Thanks,
+Miquèl

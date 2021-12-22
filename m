@@ -2,155 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5932247D598
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 18:07:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EACF347D59B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 18:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344210AbhLVRHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 12:07:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41708 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbhLVRHu (ORCPT
+        id S1344226AbhLVRKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 12:10:21 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45352 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230314AbhLVRKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 12:07:50 -0500
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E17C061574;
-        Wed, 22 Dec 2021 09:07:49 -0800 (PST)
-Received: by mail-oo1-xc34.google.com with SMTP id g11-20020a4a754b000000b002c679a02b18so1020179oof.3;
-        Wed, 22 Dec 2021 09:07:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=VOxC90hitMyTuXvblMg9yAHe4TtcUlIgp6x0D9OBaGI=;
-        b=ATOLoT/3SZPbvSAsD4ZN/H6utIrJvC89DPfkccE2uaB+35npNE+NdFElVbAJbemzNk
-         phSzpgLy9LcNMiSz8eMB4OXByGIOSI6Ch7oKOluZIT4Kl/A5w2s4XZYBdfOERD2nwM4T
-         lGebXhQYyNhiQxDr/Tut/jW1KgAdlDxjnikXkkQydrBe73lJQH6ZY7HtUbSyp0jXCs0e
-         q4ghKmkCwyypRfgZLo4A6TAISbJsxyEDYtL80Yux5LBAIEx0swfAJ4tPgt1sU5RJVjHH
-         PE9ldC15gyUIvUS0xPnXnEKCw3Vnpsb6uMVk66ExJ/PF0sssX4BpIZyCNtkv4bBQJ0yM
-         LG+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VOxC90hitMyTuXvblMg9yAHe4TtcUlIgp6x0D9OBaGI=;
-        b=WGOdGVynxs2Uedx+0u9TbVadQSclSB0yLC+dP4/F0AQ48+6h0TGJAUZ3AvnsRf+b19
-         FCOU2SHghL2hcPTbsDgY6gAl5u/zFLS7EIHOFFHFROGFpx63x6yQCmWxjA0r1ayanApi
-         WpUXXYVNJhUrdvuUYymkmiUF58dPVEE2oWw/ggMdBsT5ETRw3NH9C0urF47LKlPKmF+Y
-         QSSQMICxHcaOd3KZJlGD5t8RMTmGPITE6XU7DiHNugaVBsMPG1N23bWn+nhawtS2zYwD
-         K8jVPUiEVpPg7zU8Wk3h5uRXiIwyARw2it2YZFQVlp1DhuncSB+F1lrq4IrRyNGLpxHf
-         EO4g==
-X-Gm-Message-State: AOAM531HaW7aKlIXMxZ9RWTf69xU9tFbHHs6aaOHvm08Pq22ru23fNGg
-        Y3yFm0+O8bw3P6kzIXQKy7fqpdh9p30=
-X-Google-Smtp-Source: ABdhPJz3het8XefkHRa6MkEqx+gBbNhog3ICW4VxjtI0CHQeu7ghLPL5QX6Eht9ce9e2HgRraIMC3g==
-X-Received: by 2002:a4a:c695:: with SMTP id m21mr2433724ooq.58.1640192868513;
-        Wed, 22 Dec 2021 09:07:48 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v10sm466385oor.33.2021.12.22.09.07.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 09:07:47 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     cosmin.tanislav@analog.com, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211221215841.2641417-1-demonsingur@gmail.com>
- <20211221215841.2641417-4-demonsingur@gmail.com>
- <ff8b73b0-0c28-e1f3-d254-ea03fb594ffc@roeck-us.net>
- <03bf1d99-5411-daca-bc96-319e30b5e836@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v3 3/7] hwmon: (adt7x10) Use
- devm_hwmon_device_register_with_info
-Message-ID: <792f0265-4c4c-ce71-9a6a-a20d3ee61f41@roeck-us.net>
-Date:   Wed, 22 Dec 2021 09:07:45 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <03bf1d99-5411-daca-bc96-319e30b5e836@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Wed, 22 Dec 2021 12:10:20 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BMH7aYb015224;
+        Wed, 22 Dec 2021 17:10:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=nYaXQipwzETt4J2rtE2uBsqHuGhd71QhvpT8TF2KJoc=;
+ b=fViTgUrMjWUyyDemDf7e8hS1ZE/jfkMPYJLIuIf8fhbU8qS6VLHFUEIHBblAZFS8/tFb
+ Ul7q0TiD6x3KfvRxcjBhJWsh4MuV7oaVMgXowhOiPCVx8HHmES8Wi2EvFzg9V5E/GSCI
+ Id7BVE9kyIT2RocdexlEJVrCUrOAa3k4qbCoZdRfAu/u3EmFEjpIJUkYF4zOADofx886
+ DA4qxx0ddHuACGDX/StCWdfUHmBatMYgp8bn+TKpZSfOVTjVXMSvyYErIkJ+/F9HEQ3h
+ 5Yg+1AxHAngD/tjX7mF3TmY14FfA7ps/1US83qh6dwI/oiaHAZcdWbZgHVxi3hY3mjhY SQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d3eu0n14y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Dec 2021 17:10:12 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BMH9k3t022820;
+        Wed, 22 Dec 2021 17:10:12 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d3eu0n14a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Dec 2021 17:10:11 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BMH6w0Y031802;
+        Wed, 22 Dec 2021 17:10:10 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3d16wk0r4n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Dec 2021 17:10:10 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BMHA7Uj38011198
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Dec 2021 17:10:07 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5774F4204C;
+        Wed, 22 Dec 2021 17:10:07 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8D01342041;
+        Wed, 22 Dec 2021 17:10:06 +0000 (GMT)
+Received: from sig-9-65-92-34.ibm.com (unknown [9.65.92.34])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 22 Dec 2021 17:10:06 +0000 (GMT)
+Message-ID: <be59880bb5be18207eeb91b920f43d05fa3a1dd2.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: Fix undefined arch_ima_get_secureboot() and co
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Takashi Iwai <tiwai@suse.de>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Joey Lee <jlee@suse.com>
+Date:   Wed, 22 Dec 2021 12:10:05 -0500
+In-Reply-To: <20211213161145.3447-1-tiwai@suse.de>
+References: <20211213161145.3447-1-tiwai@suse.de>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: v1bcwv8vK7ETddMYAENsVSGHDYsb3GsG
+X-Proofpoint-ORIG-GUID: XVnzW0x1qWZXJpje5DQvVLpO_ZFcVFC7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-22_07,2021-12-22_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 lowpriorityscore=0 clxscore=1015 mlxscore=0 bulkscore=0
+ malwarescore=0 impostorscore=0 phishscore=0 mlxlogscore=963 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112220096
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/21 10:35 PM, Cosmin Tanislav wrote:
+Hi Takashi,
+
+On Mon, 2021-12-13 at 17:11 +0100, Takashi Iwai wrote:
+> Currently arch_ima_get_secureboot() and arch_get_ima_policy() are
+> defined only when CONFIG_IMA is set, and this makes the code calling
+> those functions without CONFIG_IMA failing.  Although there is no such
+> in-tree users, but the out-of-tree users already hit it.
 > 
+> Move the declaration and the dummy definition of those functions
+> outside ifdef-CONFIG_IMA block for fixing the undefined symbols.
 > 
-> On 12/22/21 05:08, Guenter Roeck wrote:
->> On 12/21/21 1:58 PM, Cosmin Tanislav wrote:
->>> From: Cosmin Tanislav <cosmin.tanislav@analog.com>
->>>
->> [ ... ]
->>
->>> +
->>> +static int adt7x10_read(struct device *dev, enum hwmon_sensor_types type,
->>> +            u32 attr, int channel, long *val)
->>> +{
->>> +    struct adt7x10_data *data = dev_get_drvdata(dev);
->>> +
->>> +    switch (attr) {
->>> +    case hwmon_temp_input:
->>> +        return adt7x10_temp_read(data, 0, val);
->>> +    case hwmon_temp_max:
->>> +        return adt7x10_temp_read(data, 1, val);
->>> +    case hwmon_temp_min:
->>> +        return adt7x10_temp_read(data, 2, val);
->>> +    case hwmon_temp_crit:
->>> +        return adt7x10_temp_read(data, 3, val);
->>
->> Ok, so you want to keep using the internal "index" to indicate the
->> array position in the register cache. I _did_ specifically ask
->> to use defines for index values in this case. You did not explain
->> why you ignored this. So now you'll have to explain 1) why you
->> ignored my request and 2) why you want to keep the code as is.
->>
->> And, _please_, add a To: recipient to your patches. I am getting
->> tired having to handle the fallout.
->>
->> Guenter
-> 
-> 
-> First of all, maybe you should compare the time these patches were
-> sent to the time that your reply that "I ignored" was sent.
-> I sent the patches before you "specifically asked me to use defines for
-> index values in this case".
-> 
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
 
-Maybe it would be beneficial to wait a few minutes to give me time
-to review all patches of a series before sending a new series.
+Joey's patch has a dependency on your patch, as seen by the kernel test
+robot report.  I'll drop the one line referencing in-tree/out-of-tree
+sentence in the patch description, before picking it up as well.
 
-> Second of all, this specific place is a 1:1 conversion from the original code. If I change to using defines here, I'll have to change to using
-> defines everywhere else in the code, which doesn't seem to be the scope
-> of this exact patch. Of course it looks bad, but it looked equally bad
+thanks,
 
-As suggested, you could have dropped the use of 'index' entirely.
-Its use was a side effect of the old hwmon API, where extra fields
-in sensor attributes were used to separate attributes. Using the
-with_info API, that is no longer necessary. You chose to keep that
-part of the code, which is fine, but then I am also asking for
-changing the hard coded constants to make it easier to understand
-the code going forward. This is especially necessary because "index"
-now has two meanings: First, it is the sensor channel, as passed
-from the hwmon subsystem and, second, it is the index into
-the register cache. Those different use cases now need to be
-clearly separated, and the best way to do that is to use an enum
-or define to indicate the index into the register cache.
+Mimi
 
-... and I specifically asked for that because I got confused
-about it while reviewing the code. People looking at the code
-at a later time should not have that problem.
-
-> before. I can introduce more following patches that fix some obvious
-> non-functional problems with the driver.
-> 
-> Third of all, why are you so tense? You're making both of our lives
-> harder. I understand being an upstream maintainer is hard work, but
-> everyone's job is hard work. It's not like I wanted to work on
-> refactoring ADT7x10, I just had to so I can later introduce a
-> patch that implements debugfs reg access...
-
-I tend to get more tense if people give me extra work, and do so
-repeatedly (like sending follow-up patch series tagged as v1 and
-with no change log). I am human, after all, Sorry for that.
-
-Guenter

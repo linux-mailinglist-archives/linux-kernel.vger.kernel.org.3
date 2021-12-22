@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B0447D851
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 21:29:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4024E47D857
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 21:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232446AbhLVU3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 15:29:10 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45284 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbhLVU3K (ORCPT
+        id S232830AbhLVUiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 15:38:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33068 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229548AbhLVUiu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 15:29:10 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF889B81E5C
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 20:29:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 751DDC36AE5;
-        Wed, 22 Dec 2021 20:29:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640204947;
-        bh=mdsgTgCNsoVWkpZibGPdNeNBdI2GgMcy7hfNkUO8a2I=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=PemRV1h72uNhY8UlIFJndAr+bicmSs6fQiASAB8qzx3ZWVLWQ7N4mhuWVAZ3gE2Ju
-         +PNSJncMuStsyuR0imMbGldqo315XTe1Iii8QhTTVjHB7obqhjNbC+esLtsmMZ2HL7
-         wV1BLsrN4DO8mgtudAijTV4D9Jfhqs+kd56iE4Qx7J8TeWJL++2xuIsmQGemGZ/Vnp
-         vTvx/QyFBC5x3bTCblhBtNgVSOdLAocY3kZvbyBofUEdi36lEUzithrnGXKFM8rB1D
-         5seX7uBHRdps5/nYDZyFwDmAkxadw84REoa1AljDamwck4b+7oPNjffONQEZnEWVBo
-         gdQ2N7We7rcLQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 47112FE5620;
-        Wed, 22 Dec 2021 20:29:07 +0000 (UTC)
-Subject: Re: [GIT PULL] memblock: fix memblock_phys_alloc() section mismatch error
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YcNltr7TxsAe+fzP@kernel.org>
-References: <YcNltr7TxsAe+fzP@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YcNltr7TxsAe+fzP@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock fixes-2021-12-22
-X-PR-Tracked-Commit-Id: d7f55471db2719629f773c2d6b5742a69595bfd3
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: bc491fb12513e79702c6f936c838f792b5389129
-Message-Id: <164020494723.30170.16693591033297777984.pr-tracker-bot@kernel.org>
-Date:   Wed, 22 Dec 2021 20:29:07 +0000
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jackie Liu <liu.yun@linux.dev>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
+        Wed, 22 Dec 2021 15:38:50 -0500
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E14C061574;
+        Wed, 22 Dec 2021 12:38:50 -0800 (PST)
+Received: by mail-vk1-xa35.google.com with SMTP id j10so1989516vkk.12;
+        Wed, 22 Dec 2021 12:38:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m0KHFHynG/Cv5zTmabkUB5fH/sivVPFmBLyvsRt42No=;
+        b=Ybjbj0UO1bMSxVm24s+VgWqgDQVInB1dFf7a72G3NQHBi25DaAocVC2JDtmy8lX1VZ
+         CNzW22BLdboUkKJk3oIWctUtHYs4zCdzf4mxBRIi1KSpBwypt7ojpL/aFQCve5wFT2u4
+         2iWjQRZpa1eZndK3lyMDvHIR/KKO9NfAL9k1clSdEySqA9S7T9ADRKZ2mrPUqEMBnQC3
+         0aoBPMp32YhNhsYXyQwdeO81D40noGhm192M3etGVF6VU0tqE0OdYkdNyzlo9xKSdNJo
+         x6wCL7SWtafoBjBGTFX9YgD5M2VXBIUC0Ra8FeKgWbMQV7dZGAtuLaSFK4NalLBMXuvL
+         dNjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m0KHFHynG/Cv5zTmabkUB5fH/sivVPFmBLyvsRt42No=;
+        b=w5HTJyNX1idKBUjPw1aSo3rjdcylE18gmq52PvEk0Br7/joUfQfnqXSmAhm85+59hS
+         dvOdbjG8ZyGNKf+TdHBdi4T/35vVHnPx0WoDxEQMACFQLtOOmfzqkc9jc+uF3EXSge3l
+         mYte2dtsCFx1/39mDdEWvfiOXusvKKOvz+LeGLLezUMzApbmAh3IoqmxKF+q8rzKfg6D
+         TtM2NncuUEm8dRfb5wN/S8En8OW5ZIMmArcUsO7gdB2tPEgIHxX7EW+kF3kXSVpt8Woq
+         Npf0q5EycjhJszIdUYsWXTZ/PpvzofVaBLzudxTg7JYJ/6P5EGjqjU58XYtTf0lRJaEb
+         BF9g==
+X-Gm-Message-State: AOAM530OMt8ir50mWJmkdaehAigS5MqVjzGvhjI9a9gFr19YlAumalm6
+        Vm3Pd7BW7eMaTj/3g0TLjOihP5q3Fn39YKn9+6g=
+X-Google-Smtp-Source: ABdhPJyhRZ7yQ+kQtC7Eai0wKzixB4C3bCIj6QEUj7+m+Z8K3puQJOAO5xu+EJmR31kQtsDZBXp42BINhE0czYeEILc=
+X-Received: by 2002:a05:6122:912:: with SMTP id j18mr1710393vka.41.1640205529214;
+ Wed, 22 Dec 2021 12:38:49 -0800 (PST)
+MIME-Version: 1.0
+References: <20211222163256.66270-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20211222163256.66270-1-andriy.shevchenko@linux.intel.com>
+From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Date:   Wed, 22 Dec 2021 23:38:44 +0300
+Message-ID: <CAHNKnsS_1fQh1UL-VX0kXfDp_umMtfSnDwJXWxiBXFdyrK1pYA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] wwan: Replace kernel.h with the necessary inclusions
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Johannes Berg <johannes@sipsolutions.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 22 Dec 2021 19:51:50 +0200:
+On Wed, Dec 22, 2021 at 7:32 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> When kernel.h is used in the headers it adds a lot into dependency hell,
+> especially when there are circular dependencies are involved.
+>
+> Replace kernel.h inclusion with the list of what is really being used.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock fixes-2021-12-22
+Subject and description do not cover cleanup of includes besides the
+kernel.h. But that does not seem like a big issue, so:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/bc491fb12513e79702c6f936c838f792b5389129
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Reviewed-by: Sergey Ryazanov <ryazanov.s.a@gmail.com>

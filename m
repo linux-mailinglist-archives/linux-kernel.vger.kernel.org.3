@@ -2,105 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A43747D3E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4814047D3E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:46:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343555AbhLVOqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 09:46:14 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35638 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343540AbhLVOqM (ORCPT
+        id S1343567AbhLVOq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 09:46:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343545AbhLVOq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:46:12 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB1BC61A56;
-        Wed, 22 Dec 2021 14:46:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B570C36AE5;
-        Wed, 22 Dec 2021 14:46:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640184371;
-        bh=phXrYZ26uqRrRtL9psmNpU8/i8O7+uPas2TndxpCdWM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=syWCh5I+BWgkLbeSip6eVBzW5xIc5oQWqcPbwwtFWkjBbrMbojgmN+UKwvr3JmuiR
-         Ec84zGxyPFNT8vWV8hVZxVfF5XV0zF1KMGt/CddpkbwLIeP0vD53UYP7J0R9Y0zzqy
-         oI9rS3NZPtVeJZYbGd8k9pzvWnzynxaDbhNTXC/usUHp6/ukv3sHq067iOH5ePz6AB
-         trn3JhMWFmEfntsv0E3zejTIqDyZBpSeXy8qYfBefzVJxGhdV0aR3b6xDRFxYZvXjL
-         4VX5Fal3iUf5muKYstZxH/BuXd/koM6k742hU0w5KE713O04DixAyuyLZXxHvjGFC8
-         wKCTmoSEJHeZw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1n02sV-0002Bx-Sa; Wed, 22 Dec 2021 15:46:03 +0100
-Date:   Wed, 22 Dec 2021 15:46:03 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Marc Ferland <ferlandm@amotus.ca>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] gnss: usb: add support for Sierra Wireless XM1210
-Message-ID: <YcM6KwkBo6lvdkZQ@hovoldconsulting.com>
-References: <20211220111901.23206-1-johan@kernel.org>
- <20211220111901.23206-3-johan@kernel.org>
- <CAMRMzCAe1B66vyhXRsiew2=NDM+FbzFU8O9wXsrod64KaYrZ1Q@mail.gmail.com>
+        Wed, 22 Dec 2021 09:46:28 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB86EC061574;
+        Wed, 22 Dec 2021 06:46:27 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id o6so9659937edc.4;
+        Wed, 22 Dec 2021 06:46:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5iP0cwT3bhm1wv/SCJZNX3eXAec5s+GXcjileA9F27Q=;
+        b=j+iLD08U4k29OZOTR400HLmz2obEtO7D3ChDq2ufdQRwoSee564zTXYkax3kXedW5x
+         iYSAkPWnWh0HmsGCYxgqB6v6rjq1J6RfbA6vdp4LqBhOQgTHCW8SJqXMQZoJdZnduOpd
+         +biLV62u++nkpKm3GHt3Wazm+d406xWf+r6xfrPIs3XFT6PdOANhi9NTNXW2pBEPseDs
+         O8fmCGSqVVXdUxHi/8Yd1osnSYTPPotOKVL37Mpw78cL+ilGurCLByJKVrMSZBrLHbP1
+         yF62XgDREqMBjMkc8HOrWcV5QL4YTGRgWxUVtLVW7P80eWy5Am70dRmng4BwwqDAhZJW
+         LUUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5iP0cwT3bhm1wv/SCJZNX3eXAec5s+GXcjileA9F27Q=;
+        b=5r7nDF4uv+8CtZmEedbF3kZoM1/QCp0xFxDPgYf+WqUQtHOzq5/L9+msdIk5TlIQfp
+         2ChvsaJZxFm5+v+bAHCo733S1e6IhP9YrOX12fitG75C1JZWKxQFuKKaGU3YXkT4s63M
+         yiU2xUL/BjEPLFYc4CsXNOHrWGQ36K2TN3jY9RpnhdW1hrvzaS0Cp6ZP1RNkVRdWmSPh
+         td7HYKx7I6pZ/aFvx0aLSaU4mRRXxT1222/Y1muDyYNHOfW73QxYeyWhXVQnRYo8no6N
+         G/MG+0lqj7+KhNMBg4YxWkZ8gIXYVP2zf+RXnRdRIjqn98AOQA8K5pboiPeuOL7RNNCm
+         fkYw==
+X-Gm-Message-State: AOAM531JFApLXFIhGenfEx7B93itg0sMz3qkrZyDqN4//BiPHd4mb/Kh
+        L1o/Yppa53r1seUPimEB62k=
+X-Google-Smtp-Source: ABdhPJyI+1PK2apwf17miH9QRLuhsilpq9fl9aPP5UQVakVob9Glo6g/RHpSyvLUZIsAbgPzbGdAww==
+X-Received: by 2002:a17:906:1d58:: with SMTP id o24mr2586115ejh.121.1640184386450;
+        Wed, 22 Dec 2021 06:46:26 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312::4fa? ([2001:b07:6468:f312::4fa])
+        by smtp.googlemail.com with ESMTPSA id l16sm864404edb.3.2021.12.22.06.46.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 06:46:26 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <b651b14f-9ad2-811d-0d16-21d23a65eba4@redhat.com>
+Date:   Wed, 22 Dec 2021 15:46:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMRMzCAe1B66vyhXRsiew2=NDM+FbzFU8O9wXsrod64KaYrZ1Q@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [RFC PATCH 00/10] KVM: selftests: Add support for test-selectable
+ ucall implementations
+Content-Language: en-US
+To:     Michael Roth <michael.roth@amd.com>,
+        linux-kselftest@vger.kernel.org
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+        Nathan Tempelman <natet@google.com>,
+        Marc Orr <marcorr@google.com>,
+        Steve Rutherford <srutherford@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Ricardo Koller <ricarkol@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        kvmarm@lists.cs.columbia.edu
+References: <20211210164620.11636-1-michael.roth@amd.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211210164620.11636-1-michael.roth@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 02:04:49PM -0500, Marc Ferland wrote:
-> On Mon, Dec 20, 2021 at 6:19 AM Johan Hovold <johan@kernel.org> wrote:
-> >
-> > Add support for the USB interface of the Sierra Wireless XM1210
-> > receiver.
-> >
-> > Note that the device only supports NMEA.
+On 12/10/21 17:46, Michael Roth wrote:
+> These patches are based on kvm/next, and are also available at:
+> 
+>    https://github.com/mdroth/linux/commits/sev-selftests-ucall-rfc1
 
-> > Reported-by: Marc Ferland <ferlandm@amotus.ca>
-> > Link: https://lore.kernel.org/r/20211027200223.72701-1-ferlandm@amotus.ca
-> > Signed-off-by: Johan Hovold <johan@kernel.org>
-> > ---
-> >  drivers/gnss/usb.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/gnss/usb.c b/drivers/gnss/usb.c
-> > index 5c0251034def..792235a688ea 100644
-> > --- a/drivers/gnss/usb.c
-> > +++ b/drivers/gnss/usb.c
-> > @@ -17,6 +17,7 @@
-> >  #define GNSS_USB_WRITE_TIMEOUT 1000
-> >
-> >  static const struct usb_device_id gnss_usb_id_table[] = {
-> > +       { USB_DEVICE(0x1199, 0xb000) },         /* Sierra Wireless XM1210 */
-> >         { }
-> >  };
-> >  MODULE_DEVICE_TABLE(usb, gnss_usb_id_table);
-> > --
-> > 2.32.0
-> >
-> Thank you Johan! Much appreciated!
-> 
-> With your patches applied on my platform (featuring the XM1210) , I get:
-> 
-> # lsmod | grep gnss
-> gnss_usb 16384 0 - Live 0xffffffffc011b000
-> gnss 16384 3 gnss_usb, Live 0xffffffffc0082000
-> 
-> # dmesg | grep gnss
-> gnss: GNSS driver registered with major 244
-> usbcore: registered new interface driver gnss-usb
-> 
-> # ls -l /dev/gnss0
-> crw-rw----    1 root     root      244,   0 Apr  8 08:39 /dev/gnss0
-> 
-> I also tested with gpsd and everything is working as expected, hence:
-> 
-> Tested-by: Marc Ferland <ferlandm@amotus.ca>
+Thanks, this is a nice implementation of the concept.  I'll check s390 
+before the next merge window, as I intend to merge this and the SEV 
+tests (which I have already confirmed to work; I haven't yet checked 
+SEV-ES because it's a bit harder for me to install new kernels on the 
+SEV-ES machine I have access to).
 
-Thanks for testing, Marc!
+Paolo
 
-I've applied this series now after adding your Tested-by tag to both
-patches.
+> == BACKGROUND ==
+> 
+> These patches are a prerequisite for adding selftest support for SEV guests
+> and possibly other confidential computing implementations in the future.
+> They were motivated by a suggestion Paolo made in response to the initial
+> SEV selftest RFC:
+> 
+>    https://lore.kernel.org/lkml/20211025035833.yqphcnf5u3lk4zgg@amd.com/T/#m959b56f9fb4ae6ab973f6ab50fe3ddfacd7c5617
+> 
+> Since the changes touch multiple archs and ended up creating a bit more churn
+> than expected, I thought it would be a good idea to carve this out into a
+> separate standalone series for reviewers who may be more interested in the
+> ucall changes than anything SEV-related.
+> 
+> To summarize, x86 relies on a ucall based on using PIO intructions to generate
+> an exit to userspace and provide the GVA of a dynamically-allocated ucall
+> struct that resides in guest memory and contains information about how to
+> handle/interpret the exit. This doesn't work for SEV guests for 3 main reasons:
+> 
+>    1) The guest memory is generally encrypted during run-time, so the guest
+>       needs to ensure the ucall struct is allocated in shared memory.
+>    2) The guest page table is also encrypted, so the address would need to be a
+>       GPA instead of a GVA.
+>    3) The guest vCPU register may also be encrypted in the case of
+>       SEV-ES/SEV-SNP, so the approach of examining vCPU register state has
+>       additional requirements such as requiring guest code to implement a #VC
+>       handler that can provide the appropriate registers via a vmgexit.
+> 
+> To address these issues, the SEV selftest RFC1 patchset introduced a set of new
+> SEV-specific interfaces that closely mirrored the functionality of
+> ucall()/get_ucall(), but relied on a pre-allocated/static ucall buffer in
+> shared guest memory so it that guest code could pass messages/state to the host
+> by simply writing to this pre-arranged shared memory region and then generating
+> an exit to userspace (via a halt instruction).
+> 
+> Paolo suggested instead implementing support for test/guest-specific ucall
+> implementations that could be used as an alternative to the default PIO-based
+> ucall implementations as-needed based on test/guest requirements, while still
+> allowing for tests to use a common set interfaces like ucall()/get_ucall().
+> 
+> == OVERVIEW ==
+> 
+> This series implements the above functionality by introducing a new ucall_ops
+> struct that can be used to register a particular ucall implementation as need,
+> then re-implements x86/arm64/s390x in terms of the ucall_ops.
+> 
+> But for the purposes of introducing a new ucall_ops implementation appropriate
+> for SEV, there are a couple issues that resulted in the need for some additional
+> ucall interfaces as well:
+> 
+>    a) ucall() doesn't take a pointer to the ucall struct it modifies, so to make
+>       it work in the case of an implementation that relies a pre-allocated ucall
+>       struct in shared guest memory some sort of global lookup functionality
+>       would be needed to locate the appropriate ucall struct for a particular
+>       VM/vcpu combination, and this would need to be made accessible for use by
+>       the guest as well. guests would then need some way of determining what
+>       VM/vcpu identifiers they need to use to do the lookup, which to do reliably
+>       would likely require seeding the guest with those identifiers in advance,
+>       which is possible, but much more easily achievable by simply adding a
+>       ucall() alternative that accepts a pointer to the ucall struct for that
+>       particular VM/vcpu.
+> 
+>    b) get_ucall() *does* take a pointer to a ucall struct, but currently zeroes
+>       it out and uses it to copy the guest's ucall struct into. It *could* be
+>       re-purposed to handle the case where the pointer is an actual pointer to
+>       the ucall struct in shared guest memory, but that could cause problems
+>       since callers would need some idea of what the underlying ucall
+>       implementation expects. Ideally the interfaces would be agnostic to the
+>       ucall implementation.
+> 
+> So to address those issues, this series also allows ucall implementations to
+> optionally be extended to support a set of 'shared' ops that are used in the
+> following manner:
+> 
+>    host:
+>      uc_gva = ucall_shared_alloc()
+>      setup_vm_args(vm, uc_gva)
+> 
+>    guest:
+>      ucall_shared(uc_gva, ...)
+> 
+>    host:
+>      uget_ucall_shared(uc_gva, ...)
+> 
+> and then implements a new ucall implementation, ucall_ops_halt, based around
+> these shared interfaces and halt instructions.
+> 
+> While this doesn't really meet the initial goal of re-using the existing
+> ucall interfaces as-is, the hope is that these *_shared interfaces are
+> general enough to be re-usable things other than SEV, or at least improve on
+> code readability over the initial SEV-specific interfaces.
+> 
+> Any review/comments are greatly appreciated!
+> 
+> ----------------------------------------------------------------
+> Michael Roth (10):
+>        kvm: selftests: move base kvm_util.h declarations to kvm_util_base.h
+>        kvm: selftests: move ucall declarations into ucall_common.h
+>        kvm: selftests: introduce ucall_ops for test/arch-specific ucall implementations
+>        kvm: arm64: selftests: use ucall_ops to define default ucall implementation
+>        (COMPILE-TESTED ONLY) kvm: s390: selftests: use ucall_ops to define default ucall implementation
+>        kvm: selftests: add ucall interfaces based around shared memory
+>        kvm: selftests: add ucall_shared ops for PIO
+>        kvm: selftests: introduce ucall implementation based on halt instructions
+>        kvm: selftests: add GUEST_SHARED_* macros for shared ucall implementations
+>        kvm: selftests: add ucall_test to test various ucall functionality
+> 
+>   tools/testing/selftests/kvm/.gitignore             |   1 +
+>   tools/testing/selftests/kvm/Makefile               |   5 +-
+>   .../testing/selftests/kvm/include/aarch64/ucall.h  |  18 +
+>   tools/testing/selftests/kvm/include/kvm_util.h     | 408 +--------------------
+>   .../testing/selftests/kvm/include/kvm_util_base.h  | 368 +++++++++++++++++++
+>   tools/testing/selftests/kvm/include/s390x/ucall.h  |  18 +
+>   tools/testing/selftests/kvm/include/ucall_common.h | 147 ++++++++
+>   tools/testing/selftests/kvm/include/x86_64/ucall.h |  19 +
+>   tools/testing/selftests/kvm/lib/aarch64/ucall.c    |  43 +--
+>   tools/testing/selftests/kvm/lib/s390x/ucall.c      |  45 +--
+>   tools/testing/selftests/kvm/lib/ucall_common.c     | 133 +++++++
+>   tools/testing/selftests/kvm/lib/x86_64/ucall.c     |  82 +++--
+>   tools/testing/selftests/kvm/ucall_test.c           | 182 +++++++++
+>   13 files changed, 982 insertions(+), 487 deletions(-)
+>   create mode 100644 tools/testing/selftests/kvm/include/aarch64/ucall.h
+>   create mode 100644 tools/testing/selftests/kvm/include/kvm_util_base.h
+>   create mode 100644 tools/testing/selftests/kvm/include/s390x/ucall.h
+>   create mode 100644 tools/testing/selftests/kvm/include/ucall_common.h
+>   create mode 100644 tools/testing/selftests/kvm/include/x86_64/ucall.h
+>   create mode 100644 tools/testing/selftests/kvm/lib/ucall_common.c
+>   create mode 100644 tools/testing/selftests/kvm/ucall_test.c
+> 
+> 
 
-Johan

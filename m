@@ -2,178 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FAF947D230
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:42:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D60A47D23F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:43:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245112AbhLVMmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 07:42:13 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:48970 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240807AbhLVMlo (ORCPT
+        id S240695AbhLVMm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 07:42:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37820 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240781AbhLVMmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:41:44 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 88D6B1F37E;
-        Wed, 22 Dec 2021 12:41:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1640176902; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MDzNf6Tqq2XWEQtFu0PI74ENcua2VcQ7pyxlNlLdJkY=;
-        b=dNVetoaTuf36VLVTDAiYoVF2mRRUnaXUChfvN2zUsJwjE7+1Yzw5f/3EG/4ztuLS3T/Rt7
-        zWtGwVwBu1mSBjDYrPok7QleF6NX7HeVkDfmHzt3hslMcY0INbCDQwqzB+BOlFqTY0bRwP
-        NLQzrEEK8MKBAvIKjFim8z5HgNcom1M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1640176902;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MDzNf6Tqq2XWEQtFu0PI74ENcua2VcQ7pyxlNlLdJkY=;
-        b=+sk/jtIu9Qc4QDt+yXf0eB+Y7Wg8hMOShKI1korq4z4P3dtgC/ihXl4Kora7AQihQgpd5A
-        aP/ZKwLwF2IlwiCg==
-Received: from quack2.suse.cz (unknown [10.163.28.18])
-        by relay2.suse.de (Postfix) with ESMTP id 309A6A3B8C;
-        Wed, 22 Dec 2021 12:41:42 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id F02DD1F2CEF; Wed, 22 Dec 2021 13:41:41 +0100 (CET)
-Date:   Wed, 22 Dec 2021 13:41:41 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Nadav Amit <namit@vmware.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-Message-ID: <20211222124141.GA685@quack2.suse.cz>
-References: <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
- <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
- <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
- <20211221010312.GC1432915@nvidia.com>
- <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
- <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
- <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
- <20211221190706.GG1432915@nvidia.com>
- <3e0868e6-c714-1bf8-163f-389989bf5189@redhat.com>
- <dfe1c8d5-6fac-9040-0272-6d77bafa6a16@redhat.com>
+        Wed, 22 Dec 2021 07:42:22 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A68C06179E;
+        Wed, 22 Dec 2021 04:42:21 -0800 (PST)
+Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1n00wj-0001eL-1H; Wed, 22 Dec 2021 13:42:17 +0100
+Message-ID: <99452126-661e-9a0c-6b51-d345ed0f76ee@leemhuis.info>
+Date:   Wed, 22 Dec 2021 13:42:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dfe1c8d5-6fac-9040-0272-6d77bafa6a16@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [REGRESSION] 5-10% increase in IO latencies with nohz balance
+ patch
+Content-Language: en-BS
+To:     Josef Bacik <josef@toxicpanda.com>,
+        Valentin Schneider <valentin.schneider@arm.com>
+Cc:     peterz@infradead.org, vincent.guittot@linaro.org,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, guro@fb.com, clm@fb.com
+References: <YaUH5GFFoLiS4/3/@localhost.localdomain>
+ <87ee6yc00j.mognet@arm.com> <YaUYsUHSKI5P2ulk@localhost.localdomain>
+ <87bl22byq2.mognet@arm.com> <YaUuyN3h07xlEx8j@localhost.localdomain>
+ <878rx6bia5.mognet@arm.com> <87wnklaoa8.mognet@arm.com>
+ <YappSLDS2EvRJmr9@localhost.localdomain> <87lf0y9i8x.mognet@arm.com>
+ <87v8zx8zia.mognet@arm.com> <YbJWBGaGAW/MenOn@localhost.localdomain>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <YbJWBGaGAW/MenOn@localhost.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1640176941;5ea55b55;
+X-HE-SMSGID: 1n00wj-0001eL-1H
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 22-12-21 10:58:36, David Hildenbrand wrote:
-> On 22.12.21 09:51, David Hildenbrand wrote:
-> > On 21.12.21 20:07, Jason Gunthorpe wrote:
-> >> On Tue, Dec 21, 2021 at 06:40:30PM +0100, David Hildenbrand wrote:
-> >>
-> >>> 2) is certainly the cherry on top. But it just means that R/O pins don't
-> >>> have to be the weird kid. And yes, achieving 2) would require
-> >>> FAULT_FLAG_EXCLUSIVE / FAULT_FLAG_UNSHARED, but it would really 99% do
-> >>> what existing COW logic does, just bypass the "map writable" and
-> >>> "trigger write fault" semantics.
-> >>
-> >> I still don't agree with this - when you come to patches can you have
-> >> this work at the end and under a good cover letter? Maybe it will make
-> >> more sense then.
-> > 
-> > Yes. But really, I think it's the logical consequence of what Linus said
-> > [1]:
-> > 
-> >   "And then all GUP-fast would need to do is to refuse to look up a page
-> >    that isn't exclusive to that VM. We already have the situation that
-> >    GUP-fast can fail for non-writable pages etc, so it's just another
-> >    test."
-> > 
-> > We must not FOLL_PIN a page that is not exclusive (not only on gup-fast,
-> > but really, on any gup). If we special case R/O FOLL_PIN, we cannot
-> > enable the sanity check on unpin as suggested by Linus [2]:
-> > 
-> >   "If we only set the exclusive VM bit on pages that get mapped into
-> >    user space, and we guarantee that GUP only looks up such pages, then
-> >    we can also add a debug test to the "unpin" case that the bit is
-> >    still set."
-> > 
-> > There are really only two feasible options I see when we want to take a
-> > R/O FOLL_PIN on a !PageAnonExclusive() anon page
-> > 
-> > (1) Fail the pinning completely. This implies that we'll have to fail
-> >     O_DIRECT once converted to FOLL_PIN.
-> > (2) Request to mark the page PageAnonExclusive() via a
-> >     FAULT_FLAG_UNSHARE and let it succeed.
-> > 
-> > 
-> > Anything else would require additional accounting that we already
-> > discussed in the past is hard -- for example, to differentiate R/O from
-> > R/W pins requiring two pin counters.
-> > 
-> > The only impact would be that FOLL_PIN after fork() has to go via a
-> > FAULT_FLAG_UNSHARE once, to turn the page PageAnonExclusive. IMHO this
-> > is the right thing to do for FOLL_LONGTERM. For !FOLL_LONGTERM it would
-> > be nice to optimize this, to *not* do that, but again ... this would
-> > require even more counters I think, for example, to differentiate
-> > between "R/W short/long-term or R/O long-term pin" and "R/O short-term pin".
-> > 
-> > So unless we discover a way to do additional accounting for ordinary 4k
-> > pages, I think we really can only do (1) or (2) to make sure we never
-> > ever pin a !PageAnonExclusive() page.
-> 
-> BTW, I just wondered if the optimization should actually be that R/O
-> short-term FOLL_PIN users should actually be using FOLL_GET instead. So
-> O_DIRECT with R/O would already be doing the right thing.
-> 
-> And it somewhat aligns with what we found: only R/W short-term FOLL_GET
-> is problematic, where we can lose writes to the page from the device via
-> O_DIRECT.
-> 
-> IIUC, our COW logic makes sure that a shared anonymous page that might
-> still be used by a R/O FOLL_GET cannot be modified, because any attempt
-> to modify it would result in a copy.
+Hi, this is your Linux kernel regression tracker speaking.
 
-Well, we defined FOLL_PIN to mean the intent that the caller wants to access
-not only page state (for which is enough FOLL_GET and there are some users
-- mostly inside mm - who need this) but also page data. Eventually, we even
-wanted to make FOLL_GET unavailable to broad areas of kernel (and keep it
-internal to only MM for its dirty deeds ;)) to reduce the misuse of GUP.
+On 09.12.21 20:16, Josef Bacik wrote:
+> On Thu, Dec 09, 2021 at 05:22:05PM +0000, Valentin Schneider wrote:
+>> On 06/12/21 09:48, Valentin Schneider wrote:
+>>> On 03/12/21 14:00, Josef Bacik wrote:
+>>>> On Fri, Dec 03, 2021 at 12:03:27PM +0000, Valentin Schneider wrote:
+>>>>> Could you give the 4 top patches, i.e. those above
+>>>>> 8c92606ab810 ("sched/cpuacct: Make user/system times in cpuacct.stat more precise")
+>>>>> a try?
+>>>>>
+>>>>> https://git.gitlab.arm.com/linux-arm/linux-vs.git -b mainline/sched/nohz-next-update-regression
+>>>>>
+>>>>> I gave that a quick test on the platform that caused me to write the patch
+>>>>> you bisected and looks like it didn't break the original fix. If the above
+>>>>> counter-measures aren't sufficient, I'll have to go poke at your
+>>>>> reproducers...
+>>>>>
+>>>>
+>>>> It's better but still around 6% regression.  If I compare these patches to the
+>>>> average of the last few days worth of runs you're 5% better than before, so
+>>>> progress but not completely erased.
+>>>>
+>>>
+>>> Hmph, time for me to reproduce this locally then. Thanks!
+>>
+>> I carved out a partition out of an Ampere eMAG's HDD to play with BTRFS
+>> via fsperf; this is what I get for the bisected commit (baseline is
+>> bisected patchset's immediate parent, aka v5.15-rc4) via a handful of
+>> ./fsperf -p before-regression -c btrfs -n 100 -t emptyfiles500k
+>>
+>>   write_clat_ns_p99     195395.92     198790.46      4797.01    1.74%
+>>   write_iops             17305.79      17471.57       250.66    0.96%
+>>
+>>   write_clat_ns_p99     195395.92     197694.06      4797.01    1.18%
+>>   write_iops             17305.79      17533.62       250.66    1.32%
+>>
+>>   write_clat_ns_p99     195395.92     197903.67      4797.01    1.28%
+>>   write_iops             17305.79      17519.71       250.66    1.24%
+>>
+>> If I compare against tip/sched/core however:
+>>
+>>   write_clat_ns_p99     195395.92     202936.32      4797.01    3.86%
+>>   write_iops             17305.79      17065.46       250.66   -1.39%
+>>
+>>   write_clat_ns_p99     195395.92     204349.44      4797.01    4.58%
+>>   write_iops             17305.79      17097.79       250.66   -1.20%
+>>
+>>   write_clat_ns_p99     195395.92     204169.05      4797.01    4.49%
+>>   write_iops             17305.79      17112.29       250.66   -1.12%
+>>
+>> tip/sched/core + my patches:
+>>
+>>   write_clat_ns_p99     195395.92     205721.60      4797.01    5.28%
+>>   write_iops             17305.79      16947.59       250.66   -2.07%
+>>
+>>   write_clat_ns_p99     195395.92     203358.04      4797.01    4.07%
+>>   write_iops             17305.79      16953.24       250.66   -2.04%
+>>
+>>   write_clat_ns_p99     195395.92     201830.40      4797.01    3.29%
+>>   write_iops             17305.79      17041.18       250.66   -1.53%
+>>
+>> So tip/sched/core seems to have a much worse regression, and my patches
+>> are making things worse on that system...
+>>
+>> I've started a bisection to see where the above leads me, unfortunately
+>> this machine needs more babysitting than I thought so it's gonna take a
+>> while.
+>>
+>> @Josef any chance you could see if the above also applies to you? tip lives
+>> at https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git, though from
+>> where my bisection is taking me it looks like you should see that against
+>> Linus' tree as well.
+>>
+> 
+> This has made us all curious, so we're all fucking around with schbench to see
+> if we can make it show up without needing to use fsperf.  Maybe that'll help
+> with the bisect, because I had to bisect twice to land on your patches, and I
+> only emailed when I could see the change right before and right after your
+> patch.  It would not surprise me at all if there's something else here that's
+> causing us pain.
 
-For file pages we need this data vs no-data access distinction so that
-filesystems can detect when someone can be accessing page data although the
-page is unmapped.  Practically, filesystems care most about when someone
-can be *modifying* page data (we need to make sure data is stable e.g. when
-writing back data to disk or doing data checksumming or other operations)
-so using FOLL_GET when wanting to only read page data should be OK for
-filesystems but honestly I would be reluctant to break the rule of "use
-FOLL_PIN when wanting to access page data" to keep things simple and
-reasonably easy to understand for parties such as filesystem developers or
-driver developers who all need to interact with pinned pages...
+What's the status here? Just wondering, because there hasn't been any
+activity in this thread since 11 days and the festive season is upon us.
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Was the discussion moved elsewhere? Or is this still a mystery? And if
+it is: how bad is it, does it need to be fixed before Linus releases 5.16?
+
+Ciao, Thorsten
+
+#regzbot poke
+
+P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
+on my table. I can only look briefly into most of them. Unfortunately
+therefore I sometimes will get things wrong or miss something important.
+I hope that's not the case here; if you think it is, don't hesitate to
+tell me about it in a public reply. That's in everyone's interest, as
+what I wrote above might be misleading to everyone reading this; any
+suggestion I gave thus might sent someone reading this down the wrong
+rabbit hole, which none of us wants.
+
+BTW, I have no personal interest in this issue, which is tracked using
+regzbot, my Linux kernel regression tracking bot
+(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
+this mail to get things rolling again and hence don't need to be CC on
+all further activities wrt to this regression.
+

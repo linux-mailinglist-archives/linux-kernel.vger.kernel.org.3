@@ -2,85 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9443947D580
+	by mail.lfdr.de (Postfix) with ESMTP id DC9AF47D581
 	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:56:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344116AbhLVQzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 11:55:52 -0500
-Received: from mga09.intel.com ([134.134.136.24]:14709 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344065AbhLVQzu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 11:55:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640192150; x=1671728150;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zn+R305IguXUmjbxhooWhM4nYIBAkbNRb9VmYzm7JcQ=;
-  b=jOE1ZsCBEluMmqOkmsizTQKap5FlcFVup5Qc42valZ2K5mKNU4q5dGyN
-   puaY+AZWOC3AwPFOeW0snQPr3xHMMATw+awMknMQo6lU65v7L4zqy4wpd
-   iT0SHTSwzGzUrTfgR6kgvuo2UCUs7jjAig3dJLP8+SpEo9yYFojI3SuRe
-   6P+QX/eIdnezHPhy9AlWrOikrHV/m3Jw9+xWD6QwwnXSKypKMsnVWaqmL
-   AzJMGJjT99n7mRAKdV0glfRVFe5lhq0tfW0s2khFBLHgXE8+VDuWp1fnG
-   63WziyxJ6JcSzI/fHyExB5spsd9pMhgiF0ljqY+S6fRjWrDwFRPm7DHkK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="240465211"
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="240465211"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 08:55:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="685081716"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 22 Dec 2021 08:55:48 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 7DAC2FE; Wed, 22 Dec 2021 18:55:56 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] KVM: arm64: vgic: Replace kernel.h with the necessary inclusions
-Date:   Wed, 22 Dec 2021 18:55:52 +0200
-Message-Id: <20211222165552.69288-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        id S1344129AbhLVQ4D convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Dec 2021 11:56:03 -0500
+Received: from lithops.sigma-star.at ([195.201.40.130]:36410 "EHLO
+        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344121AbhLVQ4C (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 11:56:02 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 752B1614E2CD;
+        Wed, 22 Dec 2021 17:56:00 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id CF-VDLV6_9Wv; Wed, 22 Dec 2021 17:55:59 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id D297C614E2D5;
+        Wed, 22 Dec 2021 17:55:59 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 3T-5_MrcWr8U; Wed, 22 Dec 2021 17:55:59 +0100 (CET)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id AB83A614E2CD;
+        Wed, 22 Dec 2021 17:55:59 +0100 (CET)
+Date:   Wed, 22 Dec 2021 17:55:59 +0100 (CET)
+From:   Richard Weinberger <richard@nod.at>
+To:     bp <bp@alien8.de>
+Cc:     hch <hch@lst.de>, anton ivanov <anton.ivanov@cambridgegreys.com>,
+        x86 <x86@kernel.org>, linux-um <linux-um@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <689476797.194605.1640192159613.JavaMail.zimbra@nod.at>
+In-Reply-To: <YcMuW88cOBNXAdb/@zn.tnic>
+References: <20211215165612.554426-1-hch@lst.de> <1202521211.191037.1640120703350.JavaMail.zimbra@nod.at> <20211222081753.GB22041@lst.de> <YcMuW88cOBNXAdb/@zn.tnic>
+Subject: Re: remove set_fs for UML
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF95 (Linux)/8.8.12_GA_3809)
+Thread-Topic: remove set_fs for UML
+Thread-Index: VWc5UxOt2mEfXDfyiYxJYrg133SXXQ==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When kernel.h is used in the headers it adds a lot into dependency hell,
-especially when there are circular dependencies are involved.
+Boris,
 
-Replace kernel.h inclusion with the list of what is really being used.
+----- Ursprüngliche Mail -----
+> Von: "bp" <bp@alien8.de>
+> An: "hch" <hch@lst.de>
+> CC: "richard" <richard@nod.at>, "anton ivanov" <anton.ivanov@cambridgegreys.com>, "x86" <x86@kernel.org>, "linux-um"
+> <linux-um@lists.infradead.org>, "linux-kernel" <linux-kernel@vger.kernel.org>
+> Gesendet: Mittwoch, 22. Dezember 2021 14:55:39
+> Betreff: Re: remove set_fs for UML
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- include/kvm/arm_vgic.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> On Wed, Dec 22, 2021 at 09:17:53AM +0100, hch wrote:
+>> On Tue, Dec 21, 2021 at 10:05:03PM +0100, Richard Weinberger wrote:
+>> > So far UML seems to work with these changes applied. :-)
+>> > I have applied both patches to my UML tree for now, I assume x86 maintainers are
+>> > fine with
+>> > patch 1/2?
+>> 
+>> Looks like patch 1 needs this fixup for some configurations, where
+>> pci.h doesn't get pulled into kvm by other means.
+>> 
+>> But we probably want an ACK from the x86 maintainers to be sure anyway..
+> 
+> I don't see why not so
+> 
+> Acked-by: Borislav Petkov <bp@suse.de>
+> 
+> Should I take the first one along with this hunk below?
 
-diff --git a/include/kvm/arm_vgic.h b/include/kvm/arm_vgic.h
-index e602d848fc1a..bb30a6803d9f 100644
---- a/include/kvm/arm_vgic.h
-+++ b/include/kvm/arm_vgic.h
-@@ -5,9 +5,11 @@
- #ifndef __KVM_ARM_VGIC_H
- #define __KVM_ARM_VGIC_H
+Would be great!
+When I'll drop "x86/mtrr: remove the mtrr_bp_init stub" from the UML tree.
  
--#include <linux/kernel.h>
-+#include <linux/bits.h>
- #include <linux/kvm.h>
- #include <linux/irqreturn.h>
-+#include <linux/kref.h>
-+#include <linux/mutex.h>
- #include <linux/spinlock.h>
- #include <linux/static_key.h>
- #include <linux/types.h>
--- 
-2.34.1
-
+Thanks,
+//richard

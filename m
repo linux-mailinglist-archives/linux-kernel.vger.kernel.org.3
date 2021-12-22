@@ -2,116 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1E5447D594
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 18:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5932247D598
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 18:07:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344200AbhLVRGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 12:06:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
+        id S1344210AbhLVRHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 12:07:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbhLVRG2 (ORCPT
+        with ESMTP id S230314AbhLVRHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 12:06:28 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07913C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 09:06:28 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id b73so2063738wmd.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 09:06:27 -0800 (PST)
+        Wed, 22 Dec 2021 12:07:50 -0500
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E17C061574;
+        Wed, 22 Dec 2021 09:07:49 -0800 (PST)
+Received: by mail-oo1-xc34.google.com with SMTP id g11-20020a4a754b000000b002c679a02b18so1020179oof.3;
+        Wed, 22 Dec 2021 09:07:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=colorfullife-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=vw1KhbhuKWFVCrYw7Go1sbi4Em3+r21Grhp7IO/l0wQ=;
-        b=f7Oiv0nzZdLq7r6eSykUMzJBdK/SfzOwckGNl8JPVZjpvfuyMMf/0GkH0sGMShEquM
-         SeTCOhWWEpVP8so4r/uQwtEGFbOKRV1NqO6bqPu+9XW2LxnaHw/h9Kbo7A2iTJ3BT5pU
-         0G+rw5zgCNNjLk3u6X1v/d2wBV7NWVEcuFJ9NSdT7PirpNhiGwcKuhm6ZN7tTVHdKUS6
-         YjCML8M1zUbLcUwA8SWVJBgtu5WUDc5FnlBuwbucZUn2WlGPeBlprMssxB6oXEGRdg9X
-         tIW6bkyCmoDN7ugsYwOser7/hBmkH+vnWIYyqhYbeo/oAFdQWDZHMfGTAkf90q1w9wxv
-         5/rQ==
+        d=gmail.com; s=20210112;
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=VOxC90hitMyTuXvblMg9yAHe4TtcUlIgp6x0D9OBaGI=;
+        b=ATOLoT/3SZPbvSAsD4ZN/H6utIrJvC89DPfkccE2uaB+35npNE+NdFElVbAJbemzNk
+         phSzpgLy9LcNMiSz8eMB4OXByGIOSI6Ch7oKOluZIT4Kl/A5w2s4XZYBdfOERD2nwM4T
+         lGebXhQYyNhiQxDr/Tut/jW1KgAdlDxjnikXkkQydrBe73lJQH6ZY7HtUbSyp0jXCs0e
+         q4ghKmkCwyypRfgZLo4A6TAISbJsxyEDYtL80Yux5LBAIEx0swfAJ4tPgt1sU5RJVjHH
+         PE9ldC15gyUIvUS0xPnXnEKCw3Vnpsb6uMVk66ExJ/PF0sssX4BpIZyCNtkv4bBQJ0yM
+         LG+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=vw1KhbhuKWFVCrYw7Go1sbi4Em3+r21Grhp7IO/l0wQ=;
-        b=787xtTSfRvGLcHq6MbEwf99MX/of+gXfd1ORlbhTHdJxuEpD+riN6ho1YAjg3eCM66
-         OdJcjQ96GwewC1TZE4qYjcd0nacbXMplqkBMR6DVN7QiMwIZ/H2gwz2B59uIOVEPdcLc
-         8umzJ8IzJcEItF/YYvdQPjjg17ECwB/lve4oNkr8w98s5pi7PmbBZ4teGcnmKb+7Kj/S
-         AyD118cdfxHAdyGWIrbvfVdLLAqEPZDnkMd8nsNFqys280RDGSzj4lHu5TY9MH5ooWmO
-         JMeSU3DSXb6s2ySExQ/5ncr7KT4QNpduKQ6cBuvaFIcmmXWJRK0tIP3ElbnyXkj3WYBq
-         8K9Q==
-X-Gm-Message-State: AOAM531o97s3ScZpAdVoNqB4XPAcxDRF1FuSKNobKXQdbXJknFfyfmmn
-        aIa7cF07ryW9ym8EoBR+CjWLeA==
-X-Google-Smtp-Source: ABdhPJyQmswUtojvAlvB17/lzqSERlYocStmQn9nmnj/YPKjY9JXZ0amCSmSPxEao4rcvX9UU73HVQ==
-X-Received: by 2002:a1c:495:: with SMTP id 143mr1545038wme.178.1640192786590;
-        Wed, 22 Dec 2021 09:06:26 -0800 (PST)
-Received: from ?IPV6:2003:d9:9708:7800:3dae:64a4:7964:a371? (p200300d9970878003dae64a47964a371.dip0.t-ipconnect.de. [2003:d9:9708:7800:3dae:64a4:7964:a371])
-        by smtp.googlemail.com with ESMTPSA id u10sm2429065wrs.28.2021.12.22.09.06.25
+        bh=VOxC90hitMyTuXvblMg9yAHe4TtcUlIgp6x0D9OBaGI=;
+        b=WGOdGVynxs2Uedx+0u9TbVadQSclSB0yLC+dP4/F0AQ48+6h0TGJAUZ3AvnsRf+b19
+         FCOU2SHghL2hcPTbsDgY6gAl5u/zFLS7EIHOFFHFROGFpx63x6yQCmWxjA0r1ayanApi
+         WpUXXYVNJhUrdvuUYymkmiUF58dPVEE2oWw/ggMdBsT5ETRw3NH9C0urF47LKlPKmF+Y
+         QSSQMICxHcaOd3KZJlGD5t8RMTmGPITE6XU7DiHNugaVBsMPG1N23bWn+nhawtS2zYwD
+         K8jVPUiEVpPg7zU8Wk3h5uRXiIwyARw2it2YZFQVlp1DhuncSB+F1lrq4IrRyNGLpxHf
+         EO4g==
+X-Gm-Message-State: AOAM531HaW7aKlIXMxZ9RWTf69xU9tFbHHs6aaOHvm08Pq22ru23fNGg
+        Y3yFm0+O8bw3P6kzIXQKy7fqpdh9p30=
+X-Google-Smtp-Source: ABdhPJz3het8XefkHRa6MkEqx+gBbNhog3ICW4VxjtI0CHQeu7ghLPL5QX6Eht9ce9e2HgRraIMC3g==
+X-Received: by 2002:a4a:c695:: with SMTP id m21mr2433724ooq.58.1640192868513;
+        Wed, 22 Dec 2021 09:07:48 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v10sm466385oor.33.2021.12.22.09.07.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 09:06:26 -0800 (PST)
-Message-ID: <4d786a02-1560-25ed-4603-8419672ec044@colorfullife.com>
-Date:   Wed, 22 Dec 2021 18:06:25 +0100
+        Wed, 22 Dec 2021 09:07:47 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     cosmin.tanislav@analog.com, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211221215841.2641417-1-demonsingur@gmail.com>
+ <20211221215841.2641417-4-demonsingur@gmail.com>
+ <ff8b73b0-0c28-e1f3-d254-ea03fb594ffc@roeck-us.net>
+ <03bf1d99-5411-daca-bc96-319e30b5e836@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v3 3/7] hwmon: (adt7x10) Use
+ devm_hwmon_device_register_with_info
+Message-ID: <792f0265-4c4c-ce71-9a6a-a20d3ee61f41@roeck-us.net>
+Date:   Wed, 22 Dec 2021 09:07:45 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] ipc/sem: do not sleep with a spin lock held
+In-Reply-To: <03bf1d99-5411-daca-bc96-319e30b5e836@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Vasily Averin <vvs@virtuozzo.com>, cgel.zte@gmail.com,
-        akpm@linux-foundation.org
-Cc:     shakeelb@google.com, rdunlap@infradead.org, dbueso@suse.de,
-        unixbhaskar@gmail.com, chi.minghao@zte.com.cn, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-References: <20211222081026.484058-1-chi.minghao@zte.com.cn>
- <63840bf3-2199-3240-bdfa-abb55518b5f9@colorfullife.com>
- <1181e64b-94c0-908a-b9e9-1a38f4610430@virtuozzo.com>
- <02171384-9d1e-19fa-5fa1-5f84b720a03e@virtuozzo.com>
-From:   Manfred Spraul <manfred@colorfullife.com>
-In-Reply-To: <02171384-9d1e-19fa-5fa1-5f84b720a03e@virtuozzo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vasily,
-
-On 12/22/21 16:50, Vasily Averin wrote:
-> On 22.12.2021 18:31, Vasily Averin wrote:
->> On 22.12.2021 14:45, Manfred Spraul wrote:
->>> Hi Minghao,
+On 12/21/21 10:35 PM, Cosmin Tanislav wrote:
+> 
+> 
+> On 12/22/21 05:08, Guenter Roeck wrote:
+>> On 12/21/21 1:58 PM, Cosmin Tanislav wrote:
+>>> From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 >>>
->>> On 12/22/21 09:10, cgel.zte@gmail.com wrote:
->>>> From: Minghao Chi <chi.minghao@zte.com.cn>
->>>>
->>>> We can't call kvfree() with a spin lock held, so defer it.
->> I'm sorry, but I do not understand why exactly we cannot use kvfree?
->> Could you explain it in more details?
-> Got it,
-> there is cond_resched() called in __vfree() -> __vunmap()
->
-> However I'm still not sure that in_interrupt() is used correctly here.
+>> [ ... ]
+>>
+>>> +
+>>> +static int adt7x10_read(struct device *dev, enum hwmon_sensor_types type,
+>>> +            u32 attr, int channel, long *val)
+>>> +{
+>>> +    struct adt7x10_data *data = dev_get_drvdata(dev);
+>>> +
+>>> +    switch (attr) {
+>>> +    case hwmon_temp_input:
+>>> +        return adt7x10_temp_read(data, 0, val);
+>>> +    case hwmon_temp_max:
+>>> +        return adt7x10_temp_read(data, 1, val);
+>>> +    case hwmon_temp_min:
+>>> +        return adt7x10_temp_read(data, 2, val);
+>>> +    case hwmon_temp_crit:
+>>> +        return adt7x10_temp_read(data, 3, val);
+>>
+>> Ok, so you want to keep using the internal "index" to indicate the
+>> array position in the register cache. I _did_ specifically ask
+>> to use defines for index values in this case. You did not explain
+>> why you ignored this. So now you'll have to explain 1) why you
+>> ignored my request and 2) why you want to keep the code as is.
+>>
+>> And, _please_, add a To: recipient to your patches. I am getting
+>> tired having to handle the fallout.
+>>
+>> Guenter
+> 
+> 
+> First of all, maybe you should compare the time these patches were
+> sent to the time that your reply that "I ignored" was sent.
+> I sent the patches before you "specifically asked me to use defines for
+> index values in this case".
+> 
 
-I see three different topics:
+Maybe it would be beneficial to wait a few minutes to give me time
+to review all patches of a series before sending a new series.
 
-- is the current code violating the API? I think yes, thus there is a 
-bug that needs to be fixed.
+> Second of all, this specific place is a 1:1 conversion from the original code. If I change to using defines here, I'll have to change to using
+> defines everywhere else in the code, which doesn't seem to be the scope
+> of this exact patch. Of course it looks bad, but it looked equally bad
 
-- Where is __vunmap() sleeping? Would it be possible to make __vunmap() 
-safe to be called when owning a spinlock?
+As suggested, you could have dropped the use of 'index' entirely.
+Its use was a side effect of the old hwmon API, where extra fields
+in sensor attributes were used to separate attributes. Using the
+with_info API, that is no longer necessary. You chose to keep that
+part of the code, which is fine, but then I am also asking for
+changing the hard coded constants to make it easier to understand
+the code going forward. This is especially necessary because "index"
+now has two meanings: First, it is the sensor channel, as passed
+from the hwmon subsystem and, second, it is the index into
+the register cache. Those different use cases now need to be
+clearly separated, and the best way to do that is to use an enum
+or define to indicate the index into the register cache.
 
-- should kvfree() use vfree() [i.e. unsafe when owning a spinlock] or 
-vfree_atomic [i.e. a bit slower, but safe]
+... and I specifically asked for that because I got confused
+about it while reviewing the code. People looking at the code
+at a later time should not have that problem.
 
+> before. I can introduce more following patches that fix some obvious
+> non-functional problems with the driver.
+> 
+> Third of all, why are you so tense? You're making both of our lives
+> harder. I understand being an upstream maintainer is hard work, but
+> everyone's job is hard work. It's not like I wanted to work on
+> refactoring ADT7x10, I just had to so I can later introduce a
+> patch that implements debugfs reg access...
 
-As we did quite many s/kfree/kvfree/ changes, perhaps just switching to 
-vfree_atomic() is the best solution.
+I tend to get more tense if people give me extra work, and do so
+repeatedly (like sending follow-up patch series tagged as v1 and
+with no change log). I am human, after all, Sorry for that.
 
-@Andrew: What would you prefer?
-
-In addition, if we do not use vfree_atomic(): Then I would propose to 
-copy the might_sleep_if() from vfree() into kvfree()
-
---
-
-     Manfred
-
+Guenter

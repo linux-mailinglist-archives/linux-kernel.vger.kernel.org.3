@@ -2,122 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2CD47D0AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D8447D0B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:16:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244506AbhLVLQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 06:16:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57228 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233429AbhLVLQZ (ORCPT
+        id S244513AbhLVLQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 06:16:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236636AbhLVLQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Dec 2021 06:16:25 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFAB7B81BBF;
-        Wed, 22 Dec 2021 11:16:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C4C3C36AF3;
-        Wed, 22 Dec 2021 11:16:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640171782;
-        bh=9c47US/IBTSpcaTa6A9sohSlsGJgoac4lsSRerkjTaY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rAwOapawARY4124h9997jUAYZGl8ZbZ6EIHFd5ga3NKlP1QtUijfWLS1Sb0BbnbD1
-         skkzKp4Rs1OB7RkijJR2y8I+rPE2bSfmQZ0XYD936tCfGUqWr7jmkjBkeD/KTdtPGo
-         yjNWFqu2wdYZmDF81jgndPbY9JZgH6OsOnDbuAtpXeoo+AU+s1TFjZ+M3q698sknmS
-         KrNBv1vAAfGvWSENhuHjsk+4NRDR1DB9SAXYEqJWY+zxR6U9lW2QRlI0tAJ7QKRFka
-         JabKFDuThabc7+jtrrDLtw/NdUbdPY1DWWL5BCCz6Ltzkg/ANsIl0ENM4TFeX5yKiP
-         hoIMWD5uzs3UQ==
-Received: by mail-vk1-f174.google.com with SMTP id s1so1082751vks.9;
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E82C061746
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:16:24 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id v11so4134686wrw.10
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:16:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=XPWgMgD0XzqoivywAckaojk88eeT9YD0wWezKrZwghA=;
+        b=TSQvltnJVjN3Yxq5i38Kl4Zl+tIZLyfhNSEv8RP6YUqRZeNA+cHVSjDndysUjDRfNp
+         9pAxUCsoF4c4bKarlN0yohlCyEkXltFo0uTGZxKKnBMkys0KDKqKJUCK6sfApzEY760Q
+         DxigGxoUD2smGsMvnNnitkRtD7vIBrGHLvEEhCkuwmQcG8/S50V0jWiC13Q8+drZ6UGi
+         ZOnLihm7FMgr7wIL/QE4t0vWJlNZFkN6IagPIfkODJ67ckYHngyQmVRleLEBj/zqVS8m
+         uHgpx3J2J/U6g5OgwHEfuZ2FziBzKqcQ9jks70Dz3h8BmSJJQRBvcjKrIJQmSpaeD33R
+         16yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=XPWgMgD0XzqoivywAckaojk88eeT9YD0wWezKrZwghA=;
+        b=Tuc6MR/KBEBC3dQlWTR6snuFaw8dQ/VRtWV93mwEDFLpZiiX26GCTBvwVu9kwv6LaU
+         ZtqKS6qCPgh8rFWijkb5RpSCrjqatIrCYMR4/Jnbu2Ph/3cjmlGMb8arRdG+wZ5Z3I7I
+         N6yWqFu4SKpn+J8BemyQW5MNNGTLa0IhxqY+IZUMTT0tLJy7V8cgLaOsdh7U9dtIG/KN
+         YgW2qphW16cqx5MSmyU80yjLX3thJDonocP7Gfh5FlLsUKH10HesLxj27dZdYU2nj7GE
+         TkGsANftzkVyJZ5Kt+GE1FOnEbOKjT7yTRQNfoXP6QJweNWgfjbFmBpFgurYeqtdLzSS
+         Uofw==
+X-Gm-Message-State: AOAM5300KwwlK+HbX8uHIszitZwxeZa/RiKSYgl03Gxe7PiGrkYWEtvr
+        beBCM9Ulnb49COMz1nm46wnsSw==
+X-Google-Smtp-Source: ABdhPJzkB3s0YBKaAq8SlAKtUF6TM0YviOwwlicJEmYHnBrD6uxPU06eJZhrr/MgKRKs9FFzJP99HA==
+X-Received: by 2002:a5d:564f:: with SMTP id j15mr1733297wrw.366.1640171783261;
+        Wed, 22 Dec 2021 03:16:23 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id j3sm1612934wrt.14.2021.12.22.03.16.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 22 Dec 2021 03:16:22 -0800 (PST)
-X-Gm-Message-State: AOAM5323tCH7VbST4JAXE3MYknY0dezf5//TPjI7hV798NBSDog7qd+e
-        oHb5WaNfCrdRXgQN6qbzO3SUtExeClhGcfMeO0g=
-X-Google-Smtp-Source: ABdhPJxj1PzhyTI98cL1Srb70bXWLzUyQMiVzIdGh0LdKJMqyS7sLEVMCA+fdiZdr9wtUMSXc7/oy/tQPd/D8KKPRhU=
-X-Received: by 2002:a1f:ae91:: with SMTP id x139mr867231vke.2.1640171781375;
- Wed, 22 Dec 2021 03:16:21 -0800 (PST)
+Date:   Wed, 22 Dec 2021 11:16:20 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Pavel Dubrova <pashadubrova@gmail.com>,
+        Kiran Gunda <kgunda@codeaurora.org>,
+        Bryan Wu <cooloney@gmail.com>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH v3 3/9] backlight: qcom-wled: Use cpu_to_le16 macro to
+ perform conversion
+Message-ID: <YcMJBDcoZc1g7R2M@google.com>
+References: <20211115203459.1634079-1-marijn.suijten@somainline.org>
+ <20211115203459.1634079-4-marijn.suijten@somainline.org>
 MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-2-guoren@kernel.org>
- <CAK8P3a1fC8aro3kHLvGMVDdvVYjaQdxJeGur9ac=11+6=r0Xyg@mail.gmail.com>
-In-Reply-To: <CAK8P3a1fC8aro3kHLvGMVDdvVYjaQdxJeGur9ac=11+6=r0Xyg@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 22 Dec 2021 19:16:10 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQciNaXk+_am=kS2uSwg6oGM4aJqiw_O5KN-DrHetf8nA@mail.gmail.com>
-Message-ID: <CAJF2gTQciNaXk+_am=kS2uSwg6oGM4aJqiw_O5KN-DrHetf8nA@mail.gmail.com>
-Subject: Re: [PATCH 01/13] syscalls: compat: Fix the missing part for __SYSCALL_COMPAT
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211115203459.1634079-4-marijn.suijten@somainline.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 1:09 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
-> > diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-> > index 4557a8b6086f..aafe5cfeb27c 100644
-> > --- a/include/uapi/asm-generic/unistd.h
-> > +++ b/include/uapi/asm-generic/unistd.h
-> > @@ -383,7 +383,7 @@ __SYSCALL(__NR_syslog, sys_syslog)
-> >
-> >  /* kernel/ptrace.c */
-> >  #define __NR_ptrace 117
-> > -__SYSCALL(__NR_ptrace, sys_ptrace)
-> > +__SC_COMP(__NR_ptrace, sys_ptrace, compat_sys_ptrace)
-> >
->
-> Right. We could merge sys_ptrace and compat_sys_ptrace() by adding
-> a in_compat_syscall() check, but either way works.
->
-> >  /* kernel/sched/core.c */
-> >  #define __NR_sched_setparam 118
-> > @@ -779,7 +779,7 @@ __SYSCALL(__NR_rseq, sys_rseq)
-> >  #define __NR_kexec_file_load 294
-> >  __SYSCALL(__NR_kexec_file_load,     sys_kexec_file_load)
-> >  /* 295 through 402 are unassigned to sync up with generic numbers, don't use */
-> > -#if __BITS_PER_LONG == 32
-> > +#if defined(__SYSCALL_COMPAT) || __BITS_PER_LONG == 32
-> >  #define __NR_clock_gettime64 403
-> >  __SYSCALL(__NR_clock_gettime64, sys_clock_gettime)
->
-> This part looks wrong, you expose clock_gettime64 to user space this way, both
-> in asm/unistd.h and in the table.
->
->          Arnd
+On Mon, 15 Nov 2021, Marijn Suijten wrote:
 
-No, we only define __SYSCALL_COMPAT in compat_syscall_table.c. It
-won't be expose to user space, because there is no __SYSCALL_COMPAT.
+> The kernel already provides appropriate primitives to perform endianness
+> conversion which should be used in favour of manual bit-wrangling.
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> ---
+>  drivers/video/backlight/qcom-wled.c | 23 +++++++++++------------
+>  1 file changed, 11 insertions(+), 12 deletions(-)
 
-$ grep __SYSCALL_COMPAT * -r
-arch/riscv/kernel/compat_syscall_table.c:#define __SYSCALL_COMPAT
-                           ^^^^^^^^^^^^^^^^^^^^^^
-include/uapi/asm-generic/unistd.h:#if __BITS_PER_LONG == 32 ||
-defined(__SYSCALL_COMPAT)
-include/uapi/asm-generic/unistd.h:#ifdef __SYSCALL_COMPAT
-include/uapi/asm-generic/unistd.h:#if defined(__SYSCALL_COMPAT) ||
-__BITS_PER_LONG == 32
-include/uapi/asm-generic/unistd.h:#if __BITS_PER_LONG == 64 &&
-!defined(__SYSCALL_COMPAT)
-tools/include/uapi/asm-generic/unistd.h:#if __BITS_PER_LONG == 32 ||
-defined(__SYSCALL_COMPAT)
-tools/include/uapi/asm-generic/unistd.h:#ifdef __SYSCALL_COMPAT
-tools/include/uapi/asm-generic/unistd.h:#if defined(__SYSCALL_COMPAT)
-|| __BITS_PER_LONG == 32
-tools/include/uapi/asm-generic/unistd.h:#if __BITS_PER_LONG == 64 &&
-!defined(__SYSCALL_COMPAT)
+Applied, thanks.
 
 -- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

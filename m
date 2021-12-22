@@ -2,81 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE8D847D152
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:53:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1322A47D15B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240355AbhLVLxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 06:53:16 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4319 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238070AbhLVLxP (ORCPT
+        id S240401AbhLVLyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 06:54:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238070AbhLVLyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 06:53:15 -0500
-Received: from fraeml741-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JJs9S1wfNz67s22;
-        Wed, 22 Dec 2021 19:51:24 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml741-chm.china.huawei.com (10.206.15.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 22 Dec 2021 12:53:13 +0100
-Received: from [10.195.32.222] (10.195.32.222) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 22 Dec 2021 11:53:12 +0000
-Subject: Re: [PATCH 4/5] iommu: Separate IOVA rcache memories from iova_domain
- structure
-To:     Robin Murphy <robin.murphy@arm.com>, <joro@8bytes.org>,
-        <will@kernel.org>, <mst@redhat.com>, <jasowang@redhat.com>
-CC:     <xieyongji@bytedance.com>, <linux-kernel@vger.kernel.org>,
-        <iommu@lists.linux-foundation.org>,
-        <virtualization@lists.linux-foundation.org>, <linuxarm@huawei.com>,
-        <thunder.leizhen@huawei.com>, <baolu.lu@linux.intel.com>
-References: <1632477717-5254-1-git-send-email-john.garry@huawei.com>
- <1632477717-5254-5-git-send-email-john.garry@huawei.com>
- <2c58036f-d9aa-61f9-ae4b-f6938a135de5@huawei.com>
- <85c60ef4-e1af-c947-a2ed-b63c4fef36c3@arm.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <045030ed-0151-6259-e336-4235d6456223@huawei.com>
-Date:   Wed, 22 Dec 2021 11:53:11 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Wed, 22 Dec 2021 06:54:45 -0500
+Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1ACC06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:54:45 -0800 (PST)
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id F279D3EEEF;
+        Wed, 22 Dec 2021 12:54:42 +0100 (CET)
+Date:   Wed, 22 Dec 2021 12:54:41 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        robdclark@gmail.com, sean@poorly.run, airlied@linux.ie,
+        daniel@ffwll.ch, abhinavk@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        konrad.dybcio@somainline.org, martin.botka@somainline.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        paul.bouchara@somainline.org
+Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Fix timeout issues on command mode
+ panels
+Message-ID: <20211222115441.7c5e55svs6inabrl@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, robdclark@gmail.com,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        abhinavk@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
+        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, paul.bouchara@somainline.org
+References: <20210911163919.47173-1-angelogioacchino.delregno@somainline.org>
+ <20210911163919.47173-2-angelogioacchino.delregno@somainline.org>
+ <b325fc8d-e06b-36de-b40a-b5ffbcebb1c5@linaro.org>
+ <94bedea3-0e5f-5ae8-79d1-ceb17ccdea23@somainline.org>
+ <20211211213528.uroqfdksvokspbxf@SoMainline.org>
+ <CAA8EJprT5gcWOsS5jJk8egUpxutBpUdW2Pnh-8FFXhgOd3hr=A@mail.gmail.com>
+ <20211211215718.pe675o5wvculxavc@SoMainline.org>
+ <33d44631-f0d7-83cc-569d-d6d6f82d6808@somainline.org>
 MIME-Version: 1.0
-In-Reply-To: <85c60ef4-e1af-c947-a2ed-b63c4fef36c3@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.32.222]
-X-ClientProxiedBy: lhreml750-chm.china.huawei.com (10.201.108.200) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <33d44631-f0d7-83cc-569d-d6d6f82d6808@somainline.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/12/2021 13:57, Robin Murphy wrote:
->> Do you have any thoughts on this patch? The decision is whether we 
->> stick with a single iova domain structure or support this super 
->> structure for iova domains which support the rcache. I did not try the 
->> former - it would be do-able but I am not sure on how it would look.
+On 2021-12-22 12:28:52, AngeloGioacchino Del Regno wrote:
+> Il 11/12/21 22:57, Marijn Suijten ha scritto:
+> > On 2021-12-12 00:49:09, Dmitry Baryshkov wrote:
+> >> On Sun, 12 Dec 2021 at 00:35, Marijn Suijten
+> >> <marijn.suijten@somainline.org> wrote:
+> >>> [..]
+> >>> On this note, does it perhaps make more sense to call the "internal"
+> >>> _dpu_encoder_phys_cmd_wait_for_idle function directly, instead of going
+> >>> through the "public" dpu_encoder_phys_cmd_wait_for_tx_complete which
+> >>> seems solely intended to handle the wait_for_tx_complete callback?
+> >>
+> >> Either one would work. The main difference is the error message. Do
+> >> you want to see it here if the wait times out or not?
+> > 
+> > I prefer calling _dpu_encoder_phys_cmd_wait_for_idle directly and
+> > optionally adding our own error message.  IIRC DRM_ERROR prints source
+> > information such as the function this originated from, and that makes it
+> > impossible to distinguish between the wait_for_tx_complete callback or
+> > the invocation through dpu_encoder_phys_cmd_wait_for_commit_done anyway.
+> > 
+> > - Marijn
+> > 
 > 
-> TBH I feel inclined to take the simpler approach of just splitting the 
-> rcache array to a separate allocation, making init_iova_rcaches() public 
-> (with a proper return value), and tweaking put_iova_domain() to make 
-> rcache cleanup conditional. A residual overhead of 3 extra pointers in 
-> iova_domain doesn't seem like *too* much for non-DMA-API users to bear. 
+> I wouldn't be happy to find myself in a situation in which I get strange
+> display slowness without any print to help me; for this reason, I find
+> having the print in place useful for debugging of both perf and fault.
 
-OK, fine. So I tried as you suggested and it looks ok to me.
+Same thought here, though dpu_encoder_phys_cmd_wait_for_tx_complete
+exists for the sole reason of printing a nice debug message, which I
+wouldn't want to be misused by dpu_encoder_phys_cmd_wait_for_commit_done
+punting its errors on wait_for_tx_complete - if that happens the first
+thing I'd do during debugging is assign individual messages to both,
+otherwise it is impossible to know which two functions is the cause: we
+might as well "duplicate" the error message right now and prevent such
+confusion from occurring in the first place?
 
-I'll send something out at rc1.
+- Marijn
 
-> Unless you want to try generalising the rcache mechanism completely away 
-> from IOVA API specifics, it doesn't seem like there's really enough to 
-> justify the bother of having its own distinct abstraction layer.
-
-Yeah, I don't see that as necessary.
-
-However something which could be useful is to separate the magazine code 
-out for other possible users.
-
-Thanks!
-John
+> 
+> Cheers,
+> - Angelo

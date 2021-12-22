@@ -2,81 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C16B47CDA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:43:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 690D247CDA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243052AbhLVHnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 02:43:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54174 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbhLVHnu (ORCPT
+        id S243058AbhLVHos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 02:44:48 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34090 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231422AbhLVHor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 02:43:50 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD4EC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 23:43:50 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id r22so2340565ljk.11
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 23:43:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=3z0w0dCN2/7/FETUgj96hnxfDSsJmAZNYN409krHcPU=;
-        b=fy8pO1fvfHkXwCvvz3jpQ76suxYCF3yQKW20Xc5oQV+vSQtmK1Iz6iO0tDtf20Cync
-         G4UWlzHXqSNvSz0j8m9iJ0qBRxeCxV0fALv8d3rvudNZuerXk8wruwOccoVdQ5/g/dJE
-         u4QyKq379P/zlYGe+2bqMMboglcKpD9CsLBYJcif2z35K6OJavV+UXUoS8R6mia3lgmp
-         5bOcqII85EIezNeAlxzqX5cij7fqQJWT9VrBM4Hk3DyyTHG8uiNfKzAxmuscBfG3M3rQ
-         z2CBvWOhgUClZeiPQCXU9FKeWHrYBLDgjMa8/Xua2tflLpT/y8cbMjTQKZkX0nM39dzp
-         PP2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=3z0w0dCN2/7/FETUgj96hnxfDSsJmAZNYN409krHcPU=;
-        b=inuECFFVpCJuUP24NvQqrdUSpPSU9qWIUAImYoF3KWAYHe5XY4fSTvAKgrNcCR/Fh3
-         bl58JPr+ya80dRTJIV4tiVnNzwKgY1LdOz3pw8/YNQVrAX+iMtJe7n42j9K7dTAYjwFf
-         RbFV4LarpaQQYQnBHUTd7aiLfr5pYklgdxae50afgBeaeWXaEcFTefvt/gnhGTVA2U4V
-         6EzgaG+uMVS+ieXQSr/VeRuKmf3Xt+bBz5M7NxgRjnvpHeJVl2/WuTYFWY/YJ5R/2GGN
-         cU9gOGbntWzKYTnW1e94tYNAfqZJgV68qBT4I0mZOEbXDI2IuE8Me3z1EezydGH+0k2+
-         QPYg==
-X-Gm-Message-State: AOAM533aVgNJN9AEvkhYg1J4wIbXyCQiBgMFqKInXLpwMzST80g9DL7h
-        EgqwkpqjxqDaOLt0lhwu/7F9lk5Yzgo2w98v9t0=
-X-Google-Smtp-Source: ABdhPJz1zMGr4rEFXkb/RzTPUr3G2rkNgsYZyn5lXYmK1Ouv5a+HFFaamypgH81g1/C8o1ZAvV57Zxz4rOmMvJLIscM=
-X-Received: by 2002:a2e:9081:: with SMTP id l1mr1283125ljg.399.1640159027868;
- Tue, 21 Dec 2021 23:43:47 -0800 (PST)
+        Wed, 22 Dec 2021 02:44:47 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F2D16189F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 07:44:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1057FC36AE8;
+        Wed, 22 Dec 2021 07:44:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640159086;
+        bh=vkHajpWN3p1MMrZ4HvcJzEwOALIp1X3ZS3EL2D5vfwY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QCkOqH8OwRODpePjYLrOqWT5JzBQHo8D6u882x33xkAs5wMui2qxHu7+4Jw3i3jdn
+         6y1tvddRPfb8ksWI9nmIzPQ1LiUZByrtVXzDPp/IEzQF848MgSiIOj2zNBdWRH7Un6
+         6kg8OwdzCW6mi3p4ZIZgPTn1l6ee75S1iHmexO5k=
+Date:   Wed, 22 Dec 2021 08:44:44 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Johan Hovold <johan@kernel.org>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH] nvmem: fix unregistering device in nvmem_register()
+ error path
+Message-ID: <YcLXbPzyhtMnP0YQ@kroah.com>
+References: <20211221154550.11455-1-zajec5@gmail.com>
+ <YcH7fw5S6aSXswvb@kroah.com>
+ <9e94f0fd-e2d5-4d9e-5759-a5f591191785@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6520:2f8b:b0:14d:a294:9a9 with HTTP; Tue, 21 Dec 2021
- 23:43:47 -0800 (PST)
-Reply-To: rnandluise552@gmail.com
-From:   "Mr. Luis Fernand" <jarrahm682@gmail.com>
-Date:   Wed, 22 Dec 2021 08:43:47 +0100
-Message-ID: <CA+O9goCLzbua+NTQZfmmedFVm54DOtYWLkG2wy7wZxwFNhOO9Q@mail.gmail.com>
-Subject: Dear Friend,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9e94f0fd-e2d5-4d9e-5759-a5f591191785@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greeting My Dear
+On Tue, Dec 21, 2021 at 06:46:01PM +0100, Rafał Miłecki wrote:
+> On 21.12.2021 17:06, Greg Kroah-Hartman wrote:
+> > On Tue, Dec 21, 2021 at 04:45:50PM +0100, Rafał Miłecki wrote:
+> > > From: Rafał Miłecki <rafal@milecki.pl>
+> > > 
+> > > 1. Drop incorrect put_device() calls
+> > > 
+> > > If device_register() fails then underlaying device_add() takes care of
+> > > calling put_device() if needed. There is no need to do that in a driver.
+> > 
+> > Did you read the documentation for device_register() that says:
+> > 
+> >   * NOTE: _Never_ directly free @dev after calling this function, even
+> >   * if it returned an error! Always use put_device() to give up the
+> >   * reference initialized in this function instead.
+> 
+> I clearly tried to be too smart and ignored documentation.
+> 
+> I'd say device_add() behaviour is rather uncommon and a bit unintuitive.
+> Most kernel functions are safe to assume to do nothing that requires
+> cleanup if they fail.
+> 
+> E.g. if I call platform_device_register() and it fails I don't need to
+> call anything like platform_device_put(). I just free previously
+> allocated memory.
 
-Before I introduce myself, I wish to inform you that this letter is
-not a hoax mail,My name is Mr. Luis Fernand.from Burkina Faso, West
-Africa. I work in Society General Burkina Faso (SG;BF) as telex
-manager with the business proposal of ($10.5million Dollars) to
-transfer into your account,
+And that is wrong.
 
- if  you are interested them let me know if interested to work
-together so that the fund to be transfer your account your country get
-back to me to proceed them i can give you the full details about the
-transaction,
+{sigh}
 
-if you believe to work with me nobody come for it asking you about the
-fund, looking forward to hearing from you immediately for further
-information,I await your response to give you more details.this my
-email(rnandluise552@gmail.com)
+Seems the author of that function did not read the documentation.  I'll
+add "fix platform_device_register()" to my long TODO list.  Arguably, it
+should handle this type of failure internally to it, to prevent all
+individual drivers from having to handle it.
 
-Thanks with all my best regards.
-Mr. Luis Fernand,
-Telex Manager
+You also need to handle this type of functionality in your bus call, and
+you do, which is good as you do not want everyone who calls
+nvmem_register() to also have to do much the same thing.
 
-Society General Burkina Faso (SG.BF)
+> When calling device_register() / device_add() it seems device always
+> gets partially registered (even if it fails!). Enough to make it safe to
+> depend on core subsystem calling .release() after device_put().
+> 
+> So what initially looks like unbalanced device_put() call is actually
+> some device_add() specific magic behaviour ;)
+
+It's documented magic behavior :)
+
+thanks,
+
+greg k-h

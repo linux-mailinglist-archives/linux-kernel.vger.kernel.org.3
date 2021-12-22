@@ -2,184 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C2947D286
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3238D47D289
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245048AbhLVM5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 07:57:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233901AbhLVM5M (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:57:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B60C061574;
-        Wed, 22 Dec 2021 04:57:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24042B819C9;
-        Wed, 22 Dec 2021 12:57:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 581CDC36AE8;
-        Wed, 22 Dec 2021 12:57:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640177829;
-        bh=DZHZR74Wmdv1RT8DZTvhHyHxk/8UcomFC4JcqKGKo/U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EKq4/MTiROv1nwsHueBcs8ZE/6uIqEOgKnaQpwkSjKrPkl4rIkWWfuLSKJ9RYoveB
-         I6P+ixlixVbQomdzq7e2nZpOG2AExsXehfdnL08mjYs8ziFqN+uqqRN4Cjkt4GhQNP
-         W0RkGWGiz45rLiWzn8NOQJte0v1l+Zw71VJWU/uU=
-Date:   Wed, 22 Dec 2021 13:57:07 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     david.e.box@linux.intel.com, lee.jones@linaro.org,
-        bhelgaas@google.com, andriy.shevchenko@linux.intel.com,
-        srinivas.pandruvada@intel.com, mgross@linux.intel.com,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-pci@vger.kernel.org, Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH RESEND V2 3/6] platform/x86/intel: Move intel_pmt from
- MFD to Auxiliary Bus
-Message-ID: <YcMgoxbi6PwLQXzM@kroah.com>
-References: <YbD1NsYHbU8FvtTN@kroah.com>
- <a70956e1c4da10603e29087e893cbae62ce82631.camel@linux.intel.com>
- <YbEFuN7fwdiNI8vW@kroah.com>
- <622887d53eaf6e6ae36354bfa0ed483df1cd9214.camel@linux.intel.com>
- <YcGEaH0oAAocziU2@kroah.com>
- <e9648546c3fb751954e411dfa392f0e0f90f0c85.camel@linux.intel.com>
- <YcIGwZqm2sfIixkH@kroah.com>
- <3913dfd7-3872-7d69-24af-eba747a7a92d@redhat.com>
- <be2a1cce5691e5dc7fb875f46d5f2085b6a55542.camel@linux.intel.com>
- <8c9d0a86-cbbb-be1b-41b1-61f27890b77d@redhat.com>
+        id S245068AbhLVM6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 07:58:31 -0500
+Received: from www.zeus03.de ([194.117.254.33]:44762 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240607AbhLVM63 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 07:58:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=1nIjg3+81S8PpIpyM/622UZk5jW8
+        luO276mlBCCaRH0=; b=k58GqFsJm7Jol5kpL42DPmyYaeBhfdWtkophTQQ75lgW
+        fcs4OCEtq0QMWgjCtTl7LHj7gXsFXwO1G28KH+eWX/RArHbYZCmUtaiiLHq05b7b
+        tv8B+oeDCfBJutQr7H6ewMqa4SYBzstQOTDy2I5DbOpy9iV+6LtoAVFZFQD0JnQ=
+Received: (qmail 1769551 invoked from network); 22 Dec 2021 13:58:27 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Dec 2021 13:58:27 +0100
+X-UD-Smtp-Session: l3s3148p1@KgpYrbvTiMYgAQnoAE7AABWUu3WTN36y
+Date:   Wed, 22 Dec 2021 13:58:24 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 1/1] gpio: add sloppy logic analyzer using polling
+Message-ID: <YcMg8NzjlNDLksNT@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211219132442.4080-1-wsa+renesas@sang-engineering.com>
+ <20211219132442.4080-2-wsa+renesas@sang-engineering.com>
+ <CAMuHMdVh60ocfzkJKz8zR1hODr8SWp=sbyHrR3KGx2ntLmuFGQ@mail.gmail.com>
+ <YcL7p5nzZs8vnojl@shikoro>
+ <CAMuHMdXn-cmK1HewukjOnjC1JEgfFfH7FW23YvPTKHcNCiet2w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="88VcK3OE27ZRg7Tw"
 Content-Disposition: inline
-In-Reply-To: <8c9d0a86-cbbb-be1b-41b1-61f27890b77d@redhat.com>
+In-Reply-To: <CAMuHMdXn-cmK1HewukjOnjC1JEgfFfH7FW23YvPTKHcNCiet2w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 07:38:38PM +0100, Hans de Goede wrote:
-> Hi,
-> 
-> On 12/21/21 19:16, David E. Box wrote:
-> > On Tue, 2021-12-21 at 18:04 +0100, Hans de Goede wrote:
-> >> Hi,
-> >>
-> >> On 12/21/21 17:54, Greg KH wrote:
-> >>> On Tue, Dec 21, 2021 at 08:44:57AM -0800, David E. Box wrote:
-> >>>> On Tue, 2021-12-21 at 08:38 +0100, Greg KH wrote:
-> >>>>> On Wed, Dec 08, 2021 at 01:30:06PM -0800, David E. Box wrote:
-> >>>>>> On Wed, 2021-12-08 at 20:21 +0100, Greg KH wrote:
-> >>>>>>> On Wed, Dec 08, 2021 at 11:09:48AM -0800, David E. Box wrote:
-> >>>>>>>> On Wed, 2021-12-08 at 19:11 +0100, Greg KH wrote:
-> >>>>>>>>> On Wed, Dec 08, 2021 at 09:47:26AM -0800, David E. Box wrote:
-> >>>>>>>>>> On Wed, 2021-12-08 at 17:22 +0100, Greg KH wrote:
-> >>>>>>>>>>> On Tue, Dec 07, 2021 at 05:50:12PM -0800, David E. Box
-> >>>>>>>>>>> wrote:
-> >>>>>>>>>>>> +static struct pci_driver intel_vsec_pci_driver = {
-> >>>>>>>>>>>> +       .name = "intel_vsec",
-> >>>>>>>>>>>> +       .id_table = intel_vsec_pci_ids,
-> >>>>>>>>>>>> +       .probe = intel_vsec_pci_probe,
-> >>>>>>>>>>>> +};
-> >>>>>>>>>>>
-> >>>>>>>>>>> So when the PCI device is removed from the system you leak
-> >>>>>>>>>>> resources and
-> >>>>>>>>>>> have dangling devices?
-> >>>>>>>>>>
-> >>>>>>>>>> No.
-> >>>>>>>>>>
-> >>>>>>>>>>> Why no PCI remove driver callback?
-> >>>>>>>>>>
-> >>>>>>>>>> After probe all resources are device managed. There's nothing
-> >>>>>>>>>> to
-> >>>>>>>>>> explicitly clean up. When
-> >>>>>>>>>> the
-> >>>>>>>>>> PCI
-> >>>>>>>>>> device is removed, all aux devices are automatically removed.
-> >>>>>>>>>> This
-> >>>>>>>>>> is the case for the SDSi
-> >>>>>>>>>> driver
-> >>>>>>>>>> as well.
-> >>>>>>>>>
-> >>>>>>>>> Where is the "automatic cleanup" happening?  As this pci driver
-> >>>>>>>>> is
-> >>>>>>>>> bound
-> >>>>>>>>> to the PCI device, when the device is removed, what is called in
-> >>>>>>>>> this
-> >>>>>>>>> driver to remove the resources allocated in the probe callback?
-> >>>>>>>>>
-> >>>>>>>>> confused,
-> >>>>>>>>
-> >>>>>>>> devm_add_action_or_reset(&pdev->dev, intel_vsec_remove_aux,
-> >>>>>>>> auxdev)
-> >>>>>>>
-> >>>>>>> Wow that is opaque.  Why not do it on remove instead?
-> >>>>>>
-> >>>>>> This code is common for auxdev cleanup. AFAICT most auxiliary bus code
-> >>>>>> is
-> >>>>>> done by drivers that have
-> >>>>>> some other primary function. They clean up their primary function
-> >>>>>> resources
-> >>>>>> in remove, but they
-> >>>>>> clean up the auxdev using the method above. In this case the sole
-> >>>>>> purpose of
-> >>>>>> this driver is to
-> >>>>>> create the auxdev. There are no other resources beyond what the auxdev
-> >>>>>> is
-> >>>>>> using.
-> >>>>>>
-> >>>>>> Adding runtime pm to the pci driver will change this. Remove will be
-> >>>>>> needed
-> >>>>>> then.
-> >>>>>
-> >>>>> And who will notice that being required when that happens?
-> >>>>>
-> >>>>> Why is there no runtime PM for this driver?  Do you not care about power
-> >>>>> consumption?  :)
-> >>>>
-> >>>> Of course. :)
-> >>>>
-> >>>> There's a backlog of patches waiting for this series. One adds support for
-> >>>> the
-> >>>> telemetry device (an auxdev) on the DG2 GPU. This device requires runtime
-> >>>> pm in
-> >>>> order for the slot to go D3. But this also requires changes to the
-> >>>> telemetry
-> >>>> driver in order for runtime pm to be handled correctly. These and other
-> >>>> patches,
-> >>>> including a series to have all current aux drivers use the new drvdata
-> >>>> helpers,
-> >>>> are waiting for this.
-> >>>
-> >>> I can take the aux driver drvdata patch now, through my tree, if you
-> >>> want, no need to make it wait for this tiny driver.
-> >>>
-> >>> Feel free to send it independant of the existing patchset, and with the
-> >>> cleanup patches at the same time, should be quite easy to get merged.
-> >>
-> >> If you're going to take that one, can you perhaps take patches
-> >> 1-3 for 5.17 through your tree as well (patch 3 depends on 2/it) ?
-> >>
-> >> Note there is a v4 of this series, see please use that :)
-> >>
-> >> I assume the follow up patches are also going to need patch 3
-> >> (the actual conversion of the driver to aux-bus).
-> > 
-> > Yes.
-> > 
-> >>
-> >> Here is my Ack for the pdx86 bits in patch 3:
-> >>
-> >> Acked-by: Hans de Goede <hdegoede@redhat.com>
-> >>
-> >> And patch 1 and 3 also have acks from the PCI resp. MFD subsys maintainers,
-> >> so I guess taking this all upstream through your tree is fine.
-> > 
-> > Should I send 1-3 plus the drvdata cleanup patches I have to Grep? V5?
-> 
-> No there is no need for that v4 is fine, since no changes have been
-> requested there is no need to send out a new version.
 
-I've taken patches 1-3 of this series now, thanks.
+--88VcK3OE27ZRg7Tw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-greg k-h
+
+> > Yes, the search engines helped[1]. I run a minimal system, so when I
+> > mount cpusets, it will actually mount cgroups with a default mount
+> > option of "noprefix". But you likely run a rootfs with cgroups already,
+> > so it gets mounted directly without "noprefix". Then, when the logic
+> > analyzer tries to mount again, the implied default "noprefix" is
+> > discarded.
+>=20
+> Yeah, systemd on Debian has it mounted.
+
+So, the proper solution is to use/mount 'cgroups2' instead of 'cpuset'.
+But this needs more thinking and testing and, thus, another revision.
+Dunno if I can make it this year, so I am probably going to miss the
+next merge window after all :(
+
+Geert, if you still want to test the PFC patch I sent, then this patch
+for the script should get you going:
+
+diff --git a/tools/gpio/gpio-sloppy-logic-analyzer b/tools/gpio/gpio-sloppy=
+-logic-analyzer
+index eb2065fe6733..f1bfdd3568cf 100755
+--- a/tools/gpio/gpio-sloppy-logic-analyzer
++++ b/tools/gpio/gpio-sloppy-logic-analyzer
+@@ -80,13 +80,13 @@ init_cpu()
+ 	mount | grep -q $cpusetdir || mount -t cpuset cpuset $cpusetdir
+ 	[ -d "$lacpusetdir" ] || mkdir "$lacpusetdir"
+=20
+-	cur_cpu=3D"$(cat "$lacpusetdir"/cpus)"
++	cur_cpu=3D"$(cat "$lacpusetdir"/cpuset.cpus)"
+ 	[ "$cur_cpu" =3D "$isol_cpu" ] && return
+ 	[ -z "$cur_cpu" ] || fail "CPU$isol_cpu requested but CPU$cur_cpu already=
+ isolated"
+=20
+-	echo "$isol_cpu" > "$lacpusetdir"/cpus || fail "Could not isolate CPU$iso=
+l_cpu. Does it exist?"
+-	echo 1 > "$lacpusetdir"/cpu_exclusive
+-	echo 0 > "$lacpusetdir"/mems
++	echo "$isol_cpu" > "$lacpusetdir"/cpuset.cpus || fail "Could not isolate =
+CPU$isol_cpu. Does it exist?"
++	echo 1 > "$lacpusetdir"/cpuset.cpu_exclusive
++	echo 0 > "$lacpusetdir"/cpuset.mems
+=20
+ 	oldmask=3D$(cat /proc/irq/default_smp_affinity)
+ 	newmask=3D$(printf "%x" $((0x$oldmask & ~(1 << isol_cpu))))
+@@ -213,7 +213,7 @@ if [ -n "$triggerdat" ]; then
+ 	printf "$trigger_bindat" > "$lasysfsdir"/trigger 2>/dev/null || fail "Tri=
+gger data '$triggerdat' rejected"
+ fi
+=20
+-workcpu=3D$(cat "$lacpusetdir"/effective_cpus)
++workcpu=3D$(cat "$lacpusetdir"/cpuset.effective_cpus)
+ [ -n "$workcpu" ] || fail "No isolated CPU found"
+ cpumask=3D$(printf '%x' $((1 << workcpu)))
+ instance=3D${lasysfsdir##*/}
+
+
+--88VcK3OE27ZRg7Tw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHDIOwACgkQFA3kzBSg
+KbYTQxAAg4lBRLmsgJwsKmT7aqv9a24V8wcazaw2rI1QhCx34BgfxAko/CgO7Tah
+mny71vhIk+cSKdkBMnXU2gTG2V7Dx6kb5XVI9IXTIc1PBnJ/syS1M1ao8QmGenkK
++lp+NBQT+lCcgPVOHP36Er9G5CG+yn4NH4VK1mT53d63KsdGyUGCi0xyB01tSwNl
+vok6xNZFksOvzWivCd7HKEVK26pK8gDYkFOrVwVx7clgAIOMurZTtEWI+ejNB11s
+DJx0kQl6ouOh0B7VZndGEQTvoOwR6hCWJ3R32z61sMO4h5hQIMfEznAVTiBRqNqQ
+2z1pzbwNq10kkQIyAKeOotxOuHzVdsZ5/yXl4JJUdn8rxxBhJXlMggAjYfKST3Qd
+pL3xcZeC+kIYiNP/QWgO5M2n+x3SFChY/jbAmUXw0N+3XL/K+6nCeMhcKLxfK+/A
+8Zpgzxd3rMbfFzg5A8TIuCojorgpKQ9XEuKbmJdu7KW2MlHiHqqTjI/kjinvjkbw
+Hqr7MkoC9QgUBZU/LmfFVV/NG4DVFhGHRVTNaOif5Tj7jx/p+daRYox7z8thMvDl
+vse5sBH0kulMdvSynvUNceKhk/tzJ/pvTYNTtyj/5Huywv9W1satgpRQbcy3V3or
+9MT+wpYFLq4SY39+/6xNgPv6sVAU/M4bUv2t/r4wR1EOcMIsYy0=
+=T8QE
+-----END PGP SIGNATURE-----
+
+--88VcK3OE27ZRg7Tw--

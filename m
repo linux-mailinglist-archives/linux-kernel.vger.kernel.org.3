@@ -2,97 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 673FA47CDFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 09:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF29E47CE01
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 09:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243272AbhLVIV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 03:21:58 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:5715 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239517AbhLVIV5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 03:21:57 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1BM8GB1I076083;
-        Wed, 22 Dec 2021 16:16:11 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 22 Dec
- 2021 16:21:37 +0800
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
-        <andrew@aj.id.au>, <linux-media@vger.kernel.org>,
-        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 4/4] media: aspeed: Fix timing polarity incorrect
-Date:   Wed, 22 Dec 2021 16:21:39 +0800
-Message-ID: <20211222082139.26933-5-jammy_huang@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211222082139.26933-1-jammy_huang@aspeedtech.com>
-References: <20211222082139.26933-1-jammy_huang@aspeedtech.com>
+        id S243283AbhLVIWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 03:22:16 -0500
+Received: from verein.lst.de ([213.95.11.211]:49648 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243282AbhLVIWP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 03:22:15 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 0144B68B05; Wed, 22 Dec 2021 09:22:10 +0100 (CET)
+Date:   Wed, 22 Dec 2021 09:22:09 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-mm@kvack.org,
+        iommu@lists.linux-foundation.org,
+        Stephen Bates <sbates@raithlin.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jakowski Andrzej <andrzej.jakowski@intel.com>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [PATCH v4 01/23] lib/scatterlist: cleanup macros into static
+ inline functions
+Message-ID: <20211222082209.GA22606@lst.de>
+References: <20211117215410.3695-1-logang@deltatee.com> <20211117215410.3695-2-logang@deltatee.com> <20211221090003.GA7949@lst.de> <05095125-464e-4e85-f609-c7bc93d2f479@deltatee.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1BM8GB1I076083
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <05095125-464e-4e85-f609-c7bc93d2f479@deltatee.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a workaround for sync polarity unstable.
-Sync value get by VR09C counts from sync's rising edge, which means
-sync's polarity is negative if sync value is bigger than total/2.
+On Tue, Dec 21, 2021 at 10:23:24AM -0700, Logan Gunthorpe wrote:
+> > scatterlist.h doesn't have a real maintainer, do you want me to pick
+> > this up through the DMA tree?
+> 
+> Sure, that would be great!
 
-Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
----
- v2:
-  - Use 'total/2' rather than 'total<<1'
-  - Update comment
----
- drivers/media/platform/aspeed-video.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
-
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index 7c50567f5ab0..c3e3343d91e1 100644
---- a/drivers/media/platform/aspeed-video.c
-+++ b/drivers/media/platform/aspeed-video.c
-@@ -989,6 +989,16 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
- 
- 		video->frame_bottom = FIELD_GET(VE_SRC_TB_EDGE_DET_BOT, src_tb_edge);
- 		video->frame_top = FIELD_GET(VE_SRC_TB_EDGE_DET_TOP, src_tb_edge);
-+
-+		/*
-+		 * This is a workaround for polarity detection when the sync
-+		 * value is larger than half.
-+		 */
-+		if (vsync > (vtotal / 2))
-+			det->polarities &= ~V4L2_DV_VSYNC_POS_POL;
-+		else
-+			det->polarities |= V4L2_DV_VSYNC_POS_POL;
-+
- 		if (det->polarities & V4L2_DV_VSYNC_POS_POL) {
- 			det->vbackporch = video->frame_top - vsync;
- 			det->vfrontporch = vtotal - video->frame_bottom;
-@@ -1003,6 +1013,16 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
- 
- 		video->frame_right = FIELD_GET(VE_SRC_LR_EDGE_DET_RT, src_lr_edge);
- 		video->frame_left = FIELD_GET(VE_SRC_LR_EDGE_DET_LEFT, src_lr_edge);
-+
-+		/*
-+		 * This is a workaround for polarity detection when the sync
-+		 * value is larger than half.
-+		 */
-+		if (hsync > (htotal / 2))
-+			det->polarities &= ~V4L2_DV_HSYNC_POS_POL;
-+		else
-+			det->polarities |= V4L2_DV_HSYNC_POS_POL;
-+
- 		if (det->polarities & V4L2_DV_HSYNC_POS_POL) {
- 			det->hbackporch = video->frame_left - hsync;
- 			det->hfrontporch = htotal - video->frame_right;
--- 
-2.25.1
-
+Done.

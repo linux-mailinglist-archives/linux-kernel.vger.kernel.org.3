@@ -2,144 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD7347D070
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:01:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D50E47D06F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244360AbhLVLAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 06:00:51 -0500
-Received: from de-smtp-delivery-102.mimecast.com ([194.104.111.102]:48512 "EHLO
-        de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244359AbhLVLAg (ORCPT
+        id S244362AbhLVLAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 06:00:44 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:48971 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244361AbhLVLAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 06:00:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1640170833;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=0DE/r1I8Mf8rCM6/bHNCXRZbOSXxyrRUceSZ+ZeXcpM=;
-        b=MdUUpX7vNirMjxfMUkdrernUa6AuKC60lOeNO1tjsLw/PCSDqcw1G3HoSr7kWSO12qClhr
-        aM64UxUpKC2MBjaAx6rZVRNmo/A8cB5CAnWSnveQM3TWXX/SH3eM/A6aPvz6doyYlUJ40r
-        PFYOzflHq5Cumw0F9JIQF22spMCATdg=
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com
- (mail-vi1eur04lp2054.outbound.protection.outlook.com [104.47.14.54]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-26-Nm1RfO4MOTOYGLMxXZm2hA-1; Wed, 22 Dec 2021 12:00:29 +0100
-X-MC-Unique: Nm1RfO4MOTOYGLMxXZm2hA-1
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b+GdTgocPgN2mJfuSo3v2YQUwdpw68pF4h8QPAHmj04TtuoGw4rs/uKtpxwfjpsLYN/L4DGTR/vFerkxtL74qivDNfy9hQ3E9D6DO1DfI+0RraJ2C5vvgJZZegezf0NKl4rZmfsGyUWuC7JVKLUqQUk5u86go89048J0RJ4CSf8kC7HLpHFNmnnjCxYqfxUX1pAd4+LrGM5xnzd93Toj+aNuohsk/F7gVaPaUeXGzk94702xbSc0NVfINQL0ptD6/kj61cZC3I8a5TVl4p/E9Ua2wpUnq+uwvVXdxmitrkw+GOZeH/rp7zVkJYlHFT2NTv8JqqqDYubxe4HUskDZCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dRFecMjSMPVBQNWJYQCKSAdm+y3Dz0ZBNDq6ISy8Si8=;
- b=Ack24VTe3czC+O8oI+rWV4RAvIcN0n6QrUACDl6lxzk45bwBMPLW+45NvjiVxcN3g21KYLlUdf2rauvIW3kEWLuxTaCWFt2hUw4oGgHlvwNQEfB116lJQIomneGWngoJcqv9RtsYa55Od+YsW8TqxJsa3BVeHNqNvRTPAjs4OevkoO0gnBXy925tww/JD4MuLEn0YvE0JY+LPl4XfpugUuWcIj6MtpSTaAKiE8didCMbm8ro7xi+11CM9XL17FYZQwRg0MmhTL1lV5ny6AzddrvjGGlMt5DMlq8J/ed+xEm/B0LS+f85fe9XJ+7nxGc0YHbKbcKq8efyBW0f+KMSLw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from HE1PR0402MB3497.eurprd04.prod.outlook.com (2603:10a6:7:83::14)
- by HE1PR0402MB3402.eurprd04.prod.outlook.com (2603:10a6:7:88::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.18; Wed, 22 Dec
- 2021 11:00:27 +0000
-Received: from HE1PR0402MB3497.eurprd04.prod.outlook.com
- ([fe80::59a0:4185:3e03:7366]) by HE1PR0402MB3497.eurprd04.prod.outlook.com
- ([fe80::59a0:4185:3e03:7366%7]) with mapi id 15.20.4823.018; Wed, 22 Dec 2021
- 11:00:26 +0000
-From:   Geliang Tang <geliang.tang@suse.com>
-To:     "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>
-CC:     Geliang Tang <geliang.tang@suse.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH] tracing: fix mismatched comment in __string_len
-Date:   Wed, 22 Dec 2021 19:00:25 +0800
-Message-ID: <5c012db463392d0e6d4f0636203d778962ad060a.1640170494.git.geliang.tang@suse.com>
-X-Mailer: git-send-email 2.31.1
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0169.apcprd02.prod.outlook.com
- (2603:1096:201:1f::29) To HE1PR0402MB3497.eurprd04.prod.outlook.com
- (2603:10a6:7:83::14)
+        Wed, 22 Dec 2021 06:00:35 -0500
+Received: by mail-io1-f71.google.com with SMTP id g23-20020a6be617000000b005e245747fb4so1056431ioh.15
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:00:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=GKX/d8iTHUta4j7+l6WF6B1hADn9V+84Bv3iJuqSE44=;
+        b=4YDpfZTwVkk5WOxRiNmEKfgTpRdROX0J96zSvt+tvhJasB/azcXoILarQX3QSjaH8N
+         ycjXTL3qXU15N8/bMqoICmpl5EOxIHh7RFWy0IruGlmcteknEAmVjRmupbRjDSUsbdZ3
+         Trw1+pmRp1trVDklZ56iACwkXMQhgxa9qZunizHI2QqOOInCAQ5x49roVa6NkN2QQqLZ
+         huUaZ1dFLHlOdUFEYVrHfhHN2aT9zMjbbuJ+Frbu0zEFQPPSZeE/IFRRtrGPkUTowk2V
+         HbqukS1D8dFadpnRLtBbkCnO+mF6mvAPu5rwRwCIHstYw1iwk68TDjqEY8NOVzBC7mcS
+         f2VA==
+X-Gm-Message-State: AOAM530UeWtroft0qMa/UphayzMW6OO9zEYgSzX5xaKzCTcJ1r3j44OX
+        whWVGcxdpCq67l3vfEGGfruveAz1Gla1xLkDe6eNZc2L1Oec
+X-Google-Smtp-Source: ABdhPJzDQee906NuLJIycYnVt2Nc0JabAzX9pZz4e5RvgxkmAtfCRVqDq1wRys3GlAV2KZ5xMgVzge06l3bMc7SUeprU3tbXtNz9
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f4391ddf-1c5d-4c17-958c-08d9c53a42a9
-X-MS-TrafficTypeDiagnostic: HE1PR0402MB3402:EE_
-X-Microsoft-Antispam-PRVS: <HE1PR0402MB34020711712B83985548BED8F87D9@HE1PR0402MB3402.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ziR6aer/KJByzL9R8blAkCs5gN1Yl6zq//7PK3G22d1WQWQLztuyVMbsCTVOcMoa6yjU1Rv/vV/ZnznMCkf/ggVZy0EbSm0sGVZ0APTr9B4fMIl43DghXmTpuS10Rq7VKC7nAnxB+gi5L5L35Bvp2fkr0MX/MWc0vMFVnmobPjxaGqViZ4eL2E/hljYBD4Oe9qydvKfXq5rMLL6YAKjwmSuTbxg71GAaFkm6ID9TkfUcuc9B4i600wlgEKHhO2txrrhF7JA+jX777TtyJfQbqgtrcTRVorgqddQd3B9Gw/NP0LwKG8JzN9+NoCSAmHWz2oJu04PKChf3DM/i6wsjxBWLEZcl5t+iVquKLtinsenRYq20zMPfJuDNg7fufuO4s41jBrj5FziFEu2TRm+2idgX6y2bNE3ZN39USb2gAYX+wZZ1iQ1ZFSOQ9KlH/+TZvSE8CTjI9gDrWs1AYWgljij8iQ4cYNmTNNdjkz3JWKC093fwEn4/Dqmx/VDtH+/LqGVFBHl44GnAYh211ONnbJooPEbxe2B4ZWt7IEC9ljnVNP3Q8sLVGqRc4ScEZ/njjkBiPQa+J2cBJSrfuyG1NjVRe7+aoyYmW/DhGLIk/8bbxwVapLpJWHNeDDpfzLFjXCdcYl3TvwvQKBdAz1DHMQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0402MB3497.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(6506007)(2906002)(186003)(66476007)(36756003)(6486002)(8676002)(66556008)(86362001)(110136005)(8936002)(508600001)(83380400001)(4326008)(55236004)(44832011)(38100700002)(2616005)(66946007)(316002)(4744005)(6512007)(26005)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+6Ss0hYf19RuF+XA9RsUERBbSpFKqNy23JBJTFFGhvbGShG1WqS0JL4kq5/7?=
- =?us-ascii?Q?ccUqm20q7IGrLOtT/q8AB2oDjzWm7qCI3ZSQgKLswQ5ntiv3O2yJzHBmmNTj?=
- =?us-ascii?Q?gmPwRla1sIcL0+D8MoPbzoVJFJwzM3Tn57u0vpBMxn+kotK+vUv1omV2QOev?=
- =?us-ascii?Q?1aa3rPVIz0zj5nyJz/Kib3EUHJcEHxjaBv/aDnwD/Ll5kImZt/U/Cewl2a2+?=
- =?us-ascii?Q?UnlvIEMrmzgdHiQrrrB+ne3bNab7+twBkREaM8NAAsrKQcQPrmQYiG6hGDcc?=
- =?us-ascii?Q?o8idChJxEkmdOjaGNHOe/jaQcUU9GOypmqFV735WGs4MuLGPTJiTucHC7cLK?=
- =?us-ascii?Q?VOyf4gREqTkLnd3d/6zrhNlH+GSSNILqT2sdApRtmHqkp6kFTFeqZJsp1+nF?=
- =?us-ascii?Q?u8LEkOazYfLFKjF5rDOdeWmBr/RnvLXneBtUQT7qIxzv1WIgD/qsiCRHZBFj?=
- =?us-ascii?Q?dnxY5MB32DY0CGGWfvgXX8dlDIGc801VUVS/hSsqp/WNim++s2w3t9rju/4Y?=
- =?us-ascii?Q?C9TVkVvWoCanwaoG60NY4H4VI0GKx4/mJ0ewkWW390QJvTqBPzMnlc7v8VTS?=
- =?us-ascii?Q?vEWwcCo9DpquP1WnSENyvBragSYH6anUeLMX6hw1mFWa75yrjbI4Q7tncOVv?=
- =?us-ascii?Q?PVtsPPZ2ukf/TiXp+3FHBsqFDLY/a1GqLYN6rIUCCDKuhkOwR0qjcdUrmZmT?=
- =?us-ascii?Q?iMA1BSj+hd5s/8UXkbQ4DCBJROb4O4miHqftms9WV3FjWOuKhQEEjxYmaXBF?=
- =?us-ascii?Q?AxYaCbN7wITMALfnK4VV25Y3fbu/3npTJb9dh2n/rsxiB+4vVRQYKa+gNMaB?=
- =?us-ascii?Q?tgAzkhTnMoh8whBq4QzuKuqOA/aCcWJ0xUBy41huGL/R177sCGrtWszQ+bfI?=
- =?us-ascii?Q?sIUpeSHvTpMCKCwL5C8YC7aCT3vVL0rhE6AKaIm8OrJvs4lAtCJMNqGK+31C?=
- =?us-ascii?Q?MZCsaAkMtjr4t5dtT1CwcZLY5+m4gbr9idyyxiPU3S0q/SK7w1j1ZFvcaNI0?=
- =?us-ascii?Q?rtiWnUz61OwfFvTzEpF+8bsap7tsHJ1DdYBcoa1KDz1k6j4tr8nBi4bGhU3f?=
- =?us-ascii?Q?BUZ69iOxsxuMGZUvNUe23Ml3FMLEtGKX9CWv6zQqIST5Fyp2Cv8BjnaqaLVg?=
- =?us-ascii?Q?CBMSMSkINj6yVicmZ3D4MiNfSDk0lfjLZagpPRMDIAlWzZ6b3OQBoDbnLBGK?=
- =?us-ascii?Q?AWD6nU/3waxchkoVgqsbZQQHSmdJPfbuOB6/6SLRhTlR93ZBVqWzRhaPSGeo?=
- =?us-ascii?Q?CFz2DzjguAOQ3h8W9apoeVLvuvDXAplqJcS79I607CpNZ7eLDzRv56vG0b7h?=
- =?us-ascii?Q?2sR0RK2BCbQB55ytw1OAhZdTl1bJcLafmxhTIR5QJ8lc3+G6sl9uRDfXfaY1?=
- =?us-ascii?Q?BA6TCtwB7Q37nYcriRPH6wL62hsAIRZHPeZjO9m0kmU9slsYTD6Y0ntAYkGD?=
- =?us-ascii?Q?X3Qxl272ZvbU5cwZi+6CfC5sYuOMrAbvMF3tVB8n5zOQIKecGAMOLw8k2cV1?=
- =?us-ascii?Q?dL6S89hNGYuwtYdJIVl90q4eJJmsYfmqugcd6PFyR4xFFcpAiYaqZUCO86zu?=
- =?us-ascii?Q?zDXm/O6e0bdv/UXCqjAmHbsB1O/wyN65kdwLMzLl4SKZP2f//4tjlH1ltdGB?=
- =?us-ascii?Q?zmFV89pR6OHvAkze1u9PgMc=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4391ddf-1c5d-4c17-958c-08d9c53a42a9
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0402MB3497.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2021 11:00:26.8360
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TAb9G9ag3lJ75oSas9MNbC3CY3xhBlvx3Dv/KsronKm1R3F5YqLz16rQVQkc4Wcqvo7Y5swVoYD3ffypdLJ2uQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0402MB3402
+X-Received: by 2002:a05:6638:3823:: with SMTP id i35mr1070513jav.213.1640170834581;
+ Wed, 22 Dec 2021 03:00:34 -0800 (PST)
+Date:   Wed, 22 Dec 2021 03:00:34 -0800
+In-Reply-To: <00000000000045dc96059f4d7b02@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f75af905d3ba0716@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in tcp_retransmit_timer (5)
+From:   syzbot <syzbot+694120e1002c117747ed@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, andriin@fb.com, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        dsahern@kernel.org, edumazet@google.com, john.fastabend@gmail.com,
+        kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org,
+        kuznet@ms2.inr.ac.ru, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, tpa@hlghospital.com, yhs@fb.com,
+        yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here __assign_str_len() should be used for the __string_len type, instead
-of __assign_str().
+syzbot has found a reproducer for the following issue on:
 
-Signed-off-by: Geliang Tang <geliang.tang@suse.com>
----
- samples/trace_events/trace-events-sample.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+HEAD commit:    819d11507f66 bpf, selftests: Fix spelling mistake "tained"..
+git tree:       bpf
+console output: https://syzkaller.appspot.com/x/log.txt?x=138bf80db00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=22b66456935ee10
+dashboard link: https://syzkaller.appspot.com/bug?extid=694120e1002c117747ed
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=172ccbcdb00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14fcccedb00000
 
-diff --git a/samples/trace_events/trace-events-sample.h b/samples/trace_eve=
-nts/trace-events-sample.h
-index 5ab74fc9a2df..cbbbb83beced 100644
---- a/samples/trace_events/trace-events-sample.h
-+++ b/samples/trace_events/trace-events-sample.h
-@@ -155,7 +155,7 @@
-  *
-  *         To assign this string, use the helper macro __assign_str_len().
-  *
-- *         __assign_str(foo, bar, len);
-+ *         __assign_str_len(foo, bar, len);
-  *
-  *         Then len + 1 is allocated to the ring buffer, and a nul termina=
-ting
-  *         byte is added. This is similar to:
---=20
-2.31.1
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+694120e1002c117747ed@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: use-after-free in tcp_retransmit_timer+0x2ea2/0x3320 net/ipv4/tcp_timer.c:511
+Read of size 8 at addr ffff888075d9b6d8 by task jbd2/sda1-8/2936
+
+CPU: 1 PID: 2936 Comm: jbd2/sda1-8 Not tainted 5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0x8d/0x320 mm/kasan/report.c:247
+ __kasan_report mm/kasan/report.c:433 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:450
+ tcp_retransmit_timer+0x2ea2/0x3320 net/ipv4/tcp_timer.c:511
+ tcp_write_timer_handler+0x5e6/0xbc0 net/ipv4/tcp_timer.c:622
+ tcp_write_timer+0xa2/0x2b0 net/ipv4/tcp_timer.c:642
+ call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
+ expire_timers kernel/time/timer.c:1466 [inline]
+ __run_timers.part.0+0x675/0xa20 kernel/time/timer.c:1734
+ __run_timers kernel/time/timer.c:1715 [inline]
+ run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1747
+ __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+ invoke_softirq kernel/softirq.c:432 [inline]
+ __irq_exit_rcu+0x123/0x180 kernel/softirq.c:637
+ irq_exit_rcu+0x5/0x20 kernel/softirq.c:649
+ sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1097
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:638
+RIP: 0010:check_kcov_mode kernel/kcov.c:166 [inline]
+RIP: 0010:__sanitizer_cov_trace_pc+0x1c/0x60 kernel/kcov.c:200
+Code: be b0 01 00 00 e8 b4 ff ff ff 31 c0 c3 90 65 8b 05 29 be 8a 7e 89 c1 48 8b 34 24 81 e1 00 01 00 00 65 48 8b 14 25 40 70 02 00 <a9> 00 01 ff 00 74 0e 85 c9 74 35 8b 82 a4 15 00 00 85 c0 74 2b 8b
+RSP: 0018:ffffc9000cc8f7e0 EFLAGS: 00000246
+RAX: 0000000080000001 RBX: 0000000000005460 RCX: 0000000000000000
+RDX: ffff88807dcdd700 RSI: ffffffff82149a29 RDI: 0000000000000003
+RBP: 0000000000008000 R08: 0000000000008000 R09: ffff88801d0598ff
+R10: ffffffff82149a1c R11: 0000000000000000 R12: ffff88801d059a88
+R13: 00000000ffffffff R14: ffff88801d059000 R15: 00000000ffffffff
+ mb_test_and_clear_bits+0xd9/0x240 fs/ext4/mballoc.c:1675
+ mb_free_blocks+0x364/0x1370 fs/ext4/mballoc.c:1811
+ ext4_free_data_in_buddy fs/ext4/mballoc.c:3662 [inline]
+ ext4_process_freed_data+0x56c/0x1070 fs/ext4/mballoc.c:3713
+ ext4_journal_commit_callback+0x11e/0x380 fs/ext4/super.c:449
+ jbd2_journal_commit_transaction+0x55a8/0x6be0 fs/jbd2/commit.c:1171
+ kjournald2+0x1d0/0x930 fs/jbd2/journal.c:213
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+
+Allocated by task 3696:
+ kasan_save_stack+0x1e/0x50 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:46 [inline]
+ set_alloc_info mm/kasan/common.c:434 [inline]
+ __kasan_slab_alloc+0x90/0xc0 mm/kasan/common.c:467
+ kasan_slab_alloc include/linux/kasan.h:259 [inline]
+ slab_post_alloc_hook mm/slab.h:519 [inline]
+ slab_alloc_node mm/slub.c:3234 [inline]
+ slab_alloc mm/slub.c:3242 [inline]
+ kmem_cache_alloc+0x202/0x3a0 mm/slub.c:3247
+ kmem_cache_zalloc include/linux/slab.h:714 [inline]
+ net_alloc net/core/net_namespace.c:402 [inline]
+ copy_net_ns+0x125/0x760 net/core/net_namespace.c:457
+ create_new_namespaces+0x3f6/0xb20 kernel/nsproxy.c:110
+ unshare_nsproxy_namespaces+0xc1/0x1f0 kernel/nsproxy.c:226
+ ksys_unshare+0x445/0x920 kernel/fork.c:3075
+ __do_sys_unshare kernel/fork.c:3146 [inline]
+ __se_sys_unshare kernel/fork.c:3144 [inline]
+ __x64_sys_unshare+0x2d/0x40 kernel/fork.c:3144
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Freed by task 503:
+ kasan_save_stack+0x1e/0x50 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:46
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free mm/kasan/common.c:328 [inline]
+ __kasan_slab_free+0xff/0x130 mm/kasan/common.c:374
+ kasan_slab_free include/linux/kasan.h:235 [inline]
+ slab_free_hook mm/slub.c:1723 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1749
+ slab_free mm/slub.c:3513 [inline]
+ kmem_cache_free+0xbd/0x5d0 mm/slub.c:3530
+ net_free net/core/net_namespace.c:431 [inline]
+ net_free net/core/net_namespace.c:427 [inline]
+ cleanup_net+0x8ba/0xb00 net/core/net_namespace.c:614
+ process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
+ worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+
+The buggy address belongs to the object at ffff888075d9b480
+ which belongs to the cache net_namespace of size 6464
+The buggy address is located 600 bytes inside of
+ 6464-byte region [ffff888075d9b480, ffff888075d9cdc0)
+The buggy address belongs to the page:
+page:ffffea0001d76600 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x75d98
+head:ffffea0001d76600 order:3 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 0000000000000000 dead000000000122 ffff888011885000
+raw: 0000000000000000 0000000080040004 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 3693, ts 1611631437660, free_ts 92175173930
+ prep_new_page mm/page_alloc.c:2418 [inline]
+ get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4149
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5369
+ alloc_pages+0x1a7/0x300 mm/mempolicy.c:2191
+ alloc_slab_page mm/slub.c:1793 [inline]
+ allocate_slab mm/slub.c:1930 [inline]
+ new_slab+0x32d/0x4a0 mm/slub.c:1993
+ ___slab_alloc+0x918/0xfe0 mm/slub.c:3022
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3109
+ slab_alloc_node mm/slub.c:3200 [inline]
+ slab_alloc mm/slub.c:3242 [inline]
+ kmem_cache_alloc+0x35c/0x3a0 mm/slub.c:3247
+ kmem_cache_zalloc include/linux/slab.h:714 [inline]
+ net_alloc net/core/net_namespace.c:402 [inline]
+ copy_net_ns+0x125/0x760 net/core/net_namespace.c:457
+ create_new_namespaces+0x3f6/0xb20 kernel/nsproxy.c:110
+ unshare_nsproxy_namespaces+0xc1/0x1f0 kernel/nsproxy.c:226
+ ksys_unshare+0x445/0x920 kernel/fork.c:3075
+ __do_sys_unshare kernel/fork.c:3146 [inline]
+ __se_sys_unshare kernel/fork.c:3144 [inline]
+ __x64_sys_unshare+0x2d/0x40 kernel/fork.c:3144
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1338 [inline]
+ free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1389
+ free_unref_page_prepare mm/page_alloc.c:3309 [inline]
+ free_unref_page+0x19/0x690 mm/page_alloc.c:3388
+ __unfreeze_partials+0x343/0x360 mm/slub.c:2527
+ qlink_free mm/kasan/quarantine.c:146 [inline]
+ qlist_free_all+0x5a/0xc0 mm/kasan/quarantine.c:165
+ kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:272
+ __kasan_slab_alloc+0xa2/0xc0 mm/kasan/common.c:444
+ kasan_slab_alloc include/linux/kasan.h:259 [inline]
+ slab_post_alloc_hook mm/slab.h:519 [inline]
+ slab_alloc_node mm/slub.c:3234 [inline]
+ kmem_cache_alloc_node+0x255/0x3f0 mm/slub.c:3270
+ __alloc_skb+0x215/0x340 net/core/skbuff.c:414
+ alloc_skb include/linux/skbuff.h:1126 [inline]
+ alloc_skb_with_frags+0x93/0x620 net/core/skbuff.c:6078
+ sock_alloc_send_pskb+0x783/0x910 net/core/sock.c:2575
+ unix_dgram_sendmsg+0x3ec/0x1950 net/unix/af_unix.c:1811
+ sock_sendmsg_nosec net/socket.c:704 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:724
+ sock_write_iter+0x289/0x3c0 net/socket.c:1057
+ call_write_iter include/linux/fs.h:2162 [inline]
+ new_sync_write+0x429/0x660 fs/read_write.c:503
+ vfs_write+0x7cd/0xae0 fs/read_write.c:590
+ ksys_write+0x1ee/0x250 fs/read_write.c:643
+
+Memory state around the buggy address:
+ ffff888075d9b580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888075d9b600: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff888075d9b680: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                    ^
+ ffff888075d9b700: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888075d9b780: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+----------------
+Code disassembly (best guess):
+   0:	be b0 01 00 00       	mov    $0x1b0,%esi
+   5:	e8 b4 ff ff ff       	callq  0xffffffbe
+   a:	31 c0                	xor    %eax,%eax
+   c:	c3                   	retq
+   d:	90                   	nop
+   e:	65 8b 05 29 be 8a 7e 	mov    %gs:0x7e8abe29(%rip),%eax        # 0x7e8abe3e
+  15:	89 c1                	mov    %eax,%ecx
+  17:	48 8b 34 24          	mov    (%rsp),%rsi
+  1b:	81 e1 00 01 00 00    	and    $0x100,%ecx
+  21:	65 48 8b 14 25 40 70 	mov    %gs:0x27040,%rdx
+  28:	02 00
+* 2a:	a9 00 01 ff 00       	test   $0xff0100,%eax <-- trapping instruction
+  2f:	74 0e                	je     0x3f
+  31:	85 c9                	test   %ecx,%ecx
+  33:	74 35                	je     0x6a
+  35:	8b 82 a4 15 00 00    	mov    0x15a4(%rdx),%eax
+  3b:	85 c0                	test   %eax,%eax
+  3d:	74 2b                	je     0x6a
+  3f:	8b                   	.byte 0x8b
 

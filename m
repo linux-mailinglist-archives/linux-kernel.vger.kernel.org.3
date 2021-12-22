@@ -2,99 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7B447D63B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8064E47D63D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344484AbhLVSGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 13:06:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344477AbhLVSGq (ORCPT
+        id S1344492AbhLVSHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 13:07:46 -0500
+Received: from mail-qk1-f176.google.com ([209.85.222.176]:42705 "EHLO
+        mail-qk1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344477AbhLVSHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 13:06:46 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C71C06173F;
-        Wed, 22 Dec 2021 10:06:46 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id 131so3133178qkk.2;
-        Wed, 22 Dec 2021 10:06:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/BaCXnb6DD2UD5cDhT0tNZDyFrPpED9Mp5n3o9Laa4Q=;
-        b=bCSeyy9Pub1PN+k5TH447nsrbvmRALWyfVaKt9AQU6YRFQC+2CgdqMt/J6d35a03MC
-         s1UVEUuDZv3DF+fukafCnViUvhTnt94ig9+x+2YtzY9cE9vJt/CbNoQmwAoffa876svJ
-         CwJuTvVzlznC+6uq4JviLzz+PeTu5SqcYeAoSHz6JU4KYtHtXXx+boOz5lIPxCcuM4NT
-         CaG1koIIV5B5DUO4V1zN7OVn9xRcVpXYZSQ252JCLIWnRbDY4lvYvfS9BdRqWZPrPAj/
-         cB+6TbO0yAtXZhiPcS0WIEj70LwyhuPzymTaRe/3UskkR9U9TkZP0OYhJWTL9JQEKLmw
-         h0PA==
+        Wed, 22 Dec 2021 13:07:44 -0500
+Received: by mail-qk1-f176.google.com with SMTP id r139so2224520qke.9;
+        Wed, 22 Dec 2021 10:07:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/BaCXnb6DD2UD5cDhT0tNZDyFrPpED9Mp5n3o9Laa4Q=;
-        b=bSBnGxI9BsrFvZN0C4UmxboLLzJxq9oBA9LRFkapIPEo1bjoDVtLCeJiMjwG1ui8MC
-         CHdffILy16FKz3nEPAzCugIQiC0Mxy6BeosJCIOKys+M8fFhBkl1+jm2t6c6RrEbC62F
-         dBijT5dcCtPyZuw3p8NwF9fWcKEwr0xZtl815YiHe7VN58Lh4oX4rhcOrg0BjaEab+hE
-         tIO2/JleO0wouKCZRC3jS5hWTYNo3m+r7U+GhIWRNVXrQDsLO1hGe1lHRGl1/KssHilu
-         4UtsNWz/AdG3zBEsKfA0bd6bM4Nc670F/k+XCwx+TKj2A6SJRAStFdZdxXQrwCJnb/UN
-         QFeg==
-X-Gm-Message-State: AOAM532TTb31WtZp0LLo3cX5o6jiZUfcL6WBBN5FARXyGMeq3Uw4nnxo
-        HlkKkEJ24j5XMjtd2HexFY0=
-X-Google-Smtp-Source: ABdhPJzSlcMzCk3/qVcDEU/40RqIBCS0oxfIqUXjbfspsSFHT06zAp/QPCyk759nWNE1B+utEH32oQ==
-X-Received: by 2002:a05:620a:1a95:: with SMTP id bl21mr2756738qkb.529.1640196405592;
-        Wed, 22 Dec 2021 10:06:45 -0800 (PST)
-Received: from [192.168.1.49] (c-67-187-90-124.hsd1.tn.comcast.net. [67.187.90.124])
-        by smtp.gmail.com with ESMTPSA id h16sm2409121qtx.20.2021.12.22.10.06.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 10:06:45 -0800 (PST)
-Subject: Re: [PATCH] of: unittest: Fix out of bounds array access when id < 0
-To:     Rob Herring <robh+dt@kernel.org>,
-        Yin Xiujiang <yinxiujiang@kylinos.cn>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211221092830.680839-1-yinxiujiang@kylinos.cn>
- <CAL_JsqLtQanbiC4egB8d5quQRZNq0V6q2s+=qhBeypBqLH-pgA@mail.gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-Message-ID: <cadd5cd5-d2d7-ccbd-50af-deca7b6afd80@gmail.com>
-Date:   Wed, 22 Dec 2021 12:06:44 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PZT+442yryoIyAnTgfkKE3INejgOanJ0gZBKWAWh5S0=;
+        b=bgHaX3MUJWWeLEdhqA0Ts0sGzM6XI6TXfExugrW3VVvZ9sPXPA/c+EjvZH7iT1+Y7e
+         MVm9kJjl5Gp40sVpZ1KRUfwZtqdg4P80zUqJio8KD6uhhy52IdlNIBr78sAZi+Gg3vtX
+         AP2BvY4Aphuqs0mymYbNMi4uHGbv9Ob5uzWuZLva59muh1aVTRJ06Hc31x2OyOQZLpn4
+         vaBANwcc4kUJ0m1yYB/zpneQF2LsQWc4EEQ0TNywCJUGfFrz1LQkGWRPf44+sS6U8U3p
+         f5j4Ev5+5bAQ6/zZa9WMO9N53z8inXTCtB8fBn1kaORACRPUUvnq5gHgtqxrfu2dCJ9W
+         mOYw==
+X-Gm-Message-State: AOAM533s6+EPwdBV6327psECn1rMfBpW2KIFkRxkAoB3sOHfKuyn4290
+        afzx1bKbHmBndCkhirVURg==
+X-Google-Smtp-Source: ABdhPJyJC96os9VsgB6XT66xXHqKpdFgHISt8Maa/ibE4MzoOiNuO46peBDi0wJyk+XRb+grY1slKA==
+X-Received: by 2002:a05:620a:f0e:: with SMTP id v14mr2825574qkl.365.1640196464048;
+        Wed, 22 Dec 2021 10:07:44 -0800 (PST)
+Received: from robh.at.kernel.org ([24.55.105.145])
+        by smtp.gmail.com with ESMTPSA id de13sm2455085qkb.81.2021.12.22.10.07.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 10:07:43 -0800 (PST)
+Received: (nullmailer pid 2429602 invoked by uid 1000);
+        Wed, 22 Dec 2021 18:07:41 -0000
+Date:   Wed, 22 Dec 2021 14:07:41 -0400
+From:   Rob Herring <robh@kernel.org>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     linux-kernel@vger.kernel.org,
+        Krishna Manikandan <mkrishn@codeaurora.org>,
+        David Airlie <airlied@linux.ie>,
+        Rob Clark <robdclark@gmail.com>,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        dri-devel@lists.freedesktop.org, ~okias/devicetree@lists.sr.ht,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Subject: Re: [PATCH] dt-bindings: msm: disp: remove bus from dpu bindings
+Message-ID: <YcNpbeN2Hjs+ipWv@robh.at.kernel.org>
+References: <20211220184220.86328-1-david@ixit.cz>
 MIME-Version: 1.0
-In-Reply-To: <CAL_JsqLtQanbiC4egB8d5quQRZNq0V6q2s+=qhBeypBqLH-pgA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211220184220.86328-1-david@ixit.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/21 6:20 AM, Rob Herring wrote:
-> On Tue, Dec 21, 2021 at 5:34 AM Yin Xiujiang <yinxiujiang@kylinos.cn> wrote:
->>
->> In of_unittest_untrack_overlay if id is less than 0 then
->> overlay_id_bits will be out of bounds. And it is also mentioned
->> in bugzilla as a bug report:
->> https://bugzilla.kernel.org/show_bug.cgi?id=214867
->>
->> Fix this bug by tiggering WARN_ON()
+On Mon, 20 Dec 2021 19:42:20 +0100, David Heidelberg wrote:
+> Driver and dts has been already adjusted and bus moved out of dpu, let's
+> update also dt-bindings.
 > 
-> If id shouldn't be less than 0, can we make it unsigned instead as
-> discussed here[1].
+> Fixes warnings as:
+> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: mdss
+> @ae00000: clock-names: ['iface', 'core'] is too short
+>         From schema: Documentation/devicetree/bindings/display/msm/dpu-sdm845.yaml
 > 
-> Rob
+> Ref: https://lore.kernel.org/all/20210803101657.1072358-1-dmitry.baryshkov@linaro.org/
 > 
-> [1] https://lore.kernel.org/all/c474a371-b524-1da8-4a67-e72cf8f2b0f7@gmail.com/
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> ---
+>  .../devicetree/bindings/display/msm/dpu-sdm845.yaml          | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 > 
 
-There are problems with changing to unsigned (fixable, but more extensive
-code changes).
-
-I think that the implementation of id tracking in unittest.c is overly
-fragile, and I would prefer to just re-implement it (see also my reply
-to the proposed patch).
-
-Let me take a look at whether I can create an alternate
-implementation of id tracking.
-
--Frank
+Applied, thanks!

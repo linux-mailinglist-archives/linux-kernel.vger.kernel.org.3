@@ -2,91 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C8B47CD3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCDF47CD69
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242875AbhLVHDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 02:03:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233983AbhLVHDC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 02:03:02 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A5CC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 23:03:02 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id l10so1306905pgm.7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 23:03:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=3VDOWPcXWhDFPAt9Df/Qo17xw6phBw6+Cx2n5GdYw8I=;
-        b=KQEn3RcHLikmtvkAq09i7D8+irGECceKpSEVr09pDFXyO8xdK79Z3J+FSAxdQPfZmK
-         6fDhpjfwz/ErFKb5Y84eXlHPyfeMiSQOeYj6qiHfFEuhn+MWlDuYOxdwKfI23GgsFSHe
-         +VQv7tZsd/3Zp3lFgIP8LWo6Su6kJX+FA281G9z+iyX2t9Imtu5as0ChygbTECXfoDuu
-         4HjadGJM7+Qt9QP1nvVu5qcNii5jqaiiGzkKAoKKuiLrUe22xQEaVyf4jSVsRx0mJLk5
-         WXUEbQHaQvlh8gBAdEM3fpV3ZqXjurLJpNAOl3OhIdbuSN8SnKgzc7fhftaMjLYY8lSe
-         f8vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=3VDOWPcXWhDFPAt9Df/Qo17xw6phBw6+Cx2n5GdYw8I=;
-        b=vlPvMR0qp7sCeUzbABZUimMAqkEn0yMpgUIYzVewpYAnt9dgMyVRTl3LpOgtr8AFWa
-         45KlqSgoIP+zsntb9h1qYfKInKOxA7iSk4DTu4eicceAIVct5p7VO4ysEvj7bLCiHNeN
-         62nm0Bm59N32PVU22OhE22rAgAS6srSPpK/BqkdoAIp8CyKjDqiIqqiP8Gui1TnklKvj
-         Pdcsf2H1TifPg7lIijGPmSkpWmFCoTZ8gNhSAfLTOTUriXcRwbXWrt0+8mGo5kC/1PS1
-         YNQufM/xs43EmfHseyYuoL9iE0hnqq48LxaLqFHX5rP2IdPGt3qLZZjMZW8iVG9oHBy8
-         +cPg==
-X-Gm-Message-State: AOAM530a8UqCsuhDh737C7Dwv00FEJCoQCZKNUQnyZl0zdYuNifcSLXV
-        gF2PVIE/gdi+hpWvX+a0Zjg=
-X-Google-Smtp-Source: ABdhPJycGG6AFTvNA5CCdWBtS06E4j1qggcF88zMZtOu/rUTQU/wK+IpHwer4hO2GDScPqbJ0V0QYA==
-X-Received: by 2002:a05:6a00:248f:b0:4a0:1e25:3155 with SMTP id c15-20020a056a00248f00b004a01e253155mr1650662pfv.21.1640156582285;
-        Tue, 21 Dec 2021 23:03:02 -0800 (PST)
-Received: from localhost.localdomain (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
-        by smtp.gmail.com with ESMTPSA id z2sm1034777pge.86.2021.12.21.23.02.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 23:03:01 -0800 (PST)
-Date:   Wed, 22 Dec 2021 20:02:56 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     gregkh@linuxfoundation.org, realwakka@gmail.com,
-        paulo.miguel.almeida.rodenas@gmail.com
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: pi433: remove unnecessary parentheses pointed out
- by checkpatch.pl
-Message-ID: <20211222070256.GA7644@localhost.localdomain>
+        id S242925AbhLVHMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 02:12:40 -0500
+Received: from mx1.cqplus1.com ([113.204.237.245]:49956 "EHLO mx1.cqplus1.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239307AbhLVHMj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 02:12:39 -0500
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 172.28.114.216
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(4818:0:AUTH_RELAY)
+        (envelope-from <qinjian@cqplus1.com>); Wed, 22 Dec 2021 15:06:14 +0800 (CST)
+From:   Qin Jian <qinjian@cqplus1.com>
+To:     robh+dt@kernel.org
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de,
+        maz@kernel.org, p.zabel@pengutronix.de, linux@armlinux.org.uk,
+        broonie@kernel.org, arnd@arndb.de, stefan.wahren@i2se.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        wells.lu@sunplus.com, Qin Jian <qinjian@cqplus1.com>
+Subject: [PATCH v7 00/10] Add Sunplus SP7021 SoC Support
+Date:   Wed, 22 Dec 2021 15:05:56 +0800
+Message-Id: <cover.1640154492.git.qinjian@cqplus1.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Checkpatch reports 'Unnecessary parentheses around <lines>'.
-Fix this by removing extraneous parentheses where applicable.
+This patch series add Sunplus SP7021 SoC support.
 
-Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
----
- drivers/staging/pi433/rf69.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates many
+peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and etc.) into a
+single chip. It is designed for industrial control.
 
-diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
-index dc047bcdf44b..e62e61ef4d27 100644
---- a/drivers/staging/pi433/rf69.c
-+++ b/drivers/staging/pi433/rf69.c
-@@ -470,9 +470,9 @@ static int rf69_set_bandwidth_intern(struct spi_device *spi, u8 reg,
- 		return -EINVAL;
- 	}
- 
--	if ((mantisse != mantisse16) &&
--	    (mantisse != mantisse20) &&
--	    (mantisse != mantisse24)) {
-+	if (mantisse != mantisse16 &&
-+	    mantisse != mantisse20 &&
-+	    mantisse != mantisse24) {
- 		dev_dbg(&spi->dev, "set: illegal bandwidth mantisse %u", mantisse);
- 		return -EINVAL;
- 	}
+SP7021 consists of two chips (dies) in a package. One is called C-chip
+(computing chip). It is a 4-core ARM Cortex A7 CPU. It adopts high-level
+process (22 nm) for high performance computing. The other is called P-
+chip (peripheral chip). It has many peripherals and an ARM A926 added
+especially for real-time control. P-chip is made for customers. It adopts
+low-level process (ex: 0.11 um) to reduce cost.
+
+Refer to (for documentations):
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+
+Refer to (applications):
+https://tibbo.com/store/plus1.html
+
+Refer to (applications):
+http://www.sinovoip.com.cn/ecp_view.asp?id=586
+
+Changes in v7:
+- sunplus,sp7021-clkc.yaml: Add clocks & clock-names
+- clk-sp7021.c: fix the comments form Stephen Boyd
+- irq-sp7021-intc.c: fix the comments from Marc
+
+Changes in v6:
+- reset-sunplus.c: fix the comments from Philipp
+- irq-sp7021-intc.c: fix the comments from Marc
+- mach-sunplus: fix the comments from Arnd
+
+Changes in v5:
+- reset-sunplus.c: fix strict checks
+- clk/Kconfig: fix spell
+- clk-sp7021.c: using bitfield ops, fix strict checks
+- irqchip/Kconfig: fix spell
+- irq-sp7021-intc.c: cleanup error path in probe, fix strict checks
+- arm/Kconfig: fix spell & typo, remove CONFIG_SERIAL_SUNPLUS
+- mach-sunplus/Kconfig: fix typo
+- sp7021_defconfig: add CONFIG_SERIAL_SUNPLUS
+
+Changes in v4:
+- mach-sunplus: add initial support for SP7021
+- sp7021_defconfig: add generic SP7021 defconfig
+- reset-sunplus: remove Q645 support
+- reset-sunplus.c: refine code based on Philipp's review
+- clk-sp7021: clock defines add prefix, more clean up
+
+Changes in v3:
+- sp7021-intc: remove primary controller mode due to P-chip running Linux
+  not supported any more.
+- sp7021-intc.h: removed, not set ext through the DT but sp_intc_set_ext()
+- sunplus,sp7021-intc.yaml: update descriptions for above changes
+- irq-sp7021-intc.c: more cleanup based on Marc's review
+- all driver's Kconfig removed default, it's selected by platform config
+
+Changes in v2:
+- sunplus,sp7021-intc.yaml: add descrption for "#interrupt-cells", interrupts
+- sunplus,sp7021-intc.yaml: drop "ext0-mask"/"ext1-mask" from DT
+- sunplus,sp7021-intc.yaml: fix example.dt too long error
+- irq-sp7021-intc.c: major rewrite
+- all files with dual license
+
+Qin Jian (10):
+  dt-bindings: vendor-prefixes: Add Sunplus
+  dt-bindings: arm: sunplus: Add bindings for Sunplus SP7021 SoC boards
+  dt-bindings: reset: Add bindings for SP7021 reset driver
+  reset: Add Sunplus SP7021 reset driver
+  dt-bindings: clock: Add bindings for SP7021 clock driver
+  clk: Add Sunplus SP7021 clock driver
+  dt-bindings: interrupt-controller: Add bindings for SP7021 interrupt
+    controller
+  irqchip: Add Sunplus SP7021 interrupt controller driver
+  ARM: sunplus: Add initial support for Sunplus SP7021 SoC
+  ARM: sp7021_defconfig: Add Sunplus SP7021 defconfig
+
+ .../bindings/arm/sunplus,sp7021.yaml          |  27 +
+ .../bindings/clock/sunplus,sp7021-clkc.yaml   |  52 ++
+ .../sunplus,sp7021-intc.yaml                  |  62 ++
+ .../bindings/reset/sunplus,reset.yaml         |  38 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |  17 +
+ arch/arm/Kconfig                              |   2 +
+ arch/arm/Makefile                             |   1 +
+ arch/arm/configs/multi_v7_defconfig           |   1 +
+ arch/arm/configs/sp7021_defconfig             |  61 ++
+ arch/arm/mach-sunplus/Kconfig                 |  26 +
+ arch/arm/mach-sunplus/Makefile                |   9 +
+ arch/arm/mach-sunplus/sp7021.c                |  16 +
+ drivers/clk/Kconfig                           |  10 +-
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-sp7021.c                      | 705 ++++++++++++++++++
+ drivers/irqchip/Kconfig                       |   9 +
+ drivers/irqchip/Makefile                      |   1 +
+ drivers/irqchip/irq-sp7021-intc.c             | 288 +++++++
+ drivers/reset/Kconfig                         |   9 +
+ drivers/reset/Makefile                        |   1 +
+ drivers/reset/reset-sunplus.c                 | 130 ++++
+ include/dt-bindings/clock/sp-sp7021.h         | 112 +++
+ include/dt-bindings/reset/sp-sp7021.h         |  97 +++
+ 24 files changed, 1676 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/sunplus,reset.yaml
+ create mode 100644 arch/arm/configs/sp7021_defconfig
+ create mode 100644 arch/arm/mach-sunplus/Kconfig
+ create mode 100644 arch/arm/mach-sunplus/Makefile
+ create mode 100644 arch/arm/mach-sunplus/sp7021.c
+ create mode 100644 drivers/clk/clk-sp7021.c
+ create mode 100644 drivers/irqchip/irq-sp7021-intc.c
+ create mode 100644 drivers/reset/reset-sunplus.c
+ create mode 100644 include/dt-bindings/clock/sp-sp7021.h
+ create mode 100644 include/dt-bindings/reset/sp-sp7021.h
+
 -- 
-2.25.4
+2.33.1
 

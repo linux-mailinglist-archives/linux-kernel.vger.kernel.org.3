@@ -2,241 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BFB947CED9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D262B47CEE0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243678AbhLVJKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 04:10:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45740 "EHLO
+        id S243740AbhLVJKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:10:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233015AbhLVJKL (ORCPT
+        with ESMTP id S243700AbhLVJKf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:10:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A30EC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:10:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16AA061932
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 09:10:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECAEAC36AE5;
-        Wed, 22 Dec 2021 09:10:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640164210;
-        bh=JLNqH5TITvgVI7p/ePqT4FK3Ji/sA5RJ201NQZxio4k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=mPj9tVDFWTkcaDF5rpB/DNySFge87y2tScnqni6Ul9mbbLC72TM+eJGdYLP2QQQMV
-         shRI5af5G9I82ia5S9cRH0j8Qb4G48MfojuEEDmVJo6dT9+dpWI8tctk+eeWSaBbN2
-         jhAegiINgwUSoAeDOZdBTl/2NRdtkURqzt5tAYBfmvm1N9zHI+tiyOLkMtvFlupwQ/
-         0yuNsWBfW0Ic1ys2U9hyn9u5VXHWsXtttm5vFjLAcZ7dNDgZKZc8zuM4C2yb5NAjof
-         /WTpkN9QLCJJoU0MWlF7PFVcaDkJXYn0x6uNpw2s8X/hbtpXM1l/X67VypOINKFK9I
-         bi5RMsDkytRCg==
-From:   SeongJae Park <sj@kernel.org>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     sj@kernel.org, akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mm/damon: Add access checking for hugetlb pages
-Date:   Wed, 22 Dec 2021 09:10:07 +0000
-Message-Id: <20211222091007.16495-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <6afcbd1fda5f9c7c24f320d26a98188c727ceec3.1639623751.git.baolin.wang@linux.alibaba.com>
+        Wed, 22 Dec 2021 04:10:35 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47FFAC06173F;
+        Wed, 22 Dec 2021 01:10:35 -0800 (PST)
+Date:   Wed, 22 Dec 2021 09:10:30 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1640164232;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CIS67eOsyZbs7fLM7ezeiuDsHR8D8TOaFfw3jAdCzB0=;
+        b=0WrubRhBtKWrcrT4t2Q9Jd9yIysK2CF+qbiR2EUXqflAj6IszCQMuWN8r/sMs9xjxiu5de
+        xy3IjbH21JASRynLRIXdLZugnBv2QjQSvfQaFSL/r5dSx6DQmnPCoX3/RuHCIF0pqHqY00
+        zDhyffbXINLabJ33ScQdv8yBS15+ozIyuwx/2kB/KRrw3XhOiG4zrnNFD7jg9EgAJyK1s4
+        bKDPIEOKMyb2h21xrvrOboZejbR4SkliUBsIXeWd+3wjW+6B4goYVmMyu3QoAcIhxxAc5p
+        L4ineQVfqQxuf6q47orGrOVKeWN9XTJXA7D6z6m82I1al5qBfdmz6MNfuoKAzw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1640164232;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CIS67eOsyZbs7fLM7ezeiuDsHR8D8TOaFfw3jAdCzB0=;
+        b=LOi7MG5xKvyoYuQ5yEmAhdroRzJZiooz7OScRXsJDlt0RauEjZ2JIaXXAnjBViQ5hkK/7H
+        kYXUegN4WvyIscCw==
+From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: objtool/urgent] compiler.h: Fix annotation macro misplacement
+ with Clang
+Cc:     kernel test robot <lkp@intel.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Miroslav Benes <mbenes@suse.cz>, linux-kernel@vger.kernel.org
+In-Reply-To: <0417e96909b97a406323409210de7bf13df0b170.1636410380.git.jpoimboe@redhat.com>
+References: <0417e96909b97a406323409210de7bf13df0b170.1636410380.git.jpoimboe@redhat.com>
+MIME-Version: 1.0
+Message-ID: <164016423099.16921.16996655982787145621.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baolin,
+The following commit has been merged into the objtool/urgent branch of tip:
 
+Commit-ID:     dcce50e6cc4d86a63dc0a9a6ee7d4f948ccd53a1
+Gitweb:        https://git.kernel.org/tip/dcce50e6cc4d86a63dc0a9a6ee7d4f948ccd53a1
+Author:        Josh Poimboeuf <jpoimboe@redhat.com>
+AuthorDate:    Mon, 08 Nov 2021 14:35:59 -08:00
+Committer:     Josh Poimboeuf <jpoimboe@redhat.com>
+CommitterDate: Tue, 21 Dec 2021 15:09:46 -08:00
 
-Basically, the code looks ok to me.  I left so trivial cosmetic nitpicks below,
-though.
+compiler.h: Fix annotation macro misplacement with Clang
 
-On Thu, 16 Dec 2021 18:38:03 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+When building with Clang and CONFIG_TRACE_BRANCH_PROFILING, there are a
+lot of unreachable warnings, like:
 
-> The process's VMAs can be mapped by hugetlb page, but now the DAMON
-> did not implement the access checking for hugetlb pte, so we can not
-> get the actual access count like below if a process VMAs were mapped
-> by hugetlb.
-> 
-> damon_aggregated: target_id=18446614368406014464
-> nr_regions=12 4194304-5476352: 0 545
-> damon_aggregated: target_id=18446614368406014464
-> nr_regions=12 140662370467840-140662372970496: 0 545
-> damon_aggregated: target_id=18446614368406014464
-> nr_regions=12 140662372970496-140662375460864: 0 545
-> damon_aggregated: target_id=18446614368406014464
-> nr_regions=12 140662375460864-140662377951232: 0 545
-> damon_aggregated: target_id=18446614368406014464
-> nr_regions=12 140662377951232-140662380449792: 0 545
-> damon_aggregated: target_id=18446614368406014464
-> nr_regions=12 140662380449792-140662382944256: 0 545
-> ......
+  arch/x86/kernel/traps.o: warning: objtool: handle_xfd_event()+0x134: unreachable instruction
 
-I'd prefer indenting the program output with 4 spaces and not wrapping it.
-e.g.,
+Without an input to the inline asm, 'volatile' is ignored for some
+reason and Clang feels free to move the reachable() annotation away from
+its intended location.
 
-    damon_aggregated: target_id=18446614368406014464 nr_regions=12 4194304-5476352: 0 545
-    damon_aggregated: target_id=18446614368406014464 nr_regions=12 140662370467840-140662372970496: 0 545
+Fix that by re-adding the counter value to the inputs.
 
+Fixes: f1069a8756b9 ("compiler.h: Avoid using inline asm operand modifiers")
+Fixes: c199f64ff93c ("instrumentation.h: Avoid using inline asm operand modifiers")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Link: https://lore.kernel.org/r/0417e96909b97a406323409210de7bf13df0b170.1636410380.git.jpoimboe@redhat.com
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: x86@kernel.org
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Miroslav Benes <mbenes@suse.cz>
+---
+ include/linux/compiler.h        | 4 ++--
+ include/linux/instrumentation.h | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> 
-> Thus this patch adds hugetlb access checking support, with this patch
-> we can see below VMA mapped by hugetlb access count.
-> 
-> damon_aggregated: target_id=18446613056935405824
-> nr_regions=12 140296486649856-140296489914368: 1 3
-> damon_aggregated: target_id=18446613056935405824
-> nr_regions=12 140296489914368-140296492978176: 1 3
-> damon_aggregated: target_id=18446613056935405824
-> nr_regions=12 140296492978176-140296495439872: 1 3
-> damon_aggregated: target_id=18446613056935405824
-> nr_regions=12 140296495439872-140296498311168: 1 3
-> damon_aggregated: target_id=18446613056935405824
-> nr_regions=12 140296498311168-140296501198848: 1 3
-> damon_aggregated: target_id=18446613056935405824
-> nr_regions=12 140296501198848-140296504320000: 1 3
-> damon_aggregated: target_id=18446613056935405824
-> nr_regions=12 140296504320000-140296507568128: 1 2
-> ......
-
-ditto.
-
-> 
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> ---
-> Changes from v1:
->  - Move damon_hugetlb_mkold() to vaddr.c file.
->  - Move some assignments in the variables definitions.
-> ---
->  mm/damon/vaddr.c | 96 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 96 insertions(+)
-> 
-> diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
-> index 78ff2bc..69c436b 100644
-> --- a/mm/damon/vaddr.c
-> +++ b/mm/damon/vaddr.c
-> @@ -386,8 +386,65 @@ static int damon_mkold_pmd_entry(pmd_t *pmd, unsigned long addr,
->  	return 0;
->  }
->  
-> +#ifdef CONFIG_HUGETLB_PAGE
-> +static void damon_hugetlb_mkold(pte_t *pte, struct mm_struct *mm,
-> +				struct vm_area_struct *vma, unsigned long addr)
-> +{
-> +	bool referenced = false;
-> +	struct hstate *h = hstate_vma(vma);
-> +	pte_t entry = huge_ptep_get(pte);
-> +	struct page *page = pte_page(entry);
-> +
-> +	if (!page)
-> +		return;
-> +
-> +	get_page(page);
-> +
-> +	if (pte_young(entry)) {
-> +		referenced = true;
-> +		entry = pte_mkold(entry);
-> +		huge_ptep_set_access_flags(vma, addr, pte, entry,
-> +					   vma->vm_flags & VM_WRITE);
-> +	}
-> +
-> +#ifdef CONFIG_MMU_NOTIFIER
-> +	if (mmu_notifier_clear_young(mm, addr, addr + huge_page_size(h)))
-> +		referenced = true;
-> +#endif /* CONFIG_MMU_NOTIFIER */
-> +
-> +	if (referenced)
-> +		set_page_young(page);
-> +
-> +	set_page_idle(page);
-> +	put_page(page);
-> +}
-> +
-> +static int damon_mkold_hugetlb_entry(pte_t *pte, unsigned long hmask,
-> +				     unsigned long addr, unsigned long end,
-> +				     struct mm_walk *walk)
-> +{
-> +	struct hstate *h = hstate_vma(walk->vma);
-> +	spinlock_t *ptl;
-> +	pte_t entry;
-> +
-> +	ptl = huge_pte_lock(h, walk->mm, pte);
-> +	entry = huge_ptep_get(pte);
-> +	if (!pte_present(entry))
-> +		goto out;
-> +
-> +	damon_hugetlb_mkold(pte, walk->mm, walk->vma, addr);
-> +
-> +out:
-> +	spin_unlock(ptl);
-> +	return 0;
-> +}
-> +#else
-> +#define damon_mkold_hugetlb_entry NULL
-> +#endif
-
-Could we append a comment saying this #endif is for #ifdef CONFIG_HUGETLB_PAGE,
-like below?
-
-    #endif	/* CONFIG_HUGETLB_PAGE */
-
-> +
->  static const struct mm_walk_ops damon_mkold_ops = {
->  	.pmd_entry = damon_mkold_pmd_entry,
-> +	.hugetlb_entry = damon_mkold_hugetlb_entry,
->  };
->  
->  static void damon_va_mkold(struct mm_struct *mm, unsigned long addr)
-> @@ -482,8 +539,47 @@ static int damon_young_pmd_entry(pmd_t *pmd, unsigned long addr,
->  	return 0;
->  }
->  
-> +#ifdef CONFIG_HUGETLB_PAGE
-> +static int damon_young_hugetlb_entry(pte_t *pte, unsigned long hmask,
-> +				     unsigned long addr, unsigned long end,
-> +				     struct mm_walk *walk)
-> +{
-> +	struct damon_young_walk_private *priv = walk->private;
-> +	struct hstate *h = hstate_vma(walk->vma);
-> +	struct page *page;
-> +	spinlock_t *ptl;
-> +	pte_t entry;
-> +
-> +	ptl = huge_pte_lock(h, walk->mm, pte);
-> +	entry = huge_ptep_get(pte);
-> +	if (!pte_present(entry))
-> +		goto out;
-> +
-> +	page = pte_page(entry);
-> +	if (!page)
-> +		goto out;
-> +
-> +	get_page(page);
-> +
-> +	if (pte_young(entry) || !page_is_idle(page) ||
-> +	    mmu_notifier_test_young(walk->mm, addr)) {
-> +		*priv->page_sz = huge_page_size(h);
-> +		priv->young = true;
-> +	}
-> +
-> +	put_page(page);
-> +
-> +out:
-> +	spin_unlock(ptl);
-> +	return 0;
-> +}
-> +#else
-> +#define damon_young_hugetlb_entry NULL
-> +#endif
-
-ditto.
-
-> +
->  static const struct mm_walk_ops damon_young_ops = {
->  	.pmd_entry = damon_young_pmd_entry,
-> +	.hugetlb_entry = damon_young_hugetlb_entry,
->  };
->  
->  static bool damon_va_young(struct mm_struct *mm, unsigned long addr,
-> -- 
-> 1.8.3.1
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index 3d5af56..429dceb 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -121,7 +121,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+ 	asm volatile(__stringify_label(c) ":\n\t"			\
+ 		     ".pushsection .discard.reachable\n\t"		\
+ 		     ".long " __stringify_label(c) "b - .\n\t"		\
+-		     ".popsection\n\t");				\
++		     ".popsection\n\t" : : "i" (c));			\
+ })
+ #define annotate_reachable() __annotate_reachable(__COUNTER__)
+ 
+@@ -129,7 +129,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+ 	asm volatile(__stringify_label(c) ":\n\t"			\
+ 		     ".pushsection .discard.unreachable\n\t"		\
+ 		     ".long " __stringify_label(c) "b - .\n\t"		\
+-		     ".popsection\n\t");				\
++		     ".popsection\n\t" : : "i" (c));			\
+ })
+ #define annotate_unreachable() __annotate_unreachable(__COUNTER__)
+ 
+diff --git a/include/linux/instrumentation.h b/include/linux/instrumentation.h
+index fa2cd8c..24359b4 100644
+--- a/include/linux/instrumentation.h
++++ b/include/linux/instrumentation.h
+@@ -11,7 +11,7 @@
+ 	asm volatile(__stringify(c) ": nop\n\t"				\
+ 		     ".pushsection .discard.instr_begin\n\t"		\
+ 		     ".long " __stringify(c) "b - .\n\t"		\
+-		     ".popsection\n\t");				\
++		     ".popsection\n\t" : : "i" (c));			\
+ })
+ #define instrumentation_begin() __instrumentation_begin(__COUNTER__)
+ 
+@@ -50,7 +50,7 @@
+ 	asm volatile(__stringify(c) ": nop\n\t"				\
+ 		     ".pushsection .discard.instr_end\n\t"		\
+ 		     ".long " __stringify(c) "b - .\n\t"		\
+-		     ".popsection\n\t");				\
++		     ".popsection\n\t" : : "i" (c));			\
+ })
+ #define instrumentation_end() __instrumentation_end(__COUNTER__)
+ #else

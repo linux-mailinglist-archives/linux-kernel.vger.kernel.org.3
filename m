@@ -2,56 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD9247D725
+	by mail.lfdr.de (Postfix) with ESMTP id 9745047D724
 	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234898AbhLVSst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 13:48:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236150AbhLVSsn (ORCPT
+        id S1344890AbhLVSss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 13:48:48 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:34470 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234898AbhLVSsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 13:48:43 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB68AC061574;
-        Wed, 22 Dec 2021 10:48:42 -0800 (PST)
+        Wed, 22 Dec 2021 13:48:42 -0500
 Date:   Wed, 22 Dec 2021 18:48:39 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1640198920;
+        s=2020; t=1640198921;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fxMxrotv61zOssaXJWYSazH/pl1kalzyCWEhLkweGxY=;
-        b=aexdxzg31YX1G/baGbr9h5p+Ffnwmq2tQjrSGbpFWZ8E0tRNfqHfPlUJbUE/sEmG9XgJDA
-        gaFh71FCdK2w7X3NKdTQ60+G3MKFOeO3P748e1D1OcpgFtuIEKOwYMXH1NjGSs8BQvSMHw
-        YqxkoO0iSzzXonCMNG8utZ79SBvS3WwD1VfutJLdWaAFpKsU/024lST8FEQ/2YFJyzP3eM
-        BDSuIoFOVvXhKzklTjPvlzxDro4jHlQ+ohIvDPAJTfpJCRce8HU87zkm8UH8jBDgSVyDPu
-        /wSC6iHfPLCDEAAXtPwo8/cRbBm7bBqBcA5vFtU5WnHX8+SMl8dOB+Pnf0HwgA==
+        bh=ektKpjNzoJvn745jebVJ8h6y1qLtHh8tHQdeksxQ2oQ=;
+        b=Y9keVkznmx75qTnHR1SEVIDdvcd1xB5XFHWzYfueJ3v9wiMTPTplRFNa/T9umeM3G/3Qdo
+        kBd+8c5lKkwtczyv8845w4jZs7tXw1H65IsBcwCnlQO0tbIj6TYwkBKAsjrMNu6GeG48j9
+        4tM+yLf4zspsDNuqkD3xcY39WI6iJuPRGtw4Vyaco9nVmqlZbY69t5cwAxCi5oPtmMg9Yx
+        uT+JXAN7buFV7RJZUPuTfLY04xQ1KXln4svh4jHfZXN6VQ0Y1CaNlrjwkwSSHC7quXAPlU
+        1KoOzzg7NTq4gzaFhY3nGoS7kJ+xFqXqLatxqi/ftiNPX7Jk3RFi2DddFhHCig==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1640198920;
+        s=2020e; t=1640198921;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fxMxrotv61zOssaXJWYSazH/pl1kalzyCWEhLkweGxY=;
-        b=XuHjiQ3tXUWCEdt2TGi6dzbs87y1wWXBPxE+ypHq0njLkSBRva6An6tPCbpDwAdtbUcv4I
-        s57PKPmWVeuiDcDQ==
+        bh=ektKpjNzoJvn745jebVJ8h6y1qLtHh8tHQdeksxQ2oQ=;
+        b=GzhzzncVTosr+DSkq8mcSy760860MqYzjypM5gLpRII+qeRYrZJnNZAJwT0ew1vbyLu3dO
+        7g8cA91FXW42j7AQ==
 From:   "tip-bot2 for Yazen Ghannam" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: ras/core] x86/MCE/AMD, EDAC/mce_amd: Support non-uniform MCA
- bank type enumeration
+Subject: [tip: ras/core] x86/MCE/AMD, EDAC/mce_amd: Add new SMCA bank types
 Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
         Borislav Petkov <bp@suse.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211216162905.4132657-3-yazen.ghannam@amd.com>
-References: <20211216162905.4132657-3-yazen.ghannam@amd.com>
+In-Reply-To: <20211216162905.4132657-2-yazen.ghannam@amd.com>
+References: <20211216162905.4132657-2-yazen.ghannam@amd.com>
 MIME-Version: 1.0
-Message-ID: <164019891907.16921.1221908392370822768.tip-bot2@tip-bot2>
+Message-ID: <164019891996.16921.9739943959210067880.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -62,311 +58,280 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the ras/core branch of tip:
 
-Commit-ID:     91f75eb481cfaee5c4ed8fb5214bf2fbfa04bd7b
-Gitweb:        https://git.kernel.org/tip/91f75eb481cfaee5c4ed8fb5214bf2fbfa04bd7b
+Commit-ID:     5176a93ab27aef1b9f4496fc68e6c303a011d7cc
+Gitweb:        https://git.kernel.org/tip/5176a93ab27aef1b9f4496fc68e6c303a011d7cc
 Author:        Yazen Ghannam <yazen.ghannam@amd.com>
-AuthorDate:    Thu, 16 Dec 2021 16:29:05 
+AuthorDate:    Thu, 16 Dec 2021 16:29:04 
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 22 Dec 2021 17:22:09 +01:00
+CommitterDate: Wed, 22 Dec 2021 17:19:18 +01:00
 
-x86/MCE/AMD, EDAC/mce_amd: Support non-uniform MCA bank type enumeration
+x86/MCE/AMD, EDAC/mce_amd: Add new SMCA bank types
 
-AMD systems currently lay out MCA bank types such that the type of bank
-number "i" is either the same across all CPUs or is Reserved/Read-as-Zero.
+Add HWID and McaType values for new SMCA bank types, and add their error
+descriptions to edac_mce_amd.
 
-For example:
+The "PHY" bank types all have the same error descriptions, and the NBIF
+and SHUB bank types have the same error descriptions. So reuse the same
+arrays where appropriate.
 
-  Bank # | CPUx | CPUy
-    0      LS     LS
-    1      RAZ    UMC
-    2      CS     CS
-    3      SMU    RAZ
-
-Future AMD systems will lay out MCA bank types such that the type of
-bank number "i" may be different across CPUs.
-
-For example:
-
-  Bank # | CPUx | CPUy
-    0      LS     LS
-    1      RAZ    UMC
-    2      CS     NBIO
-    3      SMU    RAZ
-
-Change the structures that cache MCA bank types to be per-CPU and update
-smca_get_bank_type() to handle this change.
-
-Move some SMCA-specific structures to amd.c from mce.h, since they no
-longer need to be global.
-
-Break out the "count" for bank types from struct smca_hwid, since this
-should provide a per-CPU count rather than a system-wide count.
-
-Apply the "const" qualifier to the struct smca_hwid_mcatypes array. The
-values in this array should not change at runtime.
+  [ bp: Remove useless comments over hwid types. ]
 
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20211216162905.4132657-3-yazen.ghannam@amd.com
+Link: https://lore.kernel.org/r/20211216162905.4132657-2-yazen.ghannam@amd.com
 ---
- arch/x86/include/asm/mce.h              | 18 +-------
- arch/x86/kernel/cpu/mce/amd.c           | 59 ++++++++++++++----------
- drivers/edac/mce_amd.c                  | 11 +----
- drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c |  2 +-
- 4 files changed, 39 insertions(+), 51 deletions(-)
+ arch/x86/include/asm/mce.h    |   7 ++-
+ arch/x86/kernel/cpu/mce/amd.c |  21 +++--
+ drivers/edac/mce_amd.c        | 135 +++++++++++++++++++++++++++++++--
+ 3 files changed, 151 insertions(+), 12 deletions(-)
 
 diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index 52d2b35..cc73061 100644
+index d58f4f2..52d2b35 100644
 --- a/arch/x86/include/asm/mce.h
 +++ b/arch/x86/include/asm/mce.h
-@@ -329,22 +329,6 @@ enum smca_bank_types {
+@@ -313,12 +313,19 @@ enum smca_bank_types {
+ 	SMCA_SMU,	/* System Management Unit */
+ 	SMCA_SMU_V2,
+ 	SMCA_MP5,	/* Microprocessor 5 Unit */
++	SMCA_MPDMA,	/* MPDMA Unit */
+ 	SMCA_NBIO,	/* Northbridge IO Unit */
+ 	SMCA_PCIE,	/* PCI Express Unit */
+ 	SMCA_PCIE_V2,
+ 	SMCA_XGMI_PCS,	/* xGMI PCS Unit */
++	SMCA_NBIF,	/* NBIF Unit */
++	SMCA_SHUB,	/* System HUB Unit */
++	SMCA_SATA,	/* SATA Unit */
++	SMCA_USB,	/* USB Unit */
++	SMCA_GMI_PCS,	/* GMI PCS Unit */
+ 	SMCA_XGMI_PHY,	/* xGMI PHY Unit */
+ 	SMCA_WAFL_PHY,	/* WAFL PHY Unit */
++	SMCA_GMI_PHY,	/* GMI PHY Unit */
  	N_SMCA_BANK_TYPES
  };
  
--#define HWID_MCATYPE(hwid, mcatype) (((hwid) << 16) | (mcatype))
--
--struct smca_hwid {
--	unsigned int bank_type;	/* Use with smca_bank_types for easy indexing. */
--	u32 hwid_mcatype;	/* (hwid,mcatype) tuple */
--	u8 count;		/* Number of instances. */
--};
--
--struct smca_bank {
--	struct smca_hwid *hwid;
--	u32 id;			/* Value of MCA_IPID[InstanceId]. */
--	u8 sysfs_id;		/* Value used for sysfs name. */
--};
--
--extern struct smca_bank smca_banks[MAX_NR_BANKS];
--
- extern const char *smca_get_long_name(enum smca_bank_types t);
- extern bool amd_mce_is_memory_error(struct mce *m);
- 
-@@ -352,7 +336,7 @@ extern int mce_threshold_create_device(unsigned int cpu);
- extern int mce_threshold_remove_device(unsigned int cpu);
- 
- void mce_amd_feature_init(struct cpuinfo_x86 *c);
--enum smca_bank_types smca_get_bank_type(unsigned int bank);
-+enum smca_bank_types smca_get_bank_type(unsigned int cpu, unsigned int bank);
- #else
- 
- static inline int mce_threshold_create_device(unsigned int cpu)		{ return 0; };
 diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 9407cdc..a1e2f41 100644
+index 2f35183..9407cdc 100644
 --- a/arch/x86/kernel/cpu/mce/amd.c
 +++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -71,6 +71,22 @@ static const char * const smca_umc_block_names[] = {
- 	"misc_umc"
+@@ -95,11 +95,18 @@ static struct smca_bank_name smca_names[] = {
+ 	[SMCA_PSP ... SMCA_PSP_V2]	= { "psp",		"Platform Security Processor" },
+ 	[SMCA_SMU ... SMCA_SMU_V2]	= { "smu",		"System Management Unit" },
+ 	[SMCA_MP5]			= { "mp5",		"Microprocessor 5 Unit" },
++	[SMCA_MPDMA]			= { "mpdma",		"MPDMA Unit" },
+ 	[SMCA_NBIO]			= { "nbio",		"Northbridge IO Unit" },
+ 	[SMCA_PCIE ... SMCA_PCIE_V2]	= { "pcie",		"PCI Express Unit" },
+ 	[SMCA_XGMI_PCS]			= { "xgmi_pcs",		"Ext Global Memory Interconnect PCS Unit" },
++	[SMCA_NBIF]			= { "nbif",		"NBIF Unit" },
++	[SMCA_SHUB]			= { "shub",		"System Hub Unit" },
++	[SMCA_SATA]			= { "sata",		"SATA Unit" },
++	[SMCA_USB]			= { "usb",		"USB Unit" },
++	[SMCA_GMI_PCS]			= { "gmi_pcs",		"Global Memory Interconnect PCS Unit" },
+ 	[SMCA_XGMI_PHY]			= { "xgmi_phy",		"Ext Global Memory Interconnect PHY Unit" },
+ 	[SMCA_WAFL_PHY]			= { "wafl_phy",		"WAFL PHY Unit" },
++	[SMCA_GMI_PHY]			= { "gmi_phy",		"Global Memory Interconnect PHY Unit" },
  };
  
-+#define HWID_MCATYPE(hwid, mcatype) (((hwid) << 16) | (mcatype))
+ static const char *smca_get_name(enum smca_bank_types t)
+@@ -174,6 +181,9 @@ static struct smca_hwid smca_hwid_mcatypes[] = {
+ 	/* Microprocessor 5 Unit MCA type */
+ 	{ SMCA_MP5,	 HWID_MCATYPE(0x01, 0x2)	},
+ 
++	/* MPDMA MCA type */
++	{ SMCA_MPDMA,	 HWID_MCATYPE(0x01, 0x3)	},
 +
-+struct smca_hwid {
-+	unsigned int bank_type;	/* Use with smca_bank_types for easy indexing. */
-+	u32 hwid_mcatype;	/* (hwid,mcatype) tuple */
-+};
-+
-+struct smca_bank {
-+	const struct smca_hwid *hwid;
-+	u32 id;			/* Value of MCA_IPID[InstanceId]. */
-+	u8 sysfs_id;		/* Value used for sysfs name. */
-+};
-+
-+static DEFINE_PER_CPU_READ_MOSTLY(struct smca_bank[MAX_NR_BANKS], smca_banks);
-+static DEFINE_PER_CPU_READ_MOSTLY(u8[N_SMCA_BANK_TYPES], smca_bank_counts);
-+
- struct smca_bank_name {
- 	const char *name;	/* Short name for sysfs */
- 	const char *long_name;	/* Long name for pretty-printing */
-@@ -126,14 +142,14 @@ const char *smca_get_long_name(enum smca_bank_types t)
- }
- EXPORT_SYMBOL_GPL(smca_get_long_name);
+ 	/* Northbridge IO Unit MCA type */
+ 	{ SMCA_NBIO,	 HWID_MCATYPE(0x18, 0x0)	},
  
--enum smca_bank_types smca_get_bank_type(unsigned int bank)
-+enum smca_bank_types smca_get_bank_type(unsigned int cpu, unsigned int bank)
- {
- 	struct smca_bank *b;
+@@ -181,14 +191,15 @@ static struct smca_hwid smca_hwid_mcatypes[] = {
+ 	{ SMCA_PCIE,	 HWID_MCATYPE(0x46, 0x0)	},
+ 	{ SMCA_PCIE_V2,	 HWID_MCATYPE(0x46, 0x1)	},
  
- 	if (bank >= MAX_NR_BANKS)
- 		return N_SMCA_BANK_TYPES;
- 
--	b = &smca_banks[bank];
-+	b = &per_cpu(smca_banks, cpu)[bank];
- 	if (!b->hwid)
- 		return N_SMCA_BANK_TYPES;
- 
-@@ -141,7 +157,7 @@ enum smca_bank_types smca_get_bank_type(unsigned int bank)
- }
- EXPORT_SYMBOL_GPL(smca_get_bank_type);
- 
--static struct smca_hwid smca_hwid_mcatypes[] = {
-+static const struct smca_hwid smca_hwid_mcatypes[] = {
- 	/* { bank_type, hwid_mcatype } */
- 
- 	/* Reserved type */
-@@ -202,9 +218,6 @@ static struct smca_hwid smca_hwid_mcatypes[] = {
- 	{ SMCA_GMI_PHY,	 HWID_MCATYPE(0x269, 0x0)	},
- };
- 
--struct smca_bank smca_banks[MAX_NR_BANKS];
--EXPORT_SYMBOL_GPL(smca_banks);
+-	/* xGMI PCS MCA type */
+ 	{ SMCA_XGMI_PCS, HWID_MCATYPE(0x50, 0x0)	},
 -
- /*
-  * In SMCA enabled processors, we can have multiple banks for a given IP type.
-  * So to define a unique name for each bank, we use a temp c-string to append
-@@ -260,8 +273,9 @@ static void smca_set_misc_banks_map(unsigned int bank, unsigned int cpu)
- 
- static void smca_configure(unsigned int bank, unsigned int cpu)
- {
-+	u8 *bank_counts = this_cpu_ptr(smca_bank_counts);
-+	const struct smca_hwid *s_hwid;
- 	unsigned int i, hwid_mcatype;
--	struct smca_hwid *s_hwid;
- 	u32 high, low;
- 	u32 smca_config = MSR_AMD64_SMCA_MCx_CONFIG(bank);
- 
-@@ -297,10 +311,6 @@ static void smca_configure(unsigned int bank, unsigned int cpu)
- 
- 	smca_set_misc_banks_map(bank, cpu);
- 
--	/* Return early if this bank was already initialized. */
--	if (smca_banks[bank].hwid && smca_banks[bank].hwid->hwid_mcatype != 0)
--		return;
+-	/* xGMI PHY MCA type */
++	{ SMCA_NBIF,	 HWID_MCATYPE(0x6C, 0x0)	},
++	{ SMCA_SHUB,	 HWID_MCATYPE(0x80, 0x0)	},
++	{ SMCA_SATA,	 HWID_MCATYPE(0xA8, 0x0)	},
++	{ SMCA_USB,	 HWID_MCATYPE(0xAA, 0x0)	},
++	{ SMCA_GMI_PCS,  HWID_MCATYPE(0x241, 0x0)	},
+ 	{ SMCA_XGMI_PHY, HWID_MCATYPE(0x259, 0x0)	},
 -
- 	if (rdmsr_safe(MSR_AMD64_SMCA_MCx_IPID(bank), &low, &high)) {
- 		pr_warn("Failed to read MCA_IPID for bank %d\n", bank);
- 		return;
-@@ -311,10 +321,11 @@ static void smca_configure(unsigned int bank, unsigned int cpu)
- 
- 	for (i = 0; i < ARRAY_SIZE(smca_hwid_mcatypes); i++) {
- 		s_hwid = &smca_hwid_mcatypes[i];
-+
- 		if (hwid_mcatype == s_hwid->hwid_mcatype) {
--			smca_banks[bank].hwid = s_hwid;
--			smca_banks[bank].id = low;
--			smca_banks[bank].sysfs_id = s_hwid->count++;
-+			this_cpu_ptr(smca_banks)[bank].hwid = s_hwid;
-+			this_cpu_ptr(smca_banks)[bank].id = low;
-+			this_cpu_ptr(smca_banks)[bank].sysfs_id = bank_counts[s_hwid->bank_type]++;
- 			break;
- 		}
- 	}
-@@ -600,7 +611,7 @@ out:
- 
- bool amd_filter_mce(struct mce *m)
- {
--	enum smca_bank_types bank_type = smca_get_bank_type(m->bank);
-+	enum smca_bank_types bank_type = smca_get_bank_type(m->extcpu, m->bank);
- 	struct cpuinfo_x86 *c = &boot_cpu_data;
- 
- 	/* See Family 17h Models 10h-2Fh Erratum #1114. */
-@@ -638,7 +649,7 @@ static void disable_err_thresholding(struct cpuinfo_x86 *c, unsigned int bank)
- 	} else if (c->x86 == 0x17 &&
- 		   (c->x86_model >= 0x10 && c->x86_model <= 0x2F)) {
- 
--		if (smca_get_bank_type(bank) != SMCA_IF)
-+		if (smca_get_bank_type(smp_processor_id(), bank) != SMCA_IF)
- 			return;
- 
- 		msrs[0] = MSR_AMD64_SMCA_MCx_MISC(bank);
-@@ -706,7 +717,7 @@ bool amd_mce_is_memory_error(struct mce *m)
- 	u8 xec = (m->status >> 16) & 0x1f;
- 
- 	if (mce_flags.smca)
--		return smca_get_bank_type(m->bank) == SMCA_UMC && xec == 0x0;
-+		return smca_get_bank_type(m->extcpu, m->bank) == SMCA_UMC && xec == 0x0;
- 
- 	return m->bank == 4 && xec == 0x8;
- }
-@@ -1022,7 +1033,7 @@ static struct kobj_type threshold_ktype = {
- 	.release		= threshold_block_release,
+-	/* WAFL PHY MCA type */
+ 	{ SMCA_WAFL_PHY, HWID_MCATYPE(0x267, 0x0)	},
++	{ SMCA_GMI_PHY,	 HWID_MCATYPE(0x269, 0x0)	},
  };
  
--static const char *get_name(unsigned int bank, struct threshold_block *b)
-+static const char *get_name(unsigned int cpu, unsigned int bank, struct threshold_block *b)
- {
- 	enum smca_bank_types bank_type;
- 
-@@ -1033,7 +1044,7 @@ static const char *get_name(unsigned int bank, struct threshold_block *b)
- 		return th_names[bank];
- 	}
- 
--	bank_type = smca_get_bank_type(bank);
-+	bank_type = smca_get_bank_type(cpu, bank);
- 	if (bank_type >= N_SMCA_BANK_TYPES)
- 		return NULL;
- 
-@@ -1043,12 +1054,12 @@ static const char *get_name(unsigned int bank, struct threshold_block *b)
- 		return NULL;
- 	}
- 
--	if (smca_banks[bank].hwid->count == 1)
-+	if (per_cpu(smca_bank_counts, cpu)[bank_type] == 1)
- 		return smca_get_name(bank_type);
- 
- 	snprintf(buf_mcatype, MAX_MCATYPE_NAME_LEN,
--		 "%s_%x", smca_get_name(bank_type),
--			  smca_banks[bank].sysfs_id);
-+		 "%s_%u", smca_get_name(bank_type),
-+			  per_cpu(smca_banks, cpu)[bank].sysfs_id);
- 	return buf_mcatype;
- }
- 
-@@ -1104,7 +1115,7 @@ static int allocate_threshold_blocks(unsigned int cpu, struct threshold_bank *tb
- 	else
- 		tb->blocks = b;
- 
--	err = kobject_init_and_add(&b->kobj, &threshold_ktype, tb->kobj, get_name(bank, b));
-+	err = kobject_init_and_add(&b->kobj, &threshold_ktype, tb->kobj, get_name(cpu, bank, b));
- 	if (err)
- 		goto out_free;
- recurse:
-@@ -1159,7 +1170,7 @@ static int threshold_create_bank(struct threshold_bank **bp, unsigned int cpu,
- 	struct device *dev = this_cpu_read(mce_device);
- 	struct amd_northbridge *nb = NULL;
- 	struct threshold_bank *b = NULL;
--	const char *name = get_name(bank, NULL);
-+	const char *name = get_name(cpu, bank, NULL);
- 	int err = 0;
- 
- 	if (!dev)
+ struct smca_bank smca_banks[MAX_NR_BANKS];
 diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
-index cfd3f7a..cc5c63f 100644
+index 67dbf4c..cfd3f7a 100644
 --- a/drivers/edac/mce_amd.c
 +++ b/drivers/edac/mce_amd.c
-@@ -1166,20 +1166,13 @@ static void decode_mc6_mce(struct mce *m)
- /* Decode errors according to Scalable MCA specification */
- static void decode_smca_error(struct mce *m)
- {
--	struct smca_hwid *hwid;
--	enum smca_bank_types bank_type;
-+	enum smca_bank_types bank_type = smca_get_bank_type(m->extcpu, m->bank);
- 	const char *ip_name;
- 	u8 xec = XEC(m->status, xec_mask);
+@@ -399,6 +399,63 @@ static const char * const smca_mp5_mce_desc[] = {
+ 	"Instruction Tag Cache Bank B ECC or parity error",
+ };
  
--	if (m->bank >= ARRAY_SIZE(smca_banks))
-+	if (bank_type >= N_SMCA_BANK_TYPES)
- 		return;
++static const char * const smca_mpdma_mce_desc[] = {
++	"Main SRAM [31:0] bank ECC or parity error",
++	"Main SRAM [63:32] bank ECC or parity error",
++	"Main SRAM [95:64] bank ECC or parity error",
++	"Main SRAM [127:96] bank ECC or parity error",
++	"Data Cache Bank A ECC or parity error",
++	"Data Cache Bank B ECC or parity error",
++	"Data Tag Cache Bank A ECC or parity error",
++	"Data Tag Cache Bank B ECC or parity error",
++	"Instruction Cache Bank A ECC or parity error",
++	"Instruction Cache Bank B ECC or parity error",
++	"Instruction Tag Cache Bank A ECC or parity error",
++	"Instruction Tag Cache Bank B ECC or parity error",
++	"Data Cache Bank A ECC or parity error",
++	"Data Cache Bank B ECC or parity error",
++	"Data Tag Cache Bank A ECC or parity error",
++	"Data Tag Cache Bank B ECC or parity error",
++	"Instruction Cache Bank A ECC or parity error",
++	"Instruction Cache Bank B ECC or parity error",
++	"Instruction Tag Cache Bank A ECC or parity error",
++	"Instruction Tag Cache Bank B ECC or parity error",
++	"Data Cache Bank A ECC or parity error",
++	"Data Cache Bank B ECC or parity error",
++	"Data Tag Cache Bank A ECC or parity error",
++	"Data Tag Cache Bank B ECC or parity error",
++	"Instruction Cache Bank A ECC or parity error",
++	"Instruction Cache Bank B ECC or parity error",
++	"Instruction Tag Cache Bank A ECC or parity error",
++	"Instruction Tag Cache Bank B ECC or parity error",
++	"System Hub Read Buffer ECC or parity error",
++	"MPDMA TVF DVSEC Memory ECC or parity error",
++	"MPDMA TVF MMIO Mailbox0 ECC or parity error",
++	"MPDMA TVF MMIO Mailbox1 ECC or parity error",
++	"MPDMA TVF Doorbell Memory ECC or parity error",
++	"MPDMA TVF SDP Slave Memory 0 ECC or parity error",
++	"MPDMA TVF SDP Slave Memory 1 ECC or parity error",
++	"MPDMA TVF SDP Slave Memory 2 ECC or parity error",
++	"MPDMA TVF SDP Master Memory 0 ECC or parity error",
++	"MPDMA TVF SDP Master Memory 1 ECC or parity error",
++	"MPDMA TVF SDP Master Memory 2 ECC or parity error",
++	"MPDMA TVF SDP Master Memory 3 ECC or parity error",
++	"MPDMA TVF SDP Master Memory 4 ECC or parity error",
++	"MPDMA TVF SDP Master Memory 5 ECC or parity error",
++	"MPDMA TVF SDP Master Memory 6 ECC or parity error",
++	"MPDMA PTE Command FIFO ECC or parity error",
++	"MPDMA PTE Hub Data FIFO ECC or parity error",
++	"MPDMA PTE Internal Data FIFO ECC or parity error",
++	"MPDMA PTE Command Memory DMA ECC or parity error",
++	"MPDMA PTE Command Memory Internal ECC or parity error",
++	"MPDMA PTE DMA Completion FIFO ECC or parity error",
++	"MPDMA PTE Tablewalk Completion FIFO ECC or parity error",
++	"MPDMA PTE Descriptor Completion FIFO ECC or parity error",
++	"MPDMA PTE ReadOnly Completion FIFO ECC or parity error",
++	"MPDMA PTE DirectWrite Completion FIFO ECC or parity error",
++	"SDP Watchdog Timer expired",
++};
++
+ static const char * const smca_nbio_mce_desc[] = {
+ 	"ECC or Parity error",
+ 	"PCIE error",
+@@ -448,7 +505,7 @@ static const char * const smca_xgmipcs_mce_desc[] = {
+ 	"Rx Replay Timeout Error",
+ 	"LinkSub Tx Timeout Error",
+ 	"LinkSub Rx Timeout Error",
+-	"Rx CMD Pocket Error",
++	"Rx CMD Packet Error",
+ };
  
--	hwid = smca_banks[m->bank].hwid;
--	if (!hwid)
--		return;
--
--	bank_type = hwid->bank_type;
--
- 	if (bank_type == SMCA_RESERVED) {
- 		pr_emerg(HW_ERR "Bank %d is reserved.\n", m->bank);
- 		return;
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
-index 08133de..75dad02 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
-@@ -2647,7 +2647,7 @@ static int amdgpu_bad_page_notifier(struct notifier_block *nb,
- 	 * and error occurred in DramECC (Extended error code = 0) then only
- 	 * process the error, else bail out.
- 	 */
--	if (!m || !((smca_get_bank_type(m->bank) == SMCA_UMC_V2) &&
-+	if (!m || !((smca_get_bank_type(m->extcpu, m->bank) == SMCA_UMC_V2) &&
- 		    (XEC(m->status, 0x3f) == 0x0)))
- 		return NOTIFY_DONE;
+ static const char * const smca_xgmiphy_mce_desc[] = {
+@@ -458,11 +515,66 @@ static const char * const smca_xgmiphy_mce_desc[] = {
+ 	"PHY APB error",
+ };
  
+-static const char * const smca_waflphy_mce_desc[] = {
+-	"RAM ECC Error",
+-	"ARC instruction buffer parity error",
+-	"ARC data buffer parity error",
+-	"PHY APB error",
++static const char * const smca_nbif_mce_desc[] = {
++	"Timeout error from GMI",
++	"SRAM ECC error",
++	"NTB Error Event",
++	"SDP Parity error",
++};
++
++static const char * const smca_sata_mce_desc[] = {
++	"Parity error for port 0",
++	"Parity error for port 1",
++	"Parity error for port 2",
++	"Parity error for port 3",
++	"Parity error for port 4",
++	"Parity error for port 5",
++	"Parity error for port 6",
++	"Parity error for port 7",
++};
++
++static const char * const smca_usb_mce_desc[] = {
++	"Parity error or ECC error for S0 RAM0",
++	"Parity error or ECC error for S0 RAM1",
++	"Parity error or ECC error for S0 RAM2",
++	"Parity error for PHY RAM0",
++	"Parity error for PHY RAM1",
++	"AXI Slave Response error",
++};
++
++static const char * const smca_gmipcs_mce_desc[] = {
++	"Data Loss Error",
++	"Training Error",
++	"Replay Parity Error",
++	"Rx Fifo Underflow Error",
++	"Rx Fifo Overflow Error",
++	"CRC Error",
++	"BER Exceeded Error",
++	"Tx Fifo Underflow Error",
++	"Replay Buffer Parity Error",
++	"Tx Overflow Error",
++	"Replay Fifo Overflow Error",
++	"Replay Fifo Underflow Error",
++	"Elastic Fifo Overflow Error",
++	"Deskew Error",
++	"Offline Error",
++	"Data Startup Limit Error",
++	"FC Init Timeout Error",
++	"Recovery Timeout Error",
++	"Ready Serial Timeout Error",
++	"Ready Serial Attempt Error",
++	"Recovery Attempt Error",
++	"Recovery Relock Attempt Error",
++	"Deskew Abort Error",
++	"Rx Buffer Error",
++	"Rx LFDS Fifo Overflow Error",
++	"Rx LFDS Fifo Underflow Error",
++	"LinkSub Tx Timeout Error",
++	"LinkSub Rx Timeout Error",
++	"Rx CMD Packet Error",
++	"LFDS Training Timeout Error",
++	"LFDS FC Init Timeout Error",
++	"Data Loss Error",
+ };
+ 
+ struct smca_mce_desc {
+@@ -490,12 +602,21 @@ static struct smca_mce_desc smca_mce_descs[] = {
+ 	[SMCA_SMU]	= { smca_smu_mce_desc,	ARRAY_SIZE(smca_smu_mce_desc)	},
+ 	[SMCA_SMU_V2]	= { smca_smu2_mce_desc,	ARRAY_SIZE(smca_smu2_mce_desc)	},
+ 	[SMCA_MP5]	= { smca_mp5_mce_desc,	ARRAY_SIZE(smca_mp5_mce_desc)	},
++	[SMCA_MPDMA]	= { smca_mpdma_mce_desc,	ARRAY_SIZE(smca_mpdma_mce_desc)	},
+ 	[SMCA_NBIO]	= { smca_nbio_mce_desc,	ARRAY_SIZE(smca_nbio_mce_desc)	},
+ 	[SMCA_PCIE]	= { smca_pcie_mce_desc,	ARRAY_SIZE(smca_pcie_mce_desc)	},
+ 	[SMCA_PCIE_V2]	= { smca_pcie2_mce_desc,   ARRAY_SIZE(smca_pcie2_mce_desc)	},
+ 	[SMCA_XGMI_PCS]	= { smca_xgmipcs_mce_desc, ARRAY_SIZE(smca_xgmipcs_mce_desc)	},
++	/* NBIF and SHUB have the same error descriptions, for now. */
++	[SMCA_NBIF]	= { smca_nbif_mce_desc, ARRAY_SIZE(smca_nbif_mce_desc)	},
++	[SMCA_SHUB]	= { smca_nbif_mce_desc, ARRAY_SIZE(smca_nbif_mce_desc)	},
++	[SMCA_SATA]	= { smca_sata_mce_desc, ARRAY_SIZE(smca_sata_mce_desc)	},
++	[SMCA_USB]	= { smca_usb_mce_desc,	ARRAY_SIZE(smca_usb_mce_desc)	},
++	[SMCA_GMI_PCS]	= { smca_gmipcs_mce_desc,  ARRAY_SIZE(smca_gmipcs_mce_desc)	},
++	/* All the PHY bank types have the same error descriptions, for now. */
+ 	[SMCA_XGMI_PHY]	= { smca_xgmiphy_mce_desc, ARRAY_SIZE(smca_xgmiphy_mce_desc)	},
+-	[SMCA_WAFL_PHY]	= { smca_waflphy_mce_desc, ARRAY_SIZE(smca_waflphy_mce_desc)	},
++	[SMCA_WAFL_PHY]	= { smca_xgmiphy_mce_desc, ARRAY_SIZE(smca_xgmiphy_mce_desc)	},
++	[SMCA_GMI_PHY]	= { smca_xgmiphy_mce_desc, ARRAY_SIZE(smca_xgmiphy_mce_desc)	},
+ };
+ 
+ static bool f12h_mc0_mce(u16 ec, u8 xec)

@@ -2,128 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBEF847CE31
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 09:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7716747CE36
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 09:28:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbhLVI1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 03:27:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38686 "EHLO
+        id S236320AbhLVI2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 03:28:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50078 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229482AbhLVI1i (ORCPT
+        by vger.kernel.org with ESMTP id S231948AbhLVI2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 03:27:38 -0500
+        Wed, 22 Dec 2021 03:28:43 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640161657;
+        s=mimecast20190719; t=1640161723;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YiCJI2Ld40vcwNQ1UmTsVWp+vpo93LIjdzoVcEzuB/c=;
-        b=Is28GX3q6zOv7YhzJDQAyNfUwb+FM/6AgvbUVXIncSj0o1g/8jCgf8nfgYSuKwlbQ6NUi/
-        42UnmHGESXQGQwRtgOqsTLkAKMxJiP7ul7I/4QaGa35FNireVSJTvoYA5LpelrqkhhlK9F
-        z8DK8mvuuIaBahaQz9Azb3Ed8/gZnfw=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding;
+        bh=E4JXbmbKDkqfAMNbIkv/r6xGh5or/gMN+DXKn1vGRis=;
+        b=BcRIfC/Fb0vUofEyunt+GN4JYY4MaqaSfBiOEDjT73jF4ps9M6g0peKTYgacxJZGoWeM/J
+        DA2ErGz/d1iV7dFm09FOqSQkOU34QeURkzJ4LI3zZVXKzm1enHcpzzTJ+UDrx2vMgRgpzV
+        90q6SILFbq5IewG9K5d+bZV+HMjRENI=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-78-vqukhtmvN-KBfstahjqDRA-1; Wed, 22 Dec 2021 03:27:34 -0500
-X-MC-Unique: vqukhtmvN-KBfstahjqDRA-1
-Received: by mail-wr1-f69.google.com with SMTP id p1-20020adfba81000000b001a25b07ff53so520445wrg.22
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 00:27:33 -0800 (PST)
+ us-mta-586-0acjDFP7NBaLJab8xhEBnw-1; Wed, 22 Dec 2021 03:28:42 -0500
+X-MC-Unique: 0acjDFP7NBaLJab8xhEBnw-1
+Received: by mail-wm1-f71.google.com with SMTP id m19-20020a05600c4f5300b00345cb6e8dd4so100566wmq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 00:28:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=YiCJI2Ld40vcwNQ1UmTsVWp+vpo93LIjdzoVcEzuB/c=;
-        b=Sa3meT+p5PGsazdwGU8oHCnpWuswv6P6IVaw+/f3mWOiVZ1sK+SJg7u2pF0L/aWweh
-         X+RAG8MRomff1PydxxsN/br5PtYzU5YBx0csufE3B/oVQFzaWVxmOGK9hHejFEroF9qi
-         CRqUsFHvETvXwZ04IchZGPqmyY9REcOhw81VbQyLjXKqiwPo0Sf9PvZT0AoDQGq7FBr1
-         LZMZPQ+pObya7JpsJPz6Q2z5a3ucgbBjPIQAw1LjZQbnnQXaVYMoxhil9IN7BxfEXByj
-         sKyjTRHl38+W4oOuT3xNmDMdzq+Z0dZWp/7Tmj4HoB6dgPhMeZLwFSNpg0a3UKo1XpkU
-         03FA==
-X-Gm-Message-State: AOAM533OhcHW8D37jwt32VHqT0ND3DtL09Ti0zeo7pWyCM5rYH8kux6q
-        cZS9sf2sVilNwRf0tb6F7C9j7qTvGaHP39/hG9comgOq6//lCkYnCCQGDhXNTwvWZEf2sK0Lubl
-        bp/WIdLhqIBv4o6BS3Al3qK3C
-X-Received: by 2002:a7b:c457:: with SMTP id l23mr120646wmi.24.1640161653046;
-        Wed, 22 Dec 2021 00:27:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwWxMheKBopAqBgCXoAxuJXOZ6bUwWYRp22yAOCWcNz13FizqbU4zHNjtnz+PQeYZV6wpX7ng==
-X-Received: by 2002:a7b:c457:: with SMTP id l23mr120634wmi.24.1640161652845;
-        Wed, 22 Dec 2021 00:27:32 -0800 (PST)
-Received: from [192.168.3.132] (p5b0c646a.dip0.t-ipconnect.de. [91.12.100.106])
-        by smtp.gmail.com with ESMTPSA id u13sm5243476wmq.14.2021.12.22.00.27.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 00:27:32 -0800 (PST)
-Message-ID: <94cb5c11-97b1-f157-ad8e-d916175e0690@redhat.com>
-Date:   Wed, 22 Dec 2021 09:27:31 +0100
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=E4JXbmbKDkqfAMNbIkv/r6xGh5or/gMN+DXKn1vGRis=;
+        b=3qhd3GDOHBbLfBU7ksyFr2JISTq275nBdS1HWxZUr2LvM5kVdfxH8+SQ6zGXZxK8WR
+         eA/MpmqPJpf0NdvqpUQ84+SV/YX85fQk5TlkWJZ8vYTULBEg+rt/TYR1OCtX/0wKL5L/
+         UKlgXxeeHv6oc08aJoVht6YdQ6Ut2/IngXEB3mgCKtSrN6Y8yqEaDoc9/+xDIKL0G5JE
+         tnI67ZIE4i95jI827VyxyrMon4nSt3ez6wOV88rjIc1W5zR83QZofjqCJZM9gHva2wJ0
+         rrGqnLMOa/sOIfBmuKMMRyCpq2ZzFO+EWDZC1pCm1XzEEJ1UvrXEK4WxtgMsr31nLhev
+         PQUA==
+X-Gm-Message-State: AOAM530rYfXFtf+blNzZhukytOmuhRGzCgM+v/E/IH85RGdBG9QmuUb1
+        82otmI3aeIukU9ouSRCFNg7eMwe1v9Bwr4dvgSdsu6fau0ckKwsivjkv0PUcXVaidZkMb3qKBGu
+        dhZ/ovgvQ8QqI7DSIy50dDbi78ZVNGp27waCbDFxRatCXxqaB0YfJugLpescqAhCInWMYYb9Ky1
+        Y=
+X-Received: by 2002:adf:80ca:: with SMTP id 68mr1271940wrl.528.1640161720991;
+        Wed, 22 Dec 2021 00:28:40 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwkoCJtHVX3pDhOPdiUKxxW7/e5x5c7YtwSOGtxy8UoUjYgTN5fseYcbOxjAI29EVId5+1dNg==
+X-Received: by 2002:adf:80ca:: with SMTP id 68mr1271896wrl.528.1640161720623;
+        Wed, 22 Dec 2021 00:28:40 -0800 (PST)
+Received: from minerva.home ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id m17sm1247080wrz.91.2021.12.22.00.28.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 00:28:40 -0800 (PST)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Brian Starkey <brian.starkey@arm.com>,
+        Chen Feng <puck.chen@hisilicon.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Fabio Estevam <festevam@gmail.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        "James (Qian) Wang" <james.qian.wang@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Mihail Atanassov <mihail.atanassov@arm.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH v3 00/10] drm: Make drivers to honour the nomodeset parameter
+Date:   Wed, 22 Dec 2021 09:28:21 +0100
+Message-Id: <20211222082831.196562-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Peng Hao <flyingpenghao@gmail.com>, mst@redhat.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211222011225.40573-1-flyingpeng@tencent.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH] virtio/virtio_mem: handle a possible NULL as a memcpy
- parameter
-In-Reply-To: <20211222011225.40573-1-flyingpeng@tencent.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.12.21 02:12, Peng Hao wrote:
-> There is a check for vm->sbm.sb_states before, and it should check
-> it here as well.
-> 
-> Signed-off-by: Peng Hao <flyingpeng@tencent.com>
-> ---
->  drivers/virtio/virtio_mem.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
-> index 96e5a8782769..b6b7c489c8b6 100644
-> --- a/drivers/virtio/virtio_mem.c
-> +++ b/drivers/virtio/virtio_mem.c
-> @@ -592,7 +592,7 @@ static int virtio_mem_sbm_sb_states_prepare_next_mb(struct virtio_mem *vm)
->  		return -ENOMEM;
->  
->  	mutex_lock(&vm->hotplug_mutex);
-> -	if (new_bitmap)
-> +	if (vm->sbm.sb_states)
->  		memcpy(new_bitmap, vm->sbm.sb_states, old_pages * PAGE_SIZE);
->  
->  	old_bitmap = vm->sbm.sb_states;
+The nomodeset kernel command line parameter is used to prevent the KMS/DRM
+drivers to be registered/probed. But only a few drivers implement support
+for this and most DRM drivers just ignore it.
 
-Right, on the first iteration (vm->sbm.sb_states == NULL) we would copy
-from NULL.
+This patch series is a v3 to make DRM drivers to honour nomodeset. It is
+posted as separate patches to make easier for drivers maintainers to ack
+or pick them independently at their own pace.
 
-I wonder why this never failed so far. I guess that's because "the
-behavior is undefined" if a NULL pointer is passed.
+The drm_module_{pci,platform}_driver() helper macros are added, which are
+just wrappers around module_{pci,platform}_driver() but adding a check for
+drm_firmware_drivers_only() and returning -ENODEV if that is true.
 
-I assume the memcpy implementation that we've been using so far simply
-skips the operation if they detect a NULL pointer, although according to
-the standard the behavior is undefined:
+PCI and platform DRM drivers are then modified in the following patches to
+make use of those macros.
 
-"
-AFAIK, most implementations allow null pointers for no-op calls to
-memcpy() but gcc issues a warning when it detects at compile time
-that a null pointer is passed as the first or second argument to
-memcpy().
-" [1]
+Only KMS drivers will be ported to use these new macros, and only for PCI
+and platform DRM drivers. A follow-up series might do the same for drivers
+that are rendering-only and for USB/SPI/I2C devices, but it will need more
+discussion to agree whether that's desirable or not.
 
-Fixes: 5f1f79bbc9e2 ("virtio-mem: Paravirtualized memory hotplug")
-Cc: stable@vger.kernel.org # v5.8+
+Not all drivers were posted in v3 to avoid flooding the list with too many
+patches. I'm only including the patches adding the macros and some patches
+as an example of their usage.
 
+I've built tested with 'make allmodconfig && make M=drivers/gpu/drm' but I
+don't have hardware to test the drivers, so review/testing is appreciated.
 
-Thanks!
+Best regards,
+Javier
 
-[1]
-https://mail-archives.apache.org/mod_mbox/stdcxx-dev/200804.mbox/%3CCFFDD219128FD94FB4F92B99F52D0A49010A36F4@exchmail01.Blue.Roguewave.Com%3E
+Changes in v3:
+- Include Thomas Zimmermann's patches in the series and rebase on top.
+- Add collected Acked-by tags from v2.
+
+Changes in v2:
+- Add drm_module_{pci,platform}_driver() macros and put the check there
+  (Thomas Zimmermann).
+- Use the drm_module_*_driver() macros if possible (Thomas Zimmermann).
+- Leave the DRM drivers that don't set the DRIVER_MODESET driver feature
+  (Lucas Stach).
+- Leave USB/SPI/I2C drivers and only include PCI and platform ones
+  (Noralf Trønnes).
+- Add collected Reviewed-by tags
+
+Javier Martinez Canillas (5):
+  drm: Provide platform module-init macro
+  drm/imx/dcss: Replace module initialization with DRM helpers
+  drm/komeda: Replace module initialization with DRM helpers
+  drm/arm/hdlcd: Replace module initialization with DRM helpers
+  drm/malidp: Replace module initialization with DRM helpers
+
+Thomas Zimmermann (5):
+  drm: Provide PCI module-init macros
+  drm/ast: Replace module-init boiler-plate code with DRM helpers
+  drm/bochs: Replace module-init boiler-plate code with DRM helpers
+  drm/cirrus: Replace module-init boiler-plate code with DRM helpers
+  drm/hisilicon/hibmc: Replace module initialization with DRM helpers
+
+ Documentation/gpu/drm-internals.rst           |   6 +
+ .../gpu/drm/arm/display/komeda/komeda_drv.c   |   3 +-
+ drivers/gpu/drm/arm/hdlcd_drv.c               |   3 +-
+ drivers/gpu/drm/arm/malidp_drv.c              |   3 +-
+ drivers/gpu/drm/ast/ast_drv.c                 |  18 +--
+ .../gpu/drm/hisilicon/hibmc/hibmc_drm_drv.c   |   3 +-
+ drivers/gpu/drm/imx/dcss/dcss-drv.c           |   3 +-
+ drivers/gpu/drm/tiny/bochs.c                  |  20 +--
+ drivers/gpu/drm/tiny/cirrus.c                 |  17 +--
+ include/drm/drm_module.h                      | 125 ++++++++++++++++++
+ 10 files changed, 147 insertions(+), 54 deletions(-)
+ create mode 100644 include/drm/drm_module.h
 
 -- 
-Thanks,
-
-David / dhildenb
+2.33.1
 

@@ -2,82 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E020E47CC2F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 05:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2B647CC32
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 05:36:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238461AbhLVEf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 23:35:59 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:36401 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232166AbhLVEf6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 23:35:58 -0500
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 1BM4ZfWb010504
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Dec 2021 23:35:42 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 70D0A15C33AD; Tue, 21 Dec 2021 23:35:41 -0500 (EST)
-Date:   Tue, 21 Dec 2021 23:35:41 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        syzbot <syzbot+9c3fb12e9128b6e1d7eb@syzkaller.appspotmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] INFO: task hung in jbd2_journal_commit_transaction (3)
-Message-ID: <YcKrHc11B/2tcfRS@mit.edu>
-References: <00000000000032992d05d370f75f@google.com>
- <20211219023540.1638-1-hdanton@sina.com>
- <Yb6zKVoxuD3lQMA/@casper.infradead.org>
- <20211221090804.1810-1-hdanton@sina.com>
- <20211222022527.1880-1-hdanton@sina.com>
+        id S242460AbhLVEgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 23:36:03 -0500
+Received: from mail-dm6nam11on2060.outbound.protection.outlook.com ([40.107.223.60]:1233
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S238993AbhLVEgD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 23:36:03 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nP1v5hFBzGv7/NiiFfwJBNJRgG0x09MfmZXwgHkBFgRJ6Ps3Df76MgnQVYz2vvi2lAVtmMVpGboqMTRl9yLyv/r8oZWvV7Wo6eSr3qCyK316Fdtuml5226yBd/6QH0RA8Q5GIllHktAKbl2//4ulTDorNFPcWNFWXO2MMlehzc/d4nzl0vytLg6lrRYWvofFvIUbfLbg/h5mavNPsbEfQy7jHKL1iVhEzvvFSc88srDLRlioxTHdYovx6GJ+pnf4sdfNMGIYyG4Ur/8XL9mHZtdPpRWd9NNHrFQ8cBl+KCLXhLIZXKG2bxRtryxhERmbfBuRQ5AXXHMqctDSHgYe3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dJfUthxHYtpc37hGwUQVxfGmK95bT8NPHrzh4qViFf0=;
+ b=JyeCdB8UIfqzJi2M7CAbQHV5pRl4zO6VhhmGmesy3br5V0khtao7+osSKiHHzBxovIPuRAnFXXL279e2CoRjnGL15LCbaNGgdQsZ+5c2JqBcIqk4Ua2BR7Eo4kCmPcY/ylbu5ydh8niU21b0G1HxWSs8ghYNCDRX7Ryhosk44f55Lzadzd7mxrafSn7oFoKZ7G3jLZ9+G//0g4hcV+vjsMaeXLMq9vDRg8YET6livWyXfwH4wclWyaonU/9G3B7110GfI1jrvJ0AcJD0MVZ/jeRvFwJQ6/fq82DEl5wTERQbrQq9hOaqsGyuQP7gcOl6WuLfN1GDrWLwq6Rj2Jpi9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.234) smtp.rcpttodomain=suse.com smtp.mailfrom=nvidia.com; dmarc=pass
+ (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dJfUthxHYtpc37hGwUQVxfGmK95bT8NPHrzh4qViFf0=;
+ b=CsuI7Eq32ntVBxK0cTvD+d8XJ4EqUImI65k0/zytztO70cLyZAzFdYAAbFpmgGJqsokTMAy84+LKW2TsdVZ7lTaIPXThK/Wp/iTNrXNFhqk8Zo2eEBK0QjTx6smziB0/mE34ijQfKFjPgrnIMmjzUy74xY2hDsedRsxQajmTTvjS+pjpwO5xxx8q/1yAgPYFWITY2y1AKmF/THrJYGqSmpg39K0OXL5hveQGY+sulHYEz3IkIykTHE0n2SH2I8mWVQ89cOx6/uwfN6eJ66Z1imC05wBejO0KqnwRy0mxO+R0oJaXWZn7zOXJCGx2470NsnQJyKUNAayuD3VCtlKN0Q==
+Received: from BN0PR04CA0191.namprd04.prod.outlook.com (2603:10b6:408:e9::16)
+ by BN6PR12MB1458.namprd12.prod.outlook.com (2603:10b6:405:d::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.20; Wed, 22 Dec
+ 2021 04:36:00 +0000
+Received: from BN8NAM11FT028.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e9:cafe::64) by BN0PR04CA0191.outlook.office365.com
+ (2603:10b6:408:e9::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.17 via Frontend
+ Transport; Wed, 22 Dec 2021 04:36:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.234; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.234) by
+ BN8NAM11FT028.mail.protection.outlook.com (10.13.176.225) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4823.18 via Frontend Transport; Wed, 22 Dec 2021 04:36:00 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by DRHQMAIL101.nvidia.com
+ (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 22 Dec
+ 2021 04:35:59 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 22 Dec
+ 2021 04:35:58 +0000
+Received: from audio.nvidia.com (172.20.187.5) by mail.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Wed, 22 Dec 2021 04:35:55 +0000
+From:   Sameer Pujar <spujar@nvidia.com>
+To:     <tiwai@suse.com>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <robh+dt@kernel.org>, <thierry.reding@gmail.com>, <perex@perex.cz>
+CC:     <jonathanh@nvidia.com>, <digetx@gmail.com>, <mkumard@nvidia.com>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Sameer Pujar <spujar@nvidia.com>
+Subject: [PATCH v3 0/3] Fix Tegra194 HDA regression
+Date:   Wed, 22 Dec 2021 10:05:48 +0530
+Message-ID: <1640147751-4777-1-git-send-email-spujar@nvidia.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211222022527.1880-1-hdanton@sina.com>
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 32e70685-5559-4cec-52dc-08d9c5048e56
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1458:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR12MB14589BDBAB8D56E7382982F4A77D9@BN6PR12MB1458.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 40C/MOiq634fpOhzFXvWSQBqJSd0QKEgj7hpHSH/q0Tcu4K2GOSJqKjQN5sp/09ZIJldsj2Gka2yiPq7RcbBxcYF9CR+6NunhmY7RYDjA4NMiq2Ljco/QzJJ9xX789FTxjxb0FWcVQCpnWoUjbET5taZDHa64Za95OioYrTVwSkW+2yo2B7Dm4QtoRS8F+jkrbJKzLV1lZuyQvEbvqFLro8aa9bftfP74uY4B4mAc4R1PX5hclQUCRgfit2a10QJMR62uAjmJczh9WTxPErPAjEG/+G8ncgRKlPtZwH3AHgLT+wfrjqrIZnMzO93mVzfXH7hPF9fM0HyyatEuS/DSTrMalNk419IsGzLjScKGeDdAwPemMNAuMKKMfgghw/cXBFhzJNqxn3tRR9Nb8VDFU8fZncTYc6eTTQHOlO3BRloCUYcJHEFYRi2tyTzrQCBZW85303ok44AKNluOAYkzXntn0s7cfdM/Fiio3+szJpBqVE9lSq/qhOUvxf+bnbzRc1++bK5uq1cKBksVJ3VMlHZI47eWY73s6ZPYR+CF5yGWBwmz//n024mp2vTuTaCs+LDDofqVMFQx8cKwZqrE+rkZe+r9EyMLIgP2/ODiDgzB0Q+2IpGVAtLAOYqRhB6+9O+e/zL3OAyrby2mVQ7O3EOmoLtxge2LXWhx4uJzOv2dD8ZvDVCIBjy59ajNHc48uImSQ+SO3SpN2OlFDHG4TITc0DC+WxnHBGfrXyRZ93X2FJIX9kUMZCc14xd4J0cFrX2nKlcqg2nmF1NrxUpHA6oHpNgSLQ8BYE3m4UX5csNugrdLYs8L3LMxFQBcSGwkQd/uu1Xg/XEInawPL5DEw==
+X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(36840700001)(40470700002)(46966006)(316002)(8676002)(8936002)(110136005)(7696005)(54906003)(336012)(6666004)(7416002)(86362001)(107886003)(34020700004)(426003)(2906002)(36860700001)(4326008)(70206006)(2616005)(186003)(82310400004)(36756003)(26005)(47076005)(70586007)(81166007)(508600001)(5660300002)(83380400001)(4744005)(40460700001)(356005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2021 04:36:00.6480
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 32e70685-5559-4cec-52dc-08d9c5048e56
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT028.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1458
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 10:25:27AM +0800, Hillf Danton wrote:
-> > I'm not sure what you hope to learn by doing something like that.
-> > That will certainly perturb the system, but every 150 seconds, the
-> > task is going to let other tasks/threads run --- but it will be
-> > whatever is the next highest priority thread. 
-> 
-> Without reproducer, I am trying to reproduce the issue using a FIFO CPU hog
-> which is supposed to beat the watchdog to show me the victims like various
-> kthreads, workqueue workers and user apps, despite I know zero about how the
-> watchdog is configured except the report was down to watchdog bite.
+HDA probe failure is observed on Tegra194 based platforms and this
+happens due to reset failure. This series fixes the problem by
+skipping the failing reset and DT bindings are updated accordingly.
 
-It's really trivial to reproduce an issue that has the same symptom as
-what has been reported to you.  Mount the file system using a
-non-real-time (SCHED_OTHER) thread, such that the jbd2 and ext4 worker
-threads are running SCHED_OTHER.  Then run some file system workload
-(fsstress or fsmark) as SCHED_FIFO.  Then on an N CPU system, run N
-processes as SCHED_FIFO at any priority (doesn't matter whether it's
-MAX_PRI-1 or MIN_PRI; SCHED_FIFO will have priority over SCHED_OTHER
-processes, so this will effectively starve the ext4 and jbd2 worker
-threads from ever getting to run.  Once the ext4 journal fills up, any
-SCHED_FIFO process which tries to write to the file system will hang.
 
-The problem is that's *one* potential stupid configuration of the
-real-time system.  It's not necessarily the *only* potentially stupid
-way that you can get yourself into a system hang.  It appears the
-syzkaller "repro" is another such "stupid way".  And the number of
-ways you can screw up with a real-time system is practically
-unbounded...
+Changelog
+=========
+ v2 -> v3:
+ ---------
+   * Use reset bulk APIs in HDA driver as suggested by Dmitry.
 
-So getting back to syzkaller, Willy had the right approach, which is a
-Syzcaller "repro" happens to use SCHED_FIFO or SCHED_RR, and the
-symptom is a system hang, it's probably worth ignoring the report,
-since it's going to be a waste of time to debug userspace bug.  If you
-have anything that uses kernel threads, and SCHED_FIFO or SCHED_RR is
-in play, it's probably a userspace bug.
 
-Cheers,
+ v1 -> v2:
+ ---------
+   * Updated HDA driver patch to skip the failing reset instead of
+     skipping resets in general for BPMP devices as per comment from
+     Dmitry.
+   * Used a better strucure name for SoC data as per comment from
+     Thierry.
+   * Dropped 'Fixes' tag in binding doc patch as per comment from
+     Dmitry.
 
-					- Ted
+Sameer Pujar (3):
+  ALSA: hda/tegra: Fix Tegra194 HDA reset failure
+  dt-bindings: sound: tegra: Update HDA resets
+  arm64: tegra: Remove non existent Tegra194 reset
+
+ .../bindings/sound/nvidia,tegra30-hda.yaml         | 13 +++++--
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi           |  5 +--
+ sound/pci/hda/hda_tegra.c                          | 45 +++++++++++++++++-----
+ 3 files changed, 47 insertions(+), 16 deletions(-)
+
+-- 
+2.7.4
+

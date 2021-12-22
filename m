@@ -2,81 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9449247D31C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:41:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CD047D328
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245462AbhLVNlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 08:41:00 -0500
-Received: from foss.arm.com ([217.140.110.172]:45876 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245436AbhLVNk7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 08:40:59 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2729DD6E;
-        Wed, 22 Dec 2021 05:40:58 -0800 (PST)
-Received: from bogus (unknown [10.57.36.205])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ADFD33F5A1;
-        Wed, 22 Dec 2021 05:40:56 -0800 (PST)
-Date:   Wed, 22 Dec 2021 13:40:53 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-kernel@vger.kernel.org, Jassi Brar <jassisinghbrar@gmail.com>
-Cc:     linux-acpi@vger.kernel.org, Justin He <justin.he@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH] mailbox: pcc: Handle all PCC subtypes correctly in
- pcc_mbox_irq
-Message-ID: <20211222134053.7yibtok42iluc5go@bogus>
-References: <20211209092146.620024-1-sudeep.holla@arm.com>
+        id S245468AbhLVNrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 08:47:25 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:52806 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234159AbhLVNrY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 08:47:24 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 345D81F388;
+        Wed, 22 Dec 2021 13:47:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1640180843; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=k57L7T1HFo6BPqAXN0sieUpWuA2JdRZZvO8uuOmZVkI=;
+        b=hk9hNSehpgPjEhhYQ6InKoLbcyrWSZzt7roPYMtMEwUOowTwHpnc6/9+QF1/tzHJJmqGEI
+        9ol92vjG4CAynslgyjK46zcFZK04ENjjGkfoHtJWVvGmfzl5R3Y94T6nMXv+KKzSF+MtWt
+        ZzZ31s47Q8Qb15WacukQOS+A3lD8E5Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1640180843;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=k57L7T1HFo6BPqAXN0sieUpWuA2JdRZZvO8uuOmZVkI=;
+        b=TBrGVvf5jV+Mkf4gIOwJLU7GoPk1SN+OQSBw7mJNv8A+93AqucP/J2U8pc9XnZWNNh+XRn
+        GtDG7c5CB+amK/CQ==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 9271FA3B89;
+        Wed, 22 Dec 2021 13:47:22 +0000 (UTC)
+Date:   Wed, 22 Dec 2021 14:47:22 +0100 (CET)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>, Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>
+Subject: Re: [PATCH v2 01/13] livepatch: Fix build failure on 32 bits
+ processors
+In-Reply-To: <5288e11b018a762ea3351cc8fb2d4f15093a4457.1640017960.git.christophe.leroy@csgroup.eu>
+Message-ID: <alpine.LSU.2.21.2112221447060.18494@pobox.suse.cz>
+References: <cover.1640017960.git.christophe.leroy@csgroup.eu> <5288e11b018a762ea3351cc8fb2d4f15093a4457.1640017960.git.christophe.leroy@csgroup.eu>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209092146.620024-1-sudeep.holla@arm.com>
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jassi,
+On Mon, 20 Dec 2021, Christophe Leroy wrote:
 
-On Thu, Dec 09, 2021 at 09:21:46AM +0000, Sudeep Holla wrote:
-> Commit c45ded7e1135 ("mailbox: pcc: Add support for PCCT extended PCC
-> subspaces(type 3/4)") enabled the type3/4 of PCCT, but the change in
-> pcc_mbox_irq breaks the other PCC subtypes.
+> Trying to build livepatch on powerpc/32 results in:
 > 
-> The kernel reports a warning on an Ampere eMag server
+> 	kernel/livepatch/core.c: In function 'klp_resolve_symbols':
+> 	kernel/livepatch/core.c:221:23: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+> 	  221 |                 sym = (Elf64_Sym *)sechdrs[symndx].sh_addr + ELF_R_SYM(relas[i].r_info);
+> 	      |                       ^
+> 	kernel/livepatch/core.c:221:21: error: assignment to 'Elf32_Sym *' {aka 'struct elf32_sym *'} from incompatible pointer type 'Elf64_Sym *' {aka 'struct elf64_sym *'} [-Werror=incompatible-pointer-types]
+> 	  221 |                 sym = (Elf64_Sym *)sechdrs[symndx].sh_addr + ELF_R_SYM(relas[i].r_info);
+> 	      |                     ^
+> 	kernel/livepatch/core.c: In function 'klp_apply_section_relocs':
+> 	kernel/livepatch/core.c:312:35: error: passing argument 1 of 'klp_resolve_symbols' from incompatible pointer type [-Werror=incompatible-pointer-types]
+> 	  312 |         ret = klp_resolve_symbols(sechdrs, strtab, symndx, sec, sec_objname);
+> 	      |                                   ^~~~~~~
+> 	      |                                   |
+> 	      |                                   Elf32_Shdr * {aka struct elf32_shdr *}
+> 	kernel/livepatch/core.c:193:44: note: expected 'Elf64_Shdr *' {aka 'struct elf64_shdr *'} but argument is of type 'Elf32_Shdr *' {aka 'struct elf32_shdr *'}
+> 	  193 | static int klp_resolve_symbols(Elf64_Shdr *sechdrs, const char *strtab,
+> 	      |                                ~~~~~~~~~~~~^~~~~~~
 > 
-> -->8
->  CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.16.0-rc4 #127
->  Hardware name: MiTAC RAPTOR EV-883832-X3-0001/RAPTOR, BIOS 0.14 02/22/2019
->  Call trace:
->   dump_backtrace+0x0/0x200
->   show_stack+0x20/0x30
->   dump_stack_lvl+0x68/0x84
->   dump_stack+0x18/0x34
->   __report_bad_irq+0x54/0x17c
->   note_interrupt+0x330/0x428
->   handle_irq_event_percpu+0x90/0x98
->   handle_irq_event+0x4c/0x148
->   handle_fasteoi_irq+0xc4/0x188
->   generic_handle_domain_irq+0x44/0x68
->   gic_handle_irq+0x84/0x2ec
->   call_on_irq_stack+0x28/0x34
->   do_interrupt_handler+0x88/0x90
->   el1_interrupt+0x48/0xb0
->   el1h_64_irq_handler+0x18/0x28
->   el1h_64_irq+0x7c/0x80
-> ---
+> Fix it by using the right types instead of forcing 64 bits types.
 > 
-> The main reason for that is the command complete register is read as 0
-> if the GAS register doesn't exist for the same which is the case for
-> PCC subtypes 0-2. Fix it by checking for non-zero value before masking
-> with the status flag and checking for command completion.
-> 
-> Fixes: c45ded7e1135 ("mailbox: pcc: Add support for PCCT extended PCC subspaces(type 3/4)")
+> Fixes: 7c8e2bdd5f0d ("livepatch: Apply vmlinux-specific KLP relocations early")
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Acked-by: Petr Mladek <pmladek@suse.com>
 
-Can you take this patch and [1] for v5.17 ? This one is a bug fix and good
-to get it merged ASAP.
+Acked-by: Miroslav Benes <mbenes@suse.cz>
 
--- 
-Regards,
-Sudeep
-
-[1]  https://lore.kernel.org/r/20211209082143.619354-1-sudeep.holla@arm.com
+M

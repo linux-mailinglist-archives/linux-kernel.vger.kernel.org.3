@@ -2,72 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C6B47CB3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 03:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2A447CB40
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 03:04:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236620AbhLVCCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 21:02:38 -0500
-Received: from relay037.a.hostedemail.com ([64.99.140.37]:22379 "EHLO
-        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230185AbhLVCCh (ORCPT
+        id S238505AbhLVCEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 21:04:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35734 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235639AbhLVCEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 21:02:37 -0500
-Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay10.hostedemail.com (Postfix) with ESMTP id 72E5E275;
-        Wed, 22 Dec 2021 02:02:35 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf06.hostedemail.com (Postfix) with ESMTPA id BC8F820011;
-        Wed, 22 Dec 2021 02:02:28 +0000 (UTC)
-Message-ID: <b1c43c75659847134e6bdce75c7fa0319060fcc4.camel@perches.com>
-Subject: Re: [RFC PATCH v12 01/17] dlb: add skeleton for DLB driver
-From:   Joe Perches <joe@perches.com>
-To:     "Chen, Mike Ximing" <mike.ximing.chen@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "arnd@arndb.de" <arnd@arndb.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "pierre-louis.bossart@linux.intel.com" 
-        <pierre-louis.bossart@linux.intel.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>
-Date:   Tue, 21 Dec 2021 18:02:27 -0800
-In-Reply-To: <SJ0PR11MB51812066CF2DD4458231F280D97C9@SJ0PR11MB5181.namprd11.prod.outlook.com>
-References: <20211221065047.290182-1-mike.ximing.chen@intel.com>
-         <20211221065047.290182-2-mike.ximing.chen@intel.com>
-         <60d35206a67a98a0d0fd58d6f47c8dd1312e168e.camel@perches.com>
-         <SJ0PR11MB51812066CF2DD4458231F280D97C9@SJ0PR11MB5181.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Tue, 21 Dec 2021 21:04:22 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE00C061746
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 18:04:22 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so856754otj.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 18:04:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Al9bVe7ZlBBHxflPN7dDbRiQZxeGn2j4XWyGYUriWq4=;
+        b=mlBAw9YdE/jogBzhUlrHKbx2cOXg5XI0v+CxuCs2lnBROr9s9cu+pUB+KQ8CzijjKq
+         t9k/Xeeh3M7aUPlNUjMNfkDXxlKjRCUaTVQvAYgBxJp0TQZruoa2JjQKVSXplDS90yI/
+         +0+v3XJHhw7ku3kr1ufQL+oZbL4HU0hrQCmF4vm+rdYPMDl/MXtd9b3l0z4QyTKJwnWw
+         HkLXg6x54/+dIlkkY0L8eZQZFyOLmSuEyePf8QrUsKCpo+rUHzkmwdl1Et+AdjXjpIgy
+         ZOrcCkOXfg4mss29mb1L15b8oNP25/5vAZjUvKanLdBsD8a38ECCTixEDylDsDB8gSFx
+         uB7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Al9bVe7ZlBBHxflPN7dDbRiQZxeGn2j4XWyGYUriWq4=;
+        b=lboZi4KkkMfB1mS2Ks0BOCa49GxLxJtPI81BiegyGAR44F9MeDP2mOmFWrv5uPj/E2
+         O2pYga+zpyQqg1RmvnF5dgyVShPj75lX2Xsim4lvKdhiovooV7U7iKJVltpl+V0TIgjm
+         KRLQ72vt8nDOSS1+jJweJMJlJ4AF9LZeOmzEegZIkO44x0+ypUcmfUSBfr1SnEsLykdj
+         8VThYq98rwRCFGfIcq75DFqRGN31vyFWuLK0cb/qXkXBPYuAWhVpgjDMo/j0hf2g1lhd
+         QQNqAkhFyeNW87v+kjazG2ixAMZpnBwYVxYz8uJuIyZzLynj2LTR+mE7Wt37ByOSPLqz
+         oINw==
+X-Gm-Message-State: AOAM531+p1fZSitgbOUDphLNChuSeXa+0taf/BQmIK2s4rb/6QIc5yoS
+        ymlxgWjrx42bkyn/jM3Dtgr7cFZsvzL49xHNeB0g2A==
+X-Google-Smtp-Source: ABdhPJzP8xGfPla++awyn1G27r3LXkIK3wvrijkd0Yt2tCqMYT1XZqk96h9xZY+z6BFU5GitM9gSj9v4Yy16fmVlvh4=
+X-Received: by 2002:a9d:74d0:: with SMTP id a16mr708127otl.237.1640138661156;
+ Tue, 21 Dec 2021 18:04:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.24
-X-Stat-Signature: urk96airecfwyths7cu4gctkk787z81c
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: BC8F820011
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/NOdS66y2QwsFfCnu5ScR19ZTGBZSXi+g=
-X-HE-Tag: 1640138548-970428
+References: <cover.1639696427.git.quic_vamslank@quicinc.com> <ff9abf953c274a1e34f59114642f67ecf02acb6f.1639696427.git.quic_vamslank@quicinc.com>
+In-Reply-To: <ff9abf953c274a1e34f59114642f67ecf02acb6f.1639696427.git.quic_vamslank@quicinc.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 22 Dec 2021 03:04:09 +0100
+Message-ID: <CACRpkdYR2e3PgtzS5T69m9B4yEZ0wgAm=6HxOSpwwMz95nBBXg@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] dt-bindings: pinctrl: qcom: Add SDX65 pinctrl bindings
+To:     quic_vamslank@quicinc.com
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        manivannan.sadhasivam@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-12-21 at 23:22 +0000, Chen, Mike Ximing wrote:
-> > From: Joe Perches <joe@perches.com>
-[]
-> > > diff --git a/drivers/misc/dlb/dlb_main.c b/drivers/misc/dlb/dlb_main.c
-> > []
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > []
-> > > +MODULE_LICENSE("GPL v2");
-> > 
-> > Should use "GPL" not "GPL v2".
-> > 
-> > https://lore.kernel.org/lkml/alpine.DEB.2.21.1901282105450.1669@nanos.tec.linutronix.de/
-> > 
-> We support v2 only.
+On Fri, Dec 17, 2021 at 12:19 AM <quic_vamslank@quicinc.com> wrote:
 
-This is specific to the MODULE_LICENSE use.
+> From: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
+>
+> Add device tree binding Documentation details for Qualcomm SDX65
+> pinctrl driver.
+>
+> Signed-off-by: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-I think you should read the link above.
+I applied this updated binding instead of the broken one
+that I reverted a while back.
 
-
+Yours,
+Linus Walleij

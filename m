@@ -2,139 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A70FF47D139
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:45:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8742047D136
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:45:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237897AbhLVLpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 06:45:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46513 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238070AbhLVLpm (ORCPT
+        id S232569AbhLVLpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 06:45:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52990 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233541AbhLVLph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 06:45:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640173541;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=t8hfe6Gfw3N3sm/iHXx5ElkmaS7YGmdkl1wnNMkOIrk=;
-        b=EG4DRgTgn5m3fOZmedxzXpQ6UXa3B8Ntzx2zfRwyxAbbclKkIEjLAnysduX84gxqj9Mj6E
-        DK2c1nIUnWlyRGSIcTgqBSPpud/6p0b3Nr2wlMhr9LuGhjRXw4tWMgcPrbEtaz9OchwE2R
-        gMLaM4t9CCngRN1FtBp0JFW8jEZnI5Y=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-160-5CSJt_XzNSmqpNF8X7sCyQ-1; Wed, 22 Dec 2021 06:45:36 -0500
-X-MC-Unique: 5CSJt_XzNSmqpNF8X7sCyQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C54651018720;
-        Wed, 22 Dec 2021 11:45:32 +0000 (UTC)
-Received: from dhcp-128-65.nay.redhat.com (ovpn-12-211.pek2.redhat.com [10.72.12.211])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E96477314B;
-        Wed, 22 Dec 2021 11:45:21 +0000 (UTC)
-Date:   Wed, 22 Dec 2021 19:45:18 +0800
-From:   Dave Young <dyoung@redhat.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com,
-        akpm@linux-foundation.org, feng.tang@intel.com,
-        siglesias@igalia.com, kernel@gpiccoli.net,
-        kexec@lists.infradead.org
-Subject: Re: [PATCH 3/3] panic: Allow printing extra panic information on
- kdump
-Message-ID: <YcMPzs6t8MKpEacq@dhcp-128-65.nay.redhat.com>
-References: <20211109202848.610874-1-gpiccoli@igalia.com>
- <20211109202848.610874-4-gpiccoli@igalia.com>
+        Wed, 22 Dec 2021 06:45:37 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F76C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:45:37 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id e5so4348476wrc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:45:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=colorfullife-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=QjoNb5vM5ldUOVON2Gxca/tEx2Xoz7XugK8Pv65lPPg=;
+        b=J4gd24a+jmBz5goQsAbvzRUX0ApxbJuOtd/In1JJTBeMsCSCBnHLB6JYmF0GTbn7+j
+         CK87vaL1NQ94tnaza0mI7xjCB4TWSdtW/sytr59dMzDiVwdy2P1T6sXkgYl+ejh0mcBH
+         y2dB8ddqg6qALNFx0+PQ4BBWwcPxg2BzSrgIg0fiyI/Q83goSv5s7Z0oXzXWfINICTXq
+         dJZUgrqJfdBoX28PD3CIBo7//Hl9U7b+h4tCzesQcozwAP+PJZEvHs8Aj4C8xdaohOih
+         Tqt6tW7fRXx4UmxLz7bOzPUbVh8oz8C7QbMgwn7hYe8uKP9dZ2rzaFVUJRwT4YM7DHbE
+         0/PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QjoNb5vM5ldUOVON2Gxca/tEx2Xoz7XugK8Pv65lPPg=;
+        b=2L/yCYL1rSssgsi/aSPypRqfR/MTRcemSgP5NtIuqLlPcj8MLpyqPLzWjWU7vxdJlD
+         TPSK7Mle+dF/brfzpIZWwnmxYNgArNUv8XL3TgtkDTpqVpWLu8XkAhY9g91yRF/zLZQ7
+         vzuO4thSjXVAVgnUQxmuZt4rmemlu+N4/IQOKwmrT2ESPL2wS885iWsZIkaq8Ecok1XE
+         KNbsDV6bGQtiO7/q/dFZIcUts9h8BmvU0VBqZ5257LG9Prvu3BzAHt/P4I5II61QGPGN
+         kiTyMxO5Q4Ut+Azk6pKxTlRtepf2UOmteIzZPuUz3IjW2Rb7oc3wft2BDe3OGDjL+x8s
+         FFpA==
+X-Gm-Message-State: AOAM531M73vy8mQ7z07pfPxGVIr1upGZM8SQfwIady0E+/MSQeIQGqHH
+        10REa+S+G+KSfQqfskMO9a+scg==
+X-Google-Smtp-Source: ABdhPJziRP7YTjBvvVxjZlNbcIO5/HjYdWPjQMdI2Oc1n5R58vEl6w5OnRpZQag6WP8Us/UB0jSu4Q==
+X-Received: by 2002:a5d:44ce:: with SMTP id z14mr1829621wrr.383.1640173535893;
+        Wed, 22 Dec 2021 03:45:35 -0800 (PST)
+Received: from ?IPV6:2003:d9:9708:7800:3dae:64a4:7964:a371? (p200300d9970878003dae64a47964a371.dip0.t-ipconnect.de. [2003:d9:9708:7800:3dae:64a4:7964:a371])
+        by smtp.googlemail.com with ESMTPSA id n15sm1625467wru.66.2021.12.22.03.45.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 03:45:35 -0800 (PST)
+Message-ID: <63840bf3-2199-3240-bdfa-abb55518b5f9@colorfullife.com>
+Date:   Wed, 22 Dec 2021 12:45:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211109202848.610874-4-gpiccoli@igalia.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] ipc/sem: do not sleep with a spin lock held
+Content-Language: en-US
+To:     cgel.zte@gmail.com, akpm@linux-foundation.org
+Cc:     vvs@virtuozzo.com, shakeelb@google.com, rdunlap@infradead.org,
+        dbueso@suse.de, unixbhaskar@gmail.com, chi.minghao@zte.com.cn,
+        arnd@arndb.de, linux-kernel@vger.kernel.org,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20211222081026.484058-1-chi.minghao@zte.com.cn>
+From:   Manfred Spraul <manfred@colorfullife.com>
+In-Reply-To: <20211222081026.484058-1-chi.minghao@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guilherme,
+Hi Minghao,
 
-Thanks for you patch.  Could you add kexec list for any following up
-patches?  This could change kdump behavior so let's see if any comments
-from kexec list.
+On 12/22/21 09:10, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+>
+> We can't call kvfree() with a spin lock held, so defer it.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 
-Kudos for the lore+lei tool so that I can catch this by seeing this
-coming into Andrews tree :)
-On 11/09/21 at 05:28pm, Guilherme G. Piccoli wrote:
-> Currently we have the "panic_print" parameter/sysctl to allow some extra
-> information to be printed in a panic event. On the other hand, the kdump
-> mechanism allows to kexec a new kernel to collect a memory dump for the
-> running kernel in case of panic.
-> Right now these options are incompatible: the user either sets the kdump
-> or makes use of "panic_print". The code path of "panic_print" isn't
-> reached when kdump is configured.
-> 
-> There are situations though in which this would be interesting: for
-> example, in systems that are very memory constrained, a handcrafted
-> tiny kernel/initrd for kdump might be used in order to only collect the
-> dmesg in kdump kernel. Even more common, systems with no disk space for
-> the full (compressed) memory dump might very well rely in this
-> functionality too, dumping only the dmesg with the additional information
-> provided by "panic_print".
-> 
-> So, this is what the patch does: allows both functionality to co-exist;
-> if "panic_print" is set and the system performs a kdump, the extra
-> information is printed on dmesg before the kexec. Some notes about the
-> design choices here:
-> 
-> (a) We could have introduced a sysctl or an extra bit on "panic_print"
-> to allow enabling the co-existence of kdump and "panic_print", but seems
-> that would be over-engineering; we have 3 cases, let's check how this
-> patch change things:
-> 
-> - if the user have kdump set and not "panic_print", nothing changes;
-> - if the user have "panic_print" set and not kdump, nothing changes;
-> - if both are enabled, now we print the extra information before kdump,
-> which is exactly the goal of the patch (and should be the goal of the
-> user, since they enabled both options).
+Could you add
 
-People may enable kdump crashkernel and panic_print together but
-they are not aware the extra panic print could cause kdump not reliable
-(in theory).  So at least some words in kernel-parameters.txt would
-help.
- 
-> 
-> (b) We assume that the code path won't return from __crash_kexec()
-> so we didn't guard against double execution of panic_print_sys_info().
-> 
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+Fixes: fc37a3b8b438 ("[PATCH] ipc sem: use kvmalloc for sem_undo 
+allocation")
+
+Cc: stable@vger.kernel.org
+
+I will review/test the change in the next few days.
+
+Especially, I would like to check if there are further instances where 
+the same mistake was made.
+
+> /**
+> * kvfree() - Free memory.
+> * @addr: Pointer to allocated memory.
+> *
+> * kvfree frees memory allocated by any of vmalloc(), kmalloc() or 
+> kvmalloc().
+> * It is slightly more efficient to use kfree() or vfree() if you are 
+> certain
+> * that you know which one to use.
+> *
+> * Context: Either preemptible task context or not-NMI interrupt.
+> */
+>
+As an independent change: Should we add a
+
+
+       might_sleep_if(!in_interrupt());
+
+into kvfree(), to trigger bugs more easily?
+
 > ---
->  kernel/panic.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/kernel/panic.c b/kernel/panic.c
-> index 5da71fa4e5f1..439dbf93b406 100644
-> --- a/kernel/panic.c
-> +++ b/kernel/panic.c
-> @@ -243,6 +243,13 @@ void panic(const char *fmt, ...)
->  	 */
->  	kgdb_panic(buf);
->  
-> +	/*
-> +	 * If we have a kdump kernel loaded, give a chance to panic_print
-> +	 * show some extra information on kernel log if it was set...
-> +	 */
-> +	if (kexec_crash_loaded())
-> +		panic_print_sys_info();
-> +
->  	/*
->  	 * If we have crashed and we have a crash kernel loaded let it handle
->  	 * everything else.
-> -- 
-> 2.33.1
-> 
-> 
+>   ipc/sem.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/ipc/sem.c b/ipc/sem.c
+> index 6693daf4fe11..0dbdb98fdf2d 100644
+> --- a/ipc/sem.c
+> +++ b/ipc/sem.c
+> @@ -1964,6 +1964,7 @@ static struct sem_undo *find_alloc_undo(struct ipc_namespace *ns, int semid)
+>   	 */
+>   	un = lookup_undo(ulp, semid);
+>   	if (un) {
+> +		spin_unlock(&ulp->lock);
+>   		kvfree(new);
+>   		goto success;
+>   	}
+> @@ -1976,9 +1977,8 @@ static struct sem_undo *find_alloc_undo(struct ipc_namespace *ns, int semid)
+>   	ipc_assert_locked_object(&sma->sem_perm);
+>   	list_add(&new->list_id, &sma->list_id);
+>   	un = new;
+> -
+> -success:
+>   	spin_unlock(&ulp->lock);
+> +success:
+>   	sem_unlock(sma, -1);
+>   out:
+>   	return un;
 
-Thanks
-Dave
 

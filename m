@@ -2,95 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 710A147CED8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:08:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 089DA47CF26
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:24:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243672AbhLVJI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 04:08:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243641AbhLVJIz (ORCPT
+        id S239680AbhLVJYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:24:44 -0500
+Received: from 6.mo575.mail-out.ovh.net ([46.105.63.100]:35331 "EHLO
+        6.mo575.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232601AbhLVJYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:08:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0DCC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:08:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D6ABB81B4D
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 09:08:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC91EC36AE8;
-        Wed, 22 Dec 2021 09:08:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640164133;
-        bh=2uhZVMLfYhRIBj/oj2LEo5kQRDnygLeV2amJiHrb5rI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tUdKJPOlOAgaPaJOM/JdQGml86s99/i47mG2QUCAjwR3ArAazeDlPDeixMtMOLedb
-         pISgzfz8vttHpq4MNFAs3Z4UTbvuIhWIZVB4ZdBxsbf6cSk83Jpt+3hRR/20incwoX
-         5xDmDof+kxtdIffJ95IMnt+jQ0dATe2Got5NvgwouVLR36ZBk/WuVEUg9FrpknuKsH
-         r7g3kGabL79zbdJFb6u4atQ7doZ3gmYFtBJcrzFFVuPE0IIJnWb1mbDt6ZPostwcVn
-         C5BBLO/jEjxjj6wx2lQA5D6UHquxFVEV/ZnwQEWapAPsu3zEoPFQtX9/b1EhQYGYhj
-         O9IdoUgObn61g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mzxc4-00036f-4X; Wed, 22 Dec 2021 10:08:44 +0100
-Date:   Wed, 22 Dec 2021 10:08:44 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH] nvmem: fix unregistering device in nvmem_register()
- error path
-Message-ID: <YcLrHEoOy3iRSkFp@hovoldconsulting.com>
-References: <20211221154550.11455-1-zajec5@gmail.com>
- <YcH7fw5S6aSXswvb@kroah.com>
- <9e94f0fd-e2d5-4d9e-5759-a5f591191785@gmail.com>
- <YcLXbPzyhtMnP0YQ@kroah.com>
- <YcLkA0e48+xuGsHk@hovoldconsulting.com>
- <52a2a318-0efe-94af-b8b9-308c2fbb1fab@gmail.com>
+        Wed, 22 Dec 2021 04:24:41 -0500
+X-Greylist: delayed 601 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 Dec 2021 04:24:40 EST
+Received: from player772.ha.ovh.net (unknown [10.108.1.112])
+        by mo575.mail-out.ovh.net (Postfix) with ESMTP id 0500723F0B
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 09:09:13 +0000 (UTC)
+Received: from milecki.pl (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
+        (Authenticated sender: rafal@milecki.pl)
+        by player772.ha.ovh.net (Postfix) with ESMTPSA id E2E6325B3C7F0;
+        Wed, 22 Dec 2021 09:09:10 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-97G00232c7baf0-d1aa-4c4d-8318-c2f0578df4a3,
+                    4D88ED99DEC4E8A5F70677C20256D8F202EDB5AA) smtp.auth=rafal@milecki.pl
+X-OVh-ClientIp: 194.187.74.233
+Message-ID: <d964196c-4a81-c0ae-b32c-cf2b298fdaa6@milecki.pl>
+Date:   Wed, 22 Dec 2021 10:09:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <52a2a318-0efe-94af-b8b9-308c2fbb1fab@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: drivers/pinctrl/bcm/pinctrl-ns.c:286:53: warning: passing
+ argument 3 of 'pinmux_generic_add_function' discards 'const' qualifier from
+ pointer target type
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+References: <202112221651.gLNfcGwH-lkp@intel.com>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+In-Reply-To: <202112221651.gLNfcGwH-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Ovh-Tracer-Id: 16949578675295792091
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddruddthedgudeftdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhepkfffgggfuffvfhfhjggtgfesthejredttdefjeenucfhrhhomheptfgrfhgrlhcuofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepteejueefgeeutddutdfgveeivedtgeegvdeileejhfekleeigfdvueefhfekieeknecuffhomhgrihhnpehgihhthhhusgdrtghomhdptddurdhorhhgpdhgihhthhhusghushgvrhgtohhnthgvnhhtrdgtohhmpdhkvghrnhgvlhdrohhrghenucfkpheptddrtddrtddrtddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejjedvrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 10:00:03AM +0100, Rafał Miłecki wrote:
-> On 22.12.2021 09:38, Johan Hovold wrote:
+On 22.12.2021 09:55, kernel test robot wrote:
+> tree:   https://github.com/0day-ci/linux/commits/UPDATE-20211222-144502/Rafa-Mi-ecki/pinctrl-bcm-ns-use-generic-groups-functions-helpers/20211117-064419
+> head:   da7c70cdea1466b4234a30658ee2b5383545a629
+> commit: da7c70cdea1466b4234a30658ee2b5383545a629 pinctrl: bcm: ns: use generic groups & functions helpers
+> date:   2 hours ago
+> config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20211222/202112221651.gLNfcGwH-lkp@intel.com/config)
+> compiler: arceb-elf-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/0day-ci/linux/commit/da7c70cdea1466b4234a30658ee2b5383545a629
+>          git remote add linux-review https://github.com/0day-ci/linux
+>          git fetch --no-tags linux-review UPDATE-20211222-144502/Rafa-Mi-ecki/pinctrl-bcm-ns-use-generic-groups-functions-helpers/20211117-064419
+>          git checkout da7c70cdea1466b4234a30658ee2b5383545a629
+>          # save the config file to linux build tree
+>          mkdir build_dir
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/pinctrl/bcm/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>     drivers/pinctrl/bcm/pinctrl-ns.c: In function 'ns_pinctrl_probe':
+>>> drivers/pinctrl/bcm/pinctrl-ns.c:286:53: warning: passing argument 3 of 'pinmux_generic_add_function' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+>       286 |                                             function->groups,
+>           |                                             ~~~~~~~~^~~~~~~~
+>     In file included from drivers/pinctrl/bcm/pinctrl-ns.c:18:
+>     drivers/pinctrl/bcm/../pinmux.h:153:46: note: expected 'const char **' but argument is of type 'const char * const*'
+>       153 |                                 const char **groups,
+>           |                                 ~~~~~~~~~~~~~^~~~~~
 
-> > It seems Rafał is mistaken here too; you certainly need to call
-> > platform_device_put() if platform_device_register() fail, even if many
-> > current users do appear to get this wrong.
-> 
-> Yes I was! Gosh I made up that "platform_device_put()" name and only
-> now I realized it actually exists!
-> 
-> I stand by saying this design is really misleading. Even though
-> platform_device_put() was obviously a bad example.
-> 
-> Please remember I'm just a minor kernel developer however in my humble
-> opinion behaviour of device_register() and platform_device_register()
-> should be changed.
-> 
-> If any function fails I expect:
-> 1. That function to clean up its mess if any
-> 2. Me to be responsible to clean up my mess if any
-> 
-> This is how "most" code (whatever it means) works.
-> 1. If POSIX snprintf() fails I'm not expected to call *printf_put() sth
-> 2. If POSIX bind() fails I'm not expected to call bind_put() sth
-> 3. (...)
-> 
-> I'm not sure if those are the best examples but you should get my point.
+This patch targets following git tree:
+https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/log/?h=for-next
 
-Yes, and we all agree that it's not the best interface. But it exists,
-and changing it now risks introducing worse problem than a minor, mostly
-theoretical, memleak.
-
-Johan
+As stated in the commit message it depends on the:
+bd0aae66c482 ("pinctrl: add one more "const" for function groups")

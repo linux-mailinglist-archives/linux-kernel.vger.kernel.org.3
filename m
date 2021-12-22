@@ -2,88 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DC647D368
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:12:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D6847D36D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245595AbhLVOMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 09:12:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236943AbhLVOMA (ORCPT
+        id S245611AbhLVONQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 09:13:16 -0500
+Received: from ewsoutbound.kpnmail.nl ([195.121.94.170]:55405 "EHLO
+        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245605AbhLVONO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:12:00 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C5EC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:11:59 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id 69so2376867qkd.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:11:59 -0800 (PST)
+        Wed, 22 Dec 2021 09:13:14 -0500
+X-KPN-MessageId: 274244dc-6331-11ec-8a6e-005056ab378f
+Received: from smtp.kpnmail.nl (unknown [10.31.155.38])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id 274244dc-6331-11ec-8a6e-005056ab378f;
+        Wed, 22 Dec 2021 15:12:10 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:reply-to:mime-version
-         :content-disposition;
-        bh=thDdHAXO4Fu5Yivc3/wFyA8Rxn+/3gkNfZ5obxoRWYU=;
-        b=aSRzk8PsYg5OEqACaRj37BdmaZNDEfamridrJ7FSCCY7BxmTM9TgzpPOphGmkiQEZX
-         o4ClgE9aHorWdoN2vE0O9K7qSPHrm0WQaDGYrUQ0GpUAq+x2hOZCdbYArY8LZ7G4ekMg
-         eXE5rF6eQmeDXcFpN932T0lM+b0U87n6hQmhR8PoQMoz2PEkj2PWnWBUB8gVzatM1mFm
-         9spez2okTmbE2WlgzCYuMIWXuAtF8DkUjKyyRE0JYWTPTSy9W4gpgyWGEmC7x6EvKxkH
-         DOsz8KJLHy4+pOh1D8r95EinWHn/wSfrBzcu0QhYB/RF4ng9uHZo5l43xwvnYLyfzecL
-         CR7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :reply-to:mime-version:content-disposition;
-        bh=thDdHAXO4Fu5Yivc3/wFyA8Rxn+/3gkNfZ5obxoRWYU=;
-        b=wOyoEmsztxaKOCG7hG+HdTzR+vVchJIjul85iWm+jwYbdsnLRyVHrnXNZ/sWuEFhFw
-         JHtRblyhMQHdamjbjjCPHoWje7optRYEg7dTj2OEjQc8SlSSLdBEWSwmp10P2XLbDxx4
-         a4miGjkpDyOFKWGXr1ZVWdCm8DB2EefUzFngHJbcbrklC1SLudVJZ4LSR2hDOre1nyEk
-         zZray4/RV5GBGiixop2LeAErl9629EJI95Y904iZOr8BfwD+W7GwFMH188S1Y4oVYqyR
-         uxKZMETDEL5ssS9X0wjbDxu/iu+uhyHlkUjZKQQAiRdW+4QAw3GntkX5Pb9NAo9FDIN1
-         jKWA==
-X-Gm-Message-State: AOAM531wecsfwce44FpIVOysVUBjNzM/x2ZeSedf2a5Dg1ZYKMM3BaDg
-        Z306UftfQTOmVc0xj90CdTxStxbQUA==
-X-Google-Smtp-Source: ABdhPJxw3IroCNT/flsfagqPGSgGaYVU1sdDdIIcq759rwx2qtItxf4EbHEyQc+sIFrmvmoc/TXJbg==
-X-Received: by 2002:a05:620a:1a01:: with SMTP id bk1mr2017307qkb.539.1640182318098;
-        Wed, 22 Dec 2021 06:11:58 -0800 (PST)
-Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
-        by smtp.gmail.com with ESMTPSA id bj32sm1812363qkb.75.2021.12.22.06.11.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 06:11:57 -0800 (PST)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:a994:7eee:8e73:4087])
-        by serve.minyard.net (Postfix) with ESMTPSA id DAA19180013;
-        Wed, 22 Dec 2021 14:11:56 +0000 (UTC)
-Date:   Wed, 22 Dec 2021 08:11:55 -0600
-From:   Corey Minyard <minyard@acm.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        openipmi-developer@lists.sourceforge.net
-Subject: [GIT PULL] IPMI bug fixes for 5.16 (3)
-Message-ID: <20211222141155.GV14936@minyard.net>
-Reply-To: minyard@acm.org
+        d=xs4all.nl; s=xs4all01;
+        h=content-type:from:to:subject:mime-version:date:message-id;
+        bh=D7qUlmyWyRiBM87fcOPYLUo3TqeXcR8SLDEfqWVhTeE=;
+        b=tQQnRIjzHhP68s+68bMajYZC+ii1qI3/L3IXMw5kKGRQhGTvePFDJL5KOaiwJFupzjV6tU87E0sxw
+         inac2+cllLahPQMZVciYEYYUfCQ0BbOBoLQXtkMiC55lnGj0pyOBzcwE60TJ9m4bZ2vlY4GNXf6sLd
+         1bsAwShfFsqMMMEltfQsSmbXiuxctI1MLY8+Az6hwEZ+2tn8ZmfibNgtRdhg22CfpLOKiAbOUSGdQx
+         AFfBZHg13pBsKdZCnj+C+eKZ+/NDU2jeQPk57vVoBrd/2i5OGSwsUjjeqwMUjPwFfMgKD+DgFPcxPY
+         nS/l81eNrXE1uOUCfWDQ5WOMQ+EF1lg==
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|qg0CkmnxFkjnY6FZyiTdaeY6kx8pktK47rEV/taqXLOMDWKl4uNrWffXrYj8eka
+ wfPHVTauMYkr6gD6uVRS4Gg==
+X-Originating-IP: 80.101.105.217
+Received: from [192.168.1.10] (marune.xs4all.nl [80.101.105.217])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id 4bcaacaa-6331-11ec-94d2-005056abf0db;
+        Wed, 22 Dec 2021 15:13:12 +0100 (CET)
+Message-ID: <04e5c9b4-2a96-6b5f-7c26-89e1cbf8576f@xs4all.nl>
+Date:   Wed, 22 Dec 2021 15:13:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v4 0/2] Remove clock-lanes DT property from CAMSS
+Content-Language: en-US
+To:     Robert Foss <robert.foss@linaro.org>, todor.too@gmail.com,
+        agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
+        robh+dt@kernel.org, angelogioacchino.delregno@somainline.org,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+References: <20211206151811.39271-1-robert.foss@linaro.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20211206151811.39271-1-robert.foss@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 12119cfa1052d512a92524e90ebee85029a918f8:
+Hi Robert,
 
-  Merge tag 'vfio-v5.16-rc4' of git://github.com/awilliam/linux-vfio (2021-12-03 12:27:08 -0800)
+I posted a PR for Bryan's 'CAMSS: Add SM8250 support' series, but your patch series
+clashes with his. Can you rebase this series on top of Bryan's work?
 
-are available in the Git repository at:
+You can use this branch I made for the PR if you want:
 
-  https://github.com/cminyard/linux-ipmi.git tags/for-linus-5.16-3
+https://git.linuxtv.org/hverkuil/media_tree.git/log/?h=for-v5.17j
 
-for you to fetch changes up to ffb76a86f8096a8206be03b14adda6092e18e275:
+Thanks!
 
-  ipmi: Fix UAF when uninstall ipmi_si and ipmi_msghandler module (2021-12-21 08:04:42 -0600)
+	Hans
 
-----------------------------------------------------------------
-Fix some IPMI crashes
+On 06/12/2021 16:18, Robert Foss wrote:
+> Changes since v3:
+>  - Split patches heading for Media and ARM64 tress
+>    into two seperate series
+> 
+> Changes since v2:
+>  - Stephan: Rebased on v5.16-rc1
+>  - Stephan: Fixed 3/4 commit message title
+> 
+> Changes since v1:
+>  - Rob: Instead of documenting and fixing the use of the clock-lanes
+>    property, remove it, since it is is not programmable and
+>    therefore shouldn't be exposed in the DT.
+> 
+> Robert Foss (2):
+>   media: camss: csiphy: Move to hardcode CSI Clock Lane number
+>   media: dt-bindings: media: camss: Remove clock-lane property
+> 
+>  .../bindings/media/qcom,msm8916-camss.yaml    | 10 ---------
+>  .../bindings/media/qcom,msm8996-camss.yaml    | 20 ------------------
+>  .../bindings/media/qcom,sdm660-camss.yaml     | 20 ------------------
+>  .../bindings/media/qcom,sdm845-camss.yaml     | 17 ---------------
+>  .../qcom/camss/camss-csiphy-2ph-1-0.c         | 19 +++++++++++++++--
+>  .../qcom/camss/camss-csiphy-3ph-1-0.c         | 17 ++++++++++++++-
+>  .../media/platform/qcom/camss/camss-csiphy.c  | 21 +------------------
+>  .../media/platform/qcom/camss/camss-csiphy.h  |  7 +++++++
+>  8 files changed, 41 insertions(+), 90 deletions(-)
+> 
 
-Some crash fixes have come in dealing with various error handling
-issues.  They have sat in next for 5 days or more without issue, and
-they are fairly critical.
-
--corey

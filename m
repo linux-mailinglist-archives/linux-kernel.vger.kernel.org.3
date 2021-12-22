@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BE447CE41
+	by mail.lfdr.de (Postfix) with ESMTP id A33A647CE42
 	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 09:29:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243373AbhLVI25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 03:28:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33836 "EHLO
+        id S243368AbhLVI27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 03:28:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51271 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236903AbhLVI2u (ORCPT
+        by vger.kernel.org with ESMTP id S243356AbhLVI2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 03:28:50 -0500
+        Wed, 22 Dec 2021 03:28:51 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640161729;
+        s=mimecast20190719; t=1640161731;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=916gpQ5TQZBxXpPApgtQW0I1UIGKedMg/4PyltH33/c=;
-        b=eF8WAqRzHnrQ9pZH+9c/iNxeAvoPOE5sTpf6mgD4xGVVojAZewRMpfv0vT3PHmbW2PxR3e
-        WBojX1lbD4Rhn9JeCrorF7iNdaDJxc9/V4/mnPMIQShxSb0q6Sb/RqyGxpg1v2gT8Vr0rf
-        nJ8FzNkkFYKVGn1IhNTMWASi8Px514M=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=3N2KnVsfLEPnGk4GM83SnUnjHj7nisH0v3Qa0ml2DP8=;
+        b=hyJy47EKur+p9ZsyS0oNsNJMFzf+otvJHzaR+brSXATmZVpOctEBEcNyvz9+PK/RTLfwcj
+        cVivPwNjvMXzmYGZb0KBrTDeSWz4N1T34nfyZARYMKnch+8hRuZWC1Zztp8X/ir5j9YLHM
+        0drndDd/PEXIHQieBkxW06E0jr0d4GA=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-632-jNyBZ0gYNJKut1PuCa6PXQ-1; Wed, 22 Dec 2021 03:28:48 -0500
-X-MC-Unique: jNyBZ0gYNJKut1PuCa6PXQ-1
-Received: by mail-wr1-f70.google.com with SMTP id j26-20020adfb31a000000b001a2356afd4fso516872wrd.21
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 00:28:48 -0800 (PST)
+ us-mta-183-ldYxJOr3NkmuFDqQpn_M4g-1; Wed, 22 Dec 2021 03:28:49 -0500
+X-MC-Unique: ldYxJOr3NkmuFDqQpn_M4g-1
+Received: by mail-wr1-f69.google.com with SMTP id t30-20020adfa2de000000b001a24004e1fbso522070wra.10
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 00:28:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=916gpQ5TQZBxXpPApgtQW0I1UIGKedMg/4PyltH33/c=;
-        b=PhrQpMxGsbkWiddaD1/6YNb3Tv34bLCnC5RyUMEs2fPTUomurHj91CMoTwiP8YqvPd
-         ylcNVqedEe0F+TsVPkUGeuFTkjfTUYrvKXaYy2Bv63V4f5tm7u8rA23UmuFcrlhAb+4o
-         nRJOzpZavPmUglyVIrsrqhrjYWnOG5orM6vnmUbmHeQNf4tyFm+MtA3nvEEdshqt6QiL
-         OwyeRxSTTtKp+mvI7rHgxFcrwpJLOnWN/p/4+t8fp9ObO4ND5kmVat49XkGoKeHs4sTc
-         jitS41cvugt12MTdQDNO4zviLVjY6OFTzwrVW+QAqzmI/qKBwG2nFFdi6ZuBHjVG559c
-         cGoQ==
-X-Gm-Message-State: AOAM5313JNdx8gOh9RemkggPIE77T8GyV5srrYrGf/nb/m9Ns9DukgLA
-        GXPI7Z/iemji8f0WczLZf8GyMwf4fKDje5tBCXbbMOU7e+1acyZDEppMRHsOuhE8rZuNT1tZ9w1
-        mwXU0c4vZvsI8udHG9UNZRIHYH4gBt3osn05FUnhsN6kSNReqMNvcABzmaMVIyHBpHHncxQUxcP
-        4=
-X-Received: by 2002:a5d:4144:: with SMTP id c4mr1323688wrq.702.1640161727507;
-        Wed, 22 Dec 2021 00:28:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyArIqTBpIbNGxmI4/yEpmZMeqf+tgNqKacNBC/CgC6jGtAWwEbfkMrIM/wDbmBhbs8PlGrlg==
-X-Received: by 2002:a5d:4144:: with SMTP id c4mr1323670wrq.702.1640161727213;
-        Wed, 22 Dec 2021 00:28:47 -0800 (PST)
+        bh=3N2KnVsfLEPnGk4GM83SnUnjHj7nisH0v3Qa0ml2DP8=;
+        b=Mn6GVqfPJp/SIBcs/z4ikJYa9SN07IJXmgIUH2fetVIZuhNmeief5jzrsfA6PiHi/e
+         ibPXMDB9u9HiythF/tfFxGVdL6oH+0mCOtDvLYKCJMHTGLivS26Ir4HDbZN+CRwC41fA
+         P/V/FJVeFE6xD1Sacef4HcEWFt4saelolyGnXZ82JljsXwOB+pE2XSpOuJIi7O/jsH03
+         24srjux0Qh63EUS6cwKLpT9PgxAxKUcqTtV7Te1uZvXGv1EFMAzBFST93kDIoX9PSFhJ
+         aOh69LTXRVcq3Qm6iwm7ySGb7FToTr7eNYxwFescBV+g21qziU3jbGPsAddnVFlJ9847
+         dkJA==
+X-Gm-Message-State: AOAM532QRuHVdrJtFGFTQSCiDWaugHaF1OcG8rchM1luTpmfvRFq6sEZ
+        jeoq/0ehChD5fbbt07SLahgA8AGzg8SoJD5uzKIN+++A55W7h3EDzA4LF5GX+QzSoOE7rT9IKkc
+        ++PDUMMRS78+AEzwSEi5NBXSaVXCKVuPnPavFxsvz5nie9Z0S4VH37P4UDb2/fmpyrgf5oqjWdY
+        o=
+X-Received: by 2002:a05:600c:2119:: with SMTP id u25mr97763wml.93.1640161728617;
+        Wed, 22 Dec 2021 00:28:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyclg3C9m1lfpdHzwWRKr1jtDWrqzNKG6YD/sARAOTo22q6Tb8b2/EF4W39n16Lc2X5xTgEsA==
+X-Received: by 2002:a05:600c:2119:: with SMTP id u25mr97738wml.93.1640161728427;
+        Wed, 22 Dec 2021 00:28:48 -0800 (PST)
 Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id m17sm1247080wrz.91.2021.12.22.00.28.46
+        by smtp.gmail.com with ESMTPSA id m17sm1247080wrz.91.2021.12.22.00.28.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 00:28:47 -0800 (PST)
+        Wed, 22 Dec 2021 00:28:48 -0800 (PST)
 From:   Javier Martinez Canillas <javierm@redhat.com>
 To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
 Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v3 06/10] drm: Provide platform module-init macro
-Date:   Wed, 22 Dec 2021 09:28:27 +0100
-Message-Id: <20211222082831.196562-7-javierm@redhat.com>
+        Fabio Estevam <festevam@gmail.com>,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 07/10] drm/imx/dcss: Replace module initialization with DRM helpers
+Date:   Wed, 22 Dec 2021 09:28:28 +0100
+Message-Id: <20211222082831.196562-8-javierm@redhat.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211222082831.196562-1-javierm@redhat.com>
 References: <20211222082831.196562-1-javierm@redhat.com>
@@ -73,64 +79,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide a helper macro to register platform DRM drivers. The new
-macro behaves like module_platform_driver() with an additional
-test if DRM modesetting has been enabled.
+Replace module_platform_driver() with drm_module_platform_driver(). The
+DRM macro respects drm_firmware_drivers_only() and fails if the flag has
+been set.
 
 Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
 ---
 
 (no changes since v1)
 
- include/drm/drm_module.h | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ drivers/gpu/drm/imx/dcss/dcss-drv.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/drm/drm_module.h b/include/drm/drm_module.h
-index eb3fd7bcbec9..4db1ae03d9a5 100644
---- a/include/drm/drm_module.h
-+++ b/include/drm/drm_module.h
-@@ -4,6 +4,7 @@
- #define DRM_MODULE_H
+diff --git a/drivers/gpu/drm/imx/dcss/dcss-drv.c b/drivers/gpu/drm/imx/dcss/dcss-drv.c
+index 8dc2f85c514b..24147ee7080e 100644
+--- a/drivers/gpu/drm/imx/dcss/dcss-drv.c
++++ b/drivers/gpu/drm/imx/dcss/dcss-drv.c
+@@ -6,6 +6,7 @@
+ #include <linux/module.h>
+ #include <linux/kernel.h>
+ #include <linux/platform_device.h>
++#include <drm/drm_module.h>
+ #include <drm/drm_of.h>
  
- #include <linux/pci.h>
-+#include <linux/platform_device.h>
+ #include "dcss-dev.h"
+@@ -131,7 +132,7 @@ static struct platform_driver dcss_platform_driver = {
+ 	},
+ };
  
- #include <drm/drm_drv.h>
+-module_platform_driver(dcss_platform_driver);
++drm_module_platform_driver(dcss_platform_driver);
  
-@@ -92,4 +93,33 @@ drm_pci_unregister_driver_if_modeset(struct pci_driver *pci_drv, int modeset)
- 	module_driver(__pci_drv, drm_pci_register_driver_if_modeset, \
- 		      drm_pci_unregister_driver_if_modeset, __modeset)
- 
-+/*
-+ * Platform drivers
-+ */
-+
-+static inline int __init
-+drm_platform_driver_register(struct platform_driver *platform_drv)
-+{
-+	if (drm_firmware_drivers_only())
-+		return -ENODEV;
-+
-+	return platform_driver_register(platform_drv);
-+}
-+
-+/**
-+ * drm_module_platform_driver - Register a DRM driver for platform devices
-+ * @__platform_drv: the platform driver structure
-+ *
-+ * Registers a DRM driver for devices on the platform bus. The helper
-+ * macro behaves like module_platform_driver() but tests the state of
-+ * drm_firmware_drivers_only(). For more complex module initialization,
-+ * use module_init() and module_exit() directly.
-+ *
-+ * Each module may only use this macro once. Calling it replaces
-+ * module_init() and module_exit().
-+ */
-+#define drm_module_platform_driver(__platform_drv) \
-+	module_driver(__platform_drv, drm_platform_driver_register, \
-+		      platform_driver_unregister)
-+
- #endif
+ MODULE_AUTHOR("Laurentiu Palcu <laurentiu.palcu@nxp.com>");
+ MODULE_DESCRIPTION("DCSS driver for i.MX8MQ");
 -- 
 2.33.1
 

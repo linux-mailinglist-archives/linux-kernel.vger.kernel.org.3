@@ -2,99 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9D947CE88
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 09:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 365DE47CE99
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243529AbhLVI4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 03:56:36 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15959 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243503AbhLVI4d (ORCPT
+        id S243568AbhLVJCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:02:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243554AbhLVJCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 03:56:33 -0500
-Received: from kwepemi500007.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JJnD23SCyzZdm0;
-        Wed, 22 Dec 2021 16:53:22 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi500007.china.huawei.com (7.221.188.207) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 22 Dec 2021 16:56:31 +0800
-Received: from compute.localdomain (10.175.112.70) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 22 Dec 2021 16:56:30 +0800
-From:   Xu Jia <xujia39@huawei.com>
-To:     <steffen.klassert@secunet.com>, <herbert@gondor.apana.org.au>,
-        <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: [PATCH net-next 2/2] xfrm: Add support for SM4 symmetric cipher algorithm
-Date:   Wed, 22 Dec 2021 17:06:59 +0800
-Message-ID: <1640164019-42341-3-git-send-email-xujia39@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1640164019-42341-1-git-send-email-xujia39@huawei.com>
-References: <1640164019-42341-1-git-send-email-xujia39@huawei.com>
+        Wed, 22 Dec 2021 04:02:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1B3C061574;
+        Wed, 22 Dec 2021 01:02:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E23EB61917;
+        Wed, 22 Dec 2021 09:02:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C44C6C36AE5;
+        Wed, 22 Dec 2021 09:02:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640163765;
+        bh=rw4tAaqeSiqyfeGYl47FR+hGPoNiYEFySETtI4drzMs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Jfcnfm4U6vWKU3RrbUXH1Cl+/NWDDdfzXs/YwSLNMBmvlOQPV1jl0faiGkm4CYUjG
+         Ke0OjB4g7pKOfPMcDA+oRel/7kxH7n6w1Q3Pf4BI8vh/2zKC4Ahd+4I4JYvOOBQDay
+         LtdkRSLiZfxm2Pz5E3A2bDUL1RO0WGVL4WlKfRm8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.4.296
+Date:   Wed, 22 Dec 2021 10:02:41 +0100
+Message-Id: <164016376220099@kroah.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds SM4 encryption algorithm entry to ealg_list.
+I'm announcing the release of the 4.4.296 kernel.
 
-Signed-off-by: Xu Jia <xujia39@huawei.com>
----
- include/uapi/linux/pfkeyv2.h |  1 +
- net/xfrm/xfrm_algo.c         | 21 +++++++++++++++++++++
- 2 files changed, 22 insertions(+)
+All users of the 4.4 kernel series must upgrade.
 
-diff --git a/include/uapi/linux/pfkeyv2.h b/include/uapi/linux/pfkeyv2.h
-index 798ba9f..8abae1f 100644
---- a/include/uapi/linux/pfkeyv2.h
-+++ b/include/uapi/linux/pfkeyv2.h
-@@ -330,6 +330,7 @@ struct sadb_x_filter {
- #define SADB_X_EALG_AES_GCM_ICV16	20
- #define SADB_X_EALG_CAMELLIACBC		22
- #define SADB_X_EALG_NULL_AES_GMAC	23
-+#define SADB_X_EALG_SM4CBC		24
- #define SADB_EALG_MAX                   253 /* last EALG */
- /* private allocations should use 249-255 (RFC2407) */
- #define SADB_X_EALG_SERPENTCBC  252     /* draft-ietf-ipsec-ciph-aes-cbc-00 */
-diff --git a/net/xfrm/xfrm_algo.c b/net/xfrm/xfrm_algo.c
-index 00b5444..094734f 100644
---- a/net/xfrm/xfrm_algo.c
-+++ b/net/xfrm/xfrm_algo.c
-@@ -572,6 +572,27 @@
- 		.sadb_alg_maxbits = 288
- 	}
- },
-+{
-+	.name = "cbc(sm4)",
-+	.compat = "sm4",
-+
-+	.uinfo = {
-+		.encr = {
-+			.geniv = "echainiv",
-+			.blockbits = 128,
-+			.defkeybits = 128,
-+		}
-+	},
-+
-+	.pfkey_supported = 1,
-+
-+	.desc = {
-+		.sadb_alg_id = SADB_X_EALG_SM4CBC,
-+		.sadb_alg_ivlen	= 16,
-+		.sadb_alg_minbits = 128,
-+		.sadb_alg_maxbits = 256
-+	}
-+},
- };
- 
- static struct xfrm_algo_desc calg_list[] = {
--- 
-1.8.3.1
+The updated 4.4.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.4.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
+
+thanks,
+
+greg k-h
+
+------------
+
+ Makefile                                     |    2 
+ arch/arm/mm/copypage-fa.c                    |   35 +++----
+ arch/arm/mm/copypage-feroceon.c              |   98 ++++++++++-----------
+ arch/arm/mm/copypage-v4mc.c                  |   19 +---
+ arch/arm/mm/copypage-v4wb.c                  |   41 ++++----
+ arch/arm/mm/copypage-v4wt.c                  |   37 +++----
+ arch/arm/mm/copypage-xsc3.c                  |   71 ++++++---------
+ arch/arm/mm/copypage-xscale.c                |   71 +++++++--------
+ drivers/block/xen-blkfront.c                 |   12 ++
+ drivers/char/agp/parisc-agp.c                |    6 -
+ drivers/hwmon/dell-smm-hwmon.c               |    7 +
+ drivers/i2c/busses/i2c-rk3x.c                |    4 
+ drivers/input/touchscreen/of_touchscreen.c   |   18 +--
+ drivers/md/persistent-data/dm-btree-remove.c |    2 
+ drivers/net/ethernet/broadcom/bcmsysport.c   |    5 +
+ drivers/net/ethernet/broadcom/bcmsysport.h   |    1 
+ drivers/net/ethernet/intel/igbvf/netdev.c    |    1 
+ drivers/net/usb/lan78xx.c                    |    6 -
+ drivers/net/xen-netback/netback.c            |   13 +-
+ drivers/net/xen-netfront.c                   |  125 ++++++++++++++++++++-------
+ drivers/pci/msi.c                            |    2 
+ drivers/soc/tegra/fuse/fuse-tegra.c          |    2 
+ drivers/soc/tegra/fuse/fuse.h                |    2 
+ drivers/tty/hvc/hvc_xen.c                    |   30 +++++-
+ drivers/usb/gadget/composite.c               |    6 -
+ drivers/usb/gadget/legacy/dbgp.c             |    6 -
+ drivers/usb/gadget/legacy/inode.c            |    6 -
+ drivers/usb/serial/option.c                  |    8 +
+ fs/nfsd/nfs4state.c                          |    9 +
+ kernel/time/timekeeping.c                    |    3 
+ net/mac80211/agg-tx.c                        |    2 
+ net/netlink/af_netlink.c                     |    5 +
+ net/nfc/netlink.c                            |    6 -
+ scripts/recordmcount.pl                      |    2 
+ 34 files changed, 387 insertions(+), 276 deletions(-)
+
+Armin Wolf (1):
+      hwmon: (dell-smm) Fix warning on /proc/i8k creation error
+
+Daniele Palmas (1):
+      USB: serial: option: add Telit FN990 compositions
+
+Felix Fietkau (1):
+      mac80211: send ADDBA requests using the tid/queue of the aggregation session
+
+Florian Fainelli (1):
+      net: systemport: Add global locking for descriptor lifecycle
+
+Greg Kroah-Hartman (2):
+      USB: gadget: bRequestType is a bitfield, not a enum
+      Linux 4.4.296
+
+Harshit Mogalapalli (1):
+      net: netlink: af_netlink: Prevent empty skb by adding a check on len.
+
+Helge Deller (1):
+      parisc/agp: Annotate parisc agp init functions with __init
+
+J. Bruce Fields (1):
+      nfsd: fix use-after-free due to delegation race
+
+Jerome Marchand (1):
+      recordmcount.pl: look for jgnop instruction as well as bcrl on s390
+
+Joe Thornber (1):
+      dm btree remove: fix use after free in rebalance_children()
+
+Juergen Gross (4):
+      xen/blkfront: harden blkfront against event channel storms
+      xen/netfront: harden netfront against event channel storms
+      xen/console: harden hvc_xen against event channel storms
+      xen/netback: don't queue unlimited number of packages
+
+Letu Ren (1):
+      igbvf: fix double free in `igbvf_probe`
+
+Nathan Chancellor (3):
+      soc/tegra: fuse: Fix bitwise vs. logical OR warning
+      net: lan78xx: Avoid unnecessary self assignment
+      Input: touchscreen - avoid bitwise vs logical OR warning
+
+Nicolas Pitre (1):
+      ARM: 8805/2: remove unneeded naked function usage
+
+Ondrej Jirman (1):
+      i2c: rk3x: Handle a spurious start completion interrupt flag
+
+Tadeusz Struk (1):
+      nfc: fix segfault in nfc_genl_dump_devices_done
+
+Thomas Gleixner (1):
+      PCI/MSI: Clear PCI_MSIX_FLAGS_MASKALL on error
+
+Yu Liao (1):
+      timekeeping: Really make sure wall_to_monotonic isn't positive
 

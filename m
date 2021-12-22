@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3E147CB1D
+	by mail.lfdr.de (Postfix) with ESMTP id EC5FE47CB1F
 	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241686AbhLVBxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 20:53:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
+        id S241975AbhLVBxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 20:53:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241627AbhLVBwz (ORCPT
+        with ESMTP id S241705AbhLVBw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 20:52:55 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47FBC061401;
-        Tue, 21 Dec 2021 17:52:54 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id fo11so991742qvb.4;
-        Tue, 21 Dec 2021 17:52:54 -0800 (PST)
+        Tue, 21 Dec 2021 20:52:56 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A67C061574;
+        Tue, 21 Dec 2021 17:52:56 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id h5so973532qvh.8;
+        Tue, 21 Dec 2021 17:52:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=G0d6ojm+iSx8TyFz8s64s6iKRgiSP6NutUrqmeDMqYY=;
-        b=Lf9o09k3psfMwBttTNWoiTGhU6R39RWywlywwBXOCrsNcPm+a6teR12p1y9Zh9tdCi
-         mwIySBrFkh20kwmDQymM0xleT1ca2U6AGgQ1fr8u00t0Biiosl5Wl4X9Yt6BcblXRDGP
-         +QVDJ1rFBN5R02UpbUTlevYBjq1ArwnrKoR5XuRgh8NZwHZHRuDlW4dshOz8InvMiijB
-         hdW+i5wY26KZiMOuUFlyJ3RUzCodCEWxKFDlYuOVQkM13Pi0QWhWSL3TNnqIfqt055HX
-         QKBxDbXvTmSH1cNrsUI2C/yk4LKKG5MpZJkGs4V8eoDvRQBkfF0ThWNhXu51/WROdh9P
-         YuOQ==
+        bh=5HXqsg9dt/02ULuvuW0lPnYmxm2/ejgoAsy04eW7L4o=;
+        b=XPPd77R9/JAuPIysOaq1Vu7pUtNMVGHV0ZzwVV9g2rEiPWczySJfOPa1g2StQ8Oqn+
+         Sj9Tb/nl3dJxMiIwFbgzIEZ/uMfEMhLiBqs3H92ESQZ42h2zDlTsd0Hx8B3UVn33vQsM
+         qzmNC7r0ADpfYMsfklB4dOqLpLNrJSTiDlFWPohFMAHKi1Ob5PBSfpjHGWq4YiXm1a5M
+         Yff+iHyrA4QET1dRQIDFCSrh6GY6MHnF96xG6MCt4qqWSXYGiyfcDIPF01JwIB+5syWV
+         10HEwx/uxw/FgJIH16F35evzvMnKGlQJDhRmLCic+TGpKlnHedDr5R65c8D+84wnbAZG
+         YNRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=G0d6ojm+iSx8TyFz8s64s6iKRgiSP6NutUrqmeDMqYY=;
-        b=FdU0SgO/al26XllbmJFXhUlwmlYu+qyon17xoBcIvSRClmqBp04jOXLa0lmPgAJQwJ
-         eJttqTr3ND7dm9SVuAh0HydM9tEKRT4zc8HB1mC+eic+9IBuz3jGWrj51hGf6klzwSFl
-         mrTTWqKDgLvlsO6iLqVRBpeI+8+C4y0h1KP3A3PWucYGENQjh/XTsXSAhkBH50djRgYJ
-         J4YRyq1Js3x5TpF270Gq0pMuSTT4xkGdxJCiVbIZuWKq15iItSekP/nvC3F2P0QXjZjU
-         A+a/HJwfiQLEfxAM1O2siMLoEK6Z4s9T2JJRVLwnMWp8tJK/Bc3zwkejbATCfFFB/Xeo
-         9lCQ==
-X-Gm-Message-State: AOAM5303DLQBCxJ9+QyQcTfE0ZWMuinmBnHjZEGE2bzgY3CYvOomc951
-        gAYnJZc/vUoqZek0w9IESaM=
-X-Google-Smtp-Source: ABdhPJwtAgPPkwJ7LellJUgBCVyktm57ZRLvt8pBb1j8zUdRYPD9RWUrbriNc4HDpRe3l9T+7iBwzQ==
-X-Received: by 2002:a0c:8e08:: with SMTP id v8mr905516qvb.93.1640137973956;
-        Tue, 21 Dec 2021 17:52:53 -0800 (PST)
+        bh=5HXqsg9dt/02ULuvuW0lPnYmxm2/ejgoAsy04eW7L4o=;
+        b=RGNmn6NliHfVcXDWCP1Dazu/MRvo4rKRaFp32LsTCF/Os8EJgtq/KvzlMtmnuQbHud
+         OsGuTaiqqRK1FoFJW4QPUJT1LiXCpwLEXuYpkl9h/Y3QjWuc+yRzx/HLiOho80B7z+2e
+         +9ih4YveBuYlz7xSazkil0Aroezs9xVwk6PpPD/zFzafsQVVoRpwgje3VEgMJdlHuYDi
+         OU4nbL8fu4BRQYeITxGB4EkYodc6SRAgSiUZtOSc+T9F4QbMksGOPap4ZCpNZMctlsFO
+         c2jQdsvGncYT6hB+5yMeXNEjP/rNYIoWqJTLnpe5T27Drs/KbneZ6VMddB68PeT4hCCs
+         7Y2g==
+X-Gm-Message-State: AOAM531gE6eI5fi2gbkvijcRrnii4ikeQROQM4VhDEOos5R60Y5rCOGE
+        Zx76qqgOMT+ywUOX8nxXkr8=
+X-Google-Smtp-Source: ABdhPJwBMyxwpNWKQD4o9A0k2usT9w18dtQ8QAA4VHBMVReXu/HRLylp+MWR56xDgEpc919WEE+Rwg==
+X-Received: by 2002:a05:6214:20a9:: with SMTP id 9mr925552qvd.42.1640137975204;
+        Tue, 21 Dec 2021 17:52:55 -0800 (PST)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id d4sm658161qkn.79.2021.12.21.17.52.52
+        by smtp.gmail.com with ESMTPSA id d4sm658161qkn.79.2021.12.21.17.52.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 17:52:53 -0800 (PST)
+        Tue, 21 Dec 2021 17:52:54 -0800 (PST)
 From:   Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To:     linux-imx@nxp.com
@@ -64,9 +64,9 @@ Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-serial@vger.kernel.org
-Subject: [PATCH v6 5/7] clk: imx: Add initial support for i.MXRT1050 clock driver
-Date:   Tue, 21 Dec 2021 20:52:42 -0500
-Message-Id: <20211222015244.2464671-6-Mr.Bossman075@gmail.com>
+Subject: [PATCH v6 6/7] ARM: dts: imx: Add i.MXRT1050-EVK support
+Date:   Tue, 21 Dec 2021 20:52:43 -0500
+Message-Id: <20211222015244.2464671-7-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211222015244.2464671-1-Mr.Bossman075@gmail.com>
 References: <20211222015244.2464671-1-Mr.Bossman075@gmail.com>
@@ -76,245 +76,310 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add clock driver support for i.MXRT1050.
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
+The NXP i.MXRT1050 Evaluation Kit (EVK) provides a platform for rapid
+evaluation of the i.MXRT, which features NXP's implementation of the Arm
+Cortex-M7 core.
+
+The EVK provides 32 MB SDRAM, 64 MB Quad SPI flash, Micro SD card socket,
+USB 2.0 OTG.
+
+This patch aims to support the preliminary booting up features
+as follows:
+GPIO
+LPUART
+SD/MMC
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-Suggested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Jesse: Add clock-parents, edma, usdhc, anatop, remove old pinctl]
 ---
 V1->V2:
-* Kconfig: Add new line
-* clk-imxrt.c: Remove unused const
-* clk-imxrt.c: Remove set parents
-* clk-imxrt.c: Use fsl,imxrt-anatop for anatop base address
+* dtsi: Add clock parent definitions
+* dtsi: Change hex values to lowercase
+* dtsi: Move anatop definition from driver
+* dts: Remove unused pin controll (semc)
+* dts: Use moved pin controll header
+* Move aliases from dtsi to dts
+* Change commit description
+* Change licence to "GPL-2.0+ OR MIT"
 V2->V3:
-* Remove unused ANATOP_BASE_ADDR
-* Move to hw API
-* Add GPT's own clock
-* Add SEMC clocks to set muxing to CRITICAL
+* Remove bootargs, comments, unused container
+* Remove unnecessary new lines
+* Rename imxrt to imxrt1050 for seiral and mmc
+* GPT uses own clock
+* fix memory@0
+* Change GPT compatible handles
 V3->V4:
-* Rename clk-imxrt.c to clk-imxrt1050.c
-* Rename CONFIG_CLK_IMXRT to CONFIG_CLK_IMXRT1050
-* Make CONFIG_CLK_IMXRT1050 selectable
+* Remove "fsl,imx-osc"
+* Add space on serial compatible
+* Change "iomuxc@" to "pinctrl@"
+* Change "ccm@" to "clock-controller@"
+* Change "fsl,imxrt-gpio" to "fsl,imxrt1050-gpio"
 V4->V5:
-* Move to platform driver
+* Nothing done
 V5->V6:
-* Remove "fsl" from platform driver name
+* Nothing done
 ---
- drivers/clk/imx/Kconfig         |   5 +
- drivers/clk/imx/Makefile        |   1 +
- drivers/clk/imx/clk-imxrt1050.c | 181 ++++++++++++++++++++++++++++++++
- 3 files changed, 187 insertions(+)
- create mode 100644 drivers/clk/imx/clk-imxrt1050.c
+ arch/arm/boot/dts/Makefile          |   2 +
+ arch/arm/boot/dts/imxrt1050-evk.dts |  72 +++++++++++++
+ arch/arm/boot/dts/imxrt1050.dtsi    | 154 ++++++++++++++++++++++++++++
+ 3 files changed, 228 insertions(+)
+ create mode 100644 arch/arm/boot/dts/imxrt1050-evk.dts
+ create mode 100644 arch/arm/boot/dts/imxrt1050.dtsi
 
-diff --git a/drivers/clk/imx/Kconfig b/drivers/clk/imx/Kconfig
-index c08edbd04d22..f697652ab19c 100644
---- a/drivers/clk/imx/Kconfig
-+++ b/drivers/clk/imx/Kconfig
-@@ -105,3 +105,8 @@ config CLK_IMX8ULP
- 	select MXC_CLK
- 	help
- 	    Build the driver for i.MX8ULP CCM Clock Driver
-+
-+config CLK_IMXRT1050
-+	bool "IMXRT1050 CCM Clock Driver"
-+	depends on SOC_IMXRT
-+	select MXC_CLK
-diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
-index b5e040026dfb..3d9a1e3b5fc6 100644
---- a/drivers/clk/imx/Makefile
-+++ b/drivers/clk/imx/Makefile
-@@ -47,3 +47,4 @@ obj-$(CONFIG_CLK_IMX6UL) += clk-imx6ul.o
- obj-$(CONFIG_CLK_IMX7D)  += clk-imx7d.o
- obj-$(CONFIG_CLK_IMX7ULP) += clk-imx7ulp.o
- obj-$(CONFIG_CLK_VF610)  += clk-vf610.o
-+obj-$(CONFIG_CLK_IMXRT1050)  += clk-imxrt1050.o
-diff --git a/drivers/clk/imx/clk-imxrt1050.c b/drivers/clk/imx/clk-imxrt1050.c
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index ee410c80c18c..d29a768dceef 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -735,6 +735,8 @@ dtb-$(CONFIG_SOC_IMX7D) += \
+ dtb-$(CONFIG_SOC_IMX7ULP) += \
+ 	imx7ulp-com.dtb \
+ 	imx7ulp-evk.dtb
++dtb-$(CONFIG_SOC_IMXRT) += \
++	imxrt1050-evk.dtb
+ dtb-$(CONFIG_SOC_LS1021A) += \
+ 	ls1021a-moxa-uc-8410a.dtb \
+ 	ls1021a-qds.dtb \
+diff --git a/arch/arm/boot/dts/imxrt1050-evk.dts b/arch/arm/boot/dts/imxrt1050-evk.dts
 new file mode 100644
-index 000000000000..c5472d02dc6a
+index 000000000000..6a9c10decf52
 --- /dev/null
-+++ b/drivers/clk/imx/clk-imxrt1050.c
-@@ -0,0 +1,181 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++++ b/arch/arm/boot/dts/imxrt1050-evk.dts
+@@ -0,0 +1,72 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
-+ * Copyright (C) 2021
-+ * Author(s):
-+ * Jesse Taube <Mr.Bossman075@gmail.com>
-+ * Giulio Benetti <giulio.benetti@benettiengineering.com>
++ * Copyright (C) 2019
++ * Author(s): Giulio Benetti <giulio.benetti@benettiengineering.com>
 + */
-+#include <linux/mm.h>
-+#include <linux/delay.h>
-+#include <linux/clk.h>
-+#include <linux/io.h>
-+#include <linux/clkdev.h>
-+#include <linux/clk-provider.h>
-+#include <linux/err.h>
-+#include <linux/of.h>
-+#include <linux/of_address.h>
-+#include <linux/of_irq.h>
-+#include <linux/sizes.h>
-+#include <soc/imx/revision.h>
++
++/dts-v1/;
++#include "imxrt1050.dtsi"
++#include "imxrt1050-pinfunc.h"
++
++/ {
++	model = "NXP IMXRT1050-evk board";
++	compatible = "fsl,imxrt1050-evk", "fsl,imxrt1050";
++
++	chosen {
++		stdout-path = &lpuart1;
++	};
++
++	aliases {
++		gpio0 = &gpio1;
++		gpio1 = &gpio2;
++		gpio2 = &gpio3;
++		gpio3 = &gpio4;
++		gpio4 = &gpio5;
++		mmc0 = &usdhc1;
++		serial0 = &lpuart1;
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x80000000 0x2000000>;
++	};
++};
++
++&lpuart1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_lpuart1>;
++	status = "okay";
++};
++
++&iomuxc {
++	pinctrl-names = "default";
++	pinctrl_lpuart1: lpuart1grp {
++		fsl,pins = <
++			MXRT1050_IOMUXC_GPIO_AD_B0_12_LPUART1_TXD	0xf1
++			MXRT1050_IOMUXC_GPIO_AD_B0_13_LPUART1_RXD	0xf1
++		>;
++	};
++
++	pinctrl_usdhc0: usdhc0grp {
++		fsl,pins = <
++			MXRT1050_IOMUXC_GPIO_B1_12_USDHC1_CD_B		0x1B000
++			MXRT1050_IOMUXC_GPIO_B1_14_USDHC1_VSELECT	0xB069
++			MXRT1050_IOMUXC_GPIO_SD_B0_00_USDHC1_CMD	0x17061
++			MXRT1050_IOMUXC_GPIO_SD_B0_01_USDHC1_CLK	0x17061
++			MXRT1050_IOMUXC_GPIO_SD_B0_05_USDHC1_DATA3	0x17061
++			MXRT1050_IOMUXC_GPIO_SD_B0_04_USDHC1_DATA2	0x17061
++			MXRT1050_IOMUXC_GPIO_SD_B0_03_USDHC1_DATA1	0x17061
++			MXRT1050_IOMUXC_GPIO_SD_B0_02_USDHC1_DATA0	0x17061
++		>;
++	};
++};
++
++&usdhc1 {
++	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
++	pinctrl-0 = <&pinctrl_usdhc0>;
++	pinctrl-1 = <&pinctrl_usdhc0>;
++	pinctrl-2 = <&pinctrl_usdhc0>;
++	pinctrl-3 = <&pinctrl_usdhc0>;
++	cd-gpios = <&gpio2 28 GPIO_ACTIVE_LOW>;
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/imxrt1050.dtsi b/arch/arm/boot/dts/imxrt1050.dtsi
+new file mode 100644
+index 000000000000..9cf5738d2ae3
+--- /dev/null
++++ b/arch/arm/boot/dts/imxrt1050.dtsi
+@@ -0,0 +1,154 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (C) 2019
++ * Author(s): Giulio Benetti <giulio.benetti@benettiengineering.com>
++ */
++
++#include "armv7-m.dtsi"
++#include <dt-bindings/interrupt-controller/arm-gic.h>
 +#include <dt-bindings/clock/imxrt1050-clock.h>
++#include <dt-bindings/gpio/gpio.h>
 +
-+#include "clk.h"
++/ {
++	#address-cells = <1>;
++	#size-cells = <1>;
 +
-+static const char * const pll_ref_sels[] = {"osc", "dummy", };
-+static const char * const per_sels[] = {"ipg_pdof", "osc", };
-+static const char * const pll1_bypass_sels[] = {"pll1_arm", "pll1_arm_ref_sel", };
-+static const char * const pll2_bypass_sels[] = {"pll2_sys", "pll2_sys_ref_sel", };
-+static const char * const pll3_bypass_sels[] = {"pll3_usb_otg", "pll3_usb_otg_ref_sel", };
-+static const char * const pll5_bypass_sels[] = {"pll5_video", "pll5_video_ref_sel", };
-+static const char *const pre_periph_sels[] = {
-+	"pll2_sys", "pll2_pfd2_396m", "pll2_pfd0_352m", "arm_podf", };
-+static const char *const periph_sels[] = { "pre_periph_sel", "todo", };
-+static const char *const usdhc_sels[] = { "pll2_pfd2_396m", "pll2_pfd0_352m", };
-+static const char *const lpuart_sels[] = { "pll3_80m", "osc", };
-+static const char *const lcdif_sels[] = {
-+	"pll2_sys", "pll3_pfd3_454_74m", "pll5_video", "pll2_pfd0_352m",
-+	"pll2_pfd1_594m", "pll3_pfd1_664_62m", };
-+static const char *const semc_alt_sels[] = { "pll2_pfd2_396m", "pll3_pfd1_664_62m", };
-+static const char *const semc_sels[] = { "periph_sel", "semc_alt_sel", };
++	clocks {
++		osc: osc {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <24000000>;
++		};
++	};
 +
-+static struct clk_hw **hws;
-+static struct clk_hw_onecell_data *clk_hw_data;
++	soc {
++		lpuart1: serial@40184000 {
++			compatible = "fsl,imxrt1050-lpuart", "fsl,imx8mm-uart", "fsl,imx6q-uart";
++			reg = <0x40184000 0x4000>;
++			interrupts = <20>;
++			clocks = <&clks IMXRT1050_CLK_LPUART1>;
++			clock-names = "ipg";
++			status = "disabled";
++		};
 +
-+static void __init imxrt_clocks_common_init(void __iomem *base)
-+{
-+	/* Anatop clocks */
-+	hws[IMXRT1050_CLK_DUMMY] = imx_clk_hw_fixed("dummy", 0UL);
++		iomuxc: pinctrl@401f8000 {
++			compatible = "fsl,imxrt1050-iomuxc";
++			reg = <0x401f8000 0x4000>;
++			fsl,mux_mask = <0x7>;
++		};
 +
-+	hws[IMXRT1050_CLK_PLL1_REF_SEL] = imx_clk_hw_mux("pll1_arm_ref_sel",
-+		base + 0x0, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
-+	hws[IMXRT1050_CLK_PLL2_REF_SEL] = imx_clk_hw_mux("pll2_sys_ref_sel",
-+		base + 0x30, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
-+	hws[IMXRT1050_CLK_PLL3_REF_SEL] = imx_clk_hw_mux("pll3_usb_otg_ref_sel",
-+		base + 0x10, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
-+	hws[IMXRT1050_CLK_PLL5_REF_SEL] = imx_clk_hw_mux("pll5_video_ref_sel",
-+		base + 0xa0, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
++		anatop: anatop@400d8000 {
++			compatible = "fsl,imxrt-anatop";
++			reg = <0x400d8000 0x4000>;
++		};
 +
-+	hws[IMXRT1050_CLK_PLL1_ARM] = imx_clk_hw_pllv3(IMX_PLLV3_SYS, "pll1_arm",
-+		"pll1_arm_ref_sel", base + 0x0, 0x7f);
-+	hws[IMXRT1050_CLK_PLL2_SYS] = imx_clk_hw_pllv3(IMX_PLLV3_GENERIC, "pll2_sys",
-+		"pll2_sys_ref_sel", base + 0x30, 0x1);
-+	hws[IMXRT1050_CLK_PLL3_USB_OTG] = imx_clk_hw_pllv3(IMX_PLLV3_USB, "pll3_usb_otg",
-+		"pll3_usb_otg_ref_sel", base + 0x10, 0x1);
-+	hws[IMXRT1050_CLK_PLL5_VIDEO] = imx_clk_hw_pllv3(IMX_PLLV3_AV, "pll5_video",
-+		"pll5_video_ref_sel", base + 0xa0, 0x7f);
++		clks: clock-controller@400fc000 {
++			compatible = "fsl,imxrt1050-ccm";
++			reg = <0x400fc000 0x4000>;
++			interrupts = <95>, <96>;
++			clocks = <&osc>;
++			clock-names = "osc";
++			#clock-cells = <1>;
++			assigned-clocks = <&clks IMXRT1050_CLK_PLL1_BYPASS>,
++				<&clks IMXRT1050_CLK_PLL1_BYPASS>,
++				<&clks IMXRT1050_CLK_PLL2_BYPASS>,
++				<&clks IMXRT1050_CLK_PLL3_BYPASS>,
++				<&clks IMXRT1050_CLK_PLL3_PFD1_664_62M>,
++				<&clks IMXRT1050_CLK_PLL2_PFD2_396M>;
++			assigned-clock-parents = <&clks IMXRT1050_CLK_PLL1_REF_SEL>,
++				<&clks IMXRT1050_CLK_PLL1_ARM>,
++				<&clks IMXRT1050_CLK_PLL2_SYS>,
++				<&clks IMXRT1050_CLK_PLL3_USB_OTG>,
++				<&clks IMXRT1050_CLK_PLL3_USB_OTG>,
++				<&clks IMXRT1050_CLK_PLL2_SYS>;
++		};
 +
-+	/* PLL bypass out */
-+	hws[IMXRT1050_CLK_PLL1_BYPASS] = imx_clk_hw_mux_flags("pll1_bypass", base + 0x0, 16, 1,
-+		pll1_bypass_sels, ARRAY_SIZE(pll1_bypass_sels), CLK_SET_RATE_PARENT);
-+	hws[IMXRT1050_CLK_PLL2_BYPASS] = imx_clk_hw_mux_flags("pll2_bypass", base + 0x30, 16, 1,
-+		pll2_bypass_sels, ARRAY_SIZE(pll2_bypass_sels), CLK_SET_RATE_PARENT);
-+	hws[IMXRT1050_CLK_PLL3_BYPASS] = imx_clk_hw_mux_flags("pll3_bypass", base + 0x10, 16, 1,
-+		pll3_bypass_sels, ARRAY_SIZE(pll3_bypass_sels), CLK_SET_RATE_PARENT);
-+	hws[IMXRT1050_CLK_PLL5_BYPASS] = imx_clk_hw_mux_flags("pll5_bypass", base + 0xa0, 16, 1,
-+		pll5_bypass_sels, ARRAY_SIZE(pll5_bypass_sels), CLK_SET_RATE_PARENT);
++		edma1: dma-controller@400e8000 {
++			#dma-cells = <2>;
++			compatible = "fsl,imx7ulp-edma";
++			reg = <0x400e8000 0x4000>,
++				<0x400ec000 0x4000>;
++			dma-channels = <32>;
++			interrupts = <0>, <1>, <2>, <3>, <4>, <5>, <6>, <7>, <8>,
++				<9>, <10>, <11>, <12>, <13>, <14>, <15>, <16>;
++			clock-names = "dma", "dmamux0";
++			clocks = <&clks IMXRT1050_CLK_DMA>,
++				 <&clks IMXRT1050_CLK_DMA_MUX>;
++		};
 +
-+	hws[IMXRT1050_CLK_VIDEO_POST_DIV_SEL] = imx_clk_hw_divider("video_post_div_sel",
-+		"pll5_video", base + 0xa0, 19, 2);
-+	hws[IMXRT1050_CLK_VIDEO_DIV] = imx_clk_hw_divider("video_div",
-+		"video_post_div_sel", base + 0x170, 30, 2);
++		usdhc1: mmc@402c0000 {
++			compatible ="fsl,imxrt1050-usdhc";
++			reg = <0x402c0000 0x4000>;
++			interrupts = <110>;
++			clocks = <&clks IMXRT1050_CLK_IPG_PDOF>,
++				<&clks IMXRT1050_CLK_OSC>,
++				<&clks IMXRT1050_CLK_USDHC1>;
++			clock-names = "ipg", "ahb", "per";
++			bus-width = <4>;
++			fsl,wp-controller;
++			no-1-8-v;
++			max-frequency = <4000000>;
++			fsl,tuning-start-tap = <20>;
++			fsl,tuning-step= <2>;
++			status = "disabled";
++		};
 +
-+	hws[IMXRT1050_CLK_PLL3_80M] = imx_clk_hw_fixed_factor("pll3_80m",  "pll3_usb_otg", 1, 6);
++		gpio1: gpio@401b8000 {
++			compatible = "fsl,imxrt1050-gpio", "fsl,imx35-gpio";
++			reg = <0x401b8000 0x4000>;
++			interrupts = <80>, <81>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
 +
-+	hws[IMXRT1050_CLK_PLL2_PFD0_352M] = imx_clk_hw_pfd("pll2_pfd0_352m", "pll2_sys", base + 0x100, 0);
-+	hws[IMXRT1050_CLK_PLL2_PFD1_594M] = imx_clk_hw_pfd("pll2_pfd1_594m", "pll2_sys", base + 0x100, 1);
-+	hws[IMXRT1050_CLK_PLL2_PFD2_396M] = imx_clk_hw_pfd("pll2_pfd2_396m", "pll2_sys", base + 0x100, 2);
-+	hws[IMXRT1050_CLK_PLL3_PFD1_664_62M] = imx_clk_hw_pfd("pll3_pfd1_664_62m", "pll3_usb_otg", base + 0xf0, 1);
-+	hws[IMXRT1050_CLK_PLL3_PFD3_454_74M] = imx_clk_hw_pfd("pll3_pfd3_454_74m", "pll3_usb_otg", base + 0xf0, 3);
-+}
++		gpio2: gpio@401bc000 {
++			compatible = "fsl,imxrt1050-gpio", "fsl,imx35-gpio";
++			reg = <0x401bc000 0x4000>;
++			interrupts = <82>, <83>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
 +
-+static int imxrt1050_clocks_probe(struct platform_device *pdev)
-+{
-+	void __iomem *ccm_base;
-+	void __iomem *pll_base;
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
-+	struct device_node *anp;
-+	int ret;
++		gpio3: gpio@401c0000 {
++			compatible = "fsl,imxrt1050-gpio", "fsl,imx35-gpio";
++			reg = <0x401c0000 0x4000>;
++			interrupts = <84>, <85>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
 +
-+	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws,
-+					  IMXRT1050_CLK_END), GFP_KERNEL);
-+	if (WARN_ON(!clk_hw_data))
-+		return -ENOMEM;
++		gpio4: gpio@401c4000 {
++			compatible = "fsl,imxrt1050-gpio", "fsl,imx35-gpio";
++			reg = <0x401c4000 0x4000>;
++			interrupts = <86>, <87>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
 +
-+	clk_hw_data->num = IMXRT1050_CLK_END;
-+	hws = clk_hw_data->hws;
++		gpio5: gpio@400c0000 {
++			compatible = "fsl,imxrt1050-gpio", "fsl,imx35-gpio";
++			reg = <0x400c0000 0x4000>;
++			interrupts = <88>, <89>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
 +
-+	hws[IMXRT1050_CLK_OSC] = __clk_get_hw(of_clk_get_by_name(np, "osc"));
-+
-+	anp = of_find_compatible_node(NULL, NULL, "fsl,imxrt-anatop");
-+	pll_base = of_iomap(anp, 0);
-+	of_node_put(anp)
-+	if (WARN_ON(!pll_base))
-+		return -ENOMEM;
-+	imxrt_clocks_common_init(pll_base);
-+	/* CCM clocks */
-+	ccm_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (WARN_ON(IS_ERR(ccm_base)))
-+		return PTR_ERR(ccm_base);
-+
-+	hws[IMXRT1050_CLK_ARM_PODF] = imx_clk_hw_divider("arm_podf", "pll1_arm", ccm_base + 0x10, 0, 3);
-+	hws[IMXRT1050_CLK_PRE_PERIPH_SEL] = imx_clk_hw_mux("pre_periph_sel", ccm_base + 0x18, 18, 2,
-+		pre_periph_sels, ARRAY_SIZE(pre_periph_sels));
-+	hws[IMXRT1050_CLK_PERIPH_SEL] = imx_clk_hw_mux("periph_sel", ccm_base + 0x14, 25, 1,
-+		periph_sels, ARRAY_SIZE(periph_sels));
-+	hws[IMXRT1050_CLK_USDHC1_SEL] = imx_clk_hw_mux("usdhc1_sel", ccm_base + 0x1c, 16, 1,
-+		usdhc_sels, ARRAY_SIZE(usdhc_sels));
-+	hws[IMXRT1050_CLK_USDHC2_SEL] = imx_clk_hw_mux("usdhc2_sel", ccm_base + 0x1c, 17, 1,
-+		usdhc_sels, ARRAY_SIZE(usdhc_sels));
-+	hws[IMXRT1050_CLK_LPUART_SEL] = imx_clk_hw_mux("lpuart_sel", ccm_base + 0x24, 6, 1,
-+		lpuart_sels, ARRAY_SIZE(lpuart_sels));
-+	hws[IMXRT1050_CLK_LCDIF_SEL] = imx_clk_hw_mux("lcdif_sel", ccm_base + 0x38, 15, 3,
-+		lcdif_sels, ARRAY_SIZE(lcdif_sels));
-+	hws[IMXRT1050_CLK_PER_CLK_SEL] = imx_clk_hw_mux("per_sel", ccm_base + 0x1C, 6, 1,
-+		per_sels, ARRAY_SIZE(per_sels));
-+	hws[IMXRT1050_CLK_SEMC_ALT_SEL] = imx_clk_hw_mux("semc_alt_sel", ccm_base + 0x14, 7, 1,
-+		semc_alt_sels, ARRAY_SIZE(semc_alt_sels));
-+	hws[IMXRT1050_CLK_SEMC_SEL] = imx_clk_hw_mux_flags("semc_sel", ccm_base + 0x14, 6, 1,
-+		semc_sels, ARRAY_SIZE(semc_sels), CLK_IS_CRITICAL);
-+
-+	hws[IMXRT1050_CLK_AHB_PODF] = imx_clk_hw_divider("ahb", "periph_sel", ccm_base + 0x14, 10, 3);
-+	hws[IMXRT1050_CLK_IPG_PDOF] = imx_clk_hw_divider("ipg", "ahb", ccm_base + 0x14, 8, 2);
-+	hws[IMXRT1050_CLK_PER_PDOF] = imx_clk_hw_divider("per", "per_sel", ccm_base + 0x1C, 0, 5);
-+
-+	hws[IMXRT1050_CLK_USDHC1_PODF] = imx_clk_hw_divider("usdhc1_podf", "usdhc1_sel", ccm_base + 0x24, 11, 3);
-+	hws[IMXRT1050_CLK_USDHC2_PODF] = imx_clk_hw_divider("usdhc2_podf", "usdhc2_sel", ccm_base + 0x24, 16, 3);
-+	hws[IMXRT1050_CLK_LPUART_PODF] = imx_clk_hw_divider("lpuart_podf", "lpuart_sel", ccm_base + 0x24, 0, 6);
-+	hws[IMXRT1050_CLK_LCDIF_PRED] = imx_clk_hw_divider("lcdif_pred", "lcdif_sel", ccm_base + 0x38, 12, 3);
-+	hws[IMXRT1050_CLK_LCDIF_PODF] = imx_clk_hw_divider("lcdif_podf", "lcdif_pred", ccm_base + 0x18, 23, 3);
-+
-+	hws[IMXRT1050_CLK_USDHC1] = imx_clk_hw_gate2("usdhc1", "usdhc1_podf", ccm_base + 0x80, 2);
-+	hws[IMXRT1050_CLK_USDHC2] = imx_clk_hw_gate2("usdhc2", "usdhc2_podf", ccm_base + 0x80, 4);
-+	hws[IMXRT1050_CLK_LPUART1] = imx_clk_hw_gate2("lpuart1", "lpuart_podf", ccm_base + 0x7c, 24);
-+	hws[IMXRT1050_CLK_LCDIF_APB] = imx_clk_hw_gate2("lcdif", "lcdif_podf", ccm_base + 0x74, 10);
-+	hws[IMXRT1050_CLK_DMA] = imx_clk_hw_gate("dma", "ipg", ccm_base + 0x7C, 6);
-+	hws[IMXRT1050_CLK_DMA_MUX] = imx_clk_hw_gate("dmamux0", "ipg", ccm_base + 0x7C, 7);
-+	hws[IMXRT1050_CLK_GPT] = imx_clk_hw_fixed_factor("gpt", "osc", 1, 8);
-+	imx_check_clk_hws(hws, IMXRT1050_CLK_END);
-+
-+	ret = of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to register clks for i.MXRT1050.\n");
-+		imx_unregister_hw_clocks(hws, IMXRT1050_CLK_END);
-+		return ret;
-+	}
-+	return 0;
-+}
-+static const struct of_device_id imxrt1050_clk_of_match[] = {
-+	{ .compatible = "fsl,imxrt1050-ccm" },
-+	{ /* Sentinel */ },
++		gpt: timer@401ec000 {
++			compatible = "fsl,imxrt1050-gpt", "fsl,imx6dl-gpt", "fsl,imx6sl-gpt";
++			reg = <0x401ec000 0x4000>;
++			interrupts = <100>;
++			clocks = <&clks IMXRT1050_CLK_GPT>;
++			clock-names = "per";
++		};
++	};
 +};
-+MODULE_DEVICE_TABLE(of, imxrt1050_clk_of_match);
-+
-+static struct platform_driver imxrt1050_clk_driver = {
-+	.probe = imxrt1050_clocks_probe,
-+	.driver = {
-+		.name = "imxrt1050-ccm",
-+		.of_match_table = of_match_ptr(imxrt1050_clk_of_match),
-+	},
-+};
-+module_platform_driver(imxrt1050_clk_driver);
 -- 
 2.34.1
 

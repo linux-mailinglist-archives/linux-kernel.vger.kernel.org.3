@@ -2,234 +2,741 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6201F47CC22
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 05:32:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E5A47CC26
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 05:33:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242404AbhLVEcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 23:32:14 -0500
-Received: from mail-eopbgr20111.outbound.protection.outlook.com ([40.107.2.111]:22382
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235909AbhLVEcG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 23:32:06 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dU5ri9dZY5ndfbcK0sdrC44FQgJo9MxewLSvDhwwEMEk7S8buhYOUGh4htjWBtaZAsDlD2/6Hkhx21tsa8x/KDzTSqtncgDH/z5XJUa1rPOpMaREArBD/ESgQ6ZH86trGFqG6P+VHNbb8Xkko7wvbxikkEWpWpqDqvp1ZsK14H9Y+CLh2QealNAp7rNKggeB15MPadUdF2DRe2q3Jw2kQJxeA2DeQvgG90eCsXhLSiR4/JIxtOpeWtuHGE0QVydxKGjbmd1MzZtTO33he+4PzRVNz5Xh9OjvXq34pK8bDuyP9rcytpq+Q3f+pMazDksMiXzKTxHHKi9cyBmRsjASKA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VmgFtFpGJJQfCR4v9U4Yc2RwsCDgwukfzGvaBIGZa/8=;
- b=JfPWXqQvyIP7NnL1mrOmH9Qf0o7ATJhqtneuOhM4gzUuxFheMXyZHNK0o4wFU1817lMl8CZy7X1Q4iEbrEdrgvNs3CDWpcBfsqsYY1jacz4dI/VFcg8fuwPgC36qiZFSiyMIYVRvh+VKc4c/oT0/ELI0HdmUMoCFxXJTc5tCcHg1g3LAbgzc7l0n/k314EOUUVVY+xF80ySil3SD6so0gmdaX5fSGW1Wya5yw+JHRKXnnoQ0JboT1R4SWrzAXGBZLLFzmO1TZ2Ki9s1Lhrch2j5kBTvJS8MCeXYUCxqp8TyZn57B242X53EUAk3Z5EiFoMz/Q6GVrMeaEvOrxZLbZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
- header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VmgFtFpGJJQfCR4v9U4Yc2RwsCDgwukfzGvaBIGZa/8=;
- b=jxkCBAuSlM0UMTlj1BoDFU8JNnDNPFWHPlbOkB1ihEFDCJiy3PT+K2m8ech9S3ftM6xoixPthV6fbtNi/r7UwGJi9JxFm7q+/RivaJm6Cwzhb4z5ZeUjM9ICdwJkmgknrdFS8VTGfXe4C2DC3Ik8gFN3cR15Y5hqcBsA685uSaU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=virtuozzo.com;
-Received: from DB9PR08MB6619.eurprd08.prod.outlook.com (2603:10a6:10:257::21)
- by DBBPR08MB4727.eurprd08.prod.outlook.com (2603:10a6:10:f2::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.19; Wed, 22 Dec
- 2021 04:32:02 +0000
-Received: from DB9PR08MB6619.eurprd08.prod.outlook.com
- ([fe80::347f:d385:ec53:75aa]) by DB9PR08MB6619.eurprd08.prod.outlook.com
- ([fe80::347f:d385:ec53:75aa%7]) with mapi id 15.20.4801.023; Wed, 22 Dec 2021
- 04:32:02 +0000
-Subject: Re: [PATCH] ksmbd: use F_SETLK to force vfs_file_lock() to return
- asynchronously
-To:     Namjae Jeon <linkinjeon@kernel.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steve French <sfrench@samba.org>,
-        Hyunchul Lee <hyc.lee@gmail.com>, kernel@openvz.org,
-        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <e2aef4e7-a9b9-e44e-94a2-29ed6bc20091@virtuozzo.com>
- <CAKYAXd8pCfUBPRXT-44N_g2GD_BKtjboiepgTGz5DQ93YEiz-A@mail.gmail.com>
- <bf92bd1f-d03b-1fb6-ff62-53cca4b441e8@virtuozzo.com>
- <CAKYAXd_z9i6VtMsHmR_FQDwBzGHcjHLv=zicAsddjur=_A071g@mail.gmail.com>
-From:   Vasily Averin <vvs@virtuozzo.com>
-Message-ID: <f210483a-69f7-1983-65cf-f3f5bd4112ac@virtuozzo.com>
-Date:   Wed, 22 Dec 2021 07:32:01 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <CAKYAXd_z9i6VtMsHmR_FQDwBzGHcjHLv=zicAsddjur=_A071g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM6PR04CA0051.eurprd04.prod.outlook.com
- (2603:10a6:20b:f0::28) To DB9PR08MB6619.eurprd08.prod.outlook.com
- (2603:10a6:10:257::21)
+        id S242424AbhLVEc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 23:32:58 -0500
+Received: from mga14.intel.com ([192.55.52.115]:2246 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242423AbhLVEcb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 23:32:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640147551; x=1671683551;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Ayhw8UgqGgeb1tTaoQn+SV4YjVsL1Nw1JdQvu2b/qBw=;
+  b=LCI1wB6ueonRGANZwgU4Fbc2uVxjdYfUHt3t+NdJ6vfejs1NtaWT45Pj
+   zNsACI9N9Md3/Z7xKj4PsPtsXdvF80KELtiyhaW+D43bSFaYT7RKjtEmv
+   TTrcyEDF/ZPC8hNbw5+IQnD652/bebzDhtydeiq3wOnJeWy736JolQFpx
+   HJVDJgVDvV8pIj57kHs/9qgBGulAmX8UAuGgbQ83ur0K8xyA12rGMc2Yi
+   n2F8pm+MbltnKb9Qgr2WybmapEb0PYvzqs/OyL71IeIeE8hVc/Ula+K4K
+   46g/qIk3qZ8j4Ao5wj7Spr21QKBVLNGTKNV/oxGBc7rkMBee0kG2xnTD/
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240768289"
+X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
+   d="scan'208";a="240768289"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 20:32:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
+   d="scan'208";a="617004928"
+Received: from chenyu-desktop.sh.intel.com ([10.239.158.186])
+  by orsmga004.jf.intel.com with ESMTP; 21 Dec 2021 20:32:27 -0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     linux-acpi@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Mike Rapoport <rppt@kernel.org>, Chen Yu <yu.c.chen@intel.com>,
+        Hongyu Ning <hongyu.ning@intel.com>,
+        Aubrey Li <aubrey.li@intel.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH v13 3/4] drivers/acpi: Introduce Platform Firmware Runtime Telemetry
+Date:   Wed, 22 Dec 2021 12:32:02 +0800
+Message-Id: <383fa2feec875c57211b6300d3947dfeabc2fc7c.1640007183.git.yu.c.chen@intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1640007183.git.yu.c.chen@intel.com>
+References: <cover.1640007183.git.yu.c.chen@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 56acd3e0-17e5-4055-a8ca-08d9c504002a
-X-MS-TrafficTypeDiagnostic: DBBPR08MB4727:EE_
-X-Microsoft-Antispam-PRVS: <DBBPR08MB4727C8BFBD18BD754872B8C2AA7D9@DBBPR08MB4727.eurprd08.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NN/M9WiHF5vX/jvzB+ttp79yWCy4XCAZzdXvgr5ZshjCU0cE39CzLr+PUR6UcCSe0ez0cakdTi/iPwOHVWK39dFhtKQO9KY4RLl5qzDBCFQyIj3CmWFXgsvE/ItN50U7UgOfOdMSzNTYHObJ44ek2+T2YJe5OGOYhkKCLzfn0UuaJwerUvEHPUBf6MCfitttPV+bFeue6H68lLRrEOgGE69PU/wxyX353hmDvKxKrvMTLGTaCvuyrF0WZSHtfqRBpXUNWqtnkdK9aRo31Itc5c7Nc91U9XvPOEl1tOKDZnYFmL8uMLL+vHEHK2CAVj4zn1orLK2X3Bf3+iDbA7q7DvFspNEk9lUgqsvIJHOngSsXSo1ACT3iC4r2LDpthwgnnfmhWNKaqM2D1wID/IYEmnc/z3cHJK6QBVVZJ8c4U0GPt4AHS0U/YBNLiaic+VigxSvf3Y7e51e+L1aphd3TL1gRxoRs4S6gH7Yac58WNQ/t3LFwJXs0PsBS6NIOkAAsJEoKfmqgjv8r1PLF6NznRfDo1f1GeXMzK2kCyrvWpUu0rEDBzbYNaZDLkm5l+/jlPw5s1IGo4XKMEFFMs5kTzTCrZVOh88l4ty/8D3MnYZRDAGzmkKimjRvH3Sy335inZDnFMFgdPuMvw4fmnJYMx5olo5f4bMdqhpVDFZLZ1YEMYAxWycbEbUtRsfRvpe2CIBJVaH52XnfgYpGE4RQsSosZtzx7X71y236XpTFJCGRR2lHIa8du/xURTgJ9gLVhNy26sDOyG+CjVcyRIhO7wQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB6619.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6512007)(5660300002)(38100700002)(36756003)(4001150100001)(38350700002)(6916009)(186003)(86362001)(83380400001)(2616005)(8676002)(26005)(2906002)(4326008)(31696002)(31686004)(54906003)(53546011)(6506007)(52116002)(316002)(6486002)(66476007)(66556008)(508600001)(8936002)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?enZhblIvVEt5YzRPamhJbnZ1OEhZd3EvcW1tSFhaaUZmWFRjNy82Y3Vrbk03?=
- =?utf-8?B?QXkvZGIxRUFsOTFOVm00dkNleXF4ZlJYaFBmNThPVzNHeE9GSnNEOXVMMFFi?=
- =?utf-8?B?azJhNUxOOUZlUXRmQ1RuZXlHak9xUk5UT1M3QVAzL0IxR3FVTGZrQzQvT1Bi?=
- =?utf-8?B?Vm5yVGNBN0JHSyt5TG11Qk4wR3Zta3BPVXBxSG1uSTVwaDZjNllSZG5sM2ZI?=
- =?utf-8?B?MU9RVi9oWmlCQUFSdm1jY3BxOHZjbHVoN3J0MWJnSlkzRGFjREV4K090U2Q2?=
- =?utf-8?B?blg2eGZKNTdnbTlKZFBEQnFnaXNaL051eGN4TzVWVUNCbFJOOEhpNVl6UjM0?=
- =?utf-8?B?bFl1dExzejJtVmUvazRlNmtWOEpOMXVTQml1QnIwWHBXYUNRWTZac1RBSG1s?=
- =?utf-8?B?eXM2clNuOXkvbXdxYlpDSkFZamowMGhqaFl0bDUyNll2MjYrOE03T2RXcWc4?=
- =?utf-8?B?WDlGK0h2M3FDM2tiVVcxOVYraDBYaEZodFRmV0ZpQzJFcXlQU3Z3SGdySG5t?=
- =?utf-8?B?ZmZHWjVkVmF1a3BmQVpyTktpV3hsTnR1ay9WQ2RoaVNkeS9UTkZkOXlRS1RS?=
- =?utf-8?B?NHdKWlpHUnlGSERCVnRSZENSYUtWa1dUMVlRWExxSjZGZVF5bWlhQ1Q0QVJm?=
- =?utf-8?B?ZkNNOXIvTjFFVkRtamlHRlUwZkpkZnBrSUJ1VGxsU2tpN2tFMnZqbU5WUDVk?=
- =?utf-8?B?SDVhMHRRVkx0azJlcm1wMmtSQUJ0UWEvVXVyYzh2VW9IeXh4T0p0YXIvbUl2?=
- =?utf-8?B?SytmUEN5K1BQS29lUE1ScFl0RE9ETTNhYWFtRldsMzg5Mkp6M3JHS1lNeTFJ?=
- =?utf-8?B?dGZBVERBTG1qMmo1MC9hWGZudlJlZ3VOQXBLNjhIV08ra0xuYmovRElSQUxS?=
- =?utf-8?B?MmhPczFqcU0zTTdBRW92ekJjWHc5dWtnSXRLRGJmRmtqWE54R2Jpalh0NUZs?=
- =?utf-8?B?ZThBRytMWDM2OGRoVERlc0g4bzJMd1REbFh0d1lxOWFnRVpPeG5nNDExRmpp?=
- =?utf-8?B?ZEFrWE9EVkdqM2FhWlIxVkFJNGJ3c3VuaUtqTmx0K0ZvTHB3RTlMQXRNbkJD?=
- =?utf-8?B?Sm1kYW9COXlCZ2xrY2FVMDI3ZzU1TEtEazJ5UzZWbHVwcmhZZ2F5bjdOaFcz?=
- =?utf-8?B?M3NKSnF0U2c2STQyN0JqRzhtYUtadmhWdXRxbDBqTlZnU3ZVTHFleHpyL293?=
- =?utf-8?B?N2pHeGY5VXc1UDFQRmMxMlA5OTZxQlkvcGNNVGZzSnMrQWFoUkgvVDBtUkJ1?=
- =?utf-8?B?NFg1cW5LQzBXV3pmUDFuSkdnZFRYZ2MxdytBOWZnaFVmNEh6MjdMck5POGZR?=
- =?utf-8?B?eVBzdUtNVSt0bnhMdmwxeURXUjZZbFlHVUJSUFdodzBFUkQ1NUpLWFlxMlFW?=
- =?utf-8?B?b3NPY05mUTdxeW51YnBuSTVDZzV6R2U0YkU3VmVjalAzRDdMNitqTGRtOXg1?=
- =?utf-8?B?ckR1c3BvcTh3Q2RZTyt3WDFiY3U2MmhCQkF0bVNYWmJubUZIMHZmbEFoVjdw?=
- =?utf-8?B?T3lxSVkrNzhxU2dGZFlLZkhCNUlta0FneEhZNmZ0RTlaTkdtWmpoazAwcThi?=
- =?utf-8?B?bktvdzlabVRKNjZncHNiN0pRQzBIV05ydGZHN2dXMklndHNLcW5tSE90RzE5?=
- =?utf-8?B?eGc1a2Z6NHh0SnVWenhYcnErNmREaWQxQm9TSk5oOXJ1c2ZFc3ZKSHB5Qzl3?=
- =?utf-8?B?S1Fyc3pmNkhRVmdEWXEwYVc5cnJoY0d3WWVTeHdjd0k2MWV3VzdrQURDTElw?=
- =?utf-8?B?UEV4MEJkbituRHg1b1U4N3Z4SDlRS3RRT0J4Y1g2K0UxQUxUdmJZejRkZEk1?=
- =?utf-8?B?dnZKQy80eWhNMzl0Vm80UmR3MVl0ZUNSWnIvWEV6eWxhaEtvQS9Qa0s2TWV5?=
- =?utf-8?B?MkpocHFTZ1g1OHVReSsyT3JMVnNSSWlxT2p6cmRuL2xpUjA5Ni9xanFIU08z?=
- =?utf-8?B?RVY0cW5KdWsxV3ZhU1ZaaS9rVjJ0OWJYTjluZU9RT1MrUmpSNGwzcE92ZmZU?=
- =?utf-8?B?aDliemt3VXBSVVBNRXRweHhMdktiSW5jZXRhMmgvUmJ4VlZnV2lRMkZwNTU1?=
- =?utf-8?B?cTBwTzVIckFYOFY0dEdRL012QTE4MGtkMGkyUjEwcWh6aW02WlRWUEk5WklY?=
- =?utf-8?B?ZTkrWGt1WDNmVnlzQzZTaW5OMmhVVjFwMkU3d3JSRTZDdUVlOTFIcEMvbGVV?=
- =?utf-8?Q?JLnuxqMEr1auNGk1TGcHFaA=3D?=
-X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 56acd3e0-17e5-4055-a8ca-08d9c504002a
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR08MB6619.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2021 04:32:02.5830
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GwaVnEKBE86cu+zygB7x0thGRJbhUkJAgC4e1DsQevheOn34Bmd46KRIClzP9qEdX97hHwPcKriIZyXjD6cHZg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR08MB4727
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.12.2021 05:50, Namjae Jeon wrote:
-> 2021-12-21 22:08 GMT+09:00, Vasily Averin <vvs@virtuozzo.com>:
->> On 21.12.2021 15:02, Namjae Jeon wrote:
->>> 2021-12-19 18:34 GMT+09:00, Vasily Averin <vvs@virtuozzo.com>:
->>>> To avoid possible deadlock ksmbd should process locks asynchronously.
->>>> Callers expecting vfs_file_locks() to return asynchronously should only
->>>> use F_SETLK, not F_SETLKW.
->>> Should I check this patch instead of
->>> [PATCH] ksmbd: force "fail immediately" flag on fs with its own ->lock ?
->>
->> no, these patches are independent and both ones are required.
->> current patch fixes incorrect kernel thread behaviour:
->> kernel threads should not use F_SETLKW for locking requests.
-> How does this patch work? posix_lock_file in vfs_lock_file() does not use cmd.
-> And your patch still leaves FL_SLEEP.
+This driver allows user space to fetch telemetry data from the
+firmware with the help of the Platform Firmware Runtime Telemetry
+interface.
 
-"use F_SETLK, not F_SETLKW" was copy-pasted from requirement described in
-comment above vfs_lock_file().
+Both PFRU and PFRT are based on ACPI _DSM interfaces located under
+special device objects in the ACPI Namespace, but these interfaces are
+different from each other, so it is better to provide a separate
+driver from each of them. However, they share some common definitions
+and naming conventions.
 
-posix_lock_file() is not used in all ->lock() functions, and use F_SETLKW
-forces some of affected filesystem use blocking locks:
+Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Ashok Raj <ashok.raj@intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Len Brown <lenb@kernel.org>
+Cc: Mike Rapoport <rppt@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Tested-by: Hongyu Ning <hongyu.ning@intel.com>
+Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+---
+v13:Print the _DSM failure result if invalid EFI capsule is provided.
+    (Hongyu Ning)
+v12:Change the subject to "Introduce Platform Firmware Runtime
+    Telemetry", because there is no "update" part in it.
+    (Rafael J. Wysocki)
+    Revise the commit log.(Rafael J. Wysocki)
+    Move pfr_update.c and pfr_telemetry.c) directly in drivers/acpi/
+    (Rafael J. Wysocki)
+    Update Kconfig with the information regarding PFRT
+    (Rafael J. Wysocki)
+    Describe the driver briefly at the beginning of the source code
+    (Rafael J. Wysocki)
+    Replace all PFRU prefix with PFRT.(Rafael J. Wysocki)
+    Rename pfru_log_device to pfrt_log_device(Rafael J. Wysocki)
+    Rename pfru_log_ida to pfrt_log_ida(Rafael J. Wysocki)
+    Replace pfru with pfrt prefix for all function names.
+    (Rafael J. Wysocki)
+    Use blank lines to separate the cases visually from each
+    other.(Rafael J. Wysocki)
+    Replace pfru_telemetry%d with pfrt%d, and
+    acpi_pfru_telemetry%d to acpi_pfr_telemetry.
+    (Rafael J. Wysocki)
+v11:No change since v10.
+v10:Remove the explicit assignment of the last item of enum.
+    (Andy Shevchenko)
+v9: Use GUID_INIT() instead of guid_parse() during boot up.
+    (Andy Shevchenko)
+    Drop uuid from struct pfru_log_device.(Andy Shevchenko)
+    Use kfree() instead of ACPI_FREE() in non-ACPICA usage.
+    (Andy Shevchenko)
+    Use devm_add_action_or_reset() to add ida release into dev resource
+    management. (Andy Shevchenko)
+    Use devm_kasprintf() instead of kasprintf() to format the
+    pfru_log_dev name.(Andy Shevchenko)
+    Remove redundant 0 in acpi_pfru_log_ids. (Andy Shevchenko)
+v8: Add blank line between generic include header and uapi header.
+    (Andy Shevchenko)
+    Arrange the order between devm_kzalloc() and normal allocation in
+    acpi_pfru_log_probe() that, the former should always be ahead of the
+    latter. (Andy Shevchenko)
+    Amend commit message to elaborate the reason why PFRU and PRFU_Telemetry
+    drivers look the same. (Andy Shevchenko)
+v7: Use ida_alloc() to allocate a ID, and release the ID when
+    device is removed. (Greg Kroah-Hartman)
+    Check the _DSM method at early stage, before allocate or parse
+    anything in acpi_pfru_log_probe(). (Greg Kroah-Hartman)
+    Set the parent of the misc device. (Greg Kroah-Hartman)
+    Use module_platform_driver() instead of platform_driver_register()
+    in module_init(). Separate pfru driver and pfru_telemetry driver
+    to two files. (Greg Kroah-Hartman) 
+v6: Remove linux/uuid.h and use raw buffers to contain uuid.
+    (Andy Shevchenko)
+    Include types.h in pfru.h. (Andy Shevchenko)
+    Use __u8[16] instead of uuid_t. (Andy Shevchenko)
+    Replace enum in pfru.h with __u32 as enum size is not the
+    same on all possible architectures.
+    (Andy Shevchenko)
+    Directly return results from the switch cases in pfru_log_ioctl().
+    (Andy Shevchenko)
+v5: Remove the log output sample in commit log. (Greg Kroah-Hartman)
+    Add link for corresponding userspace tool in the commit log.
+    (Greg Kroah-Hartman)
+    Replace the telemetry .read() with .mmap() so that the userspace
+    could mmap once, and read multiple times. (Greg Kroah-Hartman)
+    Fix the compile warning by declaring the pfru_log_ioctl() as
+    static. (kernel test robot LKP)
+v4: Change the write() to be the code injection/update, the read() to
+    be telemetry retrieval and all of the rest to be ioctl()s under
+    one special device file.(Rafael J. Wysocki)
+    Remove redundant parens. (Rafael J. Wysocki)
+    Putting empty code lines after an if () statement that is not
+    followed by a block. (Rafael J. Wysocki)
+    Remove "goto" tags to make the code more readable. (Rafael J. Wysocki)
+v3: Use __u32 instead of int and __64 instead of unsigned long
+    in include/uapi/linux/pfru.h (Greg Kroah-Hartman)
+    Rename the structure in uapi to start with a prefix pfru so as
+    to avoid confusing in the global namespace. (Greg Kroah-Hartman)
+v2: Do similar clean up as pfru_update driver:
+    Add sanity check for duplicated instance of ACPI device.
+    Update the driver to work with allocated telem_device objects.
+    (Mike Rapoport)
+    For each switch case pair, get rid of the magic case numbers
+    and add a default clause with the error handling.
+    (Mike Rapoport)
+---
+ drivers/acpi/Kconfig         |   8 +-
+ drivers/acpi/Makefile        |   2 +-
+ drivers/acpi/pfr_telemetry.c | 434 +++++++++++++++++++++++++++++++++++
+ include/uapi/linux/pfrut.h   |  88 +++++++
+ 4 files changed, 529 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/acpi/pfr_telemetry.c
 
-fs/ceph/locks.c::ceph_lock()
-        /* set wait bit as appropriate, then make command as Ceph expects it*/
-        if (IS_GETLK(cmd))
-                op = CEPH_MDS_OP_GETFILELOCK;
-        else if (IS_SETLKW(cmd))
-                wait = 1
-
-nfs v3 handles it in nlmclnt_proc
-fs/lockd/clntproc.c::nlmclnt_proc
-        if (IS_SETLK(cmd) || IS_SETLKW(cmd)) {
-                if (fl->fl_type != F_UNLCK) {
-                        call->a_args.block = IS_SETLKW(cmd) ? 1 : 0;
-
-
-nvs v4 handles it in nfs4_retry_setlk()
-fs/nfs/nfs4proc.c()::nfs4_retry_setlk()
-        while(!signalled()) {
-                status = nfs4_proc_setlk(state, cmd, request);
-                if ((status != -EAGAIN) || IS_SETLK(cmd))
-                        break;
-
-gfs2_lock and ocfs calls dlm_posix_lock()
-dlm_posix_lock::dlm_posix_lock()
-op->info.wait           = IS_SETLKW(cmd)
-
-So if ksmbd will try to export these file systems it can be deadlocked on blocking locks processing,
-even with my patch dropped FL_SLEEP.
-
-To be honest, some other filesystems, contrary, ignores cmd and handles FL_SLEEP instead:
-cifs_lock and fuse_setlk.  Moreover, locks_lock_file_wait() is widely used too,
-(and can block if FL_SLEEP is set). Some of these cases looks like bugs,
-its careful processing requires some time, therefore right now, to quickly work around
-all these cases kernel export threads  (nfsd/lockd/ksmbd) can drop to FL_SLEEP flag).
-
-I think it makes sense to create new bug on bugzilla.kernel.org, explain all details of this problem,
-and keep you informed about progress with filesystems fixes. When all file systems will be fixed,
-it allows you to revert "ksmbd: force "fail immediately" flag on fs with its own ->lock"
-
-Thank you,
-	Vasily Averin
-
->> "[PATCH] ksmbd: force "fail immediately" flag on fs with its own ->lock"
->> tries to workaround the incorrect behaviour of some exported filesystems.
->>
->> Currently this way is used in nfsd and lockd, however it is not fully
->> correct,
->> and I still search some better solution, so perhaps
->> '[PATCH] ksmbd: force "fail immediately" flag on fs with its own ->lock'
->> will be dropped later.
->>
->> Thank you,
->> 	Vasily Averin
->>
->>>> Signed-off-by: Vasily Averin <vvs@virtuozzo.com>
->>>> ---
->>>>  fs/ksmbd/smb2pdu.c | 4 ++--
->>>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
->>>> index 0c020deb76bb..34f333549767 100644
->>>> --- a/fs/ksmbd/smb2pdu.c
->>>> +++ b/fs/ksmbd/smb2pdu.c
->>>> @@ -6646,13 +6646,13 @@ static int smb2_set_flock_flags(struct file_lock
->>>> *flock, int flags)
->>>>  	switch (flags) {
->>>>  	case SMB2_LOCKFLAG_SHARED:
->>>>  		ksmbd_debug(SMB, "received shared request\n");
->>>> -		cmd = F_SETLKW;
->>>> +		cmd = F_SETLK;
->>>>  		flock->fl_type = F_RDLCK;
->>>>  		flock->fl_flags |= FL_SLEEP;
->>>>  		break;
->>>>  	case SMB2_LOCKFLAG_EXCLUSIVE:
->>>>  		ksmbd_debug(SMB, "received exclusive request\n");
->>>> -		cmd = F_SETLKW;
->>>> +		cmd = F_SETLK;
->>>>  		flock->fl_type = F_WRLCK;
->>>>  		flock->fl_flags |= FL_SLEEP;
->>>>  		break;
->>>> --
->>>> 2.25.1
->>>>
->>>>
->>
->>
+diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+index d0b3ca9d4a97..91f1da16934d 100644
+--- a/drivers/acpi/Kconfig
++++ b/drivers/acpi/Kconfig
+@@ -532,8 +532,12 @@ config ACPI_PFRUT
+ 	  The existing firmware code can be modified (driver update) or
+ 	  extended by adding new code to the firmware (code injection).
+ 
+-	  To compile this driver as module, choose M here:
+-	  the module will be called pfr_update.
++	  Besides, the telemetry driver allows user space to fetch telemetry
++	  data from the firmware with the help of the Platform Firmware Runtime
++	  Telemetry interface.
++
++	  To compile the drivers as modules, choose M here:
++	  the modules will be called pfr_update and pfr_telemetry.
+ 
+ if ARM64
+ source "drivers/acpi/arm64/Kconfig"
+diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
+index 2ad2e821cc08..d3dc79298ce3 100644
+--- a/drivers/acpi/Makefile
++++ b/drivers/acpi/Makefile
+@@ -102,7 +102,7 @@ obj-$(CONFIG_ACPI_CPPC_LIB)	+= cppc_acpi.o
+ obj-$(CONFIG_ACPI_SPCR_TABLE)	+= spcr.o
+ obj-$(CONFIG_ACPI_DEBUGGER_USER) += acpi_dbg.o
+ obj-$(CONFIG_ACPI_PPTT) 	+= pptt.o
+-obj-$(CONFIG_ACPI_PFRUT)	+= pfr_update.o
++obj-$(CONFIG_ACPI_PFRUT)	+= pfr_update.o pfr_telemetry.o
+ 
+ # processor has its own "processor." module_param namespace
+ processor-y			:= processor_driver.o
+diff --git a/drivers/acpi/pfr_telemetry.c b/drivers/acpi/pfr_telemetry.c
+new file mode 100644
+index 000000000000..da50dd80192c
+--- /dev/null
++++ b/drivers/acpi/pfr_telemetry.c
+@@ -0,0 +1,434 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * ACPI Platform Firmware Runtime Telemetry driver
++ *
++ * Copyright (C) 2021 Intel Corporation
++ * Author: Chen Yu <yu.c.chen@intel.com>
++ *
++ * This driver allows user space to fetch telemetry data from the
++ * firmware with the help of the Platform Firmware Runtime Telemetry
++ * interface.
++ */
++#include <linux/acpi.h>
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/errno.h>
++#include <linux/file.h>
++#include <linux/fs.h>
++#include <linux/miscdevice.h>
++#include <linux/module.h>
++#include <linux/mm.h>
++#include <linux/platform_device.h>
++#include <linux/string.h>
++#include <linux/uaccess.h>
++#include <linux/uio.h>
++#include <linux/uuid.h>
++
++#include <uapi/linux/pfrut.h>
++
++#define PFRT_LOG_EXEC_IDX	0
++#define PFRT_LOG_HISTORY_IDX	1
++
++#define PFRT_LOG_ERR		0
++#define PFRT_LOG_WARN	1
++#define PFRT_LOG_INFO	2
++#define PFRT_LOG_VERB	4
++
++#define PFRT_FUNC_SET_LEV		1
++#define PFRT_FUNC_GET_LEV		2
++#define PFRT_FUNC_GET_DATA		3
++
++#define PFRT_REVID_1		1
++#define PFRT_REVID_2		2
++#define PFRT_DEFAULT_REV_ID	PFRT_REVID_1
++
++enum log_index {
++	LOG_STATUS_IDX = 0,
++	LOG_EXT_STATUS_IDX = 1,
++	LOG_MAX_SZ_IDX = 2,
++	LOG_CHUNK1_LO_IDX = 3,
++	LOG_CHUNK1_HI_IDX = 4,
++	LOG_CHUNK1_SZ_IDX = 5,
++	LOG_CHUNK2_LO_IDX = 6,
++	LOG_CHUNK2_HI_IDX = 7,
++	LOG_CHUNK2_SZ_IDX = 8,
++	LOG_ROLLOVER_CNT_IDX = 9,
++	LOG_RESET_CNT_IDX = 10,
++	LOG_NR_IDX
++};
++
++struct pfrt_log_device {
++	int index;
++	struct pfrt_log_info info;
++	struct device *parent_dev;
++	struct miscdevice miscdev;
++};
++
++/* pfrt_guid is the parameter for _DSM method */
++static const guid_t pfrt_log_guid =
++	GUID_INIT(0x75191659, 0x8178, 0x4D9D, 0xB8, 0x8F, 0xAC, 0x5E,
++		  0x5E, 0x93, 0xE8, 0xBF);
++
++static DEFINE_IDA(pfrt_log_ida);
++
++static inline struct pfrt_log_device *to_pfrt_log_dev(struct file *file)
++{
++	return container_of(file->private_data, struct pfrt_log_device, miscdev);
++}
++
++static int get_pfrt_log_data_info(struct pfrt_log_data_info *data_info,
++				  struct pfrt_log_device *pfrt_log_dev)
++{
++	acpi_handle handle = ACPI_HANDLE(pfrt_log_dev->parent_dev);
++	union acpi_object *out_obj, in_obj, in_buf;
++	int ret = -EBUSY;
++
++	memset(&in_obj, 0, sizeof(in_obj));
++	memset(&in_buf, 0, sizeof(in_buf));
++	in_obj.type = ACPI_TYPE_PACKAGE;
++	in_obj.package.count = 1;
++	in_obj.package.elements = &in_buf;
++	in_buf.type = ACPI_TYPE_INTEGER;
++	in_buf.integer.value = pfrt_log_dev->info.log_type;
++
++	out_obj = acpi_evaluate_dsm_typed(handle, &pfrt_log_guid,
++					  pfrt_log_dev->info.log_revid, PFRT_FUNC_GET_DATA,
++					  &in_obj, ACPI_TYPE_PACKAGE);
++	if (!out_obj)
++		return -EINVAL;
++
++	if (out_obj->package.count < LOG_NR_IDX ||
++	    out_obj->package.elements[LOG_STATUS_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_EXT_STATUS_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_MAX_SZ_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_CHUNK1_LO_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_CHUNK1_HI_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_CHUNK1_SZ_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_CHUNK2_LO_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_CHUNK2_HI_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_CHUNK2_SZ_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_ROLLOVER_CNT_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_RESET_CNT_IDX].type != ACPI_TYPE_INTEGER)
++		goto free_acpi_buffer;
++
++	data_info->status = out_obj->package.elements[LOG_STATUS_IDX].integer.value;
++	data_info->ext_status =
++		out_obj->package.elements[LOG_EXT_STATUS_IDX].integer.value;
++	if (data_info->status != DSM_SUCCEED) {
++		dev_dbg(pfrt_log_dev->parent_dev, "Error Status:%d\n", data_info->status);
++		dev_dbg(pfrt_log_dev->parent_dev, "Error Extend Status:%d\n",
++			data_info->ext_status);
++		goto free_acpi_buffer;
++	}
++
++	data_info->max_data_size =
++		out_obj->package.elements[LOG_MAX_SZ_IDX].integer.value;
++	data_info->chunk1_addr_lo =
++		out_obj->package.elements[LOG_CHUNK1_LO_IDX].integer.value;
++	data_info->chunk1_addr_hi =
++		out_obj->package.elements[LOG_CHUNK1_HI_IDX].integer.value;
++	data_info->chunk1_size =
++		out_obj->package.elements[LOG_CHUNK1_SZ_IDX].integer.value;
++	data_info->chunk2_addr_lo =
++		out_obj->package.elements[LOG_CHUNK2_LO_IDX].integer.value;
++	data_info->chunk2_addr_hi =
++		out_obj->package.elements[LOG_CHUNK2_HI_IDX].integer.value;
++	data_info->chunk2_size =
++		out_obj->package.elements[LOG_CHUNK2_SZ_IDX].integer.value;
++	data_info->rollover_cnt =
++		out_obj->package.elements[LOG_ROLLOVER_CNT_IDX].integer.value;
++	data_info->reset_cnt =
++		out_obj->package.elements[LOG_RESET_CNT_IDX].integer.value;
++
++	ret = 0;
++
++free_acpi_buffer:
++	kfree(out_obj);
++
++	return ret;
++}
++
++static int set_pfrt_log_level(int level, struct pfrt_log_device *pfrt_log_dev)
++{
++	acpi_handle handle = ACPI_HANDLE(pfrt_log_dev->parent_dev);
++	union acpi_object *out_obj, *obj, in_obj, in_buf;
++	enum pfru_dsm_status status, ext_status;
++	int ret = 0;
++
++	memset(&in_obj, 0, sizeof(in_obj));
++	memset(&in_buf, 0, sizeof(in_buf));
++	in_obj.type = ACPI_TYPE_PACKAGE;
++	in_obj.package.count = 1;
++	in_obj.package.elements = &in_buf;
++	in_buf.type = ACPI_TYPE_INTEGER;
++	in_buf.integer.value = level;
++
++	out_obj = acpi_evaluate_dsm_typed(handle, &pfrt_log_guid,
++					  pfrt_log_dev->info.log_revid, PFRT_FUNC_SET_LEV,
++					  &in_obj, ACPI_TYPE_PACKAGE);
++	if (!out_obj)
++		return -EINVAL;
++
++	obj = &out_obj->package.elements[0];
++	status = obj->integer.value;
++	if (status != DSM_SUCCEED) {
++		obj = &out_obj->package.elements[1];
++		ext_status = obj->integer.value;
++		dev_dbg(pfrt_log_dev->parent_dev, "Error Status:%d\n", status);
++		dev_dbg(pfrt_log_dev->parent_dev, "Error Extend Status:%d\n", ext_status);
++		ret = -EBUSY;
++	}
++
++	kfree(out_obj);
++
++	return ret;
++}
++
++static int get_pfrt_log_level(struct pfrt_log_device *pfrt_log_dev)
++{
++	acpi_handle handle = ACPI_HANDLE(pfrt_log_dev->parent_dev);
++	union acpi_object *out_obj, *obj;
++	enum pfru_dsm_status status, ext_status;
++	int ret = -EBUSY;
++
++	out_obj = acpi_evaluate_dsm_typed(handle, &pfrt_log_guid,
++					  pfrt_log_dev->info.log_revid, PFRT_FUNC_GET_LEV,
++					  NULL, ACPI_TYPE_PACKAGE);
++	if (!out_obj)
++		return -EINVAL;
++
++	obj = &out_obj->package.elements[0];
++	if (obj->type != ACPI_TYPE_INTEGER)
++		goto free_acpi_buffer;
++
++	status = obj->integer.value;
++	if (status != DSM_SUCCEED) {
++		obj = &out_obj->package.elements[1];
++		ext_status = obj->integer.value;
++		dev_dbg(pfrt_log_dev->parent_dev, "Error Status:%d\n", status);
++		dev_dbg(pfrt_log_dev->parent_dev, "Error Extend Status:%d\n", ext_status);
++		goto free_acpi_buffer;
++	}
++
++	obj = &out_obj->package.elements[2];
++	if (obj->type != ACPI_TYPE_INTEGER)
++		goto free_acpi_buffer;
++
++	ret = obj->integer.value;
++
++free_acpi_buffer:
++	kfree(out_obj);
++
++	return ret;
++}
++
++static int valid_log_level(u32 level)
++{
++	return level == PFRT_LOG_ERR || level == PFRT_LOG_WARN ||
++	       level == PFRT_LOG_INFO || level == PFRT_LOG_VERB;
++}
++
++static int valid_log_type(u32 type)
++{
++	return type == PFRT_LOG_EXEC_IDX || type == PFRT_LOG_HISTORY_IDX;
++}
++
++static inline int valid_log_revid(u32 id)
++{
++	return id == PFRT_REVID_1 || id == PFRT_REVID_2;
++}
++
++static long pfrt_log_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
++{
++	struct pfrt_log_device *pfrt_log_dev = to_pfrt_log_dev(file);
++	struct pfrt_log_data_info data_info;
++	struct pfrt_log_info info;
++	void __user *p;
++	int ret = 0;
++
++	p = (void __user *)arg;
++
++	switch (cmd) {
++	case PFRT_LOG_IOC_SET_INFO:
++		if (copy_from_user(&info, p, sizeof(info)))
++			return -EFAULT;
++
++		if (valid_log_revid(info.log_revid))
++			pfrt_log_dev->info.log_revid = info.log_revid;
++
++		if (valid_log_level(info.log_level)) {
++			ret = set_pfrt_log_level(info.log_level, pfrt_log_dev);
++			if (ret < 0)
++				return ret;
++
++			pfrt_log_dev->info.log_level = info.log_level;
++		}
++
++		if (valid_log_type(info.log_type))
++			pfrt_log_dev->info.log_type = info.log_type;
++
++		return 0;
++
++	case PFRT_LOG_IOC_GET_INFO:
++		info.log_level = get_pfrt_log_level(pfrt_log_dev);
++		if (ret < 0)
++			return ret;
++
++		info.log_type = pfrt_log_dev->info.log_type;
++		info.log_revid = pfrt_log_dev->info.log_revid;
++		if (copy_to_user(p, &info, sizeof(info)))
++			return -EFAULT;
++
++		return 0;
++
++	case PFRT_LOG_IOC_GET_DATA_INFO:
++		ret = get_pfrt_log_data_info(&data_info, pfrt_log_dev);
++		if (ret)
++			return ret;
++
++		if (copy_to_user(p, &data_info, sizeof(struct pfrt_log_data_info)))
++			return -EFAULT;
++
++		return 0;
++
++	default:
++		return -ENOTTY;
++	}
++}
++
++static int
++pfrt_log_mmap(struct file *file, struct vm_area_struct *vma)
++{
++	struct pfrt_log_device *pfrt_log_dev;
++	struct pfrt_log_data_info info;
++	unsigned long psize, vsize;
++	phys_addr_t base_addr;
++	int ret;
++
++	if (vma->vm_flags & VM_WRITE)
++		return -EROFS;
++
++	/* changing from read to write with mprotect is not allowed */
++	vma->vm_flags &= ~VM_MAYWRITE;
++
++	pfrt_log_dev = to_pfrt_log_dev(file);
++
++	ret = get_pfrt_log_data_info(&info, pfrt_log_dev);
++	if (ret)
++		return ret;
++
++	base_addr = (phys_addr_t)((info.chunk2_addr_hi << 32) | info.chunk2_addr_lo);
++	/* pfrt update has not been launched yet */
++	if (!base_addr)
++		return -ENODEV;
++
++	psize = info.max_data_size;
++	/* base address and total buffer size must be page aligned */
++	if (!PAGE_ALIGNED(base_addr) || !PAGE_ALIGNED(psize))
++		return -ENODEV;
++
++	vsize = vma->vm_end - vma->vm_start;
++	if (vsize > psize)
++		return -EINVAL;
++
++	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
++	if (io_remap_pfn_range(vma, vma->vm_start, PFN_DOWN(base_addr),
++			       vsize, vma->vm_page_prot))
++		return -EAGAIN;
++
++	return 0;
++}
++
++static const struct file_operations acpi_pfrt_log_fops = {
++	.owner		= THIS_MODULE,
++	.mmap		= pfrt_log_mmap,
++	.unlocked_ioctl = pfrt_log_ioctl,
++	.llseek		= noop_llseek,
++};
++
++static int acpi_pfrt_log_remove(struct platform_device *pdev)
++{
++	struct pfrt_log_device *pfrt_log_dev = platform_get_drvdata(pdev);
++
++	misc_deregister(&pfrt_log_dev->miscdev);
++
++	return 0;
++}
++
++static void pfrt_log_put_idx(void *data)
++{
++	struct pfrt_log_device *pfrt_log_dev = data;
++
++	ida_free(&pfrt_log_ida, pfrt_log_dev->index);
++}
++
++static int acpi_pfrt_log_probe(struct platform_device *pdev)
++{
++	acpi_handle handle = ACPI_HANDLE(&pdev->dev);
++	struct pfrt_log_device *pfrt_log_dev;
++	int ret;
++
++	if (!acpi_has_method(handle, "_DSM")) {
++		dev_dbg(&pdev->dev, "Missing _DSM\n");
++		return -ENODEV;
++	}
++
++	pfrt_log_dev = devm_kzalloc(&pdev->dev, sizeof(*pfrt_log_dev), GFP_KERNEL);
++	if (!pfrt_log_dev)
++		return -ENOMEM;
++
++	ret = ida_alloc(&pfrt_log_ida, GFP_KERNEL);
++	if (ret < 0)
++		return ret;
++
++	pfrt_log_dev->index = ret;
++	ret = devm_add_action_or_reset(&pdev->dev, pfrt_log_put_idx, pfrt_log_dev);
++	if (ret)
++		return ret;
++
++	pfrt_log_dev->info.log_revid = PFRT_DEFAULT_REV_ID;
++	pfrt_log_dev->parent_dev = &pdev->dev;
++
++	pfrt_log_dev->miscdev.minor = MISC_DYNAMIC_MINOR;
++	pfrt_log_dev->miscdev.name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
++						    "pfrt%d",
++						    pfrt_log_dev->index);
++	if (!pfrt_log_dev->miscdev.name)
++		return -ENOMEM;
++
++	pfrt_log_dev->miscdev.nodename = devm_kasprintf(&pdev->dev, GFP_KERNEL,
++							"acpi_pfr_telemetry%d",
++							pfrt_log_dev->index);
++	if (!pfrt_log_dev->miscdev.nodename)
++		return -ENOMEM;
++
++	pfrt_log_dev->miscdev.fops = &acpi_pfrt_log_fops;
++	pfrt_log_dev->miscdev.parent = &pdev->dev;
++
++	ret = misc_register(&pfrt_log_dev->miscdev);
++	if (ret)
++		return ret;
++
++	platform_set_drvdata(pdev, pfrt_log_dev);
++
++	return 0;
++}
++
++static const struct acpi_device_id acpi_pfrt_log_ids[] = {
++	{"INTC1081"},
++	{}
++};
++MODULE_DEVICE_TABLE(acpi, acpi_pfrt_log_ids);
++
++static struct platform_driver acpi_pfrt_log_driver = {
++	.driver = {
++		.name = "pfr_telemetry",
++		.acpi_match_table = acpi_pfrt_log_ids,
++	},
++	.probe = acpi_pfrt_log_probe,
++	.remove = acpi_pfrt_log_remove,
++};
++module_platform_driver(acpi_pfrt_log_driver);
++
++MODULE_DESCRIPTION("Platform Firmware Runtime Update Telemetry driver");
++MODULE_LICENSE("GPL v2");
+diff --git a/include/uapi/linux/pfrut.h b/include/uapi/linux/pfrut.h
+index fa97e80a93b7..42fa15f8310d 100644
+--- a/include/uapi/linux/pfrut.h
++++ b/include/uapi/linux/pfrut.h
+@@ -171,4 +171,92 @@ struct pfru_updated_result {
+ 	__u64 high_exec_time;
+ };
+ 
++/**
++ * struct pfrt_log_data_info - Log Data from telemetry service.
++ * @status: Indicator of whether this update succeed.
++ * @ext_status: Implementation specific update result.
++ * @chunk1_addr_lo: Low 32bit physical address of the telemetry data chunk1
++ *                  starting address.
++ * @chunk1_addr_hi: High 32bit physical address of the telemetry data chunk1
++ *                  starting address.
++ * @chunk2_addr_lo: Low 32bit physical address of the telemetry data chunk2
++ *                  starting address.
++ * @chunk2_addr_hi: High 32bit physical address of the telemetry data chunk2
++ *                  starting address.
++ * @max_data_size: Maximum supported size of data of all data chunks combined.
++ * @chunk1_size: Data size in bytes of the telemetry data chunk1 buffer.
++ * @chunk2_size: Data size in bytes of the telemetry data chunk2 buffer.
++ * @rollover_cnt: Number of times telemetry data buffer is overwritten
++ *                since telemetry buffer reset.
++ * @reset_cnt: Number of times telemetry services resets that results in
++ *             rollover count and data chunk buffers are reset.
++ */
++struct pfrt_log_data_info {
++	__u32 status;
++	__u32 ext_status;
++	__u64 chunk1_addr_lo;
++	__u64 chunk1_addr_hi;
++	__u64 chunk2_addr_lo;
++	__u64 chunk2_addr_hi;
++	__u32 max_data_size;
++	__u32 chunk1_size;
++	__u32 chunk2_size;
++	__u32 rollover_cnt;
++	__u32 reset_cnt;
++};
++
++/**
++ * struct pfrt_log_info - Telemetry log information.
++ * @log_level: The telemetry log level.
++ * @log_type: The telemetry log type(history and execution).
++ * @log_revid: The telemetry log revision id.
++ */
++struct pfrt_log_info {
++	__u32 log_level;
++	__u32 log_type;
++	__u32 log_revid;
++};
++
++/**
++ * PFRT_LOG_IOC_SET_INFO - _IOW(PFRUT_IOCTL_MAGIC, 0x06,
++ *				struct pfrt_log_info)
++ *
++ * Return:
++ * * 0			- success
++ * * -EFAULT		- fail to get the setting parameter
++ * * -EINVAL		- fail to set the log level
++ *
++ * Set the PFRT log level and log type. The input information is
++ * a struct pfrt_log_info.
++ */
++#define PFRT_LOG_IOC_SET_INFO _IOW(PFRUT_IOCTL_MAGIC, 0x06, struct pfrt_log_info)
++
++/**
++ * PFRT_LOG_IOC_GET_INFO - _IOR(PFRUT_IOCTL_MAGIC, 0x07,
++ *				struct pfrt_log_info)
++ *
++ * Return:
++ * * 0			- success
++ * * -EINVAL		- fail to get the log level
++ * * -EFAULT		- fail to copy the result back to userspace
++ *
++ * Retrieve log level and log type of the telemetry. The information is
++ * a struct pfrt_log_info.
++ */
++#define PFRT_LOG_IOC_GET_INFO _IOR(PFRUT_IOCTL_MAGIC, 0x07, struct pfrt_log_info)
++
++/**
++ * PFRT_LOG_IOC_GET_DATA_INFO - _IOR(PFRUT_IOCTL_MAGIC, 0x08,
++ *				     struct pfrt_log_data_info)
++ *
++ * Return:
++ * * 0			- success
++ * * -EINVAL		- fail to get the log buffer information
++ * * -EFAULT		- fail to copy the log buffer information to userspace
++ *
++ * Retrieve data information about the telemetry. The information
++ * is a struct pfrt_log_data_info.
++ */
++#define PFRT_LOG_IOC_GET_DATA_INFO _IOR(PFRUT_IOCTL_MAGIC, 0x08, struct pfrt_log_data_info)
++
+ #endif /* __PFRUT_H__ */
+-- 
+2.25.1
 

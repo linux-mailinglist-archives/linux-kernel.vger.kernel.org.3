@@ -2,87 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A54947D558
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2823347D47A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 16:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344192AbhLVQo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 11:44:26 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:64872 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343994AbhLVQna (ORCPT
+        id S1343792AbhLVP5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 10:57:48 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:49975 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343765AbhLVP5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 11:43:30 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
- id 6d670e2c93a6c7f1; Wed, 22 Dec 2021 17:43:29 +0100
-Received: from kreacher.localnet (unknown [213.134.181.48])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 05FAF66AF2B;
-        Wed, 22 Dec 2021 17:43:28 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>
-Subject: [PATCH 00/19] ACPICA: ACPICA 20211217
-Date:   Wed, 22 Dec 2021 16:56:02 +0100
-Message-ID: <11889746.O9o76ZdvQC@kreacher>
+        Wed, 22 Dec 2021 10:57:47 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 6569660013;
+        Wed, 22 Dec 2021 15:57:44 +0000 (UTC)
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        linux-wpan@vger.kernel.org
+Cc:     David Girault <david.girault@qorvo.com>,
+        Romuald Despres <romuald.despres@qorvo.com>,
+        Frederic Blain <frederic.blain@qorvo.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        <linux-kernel@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [net-next 00/18] IEEE 802.15.4 passive scan support
+Date:   Wed, 22 Dec 2021 16:57:25 +0100
+Message-Id: <20211222155743.256280-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.181.48
-X-CLIENT-HOSTNAME: 213.134.181.48
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddruddtiedgkeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedtiefhlefgkeeiueetffdvfeektdfhhfetheejgeefleekgfejtdeffffhteelieenucffohhmrghinheprggtphhitggrrdhorhhgnecukfhppedvudefrddufeegrddukedurdegkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurdegkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohgsvghrthdrmhhoohhrvgesihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+Hello,
 
-This series of patches is a set of ACPICA 20211217 changes described at
-https://acpica.org/sites/acpica/files/changes_61.txt ported to Linux.
+Here is a series attempting to bring support for passive scans in the
+IEEE 802.15.4 stack. A second series follows in order to align the
+tooling with these changes, bringing support for a number of new
+features such as:
 
-It contains the following material:
+* Passively sending (or stopping) beacons. So far only intervals ranging
+  from 0 to 14 are valid. Bigger values would request the PAN
+  coordinator to answer BEACONS_REQ (active scans), this is not
+  supported yet.
+  # iwpan dev wpan0 beacons send interval 2
+  # iwpan dev wpan0 beacons stop
 
-Bob Moore (7):
-      ACPICA: iASL/Disassembler: Additional support for NHLT table
-      ACPICA: iASL Table Compiler: Complete NHLT table support
-      ACPICA: Change a return_ACPI_STATUS (AE_BAD_PARAMETER)
-      ACPICA: Fixed a couple of warnings under MSVC
-      ACPICA: iASL: Add TDEL table to both compiler/disassembler
-      ACPICA: iASL/NHLT table: "Specific Data" field support
-      ACPICA: Update version to 20211217
+* Scanning all the channels or only a subset:
+  # iwpan dev wpan1 scan type passive duration 3
 
-Ilkka Koskinen (1):
-      ACPICA: iASL: Add suppport for AGDI table
+* If a beacon is received during this operation the internal PAN list is
+  updated and can be dumped or flushed with:
+  # iwpan dev wpan1 pans dump
+  PAN 0xffff (on wpan1)
+      coordinator 0x2efefdd4cdbf9330
+      page 0
+      channel 13
+      superframe spec. 0xcf22
+      LQI 0
+      seen 7156ms ago
+  # iwpan dev wpan1 pans flush
 
-Jessica Clarke (4):
-      ACPICA: Use original data_table_region pointer for accesses
-      ACPICA: Use original pointer for virtual origin tables
-      ACPICA: Macros: Remove ACPI_PHYSADDR_TO_PTR
-      ACPICA: Avoid subobject buffer overflow when validating RSDP signature
+* It is also possible to monitor the events with:
+  # iwpan event
 
-Kirill A. Shutemov (1):
-      ACPICA: Hardware: Do not flush CPU cache when entering S4 and S5
+* As well as triggering a non blocking scan:
+  # iwpan dev wpan1 scan trigger type passive duration 3
+  # iwpan dev wpan1 scan done
+  # iwpan dev wpan1 scan abort
 
-Mark Langsdorf (1):
-      ACPICA: actypes.h: Expand the ACPI_ACCESS_ definitions
+The PAN list gets automatically updated by dropping the expired PANs
+each time the user requests access to the list.
 
-Rafael J. Wysocki (2):
-      ACPICA: Utilities: Avoid deleting the same object twice in a row
-      ACPICA: Executer: Fix the REFCLASS_REFOF case in acpi_ex_opcode_1A_0T_1R ()
+Internally, both requests (scan/beacons) are handled periodically by
+delayed workqueues.
 
-Shuuichirou Ishii (1):
-      ACPICA: Fix AEST Processor generic resource substructure data field byte length
+So far the only technical point that is missing in this series is the
+possibility to grab a reference over the module driving the net device
+in order to prevent module unloading during a scan or when the beacons
+work is ongoing.
 
-Sudeep Holla (2):
-      ACPICA: Fix wrong interpretation of PCC address
-      ACPICA: Add support for PCC Opregion special context data
+Finally, this series is a deep reshuffle of David Girault's original
+work, hence the fact that he is almost systematically credited, either
+by being the only author when I created the patches based on his changes
+with almost no modification, or with a Co-developped-by tag whenever the
+final code base is significantly different than his first proposal while
+still being greatly inspired from it.
 
-Thanks!
+Cheers,
+Miquèl
 
+David Girault (5):
+  net: ieee802154: Move IEEE 802.15.4 Kconfig main entry
+  net: mac802154: Include the softMAC stack inside the IEEE 802.15.4
+    menu
+  net: ieee802154: Move the address structure earlier
+  net: ieee802154: Add a kernel doc header to the ieee802154_addr
+    structure
+  net: ieee802154: Trace the registration of new PANs
 
+Miquel Raynal (13):
+  ieee802154: hwsim: Ensure proper channel selection at probe time
+  ieee802154: hwsim: Provide a symbol duration
+  net: ieee802154: Return meaningful error codes from the netlink
+    helpers
+  net: ieee802154: Add support for internal PAN management
+  net: ieee802154: Define a beacon frame header
+  net: ieee802154: Define frame types
+  net: ieee802154: Add support for scanning requests
+  net: mac802154: Handle scan requests
+  net: mac802154: Inform device drivers about the scanning operation
+  net: ieee802154: Full PAN management
+  net: ieee802154: Add support for beacon requests
+  net: mac802154: Handle beacons requests
+  net: mac802154: Let drivers provide their own beacons implementation
+
+ drivers/net/ieee802154/mac802154_hwsim.c |  77 +++-
+ include/linux/ieee802154.h               |   6 +
+ include/net/cfg802154.h                  | 107 +++++-
+ include/net/ieee802154_netdev.h          |  71 ++++
+ include/net/mac802154.h                  |  40 ++
+ include/net/nl802154.h                   |  95 +++++
+ net/Kconfig                              |   3 +-
+ net/ieee802154/Kconfig                   |   1 +
+ net/ieee802154/Makefile                  |   2 +-
+ net/ieee802154/core.c                    |   2 +
+ net/ieee802154/core.h                    |  23 ++
+ net/ieee802154/header_ops.c              |  29 ++
+ net/ieee802154/nl802154.c                | 466 ++++++++++++++++++++++-
+ net/ieee802154/nl802154.h                |   4 +
+ net/ieee802154/pan.c                     | 211 ++++++++++
+ net/ieee802154/rdev-ops.h                |  52 +++
+ net/ieee802154/trace.h                   |  86 +++++
+ net/mac802154/Makefile                   |   2 +-
+ net/mac802154/cfg.c                      |  76 ++++
+ net/mac802154/driver-ops.h               |  66 ++++
+ net/mac802154/ieee802154_i.h             |  28 ++
+ net/mac802154/main.c                     |   4 +
+ net/mac802154/rx.c                       |  10 +-
+ net/mac802154/scan.c                     | 374 ++++++++++++++++++
+ net/mac802154/trace.h                    |  49 +++
+ net/mac802154/util.c                     |  26 ++
+ 26 files changed, 1889 insertions(+), 21 deletions(-)
+ create mode 100644 net/ieee802154/pan.c
+ create mode 100644 net/mac802154/scan.c
+
+-- 
+2.27.0
 

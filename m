@@ -2,219 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4D547D5E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 18:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89AE447D5E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 18:38:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344368AbhLVRd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 12:33:27 -0500
-Received: from mail-il1-f197.google.com ([209.85.166.197]:54797 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232852AbhLVRd0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 12:33:26 -0500
-Received: by mail-il1-f197.google.com with SMTP id g14-20020a92c7ce000000b002b1e78da1f9so1658362ilk.21
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 09:33:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=bEbdWmUFAsr/tvwx1s231eqfR4JsDg+TU1S7GLvjmuM=;
-        b=Jq2li+yGU+D8o0nLYXgx8Vv0mVpx1C/YZaEea9cPX10kOgNIQPf7W+ywzr2jSUdT54
-         b7r2Yp2ZTezONXumvlLshxwiqLV5C9gzZlIRy2sbBAyFx0oiP0zM4pShjNhE6dI/YQ7x
-         oqQJqGXaLgNF7o88DrryqYfCSNasuGpN9GRTnUfmgyjqadqR2jiir//prVy32conqeLg
-         G6ZXNLGxt13xFH0S9o0KVuFIhw7n8YLsRGDfmzzoI1tis0C9E5Skf3CONSTqosDWcvNh
-         eIdGWuU/bxgsW6qL2N+w3GR6YX9Seq0hQc60tUWdbXOxInbMw70YVSguTJFjhhltjgE6
-         zucg==
-X-Gm-Message-State: AOAM531q1mgKIbe/VC8771K7oh9N1n8EkQAWCE7433gmPD+7JGx+Xixq
-        3ZKU8Ac7OgLvAml2ZsyPiXzHLYe5OM4E4KFtWzgWGUaL1WTW
-X-Google-Smtp-Source: ABdhPJyYBiS5x4l3gZVXhYpVRV8hsZ20+LzUWD5jeiI1BvDACkJEmO0Es+DquPVuHpzU77a9fjRcOGK7d92ugqKUVFmAHj0BMLZB
+        id S1344382AbhLVRig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 12:38:36 -0500
+Received: from mail-eopbgr130119.outbound.protection.outlook.com ([40.107.13.119]:27834
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232852AbhLVRia (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 12:38:30 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NjJ2F4GLYI9IiAkEO2uzH5OtvKVSUuI0GJTjr6R0tV9x5wbMzoFreNZM4nL5WZvo60VkHO+lmKNGQa8qSrSiFoOyiYrsdOQ4O6seQ+zzu1rPsAvbRK1plPiso831LBs30ihLvIY+Khd4aRYEyXGkkm7sHhA+V6DFxh44p6AneDmragfRKBJx8wzQhnhW7BHkf7MpcuGWda10I0sZ8zk8L+KRzIDCqY1lM688/oD+BgJhOgLwiY9RNqI5dItlrxvi5jYdUvxd6ffy1ohTThbad/fOuO1RYglW6Ue0rzrYzbUYKaVOe7MaMYIFxF8OYHCKWV0o3ix5cYKxOxJlzGBJbA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HVu0FyqaKZGI/tkS7ovW/MRDSAqgmKVWJ557BThj660=;
+ b=LWfphksmA28Aue3uWmDIlc0xnH0JLI0n7sLfSHSCMpsa4OrNWtM0MPiK5YwB9mHGWlcwrQLkYF8m3Iy848eh578TtseJ4n1/pN4hmpNSW92syMfXbdzjQCPl2ordaYIIXaeyKYHWdy4CovXlo3SsLtm3upH4FeJsLlWHkMbzCHYH2kmBvl2ZPbZ6uy653LHlABJkOS7UAc4fLemFPHHTZZfIuqTnscDnQWIBUOZxdzxLOc8lkd8G89lzOov5SoL0zZV1pmQMp84Gunoux6GwSWSkaX0DN9qwYjS46Y93h0qi7PFLIxDkRhY+WjRnoYbHKaSHB6YXceUW2mxSYglzoA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HVu0FyqaKZGI/tkS7ovW/MRDSAqgmKVWJ557BThj660=;
+ b=SooJgx3o+XRHndTj0kyA8SGx2OkB2bBfqmGJ8dWiR32yTLne4R6YjsksVMb2itaRJS36rw60i65xe8gDGhAhZunLL80PhMvjZ9uxRmAQBUdm4FURiVVGwV79UiJJ5TkgUUtdwEBBu8jIivER5KXKmdC+P6pbjIMPajmyaXWrDDc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from DB9PR08MB6619.eurprd08.prod.outlook.com (2603:10a6:10:257::21)
+ by DBBPR08MB4476.eurprd08.prod.outlook.com (2603:10a6:10:d0::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.20; Wed, 22 Dec
+ 2021 17:38:27 +0000
+Received: from DB9PR08MB6619.eurprd08.prod.outlook.com
+ ([fe80::347f:d385:ec53:75aa]) by DB9PR08MB6619.eurprd08.prod.outlook.com
+ ([fe80::347f:d385:ec53:75aa%7]) with mapi id 15.20.4801.023; Wed, 22 Dec 2021
+ 17:38:27 +0000
+Subject: Re: [PATCH] ipc/sem: do not sleep with a spin lock held
+To:     Manfred Spraul <manfred@colorfullife.com>, cgel.zte@gmail.com,
+        akpm@linux-foundation.org
+Cc:     shakeelb@google.com, rdunlap@infradead.org, dbueso@suse.de,
+        unixbhaskar@gmail.com, chi.minghao@zte.com.cn, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+References: <20211222081026.484058-1-chi.minghao@zte.com.cn>
+ <63840bf3-2199-3240-bdfa-abb55518b5f9@colorfullife.com>
+ <1181e64b-94c0-908a-b9e9-1a38f4610430@virtuozzo.com>
+ <02171384-9d1e-19fa-5fa1-5f84b720a03e@virtuozzo.com>
+ <4d786a02-1560-25ed-4603-8419672ec044@colorfullife.com>
+From:   Vasily Averin <vvs@virtuozzo.com>
+Message-ID: <d89356b2-c7d8-a3d0-5d3f-1ef37b631193@virtuozzo.com>
+Date:   Wed, 22 Dec 2021 20:38:25 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <4d786a02-1560-25ed-4603-8419672ec044@colorfullife.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM6PR0202CA0048.eurprd02.prod.outlook.com
+ (2603:10a6:20b:3a::25) To DB9PR08MB6619.eurprd08.prod.outlook.com
+ (2603:10a6:10:257::21)
 MIME-Version: 1.0
-X-Received: by 2002:a02:a306:: with SMTP id q6mr2126689jai.319.1640194406057;
- Wed, 22 Dec 2021 09:33:26 -0800 (PST)
-Date:   Wed, 22 Dec 2021 09:33:26 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ef8cbb05d3bf84cd@google.com>
-Subject: [syzbot] INFO: rcu detected stall in ext4_file_write_iter (4)
-From:   syzbot <syzbot+03464269af631f4a4bdf@syzkaller.appspotmail.com>
-To:     fweisbec@gmail.com, linux-kernel@vger.kernel.org, mingo@kernel.org,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 381f08ec-4a8d-4575-6adb-08d9c571dcb3
+X-MS-TrafficTypeDiagnostic: DBBPR08MB4476:EE_
+X-Microsoft-Antispam-PRVS: <DBBPR08MB44767F5579B3C0A868BBD60BAA7D9@DBBPR08MB4476.eurprd08.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: m50+JKlxQP2P4VPdb5Z5+sPlazrPujRQDOzwy0tQ850wYs2jlF+B/yaHSPQy2kLYtFIM6yg7hNAU/TDqY2bBc66pAa05hi9UHKsTpwisY7NFYudjOJ6utGw8dxAUu9I+7rWo9Smp5ciMTsKIbjl39eHcM7qSPWkD9YuA+RHqm9kcM1hJCWSLkeStgw4FV+kswLsMnMbuMvObvJgK6i1qqO9q9jnZKuo9TQsq+nIYF3TE7vfeeTJpJtnD3CXnPuRlX7ao65mv+s3MToRPltKrMEpM7wvuFV8J+wXx03w5fmZfBEcxeKqVsIE1I7bsk+l57etzPquV1khGlSWSYdtYMFpBYlu/+8s1a3qjRGyzOIL2PHToBzneE9+aKQ44nEFVUm/zBym4mxNjkghA7ezFiqO0wtAANzw5+FcDMANNrjjnDArpKpqpF9gxfJ/X5xXBrlYOIL2/3oXwFb+X755gtOMwEWeuxc+kNPxizlTbBgaLXiRpNUXz0Xeea0FBgHu6BMR+vmPSDj1VGCdMbCxoXNLa+zusN31SX8rSR4EBEKsF/X2jURSEJmjeci7liy+5vWjDgiRl7kxyHkQ+cyIMmqzJOXzxS/gzjyZGyMQv2Um7cNH7wV60GJRhipgEQk0SuQxkMnNtJS+YatSWdDOIXhX8KLNZszt/7c7JpKIMuFcyIMXSqL2EKmcAYs82+4m9A5O9MAcnrC50WkH73WzOb7AOwmahT1wgSK4NxHKpITHNMeCPVZ4psm7u0azultCL7gk6Trs35Wlv1Hrmk63qFA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB6619.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(31696002)(26005)(38100700002)(66476007)(83380400001)(36756003)(7416002)(66556008)(4326008)(6506007)(52116002)(53546011)(31686004)(66946007)(38350700002)(6486002)(6512007)(86362001)(316002)(2906002)(186003)(2616005)(8676002)(5660300002)(8936002)(508600001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZGI4RzhXdjBSRERWLzlvYktHY0Z1bTVsYlJRUFhEUGFrME55V0Y1ZkJqOUJG?=
+ =?utf-8?B?MFg4UWhVYWZwSzJVVk9nYy9YNzJtdVBZUlZWbXZIUVBGUWR2MXNxcXdTbkF3?=
+ =?utf-8?B?ZTVSa1V0YVBLL0NxRGMvT0ZUMWg0SlNlcDA2ZHdtTmtBaVFjSG1oSzhVY3JS?=
+ =?utf-8?B?MEF3dThjallHUVczT2ZWaG9DamJqeG9tNXQ1azRZSGhsSnFPc2prSFVZZUk4?=
+ =?utf-8?B?U1FMVnRFWmpNc29ZN3lDdzdWbU9hQ0lldkd5UHBHSU9kb1dQazBuQkFJLzQx?=
+ =?utf-8?B?QXg2ZlV1K3dIdlFLOUtGcVl3Y25ZaTN6Qm91Znpab1Q5SU00TkllOEQzY0xM?=
+ =?utf-8?B?c1BpbnQrNnRWckZFeERRNEZGTVYvcmFNT0U0T003WGlXd2FuTGhPY0hTaXVm?=
+ =?utf-8?B?M1ljNnJ0NDI0YWU5WCsxeW5FRW03Z0RVVjBrbDlHcFhRU2VjeDVHVlBJcXJj?=
+ =?utf-8?B?RnlNRXMyZmh1ekQxOEc1YXU2TjdaRDBveDF4SnFsOEFNekRvNW1lM3pqRXZk?=
+ =?utf-8?B?QUR3UEI4S3Q3QjRXQkxaamR0RzFHM25uWkh4MytkYlBPTWRmMkplNE1uTXJ5?=
+ =?utf-8?B?d1BKQnMwQ1ZEazJic1g2ZmJSUUFqdVZNZXNDdHVrelZEWXl5NERyMmMveTlw?=
+ =?utf-8?B?elNUaXRtKzRZWXJQQnRoNkNCV2Z6SWpPazJlTmoxVEV6R1RTMlNlU3RtLzNP?=
+ =?utf-8?B?RUd3OHNBVExYREc1SnRMUk1RdEducTI1b082TU1wSW02Zk5vUnAzL1FwQ1FU?=
+ =?utf-8?B?Z0VOUWJkekQzc2lqWTl4aVk2NHlGRnM0WTBXbmd3V0hXZE91K2FHMmJ1ZEc1?=
+ =?utf-8?B?VXR2TU40bU9MbmZCZkRJVDlwdzUyN010bVdNUWg4R2JNSjBpWnZEajFYUHpD?=
+ =?utf-8?B?Yzk1dCthU2xtUDlHVkxDTXdMU3QyN2ZwRU5HcVVJU0JIWW90akJXa2h1N3BT?=
+ =?utf-8?B?YlpzNk5KTHBaeXdLbnFQRWkwYXNQRnYvZzNTQXlxR1VXWGFUVGtCeDBKTXFK?=
+ =?utf-8?B?bTMwUStBY1lyU2tkeEduTGZXZk5oc2JzLzh4TnB5S0xhNWZTZUhSVUxkb01Q?=
+ =?utf-8?B?Q2FnY1NnTllBOFJpZ3FmOEMxZkJGd2tYTXJ0SDBhYXRaQVNBaUg5M3cwSCtn?=
+ =?utf-8?B?dGRIdkRBZHZSc2tnY3BYYnRZY0tvcWVZNi92U0NXSTdiVnVNYXRuWXhWWlh6?=
+ =?utf-8?B?aE03TEgrWDVJSnJaMlQyZnVOOFM1M0xZNnBsYlNGdDg3NjIxVFZwclBNVTZh?=
+ =?utf-8?B?clMxSG01OUZCcDRnY1g2ZlBFcGhCQWJvaG13K3BmZUVYWVpaeGhlWXpKbGFa?=
+ =?utf-8?B?YklGTU9yaVJ0dXlzZmlwY0k2RUlXQjV0NHdzME5BRHhiSk5HK25jcHBlUVJF?=
+ =?utf-8?B?RnpITERYM1F1dm5mSFNZUmp1cytzbERvQmljQUxNd09yWUIyQ2dlN09mbjJn?=
+ =?utf-8?B?cUFLdkNTTW80YW85a2FiaUg5d05hN2p4TTJoQUtkWjMxZGdBRXppR1lLQXlU?=
+ =?utf-8?B?aGEreE5Ld0t0NnlVempHZkt3VXR3ZGVVQThhTTZSSEkxaGVkdjFZOFpBK1h1?=
+ =?utf-8?B?cllvRDhsajZudS9iZTE2QTJ5ZzB6Y2JadENPc1dPWUh4eWJ1US9LaGpiVkJR?=
+ =?utf-8?B?SVNNdGJqM1NRWlp4SzF6dWc1NVFYUExhcW4wdXRvOXkvd0l5UGlSajFDSHVV?=
+ =?utf-8?B?a3NBdHN2RHV4eUtiNm5qaE92dElqa04rdkRGRjBTYVFxR1plQ0RNRUQwZWZt?=
+ =?utf-8?B?dkE1NVBMbnZJdHV3d3ljQ1JodlNVbEUrb0J3cjZ5UWFXdWhDOVVYWW9jZ0hK?=
+ =?utf-8?B?QkIyUTNvVm43SytET1o0TE1sRE56Qkc5bTJCUzFFS2txaWdBRkFuVEN2S0xw?=
+ =?utf-8?B?c05WK2cralBmWUdoTGFMYjUvaXBYdk0wNHNQNklIL2hFSElOZWNKdUc5Zzhv?=
+ =?utf-8?B?UE5XNVdmZURyRW1iSUxrNUlPR25YZ0NtTnFEaElUR2RodE5pRVZqUEx0TFph?=
+ =?utf-8?B?SUtSQm40MG85ZWx2MVpXZE41OGI1blF1VFZSSHRSWmtEWTI3bGhucmxwalRH?=
+ =?utf-8?B?ZERvNGdCdmx2VlcweGZpWnhaUVRrK3dKT2JydHN0MEZkcUE1MCtsRmhCMlpj?=
+ =?utf-8?B?UjdNckN2TnRLUDlBUnh6S29iYlBhcUhXN2dYbVZwSWMxUUp5TE8rMVU4a2Zp?=
+ =?utf-8?Q?n1I4mZ1y0rYEeVQEHKopafg=3D?=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 381f08ec-4a8d-4575-6adb-08d9c571dcb3
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR08MB6619.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2021 17:38:27.6100
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: m/RpxyhdT/itnTtivo2zyW/TxG62Lu+d62/u/vUCwoF241iB3Qun/SDmg7bwUtD+2gfLKpYcGS7OWpDhk8WV4Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR08MB4476
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 22.12.2021 20:06, Manfred Spraul wrote:
+> Hi Vasily,
+> 
+> On 12/22/21 16:50, Vasily Averin wrote:
+>> On 22.12.2021 18:31, Vasily Averin wrote:
+>>> On 22.12.2021 14:45, Manfred Spraul wrote:
+>>>> Hi Minghao,
+>>>>
+>>>> On 12/22/21 09:10, cgel.zte@gmail.com wrote:
+>>>>> From: Minghao Chi <chi.minghao@zte.com.cn>
+>>>>>
+>>>>> We can't call kvfree() with a spin lock held, so defer it.
+>>> I'm sorry, but I do not understand why exactly we cannot use kvfree?
+>>> Could you explain it in more details?
+>> Got it,
+>> there is cond_resched() called in __vfree() -> __vunmap()
+>>
+>> However I'm still not sure that in_interrupt() is used correctly here.
+> 
+> I see three different topics:
+> 
+> - is the current code violating the API? I think yes, thus there is a bug that needs to be fixed.
 
-syzbot found the following issue on:
+I'm agree. Found issue is a bug and it should be fixed ASAP,
+I'm sorry for a mistake in my patch.
 
-HEAD commit:    9eaa88c7036e Merge tag 'libata-5.16-rc6' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=142d4143b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e3bdfd29b408d1b6
-dashboard link: https://syzkaller.appspot.com/bug?extid=03464269af631f4a4bdf
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11b1537db00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=125de549b00000
+> - Where is __vunmap() sleeping? Would it be possible to make __vunmap() safe to be called when owning a spinlock?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+03464269af631f4a4bdf@syzkaller.appspotmail.com
+I think it is possible, and we should do it to prevent similar incidents in future.
+vfree() should check preempt count to detect this situation (i.e. execution under taken spinlock)
+generate WARN_ON and then call __vfree_deferred() to avoid sleep.
 
-rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-	(detected by 0, t=10502 jiffies, g=5509, q=170)
-rcu: All QSes seen, last rcu_preempt kthread activity 8642 (4295000735-4294992093), jiffies_till_next_fqs=1, root ->qsmask 0x0
-rcu: rcu_preempt kthread starved for 8643 jiffies! g5509 f0x2 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=0
-rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
-rcu: RCU grace-period kthread stack dump:
-task:rcu_preempt     state:R  running task     stack:28208 pid:   14 ppid:     2 flags:0x00004000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- context_switch kernel/sched/core.c:4972 [inline] kernel/sched/core.c:6253
- __schedule+0xa9a/0x4940 kernel/sched/core.c:6253 kernel/sched/core.c:6253
- schedule+0xd2/0x260 kernel/sched/core.c:6326 kernel/sched/core.c:6326
- schedule_timeout+0x14a/0x2a0 kernel/time/timer.c:1881 kernel/time/timer.c:1881
- rcu_gp_fqs_loop+0x186/0x810 kernel/rcu/tree.c:1955 kernel/rcu/tree.c:1955
- rcu_gp_kthread+0x1de/0x320 kernel/rcu/tree.c:2128 kernel/rcu/tree.c:2128
- kthread+0x405/0x4f0 kernel/kthread.c:327 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295 arch/x86/entry/entry_64.S:295
- </TASK>
-rcu: Stack dump where RCU GP kthread last ran:
-NMI backtrace for cpu 0
-CPU: 0 PID: 3672 Comm: syz-executor549 Not tainted 5.16.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- __dump_stack lib/dump_stack.c:88 [inline] lib/dump_stack.c:106
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106 lib/dump_stack.c:106
- nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111 lib/nmi_backtrace.c:111
- nmi_trigger_cpumask_backtrace+0x1b3/0x230 lib/nmi_backtrace.c:62 lib/nmi_backtrace.c:62
- trigger_single_cpu_backtrace include/linux/nmi.h:164 [inline]
- trigger_single_cpu_backtrace include/linux/nmi.h:164 [inline] kernel/rcu/tree_stall.h:481
- rcu_check_gp_kthread_starvation.cold+0x1fb/0x200 kernel/rcu/tree_stall.h:481 kernel/rcu/tree_stall.h:481
- print_other_cpu_stall kernel/rcu/tree_stall.h:586 [inline]
- check_cpu_stall kernel/rcu/tree_stall.h:729 [inline]
- rcu_pending kernel/rcu/tree.c:3878 [inline]
- print_other_cpu_stall kernel/rcu/tree_stall.h:586 [inline] kernel/rcu/tree.c:2597
- check_cpu_stall kernel/rcu/tree_stall.h:729 [inline] kernel/rcu/tree.c:2597
- rcu_pending kernel/rcu/tree.c:3878 [inline] kernel/rcu/tree.c:2597
- rcu_sched_clock_irq+0x2125/0x2200 kernel/rcu/tree.c:2597 kernel/rcu/tree.c:2597
- update_process_times+0x16d/0x200 kernel/time/timer.c:1785 kernel/time/timer.c:1785
- tick_sched_handle+0x9b/0x180 kernel/time/tick-sched.c:226 kernel/time/tick-sched.c:226
- tick_sched_timer+0x1b0/0x2d0 kernel/time/tick-sched.c:1428 kernel/time/tick-sched.c:1428
- __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
- __run_hrtimer kernel/time/hrtimer.c:1685 [inline] kernel/time/hrtimer.c:1749
- __hrtimer_run_queues+0x1c0/0xe50 kernel/time/hrtimer.c:1749 kernel/time/hrtimer.c:1749
- hrtimer_interrupt+0x31c/0x790 kernel/time/hrtimer.c:1811 kernel/time/hrtimer.c:1811
- local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1086 [inline]
- local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1086 [inline] arch/x86/kernel/apic/apic.c:1103
- __sysvec_apic_timer_interrupt+0x146/0x530 arch/x86/kernel/apic/apic.c:1103 arch/x86/kernel/apic/apic.c:1103
- sysvec_apic_timer_interrupt+0x8e/0xc0 arch/x86/kernel/apic/apic.c:1097 arch/x86/kernel/apic/apic.c:1097
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:638 arch/x86/include/asm/idtentry.h:638
-RIP: 0010:owner_on_cpu kernel/locking/rwsem.c:667 [inline]
-RIP: 0010:owner_on_cpu kernel/locking/rwsem.c:667 [inline] kernel/locking/rwsem.c:750
-RIP: 0010:rwsem_spin_on_owner+0x1aa/0x290 kernel/locking/rwsem.c:750 kernel/locking/rwsem.c:750
-Code: a8 08 75 33 49 8d 7c 24 34 48 89 f8 48 c1 e8 03 42 0f b6 14 28 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 b0 00 00 00 <41> 8b 44 24 34 85 c0 0f 85 14 ff ff ff b8 08 00 00 00 48 83 c4 08
-RSP: 0018:ffffc90002817448 EFLAGS: 00000246
-RAX: 0000000000000007 RBX: ffff88806da34680 RCX: ffffffff815a9743
-RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffff88807d2000b4
-RBP: ffff88806da34688 R08: 0000000000000000 R09: ffff888078b322c7
-R10: ffffed100f166458 R11: 0000000000000001 R12: ffff88807d200080
-R13: dffffc0000000000 R14: ffff888078b322c0 R15: ffffed100f166458
- rwsem_optimistic_spin kernel/locking/rwsem.c:808 [inline]
- rwsem_optimistic_spin kernel/locking/rwsem.c:808 [inline] kernel/locking/rwsem.c:1068
- rwsem_down_write_slowpath+0x1a8/0x1110 kernel/locking/rwsem.c:1068 kernel/locking/rwsem.c:1068
- __down_write_common kernel/locking/rwsem.c:1268 [inline]
- __down_write_common kernel/locking/rwsem.c:1265 [inline]
- __down_write kernel/locking/rwsem.c:1277 [inline]
- __down_write_common kernel/locking/rwsem.c:1268 [inline] kernel/locking/rwsem.c:1524
- __down_write_common kernel/locking/rwsem.c:1265 [inline] kernel/locking/rwsem.c:1524
- __down_write kernel/locking/rwsem.c:1277 [inline] kernel/locking/rwsem.c:1524
- down_write+0x135/0x150 kernel/locking/rwsem.c:1524 kernel/locking/rwsem.c:1524
- inode_lock include/linux/fs.h:783 [inline]
- inode_lock include/linux/fs.h:783 [inline] fs/ext4/file.c:263
- ext4_buffered_write_iter+0xb6/0x3b0 fs/ext4/file.c:263 fs/ext4/file.c:263
- ext4_file_write_iter+0x423/0x14e0 fs/ext4/file.c:681 fs/ext4/file.c:681
- call_write_iter include/linux/fs.h:2162 [inline]
- call_write_iter include/linux/fs.h:2162 [inline] fs/read_write.c:725
- do_iter_readv_writev+0x472/0x750 fs/read_write.c:725 fs/read_write.c:725
- do_iter_write+0x188/0x710 fs/read_write.c:851 fs/read_write.c:851
- vfs_iter_write+0x70/0xa0 fs/read_write.c:892 fs/read_write.c:892
- iter_file_splice_write+0x6fa/0xc10 fs/splice.c:689 fs/splice.c:689
- do_splice_from fs/splice.c:767 [inline]
- do_splice_from fs/splice.c:767 [inline] fs/splice.c:936
- direct_splice_actor+0x110/0x180 fs/splice.c:936 fs/splice.c:936
- splice_direct_to_actor+0x34b/0x8c0 fs/splice.c:891 fs/splice.c:891
- do_splice_direct+0x1b3/0x280 fs/splice.c:979 fs/splice.c:979
- do_sendfile+0xaf2/0x1250 fs/read_write.c:1245 fs/read_write.c:1245
- __do_sys_sendfile64 fs/read_write.c:1310 [inline]
- __se_sys_sendfile64 fs/read_write.c:1296 [inline]
- __do_sys_sendfile64 fs/read_write.c:1310 [inline] fs/read_write.c:1296
- __se_sys_sendfile64 fs/read_write.c:1296 [inline] fs/read_write.c:1296
- __x64_sys_sendfile64+0x1cc/0x210 fs/read_write.c:1296 fs/read_write.c:1296
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_x64 arch/x86/entry/common.c:50 [inline] arch/x86/entry/common.c:80
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f34d1e3f169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc49095728 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 00000000000f4240 RCX: 00007f34d1e3f169
-RDX: 0000000000000000 RSI: 0000000000000006 RDI: 0000000000000004
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
-R10: 00008400fffffffb R11: 0000000000000246 R12: 0000000000076d4d
-R13: 00007ffc4909573c R14: 00007ffc49095750 R15: 00007ffc49095740
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	a8 08                	test   $0x8,%al
-   2:	75 33                	jne    0x37
-   4:	49 8d 7c 24 34       	lea    0x34(%r12),%rdi
-   9:	48 89 f8             	mov    %rdi,%rax
-   c:	48 c1 e8 03          	shr    $0x3,%rax
-  10:	42 0f b6 14 28       	movzbl (%rax,%r13,1),%edx
-  15:	48 89 f8             	mov    %rdi,%rax
-  18:	83 e0 07             	and    $0x7,%eax
-  1b:	83 c0 03             	add    $0x3,%eax
-  1e:	38 d0                	cmp    %dl,%al
-  20:	7c 08                	jl     0x2a
-  22:	84 d2                	test   %dl,%dl
-  24:	0f 85 b0 00 00 00    	jne    0xda
-* 2a:	41 8b 44 24 34       	mov    0x34(%r12),%eax <-- trapping instruction
-  2f:	85 c0                	test   %eax,%eax
-  31:	0f 85 14 ff ff ff    	jne    0xffffff4b
-  37:	b8 08 00 00 00       	mov    $0x8,%eax
-  3c:	48 83 c4 08          	add    $0x8,%rsp
-----------------
-Code disassembly (best guess):
-   0:	a8 08                	test   $0x8,%al
-   2:	75 33                	jne    0x37
-   4:	49 8d 7c 24 34       	lea    0x34(%r12),%rdi
-   9:	48 89 f8             	mov    %rdi,%rax
-   c:	48 c1 e8 03          	shr    $0x3,%rax
-  10:	42 0f b6 14 28       	movzbl (%rax,%r13,1),%edx
-  15:	48 89 f8             	mov    %rdi,%rax
-  18:	83 e0 07             	and    $0x7,%eax
-  1b:	83 c0 03             	add    $0x3,%eax
-  1e:	38 d0                	cmp    %dl,%al
-  20:	7c 08                	jl     0x2a
-  22:	84 d2                	test   %dl,%dl
-  24:	0f 85 b0 00 00 00    	jne    0xda
-* 2a:	41 8b 44 24 34       	mov    0x34(%r12),%eax <-- trapping instruction
-  2f:	85 c0                	test   %eax,%eax
-  31:	0f 85 14 ff ff ff    	jne    0xffffff4b
-  37:	b8 08 00 00 00       	mov    $0x8,%eax
-  3c:	48 83 c4 08          	add    $0x8,%rsp
+> - should kvfree() use vfree() [i.e. unsafe when owning a spinlock] or vfree_atomic [i.e. a bit slower, but safe]
 
+I think it's better to change vfree.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> As we did quite many s/kfree/kvfree/ changes, perhaps just switching to vfree_atomic() is the best solution.
+> 
+> @Andrew: What would you prefer?
+> 
+> In addition, if we do not use vfree_atomic(): Then I would propose to copy the might_sleep_if() from vfree() into kvfree()
+I think it does not help, as far as I understand we are in task context, just under taken spinlock.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Thank you,
+	vasily Averin

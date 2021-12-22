@@ -2,78 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BE647D78B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BED3F47D792
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345144AbhLVTQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 14:16:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54762 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345143AbhLVTQi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 14:16:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640200593;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oBXYBJqXC5x++uqbwSfIJ2fpJnl6ko1ZlQWQiKD9HK0=;
-        b=RS5/vWKWONi3HBNpBJgT5vP4Lj7kTAvQj/OmkVrwyEQkRytbasdMpYGOLod6oTyPS7PXSx
-        Gi2PNHftFszo+t+7Vg6RICR2pkmdMdM3f/v4SQRqfB/sgPQCc3G7wroXYye3Z42froMgSF
-        AF8mewlTOWksQcs8UGfOY+08VjCYvgQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-428-SBMaDYKzPiWUDvX_Ir1ccA-1; Wed, 22 Dec 2021 14:16:30 -0500
-X-MC-Unique: SBMaDYKzPiWUDvX_Ir1ccA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 14B781023F4D;
-        Wed, 22 Dec 2021 19:16:29 +0000 (UTC)
-Received: from localhost (unknown [10.22.32.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 97A0F29997;
-        Wed, 22 Dec 2021 19:16:28 +0000 (UTC)
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     zohar@linux.ibm.com
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bruno Meneguele <bmeneg@redhat.com>
-Subject: [PATCH] ima: silence measurement list hexdump during kexec
-Date:   Wed, 22 Dec 2021 16:16:23 -0300
-Message-Id: <20211222191623.376174-1-bmeneg@redhat.com>
+        id S1345168AbhLVTVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 14:21:36 -0500
+Received: from mga09.intel.com ([134.134.136.24]:27347 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345143AbhLVTVf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 14:21:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640200895; x=1671736895;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Ie5kqnOr5yj7JVgrXETxahQe7HTBvMNTAOfAnlloruU=;
+  b=Sk9/QnYl+zriSUAGp7wFxtNYkVHYoHy7TasYnnSP+y9zGW4r9SkKpzfr
+   Vvgg2E0vMimcu0kSqOlEbhY9+E0VQ1/SYHvZFMSyuGoMRH8uLljvP9pha
+   n8w+foOLz4Y/h63yORN+iDY9NAGP2ZnUfFocXhPLIliVUeUAy5ALJpXdf
+   NnV655cTr/0bQG8I+FpRnbirALL7DiynndOema3YkjfB1nbKd1Kc7ayNq
+   ealUXFmg9df3sqDmsOIBkFS9J2o2+W+yLXPlzPSNFLi/34P4TgxUL/67J
+   oQoSyMi0FlCUwavMbRqmQIQUnl/fVtJSwvM4MHaLheJDtvLLzpsoAWc/M
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="240499602"
+X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
+   d="scan'208";a="240499602"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 11:21:35 -0800
+X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
+   d="scan'208";a="521801932"
+Received: from lmaniak-dev.igk.intel.com ([10.55.249.72])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 11:21:33 -0800
+From:   Lukasz Maniak <lukasz.maniak@linux.intel.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Lukasz Maniak <lukasz.maniak@linux.intel.com>,
+        =?UTF-8?q?=C5=81ukasz=20Gieryk?= <lukasz.gieryk@linux.intel.com>
+Subject: [PATCH] PCI: Reset IOV state on FLR to PF
+Date:   Wed, 22 Dec 2021 20:19:57 +0100
+Message-Id: <20211222191958.955681-1-lukasz.maniak@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The measurement list is dumped during a soft reset (kexec) through the call
-to "print_hex_dump(KERN_DEBUG, ...)", which ignores the DEBUG build flag.
-Instead, use "print_hex_dump_debug(...)", honoring the build flag.
+As per PCI Express specification, FLR to a PF resets the PF state as
+well as the SR-IOV extended capability including VF Enable which means
+that VFs no longer exist.
 
-Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
+Currently, the IOV state is not updated during FLR, resulting in
+non-compliant PCI driver behavior.
+
+This patch introduces a simple function, called on the FLR path, that
+removes the virtual function devices from the PCI bus and their
+corresponding sysfs links with a final clear of the num_vfs value in IOV
+state.
+
+Signed-off-by: Lukasz Maniak <lukasz.maniak@linux.intel.com>
 ---
- security/integrity/ima/ima_kexec.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/pci/iov.c | 21 +++++++++++++++++++++
+ drivers/pci/pci.c |  2 ++
+ drivers/pci/pci.h |  4 ++++
+ 3 files changed, 27 insertions(+)
 
-diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-index f799cc278a9a..13753136f03f 100644
---- a/security/integrity/ima/ima_kexec.c
-+++ b/security/integrity/ima/ima_kexec.c
-@@ -61,9 +61,9 @@ static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
- 	}
- 	memcpy(file.buf, &khdr, sizeof(khdr));
+diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
+index 0267977c9f17..69ee321027b4 100644
+--- a/drivers/pci/iov.c
++++ b/drivers/pci/iov.c
+@@ -1013,6 +1013,27 @@ int pci_iov_bus_range(struct pci_bus *bus)
+ 	return max ? max - bus->number : 0;
+ }
  
--	print_hex_dump(KERN_DEBUG, "ima dump: ", DUMP_PREFIX_NONE,
--			16, 1, file.buf,
--			file.count < 100 ? file.count : 100, true);
-+	print_hex_dump_debug("ima dump: ", DUMP_PREFIX_NONE, 16, 1,
-+			     file.buf, file.count < 100 ? file.count : 100,
-+			     true);
++/**
++ * pci_reset_iov_state - reset the state of the IOV capability
++ * @dev: the PCI device
++ */
++void pci_reset_iov_state(struct pci_dev *dev)
++{
++	struct pci_sriov *iov = dev->sriov;
++
++	if (!dev->is_physfn)
++		return;
++	if (!iov->num_VFs)
++		return;
++
++	sriov_del_vfs(dev);
++
++	if (iov->link != dev->devfn)
++		sysfs_remove_link(&dev->dev.kobj, "dep_link");
++
++	iov->num_VFs = 0;
++}
++
+ /**
+  * pci_enable_sriov - enable the SR-IOV capability
+  * @dev: the PCI device
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index 3d2fb394986a..535f19d37e8d 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -4694,6 +4694,8 @@ EXPORT_SYMBOL(pci_wait_for_pending_transaction);
+  */
+ int pcie_flr(struct pci_dev *dev)
+ {
++	pci_reset_iov_state(dev);
++
+ 	if (!pci_wait_for_pending_transaction(dev))
+ 		pci_err(dev, "timed out waiting for pending transaction; performing function level reset anyway\n");
  
- 	*buffer_size = file.count;
- 	*buffer = file.buf;
+diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+index 3d60cabde1a1..7bb144fbec76 100644
+--- a/drivers/pci/pci.h
++++ b/drivers/pci/pci.h
+@@ -480,6 +480,7 @@ void pci_iov_update_resource(struct pci_dev *dev, int resno);
+ resource_size_t pci_sriov_resource_alignment(struct pci_dev *dev, int resno);
+ void pci_restore_iov_state(struct pci_dev *dev);
+ int pci_iov_bus_range(struct pci_bus *bus);
++void pci_reset_iov_state(struct pci_dev *dev);
+ extern const struct attribute_group sriov_pf_dev_attr_group;
+ extern const struct attribute_group sriov_vf_dev_attr_group;
+ #else
+@@ -501,6 +502,9 @@ static inline int pci_iov_bus_range(struct pci_bus *bus)
+ {
+ 	return 0;
+ }
++static inline void pci_reset_iov_state(struct pci_dev *dev)
++{
++}
+ 
+ #endif /* CONFIG_PCI_IOV */
+ 
+
+base-commit: fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf
 -- 
-2.33.1
+2.25.1
 

@@ -2,83 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBECE47D338
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C03AE47D340
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:55:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245493AbhLVNy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 08:54:26 -0500
-Received: from mga14.intel.com ([192.55.52.115]:16792 "EHLO mga14.intel.com"
+        id S245515AbhLVNzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 08:55:47 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:42978 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234159AbhLVNyZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 08:54:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640181265; x=1671717265;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dVTnm7Vj85GUu0rogxumgYtqYxX+kTZ7Uoxyo2KfUh0=;
-  b=RAdNxK8uZKBNeOEK/hKThoePw/DxDG5rsYTtGlQCyWNmcCbFhGfMbu+W
-   xGOh6Nkf6kDNvcZFG9+F2f2mkxVwqIuZUrQAHpuVRU66NbtVLXA3qGaS7
-   6WMHSzM3ML++Q426qnTRU5IuuvQNjCKc6KjhyvlJquUzBF1BFysLHP2X1
-   PeVEmGcl7Al+LJp0O1W7e7M2dR8nfzKdtuQIEiT7CVawhmhgOcmRgOIkv
-   dSWGEk561DZ2NBlEFG54XvW/Wk1I8kXc78xDsnNORJd0wXZYEJm1m2vBP
-   bQTBbxgXSzIrmK2W06H6S0y4EP8ZGS6fPBAOTCLepxQPNTsoIcfM1zVBf
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240845054"
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="240845054"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 05:54:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="484761402"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 22 Dec 2021 05:54:21 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 23AD0331; Wed, 22 Dec 2021 15:54:30 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: [PATCH v1 3/3] spi: pxa2xx: Propagate firmware node
-Date:   Wed, 22 Dec 2021 15:54:23 +0200
-Message-Id: <20211222135423.62487-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211222135423.62487-1-andriy.shevchenko@linux.intel.com>
-References: <20211222135423.62487-1-andriy.shevchenko@linux.intel.com>
+        id S245500AbhLVNzn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 08:55:43 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F12831EC02B9;
+        Wed, 22 Dec 2021 14:55:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640181338;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=he7eWKUPElrIPI1ScosoCtObtf9WSTmqL/yiphcOaLk=;
+        b=R/Gp6TWCLfFVbdh5BZVWrLNWrLDGXe0GYTVNoeEUkhxj5rhv1gi1OsF6lRqxZa7X5FK2eP
+        DaXantaHkhtBgIXtSojG5h+c5uqK5foXwIAhMdvy/MDZW5yN0flcarhA5sxa1j2QW/V8tL
+        mQYhpbTRA+SlVRFQzz9U8jVEhtcnXsg=
+Date:   Wed, 22 Dec 2021 14:55:39 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     hch <hch@lst.de>
+Cc:     Richard Weinberger <richard@nod.at>,
+        anton ivanov <anton.ivanov@cambridgegreys.com>,
+        x86 <x86@kernel.org>, linux-um <linux-um@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: remove set_fs for UML
+Message-ID: <YcMuW88cOBNXAdb/@zn.tnic>
+References: <20211215165612.554426-1-hch@lst.de>
+ <1202521211.191037.1640120703350.JavaMail.zimbra@nod.at>
+ <20211222081753.GB22041@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211222081753.GB22041@lst.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Propagate firmware node by using a specific API call, i.e. device_set_node().
+On Wed, Dec 22, 2021 at 09:17:53AM +0100, hch wrote:
+> On Tue, Dec 21, 2021 at 10:05:03PM +0100, Richard Weinberger wrote:
+> > So far UML seems to work with these changes applied. :-)
+> > I have applied both patches to my UML tree for now, I assume x86 maintainers are fine with
+> > patch 1/2?
+> 
+> Looks like patch 1 needs this fixup for some configurations, where
+> pci.h doesn't get pulled into kvm by other means.
+> 
+> But we probably want an ACK from the x86 maintainers to be sure anyway..
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi-pxa2xx.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+I don't see why not so
 
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index b3186bd0c2a8..e88f86274eeb 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -1664,8 +1664,7 @@ static int pxa2xx_spi_probe(struct platform_device *pdev)
- 	drv_data->controller_info = platform_info;
- 	drv_data->ssp = ssp;
- 
--	controller->dev.of_node = dev->of_node;
--	controller->dev.fwnode = dev->fwnode;
-+	device_set_node(&controller->dev, dev_fwnode(dev));
- 
- 	/* The spi->mode bits understood by this driver: */
- 	controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LOOP;
+Acked-by: Borislav Petkov <bp@suse.de>
+
+Should I take the first one along with this hunk below?
+
+> diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
+> index 0c76c45fdb686..fad546df0bbac 100644
+> --- a/arch/x86/kvm/mmu/spte.c
+> +++ b/arch/x86/kvm/mmu/spte.c
+> @@ -16,6 +16,7 @@
+>  #include "spte.h"
+>  
+>  #include <asm/e820/api.h>
+> +#include <asm/memtype.h>
+>  #include <asm/vmx.h>
+>  
+>  static bool __read_mostly enable_mmio_caching = true;
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

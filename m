@@ -2,289 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2E247D423
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 16:11:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE70F47D42E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 16:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343676AbhLVPLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 10:11:49 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36518 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234907AbhLVPLs (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 10:11:48 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50E8EB81B76;
-        Wed, 22 Dec 2021 15:11:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BE77C36AE8;
-        Wed, 22 Dec 2021 15:11:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640185906;
-        bh=ZNqmeNIA4R6w+zyIY1J3kZvMdVn/fyz+sW7LzAYaWhw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dcLZ+VNsY03TECpEVtJd9fJZu2ov58ylES+Ha5Edja2UNBff6iR+h2lfyrEKnL1NM
-         cu5SxJIRspje7vhw6q6BxtZzdCxluK5BcCng/KtS0v90H2ZOxe5mEZXp6MpvLMNwwL
-         HPr+gZzNuWU/ShfwL5cVWxpyN6JLw/L1j4K/2/dakgw7V45hMLtvTu8WBot0wpL54v
-         egF0Ic188MM62ZbtJqdaqVNpn4PRYQBosCmsnNy03htqiQ7Y9KKU1hQHpcZAj3/X9S
-         4ZyqZu61uIevGXxQiP2bTx2F4h05p6q3tLHhjHvaZPaHBEv4BUejGXNynUHHxMsQoO
-         4Okc0dlMZ+pkA==
-Date:   Thu, 23 Dec 2021 00:11:42 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 08/12] user_events: Optimize writing events by only
- copying data once
-Message-Id: <20211223001142.b972b667cd7d5a593999ce6c@kernel.org>
-In-Reply-To: <20211216173511.10390-9-beaub@linux.microsoft.com>
-References: <20211216173511.10390-1-beaub@linux.microsoft.com>
-        <20211216173511.10390-9-beaub@linux.microsoft.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        id S1343689AbhLVPRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 10:17:07 -0500
+Received: from mail-co1nam11on2051.outbound.protection.outlook.com ([40.107.220.51]:62336
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234907AbhLVPRG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 10:17:06 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=msxZrcTn8KyjlKZQFzVVF+XiAq0RIfykAtaCZyAyVrL/LeQF5sFyztPFoqPE0UBJiP8AmvdwTfxkdv6X9uyQfd0wie67sg32cqfrAVaeqqxcRQpk1Mj7NHJ+4nKwPog4gH5dC++7yVae91WZqaQtJjREd7a+NqUo6QQEbspYPNgjj1HfOO+pcguIumIY4vmGIVKp3WU4Bf7gjuz1vDm7q5Ca9rxeK00hhcRy+FuKd+DDAxDCwPysHCZO1FN2sG9+2rZ82Ct9DnKQJZ731KTOqj/LOKox0q9NCbkgSC/aiNH3bU8Jz9v+F0hdbkB4XOY6s6DZ7WyC/UY14mopEbNULA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cIspO+Xru37NtcSTf2uQVpSGeEn8lH8hQ/vi/jEQ+XI=;
+ b=Jjz8H3zqBUEqrgkjl2AHpvgqsJ/IDf/zqL5rmNOu2newe7snYkXGDPNEO4WbvYmu9lz5+xQgyEwChUW229uUv8d32S/dO2/AaHZY44B8sUFUjyGEBo7NnIHrhb5Fgoyp7Yqeav60bSSukecrVF0Abu2Dz4Jiw+Slov6ypVSM2dRtvnwSJZOxxUMNqdBZjlA5P1T3+6clf0j6FW1jNtMmeqcKnKhYXzaL7bZ8jSusSDQS3T1bXpNkOoTvlf2to5ng/3/aKn+UMhU3jLsLBHzXQ5i1vIs+OjQ15zkCPtm9f8sNhGbis5WHjS6+vSZ7qIV85R1Ho57AOYoLLdOkVsSPWw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cIspO+Xru37NtcSTf2uQVpSGeEn8lH8hQ/vi/jEQ+XI=;
+ b=whDFyuweNFxBusGUeDx5l0HMPzBK7GX6Z9SGNWyLO7PQvIsx2YM28J9fS89jG7m857q9Y+DkT8G/oeF9VkEvKN8YQ5Wpmbq3G806NFMmOySbU4xFvDuNGTRFdXghZIxAMS7Dtbh3qIZK2mjR5YUdJkuAk0XdNOKBm+vnUzbQC9I=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB2718.namprd12.prod.outlook.com (2603:10b6:805:6f::22)
+ by SN6PR12MB2784.namprd12.prod.outlook.com (2603:10b6:805:68::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Wed, 22 Dec
+ 2021 15:17:00 +0000
+Received: from SN6PR12MB2718.namprd12.prod.outlook.com
+ ([fe80::35:281:b7f8:ed4c]) by SN6PR12MB2718.namprd12.prod.outlook.com
+ ([fe80::35:281:b7f8:ed4c%6]) with mapi id 15.20.4801.023; Wed, 22 Dec 2021
+ 15:17:00 +0000
+Cc:     brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v8 11/40] x86/sev: Register GHCB memory when SEV-SNP is
+ active
+To:     Borislav Petkov <bp@alien8.de>
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-12-brijesh.singh@amd.com> <YcMlOOPp2rTFKkeW@zn.tnic>
+From:   Brijesh Singh <brijesh.singh@amd.com>
+Message-ID: <7cedae5f-96e1-cb37-1ed1-6f8e7a23868b@amd.com>
+Date:   Wed, 22 Dec 2021 09:16:54 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <YcMlOOPp2rTFKkeW@zn.tnic>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH2PR18CA0021.namprd18.prod.outlook.com
+ (2603:10b6:610:4f::31) To SN6PR12MB2718.namprd12.prod.outlook.com
+ (2603:10b6:805:6f::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 45d970e0-2a05-45d5-769b-08d9c55e19c5
+X-MS-TrafficTypeDiagnostic: SN6PR12MB2784:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR12MB2784353C69FB2C77AC6C2041E57D9@SN6PR12MB2784.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TWFUamf/OCfGJI0WB1RJVmvE8tBz4gQBqvTEmHMZmy/dvSxP0vnu4Btkq8OhcSIUOfUjSKFVqYwiRF7JUGSYX7nJP2pSAztJ4HNp1M90JPBmNv5/mVMFyXzHvGMyRqQuBQkMmPg0KP+7g7xDQhZ4s43Sfj7xWCRbEZ9bo54p82zZ6fYirrUkmWa9X8MmB5thfuSq+YLPRnTRSgtbNv1aXlpxsFQbyj48bsWsSIXWmpQAgnNx27AADb/jOWXvZzbaVF1UigLfz3Jk3G8ppNftVD3dnbuitDF2fiGkaZFxppemktuEL7F/yD0TFTscI25N9OmI4snEw64QxPezRhqh2vBj3WXBm7jayqVAqzqVRFkVK6sfhBH7q9sAg0gpekH1jmiwooE1DtbI0/dK4DOj6jxPJ6u/wkP0H3934Tnd7Dzgm7ytXlyX/f377mGzzf825RbOvJIqgQZWf3FbkGnFG19ShQXbByn0nYKPLnu9zcJKSX8GR6Dus+YyKrkUAIHTJFjE+pIiH2FeQ1t1QB4G5IcsovNHELeeDnCummoNjrSJ+ZEzfIXdIV4zEe3aj4dC7Tvqqx3O5SppBtNvtCzsnlQeZeP8ooWDV8DOOgGZ1+Dasx3Q9ZeaX7ZebbHv9+hyWBTXIxPTSnS/wFvlhXgXd58ZXc5h0YDFKPsyOIoS1bFMAPtgd9mHIAZjdUoaMkzN/0WzeN0oub2G9GX/1YhqnbzlckZBZl3YWv5LFOOIwyU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2718.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6916009)(66946007)(31686004)(8936002)(6512007)(508600001)(66476007)(66556008)(54906003)(6486002)(26005)(316002)(7416002)(44832011)(6506007)(31696002)(2616005)(38100700002)(7406005)(83380400001)(5660300002)(86362001)(2906002)(6666004)(8676002)(4326008)(53546011)(36756003)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a21Wa2R6MEtacGx3czc3bndJYmRJSzFmNG1RZ1YxQzRLdWJFN09IbHJZcGND?=
+ =?utf-8?B?MmZ3N05kMEpaNlQxbFZ6Q3JYZlhHck83ODJaYWV4TXNtWExsOTlKYW5OSCtL?=
+ =?utf-8?B?SWFpK1NDKzQ2dUpxSkhJNkpoSFhnY1k5ZFdEaFV1cVViUjdIL1pCVW5SZUtF?=
+ =?utf-8?B?Skl0TjVlc0pUNkZPOVhBN29CdkE3NktKanp0b3E3cnp4SUV5L2pWN2ExVll1?=
+ =?utf-8?B?M0F3cnF5TG00dDhmdU16NGRWME5YWWRWVFQ2RkFLMDlJRlpoYnRxNXZFV1Zm?=
+ =?utf-8?B?eTBPZUthUEN4WGNVY0hNVnRlS2hmYllaRmh1Mk5jZXdOL05vd25FdDFheTVr?=
+ =?utf-8?B?U2M1M2o0OUdNR0lRQS9KS1ZhTjN0a2g5c3g4K3JXQzVHQ1VKUUg1WXdVbXBs?=
+ =?utf-8?B?bGhPZUYrYWpFMWlKcGNSTFFqK2p2d3NPL1h1WVJrZlBpTThyMXpaZmxrQ0Rt?=
+ =?utf-8?B?a3VkajhOa0psQ0hRK2l3cUFvRUtPQ0ZkZkw2N2VIZk93Ni9hN0pNNzNzTmxV?=
+ =?utf-8?B?RVNqSGFJK1h5RzRqaU5TdisydllPa0I1Rm40Z3RINnRQL2Nsay8ydHRYTFFT?=
+ =?utf-8?B?Mnc2OW9QNVVCT3Bvak10alVYendDYnRzZFJKdHFRYU5jNi8ybnh5ODZSQXg0?=
+ =?utf-8?B?emExSjJ4Y1ZPaXozanJqaWVrb3JDNExtWUk0QnBubkluS2tHYVk5QXQ5SkFV?=
+ =?utf-8?B?R09ESHpFdDFUWStpcDZuRjByRUprWnVGN1EzMUZJQUkySVhLd2I4RzFmZmlh?=
+ =?utf-8?B?bHhpUmRiTncxTFR4Z1U0cGF5VGVIUnhvTEZpb0ZacHVlNG9iWnZyM2VjRWdz?=
+ =?utf-8?B?K0JOVllzWUVIWXZwT3NINUFUY2ljWE01VFFPVkNGbU1lWG93cWJBTkYrT29G?=
+ =?utf-8?B?elcvYnYwc2hVd3hsWE4rbHpyS1U1Y0x5TjdQUlB2NGF0TVN1b21GazdHMDlG?=
+ =?utf-8?B?UE53NnR1RmxvZUhnT2hsMFJuaVp5WEVRcHlCaXl2NENFRzNmVlIzZTlZVkRG?=
+ =?utf-8?B?VkR4NnJNa2N0cGFrZGZKdGFVVUdDeWVFdGx6bWpMVDRZREpPb3YwYkdlS0Fv?=
+ =?utf-8?B?enVmZklKeVZIK2tWQjQ5ZG1abGczdUhxZ2QvZG1LU0l2RDQyUnVKZ291cnZn?=
+ =?utf-8?B?RGhpSk14SFg0am05SjdmNXlQb081dTdROEJCMUFlaUhJRVpySXRjdjRWN0Jx?=
+ =?utf-8?B?M2JNOGhtUWpURi9wdHdqVjJPcllkLyszMFdvMGtFeEJtRXVoam5hcm5ia0JE?=
+ =?utf-8?B?SHQ4d2tGdGVrb29FMlRrUW5YdFUralZtQjdyQVdIcGg1Q21tOWhLRzJyclVv?=
+ =?utf-8?B?QU1YeTV2U2QzcGFMVVNVVDlMcjMwODBLZVBuUW5BS2M3ajdYK08rdStCNS9S?=
+ =?utf-8?B?aEI1b0RySDRwWG5vc1U2SGtLNDBiZEtlYko5UGdSb2FIUW03R1NUUHZPRkc0?=
+ =?utf-8?B?R3R5RStWZzQ0Z2xGTll6b2lpdXVNdTdpbEEycm1TWS9ESWgvSjg1NytvTElT?=
+ =?utf-8?B?MnRocFpmS09CY2F0M0dJbXE4R3hVVEFDZVJpRnZDNDF6ZXZhWDFvS2NqRWdq?=
+ =?utf-8?B?UE5YWHFnVTJ2NlZPYUt2Qmd4aUtaTlp0SDVqRHhwdENRNzBORWxCUExTclow?=
+ =?utf-8?B?SFM3Zm4waXMza1JHUWkrYmE4bFhjNFRYcnlsUzF6QjF3Z0EwbHRkNlBGOXhR?=
+ =?utf-8?B?N09qNHpONWdJalFneDdNNTIvcmc3Z1A1dENmSGZhY1ZGK1BJREdTZXZiME0y?=
+ =?utf-8?B?VkdxT2p2ZFUwckZxQktGcGJTUzMwWVQzNGhOdVRCYk53cVhOSGFEWjdwMFo4?=
+ =?utf-8?B?eTlyRFpZY0ExdTVoc1JoTXlneE4weG9aNTRoMEgwY3NEbnBhazhrUHNxU3dW?=
+ =?utf-8?B?dzJ6ZC84cklsQWV2eEhwaTRGTEJtcENxT3NQMWkrZnRVTGV6aXlNRHBqTThv?=
+ =?utf-8?B?NGhYYWpOVE1zMHl5VVNzci9WTUdkZU04emloaFhjQ2x0WTU1V2w5N1JpRlJn?=
+ =?utf-8?B?SUhtSm4rM1JHK3lxOUd6VHNNczN1dmtLTS9STXJ1YlZEN2l3dHBxeXJnZWp4?=
+ =?utf-8?B?WkhKRFhhTGdzM2VTYXEyTWJMZVllU2RkSy9pbDl2R3lIUXdlRHhxYnowRXgx?=
+ =?utf-8?B?RWg3VUcydXdYd1VmMjRyd0NxQnRmZkJ2NXZZdk1hNEJoaVJTZ2wyN3dyS0dR?=
+ =?utf-8?Q?+XhNefrjgjdcavrTcJ6JaSs=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 45d970e0-2a05-45d5-769b-08d9c55e19c5
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2718.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2021 15:17:00.2583
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +2QVGOzfyn1RbeVj+md0/bZwKik3QGWABT241WiWvBPgff0qpRcNKokLTDrZ0oX1ZB1I+V1M/lLq3tLROHu51g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2784
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Dec 2021 09:35:07 -0800
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
 
-> Pass iterator through to probes to allow copying data directly to the
-> probe buffers instead of taking multiple copies. Enables eBPF user and
-> raw iterator types out to programs for no-copy scenarios.
 
-This looks good to me, except for 1 nitpick. See below.
-
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-
+On 12/22/21 7:16 AM, Borislav Petkov wrote:
+> On Fri, Dec 10, 2021 at 09:43:03AM -0600, Brijesh Singh wrote:
+>> @@ -652,7 +652,7 @@ static enum es_result vc_handle_msr(struct ghcb *ghcb, struct es_em_ctxt *ctxt)
+>>    * This function runs on the first #VC exception after the kernel
+>>    * switched to virtual addresses.
+>>    */
+>> -static bool __init sev_es_setup_ghcb(void)
+>> +static bool __init setup_ghcb(void)
+>>   {
+>>   	/* First make sure the hypervisor talks a supported protocol. */
+>>   	if (!sev_es_negotiate_protocol())
 > 
-> Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
-> ---
->  kernel/trace/trace_events_user.c | 113 +++++++++++++++++++++++--------
->  1 file changed, 85 insertions(+), 28 deletions(-)
+> Ok, let me stare at this for a while:
 > 
-> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-> index cc30d1fcbb63..fa3e26281fc3 100644
-> --- a/kernel/trace/trace_events_user.c
-> +++ b/kernel/trace/trace_events_user.c
-> @@ -41,6 +41,9 @@
->  #define MAX_FIELD_ARRAY_SIZE 1024
->  #define MAX_FIELD_ARG_NAME 256
->  
-> +#define MAX_BPF_COPY_SIZE PAGE_SIZE
-> +#define MAX_STACK_BPF_DATA 512
-> +
->  static char *register_page_data;
->  
->  static DEFINE_MUTEX(reg_mutex);
-> @@ -78,8 +81,7 @@ struct user_event_refs {
->  	struct user_event *events[];
->  };
->  
-> -typedef void (*user_event_func_t) (struct user_event *user,
-> -				   void *data, u32 datalen,
-> +typedef void (*user_event_func_t) (struct user_event *user, struct iov_iter *i,
->  				   void *tpdata);
->  
->  static int user_event_parse(char *name, char *args, char *flags,
-> @@ -90,6 +92,20 @@ static u32 user_event_key(char *name)
->  	return jhash(name, strlen(name), 0);
->  }
->  
-> +static __always_inline __must_check
-> +size_t copy_nofault(void *addr, size_t bytes, struct iov_iter *i)
-> +{
-> +	size_t ret;
-> +
-> +	pagefault_disable();
-> +
-> +	ret = copy_from_iter_nocache(addr, bytes, i);
-> +
-> +	pagefault_enable();
-> +
-> +	return ret;
-> +}
-> +
->  static struct list_head *user_event_get_fields(struct trace_event_call *call)
->  {
->  	struct user_event *user = (struct user_event *)call->data;
-> @@ -524,7 +540,7 @@ static struct user_event *find_user_event(char *name, u32 *outkey)
->  /*
->   * Writes the user supplied payload out to a trace file.
->   */
-> -static void user_event_ftrace(struct user_event *user, void *data, u32 datalen,
-> +static void user_event_ftrace(struct user_event *user, struct iov_iter *i,
->  			      void *tpdata)
->  {
->  	struct trace_event_file *file;
-> @@ -540,41 +556,85 @@ static void user_event_ftrace(struct user_event *user, void *data, u32 datalen,
->  
->  	/* Allocates and fills trace_entry, + 1 of this is data payload */
->  	entry = trace_event_buffer_reserve(&event_buffer, file,
-> -					   sizeof(*entry) + datalen);
-> +					   sizeof(*entry) + i->count);
->  
->  	if (unlikely(!entry))
->  		return;
->  
-> -	memcpy(entry + 1, data, datalen);
-> +	if (unlikely(!copy_nofault(entry + 1, i->count, i))) {
-> +		__trace_event_discard_commit(event_buffer.buffer,
-> +					     event_buffer.event);
-> +		return;
-> +	}
->  
->  	trace_event_buffer_commit(&event_buffer);
-
-Will this be 
-
-	if (unlikely(!copy_nofault(entry + 1, i->count, i)))
-		__trace_event_discard_commit(event_buffer.buffer,
-					     event_buffer.event);
-	else
-		trace_event_buffer_commit(&event_buffer);
-
-?
-
-Thank you,
-
->  }
->  
->  #ifdef CONFIG_PERF_EVENTS
-> +static void user_event_bpf(struct user_event *user, struct iov_iter *i)
-> +{
-> +	struct user_bpf_context context;
-> +	struct user_bpf_iter bpf_i;
-> +	char fast_data[MAX_STACK_BPF_DATA];
-> +	void *temp = NULL;
-> +
-> +	if ((user->flags & FLAG_BPF_ITER) && iter_is_iovec(i)) {
-> +		/* Raw iterator */
-> +		context.data_type = USER_BPF_DATA_ITER;
-> +		context.data_len = i->count;
-> +		context.iter = &bpf_i;
-> +
-> +		bpf_i.iov_offset = i->iov_offset;
-> +		bpf_i.iov = i->iov;
-> +		bpf_i.nr_segs = i->nr_segs;
-> +	} else if (i->nr_segs == 1 && iter_is_iovec(i)) {
-> +		/* Single buffer from user */
-> +		context.data_type = USER_BPF_DATA_USER;
-> +		context.data_len = i->count;
-> +		context.udata = i->iov->iov_base + i->iov_offset;
-> +	} else {
-> +		/* Multi buffer from user */
-> +		struct iov_iter copy = *i;
-> +		size_t copy_size = min_t(size_t, i->count, MAX_BPF_COPY_SIZE);
-> +
-> +		context.data_type = USER_BPF_DATA_KERNEL;
-> +		context.kdata = fast_data;
-> +
-> +		if (unlikely(copy_size > sizeof(fast_data))) {
-> +			temp = kmalloc(copy_size, GFP_NOWAIT);
-> +
-> +			if (temp)
-> +				context.kdata = temp;
-> +			else
-> +				copy_size = sizeof(fast_data);
-> +		}
-> +
-> +		context.data_len = copy_nofault(context.kdata,
-> +						copy_size, &copy);
-> +	}
-> +
-> +	trace_call_bpf(&user->call, &context);
-> +
-> +	kfree(temp);
-> +}
-> +
->  /*
->   * Writes the user supplied payload out to perf ring buffer or eBPF program.
->   */
-> -static void user_event_perf(struct user_event *user, void *data, u32 datalen,
-> +static void user_event_perf(struct user_event *user, struct iov_iter *i,
->  			    void *tpdata)
->  {
->  	struct hlist_head *perf_head;
->  
-> -	if (bpf_prog_array_valid(&user->call)) {
-> -		struct user_bpf_context context = {0};
-> -
-> -		context.data_len = datalen;
-> -		context.data_type = USER_BPF_DATA_KERNEL;
-> -		context.kdata = data;
-> -
-> -		trace_call_bpf(&user->call, &context);
-> -	}
-> +	if (bpf_prog_array_valid(&user->call))
-> +		user_event_bpf(user, i);
->  
->  	perf_head = this_cpu_ptr(user->call.perf_events);
->  
->  	if (perf_head && !hlist_empty(perf_head)) {
->  		struct trace_entry *perf_entry;
->  		struct pt_regs *regs;
-> -		size_t size = sizeof(*perf_entry) + datalen;
-> +		size_t size = sizeof(*perf_entry) + i->count;
->  		int context;
->  
->  		perf_entry = perf_trace_buf_alloc(ALIGN(size, 8),
-> @@ -585,7 +645,10 @@ static void user_event_perf(struct user_event *user, void *data, u32 datalen,
->  
->  		perf_fetch_caller_regs(regs);
->  
-> -		memcpy(perf_entry + 1, data, datalen);
-> +		if (unlikely(!copy_nofault(perf_entry + 1, i->count, i))) {
-> +			perf_swevent_put_recursion_context(context);
-> +			return;
-> +		}
->  
->  		perf_trace_buf_submit(perf_entry, size, context,
->  				      user->call.event.type, 1, regs,
-> @@ -1018,16 +1081,11 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
->  	if (likely(atomic_read(&tp->key.enabled) > 0)) {
->  		struct tracepoint_func *probe_func_ptr;
->  		user_event_func_t probe_func;
-> +		struct iov_iter copy;
->  		void *tpdata;
-> -		void *kdata;
-> -		u32 datalen;
-> -
-> -		kdata = kmalloc(i->count, GFP_KERNEL);
->  
-> -		if (unlikely(!kdata))
-> -			return -ENOMEM;
-> -
-> -		datalen = copy_from_iter(kdata, i->count, i);
-> +		if (unlikely(iov_iter_fault_in_readable(i, i->count)))
-> +			return -EFAULT;
->  
->  		rcu_read_lock_sched();
->  
-> @@ -1035,15 +1093,14 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
->  
->  		if (probe_func_ptr) {
->  			do {
-> +				copy = *i;
->  				probe_func = probe_func_ptr->func;
->  				tpdata = probe_func_ptr->data;
-> -				probe_func(user, kdata, datalen, tpdata);
-> +				probe_func(user, &copy, tpdata);
->  			} while ((++probe_func_ptr)->func);
->  		}
->  
->  		rcu_read_unlock_sched();
-> -
-> -		kfree(kdata);
->  	}
->  
->  	return ret;
-> -- 
-> 2.17.1
+> This gets called by handle_vc_boot_ghcb() which gets set at build time:
+> 
+> arch/x86/kernel/head_64.S:372:SYM_DATA(initial_vc_handler,      .quad handle_vc_boot_ghcb)
+> 
+> initial_vc_handler() gets called by vc_boot_ghcb() which gets set in
+> 
+> early_setup_idt()
+> 
+> and that function already does sev_snp_register_ghcb().
+> 
+> So why don't you concentrate the work setup_ghcb() does before the first
+> #VC and call it in early_setup_idt(), before the IDT is set?
+> 
+> And then you get rid of yet another setup-at-first-use case?
 > 
 
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+I was following the existing SEV-ES implementation in which GHCB is 
+setup on first #VC. But recently you recommended to move the setup 
+outside of the VC handler for the decompression path and I was going to 
+do the same for the kernel proper. I have tried moving the GHCB setup 
+outside and it seems to be working okay with me (a limited testing so 
+far). I will check Jorge to see if there was any reason for doing the 
+GHCB setup inside the VC for the SEV-ES case.

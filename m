@@ -2,119 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D42B547D061
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 11:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E177347D064
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 11:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240115AbhLVK4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 05:56:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41514 "EHLO
+        id S244322AbhLVK60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 05:58:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240085AbhLVK4t (ORCPT
+        with ESMTP id S240152AbhLVK6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 05:56:49 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F1BC061746
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 02:56:47 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id d9so4168002wrb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 02:56:47 -0800 (PST)
+        Wed, 22 Dec 2021 05:58:24 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7452EC06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 02:58:24 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id v7so4006952wrv.12
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 02:58:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:subject:message-id:references:mime-version
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=3Wks2OpuoB00uHRdh5JUOv2eXhyxD1JIeK8fHzyUvqM=;
-        b=P4Xys96R8sOLs5LvpYi8S+iGyJy/CyJ/hliNHjWaDR72pb5VG5lXrnhBXmj4y0RlHX
-         4v9sLZtMm8BVyxq+sRO25uelCX6izdp05ULp9hvwm/Mglo8UYDote5AH36detwLyX7Vm
-         mUvXr5jvb1YHSfeHVoPa0KzR46C3uFcGlEGAt7GFJWZdQ3iVBAgP83nrolccxZknIuWW
-         dCuuv1cj9ZlhKQ5xb/0JrTTtUe1cufNZnJX0cPDPa6p5zWK+99K/zeKfTycRnnXgyO5M
-         8dza5aq6D3S1rkIrUbC8l5cPMlq0UCY/lzfkJHQcOjH5CvLXP44Cglx13sliu0dbxC+d
-         a37Q==
+        bh=U6h7YYcmCz5aSPslRAoWARbne1uxxYH871pKs16mGxI=;
+        b=HNZ6vYXZWGcMzsyVNenb3KauQgqFVyS/CLuy1hRAJASHNvkfSJy6+hZaYDEAyrKTS6
+         r9Z2fXTiUIAXMqx/K9BqkKUrcRtSm5o4t4muQiXlq8+Jv+r5VQpy9q4wleVOz/Q44CX6
+         u2owH4RvjqBI1VZyEGfzwrv7yqoqOA2/LrT5IvV7e1ufkzkUOZR9ljDxoW449ga3g6Sk
+         nkBz1sSpufObR3J/ZED7CSeiKvCZj7J6+OpJlXCP1TrDlYCdSm2xv7svTE8tV4aMpVYW
+         GZ42qMv2So7dp6zpuwg1N5mtFunZqMsqWw7h3vNo+YJk0LYKpP3d12rg+qG4lqGDcnzF
+         bA9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=3Wks2OpuoB00uHRdh5JUOv2eXhyxD1JIeK8fHzyUvqM=;
-        b=LUVx2o3Uf3HmBwFCNTIJX0yX+S9ycQNIkfQq0Xb1IP+mfKmfsmTTrFahLT2vPFEEXx
-         RoN1uttDSk0XiziyHjGR7aQAD5XMTtnklsNu8l0U5BTuA7w+ZP9qMvkCg/vI2vGcuX18
-         aG4txCPQbCZofA56yuwz4vQnQNNBFVAlpJmLc4EzcUBxRrxjT2Ht3DlMs7LTIGQivsMW
-         SO/78ga1BfANPljfrc20snflmzkhOpIGEczjReyzJdzKB70068z51hcQqbNTSoea3oT/
-         KMenadYaq8T2iUAQeYT87UVwbzMXDSGc2SS3IhozWhIt8iDYIPx1npcbTijG0IviVzvK
-         CZQg==
-X-Gm-Message-State: AOAM5324Ek18Ma88OVi7Fb0AgYeFcKMwuy+6wyZ2SZ88WluDIAgJl96i
-        sYvHz7L3zVmut+maG5WcosQt/Q==
-X-Google-Smtp-Source: ABdhPJzPy9qHrxvmsh7Kw2oL3n3gfjoGIN/UMGaa134hOuMY2k9I3qz20YIwWw5VJKZnnyWplusSuQ==
-X-Received: by 2002:adf:bb4a:: with SMTP id x10mr1714179wrg.269.1640170606402;
-        Wed, 22 Dec 2021 02:56:46 -0800 (PST)
+        bh=U6h7YYcmCz5aSPslRAoWARbne1uxxYH871pKs16mGxI=;
+        b=g3flyNvNeVky8HpXHiT1OYnHeW/P/EVcTq+gUff9aSYr1LCqBn99IrQPV2Ha0GUcnX
+         ugNtf4GkTmVOjW8CuZZuKCLLvHPtfeh8/XGSsgtc+QQnsSkbRIj0yctZNYmIefRnpJiY
+         GLAjNArrVX5PpaA56oojwlKeS0zpNEt34aHLsWRcWKxQioRhBx4gOrhQHMnYukQReiY+
+         rMErMMw0dLhqctZsqmwHsZXu2fOTRAiRanmZMO5qCGnSoIvf2wnEM/LfjVaMmz8pkR/k
+         K1PVUB2BuvXaroRAzvV8nlSiysizhcCgKjvsBKIv0aNUOv37mgqadHF++tMKVJw9KbSN
+         SITw==
+X-Gm-Message-State: AOAM530o5BWv46Enc4A+c07NCeaIgbGua82odC538QlvZUTJb8Mf0rfq
+        9Ev0fDhrdksqXZf0IwtPKdRn1Q==
+X-Google-Smtp-Source: ABdhPJyOSVp8sAj2OcAANzZqIahTuMFEy50QW3HzbkXKtDFt2Nce5vaZ46zJGUzIOPX4msbYj8Yq2A==
+X-Received: by 2002:adf:e751:: with SMTP id c17mr1752270wrn.402.1640170702955;
+        Wed, 22 Dec 2021 02:58:22 -0800 (PST)
 Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id l19sm1507984wmq.22.2021.12.22.02.56.45
+        by smtp.gmail.com with ESMTPSA id v6sm4949293wmh.8.2021.12.22.02.58.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 02:56:45 -0800 (PST)
-Date:   Wed, 22 Dec 2021 10:56:43 +0000
+        Wed, 22 Dec 2021 02:58:22 -0800 (PST)
+Date:   Wed, 22 Dec 2021 10:58:20 +0000
 From:   Lee Jones <lee.jones@linaro.org>
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Pavel Dubrova <pashadubrova@gmail.com>,
-        Kiran Gunda <kgunda@codeaurora.org>,
-        Bryan Wu <cooloney@gmail.com>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH v3 0/9] backlight: qcom-wled: fix and solidify handling
- of enabled-strings
-Message-ID: <YcMEa7aEXKrgjwuG@google.com>
-References: <20211115203459.1634079-1-marijn.suijten@somainline.org>
- <20211116120213.n7qxqfi62lrxhyl7@maple.lan>
- <YZPRV2jD1EBYGdHL@google.com>
- <20211221233131.rwjjojuawgffr2gf@SoMainline.org>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        lksctp developers <linux-sctp@vger.kernel.org>,
+        "H.P. Yarroll" <piggy@acm.org>, Hui Huang <hui.huang@nokia.com>,
+        network dev <netdev@vger.kernel.org>
+Subject: Re: [RESEND 2/2] sctp: hold cached endpoints to prevent possible UAF
+Message-ID: <YcMEzMHuCmvlQQpa@google.com>
+References: <Ybtrs56tSBbmyt5c@google.com>
+ <CADvbK_cBBDkGt8XLJo6N5TX2YQATS+udVWm8_=8f96=0B9tnTA@mail.gmail.com>
+ <Ybtzr5ZmD/IKjycz@google.com>
+ <Ybtz/0gflbkG5Q/0@google.com>
+ <CADvbK_cexKiVATn=dPrWqoS0qM-bM0UcSkx8Xqz5ibEKQizDVg@mail.gmail.com>
+ <CADvbK_cxMbYwkuN_ZUvHY-7ahc9ff+jbuPkKn6CA=yqMk=SKVw@mail.gmail.com>
+ <YbuNZtV/pjDszTad@google.com>
+ <CADvbK_f7wY_tknw5wTo369-2aRSvhhkETwmdu9tRbgfeyyTQng@mail.gmail.com>
+ <YcBFSo/4WsMOls8Y@google.com>
+ <CADvbK_dF-+3J5HOGsmmvA4by=STNLEaWszZjNOOAdEkrstpYEQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211221233131.rwjjojuawgffr2gf@SoMainline.org>
+In-Reply-To: <CADvbK_dF-+3J5HOGsmmvA4by=STNLEaWszZjNOOAdEkrstpYEQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Dec 2021, Marijn Suijten wrote:
+On Tue, 21 Dec 2021, Xin Long wrote:
 
-> On 2021-11-16 15:42:15, Lee Jones wrote:
-> > On Tue, 16 Nov 2021, Daniel Thompson wrote:
-> > 
-> > > Hi Lee
-> > > 
-> > > On Mon, Nov 15, 2021 at 09:34:50PM +0100, Marijn Suijten wrote:
-> > > > This patchset fixes WLED's handling of enabled-strings: besides some
-> > > > cleanup it is now actually possible to specify a non-contiguous array of
-> > > > enabled strings (not necessarily starting at zero) and the values from
-> > > > DT are now validated to prevent possible unexpected out-of-bounds
-> > > > register and array element accesses.
-> > > > Off-by-one mistakes in the maximum number of strings, also causing
-> > > > out-of-bounds access, have been addressed as well.
-> > > 
-> > > They have arrived piecemeal (during v1, v2 and v3) but all patches on
-> > > the set should now have my R-b: attached to them.
-> > 
-> > I can see that.  Nothing for you to worry about.
-> > 
-> > I'll apply these when I conduct my next sweep, thanks.
+> On Mon, Dec 20, 2021 at 3:56 AM Lee Jones <lee.jones@linaro.org> wrote:
+> >
+> > On Sun, 19 Dec 2021, Xin Long wrote:
+> >
+> > > On Thu, Dec 16, 2021 at 2:03 PM Lee Jones <lee.jones@linaro.org> wrote:
+> > > >
+> > > > On Thu, 16 Dec 2021, Xin Long wrote:
+> > > >
+> > > > > (
+> > > > >
+> > > > > On Thu, Dec 16, 2021 at 1:12 PM Xin Long <lucien.xin@gmail.com> wrote:
+> > > > > >
+> > > > > > On Thu, Dec 16, 2021 at 12:14 PM Lee Jones <lee.jones@linaro.org> wrote:
+> > > > > > >
+> > > > > > > On Thu, 16 Dec 2021, Lee Jones wrote:
+> > > > > > >
+> > > > > > > > On Thu, 16 Dec 2021, Xin Long wrote:
+> > > > > > > >
+> > > > > > > > > On Thu, Dec 16, 2021 at 11:39 AM Lee Jones <lee.jones@linaro.org> wrote:
+> > > > > > > > > >
+> > > > > > > > > > On Thu, 16 Dec 2021, Xin Long wrote:
+> > > > > > > > > >
+> > > > > > > > > > > On Wed, Dec 15, 2021 at 8:48 PM Jakub Kicinski <kuba@kernel.org> wrote:
+> > > > > > > > > > > >
+> > > > > > > > > > > > On Tue, 14 Dec 2021 21:57:32 +0000 Lee Jones wrote:
+> > > > > > > > > > > > > The cause of the resultant dump_stack() reported below is a
+> > > > > > > > > > > > > dereference of a freed pointer to 'struct sctp_endpoint' in
+> > > > > > > > > > > > > sctp_sock_dump().
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > This race condition occurs when a transport is cached into its
+> > > > > > > > > > > > > associated hash table followed by an endpoint/sock migration to a new
+> > > > > > > > > > > > > association in sctp_assoc_migrate() prior to their subsequent use in
+> > > > > > > > > > > > > sctp_diag_dump() which uses sctp_for_each_transport() to walk the hash
+> > > > > > > > > > > > > table calling into sctp_sock_dump() where the dereference occurs.
+> > > > > > > > > >
+> > > > > > > > > > > in sctp_sock_dump():
+> > > > > > > > > > >         struct sock *sk = ep->base.sk;
+> > > > > > > > > > >         ... <--[1]
+> > > > > > > > > > >         lock_sock(sk);
+> > > > > > > > > > >
+> > > > > > > > > > > Do you mean in [1], the sk is peeled off and gets freed elsewhere?
+> > > > > > > > > >
+> > > > > > > > > > 'ep' and 'sk' are both switched out for new ones in sctp_sock_migrate().
+> > > > > > > > > >
+> > > > > > > > > > > if that's true, it's still late to do sock_hold(sk) in your this patch.
+> > > > > > > > > >
+> > > > > > > > > > No, that's not right.
+> > > > > > > > > >
+> > > > > > > > > > The schedule happens *inside* the lock_sock() call.
+> > > > > > > > > Sorry, I don't follow this.
+> > > > > > > > > We can't expect when the schedule happens, why do you think this
+> > > > > > > > > can never be scheduled before the lock_sock() call?
+> > > > > > > >
+> > > > > > > > True, but I've had this running for hours and it hasn't reproduced.
+> > > > > > I understand, but it's a crash, we shouldn't take any risk that it
+> > > > > > will never happen.
+> > > > > > you may try to add a usleep() before the lock_sock call to reproduce it.
+> > > > > >
+> > > > > > > >
+> > > > > > > > Without this patch, I can reproduce this in around 2 seconds.
+> > > > > > > >
+> > > > > > > > The C-repro for this is pretty intense!
+> > > > > > > >
+> > > > > > > > If you want to be *sure* that a schedule will never happen, we can
+> > > > > > > > take a reference directly with:
+> > > > > > > >
+> > > > > > > >      ep = sctp_endpoint_hold(tsp->asoc->ep);
+> > > > > > > >      sk = sock_hold(ep->base.sk);
+> > > > > > > >
+> > > > > > > > Which was my original plan before I soak tested this submitted patch
+> > > > > > > > for hours without any sign of reproducing the issue.
+> > > > > > we tried to not export sctp_obj_hold/put(), that's why we had
+> > > > > > sctp_for_each_transport().
+> > > > > >
+> > > > > > ep itself holds a reference of sk when it's alive, so it's weird to do
+> > > > > > these 2 together.
+> > > > > >
+> > > > > > > >
+> > > > > > > > > If the sock is peeled off or is being freed, we shouldn't dump this sock,
+> > > > > > > > > and it's better to skip it.
+> > > > > > > >
+> > > > > > > > I guess we can do that too.
+> > > > > > > >
+> > > > > > > > Are you suggesting sctp_sock_migrate() as the call site?
+> > > > > > diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+> > > > > > index 85ac2e901ffc..56ea7a0e2add 100644
+> > > > > > --- a/net/sctp/socket.c
+> > > > > > +++ b/net/sctp/socket.c
+> > > > > > @@ -9868,6 +9868,7 @@ static int sctp_sock_migrate(struct sock *oldsk,
+> > > > > > struct sock *newsk,
+> > > > > >                 inet_sk_set_state(newsk, SCTP_SS_ESTABLISHED);
+> > > > > >         }
+> > > > > >
+> > > > > > +       sock_set_flag(oldsk, SOCK_RCU_FREE);
+> > > > > >         release_sock(newsk);
+> > > > > >
+> > > > > >         return 0;
+> > > > > >
+> > > > > > SOCK_RCU_FREE is set to the previous sk, so that this sk will not
+> > > > > > be freed between rcu_read_lock() and rcu_read_unlock().
+> > > > > >
+> > > > > > >
+> > > > > > > Also, when are you planning on testing the flag?
+> > > > > > SOCK_RCU_FREE flag is used when freeing sk in sk_destruct(),
+> > > > > > and if it's set, it will be freed in the next grace period of RCU.
+> > > > > >
+> > > > > > >
+> > > > > > > Won't that suffer with the same issue(s)?
+> > > > > > diff --git a/net/sctp/diag.c b/net/sctp/diag.c
+> > > > > > index 7970d786c4a2..b4c4acd9e67e 100644
+> > > > > > --- a/net/sctp/diag.c
+> > > > > > +++ b/net/sctp/diag.c
+> > > > > > @@ -309,16 +309,21 @@ static int sctp_tsp_dump_one(struct
+> > > > > > sctp_transport *tsp, void *p)
+> > > > > >
+> > > > > >  static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
+> > > > > >  {
+> > > > > > -       struct sctp_endpoint *ep = tsp->asoc->ep;
+> > > > > >         struct sctp_comm_param *commp = p;
+> > > > > > -       struct sock *sk = ep->base.sk;
+> > > > > >         struct sk_buff *skb = commp->skb;
+> > > > > >         struct netlink_callback *cb = commp->cb;
+> > > > > >         const struct inet_diag_req_v2 *r = commp->r;
+> > > > > >         struct sctp_association *assoc;
+> > > > > > +       struct sctp_endpoint *ep;
+> > > > > > +       struct sock *sk;
+> > > > > >         int err = 0;
+> > > > > >
+> > > > > > +       rcu_read_lock();
+> > > > > > +       ep = tsp->asoc->ep;
+> > > > > > +       sk = ep->base.sk;
+> > > > > >         lock_sock(sk);
+> > > > > Unfortunately, this isn't going to work, as lock_sock() may sleep,
+> > > > > and is not allowed to be called understand rcu_read_lock() :(
+> > > >
+> > > > Ah!
+> > > >
+> > > > How about my original solution of taking:
+> > > >
+> > > >   tsp->asoc->ep
+> > > >
+> > > > ... directly?
+> > > >
+> > > > If it already holds the sk, we should be golden?
+> > > Both ep and sk could be destroyed at this moment.
+> > > you can't try to hold an object that has already been destroyed.
+> > > It holds the sk only when ep is still alive.
+> > >
+> > > I don't see a way to get this fix with the current transport hashtable.
+> > > I will change to use port hashtable to dump sock/asocs for this.
+> >
+> > Right.  Cache invalidation is hard!
+> >
+> > Sure, if there is a better way, please go ahead.
+> Hi, Jones,
 > 
-> Thanks for that Lee!  Has the next sweep already passed by?  Seems
-> everyone is preparing for the 5.17 merge window but these patches
-> haven't yet landed on the backlight tree [1].  I'd appreciate it if we
-> can make them appear in the 5.17 window :)
+> Port hashtable doesn't work either as lock_sock can not be called
+> under spin_lock().
+> 
+> I posted another patch where this issue can be fixed by moving ep free
+> to call_rcu().
+> It will be great if you are able to test it.
 
-No need to panic.
-
-v5.17-rc1 isn't due to be cut for either 3.5 or 4.5 weeks.
+I certainly will.
 
 -- 
 Lee Jones [李琼斯]

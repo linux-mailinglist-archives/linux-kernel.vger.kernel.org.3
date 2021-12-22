@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADACD47CE40
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 09:29:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31BE447CE41
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 09:29:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243354AbhLVI24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 03:28:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51112 "EHLO
+        id S243373AbhLVI25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 03:28:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33836 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243308AbhLVI2t (ORCPT
+        by vger.kernel.org with ESMTP id S236903AbhLVI2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 03:28:49 -0500
+        Wed, 22 Dec 2021 03:28:50 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1640161729;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5EHgB4jt8VzQ3WZ6ERGEVuhUukhc+8h/a/zrx+jNmtA=;
-        b=WWeai2tiFtTnNGDaBBV8yW6TC5KHppGh1oTIM3pFQhXCbQ2pVXQ6F8mHnEry2v9GnZVLli
-        iWuOty8EqfmNyny2uombQchZpq+cgN0Mo/FtmvfaBje4/P+o+AJVj3YtMVcXiMbqZIFo3D
-        Q9oivp52vXEiolLE3YL6L7+6a+d3O8A=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=916gpQ5TQZBxXpPApgtQW0I1UIGKedMg/4PyltH33/c=;
+        b=eF8WAqRzHnrQ9pZH+9c/iNxeAvoPOE5sTpf6mgD4xGVVojAZewRMpfv0vT3PHmbW2PxR3e
+        WBojX1lbD4Rhn9JeCrorF7iNdaDJxc9/V4/mnPMIQShxSb0q6Sb/RqyGxpg1v2gT8Vr0rf
+        nJ8FzNkkFYKVGn1IhNTMWASi8Px514M=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-577-HbPa1HXWPoquQ4mqqczYlw-1; Wed, 22 Dec 2021 03:28:47 -0500
-X-MC-Unique: HbPa1HXWPoquQ4mqqczYlw-1
-Received: by mail-wm1-f69.google.com with SMTP id p22-20020a05600c1d9600b00345a25ea8cfso419899wms.5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 00:28:47 -0800 (PST)
+ us-mta-632-jNyBZ0gYNJKut1PuCa6PXQ-1; Wed, 22 Dec 2021 03:28:48 -0500
+X-MC-Unique: jNyBZ0gYNJKut1PuCa6PXQ-1
+Received: by mail-wr1-f70.google.com with SMTP id j26-20020adfb31a000000b001a2356afd4fso516872wrd.21
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 00:28:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5EHgB4jt8VzQ3WZ6ERGEVuhUukhc+8h/a/zrx+jNmtA=;
-        b=qCyRJ9vcN++uRTTb+jl0KBvx+dXZaQ0V7eRdPHWF4nDJrds5gHUXvImVi0MiUvDLQh
-         WykZyqjMEjJaUWhl8XdylzBAiXDSmAzRuEA3eLQTG1kw8tYWCwLEKf2mn4UZ62nO7UgK
-         keXBCOgMHn5vOt7VVW1MlVOnqvtAtVv8zS1VybDKLklTGkO9grYPibqQwvPUFi8Ykxas
-         9UBPQo0fYLdnLcUTPjG8r34yBOMw/pR7U8LfkMUDNxfmirMonllZ1mQyiaEj6M3l1fkb
-         v5J/qZrtYrt3bD3of2ZG/AYT9Xn/shlFo2isjn8bTUJQGYT5xYal4FPCQ1XOjAGlPzPd
-         MVQw==
-X-Gm-Message-State: AOAM530OfaMxfUKHSBTSjDBaqK1aKxC6SmXyodTqyD6GM8LiMJBVDz0g
-        BcEGTDp8R5RlOQZauHuSp0HzwTxw4wHywgqoQFcVTQLPDArDYS8M8wfz8SBX/vHxZTMsFCht3Ro
-        KyZGOQRZUbkHwRW1rTqhOfu9io0jXbGVwPGLYW40ht72jlbQdCbY1MGETrLovlA6N834t5P3DNq
-        Q=
-X-Received: by 2002:a05:600c:1c20:: with SMTP id j32mr104017wms.1.1640161726589;
-        Wed, 22 Dec 2021 00:28:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxao6fS2/g74UosGgsoqKJfq1VcVJQsZJi/iDWRRvOhWbuaBqYMNZKeV5b54IyJARY9L/JEgg==
-X-Received: by 2002:a05:600c:1c20:: with SMTP id j32mr104003wms.1.1640161726400;
-        Wed, 22 Dec 2021 00:28:46 -0800 (PST)
+        bh=916gpQ5TQZBxXpPApgtQW0I1UIGKedMg/4PyltH33/c=;
+        b=PhrQpMxGsbkWiddaD1/6YNb3Tv34bLCnC5RyUMEs2fPTUomurHj91CMoTwiP8YqvPd
+         ylcNVqedEe0F+TsVPkUGeuFTkjfTUYrvKXaYy2Bv63V4f5tm7u8rA23UmuFcrlhAb+4o
+         nRJOzpZavPmUglyVIrsrqhrjYWnOG5orM6vnmUbmHeQNf4tyFm+MtA3nvEEdshqt6QiL
+         OwyeRxSTTtKp+mvI7rHgxFcrwpJLOnWN/p/4+t8fp9ObO4ND5kmVat49XkGoKeHs4sTc
+         jitS41cvugt12MTdQDNO4zviLVjY6OFTzwrVW+QAqzmI/qKBwG2nFFdi6ZuBHjVG559c
+         cGoQ==
+X-Gm-Message-State: AOAM5313JNdx8gOh9RemkggPIE77T8GyV5srrYrGf/nb/m9Ns9DukgLA
+        GXPI7Z/iemji8f0WczLZf8GyMwf4fKDje5tBCXbbMOU7e+1acyZDEppMRHsOuhE8rZuNT1tZ9w1
+        mwXU0c4vZvsI8udHG9UNZRIHYH4gBt3osn05FUnhsN6kSNReqMNvcABzmaMVIyHBpHHncxQUxcP
+        4=
+X-Received: by 2002:a5d:4144:: with SMTP id c4mr1323688wrq.702.1640161727507;
+        Wed, 22 Dec 2021 00:28:47 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyArIqTBpIbNGxmI4/yEpmZMeqf+tgNqKacNBC/CgC6jGtAWwEbfkMrIM/wDbmBhbs8PlGrlg==
+X-Received: by 2002:a5d:4144:: with SMTP id c4mr1323670wrq.702.1640161727213;
+        Wed, 22 Dec 2021 00:28:47 -0800 (PST)
 Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id m17sm1247080wrz.91.2021.12.22.00.28.45
+        by smtp.gmail.com with ESMTPSA id m17sm1247080wrz.91.2021.12.22.00.28.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 00:28:46 -0800 (PST)
+        Wed, 22 Dec 2021 00:28:47 -0800 (PST)
 From:   Javier Martinez Canillas <javierm@redhat.com>
 To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Chen Feng <puck.chen@hisilicon.com>,
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
-        John Stultz <john.stultz@linaro.org>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Xinliang Liu <xinliang.liu@linaro.org>,
-        Xinwei Kong <kong.kongxinwei@hisilicon.com>
-Subject: [PATCH v3 05/10] drm/hisilicon/hibmc: Replace module initialization with DRM helpers
-Date:   Wed, 22 Dec 2021 09:28:26 +0100
-Message-Id: <20211222082831.196562-6-javierm@redhat.com>
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v3 06/10] drm: Provide platform module-init macro
+Date:   Wed, 22 Dec 2021 09:28:27 +0100
+Message-Id: <20211222082831.196562-7-javierm@redhat.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211222082831.196562-1-javierm@redhat.com>
 References: <20211222082831.196562-1-javierm@redhat.com>
@@ -76,41 +73,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Zimmermann <tzimmermann@suse.de>
+Provide a helper macro to register platform DRM drivers. The new
+macro behaves like module_platform_driver() with an additional
+test if DRM modesetting has been enabled.
 
-Replace module_pci_driver() with drm_module_pci_driver(). The DRM macro
-respects drm_firmware_drivers_only() and fails if the flag has been set.
-
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 ---
 
 (no changes since v1)
 
- drivers/gpu/drm/hisilicon/hibmc/hibmc_drm_drv.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/drm/drm_module.h | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/drivers/gpu/drm/hisilicon/hibmc/hibmc_drm_drv.c b/drivers/gpu/drm/hisilicon/hibmc/hibmc_drm_drv.c
-index 610fc8e135f9..fe4269c5aa0a 100644
---- a/drivers/gpu/drm/hisilicon/hibmc/hibmc_drm_drv.c
-+++ b/drivers/gpu/drm/hisilicon/hibmc/hibmc_drm_drv.c
-@@ -20,6 +20,7 @@
- #include <drm/drm_gem_framebuffer_helper.h>
- #include <drm/drm_gem_vram_helper.h>
- #include <drm/drm_managed.h>
-+#include <drm/drm_module.h>
- #include <drm/drm_vblank.h>
+diff --git a/include/drm/drm_module.h b/include/drm/drm_module.h
+index eb3fd7bcbec9..4db1ae03d9a5 100644
+--- a/include/drm/drm_module.h
++++ b/include/drm/drm_module.h
+@@ -4,6 +4,7 @@
+ #define DRM_MODULE_H
  
- #include "hibmc_drm_drv.h"
-@@ -379,7 +380,7 @@ static struct pci_driver hibmc_pci_driver = {
- 	.driver.pm =    &hibmc_pm_ops,
- };
+ #include <linux/pci.h>
++#include <linux/platform_device.h>
  
--module_pci_driver(hibmc_pci_driver);
-+drm_module_pci_driver(hibmc_pci_driver);
+ #include <drm/drm_drv.h>
  
- MODULE_DEVICE_TABLE(pci, hibmc_pci_table);
- MODULE_AUTHOR("RongrongZou <zourongrong@huawei.com>");
+@@ -92,4 +93,33 @@ drm_pci_unregister_driver_if_modeset(struct pci_driver *pci_drv, int modeset)
+ 	module_driver(__pci_drv, drm_pci_register_driver_if_modeset, \
+ 		      drm_pci_unregister_driver_if_modeset, __modeset)
+ 
++/*
++ * Platform drivers
++ */
++
++static inline int __init
++drm_platform_driver_register(struct platform_driver *platform_drv)
++{
++	if (drm_firmware_drivers_only())
++		return -ENODEV;
++
++	return platform_driver_register(platform_drv);
++}
++
++/**
++ * drm_module_platform_driver - Register a DRM driver for platform devices
++ * @__platform_drv: the platform driver structure
++ *
++ * Registers a DRM driver for devices on the platform bus. The helper
++ * macro behaves like module_platform_driver() but tests the state of
++ * drm_firmware_drivers_only(). For more complex module initialization,
++ * use module_init() and module_exit() directly.
++ *
++ * Each module may only use this macro once. Calling it replaces
++ * module_init() and module_exit().
++ */
++#define drm_module_platform_driver(__platform_drv) \
++	module_driver(__platform_drv, drm_platform_driver_register, \
++		      platform_driver_unregister)
++
+ #endif
 -- 
 2.33.1
 

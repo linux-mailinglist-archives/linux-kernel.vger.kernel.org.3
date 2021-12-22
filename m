@@ -2,80 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF3A47D0FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:29:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 537C847D11D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244656AbhLVL25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 06:28:57 -0500
-Received: from relay03.th.seeweb.it ([5.144.164.164]:45671 "EHLO
-        relay03.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbhLVL2z (ORCPT
+        id S244722AbhLVLie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 06:38:34 -0500
+Received: from avasout-ptp-003.plus.net ([84.93.230.244]:57459 "EHLO
+        avasout-ptp-003.plus.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236667AbhLVLid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 06:28:55 -0500
-Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 2492120220;
-        Wed, 22 Dec 2021 12:28:53 +0100 (CET)
-Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Fix timeout issues on command mode
- panels
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        robdclark@gmail.com, sean@poorly.run, airlied@linux.ie,
-        daniel@ffwll.ch, abhinavk@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, martin.botka@somainline.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        paul.bouchara@somainline.org
-References: <20210911163919.47173-1-angelogioacchino.delregno@somainline.org>
- <20210911163919.47173-2-angelogioacchino.delregno@somainline.org>
- <b325fc8d-e06b-36de-b40a-b5ffbcebb1c5@linaro.org>
- <94bedea3-0e5f-5ae8-79d1-ceb17ccdea23@somainline.org>
- <20211211213528.uroqfdksvokspbxf@SoMainline.org>
- <CAA8EJprT5gcWOsS5jJk8egUpxutBpUdW2Pnh-8FFXhgOd3hr=A@mail.gmail.com>
- <20211211215718.pe675o5wvculxavc@SoMainline.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Message-ID: <33d44631-f0d7-83cc-569d-d6d6f82d6808@somainline.org>
-Date:   Wed, 22 Dec 2021 12:28:52 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Wed, 22 Dec 2021 06:38:33 -0500
+X-Greylist: delayed 451 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 Dec 2021 06:38:32 EST
+Received: from deneb.mcrowe.com ([80.229.24.9])
+        by smtp with ESMTP
+        id zzpimUplcZR9PzzpjmZ3PR; Wed, 22 Dec 2021 11:31:00 +0000
+X-Clacks-Overhead: "GNU Terry Pratchett"
+X-CM-Score: 0.00
+X-CNFS-Analysis: v=2.4 cv=OeX7sjfY c=1 sm=1 tr=0 ts=61c30c74
+ a=E/9URZZQ5L3bK/voZ0g0HQ==:117 a=E/9URZZQ5L3bK/voZ0g0HQ==:17
+ a=IOMw9HtfNCkA:10 a=CCpqsmhAAAAA:8 a=D19gQVrFAAAA:8 a=-An2I_7KAAAA:8
+ a=9qxNCY_qAAAA:8 a=VwQbUJbxAAAA:8 a=YyH_z52Fk-ja-1bQ6OcA:9
+ a=ul9cdbp4aOFLsgKbc677:22 a=W4TVW4IDbPiebHqcZpNg:22 a=Sq34B_EcNBM9_nrAYB9S:22
+ a=A2X48xt2e1hG9NJDz63Y:22 a=AjGcO6oz07-iQ99wixmX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mcrowe.com;
+        s=20191005; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        In-Reply-To:References; bh=utmR9QeNiZBZ8h/FI3HecPMypJ030sfratlWW4ClVGY=; b=nD
+        RRz3Q7kpv/iUFW7Sz69GAQbHA+/kh+4+cm0fPCs4xNB6Z/ugBsNtqLMXSuIG4gmu5QDKNAfYZkRTA
+        O9ISqPykyeMPqgi0FvUZ0fHfp+SvRvghkUpVHme1B/qXypdtidqJxTWa75Lp8DSLR04/Ynpap9Q9B
+        y9bUAQjWJL2MJrIb6GUCC6mYjxtcc9SFoR4k2RttAetLdZsH3zFR8+9ROUEydXFZGJYMpX3cTmuBe
+        3Nxzr+ZsbLdqJy5iI0mqLVLFGJ5Ng4/m3lOd0MnDDV9Bi7Vh4bb225t7Ku0Spzj/WPfDK/iOASy54
+        UILBy3ADUpVhRLTvDUmtR0H4IjHZh/eg==;
+Received: from mac by deneb.mcrowe.com with local (Exim 4.94.2)
+        (envelope-from <mac@mcrowe.com>)
+        id 1mzzpg-0005z8-Ic; Wed, 22 Dec 2021 11:30:56 +0000
+From:   Mike Crowe <mac@mcrowe.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Mike Crowe <mac@mcrowe.com>, Arnd Bergmann <arnd@arndb.de>,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] kmsg: Return -ESPIPE rather than EBADF from llseek(SEEK_CUR)
+Date:   Wed, 22 Dec 2021 11:30:54 +0000
+Message-Id: <20211222113054.673553-1-mac@mcrowe.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20211211215718.pe675o5wvculxavc@SoMainline.org>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfPvTBgD3nifVrMhsvW5CV9MWTXHhMnUk4l3E4ZZR6L/WkdeNCgje2weP202bWIamMcE3XYNRxZqjsfu5qT7lW85TtOeh8i7xhBsqzwi1dnS6Dqs+cZPx
+ pKH//n7CNImeCNYkha5HUgH0IKpr+OLVhKOL/NAtCu9imFpXtk+z7Hl41uUJkGqx9O6CdzCGNzfvGA==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 11/12/21 22:57, Marijn Suijten ha scritto:
-> On 2021-12-12 00:49:09, Dmitry Baryshkov wrote:
->> On Sun, 12 Dec 2021 at 00:35, Marijn Suijten
->> <marijn.suijten@somainline.org> wrote:
->>> [..]
->>> On this note, does it perhaps make more sense to call the "internal"
->>> _dpu_encoder_phys_cmd_wait_for_idle function directly, instead of going
->>> through the "public" dpu_encoder_phys_cmd_wait_for_tx_complete which
->>> seems solely intended to handle the wait_for_tx_complete callback?
->>
->> Either one would work. The main difference is the error message. Do
->> you want to see it here if the wait times out or not?
-> 
-> I prefer calling _dpu_encoder_phys_cmd_wait_for_idle directly and
-> optionally adding our own error message.  IIRC DRM_ERROR prints source
-> information such as the function this originated from, and that makes it
-> impossible to distinguish between the wait_for_tx_complete callback or
-> the invocation through dpu_encoder_phys_cmd_wait_for_commit_done anyway.
-> 
-> - Marijn
-> 
+glibc's dprintf implementation tries to determine the current file position
+by calling lseek(fd, 0, SEEK_CUR). Unfortunately it treats receiving EINVAL
+as an error. See https://sourceware.org/bugzilla/show_bug.cgi?id=17830
 
-I wouldn't be happy to find myself in a situation in which I get strange
-display slowness without any print to help me; for this reason, I find
-having the print in place useful for debugging of both perf and fault.
+From what I can tell prior to Kay Sievers printk record commit
+e11fea92e13fb91c50bacca799a6131c81929986, calling lseek(fd, 0, SEEK_CUR)
+with such a file descriptor would not return an error.
 
-Cheers,
-- Angelo
+Prior to Kay's change, Arnd Bergmann's commit
+6038f373a3dc1f1c26496e60b6c40b164716f07e seemed to go to some lengths to
+preserve the successful return code rather than returning (the perhaps more
+logical) -ESPIPE.
+
+glibc is happy with either a successful return or -ESPIPE. It seems that
+the consensus is to return -ESPIPE in this situation.
+
+Alexander Sverdlin supplied this test case:
+--8<--
+ #define _GNU_SOURCE
+ #include <stdio.h>
+ #include <fcntl.h>
+
+ int main(int argc, char **argv)
+ {
+         return dprintf(open("/dev/kmsg", O_WRONLY), "\n") < 0;
+ }
+-->8--
+
+A variant of this fix was originally proposed in 2015[1]. The problem
+was woken up again in 2019[2] and this fix was posted[3] shortly
+afterwards, but it did not land. This version has been rebased to fix
+trivial conflicts.
+
+[1] https://lkml.org/lkml/2015/1/15/575
+[2] https://lkml.org/lkml/2019/3/21/172
+[3] https://lkml.org/lkml/2019/3/24/279
+
+Signed-off-by: Mike Crowe <mac@mcrowe.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Tested-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+Cc: stable@vger.kernel.org
+Fixes: e11fea92e1 ("kmsg: export printk records to the /dev/kmsg interface")
+---
+ kernel/printk/printk.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 57b132b658e1..6013ea991378 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -803,6 +803,11 @@ static loff_t devkmsg_llseek(struct file *file, loff_t offset, int whence)
+ 		/* after the last record */
+ 		atomic64_set(&user->seq, prb_next_seq(prb));
+ 		break;
++	case SEEK_CUR:
++		/* For compatibility with userspace expecting SEEK_CUR
++		 * to not yield EINVAL. */
++		ret = -ESPIPE;
++		break;
+ 	default:
+ 		ret = -EINVAL;
+ 	}
+-- 
+2.30.2
+

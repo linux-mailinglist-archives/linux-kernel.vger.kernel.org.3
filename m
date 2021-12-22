@@ -2,92 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAD0A47D5B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 18:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0AF47D5BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 18:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344288AbhLVRTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 12:19:44 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:43460 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1344252AbhLVRTa (ORCPT
+        id S1344253AbhLVRUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 12:20:34 -0500
+Received: from mail-qv1-f53.google.com ([209.85.219.53]:42613 "EHLO
+        mail-qv1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230222AbhLVRUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 12:19:30 -0500
-X-IronPort-AV: E=Sophos;i="5.88,227,1635174000"; 
-   d="scan'208";a="104377841"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 23 Dec 2021 02:19:29 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 118B040062B3;
-        Thu, 23 Dec 2021 02:19:27 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 2/2] gpio: rcar: Use platform_get_irq() to get the interrupt
-Date:   Wed, 22 Dec 2021 17:19:15 +0000
-Message-Id: <20211222171915.9053-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211222171915.9053-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20211222171915.9053-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Wed, 22 Dec 2021 12:20:33 -0500
+Received: by mail-qv1-f53.google.com with SMTP id q4so2903181qvh.9;
+        Wed, 22 Dec 2021 09:20:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=a0nsqOSUC19qSjY8cD/nHB7fi0tQEVn7WPyxI3iDGdE=;
+        b=pTRermqo0hTO10KrLEeFmEpzyjFZYp6ZOQxqxuYRMBNDOVujYddmx069qiAWxCAJ6i
+         PqDBE10YjICm6rOjNXvaPLY6x16RuQXKZrsfbQbNA+yF01wZWdenVriSluNk/CZnr46V
+         Y3Bc2FSeG23rtG+abynjparBbC1ReRinMLH9pVBB1zy1XQNPglw1FJvQ1eOW/jZPgs3X
+         DmRkEizZMhiDXBCHO0kFV2Uo2v2CZX/GwifPMQPhBwnMtLAvEUlOO/RYDyZEdnEkCXWY
+         tLxabXgF/5fdx+3EhbcM8VzQcFFVUk/KIxr/Jlj/PcBhNpfqoDJogd2+f/iQlDLxo0PX
+         sDRA==
+X-Gm-Message-State: AOAM530BuxkKYbSUSRzVt4EXyCnzgSre/J6yvxyw2469SLhxAeflIos8
+        +8AUlXSjr/P0EBPTOT1Z1w==
+X-Google-Smtp-Source: ABdhPJzE/OH+L8kidyFrzZMckxaEXTWuD4w5ageV1YGENdTSThNnLhLCIv7WIwxTBr2rs+e6UQAb6Q==
+X-Received: by 2002:a05:6214:c42:: with SMTP id r2mr3273655qvj.53.1640193632837;
+        Wed, 22 Dec 2021 09:20:32 -0800 (PST)
+Received: from robh.at.kernel.org ([24.55.105.145])
+        by smtp.gmail.com with ESMTPSA id r187sm2124946qke.11.2021.12.22.09.20.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 09:20:32 -0800 (PST)
+Received: (nullmailer pid 2351409 invoked by uid 1000);
+        Wed, 22 Dec 2021 17:20:30 -0000
+Date:   Wed, 22 Dec 2021 13:20:30 -0400
+From:   Rob Herring <robh@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Jon Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/5] dt-bindings: memory: tegra210: Mark EMC as cooling
+ device
+Message-ID: <YcNeXgRyxvIkcgiD@robh.at.kernel.org>
+References: <20211217165919.2700920-1-thierry.reding@gmail.com>
+ <20211217165919.2700920-5-thierry.reding@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211217165919.2700920-5-thierry.reding@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypassed the hierarchical setup and messed up the
-irq chaining.
+On Fri, Dec 17, 2021 at 05:59:19PM +0100, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
+> 
+> The external memory controller found on Tegra210 can use throttling of
+> the EMC frequency in order to reduce the memory chip temperature. Mark
+> the memory controller as a cooling device to take advantage of this
+> functionality.
+> 
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> ---
+>  .../bindings/memory-controllers/nvidia,tegra210-emc.yaml  | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml
+> index bc8477e7ab19..95c14deb8941 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml
+> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml
+> @@ -44,6 +44,11 @@ properties:
+>      description:
+>        phandle of the memory controller node
+>  
+> +allOf:
+> +  - $ref: ../thermal/thermal-cooling-devices.yaml
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq().
+/schemas/thermal/...
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- drivers/gpio/gpio-rcar.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+With that,
 
-diff --git a/drivers/gpio/gpio-rcar.c b/drivers/gpio/gpio-rcar.c
-index f7b653314e7e..437baecc434e 100644
---- a/drivers/gpio/gpio-rcar.c
-+++ b/drivers/gpio/gpio-rcar.c
-@@ -477,7 +477,6 @@ static void gpio_rcar_enable_inputs(struct gpio_rcar_priv *p)
- static int gpio_rcar_probe(struct platform_device *pdev)
- {
- 	struct gpio_rcar_priv *p;
--	struct resource *irq;
- 	struct gpio_chip *gpio_chip;
- 	struct irq_chip *irq_chip;
- 	struct gpio_irq_chip *girq;
-@@ -502,12 +501,10 @@ static int gpio_rcar_probe(struct platform_device *pdev)
- 
- 	pm_runtime_enable(dev);
- 
--	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (!irq) {
--		dev_err(dev, "missing IRQ\n");
--		ret = -EINVAL;
-+	ret = platform_get_irq(pdev, 0);
-+	if (ret < 0)
- 		goto err0;
--	}
-+	p->irq_parent = ret;
- 
- 	p->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(p->base)) {
-@@ -555,8 +552,7 @@ static int gpio_rcar_probe(struct platform_device *pdev)
- 		goto err0;
- 	}
- 
--	p->irq_parent = irq->start;
--	if (devm_request_irq(dev, irq->start, gpio_rcar_irq_handler,
-+	if (devm_request_irq(dev, p->irq_parent, gpio_rcar_irq_handler,
- 			     IRQF_SHARED, name, p)) {
- 		dev_err(dev, "failed to request IRQ\n");
- 		ret = -ENOENT;
--- 
-2.17.1
+Reviewed-by: Rob Herring <robh@kernel.org>
 
+> +
+> +unevaluatedProperties: false
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -51,8 +56,6 @@ required:
+>    - clock-names
+>    - nvidia,memory-controller
+>  
+> -additionalProperties: false
+> -
+>  examples:
+>    - |
+>      #include <dt-bindings/clock/tegra210-car.h>
+> @@ -79,4 +82,5 @@ examples:
+>          interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
+>          memory-region = <&emc_table>;
+>          nvidia,memory-controller = <&mc>;
+> +        #cooling-cells = <2>;
+>      };
+> -- 
+> 2.34.1
+> 
+> 

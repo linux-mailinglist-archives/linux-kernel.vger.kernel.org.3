@@ -2,100 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA0A147CF07
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:18:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E5C47CF0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:19:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243851AbhLVJSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 04:18:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
+        id S243865AbhLVJTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:19:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236355AbhLVJSo (ORCPT
+        with ESMTP id S243856AbhLVJTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:18:44 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6270C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:18:43 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id w16so5981912edc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:18:43 -0800 (PST)
+        Wed, 22 Dec 2021 04:19:16 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6CBC061401
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:19:16 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id c2so1851816pfc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:19:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HWSjPah2c2AaRSP+2vHU6yInVlSDXI70ImIfpbXN8E4=;
-        b=pxusAbbWkBP8vA3FVas18AbqOH3j0+P39gHD1PiNPE+veMjKeURYaGR2eFOeBB01PF
-         8Fj+NJU2IougbIMEWqzIy+ekGrkV++QGSTrw2itZd6TzRtUkmHeuSg7WswBRKf9NQPYx
-         eah3fr/rMVIakHtSBSAf3LQqOFDI4IzYO+PsqUT1BtypJ4FL+reEw8D6HK06IGC7M1y8
-         peOyuf7CT5cb2Jti3eQ7JBlGp/xP9HfCtRopVV1SfHep7KQ9yOSOppztuoGgUw1gkxK8
-         nOVDsUwekpzbqXxNCZKSBkPpCnUV4vWpGYpMSnpX7YFe6dnLU2ORnAiA0Y8iCdOcsjw8
-         8Znw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IdSO8jSbku57GoEt6LVkQ1tixUnyu5ct/xRZpyTqiy0=;
+        b=fJgbtLjUAOl3BxZ00Vjl5kqR+2lxh6O+5WD6Nb7XDaHvwoeyaIUF8fPAU4q22E701P
+         Z+rjGiMN6u2i7IMttMjc5v22KcSIxHt9kPDdjurufp3Ki1K8LCNQTjqlQQgx9B2bO5SI
+         +IBPuD72WzA4C9LMnQDgvPIgFn2BDdb0nnGuKa+O4H/xqxpd8JMLyTVXjbEj1Gd/ILx+
+         b3pYp3VcZYTkaK4Gu/4zCzakK6iM0IcNn+QoCq+VIHp7wC+T4k/rx0CV5t+zriTfvLs/
+         ZZZo/nZkW/UN7b9+lGRFaqpa0DZmPws91J3j+Nbz1cKJwNhhrczSTi/KMJ4oQ4yOLGsr
+         1pmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HWSjPah2c2AaRSP+2vHU6yInVlSDXI70ImIfpbXN8E4=;
-        b=sUsGUyaL1X1f2Mrj1MGlYngcmWRMMKN5bJBo5R4+o3Q16Ur1D5TMReFUT00Vq0RP2q
-         bcnIp/tvPKfAVyNj5yUGed4Ajbqxgn7IiQ5+xKA+f7k/qqR1EAtAAqGj8m9nqtsbhfOJ
-         gKoiYaCMYTn9LHSTBB1kL+/WieNSeB2X0ZsHXpUaoRcBrhl5Y2RVMeLZeYZv1dA8VOt8
-         LeZgkX6GKibdE+4peGFHwpnInwxq+S0+/Ji0wqLGrx1g50KlafSZb+NMS2ggwrNgATy8
-         5A6S1d9irS3enxheMaX2Jop9gCtsa5W8WNBsLEX7UAOMg68+q7e8n5mtSuBTw2UOdQKP
-         O48g==
-X-Gm-Message-State: AOAM531cDo5kM3b7ECI1I2lrsAjYdTJvQq6qYFH8S9xPay+EE96NuVDX
-        +UKYKrQ8LuryFnmbaFJe9XpYE4Lrc5Te7zTMMOP0LA==
-X-Google-Smtp-Source: ABdhPJwEJev27Pc2q/Iq5MO4SuuzrQ73ie5VYbxYb/YHRh5CcCGKaz0WlKP0N/rYQvL7TgMmI9IsLY1BsrhRpNwgHe4=
-X-Received: by 2002:a17:906:2ac4:: with SMTP id m4mr1789058eje.734.1640164722465;
- Wed, 22 Dec 2021 01:18:42 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IdSO8jSbku57GoEt6LVkQ1tixUnyu5ct/xRZpyTqiy0=;
+        b=p2u2C5WNVQjsdHj+MAZxyWjkoWlbrI0hNeKxFdWBG9zSIADbJd1KusuACsuvtFHdJh
+         QPh4ZAPlbk6SxRTZ3qt7oe0mziwHsr7c82tuhpch6uEkpyQ+EWkscXWFpIYzU8ZvF7bl
+         ex/bZi3jDtqUuPNGJianbhdzOTjH2qvoqaOMMZlUTKOFYsZts9XRdK+NdyY9CgnJ+P0C
+         gWedUQfBP1u8b44n1lmDV1j3h9W4NvfvVG+FKbqM6TzfYQSKtca4aXg8MaUHgGu0XFOk
+         gbpbpmQQkzoTubhDN8qgKVMZQ14rphanmXev0tO0uHgPwhMAfSR8v+mb6kf0kwLnSpUX
+         K99Q==
+X-Gm-Message-State: AOAM5316+K3s6+uwpzXvKpqutzcijuOeuIqSm4Ulv9UEeLc7+HfQJCuG
+        1zx1CnrQMVcx8V84imKdghSQ
+X-Google-Smtp-Source: ABdhPJwV2yZYiWQh6AAhTL56gld2ZPjl8HqiRaRi6S4Xir+hBVSg6tEif1XsJNuPDQhcKv8VkcFzIg==
+X-Received: by 2002:a05:6a00:a1d:b0:4ba:ac85:5b07 with SMTP id p29-20020a056a000a1d00b004baac855b07mr2343668pfh.9.1640164755963;
+        Wed, 22 Dec 2021 01:19:15 -0800 (PST)
+Received: from thinkpad ([202.21.42.200])
+        by smtp.gmail.com with ESMTPSA id mw8sm1680513pjb.42.2021.12.22.01.19.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 01:19:15 -0800 (PST)
+Date:   Wed, 22 Dec 2021 14:49:10 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        agross@kernel.org, bjorn.andersson@linaro.org
+Subject: Re: Question about node naming in [PATCH v3 13/18] ARM: dts: qcom:
+ sdx55: Add spmi node
+Message-ID: <20211222091910.GA5159@thinkpad>
+References: <HTKF4R.5S1PY4MCM4QS@ixit.cz>
+ <20211221071219.GD26872@thinkpad>
 MIME-Version: 1.0
-References: <20211214040239.8977-1-steven_lee@aspeedtech.com> <20211214040239.8977-2-steven_lee@aspeedtech.com>
-In-Reply-To: <20211214040239.8977-2-steven_lee@aspeedtech.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 22 Dec 2021 10:18:31 +0100
-Message-ID: <CAMRc=MdAgK7zKuJ=7cA2T-mSTJD3tWSW2aEB6G=0Tz4X+iHcZQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] gpio: gpio-aspeed-sgpio: Fix wrong hwirq base in
- irq handler
-To:     Steven Lee <steven_lee@aspeedtech.com>,
-        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-aspeed@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Hongwei Zhang <Hongweiz@ami.com>, ryan_chen@aspeedtech.com,
-        billy_tsai@aspeedtech.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221071219.GD26872@thinkpad>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 5:03 AM Steven Lee <steven_lee@aspeedtech.com> wrote:
->
-> Each aspeed sgpio bank has 64 gpio pins(32 input pins and 32 output pins).
-> The hwirq base for each sgpio bank should be multiples of 64 rather than
-> multiples of 32.
->
-> Signed-off-by: Steven Lee <steven_lee@aspeedtech.com>
-> ---
->  drivers/gpio/gpio-aspeed-sgpio.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpio/gpio-aspeed-sgpio.c b/drivers/gpio/gpio-aspeed-sgpio.c
-> index 3d6ef37a7702..b3a9b8488f11 100644
-> --- a/drivers/gpio/gpio-aspeed-sgpio.c
-> +++ b/drivers/gpio/gpio-aspeed-sgpio.c
-> @@ -395,7 +395,7 @@ static void aspeed_sgpio_irq_handler(struct irq_desc *desc)
->                 reg = ioread32(bank_reg(data, bank, reg_irq_status));
->
->                 for_each_set_bit(p, &reg, 32)
-> -                       generic_handle_domain_irq(gc->irq.domain, i * 32 + p * 2);
-> +                       generic_handle_domain_irq(gc->irq.domain, (i * 32 + p) * 2);
->         }
->
->         chained_irq_exit(ic, desc);
-> --
-> 2.17.1
->
+On Tue, Dec 21, 2021 at 12:42:25PM +0530, Manivannan Sadhasivam wrote:
+> On Mon, Dec 20, 2021 at 09:27:17PM +0100, David Heidelberg wrote:
+> > Hello Manivannan,
+> > 
+> > I'd like to ask, if you had any particular reason to name node `qcom,spmi@`
+> > instead of basic `spmi@`.
+> > 
+> 
+> "spmi" node label was not documented by devicetree spec at that time. So I was
+> using "qcom,spmi" but it was not correct either.
+> 
+> I've submitted a PR now to devicetree-spec repo [1] for listing it as the
+> generic node name. So once it got accepted, we can use "spmi@" for the node
+> name.
+> 
 
-Joel, Andrew: any comments on this? I'd like to send it upstream tomorrow.
+PR is merged now. So you can proceed with using "spmi" node name in all dts.
 
-Bart
+Thanks,
+Mani
+
+> Thanks,
+> Mani
+> 
+> [1] https://github.com/devicetree-org/devicetree-specification/pull/50
+> 
+> > I'm currently converting binding for
+> > Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb and I'm
+> > considering adding qcom,spmi into qcom,spmi-pmic-arb or just rename this and
+> > arch/arm64/boot/dts/qcom/msm8996.dtsi `qcom,spmi@` occurences to `spmi@`.
+> > 
+> > Ideas, inputs?
+> > 
+> > Thank you
+> > David
+> > 
+> > 

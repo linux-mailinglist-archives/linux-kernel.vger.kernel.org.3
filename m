@@ -2,154 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 319B447D3F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:48:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD6DE47D3F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241465AbhLVOsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 09:48:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:38560 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237161AbhLVOsj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:48:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640184518;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3ysFZc3PcwsKiLv7/T8kvp9irIa0KaTSGauHVtOY+NM=;
-        b=ZiKMCDq4pgpTPpp0PZRAfJTflWBVmxB2O/cF5wFtSgpVaGs22m/BAHP8VBkl/HdwxxORe8
-        SNXZeAkQhKSKQaNPjXDfhe4QUyinqB7DUCbgcYRfvSfS7S2AsCLROD6T5cBl7+4lwuf8se
-        NalmzmuH+DTOXjJCl6Pr7Ffbo4bs7Oc=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-411-ESOjItRJNY2VSMlqRb2duw-1; Wed, 22 Dec 2021 09:48:37 -0500
-X-MC-Unique: ESOjItRJNY2VSMlqRb2duw-1
-Received: by mail-wm1-f72.google.com with SMTP id r2-20020a05600c35c200b00345c3b82b22so1254214wmq.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:48:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=3ysFZc3PcwsKiLv7/T8kvp9irIa0KaTSGauHVtOY+NM=;
-        b=7A/FTWjYOmR7SX3H0ZuEta8SEtjN3IZys7CvNFEsTDvv245ntnOwIm3l7W0eJtR0EY
-         BHVX/4pcu4gtBmV2SIALo74juwl7Ibvk0ED1uE6Nvbd0L08/7h4jt9PQUy5w0FiTzWpI
-         Ko0VLV9e2mab6oIao0x9T/BTaS2Ady1S3LdyWFvkJcCwlITOSy470cXE3n1mFVUS5Jy9
-         XXVEnEs1bQomBOO0k4CBhETNK0sCmENyQUP5b2VLZ23mMmKIRYXgFBBH07sDP9dyIVh/
-         W788FV3dgumWJGLLK2+C3BI7FQ/Cv4ZqtnF5/lmGPX2WQzVVzAwlvuhSkouiBxFICl2T
-         5DXw==
-X-Gm-Message-State: AOAM530Udpxj4dDEHFhrbQyM7VfhceqF6KJQxUhRk5o84O2vVQG1n3qy
-        udnzxXrDMjTHEx6PbK4eBEj5uYaYlqnVHIDr2eFuM9YjH7Ft27hj/nX6QnP7whKgyKcjDw7Xa/R
-        g8jiubeq8/pGsEIYzd2vf0Qya
-X-Received: by 2002:a5d:59af:: with SMTP id p15mr2400763wrr.422.1640184516105;
-        Wed, 22 Dec 2021 06:48:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzs94LbEOPQ0orxF56DEs0Qlsxjs3+SD5a8O6tpjufwOywHmGl7SQSLlNxvlgdUF3zjoLVEEA==
-X-Received: by 2002:a5d:59af:: with SMTP id p15mr2400735wrr.422.1640184515809;
-        Wed, 22 Dec 2021 06:48:35 -0800 (PST)
-Received: from [192.168.3.132] (p5b0c646a.dip0.t-ipconnect.de. [91.12.100.106])
-        by smtp.gmail.com with ESMTPSA id l2sm2250738wrs.43.2021.12.22.06.48.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 06:48:35 -0800 (PST)
-Message-ID: <505d3d0f-23ee-0eec-0571-8058b8eedb97@redhat.com>
-Date:   Wed, 22 Dec 2021 15:48:34 +0100
+        id S241421AbhLVOwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 09:52:05 -0500
+Received: from mga02.intel.com ([134.134.136.20]:51223 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232073AbhLVOwE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 09:52:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640184724; x=1671720724;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=4xtn6EPbwVHkHyVB1KSElYHsfFLKGvF4/J0qCuOQMsk=;
+  b=VUxYS4ku8mQ94rXyF+ZuUegIUm6+KI11IzClom3FK8j/jocam69PpRgk
+   jtXpyM3e0k5/rOxROXL4qLlwr40FGBSqBVP71g9gmQqt5r8RiklcpbPfr
+   Jq6cav73MyWoowvwV5DqWRF8ZxmxL7U8nTExUn4wwvrYyN6Fqd/UA+9bJ
+   nTjRF//BmrOmXHs2CtcvpOyWbqZvzB3TM9KYzZ2rbXrz5vzXyKbGJ7Dyg
+   YwCBveHUE2SRfREwozZ8wej3h2LIP+HvNc4ADivWxduczGy2Zv/m4kjSt
+   LATsih0N2HKpjbC1RCTmZ/FeYdw9Sqyyl0jC9SS5UeUzrRcaEdGYcuPwQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="227927819"
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="227927819"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 06:52:03 -0800
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="484776260"
+Received: from drakemat-mobl.amr.corp.intel.com (HELO [10.212.179.136]) ([10.212.179.136])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 06:52:03 -0800
+Subject: Re: State Component 18 and Palette 1 (Re: [PATCH 16/19] kvm: x86:
+ Introduce KVM_{G|S}ET_XSAVE2 ioctl)
+To:     "Nakajima, Jun" <jun.nakajima@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     "Zhong, Yang" <yang.zhong@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>
+References: <20211208000359.2853257-1-yang.zhong@intel.com>
+ <20211208000359.2853257-17-yang.zhong@intel.com>
+ <d16aab21-0f81-f758-a61e-5919f223be78@redhat.com>
+ <26ea7039-3186-c23f-daba-d039bb8d6f48@redhat.com>
+ <24CFD156-5093-4833-8516-526A90FF350E@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <3afdb885-d2d9-c099-bc72-c813521b6b39@intel.com>
+Date:   Wed, 22 Dec 2021 06:52:01 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
+In-Reply-To: <24CFD156-5093-4833-8516-526A90FF350E@intel.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Nadav Amit <namit@vmware.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
- <20211221010312.GC1432915@nvidia.com>
- <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
- <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
- <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
- <20211221190706.GG1432915@nvidia.com>
- <3e0868e6-c714-1bf8-163f-389989bf5189@redhat.com>
- <dfe1c8d5-6fac-9040-0272-6d77bafa6a16@redhat.com>
- <20211222124141.GA685@quack2.suse.cz>
- <4a28e8a0-2efa-8b5e-10b5-38f1fc143a98@redhat.com>
- <20211222144255.GE685@quack2.suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20211222144255.GE685@quack2.suse.cz>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.12.21 15:42, Jan Kara wrote:
-> On Wed 22-12-21 14:09:41, David Hildenbrand wrote:
->>>> IIUC, our COW logic makes sure that a shared anonymous page that might
->>>> still be used by a R/O FOLL_GET cannot be modified, because any attempt
->>>> to modify it would result in a copy.
->>>
->>> Well, we defined FOLL_PIN to mean the intent that the caller wants to access
->>> not only page state (for which is enough FOLL_GET and there are some users
->>> - mostly inside mm - who need this) but also page data. Eventually, we even
->>> wanted to make FOLL_GET unavailable to broad areas of kernel (and keep it
->>> internal to only MM for its dirty deeds ;)) to reduce the misuse of GUP.
->>>
->>> For file pages we need this data vs no-data access distinction so that
->>> filesystems can detect when someone can be accessing page data although the
->>> page is unmapped.  Practically, filesystems care most about when someone
->>> can be *modifying* page data (we need to make sure data is stable e.g. when
->>> writing back data to disk or doing data checksumming or other operations)
->>> so using FOLL_GET when wanting to only read page data should be OK for
->>> filesystems but honestly I would be reluctant to break the rule of "use
->>> FOLL_PIN when wanting to access page data" to keep things simple and
->>> reasonably easy to understand for parties such as filesystem developers or
->>> driver developers who all need to interact with pinned pages...
->>
->> Right, from an API perspective we really want people to use FOLL_PIN.
->>
->> To optimize this case in particular it would help if we would have the
->> FOLL flags on the unpin path. Then we could just decide internally
->> "well, short-term R/O FOLL_PIN can be really lightweight, we can treat
->> this like a FOLL_GET instead". And we would need that as well if we were
->> to keep different counters for R/O vs. R/W pinned.
+On 12/20/21 9:54 AM, Nakajima, Jun wrote:
+>> So, I hope that save state 18 will be frozen to 8k.  In that case,
+>> and if palette 1 is frozen to the same values as today,
+>> implementing migration will not be a problem; it will be
+>> essentially the same as SSE->AVX (horizontal extension of existing
+>> registers) and/or AVX->AVX512 (both horizontal and vertical
+>> extension).
 > 
-> Well, I guess the question here is: Which GUP user needs only R/O access to
-> page data and is so performance critical that it would be worth it to
-> sacrifice API clarity for speed? I'm not aware of any but I was not looking
-> really hard...
+> I would like to confirm that the state component 18 will remain 8KB
+> and palette 1 will remain the same.
 
-I'd be interested in examples as well. Maybe databases that use O_DIRECT
-after fork()?
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+Is that an architectural statement that will soon be making its way into
+the SDM?

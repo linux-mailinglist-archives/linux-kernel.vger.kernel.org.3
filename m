@@ -2,155 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D60A47D23F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:43:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE1447D247
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:44:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240695AbhLVMm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 07:42:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37820 "EHLO
+        id S241051AbhLVMnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 07:43:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240781AbhLVMmW (ORCPT
+        with ESMTP id S240717AbhLVMni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:42:22 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A68C06179E;
-        Wed, 22 Dec 2021 04:42:21 -0800 (PST)
-Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1n00wj-0001eL-1H; Wed, 22 Dec 2021 13:42:17 +0100
-Message-ID: <99452126-661e-9a0c-6b51-d345ed0f76ee@leemhuis.info>
-Date:   Wed, 22 Dec 2021 13:42:16 +0100
+        Wed, 22 Dec 2021 07:43:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3F8C061761;
+        Wed, 22 Dec 2021 04:43:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A567CB81054;
+        Wed, 22 Dec 2021 12:43:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 795F7C36AEA;
+        Wed, 22 Dec 2021 12:43:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640177015;
+        bh=spRwUCGiSSG8n6qeVEE9aN2Iq6VFzAj957YT2tK8Kqs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XOAUZhCycs8P/F/IgB41mY0S24xJyBhBueU6B2STDwK6SWiYp9SFmsTMDZUwf0WlS
+         XuGelJ1kDkiPKATKBgPNXcBwUcC0Qi2ZaErDTa1EcLQgSantLXY0oWuTcUXnERnHqG
+         PHwPJE3Gc9PccipxJLHsMflbauYYRzS+hjqeLI3jxpvkAkIYc2d2igdTSXOJYTHrxL
+         p5IIoIGZLKlbmMVRcBfrRy/YmlQTsYG666UvZpVq7zLs9GoEWvtnRVdSvgoERT9zus
+         nnfJvRLhGTzkiPreYUb/purRFnEOQilR8tA4kyBTlksVtapPJgMg637B6GGV6+ZfuX
+         nkamUJNP2aBKA==
+Received: by mail-vk1-f177.google.com with SMTP id s144so1223614vkb.8;
+        Wed, 22 Dec 2021 04:43:35 -0800 (PST)
+X-Gm-Message-State: AOAM531TEvvdpNxHN4xwr3s9qo1h5YUOgtyZFLXNsh1eHexVQPc3TTSS
+        4a3G0TvKDleyotkeqEgEqCu9oe09/R3HHuJGVUY=
+X-Google-Smtp-Source: ABdhPJzC3viZd1a1jd6xOFjIMdxvyj8zxpI+z9Ie7iUhyHVWlvCpwXNy8RLLG5OJvKtf/gKMdK2si6m9Ls6Z9GIn+oY=
+X-Received: by 2002:a1f:a4c5:: with SMTP id n188mr846875vke.35.1640177006825;
+ Wed, 22 Dec 2021 04:43:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [REGRESSION] 5-10% increase in IO latencies with nohz balance
- patch
-Content-Language: en-BS
-To:     Josef Bacik <josef@toxicpanda.com>,
-        Valentin Schneider <valentin.schneider@arm.com>
-Cc:     peterz@infradead.org, vincent.guittot@linaro.org,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, guro@fb.com, clm@fb.com
-References: <YaUH5GFFoLiS4/3/@localhost.localdomain>
- <87ee6yc00j.mognet@arm.com> <YaUYsUHSKI5P2ulk@localhost.localdomain>
- <87bl22byq2.mognet@arm.com> <YaUuyN3h07xlEx8j@localhost.localdomain>
- <878rx6bia5.mognet@arm.com> <87wnklaoa8.mognet@arm.com>
- <YappSLDS2EvRJmr9@localhost.localdomain> <87lf0y9i8x.mognet@arm.com>
- <87v8zx8zia.mognet@arm.com> <YbJWBGaGAW/MenOn@localhost.localdomain>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <YbJWBGaGAW/MenOn@localhost.localdomain>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1640176941;5ea55b55;
-X-HE-SMSGID: 1n00wj-0001eL-1H
+References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-6-guoren@kernel.org>
+ <CAK8P3a2XOVYB1Fm5TBdjtKx9DXoG93Zrw7TiquYL_Zy916dLwQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a2XOVYB1Fm5TBdjtKx9DXoG93Zrw7TiquYL_Zy916dLwQ@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 22 Dec 2021 20:43:15 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTR2fAU=+0fvW_VCqaZfDkSTAxQ=cKE9iAYOoGORb3m+4g@mail.gmail.com>
+Message-ID: <CAJF2gTR2fAU=+0fvW_VCqaZfDkSTAxQ=cKE9iAYOoGORb3m+4g@mail.gmail.com>
+Subject: Re: [PATCH 05/13] riscv: compat: syscall: Add compat_sys_call_table implementation
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker speaking.
+On Wed, Dec 22, 2021 at 2:15 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
+> >
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Implement compat_syscall_table.c with compat_sys_call_table & fixup
+> > system call such as truncate64,pread64,fallocate which need two
+> > regs to indicate 64bit-arg (copied from arm64).
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > ---
+> >  arch/riscv/include/asm/syscall.h         |  3 +
+> >  arch/riscv/kernel/compat_syscall_table.c | 84 ++++++++++++++++++++++++
+>
+> Same here, I think most of these should go next to the actual syscalls, with the
+> duplicates removed from other platforms,
+Agree, I will try that next version.
 
-On 09.12.21 20:16, Josef Bacik wrote:
-> On Thu, Dec 09, 2021 at 05:22:05PM +0000, Valentin Schneider wrote:
->> On 06/12/21 09:48, Valentin Schneider wrote:
->>> On 03/12/21 14:00, Josef Bacik wrote:
->>>> On Fri, Dec 03, 2021 at 12:03:27PM +0000, Valentin Schneider wrote:
->>>>> Could you give the 4 top patches, i.e. those above
->>>>> 8c92606ab810 ("sched/cpuacct: Make user/system times in cpuacct.stat more precise")
->>>>> a try?
->>>>>
->>>>> https://git.gitlab.arm.com/linux-arm/linux-vs.git -b mainline/sched/nohz-next-update-regression
->>>>>
->>>>> I gave that a quick test on the platform that caused me to write the patch
->>>>> you bisected and looks like it didn't break the original fix. If the above
->>>>> counter-measures aren't sufficient, I'll have to go poke at your
->>>>> reproducers...
->>>>>
->>>>
->>>> It's better but still around 6% regression.  If I compare these patches to the
->>>> average of the last few days worth of runs you're 5% better than before, so
->>>> progress but not completely erased.
->>>>
->>>
->>> Hmph, time for me to reproduce this locally then. Thanks!
->>
->> I carved out a partition out of an Ampere eMAG's HDD to play with BTRFS
->> via fsperf; this is what I get for the bisected commit (baseline is
->> bisected patchset's immediate parent, aka v5.15-rc4) via a handful of
->> ./fsperf -p before-regression -c btrfs -n 100 -t emptyfiles500k
->>
->>   write_clat_ns_p99     195395.92     198790.46      4797.01    1.74%
->>   write_iops             17305.79      17471.57       250.66    0.96%
->>
->>   write_clat_ns_p99     195395.92     197694.06      4797.01    1.18%
->>   write_iops             17305.79      17533.62       250.66    1.32%
->>
->>   write_clat_ns_p99     195395.92     197903.67      4797.01    1.28%
->>   write_iops             17305.79      17519.71       250.66    1.24%
->>
->> If I compare against tip/sched/core however:
->>
->>   write_clat_ns_p99     195395.92     202936.32      4797.01    3.86%
->>   write_iops             17305.79      17065.46       250.66   -1.39%
->>
->>   write_clat_ns_p99     195395.92     204349.44      4797.01    4.58%
->>   write_iops             17305.79      17097.79       250.66   -1.20%
->>
->>   write_clat_ns_p99     195395.92     204169.05      4797.01    4.49%
->>   write_iops             17305.79      17112.29       250.66   -1.12%
->>
->> tip/sched/core + my patches:
->>
->>   write_clat_ns_p99     195395.92     205721.60      4797.01    5.28%
->>   write_iops             17305.79      16947.59       250.66   -2.07%
->>
->>   write_clat_ns_p99     195395.92     203358.04      4797.01    4.07%
->>   write_iops             17305.79      16953.24       250.66   -2.04%
->>
->>   write_clat_ns_p99     195395.92     201830.40      4797.01    3.29%
->>   write_iops             17305.79      17041.18       250.66   -1.53%
->>
->> So tip/sched/core seems to have a much worse regression, and my patches
->> are making things worse on that system...
->>
->> I've started a bisection to see where the above leads me, unfortunately
->> this machine needs more babysitting than I thought so it's gonna take a
->> while.
->>
->> @Josef any chance you could see if the above also applies to you? tip lives
->> at https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git, though from
->> where my bisection is taking me it looks like you should see that against
->> Linus' tree as well.
->>
-> 
-> This has made us all curious, so we're all fucking around with schbench to see
-> if we can make it show up without needing to use fsperf.  Maybe that'll help
-> with the bisect, because I had to bisect twice to land on your patches, and I
-> only emailed when I could see the change right before and right after your
-> patch.  It would not surprise me at all if there's something else here that's
-> causing us pain.
+>
+> > +#define __SYSCALL_COMPAT
+> > +#undef __LP64__
+>
+> What is the #undef for?
 
-What's the status here? Just wondering, because there hasn't been any
-activity in this thread since 11 days and the festive season is upon us.
+See arch/riscv/include/uapi/asm/unistd.h:
 
-Was the discussion moved elsewhere? Or is this still a mystery? And if
-it is: how bad is it, does it need to be fixed before Linus releases 5.16?
+#ifdef __LP64__
+#define __ARCH_WANT_NEW_STAT
+#define __ARCH_WANT_SET_GET_RLIMIT
+#endif /* __LP64__ */
 
-Ciao, Thorsten
 
-#regzbot poke
+>
+> > +SYSCALL_DEFINE6(mmap2, unsigned long, addr, unsigned long, len,
+> > +       unsigned long, prot, unsigned long, flags,
+> > +       unsigned long, fd, unsigned long, offset)
+> > +{
+> > +       if ((prot & PROT_WRITE) && (prot & PROT_EXEC))
+> > +               if (unlikely(!(prot & PROT_READ)))
+> > +                       return -EINVAL;
+> > +
+> > +       return ksys_mmap_pgoff(addr, len, prot, flags, fd, offset);
+> > +}
+>
+> This is one that we may have to deal with separately, introducing
+> sys_mmap_pgoff() was a mistake in my opinion, and we should just have
+#if __BITS_PER_LONG == 32 || defined(__SYSCALL_COMPAT)
+#define __SC_3264(_nr, _32, _64) __SYSCALL(_nr, _32)
+#else
+#define __SC_3264(_nr, _32, _64) __SYSCALL(_nr, _64)
+#endif
 
-P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
-on my table. I can only look briefly into most of them. Unfortunately
-therefore I sometimes will get things wrong or miss something important.
-I hope that's not the case here; if you think it is, don't hesitate to
-tell me about it in a public reply. That's in everyone's interest, as
-what I wrote above might be misleading to everyone reading this; any
-suggestion I gave thus might sent someone reading this down the wrong
-rabbit hole, which none of us wants.
+#define __NR3264_mmap 222
+__SC_3264(__NR3264_mmap, sys_mmap2, sys_mmap)
 
-BTW, I have no personal interest in this issue, which is tracked using
-regzbot, my Linux kernel regression tracking bot
-(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
-this mail to get things rolling again and hence don't need to be CC on
-all further activities wrt to this regression.
+> added a sys_mmap2() for all architectures that don't explicitly override it.
+That should be another patch, right? Let's keep it here.
 
+>
+>        Arnd
+
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

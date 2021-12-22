@@ -2,109 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1527447D24C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:44:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 991C947D258
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236770AbhLVMoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 07:44:25 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:44782 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231523AbhLVMoX (ORCPT
+        id S240053AbhLVMqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 07:46:13 -0500
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:42671 "EHLO
+        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237086AbhLVMqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:44:23 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 80D5E2112B;
-        Wed, 22 Dec 2021 12:44:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1640177061; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qy9gFIp2QxGl6WSv0UolBUI85R2Q8lLoLh2lTwoavFk=;
-        b=gPSZWtxqFRZZ4KYSXRQOlHU1Vtzaz1MVqqA9I2kvB7ngleLRUnJ0pKIZFbByHTkRhNAhhf
-        JsB3sZtNH4drYNDmMY53AP59YzK0mOQRF9rNJZdPIdY/Lz8ty0td2+IHTTZ3GzrJKbsr5u
-        7S7EVOkAIeUr0UbGMWRmmlw8KcNhjas=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1640177061;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qy9gFIp2QxGl6WSv0UolBUI85R2Q8lLoLh2lTwoavFk=;
-        b=0GCk4fJ1+0SXjygAjwsjRaLC7Mu6dmG1KrJSOe+cpupyUT24+CFPMoDzHQkFsNRVH+mSIS
-        IgVCteXCYXE8/0Ag==
-Received: from quack2.suse.cz (unknown [10.163.28.18])
-        by relay2.suse.de (Postfix) with ESMTP id 66E23A3B83;
-        Wed, 22 Dec 2021 12:44:21 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id 4517C1F2CEF; Wed, 22 Dec 2021 13:44:21 +0100 (CET)
-Date:   Wed, 22 Dec 2021 13:44:21 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Nadav Amit <namit@vmware.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-Message-ID: <20211222124421.GB685@quack2.suse.cz>
-References: <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
- <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
- <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
- <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
- <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
- <20211221010312.GC1432915@nvidia.com>
- <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
- <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
- <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
- <20211221235916.GI1432915@nvidia.com>
+        Wed, 22 Dec 2021 07:46:12 -0500
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id BC9715803CD;
+        Wed, 22 Dec 2021 07:46:11 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Wed, 22 Dec 2021 07:46:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=from:to:cc:subject:date:message-id:mime-version:content-type
+        :content-transfer-encoding; s=fm2; bh=VqlIc527blP2jp4gPa9SQqMVfs
+        nmoyM43VnTaxx6eXM=; b=gDdnj7PXsQldB2H3IIMfKgbeINwEliZe6ko6k6UdaC
+        QdRo9haOXGwqoTRYiI4iBKP6gO/85igSXmlaNjS1L1zJO7VvPl1Si1B1hsO974Uu
+        meT5W9I9/MeaWIy78fRIHx27nhe7kXWRxhTOR+o1VTmSh5iIgZZnJhTzlDYkO4sx
+        9qEQcxLcQVmfMDaHxywg5Nss/GoGrMV0L+D7+Az5AknU8xJ1rV9RdDv6qBdLhjL7
+        dPLJaygJKMeQALbPIK0Gtok9LxGZqqg9eDXOAGTKNdGlDTmJJNaRLUgtwZPUWxyq
+        a/w0Hf42aiEj3avjH/HmZr6jpCE/4lEmm059b54MR49Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:message-id:mime-version:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=VqlIc5
+        27blP2jp4gPa9SQqMVfsnmoyM43VnTaxx6eXM=; b=UiIDvWc+15HtCtqY85NRpa
+        UD11Sl0aW0y441Aizcb2vPduNkyzibFDiQHdUYAEwsjGNyTzowWRR+Rjz2oj1sHx
+        KduJg9Sg7MhpP3JHr49WqQC++QpoyngaaeWCu2GpYHQ22lLBC0zV7odQHgw+WWAP
+        POyz09QMWO9waaFHc/Tlkl7Wv1JWSAmnKVTykV8z0QOWtlFZNn6bJimwLGHGX9S3
+        CDUFkVStMRYQ1ZMPYVejthfXygUGa8vSrVgt/WwH6VUFgEACKUmWfD2FgRx8Sc9Q
+        nsVJzObG3vSzCW5ffs3IJWVRTAMGpn2Ke/h3B8Up38BukZsFCnJibBKwbntG3vig
+        ==
+X-ME-Sender: <xms:Ex7DYbOLEeTDiLzqdd7U6STHtyDDc1cDPQBkBcRwLvFw0mJzRHj9_A>
+    <xme:Ex7DYV9p9SkVCnLdrl1VRlyGD6n8BNx37_7OWXKfud1yHkTmrW7IcOKfjic7G8Jq5
+    MJ9Q2O0Jnaw2FpeA5A>
+X-ME-Received: <xmr:Ex7DYaSPHdd2qtCKVSq2T7E_yYq9OQ7k3iQI5gXkI6W87D9lclhMJTzQNb8f85aD2Km2v67g2iA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddruddtiedgfeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofggtgfgsehtqhertd
+    ertdejnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghi
+    rhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepffelvdegveefve
+    efvddvffeiteefgfejveegieethfekgefhleeukefhjeehfffgnecuffhomhgrihhnpehl
+    fihnrdhnvghtpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlihhsthgrihhrvdefrdhm
+    vg
+X-ME-Proxy: <xmx:Ex7DYfvstg7j1aCd5CV-z_AQTN7ujctRRmYHZpLYN5AzAOW0_VFVEQ>
+    <xmx:Ex7DYTctdPqh3fZaCWD8H84sBm_lAVWOJkYitfJPq5SMqXJlq1BaYw>
+    <xmx:Ex7DYb1GseU6ayTAnCrkGEORRVnvspevl_CgiyiO1rSjkpQwA6JSLQ>
+    <xmx:Ex7DYX5CHclB0N9J9ZYBp_r7fQcusXmf-biPIrRkIqbvreezEVYb-Q>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 22 Dec 2021 07:46:07 -0500 (EST)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     dmitry.torokhov@gmail.com, alistair23@gmail.com,
+        robh+dt@kernel.org, linus.walleij@linaro.org, rydberg@bitmath.org,
+        andreas@kemnade.info, Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH v4 0/4] Add support for the Cypress cyttsp5
+Date:   Wed, 22 Dec 2021 22:45:59 +1000
+Message-Id: <20211222124603.326920-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211221235916.GI1432915@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 21-12-21 19:59:16, Jason Gunthorpe wrote:
-> On Tue, Dec 21, 2021 at 06:40:30PM +0100, David Hildenbrand wrote:
-> 
-> > What adds complexity to correctly maintain the "exclusive" state are at
-> > least:
-> > * KSM (might be harder, have to think about it)
-> 
-> I know little about it, but isn't KSM like fork where it is trying to
-> WP pages with the intention of copying them? Shouldn't KSM completely
-> reject WP'ing a page that is under any kind of writable GUP?
-
-I know little about KSM as well but I think fundamentally it has similar
-requirements for anon pages as filesystems have for page cache pages e.g.
-when doing block deduplication or data checksumming... I.e., it needs to
-make sure data in the page is stable and nobody can modify it.
-
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+This patch series builds on top of [1] and adds support for the cyttsp5=0D
+touchscreen controller for the reMarkable 2.=0D
+=0D
+I first tried to add an I2C HID device. Although the cyttsp5 has some HID=0D
+looking aspects it is not HID compatible. Just in trying to probe the devic=
+e=0D
+I found:=0D
+ - The HID descriptor has extra padding=0D
+ - The HID descriptor sets the high bytes of the descriptor length=0D
+ - The HID descriptor has extra unrecognised tags=0D
+ - The HID reset command doesn't appear to work=0D
+=0D
+I don't think there is a way to use the I2C HID framework with the cyttsp5.=
+=0D
+For anyone interested you can see the work here [2]. In that branch though =
+I=0D
+can only obtain a HID descriptor, nothing else works without more core=0D
+changes.=0D
+=0D
+So instead I rebased the series from [1]. Converted to the new yaml DTS=0D
+documentation, added regulator support and fixed a x/y miscalculation bug.=
+=0D
+=0D
+1: https://lwn.net/ml/linux-kernel/20180703094309.18514-1-mylene.josserand@=
+bootlin.com/=0D
+2: https://github.com/alistair23/linux/commits/rM2-mainline-cyttsp5-hid=0D
+=0D
+Alistair Francis (2):=0D
+  ARM: imx_v6_v7_defconfig: Enable the cyttsp5 touchscreen=0D
+  ARM: dts: imx7d-remarkable2: Enable the cyttsp5=0D
+=0D
+Myl=C3=A8ne Josserand (2):=0D
+  Input: Add driver for Cypress Generation 5 touchscreen=0D
+  dt-bindings: input: Add Cypress TT2100 touchscreen controller=0D
+=0D
+ .../input/touchscreen/cypress,tt21000.yaml    |  92 ++=0D
+ arch/arm/boot/dts/imx7d-remarkable2.dts       |  89 ++=0D
+ arch/arm/configs/imx_v6_v7_defconfig          |   1 +=0D
+ drivers/input/touchscreen/Kconfig             |  14 +=0D
+ drivers/input/touchscreen/Makefile            |   1 +=0D
+ drivers/input/touchscreen/cyttsp5.c           | 922 ++++++++++++++++++=0D
+ 6 files changed, 1119 insertions(+)=0D
+ create mode 100644 Documentation/devicetree/bindings/input/touchscreen/cyp=
+ress,tt21000.yaml=0D
+ create mode 100644 drivers/input/touchscreen/cyttsp5.c=0D
+=0D
+-- =0D
+2.31.1=0D
+=0D

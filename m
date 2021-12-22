@@ -2,160 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C69DE47CD38
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C8B47CD3D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242869AbhLVHBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 02:01:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
+        id S242875AbhLVHDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 02:03:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233983AbhLVHBT (ORCPT
+        with ESMTP id S233983AbhLVHDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 02:01:19 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DE1C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 23:01:19 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id p4so2586326oia.9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 23:01:19 -0800 (PST)
+        Wed, 22 Dec 2021 02:03:02 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A5CC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 23:03:02 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id l10so1306905pgm.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 23:03:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K+fEElkxyh17SJxyQvhZhzCYL3bEc/oln0enLIlPr7s=;
-        b=mtHkqAut5erRcuNLSctSEzeMyPCR80NGM65cq4+3JhKZzWgfS7gGI6pWVYJS7miIUb
-         w+FkCIpunzbp9PEpXoYSDQ8ZXzcaiGkq+y6kc1yjNnRsJOidNN0Oi3Tda2q6Tgxm/iJU
-         xvYhPeUo2fY+E9EKeH3giHSG6M64DY7SnKQKuNRN+GvUYv8xdfNTcnKySla6PI5DCijB
-         mPq73XUllLQi3Wx6m7XV+R+/rYrtrdxUMyVu4vFP1zcV9zDRgVp1VT+6W5YZjnkmvnHa
-         pEdBXHJhWiFYWkLOg64+IWFI1MqYZ74ePSROkIR1QcAYpvTQPnjpz9oCGLLZj1QagQFv
-         iCkg==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=3VDOWPcXWhDFPAt9Df/Qo17xw6phBw6+Cx2n5GdYw8I=;
+        b=KQEn3RcHLikmtvkAq09i7D8+irGECceKpSEVr09pDFXyO8xdK79Z3J+FSAxdQPfZmK
+         6fDhpjfwz/ErFKb5Y84eXlHPyfeMiSQOeYj6qiHfFEuhn+MWlDuYOxdwKfI23GgsFSHe
+         +VQv7tZsd/3Zp3lFgIP8LWo6Su6kJX+FA281G9z+iyX2t9Imtu5as0ChygbTECXfoDuu
+         4HjadGJM7+Qt9QP1nvVu5qcNii5jqaiiGzkKAoKKuiLrUe22xQEaVyf4jSVsRx0mJLk5
+         WXUEbQHaQvlh8gBAdEM3fpV3ZqXjurLJpNAOl3OhIdbuSN8SnKgzc7fhftaMjLYY8lSe
+         f8vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K+fEElkxyh17SJxyQvhZhzCYL3bEc/oln0enLIlPr7s=;
-        b=dCv4MkKJ1WRsMKYEyZHuDZXkBjHjgW/yMAG6s7gHgvRrY4xvUii7zNb9Zfzj7GlBig
-         vOguNEQqylEFnL/sSgxDgxGOOjr/ZgJmFZ4dFM0e7cTWz7OOAqwieQSYACkyqS0SfWjy
-         hBI+Wqda4Y1nTs5yKYqNmJDbI27d8Pqu0MlWXrT6lxz7dNPT3+suhxiUpmu/y6An4OYY
-         WkMOC8Mi+2J11KMLo7h5AtNEYyc5GyTw4nfIDX5u44T5Re2hWCV28B86rAZy84dIkGvz
-         exV9L5L48tNits4xUex7T5dBH5Uy2qkD+IUKBLfWJocd8O8DWnzlf3XQQFZdEopZ+NsU
-         /Z4Q==
-X-Gm-Message-State: AOAM533wJ7xFW1ar2rIQ8s8N+G8Ss2FiiOrANVOAK+YnBLdx58EyVxq7
-        LuWs8uHVXIiUFbkXLAzKmKVuJXgRCl65QdlOk0P0hA==
-X-Google-Smtp-Source: ABdhPJwCHScp3p4RzyuDHrG94FWwwyqwm0Z/uarqZ5vYJ/UJ1gXSn+F2cW8znfrXyfTzfm5pCkKhMGSbefOwEHeq95U=
-X-Received: by 2002:a05:6808:118c:: with SMTP id j12mr1181782oil.65.1640156478612;
- Tue, 21 Dec 2021 23:01:18 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=3VDOWPcXWhDFPAt9Df/Qo17xw6phBw6+Cx2n5GdYw8I=;
+        b=vlPvMR0qp7sCeUzbABZUimMAqkEn0yMpgUIYzVewpYAnt9dgMyVRTl3LpOgtr8AFWa
+         45KlqSgoIP+zsntb9h1qYfKInKOxA7iSk4DTu4eicceAIVct5p7VO4ysEvj7bLCiHNeN
+         62nm0Bm59N32PVU22OhE22rAgAS6srSPpK/BqkdoAIp8CyKjDqiIqqiP8Gui1TnklKvj
+         Pdcsf2H1TifPg7lIijGPmSkpWmFCoTZ8gNhSAfLTOTUriXcRwbXWrt0+8mGo5kC/1PS1
+         YNQufM/xs43EmfHseyYuoL9iE0hnqq48LxaLqFHX5rP2IdPGt3qLZZjMZW8iVG9oHBy8
+         +cPg==
+X-Gm-Message-State: AOAM530a8UqCsuhDh737C7Dwv00FEJCoQCZKNUQnyZl0zdYuNifcSLXV
+        gF2PVIE/gdi+hpWvX+a0Zjg=
+X-Google-Smtp-Source: ABdhPJycGG6AFTvNA5CCdWBtS06E4j1qggcF88zMZtOu/rUTQU/wK+IpHwer4hO2GDScPqbJ0V0QYA==
+X-Received: by 2002:a05:6a00:248f:b0:4a0:1e25:3155 with SMTP id c15-20020a056a00248f00b004a01e253155mr1650662pfv.21.1640156582285;
+        Tue, 21 Dec 2021 23:03:02 -0800 (PST)
+Received: from localhost.localdomain (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
+        by smtp.gmail.com with ESMTPSA id z2sm1034777pge.86.2021.12.21.23.02.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 23:03:01 -0800 (PST)
+Date:   Wed, 22 Dec 2021 20:02:56 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     gregkh@linuxfoundation.org, realwakka@gmail.com,
+        paulo.miguel.almeida.rodenas@gmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: pi433: remove unnecessary parentheses pointed out
+ by checkpatch.pl
+Message-ID: <20211222070256.GA7644@localhost.localdomain>
 MIME-Version: 1.0
-References: <cover.1640036051.git.andreyknvl@google.com>
-In-Reply-To: <cover.1640036051.git.andreyknvl@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 22 Dec 2021 08:00:00 +0100
-Message-ID: <CANpmjNOj-jYo=yaffBi5w=esyHYo=CEqDJce7cb-KmQ1P6BEMQ@mail.gmail.com>
-Subject: Re: [PATCH mm v4 00/39] kasan, vmalloc, arm64: add vmalloc tagging
- support for SW/HW_TAGS
-To:     andrey.konovalov@linux.dev
-Cc:     Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Dec 2021 at 22:58, <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@google.com>
->
-> Hi,
->
-> This patchset adds vmalloc tagging support for SW_TAGS and HW_TAGS
-> KASAN modes.
->
-> The tree with patches is available here:
->
-> https://github.com/xairy/linux/tree/up-kasan-vmalloc-tags-v4-akpm
->
-> About half of patches are cleanups I went for along the way. None of
-> them seem to be important enough to go through stable, so I decided
-> not to split them out into separate patches/series.
->
-> The patchset is partially based on an early version of the HW_TAGS
-> patchset by Vincenzo that had vmalloc support. Thus, I added a
-> Co-developed-by tag into a few patches.
->
-> SW_TAGS vmalloc tagging support is straightforward. It reuses all of
-> the generic KASAN machinery, but uses shadow memory to store tags
-> instead of magic values. Naturally, vmalloc tagging requires adding
-> a few kasan_reset_tag() annotations to the vmalloc code.
->
-> HW_TAGS vmalloc tagging support stands out. HW_TAGS KASAN is based on
-> Arm MTE, which can only assigns tags to physical memory. As a result,
-> HW_TAGS KASAN only tags vmalloc() allocations, which are backed by
-> page_alloc memory. It ignores vmap() and others.
->
-> Changes in v3->v4:
-[...]
-> Andrey Konovalov (39):
->   kasan, page_alloc: deduplicate should_skip_kasan_poison
->   kasan, page_alloc: move tag_clear_highpage out of
->     kernel_init_free_pages
->   kasan, page_alloc: merge kasan_free_pages into free_pages_prepare
->   kasan, page_alloc: simplify kasan_poison_pages call site
->   kasan, page_alloc: init memory of skipped pages on free
->   kasan: drop skip_kasan_poison variable in free_pages_prepare
->   mm: clarify __GFP_ZEROTAGS comment
->   kasan: only apply __GFP_ZEROTAGS when memory is zeroed
->   kasan, page_alloc: refactor init checks in post_alloc_hook
->   kasan, page_alloc: merge kasan_alloc_pages into post_alloc_hook
->   kasan, page_alloc: combine tag_clear_highpage calls in post_alloc_hook
->   kasan, page_alloc: move SetPageSkipKASanPoison in post_alloc_hook
->   kasan, page_alloc: move kernel_init_free_pages in post_alloc_hook
->   kasan, page_alloc: rework kasan_unpoison_pages call site
->   kasan: clean up metadata byte definitions
->   kasan: define KASAN_VMALLOC_INVALID for SW_TAGS
->   kasan, x86, arm64, s390: rename functions for modules shadow
->   kasan, vmalloc: drop outdated VM_KASAN comment
->   kasan: reorder vmalloc hooks
->   kasan: add wrappers for vmalloc hooks
->   kasan, vmalloc: reset tags in vmalloc functions
->   kasan, fork: reset pointer tags of vmapped stacks
->   kasan, arm64: reset pointer tags of vmapped stacks
->   kasan, vmalloc: add vmalloc tagging for SW_TAGS
->   kasan, vmalloc, arm64: mark vmalloc mappings as pgprot_tagged
->   kasan, vmalloc: unpoison VM_ALLOC pages after mapping
->   kasan, mm: only define ___GFP_SKIP_KASAN_POISON with HW_TAGS
->   kasan, page_alloc: allow skipping unpoisoning for HW_TAGS
->   kasan, page_alloc: allow skipping memory init for HW_TAGS
->   kasan, vmalloc: add vmalloc tagging for HW_TAGS
->   kasan, vmalloc: only tag normal vmalloc allocations
->   kasan, arm64: don't tag executable vmalloc allocations
->   kasan: mark kasan_arg_stacktrace as __initdata
->   kasan: simplify kasan_init_hw_tags
->   kasan: add kasan.vmalloc command line flag
->   kasan: allow enabling KASAN_VMALLOC and SW/HW_TAGS
->   arm64: select KASAN_VMALLOC for SW/HW_TAGS modes
->   kasan: documentation updates
->   kasan: improve vmalloc tests
+Checkpatch reports 'Unnecessary parentheses around <lines>'.
+Fix this by removing extraneous parentheses where applicable.
 
-Functionally it all looks good. So rather than acking every patch, for
-the whole series:
+Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+---
+ drivers/staging/pi433/rf69.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Acked-by: Marco Elver <elver@google.com>
+diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
+index dc047bcdf44b..e62e61ef4d27 100644
+--- a/drivers/staging/pi433/rf69.c
++++ b/drivers/staging/pi433/rf69.c
+@@ -470,9 +470,9 @@ static int rf69_set_bandwidth_intern(struct spi_device *spi, u8 reg,
+ 		return -EINVAL;
+ 	}
+ 
+-	if ((mantisse != mantisse16) &&
+-	    (mantisse != mantisse20) &&
+-	    (mantisse != mantisse24)) {
++	if (mantisse != mantisse16 &&
++	    mantisse != mantisse20 &&
++	    mantisse != mantisse24) {
+ 		dev_dbg(&spi->dev, "set: illegal bandwidth mantisse %u", mantisse);
+ 		return -EINVAL;
+ 	}
+-- 
+2.25.4
 
-... and in case you do a v5, I've left some minor comments.
-
-Happy holidays!
-
-Thanks,
--- Marco

@@ -2,80 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2F847D383
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E210A47D380
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245647AbhLVOT1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Dec 2021 09:19:27 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:59633 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245661AbhLVOTY (ORCPT
+        id S245660AbhLVOTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 09:19:23 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:50806 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245647AbhLVOTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:19:24 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 6A7D2200002;
-        Wed, 22 Dec 2021 14:19:21 +0000 (UTC)
-Date:   Wed, 22 Dec 2021 15:19:19 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Roger Quadros <rogerq@kernel.org>, tony@atomide.com,
-        robh@kernel.org, kishon@ti.com, nm@ti.com, vigneshr@ti.com,
-        linux-mtd@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 4/4] mtd: rawnand: omap2: Select GPMC device driver
- for ARCH_K3
-Message-ID: <20211222151919.5d95d72c@xps13>
-In-Reply-To: <2b4386a4-0acc-5db1-fc55-b57ad8a84be3@canonical.com>
-References: <20211221131757.2030-1-rogerq@kernel.org>
-        <20211221131757.2030-5-rogerq@kernel.org>
-        <20211221144917.0a5d8f1a@xps13>
-        <2b4386a4-0acc-5db1-fc55-b57ad8a84be3@canonical.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 22 Dec 2021 09:19:22 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id DE13B212B9;
+        Wed, 22 Dec 2021 14:19:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1640182760; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zhr+Afm9qhm7LXnYhc731sR+IngmPtrNRK+NJVmgKNs=;
+        b=xdk2jG0G0otlY+ZrBepZfL4FsYG+3amHldl6XT78E5OMXDCNt53VlsY/4KCA2iGJUbdyPb
+        bKqXHEwQ1EMHkmMnofxOOyioayEurrupL+l/HHXnzXaTjI+TCZMo25//m8HN1si2ctz4fS
+        anZS9KfAh5j3XE8d19HruXGvd6xixaw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1640182760;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zhr+Afm9qhm7LXnYhc731sR+IngmPtrNRK+NJVmgKNs=;
+        b=Ke6NY5LDOqwezFEELCgm1wBttjIxKixV5PSmi3L6yOjKJMWiWNgKI0WPgaKRDjitu9dis3
+        DH3vhMXF23LHzxDw==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 8B234A3B81;
+        Wed, 22 Dec 2021 14:19:20 +0000 (UTC)
+Date:   Wed, 22 Dec 2021 15:19:20 +0100 (CET)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>, Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, mark.rutland@arm.com,
+        broonie@kernel.org, madvenka@linux.microsoft.com
+Subject: Re: [PATCH v2 09/13] powerpc/ftrace: Implement
+ CONFIG_DYNAMIC_FTRACE_WITH_ARGS
+In-Reply-To: <5831f711a778fcd6eb51eb5898f1faae4378b35b.1640017960.git.christophe.leroy@csgroup.eu>
+Message-ID: <alpine.LSU.2.21.2112221515020.18494@pobox.suse.cz>
+References: <cover.1640017960.git.christophe.leroy@csgroup.eu> <5831f711a778fcd6eb51eb5898f1faae4378b35b.1640017960.git.christophe.leroy@csgroup.eu>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Mon, 20 Dec 2021, Christophe Leroy wrote:
 
-krzysztof.kozlowski@canonical.com wrote on Wed, 22 Dec 2021 12:50:18
-+0100:
-
-> On 21/12/2021 14:49, Miquel Raynal wrote:
-> > Hi Roger,
-> > 
-> > rogerq@kernel.org wrote on Tue, 21 Dec 2021 15:17:57 +0200:
-> >   
-> >> The GPMC device driver is required for NAND controller
-> >> to work on K3 Architecture. Select it if required.
-> >>
-> >> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> >> Signed-off-by: Roger Quadros <rogerq@kernel.org>
-> >> ---
-> >>  drivers/mtd/nand/raw/Kconfig | 1 +
-> >>  1 file changed, 1 insertion(+)
-> >>
-> >> diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
-> >> index 67b7cb67c030..587f20c6184f 100644
-> >> --- a/drivers/mtd/nand/raw/Kconfig
-> >> +++ b/drivers/mtd/nand/raw/Kconfig
-> >> @@ -42,6 +42,7 @@ config MTD_NAND_OMAP2
-> >>  	tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
-> >>  	depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || COMPILE_TEST
-> >>  	depends on HAS_IOMEM
-> >> +	select OMAP_GPMC if ARCH_K3  
-> > 
-> > Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> >   
+> Implement CONFIG_DYNAMIC_FTRACE_WITH_ARGS. It accelerates the call
+> of livepatching.
 > 
-> This patch looks actually independent. Miquel, do you want me to take it
-> via memory controller drivers tree (like three other patches)?
+> Also note that powerpc being the last one to convert to
+> CONFIG_DYNAMIC_FTRACE_WITH_ARGS, it will now be possible to remove
+> klp_arch_set_pc() on all architectures.
 
-Yes please, you can take it in your tree, I don't expect any conflicts
-in this area.
+Correct. We could replace it ftrace_instruction_pointer_set() and that is 
+it. In fact, livepatch.h in both arch/x86/include/asm/ and 
+arch/s390/include/asm/ could be removed with that.
 
-Thanks,
-Miquèl
+On the other hand, there is arm64 live patching support being worked on 
+and I am not sure what their plans about DYNAMIC_FTRACE_WITH_ARGS are. The 
+above would make it a prerequisite.
+
+Adding CCs... you can find the whole thread at 
+https://lore.kernel.org/all/cover.1640017960.git.christophe.leroy@csgroup.eu/
+
+Miroslav

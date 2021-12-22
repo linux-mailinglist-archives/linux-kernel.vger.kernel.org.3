@@ -2,75 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D55747CD16
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 07:48:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D9347CD17
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 07:51:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242818AbhLVGsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 01:48:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41894 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242796AbhLVGsl (ORCPT
+        id S242826AbhLVGvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 01:51:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:41132 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242796AbhLVGvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 01:48:41 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017FBC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 22:48:41 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id p7so1430982ljj.1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 22:48:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NSkDFoSerZVrmpLUilEfV8Ju2E4v5m7ZKobzRBew9sw=;
-        b=mEC1KfAwMvoAoyjVKDIGpaOLh80+Y/8/xezFZ1BLp994C5sEoKe3q3md8D4fzDyDbk
-         FloATRehA0zl19Me9KCKvGjRSoAM9nD2q5Y9g8wdVB20G7bMA2NlXZNjYSbnpj96VGts
-         DKRPGYXR9DbMka+rF+2fpac9vkLiM3thWRWls=
+        Wed, 22 Dec 2021 01:51:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640155874;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ch2Xpj1pnRLF55Cf/9agxcFXuNqtmtfpr9anTXKKzF0=;
+        b=CoiMsn53WqYTqKPi1iJOBd+xoCcn+MALUrzFdOy/GeGs5UJr9whe1e2fGsKs91Myl/O+13
+        X4D4uIU5xkHjs6NCVFVZdZDSZ3kl4JjpWrvfZlqSoaxdb44m0FnKWMhTaPqGOYWzDf9sfz
+        CHLwFdJRNJJOEiiD1Y6SelFPGPvIMJo=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-613-zym3a5saN-66vOEvIsUysQ-1; Wed, 22 Dec 2021 01:51:12 -0500
+X-MC-Unique: zym3a5saN-66vOEvIsUysQ-1
+Received: by mail-wr1-f69.google.com with SMTP id o20-20020adfa114000000b001a2abc089d8so404332wro.4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 22:51:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NSkDFoSerZVrmpLUilEfV8Ju2E4v5m7ZKobzRBew9sw=;
-        b=li0/2vOxpVip3YiA96mxKetJuVAc57yzg13PDDgiXSgRMKh7S3GPBXjFMw0yHAE3hw
-         8cGI/PC9tQr+HuOHWD/GFyBnwMdlmg3msLdofAf659VOQAfCbc4mLSLkOvPlDt0wPhAL
-         xHdB3uEeCC5sfnjp1ESbFEJWHVpYNhiCMS4As1F9e69y9fiK516zm5WkzW5F0G5ujEwC
-         Pqd7O7B+wL8+WRNYTSQudqz6xb5Hp4ofsd4jgwLwL9TXt8iT/LZfxXHIk96DMTQPxazn
-         czN7hWZYhRB6QlZ3nxcvwoRK/v55tandAXJ8U9qNYbQtHCTdiXk2lskGUAp05VaNUsLB
-         b05Q==
-X-Gm-Message-State: AOAM530cUQyaSF81mouoBe4u1xk+XdNAP/QYijecBqSKzCAiC3pXg3ml
-        QUVYm9g4LkHsamwjhLZS4OKc5mzOU91tnfNCHmLyKQ==
-X-Google-Smtp-Source: ABdhPJwYuCHiq0ppLpf4B056P0N88O5bHGRzhgw4jU3lnH8UCjNrBnXr/enwCxheyjFZfYfLP7YvdLpHLB7uLjwdqdE=
-X-Received: by 2002:a2e:aa14:: with SMTP id bf20mr1254932ljb.376.1640155719274;
- Tue, 21 Dec 2021 22:48:39 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ch2Xpj1pnRLF55Cf/9agxcFXuNqtmtfpr9anTXKKzF0=;
+        b=ZfrzxBLZQGO3wch4w8Z0KHbb9AUmRxWxWq9Rs8ibV9cz9fRVBFmBnp+tXfHrCcBwME
+         HpyQQkYkxTgI2dE9BURKR7ROlB16eJCCQ0q3clrvw89+u8s3bLV7dF/tmS3238aPGyld
+         S/0FkOFzPkuNa03CU9/M8iC2nWMaev86ThYp9KXj2LwZXmVOQYIG/pMHZztcBoLUkqvE
+         7zywKfseJc3MUlZn6fQXvIcfRrzuoS2HuvUuG2trnAdk99WjC/fjV+VetjkBsN9BvuQR
+         IRBsQJlcjK5FaSD51t11Kyo5gbeHqBXvZaD/dypEVbYmcFuyaND7kEblmC2M3oPvkSn1
+         9AFA==
+X-Gm-Message-State: AOAM5300grADMJGjb7pEnjUNargp5hY0RTgr/rfBTwyOu/8JUaQLjqS5
+        iPpVrpZWpHu0Tx2Qe3lFs6b9pmLg35KftV2JnwKUNGGPe5iVVy0uuvX566e7eZxIBw98bT5K5a+
+        0XcawHlVzoL0hk5vjc3JP/+IE
+X-Received: by 2002:a7b:c4d3:: with SMTP id g19mr1124851wmk.46.1640155871822;
+        Tue, 21 Dec 2021 22:51:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwDtNRmO6B8NSDYghPyCIuC7SMgE+EpTU/PA6KZoEqMErn7wwJ2gVK2teXs+Zth65RDz/bQuQ==
+X-Received: by 2002:a7b:c4d3:: with SMTP id g19mr1124841wmk.46.1640155871637;
+        Tue, 21 Dec 2021 22:51:11 -0800 (PST)
+Received: from localhost.localdomain ([151.29.58.184])
+        by smtp.gmail.com with ESMTPSA id g8sm685827wmh.17.2021.12.21.22.51.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 22:51:10 -0800 (PST)
+Date:   Wed, 22 Dec 2021 07:51:08 +0100
+From:   Juri Lelli <juri.lelli@redhat.com>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        John Kacur <jkacur@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-rt-users@vger.kernel.org, linux-trace-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tao Zhou <tao.zhou@linux.dev>
+Subject: Re: [PATCH V9 00/14] RTLA: An interface for osnoise/timerlat tracers
+Message-ID: <YcLK3MXdFTwYYC7O@localhost.localdomain>
+References: <cover.1639158831.git.bristot@kernel.org>
 MIME-Version: 1.0
-References: <20211222062444.16144-1-linmq006@gmail.com>
-In-Reply-To: <20211222062444.16144-1-linmq006@gmail.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Wed, 22 Dec 2021 14:48:28 +0800
-Message-ID: <CAGXv+5GF1WOeXVtnknAa4GYXE3Hd-UzcCBCyQzT6KY3tJCrVGA@mail.gmail.com>
-Subject: Re: [PATCH] scsi: ufs: ufs-mediatek : Fix NULL vs IS_ERR checking in ufs_mtk_init_va09_pwr_ctrl
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Stanley Chu <stanley.chu@mediatek.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-scsi@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1639158831.git.bristot@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 2:25 PM Miaoqian Lin <linmq006@gmail.com> wrote:
->
-> The function regulator_get() return error pointer,
-> use IS_ERR() to check if has error.
->
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Hi!
 
-Please add
+On 10/12/21 19:11, Daniel Bristot de Oliveira wrote:
+> The rtla(1) is a meta-tool that includes a set of commands that
+> aims to analyze the real-time properties of Linux. But instead of
+> testing Linux as a black box, rtla leverages kernel tracing
+> capabilities to provide precise information about the properties
+> and root causes of unexpected results.
+> 
+> To start, it presents an interface to the osnoise and timerlat tracers.
+> In the future, it will also serve as home to the rtsl [1] and other
+> latency/noise tracers.
+> 
+> If you just want to run it, you can download the tarball here:
+>   - https://bristot.me/files/rtla/tarball/rtla-0.5.tar.bz2
+> 
+> To compile rtla on fedora you need:
+>   $ git clone git://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git
+>   $ cd libtraceevent/
+>   $ make
+>   $ sudo make install
+>   $ cd ..
+>   $ git clone git://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git
+>   $ cd libtracefs/
+>   $ make
+>   $ sudo make install
+>   $ cd ..
+>   $ sudo dnf install python3-docutils procps-devel
+>   $ cd $rtla_src
+>   $ make
+>   $ sudo make install
+> 
+> The tracing option (-t) depends some kernel patches that are
+> available at [2].
 
-Fixes: cf137b3ea49a ("scsi: ufs-mediatek: Support VA09 regulator operations")
+FWIW, I took this for a spin (on RT) and had a very positive experience
+with it. Think is does what it says on the tin and makes using osnoise
+and timerlat tracers easier.
 
-so that the patch has a chance to get picked into stable.
+Please feel free to add
+
+Tested-by: Juri Lelli <juri.lelli@redhat.com>
+
+Best,
+Juri
+

@@ -2,108 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93DC347D2FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D639B47D301
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:21:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240917AbhLVNUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 08:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236585AbhLVNUK (ORCPT
+        id S240964AbhLVNVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 08:21:50 -0500
+Received: from mout.kundenserver.de ([212.227.126.133]:32949 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236585AbhLVNVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 08:20:10 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BBCC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 05:20:10 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id g17so6483945ybe.13
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 05:20:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=j1goV5aAlMyw5R8emZiAZx447+jdj41qItWe+35D124=;
-        b=jrchVVYCdWsktlqGCWjwZ1v1nkvcmwuQpyp6dw1rbAOesVS48vJ/3AMJLHLTPt8+H3
-         55oFx4O2+e1JzsWICdze5pWlgOPiPVuL4aB4vDNxhLU5kx1frOqUwmwg3lMJThOl7SZN
-         sRjFXF4dVzb5qE2Ae4w3uykCcKE/AwLTGdDLbMF+X52pcWRFLFSATkJockrIXweHCThX
-         BMm2bAbLSeHDuLwUBRO/I9JrnGQuyqAXA1nMdzVj4aYK9X3maVeziqeVAUGIG+D/cEDz
-         SzLYPjtfM0EZhf0pfdIZQJTYzg2bN7RGS9dlkFPgDtovuWc2KLYklFnHa5+jK+jMHuK+
-         50oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=j1goV5aAlMyw5R8emZiAZx447+jdj41qItWe+35D124=;
-        b=fFnYYtMjl8fkrCrg5l87QFx9Xo/ZIEmnmt8pX3Qppfr1UJbbPO9dB6tWb+kqzt7R7I
-         G+GhrqmahxGcsAfc+v8PMkQoXAgVpK93zovwjLkq9+r/790hpOXa9Vv52D+Cfz4VISku
-         VPCoZWMkujrqdI/vngnqonvhu1Mq8nadpmkBAroL7BAQW0IBi6NYUsGFnJMinSERtbog
-         DGuiKPkDBRnf7vTT5+8Gw9+HVjDYrut/21ZZxw/SNdLJBb4Pz5HujtoQdxatxpioTjWG
-         dA/DrvwH5AhLAbtcYMnhW5NOu9LzPQIPhxrPR9wDwRJYCG0hT9+z5T0fT0kcIKXilUjh
-         +ZKA==
-X-Gm-Message-State: AOAM531W4PHuvQtLGKmM2VAW4KVrleNW3zCMKmw9V3yS8aSuSrbeDifn
-        P1uTnxI6YrP+1ywH0jnhJWXGWcx+qEJu3eUD2UnACDo3eHYE7g==
-X-Google-Smtp-Source: ABdhPJzV7Q7oVy5TFBaPsvS9bSSY0IIXErDsF3neEXO3xKp5bdC9y9YZcL2gJ2ew0gMm7WD6kGv87ChvXAlwxxaOjr8=
-X-Received: by 2002:a25:9a84:: with SMTP id s4mr4116211ybo.405.1640179209684;
- Wed, 22 Dec 2021 05:20:09 -0800 (PST)
+        Wed, 22 Dec 2021 08:21:49 -0500
+Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MQNF3-1mmdY239DV-00MIzo; Wed, 22 Dec 2021 14:21:47 +0100
+Received: by mail-wr1-f48.google.com with SMTP id s1so4877290wra.6;
+        Wed, 22 Dec 2021 05:21:47 -0800 (PST)
+X-Gm-Message-State: AOAM530HSeVgBhXuqCrfEQJPRTMXQmQ8vJK2ixbp/+6zdJB9oGvR2r7z
+        Jps8G5130AWGCLQ9OCVjSq1IkQ3l7sQcqIvObWw=
+X-Google-Smtp-Source: ABdhPJyZJ7IM3FfszIOXVrgOVxvS2jRO3t8J5UTThAJUFt3pUIkSGUxFgQ01Mn2RRPgx8pl2cn6vKm8xDVBrWZjoma4=
+X-Received: by 2002:a5d:484f:: with SMTP id n15mr2096485wrs.219.1640179307179;
+ Wed, 22 Dec 2021 05:21:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20211220144654.926112-1-pgwipeout@gmail.com> <trinity-c54ecce4-7a39-4143-b136-f53c9b40ffd1-1640018026851@3c-app-gmx-bap45>
- <YcGU6pQqfEPBqjrO@google.com> <4963E4A2-63B4-48A1-BDDD-5F9D07D71598@public-files.de>
- <YcMHhJTsQMLDRRsN@google.com> <trinity-4d94e8dd-1499-4d5f-84c3-85075a4085dd-1640172673779@3c-app-gmx-bs44>
- <YcMf56MvFv0ym7E5@google.com>
-In-Reply-To: <YcMf56MvFv0ym7E5@google.com>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Wed, 22 Dec 2021 08:19:57 -0500
-Message-ID: <CAMdYzYpYumXLEZYNadfHHGZN16ismT2JOMO8bGEegXP69sT3sw@mail.gmail.com>
-Subject: Re: Re: [PATCH v3] mfd: rk808: add reboot support to rk808.c
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-6-guoren@kernel.org>
+ <CAK8P3a2XOVYB1Fm5TBdjtKx9DXoG93Zrw7TiquYL_Zy916dLwQ@mail.gmail.com> <CAJF2gTR2fAU=+0fvW_VCqaZfDkSTAxQ=cKE9iAYOoGORb3m+4g@mail.gmail.com>
+In-Reply-To: <CAJF2gTR2fAU=+0fvW_VCqaZfDkSTAxQ=cKE9iAYOoGORb3m+4g@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 22 Dec 2021 14:21:30 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a17A3MU_atWNEretDcr5sLRc7540tM4vfc=H4M8qVCDEg@mail.gmail.com>
+Message-ID: <CAK8P3a17A3MU_atWNEretDcr5sLRc7540tM4vfc=H4M8qVCDEg@mail.gmail.com>
+Subject: Re: [PATCH 05/13] riscv: compat: syscall: Add compat_sys_call_table implementation
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:KcHzApjnyl97SUX/IjHk9uJ+lCkoxRQHHtJigChsCQANQqFlxY3
+ 5/MMq6g2VTuF/I46pfNd6RnlNIFQ+denbw/0tR0ryLFOGp5Ea0aZF1+XJeRgN1AhKAXivcf
+ pnSS/Mc433rsAd/P95Vg19ab/yop6szHgm5aCi3HAEXOmC6z9QT2FhVC7e/2irYf+a7KSZI
+ UJctetkKtFpihzC/+0Ruw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lQE0d/nP5bg=:uC4/+XsTo0ujXShH6CntwY
+ b5QttaZHPJ5/u7tpRrCEWXV6Cp+X+iy45lfaVg2E/9ImfO2D2JpzC90iimta9rU0tNpOFkW1s
+ XXHIbb2try1m3FkZBA1rDlEWJjUAJN+RAMXGwTz3/bU5DJf0dsSz2YuuHoEw72t3i7HsKtGey
+ 1ynBOlhBJd+IJQID2fhhERr5gkUEWsNYbG+oV/Kz6o1BwwQkt2/uv1hTmUStVPjAlHtzQ33ew
+ wJSQnYrBseZ14gUZUcEvy/p9pg3Y8QnzQx3Pk/0LJg3v1qAJERik50PpremZePUgrirlFoThm
+ JzIIcjdXugSw+Om6BQgWvHG1rFE+4ahwQnY/nDCrwysHPFYAVI7SPDHFxScWEVGVU+0MxVLag
+ plc3FYkty/G4AXe68Pj8/dDIMaS3MQmTln64STW9xx/zFGwT+GgAdVkNSXHYBOg2GlhmwVDXL
+ 2KOq8UKXU+mNEoLWB+CyEah4petwEyinjhcUfvcIGeMsGnXPrS+jboBBS2Co295V8xu/YMflL
+ ecazrxtiplC/RRukl12dJqKpr9h25ypt/vF/Wg3mrflVSbMHRnC4FGIIVflaW2H+SwbIJ45uA
+ CwEYPr0NAENYCPpE7TZv1R0WfH15oXOg8ZIDNeQ0UuvekMFDhJ42ek9ekZ+ue3k1Cc8y9ltP5
+ TRKOqUs5qT682x5SNAeuQJ1g5fTumz0m9AiVqkhKIH27P6WYrYiwx6iH7w55Q+XOZnb6TMncZ
+ To+Q7UY/CjkT2XVNqzJLxQoLBNbGO8iYNlO/Zf2th4FSrioltsaezapbUu+jD2qSRj6lSbnsx
+ Jnq765M4NzgDmypQt/zvMFwBCtV74FdlM13rPzJeHlFHWBX2v8=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 7:54 AM Lee Jones <lee.jones@linaro.org> wrote:
+On Wed, Dec 22, 2021 at 1:43 PM Guo Ren <guoren@kernel.org> wrote:
 >
-> On Wed, 22 Dec 2021, Frank Wunderlich wrote:
->
-> > > Gesendet: Mittwoch, 22. Dezember 2021 um 12:09 Uhr
-> > > Von: "Lee Jones" <lee.jones@linaro.org>
-> > > An: "Frank Wunderlich" <frank-w@public-files.de>
-> > > > Here i have squashed the change in:
-> > > >
-> > > > https://github.com/frank-w/BPI-R2-4.14/commit/06430ffcb6d58d33014fb=
-940256de77807ed620f
-> > > >
-> > > > With the change i can compile it...
-> > >
-> > > Not sure I understand.
-> > >
-> > > Please make sure all patches you send for inclusion into the Linux
-> > > kernel are fully tested.  They should also be bisectable i.e. not
-> > > depend on patches applied *on top*.
-> > >
-> > > > But in v4 (patch is tagged as v3 too) the of_property_read_bool was=
- dropped completely.
-> > > > regards Frank
+> On Wed, Dec 22, 2021 at 2:15 AM Arnd Bergmann <arnd@arndb.de> wrote:
 > >
-> > only v1 was sent by me :)
+> > On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
+> > >
+> > > From: Guo Ren <guoren@linux.alibaba.com>
+> > >
+> > > Implement compat_syscall_table.c with compat_sys_call_table & fixup
+> > > system call such as truncate64,pread64,fallocate which need two
+> > > regs to indicate 64bit-arg (copied from arm64).
+> > >
+> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > > ---
+> > >  arch/riscv/include/asm/syscall.h         |  3 +
+> > >  arch/riscv/kernel/compat_syscall_table.c | 84 ++++++++++++++++++++++++
 > >
-> > v4 is compilable and works on rk809 (Bananapi r2 pro)
+> > Same here, I think most of these should go next to the actual syscalls, with the
+> > duplicates removed from other platforms,
+> Agree, I will try that next version.
 >
-> My comments are directed at whoever sent patches without testing.
-
-Apologies, due to an unfortunate set of circumstances I missed the
-build failed and I was using a stale kernel.
-
+> >
+> > > +#define __SYSCALL_COMPAT
+> > > +#undef __LP64__
+> >
+> > What is the #undef for?
 >
-> --
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
-> Senior Technical Lead - Developer Services
-> Linaro.org =E2=94=82 Open source software for Arm SoCs
-> Follow Linaro: Facebook | Twitter | Blog
+> See arch/riscv/include/uapi/asm/unistd.h:
+>
+> #ifdef __LP64__
+> #define __ARCH_WANT_NEW_STAT
+> #define __ARCH_WANT_SET_GET_RLIMIT
+> #endif /* __LP64__ */
+
+Ok, in this case I would recommend changing that #ifdef to
+check for __SYSCALL_COMPAT instead, as removing the
+__LP64__ define may cause other unintended changes.
+
+
+> > > +SYSCALL_DEFINE6(mmap2, unsigned long, addr, unsigned long, len,
+> > > +       unsigned long, prot, unsigned long, flags,
+> > > +       unsigned long, fd, unsigned long, offset)
+> > > +{
+> > > +       if ((prot & PROT_WRITE) && (prot & PROT_EXEC))
+> > > +               if (unlikely(!(prot & PROT_READ)))
+> > > +                       return -EINVAL;
+> > > +
+> > > +       return ksys_mmap_pgoff(addr, len, prot, flags, fd, offset);
+> > > +}
+> >
+> > This is one that we may have to deal with separately, introducing
+> > sys_mmap_pgoff() was a mistake in my opinion, and we should just have
+>
+> #if __BITS_PER_LONG == 32 || defined(__SYSCALL_COMPAT)
+> #define __SC_3264(_nr, _32, _64) __SYSCALL(_nr, _32)
+> #else
+> #define __SC_3264(_nr, _32, _64) __SYSCALL(_nr, _64)
+> #endif
+>
+> #define __NR3264_mmap 222
+> __SC_3264(__NR3264_mmap, sys_mmap2, sys_mmap)
+>
+> > added a sys_mmap2() for all architectures that don't explicitly override it.
+> That should be another patch, right? Let's keep it here.
+
+Right, I think the patch would be a nice cleanup, but it appears that
+riscv is among the few architectures that have defined their own
+nonstandard mmap2() syscall after all, despite using the standard
+name for the entry point. Not sure how this slipped past my original
+review, but it certainly can't be changed now.
+
+It also means that you need to change your implementation of
+compat_sys_mmap2() to match the version from
+arch/riscv/kernel/sys_riscv.c, rather than the version that
+everyone else has. Maybe leave it there and change the
+#ifdef to build mmap2 for both native rv32 and compat
+mode.
+
+FWIW, this is what a conversion from mmap_pgoff() to mmap2()
+would look like, I think this is an overall win, but it's entirely
+unrelated to your series now: https://pastebin.com/QtF55dn4
+(I'm sure I got some details wrong, at least it needs some
+#ifdef checks).
+
+       Arnd

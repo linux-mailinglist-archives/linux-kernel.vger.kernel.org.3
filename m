@@ -2,248 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0720047D41F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 16:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2E247D423
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 16:11:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343668AbhLVPKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 10:10:23 -0500
-Received: from mga04.intel.com ([192.55.52.120]:17846 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237278AbhLVPKV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 10:10:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640185821; x=1671721821;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=wDsEdZND5Fw7uI60QuLSJ8Os7m5V3R7mG1j0MGh01HY=;
-  b=LV654gG9SzgC8yxhK3gi2oWXzHeVvcnFBJQhGu+GhWOP/Fr94bNQZTs2
-   07L5eLNwNmdY9v4dHgrd8Il2EGNnuP/j02foRW2Mak1tI/U18seTot8RM
-   uQbyfHSekjaI+PQe41WDJ3bAyS+focOpgLKlDaYG8KK8Xeyqnd1k/jYKu
-   uoBUUyUL9OKtkk0QkYYDFQY+zk+Ch2D0rbtd2BKfwUsqGWJRDS1Wd6kvE
-   w9Z5oeWFpJBS+5NoBo9pr0T6cqvAVVBnlQRpb8zs3K+cKbakmWxGtTVsA
-   9nsyJBLu0MY/IYThvEdrN7w2rIvkYB+hjvBSEYvMsmWEbLcASaOdCM8+g
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="239388512"
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="239388512"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 07:10:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="484782813"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga002.jf.intel.com with ESMTP; 22 Dec 2021 07:10:18 -0800
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andrew Lunn <andrew@lunn.ch>, Rajat Jain <rajatja@google.com>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211126115652.1134230-1-kai.heng.feng@canonical.com>
- <745bd358-c34c-9deb-42e6-6f6a54fd3e2e@linux.intel.com>
- <CAAd53p7ta292yNKYBn3mtav-kPHwtd1GANy9bdCMXL=SPZK+kg@mail.gmail.com>
- <CAAd53p7uifYjFL02fh9m97i89BucdHAwAf4SjgOJkw1XiZ5ezw@mail.gmail.com>
- <66cb505d-8802-9d4c-fa3f-01c47f9734fc@linux.intel.com>
- <CAAd53p68P0zhRvYQj=vdtmhdyGHkk7iKPyJ0rCpW38FwyU0TMA@mail.gmail.com>
- <CAAd53p5Ab2myqQtPfDebaEuOrk-ocGZHoaujXS=vs9MXFd6czw@mail.gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v2] usb: core: Avoid doing warm reset on disconnect event
-Message-ID: <99c35f02-d8d3-1357-d309-6bfb8e555600@linux.intel.com>
-Date:   Wed, 22 Dec 2021 17:11:38 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <CAAd53p5Ab2myqQtPfDebaEuOrk-ocGZHoaujXS=vs9MXFd6czw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1343676AbhLVPLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 10:11:49 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36518 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234907AbhLVPLs (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 10:11:48 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50E8EB81B76;
+        Wed, 22 Dec 2021 15:11:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BE77C36AE8;
+        Wed, 22 Dec 2021 15:11:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640185906;
+        bh=ZNqmeNIA4R6w+zyIY1J3kZvMdVn/fyz+sW7LzAYaWhw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dcLZ+VNsY03TECpEVtJd9fJZu2ov58ylES+Ha5Edja2UNBff6iR+h2lfyrEKnL1NM
+         cu5SxJIRspje7vhw6q6BxtZzdCxluK5BcCng/KtS0v90H2ZOxe5mEZXp6MpvLMNwwL
+         HPr+gZzNuWU/ShfwL5cVWxpyN6JLw/L1j4K/2/dakgw7V45hMLtvTu8WBot0wpL54v
+         egF0Ic188MM62ZbtJqdaqVNpn4PRYQBosCmsnNy03htqiQ7Y9KKU1hQHpcZAj3/X9S
+         4ZyqZu61uIevGXxQiP2bTx2F4h05p6q3tLHhjHvaZPaHBEv4BUejGXNynUHHxMsQoO
+         4Okc0dlMZ+pkA==
+Date:   Thu, 23 Dec 2021 00:11:42 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 08/12] user_events: Optimize writing events by only
+ copying data once
+Message-Id: <20211223001142.b972b667cd7d5a593999ce6c@kernel.org>
+In-Reply-To: <20211216173511.10390-9-beaub@linux.microsoft.com>
+References: <20211216173511.10390-1-beaub@linux.microsoft.com>
+        <20211216173511.10390-9-beaub@linux.microsoft.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.12.2021 5.35, Kai-Heng Feng wrote:
-> On Mon, Dec 6, 2021 at 10:52 AM Kai-Heng Feng
-> <kai.heng.feng@canonical.com> wrote:
->>
->> On Fri, Dec 3, 2021 at 10:16 PM Mathias Nyman
->> <mathias.nyman@linux.intel.com> wrote:
->>>
->>> On 2.12.2021 5.10, Kai-Heng Feng wrote:
->>>> On Tue, Nov 30, 2021 at 10:36 AM Kai-Heng Feng
->>>> <kai.heng.feng@canonical.com> wrote:
->>>>>
->>>>> On Mon, Nov 29, 2021 at 6:18 PM Mathias Nyman
->>>>> <mathias.nyman@linux.intel.com> wrote:
->>>>>>
->>>>>> On 26.11.2021 13.56, Kai-Heng Feng wrote:
->>>>>>> Unplugging USB device may cause an incorrect warm reset loop:
->>>>>>> [  143.039019] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x4202c0
->>>>>>> [  143.039025] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
->>>>>>> [  143.039051] hub 2-0:1.0: state 7 ports 10 chg 0000 evt 0008
->>>>>>> [  143.039058] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x4202c0, return 0x4102c0
->>>>>>> [  143.039092] xhci_hcd 0000:00:14.0: clear port3 connect change, portsc: 0x4002c0
->>>>>>> [  143.039096] usb usb2-port3: link state change
->>>>>>> [  143.039099] xhci_hcd 0000:00:14.0: clear port3 link state change, portsc: 0x2c0
->>>>>>> [  143.039101] usb usb2-port3: do warm reset
->>>>>>> [  143.096736] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2b0, return 0x2b0
->>>>>>> [  143.096751] usb usb2-port3: not warm reset yet, waiting 50ms
->>>>>>> [  143.131500] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link inactive
->>>>>>> [  143.138260] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x2802a0
->>>>>>> [  143.138263] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
->>>>>>> [  143.160756] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2802a0, return 0x3002a0
->>>>>>> [  143.160798] usb usb2-port3: not warm reset yet, waiting 200ms
->>>>>>>
->>>>>>> The warm reset is due to its PLS is in eSS.Inactive state. However, USB
->>>>>>> 3.2 spec table 10-13 mentions "Ports can be disabled by either a fault
->>>>>>> condition (disconnect event or other fault condition)", xHCI 1.2 spec
->>>>>>> table 5-27 also states that "This flag shall automatically be cleared to
->>>>>>> ‘0’ by a disconnect event or other fault condition." on PED.
->>>>>>>
->>>>>>> So use CSC = 0 and PED = 0 as indication that device is disconnecting to
->>>>>>> avoid doing warm reset.
->>>>>>
->>>>>> My understanding is that PED = 0 in case of disconnect, error (PLS=Inactive), or
->>>>>> during active reset signalling. See xHCI Figure 4-27: USB3 Root Hub Port State Machine.
->>>>>> signal states (0,0,0,0) are PP,CCS,PED,PR.
->>>>>
->>>>> I think it's 1,0,0,0? So for my case, the port is in Error state (PLS
->>>>> = Inactive, 1,0,0,0).
->>>
->>> Yes, Port power is still on, so (1,0,0,0) but PED and CCS are both 0.
->>>
->>>>>
->>>>>>
->>>>>> I'm looking at a similar case where Inactive link is reported at disconnect for a while
->>>>>> before missing terminations are detected and link finally goes to RxDetect.
->>>>>
->>>>> So the PLS goes from Inactive to RxDetect after a while?
->>>>> Is the case you are working on also EHL?
->>>
->>> Not EHL this time, anoter platform.
->>>
->>>>>
->>>>>>
->>>>>> If the port was reset immediately when Inactive link state was reported the port stays stuck
->>>>>> in port reset.
->>>>>> This might have been related to the address0 locking issues recently fixed.
->>>>>>
->>>>>> Anyway, to avoid the extra reset of a removed USB3 device I started polling the link state of
->>>>>> the Inactive link for some time before resetting it. This gives the link time to detect
->>>>>> missing terminations and go to RxDetect, and driver can skip the reset.
->>>>>>
->>>>>> Planning on upstreaming it, patch is here:
->>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=fix_avoid_disconnect_reset&id=72d20c026b7812d096c6b5184a3888894401c829
->>>>>
->>>>> Thanks, let me test this out.
->>>>
->>>> The result is negative, here's the relevant log:
->>>> [  128.219129] xhci_hcd 0000:00:14.0: Port change event, 2-2, id 18,
->>>> portsc: 0x4202c0
->>>> [  128.219143] xhci_hcd 0000:00:14.0: handle_port_status: starting port polling.
->>>> [  128.219201] hub 2-0:1.0: state 7 ports 10 chg 0000 evt 0004
->>>> [  128.219217] xhci_hcd 0000:00:14.0: Get port status 2-2 read:
->>>> 0x4202c0, return 0x4102c0
->>>> [  128.219244] xhci_hcd 0000:00:14.0: clear port2 connect change,
->>>> portsc: 0x4002c0
->>>> [  128.219256] usb usb2-port2: link state change
->>>> [  128.219264] xhci_hcd 0000:00:14.0: clear port2 link state change,
->>>> portsc: 0x2c0
->>>> [  128.232326] xhci_hcd 0000:00:14.0: xhci_hub_status_data: stopping
->>>> port polling.
->>>> [  128.244356] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2c0,
->>>> return 0x2c0
->>>> [  128.244383] usb usb2-port2: Wait for inactive link disconnect detect
->>>> [  128.272342] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2c0,
->>>> return 0x2c0
->>>> [  128.272370] usb usb2-port2: Wait for inactive link disconnect detect
->>>> [  128.300348] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2c0,
->>>> return 0x2c0
->>>> [  128.300375] usb usb2-port2: Wait for inactive link disconnect detect
->>>> [  128.328342] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2c0,
->>>> return 0x2c0
->>>> [  128.328369] usb usb2-port2: Wait for inactive link disconnect detect
->>>> [  128.356343] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2c0,
->>>> return 0x2c0
->>>> [  128.356370] usb usb2-port2: Wait for inactive link disconnect detect
->>>> [  128.356374] usb usb2-port2: do warm reset, port only
->>>> [  128.377500] xhci_hcd 0000:00:14.0: Port change event, 1-2, id 2,
->>>> portsc: 0x206e1
->>>> [  128.377515] xhci_hcd 0000:00:14.0: handle_port_status: starting port polling.
->>>> [  128.377570] hub 1-0:1.0: state 7 ports 16 chg 0000 evt 0004
->>>> [  128.377586] xhci_hcd 0000:00:14.0: Get port status 1-2 read:
->>>> 0x206e1, return 0x10101
->>>> [  128.377614] xhci_hcd 0000:00:14.0: clear port2 connect change, portsc: 0x6e1
->>>> [  128.377626] usb usb1-port2: status 0101, change 0001, 12 Mb/s
->>>> [  128.377636] xhci_hcd 0000:00:14.0: Get port status 1-2 read: 0x6e1,
->>>> return 0x101
->>>> [  128.398304] xhci_hcd 0000:00:14.0: Port change event, 1-2, id 2,
->>>> portsc: 0x202a0
->>>> [  128.398319] xhci_hcd 0000:00:14.0: handle_port_status: starting port polling.
->>>> [  128.412343] xhci_hcd 0000:00:14.0: Get port status 1-2 read:
->>>> 0x202a0, return 0x10100
->>>> [  128.412376] xhci_hcd 0000:00:14.0: clear port2 connect change, portsc: 0x2a0
->>>> [  128.416337] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2b0,
->>>> return 0x2b0
->>>> [  128.416368] usb usb2-port2: not warm reset yet, waiting 50ms
->>>> [  128.448341] xhci_hcd 0000:00:14.0: Get port status 1-2 read: 0x2a0,
->>>> return 0x100
->>>> [  128.476335] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2f0,
->>>> return 0x2f0
->>>> [  128.476366] usb usb2-port2: not warm reset yet, waiting 200ms
->>>> [  128.480332] xhci_hcd 0000:00:14.0: xhci_hub_status_data: stopping
->>>> port polling.
->>>> [  128.484343] xhci_hcd 0000:00:14.0: Get port status 1-2 read: 0x2a0,
->>>> return 0x100
->>>> [  128.520323] xhci_hcd 0000:00:14.0: Get port status 1-2 read: 0x2a0,
->>>> return 0x100
->>>> [  128.556325] xhci_hcd 0000:00:14.0: Get port status 1-2 read: 0x2a0,
->>>> return 0x100
->>>> [  128.556353] usb usb1-port2: debounce total 125ms stable 100ms status 0x100
->>>> [  128.556366] hub 1-0:1.0: state 7 ports 16 chg 0000 evt 0004
->>>> [  128.556376] xhci_hcd 0000:00:14.0: Get port status 1-2 read: 0x2a0,
->>>> return 0x100
->>>> [  128.684329] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2f0,
->>>> return 0x2f0
->>>> [  128.684360] usb usb2-port2: not warm reset yet, waiting 200ms
->>>> [  128.892325] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2f0,
->>>> return 0x2f0
->>>> [  128.892357] usb usb2-port2: not warm reset yet, waiting 200ms
->>>> [  129.100317] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0x2f0,
->>>> return 0x2f0
->>>> [  129.100348] usb usb2-port2: not warm reset yet, waiting 200ms
->>>> [  129.100354] hub 2-0:1.0: port_wait_reset: err = -16
->>>> [  129.100358] usb usb2-port2: not enabled, trying warm reset again...
->>>>
->>>
->>> Ok, so after port 2-2 was stuck in inactive (2c0) for long enough we reset it.
->>> It goes to RxDetect with reset asserted(2b0), and then to polling with reset asserted(2f0).
->>> The "RxDetect" and "polling" link states are not very reliable while reset is asserted.
->>>
->>> So problem 1 is that port stays in Inactive for a long time even if device was disconnected.
->>> Issue 2 is that reset never completes. We are stuck in reset.
->>>
->>> Just out of curiosity, does the link go to "RxDetect" from "inactive" if we just
->>> increase the retry, or is it really stuck in inactive state?
->>
->> The result is still negative.
+On Thu, 16 Dec 2021 09:35:07 -0800
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
+
+> Pass iterator through to probes to allow copying data directly to the
+> probe buffers instead of taking multiple copies. Enables eBPF user and
+> raw iterator types out to programs for no-copy scenarios.
+
+This looks good to me, except for 1 nitpick. See below.
+
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+
 > 
-> Mathias,
+> Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+> ---
+>  kernel/trace/trace_events_user.c | 113 +++++++++++++++++++++++--------
+>  1 file changed, 85 insertions(+), 28 deletions(-)
 > 
-> So should I refine this patch, or do you want to dig a bit more?
+> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+> index cc30d1fcbb63..fa3e26281fc3 100644
+> --- a/kernel/trace/trace_events_user.c
+> +++ b/kernel/trace/trace_events_user.c
+> @@ -41,6 +41,9 @@
+>  #define MAX_FIELD_ARRAY_SIZE 1024
+>  #define MAX_FIELD_ARG_NAME 256
+>  
+> +#define MAX_BPF_COPY_SIZE PAGE_SIZE
+> +#define MAX_STACK_BPF_DATA 512
+> +
+>  static char *register_page_data;
+>  
+>  static DEFINE_MUTEX(reg_mutex);
+> @@ -78,8 +81,7 @@ struct user_event_refs {
+>  	struct user_event *events[];
+>  };
+>  
+> -typedef void (*user_event_func_t) (struct user_event *user,
+> -				   void *data, u32 datalen,
+> +typedef void (*user_event_func_t) (struct user_event *user, struct iov_iter *i,
+>  				   void *tpdata);
+>  
+>  static int user_event_parse(char *name, char *args, char *flags,
+> @@ -90,6 +92,20 @@ static u32 user_event_key(char *name)
+>  	return jhash(name, strlen(name), 0);
+>  }
+>  
+> +static __always_inline __must_check
+> +size_t copy_nofault(void *addr, size_t bytes, struct iov_iter *i)
+> +{
+> +	size_t ret;
+> +
+> +	pagefault_disable();
+> +
+> +	ret = copy_from_iter_nocache(addr, bytes, i);
+> +
+> +	pagefault_enable();
+> +
+> +	return ret;
+> +}
+> +
+>  static struct list_head *user_event_get_fields(struct trace_event_call *call)
+>  {
+>  	struct user_event *user = (struct user_event *)call->data;
+> @@ -524,7 +540,7 @@ static struct user_event *find_user_event(char *name, u32 *outkey)
+>  /*
+>   * Writes the user supplied payload out to a trace file.
+>   */
+> -static void user_event_ftrace(struct user_event *user, void *data, u32 datalen,
+> +static void user_event_ftrace(struct user_event *user, struct iov_iter *i,
+>  			      void *tpdata)
+>  {
+>  	struct trace_event_file *file;
+> @@ -540,41 +556,85 @@ static void user_event_ftrace(struct user_event *user, void *data, u32 datalen,
+>  
+>  	/* Allocates and fills trace_entry, + 1 of this is data payload */
+>  	entry = trace_event_buffer_reserve(&event_buffer, file,
+> -					   sizeof(*entry) + datalen);
+> +					   sizeof(*entry) + i->count);
+>  
+>  	if (unlikely(!entry))
+>  		return;
+>  
+> -	memcpy(entry + 1, data, datalen);
+> +	if (unlikely(!copy_nofault(entry + 1, i->count, i))) {
+> +		__trace_event_discard_commit(event_buffer.buffer,
+> +					     event_buffer.event);
+> +		return;
+> +	}
+>  
+>  	trace_event_buffer_commit(&event_buffer);
+
+Will this be 
+
+	if (unlikely(!copy_nofault(entry + 1, i->count, i)))
+		__trace_event_discard_commit(event_buffer.buffer,
+					     event_buffer.event);
+	else
+		trace_event_buffer_commit(&event_buffer);
+
+?
+
+Thank you,
+
+>  }
+>  
+>  #ifdef CONFIG_PERF_EVENTS
+> +static void user_event_bpf(struct user_event *user, struct iov_iter *i)
+> +{
+> +	struct user_bpf_context context;
+> +	struct user_bpf_iter bpf_i;
+> +	char fast_data[MAX_STACK_BPF_DATA];
+> +	void *temp = NULL;
+> +
+> +	if ((user->flags & FLAG_BPF_ITER) && iter_is_iovec(i)) {
+> +		/* Raw iterator */
+> +		context.data_type = USER_BPF_DATA_ITER;
+> +		context.data_len = i->count;
+> +		context.iter = &bpf_i;
+> +
+> +		bpf_i.iov_offset = i->iov_offset;
+> +		bpf_i.iov = i->iov;
+> +		bpf_i.nr_segs = i->nr_segs;
+> +	} else if (i->nr_segs == 1 && iter_is_iovec(i)) {
+> +		/* Single buffer from user */
+> +		context.data_type = USER_BPF_DATA_USER;
+> +		context.data_len = i->count;
+> +		context.udata = i->iov->iov_base + i->iov_offset;
+> +	} else {
+> +		/* Multi buffer from user */
+> +		struct iov_iter copy = *i;
+> +		size_t copy_size = min_t(size_t, i->count, MAX_BPF_COPY_SIZE);
+> +
+> +		context.data_type = USER_BPF_DATA_KERNEL;
+> +		context.kdata = fast_data;
+> +
+> +		if (unlikely(copy_size > sizeof(fast_data))) {
+> +			temp = kmalloc(copy_size, GFP_NOWAIT);
+> +
+> +			if (temp)
+> +				context.kdata = temp;
+> +			else
+> +				copy_size = sizeof(fast_data);
+> +		}
+> +
+> +		context.data_len = copy_nofault(context.kdata,
+> +						copy_size, &copy);
+> +	}
+> +
+> +	trace_call_bpf(&user->call, &context);
+> +
+> +	kfree(temp);
+> +}
+> +
+>  /*
+>   * Writes the user supplied payload out to perf ring buffer or eBPF program.
+>   */
+> -static void user_event_perf(struct user_event *user, void *data, u32 datalen,
+> +static void user_event_perf(struct user_event *user, struct iov_iter *i,
+>  			    void *tpdata)
+>  {
+>  	struct hlist_head *perf_head;
+>  
+> -	if (bpf_prog_array_valid(&user->call)) {
+> -		struct user_bpf_context context = {0};
+> -
+> -		context.data_len = datalen;
+> -		context.data_type = USER_BPF_DATA_KERNEL;
+> -		context.kdata = data;
+> -
+> -		trace_call_bpf(&user->call, &context);
+> -	}
+> +	if (bpf_prog_array_valid(&user->call))
+> +		user_event_bpf(user, i);
+>  
+>  	perf_head = this_cpu_ptr(user->call.perf_events);
+>  
+>  	if (perf_head && !hlist_empty(perf_head)) {
+>  		struct trace_entry *perf_entry;
+>  		struct pt_regs *regs;
+> -		size_t size = sizeof(*perf_entry) + datalen;
+> +		size_t size = sizeof(*perf_entry) + i->count;
+>  		int context;
+>  
+>  		perf_entry = perf_trace_buf_alloc(ALIGN(size, 8),
+> @@ -585,7 +645,10 @@ static void user_event_perf(struct user_event *user, void *data, u32 datalen,
+>  
+>  		perf_fetch_caller_regs(regs);
+>  
+> -		memcpy(perf_entry + 1, data, datalen);
+> +		if (unlikely(!copy_nofault(perf_entry + 1, i->count, i))) {
+> +			perf_swevent_put_recursion_context(context);
+> +			return;
+> +		}
+>  
+>  		perf_trace_buf_submit(perf_entry, size, context,
+>  				      user->call.event.type, 1, regs,
+> @@ -1018,16 +1081,11 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
+>  	if (likely(atomic_read(&tp->key.enabled) > 0)) {
+>  		struct tracepoint_func *probe_func_ptr;
+>  		user_event_func_t probe_func;
+> +		struct iov_iter copy;
+>  		void *tpdata;
+> -		void *kdata;
+> -		u32 datalen;
+> -
+> -		kdata = kmalloc(i->count, GFP_KERNEL);
+>  
+> -		if (unlikely(!kdata))
+> -			return -ENOMEM;
+> -
+> -		datalen = copy_from_iter(kdata, i->count, i);
+> +		if (unlikely(iov_iter_fault_in_readable(i, i->count)))
+> +			return -EFAULT;
+>  
+>  		rcu_read_lock_sched();
+>  
+> @@ -1035,15 +1093,14 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
+>  
+>  		if (probe_func_ptr) {
+>  			do {
+> +				copy = *i;
+>  				probe_func = probe_func_ptr->func;
+>  				tpdata = probe_func_ptr->data;
+> -				probe_func(user, kdata, datalen, tpdata);
+> +				probe_func(user, &copy, tpdata);
+>  			} while ((++probe_func_ptr)->func);
+>  		}
+>  
+>  		rcu_read_unlock_sched();
+> -
+> -		kfree(kdata);
+>  	}
+>  
+>  	return ret;
+> -- 
+> 2.17.1
 > 
-> Kai-Heng
 
-To me it looks like this patch might prevent recovery of a link in "Inactive" error state.
 
-Won't a connected USB3 device after a serious error have the same "Inactive" link status,
-and same CCS=0 and PED=0 bits as the disconnect case you described?
-
-In the error case we need the warm reset to recover, and in the disconnect case we should
-avoid reset.
-
-Does it make sense to reset at least once, but time how long the reset stays asserted?
-If link appears to be stuck in reset then bail out?
-
-Thanks
--Mathias
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

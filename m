@@ -2,99 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D7547D442
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 16:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E54D747D447
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 16:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343703AbhLVPbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 10:31:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237912AbhLVPbg (ORCPT
+        id S1343720AbhLVPdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 10:33:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59116 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237263AbhLVPdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 10:31:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34A2C061574;
-        Wed, 22 Dec 2021 07:31:35 -0800 (PST)
+        Wed, 22 Dec 2021 10:33:42 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B980B81D06;
-        Wed, 22 Dec 2021 15:31:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8AC9C36AE5;
-        Wed, 22 Dec 2021 15:31:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54D1361B01;
+        Wed, 22 Dec 2021 15:33:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BABBC36AE8;
+        Wed, 22 Dec 2021 15:33:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640187093;
-        bh=8R1VPxJ5QwjV34tj5ioukTe83BRaxGqqbl3UNmqWFGA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r/2ngNYaHbEQpP1Fz90Q6XNOfqV9+2kwOlS+9XNFPTRxfOdxH75CTlSV1VZlVNI5Z
-         kxpefZqkKzqiv0DdW9mBq3sWpkdKt11CuAWD5CUg93ciO31w+ULbFA8xCnVK7kcnc7
-         1pg/cfpisstVN/iDm5zP5L4Y0GerIps8CCkHpljvh6eZEJnJaX/VZUPkW7gRjdU4Fk
-         fqVpwZfUNSmLY2SeTvdj32L9Kuxg5Rvz0E/uoCWVPd5C7/WMeXdZatcQEbzHPbORTA
-         tJcPvyarp8dAz/Y4HcbfiAiPGxEeKEDKGNQT18IJIK09oBTwaH8GKCtf+Mj9icxe3W
-         +Kj775ieQDVvA==
-Date:   Wed, 22 Dec 2021 15:31:27 +0000
+        s=k20201202; t=1640187220;
+        bh=byBGhTV5Xn9KAFDJW7bstvlAYTSSq6UwsroZt5WEVuM=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=CGaDy/hd8YWDB2zS8FGwC2cQ5x7PzkGnh53U+thvI4CtD+8TAcS2p5rWyFswWAd7c
+         ujz8PcqG56G6/WW6oDfz/zI7I8Us3gG3A3922zYoQ4vsa2g2T1dcUCUL/gfl4yjuLI
+         1GUygCb5kuZsYTFaWqRFwdJM+MQ6Ad4b54IYzB6TPeE93a5STz/isRUfH+M2qdd9ze
+         YNPsDmtEyHovkgwFklAq81mg8ZuSaW1oyTRLwC/BXPpH5VywDGwIBD+ke9z2MSrapV
+         35CzHmgGsWBpdb6HIUEt9vhOJo5Ettbg56aKy4iUJ7QteyNNUxKUvwgtnDmdhavYi6
+         dvBn5mo4AmKkg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Re: [PATCH v1 1/3] spi: dln2: Propagate firmware node
-Message-ID: <YcNEz2MaigJp0UAe@sirena.org.uk>
-References: <20211222135423.62487-1-andriy.shevchenko@linux.intel.com>
+To:     Vincent Knecht <vincent.knecht@mailoo.org>
+Cc:     phone-devel@vger.kernel.org, alsa-devel@alsa-project.org,
+        ~postmarketos/upstreaming@lists.sr.ht, stephan@gerhold.net,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211222135403.2991657-1-vincent.knecht@mailoo.org>
+References: <20211222135403.2991657-1-vincent.knecht@mailoo.org>
+Subject: Re: [PATCH] ASoC: codecs: ak4375: Change invert controls to a stereo switch
+Message-Id: <164018721921.257503.2890165869395844521.b4-ty@kernel.org>
+Date:   Wed, 22 Dec 2021 15:33:39 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ynu3iQ1U5jvIgvu1"
-Content-Disposition: inline
-In-Reply-To: <20211222135423.62487-1-andriy.shevchenko@linux.intel.com>
-X-Cookie: I've only got 12 cards.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 22 Dec 2021 14:54:03 +0100, Vincent Knecht wrote:
+> Don't use enums for DACL/DACR Signal Invert controls,
+> and change them into a stereo "DAC Signal Invert Switch" control.
+> 
+> 
 
---Ynu3iQ1U5jvIgvu1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Wed, Dec 22, 2021 at 03:54:21PM +0200, Andy Shevchenko wrote:
-> Propagate firmware node by using a specific API call, i.e. device_set_node().
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-This breaks at least an x86 allmodconfig build:
+Thanks!
 
-/mnt/kernel/drivers/spi/spi-dln2.c: In function 'dln2_spi_probe':
-/mnt/kernel/drivers/spi/spi-dln2.c:691:32: error: implicit declaration of function 'dev_fwnode'; did you mean 'dev_of_node'? [-Werror=implicit-function-declaration]
-  691 |  device_set_node(&master->dev, dev_fwnode(dev));
-      |                                ^~~~~~~~~~
-      |                                dev_of_node
-/mnt/kernel/drivers/spi/spi-dln2.c:691:32: error: passing argument 2 of 'device_set_node' makes pointer from integer without a cast [-Werror=int-conversion]
-  691 |  device_set_node(&master->dev, dev_fwnode(dev));
-      |                                ^~~~~~~~~~~~~~~
-      |                                |
-      |                                int
-In file included from /mnt/kernel/include/linux/platform_device.h:13,
-                 from /mnt/kernel/drivers/spi/spi-dln2.c:10:
-/mnt/kernel/include/linux/device.h:854:64: note: expected 'struct fwnode_handle *' but argument is of type 'int'
-  854 | void device_set_node(struct device *dev, struct fwnode_handle *fwnode);
-      |                                          ~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-cc1: all warnings being treated as errors
+[1/1] ASoC: codecs: ak4375: Change invert controls to a stereo switch
+      commit: 37daf8d9e0bd85a2859721aec28e1eb6e9973262
 
---Ynu3iQ1U5jvIgvu1
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHDRM4ACgkQJNaLcl1U
-h9Cc/Af/d9JjkEomKALiEA6zxjzRhFaLXJ/kKKq3b/2D8I4QyCNBU76MNCA6uIGJ
-W9pD+LKXKLIwW6lZ+LBs0DEfBzduWI8vL1rX0EGuOaIepTt4F0oZR15UNUKSwwdY
-XgJzmCt+Qfq5GQe1UhBzYc+GL6ExtrFisWBJbSxzuTDdQvki4fpQdvyGmxL/sqrL
-NS5MQZjVOULcFxuNFJrznATQB9yxBM24KGVR9wat2AX8gDspsdSHjwJEKxBsJkww
-uAms0atbNg7bTAi8mmX9mkND1NV3bbYh7xonEdCHm24iexGxrSae5qtpfw8bfMbb
-KoGK0Z7b2DWzDADhxHVy4wS4d52wdw==
-=Wwd+
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---Ynu3iQ1U5jvIgvu1--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

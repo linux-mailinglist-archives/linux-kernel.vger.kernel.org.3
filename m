@@ -2,63 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ADCF47D760
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:02:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E2F47D763
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345011AbhLVTCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 14:02:36 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56764 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237672AbhLVTCf (ORCPT
+        id S1345050AbhLVTCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 14:02:39 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50394 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345002AbhLVTCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 14:02:35 -0500
+        Wed, 22 Dec 2021 14:02:36 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A121B61C50
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 19:02:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 12767C36AE5;
-        Wed, 22 Dec 2021 19:02:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42152B81E08;
+        Wed, 22 Dec 2021 19:02:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F16F6C36AE8;
+        Wed, 22 Dec 2021 19:02:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1640199754;
-        bh=c+3YcWU9gZOcVpCpOIgqSvbqYh9sSyfiIrh6ZAog+Iw=;
+        bh=5LMLGKVnXzb+fj+benAhxzo/CmUXZ09/1C28ds+lRUs=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=jc336peulH3vwrXVoEeIk9l+N3OyaAzm26DTX6DczA3N/tjsXkBRaLTINoGagpJom
-         /mB4ZSJkFouRo2gfIcIvUDKOKuXuPVxEmLcFnZJ07RuEGj+Kcwk4JqoacenXTeU6IS
-         nTEuvYEv+NEcAU9GB8KrPF3/0PzkIXJE6eZG5GVn0r38sSASMTqhjdZ1JAp1WOjaSk
-         HcsB5xI+nShEIHA+ZjhVD37y8UuY1FM6PbPwr8IY1AshSCWsPyDA2u2GCshtO+5BMt
-         4Z9Xy4O13NM9ZLl1Hg219a1DcNncfBAc22J5jBC1Ea741yXII6lYUUiTY95uNhbdHO
-         tbGr0n/liQkPw==
+        b=m1RadMQTnyUwr0z/bVrx9igkqkigxYyM4L5eeVsUU5x5I4F0AAqK8i53qV8qP1+VZ
+         S19FsMGxl0iQarXAVKGn/DCXYjxfj2OLp4UpRhbNLUF74t95ctwqEADpXzHojLm6yp
+         yp3/ttusBDRYDIKIhinMqGT3EBcYktDNs+gCQLV/lOfKbUtyYn0QhtGW/bbU8rwvn4
+         mrseNX+AnKHDLbHlLaM0asUuSc4UWCHmXT6hFj7I4kmqvgWGIP+DWEZI5fnWGAmGD4
+         7Y34ne8MGyqm9ys6oCphJiBM8ZURB0PE4XTH9nsSdXSA+yFSRjPKnuglA/Swel8Dwj
+         bv7ZjoaEZlLlA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F13681198C7E;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D599FFE95A3;
         Wed, 22 Dec 2021 19:02:33 +0000 (UTC)
-Subject: Re: [GIT PULL] IPMI bug fixes for 5.16 (3)
+Subject: Re: [GIT PULL] Crypto Fixes for 5.16
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20211222141155.GV14936@minyard.net>
-References: <20211222141155.GV14936@minyard.net>
+In-Reply-To: <YcKz4wHYTe3qlW7L@gondor.apana.org.au>
+References: <20200803044024.GA6429@gondor.apana.org.au>
+ <20200830223304.GA16882@gondor.apana.org.au>
+ <20201026011159.GA2428@gondor.apana.org.au>
+ <20201227113221.GA28744@gondor.apana.org.au>
+ <20210108035450.GA6191@gondor.apana.org.au>
+ <20210708030913.GA32097@gondor.apana.org.au>
+ <20210817013601.GA14148@gondor.apana.org.au>
+ <20210929023843.GA28594@gondor.apana.org.au>
+ <20211029041408.GA3192@gondor.apana.org.au>
+ <20211112104815.GA14105@gondor.apana.org.au> <YcKz4wHYTe3qlW7L@gondor.apana.org.au>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20211222141155.GV14936@minyard.net>
-X-PR-Tracked-Remote: https://github.com/cminyard/linux-ipmi.git tags/for-linus-5.16-3
-X-PR-Tracked-Commit-Id: ffb76a86f8096a8206be03b14adda6092e18e275
+X-PR-Tracked-Message-Id: <YcKz4wHYTe3qlW7L@gondor.apana.org.au>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git linus
+X-PR-Tracked-Commit-Id: 27750a315aba7e6675bb1c3dfd4481c4f6888af1
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 074004058094a07f784c8162153fa44c1e05596b
-Message-Id: <164019975398.26306.13698765416675113107.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: e19e226345196649e83d49c6997e806a8ecdafe6
+Message-Id: <164019975382.26306.11184236689785559312.pr-tracker-bot@kernel.org>
 Date:   Wed, 22 Dec 2021 19:02:33 +0000
-To:     Corey Minyard <minyard@acm.org>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        openipmi-developer@lists.sourceforge.net
+        "David S. Miller" <davem@davemloft.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 22 Dec 2021 08:11:55 -0600:
+The pull request you sent on Wed, 22 Dec 2021 16:13:07 +1100:
 
-> https://github.com/cminyard/linux-ipmi.git tags/for-linus-5.16-3
+> git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git linus
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/074004058094a07f784c8162153fa44c1e05596b
+https://git.kernel.org/torvalds/c/e19e226345196649e83d49c6997e806a8ecdafe6
 
 Thank you!
 

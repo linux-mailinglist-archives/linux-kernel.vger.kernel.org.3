@@ -2,291 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF8947CA83
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 01:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A785347CA88
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 01:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238415AbhLVApj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 19:45:39 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:2281 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230412AbhLVApi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 19:45:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1640133938; x=1671669938;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GJaQ5FkdpJLd0SOS8siK4lgiyGjMx7yBQQ7gb5ulYLM=;
-  b=Pt34Yb7LS3TGtNtH5zJ6KF59L/eZxJJU6KfRgdvmd/mY/x5UHSEyKp0g
-   0+69rmPdQ0IX3TvalcfIyffBPACKNXQE+fYQfrhH4BxKBcOPm/d0EdP0I
-   R3amwX4P77w2BZHR2fUc+r4JpeB8OmeSw6S46Gc/eq9dw19B0/gTc2pvs
-   Y=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 21 Dec 2021 16:45:38 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 16:45:37 -0800
-Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 21 Dec 2021 16:45:37 -0800
-Received: from [10.231.205.174] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 21 Dec
- 2021 16:45:34 -0800
-Message-ID: <b35d0f12-1de2-9e15-2d87-5049614eeff1@quicinc.com>
-Date:   Wed, 22 Dec 2021 08:45:31 +0800
+        id S239937AbhLVAsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 19:48:21 -0500
+Received: from mga07.intel.com ([134.134.136.100]:7457 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230412AbhLVAsU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 19:48:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640134100; x=1671670100;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=lPAB9TpPA8m0orWH5yrp/UacAeQjOTYI0kcgojBycwc=;
+  b=Q4sGfgYn5E7rK0SnUKAn6whZUX/xZ9ot2wVplO/PM122yrGuRJw/kcru
+   +kIctKoH7UD8R7cJr2HtFixYwA2McVP7JQGI9tObVlHJs6V/sn4iZMA01
+   +DhQ5dfoBJFFDgn2yXaJocGFSjNttDgtoKJSBopPcMoX8vkQLG7wRbWQO
+   cTbs9Fk/y9wL0ui13IyVlKqFGC/qe69u05gqrIwzAmEEoAXGIwJo3NCEH
+   o6rFN3SziTXAKCJ6q8yf1iwiu50zFTt79KARIuP3wI8urjWdsNw45++xy
+   PCr15zO6jxGeFyI0I10HPlPXF1Gvg3nkysWmkSzqmXvxegFGEEkGnFGAT
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="303889263"
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="303889263"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 16:48:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="613653051"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga002.fm.intel.com with ESMTP; 21 Dec 2021 16:48:18 -0800
+Received: from rbambrou-mobl.amr.corp.intel.com (unknown [10.209.90.33])
+        by linux.intel.com (Postfix) with ESMTP id 18C64580684;
+        Tue, 21 Dec 2021 16:48:18 -0800 (PST)
+Message-ID: <35bca887e697597f7b3e1944b3dd7347c6defca1.camel@linux.intel.com>
+Subject: Re: [PATCH 0/4] driver_core: Auxiliary drvdata helper cleanup
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     gregkh@linuxfoundation.org, mustafa.ismail@intel.com,
+        shiraz.saleem@intel.com, dledford@redhat.com, leon@kernel.org,
+        saeedm@nvidia.com, davem@davemloft.net, kuba@kernel.org,
+        vkoul@kernel.org, yung-chuan.liao@linux.intel.com,
+        pierre-louis.bossart@linux.intel.com, mst@redhat.com,
+        jasowang@redhat.com, andriy.shevchenko@linux.intel.com,
+        hdegoede@redhat.com, virtualization@lists.linux-foundation.org,
+        alsa-devel@alsa-project.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org
+Date:   Tue, 21 Dec 2021 16:48:17 -0800
+In-Reply-To: <20211222000905.GN6467@ziepe.ca>
+References: <20211221235852.323752-1-david.e.box@linux.intel.com>
+         <20211222000905.GN6467@ziepe.ca>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v4 11/11] dt-bindings: convert qcom,spmi-pmic-arb binding
- to YAML format
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
-        <devicetree@vger.kernel.org>, <collinsd@codeaurora.org>,
-        <subbaram@codeaurora.org>, <tglx@linutronix.de>, <maz@kernel.org>
-References: <1640071211-31462-1-git-send-email-quic_fenglinw@quicinc.com>
- <1640071211-31462-12-git-send-email-quic_fenglinw@quicinc.com>
- <YcHn0MLuqvMHbmuO@robh.at.kernel.org>
-From:   Fenglin Wu <quic_fenglinw@quicinc.com>
-In-Reply-To: <YcHn0MLuqvMHbmuO@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-resend with plain text
-
-
-On 2021/12/21 22:42, Rob Herring wrote:
-> On Tue, Dec 21, 2021 at 03:20:09PM +0800, Fenglin Wu wrote:
->> Convert the SPMI PMIC arbiter documentation to JSON/yaml.
->>
->> Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
->> ---
->>   .../bindings/spmi/qcom,spmi-pmic-arb.txt           |  67 ----------
->>   .../bindings/spmi/qcom,spmi-pmic-arb.yaml          | 146 +++++++++++++++++++++
->>   2 files changed, 146 insertions(+), 67 deletions(-)
->>   delete mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
->>   create mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
->>
+On Tue, 2021-12-21 at 20:09 -0400, Jason Gunthorpe wrote:
+> On Tue, Dec 21, 2021 at 03:58:48PM -0800, David E. Box wrote:
+> > Depends on "driver core: auxiliary bus: Add driver data helpers" patch [1].
+> > Applies the helpers to all auxiliary device drivers using
+> > dev_(get/set)_drvdata. Drivers were found using the following search:
+> > 
+> >     grep -lr "struct auxiliary_device" $(grep -lr "drvdata" .)
+> > 
+> > Changes were build tested using the following configs:
+> > 
+> >     vdpa/mlx5:       CONFIG_MLX5_VDPA_NET
+> >     net/mlx53:       CONFIG_MLX5_CORE_EN
+> >     soundwire/intel: CONFIG_SOUNDWIRE_INTEL
+> >     RDAM/irdma:      CONFIG_INFINIBAND_IRDMA
+> >                      CONFIG_MLX5_INFINIBAND
+> > 
+> > [1] https://www.spinics.net/lists/platform-driver-x86/msg29940.html 
 > 
->> diff --git a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
->> new file mode 100644
->> index 0000000..df8cfb7
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
->> @@ -0,0 +1,146 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/spmi/qcom,spmi-pmic-arb.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm SPMI PMIC Arbiter
->> +
->> +maintainers:
->> +  - Fenglin Wu <quic_fenglinw@quicinc.com>
->> +  - Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
->> +
->> +description: |
->> +  The SPMI PMIC Arbiter is found on Snapdragon chipsets. It is an SPMI
->> +  controller with wrapping arbitration logic to allow for multiple
->> +  on-chip devices to control a single SPMI master.
->> +
->> +  The PMIC Arbiter can also act as an interrupt controller, providing
->> +  interrupts to slave devices.
->> +
->> +  See Documentation/devicetree/bindings/spmi/spmi.yaml for the generic
->> +  SPMI controller binding requirements for child nodes.
->> +
->> +allOf:
->> +  - $ref: spmi.yaml#
->> +
->> +properties:
->> +  $nodename:
->> +    pattern: "^spmi@.*"
->> +
->> +  compatible:
->> +    const: qcom,spmi-pmic-arb
->> +
->> +  reg-names:
->> +    $ref: /schemas/types.yaml#/definitions/string-array
-> 
-> reg-names already has a type defined.
-I understand there is a pattern property defined in dt-core.yaml and it 
-defines ".*-names" as a "non-unique-string-array" type. But here, the 
-strings in "reg-names" needs to be unique and it has to be ["core", 
-"intr", "cnfg"] or ["core", "intr", "cnfg", "chnls", "obsrvr"] , that's 
-why I redefined it as "string-array" type which requires each string to 
-be unique. Otherwise, if any dtsi nodes define the "reg-name" as 
-["core", "core", "core"] will not be caught as a fault.
+> I have to say I don't really find this to be a big readability
+> improvement.
+
+I should have referenced the thread [1] discussing the benefit of this change
+since the question was asked and answered already. The idea is that drivers
+shouldn't have to touch the device API directly if they are already using a
+higher level core API (auxiliary bus) that can do that on its behalf.
+
+One benefit of this scheme is that it limits the number of places where changes
+need to be made if the device core were to change.
+
+[1] https://lore.kernel.org/all/YbBwOb6JvWkT3JWI@kroah.com/
 
 > 
->> +    anyOf:
->> +      - minItems: 3
->> +      - maxItems: 3
->> +      - enum: ["core", "intr", "cnfg"]
->> +
->> +      - minItems: 5
->> +      - maxItems: 5
->> +      - enum: ["core", "intr", "cnfg", "chnls", "obsrvr"]
-> 
-> I think you want something like this:
-> 
-> minItems: 3
-> items:
->    - const: core
->    - const: intr
->    - const: cnfg
->    - const: chnls
->    - const: obsrvr
-> 
-> 
-As I said, the content for "reg-names" here only has two options , 
-either ["core", "intr", "cnfg"] or ["core", "intr", "cnfg", "chnls", 
-"obsrvr"]. In patch V3, I defined it as below and "make dtbs_check" 
-threw out warnings because some of existing nodes defined "reg-names" 
-with these strings are not having the same order as I defined here (I 
-understood from the warnings that const items need to be followed 
-strictly even in order wise, is this correct?), and I guess the order of 
-the strings doesn't matter here and the schema here shouldn't have such 
-limitation, so I updated it as the "array-string" type and specified the 
-tuples can only be one of the strings defined in the enum. With this, 
-the previous warning regarding "reg-names" in "make dtbs_check" are all 
-fixed.
+> Also, what use is 'to_auxiliary_dev()' ? I didn't see any users added..
 
-   reg-names:
-     oneOf:
-       - items:
-           - const: core
-           - const: intr
-           - const: cnfg
-       - items:
-           - const: core
-           - const: intr
-           - const: cnfg
-           - const: chnls
-           - const: obsrvr
+This was not added by that patch.
 
+Thanks
 
->> +
->> +  reg:
->> +    minItems: 3
->> +    maxItems: 5
->> +    description: |
->> +      Specifies base physical address and size of the registers in SPMI PMIC
->> +      Arbiter HW module, with the following order.
->> +        - SPMI PMIC arbiter core registers (core)
->> +        - SPMI PMIC arbiter interrupt controller registers (intr)
->> +        - SPMI PMIC arbiter configuration registers (cnfg)
->> +        - SPMI PMIC arbiter tx-channel per virtual slave registers (chnls)
->> +        - SPMI PMIC arbiter rx-channel per virtual slave registers (obsrvr).
->> +      Register for "chnls" and "obsrvr" are only applicable for PMIC arbiter
->> +      with HW version greater than V2.
->> +
->> +  "#address-cells":
->> +    const: 2
->> +
->> +  "#size-cells":
->> +    const: 0
->> +
->> +  interrupts:
->> +    description: The summary interrupt for the PMIC Arb controller.
->> +    maxItems: 1
->> +
->> +  interrupt-names:
->> +    const: periph_irq
->> +
->> +  interrupt-controller: true
->> +
->> +  "#interrupt-cells":
->> +    const: 4
->> +    description: |
->> +      Specifies the number of cells needed to encode any interrupt source.
->> +      The 1st cell is the slave ID for the requested interrupt, its valid
->> +      range is [0-15].
->> +      The 2nd cell is the  peripheral ID for requested interrupt, its valid
->> +      range is [0-255].
->> +      The 3rd cell is the requested peripheral interrupt, its valid range
->> +      is [0-7].
->> +      The 4th cell is interrupt flags indicating level-sense information,
->> +      as defined in dt-bindings/interrupt-controller/irq.h
->> +
->> +  qcom,ee:
->> +    description: the active Execution Environment identifier
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    enum: [0, 1, 2, 3, 4, 5]
->> +
->> +  qcom,channel:
->> +    description: which of the PMIC Arbiter provided channels to use for accesses
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    enum: [0, 1, 2, 3, 4, 5]
->> +
+David
 > 
->> +patternProperties:
->> +  "@[0-9a-f]$":
->> +    description: up to 16 child PMIC nodes
->> +    type: object
->> +
->> +    properties:
->> +      reg:
->> +        items:
->> +          - minItems: 1
->> +            items:
->> +              - minimum: 0
->> +                maximum: 0xf
->> +              - enum: [ 0 ]
->> +                description:
->> +                  0 means user ID address. 1 is reserved for group ID
->> +                  address.
->> +
->> +    required:
->> +      - reg
-> 
-> All this should be covered by spmi.yaml
-> 
->> +
->> +required:
->> +  - compatible
->> +  - reg-names
->> +  - reg
->> +  - "#address-cells"
->> +  - "#size-cells"
->> +  - qcom,ee
->> +  - qcom,channel
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    spmi@fc4cf000 {
->> +          compatible = "qcom,spmi-pmic-arb";
->> +          reg-names = "core", "intr", "cnfg";
->> +          reg = <0xfc4cf000 0x1000>,
->> +                <0xfc4cb000 0x1000>,
->> +                <0xfc4ca000 0x1000>;
->> +          interrupt-names = "periph_irq";
->> +          interrupts = <0 190 0>;
->> +          interrupt-controller;
->> +          #interrupt-cells = <4>;
->> +
->> +          qcom,ee = <0>;
->> +          qcom,channel = <0>;
->> +
->> +          #address-cells = <2>;
->> +          #size-cells = <0>;
->> +    };
->> -- 
->> 2.7.4
->>
->>
+> Jason
+

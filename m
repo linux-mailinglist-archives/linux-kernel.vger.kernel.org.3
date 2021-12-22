@@ -2,164 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC58C47D8F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 22:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B15247D8FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 22:52:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240496AbhLVVvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 16:51:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240333AbhLVVvp (ORCPT
+        id S240711AbhLVVwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 16:52:40 -0500
+Received: from mout.kundenserver.de ([212.227.17.10]:45013 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240570AbhLVVwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 16:51:45 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84D4C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 13:51:44 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id m1so3497468pfk.8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 13:51:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=XR5HZ8sBD6KqfqAJLnZ1oNJ4TBXtR9dqhwDXNbHKhS4=;
-        b=lDQIImQaEYK1jwmRfunWLbYIDBg1GuI3zqkgNuH1fnjpbRSMR1KNfyOKDKakfaYnQ0
-         QOLssC/vQTxZHaDFrDmYy9wJ81caBoRUsNJA1rAm9ZqdzX0riG2XuFu4umh2hF131hN/
-         IA0dVi+upjQVNvwNxMfCPCDXKMFMe4RV4jTwdlFchARJ1PpjO88c2G2mvtPqc1D6IYTW
-         ppUl57Tc5yAPQRLrf6bWjPHLuGbUdU7zj3c/Yhb7rJnWP2ZUETmlHsHj16K2GE6ByfyT
-         1C8NJvYApyjt7HjNkV5Uu9cKoesDAA1WIbCCpvLuDJbG2yZCxjB2hRu80Y7n0ZNapFw8
-         xstg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XR5HZ8sBD6KqfqAJLnZ1oNJ4TBXtR9dqhwDXNbHKhS4=;
-        b=vBwHpkS02YO7st9PHVwEeYMS1mGZIAJIRJspCyXFq4HUL7GqlTkLJQcv8Gy2I8xcDN
-         wFydtVDgkMWGncUjs4M7hRyRo47DP5YyRBwwwit7KKtR58VskDWBT+9UrfKzEv3Iidm1
-         lG8MMffpk2Fm+jp6mNMwEH0Ny3jKi27fxbBa9tr7pXcvvTodn2aLR9+GsJzuWe25Na+N
-         zivVoZGBedKEbDecgYoKLTXIviWk8CCDiiiCeElX4NQUVjPgTZ99wF1Kwzqu7F7J6aPP
-         9Kw7AarfsQ+07CgJbt2/TEQpGUg2fB4GQxe+eljuMO72ncmbZ3BCetPRNaVWEr/YZ6T6
-         mJdg==
-X-Gm-Message-State: AOAM531SCC9ceQ8+yYcjSmUvThWoY4ZWw3YzPf5ez0sVuBQKaKmekVYT
-        KNFQDgVwrMYxjIgFBfvkcXjD5vdJ+M3Nq2mYrQEkGpZZVjQ=
-X-Google-Smtp-Source: ABdhPJxZod9LDceTnU0n582kSTjuCtX6RNUOLx6TN8oPLPDel/u4HZrJdP0Si+DQDkxU59R//YQAGXxW/801byXgnNA=
-X-Received: by 2002:a05:6a00:10d3:b0:4a4:e516:826f with SMTP id
- d19-20020a056a0010d300b004a4e516826fmr4755717pfu.70.1640209904258; Wed, 22
- Dec 2021 13:51:44 -0800 (PST)
+        Wed, 22 Dec 2021 16:52:38 -0500
+Received: from mail-wm1-f50.google.com ([209.85.128.50]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mgvn9-1mYDJR3DET-00hLKG; Wed, 22 Dec 2021 22:52:36 +0100
+Received: by mail-wm1-f50.google.com with SMTP id b73so2503311wmd.0;
+        Wed, 22 Dec 2021 13:52:36 -0800 (PST)
+X-Gm-Message-State: AOAM532uSfnDxCMvZZ0ZvWgeOx2Hbt+XO3pHjZ2E6jiBn3LtynzMrTwA
+        3GCTa8QPqD+ivW7lmNtB81VIxEUZ+eqG8CnCvww=
+X-Google-Smtp-Source: ABdhPJwONx7Rpb6kHkRzhNXYi2y5zPn1dKRyaTxTjivyBhtZyVwbnbdTNourWsYruBa/96zO4qoNQ3X7TRsmR9Wpe2Y=
+X-Received: by 2002:a7b:c448:: with SMTP id l8mr2105372wmi.173.1640209956314;
+ Wed, 22 Dec 2021 13:52:36 -0800 (PST)
 MIME-Version: 1.0
-References: <20211222094558.2098791-1-jsd@semihalf.com> <YcMP/9ATna3/yckC@smile.fi.intel.com>
- <20211222175621.7gikyvqu7xvc2qxb@mobilestation> <YcNsm+/JRJIlo/h2@smile.fi.intel.com>
-In-Reply-To: <YcNsm+/JRJIlo/h2@smile.fi.intel.com>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Wed, 22 Dec 2021 22:51:33 +0100
-Message-ID: <CAOtMz3OhB99cyA8dL6r=RJUPcSLbao5QmuiPmPGqDdDbqwFb3g@mail.gmail.com>
-Subject: Re: [RFC 0/2] i2c-designware: Add support for AMD PSP semaphore
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
-        wsa@kernel.org, rrangel@chromium.org,
-        Marcin Wojtas <mw@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com
+References: <20211222191320.17662-1-repk@triplefau.lt>
+In-Reply-To: <20211222191320.17662-1-repk@triplefau.lt>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 22 Dec 2021 22:52:20 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a18b63GoPKiTey8KpEusyffbN97gxP+NM3fyZnOYXv5zg@mail.gmail.com>
+Message-ID: <CAK8P3a18b63GoPKiTey8KpEusyffbN97gxP+NM3fyZnOYXv5zg@mail.gmail.com>
+Subject: Re: [PATCH net] net: bridge: fix ioctl old_deviceless bridge argument
+To:     Remi Pommarel <repk@triplefau.lt>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        bridge@lists.linux-foundation.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:gNy5o0LSKNVT5gOuqvGaZKZtZrNctALhHRTnRARxNCUvX3+JnAj
+ mNwQ6rnlbvXEedpKGyMcwV6ihLZ/S321C+TL1o3g04+Q3IM/WT13Wm5vd/Yhs5G+QLWQg8G
+ HzHCF28OM/g8Dq58Dn+vgpRXFF/FS83d+oYAh5/A4//0z39hbbTJ1jM0KrN7Bl8QOy3aZ15
+ 26mHSaDRLrS1W788aq+hA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:c5MnNNy6WwI=:TzT+BRu8n2iA+OWwCwG7U3
+ jT7TtTYGofEKnKSZ7Pzpkzd4iDXARrMDBujjU7knPmanDw3X6PV6FygH6pZ+TBA89rzQIH5KS
+ M5D6OZJ1Gudcvk4RhDlfyLncqhgT4kgetqf/nH92Pwp7nI/SibD4WcYL6Kty0X32+1EgHMLGd
+ UZL93urwKFf9nL8ATdn18jArRIBJdygAgcwZzrsxPjRbhauKPCANohm29rt8fXvDCfprDZedF
+ 0xS5mpqnAB16k4tNwMA2ZOFoj006ml70UFiNQx83YA2Xzu2t6VbXZC+1Da18kO0m/B2pruRX/
+ 5ogMtet7A3pVzwgmaN7Huyhazu905ZN/EZeVbPUBBc3oMERA7LlHFC40o2ebmwaEOEViOR2II
+ 4tUwjgxOdevL/ZKS0oUkVDRQ2hIlh5iq3G8BGsstGqJ5slum7hXM9lo75KGdhHo1YeTRUO3K8
+ uTmHhBrrVk0G2lDirsf/8eHBvDYm49NSH8khFsnRaAefZGaSyhMxKrwuGvrS4hnWmNsHEe8Hq
+ kucf20DtZiSHqp0DqXPoRBTN4CFxIUxzATql2GIGrKXTgEFiiNMcLW0O5u41zra6wY5vKUZwm
+ LkXq2dbZQKFZKFQRFa/CuGTuCthzwoWKn6cyMd2ZLHRUDd+Z5SGeT/9g7k8Uh/wzmk0YPvg3m
+ 3MyVNdPZqPuJeKwRz7E85PjB9lNlkLuo8Zuo7hBOGS7h0BvFPaxnXf0rKJx30zbpZ3dA=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Serge, Andy,
+On Wed, Dec 22, 2021 at 8:13 PM Remi Pommarel <repk@triplefau.lt> wrote:
+>
+> Commit 561d8352818f ("bridge: use ndo_siocdevprivate") changed the
+> source and destination arguments of copy_{to,from}_user in bridge's
+> old_deviceless() from args[1] to uarg breaking SIOC{G,S}IFBR ioctls.
+>
+> Commit cbd7ad29a507 ("net: bridge: fix ioctl old_deviceless bridge
+> argument") fixed only BRCTL_{ADD,DEL}_BRIDGES commands leaving
+> BRCTL_GET_BRIDGES one untouched.
+>
+> The fixes BRCTL_GET_BRIDGES as well
+>
+> Fixes: 561d8352818f ("bridge: use ndo_siocdevprivate")
+> Signed-off-by: Remi Pommarel <repk@triplefau.lt>
 
-Thanks for your comments. Glad to hear that this work may (possibly)
-be helpful for even broader audience. For most of the stuff I tried to
-create generic code and actually these solutions are already meant to
-be shared with platforms using baytrail semaphore.
+Thanks for fixing the regression,
 
-Best Regards,
-Jan
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
+> ---
+>  net/bridge/br_ioctl.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/bridge/br_ioctl.c b/net/bridge/br_ioctl.c
+> index db4ab2c2ce18..891cfcf45644 100644
+> --- a/net/bridge/br_ioctl.c
+> +++ b/net/bridge/br_ioctl.c
+> @@ -337,7 +337,7 @@ static int old_deviceless(struct net *net, void __user *uarg)
+>
+>                 args[2] = get_bridge_ifindices(net, indices, args[2]);
+>
+> -               ret = copy_to_user(uarg, indices,
+> +               ret = copy_to_user((void __user *)args[1], indices,
+>                                    array_size(args[2], sizeof(int)))
+>                         ? -EFAULT : args[2];
 
-=C5=9Br., 22 gru 2021 o 19:22 Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
->
-> On Wed, Dec 22, 2021 at 08:56:21PM +0300, Serge Semin wrote:
-> > On Wed, Dec 22, 2021 at 01:46:07PM +0200, Andy Shevchenko wrote:
-> > > On Wed, Dec 22, 2021 at 10:45:56AM +0100, Jan Dabros wrote:
-> > > > This patchset comprises support for new i2c-designware controller s=
-etup on some
-> > > > AMD Cezanne SoCs, where x86 is sharing i2c bus with PSP. PSP uses t=
-he same
-> > > > controller and acts as an i2c arbitrator there (x86 is leasing bus =
-from it).
-> > > >
-> > > > First commit aims to improve generic i2c-designware code by adding =
-extra locking
-> > > > on probe() and disable() paths. I would like to ask someone with ac=
-cess to
-> > > > boards which use Intel BayTrail(CONFIG_I2C_DESIGNWARE_BAYTRAIL) to =
-verify
-> > > > behavior of my changes on such setup.
-> > > >
-> > > > Second commit adds support for new PSP semaphore arbitration mechan=
-ism.
-> > > > Implementation is similar to the one from i2c-designware-baytrail.c=
- however
-> > > > there are two main differences:
-> > > > 1) Add new ACPI ID in order to protect against silent binding of th=
-e old driver
-> > > > to the setup with PSP semaphore. Extra flag ARBITRATION_SEMAPHORE a=
-dded to this
-> > > > new _HID allows to recognize setup with PSP.
-> > > > 2) Beside acquire_lock() and release_lock() methods we are also app=
-lying quirks
-> > > > to the lock_bus() and unlock_bus() global adapter methods. With thi=
-s in place
-> > > > all i2c clients drivers may lock i2c bus for a desired number of i2=
-c
-> > > > transactions (e.g. write-wait-read) without being aware of that suc=
-h bus is
-> > > > shared with another entity.
-> > > >
-> > > > Mark this patchset as RFC, since waiting for new ACPI ID value. As =
-a temporary
-> > > > measure use "AMDI9999". Once proper one will be ready, will re-send=
- this CL for
-> > > > review & merge.
-> > > >
-> > > > Looking forward to some feedback.
-> > >
-> > > If I am not mistaken something similar happened in Baikal T1.
-> > > Perhaps Serge has something to share.
-> >
-> > No, Baikal-T1 doesn't have such specific interface sharing since it
-> > doesn't have any co-processor (though a scenario of booting different
-> > kernels on each CPU core was at consideration by some our customers).
-> > So the only peculiar things the SoC has got are two interfaces with
-> > non-standard access:
-> > 1) DW SPI controller with memory mapped 16MB direct EEPROM access. DW
-> > SPI CSR/EEPROM mapping are switched by a multiplexer (basically just a
-> > flag) embedded into the system controller.
-> > 2) DW i2c controller with indirect registers access. Originally it was
-> > supposed to be used by the system bootloader for some bootloading
-> > stuff, but the actual usage scenario wasn't described by the SoC
-> > engineers. The chip initially loads the code from the SPI-flash only,
-> > which can be of up to 16MB size. It's more than enough to start pretty
-> > complex systems, so an additional i2c interface turned to be not
-> > really needed. Anyway other than having an indirectly accessible
-> > CSRs it's pretty much normal DW I2C controller.
-> >
-> > But you are right in a reference to another BE-chip - Baikal-M1. The
-> > i2c/spi/gpio/uart interfaces sharing support might get to be needed
-> > for it since aside with four 2-cored Cortex-A57 clusters it has got an
-> > embedded SCP co-processor which can access the same SoC interfaces as
-> > the CPU cores. Though Baikal-M1 isn't supported by the mainline kernel
-> > at the moment. We are going to start working on it on the next year.
-> > Then we'll most likely need to implement the interface sharing feature
-> > like the one introduced in this RFC. But for now alas I can't be much
-> > helpful.
->
-> Anyway, thanks for your insights!
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+The intention of my broken patch was to make it work for compat mode as I did
+in br_dev_siocdevprivate(), as this is now the only bit that remains broken.
+
+This could be done along the lines of the patch below, if you see any value in
+it. (not tested, probably not quite right).
+
+       Arnd
+
+diff --git a/net/bridge/br_ioctl.c b/net/bridge/br_ioctl.c
+index db4ab2c2ce18..138aa96d73f9 100644
+--- a/net/bridge/br_ioctl.c
++++ b/net/bridge/br_ioctl.c
+@@ -102,19 +102,9 @@ static int add_del_if(struct net_bridge *br, int
+ifindex, int isadd)
+        return ret;
+ }
+
+-/*
+- * Legacy ioctl's through SIOCDEVPRIVATE
+- * This interface is deprecated because it was too difficult
+- * to do the translation for 32/64bit ioctl compatibility.
+- */
+-int br_dev_siocdevprivate(struct net_device *dev, struct ifreq *rq,
+void __user *data, int cmd)
++static int br_dev_read_uargs(unsigned long *args, void __user *argp,
++                            void __user *data)
+ {
+-       struct net_bridge *br = netdev_priv(dev);
+-       struct net_bridge_port *p = NULL;
+-       unsigned long args[4];
+-       void __user *argp;
+-       int ret = -EOPNOTSUPP;
+-
+        if (in_compat_syscall()) {
+                unsigned int cargs[4];
+
+@@ -126,13 +116,29 @@ int br_dev_siocdevprivate(struct net_device
+*dev, struct ifreq *rq, void __user
+                args[2] = cargs[2];
+                args[3] = cargs[3];
+
+-               argp = compat_ptr(args[1]);
++               *argp = compat_ptr(args[1]);
+        } else {
+                if (copy_from_user(args, data, sizeof(args)))
+                        return -EFAULT;
+
+-               argp = (void __user *)args[1];
++               *argp = (void __user *)args[1];
+        }
++}
++
++/*
++ * Legacy ioctl's through SIOCDEVPRIVATE
++ * This interface is deprecated because it was too difficult
++ * to do the translation for 32/64bit ioctl compatibility.
++ */
++int br_dev_siocdevprivate(struct net_device *dev, struct ifreq *rq,
+void __user *data, int cmd)
++{
++       struct net_bridge *br = netdev_priv(dev);
++       struct net_bridge_port *p = NULL;
++       unsigned long args[4];
++       void __user *argp;
++       int ret;
++
++       ret = br_dev_read_uargs(args, &argp, data);
+
+        switch (args[0]) {
+        case BRCTL_ADD_IF:
+@@ -301,6 +307,9 @@ int br_dev_siocdevprivate(struct net_device *dev,
+struct ifreq *rq, void __user
+
+        case BRCTL_GET_FDB_ENTRIES:
+                return get_fdb_entries(br, argp, args[2], args[3]);
++
++       default:
++               ret = -EOPNOTSUPP;
+        }
+
+        if (!ret) {
+@@ -315,10 +324,13 @@ int br_dev_siocdevprivate(struct net_device
+*dev, struct ifreq *rq, void __user
+
+ static int old_deviceless(struct net *net, void __user *uarg)
+ {
+-       unsigned long args[3];
++       unsigned long args[4];
++       void __user *argp;
++       int ret;
+
+-       if (copy_from_user(args, uarg, sizeof(args)))
+-               return -EFAULT;
++       ret = br_dev_read_uargs(args, &argp, data);
++       if (ret)
++               return ret;
+
+        switch (args[0]) {
+        case BRCTL_GET_VERSION:
+@@ -337,7 +349,7 @@ static int old_deviceless(struct net *net, void
+__user *uarg)
+
+                args[2] = get_bridge_ifindices(net, indices, args[2]);
+
+-               ret = copy_to_user(uarg, indices,
++               ret = copy_to_user(argp, indices,
+                                   array_size(args[2], sizeof(int)))
+                        ? -EFAULT : args[2];
+
+@@ -353,7 +365,7 @@ static int old_deviceless(struct net *net, void
+__user *uarg)
+                if (!ns_capable(net->user_ns, CAP_NET_ADMIN))
+                        return -EPERM;
+
+-               if (copy_from_user(buf, (void __user *)args[1], IFNAMSIZ))
++               if (copy_from_user(buf, argp, IFNAMSIZ))
+                        return -EFAULT;
+
+                buf[IFNAMSIZ-1] = 0;

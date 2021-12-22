@@ -2,178 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1345647CDB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5337E47CDBC
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243113AbhLVHzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 02:55:20 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34796 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243081AbhLVHzS (ORCPT
+        id S243123AbhLVH4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 02:56:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56978 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243116AbhLVH43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 02:55:18 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94DABB81A5F;
-        Wed, 22 Dec 2021 07:55:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB812C36AE5;
-        Wed, 22 Dec 2021 07:55:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640159716;
-        bh=PcyMfPm8L3SEgEPVRJGQxYDpD26Sf6GBRQUZgl/SWMc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=prI0au14tTuT7qGIvQYDaEa79XEBkCYFlrafkrgnKa0wIXQda9jF3dHMVa430UB62
-         DPaCXQhGM4rRaqkNM0JDVx/Ds7YvckKpYOn6a+ynTglBNq7IAJ5Z2Mk++9mt3D/b4e
-         97fJASrpk5h72WhyiCZ0u9y8NoNLSlAhFdV5HjUkVM0DY8bM+1guuuVjdzumt7eyyN
-         2etDzDMvN05uB6sSa8UjeC04O56KDNpsvgfqPd7AyULVgS+cAiCD36InD+g2CpIgA2
-         etQmQonSxGW/VonBAxDYuZ3b3TKityp3wvrqMKNihu+4D+zY8NHDlebuO5iAtPLr1w
-         uGIwqctHbdxmA==
-Date:   Wed, 22 Dec 2021 16:55:12 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 04/12] user_events: Add basic perf and eBPF support
-Message-Id: <20211222165512.616e5af0c39f5461c3ee693b@kernel.org>
-In-Reply-To: <20211216173511.10390-5-beaub@linux.microsoft.com>
-References: <20211216173511.10390-1-beaub@linux.microsoft.com>
-        <20211216173511.10390-5-beaub@linux.microsoft.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Wed, 22 Dec 2021 02:56:29 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E708EC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 23:56:28 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id b13so5216398edd.8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 23:56:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Sb0ay+kl0pJXaWyi8F5Q59vUzHY3JJy0J9Q9Sl4k/Vs=;
+        b=3p6e6VMkYFdwmTWd6/iVc/jL4aXQ48e5tzJF93pB2nQdXYj5jsX8SqIfwvhRiKUOav
+         CDPbx6w9s33QFrquAeA8QauECrdo0EZFhS2D+D6Pooc2iDxzRW9hrn6qx3KuSMvZu5uU
+         EWt4G8yNpeUQwMXajBD5McDg9ixGeqW1xycyIHvK0ZoaAOiZI/5wqGBrWZ1RQ8gOYF3I
+         Od4GRxnaGI61LxxW67zQV4Q+21pxFabLN7BUjENvy8XiJaiaeM/AgQ04n43T9PLIGPtH
+         3UjDIEVyd69P4C7lHgR4ELfME2jVKkcMYLmg0TIOsuiiJqjz25Wmuj6ncs9V6+VJZ30L
+         Z7+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Sb0ay+kl0pJXaWyi8F5Q59vUzHY3JJy0J9Q9Sl4k/Vs=;
+        b=XhK4UAWMjMBfpWBvq+9KOHW720ZTglR8xd2XeQ8Din4DGCAQaD8yA4fCH2kgxCFD0c
+         EusHu6euzH2j3afuWJM4282wo5Mwh07yQptUr4M8AijDWnziHPzcoKZEFDp8QWDjT2YA
+         lrJTGxzOH8onmTypDooZz7SkXhr1nT1mJzw0FjKpHu4/V9IWhMRBLls9cBhbhKZKuwUm
+         NAUauc8FjIIiizld5PI/zMU2/XJ82blqgWF+0os+TBTHtdbWvM/6SsVSpdlHuyt63HGS
+         G1WeSieji6zng+EN+lMt5yPERFgYDh+S4+cDfl/pgVMErftVSOdsNhsNuzSTSuC5nlgt
+         1K0A==
+X-Gm-Message-State: AOAM531YGcE6BaUT8DPS9uY9FAQrljJfTxno3lvhMLXmQui5JFwGTfDk
+        pOlUUYhWqRDcbi3lyxg/LWShliSi6MdVa1ufotSypw==
+X-Google-Smtp-Source: ABdhPJwEFfl4Har97114AUPMOYWp/x1fsGdhXAjMy7AGuNjRDUzVsD0H+tOgPc788M9iBabjwcXPsdmW+vvkcoiOgTA=
+X-Received: by 2002:a05:6402:2813:: with SMTP id h19mr1762161ede.365.1640159787531;
+ Tue, 21 Dec 2021 23:56:27 -0800 (PST)
+MIME-Version: 1.0
+References: <20211217112345.14029-1-nbd@nbd.name> <20211217112345.14029-14-nbd@nbd.name>
+In-Reply-To: <20211217112345.14029-14-nbd@nbd.name>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 22 Dec 2021 08:56:16 +0100
+Message-ID: <CAMRc=Mdm8-f4eqD6zTp-OaAz5972qTdRrzjidP+9tm+536yaEQ@mail.gmail.com>
+Subject: Re: [PATCH v7 13/14] gpio: Add support for Airoha EN7523 GPIO controller
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        John Crispin <john@phrozen.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Dec 2021 09:35:03 -0800
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
-
-> Adds support to write out user_event data to perf_probe/perf files as
-> well as to any attached eBPF program.
-> 
-
-Looks good to me.
-
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-Thanks!
-
-> Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+On Fri, Dec 17, 2021 at 12:25 PM Felix Fietkau <nbd@nbd.name> wrote:
+>
+> From: John Crispin <john@phrozen.org>
+>
+> Airoha's GPIO controller on their ARM EN7523 SoCs consists of two banks of 32
+> GPIOs. Each instance in DT is for a single bank.
+>
+> Signed-off-by: John Crispin <john@phrozen.org>
+> Signed-off-by: Felix Fietkau <nbd@nbd.name>
 > ---
->  kernel/trace/trace_events_user.c | 72 +++++++++++++++++++++++++++++++-
->  1 file changed, 71 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-> index 9859e62b9838..cc30d1fcbb63 100644
-> --- a/kernel/trace/trace_events_user.c
-> +++ b/kernel/trace/trace_events_user.c
-> @@ -550,6 +550,50 @@ static void user_event_ftrace(struct user_event *user, void *data, u32 datalen,
->  	trace_event_buffer_commit(&event_buffer);
->  }
->  
-> +#ifdef CONFIG_PERF_EVENTS
-> +/*
-> + * Writes the user supplied payload out to perf ring buffer or eBPF program.
-> + */
-> +static void user_event_perf(struct user_event *user, void *data, u32 datalen,
-> +			    void *tpdata)
-> +{
-> +	struct hlist_head *perf_head;
-> +
-> +	if (bpf_prog_array_valid(&user->call)) {
-> +		struct user_bpf_context context = {0};
-> +
-> +		context.data_len = datalen;
-> +		context.data_type = USER_BPF_DATA_KERNEL;
-> +		context.kdata = data;
-> +
-> +		trace_call_bpf(&user->call, &context);
-> +	}
-> +
-> +	perf_head = this_cpu_ptr(user->call.perf_events);
-> +
-> +	if (perf_head && !hlist_empty(perf_head)) {
-> +		struct trace_entry *perf_entry;
-> +		struct pt_regs *regs;
-> +		size_t size = sizeof(*perf_entry) + datalen;
-> +		int context;
-> +
-> +		perf_entry = perf_trace_buf_alloc(ALIGN(size, 8),
-> +						  &regs, &context);
-> +
-> +		if (unlikely(!perf_entry))
-> +			return;
-> +
-> +		perf_fetch_caller_regs(regs);
-> +
-> +		memcpy(perf_entry + 1, data, datalen);
-> +
-> +		perf_trace_buf_submit(perf_entry, size, context,
-> +				      user->call.event.type, 1, regs,
-> +				      perf_head, NULL);
-> +	}
-> +}
-> +#endif
-> +
->  /*
->   * Update the register page that is shared between user processes.
->   */
-> @@ -572,6 +616,10 @@ static void update_reg_page_for(struct user_event *user)
->  
->  				if (probe_func == user_event_ftrace)
->  					status |= EVENT_STATUS_FTRACE;
-> +#ifdef CONFIG_PERF_EVENTS
-> +				else if (probe_func == user_event_perf)
-> +					status |= EVENT_STATUS_PERF;
-> +#endif
->  				else
->  					status |= EVENT_STATUS_OTHER;
->  			} while ((++probe_func_ptr)->func);
-> @@ -611,8 +659,27 @@ static int user_event_reg(struct trace_event_call *call,
->  					    data);
->  		goto dec;
->  
-> -	default:
-> +#ifdef CONFIG_PERF_EVENTS
-> +	case TRACE_REG_PERF_REGISTER:
-> +		ret = tracepoint_probe_register(call->tp,
-> +						call->class->perf_probe,
-> +						data);
-> +		if (!ret)
-> +			goto inc;
-> +		break;
-> +
-> +	case TRACE_REG_PERF_UNREGISTER:
-> +		tracepoint_probe_unregister(call->tp,
-> +					    call->class->perf_probe,
-> +					    data);
-> +		goto dec;
-> +
-> +	case TRACE_REG_PERF_OPEN:
-> +	case TRACE_REG_PERF_CLOSE:
-> +	case TRACE_REG_PERF_ADD:
-> +	case TRACE_REG_PERF_DEL:
->  		break;
-> +#endif
->  	}
->  
->  	return ret;
-> @@ -864,6 +931,9 @@ static int user_event_parse(char *name, char *args, char *flags,
->  	user->class.get_fields = user_event_get_fields;
->  	user->class.reg = user_event_reg;
->  	user->class.probe = user_event_ftrace;
-> +#ifdef CONFIG_PERF_EVENTS
-> +	user->class.perf_probe = user_event_perf;
-> +#endif
->  
->  	mutex_lock(&event_mutex);
->  	ret = user_event_trace_register(user);
-> -- 
-> 2.17.1
-> 
 
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>

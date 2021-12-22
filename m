@@ -2,214 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7DC47D0E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1238347D0EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244620AbhLVLU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 06:20:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47388 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbhLVLU5 (ORCPT
+        id S244628AbhLVLWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 06:22:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:36070 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230007AbhLVLWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 06:20:57 -0500
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0D2C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:20:56 -0800 (PST)
-Received: by mail-qk1-x742.google.com with SMTP id r139so1047318qke.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:20:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:references:in-reply-to:mime-version:thread-index:date
-         :message-id:subject:to:cc;
-        bh=tAQUbXepy/D1OV3Qgjbf5t9Ys4GHvjg64wkH4yq2t5k=;
-        b=eFSbkYm68RCOyvPXnfa5W4mt765AkhBeFwU2b0mr6jDUVWbXWXR6ZsdioHut0aN6lb
-         n39HzWiMfQ5pjQ5hTdFbnrhF7H/RIPbIgMkI4dmiYAeEH6MlJmVISTw+Nm5nN3pbhUC3
-         HOBmifOsU8qOZkPy3mghqPO6DJNg9mPA15LdQ=
+        Wed, 22 Dec 2021 06:22:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640172142;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9WyeSnwuE9oDZ0nvfKHg4dkrAZqN47nEkp3E+HseND8=;
+        b=eI26bajddVmxXnQBoKDyWbENP+/Ah/IL5ywEtOJ89Ap7D63tEF0XTJT12anNE1gJi3JNR6
+        RQamYehQwaU1gbpQ11lheh68sVWBVVN25CbcFlJGMDegAEivAfp1HkV1c8zhtmY60A4+WF
+        Pkwqr6mLp07ol4WBlfZY30FVgER/yXo=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-642-gXKcycV0NPSo1QkNaSqSdw-1; Wed, 22 Dec 2021 06:22:21 -0500
+X-MC-Unique: gXKcycV0NPSo1QkNaSqSdw-1
+Received: by mail-ed1-f70.google.com with SMTP id w10-20020a50d78a000000b003f82342a95aso1576198edi.22
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:22:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:references:in-reply-to:mime-version
-         :thread-index:date:message-id:subject:to:cc;
-        bh=tAQUbXepy/D1OV3Qgjbf5t9Ys4GHvjg64wkH4yq2t5k=;
-        b=gttsOw34QKcmLztOiiXaL/2OVh4ayThEYmIMxWJ62Uz4hJVe5rBQ+atn0AI2GuS7A/
-         NzIIn/C250pgmBTw4jR3xnl34DWo69WtK561HmTznHjUuiJx1tBiS2ENr2dALhcRuPFD
-         IAXyCNtIa9cYewN32bBH1nqe6XZaNAAE9sBIuLaMJvi9XYp092JtvHunnj0eMzENjXO+
-         /9sZzUT2y0AnCmqV617UIGmWQS6z+bdbSGEaHGQrKTiZ/PQp1MumvoWrrpJ9s/eYz4lc
-         uj/3hTfIAuSl1Wk2X1Kr+pK7BYHL2F9W1KCqTF/4CSq23useZt8vOtAE3HLiVKNN2oYL
-         DFNQ==
-X-Gm-Message-State: AOAM532jIUc7zmS0+j2L5djfUK79IIgo6PfPS5q8wFvssoCHCJuEu5sc
-        j/nwoLka5IPFxXlZiaBPxOgT2d9qMliwwC7GnEhQvQ==
-X-Google-Smtp-Source: ABdhPJwZPr3NvDHyhMSx40g591bUB3ZGaKhe021bHzk3LLhCbRyS19PqrIuDtzyrU/RpE5dUzHjwKFslc1NMvT4zqeA=
-X-Received: by 2002:a37:b182:: with SMTP id a124mr1581809qkf.135.1640172055861;
- Wed, 22 Dec 2021 03:20:55 -0800 (PST)
-From:   Kashyap Desai <kashyap.desai@broadcom.com>
-References: <20211221123157.14052-1-kashyap.desai@broadcom.com>
- <e9174a89-b3a4-d737-c5a9-ff3969053479@huawei.com> <7028630054e9cd0e8c84670a27c2b164@mail.gmail.com>
- <e7288bcd-cc4d-8f57-a0c8-eadd53732177@huawei.com>
-In-Reply-To: <e7288bcd-cc4d-8f57-a0c8-eadd53732177@huawei.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9WyeSnwuE9oDZ0nvfKHg4dkrAZqN47nEkp3E+HseND8=;
+        b=unw8Ue9Dx8ByxtORk6viL5Fe5Kxo0EYr+8WWVxn23AtH734DNZBm6+t8PUXLkfr0ak
+         yvEf9Rs4Fce6y666pF7ZZFwoJAR3JTABtgJ4GC5sHpeqGi1pSjYkmeia+pfaIYzsrUyq
+         vt0aH6XEwLspvmhkivPQtIQq4pWa03fS3VLKsQ+G84JTlKIc72FB5r2kIFMFU4GjNYRj
+         vKOvQFvzp0WChRVy8a8XAEUrn6nJtd05G02lMw7O1T6hazU8uio+mWHO8scBl37HqRY0
+         pFtN01TyfSPRPqCiJ+7bAwjY6qUGUApDrvkI6roi2SWbj7airpZPJpV2vkZphz6Ph9j7
+         2aRQ==
+X-Gm-Message-State: AOAM533HxxQ1sxDPCioqH/mFtHn8abbiP4ZIG/JAtLzmu6KnwiLT4sGA
+        HfzsqyVvTFABqVcwhNIT5Jrls+EYdkK51PuXrkuJZjMfEHRXU4pb/L9VdNvo6cvsSfWLV0ypZfm
+        OkJRxHXB/vhAhN+mgh6a3NjSwgEc5CvTiw+CLH4Hm
+X-Received: by 2002:a17:906:c156:: with SMTP id dp22mr2191870ejc.36.1640172139331;
+        Wed, 22 Dec 2021 03:22:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJySmSesxTzWAQlMVsXQ/NwKpzgT0R0ziEgP90PTbYsnJJPbTby1Be2I81ZZ3ip4rzfOCo2yJ6sdz21keAIEGAU=
+X-Received: by 2002:a17:906:c156:: with SMTP id dp22mr2191855ejc.36.1640172139035;
+ Wed, 22 Dec 2021 03:22:19 -0800 (PST)
 MIME-Version: 1.0
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: AQJC+3Le3mXDqGQStbCqvdqjeo0KCwF7x3T9AYMxWSAB1rDXcatBpi8A
-Date:   Wed, 22 Dec 2021 16:50:53 +0530
-Message-ID: <c26b40bac76ec1bfbab2419aece544ca@mail.gmail.com>
-Subject: RE: [PATCH RFT] blk-mq: optimize queue tag busy iter for shared_tags
-To:     John Garry <john.garry@huawei.com>, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ming.lei@redhat.com,
-        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000c8451c05d3ba5033"
+References: <20211104171734.137707-1-wander@redhat.com> <YcClBlhwp4arGWtw@kroah.com>
+ <CAAq0SUmVmyALNYUbM5dy3D0=Bp=ukNoNdodc1yxYQjm1SnBgAQ@mail.gmail.com> <YcGMXf7sxb/ESvFS@kroah.com>
+In-Reply-To: <YcGMXf7sxb/ESvFS@kroah.com>
+From:   Wander Costa <wcosta@redhat.com>
+Date:   Wed, 22 Dec 2021 08:22:07 -0300
+Message-ID: <CAAq0SUmw7CpY8Mmi9sZPp1b9=jZMm6+5+yAMjMHnBZxfMhsByQ@mail.gmail.com>
+Subject: Re: [PATCH v2] tty: serial: Use fifo in 8250 console driver
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Wander Lairson Costa <wander@redhat.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Johan Hovold <johan@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000c8451c05d3ba5033
-Content-Type: text/plain; charset="UTF-8"
-
+On Tue, Dec 21, 2021 at 5:12 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> But your change seems effectively the same as in
-> https://lore.kernel.org/all/1638794990-137490-4-git-send-email-
-> john.garry@huawei.com/,
-> which is now merged in Jens' 5.17 queue:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-
-> block.git/commit/?h=for-
-> 5.17/block&id=fea9f92f1748083cb82049ed503be30c3d3a9b69
-
-John -
-
-Yes, above is the same changes I was looking for. I did very basic mistake.
-I applied your above commit while doing megaraid_sas testing.
- While I move to mpi3mr testing, I did not apply your patch set. We can drop
-request of this RFT since I tested above series and it serve the same
-purpose.
-
-Kashyap
-
->
-> > While doing additional testing for [1], I noticed some performance
-> > issue.
-> > Along with the performance issue, I noticed CPU lockup as well. Lockup
-> > trace -
+> On Mon, Dec 20, 2021 at 02:02:11PM -0300, Wander Costa wrote:
+> > On Mon, Dec 20, 2021 at 12:45 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Thu, Nov 04, 2021 at 02:17:31PM -0300, wander@redhat.com wrote:
+> > > > From: Wander Lairson Costa <wander@redhat.com>
+> > > >
+> > > > Note: I am using a small test app + driver located at [0] for the
+> > > > problem description. serco is a driver whose write function dispatches
+> > > > to the serial controller. sertest is a user-mode app that writes n bytes
+> > > > to the serial console using the serco driver.
+> > > >
+> > > > Recently I got a report of a soft lockup while loading a bunch a
+> > > > scsi_debug devices (> 500).
+> > > >
+> > > > While investigating it, I noticed that the serial console throughput
+> > > > (called by the printk code) is way below the configured speed of 115200
+> > > > bps in a HP Proliant DL380 Gen9 server. I was expecting something above
+> > > > 10KB/s, but I got 2.5KB/s. I then built a simple driver [0] to isolate
+> > > > the console from the printk code. Here it is:
+> > > >
+> > > > $ time ./sertest -n 2500 /tmp/serco
+> > > >
+> > > > real    0m0.997s
+> > > > user    0m0.000s
+> > > > sys     0m0.997s
+> > > >
+> > > > With the help of the function tracer, I then noticed the serial
+> > > > controller was taking around 410us seconds to dispatch one single byte:
+> > > >
+> > > > $ trace-cmd record -p function_graph -g serial8250_console_write \
+> > > >    ./sertest -n 1 /tmp/serco
+> > > >
+> > > > $ trace-cmd report
+> > > >
+> > > >             |  serial8250_console_write() {
+> > > >  0.384 us   |    _raw_spin_lock_irqsave();
+> > > >  1.836 us   |    io_serial_in();
+> > > >  1.667 us   |    io_serial_out();
+> > > >             |    uart_console_write() {
+> > > >             |      serial8250_console_putchar() {
+> > > >             |        wait_for_xmitr() {
+> > > >  1.870 us   |          io_serial_in();
+> > > >  2.238 us   |        }
+> > > >  1.737 us   |        io_serial_out();
+> > > >  4.318 us   |      }
+> > > >  4.675 us   |    }
+> > > >             |    wait_for_xmitr() {
+> > > >  1.635 us   |      io_serial_in();
+> > > >             |      __const_udelay() {
+> > > >  1.125 us   |        delay_tsc();
+> > > >  1.429 us   |      }
+> > > > ...
+> > > > ...
+> > > > ...
+> > > >  1.683 us   |      io_serial_in();
+> > > >             |      __const_udelay() {
+> > > >  1.248 us   |        delay_tsc();
+> > > >  1.486 us   |      }
+> > > >  1.671 us   |      io_serial_in();
+> > > >  411.342 us |    }
+> > > >
+> > > > In another machine, I measured a throughput of 11.5KB/s, with the serial
+> > > > controller taking between 80-90us to send each byte. That matches the
+> > > > expected throughput for a configuration of 115200 bps.
+> > > >
+> > > > This patch changes the serial8250_console_write to use the 16550 fifo
+> > > > if available. In my artificial benchmark I could get a throughput
+> > > > increase up to 100% in some cases, but in the real case described at the
+> > > > beginning the gain was of about 25%.
+> > > >
+> > > > [0] https://github.com/walac/serial-console-test
+> > > >
+> > > > Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+> > > > ---
+> > > >  drivers/tty/serial/8250/8250.h      |  3 ++
+> > > >  drivers/tty/serial/8250/8250_port.c | 63 +++++++++++++++++++++++++----
+> > > >  2 files changed, 59 insertions(+), 7 deletions(-)
+> > > >
+> > > > diff --git a/drivers/tty/serial/8250/8250.h b/drivers/tty/serial/8250/8250.h
+> > > > index 6473361525d1..c711bf118cc1 100644
+> > > > --- a/drivers/tty/serial/8250/8250.h
+> > > > +++ b/drivers/tty/serial/8250/8250.h
+> > > > @@ -83,6 +83,9 @@ struct serial8250_config {
+> > > >  #define UART_CAP_MINI        BIT(17) /* Mini UART on BCM283X family lacks:
+> > > >                                        * STOP PARITY EPAR SPAR WLEN5 WLEN6
+> > > >                                        */
+> > > > +#define UART_CAP_CWFIFO BIT(18) /* Use the UART Fifo in
+> > > > +                              * serial8250_console_write
+> > > > +                              */
+> > >
+> > > Why do you need a new bit?  Why can't you just do this change for all
+> > > devices that have a fifo?  Why would you _not_ want to do this for all
+> > > devices that have a fifo?
+> > >
+> > The v1 patch [1] didn't have this extra bit. Andy suggested [2] to add
+> > it so we only enabled this new code on tested controllers as a
+> > precaution.
+> > If it doesn't make sense to you, feel free to consider the v1 patch [1].
 > >
-> > _raw_spin_lock_irqsave+0x42/0x50
-> >   blk_mq_find_and_get_req+0x20/0xa0
-> >   bt_iter+0x2d/0x80
-> >   blk_mq_queue_tag_busy_iter+0x1aa/0x2f0
-> >   ? blk_mq_complete_request+0x30/0x30
-> >   ? blk_mq_complete_request+0x30/0x30
-> >   ? __schedule+0x360/0x850
-> >   blk_mq_timeout_work+0x5e/0x120
-> >   process_one_work+0x1a8/0x380
-> >   worker_thread+0x30/0x380
-> >   ? wq_calc_node_cpumask.isra.30+0x100/0x100
-> >   kthread+0x167/0x190
-> >   ? set_kthread_struct+0x40/0x40
-> >   ret_from_fork+0x22/0x30
-> >
-> > It is a generic performance issue if driver use " shost->host_tagset =
-> > 1".
-> > In fact, I found that [1] is useful to fix performance issue and
-> > provided this additional patch.
-> >
-> > I changed my setup to have 64 scsi_devices (earlier I just kept 16 or
-> > 24 drives, so did not noticed this issue). Performance/cpu lockup
-> > issue is not due to [1].
-> > More number of scsi device, hardware context per host and high queue
-> > depth will increase the chances of lockup and performance drop.
-> >
-> > Do you think, it is good to have changes in 5.16 + stable ?
-> > I don't know if this  patch will create any side effect. Can you
-> > review and let me know your feedback. ?
-> >
+> > [1] https://lore.kernel.org/all/20211029201402.428284-1-wander@redhat.com/
+> > [2] https://lore.kernel.org/all/CAHp75Vf6DjNcPWpE4Dh3SuzUMJbFQjq1UNCkrCa60uw35SpqKg@mail.gmail.com/
 >
-> Can you test my merged change again for this scenario?
+> I do like [1] better, but can you fix up the checkpatch issues and
+> resend it:
 >
-> I will also note that I mentioned previously that
-> blk_mq_queue_tag_busy_iter() was not optimum for shared sbitmap, i.e.
-> before shared tags, but no one said performance was bad for shared
-> sbitmap.
->
-> Thanks,
-> John
+Sure. No problem.
 
---000000000000c8451c05d3ba5033
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+> CHECK: Alignment should match open parenthesis
+> #116: FILE: drivers/tty/serial/8250/8250_port.c:3342:
+> +static void serial8250_console_fifo_write(struct uart_8250_port *up,
+> +               const char *s, unsigned int count)
+>
+> CHECK: Logical continuations should be on the previous line
+> #156: FILE: drivers/tty/serial/8250/8250_port.c:3412:
+> +       use_fifo = (up->capabilities & UART_CAP_FIFO)
+> +               && port->fifosize > 1
+>
+> CHECK: Logical continuations should be on the previous line
+> #157: FILE: drivers/tty/serial/8250/8250_port.c:3413:
+> +               && port->fifosize > 1
+> +               && (serial_port_in(port, UART_FCR) & UART_FCR_ENABLE_FIFO)
+>
+> CHECK: Logical continuations should be on the previous line
+> #163: FILE: drivers/tty/serial/8250/8250_port.c:3419:
+> +                */
+> +               && !(up->port.flags & UPF_CONS_FLOW);
+>
+>
+>
+> thanks,
+>
+> greg k-h
+>
 
-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
-P3lSxcw4Cg90iKHqfpwLnGNc9AGXHMxUCukpnAHRlivljilKHMx1ymb180BLmtF+ZLm6KrFLQWzB
-4KeiUOMtKM13wJrQubqTeZgB1XA+89jeLYlxagVsMyksdwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRprYXNoeWFwLmRlc2FpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUkTOZp9jXE3yPj4ieKeDT
-OiNyCtswDQYJKoZIhvcNAQELBQADggEBABG1KCh7cLjStywh4S37nKE1eE8KPyAxDzQCkhxYLBVj
-gnnhaLmEOayEucPAsM1hCRAm/vR3RQ27lMXBGveCHaq9RZkzTjGSbzr8adOGK3CluPrasNf5StX3
-GSk4HwCapA39BDUrhnc/qG5vHwLrgA1jwAvSy8e/vn4F4h+KPrPoFNd1OnCafedbuiEXTqTkn5Rk
-vZ2AOTcSbxvmyKBMb/iu1vn7AAoui0d8GYCPoz8shf2iWMSUXVYJAMrtRHVJr47J5jlopF5F2ghC
-MzNfx6QsmJhYiRByd8L9sUOjp/DMgkC6H93PyYpYMiBGapgNf6UMsLg/1kx5DATNwhPAJbkxggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxwO04DXOeYbZtr
-4mAwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIEjGLIBCiS43TyB41CoVa1lGNYod
-igg/tNaYQWjWPEa3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIx
-MTIyMjExMjA1NlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQAO8d3rBpO3TMa5v7K72T5WHutvO0A2mZF5bslUCQbXyN2y
-ZGN+u7DAVMrp4LmsuuaRo6nC3W+8z3QXoxYlrKmkQq8c7G0GNA8qr6Bem8GUVbO2uhq4puH2deBe
-dBi1n8yEHYbbCaf26W9Xb6CVYg9z/zixWrkqmWTuzNH9MCJZbyfIBamvtjSkbSniqbDrnFvfSfck
-qzswAnd/56Cdb1hVy9hv/3Eo2Enj/1y5wovueBeHf+AUxUZ42H25l6x+YdDI6Iqg6H6fpY7Legp6
-IA56Jhicur7nF4+a+cYH/IT+fu3gV0tOV5xHnj5VQ1ph2iGyaM4Dyz7iCWI96xnhwzLH
---000000000000c8451c05d3ba5033--

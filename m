@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0B547D0D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6585F47D0DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:19:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244583AbhLVLSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 06:18:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46800 "EHLO
+        id S244588AbhLVLTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 06:19:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244581AbhLVLSj (ORCPT
+        with ESMTP id S244587AbhLVLTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 06:18:39 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16652C061747
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:18:39 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id a9so4166266wrr.8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:18:39 -0800 (PST)
+        Wed, 22 Dec 2021 06:19:04 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99733C061401
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:19:03 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id d198-20020a1c1dcf000000b0034569cdd2a2so1264489wmd.5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:19:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=BTFrGRijmyqVtwNX+eYj7uLDLDEXDa8YjLzuMRD+fi4=;
-        b=n1wWbc5/GBac4/7gX+mStLNdXD+9ZndYLSDI5tNU/kz1pFG6iO/9vDLjbq3DvBMd7w
-         XDwjYdZrCF3T5s1L15XEHfsQe81DDgZNTBJGUXvkDlQdIGA71FSjMEnYgn3gz3LbqQgH
-         JgGkm5YZGWh6e0AyCb2sK0g9PiUEL7B7UieKYvrzmgObGqfRvPMPKs0uhSUk9RJWHsCM
-         V8dbXY3DQADZK5nusdcU76Fmwe4y5LKKgYmD4niSo6OGjcvhaPt9OJvsuQ3MrIPhmLow
-         8ClxdDLz+f99tFS5ABAYB4WeonMu7CrFh5Vp/if6pzBieskOCnPyBORKZDHVlCyGhLLM
-         CBQQ==
+        bh=/reVXFbwGvPtptFEcS4POHmCemx6nGpkPPsCHK0zcq8=;
+        b=J5WWWvc3IuUjHTnsVCR24J6M6u9Kij+YAFcbqiLiwRsCR3JK6zKt1kUoLW7hfutiFp
+         bjHdydoVbizMsaxlerROgGyk8ySUOE98cWEOSRSGIQ7hT9qDrOBxhoOQI2h1nVu2eRSu
+         CjVizaNQZbKf0QXl8/XJACmJHDimmGHIn1jocmclYhrGj4VES2uGhaeN+iFM6+uPj/Rx
+         jYeZBScOaSi6em7f6XS+pVQVklNbmfl09oP3zsayg3tUX4Y8SoKu9ghCyQxJrVi49/VR
+         hZ+y+JxQoeGMBDf6hiXzkW+HUr4TOeD1gLJJllkFmWAz72D/owIg1JCV6qYoGF0PWyml
+         cHSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=BTFrGRijmyqVtwNX+eYj7uLDLDEXDa8YjLzuMRD+fi4=;
-        b=ZIFLbdPAV3RtUhkuy0EChviw76yIk9LOzhdFyznIjnTx6jRlLvU2ZAlhcn2VxZmI8w
-         0UQDaIgo57HafzUkjlB11ucRThfPArKXOFcF4/JMttgq1kfWd4yBhYyPFxDJA93/PCY7
-         AafLfmcxxw4G/DmilcF4UAa0U4Es9tpNeEqqCZe8SFI4HmBltJJtJ8ywki63Z3myrnRg
-         5SDKLDfqe+COKZKCS7ACpP3Ap6sFV7WEfnl5oEVMvlMkpgxX7leH9DbL+EgMTiC97GLJ
-         U10xD0eBkBJN9x5EdI+FJ5PeSFsDDBStgdbBCEBkEBBJtjgQFkZ2bb+QzuHYAcpechub
-         zj+A==
-X-Gm-Message-State: AOAM531f9GmffFpU7KYyi/eqpByS6j/NzxP0W29BGmb5Ufu9tdOulDKK
-        EYywh0Gt5Xz/u6hwkRpru031iQ==
-X-Google-Smtp-Source: ABdhPJw38s9cSuuBgFo9+w66UfDHy3rKbuDjgI0szZLbSoZofWuGha24IIq6shTkSBB6qomoMhNtng==
-X-Received: by 2002:a5d:554e:: with SMTP id g14mr1750277wrw.353.1640171917614;
-        Wed, 22 Dec 2021 03:18:37 -0800 (PST)
+        bh=/reVXFbwGvPtptFEcS4POHmCemx6nGpkPPsCHK0zcq8=;
+        b=IifLZdRzy4zhB5NZNpsO4o4izLb48eFIUt4cHq7jqH0TzChbIbV/F+qBZr7p4vBMEt
+         ahRkjQsMY+MBUNJplvzbEXOgmNOQZ3KrDgr/Q8GcumlXASuHqhv8hlT9HUSGpme9+edZ
+         5FlJOr7rso0Z5dsTzxT23sXFLV4DMzQMqLIjpkBABaOH3tdy+6K0bBDfjQBqDStvbSYT
+         c5ewYaBMxmg0sYdH4RqfCZyb8ErDc9pC2XwkC0Ekn7mTbrIzEvkNtlkXeRaN1h5iKCX+
+         imKggWuqwwfEVGeMkRYhAaWzZ3qXmAiKJUzQE5w8So77oeHgRQpJxsxB3Gc/QrHMiZmi
+         TC2A==
+X-Gm-Message-State: AOAM531Pa+WpgOncIW7QqSIduX0/Oe053JKqum9h1A5Hk6RRJ9JdRjdn
+        LY/LpOYnigcL1q+n3kQfjI6hdw==
+X-Google-Smtp-Source: ABdhPJwZmMqp90ob6RIH01SOsHCsXi+jUYNxlqmIKZvvGMW6B9dTSDKKs8jRlE62lkhrubrAM9iLjg==
+X-Received: by 2002:a05:600c:6009:: with SMTP id az9mr626439wmb.32.1640171942136;
+        Wed, 22 Dec 2021 03:19:02 -0800 (PST)
 Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id a198sm1460546wmd.42.2021.12.22.03.18.36
+        by smtp.gmail.com with ESMTPSA id i8sm809626wry.108.2021.12.22.03.19.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 03:18:37 -0800 (PST)
-Date:   Wed, 22 Dec 2021 11:18:35 +0000
+        Wed, 22 Dec 2021 03:19:01 -0800 (PST)
+Date:   Wed, 22 Dec 2021 11:18:59 +0000
 From:   Lee Jones <lee.jones@linaro.org>
 To:     Marijn Suijten <marijn.suijten@somainline.org>
 Cc:     phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
@@ -68,31 +68,54 @@ Cc:     phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
         Bryan Wu <cooloney@gmail.com>, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH v3 8/9] backlight: qcom-wled: Remove unnecessary double
- whitespace
-Message-ID: <YcMJi5Gpx84zaau6@google.com>
+Subject: Re: [PATCH v3 9/9] backlight: qcom-wled: Respect enabled-strings in
+ set_brightness
+Message-ID: <YcMJoyVF4n8yDPUY@google.com>
 References: <20211115203459.1634079-1-marijn.suijten@somainline.org>
- <20211115203459.1634079-9-marijn.suijten@somainline.org>
+ <20211115203459.1634079-10-marijn.suijten@somainline.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211115203459.1634079-9-marijn.suijten@somainline.org>
+In-Reply-To: <20211115203459.1634079-10-marijn.suijten@somainline.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Mon, 15 Nov 2021, Marijn Suijten wrote:
 
-> Remove redundant spaces inside for loop conditions.  No other double
-> spaces were found that are not part of indentation with `[^\s]  `.
+> The hardware is capable of controlling any non-contiguous sequence of
+> LEDs specified in the DT using qcom,enabled-strings as u32
+> array, and this also follows from the DT-bindings documentation.  The
+> numbers specified in this array represent indices of the LED strings
+> that are to be enabled and disabled.
 > 
+> Its value is appropriately used to setup and enable string modules, but
+> completely disregarded in the set_brightness paths which only iterate
+> over the number of strings linearly.
+> Take an example where only string 2 is enabled with
+> qcom,enabled_strings=<2>: this string is appropriately enabled but
+> subsequent brightness changes would have only touched the zero'th
+> brightness register because num_strings is 1 here.  This is simply
+> addressed by looking up the string for this index in the enabled_strings
+> array just like the other codepaths that iterate over num_strings.
+> 
+> Likewise enabled_strings is now also used in the autodetection path for
+> consistent behaviour: when a list of strings is specified in DT only
+> those strings will be probed for autodetection, analogous to how the
+> number of strings that need to be probed is already bound by
+> qcom,num-strings.  After all autodetection uses the set_brightness
+> helpers to set an initial value, which could otherwise end up changing
+> brightness on a different set of strings.
+> 
+> Fixes: 775d2ffb4af6 ("backlight: qcom-wled: Restructure the driver for WLED3")
+> Fixes: 03b2b5e86986 ("backlight: qcom-wled: Add support for WLED4 peripheral")
 > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 > Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 > ---
->  drivers/video/backlight/qcom-wled.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/video/backlight/qcom-wled.c | 22 ++++++++++++----------
+>  1 file changed, 12 insertions(+), 10 deletions(-)
 
 Applied, thanks.
 

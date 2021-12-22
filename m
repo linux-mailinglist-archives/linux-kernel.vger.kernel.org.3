@@ -2,124 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88CA047CEDF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6232447CEE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243731AbhLVJKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 04:10:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
+        id S243752AbhLVJMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:12:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243690AbhLVJKf (ORCPT
+        with ESMTP id S229800AbhLVJMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:10:35 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BE0C061574;
-        Wed, 22 Dec 2021 01:10:35 -0800 (PST)
-Date:   Wed, 22 Dec 2021 09:10:31 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1640164233;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z2d0Wg7VLsfegQIWHVxTH9Scsya5TFPCUwn/Zyee+Ao=;
-        b=1hPRagHUHTVpayjgHUDgh3j+uNZ6WGNOFsbYyZNvA5n3KwmJmjszYektwrBDFKtRVaiqRr
-        zeXQR4hFUM6ZtSuK5BTMtYHVNJFX0xPSrzMs9lbfZwkd8+kZ4SAUOQW4XJwPUOye1OvSkL
-        EMfdKng+3S5dsPEF9gvYj8NpjMfFjndTuIeq4uWrTL4j+/d/AkFxhdiJNllX2cTC7N8xNH
-        p1BJ4uu3YQn2I/1aOAy1V71Go2R4t+5k8SPrGVNDcCV1jvKCpKXgVC4p5uv6Bc3+hhyrQP
-        UYioEBHWRhgsXP1VU4GeXRcAX9pRUUpxWgOO/clcIJ8us5jsQCQC7fqoNjxX1A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1640164233;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z2d0Wg7VLsfegQIWHVxTH9Scsya5TFPCUwn/Zyee+Ao=;
-        b=A5deNL/QgLMdoNpugZxDehG/kqdcjBUaiiOdseZtNk16I30SF/Pk1WfyURvfcDbenSKQaQ
-        IZe/GhG96O4YVbDQ==
-From:   "tip-bot2 for Ismael Luceno" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/urgent] uapi: Fix undefined __always_inline on
- non-glibc systems
-Cc:     Ismael Luceno <ismael@iodev.co.uk>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20211115134647.1921-1-ismael@iodev.co.uk>
-References: <20211115134647.1921-1-ismael@iodev.co.uk>
-MIME-Version: 1.0
-Message-ID: <164016423189.16921.12749456431975367694.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Wed, 22 Dec 2021 04:12:22 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E7AC061574;
+        Wed, 22 Dec 2021 01:12:22 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id k64so1796601pfd.11;
+        Wed, 22 Dec 2021 01:12:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=CBfSdeah4di0RYShSh2rMeibOxUYRgUc2dFokC3MDPs=;
+        b=F1ey74bq97uDtJL95JJR0TplMYCBicm6fktnA7NTjHxIFuZBLELmIUvgJKsljEsFcs
+         jRBnSc5Vajm0UX5/gqdLN8AFmnYBM5JGTQltgxn3QzqoTn5S2OWrdYR+FJdmVx1EKRMd
+         DM8c6wy046SpQ++LMh1pAoM6UZZoKa3hzrvXJUkHccO+OgUPmm8Do1sNnPpf9PYv1ZUm
+         siUWLqxGsXZXmdebIvIZK14bNCjovKRrhDjY3SmC5ffAjwTtz7Ucdw7n/pNqHKq+tqkj
+         3FJUk73CzVdW5tk0dbvk16e8i/FluCaE8H1S2UW5DBkNfFdpC3fMftHJhAJaga3oB1M3
+         dekg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=CBfSdeah4di0RYShSh2rMeibOxUYRgUc2dFokC3MDPs=;
+        b=p95AFf1UhqeegrzowP5Q0b1EA7btBBhKT5Bln3a0kT2CvUrF7b/xQGzyAa6cvppdwY
+         dHKvZwIMwqSPztkyleNemsuFL5Gt16P0WexEUCmEw9eEE62hova0uGOSySkJaBruGhvf
+         RpTpjpyxKEebq2/lgCUIU6A6Qs2oybIPMmK1GZKotapdl26BuPWUNgdEWcGgyfwHDk46
+         XlPntEWBaiubr8GCLvEKq8kJVginasIq1iBQbi8ABARIe2tPfLJAM0C4NKQaAFuWGTbd
+         UqT9ENb/J3m7q7+rulwfOsoyJyu+jyNlbeCJGi+3yRXiDGN6r3p8FgWxE6bMLyM8SQ7/
+         uzmQ==
+X-Gm-Message-State: AOAM532lvRu/IFC0cpNeKI0SY3c+/PHBlspdsbyCLfzlRJHJvOIl7EIv
+        pSulQ9sM27fzAVC1jCBfPMg=
+X-Google-Smtp-Source: ABdhPJx0v6korpyB8h6BDWyEOwqsxyPCZL9duyZc0agqAuGZCniOG6GcAsi3Yl8ykX7bLor6SFXhpA==
+X-Received: by 2002:a63:d312:: with SMTP id b18mr2071718pgg.198.1640164341930;
+        Wed, 22 Dec 2021 01:12:21 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id y65sm1470011pgd.79.2021.12.22.01.12.20
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 22 Dec 2021 01:12:21 -0800 (PST)
+From:   Vincent Shih <vincent.sunplus@gmail.com>
+To:     srinivas.kandagatla@linaro.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        wells.lu@sunplus.com, vincent.shih@sunplus.com
+Cc:     Vincent Shih <vincent.sunplus@gmail.com>
+Subject: [PATCH v4 0/2] Add driver for OCOTP in Sunplus SP7021 SoC
+Date:   Wed, 22 Dec 2021 17:12:24 +0800
+Message-Id: <1640164346-26818-1-git-send-email-vincent.sunplus@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the objtool/urgent branch of tip:
+This is a patch series for OCOTP driver for Sunplus SP7021 SoC.
 
-Commit-ID:     cb8747b7d2a9e3d687a19a007575071d4b71cd05
-Gitweb:        https://git.kernel.org/tip/cb8747b7d2a9e3d687a19a007575071d4b71cd05
-Author:        Ismael Luceno <ismael@iodev.co.uk>
-AuthorDate:    Mon, 15 Nov 2021 14:46:47 +01:00
-Committer:     Josh Poimboeuf <jpoimboe@redhat.com>
-CommitterDate: Tue, 21 Dec 2021 15:09:46 -08:00
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD Card and
+etc.) into a single chip. It is designed for industrial control.
 
-uapi: Fix undefined __always_inline on non-glibc systems
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-This macro is defined by glibc itself, which makes the issue go unnoticed on
-those systems.  On non-glibc systems it causes build failures on several
-utilities and libraries, like bpftool and objtool.
+Vincent Shih (2):
+  nvmem: Add driver for OCOTP in Sunplus SP7021
+  dt-bindings: nvmem: Add bindings doc for Sunplus OCOTP driver
 
-Fixes: 1d509f2a6ebc ("x86/insn: Support big endian cross-compiles")
-Fixes: 2d7ce0e8a704 ("tools/virtio: more stubs")
-Fixes: 3fb321fde22d ("selftests/net: ipv6 flowlabel")
-Fixes: 50b3ed57dee9 ("selftests/bpf: test bpf flow dissection")
-Fixes: 9cacf81f8161 ("bpf: Remove extra lock_sock for TCP_ZEROCOPY_RECEIVE")
-Fixes: a4b2061242ec ("tools include uapi: Grab a copy of linux/in.h")
-Fixes: b12d6ec09730 ("bpf: btf: add btf print functionality")
-Fixes: c0dd967818a2 ("tools, include: Grab a copy of linux/erspan.h")
-Fixes: c4b6014e8bb0 ("tools: Add copy of perf_event.h to tools/include/linux/")
+ .../bindings/nvmem/sunplus,sp7021-ocotp.yaml       |  86 ++++++++
+ MAINTAINERS                                        |   6 +
+ drivers/nvmem/Kconfig                              |  12 ++
+ drivers/nvmem/Makefile                             |   2 +
+ drivers/nvmem/sunplus-ocotp.c                      | 228 +++++++++++++++++++++
+ 5 files changed, 334 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/sunplus,sp7021-ocotp.yaml
+ create mode 100644 drivers/nvmem/sunplus-ocotp.c
 
-Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20211115134647.1921-1-ismael@iodev.co.uk
-Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
----
- include/uapi/linux/byteorder/big_endian.h    | 1 +
- include/uapi/linux/byteorder/little_endian.h | 1 +
- 2 files changed, 2 insertions(+)
+-- 
+2.7.4
 
-diff --git a/include/uapi/linux/byteorder/big_endian.h b/include/uapi/linux/byteorder/big_endian.h
-index 2199adc..80aa5c4 100644
---- a/include/uapi/linux/byteorder/big_endian.h
-+++ b/include/uapi/linux/byteorder/big_endian.h
-@@ -9,6 +9,7 @@
- #define __BIG_ENDIAN_BITFIELD
- #endif
- 
-+#include <linux/stddef.h>
- #include <linux/types.h>
- #include <linux/swab.h>
- 
-diff --git a/include/uapi/linux/byteorder/little_endian.h b/include/uapi/linux/byteorder/little_endian.h
-index 601c904..cd98982 100644
---- a/include/uapi/linux/byteorder/little_endian.h
-+++ b/include/uapi/linux/byteorder/little_endian.h
-@@ -9,6 +9,7 @@
- #define __LITTLE_ENDIAN_BITFIELD
- #endif
- 
-+#include <linux/stddef.h>
- #include <linux/types.h>
- #include <linux/swab.h>
- 

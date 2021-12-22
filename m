@@ -2,127 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 690B447D669
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4692B47D671
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344572AbhLVSUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 13:20:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233546AbhLVSUi (ORCPT
+        id S1344586AbhLVSUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 13:20:55 -0500
+Received: from mail-qt1-f174.google.com ([209.85.160.174]:42948 "EHLO
+        mail-qt1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233546AbhLVSUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 13:20:38 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777ABC061574;
-        Wed, 22 Dec 2021 10:20:38 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id l17so2701415qtk.7;
-        Wed, 22 Dec 2021 10:20:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nE81ujb6OmoPtIGC2vwOgu441bnmiMYHv33pIJNjxXM=;
-        b=a+8t54TA0h6q1QRbxVEiuA7iBhJd3+sdf5jvdegQWzDd8jwFbZTuVugkotOxLtA3Gv
-         GLvjzrn0TCCcx/JCjQyTa+3weU6iaHOeeen45jjHNBCv63tktH5VqCGbwKegQKwNaGUA
-         btF2fsP20zHPTpTzkvIg/a1+fWrqHDJHaFJrYPP+jPsFO/LE2zmfzhH7Q7cr71YcOEYC
-         PiLXPcD+ImAQgx/8fag8M3iEXml+DfnHKZHYfIgUo9SPKJlKCaoBpfS+j5ln4LpN0ztq
-         v1TQOO+BZcwfItZ6MxFXHM/9J3+CIouQlV+QrygdhjHHTQmXskCUttJLa/q1C94txZ+o
-         D10g==
+        Wed, 22 Dec 2021 13:20:54 -0500
+Received: by mail-qt1-f174.google.com with SMTP id z9so2698045qtj.9;
+        Wed, 22 Dec 2021 10:20:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=nE81ujb6OmoPtIGC2vwOgu441bnmiMYHv33pIJNjxXM=;
-        b=k8z/0VGr7SidT0htE1cSzRNzYsZegdsSU1B4MJ1l1zWzGQScMJ8ieGva5QLnKoU5nG
-         78xHe6VDzVl8rhQsaTVY3jAiO9ED60Ck11g0+xtdDKQBrpY3t59VHelw39qvPBX4xYOm
-         JraYorK4QL/Wznff4n4jnAXr/AFfsEoOoaboVLGK1F+/YRqtQVBlgugJZjUk4etVxF1Q
-         1ydhZJjJ6y8qHKr+BxKX3Ll7HuDVmFN3uCupzpqag0HSEu/USZsjZB4BeBJ0n/aFNrTw
-         qV9tXglAYdPJz+KnGWxI53cylGNyPtTBZDRe4VU020wtGP6132y5cJWFZ0DKWv/nY4qv
-         8IrA==
-X-Gm-Message-State: AOAM533PaJ59Y/zZ6fQFZMGNjNIqNU/+RtFmabQiKqC54vpsNcWgapw5
-        qx0VZ82vFFneQL9dZ15fTyk=
-X-Google-Smtp-Source: ABdhPJymXvYVqa076ox4DDt3Mhp8PglCNBk265y6xXNkc3Y8cGlhE9mv67NO5hmRs9rc8tsq29teWQ==
-X-Received: by 2002:ac8:5fcc:: with SMTP id k12mr3256383qta.217.1640197236454;
-        Wed, 22 Dec 2021 10:20:36 -0800 (PST)
-Received: from shaak (69-165-204-82.cable.teksavvy.com. [69.165.204.82])
-        by smtp.gmail.com with ESMTPSA id bk25sm2365949qkb.13.2021.12.22.10.20.34
+        bh=XRcKcj+cA5XUzfaaLDrt+fgsCeFBFXEbRB10f73PiyY=;
+        b=HpQkxD8PFEW1pXKzrcbAq4JNa/CYjCzCyVbK/FeoAPuu+lI2G4CORO39HWa77WlXJ5
+         KuQV0zWDfTz55rXrNGljIuVnqgH8ppTXTxjNqIjTr5am9uOTaQJjGXen45Eq4nLvixUV
+         JCpEBsaNaDyWif/zPbdJN8GQVYzahE9kSDGThS9e0PtPTmMTtHcUEp8mHUkJw4yn9NQg
+         76+RHoo/j0DcPhnVkLToNa542R5AapmPdzs7JsBtDajybkjRXeFEXEjCNSYkSoMQvgU8
+         Q+kQEkAWsq/EKUzVcgMEMi7ZRWITpz0/1ZF38hFNRREoBfKEjU/g8866AWZAeLx8YnET
+         e/mQ==
+X-Gm-Message-State: AOAM530+CgEbBBEvJ2AO2riZMibE5SLLHYm+A/i/T0MFsU8//gjvSZ/R
+        tmeZkF+BvX1CI73hnXYnTg==
+X-Google-Smtp-Source: ABdhPJzBkXsa+9kAJPWbu/0STBGBkUvlqE6y6OnQfmhaZwkNESHTX36Exuu8bQZ3A42RH4J1RtvjSA==
+X-Received: by 2002:a05:622a:43:: with SMTP id y3mr3143240qtw.575.1640197252979;
+        Wed, 22 Dec 2021 10:20:52 -0800 (PST)
+Received: from robh.at.kernel.org ([24.55.105.145])
+        by smtp.gmail.com with ESMTPSA id t3sm2256640qtc.7.2021.12.22.10.20.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 10:20:35 -0800 (PST)
-Date:   Wed, 22 Dec 2021 13:20:32 -0500
-From:   Liam Beguin <liambeguin@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v11 04/15] iio: afe: rescale: expose scale processing
- function
-Message-ID: <YcNscJ/fQhI7h6Uq@shaak>
-References: <20211222034646.222189-1-liambeguin@gmail.com>
- <20211222034646.222189-5-liambeguin@gmail.com>
- <CAHp75Vc009o5EunYP3QAB8up8hMrRL7oNax7cjphCFVUgSKXRw@mail.gmail.com>
+        Wed, 22 Dec 2021 10:20:52 -0800 (PST)
+Received: (nullmailer pid 2451021 invoked by uid 1000);
+        Wed, 22 Dec 2021 18:20:50 -0000
+Date:   Wed, 22 Dec 2021 14:20:50 -0400
+From:   Rob Herring <robh@kernel.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     linux-clk@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-serial@vger.kernel.org, netdev@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Magnus Damm <magnus.damm@gmail.com>, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH 01/16] dt-bindings: arm: renesas: Document Renesas RZ/V2L
+ SoC
+Message-ID: <YcNsggkexM75uxni@robh.at.kernel.org>
+References: <20211221094717.16187-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211221094717.16187-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHp75Vc009o5EunYP3QAB8up8hMrRL7oNax7cjphCFVUgSKXRw@mail.gmail.com>
+In-Reply-To: <20211221094717.16187-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
-
-On Wed, Dec 22, 2021 at 12:21:01PM +0200, Andy Shevchenko wrote:
-> On Wed, Dec 22, 2021 at 5:46 AM Liam Beguin <liambeguin@gmail.com> wrote:
-> >
-> > From: Liam Beguin <lvb@xiphos.com>
-> >
-> > In preparation for the addition of kunit tests, expose the logic
-> > responsible for combining channel scales.
+On Tue, 21 Dec 2021 09:47:02 +0000, Lad Prabhakar wrote:
+> From: Biju Das <biju.das.jz@bp.renesas.com>
 > 
-> ...
+> Document Renesas RZ/V2L SoC.
 > 
-> >  #include <linux/gcd.h>
-> >  #include <linux/iio/consumer.h>
-> >  #include <linux/iio/iio.h>
-> > +#include <linux/iio/afe/rescale.h>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  Documentation/devicetree/bindings/arm/renesas.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> It should go before the consumer.h, no?
 
-I don't mind making the change, but why should it go before consumer.h?
-
-> And I would rather move the entire IIO group of headers...
-
-I can do that too. Do we have a convention for the ordering of #includes?
-What's usually the rule/guideline for this?
-
-> >  #include <linux/module.h>
-> >  #include <linux/of.h>
-> >  #include <linux/of_device.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/property.h>
-> 
-> ... somewhere here (with blank line above).
-> 
-> >
-> > -struct rescale;
-> 
-> ...
-> 
-> > +#ifndef __IIO_RESCALE_H__
-> > +#define __IIO_RESCALE_H__
-> > +
-> > +#include <linux/iio/iio.h>
-> 
-> Missed types.h and forward declarations like
-> struct device;
-
-Okay. will add linux/types.h
-
-Cheers,
-Liam
-
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+Acked-by: Rob Herring <robh@kernel.org>

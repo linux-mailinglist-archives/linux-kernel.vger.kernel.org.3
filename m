@@ -2,107 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07D3047D162
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:57:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C644947D168
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240349AbhLVL5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 06:57:15 -0500
-Received: from foss.arm.com ([217.140.110.172]:44044 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229533AbhLVL5O (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 06:57:14 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D6E241FB;
-        Wed, 22 Dec 2021 03:57:13 -0800 (PST)
-Received: from [10.57.34.58] (unknown [10.57.34.58])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 98CCF3F5A1;
-        Wed, 22 Dec 2021 03:57:10 -0800 (PST)
-Message-ID: <2fbc6a98-6569-0a06-c901-9a37e40ccb7c@arm.com>
-Date:   Wed, 22 Dec 2021 11:57:05 +0000
+        id S240382AbhLVMAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 07:00:39 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:37162
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236706AbhLVMAh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 07:00:37 -0500
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C5FC33F1B2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 12:00:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640174436;
+        bh=Uaaf91TsDCVBXCnAeyY/LIJnl+PNE0jBHfxuTjG5pvU=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=snENQkB3y7IbV2gMNu7zgyuBL7z725kHqtRL1Wrmnb0S19N9c2n8Vm074PgugtgyE
+         Zw0x370QkjoBTNTGixrqzZw5foXkZ1OjMC4ULflGZOpe0b63ydyBqhxJc3fOoLYvAt
+         /JYTxhgturCw4GHRv9JEWsN5jZCn3o0O8+4CTZyd2zKWIOO4O8mDQh0jyoLKdXA7wQ
+         mptaQ6BqBFHPUzOU9RsIZYMdlN5U/H+EsV80DT75ieOVhwk/kVt4vKqjYj8sehOE+D
+         SE3eOsRUg1KneP32QctHFscnuEF3XjvcApsBdkEryOVfVes1fU++SUGZK/l4A0z0qt
+         bhbWE0WsNKKlg==
+Received: by mail-lf1-f70.google.com with SMTP id m1-20020ac24281000000b004162863a2fcso1123019lfh.14
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 04:00:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Uaaf91TsDCVBXCnAeyY/LIJnl+PNE0jBHfxuTjG5pvU=;
+        b=78c07v62dmVWXvTI4WbWPhc9wnhf4fusoVGiGDByPXdDBiAqX2s1ggjBAjnq3xUojK
+         IIEpT2yPe5ejYz5nKLRNYdWnkZVEvhwjC671uEB8xKXkVlcT/CuvaAtbLoSrc/cYjngA
+         zDBUus/tAimLndTAJnM4CECU5zRPZES+ibYEMomeWDsNkUPkbuzXqhI9JXIu8rcvxdBs
+         sjYNuWJkAo9L03eAN91qTVDRgDoR+G4Jp6oO3TJ5/1dFKWMgZS5RtZhDIJG8Y1evwPdS
+         esoypwfue63rWDr0oW9QSIOCOOWT18KdZn2kO12BO6U5KfsegDp8dB1VLzyevatNfDY4
+         z5ag==
+X-Gm-Message-State: AOAM532WTkpIPQZIYQosfLW9ZDSQbQQ/aubaDYo5EPSu5ttcVMnk5ILN
+        z4S/DsV+91P7HAIytw4eHsnnSZ0oYQFeJBn7IEYIAx3lZ0OzMtqSkCIIqW5FDitadIFHM4ycFq7
+        RKUHO4rbdYRQKPw+3pkJfrrEo3F8TgcU0fq+06xVgLw==
+X-Received: by 2002:a2e:869a:: with SMTP id l26mr1955121lji.453.1640174435702;
+        Wed, 22 Dec 2021 04:00:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwGmWcDfhNo6CBJNG3HFp7TTZ6jptPYv23b/abs6CwKPO0IOvuX4aBtCxXmD9g9Amy9RbNfUA==
+X-Received: by 2002:a2e:869a:: with SMTP id l26mr1955105lji.453.1640174435441;
+        Wed, 22 Dec 2021 04:00:35 -0800 (PST)
+Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id c24sm194268lfh.153.2021.12.22.04.00.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 04:00:34 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] memory: tegra30-emc: Print additional memory info
+Date:   Wed, 22 Dec 2021 13:00:32 +0100
+Message-Id: <164017442836.13117.15236781204925669127.b4-ty@canonical.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211222043215.28237-1-digetx@gmail.com>
+References: <20211222043215.28237-1-digetx@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v3 4/5] iommu/arm-smmu-v3: Add host support for NVIDIA
- Grace CMDQ-V
-Content-Language: en-GB
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     joro@8bytes.org, will@kernel.org, nicoleotsuka@gmail.com,
-        thierry.reding@gmail.com, vdumpa@nvidia.com, nwatterson@nvidia.com,
-        jean-philippe@linaro.org, thunder.leizhen@huawei.com,
-        chenxiang66@hisilicon.com, Jonathan.Cameron@huawei.com,
-        yuzenghui@huawei.com, linux-kernel@vger.kernel.org,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        jgg@nvidia.com
-References: <20211119071959.16706-1-nicolinc@nvidia.com>
- <20211119071959.16706-5-nicolinc@nvidia.com>
- <b05183b4-e08a-77ff-219c-009a4e42a32b@arm.com>
- <20211220192714.GA27303@Asurada-Nvidia>
- <7e68fa19-90b1-bbb5-9991-36b5d35278fa@arm.com>
- <20211221220037.GA6292@Asurada-Nvidia>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20211221220037.GA6292@Asurada-Nvidia>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-21 22:00, Nicolin Chen wrote:
-[...]
->>>> The challenge to make ECMDQ useful to Linux is how to make sure that all
->>>> the commands expected to be within scope of a future CMND_SYNC plus that
->>>> sync itself all get issued on the same queue, so I'd be mildly surprised
->>>> if you didn't have the same problem.
->>>
->>> PATCH-3 in this series actually helps align the command queues,
->>> between issued commands and SYNC, if bool sync == true. Yet, if
->>> doing something like issue->issue->issue_with_sync, it could be
->>> tricker.
->>
->> Indeed between the iommu_iotlb_gather mechanism and low-level command
->> batching things are already a lot more concentrated than they could be,
->> but arm_smmu_cmdq_batch_add() and its callers stand out as examples of
->> where we'd still be vulnerable to preemption. What I haven't even tried
->> to reason about yet is assumptions in the higher-level APIs, e.g. if
->> io-pgtable might chuck out a TLBI during an iommu_unmap() which we
->> implicitly expect a later iommu_iotlb_sync() to cover.
+On Wed, 22 Dec 2021 07:32:14 +0300, Dmitry Osipenko wrote:
+> Print out memory type and LPDDR2 configuration on Tegra30, making it
+> similar to the memory info printed by the Tegra20 memory driver. This
+> info is useful for debugging purposes.
 > 
-> Though I might have oversimplified the situation here, I see
-> the arm_smmu_cmdq_batch_add() calls are typically followed by
-> arm_smmu_cmdq_batch_submit(). Could we just add a SYNC in the
-> _batch_submit() to all the queues that it previously touched
-> in the _batch_add()?
-
-Keeping track of which queues a batch has touched is certainly possible, 
-but it's yet more overhead to impose across the board when intra-batch 
-preemption should (hopefully) be very rare in practice. I was thinking 
-more along the lines of disabling preemption/migration for the lifetime 
-of a batch, or more pragmatically just hoisting the queue selection all 
-the way out to the scope of the batch itself (which also conveniently 
-seems about the right shape for potentially forking off a whole other 
-dedicated command submission flow from that point later).
-
-We still can't mitigate inter-batch preemption, though, so we'll just 
-have to audit everything very carefully to make sure we don't have (or 
-inadvertently introduce in future) any places where that could be 
-problematic. We really want to avoid over-syncing as that's liable to 
-end up being just as bad for performance as the contention that we're 
-nominally avoiding.
-
->> I've been thinking that in many ways per-domain queues make quite a bit
->> of sense and would be easier to manage than per-CPU ones - plus that's
->> pretty much the usage model once we get to VMs anyway - but that fails
->> to help the significant cases like networking and storage where many
->> CPUs are servicing a big monolithic device in a single domain :(
 > 
-> Yea, and it's hard to assume which client would use CMDQ more
-> frequently, in order to balance or assign more queues to that
-> client, which feels like a QoS conundrum.
 
-Indeed, plus once we start assigning queues to VMs we're going to want 
-to remove them from the general pool for host usage, so we definitely 
-want to plan ahead here.
+Applied, thanks!
 
-Cheers,
-Robin.
+[1/2] memory: tegra30-emc: Print additional memory info
+      commit: 23a0ea001466a9d063f65254110ac7f07f5c3937
+[2/2] memory: tegra20-emc: Correct memory device mask
+      commit: e2f01d07fad2c3fd3875a2d7dd62e1903fdf874c
+
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>

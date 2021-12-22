@@ -2,98 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB5F47CA79
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 01:39:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF8947CA83
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 01:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238354AbhLVAjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 19:39:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231169AbhLVAjk (ORCPT
+        id S238415AbhLVApj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 19:45:39 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:2281 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230412AbhLVApi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 19:39:40 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934D7C061574;
-        Tue, 21 Dec 2021 16:39:39 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id i22so1273710wrb.13;
-        Tue, 21 Dec 2021 16:39:39 -0800 (PST)
+        Tue, 21 Dec 2021 19:45:38 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xVXHL7FyFxnwIsqjzuFgRIVfeBo1Zhxkx+qtv0+xi04=;
-        b=pFdy/hdzx33MmHp/o4hC90x9UO/y/ld6yECrNWmF7DW7V7UUw6x6+cWoXxctyLxmrW
-         u2pRZoA+96YeEqOGT3ysANZ9B//0Grn8oUseK7jeZnGLC0xor3VUUZrwFe44RXiaGKpg
-         AlG5PR4oQqa7zVVUoQNNt5SyBDIKs/jZwl83/6Nl0BCMKhkWJ3706TtX6nlk7pD5YOKc
-         csBUUoet3ZAdtzpIAdcRO4XotAVB5eyp7d+bLh+Ty03ppGGh5VWq/5Sg5wV+6xYVXUsR
-         aDyjQk3g58/JSl+XUyyvBPWgUMoybT9FBWb5OzODmyoJP8qrS9S/mtNCXPML23FVnup0
-         7J7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xVXHL7FyFxnwIsqjzuFgRIVfeBo1Zhxkx+qtv0+xi04=;
-        b=ZKJUpU6jksZUacdIsGbsjvMEEa00qVNjJs4Wj2MmhT73AVVMUj9Pvv5L+/UUX2xegO
-         fwAnDYcX/SEklwqHIKmBQ+rWRlH07hmUli0/4twN7h5D0QbEYdzaW/pfn5X8G7NM5JY+
-         2TRVPD++boY/LdR8yqnPCDAw4lMFdm3YQZtcdIv32J33I2jJmJIJmZM8fNi16sMpZqul
-         e+Ek/XxoEKOr8b6E880WW1X3vDK0N1Hx6btr+1ufMJK2RD3PUoNWQ4LVHbuzWvjZCFoX
-         JI/AENJB6OLnS2HhzZ3ir4DHoCw032/tY81njykBT2gB5r21icRfZyibNfJRHAA0/zQD
-         FKpQ==
-X-Gm-Message-State: AOAM531FLGhbR+E8iVwDBgSf1AKmJud2hq3ytxJPBj5K4xsmAQbrQafW
-        KE6ZVWla27EPQzt9q1WkCqqZJn7njzUsmmUhUXujTQ==
-X-Google-Smtp-Source: ABdhPJyQkmqMUWb4XESZ7RcmFhsZh8H5eyWabK6v0OfoUKK5st4FaQFR55DDnykKiqjhNfHmP6k0RA==
-X-Received: by 2002:a05:6000:1acd:: with SMTP id i13mr403677wry.406.1640133578286;
-        Tue, 21 Dec 2021 16:39:38 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id i9sm438746wrb.84.2021.12.21.16.39.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 16:39:37 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        bcm-kernel-feedback-list@broadcom.com,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: broadcom: bcm4908enet: remove redundant variable bytes
-Date:   Wed, 22 Dec 2021 00:39:37 +0000
-Message-Id: <20211222003937.727325-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1640133938; x=1671669938;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=GJaQ5FkdpJLd0SOS8siK4lgiyGjMx7yBQQ7gb5ulYLM=;
+  b=Pt34Yb7LS3TGtNtH5zJ6KF59L/eZxJJU6KfRgdvmd/mY/x5UHSEyKp0g
+   0+69rmPdQ0IX3TvalcfIyffBPACKNXQE+fYQfrhH4BxKBcOPm/d0EdP0I
+   R3amwX4P77w2BZHR2fUc+r4JpeB8OmeSw6S46Gc/eq9dw19B0/gTc2pvs
+   Y=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 21 Dec 2021 16:45:38 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 16:45:37 -0800
+Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 21 Dec 2021 16:45:37 -0800
+Received: from [10.231.205.174] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 21 Dec
+ 2021 16:45:34 -0800
+Message-ID: <b35d0f12-1de2-9e15-2d87-5049614eeff1@quicinc.com>
+Date:   Wed, 22 Dec 2021 08:45:31 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v4 11/11] dt-bindings: convert qcom,spmi-pmic-arb binding
+ to YAML format
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
+        <devicetree@vger.kernel.org>, <collinsd@codeaurora.org>,
+        <subbaram@codeaurora.org>, <tglx@linutronix.de>, <maz@kernel.org>
+References: <1640071211-31462-1-git-send-email-quic_fenglinw@quicinc.com>
+ <1640071211-31462-12-git-send-email-quic_fenglinw@quicinc.com>
+ <YcHn0MLuqvMHbmuO@robh.at.kernel.org>
+From:   Fenglin Wu <quic_fenglinw@quicinc.com>
+In-Reply-To: <YcHn0MLuqvMHbmuO@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable bytes is being used to summate slot lengths,
-however the value is never used afterwards. The summation
-is redundant so remove variable bytes.
+resend with plain text
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/net/ethernet/broadcom/bcm4908_enet.c | 2 --
- 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bcm4908_enet.c b/drivers/net/ethernet/broadcom/bcm4908_enet.c
-index b07cb9bc5f2d..4a2622b05ee1 100644
---- a/drivers/net/ethernet/broadcom/bcm4908_enet.c
-+++ b/drivers/net/ethernet/broadcom/bcm4908_enet.c
-@@ -635,7 +635,6 @@ static int bcm4908_enet_poll_tx(struct napi_struct *napi, int weight)
- 	struct bcm4908_enet_dma_ring_bd *buf_desc;
- 	struct bcm4908_enet_dma_ring_slot *slot;
- 	struct device *dev = enet->dev;
--	unsigned int bytes = 0;
- 	int handled = 0;
- 
- 	while (handled < weight && tx_ring->read_idx != tx_ring->write_idx) {
-@@ -646,7 +645,6 @@ static int bcm4908_enet_poll_tx(struct napi_struct *napi, int weight)
- 
- 		dma_unmap_single(dev, slot->dma_addr, slot->len, DMA_TO_DEVICE);
- 		dev_kfree_skb(slot->skb);
--		bytes += slot->len;
- 		if (++tx_ring->read_idx == tx_ring->length)
- 			tx_ring->read_idx = 0;
- 
--- 
-2.33.1
+On 2021/12/21 22:42, Rob Herring wrote:
+> On Tue, Dec 21, 2021 at 03:20:09PM +0800, Fenglin Wu wrote:
+>> Convert the SPMI PMIC arbiter documentation to JSON/yaml.
+>>
+>> Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
+>> ---
+>>   .../bindings/spmi/qcom,spmi-pmic-arb.txt           |  67 ----------
+>>   .../bindings/spmi/qcom,spmi-pmic-arb.yaml          | 146 +++++++++++++++++++++
+>>   2 files changed, 146 insertions(+), 67 deletions(-)
+>>   delete mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
+>>   create mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
+>>
+> 
+>> diff --git a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
+>> new file mode 100644
+>> index 0000000..df8cfb7
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
+>> @@ -0,0 +1,146 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/spmi/qcom,spmi-pmic-arb.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Qualcomm SPMI PMIC Arbiter
+>> +
+>> +maintainers:
+>> +  - Fenglin Wu <quic_fenglinw@quicinc.com>
+>> +  - Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+>> +
+>> +description: |
+>> +  The SPMI PMIC Arbiter is found on Snapdragon chipsets. It is an SPMI
+>> +  controller with wrapping arbitration logic to allow for multiple
+>> +  on-chip devices to control a single SPMI master.
+>> +
+>> +  The PMIC Arbiter can also act as an interrupt controller, providing
+>> +  interrupts to slave devices.
+>> +
+>> +  See Documentation/devicetree/bindings/spmi/spmi.yaml for the generic
+>> +  SPMI controller binding requirements for child nodes.
+>> +
+>> +allOf:
+>> +  - $ref: spmi.yaml#
+>> +
+>> +properties:
+>> +  $nodename:
+>> +    pattern: "^spmi@.*"
+>> +
+>> +  compatible:
+>> +    const: qcom,spmi-pmic-arb
+>> +
+>> +  reg-names:
+>> +    $ref: /schemas/types.yaml#/definitions/string-array
+> 
+> reg-names already has a type defined.
+I understand there is a pattern property defined in dt-core.yaml and it 
+defines ".*-names" as a "non-unique-string-array" type. But here, the 
+strings in "reg-names" needs to be unique and it has to be ["core", 
+"intr", "cnfg"] or ["core", "intr", "cnfg", "chnls", "obsrvr"] , that's 
+why I redefined it as "string-array" type which requires each string to 
+be unique. Otherwise, if any dtsi nodes define the "reg-name" as 
+["core", "core", "core"] will not be caught as a fault.
 
+> 
+>> +    anyOf:
+>> +      - minItems: 3
+>> +      - maxItems: 3
+>> +      - enum: ["core", "intr", "cnfg"]
+>> +
+>> +      - minItems: 5
+>> +      - maxItems: 5
+>> +      - enum: ["core", "intr", "cnfg", "chnls", "obsrvr"]
+> 
+> I think you want something like this:
+> 
+> minItems: 3
+> items:
+>    - const: core
+>    - const: intr
+>    - const: cnfg
+>    - const: chnls
+>    - const: obsrvr
+> 
+> 
+As I said, the content for "reg-names" here only has two options , 
+either ["core", "intr", "cnfg"] or ["core", "intr", "cnfg", "chnls", 
+"obsrvr"]. In patch V3, I defined it as below and "make dtbs_check" 
+threw out warnings because some of existing nodes defined "reg-names" 
+with these strings are not having the same order as I defined here (I 
+understood from the warnings that const items need to be followed 
+strictly even in order wise, is this correct?), and I guess the order of 
+the strings doesn't matter here and the schema here shouldn't have such 
+limitation, so I updated it as the "array-string" type and specified the 
+tuples can only be one of the strings defined in the enum. With this, 
+the previous warning regarding "reg-names" in "make dtbs_check" are all 
+fixed.
+
+   reg-names:
+     oneOf:
+       - items:
+           - const: core
+           - const: intr
+           - const: cnfg
+       - items:
+           - const: core
+           - const: intr
+           - const: cnfg
+           - const: chnls
+           - const: obsrvr
+
+
+>> +
+>> +  reg:
+>> +    minItems: 3
+>> +    maxItems: 5
+>> +    description: |
+>> +      Specifies base physical address and size of the registers in SPMI PMIC
+>> +      Arbiter HW module, with the following order.
+>> +        - SPMI PMIC arbiter core registers (core)
+>> +        - SPMI PMIC arbiter interrupt controller registers (intr)
+>> +        - SPMI PMIC arbiter configuration registers (cnfg)
+>> +        - SPMI PMIC arbiter tx-channel per virtual slave registers (chnls)
+>> +        - SPMI PMIC arbiter rx-channel per virtual slave registers (obsrvr).
+>> +      Register for "chnls" and "obsrvr" are only applicable for PMIC arbiter
+>> +      with HW version greater than V2.
+>> +
+>> +  "#address-cells":
+>> +    const: 2
+>> +
+>> +  "#size-cells":
+>> +    const: 0
+>> +
+>> +  interrupts:
+>> +    description: The summary interrupt for the PMIC Arb controller.
+>> +    maxItems: 1
+>> +
+>> +  interrupt-names:
+>> +    const: periph_irq
+>> +
+>> +  interrupt-controller: true
+>> +
+>> +  "#interrupt-cells":
+>> +    const: 4
+>> +    description: |
+>> +      Specifies the number of cells needed to encode any interrupt source.
+>> +      The 1st cell is the slave ID for the requested interrupt, its valid
+>> +      range is [0-15].
+>> +      The 2nd cell is the  peripheral ID for requested interrupt, its valid
+>> +      range is [0-255].
+>> +      The 3rd cell is the requested peripheral interrupt, its valid range
+>> +      is [0-7].
+>> +      The 4th cell is interrupt flags indicating level-sense information,
+>> +      as defined in dt-bindings/interrupt-controller/irq.h
+>> +
+>> +  qcom,ee:
+>> +    description: the active Execution Environment identifier
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    enum: [0, 1, 2, 3, 4, 5]
+>> +
+>> +  qcom,channel:
+>> +    description: which of the PMIC Arbiter provided channels to use for accesses
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    enum: [0, 1, 2, 3, 4, 5]
+>> +
+> 
+>> +patternProperties:
+>> +  "@[0-9a-f]$":
+>> +    description: up to 16 child PMIC nodes
+>> +    type: object
+>> +
+>> +    properties:
+>> +      reg:
+>> +        items:
+>> +          - minItems: 1
+>> +            items:
+>> +              - minimum: 0
+>> +                maximum: 0xf
+>> +              - enum: [ 0 ]
+>> +                description:
+>> +                  0 means user ID address. 1 is reserved for group ID
+>> +                  address.
+>> +
+>> +    required:
+>> +      - reg
+> 
+> All this should be covered by spmi.yaml
+> 
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg-names
+>> +  - reg
+>> +  - "#address-cells"
+>> +  - "#size-cells"
+>> +  - qcom,ee
+>> +  - qcom,channel
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    spmi@fc4cf000 {
+>> +          compatible = "qcom,spmi-pmic-arb";
+>> +          reg-names = "core", "intr", "cnfg";
+>> +          reg = <0xfc4cf000 0x1000>,
+>> +                <0xfc4cb000 0x1000>,
+>> +                <0xfc4ca000 0x1000>;
+>> +          interrupt-names = "periph_irq";
+>> +          interrupts = <0 190 0>;
+>> +          interrupt-controller;
+>> +          #interrupt-cells = <4>;
+>> +
+>> +          qcom,ee = <0>;
+>> +          qcom,channel = <0>;
+>> +
+>> +          #address-cells = <2>;
+>> +          #size-cells = <0>;
+>> +    };
+>> -- 
+>> 2.7.4
+>>
+>>

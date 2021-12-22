@@ -2,86 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7947D47D244
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9E547D1F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245152AbhLVMnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 07:43:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244989AbhLVMmg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:42:36 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89221C061757;
-        Wed, 22 Dec 2021 04:42:35 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id bm14so8187115edb.5;
-        Wed, 22 Dec 2021 04:42:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0PHB2DbyuqWjb8kOPRMCAabVl++BybmOaXAT1jQnLdE=;
-        b=A3aSKk0zsqKWt+N5dbDvZnR4TsIGtDoP9kAPs5+0kxYIEBmxB6Vb/Yx6Kj3y+jETgw
-         quiZ6gPo4KKWywQ13342Mc1UOABJvfvMy4hpHwZ5A/MOZF1HOgvsle0lS6fl5aBBp4P9
-         xtzENL4wML613CCYM7STBCQ0tzXknUbL+THotmvNnPTe5ZE7nlHR8UgBp2EnArNwpTGH
-         4qpXzwiz9ejiflfBFWSXCtR0ouvspEnaAn3c1T6k/gXGrBDxUdg2OFmcSaiOVO9OxTgD
-         JZs26eFkCWL/8NncABavxU5CeWI9FK1uJAEzDrur7Vbq9D8kJTedLY4aZqFcjRG+1X8y
-         iiCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0PHB2DbyuqWjb8kOPRMCAabVl++BybmOaXAT1jQnLdE=;
-        b=E8+f42v+bOH+BXxkzT4xCQq+5QmFedj1Jq1F424s7hBLkYCTR0JcIvaYQxnuM1higN
-         U8ncnVmEtfRcphUK19M1RLGAzh7zK+OROaDKIAZP8aMxfzG+YWOzklIrIgxE+1jYzuGo
-         n9VuoG+dGV2zA4SQhtLxQofESh9N6qn6lfMWkzgqfwzQrM+K1Srculgy6vZeSAdMPFmR
-         RP/dQ2RLHAPU1eZP26EWioB7p9qQOorztxUHUmiKMRQDTW1oihsu+8zzi2aY7kagvrl+
-         ZDo2wMrdafvn2Ol1hKLRuHRpb/kvmmWy7p/KmXl+wlafLgnGsYVAarSCN+AKAVREAsLf
-         M2cw==
-X-Gm-Message-State: AOAM533msJtbJHDKsaI9iXhEtj+0MZ4pyyzD42V+TlH7DsHAeJxJTOh4
-        +Kp2bh5sV5JQAOpxhNSoJBg5XzhNLKiwZMe7Uqk=
-X-Google-Smtp-Source: ABdhPJwhAUvQ/IAad0o9VyMvINqUtW7Yn7BvDa5bqAfmkvgWiK1Qh0+09stpi2FbCU9QA3buCd3YEhZkroARzxwUrYo=
-X-Received: by 2002:a17:907:6d8d:: with SMTP id sb13mr2360256ejc.132.1640176953787;
- Wed, 22 Dec 2021 04:42:33 -0800 (PST)
+        id S245072AbhLVMlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 07:41:10 -0500
+Received: from mga14.intel.com ([192.55.52.115]:11437 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244949AbhLVMk6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 07:40:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640176858; x=1671712858;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=7dXZPVEDoLzyZy2Pl21Dl3pKMjJYI7sq2Em4vBDIQI4=;
+  b=VuwfOyiJ2S6x1w232vI6TyjhOoOcRYhqRX/eGcczTscxQ/qYdGRZYS3T
+   GQXcdd37YB3OC5yeMSPn/HJsy7CDp3syNBP48fkcqjRZ6tDblnN7IG99N
+   94N8NtAlZyzobe4Wm3WNA+OeC7KROp0jHEnD6Q7c+6VuTQJgCU6DG8/4L
+   DSZp62u/so5HRBCvX42xXqZTvp5qeriG+Yp97+xyrLLPO6dvqPMwb1VA7
+   TG2EHCdtzTbae5drkj/nYPBxKOFbxxWaWI1Fy7kB0UwInLjuqiHKwfxuM
+   8vzeZrFH96Ch5v2G/Vyw/ICKHHuF1f1ZVtXhkEMhw8wr2N7o6IVha/CDd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240833410"
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="240833410"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 04:40:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="587002718"
+Received: from 984fee00a228.jf.intel.com ([10.165.56.59])
+  by fmsmga004.fm.intel.com with ESMTP; 22 Dec 2021 04:40:57 -0800
+From:   Jing Liu <jing2.liu@intel.com>
+To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, pbonzini@redhat.com, corbet@lwn.net,
+        shuah@kernel.org
+Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, jing2.liu@intel.com,
+        guang.zeng@intel.com, wei.w.wang@intel.com, yang.zhong@intel.com
+Subject: [PATCH v3 06/22] x86/fpu: Make XFD initialization in __fpstate_reset() a function argument
+Date:   Wed, 22 Dec 2021 04:40:36 -0800
+Message-Id: <20211222124052.644626-7-jing2.liu@intel.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20211222124052.644626-1-jing2.liu@intel.com>
+References: <20211222124052.644626-1-jing2.liu@intel.com>
 MIME-Version: 1.0
-References: <20211222034646.222189-1-liambeguin@gmail.com> <20211222034646.222189-14-liambeguin@gmail.com>
-In-Reply-To: <20211222034646.222189-14-liambeguin@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 22 Dec 2021 14:40:35 +0200
-Message-ID: <CAHp75VfC5-C1JuY4r_26tR7ds-f=S6BCPNde=TEBbWNW6hBrnQ@mail.gmail.com>
-Subject: Re: [PATCH v11 13/15] iio: afe: rescale: add temperature transducers
-To:     Liam Beguin <liambeguin@gmail.com>
-Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 5:47 AM Liam Beguin <liambeguin@gmail.com> wrote:
->
-> From: Liam Beguin <lvb@xiphos.com>
->
-> A temperature transducer is a device that converts a thermal quantity
-> into any other physical quantity. This patch add support for temperature
+vCPU threads are different from native tasks regarding to the initial XFD
+value. While all native tasks follow a fixed value (init_fpstate::xfd)
+established by the FPU core at boot, vCPU threads need to obey the reset
+value (i.e. ZERO) defined by the specification, to meet the expectation of
+the guest.
 
-This patch add --> Add a
+Let the caller supply an argument and adjust the host and guest related
+invocations accordingly.
 
-> to voltage (like the LTC2997) and temperature to current (like the
-> AD590) linear transducers.
-> In both cases these are assumed to be connected to a voltage ADC.
+Signed-off-by: Yang Zhong <yang.zhong@intel.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Jing Liu <jing2.liu@intel.com>
+---
+ arch/x86/kernel/fpu/core.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-...
-
-> +       rescale->numerator = MICRO;
-
-Same comment, please double check we imply 10^-6 and not 10^6 here.
-
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index eddeeb4ed2f5..a78bc547fc03 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -199,7 +199,7 @@ void fpu_reset_from_exception_fixup(void)
+ }
+ 
+ #if IS_ENABLED(CONFIG_KVM)
+-static void __fpstate_reset(struct fpstate *fpstate);
++static void __fpstate_reset(struct fpstate *fpstate, u64 xfd);
+ 
+ static void fpu_init_guest_permissions(struct fpu_guest *gfpu)
+ {
+@@ -231,7 +231,8 @@ bool fpu_alloc_guest_fpstate(struct fpu_guest *gfpu)
+ 	if (!fpstate)
+ 		return false;
+ 
+-	__fpstate_reset(fpstate);
++	/* Leave xfd to 0 (the reset value defined by spec) */
++	__fpstate_reset(fpstate, 0);
+ 	fpstate_init_user(fpstate);
+ 	fpstate->is_valloc	= true;
+ 	fpstate->is_guest	= true;
+@@ -454,21 +455,21 @@ void fpstate_init_user(struct fpstate *fpstate)
+ 		fpstate_init_fstate(fpstate);
+ }
+ 
+-static void __fpstate_reset(struct fpstate *fpstate)
++static void __fpstate_reset(struct fpstate *fpstate, u64 xfd)
+ {
+ 	/* Initialize sizes and feature masks */
+ 	fpstate->size		= fpu_kernel_cfg.default_size;
+ 	fpstate->user_size	= fpu_user_cfg.default_size;
+ 	fpstate->xfeatures	= fpu_kernel_cfg.default_features;
+ 	fpstate->user_xfeatures	= fpu_user_cfg.default_features;
+-	fpstate->xfd		= init_fpstate.xfd;
++	fpstate->xfd		= xfd;
+ }
+ 
+ void fpstate_reset(struct fpu *fpu)
+ {
+ 	/* Set the fpstate pointer to the default fpstate */
+ 	fpu->fpstate = &fpu->__fpstate;
+-	__fpstate_reset(fpu->fpstate);
++	__fpstate_reset(fpu->fpstate, init_fpstate.xfd);
+ 
+ 	/* Initialize the permission related info in fpu */
+ 	fpu->perm.__state_perm		= fpu_kernel_cfg.default_features;
 -- 
-With Best Regards,
-Andy Shevchenko
+2.27.0
+

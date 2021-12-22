@@ -2,99 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF3847D40C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:59:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDEB47D411
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 16:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343638AbhLVO7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 09:59:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
+        id S1343640AbhLVO76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 09:59:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343659AbhLVO7f (ORCPT
+        with ESMTP id S241492AbhLVO74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:59:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91021C061574;
-        Wed, 22 Dec 2021 06:59:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39BC761AEF;
-        Wed, 22 Dec 2021 14:59:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2DBBC36AE8;
-        Wed, 22 Dec 2021 14:59:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640185174;
-        bh=vCnQR+VhWGP/oq1VpBT5c/Gf1g+52375THRgDt52HI8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s87AsxSviFqP4w4PKBnDXj2GKaNXUXmKFFD6QY+HcwbjtfnkSECT6y3kZM03F38cQ
-         eWyBZgYdigQPgdHrKqlgvaSgb43cXrytr9pAgzM7x4+BsVeww9jtQfJpOGnZMyTmxA
-         VQfuxz2eg7Wm9gJzbJIFqSO/HRsO+kWjRuADlyPzQbWNCW4nFgSEE6ob1rD7/ND+gD
-         p7w+ZmRs2u6muF4dPtQI4kcMq65sHKD/OK89mjfYSkCGmNRTuEh9DIr3VF7vFQuNHJ
-         GZc1gfQdIQGO1vt/4kKMOQuKeshPdfOFVN7xqXid4vRDWMMIiH3+Plispcjh9m830b
-         6xT3tecMRLWjQ==
-Date:   Wed, 22 Dec 2021 14:59:30 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Oskari =?iso-8859-1?Q?Lemmel=E4?= <oskari@lemmela.net>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] spi: ar934x: fix transfer size
-Message-ID: <YcM9Ug3JhaxynLt0@sirena.org.uk>
-References: <20211222055958.1383233-1-oskari@lemmela.net>
- <20211222055958.1383233-2-oskari@lemmela.net>
- <YcMa1TIg3x3oBKBl@sirena.org.uk>
- <98a574a2-45c3-5d7c-6405-0cd279a81816@lemmela.net>
+        Wed, 22 Dec 2021 09:59:56 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B133C061401
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:59:56 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id jw3so2516982pjb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:59:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=R4fAvto+5kiJhIGMycVJNRIDsGMunfWc3NoA9gToFxc=;
+        b=yAYsIew16rDxK2O8IBSr18NkIZNRERvjTpiLlglFWe7mdn+WkOxn6IU5Ar2X5kHWqW
+         71UgZbTwcoNT5Olu2zDRURo8mWCi+LY6l3M3D3UXfEZicV7wCMfOj7Op5zDWDfVIx2w3
+         CRK/Tf/UZM5tSjXeKNEoQbC9F6PHwtEL0AzoihUU5ccqp0U28BRygvV3N2MKvDNhg5on
+         pyYw73E46Vhal0zXq/48c7XQxUPw4ihx2Jlb3TMYhB8cjTOutZEgY+XvDoWnVPBlcFG/
+         aBOtJOiU8njTxlHaBeQMLTt8LMz2WSbXCA62sVBTUVYano6heJeY3yrb1IFIEHIMWthq
+         DPCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=R4fAvto+5kiJhIGMycVJNRIDsGMunfWc3NoA9gToFxc=;
+        b=riIqEpADkbkHRUfbj2F2cpPU7Z1fMb/eOr559e8hNrEdRtpiTI5MgCr+H6KA5kL2sf
+         JsCui9SJlnxWXIvHe2cztMFBG6oSCl47HYGbXY16iiDyVUw7nWjilzY01hFZMBiL/h+8
+         SoHJzE0yUIq793qlK3UvefbprhivZUO+bw1iII8oyaWt9YgFnnkV4rtUY9TvLvHI5MEG
+         JKJELxbMkQriPoo3KcXaOdvkWfdbWBryJAqKhuZ4zI1JfMeKZybTCxWen2LsZ7l0+9vr
+         ZpOHmfq7fV1G56rqoMSS6ZOKjhw3q9iyyQSn8fVICtW15OAWao8/dJBipjXzaP+taLii
+         3Yvg==
+X-Gm-Message-State: AOAM5310AvzhFf2T/65WeSa5YVh9U5FuIxcFHtBmRVf1oEw406sU1oV+
+        y6iTWCoz7UXe9CTmWa9voDjcU4Y8RZk1TBHdW4Rq/Q==
+X-Google-Smtp-Source: ABdhPJxD+B+hmQU/gZDQgKwOCAzSvQG1Z4rSyD47kKB+7bVpUE/kfF9NRmwJWNjPCxWHnv2nROBlW7MbbxP2zerqXEs=
+X-Received: by 2002:a17:90a:a6d:: with SMTP id o100mr1780124pjo.179.1640185195954;
+ Wed, 22 Dec 2021 06:59:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zTjvtHddp2R5PWDu"
-Content-Disposition: inline
-In-Reply-To: <98a574a2-45c3-5d7c-6405-0cd279a81816@lemmela.net>
-X-Cookie: Weekend, where are you?
+References: <20211206151811.39271-1-robert.foss@linaro.org> <20211206151811.39271-2-robert.foss@linaro.org>
+In-Reply-To: <20211206151811.39271-2-robert.foss@linaro.org>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Wed, 22 Dec 2021 15:59:44 +0100
+Message-ID: <CAG3jFys1MO461TeWMdasVS0B_ya5NU=5mMomchq_nZ+X+v07SQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] media: camss: csiphy: Move to hardcode CSI Clock
+ Lane number
+To:     robert.foss@linaro.org, todor.too@gmail.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, mchehab@kernel.org, robh+dt@kernel.org,
+        angelogioacchino.delregno@somainline.org,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Bjorn: The CAMSS changes related to this series have just been applied
+to the media tree, so I think this series is ready to be applied now.
 
---zTjvtHddp2R5PWDu
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Dec 22, 2021 at 04:27:36PM +0200, Oskari Lemmel=E4 wrote:
-> On 22.12.2021 14.32, Mark Brown wrote:
-
-> > Does this actually materially affect what the hardware does?  How much
-> > data is transferred in an internal loop in the driver is completely
-> > immaterial, bits per word only matters for formatting of the transferred
-> > data.
-
-> I don't have logic analyzator to verify what hardware actual does.
-> I tested this with transferring 32bits to ATSAMD20J15 slave.
-> Running loop in 8bits or 16bits, transfer is done correctly without
-> any errors. When running loop in 24bits or 32bits directly I got
-> error from spi_sync_transfer.
-
-This doesn't inspire confidence TBH.  Given the lack of any change in
-the interaction with the hardware it doesn't seem likely that the word
-length is being changed at any point.  Possibly there's a bug somewhere
-that needs fixing but it's been misdiagnosed.
-
-Note also that the commit log is not good here, now I look at the code
-the driver only supports 8 bits per word at the minute and the change
-adds support for higher word lengths.  If you are seeing an issue that
-might point towards what it is.
-
---zTjvtHddp2R5PWDu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHDPVEACgkQJNaLcl1U
-h9Ah9gf+Lm0wPKvrwj0LPu4zRr+b4A2CLlpCl+wmfy/rCUTf3aesyWfRAAhIhFN8
-AX5YWiinPuRcGvpdWeornL64++BSGulLwAXTFukpGAXDBjDNtpuxh3G2UluJkHBR
-L8hXEo02iN3M8ZZmmSL1ND6V8CA3Ldq3KVVPx8WuoTmuuuRA293fzHdigVk4Ge8g
-FbDOgwBKdbnucEWi2IcRqz/raJL9aGk7+lQP+w5g6mxjrnekQrGiGV2h5Jlwpy8i
-6cVWzIwkhPvglFpHQ3C7VO1jWj+MrifUMO2k/KSJm3o3+NjG2nG/0suTdMmXi/3x
-z0MvhKft2kO1jwH2BDZ4QW+yv+ggEA==
-=zHa7
------END PGP SIGNATURE-----
-
---zTjvtHddp2R5PWDu--
+https://lore.kernel.org/all/20211206151811.39271-1-robert.foss@linaro.org/

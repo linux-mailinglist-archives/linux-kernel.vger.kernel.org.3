@@ -2,84 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C99347D780
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:12:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF7E47D77E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237516AbhLVTMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 14:12:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234913AbhLVTMj (ORCPT
+        id S1345150AbhLVTLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 14:11:13 -0500
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:39439 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345107AbhLVTLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 14:12:39 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF4FC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 11:12:38 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id bm14so12447729edb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 11:12:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fyrpWmBDffIXpDpE9r2nAUOucNSJb08zIyrGVuC0WBY=;
-        b=PznTpRzt31liGkKFDqT5mT0nuJEUiJ/Oo8nOjFZKW17EpT0QwYGJbnAIr6jy0K4EKN
-         +FB72gV+KCeuyb5uPBnN2HPZNRiU2lvHaOS6MYa2Tp8KTXL5GiKe1jgzxXG39JuEpHiX
-         RyMnsboN1Vf+kLCWuc8PGnu+onBZk7JQxSoLDaR/oQdDYvfh8cRcKf7WWqxt8hfrQbjX
-         EFCrSdeyOZelfJf3960Hv+poAxHJYlp/keKvqmg6iVqHOyU3nVC1tUzNRMI4rFkDg43Y
-         iH2o64+CJFtrfytK9Qg2CjUFHYUseGJTFfH9BB3tnsYnxEBKFs4aNJGfJl0I20RaEUnd
-         RC4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fyrpWmBDffIXpDpE9r2nAUOucNSJb08zIyrGVuC0WBY=;
-        b=7rz6UDYCorasHhtkBef0lQAUXyYV6VE8MQinU0EBnF0dUeu5Oz2w6+QXGEIxZ9obqe
-         5h/tdcBL3Nn5WrgDpqsDm1crehVMU67xd7GbnbbRPI8kDSzXWlwMT7289Bp45EiFN1JV
-         XL9jrVXsi7D3SZXwcgcavlnxqguUC/TjBZFlh8Rzn+CDw+EWvdtmYvaS+ZZ80lbzFc2R
-         bQCgYONwARt4ILcl05u3ROAWaIvUnVvip20QZCvruurIQaGdAImNr0PZCpPOONDC5h4R
-         AuejZssvnPXBpnJ/VPlDQY7d/WD+vX2o9ioViUjsjz7ROjY8KJBDtOKNX/MlUQ8wCdd2
-         RQIA==
-X-Gm-Message-State: AOAM531pki3Z74C5Eb+1M+9pI+fcNpy9HCcEZFx2JmEw+V4J/ABtLSdu
-        szOgk7eTjmn44sIHpJqLbQq/lhj5IpUV9u+aIkcqROUbVr0=
-X-Google-Smtp-Source: ABdhPJy0Z8vkD4nq2X1x4bH/ViHnqlldjlghhWOvSUfcDmcIDnYqlu83mm0qGnuNpAhwVryiDFoAaEhTfEXRi0dtJPc=
-X-Received: by 2002:a05:6402:849:: with SMTP id b9mr2702711edz.258.1640200357120;
- Wed, 22 Dec 2021 11:12:37 -0800 (PST)
+        Wed, 22 Dec 2021 14:11:02 -0500
+Received: (Authenticated sender: repk@triplefau.lt)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 0D4B91BF207;
+        Wed, 22 Dec 2021 19:10:57 +0000 (UTC)
+From:   Remi Pommarel <repk@triplefau.lt>
+To:     netdev@vger.kernel.org
+Cc:     Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        bridge@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Remi Pommarel <repk@triplefau.lt>
+Subject: [PATCH net] net: bridge: fix ioctl old_deviceless bridge argument
+Date:   Wed, 22 Dec 2021 20:13:20 +0100
+Message-Id: <20211222191320.17662-1-repk@triplefau.lt>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <CAHp75Vdjp9_67xe0PeZ9LzcJ=eNxB0qVqPJqtFEvh3SDgcdODw@mail.gmail.com>
-In-Reply-To: <CAHp75Vdjp9_67xe0PeZ9LzcJ=eNxB0qVqPJqtFEvh3SDgcdODw@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 22 Dec 2021 21:10:38 +0200
-Message-ID: <CAHp75VeQcD5Git6sgsrwCkW+AHPxPhvHZD4kuOt6o0PZsjjPdg@mail.gmail.com>
-Subject: Re: header circular dependencies
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        John Ogness <john.ogness@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 9:08 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> `make headerdep` is full of printk.h circular dependencies, like
->
-> include/kvm/arm_vgic.h:18: warning: recursive header inclusion
+Commit 561d8352818f ("bridge: use ndo_siocdevprivate") changed the
+source and destination arguments of copy_{to,from}_user in bridge's
+old_deviceless() from args[1] to uarg breaking SIOC{G,S}IFBR ioctls.
 
-For the clearness, 18 here is with one of my (not related to printk,h)
-patches, but the line in question is inclusion of jump_label.h. In the
-original code it's 16.
+Commit cbd7ad29a507 ("net: bridge: fix ioctl old_deviceless bridge
+argument") fixed only BRCTL_{ADD,DEL}_BRIDGES commands leaving
+BRCTL_GET_BRIDGES one untouched.
 
-> In file included from linux/printk.h,
->                 from linux/dynamic_debug.h:188
->                 from linux/printk.h:555 <-- here
->
-> I'm wondering if it's a false positive?
-> In either case, can we teach the headerdep not to complain by fixing
-> the culprit?
+The fixes BRCTL_GET_BRIDGES as well
 
+Fixes: 561d8352818f ("bridge: use ndo_siocdevprivate")
+Signed-off-by: Remi Pommarel <repk@triplefau.lt>
+---
+ net/bridge/br_ioctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/bridge/br_ioctl.c b/net/bridge/br_ioctl.c
+index db4ab2c2ce18..891cfcf45644 100644
+--- a/net/bridge/br_ioctl.c
++++ b/net/bridge/br_ioctl.c
+@@ -337,7 +337,7 @@ static int old_deviceless(struct net *net, void __user *uarg)
+ 
+ 		args[2] = get_bridge_ifindices(net, indices, args[2]);
+ 
+-		ret = copy_to_user(uarg, indices,
++		ret = copy_to_user((void __user *)args[1], indices,
+ 				   array_size(args[2], sizeof(int)))
+ 			? -EFAULT : args[2];
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.33.0
+

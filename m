@@ -2,106 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91FDD47CFDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 11:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8353A47CFDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 11:21:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244124AbhLVKVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 05:21:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236558AbhLVKVj (ORCPT
+        id S244138AbhLVKVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 05:21:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24446 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244126AbhLVKVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 05:21:39 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7F2C061574;
-        Wed, 22 Dec 2021 02:21:38 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id w16so6602123edc.11;
-        Wed, 22 Dec 2021 02:21:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TU7dyJKQKtUa7Bp992pXfOwL0ZeVphvql4VDb9W1uSE=;
-        b=SCwI4pttJkVZfAaYOFBQTFCh9jhK4Le26UvobhIjJsqDrdonlYFwSwOMIimkKd/R1z
-         mdk/5wsw+IaUIzNPQGMTQ+XPRHwprMcWxWYEAoPWH68XaRgwSRLJ7Wjzn5TQNhGY7QZi
-         GoSPR2bqv4Z9dDNWkZXhq9MzEs7aIkwUsDJXU8o+ucThFyA2aXQKZlv/uDw4vjDbWCP+
-         LWwqk3gugDPJoihlT4xy6joCOtPF8bCiYjX8qvONLhmsGnOKlHqtK+t4I+/fEXUSyph7
-         oSB75AYAd5TG0SRzGVkPC55wdQ13W9Gdsan+TDbm1V5cykis8pjK+Kl/eC6QDtM0lJrg
-         cr1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TU7dyJKQKtUa7Bp992pXfOwL0ZeVphvql4VDb9W1uSE=;
-        b=OaJwzFt2+To/rWsjdq1qxsJHyiIEcYx9WaXasSGcSRRyUTTHLupJ0YooBj7vpKYn0N
-         I29B0D7uipBzB9q3BJDVlb3045htkG3jI1xCO4d2VeF3pcO4gKS0QF4TP5cwVph4pAsq
-         NfcvU8Ri+ZFT0InCeAMLWtd9xW9X+p/KpWEnQ192UXO49cnOB+cOIadNU0AKLGsmGNAn
-         8Pylkd3uP/A8WwIhbt1nwCw3l0tz84hBU/BQ1IO+dI3suhm4YkK4EB2u0YZPTu0t4lOF
-         yIT4z2Bkqy7GlCfH4kdvZxFocTlOVjDOTtSxq/3Wr0/P4ZfNXN9JG5YLhEAbu1FxsFln
-         4EEw==
-X-Gm-Message-State: AOAM533r9bzrLECk3uVjFSHCAIK85qdbXZzUke+YrwQROXBcUzFLg1Oy
-        IOVJUjOnviyKaKA6uDRD1aoVpJruMULbCvYbOa9+wIzFyGD+lA==
-X-Google-Smtp-Source: ABdhPJyhZIjLhbrjZZCaoOxbVuoWLmJbZAnmJRjj4wvpf/lS3YOi45QDeSykT7cyVLSPJKuIhSWkbWt3De4HN6hyx1g=
-X-Received: by 2002:aa7:cd75:: with SMTP id ca21mr2204212edb.242.1640168497416;
- Wed, 22 Dec 2021 02:21:37 -0800 (PST)
+        Wed, 22 Dec 2021 05:21:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640168504;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=J3yvO4cXgbZxOlydhSiK2v9Tckc8inZjlFWlSIoyww0=;
+        b=ewT25VXTbIgrEyFXhGyn1QV8Spb0Ul6Ms5B9Rf0o72IMqgbpC3cRVQtu0by9QJ+2rv2hkm
+        2muvuwUBOPshtZvkCN0vi+1/cGaXlhVePJcJwiVlJPFLi+jO8Uu3XBAqNcVuXr1xJmgfO1
+        zBbJg7ObjNKAf2HJutBf2VaZ+EgzSpM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-86-3KUcni5SOvazGs4afVTvLw-1; Wed, 22 Dec 2021 05:21:39 -0500
+X-MC-Unique: 3KUcni5SOvazGs4afVTvLw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0364A100C612;
+        Wed, 22 Dec 2021 10:21:38 +0000 (UTC)
+Received: from sirius.home.kraxel.org (unknown [10.39.193.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9F7C94E2CD;
+        Wed, 22 Dec 2021 10:21:37 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id 968651800616; Wed, 22 Dec 2021 11:21:35 +0100 (CET)
+Date:   Wed, 22 Dec 2021 11:21:35 +0100
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v3 03/10] drm/bochs: Replace module-init boiler-plate
+ code with DRM helpers
+Message-ID: <20211222102135.fhtfkinp2u6yjwx3@sirius.home.kraxel.org>
+References: <20211222082831.196562-1-javierm@redhat.com>
+ <20211222082831.196562-4-javierm@redhat.com>
 MIME-Version: 1.0
-References: <20211222034646.222189-1-liambeguin@gmail.com> <20211222034646.222189-5-liambeguin@gmail.com>
-In-Reply-To: <20211222034646.222189-5-liambeguin@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 22 Dec 2021 12:21:01 +0200
-Message-ID: <CAHp75Vc009o5EunYP3QAB8up8hMrRL7oNax7cjphCFVUgSKXRw@mail.gmail.com>
-Subject: Re: [PATCH v11 04/15] iio: afe: rescale: expose scale processing function
-To:     Liam Beguin <liambeguin@gmail.com>
-Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211222082831.196562-4-javierm@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 5:46 AM Liam Beguin <liambeguin@gmail.com> wrote:
->
-> From: Liam Beguin <lvb@xiphos.com>
->
-> In preparation for the addition of kunit tests, expose the logic
-> responsible for combining channel scales.
+On Wed, Dec 22, 2021 at 09:28:24AM +0100, Javier Martinez Canillas wrote:
+> -static int __init bochs_init(void)
+> -{
+> -	if (drm_firmware_drivers_only() && bochs_modeset == -1)
+> -		return -EINVAL;
 
-...
+Also cleanup bochs_modeset?  I guess its not used any more after this
+patch ...
 
->  #include <linux/gcd.h>
->  #include <linux/iio/consumer.h>
->  #include <linux/iio/iio.h>
-> +#include <linux/iio/afe/rescale.h>
+take care,
+  Gerd
 
-It should go before the consumer.h, no?
-
-And I would rather move the entire IIO group of headers...
-
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  #include <linux/property.h>
-
-... somewhere here (with blank line above).
-
->
-> -struct rescale;
-
-...
-
-> +#ifndef __IIO_RESCALE_H__
-> +#define __IIO_RESCALE_H__
-> +
-> +#include <linux/iio/iio.h>
-
-Missed types.h and forward declarations like
-struct device;
-
--- 
-With Best Regards,
-Andy Shevchenko

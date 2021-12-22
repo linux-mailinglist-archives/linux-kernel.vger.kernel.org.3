@@ -2,285 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CA647D081
+	by mail.lfdr.de (Postfix) with ESMTP id 4100047D080
 	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244404AbhLVLGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 06:06:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244385AbhLVLGT (ORCPT
+        id S244394AbhLVLGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 06:06:11 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:21325 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244393AbhLVLGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 06:06:19 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3183C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:06:18 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id z29so7126092edl.7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:06:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3GJ2M7D00c9DrjeKXYAsHrRWfIE9Y74Q5SgYDeIG00E=;
-        b=pYJ4JxftgjRqtfoMgc4081dUripTuSoYBTTM62uOp1tt3/GabyzCz55hcejgjUlOtr
-         uZmoyUD4Fis/YSXDEAYh0pd+7wu1cIIZ2JAuHDmBcVdwGIuVC5iTj97wi05/cmwQs5gF
-         niC5dqXsCKOz/5PKniVM9rAfGDEzQToPeOiQxIul91LKBD+RTiAFxtbJrkRxFVpcL5Th
-         C91xqlNA0gUWSMy3kQ36Q5olqq7zyffx8hLhBcyQlwLZbKBX0VmUaaCSzwWf5LuAXzij
-         u/N1eaMJeyVvqkrMSJ5VWIM3AanmihSk2lz+KnhiFx2P9W6ZcE8g5J8GYQ111+OPLs/8
-         nSAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3GJ2M7D00c9DrjeKXYAsHrRWfIE9Y74Q5SgYDeIG00E=;
-        b=mm+bleYKViMrIP63IomDJN8FrjtQs+DArDZSWfQvrlksOvR9eB4E7xvjTrDlIesjYy
-         f4uB6PZhlxroxtKi4feqGafkreGPTXv0I6OKaWVaodFH/2UExErRXT6yLpCT8EK3Mqk1
-         HSh+/lHNtkx4v1WIg+y2T8NXz5EZ609iDbUisYPejSxnjP4rxgVnRszGtU5mX4G/E7/M
-         MoWyH7G3YFKrBPpSt3xJcyHCikawQ3DWKJ2CyspwbfndJJ9HxoF1mmi/zd87bnJBiAYp
-         YzhB5d8li/v2hOcSGNp3m4eAGZCb8IjCfv/7di7QsoTsaQrS0XYiJlbGFNVURz2kxra4
-         Aj5w==
-X-Gm-Message-State: AOAM532+A9W1SzQ4LEYFWH3EHZeBGjblCURelbJtpaVcBK8w+O4EHmVG
-        9NJfHr+i1z28LeJXdBbydegCF4SztasihrlpjbI=
-X-Google-Smtp-Source: ABdhPJxxeK4wdEZ/KpoifPgoa5FXJ+6SBhtfvNfRrMEjJks0QR6WMqLEztZ/GC7Wsy8gYEL4zIEc0uEetqgqXCDPf2A=
-X-Received: by 2002:a05:6402:891:: with SMTP id e17mr2418777edy.227.1640171177332;
- Wed, 22 Dec 2021 03:06:17 -0800 (PST)
+        Wed, 22 Dec 2021 06:06:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1640171165; x=1671707165;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=g5J3Rh22DQzCivBDmFhnr6iSZpsLXO0SLAoKTREpPtE=;
+  b=x7LRDP52cb7ETB0UKP4GkpuJzxijyvbZ3KBujBoqsKvdTUitXE14ie9/
+   w+24/9H8NfWYvyxqL0gAEa+xm5F+mZhC5Xiyt89HyYOhETwwPUlyMv/B6
+   1cvzZqPZIZm7NYYdScL4nE7m2fjMrD5h0AQnQNO7c1LGWJRAqxJavZ8YO
+   IT7erFBfwl5WNRZOyRft+/wqOAmlnPCXM4RZAo4GmigMdjTOFiEPhpsst
+   sT86HfGtz/D6jsS9m/sT5rw4//UBxUGHw0f3M7pQlOvCwwl1RY4FKKqlw
+   SGx0aU1dCCCAK1jPbnjmiw9nUkhSadhZWUvXh7o6inr1dDvL17QJ0MwNP
+   g==;
+IronPort-SDR: 9VuNPD3oF1kIHsRfBokY8y/DAOkKLuzIVzTVRnwQxIhQArzwDydHhQR2bYEILrdQ4kj8USmx5C
+ pyLqaA+V3bIhhjEfyx8ZhvDy+xQhLo7AI7JhMUwr0PHC1gr7gzyvQ3/Xu5bnArUsqY0/eP4K+A
+ 2rb5qR9tjHkuBhyoe5tZFNveDTJxBgrD/y+EedMN8e0Zo1nqOQbnkKl82K8ONJIZjnFnlJawB2
+ OihsAd1R3z4cvWGMptaBbLp5gTOwe9VKVkghmhF4dyYOXZ0mSKt5Q23WyKpGXrUO7smgTY8OCM
+ fdHAKjwQTQU7E/L+XPbrXsOg
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="140583721"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Dec 2021 04:06:02 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 22 Dec 2021 04:06:01 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 22 Dec 2021 04:05:59 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <linux@armlinux.org.uk>,
+        <f.fainelli@gmail.com>, <vivien.didelot@gmail.com>,
+        <vladimir.oltean@nxp.com>, <andrew@lunn.ch>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next] net: lan966x: Add support for multiple bridge flags
+Date:   Wed, 22 Dec 2021 12:07:59 +0100
+Message-ID: <20211222110759.1404383-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20211215041149.73171-1-yangyicong@hisilicon.com>
- <20211215041149.73171-2-yangyicong@hisilicon.com> <YcL80lUZi4f9zqjB@BLR-5CG11610CF.amd.com>
-In-Reply-To: <YcL80lUZi4f9zqjB@BLR-5CG11610CF.amd.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Thu, 23 Dec 2021 00:06:05 +1300
-Message-ID: <CAGsJ_4y_G74f1KEze__i_1qFOF30DMWaD=R3ww8rvvRMHvPELA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] sched: Add per_cpu cluster domain info and
- cpus_share_cluster API
-To:     "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-Cc:     Yicong Yang <yangyicong@hisilicon.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        prime.zeng@huawei.com,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        ego@linux.vnet.ibm.com,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Guodong Xu <guodong.xu@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 11:24 PM Gautham R. Shenoy
-<gautham.shenoy@amd.com> wrote:
->
-> Hello Yicong, Barry,
->
->
-> On Wed, Dec 15, 2021 at 12:11:48PM +0800, Yicong Yang wrote:
-> > From: Barry Song <song.bao.hua@hisilicon.com>
-> >
-> > Add per-cpu cluster domain info and cpus_share_cluster() API.
-> > This is the preparation for the optimization of select_idle_cpu()
-> > on platforms with cluster scheduler level.
-> >
-> > Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
-> > Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> > ---
-> >  include/linux/sched/sd_flags.h |  5 +++++
-> >  include/linux/sched/topology.h |  8 +++++++-
-> >  kernel/sched/core.c            | 12 ++++++++++++
-> >  kernel/sched/sched.h           |  2 ++
-> >  kernel/sched/topology.c        |  9 +++++++++
-> >  5 files changed, 35 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/include/linux/sched/sd_flags.h b/include/linux/sched/sd_flags.h
-> > index 57bde66d95f7..0f732bcfbb2c 100644
-> > --- a/include/linux/sched/sd_flags.h
-> > +++ b/include/linux/sched/sd_flags.h
-> > @@ -109,6 +109,11 @@ SD_FLAG(SD_ASYM_CPUCAPACITY_FULL, SDF_SHARED_PARENT | SDF_NEEDS_GROUPS)
-> >   */
-> >  SD_FLAG(SD_SHARE_CPUCAPACITY, SDF_SHARED_CHILD | SDF_NEEDS_GROUPS)
-> >
-> > +/*
-> > + * Set up for cluster domains sharing resources such as llc tags or l2
-> > + */
-> > +SD_FLAG(SD_CLUSTER, SDF_NEEDS_GROUPS)
-> > +
-> >  /*
-> >   * Domain members share CPU package resources (i.e. caches)
-> >   *
-> > diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
-> > index c07bfa2d80f2..78c3a94fae66 100644
-> > --- a/include/linux/sched/topology.h
-> > +++ b/include/linux/sched/topology.h
-> > @@ -45,7 +45,7 @@ static inline int cpu_smt_flags(void)
-> >  #ifdef CONFIG_SCHED_CLUSTER
-> >  static inline int cpu_cluster_flags(void)
-> >  {
-> > -     return SD_SHARE_PKG_RESOURCES;
-> > +     return SD_CLUSTER | SD_SHARE_PKG_RESOURCES;
->
-> On non-cluster systems, there would be only one group at the at the
-> CLS domain. Since SD_CLUSTER is also tagged with SDF_NEEDS_GROUP, it
-> would need the presence of two groups. Thus, on such non-cluster
-> systems, the CLS domain will continue to be degenerated in favour of
-> the SMT domain.
->
-> >  }
-> >  #endif
-> >
-> > @@ -177,6 +177,7 @@ cpumask_var_t *alloc_sched_domains(unsigned int ndoms);
-> >  void free_sched_domains(cpumask_var_t doms[], unsigned int ndoms);
-> >
-> >  bool cpus_share_cache(int this_cpu, int that_cpu);
-> > +bool cpus_share_cluster(int this_cpu, int that_cpu);
-> >
-> >  typedef const struct cpumask *(*sched_domain_mask_f)(int cpu);
-> >  typedef int (*sched_domain_flags_f)(void);
-> > @@ -230,6 +231,11 @@ static inline bool cpus_share_cache(int this_cpu, int that_cpu)
-> >       return true;
-> >  }
-> >
-> > +static inline bool cpus_share_cluster(int this_cpu, int that_cpu)
-> > +{
-> > +     return true;
-> > +}
-> > +
-> >  #endif       /* !CONFIG_SMP */
-> >
-> >  #if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index 3c9b0fda64ac..11f9b25c3068 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -3732,6 +3732,18 @@ bool cpus_share_cache(int this_cpu, int that_cpu)
-> >       return per_cpu(sd_llc_id, this_cpu) == per_cpu(sd_llc_id, that_cpu);
-> >  }
-> >
-> > +/*
-> > + * On non-Cluster machine this function works same with cpus_share_cache()
-> > + * as sd_cluster_id equals to sd_llc_id.
-> > + */
->
-> Ok, so on a non-cluster machine, a cluster is trivially defined to be
-> a single core (this is reflected in what the cpu_cluster_mask() shows
-> up on such machines).
->
-> However, in cpus_share_cluster(), we are upgrading the definition of a
-> cluster to be group of CPUs that share the LLC. This is inconsistent
-> with the original definition. Is there a way to avoid this
-> inconsistency ?
+This patch series extends the current supported bridge flags with the
+following flags: BR_FLOOD, BR_BCAST_FLOOD and BR_LEARNING.
 
-Hi gautham,
-Yep but I wrote this trick to keep the change in patch2/2 compatible
-with non-cluster machine:
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ .../ethernet/microchip/lan966x/lan966x_main.c |  7 ++
+ .../ethernet/microchip/lan966x/lan966x_main.h |  2 +
+ .../ethernet/microchip/lan966x/lan966x_regs.h |  6 ++
+ .../microchip/lan966x/lan966x_switchdev.c     | 69 ++++++++++++++++++-
+ 4 files changed, 82 insertions(+), 2 deletions(-)
 
-@@ -6384,7 +6422,7 @@ static int select_idle_sibling(struct
-task_struct *p, int prev, int target)
-  /*
-  * If the previous CPU is cache affine and idle, don't be stupid:
-  */
-- if (prev != target && cpus_share_cache(prev, target) &&
-+ if (prev != target && cpus_share_cluster(prev, target) &&
-     (available_idle_cpu(prev) || sched_idle_cpu(prev)) &&
-     asym_fits_capacity(task_util, prev))
-  return prev;
-@@ -6408,7 +6446,7 @@ static int select_idle_sibling(struct
-task_struct *p, int prev, int target)
-  p->recent_used_cpu = prev;
-  if (recent_used_cpu != prev &&
-     recent_used_cpu != target &&
--    cpus_share_cache(recent_used_cpu, target) &&
-+    cpus_share_cluster(recent_used_cpu, target) &&
-     (available_idle_cpu(recent_used_cpu) || sched_idle_cpu(recent_used_cpu)) &&
-     cpumask_test_cpu(p->recent_used_cpu, p->cpus_ptr) &&
-     asym_fits_capacity(task_util, recent_used_cpu)) {
-@@ -6449,7 +6487,7 @@ static int select_idle_sibling(struct
-task_struct *p, int prev, int target)
-  }
-  }
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+index 5b9f004ad902..16f4d8737d7b 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+@@ -715,8 +715,10 @@ static void lan966x_init(struct lan966x *lan966x)
+ 	/* There are 8 priorities */
+ 	for (i = 0; i < 8; ++i)
+ 		lan_rmw(ANA_FLOODING_FLD_MULTICAST_SET(PGID_MC) |
++			ANA_FLOODING_FLD_UNICAST_SET(PGID_UC) |
+ 			ANA_FLOODING_FLD_BROADCAST_SET(PGID_BC),
+ 			ANA_FLOODING_FLD_MULTICAST |
++			ANA_FLOODING_FLD_UNICAST |
+ 			ANA_FLOODING_FLD_BROADCAST,
+ 			lan966x, ANA_FLOODING(i));
+ 
+@@ -768,6 +770,11 @@ static void lan966x_init(struct lan966x *lan966x)
+ 		ANA_PGID_PGID,
+ 		lan966x, ANA_PGID(PGID_MCIPV4));
+ 
++	/* Unicast to all other ports */
++	lan_rmw(GENMASK(lan966x->num_phys_ports - 1, 0),
++		ANA_PGID_PGID,
++		lan966x, ANA_PGID(PGID_UC));
++
+ 	/* Broadcast to the CPU port and to other ports */
+ 	lan_rmw(ANA_PGID_PGID_SET(BIT(CPU_PORT) | GENMASK(lan966x->num_phys_ports - 1, 0)),
+ 		ANA_PGID_PGID,
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+index 051182890237..c399b1256edc 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+@@ -126,6 +126,8 @@ struct lan966x_port {
+ 	u16 vid;
+ 	bool vlan_aware;
+ 
++	bool learn_ena;
++
+ 	struct phylink_config phylink_config;
+ 	struct phylink_pcs phylink_pcs;
+ 	struct lan966x_port_config config;
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h b/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h
+index 2f2b26b9f8c6..a13c469e139a 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h
+@@ -91,6 +91,12 @@ enum lan966x_target {
+ /*      ANA:ANA:FLOODING */
+ #define ANA_FLOODING(r)           __REG(TARGET_ANA, 0, 1, 29824, 0, 1, 244, 68, r, 8, 4)
+ 
++#define ANA_FLOODING_FLD_UNICAST                 GENMASK(17, 12)
++#define ANA_FLOODING_FLD_UNICAST_SET(x)\
++	FIELD_PREP(ANA_FLOODING_FLD_UNICAST, x)
++#define ANA_FLOODING_FLD_UNICAST_GET(x)\
++	FIELD_GET(ANA_FLOODING_FLD_UNICAST, x)
++
+ #define ANA_FLOODING_FLD_BROADCAST               GENMASK(11, 6)
+ #define ANA_FLOODING_FLD_BROADCAST_SET(x)\
+ 	FIELD_PREP(ANA_FLOODING_FLD_BROADCAST, x)
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c b/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c
+index 42c3170030d0..deb3dd5be67a 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c
+@@ -25,18 +25,72 @@ static void lan966x_port_set_mcast_flood(struct lan966x_port *port,
+ 		port->lan966x, ANA_PGID(PGID_MC));
+ }
+ 
++static void lan966x_port_set_ucast_flood(struct lan966x_port *port,
++					 bool enabled)
++{
++	u32 val = lan_rd(port->lan966x, ANA_PGID(PGID_UC));
++
++	val = ANA_PGID_PGID_GET(val);
++	if (enabled)
++		val |= BIT(port->chip_port);
++	else
++		val &= ~BIT(port->chip_port);
++
++	lan_rmw(ANA_PGID_PGID_SET(val),
++		ANA_PGID_PGID,
++		port->lan966x, ANA_PGID(PGID_UC));
++}
++
++static void lan966x_port_set_bcast_flood(struct lan966x_port *port,
++					 bool enabled)
++{
++	u32 val = lan_rd(port->lan966x, ANA_PGID(PGID_BC));
++
++	val = ANA_PGID_PGID_GET(val);
++	if (enabled)
++		val |= BIT(port->chip_port);
++	else
++		val &= ~BIT(port->chip_port);
++
++	lan_rmw(ANA_PGID_PGID_SET(val),
++		ANA_PGID_PGID,
++		port->lan966x, ANA_PGID(PGID_BC));
++}
++
++static void lan966x_port_set_learning(struct lan966x_port *port, bool enabled)
++{
++	lan_rmw(ANA_PORT_CFG_LEARN_ENA_SET(enabled),
++		ANA_PORT_CFG_LEARN_ENA,
++		port->lan966x, ANA_PORT_CFG(port->chip_port));
++
++	port->learn_ena = enabled;
++}
++
+ static void lan966x_port_bridge_flags(struct lan966x_port *port,
+ 				      struct switchdev_brport_flags flags)
+ {
+ 	if (flags.mask & BR_MCAST_FLOOD)
+ 		lan966x_port_set_mcast_flood(port,
+ 					     !!(flags.val & BR_MCAST_FLOOD));
++
++	if (flags.mask & BR_FLOOD)
++		lan966x_port_set_ucast_flood(port,
++					     !!(flags.val & BR_FLOOD));
++
++	if (flags.mask & BR_BCAST_FLOOD)
++		lan966x_port_set_bcast_flood(port,
++					     !!(flags.val & BR_BCAST_FLOOD));
++
++	if (flags.mask & BR_LEARNING)
++		lan966x_port_set_learning(port,
++					  !!(flags.val & BR_LEARNING));
+ }
+ 
+ static int lan966x_port_pre_bridge_flags(struct lan966x_port *port,
+ 					 struct switchdev_brport_flags flags)
+ {
+-	if (flags.mask & ~BR_MCAST_FLOOD)
++	if (flags.mask & ~(BR_MCAST_FLOOD | BR_FLOOD | BR_BCAST_FLOOD |
++			   BR_LEARNING))
+ 		return -EINVAL;
+ 
+ 	return 0;
+@@ -65,7 +119,8 @@ static void lan966x_port_stp_state_set(struct lan966x_port *port, u8 state)
+ 	struct lan966x *lan966x = port->lan966x;
+ 	bool learn_ena = false;
+ 
+-	if (state == BR_STATE_FORWARDING || state == BR_STATE_LEARNING)
++	if ((state == BR_STATE_FORWARDING || state == BR_STATE_LEARNING) &&
++	    port->learn_ena)
+ 		learn_ena = true;
+ 
+ 	if (state == BR_STATE_FORWARDING)
+@@ -128,6 +183,7 @@ static int lan966x_port_bridge_join(struct lan966x_port *port,
+ 				    struct net_device *bridge,
+ 				    struct netlink_ext_ack *extack)
+ {
++	struct switchdev_brport_flags flags = {0};
+ 	struct lan966x *lan966x = port->lan966x;
+ 	struct net_device *dev = port->dev;
+ 	int err;
+@@ -150,14 +206,23 @@ static int lan966x_port_bridge_join(struct lan966x_port *port,
+ 
+ 	lan966x->bridge_mask |= BIT(port->chip_port);
+ 
++	flags.mask = BR_LEARNING | BR_FLOOD | BR_MCAST_FLOOD | BR_BCAST_FLOOD;
++	flags.val = flags.mask;
++	lan966x_port_bridge_flags(port, flags);
++
+ 	return 0;
+ }
+ 
+ static void lan966x_port_bridge_leave(struct lan966x_port *port,
+ 				      struct net_device *bridge)
+ {
++	struct switchdev_brport_flags flags = {0};
+ 	struct lan966x *lan966x = port->lan966x;
+ 
++	flags.mask = BR_LEARNING | BR_FLOOD | BR_MCAST_FLOOD | BR_BCAST_FLOOD;
++	flags.val = flags.mask & ~BR_LEARNING;
++	lan966x_port_bridge_flags(port, flags);
++
+ 	lan966x->bridge_mask &= ~BIT(port->chip_port);
+ 
+ 	if (!lan966x->bridge_mask)
+-- 
+2.33.0
 
-I didn't find a better way to implement this with minimum overhead and
-code modification.
-
->
->
->
-> > +bool cpus_share_cluster(int this_cpu, int that_cpu)
-> > +{
-> > +     if (this_cpu == that_cpu)
-> > +             return true;
-> > +
-> > +     return per_cpu(sd_cluster_id, this_cpu) == per_cpu(sd_cluster_id, that_cpu);
-> > +}
-> > +
-> >  static inline bool ttwu_queue_cond(int cpu, int wake_flags)
-> >  {
-> >       /*
-> > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> > index 0e66749486e7..ddd29879ad40 100644
-> > --- a/kernel/sched/sched.h
-> > +++ b/kernel/sched/sched.h
-> > @@ -1763,7 +1763,9 @@ static inline struct sched_domain *lowest_flag_domain(int cpu, int flag)
-> >  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_llc);
-> >  DECLARE_PER_CPU(int, sd_llc_size);
-> >  DECLARE_PER_CPU(int, sd_llc_id);
-> > +DECLARE_PER_CPU(int, sd_cluster_id);
-> >  DECLARE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
-> > +DECLARE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
-> >  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_numa);
-> >  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
-> >  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_cpucapacity);
-> > diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> > index d201a7052a29..5642df384904 100644
-> > --- a/kernel/sched/topology.c
-> > +++ b/kernel/sched/topology.c
-> > @@ -644,6 +644,8 @@ static void destroy_sched_domains(struct sched_domain *sd)
-> >  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_llc);
-> >  DEFINE_PER_CPU(int, sd_llc_size);
-> >  DEFINE_PER_CPU(int, sd_llc_id);
-> > +DEFINE_PER_CPU(int, sd_cluster_id);
-> > +DEFINE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
-> >  DEFINE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
-> >  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_numa);
-> >  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
-> > @@ -669,6 +671,12 @@ static void update_top_cache_domain(int cpu)
-> >       per_cpu(sd_llc_id, cpu) = id;
-> >       rcu_assign_pointer(per_cpu(sd_llc_shared, cpu), sds);
-> >
-> > +     sd = lowest_flag_domain(cpu, SD_CLUSTER);
-> > +     if (sd)
-> > +             id = cpumask_first(sched_domain_span(sd));
-> > +     rcu_assign_pointer(per_cpu(sd_cluster, cpu), sd);
-> > +     per_cpu(sd_cluster_id, cpu) = id;
-> > +
-> >       sd = lowest_flag_domain(cpu, SD_NUMA);
-> >       rcu_assign_pointer(per_cpu(sd_numa, cpu), sd);
-> >
-> > @@ -1514,6 +1522,7 @@ static unsigned long __read_mostly *sched_numa_onlined_nodes;
-> >   */
-> >  #define TOPOLOGY_SD_FLAGS            \
-> >       (SD_SHARE_CPUCAPACITY   |       \
-> > +      SD_CLUSTER             |       \
-> >        SD_SHARE_PKG_RESOURCES |       \
-> >        SD_NUMA                |       \
-> >        SD_ASYM_PACKING)
-> > --
-> > 2.33.0
-> >
->
->
-> --
-> Thanks and Regards
-> gautham.
-
-Thanks
-Barry

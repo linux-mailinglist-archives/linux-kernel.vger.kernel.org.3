@@ -2,91 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0EF747D294
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:01:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A37D47D29A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:04:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245171AbhLVNBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 08:01:02 -0500
-Received: from mail-ua1-f43.google.com ([209.85.222.43]:33544 "EHLO
-        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245117AbhLVNBB (ORCPT
+        id S245187AbhLVNEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 08:04:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236759AbhLVNEB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 08:01:01 -0500
-Received: by mail-ua1-f43.google.com with SMTP id a14so4336572uak.0;
-        Wed, 22 Dec 2021 05:01:00 -0800 (PST)
+        Wed, 22 Dec 2021 08:04:01 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4989C061574;
+        Wed, 22 Dec 2021 05:04:00 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id e5so4796637wrc.5;
+        Wed, 22 Dec 2021 05:04:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=HKQIWNLYPt7amFrpeIymAqoGxzo0Cgh8nYeaaa5M1uA=;
+        b=cU2XA5CSGjYISQe4AfmNub7qo8y8L/husj6deVctxz4Xgli5etSpWH8JllQMSio9x3
+         briBu/f9ljZ06KDlZCq9JDZZLFCUvQMpoBhtJg2MkURnQmKBoDmp+6Mv8L1JucF0GqP/
+         jNIGNEdolu7nsR6BSolLWALOaMq8bDJiUg8x5DiM4E9xtTi6v+R71J96clEsHz34KgnZ
+         cBwLjbpjjiBvRFQRyJ2ADZdWRUynpfVx5QrM7zNLRNXqX2OKRfp4gD9whOfWG2o+Rh9x
+         lia5QnhFMtZC/fRI1Wn0qr03tZdUUqj8P4K6VX659vUzLq/4dHxaUt9kfAlowcLQ9aKS
+         hupg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Yxte1rmkLG8Gm4NdhjyMtfcy7DGtqwrDwC8ez4uL4ug=;
-        b=7aexI+22OuVkLdZeWSxCPzvWM9o48o4yUTmU8QjcyHW5hICJSXWaqqIYXRXN0B33MT
-         c7mQIOLPQDLPzU5493ZJo7+/YkBoAEyjg8reCwcbxzjoQi62TASVIC+9OeTSQ1vaA2A1
-         Vk9AIb6kdCIoQ/6g1Wm9gaTfFwoCtkpVz6CZ12BE58jiLbQvIEhr3AqW3RnmaDJ4a8Jf
-         1m4iT3DXQETQfdqQXu6z4XMswdcvpGW46/BMqLM1XE803IqUdHKIs95M4CIT7DNKCjd5
-         7x1w6/0IhOMBGM1C6UubsmBK1dDOiZj9JkpsWpzBSGk4ZkYudLehfLG3o9mxVg25xNG2
-         TgiA==
-X-Gm-Message-State: AOAM531bXCST4l0bOV/x434y5txFEEfBKS+ZUHe0RXiJfNYcJBmYFbru
-        DfM+geAWbAKcRtt7gNxyEYYhA8juUlMy1Q==
-X-Google-Smtp-Source: ABdhPJxv37cvs2r4zsJg2ebG9OgCzjGonPx8m71eAcn0O3DfWWsNnb5//UdHj4scngwnsn13jQHMqA==
-X-Received: by 2002:ab0:70ce:: with SMTP id r14mr892472ual.76.1640178060090;
-        Wed, 22 Dec 2021 05:01:00 -0800 (PST)
-Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com. [209.85.221.179])
-        by smtp.gmail.com with ESMTPSA id bc2sm369283vkb.53.2021.12.22.05.00.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 05:00:59 -0800 (PST)
-Received: by mail-vk1-f179.google.com with SMTP id m185so1263688vkm.5;
-        Wed, 22 Dec 2021 05:00:59 -0800 (PST)
-X-Received: by 2002:a1f:2196:: with SMTP id h144mr984968vkh.7.1640178059508;
- Wed, 22 Dec 2021 05:00:59 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to:user-agent;
+        bh=HKQIWNLYPt7amFrpeIymAqoGxzo0Cgh8nYeaaa5M1uA=;
+        b=of59V/wdHdxKU4ks4p7wqkSea+gGoRLvLP18a047jDFtC0LMYH5Q38DHZ1RrugfwPa
+         BAdMm6haZIs5YnHGEPFPx9+YXav35+3uT0GAFtAqFUX8GWZ6F880IXS/muidlIX+fuZQ
+         TGnCW57lsjc6EZCxJe1GUPCOearTvSENFV0xJnRa/6Omeucbe1WqRBWbpALlCKPS+sqK
+         hUkICmxNMgTG7o44EFeb2slesRgPCsJqGi1T/ls0oUASLmUWfCbTZEMcpUCzHxHKP4w2
+         ZHKiDnqpcOOVHdPYIBHT3WD4NnpobSNjeOjkNuqmfM0bFrptkCmr+PKgcY9DnFYon2mo
+         /KIA==
+X-Gm-Message-State: AOAM531Ua0JSbdG/gMg+xpCcCkzJYkj8Rj/wTL9MSPdXFK/rYVh5cvxF
+        SXmKE6YzU0FqxP+TMfPogD0=
+X-Google-Smtp-Source: ABdhPJzCSUsI+1Rnpp2auPNEAsP95AYQmrBIBFI047rty/ezPIaz/pYqp95RjJUYc00ugUrjw3lvdQ==
+X-Received: by 2002:adf:f188:: with SMTP id h8mr2054843wro.663.1640178239296;
+        Wed, 22 Dec 2021 05:03:59 -0800 (PST)
+Received: from gmail.com ([81.168.73.77])
+        by smtp.gmail.com with ESMTPSA id g1sm1937049wri.103.2021.12.22.05.03.58
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 22 Dec 2021 05:03:58 -0800 (PST)
+Date:   Wed, 22 Dec 2021 13:03:56 +0000
+From:   Martin Habets <habetsm.xilinx@gmail.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     ecree.xilinx@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] sfc: Check null pointer of rx_queue->page_ring
+Message-ID: <20211222130356.xlzmhoyexrnctkrs@gmail.com>
+Mail-Followup-To: Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        ecree.xilinx@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20211220135603.954944-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-References: <20211221175322.7096-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211221175322.7096-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20211221175322.7096-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 22 Dec 2021 14:00:48 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVc-t_7-HRiM=nubmBHGRUvC+ihRa1M287LMdD3RD2dnw@mail.gmail.com>
-Message-ID: <CAMuHMdVc-t_7-HRiM=nubmBHGRUvC+ihRa1M287LMdD3RD2dnw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] i2c: riic: Use platform_get_irq() to get the interrupt
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakarprabhakar.csengg@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211220135603.954944-1-jiasheng@iscas.ac.cn>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 7:25 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
->
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq().
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Mon, Dec 20, 2021 at 09:56:03PM +0800, Jiasheng Jiang wrote:
+> Because of the possible failure of the kcalloc, it should be better to
+> set rx_queue->page_ptr_mask to 0 when it happens in order to maintain
+> the consistency.
+> 
+> Fixes: 5a6681e22c14 ("sfc: separate out SFC4000 ("Falcon") support into new sfc-falcon driver")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Martin Habets <habetsm.xilinx@gmail.com>
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> ---
+>  drivers/net/ethernet/sfc/rx_common.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/sfc/rx_common.c b/drivers/net/ethernet/sfc/rx_common.c
+> index 68fc7d317693..0983abc0cc5f 100644
+> --- a/drivers/net/ethernet/sfc/rx_common.c
+> +++ b/drivers/net/ethernet/sfc/rx_common.c
+> @@ -150,7 +150,10 @@ static void efx_init_rx_recycle_ring(struct efx_rx_queue *rx_queue)
+>  					    efx->rx_bufs_per_page);
+>  	rx_queue->page_ring = kcalloc(page_ring_size,
+>  				      sizeof(*rx_queue->page_ring), GFP_KERNEL);
+> -	rx_queue->page_ptr_mask = page_ring_size - 1;
+> +	if (!rx_queue->page_ring)
+> +		rx_queue->page_ptr_mask = 0;
+> +	else
+> +		rx_queue->page_ptr_mask = page_ring_size - 1;
+>  }
+>  
+>  static void efx_fini_rx_recycle_ring(struct efx_rx_queue *rx_queue)
+> -- 
+> 2.25.1

@@ -2,114 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DAA47D7F8
+	by mail.lfdr.de (Postfix) with ESMTP id D351147D7F9
 	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345314AbhLVTsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        id S1345324AbhLVTso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 14:48:44 -0500
+Received: from foss.arm.com ([217.140.110.172]:53342 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345312AbhLVTsl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Dec 2021 14:48:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345307AbhLVTsk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 14:48:40 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4280C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 11:48:39 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id v7so6937936wrv.12
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 11:48:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=colorfullife-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s0Np47Sa5pl9gnz8YRlCOL68fxuhegQ0UELp+V7hih0=;
-        b=ShpxXURYszaRMGGR7Amw9aByeA2z9pmwguw8vJMrwma0p7JrEpZAR//BeulUjTnj4B
-         D3Gv45fD6hNXeM3/mRdYiiBubdKW7j+wgRlIWLPf8R7hqqaUhWdTgxePlh4HoTJ32G2V
-         ezxsX+SpUXz95b65NKPd3pqEt2CuZ2oBGk30meGymGMRMGxngkY7I9E/uvR+1jMxQtkD
-         u+OS/gIG7X3qxv9zdGVx/hOSUR+/EB8nN01ntjA3CDwTZI/SQ0MgKd6zXX7XQ9MFzNGr
-         G2U6eUr1iavHJofLSRrJ5ZmkNCcggBSQCKFQDZUhdNgQraXr0UtZ/TvbyTkEROBnYCYp
-         ncmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s0Np47Sa5pl9gnz8YRlCOL68fxuhegQ0UELp+V7hih0=;
-        b=KAJjvL90/4m3JJNjmJb9zYKjOEAfgTEQeiG/IdEZ/Sx8aeqawyr8B6tW0chdFcbiQn
-         n6OraKFwI45DUvNc0MNUJ5MUHJtmxE9YzENE6A0C07CuXk6H/FbSLRxdL64iUCdf7IpC
-         sENuPuz/MA8tg7OEJ3dAnmER3JIi1hbQ8AWQJ6IP3RYBpa8Q6//fdzeGtj3zHqhaMXqQ
-         FER7hSiDg/YQftG+2l0TpUT+vpF8FYz5gzP3hXV+gkZrE79UGmUPNht8Qx5BfRpiH0hY
-         pbM6Nzbe2RsHdBpR9p2rGXfDnlp5GI4wFqQC5H24JDL1AqoASbObLfyiL7L/LM85jQaI
-         oJrA==
-X-Gm-Message-State: AOAM530iQI6tLJfKN2U6iw5LxuN/MsvqC6eMuPap4S2v6mo0MKbHHcfS
-        NMz61gAeOs217SnAdstWyTv0dDbQKneVevsF
-X-Google-Smtp-Source: ABdhPJwrNjuRSRbCuEDIvyvjT5LMfUxmfDcjFXxqtdFWy3mco/AY4P0vZNGjc6maPs4bae7pSiZfeg==
-X-Received: by 2002:a5d:4dca:: with SMTP id f10mr3113197wru.595.1640202518184;
-        Wed, 22 Dec 2021 11:48:38 -0800 (PST)
-Received: from localhost.localdomain (p200300d9970878003dae64a47964a371.dip0.t-ipconnect.de. [2003:d9:9708:7800:3dae:64a4:7964:a371])
-        by smtp.googlemail.com with ESMTPSA id c7sm3273596wri.21.2021.12.22.11.48.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 11:48:37 -0800 (PST)
-From:   Manfred Spraul <manfred@colorfullife.com>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Vasily Averin <vvs@virtuozzo.com>, cgel.zte@gmail.com,
-        shakeelb@google.com, rdunlap@infradead.org, dbueso@suse.de,
-        unixbhaskar@gmail.com, chi.minghao@zte.com.cn, arnd@arndb.de,
-        Zeal Robot <zealci@zte.com.cn>, linux-mm@kvack.org,
-        1vier1@web.de, Manfred Spraul <manfred@colorfullife.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] mm/util.c: Make kvfree() safe for calling while holding spinlocks
-Date:   Wed, 22 Dec 2021 20:48:28 +0100
-Message-Id: <20211222194828.15320-1-manfred@colorfullife.com>
-X-Mailer: git-send-email 2.33.1
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4363C1FB;
+        Wed, 22 Dec 2021 11:48:41 -0800 (PST)
+Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.196.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AEF423F5A1;
+        Wed, 22 Dec 2021 11:48:39 -0800 (PST)
+From:   Valentin Schneider <valentin.schneider@arm.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        John Keeping <john@metanate.com>
+Cc:     linux-rt-users@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RT] BUG in sched/cpupri.c
+In-Reply-To: <31a47e99-6de3-76ec-62ad-9c98d092ead5@arm.com>
+References: <Yb3vXx3DcqVOi+EA@donbot> <71ddbe51-2b7f-2b13-5f22-9013506471dc@arm.com> <87zgou6iq1.mognet@arm.com> <20211221164528.3c84543f.john@metanate.com> <31a47e99-6de3-76ec-62ad-9c98d092ead5@arm.com>
+Date:   Wed, 22 Dec 2021 19:48:33 +0000
+Message-ID: <87r1a4775a.mognet@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One codepath in find_alloc_undo() calls kvfree() while holding a spinlock.
-Since vfree() can sleep this is a bug.
+On 22/12/21 18:46, Dietmar Eggemann wrote:
+> On 21.12.21 17:45, John Keeping wrote:
+>> On Tue, 21 Dec 2021 16:11:34 +0000
+>> Valentin Schneider <valentin.schneider@arm.com> wrote:
+>>
+>>> On 20/12/21 18:35, Dietmar Eggemann wrote:
+>
+> [...]
+>
+>>> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+>>> index fd7c4f972aaf..7d61ceec1a3b 100644
+>>> --- a/kernel/sched/deadline.c
+>>> +++ b/kernel/sched/deadline.c
+>>> @@ -2467,10 +2467,13 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
+>>>      * this is the right place to try to pull some other one
+>>>      * from an overloaded CPU, if any.
+>>>      */
+>>> -	if (!task_on_rq_queued(p) || rq->dl.dl_nr_running)
+>>> +	if (!task_on_rq_queued(p))
+>>>             return;
+>>>
+>>> -	deadline_queue_pull_task(rq);
+>>> +	if (!rq->dl.dl_nr_running)
+>>> +		deadline_queue_pull_task(rq);
+>>> +	else if (task_current(rq, p) && (p->sched_class < &dl_sched_class))
+>>> +		resched_curr(rq);
+>>>  }
+>>>
+>>>  /*
+>>> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+>>> index ef8228d19382..1ea2567612fb 100644
+>>> --- a/kernel/sched/rt.c
+>>> +++ b/kernel/sched/rt.c
+>>> @@ -2322,10 +2322,13 @@ static void switched_from_rt(struct rq *rq, struct task_struct *p)
+>>>      * we may need to handle the pulling of RT tasks
+>>>      * now.
+>>>      */
+>>> -	if (!task_on_rq_queued(p) || rq->rt.rt_nr_running)
+>>> +	if (!task_on_rq_queued(p))
+>>>             return;
+>>>
+>>> -	rt_queue_pull_task(rq);
+>>> +	if (!rq->rt.rt_nr_running)
+>>> +		rt_queue_pull_task(rq);
+>>> +	else if (task_current(rq, p) && (p->sched_class < &rt_sched_class))
+>>> +		resched_curr(rq);
+>
+> switched_from_rt() -> rt_queue_pull_task(, pull_rt_task)
+>   pull_rt_task()->tell_cpu_to_push()->irq_work_queue_on(&rq->rd->rto_push_work,)
+>     rto_push_irq_work_func() -> push_rt_task(rq, true)
+>
+> seems to be the only way with pull=true.
+>
+> In my tests, rq->rt.rt_nr_running seems to be 0 when it happens.
+>
+> [   22.288537] CPU3 switched_to_rt: p=[ksoftirqd/3 35]
+> [   22.288554] rt_mutex_setprio: CPU3 p=[ksoftirqd/3 35] pi_task=[rcu_preempt 11] queued=1 running=0 prio=98 oldprio=120
+> [   22.288636] CPU3 switched_from_rt: p=[ksoftirqd/3 35] rq->rt.rt_nr_running=0
+>                                                          ^^^^^^^^^^^^^^^^^^^^^^
+> [   22.288649] rt_mutex_setprio: CPU3 p=[ksoftirqd/3 35] queued=1 running=1 prio=120 oldprio=98
+> [   22.288681] CPU3 push_rt_task: next_task=[rcu_preempt 11] migr_dis=1 rq->curr=[ksoftirqd/3 35] pull=1
+>                                                              ^^^^^^^^^^                           ^^^^^^
 
-Previously, the code path used kfree(), and kfree() is safe to be called
-while holding a spinlock.
+mark_wakeup_next_waiter() first deboosts the previous owner and then
+wakeups the next top waiter. Seems like you somehow have the wakeup happen
+before the push_rt_task IRQ work is run. Also, tell_cpu_to_push() should
+only pick a CPU that is in rq->rd->rto_mask, which requires having at least
+2 RT tasks there...
 
-Minghao proposed to fix this by updating find_alloc_undo().
+Now, that wakeup from the rtmutex unlock would give us a resched_curr() via
+check_preempt_curr() if required, which is good, though I think we are
+still missing some for sched_setscheduler() (there are no wakeups
+there). So if we just have to live with an IRQ work popping in before we
+get to preempt_schedule_irq() (or somesuch), then perhaps the below would
+be sufficient.
 
-Alternate proposal to fix this: Instead of changing find_alloc_undo(),
-change kvfree() so that the same rules as for kfree() apply:
-Having different rules for kfree() and kvfree() just asks for bugs.
+> What about slightly changing the layout in switched_from_rt() (only lightly tested):
+>
+>
+> @@ -2322,7 +2338,15 @@ static void switched_from_rt(struct rq *rq, struct task_struct *p)
+>          * we may need to handle the pulling of RT tasks
+>          * now.
+>          */
+> -       if (!task_on_rq_queued(p) || rq->rt.rt_nr_running)
+> +       if (!task_on_rq_queued(p))
+> +               return;
+> +
+> +       if (task_current(rq, p) && (p->sched_class < &rt_sched_class)) {
+> +               resched_curr(rq);
+> +               return;
+> +       }
+> +
+> +       if (rq->rt.rt_nr_running)
+>                 return;
+>
+>         rt_queue_pull_task(rq);
 
-Disadvantage: Releasing vmalloc'ed memory will be delayed a bit.
+If !rq->rt.rt_nr_running then there's no point in issuing a reschedule (at
+least from RT's perspective; p->sched_class->switched_to() takes care of
+the rest)
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Reported-by: Minghao Chi <chi.minghao@zte.com.cn>
-Link: https://lore.kernel.org/all/20211222081026.484058-1-chi.minghao@zte.com.cn/
-Fixes: fc37a3b8b438 ("[PATCH] ipc sem: use kvmalloc for sem_undo allocation")
-Cc: stable@vger.kernel.org
-Signed-off-by: Manfred Spraul <manfred@colorfullife.com>
 ---
- mm/util.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/mm/util.c b/mm/util.c
-index 741ba32a43ac..7f9181998835 100644
---- a/mm/util.c
-+++ b/mm/util.c
-@@ -610,12 +610,12 @@ EXPORT_SYMBOL(kvmalloc_node);
-  * It is slightly more efficient to use kfree() or vfree() if you are certain
-  * that you know which one to use.
-  *
-- * Context: Either preemptible task context or not-NMI interrupt.
-+ * Context: Any context except NMI interrupt.
-  */
- void kvfree(const void *addr)
- {
- 	if (is_vmalloc_addr(addr))
--		vfree(addr);
-+		vfree_atomic(addr);
- 	else
- 		kfree(addr);
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index fd7c4f972aaf..7d61ceec1a3b 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -2467,10 +2467,13 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
+ 	 * this is the right place to try to pull some other one
+ 	 * from an overloaded CPU, if any.
+ 	 */
+-	if (!task_on_rq_queued(p) || rq->dl.dl_nr_running)
++	if (!task_on_rq_queued(p))
+ 		return;
+ 
+-	deadline_queue_pull_task(rq);
++	if (!rq->dl.dl_nr_running)
++		deadline_queue_pull_task(rq);
++	else if (task_current(rq, p) && (p->sched_class < &dl_sched_class))
++		resched_curr(rq);
  }
--- 
-2.33.1
-
+ 
+ /*
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index ef8228d19382..8f3e3a1367b6 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -1890,6 +1890,16 @@ static int push_rt_task(struct rq *rq, bool pull)
+ 	if (!next_task)
+ 		return 0;
+ 
++	/*
++	 * It's possible that the next_task slipped in of higher priority than
++	 * current, or current has *just* changed priority.  If that's the case
++	 * just reschedule current.
++	 */
++	if (unlikely(next_task->prio < rq->curr->prio)) {
++		resched_curr(rq);
++		return 0;
++	}
++
+ retry:
+ 	if (is_migration_disabled(next_task)) {
+ 		struct task_struct *push_task = NULL;
+@@ -1922,16 +1932,6 @@ static int push_rt_task(struct rq *rq, bool pull)
+ 	if (WARN_ON(next_task == rq->curr))
+ 		return 0;
+ 
+-	/*
+-	 * It's possible that the next_task slipped in of
+-	 * higher priority than current. If that's the case
+-	 * just reschedule current.
+-	 */
+-	if (unlikely(next_task->prio < rq->curr->prio)) {
+-		resched_curr(rq);
+-		return 0;
+-	}
+-
+ 	/* We might release rq lock */
+ 	get_task_struct(next_task);
+ 
+@@ -2322,10 +2322,13 @@ static void switched_from_rt(struct rq *rq, struct task_struct *p)
+ 	 * we may need to handle the pulling of RT tasks
+ 	 * now.
+ 	 */
+-	if (!task_on_rq_queued(p) || rq->rt.rt_nr_running)
++	if (!task_on_rq_queued(p))
+ 		return;
+ 
+-	rt_queue_pull_task(rq);
++	if (!rq->rt.rt_nr_running)
++		rt_queue_pull_task(rq);
++	else if (task_current(rq, p) && (p->sched_class < &rt_sched_class))
++		resched_curr(rq);
+ }
+ 
+ void __init init_sched_rt_class(void)

@@ -2,86 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8AD947D6D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:28:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8D747D6DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344741AbhLVS2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 13:28:19 -0500
-Received: from mail-qk1-f180.google.com ([209.85.222.180]:43810 "EHLO
-        mail-qk1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236475AbhLVS2S (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 13:28:18 -0500
-Received: by mail-qk1-f180.google.com with SMTP id f138so3148494qke.10;
-        Wed, 22 Dec 2021 10:28:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BQVHinv4Cgd22h/GWeg09N0p9AK9353UAAMDL16H6IM=;
-        b=pqUxQE3X0CtYNXz5C2fDZN9vaC7fdCsHa3AIL0uzThZG+AwMzk2/Fo0rdoK4ZtUEuM
-         /n4jViGRF4qyaSNjkYIXG93IbHld2vaJe/o9Q7jnhocuF0tonG1tU0RLnoGbLoqvyiwj
-         2Z3lkK0VW7mwMFqWH563qep4HobgHdXoeQ68vwlhE3m3nM6js8WUfZ+NSC+KCYp81nlm
-         0yf0VvfN3nKSqt/y5Iwiv3WgHQ8jIgFR/tu8ejRS8UYXVF3ksWbH2c6aPU3VHPsPLzRQ
-         CeRNg/VXyRdBT6ZUUc7oNQqnClEHfCfBoWJ1EqcTrtXTC1BgOiuo13RdrB1pg6+RIAr1
-         crUA==
-X-Gm-Message-State: AOAM530PY4R7UTPbYX7jNkwDmvH5GFYkI/cRXxrr/fyMpY9vImGXKchJ
-        804/sLrs01oGuXy7hnMm/g==
-X-Google-Smtp-Source: ABdhPJyTGIBihg0G/yVtVYX1Gz0fkM6asEfTlgU/B6KKvYzxPNc4S5SjaaGD5r8Uu2e3WnF02Fhg0w==
-X-Received: by 2002:a37:94c2:: with SMTP id w185mr2854133qkd.666.1640197697351;
-        Wed, 22 Dec 2021 10:28:17 -0800 (PST)
-Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id y18sm2492143qtx.19.2021.12.22.10.28.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 10:28:16 -0800 (PST)
-Received: (nullmailer pid 2463743 invoked by uid 1000);
-        Wed, 22 Dec 2021 18:28:14 -0000
-Date:   Wed, 22 Dec 2021 14:28:14 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     linux-serial@vger.kernel.org, Magnus Damm <magnus.damm@gmail.com>,
-        netdev@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vinod Koul <vkoul@kernel.org>,
+        id S1344803AbhLVS3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 13:29:48 -0500
+Received: from mga02.intel.com ([134.134.136.20]:8331 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236569AbhLVS3p (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 13:29:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640197785; x=1671733785;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5mB06axBALQGGpSMy3LM5SGDcRG0aHhmCGXrmMpFCXA=;
+  b=FM9ciw1CDHzTLpeO7JXnzuRa8kM71unVQivreYrGwVEIvyZFAn3BiNLu
+   RzZECHr72fRrE1m/ARDT+bJtB1kyFhIksVF5mrjt//yEKEiCueQzjh9DM
+   VPG+cnyPl+6EPjivmWshny8kRfrODcOf7Z1kNZe/VfsHXLQP6V0zs4uzD
+   xUw0+sd2xEtJm+l5gO4y2xxUjQsZDjMsUojTpZ/erxUTu/GYO7S6soO15
+   B6H2n47Ee3i89IVuZCk9mfVGw+KSVz8iGQMPIG2GdMKomOKreNRleZiPt
+   tV0HH7BHCk/6u1lp4bc8T9DDRxbxc1Ry91tPwlDA9GgmMn5ILP4yAneLX
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="227984481"
+X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
+   d="scan'208";a="227984481"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 10:29:44 -0800
+X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
+   d="scan'208";a="508579148"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 10:29:42 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1n06LZ-000v0C-K3;
+        Wed, 22 Dec 2021 20:28:17 +0200
+Date:   Wed, 22 Dec 2021 20:28:17 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org, dmaengine@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 14/16] dt-bindings: net: renesas,etheravb: Document
- RZ/V2L SoC
-Message-ID: <YcNuPnkXLBBjFRG0@robh.at.kernel.org>
-References: <20211221094717.16187-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211221094717.16187-15-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/5] acpi: Store CRC-32 hash of the _PLD in struct
+ acpi_device
+Message-ID: <YcNuQYfbMcxlRkSP@smile.fi.intel.com>
+References: <20211222143258.82305-1-heikki.krogerus@linux.intel.com>
+ <20211222143258.82305-3-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211221094717.16187-15-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20211222143258.82305-3-heikki.krogerus@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Dec 2021 09:47:15 +0000, Lad Prabhakar wrote:
-> From: Biju Das <biju.das.jz@bp.renesas.com>
+On Wed, Dec 22, 2021 at 05:32:55PM +0300, Heikki Krogerus wrote:
+> Storing CRC-32 hash of the Physical Location of Device
+> object (_PLD) with devices that have it. The hash is stored
+> to a new struct acpi_device member "pld_crc".
 > 
-> Document Gigabit Ethernet IP found on RZ/V2L SoC. Gigabit Ethernet
-> Interface is identical to one found on the RZ/G2L SoC. No driver changes
-> are required as generic compatible string "renesas,rzg2l-gbeth" will be
-> used as a fallback.
-> 
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  Documentation/devicetree/bindings/net/renesas,etheravb.yaml | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
+> The hash makes it easier to find devices that share a
+> location, as there is no need to evaluate the entire object
+> every time. Knowledge about devices that share a location
+> can be used in device drivers that need to know the
+> connections to other components inside a system. USB3 ports
+> will for example always share their location with a USB2
+> port.
 
-Acked-by: Rob Herring <robh@kernel.org>
+...
+
+> @@ -739,7 +752,6 @@ static inline void acpi_bus_put_acpi_device(struct acpi_device *adev)
+>  
+>  static inline int register_acpi_bus_type(void *bus) { return 0; }
+>  static inline int unregister_acpi_bus_type(void *bus) { return 0; }
+> -
+>  #endif				/* CONFIG_ACPI */
+
+Looks like a stray change.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

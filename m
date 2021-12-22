@@ -2,99 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FFAD47D290
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5FC47D291
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:00:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245133AbhLVNAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 08:00:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245111AbhLVNAR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 08:00:17 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DC4C061401;
-        Wed, 22 Dec 2021 05:00:17 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id d10so6443346ybe.3;
-        Wed, 22 Dec 2021 05:00:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aaB61a7c9DxINzPtdKQI5VfQqfkyBLUL6KJtFjoHoH4=;
-        b=DYobZKni1BvZMsQQkn6f6UUD4Sv4gOwlFq7ovNWSefQjSaJucfTCmxdJhvP8QTEvc7
-         VnJNrt/md64qoG3R/lc/Nt/Em01gBKJmQtu9TJr8v4gmetHni/EEWyVC3IGJKlDHcM8z
-         /jDqAM39BQAK0o5oj0/Df4IP2IFjtrPS7nMb19Cm633+vuWcDTipL6ra8zVph8UUGT2Z
-         mXcLbOqRjCb975sz9ziMCm+dveThuvPs8k0UdU+xPyYiqZp5yNgX7uNGLYSgDzy1JOYY
-         GhA+hWg3dJ9RmgH5mgIfMW2lAE//Xz6wG2U8pcGbgf40880moNKE6jxavOiEghOSBPec
-         pU7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aaB61a7c9DxINzPtdKQI5VfQqfkyBLUL6KJtFjoHoH4=;
-        b=YH7jryhjyzRdygK1Ar4SoJFkAfi5UmChCyiDky8baM7GqqU0/QC5K+fm9Llw9imqGa
-         Lu3S8hZTTeBVZ9cMczC8vUzrJ6KawocdQvkb7egwZT5YwvupS5ydaw2h8XvcPmWT/4z4
-         29jzFb8HtfQWX/JU5bCyUDTMWkwTTvDK4izq1kQbst+mhlBWK8SGk5yDBCL0J3LeAN0R
-         ZY34DzT6AgQApWy3Ndbt70LfacMVcP4bU16B1QrOuAF7PFtxRBPfD48P5ghlJp/jz/aN
-         IH/4Vvbju0L4IAAIwuD+6s8jj3l7W2R2l5dGDyDA5wY4LBYPe4I5ASniKSUIBl2v5XJn
-         gSCA==
-X-Gm-Message-State: AOAM531DQrkp7ugc+52sBKqJT9yMSfv6m4FbRZw2DBI0cbklOMhpbW+0
-        FuNQ0Q1+lOUyJI3Z9RROY6WLHi/cvt7/JMSW4KU=
-X-Google-Smtp-Source: ABdhPJwrKuxap0lZ5lBtIC4T5EzGhxynqD8xxXeZzrcsqHwSveQZaQTiNDvUYFWwkR/+k21dEGN0bwkMvOiv1T49PcY=
-X-Received: by 2002:a25:ade0:: with SMTP id d32mr4102956ybe.510.1640178016160;
- Wed, 22 Dec 2021 05:00:16 -0800 (PST)
+        id S245141AbhLVNAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 08:00:45 -0500
+Received: from mga17.intel.com ([192.55.52.151]:3847 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245117AbhLVNAo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 08:00:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640178044; x=1671714044;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xdmrSRTYKfyydf1mkoVn3w/fix+3qP0dG8Soyz55F98=;
+  b=ZZVAx8Xpe4bvE4yoW4YOo3zYXN85kOCFegqDFicLmllFP7VQcNNmdh3y
+   R8RLtEgHfhWUJTkVJSwWV+w8wScY5xcYsuorT+0WMtUCpRZaTfLEw0KVX
+   AhLdSKo8nNZ3sxAwK7y55uDrbtfqpt2nUjYbwbPU9uYXQr/xe43ViAqHm
+   c22qWq2wKp4ZIicAQ2WaHYjrPl4XEZB84Tokq3Ra98Kd8HvthegKyQO/p
+   3YpCsYTdHaLNKhac6BySWEhfvNf+bXh+DYJdn42Y5RdYRF67Jxj+bycIe
+   uHrmXFCzm7AH0pA02Yplwvn7qmTbHOk6PgLj1xLdHN5pf0iwjb65B+oW6
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="221288025"
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="221288025"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 05:00:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="617127026"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 22 Dec 2021 05:00:42 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n01EY-0000SL-28; Wed, 22 Dec 2021 13:00:42 +0000
+Date:   Wed, 22 Dec 2021 21:00:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: sound/pci/hda/patch_realtek.c:886:20: warning: unused function
+ 'alc_shutup'
+Message-ID: <202112222030.pe8E3Bq0-lkp@intel.com>
 MIME-Version: 1.0
-References: <20210803113531.30720-1-lukas.bulwahn@gmail.com>
- <f9074e8d-9314-9d7d-7bf5-5b5538c8be8d@intel.com> <CAKXUXMxQ83T7beOTuZ928=-eo2Tsr94TGxsaYh3+MHOJrDO8Bg@mail.gmail.com>
- <0bc1734f-39c5-cf19-a77e-e0d08978b3d0@intel.com>
-In-Reply-To: <0bc1734f-39c5-cf19-a77e-e0d08978b3d0@intel.com>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Wed, 22 Dec 2021 14:00:05 +0100
-Message-ID: <CAKXUXMxW7-_D=u4GcsmASzM0Oa8qR-K7kmB945B=W+Zgg9WLgA@mail.gmail.com>
-Subject: Re: [PATCH 0/9] Kconfig symbol clean-up on ./arch/x86/
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        X86 ML <x86@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Lubomir Rintel <lkundrak@v3.sk>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        platform-driver-x86@vger.kernel.org,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 3, 2021 at 5:40 PM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 8/3/21 8:12 AM, Lukas Bulwahn wrote:
-> >> It's a pretty safe guess that STRICT_IOMEM refers to CONFIG_STRICT_DEVMEM.
-> > Thanks, Dave.
-> >
-> > If the maintainers consider updates to comments making them consistent
-> > with the code as worth being picked, I will turn your analysis into a
-> > proper commit message and provide a patch to update that comment.
->
-> I'd happily ack a patch that does that.  Might as well fix that kind of
-> stuff now before more time passes and it gets harder to track down.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2f47a9a4dfa3674fad19a49b40c5103a9a8e1589
+commit: 327b34f2a97d72c41d4854d61336c9ae6ffe4a44 ALSA: hda: Nuke unused reboot_notify callback
+date:   4 months ago
+config: mips-buildonly-randconfig-r003-20211222 (https://download.01.org/0day-ci/archive/20211222/202112222030.pe8E3Bq0-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project de4e0195ae1c39f1c3b07834b8e32c113f4f20eb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=327b34f2a97d72c41d4854d61336c9ae6ffe4a44
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 327b34f2a97d72c41d4854d61336c9ae6ffe4a44
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/ sound/pci/hda/
 
-Sorry, Dave, it took me a bit longer to come back to my second pass on
-references to non-existing configs in the kernel tree...
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I have just sent out a quick fix for this issue, now in your and other
-x86 maintainers' mailbox:
+All warnings (new ones prefixed by >>):
 
-https://lore.kernel.org/all/20211222125347.13054-1-lukas.bulwahn@gmail.com/
+>> sound/pci/hda/patch_realtek.c:886:20: warning: unused function 'alc_shutup'
+   static inline void alc_shutup(struct hda_codec
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $1
+   or $0, $2
+   sc $0, $1
+   beqz $0, 1b
+   .set pop
+   '
+   clang-14: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 14.0.0 (git://gitmirror/llvm_project de4e0195ae1c39f1c3b07834b8e32c113f4f20eb)
+   Target: mipsel-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-de4e0195ae/bin
+   clang-14: note: diagnostic msg:
+   Makefile arch drivers fs include kernel mm nr_bisected scripts sound source usr
 
-I am happy to get an ack for that patch.
 
-Lukas
+vim +/alc_shutup +886 sound/pci/hda/patch_realtek.c
+
+a361d84bfcd938 Kailang Yang 2007-06-05  885  
+08c189f2c5523e Takashi Iwai 2012-12-19 @886  static inline void alc_shutup(struct hda_codec *codec)
+a361d84bfcd938 Kailang Yang 2007-06-05  887  {
+1d045db96ad9b8 Takashi Iwai 2011-07-07  888  	struct alc_spec *spec = codec->spec;
+a361d84bfcd938 Kailang Yang 2007-06-05  889  
+c7273bd6c1922a Takashi Iwai 2018-06-12  890  	if (!snd_hda_get_bool_hint(codec, "shutup"))
+c7273bd6c1922a Takashi Iwai 2018-06-12  891  		return; /* disabled explicitly by hints */
+c7273bd6c1922a Takashi Iwai 2018-06-12  892  
+08c189f2c5523e Takashi Iwai 2012-12-19  893  	if (spec && spec->shutup)
+08c189f2c5523e Takashi Iwai 2012-12-19  894  		spec->shutup(codec);
+9bfb2844a2f9e6 Takashi Iwai 2013-07-24  895  	else
+c0ca5eced22215 Takashi Iwai 2019-02-20  896  		alc_shutup_pins(codec);
+1d045db96ad9b8 Takashi Iwai 2011-07-07  897  }
+1f0f4b8036b1fe Takashi Iwai 2011-06-27  898  
+
+:::::: The code at line 886 was first introduced by commit
+:::::: 08c189f2c5523eda847cddb89eb8f44c0b957431 ALSA: hda - Use generic parser codes for Realtek driver
+
+:::::: TO: Takashi Iwai <tiwai@suse.de>
+:::::: CC: Takashi Iwai <tiwai@suse.de>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

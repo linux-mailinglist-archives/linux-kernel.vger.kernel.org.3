@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA0147D7C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A8247D7C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:33:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345247AbhLVTcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 14:32:41 -0500
-Received: from mail-qk1-f171.google.com ([209.85.222.171]:40696 "EHLO
-        mail-qk1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345245AbhLVTcd (ORCPT
+        id S1345245AbhLVTdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 14:33:47 -0500
+Received: from mail-qk1-f173.google.com ([209.85.222.173]:35822 "EHLO
+        mail-qk1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232231AbhLVTdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 14:32:33 -0500
-Received: by mail-qk1-f171.google.com with SMTP id p4so3320742qkm.7;
-        Wed, 22 Dec 2021 11:32:33 -0800 (PST)
+        Wed, 22 Dec 2021 14:33:46 -0500
+Received: by mail-qk1-f173.google.com with SMTP id 131so3370629qkk.2;
+        Wed, 22 Dec 2021 11:33:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=sxJWPj3rHawhyCh/duH/9lPfNueEJhvu1jRyrlWPok4=;
-        b=AXnEPb9oiUrey2LSKRVsKdXxeJUb9c+q/ureSvFeSJjPnN7sIKHoU2WSfWFepWQgfn
-         PhQnpMjFhF2xLgYHyRzOVmZcpw4sraqK737yxWHYD5ArL4mK+GrlOMn1XreuIwbI695E
-         cRkwTOqBRG7fLAuHKqSBA3oGWOrdPj7aRlRnQV3kitXt8CAEcGM0GDfs7DjRt7gHXNAm
-         1YZPd7QM8j8FHNpGB66XJ4KoEgBdPjqSLetqnQKJpvLKsUvp4ih0pQLV6bCbay91WwrG
-         cfgoAd2fa3IKMyakG8TfTe7D0f/cRO2LPM6k2sqR9TROfd7Kc2KLbtVW6hjVp0K0tuBm
-         wc3g==
-X-Gm-Message-State: AOAM531kVUEH1ozm5qC9NeQ0KgiHin6il8cpTfibIj3aMb2A1FxEu4AM
-        R/m9jlcdd2nHkkSRY4T59VzhL7VJWi/q
-X-Google-Smtp-Source: ABdhPJw/9CKbC8jHmQJfAXdPJBsfrQrxGZEZ3Hp6TzNGY8SOh5XRos1l7s3US51lvySjsAVlVG6QxA==
-X-Received: by 2002:a05:620a:11b0:: with SMTP id c16mr3092260qkk.354.1640201552608;
-        Wed, 22 Dec 2021 11:32:32 -0800 (PST)
+        bh=RfUosveW4tPMKOFRdTv8lZwv8YHtumNVeL61eaPcSTE=;
+        b=WvLa9mo2fm0I+2+bsgM6GO9vAgA5ANMBDmb6OcTGkOArJOtt8WM+l1JLC56LKjnWLS
+         qMKCFyUR4i0dFJpzyu6RLMr7Ezn58vxUNjuASSIdELIqHpHJ4D2ATGBpVo/qreoWwbSQ
+         AyDrDJxuHJshagoEj6tx0l4H8LhpCMX+SkcRh2zP4iur42IfRlbq9kXTTs9aN8tAfJaR
+         efbwGPVynKFhOe9IFxXiiy+q7kXgMPGkmrHk+1pp/d/z6ujXao+G+4sdRZ3UdSWJyIFY
+         vSqEfrDicntETZgTF88BNW5Yl58SxnOpTB7oPWwrPqZ+0wVdIJaCZJFZrdCVrUKbniyF
+         +PCA==
+X-Gm-Message-State: AOAM533KP8JKaLGzDrs4qOMWT+Be+ZsUEC6eIEZC+lOfjkmr9psWJPBO
+        RE5h4FhGpYY0IX8tUsxLdg==
+X-Google-Smtp-Source: ABdhPJzJNJlDDCa0+UOXe9azUIDoUn8DABtzCzM90mIYT03z73tX7YCWI8LWh5ySSv4c0TJ0MsjQRg==
+X-Received: by 2002:a05:620a:3193:: with SMTP id bi19mr3083716qkb.296.1640201625369;
+        Wed, 22 Dec 2021 11:33:45 -0800 (PST)
 Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id i6sm2769847qkn.26.2021.12.22.11.32.31
+        by smtp.gmail.com with ESMTPSA id y17sm2415617qtj.75.2021.12.22.11.33.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 11:32:32 -0800 (PST)
-Received: (nullmailer pid 2568168 invoked by uid 1000);
-        Wed, 22 Dec 2021 19:32:30 -0000
-Date:   Wed, 22 Dec 2021 15:32:30 -0400
+        Wed, 22 Dec 2021 11:33:44 -0800 (PST)
+Received: (nullmailer pid 2570137 invoked by uid 1000);
+        Wed, 22 Dec 2021 19:33:43 -0000
+Date:   Wed, 22 Dec 2021 15:33:43 -0400
 From:   Rob Herring <robh@kernel.org>
 To:     David Brazdil <dbrazdil@google.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -45,90 +45,49 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Will Deacon <will@kernel.org>,
         Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] dt-bindings: reserved-memory: Open Profile for
- DICE
-Message-ID: <YcN9Tl5BOJ4fMLTw@robh.at.kernel.org>
+Subject: Re: [PATCH v5 2/2] misc: open-dice: Add driver to expose DICE data
+ to userspace
+Message-ID: <YcN9lzDMPjkvRDAZ@robh.at.kernel.org>
 References: <20211221174502.63891-1-dbrazdil@google.com>
- <20211221174502.63891-2-dbrazdil@google.com>
+ <20211221174502.63891-3-dbrazdil@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211221174502.63891-2-dbrazdil@google.com>
+In-Reply-To: <20211221174502.63891-3-dbrazdil@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 05:45:01PM +0000, David Brazdil wrote:
-> Add DeviceTree bindings for Open Profile for DICE, an open protocol for
-> measured boot. Firmware uses DICE to measure the hardware/software
-> combination and generates Compound Device Identifier (CDI) certificates.
-> These are stored in memory and the buffer is described in the DT as
-> a reserved memory region compatible with 'google,open-dice'.
+On Tue, Dec 21, 2021 at 05:45:02PM +0000, David Brazdil wrote:
+> Open Profile for DICE is an open protocol for measured boot compatible
+> with the Trusted Computing Group's Device Identifier Composition
+> Engine (DICE) specification. The generated Compound Device Identifier
+> (CDI) certificates represent the hardware/software combination measured
+> by DICE, and can be used for remote attestation and sealing.
 > 
+> Add a driver that exposes reserved memory regions populated by firmware
+> with DICE CDIs and exposes them to userspace via a character device.
+> 
+> Userspace obtains the memory region's size from read() and calls mmap()
+> to create a mapping of the memory region in its address space. The
+> mapping is not allowed to be write+shared, giving userspace a guarantee
+> that the data were not overwritten by another process.
+> 
+> Userspace can also call write(), which triggers a wipe of the DICE data
+> by the driver. Because both the kernel and userspace mappings use
+> write-combine semantics, all clients observe the memory as zeroed after
+> the syscall has returned.
+> 
+> Cc: Andrew Scull <ascull@google.com>
+> Cc: Will Deacon <will@kernel.org>
 > Signed-off-by: David Brazdil <dbrazdil@google.com>
 > ---
->  .../reserved-memory/google,open-dice.yaml     | 45 +++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/reserved-memory/google,open-dice.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/reserved-memory/google,open-dice.yaml b/Documentation/devicetree/bindings/reserved-memory/google,open-dice.yaml
-> new file mode 100644
-> index 000000000000..7bc714e9715f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/reserved-memory/google,open-dice.yaml
-> @@ -0,0 +1,45 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/reserved-memory/google,open-dice.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Open Profile for DICE Device Tree Bindings
-> +
-> +description: |
-> +  This binding represents a reserved memory region containing data
-> +  generated by the Open Profile for DICE protocol.
-> +
-> +  See https://pigweed.googlesource.com/open-dice/
-> +
-> +maintainers:
-> +  - David Brazdil <dbrazdil@google.com>
-> +
-> +allOf:
-> +  - $ref: "reserved-memory.yaml"
-> +
-> +properties:
-> +  compatible:
-> +    const: google,open-dice
-> +
-> +  reg:
-> +    description: page-aligned region of memory containing DICE data
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: true
+>  drivers/misc/Kconfig     |  12 +++
+>  drivers/misc/Makefile    |   1 +
+>  drivers/misc/open-dice.c | 188 +++++++++++++++++++++++++++++++++++++++
+>  drivers/of/platform.c    |   1 +
 
-unevaluatedProperties: false
+Acked-by: Rob Herring <robh@kernel.org>
 
-Additional properties are only allowed for common schema included by 
-other schemas.
-
-> +
-> +examples:
-> +  - |
-> +    reserved-memory {
-> +        #address-cells = <2>;
-> +        #size-cells = <1>;
-> +
-> +        dice: dice@12340000 {
-> +            compatible = "google,open-dice";
-> +            reg = <0x00 0x12340000 0x2000>;
-> +            no-map;
-> +        };
-> +    };
-> -- 
-> 2.34.1.307.g9b7440fafd-goog
-> 
-> 
+>  4 files changed, 202 insertions(+)
+>  create mode 100644 drivers/misc/open-dice.c

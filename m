@@ -2,97 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 807FE47CBF8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 04:50:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05BDC47CBFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 05:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235665AbhLVDuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 22:50:23 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:53013 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232444AbhLVDuW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 22:50:22 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JJfVJ2QHNz4xgw;
-        Wed, 22 Dec 2021 14:50:15 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1640145020;
-        bh=1gSJCMn7ct3ljzUhwcf96/8gcMJWyTknZl8h09ZvdP4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EaGWTISRYHyR2uf+SNDcH1WDlaPGFuczKLkIcUVRhrpgVpqD4q5PV9Pc+1ZihU3n8
-         qZPWxzzdhACIWYRlGAgCtxRXspYpE8c/vnGj3N55rL3nbdarNZ0TPR1QBO0OUNDZgq
-         I0TybrQ85E4BGbKRuhlsb8IS+ZjWPv/k1P4aiQZAr34Y60gnYJY7M5GV33KiGOI3m7
-         /1uKBBgUr7mDUB1uhx5IvH+jMS+Ewxxfn2uDeHONq/b1wJkrqYiZsFldLkl58GID8N
-         YiS9+jtWb0VhNH8M74O+5aMzQ5F8+g6Wis0eS0Fyu8FORXcnKxTgWjNrQ3YBYhT4KK
-         1kyjxR39UFhig==
-Date:   Wed, 22 Dec 2021 14:50:14 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the drm tree with the drm-misc-fixes
- tree
-Message-ID: <20211222145014.472328be@canb.auug.org.au>
+        id S242307AbhLVEQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 23:16:36 -0500
+Received: from mga09.intel.com ([134.134.136.24]:4456 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242205AbhLVEQe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 23:16:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640146594; x=1671682594;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yZ8dxGoPrJZXz/i00vV+0R8ve859BTlAoB4X2DkskOs=;
+  b=b3s2TTwetLWnp0IqgL1VhyjKqf49A3Ui5qCP95nh1Hzj2GhwPkqMeyYc
+   U/nBv/bWUYPq5xcpgyG8lh2fYGGyvwplUGcjaaH08ey4Tenz8Gj5xyIk/
+   1zVTxbJxWyT1zDZUTye2sgEi1rw6hTdbMpL9TJNAXVCjH04ZswXCULqO2
+   UUBUiSzTas9TrWD0b6C3D7IufyWkB9ZgA+VPJN49zh0eWFgF/2i8kofbb
+   skw7pDJNsU8BDn9a9O1+wJnKs/sNANrJu0v2mk1hKacChGgLeK9n773Lw
+   ibiMdFHry01A4Enr6KV9s6nJ7FJ8G5V4zOsDi9zbgUnCwZ6Xx+2t4C79z
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240348053"
+X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
+   d="scan'208";a="240348053"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 20:16:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
+   d="scan'208";a="684886374"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 21 Dec 2021 20:16:32 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mzt3I-00000o-8h; Wed, 22 Dec 2021 04:16:32 +0000
+Date:   Wed, 22 Dec 2021 12:12:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     kbuild-all@lists.01.org,
+        user-mode-linux-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Richard Weinberger <richard@nod.at>
+Subject: [rw-uml:linux-next 28/29] arch/x86/kvm/mmu/spte.c:85:6: error:
+ implicit declaration of function 'pat_enabled'; did you mean
+ 'kasan_enabled'?
+Message-ID: <202112221002.dpWf8YCs-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/zF5D0Q+.65monPUqeOmdZ0g";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/zF5D0Q+.65monPUqeOmdZ0g
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rw/uml.git linux-next
+head:   5d0f822da145a87c38bf9162bebdce865e6ad359
+commit: 59a49f02bbc8b44ed1a8b9603b1a6aa620cca3b4 [28/29] x86/mtrr: remove the mtrr_bp_init stub
+config: x86_64-randconfig-a001-20211220 (https://download.01.org/0day-ci/archive/20211222/202112221002.dpWf8YCs-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rw/uml.git/commit/?id=59a49f02bbc8b44ed1a8b9603b1a6aa620cca3b4
+        git remote add rw-uml https://git.kernel.org/pub/scm/linux/kernel/git/rw/uml.git
+        git fetch --no-tags rw-uml linux-next
+        git checkout 59a49f02bbc8b44ed1a8b9603b1a6aa620cca3b4
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Hi all,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Today's linux-next merge of the drm tree got a conflict in:
+All errors (new ones prefixed by >>):
 
-  drivers/gpu/drm/nouveau/nouveau_fence.c
+   arch/x86/kvm/mmu/spte.c: In function 'kvm_is_mmio_pfn':
+>> arch/x86/kvm/mmu/spte.c:85:6: error: implicit declaration of function 'pat_enabled'; did you mean 'kasan_enabled'? [-Werror=implicit-function-declaration]
+      85 |    (!pat_enabled() || pat_pfn_immune_to_uc_mtrr(pfn));
+         |      ^~~~~~~~~~~
+         |      kasan_enabled
+>> arch/x86/kvm/mmu/spte.c:85:23: error: implicit declaration of function 'pat_pfn_immune_to_uc_mtrr' [-Werror=implicit-function-declaration]
+      85 |    (!pat_enabled() || pat_pfn_immune_to_uc_mtrr(pfn));
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-between commit:
 
-  67f74302f45d ("drm/nouveau: wait for the exclusive fence after the shared=
- ones v2")
+vim +85 arch/x86/kvm/mmu/spte.c
 
-from the drm-misc-fixes tree and commit:
+5a9624affe7c74 Paolo Bonzini 2020-10-16  70  
+5a9624affe7c74 Paolo Bonzini 2020-10-16  71  static bool kvm_is_mmio_pfn(kvm_pfn_t pfn)
+5a9624affe7c74 Paolo Bonzini 2020-10-16  72  {
+5a9624affe7c74 Paolo Bonzini 2020-10-16  73  	if (pfn_valid(pfn))
+5a9624affe7c74 Paolo Bonzini 2020-10-16  74  		return !is_zero_pfn(pfn) && PageReserved(pfn_to_page(pfn)) &&
+5a9624affe7c74 Paolo Bonzini 2020-10-16  75  			/*
+5a9624affe7c74 Paolo Bonzini 2020-10-16  76  			 * Some reserved pages, such as those from NVDIMM
+5a9624affe7c74 Paolo Bonzini 2020-10-16  77  			 * DAX devices, are not for MMIO, and can be mapped
+5a9624affe7c74 Paolo Bonzini 2020-10-16  78  			 * with cached memory type for better performance.
+5a9624affe7c74 Paolo Bonzini 2020-10-16  79  			 * However, the above check misconceives those pages
+5a9624affe7c74 Paolo Bonzini 2020-10-16  80  			 * as MMIO, and results in KVM mapping them with UC
+5a9624affe7c74 Paolo Bonzini 2020-10-16  81  			 * memory type, which would hurt the performance.
+5a9624affe7c74 Paolo Bonzini 2020-10-16  82  			 * Therefore, we check the host memory type in addition
+5a9624affe7c74 Paolo Bonzini 2020-10-16  83  			 * and only treat UC/UC-/WC pages as MMIO.
+5a9624affe7c74 Paolo Bonzini 2020-10-16  84  			 */
+5a9624affe7c74 Paolo Bonzini 2020-10-16 @85  			(!pat_enabled() || pat_pfn_immune_to_uc_mtrr(pfn));
+5a9624affe7c74 Paolo Bonzini 2020-10-16  86  
+5a9624affe7c74 Paolo Bonzini 2020-10-16  87  	return !e820__mapped_raw_any(pfn_to_hpa(pfn),
+5a9624affe7c74 Paolo Bonzini 2020-10-16  88  				     pfn_to_hpa(pfn + 1) - 1,
+5a9624affe7c74 Paolo Bonzini 2020-10-16  89  				     E820_TYPE_RAM);
+5a9624affe7c74 Paolo Bonzini 2020-10-16  90  }
+5a9624affe7c74 Paolo Bonzini 2020-10-16  91  
 
-  40298cb45071 ("drm/nouveau: use the new iterator in nouveau_fence_sync")
+:::::: The code at line 85 was first introduced by commit
+:::::: 5a9624affe7c7498fb395879d9bb613628e89e60 KVM: mmu: extract spte.h and spte.c
 
-from the drm tree.
+:::::: TO: Paolo Bonzini <pbonzini@redhat.com>
+:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
 
-I fixed it up (I just used the latter version) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/zF5D0Q+.65monPUqeOmdZ0g
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHCoHYACgkQAVBC80lX
-0GyfUAgAoAi63KqneHolxn64MFP9kfVXtRglSldvtMUcUyZnEzL4ub6cCj7PE8/e
-5RwDIHzStvITG8DeQlM+eWCAjZbDd1CLCgEgQn9HH7G+5n5DBXUL2Ll4tgxbvQho
-2dpOeESgguHA2a/VMZzDmRIsHWvu0SB03qrBsnC6btt83chvDtPUP9Q3LlZSM0rO
-ZXAIM1Zwt3K+sr3DZWTvXmbbIYIji4vf68dR0kYhETZw97SNWhPOSdWNb42J1Dz5
-35frsST/B/MV9JEBC6ZhCauMPZgK0c+PUmUOEDiRv49Hb3fdcigWfHyZaboZpyp1
-DHUwf8nd/zLDqd7stLso2zFqFpdx0w==
-=xq+w
------END PGP SIGNATURE-----
-
---Sig_/zF5D0Q+.65monPUqeOmdZ0g--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,152 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 203A947D2E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C14D347D2A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:08:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245459AbhLVNNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 08:13:19 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:30091 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245370AbhLVNMg (ORCPT
+        id S245250AbhLVNI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 08:08:27 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4321 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240684AbhLVNIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 08:12:36 -0500
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JJtvV0QZBz1DK75;
-        Wed, 22 Dec 2021 21:09:26 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+        Wed, 22 Dec 2021 08:08:24 -0500
+Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JJtqM4dLQz67kgW;
+        Wed, 22 Dec 2021 21:05:51 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 22 Dec 2021 21:12:34 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ 15.1.2308.20; Wed, 22 Dec 2021 14:08:22 +0100
+Received: from [10.195.32.222] (10.195.32.222) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 22 Dec 2021 21:12:33 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        "John Donnelly" <John.p.donnelly@oracle.com>
-Subject: [PATCH v18 16/17] of: fdt: Add memory for devices by DT property "linux,usable-memory-range"
-Date:   Wed, 22 Dec 2021 21:08:19 +0800
-Message-ID: <20211222130820.1754-17-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
-In-Reply-To: <20211222130820.1754-1-thunder.leizhen@huawei.com>
-References: <20211222130820.1754-1-thunder.leizhen@huawei.com>
+ 15.1.2308.20; Wed, 22 Dec 2021 13:08:21 +0000
+Subject: Re: [PATCH] perf pmu: Fix event list for uncore PMUs
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     Jiri Olsa <jolsa@redhat.com>, <peterz@infradead.org>,
+        <mingo@redhat.com>, <mark.rutland@arm.com>,
+        <alexander.shishkin@linux.intel.com>, <namhyung@kernel.org>,
+        <irogers@google.com>, <kan.liang@linux.intel.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1639670017-74918-1-git-send-email-john.garry@huawei.com>
+ <YcGJJ2g+i5qWea7d@krava> <bbf9c0b4-c048-3adf-5282-2355aa648acf@huawei.com>
+ <YcGf/d5PPqqyXxUW@krava> <43e185f6-9fa7-6ae1-e4fd-c90c6a50f68f@huawei.com>
+ <YcI9twHCIiFyUDOu@kernel.org>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <d987a1a9-3c3f-9efb-24c7-22e18d8d63e4@huawei.com>
+Date:   Wed, 22 Dec 2021 13:08:20 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
+In-Reply-To: <YcI9twHCIiFyUDOu@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.195.32.222]
+X-ClientProxiedBy: lhreml750-chm.china.huawei.com (10.201.108.200) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen Zhou <chenzhou10@huawei.com>
+On 21/12/2021 20:48, Arnaldo Carvalho de Melo wrote:
+>> Now thinking a bit more I am not confident that this patch is a full fix.
+>>
+>> arm have heterogeneous CPU systems as well - which are not "hybrid" - and I
+>> need to ensure that aliasing is still working properly there, as I think
+>> that this following check would stop removing duplicates there:
+>>
+>> +	/* uncore PMUs */
+>> +	if (!alias_a->is_cpu && !alias_b->is_cpu)
+>> +		return true;
+>> +	return false;
+> I was about to process this, do you think its better to revert the
+> original patch while this gets fixed?
 
-When reserving crashkernel in high memory, some low memory is reserved
-for crash dump kernel devices and never mapped by the first kernel.
-This memory range is advertised to crash dump kernel via DT property
-under /chosen,
-        linux,usable-memory-range = <BASE1 SIZE1 [BASE2 SIZE2]>
+I think that the v2 should now be ok.
 
-We reused the DT property linux,usable-memory-range and made the low
-memory region as the second range "BASE2 SIZE2", which keeps compatibility
-with existing user-space and older kdump kernels.
+@jirka, can you kindly help to check that?
 
-Crash dump kernel reads this property at boot time and call memblock_add()
-to add the low memory region after memblock_cap_memory_range() has been
-called.
+BTW, my patch is based on v5.16-rc5 . I assumed that I would need to be 
+based on acme/perf/urgent, but that seems to be based on 5.15
 
-Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
-Co-developed-by: Zhen Lei <thunder.leizhen@huawei.com>
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Tested-by: Dave Kleikamp <dave.kleikamp@oracle.com>
----
- drivers/of/fdt.c | 33 +++++++++++++++++++++++----------
- 1 file changed, 23 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index 37b477a51175359..f7b72fa773250ad 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -967,6 +967,15 @@ static void __init early_init_dt_check_for_elfcorehdr(unsigned long node)
- 
- static unsigned long chosen_node_offset = -FDT_ERR_NOTFOUND;
- 
-+/*
-+ * The main usage of linux,usable-memory-range is for crash dump kernel.
-+ * Originally, the number of usable-memory regions is one. Now there may
-+ * be two regions, low region and high region.
-+ * To make compatibility with existing user-space and older kdump, the low
-+ * region is always the last range of linux,usable-memory-range if exist.
-+ */
-+#define MAX_USABLE_RANGES		2
-+
- /**
-  * early_init_dt_check_for_usable_mem_range - Decode usable memory range
-  * location from flat tree
-@@ -974,10 +983,9 @@ static unsigned long chosen_node_offset = -FDT_ERR_NOTFOUND;
-  */
- static void __init early_init_dt_check_for_usable_mem_range(unsigned long node)
- {
--	const __be32 *prop;
--	int len;
--	phys_addr_t cap_mem_addr;
--	phys_addr_t cap_mem_size;
-+	struct memblock_region rgn[MAX_USABLE_RANGES] = {0};
-+	const __be32 *prop, *endp;
-+	int len, i;
- 
- 	if ((long)node < 0)
- 		return;
-@@ -985,16 +993,21 @@ static void __init early_init_dt_check_for_usable_mem_range(unsigned long node)
- 	pr_debug("Looking for usable-memory-range property... ");
- 
- 	prop = of_get_flat_dt_prop(node, "linux,usable-memory-range", &len);
--	if (!prop || (len < (dt_root_addr_cells + dt_root_size_cells)))
-+	if (!prop || (len % (dt_root_addr_cells + dt_root_size_cells)))
- 		return;
- 
--	cap_mem_addr = dt_mem_next_cell(dt_root_addr_cells, &prop);
--	cap_mem_size = dt_mem_next_cell(dt_root_size_cells, &prop);
-+	endp = prop + (len / sizeof(__be32));
-+	for (i = 0; i < MAX_USABLE_RANGES && prop < endp; i++) {
-+		rgn[i].base = dt_mem_next_cell(dt_root_addr_cells, &prop);
-+		rgn[i].size = dt_mem_next_cell(dt_root_size_cells, &prop);
- 
--	pr_debug("cap_mem_start=%pa cap_mem_size=%pa\n", &cap_mem_addr,
--		 &cap_mem_size);
-+		pr_debug("cap_mem_regions[%d]: base=%pa, size=%pa\n",
-+			 i, &rgn[i].base, &rgn[i].size);
-+	}
- 
--	memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
-+	memblock_cap_memory_range(rgn[0].base, rgn[0].size);
-+	for (i = 1; i < MAX_USABLE_RANGES && rgn[i].size; i++)
-+		memblock_add(rgn[i].base, rgn[i].size);
- }
- 
- #ifdef CONFIG_SERIAL_EARLYCON
--- 
-2.25.1
+Thanks,
+John
 

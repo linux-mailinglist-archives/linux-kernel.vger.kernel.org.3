@@ -2,145 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D8447CABA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:23:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 645FA47CAB6
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:22:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240864AbhLVBXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 20:23:10 -0500
-Received: from mga18.intel.com ([134.134.136.126]:32526 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234213AbhLVBXJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 20:23:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640136189; x=1671672189;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=soai/pmfaSqocLc0zgIUXqg4L+dRY+Q0ibdRNh+8JpM=;
-  b=MDX1v/gFkcqRXhrIBBknWseLYvpOYRiWsAcnhDaPBejDJQNuKGHAMesf
-   sjsHfFvAH4SLzzQHRLWmxRk9Ey0eFAb48EE00z3neHWBoCJv13l3aVn97
-   U1ByIEliLUYGUdWMhEqMnlssHo+/qiGhlwkgHklJUJBZ6lBydw7vclyB6
-   +kf/Ko+j7ZCQhpaZ0qVBu8/1iDrq5KrpF7/Ggyv4cgfPh/7ihH8j9/Jk3
-   bOAR+pz/bViAi8f6XdPfGf4/zldp8+GBFonPkz1F3s8+nvjPZepAMUg57
-   abgTvo1cNqJ8Umen20kyid4oSAvL60ecsANVjDeSeah2OPZtkBgZjSZcy
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="227372590"
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="227372590"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 17:23:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="521477368"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by orsmga008.jf.intel.com with ESMTP; 21 Dec 2021 17:23:01 -0800
-Date:   Wed, 22 Dec 2021 09:22:23 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com
-Subject: Re: [PATCH v3 00/15] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <20211222012223.GA22448@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20211221151125.19446-1-chao.p.peng@linux.intel.com>
- <YcH2aGNJn57pLihJ@google.com>
+        id S240670AbhLVBWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 20:22:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238386AbhLVBWt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 20:22:49 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA367C061574;
+        Tue, 21 Dec 2021 17:22:49 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id z9so549847qtj.9;
+        Tue, 21 Dec 2021 17:22:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cNVgFuSkvXsOF4mMDEXYWlsVrY9TlgTecIPAVLkOuWs=;
+        b=NTUsZ+hXhAodFI9Oan+WRQ3tF0KpKZnGm18/mkaitLP2Ggx9jiN3HG4WVR7UsgomM4
+         LNeynEFuG7cIg8gIUZdiizlJ1815Kx+tG5yi0mXaU6NPdtJxOcHD99hO8I2VDtUKdp5/
+         wgAmLauiM8/dqVp43ngZ1f9vLn+6DKkqIdHUE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cNVgFuSkvXsOF4mMDEXYWlsVrY9TlgTecIPAVLkOuWs=;
+        b=gn+7HxzOfiSdPeLqmAO4vloMea1jV7S+uPfroneA+BVRtH4TWbtBJiERzJQ7ffv1q6
+         W7v2tKWo4V564Ak5vU6eat056M6hVVEETlyjLtRELJerfxTZ0LtzHkXy4wYNd4G7HeJw
+         ydFYLXiGuZr7b47Mk/HJ8JkI5ZFWFoPWHFNhJacu/1K11+zHkX6iHnAqg/m5xikNq4ay
+         LIdIvq7x8ar51DulevmX0dO+nZApjPkTCkfUyDrIydaA+nBc9q0nlo2BuaznaJvWH7DU
+         xcXgoTDRXzhLTgH3ShTAaDuebtegcwMGs24yiQBaRKRXhi5h0lC5x5kYX68YBvJ6RsmC
+         ZL5w==
+X-Gm-Message-State: AOAM532I/+LJnb1DwLi62eUXBX1JrHeI2urYpojnmlzpYqHC1JgWDh5t
+        x/l2zkv+dS1oD6tDvzsEeolPOy25cxcbtLauBWg1Zwaw
+X-Google-Smtp-Source: ABdhPJy3jDioVIMXa2v625o3reDXrAtyaAv6CujTMELAi6Yci7xqNtalhS1zaix51U3flPHoVs8qoyEnjyutV/e5lvg=
+X-Received: by 2002:a05:622a:588:: with SMTP id c8mr699346qtb.108.1640136168852;
+ Tue, 21 Dec 2021 17:22:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YcH2aGNJn57pLihJ@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20211217095403.2618-1-jammy_huang@aspeedtech.com> <20211217095403.2618-5-jammy_huang@aspeedtech.com>
+In-Reply-To: <20211217095403.2618-5-jammy_huang@aspeedtech.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 22 Dec 2021 01:22:36 +0000
+Message-ID: <CACPK8Xf7rsjgCv=Honyf8gwDWbG67dPVjE+z_tXD4yEu1WaE5w@mail.gmail.com>
+Subject: Re: [PATCH 4/4] media: aspeed: Fix timing polarity incorrect
+To:     Jammy Huang <jammy_huang@aspeedtech.com>
+Cc:     Eddie James <eajames@linux.ibm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-media@vger.kernel.org,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 03:44:40PM +0000, Sean Christopherson wrote:
-> On Tue, Dec 21, 2021, Chao Peng wrote:
-> > This is the third version of this series which try to implement the
-> > fd-based KVM guest private memory.
-> 
-> ...
-> 
-> > Test
-> > ----
-> > This code has been tested with latest TDX code patches hosted at
-> > (https://github.com/intel/tdx/tree/kvm-upstream) with minimal TDX
-> > adaption and QEMU support.
-> > 
-> > Example QEMU command line:
-> > -object tdx-guest,id=tdx \
-> > -object memory-backend-memfd-private,id=ram1,size=2G \
-> > -machine q35,kvm-type=tdx,pic=no,kernel_irqchip=split,memory-encryption=tdx,memory-backend=ram1
-> > 
-> > Changelog
-> > ----------
-> > v3:
-> >   - Added locking protection when calling
-> >     invalidate_page_range/fallocate callbacks.
-> >   - Changed memslot structure to keep use useraddr for shared memory.
-> >   - Re-organized F_SEAL_INACCESSIBLE and MEMFD_OPS.
-> >   - Added MFD_INACCESSIBLE flag to force F_SEAL_INACCESSIBLE.
-> >   - Commit message improvement.
-> >   - Many small fixes for comments from the last version.
-> 
-> Can you rebase on top of kvm/queue and send a new version?  There's a massive
-> overhaul of KVM's memslots code that's queued for 5.17, and the KVM core changes
-> in this series conflict mightily.
+On Fri, 17 Dec 2021 at 09:54, Jammy Huang <jammy_huang@aspeedtech.com> wrote:
+>
+> This is a workaround for polarity unstable.
+> Sync value get by VR09C counts from sync's rising edge, which means
+> sync's polarity is negative if sync value is bigger than total/2.
+>
+> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+> ---
+>  drivers/media/platform/aspeed-video.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+>
+> diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+> index 5ad3a20c5bac..f628f69bb7dd 100644
+> --- a/drivers/media/platform/aspeed-video.c
+> +++ b/drivers/media/platform/aspeed-video.c
+> @@ -989,6 +989,15 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+>                 video->frame_top = FIELD_GET(VE_SRC_TB_EDGE_DET_TOP,
+>                                              src_tb_edge);
+>                 det->vsync = FIELD_GET(VE_SYNC_STATUS_VSYNC, sync);
+> +               /*
+> +                * Workaround for polarity detection
+> +                * Use sync(VR098) counts from sync's rising edge till falling
+> +                * edge to tell sync polarity.
+> +                */
+> +               if (det->vsync > (FIELD_GET(VE_MODE_DETECT_V_LINES, mds) >> 1))
 
-Sure, will do the rebase and send a new version.
+Are you right shifting as this is the value / 2? I think it's clearer
+to write / 2 instead of >> 1.
 
-> 
-> It's ok if the private memslot support isn't tested exactly as-is, it's not like
-> any of us reviewers can test it anyways, but I would like to be able to apply
-> cleanly and verify that the series doesn't break existing functionality.
+Mention in the comment that this is a workaround for when the sync
+value is larger than half.
 
-Good, it will ease me if that is acceptable (e.g. test on the relative
-new TDX codebase but send out the patch on latest kvm/queue which is not
-verified for the new function). This gets rid of the 'chicken and egg'
-dependency between this series and TDX patchset.
-
-> 
-> This version also appears to be based on an internal development branch, e.g. patch
-> 12/15 has some bits from the TDX series.
-
-Right, it's based on latest TDX code https://github.com/intel/tdx/tree/kvm-upstream.
-I did this because this is the only way I can test the code. 
-
-Thanks,
-Chao
-> 
-> @@ -336,6 +348,7 @@ struct kvm_tdx_exit {
->  #define KVM_EXIT_X86_BUS_LOCK     33
->  #define KVM_EXIT_XEN              34
->  #define KVM_EXIT_RISCV_SBI        35
-> +#define KVM_EXIT_MEMORY_ERROR     36
->  #define KVM_EXIT_TDX              50   /* dump number to avoid conflict. */
-> 
->  /* For KVM_EXIT_INTERNAL_ERROR */
-> @@ -554,6 +567,8 @@ struct kvm_run {
->                         unsigned long args[6];
->                         unsigned long ret[2];
->                 } riscv_sbi;
-> +               /* KVM_EXIT_MEMORY_ERROR */
-> +               struct kvm_memory_exit mem;
->                 /* KVM_EXIT_TDX_VMCALL */
->                 struct kvm_tdx_exit tdx;
->                 /* Fix the size of the union. */
+> +                       det->polarities &= ~V4L2_DV_VSYNC_POS_POL;
+> +               else
+> +                       det->polarities |= V4L2_DV_VSYNC_POS_POL;
+>                 if (det->polarities & V4L2_DV_VSYNC_POS_POL) {
+>                         det->vbackporch = video->frame_top - det->vsync;
+>                         det->vfrontporch =
+> @@ -1010,6 +1019,15 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+>                 video->frame_left = FIELD_GET(VE_SRC_LR_EDGE_DET_LEFT,
+>                                               src_lr_edge);
+>                 det->hsync = FIELD_GET(VE_SYNC_STATUS_HSYNC, sync);
+> +               /*
+> +                * Workaround for polarity detection
+> +                * Use sync(VR098) counts from sync's rising edge till falling
+> +                * edge to tell sync polarity.
+> +                */
+> +               if (det->hsync > (htotal >> 1))
+> +                       det->polarities &= ~V4L2_DV_HSYNC_POS_POL;
+> +               else
+> +                       det->polarities |= V4L2_DV_HSYNC_POS_POL;
+>                 if (det->polarities & V4L2_DV_HSYNC_POS_POL) {
+>                         det->hbackporch = video->frame_left - det->hsync;
+>                         det->hfrontporch = htotal - video->frame_right;
+> --
+> 2.25.1
+>

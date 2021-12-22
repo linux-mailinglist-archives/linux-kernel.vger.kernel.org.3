@@ -2,164 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB74147D39E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2376E47D3A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241208AbhLVOZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 09:25:02 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:45465 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233186AbhLVOZB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:25:01 -0500
-Received: from [192.168.0.2] (ip5f5aeac8.dynamic.kabel-deutschland.de [95.90.234.200])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id F34BD61EA1935;
-        Wed, 22 Dec 2021 15:24:58 +0100 (CET)
-Message-ID: <f6baa415-b078-4308-e31d-6b44e748c1c5@molgen.mpg.de>
-Date:   Wed, 22 Dec 2021 15:24:58 +0100
+        id S241276AbhLVOZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 09:25:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:27874 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233186AbhLVOZk (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 09:25:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640183139;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sed+3q7BIrPqRH2oXW0H9yWhS0jLPTp/jKWbYcwpgtQ=;
+        b=awQv03ht/1G6zUffJaDNGHcArwpGVG9AMYCgc6BvcvDUX0I/hKKW+FIRwQ2tS4qa62ooWI
+        GX4cSrzPRACLSoGY4Gi7xI/Ou27JVhF+re1eRt+VRYHp1waWZWwMWGoqeaRr3z1bDvM8Gl
+        1e7oHzbQoqVLEih0ESwaz0BfbWe767g=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-149-poMwdivYNU-HGi2syGYMdA-1; Wed, 22 Dec 2021 09:25:38 -0500
+X-MC-Unique: poMwdivYNU-HGi2syGYMdA-1
+Received: by mail-wm1-f70.google.com with SMTP id r2-20020a05600c35c200b00345c3b82b22so1222305wmq.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:25:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Sed+3q7BIrPqRH2oXW0H9yWhS0jLPTp/jKWbYcwpgtQ=;
+        b=J4hx5q1RQpdw0MkLQN5dt/Ih7GkhoApmKIqG94EgZ3Kfec/3NMJsc6VdSNZleZA6a2
+         zf4MQl5CvTRbEgSU2gRQrNKzpcqemKb6IyBpbuj/Fkj8Uf98dZFdCvVdj+sukN/lWTS+
+         2PpnNDOQeFc5gLBYpcDE0pQDi4D1MgIOMK5QfuHpHYvPjfcP/9Q+5DohIjV5AYpg6Sm1
+         e+c6EFcKvky6HLkioGCItv5h2Y3MlSLHppnfZxgWAtKBheCbG316+833ghlLoxaQRzT8
+         f3OAmmPXwmRyJC2h9Oyv0Al0EiemMqwiIIFAH0zbdMV06gCgc4ESuj1OW84UzDx9Vkhk
+         OHeg==
+X-Gm-Message-State: AOAM532FQ2XOopsiM83XD5KP93h/3D9Lqerb+2tITe7bNjA+yJLBhHFN
+        /S3sGWOjMcS7RKhYZlyVYj2dSHAEWbPWbJySyxklKbJRpasXu3dY4SY4jEcqa6xT3F5CBJDrRRJ
+        mi/iUbGYf7ADXl7DK1I4IP2pV
+X-Received: by 2002:adf:f48e:: with SMTP id l14mr2349811wro.88.1640183136569;
+        Wed, 22 Dec 2021 06:25:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwF1H19oReVzIhW/HdovbPos3VfS1M89DowdEAQKVZDSnhnAO8GO941Jyef1dfqEXvlTJiEDA==
+X-Received: by 2002:adf:f48e:: with SMTP id l14mr2349780wro.88.1640183136311;
+        Wed, 22 Dec 2021 06:25:36 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312::4fa? ([2001:b07:6468:f312::4fa])
+        by smtp.googlemail.com with ESMTPSA id p5sm2041160wrd.13.2021.12.22.06.25.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 06:25:35 -0800 (PST)
+Message-ID: <eb23f097-bc37-f656-2d78-96135f0f9fab@redhat.com>
+Date:   Wed, 22 Dec 2021 15:25:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v2 1/3] Bluetooth: mt7921s: Support wake on bluetooth
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 09/13] KVM: SVM: include CR3 in initial VMSA state for
+ SEV-ES guests
 Content-Language: en-US
-To:     Sean Wang <sean.wang@mediatek.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>
-Cc:     Mark-YW.Chen@mediatek.com, Soul.Huang@mediatek.com,
-        YN.Chen@mediatek.com, Leon.Yen@mediatek.com,
-        Eric-SY.Chang@mediatek.com, Deren.Wu@mediatek.com,
-        km.lin@mediatek.com, robin.chiu@mediatek.com,
-        Eddie.Chen@mediatek.com, ch.yeh@mediatek.com,
-        posh.sun@mediatek.com, ted.huang@mediatek.com,
-        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
-        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
-        frankgor@google.com, jemele@google.com, abhishekpandit@google.com,
-        michaelfsun@google.com, mcchou@chromium.org, shawnku@google.com,
-        linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <ef0603f2553d09fb84043704e4726d0ab98aa63b.1640141813.git.objelf@gmail.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <ef0603f2553d09fb84043704e4726d0ab98aa63b.1640141813.git.objelf@gmail.com>
+To:     Michael Roth <michael.roth@amd.com>,
+        linux-kselftest@vger.kernel.org
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+        Nathan Tempelman <natet@google.com>,
+        Marc Orr <marcorr@google.com>,
+        Steve Rutherford <srutherford@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Ricardo Koller <ricarkol@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Peter Gonda <pgonda@google.com>
+References: <20211216171358.61140-1-michael.roth@amd.com>
+ <20211216171358.61140-10-michael.roth@amd.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211216171358.61140-10-michael.roth@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Sean,
-
-
-Am 22.12.21 um 04:11 schrieb sean.wang@mediatek.com:
-> From: Mark Chen <mark-yw.chen@mediatek.com>
+On 12/16/21 18:13, Michael Roth wrote:
+> Normally guests will set up CR3 themselves, but some guests, such as
+> kselftests, and potentially CONFIG_PVH guests, rely on being booted
+> with paging enabled and CR3 initialized to a pre-allocated page table.
 > 
-> Enable wake on bluetooth on mt7921s that can be supported since the
-> firmware with version 20211129211059 was added, and the patch would
-> not cause any harm even when the old firmware is applied.
-
-Maybe print a notice level message, if the firmware is too old, and the 
-feature cannot be supported?
-
-> The patch was tested by setting up an HID or HOGP profile to connect a
-> Bluetooth keyboard and mouse, then putting the system to suspend, then
-> trying to wake up the system by moving the Bluetooth keyboard or mouse,
-> and then checking if the system can wake up and be brought back to
-> the normal state.
-
-I’d still would like to see the datasheet name, revision, and section in 
-the commit message, even though the datasheet is not public.
-
-> Co-developed-by: Sean Wang <sean.wang@mediatek.com>
-> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-> Signed-off-by: Mark Chen <mark-yw.chen@mediatek.com>
-> ---
-> v2: refine the git message
-> ---
->   drivers/bluetooth/btmtk.h     |  8 ++++++++
->   drivers/bluetooth/btmtksdio.c | 31 ++++++++++++++++++++++++++++++-
->   2 files changed, 38 insertions(+), 1 deletion(-)
+> Currently CR3 updates via KVM_SET_SREGS* are not loaded into the guest
+> VMCB until just prior to entering the guest. For SEV-ES/SEV-SNP, this
+> is too late, since it will have switched over to using the VMSA page
+> prior to that point, with the VMSA CR3 copied from the VMCB initial
+> CR3 value: 0.
 > 
-> diff --git a/drivers/bluetooth/btmtk.h b/drivers/bluetooth/btmtk.h
-> index 6e7b0c7567c0..2be1d2680ad8 100644
-> --- a/drivers/bluetooth/btmtk.h
-> +++ b/drivers/bluetooth/btmtk.h
-> @@ -68,6 +68,14 @@ struct btmtk_tci_sleep {
->   	u8 time_compensation;
->   } __packed;
->   
-> +struct btmtk_wakeon {
-> +	u8 mode;
-> +	u8 gpo;
-> +	u8 active_high;
-> +	__le16 enable_delay;
-> +	__le16 wakeup_delay;
-> +} __packed;
-> +
->   struct btmtk_hci_wmt_params {
->   	u8 op;
->   	u8 flag;
-> diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-> index b5ea8d3bffaa..771733ce362b 100644
-> --- a/drivers/bluetooth/btmtksdio.c
-> +++ b/drivers/bluetooth/btmtksdio.c
-> @@ -958,6 +958,30 @@ static int btmtksdio_send_frame(struct hci_dev *hdev, struct sk_buff *skb)
->   	return 0;
+> Address this by sync'ing the CR3 value into the VMCB save area
+> immediately when KVM_SET_SREGS* is issued so it will find it's way into
+> the initial VMSA.
+> 
+> Suggested-by: Tom Lendacky <thomas.lendacky@amd.com>
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> ---
+>   arch/x86/include/asm/kvm-x86-ops.h |  1 +
+>   arch/x86/include/asm/kvm_host.h    |  1 +
+>   arch/x86/kvm/svm/svm.c             | 19 +++++++++++++++++++
+>   arch/x86/kvm/vmx/vmx.c             |  6 ++++++
+>   arch/x86/kvm/x86.c                 |  1 +
+>   5 files changed, 28 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index cefe1d81e2e8..a3172bd59690 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -35,6 +35,7 @@ KVM_X86_OP(get_cpl)
+>   KVM_X86_OP(set_segment)
+>   KVM_X86_OP_NULL(get_cs_db_l_bits)
+>   KVM_X86_OP(set_cr0)
+> +KVM_X86_OP(post_set_cr3)
+>   KVM_X86_OP(is_valid_cr4)
+>   KVM_X86_OP(set_cr4)
+>   KVM_X86_OP(set_efer)
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index d5fede05eb5f..22f384320ed1 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1342,6 +1342,7 @@ struct kvm_x86_ops {
+>   			    struct kvm_segment *var, int seg);
+>   	void (*get_cs_db_l_bits)(struct kvm_vcpu *vcpu, int *db, int *l);
+>   	void (*set_cr0)(struct kvm_vcpu *vcpu, unsigned long cr0);
+> +	void (*post_set_cr3)(struct kvm_vcpu *vcpu, unsigned long cr3);
+>   	bool (*is_valid_cr4)(struct kvm_vcpu *vcpu, unsigned long cr0);
+>   	void (*set_cr4)(struct kvm_vcpu *vcpu, unsigned long cr4);
+>   	int (*set_efer)(struct kvm_vcpu *vcpu, u64 efer);
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 208566f63bce..76e906d83a84 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -1792,6 +1792,24 @@ static void svm_set_gdt(struct kvm_vcpu *vcpu, struct desc_ptr *dt)
+>   	vmcb_mark_dirty(svm->vmcb, VMCB_DT);
 >   }
 >   
-> +static bool btmtk_sdio_wakeup(struct hci_dev *hdev)
+> +static void svm_post_set_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
 > +{
-> +	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev);
-> +	bool may_wakeup = device_may_wakeup(bdev->dev);
-> +	struct btmtk_wakeon bt_awake = {
-> +		.mode = 0x1,
-> +		.gpo = 0,
-> +		.active_high = 0x1,
-> +		.enable_delay = cpu_to_le16(0xc80),
-> +		.wakeup_delay = cpu_to_le16(0x20)
-> +	};
-> +	struct sk_buff *skb;
+> +	struct vcpu_svm *svm = to_svm(vcpu);
 > +
-> +	if (may_wakeup &&
-> +	    bdev->data->chipid == 0x7921) {
-> +		skb =  __hci_cmd_sync(hdev, 0xfc27, sizeof(bt_awake),
-> +				      &bt_awake, HCI_CMD_TIMEOUT);
-> +		if (IS_ERR(skb))
-> +			may_wakeup = false;
+> +	/*
+> +	 * For guests that don't set guest_state_protected, the cr3 update is
+> +	 * handled via kvm_mmu_load() while entering the guest. For guests
+> +	 * that do (SEV-ES/SEV-SNP), the cr3 update needs to be written to
+> +	 * VMCB save area now, since the save area will become the initial
+> +	 * contents of the VMSA, and future VMCB save area updates won't be
+> +	 * seen.
+> +	 */
+> +	if (sev_es_guest(vcpu->kvm)) {
+> +		svm->vmcb->save.cr3 = cr3;
+> +		vmcb_mark_dirty(svm->vmcb, VMCB_CR);
 > +	}
-> +
-> +	return may_wakeup;
 > +}
 > +
->   static int btmtksdio_probe(struct sdio_func *func,
->   			   const struct sdio_device_id *id)
+>   void svm_set_cr0(struct kvm_vcpu *vcpu, unsigned long cr0)
 >   {
-> @@ -998,6 +1022,7 @@ static int btmtksdio_probe(struct sdio_func *func,
->   	hdev->shutdown = btmtksdio_shutdown;
->   	hdev->send     = btmtksdio_send_frame;
->   	hdev->set_bdaddr = btmtk_set_bdaddr;
-> +	hdev->wakeup = btmtk_sdio_wakeup;
-
-Just a nit, that two and three lines above, the equal signs are aligned.
-
->   	SET_HCIDEV_DEV(hdev, &func->dev);
->   
-> @@ -1032,7 +1057,11 @@ static int btmtksdio_probe(struct sdio_func *func,
->   	 */
->   	pm_runtime_put_noidle(bdev->dev);
->   
-> -	return 0;
-> +	err = device_init_wakeup(bdev->dev, true);
-> +	if (err)
-> +		bt_dev_err(hdev, "%s: failed to init_wakeup", __func__);
-> +
-> +	return err;
+>   	struct vcpu_svm *svm = to_svm(vcpu);
+> @@ -4622,6 +4640,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+>   	.get_cpl = svm_get_cpl,
+>   	.get_cs_db_l_bits = kvm_get_cs_db_l_bits,
+>   	.set_cr0 = svm_set_cr0,
+> +	.post_set_cr3 = svm_post_set_cr3,
+>   	.is_valid_cr4 = svm_is_valid_cr4,
+>   	.set_cr4 = svm_set_cr4,
+>   	.set_efer = svm_set_efer,
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 63615d242bdf..075107c1b3f5 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -3124,6 +3124,11 @@ static void vmx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa,
+>   		vmcs_writel(GUEST_CR3, guest_cr3);
 >   }
 >   
->   static void btmtksdio_remove(struct sdio_func *func)
+> +
+> +void vmx_post_set_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
+> +{
+> +}
+> +
+>   static bool vmx_is_valid_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
+>   {
+>   	/*
+> @@ -7597,6 +7602,7 @@ static struct kvm_x86_ops vmx_x86_ops __initdata = {
+>   	.get_cpl = vmx_get_cpl,
+>   	.get_cs_db_l_bits = vmx_get_cs_db_l_bits,
+>   	.set_cr0 = vmx_set_cr0,
+> +	.post_set_cr3 = vmx_post_set_cr3,
+>   	.is_valid_cr4 = vmx_is_valid_cr4,
+>   	.set_cr4 = vmx_set_cr4,
+>   	.set_efer = vmx_set_efer,
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 26cb3a4cd0e9..c0d84a4c8049 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -10609,6 +10609,7 @@ static int __set_sregs_common(struct kvm_vcpu *vcpu, struct kvm_sregs *sregs,
+>   	*mmu_reset_needed |= kvm_read_cr3(vcpu) != sregs->cr3;
+>   	vcpu->arch.cr3 = sregs->cr3;
+>   	kvm_register_mark_dirty(vcpu, VCPU_EXREG_CR3);
+> +	static_call(kvm_x86_post_set_cr3)(vcpu, sregs->cr3);
+>   
+>   	kvm_set_cr8(vcpu, sregs->cr8);
+>   
+> 
+
+I'm going to apply this one now, just with a small change to avoid 
+vmx_post_set_cr3 and a remark about why kvm_set_cr3 is not calling the 
+new hook.
+
+diff --git a/arch/x86/include/asm/kvm-x86-ops.h 
+b/arch/x86/include/asm/kvm-x86-ops.h
+index 8803773539a0..37624a9e3e40 100644
+--- a/arch/x86/include/asm/kvm-x86-ops.h
++++ b/arch/x86/include/asm/kvm-x86-ops.h
+@@ -35,7 +35,7 @@ KVM_X86_OP(get_cpl)
+  KVM_X86_OP(set_segment)
+  KVM_X86_OP_NULL(get_cs_db_l_bits)
+  KVM_X86_OP(set_cr0)
+-KVM_X86_OP(post_set_cr3)
++KVM_X86_OP_NULL(post_set_cr3)
+  KVM_X86_OP(is_valid_cr4)
+  KVM_X86_OP(set_cr4)
+  KVM_X86_OP(set_efer)
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index a39da103e33c..fe06b02994e6 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -3135,10 +3135,6 @@ static void vmx_load_mmu_pgd(struct kvm_vcpu 
+*vcpu, hpa_t root_hpa,
+  }
 
 
-Kind regards,
+-void vmx_post_set_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
+-{
+-}
+-
+  static bool vmx_is_valid_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
+  {
+  	/*
+@@ -7608,7 +7604,6 @@ static struct kvm_x86_ops vmx_x86_ops __initdata = {
+  	.get_cpl = vmx_get_cpl,
+  	.get_cs_db_l_bits = vmx_get_cs_db_l_bits,
+  	.set_cr0 = vmx_set_cr0,
+-	.post_set_cr3 = vmx_post_set_cr3,
+  	.is_valid_cr4 = vmx_is_valid_cr4,
+  	.set_cr4 = vmx_set_cr4,
+  	.set_efer = vmx_set_efer,
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index db118066c653..c194a8cbd25f 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -1179,6 +1179,7 @@ int kvm_set_cr3(struct kvm_vcpu *vcpu, unsigned 
+long cr3)
 
-Paul
+  	vcpu->arch.cr3 = cr3;
+  	kvm_register_mark_dirty(vcpu, VCPU_EXREG_CR3);
++	/* Do not call post_set_cr3, we do not get here for confidential 
+guests.  */
+
+  handle_tlb_flush:
+  	/*
+@@ -10636,7 +10637,7 @@ static int __set_sregs_common(struct kvm_vcpu 
+*vcpu, struct kvm_sregs *sregs,
+  	*mmu_reset_needed |= kvm_read_cr3(vcpu) != sregs->cr3;
+  	vcpu->arch.cr3 = sregs->cr3;
+  	kvm_register_mark_dirty(vcpu, VCPU_EXREG_CR3);
+-	static_call(kvm_x86_post_set_cr3)(vcpu, sregs->cr3);
++	static_call_cond(kvm_x86_post_set_cr3)(vcpu, sregs->cr3);
+
+  	kvm_set_cr8(vcpu, sregs->cr8);
+
+Paolo
+

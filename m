@@ -2,70 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 569B047CAC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:27:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A31847CAC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238439AbhLVB06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 20:26:58 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:29278 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233887AbhLVB05 (ORCPT
+        id S240993AbhLVBbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 20:31:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56552 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233887AbhLVBbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 20:26:57 -0500
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JJbJS4ZRnzbjXv;
-        Wed, 22 Dec 2021 09:26:32 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 22 Dec 2021 09:26:55 +0800
-Subject: Re: [PATCH -next] sysctl: returns -EINVAL when a negative value is
- passed to proc_doulongvec_minmax
-To:     Luis Chamberlain <mcgrof@kernel.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>, <keescook@chromium.org>,
-        <yzaikin@google.com>, <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <yukuai3@huawei.com>,
-        Hulk Robot <hulkci@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>
-References: <20211209085635.1288737-1-libaokun1@huawei.com>
- <Yb+kHuIFnCKcfM5l@bombadil.infradead.org>
- <4b2cba44-b18a-dd93-b288-c6a487e4857a@huawei.com>
- <YcDZKxXJKglR6mcO@bombadil.infradead.org>
- <70910c5b-4681-db00-27ba-715dddd7831a@huawei.com>
- <YcJO3f8LWvSMWBKz@bombadil.infradead.org>
-From:   "libaokun (A)" <libaokun1@huawei.com>
-Message-ID: <0d2b0af4-b0c0-487d-549b-5817ae75284d@huawei.com>
-Date:   Wed, 22 Dec 2021 09:26:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        Tue, 21 Dec 2021 20:31:16 -0500
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AA9C061574;
+        Tue, 21 Dec 2021 17:31:15 -0800 (PST)
+Received: by mail-qk1-x72f.google.com with SMTP id e16so822473qkl.12;
+        Tue, 21 Dec 2021 17:31:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BL4VTrxHuhNngkVjVPPyXcbNQ/vv2xvDhyVBuDNvoBE=;
+        b=HGxs8jlV6uJBLy77VN0ld1Ch0KRpJ634KfWR9yIX8fJk3s2xAZEEuxCDpXgkg8n9Yo
+         iOnOqRhsMKTh31pymyYvwtnt3keVbkK4uIiH7PR9wCr9iPjXQXz3CRRpxDAC+et0arj7
+         SAtH7PDcshRL8CTuOEcpixfhsxwtrIIL5YMCQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BL4VTrxHuhNngkVjVPPyXcbNQ/vv2xvDhyVBuDNvoBE=;
+        b=rQUe6u+Rqt3tzhz9998b3klATZ3HB9NHVyvk196rMgLqCJc8bHRpqjP2NOib1esHzN
+         F0i5jjjvUuyrofJXmX4KyCKODqMMvFR1S0Q/qgrVhABMaEpR+ndSnlJfw1FISgypp5ia
+         ZFDXEPmY2xUiM/vmTAVLzB0Jd9eUcCX7gmdIBIo2xa4aeJfLRp9+tmPUrH1t/1+kPU2Q
+         8kMluPWhSrW71BG8wasElMRmjdS32d2+W+N6Hd4TKJROi2BV/OFfeW957vV13XWFfUss
+         4mlg+3qf2lDQlV9Etkq9J+cG+LFY8oWQVVB/mYE0hAwvzLhKA7arjDRpR5VBkwU8oCJe
+         Sakg==
+X-Gm-Message-State: AOAM532jpCuyhXwX3l4Z4D0it2Qj0Lni7L2WWGIAZWBzxr/GX2FDE2XW
+        vICTOAPyEuVeFls3XiSECOdKBx08x9IvBpgoOcO8UWn0
+X-Google-Smtp-Source: ABdhPJwYB/w9mWQ/fJ18cguaiEKzZSEf2jcz9l7mfEhP1ihTCU6+UEnF0DuWo1HpbZ9y0+2JAC3df9FcIneYpMNTd+k=
+X-Received: by 2002:a37:4047:: with SMTP id n68mr734946qka.346.1640136674770;
+ Tue, 21 Dec 2021 17:31:14 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YcJO3f8LWvSMWBKz@bombadil.infradead.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500020.china.huawei.com (7.185.36.88)
-X-CFilter-Loop: Reflected
+References: <20211217095403.2618-1-jammy_huang@aspeedtech.com> <20211217095403.2618-4-jammy_huang@aspeedtech.com>
+In-Reply-To: <20211217095403.2618-4-jammy_huang@aspeedtech.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 22 Dec 2021 01:31:02 +0000
+Message-ID: <CACPK8Xf_5wZXzfDSrdLLxs_B_jX7BVHc5o2Thw1DJvYix1AA8Q@mail.gmail.com>
+Subject: Re: [PATCH 3/4] media: aspeed: Correct values for detected timing
+To:     Jammy Huang <jammy_huang@aspeedtech.com>
+Cc:     Eddie James <eajames@linux.ibm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-media@vger.kernel.org,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2021/12/22 6:02, Luis Chamberlain 写道:
-> On Tue, Dec 21, 2021 at 09:15:28AM +0800, libaokun (A) wrote:
->> 在 2021/12/21 3:27, Luis Chamberlain 写道:
->>> On Mon, Dec 20, 2021 at 04:53:57PM +0800, libaokun (A) wrote:
->>>> 在 2021/12/20 5:29, Luis Chamberlain 写道:
->>>>> Curious do you have docs on Hulk Robot?
->>>> Hulk Robot is Huawei's internal test framework. It contains many things.
->>> Neat, is the code public?
->> The code is not public.
-> Why not?
-Because it's currently only used internally, and I don't know much about it.
+On Fri, 17 Dec 2021 at 09:54, Jammy Huang <jammy_huang@aspeedtech.com> wrote:
 >
->    Luis
-> .
+> Correct timing's fp/sync/bp value based on the information below.
+> It should be noticed that the calculation formula should be changed
+> per sync polarity.
+>
+> The sequence of signal: sync - backporch - video data - frontporch
+>
+> The following registers start counting from sync's rising edge:
+> 1. VR090: frame edge's left and right
+> 2. VR094: frame edge's top and bottom
+> 3. VR09C: counting from sync's rising edge to falling edge
+>
+>             +--+     +-------------------+     +--+
+>             |  |     |    v i d e o      |     |  |
+>          +--+  +-----+                   +-----+  +---+
+>
+>         sync+--+
+>     left/top+--------+
+> right/bottom+----------------------------+
+>
+>                   +-------------------+
+>                   |    v i d e o      |
+>       +--+  +-----+                   +-----+  +---+
+>          |  |                               |  |
+>          +--+                               +--+
+>         sync+-------------------------------+
+>     left/top+-----+
+> right/bottom+-------------------------+
 
--- 
-With Best Regards,
-Baokun Li
+This is a good explanation. Can you add detail that relates the names
+you use here to to the variable names in your patch (or change them to
+match)?
 
+>
+> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+> ---
+>  drivers/media/platform/aspeed-video.c | 27 ++++++++++++++++++++++-----
+>  1 file changed, 22 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+> index 581a4261f9b7..5ad3a20c5bac 100644
+> --- a/drivers/media/platform/aspeed-video.c
+> +++ b/drivers/media/platform/aspeed-video.c
+> @@ -988,10 +988,20 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+>                                                 src_tb_edge);
+>                 video->frame_top = FIELD_GET(VE_SRC_TB_EDGE_DET_TOP,
+>                                              src_tb_edge);
+> -               det->vfrontporch = video->frame_top;
+> -               det->vbackporch = FIELD_GET(VE_MODE_DETECT_V_LINES, mds) -
+> -                       video->frame_bottom;
+>                 det->vsync = FIELD_GET(VE_SYNC_STATUS_VSYNC, sync);
+
+
+Would it be clearer if you structured the code like this?
+
+ vsync = FIELD_GET(VE_SYNC_STATUS_VSYNC, sync);
+ vlines = FIELD_GET(VE_MODE_DETECT_V_LINES, mds);
+
+ if (det->polarities & V4L2_DV_VSYNC_POS_POL)) {
+    det->vbackporch = video->frame_top - vsync;
+    det->vfrontporch = vlines - video->frame_bottom;
+    det->vsync = vsync;
+ } else {
+    det->vbackporch = video->frame_top;
+    det->vfrontporch = vlines - video->frame_bottom - vsync;
+    det->vsync = vlines - vsync;
+
+}
+
+
+> +               if (det->polarities & V4L2_DV_VSYNC_POS_POL) {
+> +                       det->vbackporch = video->frame_top - det->vsync;
+> +                       det->vfrontporch =
+> +                               FIELD_GET(VE_MODE_DETECT_V_LINES, mds) -
+> +                               video->frame_bottom;
+> +               } else {
+> +                       det->vsync = FIELD_GET(VE_MODE_DETECT_V_LINES, mds) -
+> +                                              det->vsync;
+> +                       det->vbackporch = video->frame_top;
+> +                       det->vfrontporch =
+> +                               FIELD_GET(VE_MODE_DETECT_V_LINES, mds) -
+> +                               video->frame_bottom - det->vsync;
+> +               }
+>                 if (video->frame_top > video->frame_bottom)
+>                         continue;
+>
+> @@ -999,9 +1009,16 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+>                                                src_lr_edge);
+>                 video->frame_left = FIELD_GET(VE_SRC_LR_EDGE_DET_LEFT,
+>                                               src_lr_edge);
+> -               det->hfrontporch = video->frame_left;
+> -               det->hbackporch = htotal - video->frame_right;
+>                 det->hsync = FIELD_GET(VE_SYNC_STATUS_HSYNC, sync);
+> +               if (det->polarities & V4L2_DV_HSYNC_POS_POL) {
+> +                       det->hbackporch = video->frame_left - det->hsync;
+> +                       det->hfrontporch = htotal - video->frame_right;
+> +               } else {
+> +                       det->hsync = htotal - det->hsync;
+> +                       det->hbackporch = video->frame_left;
+> +                       det->hfrontporch = htotal - video->frame_right -
+> +                                          det->hsync;
+> +               }
+>                 if (video->frame_left > video->frame_right)
+>                         continue;
+>
+> --
+> 2.25.1
+>

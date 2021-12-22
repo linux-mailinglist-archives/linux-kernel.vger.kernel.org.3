@@ -2,99 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6643447D49A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 16:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBDA47D557
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:44:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344043AbhLVP6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 10:58:23 -0500
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:49907 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343864AbhLVP6A (ORCPT
+        id S1344090AbhLVQoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 11:44:24 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:46556 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241894AbhLVQn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 10:58:00 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 5473660013;
-        Wed, 22 Dec 2021 15:57:58 +0000 (UTC)
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        linux-wpan@vger.kernel.org
-Cc:     David Girault <david.girault@qorvo.com>,
-        Romuald Despres <romuald.despres@qorvo.com>,
-        Frederic Blain <frederic.blain@qorvo.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        <linux-kernel@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [net-next 09/18] net: ieee802154: Define a beacon frame header
+        Wed, 22 Dec 2021 11:43:29 -0500
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
+ id ca1892f530cae655; Wed, 22 Dec 2021 17:43:27 +0100
+Received: from kreacher.localnet (unknown [213.134.181.48])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 1B1D766AE27;
+        Wed, 22 Dec 2021 17:43:27 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bob Moore <robert.moore@intel.com>
+Subject: [PATCH 01/19] ACPICA: actypes.h: Expand the ACPI_ACCESS_ definitions
 Date:   Wed, 22 Dec 2021 16:57:34 +0100
-Message-Id: <20211222155743.256280-10-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20211222155743.256280-1-miquel.raynal@bootlin.com>
-References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
+Message-ID: <5779634.lOV4Wx5bFT@kreacher>
+In-Reply-To: <11889746.O9o76ZdvQC@kreacher>
+References: <11889746.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.181.48
+X-CLIENT-HOSTNAME: 213.134.181.48
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddruddtiedgkeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefgkedtheeuheetffeuleelhefhfffgjedthedvtdefteejffevteehhedvjefgudenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedvudefrddufeegrddukedurdegkeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurdegkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohgsvghrthdrmhhoohhrvgesihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This definition will be used when adding support for scanning and defines
-the content of a beacon frame header as in the 802.15.4 specification.
+From: Mark Langsdorf <mlangsdo@redhat.com>
 
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+ACPICA commit bc02c76d518135531483dfc276ed28b7ee632ce1
+
+The current ACPI_ACCESS_*_WIDTH defines do not provide a way to
+test that size is small enough to not cause an overflow when
+applied to a 32-bit integer.
+
+Rather than adding more magic numbers, add ACPI_ACCESS_*_SHIFT,
+ACPI_ACCESS_*_MAX, and ACPI_ACCESS_*_DEFAULT #defines and
+redefine ACPI_ACCESS_*_WIDTH in terms of the new #defines.
+
+This was inititally reported on Linux where a size of 102 in
+ACPI_ACCESS_BIT_WIDTH caused an overflow error in the SPCR
+initialization code.
+
+Link: https://github.com/acpica/acpica/commit/bc02c76d
+Signed-off-by: Mark Langsdorf <mlangsdo@redhat.com>
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- include/net/ieee802154_netdev.h | 36 +++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ include/acpi/actypes.h | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/include/net/ieee802154_netdev.h b/include/net/ieee802154_netdev.h
-index d0d188c3294b..a92999817dc0 100644
---- a/include/net/ieee802154_netdev.h
-+++ b/include/net/ieee802154_netdev.h
-@@ -22,6 +22,42 @@
+diff --git a/include/acpi/actypes.h b/include/acpi/actypes.h
+index ff8b3c913f21..248242dca28d 100644
+--- a/include/acpi/actypes.h
++++ b/include/acpi/actypes.h
+@@ -536,8 +536,14 @@ typedef u64 acpi_integer;
+  * Can be used with access_width of struct acpi_generic_address and access_size of
+  * struct acpi_resource_generic_register.
+  */
+-#define ACPI_ACCESS_BIT_WIDTH(size)     (1 << ((size) + 2))
+-#define ACPI_ACCESS_BYTE_WIDTH(size)    (1 << ((size) - 1))
++#define ACPI_ACCESS_BIT_SHIFT		2
++#define ACPI_ACCESS_BYTE_SHIFT		-1
++#define ACPI_ACCESS_BIT_MAX		(31 - ACPI_ACCESS_BIT_SHIFT)
++#define ACPI_ACCESS_BYTE_MAX		(31 - ACPI_ACCESS_BYTE_SHIFT)
++#define ACPI_ACCESS_BIT_DEFAULT		(8 - ACPI_ACCESS_BIT_SHIFT)
++#define ACPI_ACCESS_BYTE_DEFAULT	(8 - ACPI_ACCESS_BYTE_SHIFT)
++#define ACPI_ACCESS_BIT_WIDTH(size)	(1 << ((size) + ACPI_ACCESS_BIT_SHIFT))
++#define ACPI_ACCESS_BYTE_WIDTH(size)	(1 << ((size) + ACPI_ACCESS_BYTE_SHIFT))
  
- #include <net/cfg802154.h>
- 
-+struct ieee802154_beaconhdr {
-+#if defined(__LITTLE_ENDIAN_BITFIELD)
-+	u16 beacon_order:4,
-+	    superframe_order:4,
-+	    final_cap_slot:4,
-+	    battery_life_ext:1,
-+	    reserved0:1,
-+	    pan_coordinator:1,
-+	    assoc_permit:1;
-+	u8  gts_count:3,
-+	    gts_reserved:4,
-+	    gts_permit:1;
-+	u8  pend_short_addr_count:3,
-+	    reserved1:1,
-+	    pend_ext_addr_count:3,
-+	    reserved2:1;
-+#elif defined(__BIG_ENDIAN_BITFIELD)
-+	u16 assoc_permit:1,
-+	    pan_coordinator:1,
-+	    reserved0:1,
-+	    battery_life_ext:1,
-+	    final_cap_slot:4,
-+	    superframe_order:4,
-+	    beacon_order:4;
-+	u8  gts_permit:1,
-+	    gts_reserved:4,
-+	    gts_count:3;
-+	u8  reserved2:1,
-+	    pend_ext_addr_count:3,
-+	    reserved1:1,
-+	    pend_short_addr_count:3;
-+#else
-+#error	"Please fix <asm/byteorder.h>"
-+#endif
-+} __packed;
-+
- struct ieee802154_sechdr {
- #if defined(__LITTLE_ENDIAN_BITFIELD)
- 	u8 level:3,
+ /*******************************************************************************
+  *
 -- 
-2.27.0
+2.26.2
+
+
+
 

@@ -2,102 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF58B47CB59
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 03:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B23747CB5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 03:31:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238650AbhLVC2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 21:28:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41034 "EHLO
+        id S238684AbhLVCbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 21:31:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237775AbhLVC2u (ORCPT
+        with ESMTP id S230172AbhLVCbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 21:28:50 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D50C061574;
-        Tue, 21 Dec 2021 18:28:49 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id f9so683496qtk.4;
-        Tue, 21 Dec 2021 18:28:49 -0800 (PST)
+        Tue, 21 Dec 2021 21:31:23 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB393C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 18:31:22 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id t23so1734407oiw.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 18:31:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lBbJ0cNNlYj6EJvQfd0q1bNDKSk0QFiEWVowekGezSc=;
-        b=nKTtXIAQv8OY5SnLYPIKNbxRbp/nsYZuehcQVCtQ3j1R86ExUTbR1f+MvE75lvRYpy
-         IqWmcsdG9pcey/vn11uxa+8hkcRxqWMaGIH9xykoOJvBrW1DviuSEKZrTWu06c4sH2F0
-         QFKuYgdQ9FladRPzBuDMEvkz+L5+mAXaC5gd4E9cN76wuvsFztQNHmmlgvfgXMmDbek/
-         ztK4t2xxutn3DuKY8kVDU7GT/3kaexLgG1kdQmZDw431j2F0LsVSJxSrNBK6NLzUr/Lm
-         akNQqlo/o7faBeeMXbyN4UW+UtXgiOMPrwWjw1St+4ILGjA+8ipdfZ5RaKG5DsAoAqlP
-         8/HQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WVVTT3vmCo0q+zp9wFYRPgJeYzCdgYYZVxCTfsBXpCo=;
+        b=mKsAMnpFxty/J3lsRPATdg9Gs0N+0Z+X2GBXtJSBuv5AtGMYxzkOAILiIvTERYbCez
+         pR66vqnBgCquTFG1zBdeZTNQrJjVAlqtkBYUOlLsXnmuyBJCfirNpdTy92WUoJBD5pwZ
+         OAUp1QhNYTo2E81BaaQoSagyvrf50+EhZawqS9QylSDjPy+3tMpH2nOKqN8MXOBHAlHe
+         2s2RzTamSMr/f51jBQh1gq6V7D/3JOGYJD4b7Gh4zgqqO11mO+a22GJEDNG+NyZZLhBO
+         9anAtrucLwlGE5/9E4rUVk5l0lgrIfMJN+hqeBRIJnYCogm4uY5D2faHxEWOaEv5M9kp
+         AiBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lBbJ0cNNlYj6EJvQfd0q1bNDKSk0QFiEWVowekGezSc=;
-        b=JGThm4Vrc0pG0Hy7odOCXz4CR/PWqRUUQ2FaYnwGwVQ9cDBM3cRgxMPa5lPqD6E0Wg
-         0NLHZnbnWE0X8lL5ia9laByQjBRWQVxDo39ZFWpoQFTq9GZ/Ctlvq80dhvySEOkhe0xH
-         duyRIjZ1Kd4AoPYc/543hkCI9pdUIp/G7hCErHk0a+lgUq7Ci+pukCjl4eRQFUVJGZgi
-         j59kwpJciV2Ug8NQNkTv5kvKqqaUE+RRtKdLnUXohaawFAKfHN359xesykNcTRpG/9RO
-         fRTpDkq4m9A6IffZihnTGlCYktwvQrtxS4xbOim1cJ4SKMRiqbmfD9ETyT/+QmDHlFHV
-         F+pw==
-X-Gm-Message-State: AOAM533yAVuh/jTtrwVO5Fp3QTBSqTDFuVh0Z12pDSnhin4NQ1n9OSt7
-        KkWZdsy6C4d2RT4Bxn7jhaKNArUMGE4=
-X-Google-Smtp-Source: ABdhPJxXlgfDLzoTmYUKxRVp7zI7rqyERG0y1sWq4DcxIpqUsRf3PDeggg69og3JMVFqRXKvaa3+bQ==
-X-Received: by 2002:ac8:7345:: with SMTP id q5mr823587qtp.410.1640140128984;
-        Tue, 21 Dec 2021 18:28:48 -0800 (PST)
-Received: from shaak (69-165-204-82.cable.teksavvy.com. [69.165.204.82])
-        by smtp.gmail.com with ESMTPSA id s4sm755522qko.47.2021.12.21.18.28.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 18:28:48 -0800 (PST)
-Date:   Tue, 21 Dec 2021 21:28:45 -0500
-From:   Liam Beguin <liambeguin@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "peda@axentia.se" <peda@axentia.se>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-Subject: Re: [PATCH v10 04/14] iio: afe: rescale: expose scale processing
- function
-Message-ID: <YcKNXaVXrkdgDMTz@shaak>
-References: <20211219223953.16074-1-liambeguin@gmail.com>
- <20211219223953.16074-5-liambeguin@gmail.com>
- <CAHp75VdfPf6FMvkGqhhQg5e5XE1cgE-K8seobe5n0yGarnPGtQ@mail.gmail.com>
- <CAHp75VcRH9ZGYuXteT2WQWqr8sch3EsSYu_AYtNx2jEJY76tow@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WVVTT3vmCo0q+zp9wFYRPgJeYzCdgYYZVxCTfsBXpCo=;
+        b=DHav9J0IF2OPC8J/1dE8EXda6UFYnIxUAY6oWHsnHrtEGAltXbxvcZL6KzyoLDPk1g
+         FujC1LeUJL3b+/q67EAdsQ0n8BSnDqRVEAKjP2VvDRoiY5Kphb1At5fexn/WHNEeZKVC
+         MYZ7Fu2R9/ED0SqR0Hkf2l/ZiCqfRiGhNE+ARoOHT7WpM1VHOUM4rDVuy4gPVc2xDbst
+         JIlhAu2B0Auen5jKeuxqhywyaP/BH+oEDDh+TYJwTTIo+EMxYIYY9aMCU+yKxBKGgwj9
+         Cm7bbfCwLyOoVoCbXb56CxaH6mMGUbUJUBYk+WBVoF1/KFy1gUag3Szz4SQEh4Vw+A6Z
+         UKEg==
+X-Gm-Message-State: AOAM532lgH7Ct7SWc/pKioxADHIjHHPuVqL06XRpNTsiBYxv16TIPRKu
+        O/pohvfxo7tL45a3wZMgtMQ9umtdgDDagL8of2agwQ==
+X-Google-Smtp-Source: ABdhPJyQw6pAlcKRGCxrInfNKU8CpUScnbM1HMPt/NrRC5sZMLlmMoxRq9pY61m6usNkXlYoPEcqNzn8/ggSyYEYD0U=
+X-Received: by 2002:aca:5a87:: with SMTP id o129mr754536oib.114.1640140281901;
+ Tue, 21 Dec 2021 18:31:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75VcRH9ZGYuXteT2WQWqr8sch3EsSYu_AYtNx2jEJY76tow@mail.gmail.com>
+References: <20211218085843.212497-1-cuigaosheng1@huawei.com>
+ <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com>
+ <dfc25b22-2f66-4404-66c4-44c9c8c3bab4@huawei.com> <CAK8P3a0aNoU693ft3pHCPJOcGubZ1dMFyOmWozO0N_8-F_JkLQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a0aNoU693ft3pHCPJOcGubZ1dMFyOmWozO0N_8-F_JkLQ@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 22 Dec 2021 03:31:10 +0100
+Message-ID: <CACRpkdaNv7850mOyXRMgmPf8TQxiM-C5VEkGnLfd+wvffW8FAg@mail.gmail.com>
+Subject: Re: [PATCH -next 0/3] replace open coded VA->PA calculation
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     cuigaosheng <cuigaosheng1@huawei.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        SoC Team <soc@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        gongruiqi1@huawei.com, wangweiyang2@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Tue, Dec 21, 2021 at 10:16 AM Arnd Bergmann <arnd@arndb.de> wrote:
 
-On Tue, Dec 21, 2021 at 07:43:52AM +0200, Andy Shevchenko wrote:
-> On Tue, Dec 21, 2021 at 7:20 AM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Monday, December 20, 2021, Liam Beguin <liambeguin@gmail.com> wrote:
-> 
-> ...
-> 
-> >> +               tmp = *val * 1000000000LL;
-> >
-> > I see this is the original code, but perhaps use proper SI multipliers here and there?
-> 
-> I mean in a separate change.
+> I think for CPUs that can use LPAE, we want to eventually move to the 4G:4G
+> memory model, which in turn depends on having the kernel in vmalloc space, as
+> implemented by Linus Walleij in
+> https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/log/?h=kernel-in-vmalloc-v5.14-rc1
 
-Will do!
+Yeah I'm still working on this series. The 4/4 split works pretty well,
+but it breaks KASan and I was in the process of fixing that when I left
+for parental leave.
 
-I'll add a separate patch to convert existing multipliers, and will
-fixup the ones I'm adding.
+The reason it breaks would be related to KASan not expecting
+executable code in the vmalloc area, and since the shadowing
+algorithm is a simple pointer offset, and since we go to lengths
+to chisel shadow memory out of lowmem at a fixed offset from
+TEXT_OFFSET, we have a problem.
 
-Cheers,
-Liam
+The patch "KASAN horror" shows what I am trying to do to fix it,
+it's "just" some hard work missing.
 
-> >> +               do_div(tmp, 1000000000LL);
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+Yours,
+Linus Walleij

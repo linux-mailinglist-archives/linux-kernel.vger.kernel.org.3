@@ -2,294 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF4D47D956
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 23:36:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B176E47D96B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 23:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241803AbhLVWgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 17:36:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbhLVWgP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 17:36:15 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA41C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 14:36:15 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id z29so14082751edl.7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 14:36:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XTuzGAkv6wgr3HY2FHgmdJztkSQf1bMbIhv+fAPQF2E=;
-        b=auauTSt6b+33+Cgmxk3EOCYswy3sUyGDX8/+9SaUxaT+FI9cgpxmD/IcoByAwf4yMb
-         WNjWVuXTMxyQQKFJWI3U4GQb+YuYqL+qYCyyVRorAa4yGA5zabyczxML2J89gy50NTBX
-         lhbJtpUPR5XyEdr3Em5tKpVCV7p5xU5x4JithUduppmbORDnHipQbR0AXsIbuk1wq6+e
-         6CI0HhR/o1KJ0yzPKlYk0lJ8ihElhMAdEZtc7jYWDI4u6TqobUeKOl2pAhZS9ueYOPfG
-         87gv5WDgygiHtlSChihgjHCRHMOrbbYBEQtz8vTFcFx6TOwxTTsuu5BLnCJN47CPK5Uj
-         qJvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XTuzGAkv6wgr3HY2FHgmdJztkSQf1bMbIhv+fAPQF2E=;
-        b=ru77fHI64+IEPOAqg7GGy6RbDn5x0oWgOCJUSn3kHdbDRGnjGKOs24VjdDPy6w28qi
-         0nT71VX1iDqQB8wIZ01TjF0kP7GhMFQ4ezDvNhBaV4kcEOwMNPZi9Aueb37Eez0dhB8k
-         7vhajd1lxzv77fYuZySZ9++Mfhhm+LMLxGOOMmc57VrB/1k0JSI2tEIoaIqV9wC3xnMO
-         yAAFQikXmomn+A62bPsG/UVGGT8ZJjUKbJGFFtVVdfPcNgr9RLvIs/af1+yKoUxZ7CM9
-         BADVl7tRb4hExKcYKAmAnX9Nb2qqaBzY0ksdLNPLt5bOz3pA0fb2nRtLI1jbMFjsvRm4
-         Xu5w==
-X-Gm-Message-State: AOAM5301jhxEOMqjvcXBG3uCEOQp3qE0Jn5UZP0XIdE+6bvj3GWMHQK9
-        JC4C3CF7NLFryIUazxwWe99dyc7MbD7pWKww1mK6akKmqjjuGg==
-X-Google-Smtp-Source: ABdhPJxYToOLmwXv/ULhwIYz/yRQQJAtZ5uPIKtOh1+PrIp+LLmottyuoIcAw/pUq82EouURAjo9PK/i18uJf3LdIjM=
-X-Received: by 2002:a17:907:86a6:: with SMTP id qa38mr3889769ejc.170.1640212573804;
- Wed, 22 Dec 2021 14:36:13 -0800 (PST)
+        id S242097AbhLVWwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 17:52:47 -0500
+Received: from mail-dm6nam10on2041.outbound.protection.outlook.com ([40.107.93.41]:36640
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229578AbhLVWwq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 17:52:46 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=maf/41XZTyPkrp+puK2fcnc5R+GiEDYbXxoxDjLfT/OO9k7M5V6qIdWgPhGR6Why6SSGwJdERc9y5eVAgz8f5eVC/GiVGoZjNXA0ghwx5PSXAN6kDb92QudvaaOoPMbR1/XqRWOpEb8Zd8N/Z11zBa4+xkBttFS7/dGXUXSVvdktVpM+YbvRc/O1C6Ij2Hgl3MbqR4TlYkagQ5XOGNXZv65N6CYCiwTNiQyqif0km+tvRuVgc/EqEmgXWeOKL/XtvvK/hROPNr4YQZ32tsX7uejr9IUNqtu4+xONVUJOe64SL/Pch4KD91h0+ZTQnqODA6FTJIvMx1l+Yc0H+ZNKDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IhRifqNjKh97D4zNpyN7zrEHJYexMckcYmOAa4FkE9s=;
+ b=DM8G9dMq6tQMk20BnVR6xfHOHMFIpSxLqUNlS3BbSbWMhDvRr75oXg6wsBfzzNxDqX/+8xVlVuGdRTOjrTeyPthLHw0BHyfdQSQHw/jZ+REtL7i1QbF+2t+b7HuQaUZi0LctZhV9ACsfGX9/bj6UcNIW5+k9xkJgbKvkXOmIpOXBb4j/4K2W0/zxR3zXsf8qg5JdqxXesmusbcKmb5ZyAeM2h/QhdHxky8XElBPrt1rojkIIe7XLzlEw0TYqn+nZoepCTji+nTGu2TWExbJEzUp0lsrV6i0IK2twwk1DYxXxvg/IvEAGmKlHOUjGEQmWrrpH41GS2jG4s/v7TWezDA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IhRifqNjKh97D4zNpyN7zrEHJYexMckcYmOAa4FkE9s=;
+ b=lGn5MMi24LP3FQms19rJ0SFg1+7rF7pL/GAxeFAc2cIrsgNDrG6vFcrZtn0pVG9mrpN40P7o1eq3ymrAgSdddrW7DRL/79uhp0i8BtD7sB2PPkzaqOwOnoQUv42S828JMScwOWkCOR5VzDU6pnjS09A4iq4+oaUNfIottS4NLCFfBZsNDB+kzKKDygklXi+lgXRMeP1pDLiLbBVaawuza02RvKu8ddYopH3IcTckAwPfuusgtSNUjUFc/glkazEH5ATCZ+rB/2vOv1kyWj4M13NW2ZkgyMZuzDGnbOkVtg1rcsZTvu+1mMfgKR/2R2H1yyDubPJwmp9cGc1rx8rvqA==
+Received: from BN1PR14CA0008.namprd14.prod.outlook.com (2603:10b6:408:e3::13)
+ by CH0PR12MB5218.namprd12.prod.outlook.com (2603:10b6:610:d1::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Wed, 22 Dec
+ 2021 22:52:44 +0000
+Received: from BN8NAM11FT022.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e3:cafe::ba) by BN1PR14CA0008.outlook.office365.com
+ (2603:10b6:408:e3::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.18 via Frontend
+ Transport; Wed, 22 Dec 2021 22:52:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ BN8NAM11FT022.mail.protection.outlook.com (10.13.176.112) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4823.18 via Frontend Transport; Wed, 22 Dec 2021 22:52:43 +0000
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 22 Dec
+ 2021 22:52:43 +0000
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 22 Dec
+ 2021 22:52:43 +0000
+Received: from Asurada-Nvidia (172.20.187.6) by mail.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1497.18 via Frontend
+ Transport; Wed, 22 Dec 2021 22:52:42 +0000
+Date:   Wed, 22 Dec 2021 14:52:40 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+CC:     <joro@8bytes.org>, <will@kernel.org>, <jean-philippe@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
+        <linux-tegra@vger.kernel.org>, <thierry.reding@gmail.com>,
+        <jgg@nvidia.com>, <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v3 5/5] iommu/nvidia-grace-cmdqv: Limit CMDs for guest
+ owned VINTF
+Message-ID: <20211222225134.GB5698@Asurada-Nvidia>
+References: <20211119071959.16706-1-nicolinc@nvidia.com>
+ <20211119071959.16706-6-nicolinc@nvidia.com>
+ <6f020ea5-a45c-d21d-04b5-bdb2aef080f1@arm.com>
 MIME-Version: 1.0
-References: <20211215041149.73171-1-yangyicong@hisilicon.com>
- <20211215041149.73171-3-yangyicong@hisilicon.com> <CAKfTPtDVJ1t9dp133A2eouPBRZM8Cgcsf1G+PMAWyFAVwtsyUw@mail.gmail.com>
-In-Reply-To: <CAKfTPtDVJ1t9dp133A2eouPBRZM8Cgcsf1G+PMAWyFAVwtsyUw@mail.gmail.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Thu, 23 Dec 2021 11:36:02 +1300
-Message-ID: <CAGsJ_4w3QppZQ8ZGMbsDchgxb05MWL5Ejg=aCMKAu6uNO=WQQQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] sched/fair: Scan cluster before scanning LLC in
- wake-up path
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Yicong Yang <yangyicong@hisilicon.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        prime.zeng@huawei.com,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        ego@linux.vnet.ibm.com,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Guodong Xu <guodong.xu@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <6f020ea5-a45c-d21d-04b5-bdb2aef080f1@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6259e1db-12be-41ac-dd08-08d9c59dc3f4
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5218:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR12MB5218F8A9458432DF88E735AAAB7D9@CH0PR12MB5218.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gneU9TTugnzxi4tu+VWIMZEGnqSExhZArEvCsgeQca6Z9+sdnfBH8TrU7Fh1rk3tADzh5vqkzTa7R1w5dV0nKYRFrCjdjvvRK5Kgd+aarBwCwmOv6xLjNZ5g+AWtW7lx/m6z+v0nGVcSEwUHjI7kaPeGf8gT9n+bL275V5zZ7rQwM8gA6svxpZPz5iKpXS0w/AIe6DSUuRmk3oSyiz+v+L0Nm87QuxwuCEFWHLNDQED5tt1AosE1jFKbdEajExVd5R5Xy4+B/V4wkctv/9Yw27bh7N5yQPkl8QgsxOUl0XaB+nol4f5gY8bjQrmDCM273cGNCKdAEgN7XtxfSIuiLi+j723u/d8wiK3JEUqPmI954Y9IxYb2+Hc39eJd4p9u2wkXhz+z+zqMKc5fX6vNSQEy7cJ2YCGC7qGbyNGqxADEP7ZhzbcEzU/US5gtm6vao5CtFcPDtzjhV3RTdP1RIPMSgGbRiVG7skV0UrJMBgpnQ1G2t0i06ZwNSmQ0YzPyqlIZYBw3cuPOhjkOrkQ+7zEvwRr/2mtv2k9qpCDrT41vauExZQnoIqvyXdHCRHOPYDa0AZWH3wkQRzT5ngN4NiK85WRbAvDDRC0uGw01KEoNq6im451WSNpbphc++6OE9sTEtW0sWxP4uFaFvIsjcC0pgFIL+7tBE16R6DTjGgjqdE+Kl6um2NiXEDE7xuTCrYgzHuijfHny7x++DmMWWPUkuFSCUuYCOA60pTUkrt4YgKKJqTLBiGoxEZ+xmHo4sHg3wfJIYQI3mRZK1o0bsbbWSUzb9ulTWRhXPn9m75sTLSxwA/GluQrYddL+wVmGYZkkyjUfCa92gd+e9FL0Ndz15+IfNTIGoCf96Phfj7H0ajeZZ4QN1o7swJZSh9WrDkwN8oy4A4UKJWbFfOS52xEt7NZ7wIxF2d7FA4wDDH8=
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(36840700001)(40470700002)(46966006)(8936002)(53546011)(70206006)(70586007)(9686003)(83380400001)(4001150100001)(316002)(6916009)(33656002)(2906002)(966005)(186003)(8676002)(26005)(5660300002)(47076005)(356005)(86362001)(54906003)(1076003)(426003)(40460700001)(36860700001)(82310400004)(55016003)(81166007)(336012)(4326008)(34020700004)(33716001)(508600001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2021 22:52:43.5434
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6259e1db-12be-41ac-dd08-08d9c59dc3f4
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT022.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5218
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 2:27 AM Vincent Guittot
-<vincent.guittot@linaro.org> wrote:
->
-> On Wed, 15 Dec 2021 at 05:11, Yicong Yang <yangyicong@hisilicon.com> wrote:
-> >
-> > From: Barry Song <song.bao.hua@hisilicon.com>
-> >
-> > For platforms having clusters like Kunpeng920, CPUs within the same
-> > cluster have lower latency when synchronizing and accessing shared
-> > resources like cache. Thus, this patch tries to find an idle cpu
-> > within the cluster of the target CPU before scanning the whole LLC
-> > to gain lower latency.
-> >
-> > Note neither Kunpeng920 nor x86 Jacobsville supports SMT, so this
-> > patch doesn't consider SMT for this moment.
-> >
-> > Testing has been done on Kunpeng920 by pinning tasks to one numa
-> > and two numa. Each numa has 8 clusters and each cluster has 4 CPUs.
-> >
-> > With this patch, We noticed enhancement on tbench within one
-> > numa or cross two numa.
-> >
-> > On numa 0:
-> >                            5.16-rc1                patched
-> > Hmean     1        329.17 (   0.00%)      384.84 *  16.91%*
-> > Hmean     2        654.09 (   0.00%)      768.77 *  17.53%*
-> > Hmean     4       1321.41 (   0.00%)     1538.10 *  16.40%*
-> > Hmean     8       2650.43 (   0.00%)     3048.86 *  15.03%*
-> > Hmean     16      5322.37 (   0.00%)     5975.20 *  12.27%*
-> > Hmean     32     10002.11 (   0.00%)    10085.57 *   0.83%*
-> > Hmean     64      7910.39 (   0.00%)     7936.37 *   0.33%*
-> > Hmean     128     6745.25 (   0.00%)     6811.28 *   0.98%*
-> >
-> > On numa 0-1:
-> >                            5.16-rc1                patched
-> > Hmean     1        326.61 (   0.00%)      385.36 *  17.99%*
-> > Hmean     2        650.62 (   0.00%)      770.57 *  18.44%*
-> > Hmean     4       1318.05 (   0.00%)     1534.83 *  16.45%*
-> > Hmean     8       2621.50 (   0.00%)     3030.10 *  15.59%*
-> > Hmean     16      5252.17 (   0.00%)     6023.08 *  14.68%*
-> > Hmean     32      9829.30 (   0.00%)     9856.33 *   0.28%*
-> > Hmean     64     12452.66 (   0.00%)    17338.48 *  39.24%*
-> > Hmean     128    14181.24 (   0.00%)    15025.24 *   5.95%*
-> > Hmean     256    12239.07 (   0.00%)    13080.16 *   6.87%*
-> > Hmean     512    14297.00 (   0.00%)    15063.76 *   5.36%*
-> >
-> > This will also help to improve the MySQL. With MySQL server
-> > running on numa 0 and client running on numa 1, both QPS and
-> > latency is imporved on read-write case:
-> >                       5.16-rc1              patched
-> > QPS-24threads        195327.48    202081.28(+3.46%)
-> > QPS-32threads         242039.4     247059.5(+2.07%)
-> > QPS-64threads        243024.52    254274.47(+4.63%)
-> > avg-lat-24threads         2.46         2.37(+3.66%)
-> > avg-lat-36threads         2.64         2.59(+1.89%)
-> > avg-lat-64threads         5.27         5.03(+4.55%)
-> >
-> > Tested-by: Yicong Yang <yangyicong@hisilicon.com>
-> > Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
-> > Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+On Wed, Dec 22, 2021 at 12:32:29PM +0000, Robin Murphy wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On 2021-11-19 07:19, Nicolin Chen via iommu wrote:
+> > When VCMDQs are assigned to a VINTF that is owned by a guest, not
+> > hypervisor (HYP_OWN bit is unset), only TLB invalidation commands
+> > are supported. This requires get_cmd() function to scan the input
+> > cmd before selecting cmdq between smmu->cmdq and vintf->vcmdq, so
+> > unsupported commands can still go through emulated smmu->cmdq.
+> > 
+> > Also the guest shouldn't have HYP_OWN bit being set regardless of
+> > guest kernel driver writing it or not, i.e. the user space driver
+> > running in the host OS should wire this bit to zero when trapping
+> > a write access to this VINTF_CONFIG register from a guest kernel.
+> > So instead of using the existing regval, this patch reads out the
+> > register value explicitly to cache in vintf->cfg.
+> > 
+> > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 > > ---
-> >  kernel/sched/fair.c | 46 +++++++++++++++++++++++++++++++++++++++++----
-> >  1 file changed, 42 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 6e476f6d9435..8a5795c78af8 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -6230,12 +6230,46 @@ static inline int select_idle_smt(struct task_struct *p, struct sched_domain *sd
-> >
-> >  #endif /* CONFIG_SCHED_SMT */
-> >
-> > +#ifdef CONFIG_SCHED_CLUSTER
-> > +/*
-> > + * Scan the cluster domain for idle CPUs and clear cluster cpumask after scanning
-> > + */
-> > +static inline int scan_cluster(struct task_struct *p, int prev_cpu, int target)
-> > +{
-> > +       struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
-> > +       struct sched_domain *sd = rcu_dereference(per_cpu(sd_cluster, target));
-> > +       int cpu, idle_cpu;
+> >   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   |  6 ++--
+> >   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   |  5 +--
+> >   .../arm/arm-smmu-v3/nvidia-grace-cmdqv.c      | 32 +++++++++++++++++--
+> >   3 files changed, 36 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> > index b1182dd825fd..73941ccc1a3e 100644
+> > --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> > +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> > @@ -337,10 +337,10 @@ static int arm_smmu_cmdq_build_cmd(u64 *cmd, struct arm_smmu_cmdq_ent *ent)
+> >       return 0;
+> >   }
+> > 
+> > -static struct arm_smmu_cmdq *arm_smmu_get_cmdq(struct arm_smmu_device *smmu)
+> > +static struct arm_smmu_cmdq *arm_smmu_get_cmdq(struct arm_smmu_device *smmu, u64 *cmds, int n)
+> >   {
+> >       if (smmu->nvidia_grace_cmdqv)
+> > -             return nvidia_grace_cmdqv_get_cmdq(smmu);
+> > +             return nvidia_grace_cmdqv_get_cmdq(smmu, cmds, n);
+> > 
+> >       return &smmu->cmdq;
+> >   }
+> > @@ -747,7 +747,7 @@ static int arm_smmu_cmdq_issue_cmdlist(struct arm_smmu_device *smmu,
+> >       u32 prod;
+> >       unsigned long flags;
+> >       bool owner;
+> > -     struct arm_smmu_cmdq *cmdq = arm_smmu_get_cmdq(smmu);
+> > +     struct arm_smmu_cmdq *cmdq = arm_smmu_get_cmdq(smmu, cmds, n);
+> >       struct arm_smmu_ll_queue llq, head;
+> >       int ret = 0;
+> > 
+> > diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> > index 24f93444aeeb..085c775c2eea 100644
+> > --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> > +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> > @@ -832,7 +832,8 @@ struct nvidia_grace_cmdqv *
+> >   nvidia_grace_cmdqv_acpi_probe(struct arm_smmu_device *smmu,
+> >                             struct acpi_iort_node *node);
+> >   int nvidia_grace_cmdqv_device_reset(struct arm_smmu_device *smmu);
+> > -struct arm_smmu_cmdq *nvidia_grace_cmdqv_get_cmdq(struct arm_smmu_device *smmu);
+> > +struct arm_smmu_cmdq *nvidia_grace_cmdqv_get_cmdq(struct arm_smmu_device *smmu,
+> > +                                               u64 *cmds, int n);
+> >   #else /* CONFIG_NVIDIA_GRACE_CMDQV */
+> >   static inline struct nvidia_grace_cmdqv *
+> >   nvidia_grace_cmdqv_acpi_probe(struct arm_smmu_device *smmu,
+> > @@ -847,7 +848,7 @@ static inline int nvidia_grace_cmdqv_device_reset(struct arm_smmu_device *smmu)
+> >   }
+> > 
+> >   static inline struct arm_smmu_cmdq *
+> > -nvidia_grace_cmdqv_get_cmdq(struct arm_smmu_device *smmu)
+> > +nvidia_grace_cmdqv_get_cmdq(struct arm_smmu_device *smmu, u64 *cmds, int n)
+> >   {
+> >       return NULL;
+> >   }
+> > diff --git a/drivers/iommu/arm/arm-smmu-v3/nvidia-grace-cmdqv.c b/drivers/iommu/arm/arm-smmu-v3/nvidia-grace-cmdqv.c
+> > index c0d7351f13e2..71f6bc684e64 100644
+> > --- a/drivers/iommu/arm/arm-smmu-v3/nvidia-grace-cmdqv.c
+> > +++ b/drivers/iommu/arm/arm-smmu-v3/nvidia-grace-cmdqv.c
+> > @@ -166,7 +166,8 @@ static int nvidia_grace_cmdqv_init_one_vcmdq(struct nvidia_grace_cmdqv *cmdqv,
+> >       return arm_smmu_cmdq_init(cmdqv->smmu, cmdq);
+> >   }
+> > 
+> > -struct arm_smmu_cmdq *nvidia_grace_cmdqv_get_cmdq(struct arm_smmu_device *smmu)
+> > +struct arm_smmu_cmdq *
+> > +nvidia_grace_cmdqv_get_cmdq(struct arm_smmu_device *smmu, u64 *cmds, int n)
+> >   {
+> >       struct nvidia_grace_cmdqv *cmdqv = smmu->nvidia_grace_cmdqv;
+> >       struct nvidia_grace_cmdqv_vintf *vintf0 = &cmdqv->vintf0;
+> > @@ -176,6 +177,24 @@ struct arm_smmu_cmdq *nvidia_grace_cmdqv_get_cmdq(struct arm_smmu_device *smmu)
+> >       if (!FIELD_GET(VINTF_STATUS, vintf0->status))
+> >               return &smmu->cmdq;
+> > 
+> > +     /* Check for supported CMDs if VINTF is owned by guest (not hypervisor) */
+> > +     if (!FIELD_GET(VINTF_HYP_OWN, vintf0->cfg)) {
+> > +             u64 opcode = (n) ? FIELD_GET(CMDQ_0_OP, cmds[0]) : CMDQ_OP_CMD_SYNC;
+> 
+> I'm not sure there was ever a conscious design decision that batches
+> only ever contain one type of command - if something needs to start
+
+Hmm, I think that's a good catch -- as it could be a potential
+bug here. Though the SMMUv3 driver currently seems to use loop
+by adding one type of cmds to any batch and submitting it right
+away so checking opcode of cmds[0] alone seems to be sufficient
+at this moment, yet it might not be so in the future. We'd need
+to apply certain constrains on the type of cmds in the batch in
+SMMUv3 driver upon smmu->nvidia_grace_cmdqv, or fallback to the
+SMMUv3's CMDQ pathway here if one of cmds is not supported.
+
+> depending on that behaviour then that dependency probably wants to be
+> clearly documented. Also, a sync on its own gets trapped to the main
+> cmdq but a sync on the end of a batch of TLBIs or ATCIs goes to the
+> VCMDQ, huh?
+
+Yea...looks like an implication again where cmds must have SYNC
+at the end of the batch. I will see if any simple change can be
+done to fix these two. If you have suggestions for them, I would
+love to hear too.
+
 > > +
-> > +       /* TODO: Support SMT case while a machine with both cluster and SMT born */
-> > +       if (!sched_smt_active() && sd) {
-> > +               for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
-> > +                       idle_cpu = __select_idle_cpu(cpu, p);
-> > +                       if ((unsigned int)idle_cpu < nr_cpumask_bits)
-> > +                               return idle_cpu;
-> > +               }
-> > +
-> > +               /* Don't ping-pong tasks in and out cluster frequently */
-> > +               if (cpus_share_cluster(target, prev_cpu))
-> > +                       return target;
-> > +
-> > +               cpumask_andnot(cpus, cpus, sched_domain_span(sd));
-> > +       }
-> > +
-> > +       return -1;
-> > +}
-> > +#else
-> > +static inline int scan_cluster(struct task_struct *p, int prev_cpu, int target)
-> > +{
-> > +       return -1;
-> > +}
-> > +#endif
-> > +
-> >  /*
-> >   * Scan the LLC domain for idle CPUs; this is dynamically regulated by
-> >   * comparing the average scan cost (tracked in sd->avg_scan_cost) against the
-> >   * average idle time for this rq (as found in rq->avg_idle).
-> >   */
-> > -static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool has_idle_core, int target)
-> > +static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool has_idle_core, int prev_cpu, int target)
-> >  {
-> >         struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
-> >         int i, cpu, idle_cpu = -1, nr = INT_MAX;
-> > @@ -6250,6 +6284,10 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
-> >
-> >         cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
-> >
-> > +       idle_cpu = scan_cluster(p, prev_cpu, target);
->
-> Why don't you do the above before calling select_idle_cpu() like for smt ?
+> > +             /* List all supported CMDs for vintf->cmdq pathway */
+> > +             switch (opcode) {
+> > +             case CMDQ_OP_TLBI_NH_ASID:
+> > +             case CMDQ_OP_TLBI_NH_VA:
+> > +             case CMDQ_OP_TLBI_S12_VMALL:
+> > +             case CMDQ_OP_TLBI_S2_IPA:
+> 
+> Fun! Can the guest invalidate any VMID it feels like, or is there some
+> additional magic on the host side that we're missing here?
 
-yep. I did make two versions :
-1. scan_cluster inside select_idle_cpu()
-2. scan_cluster before select_idle_cpu()
+Yes. VINTF has a register for SW to program VMID so that the HW
+can replace VMIDs in the cmds in the VCMDQs of that VINTF with
+the programmed VMID. That was the reason why we had numbers of
+patches in v2 to route the VMID between guest and host.
 
-Then I felt 1 looks a bit better than 2 as 2 requires changes in two
-places. We still need to change
-select_idle_cpu() to do cpumask_andnot() to exclude the cluster as we
-have scanned the cluster
-before select_idle_cpu(). In the first way, only one place is modified.
+> > +             case CMDQ_OP_ATC_INV:
+> > +                     break;
+> Ditto for StreamID here.
 
->
-> > +       if ((unsigned int)idle_cpu < nr_cpumask_bits)
-> > +               return idle_cpu;
-> > +
-> >         if (sched_feat(SIS_PROP) && !has_idle_core) {
-> >                 u64 avg_cost, avg_idle, span_avg;
-> >                 unsigned long now = jiffies;
-> > @@ -6384,7 +6422,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
-> >         /*
-> >          * If the previous CPU is cache affine and idle, don't be stupid:
-> >          */
-> > -       if (prev != target && cpus_share_cache(prev, target) &&
-> > +       if (prev != target && cpus_share_cluster(prev, target) &&
->
-> This is misleading because cpus_share_cluster is meaningless for most of system
-
-yep. The name is misleading though it hasn't side effects for
-non-cluster systems as
-cpus_share_cluster equals cpus_share_cache for them.
-It seems this can be much better if we do the below as your comments
-in patch1/2:
-
-+bool cpus_share_resources(int this_cpu, int that_cpu)
-+{
-+     if (this_cpu == that_cpu)
-+             return true;
-+
-+     return per_cpu(sd_share_id, this_cpu) == per_cpu(sd_share_id, that_cpu);
-+}
-+
-which returns true when cpu shares resources which can be LLC or cluster
-
->
-> Then, you don't care at all of the llc if there is a cluster domain ?
-
-Basically, what I have seen is that in tbench, target is likely to be
-idle especially when
-the system load is not full. and waker and wakee are unlikely to run
-in the same cluster
-as fork has splitted them for LB. so we will almost always lose the
-chance to pull them
-together forever. This change made a big gain for tbench especially
-for light and medium
-load.
-
-But Yicong did see some negative impact on benchmarks like pgbench. so
-this change
-is not a universal win. The difficulty might be how to make a decision
-which can be
-more aware of the hierarchy of two levels - cluster and llc, and aware
-of the requirements
-of the workload.
-
->
->
-> >             (available_idle_cpu(prev) || sched_idle_cpu(prev)) &&
-> >             asym_fits_capacity(task_util, prev))
-> >                 return prev;
-> > @@ -6408,7 +6446,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
-> >         p->recent_used_cpu = prev;
-> >         if (recent_used_cpu != prev &&
-> >             recent_used_cpu != target &&
-> > -           cpus_share_cache(recent_used_cpu, target) &&
-> > +           cpus_share_cluster(recent_used_cpu, target) &&
-> >             (available_idle_cpu(recent_used_cpu) || sched_idle_cpu(recent_used_cpu)) &&
-> >             cpumask_test_cpu(p->recent_used_cpu, p->cpus_ptr) &&
-> >             asym_fits_capacity(task_util, recent_used_cpu)) {
-> > @@ -6449,7 +6487,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
-> >                 }
-> >         }
-> >
-> > -       i = select_idle_cpu(p, sd, has_idle_core, target);
-> > +       i = select_idle_cpu(p, sd, has_idle_core, prev, target);
-> >         if ((unsigned)i < nr_cpumask_bits)
-> >                 return i;
-> >
-> > --
-> > 2.33.0
-> >
+Yes. StreamID works similarly by the HW: each VINTF provides us
+16 pairs of MATCH+REPLACE registers to program host and guest's
+StreamIDs. Our previous mdev implementation in v2 can be a good
+reference code:
+https://lore.kernel.org/kvm/20210831101549.237151fa.alex.williamson@redhat.com/T/#m903a1b44935d9e0376439a0c63e832eb464fbaee
 
 Thanks
-Barry
+Nic
+
+> > +             default:
+> > +                     /* Unsupported CMDs go for smmu->cmdq pathway */
+> > +                     return &smmu->cmdq;
+> > +             }
+> > +     }
+> > +
+> >       /*
+> >        * Select a vcmdq to use. Here we use a temporal solution to
+> >        * balance out traffic on cmdq issuing: each cmdq has its own
+> > @@ -199,13 +218,22 @@ int nvidia_grace_cmdqv_device_reset(struct arm_smmu_device *smmu)
+> >       vintf0->idx = 0;
+> >       vintf0->base = cmdqv->base + NVIDIA_CMDQV_VINTF(0);
+> > 
+> > +     /*
+> > +      * Note that HYP_OWN bit is wired to zero when running in guest kernel
+> > +      * regardless of enabling it here, as !HYP_OWN cmdqs have a restricted
+> > +      * set of supported commands, by following the HW design.
+> > +      */
+> >       regval = FIELD_PREP(VINTF_HYP_OWN, 1);
+> >       writel(regval, vintf0->base + NVIDIA_VINTF_CONFIG);
+> > 
+> >       regval |= FIELD_PREP(VINTF_EN, 1);
+> >       writel(regval, vintf0->base + NVIDIA_VINTF_CONFIG);
+> > 
+> > -     vintf0->cfg = regval;
+> > +     /*
+> > +      * As being mentioned above, HYP_OWN bit is wired to zero for a guest
+> > +      * kernel, so read back regval from HW to ensure that reflects in cfg
+> > +      */
+> > +     vintf0->cfg = readl(vintf0->base + NVIDIA_VINTF_CONFIG);
+> > 
+> >       ret = readl_relaxed_poll_timeout(vintf0->base + NVIDIA_VINTF_STATUS,
+> >                                        regval, regval == VINTF_ENABLED,

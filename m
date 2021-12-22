@@ -2,122 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B6B47D931
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 23:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8928647D934
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 23:14:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240864AbhLVWNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 17:13:19 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:57254 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbhLVWNS (ORCPT
+        id S241331AbhLVWOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 17:14:03 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:55250 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229813AbhLVWOD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 17:13:18 -0500
-Received: by mail-io1-f71.google.com with SMTP id d187-20020a6bb4c4000000b00601c0b8532aso2041099iof.23
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 14:13:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=f/bM15rE1P3oiPUnfpraP5G6wa3R2qGfubVJB9H598U=;
-        b=iq8Vt2YPmg15rfN9pbHvBpSFBH0V2uDEEcUtMZfkAIG/oJU9uSWoxKsAD+819DXf+N
-         /bHpxuVHHd5YZQKf1YtuUJwFJG5zzLLQlPyuQHSYi4dImDvEiAFl1mUz6v1HXG0i0Kfo
-         B5udp98lgW0zCqEeydy+fJUXHfimhQUqdQDoC4FRtwZKRK+1vcIvW6M0PHFH6d/lN/jW
-         QvsKN0G19F5dtjiIrmNo0i1hJiDYF+TKkBEniGgSyLl035MxVkpLXQYimfk35GNnffpO
-         w+6KbPCKGP2qv4eV7KYuUNFIVj9TAzWOOXp6JSiXEGXVRoSbOq9AUvAaC5EK0ko08P9r
-         AmAw==
-X-Gm-Message-State: AOAM530Fcj3XVlVn92xn4ZLegfgOXSjg+sO1fCueWqjOUWik6zXJ3YFS
-        AF2zQ2q2PcIBEtNIi8oHFv2qQCPriCAiOpLsE4aCJ44TO+14
-X-Google-Smtp-Source: ABdhPJzSy2IJuEdD5OgvrhTE12dPDNF/iA4nDreUkcZKOKiFQ3kkVmr7ygItBaZzv1rwqTjk2Zkjd7YqxNWLaOCJqxvpMkgPmd7f
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:170c:: with SMTP id u12mr1884027ill.53.1640211197826;
- Wed, 22 Dec 2021 14:13:17 -0800 (PST)
-Date:   Wed, 22 Dec 2021 14:13:17 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cd9d6f05d3c36ddc@google.com>
-Subject: [syzbot] INFO: task hung in cgroup_can_fork
-From:   syzbot <syzbot+304cbc9725238275b855@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        cgroups@vger.kernel.org, christian@brauner.io,
-        daniel@iogearbox.net, hannes@cmpxchg.org, john.fastabend@gmail.com,
-        kafai@fb.com, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        lizefan.x@bytedance.com, netdev@vger.kernel.org,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
-        tj@kernel.org, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 22 Dec 2021 17:14:03 -0500
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BMM1pg5007235;
+        Wed, 22 Dec 2021 22:14:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=MhZv0mPQHiuDZvRQG5dC1mpk7h5pq5TOT7yS86sVm8I=;
+ b=sG5x2DU5q173o+KnMMzHGq9xPqOk5gkGMkLq/J4DBwSPFVsYThxjvgnzhwneL3yZOoIH
+ xb7dJuEsCSRsUEQZRJkiyYP9/L7HP0vYW6iLiSfxxnlBYTommwzmaMSDIndJ45Uao0hA
+ EdZS/3bxnz52NwnhmqQpWyGufps7EYdcAFW71SZGEzSFCOcEq9qIP2l99d7Nz37j1te7
+ VfLLdIC2gkz++exkypGsQ15jN1q+YeVQo6+l0x25u0eM6JAXDXDEFGPidAbyro/Tp7Vi
+ oNxjLDrO48nQMIAojujA0rgLWxbgQnhTaOyRPbfwRxDajrysSVSvWIeCkMruXruaujvQ Fw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d4cf1r5y6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Dec 2021 22:14:02 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BMM5k7X021847;
+        Wed, 22 Dec 2021 22:14:01 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d4cf1r5y1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Dec 2021 22:14:01 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BMMCBtt021215;
+        Wed, 22 Dec 2021 22:14:00 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3d179at6ns-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Dec 2021 22:13:59 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BMMDvtY47186334
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Dec 2021 22:13:57 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B5970AE04D;
+        Wed, 22 Dec 2021 22:13:57 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 36AD4AE045;
+        Wed, 22 Dec 2021 22:13:57 +0000 (GMT)
+Received: from sig-9-65-95-213.ibm.com (unknown [9.65.95.213])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 22 Dec 2021 22:13:57 +0000 (GMT)
+Message-ID: <31d71e1957e84d2440f41d43d2570b112e91a27b.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: silence measurement list hexdump during kexec
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Bruno Meneguele <bmeneg@redhat.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 22 Dec 2021 17:13:56 -0500
+In-Reply-To: <20211222191623.376174-1-bmeneg@redhat.com>
+References: <20211222191623.376174-1-bmeneg@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: s6cExu7CsdmG-24r9QPPh7xAdY5zAI6t
+X-Proofpoint-GUID: vxIgZQKt7768fdyMZ-oS7V1gT-tm4dx_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-22_09,2021-12-22_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ malwarescore=0 lowpriorityscore=0 phishscore=0 suspectscore=0 spamscore=0
+ impostorscore=0 bulkscore=0 adultscore=0 clxscore=1015 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112220114
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Bruno,
 
-syzbot found the following issue on:
+On Wed, 2021-12-22 at 16:16 -0300, Bruno Meneguele wrote:
+> The measurement list is dumped during a soft reset (kexec) through the call
+> to "print_hex_dump(KERN_DEBUG, ...)", which ignores the DEBUG build flag.
+> Instead, use "print_hex_dump_debug(...)", honoring the build flag.
+> 
+> Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
 
-HEAD commit:    9eaa88c7036e Merge tag 'libata-5.16-rc6' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11872543b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fa556098924b78f0
-dashboard link: https://syzkaller.appspot.com/bug?extid=304cbc9725238275b855
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=154716a3b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=111e92dbb00000
+The patch description needs to at least explain why using
+print_hex_dump() isn't sufficent.   Look at how print_hex_dump() is
+defined.  Based on whether CONFIG_DYNAMIC_DEBUG is enabled, different
+functions are used.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+304cbc9725238275b855@syzkaller.appspotmail.com
+Mimi
 
-INFO: task syz-executor812:3663 blocked for more than 165 seconds.
-      Not tainted 5.16.0-rc5-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor812 state:D stack:27552 pid: 3663 ppid:  3654 flags:0x00000000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- context_switch kernel/sched/core.c:4972 [inline] kernel/sched/core.c:6253
- __schedule+0xa9a/0x4940 kernel/sched/core.c:6253 kernel/sched/core.c:6253
- schedule+0xd2/0x260 kernel/sched/core.c:6326 kernel/sched/core.c:6326
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6385 kernel/sched/core.c:6385
- __mutex_lock_common kernel/locking/mutex.c:680 [inline]
- __mutex_lock_common kernel/locking/mutex.c:680 [inline] kernel/locking/mutex.c:740
- __mutex_lock+0xa32/0x12f0 kernel/locking/mutex.c:740 kernel/locking/mutex.c:740
- cgroup_css_set_fork kernel/cgroup/cgroup.c:6090 [inline]
- cgroup_css_set_fork kernel/cgroup/cgroup.c:6090 [inline] kernel/cgroup/cgroup.c:6206
- cgroup_can_fork+0x888/0xeb0 kernel/cgroup/cgroup.c:6206 kernel/cgroup/cgroup.c:6206
- copy_process+0x3636/0x75a0 kernel/fork.c:2292 kernel/fork.c:2292
- kernel_clone+0xe7/0xab0 kernel/fork.c:2582 kernel/fork.c:2582
- __do_sys_clone3+0x1ca/0x2e0 kernel/fork.c:2857 kernel/fork.c:2857
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_x64 arch/x86/entry/common.c:50 [inline] arch/x86/entry/common.c:80
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fbc074509a9
-RSP: 002b:00007fbc074022f8 EFLAGS: 00000246 ORIG_RAX: 00000000000001b3
-RAX: ffffffffffffffda RBX: 0000000000000031 RCX: 00007fbc074509a9
-RDX: 00007fbc074509a9 RSI: 0000000000000058 RDI: 0000000020000080
-RBP: 00007fbc074d8408 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fbc074d8400
-R13: 00007fbc074d840c R14: 00007fbc074a6074 R15: 0000000280000000
- </TASK>
-INFO: task syz-executor812:3664 blocked for more than 172 seconds.
-      Not tainted 5.16.0-rc5-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor812 state:D stack:27552 pid: 3664 ppid:     1 flags:0x00000000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- context_switch kernel/sched/core.c:4972 [inline] kernel/sched/core.c:6253
- __schedule+0xa9a/0x4940 kernel/sched/core.c:6253 kernel/sched/core.c:6253
- schedule+0xd2/0x260 kernel/sched/core.c:6326 kernel/sched/core.c:6326
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6385 kernel/sched/core.c:6385
- __mutex_lock_common kernel/locking/mutex.c:680 [inline]
- __mutex_lock_common kernel/locking/mutex.c:680 [inline] kernel/locking/mutex.c:740
- __mutex_lock+0xa32/0x12f0 kernel/locking/mutex.c:740 kernel/locking/mutex.c:740
+> ---
+>  security/integrity/ima/ima_kexec.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+> index f799cc278a9a..13753136f03f 100644
+> --- a/security/integrity/ima/ima_kexec.c
+> +++ b/security/integrity/ima/ima_kexec.c
+> @@ -61,9 +61,9 @@ static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
+>  	}
+>  	memcpy(file.buf, &khdr, sizeof(khdr));
+>  
+> -	print_hex_dump(KERN_DEBUG, "ima dump: ", DUMP_PREFIX_NONE,
+> -			16, 1, file.buf,
+> -			file.count < 100 ? file.count : 100, true);
+> +	print_hex_dump_debug("ima dump: ", DUMP_PREFIX_NONE, 16, 1,
+> +			     file.buf, file.count < 100 ? file.count : 100,
+> +			     true);
+>  
+>  	*buffer_size = file.count;
+>  	*buffer = file.buf;
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches

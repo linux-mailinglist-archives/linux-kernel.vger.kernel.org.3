@@ -2,94 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 232E047CE62
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 09:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C924947CE68
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 09:41:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243389AbhLVIik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 03:38:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239721AbhLVIik (ORCPT
+        id S243401AbhLVIlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 03:41:51 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:27422 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239582AbhLVIlv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 03:38:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662CCC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 00:38:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2CC2DB81A52
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 08:38:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF121C36AE8;
-        Wed, 22 Dec 2021 08:38:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640162316;
-        bh=UR4EKc0/bCNdoXjQZxr7F+L+PvTK1DfNqQdTTxtLOKc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WhqmxEpue7hGYMOPQ5sJ2GIKryc6nEK9DVICWbV3VnZadwINFulhNU0rfhYHTVQm4
-         iYMCi/d8vHS9Gb21u9i2m5DmrKYg2EvweCc/lDjJBoztkln+Yngv6oYAZvVOC8sWww
-         0bToS6Rm/ybj6NTUqzHc42wyc81dfoAlVae8V6pWJ/LLFbWbz1t3HC8vmEF46Xzq6F
-         kUHaBvzTXLmi+6YqUCPpAqN9xSyKm4G81mUEAXvioTEXAs9C8HXTpO9kYiSVN7VKqE
-         1P9cQTqmuwmX6Y3naQwhsfKWNANWLovDhsMu3VKkvGTmc+ULXR1BGSHXNY70zD0XBp
-         +sR3VOnxSx6ZA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mzx8l-0002vV-TV; Wed, 22 Dec 2021 09:38:28 +0100
-Date:   Wed, 22 Dec 2021 09:38:27 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH] nvmem: fix unregistering device in nvmem_register()
- error path
-Message-ID: <YcLkA0e48+xuGsHk@hovoldconsulting.com>
-References: <20211221154550.11455-1-zajec5@gmail.com>
- <YcH7fw5S6aSXswvb@kroah.com>
- <9e94f0fd-e2d5-4d9e-5759-a5f591191785@gmail.com>
- <YcLXbPzyhtMnP0YQ@kroah.com>
+        Wed, 22 Dec 2021 03:41:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1640162511; x=1671698511;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=efBvZD3Wo2dCo6KUiX1BsCnl42Y38akJdR07rb3mcKQ=;
+  b=TBeviJOs/9DhGHB5Aa5B0JsXzO05/gmpEF/Lns9K/ZXTqsujPP4MM6uO
+   WeNjgE70SdPoa3HpVvW8oIVvtHRWasQyGUMBRcPXtZH7TRm3gPWnl0ypt
+   35CXVKRmwiBUrcrX2G6t0nf6jWc5FwXGeFLLSe6YIJd2cag2PU+Z1bu5s
+   0=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 22 Dec 2021 00:41:50 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 00:41:50 -0800
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 22 Dec 2021 00:41:49 -0800
+Received: from codeaurora.org (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 22 Dec
+ 2021 00:41:47 -0800
+From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+To:     Sebastian Reichel <sre@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        David Collins <quic_collinsd@quicinc.com>,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "thara . gopinath @ linaro . org" <thara.gopinath@linaro.org>,
+        "Manaf Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
+Subject: [PATCH v4 1/2] power_supply: Register cooling device outside of probe
+Date:   Wed, 22 Dec 2021 14:11:28 +0530
+Message-ID: <1640162489-7847-1-git-send-email-quic_manafm@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YcLXbPzyhtMnP0YQ@kroah.com>
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 08:44:44AM +0100, Greg Kroah-Hartman wrote:
-> On Tue, Dec 21, 2021 at 06:46:01PM +0100, Rafał Miłecki wrote:
-> > On 21.12.2021 17:06, Greg Kroah-Hartman wrote:
-> > > On Tue, Dec 21, 2021 at 04:45:50PM +0100, Rafał Miłecki wrote:
-> > > > From: Rafał Miłecki <rafal@milecki.pl>
-> > > > 
-> > > > 1. Drop incorrect put_device() calls
-> > > > 
-> > > > If device_register() fails then underlaying device_add() takes care of
-> > > > calling put_device() if needed. There is no need to do that in a driver.
-> > > 
-> > > Did you read the documentation for device_register() that says:
-> > > 
-> > >   * NOTE: _Never_ directly free @dev after calling this function, even
-> > >   * if it returned an error! Always use put_device() to give up the
-> > >   * reference initialized in this function instead.
-> > 
-> > I clearly tried to be too smart and ignored documentation.
-> > 
-> > I'd say device_add() behaviour is rather uncommon and a bit unintuitive.
-> > Most kernel functions are safe to assume to do nothing that requires
-> > cleanup if they fail.
-> > 
-> > E.g. if I call platform_device_register() and it fails I don't need to
-> > call anything like platform_device_put(). I just free previously
-> > allocated memory.
-> 
-> And that is wrong.
+Registering the cooling device from the probe can result in the
+execution of get_property() function before it gets initialized.
 
-It seems Rafał is mistaken here too; you certainly need to call
-platform_device_put() if platform_device_register() fail, even if many
-current users do appear to get this wrong.
+To avoid this, register the cooling device from a workqueue
+instead of registering in the probe.
 
-Johan
+Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+---
+ drivers/power/supply/power_supply_core.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index 668369b..ef6f290 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -132,6 +132,7 @@ void power_supply_changed(struct power_supply *psy)
+ }
+ EXPORT_SYMBOL_GPL(power_supply_changed);
+ 
++static int psy_register_cooler(struct power_supply *psy);
+ /*
+  * Notify that power supply was registered after parent finished the probing.
+  *
+@@ -139,6 +140,8 @@ EXPORT_SYMBOL_GPL(power_supply_changed);
+  * calling power_supply_changed() directly from power_supply_register()
+  * would lead to execution of get_property() function provided by the driver
+  * too early - before the probe ends.
++ * Also, registering cooling device from the probe will execute the
++ * get_property() function. So register the cooling device after the probe.
+  *
+  * Avoid that by waiting on parent's mutex.
+  */
+@@ -156,6 +159,7 @@ static void power_supply_deferred_register_work(struct work_struct *work)
+ 	}
+ 
+ 	power_supply_changed(psy);
++	psy_register_cooler(psy);
+ 
+ 	if (psy->dev.parent)
+ 		mutex_unlock(&psy->dev.parent->mutex);
+@@ -1238,10 +1242,6 @@ __power_supply_register(struct device *parent,
+ 	if (rc)
+ 		goto register_thermal_failed;
+ 
+-	rc = psy_register_cooler(psy);
+-	if (rc)
+-		goto register_cooler_failed;
+-
+ 	rc = power_supply_create_triggers(psy);
+ 	if (rc)
+ 		goto create_triggers_failed;
+@@ -1271,8 +1271,6 @@ __power_supply_register(struct device *parent,
+ add_hwmon_sysfs_failed:
+ 	power_supply_remove_triggers(psy);
+ create_triggers_failed:
+-	psy_unregister_cooler(psy);
+-register_cooler_failed:
+ 	psy_unregister_thermal(psy);
+ register_thermal_failed:
+ 	device_del(dev);
+

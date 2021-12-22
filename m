@@ -2,185 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07DAE47CFA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:58:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CA747CFA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244068AbhLVJ6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 04:58:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55200 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231487AbhLVJ6m (ORCPT
+        id S244073AbhLVJ6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:58:48 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54932 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239575AbhLVJ6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:58:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640167121;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K5G4EVE4ohJb3tDbOzo24CdbVU9kLTuaVeCzI5YYwUo=;
-        b=gDT2wzaaZPsKRifnrIWNYvTguKtbc769l93fAqvR/OEzNSOM3jhLGBJDelgcYCz1XZ21cN
-        2OAAyKGRm+fmPZbtbR6wyoZPuUaP93wCophrbt2NBWiiAAtbC+hCMVrsc/nTBRL3I0Ns5U
-        NKkw3snVJPcJIiGaxGo4N6q/AK+zGkM=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-zxckO843POC59J9gRZmpkg-1; Wed, 22 Dec 2021 04:58:40 -0500
-X-MC-Unique: zxckO843POC59J9gRZmpkg-1
-Received: by mail-wm1-f69.google.com with SMTP id b188-20020a1c80c5000000b00345c1603997so47679wmd.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:58:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:from:to:cc:references:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=K5G4EVE4ohJb3tDbOzo24CdbVU9kLTuaVeCzI5YYwUo=;
-        b=FFE/+1Evjvu/tgiaK4gJ4F3zVDM4EwkyeXK2TPBAl/RYdEZMYoiW3a0MrShuWu8sOr
-         0kvxUTlSsDIp6Ar19HQgP8paFIlDBKZqMUFeQ7Nby6IPrw7LZ5ruOCW5ZCblfoV5EMVL
-         dPd1C7DMeqvcTulzt19Bp4YNYZ0CxcnPSO/Y7yIEq+8rri3MtQlxfktPFDM1Z/oA1RFs
-         YMSnXmh9F7Fwy4RHvVpWOI0i3oYB3l7hZ/Fy534GPdphH6BJdRES7KLWYF7hjNteR+cu
-         L4GrgkckwClvr2BXrSOXZX3MlM9Mdc31q9+pJ92/a3DAX0lcqVP0Uk67HITtjYyTmLRC
-         FxYQ==
-X-Gm-Message-State: AOAM532T5GQrtsRJMCnpn2gxjGOyyrR+pH7HYNZATkbEHRBh7CpQFlGz
-        BFMbkV3mdT6dmAlOOMv2zpyku1M7qY6OSWZFZigjC8XSec/j2NQAj7oT90GOpCSxDMNQrqUdqqE
-        75KBhr3ez1rnNJ+nIWfYvEw4d
-X-Received: by 2002:a05:600c:2242:: with SMTP id a2mr361334wmm.63.1640167119412;
-        Wed, 22 Dec 2021 01:58:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwAcPxZQQUdZzMn38yXVn5CoME1uZa7193DP1I+6cHL0latjqEXQ98ESJ3dAVdMJyoz2zLO5A==
-X-Received: by 2002:a05:600c:2242:: with SMTP id a2mr361317wmm.63.1640167119151;
-        Wed, 22 Dec 2021 01:58:39 -0800 (PST)
-Received: from [192.168.3.132] (p5b0c646a.dip0.t-ipconnect.de. [91.12.100.106])
-        by smtp.gmail.com with ESMTPSA id i12sm1451835wrp.96.2021.12.22.01.58.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 01:58:38 -0800 (PST)
-Message-ID: <dfe1c8d5-6fac-9040-0272-6d77bafa6a16@redhat.com>
-Date:   Wed, 22 Dec 2021 10:58:36 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Nadav Amit <namit@vmware.com>,
+        Wed, 22 Dec 2021 04:58:47 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D1E26197B
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 09:58:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD3C5C36AE8;
+        Wed, 22 Dec 2021 09:58:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640167126;
+        bh=4Jbtx0sxV9eUary/KdEpdFh2LPUEDT9+q6duvRyEM3M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IldX2r97TCE1WX4R71Z6NObvVMPrG5wnqtdEYIZ3ukMQAQW2gpG8U5J8ikHJVEu/D
+         /tB02O/QmMhYdfGSaZylcxZicU2OqDzkozPpFT+OxK2O83UCwro3anDPCdoTH+j5sW
+         jY5mjqU6YFwpZ1U0MIzvqyG4oDM63KcExIcFsHqI=
+Date:   Wed, 22 Dec 2021 10:58:43 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        greybus-dev@lists.linaro.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
- <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
- <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
- <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
- <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
- <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
- <20211221010312.GC1432915@nvidia.com>
- <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
- <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
- <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
- <20211221190706.GG1432915@nvidia.com>
- <3e0868e6-c714-1bf8-163f-389989bf5189@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-In-Reply-To: <3e0868e6-c714-1bf8-163f-389989bf5189@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        linux-staging@lists.linux.dev
+Subject: Re: Addition of config USB_HSIC_USB3613 soon?
+Message-ID: <YcL20/7ddWTsdIuQ@kroah.com>
+References: <CAKXUXMym0M1UNuNGUVpFr2yUwOwjkZ_sQpCD0jC8YB+hs=j-bA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKXUXMym0M1UNuNGUVpFr2yUwOwjkZ_sQpCD0jC8YB+hs=j-bA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.12.21 09:51, David Hildenbrand wrote:
-> On 21.12.21 20:07, Jason Gunthorpe wrote:
->> On Tue, Dec 21, 2021 at 06:40:30PM +0100, David Hildenbrand wrote:
->>
->>> 2) is certainly the cherry on top. But it just means that R/O pins don't
->>> have to be the weird kid. And yes, achieving 2) would require
->>> FAULT_FLAG_EXCLUSIVE / FAULT_FLAG_UNSHARED, but it would really 99% do
->>> what existing COW logic does, just bypass the "map writable" and
->>> "trigger write fault" semantics.
->>
->> I still don't agree with this - when you come to patches can you have
->> this work at the end and under a good cover letter? Maybe it will make
->> more sense then.
+On Wed, Dec 22, 2021 at 10:54:41AM +0100, Lukas Bulwahn wrote:
+> Dear Vaibhav, dear Johan, dear Alex, dear Greg,
 > 
-> Yes. But really, I think it's the logical consequence of what Linus said
-> [1]:
+> I have seen that the greybus arche driver has been under heavy
+> development in 2016 and 2017 with some further clean-up in 2019.
 > 
->   "And then all GUP-fast would need to do is to refuse to look up a page
->    that isn't exclusive to that VM. We already have the situation that
->    GUP-fast can fail for non-writable pages etc, so it's just another
->    test."
+> However, so far, the config GREYBUS_ARCHE for this driver still
+> depends on the out-of-tree config USB_HSIC_USB3613, with a proper
+> exception made for compile testing (with COMPILE_TEST).
 > 
-> We must not FOLL_PIN a page that is not exclusive (not only on gup-fast,
-> but really, on any gup). If we special case R/O FOLL_PIN, we cannot
-> enable the sanity check on unpin as suggested by Linus [2]:
-> 
->   "If we only set the exclusive VM bit on pages that get mapped into
->    user space, and we guarantee that GUP only looks up such pages, then
->    we can also add a debug test to the "unpin" case that the bit is
->    still set."
-> 
-> There are really only two feasible options I see when we want to take a
-> R/O FOLL_PIN on a !PageAnonExclusive() anon page
-> 
-> (1) Fail the pinning completely. This implies that we'll have to fail
->     O_DIRECT once converted to FOLL_PIN.
-> (2) Request to mark the page PageAnonExclusive() via a
->     FAULT_FLAG_UNSHARE and let it succeed.
-> 
-> 
-> Anything else would require additional accounting that we already
-> discussed in the past is hard -- for example, to differentiate R/O from
-> R/W pins requiring two pin counters.
-> 
-> The only impact would be that FOLL_PIN after fork() has to go via a
-> FAULT_FLAG_UNSHARE once, to turn the page PageAnonExclusive. IMHO this
-> is the right thing to do for FOLL_LONGTERM. For !FOLL_LONGTERM it would
-> be nice to optimize this, to *not* do that, but again ... this would
-> require even more counters I think, for example, to differentiate
-> between "R/W short/long-term or R/O long-term pin" and "R/O short-term pin".
-> 
-> So unless we discover a way to do additional accounting for ordinary 4k
-> pages, I think we really can only do (1) or (2) to make sure we never
-> ever pin a !PageAnonExclusive() page.
+> Will this USB_HSIC_USB3613 config and driver still be added in the
+> mainline kernel in the near future, so that the config dependencies
+> are consistent in mainline?
 
-BTW, I just wondered if the optimization should actually be that R/O
-short-term FOLL_PIN users should actually be using FOLL_GET instead. So
-O_DIRECT with R/O would already be doing the right thing.
+Do you have this hardware?  If so, we can add the driver, but given that
+I did not think the chip ever actually shipped, it didn't make much
+sense.
 
-And it somewhat aligns with what we found: only R/W short-term FOLL_GET
-is problematic, where we can lose writes to the page from the device via
-O_DIRECT.
+> Or, are the further out-of-tree additions still maintained for the
+> current kernel and will stay out of tree? Is this arche driver not
+> needed anymore and can be dropped?
 
-IIUC, our COW logic makes sure that a shared anonymous page that might
-still be used by a R/O FOLL_GET cannot be modified, because any attempt
-to modify it would result in a copy.
+Do you want to drop it as it is causing problems for you?  It's a good
+example driver for those wanting to create a greybus host controller
+driver so it's nice to have in the tree, unless you have a different one
+that should be merged instead?
 
-But I might be missing something, just an idea.
+thanks,
 
-
--- 
-Thanks,
-
-David / dhildenb
-
+greg k-h

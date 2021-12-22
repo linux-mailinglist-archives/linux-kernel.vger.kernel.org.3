@@ -2,214 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F7147D74A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:01:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 256A247D753
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236737AbhLVTBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 14:01:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbhLVTBH (ORCPT
+        id S237364AbhLVTB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 14:01:56 -0500
+Received: from relmlor1.renesas.com ([210.160.252.171]:26471 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231511AbhLVTBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 14:01:07 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9FEC061574;
-        Wed, 22 Dec 2021 11:01:06 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id v15so5526924ljc.0;
-        Wed, 22 Dec 2021 11:01:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=5qyDhDUwPSzlKry3WWiQixXU+Cd/VbSsGfSS3pBCnbQ=;
-        b=RQazfz82dLgGWyQnWzFwUJVjtPEbt5YWT/uQVL4cXzIi4bKwZhm62VKgJ1svmH5Oc0
-         F9U/ZS6gqturE3qBxcaLOQ5OUEvO9fwu7aZFr4d08jAL4nGEAQbxVC2NeSw5GGpTKQHI
-         iTJtxnSMZPahl9KKsJAeCOzmeJtXBFwk6XAmkGxh0fJcq+5l1tQPCJV7440mR16rm3aa
-         cthd//CZWZNvdgCV893iMnxac6h2QRQPEN4d1qOItYKhf3PtlcDiOQH7jUmQWgV0Ua/R
-         QZ68nb/kcdUNScJXlTrYR9HMSD0IbbHvfIpWp2hmSEM9oVf5A4t6nshy/8Fx9PU6Ubgu
-         ifXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=5qyDhDUwPSzlKry3WWiQixXU+Cd/VbSsGfSS3pBCnbQ=;
-        b=LsyrgY2ZSR03kAK4TRMQ+cmoRf+PKF/1vB0c5WlGi3TMO3szog3xeSE2ibevQO3GZk
-         Ad0k8arQ9xiWhzTXu4FbscrC/2OioapK1zUeMgkOLGraTXAHghEBfoBAIB9xTUyogIWY
-         wxl6+eXzYymm79ff+dBRMJDVw0w6bIf6aw4yEoKed1bkyIlvMn4JNcCoRxXwMSiuJjBZ
-         qHGDrMgUV6+KpflraWg7nk8vHkBBhk240UG/IV3uTlXjp2dF5pAdS/SGPIxanIAKRW8g
-         TzRCvFPWSTLIoepXgr8botp2cbGe0tRdFM5WL8xfTMXdTRyOqz6jTPMzJGOBsoZKkEri
-         NP9w==
-X-Gm-Message-State: AOAM533IehvY43Y8KE/IlG+lwtzpZb9NcEV8wPxb2o9uvfc63ymnzfT4
-        cIa6MzbZFYQgrtFpd49GR/QJBL7s3do=
-X-Google-Smtp-Source: ABdhPJx2bFnl4KwymiZWBgpVgj62KepZK1/+QIA7UfkgYV7U42wp2ZF38bQi8wul84W/UBzbREFafw==
-X-Received: by 2002:a2e:8507:: with SMTP id j7mr2863920lji.307.1640199664643;
-        Wed, 22 Dec 2021 11:01:04 -0800 (PST)
-Received: from [192.168.2.145] (46-138-43-24.dynamic.spd-mgts.ru. [46.138.43.24])
-        by smtp.googlemail.com with ESMTPSA id a28sm245793ljm.65.2021.12.22.11.01.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 11:01:04 -0800 (PST)
-Subject: Re: [PATCH v16 08/40] gpu: host1x: Add initial runtime PM and OPP
- support
-To:     Jon Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
-References: <20211130232347.950-1-digetx@gmail.com>
- <20211130232347.950-9-digetx@gmail.com>
- <21212ddb-205f-71d6-0199-d75768eaf32c@nvidia.com>
- <41edc53b-5ed1-d524-2546-c3d1ee6cdea4@gmail.com>
- <6652ac84-36f5-0e43-65fa-04786f384f21@nvidia.com>
- <56dce9c7-397d-75b0-b5b8-18ce1084e72b@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <6dbc8205-5669-8b08-16b8-fe5e1acdd06f@gmail.com>
-Date:   Wed, 22 Dec 2021 22:01:03 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <56dce9c7-397d-75b0-b5b8-18ce1084e72b@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Wed, 22 Dec 2021 14:01:55 -0500
+X-IronPort-AV: E=Sophos;i="5.88,227,1635174000"; 
+   d="scan'208";a="104382674"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 23 Dec 2021 04:01:53 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 87E8240DF445;
+        Thu, 23 Dec 2021 04:01:50 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Inki Dae <inki.dae@samsung.com>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 0/5] drm/exynos: Use platform_get_irq*() variants to fetch IRQ's
+Date:   Wed, 22 Dec 2021 19:01:29 +0000
+Message-Id: <20211222190134.24866-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-22.12.2021 21:41, Jon Hunter пишет:
-> 
-> On 22/12/2021 09:47, Jon Hunter wrote:
->>
->> On 21/12/2021 20:58, Dmitry Osipenko wrote:
->>> Hi,
->>>
->>> Thank you for testing it all.
->>>
->>> 21.12.2021 21:55, Jon Hunter пишет:
->>>> Hi Dmitry, Thierry,
->>>>
->>>> On 30/11/2021 23:23, Dmitry Osipenko wrote:
->>>>> Add runtime PM and OPP support to the Host1x driver. For the
->>>>> starter we
->>>>> will keep host1x always-on because dynamic power management require a
->>>>> major
->>>>> refactoring of the driver code since lot's of code paths are
->>>>> missing the
->>>>> RPM handling and we're going to remove some of these paths in the
->>>>> future.
->>>>
->>>>
->>>> Unfortunately, this change is breaking boot on Tegra186. Bisect points
->>>> to this and reverting on top of -next gets the board booting again.
->>>> Sadly, there is no panic or error reported, it is just a hard hang. I
->>>> will not have time to look at this this week and so we may need to
->>>> revert for the moment.
->>>
->>> Only T186 broken? What about T194?
->>
->> Yes interestingly only Tegra186 and no other board.
->>
->>> Which board model fails to boot? Is it running in hypervisor mode?
->>
->> This is Jetson TX2. No hypervisor.
->>
->>> Do you use any additional patches?
->>
->> No just plain -next. The tests run every day on top of tree.
->>
->>> Could you please test the below diff? I suspect that
->>> host1x_syncpt_save/restore may be entirely broken for T186 since we
->>> never used these funcs before.
->>>
->>> --- >8 ---
->>>
->>> diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
->>> index f5b4dcded088..fd5dfb875422 100644
->>> --- a/drivers/gpu/host1x/dev.c
->>> +++ b/drivers/gpu/host1x/dev.c
->>> @@ -580,7 +580,6 @@ static int __maybe_unused
->>> host1x_runtime_suspend(struct device *dev)
->>>       int err;
->>>
->>>       host1x_intr_stop(host);
->>> -    host1x_syncpt_save(host);
->>>
->>>       err = reset_control_bulk_assert(host->nresets, host->resets);
->>>       if (err) {
->>> @@ -596,9 +595,8 @@ static int __maybe_unused
->>> host1x_runtime_suspend(struct device *dev)
->>>       return 0;
->>>
->>>   resume_host1x:
->>> -    host1x_setup_sid_table(host);
->>> -    host1x_syncpt_restore(host);
->>>       host1x_intr_start(host);
->>> +    host1x_setup_sid_table(host);
->>>
->>>       return err;
->>>   }
->>> @@ -626,9 +624,8 @@ static int __maybe_unused
->>> host1x_runtime_resume(struct device *dev)
->>>           goto disable_clk;
->>>       }
->>>
->>> -    host1x_setup_sid_table(host);
->>> -    host1x_syncpt_restore(host);
->>>       host1x_intr_start(host);
->>> +    host1x_setup_sid_table(host);
->>
->>
->> Thanks! Will try this later, once the next bisect is finished :-)
-> 
-> I tested the above, but this did not fix it. It still hangs on boot.
+Hi All,
 
-Thank you, now I see where the problem should be. Apparently host1x is
-disabled at a boot time on T186 and we touch h/w before RPM is resumed.
+This patch series aims to drop using platform_get_resource() for IRQ types
+in preparation for removal of static setup of IRQ resource from DT core
+code.
 
-Could you please revert the above change and try this instead:
+Dropping usage of platform_get_resource() was agreed based on
+the discussion [0].
 
-diff --git a/drivers/gpu/host1x/syncpt.c b/drivers/gpu/host1x/syncpt.c
-index e08e331e46ae..8194826c9ce3 100644
---- a/drivers/gpu/host1x/syncpt.c
-+++ b/drivers/gpu/host1x/syncpt.c
-@@ -137,6 +137,15 @@ void host1x_syncpt_restore(struct host1x *host)
- 	struct host1x_syncpt *sp_base = host->syncpt;
- 	unsigned int i;
+[0] https://patchwork.kernel.org/project/linux-renesas-soc/
+patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
 
-+	for (i = 0; i < host->info->nb_pts; i++) {
-+		/*
-+		 * Unassign syncpt from channels for purposes of Tegra186
-+		 * syncpoint protection. This prevents any channel from
-+		 * accessing it until it is reassigned.
-+		 */
-+		host1x_hw_syncpt_assign_to_channel(host, sp_base + i, NULL);
-+	}
-+
- 	for (i = 0; i < host1x_syncpt_nb_pts(host); i++)
- 		host1x_hw_syncpt_restore(host, sp_base + i);
+Cheers,
+Prabhakar
 
-@@ -352,13 +361,6 @@ int host1x_syncpt_init(struct host1x *host)
- 	for (i = 0; i < host->info->nb_pts; i++) {
- 		syncpt[i].id = i;
- 		syncpt[i].host = host;
--
--		/*
--		 * Unassign syncpt from channels for purposes of Tegra186
--		 * syncpoint protection. This prevents any channel from
--		 * accessing it until it is reassigned.
--		 */
--		host1x_hw_syncpt_assign_to_channel(host, &syncpt[i], NULL);
- 	}
+Lad Prabhakar (5):
+  drm/exynos/exynos7_drm_decon: Use platform_get_irq_byname() to get the
+    interrupt
+  drm/exynos: mixer: Use platform_get_irq() to get the interrupt
+  drm/exynos/exynos_drm_fimd: Use platform_get_irq_byname() to get the
+    interrupt
+  drm/exynos/fimc: Use platform_get_irq() to get the interrupt
+  drm/exynos: gsc: Use platform_get_irq() to get the interrupt
 
- 	for (i = 0; i < host->info->nb_bases; i++)
+ drivers/gpu/drm/exynos/exynos7_drm_decon.c | 12 +++---------
+ drivers/gpu/drm/exynos/exynos_drm_fimc.c   | 13 +++++--------
+ drivers/gpu/drm/exynos/exynos_drm_fimd.c   | 13 ++++---------
+ drivers/gpu/drm/exynos/exynos_drm_gsc.c    | 10 +++-------
+ drivers/gpu/drm/exynos/exynos_mixer.c      | 14 ++++++--------
+ 5 files changed, 21 insertions(+), 41 deletions(-)
+
+-- 
+2.17.1
+

@@ -2,125 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB9D47D7EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88DAA47D7F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345305AbhLVToL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 14:44:11 -0500
-Received: from mga05.intel.com ([192.55.52.43]:55515 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231352AbhLVToJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 14:44:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640202249; x=1671738249;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=7eZDGz/iiLgWgKXq6dgjtOY9xoQndBNl5y9xF61/U0I=;
-  b=YBI6h/kK3jj+iN/+xjLbBMS4NhV1+49WRVGaUnkcZV1/pfZpnyGgoH8I
-   EI57xssMvQd8Ppk9doykOjqOSFtR6OTBMnzjmpBUD5ht3l1UETxOUOzuN
-   QJCNogCEbrU6g0899LCTFd2j/dKNEz/DRGrkz9XzCc4umnb+QuyrRf05j
-   P7/b+5N0/kb7a6aKknIoU7hkUXeQ+Q6LA7D5xs6jLGxymoPQWIM+0aYMo
-   AGDX9vJT1BG46QjUgcLeKUg6vdEualRX/R5BcXj6AmVlxGJUNQx/Q0dxa
-   ZhNC4GLiSheq0kOv24cl0dlrSleqoWm2L+cD1Umhu9/EDqX9NdDz+eNLO
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="327004123"
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="327004123"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 11:44:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="570674162"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 22 Dec 2021 11:44:07 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 2F4C5FE; Wed, 22 Dec 2021 21:44:16 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: [PATCH v1 1/1] serial: 8250_exar: derive nr_ports from ID for Acces I/O cards
-Date:   Wed, 22 Dec 2021 21:44:13 +0200
-Message-Id: <20211222194413.75069-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        id S1345314AbhLVTsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 14:48:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345307AbhLVTsk (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 14:48:40 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4280C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 11:48:39 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id v7so6937936wrv.12
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 11:48:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=colorfullife-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s0Np47Sa5pl9gnz8YRlCOL68fxuhegQ0UELp+V7hih0=;
+        b=ShpxXURYszaRMGGR7Amw9aByeA2z9pmwguw8vJMrwma0p7JrEpZAR//BeulUjTnj4B
+         D3Gv45fD6hNXeM3/mRdYiiBubdKW7j+wgRlIWLPf8R7hqqaUhWdTgxePlh4HoTJ32G2V
+         ezxsX+SpUXz95b65NKPd3pqEt2CuZ2oBGk30meGymGMRMGxngkY7I9E/uvR+1jMxQtkD
+         u+OS/gIG7X3qxv9zdGVx/hOSUR+/EB8nN01ntjA3CDwTZI/SQ0MgKd6zXX7XQ9MFzNGr
+         G2U6eUr1iavHJofLSRrJ5ZmkNCcggBSQCKFQDZUhdNgQraXr0UtZ/TvbyTkEROBnYCYp
+         ncmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s0Np47Sa5pl9gnz8YRlCOL68fxuhegQ0UELp+V7hih0=;
+        b=KAJjvL90/4m3JJNjmJb9zYKjOEAfgTEQeiG/IdEZ/Sx8aeqawyr8B6tW0chdFcbiQn
+         n6OraKFwI45DUvNc0MNUJ5MUHJtmxE9YzENE6A0C07CuXk6H/FbSLRxdL64iUCdf7IpC
+         sENuPuz/MA8tg7OEJ3dAnmER3JIi1hbQ8AWQJ6IP3RYBpa8Q6//fdzeGtj3zHqhaMXqQ
+         FER7hSiDg/YQftG+2l0TpUT+vpF8FYz5gzP3hXV+gkZrE79UGmUPNht8Qx5BfRpiH0hY
+         pbM6Nzbe2RsHdBpR9p2rGXfDnlp5GI4wFqQC5H24JDL1AqoASbObLfyiL7L/LM85jQaI
+         oJrA==
+X-Gm-Message-State: AOAM530iQI6tLJfKN2U6iw5LxuN/MsvqC6eMuPap4S2v6mo0MKbHHcfS
+        NMz61gAeOs217SnAdstWyTv0dDbQKneVevsF
+X-Google-Smtp-Source: ABdhPJwrNjuRSRbCuEDIvyvjT5LMfUxmfDcjFXxqtdFWy3mco/AY4P0vZNGjc6maPs4bae7pSiZfeg==
+X-Received: by 2002:a5d:4dca:: with SMTP id f10mr3113197wru.595.1640202518184;
+        Wed, 22 Dec 2021 11:48:38 -0800 (PST)
+Received: from localhost.localdomain (p200300d9970878003dae64a47964a371.dip0.t-ipconnect.de. [2003:d9:9708:7800:3dae:64a4:7964:a371])
+        by smtp.googlemail.com with ESMTPSA id c7sm3273596wri.21.2021.12.22.11.48.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 11:48:37 -0800 (PST)
+From:   Manfred Spraul <manfred@colorfullife.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Vasily Averin <vvs@virtuozzo.com>, cgel.zte@gmail.com,
+        shakeelb@google.com, rdunlap@infradead.org, dbueso@suse.de,
+        unixbhaskar@gmail.com, chi.minghao@zte.com.cn, arnd@arndb.de,
+        Zeal Robot <zealci@zte.com.cn>, linux-mm@kvack.org,
+        1vier1@web.de, Manfred Spraul <manfred@colorfullife.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] mm/util.c: Make kvfree() safe for calling while holding spinlocks
+Date:   Wed, 22 Dec 2021 20:48:28 +0100
+Message-Id: <20211222194828.15320-1-manfred@colorfullife.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the similar way how it's done in 8250_pericom, derive number of
-UART ports from PCI ID for Acces I/O cards.
+One codepath in find_alloc_undo() calls kvfree() while holding a spinlock.
+Since vfree() can sleep this is a bug.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Previously, the code path used kfree(), and kfree() is safe to be called
+while holding a spinlock.
+
+Minghao proposed to fix this by updating find_alloc_undo().
+
+Alternate proposal to fix this: Instead of changing find_alloc_undo(),
+change kvfree() so that the same rules as for kfree() apply:
+Having different rules for kfree() and kvfree() just asks for bugs.
+
+Disadvantage: Releasing vmalloc'ed memory will be delayed a bit.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Reported-by: Minghao Chi <chi.minghao@zte.com.cn>
+Link: https://lore.kernel.org/all/20211222081026.484058-1-chi.minghao@zte.com.cn/
+Fixes: fc37a3b8b438 ("[PATCH] ipc sem: use kvmalloc for sem_undo allocation")
+Cc: stable@vger.kernel.org
+Signed-off-by: Manfred Spraul <manfred@colorfullife.com>
 ---
- drivers/tty/serial/8250/8250_exar.c | 37 ++++++++++-------------------
- 1 file changed, 13 insertions(+), 24 deletions(-)
+ mm/util.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
-index a4508ac0cac9..cf16bd889abd 100644
---- a/drivers/tty/serial/8250/8250_exar.c
-+++ b/drivers/tty/serial/8250/8250_exar.c
-@@ -611,7 +611,12 @@ exar_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *ent)
- 
- 	maxnr = pci_resource_len(pcidev, bar) >> (board->reg_shift + 3);
- 
--	nr_ports = board->num_ports ? board->num_ports : pcidev->device & 0x0f;
-+	if (pcidev->vendor == PCI_VENDOR_ID_ACCESSIO)
-+		nr = BIT(((pcidev->device & 0x38) >> 3) - 1);
-+	else if (board->num_ports)
-+		nr_ports = board->num_ports;
-+	else
-+		nr_ports = pcidev->device & 0x0f;
- 
- 	priv = devm_kzalloc(&pcidev->dev, struct_size(priv, line, nr_ports), GFP_KERNEL);
- 	if (!priv)
-@@ -710,22 +715,6 @@ static int __maybe_unused exar_resume(struct device *dev)
- 
- static SIMPLE_DEV_PM_OPS(exar_pci_pm, exar_suspend, exar_resume);
- 
--static const struct exar8250_board acces_com_2x = {
--	.num_ports	= 2,
--	.setup		= pci_xr17c154_setup,
--};
--
--static const struct exar8250_board acces_com_4x = {
--	.num_ports	= 4,
--	.setup		= pci_xr17c154_setup,
--};
--
--static const struct exar8250_board acces_com_8x = {
--	.num_ports	= 8,
--	.setup		= pci_xr17c154_setup,
--};
--
--
- static const struct exar8250_board pbn_fastcom335_2 = {
- 	.num_ports	= 2,
- 	.setup		= pci_fastcom335_setup,
-@@ -810,13 +799,13 @@ static const struct exar8250_board pbn_exar_XR17V8358 = {
- 	}
- 
- static const struct pci_device_id exar_pci_tbl[] = {
--	EXAR_DEVICE(ACCESSIO, COM_2S, acces_com_2x),
--	EXAR_DEVICE(ACCESSIO, COM_4S, acces_com_4x),
--	EXAR_DEVICE(ACCESSIO, COM_8S, acces_com_8x),
--	EXAR_DEVICE(ACCESSIO, COM232_8, acces_com_8x),
--	EXAR_DEVICE(ACCESSIO, COM_2SM, acces_com_2x),
--	EXAR_DEVICE(ACCESSIO, COM_4SM, acces_com_4x),
--	EXAR_DEVICE(ACCESSIO, COM_8SM, acces_com_8x),
-+	EXAR_DEVICE(ACCESSIO, COM_2S, pbn_exar_XR17C15x),
-+	EXAR_DEVICE(ACCESSIO, COM_4S, pbn_exar_XR17C15x),
-+	EXAR_DEVICE(ACCESSIO, COM_8S, pbn_exar_XR17C15x),
-+	EXAR_DEVICE(ACCESSIO, COM232_8, pbn_exar_XR17C15x),
-+	EXAR_DEVICE(ACCESSIO, COM_2SM, pbn_exar_XR17C15x),
-+	EXAR_DEVICE(ACCESSIO, COM_4SM, pbn_exar_XR17C15x),
-+	EXAR_DEVICE(ACCESSIO, COM_8SM, pbn_exar_XR17C15x),
- 
- 	CONNECT_DEVICE(XR17C152, UART_2_232, pbn_connect),
- 	CONNECT_DEVICE(XR17C154, UART_4_232, pbn_connect),
+diff --git a/mm/util.c b/mm/util.c
+index 741ba32a43ac..7f9181998835 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -610,12 +610,12 @@ EXPORT_SYMBOL(kvmalloc_node);
+  * It is slightly more efficient to use kfree() or vfree() if you are certain
+  * that you know which one to use.
+  *
+- * Context: Either preemptible task context or not-NMI interrupt.
++ * Context: Any context except NMI interrupt.
+  */
+ void kvfree(const void *addr)
+ {
+ 	if (is_vmalloc_addr(addr))
+-		vfree(addr);
++		vfree_atomic(addr);
+ 	else
+ 		kfree(addr);
+ }
 -- 
-2.34.1
+2.33.1
 

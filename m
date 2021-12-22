@@ -2,107 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 558E947CAD4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:38:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9259547CAE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:46:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241141AbhLVBiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 20:38:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbhLVBiH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 20:38:07 -0500
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12392C061574;
-        Tue, 21 Dec 2021 17:38:07 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id b85so896683qkc.1;
-        Tue, 21 Dec 2021 17:38:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fJAfK3DqpfiPmHQwaBI/smOBiafG0laxAPbgGyOvQTg=;
-        b=NEsC0bwTrII2R5alA3OhKMtCJh6qrGtuahtPqUjey2ycLMqVZjwaz2JNlqDUDv/LSz
-         ZQqLPDa9wna5XSVi0/muG0Apl+8GH4q4zGAPrcxoZX9XOmTJRnuCPjYxhATh7kTWXRyf
-         gUiVLkVJypdREiMOBk6ZrWff6h4SMV81HMYzg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fJAfK3DqpfiPmHQwaBI/smOBiafG0laxAPbgGyOvQTg=;
-        b=prvjwYAz+l+EluCH0U9o08m8r9/UgX9lBYTnTpEesjFz5vl9fX1n/fpPXO1vXkDpnJ
-         g+EY9wV/+FQbY13C5uxOrfGf37iOfDPvUFFXXLQCtYPb6OCGog8PnWQO6ilbigy3Tfva
-         QQTlb+8pLRBWATPb1yjwjxDxdP2Oi4NxhYN7h6EeC/+TyMdYg3a452I+RmfDP+FDvTu4
-         uW1UJ7l3X4HUmR0Q9n4PWPxl9Y4vWgc15XVAj8GrnTl3p88WHUT0I+73IBzqHkzim8O7
-         ytpEVPSwdJDE7nyDA4OEVOdG3+z3G3KqDmSTcLXSfiNFf4V3GodFntCfkdbUAruxGq+N
-         tHeQ==
-X-Gm-Message-State: AOAM532JNu+uFdQUpLQOoINppzZZNcgVL3h+R/bsfzh2ALGsP57HbCfN
-        RIzMeLgAUktcFx4+FoRTiqyDSPVWaxpW6FCjtvs=
-X-Google-Smtp-Source: ABdhPJxhiavwjj59AhM6tp4D2rXd4oQSL5w/FRsldzbqAWfZsoEC+QgYrJGyQgUTUvGjcxZ9auohlAELtVpy61lkCeg=
-X-Received: by 2002:a37:94c2:: with SMTP id w185mr740322qkd.666.1640137086103;
- Tue, 21 Dec 2021 17:38:06 -0800 (PST)
+        id S241196AbhLVBqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 20:46:20 -0500
+Received: from p3plsmtp16-03-2.prod.phx3.secureserver.net ([173.201.193.58]:34269
+        "EHLO p3plwbeout16-03.prod.phx3.secureserver.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232258AbhLVBqT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 20:46:19 -0500
+X-Greylist: delayed 469 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 Dec 2021 20:46:19 EST
+Received: from mailex.mailcore.me ([94.136.40.144])
+        by :WBEOUT: with ESMTP
+        id zqaLmocrca06VzqaMmDCZV; Tue, 21 Dec 2021 18:38:30 -0700
+X-CMAE-Analysis: v=2.4 cv=E7MIGYRl c=1 sm=1 tr=0 ts=61c28196
+ a=wXHyRMViKMYRd//SnbHIqA==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
+ a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=IOMw9HtfNCkA:10
+ a=mr8mJ_Mg9M5BUJlPZpQA:9 a=QEXdDO2ut3YA:10
+X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
+X-SID:  zqaLmocrca06V
+Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.33])
+        by smtp05.mailcore.me with esmtpa (Exim 4.94.2)
+        (envelope-from <phillip@squashfs.org.uk>)
+        id 1mzqaK-0003ER-No; Wed, 22 Dec 2021 01:38:29 +0000
+Message-ID: <91a4bb22-0144-f8d8-86be-62c593e77cb6@squashfs.org.uk>
+Date:   Wed, 22 Dec 2021 01:38:28 +0000
 MIME-Version: 1.0
-References: <20211210093623.2140640-1-yulei.sh@bytedance.com>
-In-Reply-To: <20211210093623.2140640-1-yulei.sh@bytedance.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 22 Dec 2021 01:37:53 +0000
-Message-ID: <CACPK8XeK977rY33Kt3-vhEbqa68iXbG6vbRAfRGYxC94tE=t_g@mail.gmail.com>
-Subject: Re: [PATCH] ARM: dts: aspeed: g220a: Enable secondary flash
-To:     Lei YU <yulei.sh@bytedance.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andrew Jeffery <andrew@aj.id.au>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        openbmc <openbmc@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] fs/squashfs: handle possible null pointer
+To:     Peng Hao <flyingpenghao@gmail.com>
+Cc:     linux-kernel@vger.kernel.org
+References: <20211221020347.46021-1-flyingpeng@tencent.com>
+From:   Phillip Lougher <phillip@squashfs.org.uk>
+In-Reply-To: <20211221020347.46021-1-flyingpeng@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailcore-Auth: 439999529
+X-Mailcore-Domain: 1394945
+X-123-reg-Authenticated:  phillip@squashfs.org.uk  
+X-Originating-IP: 82.69.79.175
+X-CMAE-Envelope: MS4xfGhfW3/a30k6gJ3OH0EkNdC4ImUsvpet9/Ib1NdUq9bzV6owkpCYsCHJE0wF7V7P7KMh/BJF0uesilnR3qTJA2/TwUnztqvXjmyYeXw5Hv3VThFvA+qZ
+ daEfZ32XZPn0OZ2CQVWJx5F9zAiE9ikImPMzZr+S8RENu3AvhejfHPjo3nAUW1OuSHLnUQ6ezcAGmTrJuAk08bpQJvEuXy44eXU=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lei,
+On 21/12/2021 02:03, Peng Hao wrote:
+>   in squashfs_fill_super:
+> 
+>          msblk->decompressor = supported_squashfs_filesystem(
+>                          fc,
+>                          le16_to_cpu(sblk->s_major),
+>                          le16_to_cpu(sblk->s_minor),
+>                          le16_to_cpu(sblk->compression));
+>          if (msblk->decompressor == NULL)
+>                  goto failed_mount;
+>          ...
+> 
+> failed_mount:
+> 	...
+> 	squashfs_decompressor_destroy(msblk);
+> 
+> in squashfs_decompressor_destroy:
+> 	if (stream) {
+>          	msblk->decompressor->free(stream->stream);
+> msblk->decompressor is NULL.
+> 
+> so add a judgment whether a null pointer.
 
-On Fri, 10 Dec 2021 at 09:36, Lei YU <yulei.sh@bytedance.com> wrote:
->
-> Enable the secondary flash of the g220a's BMC and the wdt2.
->
-> Signed-off-by: Lei YU <yulei.sh@bytedance.com>
+NACK.
 
-I've applied this and the layout patch for v5.17, and to the openbmc tree.
+The NULL pointer dereference (msblk->decompressor) will not happen 
+because stream (msblk->stream) is NULL (thus the code in question will 
+not be executed).
 
-> ---
->  arch/arm/boot/dts/aspeed-bmc-bytedance-g220a.dts | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-bytedance-g220a.dts b/arch/arm/boot/dts/aspeed-bmc-bytedance-g220a.dts
-> index 01dace8f5e5f..05f392f42960 100644
-> --- a/arch/arm/boot/dts/aspeed-bmc-bytedance-g220a.dts
-> +++ b/arch/arm/boot/dts/aspeed-bmc-bytedance-g220a.dts
-> @@ -260,6 +260,13 @@ flash@0 {
->                 spi-max-frequency = <50000000>;
->  #include "openbmc-flash-layout-64.dtsi"
->         };
-> +       flash@1 {
-> +               status = "okay";
-> +               label = "alt-bmc";
-> +               m25p,fast-read;
-> +               spi-max-frequency = <50000000>;
-> +#include "openbmc-flash-layout-64-alt.dtsi"
-> +       };
->  };
->
->  &spi1 {
-> @@ -278,6 +285,10 @@ &adc {
->         status = "okay";
->  };
->
-> +&wdt2 {
-> +       aspeed,alt-boot;
-> +};
-> +
->  &gpio {
->         status = "okay";
->         gpio-line-names =
-> --
-> 2.25.1
->
+At the start of the initialisation phase msblk is zeroed out
+
+	sb->s_fs_info = kzalloc(sizeof(*msblk), GFP_KERNEL);
+	if (sb->s_fs_info == NULL) {
+		ERROR("Failed to allocate squashfs_sb_info\n");
+		return -ENOMEM;
+	}
+	msblk = sb->s_fs_info;
+
+Making msblk->decompressor and msblk->stream NULL.
+
+msblk->decompressor is allocated first
+
+	msblk->decompressor = supported_squashfs_filesystem(
+			fc,
+			le16_to_cpu(sblk->s_major),
+			le16_to_cpu(sblk->s_minor),
+			le16_to_cpu(sblk->compression));
+	if (msblk->decompressor == NULL)
+		goto failed_mount;
+
+If that succeeds (msblk->decompressor != NULL), then msblk->stream is 
+allocated
+
+	msblk->stream = squashfs_decompressor_setup(sb, flags);
+	if (IS_ERR(msblk->stream)) {
+		err = PTR_ERR(msblk->stream);
+		msblk->stream = NULL;
+		goto insanity;
+	}
+
+Thus, in squashfs_decompressor_destroy() if stream (msblk->stream) is 
+not NULL, then msblk->decompressor is also guaranteed to be not NULL.
+
+Likewise if msblk->decompressor is NULL, then msblk->stream will also be 
+NULL.
+
+Or to put it another way, the decompressor is only destroyed if it was 
+previously created (msblk->stream != NULL), and it will only have been 
+created if msblk->decompressor is != NULL.
+
+Phillip
+

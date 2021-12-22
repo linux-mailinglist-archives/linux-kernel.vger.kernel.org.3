@@ -2,116 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C89847CAE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 844F847CAE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:44:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237612AbhLVBnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 20:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232258AbhLVBnD (ORCPT
+        id S238459AbhLVBo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 20:44:58 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16848 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232258AbhLVBo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 20:43:03 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8822AC061574;
-        Tue, 21 Dec 2021 17:43:03 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id m21so3487948edc.0;
-        Tue, 21 Dec 2021 17:43:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=L5HXUbtpZbhWm0eIO9n7xuZrUAU7FSVNXrbbO8GknXU=;
-        b=NEUc48d3pV7T70Mad+r745216ViF/UiBsPRrOZNfCbAdiJ4i/IB4EmQsKSiWlusBzR
-         ByTc90tR/Tef2isGxSHzHRw+MjpcAxMpfftrADlO2ruYhS72E/xX/lV31Evh/RDkNhdS
-         QyWtZQYduwKOSlbHSrtcj93Z7cE+AmqTr1/lOMAK8N7/vD9o/NC4vt6k4vohMyPlAGXy
-         OboBUDZ3h13j5KdIBKLvUviyFXW8XeKcFsTTL2vRTlKSfSN1gFgps/YB01o5/a/RXf4D
-         KKnst8LvdQcFFjWPd/GujX0jRjn/DTSzoaBO94/bqb1SBQc8tHz8Qs7fzkuDCHZFvwvI
-         OdRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L5HXUbtpZbhWm0eIO9n7xuZrUAU7FSVNXrbbO8GknXU=;
-        b=sRKvYiys4+TNY2ZKWAxG+1nSsybrGCzezQ9T0vbIklgbAoPRr0ruH3ECQZ7RfWxNQA
-         mhPHIz/QJuAzU68cowoIsDVVjt1f2UqCgt4GDa0S2ny9cSJJ67zR2q50ihCpROtHugS7
-         RnedaiVdA2ypVkJQ4NkOW4548FcmK+6pSeMo7CZ2FG0jxOIgsJ6ax/rka5mePTZ7DowD
-         BqrzWhQn5tW7WgBLvt+Ov3cHhYfR+LaGTexdJ0CY7hEKIcXzFV6/+DzAM6KtOR2xGhMx
-         QnUE6x9mpKkYCI3RUtAlPK2h45XrGBsD3TEhBsnITfyn1TR2wfo83oZkf7CAuouSGaap
-         kIAQ==
-X-Gm-Message-State: AOAM532ZensjduSUnMnZZWZkG8z1DxN9kL+8iq6PozCYr6/fzNrANjsR
-        AT061+bJuAd6iy5RecXa94RYWW1YpMcix+xEVyj/1ng3234=
-X-Google-Smtp-Source: ABdhPJz0jGbJWhu/e5N5szknK6r9Io4+lI7/ZYYX7hLb/2bNH22rQV3x82NofTbJBi8j7He29LcP0XrciJe5eM9g6s0=
-X-Received: by 2002:a17:907:3d88:: with SMTP id he8mr766963ejc.239.1640137382153;
- Tue, 21 Dec 2021 17:43:02 -0800 (PST)
+        Tue, 21 Dec 2021 20:44:57 -0500
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JJbhj4X8jz91rH;
+        Wed, 22 Dec 2021 09:44:05 +0800 (CST)
+Received: from [10.67.103.22] (10.67.103.22) by canpemm500005.china.huawei.com
+ (7.192.104.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 22 Dec
+ 2021 09:44:55 +0800
+Message-ID: <d3227d10-cf28-10a5-d560-f46309970c5f@hisilicon.com>
+Date:   Wed, 22 Dec 2021 09:44:50 +0800
 MIME-Version: 1.0
-References: <00000000000017977605c395a751@google.com> <0000000000009411bb05d3ab468f@google.com>
- <CAHbLzkoU_giAFiOyhHZvxLT9Vie2-8TmQv_XLDpRxbec5r5weg@mail.gmail.com>
- <YcIfj3nfuL0kzkFO@casper.infradead.org> <CAHbLzkqYhtYNRs83DP-Cgti8-4kZn-iXHTdkesK+=U3d3N0U+w@mail.gmail.com>
-In-Reply-To: <CAHbLzkqYhtYNRs83DP-Cgti8-4kZn-iXHTdkesK+=U3d3N0U+w@mail.gmail.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Tue, 21 Dec 2021 17:42:50 -0800
-Message-ID: <CAHbLzkpj8tKykWfOUkffsnc7SXn395e67HVH+ys7cQ19aw-fPg@mail.gmail.com>
-Subject: Re: [syzbot] kernel BUG in __page_mapcount
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     syzbot <syzbot+1f52b3a18d5633fa7f82@syzkaller.appspotmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        chinwen.chang@mediatek.com, fgheet255t@gmail.com,
-        Jann Horn <jannh@google.com>,
-        Konstantin Khlebnikov <khlebnikov@yandex-team.ru>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>, Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        syzkaller-bugs@googlegroups.com, tonymarislogistics@yandex.com,
-        Vlastimil Babka <vbabka@suse.cz>, Zi Yan <ziy@nvidia.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH] crypto: cleanup warning in qm_get_qos_value()
+To:     <trix@redhat.com>, <herbert@gondor.apana.org.au>,
+        <davem@davemloft.net>, <nathan@kernel.org>,
+        <ndesaulniers@google.com>
+CC:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>
+References: <20211221205953.3128923-1-trix@redhat.com>
+From:   Zhou Wang <wangzhou1@hisilicon.com>
+In-Reply-To: <20211221205953.3128923-1-trix@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.22]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500005.china.huawei.com (7.192.104.229)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 11:07 AM Yang Shi <shy828301@gmail.com> wrote:
->
-> On Tue, Dec 21, 2021 at 10:40 AM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Tue, Dec 21, 2021 at 10:24:27AM -0800, Yang Shi wrote:
-> > > It seems the THP is split during smaps walk. The reproducer does call
-> > > MADV_FREE on partial THP which may split the huge page.
-> > >
-> > > The below fix (untested) should be able to fix it.
-> >
-> > Did you read the rest of the thread on this?  If the page is being
-> > migrated, we should still account it ... also, you've changed the
->
-> Yes, the being migrated pages may be skipped. We should be able to add
-> a new flag to smaps_account() to indicate this is a migration entry
-> then don't elevate the page count.
+在 2021/12/22 4:59, trix@redhat.com 写道:
+> From: Tom Rix <trix@redhat.com>
+> 
+> Building with clang static analysis returns this warning:
+> 
+> qm.c:4382:11: warning: The left operand of '==' is a garbage value
+>         if (*val == 0 || *val > QM_QOS_MAX_VAL || ret) {
+>             ~~~~ ^
+> 
+> The call to qm_qos_value_init() can return an error without setting
+> *val.  So check ret before checking *val.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/crypto/hisilicon/qm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+> index b1fe9c7b8cc89..c906f2e59277b 100644
+> --- a/drivers/crypto/hisilicon/qm.c
+> +++ b/drivers/crypto/hisilicon/qm.c
+> @@ -4379,7 +4379,7 @@ static ssize_t qm_get_qos_value(struct hisi_qm *qm, const char *buf,
+>  		return -EINVAL;
+>  
+>  	ret = qm_qos_value_init(val_buf, val);
+> -	if (*val == 0 || *val > QM_QOS_MAX_VAL || ret) {
+> +	if (ret || *val == 0 || *val > QM_QOS_MAX_VAL) {
+>  		pci_err(qm->pdev, "input qos value is error, please set 1~1000!\n");
+>  		return -EINVAL;
+>  	}
+> 
 
-It seems not that straightforward. THP split converts PTEs to
-migration entries too. So we can't tell if it is real migration or
-just in the middle of THP split.
+Should check return firstly, thanks.
 
-We just need to serialize against THP split for PTE mapped subpages.
-So in real life workload it might be ok to skip accounting migration
-pages? Typically the migration is a transient state, so the under
-accounting should be transient too. Or account migration pages
-separately, just like swap entries?
-
-I may revisit this after the holiday. If you have any better ideas,
-please feel free to propose.
-
->
-> > refcount, so this:
-> >
-> >         if (page_count(page) == 1) {
-> >                 smaps_page_accumulate(mss, page, size, size << PSS_SHIFT, dirty,
-> >                         locked, true);
-> >                 return;
-> >         }
-> >
-> > will never trigger.
->
-> The get_page_unless_zero() is called after this block.
+Zhou

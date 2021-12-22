@@ -2,148 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3DC547CE82
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 09:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F15D47CE83
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 09:55:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243493AbhLVIzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 03:55:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42156 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236120AbhLVIzB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 03:55:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB4EC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 00:55:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2ADD261943
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 08:55:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 930E2C36AE5;
-        Wed, 22 Dec 2021 08:54:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640163300;
-        bh=e5bRXF0QeHEecyEBKt0xWGLG3CQkFtpGm6V1JPRcJAY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=kb7Gg1HuTXaDQX01iw84yS5Bbt33Go6aW5J2jmnmRR9yEVffm2bsm5/MVnOYdurGf
-         y4gujrc92nF7gV/SXtwE2VcYlwxvrciwpS+ZUzDvLvcp3w3oSU3+rh4rh85zWOswnH
-         OXTw0ZdTn3V6XCZ4vh/jap8oziOKRbgQ4rhGe+EMoWKsCO/X+EuRzrHSAY6v7jDSoE
-         77ZhDzC+NUSDxnMVcmZVRwyX30oykDyHFxl7hX2Ud0Dq3wWrqKncRHuP/sFI/ZKY6H
-         o9TTazh9Sci7jmJDzYXcOgkH5/6EnjtXuu7N0VxSslY89CSUfEEzwa7+gh9CPDON7U
-         TbP52rwS98XsA==
-From:   SeongJae Park <sj@kernel.org>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org,
-        ying.huang@intel.com, dave.hansen@linux.intel.com, ziy@nvidia.com,
-        shy828301@gmail.com, zhongjiang-ali@linux.alibaba.com,
-        xlpang@linux.alibaba.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] Add a new scheme to support demotion on tiered memory system
-Date:   Wed, 22 Dec 2021 08:54:55 +0000
-Message-Id: <20211222085455.15996-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <7d3e57ec-8344-bbc9-6a2e-052707aec760@linux.alibaba.com>
+        id S243500AbhLVIzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 03:55:54 -0500
+Received: from mga02.intel.com ([134.134.136.20]:25705 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236120AbhLVIzw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 03:55:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640163352; x=1671699352;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sN9CQ6H0z2ggrNBRyE2c71qxS6Hewy6xxcUI7wjpYMs=;
+  b=heY5kiJB8svr2Gkr/Yq0KPuokocQ8WQdMpbUYECVXiRLZV4uyKU8GkVY
+   uTEQcMBbj+wlDxhZ/hbX8tTcJEcKNq29XIpTpPyrferOh/o/9dSs8aE5v
+   hqLt1Tos+OgwcQk9dsEPVZAUUaB9XOPxhv3jFgix+/w8vBj1zxbcLO2LK
+   MidYGiSOqxxvlK75Fxe9hYnvjX/MGkyO8XBV1QRYCJaT1CqzazLjg7vED
+   mdCx2L+NG/VfqYb0QjzCd1xq+VBTMtwyxDUEdvlXsQ1+BKd50d/dJHQiA
+   to+joh4M5yyqMaKUICmVqPit6l9MQ01ph+6RK1wDbj9a5+e78AIQkITuO
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="227876987"
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="227876987"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 00:55:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="684958718"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 22 Dec 2021 00:55:38 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mzxPO-0000IX-4c; Wed, 22 Dec 2021 08:55:38 +0000
+Date:   Wed, 22 Dec 2021 16:55:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>
+Subject: drivers/pinctrl/bcm/pinctrl-ns.c:286:53: warning: passing argument 3
+ of 'pinmux_generic_add_function' discards 'const' qualifier from pointer
+ target type
+Message-ID: <202112221651.gLNfcGwH-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Dec 2021 22:32:24 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+tree:   https://github.com/0day-ci/linux/commits/UPDATE-20211222-144502/Rafa-Mi-ecki/pinctrl-bcm-ns-use-generic-groups-functions-helpers/20211117-064419
+head:   da7c70cdea1466b4234a30658ee2b5383545a629
+commit: da7c70cdea1466b4234a30658ee2b5383545a629 pinctrl: bcm: ns: use generic groups & functions helpers
+date:   2 hours ago
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20211222/202112221651.gLNfcGwH-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/da7c70cdea1466b4234a30658ee2b5383545a629
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review UPDATE-20211222-144502/Rafa-Mi-ecki/pinctrl-bcm-ns-use-generic-groups-functions-helpers/20211117-064419
+        git checkout da7c70cdea1466b4234a30658ee2b5383545a629
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/pinctrl/bcm/
 
-> 
-> 
-> On 12/21/2021 9:26 PM, SeongJae Park wrote:
-> > Hi Baolin,
-> > 
-> > On Tue, 21 Dec 2021 17:18:02 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
-> > 
-> >> Hi,
-> >>
-> >> Now on tiered memory system with different memory types, the reclaim path in
-> >> shrink_page_list() already support demoting pages to slow memory node instead
-> >> of discarding the pages. However, at that time the fast memory node memory
-> >> wartermark is already tense, which will increase the memory allocation latency
-> >> during page demotion. So a new method from user space demoting cold pages
-> >> proactively will be more helpful.
-> >>
-> >> We can rely on the DAMON in user space to help to monitor the cold memory on
-> >> fast memory node, and demote the cold pages to slow memory node proactively to
-> >> keep the fast memory node in a healthy state.
-> >>
-> >> This patch set introduces a new scheme named DAMOS_DEMOTE to support this feature,
-> >> and works well from my testing. Any comments are welcome. Thanks.
-> > 
-> > I like the idea, thank you for these patches!  If possible, could you share
-> > some details about your tests?
-> 
-> Sure, sorry for not adding more information about my tests.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-No problem!
+All warnings (new ones prefixed by >>):
 
-> 
-> My machine contains 64G DRAM + 256G AEP(persistent memory), and you 
-> should enable the demotion firstly by:
-> echo "true" > /sys/kernel/mm/numa/demotion_enabled
-> 
-> Then I just write a simple test case like below to mmap some anon 
-> memory, and then just read and write half of the mmap buffer to let 
-> another half to be cold enough to demote.
-> 
-> int main()
-> {
->          int len = 50 * 1024 * 1024;
->          int scan_len = len / 2;
->          int i, ret, j;
->          unsigned long *p;
-> 
->          p = mmap(NULL, len, PROT_READ | PROT_WRITE,
->                   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
->          if (p == MAP_FAILED) {
->                  printf("failed to get memory\n");
->                  return -1;
->          }
-> 
->          for (i = 0; i < len / sizeof(*p); i++)
->                  p[i] = 0x55aa;
-> 
->          /* Let another half of buffer to be cold */
->          do {
->                  for (i = 0; i < scan_len / sizeof(*p); i++)
->                          p[i] = 0x55aa;
-> 
->                  sleep(2);
-> 
->                  for (i = 0; i < scan_len / sizeof(*p); i++)
->                          j +=  p[i] >> 2;
->          } while (1);
-> 
->          munmap(p, len);
->          return 0;
-> }
-> 
-> After setting the atts/schemes/target_ids, then start monitoring:
-> echo 100000 1000000 1000000 10 1000 > /sys/kernel/debug/damon/attrs
-> echo 4096 8192000 0 5 10 2000 5 1000 2097152 5000 0 0 0 0 0 3 2 1 > 
-> /sys/kernel/debug/damon/schemes
-> 
-> After a while, you can check the demote statictics by below command, and 
-> you can find the demote scheme is applied by demoting some cold pages to 
-> slow memory (AEP) node.
-> 
-> cat /proc/vmstat | grep "demote"
-> pgdemote_direct 6881
-
-Thank you for sharing this great details!
-
-I was just wondering if you have tested and measured the effects of the memory
-allocation latency increase during the page demotion, which invoked by
-shrink_page_list(), and also if you have measured how much improvement can be
-achieved with DAMON-based demotion in the scenario.  Seems that's not the case,
-and I personally think that information is not essential for this patch, so I
-see no problem here.  But, if you have tested or have a plan to do that, and if
-you could, I think sharing the results on this cover letter would make this
-even greater.
+   drivers/pinctrl/bcm/pinctrl-ns.c: In function 'ns_pinctrl_probe':
+>> drivers/pinctrl/bcm/pinctrl-ns.c:286:53: warning: passing argument 3 of 'pinmux_generic_add_function' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     286 |                                             function->groups,
+         |                                             ~~~~~~~~^~~~~~~~
+   In file included from drivers/pinctrl/bcm/pinctrl-ns.c:18:
+   drivers/pinctrl/bcm/../pinmux.h:153:46: note: expected 'const char **' but argument is of type 'const char * const*'
+     153 |                                 const char **groups,
+         |                                 ~~~~~~~~~~~~~^~~~~~
 
 
-Thanks,
-SJ
+vim +286 drivers/pinctrl/bcm/pinctrl-ns.c
+
+   207	
+   208	static int ns_pinctrl_probe(struct platform_device *pdev)
+   209	{
+   210		struct device *dev = &pdev->dev;
+   211		const struct of_device_id *of_id;
+   212		struct ns_pinctrl *ns_pinctrl;
+   213		struct pinctrl_desc *pctldesc;
+   214		struct pinctrl_pin_desc *pin;
+   215		struct resource *res;
+   216		int i;
+   217	
+   218		ns_pinctrl = devm_kzalloc(dev, sizeof(*ns_pinctrl), GFP_KERNEL);
+   219		if (!ns_pinctrl)
+   220			return -ENOMEM;
+   221		pctldesc = &ns_pinctrl->pctldesc;
+   222		platform_set_drvdata(pdev, ns_pinctrl);
+   223	
+   224		/* Set basic properties */
+   225	
+   226		ns_pinctrl->dev = dev;
+   227	
+   228		of_id = of_match_device(ns_pinctrl_of_match_table, dev);
+   229		if (!of_id)
+   230			return -EINVAL;
+   231		ns_pinctrl->chipset_flag = (uintptr_t)of_id->data;
+   232	
+   233		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+   234						   "cru_gpio_control");
+   235		ns_pinctrl->base = devm_ioremap_resource(dev, res);
+   236		if (IS_ERR(ns_pinctrl->base)) {
+   237			dev_err(dev, "Failed to map pinctrl regs\n");
+   238			return PTR_ERR(ns_pinctrl->base);
+   239		}
+   240	
+   241		memcpy(pctldesc, &ns_pinctrl_desc, sizeof(*pctldesc));
+   242	
+   243		/* Set pinctrl properties */
+   244	
+   245		pctldesc->pins = devm_kcalloc(dev, ARRAY_SIZE(ns_pinctrl_pins),
+   246					      sizeof(struct pinctrl_pin_desc),
+   247					      GFP_KERNEL);
+   248		if (!pctldesc->pins)
+   249			return -ENOMEM;
+   250		for (i = 0, pin = (struct pinctrl_pin_desc *)&pctldesc->pins[0];
+   251		     i < ARRAY_SIZE(ns_pinctrl_pins); i++) {
+   252			const struct pinctrl_pin_desc *src = &ns_pinctrl_pins[i];
+   253			unsigned int chipsets = (uintptr_t)src->drv_data;
+   254	
+   255			if (chipsets & ns_pinctrl->chipset_flag) {
+   256				memcpy(pin++, src, sizeof(*src));
+   257				pctldesc->npins++;
+   258			}
+   259		}
+   260	
+   261		/* Register */
+   262	
+   263		ns_pinctrl->pctldev = devm_pinctrl_register(dev, pctldesc, ns_pinctrl);
+   264		if (IS_ERR(ns_pinctrl->pctldev)) {
+   265			dev_err(dev, "Failed to register pinctrl\n");
+   266			return PTR_ERR(ns_pinctrl->pctldev);
+   267		}
+   268	
+   269		for (i = 0; i < ARRAY_SIZE(ns_pinctrl_groups); i++) {
+   270			const struct ns_pinctrl_group *group = &ns_pinctrl_groups[i];
+   271	
+   272			if (!(group->chipsets & ns_pinctrl->chipset_flag))
+   273				continue;
+   274	
+   275			pinctrl_generic_add_group(ns_pinctrl->pctldev, group->name,
+   276						  group->pins, group->num_pins, NULL);
+   277		}
+   278	
+   279		for (i = 0; i < ARRAY_SIZE(ns_pinctrl_functions); i++) {
+   280			const struct ns_pinctrl_function *function = &ns_pinctrl_functions[i];
+   281	
+   282			if (!(function->chipsets & ns_pinctrl->chipset_flag))
+   283				continue;
+   284	
+   285			pinmux_generic_add_function(ns_pinctrl->pctldev, function->name,
+ > 286						    function->groups,
+   287						    function->num_groups, NULL);
+   288		}
+   289	
+   290		return 0;
+   291	}
+   292	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

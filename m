@@ -2,111 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4287547CF59
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC0A47CF60
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:36:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239810AbhLVJfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 04:35:05 -0500
-Received: from mga02.intel.com ([134.134.136.20]:28482 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229987AbhLVJfE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:35:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640165704; x=1671701704;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=qZUDc1T9LV4wFwF8706CO5P2w8QLmoRAzlSwfpbYtGo=;
-  b=EdtrB2uIitEkMptxUmSWeQjhDQ0UiJYWYw1RMyPdSAG8ZXvaWXsHqYjw
-   OQ8iI0I1QnG5bC2oBSe0Z311ZaP5vE84M5tREH9m5QWhV8jpQp6C4d43d
-   jt47apMG0Z4ZP+g/fCy67/oVAZi33+r8SfPGLk+X8VLymUY1yHS4pgE8C
-   7iKo4aZ0dD3FYAAMPvcXJ05dVnfPE+r7/KMw3XVcCcvBWZGToVajAq+C7
-   pTbSQPRdxSICp0Qtz0W3DDZU96pCNmh1FC43U4z1QeTxc7SOooctMANW6
-   hk1CoCl1/OgPqDTzwcu8rwTrB7waujARc6NMGd6shQ71wJQiAmehiZTxl
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="227881944"
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="227881944"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 01:35:04 -0800
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="586966983"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 01:35:01 -0800
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id 582C7201AA;
-        Wed, 22 Dec 2021 11:34:59 +0200 (EET)
-Date:   Wed, 22 Dec 2021 11:34:59 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Daniel Scally <djrscally@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] software node: fix wrong node passed to find nargs_prop
-Message-ID: <YcLxQ+X3I6hAJ9RY@paasikivi.fi.intel.com>
-References: <20211220210533.3578678-1-clement.leger@bootlin.com>
- <CAHp75Vf+F2L4EFmokRYD+-M9hSuz+SbiiWnqHvFZttRyfKS-mg@mail.gmail.com>
- <d9f5b201-2a00-799d-3a0f-7c9709d77102@gmail.com>
- <YcGfky32lSXeABEF@kroah.com>
- <YcGiIHAJS7/qXcJv@paasikivi.fi.intel.com>
- <800d89c5-c9e3-d969-ea9a-08ec0362a90c@gmail.com>
+        id S243960AbhLVJgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:36:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229987AbhLVJgc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 04:36:32 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835C3C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:36:32 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id b22so1874072pfb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:36:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=sgwNBG2Cny1fVZO0hlT3ohe+sFdmqVc2UDvfjIkF6eM=;
+        b=Gtw64aYKGZsQ+dMlQmcTSBpB89iTplIsqutgq9KDlrnM+hli46Z2Ro7tachGGxM7w4
+         oUHUisn4R+tgsDxHmxWzg/LEExczh+vNBt6gBCVzH9qgcomJ4JklY7E38fQ+HmXH9HHc
+         eg2Uwx83TBMqxyE0lJyNBg71kv7DbhicLgTHhAmTtGgukQa6l5rvw0p/aS98bodqL36y
+         T3DVarvdhCMZjo+ddhF8fX7JF++uK//sTAFFRAMbLqv627qG2eQiwOzNM5TZeFFE+ITH
+         MWRmvG4cCUo+5gxWrK3LbO7iNauV6aqEwHEn832cG6ta7EdEYLBuG1LmqJ4qRwlqTIqV
+         iAsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=sgwNBG2Cny1fVZO0hlT3ohe+sFdmqVc2UDvfjIkF6eM=;
+        b=xetR+L9Q+FbyJO/wm1wYXeAqJs1IgNwjhKuwNU+NyxEKkb5nT8UzvdqEarQuZYKuqX
+         76hNCWAMLdRZyWrAzMDPiA+8o86JsxO5JoYT01fssUH5iSSCV/hiYg7iDDivaCDWke6x
+         7u8EY10OAS8yhvRCSgvb03fWTSfrWsO6XlaUhXRN8t1jjlXSGMI5jSFA6CSbAAL9Cs9o
+         ew0PdRJO6UGn4dLqh1eqhupnn8uiVv8WqYUYU7AsOUQkq9dXTG/5ovAt6ldF/nwhv4FC
+         i4FiLGIwni8vPMavecHYRhmFTs40ZWHmntwRcsRiVEiEJxOwosW0r9RgpYfqja5zVjVk
+         qTkg==
+X-Gm-Message-State: AOAM533FUKIev79GZNNk14HXSNa5HDmGUQq3pRTAje6kEXb4p+DK+6bL
+        EGuff1Hch/7X7mtXO68OSu8Dpm7Lzr9tRg==
+X-Google-Smtp-Source: ABdhPJyERfHYaADMDkqmMfs0w+6zK8q5UnftfZAI+ylhVVB8Anx7cAHpS4amJepVdBH9A76ZpOYUQQ==
+X-Received: by 2002:aa7:8e52:0:b0:4a1:5820:d9cc with SMTP id d18-20020aa78e52000000b004a15820d9ccmr2060919pfr.49.1640165792078;
+        Wed, 22 Dec 2021 01:36:32 -0800 (PST)
+Received: from localhost.localdomain (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
+        by smtp.gmail.com with ESMTPSA id s207sm1616088pgs.74.2021.12.22.01.36.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 01:36:31 -0800 (PST)
+Date:   Wed, 22 Dec 2021 22:36:26 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     gregkh@linuxfoundation.org, realwakka@gmail.com,
+        paulo.miguel.almeida.rodenas@gmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: pi433: add comment to rx_lock mutex definition
+Message-ID: <20211222093626.GA13332@localhost.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <800d89c5-c9e3-d969-ea9a-08ec0362a90c@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+Checkpatch reports: CHECK: struct mutex definition without comment.
+Fix this by documenting what rx_mutex struct is used for in pi433 driver.
 
-On Tue, Dec 21, 2021 at 10:09:45PM +0000, Daniel Scally wrote:
-> Hi Sakari
-> 
-> On 21/12/2021 09:45, Sakari Ailus wrote:
-> > Hi Greg, Andy,
-> > 
-> > On Tue, Dec 21, 2021 at 10:34:11AM +0100, Greg Kroah-Hartman wrote:
-> >> On Mon, Dec 20, 2021 at 11:37:07PM +0000, Daniel Scally wrote:
-> >>> Thanks Andy
-> >>>
-> >>> On 20/12/2021 22:13, Andy Shevchenko wrote:
-> >>>> + Sakari, Dan
-> >>>>
-> >>>> On Monday, December 20, 2021, Clément Léger <clement.leger@bootlin.com
-> >>>> <mailto:clement.leger@bootlin.com>> wrote:
-> >>>>
-> >>>>     nargs_prop refers to a property located in the reference that is found
-> >>>>     within the nargs property.
-> >>>
-> >>> I think this is right (it's not used in the ACPI version, and the OF
-> >>> version is quite convoluted so a bit hard to follow)...but also I note
-> >>> that none of the users of fwnode_property_get_reference_args() pass
-> >>> anything to nargs_prop anyway...do we even need this?
-> >>
-> >> Looks like it is unused, please just remove it.
-> > 
-> > If you remove nargs_prop argument, then callers will have to use OF
-> > property API instead to parse references with property-defined number of
-> > arguments. The goal has been to cover all functionality in a
-> > firmware-independent way.
-> 
-> My mistake, I missed that of_parse_phandle_with_args() has a ton of
-> direct users. I guess we should try to replace those with
-> fwnode_property_get_reference_args() where appropriate.
+Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+---
+ drivers/staging/pi433/pi433_if.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I'd say at least when the code is otherwise using fwnode property API.
-
-I guess most of the reference users are OF-based originally while cameras
-are perhaps a bit of an exception to this. :-)
-
+diff --git a/drivers/staging/pi433/pi433_if.c b/drivers/staging/pi433/pi433_if.c
+index 29bd37669059..aa0ecb3788c6 100644
+--- a/drivers/staging/pi433/pi433_if.c
++++ b/drivers/staging/pi433/pi433_if.c
+@@ -92,6 +92,7 @@ struct pi433_device {
+ 	u32			rx_bytes_to_drop;
+ 	u32			rx_bytes_dropped;
+ 	unsigned int		rx_position;
++	/* rx read and config operations can only be served one at the time */
+ 	struct mutex		rx_lock;
+ 	wait_queue_head_t	rx_wait_queue;
+ 
 -- 
-Regards,
+2.25.4
 
-Sakari Ailus

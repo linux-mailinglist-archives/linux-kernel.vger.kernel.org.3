@@ -2,84 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7578E47D254
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AEF47D1CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236966AbhLVMqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 07:46:03 -0500
-Received: from mail.foescog.net ([5.56.57.2]:43731 "EHLO mail.foescog.net"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236867AbhLVMqC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:46:02 -0500
-X-Greylist: delayed 527 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 Dec 2021 07:46:02 EST
-Received: from 42.91-116-32.dynamic.clientes.euskaltel.es (unknown [91.116.32.42])
-        by mail.foescog.net (Postfix) with ESMTPSA id 1BB251F6267
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 13:36:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gruposerys.net;
-        s=default; t=1640176588;
-        bh=xUrfVs0SwqMa4XF9Lpvuw2aBNh65XgM2+voF5q808Ko=; h=From:To:Subject;
-        b=pzvWbNNh9lzkrzL2V4Nak9d3FTKFefHqsehvf1Pgs51+I5fkFqpth+fdj7Wso/wAg
-         jzgYpxOxKfpNrQUmcCcJ9PWja0wJeh19dNi/KEG2MngDI5lUYSdjjz2lyVQYKq+sa4
-         qC20/37x7zAzFN59pbDA2vivI6rkGYERWt8YA8WI=
+        id S240682AbhLVMhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 07:37:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233073AbhLVMg7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 07:36:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C496C061574;
+        Wed, 22 Dec 2021 04:36:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2339FB81C44;
+        Wed, 22 Dec 2021 12:36:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF05EC36AE8;
+        Wed, 22 Dec 2021 12:36:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640176615;
+        bh=qGl8dUD8CJWsNsQWAUSoBTpV2v/CDrYNgJo4cg1vapM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GY70V05Ou21b3HPsS6FkVNh1AdjRnP7ZgxsaRp9EnTrqbKW6B9XBbmPilVMw8Id+3
+         jOA4LaFiz0x+5IUKkf/UKFpm1g7BbE9jl96i50PWj/2gp5OZwlWGT0647JLYsalHgx
+         Y5x62AahXIlrUOTKBKR4kWp9cSTox/7kdQG1UhHsLCRVBaA5KJG07cUPHmUZ+ulktX
+         yry0SJm76Oj94QSNdDDaKTz+aRAijivpXn6s2Y0e0XRhhocH0H6gAbO5kOZqDv5BLU
+         UNMmCiB5J/OrnVRGVjGd78kYvhRkvmJy20QovxDNHKAfCyWa+llrkP/TxEGSEFyC1j
+         ebucyUoBzhbTQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 36DA340B92; Wed, 22 Dec 2021 09:36:53 -0300 (-03)
+Date:   Wed, 22 Dec 2021 09:36:53 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Kajol Jain <kjain@linux.ibm.com>
+Cc:     mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        mingo@redhat.com, jolsa@kernel.org, namhyung@kernel.org,
+        ak@linux.intel.com, linux-perf-users@vger.kernel.org,
+        maddy@linux.ibm.com, atrajeev@linux.vnet.ibm.com,
+        rnsastry@linux.ibm.com, yao.jin@linux.intel.com, ast@kernel.org,
+        daniel@iogearbox.net, songliubraving@fb.com,
+        kan.liang@linux.intel.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, paulus@samba.org
+Subject: Re: [PATCH 2/4] tools/perf: Add new macros for mem_hops field
+Message-ID: <YcMb5bUOW8BYw9fP@kernel.org>
+References: <20211206091749.87585-1-kjain@linux.ibm.com>
+ <20211206091749.87585-3-kjain@linux.ibm.com>
 MIME-Version: 1.0
-From:   "SERYS" <info2@gruposerys.net>
-Reply-To: info2@gruposerys.net
-To:     linux-kernel@vger.kernel.org
-Subject: Consulta SERYS
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Smart_Send_4_3_3
-Date:   Wed, 22 Dec 2021 13:36:28 +0100
-Message-ID: <6372476437304122895474@DESKTOP-E4PFAM0>
-X-Priority: 1
-X-MSMail-Priority: High
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206091749.87585-3-kjain@linux.ibm.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Buenos d=EDas
+Em Mon, Dec 06, 2021 at 02:47:47PM +0530, Kajol Jain escreveu:
+> Add new macros for mem_hops field which can be used to
+> represent remote-node, socket and board level details.
+> 
+> Currently the code had macro for HOPS_0 which, corresponds
+> to data coming from another core but same node.
+> Add new macros for HOPS_1 to HOPS_3 to represent
+> remote-node, socket and board level data.
+> 
+> Also add corresponding strings in the mem_hops array to
+> represent mem_hop field data in perf_mem__lvl_scnprintf function
+> 
+> Incase mem_hops field is used, PERF_MEM_LVLNUM field also need
+> to be set inorder to represent the data source. Hence printing
+> data source via PERF_MEM_LVL field can be skip in that scenario.
+> 
+> For ex: Encodings for mem_hops fields with L2 cache:
 
+Thanks, applied.
 
+- Arnaldo
 
-Desde SERYS ENERGIA estamos informando a todas las empresas, particulares y=
- entidades p=FAblicas acerca del servicio de autoconsumo el=E9ctrico median=
-te la instalaci=F3n totalmente financidada de placas solares fotovoltaicas.
+ 
+> L2                      - local L2
+> L2 | REMOTE | HOPS_0    - remote core, same node L2
+> L2 | REMOTE | HOPS_1    - remote node, same socket L2
+> L2 | REMOTE | HOPS_2    - remote socket, same board L2
+> L2 | REMOTE | HOPS_3    - remote board L2
+> 
+> Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
+> ---
+>  tools/include/uapi/linux/perf_event.h |  5 ++++-
+>  tools/perf/util/mem-events.c          | 29 +++++++++++++++++----------
+>  2 files changed, 22 insertions(+), 12 deletions(-)
+> 
+> diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
+> index bd8860eeb291..4cd39aaccbe7 100644
+> --- a/tools/include/uapi/linux/perf_event.h
+> +++ b/tools/include/uapi/linux/perf_event.h
+> @@ -1332,7 +1332,10 @@ union perf_mem_data_src {
+>  
+>  /* hop level */
+>  #define PERF_MEM_HOPS_0		0x01 /* remote core, same node */
+> -/* 2-7 available */
+> +#define PERF_MEM_HOPS_1         0x02 /* remote node, same socket */
+> +#define PERF_MEM_HOPS_2         0x03 /* remote socket, same board */
+> +#define PERF_MEM_HOPS_3         0x04 /* remote board */
+> +/* 5-7 available */
+>  #define PERF_MEM_HOPS_SHIFT	43
+>  
+>  #define PERF_MEM_S(a, s) \
+> diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
+> index 3167b4628b6d..ed0ab838bcc5 100644
+> --- a/tools/perf/util/mem-events.c
+> +++ b/tools/perf/util/mem-events.c
+> @@ -309,6 +309,9 @@ static const char * const mem_hops[] = {
+>  	 * to be set with mem_hops field.
+>  	 */
+>  	"core, same node",
+> +	"node, same socket",
+> +	"socket, same board",
+> +	"board",
+>  };
+>  
+>  int perf_mem__lvl_scnprintf(char *out, size_t sz, struct mem_info *mem_info)
+> @@ -316,7 +319,7 @@ int perf_mem__lvl_scnprintf(char *out, size_t sz, struct mem_info *mem_info)
+>  	size_t i, l = 0;
+>  	u64 m =  PERF_MEM_LVL_NA;
+>  	u64 hit, miss;
+> -	int printed;
+> +	int printed = 0;
+>  
+>  	if (mem_info)
+>  		m  = mem_info->data_src.mem_lvl;
+> @@ -335,18 +338,22 @@ int perf_mem__lvl_scnprintf(char *out, size_t sz, struct mem_info *mem_info)
+>  		l += 7;
+>  	}
+>  
+> -	if (mem_info && mem_info->data_src.mem_hops)
+> +	/*
+> +	 * Incase mem_hops field is set, we can skip printing data source via
+> +	 * PERF_MEM_LVL namespace.
+> +	 */
+> +	if (mem_info && mem_info->data_src.mem_hops) {
+>  		l += scnprintf(out + l, sz - l, "%s ", mem_hops[mem_info->data_src.mem_hops]);
+> -
+> -	printed = 0;
+> -	for (i = 0; m && i < ARRAY_SIZE(mem_lvl); i++, m >>= 1) {
+> -		if (!(m & 0x1))
+> -			continue;
+> -		if (printed++) {
+> -			strcat(out, " or ");
+> -			l += 4;
+> +	} else {
+> +		for (i = 0; m && i < ARRAY_SIZE(mem_lvl); i++, m >>= 1) {
+> +			if (!(m & 0x1))
+> +				continue;
+> +			if (printed++) {
+> +				strcat(out, " or ");
+> +				l += 4;
+> +			}
+> +			l += scnprintf(out + l, sz - l, mem_lvl[i]);
+>  		}
+> -		l += scnprintf(out + l, sz - l, mem_lvl[i]);
+>  	}
+>  
+>  	if (mem_info && mem_info->data_src.mem_lvl_num) {
+> -- 
+> 2.27.0
 
+-- 
 
-Por este motivo rogamos pod=E1is respondernos indicando una de la siguiente=
-s respuestas:
-
-
-1 - Precisamos recibir presupuesto personalizado y sin compromiso (Indicar =
-por favor nombre y tel=E9fono de contacto).
-
-2 - No precisamos recibir informaci=F3n, disponemos ya de una instalaci=F3n=
- fotovoltaica.
-
-3 - No precisamos recibir informaci=F3n, no nos interesa cambiar.
-
-
-Gracias por vuestra colaboraci=F3n, quedamos a la espera de vuestra respues=
-ta.
-
-
-Saludos cordiales.
-
-
-Departamento de autoconsumo y renovables
-SERYS CONSULTING ESPA=D1A
-Tel. 604213428
-Email. info@serys-energia.com
-
-www.serys-energia.com
-
-Antes de imprimir este e-mail piense bien si es necesario hacerlo. De confo=
-rmidad con lo dispuesto en el Reglamento Europeo del 2016/679, del 27 de Ab=
-ril de 2016 le informamos que la informaci=F3n transmitida en este mensaje =
-est=E1 dirigida solamente a las personas o entidades que figuran en el enca=
-bezamiento y contiene informaci=F3n confidencial, por lo que, si usted lo r=
-ecibiera por error, por favor destr=FAyalo sin copiarlo, usarlo ni distribu=
-irlo, comunic=E1ndolo inmediatamente al emisor del mensaje.=20
-
-Puede solicitar BAJA en el env=EDo de correos electr=F3nicos "PULSANDO AQUI=
-" <mailto:bajas@serys.net=3FSubject=3DBAJA%20CORREOS> y "ENVIAR".
+- Arnaldo

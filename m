@@ -2,107 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3D347D4EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C9147D4F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237566AbhLVQNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 11:13:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57696 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237326AbhLVQNx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 11:13:53 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A159FC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 08:13:53 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id y16-20020a17090a6c9000b001b13ffaa625so6324070pjj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 08:13:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BFGk+wXY2WG7afvEROgA8Vzr9P5EaP9/8caVFzhLkSA=;
-        b=KPIAxvXG/nK7mtoxHKJtmhxYY1JxI8FZfbXBE5JDarjZjntn99MFPIUMIePJ5fM9l4
-         BIvHhJc+zR1Gmecdm/xoWo2Cj3K5rtCy53e3LQwCw9OGrjfhem3rW0ulCgdb2lPXIk4m
-         57l2A92N59ge18B950cG7ZpU7IGcQZvBoVlQU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BFGk+wXY2WG7afvEROgA8Vzr9P5EaP9/8caVFzhLkSA=;
-        b=Kl22oHlfO+7xZ+EyNBM/hT7xBNNAkEuXQ2B5UfqRL+GTFSjsLZ+1wjF5SAabLfyf3t
-         qJzuQ+pH0ruRBgrhwf2DFv1u2bOdasamEoC6OV8kH3/scaxgccxItaP0HsgQo8fO/AkD
-         x67poquYmXoywjSjdAScf77llUb5AsG4kQoJY0Ii9GN52RG0Doo0X6EPbkxton4FM0Eq
-         eK7Ra2ov4vGx/+Dcb4HtdERo0ZoEoI8cTzflGW0xyBtPGZBbY/7nqHGsktrQ5rrssdaH
-         YDhFPDEGhPXy1fB1xi6w2W1JH8VqmMF7wty3Uj4pORhzWJNKMGdNtNq4Wy/lrhNvjab9
-         0KWw==
-X-Gm-Message-State: AOAM531min1Kx5eJ/iiLBJ5IToLt8n8XbpalVgd/p+LNQtpcDCsAXUEY
-        6CKFsCSL62zeHqOp6OCfAG8s5Q==
-X-Google-Smtp-Source: ABdhPJzJthtDcM8o6fnNwW70a8dUfaT9zNNY93DBwhkMDoA9DeR6kxYIymeQ/Nwv6x/WCNqCtRB2CQ==
-X-Received: by 2002:a17:902:aa8a:b0:148:a2e7:fb62 with SMTP id d10-20020a170902aa8a00b00148a2e7fb62mr3371252plr.163.1640189633147;
-        Wed, 22 Dec 2021 08:13:53 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:474e:891f:9d18:9114])
-        by smtp.gmail.com with UTF8SMTPSA id f124sm2529843pgc.32.2021.12.22.08.13.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 08:13:52 -0800 (PST)
-Date:   Wed, 22 Dec 2021 08:13:50 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Balakrishna Godavarthi <bgodavar@codeaurora.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        Hemantg <hemantg@codeaurora.org>,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        Rocky Liao <rjliao@codeaurora.org>, hbandi@codeaurora.org,
-        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        mcchou@chromium.org, saluvala@codeaurora.org
-Subject: Re: [PATCH v4] arm64: dts: qcom: sc7280: Add bluetooth node on
- SC7280 IDP boards
-Message-ID: <YcNOvlVQaT80qPsx@google.com>
-References: <1639587963-22503-1-git-send-email-bgodavar@codeaurora.org>
- <580E8974-EB7F-4493-BECC-4B09765A954D@holtmann.org>
+        id S232538AbhLVQPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 11:15:00 -0500
+Received: from mga07.intel.com ([134.134.136.100]:7469 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230463AbhLVQO6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 11:14:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640189698; x=1671725698;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mYdYY+ADtjn6HzBwQue9prErm9yOuvehXfs4ypch/Lw=;
+  b=iUtrtRXy39T/atUv6/8cuR16aFsHs99+4vjifMbig8qd1G82pZaNeZqS
+   6OIcfb669xZoWd/0Mp1V4vrJuFPWj/9cchoiupPlOcexLGA9hxXrFFmOq
+   5fbVgPbuYG1dPbxl+8JtkUbjRjGvE4cHNYM2lGmFqgsX/cvvNljeMTeAF
+   nc3rmZMSMgDXPtfF6J0YLT8BzvtGVJMY2ks9wvJmuD19aunWanZ7g4/vx
+   lLMjCM9JIs7eqgTBNNlOHTAF/uSFC3Wmi/Iti7HgX1TtMyyni29kfoPXM
+   y3eWsff2Y9ubz87M6zk7Pcgsm8Ws19Pn5fVegNI/t21LPj6x/q/8mmJHa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="304021845"
+X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
+   d="scan'208";a="304021845"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 08:14:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
+   d="scan'208";a="508523641"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 22 Dec 2021 08:14:54 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n04GT-0000kC-HW; Wed, 22 Dec 2021 16:14:53 +0000
+Date:   Thu, 23 Dec 2021 00:13:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: arch/arm/boot/compressed/../../../../lib/xz/xz_dec_stream.c:393:28:
+ sparse: sparse: incorrect type in argument 1 (different base types)
+Message-ID: <202112230059.QSushf7X-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <580E8974-EB7F-4493-BECC-4B09765A954D@holtmann.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 08:54:56AM +0100, Marcel Holtmann wrote:
-> Hi Balakrishna,
-> 
-> > Add bluetooth SoC WCN6750 node for SC7280 IDP boards.
-> > 
-> > Signed-off-by: Balakrishna Godavarthi <bgodavar@codeaurora.org>
-> > ---
-> > v4:
-> >  * updated commit subject
-> >  * Removed drive strength for bt_en
-> >  * updated swctrl_gpio name to sw_ctrl
-> > 
-> > v3:
-> >  * Addressed reviewers comments
-> >  * Added pin config for sw_ctrl line.
-> > v2:
-> >  * merged two patches into one
-> >  * Removed unused comments
-> >  * Removed pinmux & pin conf.
-> >  * Addressed reviewers comments
-> > 
-> > v1: initial patch
-> > ---
-> > arch/arm64/boot/dts/qcom/sc7280-idp.dts  |  4 ++++
-> > arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 36 ++++++++++++++++++++++++++++++++
-> > arch/arm64/boot/dts/qcom/sc7280-idp2.dts |  4 ++++
-> > 3 files changed, 44 insertions(+)
-> 
-> patch has been applied to bluetooth-next tree.
+Hi Russell,
 
-Thanks!
+First bad commit (maybe != root cause):
 
-I would have expected though that a device tree change goes through
-the qcom tree. Maybe Bjorn should pick it too to avoid possible
-conflicts?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2f47a9a4dfa3674fad19a49b40c5103a9a8e1589
+commit: 11779842dd6f59505f5685bdd6ebaaa7a5bc1d94 Merge branches 'devel-stable' and 'misc' into for-linus
+date:   7 weeks ago
+config: arm-randconfig-s032-20211222 (https://download.01.org/0day-ci/archive/20211223/202112230059.QSushf7X-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=11779842dd6f59505f5685bdd6ebaaa7a5bc1d94
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 11779842dd6f59505f5685bdd6ebaaa7a5bc1d94
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+   arch/arm/boot/compressed/decompress.c: note: in included file (through arch/arm/boot/compressed/../../../../lib/decompress_unxz.c):
+   include/linux/decompress/mm.h:31:30: sparse: sparse: symbol 'malloc_ptr' was not declared. Should it be static?
+   include/linux/decompress/mm.h:32:20: sparse: sparse: symbol 'malloc_count' was not declared. Should it be static?
+   arch/arm/boot/compressed/decompress.c: note: in included file (through arch/arm/boot/compressed/../../../../lib/decompress_unxz.c):
+   arch/arm/boot/compressed/decompress.c: note: in included file (through arch/arm/boot/compressed/../../../../lib/decompress_unxz.c):
+>> arch/arm/boot/compressed/../../../../lib/xz/xz_dec_stream.c:393:28: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
+   arch/arm/boot/compressed/../../../../lib/xz/xz_dec_stream.c:393:28: sparse:     expected restricted __le32 const [usertype] *p
+   arch/arm/boot/compressed/../../../../lib/xz/xz_dec_stream.c:393:28: sparse:     got unsigned int const [usertype] *
+   arch/arm/boot/compressed/../../../../lib/xz/xz_dec_stream.c:427:48: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
+   arch/arm/boot/compressed/../../../../lib/xz/xz_dec_stream.c:427:48: sparse:     expected restricted __le32 const [usertype] *p
+   arch/arm/boot/compressed/../../../../lib/xz/xz_dec_stream.c:427:48: sparse:     got unsigned int const [usertype] *
+   arch/arm/boot/compressed/../../../../lib/xz/xz_dec_stream.c:435:37: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
+   arch/arm/boot/compressed/../../../../lib/xz/xz_dec_stream.c:435:37: sparse:     expected restricted __le32 const [usertype] *p
+   arch/arm/boot/compressed/../../../../lib/xz/xz_dec_stream.c:435:37: sparse:     got unsigned int const [usertype] *
+   arch/arm/boot/compressed/../../../../lib/xz/xz_dec_stream.c:459:28: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
+   arch/arm/boot/compressed/../../../../lib/xz/xz_dec_stream.c:459:28: sparse:     expected restricted __le32 const [usertype] *p
+   arch/arm/boot/compressed/../../../../lib/xz/xz_dec_stream.c:459:28: sparse:     got unsigned int const [usertype] *
+
+vim +393 arch/arm/boot/compressed/../../../../lib/xz/xz_dec_stream.c
+
+24fa0402a9b6a5 Lasse Collin 2011-01-12  385  
+24fa0402a9b6a5 Lasse Collin 2011-01-12  386  /* Decode the Stream Header field (the first 12 bytes of the .xz Stream). */
+24fa0402a9b6a5 Lasse Collin 2011-01-12  387  static enum xz_ret dec_stream_header(struct xz_dec *s)
+24fa0402a9b6a5 Lasse Collin 2011-01-12  388  {
+24fa0402a9b6a5 Lasse Collin 2011-01-12  389  	if (!memeq(s->temp.buf, HEADER_MAGIC, HEADER_MAGIC_SIZE))
+24fa0402a9b6a5 Lasse Collin 2011-01-12  390  		return XZ_FORMAT_ERROR;
+24fa0402a9b6a5 Lasse Collin 2011-01-12  391  
+24fa0402a9b6a5 Lasse Collin 2011-01-12  392  	if (xz_crc32(s->temp.buf + HEADER_MAGIC_SIZE, 2, 0)
+24fa0402a9b6a5 Lasse Collin 2011-01-12 @393  			!= get_le32(s->temp.buf + HEADER_MAGIC_SIZE + 2))
+24fa0402a9b6a5 Lasse Collin 2011-01-12  394  		return XZ_DATA_ERROR;
+24fa0402a9b6a5 Lasse Collin 2011-01-12  395  
+24fa0402a9b6a5 Lasse Collin 2011-01-12  396  	if (s->temp.buf[HEADER_MAGIC_SIZE] != 0)
+24fa0402a9b6a5 Lasse Collin 2011-01-12  397  		return XZ_OPTIONS_ERROR;
+24fa0402a9b6a5 Lasse Collin 2011-01-12  398  
+24fa0402a9b6a5 Lasse Collin 2011-01-12  399  	/*
+24fa0402a9b6a5 Lasse Collin 2011-01-12  400  	 * Of integrity checks, we support only none (Check ID = 0) and
+24fa0402a9b6a5 Lasse Collin 2011-01-12  401  	 * CRC32 (Check ID = 1). However, if XZ_DEC_ANY_CHECK is defined,
+24fa0402a9b6a5 Lasse Collin 2011-01-12  402  	 * we will accept other check types too, but then the check won't
+24fa0402a9b6a5 Lasse Collin 2011-01-12  403  	 * be verified and a warning (XZ_UNSUPPORTED_CHECK) will be given.
+24fa0402a9b6a5 Lasse Collin 2011-01-12  404  	 */
+24fa0402a9b6a5 Lasse Collin 2011-01-12  405  	s->check_type = s->temp.buf[HEADER_MAGIC_SIZE + 1];
+24fa0402a9b6a5 Lasse Collin 2011-01-12  406  
+
+:::::: The code at line 393 was first introduced by commit
+:::::: 24fa0402a9b6a537e87e38341e78b7da86486846 decompressors: add XZ decompressor module
+
+:::::: TO: Lasse Collin <lasse.collin@tukaani.org>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,118 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0067847CE9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:02:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 069C047CE9E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243573AbhLVJCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 04:02:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243565AbhLVJCr (ORCPT
+        id S243602AbhLVJDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:03:00 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34678 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243578AbhLVJCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:02:47 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58A0C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:02:46 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id bq20so3901201lfb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:02:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=VDdusWnmXaR3nxorqCBH/H6b5AMX/vYTXou53++UlL0=;
-        b=P4T3wD1CogcUbJ1LKPN43Lwus7GYdbLfZBB1/QgBYlpwQYXEyrbSIDJBpYVRp0hVe2
-         n26lKzD6/zbaamDaK14tnu4oqmEMl0sgIZoAjTUjBgO3FiAljVRzBiqtNClo1UN43cKG
-         uF/b73Uypx3ZkH22D7J1/TkfqTXv1uxSovZazVklujbkl4vMGrhd9xErR615PArLgShI
-         MAh3AQYzoGSXNQd4WD9emWzUAfgnxkmbdqN1Kugkr0tFnXhMgpeP5O9h5kvGV7HzQP8y
-         TDM0UepxATBaNt3Nxpt18WtUFe3l2v8eQOFWPsnGNuLES+r9D4TFTiN1mGaYUDpyaOuU
-         ZUNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VDdusWnmXaR3nxorqCBH/H6b5AMX/vYTXou53++UlL0=;
-        b=VJcDC6n8kjnPV+36YT8Tj4/MqVPZLRcy1uNrqhPKQKnUeryIfQjmQSS0OHI9Nep3IX
-         b2TW6ZXZsazxgSOmylCtT14TlyXhDHR9dgkMEINfGGNfDnsSzGnlxubT06kw+EE7Bm03
-         DT/mozqBI998bIPhYaYDRfEZfl+ShmCl5EMBbOoqmdpjkipOvHBDRQh6hJqaYRjQZ1c2
-         CEwlX//emUxdylgXFd5JlDKPE8j3iV5hnZ5rzCL6FfhyZ2VAk2XpsU1vl+H+c5dJau3J
-         vEdjvngkzhvBrCoZP7llKeo6O4xlWCV3R+03erfL3jGOL5N2mF3TfiSLAu8Ja892VrhW
-         1AeQ==
-X-Gm-Message-State: AOAM532RSK/onEthWzE6oc4wCL1EFL45HctY64KEjNi0/pX/Ip/f5ekt
-        KX6HkveIz4K46yQm0Jiflgo=
-X-Google-Smtp-Source: ABdhPJzn8kemUt6O32Twz61oBnYSmy+glvsbxZpzt4P73mj0CWxOzOUdLHZfYw59rMVUHCMGkZPCwA==
-X-Received: by 2002:a05:6512:3d02:: with SMTP id d2mr1783774lfv.78.1640163765058;
-        Wed, 22 Dec 2021 01:02:45 -0800 (PST)
-Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.googlemail.com with ESMTPSA id j22sm152044lfu.155.2021.12.22.01.02.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 01:02:44 -0800 (PST)
-Message-ID: <3b4656cf-3c00-9a0e-c38e-33c2934a2aa5@gmail.com>
-Date:   Wed, 22 Dec 2021 10:02:43 +0100
+        Wed, 22 Dec 2021 04:02:54 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A6396194A;
+        Wed, 22 Dec 2021 09:02:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FF65C36AE8;
+        Wed, 22 Dec 2021 09:02:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640163773;
+        bh=rmrmESZctXtPXWhVvy69fIm3of5gVzQD2KcOcgrDy2U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=S8ZKtpFE2VF91wGUdPXYas+uxuhCQQrrpG3KiPTZ2Lbpq4RPe+blPuqL6MVvH9wdc
+         k3RglDIVTVAP0JPW6nZKGRYJhYTJ4BPaqfc23JTpZuN2DAVxpe5OUbvg1xJb8Ne07R
+         NqfrY2Og3ZcUrSINSvBXPsifz8gu5gamFziwF5Sc=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.9.294
+Date:   Wed, 22 Dec 2021 10:02:46 +0100
+Message-Id: <1640163766209183@kroah.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH] nvmem: fix unregistering device in nvmem_register() error
- path
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20211221154550.11455-1-zajec5@gmail.com>
- <YcH7fw5S6aSXswvb@kroah.com> <9e94f0fd-e2d5-4d9e-5759-a5f591191785@gmail.com>
- <YcLXbPzyhtMnP0YQ@kroah.com> <YcLkA0e48+xuGsHk@hovoldconsulting.com>
- <YcLoPV6A9XJImBXa@kroah.com>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-In-Reply-To: <YcLoPV6A9XJImBXa@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.12.2021 09:56, Greg Kroah-Hartman wrote:
-> On Wed, Dec 22, 2021 at 09:38:27AM +0100, Johan Hovold wrote:
->> On Wed, Dec 22, 2021 at 08:44:44AM +0100, Greg Kroah-Hartman wrote:
->>> On Tue, Dec 21, 2021 at 06:46:01PM +0100, Rafał Miłecki wrote:
->>>> On 21.12.2021 17:06, Greg Kroah-Hartman wrote:
->>>>> On Tue, Dec 21, 2021 at 04:45:50PM +0100, Rafał Miłecki wrote:
->>>>>> From: Rafał Miłecki <rafal@milecki.pl>
->>>>>>
->>>>>> 1. Drop incorrect put_device() calls
->>>>>>
->>>>>> If device_register() fails then underlaying device_add() takes care of
->>>>>> calling put_device() if needed. There is no need to do that in a driver.
->>>>>
->>>>> Did you read the documentation for device_register() that says:
->>>>>
->>>>>    * NOTE: _Never_ directly free @dev after calling this function, even
->>>>>    * if it returned an error! Always use put_device() to give up the
->>>>>    * reference initialized in this function instead.
->>>>
->>>> I clearly tried to be too smart and ignored documentation.
->>>>
->>>> I'd say device_add() behaviour is rather uncommon and a bit unintuitive.
->>>> Most kernel functions are safe to assume to do nothing that requires
->>>> cleanup if they fail.
->>>>
->>>> E.g. if I call platform_device_register() and it fails I don't need to
->>>> call anything like platform_device_put(). I just free previously
->>>> allocated memory.
->>>
->>> And that is wrong.
->>
->> It seems Rafał is mistaken here too; you certainly need to call
->> platform_device_put() if platform_device_register() fail, even if many
->> current users do appear to get this wrong.
-> 
-> A short search found almost everyone getting this wrong.  Arguably
-> platform_device_register() can clean up properly on its own if we want
-> it to do so.  Will take a lot of auditing of the current codebase first
-> to see if it's safe...
+I'm announcing the release of the 4.9.294 kernel.
 
-If so many people get it wrong maybe that is indded an unintuitive
-design?
+All users of the 4.9 kernel series must upgrade.
 
-I'll better hide now ;)
+The updated 4.9.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.9.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
+
+thanks,
+
+greg k-h
+
+------------
+
+ Makefile                                        |    2 
+ arch/arm/mm/copypage-fa.c                       |   35 +++---
+ arch/arm/mm/copypage-feroceon.c                 |   98 +++++++++---------
+ arch/arm/mm/copypage-v4mc.c                     |   19 +--
+ arch/arm/mm/copypage-v4wb.c                     |   41 +++----
+ arch/arm/mm/copypage-v4wt.c                     |   37 +++----
+ arch/arm/mm/copypage-xsc3.c                     |   71 +++++--------
+ arch/arm/mm/copypage-xscale.c                   |   71 ++++++-------
+ drivers/block/xen-blkfront.c                    |   15 ++
+ drivers/char/agp/parisc-agp.c                   |    6 -
+ drivers/firmware/scpi_pm_domain.c               |   10 +
+ drivers/hwmon/dell-smm-hwmon.c                  |    7 -
+ drivers/i2c/busses/i2c-rk3x.c                   |    4 
+ drivers/input/touchscreen/of_touchscreen.c      |   18 +--
+ drivers/md/persistent-data/dm-btree-remove.c    |    2 
+ drivers/net/ethernet/broadcom/bcmsysport.c      |    5 
+ drivers/net/ethernet/broadcom/bcmsysport.h      |    1 
+ drivers/net/ethernet/intel/igbvf/netdev.c       |    1 
+ drivers/net/ethernet/intel/ixgbe/ixgbe_x550.c   |    3 
+ drivers/net/ethernet/mellanox/mlx4/en_ethtool.c |    6 -
+ drivers/net/usb/lan78xx.c                       |    6 -
+ drivers/net/wireless/marvell/mwifiex/cmdevt.c   |    4 
+ drivers/net/wireless/marvell/mwifiex/fw.h       |    8 -
+ drivers/net/xen-netback/common.h                |    1 
+ drivers/net/xen-netback/rx.c                    |   77 +++++++++-----
+ drivers/net/xen-netfront.c                      |  125 ++++++++++++++++++------
+ drivers/pci/msi.c                               |    2 
+ drivers/scsi/scsi_debug.c                       |    4 
+ drivers/soc/tegra/fuse/fuse-tegra.c             |    2 
+ drivers/soc/tegra/fuse/fuse.h                   |    2 
+ drivers/tty/hvc/hvc_xen.c                       |   30 +++++
+ drivers/usb/gadget/composite.c                  |    6 -
+ drivers/usb/gadget/legacy/dbgp.c                |    6 -
+ drivers/usb/gadget/legacy/inode.c               |    6 -
+ drivers/usb/serial/option.c                     |    8 +
+ fs/fuse/dir.c                                   |    2 
+ fs/nfsd/nfs4state.c                             |    9 +
+ kernel/time/timekeeping.c                       |    3 
+ kernel/trace/tracing_map.c                      |    3 
+ net/mac80211/agg-tx.c                           |    2 
+ net/netlink/af_netlink.c                        |    5 
+ net/nfc/netlink.c                               |    6 -
+ scripts/recordmcount.pl                         |    2 
+ 43 files changed, 455 insertions(+), 316 deletions(-)
+
+Armin Wolf (1):
+      hwmon: (dell-smm) Fix warning on /proc/i8k creation error
+
+Chen Jun (1):
+      tracing: Fix a kmemleak false positive in tracing_map
+
+Cyril Novikov (1):
+      ixgbe: set X550 MDIO speed before talking to PHY
+
+Daniele Palmas (1):
+      USB: serial: option: add Telit FN990 compositions
+
+Erik Ekman (1):
+      net/mlx4_en: Update reported link modes for 1/10G
+
+Felix Fietkau (1):
+      mac80211: send ADDBA requests using the tid/queue of the aggregation session
+
+Florian Fainelli (1):
+      net: systemport: Add global locking for descriptor lifecycle
+
+George Kennedy (1):
+      scsi: scsi_debug: Sanity check block descriptor length in resp_mode_select()
+
+Greg Kroah-Hartman (2):
+      USB: gadget: bRequestType is a bitfield, not a enum
+      Linux 4.9.294
+
+Harshit Mogalapalli (1):
+      net: netlink: af_netlink: Prevent empty skb by adding a check on len.
+
+Helge Deller (1):
+      parisc/agp: Annotate parisc agp init functions with __init
+
+J. Bruce Fields (1):
+      nfsd: fix use-after-free due to delegation race
+
+Jerome Marchand (1):
+      recordmcount.pl: look for jgnop instruction as well as bcrl on s390
+
+Joe Thornber (1):
+      dm btree remove: fix use after free in rebalance_children()
+
+Juergen Gross (5):
+      xen/blkfront: harden blkfront against event channel storms
+      xen/netfront: harden netfront against event channel storms
+      xen/console: harden hvc_xen against event channel storms
+      xen/netback: fix rx queue stall detection
+      xen/netback: don't queue unlimited number of packages
+
+Letu Ren (1):
+      igbvf: fix double free in `igbvf_probe`
+
+Miklos Szeredi (1):
+      fuse: annotate lock in fuse_reverse_inval_entry()
+
+Nathan Chancellor (4):
+      soc/tegra: fuse: Fix bitwise vs. logical OR warning
+      net: lan78xx: Avoid unnecessary self assignment
+      mwifiex: Remove unnecessary braces from HostCmd_SET_SEQ_NO_BSS_INFO
+      Input: touchscreen - avoid bitwise vs logical OR warning
+
+Nicolas Pitre (1):
+      ARM: 8805/2: remove unneeded naked function usage
+
+Ondrej Jirman (1):
+      i2c: rk3x: Handle a spurious start completion interrupt flag
+
+Sudeep Holla (1):
+      firmware: arm_scpi: Fix string overflow in SCPI genpd driver
+
+Tadeusz Struk (1):
+      nfc: fix segfault in nfc_genl_dump_devices_done
+
+Thomas Gleixner (1):
+      PCI/MSI: Clear PCI_MSIX_FLAGS_MASKALL on error
+
+Yu Liao (1):
+      timekeeping: Really make sure wall_to_monotonic isn't positive
+

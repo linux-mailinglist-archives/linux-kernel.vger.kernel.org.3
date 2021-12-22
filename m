@@ -2,205 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A294847D266
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:46:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E72C47D26A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:47:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241014AbhLVMqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 07:46:35 -0500
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:58343 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241016AbhLVMqc (ORCPT
+        id S241041AbhLVMrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 07:47:06 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:50637 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240938AbhLVMrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:46:32 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id AEA275803DA;
-        Wed, 22 Dec 2021 07:46:31 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 22 Dec 2021 07:46:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=liWNH9cngrKwH
-        G/iQAoSwWAxTQqxW15kZvnIgwu8SwU=; b=N+IGqbnou+seL9Ny+yn3XiNkHPRRp
-        Hab2YkcarkqS15cAYeD5hPSp2Jg4A5xdQd1JPQWGPWjJ3h4u0TSvfAOT6dzpBsyu
-        +Etjap+fxYoTlWGAUcr5XTaIbvUCSUILsqx+l5cw5jjkheKQGGqjxR8Iawd9qOxD
-        hs6ZTADSnZgSl+OV5rl88UM642fFe74T9KBckeHsvvXJ2qiQUOcG3mSmup/s95yy
-        1eymaTxziHjkIBws26QKlUaYj6CzpGLGb9v87eWtJW8rUMuynHrp4FPRg1hoJSwj
-        fHymcfhtmzmKhuQS8Seq4BsjHqWXlRWvg07IbFhXu/Px8oud5/eb/puhA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=liWNH9cngrKwHG/iQAoSwWAxTQqxW15kZvnIgwu8SwU=; b=PBuJWE4G
-        Z+ZVuYxsSrz1trfZ0WSTz1FfL1uJcKoCzMNGuB428SdMIYJzl2BgxCc3j/d2RqCI
-        r7ylIp8iFbC9gGU+JwznKK2jmzORvH7OvKHBsCwmEoW6sCBSKuN/m9G8Qw8YjdPR
-        xJPWtApch244ILnu2BKb43jQk+LFTi2zWPX6LUimPLp35ootBUYRWbVWHKJv+YCb
-        cm9YB3wLAu/RvB85XrvjY9x/4xZqCkIoBgY0hoAQvLFdqSEeeRfzK1fpG2G08ME9
-        cSL2EeoB05LakQlhhSkdNwKspGt97XRv6HomHsj2N349FWPciwCjLUkTm2BrBup8
-        LQ/sRmyprXhTeA==
-X-ME-Sender: <xms:Jx7DYWX_JR7l8elWKKfdIErAszGkkyvVrbRKyFQSn-4nq73KlRgQAQ>
-    <xme:Jx7DYSmYtEhgepYgPNrcbS6kmC6hf6fbCjjA1w5DJGTRSEgKN6u_Qy8pZBCZukJpI
-    NwQaV8KS4Zcuy_hgtI>
-X-ME-Received: <xmr:Jx7DYab3xQCiGmy2B2o8RwH1mzMIKOeYMrzWMQe2gr-6N5IAZdhaTbO4QOuAwcAlvInze_e15Ok>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddruddtiedgfeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgjfhgggfestdekre
-    dtredttdenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgr
-    ihhrsegrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeeggedtteejke
-    eggeeugfehueevudegvdetjeeviedugedvtdekffekhedtteduhfenucevlhhushhtvghr
-    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlih
-    hsthgrihhrvdefrdhmvg
-X-ME-Proxy: <xmx:Jx7DYdUBtbY9PYNgIdgtesMY8jAiwhQG-wXpDVzc4HpSoagVT0DLDQ>
-    <xmx:Jx7DYQnqVg2PlaURARGturzNhYcPbBONBeO38RRnVzj4q8h8ip62yg>
-    <xmx:Jx7DYSdYeNPPJ6uU7ydK_KFTPJl49S8VWGMMXvR7R7Zggyxerq9jOA>
-    <xmx:Jx7DYdhBkp_uOFN2-fHbLHwJX9u3IzQPFz3FHw69uWIpgJBzkEbv_g>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Dec 2021 07:46:27 -0500 (EST)
-From:   Alistair Francis <alistair@alistair23.me>
-To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     dmitry.torokhov@gmail.com, alistair23@gmail.com,
-        robh+dt@kernel.org, linus.walleij@linaro.org, rydberg@bitmath.org,
-        andreas@kemnade.info, Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v4 4/4] ARM: dts: imx7d-remarkable2: Enable the cyttsp5
-Date:   Wed, 22 Dec 2021 22:46:03 +1000
-Message-Id: <20211222124603.326920-5-alistair@alistair23.me>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211222124603.326920-1-alistair@alistair23.me>
-References: <20211222124603.326920-1-alistair@alistair23.me>
+        Wed, 22 Dec 2021 07:47:05 -0500
+Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M3UhQ-1mzSmz4946-000bDP; Wed, 22 Dec 2021 13:47:04 +0100
+Received: by mail-wr1-f50.google.com with SMTP id s1so4736324wrg.1;
+        Wed, 22 Dec 2021 04:47:03 -0800 (PST)
+X-Gm-Message-State: AOAM532PQMcTNLUhPLl4QvD6CI87/wOZU0ZRQWuVOxACl6Airr0NMogB
+        79Ld7KcfVx/dWrDeYPRtvB4A3eIlAOwlpCLEVE0=
+X-Google-Smtp-Source: ABdhPJzGHS+0FSFJawmPN4qrozHG2jZvyHLpVVATumqQCoz0M2O4wCbSVKWRKxMVEP1zq7AFGcfzbsz2Xb2ui4JNRRk=
+X-Received: by 2002:adf:a352:: with SMTP id d18mr2002955wrb.317.1640177223561;
+ Wed, 22 Dec 2021 04:47:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-4-guoren@kernel.org>
+ <CAK8P3a3navO2Z2F5zxisby5EBNDo8rwQ6hxSuyniFgFxrQ5qXQ@mail.gmail.com> <CAJF2gTSssufQOQTXqzRjY8h_JjAmMs8jC6R+6d09K728=4fOOA@mail.gmail.com>
+In-Reply-To: <CAJF2gTSssufQOQTXqzRjY8h_JjAmMs8jC6R+6d09K728=4fOOA@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 22 Dec 2021 13:46:47 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a19n3pa+hRfC-ToTPhH2hvgYY=mXo_u6ZWkbbSSY5_JAA@mail.gmail.com>
+Message-ID: <CAK8P3a19n3pa+hRfC-ToTPhH2hvgYY=mXo_u6ZWkbbSSY5_JAA@mail.gmail.com>
+Subject: Re: [PATCH 03/13] riscv: compat: Add basic compat date type implementation
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:okWP2cEJQb5j3qXWuw0s51Vq8YIqRuxL2xCho+ILaiSGTbU5PXV
+ ZBr6OlAX1BAujwV+sxJmx92t7JctDrKiht5sqnXcPIyMSsc34ovAxC2EDu0SccqNFK6govE
+ 1tQMKO+NuqMxO3sW3YcHuzjBntmdoBiMwVn+4KedBR2VgqMTdEQrVgQygR6wXbTGy5yWrIH
+ jDcHFXtnrPNrXkNIzrhfA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WH3rUV9UEek=:w0ylpz7RyCxCJxPfrMy7sv
+ s7GhtHxCO2o7TuA36k4D0pHk2m/29LWQMlyyxQkP9NpSpkE8Y/GmE9HoOfRdu2ll+F8OqtHfa
+ RJff5mC2obPPCferRiSk6/bET9xS1QE6lox1L/9BcXGc16VwYVHyUfD3GURHhDUCfUjW1Koxq
+ 5IJVTlMiN5AHzTj1tUyo9GRWpc2vALkz1Q0G8+Y4ejjcXsjDA0bAH01wSOsmmkspcERyK5CN8
+ 2p1fko2Y2h3GcKSX55wvip1sEWa9+Eaz+YD5lm6KF9c7eU9FNbdlx7o0uPad6XzRVneUPYax0
+ 81bwU8UFn6zs+RCMD+1mSS/6ZXnhnJu8Yt6AQDOEGZULBavvx0UJVzDpWXVw3m29TOkWUC5cr
+ XDrrssnzH7vZXetMxnIGOcQJPdO+kwIJvo2GilJrLhqXck8NieS4Jv/qlFQc1rYMzTKcpZ2a/
+ N/dMZytTHNvtFXebIo3MNTQS2U58qzUpTgokRuuDrd3yd5nb6Sym7P/qyglZW3zPL77yyIRAY
+ SElJzD+1FOm5s1oC68Oiy6eUyS0Brsqd/r4YmtpdDG+Jr8OYL9BaU1ClzVrdDgZJ1NMnpdngh
+ j8MacWuZklwUAy8ouHfZuE7FHeLIRRgW4PBie6lr/j/pupIpW0zAmdUMQ9VNJk8CKCCPtndpm
+ F79GfxI9mAhVSj0rY85B5Y6fvhLS4B+6LJMrMV+DevCO9hu0SVhphm+87fnpB/5ivXP9RsQt5
+ o3Mh+5nuiFdtbQ07GQ7OwojCJ+rT9HBAH0y9KSjoek/P+IK02xri1rJYVyYSRlXWfi0mQDFTg
+ 4Bp2y0OJI1bFrY9VCZMUCyVMyMD84ls4ioHVIYEdjmr4m9WLSM=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the cyttsp5 touchscreen controller for the reMarkable 2.
+On Wed, Dec 22, 2021 at 1:03 PM Guo Ren <guoren@kernel.org> wrote:
+> On Wed, Dec 22, 2021 at 1:13 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
+> >
+> > > +struct compat_stat {
+> > > +       compat_ulong_t  st_dev;
+> > > +       compat_ulong_t  st_ino;
+> > > +       compat_uint_t   st_mode;
+> > > +       compat_uint_t   st_nlink;
+> >
+> > You should not need a compat_stat, because native rv32 does not have a
+> > stat() syscall.
+> We need it:
+>
+> $ make ARCH=riscv CROSS_COMPILE=riscv64-unknown-linux-gnu-
+> EXTRA_CFLAGS+=-g O=../build-riscv/ Image -j > /dev/null
+> /home/guoren/source/kernel/riscv-linux/fs/stat.c: In function 'cp_compat_stat':
+> /home/guoren/source/kernel/riscv-linux/fs/stat.c:645:21: error:
+> storage size of 'tmp' isn't known
+>   645 |  struct compat_stat tmp;
 
-Signed-off-by: Alistair Francis <alistair@alistair23.me>
----
- arch/arm/boot/dts/imx7d-remarkable2.dts | 89 +++++++++++++++++++++++++
- 1 file changed, 89 insertions(+)
+I think that's just a bug in fs/stat.c. Every other architecture so
+far needed it,
+just not riscv, so we should add an appropriate #ifdef here. I would replace
+#ifdef CONFIG_COMPAT around these with __ARCH_WANT_COMPAT_STAT
+and then change all other compat architectures to define that depending
+on the configuration.
 
-diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-index 89cbf13097a4..f12d6805b214 100644
---- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-+++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-@@ -8,6 +8,7 @@
- /dts-v1/;
- 
- #include "imx7d.dtsi"
-+#include <dt-bindings/input/linux-event-codes.h>
- 
- / {
- 	model = "reMarkable 2.0";
-@@ -34,6 +35,18 @@ reg_brcm: regulator-brcm {
- 		startup-delay-us = <150>;
- 	};
- 
-+	reg_touch: regulator-touch {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VDD_3V3_TOUCH";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		pinctrl-names = "default", "sleep";
-+		pinctrl-0 = <&pinctrl_touch_reg>;
-+		pinctrl-1 = <&pinctrl_touch_reg>;
-+		gpio = <&gpio1 11 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
- 	wifi_pwrseq: wifi_pwrseq {
- 		compatible = "mmc-pwrseq-simple";
- 		pinctrl-names = "default";
-@@ -51,6 +64,59 @@ &clks {
- 	assigned-clock-rates = <0>, <32768>;
- };
- 
-+&i2c3 {
-+	clock-frequency = <100000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_i2c3>;
-+	status = "okay";
-+
-+	tsc@24 {
-+		compatible = "cypress,tt21000";
-+		reg = <0x24>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_touch>;
-+		interrupt-parent = <&gpio1>;
-+		interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
-+		reset-gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
-+		vdd-supply = <&reg_touch>;
-+		touchscreen-size-x = <880>;
-+		touchscreen-size-y = <1280>;
-+
-+		button-0 {
-+			linux,code = <KEY_HOMEPAGE>;
-+		};
-+
-+		button-1 {
-+			linux,code = <KEY_MENU>;
-+		};
-+
-+		button-2 {
-+			linux,code = <KEY_BACK>;
-+		};
-+
-+		button-3 {
-+			linux,code = <KEY_SEARCH>;
-+		};
-+
-+		button-4 {
-+			linux,code = <KEY_VOLUMEDOWN>;
-+		};
-+
-+		button-5 {
-+			linux,code = <KEY_VOLUMEUP>;
-+		};
-+
-+		button-6 {
-+			linux,code = <KEY_CAMERA>;
-+		};
-+
-+		button-7 {
-+			linux,code = <KEY_POWER>;
-+		};
-+	};
-+};
-+
- &snvs_pwrkey {
- 	status = "okay";
- };
-@@ -125,6 +191,29 @@ MX7D_PAD_SAI1_TX_BCLK__GPIO6_IO13	0x14
- 		>;
- 	};
- 
-+	pinctrl_touch: touchgrp {
-+		fsl,pins = <
-+			/* CYTTSP interrupt */
-+			MX7D_PAD_GPIO1_IO14__GPIO1_IO14		0x54
-+			/* CYTTSP reset */
-+			MX7D_PAD_GPIO1_IO13__GPIO1_IO13		0x04
-+		>;
-+	};
-+
-+	pinctrl_i2c3: i2c3grp {
-+		fsl,pins = <
-+			MX7D_PAD_I2C3_SDA__I2C3_SDA		0x4000007f
-+			MX7D_PAD_I2C3_SCL__I2C3_SCL		0x4000007f
-+		>;
-+	};
-+
-+	pinctrl_touch_reg: touchreggrp {
-+		fsl,pins = <
-+			/* TOUCH_PWR_EN */
-+			MX7D_PAD_GPIO1_IO11__GPIO1_IO11		0x14
-+		>;
-+	};
-+
- 	pinctrl_uart1: uart1grp {
- 		fsl,pins = <
- 			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
--- 
-2.31.1
-
+        Arnd

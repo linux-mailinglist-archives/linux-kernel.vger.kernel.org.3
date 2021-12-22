@@ -2,147 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB04A47D23D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:42:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 308F747D214
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245142AbhLVMmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 07:42:36 -0500
-Received: from mga14.intel.com ([192.55.52.115]:11441 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240591AbhLVMl6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:41:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640176918; x=1671712918;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=mcJXn64JGu5vCi+1e3/iFncLwSWAIL5VMmqM8cXOyVs=;
-  b=gZm/tOOtEFwVKRfFvIiFbWESnxJJUXX/nSxdpLh7S12O7U7bag6onCf5
-   Hh8trXZJ8L94s8/AkxsKn6EMWEdAs7O6NgjiZH5o94miSkxjRubasgjEO
-   3WI2xJg/IeCU6jOiBQZ1ZOLLY6K5wHb0aT37DkDElDlT/o14aTvTfOD3t
-   WeRGK7Dt8QzXTwnF8ufpfc5b/dP27A3gXngrsd4bLw+MSjLrjEL+NNqQd
-   gi8d+WT+jHIreKNpKsnuv3p8ioZCytV8/NGVkmeHFdKaHw50Sv5lTK7KD
-   QtjTjmiMRUiQIeRqJEgA1SOmEAu3l54rJWjj7V5SxYd6N8iDi8hpF2amo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240833441"
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="240833441"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 04:41:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="587002792"
-Received: from 984fee00a228.jf.intel.com ([10.165.56.59])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Dec 2021 04:41:09 -0800
-From:   Jing Liu <jing2.liu@intel.com>
-To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, pbonzini@redhat.com, corbet@lwn.net,
-        shuah@kernel.org
-Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com,
-        guang.zeng@intel.com, wei.w.wang@intel.com, yang.zhong@intel.com
-Subject: [PATCH v3 22/22] kvm: x86: Disable interception for IA32_XFD on demand
-Date:   Wed, 22 Dec 2021 04:40:52 -0800
-Message-Id: <20211222124052.644626-23-jing2.liu@intel.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20211222124052.644626-1-jing2.liu@intel.com>
-References: <20211222124052.644626-1-jing2.liu@intel.com>
+        id S245207AbhLVMlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 07:41:46 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36424 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245195AbhLVMlY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 07:41:24 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1300561844;
+        Wed, 22 Dec 2021 12:41:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42F08C36AE5;
+        Wed, 22 Dec 2021 12:41:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640176883;
+        bh=C+xfOCVJ4pREcm2vRALjvsvHcgdWEthAsNXkbnYp6s4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V6CGQ8Ip80Aq/o+RnyQiz7PZnj8cq2MRDmBKrW5I47gkyyvO2zPq3NTlWX9V1M/O+
+         tN6c7NBTggIOxs/bd4mrmZy8Fg12FD/GGn0bWTlhsh6ItPugI4Ecy56MKsKPpZm17L
+         qcy08Zcd203UQ/yphHxUT/UqgQWR1q/UEBtNjkBbbjsuBmn8F2hMoELbEeLGD5jAGc
+         RKUzb5qF8zEl4jBf6njdEUmRw9uSQuXvx5zZfsJmhDNu3JBqFqkEa11SPH14zk3hOJ
+         bK0ExDXHYTgJqJBS7/fHUKrlPYBGGQEawfpOWaW29G01Qz/aS5mHpdoAJrJsNv9uXI
+         U+BthusFVza6w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 9AC6740B92; Wed, 22 Dec 2021 09:41:21 -0300 (-03)
+Date:   Wed, 22 Dec 2021 09:41:21 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Kajol Jain <kjain@linux.ibm.com>
+Cc:     mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        mingo@redhat.com, jolsa@kernel.org, namhyung@kernel.org,
+        ak@linux.intel.com, linux-perf-users@vger.kernel.org,
+        maddy@linux.ibm.com, atrajeev@linux.vnet.ibm.com,
+        rnsastry@linux.ibm.com, yao.jin@linux.intel.com, ast@kernel.org,
+        daniel@iogearbox.net, songliubraving@fb.com,
+        kan.liang@linux.intel.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, paulus@samba.org
+Subject: Re: [PATCH 4/4] powerpc/perf: Add data source encodings for power10
+ platform
+Message-ID: <YcMc8fnIsbHxbX6i@kernel.org>
+References: <20211206091749.87585-1-kjain@linux.ibm.com>
+ <20211206091749.87585-5-kjain@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206091749.87585-5-kjain@linux.ibm.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Always intercepting IA32_XFD causes non-negligible overhead when this
-register is updated frequently in the guest.
+Em Mon, Dec 06, 2021 at 02:47:49PM +0530, Kajol Jain escreveu:
+> The code represent memory/cache level data based on PERF_MEM_LVL_*
+> namespace, which is in the process of deprication in the favour of
+> newer composite PERF_MEM_{LVLNUM_,REMOTE_,SNOOPX_,HOPS_} fields.
+> Add data source encodings to represent cache/memory data based on
+> newer composite PERF_MEM_{LVLNUM_,REMOTE_,SNOOPX_,HOPS_} fields.
 
-Disable r/w emulation after intercepting the first WRMSR(IA32_XFD)
-with a non-zero value.
+Thanks, applied.
 
-Disable WRMSR emulation implies that IA32_XFD becomes out-of-sync
-with the software states in fpstate and the per-cpu xfd cache. Call
-fpu_sync_guest_vmexit_xfd_state() to bring them back in-sync, before
-preemption is enabled.
+- Arnaldo
 
-p.s. We have confirmed that SDM is being revised to say that
-when setting IA32_XFD[18] the AMX register state is not guaranteed
-to be preserved. This clarification avoids adding mess for a creative
-guest which sets IA32_XFD[18]=1 before saving active AMX state to
-its own storage.
-
-Signed-off-by: Kevin Tian <kevin.tian@intel.com>
-Signed-off-by: Yang Zhong <yang.zhong@intel.com>
-Signed-off-by: Jing Liu <jing2.liu@intel.com>
----
- arch/x86/include/asm/kvm_host.h | 1 +
- arch/x86/kvm/vmx/vmx.c          | 4 ++++
- arch/x86/kvm/vmx/vmx.h          | 2 +-
- arch/x86/kvm/x86.c              | 3 +++
- 4 files changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index f7a661f35d1a..7b81d324b32a 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -641,6 +641,7 @@ struct kvm_vcpu_arch {
- 	bool tpr_access_reporting;
- 	bool xsaves_enabled;
- 	bool trap_nm;
-+	bool xfd_out_of_sync;
- 	u64 ia32_xss;
- 	u64 microcode_version;
- 	u64 arch_capabilities;
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 8595a3e8fbd8..7aaf905e13b4 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -162,6 +162,7 @@ static u32 vmx_possible_passthrough_msrs[MAX_POSSIBLE_PASSTHROUGH_MSRS] = {
- 	MSR_FS_BASE,
- 	MSR_GS_BASE,
- 	MSR_KERNEL_GS_BASE,
-+	MSR_IA32_XFD,
- 	MSR_IA32_XFD_ERR,
- #endif
- 	MSR_IA32_SYSENTER_CS,
-@@ -1968,6 +1969,9 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 	case MSR_IA32_XFD:
- 		ret = kvm_set_msr_common(vcpu, msr_info);
- 		if (!ret && data) {
-+			vmx_disable_intercept_for_msr(vcpu, MSR_IA32_XFD, MSR_TYPE_RW);
-+			vcpu->arch.xfd_out_of_sync = true;
-+
- 			vcpu->arch.trap_nm = true;
- 			vmx_update_exception_bitmap(vcpu);
- 		}
-diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-index bf9d3051cd6c..0a00242a91e7 100644
---- a/arch/x86/kvm/vmx/vmx.h
-+++ b/arch/x86/kvm/vmx/vmx.h
-@@ -340,7 +340,7 @@ struct vcpu_vmx {
- 	struct lbr_desc lbr_desc;
  
- 	/* Save desired MSR intercept (read: pass-through) state */
--#define MAX_POSSIBLE_PASSTHROUGH_MSRS	14
-+#define MAX_POSSIBLE_PASSTHROUGH_MSRS	15
- 	struct {
- 		DECLARE_BITMAP(read, MAX_POSSIBLE_PASSTHROUGH_MSRS);
- 		DECLARE_BITMAP(write, MAX_POSSIBLE_PASSTHROUGH_MSRS);
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 3b756ff13103..10a08aa2aa45 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -10024,6 +10024,9 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
- 	if (vcpu->arch.guest_fpu.xfd_err)
- 		wrmsrl(MSR_IA32_XFD_ERR, 0);
- 
-+	if (vcpu->arch.xfd_out_of_sync)
-+		fpu_sync_guest_vmexit_xfd_state();
-+
- 	/*
- 	 * Consume any pending interrupts, including the possible source of
- 	 * VM-Exit on SVM and any ticks that occur between VM-Exit and now.
+> Add data source encodings to represent data coming from local
+> memory/Remote memory/distant memory and remote/distant cache hits.
+> 
+> Inorder to represent data coming from OpenCAPI cache/memory, we use
+> LVLNUM "PMEM" field which is used to present persistent memory accesses.
+> 
+> Result in power10 system with patch changes:
+> 
+> localhost:# ./perf mem report --sort="mem,sym,dso" --stdio
+>  # Overhead       Samples  Memory access             Symbol                      Shared Object
+>  # ........  ............  ........................  ..........................  ................
+>  #
+>     29.46%          2331  L1 or L1 hit              [.] __random                                     libc-2.28.so
+>     23.11%          2121  L1 or L1 hit              [.] producer_populate_cache                      producer_consumer
+>     18.56%          1758  L1 or L1 hit              [.] __random_r                                   libc-2.28.so
+>     15.64%          1559  L2 or L2 hit              [.] __random                                     libc-2.28.so
+>     .....
+>     0.09%              5  Remote socket, same board Any cache hit             [.] __random         libc-2.28.so
+>     0.07%              4  Remote socket, same board Any cache hit             [.] __random         libc-2.28.so
+>     .....
+> 
+> Reviewed-by: Madhavan Srinivasan <maddy@linux.ibm.com>
+> Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
+> ---
+>  arch/powerpc/perf/isa207-common.c | 54 ++++++++++++++++++++++++-------
+>  1 file changed, 42 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/powerpc/perf/isa207-common.c b/arch/powerpc/perf/isa207-common.c
+> index 6c6bc8b7d887..4037ea652522 100644
+> --- a/arch/powerpc/perf/isa207-common.c
+> +++ b/arch/powerpc/perf/isa207-common.c
+> @@ -229,13 +229,28 @@ static inline u64 isa207_find_source(u64 idx, u32 sub_idx)
+>  		ret = PH(LVL, L3) | LEVEL(L3) | P(SNOOP, HIT);
+>  		break;
+>  	case 4:
+> -		if (sub_idx <= 1)
+> -			ret = PH(LVL, LOC_RAM);
+> -		else if (sub_idx > 1 && sub_idx <= 2)
+> -			ret = PH(LVL, REM_RAM1);
+> -		else
+> -			ret = PH(LVL, REM_RAM2);
+> -		ret |= P(SNOOP, HIT);
+> +		if (cpu_has_feature(CPU_FTR_ARCH_31)) {
+> +			ret = P(SNOOP, HIT);
+> +
+> +			if (sub_idx == 1)
+> +				ret |= PH(LVL, LOC_RAM) | LEVEL(RAM);
+> +			else if (sub_idx == 2 || sub_idx == 3)
+> +				ret |= P(LVL, HIT) | LEVEL(PMEM);
+> +			else if (sub_idx == 4)
+> +				ret |= PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
+> +			else if (sub_idx == 5 || sub_idx == 7)
+> +				ret |= P(LVL, HIT) | LEVEL(PMEM) | REM;
+> +			else if (sub_idx == 6)
+> +				ret |= PH(LVL, REM_RAM2) | REM | LEVEL(RAM) | P(HOPS, 3);
+> +		} else {
+> +			if (sub_idx <= 1)
+> +				ret = PH(LVL, LOC_RAM);
+> +			else if (sub_idx > 1 && sub_idx <= 2)
+> +				ret = PH(LVL, REM_RAM1);
+> +			else
+> +				ret = PH(LVL, REM_RAM2);
+> +			ret |= P(SNOOP, HIT);
+> +		}
+>  		break;
+>  	case 5:
+>  		if (cpu_has_feature(CPU_FTR_ARCH_31)) {
+> @@ -261,11 +276,26 @@ static inline u64 isa207_find_source(u64 idx, u32 sub_idx)
+>  		}
+>  		break;
+>  	case 6:
+> -		ret = PH(LVL, REM_CCE2);
+> -		if ((sub_idx == 0) || (sub_idx == 2))
+> -			ret |= P(SNOOP, HIT);
+> -		else if ((sub_idx == 1) || (sub_idx == 3))
+> -			ret |= P(SNOOP, HITM);
+> +		if (cpu_has_feature(CPU_FTR_ARCH_31)) {
+> +			if (sub_idx == 0)
+> +				ret = PH(LVL, REM_CCE1) | LEVEL(ANY_CACHE) | REM |
+> +					P(SNOOP, HIT) | P(HOPS, 2);
+> +			else if (sub_idx == 1)
+> +				ret = PH(LVL, REM_CCE1) | LEVEL(ANY_CACHE) | REM |
+> +					P(SNOOP, HITM) | P(HOPS, 2);
+> +			else if (sub_idx == 2)
+> +				ret = PH(LVL, REM_CCE2) | LEVEL(ANY_CACHE) | REM |
+> +					P(SNOOP, HIT) | P(HOPS, 3);
+> +			else if (sub_idx == 3)
+> +				ret = PH(LVL, REM_CCE2) | LEVEL(ANY_CACHE) | REM |
+> +					P(SNOOP, HITM) | P(HOPS, 3);
+> +		} else {
+> +			ret = PH(LVL, REM_CCE2);
+> +			if (sub_idx == 0 || sub_idx == 2)
+> +				ret |= P(SNOOP, HIT);
+> +			else if (sub_idx == 1 || sub_idx == 3)
+> +				ret |= P(SNOOP, HITM);
+> +		}
+>  		break;
+>  	case 7:
+>  		ret = PM(LVL, L1);
+> -- 
+> 2.27.0
+
 -- 
-2.27.0
 
+- Arnaldo

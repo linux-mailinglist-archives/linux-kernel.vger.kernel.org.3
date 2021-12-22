@@ -2,79 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8064E47D63D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:07:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1844547D643
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344492AbhLVSHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 13:07:46 -0500
-Received: from mail-qk1-f176.google.com ([209.85.222.176]:42705 "EHLO
-        mail-qk1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344477AbhLVSHo (ORCPT
+        id S1344498AbhLVSJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 13:09:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55498 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344477AbhLVSJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 13:07:44 -0500
-Received: by mail-qk1-f176.google.com with SMTP id r139so2224520qke.9;
-        Wed, 22 Dec 2021 10:07:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PZT+442yryoIyAnTgfkKE3INejgOanJ0gZBKWAWh5S0=;
-        b=bgHaX3MUJWWeLEdhqA0Ts0sGzM6XI6TXfExugrW3VVvZ9sPXPA/c+EjvZH7iT1+Y7e
-         MVm9kJjl5Gp40sVpZ1KRUfwZtqdg4P80zUqJio8KD6uhhy52IdlNIBr78sAZi+Gg3vtX
-         AP2BvY4Aphuqs0mymYbNMi4uHGbv9Ob5uzWuZLva59muh1aVTRJ06Hc31x2OyOQZLpn4
-         vaBANwcc4kUJ0m1yYB/zpneQF2LsQWc4EEQ0TNywCJUGfFrz1LQkGWRPf44+sS6U8U3p
-         f5j4Ev5+5bAQ6/zZa9WMO9N53z8inXTCtB8fBn1kaORACRPUUvnq5gHgtqxrfu2dCJ9W
-         mOYw==
-X-Gm-Message-State: AOAM533s6+EPwdBV6327psECn1rMfBpW2KIFkRxkAoB3sOHfKuyn4290
-        afzx1bKbHmBndCkhirVURg==
-X-Google-Smtp-Source: ABdhPJyJC96os9VsgB6XT66xXHqKpdFgHISt8Maa/ibE4MzoOiNuO46peBDi0wJyk+XRb+grY1slKA==
-X-Received: by 2002:a05:620a:f0e:: with SMTP id v14mr2825574qkl.365.1640196464048;
-        Wed, 22 Dec 2021 10:07:44 -0800 (PST)
-Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id de13sm2455085qkb.81.2021.12.22.10.07.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 10:07:43 -0800 (PST)
-Received: (nullmailer pid 2429602 invoked by uid 1000);
-        Wed, 22 Dec 2021 18:07:41 -0000
-Date:   Wed, 22 Dec 2021 14:07:41 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     linux-kernel@vger.kernel.org,
-        Krishna Manikandan <mkrishn@codeaurora.org>,
-        David Airlie <airlied@linux.ie>,
-        Rob Clark <robdclark@gmail.com>,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        dri-devel@lists.freedesktop.org, ~okias/devicetree@lists.sr.ht,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Subject: Re: [PATCH] dt-bindings: msm: disp: remove bus from dpu bindings
-Message-ID: <YcNpbeN2Hjs+ipWv@robh.at.kernel.org>
-References: <20211220184220.86328-1-david@ixit.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220184220.86328-1-david@ixit.cz>
+        Wed, 22 Dec 2021 13:09:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77089C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 10:09:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2F2BB81974
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 18:09:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CBC5C36AE8;
+        Wed, 22 Dec 2021 18:09:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640196564;
+        bh=iEFUEna97ko1olMnjH+iG6rQ80sb9UFPa3E1ejjRWVs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=W5P8agmyqTHY9ToAN2yviMWDaZVNQduRAxwaMAeGFSMLO7Eg75xby6qgxczgJKyO2
+         4T2I6Idgi4NQU5H2n+7BZVXMcqggSCOtXohDg0Py6cJKO27QVkn3Ifj3+NIO9Cxpm5
+         WGtnHMvAhkhHrsdWs+O/WM4HZZgTripdZ8lywAOYow8Vv5mh92EbQjA4Mjm/kcNffL
+         u/W+0GTWQXaki16osYCgY5ewgbLhn8/I2bxtZMZ3Yu4W+eSTrros01UUUF/1tlnP3X
+         2dmd5ffRxYE5NsOf5xZsRDbPoXYVlgfmsjOlaIsrU1eWYc8+BPPtxtzlvh2619S+Hi
+         J+hZTDYV4Ji4g==
+Received: from 91-161-240-24.subs.proxad.net ([91.161.240.24] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n063G-00Dnpe-Ka; Wed, 22 Dec 2021 18:09:22 +0000
+Date:   Wed, 22 Dec 2021 18:09:22 +0000
+Message-ID: <8735mk1pgt.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Subject: Re: [PATCH v1 1/1] KVM: arm64: vgic: Replace kernel.h with the necessary inclusions
+In-Reply-To: <20211222165552.69288-1-andriy.shevchenko@linux.intel.com>
+References: <20211222165552.69288-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 91.161.240.24
+X-SA-Exim-Rcpt-To: andriy.shevchenko@linux.intel.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Dec 2021 19:42:20 +0100, David Heidelberg wrote:
-> Driver and dts has been already adjusted and bus moved out of dpu, let's
-> update also dt-bindings.
+On Wed, 22 Dec 2021 16:55:52 +0000,
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 > 
-> Fixes warnings as:
-> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: mdss
-> @ae00000: clock-names: ['iface', 'core'] is too short
->         From schema: Documentation/devicetree/bindings/display/msm/dpu-sdm845.yaml
-> 
-> Ref: https://lore.kernel.org/all/20210803101657.1072358-1-dmitry.baryshkov@linaro.org/
-> 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->  .../devicetree/bindings/display/msm/dpu-sdm845.yaml          | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
+> When kernel.h is used in the headers it adds a lot into dependency hell,
+> especially when there are circular dependencies are involved.
 
-Applied, thanks!
+Which circular dependencies? What problem are you solving?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

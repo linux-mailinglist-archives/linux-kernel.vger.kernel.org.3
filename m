@@ -2,103 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E01447CD25
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 07:55:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C4647CD2A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 07:56:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242834AbhLVGzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 01:55:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235252AbhLVGzH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 01:55:07 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13731C061574;
-        Tue, 21 Dec 2021 22:55:07 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id u20so1496630pfi.12;
-        Tue, 21 Dec 2021 22:55:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=uohWpaXjI8g/PY6FinDVNdsod7i1s4bkwCFo5JR4qSE=;
-        b=LPiF0zBhPGMQBYyo1QzxQWjgbpGx9KVnXKOXD05EPQNVC50teGcqahjTDN961k9gba
-         xXQ4YGtKtGcDacZMvyr8Suo8Ndfq/4j4oyYuo3HSjMcLs+0nu8dmtExIKSOSlPvKeFvX
-         3BviGPCgY1yJyQ8eHMzK0VL9LD5PuBGr7kfuH0/Cpo+aFIP3lgRnHXAk1eV3omq0blig
-         1GYstadNZMDJD2XIKjXyPRxsYG3pjvInwai7/savbiP36iR/55a2cJge3YDfmHRdrq5H
-         TOrQJKXQcOFFwhM9EkDAEHWqcoPF9iFgu4eh3Wtbyrv3k9f8+79PBkMaGVaZbpdXzvqU
-         mhJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=uohWpaXjI8g/PY6FinDVNdsod7i1s4bkwCFo5JR4qSE=;
-        b=ncTS9rkTnWL0JklVv7BX8bm+xl+joY/g3ArPdUATsgp3iFPBA5+4NQVE0koMnOlYyy
-         1bPvOIkpbr3Ber22tr5wLMERXYlbYRi2XkULEZpiwiUm4HDZ04LFXeThyfAHWiKaAemc
-         AnQYwc99skwhjp9kyEAYzGjmuN8aFqukBEVeIEbhyJezpNCkN4JeTLKiV2LgVxG0ZFX3
-         RAf4Dz1eVUMeDlnTFnMxyNrg67WQJr27gC604fjj/P7MH18lg8tjzo/Yr4YvpJK2to+k
-         PRYSBAC1QcCwJxtf5bcXHXq4gkzfNL3SamzBpSpu+fZ6T+opwVgmMvua/Ri1WdCPEzTI
-         utQA==
-X-Gm-Message-State: AOAM532+haxdic9saZ+daCDeLTxLBmole7Iir5kbchyFpi6BycKzp6Xq
-        On8ncmhOLfrYrFmt3DjF4f4=
-X-Google-Smtp-Source: ABdhPJxPDLkyV6b1Mo2D2Tns9DkwrAy/SYRH/5mxP9u91aahy9p8WbZB/o9ixOieNN9sQo+kwQKSxQ==
-X-Received: by 2002:a05:6a00:b89:b0:4bb:15c:908c with SMTP id g9-20020a056a000b8900b004bb015c908cmr1979587pfj.34.1640156106630;
-        Tue, 21 Dec 2021 22:55:06 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id lp6sm4993004pjb.55.2021.12.21.22.55.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 22:55:06 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yevgeny Kliteynik <kliteyn@nvidia.com>,
-        Muhammad Sammar <muhammads@nvidia.com>,
-        Alex Vesker <valex@nvidia.com>,
-        Erez Shitrit <erezsh@mellanox.com>,
-        Mark Bloch <markb@mellanox.com>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net/mlx5: DR, Fix NULL vs IS_ERR checking in  dr_domain_init_resources
-Date:   Wed, 22 Dec 2021 06:54:53 +0000
-Message-Id: <20211222065455.32573-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        id S242842AbhLVG4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 01:56:38 -0500
+Received: from mout.gmx.net ([212.227.17.20]:57369 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235252AbhLVG4h (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 01:56:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1640156183;
+        bh=usaE+auloC0pKur1KyeikoeCQuPrvDwpepUfa8MTVBM=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=bfAhe70bDEEZZnFnE7Ox822RAFR0ZxPycmQqYq9kynkvLpT05LL/qs0wgyalyFSxc
+         pP13EnpAs/trPnl0l0ZzrF1XdR48T82Z+jCY6L22iBx3U3Zg0WUW7sQK4VgL0iEzUN
+         uTzG2SkoXFBV1szfheDPjoAY6VANpc1BjxwbfJp0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.178.70] ([46.223.119.124]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MtwUm-1mCDD111eW-00uHCG; Wed, 22
+ Dec 2021 07:56:23 +0100
+Subject: Re: [PATCH v2] tpm: fix potential NULL pointer access in
+ tpm_del_char_device
+To:     Stefan Berger <stefanb@linux.ibm.com>, peterhuewe@gmx.de,
+        jarkko@kernel.org, jgg@ziepe.ca
+Cc:     p.rosenberger@kunbus.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20211220150635.8545-1-LinoSanfilippo@gmx.de>
+ <af847879-0f29-08e7-7609-da3b27381d3a@linux.ibm.com>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <926f57a8-81b8-b3a9-8338-71213f1b85ac@gmx.de>
+Date:   Wed, 22 Dec 2021 07:56:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <af847879-0f29-08e7-7609-da3b27381d3a@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:drYXROArZ3cwX1WlTQdq2uKpG6SFxH+1Ub6aaSiTYRYnuKz9Qbm
+ sTvQtIwb4GPEWvFj4om8LDumN8p/hd2ps4z/5y1kiso7Lm84XM9QCTtZnKWWf4RsqJMgLnh
+ fiINh7ajSWGhZPx95inayWuoFH9csLKDZ40sEPdPhm2wXP4zifRnlEgtDLVNcnatfnfSSGw
+ Ltd+wexmEJpyy4iOVEQAw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:q5XXRM0EOvE=:dxGm4/HlpZ1+G/pXELQt6g
+ rXkhfXj8XkbJOiNKkcqbWAjVQuF+5YckJLzOALfQ4QpDWFWGNzhdh/A8yPDmvrVrorXD6rui8
+ YIrd83Usd3R5FzMAJZ8BXzMHHQa7oHH1YVtdLuirupZrEKWQgmBzJ2D4ExORFk855TCH5aO3f
+ ZxnnEwLuaCKMRDyDQQn6CQFjiLLcr7qXXcLYHte4iNrnGZOB0VSVwmNcSeXmLN5tgFkT73N98
+ FrfYkOAu9zSjy6nbw9hACdOL9DdAP3Tqu1epKZrJY2bfEEjcYtTR+dc8eJg9gweu5iR90ihzP
+ H+xUrniG+tL042JFYmmYNYzKf7Mdnmo7wiNkDic3s9PHjyunN9vPSDeeMfJ/o4SZ6VaaYj5E6
+ U1LbkYn3rq8CAkjbb1P1UVw5BTjTF3sVMbPVCpf4Ex2HZC4RAY7mb0wV2L7tbDe5CMNC3vjjE
+ e51NoEdXaPsXUMwZ5+o9Z8GsaJYOD7z4A9sdgkFiLSD7LJkSTYpzfQke6ZP8Ag9qxtCKZ0Y7B
+ /Go+TN1pG8Fhg9qqBvntdXO0nlIS2vdP4j3FxY71omK1oIoykzETER8oLp8lg4VIbqX3N9SfY
+ pdL09lySuIW5F2icP908BnRs289gEMGHLNQqFGPHmv02klDsirDAGbCRcd/3AKpooGDCw+Ezh
+ bex950zJkFLYhlFoVxOkeurM8q//vdT1BUxjBg+dkQ1rPrT6+q3UclPi0+xccbxiqYhO1Nbtc
+ Kks/NCdwX7Xa9sLK4UaTu8LyMZYf5GjQ+brD4eS0sRiuUI6MqWBQ56BDVELel7KccGM97faLO
+ o/arbV8Ng5qSzQLGbVT5ZbAb6OHPwCsWp+J5AEM1fMNeHZpa9hPB7KXj8ssl1hVpvd58wHnvU
+ F1M5VB6tFt7aNnBh2f3LXHoncMGEpp3cIpgATNL99R7wDUBJcisPh0QhmrwlyRm3l+/EKOeOL
+ C24X1gR3w7NzvU0pLFVJkWYwv+iqYaAu+98T+0BNuFq82pDuOS8SEY76WsXsvWpvrTsw/fV+q
+ Hgm/gVR1cm730V+4Ehrd3w6slh/xyAf9VNGD9xtlWpBhcdcIZdAHt9ijIYB+JLO7daR0FzYUx
+ hQM0rjbCo0l4WY=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mlx5_get_uars_page() function  returns error pointers.
-Using IS_ERR() to check the return value to fix this.
 
-Fixes: 4ec9e7b02697("net/mlx5: DR, Expose steering domain functionality")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/net/ethernet/mellanox/mlx5/core/steering/dr_domain.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Hi Stefan,
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_domain.c b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_domain.c
-index 8cbd36c82b3b..f6e6d9209766 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_domain.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_domain.c
-@@ -2,6 +2,7 @@
- /* Copyright (c) 2019 Mellanox Technologies. */
- 
- #include <linux/mlx5/eswitch.h>
-+#include <linux/err.h>
- #include "dr_types.h"
- 
- #define DR_DOMAIN_SW_STEERING_SUPPORTED(dmn, dmn_type)	\
-@@ -72,9 +73,9 @@ static int dr_domain_init_resources(struct mlx5dr_domain *dmn)
- 	}
- 
- 	dmn->uar = mlx5_get_uars_page(dmn->mdev);
--	if (!dmn->uar) {
-+	if (IS_ERR(dmn->uar)) {
- 		mlx5dr_err(dmn, "Couldn't allocate UAR\n");
--		ret = -ENOMEM;
-+		ret = PTR_ERR(dmn->uar);
- 		goto clean_pd;
- 	}
- 
--- 
-2.17.1
 
+On 22.12.21 at 05:53, Stefan Berger wrote:
+
+>>
+>> =C2=A0 drivers/char/tpm/tpm-chip.c | 16 +++++++++++-----
+>> =C2=A0 1 file changed, 11 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+>> index ddaeceb7e109..7960da490e72 100644
+>> --- a/drivers/char/tpm/tpm-chip.c
+>> +++ b/drivers/char/tpm/tpm-chip.c
+>> @@ -474,13 +474,19 @@ static void tpm_del_char_device(struct tpm_chip *=
+chip)
+>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Make the driver uncallable. */
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 down_write(&chip->ops_sem);
+>> -=C2=A0=C2=A0=C2=A0 if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!tpm_chip_start(chip)) =
+{
+>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tpm=
+2_shutdown(chip, TPM2_SU_CLEAR);
+>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tpm=
+_chip_stop(chip);
+>> +=C2=A0=C2=A0=C2=A0 /* Check if chip->ops is still valid: In case that =
+the controller
+>> +=C2=A0=C2=A0=C2=A0=C2=A0 * drivers shutdown handler unregisters the co=
+ntroller in its
+>> +=C2=A0=C2=A0=C2=A0=C2=A0 * shutdown handler we are called twice and ch=
+ip->ops to NULL.
+>> +=C2=A0=C2=A0=C2=A0=C2=A0 */
+>> +=C2=A0=C2=A0=C2=A0 if (chip->ops) {
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (chip->flags & TPM_CHIP_=
+FLAG_TPM2) {
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if =
+(!tpm_chip_start(chip)) {
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 tpm2_shutdown(chip, TPM2_SU_CLEAR);
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 tpm_chip_stop(chip);
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 chip->ops =3D NULL;
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>> -=C2=A0=C2=A0=C2=A0 chip->ops =3D NULL;
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 up_write(&chip->ops_sem);
+>> =C2=A0 }
+>> =C2=A0
+>> base-commit: a7904a538933c525096ca2ccde1e60d0ee62c08e
+>
+>
+> Fixes: 39d0099f9439 ("powerpc/pseries: Add shutdown() to vio_driver and =
+vio_bus")
+>
+> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+>
+> Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+>
+>
+
+Thanks a lot for testing this.
+
+Best regards,
+Lino

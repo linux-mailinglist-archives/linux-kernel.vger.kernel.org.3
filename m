@@ -2,131 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1406E47CB8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 04:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74BCE47CB94
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 04:15:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242070AbhLVDMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 22:12:50 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:29279 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238670AbhLVDMt (ORCPT
+        id S242084AbhLVDPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 22:15:49 -0500
+Received: from out28-145.mail.aliyun.com ([115.124.28.145]:35462 "EHLO
+        out28-145.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238645AbhLVDPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 22:12:49 -0500
-Received: from kwepemi100001.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JJdfc1ff6zbjM8;
-        Wed, 22 Dec 2021 11:12:24 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100001.china.huawei.com (7.221.188.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 22 Dec 2021 11:12:47 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 22 Dec 2021 11:12:46 +0800
-Subject: Re: [PATCH 4/4] block, bfq: update pos_root for idle bfq_queue in
- bfq_bfqq_move()
-To:     Jan Kara <jack@suse.cz>
-CC:     <tj@kernel.org>, <axboe@kernel.dk>, <paolo.valente@linaro.org>,
-        <fchecconi@gmail.com>, <avanzini.arianna@gmail.com>,
-        <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20211221032135.878550-1-yukuai3@huawei.com>
- <20211221032135.878550-5-yukuai3@huawei.com>
- <20211221115001.GD24748@quack2.suse.cz>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <6ca1e924-47fa-b94e-598c-69a9549eb68e@huawei.com>
-Date:   Wed, 22 Dec 2021 11:12:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 21 Dec 2021 22:15:48 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1217135|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0561819-0.000317092-0.943501;FP=7011064724060272356|1|1|5|0|-1|-1|-1;HT=ay29a033018047199;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.MMifRmp_1640142945;
+Received: from sunxibot.allwinnertech.com(mailfrom:michael@allwinnertech.com fp:SMTPD_---.MMifRmp_1640142945)
+          by smtp.aliyun-inc.com(10.147.42.135);
+          Wed, 22 Dec 2021 11:15:45 +0800
+From:   Michael Wu <michael@allwinnertech.com>
+To:     ulf.hansson@linaro.org, mripard@kernel.org, wens@csie.org,
+        samuel@sholland.org, andre.przywara@arm.com
+Cc:     jernej.skrabec@gmail.com, linux-mmc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Michael Wu <michael@allwinnertech.com>
+Subject: [PATCH 2/3] mmc:sunxi-mmc:fix clock division for timing mode
+Date:   Wed, 22 Dec 2021 11:15:21 +0800
+Message-Id: <20211222031521.34170-1-michael@allwinnertech.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-In-Reply-To: <20211221115001.GD24748@quack2.suse.cz>
-Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2021/12/21 19:50, Jan Kara Ð´µÀ:
-> On Tue 21-12-21 11:21:35, Yu Kuai wrote:
->> During code review, we found that if bfqq is not busy in
->> bfq_bfqq_move(), bfq_pos_tree_add_move() won't be called for the bfqq,
->> thus bfqq->pos_root still points to the old bfqg. However, the ref
->> that bfqq hold for the old bfqg will be released, so it's possible
->> that the old bfqg can be freed. This is problematic because the freed
->> bfqg can still be accessed by bfqq->pos_root.
->>
->> Fix the problem by calling bfq_pos_tree_add_move() for idle bfqq
->> as well.
->>
->> Fixes: e21b7a0b9887 ("block, bfq: add full hierarchical scheduling and cgroups support")
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> 
-> I'm just wondering, how can it happen that !bfq_bfqq_busy() queue is in
-> pos_tree? Because bfq_remove_request() takes care to remove bfqq from the
-> pos_tree...
+When use new timings,all speed mode requires a doubled module clock
+if speed mode is ddr,requires a four times module clock
+When use old timings,only 8 bit ddr requires a doubled module clock
 
-Hi,
+Signed-off-by: Michael Wu <michael@allwinnertech.com>
+---
+ drivers/mmc/host/sunxi-mmc.c | 27 +++++++++++++++------------
+ 1 file changed, 15 insertions(+), 12 deletions(-)
 
-It's right this is not a problem in common case. The problem seems to
-relate to queue merging and task migration. Because I once reporduced
-it with the same reporducer for the problem that offlined bfqg can be
-inserted into service tree. The uaf is exactly in
-bfq_remove_request->rb_rease(). However I didn't save the stack...
+diff --git a/drivers/mmc/host/sunxi-mmc.c b/drivers/mmc/host/sunxi-mmc.c
+index afeefead6501..7b47ec453fb6 100644
+--- a/drivers/mmc/host/sunxi-mmc.c
++++ b/drivers/mmc/host/sunxi-mmc.c
+@@ -774,20 +774,23 @@ static int sunxi_mmc_clk_set_rate(struct sunxi_mmc_host *host,
+ 	if (!ios->clock)
+ 		return 0;
+ 
+-	/*
+-	 * Under the old timing mode, 8 bit DDR requires the module
+-	 * clock to be double the card clock. Under the new timing
+-	 * mode, all DDR modes require a doubled module clock.
+-	 *
+-	 * We currently only support the standard MMC DDR52 mode.
+-	 * This block should be updated once support for other DDR
+-	 * modes is added.
++	/**
++	 * When use new timings, all speed mode requires a doubled module clock.
++	 * if speed mode is ddr, requires a four times module clock.
++	 * When use old timings, only 8 bit ddr requires a doubled module clock.
+ 	 */
+-	if (ios->timing == MMC_TIMING_MMC_DDR52 &&
+-	    (host->use_new_timings ||
+-	     ios->bus_width == MMC_BUS_WIDTH_8)) {
+-		div = 2;
++	if (host->use_new_timings) {
+ 		clock <<= 1;
++		if (ios->timing == MMC_TIMING_MMC_DDR52) {
++			div = 2;
++			clock <<= 1;
++		}
++	} else {
++		if (ios->timing == MMC_TIMING_MMC_DDR52 &&
++				(ios->bus_width == MMC_BUS_WIDTH_8)) {
++			div = 2;
++			clock <<= 1;
++		}
+ 	}
+ 
+ 	if (host->use_new_timings && host->cfg->ccu_has_timings_switch) {
+-- 
+2.29.0
 
-I guess this is because bfq_del_bfqq_busy() is called from
-bfq_release_process_ref(), and queue merging prevert sunch bfqq to be
-freed, thus such bfqq is not in service tree, and it's pos_root can
-point to the old bfqg after bfq_bic_update_cgroup->bfq_bfqq_move.
-
-I haven't confirmed this, however, this patch itself only cleared
-bfqq->pos_root for idle bfqq, there should be no harm.
-
-Thanks,
-Kuai
-> 
-> 								Honza
-> 
->> ---
->>   block/bfq-cgroup.c | 14 +++++++++-----
->>   1 file changed, 9 insertions(+), 5 deletions(-)
->>
->> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
->> index 8e8cf6b3d946..822dd28ecf53 100644
->> --- a/block/bfq-cgroup.c
->> +++ b/block/bfq-cgroup.c
->> @@ -677,7 +677,6 @@ void bfq_bfqq_move(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->>   		bfq_deactivate_bfqq(bfqd, bfqq, false, false);
->>   	else if (entity->on_st_or_in_serv)
->>   		bfq_put_idle_entity(bfq_entity_service_tree(entity), entity);
->> -	bfqg_and_blkg_put(old_parent);
->>   
->>   	if (entity->parent &&
->>   	    entity->parent->last_bfqq_created == bfqq)
->> @@ -690,11 +689,16 @@ void bfq_bfqq_move(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->>   	/* pin down bfqg and its associated blkg  */
->>   	bfqg_and_blkg_get(bfqg);
->>   
->> -	if (bfq_bfqq_busy(bfqq)) {
->> -		if (unlikely(!bfqd->nonrot_with_queueing))
->> -			bfq_pos_tree_add_move(bfqd, bfqq);
->> +	/*
->> +	 * Don't leave the pos_root to old bfqg, since the ref to old bfqg will
->> +	 * be released and the bfqg might be freed.
->> +	 */
->> +	if (unlikely(!bfqd->nonrot_with_queueing))
->> +		bfq_pos_tree_add_move(bfqd, bfqq);
->> +	bfqg_and_blkg_put(old_parent);
->> +
->> +	if (bfq_bfqq_busy(bfqq))
->>   		bfq_activate_bfqq(bfqd, bfqq);
->> -	}
->>   
->>   	if (!bfqd->in_service_queue && !bfqd->rq_in_driver)
->>   		bfq_schedule_dispatch(bfqd);
->> -- 
->> 2.31.1
->>

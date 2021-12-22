@@ -2,132 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2CE47D3F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:53:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF8247D3FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343570AbhLVOw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 09:52:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232073AbhLVOwz (ORCPT
+        id S1343596AbhLVOzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 09:55:02 -0500
+Received: from mail-qk1-f182.google.com ([209.85.222.182]:37485 "EHLO
+        mail-qk1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237161AbhLVOzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:52:55 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8D2C061574;
-        Wed, 22 Dec 2021 06:52:54 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id bg2-20020a05600c3c8200b0034565c2be15so4008670wmb.0;
-        Wed, 22 Dec 2021 06:52:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UNASmdT0hvuhhs3uP9YzQnXIGyHzJSzVhAFNnDIR+qQ=;
-        b=oPmNrh2qnVZy7/rZvkrXfxHUtL7Dy90QCzv0h25xHCk0ESRgscsionZUbrLaMP8YiQ
-         9xS6DaUE7w8gcaUadFsu1zRr6YH9/NsCR3kvy0Nag56lp0TgE2DytfYJPYaTP6D5mll8
-         Z2iT2PJlaapBG71YAYrZwTovagn9QEOuw/aZcrOnS937Zfaijnwlab0Z/lzdUeSjwqBr
-         P9QCypcTgvHybTbmYtm/KMXMYorn6M2bVMUNlPui4flrm/gQnN+j/m9sxycRfzBARixw
-         htaqs1RqIIL7DYoZuPF2qCEKbUELafeegij/SRMxvrMjOOfGeu9hduV6E8gIuwwQL8Wx
-         gDag==
+        Wed, 22 Dec 2021 09:55:01 -0500
+Received: by mail-qk1-f182.google.com with SMTP id m186so2519770qkb.4;
+        Wed, 22 Dec 2021 06:55:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UNASmdT0hvuhhs3uP9YzQnXIGyHzJSzVhAFNnDIR+qQ=;
-        b=R5/qJ4GpHWlZpd1aZBJLJ2Ww0Fe+udpXpzoPI0R+bHR2hYq74cO0Yr3PfEycHI/KiU
-         b4Y28lYbeoMkO8IUOcsE+W/u4I2zQLGWk61aSqhvwfi/ulT2kPR5dzl9+Z1pZnbusk86
-         uYgeuzCdaDIxAsoCmyTLXK8ku4OIZvU3BHE+yUBg4f+1RyXquFy/iXI65mJE+1algsEi
-         0D5mB5Wqckm01FxnCh8+KmucInIgdgPTK37DMBibBuohclV/pF8Tj4zfCF5loLShwang
-         j/5PHy0Wpp7vXJqAqvG8ZsHtp/HgdXNPlK5LjGYseZEsZGcLQkc7oY8q2tGBzOJ7N1JK
-         se3w==
-X-Gm-Message-State: AOAM533u+7bpVkTh5Kq6UmaAXhifz/GJiOsvvLmZUeVjM3zxZJB5Pj6G
-        qf5k/Qx5HGousYmAPW2SXQE=
-X-Google-Smtp-Source: ABdhPJyXpgGNGKRcdlXMW7sez9UGp/XRanMx+cNdPZOSjYRNQanq5WOvyc59EI5cbOwxjj6Y9TPewA==
-X-Received: by 2002:a05:600c:1e01:: with SMTP id ay1mr1201748wmb.152.1640184773438;
-        Wed, 22 Dec 2021 06:52:53 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312::4fa? ([2001:b07:6468:f312::4fa])
-        by smtp.googlemail.com with ESMTPSA id m35sm12429107wms.1.2021.12.22.06.52.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 06:52:52 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <496b5209-6b1c-1205-ed0e-733af6386f8d@redhat.com>
-Date:   Wed, 22 Dec 2021 15:52:49 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5nzVW9fS8lVq4A7s+LleLBNZjpuppm4Z5+9u/hx4F4M=;
+        b=kwSnQ44f1ozuIEFYOUypgo9Pe+mqqQ1Uo8TJ/cQ0WrsNJZuBmiwphTpMy/Z67K7Ww0
+         Pgtx+eUYiBsX2+GhJSdjyFkrEzq6907AWm+IeQCbqlB1rtWw/K8JlFqKRb7dtyXKEATN
+         2WwuQp8mmfNoIXnPD2Eul7X94KAxc+0yHL5GUq0PBbp9t5dFsy1G0vIS11xJ7MzXCCFL
+         dHKsxUmlo+jBg8S5yhwdxhPaYJVC2Kjr42Jiz9qUrPnZR2SK59KUe9781q9eq5etxrKb
+         5N0eQvFqUTOijb7QVxNt/+awdof6JlWVUbeg86oMq8rnyI2E2uX2jGqtLcyT6SspKxCx
+         MbLA==
+X-Gm-Message-State: AOAM532cf2h+JFH23yf84eoTuPZLKqMcSEST8IIjfgfnGCgLskQis+2k
+        PMVdAeyWBEgDLNoqGzfCEz+bgBZn0xZ8mmJhTGk=
+X-Google-Smtp-Source: ABdhPJxu4y5AWPkYpGQLKns+2Ooj7oRBJ8xa5ngpaxS0tHENl0qV83deqMOYvle2DP4D8tywrxLcdWrtsuYu8Gz4wLM=
+X-Received: by 2002:a05:620a:706:: with SMTP id 6mr2223347qkc.374.1640184900377;
+ Wed, 22 Dec 2021 06:55:00 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 07/13] KVM: selftests: add library for
- creating/interacting with SEV guests
-Content-Language: en-US
-To:     Michael Roth <michael.roth@amd.com>,
-        Peter Gonda <pgonda@google.com>
-Cc:     linux-kselftest@vger.kernel.org, kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Nathan Tempelman <natet@google.com>,
-        Marc Orr <marcorr@google.com>,
-        Steve Rutherford <srutherford@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Ricardo Koller <ricarkol@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>
-References: <20211216171358.61140-1-michael.roth@amd.com>
- <20211216171358.61140-8-michael.roth@amd.com>
- <CAMkAt6pPpWzazBJAM0N1s115k9on7mC46BKzwk6oYHBOoGyohA@mail.gmail.com>
- <20211217161758.pgpvzlgu4z6vhq7x@amd.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211217161758.pgpvzlgu4z6vhq7x@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>
+ <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com>
+ <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112172258480.2968@hadrien> <87fsqqu6by.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net>
+ <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com> <878rwdse9o.fsf@riseup.net>
+In-Reply-To: <878rwdse9o.fsf@riseup.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 22 Dec 2021 15:54:48 +0100
+Message-ID: <CAJZ5v0jyusD4r1eK_hv8CXuaoOXZ6gY8TVdomW5q75dS3wNq5A@mail.gmail.com>
+Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
+To:     Francisco Jerez <currojerez@riseup.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/17/21 17:17, Michael Roth wrote:
->>> +void kvm_sev_ioctl(struct sev_vm *sev, int cmd, void *data)
->>> +{
->>> +       struct kvm_sev_cmd arg = {0};
->>> +       int ret;
->>> +
->>> +       arg.id = cmd;
->>> +       arg.sev_fd = sev->fd;
->>> +       arg.data = (__u64)data;
->>> +
->>> +       ret = ioctl(vm_get_fd(sev->vm), KVM_MEMORY_ENCRYPT_OP, &arg);
->> If the helper vm_get_fd() exists why not add another which takes a
->> struct sev_vm. So you can do __vm_get_fd(sev) here?
-> I can add it as a local helper for now, maybe sev_get_kvm_fd(), to
-> distinguish from the SEV_PATH fd? I'm not sure it's worth exporting it
-> as part of the library though since vm_get_fd(sev_get_vm(sev)) would be
-> more familiar to callers that are already used to the kvm_util library.
-> 
+On Wed, Dec 22, 2021 at 12:57 AM Francisco Jerez <currojerez@riseup.net> wrote:
+>
+> "Rafael J. Wysocki" <rafael@kernel.org> writes:
+>
+> > On Sun, Dec 19, 2021 at 11:10 PM Francisco Jerez <currojerez@riseup.net> wrote:
+> >>
+> >> Julia Lawall <julia.lawall@inria.fr> writes:
+> >>
+> >> > On Sat, 18 Dec 2021, Francisco Jerez wrote:
+> >
+> > [cut]
+> >
+> >> > I did some experiements with forcing different frequencies.  I haven't
+> >> > finished processing the results, but I notice that as the frequency goes
+> >> > up, the utilization (specifically the value of
+> >> > map_util_perf(sg_cpu->util) at the point of the call to
+> >> > cpufreq_driver_adjust_perf in sugov_update_single_perf) goes up as well.
+> >> > Is this expected?
+> >> >
+> >>
+> >> Actually, it *is* expected based on our previous hypothesis that these
+> >> workloads are largely latency-bound: In cases where a given burst of CPU
+> >> work is not parallelizable with any other tasks the thread needs to
+> >> complete subsequently, its overall runtime will decrease monotonically
+> >> with increasing frequency, therefore the number of instructions executed
+> >> per unit of time will increase monotonically with increasing frequency,
+> >> and with it its frequency-invariant utilization.
+> >
+> > But shouldn't these two effects cancel each other if the
+> > frequency-invariance mechanism works well?
+>
+> No, they won't cancel each other out under our hypothesis that these
+> workloads are largely latency-bound, since the performance of the
+> application will increase steadily with increasing frequency, and with
+> it the amount of computational resources it utilizes per unit of time on
+> the average, and therefore its frequency-invariant utilization as well.
 
-I also prefer the one that you suggest.
+OK, so this is a workload in which the maximum performance is only
+achieved at the maximum available frequency.  IOW, there's no
+performance saturation point and increasing the frequency (if
+possible) will always cause more work to be done per unit of time.
 
->> Can you dedup this from  sev_ioctl() in sev_migrate_tests.c? That
->> function already correctly asserts the fw_error.
-> 
-> This is a little bit awkward since sev_ioctl() in sev_migrate_tests opens
-> SEV_PATH on demand whereas this one pulls it out of struct sev_vm. I
-> could make kvm_sev_ioctl() expect the KVM fd as a parameter but that
-> means external callers need another call to pull it out of struct
-> sev_vm.
+For this type of workloads, requirements regarding performance (for
+example, upper bound on the expected time of computations) need to be
+known in order to determine the "most suitable" frequency to run them
+and I agree that schedutil doesn't help much in that respect.
 
-Yeah, it's a bit weird because sev_migrate_tests do not use struct 
-sev_vm.  Unless you port them first, you could have both 
-kvm_vm_sev_ioctl that takes a struct kvm_vm, and sev_vm_ioctl that takes 
-a struct sev_vm.  Then you only need to change the argument of 
-verify_mirror_allowed_cmds to struct kvm_vm.
-
-Paolo
+It is probably better to run them with intel_pstate in the active mode
+(ie. "pure HWP") or decrease EPP via sysfs to allow HWP to ramp up
+turbo more aggressively.

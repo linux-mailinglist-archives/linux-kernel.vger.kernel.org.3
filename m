@@ -2,160 +2,451 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB3D47D71A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE2447D71D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344851AbhLVSpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 13:45:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235054AbhLVSpm (ORCPT
+        id S1344873AbhLVSqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 13:46:14 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:56878 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234898AbhLVSqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 13:45:42 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC6BC061574;
-        Wed, 22 Dec 2021 10:45:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Content-Type:
-        References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID
-        :Content-Description; bh=RTobEUkTLVHhSZ45tuTt7qIPQYTObJHQibTh5FYQpes=; b=2cqL
-        SdyEqRQDW1jCv+4jHh1yg0OXuBz1C7L63ZFOttoiDdedecqAB8kh6RBVKe8Cjxd4LfTejaw8ccjV1
-        nO5W+Iys3RwaL+noMJnv2kSDdchcbopa/vEOFPUZWNQwrATljem+cmCkG+FAkZ4u9qp+eqpuqx2ES
-        bHR5tHHvAR6f4noV21oQWQlaTyZyCHkAr1Jg+n0BgDc9rPksDmsoO3x1wK+kMN/HcZ+zvWNBTHgPG
-        CsLjo118XAYWztw56Dc7Yd1S8L57nUcxPVbx6Z9NNVFhb7/754gFNtUa8x/nnXcP7TSpkRAH6tFEo
-        foz+Fxhb7XI4kl1sZ6glINC1hoH5uQ==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1n06cI-0008Bn-VR; Wed, 22 Dec 2021 18:45:35 +0000
-Date:   Wed, 22 Dec 2021 18:45:33 +0000
-From:   John Keeping <john@metanate.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Valentin Schneider <valentin.schneider@arm.com>,
-        linux-rt-users@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RT] BUG in sched/cpupri.c
-Message-ID: <20211222184533.4c14868c.john@metanate.com>
-In-Reply-To: <31a47e99-6de3-76ec-62ad-9c98d092ead5@arm.com>
-References: <Yb3vXx3DcqVOi+EA@donbot>
-        <71ddbe51-2b7f-2b13-5f22-9013506471dc@arm.com>
-        <87zgou6iq1.mognet@arm.com>
-        <20211221164528.3c84543f.john@metanate.com>
-        <31a47e99-6de3-76ec-62ad-9c98d092ead5@arm.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+        Wed, 22 Dec 2021 13:46:13 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BMIjnqA130836;
+        Wed, 22 Dec 2021 12:45:49 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1640198749;
+        bh=m7HaYrNWlY/wtTbutByFNU5d0qsx4Ws2/hy54s3BuI8=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=Kyu1ezyG5eaz6pikn93LgdzSMpJX5nDc8JrsW4UCbh+CIOSd9oLGxZpsUbyRcxVzb
+         1O1e330CtHiSDfIZBGyY3lidW2iuklNkDbQtuceY7/nKFaiK2y5k9R0mNdBR2Z4nZ8
+         ohaz9Q6Neogjm6PdL1DFeCw2usmYBMNlp3oBFMGA=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BMIjngN100942
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 22 Dec 2021 12:45:49 -0600
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 22
+ Dec 2021 12:45:49 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 22 Dec 2021 12:45:49 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BMIjmfC043912;
+        Wed, 22 Dec 2021 12:45:49 -0600
+Date:   Thu, 23 Dec 2021 00:15:48 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+CC:     Vinod Koul <vkoul@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>
+Subject: Re: [PATCH v6 1/4] phy: cadence: Add Cadence D-PHY Rx driver
+Message-ID: <20211222184545.atci25onvpw6f2ed@ti.com>
+References: <20211214180703.3268-1-p.yadav@ti.com>
+ <20211214180703.3268-2-p.yadav@ti.com>
+ <YcCh1PU+Tc1+pzEL@aptenodytes>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Authenticated: YES
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YcCh1PU+Tc1+pzEL@aptenodytes>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Dec 2021 18:46:57 +0100
-Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+On 20/12/21 04:31PM, Paul Kocialkowski wrote:
+> Hi Pratyush,
+> 
+> On Tue 14 Dec 21, 23:37, Pratyush Yadav wrote:
+> > The Cadence D-PHY can be configured in Tx (DSI) mode or Rx (CSI) mode.
+> > Both modes have a different programming sequence and share little among
+> > them. In addition, a PHY configured in Tx mode cannot be used in Rx mode
+> > and vice versa. For this reason, create a separate driver for the Rx
+> > mode to make it easier to read and maintain.
+> > 
+> > Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+> > 
+> > ---
+> > 
+> > Changes in v6:
+> > - Move to a separate driver.
+> > 
+> > Changes in v5:
+> > - Use the new cdns_dphy_info to specify PHY ops.
+> > - Re-order include in alphabetical order.
+> > - Make bands const.
+> > - Drop num_bands.
+> > - Make i, lanes unsigned.
+> > - Drop the maximum check in cdns_dphy_rx_get_band_ctrl(). Let the loop
+> >   complete and return -EOPNOTSUPP when we reach the end.
+> > - Drop the "rate < bands[i].min_rate" check since the bands are in
+> >   ascending order.
+> > - Move data_lane_ctrl to start of function and make it static const.
+> > 
+> > Changes in v4:
+> > - Drop the submode parts. Use a different compatible for the Rx ops.
+> > - Make bands and num_bands static.
+> > 
+> > Changes in v3:
+> > - Use a table to select the band.
+> > - Use a table to poll the data lane ready bits.
+> > - Multiply the DPHY HS clock rate by 2 to get the bit rate since the
+> >   clock is DDR.
+> > 
+> >  drivers/phy/cadence/Kconfig        |   8 +
+> >  drivers/phy/cadence/Makefile       |   1 +
+> >  drivers/phy/cadence/cdns-dphy-rx.c | 250 +++++++++++++++++++++++++++++
+> >  3 files changed, 259 insertions(+)
+> >  create mode 100644 drivers/phy/cadence/cdns-dphy-rx.c
+> > 
+> > diff --git a/drivers/phy/cadence/Kconfig b/drivers/phy/cadence/Kconfig
+> > index a62910ff5591..1adde2d99ae7 100644
+> > --- a/drivers/phy/cadence/Kconfig
+> > +++ b/drivers/phy/cadence/Kconfig
+> > @@ -22,6 +22,14 @@ config PHY_CADENCE_DPHY
+> >  	  system. If M is selected, the module will be called
+> >  	  cdns-dphy.
+> >  
+> > +config PHY_CADENCE_DPHY_RX
+> > +	tristate "Cadence D-PHY Rx Support"
+> > +	depends on HAS_IOMEM && OF
+> > +	select GENERIC_PHY
+> > +	select GENERIC_PHY_MIPI_DPHY
+> > +	help
+> > +	  Support for Cadence D-PHY in Rx configuration.
+> > +
+> >  config PHY_CADENCE_SIERRA
+> >  	tristate "Cadence Sierra PHY Driver"
+> >  	depends on OF && HAS_IOMEM && RESET_CONTROLLER
+> > diff --git a/drivers/phy/cadence/Makefile b/drivers/phy/cadence/Makefile
+> > index 26e16bd34efe..e17f035ddece 100644
+> > --- a/drivers/phy/cadence/Makefile
+> > +++ b/drivers/phy/cadence/Makefile
+> > @@ -1,5 +1,6 @@
+> >  # SPDX-License-Identifier: GPL-2.0-only
+> >  obj-$(CONFIG_PHY_CADENCE_TORRENT)	+= phy-cadence-torrent.o
+> >  obj-$(CONFIG_PHY_CADENCE_DPHY)	+= cdns-dphy.o
+> > +obj-$(CONFIG_PHY_CADENCE_DPHY_RX)	+= cdns-dphy-rx.o
+> >  obj-$(CONFIG_PHY_CADENCE_SIERRA)	+= phy-cadence-sierra.o
+> >  obj-$(CONFIG_PHY_CADENCE_SALVO)	+= phy-cadence-salvo.o
+> > diff --git a/drivers/phy/cadence/cdns-dphy-rx.c b/drivers/phy/cadence/cdns-dphy-rx.c
+> > new file mode 100644
+> > index 000000000000..fb75e645e662
+> > --- /dev/null
+> > +++ b/drivers/phy/cadence/cdns-dphy-rx.c
+> > @@ -0,0 +1,250 @@
+> > +// SPDX-License-Identifier: GPL-2.0+
+> > +/*
+> > + * Copyright (C) 2021 Texas Instruments Incorporated - https://www.ti.com/
+> > + */
+> > +
+> > +#include <linux/bitfield.h>
+> > +#include <linux/bitops.h>
+> > +#include <linux/io.h>
+> > +#include <linux/iopoll.h>
+> > +#include <linux/module.h>
+> > +#include <linux/phy/phy.h>
+> > +#include <linux/phy/phy-mipi-dphy.h>
+> > +#include <linux/platform_device.h>
+> > +
+> > +#define DPHY_PMA_CMN(reg)		(reg)
+> > +#define DPHY_PCS(reg)			(0xb00 + (reg))
+> > +#define DPHY_ISO(reg)			(0xc00 + (reg))
+> > +
+> > +#define DPHY_CMN_SSM			DPHY_PMA_CMN(0x20)
+> > +#define DPHY_CMN_RX_MODE_EN		BIT(10)
+> > +#define DPHY_CMN_RX_BANDGAP_TIMER_MASK	GENMASK(8, 1)
+> > +#define DPHY_CMN_SSM_EN			BIT(0)
+> > +
+> > +#define DPHY_CMN_RX_BANDGAP_TIMER	0x14
+> > +
+> > +#define DPHY_BAND_CFG			DPHY_PCS(0x0)
+> > +#define DPHY_BAND_CFG_RIGHT_BAND	GENMASK(9, 5)
+> > +#define DPHY_BAND_CFG_LEFT_BAND		GENMASK(4, 0)
+> > +
+> > +#define DPHY_POWER_ISLAND_EN_DATA	DPHY_PCS(0x8)
+> > +#define DPHY_POWER_ISLAND_EN_DATA_VAL	0xaaaaaaaa
+> > +
+> > +#define DPHY_POWER_ISLAND_EN_CLK	DPHY_PCS(0xc)
+> > +#define DPHY_POWER_ISLAND_EN_CLK_VAL	0xaa
+> > +
+> > +#define DPHY_ISO_CL_CTRL_L		DPHY_ISO(0x10)
+> > +#define DPHY_ISO_DL_CTRL_L0		DPHY_ISO(0x14)
+> > +#define DPHY_ISO_DL_CTRL_L1		DPHY_ISO(0x20)
+> > +#define DPHY_ISO_DL_CTRL_L2		DPHY_ISO(0x30)
+> > +#define DPHY_ISO_DL_CTRL_L3		DPHY_ISO(0x3c)
+> > +
+> > +#define DPHY_ISO_LANE_READY_BIT		0
+> > +#define DPHY_ISO_LANE_READY_TIMEOUT_MS	100UL
+> > +
+> > +#define DPHY_LANES_MIN			1
+> > +#define DPHY_LANES_MAX			4
+> > +
+> > +struct cdns_dphy_rx {
+> > +	void __iomem *regs;
+> > +	struct device *dev;
+> > +	struct phy *phy;
+> > +};
+> > +
+> > +struct cdns_dphy_rx_band {
+> > +	/* Rates are in Mbps. */
+> > +	unsigned int min_rate;
+> > +	unsigned int max_rate;
+> > +};
+> > +
+> > +/* Order of bands is important since the index is the band number. */
+> > +static const struct cdns_dphy_rx_band bands[] = {
+> > +	{80, 100}, {100, 120}, {120, 160}, {160, 200}, {200, 240},
+> > +	{240, 280}, {280, 320}, {320, 360}, {360, 400}, {400, 480},
+> > +	{480, 560}, {560, 640}, {640, 720}, {720, 800}, {800, 880},
+> > +	{880, 1040}, {1040, 1200}, {1200, 1350}, {1350, 1500}, {1500, 1750},
+> > +	{1750, 2000}, {2000, 2250}, {2250, 2500}
+> 
+> Cosmetic suggestion: add whitespaces after { and before }.
 
-> On 21.12.21 17:45, John Keeping wrote:
-> > On Tue, 21 Dec 2021 16:11:34 +0000
-> > Valentin Schneider <valentin.schneider@arm.com> wrote:
-> >   
-> >> On 20/12/21 18:35, Dietmar Eggemann wrote:  
-> 
-> [...]
-> 
-> >> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-> >> index fd7c4f972aaf..7d61ceec1a3b 100644
-> >> --- a/kernel/sched/deadline.c
-> >> +++ b/kernel/sched/deadline.c
-> >> @@ -2467,10 +2467,13 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
-> >>  	 * this is the right place to try to pull some other one
-> >>  	 * from an overloaded CPU, if any.
-> >>  	 */
-> >> -	if (!task_on_rq_queued(p) || rq->dl.dl_nr_running)
-> >> +	if (!task_on_rq_queued(p))
-> >>  		return;
-> >>  
-> >> -	deadline_queue_pull_task(rq);
-> >> +	if (!rq->dl.dl_nr_running)
-> >> +		deadline_queue_pull_task(rq);
-> >> +	else if (task_current(rq, p) && (p->sched_class < &dl_sched_class))
-> >> +		resched_curr(rq);
-> >>  }
-> >>  
-> >>  /*
-> >> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-> >> index ef8228d19382..1ea2567612fb 100644
-> >> --- a/kernel/sched/rt.c
-> >> +++ b/kernel/sched/rt.c
-> >> @@ -2322,10 +2322,13 @@ static void switched_from_rt(struct rq *rq, struct task_struct *p)
-> >>  	 * we may need to handle the pulling of RT tasks
-> >>  	 * now.
-> >>  	 */
-> >> -	if (!task_on_rq_queued(p) || rq->rt.rt_nr_running)
-> >> +	if (!task_on_rq_queued(p))
-> >>  		return;
-> >>  
-> >> -	rt_queue_pull_task(rq);
-> >> +	if (!rq->rt.rt_nr_running)
-> >> +		rt_queue_pull_task(rq);
-> >> +	else if (task_current(rq, p) && (p->sched_class < &rt_sched_class))
-> >> +		resched_curr(rq);  
-> 
-> switched_from_rt() -> rt_queue_pull_task(, pull_rt_task)
->   pull_rt_task()->tell_cpu_to_push()->irq_work_queue_on(&rq->rd->rto_push_work,)
->     rto_push_irq_work_func() -> push_rt_task(rq, true)
-> 
-> seems to be the only way with pull=true.
-> 
-> In my tests, rq->rt.rt_nr_running seems to be 0 when it happens.
-> 
-> [   22.288537] CPU3 switched_to_rt: p=[ksoftirqd/3 35]
-> [   22.288554] rt_mutex_setprio: CPU3 p=[ksoftirqd/3 35] pi_task=[rcu_preempt 11] queued=1 running=0 prio=98 oldprio=120
-> [   22.288636] CPU3 switched_from_rt: p=[ksoftirqd/3 35] rq->rt.rt_nr_running=0
->                                                          ^^^^^^^^^^^^^^^^^^^^^^ 
-> [   22.288649] rt_mutex_setprio: CPU3 p=[ksoftirqd/3 35] queued=1 running=1 prio=120 oldprio=98
-> [   22.288681] CPU3 push_rt_task: next_task=[rcu_preempt 11] migr_dis=1 rq->curr=[ksoftirqd/3 35] pull=1
->                                                              ^^^^^^^^^^                           ^^^^^^ 
-> [   22.288698] CPU: 3 PID: 35 Comm: ksoftirqd/3 Not tainted 5.15.10-rt24-dirty #36
-> [   22.288711] Hardware name: ARM Juno development board (r0) (DT)
-> [   22.288718] Call trace:
-> [   22.288722]  dump_backtrace+0x0/0x1ac
-> [   22.288747]  show_stack+0x1c/0x70
-> [   22.288763]  dump_stack_lvl+0x68/0x84
-> [   22.288777]  dump_stack+0x1c/0x38
-> [   22.288788]  push_rt_task.part.0+0x364/0x370
-> [   22.288805]  rto_push_irq_work_func+0x180/0x190
-> [   22.288821]  irq_work_single+0x34/0xa0
-> [   22.288836]  flush_smp_call_function_queue+0x138/0x244
-> [   22.288852]  generic_smp_call_function_single_interrupt+0x18/0x24
-> [   22.288867]  ipi_handler+0xb0/0x15c
-> ...
-> 
-> What about slightly changing the layout in switched_from_rt() (only lightly tested):
+I think it would just add noise. I would like to keep it compact.
 
-I still see the BUG splat with the patch below applied :-(
+> 
+> > +};
+> > +
+> > +static int cdns_dphy_rx_power_on(struct phy *phy)
+> > +{
+> > +	struct cdns_dphy_rx *dphy = phy_get_drvdata(phy);
+> > +
+> > +	/* Start RX state machine. */
+> > +	writel(DPHY_CMN_SSM_EN | DPHY_CMN_RX_MODE_EN |
+> > +	       FIELD_PREP(DPHY_CMN_RX_BANDGAP_TIMER_MASK,
+> > +			  DPHY_CMN_RX_BANDGAP_TIMER),
+> > +	       dphy->regs + DPHY_CMN_SSM);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int cdns_dphy_rx_power_off(struct phy *phy)
+> > +{
+> > +	struct cdns_dphy_rx *dphy = phy_get_drvdata(phy);
+> > +
+> > +	writel(0, dphy->regs + DPHY_CMN_SSM);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int cdns_dphy_rx_get_band_ctrl(unsigned long hs_clk_rate)
+> > +{
+> > +	unsigned int rate, i;
+> > +
+> > +	rate = hs_clk_rate / 1000000UL;
+> > +	/* Since CSI-2 clock is DDR, the bit rate is twice the clock rate. */
+> > +	rate *= 2;
+> > +
+> > +	if (rate < bands[0].min_rate)
+> > +		return -EOPNOTSUPP;
+> > +
+> > +	for (i = 0; i < ARRAY_SIZE(bands); i++) {
+> > +		if (rate < bands[i].max_rate)
+> > +			return i;
+> > +	}
+> 
+> Comstic: you don't need the wrapping { and } here.
 
-> @@ -2322,7 +2338,15 @@ static void switched_from_rt(struct rq *rq, struct task_struct *p)
->          * we may need to handle the pulling of RT tasks
->          * now.
->          */
-> -       if (!task_on_rq_queued(p) || rq->rt.rt_nr_running)
-> +       if (!task_on_rq_queued(p))
-> +               return;
-> +
-> +       if (task_current(rq, p) && (p->sched_class < &rt_sched_class)) {
-> +               resched_curr(rq);
-> +               return;
-> +       }
-> +
-> +       if (rq->rt.rt_nr_running)
->                 return;
->  
->         rt_queue_pull_task(rq);
+Yes, but I generally like to add it for cases like this to make the 
+scope clearer. But I have no strong preferences, I can drop them.
 
+> 
+> > +
+> > +	return -EOPNOTSUPP;
+> > +}
+> > +
+> > +static int cdns_dphy_rx_wait_for_bit(void __iomem *addr, unsigned int bit)
+> 
+> You can probably inline this one.
+
+The compiler will likely do it anyway, but sure I will add it.
+
+> 
+> > +{
+> > +	u32 val;
+> > +
+> > +	return readl_relaxed_poll_timeout(addr, val, val & BIT(bit), 10,
+> > +					  DPHY_ISO_LANE_READY_TIMEOUT_MS * 1000);
+> > +}
+> > +
+> > +static int cdns_dphy_rx_wait_lane_ready(struct cdns_dphy_rx *dphy,
+> > +					unsigned int lanes)
+> > +{
+> > +	static const u32 data_lane_ctrl[] = {DPHY_ISO_DL_CTRL_L0,
+> > +					     DPHY_ISO_DL_CTRL_L1,
+> > +					     DPHY_ISO_DL_CTRL_L2,
+> > +					     DPHY_ISO_DL_CTRL_L3};
+> > +	void __iomem *reg = dphy->regs;
+> > +	unsigned int i;
+> > +	int ret;
+> > +
+> > +	/* Data lanes. Minimum one lane is mandatory. */
+> > +	if (lanes < DPHY_LANES_MIN || lanes > DPHY_LANES_MAX)
+> > +		return -EINVAL;
+> > +
+> > +	/* Clock lane */
+> > +	ret = cdns_dphy_rx_wait_for_bit(reg + DPHY_ISO_CL_CTRL_L,
+> > +					DPHY_ISO_LANE_READY_BIT);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	for (i = 0; i < lanes; i++) {
+> > +		ret = cdns_dphy_rx_wait_for_bit(reg + data_lane_ctrl[i],
+> > +						DPHY_ISO_LANE_READY_BIT);
+> > +		if (ret)
+> > +			return ret;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int cdns_dphy_rx_configure(struct phy *phy,
+> > +				  union phy_configure_opts *opts)
+> > +{
+> > +	struct cdns_dphy_rx *dphy = phy_get_drvdata(phy);
+> > +	unsigned int reg;
+> > +	int band_ctrl, ret;
+> > +
+> > +	band_ctrl = cdns_dphy_rx_get_band_ctrl(opts->mipi_dphy.hs_clk_rate);
+> > +	if (band_ctrl < 0)
+> > +		return band_ctrl;
+> > +
+> > +	reg = FIELD_PREP(DPHY_BAND_CFG_LEFT_BAND, band_ctrl) |
+> > +	      FIELD_PREP(DPHY_BAND_CFG_RIGHT_BAND, band_ctrl);
+> > +	writel(reg, dphy->regs + DPHY_BAND_CFG);
+> > +
+> > +	/*
+> > +	 * Set the required power island phase 2 time. This is mandated by DPHY
+> > +	 * specs.
+> > +	 */
+> > +	reg = DPHY_POWER_ISLAND_EN_DATA_VAL;
+> > +	writel(reg, dphy->regs + DPHY_POWER_ISLAND_EN_DATA);
+> > +	reg = DPHY_POWER_ISLAND_EN_CLK_VAL;
+> > +	writel(reg, dphy->regs + DPHY_POWER_ISLAND_EN_CLK);
+> > +
+> > +	ret = cdns_dphy_rx_wait_lane_ready(dphy, opts->mipi_dphy.lanes);
+> > +	if (ret) {
+> > +		dev_err(dphy->dev, "DPHY wait for lane ready timeout\n");
+> > +		return ret;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int cdns_dphy_rx_validate(struct phy *phy, enum phy_mode mode,
+> > +				 int submode, union phy_configure_opts *opts)
+> > +{
+> > +	int ret;
+> > +
+> > +	if (mode != PHY_MODE_MIPI_DPHY)
+> > +		return -EINVAL;
+> > +
+> > +	ret = cdns_dphy_rx_get_band_ctrl(opts->mipi_dphy.hs_clk_rate);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	return phy_mipi_dphy_config_validate(&opts->mipi_dphy);
+> > +}
+> > +
+> > +static const struct phy_ops cdns_dphy_rx_ops = {
+> > +	.power_on = cdns_dphy_rx_power_on,
+> > +	.power_off = cdns_dphy_rx_power_off,
+> > +	.configure = cdns_dphy_rx_configure,
+> > +	.validate = cdns_dphy_rx_validate,
+> > +};
+> > +
+> > +static int cdns_dphy_rx_probe(struct platform_device *pdev)
+> > +{
+> > +	struct device *dev = &pdev->dev;
+> > +	struct phy_provider *provider;
+> > +	struct cdns_dphy_rx *dphy;
+> > +
+> > +	dphy = devm_kzalloc(dev, sizeof(*dphy), GFP_KERNEL);
+> > +	if (!dphy)
+> > +		return -ENOMEM;
+> > +
+> > +	dev_set_drvdata(dev, dphy);
+> 
+> It looks like you're never getting the dphy pointer from dev so this seems a bit
+> pointless.
+
+Yes, we don't need it since there is no remove hook as of now. But I 
+would still like to keep it. It would avoid extra churn when someone 
+does want to add one.
+
+> 
+> > +	dphy->dev = dev;
+> > +
+> > +	dphy->regs = devm_platform_ioremap_resource(pdev, 0);
+> > +	if (IS_ERR(dphy->regs))
+> > +		return PTR_ERR(dphy->regs);
+> > +
+> > +	dphy->phy = devm_phy_create(dev, NULL, &cdns_dphy_rx_ops);
+> > +	if (IS_ERR(dphy->phy)) {
+> > +		dev_err(dev, "Failed to create PHY: %d\n", PTR_ERR(dphy->phy));
+> > +		return PTR_ERR(dphy->phy);
+> > +	}
+> > +
+> > +	phy_set_drvdata(dphy->phy, dphy);
+> > +	provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+> 
+> You might want to print an error message if it failed to register.
+
+Ok, will do.
+
+> 
+> > +
+> > +	return PTR_ERR_OR_ZERO(provider);
+> > +}
+> > +
+> > +static const struct of_device_id cdns_dphy_rx_of_match[] = {
+> > +	{ .compatible = "cdns,dphy-rx" },
+> > +	{ /* sentinel */ },
+> > +};
+> > +MODULE_DEVICE_TABLE(of, cdns_dphy_rx_of_match);
+> > +
+> > +static struct platform_driver cdns_dphy_rx_platform_driver = {
+> > +	.probe		= cdns_dphy_rx_probe,
+> > +	.driver		= {
+> > +		.name		= "cdns-mipi-dphy-rx",
+> > +		.of_match_table	= cdns_dphy_rx_of_match,
+> > +	},
+> > +};
+> > +module_platform_driver(cdns_dphy_rx_platform_driver);
+> > +
+> > +MODULE_AUTHOR("Pratyush Yadav <p.yadav@ti.com>");
+> > +MODULE_DESCRIPTION("Cadence D-PHY Rx Driver");
+> > +MODULE_LICENSE("GPL v2");
+> 
+> Otherwise this looks good to me!
+
+Thanks for reviewing.
+
+> 
+> Cheers,
+> 
+> Paul
+> 
+> -- 
+> Paul Kocialkowski, Bootlin
+> Embedded Linux and kernel engineering
+> https://bootlin.com
+
+
+
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

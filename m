@@ -2,226 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C2C547DA80
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 00:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E11D47DA86
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 00:22:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245481AbhLVXWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 18:22:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40583 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245427AbhLVXWl (ORCPT
+        id S245705AbhLVXWx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Dec 2021 18:22:53 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:37317 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245636AbhLVXWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 18:22:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640215360;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5UVh3aDtm+eiGbkzUFXOBvBvVmz6vDb4T1np/ZQbrzg=;
-        b=P0I5nfpGto4EKKlEDUHHcMFFUWAGWiFTbilbfp4Z9N2TljPfvxm7FphU+gbN6sh6Fh6zPl
-        8i9lBy+7ywmBCm+sHxM+ZHPyzZsDYMZPs1ki6ExE1OCbTjdH05voNMBAmSHkz72si8FhsM
-        g2qucaoqFb8dCvGU7IgjUjxKr6jeTco=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-411-31BEXXQvPFO2pj-Bv_sbfg-1; Wed, 22 Dec 2021 18:22:37 -0500
-X-MC-Unique: 31BEXXQvPFO2pj-Bv_sbfg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4E4801006AA5;
-        Wed, 22 Dec 2021 23:22:35 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.165])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2C8E110911BA;
-        Wed, 22 Dec 2021 23:22:21 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v4 33/68] cachefiles: Add a couple of tracepoints for logging
- errors
-From:   David Howells <dhowells@redhat.com>
-To:     linux-cachefs@redhat.com
-Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 22 Dec 2021 23:22:20 +0000
-Message-ID: <164021534029.640689.1875723624947577095.stgit@warthog.procyon.org.uk>
-In-Reply-To: <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk>
-References: <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/0.23
+        Wed, 22 Dec 2021 18:22:52 -0500
+Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MXoxG-1mz6bm3mqy-00YESJ; Thu, 23 Dec 2021 00:22:50 +0100
+Received: by mail-wr1-f44.google.com with SMTP id r17so7897108wrc.3;
+        Wed, 22 Dec 2021 15:22:50 -0800 (PST)
+X-Gm-Message-State: AOAM532Y5jKLGHkYeoGYo9loKWciernRSpn7B88nsc5PD5GrsvIMe5M6
+        2NwO9AR2gUMP4+FgayDl84qCLQ4lNQDkjYiTVFg=
+X-Google-Smtp-Source: ABdhPJw9uvBVgsr2Gcg3Nra+s0VShilg43p0yBw7r08mPnnGpKyICZ9z8hi55OCoFPQKV3SgsyicfeMLJf8K3g2dLrA=
+X-Received: by 2002:a5d:6d0e:: with SMTP id e14mr3594325wrq.407.1640215370376;
+ Wed, 22 Dec 2021 15:22:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+References: <20211223085944.0095eaf5@canb.auug.org.au>
+In-Reply-To: <20211223085944.0095eaf5@canb.auug.org.au>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 23 Dec 2021 00:22:34 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3WxP1x60fj7oPzY2=gTUEgA68x1vc17tRHEJ-O19-UTQ@mail.gmail.com>
+Message-ID: <CAK8P3a3WxP1x60fj7oPzY2=gTUEgA68x1vc17tRHEJ-O19-UTQ@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the arm-soc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:UJgjNx4krcB90RxxDGdJr08xY+xMCoH3h5yyD/elk5c8aS/f91y
+ 7d4TUoZ2hADedbjcTrnSoDiSPgB1jyXv7kgdjs3fGuEYsDGM6OkN6uMQX0qX9cHwoifr3u9
+ 0i2cEn2q+JoQRdZiDv3j7fjsmUkN7L1jqlIPQcXoUlnnvzsETSCqw58sQk0JB3SQrvZV195
+ 0g3u5sZ2OKKV6U+N2lDIA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:C5Co6cZAREo=:3rrE46Q6nB7y9rXQVQ79ef
+ cXfkXO66G7psmk0uTlwJVPp41ohKK/MsU9370WEp4Ca29fh28OCrKD63Qivn8uFlMvwN2vySW
+ mNhxdoFH66jKkQWiL5LUPSYnffCXL6MVNR3Unx07s5D8cboMGcFsPBtyUVWQCCGpLUXBRNsEb
+ OgzAIiJUw/uwI0k2G7jeyIUR7ipGo3pdHUo9vWWqMFzPJAXYSyvU7S62KCM27kzsR+52s7bLa
+ IsqfJxX7HI0VMTBz7j0jahCfMrx7ee1cSvIKklQPR2ZCcDlTtJBJnPOTbtvWh+WXgvXUxJK1t
+ nGkWyig+GVy43CxmDGyCVF5k3zI8WayPMpxeweCLqAEwnMV4RZ/eeeoHZR9TFyYvXjenPFmk3
+ BeXN8Rsx++BJ15BcjoBpxKeSE0AUp1XEcdcV+sEpMN3KbRq7/kHY2VAW7oxHFcpmAa6q/e/8H
+ 3EC7ntZnDY+h2EEPYsGuYSQdcAAUemd0TEXRU21Bujhhaa+eN1Y3sdwnWX8eaNG2hdCHUW/qV
+ CEKa1gZh1Bitxm7JJpE++j3zO2JSIaOZf0IHfwFKwR7STnCM4YHL4sgUX2G1Am4kRbfkTsyfp
+ b0Q/zfZXj49lrbjJHnorEgu7Z0Wt3RVu2L2vleE2fpICwghbvSiS1m6FfX+JIrmTmfI7HZGpQ
+ J2e5/SbGnv6vSYVXqLDen2RvFIY/WNLiftCKx8z9Fy1YNnivBpPUQB7fh0BAMcgBX8as=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add two trace points to log errors, one for vfs operations like mkdir or
-create, and one for I/O operations, like read, write or truncate.
+On Wed, Dec 22, 2021 at 10:59 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the arm-soc tree, today's linux-next build (arm
+> multi_v7_defconfig) produced this warning:
+>
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:109.4-14: Warning (reg_format): /switch/ports:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:106.9-149.5: Warning (avoid_default_addr_size): /switch/ports: Relying on default #address-cells value
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:106.9-149.5: Warning (avoid_default_addr_size): /switch/ports: Relying on default #size-cells value
+>
+> Maybe introduced by commit
+>
+>   3d2d52a0d183 ("ARM: dts: BCM5301X: define RTL8365MB switch on Asus RT-AC88U")
 
-Also add the beginnings of a struct that is going to represent a data file
-and place a debugging ID in it for the tracepoints to record.
+Confirmed, and now reverted as I'm already tagging the final pull requests.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: linux-cachefs@redhat.com
-Link: https://lore.kernel.org/r/163819625632.215744.17907340966178411033.stgit@warthog.procyon.org.uk/ # v1
-Link: https://lore.kernel.org/r/163906926297.143852.18267924605548658911.stgit@warthog.procyon.org.uk/ # v2
-Link: https://lore.kernel.org/r/163967135390.1823006.2512120406360156424.stgit@warthog.procyon.org.uk/ # v3
----
+Arınç, Florian: Feel free to resubmit a fixed version for the "late"
+branch that Olof
+may still pick up when I'm out of office, in case this is an important
+change. Otherwise
+I guess we can leave it for 5.18
 
- fs/cachefiles/internal.h          |    1 
- include/trace/events/cachefiles.h |   94 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 95 insertions(+)
-
-diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
-index 1f2fea902d3e..b51146a29aca 100644
---- a/fs/cachefiles/internal.h
-+++ b/fs/cachefiles/internal.h
-@@ -62,6 +62,7 @@ struct cachefiles_cache {
- 	char				*tag;		/* cache binding tag */
- };
- 
-+#include <trace/events/cachefiles.h>
- 
- /*
-  * error_inject.c
-diff --git a/include/trace/events/cachefiles.h b/include/trace/events/cachefiles.h
-index 5ee0aabb20be..9bd5a8a60801 100644
---- a/include/trace/events/cachefiles.h
-+++ b/include/trace/events/cachefiles.h
-@@ -18,11 +18,49 @@
- #ifndef __CACHEFILES_DECLARE_TRACE_ENUMS_ONCE_ONLY
- #define __CACHEFILES_DECLARE_TRACE_ENUMS_ONCE_ONLY
- 
-+enum cachefiles_error_trace {
-+	cachefiles_trace_fallocate_error,
-+	cachefiles_trace_getxattr_error,
-+	cachefiles_trace_link_error,
-+	cachefiles_trace_lookup_error,
-+	cachefiles_trace_mkdir_error,
-+	cachefiles_trace_notify_change_error,
-+	cachefiles_trace_open_error,
-+	cachefiles_trace_read_error,
-+	cachefiles_trace_remxattr_error,
-+	cachefiles_trace_rename_error,
-+	cachefiles_trace_seek_error,
-+	cachefiles_trace_setxattr_error,
-+	cachefiles_trace_statfs_error,
-+	cachefiles_trace_tmpfile_error,
-+	cachefiles_trace_trunc_error,
-+	cachefiles_trace_unlink_error,
-+	cachefiles_trace_write_error,
-+};
-+
- #endif
- 
- /*
-  * Define enum -> string mappings for display.
-  */
-+#define cachefiles_error_traces						\
-+	EM(cachefiles_trace_fallocate_error,	"fallocate")		\
-+	EM(cachefiles_trace_getxattr_error,	"getxattr")		\
-+	EM(cachefiles_trace_link_error,		"link")			\
-+	EM(cachefiles_trace_lookup_error,	"lookup")		\
-+	EM(cachefiles_trace_mkdir_error,	"mkdir")		\
-+	EM(cachefiles_trace_notify_change_error, "notify_change")	\
-+	EM(cachefiles_trace_open_error,		"open")			\
-+	EM(cachefiles_trace_read_error,		"read")			\
-+	EM(cachefiles_trace_remxattr_error,	"remxattr")		\
-+	EM(cachefiles_trace_rename_error,	"rename")		\
-+	EM(cachefiles_trace_seek_error,		"seek")			\
-+	EM(cachefiles_trace_setxattr_error,	"setxattr")		\
-+	EM(cachefiles_trace_statfs_error,	"statfs")		\
-+	EM(cachefiles_trace_tmpfile_error,	"tmpfile")		\
-+	EM(cachefiles_trace_trunc_error,	"trunc")		\
-+	EM(cachefiles_trace_unlink_error,	"unlink")		\
-+	E_(cachefiles_trace_write_error,	"write")
- 
- 
- /*
-@@ -33,6 +71,8 @@
- #define EM(a, b) TRACE_DEFINE_ENUM(a);
- #define E_(a, b) TRACE_DEFINE_ENUM(a);
- 
-+cachefiles_error_traces;
-+
- /*
-  * Now redefine the EM() and E_() macros to map the enums to the strings that
-  * will be printed in the output.
-@@ -43,6 +83,60 @@
- #define E_(a, b)	{ a, b }
- 
- 
-+TRACE_EVENT(cachefiles_vfs_error,
-+	    TP_PROTO(struct cachefiles_object *obj, struct inode *backer,
-+		     int error, enum cachefiles_error_trace where),
-+
-+	    TP_ARGS(obj, backer, error, where),
-+
-+	    TP_STRUCT__entry(
-+		    __field(unsigned int,			obj	)
-+		    __field(unsigned int,			backer	)
-+		    __field(enum cachefiles_error_trace,	where	)
-+		    __field(short,				error	)
-+			     ),
-+
-+	    TP_fast_assign(
-+		    __entry->obj	= obj ? obj->debug_id : 0;
-+		    __entry->backer	= backer->i_ino;
-+		    __entry->error	= error;
-+		    __entry->where	= where;
-+			   ),
-+
-+	    TP_printk("o=%08x b=%08x %s e=%d",
-+		      __entry->obj,
-+		      __entry->backer,
-+		      __print_symbolic(__entry->where, cachefiles_error_traces),
-+		      __entry->error)
-+	    );
-+
-+TRACE_EVENT(cachefiles_io_error,
-+	    TP_PROTO(struct cachefiles_object *obj, struct inode *backer,
-+		     int error, enum cachefiles_error_trace where),
-+
-+	    TP_ARGS(obj, backer, error, where),
-+
-+	    TP_STRUCT__entry(
-+		    __field(unsigned int,			obj	)
-+		    __field(unsigned int,			backer	)
-+		    __field(enum cachefiles_error_trace,	where	)
-+		    __field(short,				error	)
-+			     ),
-+
-+	    TP_fast_assign(
-+		    __entry->obj	= obj ? obj->debug_id : 0;
-+		    __entry->backer	= backer->i_ino;
-+		    __entry->error	= error;
-+		    __entry->where	= where;
-+			   ),
-+
-+	    TP_printk("o=%08x b=%08x %s e=%d",
-+		      __entry->obj,
-+		      __entry->backer,
-+		      __print_symbolic(__entry->where, cachefiles_error_traces),
-+		      __entry->error)
-+	    );
-+
- #endif /* _TRACE_CACHEFILES_H */
- 
- /* This part must be outside protection */
-
-
+        Arnd

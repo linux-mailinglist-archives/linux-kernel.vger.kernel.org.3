@@ -2,81 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF3547D64F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D98DF47D652
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344518AbhLVSLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 13:11:11 -0500
-Received: from mail-qt1-f181.google.com ([209.85.160.181]:40746 "EHLO
-        mail-qt1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344507AbhLVSLK (ORCPT
+        id S1344542AbhLVSMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 13:12:06 -0500
+Received: from mail-qv1-f50.google.com ([209.85.219.50]:45677 "EHLO
+        mail-qv1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344526AbhLVSMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 13:11:10 -0500
-Received: by mail-qt1-f181.google.com with SMTP id l17so2675799qtk.7;
-        Wed, 22 Dec 2021 10:11:09 -0800 (PST)
+        Wed, 22 Dec 2021 13:12:03 -0500
+Received: by mail-qv1-f50.google.com with SMTP id a9so3016798qvd.12;
+        Wed, 22 Dec 2021 10:12:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Il/qIXEpM0k/r83Hkz4DiWBovhWj2kmv+y71DSrCm8c=;
-        b=OwrAUZb5StnHhcO28cBmna5iii7ghZZG+ogdQcsCILcswmI13LLALDrRpWEiFshe7Y
-         tYCsPe+Y/KrQxXeFnOe5jV8sEbIghTOA4wQtuxPsn7F+/Mos/ORxqksALw029It3ZFCI
-         oNzCYUqBXbLY3Ybg/UFxKw06RUMLTusVRm3wcCDaLuMZAsnrODjiKkOLbBfHZUW2V2En
-         QzGA+aagftw+IZxrYvhgVhoAWOeny3xb74rcsUbIDHIVSj9GuZS+I9pgw6d88Ifs7UmZ
-         mhB3b7RJj2EBwv2xzzc81vBJVJEmhzLvQ/f1cc+YGiKRFiuNORjmk9HN0Sy/MWzHRX56
-         IUEg==
-X-Gm-Message-State: AOAM531D8QGLcB5x7UEVS8K/neW5LEntHdmReZyFcTTEapJ5PTwFSeiM
-        5Az9QFV2rRbwGulBT7kO/g==
-X-Google-Smtp-Source: ABdhPJw47NUTqeOoKpNDgF7NJg6QIbxE7QNiZXBbjqvRNsib5jawU+pweuawJYm1Hu7bbr9h2qzQFA==
-X-Received: by 2002:a05:622a:1813:: with SMTP id t19mr2115869qtc.256.1640196669405;
-        Wed, 22 Dec 2021 10:11:09 -0800 (PST)
+        bh=OFOeNc3Y0ndz/EXm1f7thJms/RZmhtXvY2DccU76yx4=;
+        b=GgSnAlhyu4JEpvff13zkNHym/92t9yqqfJwoEQNph1ZRWGcNYQP/YYTW1mz/OmH/FX
+         nQkJiYVurjjISOlt3AEuL6VzIgRqgiSzr3OYNy7bBDfOdY26SC5RxVcWQA6H/Pc+pxMw
+         ShCjzSAQUwXs+RaooHQ8FBCqHoTEl32gQ3uHxY6/YV1Zp/aBO1DtE69k8wCWxlw0tke2
+         /ZiB4L+Leo30+dtCLiIM0omGF/GqOPM2NdKpt50dZ47qWmlJh5T7L/7ps1xBNGVfoAdK
+         yHaO70Fq6JQ4Br3uwHoSd1SgHdB5+8p7lAVhVZ9WeW8RPE4AWEU5TC9IplA/TJl+sdS0
+         971A==
+X-Gm-Message-State: AOAM531c+jM0jGAwtkklu6soeSeXS8j32BD6k5Iq8enjrj7m6mQlwtTF
+        2UwiOYgCPGy4BH8qUnw+sQ==
+X-Google-Smtp-Source: ABdhPJzGakyluSdij/OLglbf0wU9LSPWCjpmjuvVW4JZ5+JzF9r8FSIgVMpgGjbFF+FN/XQXb/CvnA==
+X-Received: by 2002:a05:6214:529e:: with SMTP id kj30mr3461167qvb.117.1640196723101;
+        Wed, 22 Dec 2021 10:12:03 -0800 (PST)
 Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id g12sm2279193qtk.69.2021.12.22.10.11.08
+        by smtp.gmail.com with ESMTPSA id x4sm2313380qtw.44.2021.12.22.10.12.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 10:11:08 -0800 (PST)
-Received: (nullmailer pid 2435332 invoked by uid 1000);
-        Wed, 22 Dec 2021 18:11:07 -0000
-Date:   Wed, 22 Dec 2021 14:11:07 -0400
+        Wed, 22 Dec 2021 10:12:02 -0800 (PST)
+Received: (nullmailer pid 2436857 invoked by uid 1000);
+        Wed, 22 Dec 2021 18:12:00 -0000
+Date:   Wed, 22 Dec 2021 14:12:00 -0400
 From:   Rob Herring <robh@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     linux-clk@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        list@opendingux.net, linux-kernel@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v3 1/2] dt-bindings: clk/ingenic: Add MDMA and BDMA clocks
-Message-ID: <YcNqOwjYQT8GTwqD@robh.at.kernel.org>
-References: <20211220193319.114974-1-paul@crapouillou.net>
- <20211220193319.114974-2-paul@crapouillou.net>
+To:     Xianwei Zhao <xianwei.zhao@amlogic.com>
+Cc:     Vyacheslav Bocharov <adeep@lexina.in>, kelvin.zhang@amlogic.com,
+        linux-amlogic@lists.infradead.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Kevin Hilman <khilman@baylibre.com>, devicetree@vger.kernel.org
+Subject: Re: [PATCH V3] dt-bindings: arm: amlogic: add S4 based AQ222 bindings
+Message-ID: <YcNqcKWJrJS02nkL@robh.at.kernel.org>
+References: <20211221030014.434-1-xianwei.zhao@amlogic.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211220193319.114974-2-paul@crapouillou.net>
+In-Reply-To: <20211221030014.434-1-xianwei.zhao@amlogic.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Dec 2021 19:33:18 +0000, Paul Cercueil wrote:
-> The Ingenic JZ4760 and JZ4770 both have an extra DMA core named BDMA
-> dedicated to the NAND and BCH controller, but which can also do
-> memory-to-memory transfers. The JZ4760 additionally has a DMA core named
-> MDMA dedicated to memory-to-memory transfers. The programming manual for
-> the JZ4770 does have a bit for a MDMA clock, but does not seem to have
-> the hardware wired in.
+On Tue, 21 Dec 2021 11:00:14 +0800, Xianwei Zhao wrote:
+> Add bindings for the new Amlogic S4 SoC family,
+> and add binds the compatible for the Amlogic S4 Based AQ222 board.
 > 
-> Add macros for the MDMA and BDMA clocks to the dt-bindings include
-> files, so that they can be used within Device Tree files.
+> S4 is an application processor designed for hybrid OTT/IP Set To
+> Box(STB) and high-end media box applications, with quad core Cortex-A35.
 > 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
 > ---
-> 
-> Notes:
->     v3: New patch
-> 
->  include/dt-bindings/clock/ingenic,jz4760-cgu.h | 2 ++
->  include/dt-bindings/clock/ingenic,jz4770-cgu.h | 1 +
->  2 files changed, 3 insertions(+)
+> V2 -> V3 : upate author name
+> V1 -> V2 : modfiy soc name S805X2
+> ---
+>  Documentation/devicetree/bindings/arm/amlogic.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>

@@ -2,133 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C09E347D1F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7947D47D244
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:43:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245012AbhLVMlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 07:41:06 -0500
-Received: from mga14.intel.com ([192.55.52.115]:11431 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244921AbhLVMk5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:40:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640176857; x=1671712857;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Cq5pl+LFSmydyprw9+uNd5O4QogykkkHwYzeeS4aZ1E=;
-  b=CuinwUQizNZ6fn69KhJekXaE02Mkb/m0FiaQxP7sELVin5MgXKuxVu0I
-   Bu4SQrvu8wCmK1OTK/iAJhhJBvAHz9FpMNxaF3I1dAwCbApqgNSQj/apr
-   RBaxeCTotG3Hie0keHrzpISpioP+otnd85D1yxU9dmrXIYSMappyDi1Af
-   k5P36NZ8Lv4R6+T3PywYPlD9k07N7KNRId0RohHqj19w8EGtQwmgqCGzs
-   0HKy/gtuECPiFK4CkVLoPtw+Mn100ArJxt9BQGNx39MPRYyiw6FeOj31H
-   iJ/Th1gO9nFpdLt0Ge9/IaznD9mofy+nCYBhIe3aU7vD0jvzMYP0NPB+Q
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240833408"
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="240833408"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 04:40:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="587002714"
-Received: from 984fee00a228.jf.intel.com ([10.165.56.59])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Dec 2021 04:40:56 -0800
-From:   Jing Liu <jing2.liu@intel.com>
-To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, pbonzini@redhat.com, corbet@lwn.net,
-        shuah@kernel.org
-Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com,
-        guang.zeng@intel.com, wei.w.wang@intel.com, yang.zhong@intel.com
-Subject: [PATCH v3 05/22] kvm: x86: Check permitted dynamic xfeatures at KVM_SET_CPUID2
-Date:   Wed, 22 Dec 2021 04:40:35 -0800
-Message-Id: <20211222124052.644626-6-jing2.liu@intel.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20211222124052.644626-1-jing2.liu@intel.com>
-References: <20211222124052.644626-1-jing2.liu@intel.com>
+        id S245152AbhLVMnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 07:43:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244989AbhLVMmg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 07:42:36 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89221C061757;
+        Wed, 22 Dec 2021 04:42:35 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id bm14so8187115edb.5;
+        Wed, 22 Dec 2021 04:42:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0PHB2DbyuqWjb8kOPRMCAabVl++BybmOaXAT1jQnLdE=;
+        b=A3aSKk0zsqKWt+N5dbDvZnR4TsIGtDoP9kAPs5+0kxYIEBmxB6Vb/Yx6Kj3y+jETgw
+         quiZ6gPo4KKWywQ13342Mc1UOABJvfvMy4hpHwZ5A/MOZF1HOgvsle0lS6fl5aBBp4P9
+         xtzENL4wML613CCYM7STBCQ0tzXknUbL+THotmvNnPTe5ZE7nlHR8UgBp2EnArNwpTGH
+         4qpXzwiz9ejiflfBFWSXCtR0ouvspEnaAn3c1T6k/gXGrBDxUdg2OFmcSaiOVO9OxTgD
+         JZs26eFkCWL/8NncABavxU5CeWI9FK1uJAEzDrur7Vbq9D8kJTedLY4aZqFcjRG+1X8y
+         iiCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0PHB2DbyuqWjb8kOPRMCAabVl++BybmOaXAT1jQnLdE=;
+        b=E8+f42v+bOH+BXxkzT4xCQq+5QmFedj1Jq1F424s7hBLkYCTR0JcIvaYQxnuM1higN
+         U8ncnVmEtfRcphUK19M1RLGAzh7zK+OROaDKIAZP8aMxfzG+YWOzklIrIgxE+1jYzuGo
+         n9VuoG+dGV2zA4SQhtLxQofESh9N6qn6lfMWkzgqfwzQrM+K1Srculgy6vZeSAdMPFmR
+         RP/dQ2RLHAPU1eZP26EWioB7p9qQOorztxUHUmiKMRQDTW1oihsu+8zzi2aY7kagvrl+
+         ZDo2wMrdafvn2Ol1hKLRuHRpb/kvmmWy7p/KmXl+wlafLgnGsYVAarSCN+AKAVREAsLf
+         M2cw==
+X-Gm-Message-State: AOAM533msJtbJHDKsaI9iXhEtj+0MZ4pyyzD42V+TlH7DsHAeJxJTOh4
+        +Kp2bh5sV5JQAOpxhNSoJBg5XzhNLKiwZMe7Uqk=
+X-Google-Smtp-Source: ABdhPJwhAUvQ/IAad0o9VyMvINqUtW7Yn7BvDa5bqAfmkvgWiK1Qh0+09stpi2FbCU9QA3buCd3YEhZkroARzxwUrYo=
+X-Received: by 2002:a17:907:6d8d:: with SMTP id sb13mr2360256ejc.132.1640176953787;
+ Wed, 22 Dec 2021 04:42:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211222034646.222189-1-liambeguin@gmail.com> <20211222034646.222189-14-liambeguin@gmail.com>
+In-Reply-To: <20211222034646.222189-14-liambeguin@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 22 Dec 2021 14:40:35 +0200
+Message-ID: <CAHp75VfC5-C1JuY4r_26tR7ds-f=S6BCPNde=TEBbWNW6hBrnQ@mail.gmail.com>
+Subject: Re: [PATCH v11 13/15] iio: afe: rescale: add temperature transducers
+To:     Liam Beguin <liambeguin@gmail.com>
+Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Guest xstate permissions should be set by userspace VMM before vcpu
-creation. Extend KVM_SET_CPUID2 to verify that every feature reported
-in CPUID[0xD] has proper permission set.
+On Wed, Dec 22, 2021 at 5:47 AM Liam Beguin <liambeguin@gmail.com> wrote:
+>
+> From: Liam Beguin <lvb@xiphos.com>
+>
+> A temperature transducer is a device that converts a thermal quantity
+> into any other physical quantity. This patch add support for temperature
 
-Signed-off-by: Jing Liu <jing2.liu@intel.com>
----
- arch/x86/kvm/cpuid.c | 36 ++++++++++++++++++++++++------------
- 1 file changed, 24 insertions(+), 12 deletions(-)
+This patch add --> Add a
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 4855344091b8..a068373a7fbd 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -81,7 +81,9 @@ static inline struct kvm_cpuid_entry2 *cpuid_entry2_find(
- 	return NULL;
- }
- 
--static int kvm_check_cpuid(struct kvm_cpuid_entry2 *entries, int nent)
-+static int kvm_check_cpuid(struct kvm_vcpu *vcpu,
-+			   struct kvm_cpuid_entry2 *entries,
-+			   int nent)
- {
- 	struct kvm_cpuid_entry2 *best;
- 
-@@ -97,6 +99,16 @@ static int kvm_check_cpuid(struct kvm_cpuid_entry2 *entries, int nent)
- 			return -EINVAL;
- 	}
- 
-+	/* Check guest permissions for dynamically-enabled xfeatures */
-+	best = cpuid_entry2_find(entries, nent, 0xd, 0);
-+	if (best) {
-+		u64 xfeatures;
-+
-+		xfeatures = best->eax | ((u64)best->edx << 32);
-+		if (xfeatures & ~vcpu->arch.guest_fpu.perm)
-+			return -ENXIO;
-+	}
-+
- 	return 0;
- }
- 
-@@ -277,21 +289,21 @@ u64 kvm_vcpu_reserved_gpa_bits_raw(struct kvm_vcpu *vcpu)
- static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
-                         int nent)
- {
--    int r;
-+	int r;
- 
--    r = kvm_check_cpuid(e2, nent);
--    if (r)
--        return r;
-+	r = kvm_check_cpuid(vcpu, e2, nent);
-+	if (r)
-+		return r;
- 
--    kvfree(vcpu->arch.cpuid_entries);
--    vcpu->arch.cpuid_entries = e2;
--    vcpu->arch.cpuid_nent = nent;
-+	kvfree(vcpu->arch.cpuid_entries);
-+	vcpu->arch.cpuid_entries = e2;
-+	vcpu->arch.cpuid_nent = nent;
- 
--    kvm_update_kvm_cpuid_base(vcpu);
--    kvm_update_cpuid_runtime(vcpu);
--    kvm_vcpu_after_set_cpuid(vcpu);
-+	kvm_update_kvm_cpuid_base(vcpu);
-+	kvm_update_cpuid_runtime(vcpu);
-+	kvm_vcpu_after_set_cpuid(vcpu);
- 
--    return 0;
-+	return 0;
- }
- 
- /* when an old userspace process fills a new kernel module */
+> to voltage (like the LTC2997) and temperature to current (like the
+> AD590) linear transducers.
+> In both cases these are assumed to be connected to a voltage ADC.
+
+...
+
+> +       rescale->numerator = MICRO;
+
+Same comment, please double check we imply 10^-6 and not 10^6 here.
+
 -- 
-2.27.0
-
+With Best Regards,
+Andy Shevchenko

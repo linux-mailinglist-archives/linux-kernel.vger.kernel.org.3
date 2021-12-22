@@ -2,98 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9AF247CCFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 07:31:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 552CA47CD02
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 07:31:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242756AbhLVGbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 01:31:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
+        id S242765AbhLVGb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 01:31:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233175AbhLVGbC (ORCPT
+        with ESMTP id S233175AbhLVGb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 01:31:02 -0500
+        Wed, 22 Dec 2021 01:31:26 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52200C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 22:31:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6B1C061574;
+        Tue, 21 Dec 2021 22:31:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DBD7C618BF
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:31:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B83FC36AE5;
-        Wed, 22 Dec 2021 06:31:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640154661;
-        bh=kOC4wWHNwotDFufgc5qAmoRfDRS0MtG/Ry58g//qJNs=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D24E6189F;
+        Wed, 22 Dec 2021 06:31:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3A8AC36AE8;
+        Wed, 22 Dec 2021 06:31:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640154685;
+        bh=7NmdHcwB+/nylAMW4yN/VuHS9DzrX/FmHd8am4UiMOk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Flhc3hMIuoPFhMzcN6pCAvjrTONovn+Ke8Dip1zDqYJ+jOtaHvAoF1u0+r20dTRUG
-         iAsxEv2XH3FkRX9s4hHYKlimA3yjPIh19uVEVexjmlJTCqPGWgvGObO2ORnMmjqdbc
-         pTgmoRulAbGk1Q0TP62/77ZCO7hM4j20sZ5wOC6k=
-Date:   Wed, 22 Dec 2021 07:30:57 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, tytso@mit.edu,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-Subject: Re: [PATCH] random: use BLAKE2s instead of SHA1 in extraction
-Message-ID: <YcLGIbWiMH4VudW0@kroah.com>
-References: <20211221175047.341782-1-Jason@zx2c4.com>
+        b=YfTI1iL0xhlOZc43ftoVaYHxzagg0aC/+9ABfisPvSFbJQfiRjuzHjBjmLrpWWyh2
+         dp4NEr7mV86a1/NSFOzfMZ/zgWTKPZvgvDBNnjsy37THaxGD1VjmO4A95erKu9wGN0
+         uG8XSqNSyNHWz3zdPx+vU7S964D/thEisKaLo+1RXvnQyf5KTLL0eRoXv26h3og8cc
+         B7KtJJKWaOj7wa1RgNoClgpN2QyVDt2FuC52ZanUJ5rTrE7aH9GlSz8lX3aDKvi6Xn
+         VU5czq5lSTIHg0C17dyZUsAjy79J8RIYBYWvoIVj/pbnFpz39dXmK62pJ/jUMFaO6p
+         14QxKWboY+obw==
+Date:   Wed, 22 Dec 2021 12:01:21 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: crypto: convert Qualcomm PRNG to yaml
+Message-ID: <YcLGOWSnIDFpNcW6@matsya>
+References: <20211220184355.86582-1-david@ixit.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211221175047.341782-1-Jason@zx2c4.com>
+In-Reply-To: <20211220184355.86582-1-david@ixit.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 06:50:47PM +0100, Jason A. Donenfeld wrote:
-> This commit addresses one of the lower hanging fruits of the RNG: its
-> usage of SHA1.
-> 
-> BLAKE2s is generally faster, and certainly more secure, than SHA1, which
-> has [1] been [2] really [3] very [4] broken [5]. Additionally, the
-> current construction in the RNG doesn't use the full SHA1 function, as
-> specified, and allows overwriting the IV with RDRAND output in an
-> undocumented way, even in the case when RDRAND isn't set to "trusted",
-> which means potential malicious IV choices. And its short length means
-> that keeping only half of it secret when feeding back into the mixer
-> gives us only 2^80 bits of forward secrecy. In other words, not only is
-> the choice of hash function dated, but the use of it isn't really great
-> either.
-> 
-> This commit aims to fix both of these issues while also keeping the
-> general structure and semantics as close to the original as possible.
-> Specifically:
-> 
->    a) Rather than overwriting the hash IV with RDRAND, we put it into
->       BLAKE2's documented "salt" and "personal" fields, which were
->       specifically created for this type of usage.
->    b) Since this function feeds the full hash result back into the
->       entropy collector, we only return from it half the length of the
->       hash, just as it was done before. This increases the
->       construction's forward secrecy from 2^80 to a much more
->       comfortable 2^128.
->    c) Rather than using the raw "sha1_transform" function alone, we
->       instead use the full proper BLAKE2s function, with finalization.
-> 
-> This also has the advantage of supplying 16 bytes at a time rather than
-> SHA1's 10 bytes, which, in addition to having a faster compression
-> function to begin with, means faster extraction in general. On an Intel
-> i7-11850H, this commit makes calls to RNDRESEEDCRNG around 28% faster.
-> 
-> BLAKE2s itself has the nice property of internally being based on the
-> ChaCha permutation, which the RNG is already using for expansion, so
-> there shouldn't be any issue with newness, funkiness, or surprising CPU
-> behavior, since it's based on something already in use.
-> 
-> [1] https://eprint.iacr.org/2005/010.pdf
-> [2] https://www.iacr.org/archive/crypto2005/36210017/36210017.pdf
-> [3] https://eprint.iacr.org/2015/967.pdf
-> [4] https://shattered.io/static/shattered.pdf
-> [5] https://www.usenix.org/system/files/sec20-leurent.pdf
-> 
-> Reviewed-by: Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+On 20-12-21, 19:43, David Heidelberg wrote:
+> Convert Qualcomm PRNG documentation to yaml format.
 
-0-day build issues asside, this looks sane to me, nice work:
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Acked-By: Vinod Koul <vkoul@kernel.org>
+
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> ---
+>  .../devicetree/bindings/crypto/qcom,prng.txt  | 19 --------
+>  .../devicetree/bindings/crypto/qcom,prng.yaml | 43 +++++++++++++++++++
+>  2 files changed, 43 insertions(+), 19 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/crypto/qcom,prng.txt
+>  create mode 100644 Documentation/devicetree/bindings/crypto/qcom,prng.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/crypto/qcom,prng.txt b/Documentation/devicetree/bindings/crypto/qcom,prng.txt
+> deleted file mode 100644
+> index 7ee0e9eac973..000000000000
+> --- a/Documentation/devicetree/bindings/crypto/qcom,prng.txt
+> +++ /dev/null
+> @@ -1,19 +0,0 @@
+> -Qualcomm MSM pseudo random number generator.
+> -
+> -Required properties:
+> -
+> -- compatible  : should be "qcom,prng" for 8916 etc
+> -              : should be "qcom,prng-ee" for 8996 and later using EE
+> -		(Execution Environment) slice of prng
+> -- reg         : specifies base physical address and size of the registers map
+> -- clocks      : phandle to clock-controller plus clock-specifier pair
+> -- clock-names : "core" clocks all registers, FIFO and circuits in PRNG IP block
+> -
+> -Example:
+> -
+> -	rng@f9bff000 {
+> -		compatible = "qcom,prng";
+> -		reg = <0xf9bff000 0x200>;
+> -		clocks = <&clock GCC_PRNG_AHB_CLK>;
+> -		clock-names = "core";
+> -	};
+> diff --git a/Documentation/devicetree/bindings/crypto/qcom,prng.yaml b/Documentation/devicetree/bindings/crypto/qcom,prng.yaml
+> new file mode 100644
+> index 000000000000..bb42f4588b40
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/crypto/qcom,prng.yaml
+> @@ -0,0 +1,43 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/crypto/qcom,prng.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Pseudo Random Number Generator
+> +
+> +maintainers:
+> +  - Vinod Koul <vkoul@kernel.org>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,prng  # 8916 etc.
+> +      - qcom,prng-ee  # 8996 and later using EE
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: core
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    rng@f9bff000 {
+> +        compatible = "qcom,prng";
+> +        reg = <0xf9bff000 0x200>;
+> +        clocks = <&clk 125>;
+> +        clock-names = "core";
+> +    };
+> -- 
+> 2.34.1
+
+-- 
+~Vinod

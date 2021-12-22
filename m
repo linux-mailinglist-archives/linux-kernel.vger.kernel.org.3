@@ -2,100 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9EA47D909
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 22:59:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4AF47D90F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 23:02:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241141AbhLVV7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 16:59:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234030AbhLVV7u (ORCPT
+        id S240864AbhLVWCw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Dec 2021 17:02:52 -0500
+Received: from coyote.holtmann.net ([212.227.132.17]:49058 "EHLO
+        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230328AbhLVWCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 16:59:50 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E040C061574;
-        Wed, 22 Dec 2021 13:59:50 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JK6gR27d7z4xbd;
-        Thu, 23 Dec 2021 08:59:46 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1640210388;
-        bh=TklSx10aW0pHnE233yn87br6m+Ruo2on2shB4yYZkiA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=RxLoN727VZsOOkkOpjHaMdnRFwscAhkeoR/5foRtoOwlRYSiC2PDTf/NaBU9Jb5rm
-         w64uM0l9gMvPW3pAGOTsh9YfBlGZOBt1fk8asrsPLWQLbQ94qEPPPIopLjy5+uO6nj
-         eP1sY6farBAbQKnEuSqgC8P/OUweGNHGY/ZEacZ6tgiFJ1J21Zsy8JkDJtyrYLdbXT
-         RDUCk74lUK351PBgWFMnmYcuOTvG2iRxeSVMOIQx+mhd/mXWxI/s24L/09X0AY2RVC
-         kpPwIpzGf9lPuB3oiT6vWXytZN6e0o26kBFSPdVLed4xHz/1NEWgrboDgui26YxNBC
-         OPCd42hPV/JFw==
-Date:   Thu, 23 Dec 2021 08:59:44 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        Wed, 22 Dec 2021 17:02:50 -0500
+Received: from smtpclient.apple (p5b3d2e91.dip0.t-ipconnect.de [91.61.46.145])
+        by mail.holtmann.org (Postfix) with ESMTPSA id 9030FCED16;
+        Wed, 22 Dec 2021 23:02:46 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
+Subject: Re: [PATCH v4] arm64: dts: qcom: sc7280: Add bluetooth node on SC7280
+ IDP boards
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <YcNVRNqAbfAYpCWH@ripper>
+Date:   Wed, 22 Dec 2021 23:02:46 +0100
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Balakrishna Godavarthi <bgodavar@codeaurora.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the arm-soc tree
-Message-ID: <20211223085944.0095eaf5@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4DpgRW6knj1wx2f5p4ku0FS";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        Hemantg <hemantg@codeaurora.org>,
+        MSM <linux-arm-msm@vger.kernel.org>,
+        Rocky Liao <rjliao@codeaurora.org>, hbandi@codeaurora.org,
+        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+        mcchou@chromium.org, saluvala@codeaurora.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <A24CF0E8-AA9A-48B8-AE50-74F86F600825@holtmann.org>
+References: <1639587963-22503-1-git-send-email-bgodavar@codeaurora.org>
+ <580E8974-EB7F-4493-BECC-4B09765A954D@holtmann.org>
+ <YcNOvlVQaT80qPsx@google.com> <YcNVRNqAbfAYpCWH@ripper>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+X-Mailer: Apple Mail (2.3693.40.0.1.81)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/4DpgRW6knj1wx2f5p4ku0FS
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Bjorn,
 
-Hi all,
+>>>> Add bluetooth SoC WCN6750 node for SC7280 IDP boards.
+>>>> 
+>>>> Signed-off-by: Balakrishna Godavarthi <bgodavar@codeaurora.org>
+>>>> ---
+>>>> v4:
+>>>> * updated commit subject
+>>>> * Removed drive strength for bt_en
+>>>> * updated swctrl_gpio name to sw_ctrl
+>>>> 
+>>>> v3:
+>>>> * Addressed reviewers comments
+>>>> * Added pin config for sw_ctrl line.
+>>>> v2:
+>>>> * merged two patches into one
+>>>> * Removed unused comments
+>>>> * Removed pinmux & pin conf.
+>>>> * Addressed reviewers comments
+>>>> 
+>>>> v1: initial patch
+>>>> ---
+>>>> arch/arm64/boot/dts/qcom/sc7280-idp.dts  |  4 ++++
+>>>> arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 36 ++++++++++++++++++++++++++++++++
+>>>> arch/arm64/boot/dts/qcom/sc7280-idp2.dts |  4 ++++
+>>>> 3 files changed, 44 insertions(+)
+>>> 
+>>> patch has been applied to bluetooth-next tree.
+>> 
+>> Thanks!
+>> 
+>> I would have expected though that a device tree change goes through
+>> the qcom tree. Maybe Bjorn should pick it too to avoid possible
+>> conflicts?
+> 
+> That would be preferable, I've picked a few patches in these files for
+> v5.17, so there's a risk for conflict as this reaches Linus.
+> 
+> Marcel, let me know if you drop this and I should pick it up.
 
-After merging the arm-soc tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
+ok, dropped the patch.
 
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:109.4-14: Warning (reg_format)=
-: /switch/ports:reg: property has invalid length (4 bytes) (#address-cells =
-=3D=3D 2, #size-cells =3D=3D 1)
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_reg): Fai=
-led prerequisite 'reg_format'
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_bus_num):=
- Failed prerequisite 'reg_format'
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (i2c_bus_reg): Failed=
- prerequisite 'reg_format'
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (spi_bus_reg): Failed=
- prerequisite 'reg_format'
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:106.9-149.5: Warning (avoid_de=
-fault_addr_size): /switch/ports: Relying on default #address-cells value
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:106.9-149.5: Warning (avoid_de=
-fault_addr_size): /switch/ports: Relying on default #size-cells value
+Regards
 
-Maybe introduced by commit
+Marcel
 
-  3d2d52a0d183 ("ARM: dts: BCM5301X: define RTL8365MB switch on Asus RT-AC8=
-8U")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/4DpgRW6knj1wx2f5p4ku0FS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHDn9AACgkQAVBC80lX
-0GyaeAf/WPrbTYp0eDL54QOzju9jt121EbbKjsU2jpj2BC3U80Hsed2r66fcmYkJ
-WaUIm0VojkPQXMRD9Zw/4qO58tzFl2oEYPwNA5N+R7cv4Mpm0ysazrkpU0g3IWw4
-TTFMOTAhwvcxKZVjbKHAKre98bQ3VWbmPfCQuhHmXmwaMwZtwnbGdQ+faRJrl71U
-vz7bXDekUwsmqxFAGGpQMOau48oR/TqmPYgk7SieDBHe9k1Xck8ZLry+RMdzV3QA
-9xtH0cOXBYMS9Pw5VYmxA7VFxtxPPAG2ehtlrY76HcNWwVn9fKoNsk04qsgyIyUj
-7QCkOCNY6We4FVk1pH3m+LCUPut+Tw==
-=UBpu
------END PGP SIGNATURE-----
-
---Sig_/4DpgRW6knj1wx2f5p4ku0FS--

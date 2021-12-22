@@ -2,113 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9FA847D3CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:36:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A2247D3CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:36:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241400AbhLVOgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 09:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
+        id S1343494AbhLVOgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 09:36:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238818AbhLVOgO (ORCPT
+        with ESMTP id S238818AbhLVOgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:36:14 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7C2C061574;
-        Wed, 22 Dec 2021 06:36:13 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso3137566otf.0;
-        Wed, 22 Dec 2021 06:36:13 -0800 (PST)
+        Wed, 22 Dec 2021 09:36:16 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B42C061574;
+        Wed, 22 Dec 2021 06:36:15 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id q16so5333254wrg.7;
+        Wed, 22 Dec 2021 06:36:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YKV2BgPx3gxDDsLRq0VaVFxrk1VsU28qjAbSzmWcK8s=;
-        b=F4FtXIvPLHbNUO3PvwjUupkMTlh/8PoI8Mlv+LjOyiWfHwe3Rp4hnQZYbK32u0+Uf9
-         d2vsLj3kr/GNU6EArfgKY/7c01pFl10W5OlApZ8PcERSfkfKRDeWRSILqMhwWhSMJMzl
-         VnPXpUUwQs39GmhzqKEw98M/UcJxxDoM0A0ovMyK57n2LZ6URDRbzkEgd8Z9c/VR8Gil
-         61TtT5V1UDXYkcSnbPGKlZ2h+jyTxrBQuh0b6sD5WelYsvqD9k7sIMY/0vVuxC5qol0J
-         fMyR/bh7AXjyBNk3tTMl0MMIGVHuTu0YO5n5j8xGABViZbXX3EdAwDSn8f6T4KLQ31/o
-         0e+w==
+        h=message-id:date:mime-version:user-agent:to:content-language:cc:from
+         :subject:content-transfer-encoding;
+        bh=+3GdlkNFtphXM9+jbZr28VK+BqW1pmexR4dHqpidTUM=;
+        b=m70JsyAC9ag04xzSZntp0nBHg3911N/bjISqCtGKsT444xZcRQ4lbpqPu8ZytwS9YW
+         SXgb0qpl/Lqm5dFHbzAgkXJA7a1EbPmAYcurBp99MDMYnn2m2Z2PcIjQ3ZCas+UUMvKW
+         bNi00Hcx24w1/03P482Y8np9mI8vR/k6YOvdVB7H/vKkpg8ebDN7PTFW95fq6TVGEYQm
+         qb2eRBxdlRl+oxcnhRdYjxJoLIBFQMFtI32sHF4rb9nlikFTJAAZN6iX2uF3IiFbY4p+
+         ftUIY6UiBT3HMkaX0EiWFjGzEUQD/5rjPbw7FVPjZTOK0Bjc5zbLz3oxHGE1vk+hyq72
+         mbLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YKV2BgPx3gxDDsLRq0VaVFxrk1VsU28qjAbSzmWcK8s=;
-        b=L+3FMA92WetuaCW7jRseyGw3Pj9i3r2+PmsIwAznWHC3pBS/yQ65IsBY5VsOg30ixu
-         G5bSwf1moIrXh7qeJheG3w9RYKfIgDZQx8/9Fth+KJWddx1CyRiKd+jQH9B/zCFCmGu2
-         k0PRj/wYQ1aJJvkXd1hAGf5mfLOuGgOw828HXm99E0SVWcKoa5lVMEpZC5SZQahiH6aI
-         vyuQHImrYAPEmM7HU06tLXM7x9lUpIydx657c0dNBZ64FxGjVanW2tGnQtmLjyFa6R/C
-         xrlq295G/wOyqHmZ2Raof26jZbjAIHROrp0Z79z05nzIkJUqnv/N+hLyHj9z61TfWMT6
-         9k0g==
-X-Gm-Message-State: AOAM532hX9gC2K1rsGTlP/rew32xh1EZtjQ6FqYtoweF4foofrRWGYn1
-        24TACv0m1JHB9Ku1KyFc0s3llvOpL0cIMXfzEgY=
-X-Google-Smtp-Source: ABdhPJy3WcmtsTxv7JJwydEOin6GI2gdo+m/5Hy64ORpHVjNNh9PY34ZN27QovkF7vfUp/iqgBerodD18DXLUYQeGSA=
-X-Received: by 2002:a9d:6855:: with SMTP id c21mr2261142oto.357.1640183773245;
- Wed, 22 Dec 2021 06:36:13 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:to
+         :content-language:cc:from:subject:content-transfer-encoding;
+        bh=+3GdlkNFtphXM9+jbZr28VK+BqW1pmexR4dHqpidTUM=;
+        b=iU626B1iOaX0XUs232pPwn/8IlMTw6T5/R6J6DRlyxqFA6+ldSXdiI4DnxFV9U4dmL
+         QQyEHFkhYYePb/X1fqR1Naqe8BUIUHD5N6B/LbtGnveNcTMmU2wG3/22GFxJRrhIDeZ9
+         4ES17P4MUucFf6Dd4Fb+HUG0ykAmoRcK6xsWdcOZ/6K2+I7VPLiBSdOE4ubz5cOoUXCh
+         I3VUhCXkMzHDNRdrMc//uCI3NzJMns/RilTVc6yhqlDjn1lVr2FI7KWxiVTlk9BSoVQ+
+         aZswh2hDGGdJYs0HSobRyWcdJr54Qk4S+xz9CrVuM7hBQ6d8N5YaxhX72TmEoheymqBM
+         aLjA==
+X-Gm-Message-State: AOAM533xgpkqwwNk//QoQcNkHMw5tb+8SFDeib7bdTXBFhBlx0zS60wx
+        vINBd87f1sRtIpUvWNcxo0+RsYbZ9W8odUbWtkSlnA==
+X-Google-Smtp-Source: ABdhPJxACWzuou6187/C4WEJ5RESpXHpUy8LrxX+RXk3w/0SvBTHoVE46hocSH6yPsgYW1k61x+0Yw==
+X-Received: by 2002:a5d:6d41:: with SMTP id k1mr2308112wri.134.1640183774131;
+        Wed, 22 Dec 2021 06:36:14 -0800 (PST)
+Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.googlemail.com with ESMTPSA id n7sm2080941wms.45.2021.12.22.06.36.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 06:36:13 -0800 (PST)
+Message-ID: <f26b1e6f-f3fc-191b-e613-c0b5748e26ef@gmail.com>
+Date:   Wed, 22 Dec 2021 14:36:12 +0000
 MIME-Version: 1.0
-References: <20211218042226.2608212-1-yzhai003@ucr.edu>
-In-Reply-To: <20211218042226.2608212-1-yzhai003@ucr.edu>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 22 Dec 2021 09:36:02 -0500
-Message-ID: <CADnq5_MT3Ci94jytrXWM_WJaMU7BpzQHMhJnPb-hgUhU6JDa1w@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: Fix the uninitialized variable in enable_stream_features()
-To:     Yizhuo Zhai <yzhai003@ucr.edu>
-Cc:     David Airlie <airlied@linux.ie>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        Meenakshikumar Somasundaram <meenakshikumar.somasundaram@amd.com>,
-        Jun Lei <jun.lei@amd.com>, Anthony Koo <Anthony.Koo@amd.com>,
-        Jimmy Kizito <Jimmy.Kizito@amd.com>,
-        Wenjing Liu <wenjing.liu@amd.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        "Guo, Bing" <Bing.Guo@amd.com>, Leo Li <sunpeng.li@amd.com>,
-        Agustin Gutierrez <agustin.gutierrez@amd.com>,
-        Mark Morra <MarkAlbert.Morra@amd.com>,
-        Robin Singh <robin.singh@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "for 3.8" <stable@vger.kernel.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+To:     linux-alpha@vger.kernel.org
+Content-Language: en-US
+Cc:     Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   "Colin King (gmail)" <colin.i.king@gmail.com>
+Subject: kernel oops when reading /proc/bus/pci/00/01.00 with odd size and odd
+ alignment
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+Hi,
 
-Alex
+While testing the Alpha kernel with stress-ng procfs test I found that 
+misaligned odd reads cause an oops. I was able to figure out a simple 
+reproducer as follows:
 
-On Fri, Dec 17, 2021 at 11:22 PM Yizhuo Zhai <yzhai003@ucr.edu> wrote:
->
-> In function enable_stream_features(), the variable "old_downspread.raw"
-> could be uninitialized if core_link_read_dpcd() fails, however, it is
-> used in the later if statement, and further, core_link_write_dpcd()
-> may write random value, which is potentially unsafe.
->
-> Fixes: 6016cd9dba0f ("drm/amd/display: add helper for enabling mst stream features")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Yizhuo Zhai <yzhai003@ucr.edu>
-> ---
->  drivers/gpu/drm/amd/display/dc/core/dc_link.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link.c b/drivers/gpu/drm/amd/display/dc/core/dc_link.c
-> index c8457babfdea..fd5a0e7eb029 100644
-> --- a/drivers/gpu/drm/amd/display/dc/core/dc_link.c
-> +++ b/drivers/gpu/drm/amd/display/dc/core/dc_link.c
-> @@ -1844,6 +1844,8 @@ static void enable_stream_features(struct pipe_ctx *pipe_ctx)
->                 union down_spread_ctrl old_downspread;
->                 union down_spread_ctrl new_downspread;
->
-> +               memset(&old_downspread, 0, sizeof(old_downspread));
-> +
->                 core_link_read_dpcd(link, DP_DOWNSPREAD_CTRL,
->                                 &old_downspread.raw, sizeof(old_downspread));
->
-> --
-> 2.25.1
->
+dd seek=1 if=/proc/bus/pci/00/01.0 of=/dev/zero bs=5
+
+
+[ 2013.722601] Unable to handle kernel paging request at virtual address 
+0000000000000004
+[ 2013.722601] dd(1195): Oops -1
+[ 2013.722601] pc = [<0000000000000004>]  ra = [<fffffc00014fd634>]  ps 
+= 0000    Tainted: G      D     E
+[ 2013.722601] pc is at 0x4
+[ 2013.722601] ra is at proc_bus_pci_read+0x244/0x3d0
+[ 2013.722601] v0 = 0000000000000000  t0 = 0000000009080000  t1 = 
+0000000000000000
+[ 2013.722601] t2 = 0000000009080000  t3 = 0000000000000000  t4 = 
+fffffc0006c43f08
+[ 2013.722601] t5 = 0000000000000011  t6 = 0000000000000012  t7 = 
+fffffc0006c40000
+[ 2013.722601] s0 = fffffc0000967000  s1 = 0000000000000005  s2 = 
+000000012002a005
+[ 2013.722601] s3 = 000000012002a001  s4 = 0000000000000010  s5 = 
+0000000000000000
+[ 2013.722601] s6 = ffffffffdffd600f
+[ 2013.722601] a0 = 0000000000000000  a1 = fffffd01fe000810  a2 = 
+0000000000000010
+[ 2013.722601] a3 = 0000000000000004  a4 = fffffc0006c43dd8  a5 = 
+fffffc0003c05dd8
+[ 2013.722601] t8 = 0000000000000001  t9 = 0000000000000001  t10= 
+000000012002e058
+[ 2013.722601] t11= 000000012002e058  pv = fffffc0001023650  at = 
+0000000010a8b186
+[ 2013.726508] gp = fffffc00025197f8  sp = 00000000d1f90b3a
+[ 2013.726508] Trace:
+[ 2013.726508] [<fffffc00012d39e8>] proc_reg_read+0xc8/0x140
+[ 2013.727484] [<fffffc000120ed58>] vfs_read+0xd8/0x220
+[ 2013.727484] [<fffffc000120ed14>] vfs_read+0x94/0x220
+[ 2013.727484] [<fffffc00010110ec>] entMM+0x9c/0xc0
+[ 2013.727484] [<fffffc000120f274>] ksys_read+0x84/0x130
+[ 2013.728461] [<fffffc000101149c>] entSys+0xac/0xc0
+
+[ 2013.728461] Code:
+[ 2013.728461]  00000000
+[ 2013.728461]  00063301
+[ 2013.728461]  000012c8
+[ 2013.729437]  00001111
+[ 2013.729437]  0003fac6
+
+Colin

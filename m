@@ -2,129 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B7447D127
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C267847D12C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244727AbhLVLlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 06:41:24 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:39656 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237624AbhLVLlX (ORCPT
+        id S229503AbhLVLog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 06:44:36 -0500
+Received: from mout.kundenserver.de ([212.227.126.130]:44969 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232235AbhLVLoa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 06:41:23 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id D483B212B9;
-        Wed, 22 Dec 2021 11:41:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1640173281; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ps07gwicxIa6if6MGpsmNI9n6pnErUxgnZxQzcd6Lbk=;
-        b=sP3nnik3EJAsx3SWWYmI+EC3wsLNXWfVbcgv3VLqEXO8fzAegf2b6Sv4hNKy/1wb8fF78n
-        yDahY3G7ZuiIOAuh2CvzSLLFls2YtMKRdz0LdF2BGksXesvgavLjoLsPDVvl5wba9Dv2zr
-        PuTQcX61PzWQjpPDl++F1vLDoiqNCqc=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B8BB1A3B84;
-        Wed, 22 Dec 2021 11:41:21 +0000 (UTC)
-Date:   Wed, 22 Dec 2021 12:41:18 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Alexey Makhalov <amakhalov@vmware.com>
-Cc:     Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
-Message-ID: <YcMO3qm9UDcPZjCT@dhcp22.suse.cz>
-References: <2291C572-3B22-4BE5-8C7A-0D6A4609547B@vmware.com>
- <YbHS2qN4wY+1hWZp@dhcp22.suse.cz>
- <B5B3BCE0-853B-444E-BAD8-823CEE8A3E59@vmware.com>
- <YbIEqflrP/vxIsXZ@dhcp22.suse.cz>
- <7D1564FA-5AC6-47F3-BC5A-A11716CD40F2@vmware.com>
- <YbMZsczMGpChaWz0@dhcp22.suse.cz>
- <YbyIVPAc2A2sWO8/@dhcp22.suse.cz>
- <FD8165E2-E17E-458E-B4EE-8C4DB21BA3B6@vmware.com>
- <YcGignpJgdvy9Vnu@dhcp22.suse.cz>
- <078460FE-84C4-442C-BD80-97DB90557809@vmware.com>
+        Wed, 22 Dec 2021 06:44:30 -0500
+Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mxpqo-1mGYp11rw6-00zFvk for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021
+ 12:44:29 +0100
+Received: by mail-wr1-f52.google.com with SMTP id a9so4311641wrr.8;
+        Wed, 22 Dec 2021 03:44:29 -0800 (PST)
+X-Gm-Message-State: AOAM531QCEHD57pOEaqDZmGr05iJKHX+dWRtp5xyBluCQyH9Ry7REkzr
+        0GdvW//4sqWvYEY2QOxgZvfi5KYFPQncClGE+f4=
+X-Google-Smtp-Source: ABdhPJyMFXz7aqbM7KdvBb77zETinuaSKzit22o64H1Git0wpQHkxlanFxDaPfbOiMZL+6FwJBcCxSM41Y+rYzB+cVs=
+X-Received: by 2002:a5d:6989:: with SMTP id g9mr1836953wru.12.1640173469025;
+ Wed, 22 Dec 2021 03:44:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <078460FE-84C4-442C-BD80-97DB90557809@vmware.com>
+References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-3-guoren@kernel.org>
+ <CAK8P3a3dS=Ne0Pd2qZc8vB2whM7AUcJ1BNbhtf6EEboWAPpSug@mail.gmail.com> <CAJF2gTTN1HZeycK-WOFH0EjmjtBB4T=9de6Qrjs=uhAsLoOFaQ@mail.gmail.com>
+In-Reply-To: <CAJF2gTTN1HZeycK-WOFH0EjmjtBB4T=9de6Qrjs=uhAsLoOFaQ@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 22 Dec 2021 12:44:13 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3m2Mz4Tvu+3cdji6iq_wvFZsYoyKvnaNKTEjE+ivex6A@mail.gmail.com>
+Message-ID: <CAK8P3a3m2Mz4Tvu+3cdji6iq_wvFZsYoyKvnaNKTEjE+ivex6A@mail.gmail.com>
+Subject: Re: [PATCH 02/13] riscv: Fixup difference with defconfig
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:NcKuRv57fUJ/PqJdFQAJs1tvYpP4e80WQoLjl9H2Wpm7Qf+tOeo
+ BZWsaT4Y9j6H4ZL2MfRTMvJImLS16hORmdllpGTjc3udSWUNJvAXyuFd3Lo5ozj7zf6MStf
+ Z/I0nQ34emc2Z/NjTidwMNy3IEaw5t+vU3/6LYgJBsOcUg0oOarl5EW6kp+tyDhlPxhivYO
+ kEE9ezNDqM794qgxbMB4g==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dBIY+UQfeSo=:B/21Tc2TG52oY8kkN0RHEr
+ soJw7MSqgdixmpnjc5pK3QaF7Z/TCur0hZe4Hwo5LlAXImf/QbnPOkRNXz7zqQhDVh4R7L0rh
+ YdUrynooQLu2w7Xp+ZlpuDILUjA2vDOxUMqTUvhqF0OXhC/35i+TB1xBdikogFQyGsbsMdKca
+ VoBNTb8UpH45BVPPlbOFjWaKg9s+0UKqJI5zFddHkKl04k05uOROIYqrxk7ASckVx9rKt8Zz1
+ C0qul2JqRkevrNgBINfDiur3PdlIgXIddHKhS8Njf325BoQMLqxEb3QaKgk2t6eEPWIqih5jk
+ 4QRwqvZS/Plz/A3C3e0HSUmXv2ZrI8WMlqNS6grBbzN6KVUi0LLhFlifvQHjRwi/9mWECyZ/q
+ uX3QxuVPCPFt4Kydz9pj5DEu51fXxvjX1Nzh2mCLfTFReStMFUi5H3yUiaD3+yMiqZef4leKY
+ 6IG0nokWmzgqF8Sge2MtwuIDrgEMsg0o3c0Jz+XrtJENt+p1DxIfYfE4cE7qMANwT/T0SkqCj
+ tzvvo9w5V5vn8Se/7oz8YBAewLA3n/pwEIdFjuGwKR7VvZae6x0RnK242a7ZtoUMtiZM7fBOT
+ OEArqEvzCQGVma/b9BNtYZwiYZC1zHHfB9MheVDsGFyv/1rY6EAJAHo+B0UhHHbFSZb8sp9og
+ rLG+NiOD19LKSsolBQ95NQDCagax3F+0qiwV5YHh1ExAMl/mKpzxxXSZ2Dhz0jEZI64kD0NuR
+ kFPVYZa5I6E+JVMUkE77oxvjjhhPO2bseZP223ExzIIR/2EmZ///f1DEk+sTmkH9A+tgIJKTF
+ PRcTH0dFQw1fJLJHQa3S964+CfGtj+Z8GYOgvoZR5aaX9XeOhw=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 21-12-21 20:23:34, Alexey Makhalov wrote:
-> 
-> 
-> > On Dec 21, 2021, at 1:46 AM, Michal Hocko <mhocko@suse.com> wrote:
-> > 
-> > On Tue 21-12-21 05:46:16, Alexey Makhalov wrote:
-> >> Hi Michal,
-> >> 
-> >> The patchset looks good to me. I didn’t find any issues during the testing.
-> > 
-> > Thanks a lot. Can I add your Tested-by: tag?
-> Sure, thanks.
+On Wed, Dec 22, 2021 at 12:34 PM Guo Ren <guoren@kernel.org> wrote:
+> On Wed, Dec 22, 2021 at 1:09 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
+> > If the intention is to keep them in sync, maybe use a fragment for 32-bit
+> > mode, like powerpc or mips do.
+>
+> Some people are familiar with "make rv32_defconfig". There has a
+> 32-bit.config fragment config in arch/riscv/configs/.
+>
+> I've tested with:
+>
+> make ARCH=riscv CROSS_COMPILE=riscv32-buildroot-linux-gnu-
+> EXTRA_CFLAGS+=-g O=../build-rv32/ defconfig 32-bit.config
+>
+> The above is tested Okay, do you mean we should delete rv32_defconfig?
+> I think it's another topic, I just want them the same in "compat"
+> patchset.
 
-Thanks I will add those then.
- 
-> >> I have one concern regarding dmesg output. Do you think this messaging is
-> >> valid if possible node is not yet present?
-> >> Or is it only the issue for virtual machines?
-> >> 
-> >>  Node XX uninitialized by the platform. Please report with boot dmesg.
-> >>  Initmem setup node XX [mem 0x0000000000000000-0x0000000000000000]
-> > 
-> > AFAIU the Initmem part of the output is what concerns you, right? Yeah,
-> First line actually, this sentence “Please report with boot dmesg.”. But
-> there is nothing to fix, at least for VMs.
+I think what you can do is to add rv32_defconfig as a target in
+arch/riscv/Makefile the same way as rv32_randconfig, and then
+delete the other file, that will keep the existing process working
+for any existing users.
 
-I am still not sure because at least x86 aims at handling that at the
-platform code. David has given us a way to trigger this from kvm/qemu so
-I will play with that. I can certainly change the wording but this whole
-thing was meant to do a fixup after the arch specific code has initialized
-everything.
+Given that there are no specific rv32 SoC implementations supported
+by the kernel today (other than SOC_VIRT), the number of users
+would be close to zero anyway.
 
-> > that really is more cryptic than necessary. Does this look any better?
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index 34743dcd2d66..7e18a924be7e 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -7618,9 +7618,14 @@ static void __init free_area_init_node(int nid)
-> > 	pgdat->node_start_pfn = start_pfn;
-> > 	pgdat->per_cpu_nodestats = NULL;
-> > 
-> > -	pr_info("Initmem setup node %d [mem %#018Lx-%#018Lx]\n", nid,
-> > -		(u64)start_pfn << PAGE_SHIFT,
-> > -		end_pfn ? ((u64)end_pfn << PAGE_SHIFT) - 1 : 0);
-> > +	if (start_pfn != end_pfn) {
-> > +		pr_info("Initmem setup node %d [mem %#018Lx-%#018Lx]\n", nid,
-> > +			(u64)start_pfn << PAGE_SHIFT,
-> > +			end_pfn ? ((u64)end_pfn << PAGE_SHIFT) - 1 : 0);
-> > +	} else {
-> > +		pr_info("Initmem setup node %d as memoryless\n", nid);
-> > +	}
-> > +
-> > 	calculate_node_totalpages(pgdat, start_pfn, end_pfn);
-> > 
-> > 	alloc_node_mem_map(pgdat);
-> Second line looks much better.
-
-OK, I will fold that in. I think it is more descriptive as well.
-> 
-> Thank you,
-> —Alexey
-> 
-
--- 
-Michal Hocko
-SUSE Labs
+       Arnd

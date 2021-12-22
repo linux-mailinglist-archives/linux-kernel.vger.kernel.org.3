@@ -2,140 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 867A347D628
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 18:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE9047D637
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:05:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344458AbhLVR41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 12:56:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52660 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234161AbhLVR40 (ORCPT
+        id S240071AbhLVSFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 13:05:53 -0500
+Received: from mail-qk1-f172.google.com ([209.85.222.172]:39743 "EHLO
+        mail-qk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232105AbhLVSFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 12:56:26 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5061C061574;
-        Wed, 22 Dec 2021 09:56:25 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id v15so5273716ljc.0;
-        Wed, 22 Dec 2021 09:56:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8Qi/O7lIyvFx6HdoJVbT/DApgKxTLrXk+chsL3MpNkU=;
-        b=DEOCcPYN7PZ2FPgKRMZHcsZQiSdTPq4/xgiMp2cbzow5jL4s7USkkXAqHqs5+qhgXi
-         3NFjZ9p/vVLUe8Mfhmt85ggm7ysgINjpbw4wXwyPBC8fY6osk2xd6xzLtanGhWIDI4sP
-         2IcU7HvWz2PoNAroVfPrkp8NquIv6HcLcIFrZ45j0wG1jWJo8zg4gWb0VqebT7Rff/6G
-         fzfVLf1JC7hDL07YYxK0WaQX+NI8hiWYNhXmfkRESdk/Ur8qK9BXMJxQ5AZtdGdMXcEQ
-         6FnLx62xw+oTUAWhZKXPbf3nlCWtoW+2qbRDvHntMcCyApWb3+vw6EUI84ElmXNF0Rbd
-         t0Bg==
+        Wed, 22 Dec 2021 13:05:51 -0500
+Received: by mail-qk1-f172.google.com with SMTP id 69so3100235qkd.6;
+        Wed, 22 Dec 2021 10:05:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8Qi/O7lIyvFx6HdoJVbT/DApgKxTLrXk+chsL3MpNkU=;
-        b=yDAAaa5P1P+1py6yGP/xZE/CTCOiUhCFDqzBBg7LFEL2iRT6Z5JWolmDiOXO5xBmLr
-         ZOswaQ2vCVwOQNjaO3+vd6mmGHbVVuwm+Y8hkJTaNc+jd3bo/sUwBMEyGpo34cYOWklc
-         wp12jx4XzfMpC89YYKsp4iF5Bl2jnzSQDtMNcRlS+vrMuKfNH2UXhGLR94pt00x1583/
-         QV3A4PNbIFZ7LJJmAh0/0BTjMpU5RZD69LKzbdIxjmbb/YtZYo4WDcE0Mai9b3x0ggAP
-         6cVL2Cchz5PuSOvpnbLrlVBrcTvGIFEWeEJMlBVPlQJiu1815j+A8mHdSKkvKBtOwhwr
-         iGXQ==
-X-Gm-Message-State: AOAM5327kd3iew97qQvndimA1Uc0uhTTdgkV9XpnFJQYS5kAiZneRDpQ
-        5RWKKr/fSJ/qTOrtrRZpqME=
-X-Google-Smtp-Source: ABdhPJz6M6i+H43r9ZMhVG80++2xYfDG3a7PHVDiFwBl1IQH6jVMeO47yuMn+oGjh06TlTSwnJuRoQ==
-X-Received: by 2002:a05:651c:1548:: with SMTP id y8mr2781458ljp.458.1640195784086;
-        Wed, 22 Dec 2021 09:56:24 -0800 (PST)
-Received: from mobilestation ([95.79.218.126])
-        by smtp.gmail.com with ESMTPSA id e13sm275141lfs.306.2021.12.22.09.56.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 09:56:23 -0800 (PST)
-Date:   Wed, 22 Dec 2021 20:56:21 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jan Dabros <jsd@semihalf.com>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, jarkko.nikula@linux.intel.com,
-        mika.westerberg@linux.intel.com, wsa@kernel.org,
-        rrangel@chromium.org, mw@semihalf.com, jaz@semihalf.com,
-        upstream@semihalf.com
-Subject: Re: [RFC 0/2] i2c-designware: Add support for AMD PSP semaphore
-Message-ID: <20211222175621.7gikyvqu7xvc2qxb@mobilestation>
-References: <20211222094558.2098791-1-jsd@semihalf.com>
- <YcMP/9ATna3/yckC@smile.fi.intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nf5aXPoDAE/jO+Ix3AJanCNaQUNSY1ijxTeKGh4Dwj8=;
+        b=NnQ/3eSpkQ0kEHYNXFHrFGqPAj2b1gEs+n+Sh6LAuNQcmwUVujSzsN9uYpyLsdsfxO
+         ZBV+i0f7bapvTxDVyvDKuu+3JIqOV6VJA80zaJPOZuRacPEBA411jfw/OoYPAKsyISqb
+         LHbEiViDFjDyV2SmvEJKSfP3UWlKaI3ZOg+uSVvDscRVtw5p/FvUCR3+GwFY/GCgqMxj
+         w5YZrYqhq2YhPWatmApmKnlKGcaJ45s/nwA6Lur4F3b0vuYG2JaLDj2Ha2Qye6s8EpKE
+         jksodBppqFagbRtiiyyE8Erirw+7Ld/gj4eO2bT4ymTKe3U2na8euCGQrzKjICt+HiVk
+         G44A==
+X-Gm-Message-State: AOAM5338mp5ryKu+KUuSni5U2BshQlKwvn1GqAUQRSAKZwKGETkAJTP6
+        tQGgam80XUL22KYHfb7iCWyTmx4KldpsG7yZc+E=
+X-Google-Smtp-Source: ABdhPJxfTli9xvKRiKrxKAotvByqu494ew7/JecFpwV4DxThjSnnC0kkG6jK/t/8mb4L410nnerUW02iqxOOOFVdO58=
+X-Received: by 2002:a05:620a:706:: with SMTP id 6mr2880466qkc.374.1640196350918;
+ Wed, 22 Dec 2021 10:05:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YcMP/9ATna3/yckC@smile.fi.intel.com>
+References: <20211219163528.1023186-1-ray.huang@amd.com> <20211219163528.1023186-3-ray.huang@amd.com>
+ <YcH2hYJN9+NudhH4@zn.tnic> <YcJulhgWUj6kmQEw@amd.com>
+In-Reply-To: <YcJulhgWUj6kmQEw@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 22 Dec 2021 19:05:40 +0100
+Message-ID: <CAJZ5v0gA+FNh9EQWm0urtzFLgvzuakGydmKXG1pqakqrmDg18w@mail.gmail.com>
+Subject: Re: [PATCH v6 02/14] x86/msr: add AMD CPPC MSR definitions
+To:     Huang Rui <ray.huang@amd.com>
+Cc:     Borislav Petkov <bp@suse.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Steven Noonan <steven@valvesoftware.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy, Jan
+On Wed, Dec 22, 2021 at 1:17 AM Huang Rui <ray.huang@amd.com> wrote:
+>
+> Hi Boris,
+>
+> On Tue, Dec 21, 2021 at 11:45:09PM +0800, Borislav Petkov wrote:
+> > On Mon, Dec 20, 2021 at 12:35:16AM +0800, Huang Rui wrote:
+> >
+> > Capitalize subject's first letter:
+> >  [x86/msr: add AMD CPPC MSR definitions]
+> >  [x86/msr: Add AMD CPPC MSR definitions]
+>
+> Thank you for the reply! Updated.
+>
+> >
+> > > AMD CPPC (Collaborative Processor Performance Control) function uses MSR
+> > > registers to manage the performance hints. So add the MSR register macro
+> > > here.
+> > >
+> > > Signed-off-by: Huang Rui <ray.huang@amd.com>
+> > > ---
+> > >  arch/x86/include/asm/msr-index.h | 17 +++++++++++++++++
+> > >  1 file changed, 17 insertions(+)
+> > >
+> > > diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+> > > index 01e2650b9585..e7945ef6a8df 100644
+> > > --- a/arch/x86/include/asm/msr-index.h
+> > > +++ b/arch/x86/include/asm/msr-index.h
+> > > @@ -486,6 +486,23 @@
+> > >
+> > >  #define MSR_AMD64_VIRT_SPEC_CTRL   0xc001011f
+> > >
+> > > +/* AMD Collaborative Processor Performance Control MSRs */
+> > > +#define MSR_AMD_CPPC_CAP1          0xc00102b0
+> > > +#define MSR_AMD_CPPC_ENABLE                0xc00102b1
+> > > +#define MSR_AMD_CPPC_CAP2          0xc00102b2
+> > > +#define MSR_AMD_CPPC_REQ           0xc00102b3
+> > > +#define MSR_AMD_CPPC_STATUS                0xc00102b4
+> > > +
+> > > +#define CAP1_LOWEST_PERF(x)        (((x) >> 0) & 0xff)
+> > > +#define CAP1_LOWNONLIN_PERF(x)     (((x) >> 8) & 0xff)
+> > > +#define CAP1_NOMINAL_PERF(x)       (((x) >> 16) & 0xff)
+> > > +#define CAP1_HIGHEST_PERF(x)       (((x) >> 24) & 0xff)
+> > > +
+> > > +#define REQ_MAX_PERF(x)            (((x) & 0xff) << 0)
+> > > +#define REQ_MIN_PERF(x)            (((x) & 0xff) << 8)
+> > > +#define REQ_DES_PERF(x)            (((x) & 0xff) << 16)
+> > > +#define REQ_ENERGY_PERF_PREF(x)    (((x) & 0xff) << 24)
+> >
+> > All those bitfield names are too generic - they should at least be
+> > prefixed with "CPPC_"
+> >
+> > If an Intel CPPC set of MSRs appears too, then the prefix should be
+> > "AMD_CPPC_" and so on.
+> >
+>
+> The similar function in Intel names HWP (Hardware P-State), and related MSR
+> registers names as "HWP_" as the prefixes like below:
+>
+> /* IA32_HWP_CAPABILITIES */
+> #define HWP_HIGHEST_PERF(x)             (((x) >> 0) & 0xff)
+> #define HWP_GUARANTEED_PERF(x)          (((x) >> 8) & 0xff)
+> #define HWP_MOSTEFFICIENT_PERF(x)       (((x) >> 16) & 0xff)
+> #define HWP_LOWEST_PERF(x)              (((x) >> 24) & 0xff)
+>
+> Hi Rafael,
+>
+> Can we use the "CPPC_" as the prefixes for AMD CPPC MSR bitfield name?
 
-On Wed, Dec 22, 2021 at 01:46:07PM +0200, Andy Shevchenko wrote:
-> +Serge
-> 
-> On Wed, Dec 22, 2021 at 10:45:56AM +0100, Jan Dabros wrote:
-> > This patchset comprises support for new i2c-designware controller setup on some
-> > AMD Cezanne SoCs, where x86 is sharing i2c bus with PSP. PSP uses the same
-> > controller and acts as an i2c arbitrator there (x86 is leasing bus from it).
-> > 
-> > First commit aims to improve generic i2c-designware code by adding extra locking
-> > on probe() and disable() paths. I would like to ask someone with access to
-> > boards which use Intel BayTrail(CONFIG_I2C_DESIGNWARE_BAYTRAIL) to verify
-> > behavior of my changes on such setup.
-> > 
-> > Second commit adds support for new PSP semaphore arbitration mechanism.
-> > Implementation is similar to the one from i2c-designware-baytrail.c however
-> > there are two main differences:
-> > 1) Add new ACPI ID in order to protect against silent binding of the old driver
-> > to the setup with PSP semaphore. Extra flag ARBITRATION_SEMAPHORE added to this
-> > new _HID allows to recognize setup with PSP.
-> > 2) Beside acquire_lock() and release_lock() methods we are also applying quirks
-> > to the lock_bus() and unlock_bus() global adapter methods. With this in place
-> > all i2c clients drivers may lock i2c bus for a desired number of i2c
-> > transactions (e.g. write-wait-read) without being aware of that such bus is
-> > shared with another entity.
-> > 
-> > Mark this patchset as RFC, since waiting for new ACPI ID value. As a temporary
-> > measure use "AMDI9999". Once proper one will be ready, will re-send this CL for
-> > review & merge.
-> > 
-> > Looking forward to some feedback.
-> 
-> If I am not mistaken something similar happened in Baikal T1.
-> Perhaps Serge has something to share.
-
-No, Baikal-T1 doesn't have such specific interface sharing since it
-doesn't have any co-processor (though a scenario of booting different
-kernels on each CPU core was at consideration by some our customers).
-So the only peculiar things the SoC has got are two interfaces with
-non-standard access:
-1) DW SPI controller with memory mapped 16MB direct EEPROM access. DW
-SPI CSR/EEPROM mapping are switched by a multiplexer (basically just a
-flag) embedded into the system controller.
-2) DW i2c controller with indirect registers access. Originally it was
-supposed to be used by the system bootloader for some bootloading
-stuff, but the actual usage scenario wasn't described by the SoC
-engineers. The chip initially loads the code from the SPI-flash only,
-which can be of up to 16MB size. It's more than enough to start pretty
-complex systems, so an additional i2c interface turned to be not
-really needed. Anyway other than having an indirectly accessible
-CSRs it's pretty much normal DW I2C controller.
-
-But you are right in a reference to another BE-chip - Baikal-M1. The
-i2c/spi/gpio/uart interfaces sharing support might get to be needed
-for it since aside with four 2-cored Cortex-A57 clusters it has got an
-embedded SCP co-processor which can access the same SoC interfaces as
-the CPU cores. Though Baikal-M1 isn't supported by the mainline kernel
-at the moment. We are going to start working on it on the next year.
-Then we'll most likely need to implement the interface sharing feature
-like the one introduced in this RFC. But for now alas I can't be much
-helpful.
-
--Sergey
-
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+Well, what about using "AMD_CPPC_" instead of "REQ_" in these names?
+The names of the analogous Intel macros start with "HWP_" which
+basically stands for "INTEL_CPPC_".

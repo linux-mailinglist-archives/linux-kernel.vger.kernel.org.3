@@ -2,102 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DAA47D192
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:19:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8B347D194
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235738AbhLVMTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 07:19:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31891 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229616AbhLVMTB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:19:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640175540;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cL61vxvdQEO5k/ykdSCycESvP1inlvyehpY4sAwws0I=;
-        b=IomJKT4S3ijeXE4FkCIrwhzoV4RtRnhy6WaBFZMOFp1QGaVN77zr1lUekHgjccmItLL5zo
-        MdbWjEpQ5jlmy9fmZ5EG9amlSQe8MUaLHGdpifvmttUM6MURQQ3Q2/Q9LoXpBA8/p+T3kc
-        mTXziYuz8NJCESmHn2PTf6YdkYnCKLw=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-586-BYM7eRkvNFiNS8JZOtaOIg-1; Wed, 22 Dec 2021 07:18:59 -0500
-X-MC-Unique: BYM7eRkvNFiNS8JZOtaOIg-1
-Received: by mail-wm1-f71.google.com with SMTP id l20-20020a05600c1d1400b003458e02cea0so2918440wms.7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 04:18:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cL61vxvdQEO5k/ykdSCycESvP1inlvyehpY4sAwws0I=;
-        b=UexQEP4I5Yg/nIOU89diXPF4SORWzIAnjYtkt020XVZmfniYU9rniIRjET3ScadhaY
-         7fTrimY2YswuP253KVxkdZt4Kfl/Nb4Pv6P06+sSzx8I5ePbq0gH99ULOzVuyEN+pFdd
-         gSX7UTTaD6dcwRJPB245R/Qp1WgZQBo/yOqD1hPP94jb0R9c5Q1OGZPJdmXVoPmfUho1
-         Dxb5FTLKGvTSviVYkGXaKp2MVkWVaT/YG3lu/8EZ4jKCZR5Nl4+ln1ZMZeTtyfHZhY3i
-         ooqWMszVmV2ZKEwJESwur3qDZR/M2fmlJvy2AUtGa/HsLjSHfHKnu3BDcqqZ7H2KFFaA
-         tO0A==
-X-Gm-Message-State: AOAM532zdzzOLJuPhfoDBoKUnlWIRjdZ4Ri5EIvn46whfN+vrrKF6H0c
-        m+phmh9+9fiFhJ7+vpyWfhwRHKj2UWERMB+RahidcmPmTuX1GgGpw1JjjNJGeQQf24Myhiz6TY0
-        WY6ZAufkQ2BRnyu2tOVhwIL0g
-X-Received: by 2002:a05:600c:511c:: with SMTP id o28mr821312wms.96.1640175538758;
-        Wed, 22 Dec 2021 04:18:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy5r7kubxgz+bs8OZwuv5BmfKHiTBiEJEfqXxBgDH8xXoRJQUdklHrzHmZpeba3ojR02aUVTw==
-X-Received: by 2002:a05:600c:511c:: with SMTP id o28mr821303wms.96.1640175538587;
-        Wed, 22 Dec 2021 04:18:58 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id h27sm5365676wmc.43.2021.12.22.04.18.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 04:18:58 -0800 (PST)
-Message-ID: <7b07b437-2bc1-0194-233b-cc6d6c70cfd5@redhat.com>
-Date:   Wed, 22 Dec 2021 13:18:57 +0100
+        id S236001AbhLVMTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 07:19:47 -0500
+Received: from mga03.intel.com ([134.134.136.65]:1689 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229616AbhLVMTq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 07:19:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640175586; x=1671711586;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IpQcbv20rPvoU2QuAxvuOWNufLhcgT8QLvQICN5SqcI=;
+  b=gs2yHw+SZCfmsGYV0NhebdFV9ZVYISCfPCZAyadhDliBaW12qaxy3Ad0
+   9/F87QkyvBO6SqC5/rxq7FGdgE2sOvejAlW8IzeupkXrAwtu8/RUWD6Xf
+   BmhZHOBpOVOcsac6vqudcuBLSe8EF5TTBFntJ+aZsMxqVdNzj2QBhqx5Z
+   mYCh/VPwSvOM0n43MJq8BbeeipwPwVR+qR/PvfeeF1LRAeVGZaugPsW0S
+   6fvV1+ShV6zLlaTZVzBZmrS1Ufidbdjr3Rx7UETzTVIzA1sdPvpg4K0zo
+   mvDDGVYk7ua4EpspSUkrR0DSYkkMFdDbxLkEk+26IVo8NJa9u0Hl3UycT
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240559036"
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="240559036"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 04:19:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="685004645"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 22 Dec 2021 04:19:44 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n00ar-0000QD-3M; Wed, 22 Dec 2021 12:19:41 +0000
+Date:   Wed, 22 Dec 2021 20:19:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: mm/kasan/sw_tags.c:211:6: warning: no previous prototype for
+ function 'kasan_tag_mismatch'
+Message-ID: <202112222040.WutR6KJ2-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v3 03/10] drm/bochs: Replace module-init boiler-plate code
- with DRM helpers
-Content-Language: en-US
-To:     Gerd Hoffmann <kraxel@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        virtualization@lists.linux-foundation.org
-References: <20211222082831.196562-1-javierm@redhat.com>
- <20211222082831.196562-4-javierm@redhat.com>
- <20211222102135.fhtfkinp2u6yjwx3@sirius.home.kraxel.org>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20211222102135.fhtfkinp2u6yjwx3@sirius.home.kraxel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Gerd,
+Hi Peter,
 
-On 12/22/21 11:21, Gerd Hoffmann wrote:
-> On Wed, Dec 22, 2021 at 09:28:24AM +0100, Javier Martinez Canillas wrote:
->> -static int __init bochs_init(void)
->> -{
->> -	if (drm_firmware_drivers_only() && bochs_modeset == -1)
->> -		return -EINVAL;
-> 
-> Also cleanup bochs_modeset?  I guess its not used any more after this
-> patch ...
->
+FYI, the error/warning still remains.
 
-That's still used. It is passed as an argument to the macro:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2f47a9a4dfa3674fad19a49b40c5103a9a8e1589
+commit: 1cbdf60bd1b74e397d48aa877367cfc621f45ffe kasan: arm64: support specialized outlined tag mismatch checks
+date:   7 months ago
+config: arm64-randconfig-r023-20211222 (https://download.01.org/0day-ci/archive/20211222/202112222040.WutR6KJ2-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project de4e0195ae1c39f1c3b07834b8e32c113f4f20eb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1cbdf60bd1b74e397d48aa877367cfc621f45ffe
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 1cbdf60bd1b74e397d48aa877367cfc621f45ffe
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash mm/
 
-drm_module_pci_driver_if_modeset(bochs_pci_driver, bochs_modeset);
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Best regards,
--- 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+All warnings (new ones prefixed by >>):
 
+>> mm/kasan/sw_tags.c:211:6: warning: no previous prototype for function 'kasan_tag_mismatch' [-Wmissing-prototypes]
+   void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
+        ^
+   mm/kasan/sw_tags.c:211:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/kasan_tag_mismatch +211 mm/kasan/sw_tags.c
+
+   210	
+ > 211	void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

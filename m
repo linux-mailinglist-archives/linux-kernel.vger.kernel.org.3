@@ -2,92 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B004547CF16
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:20:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3635B47CF29
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:25:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243880AbhLVJUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 04:20:17 -0500
-Received: from mail-ua1-f43.google.com ([209.85.222.43]:40865 "EHLO
-        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239569AbhLVJUQ (ORCPT
+        id S243887AbhLVJZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:25:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49138 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239722AbhLVJYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:20:16 -0500
-Received: by mail-ua1-f43.google.com with SMTP id y23so3019941uay.7;
-        Wed, 22 Dec 2021 01:20:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=a5KXFkJczT+loL4bmBd/xTV7aUTkBhT057Cylmeu8aM=;
-        b=B63M9lnNYHxhCs876fSKbCSpVLD3SfeHDCQ77UUuhAJIjPE0tI/K0QZ/ug73+1jqta
-         lz+bns5TmqLV1byR0NQHxegThxqZFm7zeOyw4s8f0D2I4OFLR067nmkfg8dL9+O8UIqb
-         9EUSrQtkweKOX/0xI25uRnG+RgQew75PkNL6Hd3hRVhp5bkJMySnkLOlCm1ikQjvmJvn
-         gYb1fqB3hss1eLowdUPZIAN+es6xsFyxHQoJPhwzBt63u4jQcdsWWOSVilR/RgXg+OWp
-         jA5ze6crTQxXH5UhafeaF7QpPch9aoiD83x5Mne4OpplJbpItpwm2+PwgAhrYfAjrPxB
-         dROA==
-X-Gm-Message-State: AOAM530RprnitFafJVAQX54NdesjpiBUpGz7g/OwzzjgRZh6wgycFlqz
-        Xx3YztjPSaxiX9b6FrH5RiBZxF8990/y3g==
-X-Google-Smtp-Source: ABdhPJwF9jaHNu77S8dTJ0lF2VMZJwYVQ2Lk62/GUHrzODlWm4y4qhZpM09z2gYL0qwrD/XRcwqQNA==
-X-Received: by 2002:a67:e109:: with SMTP id d9mr631850vsl.11.1640164815641;
-        Wed, 22 Dec 2021 01:20:15 -0800 (PST)
-Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com. [209.85.221.170])
-        by smtp.gmail.com with ESMTPSA id i123sm281897vkb.20.2021.12.22.01.20.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 01:20:15 -0800 (PST)
-Received: by mail-vk1-f170.google.com with SMTP id m185so933582vkm.5;
-        Wed, 22 Dec 2021 01:20:15 -0800 (PST)
-X-Received: by 2002:a05:6122:21a6:: with SMTP id j38mr685592vkd.39.1640164815041;
- Wed, 22 Dec 2021 01:20:15 -0800 (PST)
+        Wed, 22 Dec 2021 04:24:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94408C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:24:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43BC5B81B4D
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 09:24:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0861FC36AEA;
+        Wed, 22 Dec 2021 09:24:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640165082;
+        bh=ADjjKeMGQq4tz8v/9fPbwYPnoD4URSab2L8MYx05/SE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BSWmSZm/CFIW6ox00fGxqrFDUjFOjl9VrexKjZ6siulnw3RpDaKGjehqtbr1gZ0gy
+         z5KYDUs4hDBcNQTcjJKPJEmU8wZ+F0ve5GU0qO2PAy+yBsDoBwfR/kzlymgyQ4mGCZ
+         RS550JOKlZzNDkERZb8axZWzYLxLUtpmDVi3xi58xmm7KZPrpj1HvR3A4IW09hEfEZ
+         f7QLBkHokWcVMTB5ilZxmuNezuvPh2YCNykfvTjcRcWsoKs7F1760VLivSijhX5vgB
+         mjWLhk/+Dd8D3C+ZknNcz2J2khdqTCRltB5F7cLhy08P5fjAllMuC/eCGW0dYo3lfU
+         R7jyt+by553KQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mzxrN-0003BN-4Y; Wed, 22 Dec 2021 10:24:33 +0100
+Date:   Wed, 22 Dec 2021 10:24:33 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH] nvmem: fix unregistering device in nvmem_register()
+ error path
+Message-ID: <YcLu0VAMXpiw6l+T@hovoldconsulting.com>
+References: <20211221154550.11455-1-zajec5@gmail.com>
+ <YcH7fw5S6aSXswvb@kroah.com>
+ <9e94f0fd-e2d5-4d9e-5759-a5f591191785@gmail.com>
+ <YcLXbPzyhtMnP0YQ@kroah.com>
+ <YcLkA0e48+xuGsHk@hovoldconsulting.com>
+ <YcLoPV6A9XJImBXa@kroah.com>
+ <YcLp1PtcX0QCp2BZ@hovoldconsulting.com>
 MIME-Version: 1.0
-References: <20211221175322.7096-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211221175322.7096-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20211221175322.7096-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 22 Dec 2021 10:20:03 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXhenTpAqYkZhgnxOWZPgJah0_UeWC_sC9Me+AA1YDBMQ@mail.gmail.com>
-Message-ID: <CAMuHMdXhenTpAqYkZhgnxOWZPgJah0_UeWC_sC9Me+AA1YDBMQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] i2c: sh_mobile: Use platform_get_irq_optional() to
- get the interrupt
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakarprabhakar.csengg@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YcLp1PtcX0QCp2BZ@hovoldconsulting.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 7:21 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
->
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq_optional() for DT users only.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Wed, Dec 22, 2021 at 10:03:17AM +0100, Johan Hovold wrote:
+> On Wed, Dec 22, 2021 at 09:56:29AM +0100, Greg Kroah-Hartman wrote:
+> > On Wed, Dec 22, 2021 at 09:38:27AM +0100, Johan Hovold wrote:
+> > > On Wed, Dec 22, 2021 at 08:44:44AM +0100, Greg Kroah-Hartman wrote:
+> > > > On Tue, Dec 21, 2021 at 06:46:01PM +0100, Rafał Miłecki wrote:
+> > > > > On 21.12.2021 17:06, Greg Kroah-Hartman wrote:
+> > > > > > On Tue, Dec 21, 2021 at 04:45:50PM +0100, Rafał Miłecki wrote:
+> > > > > > > From: Rafał Miłecki <rafal@milecki.pl>
+> > > > > > > 
+> > > > > > > 1. Drop incorrect put_device() calls
+> > > > > > > 
+> > > > > > > If device_register() fails then underlaying device_add() takes care of
+> > > > > > > calling put_device() if needed. There is no need to do that in a driver.
+> > > > > > 
+> > > > > > Did you read the documentation for device_register() that says:
+> > > > > > 
+> > > > > >   * NOTE: _Never_ directly free @dev after calling this function, even
+> > > > > >   * if it returned an error! Always use put_device() to give up the
+> > > > > >   * reference initialized in this function instead.
+> > > > > 
+> > > > > I clearly tried to be too smart and ignored documentation.
+> > > > > 
+> > > > > I'd say device_add() behaviour is rather uncommon and a bit unintuitive.
+> > > > > Most kernel functions are safe to assume to do nothing that requires
+> > > > > cleanup if they fail.
+> > > > > 
+> > > > > E.g. if I call platform_device_register() and it fails I don't need to
+> > > > > call anything like platform_device_put(). I just free previously
+> > > > > allocated memory.
+> > > > 
+> > > > And that is wrong.
+> > > 
+> > > It seems Rafał is mistaken here too; you certainly need to call
+> > > platform_device_put() if platform_device_register() fail, even if many
+> > > current users do appear to get this wrong.
+> > 
+> > A short search found almost everyone getting this wrong.  Arguably
+> > platform_device_register() can clean up properly on its own if we want
+> > it to do so.  Will take a lot of auditing of the current codebase first
+> > to see if it's safe...
+> 
+> Right, but I found at least a couple of callers getting it it right, so
+> changing the behaviour now risks introducing a double free (which is
+> worse than a memleak on registration failure). But yeah, a careful
+> review might suffice.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Actually, I'm not sure we can (should) change
+platform_device_register(). The platform device has been allocated by
+the caller and it would be quite counterintuitive to have the
+registration function deallocate that memory if registration fails.
 
-Gr{oetje,eeting}s,
+Heh, we even have statically allocated structures being registered with
+this function and we certainly don't want the helper to try to free
+those.
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Johan

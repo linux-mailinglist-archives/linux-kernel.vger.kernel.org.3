@@ -2,121 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A2247D3CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C05FF47D3D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343494AbhLVOgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 09:36:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238818AbhLVOgQ (ORCPT
+        id S1343504AbhLVOh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 09:37:59 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:54228 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238818AbhLVOh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:36:16 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B42C061574;
-        Wed, 22 Dec 2021 06:36:15 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id q16so5333254wrg.7;
-        Wed, 22 Dec 2021 06:36:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:to:content-language:cc:from
-         :subject:content-transfer-encoding;
-        bh=+3GdlkNFtphXM9+jbZr28VK+BqW1pmexR4dHqpidTUM=;
-        b=m70JsyAC9ag04xzSZntp0nBHg3911N/bjISqCtGKsT444xZcRQ4lbpqPu8ZytwS9YW
-         SXgb0qpl/Lqm5dFHbzAgkXJA7a1EbPmAYcurBp99MDMYnn2m2Z2PcIjQ3ZCas+UUMvKW
-         bNi00Hcx24w1/03P482Y8np9mI8vR/k6YOvdVB7H/vKkpg8ebDN7PTFW95fq6TVGEYQm
-         qb2eRBxdlRl+oxcnhRdYjxJoLIBFQMFtI32sHF4rb9nlikFTJAAZN6iX2uF3IiFbY4p+
-         ftUIY6UiBT3HMkaX0EiWFjGzEUQD/5rjPbw7FVPjZTOK0Bjc5zbLz3oxHGE1vk+hyq72
-         mbLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:to
-         :content-language:cc:from:subject:content-transfer-encoding;
-        bh=+3GdlkNFtphXM9+jbZr28VK+BqW1pmexR4dHqpidTUM=;
-        b=iU626B1iOaX0XUs232pPwn/8IlMTw6T5/R6J6DRlyxqFA6+ldSXdiI4DnxFV9U4dmL
-         QQyEHFkhYYePb/X1fqR1Naqe8BUIUHD5N6B/LbtGnveNcTMmU2wG3/22GFxJRrhIDeZ9
-         4ES17P4MUucFf6Dd4Fb+HUG0ykAmoRcK6xsWdcOZ/6K2+I7VPLiBSdOE4ubz5cOoUXCh
-         I3VUhCXkMzHDNRdrMc//uCI3NzJMns/RilTVc6yhqlDjn1lVr2FI7KWxiVTlk9BSoVQ+
-         aZswh2hDGGdJYs0HSobRyWcdJr54Qk4S+xz9CrVuM7hBQ6d8N5YaxhX72TmEoheymqBM
-         aLjA==
-X-Gm-Message-State: AOAM533xgpkqwwNk//QoQcNkHMw5tb+8SFDeib7bdTXBFhBlx0zS60wx
-        vINBd87f1sRtIpUvWNcxo0+RsYbZ9W8odUbWtkSlnA==
-X-Google-Smtp-Source: ABdhPJxACWzuou6187/C4WEJ5RESpXHpUy8LrxX+RXk3w/0SvBTHoVE46hocSH6yPsgYW1k61x+0Yw==
-X-Received: by 2002:a5d:6d41:: with SMTP id k1mr2308112wri.134.1640183774131;
-        Wed, 22 Dec 2021 06:36:14 -0800 (PST)
-Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id n7sm2080941wms.45.2021.12.22.06.36.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 06:36:13 -0800 (PST)
-Message-ID: <f26b1e6f-f3fc-191b-e613-c0b5748e26ef@gmail.com>
-Date:   Wed, 22 Dec 2021 14:36:12 +0000
+        Wed, 22 Dec 2021 09:37:58 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id C4AD6212B7;
+        Wed, 22 Dec 2021 14:37:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1640183877; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gc7GULz8GdRORFE4g+VjvQfetQYn3CecFaan/rOImzU=;
+        b=pp2MQa4g4afqeHnnbpstvRRU0/qWMlW3OK2cev8JBu+h0CU2G607lmDtWIKsVNc5MPiGlf
+        UQYbLtLeBmrUAxD4kratrxEyvquGjz1GfnyYp2i/V7jM0BhhPl2n1Km6Hqp2GGdldC0qqR
+        hD2XX1rjZZsYBlFXLZ+Ujjay4STNAgA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1640183877;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gc7GULz8GdRORFE4g+VjvQfetQYn3CecFaan/rOImzU=;
+        b=E33r5WLDqBxz72e8y/vh9Rj8eAHM6hee0L1G3De5TXXGsSaRB+ut2Ly/Amuo1Ed0D7oG7w
+        Kp9twdzYx7wOzdAg==
+Received: from quack2.suse.cz (unknown [10.163.28.18])
+        by relay2.suse.de (Postfix) with ESMTP id B0536A3B81;
+        Wed, 22 Dec 2021 14:37:57 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id 832E51F2CEF; Wed, 22 Dec 2021 15:37:57 +0100 (CET)
+Date:   Wed, 22 Dec 2021 15:37:57 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin10@huawei.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz
+Subject: Re: [PATCH -next] ext4: Fix BUG_ON in ext4_bread when write quota
+ data
+Message-ID: <20211222143757.GD685@quack2.suse.cz>
+References: <20211222013537.3096310-1-yebin10@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-To:     linux-alpha@vger.kernel.org
-Content-Language: en-US
-Cc:     Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-Subject: kernel oops when reading /proc/bus/pci/00/01.00 with odd size and odd
- alignment
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211222013537.3096310-1-yebin10@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed 22-12-21 09:35:37, Ye Bin wrote:
+> We got issue as follows when run syzkaller:
+> [  167.936972] EXT4-fs error (device loop0): __ext4_remount:6314: comm rep: Abort forced by user
+> [  167.938306] EXT4-fs (loop0): Remounting filesystem read-only
+> [  167.981637] Assertion failure in ext4_getblk() at fs/ext4/inode.c:847: '(EXT4_SB(inode->i_sb)->s_mount_state & EXT4_FC_REPLAY) || handle != NULL || create == 0'
+> [  167.983601] ------------[ cut here ]------------
+> [  167.984245] kernel BUG at fs/ext4/inode.c:847!
+> [  167.984882] invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
+> [  167.985624] CPU: 7 PID: 2290 Comm: rep Tainted: G    B             5.16.0-rc5-next-20211217+ #123
+> [  167.986823] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20190727_073836-buildvm-ppc64le-16.ppc.fedoraproject.org-3.fc31 04/01/2014
+> [  167.988590] RIP: 0010:ext4_getblk+0x17e/0x504
+> [  167.989189] Code: c6 01 74 28 49 c7 c0 a0 a3 5c 9b b9 4f 03 00 00 48 c7 c2 80 9c 5c 9b 48 c7 c6 40 b6 5c 9b 48 c7 c7 20 a4 5c 9b e8 77 e3 fd ff <0f> 0b 8b 04 244
+> [  167.991679] RSP: 0018:ffff8881736f7398 EFLAGS: 00010282
+> [  167.992385] RAX: 0000000000000094 RBX: 1ffff1102e6dee75 RCX: 0000000000000000
+> [  167.993337] RDX: 0000000000000001 RSI: ffffffff9b6e29e0 RDI: ffffed102e6dee66
+> [  167.994292] RBP: ffff88816a076210 R08: 0000000000000094 R09: ffffed107363fa09
+> [  167.995252] R10: ffff88839b1fd047 R11: ffffed107363fa08 R12: ffff88816a0761e8
+> [  167.996205] R13: 0000000000000000 R14: 0000000000000021 R15: 0000000000000001
+> [  167.997158] FS:  00007f6a1428c740(0000) GS:ffff88839b000000(0000) knlGS:0000000000000000
+> [  167.998238] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  167.999025] CR2: 00007f6a140716c8 CR3: 0000000133216000 CR4: 00000000000006e0
+> [  167.999987] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [  168.000944] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [  168.001899] Call Trace:
+> [  168.002235]  <TASK>
+> [  168.007167]  ext4_bread+0xd/0x53
+> [  168.007612]  ext4_quota_write+0x20c/0x5c0
+> [  168.010457]  write_blk+0x100/0x220
+> [  168.010944]  remove_free_dqentry+0x1c6/0x440
+> [  168.011525]  free_dqentry.isra.0+0x565/0x830
+> [  168.012133]  remove_tree+0x318/0x6d0
+> [  168.014744]  remove_tree+0x1eb/0x6d0
+> [  168.017346]  remove_tree+0x1eb/0x6d0
+> [  168.019969]  remove_tree+0x1eb/0x6d0
+> [  168.022128]  qtree_release_dquot+0x291/0x340
+> [  168.023297]  v2_release_dquot+0xce/0x120
+> [  168.023847]  dquot_release+0x197/0x3e0
+> [  168.024358]  ext4_release_dquot+0x22a/0x2d0
+> [  168.024932]  dqput.part.0+0x1c9/0x900
+> [  168.025430]  __dquot_drop+0x120/0x190
+> [  168.025942]  ext4_clear_inode+0x86/0x220
+> [  168.026472]  ext4_evict_inode+0x9e8/0xa22
+> [  168.028200]  evict+0x29e/0x4f0
+> [  168.028625]  dispose_list+0x102/0x1f0
+> [  168.029148]  evict_inodes+0x2c1/0x3e0
+> [  168.030188]  generic_shutdown_super+0xa4/0x3b0
+> [  168.030817]  kill_block_super+0x95/0xd0
+> [  168.031360]  deactivate_locked_super+0x85/0xd0
+> [  168.031977]  cleanup_mnt+0x2bc/0x480
+> [  168.033062]  task_work_run+0xd1/0x170
+> [  168.033565]  do_exit+0xa4f/0x2b50
+> [  168.037155]  do_group_exit+0xef/0x2d0
+> [  168.037666]  __x64_sys_exit_group+0x3a/0x50
+> [  168.038237]  do_syscall_64+0x3b/0x90
+> [  168.038751]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> In order to reproduce this problem, the following conditions need to be met:
+> 1. Ext4 filesystem with no journal;
+> 2. Filesystem image with incorrect quota data;
+> 3. Abort filesystem forced by user;
+> 4. umount filesystem;
+> 
+> As in ext4_quota_write:
+> ...
+>          if (EXT4_SB(sb)->s_journal && !handle) {
+>                  ext4_msg(sb, KERN_WARNING, "Quota write (off=%llu, len=%llu)"
+>                          " cancelled because transaction is not started",
+>                          (unsigned long long)off, (unsigned long long)len);
+>                  return -EIO;
+>          }
+> ...
+> We only check handle if NULL when filesystem has journal. There is need
+> check handle if NULL even when filesystem has no journal.
 
-While testing the Alpha kernel with stress-ng procfs test I found that 
-misaligned odd reads cause an oops. I was able to figure out a simple 
-reproducer as follows:
+Hum, so I think we can just drop this whole condition and warning and
+instead add a silent return of -EROFS if the filesystem is readonly. That
+should also fix the bug and also make aborted case less noisy. The message
+from ext4_quota_write() IMO is not very useful and ext4_bread() will
+provide us with a BUG and stacktrace which is better for debugging what
+went wrong anyway.
 
-dd seek=1 if=/proc/bus/pci/00/01.0 of=/dev/zero bs=5
+								Honza
 
-
-[ 2013.722601] Unable to handle kernel paging request at virtual address 
-0000000000000004
-[ 2013.722601] dd(1195): Oops -1
-[ 2013.722601] pc = [<0000000000000004>]  ra = [<fffffc00014fd634>]  ps 
-= 0000    Tainted: G      D     E
-[ 2013.722601] pc is at 0x4
-[ 2013.722601] ra is at proc_bus_pci_read+0x244/0x3d0
-[ 2013.722601] v0 = 0000000000000000  t0 = 0000000009080000  t1 = 
-0000000000000000
-[ 2013.722601] t2 = 0000000009080000  t3 = 0000000000000000  t4 = 
-fffffc0006c43f08
-[ 2013.722601] t5 = 0000000000000011  t6 = 0000000000000012  t7 = 
-fffffc0006c40000
-[ 2013.722601] s0 = fffffc0000967000  s1 = 0000000000000005  s2 = 
-000000012002a005
-[ 2013.722601] s3 = 000000012002a001  s4 = 0000000000000010  s5 = 
-0000000000000000
-[ 2013.722601] s6 = ffffffffdffd600f
-[ 2013.722601] a0 = 0000000000000000  a1 = fffffd01fe000810  a2 = 
-0000000000000010
-[ 2013.722601] a3 = 0000000000000004  a4 = fffffc0006c43dd8  a5 = 
-fffffc0003c05dd8
-[ 2013.722601] t8 = 0000000000000001  t9 = 0000000000000001  t10= 
-000000012002e058
-[ 2013.722601] t11= 000000012002e058  pv = fffffc0001023650  at = 
-0000000010a8b186
-[ 2013.726508] gp = fffffc00025197f8  sp = 00000000d1f90b3a
-[ 2013.726508] Trace:
-[ 2013.726508] [<fffffc00012d39e8>] proc_reg_read+0xc8/0x140
-[ 2013.727484] [<fffffc000120ed58>] vfs_read+0xd8/0x220
-[ 2013.727484] [<fffffc000120ed14>] vfs_read+0x94/0x220
-[ 2013.727484] [<fffffc00010110ec>] entMM+0x9c/0xc0
-[ 2013.727484] [<fffffc000120f274>] ksys_read+0x84/0x130
-[ 2013.728461] [<fffffc000101149c>] entSys+0xac/0xc0
-
-[ 2013.728461] Code:
-[ 2013.728461]  00000000
-[ 2013.728461]  00063301
-[ 2013.728461]  000012c8
-[ 2013.729437]  00001111
-[ 2013.729437]  0003fac6
-
-Colin
+> 
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
+> ---
+>  fs/ext4/super.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index 071b7b3c5678..c8ca5811ea65 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -6955,9 +6955,10 @@ static ssize_t ext4_quota_write(struct super_block *sb, int type,
+>  	struct buffer_head *bh;
+>  	handle_t *handle = journal_current_handle();
+>  
+> -	if (EXT4_SB(sb)->s_journal && !handle) {
+> +	if (!handle) {
+>  		ext4_msg(sb, KERN_WARNING, "Quota write (off=%llu, len=%llu)"
+> -			" cancelled because transaction is not started",
+> +			" cancelled because transaction is not started"
+> +			" or filesystem is abort forced by user",
+>  			(unsigned long long)off, (unsigned long long)len);
+>  		return -EIO;
+>  	}
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

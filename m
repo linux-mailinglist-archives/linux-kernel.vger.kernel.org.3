@@ -2,130 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB1247D7E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB9D47D7EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345298AbhLVTmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 14:42:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231352AbhLVTmO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 14:42:14 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073F2C061574;
-        Wed, 22 Dec 2021 11:42:14 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id l17so2909810qtk.7;
-        Wed, 22 Dec 2021 11:42:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=r5plYkDKDQhkLjCFvQaIPKKi/bkznMOuAEcbc1q96jE=;
-        b=cdv5W5aKxAgD7OFo+6buOuhuxg4SVAPYaZIAiu3wnE5kz2UOObg8AqvilUHM1GJMPj
-         Bx0ZWvqPE4n7a9i27DRDuII3npxs7dck2N1SHui+T9/aayi9+IxivnjvaYrkTbrUz+K7
-         R2htEu5XKVRD6C4UWfvDIYabzs6CWrTMZnGjvGJ8U4KhbOjnYjHJ/kCftqh6cx66czf+
-         9FtFqRo7nihjnk1mt0AdLZHOwQdoLRua05zJhbb9KUWG0QlYCJr2pmhGcHthjdEtxB3U
-         bGLecWkSibZsvgIawCs7lmdhyOjhZ0Ow8YjfOIuqo5tZnVX5ocx53fuiekJmtBbRVwzD
-         XfGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=r5plYkDKDQhkLjCFvQaIPKKi/bkznMOuAEcbc1q96jE=;
-        b=rrWIjP4FDMMp3cWhY0PFWLmhTL0Yvswf1OIIsoEg9kNcedOV0nd4LkCzJ7PIiMVwbT
-         Rs2DXhNPF4+A7TIz81rZ54y71hjBIQJ5RPRbG5jiO8KUKqQ31ig/pVFdxyZ6KW5QGdqe
-         jOScKecB1sIqQHh4GP5Ng2AlchnKU7AmJa6r0Mt2D5v3MfDcZyUZ0O3PxqjmVSGXFyev
-         N33K8ptKksrLI8/IBUrxrI8zgR8FV3lZA5TW7Dtwbztksl1mtD5Qmnx4v1WNBEMtQW24
-         6ar8F6O2kqkS07dKXH1ISIB0PbYUkhCb3Ahgf45rowPyW9BGvwNwOS2vLPu7A8s7WmUV
-         on9w==
-X-Gm-Message-State: AOAM531wOBG5TCKaWbOInNl/ANm3atltUgKs/e2PfiVFXckPUBHeTa9z
-        SvRP2IaCxVCwZNMTHyJm1RQ=
-X-Google-Smtp-Source: ABdhPJyxJWiGGi3Ni8qP0vVgP+6/LKLjawF/7omDc90qxOdts15hm53TwwDJ30g6cxVqZyFPgB1rUA==
-X-Received: by 2002:a05:622a:50a:: with SMTP id l10mr3361160qtx.491.1640202133241;
-        Wed, 22 Dec 2021 11:42:13 -0800 (PST)
-Received: from shaak (69-165-204-82.cable.teksavvy.com. [69.165.204.82])
-        by smtp.gmail.com with ESMTPSA id u21sm2359241qke.95.2021.12.22.11.42.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 11:42:12 -0800 (PST)
-Date:   Wed, 22 Dec 2021 14:42:10 -0500
-From:   Liam Beguin <liambeguin@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v11 04/15] iio: afe: rescale: expose scale processing
- function
-Message-ID: <YcN/kkazUGyyazNF@shaak>
-References: <20211222034646.222189-1-liambeguin@gmail.com>
- <20211222034646.222189-5-liambeguin@gmail.com>
- <CAHp75Vc009o5EunYP3QAB8up8hMrRL7oNax7cjphCFVUgSKXRw@mail.gmail.com>
- <YcNscJ/fQhI7h6Uq@shaak>
- <CAHp75Vf6iN7yEdubKFkf+fXupVTco-toZN=a5+KNXG4Yv6oT3Q@mail.gmail.com>
+        id S1345305AbhLVToL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 14:44:11 -0500
+Received: from mga05.intel.com ([192.55.52.43]:55515 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231352AbhLVToJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 14:44:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640202249; x=1671738249;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7eZDGz/iiLgWgKXq6dgjtOY9xoQndBNl5y9xF61/U0I=;
+  b=YBI6h/kK3jj+iN/+xjLbBMS4NhV1+49WRVGaUnkcZV1/pfZpnyGgoH8I
+   EI57xssMvQd8Ppk9doykOjqOSFtR6OTBMnzjmpBUD5ht3l1UETxOUOzuN
+   QJCNogCEbrU6g0899LCTFd2j/dKNEz/DRGrkz9XzCc4umnb+QuyrRf05j
+   P7/b+5N0/kb7a6aKknIoU7hkUXeQ+Q6LA7D5xs6jLGxymoPQWIM+0aYMo
+   AGDX9vJT1BG46QjUgcLeKUg6vdEualRX/R5BcXj6AmVlxGJUNQx/Q0dxa
+   ZhNC4GLiSheq0kOv24cl0dlrSleqoWm2L+cD1Umhu9/EDqX9NdDz+eNLO
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="327004123"
+X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
+   d="scan'208";a="327004123"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 11:44:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
+   d="scan'208";a="570674162"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 22 Dec 2021 11:44:07 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 2F4C5FE; Wed, 22 Dec 2021 21:44:16 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: [PATCH v1 1/1] serial: 8250_exar: derive nr_ports from ID for Acces I/O cards
+Date:   Wed, 22 Dec 2021 21:44:13 +0200
+Message-Id: <20211222194413.75069-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vf6iN7yEdubKFkf+fXupVTco-toZN=a5+KNXG4Yv6oT3Q@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 08:52:30PM +0200, Andy Shevchenko wrote:
-> On Wed, Dec 22, 2021 at 8:20 PM Liam Beguin <liambeguin@gmail.com> wrote:
-> > On Wed, Dec 22, 2021 at 12:21:01PM +0200, Andy Shevchenko wrote:
-> > > On Wed, Dec 22, 2021 at 5:46 AM Liam Beguin <liambeguin@gmail.com> wrote:
-> 
-> ...
-> 
-> > > >  #include <linux/iio/consumer.h>
-> > > >  #include <linux/iio/iio.h>
-> > > > +#include <linux/iio/afe/rescale.h>
-> > >
-> > > It should go before the consumer.h, no?
-> >
-> > I don't mind making the change, but why should it go before consumer.h?
-> 
-> 'a' is earlier than 'c' in the alphabet, no?
-> 
-> ...
-> 
-> > > And I would rather move the entire IIO group of headers...
-> >
-> > I can do that too. Do we have a convention for the ordering of #includes?
-> > What's usually the rule/guideline for this?
-> 
-> Guidelines suggest sorting without clear instructions. But in IIO and
-> pin control I suggest people use this kind of grouping.
+In the similar way how it's done in 8250_pericom, derive number of
+UART ports from PCI ID for Acces I/O cards.
 
-Understood, will update.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/tty/serial/8250/8250_exar.c | 37 ++++++++++-------------------
+ 1 file changed, 13 insertions(+), 24 deletions(-)
 
-> > > >  #include <linux/module.h>
-> > > >  #include <linux/of.h>
-> > > >  #include <linux/of_device.h>
-> > > >  #include <linux/platform_device.h>
-> > > >  #include <linux/property.h>
-> > >
-> > > ... somewhere here (with blank line above).
-> > >
-> > > > -struct rescale;
-> 
-> ...
-> 
-> > > Missed types.h and forward declarations like
-> > > struct device;
-> >
-> > Okay. will add linux/types.h
-> 
-> What about forward declaration?
+diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
+index a4508ac0cac9..cf16bd889abd 100644
+--- a/drivers/tty/serial/8250/8250_exar.c
++++ b/drivers/tty/serial/8250/8250_exar.c
+@@ -611,7 +611,12 @@ exar_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *ent)
+ 
+ 	maxnr = pci_resource_len(pcidev, bar) >> (board->reg_shift + 3);
+ 
+-	nr_ports = board->num_ports ? board->num_ports : pcidev->device & 0x0f;
++	if (pcidev->vendor == PCI_VENDOR_ID_ACCESSIO)
++		nr = BIT(((pcidev->device & 0x38) >> 3) - 1);
++	else if (board->num_ports)
++		nr_ports = board->num_ports;
++	else
++		nr_ports = pcidev->device & 0x0f;
+ 
+ 	priv = devm_kzalloc(&pcidev->dev, struct_size(priv, line, nr_ports), GFP_KERNEL);
+ 	if (!priv)
+@@ -710,22 +715,6 @@ static int __maybe_unused exar_resume(struct device *dev)
+ 
+ static SIMPLE_DEV_PM_OPS(exar_pci_pm, exar_suspend, exar_resume);
+ 
+-static const struct exar8250_board acces_com_2x = {
+-	.num_ports	= 2,
+-	.setup		= pci_xr17c154_setup,
+-};
+-
+-static const struct exar8250_board acces_com_4x = {
+-	.num_ports	= 4,
+-	.setup		= pci_xr17c154_setup,
+-};
+-
+-static const struct exar8250_board acces_com_8x = {
+-	.num_ports	= 8,
+-	.setup		= pci_xr17c154_setup,
+-};
+-
+-
+ static const struct exar8250_board pbn_fastcom335_2 = {
+ 	.num_ports	= 2,
+ 	.setup		= pci_fastcom335_setup,
+@@ -810,13 +799,13 @@ static const struct exar8250_board pbn_exar_XR17V8358 = {
+ 	}
+ 
+ static const struct pci_device_id exar_pci_tbl[] = {
+-	EXAR_DEVICE(ACCESSIO, COM_2S, acces_com_2x),
+-	EXAR_DEVICE(ACCESSIO, COM_4S, acces_com_4x),
+-	EXAR_DEVICE(ACCESSIO, COM_8S, acces_com_8x),
+-	EXAR_DEVICE(ACCESSIO, COM232_8, acces_com_8x),
+-	EXAR_DEVICE(ACCESSIO, COM_2SM, acces_com_2x),
+-	EXAR_DEVICE(ACCESSIO, COM_4SM, acces_com_4x),
+-	EXAR_DEVICE(ACCESSIO, COM_8SM, acces_com_8x),
++	EXAR_DEVICE(ACCESSIO, COM_2S, pbn_exar_XR17C15x),
++	EXAR_DEVICE(ACCESSIO, COM_4S, pbn_exar_XR17C15x),
++	EXAR_DEVICE(ACCESSIO, COM_8S, pbn_exar_XR17C15x),
++	EXAR_DEVICE(ACCESSIO, COM232_8, pbn_exar_XR17C15x),
++	EXAR_DEVICE(ACCESSIO, COM_2SM, pbn_exar_XR17C15x),
++	EXAR_DEVICE(ACCESSIO, COM_4SM, pbn_exar_XR17C15x),
++	EXAR_DEVICE(ACCESSIO, COM_8SM, pbn_exar_XR17C15x),
+ 
+ 	CONNECT_DEVICE(XR17C152, UART_2_232, pbn_connect),
+ 	CONNECT_DEVICE(XR17C154, UART_4_232, pbn_connect),
+-- 
+2.34.1
 
-I'm not sure I understand what you mean here.
-
-Cheers,
-Liam
-
-> -- 
-> With Best Regards,
-> Andy Shevchenko

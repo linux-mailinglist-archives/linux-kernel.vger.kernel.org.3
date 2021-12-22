@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA6447CC4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 05:50:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 786F747CC51
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 05:50:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242520AbhLVEue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 23:50:34 -0500
-Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:41055 "EHLO
-        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235801AbhLVEua (ORCPT
+        id S242552AbhLVEuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 23:50:37 -0500
+Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:50935 "EHLO
+        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242525AbhLVEud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 23:50:30 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0V.OXu.4_1640148626;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0V.OXu.4_1640148626)
+        Tue, 21 Dec 2021 23:50:33 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0V.OKG1K_1640148627;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0V.OKG1K_1640148627)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 22 Dec 2021 12:50:26 +0800
+          Wed, 22 Dec 2021 12:50:28 +0800
 From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 To:     Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
@@ -34,9 +34,9 @@ To:     Herbert Xu <herbert@gondor.apana.org.au>,
         x86@kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH v2 2/6] crypto: arm64/sm3-ce - make dependent on sm3 library
-Date:   Wed, 22 Dec 2021 12:50:18 +0800
-Message-Id: <20211222045022.27069-3-tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH v2 3/6] crypto: sm2 - make dependent on sm3 library
+Date:   Wed, 22 Dec 2021 12:50:19 +0800
+Message-Id: <20211222045022.27069-4-tianjia.zhang@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211222045022.27069-1-tianjia.zhang@linux.alibaba.com>
 References: <20211222045022.27069-1-tianjia.zhang@linux.alibaba.com>
@@ -46,77 +46,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SM3 generic library is stand-alone implementation, sm3-ce can depend
-on the SM3 library instead of sm3-generic.
+SM3 generic library is stand-alone implementation, it is necessary
+for the calculation of sm2 z digest to depends on SM3 library
+instead of sm3-generic.
 
 Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 ---
- arch/arm64/crypto/Kconfig       |  2 +-
- arch/arm64/crypto/sm3-ce-glue.c | 20 ++++++++++++++------
- 2 files changed, 15 insertions(+), 7 deletions(-)
+ crypto/Kconfig |  2 +-
+ crypto/sm2.c   | 38 +++++++++++++++++++-------------------
+ 2 files changed, 20 insertions(+), 20 deletions(-)
 
-diff --git a/arch/arm64/crypto/Kconfig b/arch/arm64/crypto/Kconfig
-index addfa413650b..2a965aa0188d 100644
---- a/arch/arm64/crypto/Kconfig
-+++ b/arch/arm64/crypto/Kconfig
-@@ -45,7 +45,7 @@ config CRYPTO_SM3_ARM64_CE
- 	tristate "SM3 digest algorithm (ARMv8.2 Crypto Extensions)"
- 	depends on KERNEL_MODE_NEON
- 	select CRYPTO_HASH
+diff --git a/crypto/Kconfig b/crypto/Kconfig
+index 01b9ca0836a5..60b252975dc4 100644
+--- a/crypto/Kconfig
++++ b/crypto/Kconfig
+@@ -267,7 +267,7 @@ config CRYPTO_ECRDSA
+ 
+ config CRYPTO_SM2
+ 	tristate "SM2 algorithm"
 -	select CRYPTO_SM3
 +	select CRYPTO_LIB_SM3
- 
- config CRYPTO_SM4_ARM64_CE
- 	tristate "SM4 symmetric cipher (ARMv8.2 Crypto Extensions)"
-diff --git a/arch/arm64/crypto/sm3-ce-glue.c b/arch/arm64/crypto/sm3-ce-glue.c
-index d71faca322f2..3198f31c9446 100644
---- a/arch/arm64/crypto/sm3-ce-glue.c
-+++ b/arch/arm64/crypto/sm3-ce-glue.c
-@@ -27,7 +27,7 @@ static int sm3_ce_update(struct shash_desc *desc, const u8 *data,
- 			 unsigned int len)
- {
- 	if (!crypto_simd_usable())
--		return crypto_sm3_update(desc, data, len);
-+		return sm3_update(shash_desc_ctx(desc), data, len);
- 
- 	kernel_neon_begin();
- 	sm3_base_do_update(desc, data, len, sm3_ce_transform);
-@@ -39,7 +39,7 @@ static int sm3_ce_update(struct shash_desc *desc, const u8 *data,
- static int sm3_ce_final(struct shash_desc *desc, u8 *out)
- {
- 	if (!crypto_simd_usable())
--		return crypto_sm3_finup(desc, NULL, 0, out);
-+		return sm3_final(shash_desc_ctx(desc), out);
- 
- 	kernel_neon_begin();
- 	sm3_base_do_finalize(desc, sm3_ce_transform);
-@@ -51,14 +51,22 @@ static int sm3_ce_final(struct shash_desc *desc, u8 *out)
- static int sm3_ce_finup(struct shash_desc *desc, const u8 *data,
- 			unsigned int len, u8 *out)
- {
--	if (!crypto_simd_usable())
--		return crypto_sm3_finup(desc, data, len, out);
-+	if (!crypto_simd_usable()) {
-+		struct sm3_state *sctx = shash_desc_ctx(desc);
-+
-+		if (len)
-+			sm3_update(sctx, data, len);
-+		sm3_final(sctx, out);
-+		return 0;
-+	}
- 
- 	kernel_neon_begin();
--	sm3_base_do_update(desc, data, len, sm3_ce_transform);
-+	if (len)
-+		sm3_base_do_update(desc, data, len, sm3_ce_transform);
-+	sm3_base_do_finalize(desc, sm3_ce_transform);
- 	kernel_neon_end();
- 
--	return sm3_ce_final(desc, out);
-+	return sm3_base_finish(desc, out);
+ 	select CRYPTO_AKCIPHER
+ 	select CRYPTO_MANAGER
+ 	select MPILIB
+diff --git a/crypto/sm2.c b/crypto/sm2.c
+index db8a4a265669..ae3f77a66070 100644
+--- a/crypto/sm2.c
++++ b/crypto/sm2.c
+@@ -13,7 +13,7 @@
+ #include <crypto/internal/akcipher.h>
+ #include <crypto/akcipher.h>
+ #include <crypto/hash.h>
+-#include <crypto/sm3_base.h>
++#include <crypto/sm3.h>
+ #include <crypto/rng.h>
+ #include <crypto/sm2.h>
+ #include "sm2signature.asn1.h"
+@@ -213,7 +213,7 @@ int sm2_get_signature_s(void *context, size_t hdrlen, unsigned char tag,
+ 	return 0;
  }
  
- static struct shash_alg sm3_alg = {
+-static int sm2_z_digest_update(struct shash_desc *desc,
++static int sm2_z_digest_update(struct sm3_state *sctx,
+ 			MPI m, unsigned int pbytes)
+ {
+ 	static const unsigned char zero[32];
+@@ -226,20 +226,20 @@ static int sm2_z_digest_update(struct shash_desc *desc,
+ 
+ 	if (inlen < pbytes) {
+ 		/* padding with zero */
+-		crypto_sm3_update(desc, zero, pbytes - inlen);
+-		crypto_sm3_update(desc, in, inlen);
++		sm3_update(sctx, zero, pbytes - inlen);
++		sm3_update(sctx, in, inlen);
+ 	} else if (inlen > pbytes) {
+ 		/* skip the starting zero */
+-		crypto_sm3_update(desc, in + inlen - pbytes, pbytes);
++		sm3_update(sctx, in + inlen - pbytes, pbytes);
+ 	} else {
+-		crypto_sm3_update(desc, in, inlen);
++		sm3_update(sctx, in, inlen);
+ 	}
+ 
+ 	kfree(in);
+ 	return 0;
+ }
+ 
+-static int sm2_z_digest_update_point(struct shash_desc *desc,
++static int sm2_z_digest_update_point(struct sm3_state *sctx,
+ 		MPI_POINT point, struct mpi_ec_ctx *ec, unsigned int pbytes)
+ {
+ 	MPI x, y;
+@@ -249,8 +249,8 @@ static int sm2_z_digest_update_point(struct shash_desc *desc,
+ 	y = mpi_new(0);
+ 
+ 	if (!mpi_ec_get_affine(x, y, point, ec) &&
+-		!sm2_z_digest_update(desc, x, pbytes) &&
+-		!sm2_z_digest_update(desc, y, pbytes))
++	    !sm2_z_digest_update(sctx, x, pbytes) &&
++	    !sm2_z_digest_update(sctx, y, pbytes))
+ 		ret = 0;
+ 
+ 	mpi_free(x);
+@@ -265,7 +265,7 @@ int sm2_compute_z_digest(struct crypto_akcipher *tfm,
+ 	struct mpi_ec_ctx *ec = akcipher_tfm_ctx(tfm);
+ 	uint16_t bits_len;
+ 	unsigned char entl[2];
+-	SHASH_DESC_ON_STACK(desc, NULL);
++	struct sm3_state sctx;
+ 	unsigned int pbytes;
+ 
+ 	if (id_len > (USHRT_MAX / 8) || !ec->Q)
+@@ -278,17 +278,17 @@ int sm2_compute_z_digest(struct crypto_akcipher *tfm,
+ 	pbytes = MPI_NBYTES(ec->p);
+ 
+ 	/* ZA = H256(ENTLA | IDA | a | b | xG | yG | xA | yA) */
+-	sm3_base_init(desc);
+-	crypto_sm3_update(desc, entl, 2);
+-	crypto_sm3_update(desc, id, id_len);
+-
+-	if (sm2_z_digest_update(desc, ec->a, pbytes) ||
+-		sm2_z_digest_update(desc, ec->b, pbytes) ||
+-		sm2_z_digest_update_point(desc, ec->G, ec, pbytes) ||
+-		sm2_z_digest_update_point(desc, ec->Q, ec, pbytes))
++	sm3_init(&sctx);
++	sm3_update(&sctx, entl, 2);
++	sm3_update(&sctx, id, id_len);
++
++	if (sm2_z_digest_update(&sctx, ec->a, pbytes) ||
++	    sm2_z_digest_update(&sctx, ec->b, pbytes) ||
++	    sm2_z_digest_update_point(&sctx, ec->G, ec, pbytes) ||
++	    sm2_z_digest_update_point(&sctx, ec->Q, ec, pbytes))
+ 		return -EINVAL;
+ 
+-	crypto_sm3_final(desc, dgst);
++	sm3_final(&sctx, dgst);
+ 	return 0;
+ }
+ EXPORT_SYMBOL(sm2_compute_z_digest);
 -- 
 2.32.0
 

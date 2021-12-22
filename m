@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D11EC47D545
+	by mail.lfdr.de (Postfix) with ESMTP id 1C19047D543
 	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344066AbhLVQnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 11:43:13 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:57758 "EHLO
+        id S1344020AbhLVQnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 11:43:10 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:42586 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343948AbhLVQnG (ORCPT
+        with ESMTP id S1343977AbhLVQnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 11:43:06 -0500
+        Wed, 22 Dec 2021 11:43:05 -0500
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
- id bd60d9beba45ad74; Wed, 22 Dec 2021 17:43:05 +0100
+ id 781c734b2d430045; Wed, 22 Dec 2021 17:43:04 +0100
 Received: from kreacher.localnet (unknown [213.134.181.48])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id D906B66AE27;
-        Wed, 22 Dec 2021 17:43:04 +0100 (CET)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 67C4B66AE27;
+        Wed, 22 Dec 2021 17:43:03 +0100 (CET)
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux ACPI <linux-acpi@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Bob Moore <robert.moore@intel.com>
-Subject: [PATCH 10/19] ACPICA: Fix wrong interpretation of PCC address
-Date:   Wed, 22 Dec 2021 17:31:54 +0100
-Message-ID: <1714635.VLH7GnMWUR@kreacher>
+Subject: [PATCH 11/19] ACPICA: Add support for PCC Opregion special context data
+Date:   Wed, 22 Dec 2021 17:32:54 +0100
+Message-ID: <1900496.usQuhbGJ8B@kreacher>
 In-Reply-To: <11889746.O9o76ZdvQC@kreacher>
 References: <11889746.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
@@ -36,7 +36,7 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 213.134.181.48
 X-CLIENT-HOSTNAME: 213.134.181.48
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddruddtiedgkeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefgkedtheeuheetffeuleelhefhfffgjedthedvtdefteejffevteehhedvjefgudenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedvudefrddufeegrddukedurdegkeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurdegkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohgsvghrthdrmhhoohhrvgesihhnthgvlhdrtghomh
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddruddtiedgkeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefgkedtheeuheetffeuleelhefhfffgjedthedvtdefteejffevteehhedvjefgudenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedvudefrddufeegrddukedurdegkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurdegkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohgsvghrthdrmhhoohhrvgesihhnthgvlhdrtghomh
 X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
@@ -44,79 +44,64 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sudeep Holla <sudeep.holla@arm.com>
 
-ACPICA commit 41be6afacfdaec2dba3a5ed368736babc2a7aa5c
+ACPICA commit 55526e8a6133cbf5a9cc0fb75a95dbbac6eb98e6
 
-With the PCC Opregion in the firmware and we are hitting below kernel crash:
+PCC Opregion added in ACPIC 6.3 requires special context data similar
+to GPIO and Generic Serial Bus as it needs to know the internal PCC
+buffer and its length as well as the PCC channel index when the opregion
+handler is being executed by the OSPM.
 
--->8
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
- Workqueue: pm pm_runtime_work
- pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : __memcpy+0x54/0x260
- lr : acpi_ex_write_data_to_field+0xb8/0x194
- Call trace:
-  __memcpy+0x54/0x260
-  acpi_ex_store_object_to_node+0xa4/0x1d4
-  acpi_ex_store+0x44/0x164
-  acpi_ex_opcode_1A_1T_1R+0x25c/0x508
-  acpi_ds_exec_end_op+0x1b4/0x44c
-  acpi_ps_parse_loop+0x3a8/0x614
-  acpi_ps_parse_aml+0x90/0x2f4
-  acpi_ps_execute_method+0x11c/0x19c
-  acpi_ns_evaluate+0x1ec/0x2b0
-  acpi_evaluate_object+0x170/0x2b0
-  acpi_device_set_power+0x118/0x310
-  acpi_dev_suspend+0xd4/0x180
-  acpi_subsys_runtime_suspend+0x28/0x38
-  __rpm_callback+0x74/0x328
-  rpm_suspend+0x2d8/0x624
-  pm_runtime_work+0xa4/0xb8
-  process_one_work+0x194/0x25c
-  worker_thread+0x260/0x49c
-  kthread+0x14c/0x30c
-  ret_from_fork+0x10/0x20
- Code: f9000006 f81f80a7 d65f03c0 361000c2 (b9400026)
- ---[ end trace 24d8a032fa77b68a ]---
+Lets add support for the special context data needed by PCC Opregion.
 
-The reason for the crash is that the PCC channel index passed via region.address
-in acpi_ex_store_object_to_node is interpreted as the channel subtype
-incorrectly.
-
-Assuming the PCC op_region support is not used by any other type, let us
-remove the subtype check as the AML has no access to the subtype information.
-Once we remove it, the kernel crash disappears and correctly complains about
-missing PCC Opregion handler.
-
-ACPI Error: No handler for Region [PFRM] ((____ptrval____)) [PCC] (20210730/evregion-130)
-ACPI Error: Region PCC (ID=10) has no handler (20210730/exfldio-261)
-ACPI Error: Aborting method \_SB.ETH0._PS3 due to previous error (AE_NOT_EXIST) (20210730/psparse-531)
-
-Link: https://github.com/acpica/acpica/commit/41be6afa
+Link: https://github.com/acpica/acpica/commit/55526e8a
 Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 Signed-off-by: Bob Moore <robert.moore@intel.com>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/acpi/acpica/exfield.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/acpi/acpica/evregion.c | 10 ++++++++++
+ include/acpi/actypes.h         |  8 ++++++++
+ 2 files changed, 18 insertions(+)
 
-diff --git a/drivers/acpi/acpica/exfield.c b/drivers/acpi/acpica/exfield.c
-index 06f3c9df1e22..8618500f23b3 100644
---- a/drivers/acpi/acpica/exfield.c
-+++ b/drivers/acpi/acpica/exfield.c
-@@ -330,12 +330,7 @@ acpi_ex_write_data_to_field(union acpi_operand_object *source_desc,
- 		       obj_desc->field.base_byte_offset,
- 		       source_desc->buffer.pointer, data_length);
+diff --git a/drivers/acpi/acpica/evregion.c b/drivers/acpi/acpica/evregion.c
+index 4ef43c8ef5e7..80b68f216b46 100644
+--- a/drivers/acpi/acpica/evregion.c
++++ b/drivers/acpi/acpica/evregion.c
+@@ -162,6 +162,16 @@ acpi_ev_address_space_dispatch(union acpi_operand_object *region_obj,
+ 			return_ACPI_STATUS(AE_NOT_EXIST);
+ 		}
  
--		if ((obj_desc->field.region_obj->region.address ==
--		     PCC_MASTER_SUBSPACE
--		     && MASTER_SUBSPACE_COMMAND(obj_desc->field.
--						base_byte_offset))
--		    || GENERIC_SUBSPACE_COMMAND(obj_desc->field.
--						base_byte_offset)) {
-+		if (MASTER_SUBSPACE_COMMAND(obj_desc->field.base_byte_offset)) {
++		if (region_obj->region.space_id == ACPI_ADR_SPACE_PLATFORM_COMM) {
++			struct acpi_pcc_info *ctx =
++			    handler_desc->address_space.context;
++
++			ctx->internal_buffer =
++			    field_obj->field.internal_pcc_buffer;
++			ctx->length = region_obj->region.length;
++			ctx->subspace_id = region_obj->region.address;
++		}
++
+ 		/*
+ 		 * We must exit the interpreter because the region setup will
+ 		 * potentially execute control methods (for example, the _REG method
+diff --git a/include/acpi/actypes.h b/include/acpi/actypes.h
+index 83a7ee1fbd7c..69e89d572b9e 100644
+--- a/include/acpi/actypes.h
++++ b/include/acpi/actypes.h
+@@ -1103,6 +1103,14 @@ struct acpi_connection_info {
+ 	u8 access_length;
+ };
  
- 			/* Perform the write */
- 
++/* Special Context data for PCC Opregion (ACPI 6.3) */
++
++struct acpi_pcc_info {
++	u8 subspace_id;
++	u16 length;
++	u8 *internal_buffer;
++};
++
+ typedef
+ acpi_status (*acpi_adr_space_setup) (acpi_handle region_handle,
+ 				     u32 function,
 -- 
 2.26.2
 

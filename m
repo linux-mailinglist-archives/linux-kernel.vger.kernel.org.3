@@ -2,141 +2,467 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E90F547DAE0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 00:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2619A47DAE4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 00:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244106AbhLVX0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 18:26:08 -0500
-Received: from mga05.intel.com ([192.55.52.43]:16418 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230210AbhLVX0H (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 18:26:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640215567; x=1671751567;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=J7vnVG5q1My3KWcdQmTiXRPCNvGbUpytvZ6Hrp86Z8I=;
-  b=hszrZlvlZhlqz0McK+ucVadwLF/nvh9XHgawpBxJGqZp7AjasHVB2GlQ
-   B+IK57IHwvLeQZw3uCizM5Mirorpl+aZyXrJPQESzTZCiKAaaTpo7gjSr
-   bwpPM6Z+TwwFNlE19W24HjvTYypACvbp92SdxtRt60sd4JMzjUhALI4QG
-   TMJs5i4r0DxqKLkC6Dv/LcuFvF7otGVPKXzZPCqFVjtw0Yqguo3OiWBEX
-   BZ/KAP3tIMs39LvF0x9snpCjLWIGFXalYFC5zuHI/4zV9DqgAEjD4WKPp
-   01leUiHCvNxyOBJy3COxhQa4xPgHXeYqv8kjdJwZlDZGuEmD4BnZmLsL7
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="327030750"
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="327030750"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 15:26:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="508652227"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 22 Dec 2021 15:26:04 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n0Azk-00013G-15; Wed, 22 Dec 2021 23:26:04 +0000
-Date:   Thu, 23 Dec 2021 07:25:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bo Jiao <Bo.Jiao@mediatek.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
-        Sujuan Chen <sujuan.chen@mediatek.com>,
-        Ryder Lee <ryder.lee@mediatek.com>
-Subject: [nbd168-wireless:mt76 5/28]
- drivers/net/wireless/mediatek/mt76/mt7915/dma.c:97:6: warning: variable
- 'base' is used uninitialized whenever 'if' condition is false
-Message-ID: <202112230704.dKCp3lmX-lkp@intel.com>
+        id S1344356AbhLVX0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 18:26:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59200 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1344351AbhLVX0M (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 18:26:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640215571;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AJ/yfbQmHbK2JU57iFvrDipHf0zo7OxSMRY6+mXwzOc=;
+        b=EiC+3YXvSftpDNevxSiDlhJIcflAXjmxw1aV8viVA2xw++U5GyXhKVOpTdfQ94+5Xo0fGP
+        zko1rOEiR0rBSCN6QbNrjm/7IbfCj5dF+4Lfih2poscXtJJQgTNmBL23ceAk/P4HFUAC+b
+        NBHFdRCrl9YAYfRfezMUThiWMzQaw24=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-161-58IRSqpEN8SCiD2svRfCiQ-1; Wed, 22 Dec 2021 18:26:07 -0500
+X-MC-Unique: 58IRSqpEN8SCiD2svRfCiQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5D0491800D50;
+        Wed, 22 Dec 2021 23:26:05 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.165])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3B0137EA26;
+        Wed, 22 Dec 2021 23:25:51 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH v4 47/68] cachefiles: Implement culling daemon commands
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 22 Dec 2021 23:25:50 +0000
+Message-ID: <164021555037.640689.9472627499842585255.stgit@warthog.procyon.org.uk>
+In-Reply-To: <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk>
+References: <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/nbd168/wireless mt76
-head:   05f0500c7b0147353e97de7369d504c5fbd3951e
-commit: 22c2fb9495d35e0c442c23bcd3b8a4a18a28c62d [5/28] mt76: mt7915: rework dma.c to adapt mt7916 changes
-config: mips-randconfig-r033-20211222 (https://download.01.org/0day-ci/archive/20211223/202112230704.dKCp3lmX-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project de4e0195ae1c39f1c3b07834b8e32c113f4f20eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/nbd168/wireless/commit/22c2fb9495d35e0c442c23bcd3b8a4a18a28c62d
-        git remote add nbd168-wireless https://github.com/nbd168/wireless
-        git fetch --no-tags nbd168-wireless mt76
-        git checkout 22c2fb9495d35e0c442c23bcd3b8a4a18a28c62d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/wireless/mediatek/mt76/mt7915/
+Implement the ability for the userspace daemon to try and cull a file or
+directory in the cache.  Two daemon commands are implemented:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+ (1) The "inuse" command.  This queries if a file is in use or whether it
+     can be deleted.  It checks the S_KERNEL_FILE flag on the inode
+     referred to by the specified filename.
 
-All warnings (new ones prefixed by >>):
+ (2) The "cull" command.  This asks for a file or directory to be removed,
+     where removal means either unlinking it or moving it to the graveyard
+     directory for userspace to dismantle.
 
->> drivers/net/wireless/mediatek/mt76/mt7915/dma.c:97:6: warning: variable 'base' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (!is_mt7915(&dev->mt76)) {
-               ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/mediatek/mt76/mt7915/dma.c:101:70: note: uninitialized use occurs here
-           mt76_wr(dev, MT_RXQ_EXT_CTRL(MT_RXQ_EXT_WA) + ofs, PREFETCH(0x1c0 + base, 0x4));
-                                                                               ^~~~
-   drivers/net/wireless/mediatek/mt76/mt7915/dma.c:85:35: note: expanded from macro 'PREFETCH'
-   #define PREFETCH(_base, _depth) ((_base) << 16 | (_depth))
-                                     ^~~~~
-   drivers/net/wireless/mediatek/mt76/mt7915/../mt76.h:829:63: note: expanded from macro 'mt76_wr'
-   #define mt76_wr(dev, ...)       (dev)->mt76.bus->wr(&((dev)->mt76), __VA_ARGS__)
-                                                                       ^~~~~~~~~~~
-   drivers/net/wireless/mediatek/mt76/mt7915/dma.c:97:2: note: remove the 'if' if its condition is always true
-           if (!is_mt7915(&dev->mt76)) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/mediatek/mt76/mt7915/dma.c:86:10: note: initialize the variable 'base' to silence this warning
-           u32 base;
-                   ^
-                    = 0
-   1 warning generated.
+Changes
+=======
+ver #2:
+ - Fix logging of wrong error[1].
+ - Need to unmark an inode we've moved to the graveyard before unlocking.
 
-
-vim +97 drivers/net/wireless/mediatek/mt76/mt7915/dma.c
-
-    82	
-    83	static void __mt7915_dma_prefetch(struct mt7915_dev *dev, u32 ofs)
-    84	{
-    85	#define PREFETCH(_base, _depth)	((_base) << 16 | (_depth))
-    86		u32 base;
-    87	
-    88		/* prefetch SRAM wrapping boundary for tx/rx ring. */
-    89		mt76_wr(dev, MT_MCUQ_EXT_CTRL(MT_MCUQ_FWDL) + ofs, PREFETCH(0x0, 0x4));
-    90		mt76_wr(dev, MT_MCUQ_EXT_CTRL(MT_MCUQ_WM) + ofs, PREFETCH(0x40, 0x4));
-    91		mt76_wr(dev, MT_TXQ_EXT_CTRL(0) + ofs, PREFETCH(0x80, 0x4));
-    92		mt76_wr(dev, MT_TXQ_EXT_CTRL(1) + ofs, PREFETCH(0xc0, 0x4));
-    93		mt76_wr(dev, MT_MCUQ_EXT_CTRL(MT_MCUQ_WA) + ofs, PREFETCH(0x100, 0x4));
-    94	
-    95		mt76_wr(dev, MT_RXQ_EXT_CTRL(MT_RXQ_MCU) + ofs, PREFETCH(0x140, 0x4));
-    96		mt76_wr(dev, MT_RXQ_EXT_CTRL(MT_RXQ_MCU_WA) + ofs, PREFETCH(0x180, 0x4));
-  > 97		if (!is_mt7915(&dev->mt76)) {
-    98			mt76_wr(dev, MT_RXQ_EXT_CTRL(MT_RXQ_MAIN_WA) + ofs, PREFETCH(0x1c0, 0x4));
-    99			base = 0x40;
-   100		}
-   101		mt76_wr(dev, MT_RXQ_EXT_CTRL(MT_RXQ_EXT_WA) + ofs, PREFETCH(0x1c0 + base, 0x4));
-   102		mt76_wr(dev, MT_RXQ_EXT_CTRL(MT_RXQ_MAIN) + ofs, PREFETCH(0x200 + base, 0x4));
-   103		mt76_wr(dev, MT_RXQ_EXT_CTRL(MT_RXQ_EXT) + ofs, PREFETCH(0x240 + base, 0x4));
-   104	
-   105		/* for mt7915, the ring which is next the last
-   106		 * used ring must be initialized.
-   107		 */
-   108		if (is_mt7915(&dev->mt76)) {
-   109			ofs += 0x4;
-   110			mt76_wr(dev, MT_MCUQ_EXT_CTRL(MT_MCUQ_WA) + ofs, PREFETCH(0x140, 0x0));
-   111			mt76_wr(dev, MT_RXQ_EXT_CTRL(MT_RXQ_EXT_WA) + ofs, PREFETCH(0x200 + base, 0x0));
-   112			mt76_wr(dev, MT_RXQ_EXT_CTRL(MT_RXQ_EXT) + ofs, PREFETCH(0x280 + base, 0x0));
-   113		}
-   114	}
-   115	
-
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: linux-cachefs@redhat.com
+Link: https://lore.kernel.org/r/20211203094950.GA2480@kili/ [1]
+Link: https://lore.kernel.org/r/163819643179.215744.13641580295708315695.stgit@warthog.procyon.org.uk/ # v1
+Link: https://lore.kernel.org/r/163906945705.143852.8177595531814485350.stgit@warthog.procyon.org.uk/ # v2
+Link: https://lore.kernel.org/r/163967155792.1823006.1088936326902550910.stgit@warthog.procyon.org.uk/ # v3
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+ fs/cachefiles/daemon.c   |    4 -
+ fs/cachefiles/internal.h |   11 ++
+ fs/cachefiles/namei.c    |  307 ++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 320 insertions(+), 2 deletions(-)
+
+diff --git a/fs/cachefiles/daemon.c b/fs/cachefiles/daemon.c
+index 337597a4e30c..985c3f3e6767 100644
+--- a/fs/cachefiles/daemon.c
++++ b/fs/cachefiles/daemon.c
+@@ -574,7 +574,7 @@ static int cachefiles_daemon_cull(struct cachefiles_cache *cache, char *args)
+ 		goto notdir;
+ 
+ 	cachefiles_begin_secure(cache, &saved_cred);
+-	ret = -ENOANO; // PLACEHOLDER: Do culling
++	ret = cachefiles_cull(cache, path.dentry, args);
+ 	cachefiles_end_secure(cache, saved_cred);
+ 
+ 	path_put(&path);
+@@ -645,7 +645,7 @@ static int cachefiles_daemon_inuse(struct cachefiles_cache *cache, char *args)
+ 		goto notdir;
+ 
+ 	cachefiles_begin_secure(cache, &saved_cred);
+-	ret = -ENOANO; // PLACEHOLDER: Check if in use
++	ret = cachefiles_check_in_use(cache, path.dentry, args);
+ 	cachefiles_end_secure(cache, saved_cred);
+ 
+ 	path_put(&path);
+diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
+index 7c67a70a3dff..654dbd51b965 100644
+--- a/fs/cachefiles/internal.h
++++ b/fs/cachefiles/internal.h
+@@ -189,12 +189,23 @@ extern struct kmem_cache *cachefiles_object_jar;
+  */
+ extern void cachefiles_unmark_inode_in_use(struct cachefiles_object *object,
+ 					   struct file *file);
++extern int cachefiles_bury_object(struct cachefiles_cache *cache,
++				  struct cachefiles_object *object,
++				  struct dentry *dir,
++				  struct dentry *rep,
++				  enum fscache_why_object_killed why);
+ extern struct dentry *cachefiles_get_directory(struct cachefiles_cache *cache,
+ 					       struct dentry *dir,
+ 					       const char *name,
+ 					       bool *_is_new);
+ extern void cachefiles_put_directory(struct dentry *dir);
+ 
++extern int cachefiles_cull(struct cachefiles_cache *cache, struct dentry *dir,
++			   char *filename);
++
++extern int cachefiles_check_in_use(struct cachefiles_cache *cache,
++				   struct dentry *dir, char *filename);
++
+ /*
+  * security.c
+  */
+diff --git a/fs/cachefiles/namei.c b/fs/cachefiles/namei.c
+index db60a671c3fc..e87c401239f1 100644
+--- a/fs/cachefiles/namei.c
++++ b/fs/cachefiles/namei.c
+@@ -217,3 +217,310 @@ void cachefiles_put_directory(struct dentry *dir)
+ 		dput(dir);
+ 	}
+ }
++
++/*
++ * Remove a regular file from the cache.
++ */
++static int cachefiles_unlink(struct cachefiles_cache *cache,
++			     struct cachefiles_object *object,
++			     struct dentry *dir, struct dentry *dentry,
++			     enum fscache_why_object_killed why)
++{
++	struct path path = {
++		.mnt	= cache->mnt,
++		.dentry	= dir,
++	};
++	int ret;
++
++	trace_cachefiles_unlink(object, dentry, why);
++	ret = security_path_unlink(&path, dentry);
++	if (ret < 0) {
++		cachefiles_io_error(cache, "Unlink security error");
++		return ret;
++	}
++
++	ret = cachefiles_inject_remove_error();
++	if (ret == 0) {
++		ret = vfs_unlink(&init_user_ns, d_backing_inode(dir), dentry, NULL);
++		if (ret == -EIO)
++			cachefiles_io_error(cache, "Unlink failed");
++	}
++	if (ret != 0)
++		trace_cachefiles_vfs_error(object, d_backing_inode(dir), ret,
++					   cachefiles_trace_unlink_error);
++	return ret;
++}
++
++/*
++ * Delete an object representation from the cache
++ * - File backed objects are unlinked
++ * - Directory backed objects are stuffed into the graveyard for userspace to
++ *   delete
++ */
++int cachefiles_bury_object(struct cachefiles_cache *cache,
++			   struct cachefiles_object *object,
++			   struct dentry *dir,
++			   struct dentry *rep,
++			   enum fscache_why_object_killed why)
++{
++	struct dentry *grave, *trap;
++	struct path path, path_to_graveyard;
++	char nbuffer[8 + 8 + 1];
++	int ret;
++
++	_enter(",'%pd','%pd'", dir, rep);
++
++	if (rep->d_parent != dir) {
++		inode_unlock(d_inode(dir));
++		_leave(" = -ESTALE");
++		return -ESTALE;
++	}
++
++	/* non-directories can just be unlinked */
++	if (!d_is_dir(rep)) {
++		dget(rep); /* Stop the dentry being negated if it's only pinned
++			    * by a file struct.
++			    */
++		ret = cachefiles_unlink(cache, object, dir, rep, why);
++		dput(rep);
++
++		inode_unlock(d_inode(dir));
++		_leave(" = %d", ret);
++		return ret;
++	}
++
++	/* directories have to be moved to the graveyard */
++	_debug("move stale object to graveyard");
++	inode_unlock(d_inode(dir));
++
++try_again:
++	/* first step is to make up a grave dentry in the graveyard */
++	sprintf(nbuffer, "%08x%08x",
++		(uint32_t) ktime_get_real_seconds(),
++		(uint32_t) atomic_inc_return(&cache->gravecounter));
++
++	/* do the multiway lock magic */
++	trap = lock_rename(cache->graveyard, dir);
++
++	/* do some checks before getting the grave dentry */
++	if (rep->d_parent != dir || IS_DEADDIR(d_inode(rep))) {
++		/* the entry was probably culled when we dropped the parent dir
++		 * lock */
++		unlock_rename(cache->graveyard, dir);
++		_leave(" = 0 [culled?]");
++		return 0;
++	}
++
++	if (!d_can_lookup(cache->graveyard)) {
++		unlock_rename(cache->graveyard, dir);
++		cachefiles_io_error(cache, "Graveyard no longer a directory");
++		return -EIO;
++	}
++
++	if (trap == rep) {
++		unlock_rename(cache->graveyard, dir);
++		cachefiles_io_error(cache, "May not make directory loop");
++		return -EIO;
++	}
++
++	if (d_mountpoint(rep)) {
++		unlock_rename(cache->graveyard, dir);
++		cachefiles_io_error(cache, "Mountpoint in cache");
++		return -EIO;
++	}
++
++	grave = lookup_one_len(nbuffer, cache->graveyard, strlen(nbuffer));
++	if (IS_ERR(grave)) {
++		unlock_rename(cache->graveyard, dir);
++		trace_cachefiles_vfs_error(object, d_inode(cache->graveyard),
++					   PTR_ERR(grave),
++					   cachefiles_trace_lookup_error);
++
++		if (PTR_ERR(grave) == -ENOMEM) {
++			_leave(" = -ENOMEM");
++			return -ENOMEM;
++		}
++
++		cachefiles_io_error(cache, "Lookup error %ld", PTR_ERR(grave));
++		return -EIO;
++	}
++
++	if (d_is_positive(grave)) {
++		unlock_rename(cache->graveyard, dir);
++		dput(grave);
++		grave = NULL;
++		cond_resched();
++		goto try_again;
++	}
++
++	if (d_mountpoint(grave)) {
++		unlock_rename(cache->graveyard, dir);
++		dput(grave);
++		cachefiles_io_error(cache, "Mountpoint in graveyard");
++		return -EIO;
++	}
++
++	/* target should not be an ancestor of source */
++	if (trap == grave) {
++		unlock_rename(cache->graveyard, dir);
++		dput(grave);
++		cachefiles_io_error(cache, "May not make directory loop");
++		return -EIO;
++	}
++
++	/* attempt the rename */
++	path.mnt = cache->mnt;
++	path.dentry = dir;
++	path_to_graveyard.mnt = cache->mnt;
++	path_to_graveyard.dentry = cache->graveyard;
++	ret = security_path_rename(&path, rep, &path_to_graveyard, grave, 0);
++	if (ret < 0) {
++		cachefiles_io_error(cache, "Rename security error %d", ret);
++	} else {
++		struct renamedata rd = {
++			.old_mnt_userns	= &init_user_ns,
++			.old_dir	= d_inode(dir),
++			.old_dentry	= rep,
++			.new_mnt_userns	= &init_user_ns,
++			.new_dir	= d_inode(cache->graveyard),
++			.new_dentry	= grave,
++		};
++		trace_cachefiles_rename(object, rep, grave, why);
++		ret = cachefiles_inject_read_error();
++		if (ret == 0)
++			ret = vfs_rename(&rd);
++		if (ret != 0)
++			trace_cachefiles_vfs_error(object, d_inode(dir), ret,
++						   cachefiles_trace_rename_error);
++		if (ret != 0 && ret != -ENOMEM)
++			cachefiles_io_error(cache,
++					    "Rename failed with error %d", ret);
++	}
++
++	__cachefiles_unmark_inode_in_use(object, rep);
++	unlock_rename(cache->graveyard, dir);
++	dput(grave);
++	_leave(" = 0");
++	return 0;
++}
++
++/*
++ * Look up an inode to be checked or culled.  Return -EBUSY if the inode is
++ * marked in use.
++ */
++static struct dentry *cachefiles_lookup_for_cull(struct cachefiles_cache *cache,
++						 struct dentry *dir,
++						 char *filename)
++{
++	struct dentry *victim;
++	int ret = -ENOENT;
++
++	inode_lock_nested(d_inode(dir), I_MUTEX_PARENT);
++
++	victim = lookup_one_len(filename, dir, strlen(filename));
++	if (IS_ERR(victim))
++		goto lookup_error;
++	if (d_is_negative(victim))
++		goto lookup_put;
++	if (d_inode(victim)->i_flags & S_KERNEL_FILE)
++		goto lookup_busy;
++	return victim;
++
++lookup_busy:
++	ret = -EBUSY;
++lookup_put:
++	inode_unlock(d_inode(dir));
++	dput(victim);
++	return ERR_PTR(ret);
++
++lookup_error:
++	inode_unlock(d_inode(dir));
++	ret = PTR_ERR(victim);
++	if (ret == -ENOENT)
++		return ERR_PTR(-ESTALE); /* Probably got retired by the netfs */
++
++	if (ret == -EIO) {
++		cachefiles_io_error(cache, "Lookup failed");
++	} else if (ret != -ENOMEM) {
++		pr_err("Internal error: %d\n", ret);
++		ret = -EIO;
++	}
++
++	return ERR_PTR(ret);
++}
++
++/*
++ * Cull an object if it's not in use
++ * - called only by cache manager daemon
++ */
++int cachefiles_cull(struct cachefiles_cache *cache, struct dentry *dir,
++		    char *filename)
++{
++	struct dentry *victim;
++	struct inode *inode;
++	int ret;
++
++	_enter(",%pd/,%s", dir, filename);
++
++	victim = cachefiles_lookup_for_cull(cache, dir, filename);
++	if (IS_ERR(victim))
++		return PTR_ERR(victim);
++
++	/* check to see if someone is using this object */
++	inode = d_inode(victim);
++	inode_lock(inode);
++	if (inode->i_flags & S_KERNEL_FILE) {
++		ret = -EBUSY;
++	} else {
++		/* Stop the cache from picking it back up */
++		inode->i_flags |= S_KERNEL_FILE;
++		ret = 0;
++	}
++	inode_unlock(inode);
++	if (ret < 0)
++		goto error_unlock;
++
++	ret = cachefiles_bury_object(cache, NULL, dir, victim,
++				     FSCACHE_OBJECT_WAS_CULLED);
++	if (ret < 0)
++		goto error;
++
++	dput(victim);
++	_leave(" = 0");
++	return 0;
++
++error_unlock:
++	inode_unlock(d_inode(dir));
++error:
++	dput(victim);
++	if (ret == -ENOENT)
++		return -ESTALE; /* Probably got retired by the netfs */
++
++	if (ret != -ENOMEM) {
++		pr_err("Internal error: %d\n", ret);
++		ret = -EIO;
++	}
++
++	_leave(" = %d", ret);
++	return ret;
++}
++
++/*
++ * Find out if an object is in use or not
++ * - called only by cache manager daemon
++ * - returns -EBUSY or 0 to indicate whether an object is in use or not
++ */
++int cachefiles_check_in_use(struct cachefiles_cache *cache, struct dentry *dir,
++			    char *filename)
++{
++	struct dentry *victim;
++	int ret = 0;
++
++	victim = cachefiles_lookup_for_cull(cache, dir, filename);
++	if (IS_ERR(victim))
++		return PTR_ERR(victim);
++
++	inode_unlock(d_inode(dir));
++	dput(victim);
++	return ret;
++}
+
+

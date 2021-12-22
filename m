@@ -2,153 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6670647D007
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 11:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F3347D00C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 11:34:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240004AbhLVKck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 05:32:40 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:33893 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235010AbhLVKch (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 05:32:37 -0500
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JJqQ455n5zcc7n;
-        Wed, 22 Dec 2021 18:32:12 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 22 Dec 2021 18:32:35 +0800
-From:   "libaokun (A)" <libaokun1@huawei.com>
-Subject: Questions about the patch 054aa8d439b9 ("fget: check that the fd
- still exists after getting a ref to it")
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        <mszeredi@redhat.com>, <jannh@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-CC:     "zhangyi (F)" <yi.zhang@huawei.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>
-Message-ID: <58644a55-561d-4a2e-6741-589d013837f1@huawei.com>
-Date:   Wed, 22 Dec 2021 18:32:35 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        id S240049AbhLVKeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 05:34:20 -0500
+Received: from smtp1.axis.com ([195.60.68.17]:36794 "EHLO smtp1.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235010AbhLVKeT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 05:34:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1640169259;
+  x=1671705259;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VLMLmT5m3m7o69AaIKBFwKPKTlTsCPE8fqiz5LYmR68=;
+  b=I5V2s3X+qEdyEm0ZzTycnYPNeZhN90SESk62UfyWIhRxSliTj2xaGsb4
+   2+Gv6xECHEWMwN3G+nYD+t+rzCtyC5pAPpL7mCHzVSs/FyuRZ2C8bqAz8
+   Y3Ait1HugHTaiwteFIXGqo/nHD76Eg1xDKYbZsnE2efkw580q/ywtr7FC
+   1jAfeYmslCXM4Dk/UBM+rLdyHhT8SzUAH4dkcrWZADX1jcZz3xDT/Hz4J
+   TD16qz5B6LR0eQm9Adm6fVgbLLdY8NOzXEW90u79ss/JQxZpv7iDLIe/0
+   by65PZ+x4s4WlSYIo+GMu8nGNM/73AwFXXn3z/zfjKlmYtTNO4e7CZSV6
+   Q==;
+Date:   Wed, 22 Dec 2021 11:34:17 +0100
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Johannes Berg <johannes@sipsolutions.net>
+CC:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Rob Herring <robh+dt@kernel.org>, kernel <kernel@axis.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] um: virtio_uml: allow probing from devicetree
+Message-ID: <20211222103417.GB25135@axis.com>
+References: <20211221090447.1567-1-vincent.whitchurch@axis.com>
+ <5f104044649ec60ba93648e68c3df2183e032072.camel@sipsolutions.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500020.china.huawei.com (7.185.36.88)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <5f104044649ec60ba93648e68c3df2183e032072.camel@sipsolutions.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Linus Torvalds <torvalds@linux-foundation.org>
-> Date: Wed, 1 Dec 2021 10:06:14 -0800
-> Subject: fget: check that the fd still exists after getting a ref to it
->
-> Jann Horn points out that there is another possible race wrt Unix domain
-> socket garbage collection, somewhat reminiscent of the one fixed in
-> commit cbcf01128d0a ("af_unix: fix garbage collect vs MSG_PEEK").
->
-> See the extended comment about the garbage collection requirements added
-> to unix_peek_fds() by that commit for details.
->
-> The race comes from how we can locklessly look up a file descriptor just
-> as it is in the process of being closed, and with the right artificial
-> timing (Jann added a few strategic 'mdelay(500)' calls to do that), the
-> Unix domain socket garbage collector could see the reference count
-> decrement of the close() happen before fget() took its reference to the
-> file and the file was attached onto a new file descriptor.
+On Tue, Dec 21, 2021 at 09:48:26PM +0100, Johannes Berg wrote:
+> On Tue, 2021-12-21 at 10:04 +0100, Vincent Whitchurch wrote:
+> > Allow the virtio_uml device to be probed from the devicetree so that
+> > sub-devices can be specified using the standard virtio bindings, for
+> > example:
+> > 
+> >   virtio@1 {
+> >     compatible = "virtio,uml";
+> >     socket-path = "i2c.sock";
+> >     virtio-device-id = <0x22>;
+> > 
+> 
+> Given this, maybe it should modify
+> Documentation/devicetree/bindings/virtio/virtio-device.yaml? Or actually
+> add a new Documentation/devicetree/bindings/virtio/uml.yaml I guess?
+> 
+> +Rob, because I'm not really into any of this.
+> 
+> Also, I'm not even sure we should/need to document the DT bits that are
+> basically only used for testing in the first place?
 
-I analyzed this CVE and tried to reproduce it.
+I wasn't sure either, but Rob was OK with not documenting some other
+bindings which are only used for testing[0], so I assumed that that
+applied here too:
 
-I guess he triggered it like the stack below.
+ [0] https://lore.kernel.org/all/5baa1ae6.1c69fb81.847f2.3ab1@mx.google.com/ 
 
+Also, DT bindings are supposed to be generic and based on what the
+hardware has, but here we have no hardware and something very Linux and
+UML-specific.
 
-close_fd                               |
-  pick_file                             |
-                                        | __fget_files
-file = files_lookup_fd_rcu(files, fd); |
-                                        | 
-rcu_assign_pointer(fdt->fd[fd], NULL);
-  filp_close                            |
-   fput                                 |
-                                        | get_file_rcu_many // ned ref>=1
-    fput_many(file, 1);                 |
-     file_free(file);                   |
-                                        |  return file
-                                        |  // read-after-free
+> Code looks good to me.
 
-
-
-If you want to successfully execute the get_file_rcu_many function,
-
-the reference counting of the file is greater than or equal to 1 and
-
-is greater than or equal to 2 after the execution.
-
-However, close releases only one reference count and does not release 
-the file,
-
-so read-after-free does not occur. So how is the race triggered here?
-
-The question has been pondered for a long time without any results.
-
-Could I get more details (e.g. reproduction methods or stacks) from you ?
-
-I would appreciate it if you could help me.
-
-
-> This is all (intentionally) correct on the 'struct file *' side, with
-> RCU lookups and lockless reference counting very much part of the
-> design. Getting that reference count out of order isn't a problem per
-> se.
->
-> But the garbage collector can get confused by seeing this situation of
-> having seen a file not having any remaining external references and then
-> seeing it being attached to an fd.
->
-> In commit cbcf01128d0a ("af_unix: fix garbage collect vs MSG_PEEK") the
-> fix was to serialize the file descriptor install with the garbage
-> collector by taking and releasing the unix_gc_lock.
->
-> That's not really an option here, but since this all happens when we are
-> in the process of looking up a file descriptor, we can instead simply
-> just re-check that the file hasn't been closed in the meantime, and just
-> re-do the lookup if we raced with a concurrent close() of the same file
-> descriptor.
->
-> Reported-and-tested-by: Jann Horn <jannh@google.com>
-> Acked-by: Miklos Szeredi <mszeredi@redhat.com>
-> Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-> ---
-> fs/file.c | 4 ++++
-> 1 file changed, 4 insertions(+)
->
-> diff --git a/fs/file.c b/fs/file.c
-> index 8627dacfc4246..ad4a8bf3cf109 100644
-> --- a/fs/file.c
-> +++ b/fs/file.c
-> @@ -858,6 +858,10 @@ loop:
-> file = NULL;
-> else if (!get_file_rcu_many(file, refs))
-> goto loop;
-> + else if (files_lookup_fd_raw(files, fd) != file) {
-> + fput_many(file, refs);
-> + goto loop;
-> + }
-> }
-> rcu_read_unlock();
-> -- cgit 1.2.3-1.el7
-
-Looking forward to hearing from you.
-
-Thank you!
-
--- 
-With Best Regards,
-Baokun Li
-.
-
-
+Thanks!

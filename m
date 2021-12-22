@@ -2,74 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 633A647D30A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:29:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A40F647D344
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241187AbhLVN3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 08:29:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241120AbhLVN3s (ORCPT
+        id S245549AbhLVN4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 08:56:36 -0500
+Received: from mout.kundenserver.de ([217.72.192.74]:42237 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245500AbhLVN4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 08:29:48 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDFFC061574;
-        Wed, 22 Dec 2021 05:29:47 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id q14so1137318edi.3;
-        Wed, 22 Dec 2021 05:29:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6mz9mKXhthiMp9uod4RylTzdhkx9DUKWmtKeQhYTqFE=;
-        b=XZhfKD4djxCuA0zOwiQymC/6ud1PQTqb5xArDVLDF4Mx8CXa4KYVcTBvQBhLNsk6cZ
-         3nIiZzMogoVRc+Zyhg1vy2OJwjJegXE/DwCJ5w3J9G8a0ZA1XKuOl5ivpaqFWHKiUz2G
-         gkd0Au0C/gS3aKzZELbscBvpSztqdbjGK0GC/qXtFkB6HTs8JHwdOaNfc4ddrIhDsukx
-         u5nagLVaylIH7lhfESqkjDd7tcrFdqzITJ25vlNFOELuGFMAHd4t6uuKEqIIb7u3VuXQ
-         uZDXIyOo3pZd6t+2QFhC7bCgmEMLQpVRv/bUewfs6CFuv/n2Ib8kpPHLDr3v9qoA5Fbw
-         onfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6mz9mKXhthiMp9uod4RylTzdhkx9DUKWmtKeQhYTqFE=;
-        b=vmZ0vI//5Pyl6kfoWi8p5tp/VMON1uHWcWSDYq8KUWJDsfjA7H8/BoXrmT2FRF6zXl
-         0hENhFLJaMsrrK2nr1UVkupadAnnRK97KWOvl87M1j+ZM0xguc2Y1IeD3rLHHJPxeBbW
-         OlDDwuLig0DeNmXO5cGKdV8Z29iAxvw6zaYmSO7RdgQVgCmo22qxT90cGv4y9R1PQGNU
-         tY10xi1CaTJjVcPH4tW+FYAE2nNKoxzNMd2FXmfXuviKj67yt5gePZfZFc+KNORxurhO
-         NYeD+fiGB/JnozBsKRF+d8oFfOghkiPcvflUSyR+1+x788OglW6ynFTQoxeE22yzOxvU
-         qlpw==
-X-Gm-Message-State: AOAM530Fsc7PxEjyYCPoKiOOi2WRpTiXGzT63PkCiFugmuYOJcPSIP08
-        BwvZY8CB9XgGLZbi1+oZMXGxdagGw7sUUVicaw==
-X-Google-Smtp-Source: ABdhPJxxriRxyKYzBYvTdUDYNRMVnvcEsBszrhDroFotMEvj5A/odI+0bpSzgdPEz8wZXfX7CcJhVutmRtdnzaflsqo=
-X-Received: by 2002:aa7:dc07:: with SMTP id b7mr2825876edu.327.1640179786483;
- Wed, 22 Dec 2021 05:29:46 -0800 (PST)
+        Wed, 22 Dec 2021 08:56:34 -0500
+Received: from mail-wm1-f51.google.com ([209.85.128.51]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MWBC8-1mxKAd1Vrm-00Xf5B; Wed, 22 Dec 2021 14:56:33 +0100
+Received: by mail-wm1-f51.google.com with SMTP id n14-20020a7bcbce000000b00332f4abf43fso2345269wmi.0;
+        Wed, 22 Dec 2021 05:56:33 -0800 (PST)
+X-Gm-Message-State: AOAM533JNhWpGmeRcXqOoOCADiHIBByeCy8O4cTuOkZ0pssBO7ZfEdah
+        uMBjfyinhg1v+J7xiDnyMNqG0e0PkFAvFnNi84o=
+X-Google-Smtp-Source: ABdhPJxHZHEwLAEwqHridYfJm7TlWCGLjIEDeHHUir8Cs1kP3HuMbH2jN9G4hTgoKteiOAzPC+bhvI86kuxZaYPixlc=
+X-Received: by 2002:a7b:c198:: with SMTP id y24mr961837wmi.1.1640179840757;
+ Wed, 22 Dec 2021 05:30:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20211222232448.012801f5@canb.auug.org.au>
-In-Reply-To: <20211222232448.012801f5@canb.auug.org.au>
-From:   Rob Herring <robherring2@gmail.com>
-Date:   Wed, 22 Dec 2021 09:29:35 -0400
-Message-ID: <CAL_JsqLzY7pLht8ytma4UcdHSK4Et54L314bt1RYN4M7TM=Q0A@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the devicetree-fixes tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Pingfan Liu <kernelfans@gmail.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
+References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-3-guoren@kernel.org>
+ <CAK8P3a3dS=Ne0Pd2qZc8vB2whM7AUcJ1BNbhtf6EEboWAPpSug@mail.gmail.com>
+ <CAJF2gTTN1HZeycK-WOFH0EjmjtBB4T=9de6Qrjs=uhAsLoOFaQ@mail.gmail.com>
+ <CAK8P3a3m2Mz4Tvu+3cdji6iq_wvFZsYoyKvnaNKTEjE+ivex6A@mail.gmail.com> <CAJF2gTQEp0hEousuEyp5cPCa5Remb_8HMZ-BXZ393_z7hbne7g@mail.gmail.com>
+In-Reply-To: <CAJF2gTQEp0hEousuEyp5cPCa5Remb_8HMZ-BXZ393_z7hbne7g@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 22 Dec 2021 14:30:24 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a165oWeGOgsM=U3F54e4HFvhJxr2sG0qoGLOe_WK8qAtw@mail.gmail.com>
+Message-ID: <CAK8P3a165oWeGOgsM=U3F54e4HFvhJxr2sG0qoGLOe_WK8qAtw@mail.gmail.com>
+Subject: Re: [PATCH 02/13] riscv: Fixup difference with defconfig
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:V+ui7Qfh5UJ5wbdFKKqnkMcn70JhiC8cXqClgW8RetvDqfobO2L
+ nJNBiUoYiMSgGcBgIoFbvNzV4iyvOwJoCHSfUysVAcS0qOlYaqSn5iPStgLG6K5fwoFYIWB
+ 7ZksIhUT1ZOFaZ6REI17gMhvZA48aZRFXVXtlTP8swf3ozv4wqOCtitSQBZxcM90wj1KuYc
+ ebkyGDtDMSRDNyXD6+CWw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:DHOosCbS8YU=:Egea1T/Zw6a6fxhPsEta8x
+ IaumnO5BQwpM0o6upnzhacoNM4/qTKod0UGv0YzxsLS1UgCFs0IPRtwvXxoUnj7vNs30OJh02
+ ZwrjLh+tSsi44/3L7LpaXIM9NEhRbpBpomokY/uVzYU0i0lo+P78Q6z81pTDhIEl0cm7PrIE9
+ bbUWY0o8z66aQPUFnMuXaxTqiZM2Pjl++WEjIn7JCDbJ9pyfUHpyOouxk760dTDJciFuBAzSZ
+ LROUsB2+Lbil6TLTxi/DqeFsM66r5j+9/8LIVdmO7I6XF1AHMn2lttqEAnviYPqqCjB6ZFJde
+ IqKoi6CQWDYVXAaDq/8VolA1hIEeGFtdx+W+CSyjn3XvnLPL80qYa6Fo0Ims6pjIHfwRzQkfQ
+ 9udGcJwEaMNbiNDEO03iVpQX55CkZ4NnUfOSLCeAukOgKHlXmwt915Z3RLVluaa2Yn0O2eoas
+ J0dfzTaCPB/ri4HeZqVJS0iNu8mK4g6AO6zqzC2FmqDf02wxIwvP1857ht4h9jhz3G4rzkIhd
+ U8Hu98VRS1ENfVsdbpdwmgw26mwvd0Yvxj6W9qhWQiKHk7exStgCCvU7WMgpu7NiDzLppduxi
+ 1fBAhGuNn53MjyEwquE005h62lVzGePtMrQebKMf3ejjnYcrYWK5hOEM97ftgdPY6VgwvmCjB
+ 3urzxwB5wCDx5nzfq8XO5RWdR6mbYd97kXGugxubRVnOKZC/LtBrc3RwHebPIbWRvfR+yzkJ4
+ lK8g13Ohq+oXmo3ExSpzrTXGUPlMXK3mmO6BMKNmE2qNYjaFAj133fpLL/eaevxbgKv/AozCa
+ 7Jh3LQ+ilRqqwFgm627kgtyidDeUWIFbk4tdqdhgBEm6K8rJQU=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 8:24 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the devicetree-fixes tree, today's linux-next build
-> (htmldocs) produced this warning:
->
-> drivers/of/fdt.c:980: warning: Excess function parameter 'node' description in 'early_init_dt_check_for_usable_mem_range'
+On Wed, Dec 22, 2021 at 2:06 PM Guo Ren <guoren@kernel.org> wrote:
+> On Wed, Dec 22, 2021 at 8:51 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Wed, Dec 22, 2021 at 12:34 PM Guo Ren <guoren@kernel.org> wrote:
+> > Given that there are no specific rv32 SoC implementations supported
+> > by the kernel today (other than SOC_VIRT), the number of users
+> > would be close to zero anyway.
+> I really agree with you, but we still need the rv32 user mode
+> ecosystem for memory footprint.
 
-Thanks, I've fixed this up.
+Sure, I just meant there are few users that would have to relearn typing
+"make defconfig 32-bit.config" instead of "make rv32_defconfig" even
+without the added Makefile target.
 
-Rob
+         Arnd

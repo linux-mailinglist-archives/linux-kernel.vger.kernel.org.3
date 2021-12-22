@@ -2,158 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC9F647CD74
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:16:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE3D47CD7A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:20:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239411AbhLVHQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 02:16:05 -0500
-Received: from mail-dm3nam07on2072.outbound.protection.outlook.com ([40.107.95.72]:32736
-        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231422AbhLVHQE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 02:16:04 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RbEgZzHKOnq/GfEk8WzBFsRS8ohOthiY7+T42HylzUehXG0mM55FDXy/MFNfvjjZuxGMkX6RUCB1/TWJ0KWGQ/KW9kFdSAUyek3crIZrbD+h4dauTB1+38bJt5TUpyRkGVL5/CgLmn+BZE+8XZbQDQvTC30qeCrKBB7cPcqzu2AFq7jhPxzBzSG+O5TuCP0cuqJclQu2LIhlgZ9XNHOfh4OWrwCh3x6nZUoumelu0q/jHdr0Am3ZY0fsftprIVyF2uARB3HDn/W7tTzbjdQVoJexe5J3/rTKKU8VbYwfyK9RbK1Tp8IFGxX8GNpw2T8xzC5dC/uN5FYMXCn/28Mzyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oZsc4ge82UU7J91zcme+atha3HcRIdW62igeHbRURTw=;
- b=XBeeigyNUnEK6P1GwbSM68IEBz4U9ctQ3lraCEEi5kngH13c/Z+xYN0iWQnOiH3NsTQ0Li3+N0QAAOEcfP3ZUSMskYbwi++BCtD5yfKZmNOIkMqMWdetSgrOG2bvNVySggdpqeYSbtapcCBP53Siyk4/WH1/ygY6PMp0rVO5FyFf8btg02efEzktyULT0rrIQizw5RboOifJ/gqCSJE3mNfrYNvF95qEmwU2200sFIqtn7AS9PgKB3tBYDqM8cWSMQqu4lZQ2DseOwGoa4vpJhqckY3oq0KRPEVJBzm9L9sH0+X5a6jy0TAORn0QXRxwShDTx5BDW9/dVhf+x83qug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com; dmarc=pass
- (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
- (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oZsc4ge82UU7J91zcme+atha3HcRIdW62igeHbRURTw=;
- b=U6NxR3y6RAcjSVSETEaygjqR+PEyXPrttPsNuLeJvkqPyMkFM/j+sQAYMJcp8sSNIoMY21sDQweJRpA8zQyTpKFWT9H/dBAvpX2/3OsgmyCahzbIc7m12qWWp23LV63YM5kapkIe8Ijt6Hkqe6mFCwf9MwmBC5zlD6aqEM9Kjrcc5MatKRFL8qqTbgEBBx4fmIU7a+eznwVRfyn5qSLseuyj5ZcPCt2clJbGKKt8TlPqMLJC6CwIu1n8gYuki0gMRIp0mClUeOqjEthTJ7tOONPbN6gkfwjEG0RPJODQsUKedK0g7Hjr3iyMUVCISexOeVRZzNKSTguz5mKahM8VCQ==
-Received: from MWHPR1201CA0003.namprd12.prod.outlook.com
- (2603:10b6:301:4a::13) by MW3PR12MB4571.namprd12.prod.outlook.com
- (2603:10b6:303:5c::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.17; Wed, 22 Dec
- 2021 07:15:59 +0000
-Received: from CO1NAM11FT022.eop-nam11.prod.protection.outlook.com
- (2603:10b6:301:4a:cafe::4a) by MWHPR1201CA0003.outlook.office365.com
- (2603:10b6:301:4a::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.14 via Frontend
- Transport; Wed, 22 Dec 2021 07:15:59 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.234) by
- CO1NAM11FT022.mail.protection.outlook.com (10.13.175.199) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4823.18 via Frontend Transport; Wed, 22 Dec 2021 07:15:59 +0000
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 22 Dec
- 2021 07:15:58 +0000
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 22 Dec
- 2021 07:15:58 +0000
-Received: from waynec-Precision-5760.nvidia.com (172.20.187.6) by
- mail.nvidia.com (172.20.187.15) with Microsoft SMTP Server id 15.0.1497.18
- via Frontend Transport; Tue, 21 Dec 2021 23:15:55 -0800
-From:   Wayne Chang <waynec@nvidia.com>
-To:     <robh+dt@kernel.org>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>
-CC:     <spujar@nvidia.com>, <mchehab+huawei@kernel.org>,
-        <skomatineni@nvidia.com>, <devicetree@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Wayne Chang <waynec@nvidia.com>
-Subject: [PATCH 1/1] arm64: tegra: Enable Jetson Xavier NX USB device mode
-Date:   Wed, 22 Dec 2021 15:15:28 +0800
-Message-ID: <20211222071528.144472-1-waynec@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+        id S239456AbhLVHUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 02:20:00 -0500
+Received: from 113.196.136.162.ll.static.sparqnet.net ([113.196.136.162]:48896
+        "EHLO mg.sunplus.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231422AbhLVHT7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 02:19:59 -0500
+X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
+        ,3)
+Received: from 172.17.9.112
+        by mg01.sunplus.com with MailGates ESMTP Server V5.0(4628:0:AUTH_RELAY)
+        (envelope-from <tony.huang@sunplus.com>); Wed, 22 Dec 2021 15:20:08 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx02.sunplus.com.tw (172.17.9.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.26; Wed, 22 Dec 2021 15:20:03 +0800
+Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
+ sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
+ 15.00.1497.026; Wed, 22 Dec 2021 15:20:03 +0800
+From:   =?utf-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        =?utf-8?B?6buD5oe35Y6a?= <tonyhuang.sunplus@gmail.com>
+Subject: RE: [PATCH v4 2/2] misc: Add iop driver for Sunplus SP7021
+Thread-Topic: [PATCH v4 2/2] misc: Add iop driver for Sunplus SP7021
+Thread-Index: AQHX8mCd69RkrTnSM0GRURxouCuBCKw1+gLA///W7ICACDps4A==
+Date:   Wed, 22 Dec 2021 07:20:03 +0000
+Message-ID: <a45cf55f836c4befa65510e30440016c@sphcmbx02.sunplus.com.tw>
+References: <cover.1639557112.git.tonyhuang.sunplus@gmail.com>
+ <c3a3b64c38807b2f344c3df500eb4c60b885eadf.1639557112.git.tonyhuang.sunplus@gmail.com>
+ <CAK8P3a0CnCK-Dfodp-jTzZApM_1NpdY7DV2fRqnO=gaju5xGwg@mail.gmail.com>
+ <CAHpW4oQmtd-gG1HYZT-Dk=QAvXKsKebzcOaVtrEeoujwoL9zSg@mail.gmail.com>
+ <316c16afbff74160b07bd74444f3b8e1@sphcmbx02.sunplus.com.tw>
+ <CAK8P3a0cA7iL=ug6hiqWAV1-qFSoCN-R7jrXv0cqByUDJV4x0Q@mail.gmail.com>
+In-Reply-To: <CAK8P3a0cA7iL=ug6hiqWAV1-qFSoCN-R7jrXv0cqByUDJV4x0Q@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.54]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 948d5103-058a-4070-5f33-08d9c51ae782
-X-MS-TrafficTypeDiagnostic: MW3PR12MB4571:EE_
-X-Microsoft-Antispam-PRVS: <MW3PR12MB45711739114852F68B070ABEAF7D9@MW3PR12MB4571.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:91;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DUgWGwdgkGeoKGO7VqgJBnpnpxh0XFJTMn+qQQnTD2n78PXFRRf8ZoFZuKRVyb8fOHz6MzmwmQM5K8kA1Kr2V8D3RtWCqyqDdIMh60s3cPSxmg5Uq6bAxajBgYByLHuPtjdGY4T4bC1CeGvfvChAEZD5RbqgoWK6bBct5HbnTVciZBUGWpu/3+p7m9mvf0oaeaJKY0FLvCqTCdYSaX6/fldLfwQh+2SsofrVhEKY45l1OjqS4yV2GDWbLL2mxQiahv3JXOtcIkrXFq49ZVDcB4tFx3w8YqacDkQ/uxPEma/Ase7Xh+nLVcj6JGrGr//AMY4B57aueyBNe9+ciiwBjEmuPSryj5UHGnDt9m2kOHhkfq1dLMy+Gkqyo8Yl9CTk/4wgJXTW9+xBOuWJT1w4QxLN0koN1Zk8OA5389F2xUMIljplhtPKaj9qKaEMkZH0O10M5kpU6Wl1im55RbK/CfwH5vJ8kKjQBIT1fUeK4sNJA1OaiHC9DP+u41S+u4Mjj43NVSo+A0i+rr+P9gC6LqmlvYKKN9yc3fKQC6I9pRqwxVweWYINCmc+x2l7Z69XEPKN+NJ9UavJMscWMxN6yy7e7Kh7+qTSq4weXTYTKiDQopGO761Lf40FUg5qfqP1Bdh3/9//DD+oBN1LlUxnqPqZGq66RX8gz/9Acgj4I17WxR5GavsWf5F5XfHlcAP+rJQlPDYO/OE4foZGpPPHUDQnRX58TFFaTAwH/Gk3UiloA11RhZm8x+gxyMAXmDVRAG16dSrAgqOkAJCzVavoSZoM+7w0NUTzT3w+IPpnRqD9oeTSO2fzeepkSwgdJ0p+r+L6qAIi9FLxuDPZsxxeBw==
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700002)(6636002)(36860700001)(1076003)(426003)(336012)(2616005)(70206006)(7696005)(4326008)(107886003)(508600001)(70586007)(6666004)(110136005)(36756003)(356005)(26005)(5660300002)(86362001)(82310400004)(316002)(54906003)(8676002)(8936002)(2906002)(186003)(40460700001)(47076005)(34020700004)(81166007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2021 07:15:59.2288
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 948d5103-058a-4070-5f33-08d9c51ae782
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT022.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4571
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit enables USB device mode at J5 micro-B
-USB port of Jetson Xavier NX.
-
-Signed-off-by: Wayne Chang <waynec@nvidia.com>
----
- .../boot/dts/nvidia/tegra194-p3509-0000.dtsi  | 25 +++++++++++++++++++
- 1 file changed, 25 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/nvidia/tegra194-p3509-0000.dtsi b/arch/arm64/boot/dts/nvidia/tegra194-p3509-0000.dtsi
-index a055f17218bb..f4733b98fcaa 100644
---- a/arch/arm64/boot/dts/nvidia/tegra194-p3509-0000.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra194-p3509-0000.dtsi
-@@ -1826,6 +1826,10 @@ padctl@3520000 {
- 			pads {
- 				usb2 {
- 					lanes {
-+						usb2-0 {
-+							status = "okay";
-+						};
-+
- 						usb2-1 {
- 							status = "okay";
- 						};
-@@ -1846,6 +1850,20 @@ usb3-2 {
- 			};
- 
- 			ports {
-+				usb2-0 {
-+					mode = "otg";
-+					status = "okay";
-+					usb-role-switch;
-+					connector {
-+						compatible = "gpio-usb-b-connector",
-+							"usb-b-connector";
-+						label = "micro-USB";
-+						type = "micro";
-+						vbus-gpio = <&gpio TEGRA194_MAIN_GPIO(Z, 1)
-+								GPIO_ACTIVE_LOW>;
-+					};
-+				};
-+
- 				usb2-1 {
- 					mode = "host";
- 					status = "okay";
-@@ -1874,6 +1892,13 @@ usb@3610000 {
- 			phy-names = "usb2-1", "usb2-2", "usb3-2";
- 		};
- 
-+		usb@3550000 {
-+			status = "okay";
-+
-+			phys = <&{/bus@0/padctl@3520000/pads/usb2/lanes/usb2-0}>;
-+			phy-names = "usb2-0";
-+		};
-+
- 		spi@3270000 {
- 			status = "okay";
- 
--- 
-2.25.1
-
+RGVhciBBcm5kOg0KDQo+ID4gPj4gSU9QIChJTyBQcm9jZXNzb3IpIGVtYmVkZGVkIGluc2lkZSBT
+UDcwMjEgd2hpY2ggaXMgdXNlZCBhcw0KPiA+ID4+IFByb2Nlc3NvciBmb3IgSS9PIGNvbnRyb2ws
+IFJUQyB3YWtlLXVwIGFuZCBjb29wZXJhdGlvbiB3aXRoIENQVSAmDQo+ID4gPj4gUE1DIGluIHBv
+d2VyIG1hbmFnZW1lbnQgcHVycG9zZS4NCj4gPiA+PiBUaGUgSU9QIGNvcmUgaXMgRFE4MDUxLCBz
+byBhbHNvIG5hbWVkIElPUDgwNTEsIGl0IHN1cHBvcnRzDQo+ID4gPj4gZGVkaWNhdGVkIEpUQUcg
+ZGVidWcgcGlucyB3aGljaCBzaGFyZSB3aXRoIFNQNzAyMS4NCj4gPiA+PiBJbiBzdGFuZGJ5IG1v
+ZGUgb3BlcmF0aW9uLCB0aGUgcG93ZXIgc3BlYyByZWFjaCA0MDB1QS4NCj4gPiA+Pg0KPiA+ID4+
+IFNpZ25lZC1vZmYtYnk6IFRvbnkgSHVhbmcgPHRvbnlodWFuZy5zdW5wbHVzQGdtYWlsLmNvbT4N
+Cj4gPiA+PiAtLS0NCj4gPiA+PiBDaGFuZ2VzIGluIHY0Og0KPiA+ID4+ICAtIEFkZHJlc3NlZCBj
+b21tZW50cyBmcm9tIEFybmQgQmVyZ21hbm4uDQo+ID4NCj4gPiA+SSBkb24ndCB0aGluayB5b3Ug
+ZGlkOiBJIGFza2VkIHlvdSBzcGVjaWZpY2FsbHkgdG8gYWRkIGNvZGUgdG8NCj4gPiA+aW50ZXJh
+Y3Qgd2l0aCB0aGUgZXhpc3RpbmcgaW4ta2VybmVsIGludGVyZmFjZXMgdG8gdXNlIHRoZQ0KPiA+
+ID5mdW5jdGlvbmFsaXR5IHByb3ZpZGVkIGJ5IHRoZSBkZXZpY2UuIFBpY2sgYW55IChhdCBsZWFz
+dCB0d28pDQo+ID4gPnN1YnN5c3RlbXMgYW5kIGFkZCBzdXBwb3J0LCBidXQgbGVhdmUgb3V0IGFu
+eSBjdXN0b20gdXNlciBzcGFjZQ0KPiA+ID5pbnRlcmZhY2VzIChtaXNjZGV2aWNlLCBkZWJ1Z2Zz
+LCBzeXNmcywgLi4uKSBmb3IgdGhlIG1vbWVudC4NCj4gPg0KPiA+DQo+ID4NCj4gPiAxLiBJT1Ag
+Y2FuIHJ1biBzcF9pb3BfcGxhdGZvcm1fZHJpdmVyX3NodWRvd24oKSB0aHJvdWdoIHRoZSBwb3dl
+cm9mZg0KPiA+IGNvbW1hbmQgYW5kIHRoZSBrZXJuZWwuIFBlcmZvcm0gc3lzdGVtIHBvd2VyLW9m
+ZiBhY3Rpb25zLg0KPiANCj4gRG8geW91IG1lYW4gdGhhdCB0aGlzIG1ldGhvZCBhKSBjbGVhbmx5
+IHNodXRzIGRvd24gdGhlIGlvcCBiZWZvcmUgdGhlIHN5c3RlbQ0KPiBpcyBwb3dlcmVkIGRvd24s
+IG9yIGIpIHRoZSBkcml2ZXJfc2h1dGRvd24oKSBjYWxsYmFjayBpcyB1c2VkIHRvIGluaXRpYXRl
+IHRoZQ0KPiBwb3dlcmRvd24gb2YgdGhlIHN5c3RlbSBpdHNlbGY/DQo+IA0KPiBJbiBjYXNlIG9m
+IGEpIEkgd291bGQgbm90IGNvdW50IHRoYXQgYXMgZXhwb3NpbmcgZnVuY3Rpb25hbGl0eSwgd2hh
+dCB5b3UgZG8gaGVyZQ0KPiBpcyBqdXN0IHBhcnQgb2YgYW55IGRyaXZlci4gSWYgaW5zdGVhZCB5
+b3UgYXJlIHRyeWluZyB0byB1c2UgYiksIHRoaXMgaXMgdGhlIHdyb25nDQo+IHdheSBvZiBkb2lu
+ZyBpdCwgc2VlIGRyaXZlcnMvcG93ZXIvcmVzZXQvIGZvciBleGFtcGxlcyBvZiBob3cgdG8gZG8g
+aXQgcmlnaHQuDQo+IA0KPiA+IDIuIFdha2UgdXAgdGhlIHN5c3RlbSBieSByZWx5aW5nIG9uIHRo
+ZSA4MDUxIGludGVybmFsIFJUQyB3YWtlLXVwDQo+ID4gbWVjaGFuaXNtIGFuZCBleHRlcm5hbCBH
+UElPIGlucHV0IHNpZ25hbHMgdG8gd2FrZSB1cC4NCj4gDQo+IEkgdGhpbmsgdGhvc2Ugc2hvdWxk
+IGJlIGV4cG9zZWQgd2l0aCBkcml2ZXJzL3J0YyBmb3IgdGhlIFJUQyBhbmQgZHJpdmVycy9ncGlv
+Lw0KPiBmb3IgdGhlIEdQSU8gZHJpdmVyLCBhbmQgdGhlbiB5b3UgY2FuIHVzZSB0aGUgZGV2aWNl
+IHRyZWUgdG8gY29uZmlndXJlIHdoaWNoDQo+IEdQSU8gdG8gdXNlIGFzIGEgd2FrZXVwIGFuZCBo
+b3cgaXQncyBjb25uZWN0ZWQgdG8gdGhlIFJUQy4NCj4gDQoNCkkgaGF2ZSBhIHF1ZXN0aW9uIHRv
+IGFzayB5b3U6CQ0KVGhlcmUgYXJlIHR3byB3YXlzIHRvIHdha2UgdXAgdGhlIExpbnV4IGtlcm5l
+bCBzeXN0ZW0gaW4gODA1MS4JCQkJCQkJCQ0KMSlSVEMgd2FrZXVwOgkJCQkJCQkJDQpUaGUgU1A3
+MDIxIHN5c3RlbSBtb3VudHMgdGhlIFJUQyBkZXZpY2UgZHJpdmVyLgkJCQkJCQkJDQpJIHNldCB0
+aGUgUlRDIHdha2UtdXAgdGltZSBieSB0eXBlIGNvbW1hbmRzIGluIGNvbW1hbmQgbGluZS4JCQkJ
+CQkJCQ0KRXhhbXBsZTogDQplY2hvIDAgPiAvc3lzL2NsYXNzL3J0Yy9ydGMwL3dha2VhbGFybSAm
+JiBubm49YGRhdGUgJyslcydgICYmIGVjaG8gJG5ubiAmJiBubm49YGV4cHIgJG5ubiArIDEwYCAm
+JiBlY2hvICRubm4gPiAvc3lzL2NsYXNzL3J0Yy9ydGMwL3dha2VhbGFybQkJCQkJCQkJDQpXaGVu
+IHRoZSBsaW51eCBrZXJuZWwgc3lzdGVtIGhhcyBubyBwb3dlci4gODA1MSBjYW4gcmVhZCBSVEMg
+cmVzZ2lzdGVyIGFuZCByZWNlaXZlIFJUQyB3YWtldXAgaW50ZXJydXB0LgkJCQkJCQkJDQpEbyBJ
+IG5lZWQgdG8gYWRkIFJUQyBzdWJzeXN0ZW0gZnVuY3Rpb25hIHRvIHRoZSBJT1AgY29kZT8JCQkJ
+CQkJCQ0KCQkJCQkJCQkNCjIpR1BJTyB3YWtldXA6CQkJCQkJCQkNCkFjY29yZGluZyB0byB5b3Vy
+IHN1Z2dlc3Rpb24JCQkJCQkJCQ0KSSB1c2Ugb2ZfZ2V0X25hbWVfZ3BpbygpIHRvIGdldCBHUElP
+IG51bWJlciBmcm9tIGRldmljZSB0cmVlIGR1cmluZyB0aGUgSU9QIHByb2JlIHByb2Nlc3MuCQkJ
+CQkJCQkNClBhc3MgaXQgdG8gODA1MSBmb3IgdXNlLgkJCQkJCQkJDQoNClRoYW5rcw0KDQo=

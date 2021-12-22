@@ -2,73 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1762A47D1D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:37:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 304D047D1DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244906AbhLVMhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 07:37:54 -0500
-Received: from fanzine2.igalia.com ([213.97.179.56]:33770 "EHLO
-        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233073AbhLVMhw (ORCPT
+        id S244918AbhLVMkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 07:40:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233073AbhLVMkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:37:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version
-        :Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=8MaPpGxJgEGfhSRIWktUPu8Djx/Jd3vJZEcOcNPLJuQ=; b=iIlX9D5ZmpxcdPauNLWoUmXHzS
-        8vtQjJHZizUdOJ9GIJOBrpuZMTr+W4eLIfSnahX4eM304VvQGMH8NpfidPqxTyZhDaRuGpC83qDGH
-        IW/AMwPg3Hz3HscPK1NBNQSPk83j5X828tLNL/Qd7e23y8H8cnFuQzzY+LXjaCD3179cvkyDDQ9oE
-        wFyWvb8Ej8lHmhRpzJHF0PyRQvNzurq7BvO9v56V0CzeeErVDNRLu0qsVqAi1UjJfVkBLjdveywDk
-        vFD1sKnsJaVfvUDxM1VpFAi+h8Sbdi3FzOIEcO8OTDj3ICHTMWQqSfThWOCev50j+HHT28XHWMtxb
-        g2vyvZCw==;
-Received: from 200-153-146-242.dsl.telesp.net.br ([200.153.146.242] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1n00s3-0003eR-DI; Wed, 22 Dec 2021 13:37:27 +0100
-Subject: Re: [PATCH 2/3] panic: Add option to dump all CPUs backtraces in
- panic_print
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Feng Tang <feng.tang@intel.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
-        keescook@chromium.org, yzaikin@google.com, siglesias@igalia.com,
-        kernel@gpiccoli.net
-References: <20211109202848.610874-1-gpiccoli@igalia.com>
- <20211109202848.610874-3-gpiccoli@igalia.com>
- <20211130051206.GB89318@shbuild999.sh.intel.com>
- <6f269857-2cbe-b4dd-714a-82372dc3adfc@igalia.com>
- <Yb+R/OVeBkdYLWeH@bombadil.infradead.org>
- <911e81d3-5ffe-b936-f668-bf1f6a9b6cfb@igalia.com>
- <20211221154816.4a7472c55073d06df0c25f74@linux-foundation.org>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Message-ID: <1758d4a0-6158-01b1-7460-c8ffd091d3dc@igalia.com>
-Date:   Wed, 22 Dec 2021 09:37:13 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 22 Dec 2021 07:40:14 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC69C061574;
+        Wed, 22 Dec 2021 04:40:13 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id w16so8068628edc.11;
+        Wed, 22 Dec 2021 04:40:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/3we7U5LcUazMGSwOo/jCUNu/Z/IZrx6owVs1sXCGNU=;
+        b=Liuneh8q2xKHO2+PIe0dy2fGqEu/ES6bhQwGdBvGcLKxSuf9wqTaYUHVtl/naFgMnx
+         8yuTfxBdbZEIxx6EzBBIAuJJ+1EgyHQm/O0ZSZdueGr1Vw7EX29temBhcqF4WxXZe7jC
+         ueyiyMhVS3t36m6op0s6V3dHGxkaVCHWTCj7pxVUu0FchH0k8Y8UKY2fC/ONUI+AfzuV
+         4Pa0ZjguTQE4xkHt0o3eaB0Vd+EC4e7jOmo0G1Ws1m0/HEnqA5kHD8ltIZjwD7NaSUDw
+         fK/0dM3LRFHkPMv8Uyqu8Z9nrd78fojl5uoUaA750JMu84idKg0EMblh5sGhKd3A2E/w
+         FaAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/3we7U5LcUazMGSwOo/jCUNu/Z/IZrx6owVs1sXCGNU=;
+        b=L849YOgf2mULpeU3BVxTk8FI8zqwqP1D5DXSe3c9FBJHmo0oeuYtnyAqgPjQuSJgkF
+         aWYKQq5AB04Z1+B6iON+Szr5G6nvwKrK9rW4n0ncEC8DktaT37A5vGJDB+AF/lp+1pBP
+         TgKQSSmhH6qjZil0BxJLKCa5YJ02f0QY8Bk49GvcRgnRr4c10yciLzqG3Y8K0kr0vN3I
+         9XSGf/PDXlHBqNUYtdu4hvEKuA/hcFE45pDQSPXOwPqp9AbQybdUFqSzuU+tiY01Satc
+         qS923AcWMpUEgEPORrVlaINxfnAed3he5WTeuqeK4JlShlgk58iAFx/I9T7kYRhh1lz8
+         bVqw==
+X-Gm-Message-State: AOAM531U1IT8ZjmOVW1JWhWejcZFs/7GwY6ac0zAIO2uV7tt2tdpnk3s
+        wBSl/cyxcEtJ99RABp79ezukgGecWZKwnPFdvXs=
+X-Google-Smtp-Source: ABdhPJxReAOg2unycC4N1KbyWWK7SHYagXoLLqRd1kla0Z8iXoq/yoKYbOs0BbHleOYcvuPxgk7pT2YSGXfMR1W25so=
+X-Received: by 2002:a05:6402:849:: with SMTP id b9mr1298568edz.258.1640176812095;
+ Wed, 22 Dec 2021 04:40:12 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211221154816.4a7472c55073d06df0c25f74@linux-foundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211222034646.222189-1-liambeguin@gmail.com> <20211222034646.222189-12-liambeguin@gmail.com>
+In-Reply-To: <20211222034646.222189-12-liambeguin@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 22 Dec 2021 14:38:13 +0200
+Message-ID: <CAHp75Ve4RuJLMdpdKe14nobuZHRNKA7tWt4yE82+noF5p+xxpw@mail.gmail.com>
+Subject: Re: [PATCH v11 11/15] iio: test: add basic tests for the iio-rescale driver
+To:     Liam Beguin <liambeguin@gmail.com>
+Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/12/2021 20:48, Andrew Morton wrote:
->[...]
-> 
-> They'll turn up on ozlabs after I've tested it all then uploaded.  I do
-> this a couple of times a week, approx.
-> 
+On Wed, Dec 22, 2021 at 5:47 AM Liam Beguin <liambeguin@gmail.com> wrote:
+>
+> From: Liam Beguin <lvb@xiphos.com>
+>
+> The iio-rescale driver supports various combinations of scale types and
+> offsets. These can often result in large integer multiplications. Make
+> sure these calculations are done right by adding a set of kunit test
+> cases that build on top of iio-test-format.
 
-OK, thank you Andrew. Will I get some ping when that happens, through
-some bot or anything? I'm waiting them to show up in linux-next tree so
-to start a backport to an in-house kernel and starting using them.
+...
 
-Cheers,
+> +       int fract_mult = 100000000LL;
 
+Perhaps also change to use the prefix?
 
-Guilherme
+...
+
+> +       *nano = (s64)tmp * 10 * fract_mult + tmp2;
+
+I'm also puzzled what the meaning of the 10 is here?
+
+...
+
+> +       err = 1000000 * abs(exp - real);
+
+Prefix?
+
+...
+
+> +       err = div64_u64(err, abs(exp));
+> +       return (int)err;
+
+return div64_u64();
+
+-- 
+With Best Regards,
+Andy Shevchenko

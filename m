@@ -2,178 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B823E47D3EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 319B447D3F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:48:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343586AbhLVOr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 09:47:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:25874 "EHLO
+        id S241465AbhLVOsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 09:48:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:38560 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343573AbhLVOrY (ORCPT
+        by vger.kernel.org with ESMTP id S237161AbhLVOsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:47:24 -0500
+        Wed, 22 Dec 2021 09:48:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640184443;
+        s=mimecast20190719; t=1640184518;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KkPrGYIHtROONol+rZCx2qQwfF/Vw8Q6rsv1yxJ+1lA=;
-        b=IUfty+yb6/lruZDAGQzLp/DhlUbQDnX70mbOUrkf3sfBof6VWS6hAOdNFAwKXppa1q7rh6
-        u8MwJc6EZ9153g1+kLE0nUH/IzoRzu4d03JLznfYkQNioYs3hRZoZnFPRZFXxcFriuMmwn
-        K/WRBY96f5Hclr7j8Z5GRIR2JNP1FBs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=3ysFZc3PcwsKiLv7/T8kvp9irIa0KaTSGauHVtOY+NM=;
+        b=ZiKMCDq4pgpTPpp0PZRAfJTflWBVmxB2O/cF5wFtSgpVaGs22m/BAHP8VBkl/HdwxxORe8
+        SNXZeAkQhKSKQaNPjXDfhe4QUyinqB7DUCbgcYRfvSfS7S2AsCLROD6T5cBl7+4lwuf8se
+        NalmzmuH+DTOXjJCl6Pr7Ffbo4bs7Oc=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-256-RQyFGqGhOEaecN1tVe6sXw-1; Wed, 22 Dec 2021 09:47:20 -0500
-X-MC-Unique: RQyFGqGhOEaecN1tVe6sXw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8520418C89C4;
-        Wed, 22 Dec 2021 14:47:18 +0000 (UTC)
-Received: from work (unknown [10.40.193.216])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 549C11084266;
-        Wed, 22 Dec 2021 14:47:16 +0000 (UTC)
-Date:   Wed, 22 Dec 2021 15:47:12 +0100
-From:   Lukas Czerner <lczerner@redhat.com>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Ye Bin <yebin10@huawei.com>, tytso@mit.edu,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] ext4: Fix BUG_ON in ext4_bread when write quota
- data
-Message-ID: <20211222144712.fdkgr3d4cqvgxbi2@work>
-References: <20211222013537.3096310-1-yebin10@huawei.com>
- <20211222143757.GD685@quack2.suse.cz>
+ us-mta-411-ESOjItRJNY2VSMlqRb2duw-1; Wed, 22 Dec 2021 09:48:37 -0500
+X-MC-Unique: ESOjItRJNY2VSMlqRb2duw-1
+Received: by mail-wm1-f72.google.com with SMTP id r2-20020a05600c35c200b00345c3b82b22so1254214wmq.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:48:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=3ysFZc3PcwsKiLv7/T8kvp9irIa0KaTSGauHVtOY+NM=;
+        b=7A/FTWjYOmR7SX3H0ZuEta8SEtjN3IZys7CvNFEsTDvv245ntnOwIm3l7W0eJtR0EY
+         BHVX/4pcu4gtBmV2SIALo74juwl7Ibvk0ED1uE6Nvbd0L08/7h4jt9PQUy5w0FiTzWpI
+         Ko0VLV9e2mab6oIao0x9T/BTaS2Ady1S3LdyWFvkJcCwlITOSy470cXE3n1mFVUS5Jy9
+         XXVEnEs1bQomBOO0k4CBhETNK0sCmENyQUP5b2VLZ23mMmKIRYXgFBBH07sDP9dyIVh/
+         W788FV3dgumWJGLLK2+C3BI7FQ/Cv4ZqtnF5/lmGPX2WQzVVzAwlvuhSkouiBxFICl2T
+         5DXw==
+X-Gm-Message-State: AOAM530Udpxj4dDEHFhrbQyM7VfhceqF6KJQxUhRk5o84O2vVQG1n3qy
+        udnzxXrDMjTHEx6PbK4eBEj5uYaYlqnVHIDr2eFuM9YjH7Ft27hj/nX6QnP7whKgyKcjDw7Xa/R
+        g8jiubeq8/pGsEIYzd2vf0Qya
+X-Received: by 2002:a5d:59af:: with SMTP id p15mr2400763wrr.422.1640184516105;
+        Wed, 22 Dec 2021 06:48:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzs94LbEOPQ0orxF56DEs0Qlsxjs3+SD5a8O6tpjufwOywHmGl7SQSLlNxvlgdUF3zjoLVEEA==
+X-Received: by 2002:a5d:59af:: with SMTP id p15mr2400735wrr.422.1640184515809;
+        Wed, 22 Dec 2021 06:48:35 -0800 (PST)
+Received: from [192.168.3.132] (p5b0c646a.dip0.t-ipconnect.de. [91.12.100.106])
+        by smtp.gmail.com with ESMTPSA id l2sm2250738wrs.43.2021.12.22.06.48.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 06:48:35 -0800 (PST)
+Message-ID: <505d3d0f-23ee-0eec-0571-8058b8eedb97@redhat.com>
+Date:   Wed, 22 Dec 2021 15:48:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211222143757.GD685@quack2.suse.cz>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+Content-Language: en-US
+To:     Jan Kara <jack@suse.cz>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Nadav Amit <namit@vmware.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
+ <20211221010312.GC1432915@nvidia.com>
+ <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
+ <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
+ <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
+ <20211221190706.GG1432915@nvidia.com>
+ <3e0868e6-c714-1bf8-163f-389989bf5189@redhat.com>
+ <dfe1c8d5-6fac-9040-0272-6d77bafa6a16@redhat.com>
+ <20211222124141.GA685@quack2.suse.cz>
+ <4a28e8a0-2efa-8b5e-10b5-38f1fc143a98@redhat.com>
+ <20211222144255.GE685@quack2.suse.cz>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20211222144255.GE685@quack2.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 03:37:57PM +0100, Jan Kara wrote:
-> On Wed 22-12-21 09:35:37, Ye Bin wrote:
-> > We got issue as follows when run syzkaller:
-> > [  167.936972] EXT4-fs error (device loop0): __ext4_remount:6314: comm rep: Abort forced by user
-> > [  167.938306] EXT4-fs (loop0): Remounting filesystem read-only
-> > [  167.981637] Assertion failure in ext4_getblk() at fs/ext4/inode.c:847: '(EXT4_SB(inode->i_sb)->s_mount_state & EXT4_FC_REPLAY) || handle != NULL || create == 0'
-> > [  167.983601] ------------[ cut here ]------------
-> > [  167.984245] kernel BUG at fs/ext4/inode.c:847!
-> > [  167.984882] invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-> > [  167.985624] CPU: 7 PID: 2290 Comm: rep Tainted: G    B             5.16.0-rc5-next-20211217+ #123
-> > [  167.986823] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20190727_073836-buildvm-ppc64le-16.ppc.fedoraproject.org-3.fc31 04/01/2014
-> > [  167.988590] RIP: 0010:ext4_getblk+0x17e/0x504
-> > [  167.989189] Code: c6 01 74 28 49 c7 c0 a0 a3 5c 9b b9 4f 03 00 00 48 c7 c2 80 9c 5c 9b 48 c7 c6 40 b6 5c 9b 48 c7 c7 20 a4 5c 9b e8 77 e3 fd ff <0f> 0b 8b 04 244
-> > [  167.991679] RSP: 0018:ffff8881736f7398 EFLAGS: 00010282
-> > [  167.992385] RAX: 0000000000000094 RBX: 1ffff1102e6dee75 RCX: 0000000000000000
-> > [  167.993337] RDX: 0000000000000001 RSI: ffffffff9b6e29e0 RDI: ffffed102e6dee66
-> > [  167.994292] RBP: ffff88816a076210 R08: 0000000000000094 R09: ffffed107363fa09
-> > [  167.995252] R10: ffff88839b1fd047 R11: ffffed107363fa08 R12: ffff88816a0761e8
-> > [  167.996205] R13: 0000000000000000 R14: 0000000000000021 R15: 0000000000000001
-> > [  167.997158] FS:  00007f6a1428c740(0000) GS:ffff88839b000000(0000) knlGS:0000000000000000
-> > [  167.998238] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [  167.999025] CR2: 00007f6a140716c8 CR3: 0000000133216000 CR4: 00000000000006e0
-> > [  167.999987] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > [  168.000944] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > [  168.001899] Call Trace:
-> > [  168.002235]  <TASK>
-> > [  168.007167]  ext4_bread+0xd/0x53
-> > [  168.007612]  ext4_quota_write+0x20c/0x5c0
-> > [  168.010457]  write_blk+0x100/0x220
-> > [  168.010944]  remove_free_dqentry+0x1c6/0x440
-> > [  168.011525]  free_dqentry.isra.0+0x565/0x830
-> > [  168.012133]  remove_tree+0x318/0x6d0
-> > [  168.014744]  remove_tree+0x1eb/0x6d0
-> > [  168.017346]  remove_tree+0x1eb/0x6d0
-> > [  168.019969]  remove_tree+0x1eb/0x6d0
-> > [  168.022128]  qtree_release_dquot+0x291/0x340
-> > [  168.023297]  v2_release_dquot+0xce/0x120
-> > [  168.023847]  dquot_release+0x197/0x3e0
-> > [  168.024358]  ext4_release_dquot+0x22a/0x2d0
-> > [  168.024932]  dqput.part.0+0x1c9/0x900
-> > [  168.025430]  __dquot_drop+0x120/0x190
-> > [  168.025942]  ext4_clear_inode+0x86/0x220
-> > [  168.026472]  ext4_evict_inode+0x9e8/0xa22
-> > [  168.028200]  evict+0x29e/0x4f0
-> > [  168.028625]  dispose_list+0x102/0x1f0
-> > [  168.029148]  evict_inodes+0x2c1/0x3e0
-> > [  168.030188]  generic_shutdown_super+0xa4/0x3b0
-> > [  168.030817]  kill_block_super+0x95/0xd0
-> > [  168.031360]  deactivate_locked_super+0x85/0xd0
-> > [  168.031977]  cleanup_mnt+0x2bc/0x480
-> > [  168.033062]  task_work_run+0xd1/0x170
-> > [  168.033565]  do_exit+0xa4f/0x2b50
-> > [  168.037155]  do_group_exit+0xef/0x2d0
-> > [  168.037666]  __x64_sys_exit_group+0x3a/0x50
-> > [  168.038237]  do_syscall_64+0x3b/0x90
-> > [  168.038751]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > 
-> > In order to reproduce this problem, the following conditions need to be met:
-> > 1. Ext4 filesystem with no journal;
-> > 2. Filesystem image with incorrect quota data;
-> > 3. Abort filesystem forced by user;
-> > 4. umount filesystem;
-> > 
-> > As in ext4_quota_write:
-> > ...
-> >          if (EXT4_SB(sb)->s_journal && !handle) {
-> >                  ext4_msg(sb, KERN_WARNING, "Quota write (off=%llu, len=%llu)"
-> >                          " cancelled because transaction is not started",
-> >                          (unsigned long long)off, (unsigned long long)len);
-> >                  return -EIO;
-> >          }
-> > ...
-> > We only check handle if NULL when filesystem has journal. There is need
-> > check handle if NULL even when filesystem has no journal.
+On 22.12.21 15:42, Jan Kara wrote:
+> On Wed 22-12-21 14:09:41, David Hildenbrand wrote:
+>>>> IIUC, our COW logic makes sure that a shared anonymous page that might
+>>>> still be used by a R/O FOLL_GET cannot be modified, because any attempt
+>>>> to modify it would result in a copy.
+>>>
+>>> Well, we defined FOLL_PIN to mean the intent that the caller wants to access
+>>> not only page state (for which is enough FOLL_GET and there are some users
+>>> - mostly inside mm - who need this) but also page data. Eventually, we even
+>>> wanted to make FOLL_GET unavailable to broad areas of kernel (and keep it
+>>> internal to only MM for its dirty deeds ;)) to reduce the misuse of GUP.
+>>>
+>>> For file pages we need this data vs no-data access distinction so that
+>>> filesystems can detect when someone can be accessing page data although the
+>>> page is unmapped.  Practically, filesystems care most about when someone
+>>> can be *modifying* page data (we need to make sure data is stable e.g. when
+>>> writing back data to disk or doing data checksumming or other operations)
+>>> so using FOLL_GET when wanting to only read page data should be OK for
+>>> filesystems but honestly I would be reluctant to break the rule of "use
+>>> FOLL_PIN when wanting to access page data" to keep things simple and
+>>> reasonably easy to understand for parties such as filesystem developers or
+>>> driver developers who all need to interact with pinned pages...
+>>
+>> Right, from an API perspective we really want people to use FOLL_PIN.
+>>
+>> To optimize this case in particular it would help if we would have the
+>> FOLL flags on the unpin path. Then we could just decide internally
+>> "well, short-term R/O FOLL_PIN can be really lightweight, we can treat
+>> this like a FOLL_GET instead". And we would need that as well if we were
+>> to keep different counters for R/O vs. R/W pinned.
 > 
-> Hum, so I think we can just drop this whole condition and warning and
-> instead add a silent return of -EROFS if the filesystem is readonly. That
-> should also fix the bug and also make aborted case less noisy. The message
-> from ext4_quota_write() IMO is not very useful and ext4_bread() will
-> provide us with a BUG and stacktrace which is better for debugging what
-> went wrong anyway.
+> Well, I guess the question here is: Which GUP user needs only R/O access to
+> page data and is so performance critical that it would be worth it to
+> sacrifice API clarity for speed? I'm not aware of any but I was not looking
+> really hard...
 
-Can we really only get here when the fs is read only ? We're going to
-end up with NULL handle here any time the ext4_journal_start() fails in
-ext4_release_dquot() which I think can fail for plenty of reasons, not
-just EROFS.
+I'd be interested in examples as well. Maybe databases that use O_DIRECT
+after fork()?
 
--Lukas
 
-> 
-> 								Honza
-> 
-> > 
-> > Signed-off-by: Ye Bin <yebin10@huawei.com>
-> > ---
-> >  fs/ext4/super.c | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> > index 071b7b3c5678..c8ca5811ea65 100644
-> > --- a/fs/ext4/super.c
-> > +++ b/fs/ext4/super.c
-> > @@ -6955,9 +6955,10 @@ static ssize_t ext4_quota_write(struct super_block *sb, int type,
-> >  	struct buffer_head *bh;
-> >  	handle_t *handle = journal_current_handle();
-> >  
-> > -	if (EXT4_SB(sb)->s_journal && !handle) {
-> > +	if (!handle) {
-> >  		ext4_msg(sb, KERN_WARNING, "Quota write (off=%llu, len=%llu)"
-> > -			" cancelled because transaction is not started",
-> > +			" cancelled because transaction is not started"
-> > +			" or filesystem is abort forced by user",
-> >  			(unsigned long long)off, (unsigned long long)len);
-> >  		return -EIO;
-> >  	}
-> > -- 
-> > 2.31.1
-> > 
-> -- 
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
-> 
+-- 
+Thanks,
+
+David / dhildenb
 

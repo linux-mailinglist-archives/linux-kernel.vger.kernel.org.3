@@ -2,286 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2376E47D3A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B5347D3AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241276AbhLVOZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 09:25:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:27874 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233186AbhLVOZk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:25:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640183139;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sed+3q7BIrPqRH2oXW0H9yWhS0jLPTp/jKWbYcwpgtQ=;
-        b=awQv03ht/1G6zUffJaDNGHcArwpGVG9AMYCgc6BvcvDUX0I/hKKW+FIRwQ2tS4qa62ooWI
-        GX4cSrzPRACLSoGY4Gi7xI/Ou27JVhF+re1eRt+VRYHp1waWZWwMWGoqeaRr3z1bDvM8Gl
-        1e7oHzbQoqVLEih0ESwaz0BfbWe767g=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-149-poMwdivYNU-HGi2syGYMdA-1; Wed, 22 Dec 2021 09:25:38 -0500
-X-MC-Unique: poMwdivYNU-HGi2syGYMdA-1
-Received: by mail-wm1-f70.google.com with SMTP id r2-20020a05600c35c200b00345c3b82b22so1222305wmq.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:25:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Sed+3q7BIrPqRH2oXW0H9yWhS0jLPTp/jKWbYcwpgtQ=;
-        b=J4hx5q1RQpdw0MkLQN5dt/Ih7GkhoApmKIqG94EgZ3Kfec/3NMJsc6VdSNZleZA6a2
-         zf4MQl5CvTRbEgSU2gRQrNKzpcqemKb6IyBpbuj/Fkj8Uf98dZFdCvVdj+sukN/lWTS+
-         2PpnNDOQeFc5gLBYpcDE0pQDi4D1MgIOMK5QfuHpHYvPjfcP/9Q+5DohIjV5AYpg6Sm1
-         e+c6EFcKvky6HLkioGCItv5h2Y3MlSLHppnfZxgWAtKBheCbG316+833ghlLoxaQRzT8
-         f3OAmmPXwmRyJC2h9Oyv0Al0EiemMqwiIIFAH0zbdMV06gCgc4ESuj1OW84UzDx9Vkhk
-         OHeg==
-X-Gm-Message-State: AOAM532FQ2XOopsiM83XD5KP93h/3D9Lqerb+2tITe7bNjA+yJLBhHFN
-        /S3sGWOjMcS7RKhYZlyVYj2dSHAEWbPWbJySyxklKbJRpasXu3dY4SY4jEcqa6xT3F5CBJDrRRJ
-        mi/iUbGYf7ADXl7DK1I4IP2pV
-X-Received: by 2002:adf:f48e:: with SMTP id l14mr2349811wro.88.1640183136569;
-        Wed, 22 Dec 2021 06:25:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwF1H19oReVzIhW/HdovbPos3VfS1M89DowdEAQKVZDSnhnAO8GO941Jyef1dfqEXvlTJiEDA==
-X-Received: by 2002:adf:f48e:: with SMTP id l14mr2349780wro.88.1640183136311;
-        Wed, 22 Dec 2021 06:25:36 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312::4fa? ([2001:b07:6468:f312::4fa])
-        by smtp.googlemail.com with ESMTPSA id p5sm2041160wrd.13.2021.12.22.06.25.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 06:25:35 -0800 (PST)
-Message-ID: <eb23f097-bc37-f656-2d78-96135f0f9fab@redhat.com>
-Date:   Wed, 22 Dec 2021 15:25:32 +0100
+        id S241294AbhLVO1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 09:27:44 -0500
+Received: from mail1.kuutio.org ([54.37.79.207]:42894 "EHLO mail1.kuutio.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237162AbhLVO1m (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 09:27:42 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail1.kuutio.org (Postfix) with ESMTP id 16D5A1FE00;
+        Wed, 22 Dec 2021 15:27:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lemmela.net; h=
+        content-language:content-transfer-encoding:content-type
+        :content-type:in-reply-to:mime-version:user-agent:date:date
+        :message-id:from:from:references:subject:subject:received
+        :received; s=dkim; t=1640183258; x=1642775259; bh=xrQekw5SeZXuxH
+        AolB6PPyS1XVaI2aV1dGkHDgvq+IE=; b=Hj2Q/deTUrADEDW/bG8EcrlXd14uZs
+        8eSSm486Cc2/pa+hzzDYXSiQfdJcBSnJWLBpSwJNCNB/WHQcoO/F+DV8esCEHPJ7
+        tloOrx26hY/i/L5yEjgLEw+XAYp+bdstdXAzYm+Ej381wrhZkqvoJC/BXnC9Ctf3
+        1jrNjeKcSy/Uw8V2FD1U8xuKo0o+M+8524mW6zl5KR2/GpeP/j2NMMZUjRTevEw7
+        nnBaKcwLiKu8uiqbpSR0qDi9Y8yFR2EOQm2U6nXSVOByVqq+F9E/SzeS0OswRDp/
+        X4WXGrgbGzFTmyiokcfeoNuZhz+cY4oLn/GRqcNdJDT95SRZnX54vFCgWWt/egUU
+        BXLB1PaYdp+f8TmMHOfTgrMKfydFjh/x2slyn9QN/KPPOREMBDgcV9eXNA1eH15a
+        rZsdnJef2lLO8jwMxOUVgIQ+izMB1is07wQ+/gws3ORuBYOnygXDrZ2Bo4RvT7iX
+        cC+pSyc3UdyvOML+d84Ep/PkRXlNb6fWLiHQB1B4GpGCoUKaBDam64s6OTKOOBYR
+        0Aiubd5nM0yZx4cVlw0Ca1ZIyVG/OTmTiD5RKx8DAHAqKkoBd9gH5i1wG1xtHcDu
+        r927luAQEcDk2kuqQAysDV/+IZhDWOYg5l8acmRfXKjwQnElcFWPKxdESBYu6oeQ
+        jWUrPCkYYW8uo=
+X-Virus-Scanned: amavisd-new at kuutio.org
+Received: from mail1.kuutio.org ([127.0.0.1])
+        by localhost (mail1.kuutio.org [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id kThwQP-psZ3c; Wed, 22 Dec 2021 15:27:38 +0100 (CET)
+Received: from [IPv6:2001:998:13:e1::beee] (unknown [IPv6:2001:998:13:e1::beee])
+        by mail1.kuutio.org (Postfix) with ESMTPSA id AE65E1FD6F;
+        Wed, 22 Dec 2021 15:27:38 +0100 (CET)
+Subject: Re: [PATCH 1/2] spi: ar934x: fix transfer size
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211222055958.1383233-1-oskari@lemmela.net>
+ <20211222055958.1383233-2-oskari@lemmela.net>
+ <YcMa1TIg3x3oBKBl@sirena.org.uk>
+From:   =?UTF-8?Q?Oskari_Lemmel=c3=a4?= <oskari@lemmela.net>
+Message-ID: <98a574a2-45c3-5d7c-6405-0cd279a81816@lemmela.net>
+Date:   Wed, 22 Dec 2021 16:27:36 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 09/13] KVM: SVM: include CR3 in initial VMSA state for
- SEV-ES guests
-Content-Language: en-US
-To:     Michael Roth <michael.roth@amd.com>,
-        linux-kselftest@vger.kernel.org
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
-        Nathan Tempelman <natet@google.com>,
-        Marc Orr <marcorr@google.com>,
-        Steve Rutherford <srutherford@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Ricardo Koller <ricarkol@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
-        Peter Gonda <pgonda@google.com>
-References: <20211216171358.61140-1-michael.roth@amd.com>
- <20211216171358.61140-10-michael.roth@amd.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211216171358.61140-10-michael.roth@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <YcMa1TIg3x3oBKBl@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/16/21 18:13, Michael Roth wrote:
-> Normally guests will set up CR3 themselves, but some guests, such as
-> kselftests, and potentially CONFIG_PVH guests, rely on being booted
-> with paging enabled and CR3 initialized to a pre-allocated page table.
-> 
-> Currently CR3 updates via KVM_SET_SREGS* are not loaded into the guest
-> VMCB until just prior to entering the guest. For SEV-ES/SEV-SNP, this
-> is too late, since it will have switched over to using the VMSA page
-> prior to that point, with the VMSA CR3 copied from the VMCB initial
-> CR3 value: 0.
-> 
-> Address this by sync'ing the CR3 value into the VMCB save area
-> immediately when KVM_SET_SREGS* is issued so it will find it's way into
-> the initial VMSA.
-> 
-> Suggested-by: Tom Lendacky <thomas.lendacky@amd.com>
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> ---
->   arch/x86/include/asm/kvm-x86-ops.h |  1 +
->   arch/x86/include/asm/kvm_host.h    |  1 +
->   arch/x86/kvm/svm/svm.c             | 19 +++++++++++++++++++
->   arch/x86/kvm/vmx/vmx.c             |  6 ++++++
->   arch/x86/kvm/x86.c                 |  1 +
->   5 files changed, 28 insertions(+)
-> 
-> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> index cefe1d81e2e8..a3172bd59690 100644
-> --- a/arch/x86/include/asm/kvm-x86-ops.h
-> +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> @@ -35,6 +35,7 @@ KVM_X86_OP(get_cpl)
->   KVM_X86_OP(set_segment)
->   KVM_X86_OP_NULL(get_cs_db_l_bits)
->   KVM_X86_OP(set_cr0)
-> +KVM_X86_OP(post_set_cr3)
->   KVM_X86_OP(is_valid_cr4)
->   KVM_X86_OP(set_cr4)
->   KVM_X86_OP(set_efer)
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index d5fede05eb5f..22f384320ed1 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1342,6 +1342,7 @@ struct kvm_x86_ops {
->   			    struct kvm_segment *var, int seg);
->   	void (*get_cs_db_l_bits)(struct kvm_vcpu *vcpu, int *db, int *l);
->   	void (*set_cr0)(struct kvm_vcpu *vcpu, unsigned long cr0);
-> +	void (*post_set_cr3)(struct kvm_vcpu *vcpu, unsigned long cr3);
->   	bool (*is_valid_cr4)(struct kvm_vcpu *vcpu, unsigned long cr0);
->   	void (*set_cr4)(struct kvm_vcpu *vcpu, unsigned long cr4);
->   	int (*set_efer)(struct kvm_vcpu *vcpu, u64 efer);
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 208566f63bce..76e906d83a84 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -1792,6 +1792,24 @@ static void svm_set_gdt(struct kvm_vcpu *vcpu, struct desc_ptr *dt)
->   	vmcb_mark_dirty(svm->vmcb, VMCB_DT);
->   }
->   
-> +static void svm_post_set_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
-> +{
-> +	struct vcpu_svm *svm = to_svm(vcpu);
-> +
-> +	/*
-> +	 * For guests that don't set guest_state_protected, the cr3 update is
-> +	 * handled via kvm_mmu_load() while entering the guest. For guests
-> +	 * that do (SEV-ES/SEV-SNP), the cr3 update needs to be written to
-> +	 * VMCB save area now, since the save area will become the initial
-> +	 * contents of the VMSA, and future VMCB save area updates won't be
-> +	 * seen.
-> +	 */
-> +	if (sev_es_guest(vcpu->kvm)) {
-> +		svm->vmcb->save.cr3 = cr3;
-> +		vmcb_mark_dirty(svm->vmcb, VMCB_CR);
-> +	}
-> +}
-> +
->   void svm_set_cr0(struct kvm_vcpu *vcpu, unsigned long cr0)
->   {
->   	struct vcpu_svm *svm = to_svm(vcpu);
-> @@ -4622,6 +4640,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
->   	.get_cpl = svm_get_cpl,
->   	.get_cs_db_l_bits = kvm_get_cs_db_l_bits,
->   	.set_cr0 = svm_set_cr0,
-> +	.post_set_cr3 = svm_post_set_cr3,
->   	.is_valid_cr4 = svm_is_valid_cr4,
->   	.set_cr4 = svm_set_cr4,
->   	.set_efer = svm_set_efer,
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 63615d242bdf..075107c1b3f5 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -3124,6 +3124,11 @@ static void vmx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa,
->   		vmcs_writel(GUEST_CR3, guest_cr3);
->   }
->   
-> +
-> +void vmx_post_set_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
-> +{
-> +}
-> +
->   static bool vmx_is_valid_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
->   {
->   	/*
-> @@ -7597,6 +7602,7 @@ static struct kvm_x86_ops vmx_x86_ops __initdata = {
->   	.get_cpl = vmx_get_cpl,
->   	.get_cs_db_l_bits = vmx_get_cs_db_l_bits,
->   	.set_cr0 = vmx_set_cr0,
-> +	.post_set_cr3 = vmx_post_set_cr3,
->   	.is_valid_cr4 = vmx_is_valid_cr4,
->   	.set_cr4 = vmx_set_cr4,
->   	.set_efer = vmx_set_efer,
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 26cb3a4cd0e9..c0d84a4c8049 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -10609,6 +10609,7 @@ static int __set_sregs_common(struct kvm_vcpu *vcpu, struct kvm_sregs *sregs,
->   	*mmu_reset_needed |= kvm_read_cr3(vcpu) != sregs->cr3;
->   	vcpu->arch.cr3 = sregs->cr3;
->   	kvm_register_mark_dirty(vcpu, VCPU_EXREG_CR3);
-> +	static_call(kvm_x86_post_set_cr3)(vcpu, sregs->cr3);
->   
->   	kvm_set_cr8(vcpu, sregs->cr8);
->   
-> 
 
-I'm going to apply this one now, just with a small change to avoid 
-vmx_post_set_cr3 and a remark about why kvm_set_cr3 is not calling the 
-new hook.
+On 22.12.2021 14.32, Mark Brown wrote:
+> On Wed, Dec 22, 2021 at 07:59:57AM +0200, Oskari Lemmela wrote:
+>> If bits_per_word is configured, transfer only word amount
+>> of data per iteration.
+> Does this actually materially affect what the hardware does?  How much
+> data is transferred in an internal loop in the driver is completely
+> immaterial, bits per word only matters for formatting of the transferred
+> data.
+I don't have logic analyzator to verify what hardware actual does.
+I tested this with transferring 32bits to ATSAMD20J15 slave.
+Running loop in 8bits or 16bits, transfer is done correctly without
+any errors. When running loop in 24bits or 32bits directly I got
+error from spi_sync_transfer.
 
-diff --git a/arch/x86/include/asm/kvm-x86-ops.h 
-b/arch/x86/include/asm/kvm-x86-ops.h
-index 8803773539a0..37624a9e3e40 100644
---- a/arch/x86/include/asm/kvm-x86-ops.h
-+++ b/arch/x86/include/asm/kvm-x86-ops.h
-@@ -35,7 +35,7 @@ KVM_X86_OP(get_cpl)
-  KVM_X86_OP(set_segment)
-  KVM_X86_OP_NULL(get_cs_db_l_bits)
-  KVM_X86_OP(set_cr0)
--KVM_X86_OP(post_set_cr3)
-+KVM_X86_OP_NULL(post_set_cr3)
-  KVM_X86_OP(is_valid_cr4)
-  KVM_X86_OP(set_cr4)
-  KVM_X86_OP(set_efer)
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index a39da103e33c..fe06b02994e6 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -3135,10 +3135,6 @@ static void vmx_load_mmu_pgd(struct kvm_vcpu 
-*vcpu, hpa_t root_hpa,
-  }
-
-
--void vmx_post_set_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
--{
--}
--
-  static bool vmx_is_valid_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
-  {
-  	/*
-@@ -7608,7 +7604,6 @@ static struct kvm_x86_ops vmx_x86_ops __initdata = {
-  	.get_cpl = vmx_get_cpl,
-  	.get_cs_db_l_bits = vmx_get_cs_db_l_bits,
-  	.set_cr0 = vmx_set_cr0,
--	.post_set_cr3 = vmx_post_set_cr3,
-  	.is_valid_cr4 = vmx_is_valid_cr4,
-  	.set_cr4 = vmx_set_cr4,
-  	.set_efer = vmx_set_efer,
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index db118066c653..c194a8cbd25f 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1179,6 +1179,7 @@ int kvm_set_cr3(struct kvm_vcpu *vcpu, unsigned 
-long cr3)
-
-  	vcpu->arch.cr3 = cr3;
-  	kvm_register_mark_dirty(vcpu, VCPU_EXREG_CR3);
-+	/* Do not call post_set_cr3, we do not get here for confidential 
-guests.  */
-
-  handle_tlb_flush:
-  	/*
-@@ -10636,7 +10637,7 @@ static int __set_sregs_common(struct kvm_vcpu 
-*vcpu, struct kvm_sregs *sregs,
-  	*mmu_reset_needed |= kvm_read_cr3(vcpu) != sregs->cr3;
-  	vcpu->arch.cr3 = sregs->cr3;
-  	kvm_register_mark_dirty(vcpu, VCPU_EXREG_CR3);
--	static_call(kvm_x86_post_set_cr3)(vcpu, sregs->cr3);
-+	static_call_cond(kvm_x86_post_set_cr3)(vcpu, sregs->cr3);
-
-  	kvm_set_cr8(vcpu, sregs->cr8);
-
-Paolo
-
+Oskari

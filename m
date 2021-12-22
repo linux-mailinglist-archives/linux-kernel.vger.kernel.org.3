@@ -2,133 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A35E447CD7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:23:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A5E47CD80
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:25:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242960AbhLVHXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 02:23:37 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:33891 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbhLVHXg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 02:23:36 -0500
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JJlCz3NgMzcc6Z;
-        Wed, 22 Dec 2021 15:23:11 +0800 (CST)
-Received: from huawei.com (10.67.189.167) by canpemm500010.china.huawei.com
- (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 22 Dec
- 2021 15:23:34 +0800
-From:   Jiangfeng Xiao <xiaojiangfeng@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@redhat.com>, <namhyung@kernel.org>, <james.clark@arm.com>,
-        <leo.yan@linaro.org>, <shaolexi@huawei.com>, <qiuxi1@huawei.com>,
-        <wangbing6@huawei.com>, <nixiaoming@huawei.com>,
-        <xiaojiangfeng@huawei.com>
-CC:     <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] perf dso: Avoid copying redundant kallsyms in th buildid_dir
-Date:   Wed, 22 Dec 2021 15:23:23 +0800
-Message-ID: <1640157803-106978-1-git-send-email-xiaojiangfeng@huawei.com>
-X-Mailer: git-send-email 1.8.5.6
+        id S242975AbhLVHZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 02:25:09 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:59194 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231422AbhLVHZI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 02:25:08 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowAA3P5+_0sJhvqi7BA--.45819S2;
+        Wed, 22 Dec 2021 15:24:47 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     hdegoede@redhat.com, axboe@kernel.dk, p.zabel@pengutronix.de
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] ata: libahci_platform: Remove abundant check
+Date:   Wed, 22 Dec 2021 15:24:46 +0800
+Message-Id: <20211222072446.1096168-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.189.167]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAA3P5+_0sJhvqi7BA--.45819S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gry8GF1rXrW3ZFy7ZrW5Wrg_yoW3KrX_Jw
+        18WFW7Jr4rCF1vqw17tr13uFWSyas8urn2vF1kt3ZIg3s8X345uFy7Zr4UAa1j9F10yr95
+        AFsrCry3C34SyjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbckFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8CwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUPb18UUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The issue is occurs in following step:
-(1)copy the kernel module (such as test.ko) to /root directory
-(2)load the kernel module (such as insmod test.ko)
-(3)run perf-record as: perf record sleep 1
-Then /proc/kallsyms will be copied not only to
-/root/.debug/[kernel.kallsyms]/<buildid>/kallsyms,
-but also be copied to
-/root/.debug/[test]/<buildid>/kallsyms(this is redundant).
+It can be found that platform_get_irq() returns nagative code but not
+null when fails.
+The comment of the platform_get_irq clearly shows that.
+Therefore it should be better to remove the useless check.
 
-Say a kallsyms file content takes 5MB memory,
-100 out-of-tree kernel modules will take 500MB,
-which is not bearable on embedded environment.
-
-__cmd_record():
-  __perf_session__new():
-    perf_session__create_kernel_maps():
-      machine__create_kernel_maps():
-        machine__create_modules():
-          machine__set_modules_path(): perf will only search for kernel
-                                      modules in "/lib/modules/`uname -r`/"
-                                      /root/test.ko is not in scope.
-            maps__set_modules_path_dir():
-              maps__set_module_path():
-                dso__set_long_name(): the dso->long_name of test.ko has
-                                      not changed, it is still [test].
-
-record__finish_output():
-  perf_session__write_header():
-    [...]
-      dso__cache_build_id():
-        bool is_kallsyms = dso__is_kallsyms(dso);
-          dso__is_kallsyms(): return dso->kernel&&dso->long_name[0] != '/';
-                              [test] will be wrongly judged as kallsyms,
-                              and then the value of is_kallsyms is true.
-        build_id_cache__add_b(, is_kallsyms,):
-          build_id_cache__add_s(, is_kallsyms,):
-            build_id_cache__add(, is_kallsyms,):
-              if (is_kallsyms)
-                copyfile("/proc/kallsyms", filename): /proc/kallsyms will
-                be copied to /root/.debug/[test]/<buildid>/kallsyms.
-
-Why can this modification can avoid the redundancy of kallsyms:
-  if (dso->kernel == DSO_SPACE__KERNEL) there are only two possibilities,
-  one is dso__is_kallsyms, and the other is dso__is_kmod. After
-  modification, [test] is no longer incorrectly judged as kallsyms.
-Why can dso__is_kmod judge correctly?
-  __cmd_record():
-    __perf_session__new():
-      perf_session__create_kernel_maps():
-        machine__create_kernel_maps():
-          machine__create_modules():
-            modules__parse(): for each line in /proc/modules,
-                              not just in "/lib/modules/`uname -r`/".
-              machine__create_module():
-                machine__addnew_module_map():
-                  machine__findnew_module_dso():
-                    dso__set_module_info(): assign dso->symtab_type to
-                    DSO_BINARY_TYPE__SYSTEM_PATH_KMODULE and so on.
-
-Reported-by: Lexi Shao <shaolexi@huawei.com>
-Signed-off-by: Jiangfeng Xiao <xiaojiangfeng@huawei.com>
+Fixes: fd990556f0fa ("ata: move library code from ahci_platform.c to libahci_platform.c")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- tools/perf/util/dso.h | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/ata/libahci_platform.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
-index 011da39..57a6ab5 100644
---- a/tools/perf/util/dso.h
-+++ b/tools/perf/util/dso.h
-@@ -380,9 +380,17 @@ static inline bool dso__is_kcore(struct dso *dso)
- 	       dso->binary_type == DSO_BINARY_TYPE__GUEST_KCORE;
- }
+diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
+index b2f552088291..5ec68f138c28 100644
+--- a/drivers/ata/libahci_platform.c
++++ b/drivers/ata/libahci_platform.c
+@@ -587,8 +587,6 @@ int ahci_platform_init_host(struct platform_device *pdev,
+ 			dev_err(dev, "no irq\n");
+ 		return irq;
+ 	}
+-	if (!irq)
+-		return -EINVAL;
  
-+static inline bool dso__is_kmod(struct dso *dso)
-+{
-+	return dso->symtab_type == DSO_BINARY_TYPE__SYSTEM_PATH_KMODULE ||
-+		dso->symtab_type == DSO_BINARY_TYPE__SYSTEM_PATH_KMODULE_COMP ||
-+		dso->symtab_type == DSO_BINARY_TYPE__GUEST_KMODULE ||
-+		dso->symtab_type == DSO_BINARY_TYPE__GUEST_KMODULE_COMP;
-+}
-+
- static inline bool dso__is_kallsyms(struct dso *dso)
- {
--	return dso->kernel && dso->long_name[0] != '/';
-+	return dso->kernel && !dso__is_kmod(dso);
- }
+ 	hpriv->irq = irq;
  
- void dso__free_a2l(struct dso *dso);
 -- 
-1.8.5.6
+2.25.1
 

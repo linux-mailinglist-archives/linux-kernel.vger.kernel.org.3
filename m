@@ -2,167 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8B647D7CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:35:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9642547D7D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:36:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345261AbhLVTf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 14:35:26 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:34694 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232808AbhLVTfZ (ORCPT
+        id S1345268AbhLVTg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 14:36:27 -0500
+Received: from mail-qk1-f179.google.com ([209.85.222.179]:43917 "EHLO
+        mail-qk1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232808AbhLVTg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 14:35:25 -0500
-Date:   Wed, 22 Dec 2021 20:35:22 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1640201724;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rkPNWOADgnC36BjgHUX/l07Xpal9174kWfL7noL/iQ0=;
-        b=z9hToS1fSJQDmIizgg5c68gAfttWbhc5y5zulXIGTv8C7Acknp6zBqymzPubJ9pUJ0Kp0D
-        Xn7EmWhswAbPklw3UKW/y0lCvTw6uhQvT0UVAm5QNBVtNwWg1lOjTv8HK2JG7iM+cegmyA
-        EckIq8MoBmUwa1D6n5UOTTHuV4pXzDewlN7Rd/gT4EtCeMn+9TazFiJxgYM1ZmUtrbj+1S
-        Ip/Bpiwve8C43kQL5JjvXEhKlqTvH7Lm2sJSKOJ42m4xOxJK4WwywWqJtJltakEiOS38p5
-        uaSFGrFgYyE+gspkv/t5w/jI7zgZi9zeJ55bNl8Fg/LPdtwlEAMEz8gM/UoPNw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1640201724;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rkPNWOADgnC36BjgHUX/l07Xpal9174kWfL7noL/iQ0=;
-        b=dSvyKK+j1I4mP2azSbbXHkXrmQQicRdPLVkeTnEpT/E5u0f8k+iXACOGacRsVzgaRhRrC9
-        my6n42wjB2HqsbBQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Clark Williams <williams@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        John Kacur <jkacur@redhat.com>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Pavel Machek <pavel@denx.de>,
-        Salvatore Bonaccorso <carnil@debian.org>
-Subject: [PATCH RT] net: Add missing xmit_lock_owner hunks.
-Message-ID: <YcN9+vGl7GXAZwJH@linutronix.de>
-References: <163977665182.1250088.11049848941535534253@puck.lan>
+        Wed, 22 Dec 2021 14:36:26 -0500
+Received: by mail-qk1-f179.google.com with SMTP id f138so3332665qke.10;
+        Wed, 22 Dec 2021 11:36:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DQXkbqnZiEcUh+/jcIs4LSNWY6G1vGofSkBZyjGU8cQ=;
+        b=R7zWbvk82wDCaUtKlcZGIARJVV6KhxDWi5AglA5393WLRbmHwpiWKMnbpM+OM3YfR9
+         BaNZURHf2TyYhjRPB3BvZpcoBoQUJn3xl5dFe78g+4ggCLDLR6BH1wWPDeT13R+qlpAI
+         q5ya7fzKDRQD+8YaDlrh8eDbhbgvwUzyFh+HfXe+L9Yj0lv+13oNiYGVuvUyaihRtu10
+         q8n3U7MBuE/tS1KXlzuwvNd6JF7kZbC8+tGGg/7Xzg55C0UtZYzzvKQyqvrtgB2fqtZg
+         JT38gcGdU47ZyCB5KrVdHFtUq66JuOdfvKmS/ppv+/PXdHlEUYmtI4yqKM5vVRA8r/IJ
+         RArw==
+X-Gm-Message-State: AOAM533IfhnLgKbzF60qQuj2fgRErd/P5P34NR5oP0sy//tzt8XkvMtf
+        rAjI44QZI7cRG6QUPXw18iGQZWtFh7Kj
+X-Google-Smtp-Source: ABdhPJweKvH4XP+FIgEnwNQb2TWPZgo9az0S6H2t7eFK6avipIRvJ+Y3o6DS8ZLkH1cDVPiRc2/IbQ==
+X-Received: by 2002:a37:a305:: with SMTP id m5mr2075895qke.86.1640201785488;
+        Wed, 22 Dec 2021 11:36:25 -0800 (PST)
+Received: from robh.at.kernel.org ([24.55.105.145])
+        by smtp.gmail.com with ESMTPSA id r187sm2375814qke.11.2021.12.22.11.36.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 11:36:25 -0800 (PST)
+Received: (nullmailer pid 2574361 invoked by uid 1000);
+        Wed, 22 Dec 2021 19:36:23 -0000
+Date:   Wed, 22 Dec 2021 15:36:23 -0400
+From:   Rob Herring <robh@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Introduce common properties
+Message-ID: <YcN+NwFu2m6WZCdE@robh.at.kernel.org>
+References: <20211221175029.144906-1-paul@crapouillou.net>
+ <20211221175029.144906-2-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <163977665182.1250088.11049848941535534253@puck.lan>
+In-Reply-To: <20211221175029.144906-2-paul@crapouillou.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The patch
-	net: move xmit_recursion to per-task variable on -RT
+On Tue, Dec 21, 2021 at 05:50:28PM +0000, Paul Cercueil wrote:
+> Introduce a file for common properties of hwmon sensors.
+> 
+> As of now it contains only the "label" property, which can contain a
+> descriptive label that allows to uniquely identify a device within the
+> system.
 
-lost a few hunks during its rebase.
+I don't think we need this. What we need is a global (in dtschema) 
+type definition and then any users just add 'label: true'.
 
-Add the `xmit_lock_owner' accessor/wrapper.
-
-Reported-by: Salvatore Bonaccorso <carnil@debian.org>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- include/linux/netdevice.h | 29 +++++++++++++----------------
- 1 file changed, 13 insertions(+), 16 deletions(-)
-
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 7b34ce34114ac..ce19befe4d87d 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -3882,17 +3882,17 @@ static inline u32 netif_msg_init(int debug_value, int default_msg_enable_bits)
- #ifdef CONFIG_PREEMPT_RT_FULL
- static inline void netdev_queue_set_owner(struct netdev_queue *txq, int cpu)
- {
--	txq->xmit_lock_owner = current;
-+	WRITE_ONCE(txq->xmit_lock_owner, current);
- }
- 
- static inline void netdev_queue_clear_owner(struct netdev_queue *txq)
- {
--	txq->xmit_lock_owner = NULL;
-+	WRITE_ONCE(txq->xmit_lock_owner, NULL);
- }
- 
- static inline bool netdev_queue_has_owner(struct netdev_queue *txq)
- {
--	if (txq->xmit_lock_owner != NULL)
-+	if (READ_ONCE(txq->xmit_lock_owner) != NULL)
- 		return true;
- 	return false;
- }
-@@ -3901,17 +3901,19 @@ static inline bool netdev_queue_has_owner(struct netdev_queue *txq)
- 
- static inline void netdev_queue_set_owner(struct netdev_queue *txq, int cpu)
- {
--	txq->xmit_lock_owner = cpu;
-+	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
-+	WRITE_ONCE(txq->xmit_lock_owner, cpu);
- }
- 
- static inline void netdev_queue_clear_owner(struct netdev_queue *txq)
- {
--	txq->xmit_lock_owner = -1;
-+	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
-+	WRITE_ONCE(txq->xmit_lock_owner, -1);
- }
- 
- static inline bool netdev_queue_has_owner(struct netdev_queue *txq)
- {
--	if (txq->xmit_lock_owner != -1)
-+	if (READ_ONCE(txq->xmit_lock_owner != -1))
- 		return true;
- 	return false;
- }
-@@ -3920,8 +3922,7 @@ static inline bool netdev_queue_has_owner(struct netdev_queue *txq)
- static inline void __netif_tx_lock(struct netdev_queue *txq, int cpu)
- {
- 	spin_lock(&txq->_xmit_lock);
--	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
--	WRITE_ONCE(txq->xmit_lock_owner, cpu);
-+	netdev_queue_set_owner(txq, cpu);
- }
- 
- static inline bool __netif_tx_acquire(struct netdev_queue *txq)
-@@ -3938,8 +3939,7 @@ static inline void __netif_tx_release(struct netdev_queue *txq)
- static inline void __netif_tx_lock_bh(struct netdev_queue *txq)
- {
- 	spin_lock_bh(&txq->_xmit_lock);
--	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
--	WRITE_ONCE(txq->xmit_lock_owner, smp_processor_id());
-+	netdev_queue_set_owner(txq, smp_processor_id());
- }
- 
- static inline bool __netif_tx_trylock(struct netdev_queue *txq)
-@@ -3947,23 +3947,20 @@ static inline bool __netif_tx_trylock(struct netdev_queue *txq)
- 	bool ok = spin_trylock(&txq->_xmit_lock);
- 
- 	if (likely(ok)) {
--		/* Pairs with READ_ONCE() in __dev_queue_xmit() */
--		WRITE_ONCE(txq->xmit_lock_owner, smp_processor_id());
-+		netdev_queue_set_owner(txq, smp_processor_id());
- 	}
- 	return ok;
- }
- 
- static inline void __netif_tx_unlock(struct netdev_queue *txq)
- {
--	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
--	WRITE_ONCE(txq->xmit_lock_owner, -1);
-+	netdev_queue_clear_owner(txq);
- 	spin_unlock(&txq->_xmit_lock);
- }
- 
- static inline void __netif_tx_unlock_bh(struct netdev_queue *txq)
- {
--	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
--	WRITE_ONCE(txq->xmit_lock_owner, -1);
-+	netdev_queue_clear_owner(txq);
- 	spin_unlock_bh(&txq->_xmit_lock);
- }
- 
--- 
-2.34.1
-
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  .../devicetree/bindings/hwmon/common.yaml     | 31 +++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/common.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/common.yaml b/Documentation/devicetree/bindings/hwmon/common.yaml
+> new file mode 100644
+> index 000000000000..997f74127d8c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/common.yaml
+> @@ -0,0 +1,31 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/common.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Common properties for hwmon sensors
+> +
+> +maintainers:
+> +  - Jean Delvare <jdelvare@suse.com>
+> +  - Guenter Roeck <linux@roeck-us.net>
+> +
+> +description: |
+> +  This document defines device tree properties common to several hwmon
+> +  sensors. It doesn't constitue a device tree binding specification by itself but
+> +  is meant to be referenced by device tree bindings.
+> +
+> +  When referenced from sensor tree bindings the properties defined in this
+> +  document are defined as follows. The sensor tree bindings are responsible for
+> +  defining whether each property is required or optional.
+> +
+> +properties:
+> +  label:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description: >
+> +      Descriptive label that allows to uniquely identify a device within
+> +      the system.
+> +
+> +additionalProperties: true
+> +
+> +...
+> -- 
+> 2.34.1
+> 
+> 

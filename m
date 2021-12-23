@@ -2,119 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D70347E92C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 22:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A90A847E930
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 22:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350360AbhLWVnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 16:43:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240686AbhLWVnS (ORCPT
+        id S1350384AbhLWVsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 16:48:45 -0500
+Received: from mout.kundenserver.de ([212.227.126.134]:41609 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240686AbhLWVsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 16:43:18 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4206AC061401;
-        Thu, 23 Dec 2021 13:43:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7AE5DCE2208;
-        Thu, 23 Dec 2021 21:43:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C85FEC36AEA;
-        Thu, 23 Dec 2021 21:43:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640295794;
-        bh=YZG2vX676ItJy3+kJRWOsS2iMCGgY1eqBlxO8esua7k=;
-        h=From:Date:Subject:To:Cc:From;
-        b=AFfyfJfylrPYTx9StY/CF6lMb4wD5XehUOUZH9qMPNQ/u4I33ZQIGVkN4fK1oTsEL
-         S3J8hke9AyyiwFMd8LxSexuGbGtAhtR8UHNu2vmxwMF8a/PrbxzLy4GqXkS5pOt1LY
-         2NMgZF50eiKyoVXlMQwtMpwHVJTP6S1LgkwLeImtAOCny0E/YI0IMVZKHaww3ZX7K7
-         11QDAh+hCfe37h72ZpYNWboHz3TFIvVt17IY2KIuM6vox2EhyO/PxlfvVTv0UFYj2/
-         Fc+zV1Ce/uD0AhadNpJOoBfQX6deMd6K1c0ZwVSwCRtXSCHVDLMf4LP4D0tN2AyoiP
-         tneGAJlVQVZjA==
-Received: by mail-wr1-f49.google.com with SMTP id s1so13889004wra.6;
-        Thu, 23 Dec 2021 13:43:14 -0800 (PST)
-X-Gm-Message-State: AOAM531UTSYgI11rmZGPgBJQxyrui03Qyr5Vza0bzllzcoOPcXAacpr1
-        3eX3j+B0hImR9nSFSfY15XQ/hvajODlrShegk+k=
-X-Google-Smtp-Source: ABdhPJxGnmkmwfJuofdStb9OMaZZAS7Asd+mhazJrq2O1sPYplNi8Szl6RNei35+vaGLMqTCAbvXATegCNAhfMORJlo=
-X-Received: by 2002:a5d:6989:: with SMTP id g9mr2832508wru.12.1640295793148;
- Thu, 23 Dec 2021 13:43:13 -0800 (PST)
+        Thu, 23 Dec 2021 16:48:43 -0500
+Received: from mail-wm1-f41.google.com ([209.85.128.41]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MEC8L-1n8S230SqT-00AEav for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021
+ 22:48:42 +0100
+Received: by mail-wm1-f41.google.com with SMTP id o30so1990352wms.4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 13:48:42 -0800 (PST)
+X-Gm-Message-State: AOAM531WhokRZFM3GFVYzUTeweR5n5b6aLNXi5F2JeKy+RIeSP/5QGSX
+        DdxWP3AYbi3MAAT08zUBpWPyeGTtaUsB/6FCpaU=
+X-Google-Smtp-Source: ABdhPJxEYcYHc2s5iCcMqJon0WqW70nGm5f5WDQq7gMOd5Wc3NVcPo41UEwymsv+n/rGicATExGdFZsdKwBJEHEzGmU=
+X-Received: by 2002:a7b:c198:: with SMTP id y24mr3011601wmi.1.1640296121769;
+ Thu, 23 Dec 2021 13:48:41 -0800 (PST)
 MIME-Version: 1.0
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 23 Dec 2021 22:42:57 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2ajcXkh4OAfJseUSiCsfU7gOXbDwiWHNGKgByzDwcycg@mail.gmail.com>
-Message-ID: <CAK8P3a2ajcXkh4OAfJseUSiCsfU7gOXbDwiWHNGKgByzDwcycg@mail.gmail.com>
-Subject: [GIT PULL] asm-generic: cleanups for 5.17
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>, wasin@wasin.io
+References: <YcS4xVWs6bQlQSPC@archlinux-ax161>
+In-Reply-To: <YcS4xVWs6bQlQSPC@archlinux-ax161>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 23 Dec 2021 22:48:25 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1GhoqbcdLHosHNe0QNX3oA5XmE2R-MXfD+eOsJjY5-=Q@mail.gmail.com>
+Message-ID: <CAK8P3a1GhoqbcdLHosHNe0QNX3oA5XmE2R-MXfD+eOsJjY5-=Q@mail.gmail.com>
+Subject: Re: Issue with booting multi_v5_defconfig kernel with GCC 11
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:r5Ak1ebR5rTlEUEEDSmt0qY3PaS07uuSKx4CFzgjcN8BAO7kkg9
+ rrx+K5x4grNfo3XrR7srshiNtoHKi3aL6bdkCwj5e2iXaZiMaNWP3CqFAtaxZWjACZhqXoo
+ WQMcHoYpujPDRdIL/uI7yuWIr/dNrcW+abWoWGx6uZAdb1q6YAWYsWTe/msZLD7jlmEMJ1Y
+ 9rjMUgJeMZRXA04ZraUFA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fiEXNFVM780=:7T7YJgTGqvTaUGTzX0d0NI
+ yvi8YzPgsxDWO8RNoOBrj9f+rdxGlu6DeN1+1uKNObhdoVXv/rsgy8Jpr5qVy/3ADCINi998C
+ IaT6Ylhm2F4jkjOSOM0w/RVqx5D6LxGVFWA2lMi5BWDXbLVyccBYNEASsT8zDO1fn2llj249e
+ yO9LBrin+DS5DrVeuLOG+mvi6oSHmsnUKyEYWqYYB06zxMvPsep8FJ2hEipC2ZLUcTxWzdlRq
+ aJvXKWwYJnCVGwxVaz72CXqivV9E5yYh+GXuR9H+II5sDEGS7Vk+ySmGOqLs8vJisOWWHTBLx
+ uOZnfwOQDB26kxYNxRX99AdQi+zHgkB6MuWo2Ys3THryhLSfZ8jNqHDgetRa1J8dq3KjrJPw4
+ hkkAjz8Rs4da5jMctAbl47tmpt/KJxR4reDgSwr2SEORJdWjuJnh49M29SdWqdSIOCDpHmgNn
+ 2Gkpkb71Wsl+IJUHtfkgTKYoxhXp0SKjHDbVJTMdMaKwxtcggc9xFKPmbWu5EedlFz+XtrsY8
+ 8UpJ9CcQmveBoDgUHWn+7/4voOGeSd57QW5WEOUumXZZ5N9KRKmL4wGFoQBqZpF/92b5TOAuV
+ wytzm+3eioH3NuZbTKU7nyFhVoMzw06N/cPR0rONY7SOwX8mlgX6hnk/OgAWFpe2jyljdK8iO
+ ETVezjsDjO8iUGbTZYziw6iR3DyY8j+cq6HT90mZHQmjmoeYCVOUvreze6XxQnuD8300=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit d58071a8a76d779eedab38033ae4c821c30295a5:
+On Thu, Dec 23, 2021 at 6:58 PM Nathan Chancellor <nathan@kernel.org> wrote:
 
-  Linux 5.16-rc3 (2021-11-28 14:09:19 -0800)
+> da850_evm_config_emac: soc_info: c0dd7288
+> da850_evm_config_emac: emac_pdata: 00000000
+>
+> I don't really see how that is possible, as I can see this member
+> assigned in the davinci_soc_info_* variables but maybe there is some
+> race during initialization or problem because the QEMU machine is not
+> one of these machines?
 
-are available in the Git repository at:
+Right, the problem is that da850_evm_config_emac() gets called
+unconditionally for all machines, but davinci_soc_info only gets
+populated on davinci machines.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
-tags/asm-generic-5.17
+> I think that the GCC commit just makes it so that the rmii_en member is
+> read earlier, rather than at the point of use.
+>
+> Regardless, something like this resolves this panic for me but I have no
+> idea if it is proper or not, hence just the report :)
+>
+> diff --git a/arch/arm/mach-davinci/board-da850-evm.c b/arch/arm/mach-davinci/board-da850-evm.c
+> index 428012687a80..7f7f6bae21c2 100644
+> --- a/arch/arm/mach-davinci/board-da850-evm.c
+> +++ b/arch/arm/mach-davinci/board-da850-evm.c
+> @@ -1101,11 +1101,13 @@ static int __init da850_evm_config_emac(void)
+>         int ret;
+>         u32 val;
+>         struct davinci_soc_info *soc_info = &davinci_soc_info;
+> -       u8 rmii_en = soc_info->emac_pdata->rmii_en;
+> +       u8 rmii_en;
+>
+>         if (!machine_is_davinci_da850_evm())
+>                 return 0;
+>
+> +       rmii_en = soc_info->emac_pdata->rmii_en;
+> +
+>         cfg_chip3_base = DA8XX_SYSCFG0_VIRT(DA8XX_CFGCHIP3_REG);
+>
+>         val = __raw_readl(cfg_chip3_base);
+>
 
-for you to fetch changes up to 733e417518a69b71061c3bafc2bf106109565eee:
+This is the correct fix.
 
-  asm-generic/error-injection.h: fix a spelling mistake, and a coding
-style issue (2021-12-17 14:12:14 +0100)
-
-----------------------------------------------------------------
-asm-generic: cleanups for 5.17
-
-A few minor cleanups for cross-architecture code: Alexandre Ghiti
-deals with removing some leftovers from drivers and features that
-have been removed, and Wasin Thonkaew has a cosmetic change.
-
-----------------------------------------------------------------
-As with the soc pull requests, this is also early, as I won't be working
-before the start of the merge window.
-
-Alexandre Ghiti (4):
-      Documentation, arch: Remove leftovers from raw device
-      Documentation, arch: Remove leftovers from CIFS_WEAK_PW_HASH
-      arch: Remove leftovers from mandatory file locking
-      arch: Remove leftovers from prism54 wireless driver
-
-Wasin Thonkaew (1):
-      asm-generic/error-injection.h: fix a spelling mistake, and a
-coding style issue
-
- Documentation/admin-guide/cifs/usage.rst    | 7 +++----
- Documentation/admin-guide/devices.txt       | 8 +-------
- arch/arm/configs/cm_x300_defconfig          | 1 -
- arch/arm/configs/ezx_defconfig              | 1 -
- arch/arm/configs/imote2_defconfig           | 1 -
- arch/arm/configs/nhk8815_defconfig          | 1 -
- arch/arm/configs/pxa_defconfig              | 1 -
- arch/arm/configs/spear13xx_defconfig        | 1 -
- arch/arm/configs/spear3xx_defconfig         | 1 -
- arch/arm/configs/spear6xx_defconfig         | 1 -
- arch/mips/configs/decstation_64_defconfig   | 1 -
- arch/mips/configs/decstation_defconfig      | 1 -
- arch/mips/configs/decstation_r4k_defconfig  | 1 -
- arch/mips/configs/fuloong2e_defconfig       | 1 -
- arch/mips/configs/ip27_defconfig            | 1 -
- arch/mips/configs/malta_defconfig           | 1 -
- arch/mips/configs/malta_kvm_defconfig       | 1 -
- arch/mips/configs/malta_qemu_32r6_defconfig | 1 -
- arch/mips/configs/maltaaprp_defconfig       | 1 -
- arch/mips/configs/maltasmvp_defconfig       | 1 -
- arch/mips/configs/maltasmvp_eva_defconfig   | 1 -
- arch/mips/configs/maltaup_defconfig         | 1 -
- arch/mips/configs/maltaup_xpa_defconfig     | 1 -
- arch/powerpc/configs/pmac32_defconfig       | 1 -
- arch/powerpc/configs/ppc6xx_defconfig       | 1 -
- arch/powerpc/configs/pseries_defconfig      | 1 -
- arch/sh/configs/titan_defconfig             | 1 -
- include/asm-generic/error-injection.h       | 4 ++--
- 28 files changed, 6 insertions(+), 38 deletions(-)
+Fixes: bae105879f2f ("davinci: DA850/OMAP-L138 EVM: implement
+autodetect of RMII PHY")
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>

@@ -2,86 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BE347E995
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 23:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7112A47E99F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 00:13:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236968AbhLWWxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 17:53:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45250 "EHLO
+        id S240756AbhLWXJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 18:09:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234511AbhLWWxH (ORCPT
+        with ESMTP id S229834AbhLWXJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 17:53:07 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEC5C061401
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 14:53:07 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id x32so20483401ybi.12
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 14:53:06 -0800 (PST)
+        Thu, 23 Dec 2021 18:09:55 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33609C061401;
+        Thu, 23 Dec 2021 15:09:55 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id e5so4186714wmq.1;
+        Thu, 23 Dec 2021 15:09:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZcEv8EcLJVrHvC/I5/J7MwrmBXZn8X2kMKVjuhCef14=;
-        b=Y1aTx1YrmjZq5GG2AVe7+K3dzJAMOMWNq8DYehXq7+z97i1nm+M2Ea2sAzDUXJjKp2
-         GnNc4dqe1KYLwgMy+pKHEvAj0hVHmofr0XHbr5dtZTeDL13QlJbENdsPTdkpu+VOA+BD
-         ReleBwzcVXENo4HNU9m2daQiGj+nPgn1x0LWA=
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=dgbT8DN+Tw3GNuf5KJthTWpp6lDkFZBiYQzZimRcuRE=;
+        b=ehxbIBRAS2aXNbnGgB0k0x6R5UnwGvaUuLQwHieKejHDCyBTff1JOdaDIPIckgtJou
+         8hYkLoqNGiii4+iF8QW2us8YgNv9kljvbT4qGb/bQUff9DbRMmIrP0045w7Uw3CUCOK8
+         TTwrauAIdVxgec9tqmZeT0ABn4zy0J9Ld1K8K1eW8x56QfvdoJ4Dm/BexqyjR/YwzPZw
+         lDqlfT6bv88bZRj1nDoITdfdxhxwY3gc40PVSTqhV1FQbyf1IA5N0iLVeBCj3xHVVZgn
+         NV7mk5eCxTD4+SUpFaDQwPqH182VQ8mtL51XgD/+4dSE1ey1EoQe53Wn8U4cWrQUgaMC
+         9neA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZcEv8EcLJVrHvC/I5/J7MwrmBXZn8X2kMKVjuhCef14=;
-        b=As8h9wSznfAYRwy/nc69u0R77j3tr7S9AbdBj8E007DWk0jyVmuj5nclvURRM8XfIx
-         r1PxX9wWbW+hsNcBu27JAd5UdfelJvBpURclnWv1qoTOCDNbHKD3PsRg8nttMyoklMqq
-         kC66y0JlvnGAd3cgrBpARakEQNIdXwB9rYM/IFn7xxo0mKHoLIkIjgV4frXUVJf+pwvU
-         S0A4CSnH1s0s6bciXHFXw158iOzt+5d73jiCaTKLl5t9pp3Ud3b1BhWOiK+HSIUDRBea
-         aoUsBP9ncpJClZCqaQMu2MtFJlC6Vy2B49LknnX6EPLTV0BfMkXTgoq75atf/Vx5/+ZG
-         Nq6Q==
-X-Gm-Message-State: AOAM532BtZBZwvRQoOIsi+zzmAyy+tbxgv/DtByRoFTGr05bZO3tVN/1
-        IuyQLRU97sX2Nblt857rkIzq8m61j6CPcIDxpsNmp62XjJU=
-X-Google-Smtp-Source: ABdhPJwE+p02x6CD8c8Z3xtjknTsne4NEUfj3GqbYLVPV1vZGGJhs3fskI38m4tdIitm33R3WVJMb3Q0j+4HsaVIBw8=
-X-Received: by 2002:a25:d84a:: with SMTP id p71mr93571ybg.693.1640299986168;
- Thu, 23 Dec 2021 14:53:06 -0800 (PST)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=dgbT8DN+Tw3GNuf5KJthTWpp6lDkFZBiYQzZimRcuRE=;
+        b=o4y2wHRFmnHEptWe2GP8e3dul2mqXrLlB31CwsgAlX4QnaS5Ch7MJdhHYpAkIoam5P
+         SGB37Fx5ZGN186NbY2INJurdUedBCX4rgL5SmUaXfOhIb+sXHJfKPGu5S5cSRVBsNbEM
+         296rGoCDgMLmpsU93hhW8ApHF9AQt6JItlo8q8vIeTPhNw6DiacNwlfUiz0jbVSmp/6n
+         K/pKg4wjn5EQ7lUJ852IgEnq0/3ZRjg3oJCW3fiX/otRF2x17VHk1i350qJsB1JwcqS6
+         beQ6GKkzM+lhYgsl2oH0dS71j8rd62DiuOvsuhaiVvGRrxpfrwCQ2LxkHiE3d2fm0ei5
+         Zf/A==
+X-Gm-Message-State: AOAM533nsrGrWtZpRG8X65WjrW1Am5/mdhgEGNx3lAxJQmt28ZCsdbAa
+        XOOyar0cQhMt7NWkdoVHPfea91WY7f8=
+X-Google-Smtp-Source: ABdhPJxl1U9OmTr5nW/WPKnQ66/Eyo9O1/bfTZjkkZoBY6qhl1LyNXjyknMXkm7SCe/TuBNlpdLL3A==
+X-Received: by 2002:a05:600c:c7:: with SMTP id u7mr3032584wmm.85.1640300993673;
+        Thu, 23 Dec 2021 15:09:53 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id c11sm10989913wmq.48.2021.12.23.15.09.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Dec 2021 15:09:53 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <e3fe04eb-1a01-bea4-f1ea-cb9ee98ee216@redhat.com>
+Date:   Fri, 24 Dec 2021 00:09:47 +0100
 MIME-Version: 1.0
-References: <CABWYdi3bzd4P0nsyZe6P6coBCQ2jN=kVOJte62zKj=Q8iJCSOQ@mail.gmail.com>
- <CANn89i+mhqGaM2tuhgEmEPbbNu_59GGMhBMha4jnnzFE=UBNYg@mail.gmail.com>
-In-Reply-To: <CANn89i+mhqGaM2tuhgEmEPbbNu_59GGMhBMha4jnnzFE=UBNYg@mail.gmail.com>
-From:   Ivan Babrou <ivan@cloudflare.com>
-Date:   Thu, 23 Dec 2021 14:52:55 -0800
-Message-ID: <CABWYdi0qBQ57OHt4ZbRxMtdSzhubzkPaPKkYzdNfu4+cgPyXCA@mail.gmail.com>
-Subject: Re: Initial TCP receive window is clamped to 64k by rcv_ssthresh
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v3 kvm/queue 06/16] KVM: Implement fd-based memory using
+ MEMFD_OPS interfaces
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        qemu-devel@nongnu.org, Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com
+References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
+ <20211223123011.41044-7-chao.p.peng@linux.intel.com>
+ <YcTBLpVlETdI8JHi@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YcTBLpVlETdI8JHi@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 10:10 AM Eric Dumazet <edumazet@google.com> wrote:
-> Stack is conservative about RWIN increase, it wants to receive packets
-> to have an idea
-> of the skb->len/skb->truesize ratio to convert a memory budget to  RWIN.
->
-> Some drivers have to allocate 16K buffers (or even 32K buffers) just
-> to hold one segment
-> (of less than 1500 bytes of payload), while others are able to pack
-> memory more efficiently.
->
-> I guess that you could use eBPF code to precisely tweak stack behavior
-> to your needs.
+On 12/23/21 19:34, Sean Christopherson wrote:
+>>   	select HAVE_KVM_PM_NOTIFIER if PM
+>> +	select MEMFD_OPS
+> MEMFD_OPS is a weird Kconfig name given that it's not just memfd() that can
+> implement the ops.
+> 
 
-Adding ebpf for this is certainly an option and it seems similar to
-TCP_BPF_SNDCWND_CLAMP. I can certainly look into crafting a patch for
-this.
+Or, it's kvm that implements them to talk to memfd?
 
-Is it not possible to do anything automatically to pick a bigger
-window without ebpf? When the scaled window is first advertised in the
-very first ACK, the kernel already has the SYN ACK skb from the other
-end of the connection. Could the skb->len / skb->truesize ratio be
-looked up there?
-
-Increasing tcp_rmem (the middle part specifically) is a lower entry
-barrier than making ebpf involved, and it can really help with latency
-even for human use cases like opening a website across the ocean.
+Paolo

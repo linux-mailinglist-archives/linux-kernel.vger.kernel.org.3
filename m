@@ -2,67 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01BFB47E78B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD23647E78D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:16:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349767AbhLWSPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 13:15:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
+        id S1349797AbhLWSQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 13:16:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235530AbhLWSPN (ORCPT
+        with ESMTP id S235530AbhLWSQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 13:15:13 -0500
+        Thu, 23 Dec 2021 13:16:21 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C61C061401;
-        Thu, 23 Dec 2021 10:15:13 -0800 (PST)
-Date:   Thu, 23 Dec 2021 19:15:09 +0100
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D6DC061401
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:16:20 -0800 (PST)
+Date:   Thu, 23 Dec 2021 19:16:18 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1640283311;
+        s=2020; t=1640283379;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=u15BsHMoBrJUtjooOKbGSgdqSc8SME1p0Eqjd+SbLoM=;
-        b=2rpJr5ksubIlyfDZiXFeBLM3GYv/DVi+GFqjA4b8g2Y0TvbKZOCLJKhlzoIo8NiVL4X7tu
-        5x+x+zLgABCqLc7JBCq8FijX0ohGoilRvjcFRy1DywA0wHeojPsIn2GRZ7xPIY6CMMrTni
-        6vmkLrvdHs1Ch96ecconCdfYDkll/YRVQvLr/YHRvJGWxatU6zISKa+05dZEPVFuv+ANZw
-        IM2+dnFz/J+wG1pPV/s8Zymt9H/uqqBCRjDVUqRPFO/xuzVaZQRtULO9telJlJayLCLeDh
-        LX+rcQqodZf0R14CL54rtrTA5ir8baWfKQUrbwviOt+dmgatM9ZjS9ZvKdPwVw==
+        bh=PVvVGmFRMRgJJlnbFf61zJZphy1Y/40cQiMHN3VaNJw=;
+        b=rlj5M4rI4WjlPl+EDtDEsm/6YSRDpIytY+k4st3RKCYb4DnwsgV40xO1I0iU+EjenY9P12
+        E88TtlKK2o9ZjlOeR2bVxlpP7iv57K3ZeMLwy1f4Ul/NN90VhwzcAZ2GwfXs++QXDHyPW7
+        cz1yNmu5xH9QGje/nneFnQ9YfNwn+BvQYOayUBxJAmAlJR2Aye8lTH5RJ+jdQK54yFadq8
+        yzVMNDA6nuTJTer6FVccNu83JN8FFkiW5X5VdAhNxpEMZYFhmqPRyjTvPgYqhSl1RTJCwy
+        Eur0s5Z1nOAwDX/J3HfNevdMrRpZdNNTNsl5HuZVayEO7JO6V7qFRfU9R1uI2A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1640283311;
+        s=2020e; t=1640283379;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=u15BsHMoBrJUtjooOKbGSgdqSc8SME1p0Eqjd+SbLoM=;
-        b=ISorxxz9/iFv/aR0ca1jscZRBnoZW5a9JvZrttzSnH9FFpjsagzvLjllric3ygUSpR045p
-        pu79+10RLbCuNEBA==
+        bh=PVvVGmFRMRgJJlnbFf61zJZphy1Y/40cQiMHN3VaNJw=;
+        b=L3yVH5ZNd2FXO8VtARNwSSa4VafQgRl79wBUV3gAexxWl/b2VODPOORlVLBm6Q/D5YZLfh
+        hqr3KfCR7ci82sBA==
 From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     David Howells <dhowells@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Gregor Beck <gregor.beck@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH REPOST REPOST v2] fscache: Use only one
- fscache_object_cong_wait.
-Message-ID: <YcS8rc64cVIckeW0@linutronix.de>
-References: <20211223163500.2625491-1-bigeasy@linutronix.de>
- <901885.1640279829@warthog.procyon.org.uk>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     X86 ML <x86@kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -v2] notifier: Return an error when a callback has
+ already been registered
+Message-ID: <YcS88mkwxbO8Qy7c@linutronix.de>
+References: <20211202133601.23527-1-bp@alien8.de>
+ <YcSWNdUBS8A2ZB3s@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <901885.1640279829@warthog.procyon.org.uk>
+In-Reply-To: <YcSWNdUBS8A2ZB3s@zn.tnic>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-23 17:17:09 [+0000], David Howells wrote:
-> Thanks, but this is gone in the upcoming fscache rewrite.  I'm hoping that
-> will get in the next merge window.
+On 2021-12-23 16:31:01 [+0100], Borislav Petkov wrote:
+> From: Borislav Petkov <bp@suse.de>
+> 
+> Return -EEXIST when a notifier callback has already been registered on a
+> notifier chain.
+> 
+> This should avoid any homegrown registration tracking at the callsite
+> like
+> 
+>   https://lore.kernel.org/amd-gfx/20210512013058.6827-1-mukul.joshi@amd.com
+> 
+> for example.
+> 
+> This version is an alternative of
+> 
+>   https://lore.kernel.org/r/20211108101157.15189-1-bp@alien8.de
+> 
+> which needed to touch every caller not checking the registration
+> routine's return value.
+> 
+> Signed-off-by: Borislav Petkov <bp@suse.de>
 
-Yes, I noticed that. What about current tree, v5.16-rc6 and less?
-Shouldn't this be addressed?
-
-> David
+Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
 Sebastian

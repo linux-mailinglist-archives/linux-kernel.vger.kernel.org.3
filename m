@@ -2,103 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED94447DE23
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 04:42:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D345E47DE21
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 04:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346241AbhLWDm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 22:42:56 -0500
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net ([165.227.154.27]:56131
-        "HELO zg8tmty1ljiyny4xntqumjca.icoremail.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with SMTP id S242010AbhLWDmz (ORCPT
+        id S1346196AbhLWDkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 22:40:20 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:39430 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242010AbhLWDkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 22:42:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=BMyBRwvhGy
-        luiRrlY86sBHaPYG7tA6Ci8GsbTDeggR0=; b=VqpLZHizDwmZztJ2SuqDojQVfS
-        M9MEieTjUPfnKc6e/0lrLekaEYWztnpjsK7xs0oCFQqht+ORbfQU75G3Zh/iXHNR
-        me9LWNSAO+oQtK6H2+Q+83b6EQCZjhuhZTb2yE/+ygn7nxrBQ7GO65HuLTN9YbmU
-        P23gLXjKj+Kx9Tyco=
-Received: from localhost.localdomain (unknown [10.102.225.147])
-        by app2 (Coremail) with SMTP id XQUFCgDHzob378NhybUSAA--.1652S4;
-        Thu, 23 Dec 2021 11:42:12 +0800 (CST)
-From:   Xin Xiong <xiongx18@fudan.edu.cn>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Cc:     yuanxzhang@fudan.edu.cn, Xin Xiong <xiongx18@fudan.edu.cn>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>
-Subject: [PATCH] drm/i915/selftests: fix potential refcnt issue of a dma_buf object
-Date:   Thu, 23 Dec 2021 11:39:49 +0800
-Message-Id: <20211223033948.5208-1-xiongx18@fudan.edu.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 22 Dec 2021 22:40:19 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3273C1F389;
+        Thu, 23 Dec 2021 03:40:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1640230818; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oqEZj9Ynr/lqpqMDeWnJrddzDJzzUwUUL4YhGemGfck=;
+        b=IV/WUm1fBoiYdBwrSp2P/Exxjz7+M8A0KBktN+Q6PINaQSXSJ3M3DkR2oncJhBjshPhLzV
+        R2jTbgGqrG4tLzzmxLnfw9LoJN6EcM5+5CHChoURXTyPUOCLLN2fmizTK/CxXehUzerHQo
+        d6Afg2nQhOK3N5/6/5uwi3l2A4uEJnE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1640230818;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oqEZj9Ynr/lqpqMDeWnJrddzDJzzUwUUL4YhGemGfck=;
+        b=X3qOzB6A00iA3cyRoaZcVJx80gcRq40FRxMPs6Zqn1PAcVLZUCvPkeFfSPtZejBjPWn853
+        Fqu58iLot6ZwsJBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1702F13E39;
+        Thu, 23 Dec 2021 03:40:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BpsDBaLvw2G2DQAAMHmgww
+        (envelope-from <dbueso@suse.de>); Thu, 23 Dec 2021 03:40:18 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: XQUFCgDHzob378NhybUSAA--.1652S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZryUGF45JFW7Kw1UWw4UArb_yoW8JFykp3
-        y3ZFy8CrZ5tF17ta1xJFnFvasxAay3WFy8G39rGwsxAr1DZF18tFWS9Fy3AryUGryfJa4S
-        yF92kFy5WFy5AF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9K14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4U
-        JVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
-        rcIFxwACI402YVCY1x02628vn2kIc2xKxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I
-        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
-        xVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
-        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
-        cIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
-        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOrcfUUUUU
-X-CM-SenderInfo: arytiiqsuqiimz6i3vldqovvfxof0/1tbiAQ4EEFKp456+1QAAs2
+Date:   Wed, 22 Dec 2021 19:40:17 -0800
+From:   Davidlohr Bueso <dbueso@suse.de>
+To:     Manfred Spraul <manfred@colorfullife.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vvs@virtuozzo.com>, cgel.zte@gmail.com,
+        shakeelb@google.com, rdunlap@infradead.org, unixbhaskar@gmail.com,
+        chi.minghao@zte.com.cn, arnd@arndb.de,
+        Zeal Robot <zealci@zte.com.cn>, linux-mm@kvack.org,
+        1vier1@web.de, stable@vger.kernel.org, mhocko@kernel.org,
+        willy@infradead.org, vbabka@suse.cz
+Subject: Re: [PATCH] mm/util.c: Make kvfree() safe for calling while holding
+ spinlocks
+In-Reply-To: <20211222194828.15320-1-manfred@colorfullife.com>
+References: <20211222194828.15320-1-manfred@colorfullife.com>
+User-Agent: Roundcube Webmail
+Message-ID: <a3212f020c7e8e2efbeffbb5e0a02424@suse.de>
+X-Sender: dbueso@suse.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This issue happens in an error path of igt_dmabuf_export_vmap(). When
-dma_buf_vmap() succeeds and memchr_inv() returns nonzero, the function
-forgets to decrement `vmapping_counter` of the dma_buf object, which
-may result in refcount leaks.
+Cc'ing more mm folks.
 
-Fix it by calling dma_buf_vunmap() under label `out_dma_map` in
-certain error path.
+On 2021-12-22 11:48, Manfred Spraul wrote:
+> One codepath in find_alloc_undo() calls kvfree() while holding a 
+> spinlock.
+> Since vfree() can sleep this is a bug.
 
-Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
-Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
----
- drivers/gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+afaict the only other offender is devx_async_cmd_event_destroy_uobj(), 
+in drivers/infiniband/hw/mlx5/devx.c. I was expecting to find more, 
+actually.
 
-diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c b/drivers/gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c
-index 4a6bb64c3..b24bc506f 100644
---- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c
-+++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c
-@@ -428,12 +428,14 @@ static int igt_dmabuf_export_vmap(void *arg)
- 	if (memchr_inv(ptr, 0, dmabuf->size)) {
- 		pr_err("Exported object not initialiased to zero!\n");
- 		err = -EINVAL;
--		goto out;
-+		goto out_dma_map;
- 	}
- 
- 	memset(ptr, 0xc5, dmabuf->size);
- 
- 	err = 0;
-+
-+out_dma_map:
- 	dma_buf_vunmap(dmabuf, &map);
- out:
- 	dma_buf_put(dmabuf);
--- 
-2.25.1
+> Previously, the code path used kfree(), and kfree() is safe to be 
+> called
+> while holding a spinlock.
+> 
+> Minghao proposed to fix this by updating find_alloc_undo().
+> 
+> Alternate proposal to fix this: Instead of changing find_alloc_undo(),
+> change kvfree() so that the same rules as for kfree() apply:
+> Having different rules for kfree() and kvfree() just asks for bugs.
 
+I agree that it is best to have the same atomic semantics across all 
+family of calls.
+
+> 
+> Disadvantage: Releasing vmalloc'ed memory will be delayed a bit.
+
+I would not expect the added latency to be a big deal unless under 
+serious memory pressure, for which case things are already fragile to 
+begin with. Furthermore users of kvfree() are already warned that this 
+is the slower choice. Feel free to add my:
+
+Acked-by: Davidlohr Bueso <dbueso@suse.de>
+
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Reported-by: Minghao Chi <chi.minghao@zte.com.cn>
+> Link:
+> https://lore.kernel.org/all/20211222081026.484058-1-chi.minghao@zte.com.cn/
+> Fixes: fc37a3b8b438 ("[PATCH] ipc sem: use kvmalloc for sem_undo 
+> allocation")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Manfred Spraul <manfred@colorfullife.com>
+> ---
+>  mm/util.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/util.c b/mm/util.c
+> index 741ba32a43ac..7f9181998835 100644
+> --- a/mm/util.c
+> +++ b/mm/util.c
+> @@ -610,12 +610,12 @@ EXPORT_SYMBOL(kvmalloc_node);
+>   * It is slightly more efficient to use kfree() or vfree() if you are 
+> certain
+>   * that you know which one to use.
+>   *
+> - * Context: Either preemptible task context or not-NMI interrupt.
+> + * Context: Any context except NMI interrupt.
+>   */
+>  void kvfree(const void *addr)
+>  {
+>  	if (is_vmalloc_addr(addr))
+> -		vfree(addr);
+> +		vfree_atomic(addr);
+>  	else
+>  		kfree(addr);
+>  }

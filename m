@@ -2,94 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 124D747E683
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 17:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E291447E687
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 17:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349302AbhLWQnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 11:43:09 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42822 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233591AbhLWQnI (ORCPT
+        id S1349316AbhLWQrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 11:47:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233591AbhLWQrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 11:43:08 -0500
+        Thu, 23 Dec 2021 11:47:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3388C061401;
+        Thu, 23 Dec 2021 08:47:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6C9261EF4;
-        Thu, 23 Dec 2021 16:43:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AEDEC36AE9;
-        Thu, 23 Dec 2021 16:43:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6330461E67;
+        Thu, 23 Dec 2021 16:47:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5215AC36AE5;
+        Thu, 23 Dec 2021 16:47:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640277787;
-        bh=NL161JDeCDIM/xYNPhiC2ONE2NUXcY75vDiM159xu5U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=PksqG2PWGf4RtwEqs6ZBvoY/axiIf4Sf9R3Q7ijq4zxConWpi5QScPKc1J1wRl1YF
-         VPF4WLJVQSBOF2NRURrWTMuicoXgsqwIjnpbSQsuQgoljTVFBjcGJNKaj8npFSXmQE
-         R6dJzXmYW79WzXlhCyFB48jys5FQTOZCrHWYG+Tt+INp9LcH2fj57ufedZZxcqA0ws
-         R6BF0NiWq1QW6X9qweE3WjJoIlLzKSMV5IfrmL+Xf3T8S2mwhFephLL76xGB5J37QS
-         FkfBcAUKj+cBc8LAqtRQhzvzdcXDb6FoAZjyU4z3C6PUqelnTlpgN0uZzij3k8e2J0
-         MOqQT2HPVMHtw==
-Date:   Thu, 23 Dec 2021 10:43:05 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     linux-pci <linux-pci@vger.kernel.org>,
-        Fan Fei <ffclaire1224@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH v2 17/23] PCI: mt7621: Rename mt7621_pci_ to mt7621_pcie_
-Message-ID: <20211223164305.GA1270275@bhelgaas>
+        s=k20201202; t=1640278023;
+        bh=Erp7JrQTEj22ZBoCVLb6jekKYLXMsaNkCl9Ck641gGE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=T+3js6b5lliyZxy4IkdhgSR3j95koElW6JZ3sZBGAg2yxf+MzmB+h6EgGEGMnGOFh
+         t3soLXcNwP9KENxEdJFr7761jHPKhtBczFTWGf6DCtrwEXrhDCvJVhz+G8OuwDN1/L
+         SV9NCxXGh2wqyCEiO0DMGFqaCAIfxgCADYctW30U7pwmRFle5nAsZU7eQt6ujB9mJc
+         YHwYBnR1r0nQQCX1uSFZR3UYXHuMTezgRBtrN0Rv3X8s7ktqOA75RxpW8QxvjF0TB5
+         uB9LFqB+oa22JQwzP2qwBYQQW4ud/hRTafBLgocnC98J8wrBGrHbs4GEY+AmTZBHfo
+         XS86fg4uDbYGA==
+Date:   Thu, 23 Dec 2021 08:47:02 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     cgel.zte@gmail.com
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        prestwoj@gmail.com, xu.xin16@zte.com.cn, zxu@linkedin.com,
+        praveen5582@gmail.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH net-next] ipv4: delete sysctls about routing cache
+Message-ID: <20211223084702.51d09c08@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20211223122010.569553-1-xu.xin16@zte.com.cn>
+References: <20211223122010.569553-1-xu.xin16@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMhs-H_dTkp6_1Loq973JqotW26GtRYQv-vdQ2i6Heo7oGCL3w@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 07:10:22AM +0100, Sergio Paracuellos wrote:
-> On Thu, Dec 23, 2021 at 2:11 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > From: Bjorn Helgaas <bhelgaas@google.com>
-> >
-> > Rename mt7621_pci_* structs and functions to mt7621_pcie_* for consistency
-> > with the rest of the file.
-> >
-> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> > Cc: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> > Cc: linux-arm-kernel@lists.infradead.org
-> > Cc: linux-mediatek@lists.infradead.org
-> > ---
-> >  drivers/pci/controller/pcie-mt7621.c | 36 ++++++++++++++--------------
-> >  1 file changed, 18 insertions(+), 18 deletions(-)
-> >
-> > diff --git a/drivers/pci/controller/pcie-mt7621.c b/drivers/pci/controller/pcie-mt7621.c
-> > index 4138c0e83513..b8fea7afdb1b 100644
-> > --- a/drivers/pci/controller/pcie-mt7621.c
-> > +++ b/drivers/pci/controller/pcie-mt7621.c
-> > @@ -93,8 +93,8 @@ struct mt7621_pcie_port {
-> >   * reset lines are inverted.
-> >   */
-> >  struct mt7621_pcie {
-> > -       void __iomem *base;
-> >         struct device *dev;
-> > +       void __iomem *base;
+On Thu, 23 Dec 2021 12:20:10 +0000 cgel.zte@gmail.com wrote:
+> From: xu xin <xu.xin16@zte.com.cn>
 > 
-> This change is unrelated to the commit message and the rest of the
-> changes of this patch.
-> ...
+> Since routing cache in ipv4 has been deleted in 2012, the sysctls about
+> it are useless.
 
-> Other than that minor unrelated change, this looks good to me:
-> 
-> Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-
-Thanks, I added a mention of the struct member reorder.
-
-Bjorn
+Search for those on GitHub. Useless or not, there is software which
+expects those files to exist and which may break if they disappear.
+That's why they were left in place.

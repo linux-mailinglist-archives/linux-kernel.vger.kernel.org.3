@@ -2,120 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AFB847E075
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 09:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1E947E082
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 09:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347214AbhLWIgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 03:36:02 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:49796 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbhLWIgA (ORCPT
+        id S1347262AbhLWIi0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 23 Dec 2021 03:38:26 -0500
+Received: from coyote.holtmann.net ([212.227.132.17]:39432 "EHLO
+        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229785AbhLWIiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 03:36:00 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 63EA91F38A;
-        Thu, 23 Dec 2021 08:35:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1640248559;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MV/5K9zmhuw4wh4GeKO1RwxfharP8GGckwYEIlHrrJs=;
-        b=I1mUbTlQhKbIjakUkJDnAqJ8ux/WptWSs6mhucuFKxa3m3xOnIJHU7K6sBKacyOqwsAyer
-        H24Zl9qygEDtc1AqBpwybII8+Ya9yQ1TrS24rUT+LXYTD9/+zk4ZiNEg2s/oEcdyG9b+18
-        qN0sAQc6NdstxsXco0E9K0u34OBsAwY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1640248559;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MV/5K9zmhuw4wh4GeKO1RwxfharP8GGckwYEIlHrrJs=;
-        b=C0A1smGAleYucDeFJ93gCVnGl/89pYnGeaKSwPQxbYppxBnR6M9mrcNLVC3DkiFUoPPEpN
-        aJvgvGjLw82nfoDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E974913E82;
-        Thu, 23 Dec 2021 08:35:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jQ5wNu40xGEGZwAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Thu, 23 Dec 2021 08:35:58 +0000
-Date:   Thu, 23 Dec 2021 09:35:57 +0100
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        Nageswara Sastry <rnsastry@linux.ibm.com>,
-        Takashi Iwai <tiwai@suse.de>, Joey Lee <jlee@suse.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] selftests/kexec: update searching for the Kconfig
-Message-ID: <YcQ07bX74r/qbkPD@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20211222213052.6771-1-zohar@linux.ibm.com>
- <20211222213052.6771-3-zohar@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211222213052.6771-3-zohar@linux.ibm.com>
+        Thu, 23 Dec 2021 03:38:24 -0500
+Received: from smtpclient.apple (p5b3d2e91.dip0.t-ipconnect.de [91.61.46.145])
+        by mail.holtmann.org (Postfix) with ESMTPSA id 22EF4CED21;
+        Thu, 23 Dec 2021 09:38:23 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
+Subject: Re: [PATCH v3 1/3] Bluetooth: mt7921s: Support wake on bluetooth
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <ceafc644ca9ce926a9fb07f7b3f4e2f701e69c8d.1640165092.git.sean.wang@kernel.org>
+Date:   Thu, 23 Dec 2021 09:38:22 +0100
+Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
+        =?utf-8?B?Ik1hcmstWVcgQ2hlbiAo6Zmz5o+a5paHKSI=?= 
+        <Mark-YW.Chen@mediatek.com>, Soul.Huang@mediatek.com,
+        YN.Chen@mediatek.com, Leon.Yen@mediatek.com,
+        Eric-SY.Chang@mediatek.com, Deren.Wu@mediatek.com,
+        km.lin@mediatek.com, robin.chiu@mediatek.com,
+        Eddie.Chen@mediatek.com, ch.yeh@mediatek.com,
+        posh.sun@mediatek.com, ted.huang@mediatek.com,
+        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
+        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
+        frankgor@google.com, jemele@google.com, abhishekpandit@google.com,
+        Michael Sun <michaelfsun@google.com>,
+        Miao-chen Chou <mcchou@chromium.org>, shawnku@google.com,
+        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <3ED64734-D1D6-4DC3-8065-849AFC79866B@holtmann.org>
+References: <ceafc644ca9ce926a9fb07f7b3f4e2f701e69c8d.1640165092.git.sean.wang@kernel.org>
+To:     Sean Wang <sean.wang@mediatek.com>
+X-Mailer: Apple Mail (2.3693.40.0.1.81)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> First check /lib/modules/`uname -r`/config, before using the IKCONFIG.
-> In addition, the configs.ko might be compressed.  Fix the configs.ko
-> name.
+Hi Sean,
 
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> Enable wake on bluetooth on mt7921s that can be supported since the
+> firmware with version 20211129211059 was added, and the patch would
+> not cause any harm even when the old firmware is applied.
+> 
+> The patch was tested by setting up an HID or HOGP profile to connect a
+> Bluetooth keyboard and mouse, then putting the system to suspend, then
+> trying to wake up the system by moving the Bluetooth keyboard or mouse,
+> and then checking if the system can wake up and be brought back to
+> the normal state.
+> 
+> Co-developed-by: Sean Wang <sean.wang@mediatek.com>
+> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+> Signed-off-by: Mark Chen <mark-yw.chen@mediatek.com>
 > ---
-> Distros: is storing the Kconfig in /lib/modules/`uname -r`/config common?
-
->  tools/testing/selftests/kexec/kexec_common_lib.sh | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
-
-> diff --git a/tools/testing/selftests/kexec/kexec_common_lib.sh b/tools/testing/selftests/kexec/kexec_common_lib.sh
-> index 43017cfe88f7..5a1b8ae04c64 100755
-> --- a/tools/testing/selftests/kexec/kexec_common_lib.sh
-> +++ b/tools/testing/selftests/kexec/kexec_common_lib.sh
-> @@ -138,15 +138,20 @@ kconfig_enabled()
->  	return 0
->  }
-
-> -# Attempt to get the kernel config first via proc, and then by
-> -# extracting it from the kernel image or the configs.ko using
-> -# scripts/extract-ikconfig.
-> +# Attempt to get the kernel config first by checking the modules directory
-> +# then via proc, and finally by extracting it from the kernel image or the
-> +# configs.ko using scripts/extract-ikconfig.
->  # Return 1 for found.
->  get_kconfig()
->  {
->  	local proc_config="/proc/config.gz"
->  	local module_dir="/lib/modules/`uname -r`"
-> -	local configs_module="$module_dir/kernel/kernel/configs.ko"
-> +	local configs_module="$module_dir/kernel/kernel/configs.ko*"
-I wonder if * will later work:
-
-if [ ! -f $configs_module ]; then
-
-But there should be just one variant: either configs.ko or configs.ko.xz
-(or something other), so it should work, right?
-
-Thus
-Reviewed-by: Petr Vorel <pvorel@suse.cz>
-
-Kind regards,
-Petr
-
+> v2: refine the git message
+> v3:
+>    1. fit to single line as possible
+>    2. move the skb variable into local scope
+>    3. free skb after calling __hci_cmd_sync
+>    4. make bt_awake as const struct btmtk_wakeon
+> ---
+> drivers/bluetooth/btmtk.h     |  8 ++++++++
+> drivers/bluetooth/btmtksdio.c | 33 ++++++++++++++++++++++++++++++++-
+> 2 files changed, 40 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/bluetooth/btmtk.h b/drivers/bluetooth/btmtk.h
+> index 6e7b0c7567c0..2be1d2680ad8 100644
+> --- a/drivers/bluetooth/btmtk.h
+> +++ b/drivers/bluetooth/btmtk.h
+> @@ -68,6 +68,14 @@ struct btmtk_tci_sleep {
+> 	u8 time_compensation;
+> } __packed;
+> 
+> +struct btmtk_wakeon {
+> +	u8 mode;
+> +	u8 gpo;
+> +	u8 active_high;
+> +	__le16 enable_delay;
+> +	__le16 wakeup_delay;
+> +} __packed;
 > +
-> +	if [ -f $module_dir/config ]; then
-> +		IKCONFIG=$module_dir/config
-> +		return 1
-> +	fi
+> struct btmtk_hci_wmt_params {
+> 	u8 op;
+> 	u8 flag;
+> diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
+> index b5ea8d3bffaa..b79cee84f590 100644
+> --- a/drivers/bluetooth/btmtksdio.c
+> +++ b/drivers/bluetooth/btmtksdio.c
+> @@ -958,6 +958,32 @@ static int btmtksdio_send_frame(struct hci_dev *hdev, struct sk_buff *skb)
+> 	return 0;
+> }
+> 
+> +static bool btmtk_sdio_wakeup(struct hci_dev *hdev)
+> +{
+> +	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev);
+> +	bool may_wakeup = device_may_wakeup(bdev->dev);
+> +	const struct btmtk_wakeon bt_awake = {
+> +		.mode = 0x1,
+> +		.gpo = 0,
+> +		.active_high = 0x1,
+> +		.enable_delay = cpu_to_le16(0xc80),
+> +		.wakeup_delay = cpu_to_le16(0x20)
+> +	};
+> +
+> +	if (may_wakeup && bdev->data->chipid == 0x7921) {
+> +		struct sk_buff *skb;
+> +
+> +		skb =  __hci_cmd_sync(hdev, 0xfc27, sizeof(bt_awake),
+> +				      &bt_awake, HCI_CMD_TIMEOUT);
+> +		if (IS_ERR(skb))
+> +			may_wakeup = false;
+> +
+> +		kfree_skb(skb);
+> +	}
+> +
+> +	return may_wakeup;
+> +}
+> +
+> static int btmtksdio_probe(struct sdio_func *func,
+> 			   const struct sdio_device_id *id)
+> {
+> @@ -998,6 +1024,7 @@ static int btmtksdio_probe(struct sdio_func *func,
+> 	hdev->shutdown = btmtksdio_shutdown;
+> 	hdev->send     = btmtksdio_send_frame;
+> 	hdev->set_bdaddr = btmtk_set_bdaddr;
+> +	hdev->wakeup = btmtk_sdio_wakeup;
+> 
+> 	SET_HCIDEV_DEV(hdev, &func->dev);
+> 
+> @@ -1032,7 +1059,11 @@ static int btmtksdio_probe(struct sdio_func *func,
+> 	 */
+> 	pm_runtime_put_noidle(bdev->dev);
+> 
+> -	return 0;
+> +	err = device_init_wakeup(bdev->dev, true);
+> +	if (err)
+> +		bt_dev_err(hdev, "%s: failed to init_wakeup", __func__);
 
->  	if [ ! -f $proc_config ]; then
->  		modprobe configs > /dev/null 2>&1
+I missed this the first time around, no __func__ in error messages. Write a proper English one.
+
+Regards
+
+Marcel
+

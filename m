@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 426E847E948
+	by mail.lfdr.de (Postfix) with ESMTP id DBC1C47E94A
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 23:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350410AbhLWWXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 17:23:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38636 "EHLO
+        id S1350413AbhLWWXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 17:23:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234631AbhLWWXm (ORCPT
+        with ESMTP id S1350412AbhLWWXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 17:23:42 -0500
+        Thu, 23 Dec 2021 17:23:44 -0500
 Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BB2C061401
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 14:23:42 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id u13-20020a17090a450d00b001b1e6726fccso6268880pjg.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 14:23:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176C0C061756
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 14:23:44 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id w23-20020a17090a15d700b001b15a89e63fso6400544pjd.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 14:23:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=OrzQLDV0JBGv9xZyOI3iXeGl6MYuDTmF8uhCLxF6pxY=;
-        b=lYTB3jFJhbTbo9TZh/o313alnkQBEfNDm1VciotnT9J688PYPBEiZZUzMOPysawpic
-         KIvx6DUGniq4KgrQKPkWe+SDI/MfiZXxzkORbo4rpI/JziFpbSNTjdPQmxOOIG0WAs36
-         +iWY+p+98S5TjvibkoJGM3nAbpuFp2mSmHGFr6AkmPw8ZyIPaC6L2MlmduUEN180ToMo
-         kjp//6UMOSWZui8wASl3mLrhU8+YOTNuUazC/mmqnzRwZtIq129CaeY4e1OPiQralpXM
-         q7Bk4U/xc/xv/X+foUE8BRF5bm71xK5teeJaOoW38PJhZmdDeZZ4zGRErODeEy9rRR7s
-         gGBg==
+        h=reply-to:date:in-reply-to:message-id:mime-version:references
+         :subject:from:to:cc;
+        bh=79VM+FjN4+gNHCbA/cPFX/DKrZdg0OUTgV3ZeDUQV64=;
+        b=nlDhfoBF1UMR4zeZ2AMSsTw+2NFav++t76m5v/u01E8WX1IeLkIOgAwZxi4k8dtyD8
+         DINKhA/okKbzh3Bl79w0UHPYPe+mI4qQSZBXUA7Q47lwZHbduNO4ktigSHa5Ti2t/EkP
+         9kdEt9PUWiSDuPmNi2sOxizUslZ06oNOwgJg5zBRPAZNUhm5xf+Ew1gTWxeKs+A3wRS2
+         LDbF9nF0FWwkIu5BMvu+ht6a0imSBbA4HP6uyTQIFXDk/edSQHkFwBMbZFIq4yFBcfyM
+         +Jnkd2dtw/HibGSkH9vS+j3S8TWU1rDiX1GYc8Fia1d0AR1CpgvgnpxJMh+NbICv3H0j
+         QQCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=OrzQLDV0JBGv9xZyOI3iXeGl6MYuDTmF8uhCLxF6pxY=;
-        b=iVo04whsfiz1cPOkr+OhErNpjnqqUxCFUfFNQpHwDbGWYjsEuUdh8DIcb/XoAGf9VF
-         kmx+L08o+lgX/bXw1qnW+1YCzJ2rBPTBzcHoogZapNmNvG85kH/AzZ5DyiY9//sP7VWG
-         hK8TkDX3b8W2mzM4d4WLDfffxgfr7yY6dfFTLhz7OFghWBVZpOQIQLUeyL1aSNMF5rnl
-         Rc7JYgOIRqCP1ourpt+SYvTM2FOxcA7ANLTP/qSrtE5Eod2orDl5V/nY/4uRqNqR4jaC
-         jQ+a/TCSMqYZhdCkftS6QL/iBb1Z3aTUiUeLkhThD32/J66DoFydoJTpM4/mRlbryrgf
-         1cVw==
-X-Gm-Message-State: AOAM530kXQzD0qhYRLrr6yOp4R8riPC/ibctWQSZSSbZwp9MDvVDUp5s
-        +oPKYJ+7dIMq+efBYqdYz6ah2FXnfQc=
-X-Google-Smtp-Source: ABdhPJyTWpHkIYY8FLLDoK4E5sb5seoJZtEKQMAdAzGE9EVmOk3eGjYInQ9lqNuqnEy6blmd5DK6f0E+QVU=
+        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
+         :mime-version:references:subject:from:to:cc;
+        bh=79VM+FjN4+gNHCbA/cPFX/DKrZdg0OUTgV3ZeDUQV64=;
+        b=rUamxjLpqFcFYEcSu72DrgKY1EL9m/l9TzNCLYlnUT/OQZ38wvY6WoSt7BXKMKMJ0p
+         PDmw4NVqGdEpCC1QnRB7kQaJkmXu7ScJ25n4fMA6IY84Wr1zQHhKfA5pLRbX1sjCtz91
+         x7wvnbSSkNBJK+emjhfobf7CuLCJQidNl+DYwsWfUYiwqK7p8m87JSGUMYp5F7l7Erj2
+         bb+qXEeNzuA+9Sjhc0JKGMkAT1/pIeulC1co9HCKHWfo1lzuok0sT3EqGioRHvPh63pA
+         /tp8M4in3My1HCLIA3+ixGxzksKHKLTYnz5bDePATg6nraGAcMhwr4FwXhuvSHagdZsX
+         PZpA==
+X-Gm-Message-State: AOAM5337aBZ7H8rdVbFTTmIRaYPcFbWuYTlw7RDzSPg5mcUgNYUBuRQj
+        WiDEW6Q6x+qDCugWXdm6DSycFqFOkno=
+X-Google-Smtp-Source: ABdhPJzIg1slQVwWGbXNsGn/iIW/Jo8Ri2O+OYkocHu7aRAWSVbg1N6hanW77pCArB6nbzVf3Peu+sZUvEs=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:cec2:b0:148:b4c1:540b with SMTP id
- d2-20020a170902cec200b00148b4c1540bmr3989850plg.0.1640298221901; Thu, 23 Dec
- 2021 14:23:41 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:fa12:: with SMTP id
+ cm18mr4714053pjb.141.1640298223566; Thu, 23 Dec 2021 14:23:43 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 23 Dec 2021 22:22:48 +0000
-Message-Id: <20211223222318.1039223-1-seanjc@google.com>
+Date:   Thu, 23 Dec 2021 22:22:49 +0000
+In-Reply-To: <20211223222318.1039223-1-seanjc@google.com>
+Message-Id: <20211223222318.1039223-2-seanjc@google.com>
 Mime-Version: 1.0
+References: <20211223222318.1039223-1-seanjc@google.com>
 X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
-Subject: [PATCH v2 00/30] KVM: x86/mmu: Overhaul TDP MMU zapping and flushing
+Subject: [PATCH v2 01/30] KVM: x86/mmu: Use common TDP MMU zap helper for MMU
+ notifier unmap hook
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -66,128 +69,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Overhaul TDP MMU's handling of zapping and TLB flushing to reduce the
-number of TLB flushes, fix soft lockups and RCU stalls, avoid blocking
-vCPUs for long durations while zapping paging structure, and to clean up
-the zapping code.
+Use the common TDP MMU zap helper when handling an MMU notifier unmap
+event, the two flows are semantically identical.  Consolidate the code in
+preparation for a future bug fix, as both kvm_tdp_mmu_unmap_gfn_range()
+and __kvm_tdp_mmu_zap_gfn_range() are guilty of not zapping SPTEs in
+invalid roots.
 
-Patches 01-03 were allegedly queued when posted separately, but they haven't
-showed up yet, and this series depends/conflicts on/with them, so here they
-are again.
+No functional change intended.
 
-Based on kvm/queue-5.17, commit 1c4261809af0 ("KVM: SVM: include CR3 ...").
+Cc: stable@vger.kernel.org
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/mmu/tdp_mmu.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-The largest cleanup is to separate the flows for zapping roots (zap
-_everything_), zapping leaf SPTEs (zap guest mappings for whatever reason),
-and zapping a specific SP (NX recovery).  They're currently smushed into a
-single zap_gfn_range(), which was a good idea at the time, but became a
-mess when trying to handle the different rules, e.g. TLB flushes aren't
-needed when zapping a root because KVM can safely zap a root if and only
-if it's unreachable.
-
-To solve the soft lockups, stalls, and vCPU performance issues:
-
- - Defer remote TLB flushes to the caller when zapping TDP MMU shadow
-   pages by relying on RCU to ensure the paging structure isn't freed
-   until all vCPUs have exited the guest.
-
- - Allowing yielding when zapping TDP MMU roots in response to the root's
-   last reference being put.  This requires a bit of trickery to ensure
-   the root is reachable via mmu_notifier, but it's not too gross.
-
- - Zap roots in two passes to avoid holding RCU for potential hundreds of
-   seconds when zapping guest with terabytes of memory that is backed
-   entirely by 4kb SPTEs.
-
- - Zap defunct roots asynchronously via the common work_queue so that a
-   vCPU doesn't get stuck doing the work if the vCPU happens to drop the
-   last reference to a root.
-
-The selftest at the end allows populating a guest with the max amount of
-memory allowed by the underlying architecture.  The most I've tested is
-~64tb (MAXPHYADDR=46) as I don't have easy access to a system with
-MAXPHYADDR=52.  The selftest compiles on arm64 and s390x, but otherwise
-hasn't been tested outside of x86-64.  It will hopefully do something
-useful as is, but there's a non-zero chance it won't get past init with
-a high max memory.  Running on x86 without the TDP MMU is comically slow.
-
-v2:
-  - Drop patches that were applied.
-  - Collect reviews for patches that weren't modified. [Ben]
-  - Abandon the idea of taking invalid roots off the list of roots.
-  - Add a patch to fix misleading/wrong comments with respect to KVM's
-    responsibilities in the "fast zap" flow, specifically that all SPTEs
-    must be dropped before the zap completes.
-  - Rework yielding in kvm_tdp_mmu_put_root() to keep the root visibile
-    while yielding.
-  - Add patch to zap roots in two passes. [Mingwei, David]
-  - Add a patch to asynchronously zap defunct roots.
-  - Add the selftest.
-
-v1: https://lore.kernel.org/all/20211120045046.3940942-1-seanjc@google.com
-
-Sean Christopherson (30):
-  KVM: x86/mmu: Use common TDP MMU zap helper for MMU notifier unmap
-    hook
-  KVM: x86/mmu: Move "invalid" check out of kvm_tdp_mmu_get_root()
-  KVM: x86/mmu: Zap _all_ roots when unmapping gfn range in TDP MMU
-  KVM: x86/mmu: Use common iterator for walking invalid TDP MMU roots
-  KVM: x86/mmu: Check for present SPTE when clearing dirty bit in TDP
-    MMU
-  KVM: x86/mmu: Fix wrong/misleading comments in TDP MMU fast zap
-  KVM: x86/mmu: Formalize TDP MMU's (unintended?) deferred TLB flush
-    logic
-  KVM: x86/mmu: Document that zapping invalidated roots doesn't need to
-    flush
-  KVM: x86/mmu: Drop unused @kvm param from kvm_tdp_mmu_get_root()
-  KVM: x86/mmu: Require mmu_lock be held for write in unyielding root
-    iter
-  KVM: x86/mmu: Check for !leaf=>leaf, not PFN change, in TDP MMU SP
-    removal
-  KVM: x86/mmu: Batch TLB flushes from TDP MMU for MMU notifier
-    change_spte
-  KVM: x86/mmu: Drop RCU after processing each root in MMU notifier
-    hooks
-  KVM: x86/mmu: Add helpers to read/write TDP MMU SPTEs and document RCU
-  KVM: x86/mmu: WARN if old _or_ new SPTE is REMOVED in non-atomic path
-  KVM: x86/mmu: Refactor low-level TDP MMU set SPTE helper to take raw
-    vals
-  KVM: x86/mmu: Zap only the target TDP MMU shadow page in NX recovery
-  KVM: x86/mmu: Skip remote TLB flush when zapping all of TDP MMU
-  KVM: x86/mmu: Add dedicated helper to zap TDP MMU root shadow page
-  KVM: x86/mmu: Require mmu_lock be held for write to zap TDP MMU range
-  KVM: x86/mmu: Zap only TDP MMU leafs in kvm_zap_gfn_range()
-  KVM: x86/mmu: Do remote TLB flush before dropping RCU in TDP MMU
-    resched
-  KVM: x86/mmu: Defer TLB flush to caller when freeing TDP MMU shadow
-    pages
-  KVM: x86/mmu: Allow yielding when zapping GFNs for defunct TDP MMU
-    root
-  KVM: x86/mmu: Zap roots in two passes to avoid inducing RCU stalls
-  KVM: x86/mmu: Zap defunct roots via asynchronous worker
-  KVM: selftests: Move raw KVM_SET_USER_MEMORY_REGION helper to utils
-  KVM: selftests: Split out helper to allocate guest mem via memfd
-  KVM: selftests: Define cpu_relax() helpers for s390 and x86
-  KVM: selftests: Add test to populate a VM with the max possible guest
-    mem
-
- arch/x86/kvm/mmu/mmu.c                        |  42 +-
- arch/x86/kvm/mmu/mmu_internal.h               |  16 +-
- arch/x86/kvm/mmu/tdp_iter.c                   |   6 +-
- arch/x86/kvm/mmu/tdp_iter.h                   |  15 +-
- arch/x86/kvm/mmu/tdp_mmu.c                    | 642 ++++++++++++------
- arch/x86/kvm/mmu/tdp_mmu.h                    |  32 +-
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   3 +
- .../testing/selftests/kvm/include/kvm_util.h  |   6 +
- .../selftests/kvm/include/s390x/processor.h   |   8 +
- .../selftests/kvm/include/x86_64/processor.h  |   5 +
- tools/testing/selftests/kvm/lib/kvm_util.c    |  66 +-
- .../selftests/kvm/max_guest_memory_test.c     | 292 ++++++++
- .../selftests/kvm/set_memory_region_test.c    |  35 +-
- 14 files changed, 870 insertions(+), 299 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/max_guest_memory_test.c
-
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index 7b1bc816b7c3..d320b56d5cd7 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -1032,13 +1032,8 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+ bool kvm_tdp_mmu_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range,
+ 				 bool flush)
+ {
+-	struct kvm_mmu_page *root;
+-
+-	for_each_tdp_mmu_root_yield_safe(kvm, root, range->slot->as_id, false)
+-		flush = zap_gfn_range(kvm, root, range->start, range->end,
+-				      range->may_block, flush, false);
+-
+-	return flush;
++	return __kvm_tdp_mmu_zap_gfn_range(kvm, range->slot->as_id, range->start,
++					   range->end, range->may_block, flush);
+ }
+ 
+ typedef bool (*tdp_handler_t)(struct kvm *kvm, struct tdp_iter *iter,
 -- 
 2.34.1.448.ga2b2bfdf31-goog
 

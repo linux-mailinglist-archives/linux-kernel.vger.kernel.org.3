@@ -2,161 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4AD47DD7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:41:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A4547DD84
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242508AbhLWBlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:41:36 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:33899 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235957AbhLWBld (ORCPT
+        id S231513AbhLWBoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:44:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46190 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229788AbhLWBok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:41:33 -0500
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JKCZr16QZzcc8V;
-        Thu, 23 Dec 2021 09:41:08 +0800 (CST)
-Received: from [10.174.178.185] (10.174.178.185) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 23 Dec 2021 09:41:31 +0800
-Subject: Re: [PATCH -next] ext4: Fix remount with 'abort' option isn't
- effective
-To:     Lukas Czerner <lczerner@redhat.com>
-References: <20211221123214.2410593-1-yebin10@huawei.com>
- <20211221144305.nlryh7q2cgdbpmi5@work> <61C27A0E.9050900@huawei.com>
- <20211222091947.chmg6mcetocrmygd@work>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jack@suse.cz>
-From:   yebin <yebin10@huawei.com>
-Message-ID: <61C3D3CB.1010106@huawei.com>
-Date:   Thu, 23 Dec 2021 09:41:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.1.0
+        Wed, 22 Dec 2021 20:44:40 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D9DC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 17:44:39 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id j6so15221023edw.12
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 17:44:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=d4E3I94lbLlPXFEv10nZx1gpIaeSB2VvrufzgL5uqNs=;
+        b=Rj55DD2ypmp+T2NB14PT9j9kRbSE48Rxug7Q0e06Y1fRs0Cs5VI1KZH9CZHxEdfaB+
+         H1g+e03n2c3vUdfdYnyTjEuoykaguQSuIyGs6f7dToD7gb9dgOiNmIrvKYXIyVFNqVH0
+         PckY0GGNAZUWB2hNWw9dVwA7P1YiVXlzEC73U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=d4E3I94lbLlPXFEv10nZx1gpIaeSB2VvrufzgL5uqNs=;
+        b=BInGhM3ix0iaQTLAzc1Y51kCEt9zR+3TC0R7yVJCrYSh9KL982j9ZmSwx473YSU47G
+         ozUIvw3MFHIwGvh4GFr3bENOOJUVHgp/KtV8hhsYKelFQBlDX/sJIwgxCUIf4h+6z5t+
+         sXP9wBvphB0LY6+0il/7suV24zX3BSup+GZSrRMrX026CxpspxP+I+8vjpo9kM/AHflH
+         Rp0zm9XgNhd1JAJnAct3abeY+LK9jkfnQuTQacvywJ9CC4M9heedXWsXVvxPoXHSlXVz
+         ntgBR5B+LG815vy7xjVYU/ZlWzs/2vte/xDvETzqTdBZXvBw59jY3Nrc/UZ1VGAAWsmN
+         nWlA==
+X-Gm-Message-State: AOAM533MZ+ZpO+G3xhlWLfBB2v6K+b1Qdbr51qIhQzEbc0iPEqK40r/e
+        p0qrHcMobyUQGZ1vRWy1McirqJwhdutIVw/qyCw=
+X-Google-Smtp-Source: ABdhPJz/w5nwmq4NVKQyIAnKluOWxoF4hrics6a2EoBUfH1htKX5FUkJcygr5+kgkeQ9YrP2NlftoQ==
+X-Received: by 2002:a05:6402:2706:: with SMTP id y6mr289291edd.29.1640223878061;
+        Wed, 22 Dec 2021 17:44:38 -0800 (PST)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
+        by smtp.gmail.com with ESMTPSA id j5sm1209205ejo.171.2021.12.22.17.44.36
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 17:44:36 -0800 (PST)
+Received: by mail-wm1-f53.google.com with SMTP id g132so2712718wmg.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 17:44:36 -0800 (PST)
+X-Received: by 2002:a05:600c:5108:: with SMTP id o8mr95044wms.144.1640223875699;
+ Wed, 22 Dec 2021 17:44:35 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211222091947.chmg6mcetocrmygd@work>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.185]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+ <20211208202532.16409-9-ebiederm@xmission.com> <YcNsG0Lp94V13whH@archlinux-ax161>
+ <87zgoswkym.fsf@email.froward.int.ebiederm.org> <YcNyjxac3wlKPywk@archlinux-ax161>
+ <87pmpow7ga.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <87pmpow7ga.fsf@email.froward.int.ebiederm.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 22 Dec 2021 17:44:19 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgtFAA9SbVYg0gR1tqPMC17-NYcs0GQkaYg1bGhh1uJQQ@mail.gmail.com>
+Message-ID: <CAHk-=wgtFAA9SbVYg0gR1tqPMC17-NYcs0GQkaYg1bGhh1uJQQ@mail.gmail.com>
+Subject: Re: [PATCH 09/10] kthread: Ensure struct kthread is present for all kthreads
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2021/12/22 17:19, Lukas Czerner wrote:
-> On Wed, Dec 22, 2021 at 09:06:22AM +0800, yebin wrote:
->>
->> On 2021/12/21 22:43, Lukas Czerner wrote:
->>> Hi,
->>>
->>> nice catch. This is a bug indeed. However I am currently in a process of
->>> changing the ctx_set/clear/test_ helpers because currently it generates
->>> functions that are unused.
->>>
->>> While I am at it I can just create a custom ctx_set_mount_flags()
->>> helper that would behave as expected so that we won't have to specify
->>> "1 < EXT4_MF_FS_ABORTED" which is not really obvious and hence error
->>> prone.
->> Actually, I fixed the first version as follows:
-> Allright, this looks better.
+On Wed, Dec 22, 2021 at 3:25 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
 >
->> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
->> index b72d989b77fb..199920ffc7d3 100644
->> --- a/fs/ext4/super.c
->> +++ b/fs/ext4/super.c
->> @@ -2049,8 +2049,8 @@ struct ext4_fs_context {
->>   	unsigned int	mask_s_mount_opt;
->>   	unsigned int	vals_s_mount_opt2;
->>   	unsigned int	mask_s_mount_opt2;
->> -	unsigned int	vals_s_mount_flags;
->> -	unsigned int	mask_s_mount_flags;
->> +	unsigned long	vals_s_mount_flags;
->> +	unsigned long	mask_s_mount_flags;
->>   	unsigned int	opt_flags;	/* MOPT flags */
->>   	unsigned int	spec;
->>   	u32		s_max_batch_time;
->> @@ -2166,7 +2166,12 @@ static inline bool ctx_test_##name(struct ext4_fs_context *ctx, int flag)\
->>   EXT4_SET_CTX(flags);
->>   EXT4_SET_CTX(mount_opt);
->>   EXT4_SET_CTX(mount_opt2);
->> -EXT4_SET_CTX(mount_flags);
->> +
->> +static inline void ctx_set_mount_flags(struct ext4_fs_context *ctx, int bit)
-> Maybe ctx_set_mount_flag since you can't really set more than one this
-> way?
-So I think it's a little inappropriate to use the current repair scheme.
->> +{
->> +	set_bit(bit, &ctx->mask_s_mount_flags);
->> +	set_bit(bit, &ctx->vals_s_mount_flags);
->> +}
->>
->>
->> I think 'mask_s_mount_flags' is useless now.
-> So how would we know what flags have changed ? Sure, there is currently
-> no need to clear the flag but that can come in future and once it does
-> we'll only need to create a clear helper, the rest will be ready.
-> I'd rather keep it.
->
-> -Lukas
- From this point of view, I agree with you.
->>> My plan is to send my patch set including this one tomorrow, will that
->>> be fine with you ?
->>>
->>> -Lukas
->>>
->>> On Tue, Dec 21, 2021 at 08:32:14PM +0800, Ye Bin wrote:
->>>> We test remount with 'abort' option as follows:
->>>> [root@localhost home]# mount  /dev/sda test
->>>> [root@localhost home]# mount | grep test
->>>> /dev/sda on /home/test type ext4 (rw,relatime)
->>>> [root@localhost home]# mount -o remount,abort test
->>>> [root@localhost home]# mount | grep test
->>>> /dev/sda on /home/test type ext4 (rw,relatime)
->>>>
->>>> Obviously, remount 'abort' option isn't effective.
->>>> After 6e47a3cc68fc commit we process abort option with 'ctx_set_mount_flags':
->>>> static inline void ctx_set_mount_flags(struct ext4_fs_context *ctx, int flag)
->>>> {
->>>> 	ctx->mask_s_mount_flags |= flag;
->>>> 	ctx->vals_s_mount_flags |= flag;
->>>> }
->>>>
->>>> But we test 'abort' option with 'ext4_test_mount_flag':
->>>> static inline int ext4_test_mount_flag(struct super_block *sb, int bit)
->>>> {
->>>>           return test_bit(bit, &EXT4_SB(sb)->s_mount_flags);
->>>> }
->>>>
->>>> To solve this issue, pass (1 <<  EXT4_MF_FS_ABORTED) to 'ctx_set_mount_flags'.
->>>>
->>>> Fixes:6e47a3cc68fc("ext4: get rid of super block and sbi from handle_mount_ops()")
->>>> Signed-off-by: Ye Bin <yebin10@huawei.com>
->>>> ---
->>>>    fs/ext4/super.c | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
->>>> index b72d989b77fb..071b7b3c5678 100644
->>>> --- a/fs/ext4/super.c
->>>> +++ b/fs/ext4/super.c
->>>> @@ -2236,7 +2236,7 @@ static int ext4_parse_param(struct fs_context *fc, struct fs_parameter *param)
->>>>    			 param->key);
->>>>    		return 0;
->>>>    	case Opt_abort:
->>>> -		ctx_set_mount_flags(ctx, EXT4_MF_FS_ABORTED);
->>>> +		ctx_set_mount_flags(ctx, 1 << EXT4_MF_FS_ABORTED);
->>>>    		return 0;
->>>>    	case Opt_i_version:
->>>>    		ctx_set_flags(ctx, SB_I_VERSION);
->>>> -- 
->>>> 2.31.1
->>>>
->>> .
->>>
-> .
->
+> Solve this by skipping the put_user for all kthreads.
 
+Ugh.
+
+While this fixes the problem, could we please just not mis-use that
+'set_child_tid' as that kthread pointer any more?
+
+It was always kind of hacky. I think a new pointer with the proper
+'struct kthread *' type would be an improvement.
+
+One of the "arguments" in the comment for re-using that set_child_tid
+pointer was that 'fork()' used to not wrongly copy it, but your patch
+literally now does that "allocate new kthread struct" at fork-time, so
+that argument is actually bogus now.
+
+              Linus

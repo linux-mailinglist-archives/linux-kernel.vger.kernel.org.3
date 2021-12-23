@@ -2,79 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2192B47E63A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 17:14:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 664E247E63C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 17:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349088AbhLWQOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 11:14:52 -0500
-Received: from smtp03.smtpout.orange.fr ([80.12.242.125]:55056 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244349AbhLWQOv (ORCPT
+        id S1349132AbhLWQPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 11:15:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349125AbhLWQPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 11:14:51 -0500
-Received: from pop-os.home ([86.243.171.122])
-        by smtp.orange.fr with ESMTPA
-        id 0QjwnMoJoIEdl0QjwnhFhs; Thu, 23 Dec 2021 17:14:49 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 23 Dec 2021 17:14:49 +0100
-X-ME-IP: 86.243.171.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     nm@ti.com, ssantosh@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] soc: ti: k3-ringacc: Use devm_bitmap_zalloc() when applicable
-Date:   Thu, 23 Dec 2021 17:14:46 +0100
-Message-Id: <45544b0d97a7bea7764292852842adf5085a7700.1640276001.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Thu, 23 Dec 2021 11:15:03 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24ADFC061757
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 08:15:03 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id x15so23418098edv.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 08:15:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7vIhnilgSh+Fia1MLez8IlVcdelDNWzlS9+D9/jDYmE=;
+        b=mpNud0kKzvR+WQ0gBFa5kVXhk7gulH24cYrsgD/5AhkGKPs+M/vEErjulnFUs6N4A5
+         DQTSYiAAmncV8N9/HfeCWWV3wOT1zoTg4cyzCO/rBm+cIDzBHBNbT01fq30TcKvvsPSo
+         pcyttAnrEF7653+uOBIeS6nMlCV789/lEIFT93UcWbkO2CFh5ZoaBsjOAdw3sMjYpLgY
+         crFKrA5pVvE13NVOwdtz3aDkR0WZawwXvAbeRgHqCpakYKM5NxmfBsXe1Stas5jh5vSV
+         WVjzwHZn/tKw7Jat9UXoeHkQ+FB8FforGzGTDIZ+qjltxs1EuNTfdzRsIQOcSDux+9hd
+         GyxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7vIhnilgSh+Fia1MLez8IlVcdelDNWzlS9+D9/jDYmE=;
+        b=Uy32dQF8cZjgXYK91jpGvYF3zHrhvVwZVA70kLTbDDQvNFrzX0MYWotjLeELVmRHp7
+         bBpGz67GswpvcpjbxC8NiVmHbiN+kqovlp/TI1jdg0VdKVuMgOsDK8E7oo3yrxqkeUes
+         l3PiaYq2jA3+4l2Ix0FoiozxFWvMY63S6/atNpGneXm7hRCP1dXy2Qdt9DCVBOoAIij7
+         hI/tlh4g43BkLNUrYyI5+NHqno9oHKnUZgqI7c+okcgvhRUrL6ovMkuOIYQws3QwCQyr
+         0hyakaDx0uRAGkSQA6wc6Xp1d/GSpqR4XV5DSgAj1m6JU73uzGU6zbIeSEh2Ne9dmgts
+         yYhQ==
+X-Gm-Message-State: AOAM530Sp7eaaaxhlTAJTJ9NlDO2fvusi9t81RS4F1U2/JJDdtQLptlb
+        017Fje1hKpmTRzC/yfYhD5t6U1zWRJqILSG9pja2+YDOxDk=
+X-Google-Smtp-Source: ABdhPJwYwGpkU4nU8vEiR/jvrZqHtdO6zYZ1DfYr7cVN1PStGTew60erncoMWe1J2wBUAQPAqvqaqzt66PNibkI8TtU=
+X-Received: by 2002:aa7:dd59:: with SMTP id o25mr2597851edw.288.1640276101735;
+ Thu, 23 Dec 2021 08:15:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211223121606.67055-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20211223121606.67055-1-andriy.shevchenko@linux.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 23 Dec 2021 17:14:50 +0100
+Message-ID: <CAMRc=McyA5n2vYLP1pSJYuy35AjGfugaM91JYxxmrmm0Lz_Q6A@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] gpio: regmap: Switch to use fwnode instead of of_node
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Michael Walle <michael@walle.cc>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'rings_inuse' and 'proxy_inuse' are bitmaps. So use 'devm_bitmap_zalloc()'
-to simplify code and improve the semantic.
+On Thu, Dec 23, 2021 at 1:16 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> GPIO library now accepts fwnode as a firmware node, so
+> switch the driver to use it.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/gpio/gpio-regmap.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-regmap.c b/drivers/gpio/gpio-regmap.c
+> index 69c219742083..6383136cbe59 100644
+> --- a/drivers/gpio/gpio-regmap.c
+> +++ b/drivers/gpio/gpio-regmap.c
+> @@ -244,16 +244,12 @@ struct gpio_regmap *gpio_regmap_register(const struct gpio_regmap_config *config
+>
+>         chip = &gpio->gpio_chip;
+>         chip->parent = config->parent;
+> +       chip->fwnode = config->fwnode;
+>         chip->base = -1;
+>         chip->ngpio = config->ngpio;
+>         chip->names = config->names;
+>         chip->label = config->label ?: dev_name(config->parent);
+>
+> -#if defined(CONFIG_OF_GPIO)
+> -       /* gpiolib will use of_node of the parent if chip->of_node is NULL */
+> -       chip->of_node = to_of_node(config->fwnode);
+> -#endif /* CONFIG_OF_GPIO */
+> -
+>         /*
+>          * If our regmap is fast_io we should probably set can_sleep to false.
+>          * Right now, the regmap doesn't save this property, nor is there any
+> --
+> 2.34.1
+>
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/soc/ti/k3-ringacc.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+Applied, thanks!
 
-diff --git a/drivers/soc/ti/k3-ringacc.c b/drivers/soc/ti/k3-ringacc.c
-index 31ab6c657fec..f7bf18b8229a 100644
---- a/drivers/soc/ti/k3-ringacc.c
-+++ b/drivers/soc/ti/k3-ringacc.c
-@@ -1402,12 +1402,10 @@ static int k3_ringacc_init(struct platform_device *pdev,
- 				      sizeof(*ringacc->rings) *
- 				      ringacc->num_rings,
- 				      GFP_KERNEL);
--	ringacc->rings_inuse = devm_kcalloc(dev,
--					    BITS_TO_LONGS(ringacc->num_rings),
--					    sizeof(unsigned long), GFP_KERNEL);
--	ringacc->proxy_inuse = devm_kcalloc(dev,
--					    BITS_TO_LONGS(ringacc->num_proxies),
--					    sizeof(unsigned long), GFP_KERNEL);
-+	ringacc->rings_inuse = devm_bitmap_zalloc(dev, ringacc->num_rings,
-+						  GFP_KERNEL);
-+	ringacc->proxy_inuse = devm_bitmap_zalloc(dev, ringacc->num_proxies,
-+						  GFP_KERNEL);
- 
- 	if (!ringacc->rings || !ringacc->rings_inuse || !ringacc->proxy_inuse)
- 		return -ENOMEM;
-@@ -1483,9 +1481,8 @@ struct k3_ringacc *k3_ringacc_dmarings_init(struct platform_device *pdev,
- 				      sizeof(*ringacc->rings) *
- 				      ringacc->num_rings * 2,
- 				      GFP_KERNEL);
--	ringacc->rings_inuse = devm_kcalloc(dev,
--					    BITS_TO_LONGS(ringacc->num_rings),
--					    sizeof(unsigned long), GFP_KERNEL);
-+	ringacc->rings_inuse = devm_bitmap_zalloc(dev, ringacc->num_rings,
-+						  GFP_KERNEL);
- 
- 	if (!ringacc->rings || !ringacc->rings_inuse)
- 		return ERR_PTR(-ENOMEM);
--- 
-2.32.0
-
+Bart

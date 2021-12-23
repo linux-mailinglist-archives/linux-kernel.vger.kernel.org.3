@@ -2,78 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC6447E2DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:04:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF3A47E2DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348097AbhLWMEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 07:04:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348102AbhLWMEh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 07:04:37 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DC7C061401;
-        Thu, 23 Dec 2021 04:04:37 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id j6so20399518edw.12;
-        Thu, 23 Dec 2021 04:04:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vHXP4DgUxXHsJzGn5rRtLSurzSkz1QEhYFG5Qx1uOwQ=;
-        b=RLDaPYcqkPeMjMJ6yC56PoeEDIE24h55zgk6ItpvpcLd89jcnNOVqAKBvUnhObSIAD
-         B0oJc+oeO7WWB+2H+Nba2nShScj1QijSwJ+IeWEWKTrl/+Idp4ru8e2ZRe1Xb2vgc8fu
-         iZhphtZGnCoOG12P6Vl+AnQ6aHwoSArE3afEqgPfpuijZ7SZLXZTOHtySdIvA2jGY3Ww
-         K29MWwUTA1HmuexeoiPV/xu9tzM2H5vaj3G6Xz1Cqudz/vuhe0O4I4XAEv0lnKB/TDu8
-         LZpvIq47Ej2GRqdrfunAO4YRtFb07yhPR0dRXbrzpXYGhom9zcvHMgO2MrfI6djFGKMA
-         C3NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vHXP4DgUxXHsJzGn5rRtLSurzSkz1QEhYFG5Qx1uOwQ=;
-        b=cwU5YM4PSarXmVoNewEc3D4eS3alI+eapQrF81Cs+HZ/gzoRSicCACMKewRXFtx3/H
-         RsqUXRWaOgQBQRO1VwNEKdF2Dd0ncgQ+BAeXqmYunW4euD3sfO42wSgsxJsqmc2rrnYQ
-         csRSRSb2WU0U0LGrx4ECYGLye1TEmK5gWAD35V0iigFfUPw+XUg/l6gi1/eLQIcq5DET
-         oQMoGifn8X//ey6nMufOufrbZ/kkoVL/yluOiJ0wSfvzWvnLjsBFgYh+xSLQe19jxuo6
-         bVfs/RfhBJTkHbuAelR0AWpfh31bb5RSjl5FC/iCRMfpSURtenasL3HGQ8RiarBH9Bub
-         nIXQ==
-X-Gm-Message-State: AOAM530C753dw8EnrTGpwkfBkYVrnkmZr2xNAwfkMpSNqiNU7+kYDfHE
-        jglPdwdL7CqwJvrvgcZXlIU4IY2eigck6IXla+nYgWbR/m8=
-X-Google-Smtp-Source: ABdhPJyRVDEnjltecyiX2KCow6fCITK/+MaEdzV9k7+Kdcl86XxJMaAyVam4EJ03SzQB8wG0Lmh4NgaFKddoq2DXgR4=
-X-Received: by 2002:a05:6402:354b:: with SMTP id f11mr1743438edd.342.1640261075478;
- Thu, 23 Dec 2021 04:04:35 -0800 (PST)
+        id S1348111AbhLWMEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 07:04:52 -0500
+Received: from mga01.intel.com ([192.55.52.88]:54141 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348085AbhLWMEs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 07:04:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640261088; x=1671797088;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=j7Iz0oIwoUZhkLnHFpLk+ZAFJFPFIJXK1GEWhh4vA2M=;
+  b=AXCiiWfGF8NgRWt25uvrX09lDuS33/EHDuHtBHyF2lRNbTzZtZ6rXv8u
+   qNoPj7QLA5eOJVzQN8RbI7/KEmMucOTjA6035vBEUTDed3pywl4lTCD9m
+   xCcmGmpinK6VGuN/RjRxscXEWeQHP9CTaGsf5bxbend9gVNfoMp9E+qcu
+   BnuiN3obuAEIM6GIxX0baIXynzOzJhlzrOWXCdF33lnymFyEgzb0siONC
+   3fhJ5BvmZ7IW9n04LsFrTy/SsERydn3/b53X5Y1gIBe0hfc546KKptrFF
+   2GBOQIv6nvz2oyLLsnqTfKnd+/LgX3NH+vfNhxZSBcTLZr/tISkCYGd7z
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="265022973"
+X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
+   d="scan'208";a="265022973"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 04:04:48 -0800
+X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
+   d="scan'208";a="570912439"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 04:04:45 -0800
+Received: by lahna (sSMTP sendmail emulation); Thu, 23 Dec 2021 14:04:43 +0200
+Date:   Thu, 23 Dec 2021 14:04:43 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        Hoan Tran <hoan@os.amperecomputing.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PATCH v1 1/2] gpiolib: acpi: make fwnode take precedence in
+ struct gpio_chip
+Message-ID: <YcRl29vhMQrNBF+e@lahna>
+References: <20211223103809.12343-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <20211223120146.1330186-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20211223120146.1330186-1-jiasheng@iscas.ac.cn>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 23 Dec 2021 14:02:37 +0200
-Message-ID: <CAHp75VdDPKWb6a6SZTUqwv-Zif+Lxz_zgVrRBEDuJQ_xVpNPXA@mail.gmail.com>
-Subject: Re: [PATCH v3] fjes: Check for error irq
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Sasha Levin <sashal@kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211223103809.12343-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 2:01 PM Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
-> On Thursday, December 23, 2021, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > Always think a bit, don't be an appendix to the dumb machine.
->
-> Sorry, the v2 message has a mistake.
-> Here is the right one.
->
-> This one is also corrected.
+On Thu, Dec 23, 2021 at 12:38:08PM +0200, Andy Shevchenko wrote:
+> If the driver sets the fwnode in struct gpio_chip, let it take
+> precedence over the parent's fwnode.
+> 
+> This is a follow up to the commit 9126a738edc1 ("gpiolib: of: make
+> fwnode take precedence in struct gpio_chip").
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Same as per previous patches from you, fix the commit message and send v4.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>

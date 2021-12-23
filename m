@@ -2,341 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BF847E0F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 10:43:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88DBB47E0F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 10:45:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347516AbhLWJnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 04:43:20 -0500
-Received: from mga14.intel.com ([192.55.52.115]:25690 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232539AbhLWJnT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 04:43:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640252599; x=1671788599;
-  h=from:to:cc:subject:date:message-id;
-  bh=V+5w0sheZoHhAs/TI35RX+H2LBa77kYuq3HanpGixXc=;
-  b=Frw5bMS5Fm2hgf/iI4xDlE7hS1aBmrR1Zqb271xyD2fKzADq6GHYeZG+
-   mGfpQt7LjeTt1S4/q9dDnKbEPGx+C/JhZNYb36f0MlofXnNV37XS/bn/l
-   zXYbrV/4mohBVddzIlWasu2Yl61ryEGol23WJxECpNaYaYllEh4AgpEg+
-   29wdf3oyClqkTTIPjhMKQk/h5lAvz0fnzF1oz54TNFH2b/bOlxknLrP34
-   MGu6PfGaJL8jUF9kMApImXlqvT0ktx62r0QBGxwYE1wbDyHerAu1Jms1R
-   xK+rAhPhKrRxs77Vl075ASWmbXuT5b4R5S/7XfKA218FO/ZHuOd/NVrRn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="241020521"
-X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
-   d="scan'208";a="241020521"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 01:43:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
-   d="scan'208";a="485043990"
-Received: from srpawnik.iind.intel.com ([10.223.107.57])
-  by orsmga002.jf.intel.com with ESMTP; 23 Dec 2021 01:43:15 -0800
-From:   Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org,
-        srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, sumeet.r.pawnikar@intel.com,
-        stable@vger.kernel.org
-Subject: [PATCH v2] thermal/drivers/int340x: Fix RFIM mailbox write commands
-Date:   Thu, 23 Dec 2021 15:12:36 +0530
-Message-Id: <20211223094236.15179-1-sumeet.r.pawnikar@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S242974AbhLWJpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 04:45:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38804 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232539AbhLWJpC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 04:45:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640252701;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ARybGRLY7DPO8OzR+Y/t8B6nqAUsMUtXK9t2REMZNAw=;
+        b=gGxYjhmzktt97nehMsA/QFUGqo0/8/6xSCNJPJIbN1nQnbWSUTHfUcuplUA0LZ0bdpLXPo
+        2h+3YdGGrPRdYBk8AWMG5ZOmQSZPJ1g5RUYO/DlX448fzz8v/Lt2ybHTh55Jne5qfi5Fjk
+        75G9zn0h/nXZud/vFAq0nRpM1nH4uKg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-28-koNWOVNzMnS8tv35d98NIg-1; Thu, 23 Dec 2021 04:44:57 -0500
+X-MC-Unique: koNWOVNzMnS8tv35d98NIg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 91855101F7A1;
+        Thu, 23 Dec 2021 09:44:55 +0000 (UTC)
+Received: from MiWiFi-R3L-srv.redhat.com (ovpn-13-71.pek2.redhat.com [10.72.13.71])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 022FF4736B;
+        Thu, 23 Dec 2021 09:44:36 +0000 (UTC)
+From:   Baoquan He <bhe@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org, hch@lst.de,
+        cl@linux.com, John.p.donnelly@oracle.com,
+        kexec@lists.infradead.org, bhe@redhat.com, 42.hyeyoo@gmail.com,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        vbabka@suse.cz, David.Laight@ACULAB.COM, david@redhat.com,
+        x86@kernel.org, bp@alien8.de
+Subject: [PATCH v4 0/3] Handle warning of allocation failure on DMA zone w/o managed pages
+Date:   Thu, 23 Dec 2021 17:44:32 +0800
+Message-Id: <20211223094435.248523-1-bhe@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The existing mail mechanism only supports writing of workload types.
-But mailbox command for RFIM (cmd = 0x08) also requires write operation
-which was ignored. This results in failing to store RFI restriction.
-This requires enhancing mailbox writes for non workload commands also.
-So, remove the check for MBOX_CMD_WORKLOAD_TYPE_WRITE in mailbox write,
-with this other write commands also can be supoorted. But at the same
-time, we have to make sure that there is no impact on read commands,
-by not writing anything in mailbox data register.
-To properly implement, add two separate functions for mbox read and write
-command for processor thermal workload command type. This helps to
-differentiate the read and write workload command types while sending mbox
-command.
+**Problem observed:
+On x86_64, when crash is triggered and entering into kdump kernel, page
+allocation failure can always be seen.
 
-Fixes: 5d6fbc96bd36 ("thermal/drivers/int340x: processor_thermal: Export additional attributes")
-Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-Cc: stable@vger.kernel.org # 5.14+
----
-Changes in v2 from v1:
- - Addressed below review comments received from Srinivas.
-   - updated subject line.
-   - removed data argument for send_mbox_read_cmd function as it's not used.
-   - removed writel call inside send_mbox_read_cmd function which is not required.
----
- .../processor_thermal_device.h                |   3 +-
- .../int340x_thermal/processor_thermal_mbox.c  | 100 +++++++++++-------
- .../int340x_thermal/processor_thermal_rfim.c  |  23 ++--
- 3 files changed, 73 insertions(+), 53 deletions(-)
+ ---------------------------------
+ DMA: preallocated 128 KiB GFP_KERNEL pool for atomic allocations
+ swapper/0: page allocation failure: order:5, mode:0xcc1(GFP_KERNEL|GFP_DMA), nodemask=(null),cpuset=/,mems_allowed=0
+ CPU: 0 PID: 1 Comm: swapper/0
+ Call Trace:
+  dump_stack+0x7f/0xa1
+  warn_alloc.cold+0x72/0xd6
+  ......
+  __alloc_pages+0x24d/0x2c0
+  ......
+  dma_atomic_pool_init+0xdb/0x176
+  do_one_initcall+0x67/0x320
+  ? rcu_read_lock_sched_held+0x3f/0x80
+  kernel_init_freeable+0x290/0x2dc
+  ? rest_init+0x24f/0x24f
+  kernel_init+0xa/0x111
+  ret_from_fork+0x22/0x30
+ Mem-Info:
+ ------------------------------------
 
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-index be27f633e40a..9b2a64ef55d0 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-@@ -80,7 +80,8 @@ void proc_thermal_rfim_remove(struct pci_dev *pdev);
- int proc_thermal_mbox_add(struct pci_dev *pdev, struct proc_thermal_device *proc_priv);
- void proc_thermal_mbox_remove(struct pci_dev *pdev);
- 
--int processor_thermal_send_mbox_cmd(struct pci_dev *pdev, u16 cmd_id, u32 cmd_data, u64 *cmd_resp);
-+int processor_thermal_send_mbox_read_cmd(struct pci_dev *pdev, u16 id, u64 *resp);
-+int processor_thermal_send_mbox_write_cmd(struct pci_dev *pdev, u16 id, u32 data);
- int proc_thermal_add(struct device *dev, struct proc_thermal_device *priv);
- void proc_thermal_remove(struct proc_thermal_device *proc_priv);
- int proc_thermal_suspend(struct device *dev);
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c
-index 01008ae00e7f..0b89a4340ff4 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c
-@@ -24,19 +24,15 @@
- 
- static DEFINE_MUTEX(mbox_lock);
- 
--static int send_mbox_cmd(struct pci_dev *pdev, u16 cmd_id, u32 cmd_data, u64 *cmd_resp)
-+static int wait_for_mbox_ready(struct proc_thermal_device *proc_priv)
- {
--	struct proc_thermal_device *proc_priv;
- 	u32 retries, data;
- 	int ret;
- 
--	mutex_lock(&mbox_lock);
--	proc_priv = pci_get_drvdata(pdev);
--
- 	/* Poll for rb bit == 0 */
- 	retries = MBOX_RETRY_COUNT;
- 	do {
--		data = readl((void __iomem *) (proc_priv->mmio_base + MBOX_OFFSET_INTERFACE));
-+		data = readl(proc_priv->mmio_base + MBOX_OFFSET_INTERFACE);
- 		if (data & BIT_ULL(MBOX_BUSY_BIT)) {
- 			ret = -EBUSY;
- 			continue;
-@@ -45,53 +41,78 @@ static int send_mbox_cmd(struct pci_dev *pdev, u16 cmd_id, u32 cmd_data, u64 *cm
- 		break;
- 	} while (--retries);
- 
-+	return ret;
-+}
-+
-+static int send_mbox_write_cmd(struct pci_dev *pdev, u16 id, u32 data)
-+{
-+	struct proc_thermal_device *proc_priv;
-+	u32 reg_data;
-+	int ret;
-+
-+	proc_priv = pci_get_drvdata(pdev);
-+
-+	mutex_lock(&mbox_lock);
-+
-+	ret = wait_for_mbox_ready(proc_priv);
- 	if (ret)
- 		goto unlock_mbox;
- 
--	if (cmd_id == MBOX_CMD_WORKLOAD_TYPE_WRITE)
--		writel(cmd_data, (void __iomem *) ((proc_priv->mmio_base + MBOX_OFFSET_DATA)));
--
-+	writel(data, (proc_priv->mmio_base + MBOX_OFFSET_DATA));
- 	/* Write command register */
--	data = BIT_ULL(MBOX_BUSY_BIT) | cmd_id;
--	writel(data, (void __iomem *) ((proc_priv->mmio_base + MBOX_OFFSET_INTERFACE)));
-+	reg_data = BIT_ULL(MBOX_BUSY_BIT) | id;
-+	writel(reg_data, (proc_priv->mmio_base + MBOX_OFFSET_INTERFACE));
- 
--	/* Poll for rb bit == 0 */
--	retries = MBOX_RETRY_COUNT;
--	do {
--		data = readl((void __iomem *) (proc_priv->mmio_base + MBOX_OFFSET_INTERFACE));
--		if (data & BIT_ULL(MBOX_BUSY_BIT)) {
--			ret = -EBUSY;
--			continue;
--		}
-+	ret = wait_for_mbox_ready(proc_priv);
- 
--		if (data) {
--			ret = -ENXIO;
--			goto unlock_mbox;
--		}
-+unlock_mbox:
-+	mutex_unlock(&mbox_lock);
-+	return ret;
-+}
- 
--		ret = 0;
-+static int send_mbox_read_cmd(struct pci_dev *pdev, u16 id, u64 *resp)
-+{
-+	struct proc_thermal_device *proc_priv;
-+	u32 reg_data;
-+	int ret;
- 
--		if (!cmd_resp)
--			break;
-+	proc_priv = pci_get_drvdata(pdev);
- 
--		if (cmd_id == MBOX_CMD_WORKLOAD_TYPE_READ)
--			*cmd_resp = readl((void __iomem *) (proc_priv->mmio_base + MBOX_OFFSET_DATA));
--		else
--			*cmd_resp = readq((void __iomem *) (proc_priv->mmio_base + MBOX_OFFSET_DATA));
-+	mutex_lock(&mbox_lock);
- 
--		break;
--	} while (--retries);
-+	ret = wait_for_mbox_ready(proc_priv);
-+	if (ret)
-+		goto unlock_mbox;
-+
-+	/* Write command register */
-+	reg_data = BIT_ULL(MBOX_BUSY_BIT) | id;
-+	writel(reg_data, (proc_priv->mmio_base + MBOX_OFFSET_INTERFACE));
-+
-+	ret = wait_for_mbox_ready(proc_priv);
-+	if (ret)
-+		goto unlock_mbox;
-+
-+	if (id == MBOX_CMD_WORKLOAD_TYPE_READ)
-+		*resp = readl(proc_priv->mmio_base + MBOX_OFFSET_DATA);
-+	else
-+		*resp = readq(proc_priv->mmio_base + MBOX_OFFSET_DATA);
- 
- unlock_mbox:
- 	mutex_unlock(&mbox_lock);
- 	return ret;
- }
- 
--int processor_thermal_send_mbox_cmd(struct pci_dev *pdev, u16 cmd_id, u32 cmd_data, u64 *cmd_resp)
-+int processor_thermal_send_mbox_read_cmd(struct pci_dev *pdev, u16 id, u64 *resp)
- {
--	return send_mbox_cmd(pdev, cmd_id, cmd_data, cmd_resp);
-+	return send_mbox_read_cmd(pdev, id, resp);
- }
--EXPORT_SYMBOL_GPL(processor_thermal_send_mbox_cmd);
-+EXPORT_SYMBOL_NS_GPL(processor_thermal_send_mbox_read_cmd, INT340X_THERMAL);
-+
-+int processor_thermal_send_mbox_write_cmd(struct pci_dev *pdev, u16 id, u32 data)
-+{
-+	return send_mbox_write_cmd(pdev, id, data);
-+}
-+EXPORT_SYMBOL_NS_GPL(processor_thermal_send_mbox_write_cmd, INT340X_THERMAL);
- 
- /* List of workload types */
- static const char * const workload_types[] = {
-@@ -104,7 +125,6 @@ static const char * const workload_types[] = {
- 	NULL
- };
- 
--
- static ssize_t workload_available_types_show(struct device *dev,
- 					       struct device_attribute *attr,
- 					       char *buf)
-@@ -146,7 +166,7 @@ static ssize_t workload_type_store(struct device *dev,
- 
- 	data |= ret;
- 
--	ret = send_mbox_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_WRITE, data, NULL);
-+	ret = send_mbox_write_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_WRITE, data);
- 	if (ret)
- 		return false;
- 
-@@ -161,7 +181,7 @@ static ssize_t workload_type_show(struct device *dev,
- 	u64 cmd_resp;
- 	int ret;
- 
--	ret = send_mbox_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_READ, 0, &cmd_resp);
-+	ret = send_mbox_read_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_READ, &cmd_resp);
- 	if (ret)
- 		return false;
- 
-@@ -186,8 +206,6 @@ static const struct attribute_group workload_req_attribute_group = {
- 	.name = "workload_request"
- };
- 
--
--
- static bool workload_req_created;
- 
- int proc_thermal_mbox_add(struct pci_dev *pdev, struct proc_thermal_device *proc_priv)
-@@ -196,7 +214,7 @@ int proc_thermal_mbox_add(struct pci_dev *pdev, struct proc_thermal_device *proc
- 	int ret;
- 
- 	/* Check if there is a mailbox support, if fails return success */
--	ret = send_mbox_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_READ, 0, &cmd_resp);
-+	ret = send_mbox_read_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_READ, &cmd_resp);
- 	if (ret)
- 		return 0;
- 
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-index e693ec8234fb..8c42e7662033 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-@@ -9,6 +9,8 @@
- #include <linux/pci.h>
- #include "processor_thermal_device.h"
- 
-+MODULE_IMPORT_NS(INT340X_THERMAL);
-+
- struct mmio_reg {
- 	int read_only;
- 	u32 offset;
-@@ -194,8 +196,7 @@ static ssize_t rfi_restriction_store(struct device *dev,
- 				     struct device_attribute *attr,
- 				     const char *buf, size_t count)
- {
--	u16 cmd_id = 0x0008;
--	u64 cmd_resp;
-+	u16 id = 0x0008;
- 	u32 input;
- 	int ret;
- 
-@@ -203,7 +204,7 @@ static ssize_t rfi_restriction_store(struct device *dev,
- 	if (ret)
- 		return ret;
- 
--	ret = processor_thermal_send_mbox_cmd(to_pci_dev(dev), cmd_id, input, &cmd_resp);
-+	ret = processor_thermal_send_mbox_write_cmd(to_pci_dev(dev), id, input);
- 	if (ret)
- 		return ret;
- 
-@@ -214,30 +215,30 @@ static ssize_t rfi_restriction_show(struct device *dev,
- 				    struct device_attribute *attr,
- 				    char *buf)
- {
--	u16 cmd_id = 0x0007;
--	u64 cmd_resp;
-+	u16 id = 0x0007;
-+	u64 resp;
- 	int ret;
- 
--	ret = processor_thermal_send_mbox_cmd(to_pci_dev(dev), cmd_id, 0, &cmd_resp);
-+	ret = processor_thermal_send_mbox_read_cmd(to_pci_dev(dev), id, &resp);
- 	if (ret)
- 		return ret;
- 
--	return sprintf(buf, "%llu\n", cmd_resp);
-+	return sprintf(buf, "%llu\n", resp);
- }
- 
- static ssize_t ddr_data_rate_show(struct device *dev,
- 				  struct device_attribute *attr,
- 				  char *buf)
- {
--	u16 cmd_id = 0x0107;
--	u64 cmd_resp;
-+	u16 id = 0x0107;
-+	u64 resp;
- 	int ret;
- 
--	ret = processor_thermal_send_mbox_cmd(to_pci_dev(dev), cmd_id, 0, &cmd_resp);
-+	ret = processor_thermal_send_mbox_read_cmd(to_pci_dev(dev), id, &resp);
- 	if (ret)
- 		return ret;
- 
--	return sprintf(buf, "%llu\n", cmd_resp);
-+	return sprintf(buf, "%llu\n", resp);
- }
- 
- static DEVICE_ATTR_RW(rfi_restriction);
+***Root cause:
+In the current kernel, it assumes that DMA zone must have managed pages
+and try to request pages if CONFIG_ZONE_DMA is enabled. While this is not
+always true. E.g in kdump kernel of x86_64, only low 1M is presented and
+locked down at very early stage of boot, so that this low 1M won't be
+added into buddy allocator to become managed pages of DMA zone. This
+exception will always cause page allocation failure if page is requested
+from DMA zone.
+
+***Investigation:
+This failure happens since below commit merged into linus's tree.
+  1a6a9044b967 x86/setup: Remove CONFIG_X86_RESERVE_LOW and reservelow= options
+  23721c8e92f7 x86/crash: Remove crash_reserve_low_1M()
+  f1d4d47c5851 x86/setup: Always reserve the first 1M of RAM
+  7c321eb2b843 x86/kdump: Remove the backup region handling
+  6f599d84231f x86/kdump: Always reserve the low 1M when the crashkernel option is specified
+
+Before them, on x86_64, the low 640K area will be reused by kdump kernel.
+So in kdump kernel, the content of low 640K area is copied into a backup
+region for dumping before jumping into kdump. Then except of those firmware
+reserved region in [0, 640K], the left area will be added into buddy
+allocator to become available managed pages of DMA zone.
+
+However, after above commits applied, in kdump kernel of x86_64, the low
+1M is reserved by memblock, but not released to buddy allocator. So any
+later page allocation requested from DMA zone will fail.
+
+At the beginning, if crashkernel is reserved, the low 1M need be locked
+down because AMD SME encrypts memory making the old backup region
+mechanims impossible when switching into kdump kernel.
+
+Later, it was also observed that there are BIOSes corrupting memory
+under 1M. To solve this, in commit f1d4d47c5851, the entire region of
+low 1M is always reserved after the real mode trampoline is allocated.
+
+Besides, recently, Intel engineer mentioned their TDX (Trusted domain
+extensions) which is under development in kernel also needs to lock down
+the low 1M. So we can't simply revert above commits to fix the page allocation
+failure from DMA zone as someone suggested.
+
+***Solution:
+Currently, only DMA atomic pool and dma-kmalloc will initialize and
+request page allocation with GFP_DMA during bootup.
+
+So only initializ DMA atomic pool when DMA zone has available managed
+pages, otherwise just skip the initialization.
+
+For dma-kmalloc(), for the time being, let's mute the warning of
+allocation failure if requesting pages from DMA zone while no manged
+pages. Meanwhile, change code to use dma_alloc_xx/dma_map_xx API to
+replace kmalloc(GFP_DMA), or do not use GFP_DMA when calling kmalloc()
+if not necessary. Christoph is posting patches to fix those under
+drivers/scsi/. Finally, we can remove the need of dma-kmalloc() as
+people suggested.
+
+Changelog:
+v3->v4:
+ - Split the old v3 into two separate patchset. The first two clean
+   up/improvement patches in v3 have been sent out in a independent
+   patchset. The fixes patchs are adapted and sent in this patchset.
+ - Do not change dma-kmalloc(), mute the warning of allocation failure
+   instead if it's requesting page from DMA zone which has no managed
+   pages.
+
+v2-Resend -> v3:
+ - Re-implement has_managed_dma() according to David's suggestion.
+ - Add Fixes tag and cc stable.
+
+v2->v2 RESEND:
+ - John pinged to push the repost of this patchset. So fix one typo of
+   suject of patch 3/5; Fix a building error caused by mix declaration in
+   patch 5/5. Both of them are found by John from his testing.
+ - Rewrite cover letter to add more information.
+
+v1->v2:
+ Change to check if managed DMA zone exists. If DMA zone has managed
+ pages, go further to request page from DMA zone to initialize. Otherwise,
+ just skip to initialize stuffs which need pages from DMA zone.
+
+v3:
+https://lore.kernel.org/all/20211213122712.23805-1-bhe@redhat.com/T/#u
+
+V2 RESEND post:
+https://lore.kernel.org/all/20211207030750.30824-1-bhe@redhat.com/T/#u
+
+v2 post:
+https://lore.kernel.org/all/20210810094835.13402-1-bhe@redhat.com/T/#u
+
+v1 post:
+https://lore.kernel.org/all/20210624052010.5676-1-bhe@redhat.com/T/#u
+
+
+
+Baoquan He (3):
+  mm_zone: add function to check if managed dma zone exists
+  dma/pool: create dma atomic pool only if dma zone has managed pages
+  mm/page_alloc.c: do not warn allocation failure on zone DMA if no
+    managed pages
+
+ include/linux/mmzone.h |  9 +++++++++
+ kernel/dma/pool.c      |  4 ++--
+ mm/page_alloc.c        | 18 +++++++++++++++++-
+ 3 files changed, 28 insertions(+), 3 deletions(-)
+
 -- 
-2.17.1
+2.26.3
 

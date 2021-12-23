@@ -2,151 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C17D547E71E
+	by mail.lfdr.de (Postfix) with ESMTP id 7736347E71D
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 18:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244455AbhLWRdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 12:33:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:38618 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229964AbhLWRdn (ORCPT
+        id S229962AbhLWRdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 12:33:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59226 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229797AbhLWRdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 23 Dec 2021 12:33:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640280823;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=jOV9AA0TQCjyahzHmdUlQVGoQTJzgx1YP7UeqttO4xI=;
-        b=gYj3TRQ7tzTt7zFFEch7fSM3k290ix512KXYU3hEHjt8WMxqikPHqKj6HS1DmkzQDhjTiE
-        tE925CeBB2L+M72lmhMphuS82ReSVZxrSirv6bsS77PuVWU4WYTHU1OAgUvHTZE5/fhUGp
-        WQBa5qydSgxXl1+CP1nJNZe3C0bxKMk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-651-VQp2u5UjNw-feBhNNAP2lw-1; Thu, 23 Dec 2021 12:33:42 -0500
-X-MC-Unique: VQp2u5UjNw-feBhNNAP2lw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 283B619251A0;
-        Thu, 23 Dec 2021 17:33:34 +0000 (UTC)
-Received: from wsfd-netdev76.ntdv.lab.eng.bos.redhat.com (wsfd-netdev76.ntdv.lab.eng.bos.redhat.com [10.19.188.157])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CA34F5C2F1;
-        Thu, 23 Dec 2021 17:33:32 +0000 (UTC)
-From:   William Zhao <wizhao@redhat.com>
-To:     steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wizhao@redhat.com
-Subject: [PATCH] ip6_vti: initialize __ip6_tnl_parm struct in vti6_siocdevprivate
-Date:   Thu, 23 Dec 2021 12:33:16 -0500
-Message-Id: <20211223173316.779982-1-wizhao@redhat.com>
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C770C061401;
+        Thu, 23 Dec 2021 09:33:43 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id z29so24116209edl.7;
+        Thu, 23 Dec 2021 09:33:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=E0/YQJ43ks9rfBu4JnnAsmKLJ07kJTfqV/arSmMfD9Q=;
+        b=CfmnnQraty6UZHCrWwtMX/TFGU1UgDTVytCT9sKEY4sZgXNOv0JF6NEVb3IroMCwUP
+         nNOLSiU36bIUDocXH3mkY21WQ/js0o+kPISJK+0yD4zqfUvYqz853pm9dsY+iPWfpefZ
+         ZLaA/xJVISHgZJmN64GLASMchrK7qpBCdNF6vQEWZpFQ+vTYQ1WFvCaZ64QrEj5bd8TS
+         A3ckS0tjuGiDorxN8btb7QhAlF2HvGhva5obFrBE5z/Lo+o5Fo2OXp0cBV3LjFd+uHLZ
+         BtQNpwq1bOTYV8BOij3Na5iUptrURZbog73xEUSG8K+5kxGIqpL2OHt0QlxbwQqGTiE4
+         UqMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=E0/YQJ43ks9rfBu4JnnAsmKLJ07kJTfqV/arSmMfD9Q=;
+        b=HZd5aJsRoEudzv8etkZ/Pj/mSEaPUUqCGm1lEI3HWJ1deWREtANBSg0YsZfKq0UnQG
+         xhAhy+mVq9AGH+6iSpuvh4H8BHbuiloBu7di1GnE505+SZgMnKpGsYfbnUaOQmXGNMzi
+         f6sX5MLFlzn9eknJpdVzkwPL/O4ulOpZ93ncR7imSlUYieiP1UBcYHq0cUb6od0TDeWS
+         nZC8zv06R0p2aQtSaNUdrZnudbJITpRb2u8qZGsv5SuEVgwUfF5J74chJWEjLI5raxJs
+         MByfWUN4/NeZ40+98B7tL8COufG/3iz/9VnZeMROtO3ZZUTt9iItfYt1i8y6wyAEPAjf
+         vP3A==
+X-Gm-Message-State: AOAM530LmooHBvqCwAyetlSPgKcSi9cmf7xJgcFo3HqV3bpXDWsIS7kE
+        c+I4aCZsNIagaMIdhH/u8TU=
+X-Google-Smtp-Source: ABdhPJz1wb9lZeAJjuhN0BSqjf+Y/9f1AfyNiqQT/ha2qp8Ia+obXP8Z6LU16my6WHEOEyT7BpN+xw==
+X-Received: by 2002:a17:906:9413:: with SMTP id q19mr2756677ejx.296.1640280821676;
+        Thu, 23 Dec 2021 09:33:41 -0800 (PST)
+Received: from standask-GA-A55M-S2HP ([188.123.115.255])
+        by smtp.gmail.com with ESMTPSA id m12sm967093edd.86.2021.12.23.09.33.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Dec 2021 09:33:41 -0800 (PST)
+Date:   Thu, 23 Dec 2021 18:33:39 +0100
+From:   Stanislav Jakubek <stano.jakubek@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] Revert "dt-bindings: arm: qcom: Document SDX65 platform and
+ boards"
+Message-ID: <20211223173339.GA3925@standask-GA-A55M-S2HP>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "__ip6_tnl_parm" struct was left uninitialized causing an invalid
-load of random data when the "__ip6_tnl_parm" struct was used elsewhere.
-As an example, in the function "ip6_tnl_xmit_ctl()", it tries to access
-the "collect_md" member. With "__ip6_tnl_parm" being uninitialized and
-containing random data, the UBSAN detected that "collect_md" held a
-non-boolean value.
+This reverts commit 3b338c9a6a2afd6db46d5d8e39ae4f5eef420bf8.
 
-The UBSAN issue is as follows:
-===============================================================
-UBSAN: invalid-load in net/ipv6/ip6_tunnel.c:1025:14
-load of value 30 is not a valid value for type '_Bool'
-CPU: 1 PID: 228 Comm: kworker/1:3 Not tainted 5.16.0-rc4+ #8
-Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
-Workqueue: ipv6_addrconf addrconf_dad_work
-Call Trace:
-<TASK>
-dump_stack_lvl+0x44/0x57
-ubsan_epilogue+0x5/0x40
-__ubsan_handle_load_invalid_value+0x66/0x70
-? __cpuhp_setup_state+0x1d3/0x210
-ip6_tnl_xmit_ctl.cold.52+0x2c/0x6f [ip6_tunnel]
-vti6_tnl_xmit+0x79c/0x1e96 [ip6_vti]
-? lock_is_held_type+0xd9/0x130
-? vti6_rcv+0x100/0x100 [ip6_vti]
-? lock_is_held_type+0xd9/0x130
-? rcu_read_lock_bh_held+0xc0/0xc0
-? lock_acquired+0x262/0xb10
-dev_hard_start_xmit+0x1e6/0x820
-__dev_queue_xmit+0x2079/0x3340
-? mark_lock.part.52+0xf7/0x1050
-? netdev_core_pick_tx+0x290/0x290
-? kvm_clock_read+0x14/0x30
-? kvm_sched_clock_read+0x5/0x10
-? sched_clock_cpu+0x15/0x200
-? find_held_lock+0x3a/0x1c0
-? lock_release+0x42f/0xc90
-? lock_downgrade+0x6b0/0x6b0
-? mark_held_locks+0xb7/0x120
-? neigh_connected_output+0x31f/0x470
-? lockdep_hardirqs_on+0x79/0x100
-? neigh_connected_output+0x31f/0x470
-? ip6_finish_output2+0x9b0/0x1d90
-? rcu_read_lock_bh_held+0x62/0xc0
-? ip6_finish_output2+0x9b0/0x1d90
-ip6_finish_output2+0x9b0/0x1d90
-? ip6_append_data+0x330/0x330
-? ip6_mtu+0x166/0x370
-? __ip6_finish_output+0x1ad/0xfb0
-? nf_hook_slow+0xa6/0x170
-ip6_output+0x1fb/0x710
-? nf_hook.constprop.32+0x317/0x430
-? ip6_finish_output+0x180/0x180
-? __ip6_finish_output+0xfb0/0xfb0
-? lock_is_held_type+0xd9/0x130
-ndisc_send_skb+0xb33/0x1590
-? __sk_mem_raise_allocated+0x11cf/0x1560
-? dst_output+0x4a0/0x4a0
-? ndisc_send_rs+0x432/0x610
-addrconf_dad_completed+0x30c/0xbb0
-? addrconf_rs_timer+0x650/0x650
-? addrconf_dad_work+0x73c/0x10e0
-addrconf_dad_work+0x73c/0x10e0
-? addrconf_dad_completed+0xbb0/0xbb0
-? rcu_read_lock_sched_held+0xaf/0xe0
-? rcu_read_lock_bh_held+0xc0/0xc0
-process_one_work+0x97b/0x1740
-? pwq_dec_nr_in_flight+0x270/0x270
-worker_thread+0x87/0xbf0
-? process_one_work+0x1740/0x1740
-kthread+0x3ac/0x490
-? set_kthread_struct+0x100/0x100
-ret_from_fork+0x22/0x30
-</TASK>
-===============================================================
+This was a duplicate of 61339f368d59d25e22401731f89de44e3215508b,
+causing the sdx65 compatible and its board to be documented twice.
 
-The solution is to initialize "__ip6_tnl_parm" struct to zeros in the
-"vti6_siocdevprivate()" function.
-
-Signed-off-by: William Zhao <wizhao@redhat.com>
+Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+Link: https://lore.kernel.org/all/20211223144407.GA6503@standask-GA-A55M-S2HP/
 ---
- net/ipv6/ip6_vti.c | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/arm/qcom.yaml | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/net/ipv6/ip6_vti.c b/net/ipv6/ip6_vti.c
-index 527e9ead7449..5e9474bc54fc 100644
---- a/net/ipv6/ip6_vti.c
-+++ b/net/ipv6/ip6_vti.c
-@@ -808,6 +808,8 @@ vti6_siocdevprivate(struct net_device *dev, struct ifreq *ifr, void __user *data
- 	struct net *net = dev_net(dev);
- 	struct vti6_net *ip6n = net_generic(net, vti6_net_id);
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 370aab274cd1..04ff0b55bb85 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -48,7 +48,6 @@ description: |
+         sdx65
+         sm7225
+         sm8150
+-        sdx65
+         sm8250
+         sm8350
+         sm8450
+@@ -228,11 +227,6 @@ properties:
+               - qcom,sdx65-mtp
+           - const: qcom,sdx65
  
-+	memset(&p1, 0, sizeof(p1));
-+
- 	switch (cmd) {
- 	case SIOCGETTUNNEL:
- 		if (dev == ip6n->fb_tnl_dev) {
-
-base-commit: b8a98b6bf66ae35361e987333233d07241642909
+-      - items:
+-          - enum:
+-              - qcom,sdx65-mtp
+-          - const: qcom,sdx65
+-
+       - items:
+           - enum:
+               - qcom,ipq6018-cp01
 -- 
-2.27.0
+2.25.1
 

@@ -2,118 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A40E147E791
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:18:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B4147E793
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:18:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349806AbhLWSRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 13:17:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41008 "EHLO
+        id S1349815AbhLWSSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 13:18:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235530AbhLWSRx (ORCPT
+        with ESMTP id S1349610AbhLWSSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 13:17:53 -0500
+        Thu, 23 Dec 2021 13:18:35 -0500
 Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF8DC061401;
-        Thu, 23 Dec 2021 10:17:52 -0800 (PST)
-Received: by mail-ua1-x935.google.com with SMTP id y22so11581378uap.2;
-        Thu, 23 Dec 2021 10:17:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1DE4C061401;
+        Thu, 23 Dec 2021 10:18:35 -0800 (PST)
+Received: by mail-ua1-x935.google.com with SMTP id r15so11606513uao.3;
+        Thu, 23 Dec 2021 10:18:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2DoeJMrLCJd4i4nfvvOGZtme/V247eVYY/et0WnUbAk=;
-        b=Pi0PnrJ7I6mPcBd8bcvZEh82CN7PT3fPKZsFE43VoFL/6ateTTzH/o2wcVUDO2KuHm
-         qgD6Y6OxowtFt2n4vCOPUF4gk7SSQ3HsoB57otrILfZy+IYDiqNa5NgjtBAmYyZGnkbn
-         jj4j9bLx6fdBeMGBz94j4Oo2bVqrdKXqDwJ7nuIjNNqAh8cbcIDKyUyXvAYsZFdXxM1Q
-         RNZY6fLr2/JuyX7a+f0N0Om8mm8nkbafjbNxfqBcrcUAW1lCrfkyAnexCzB1Kq9LkkXZ
-         ABasn1M5/hDNpwC29Lcve8fkwKfBf3aSmSJAxxK+T/xbsngEHpDYK1eQiGG4zUVviMbf
-         HP7A==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=NmeJ67pdFJJuFTydiDcuzKxhQ/kTg7RGAFCoGfwnnPY=;
+        b=GA7RPJuOwrMLDuLABEAn1P9Iuz4C8iTV3/DkmisuF6nWgWzi4siqog+UeRN6qCO9//
+         KF101w8xqZhCbWCdiyvAG6ougU6dKptJFKBvsTuavk18GEP2nBbSOrWksnR9k4bldjEM
+         tGDWRf68p8qZMIOKCa9O30L/sDM5/1y8Wo/g0+O74T4de5dhfgm8d8vQML1YKzpNRH2T
+         Uxc/G6tZ5+Adlj/afRLRwRCJdIErzDvjHTCviulfDssXa0+HLCE7Ro7h1WZQnQ3ntp+U
+         IB19kqnAq0jy+++yRRQ1GxryNX3LAvoS54dDpJv6trdy/eMi1jHTkQdKJJt/liBREDSm
+         3Vuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=2DoeJMrLCJd4i4nfvvOGZtme/V247eVYY/et0WnUbAk=;
-        b=toTSRp5qHOArSfhqX0qlLOEKAg6YiPZ/4NgtaCdIMgKKVURFLZ/evNAdn9GKooq6NH
-         beR+YTY2qZOEFfOz1XRnDnlwacFfh9/zemcsP6LzNAz9Cci2QlsSvISqkr7RhTp9QEMF
-         OfmX/i+4CCc8Y2yg4F2j1D/q2TO2CzrlLBL6wzhmJZVkABGzs95tQbIo0U+DxRY/sOtL
-         4yf7QksNZLiohRHXe016jEuKSEd319rPevvxW1AJNVjMXqUKX2rlCS4TsZ4mI6kHwptS
-         clQkiMdmsxthFxNSsX/B81rAcmL9KcJw/3vM48trAFVgGlJ5pJh7IXcevEN/1yD1Q26V
-         sUFQ==
-X-Gm-Message-State: AOAM533sbqZLGtJpgDJuYjY+BBh5uXtC6le+duhkVsncQSFNyE8i9LHL
-        E+ldowubMXvRGttj9AzSzM1bwbkLC5g=
-X-Google-Smtp-Source: ABdhPJxgTNHgYBJ+dCZ6o8KfcWvh+ah0yjg4iUOV6/G53omSxl4C9qCxpLhsTJJrxj+RsTvlCq0XNA==
-X-Received: by 2002:a67:f141:: with SMTP id t1mr1098716vsm.35.1640283471269;
-        Thu, 23 Dec 2021 10:17:51 -0800 (PST)
-Received: from 7YHHR73.igp.broadcom.net (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id z11sm161727uac.13.2021.12.23.10.17.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Dec 2021 10:17:50 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     devicetree@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] dt-bindings: net: dsa: Fix realtek-smi example
-Date:   Thu, 23 Dec 2021 10:17:41 -0800
-Message-Id: <20211223181741.3999-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=NmeJ67pdFJJuFTydiDcuzKxhQ/kTg7RGAFCoGfwnnPY=;
+        b=gZF+Ln+3/aS8v5pbrz3twuxs0/1+MAvYXPD75dIPbfq6mq0XkSPTtaPlFDtnUgtR0Q
+         kiVectUmMnXOrUxjE1ANa64Du0M52I1e96/GlWtCDyfKTsSzkk8TdS3ClK6K0ZMeI7oK
+         DAzH+8ePggtO53ZLBOGgkFasF2efiYbxSANJ+h3MHU+YWsUx8i5A3BR4+74boNRoYtno
+         ogalfViQczHW/LPehlTqRFN8Z0Q54H5/uEW9daFPmigyqREnEr98RQ1sasjK1F1zI005
+         xSqBG5UY49XTIJIYs1EkAJbiO2J7kXIa2TR3eXelbwGklH92KhEUFsfZI/SdzIOCVMiA
+         G+Xw==
+X-Gm-Message-State: AOAM5306/VEIGjCFxxvmynDXJ4zEk8/wl8Wf0Y0PxS7IYBm13aQ60pHT
+        NJZ7gVuFb6CQ027BTyhaQ1A=
+X-Google-Smtp-Source: ABdhPJxVz2GubnCEUR0CBNvNp3uJCME9FVi8+Mv1mIbvYXIP0Q5klHH0NBupIB9HFM0aUwCYoHGfbA==
+X-Received: by 2002:a67:2683:: with SMTP id m125mr1086777vsm.80.1640283514812;
+        Thu, 23 Dec 2021 10:18:34 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id s12sm1192696vsj.26.2021.12.23.10.18.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Dec 2021 10:18:34 -0800 (PST)
+Message-ID: <684e3940-0884-4139-dd4e-a16375ec9cf6@gmail.com>
+Date:   Thu, 23 Dec 2021 10:18:32 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: linux-next: build warning after merge of the arm-soc tree
+Content-Language: en-US
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Olof Johansson <olof@lixom.net>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20211223085944.0095eaf5@canb.auug.org.au>
+ <CAK8P3a3WxP1x60fj7oPzY2=gTUEgA68x1vc17tRHEJ-O19-UTQ@mail.gmail.com>
+ <6a830fc3-2186-0335-a600-8410abc24ea2@gmail.com>
+ <00324e0f-7825-4ddc-a823-40a698715442@arinc9.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <00324e0f-7825-4ddc-a823-40a698715442@arinc9.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 'ports' node is not supposed to have a 'reg' property at all, in
-fact, doing so will lead to dtc issuing warnings looking like these:
 
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:109.4-14: Warning (reg_format): /switch/ports:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:106.9-149.5: Warning (avoid_default_addr_size): /switch/ports: Relying on default #address-cells value
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:106.9-149.5: Warning (avoid_default_addr_size): /switch/ports: Relying on default #size-cells value
 
-Fix the example by remove the stray 'reg' property.
+On 12/23/2021 12:50 AM, Arınç ÜNAL wrote:
+> Hey Florian.
+> 
+> I'm not sure I understand what's going wrong here. I did everything 
+> according to the documentation here:
+> https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/net/dsa/realtek-smi.txt#L158 
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Fixes: 3b3b6b460f78 ("net: dsa: Add bindings for Realtek SMI DSAs")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- Documentation/devicetree/bindings/net/dsa/realtek-smi.txt | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+The problem is that there is a 'reg' property for the 'ports' node when 
+this node is just a "container" for additional sub-node. This is because 
+the example you rightfully followed to the letter was wrong to begin 
+with. Should be fixed with:
 
-diff --git a/Documentation/devicetree/bindings/net/dsa/realtek-smi.txt b/Documentation/devicetree/bindings/net/dsa/realtek-smi.txt
-index 7959ec237983..a8d0f1febe32 100644
---- a/Documentation/devicetree/bindings/net/dsa/realtek-smi.txt
-+++ b/Documentation/devicetree/bindings/net/dsa/realtek-smi.txt
-@@ -84,7 +84,6 @@ switch {
- 	ports {
- 		#address-cells = <1>;
- 		#size-cells = <0>;
--		reg = <0>;
- 		port@0 {
- 			reg = <0>;
- 			label = "lan0";
-@@ -174,7 +173,7 @@ switch {
- 	ports {
- 		#address-cells = <1>;
- 		#size-cells = <0>;
--		reg = <0>;
-+
- 		port@0 {
- 			reg = <0>;
- 			label = "swp0";
+https://lore.kernel.org/netdev/20211223181741.3999-1-f.fainelli@gmail.com/
+
+And you would need to make a matching change to 
+arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts.
+
+Thanks!
 -- 
-2.25.1
-
+Florian

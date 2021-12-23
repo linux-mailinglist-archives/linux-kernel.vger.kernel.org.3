@@ -2,110 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6165F47DDC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 03:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4FE47DDCA
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 03:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345934AbhLWCiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 21:38:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57884 "EHLO
+        id S1345958AbhLWCl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 21:41:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232572AbhLWCiR (ORCPT
+        with ESMTP id S232572AbhLWCl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 21:38:17 -0500
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4BAC061574;
-        Wed, 22 Dec 2021 18:38:16 -0800 (PST)
-Received: by mail-qk1-x72f.google.com with SMTP id p4so4138493qkm.7;
-        Wed, 22 Dec 2021 18:38:16 -0800 (PST)
+        Wed, 22 Dec 2021 21:41:26 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A30C061574;
+        Wed, 22 Dec 2021 18:41:25 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id m21so17024982edc.0;
+        Wed, 22 Dec 2021 18:41:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SeDS6NYXrws6CvV5v+btXZxjBWdFilmIPCi4J1Jsij4=;
-        b=cdTN2Lyd2qFtzNqQAa/hurw13ieJSZQh2PA20jJMNSvTUduwO10i2uTmdWPEX56k5B
-         WXq0QwfsQkgyHZzhCV+RS+yRJAHoDCLWuHR94ZSBmWNuKEQEqQiCVns7zMx5f2O3wr1c
-         TmlKEuuj9r0yf1B+A4IuVeiMRs0fe/QsQ+rJ89tTlG5BKaMlsmX5rOrPzvVsPs/qhYWb
-         S9aZE5dpDbQWTuSuG7hXwcxzxRjum9cI1SPnwJ18cvy5CAqmGNwa3pkTnSQgqeWV1cYw
-         p+YW8SUeMck6Q334shIIqKo+sTXHTgQ+farzvBOi1f/MXTL+YQS8oi0ugjcu1uT1uGNT
-         dt6w==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bg3jjRZ+lxoTNYTRY1TdvP2BIH4Co9AsKyazy1E9U3Y=;
+        b=qpqQPotDQNvD/1Mp0Fz1Ks/zQDKP6TKj1ttF4zQHhnvsBEiKzV9eKvPsDPH8yhjJ2/
+         rj4xNdYe9emeXzlCBIxYwgLBAswlo3i35/OY1I/2vANP9U6Zq4MBYrCOdRY1MxiL5/Rf
+         XfMwlN8OeSS9WWI0uz1+BYopYIrHA7WOoGh+bPsOo+NMoN2+TFY1rKUPbPob3M22MRo2
+         bet2NPUqyVoefysAdrDlj3+uCukCIUGMAjXzJ1E0oShyqplqYNhQsbX2p7T8hPKI/pXo
+         OYz6XYvCEd9GfkgAtBXaBFUaJnvkdcaW4CjV7LJiaqRb3N1dRaGZ8EqOqMdcBr9ZR/jg
+         X3bQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SeDS6NYXrws6CvV5v+btXZxjBWdFilmIPCi4J1Jsij4=;
-        b=I2Gb00oAz+ZteI7jPuQDMqkP7aRWK6Na204zVbzky/pgOooK6IdqDyUoBdpFkgOaCh
-         0dad5w1+wGvkd8AH6DQNKGQdQJdJuoCHLKMSKVVlcnFNByAk2yEO1Cr/po6sQHppI653
-         jJvMRTChDNt501suT7fp6VXLx3VzU15GHWZnj4d3ZEjPWaaOgfB7CdBcEZzIAb0BJ8QB
-         eMHK/wgG5p4fM8suw1r55wfSNHZPVS9+lwD50ig8NrBOwZSXXIn1mOf7+YmvtmAlnOuL
-         LcwvFvf4NJniyx0cNkEIkVqFhtYfBsxXnvo430XqgTNQDGpPMkuh4QPd3XLE73r5BKP/
-         6kIg==
-X-Gm-Message-State: AOAM533uNDquh89dzqoO87PW1tGLsHod/hP/HneoPqto5euo2AOte3cc
-        hCWRTpQ72N3x3wtBmKXQAs8=
-X-Google-Smtp-Source: ABdhPJxNr0cmyXs322jx+2McPs82lFRBDqx3ec2ndsROtQFSy3Ji3MEzxlozfESAx7p97chFnmdKsQ==
-X-Received: by 2002:a05:620a:68a:: with SMTP id f10mr224581qkh.651.1640227095888;
-        Wed, 22 Dec 2021 18:38:15 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id w10sm3350407qtk.90.2021.12.22.18.38.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 18:38:15 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     manfred@colorfullife.com
-Cc:     stable@vger.kernel.org, akpm@linux-foundation.org, arnd@arndb.de,
-        cgel.zte@gmail.com, chi.minghao@zte.com.cn, dbueso@suse.de,
-        linux-kernel@vger.kernel.org, rdunlap@infradead.org,
-        shakeelb@google.com, unixbhaskar@gmail.com, vvs@virtuozzo.com,
-        zealci@zte.com.cn
-Subject: [PATCH v2] ipc/sem: do not sleep with a spin lock held
-Date:   Thu, 23 Dec 2021 02:37:56 +0000
-Message-Id: <20211223023756.555856-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <63840bf3-2199-3240-bdfa-abb55518b5f9@colorfullife.com>
-References: <63840bf3-2199-3240-bdfa-abb55518b5f9@colorfullife.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bg3jjRZ+lxoTNYTRY1TdvP2BIH4Co9AsKyazy1E9U3Y=;
+        b=EGU/q5hC4fLSMAzU2AhJ2XONSJ76A4q/AEQa3tlpl7KTH4+/6mR9ylW7VsE6xB8AFa
+         rcYq7BtEqP9Vqo2scPBOTnhT8AzL/ytpOBvRhv8Z0D6IFwIuKwWCdGOKk4EahWH1PfxC
+         GyrBy1z5qKNVKk1P+1H7zSce8e1QWx1DzjMi75x6gB/RwGmfH65ORvAoll+a45elWHMy
+         0nef3kNLCdTc3CzHmqnaxjuoi6kX0zD6L6xS0QzzsOb9k9WHh18nxq7NyZ66qT42w/IC
+         8oGbS1uw3JoT8CsTtpOvjrT2DOuhYhyCkhbrD+Q9m1XZeAGT2aErKCbi+AZrvLWljt1m
+         pCSQ==
+X-Gm-Message-State: AOAM5312Aohvae/pDmyKjTXN8+IEo0rsjan6MPnAsCYPtcFmdpd+9ChZ
+        emNJemE31jjzVJpL7CUrtOWFCDtmx6x99K10/VIeAubF
+X-Google-Smtp-Source: ABdhPJzuQ5w8vJUJmuEhwHQdFXussH6ZxaD7IQN7I79SmHGY1SApbrFN4dXzkQEofrLH9WWoRGa6/i48et9dYypfBsE=
+X-Received: by 2002:a17:906:c156:: with SMTP id dp22mr381092ejc.283.1640227284164;
+ Wed, 22 Dec 2021 18:41:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211221022839.374606-1-yinxin.x@bytedance.com>
+In-Reply-To: <20211221022839.374606-1-yinxin.x@bytedance.com>
+From:   harshad shirwadkar <harshadshirwadkar@gmail.com>
+Date:   Wed, 22 Dec 2021 18:41:12 -0800
+Message-ID: <CAD+ocbzN9FODr5b-pNBJoCB82Gy=J6JLUEooMVqUfCPky-J0cA@mail.gmail.com>
+Subject: Re: [PATCH v2] ext4: fix fast commit may miss tracking range for FALLOC_FL_ZERO_RANGE
+To:     Xin Yin <yinxin.x@bytedance.com>
+Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+Looks good, thanks!
 
-We can't call kvfree() with a spin lock held, so defer it.
-Fixes: fc37a3b8b438 ("[PATCH] ipc sem: use kvmalloc for sem_undo 
-allocation")
+Reviewed-by: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
-changelog since v2:
-+ Fixes: fc37a3b8b438 ("[PATCH] ipc sem: use kvmalloc for sem_undo 
-+ allocation")
- ipc/sem.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/ipc/sem.c b/ipc/sem.c
-index 6693daf4fe11..0dbdb98fdf2d 100644
---- a/ipc/sem.c
-+++ b/ipc/sem.c
-@@ -1964,6 +1964,7 @@ static struct sem_undo *find_alloc_undo(struct ipc_namespace *ns, int semid)
- 	 */
- 	un = lookup_undo(ulp, semid);
- 	if (un) {
-+		spin_unlock(&ulp->lock);
- 		kvfree(new);
- 		goto success;
- 	}
-@@ -1976,9 +1977,8 @@ static struct sem_undo *find_alloc_undo(struct ipc_namespace *ns, int semid)
- 	ipc_assert_locked_object(&sma->sem_perm);
- 	list_add(&new->list_id, &sma->list_id);
- 	un = new;
--
--success:
- 	spin_unlock(&ulp->lock);
-+success:
- 	sem_unlock(sma, -1);
- out:
- 	return un;
--- 
-2.25.1
-
+On Mon, Dec 20, 2021 at 6:28 PM Xin Yin <yinxin.x@bytedance.com> wrote:
+>
+> when call falloc with FALLOC_FL_ZERO_RANGE, to set an range to unwritten,
+> which has been already initialized. If the range is align to blocksize,
+> fast commit will not track range for this change.
+>
+> Also track range for unwritten range in ext4_map_blocks().
+>
+> Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
+> ---
+> v2: change to track unwritten range in ext4_map_blocks()
+> ---
+>  fs/ext4/extents.c | 2 --
+>  fs/ext4/inode.c   | 7 ++++---
+>  2 files changed, 4 insertions(+), 5 deletions(-)
+>
+> diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+> index 9229ab1f99c5..6bce319f3bcd 100644
+> --- a/fs/ext4/extents.c
+> +++ b/fs/ext4/extents.c
+> @@ -4599,8 +4599,6 @@ static long ext4_zero_range(struct file *file, loff_t offset,
+>         ret = ext4_mark_inode_dirty(handle, inode);
+>         if (unlikely(ret))
+>                 goto out_handle;
+> -       ext4_fc_track_range(handle, inode, offset >> inode->i_sb->s_blocksize_bits,
+> -                       (offset + len - 1) >> inode->i_sb->s_blocksize_bits);
+>         /* Zero out partial block at the edges of the range */
+>         ret = ext4_zero_partial_blocks(handle, inode, offset, len);
+>         if (ret >= 0)
+> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+> index 0afab6d5c65b..47ad4b8cb503 100644
+> --- a/fs/ext4/inode.c
+> +++ b/fs/ext4/inode.c
+> @@ -741,10 +741,11 @@ int ext4_map_blocks(handle_t *handle, struct inode *inode,
+>                         if (ret)
+>                                 return ret;
+>                 }
+> -               ext4_fc_track_range(handle, inode, map->m_lblk,
+> -                           map->m_lblk + map->m_len - 1);
+>         }
+> -
+> +       if (retval > 0 && (map->m_flags & EXT4_MAP_UNWRITTEN ||
+> +                               map->m_flags & EXT4_MAP_MAPPED))
+> +               ext4_fc_track_range(handle, inode, map->m_lblk,
+> +                                       map->m_lblk + map->m_len - 1);
+>         if (retval < 0)
+>                 ext_debug(inode, "failed with err %d\n", retval);
+>         return retval;
+> --
+> 2.20.1
+>

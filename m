@@ -2,38 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2299147E709
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 18:31:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B510F47E711
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 18:31:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349608AbhLWRbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 12:31:22 -0500
-Received: from relmlor2.renesas.com ([210.160.252.172]:27593 "EHLO
+        id S1349718AbhLWRbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 12:31:40 -0500
+Received: from relmlor2.renesas.com ([210.160.252.172]:29810 "EHLO
         relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1349650AbhLWRbF (ORCPT
+        by vger.kernel.org with ESMTP id S1349598AbhLWRbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 12:31:05 -0500
+        Thu, 23 Dec 2021 12:31:07 -0500
 X-IronPort-AV: E=Sophos;i="5.88,230,1635174000"; 
-   d="scan'208";a="104983907"
+   d="scan'208";a="104983913"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 24 Dec 2021 02:31:03 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 24 Dec 2021 02:31:06 +0900
 Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 551B140C4DAD;
-        Fri, 24 Dec 2021 02:31:01 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 9ADFD40C4DB3;
+        Fri, 24 Dec 2021 02:31:04 +0900 (JST)
 From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     linux-media@vger.kernel.org,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+        =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         linux-renesas-soc@vger.kernel.org,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 10/13] media: exynos4-is: Use platform_get_irq() to get the interrupt
-Date:   Thu, 23 Dec 2021 17:30:11 +0000
-Message-Id: <20211223173015.22251-11-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 11/13] media: s5p-g2d: Use platform_get_irq() to get the interrupt
+Date:   Thu, 23 Dec 2021 17:30:12 +0000
+Message-Id: <20211223173015.22251-12-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211223173015.22251-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20211223173015.22251-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -52,80 +50,39 @@ code use platform_get_irq().
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
- drivers/media/platform/exynos4-is/fimc-core.c | 11 +++++------
- drivers/media/platform/exynos4-is/fimc-lite.c | 11 +++++------
- 2 files changed, 10 insertions(+), 12 deletions(-)
+ drivers/media/platform/s5p-g2d/g2d.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/platform/exynos4-is/fimc-core.c b/drivers/media/platform/exynos4-is/fimc-core.c
-index bfdee771cef9..91cc8d58a663 100644
---- a/drivers/media/platform/exynos4-is/fimc-core.c
-+++ b/drivers/media/platform/exynos4-is/fimc-core.c
-@@ -926,6 +926,7 @@ static int fimc_probe(struct platform_device *pdev)
- 	struct fimc_dev *fimc;
- 	struct resource *res;
+diff --git a/drivers/media/platform/s5p-g2d/g2d.c b/drivers/media/platform/s5p-g2d/g2d.c
+index fa0bb31bd2b9..dd8864779a7c 100644
+--- a/drivers/media/platform/s5p-g2d/g2d.c
++++ b/drivers/media/platform/s5p-g2d/g2d.c
+@@ -623,7 +623,6 @@ static int g2d_probe(struct platform_device *pdev)
+ {
+ 	struct g2d_dev *dev;
+ 	struct video_device *vfd;
+-	struct resource *res;
+ 	const struct of_device_id *of_id;
  	int ret = 0;
-+	int irq;
  
- 	fimc = devm_kzalloc(dev, sizeof(*fimc), GFP_KERNEL);
- 	if (!fimc)
-@@ -965,11 +966,9 @@ static int fimc_probe(struct platform_device *pdev)
- 	if (IS_ERR(fimc->regs))
- 		return PTR_ERR(fimc->regs);
+@@ -664,14 +663,11 @@ static int g2d_probe(struct platform_device *pdev)
+ 		goto put_clk_gate;
+ 	}
  
 -	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (res == NULL) {
--		dev_err(dev, "Failed to get IRQ resource\n");
--		return -ENXIO;
+-	if (!res) {
+-		dev_err(&pdev->dev, "failed to find IRQ\n");
+-		ret = -ENXIO;
++	ret = platform_get_irq(pdev, 0);
++	if (ret < 0)
+ 		goto unprep_clk_gate;
 -	}
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
  
- 	ret = fimc_clk_get(fimc);
- 	if (ret)
-@@ -986,7 +985,7 @@ static int fimc_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		return ret;
+-	dev->irq = res->start;
++	dev->irq = ret;
  
--	ret = devm_request_irq(dev, res->start, fimc_irq_handler,
-+	ret = devm_request_irq(dev, irq, fimc_irq_handler,
- 			       0, dev_name(dev), fimc);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to install irq (%d)\n", ret);
-diff --git a/drivers/media/platform/exynos4-is/fimc-lite.c b/drivers/media/platform/exynos4-is/fimc-lite.c
-index aaa3af0493ce..9b7cc9564cf1 100644
---- a/drivers/media/platform/exynos4-is/fimc-lite.c
-+++ b/drivers/media/platform/exynos4-is/fimc-lite.c
-@@ -1454,6 +1454,7 @@ static int fimc_lite_probe(struct platform_device *pdev)
- 	struct fimc_lite *fimc;
- 	struct resource *res;
- 	int ret;
-+	int irq;
- 
- 	if (!dev->of_node)
- 		return -ENODEV;
-@@ -1485,17 +1486,15 @@ static int fimc_lite_probe(struct platform_device *pdev)
- 	if (IS_ERR(fimc->regs))
- 		return PTR_ERR(fimc->regs);
- 
--	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (res == NULL) {
--		dev_err(dev, "Failed to get IRQ resource\n");
--		return -ENXIO;
--	}
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
- 
- 	ret = fimc_lite_clk_get(fimc);
- 	if (ret)
- 		return ret;
- 
--	ret = devm_request_irq(dev, res->start, flite_irq_handler,
-+	ret = devm_request_irq(dev, irq, flite_irq_handler,
- 			       0, dev_name(dev), fimc);
- 	if (ret) {
- 		dev_err(dev, "Failed to install irq (%d)\n", ret);
+ 	ret = devm_request_irq(&pdev->dev, dev->irq, g2d_isr,
+ 						0, pdev->name, dev);
 -- 
 2.17.1
 

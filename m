@@ -2,267 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15DC247DBB6
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 01:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3DF47DC10
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 01:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345627AbhLWAW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 19:22:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345560AbhLWAWs (ORCPT
+        id S235390AbhLWAf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 19:35:29 -0500
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:1817 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233413AbhLWAf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 19:22:48 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA888C061748;
-        Wed, 22 Dec 2021 16:22:47 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id n16so3055195plc.2;
-        Wed, 22 Dec 2021 16:22:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=B/4Rn7jIc8ftTpjbra5Wz6AYzDCXpGuGFG/j7apzAik=;
-        b=k6QCX/Ymv3gTQg74d/r3VQ8KxAJut/r/mMAyglcbQoosZaQOtfDT6jibnZznuXisXx
-         zjhLP4XTp7TkPoQhHJtwYy77zh23RYLDF47tTkwaOzxIl1D1iGvQO4ECpT92sMt46pNR
-         DoZ2q6nZs00ALvhjrsCJewcG86zxAZx/lwXJZrnIjgJcGhi3rx+CS68tIi7ucDmIHBNd
-         HM70noNpm5QVQQ9fv7YOPqQdQSPKgEmze6j44hRk4yfOsL2cbO5sCPA+6ltRPxdJEULT
-         /mMAo+u1iDHTZzTOohV5p4vWg5j93ip36gIwOLTidJTzPOJymoQJz6R/sOO2LeWihtYx
-         34Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=B/4Rn7jIc8ftTpjbra5Wz6AYzDCXpGuGFG/j7apzAik=;
-        b=ElyuoyD6W1erk+kw/jgx9oN+Iy4ojcfplFE1jWVZuSfHVSXvksMmF66wF5QCenbUZJ
-         RGrrK/b5H8WHN3xAkC4GCKE3kD+E7hmEZsmtNz3pRZVF9PN9TifPS5tMisAOXmkltVCd
-         76Sc3Gq4gbFHvefY0OPXqdYXgFT2444DfCgpxD0iRZ09AnBCkbT2uNGeY8QIc2QO0afT
-         vSc2ojNB8KAk9wAeISvhhV3ESgtnehZzDp7gA1XEARTotDT6AeGy2RBAAYBiynxXOmUt
-         VjuvohhUMFwyh7iBpv3zDaoNLKTfjfYWMMExxpONc4q2oQP+AMAHH3CiKwf9f8rQ17Jj
-         /1/g==
-X-Gm-Message-State: AOAM533GHIxkmwhk+SXwneqxmdPzP9wRXlh2zjRzYBCvtnq//Y5gXT4d
-        IrY580CnoNqjDDnMoguQYeo=
-X-Google-Smtp-Source: ABdhPJyzDrnhUwQuP4xuG3Evu4ES9qduMUAMVa3xWuELq7+dUMTbs70knDE5wWTvDMQDdRDuUjq/aw==
-X-Received: by 2002:a17:90b:314b:: with SMTP id ip11mr261023pjb.133.1640218967349;
-        Wed, 22 Dec 2021 16:22:47 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id e24sm6720703pjt.45.2021.12.22.16.22.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 16:22:46 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-mtd@lists.infradead.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Brian Norris <computersforpeace@gmail.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Colin Ian King <colin.king@intel.com>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-wireless@vger.kernel.org (open list:BROADCOM SPECIFIC AMBA DRIVER
-        (BCMA)),
-        bcm-kernel-feedback-list@broadcom.com (open list:BROADCOM STB NAND
-        FLASH DRIVER)
-Subject: [PATCH 9/9] mtd: rawnand: brcmnand: Add BCMA shim
-Date:   Wed, 22 Dec 2021 16:22:25 -0800
-Message-Id: <20211223002225.3738385-10-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211223002225.3738385-1-f.fainelli@gmail.com>
-References: <20211223002225.3738385-1-f.fainelli@gmail.com>
+        Wed, 22 Dec 2021 19:35:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1640219727; x=1671755727;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=FJoVc4dAwzd533OMIKZS9+1/T26+GvCBRtbTTG2MG3g=;
+  b=PHErUyB76Fv1NRUwiJa5Xfbm9r0q2dL5dA9vUW/6kNj3CPCECZqJ8IqS
+   eLAO0uRd40AqBbcooKVVigd3TKOxEkoPr6+ugZ2Fx7Nf50qiqUHtVRNT/
+   4ccs9ufBqtF8Mr9VdDjsEMIUdGkmmJ4P7D6+4Tzj7TdYKFx14Gk2SDMbF
+   kbs2p/dwr77sw37R/0YIRkFB+BtTXS4gTxjL04U2405OlQ56vWl8RF5AB
+   aT29G8hiQc6OfujdSzNMtJ77KeOWW8huxIZIlYp/pehkK/p/i1otQbKoG
+   cpdF9WKZnnPhjQaO6x4k5lgj0VU50Dchhkp1nS/vPn81sLXzwvN4SxjvE
+   A==;
+X-IronPort-AV: E=Sophos;i="5.88,228,1635177600"; 
+   d="scan'208";a="187873536"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 23 Dec 2021 08:35:27 +0800
+IronPort-SDR: h6pnkbaekqyztOOpKDko8cYeZBKO/R+My30sifgeKS2qWt57KwgfgIsU8O73PlducTOUxW+Z/j
+ T6/k5XiJrtY9UgdqZKyOwAHeLL4OPV09kCDZWxdIuRr9kY1UDOJw45sXjy+kOs8TE3EkDEBKmK
+ iEw9Xnr4dlN8oJB04N4OPd2eRcFl7lefaII7nbut2GICtfvFBEFi3I2tojma9QfenFT1Vz3eCY
+ iCoRPkuc2V+ZGE6r+8/ZCxB91tAgZ+NjvpHVorcv3YxjV8nS8q6w6C20EZl6WGdGcyFQ/L3Yn3
+ nAUz/wdsTH4cMn57/Q8Y2T+D
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:08:14 -0800
+IronPort-SDR: Yc9TfOGZdmtVYXrfG8fBGweR9e+zg9vK2rSdxUXZN3+0py2Vf8U266VJJ8g3S3eU+zhxHE8IS1
+ OMixxb7kTyQIiRLZ++dTvS7klR5CY3kiHEMjQwQF92gKxf13bTsPHVn7QvXIxExqRCgCif0PG2
+ ZX4h7l0EZWbL7W4w1tVG2WgFvbWSMVVFQQWHzVTlKH4fKYXcvZ1seRPDJ8M1HcqD4CeIoT/ovK
+ ORHf2XWeByiNQKP0EXB0pa1YBQxGqJ1ny5/jagq9MDIt92zo6kF4c1uNoSDx4NkYPW4xucEg7h
+ 0XU=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:35:28 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JKB731JcKz1Rwns
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 16:35:27 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1640219726; x=1642811727; bh=FJoVc4dAwzd533OMIKZS9+1/T26+GvCBRtb
+        TTG2MG3g=; b=B2nhR3cayhmNKO9nGybK/8FxEQDeMnII2cYvbb3R/Q6TrVLg8E0
+        xRkape75ud1R63ChmYQviHQaVqckRQ9oXjyppRuJnMduyFCxq6hUS9b/lzqxvyTT
+        gxHYJnN3zpondXbkjmDCdKFU8bWaJ1oJnMLjf1tkpDyB9dendjPdQ2dPv8xXqOdF
+        czAecT3P0dS+ILGBXwGHt22vyqSsjfS/lUBs42doNBXN+f1d3RVfrQZiBiM/W85E
+        jT2LH+H4C6o/pDCrDEoOJxyLByzp/uCp1rfLVsLU/wKQ/GL3c+rTthg/N1w9tP2o
+        Ok08b/e2o8HKeN94Yk89GfEypck7zVJ2o3g==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id n8pz_IJJ-KmQ for <linux-kernel@vger.kernel.org>;
+        Wed, 22 Dec 2021 16:35:26 -0800 (PST)
+Received: from [10.225.163.35] (unknown [10.225.163.35])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JKB7127BFz1RtVG;
+        Wed, 22 Dec 2021 16:35:25 -0800 (PST)
+Message-ID: <d851cdc5-78c6-ff35-979f-7aec71f3cb9b@opensource.wdc.com>
+Date:   Thu, 23 Dec 2021 09:35:23 +0900
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2 1/4] ata: pata_platform: make use of
+ platform_get_mem_or_io()
+Content-Language: en-US
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>, linux-ide@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+References: <20211221162614.25308-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211221162614.25308-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20211221162614.25308-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a BCMA shim to allow us to register the brcmnand driver using the
-BCMA bus which provides indirect memory mapped access to SoC registers.
+On 12/22/21 01:26, Lad Prabhakar wrote:
+> Make use of platform_get_mem_or_io() to simplify the code.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v1-->v2
+> * No change
+> ---
+>  drivers/ata/pata_platform.c | 18 ++++++------------
+>  1 file changed, 6 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/ata/pata_platform.c b/drivers/ata/pata_platform.c
+> index 028329428b75..cb3134bf88eb 100644
+> --- a/drivers/ata/pata_platform.c
+> +++ b/drivers/ata/pata_platform.c
+> @@ -198,22 +198,16 @@ static int pata_platform_probe(struct platform_device *pdev)
+>  	/*
+>  	 * Get the I/O base first
+>  	 */
+> -	io_res = platform_get_resource(pdev, IORESOURCE_IO, 0);
+> -	if (io_res == NULL) {
+> -		io_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -		if (unlikely(io_res == NULL))
+> -			return -EINVAL;
+> -	}
+> +	io_res = platform_get_mem_or_io(pdev, 0);
+> +	if (unlikely(!io_res))
 
-There are a number of registers that need to be byte swapped because
-they are natively big endian, coming directly from the NAND chip, and
-there is no bus interface unlike the iProc or STB platforms that
-performs the byte swapping for us.
+This is not the hot path, so I do not think that the unlikely() is
+necessary here.
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/mtd/nand/raw/Kconfig              |  11 ++
- drivers/mtd/nand/raw/brcmnand/Makefile    |   2 +
- drivers/mtd/nand/raw/brcmnand/bcma_nand.c | 131 ++++++++++++++++++++++
- 3 files changed, 144 insertions(+)
- create mode 100644 drivers/mtd/nand/raw/brcmnand/bcma_nand.c
+> +		return -EINVAL;
+>  
+>  	/*
+>  	 * Then the CTL base
+>  	 */
+> -	ctl_res = platform_get_resource(pdev, IORESOURCE_IO, 1);
+> -	if (ctl_res == NULL) {
+> -		ctl_res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> -		if (unlikely(ctl_res == NULL))
+> -			return -EINVAL;
+> -	}
+> +	ctl_res = platform_get_mem_or_io(pdev, 1);
+> +	if (unlikely(!ctl_res))
 
-diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
-index 0a45d3c6c15b..f643e02e5559 100644
---- a/drivers/mtd/nand/raw/Kconfig
-+++ b/drivers/mtd/nand/raw/Kconfig
-@@ -208,6 +208,17 @@ config MTD_NAND_BRCMNAND
- 	  originally designed for Set-Top Box but is used on various BCM7xxx,
- 	  BCM3xxx, BCM63xxx, iProc/Cygnus and more.
- 
-+if MTD_NAND_BRCMNAND
-+
-+config MTD_NAND_BRCMNAND_BCMA
-+	tristate "Broadcom BCMA NAND controller"
-+	depends on BCMA_NFLASH
-+	depends on BCMA
-+	help
-+	  Enables the BRCMNAND controller over BCMA on BCM47186/BCM5358 SoCs.
-+
-+endif # MTD_NAND_BRCMNAND
-+
- config MTD_NAND_BCM47XXNFLASH
- 	tristate "BCM4706 BCMA NAND controller"
- 	depends on BCMA_NFLASH
-diff --git a/drivers/mtd/nand/raw/brcmnand/Makefile b/drivers/mtd/nand/raw/brcmnand/Makefile
-index 195b845e48b8..16dc7254200e 100644
---- a/drivers/mtd/nand/raw/brcmnand/Makefile
-+++ b/drivers/mtd/nand/raw/brcmnand/Makefile
-@@ -6,3 +6,5 @@ obj-$(CONFIG_MTD_NAND_BRCMNAND)		+= bcm63138_nand.o
- obj-$(CONFIG_MTD_NAND_BRCMNAND)		+= bcm6368_nand.o
- obj-$(CONFIG_MTD_NAND_BRCMNAND)		+= brcmstb_nand.o
- obj-$(CONFIG_MTD_NAND_BRCMNAND)		+= brcmnand.o
-+
-+obj-$(CONFIG_MTD_NAND_BRCMNAND_BCMA)	+= bcma_nand.o
-diff --git a/drivers/mtd/nand/raw/brcmnand/bcma_nand.c b/drivers/mtd/nand/raw/brcmnand/bcma_nand.c
-new file mode 100644
-index 000000000000..e3be9ecf0761
---- /dev/null
-+++ b/drivers/mtd/nand/raw/brcmnand/bcma_nand.c
-@@ -0,0 +1,131 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright © 2021 Broadcom
-+ */
-+#include <linux/bcma/bcma.h>
-+#include <linux/bcma/bcma_driver_chipcommon.h>
-+#include <linux/device.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_device.h>
-+
-+#include "brcmnand.h"
-+
-+struct brcmnand_bcma_soc {
-+	struct brcmnand_soc soc;
-+	struct bcma_drv_cc *cc;
-+};
-+
-+static inline bool brcmnand_bcma_needs_swapping(u32 offset)
-+{
-+	switch (offset) {
-+	case BCMA_CC_NAND_SPARE_RD0:
-+	case BCMA_CC_NAND_SPARE_RD4:
-+	case BCMA_CC_NAND_SPARE_RD8:
-+	case BCMA_CC_NAND_SPARE_RD12:
-+	case BCMA_CC_NAND_SPARE_WR0:
-+	case BCMA_CC_NAND_SPARE_WR4:
-+	case BCMA_CC_NAND_SPARE_WR8:
-+	case BCMA_CC_NAND_SPARE_WR12:
-+	case BCMA_CC_NAND_DEVID:
-+	case BCMA_CC_NAND_DEVID_X:
-+	case BCMA_CC_NAND_SPARE_RD16:
-+	case BCMA_CC_NAND_SPARE_RD20:
-+	case BCMA_CC_NAND_SPARE_RD24:
-+	case BCMA_CC_NAND_SPARE_RD28:
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+static u32 brcmnand_bcma_read_reg(struct brcmnand_soc *soc, u32 offset)
-+{
-+	struct brcmnand_bcma_soc *sc;
-+	u32 val;
-+
-+	sc = container_of(soc, struct brcmnand_bcma_soc, soc);
-+
-+	/* Offset into the NAND block and deal with the flash cache separately */
-+	if (offset == ~0)
-+		offset = BCMA_CC_NAND_CACHE_DATA;
-+	else
-+		offset += BCMA_CC_NAND_REVISION;
-+
-+	val = bcma_cc_read32(sc->cc, offset);
-+
-+	/* Swap if necessary */
-+	if (brcmnand_bcma_needs_swapping(offset))
-+		val = be32_to_cpu(val);
-+	return val;
-+}
-+
-+static void brcmnand_bcma_write_reg(struct brcmnand_soc *soc, u32 val,
-+				    u32 offset)
-+{
-+	struct brcmnand_bcma_soc *sc;
-+
-+	sc = container_of(soc, struct brcmnand_bcma_soc, soc);
-+
-+	/* Offset into the NAND block */
-+	if (offset == ~0)
-+		offset = BCMA_CC_NAND_CACHE_DATA;
-+	else
-+		offset += BCMA_CC_NAND_REVISION;
-+
-+	/* Swap if necessary */
-+	if (brcmnand_bcma_needs_swapping(offset))
-+		val = cpu_to_be32(val);
-+
-+	bcma_cc_write32(sc->cc, offset, val);
-+}
-+
-+static struct brcmnand_io_ops brcmnand_bcma_io_ops = {
-+	.read_reg	= brcmnand_bcma_read_reg,
-+	.write_reg	= brcmnand_bcma_write_reg,
-+};
-+
-+static void brcmnand_bcma_prepare_data_bus(struct brcmnand_soc *soc, bool prepare,
-+					   bool is_param)
-+{
-+	struct brcmnand_bcma_soc *sc;
-+
-+	sc = container_of(soc, struct brcmnand_bcma_soc, soc);
-+
-+	bcma_cc_write32(sc->cc, BCMA_CC_NAND_CACHE_ADDR, 0);
-+}
-+
-+static int brcmnand_bcma_nand_probe(struct platform_device *pdev)
-+{
-+	struct bcma_nflash *nflash = dev_get_platdata(&pdev->dev);
-+	struct brcmnand_bcma_soc *soc;
-+
-+	soc = devm_kzalloc(&pdev->dev, sizeof(*soc), GFP_KERNEL);
-+	if (!soc)
-+		return -ENOMEM;
-+
-+	soc->cc = container_of(nflash, struct bcma_drv_cc, nflash);
-+	soc->soc.prepare_data_bus = brcmnand_bcma_prepare_data_bus;
-+	soc->soc.ops = &brcmnand_bcma_io_ops;
-+
-+	if (soc->cc->core->bus->chipinfo.id == BCMA_CHIP_ID_BCM4706) {
-+		dev_err(&pdev->dev, "Use bcm47xxnflash for 4706!\n");
-+		return -ENODEV;
-+	}
-+
-+	return brcmnand_probe(pdev, &soc->soc);
-+}
-+
-+static struct platform_driver brcmnand_bcma_nand_driver = {
-+	.probe			= brcmnand_bcma_nand_probe,
-+	.remove			= brcmnand_remove,
-+	.driver = {
-+		.name		= "bcma_brcmnand",
-+		.pm		= &brcmnand_pm_ops,
-+	}
-+};
-+module_platform_driver(brcmnand_bcma_nand_driver);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_AUTHOR("Braodcom");
-+MODULE_DESCRIPTION("NAND driver for BCMA chips");
+Same comment here.
+
+> +		return -EINVAL;
+>  
+>  	/*
+>  	 * And the IRQ
+
+
 -- 
-2.25.1
-
+Damien Le Moal
+Western Digital Research

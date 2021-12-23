@@ -2,60 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E291447E687
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 17:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA44A47E68B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 17:56:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349316AbhLWQrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 11:47:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233591AbhLWQrF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 11:47:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3388C061401;
-        Thu, 23 Dec 2021 08:47:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6330461E67;
-        Thu, 23 Dec 2021 16:47:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5215AC36AE5;
-        Thu, 23 Dec 2021 16:47:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640278023;
-        bh=Erp7JrQTEj22ZBoCVLb6jekKYLXMsaNkCl9Ck641gGE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=T+3js6b5lliyZxy4IkdhgSR3j95koElW6JZ3sZBGAg2yxf+MzmB+h6EgGEGMnGOFh
-         t3soLXcNwP9KENxEdJFr7761jHPKhtBczFTWGf6DCtrwEXrhDCvJVhz+G8OuwDN1/L
-         SV9NCxXGh2wqyCEiO0DMGFqaCAIfxgCADYctW30U7pwmRFle5nAsZU7eQt6ujB9mJc
-         YHwYBnR1r0nQQCX1uSFZR3UYXHuMTezgRBtrN0Rv3X8s7ktqOA75RxpW8QxvjF0TB5
-         uB9LFqB+oa22JQwzP2qwBYQQW4ud/hRTafBLgocnC98J8wrBGrHbs4GEY+AmTZBHfo
-         XS86fg4uDbYGA==
-Date:   Thu, 23 Dec 2021 08:47:02 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     cgel.zte@gmail.com
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        prestwoj@gmail.com, xu.xin16@zte.com.cn, zxu@linkedin.com,
-        praveen5582@gmail.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH net-next] ipv4: delete sysctls about routing cache
-Message-ID: <20211223084702.51d09c08@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20211223122010.569553-1-xu.xin16@zte.com.cn>
-References: <20211223122010.569553-1-xu.xin16@zte.com.cn>
+        id S1349299AbhLWQzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 11:55:47 -0500
+Received: from mga18.intel.com ([134.134.136.126]:43909 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233597AbhLWQzr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 11:55:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640278546; x=1671814546;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EIbGWKBabvxgEfOoZhx/EGM4lcrtAH/4qkhaNcy2FQw=;
+  b=WkcEliI50bienu6tayXsGcwFpYbQdx8RcvIi18RrmBN7JXwkYEXsgyDS
+   VairJdQGHjcXqHlWudNTKY2QLpCVVPirvFulz+vivwmHSArLWINq8tCVf
+   kBmDqina3calps0+RE0h3JHtUgmYwNqPYoMoa/cklsKHLq0UAT4GXIUFR
+   GHgA6qzAv+1BbfwXXonXF0zoZ3xfu7UdUjPGM5AxIy4SU3hzj1adDLx2Q
+   C8VeXwS1JcQjJpVnhVw/hiQJm6KShDtrRr/SK8Z3FbiNNDCVn8Rf3FYLc
+   V67OSKL0AoO1MAWl27ZS7g3JMoCJhLvr3JyDYOhCRtvrKNEKTva8m1RbF
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10207"; a="227696606"
+X-IronPort-AV: E=Sophos;i="5.88,230,1635231600"; 
+   d="scan'208";a="227696606"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 08:55:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,230,1635231600"; 
+   d="scan'208";a="759207328"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 23 Dec 2021 08:55:40 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 471A8125; Thu, 23 Dec 2021 18:55:49 +0200 (EET)
+Date:   Thu, 23 Dec 2021 19:55:48 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/26] x86/tdx: Add __tdx_module_call() and
+ __tdx_hypercall() helper functions
+Message-ID: <20211223165548.xr57h25g4diixivp@black.fi.intel.com>
+References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
+ <20211214150304.62613-4-kirill.shutemov@linux.intel.com>
+ <YcIm8fngUsVulUoI@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YcIm8fngUsVulUoI@zn.tnic>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Dec 2021 12:20:10 +0000 cgel.zte@gmail.com wrote:
-> From: xu xin <xu.xin16@zte.com.cn>
+On Tue, Dec 21, 2021 at 08:11:45PM +0100, Borislav Petkov wrote:
+> On Tue, Dec 14, 2021 at 06:02:41PM +0300, Kirill A. Shutemov wrote:
+> > From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> > 
+> > Guests communicate with VMMs with hypercalls. Historically, these
+> > are implemented using instructions that are known to cause VMEXITs
+> > like VMCALL, VMLAUNCH, etc. However, with TDX, VMEXITs no longer
+> > expose the guest state to the host. This prevents the old hypercall
+> > mechanisms from working. So, to communicate with VMM, TDX
+> > specification defines a new instruction called TDCALL.
+> > 
+> > In a TDX based VM, since the VMM is an untrusted entity, an intermediary
+> > layer (TDX module) exists in the CPU to facilitate secure communication
 > 
-> Since routing cache in ipv4 has been deleted in 2012, the sysctls about
-> it are useless.
+> in the CPU?!
+> 
+> I think you wanna say, "it is loaded like a firmware into a special CPU
+> mode called SEAM..." or so.
 
-Search for those on GitHub. Useless or not, there is software which
-expects those files to exist and which may break if they disappear.
-That's why they were left in place.
+What about this?
+
+	In a TDX based VM, since the VMM is an untrusted entity, an intermediary
+	layer -- TDX module -- facilitates secure communication between the host
+	and the guest. TDX module is loaded like a firmware into a special CPU
+	mode called SEAM. TDX guests communicate with the TDX module using the
+	TDCALL instruction.
+
+Does it look fine?
+
+> > (using the TDCALL instruction).
+> > 
+> > __tdx_hypercall()    - Used by the guest to request services from the
+> > 		       VMM (via TDVMCALL).
+> > __tdx_module_call()  - Used to communicate with the TDX Module (via
+> > 		       TDCALL).
+> 
+> "module". No need to capitalize every word like in CPU manuals.
+
+Okay, I will change it globally over the whole patchset.
+
+> > Originally-by: Sean Christopherson <seanjc@google.com>
+> 
+> Just state that in free text in the commit message:
+> 
+> "Based on a previous patch by Sean... "
+
+Okay.
+
+> > +	/*
+> > +	 * Since this function can be initiated without an output pointer,
+> > +	 * check if caller provided an output struct before storing
+> > +	 * output registers.
+> > +	 */
+> > +	test %r12, %r12
+> > +	jz mcall_done
+> 
+> All those local label names need to be prefixed with .L so that they
+> don't appear in the vmlinux symbol table unnecessarily:
+> 
+> 	jz .Lno_output_struct
+
+Ah, okay. I did not know about special treatment for .L labels.
+Again, will check whole patchset.
+
+-- 
+ Kirill A. Shutemov

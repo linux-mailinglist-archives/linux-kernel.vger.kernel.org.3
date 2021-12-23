@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EBB147DFE6
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 08:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 053D847DFE7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 08:50:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347463AbhLWHtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 02:49:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
+        id S1347573AbhLWHt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 02:49:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347361AbhLWHsQ (ORCPT
+        with ESMTP id S1347223AbhLWHsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 02:48:16 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEE7C0698CB
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 23:48:03 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id j18-20020a258152000000b006000d292a42so8800455ybm.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 23:48:03 -0800 (PST)
+        Thu, 23 Dec 2021 02:48:17 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7070C0698D1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 23:48:05 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id d205-20020a251dd6000000b0060977416ad4so8519191ybd.16
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 23:48:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=0+jllfj9qKTtJn62Mv0xaycKEmjVjVqlWS+UU/ykrAI=;
-        b=VS1sJ5HaFNgLWNjQYGVO1AtJP7sYCg/muV4bWo4w9PU1mXOnMoE2wy2OOHSPptpn2e
-         8LBFCDKZ4EjtqSPtym/k8DfExCgIcaZ64yNjXn0dfjp1nOoiQzswq3FYIS8MOteOJGtE
-         yCaOybVqwP/dg7QKAKb3xVJjcmqSEbX+9Z8BQo1GizOG3xz0MQcHMis3c6tTiCb2f7Mo
-         4Kl5OgK9mi4fV0xNjFYNcncF/iQVH2cpuZkxSN7Y1P9B9h8HjRvr9mZJh4G2bhe+boat
-         m5W3RIosFUHAC9q0KNgBYT3dMEzl6qtVOwXxTHw1OiUyFsBO1JEfQJtUP/oSiOmpojl7
-         TIfQ==
+        bh=8dsbS5qNAaZwjjgso/tH43ZBCOZXMegiAB2IxZGAtxY=;
+        b=PQhAtMAARGULqWwBTpXr3yXhs2ODyw/ITTTon4PBCLboBEqbgmDaHbmw4c6nePmtTs
+         uAGCVnve4qdC3HB0ycP8Ffwg3laRq/3wRwQLITuj/NM6ljjzWyV2PuZsqKjsoKC7P0vV
+         CxBdrtKujfQ5fKSG12PNfMvK51kmg7PJKeTxB2Hem9rrLzH2ujPUhnK3mh6yxmxEsRBt
+         nJSUpYWHia6Jmf9ZYIq1Q4OHllCwz39+BFSwFa6deXzEI6bD2zJdbCJbhwaJNV7xH/7D
+         1AQmqj0XFlL3Nzie5Ah66Swk9U5RR578skOC784re3hCuU1+PSmz32lI/J8gkXrBWiRr
+         HBSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=0+jllfj9qKTtJn62Mv0xaycKEmjVjVqlWS+UU/ykrAI=;
-        b=dxX9Gqbm18TghQl1RGB8AGvWPQps667pwOCetv3DvkMCmix7L8aQsPzQ6q8upH8cXG
-         0eXAwSue7mzbPg7eNKAMl094sVPeTW3//0qobgah4jVkoFIlGWWT0If6E6W1duSUoz8L
-         5UPur+5GlTza5lGBbyCelFRZYU30SAM1b7PHCTmqysQyN99mzriKhZSNOkyK/7tIj29x
-         hPM4oces0UZ1TDls7m0QE7g01P3lMvmU75ghJfgIZ1WXHIjjNEDaX3ryf023VbNM++DN
-         zA8d4a1SdrX3GxD2iyL+3SPINlM/gsx5n4XEUsNsHhwvyMFLdqNo0RL3HVAvgTGmqZ3B
-         1vpA==
-X-Gm-Message-State: AOAM533RC4Yf1GzY3s5q1awYl5Cu5f3o86Hp8Ojg+X2QfPc60RcZv1Jw
-        v7Rj9DEOg7I46xygI8KOEQA4YT5q7RVz
-X-Google-Smtp-Source: ABdhPJw1XvXrCrCmgw8Tk2gnaSSb4wGPW7JXEGtNiZ5hS4rNdk0qW6Y2vLin1IHozUlivVvyHQGwrvdHCPkX
+        bh=8dsbS5qNAaZwjjgso/tH43ZBCOZXMegiAB2IxZGAtxY=;
+        b=5oVY5rcxvur8nWjNjQ5vxZqxAxS1C/MtcC2L934yxZ/754ucicucGdFuqZSdFQQb5a
+         DHdnhPDkBs60OaPw94X9M/AsQZ+Ukexn6Sf/QnHsxlf1awRM+DOdh50Jt1n8wz5q8xu5
+         zUrcz8DKPiTlTBixCccq/rmzz0kSzSRyazu/QrJThVYigCCAvM60gAqb0TLvfXFjJpat
+         88nOIAKwDHAeUanC6mnpRhN6GGMC4FSfaoEQH1WlxUHHwpnDjvJlbRSwjSQwmIaZeiwj
+         DrRMghdC3i7bpXirlM1hYx0Ge6Pwdzygbt371Y51lZIbfF8nOpntatKxY2OeRf0bNXV5
+         fuUA==
+X-Gm-Message-State: AOAM533wCqD8VOFz8grTZfWaDukCzWZ6t7dbt3b8cOZAN4yBC2NY7qZo
+        gQ80mEE5bGM0JizXxeouHRHuauR6o5EY
+X-Google-Smtp-Source: ABdhPJzWqsoRQMCzJi9y2FpN5S2sgEEMwklh3mJKbN+pS1OAmbSTCoL/av3GIvKVh+8AzLIV6l2ui3xlohJr
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:4fef:90ff:589d:24ca])
- (user=irogers job=sendgmr) by 2002:a25:2c4d:: with SMTP id
- s74mr1589032ybs.171.1640245682584; Wed, 22 Dec 2021 23:48:02 -0800 (PST)
-Date:   Wed, 22 Dec 2021 23:45:38 -0800
+ (user=irogers job=sendgmr) by 2002:a25:d743:: with SMTP id
+ o64mr1575188ybg.81.1640245685068; Wed, 22 Dec 2021 23:48:05 -0800 (PST)
+Date:   Wed, 22 Dec 2021 23:45:39 -0800
 In-Reply-To: <20211223074541.3318938-1-irogers@google.com>
-Message-Id: <20211223074541.3318938-46-irogers@google.com>
+Message-Id: <20211223074541.3318938-47-irogers@google.com>
 Mime-Version: 1.0
 References: <20211223074541.3318938-1-irogers@google.com>
 X-Mailer: git-send-email 2.34.1.307.g9b7440fafd-goog
-Subject: [PATCH v2 45/48] perf c2c: Use more intention revealing iterator
+Subject: [PATCH v2 46/48] perf script: Fix flipped index and cpu
 From:   Ian Rogers <irogers@google.com>
 To:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
@@ -79,44 +79,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use perf_cpu_map__for_each_cpu in setup_nodes.
+perf_counts are accessed by the densely packed index.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-c2c.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ tools/perf/builtin-script.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
-index b5c67ef73862..ad1fbeafc93d 100644
---- a/tools/perf/builtin-c2c.c
-+++ b/tools/perf/builtin-c2c.c
-@@ -2015,7 +2015,7 @@ static int setup_nodes(struct perf_session *session)
- {
- 	struct numa_node *n;
- 	unsigned long **nodes;
--	int node, cpu;
-+	int node, cpu, idx;
- 	int *cpu2node;
+diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+index af06fe1271cc..de4af7af34c8 100644
+--- a/tools/perf/builtin-script.c
++++ b/tools/perf/builtin-script.c
+@@ -2129,7 +2129,7 @@ static void __process_stat(struct evsel *counter, u64 tstamp)
+ 		perf_cpu_map__for_each_cpu(cpu, idx, evsel__cpus(counter)) {
+ 			struct perf_counts_values *counts;
  
- 	if (c2c.node_info > 2)
-@@ -2057,13 +2057,13 @@ static int setup_nodes(struct perf_session *session)
- 		if (perf_cpu_map__empty(map))
- 			continue;
+-			counts = perf_counts(counter->counts, cpu, thread);
++			counts = perf_counts(counter->counts, idx, thread);
  
--		for (cpu = 0; cpu < map->nr; cpu++) {
--			set_bit(map->map[cpu], set);
-+		perf_cpu_map__for_each_cpu(cpu, idx, map) {
-+			set_bit(cpu, set);
- 
--			if (WARN_ONCE(cpu2node[map->map[cpu]] != -1, "node/cpu topology bug"))
-+			if (WARN_ONCE(cpu2node[cpu] != -1, "node/cpu topology bug"))
- 				return -EINVAL;
- 
--			cpu2node[map->map[cpu]] = node;
-+			cpu2node[cpu] = node;
- 		}
- 	}
- 
+ 			printf("%3d %8d %15" PRIu64 " %15" PRIu64 " %15" PRIu64 " %15" PRIu64 " %s\n",
+ 				cpu,
 -- 
 2.34.1.307.g9b7440fafd-goog
 

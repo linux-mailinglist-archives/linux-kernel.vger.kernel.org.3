@@ -2,94 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 664A847E382
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4247E47E387
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348508AbhLWMdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 07:33:00 -0500
-Received: from smtp23.cstnet.cn ([159.226.251.23]:47584 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1348490AbhLWMcv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 07:32:51 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowAAnLy9gbMRh4h1oBA--.49853S2;
-        Thu, 23 Dec 2021 20:32:33 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     andy.shevchenko@gmail.com, davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] drivers: net: smc911x: Check for error irq
-Date:   Thu, 23 Dec 2021 20:32:32 +0800
-Message-Id: <20211223123232.1353785-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S243699AbhLWMdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 07:33:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48268 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348289AbhLWMdi (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 07:33:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02632C06175E;
+        Thu, 23 Dec 2021 04:33:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F1C961E7E;
+        Thu, 23 Dec 2021 12:33:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C1D8C36AE9;
+        Thu, 23 Dec 2021 12:33:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640262815;
+        bh=9dtIDUIeaOL1iIFajBw4lij0XHvFv4zAoRx3F2P0ROo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=myDr0vL981wkE2hdzlfZwkQ6xFz3iLUabhfD9eYczeFYpP8IhDK/u7FYnEXxAPJea
+         jTmUByZgGzypsdUgEUMBf+CdMLJ0d1MWDBGH6S8qHVb/2aEQeiAE6rPtfGlrz/6y4M
+         33j6FLv9cQfAUwNaQlHnYtV/U61rejMN4V0eyhI4mcPDVRp30m008ngkoRBNXAkiTz
+         Jw6vA73hco5yk2zwvaoktwhg//Zx8WEhozoSH+FUopo54bTqZtzEy4TAgx6JT5fbEh
+         eKiIjPrtZMLLo5cxUun453mE7r3kfjMy+KgBYdZPLhqQOlo/xMV/EWYnUbLWvsQseB
+         7Z7M8RpV1Hgpw==
+From:   Georgi Djakov <djakov@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        djakov@kernel.org
+Subject: [GIT PULL] interconnect changes for 5.17
+Date:   Thu, 23 Dec 2021 14:33:34 +0200
+Message-Id: <20211223123334.22485-1-djakov@kernel.org>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowAAnLy9gbMRh4h1oBA--.49853S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zr15Kr48KrWktw4UJr1fJFb_yoW8JFWfpw
-        48Kayxurs7Ka40gFZrJw18ua98AasFqryxGFW7KayfZ3s8trnxJryktFWjkF1DJrZ8tw4a
-        vr45ZrWfAFn8Z3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW5JwCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUr8nnUUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday, December 23, 2021, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> Do other way around.
-> ret = ...
-> if (ret < 0)
->   ...
-> irq = ret;
+Hello Greg,
 
-This version I correct the patch by using error variable, too.
-And the commit message is as follow.
+This is the pull request with interconnect changes for the 5.17-rc1 merge
+window. The highlight are drivers for 4 new platforms. The details are in
+the signed tag.
 
-Because platform_get_irq() could fail and return error irq.
-Therefore, it might be better to check it in order to avoid the use of
-error irq.
+All patches have been in linux-next for more than a week. No issues have
+been reported so far. Please pull into char-misc-next.
 
-Fixes: ae150435b59e ("smsc: Move the SMC (SMSC) drivers")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changlog:
+Thanks,
+Georgi
 
-v1 -> v2
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
-*Change 1. Using error varaible to check.
----
- drivers/net/ethernet/smsc/smc911x.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 
-diff --git a/drivers/net/ethernet/smsc/smc911x.c b/drivers/net/ethernet/smsc/smc911x.c
-index 22cdbf12c823..9470d9c07fed 100644
---- a/drivers/net/ethernet/smsc/smc911x.c
-+++ b/drivers/net/ethernet/smsc/smc911x.c
-@@ -2069,7 +2069,12 @@ static int smc911x_drv_probe(struct platform_device *pdev)
- 	SET_NETDEV_DEV(ndev, &pdev->dev);
- 
- 	ndev->dma = (unsigned char)-1;
--	ndev->irq = platform_get_irq(pdev, 0);
-+
-+	ret = platform_get_irq(pdev, 0);
-+	if (ret < 0)
-+		goto release_both;
-+	ndev->irq = ret;
-+
- 	lp = netdev_priv(ndev);
- 	lp->netdev = ndev;
- #ifdef SMC_DYNAMIC_BUS_CONFIG
--- 
-2.25.1
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-5.17-rc1
+
+for you to fetch changes up to 01f8938ad036e97802551ea3746fbc5fdc091de6:
+
+  Merge branch 'icc-qcm2290' into icc-next (2021-12-15 07:14:27 +0200)
+
+----------------------------------------------------------------
+interconnect changes for 5.17
+
+Here are the interconnect changes for the 5.17-rc1 merge window
+consisting of new drivers, minor changes and fixes.
+
+New drivers:
+ - New driver for MSM8996 platforms
+ - New driver for SC7280 EPSS L3 hardware
+ - New driver for QCM2290 platforms
+ - New driver for SM8450 platforms
+
+Driver changes:
+ - dt-bindings: interconnect: Combine SDM660 bindings into RPM schema
+ - icc-rpm: Add support for bus power domain
+ - icc-rpm: Use NOC_QOS_MODE_INVALID for qos_mode check
+ - icc-rpm: Define ICC device type
+ - icc-rpm: Add QNOC type QoS support
+ - icc-rpm: Support child NoC device probe
+ - icc-rpm: Prevent integer overflow in rate
+ - icc-rpmh: Add BCMs to commit list in pre_aggregate
+
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
+
+----------------------------------------------------------------
+Georgi Djakov (4):
+      Merge branch 'icc-msm8996' into icc-next
+      Merge branch 'icc-sc7280' into icc-next
+      Merge branch 'icc-sm8450' into icc-next
+      Merge branch 'icc-qcm2290' into icc-next
+
+Mike Tipton (1):
+      interconnect: qcom: icc-rpmh: Add BCMs to commit list in pre_aggregate
+
+Odelu Kukatla (2):
+      dt-bindings: interconnect: Add EPSS L3 DT binding on SC7280
+      interconnect: qcom: Add EPSS L3 support on SC7280
+
+Shawn Guo (6):
+      interconnect: icc-rpm: Use NOC_QOS_MODE_INVALID for qos_mode check
+      interconnect: icc-rpm: Define ICC device type
+      interconnect: icc-rpm: Add QNOC type QoS support
+      interconnect: icc-rpm: Support child NoC device probe
+      dt-bindings: interconnect: Add Qualcomm QCM2290 NoC support
+      interconnect: qcom: Add QCM2290 driver support
+
+Stephan Gerhold (1):
+      interconnect: qcom: rpm: Prevent integer overflow in rate
+
+Vinod Koul (2):
+      dt-bindings: interconnect: Add Qualcomm SM8450 DT bindings
+      interconnect: qcom: Add SM8450 interconnect provider driver
+
+Yassine Oudjana (4):
+      dt-bindings: interconnect: Combine SDM660 bindings into RPM schema
+      interconnect: icc-rpm: Add support for bus power domain
+      dt-bindings: interconnect: Add Qualcomm MSM8996 DT bindings
+      interconnect: qcom: Add MSM8996 interconnect provider driver
+
+ .../devicetree/bindings/interconnect/qcom,osm-l3.yaml          |    1 +
+ .../devicetree/bindings/interconnect/qcom,qcm2290.yaml         |  137 +
+ Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml   |  143 +-
+ Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml  |   11 +
+ .../devicetree/bindings/interconnect/qcom,sdm660.yaml          |  185 -
+ drivers/interconnect/qcom/Kconfig                              |   27 +
+ drivers/interconnect/qcom/Makefile                             |    6 +
+ drivers/interconnect/qcom/icc-rpm.c                            |   64 +-
+ drivers/interconnect/qcom/icc-rpm.h                            |   15 +-
+ drivers/interconnect/qcom/icc-rpmh.c                           |   10 +-
+ drivers/interconnect/qcom/msm8916.c                            |    4 +-
+ drivers/interconnect/qcom/msm8939.c                            |    5 +-
+ drivers/interconnect/qcom/msm8996.c                            | 2110 ++++++++
+ drivers/interconnect/qcom/msm8996.h                            |  149 +
+ drivers/interconnect/qcom/osm-l3.c                             |   20 +-
+ drivers/interconnect/qcom/qcm2290.c                            | 1363 +++++
+ drivers/interconnect/qcom/sc7280.h                             |    2 +
+ drivers/interconnect/qcom/sdm660.c                             |    7 +-
+ drivers/interconnect/qcom/sm8150.c                             |    1 -
+ drivers/interconnect/qcom/sm8250.c                             |    1 -
+ drivers/interconnect/qcom/sm8350.c                             |    1 -
+ drivers/interconnect/qcom/sm8450.c                             | 1987 +++++++
+ drivers/interconnect/qcom/sm8450.h                             |  169 +
+ include/dt-bindings/interconnect/qcom,msm8996.h                |  163 +
+ include/dt-bindings/interconnect/qcom,qcm2290.h                |   94 +
+ include/dt-bindings/interconnect/qcom,sm8450.h                 |  171 +
+ 26 files changed, 6632 insertions(+), 214 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcm2290.yaml
+ delete mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm660.yaml
+ create mode 100644 drivers/interconnect/qcom/msm8996.c
+ create mode 100644 drivers/interconnect/qcom/msm8996.h
+ create mode 100644 drivers/interconnect/qcom/qcm2290.c
+ create mode 100644 drivers/interconnect/qcom/sm8450.c
+ create mode 100644 drivers/interconnect/qcom/sm8450.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,msm8996.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,qcm2290.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sm8450.h

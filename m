@@ -2,85 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E742447E3AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:44:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A3E47E3AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:44:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348291AbhLWMoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 07:44:07 -0500
-Received: from smtp23.cstnet.cn ([159.226.251.23]:49512 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233015AbhLWMoG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 07:44:06 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowAAnLy8Bb8RhZVpoBA--.50184S2;
-        Thu, 23 Dec 2021 20:43:46 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     andy.shevchenko@gmail.com, davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v3] drivers: net: smc911x: Check for error irq
-Date:   Thu, 23 Dec 2021 20:43:45 +0800
-Message-Id: <20211223124345.1400194-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1348384AbhLWMoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 07:44:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51080 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233015AbhLWMog (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 07:44:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE247C061401
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 04:44:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E62961E56
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 12:44:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6250C36AE9;
+        Thu, 23 Dec 2021 12:44:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640263475;
+        bh=wf2Q5Z8Tn40GLZE7d2G7aovZuItbu1aPQM8ANQTfrr0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rzeFX8nLeFG53dNA0OMoD+SQ9bKo0YRW7sYdQlJMJLkVM1vWu9k9phtL64NPjSoqG
+         LCwmSV2pWGxL8Go1ODKLPqrtVDc5tDGf96cJmDr0+1ObszHjhSXOGRrRexAE/Hb/x/
+         upnXURepmNI5+450Mg95sjYuvrXG9eedwCY8YkqI8CzjiC2FMAcvzzzVh28rldLrZV
+         jKViuDWkFWkxcAwThLhi11jFhkgrq4yKvd8iV7blCVZuqqo3KH/XcuDmmNFqn7mFjc
+         Y6F3/tsIuc7D4GfRrp7QDrxx64c1USgb0EEV3+UOvgzO1u8BS1ANrdFhykBt1WPpfj
+         bV7UoqoNqAL0g==
+Date:   Thu, 23 Dec 2021 18:14:31 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Li Chen <lchen@ambarella.com>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: Re: [EXT] Re: [PATCH] Revert "phy: cadence-torrent: Do not configure
+ SERDES if it's already configured"
+Message-ID: <YcRvL85x9Q1dkvRn@matsya>
+References: <CH2PR19MB4024BE31FB249744412071F6A0639@CH2PR19MB4024.namprd19.prod.outlook.com>
+ <YcQIp3IJ0eki3hY2@matsya>
+ <CH2PR19MB4024714657D84812E6F16A77A07E9@CH2PR19MB4024.namprd19.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowAAnLy8Bb8RhZVpoBA--.50184S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7JrW8tF18Zr1rCr45GFWkXrb_yoWDKwc_Kr
-        4v9F43GaykXr1v9F43tr4Sk34IvFn8XF4ruFZ2gFWSq34DAryUXr4Dur48Aw17u34DKF9r
-        Gry3WFZrA34SyjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbcxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
-        1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
-        cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
-        ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6ryUMxAI
-        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJw
-        CI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAI
-        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjVOJ5UUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CH2PR19MB4024714657D84812E6F16A77A07E9@CH2PR19MB4024.namprd19.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As platform_get_irq() could fail and return error irq number.
-Therefore, it might be better to check it in order to avoid the use of
-error irq.
+On 23-12-21, 06:27, Li Chen wrote:
+> Hi, Vinod
+> 
+> > -----Original Message-----
+> > From: Vinod Koul [mailto:vkoul@kernel.org]
+> > Sent: Thursday, December 23, 2021 1:27 PM
+> > To: Li Chen
+> > Cc: Kishon Vijay Abraham I; Philipp Zabel; Swapnil Jakhade; linux-
+> > phy@lists.infradead.org; linux-kernel@vger.kernel.org; Dan Carpenter
+> > Subject: [EXT] Re: [PATCH] Revert "phy: cadence-torrent: Do not configure
+> > SERDES if it's already configured"
+> > 
+> > On 26-11-21, 05:06, Li Chen wrote:
+> > > This reverts commit
+> > > b69d39f68419("phy: cadence-torrent: Do not configure SERDES if it's already
+> > configured")
+> > 
+> > space between commit id and open brace...
+> > 
+> > >
+> > > our soc will hang on any regmap field read before reset.
+> > 
+> > okay, in this case the right fix would be to keep track of reset in SW
+> > and still skip reset if it is already configured?
+> > 
+> 
+> I should be grateful if you would give me more details of reset in SW.
 
-Fixes: ae150435b59e ("smsc: Move the SMC (SMSC) drivers")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changlog:
+Store the reset state in a driver variable reset and use that for
+finding already_configured rather than reading a hw value
 
-v2 -> v3
+> 
+> > >
+> > > Signed-off-by: Li Chen <lchen@ambarella.com>
+> > > ---
+> > >  drivers/phy/cadence/phy-cadence-torrent.c | 31 +++++++----------------
+> > >  1 file changed, 9 insertions(+), 22 deletions(-)
+> > >
+> > > diff --git a/drivers/phy/cadence/phy-cadence-torrent.c
+> > b/drivers/phy/cadence/phy-cadence-torrent.c
+> > > index 415ace64adc5c..e57e0b1523aff 100644
+> > > --- a/drivers/phy/cadence/phy-cadence-torrent.c
+> > > +++ b/drivers/phy/cadence/phy-cadence-torrent.c
+> > > @@ -2031,11 +2031,6 @@ static int cdns_torrent_noop_phy_on(struct phy
+> > *phy)
+> > >  	return 0;
+> > >  }
+> > >
+> > > -static const struct phy_ops noop_ops = {
+> > > -	.power_on	= cdns_torrent_noop_phy_on,
+> > > -	.owner		= THIS_MODULE,
+> > > -};
+> > > -
+> > >  static
+> > >  int cdns_torrent_phy_configure_multilink(struct cdns_torrent_phy *cdns_phy)
+> > >  {
+> > > @@ -2282,7 +2277,6 @@ static int cdns_torrent_phy_probe(struct
+> > platform_device *pdev)
+> > >  	struct device_node *child;
+> > >  	int ret, subnodes, node = 0, i;
+> > >  	u32 total_num_lanes = 0;
+> > > -	int already_configured;
+> > >  	u8 init_dp_regmap = 0;
+> > >  	u32 phy_type;
+> > >
+> > > @@ -2321,20 +2315,16 @@ static int cdns_torrent_phy_probe(struct
+> > platform_device *pdev)
+> > >  	if (ret)
+> > >  		return ret;
+> > >
+> > > -	regmap_field_read(cdns_phy->phy_pma_cmn_ctrl_1,
+> > &already_configured);
+> > > -
+> > > -	if (!already_configured) {
+> > > -		ret = cdns_torrent_reset(cdns_phy);
+> > > -		if (ret)
+> > > -			goto clk_cleanup;
+> > > +	ret = cdns_torrent_reset(cdns_phy);
+> > > +	if (ret)
+> > > +		goto clk_cleanup;
+> > >
+> > > -		ret = cdns_torrent_clk(cdns_phy);
+> > > -		if (ret)
+> > > -			goto clk_cleanup;
+> > > +	ret = cdns_torrent_clk(cdns_phy);
+> > > +	if (ret)
+> > > +		goto clk_cleanup;
+> > >
+> > >  		/* Enable APB */
+> > > -		reset_control_deassert(cdns_phy->apb_rst);
+> > > -	}
+> > > +	reset_control_deassert(cdns_phy->apb_rst);
+> > >
+> > >  	for_each_available_child_of_node(dev->of_node, child) {
+> > >  		struct phy *gphy;
+> > > @@ -2404,10 +2394,7 @@ static int cdns_torrent_phy_probe(struct
+> > platform_device *pdev)
+> > >  		of_property_read_u32(child, "cdns,ssc-mode",
+> > >  				     &cdns_phy->phys[node].ssc_mode);
+> > >
+> > > -		if (!already_configured)
+> > > -			gphy = devm_phy_create(dev, child,
+> > &cdns_torrent_phy_ops);
+> > > -		else
+> > > -			gphy = devm_phy_create(dev, child, &noop_ops);
+> > > +		gphy = devm_phy_create(dev, child, &cdns_torrent_phy_ops);
+> > >  		if (IS_ERR(gphy)) {
+> > >  			ret = PTR_ERR(gphy);
+> > >  			goto put_child;
+> > > @@ -2490,7 +2477,7 @@ static int cdns_torrent_phy_probe(struct
+> > platform_device *pdev)
+> > >  		goto put_lnk_rst;
+> > >  	}
+> > >
+> > > -	if (cdns_phy->nsubnodes > 1 && !already_configured) {
+> > > +	if (cdns_phy->nsubnodes > 1) {
+> > >  		ret = cdns_torrent_phy_configure_multilink(cdns_phy);
+> > >  		if (ret)
+> > >  			goto put_lnk_rst;
+> > > --
+> > > 2.33.1
+> > >
+> > >
+> > >
+> > **************************************************************
+> > ********
+> > > This email and attachments contain Ambarella Proprietary and/or Confidential
+> > Information and is intended solely for the use of the individual(s) to whom it is
+> > addressed. Any unauthorized review, use, disclosure, distribute, copy, or print is
+> > prohibited. If you are not an intended recipient, please contact the sender by
+> > reply email and destroy all copies of the original message. Thank you.
 
-*Change 1. Using error varaible to check.
-*Change 2. Fix commit message.
----
- drivers/net/ethernet/smsc/smc911x.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+You do realize this is not OK in public emails... Pls fix
 
-diff --git a/drivers/net/ethernet/smsc/smc911x.c b/drivers/net/ethernet/smsc/smc911x.c
-index 22cdbf12c823..9470d9c07fed 100644
---- a/drivers/net/ethernet/smsc/smc911x.c
-+++ b/drivers/net/ethernet/smsc/smc911x.c
-@@ -2069,7 +2069,12 @@ static int smc911x_drv_probe(struct platform_device *pdev)
- 	SET_NETDEV_DEV(ndev, &pdev->dev);
- 
- 	ndev->dma = (unsigned char)-1;
--	ndev->irq = platform_get_irq(pdev, 0);
-+
-+	ret = platform_get_irq(pdev, 0);
-+	if (ret < 0)
-+		goto release_both;
-+	ndev->irq = ret;
-+
- 	lp = netdev_priv(ndev);
- 	lp->netdev = ndev;
- #ifdef SMC_DYNAMIC_BUS_CONFIG
+> > 
+> > Aha!!!
+> > 
+> > Okay destroyed this now!
+> > 
+> > --
+> > ~Vinod
+> > 
+> > ##############################################################
+> > ########
+> > This EXTERNAL email has been scanned by Proofpoint Email Protect service.
+> 
+> Regards,
+> Li
+
 -- 
-2.25.1
-
+~Vinod

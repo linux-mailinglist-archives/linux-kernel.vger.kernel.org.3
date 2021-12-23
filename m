@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6548A47DD57
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:19:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9249247DD55
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347037AbhLWBRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:17:17 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:18314 "EHLO
+        id S1346495AbhLWBRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:17:13 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:18418 "EHLO
         o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345749AbhLWBOP (ORCPT
+        with ESMTP id S1345817AbhLWBOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:14:15 -0500
+        Wed, 22 Dec 2021 20:14:22 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
         h=from:subject:in-reply-to:references:mime-version:to:cc:
         content-transfer-encoding:content-type;
-        s=sgd; bh=VdSmr7LcH0rW8kHWmZpoh/Ig1LSGlhHmXHB0t3cqZGc=;
-        b=AGJAB9NF2r1y61gG1NFibLyjYqebZYsKzYQcyhYBEKFYqqWwu8BuwSFhK0VCpq+UoUxt
-        Fgfp5X8r6vQtUrMwJp0elicdllDHKLvt1X7EGdEuT0VRQYDHOdRYmpuZHKGWYytmh7nhrg
-        hRMcbf+nteyrDWlChGGdXIyMLM+oYUTGSYy7nDrqIf7DW74x8qEoHJs9AHz+jFRha8lz2A
-        tsJj6HzeIfuluuFGT+CUAwMxLaKtxLJRVkxU7ukN9K2xEdsvXTr/g6so2joTiiveH9o4/F
-        8sawsJ7aa84oUE3iqZkpuMvkg5C79l8hC6IEfUGQsD0exT3joAie/Pq2I2WiDbFw==
-Received: by filterdrecv-64fcb979b9-6vbpf with SMTP id filterdrecv-64fcb979b9-6vbpf-1-61C3CD5E-35
-        2021-12-23 01:14:06.683709228 +0000 UTC m=+8644637.687945467
+        s=sgd; bh=f9xzkdOgmpl7Kp4IqvxccUyOsVwln+nUuQ3GXq4ZqFs=;
+        b=ppHdJXk/AG+5xPHnjDps7NgVXLNfN05WI955waa9m12R5zEWDTXDH1dmFrExgZCir0Du
+        Cb1J0XotgzBo8MDC/A0NxgAhJcGk/dLmMEJ1DkkS5CYahcbwq2WhSGn9REnASMdBC6MHLW
+        vvXXDSOnMd4zYH6YiZP85cc8BxjTav9VZRJyuT343UPcKnmBRibGqyZh+3xJz9uNUxR1PZ
+        Y1Vo5aWOg2L2RKdVMK/yh7I8EwNOjQ8gR1Uh9awypLmgajX2iJsH9KVAWaQH16HDPt3AZV
+        D9tivbIVPuwxhvSmSwVtiPRXCNKSVPbjQPoR/DDoDJDYgHPqv16+uMDGiW2Qs8tg==
+Received: by filterdrecv-7bf5c69d5-w55fp with SMTP id filterdrecv-7bf5c69d5-w55fp-1-61C3CD5E-34
+        2021-12-23 01:14:06.708063961 +0000 UTC m=+9687231.867084891
 Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-6-0 (SG)
+        by geopod-ismtpd-3-0 (SG)
         with ESMTP
-        id OwzaDxMVSaWpyCRXrQezBA
-        Thu, 23 Dec 2021 01:14:06.542 +0000 (UTC)
+        id KTvvbw4FRUKHwSCk21U2EQ
+        Thu, 23 Dec 2021 01:14:06.577 +0000 (UTC)
 Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id 73DAF701488; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
+        id 85DB07014A9; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
 From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH v2 27/50] wilc1000: simplify ac_balance() a bit
+Subject: [PATCH v2 29/50] wilc1000: factor header length calculation into a
+ new function
 Date:   Thu, 23 Dec 2021 01:14:06 +0000 (UTC)
-Message-Id: <20211223011358.4031459-28-davidm@egauge.net>
+Message-Id: <20211223011358.4031459-30-davidm@egauge.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211223011358.4031459-1-davidm@egauge.net>
 References: <20211223011358.4031459-1-davidm@egauge.net>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvFH5jXK85cQtbtZt7?=
- =?us-ascii?Q?SL3jCjJD5yamKyyCopUd3NzO3D=2FhuQ5uOd=2Fdefx?=
- =?us-ascii?Q?Rnh5BvGJtoyo9c8YpecROwyRILZQe2L38qiqsO8?=
- =?us-ascii?Q?X42rWYL8lZGUAQYKHueWYFauMysTRqWC5PnLWjm?=
- =?us-ascii?Q?Mt5LPwzOsSevt8liHKpmpbI98+=2Fy8xZQhoGhIgM?=
- =?us-ascii?Q?EdiKu7aRHVNn376XDkFYw=3D=3D?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvM=2F6RLlPQwh+26vUz?=
+ =?us-ascii?Q?xaeDWE8+d=2Fa7XnYxrlWl0eXZNjUWX3Z2JuNdED8?=
+ =?us-ascii?Q?I4ROcRQK=2F8Fck6bIRHcj+2h31fZd5siMauqypVg?=
+ =?us-ascii?Q?jEumQn4U2dW1Df3hj55qWS1vuxs4aLsVim+dmjY?=
+ =?us-ascii?Q?PAPysDfcvwCeeZrm7ck2y32vmvjlgJp516nFSNU?=
+ =?us-ascii?Q?6Q+WY9HJI6ZGuz2JfIkJQ=3D=3D?=
 To:     Ajay Singh <ajay.kathat@microchip.com>
 Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
         Kalle Valo <kvalo@kernel.org>,
@@ -60,58 +61,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ac_balance() is never going to fail ("ratio" is always non-NULL), so
-there is no reason to pretend otherwise.
+Add a helper function to calculate header length instead of using the
+same open code twice.
 
 Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
 ---
- drivers/net/wireless/microchip/wilc1000/wlan.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ .../net/wireless/microchip/wilc1000/wlan.c    | 43 +++++++++++++------
+ 1 file changed, 30 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
-index 5ea9129b36925..287c0843ba152 100644
+index 033979cc85b43..1cd9a7761343a 100644
 --- a/drivers/net/wireless/microchip/wilc1000/wlan.c
 +++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
-@@ -345,21 +345,23 @@ static inline u8 ac_classify(struct wilc *wilc, struct sk_buff *skb)
- 	return q_num;
+@@ -602,6 +602,33 @@ void host_sleep_notify(struct wilc *wilc)
  }
+ EXPORT_SYMBOL_GPL(host_sleep_notify);
  
--static inline int ac_balance(struct wilc *wl, u8 *ratio)
 +/**
-+ * ac_balance() - balance queues by favoring ones with fewer packets pending
-+ * @wl: Pointer to the wilc structure.
-+ * @ratio: Pointer to array of length NQUEUES in which this function
-+ *	returns the number of packets that may be scheduled for each
-+ *	access category.
++ * tx_hdr_len() - calculate tx packet header length
++ * @type: The packet type for which to return the header length.
++ *
++ * Calculate the total header size for a given packet type.  This size
++ * includes the 4 bytes required to hold the VMM header.
++ *
++ * Return: The total size of the header in bytes.
 + */
-+static inline void ac_balance(const struct wilc *wl, u8 *ratio)
- {
- 	u8 i, max_count = 0;
++static u32 tx_hdr_len(u8 type)
++{
++	switch (type) {
++	case WILC_NET_PKT:
++		return ETH_ETHERNET_HDR_OFFSET;
++
++	case WILC_CFG_PKT:
++		return ETH_CONFIG_PKT_HDR_OFFSET;
++
++	case WILC_MGMT_PKT:
++		return HOST_HDR_OFFSET;
++
++	default:
++		pr_err("%s: Invalid packet type %d.", __func__, type);
++		return 4;
++	}
++}
++
+ /**
+  * fill_vmm_table() - Fill VMM table with packets to be sent
+  * @wilc: Pointer to the wilc structure.
+@@ -658,13 +685,7 @@ static int fill_vmm_table(const struct wilc *wilc,
+ 					goto out;
  
--	if (!ratio)
--		return -EINVAL;
+ 				tx_cb = WILC_SKB_TX_CB(tqe_q[ac]);
+-				if (tx_cb->type == WILC_CFG_PKT)
+-					vmm_sz = ETH_CONFIG_PKT_HDR_OFFSET;
+-				else if (tx_cb->type == WILC_NET_PKT)
+-					vmm_sz = ETH_ETHERNET_HDR_OFFSET;
+-				else
+-					vmm_sz = HOST_HDR_OFFSET;
 -
- 	for (i = 0; i < NQUEUES; i++)
- 		if (wl->fw[i].count > max_count)
- 			max_count = wl->fw[i].count;
++				vmm_sz = tx_hdr_len(tx_cb->type);
+ 				vmm_sz += tqe_q[ac]->len;
+ 				vmm_sz = ALIGN(vmm_sz, 4);
  
- 	for (i = 0; i < NQUEUES; i++)
- 		ratio[i] = max_count - wl->fw[i].count;
--
--	return 0;
- }
+@@ -834,17 +855,13 @@ static int copy_packets(struct wilc *wilc, int entries, u32 *vmm_table,
  
- static inline void ac_update_fw_ac_pkt_info(struct wilc *wl, u32 reg)
-@@ -894,8 +896,7 @@ int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
- 	if (wilc->quit)
- 		goto out_update_cnt;
+ 		cpu_to_le32s(&header);
+ 		memcpy(&txb[offset], &header, 4);
+-		if (tx_cb->type == WILC_CFG_PKT) {
+-			buffer_offset = ETH_CONFIG_PKT_HDR_OFFSET;
+-		} else if (tx_cb->type == WILC_NET_PKT) {
++		buffer_offset = tx_hdr_len(tx_cb->type);
++		if (tx_cb->type == WILC_NET_PKT) {
+ 			int prio = tx_cb->q_num;
  
--	if (ac_balance(wilc, ac_desired_ratio))
--		return -EINVAL;
-+	ac_balance(wilc, ac_desired_ratio);
+ 			bssid = vif->bssid;
+-			buffer_offset = ETH_ETHERNET_HDR_OFFSET;
+ 			memcpy(&txb[offset + 4], &prio, sizeof(prio));
+ 			memcpy(&txb[offset + 8], bssid, 6);
+-		} else {
+-			buffer_offset = HOST_HDR_OFFSET;
+ 		}
  
- 	mutex_lock(&wilc->txq_add_to_head_cs);
- 
+ 		memcpy(&txb[offset + buffer_offset], tqe->data, tqe->len);
 -- 
 2.25.1
 

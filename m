@@ -2,99 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87EA647E946
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 23:22:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 426E847E948
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 23:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350400AbhLWWWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 17:22:05 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48390 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234511AbhLWWWF (ORCPT
+        id S1350410AbhLWWXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 17:23:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38636 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234631AbhLWWXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 17:22:05 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6DFAB82218;
-        Thu, 23 Dec 2021 22:22:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30437C36AE5;
-        Thu, 23 Dec 2021 22:22:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640298122;
-        bh=UxoJa3uQnvxGZMIg6OiN0I0O5ZfIJYWcZNx7h6H53CM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=gvcIZgp1w4b70jBT6xQhf1FtELSTyqzhPA0uszhahayD0lWs95U4D3+nsK1t9nNhW
-         s5H/dhNELRQdRVj7O9Sc7AD+spZlpNQGrpv0orvXDI+BMnUJPzG8KiTd6+9kJ+wg7/
-         F7Tv1U0TeOvRb0sy1Vm/SaT72LXJKY4W9QRars3QgReSKVqJB4oYNSdCg5aR5/yeuD
-         d4IIh2HYI4kzL31QquxqOBddA0JC0QQNvadkeTryVKrID85ahP/W2/jPJkzO1gCiCG
-         +55DAVNevrAtdmJMMlwRAWdtgCbW/S1fy/m7goFojt3ZgOlI0el3YlP/u5O0Z4pbRw
-         GTMyzFV2YfMLQ==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Sekhar Nori <nsekhar@ti.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>, stable@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH] ARM: davinci: da850-evm: Avoid NULL pointer dereference
-Date:   Thu, 23 Dec 2021 15:21:41 -0700
-Message-Id: <20211223222141.1253092-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 23 Dec 2021 17:23:42 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BB2C061401
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 14:23:42 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id u13-20020a17090a450d00b001b1e6726fccso6268880pjg.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 14:23:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=OrzQLDV0JBGv9xZyOI3iXeGl6MYuDTmF8uhCLxF6pxY=;
+        b=lYTB3jFJhbTbo9TZh/o313alnkQBEfNDm1VciotnT9J688PYPBEiZZUzMOPysawpic
+         KIvx6DUGniq4KgrQKPkWe+SDI/MfiZXxzkORbo4rpI/JziFpbSNTjdPQmxOOIG0WAs36
+         +iWY+p+98S5TjvibkoJGM3nAbpuFp2mSmHGFr6AkmPw8ZyIPaC6L2MlmduUEN180ToMo
+         kjp//6UMOSWZui8wASl3mLrhU8+YOTNuUazC/mmqnzRwZtIq129CaeY4e1OPiQralpXM
+         q7Bk4U/xc/xv/X+foUE8BRF5bm71xK5teeJaOoW38PJhZmdDeZZ4zGRErODeEy9rRR7s
+         gGBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=OrzQLDV0JBGv9xZyOI3iXeGl6MYuDTmF8uhCLxF6pxY=;
+        b=iVo04whsfiz1cPOkr+OhErNpjnqqUxCFUfFNQpHwDbGWYjsEuUdh8DIcb/XoAGf9VF
+         kmx+L08o+lgX/bXw1qnW+1YCzJ2rBPTBzcHoogZapNmNvG85kH/AzZ5DyiY9//sP7VWG
+         hK8TkDX3b8W2mzM4d4WLDfffxgfr7yY6dfFTLhz7OFghWBVZpOQIQLUeyL1aSNMF5rnl
+         Rc7JYgOIRqCP1ourpt+SYvTM2FOxcA7ANLTP/qSrtE5Eod2orDl5V/nY/4uRqNqR4jaC
+         jQ+a/TCSMqYZhdCkftS6QL/iBb1Z3aTUiUeLkhThD32/J66DoFydoJTpM4/mRlbryrgf
+         1cVw==
+X-Gm-Message-State: AOAM530kXQzD0qhYRLrr6yOp4R8riPC/ibctWQSZSSbZwp9MDvVDUp5s
+        +oPKYJ+7dIMq+efBYqdYz6ah2FXnfQc=
+X-Google-Smtp-Source: ABdhPJyTWpHkIYY8FLLDoK4E5sb5seoJZtEKQMAdAzGE9EVmOk3eGjYInQ9lqNuqnEy6blmd5DK6f0E+QVU=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:902:cec2:b0:148:b4c1:540b with SMTP id
+ d2-20020a170902cec200b00148b4c1540bmr3989850plg.0.1640298221901; Thu, 23 Dec
+ 2021 14:23:41 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Thu, 23 Dec 2021 22:22:48 +0000
+Message-Id: <20211223222318.1039223-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
+Subject: [PATCH v2 00/30] KVM: x86/mmu: Overhaul TDP MMU zapping and flushing
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With newer versions of GCC, there is a panic in da850_evm_config_emac()
-when booting multi_v5_defconfig in QEMU under the palmetto-bmc machine:
+Overhaul TDP MMU's handling of zapping and TLB flushing to reduce the
+number of TLB flushes, fix soft lockups and RCU stalls, avoid blocking
+vCPUs for long durations while zapping paging structure, and to clean up
+the zapping code.
 
-Unable to handle kernel NULL pointer dereference at virtual address 00000020
-pgd = (ptrval)
-[00000020] *pgd=00000000
-Internal error: Oops: 5 [#1] PREEMPT ARM
-Modules linked in:
-CPU: 0 PID: 1 Comm: swapper Not tainted 5.15.0 #1
-Hardware name: Generic DT based system
-PC is at da850_evm_config_emac+0x1c/0x120
-LR is at do_one_initcall+0x50/0x1e0
+Patches 01-03 were allegedly queued when posted separately, but they haven't
+showed up yet, and this series depends/conflicts on/with them, so here they
+are again.
 
-The emac_pdata pointer in soc_info is NULL because davinci_soc_info only
-gets populated on davinci machines but da850_evm_config_emac() is called
-on all machines via device_initcall().
+Based on kvm/queue-5.17, commit 1c4261809af0 ("KVM: SVM: include CR3 ...").
 
-Move the rmii_en assignment below the machine check so that it is only
-dereferenced when running on a supported SoC.
+The largest cleanup is to separate the flows for zapping roots (zap
+_everything_), zapping leaf SPTEs (zap guest mappings for whatever reason),
+and zapping a specific SP (NX recovery).  They're currently smushed into a
+single zap_gfn_range(), which was a good idea at the time, but became a
+mess when trying to handle the different rules, e.g. TLB flushes aren't
+needed when zapping a root because KVM can safely zap a root if and only
+if it's unreachable.
 
-Cc: stable@vger.kernel.org
-Fixes: bae105879f2f ("davinci: DA850/OMAP-L138 EVM: implement autodetect of RMII PHY")
-Link: https://lore.kernel.org/r/YcS4xVWs6bQlQSPC@archlinux-ax161/
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/arm/mach-davinci/board-da850-evm.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+To solve the soft lockups, stalls, and vCPU performance issues:
 
-diff --git a/arch/arm/mach-davinci/board-da850-evm.c b/arch/arm/mach-davinci/board-da850-evm.c
-index 428012687a80..7f7f6bae21c2 100644
---- a/arch/arm/mach-davinci/board-da850-evm.c
-+++ b/arch/arm/mach-davinci/board-da850-evm.c
-@@ -1101,11 +1101,13 @@ static int __init da850_evm_config_emac(void)
- 	int ret;
- 	u32 val;
- 	struct davinci_soc_info *soc_info = &davinci_soc_info;
--	u8 rmii_en = soc_info->emac_pdata->rmii_en;
-+	u8 rmii_en;
- 
- 	if (!machine_is_davinci_da850_evm())
- 		return 0;
- 
-+	rmii_en = soc_info->emac_pdata->rmii_en;
-+
- 	cfg_chip3_base = DA8XX_SYSCFG0_VIRT(DA8XX_CFGCHIP3_REG);
- 
- 	val = __raw_readl(cfg_chip3_base);
+ - Defer remote TLB flushes to the caller when zapping TDP MMU shadow
+   pages by relying on RCU to ensure the paging structure isn't freed
+   until all vCPUs have exited the guest.
 
-base-commit: a7904a538933c525096ca2ccde1e60d0ee62c08e
+ - Allowing yielding when zapping TDP MMU roots in response to the root's
+   last reference being put.  This requires a bit of trickery to ensure
+   the root is reachable via mmu_notifier, but it's not too gross.
+
+ - Zap roots in two passes to avoid holding RCU for potential hundreds of
+   seconds when zapping guest with terabytes of memory that is backed
+   entirely by 4kb SPTEs.
+
+ - Zap defunct roots asynchronously via the common work_queue so that a
+   vCPU doesn't get stuck doing the work if the vCPU happens to drop the
+   last reference to a root.
+
+The selftest at the end allows populating a guest with the max amount of
+memory allowed by the underlying architecture.  The most I've tested is
+~64tb (MAXPHYADDR=46) as I don't have easy access to a system with
+MAXPHYADDR=52.  The selftest compiles on arm64 and s390x, but otherwise
+hasn't been tested outside of x86-64.  It will hopefully do something
+useful as is, but there's a non-zero chance it won't get past init with
+a high max memory.  Running on x86 without the TDP MMU is comically slow.
+
+v2:
+  - Drop patches that were applied.
+  - Collect reviews for patches that weren't modified. [Ben]
+  - Abandon the idea of taking invalid roots off the list of roots.
+  - Add a patch to fix misleading/wrong comments with respect to KVM's
+    responsibilities in the "fast zap" flow, specifically that all SPTEs
+    must be dropped before the zap completes.
+  - Rework yielding in kvm_tdp_mmu_put_root() to keep the root visibile
+    while yielding.
+  - Add patch to zap roots in two passes. [Mingwei, David]
+  - Add a patch to asynchronously zap defunct roots.
+  - Add the selftest.
+
+v1: https://lore.kernel.org/all/20211120045046.3940942-1-seanjc@google.com
+
+Sean Christopherson (30):
+  KVM: x86/mmu: Use common TDP MMU zap helper for MMU notifier unmap
+    hook
+  KVM: x86/mmu: Move "invalid" check out of kvm_tdp_mmu_get_root()
+  KVM: x86/mmu: Zap _all_ roots when unmapping gfn range in TDP MMU
+  KVM: x86/mmu: Use common iterator for walking invalid TDP MMU roots
+  KVM: x86/mmu: Check for present SPTE when clearing dirty bit in TDP
+    MMU
+  KVM: x86/mmu: Fix wrong/misleading comments in TDP MMU fast zap
+  KVM: x86/mmu: Formalize TDP MMU's (unintended?) deferred TLB flush
+    logic
+  KVM: x86/mmu: Document that zapping invalidated roots doesn't need to
+    flush
+  KVM: x86/mmu: Drop unused @kvm param from kvm_tdp_mmu_get_root()
+  KVM: x86/mmu: Require mmu_lock be held for write in unyielding root
+    iter
+  KVM: x86/mmu: Check for !leaf=>leaf, not PFN change, in TDP MMU SP
+    removal
+  KVM: x86/mmu: Batch TLB flushes from TDP MMU for MMU notifier
+    change_spte
+  KVM: x86/mmu: Drop RCU after processing each root in MMU notifier
+    hooks
+  KVM: x86/mmu: Add helpers to read/write TDP MMU SPTEs and document RCU
+  KVM: x86/mmu: WARN if old _or_ new SPTE is REMOVED in non-atomic path
+  KVM: x86/mmu: Refactor low-level TDP MMU set SPTE helper to take raw
+    vals
+  KVM: x86/mmu: Zap only the target TDP MMU shadow page in NX recovery
+  KVM: x86/mmu: Skip remote TLB flush when zapping all of TDP MMU
+  KVM: x86/mmu: Add dedicated helper to zap TDP MMU root shadow page
+  KVM: x86/mmu: Require mmu_lock be held for write to zap TDP MMU range
+  KVM: x86/mmu: Zap only TDP MMU leafs in kvm_zap_gfn_range()
+  KVM: x86/mmu: Do remote TLB flush before dropping RCU in TDP MMU
+    resched
+  KVM: x86/mmu: Defer TLB flush to caller when freeing TDP MMU shadow
+    pages
+  KVM: x86/mmu: Allow yielding when zapping GFNs for defunct TDP MMU
+    root
+  KVM: x86/mmu: Zap roots in two passes to avoid inducing RCU stalls
+  KVM: x86/mmu: Zap defunct roots via asynchronous worker
+  KVM: selftests: Move raw KVM_SET_USER_MEMORY_REGION helper to utils
+  KVM: selftests: Split out helper to allocate guest mem via memfd
+  KVM: selftests: Define cpu_relax() helpers for s390 and x86
+  KVM: selftests: Add test to populate a VM with the max possible guest
+    mem
+
+ arch/x86/kvm/mmu/mmu.c                        |  42 +-
+ arch/x86/kvm/mmu/mmu_internal.h               |  16 +-
+ arch/x86/kvm/mmu/tdp_iter.c                   |   6 +-
+ arch/x86/kvm/mmu/tdp_iter.h                   |  15 +-
+ arch/x86/kvm/mmu/tdp_mmu.c                    | 642 ++++++++++++------
+ arch/x86/kvm/mmu/tdp_mmu.h                    |  32 +-
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ .../testing/selftests/kvm/include/kvm_util.h  |   6 +
+ .../selftests/kvm/include/s390x/processor.h   |   8 +
+ .../selftests/kvm/include/x86_64/processor.h  |   5 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  66 +-
+ .../selftests/kvm/max_guest_memory_test.c     | 292 ++++++++
+ .../selftests/kvm/set_memory_region_test.c    |  35 +-
+ 14 files changed, 870 insertions(+), 299 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/max_guest_memory_test.c
+
 -- 
-2.34.1
+2.34.1.448.ga2b2bfdf31-goog
 

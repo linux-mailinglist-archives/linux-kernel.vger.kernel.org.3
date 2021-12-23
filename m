@@ -2,125 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE97347E2B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 12:54:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADAAC47E292
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 12:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348066AbhLWLyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 06:54:17 -0500
-Received: from mail-bn8nam12on2049.outbound.protection.outlook.com ([40.107.237.49]:57024
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1348077AbhLWLyN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 06:54:13 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GS7rSn1RDrs41FvSG6Hhj2fYb0mlEJPSrwNBgP5yIXTMVGNgFW2A5F4hXjCAeqh8BFxh5XeklVFzL5aIvVBWn1UQEShfUnJT2Of47kIRjswirhTjf67Wb5RRw07qi06JSDOqu1DFx17p+CVTW8c08ZcQTI0Bw5/dvgX8UADkvYk/MBsLUP+41u1VYhBh3432nQVLdON+sFBUNbJPmYOo/e9rfgw8axUpmeblEnO0FavpfMPEGRl1jMIyS30KG8sI4zBFHJcAF5y7fkh5uhqkNuWceZbGq6lOYRTPV9QMj0TL7qC0kngb0aM3G5U+WCKKXAKMlG+y8x38kKbzCf7UUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rW2CBw1ZqgMzRjVYduwvq7BT9NVzCPU6/lpqXt4Mmzw=;
- b=IrGZqoUIWzfiWdoyZh+ePfK+oPHDn7HB/aW2LVe1+be+Sz+36Z2r8oYnYE9qBKJtkE1k40v3cBq3pLjttKuiOPuaD5Nr/7yKKSycCY7/+WwMrOKhIaIP8PT2Z97/K5KNYZH/H73HVjtf7m97WldbtAlViI6n7bhPFzoovXbVrQWRdiQTqnlDzEqrcVEaGcx66vDd8hiw0OlQxjX8V1IEV8m9LEe4i2tYx+7hCz1MfSV5C9nsAdpfwSqONwMcu5ZGptQXQWFGGsebu8zqOnY6Iw2zemhlrNTulkj2LSUvpnbiSA7+ItQW+wUPTPT9inpkBKh1UDoUK3LyHNhHOrYgAg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=suse.com smtp.mailfrom=nvidia.com; dmarc=pass
- (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
- (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rW2CBw1ZqgMzRjVYduwvq7BT9NVzCPU6/lpqXt4Mmzw=;
- b=SYtcnZ5KNFBHQEAoo26VVHFfbttAEuKE8ga5UZYvLrem92Xu+1MfqPMimZLGVZtJCI1+9FpcGN5b+pM/UFRhP5Gg5TLaBNW0G1fbm5PX9GDAOI08sQggFA/x98Ovdz20ZjIkVWahF4mNLld8bykMZU3jBRQEGVuhq8tbIDbTihjoxO9OJ3x6ADBH287bHp2zsM99KXpNpHeO6cKFKSLH64p8if9StM9zLZWRw4ypXVBBLoAxXlqZN4DJ8YlITxyqlV1w58lQ2Cac2b5lV9D8AS2tLOTsvop9vsbss2ri1fDDy7n9zK6j5Hi2ltDGSisQEQmSUCLyrYed6/OuiPSMDg==
-Received: from MWHPR01CA0046.prod.exchangelabs.com (2603:10b6:300:101::32) by
- SN1PR12MB2543.namprd12.prod.outlook.com (2603:10b6:802:2a::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4823.18; Thu, 23 Dec 2021 11:54:11 +0000
-Received: from CO1NAM11FT054.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:101:cafe::d5) by MWHPR01CA0046.outlook.office365.com
- (2603:10b6:300:101::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.19 via Frontend
- Transport; Thu, 23 Dec 2021 11:54:11 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.236) by
- CO1NAM11FT054.mail.protection.outlook.com (10.13.174.70) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4823.18 via Frontend Transport; Thu, 23 Dec 2021 11:54:11 +0000
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by DRHQMAIL109.nvidia.com
- (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 23 Dec
- 2021 11:54:09 +0000
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 23 Dec
- 2021 11:54:09 +0000
-Received: from audio.nvidia.com (172.20.187.6) by mail.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Thu, 23 Dec 2021 11:54:06 +0000
-From:   Sameer Pujar <spujar@nvidia.com>
-To:     <tiwai@suse.com>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <robh+dt@kernel.org>, <thierry.reding@gmail.com>, <perex@perex.cz>
-CC:     <jonathanh@nvidia.com>, <digetx@gmail.com>, <mkumard@nvidia.com>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Sameer Pujar <spujar@nvidia.com>
-Subject: [PATCH v4 3/3] arm64: tegra: Remove non existent Tegra194 reset
-Date:   Thu, 23 Dec 2021 17:23:51 +0530
-Message-ID: <1640260431-11613-4-git-send-email-spujar@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1640260431-11613-1-git-send-email-spujar@nvidia.com>
-References: <1640260431-11613-1-git-send-email-spujar@nvidia.com>
+        id S1348008AbhLWLtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 06:49:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229623AbhLWLtG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 06:49:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AE9C061401;
+        Thu, 23 Dec 2021 03:49:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5EBC3B81FCA;
+        Thu, 23 Dec 2021 11:49:04 +0000 (UTC)
+Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp.kernel.org (Postfix) with ESMTPSA id F3013C36AE9;
+        Thu, 23 Dec 2021 11:49:00 +0000 (UTC)
+Date:   Thu, 23 Dec 2021 11:54:30 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
+Cc:     <robh+dt@kernel.org>, <linux-iio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 1/3] iio: frequency: admv1013: add support for
+ ADMV1013
+Message-ID: <20211223115430.797179b1@jic23-huawei>
+In-Reply-To: <20211221112206.97066-1-antoniu.miclaus@analog.com>
+References: <20211221112206.97066-1-antoniu.miclaus@analog.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 87787131-0c7e-4842-0b8c-08d9c60aef0a
-X-MS-TrafficTypeDiagnostic: SN1PR12MB2543:EE_
-X-Microsoft-Antispam-PRVS: <SN1PR12MB2543C1BAAD018D942A4D6C88A77E9@SN1PR12MB2543.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:935;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QlDi0I6ChjjdNLGahh2zAmFAMoT8Riot4rzPr60uy9tHPdqlgEpyTNABaO/6gtgU8x7cHTBUz7FKyMcfW8aGbWlY7OiodGQKuX3FklzVa8XfyCJsPf7E3IBV6cNsMl/neadHNUbHiku0/IuVZkMS0Q2sXb7PX/q1YYlZUSBVecy4LdW0JenfgDEVTHel0K0b/8VaaCiY3WqI/ewfZM10XYzOoOIpU9G6Sv4e7NxDYxr1lcT1ZQ4Q6+l1Qr/OZMmMcc0hWbQm+z2Vp7hbs8xsRq2MnYL6Q5fn5YkLOQw6HpcXU8XbQGi5cGEDzSCP7WyTJRvs92VBp7JwilEb1QRXCk/lnU0pRK8v9EvKJw4hAnGZn7mq8b6u0mmhkUhuFYoXhkKhFP0+sLDZWOdXDJAGAQ1x7R7efO8PfSqGbBL5qkeP0PcF15zt7JvOuFjUjiL28nYVgPaf0xIIdiT7Yceye18EIE7rdmyUB+Ex1esvt/YclJUkz2WUPe4VmN99qVms3YA2cAi5SnH0p3k6eCkmtJMsXCa+oYX7VXQGGXd47eQUqgpnG6NtoG+LK4FbpeTQmCRdu2meurLoY4MzYU2IxJmERSPX1tqShl4UFynY4SAVzj9sJ3Bxs6mGkTd36NFtrwjWcnRBjoE92Sj0a5KDPSLvWBzDf5Ctqc1oWQzyDzx2xifQAbsFzvGXhHn809VteZWxwjoTR1scq5fvR1BKgLNf9Qxb74crkB9ZEI+k96cdw8RjfLEw/Hx7HzCReIEfsLlY7b3RE45RHQjc5iTgXLFTWa8I4E22PK7sLkNic6s=
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(40470700002)(36840700001)(46966006)(70206006)(70586007)(36860700001)(336012)(26005)(7696005)(83380400001)(5660300002)(8676002)(356005)(54906003)(316002)(110136005)(508600001)(86362001)(40460700001)(36756003)(47076005)(186003)(82310400004)(81166007)(107886003)(8936002)(2906002)(7416002)(2616005)(6666004)(426003)(4326008)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Dec 2021 11:54:11.0927
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87787131-0c7e-4842-0b8c-08d9c60aef0a
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT054.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2543
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tegra194 does not really have "hda2codec_2x" related reset. Hence drop
-this entry to reflect actual HW.
+On Tue, 21 Dec 2021 13:22:04 +0200
+Antoniu Miclaus <antoniu.miclaus@analog.com> wrote:
 
-Fixes: 4878cc0c9fab ("arm64: tegra: Add HDA controller on Tegra194")
-Signed-off-by: Sameer Pujar <spujar@nvidia.com>
----
- arch/arm64/boot/dts/nvidia/tegra194.dtsi | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+> The ADMV1013 is a wideband, microwave upconverter optimized
+> for point to point microwave radio designs operating in the
+> 24 GHz to 44 GHz radio frequency (RF) range.
+> 
+> Datasheet:
+> https://www.analog.com/media/en/technical-documentation/data-sheets/ADMV1013.pdf
+> 
+> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+> ---
+Hi Antoniu,
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra194.dtsi b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
-index 8d29b7f..6a1d896 100644
---- a/arch/arm64/boot/dts/nvidia/tegra194.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
-@@ -976,9 +976,8 @@
- 				 <&bpmp TEGRA194_CLK_HDA2CODEC_2X>;
- 			clock-names = "hda", "hda2hdmi", "hda2codec_2x";
- 			resets = <&bpmp TEGRA194_RESET_HDA>,
--				 <&bpmp TEGRA194_RESET_HDA2HDMICODEC>,
--				 <&bpmp TEGRA194_RESET_HDA2CODEC_2X>;
--			reset-names = "hda", "hda2hdmi", "hda2codec_2x";
-+				 <&bpmp TEGRA194_RESET_HDA2HDMICODEC>;
-+			reset-names = "hda", "hda2hdmi";
- 			power-domains = <&bpmp TEGRA194_POWER_DOMAIN_DISP>;
- 			interconnects = <&mc TEGRA194_MEMORY_CLIENT_HDAR &emc>,
- 					<&mc TEGRA194_MEMORY_CLIENT_HDAW &emc>;
--- 
-2.7.4
+A couple of observations inline but neither was significant enough
+to require a respin or clearly beneficial to a degree where I'd just
+fix them whilst applying.
+
+Series applied and Rob's tag added to the dt-binding.
+
+Pushed out as testing for 0-day to take a first look at it.
+
+Where this makes it pre merge window depends on various people's
+vacation plans so we'll see how that goes.
+
+Thanks,
+
+Jonathan
+
+
+
+> +
+> +static ssize_t admv1013_read(struct iio_dev *indio_dev,
+> +			     uintptr_t private,
+> +			     const struct iio_chan_spec *chan,
+> +			     char *buf)
+> +{
+> +	struct admv1013_state *st = iio_priv(indio_dev);
+> +	unsigned int data, addr;
+> +	int ret;
+> +
+> +	switch ((u32)private) {
+> +	case ADMV1013_RFMOD_I_CALIBPHASE:
+> +		addr = ADMV1013_REG_LO_AMP_I;
+> +		break;
+> +	case ADMV1013_RFMOD_Q_CALIBPHASE:
+> +		addr = ADMV1013_REG_LO_AMP_Q;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	ret = admv1013_spi_read(st, addr, &data);
+> +	if (ret)
+> +		return ret;
+> +
+> +	data = FIELD_GET(ADMV1013_LOAMP_PH_ADJ_FINE_MSK, data);
+> +
+> +	return sysfs_emit(buf, "%u\n", data);
+> +}
+> +
+> +static ssize_t admv1013_write(struct iio_dev *indio_dev,
+> +			      uintptr_t private,
+> +			      const struct iio_chan_spec *chan,
+> +			      const char *buf, size_t len)
+> +{
+> +	struct admv1013_state *st = iio_priv(indio_dev);
+> +	unsigned int data;
+> +	int ret;
+> +
+> +	ret = kstrtou32(buf, 10, &data);
+> +	if (ret)
+> +		return ret;
+> +
+> +	data = FIELD_PREP(ADMV1013_LOAMP_PH_ADJ_FINE_MSK, data);
+> +
+> +	switch ((u32)private) {
+> +	case ADMV1013_RFMOD_I_CALIBPHASE:
+
+As a possible follow up / cleanup you could just make private == ADMV1013_REG_LO_AMP_I/Q
+and use it directly as the address.
+
+The indirection here isn't adding anything that I can see.
+
+> +		ret = admv1013_spi_update_bits(st, ADMV1013_REG_LO_AMP_I,
+> +					       ADMV1013_LOAMP_PH_ADJ_FINE_MSK,
+> +					       data);
+> +		if (ret)
+> +			return ret;
+> +		break;
+> +	case ADMV1013_RFMOD_Q_CALIBPHASE:
+> +		ret = admv1013_spi_update_bits(st, ADMV1013_REG_LO_AMP_Q,
+> +					       ADMV1013_LOAMP_PH_ADJ_FINE_MSK,
+> +					       data);
+> +		if (ret)
+> +			return ret;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return ret ? ret : len;
+> +}
+> +
+> +static int admv1013_update_quad_filters(struct admv1013_state *st)
+> +{
+> +	unsigned int filt_raw;
+> +	u64 rate = clk_get_rate(st->clkin);
+> +
+> +	if (rate >= (5400 * HZ_PER_MHZ) && rate <= (7000 * HZ_PER_MHZ))
+> +		filt_raw = 15;
+> +	else if (rate >= (5400 * HZ_PER_MHZ) && rate <= (8000 * HZ_PER_MHZ))
+> +		filt_raw = 10;
+> +	else if (rate >= (6600 * HZ_PER_MHZ) && rate <= (9200 * HZ_PER_MHZ))
+> +		filt_raw = 5;
+> +	else
+> +		filt_raw = 0;
+> +
+> +	return __admv1013_spi_update_bits(st, ADMV1013_REG_QUAD,
+> +					ADMV1013_QUAD_FILTERS_MSK,
+> +					FIELD_PREP(ADMV1013_QUAD_FILTERS_MSK, filt_raw));
+> +}
+> +
+
+> +#define _ADMV1013_EXT_INFO(_name, _shared, _ident) { \
+> +		.name = _name, \
+> +		.read = admv1013_read, \
+> +		.write = admv1013_write, \
+> +		.private = _ident, \
+> +		.shared = _shared, \
+> +}
+> +
+> +static const struct iio_chan_spec_ext_info admv1013_ext_info[] = {
+> +	_ADMV1013_EXT_INFO("i_calibphase", IIO_SEPARATE, ADMV1013_RFMOD_I_CALIBPHASE),
+> +	_ADMV1013_EXT_INFO("q_calibphase", IIO_SEPARATE, ADMV1013_RFMOD_Q_CALIBPHASE),
+> +	{ },
+> +};
+> +
+> +#define ADMV1013_CHAN_PHASE(_channel, _channel2, _admv1013_ext_info) {		\
+> +	.type = IIO_ALTVOLTAGE,					\
+> +	.output = 0,						\
+> +	.indexed = 1,						\
+> +	.channel2 = _channel2,					\
+> +	.channel = _channel,					\
+> +	.differential = 1,					\
+> +	.ext_info = _admv1013_ext_info,				\
+
+Trivial but there is little purpose in passing _admv1013_ext_info into here
+as it only ever takes once value.  It would be cleaner to just hard
+code it here.
+
+> +	}
+> +
+> +#define ADMV1013_CHAN_CALIB(_channel, rf_comp) {	\
+> +	.type = IIO_ALTVOLTAGE,					\
+> +	.output = 0,						\
+> +	.indexed = 1,						\
+> +	.channel = _channel,					\
+> +	.channel2 = IIO_MOD_##rf_comp,				\
+> +	.info_mask_separate = BIT(IIO_CHAN_INFO_CALIBBIAS),	\
+> +	}
+> +
+> +static const struct iio_chan_spec admv1013_channels[] = {
+> +	ADMV1013_CHAN_PHASE(0, 1, admv1013_ext_info),
+> +	ADMV1013_CHAN_CALIB(0, I),
+> +	ADMV1013_CHAN_CALIB(0, Q),
+> +	ADMV1013_CHAN_CALIB(1, I),
+> +	ADMV1013_CHAN_CALIB(1, Q),
+> +};
+> +
 

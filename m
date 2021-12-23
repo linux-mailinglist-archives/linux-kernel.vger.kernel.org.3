@@ -2,180 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A7647E02C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 09:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C83B247E030
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 09:11:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242926AbhLWIKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 03:10:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242745AbhLWIKq (ORCPT
+        id S243081AbhLWILU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 03:11:20 -0500
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:45209 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243034AbhLWILR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 03:10:46 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6F5C061756
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 00:10:46 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id a9so9851118wrr.8
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 00:10:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=NkvR1gHSe2IjM5ARC815Kf628ZgjzxkOpI9zgg4nLC0=;
-        b=qh2WPW9Y8y6+kjf8icGxT+J/JVRgM7yvr0WY9qXSt0L1B448ofhaSZiR2c9J0MyTPF
-         ND9BkmJMTcgj2IMz/5cdxESHk+/inpmTMV0s4n0gnsK2fa2//5QZacUhBRt5Tcpz06rJ
-         NGhqldm03XtOv3yewF3mSb7lR8q0NVR9M+Uiq4x+1cRzEICtp8iiT3A15XhPFsEo1hDG
-         a+0+2G2gK9qvvaa/ZrhSL6cwhRpj5V028G3N30qQZtnLglxqSqfbX90lCoxdtsRhFrlX
-         19xb5CIA8NfnJHvaImiUHZqBwt6Oi2N8kcpDrSFkK6v8JUA7iDwRdFZQhANZVhqSOV02
-         rsqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NkvR1gHSe2IjM5ARC815Kf628ZgjzxkOpI9zgg4nLC0=;
-        b=An5yCk0HIiBXNrw+MZsBUx76oq1cldyIWmySBGrWomWsCeY491PwKdZq89bYwaIOMX
-         FlRt8+ktSdSYQwv1bNQS7FQbsaQk8qPezZeY1PTWE58cpz11jNHbzohPHFD+S3P88X5Y
-         S81xQP1oJq9WXA135KJQyYRPLFI4YdC4p/G2Eqy8kuLWWLkO4TV7yPmdLsMkh5cKSfBU
-         RSJIRNf1qlxl7T7b5bzes8jgojzHgEC447WlZRa4XivW1ifvOnyglipO9ahbeCLV0Lau
-         ywF80vpHZZhVrqKE/+O80CQy2kNmlhhkFDB6w79tgNbuTsdzCFQ7+CeZGdsl012i9kLe
-         B6bQ==
-X-Gm-Message-State: AOAM531AUXdw00CDCPFQkWwSMQKwH2tXmELn3U6K1UA4nlQY20faFVAf
-        6CGQsfeDRVLkwgtdw6p73Z3hDUpghyn6mw==
-X-Google-Smtp-Source: ABdhPJxICwXcYDz+FEECFh0a7o7VzKwW8Gumv/0LMIWAV4pYWQOA58t5JSN7+YI79ld2Jgp3Dz4PCw==
-X-Received: by 2002:a5d:6312:: with SMTP id i18mr851978wru.475.1640247044620;
-        Thu, 23 Dec 2021 00:10:44 -0800 (PST)
-Received: from localhost.localdomain ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id r62sm3841313wmr.35.2021.12.23.00.10.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Dec 2021 00:10:44 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     rodrigosiqueiramelo@gmail.com
-Cc:     melissa.srw@gmail.com, hamohammed.sa@gmail.com, daniel@ffwll.ch,
-        airlied@linux.ie, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH 1/1] drm/vkms: add zpos plane property
-Date:   Thu, 23 Dec 2021 09:10:30 +0100
-Message-Id: <20211223081030.16629-2-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211223081030.16629-1-jose.exposito89@gmail.com>
-References: <20211223081030.16629-1-jose.exposito89@gmail.com>
+        Thu, 23 Dec 2021 03:11:17 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0V.Wa1Z2_1640247072;
+Received: from 30.240.114.155(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V.Wa1Z2_1640247072)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 23 Dec 2021 16:11:14 +0800
+Message-ID: <8d415145-01bc-ce57-fd00-91ca63090caa@linux.alibaba.com>
+Date:   Thu, 23 Dec 2021 16:11:11 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+Subject: Re: [RESEND PATCH v4] ACPI: Move sdei_init and ghes_init ahead to
+ handle platform errors earlier
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     bp@alien8.de, tony.luck@intel.com, james.morse@arm.com,
+        lenb@kernel.org, rjw@rjwysocki.net, bhelgaas@google.com,
+        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org
+References: <20211221231701.GA1125162@bhelgaas>
+Content-Language: en-US
+In-Reply-To: <20211221231701.GA1125162@bhelgaas>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the zpos plane property. Depending on the plane type:
+Hi, Bjorn,
 
-- Primary and cursor planes: Create an immutable zpos property. The
-  primary plane is always at the bottom and the cursor plane is always
-  on the top.
-- Overlay planes: Create a mutable zpos property allowing to change
-  their order but always keep them between the primary and cursor
-  planes.
+Thank you for your comments.
 
-As documented, "vkms_crtc_state.active_planes" must be sorted by zpos.
-This is achieved by inserting them in the array at their
-normalized_zpos index.
+在 2021/12/22 AM7:17, Bjorn Helgaas 写道:
+> On Thu, Dec 16, 2021 at 09:34:56PM +0800, Shuai Xue wrote:
+>> On an ACPI system, ACPI is initialised very early from a subsys_initcall(),
+>> while SDEI is not ready until a subsys_initcall_sync().
+>>
+>> The SDEI driver provides functions (e.g. apei_sdei_register_ghes,
+>> apei_sdei_unregister_ghes) to register or unregister event callback for
+>> dispatcher in firmware. When the GHES driver probing, it registers the
+>> corresponding callback according to the notification type specified by
+>> GHES. If the GHES notification type is SDEI, the GHES driver will call
+>> apei_sdei_register_ghes to register event call.
+>>
+>> When the firmware emits an event, it migrates the handling of the event
+>> into the kernel at the registered entry-point __sdei_asm_handler. And
+>> finally, the kernel will call the registered event callback and return
+>> status_code to indicate the status of event handling. SDEI_EV_FAILED
+>> indicates that the kernel failed to handle the event.
+>>
+>> Consequently, when an error occurs during kernel booting, the kernel is
+>> unable to handle and report errors until the GHES driver is initialized by
+>> device_initcall(), in which the event callback is registered. All errors
+>> that occurred before GHES initialization are missed and there is no chance
+>> to report and find them again.
+>>
+>> From commit e147133a42cb ("ACPI / APEI: Make hest.c manage the estatus
+>> memory pool") was merged, ghes_init() relies on acpi_hest_init() to manage
+>> the estatus memory pool. On the other hand, ghes_init() relies on
+>> sdei_init() to detect the SDEI version and the framework for registering
+>> and unregistering events.
+> 
+>> By the way, I don't figure out why acpi_hest_init is called in
+>> acpi_pci_root_init, it don't rely on any other thing. May it could
+>> be moved further, following acpi_iort_init in acpi_init.
+> 
+> I think you should drop the "By the way ..." text or move it after the
+> "---" at the bottom of your commit log.  It doesn't help understand
+> this patch.
 
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- drivers/gpu/drm/vkms/vkms_crtc.c  |  3 +--
- drivers/gpu/drm/vkms/vkms_drv.c   |  1 +
- drivers/gpu/drm/vkms/vkms_plane.c | 25 +++++++++++++++++++++++++
- 3 files changed, 27 insertions(+), 2 deletions(-)
+I will fix it in next version.
 
-diff --git a/drivers/gpu/drm/vkms/vkms_crtc.c b/drivers/gpu/drm/vkms/vkms_crtc.c
-index 57bbd32e9beb..4f23488b15f3 100644
---- a/drivers/gpu/drm/vkms/vkms_crtc.c
-+++ b/drivers/gpu/drm/vkms/vkms_crtc.c
-@@ -207,7 +207,6 @@ static int vkms_crtc_atomic_check(struct drm_crtc *crtc,
- 		return -ENOMEM;
- 	vkms_state->num_active_planes = i;
- 
--	i = 0;
- 	drm_for_each_plane_mask(plane, crtc->dev, crtc_state->plane_mask) {
- 		plane_state = drm_atomic_get_existing_plane_state(crtc_state->state,
- 								  plane);
-@@ -215,7 +214,7 @@ static int vkms_crtc_atomic_check(struct drm_crtc *crtc,
- 		if (!plane_state->visible)
- 			continue;
- 
--		vkms_state->active_planes[i++] =
-+		vkms_state->active_planes[plane_state->normalized_zpos] =
- 			to_vkms_plane_state(plane_state);
- 	}
- 
-diff --git a/drivers/gpu/drm/vkms/vkms_drv.c b/drivers/gpu/drm/vkms/vkms_drv.c
-index bb98f6c6c561..a97b338318c6 100644
---- a/drivers/gpu/drm/vkms/vkms_drv.c
-+++ b/drivers/gpu/drm/vkms/vkms_drv.c
-@@ -157,6 +157,7 @@ static int vkms_modeset_init(struct vkms_device *vkmsdev)
- 	 * fbdev helpers. We have to go with 0, meaning "pick the default",
- 	 * which ix XRGB8888 in all cases. */
- 	dev->mode_config.preferred_depth = 0;
-+	dev->mode_config.normalize_zpos = true;
- 	dev->mode_config.helper_private = &vkms_mode_config_helpers;
- 
- 	return vkms_output_init(vkmsdev, 0);
-diff --git a/drivers/gpu/drm/vkms/vkms_plane.c b/drivers/gpu/drm/vkms/vkms_plane.c
-index 32409e15244b..f491abb35d4a 100644
---- a/drivers/gpu/drm/vkms/vkms_plane.c
-+++ b/drivers/gpu/drm/vkms/vkms_plane.c
-@@ -81,6 +81,8 @@ static void vkms_plane_reset(struct drm_plane *plane)
- 	}
- 
- 	__drm_gem_reset_shadow_plane(plane, &vkms_state->base);
-+	vkms_state->base.base.zpos = drm_plane_index(plane);
-+	vkms_state->base.base.normalized_zpos = drm_plane_index(plane);
- }
- 
- static const struct drm_plane_funcs vkms_plane_funcs = {
-@@ -158,6 +160,24 @@ static const struct drm_plane_helper_funcs vkms_primary_helper_funcs = {
- 	DRM_GEM_SHADOW_PLANE_HELPER_FUNCS,
- };
- 
-+static int vkms_plane_create_zpos_property(struct vkms_device *vkmsdev,
-+					   struct vkms_plane *plane)
-+{
-+	int ret;
-+	unsigned int zpos = drm_plane_index(&plane->base);
-+	int overlay_max_zpos = vkmsdev->config->num_overlay_planes;
-+
-+	if (plane->base.type == DRM_PLANE_TYPE_OVERLAY) {
-+		ret = drm_plane_create_zpos_property(&plane->base, zpos,
-+						     1, overlay_max_zpos);
-+	} else {
-+		ret = drm_plane_create_zpos_immutable_property(&plane->base,
-+							       zpos);
-+	}
-+
-+	return ret;
-+}
-+
- struct vkms_plane *vkms_plane_init(struct vkms_device *vkmsdev,
- 				   enum drm_plane_type type, int index)
- {
-@@ -166,6 +186,7 @@ struct vkms_plane *vkms_plane_init(struct vkms_device *vkmsdev,
- 	struct vkms_plane *plane;
- 	const u32 *formats;
- 	int nformats;
-+	int ret;
- 
- 	switch (type) {
- 	case DRM_PLANE_TYPE_PRIMARY:
-@@ -195,5 +216,9 @@ struct vkms_plane *vkms_plane_init(struct vkms_device *vkmsdev,
- 
- 	drm_plane_helper_add(&plane->base, funcs);
- 
-+	ret = vkms_plane_create_zpos_property(vkmsdev, plane);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
- 	return plane;
- }
--- 
-2.25.1
+>> sdei_init() relies on ACPI table which is initialized
+>> subsys_initcall(): acpi_init(), acpi_bus_init(), acpi_load_tables(),
+>> acpi_tb_laod_namespace().  May it should be also moved further,
+>> after acpi_load_tables.
+> 
+> This text also doesn't seem relevant to this patch.
 
+I will delete it in next version.
+
+>> In this patch, move sdei_init and ghes_init as far ahead as
+>> possible, right after acpi_hest_init().
+> 
+> I'm having a hard time figuring out the reason for this patch.
+> 
+> Apparently the relevant parts are sdei_init() and ghes_init().
+> Today they are executed in that order:
+> 
+>   subsys_initcall_sync(sdei_init);
+>   device_initcall(ghes_init);
+> 
+> After this patch, they would be executed in the same order, but called
+> explicitly instead of as initcalls:
+> 
+>   acpi_pci_root_init()
+>   {
+>     acpi_hest_init();
+>     sdei_init();
+>     ghes_init();
+>     ...
+> 
+> Explicit calls are certainly better than initcalls, but that doesn't
+> seem to be the reason for this patch.
+> 
+> Does this patch fix a bug?  If so, what is the bug?
+
+Yes. When the kernel booting, the console logs many times from firmware
+before GHES drivers init:
+
+	Trip in MM PCIe RAS handle(Intr:910)
+  	Clean PE[1.1.1] ERR_STS:0x4000100 -> 0 INT_STS:F0000000
+	Find RP(98:1.0)
+	--Walk dev(98:1.0) CE:0 UCE:4000
+	...
+	ERROR:   sdei_dispatch_event(32a) ret:-1
+	--handler(910) end
+
+This is because the callback function has not been registered yet.
+Previously reported errors will be overwritten by new ones. Therefore,
+all errors that occurred before GHES initialization are missed
+and there is no chance to report and find them again.
+
+
+> You say that currently "errors that occur before GHES initialization
+> are missed".  Isn't that still true after this patch?  Does this patch
+> merely reduce the time before GHES initialization?  If so, I'm
+> dubious, because we have to tolerate an arbitrary amount of time
+> there.
+After this patch, there are still errors missing. As you mentioned,
+we have to tolerate it until the software reporting capability is built.
+
+Yes, this patch merely reduce the time before GHES initialization. The boot
+dmesg before this patch:
+
+	[    3.688586] HEST: Table parsing has been initialized.
+	...
+	[   33.204340] calling  sdei_init+0x0/0x120 @ 1
+	[   33.208645] sdei: SDEIv1.0 (0x0) detected in firmware.
+	...
+	[   36.005390] calling  ghes_init+0x0/0x11c @ 1
+	[   36.190021] GHES: APEI firmware first mode is enabled by APEI bit and WHEA _OSC.
+
+
+After this patch, the boot dmesg like bellow:
+
+	[    3.688664] HEST: Table parsing has been initialized.
+	[    3.688691] sdei: SDEIv1.0 (0x0) detected in firmware.
+	[    3.694557] GHES: APEI firmware first mode is enabled by APEI bit and WHEA _OSC.
+
+As we can see, the initialization of GHES is advanced by 33 seconds.
+So, in my opinion, this patch is necessary, right?
+(It should be noted that the effect of optimization varies with the platform.)
+
+> s/acpi_tb_laod_namespace/acpi_tb_load_namespace/
+
+> You use "()" after function names sometimes, but not always.  Please
+> do it consistently.
+
+Thank you for pointing this out. I will fix it in next version.
+
+
+>> -device_initcall(ghes_init);
+> 
+>>  void __init acpi_pci_root_init(void)
+>>  {
+>>  	acpi_hest_init();
+>> +	sdei_init();
+>> +	ghes_init();
+> 
+> What's the connection between PCI, SDEI, and GHES?  As far as I can
+> tell, SDEI and GHES are not PCI-specific, so it doesn't seem like they
+> should be initialized here in acpi_pci_root_init().
+
+The only reason is that acpi_hest_init() is initialized here.
+
+From commit e147133a42cb ("ACPI / APEI: Make hest.c manage the estatus
+memory pool") was merged, ghes_init() relies on acpi_hest_init() to manage
+the estatus memory pool. On the other hand, ghes_init() relies on
+sdei_init() to detect the SDEI version and the framework for registering
+and unregistering events. The dependencies are as follows
+
+	ghes_init() => acpi_hest_init()
+	ghes_init() => sdei_init()
+
+I don't figure out why acpi_hest_init() is called in
+acpi_pci_root_init(), it don't rely on any other thing.
+I am wondering that should we moved all of them further? e.g.
+following acpi_iort_init() in acpi_init().
+
+Best Regards,
+Shuai

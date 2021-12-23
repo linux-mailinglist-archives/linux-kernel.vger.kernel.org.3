@@ -2,110 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C91947E763
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:02:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A9447E757
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349687AbhLWSCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 13:02:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244679AbhLWSCi (ORCPT
+        id S1349645AbhLWSA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 13:00:26 -0500
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:43755 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349590AbhLWSAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 13:02:38 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F540C061756
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:02:38 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id f125so5737799pgc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:02:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=F3vp7cNpz2qk0OIvJVZgGpZrlLI8cGs8eddNh3pH4O0=;
-        b=V6LVAQd/8UIn8ldsx5JR1O9YpJZeToHbDLZbS7mg8/+loFV7/N7sZ+XhcLN4ER+wrt
-         a4OJl94CKbfUSCf2rds4kBh5Lrrm72ej4Vw2jCZdwyaTpvW1Rfri5/b6D0d+XdP6rcLq
-         EnCBOIjnXfg4hlKeBatFlHOFTTdwmCQQ6xeF/Ly1U82igCJHWiW1VL+d3kr+QmXcuLv8
-         0JyTkQyChwcIVqzmWpqo1NlewbWrHW4RFSMnsRxLAB2r1vNJbOQ7FxBRMK3jdWuCu2Zf
-         vQb1n9Yb12+2OopiSqPqPM/6Qm6od8AV54HqElWU29SUVdpkee1DGnFa+7+XiW0B251Y
-         fEzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=F3vp7cNpz2qk0OIvJVZgGpZrlLI8cGs8eddNh3pH4O0=;
-        b=Psq5EpxUjWcbhxFGYCPdGOn5RgIkU7YCcbEyyocP+dOM+kRkPGZ68vwQx+tQ1+xhn4
-         UtgttA3FjMw/USygx5glXhE/FpCS2hqujYTAtcFSqwpRWHBQ2CWWRF1hTpHvfsV9F7xC
-         i45NwwRxKpjNlplGtUEEJ5xFiwN2muQ4FG+5qJ3pjg29lwryfr/oZvcpM5EsQnOuARtv
-         y/uwMAy82Bfh9rqKxobHQvVlkkZRAfPsTxRubgm3XqRHg3h1OyDC0E9JvqhIFeZdyZqv
-         OZMe9e3S87NFod6m/1I8kwyILIc5kYnYUX3w4BM5z0rWpzuCL84dWmFWF7VK26kFspl0
-         elZQ==
-X-Gm-Message-State: AOAM5330AOgFLDDqYseRlvn7jIsYR+G7n2qYR//7ky98Tq3mXubcqyiK
-        bLFY0bX/Gm0stWJ2xtfRn2KPbg==
-X-Google-Smtp-Source: ABdhPJwrV3ydO2yyHoylZ6+Gjlc1pXLEXn2GLpfX+eRE21Of6xThdp2NrJD74NCN2Jt8w5I9duli3Q==
-X-Received: by 2002:a65:648b:: with SMTP id e11mr3022987pgv.138.1640282557705;
-        Thu, 23 Dec 2021 10:02:37 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id gg23sm9329532pjb.31.2021.12.23.10.02.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Dec 2021 10:02:36 -0800 (PST)
-Date:   Thu, 23 Dec 2021 18:02:33 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com
-Subject: Re: [PATCH v3 kvm/queue 05/16] KVM: Maintain ofs_tree for fast
- memslot lookup by file offset
-Message-ID: <YcS5uStTallwRs0G@google.com>
-References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
- <20211223123011.41044-6-chao.p.peng@linux.intel.com>
+        Thu, 23 Dec 2021 13:00:25 -0500
+Received: (Authenticated sender: repk@triplefau.lt)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id EE8DA20003;
+        Thu, 23 Dec 2021 18:00:22 +0000 (UTC)
+Date:   Thu, 23 Dec 2021 19:05:20 +0100
+From:   Remi Pommarel <repk@triplefau.lt>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        bridge@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 2/2] net: bridge: Get SIOCGIFBR/SIOCSIFBR ioctl
+ working in compat mode
+Message-ID: <YcS6YAJVFUDcDmo0@pilgrim>
+References: <20211223153139.7661-1-repk@triplefau.lt>
+ <20211223153139.7661-3-repk@triplefau.lt>
+ <20211223085944.55b43857@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <YcS25oqoo+xnAIIW@pilgrim>
+ <20211223095318.30d2b9ce@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211223123011.41044-6-chao.p.peng@linux.intel.com>
+In-Reply-To: <20211223095318.30d2b9ce@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021, Chao Peng wrote:
-> Similar to hva_tree for hva range, maintain interval tree ofs_tree for
-> offset range of a fd-based memslot so the lookup by offset range can be
-> faster when memslot count is high.
+On Thu, Dec 23, 2021 at 09:53:18AM -0800, Jakub Kicinski wrote:
+> On Thu, 23 Dec 2021 18:50:30 +0100 Remi Pommarel wrote:
+> > On Thu, Dec 23, 2021 at 08:59:44AM -0800, Jakub Kicinski wrote:
+> > > On Thu, 23 Dec 2021 16:31:39 +0100 Remi Pommarel wrote:  
+> > > > In compat mode SIOC{G,S}IFBR ioctls were only supporting
+> > > > BRCTL_GET_VERSION returning an artificially version to spur userland
+> > > > tool to use SIOCDEVPRIVATE instead. But some userland tools ignore that
+> > > > and use SIOC{G,S}IFBR unconditionally as seen with busybox's brctl.
+> > > > 
+> > > > Example of non working 32-bit brctl with CONFIG_COMPAT=y:
+> > > > $ brctl show
+> > > > brctl: SIOCGIFBR: Invalid argument
+> > > > 
+> > > > Example of fixed 32-bit brctl with CONFIG_COMPAT=y:
+> > > > $ brctl show
+> > > > bridge name     bridge id               STP enabled     interfaces
+> > > > br0
+> > > > 
+> > > > Signed-off-by: Remi Pommarel <repk@triplefau.lt>
+> > > > Co-developed-by: Arnd Bergmann <arnd@arndb.de>
+> > > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>  
+> > > 
+> > > Since Arnd said this is not supposed to be backported I presume it
+> > > should go to net-next?  
+> > 
+> > Yes, out of curiosity, is it appropriate to mix "[PATCH net]" and
+> > "[PATCH net-next]" in the same serie ?
+> 
+> It's not, mixing makes it quite hard to know what's needed where.
+> Also hard to automate things on our end. Let me pick out the first
+> patch, I'll be sending a PR to Linus shortly and then merge net into
+> net-next. At which point you'll be able to rebase on top of net-next
+> and resend just the second patch for net-next..
 
-This won't work.  The hva_tree relies on there being exactly one virtual address
-space, whereas with private memory, userspace can map multiple files into the
-guest at different gfns, but with overlapping offsets.
-
-I also dislike hijacking __kvm_handle_hva_range() in patch 07.
-
-KVM also needs to disallow mapping the same file+offset into multiple gfns, which
-I don't see anywhere in this series.
-
-In other words, there needs to be a 1:1 gfn:file+offset mapping.  Since userspace
-likely wants to allocate a single file for guest private memory and map it into
-multiple discontiguous slots, e.g. to skip the PCI hole, the best idea off the top
-of my head would be to register the notifier on a per-slot basis, not a per-VM
-basis.  It would require a 'struct kvm *' in 'struct kvm_memory_slot', but that's
-not a huge deal.
-
-That way, KVM's notifier callback already knows the memslot and can compute overlap
-between the memslot and the range by reversing the math done by kvm_memfd_get_pfn().
-Then, armed with the gfn and slot, invalidation is just a matter of constructing
-a struct kvm_gfn_range and invoking kvm_unmap_gfn_range().
+Ok sounds good to me thanks.

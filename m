@@ -2,108 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E918347E782
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B204F47E783
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:12:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349709AbhLWSMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 13:12:07 -0500
-Received: from ssl.serverraum.org ([176.9.125.105]:53309 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbhLWSMF (ORCPT
+        id S1349736AbhLWSM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 13:12:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349715AbhLWSM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 13:12:05 -0500
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 2103E223E9;
-        Thu, 23 Dec 2021 19:12:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1640283123;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nRX7vAwWjeC+5mIHv2fkVxYbCFKHsJmLOBQYXaEnGoc=;
-        b=t5jQaHjtifmYXk96YE3zxFBmUUzMx/fAG34lCURwpKTj6zE8naRnTr9HWUtdQmBTs0yM85
-        rvUu9QbX1nivR0VyadbTes7pB7y4y7Pt+/TR1Xvk7pw8t+60iOcVXdlrFLWa1S/vSg6b7d
-        vYI3aIPMNdYkbajHDCphv9r0N9ciqIk=
+        Thu, 23 Dec 2021 13:12:28 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9419EC061756
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:12:27 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id j18so13061189wrd.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:12:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=nzsSR9gaMQOn7J2eW/ssQ5yb+nVeVfpc0pU+2UQV77k=;
+        b=U76cdZV073LBZdQt/UXjHVzVmoPR243sXYoyWwNW3SOIOcAspV9noClNZvnduEZFjE
+         pcLW8qJhL2O7fo8fAA0Yk3CPyo0oz/h5mvbwM421YjY7G/uiEmeBA1j8JnuI7oApI+cH
+         Xs4lwkEvTNPM0d2jHI4wmDWUqMGZlhijplI50GQQu17213585rH3GwxbHEevOJMjbj7u
+         oMwdvYAMERemqGBETcnPcu6JiqaZoOV/VKTr5no1f14BVfxhGHLMwSvJpBycfrxkWpzZ
+         BNxRFf5R3XBHeW5ByewPI57PO6PudsE1hMk0pHLQdAOQKfUnBzl+JTXgsK/ZIFP7MZwp
+         nl2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=nzsSR9gaMQOn7J2eW/ssQ5yb+nVeVfpc0pU+2UQV77k=;
+        b=EoSE1BEGlDd0ewGC26T7IYJ10Gi5q7Pq8k+QBf2aKMdkrctWkFb5XIfApe52cuBDRp
+         J3qhZ4gzZQdaV47x2X5JZwVdjiYF0Lij5qChOV7TNPAZI8S/rtFZqw5og0Z38aWeLcBb
+         UC3jy0laF/zHJM5u61PRtvU0K8eCTKsyj78/0D0Nsr+UmsYjpsRMAlckDUy6+MvAelTY
+         0bUjgTFheJGdASAg8vxlFcieMZO2UD2TFsmw1Axs/GGGKwQ4OJBAAO9ztQ0huxu4uhl1
+         9c/DIu5uZk2KJ3zZ44ahn/ZElK3++A8fY6gpLJVI3OxQ5lw+ewhxFMkIS8FM7uEaMmFZ
+         jfnw==
+X-Gm-Message-State: AOAM532xdisxHrF+c8X+X0P+IzyOQ2tvZlPmDrvSDp4mbC8wtiYEIJ4c
+        ek+iiOA5wHX6YiN78N2fmUjayiKrW6xhtY2ZvNk=
+X-Google-Smtp-Source: ABdhPJwAeXEV9tk0CgLKaSON15uezBoKfvZpV1p5YCAJ6S9ugrj+zKQCgEs0FFVWV+nYysOmmoKQXR9+UteMfCHxnvQ=
+X-Received: by 2002:adf:cc83:: with SMTP id p3mr2499588wrj.680.1640283145808;
+ Thu, 23 Dec 2021 10:12:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 23 Dec 2021 19:12:02 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Re: [PATCH v2] PCI: Fix Intel i210 by avoiding overlapping of BARs
-In-Reply-To: <20211223163754.GA1267351@bhelgaas>
-References: <20211223163754.GA1267351@bhelgaas>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <9526698be0ced0f7a7ed00bd76538d16@walle.cc>
-X-Sender: michael@walle.cc
+Received: by 2002:adf:ef46:0:0:0:0:0 with HTTP; Thu, 23 Dec 2021 10:12:25
+ -0800 (PST)
+Reply-To: mrnizar_rokban@outlook.com
+From:   Mr Nnizar Rokban <mrlevyjamshyd90@gmail.com>
+Date:   Thu, 23 Dec 2021 18:12:25 +0000
+Message-ID: <CA+3-=Kv_D_H7Nr49kM8-mO_VNzEjEwvsAcNAQ6spofFScSiRgg@mail.gmail.com>
+Subject: URGENT IS VERY NEEDED PLEASE
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2021-12-23 17:37, schrieb Bjorn Helgaas:
+Greetings my good friend
 
-> I intended to change the quirk from FINAL to EARLY, but obviously
-> forgot.  Here's the updated version:
-> 
-> commit bb5639b73a2d ("PCI: Work around Intel I210 ROM BAR overlap 
-> defect")
-> Author: Bjorn Helgaas <bhelgaas@google.com>
-> Date:   Tue Dec 21 10:45:07 2021 -0600
-> 
->     PCI: Work around Intel I210 ROM BAR overlap defect
-> 
->     Per PCIe r5, sec 7.5.1.2.4, a device must not claim accesses to its
->     Expansion ROM unless both the Memory Space Enable and the Expansion 
-> ROM
->     Enable bit are set.  But apparently some Intel I210 NICs don't work
->     correctly if the ROM BAR overlaps another BAR, even if the 
-> Expansion ROM is
->     disabled.
-> 
->     Michael reported that on a Kontron SMARC-sAL28 ARM64 system with 
-> U-Boot
->     v2021.01-rc3, the ROM BAR overlaps BAR 3, and networking doesn't 
-> work at
->     all:
-> 
->       BAR 0: 0x40000000 (32-bit, non-prefetchable) [size=1M]
->       BAR 3: 0x40200000 (32-bit, non-prefetchable) [size=16K]
->       ROM:   0x40200000 (disabled) [size=1M]
-> 
->       NETDEV WATCHDOG: enP2p1s0 (igb): transmit queue 0 timed out
->       Hardware name: Kontron SMARC-sAL28 (Single PHY) on SMARC Eval
-> 2.0 carrier (DT)
->       igb 0002:01:00.0 enP2p1s0: Reset adapter
-> 
->     Previously, pci_std_update_resource() wrote the assigned ROM 
-> address to the
->     BAR only when the ROM was enabled.  This meant that the I210 ROM 
-> BAR could
->     be left with an address assigned by firmware, which might overlap 
-> with
->     other BARs.
-> 
->     Quirk these I210 devices so pci_std_update_resource() always writes 
-> the
->     assigned address to the ROM BAR, whether or not the ROM is enabled.
-> 
->     Link: 
-> https://lore.kernel.org/r/20201230185317.30915-1-michael@walle.cc
->     Link: https://bugzilla.kernel.org/show_bug.cgi?id=211105
->     Reported-by: Michael Walle <michael@walle.cc>
->     Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+  I have a proposal for you, this however is not mandatory nor will I
+in any manner compel you to honor against your will. I am Mr Nnizar
+Rokban, a former executive director with Arab Tunisian Bank here in
+Tunis; I retired A year and 7 months ago after putting in 28 years of
+meticulous service. During my days with Arab Tunisian Bank, I was the
+personal account officer and one of the financial advisers to Mr. Zine
+Al-Abidine Ben Ali the past Tunisian President who died on self exile
+at Saudi Arabia. During his tryer period he instructed me to move all
+his investment in my care which consists of US$115M and 767KG of gold
+out of the Gulf States for safe keeping; and that I successfully did
+by moving US$50M to Madrid Spain, US$50M to Dubai United Arab Emirate,
+US$15M to Ouagadougou and 767KG of gold to Acra Ghana in West Africa
+as an anonymous deposits, so that the funds will in no way to be
+traced to him. He has instructed me to find an investor who would
+stand as the beneficiary of the fund and the gold; and claim it for
+further investment.
 
-Tested-by: Michael Walle <michael@walle.cc>
+Consequent upon the above, my proposal is that I would like you as a
+foreigner to stand in as the beneficiary of this fund and the gold
+which I have successfully moved outside the country and provide an
+account overseas where this said fund will be transferred into. It is
+a careful network and my voluntary retirement from the Arab Tunisian
+Bank is to ensure a hitch-free operation as all modalities for you to
+stand as beneficiary and owner of the deposits has been perfected by
+me. Mr. Zine al-Abidine Ben Ali will offer you 20% of the total
+investment if you can be the investor and claim this deposits in
+Spain, Dubai, Ouagadougou and Accra Ghana as the beneficiary.
 
-Thanks,
--michael
+Now my questions are:-
+
+1. Can you handle this transaction?
+2. Can I give you this trust?
+
+Consider this and get back to me as soon as possible so that I can
+give you more details regarding this transaction. Finally, it is my
+humble request that the information as contained herein be accorded
+the necessary attention, urgency as well as the secrecy it deserves.
+
+I expect your urgent response if you can handle this project.
+you can contact me in my emailaddress
+[ mrnizar_rokban@outlook.com ]
+Regards,
+Mr Nnizar Rokban

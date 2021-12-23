@@ -2,83 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D915247E417
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 14:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2EF47E41C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 14:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348648AbhLWN2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 08:28:33 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:38378 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348338AbhLWN2a (ORCPT
+        id S1348658AbhLWNbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 08:31:14 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:22408 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243693AbhLWNbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 08:28:30 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BNDSMnW080040;
-        Thu, 23 Dec 2021 07:28:22 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1640266102;
-        bh=gpYmilyLtZUTDYrWXmQrc3KjXUM/XvOcqez8932MIJ4=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=oQm9DesHktMGfMC894nygJpp3AeYQ+VC5kwVYnLVU19iMeg+7QkGh9iDyOOEAoTm9
-         4BzYofKyXsTaZlAlZ/H9azr8suKm00t7IrTUG5kBEia9HlpSOmmyaK4p4NZ7Dc4rTz
-         AbL86N8HxwNk30FVrlu0cKTHfQMtXaSfJFlJI6yM=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BNDSMfw016863
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 23 Dec 2021 07:28:22 -0600
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 23
- Dec 2021 07:28:22 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 23 Dec 2021 07:28:22 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BNDSMpg096105;
-        Thu, 23 Dec 2021 07:28:22 -0600
-Date:   Thu, 23 Dec 2021 07:28:22 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Roger Quadros <rogerq@kernel.org>
-CC:     <kishon@ti.com>, <vigneshr@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/2] arm64: dts: ti: k3-am64-main: Add GPMC & ELM nodes
-Message-ID: <20211223132822.nhujenxwmdwtjruw@viral>
-References: <20211208131536.23667-1-rogerq@kernel.org>
- <9250e5ed-6d4a-9eae-93d4-90e5906ae166@kernel.org>
+        Thu, 23 Dec 2021 08:31:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1640266273; x=1671802273;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=YoDSXtV6rvarkWTyXxeMntGyoYZrqMPACoSb3VC2mL4=;
+  b=vc1PxbrBE69FvAJLplmRO9XFbn8ivQazs1651xM1Bn6eoMm3oaAHnLKU
+   hVqbXow5vpca7cy818ao+KiWidNs6qnsh4DUv2UdPW2jVTYQ0wdDMHolb
+   6l//jQ4Rsl/yNv3LLbnk4UcoG4sy1tUr4CyHrrk7kjtOAeUlaDX++ZdCS
+   fPI7CcsxCgsV9nAxQDTKI1LmhmUnjJ+aCBJjrmDI6k6PSMDCG6H+iuS9S
+   GBZUhugRID4h2XsIMLmAhdGO7mr3Q8L0YfMdAgK9rPKJYCFYdZKTCJoPF
+   2uTP0pyMnDw3S3wuaaML/3DsIiw2rSfo5bwum6RfGSvIcXk5qtRMjRmSG
+   g==;
+IronPort-SDR: rB9GO1hyF7ANxWThvzaHFPXpcCJwHOmJl6R52U2hsKsWO8hEk7AftzCyrE+DgkMRm4tyVyuJEx
+ e6llV6TsIiZNuPAB5+lDd3bLaFvslWR+qad5UbksDRIZ+aJARzN05oxrbH0DLvynjhjdH88LAi
+ QoiQ4RF9pTmlg6D/liy9XjpV/y4s0ZwiPuQ3GICVAMjKINGTWL29f6pV4XokvhpwW+H2E+0kWT
+ k8+73kEatNIBxFr8Y6AZgfZFIblT9kxPy15Wv8F1sXbsy0WvuRo0cLPO3thKpeFTzbZ1GZT2gx
+ lCj1E/KvaIql3kLPzTgaRbjU
+X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
+   d="scan'208";a="80492374"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Dec 2021 06:31:13 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 23 Dec 2021 06:31:12 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 23 Dec 2021 06:31:10 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     Michael Walle <michael@walle.cc>, <linux-mtd@lists.infradead.org>,
+        "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        <linux-kernel@vger.kernel.org>, Pratyush Yadav <p.yadav@ti.com>,
+        "Richard Weinberger" <richard@nod.at>, <linux-spi@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>
+Subject: (subset) Re: [PATCH v2 0/6] Avoid odd length/address read/writes in 8D-8D-8D mode.
+Date:   Thu, 23 Dec 2021 15:31:08 +0200
+Message-ID: <164026605398.210110.7825546754254895590.b4-ty@microchip.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210531181757.19458-1-p.yadav@ti.com>
+References: <20210531181757.19458-1-p.yadav@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <9250e5ed-6d4a-9eae-93d4-90e5906ae166@kernel.org>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19:11-20211222, Roger Quadros wrote:
-> Hi Nishanth,
+On Mon, 31 May 2021 23:47:51 +0530, Pratyush Yadav wrote:
+> On Octal DTR flashes like Micron Xcella or Cypress S28 family, reads or
+> writes cannot start at an odd address in 8D-8D-8D mode. Neither can they
+> be odd bytes long. Upper layers like filesystems don't know what mode
+> the flash is in, and hence don't know the read/write address or length
+> limitations. They might issue reads or writes that leave the flash in an
+> error state. In fact, using UBIFS on top of the flash was how I first
+> noticed this problem.
 > 
-> On 08/12/2021 15:15, Roger Quadros wrote:
-> > Hi Nishanth,
-> > 
-> > This series adds GPMC and ELM controller device tree nodes to
-> > AM64 SoC's dtsi file.
-> > 
-> > Changelog:
-> > v2
-> > - Fix register sizes for GPMC node.
-> > - Disable GPMC and ELM nodes in board files. They will be enabled in
-> > NAND card device tree overlay.
-> 
-> Gentle reminder to pick this for -next
-> GPMC + NAND side patches are already in queue for -next. Thanks.
+> [...]
 
-just responding to the main thread: lets hold this back for next window.
-the bindings need to be in master rc1 prior to the dts getting picked up.
+Applied to spi-nor/next, thanks!
 
+[1/6] mtd: spi-nor: core: use 2 data bytes for template ops
+      https://git.kernel.org/mtd/c/0d051a49829a
+[2/6] mtd: spi-nor: spansion: write 2 bytes when disabling Octal DTR mode
+      https://git.kernel.org/mtd/c/63017068a6d9
+[3/6] mtd: spi-nor: micron-st: write 2 bytes when disabling Octal DTR mode
+      https://git.kernel.org/mtd/c/9de3cb1cc95b
+
+Best regards,
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Tudor Ambarus <tudor.ambarus@microchip.com>

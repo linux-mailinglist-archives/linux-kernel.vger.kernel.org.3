@@ -2,191 +2,518 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61DD347E1E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 12:01:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA0647E1F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 12:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347843AbhLWLB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 06:01:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55860 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239611AbhLWLB4 (ORCPT
+        id S1347850AbhLWLFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 06:05:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:39830 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239611AbhLWLFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 06:01:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26ABAC061401;
-        Thu, 23 Dec 2021 03:01:56 -0800 (PST)
+        Thu, 23 Dec 2021 06:05:10 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B197C61E25;
-        Thu, 23 Dec 2021 11:01:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C84FC36AEA;
-        Thu, 23 Dec 2021 11:01:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E7CC61E20
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 11:05:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B629C36AE5;
+        Thu, 23 Dec 2021 11:05:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640257315;
-        bh=NGVyI3dy77I78cr4z1j7vHEywOFocutRkeehzswXWLk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lthZXy50TuX9+j+hzMJo73bUnVklQD7rAf3FYFYOqhCZxW5l1xYJkds7C1EyIjLhJ
-         8qWnI4zNIY4APZaELj8DJDFPWPKLVnqqkk49bMTz2VZhXOTScr3Xb+JL6co+ZgqFik
-         b7K2QXkM0rYOmAfDyuPvpcGglNq5HUaVaNdsFi1RRblJskDCPj9QUUL2CVCuPDgeYy
-         fOXwsUK+w9CaHOnsjlhD8omkoUD/oBVVaYQ7G6l2CJwJJWnCRDHbBv1GlJ/6+b4Nyx
-         p1NOSkE0r37vLviaoI2DnvZB93SGzC/AvJjr2OEHlBXfdOQai4qV4tP04Yki+fs2Xv
-         uIPrzQQMMct7g==
-Received: by mail-wm1-f46.google.com with SMTP id f134-20020a1c1f8c000000b00345c05bc12dso3026446wmf.3;
-        Thu, 23 Dec 2021 03:01:55 -0800 (PST)
-X-Gm-Message-State: AOAM531EZH+spfxGiNQEiI9VrjOHae+bw3FXlPzp0SjbSBJk4SUreh9Q
-        xXPDBuW6qemuBVu1R0olHtE4Bo4R/oyP5xEbE0E=
-X-Google-Smtp-Source: ABdhPJwhmS7JMAKuJSRnPUT24qtFJoAEThMpHyhZkHfc01perLw2BVfzcCphvDUlO1AokBXUTnO1NKy0tpTuyhwzpFQ=
-X-Received: by 2002:a1c:1f93:: with SMTP id f141mr1304483wmf.56.1640257313324;
- Thu, 23 Dec 2021 03:01:53 -0800 (PST)
+        s=k20201202; t=1640257509;
+        bh=moFrdfi1gAB4sIuYqhTiGf31cZmF2Nzr0u8tZE00HpY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vcfa2NrQT72MXrlXEZETDr9rJOcPeY8Li2U7nyjGsbcZ4054sCbG4y0ED24KXype3
+         Jz7OakUaHBn0DaZOsem8PhPaSw5xHFmPi3kueUcD2GYaYtPaGPVwTZYEdZvkBuYrAY
+         bxiH6J3nZnPg+ao2QP2TduF60aF2FLdxypN0jl6ipmI6OLO79QuOXqHDlM+Dfr/dXP
+         mBVTOap75+ByDcT8uKIb+vrYlf1x7oE6v1K0L6Fq/pwoBjiKVLh7QVTBCp21FwQ4lq
+         AirF7forLhGJFLVbVPjKBOw1AxK1RtcMF1vTqE+BBrtnftDeYjOlyffjw9G2V+qurs
+         fqIL1qYzH7+iQ==
+Date:   Thu, 23 Dec 2021 16:35:05 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     "Liao, Bard" <bard.liao@intel.com>
+Cc:     Bard Liao <yung-chuan.liao@linux.intel.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tiwai@suse.de" <tiwai@suse.de>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "srinivas.kandagatla@linaro.org" <srinivas.kandagatla@linaro.org>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>,
+        "Kale, Sanyog R" <sanyog.r.kale@intel.com>
+Subject: Re: [PATCH 7/7] soundwire: intel: remove PDM support
+Message-ID: <YcRX4ehgXZIWx3jf@matsya>
+References: <20211213054634.30088-1-yung-chuan.liao@linux.intel.com>
+ <20211213054634.30088-8-yung-chuan.liao@linux.intel.com>
+ <YcQeRJ060/u4n6fR@matsya>
+ <DM6PR11MB4074FEE19010B83F0CDDE8A9FF7E9@DM6PR11MB4074.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-References: <20211223101551.19991-1-lecopzer.chen@mediatek.com>
-In-Reply-To: <20211223101551.19991-1-lecopzer.chen@mediatek.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 23 Dec 2021 12:01:41 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGL++stjcuryn8zVwMgH4F05mONoU3Kca9Ch8N2dW-_bg@mail.gmail.com>
-Message-ID: <CAMj1kXGL++stjcuryn8zVwMgH4F05mONoU3Kca9Ch8N2dW-_bg@mail.gmail.com>
-Subject: Re: [PATCH] ARM: module: fix MODULE_PLTS not work for KASAN
-To:     Lecopzer Chen <lecopzer.chen@mediatek.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Abbott Liu <liuwenliang@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>, yj.chiang@mediatek.com,
-        "# 3.4.x" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DM6PR11MB4074FEE19010B83F0CDDE8A9FF7E9@DM6PR11MB4074.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Dec 2021 at 11:16, Lecopzer Chen <lecopzer.chen@mediatek.com> wrote:
->
-> When we run out of module space address with ko insertion,
-> and with MODULE_PLTS, module would turn to try to find memory
-> from VMALLOC address space.
->
-> Unfortunately, with KASAN enabled, VMALLOC doesn't work without
-> VMALLOC_KASAN which is unimplemented in ARM.
->
-> hello: loading out-of-tree module taints kernel.
-> 8<--- cut here ---
->  Unable to handle kernel paging request at virtual address bd300860
->  [bd300860] *pgd=41cf1811, *pte=41cf26df, *ppte=41cf265f
->  Internal error: Oops: 80f [#1] PREEMPT SMP ARM
->  Modules linked in: hello(O+)
->  CPU: 0 PID: 89 Comm: insmod Tainted: G           O      5.16.0-rc6+ #19
->  Hardware name: Generic DT based system
->  PC is at mmioset+0x30/0xa8
->  LR is at 0x0
->  pc : [<c077ed30>]    lr : [<00000000>]    psr: 20000013
->  sp : c451fc18  ip : bd300860  fp : c451fc2c
->  r10: f18042cc  r9 : f18042d0  r8 : 00000000
->  r7 : 00000001  r6 : 00000003  r5 : 01312d00  r4 : f1804300
->  r3 : 00000000  r2 : 00262560  r1 : 00000000  r0 : bd300860
->  Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
->  Control: 10c5387d  Table: 43e9406a  DAC: 00000051
->  Register r0 information: non-paged memory
->  Register r1 information: NULL pointer
->  Register r2 information: non-paged memory
->  Register r3 information: NULL pointer
->  Register r4 information: 4887-page vmalloc region starting at 0xf1802000 allocated at load_module+0x14f4/0x32a8
->  Register r5 information: non-paged memory
->  Register r6 information: non-paged memory
->  Register r7 information: non-paged memory
->  Register r8 information: NULL pointer
->  Register r9 information: 4887-page vmalloc region starting at 0xf1802000 allocated at load_module+0x14f4/0x32a8
->  Register r10 information: 4887-page vmalloc region starting at 0xf1802000 allocated at load_module+0x14f4/0x32a8
->  Register r11 information: non-slab/vmalloc memory
->  Register r12 information: non-paged memory
->  Process insmod (pid: 89, stack limit = 0xc451c000)
->  Stack: (0xc451fc18 to 0xc4520000)
->  fc00:                                                       f18041f0 c04803a4
->  fc20: c451fc44 c451fc30 c048053c c0480358 f1804030 01312cff c451fc64 c451fc48
->  fc40: c047f330 c0480500 f18040c0 c1b52ccc 00000001 c5be7700 c451fc74 c451fc68
->  fc60: f1802098 c047f300 c451fcb4 c451fc78 c026106c f180208c c4880004 00000000
->  fc80: c451fcb4 bf001000 c044ff48 c451fec0 f18040c0 00000000 c1b54cc4 00000000
->  fca0: c451fdf0 f1804268 c451fe64 c451fcb8 c0264e88 c0260d48 ffff8000 00007fff
->  fcc0: f18040c0 c025cd00 c451fd14 00000003 0157f008 f1804258 f180425c f1804174
->  fce0: f1804154 f180424c f18041f0 f180414c f1804178 f18041c0 bf0025d4 188a3fa8
->  fd00: 0000009e f1804170 f2b18000 c451ff10 c0d92e40 f180416c c451feec 00000001
->  fd20: 00000000 c451fec8 c451fe20 c451fed0 f18040cc 00000000 f17ea000 c451fdc0
->  fd40: 41b58ab3 c1387729 c0261c28 c047fb5c c451fe2c c451fd60 c0525308 c048033c
->  fd60: 188a3fb4 c3ccb090 c451fe00 c3ccb080 00000000 00000000 00016920 00000000
->  fd80: c02d0388 c047f55c c02d0388 00000000 c451fddc c451fda0 c02d0388 00000000
->  fda0: 41b58ab3 c13a72d0 c0524ff0 c1705f48 c451fdfc c451fdc0 c02d0388 c047f55c
->  fdc0: 00016920 00000000 00000003 c1bb2384 c451fdfc c3ccb080 c1bb2384 00000000
->  fde0: 00000000 00000000 00000000 00000000 c451fe1c c451fe00 c04e9d70 c1705f48
->  fe00: c1b54cc4 c1bbc71c c3ccb080 00000000 c3ccb080 00000000 00000003 c451fec0
->  fe20: c451fe64 c451fe30 c0525918 c0524ffc c451feb0 c1705f48 00000000 c1b54cc4
->  fe40: b78a3fd0 c451ff60 00000000 0157f008 00000003 c451fec0 c451ffa4 c451fe68
->  fe60: c0265480 c0261c34 c451feb0 7fffffff 00000000 00000002 00000000 c4880000
->  fe80: 41b58ab3 c138777b c02652cc c04803ec 000a0000 c451ff00 ffffff9c b6ac9f60
->  fea0: c451fed4 c1705f48 c04a4a90 b78a3fdc f17ea000 ffffff9c b6ac9f60 c0100244
->  fec0: f17ea21a f17ea300 f17ea000 00016920 f1800240 f18000ac f17fb7dc 01316000
->  fee0: 013161b0 00002590 01316250 00000000 00000000 00000000 00002580 00000029
->  ff00: 0000002a 00000013 00000000 0000000c 00000000 00000000 0157f004 c451ffb0
->  ff20: c1719be0 aed6f410 c451ff74 c451ff38 c0c4103c c0c407d0 c451ff84 c451ff48
->  ff40: 00000805 c02c8658 c1604230 c1719c30 00000805 0157f004 00000005 c451ffb0
->  ff60: c1719be0 aed6f410 c451ffac c451ff78 c0122130 c1705f48 c451ffac 0157f008
->  ff80: 00000006 0000005f 0000017b c0100244 c4880000 0000017b 00000000 c451ffa8
->  ffa0: c0100060 c02652d8 0157f008 00000006 00000003 0157f008 00000000 b6ac9f60
->  ffc0: 0157f008 00000006 0000005f 0000017b 00000000 00000000 aed85f74 00000000
->  ffe0: b6ac9cd8 b6ac9cc8 00030200 aecf2d60 a0000010 00000003 00000000 00000000
->  Backtrace:
->  [<c048034c>] (kasan_poison) from [<c048053c>] (kasan_unpoison+0x48/0x5c)
->  [<c04804f4>] (kasan_unpoison) from [<c047f330>] (__asan_register_globals+0x3c/0x64)
->   r5:01312cff r4:f1804030
->  [<c047f2f4>] (__asan_register_globals) from [<f1802098>] (_sub_I_65535_1+0x18/0xf80 [hello])
->   r7:c5be7700 r6:00000001 r5:c1b52ccc r4:f18040c0
->  [<f1802080>] (_sub_I_65535_1 [hello]) from [<c026106c>] (do_init_module+0x330/0x72c)
->  [<c0260d3c>] (do_init_module) from [<c0264e88>] (load_module+0x3260/0x32a8)
->   r10:f1804268 r9:c451fdf0 r8:00000000 r7:c1b54cc4 r6:00000000 r5:f18040c0
->   r4:c451fec0
->  [<c0261c28>] (load_module) from [<c0265480>] (sys_finit_module+0x1b4/0x1e8)
->   r10:c451fec0 r9:00000003 r8:0157f008 r7:00000000 r6:c451ff60 r5:b78a3fd0
->   r4:c1b54cc4
->  [<c02652cc>] (sys_finit_module) from [<c0100060>] (ret_fast_syscall+0x0/0x1c)
->  Exception stack(0xc451ffa8 to 0xc451fff0)
->  ffa0:                   0157f008 00000006 00000003 0157f008 00000000 b6ac9f60
->  ffc0: 0157f008 00000006 0000005f 0000017b 00000000 00000000 aed85f74 00000000
->  ffe0: b6ac9cd8 b6ac9cc8 00030200 aecf2d60
->   r10:0000017b r9:c4880000 r8:c0100244 r7:0000017b r6:0000005f r5:00000006
->   r4:0157f008
->  Code: e92d4100 e1a08001 e1a0e003 e2522040 (a8ac410a)
->  ---[ end trace df6e12843197b6f5 ]---
->
-> Cc: <stable@vger.kernel.org> # 5.10+
-> Fixes: 421015713b306e47af9 ("ARM: 9017/2: Enable KASan for ARM")
-> Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
-> ---
->  arch/arm/kernel/module.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/arm/kernel/module.c b/arch/arm/kernel/module.c
-> index beac45e89ba6..c818aba72f68 100644
-> --- a/arch/arm/kernel/module.c
-> +++ b/arch/arm/kernel/module.c
-> @@ -46,7 +46,7 @@ void *module_alloc(unsigned long size)
->         p = __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
->                                 gfp_mask, PAGE_KERNEL_EXEC, 0, NUMA_NO_NODE,
->                                 __builtin_return_address(0));
-> -       if (!IS_ENABLED(CONFIG_ARM_MODULE_PLTS) || p)
-> +       if (!IS_ENABLED(CONFIG_ARM_MODULE_PLTS) || IS_ENABLED(CONFIG_KASAN) || p)
+On 23-12-21, 07:46, Liao, Bard wrote:
+> > -----Original Message-----
+> > From: Vinod Koul <vkoul@kernel.org>
+> > Sent: Thursday, December 23, 2021 2:59 PM
+> > To: Bard Liao <yung-chuan.liao@linux.intel.com>
+> > Cc: alsa-devel@alsa-project.org; linux-kernel@vger.kernel.org;
+> > tiwai@suse.de; broonie@kernel.org; gregkh@linuxfoundation.org;
+> > srinivas.kandagatla@linaro.org; pierre-louis.bossart@linux.intel.com; Kale,
+> > Sanyog R <sanyog.r.kale@intel.com>; Liao, Bard <bard.liao@intel.com>
+> > Subject: Re: [PATCH 7/7] soundwire: intel: remove PDM support
+> > 
+> > On 13-12-21, 13:46, Bard Liao wrote:
+> > > From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> > >
+> > > While the hardware supports PDM streams, this capability has never
+> > > been tested or enabled on any product, so this is dead-code. Let's
+> > > remove all this.
+> > 
+> > So no plans to test and enable this? Do the DMICs not use PDM?
+> 
+> The point is that this code is unused/untested. We can re-add it after
+> it was tested.
 
+That does not answer my question. Do the DMICs not use PDM?
 
-Hello Lecopzer,
+> 
+> > 
+> > Again this should not be in this series...
+> 
+> Agree, but since this patche depends on the previous patches, I sent them
+> together to avoid conflict.
 
-This is not the right place to fix this. If module PLTs are
-incompatible with KAsan, they should not be selectable in Kconfig at
-the same time.
+There are ways to handle that...
 
-But ideally, we should implement KASAN_VMALLOC for ARM as well - we
-also need this for the vmap'ed stacks.
+> 
+> > 
+> > >
+> > > Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> > > Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
+> > > Reviewed-by: Rander Wang <rander.wang@intel.com>
+> > > Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+> > > ---
+> > >  drivers/soundwire/cadence_master.c |  36 +--------
+> > >  drivers/soundwire/cadence_master.h |  12 +--
+> > >  drivers/soundwire/intel.c          | 123 +++++++----------------------
+> > >  3 files changed, 31 insertions(+), 140 deletions(-)
+> > >
+> > > diff --git a/drivers/soundwire/cadence_master.c
+> > b/drivers/soundwire/cadence_master.c
+> > > index 4fcc3ba93004..558390af44b6 100644
+> > > --- a/drivers/soundwire/cadence_master.c
+> > > +++ b/drivers/soundwire/cadence_master.c
+> > > @@ -1178,9 +1178,6 @@ int sdw_cdns_pdi_init(struct sdw_cdns *cdns,
+> > >  	cdns->pcm.num_bd = config.pcm_bd;
+> > >  	cdns->pcm.num_in = config.pcm_in;
+> > >  	cdns->pcm.num_out = config.pcm_out;
+> > > -	cdns->pdm.num_bd = config.pdm_bd;
+> > > -	cdns->pdm.num_in = config.pdm_in;
+> > > -	cdns->pdm.num_out = config.pdm_out;
+> > >
+> > >  	/* Allocate PDIs for PCMs */
+> > >  	stream = &cdns->pcm;
+> > > @@ -1211,32 +1208,6 @@ int sdw_cdns_pdi_init(struct sdw_cdns *cdns,
+> > >  	stream->num_pdi = stream->num_bd + stream->num_in + stream-
+> > >num_out;
+> > >  	cdns->num_ports = stream->num_pdi;
+> > >
+> > > -	/* Allocate PDIs for PDMs */
+> > > -	stream = &cdns->pdm;
+> > > -	ret = cdns_allocate_pdi(cdns, &stream->bd,
+> > > -				stream->num_bd, offset);
+> > > -	if (ret)
+> > > -		return ret;
+> > > -
+> > > -	offset += stream->num_bd;
+> > > -
+> > > -	ret = cdns_allocate_pdi(cdns, &stream->in,
+> > > -				stream->num_in, offset);
+> > > -	if (ret)
+> > > -		return ret;
+> > > -
+> > > -	offset += stream->num_in;
+> > > -
+> > > -	ret = cdns_allocate_pdi(cdns, &stream->out,
+> > > -				stream->num_out, offset);
+> > > -
+> > > -	if (ret)
+> > > -		return ret;
+> > > -
+> > > -	/* Update total number of PDM PDIs */
+> > > -	stream->num_pdi = stream->num_bd + stream->num_in + stream-
+> > >num_out;
+> > > -	cdns->num_ports += stream->num_pdi;
+> > > -
+> > >  	return 0;
+> > >  }
+> > >  EXPORT_SYMBOL(sdw_cdns_pdi_init);
+> > > @@ -1681,7 +1652,7 @@ int sdw_cdns_probe(struct sdw_cdns *cdns)
+> > >  EXPORT_SYMBOL(sdw_cdns_probe);
+> > >
+> > >  int cdns_set_sdw_stream(struct snd_soc_dai *dai,
+> > > -			void *stream, bool pcm, int direction)
+> > > +			void *stream, int direction)
+> > >  {
+> > >  	struct sdw_cdns *cdns = snd_soc_dai_get_drvdata(dai);
+> > >  	struct sdw_cdns_dma_data *dma;
+> > > @@ -1705,10 +1676,7 @@ int cdns_set_sdw_stream(struct snd_soc_dai
+> > *dai,
+> > >  		if (!dma)
+> > >  			return -ENOMEM;
+> > >
+> > > -		if (pcm)
+> > > -			dma->stream_type = SDW_STREAM_PCM;
+> > > -		else
+> > > -			dma->stream_type = SDW_STREAM_PDM;
+> > > +		dma->stream_type = SDW_STREAM_PCM;
+> > >
+> > >  		dma->bus = &cdns->bus;
+> > >  		dma->link_id = cdns->instance;
+> > > diff --git a/drivers/soundwire/cadence_master.h
+> > b/drivers/soundwire/cadence_master.h
+> > > index aa4b9b0eb2a8..595d72c15d97 100644
+> > > --- a/drivers/soundwire/cadence_master.h
+> > > +++ b/drivers/soundwire/cadence_master.h
+> > > @@ -17,7 +17,7 @@
+> > >   * @h_ch_num: high channel for PDI
+> > >   * @ch_count: total channel count for PDI
+> > >   * @dir: data direction
+> > > - * @type: stream type, PDM or PCM
+> > > + * @type: stream type, (only PCM supported)
+> > >   */
+> > >  struct sdw_cdns_pdi {
+> > >  	int num;
+> > > @@ -62,17 +62,11 @@ struct sdw_cdns_streams {
+> > >   * @pcm_bd: number of bidirectional PCM streams supported
+> > >   * @pcm_in: number of input PCM streams supported
+> > >   * @pcm_out: number of output PCM streams supported
+> > > - * @pdm_bd: number of bidirectional PDM streams supported
+> > > - * @pdm_in: number of input PDM streams supported
+> > > - * @pdm_out: number of output PDM streams supported
+> > >   */
+> > >  struct sdw_cdns_stream_config {
+> > >  	unsigned int pcm_bd;
+> > >  	unsigned int pcm_in;
+> > >  	unsigned int pcm_out;
+> > > -	unsigned int pdm_bd;
+> > > -	unsigned int pdm_in;
+> > > -	unsigned int pdm_out;
+> > >  };
+> > >
+> > >  /**
+> > > @@ -111,7 +105,6 @@ struct sdw_cdns_dma_data {
+> > >   * @ports: Data ports
+> > >   * @num_ports: Total number of data ports
+> > >   * @pcm: PCM streams
+> > > - * @pdm: PDM streams
+> > >   * @registers: Cadence registers
+> > >   * @link_up: Link status
+> > >   * @msg_count: Messages sent on bus
+> > > @@ -129,7 +122,6 @@ struct sdw_cdns {
+> > >  	int num_ports;
+> > >
+> > >  	struct sdw_cdns_streams pcm;
+> > > -	struct sdw_cdns_streams pdm;
+> > >
+> > >  	int pdi_loopback_source;
+> > >  	int pdi_loopback_target;
+> > > @@ -188,7 +180,7 @@ cdns_xfer_msg_defer(struct sdw_bus *bus,
+> > >  int cdns_bus_conf(struct sdw_bus *bus, struct sdw_bus_params
+> > *params);
+> > >
+> > >  int cdns_set_sdw_stream(struct snd_soc_dai *dai,
+> > > -			void *stream, bool pcm, int direction);
+> > > +			void *stream, int direction);
+> > >
+> > >  void sdw_cdns_check_self_clearing_bits(struct sdw_cdns *cdns, const
+> > char *string,
+> > >  				       bool initial_delay, int reset_iterations);
+> > > diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
+> > > index 45ea55a7d0c8..79ba0e3f6dac 100644
+> > > --- a/drivers/soundwire/intel.c
+> > > +++ b/drivers/soundwire/intel.c
+> > > @@ -564,7 +564,7 @@ static void intel_pdi_init(struct sdw_intel *sdw,
+> > >  {
+> > >  	void __iomem *shim = sdw->link_res->shim;
+> > >  	unsigned int link_id = sdw->instance;
+> > > -	int pcm_cap, pdm_cap;
+> > > +	int pcm_cap;
+> > >
+> > >  	/* PCM Stream Capability */
+> > >  	pcm_cap = intel_readw(shim, SDW_SHIM_PCMSCAP(link_id));
+> > > @@ -575,41 +575,25 @@ static void intel_pdi_init(struct sdw_intel *sdw,
+> > >
+> > >  	dev_dbg(sdw->cdns.dev, "PCM cap bd:%d in:%d out:%d\n",
+> > >  		config->pcm_bd, config->pcm_in, config->pcm_out);
+> > > -
+> > > -	/* PDM Stream Capability */
+> > > -	pdm_cap = intel_readw(shim, SDW_SHIM_PDMSCAP(link_id));
+> > > -
+> > > -	config->pdm_bd = FIELD_GET(SDW_SHIM_PDMSCAP_BSS,
+> > pdm_cap);
+> > > -	config->pdm_in = FIELD_GET(SDW_SHIM_PDMSCAP_ISS, pdm_cap);
+> > > -	config->pdm_out = FIELD_GET(SDW_SHIM_PDMSCAP_OSS,
+> > pdm_cap);
+> > > -
+> > > -	dev_dbg(sdw->cdns.dev, "PDM cap bd:%d in:%d out:%d\n",
+> > > -		config->pdm_bd, config->pdm_in, config->pdm_out);
+> > >  }
+> > >
+> > >  static int
+> > > -intel_pdi_get_ch_cap(struct sdw_intel *sdw, unsigned int pdi_num, bool
+> > pcm)
+> > > +intel_pdi_get_ch_cap(struct sdw_intel *sdw, unsigned int pdi_num)
+> > >  {
+> > >  	void __iomem *shim = sdw->link_res->shim;
+> > >  	unsigned int link_id = sdw->instance;
+> > >  	int count;
+> > >
+> > > -	if (pcm) {
+> > > -		count = intel_readw(shim, SDW_SHIM_PCMSYCHC(link_id,
+> > pdi_num));
+> > > +	count = intel_readw(shim, SDW_SHIM_PCMSYCHC(link_id,
+> > pdi_num));
+> > >
+> > > -		/*
+> > > -		 * WORKAROUND: on all existing Intel controllers, pdi
+> > > -		 * number 2 reports channel count as 1 even though it
+> > > -		 * supports 8 channels. Performing hardcoding for pdi
+> > > -		 * number 2.
+> > > -		 */
+> > > -		if (pdi_num == 2)
+> > > -			count = 7;
+> > > -
+> > > -	} else {
+> > > -		count = intel_readw(shim, SDW_SHIM_PDMSCAP(link_id));
+> > > -		count = FIELD_GET(SDW_SHIM_PDMSCAP_CPSS, count);
+> > > -	}
+> > > +	/*
+> > > +	 * WORKAROUND: on all existing Intel controllers, pdi
+> > > +	 * number 2 reports channel count as 1 even though it
+> > > +	 * supports 8 channels. Performing hardcoding for pdi
+> > > +	 * number 2.
+> > > +	 */
+> > > +	if (pdi_num == 2)
+> > > +		count = 7;
+> > >
+> > >  	/* zero based values for channel count in register */
+> > >  	count++;
+> > > @@ -620,12 +604,12 @@ intel_pdi_get_ch_cap(struct sdw_intel *sdw,
+> > unsigned int pdi_num, bool pcm)
+> > >  static int intel_pdi_get_ch_update(struct sdw_intel *sdw,
+> > >  				   struct sdw_cdns_pdi *pdi,
+> > >  				   unsigned int num_pdi,
+> > > -				   unsigned int *num_ch, bool pcm)
+> > > +				   unsigned int *num_ch)
+> > >  {
+> > >  	int i, ch_count = 0;
+> > >
+> > >  	for (i = 0; i < num_pdi; i++) {
+> > > -		pdi->ch_count = intel_pdi_get_ch_cap(sdw, pdi->num, pcm);
+> > > +		pdi->ch_count = intel_pdi_get_ch_cap(sdw, pdi->num);
+> > >  		ch_count += pdi->ch_count;
+> > >  		pdi++;
+> > >  	}
+> > > @@ -635,25 +619,23 @@ static int intel_pdi_get_ch_update(struct
+> > sdw_intel *sdw,
+> > >  }
+> > >
+> > >  static int intel_pdi_stream_ch_update(struct sdw_intel *sdw,
+> > > -				      struct sdw_cdns_streams *stream, bool
+> > pcm)
+> > > +				      struct sdw_cdns_streams *stream)
+> > >  {
+> > >  	intel_pdi_get_ch_update(sdw, stream->bd, stream->num_bd,
+> > > -				&stream->num_ch_bd, pcm);
+> > > +				&stream->num_ch_bd);
+> > >
+> > >  	intel_pdi_get_ch_update(sdw, stream->in, stream->num_in,
+> > > -				&stream->num_ch_in, pcm);
+> > > +				&stream->num_ch_in);
+> > >
+> > >  	intel_pdi_get_ch_update(sdw, stream->out, stream->num_out,
+> > > -				&stream->num_ch_out, pcm);
+> > > +				&stream->num_ch_out);
+> > >
+> > >  	return 0;
+> > >  }
+> > >
+> > >  static int intel_pdi_ch_update(struct sdw_intel *sdw)
+> > >  {
+> > > -	/* First update PCM streams followed by PDM streams */
+> > > -	intel_pdi_stream_ch_update(sdw, &sdw->cdns.pcm, true);
+> > > -	intel_pdi_stream_ch_update(sdw, &sdw->cdns.pdm, false);
+> > > +	intel_pdi_stream_ch_update(sdw, &sdw->cdns.pcm);
+> > >
+> > >  	return 0;
+> > >  }
+> > > @@ -840,7 +822,6 @@ static int intel_hw_params(struct
+> > snd_pcm_substream *substream,
+> > >  	struct sdw_port_config *pconfig;
+> > >  	int ch, dir;
+> > >  	int ret;
+> > > -	bool pcm = true;
+> > >
+> > >  	dma = snd_soc_dai_get_dma_data(dai, substream);
+> > >  	if (!dma)
+> > > @@ -852,13 +833,7 @@ static int intel_hw_params(struct
+> > snd_pcm_substream *substream,
+> > >  	else
+> > >  		dir = SDW_DATA_DIR_TX;
+> > >
+> > > -	if (dma->stream_type == SDW_STREAM_PDM)
+> > > -		pcm = false;
+> > > -
+> > > -	if (pcm)
+> > > -		pdi = sdw_cdns_alloc_pdi(cdns, &cdns->pcm, ch, dir, dai->id);
+> > > -	else
+> > > -		pdi = sdw_cdns_alloc_pdi(cdns, &cdns->pdm, ch, dir, dai->id);
+> > > +	pdi = sdw_cdns_alloc_pdi(cdns, &cdns->pcm, ch, dir, dai->id);
+> > >
+> > >  	if (!pdi) {
+> > >  		ret = -EINVAL;
+> > > @@ -888,12 +863,7 @@ static int intel_hw_params(struct
+> > snd_pcm_substream *substream,
+> > >  	sconfig.frame_rate = params_rate(params);
+> > >  	sconfig.type = dma->stream_type;
+> > >
+> > > -	if (dma->stream_type == SDW_STREAM_PDM) {
+> > > -		sconfig.frame_rate *= 50;
+> > > -		sconfig.bps = 1;
+> > > -	} else {
+> > > -		sconfig.bps =
+> > snd_pcm_format_width(params_format(params));
+> > > -	}
+> > > +	sconfig.bps = snd_pcm_format_width(params_format(params));
+> > >
+> > >  	/* Port configuration */
+> > >  	pconfig = kzalloc(sizeof(*pconfig), GFP_KERNEL);
+> > > @@ -1012,13 +982,7 @@ static void intel_shutdown(struct
+> > snd_pcm_substream *substream,
+> > >  static int intel_pcm_set_sdw_stream(struct snd_soc_dai *dai,
+> > >  				    void *stream, int direction)
+> > >  {
+> > > -	return cdns_set_sdw_stream(dai, stream, true, direction);
+> > > -}
+> > > -
+> > > -static int intel_pdm_set_sdw_stream(struct snd_soc_dai *dai,
+> > > -				    void *stream, int direction)
+> > > -{
+> > > -	return cdns_set_sdw_stream(dai, stream, false, direction);
+> > > +	return cdns_set_sdw_stream(dai, stream, direction);
+> > >  }
+> > >
+> > >  static void *intel_get_sdw_stream(struct snd_soc_dai *dai,
+> > > @@ -1133,16 +1097,6 @@ static const struct snd_soc_dai_ops
+> > intel_pcm_dai_ops = {
+> > >  	.get_stream = intel_get_sdw_stream,
+> > >  };
+> > >
+> > > -static const struct snd_soc_dai_ops intel_pdm_dai_ops = {
+> > > -	.startup = intel_startup,
+> > > -	.hw_params = intel_hw_params,
+> > > -	.prepare = intel_prepare,
+> > > -	.hw_free = intel_hw_free,
+> > > -	.shutdown = intel_shutdown,
+> > > -	.set_sdw_stream = intel_pdm_set_sdw_stream,
+> > > -	.get_sdw_stream = intel_get_sdw_stream,
+> > > -};
+> > > -
+> > >  static const struct snd_soc_component_driver dai_component = {
+> > >  	.name           = "soundwire",
+> > >  	.suspend	= intel_component_dais_suspend
+> > > @@ -1151,7 +1105,7 @@ static const struct snd_soc_component_driver
+> > dai_component = {
+> > >  static int intel_create_dai(struct sdw_cdns *cdns,
+> > >  			    struct snd_soc_dai_driver *dais,
+> > >  			    enum intel_pdi_type type,
+> > > -			    u32 num, u32 off, u32 max_ch, bool pcm)
+> > > +			    u32 num, u32 off, u32 max_ch)
+> > >  {
+> > >  	int i;
+> > >
+> > > @@ -1180,10 +1134,7 @@ static int intel_create_dai(struct sdw_cdns *cdns,
+> > >  			dais[i].capture.formats =
+> > SNDRV_PCM_FMTBIT_S16_LE;
+> > >  		}
+> > >
+> > > -		if (pcm)
+> > > -			dais[i].ops = &intel_pcm_dai_ops;
+> > > -		else
+> > > -			dais[i].ops = &intel_pdm_dai_ops;
+> > > +		dais[i].ops = &intel_pcm_dai_ops;
+> > >  	}
+> > >
+> > >  	return 0;
+> > > @@ -1197,7 +1148,7 @@ static int intel_register_dai(struct sdw_intel *sdw)
+> > >  	int num_dai, ret, off = 0;
+> > >
+> > >  	/* DAIs are created based on total number of PDIs supported */
+> > > -	num_dai = cdns->pcm.num_pdi + cdns->pdm.num_pdi;
+> > > +	num_dai = cdns->pcm.num_pdi;
+> > >
+> > >  	dais = devm_kcalloc(cdns->dev, num_dai, sizeof(*dais),
+> > GFP_KERNEL);
+> > >  	if (!dais)
+> > > @@ -1207,39 +1158,19 @@ static int intel_register_dai(struct sdw_intel
+> > *sdw)
+> > >  	stream = &cdns->pcm;
+> > >
+> > >  	ret = intel_create_dai(cdns, dais, INTEL_PDI_IN, cdns->pcm.num_in,
+> > > -			       off, stream->num_ch_in, true);
+> > > +			       off, stream->num_ch_in);
+> > >  	if (ret)
+> > >  		return ret;
+> > >
+> > >  	off += cdns->pcm.num_in;
+> > >  	ret = intel_create_dai(cdns, dais, INTEL_PDI_OUT, cdns-
+> > >pcm.num_out,
+> > > -			       off, stream->num_ch_out, true);
+> > > +			       off, stream->num_ch_out);
+> > >  	if (ret)
+> > >  		return ret;
+> > >
+> > >  	off += cdns->pcm.num_out;
+> > >  	ret = intel_create_dai(cdns, dais, INTEL_PDI_BD, cdns->pcm.num_bd,
+> > > -			       off, stream->num_ch_bd, true);
+> > > -	if (ret)
+> > > -		return ret;
+> > > -
+> > > -	/* Create PDM DAIs */
+> > > -	stream = &cdns->pdm;
+> > > -	off += cdns->pcm.num_bd;
+> > > -	ret = intel_create_dai(cdns, dais, INTEL_PDI_IN, cdns->pdm.num_in,
+> > > -			       off, stream->num_ch_in, false);
+> > > -	if (ret)
+> > > -		return ret;
+> > > -
+> > > -	off += cdns->pdm.num_in;
+> > > -	ret = intel_create_dai(cdns, dais, INTEL_PDI_OUT, cdns-
+> > >pdm.num_out,
+> > > -			       off, stream->num_ch_out, false);
+> > > -	if (ret)
+> > > -		return ret;
+> > > -
+> > > -	off += cdns->pdm.num_out;
+> > > -	ret = intel_create_dai(cdns, dais, INTEL_PDI_BD, cdns-
+> > >pdm.num_bd,
+> > > -			       off, stream->num_ch_bd, false);
+> > > +			       off, stream->num_ch_bd);
+> > >  	if (ret)
+> > >  		return ret;
+> > >
+> > > --
+> > > 2.17.1
+> > 
+> > --
+> > ~Vinod
 
-
->                 return p;
->         return __vmalloc_node_range(size, 1,  VMALLOC_START, VMALLOC_END,
->                                 GFP_KERNEL, PAGE_KERNEL_EXEC, 0, NUMA_NO_NODE,
+-- 
+~Vinod

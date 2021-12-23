@@ -2,277 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 101E547E884
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 20:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C951847E88D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 20:57:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350179AbhLWT4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 14:56:07 -0500
-Received: from mga03.intel.com ([134.134.136.65]:19666 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244935AbhLWT4G (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 14:56:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640289366; x=1671825366;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=WErW4BHcxtmCwZOjNoLXEmSmCYrSarVDP90bgNIp+Qk=;
-  b=W1s/6j3pFnsnSvJLTAHBUPKgyfljBBysV2W0a43HMeKmZYzzm5p8BykU
-   8JgID8FtuAXS31CKkg87HDDQ/WeRFxlFK3rKwv4lpsL3jiVo3GM5xsVob
-   XsiFxEYd2gb3ZUaJKDyIGb/CTEOuCHWVxJzKjalwsbMluUYnWxyuq+ZbT
-   nsH3xR9sjphU8gORHRMp1TLLC6K0twy7i1DVb867eqmUXommuopI1nkgt
-   2qctLWLv8SgO4WtG5BK5Lb3URDfyenfT9nhQ6sKSU/gsMZYbZL+dYEzyN
-   EiEODfg/OS+5lPln5wBp2R0OllG4E+8NjTSnD4Sp8O7Y6hlAkZ/yEyibA
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10207"; a="240832688"
-X-IronPort-AV: E=Sophos;i="5.88,230,1635231600"; 
-   d="scan'208";a="240832688"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 11:56:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,230,1635231600"; 
-   d="scan'208";a="468637690"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 23 Dec 2021 11:56:04 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n0UC4-0002Dg-8n; Thu, 23 Dec 2021 19:56:04 +0000
-Date:   Fri, 24 Dec 2021 03:55:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:ras/core] BUILD SUCCESS
- 91f75eb481cfaee5c4ed8fb5214bf2fbfa04bd7b
-Message-ID: <61c4d427.O/RFkp/ASu1G+qy1%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1350184AbhLWT50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 14:57:26 -0500
+Received: from out03.mta.xmission.com ([166.70.13.233]:41894 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242793AbhLWT5Y (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 14:57:24 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52]:34538)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n0UDK-00F9Io-Dd; Thu, 23 Dec 2021 12:57:22 -0700
+Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:58666 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n0UDJ-00CdYC-7p; Thu, 23 Dec 2021 12:57:22 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Alexey Gladkov <legion@kernel.org>, <linux-kernel@vger.kernel.org>,
+        Linux Containers <containers@lists.linux.dev>
+Date:   Thu, 23 Dec 2021 13:55:48 -0600
+Message-ID: <87r1a3t7sr.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-XM-SPF: eid=1n0UDJ-00CdYC-7p;;;mid=<87r1a3t7sr.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX19htWhqwsoj+0/1LYVI3wYdacjkXJeHZRg=
+X-SA-Exim-Connect-IP: 68.110.24.146
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
+X-Spam-Level: **
+X-Spam-Status: No, score=2.6 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,SUBJ_ALL_CAPS,T_TM2_M_HEADER_IN_MSG,
+        XMSubMetaSxObfu_03,XMSubMetaSx_00 autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4994]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  1.0 XMSubMetaSx_00 1+ Sexy Words
+        *  1.2 XMSubMetaSxObfu_03 Obfuscated Sexy Noun-People
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Linus Torvalds <torvalds@linux-foundation.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 555 ms - load_scoreonly_sql: 0.08 (0.0%),
+        signal_user_changed: 10 (1.7%), b_tie_ro: 8 (1.5%), parse: 0.90 (0.2%),
+         extract_message_metadata: 16 (2.9%), get_uri_detail_list: 3.0 (0.5%),
+        tests_pri_-1000: 14 (2.6%), tests_pri_-950: 1.19 (0.2%),
+        tests_pri_-900: 0.96 (0.2%), tests_pri_-90: 123 (22.2%), check_bayes:
+        121 (21.8%), b_tokenize: 9 (1.6%), b_tok_get_all: 7 (1.3%),
+        b_comp_prob: 2.3 (0.4%), b_tok_touch_all: 99 (17.8%), b_finish: 0.96
+        (0.2%), tests_pri_0: 374 (67.5%), check_dkim_signature: 0.57 (0.1%),
+        check_dkim_adsp: 4.8 (0.9%), poll_dns_idle: 0.53 (0.1%), tests_pri_10:
+        2.1 (0.4%), tests_pri_500: 9 (1.7%), rewrite_mail: 0.00 (0.0%)
+Subject: [GIT PULL]
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ras/core
-branch HEAD: 91f75eb481cfaee5c4ed8fb5214bf2fbfa04bd7b  x86/MCE/AMD, EDAC/mce_amd: Support non-uniform MCA bank type enumeration
 
-possible Warning in current branch (please contact us if interested):
+Linus,
 
-vmlinux.o: warning: objtool: do_machine_check()+0x3c3: call to test_bit() leaves .noinstr.text section
-vmlinux.o: warning: objtool: mce_read_aux()+0x46: call to mca_msr_reg() leaves .noinstr.text section
-vmlinux.o: warning: objtool: mce_start()+0x46: call to __tsan_atomic64_fetch_add() leaves .noinstr.text section
+Please pull the ucount-rlimit-fixes-for-v5.16 branch from the git tree:
 
-Warning ids grouped by kconfigs:
+  git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git ucount-rlimit-fixes-for-v5.16
 
-gcc_recent_errors
-`-- x86_64-buildonly-randconfig-r002-20211222
-    |-- vmlinux.o:warning:objtool:do_machine_check():call-to-test_bit()-leaves-.noinstr.text-section
-    `-- vmlinux.o:warning:objtool:mce_read_aux():call-to-mca_msr_reg()-leaves-.noinstr.text-section
+  HEAD: 59ec71575ab440cd5ca0aa53b2a2985b3639fad4 ucounts: Fix rlimit max values check
 
-clang_recent_errors
-`-- x86_64-randconfig-a013-20211222
-    `-- vmlinux.o:warning:objtool:mce_start():call-to-__tsan_atomic64_fetch_add()-leaves-.noinstr.text-section
+This fixes a silly logic bug in the ucount rlimits code, where it was
+comparing against the wrong limit.  As the fix is quite small it is
+included in it's entirety below.
 
-elapsed time: 1491m
+Eric
 
-configs tested: 189
-configs skipped: 3
+From 59ec71575ab440cd5ca0aa53b2a2985b3639fad4 Mon Sep 17 00:00:00 2001
+From: Alexey Gladkov <legion@kernel.org>
+Date: Mon, 29 Nov 2021 21:37:25 +0100
+Subject: [PATCH] ucounts: Fix rlimit max values check
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+The semantics of the rlimit max values differs from ucounts itself. When
+creating a new userns, we store the current rlimit of the process in
+ucount_max. Thus, the value of the limit in the parent userns is saved
+in the created one.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211223
-arm                          moxart_defconfig
-powerpc               mpc834x_itxgp_defconfig
-sparc                       sparc64_defconfig
-powerpc                         wii_defconfig
-powerpc64                        alldefconfig
-powerpc                      ppc44x_defconfig
-powerpc                   bluestone_defconfig
-powerpc                 mpc832x_rdb_defconfig
-mips                     loongson1b_defconfig
-mips                        maltaup_defconfig
-mips                  decstation_64_defconfig
-sh                      rts7751r2d1_defconfig
-arm                         lubbock_defconfig
-arm                   milbeaut_m10v_defconfig
-mips                             allmodconfig
-m68k                        mvme147_defconfig
-sh                 kfr2r09-romimage_defconfig
-powerpc                      pcm030_defconfig
-arc                     nsimosci_hs_defconfig
-mips                         db1xxx_defconfig
-arm                          badge4_defconfig
-powerpc                     tqm8540_defconfig
-mips                           ip22_defconfig
-sparc                            allyesconfig
-sh                          sdk7786_defconfig
-powerpc                   motionpro_defconfig
-arm                        clps711x_defconfig
-sh                           se7343_defconfig
-ia64                      gensparse_defconfig
-h8300                     edosk2674_defconfig
-arc                        vdk_hs38_defconfig
-m68k                       m5208evb_defconfig
-powerpc                     tqm8555_defconfig
-arm                         lpc32xx_defconfig
-mips                   sb1250_swarm_defconfig
-arm                       aspeed_g4_defconfig
-arm                          pxa3xx_defconfig
-sh                           se7722_defconfig
-mips                     cu1000-neo_defconfig
-mips                            e55_defconfig
-arm                             pxa_defconfig
-sh                          kfr2r09_defconfig
-powerpc                 mpc832x_mds_defconfig
-ia64                             allyesconfig
-powerpc                     skiroot_defconfig
-powerpc                      ep88xc_defconfig
-mips                     decstation_defconfig
-arc                            hsdk_defconfig
-powerpc                      pmac32_defconfig
-arm                        oxnas_v6_defconfig
-powerpc                     ppa8548_defconfig
-sh                          rsk7264_defconfig
-powerpc64                           defconfig
-sh                        edosk7760_defconfig
-powerpc                     kilauea_defconfig
-arm                         hackkit_defconfig
-mips                     loongson2k_defconfig
-ia64                         bigsur_defconfig
-mips                          ath25_defconfig
-mips                          ath79_defconfig
-arm                          pxa168_defconfig
-powerpc                      makalu_defconfig
-arm                        trizeps4_defconfig
-arm                            zeus_defconfig
-m68k                       m5475evb_defconfig
-xtensa                    smp_lx200_defconfig
-arm                        vexpress_defconfig
-powerpc                          allmodconfig
-arm                           corgi_defconfig
-powerpc                     redwood_defconfig
-arm                          iop32x_defconfig
-powerpc                 mpc836x_mds_defconfig
-s390                             allyesconfig
-openrisc                            defconfig
-m68k                       bvme6000_defconfig
-alpha                               defconfig
-riscv             nommu_k210_sdcard_defconfig
-mips                         rt305x_defconfig
-powerpc                       maple_defconfig
-arm                            qcom_defconfig
-powerpc                      obs600_defconfig
-sh                          rsk7203_defconfig
-mips                       capcella_defconfig
-mips                         tb0226_defconfig
-xtensa                           alldefconfig
-sh                           se7724_defconfig
-powerpc                 mpc8313_rdb_defconfig
-arm                           sunxi_defconfig
-sh                           se7721_defconfig
-arc                          axs101_defconfig
-openrisc                         alldefconfig
-arm                          pcm027_defconfig
-powerpc                    adder875_defconfig
-arm                     eseries_pxa_defconfig
-arm                        neponset_defconfig
-arm                  randconfig-c002-20211223
-ia64                             allmodconfig
-ia64                                defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-i386                 randconfig-a002-20211222
-i386                 randconfig-a003-20211222
-i386                 randconfig-a001-20211222
-i386                 randconfig-a005-20211222
-i386                 randconfig-a006-20211222
-i386                 randconfig-a004-20211222
-x86_64               randconfig-a013-20211223
-x86_64               randconfig-a015-20211223
-x86_64               randconfig-a014-20211223
-x86_64               randconfig-a011-20211223
-x86_64               randconfig-a012-20211223
-x86_64               randconfig-a016-20211223
-i386                 randconfig-a012-20211223
-i386                 randconfig-a011-20211223
-i386                 randconfig-a014-20211223
-i386                 randconfig-a016-20211223
-i386                 randconfig-a015-20211223
-i386                 randconfig-a013-20211223
-x86_64               randconfig-a001-20211222
-x86_64               randconfig-a003-20211222
-x86_64               randconfig-a005-20211222
-x86_64               randconfig-a006-20211222
-x86_64               randconfig-a004-20211222
-x86_64               randconfig-a002-20211222
-arc                  randconfig-r043-20211222
-arc                  randconfig-r043-20211223
-riscv                randconfig-r042-20211223
-s390                 randconfig-r044-20211223
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+The problem is that now we are taking the maximum value for counter from
+the same userns. So for init_user_ns it will always be RLIM_INFINITY.
 
-clang tested configs:
-x86_64               randconfig-a001-20211223
-x86_64               randconfig-a003-20211223
-x86_64               randconfig-a005-20211223
-x86_64               randconfig-a006-20211223
-x86_64               randconfig-a004-20211223
-x86_64               randconfig-a002-20211223
-i386                 randconfig-a006-20211223
-i386                 randconfig-a004-20211223
-i386                 randconfig-a002-20211223
-i386                 randconfig-a003-20211223
-i386                 randconfig-a005-20211223
-i386                 randconfig-a001-20211223
-hexagon              randconfig-r045-20211222
-hexagon              randconfig-r041-20211222
-riscv                randconfig-r042-20211222
-s390                 randconfig-r044-20211222
+To fix the problem we need to check the counter value with the max value
+stored in userns.
 
+Reproducer:
+
+su - test -c "ulimit -u 3; sleep 5 & sleep 6 & unshare -U --map-root-user sh -c 'sleep 7 & sleep 8 & date; wait'"
+
+Before:
+
+[1] 175
+[2] 176
+Fri Nov 26 13:48:20 UTC 2021
+[1]-  Done                    sleep 5
+[2]+  Done                    sleep 6
+
+After:
+
+[1] 167
+[2] 168
+sh: fork: retry: Resource temporarily unavailable
+sh: fork: retry: Resource temporarily unavailable
+sh: fork: retry: Resource temporarily unavailable
+sh: fork: retry: Resource temporarily unavailable
+sh: fork: retry: Resource temporarily unavailable
+sh: fork: retry: Resource temporarily unavailable
+sh: fork: retry: Resource temporarily unavailable
+sh: fork: Interrupted system call
+[1]-  Done                    sleep 5
+[2]+  Done                    sleep 6
+
+Fixes: c54b245d0118 ("Merge branch 'for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace")
+Reported-by: Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Signed-off-by: Alexey Gladkov <legion@kernel.org>
+Link: https://lkml.kernel.org/r/024ec805f6e16896f0b23e094773790d171d2c1c.1638218242.git.legion@kernel.org
+Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ kernel/ucount.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/kernel/ucount.c b/kernel/ucount.c
+index 4f5613dac227..7b32c356ebc5 100644
+--- a/kernel/ucount.c
++++ b/kernel/ucount.c
+@@ -264,15 +264,16 @@ void dec_ucount(struct ucounts *ucounts, enum ucount_type type)
+ long inc_rlimit_ucounts(struct ucounts *ucounts, enum ucount_type type, long v)
+ {
+ 	struct ucounts *iter;
++	long max = LONG_MAX;
+ 	long ret = 0;
+ 
+ 	for (iter = ucounts; iter; iter = iter->ns->ucounts) {
+-		long max = READ_ONCE(iter->ns->ucount_max[type]);
+ 		long new = atomic_long_add_return(v, &iter->ucount[type]);
+ 		if (new < 0 || new > max)
+ 			ret = LONG_MAX;
+ 		else if (iter == ucounts)
+ 			ret = new;
++		max = READ_ONCE(iter->ns->ucount_max[type]);
+ 	}
+ 	return ret;
+ }
+@@ -312,15 +313,16 @@ long inc_rlimit_get_ucounts(struct ucounts *ucounts, enum ucount_type type)
+ {
+ 	/* Caller must hold a reference to ucounts */
+ 	struct ucounts *iter;
++	long max = LONG_MAX;
+ 	long dec, ret = 0;
+ 
+ 	for (iter = ucounts; iter; iter = iter->ns->ucounts) {
+-		long max = READ_ONCE(iter->ns->ucount_max[type]);
+ 		long new = atomic_long_add_return(1, &iter->ucount[type]);
+ 		if (new < 0 || new > max)
+ 			goto unwind;
+ 		if (iter == ucounts)
+ 			ret = new;
++		max = READ_ONCE(iter->ns->ucount_max[type]);
+ 		/*
+ 		 * Grab an extra ucount reference for the caller when
+ 		 * the rlimit count was previously 0.
+@@ -339,15 +341,16 @@ long inc_rlimit_get_ucounts(struct ucounts *ucounts, enum ucount_type type)
+ 	return 0;
+ }
+ 
+-bool is_ucounts_overlimit(struct ucounts *ucounts, enum ucount_type type, unsigned long max)
++bool is_ucounts_overlimit(struct ucounts *ucounts, enum ucount_type type, unsigned long rlimit)
+ {
+ 	struct ucounts *iter;
+-	if (get_ucounts_value(ucounts, type) > max)
+-		return true;
++	long max = rlimit;
++	if (rlimit > LONG_MAX)
++		max = LONG_MAX;
+ 	for (iter = ucounts; iter; iter = iter->ns->ucounts) {
+-		max = READ_ONCE(iter->ns->ucount_max[type]);
+ 		if (get_ucounts_value(iter, type) > max)
+ 			return true;
++		max = READ_ONCE(iter->ns->ucount_max[type]);
+ 	}
+ 	return false;
+ }
+-- 
+2.29.2
+

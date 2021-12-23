@@ -2,179 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF33247DC5D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 01:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5CC47DC63
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 01:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239138AbhLWAux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 19:50:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238150AbhLWAuw (ORCPT
+        id S239376AbhLWAx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 19:53:58 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:7490 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238150AbhLWAx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 19:50:52 -0500
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50078C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 16:50:52 -0800 (PST)
-Received: by mail-qv1-xf33.google.com with SMTP id fo11so3809360qvb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 16:50:52 -0800 (PST)
+        Wed, 22 Dec 2021 19:53:57 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5ojLwmjQpkbFYUPrgr9e5LBbVEdE5fLHBr16hsYVDs8=;
-        b=ZFc9wRu/xtOdyh2hglOWsy8PxyPGLBNp2wRznQCYjdhbQ85WoeZRfxnBonPI7i/ga7
-         ttCz25lTHf/u6edQuVFJVGtKFyncjOo1oTG8mSH0Y/Vvwagrx94+4d1yPmnHYxV8rhi2
-         d2PHIPUgadHq6oEKQ9rcmtZaQ/NUKWMcTNequq+mjzDcArvs7JwM959M5VN/Y4EY9kui
-         oZ42vRx6is0M2fvEfPbIArVrHot0JnRTC93c2d358YNwwA4pEmfIWywW/Fzd8CJOTMTh
-         T7zdNEMvlyWMgCMfrGwG8lLwqYJAaBy1vf1Vir8fvVYLA7WMNq2YZgwut0lsFDq06BlP
-         biYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5ojLwmjQpkbFYUPrgr9e5LBbVEdE5fLHBr16hsYVDs8=;
-        b=m1exwo/2OJ0bC4NwTcAwvPAxAq3dbh5qw4ztM/Ac0c0ocIpT5lFT6K27TlEHujGQtT
-         BDWrv/QU0oj6iGSKi0xJHvm7fZ8mmeHlzjKCEhu1XRScLXr75eW0soprWEaaiyObtjFQ
-         yKQjyz04SjZiiTc5WLy42W7Se8jeNRYML5yam3U/Afu4tlJzUqR8RodFcBHEtkTxrE4/
-         BMLXYEcI5+kMrDzvYW8yciYycRrl1COG1KeuFqVlUbeA+UZbbXoZ74hN/1oXzd9LBk+A
-         sRFX3HYsCUUbCMz6WqZl88G7wL6tcgYehZa3QqXHi89RJodsWJfsRRKO+RvsdwLYSfCd
-         iudg==
-X-Gm-Message-State: AOAM530BuBQPDa2PcYI5+rVF1CZyhYqkbKI0JZ9GdsCVb4nMCP73rdiB
-        Xf8KEBRTvz/L/PrN5S4+0+Hj035fqMe8ELbThw0=
-X-Google-Smtp-Source: ABdhPJzcZhSaI4yJNcOImOTYhAE+s8f8/SkSTThE6t6JN7xPRbvP4MLjHsQkhBWhX6JJbyr1tCBtcCScaZzHzMVObEk=
-X-Received: by 2002:a05:6214:c21:: with SMTP id a1mr29492qvd.15.1640220651470;
- Wed, 22 Dec 2021 16:50:51 -0800 (PST)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1640220836; x=1671756836;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=ZsgLJndpLvwXmWTrpAtIHRV7ZxELnn8+rKqh9Mjotck=;
+  b=LmxV4VhyN03+n6d4J5IUxqi4b1mMyfuezZOaAx+GbubEQ97qFB32Da+t
+   TWoQ0D9sKfM3Od1z1Nvc/HNkeK6rClGjF3HwWstfWOHmz1U3ErbCsFcy+
+   sTNrQPKKQvL4bFYpTcrdLiPU//v+/ugD+Ok79XTcXxArYYYIa7Of+7VFA
+   M=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 22 Dec 2021 16:53:55 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:53:55 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 22 Dec 2021 16:53:54 -0800
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 22 Dec 2021 16:53:53 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
+        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v9 1/2] drm/msm/dp: dp_link_parse_sink_count() return immediately if aux read failed
+Date:   Wed, 22 Dec 2021 16:53:45 -0800
+Message-ID: <1640220825-25223-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <1640132668-28249-1-git-send-email-huangzhaoyang@gmail.com> <CAJuCfpFdb7VAZExs=ejqG0FDJqRi4LwOEu5E1EM8rtyv1HzbaQ@mail.gmail.com>
-In-Reply-To: <CAJuCfpFdb7VAZExs=ejqG0FDJqRi4LwOEu5E1EM8rtyv1HzbaQ@mail.gmail.com>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Thu, 23 Dec 2021 08:50:31 +0800
-Message-ID: <CAGWkznGJE32mQAve+MB3YrCwmLAGbwd9oyn3rWN2SZj07ez9jw@mail.gmail.com>
-Subject: Re: [PATCH v3] psi: fix possible trigger missing in the window
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-@Peter Zijlstra @Johannes Weiner
-Would you please review this patch? We would like to have it be merged
-ASAP. Thanks.
+Add checking aux read/write status at both dp_link_parse_sink_count()
+and dp_link_parse_sink_status_filed() to avoid long timeout delay if
+dp aux read/write failed at timeout due to cable unplugged. Also make
+sure dp controller had been initialized before start dpcd read and write.
 
-On Wed, Dec 22, 2021 at 8:31 AM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Tue, Dec 21, 2021 at 4:24 PM Huangzhaoyang <huangzhaoyang@gmail.com> wrote:
-> >
-> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
->
-> Please remember to CC Peter.
->
-> >
-> > When a new threshold breaching stall happens after a psi event was
-> > generated and within the window duration, the new event is not
-> > generated because the events are rate-limited to one per window. If
-> > after that no new stall is recorded then the event will not be
-> > generated even after rate-limiting duration has passed. This is
-> > happening because with no new stall, window_update will not be called
-> > even though threshold was previously breached. To fix this, record
-> > threshold breaching occurrence and generate the event once window
-> > duration is passed.
-> >
-> > Suggested-by: Suren Baghdasaryan <surenb@google.com>
-> > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > ---
-> > v2: modify the logic according to Suren's suggestion
-> > v3: update commit message
-> > ---
-> > ---
-> >  include/linux/psi_types.h |  2 ++
-> >  kernel/sched/psi.c        | 38 +++++++++++++++++++++++---------------
-> >  2 files changed, 25 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
-> > index 0a23300..87b694a 100644
-> > --- a/include/linux/psi_types.h
-> > +++ b/include/linux/psi_types.h
-> > @@ -132,6 +132,8 @@ struct psi_trigger {
-> >
-> >         /* Refcounting to prevent premature destruction */
-> >         struct kref refcount;
-> > +
-> > +       bool threshold_breach;
-> >  };
-> >
-> >  struct psi_group {
-> > diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> > index 1652f2b..5c67ab9 100644
-> > --- a/kernel/sched/psi.c
-> > +++ b/kernel/sched/psi.c
-> > @@ -524,24 +524,29 @@ static u64 update_triggers(struct psi_group *group, u64 now)
-> >          */
-> >         list_for_each_entry(t, &group->triggers, node) {
-> >                 u64 growth;
-> > +               bool trigger_stalled =
-> > +                       group->polling_total[t->state] != total[t->state];
-> >
-> > -               /* Check for stall activity */
-> > -               if (group->polling_total[t->state] == total[t->state])
-> > -                       continue;
-> > -
-> > -               /*
-> > -                * Multiple triggers might be looking at the same state,
-> > -                * remember to update group->polling_total[] once we've
-> > -                * been through all of them. Also remember to extend the
-> > -                * polling time if we see new stall activity.
-> > -                */
-> > -               new_stall = true;
-> > -
-> > -               /* Calculate growth since last update */
-> > -               growth = window_update(&t->win, now, total[t->state]);
-> > -               if (growth < t->threshold)
-> > +               /* Check for stall activity or a previous threshold breach */
-> > +               if (!trigger_stalled && !t->threshold_breach)
-> >                         continue;
-> >
-> > +               if (trigger_stalled) {
-> > +                       /*
-> > +                        * Multiple triggers might be looking at the same state,
-> > +                        * remember to update group->polling_total[] once we've
-> > +                        * been through all of them. Also remember to extend the
-> > +                        * polling time if we see new stall activity.
-> > +                        */
-> > +                       new_stall = true;
-> > +
-> > +                       /* Calculate growth since last update */
-> > +                       growth = window_update(&t->win, now, total[t->state]);
-> > +                       if (growth < t->threshold)
-> > +                               continue;
-> > +
-> > +                       t->threshold_breach = true;
-> > +               }
-> >                 /* Limit event signaling to once per window */
-> >                 if (now < t->last_event_time + t->win.size)
-> >                         continue;
-> > @@ -550,6 +555,8 @@ static u64 update_triggers(struct psi_group *group, u64 now)
-> >                 if (cmpxchg(&t->event, 0, 1) == 0)
-> >                         wake_up_interruptible(&t->event_wait);
-> >                 t->last_event_time = now;
-> > +               /* Reset threshold breach flag once event got generated */
-> > +               t->threshold_breach = false;
-> >         }
-> >
-> >         if (new_stall)
-> > @@ -1152,6 +1159,7 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
-> >         t->last_event_time = 0;
-> >         init_waitqueue_head(&t->event_wait);
-> >         kref_init(&t->refcount);
-> > +       t->threshold_breach = false;
-> >
-> >         mutex_lock(&group->trigger_lock);
-> >
-> > --
-> > 1.9.1
-> >
+Changes in V4:
+-- split this patch as stand alone patch
+
+Changes in v5:
+-- rebase on msm-next branch
+
+Changes in v6:
+-- add more details commit text
+
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Tested-by: Stephen Boyd <swboyd@chromium.org>
+---
+ drivers/gpu/drm/msm/dp/dp_display.c | 12 +++++++++---
+ drivers/gpu/drm/msm/dp/dp_link.c    | 19 ++++++++++++++-----
+ 2 files changed, 23 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index 3d61459..0766752 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -692,9 +692,15 @@ static int dp_irq_hpd_handle(struct dp_display_private *dp, u32 data)
+ 		return 0;
+ 	}
+ 
+-	ret = dp_display_usbpd_attention_cb(&dp->pdev->dev);
+-	if (ret == -ECONNRESET) { /* cable unplugged */
+-		dp->core_initialized = false;
++	/*
++	 * dp core (ahb/aux clks) must be initialized before
++	 * irq_hpd be handled
++	 */
++	if (dp->core_initialized) {
++		ret = dp_display_usbpd_attention_cb(&dp->pdev->dev);
++		if (ret == -ECONNRESET) { /* cable unplugged */
++			dp->core_initialized = false;
++		}
+ 	}
+ 	DRM_DEBUG_DP("hpd_state=%d\n", state);
+ 
+diff --git a/drivers/gpu/drm/msm/dp/dp_link.c b/drivers/gpu/drm/msm/dp/dp_link.c
+index a5bdfc5..d4d31e5 100644
+--- a/drivers/gpu/drm/msm/dp/dp_link.c
++++ b/drivers/gpu/drm/msm/dp/dp_link.c
+@@ -737,18 +737,25 @@ static int dp_link_parse_sink_count(struct dp_link *dp_link)
+ 	return 0;
+ }
+ 
+-static void dp_link_parse_sink_status_field(struct dp_link_private *link)
++static int dp_link_parse_sink_status_field(struct dp_link_private *link)
+ {
+ 	int len = 0;
+ 
+ 	link->prev_sink_count = link->dp_link.sink_count;
+-	dp_link_parse_sink_count(&link->dp_link);
++	len = dp_link_parse_sink_count(&link->dp_link);
++	if (len < 0) {
++		DRM_ERROR("DP parse sink count failed\n");
++		return len;
++	}
+ 
+ 	len = drm_dp_dpcd_read_link_status(link->aux,
+ 		link->link_status);
+-	if (len < DP_LINK_STATUS_SIZE)
++	if (len < DP_LINK_STATUS_SIZE) {
+ 		DRM_ERROR("DP link status read failed\n");
+-	dp_link_parse_request(link);
++		return len;
++	}
++
++	return dp_link_parse_request(link);
+ }
+ 
+ /**
+@@ -1023,7 +1030,9 @@ int dp_link_process_request(struct dp_link *dp_link)
+ 
+ 	dp_link_reset_data(link);
+ 
+-	dp_link_parse_sink_status_field(link);
++	ret = dp_link_parse_sink_status_field(link);
++	if (ret)
++		return ret;
+ 
+ 	if (link->request.test_requested == DP_TEST_LINK_EDID_READ) {
+ 		dp_link->sink_request |= DP_TEST_LINK_EDID_READ;
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+

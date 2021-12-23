@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5B647E872
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 20:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1F547E874
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 20:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350112AbhLWTm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 14:42:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244856AbhLWTm6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 14:42:58 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C730C061401;
-        Thu, 23 Dec 2021 11:42:58 -0800 (PST)
+        id S1350120AbhLWToh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 14:44:37 -0500
+Received: from ms.lwn.net ([45.79.88.28]:51026 "EHLO ms.lwn.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244856AbhLWToe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 14:44:34 -0500
 Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id F07E96A2;
-        Thu, 23 Dec 2021 19:42:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net F07E96A2
+        by ms.lwn.net (Postfix) with ESMTPSA id 4EFD62D7;
+        Thu, 23 Dec 2021 19:44:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 4EFD62D7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1640288578; bh=PJV/bq5x8wkVijX5HAMsOC0RPW3ghq1DWO8+dyh0Slg=;
+        t=1640288674; bh=ZA0UbbwoodtgOGE6plVIZt3QIEPYFx58JVAET1UksTs=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=VR4oeUV3ZziW8aAy7nrkWHiFx7QAGI4XPR0VDY6Ckrn5YOT7MxZINYTO4e0W4NA6y
-         KECVpA2weKrKMQSO39SFQsOUOKZzHp46WKGcp8fM2vpUwn5UE39bMYdyhCGlwPdreX
-         qQJ3GQ1ZpPSnEQnSxEEStMsU9k29l4CQnRGbkd3xO/SH1Kf3klr2s0ItCz4RqCopmh
-         FTvBD4Q02x6k50xc3LqAgEXCzzzFo++fCMhDzSnqcfm529sIKabFQ+ooynAoaO+f0I
-         9PVjK9p96vJX32TWJQ+7+9Ee7hfE4MCC24wX7/gJLK/pewf4Nyh/TBmRLkFfgCNz5o
-         RtF7h3/+VbtTA==
+        b=f+MJGr5LClVMwW9IYLl//XXmlj2xECruqiY6t4wLe0jkc05CmUIQmkhn/e9otvLVg
+         3z02qBI4hed6k4nMjaUP/pOSty16bvgnYK7V2JrR5r4BkylSrMgbVVO/eAYTyd57SG
+         LIlQE8ZCdQsP+jfI2CoRekc5j1XCEmOndIEVv3v2bsgty7HHKuBuKLghoFEROpZlOQ
+         teLvPehsPxxTJaA4qvF1NlQJNSJ9+zcaTFU/EuIRbWI9i7CBDWaoMogJqGxLZ259Wt
+         y3SoSgjB7QbxiB/1Spk8ZE7zLqVv74ccAaNeJw99nBntN8E0vh/okVdAc5jupQJZgq
+         XDWSdcvpZOtPw==
 From:   Jonathan Corbet <corbet@lwn.net>
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH] Documentation/sphinx: fix typos of "its"
-In-Reply-To: <20211222062354.23224-1-rdunlap@infradead.org>
-References: <20211222062354.23224-1-rdunlap@infradead.org>
-Date:   Thu, 23 Dec 2021 12:42:57 -0700
-Message-ID: <878rwbf6pq.fsf@meer.lwn.net>
+To:     cgel.zte@gmail.com, alexs@kernel.org, siyanteng@loongson.cn,
+        seakeel@gmail.com
+Cc:     yang.yang29@zte.com.cn, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] docs/zh_CN: Add zh_CN/accounting/delay-accounting.rst
+In-Reply-To: <20211217110949.453361-1-yang.yang29@zte.com.cn>
+References: <20211217110949.453361-1-yang.yang29@zte.com.cn>
+Date:   Thu, 23 Dec 2021 12:44:33 -0700
+Message-ID: <874k6zf6n2.fsf@meer.lwn.net>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Randy Dunlap <rdunlap@infradead.org> writes:
+cgel.zte@gmail.com writes:
 
-> Use "its" for possessive form instead of the contraction "it's".
+> From: Yang Yang <yang.yang29@zte.com.cn>
 >
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
+> Add translation zh_CN/accounting/delay-accounting.rst and links it
+> to zh_CN/accounting/index.rst while clean its todo entry.
+>
+> Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+> Reviewed-by: Alex Shi <alexs@kernel.org>
+> Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
 > ---
->  Documentation/sphinx/kernel_abi.py  |    2 +-
->  Documentation/sphinx/kernel_feat.py |    2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> v4:
+> - removed excess RST label.
+> v3:
+> - add missing period.
+> v2:
+> - delete useless blackline.
+> ---
+>  .../zh_CN/accounting/delay-accounting.rst     | 111 ++++++++++++++++++
+>  .../translations/zh_CN/accounting/index.rst   |   2 +-
+>  2 files changed, 112 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/translations/zh_CN/accounting/delay-accounting.rst
 
 Applied, thanks.
 

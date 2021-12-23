@@ -2,128 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F15E347DE0D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 04:22:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C26947DE0F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 04:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346047AbhLWDWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 22:22:42 -0500
-Received: from mga17.intel.com ([192.55.52.151]:15721 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231389AbhLWDWk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 22:22:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640229760; x=1671765760;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=nVLDDg8On+ICFAWhrHSjhLFb+A4To9duy6snog5e8I4=;
-  b=SRAJ+Ic5HduwoLdkiAMKvlCKAlha7FQcE/jR8ap2rmwOjwpGl9WnMSL4
-   I5HHUSI57KW2LS7P20tFU1fQH7/jKyA9YWW+36xI/J9E+53KB/aSPke+s
-   FcSXY1//7mRw7pIrKOq6QxkivV4VG+rtnSpIZ1O8tTi4+vOF7BbBYAbOK
-   BU1CPl90eNazTI4O9dzFDX9HCX7Hdw1HgPM2VByXcJ0ceZLSI40zedB7x
-   8V+dCRheogS5HxiTjEmsaB0Suvv873bV2CTxGFyhI2dpdGDfMkfmnpLB8
-   p66PkI6z59AIRPx5k7dEz22ePXeQpsymrYq/Aq/y6S/Tb9LF8KHFETfkw
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="221422511"
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="221422511"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 19:22:40 -0800
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="521926203"
-Received: from unknown (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.11])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 19:22:37 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>, <sj@kernel.org>
-Cc:     <akpm@linux-foundation.org>, <dave.hansen@linux.intel.com>,
-        <ziy@nvidia.com>, <shy828301@gmail.com>,
-        <zhongjiang-ali@linux.alibaba.com>, <xlpang@linux.alibaba.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/2] Add a new scheme to support demotion on tiered
- memory system
-References: <cover.1640171137.git.baolin.wang@linux.alibaba.com>
-        <87a6gsceo6.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <90c5f31f-9e0a-df6d-8639-8a46ee02f9fa@linux.alibaba.com>
-Date:   Thu, 23 Dec 2021 11:22:35 +0800
-In-Reply-To: <90c5f31f-9e0a-df6d-8639-8a46ee02f9fa@linux.alibaba.com> (Baolin
-        Wang's message of "Thu, 23 Dec 2021 09:21:45 +0800")
-Message-ID: <875yrgc8ec.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S1346167AbhLWDYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 22:24:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39752 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346074AbhLWDYM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 22:24:12 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55F7C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 19:24:11 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id k6-20020a17090a7f0600b001ad9d73b20bso4364973pjl.3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 19:24:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LS8DywJ2uBotDQESRAfls6o357hbpNH3R8BA0Fi916w=;
+        b=lHLwS7wAvLitgo6ES2KRcZ1GVPKcovSQnuFOpENHUp1rAYu/G1c3ZAe/gRjz/6zx1M
+         LxJc2AicRtvTeVtzXWMIbRUYExSNxu3ZIh/fyaZcb/sM6e3rgOei1qiZkwA82DH8CPs6
+         dNPy6K09gknxnf3ku0F/wJLcA3khMFzNAfpiNO4Pn/8ap6axdeBkMnSC+m+sw+3LkMup
+         8w9PXmk64U/FnyTbBJp0QVJcevypHmXwRjKII+Na4ieHaEB0u2ag2ok93Co0NUywL/Xe
+         RHMfKu1DW6ou8RKfE/lDKa4Y04X69SZ6PExHVcC2wYNbQwIrJXs8Zdo3c4ULkna5oumy
+         3H0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LS8DywJ2uBotDQESRAfls6o357hbpNH3R8BA0Fi916w=;
+        b=xdpT2WGsYMe3i6o/Dsvdx55FJlrZd6ZnNwqQ24TkDVp5+R0V/heb3fk+pWxTIczWuo
+         5l8n3Teguym8Yb3BFUMSBNpT6usQe8fJ3h22k+ImF58KMfsAw0OS2PDdcnMCzwPUNQ+J
+         vngJCy8pasTCV0yZEKC+wKh5/zg4j4qdzsLBgKnw4qfSzMF1bKLHqwxMdjiq6lHx1lb1
+         CFziAupOwYyBS4lMzfbrsCyDMMxzS8fczJzzJ0DqRjOSB2dW6kOG9Myg+zbAa2pU9utX
+         DoIO7jFlCVDRvMZ+SY1K223ktAlF1old8YYn2k4enkYRmjvbkk6nI5G9BzW1nKG04/+i
+         OMNg==
+X-Gm-Message-State: AOAM531WzgPQZmo2X9JEViW8YeQHA8uPThH30zYPRdS1LPTY9ZVz+3JS
+        qFI+n7jytroVAXLkL2479v8YWA==
+X-Google-Smtp-Source: ABdhPJzzO25WFeEjMVlRpDbyTeU+tl2GTDKhLHGdlfQgu9owR/074xdIe33WKXIUcAmDFIAJyEUGtw==
+X-Received: by 2002:a17:90b:2243:: with SMTP id hk3mr949951pjb.72.1640229851211;
+        Wed, 22 Dec 2021 19:24:11 -0800 (PST)
+Received: from yinxin.bytedance.net ([139.177.225.235])
+        by smtp.gmail.com with ESMTPSA id d3sm4348622pfv.192.2021.12.22.19.24.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 19:24:10 -0800 (PST)
+From:   Xin Yin <yinxin.x@bytedance.com>
+To:     harshadshirwadkar@gmail.com, tytso@mit.edu,
+        adilger.kernel@dilger.ca
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xin Yin <yinxin.x@bytedance.com>
+Subject: [PATCH 0/2] ext4: fast commit crash consistency issues
+Date:   Thu, 23 Dec 2021 11:23:35 +0800
+Message-Id: <20211223032337.5198-1-yinxin.x@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Baolin Wang <baolin.wang@linux.alibaba.com> writes:
+This patch sets fix 2 crash-consistency issues of fast commit.
+First patch change to use ext4_ext_remove_space instead of 
+ext4_punch_hole during replay delete range procedure. This 
+avoid replay procedure being affeced by incorrect inode->i_size. 
+Second patch correct the trank range logic for ftruncte.
 
-> On 12/23/2021 9:07 AM, Huang, Ying wrote:
->> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
->> 
->>> Hi,
->>>
->>> Now on tiered memory system with different memory types, the reclaim path in
->>> shrink_page_list() already support demoting pages to slow memory node instead
->>> of discarding the pages. However, at that time the fast memory node memory
->>> wartermark is already tense, which will increase the memory allocation latency
->>> during page demotion. So a new method from user space demoting cold pages
->>> proactively will be more helpful.
->>>
->>> We can rely on the DAMON in user space to help to monitor the cold memory on
->>> fast memory node, and demote the cold pages to slow memory node proactively to
->>> keep the fast memory node in a healthy state.
->>>
->>> This patch set introduces a new scheme named DAMOS_DEMOTE to support this feature,
->>> and works well from my testing. Any comments are welcome. Thanks.
->> As a performance optimization patch, it's better to provide some
->> test
->> results.
->
-> Actually this is a functional patch, which adds a new scheme for
-> DAMON. And I think it is too early to measure the performance for the
-> real workload, and more work need to do for DAMON used on tiered
-> memory system (like supporting promotion scheme later).
+After testing this patch sets with xfstests-bld, in the "log" and 
+"quick" group with config "fast_commit" is selected. No regressions
+was found.
 
-I don't think you provide any new functionality except the performance
-influence.
+Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
 
-And I think proactive demotion itself can show some performance benefit
-already.  Just like we can find the performance benefit in the proactive
-reclaim patchset as below.
+Xin Yin (2):
+  ext4: use ext4_ext_remove_space() for fast commit replay delete range
+  ext4: fast commit may miss tracking unwritten range during ftruncate
 
-https://lore.kernel.org/lkml/20211019150731.16699-1-sj@kernel.org/
+ fs/ext4/fast_commit.c | 13 ++++++++-----
+ fs/ext4/inode.c       |  3 +--
+ 2 files changed, 9 insertions(+), 7 deletions(-)
 
->> Another question is why we shouldn't do this in user space?  With DAMON,
->> it's possible to export cold memory regions information to the user
->> space, then we can use move_pages() to migrate them from DRAM to PMEM.
->> What's the problem of that?
->
-> IMO this is the purpose of introducing scheme for DAMON, and you can
-> check more in the Documentation/admin-guide/mm/damon/usage.rst.
->
-> "
-> Schemes
-> -------
->
-> For usual DAMON-based data access aware memory management
-> optimizations, users
-> would simply want the system to apply a memory management action to a memory
-> region of a specific access pattern.  DAMON receives such formalized
-> operation
-> schemes from the user and applies those to the target processes.
-> "
+-- 
+2.20.1
 
-For proactive reclaim, we haven't a user space ABI to reclaim a page of
-a process from memory to disk.  So it appears necessary to add a kernel
-module to do that.
-
-But for proactive demotion, we already have a user space ABI
-(move_pages()) to demote a page of a process from DRAM to PMEM.  What
-prevents you to do all these in the user space?
-
-And, I found there are MADV_XXX schemes too.  Where the user space ABIs
-are available already.  TBH, I don't know why we need these given there
-are already user space ABIs.  Maybe this is a question for SeongJae too.
-
-Best Regards,
-Huang, Ying

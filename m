@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8941747DD1A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6842F47DD3B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346413AbhLWBP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:15:58 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:27278 "EHLO
+        id S1346925AbhLWBQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:16:39 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:27358 "EHLO
         o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346223AbhLWBOm (ORCPT
+        with ESMTP id S1346243AbhLWBOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:14:42 -0500
+        Wed, 22 Dec 2021 20:14:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
         h=from:subject:in-reply-to:references:mime-version:to:cc:
         content-transfer-encoding:content-type;
-        s=sgd; bh=lHfpOqhOfpDOCfOX9m8HbTSH198YL4xz6udBaxMWEhU=;
-        b=He/CxrgZEFngolwjXHMJWEKjUhKIOSVokvqKUvxw4wiwguybmmU9i+segEnZplKOvvAG
-        5jmo4LObHAT+dvq7TfL61pUedZuzA7xhnxG9Yn6r5PRe2IgXT7UISNbitqvuozqKZmImf7
-        iimBVGIlEBTWSA5uCU57sYi2VtMP5BN//v1fvoU+KWrLQzm10T13c+t/adNTE4aITX7LTh
-        B+8GmGlr0SOSWfl4f0hs8xcK6UAyYy71iptESF+BUtz7P5CBGJYLylyC15jowYBKtpqs2o
-        2g12eiVTJOVDT2YOcE+QWqGq5uO6lDsiOTqBbdpHenorb0i7f8cPtSbCxQ4vuE1w==
-Received: by filterdrecv-656998cfdd-gwqfx with SMTP id filterdrecv-656998cfdd-gwqfx-1-61C3CD5F-2
-        2021-12-23 01:14:07.065548949 +0000 UTC m=+7955180.472261611
+        s=sgd; bh=O3ZizfkdwvjAFL0IllFWvZYbWlz/CPB//NPk13szDnA=;
+        b=XTCcYYMiXOfOO8UZtTG2f4+h7DnLy2umVMF+CdELsqaDItfv4WYfrK+AW4TM2ZY7Wiz5
+        hc3RNIYrxa5LoCQedwb+b4jaEdcBZJYqBWbR4RQ8qhU01QPzbUblFv4RAINGa0R6UPBXr6
+        accQA7xeA371StT45tuT9cpy/iWPU8Cc1EdmRZPoG56rEypnktm6AM3IilMihvm75KNBEl
+        IYvFNEPcfLHWEJxS/lqNTlroQHVDUvrDRGPQMaB1D4AHnh2U4hQjkmVZ5g0sJmVEvTrB2J
+        bH8gzmyLyFuYSgzbupsRv9Fozsi72vtPL1ZnYAQrsXhBhPwVXMFITMWAGBNyENTg==
+Received: by filterdrecv-64fcb979b9-6vbpf with SMTP id filterdrecv-64fcb979b9-6vbpf-1-61C3CD5F-5
+        2021-12-23 01:14:07.110980273 +0000 UTC m=+8644638.115216542
 Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-4-0 (SG)
+        by geopod-ismtpd-5-1 (SG)
         with ESMTP
-        id jn2DgsfWQie8Tv6IdcNhoA
-        Thu, 23 Dec 2021 01:14:06.899 +0000 (UTC)
+        id TsQv68ysQ0ubKGaRoRZ4qw
+        Thu, 23 Dec 2021 01:14:06.927 +0000 (UTC)
 Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id DAF3270150E; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
+        id E53EE701518; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
 From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH v2 44/50] wilc1000: don't allocate tx_buffer when zero-copy is
- available
+Subject: [PATCH v2 45/50] wilc1000: move struct wilc_spi declaration
 Date:   Thu, 23 Dec 2021 01:14:07 +0000 (UTC)
-Message-Id: <20211223011358.4031459-45-davidm@egauge.net>
+Message-Id: <20211223011358.4031459-46-davidm@egauge.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211223011358.4031459-1-davidm@egauge.net>
 References: <20211223011358.4031459-1-davidm@egauge.net>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvCku2d01bUPHXOooM?=
- =?us-ascii?Q?P+=2FUf3qjDaNo4LbXVJ1cRCS8pJYe4aPxCLVg3LP?=
- =?us-ascii?Q?M7wKTY3qogKRr+YpQH0519OH2M8hpB54iw3Xliv?=
- =?us-ascii?Q?7NRVCjYht7AX+HB1hqNDi6F43cGXXsX0q3Ov8yJ?=
- =?us-ascii?Q?ZxZHVy156avRLeJRAoHRG2QDKUQ+QKajLrAgapC?=
- =?us-ascii?Q?2voZ6btNWDr4NVuHxJCog=3D=3D?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvH9Cvv=2F5ehKJw4467?=
+ =?us-ascii?Q?7quhFIAFUnbiUWmbmmTg6+hqXGuYJ3ieEzuxpbm?=
+ =?us-ascii?Q?7Je+yt+BbiVHKqzw5OrYGLhvWgBHh5hmLhcwiGx?=
+ =?us-ascii?Q?vUDvb09wx1aTcHtWXta2tqSykUGcpxENuXbfHgf?=
+ =?us-ascii?Q?4jsGU=2FjvTtzO1inI253zcbm3p25fq0VAhXBfw9A?=
+ =?us-ascii?Q?sJCvUMz2Rvkvv44n+cUSg=3D=3D?=
 To:     Ajay Singh <ajay.kathat@microchip.com>
 Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
         Kalle Valo <kvalo@kernel.org>,
@@ -61,36 +60,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a driver supports zero-copy transmit transfers, there is no need to
-have a transmit buffer.
+Just move the structure down by a few lines so that a later patch can
+be understood more easily.  No functional change.
 
 Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
 ---
- drivers/net/wireless/microchip/wilc1000/wlan.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/net/wireless/microchip/wilc1000/spi.c | 22 +++++++++----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
-index d96a7e2a0bd59..d46d6e8122c8d 100644
---- a/drivers/net/wireless/microchip/wilc1000/wlan.c
-+++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
-@@ -1604,12 +1604,12 @@ int wilc_wlan_init(struct net_device *dev)
+diff --git a/drivers/net/wireless/microchip/wilc1000/spi.c b/drivers/net/wireless/microchip/wilc1000/spi.c
+index 2c2ed4b09efd5..5f73b3d2d2112 100644
+--- a/drivers/net/wireless/microchip/wilc1000/spi.c
++++ b/drivers/net/wireless/microchip/wilc1000/spi.c
+@@ -41,17 +41,6 @@ MODULE_PARM_DESC(enable_crc16,
+  */
+ #define WILC_SPI_RSP_HDR_EXTRA_DATA	8
  
- 	init_q_limits(wilc);
- 
--	if (!wilc->tx_buffer)
-+	if (!wilc->hif_func->hif_sk_buffs_tx && !wilc->tx_buffer) {
- 		wilc->tx_buffer = kmalloc(WILC_TX_BUFF_SIZE, GFP_KERNEL);
+-struct wilc_spi {
+-	bool isinit;		/* true if SPI protocol has been configured */
+-	bool probing_crc;	/* true if we're probing chip's CRC config */
+-	bool crc7_enabled;	/* true if crc7 is currently enabled */
+-	bool crc16_enabled;	/* true if crc16 is currently enabled */
+-	struct wilc_gpios {
+-		struct gpio_desc *enable;	/* ENABLE GPIO or NULL */
+-		struct gpio_desc *reset;	/* RESET GPIO or NULL */
+-	} gpios;
+-};
 -
--	if (!wilc->tx_buffer) {
--		ret = -ENOBUFS;
--		goto fail;
-+		if (!wilc->tx_buffer) {
-+			ret = -ENOBUFS;
-+			goto fail;
-+		}
- 	}
+ static const struct wilc_hif_func wilc_hif_spi;
  
- 	if (!wilc->rx_buffer)
+ static int wilc_spi_reset(struct wilc *wilc);
+@@ -109,6 +98,17 @@ static int wilc_spi_reset(struct wilc *wilc);
+ #define WILC_SPI_COMMAND_STAT_SUCCESS		0
+ #define WILC_GET_RESP_HDR_START(h)		(((h) >> 4) & 0xf)
+ 
++struct wilc_spi {
++	bool isinit;		/* true if SPI protocol has been configured */
++	bool probing_crc;	/* true if we're probing chip's CRC config */
++	bool crc7_enabled;	/* true if crc7 is currently enabled */
++	bool crc16_enabled;	/* true if crc16 is currently enabled */
++	struct wilc_gpios {
++		struct gpio_desc *enable;	/* ENABLE GPIO or NULL */
++		struct gpio_desc *reset;	/* RESET GPIO or NULL */
++	} gpios;
++};
++
+ struct wilc_spi_cmd {
+ 	u8 cmd_type;
+ 	union {
 -- 
 2.25.1
 

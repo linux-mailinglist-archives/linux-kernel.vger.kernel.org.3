@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19AD947E0B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 10:07:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 967D947E0C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 10:18:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347390AbhLWJHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 04:07:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347407AbhLWJHK (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 04:07:10 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648B2C061756;
-        Thu, 23 Dec 2021 01:07:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=+F9l4oaTYcTezns5dJwiIVOjH6VpsW1N0yjevEuxrKk=; b=U1KCjtRxFZAs1+SJMEnP4jjE3Q
-        Rf0uJ9dXTATYkWCfAVUNbdJngAU35jR2BflmZpLuqHAyCYm/5wFKXxRV8TKhzxkCGQcFIRicAGzzp
-        V8QmGC0pJUh2nBRqGgGs50RkNJBkw5whd4abKSMoYdpu9IhJpI7wYPMXP9OdQ2Pkqj1U=;
-Received: from p200300ccff0e67001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0e:6700:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1n0K40-0002b4-P2; Thu, 23 Dec 2021 10:07:05 +0100
-Date:   Thu, 23 Dec 2021 10:07:03 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Alistair Francis <alistair@alistair23.me>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmitry.torokhov@gmail.com, alistair23@gmail.com,
-        robh+dt@kernel.org, linus.walleij@linaro.org, rydberg@bitmath.org,
-        =?UTF-8?B?TXlsw6huZQ==?= Josserand <mylene.josserand@bootlin.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>
-Subject: Re: [PATCH v4 1/4] Input: Add driver for Cypress Generation 5
- touchscreen
-Message-ID: <20211223100703.78bbdf84@aktux>
-In-Reply-To: <20211222124603.326920-2-alistair@alistair23.me>
-References: <20211222124603.326920-1-alistair@alistair23.me>
-        <20211222124603.326920-2-alistair@alistair23.me>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S1347375AbhLWJSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 04:18:32 -0500
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:59469 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239245AbhLWJSa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 04:18:30 -0500
+Received: from [192.168.0.2] (ip5f5aea70.dynamic.kabel-deutschland.de [95.90.234.112])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id F355A61EA1BDD;
+        Thu, 23 Dec 2021 10:18:27 +0100 (CET)
+Message-ID: <373eb764-f5bb-d6ff-0500-db2ccd62a6b2@molgen.mpg.de>
+Date:   Thu, 23 Dec 2021 10:18:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Score: -1.0 (-)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v3 1/3] Bluetooth: mt7921s: Support wake on bluetooth
+Content-Language: en-US
+To:     Sean Wang <sean.wang@mediatek.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>
+Cc:     Mark-YW.Chen@mediatek.com, Soul.Huang@mediatek.com,
+        YN.Chen@mediatek.com, Leon.Yen@mediatek.com,
+        Eric-SY.Chang@mediatek.com, Deren.Wu@mediatek.com,
+        km.lin@mediatek.com, robin.chiu@mediatek.com,
+        Eddie.Chen@mediatek.com, ch.yeh@mediatek.com,
+        posh.sun@mediatek.com, ted.huang@mediatek.com,
+        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
+        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
+        frankgor@google.com, jemele@google.com, abhishekpandit@google.com,
+        michaelfsun@google.com, mcchou@chromium.org, shawnku@google.com,
+        linux-bluetooth@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <ceafc644ca9ce926a9fb07f7b3f4e2f701e69c8d.1640165092.git.sean.wang@kernel.org>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <ceafc644ca9ce926a9fb07f7b3f4e2f701e69c8d.1640165092.git.sean.wang@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Dec 2021 22:46:00 +1000
-Alistair Francis <alistair@alistair23.me> wrote:
+Dear Sean,
 
-> From: Myl=C3=A8ne Josserand <mylene.josserand@bootlin.com>
->=20
-> This is the basic driver for the Cypress TrueTouch Gen5 touchscreen
-> controllers. This driver supports only the I2C bus but it uses regmap
-> so SPI support could be added later.
-> The touchscreen can retrieve some defined zone that are handled as
-> buttons (according to the hardware). That is why it handles
-> button and multitouch events.
->=20
-> Reviewed-by: Maxime Ripard <maxime.ripard@bootlin.com>
-> Signed-off-by: Myl=C3=A8ne Josserand <mylene.josserand@bootlin.com>
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
 
-Works for me (with devicetree additions for my device)
+Am 23.12.21 um 03:56 schrieb sean.wang@mediatek.com:
 
-Tested-by: Andreas Kemnade <andreas@kemnade.info> # Kobo Clara HD
+[…]
+
+>   static int btmtksdio_probe(struct sdio_func *func,
+>   			   const struct sdio_device_id *id)
+>   {
+> @@ -998,6 +1024,7 @@ static int btmtksdio_probe(struct sdio_func *func,
+>   	hdev->shutdown = btmtksdio_shutdown;
+>   	hdev->send     = btmtksdio_send_frame;
+>   	hdev->set_bdaddr = btmtk_set_bdaddr;
+> +	hdev->wakeup = btmtk_sdio_wakeup;
+
+The equal sign still is not aligned with the one on `hdev->send`.
+
+[…]
+
+
+Kind regards,
+
+Paul

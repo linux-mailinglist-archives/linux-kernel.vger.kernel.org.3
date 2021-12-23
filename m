@@ -2,124 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B19447E877
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 20:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82FF247E87B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 20:48:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350138AbhLWTpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 14:45:45 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:56898 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244856AbhLWTpn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 14:45:43 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        id S1350150AbhLWTsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 14:48:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33194 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244856AbhLWTse (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 14:48:34 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE36C061401;
+        Thu, 23 Dec 2021 11:48:34 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 96A771EC052C;
-        Thu, 23 Dec 2021 20:45:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640288738;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=GIRBlL+iiTgH3dproQOBfea9NGLTBWmifcVI0uoj7Hw=;
-        b=eI0VnDr5E3I3aFabWxYfx/M21f7MFwsFH2L24MFvjt5L3ni1vs5W/73BHwFouPS3p9kMvx
-        w9ltHAn8NMKmKlB5uU7HDs069v1ox1kosW4gfheSldWXKQ4TR8+FzVZCqqpfxLENDUW0BO
-        oesuOmi9psOoEbvMpN7xReVuzXT286U=
-Date:   Thu, 23 Dec 2021 20:45:40 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [PATCH 04/26] x86/traps: Add #VE support for TDX guest
-Message-ID: <YcTR5HnkHi7CjVyx@zn.tnic>
-References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
- <20211214150304.62613-5-kirill.shutemov@linux.intel.com>
+        by ms.lwn.net (Postfix) with ESMTPSA id 438FE6A2;
+        Thu, 23 Dec 2021 19:48:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 438FE6A2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1640288914; bh=IGCCfzoruXVuNxjJQ9Jvb4MnqEAOH92v0oH47GM483I=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=mIB9d8mSJcZEVmgP6booAARhBn9Sy8dNF9ty/YdsEL6LJUIf4+gzbte7iJFZr8KtA
+         KW531Ev3yZ37huTH2OwFthpuvccCxjodxyIDddwTOY1IjulHDn82REKsz5RTZaPyRW
+         Ihz1NtwHdb/4DsvEBLA1eahk61J5YKDQfc7UvolU76RWSxle156KZHWlwakPXNSaxv
+         T3YfO2fASXLb6rE9tt2lE7LWNJOkELqu69/Bc0f8iwJARjlFgBD+8jLQrrOHwlvK6X
+         djKijrHFoezFxbTcDw6GiQv+o9W9OfmB97dXMd9cdQHMYA9IrlmmIntVvHE9I0hwDE
+         6+n8VzayC9HxQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Marco Elver <elver@google.com>,
+        Harinder Singh <sharinder@google.com>
+Cc:     davidgow@google.com, brendanhiggins@google.com, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tim.Bird@sony.com
+Subject: Re: [PATCH v6 3/7] Documentation: KUnit: Added KUnit Architecture
+In-Reply-To: <CANpmjNMz7nh7Eo97p-ikdE6cyTu_Vge_RJktj68BpC9QHqE7iw@mail.gmail.com>
+References: <20211217044911.798817-1-sharinder@google.com>
+ <20211217044911.798817-4-sharinder@google.com>
+ <CANpmjNMz7nh7Eo97p-ikdE6cyTu_Vge_RJktj68BpC9QHqE7iw@mail.gmail.com>
+Date:   Thu, 23 Dec 2021 12:48:33 -0700
+Message-ID: <87zgordrvy.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211214150304.62613-5-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 06:02:42PM +0300, Kirill A. Shutemov wrote:
-> Virtualization Exceptions (#VE) are delivered to TDX guests due to
-> specific guest actions which may happen in either user space or the
-> kernel:
-> 
->  * Specific instructions (WBINVD, for example)
->  * Specific MSR accesses
->  * Specific CPUID leaf accesses
->  * Access to unmapped pages (EPT violation)
-> 
-> In the settings that Linux will run in, virtual exceptions are never
-> generated on accesses to normal, TD-private memory that has been
-> accepted.
-> 
-> The #VE handler implementation is simplified by the fact that entry
-> paths do not trigger #VE and that the handler may not be interrupted.
-> Specifically, the implementation assumes that the entry paths do not
-> access TD-shared memory, MMIO regions, use #VE triggering MSRs,
-> instructions, or CPUID leaves that might generate #VE. Interrupts,
-> including NMIs, are blocked by the hardware starting with #VE delivery
-> until TDGETVEINFO is called. All of this combined  eliminates the
-> chance of a #VE during the syscall gap, or paranoid entry paths.
-> 
-> After TDGETVEINFO, #VE could happen in theory (e.g. through an NMI),
-> but it is expected not to happen because TDX expects NMIs not to
-> trigger #VEs. Another case where #VE could happen is if the #VE
-> exception panics, but in this case, since the platform is already in
-> a panic state, nested #VE is not a concern.
-> 
-> If a guest kernel action which would normally cause a #VE occurs in
-> the interrupt-disabled region before TDGETVEINFO, a #DF (fault
-> exception) is delivered to the guest which will result in an oops
-> (and should eventually be a panic, as it is expected panic_on_oops is
-> set to 1 for TDX guests).
+Marco Elver <elver@google.com> writes:
 
-So until here there are a lot of expectations and assumptions. What
-happens if those are violated?
+> On Fri, 17 Dec 2021 at 05:49, Harinder Singh <sharinder@google.com> wrote:
+>>
+>> Describe the components of KUnit and how the kernel mode parts
+>> interact with kunit_tool.
+>>
+>> Signed-off-by: Harinder Singh <sharinder@google.com>
+>
+> Acked-by: Marco Elver <elver@google.com>
+>
+> For the .svg file, I think per
+> https://www.kernel.org/doc/html/latest/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
+> at least my Signed-off-by is required, but probably also my
+> Co-developed-by? In any case my SOB for kunit_suitememorydiagram.svg
+> is hereby given:
+>
+> Signed-off-by: Marco Elver <elver@google.com>
 
-What happens if the NMI handler triggers a #VE after all? Or where is it
-enforced that TDX guests should set panic_on_oops?
+This is important; Harinder, please try to be sure to credit things
+properly; I'll add this tag to the patch.
 
-It all reads really weird, like the TDX guest is a big bird which simply
-sticks its head in the sand in the face of danger...
+Thanks,
 
-...
-
-> +/*
-> + * Handle the user initiated #VE.
-> + *
-> + * For example, executing the CPUID instruction from the user
-
-"... from userspace... " no "the"
-
-> + * space is a valid case and hence the resulting #VE had to
-
-s/had/has/
-
-> + * be handled.
-> + *
-> + * For dis-allowed or invalid #VE just return failure.
-> + *
-> + * Return True on success and False on failure.
-
-You lost me here - function returns false unconditionally. And that
-bla about CPUID from user being a valid case doesn't really look like
-one when I look at the code. Especially since ve_raise_fault() sends a
-SIGSEGV for user #VEs.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+jon

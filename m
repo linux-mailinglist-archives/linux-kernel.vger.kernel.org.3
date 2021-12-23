@@ -2,97 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C4447E341
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 749E447E346
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:31:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348259AbhLWMaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 07:30:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47516 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243453AbhLWMaV (ORCPT
+        id S1348285AbhLWMa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 07:30:28 -0500
+Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:49897 "EHLO
+        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243453AbhLWMaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 07:30:21 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC57C061401;
-        Thu, 23 Dec 2021 04:30:21 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id y22so20869809edq.2;
-        Thu, 23 Dec 2021 04:30:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=fNaPNTcQ9+5saoF57Y7rdpQmhsZMZ3umVXTUa4EFrBI=;
-        b=TxFI65WVU5ATfdfV6agT/ZhhwNnAFbfMpGRv9XmXTnIFXSc9rJ1pepLPlR/1RJMjov
-         SZpxgciBz+wq+7ivloAmDwkEuwv7WAc2F4Kwk0sgzI3sYSMe+vd3DE3jdXikyae2MB27
-         BQd26KIuEcjXplZweyjLS4UgYh3xueNdaopPlN4WoLyCzrS8GuauVLIXNf/q4zZxqhFz
-         XLuF5m8gR8Rg6IdC9FfYKWXpc0t8GhVLkle+KWWEC0JIoNPASf35YtD9fmnjjwFuc15I
-         Nvg+VAp/IZYyO6K/6jDS6E2JKH4F7tf65q1guqQniRwV/dlJt3liNUwS9lCUz2OtDLri
-         4tsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=fNaPNTcQ9+5saoF57Y7rdpQmhsZMZ3umVXTUa4EFrBI=;
-        b=VduE4Yd437MgEIky983sTtjL173qXt1W2ztc0Z2vO0aG85VAwj3mrt3Cv+ZHWIK6gA
-         tgutH8bLxMg8Sf5GTpmHMpmIh1M/2DMmsQPg0lNHzCKCRLPPKjRuRPL402Lpp/pLZjpO
-         DpmoVj8cfGmj2q5FTnJLzBb0Xc1IrOYQq+vp7NZPiSvG4B31bo13qlGkVYAjpu0EvEeV
-         /MwkUYTSulu7qkFrI1knswUWGEtg1opq4fsV60YRJjO4WivBHO+HXUxDAgycA/sRTHBo
-         Z2QZn07L1qeKhpFGnjDJEhcOdEgH41UgfBKrSKQMivqns4WlzNTF7zcPhR8sHkesmOQt
-         2Tpw==
-X-Gm-Message-State: AOAM533dSkxnYDpW2eJkrU1SdLx3JndpFO9zpmJnuRMq68LP3OIx4Kpb
-        Md2OzUUnf/1zX/1e5DplX5U=
-X-Google-Smtp-Source: ABdhPJydmPm6zJII+gat7VsvRjkt3D0JC59Ka+WRBkeZPYAgcZ1UzML+8KUmdBuuKTsN5AdPm6dCVA==
-X-Received: by 2002:a17:906:c214:: with SMTP id d20mr1779645ejz.630.1640262618575;
-        Thu, 23 Dec 2021 04:30:18 -0800 (PST)
-Received: from felia.fritz.box ([2001:16b8:2606:5e00:3112:93fc:fc68:4d9e])
-        by smtp.gmail.com with ESMTPSA id d1sm1728878ejo.176.2021.12.23.04.30.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Dec 2021 04:30:18 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Jan Kara <jack@suse.cz>, linux-block@vger.kernel.org
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] block: drop needless assignment in set_task_ioprio()
-Date:   Thu, 23 Dec 2021 13:30:03 +0100
-Message-Id: <20211223123003.6947-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 23 Dec 2021 07:30:23 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=cruzzhao@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V.XmPDo_1640262604;
+Received: from AliYun.localdomain(mailfrom:CruzZhao@linux.alibaba.com fp:SMTPD_---0V.XmPDo_1640262604)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 23 Dec 2021 20:30:20 +0800
+From:   Cruz Zhao <CruzZhao@linux.alibaba.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com
+Cc:     adobriyan@gmail.com, CruzZhao@linux.alibaba.com,
+        joshdon@google.com, edumazet@google.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: [PATCH 2/2] sched/core: Uncookied force idle accounting per cpu
+Date:   Thu, 23 Dec 2021 20:30:03 +0800
+Message-Id: <1640262603-19339-3-git-send-email-CruzZhao@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1640262603-19339-1-git-send-email-CruzZhao@linux.alibaba.com>
+References: <1640262603-19339-1-git-send-email-CruzZhao@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 5fc11eebb4a9 ("block: open code create_task_io_context in
-set_task_ioprio") introduces a needless assignment
-'ioc = task->io_context', as the local variable ioc is not further
-used before returning.
+Forced idle can be divided into two types, forced idle with cookie'd task
+running on it SMT sibling, and forced idle with uncookie'd task running
+on it SMT sibling, which should be accounting to measure the cost of
+enabling core scheduling too.
 
-Even after the further fix, commit a957b61254a7 ("block: fix error in
-handling dead task for ioprio setting"), the assignment still remains
-needless.
+This patch accounts the forced idle time with uncookie'd task, and the
+sum of both.
 
-Drop this needless assignment in set_task_ioprio().
+A few details:
+ - Uncookied forceidle time and total forceidle time is displayed via
+   the last two columns of /proc/stat.
+ - Uncookied forceidle time is ony accounted when this cpu is forced
+   idle and a sibling hyperthread is running with an uncookie'd task.
 
-This code smell was identified with 'make clang-analyzer'.
-
-Fixes: 5fc11eebb4a9 ("block: open code create_task_io_context in set_task_ioprio")
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Signed-off-by: Cruz Zhao <CruzZhao@linux.alibaba.com>
 ---
- block/blk-ioc.c | 1 -
- 1 file changed, 1 deletion(-)
+ fs/proc/stat.c              | 13 ++++++++++++-
+ include/linux/kernel_stat.h |  1 +
+ kernel/sched/core.c         |  3 +--
+ kernel/sched/core_sched.c   |  7 ++++---
+ 4 files changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/block/blk-ioc.c b/block/blk-ioc.c
-index 71c3a933cf16..8c99e1771c9c 100644
---- a/block/blk-ioc.c
-+++ b/block/blk-ioc.c
-@@ -286,7 +286,6 @@ int set_task_ioprio(struct task_struct *task, int ioprio)
+diff --git a/fs/proc/stat.c b/fs/proc/stat.c
+index 3a2fbc9..21607cf 100644
+--- a/fs/proc/stat.c
++++ b/fs/proc/stat.c
+@@ -110,7 +110,7 @@ static int show_stat(struct seq_file *p, void *v)
+ 	int i, j;
+ 	u64 user, nice, system, idle, iowait, irq, softirq, steal;
+ #ifdef CONFIG_SCHED_CORE
+-	u64 cookied_forceidle = 0;
++	u64 cookied_forceidle, uncookied_forceidle, forceidle;
+ #endif
+ 	u64 guest, guest_nice;
+ 	u64 sum = 0;
+@@ -121,6 +121,9 @@ static int show_stat(struct seq_file *p, void *v)
+ 	user = nice = system = idle = iowait =
+ 		irq = softirq = steal = 0;
+ 	guest = guest_nice = 0;
++#ifdef CONFIG_SCHED_CORE
++	cookied_forceidle = uncookied_forceidle = forceidle = 0;
++#endif
+ 	getboottime64(&boottime);
+ 	/* shift boot timestamp according to the timens offset */
+ 	timens_sub_boottime(&boottime);
+@@ -145,6 +148,8 @@ static int show_stat(struct seq_file *p, void *v)
+ 		sum		+= arch_irq_stat_cpu(i);
+ #ifdef CONFIG_SCHED_CORE
+ 		cookied_forceidle	+= cpustat[CPUTIME_COOKIED_FORCEIDLE];
++		uncookied_forceidle	+= cpustat[CPUTIME_UNCOOKIED_FORCEIDLE];
++		forceidle		= cookied_forceidle + uncookied_forceidle;
+ #endif
+ 
+ 		for (j = 0; j < NR_SOFTIRQS; j++) {
+@@ -168,6 +173,8 @@ static int show_stat(struct seq_file *p, void *v)
+ 	seq_put_decimal_ull(p, " ", nsec_to_clock_t(guest_nice));
+ #ifdef CONFIG_SCHED_CORE
+ 	seq_put_decimal_ull(p, " ", nsec_to_clock_t(cookied_forceidle));
++	seq_put_decimal_ull(p, " ", nsec_to_clock_t(uncookied_forceidle));
++	seq_put_decimal_ull(p, " ", nsec_to_clock_t(forceidle));
+ #endif
+ 	seq_putc(p, '\n');
+ 
+@@ -190,6 +197,8 @@ static int show_stat(struct seq_file *p, void *v)
+ 		guest_nice	= cpustat[CPUTIME_GUEST_NICE];
+ #ifdef CONFIG_SCHED_CORE
+ 		cookied_forceidle	= cpustat[CPUTIME_COOKIED_FORCEIDLE];
++		uncookied_forceidle	= cpustat[CPUTIME_UNCOOKIED_FORCEIDLE];
++		forceidle		= cookied_forceidle + uncookied_forceidle;
+ #endif
+ 		seq_printf(p, "cpu%d", i);
+ 		seq_put_decimal_ull(p, " ", nsec_to_clock_t(user));
+@@ -204,6 +213,8 @@ static int show_stat(struct seq_file *p, void *v)
+ 		seq_put_decimal_ull(p, " ", nsec_to_clock_t(guest_nice));
+ #ifdef CONFIG_SCHED_CORE
+ 		seq_put_decimal_ull(p, " ", nsec_to_clock_t(cookied_forceidle));
++		seq_put_decimal_ull(p, " ", nsec_to_clock_t(uncookied_forceidle));
++		seq_put_decimal_ull(p, " ", nsec_to_clock_t(forceidle));
+ #endif
+ 		seq_putc(p, '\n');
+ 	}
+diff --git a/include/linux/kernel_stat.h b/include/linux/kernel_stat.h
+index a21b065..23945c1 100644
+--- a/include/linux/kernel_stat.h
++++ b/include/linux/kernel_stat.h
+@@ -30,6 +30,7 @@ enum cpu_usage_stat {
+ 	CPUTIME_GUEST_NICE,
+ #ifdef CONFIG_SCHED_CORE
+ 	CPUTIME_COOKIED_FORCEIDLE,
++	CPUTIME_UNCOOKIED_FORCEIDLE,
+ #endif
+ 	NR_STATS,
+ };
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index f4f4b24..16d937e4 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -5822,8 +5822,7 @@ static inline struct task_struct *pick_task(struct rq *rq)
+ 	}
+ 
+ 	if (rq->core->core_forceidle_count) {
+-		if (cookie)
+-			rq->core->core_forceidle_start = rq_clock(rq->core);
++		rq->core->core_forceidle_start = rq_clock(rq->core);
+ 		rq->core->core_forceidle_occupation = occ;
+ 	}
+ 
+diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
+index bc5f45f..89bd49d 100644
+--- a/kernel/sched/core_sched.c
++++ b/kernel/sched/core_sched.c
+@@ -265,11 +265,12 @@ void sched_core_account_forceidle(struct rq *rq)
+ 		rq_i = cpu_rq(i);
+ 		p = rq_i->core_pick ?: rq_i->curr;
+ 
+-		if (!rq->core->core_cookie)
+-			continue;
+ 		if (p == rq_i->idle && rq_i->nr_running) {
+ 			cpustat = kcpustat_cpu(i).cpustat;
+-			cpustat[CPUTIME_COOKIED_FORCEIDLE] += delta;
++			if (rq->core->core_cookie)
++				cpustat[CPUTIME_COOKIED_FORCEIDLE] += delta;
++			else
++				cpustat[CPUTIME_UNCOOKIED_FORCEIDLE] += delta;
  		}
- 		if (task->io_context) {
- 			kmem_cache_free(iocontext_cachep, ioc);
--			ioc = task->io_context;
- 		} else {
- 			task->io_context = ioc;
- 		}
+ 	}
+ 
 -- 
-2.17.1
+1.8.3.1
 

@@ -2,152 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69C7947E028
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 09:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3DE47E02D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 09:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242860AbhLWIEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 03:04:44 -0500
-Received: from mga06.intel.com ([134.134.136.31]:27737 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242745AbhLWIEn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 03:04:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640246683; x=1671782683;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i+YD/pNRVPPsMYgsiZ0v66EnAsM8Wm2IxjTw8+56sVQ=;
-  b=eiktmwc+Kbnp4sTdFUComIRiv+UzjUnVQ3HS9uNy7+jBkPmI61Tc/d3c
-   yhSJ79drUIq5lLlfHy+lwpHfWUR9tU3z6h+wOXUw289aJmgGK4N78sIgR
-   IfrccaSNvjVIq9NSwSQpAC53LpLXfkJgT/sXkRlaiCFJ13YtwO7LCat0x
-   QoKgzEhplwGhmETbEgt239+F/W36AArLIpXdkggc1OhmsxZPCabVTe1NB
-   7eWcYn/kKNQIl49sK/3iZCKed6AmD9UROSldllBf9J6BOIiWeFSd7YNHR
-   INdRTpgXP7BI4yhqFGUeN+gDwIg+PU4UebvnzhapQ4E1Wh29SUSopvB5r
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="301544454"
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="301544454"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 00:04:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="664513558"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 23 Dec 2021 00:04:38 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 23 Dec 2021 10:04:38 +0200
-Date:   Thu, 23 Dec 2021 10:04:38 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 2/5] acpi: Store CRC-32 hash of the _PLD in struct
- acpi_device
-Message-ID: <YcQtlg5QtrMa4xzz@kuha.fi.intel.com>
-References: <20211222143258.82305-1-heikki.krogerus@linux.intel.com>
- <20211222143258.82305-3-heikki.krogerus@linux.intel.com>
- <CAJZ5v0iJhM2p+GDR+Ta0QZLdsvar=ybef8DnEHV1=-E-swdL0g@mail.gmail.com>
+        id S243016AbhLWIKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 03:10:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235156AbhLWIKp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 03:10:45 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAC0C061401
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 00:10:45 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id w20so881658wra.9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 00:10:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0f/DuxP5XdKHv9iiqx47pPE+4gNN7bTaKcBE9rvwOvY=;
+        b=VRqkex8PM5rV4X6zVGqkNTV3airNy9nvhjYuWJodMWJiLoPgimfqO8p+tBBa6rdSl9
+         7qZnPVaQ3KAs/HjO7Vkpy0/s2MGnS9k4U4cYLhP62fedLLEDKyKWc+uErtcWPXnpyXfS
+         YSkuDM5W7OLMzF10ywvq18auTJY9OE/iLJAMSPEZwMS6iPXa7tctsVG1nNkNZize2wcn
+         8xhbKeBKucObn/e9cmlEav9AN77oW9T05z/uEsVAwq3uT7hOrtiloJSVki90/rP0Q946
+         XHczpL3uLPj4yb5w22eWA0kivGZkEaM1Ql5+zRMMe6pJYa/f6zc3tBUBeGgHecj2G/6a
+         CWrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0f/DuxP5XdKHv9iiqx47pPE+4gNN7bTaKcBE9rvwOvY=;
+        b=cWXswY/cOWChl5niFJ1N83ad4dVaDgM/wlwoYzUaO1VwejKTRrG9BAX6DAm8xsvMW2
+         m8Ge3q56Mo1S6TKayUT3xmcxl7LSd54kjEx/Vay02rYrm3mlD7lzOeCdfxl1Alka68Cy
+         aPBeEK/3JpbuWzRsFZ0KV56suhh+46qdg+bNRpx4qW6Vjp0f8/PLXNOd28QVYmb/0gR/
+         4omeZ0vmjJA7hwRsYOX+XeVYRM0dI1fMld/+wn/Bm2bIsJ/7g2yndeil1i4rlCun5jj0
+         Xa+NDg4lqO9727TCjGR8eD8V7h5rXE8avKlCQzbjfYCxPdrT6RFUzm07vX+SivpMZJQ4
+         GHug==
+X-Gm-Message-State: AOAM533wN2NPKVHXkTcsv8Qs1LTBe+iZTLdHLil1Oog39dEC2AnwfXkk
+        +FZVT0k1MQe8S94sixBODKw=
+X-Google-Smtp-Source: ABdhPJzQDJZwwSw+UjgbS+4mICsUCNoeS5eclflOZxZe1hKfAzuG1E1Gwy4zFKXJcr9uELWydG7zvg==
+X-Received: by 2002:adf:f985:: with SMTP id f5mr904698wrr.14.1640247043603;
+        Thu, 23 Dec 2021 00:10:43 -0800 (PST)
+Received: from localhost.localdomain ([217.113.240.86])
+        by smtp.gmail.com with ESMTPSA id r62sm3841313wmr.35.2021.12.23.00.10.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Dec 2021 00:10:42 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     rodrigosiqueiramelo@gmail.com
+Cc:     melissa.srw@gmail.com, hamohammed.sa@gmail.com, daniel@ffwll.ch,
+        airlied@linux.ie, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH 0/1] drm/vkms: zpos
+Date:   Thu, 23 Dec 2021 09:10:29 +0100
+Message-Id: <20211223081030.16629-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0iJhM2p+GDR+Ta0QZLdsvar=ybef8DnEHV1=-E-swdL0g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 05:55:32PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Dec 22, 2021 at 3:33 PM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > Storing CRC-32 hash of the Physical Location of Device
-> > object (_PLD) with devices that have it. The hash is stored
-> > to a new struct acpi_device member "pld_crc".
-> >
-> > The hash makes it easier to find devices that share a
-> > location, as there is no need to evaluate the entire object
-> > every time. Knowledge about devices that share a location
-> > can be used in device drivers that need to know the
-> > connections to other components inside a system. USB3 ports
-> > will for example always share their location with a USB2
-> > port.
-> >
-> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > ---
-> >  drivers/acpi/scan.c     | 16 ++++++++++++++++
-> >  include/acpi/acpi_bus.h | 14 +++++++++++++-
-> >  2 files changed, 29 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> > index 7ff55a197a583..113414c46b713 100644
-> > --- a/drivers/acpi/scan.c
-> > +++ b/drivers/acpi/scan.c
-> > @@ -19,6 +19,7 @@
-> >  #include <linux/dma-map-ops.h>
-> >  #include <linux/platform_data/x86/apple.h>
-> >  #include <linux/pgtable.h>
-> > +#include <linux/crc32.h>
-> >
-> >  #include "internal.h"
-> >
-> > @@ -667,6 +668,19 @@ static int acpi_tie_acpi_dev(struct acpi_device *adev)
-> >         return 0;
-> >  }
-> >
-> > +static void acpi_store_pld_crc(struct acpi_device *adev)
-> > +{
-> > +       struct acpi_pld_info *pld;
-> > +       acpi_status status;
-> > +
-> > +       status = acpi_get_physical_device_location(adev->handle, &pld);
-> > +       if (ACPI_FAILURE(status))
-> > +               return;
-> > +
-> > +       adev->pld_crc = crc32(~0, pld, sizeof(*pld));
-> > +       ACPI_FREE(pld);
-> > +}
-> > +
-> >  static int __acpi_device_add(struct acpi_device *device,
-> >                              void (*release)(struct device *))
-> >  {
-> > @@ -725,6 +739,8 @@ static int __acpi_device_add(struct acpi_device *device,
-> >         if (device->wakeup.flags.valid)
-> >                 list_add_tail(&device->wakeup_list, &acpi_wakeup_device_list);
-> >
-> > +       acpi_store_pld_crc(device);
-> > +
-> >         mutex_unlock(&acpi_device_lock);
-> >
-> >         if (device->parent)
-> > diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-> > index 8e87ead2af341..1977db19458ed 100644
-> > --- a/include/acpi/acpi_bus.h
-> > +++ b/include/acpi/acpi_bus.h
-> > @@ -356,10 +356,23 @@ struct acpi_device_data {
-> >         struct list_head subnodes;
-> >  };
-> >
-> > +/*
-> > + * struct acpi_device_location - Device location based on _PLD
-> > + * @devices: List of devices that share this location
-> > + * @node: Entry in the internal list of locations
-> > + * @pld_crc: CRC-32 hash of the _PLD
-> > + */
-> > +struct acpi_device_location {
-> > +       struct list_head devices;
-> > +       struct list_head node;
-> > +       u32 pld_crc;
-> > +};
-> 
-> Does this get used anywhere or is it a leftover from the previous version?
+Hi all,
 
-No. I'm sorry that was supposed to be removed. I'll resend.
+This patch adds support for the zpos plane prop in the VKMS driver.
 
-thanks,
+It should be applied after the "drm/vkms: add support for multiple
+overlay planes" series [1] because this new patch takes advantage of
+the "num_overlay_planes" module parameter to set the maximum and
+minimum overlay plane zpos.
+
+Thanks in advance,
+José Expósito
+
+[1] https://lore.kernel.org/dri-devel/20211213181131.17223-1-jose.exposito89@gmail.com/T/
+
+José Expósito (1):
+  drm/vkms: add zpos plane property
+
+ drivers/gpu/drm/vkms/vkms_crtc.c  |  3 +--
+ drivers/gpu/drm/vkms/vkms_drv.c   |  1 +
+ drivers/gpu/drm/vkms/vkms_plane.c | 25 +++++++++++++++++++++++++
+ 3 files changed, 27 insertions(+), 2 deletions(-)
 
 -- 
-heikki
+2.25.1
+

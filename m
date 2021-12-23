@@ -2,99 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1022347DF45
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 08:01:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0524747DF34
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 07:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346698AbhLWHBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 02:01:52 -0500
-Received: from ni.piap.pl ([195.187.100.5]:44392 "EHLO ni.piap.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242432AbhLWHBv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 02:01:51 -0500
-X-Greylist: delayed 432 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Dec 2021 02:01:50 EST
-Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
-        by ni.piap.pl (Postfix) with ESMTPSA id 345C0C3F3EF5;
-        Thu, 23 Dec 2021 07:54:34 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl 345C0C3F3EF5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=piap.pl; s=mail;
-        t=1640242474; bh=QsH3ALB18JLQWaw2qwSMArNv7YYytOGVjTzrHnBVUbg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Y+G54OCu5+Pp1KPo+OjHnxjgx13kdrHOyLfuahhL10pDK4yLF1wa/cE4QtONU381C
-         H+cWBN3Nzo3xNOPDyHOyIpox1ufdCk2fJEo0eFHQNzv2J4RLRz6ywdHKGa8jx4ZQvN
-         TzRhynprxDUeNbM15VHlPbZW1auLkIiPFWoTj2LY=
-From:   =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v6 0/2] On Semi AR0521 sensor driver
-Sender: khalasa@piap.pl
-Date:   Thu, 23 Dec 2021 07:54:33 +0100
-Message-ID: <m3ee63hkuu.fsf@t19.piap.pl>
+        id S242410AbhLWG4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 01:56:49 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:39834 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232658AbhLWG4r (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 01:56:47 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10DF661DC8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 06:56:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2AF3C36AE5;
+        Thu, 23 Dec 2021 06:56:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640242606;
+        bh=ISmOxWI6u5C+k89d6ZQbgZNWCUXFaswndd35sG+K8z0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CM5fWh+lMBnLGGltiQMXQB7+PEgxoswhmZAuKApX00qzBb3NfFokxD4noPYkg/cVQ
+         wgUdYG/RZMTm/zX3xDONpueRwRrrjkR3y/uhpPDaO/GL42wOkRXpQyjLXzaD6w1lMe
+         /TmcrIzy6VnFP2YATaKERGFUIDt4mDY9aYDEgYsQUgym9E9HTZf2pR/QBx12kY+ULs
+         T9VABz36aSbtnJAxULLUUtmQ8jcf9vN+QXaY23GsRQ5pn4xd9wGChDwnM/dwRfkxJX
+         OqKDW4cVI7xR/d1v/rBco8uIQspbDX86T/MRANXjomdMEXbc62kYTKR2FiTQ4y9xXB
+         UuCvjuCx+cuwQ==
+Date:   Thu, 23 Dec 2021 12:26:41 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bard Liao <yung-chuan.liao@linux.intel.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        tiwai@suse.de, broonie@kernel.org, gregkh@linuxfoundation.org,
+        srinivas.kandagatla@linaro.org,
+        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
+        bard.liao@intel.com
+Subject: Re: [PATCH 3/7] soundwire: intel: improve suspend flows
+Message-ID: <YcQdqT6M+W9du8wy@matsya>
+References: <20211213054634.30088-1-yung-chuan.liao@linux.intel.com>
+ <20211213054634.30088-4-yung-chuan.liao@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-KLMS-Rule-ID: 3
-X-KLMS-Message-Action: skipped
-X-KLMS-AntiSpam-Status: not scanned, whitelist
-X-KLMS-AntiPhishing: not scanned, whitelist
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, not scanned, whitelist
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213054634.30088-4-yung-chuan.liao@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rob, Mauro, media subsystem reviewers,
+On 13-12-21, 13:46, Bard Liao wrote:
+> From: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+> 
+> This patch provides both a simplification of the suspend flows and a
+> better balanced operation during suspend/resume transition, as part of
+> the transition of Sound Open Firmware (SOF) to dynamic pipelines: the
+> DSP resources are only enabled when required instead of enabled on
+> startup.
+> 
+> The exiting code relies on a convoluted way of dealing with suspend
+> signals. Since there is no .suspend DAI callback, we used the
+> component .suspend and marked all the component DAI dmas as
+> 'suspended'. The information was used in the .prepare stage to
+> differentiate resume operations from xrun handling, and only
+> reinitialize SHIM registers and DMA in the former case.
+> 
+> While this solution has been working reliably for about 2 years, there
+> is a much better solution consisting in trapping the TRIGGER_SUSPEND
+> in the .trigger DAI ops. The DMA is still marked in the same way for
+> the .prepare op to run, but in addition the callbacks sent to DSP
+> firmware are now balanced.
+> 
+> Normal operation:
+> hw_params -> intel_params_stream
+> hw_free   -> intel_free_stream
+> 
+> suspend    -> intel_free_stream
+> prepare    -> intel_params_stream
+> 
+> This balanced operation was not required with existing SOF firmware
+> relying on static pipelines instantiated at every boot. With the
+> on-going transition to dynamic pipelines, it's however a requirement
+> to keep the use count for the DAI widget balanced across all
+> transitions.
+> 
+> The component suspend is not removed but instead modified to deal with
+> a corner case: when a substream is PAUSED, the ALSA core does not
+> throw the TRIGGER_SUSPEND. This is problematic since the refcount for
+> all pipelines and widgets is not balanced, leading to issues on
+> resume. The trigger callback keeps track of the 'paused' state with a
+> new flag, which is tested during the component suspend called later to
+> release the remaining DSP resources. These resources will be
+> re-enabled in the .prepare step.
+> 
+> The IPC used in the TRIGGER_SUSPEND to release DSP resources is not a
+> problem since the BE dailink is already marked as non-atomic.
 
-This is the 6th version of my On Semi AR0521 sensor driver.
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
-The documentation patch (1/2) hasn't been changed from v4:
-
- onnn,ar0521.yaml |  112
- 1 file changed, 112 insertions(+)
-
-The actual driver (2/2) changes:
-
- MAINTAINERS                |    7
- drivers/media/i2c/Kconfig  |   13
- drivers/media/i2c/Makefile |    1
- drivers/media/i2c/ar0521.c | 1051
- 4 files changed, 1072 insertions(+)
-
-- I reformatted the code to fit in 80 columns. Nobody should be asked to
-  make his code worse (and the 80-column version IS worse), and multiple
-  high-profile Linux developers (including the top one) appear to share
-  my opinion, but nevertheless - if it's something that will make it go
-  in, I won't care.
-
-- Basically the same applies to the // comments.
-
-- I have removed the "interval" support (frames per second).
-  Unfortunately this cripples the driver further a bit - the userspace
-  will not be able to set precise frame timings needed for broadcast
-  quality video. I will have to keep a private patch for that.
-  Another effect of this change is that the pixel clock is now fixed at
-  184 MHz, which by default produces ca. 30 FPS at 2560x1920. This may
-  be problematic on systems with less than 4 MIPI lanes, and/or on ones
-  which can't support higher frequency MIPI bus (the previous version
-  used a calculated clock). Perhaps it will be possible to fix this
-  issue in the future, with a couple of core V4L2 changes.
-
-- the driver now provides the .pre_streamon() for setting LP-11 state on
-  MIPI data and clock lanes. This is compatible with i.MX6 receiver.
-
-- s_power() converted to SET_RUNTIME_PM_OPS().
-
-- the "initial" I2C registers have been all converted to a table of
-  multi-register files, to minimize time spent on I2C bus.
-
-- a lot of smaller changes suggested by Laurent, Sakari, Jacopo and
-  possibly others.
---=20
-Krzysztof "Chris" Ha=C5=82asa
-
-Sie=C4=87 Badawcza =C5=81ukasiewicz
-Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
-Al. Jerozolimskie 202, 02-486 Warszawa
+-- 
+~Vinod

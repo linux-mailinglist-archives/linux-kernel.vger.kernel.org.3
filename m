@@ -2,164 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D35CA47E7AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:34:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C9F47E7B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:39:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349825AbhLWSe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 13:34:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
+        id S1349863AbhLWSj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 13:39:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240342AbhLWSe1 (ORCPT
+        with ESMTP id S240240AbhLWSjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 13:34:27 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7A4C061757
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:34:26 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id h1so1758322pls.11
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:34:26 -0800 (PST)
+        Thu, 23 Dec 2021 13:39:54 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD90AC061401
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:39:54 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id s189-20020a252cc6000000b005c1f206d91eso11370010ybs.14
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:39:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wgoegRi5bG9RfU6sMp0VEJxN3NnOXgdV/DTIFT/FP9s=;
-        b=L+zXpuXCNgLWcMvoCH32XVHU3LmaAvryhek/ia9zaFUu0ZSn7rADevGixqyB2soisL
-         lb8sy3eZ0Qb13+uIbTieaElB9/eNeY1LdDq+a6B1I4SCMgjk8KynVB6mC3VxCjS62dVR
-         shouleL8Xc9cW4Wz78SXSVxVyqQLoN4F0NG+DvAR8pOfjTfWeQzVKxXB0o9Pq4oNeD2u
-         D/l3mjhlcj2MVLlMZngH+SksfEZR9/1Wk/yngiydrBqbgLH3qAIjqS5gEc7eeKDfOTuB
-         avLlOIlX+XDpMaVWp30QaJoxFQY/I8sNhRtyyMDPfKjd8Jl1YaMQ7pZgNNA9C4UmrgVB
-         9akA==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=TVJiAygomhnsrOQSAYm31X4HGCs9K5bbFFwm5gR602Y=;
+        b=AXRSAJcIT5hS0UUyfBMSukDFA5aTFCY85MwAep99fEq3FQW8DXd0kL/nq4yDIMHGYX
+         SX+DOqnaoT93XZsHUnkPVtvusbQq5tkN1jIVI7MKP1ovRfvCcPZyecKdG/llHEXOwR4S
+         RPlVvI9tnl2QgUSlPKVxS4KuzI9FiIyjsoF7tLvsKKRUeIdCRB5BMR448f1VTAwiBPL/
+         l0/KPMBnUbz9tPppQJSef+y4U6S8ww/HSx/7bYSL78Qyklqz4cqmHzyQTa+Vnn4ERE71
+         10+HFtf0Z+0TSJMLTdSPZA5W5nJa68I3X6OZOgBcFOPr77CrPndzYhx0WLonBp9T44nU
+         auEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wgoegRi5bG9RfU6sMp0VEJxN3NnOXgdV/DTIFT/FP9s=;
-        b=IIa9IAZ3pPKLmF1++1N+Lf8fLSAhhpAxK9Z6lfDpwMvdSTkLeOFMPIZFZsoykDt9FQ
-         mEM49+hM5U8f+C0kQ4Ygb30+lS0uiWtebVeIyECJVeIioaoLziAJFfA+wslhP7EbZdma
-         +TDGWj5O8jOZXv+2YEw/bXI1o3O1sjgTJvawXaoq/o2X30+FTDojJ3xEF5MPDL0NEdxy
-         klpucGhUxRD7gNC68dPrpbBurw0JM1bJEM6f+SKDcwbapI5wxpBGlyM9hg2gUamCk4rd
-         ig5ghPeQHb5QUjlU/muNbqVNI+5q8K/jLbV9Htoz/iqpT6JCXeNVQh42pJg7ToGIkFDZ
-         DTaw==
-X-Gm-Message-State: AOAM533zqO/LDUb7JeZN7myZNHiue0gqTP8MQktyA9vhYGbbDlzuf1gl
-        IRjELHrjOSjgcMnN4kTqYX1UWQ==
-X-Google-Smtp-Source: ABdhPJymsNE7J9ptKr2BtgChAzAfQEzAGp2WzRVvToHDYcXxBbfV5GZE58CrgE/W67Py/7kxVbiHvg==
-X-Received: by 2002:a17:90a:c58f:: with SMTP id l15mr3967558pjt.227.1640284466086;
-        Thu, 23 Dec 2021 10:34:26 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id k6sm6898801pff.17.2021.12.23.10.34.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Dec 2021 10:34:25 -0800 (PST)
-Date:   Thu, 23 Dec 2021 18:34:22 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com
-Subject: Re: [PATCH v3 kvm/queue 06/16] KVM: Implement fd-based memory using
- MEMFD_OPS interfaces
-Message-ID: <YcTBLpVlETdI8JHi@google.com>
-References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
- <20211223123011.41044-7-chao.p.peng@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211223123011.41044-7-chao.p.peng@linux.intel.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=TVJiAygomhnsrOQSAYm31X4HGCs9K5bbFFwm5gR602Y=;
+        b=sxdRmI3aN9M6Cyhu5keResmduDqdsc8Lojwm9gcRtsvkJeZP6oaTxLrotHcQDli8y7
+         lvMw1NID9+cuEdJthSeRic/E3QLWYH6gOlWEsw1BF5wNSAS/fKdf5Ep5aW5pG0ebHOjV
+         Baist+eWTyJn33n9Xjg9ymtQPMUim6pP4gMT07XkivAV95wUJz9sM01Tq/xpWsaR71D3
+         rH8ClTWi0v6CCSg9cykZdZAz6gMC/XMHzx5UVYe/AOLwyz/76k71KGtfe1fD3P27s5+j
+         jK2HhU4WfPUzyqP87HTwka2XEA7rlEj7Vk1EfpcpDDNFG6yslLzzlSv5ZiRxQaKSW1ys
+         2CAA==
+X-Gm-Message-State: AOAM532JQLHyhklb+TgJKszUOTiEvFuIIXeWRLlFIYV3oyps0hi7eeb/
+        JSEbsu+MLDC98hS01RCpBT8kd9SiKQyY
+X-Google-Smtp-Source: ABdhPJwikImMY1Hv+0p2ALafNYtwJaisYg7JEEhXUtfEIZvbO90Xnr4QfnNTFesZBy0TorTrIzxAV610tbva
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:1c9d:afe4:ff2f:9382])
+ (user=irogers job=sendgmr) by 2002:a25:68a:: with SMTP id 132mr4780415ybg.649.1640284793933;
+ Thu, 23 Dec 2021 10:39:53 -0800 (PST)
+Date:   Thu, 23 Dec 2021 10:39:47 -0800
+Message-Id: <20211223183948.3423989-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.307.g9b7440fafd-goog
+Subject: [PATCH v2 1/2] perf test: Enable system wide for metricgroups test
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     eranian@google.com, Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021, Chao Peng wrote:
-> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
-> index 03b2ce34e7f4..86655cd660ca 100644
-> --- a/arch/x86/kvm/Kconfig
-> +++ b/arch/x86/kvm/Kconfig
-> @@ -46,6 +46,7 @@ config KVM
->  	select SRCU
->  	select INTERVAL_TREE
->  	select HAVE_KVM_PM_NOTIFIER if PM
-> +	select MEMFD_OPS
+Uncore events as group leaders fail in per-thread mode causing exit
+errors. Enable system-wide for metricgroup testing. This fixes the HPC
+metric group when tested on skylakex.
 
-MEMFD_OPS is a weird Kconfig name given that it's not just memfd() that can
-implement the ops.
+Fixes: 4a87dea9e60f ("perf test: Workload test of metric and metricgroups")
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/tests/shell/stat_all_metricgroups.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->  	help
->  	  Support hosting fully virtualized guest machines using hardware
->  	  virtualization extensions.  You will need a fairly recent
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 3bd875f9669f..21f8b1880723 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -806,6 +806,12 @@ static inline void kvm_irqfd_exit(void)
->  {
->  }
->  #endif
-> +
-> +int kvm_memfd_register(struct kvm *kvm, struct kvm_memory_slot *slot);
-> +void kvm_memfd_unregister(struct kvm_memory_slot *slot);
-> +long kvm_memfd_get_pfn(struct kvm_memory_slot *slot, gfn_t gfn, int *order);
-> +void kvm_memfd_put_pfn(kvm_pfn_t pfn);
-> +
->  int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
->  		  struct module *module);
->  void kvm_exit(void);
-> diff --git a/virt/kvm/Makefile.kvm b/virt/kvm/Makefile.kvm
-> index ffdcad3cc97a..8842128d8429 100644
-> --- a/virt/kvm/Makefile.kvm
-> +++ b/virt/kvm/Makefile.kvm
-> @@ -5,7 +5,7 @@
->  
->  KVM ?= ../../../virt/kvm
->  
-> -kvm-y := $(KVM)/kvm_main.o $(KVM)/eventfd.o $(KVM)/binary_stats.o
-> +kvm-y := $(KVM)/kvm_main.o $(KVM)/eventfd.o $(KVM)/binary_stats.o $(KVM)/memfd.o
+diff --git a/tools/perf/tests/shell/stat_all_metricgroups.sh b/tools/perf/tests/shell/stat_all_metricgroups.sh
+index de24d374ce24..cb35e488809a 100755
+--- a/tools/perf/tests/shell/stat_all_metricgroups.sh
++++ b/tools/perf/tests/shell/stat_all_metricgroups.sh
+@@ -6,7 +6,7 @@ set -e
+ 
+ for m in $(perf list --raw-dump metricgroups); do
+   echo "Testing $m"
+-  perf stat -M "$m" true
++  perf stat -M "$m" -a true
+ done
+ 
+ exit 0
+-- 
+2.34.1.307.g9b7440fafd-goog
 
-This should be
-
-   kvm-$(CONFIG_MEMFD_OPS) += $(KVM)/memfd.o
-
-with stubs provided in a header file as needed.  I also really dislike naming KVM's
-file memfd.c, though I don't have a good alternative off the top of my head.
-
->  kvm-$(CONFIG_KVM_VFIO) += $(KVM)/vfio.o
->  kvm-$(CONFIG_KVM_MMIO) += $(KVM)/coalesced_mmio.o
->  kvm-$(CONFIG_KVM_ASYNC_PF) += $(KVM)/async_pf.o
-
-
-> +#ifdef CONFIG_MEMFD_OPS
-> +static const struct memfd_pfn_ops *memfd_ops;
-
-memfd_ops needs to be associated with the slot, e.g. userspace should be able to
-map multiple types of a backing stores into a single VM.  This doesn't even allow
-that for multiple VMs, and there are all kinds of ordering issues.
-
-> +void kvm_memfd_unregister(struct kvm_memory_slot *slot)
-> +{
-> +#ifdef CONFIG_MEMFD_OPS
-> +	if (slot->file) {
-> +		fput(slot->file);
-
-Needs to actually unregister.
-
-> +		slot->file = NULL;
-> +	}
-> +#endif
-> +}
-> -- 
-> 2.17.1
-> 

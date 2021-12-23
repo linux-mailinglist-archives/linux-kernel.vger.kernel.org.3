@@ -2,112 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D862547DDEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 03:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E03B47DDDD
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 03:52:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241976AbhLWC5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 21:57:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33838 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242024AbhLWC4y (ORCPT
+        id S1346057AbhLWCwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 21:52:35 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:15968 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238419AbhLWCwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 21:56:54 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F79C061757;
-        Wed, 22 Dec 2021 18:56:53 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id fq10so3981794qvb.10;
-        Wed, 22 Dec 2021 18:56:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iOaeq1ltcsHbT2VFHG2JnaFkk9N0hH51i2oF/BC7WdM=;
-        b=BZSRI2qumXOY5MVBm8/Hd12OBgjK/ia30/Ksq2FaklvZAR1AFabkD87VBtJnaKjByl
-         SSZSNM5zVd1CPPMraVVpgOyvPXfZv80EJV64+euzSEwjZj2Ho0zMnkXRCqyvs+8QQiis
-         L5v4gAdkapMXJyL58EmjpTNBsbyzfjI6JeMpYd1GMXsysnzKs6m8YZ4nmV4wQWHgkcj9
-         8dmq2c9SE2PE3zRZqu0iPHUKqHIg4cKRWTq8Tup5pdo0OLZnCiV+5pq2FNmoiPHs/kEk
-         XAGP8xRGe7KGMXxdxVkKImV4Q9/FLcPqE3AOWb7A2L01PA0aEjjJYkdIBhA0CjTkbzhJ
-         qcNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iOaeq1ltcsHbT2VFHG2JnaFkk9N0hH51i2oF/BC7WdM=;
-        b=BW2o8rw1TQLu771kpNeKuD54/yfwm63xCmIMqaMPk8hoPAkwmnx4bI6SxDnSmeVS5R
-         p31CmFAW5uqAmhTN0jk9OpALFGGFq85fdNpfsQW2vlc6iNBmz4Ez5R4URq3PjapUvdkk
-         JGcSJL00E7lEdicLjNap+zhocGX4uMzl66hvnClLfG9IUnhr4jIAKRMuy8cSdbpr80uD
-         udwqKuSSk9pKurAbFYTGiTV0Zv04KFnoYjqSeyxbMsI879aV9OuMYQXlsJNvVN1FPDF0
-         DTdj/Yi8hcCsIEDVtkK6+jQwPYpFYKth4+44Gj0mW6I0yoLeaRTVGEmvfTqzpX0iKQ/4
-         w4og==
-X-Gm-Message-State: AOAM530LUyh/RjIMpXMunbqHQeUBFuk98vy4LwMxowkv+zm9g6OBSEsq
-        ed2qiZ3oN4D2MUFd67Qmx0s=
-X-Google-Smtp-Source: ABdhPJz4e+/HZaPc8a1onr4hOorROLgx6m4j2H5jR66b9xo88LrpKXaMPcwQ6YZOIDr6d9FlHOPtqw==
-X-Received: by 2002:a05:6214:76a:: with SMTP id f10mr440043qvz.80.1640228213118;
-        Wed, 22 Dec 2021 18:56:53 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id s126sm3126273qkf.7.2021.12.22.18.56.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 18:56:52 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     manfred@colorfullife.com
-Cc:     stable@vger.kernel.org, akpm@linux-foundation.org, arnd@arndb.de,
-        cgel.zte@gmail.com, chi.minghao@zte.com.cn, dbueso@suse.de,
-        linux-kernel@vger.kernel.org, rdunlap@infradead.org,
-        shakeelb@google.com, unixbhaskar@gmail.com, vvs@virtuozzo.com,
-        zealci@zte.com.cn
-Subject: [PATCH v2] ipc/sem: do not sleep with a spin lock held
-Date:   Thu, 23 Dec 2021 02:56:23 +0000
-Message-Id: <20211223025623.556044-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <63840bf3-2199-3240-bdfa-abb55518b5f9@colorfullife.com>
-References: <63840bf3-2199-3240-bdfa-abb55518b5f9@colorfullife.com>
+        Wed, 22 Dec 2021 21:52:34 -0500
+Received: from dggeme764-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JKF5b1HyqzZdpx;
+        Thu, 23 Dec 2021 10:49:23 +0800 (CST)
+Received: from huawei.com (10.67.174.119) by dggeme764-chm.china.huawei.com
+ (10.3.19.110) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.20; Thu, 23
+ Dec 2021 10:52:32 +0800
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     <linux-arm-kernel@lists.infradead.org>, <linux@armlinux.org.uk>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH RESEND] ARM: Add unwinding annotations to __loop.*delay functions
+Date:   Thu, 23 Dec 2021 02:56:58 +0000
+Message-ID: <20211223025658.3768629-1-xukuohai@huawei.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.119]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggeme764-chm.china.huawei.com (10.3.19.110)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+The unwind directives can't handle nested function entries, so only the
+outermost function __loop_udelay is annotated, and the inner nested
+entries share the same unwind info with __loop_udelay.
 
-We can't call kvfree() with a spin lock held, so defer it.
-Fixes: fc37a3b8b438 ("[PATCH] ipc sem: use kvmalloc for sem_undo
-allocation")
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
-changelog since v2:
-+ Fixes: fc37a3b8b438 ("[PATCH] ipc sem: use kvmalloc for sem_undo
-+ allocation")
- ipc/sem.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/lib/delay-loop.S | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/ipc/sem.c b/ipc/sem.c
-index 6693daf4fe11..0dbdb98fdf2d 100644
---- a/ipc/sem.c
-+++ b/ipc/sem.c
-@@ -1964,6 +1964,7 @@ static struct sem_undo *find_alloc_undo(struct
-ipc_namespace *ns, int semid)
- 	 */
- 	un = lookup_undo(ulp, semid);
- 	if (un) {
-+		spin_unlock(&ulp->lock);
- 		kvfree(new);
- 		goto success;
- 	}
-@@ -1976,9 +1977,8 @@ static struct sem_undo *find_alloc_undo(struct
-ipc_namespace *ns, int semid)
- 	ipc_assert_locked_object(&sma->sem_perm);
- 	list_add(&new->list_id, &sma->list_id);
- 	un = new;
--
--success:
- 	spin_unlock(&ulp->lock);
-+success:
- 	sem_unlock(sma, -1);
- out:
- 	return un;
+diff --git a/arch/arm/lib/delay-loop.S b/arch/arm/lib/delay-loop.S
+index 3ccade0f8130..f0a076f9abc5 100644
+--- a/arch/arm/lib/delay-loop.S
++++ b/arch/arm/lib/delay-loop.S
+@@ -7,6 +7,7 @@
+ #include <linux/linkage.h>
+ #include <asm/assembler.h>
+ #include <asm/delay.h>
++#include <asm/unwind.h>
+ 
+ 		.text
+ 
+@@ -21,6 +22,7 @@
+  */
+ 
+ ENTRY(__loop_udelay)
++UNWIND(.fnstart)
+ 		ldr	r2, .LC1
+ 		mul	r0, r2, r0		@ r0 = delay_us * UDELAY_MULT
+ ENTRY(__loop_const_udelay)			@ 0 <= r0 <= 0xfffffaf0
+@@ -54,6 +56,7 @@ ENTRY(__loop_delay)
+ #endif
+ 		bhi	__loop_delay
+ 		ret	lr
+-ENDPROC(__loop_udelay)
+-ENDPROC(__loop_const_udelay)
+ ENDPROC(__loop_delay)
++ENDPROC(__loop_const_udelay)
++UNWIND(.fnend)
++ENDPROC(__loop_udelay)
 -- 
-2.25.1
+2.27.0
 

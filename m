@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4594847DFE1
+	by mail.lfdr.de (Postfix) with ESMTP id A2D2047DFE2
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 08:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235156AbhLWHtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 02:49:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
+        id S1347362AbhLWHtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 02:49:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347194AbhLWHsP (ORCPT
+        with ESMTP id S1347197AbhLWHsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 23 Dec 2021 02:48:15 -0500
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866EBC061792
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 23:47:50 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id j204-20020a2523d5000000b005c21574c704so8599408ybj.13
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 23:47:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315E8C061799
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 23:47:53 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id q198-20020a25d9cf000000b005f7a6a84f9fso8570356ybg.6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 23:47:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=J+XZcWIvTsMTXk/jF0b/YxErH+RdVpP417KXG5BKDgQ=;
-        b=qINuLaApMXPezDR3O3jtt/WAs+gUahEe62wROOyyU64FhMjIQDuk6iFrPd9nND5dhZ
-         BHyaPjAI6A84A1YLGA/bZ8OzeV7TALDFXuODvwMf+XrzUK0PZnwNY2OBkrnHqIT4b5ZB
-         xzqy1FWR9uBUiimKdM1M5tXnYThntnMHuLPqAcn6kQ1dqwRJqMsznMMcpkqu+C+F0OTT
-         aTVJ8HNQUN2Sj9wGpuYM3fayqBO7cpJGvAahG3jDfc2FS5xjx6kpilevRyUmp+EdWtSX
-         uQQD3TT0oTYF7xNxxdTY5DdwmtCj334dnul3ra3QpR+8bKDHTLVmmhNmYFiUPtK9cPWg
-         1GuA==
+        bh=84jiul3eS69fZOps8gyBR2xeuwa8naIlTNqvP/j/8xA=;
+        b=eWvVaORPbPCnckO/NmOe+ry/whk3ae7kUZNUzcG+mrlyrUmZJAMUJzjb+aMMLos9VA
+         3aF8p1UpAPuuUehAL4NI9mLMLA2AT7CimKeCxG1bJ4r8NrvH/Ag9dpRdUNMYOUpNz+NZ
+         MDT7urMFaz5qbPYzLQUHQp1Nu3Dru8+RHWWE2nLNsuUxnBeAYtXxe5LgRY4izM2LoEQg
+         +P+jY5XIjXuKW6r6/skwTDr3uoDZkiUCDd5RuCCqaGrh4QLQCEqGxXR3v0+3f6qvKYIH
+         GMJmHEiZuL3CtVbNK2buWxV2fNimLbiDIbZ8hJcT+XyNiIhX/Y9qlYd2VOYotU5TM/t1
+         Vjog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=J+XZcWIvTsMTXk/jF0b/YxErH+RdVpP417KXG5BKDgQ=;
-        b=rOKmO0uKBGSJtk9n3YB4tG4fDneX3cIf4S37KDq4Gsy5HRA5DbGGZMvNlHXYgN5XbO
-         4o8KI9V4Xw6zLC3Qw5qC+/mXDixm+RYOxKLZj9i2hN5rK3FJGoPGjQDzw4gWXpYkEHj4
-         D/8TYc2eLuUwKbbfJTehWLXJm11F5I+Jd/b62eTjDAObDnCWtMYGMH40JLGMNqhOrkN6
-         DmUg8SkYo1VZ9w0Nb/PLSvSXJDCY6DRDMchgy1lF5GS2CvxqKLsCEAiPFbm7JfvWUzmS
-         E8i/YhdME0eT2H9e8Hppd4ODGZHQs7c6Z9G/TIe4NYABgLLAygQE3a9LB4uupmfeKrsM
-         A6lA==
-X-Gm-Message-State: AOAM533dAOgPoLArxV4i5pRdmo/cpABUaruOewV5zizAC3WTQMW8oK5Z
-        A2h1pdr6YRhIb166AFs4sB8KzghLkDju
-X-Google-Smtp-Source: ABdhPJzLRWoaIPKwhtvd7PAQUCqVSNKCsmBsw5xkU76uWfw/NKh8WqXoB837sdBX/gDC08lELhKKt7I/8ciz
+        bh=84jiul3eS69fZOps8gyBR2xeuwa8naIlTNqvP/j/8xA=;
+        b=H7v9R/7Bhvk4u8IcI8BxnMh60gNuW+Ca2CSu9E5kpZg47yWgU44BdLL3YxcTC0Kfn+
+         y5UqWYM/8/2kgHmust39o9hUKR+o2KsFeAwtqxBrZr1tMhdbVkfwM4mjLnCJOJFjl7S6
+         +alDb7+RS3QdBJHuENtMRxwgMiG7ORcu5GucN1OIbAqIQv1KEEY6IVVhDNWDoQoeYn8i
+         A/ykDKAWHfqbpbLRur6RMo6/95oYr0sXhGmn+ZvQ3rGNVc9I67hFRzDHE11BWiJ/fDeQ
+         MfoAto1OozNG7Ofu4Mm6h9GN822UAPhz/wwFeUcoPCTya7BGTBir/ObYfIsXBS7M7Jaq
+         p8+Q==
+X-Gm-Message-State: AOAM531QJQgiH5XwB3DNuPHw//Avb+C22HZff4RIom7yVf9RKLfYp1je
+        nG2Z8eKeRIKOSiIwN6QgQOPSjBhB2xJX
+X-Google-Smtp-Source: ABdhPJxhU524UVDy65p+6AJP7nFi0/17OcNMoh/MQicxFL+nsP8RdWqJqC3cARe3QImikhkZrwzBUDdJOmI/
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:4fef:90ff:589d:24ca])
- (user=irogers job=sendgmr) by 2002:a25:d013:: with SMTP id
- h19mr1759800ybg.428.1640245669757; Wed, 22 Dec 2021 23:47:49 -0800 (PST)
-Date:   Wed, 22 Dec 2021 23:45:33 -0800
+ (user=irogers job=sendgmr) by 2002:a25:13c6:: with SMTP id
+ 189mr1675596ybt.113.1640245672380; Wed, 22 Dec 2021 23:47:52 -0800 (PST)
+Date:   Wed, 22 Dec 2021 23:45:34 -0800
 In-Reply-To: <20211223074541.3318938-1-irogers@google.com>
-Message-Id: <20211223074541.3318938-41-irogers@google.com>
+Message-Id: <20211223074541.3318938-42-irogers@google.com>
 Mime-Version: 1.0
 References: <20211223074541.3318938-1-irogers@google.com>
 X-Mailer: git-send-email 2.34.1.307.g9b7440fafd-goog
-Subject: [PATCH v2 40/48] perf test: Use perf_cpu_map__for_each_cpu
+Subject: [PATCH v2 41/48] perf stat: Correct check_per_pkg cpu
 From:   Ian Rogers <irogers@google.com>
 To:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
@@ -79,93 +79,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up variable naming to make cpu and index clearer.
+Code was incorrectly using the cpu map index as the CPU.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/openat-syscall-all-cpus.c | 28 +++++++++++-----------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+ tools/perf/util/stat.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/tests/openat-syscall-all-cpus.c b/tools/perf/tests/openat-syscall-all-cpus.c
-index 544db0839b3b..ca0a50e92839 100644
---- a/tools/perf/tests/openat-syscall-all-cpus.c
-+++ b/tools/perf/tests/openat-syscall-all-cpus.c
-@@ -22,7 +22,7 @@
- static int test__openat_syscall_event_on_all_cpus(struct test_suite *test __maybe_unused,
- 						  int subtest __maybe_unused)
+diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
+index f7f9757eba23..86ab427e87fc 100644
+--- a/tools/perf/util/stat.c
++++ b/tools/perf/util/stat.c
+@@ -292,11 +292,12 @@ static bool pkg_id_equal(const void *__key1, const void *__key2,
+ 	return *key1 == *key2;
+ }
+ 
+-static int check_per_pkg(struct evsel *counter,
+-			 struct perf_counts_values *vals, int cpu, bool *skip)
++static int check_per_pkg(struct evsel *counter, struct perf_counts_values *vals,
++			 int cpu_map_idx, bool *skip)
  {
--	int err = -1, fd, cpu;
-+	int err = -1, fd, idx, cpu;
- 	struct perf_cpu_map *cpus;
- 	struct evsel *evsel;
- 	unsigned int nr_openat_calls = 111, i;
-@@ -58,23 +58,23 @@ static int test__openat_syscall_event_on_all_cpus(struct test_suite *test __mayb
- 		goto out_evsel_delete;
- 	}
+ 	struct hashmap *mask = counter->per_pkg_mask;
+ 	struct perf_cpu_map *cpus = evsel__cpus(counter);
++	int cpu = perf_cpu_map__cpu(cpus, cpu_map_idx);
+ 	int s, d, ret = 0;
+ 	uint64_t *key;
  
--	for (cpu = 0; cpu < cpus->nr; ++cpu) {
--		unsigned int ncalls = nr_openat_calls + cpu;
-+	perf_cpu_map__for_each_cpu(cpu, idx, cpus) {
-+		unsigned int ncalls = nr_openat_calls + idx;
- 		/*
- 		 * XXX eventually lift this restriction in a way that
- 		 * keeps perf building on older glibc installations
- 		 * without CPU_ALLOC. 1024 cpus in 2010 still seems
- 		 * a reasonable upper limit tho :-)
- 		 */
--		if (cpus->map[cpu] >= CPU_SETSIZE) {
--			pr_debug("Ignoring CPU %d\n", cpus->map[cpu]);
-+		if (cpu >= CPU_SETSIZE) {
-+			pr_debug("Ignoring CPU %d\n", cpu);
- 			continue;
- 		}
- 
--		CPU_SET(cpus->map[cpu], &cpu_set);
-+		CPU_SET(cpu, &cpu_set);
- 		if (sched_setaffinity(0, sizeof(cpu_set), &cpu_set) < 0) {
- 			pr_debug("sched_setaffinity() failed on CPU %d: %s ",
--				 cpus->map[cpu],
-+				 cpu,
- 				 str_error_r(errno, sbuf, sizeof(sbuf)));
- 			goto out_close_fd;
- 		}
-@@ -82,29 +82,29 @@ static int test__openat_syscall_event_on_all_cpus(struct test_suite *test __mayb
- 			fd = openat(0, "/etc/passwd", O_RDONLY);
- 			close(fd);
- 		}
--		CPU_CLR(cpus->map[cpu], &cpu_set);
-+		CPU_CLR(cpu, &cpu_set);
- 	}
- 
- 	evsel->core.cpus = perf_cpu_map__get(cpus);
- 
- 	err = 0;
- 
--	for (cpu = 0; cpu < cpus->nr; ++cpu) {
-+	perf_cpu_map__for_each_cpu(cpu, idx, cpus) {
- 		unsigned int expected;
- 
--		if (cpus->map[cpu] >= CPU_SETSIZE)
-+		if (cpu >= CPU_SETSIZE)
- 			continue;
- 
--		if (evsel__read_on_cpu(evsel, cpu, 0) < 0) {
-+		if (evsel__read_on_cpu(evsel, idx, 0) < 0) {
- 			pr_debug("evsel__read_on_cpu\n");
- 			err = -1;
- 			break;
- 		}
- 
--		expected = nr_openat_calls + cpu;
--		if (perf_counts(evsel->counts, cpu, 0)->val != expected) {
-+		expected = nr_openat_calls + idx;
-+		if (perf_counts(evsel->counts, idx, 0)->val != expected) {
- 			pr_debug("evsel__read_on_cpu: expected to intercept %d calls on cpu %d, got %" PRIu64 "\n",
--				 expected, cpus->map[cpu], perf_counts(evsel->counts, cpu, 0)->val);
-+				 expected, cpu, perf_counts(evsel->counts, idx, 0)->val);
- 			err = -1;
- 		}
- 	}
 -- 
 2.34.1.307.g9b7440fafd-goog
 

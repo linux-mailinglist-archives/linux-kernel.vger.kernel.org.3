@@ -2,211 +2,869 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E83147E106
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 10:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A5847E10E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 11:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347581AbhLWJzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 04:55:49 -0500
-Received: from mail-am6eur05on2121.outbound.protection.outlook.com ([40.107.22.121]:4001
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S239351AbhLWJzs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 04:55:48 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ssg+xVzoTiiAYSZtN9pHpYos604A5I4PRfUpjHJnzR6kVdkN5BlC+FLFhf4u/HN5DDmFfMpe+QRy78JOZot6WB/E1GByXC9wLRALw1+3UlIeTmQITnRCC82o+RnuUVATiPBm2wQXZjvhI5iCq4CkIvUYuepo/bMBXgKFsyePU/uoNXMwU02y0y9bJnMcUNLWxD8AuERwwrHD9OkcxfmTMVN+q8dGyXOtZky0BKbbXi9zTnOMbagh2npqZDFzCMziAKBuAZ87JdqAPzSvx1aXR2ED5aQGjs9sDjIEzNyJrVB7Sl7hZCxUn9+2zjycU3EwFKkWM6mGOSNYZ9so7vSqhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8bDg3DgTznj1nYYpa6+ml0oS30/RxArF7kzxE1FeOO8=;
- b=VVQlZpaLWilmdR9Bjy425DgvYQWm/i624wr13wbH1ExXTHXFIn414Xw+WZ9fFuq5Ll40m5izetdyVh8QqZBBavNyyU+s8IgL9PtS+8JVoXNDk7dabOQkpLedPJcil6AsnrkEStDFJfCICETZ4WdxT0d8O3lFgDBzaaPcrTLTwazfce2AsOVVvlIEUDsF8D8Vl/35oK2criBD7+pU2xRPW9OY0oiKQwXFKPPHs8M2Vneqk3M6nOVTVKH4SIFZdIm/N7jqn7OT1xD6DTBQ5kPK8zTZxxy5P1sDC20RmrNVNfOewr46uAY4VWMrd5lgrLBD2YGer54doSNJvbZXD/8/Kg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
- header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8bDg3DgTznj1nYYpa6+ml0oS30/RxArF7kzxE1FeOO8=;
- b=RdomMqUERracOitAsS/3jc2+r3ajFaE0SIXkrDklfGl42zLWEVukeaWeK/n4Swuvmu/4DvCF2skmhoSJVV3CkmOQT8ZMMAoAMByyP6NIhHspwMEJAwdhsaHBfPUNeYjsEaXziHbwRVOn1f7cD6gkIKwL7wcjPt59rLz6uuBxN+4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=virtuozzo.com;
-Received: from VE1PR08MB5630.eurprd08.prod.outlook.com (2603:10a6:800:1ae::7)
- by VI1PR08MB5328.eurprd08.prod.outlook.com (2603:10a6:803:13a::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.19; Thu, 23 Dec
- 2021 09:55:43 +0000
-Received: from VE1PR08MB5630.eurprd08.prod.outlook.com
- ([fe80::5807:e24c:a173:3b71]) by VE1PR08MB5630.eurprd08.prod.outlook.com
- ([fe80::5807:e24c:a173:3b71%4]) with mapi id 15.20.4823.019; Thu, 23 Dec 2021
- 09:55:43 +0000
-Subject: Re: [PATCH/RFC] mm: add and use batched version of
- __tlb_remove_table()
-To:     Dave Hansen <dave.hansen@intel.com>, Will Deacon <will@kernel.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, kernel@openvz.org
-References: <20211217081909.596413-1-nikita.yushchenko@virtuozzo.com>
- <fcbb726d-fe6a-8fe4-20fd-6a10cdef007a@intel.com>
- <d6094dc4-3976-e06f-696b-c55f696fe287@virtuozzo.com>
- <290cfe1c-564f-9779-0757-5ca281055e77@intel.com>
-From:   Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
-Message-ID: <22a7534c-4759-4e7e-de07-d33a3682c156@virtuozzo.com>
-Date:   Thu, 23 Dec 2021 12:55:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <290cfe1c-564f-9779-0757-5ca281055e77@intel.com>
-Content-Type: multipart/mixed;
- boundary="------------C841C10C78D715F3120DB136"
-Content-Language: en-US
-X-ClientProxiedBy: AM5PR0701CA0004.eurprd07.prod.outlook.com
- (2603:10a6:203:51::14) To VE1PR08MB5630.eurprd08.prod.outlook.com
- (2603:10a6:800:1ae::7)
+        id S1347594AbhLWKAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 05:00:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42120 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347588AbhLWKAB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 05:00:01 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B154C061759
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 02:00:00 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id k21so11364996lfu.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 02:00:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ozWOdzw4/gQTVpTCaZ01eY6Ii6IdnRKK+yVg8sDvroI=;
+        b=MQZvipuLWLs3sfUhXbKs0dN6b7aVQ5f1NX7dAPmJARViFODigm9p+rbxZv2z35b1p0
+         nIzIXjC+iiEuMBbY2qXviZ+nqc8RfiZqGqBBHblzDF6YGMA4ipqkNJYx/m4xPew/hu3l
+         1GLdFaQCk9dwu0MWgu5lpJ1PArCQfiK4EqO2o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ozWOdzw4/gQTVpTCaZ01eY6Ii6IdnRKK+yVg8sDvroI=;
+        b=nTubxYzLLJLsVeopMNupODBOK0+7pdT/cqLhrkgsuQsPp/gzlS+kaUUs9CLcYLyk6j
+         oaosisDJx2q0GduJ6u4Num/1zCS1nn+TCidsrakK4cP5HxFdDXaO3V1l9QHX0XBKIGPK
+         yNtdjDrOTJcB1q3jmWZ9ZAKPxhDqPzCLVhsy6edN22MDBNrZZVEfbz0sfSFtNooGgjWX
+         U9zXBZKccq2HEkxLzyHLe3heDfovs8001pS8fHuBZZ/RhnfwKHMQIMMSVnxKzB98vDwl
+         LIxRvEZpv/XfrWzKC19/P+VOyTC7c3mwWL5usV3wtMfoc/REJMm5QKbJCU3reCkpWLhl
+         pYSQ==
+X-Gm-Message-State: AOAM5313avCW5vNOlBt77dh/pzYGoNbfkZvp4imZGtp02xf/Eeksg9Iu
+        uJLc/ZIo+CTIOqIwNzDlZTdqDLVAqPhcWByvKgFSXw==
+X-Google-Smtp-Source: ABdhPJw3jCl3U2HApVc0Sal5/5IDxNKS1pBLxkt7Gt7nBbvtKp2b8UfsV4Tl/aOVnqLs/Bg+tdcAvP+01l9/oR6HgzM=
+X-Received: by 2002:ac2:4353:: with SMTP id o19mr1268636lfl.670.1640253598261;
+ Thu, 23 Dec 2021 01:59:58 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d4f2e611-147c-46f8-74b1-08d9c5fa6263
-X-MS-TrafficTypeDiagnostic: VI1PR08MB5328:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR08MB532827F2AC4A997429EDBC04F47E9@VI1PR08MB5328.eurprd08.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:457;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: g/x4uxXR1pmYjchvjyqYs0mZLKtffTkJapTkTgEPIVNQNxrUXIHNgfj6wn6slCNAtCPwXvo2QGLo+012k8xw44MgqxfrCJpbPu9acPoEmZ3vX0O0XhcMkEGBSGNwWP5ZnJM4VHsP1homIl6UdQIbXpp92XwHtRs8A0nXQ2m+jTDHJpZDTD9HtiGs1KZb9JbqI+cqZl7bevklrUaZh5mv6NSNcSKhqaF/r/UM574u6qGpcOkvflKiTIbxhNE+3nsNprfq2JSSS+ipCADDE0jQlNOO0e1CUS386HgpTS/TCVDoYQ4Ym3ifyzISVp3XxTecLmHQ8es7czNoZJTiBP7+APlEU79nq0MPfhJ75gvdJWR2rdqnzJhj3YvzGvjcIHx4VZEJix5OsaL0lVVrj/4QFhHgG6hUiGO9+pv6ep5gYc4gdlHz7cbRPgj+15iDTlsPBCpS4A4Y7lYK+8uDhlir7+30BHNgr0Tlf3nRb50QEyUESRG4XLHwpgK0Ci9PxV7YN8WI9eo/rpGOaOuvtCEhTNAuC/NYH0e6RIWJZfnuGcWNpSNFcRpCV4dvkfVeXjMold/JknNQpPk2gYo10m5u1zPmfpfCbLrmenCmiB6d2tKabb1SnNyXn9WuL5+/jXufZfz75RkmP9+P4197Hx3snOeI/a1hJ58GnDUxBAaGmz1q4SadG5XQGmChvGM/+GAV8eJNGXJ7TPDk5EaSRMzmDh1TImJZHJX6pIhEQGk8CsftsPLSGJXethzuR98jRTLc
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB5630.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(316002)(107886003)(83380400001)(6666004)(921005)(5660300002)(86362001)(186003)(26005)(508600001)(8676002)(6486002)(36756003)(2616005)(110136005)(44832011)(38100700002)(8936002)(66556008)(66476007)(4326008)(33964004)(2906002)(6506007)(31686004)(66946007)(31696002)(6512007)(7416002)(235185007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dkhSTEtlT2NLS3p3dENhZlYxVWgyakxwRnZoTU9pMjRPRDJHSGVuUkN2VEhK?=
- =?utf-8?B?VkhHWDNYa01CZ1hIbllIUUgwUkg1a3JXdlk4TTJLQ2VrUm1BcURYNlJkNVJD?=
- =?utf-8?B?YmtJeFlJT0dkYm1SVHliQ1RjYUwzbUkrTS9iMXVvYnZYRGFFVEVUZUllTndT?=
- =?utf-8?B?QTBFa3lPVWlWVW9vdStDbzhwSHBIbGxHdkFRd0tOTjRaZXV2Y3J2RzZJN3Bs?=
- =?utf-8?B?TkFadzdSeXBpbGF2Rlk0ZHRSQWd3V2JaTEo3WWJXOENpcVRJUGZ4OEtkWERK?=
- =?utf-8?B?TSt3cVpvQkgrTmR5ZUxCTHphSER5cDdma3o4cVgvcS82M1h6RmZWWXB2RkRs?=
- =?utf-8?B?L2wzMC9ZUDBCRWZ4ZitFdzBYTUd1RTJMMVZHVXcrYkxENzg1YXBxRTY2K3dI?=
- =?utf-8?B?VkkvRDRXWjd2Q2JWamhWQUczVTEzWVIyb3MxSnhpQVlnVC8yRGFzc2QwYkYz?=
- =?utf-8?B?Z3V5bkNwMVozdlh6WHhRaUNKM09jdldITVR2VlpqSlZPWWxSQ1JISWYvQVBh?=
- =?utf-8?B?MEMxU0c3ZEVidDNCQTJDYUF4NmgySDZkRk5Vbis4UGt1VUlLSSttQzBUcjRa?=
- =?utf-8?B?S2lxdjlOcnN6dGlVWGtIemtiVEFENUhXSyszaGtyTzFMbjBLVXI0OWR6R3dk?=
- =?utf-8?B?cmNpaEUxT3k0a0p1Y25NZDJjV1dLTnhOaEZzakhhK3FyS0hlWWM5REZmSzdz?=
- =?utf-8?B?UWFTUHRsbnFNVjNwSG9wM3pZQnJndzFxdEtoa2M4SWt3dmJjNEZ3aGo3Q2s1?=
- =?utf-8?B?aUtxb1RZY2J5WmxEL0VXZlJNZjlXUGhJS1NJV2hjdUN2RUNUc05SVVZmTFlU?=
- =?utf-8?B?OThUNUdGK3lndmxiZE5wRFRuUDMrZ3BNL0tSQUVLbnFFMytnZmNWQ2x0Z2d4?=
- =?utf-8?B?TzdMYi92cWRHRSsrSzExa2pRei9ONGU4My9aVHkxb1A4Rm9yUzJGakhRZ3BV?=
- =?utf-8?B?SHV4Q2VScVlCRW44ditVclU4ZTdnMHppVEhUY0pvQmE5b1dVWjU1S3RwT1RO?=
- =?utf-8?B?MnljL1FHRHV3Mm5XOHJqNUF6OUlsUmkrWUJRMWRsUmVmUUlmYXpUVnRkSWJW?=
- =?utf-8?B?WW9HKzRjUlQyd0FtVEl6TjlYdkl3VXVOdFp3elVYOE96ejlHbVZSek1HU0Y1?=
- =?utf-8?B?bm1qWUtLb2RxSXk0WVZtcVZ2cWFnY25OZ1Z2WjJpTDhUTFpzTkNBa3NxQnZB?=
- =?utf-8?B?ekN4TlNSOHk5aHV1VlNlRWQ3VWVyak1mbzRhSFZhT0ZTTkJhVy9yQWhjWlk5?=
- =?utf-8?B?aVVPem1jTFpQVmI2cElNSU1LOENZdHZqT1dZNEVFMlR6Z0phQ3ZNTkdWRVBG?=
- =?utf-8?B?YURmN2R4M0hKdGNNZDIxTFJNUDJZZFhLdVZ5NjJnSmRhbk9lNnZqQVBkTktH?=
- =?utf-8?B?dmFDdExDUVJzVGxpb1paVnl0OFFmb2tQUGFWeDVLb2VIdGtrb1pvNkNGb2wr?=
- =?utf-8?B?MC9rblRpVmZBOHprOUFMN3lzYWYyVGdCVmJ0bUZyZjgvdm9YQkE1NnVoUkQ3?=
- =?utf-8?B?aXNIcWVLREtxTTk3am5TbDVUNEFUYVRGMm1xYmZaVXBGOFpXSjcvUkxHUjFx?=
- =?utf-8?B?NFcyY0ZoTHlDTm45WGREV1ljU1NvMXQzdmJGZk9UeE9NM1oyd3F2R2RxZ0p3?=
- =?utf-8?B?d290cnRmWU1nRnJ5ZXhSSDlxSWI3cmVPOGU4THRIMzhOeEE2RnFMYkd1Slhp?=
- =?utf-8?B?c0M0ZDUyUGxFNzJkN0g3R05zSjRkQjNYa0RsbmVkY25PQ0drNFhrelgvQmpE?=
- =?utf-8?B?eFFRQnQycnpLb1J1ZUJsL3RFcWpPc3VyODFlWFZEWDF1a1F2RXp0ZXdjdkE1?=
- =?utf-8?B?dnprVVFwR3haNzRXSk13Y0dsSUNVUVdWbS9iVWtRTFhUQm92M2RlUUl2alZV?=
- =?utf-8?B?OC9LbnRIcjUvbkdjSjkxcVAycG9VenhsV2ZiL1BXdGY5am5LVXlRQWtaRStv?=
- =?utf-8?B?WjZNT2VBYWJDRDVzU1VQREdPWEtmQmxReWNXc2VwdGNyU3c5WjBsclEwK2tD?=
- =?utf-8?B?bS9nUFBPcENZTEJzU2tTQ2pHS3pWaWlBZm9PRU9JQnM3ZEJZS3RPT1p6REJF?=
- =?utf-8?B?WHovWGdIUXFVbzIxRmwxazhhZzhmdFE4bkVUeVJoRnpYaXBSTjlaZWRlWW5Q?=
- =?utf-8?B?dXdJMHZFZkU4b3UxOFlRcDNuc2MzeGR0Mk9UYlNnaTZMYWRzTGZkOWlLUndr?=
- =?utf-8?B?OG9PckJHa05FZ2QwYWsyUlNMYXNsU1F6YTlIc0RhQXpObHJielFxOHA5SjNm?=
- =?utf-8?B?YmNsMGxaUzU4MmhUUEplbFJhb2pBPT0=?=
-X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4f2e611-147c-46f8-74b1-08d9c5fa6263
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB5630.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Dec 2021 09:55:43.5295
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: I6i8Fo386ZwOdV6ysCXm8W53w6aqRdi6fZSB0Z/12QCB67zXLxOBzr9wEw3pbCo/QR8+/6s/EnoYENLXStFJUFgno6VWNBsz+432SmmT4JU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR08MB5328
+References: <20211220121825.6446-1-tinghan.shen@mediatek.com> <20211220121825.6446-5-tinghan.shen@mediatek.com>
+In-Reply-To: <20211220121825.6446-5-tinghan.shen@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 23 Dec 2021 17:59:46 +0800
+Message-ID: <CAGXv+5GaFikojqYYv0TfQsz3NSqn7QPmTWyCJY8V2g8UYoV4OA@mail.gmail.com>
+Subject: Re: [PATCH v7 4/4] arm64: dts: Add mediatek SoC mt8195 and evaluation board
+To:     Tinghan Shen <tinghan.shen@mediatek.com>
+Cc:     robh+dt@kernel.org, linus.walleij@linaro.org,
+        matthias.bgg@gmail.com, broonie@kernel.org,
+        bgolaszewski@baylibre.com, sean.wang@mediatek.com,
+        bayi.cheng@mediatek.com, gch981213@gmail.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Seiya Wang <seiya.wang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---------------C841C10C78D715F3120DB136
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Hi,
 
->> I currently don't have numbers for this patch taken alone. This patch
->> originates from work done some years ago to reduce cost of memory
->> accounting, and x86-only version of this patch was in virtuozzo/openvz
->> kernel since then. Other patches from that work have been upstreamed,
->> but this one was missed.
->>
->> Still it's obvious that release_pages() shall be faster that a loop
->> calling put_page() - isn't that exactly the reason why release_pages()
->> exists and is different from a loop calling put_page()?
-> 
-> Yep, but this patch does a bunch of stuff to some really hot paths.  It
-> would be greatly appreciated if you could put in the effort to actually
-> put some numbers behind this.  Plenty of weird stuff happens on
-> computers that we suck at predicting.
+On Mon, Dec 20, 2021 at 8:20 PM Tinghan Shen <tinghan.shen@mediatek.com> wrote:
+>
+> Add basic chip support for mediatek mt8195.
+>
+> Signed-off-by: Seiya Wang <seiya.wang@mediatek.com>
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> ---
+>  arch/arm64/boot/dts/mediatek/Makefile       |    1 +
+>  arch/arm64/boot/dts/mediatek/mt8195-evb.dts |  209 ++++
+>  arch/arm64/boot/dts/mediatek/mt8195.dtsi    | 1034 +++++++++++++++++++
+>  3 files changed, 1244 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt8195.dtsi
+>
+> diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
+> index 4f68ebed2e31..7aa08bb4c078 100644
+> --- a/arch/arm64/boot/dts/mediatek/Makefile
+> +++ b/arch/arm64/boot/dts/mediatek/Makefile
+> @@ -32,4 +32,5 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku0.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku176.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-pumpkin.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-evb.dtb
+> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-evb.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8195-evb.dts b/arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+> new file mode 100644
+> index 000000000000..e581c6bbead6
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+> @@ -0,0 +1,209 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/*
+> + * Copyright (C) 2021 MediaTek Inc.
+> + * Author: Seiya Wang <seiya.wang@mediatek.com>
+> + */
+> +/dts-v1/;
+> +#include "mt8195.dtsi"
+> +
+> +/ {
+> +       model = "MediaTek MT8195 evaluation board";
+> +       compatible = "mediatek,mt8195-evb", "mediatek,mt8195";
+> +
+> +       aliases {
+> +               serial0 = &uart0;
+> +       };
+> +
+> +       chosen {
+> +               stdout-path = "serial0:921600n8";
+> +       };
+> +
+> +       memory@40000000 {
+> +               device_type = "memory";
+> +               reg = <0 0x40000000 0 0x80000000>;
+> +       };
+> +};
+> +
+> +&auxadc {
+> +       status = "okay";
+> +};
+> +
+> +&i2c0 {
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&i2c0_pin>;
+> +       clock-frequency = <100000>;
+> +       status = "okay";
+> +};
+> +
+> +&i2c1 {
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&i2c1_pin>;
+> +       clock-frequency = <400000>;
+> +       status = "okay";
+> +};
+> +
+> +&i2c2 {
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&i2c2_pin>;
+> +       status = "disabled";
+> +};
+> +
+> +&i2c3 {
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&i2c3_pin>;
+> +       status = "disabled";
+> +};
 
-I found the original report about high cost of memory accounting, and tried to repeat the test described 
-there, with and without the patch.
+Is there any reason in particular to list "disabled" devices here?
+Are they part of some GPIO header? If they are not accessible, then
+it's better to not list them. If they are, please leave a comment
+about it.
 
-The test is - run a script in 30 openvz containers in parallel, and measure average time per execution. 
-Script is attached.
+> +
+> +&i2c4 {
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&i2c4_pin>;
+> +       clock-frequency = <400000>;
+> +       status = "okay";
+> +};
+> +
+> +&i2c5 {
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&i2c5_pin>;
+> +       status = "disabled";
+> +};
+> +
+> +&i2c6 {
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&i2c6_pin>;
+> +       clock-frequency = <400000>;
+> +       status = "disabled";
+> +};
 
-I'm getting measurable improvement in average msecs per execution: 15360 ms without patch, 15170 ms with 
-patch. And this difference is reliably reproducible.
+Same here.
 
-Nikita
+> +
+> +&nor_flash {
+> +       status = "okay";
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&nor_pins_default>;
 
---------------C841C10C78D715F3120DB136
-Content-Type: application/x-sh;
- name="calcprimes.sh"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="calcprimes.sh"
+Please add an empty line between properties and child device nodes. It helps
+with readability and also fits the style of other parts and other DT files.
 
-#!/bin/bash
+> +       flash@0 {
+> +               compatible = "jedec,spi-nor";
+> +               reg = <0>;
+> +               spi-max-frequency = <50000000>;
+> +       };
+> +};
+> +
+> +&pio {
+> +       i2c0_pin: i2c0-pins {
+> +               pins {
+> +                       pinmux = <PINMUX_GPIO8__FUNC_SDA0>,
+> +                                <PINMUX_GPIO9__FUNC_SCL0>;
+> +                       bias-pull-up = <1>;
+> +                       mediatek,rsel = <7>;
 
-exec > ~/primes
+Please use the MTK_PULL_SET_RSEL_* macros with the bias-pull-* properties.
+We spent a lot of time defining those.
 
-#storing the number to be checked
-for NUMBER in $(seq 1 100)
-do
-  i=2
+> +                       mediatek,drive-strength-adv = <0>;
 
-  #flag variable
-  f=0
+This property is not part of the DT binding.
 
-  #running a loop from 2 to number/2
-  while test $i -le `expr $NUMBER / 2`
-  do
+> +                       drive-strength = <MTK_DRIVE_6mA>;
 
-    #checking if i is factor of number
-    if test `expr $NUMBER % $i` -eq 0
-    then
-      f=1
-    fi
+Please just use raw numbers here. MTK_DRIVE_6mA just translates to 6.
+The binding already specifies mA as the unit for "drive-strength".
 
-    #increment the loop variable
-    i=`expr $i + 1`
-  done
-  if test $f -eq 1
-  then
-    echo "$NUMBER Not Prime"
-  else
-    echo "$NUMBER Prime"
-  fi
-done
+> +               };
+> +       };
 
---------------C841C10C78D715F3120DB136--
+Above comments apply to all the other "pins" nodes.
+
+Please add an empty line between different child device nodes. It helps
+with readability and also fits the style of other parts and other DT files.
+
+> +       i2c1_pin: i2c1-pins {
+> +               pins {
+> +                       pinmux = <PINMUX_GPIO10__FUNC_SDA1>,
+> +                                <PINMUX_GPIO11__FUNC_SCL1>;
+> +                       bias-pull-up = <1>;
+> +                       mediatek,rsel = <7>;
+> +                       mediatek,drive-strength-adv = <0>;
+> +                       drive-strength = <MTK_DRIVE_6mA>;
+> +               };
+> +       };
+> +       i2c2_pin: i2c2-pins {
+> +               pins {
+> +                       pinmux = <PINMUX_GPIO12__FUNC_SDA2>,
+> +                                <PINMUX_GPIO13__FUNC_SCL2>;
+> +                       bias-pull-up = <1>;
+> +                       mediatek,rsel = <7>;
+> +                       mediatek,drive-strength-adv = <7>;
+> +               };
+> +       };
+> +       i2c3_pin: i2c3-pins {
+> +               pins {
+> +                       pinmux = <PINMUX_GPIO14__FUNC_SDA3>,
+> +                                <PINMUX_GPIO15__FUNC_SCL3>;
+> +                       bias-pull-up = <1>;
+> +                       mediatek,rsel = <7>;
+> +                       mediatek,drive-strength-adv = <7>;
+> +               };
+> +       };
+> +       i2c4_pin: i2c4-pins {
+> +               pins {
+> +                       pinmux = <PINMUX_GPIO16__FUNC_SDA4>,
+> +                                <PINMUX_GPIO17__FUNC_SCL4>;
+> +                       bias-pull-up = <1>;
+> +                       mediatek,rsel = <7>;
+> +                       mediatek,drive-strength-adv = <7>;
+> +               };
+> +       };
+> +       i2c5_pin: i2c5-pins {
+> +               pins {
+> +                       pinmux = <PINMUX_GPIO29__FUNC_SCL5>,
+> +                                <PINMUX_GPIO30__FUNC_SDA5>;
+> +                       bias-pull-up = <1>;
+> +                       mediatek,rsel = <7>;
+> +                       mediatek,drive-strength-adv = <7>;
+> +               };
+> +       };
+> +       i2c6_pin: i2c6-pins {
+> +               pins {
+> +                       pinmux = <PINMUX_GPIO25__FUNC_SDA6>,
+> +                                <PINMUX_GPIO26__FUNC_SCL6>;
+> +                       bias-pull-up = <1>;
+> +               };
+> +       };
+> +       i2c7_pin: i2c7-pins {
+> +               pins {
+> +                       pinmux = <PINMUX_GPIO27__FUNC_SCL7>,
+> +                                <PINMUX_GPIO28__FUNC_SDA7>;
+> +                       bias-pull-up = <1>;
+> +               };
+> +       };
+> +       nor_pins_default: nor-pins {
+> +               pins0 {
+> +                       pinmux = <PINMUX_GPIO142__FUNC_SPINOR_IO0>,
+> +                                        <PINMUX_GPIO141__FUNC_SPINOR_CK>,
+> +                                        <PINMUX_GPIO143__FUNC_SPINOR_IO1>;
+> +                       bias-pull-down;
+> +               };
+> +               pins1 {
+> +                       pinmux = <PINMUX_GPIO140__FUNC_SPINOR_CS>,
+> +                                    <PINMUX_GPIO130__FUNC_SPINOR_IO2>,
+> +                                    <PINMUX_GPIO131__FUNC_SPINOR_IO3>;
+> +                       bias-pull-up;
+> +               };
+> +       };
+> +       uart0_pin: uart0-pins {
+> +               pins {
+> +                       pinmux = <PINMUX_GPIO98__FUNC_UTXD0>,
+> +                               <PINMUX_GPIO99__FUNC_URXD0>;
+> +               };
+> +       };
+> +};
+> +
+> +&u2port0 {
+> +       status = "okay";
+> +};
+> +
+> +&u2port1 {
+> +       status = "okay";
+> +};
+> +
+> +&u3phy0 {
+> +       status="okay";
+> +};
+> +
+> +&u3phy1 {
+> +       status="okay";
+> +};
+> +
+> +&u3port0 {
+> +       status = "okay";
+> +};
+> +
+> +&u3port1 {
+> +       status = "okay";
+> +};
+> +
+> +&uart0 {
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&uart0_pin>;
+> +       status = "okay";
+> +};
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> new file mode 100644
+> index 000000000000..057a8492edec
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> @@ -0,0 +1,1034 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/*
+> + * Copyright (c) 2021 MediaTek Inc.
+> + * Author: Seiya Wang <seiya.wang@mediatek.com>
+> + */
+> +
+> +/dts-v1/;
+> +#include <dt-bindings/clock/mt8195-clk.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/phy/phy.h>
+> +#include <dt-bindings/pinctrl/mt8195-pinfunc.h>
+> +#include <dt-bindings/reset/ti-syscon.h>
+> +
+> +/ {
+> +       compatible = "mediatek,mt8195";
+> +       interrupt-parent = <&gic>;
+> +       #address-cells = <2>;
+> +       #size-cells = <2>;
+> +
+> +       clk26m: oscillator0 {
+
+Please order device nodes based on the node name ("oscillator0"),
+not the label. An exception to this would be the "soc" node, which
+most tend to keep as the last node in the list.
+
+Also, naming them "oscillator-26m" and "oscillator-32k" would make
+more sense than "oscillatorN".
+
+> +               compatible = "fixed-clock";
+> +               #clock-cells = <0>;
+> +               clock-frequency = <26000000>;
+> +               clock-output-names = "clk26m";
+> +       };
+> +
+> +       clk32k: oscillator1 {
+> +               compatible = "fixed-clock";
+> +               #clock-cells = <0>;
+> +               clock-frequency = <32768>;
+> +               clock-output-names = "clk32k";
+> +       };
+> +
+> +       cpus {
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +
+> +               cpu0: cpu@0 {
+> +                       device_type = "cpu";
+> +                       compatible = "arm,cortex-a55";
+> +                       reg = <0x000>;
+> +                       enable-method = "psci";
+> +                       clock-frequency = <1701000000>;
+> +                       capacity-dmips-mhz = <578>;
+> +                       cpu-idle-states = <&cpuoff_l &clusteroff_l>;
+> +                       next-level-cache = <&l2_0>;
+> +                       #cooling-cells = <2>;
+> +               };
+> +
+> +               cpu1: cpu@100 {
+> +                       device_type = "cpu";
+> +                       compatible = "arm,cortex-a55";
+> +                       reg = <0x100>;
+> +                       enable-method = "psci";
+> +                       clock-frequency = <1701000000>;
+> +                       capacity-dmips-mhz = <578>;
+> +                       cpu-idle-states = <&cpuoff_l &clusteroff_l>;
+> +                       next-level-cache = <&l2_0>;
+> +                       #cooling-cells = <2>;
+> +               };
+> +
+> +               cpu2: cpu@200 {
+> +                       device_type = "cpu";
+> +                       compatible = "arm,cortex-a55";
+> +                       reg = <0x200>;
+> +                       enable-method = "psci";
+> +                       clock-frequency = <1701000000>;
+> +                       capacity-dmips-mhz = <578>;
+> +                       cpu-idle-states = <&cpuoff_l &clusteroff_l>;
+> +                       next-level-cache = <&l2_0>;
+> +                       #cooling-cells = <2>;
+> +               };
+> +
+> +               cpu3: cpu@300 {
+> +                       device_type = "cpu";
+> +                       compatible = "arm,cortex-a55";
+> +                       reg = <0x300>;
+> +                       enable-method = "psci";
+> +                       clock-frequency = <1701000000>;
+> +                       capacity-dmips-mhz = <578>;
+> +                       cpu-idle-states = <&cpuoff_l &clusteroff_l>;
+> +                       next-level-cache = <&l2_0>;
+> +                       #cooling-cells = <2>;
+> +               };
+> +
+> +               cpu4: cpu@400 {
+> +                       device_type = "cpu";
+> +                       compatible = "arm,cortex-a78";
+> +                       reg = <0x400>;
+> +                       enable-method = "psci";
+> +                       clock-frequency = <2171000000>;
+> +                       capacity-dmips-mhz = <1024>;
+> +                       cpu-idle-states = <&cpuoff_b &clusteroff_b>;
+> +                       next-level-cache = <&l2_1>;
+> +                       #cooling-cells = <2>;
+> +               };
+> +
+> +               cpu5: cpu@500 {
+> +                       device_type = "cpu";
+> +                       compatible = "arm,cortex-a78";
+> +                       reg = <0x500>;
+> +                       enable-method = "psci";
+> +                       clock-frequency = <2171000000>;
+> +                       capacity-dmips-mhz = <1024>;
+> +                       cpu-idle-states = <&cpuoff_b &clusteroff_b>;
+> +                       next-level-cache = <&l2_1>;
+> +                       #cooling-cells = <2>;
+> +               };
+> +
+> +               cpu6: cpu@600 {
+> +                       device_type = "cpu";
+> +                       compatible = "arm,cortex-a78";
+> +                       reg = <0x600>;
+> +                       enable-method = "psci";
+> +                       clock-frequency = <2171000000>;
+> +                       capacity-dmips-mhz = <1024>;
+> +                       cpu-idle-states = <&cpuoff_b &clusteroff_b>;
+> +                       next-level-cache = <&l2_1>;
+> +                       #cooling-cells = <2>;
+> +               };
+> +
+> +               cpu7: cpu@700 {
+> +                       device_type = "cpu";
+> +                       compatible = "arm,cortex-a78";
+> +                       reg = <0x700>;
+> +                       enable-method = "psci";
+> +                       clock-frequency = <2171000000>;
+> +                       capacity-dmips-mhz = <1024>;
+> +                       cpu-idle-states = <&cpuoff_b &clusteroff_b>;
+> +                       next-level-cache = <&l2_1>;
+> +                       #cooling-cells = <2>;
+> +               };
+> +
+> +               cpu-map {
+> +                       cluster0 {
+> +                               core0 {
+> +                                       cpu = <&cpu0>;
+> +                               };
+
+Please add an empty line between child nodes. This aids in readability.
+
+> +                               core1 {
+> +                                       cpu = <&cpu1>;
+> +                               };
+> +                               core2 {
+> +                                       cpu = <&cpu2>;
+> +                               };
+> +                               core3 {
+> +                                       cpu = <&cpu3>;
+> +                               };
+> +                       };
+> +                       cluster1 {
+> +                               core0 {
+> +                                       cpu = <&cpu4>;
+> +                               };
+> +                               core1 {
+> +                                       cpu = <&cpu5>;
+> +                               };
+> +                               core2 {
+> +                                       cpu = <&cpu6>;
+> +                               };
+> +                               core3 {
+> +                                       cpu = <&cpu7>;
+> +                               };
+> +                       };
+> +               };
+> +
+> +               idle-states {
+> +                       entry-method = "arm,psci";
+
+This should be just "psci".
+
+Please add empty lines between properties and child device nodes, and
+in between device nodes.
+
+> +                       cpuoff_l: cpuoff_l {
+
+Please do not use underscores in device node names. Also, for the idle
+states, the binding requires the nodes to be named as "cpu-*" or
+"cluster-*". So {cpu,cluster}-off-{l,b} would work.
+
+> +                               compatible = "arm,idle-state";
+> +                               arm,psci-suspend-param = <0x00010001>;
+> +                               local-timer-stop;
+> +                               entry-latency-us = <50>;
+> +                               exit-latency-us = <95>;
+> +                               min-residency-us = <580>;
+> +                       };
+> +                       cpuoff_b: cpuoff_b {
+> +                               compatible = "arm,idle-state";
+> +                               arm,psci-suspend-param = <0x00010001>;
+> +                               local-timer-stop;
+> +                               entry-latency-us = <45>;
+> +                               exit-latency-us = <140>;
+> +                               min-residency-us = <740>;
+> +                       };
+> +                       clusteroff_l: clusteroff_l {
+> +                               compatible = "arm,idle-state";
+> +                               arm,psci-suspend-param = <0x01010002>;
+> +                               local-timer-stop;
+> +                               entry-latency-us = <55>;
+> +                               exit-latency-us = <155>;
+> +                               min-residency-us = <840>;
+> +                       };
+> +                       clusteroff_b: clusteroff_b {
+> +                               compatible = "arm,idle-state";
+> +                               arm,psci-suspend-param = <0x01010002>;
+> +                               local-timer-stop;
+> +                               entry-latency-us = <50>;
+> +                               exit-latency-us = <200>;
+> +                               min-residency-us = <1000>;
+> +                       };
+> +               };
+> +
+> +               l2_0: l2-cache0 {
+> +                       compatible = "cache";
+> +                       next-level-cache = <&l3_0>;
+> +               };
+> +
+> +               l2_1: l2-cache1 {
+> +                       compatible = "cache";
+> +                       next-level-cache = <&l3_0>;
+> +               };
+> +
+> +               l3_0: l3-cache {
+> +                       compatible = "cache";
+> +               };
+> +       };
+> +
+> +       dsu-pmu {
+> +               compatible = "arm,dsu-pmu";
+> +               interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH 0>;
+> +               cpus = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>,
+> +                      <&cpu4>, <&cpu5>, <&cpu6>, <&cpu7>;
+> +       };
+> +
+> +       pmu-a55 {
+> +               compatible = "arm,cortex-a55-pmu";
+> +               interrupt-parent = <&gic>;
+> +               interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH &ppi_cluster0>;
+> +       };
+> +
+> +       pmu-a78 {
+> +               compatible = "arm,cortex-a78-pmu";
+> +               interrupt-parent = <&gic>;
+> +               interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH &ppi_cluster1>;
+> +       };
+> +
+> +       psci {
+> +               compatible = "arm,psci-1.0";
+> +               method = "smc";
+> +       };
+> +
+> +       timer: timer {
+> +               compatible = "arm,armv8-timer";
+> +               interrupt-parent = <&gic>;
+> +               interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_HIGH 0>,
+> +                            <GIC_PPI 14 IRQ_TYPE_LEVEL_HIGH 0>,
+> +                            <GIC_PPI 11 IRQ_TYPE_LEVEL_HIGH 0>,
+> +                            <GIC_PPI 10 IRQ_TYPE_LEVEL_HIGH 0>;
+> +               clock-frequency = <13000000>;
+
+IIRC Marc already mentioned before that this should not be specified in
+the device tree. The firmware should have filled in the CNTFRQ register.
+
+> +       };
+> +
+> +       soc {
+> +               #address-cells = <2>;
+> +               #size-cells = <2>;
+> +               compatible = "simple-bus";
+> +               ranges;
+> +
+> +               gic: interrupt-controller@c000000 {
+> +                       compatible = "arm,gic-v3";
+> +                       #interrupt-cells = <4>;
+> +                       #redistributor-regions = <1>;
+> +                       interrupt-parent = <&gic>;
+> +                       interrupt-controller;
+> +                       reg = <0 0x0c000000 0 0x40000>,
+> +                             <0 0x0c040000 0 0x200000>;
+> +                       interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH 0>;
+> +
+> +                       ppi-partitions {
+> +                               ppi_cluster0: interrupt-partition-0 {
+> +                                       affinity = <&cpu0 &cpu1 &cpu2 &cpu3>;
+> +                               };
+
+Please add an extra line for readability.
+
+> +                               ppi_cluster1: interrupt-partition-1 {
+> +                                       affinity = <&cpu4 &cpu5 &cpu6 &cpu7>;
+> +                               };
+> +                       };
+> +               };
+> +
+> +               topckgen: syscon@10000000 {
+> +                       compatible = "mediatek,mt8195-topckgen", "syscon";
+> +                       reg = <0 0x10000000 0 0x1000>;
+> +                       #clock-cells = <1>;
+> +               };
+> +
+> +               infracfg_ao: syscon@10001000 {
+> +                       compatible = "mediatek,mt8195-infracfg_ao", "syscon", "simple-mfd";
+> +                       reg = <0 0x10001000 0 0x1000>;
+> +                       #clock-cells = <1>;
+
+Please add an extra line for readability.
+
+> +                       infracfg_rst: reset-controller {
+> +                               compatible = "ti,syscon-reset";
+> +                               #reset-cells = <1>;
+> +                               ti,reset-bits = <
+> +                                       0x140 18 0x144 18 0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE)
+> +                                       0x120 0 0x124 0 0 0     (ASSERT_SET | DEASSERT_SET | STATUS_NONE)
+> +                                       0x730 10 0x734 10 0 0     (ASSERT_SET | DEASSERT_SET | STATUS_NONE)
+> +                                       0x150 5 0x154 5 0 0     (ASSERT_SET | DEASSERT_SET | STATUS_NONE)
+
+This should be 7 cells per entry:
+
+    ti,reset-bits =
+        <0x140 18 0x144 18 0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE>,
+        <0x120 0 0x124 0 0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE)>,
+        <...>,
+        <...>;
+
+Also, please remove the extra spaces in each line. They aren't helping
+with formatting.
+
+> +                               >;
+> +                       };
+> +               };
+> +
+
+> +               pio: pinctrl@10005000 {
+> +                       compatible = "mediatek,mt8195-pinctrl";
+> +                       reg = <0 0x10005000 0 0x1000>,
+> +                             <0 0x11d10000 0 0x1000>,
+> +                             <0 0x11d30000 0 0x1000>,
+> +                             <0 0x11d40000 0 0x1000>,
+> +                             <0 0x11e20000 0 0x1000>,
+> +                             <0 0x11eb0000 0 0x1000>,
+> +                             <0 0x11f40000 0 0x1000>,
+> +                             <0 0x1000b000 0 0x1000>;
+> +                       reg-names = "iocfg0", "iocfg_bm", "iocfg_bl",
+> +                                   "iocfg_br", "iocfg_lm", "iocfg_rb",
+> +                                   "iocfg_tl", "eint";
+> +                       gpio-controller;
+> +                       #gpio-cells = <2>;
+> +                       gpio-ranges = <&pio 0 0 144>;
+> +                       interrupt-controller;
+> +                       interrupts = <GIC_SPI 235 IRQ_TYPE_LEVEL_HIGH 0>;
+
+This looks correct now (a comment I raised in v4). Thanks.
+
+> +                       #interrupt-cells = <2>;
+> +               };
+
+[...]
+
+> +               xhci0: usb@11200000 {
+> +                       compatible = "mediatek,mt8195-xhci",
+> +                                    "mediatek,mtk-xhci";
+> +                       reg = <0 0x11200000 0 0x1000>,
+> +                             <0 0x11203e00 0 0x0100>;
+> +                       reg-names = "mac", "ippc";
+> +                       interrupts = <GIC_SPI 129 IRQ_TYPE_LEVEL_HIGH 0>;
+> +                       phys = <&u2port0 PHY_TYPE_USB2>,
+> +                              <&u3port0 PHY_TYPE_USB3>;
+> +                       assigned-clocks = <&topckgen CLK_TOP_USB_TOP>,
+> +                                         <&topckgen CLK_TOP_SSUSB_XHCI>;
+> +                       assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
+> +                                                <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
+> +                       clocks = <&infracfg_ao CLK_INFRA_AO_SSUSB>,
+> +                                <&infracfg_ao CLK_INFRA_AO_SSUSB_XHCI>,
+> +                                <&topckgen CLK_TOP_SSUSB_REF>,
+> +                                <&apmixedsys CLK_APMIXED_USB1PLL>;
+> +                       clock-names = "sys_ck", "xhci_ck", "ref_ck", "mcu_ck";
+
+The binding for this needs to be fixed. It expects clocks in the order
+specified in the binding, and this doesn't match. Also, "dma_ck" is missing
+and will likely cause warnings to be generated.
+
+This goes for all the xhci device nodes.
+
+> +                       status = "disabled";
+> +               };
+> +
+> +               mmc0: mmc@11230000 {
+> +                       compatible = "mediatek,mt8195-mmc",
+> +                                    "mediatek,mt8183-mmc";
+> +                       reg = <0 0x11230000 0 0x10000>,
+> +                             <0 0x11f50000 0 0x1000>;
+
+The binding only allows one entry. Please fix the binding first.
+This was added with MT8183, and the fix should list the relavent commit.
+
+> +                       interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH 0>;
+> +                       clocks = <&topckgen CLK_TOP_MSDC50_0>,
+> +                                <&infracfg_ao CLK_INFRA_AO_MSDC0>,
+> +                                <&infracfg_ao CLK_INFRA_AO_MSDC0_SRC>;
+> +                       clock-names = "source", "hclk", "source_cg";
+> +                       status = "disabled";
+> +               };
+> +
+
+[...]
+
+> +
+> +               xhci1: usb@11290000 {
+> +                       compatible = "mediatek,mt8195-xhci",
+> +                                    "mediatek,mtk-xhci";
+> +                       reg = <0 0x11290000 0 0x1000>,
+> +                             <0 0x11293e00 0 0x0100>;
+> +                       reg-names = "mac", "ippc";
+> +                       interrupts = <GIC_SPI 530 IRQ_TYPE_LEVEL_HIGH 0>;
+> +                       phys = <&u2port1 PHY_TYPE_USB2>;
+
+Shouldn't there be a USB3 phy?
+
+> +                       assigned-clocks = <&topckgen CLK_TOP_USB_TOP_1P>,
+> +                                         <&topckgen CLK_TOP_SSUSB_XHCI_1P>;
+> +                       assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
+> +                                                <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
+> +                       clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_1P_BUS>,
+> +                                <&topckgen CLK_TOP_SSUSB_P1_REF>,
+> +                                <&pericfg_ao CLK_PERI_AO_SSUSB_1P_XHCI>,
+> +                                <&apmixedsys CLK_APMIXED_USB1PLL>;
+> +                       clock-names = "sys_ck", "ref_ck", "xhci_ck", "mcu_ck";
+> +                       status = "disabled";
+> +               };
+> +
+> +               xhci2: usb@112a0000 {
+> +                       compatible = "mediatek,mt8195-xhci",
+> +                                    "mediatek,mtk-xhci";
+> +                       reg = <0 0x112a0000 0 0x1000>,
+> +                             <0 0x112a3e00 0 0x0100>;
+> +                       reg-names = "mac", "ippc";
+> +                       interrupts = <GIC_SPI 533 IRQ_TYPE_LEVEL_HIGH 0>;
+> +                       phys = <&u2port2 PHY_TYPE_USB2>;
+> +                       assigned-clocks = <&topckgen CLK_TOP_USB_TOP_2P>,
+> +                                         <&topckgen CLK_TOP_SSUSB_XHCI_2P>;
+> +                       assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
+> +                                                <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
+> +                       clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_2P_BUS>,
+> +                                <&topckgen CLK_TOP_SSUSB_P2_REF>,
+> +                                <&pericfg_ao CLK_PERI_AO_SSUSB_2P_XHCI>;
+> +                       clock-names = "sys_ck", "ref_ck", "xhci_ck";
+> +                       status = "disabled";
+> +               };
+> +
+> +               xhci3: usb@112b0000 {
+> +                       compatible = "mediatek,mt8195-xhci",
+> +                                    "mediatek,mtk-xhci";
+> +                       reg = <0 0x112b0000 0 0x1000>,
+> +                             <0 0x112b3e00 0 0x0100>;
+> +                       reg-names = "mac", "ippc";
+> +                       interrupts = <GIC_SPI 536 IRQ_TYPE_LEVEL_HIGH 0>;
+> +                       phys = <&u2port3 PHY_TYPE_USB2>;
+> +                       assigned-clocks = <&topckgen CLK_TOP_USB_TOP_3P>,
+> +                                         <&topckgen CLK_TOP_SSUSB_XHCI_3P>;
+> +                       assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
+> +                                                <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
+> +                       clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_3P_BUS>,
+> +                                <&pericfg_ao CLK_PERI_AO_SSUSB_3P_XHCI>,
+> +                                <&topckgen CLK_TOP_SSUSB_P3_REF>;
+> +                       clock-names = "sys_ck", "xhci_ck", "ref_ck";
+> +                       usb2-lpm-disable;
+
+Could you explain why this is needed only for this controller?
+
+> +                       status = "disabled";
+> +               };
+> +
+
+> +               u3phy2: t-phy@11c40000 {
+
+Just "phy" for the node name. (Or maybe "serdes".) t-phy is not generic.
+
+> +                       compatible = "mediatek,mt8195-tphy", "mediatek,generic-tphy-v3";
+> +                       #address-cells = <1>;
+> +                       #size-cells = <1>;
+> +                       ranges = <0 0 0x11c40000 0x700>;
+> +                       status = "disabled";
+> +
+> +                       u2port2: usb-phy@0 {
+> +                               reg = <0x0 0x700>;
+> +                               clocks = <&topckgen CLK_TOP_SSUSB_PHY_P2_REF>;
+> +                               clock-names = "ref";
+> +                               #phy-cells = <1>;
+> +                       };
+> +               };
+> +
+
+[...]
+
+> +               ufsphy: ufs-phy@11fa0000 {
+
+I would have preferred "phy" for the device node, but this seems already
+defined in the binding.
+
+This IP block is not listed in the datasheet I have, so I am unable to
+verify the properties listed here.
+
+> +                       compatible = "mediatek,mt8195-ufsphy", "mediatek,mt8183-ufsphy";
+> +                       reg = <0 0x11fa0000 0 0xc000>;
+> +                       clocks = <&clk26m>, <&clk26m>;
+> +                       clock-names = "unipro", "mp";
+> +                       #phy-cells = <0>;
+> +                       status = "disabled";
+> +               };
+> +
+
+Most of the issues I raised in this version were issues with things not
+matching the bindings. Please apply your patches on -next and run
+`make dtbs_check`.
+
+
+ChenYu

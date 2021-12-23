@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A0F47DD12
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:18:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F9347DD59
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346632AbhLWBPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:15:47 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:18394 "EHLO
+        id S1346071AbhLWBRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:17:24 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:17970 "EHLO
         o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345779AbhLWBOT (ORCPT
+        with ESMTP id S238680AbhLWBOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:14:19 -0500
+        Wed, 22 Dec 2021 20:14:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
         h=from:subject:in-reply-to:references:mime-version:to:cc:
         content-transfer-encoding:content-type;
-        s=sgd; bh=3vwCxlA4ciJJxDou6+Vb/H7rVta8Jut/SEU831ryMNU=;
-        b=aMLSvbfJFTCyE2NGkfucRE4R2mGDyxR2qAeqVCy6M7NHL3w51yP2L9P0O3/PTJnM4eHm
-        z9fxAMb8WcWmmQaKjB1qMlY3etdM94RthIavutZLG+DkZIzLPrh/ge0ma0beOYgO6Tr2xc
-        06puuOtJMBVm8MAWTdWj16TVWy1fvqTo4SuV9g5lhhpvIIahxEpkW/yLoS0a/gSGrTQsIH
-        MrdM19HrPlWfNs/kEaIEUYhXvxYi5Lfdi7GRD67kZ+OVUCOc09TcsUJsffvQe/U0BwIl38
-        rASRv8uHr9/B5lQabJ5+GwxiVqvpLAquD39u7rYgGNbA2tHrAM0F76iPDtawz5TA==
-Received: by filterdrecv-64fcb979b9-st7n5 with SMTP id filterdrecv-64fcb979b9-st7n5-1-61C3CD5E-3C
-        2021-12-23 01:14:06.739937721 +0000 UTC m=+8644640.723524771
+        s=sgd; bh=XUnrrGniQ2mn68UkAYnDzma+xGBy6FTx8ryJIfAGnQo=;
+        b=VcBFnY2muLpFkQ1893uov1TVafXAcHDZDkHJB690ydWybbP6RK+v19Y3c2i9f1kPHGF0
+        ZFC2xEXM0oET8DD5ca3q2yYeV1DFWmB9tObGhcR373tikpnfceftTH7lZkDgzwHZfNutQw
+        NV8KXIrKPW/eNFXW2H70JgUIzgIVIftpjKXw3v5sO2yXTnzzQTtvoM348N4CDCY5TU1RBO
+        IgshvXMhDkUxJ3DZvGUoL3QDFBS2f/nMxQt6nXxG9eQ32YD0xSN58iBOi+wrA2bFr4inBE
+        dTe5e5MP/LEF79kC8pEC+erqAHlL73U8C0FYkRsCpsb0645Z3W92aii3wz2UbOeg==
+Received: by filterdrecv-64fcb979b9-7lnp4 with SMTP id filterdrecv-64fcb979b9-7lnp4-1-61C3CD5E-10
+        2021-12-23 01:14:06.269481321 +0000 UTC m=+8644593.200041699
 Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-5-0 (SG)
+        by geopod-ismtpd-6-0 (SG)
         with ESMTP
-        id dhLYRvACTEmHBYzBDu_11g
-        Thu, 23 Dec 2021 01:14:06.600 +0000 (UTC)
+        id LNQyyxPoSt-QvKfE-Cejvg
+        Thu, 23 Dec 2021 01:14:06.045 +0000 (UTC)
 Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id 8F3127014AD; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
+        id F1607700F78; Wed, 22 Dec 2021 18:14:04 -0700 (MST)
 From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH v2 30/50] wilc1000: use more descriptive variable names
+Subject: [PATCH v2 09/50] wilc1000: prepare wilc_wlan_tx_packet_done() for
+ sk_buff changes
 Date:   Thu, 23 Dec 2021 01:14:06 +0000 (UTC)
-Message-Id: <20211223011358.4031459-31-davidm@egauge.net>
+Message-Id: <20211223011358.4031459-10-davidm@egauge.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211223011358.4031459-1-davidm@egauge.net>
 References: <20211223011358.4031459-1-davidm@egauge.net>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvFxBP+gfd73CXFX+b?=
- =?us-ascii?Q?N=2FzdCv1aaMpRvyqQ7QMMfTi3rjMRuYumSNBl00O?=
- =?us-ascii?Q?AOZq92YF2soepP4nF+7m7Rwi9ECmoO5pYtdjtLb?=
- =?us-ascii?Q?rl=2F3umoT6k8Gek5XOEDVIQyew2oPLaZNkKO9C6O?=
- =?us-ascii?Q?CKT0mRaev9RFH6ROm53qOP8EAe4i9jw=2FPD6e7Mm?=
- =?us-ascii?Q?cfsAjseOnZ6=2FwRwN5u5+A=3D=3D?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvCb1xlyXRSrVqQqxd?=
+ =?us-ascii?Q?c6y8Gj6yOsjIp2cOckDjzQ6eQStIL96U5Dw3ROd?=
+ =?us-ascii?Q?QNJIrQjv46xS5QYahfsOrfwiSRwctE9aF271tnB?=
+ =?us-ascii?Q?7ggtb3EX7=2FvKH4UuSK2oQ++9f27+UWvJf2Gl7cy?=
+ =?us-ascii?Q?j5X703R7EnbaWi540H8NGWTfa55KihzX9+3mWL3?=
+ =?us-ascii?Q?OzEjTrKpTN7jKL+rPK5xg=3D=3D?=
 To:     Ajay Singh <ajay.kathat@microchip.com>
 Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
         Kalle Valo <kvalo@kernel.org>,
@@ -60,80 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename "i" to "vmm_table_len" to improve readability and update
-kernel-doc for send_vmm_table() as well.
+This patch just adds some helper variables.  I suppose they improve
+readability, but the real reason for this patch is to make the
+forthcoming sk_buff rework patch shorter and more obvious.
 
 Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
 ---
- .../net/wireless/microchip/wilc1000/wlan.c    | 21 ++++++++++---------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+ drivers/net/wireless/microchip/wilc1000/wlan.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
-index 1cd9a7761343a..a4523b0860878 100644
+index 1156498e66b81..77dd91c23faad 100644
 --- a/drivers/net/wireless/microchip/wilc1000/wlan.c
 +++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
-@@ -712,9 +712,9 @@ static int fill_vmm_table(const struct wilc *wilc,
+@@ -192,11 +192,14 @@ static inline void tcp_process(struct net_device *dev, struct txq_entry_t *tqe)
+ 
+ static void wilc_wlan_tx_packet_done(struct txq_entry_t *tqe, int status)
+ {
++	struct wilc_vif *vif = tqe->vif;
++	int ack_idx = tqe->ack_idx;
++
+ 	tqe->status = status;
+ 	if (tqe->tx_complete_func)
+ 		tqe->tx_complete_func(tqe->priv, tqe->status);
+-	if (tqe->ack_idx != NOT_TCP_ACK && tqe->ack_idx < MAX_PENDING_ACKS)
+-		tqe->vif->ack_filter.pending_acks[tqe->ack_idx].txqe = NULL;
++	if (ack_idx != NOT_TCP_ACK && ack_idx < MAX_PENDING_ACKS)
++		vif->ack_filter.pending_acks[ack_idx].txqe = NULL;
+ 	kfree(tqe);
  }
  
- /**
-- * send_vmm_table() - Send the VMM table to the chip
-+ * send_vmm_table() - send the VMM table to the chip
-  * @wilc: Pointer to the wilc structure.
-- * @i: The number of entries in the VMM table.
-+ * @vmm_table_len: The number of entries in the VMM table.
-  * @vmm_table: The VMM table to send.
-  *
-  * Send the VMM table to the chip and get back the number of entries
-@@ -723,10 +723,10 @@ static int fill_vmm_table(const struct wilc *wilc,
-  * Context: The bus must have been acquired before calling this
-  * function.
-  *
-- * Return:
-- *	The number of VMM table entries the chip can accept.
-+ * Return: The number of VMM table entries the chip can accept.
-  */
--static int send_vmm_table(struct wilc *wilc, int i, const u32 *vmm_table)
-+static int send_vmm_table(struct wilc *wilc,
-+			  int vmm_table_len, const u32 *vmm_table)
- {
- 	const struct wilc_hif_func *func;
- 	int ret, counter, entries, timeout;
-@@ -758,7 +758,8 @@ static int send_vmm_table(struct wilc *wilc, int i, const u32 *vmm_table)
- 	timeout = 200;
- 	do {
- 		ret = func->hif_block_tx(wilc, WILC_VMM_TBL_RX_SHADOW_BASE,
--					 (u8 *)vmm_table, (i + 1) * 4);
-+					 (u8 *)vmm_table,
-+					 (vmm_table_len + 1) * 4);
- 		if (ret)
- 			break;
- 
-@@ -899,7 +900,7 @@ static int send_packets(struct wilc *wilc, int len)
- 
- int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
- {
--	int i, entries, len;
-+	int vmm_table_len, entries, len;
- 	u8 ac_desired_ratio[NQUEUES] = {0, 0, 0, 0};
- 	u8 vmm_entries_ac[WILC_VMM_TBL_SIZE];
- 	int ret = 0;
-@@ -919,13 +920,13 @@ int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
- 		wilc_wlan_txq_filter_dup_tcp_ack(vif->ndev);
- 	srcu_read_unlock(&wilc->srcu, srcu_idx);
- 
--	i = fill_vmm_table(wilc, ac_desired_ratio, vmm_table, vmm_entries_ac);
--	if (i == 0)
-+	vmm_table_len = fill_vmm_table(wilc, ac_desired_ratio, vmm_table, vmm_entries_ac);
-+	if (vmm_table_len == 0)
- 		goto out_unlock;
- 
- 	acquire_bus(wilc, WILC_BUS_ACQUIRE_AND_WAKEUP);
- 
--	ret = send_vmm_table(wilc, i, vmm_table);
-+	ret = send_vmm_table(wilc, vmm_table_len, vmm_table);
- 	if (ret <= 0) {
- 		if (ret == 0)
- 			/* No VMM space available in firmware.  Inform
 -- 
 2.25.1
 

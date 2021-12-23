@@ -2,138 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF56B47E57C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 16:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5029B47E56F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 16:27:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349000AbhLWPbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 10:31:06 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:50210 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348996AbhLWPbF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 10:31:05 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0F5841EC050F;
-        Thu, 23 Dec 2021 16:31:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640273460;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=NZFAMZtyznfRy9FSPfN4x5Z+DA8XjFd54VpWXNHETQI=;
-        b=abKrQOtv93Jc4J6G1Q+y5+nvSO4H3plQTGLwv9rrILUVaWKilfEMi9uT6+HXGHmsqukemv
-        etLXEXzhQHDOJ6+YGfnhrG+RevkcvsyFzpgZFP1JsoCqtfA98dTEasH+xQFjT7H+DhefgY
-        hzZcqDIgXtsh0eoy0EKmaWyxtHq+ftE=
-Date:   Thu, 23 Dec 2021 16:31:01 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     X86 ML <x86@kernel.org>
-Cc:     Valentin Schneider <valentin.schneider@arm.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH -v2] notifier: Return an error when a callback has already
- been registered
-Message-ID: <YcSWNdUBS8A2ZB3s@zn.tnic>
-References: <20211202133601.23527-1-bp@alien8.de>
+        id S235773AbhLWP1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 10:27:08 -0500
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:34005 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234595AbhLWP1E (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 10:27:04 -0500
+Received: (Authenticated sender: repk@triplefau.lt)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id CDBCA1C0004;
+        Thu, 23 Dec 2021 15:27:00 +0000 (UTC)
+From:   Remi Pommarel <repk@triplefau.lt>
+To:     netdev@vger.kernel.org
+Cc:     Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        bridge@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Remi Pommarel <repk@triplefau.lt>
+Subject: [PATCH net 0/2] Fix SIOCGIFBR/SIOCSIFBR ioctl
+Date:   Thu, 23 Dec 2021 16:31:37 +0100
+Message-Id: <20211223153139.7661-1-repk@triplefau.lt>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211202133601.23527-1-bp@alien8.de>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+SIOC{G,S}IFBR ioctls have been broken since [0], as discussed here [1]
+the intent was to get them working in compat mode.
 
-Return -EEXIST when a notifier callback has already been registered on a
-notifier chain.
+This serie is gathering patch from [2] with the one from [3].
 
-This should avoid any homegrown registration tracking at the callsite
-like
+The first patch fixes the ioctl usage so it can be backported to stable
+kernel while the second one adds proper support for those ioctl in
+compat mode.
 
-  https://lore.kernel.org/amd-gfx/20210512013058.6827-1-mukul.joshi@amd.com
+This has been tested with busybox's brctl as below.
 
-for example.
+Before this serie
 
-This version is an alternative of
+- 64-bit brctl:
+  $ brctl show
+  bridge name     bridge id               STP enabled     interfaces
+  brctl: can't get bridge name for index 0: No such device or address
 
-  https://lore.kernel.org/r/20211108101157.15189-1-bp@alien8.de
+- 32-bit brctl on CONFIG_COMPAT=y kernel:
+  $ brctl show
+  brctl: SIOCGIFBR: Invalid argument
 
-which needed to touch every caller not checking the registration
-routine's return value.
+With first patch of this serie
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
----
- kernel/notifier.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+- 64-bit brctl
+  $ brctl show
+  bridge name     bridge id               STP enabled     interfaces
+  br0             8000.000000000000       no
 
-diff --git a/kernel/notifier.c b/kernel/notifier.c
-index b8251dc0bc0f..ba005ebf4730 100644
---- a/kernel/notifier.c
-+++ b/kernel/notifier.c
-@@ -20,12 +20,13 @@ BLOCKING_NOTIFIER_HEAD(reboot_notifier_list);
-  */
- 
- static int notifier_chain_register(struct notifier_block **nl,
--		struct notifier_block *n)
-+				   struct notifier_block *n)
- {
- 	while ((*nl) != NULL) {
- 		if (unlikely((*nl) == n)) {
--			WARN(1, "double register detected");
--			return 0;
-+			WARN(1, "notifier callback %ps already registered",
-+			     n->notifier_call);
-+			return -EEXIST;
- 		}
- 		if (n->priority > (*nl)->priority)
- 			break;
-@@ -134,7 +135,7 @@ static int notifier_call_chain_robust(struct notifier_block **nl,
-  *
-  *	Adds a notifier to an atomic notifier chain.
-  *
-- *	Currently always returns zero.
-+ *	Returns 0 on success, %-EEXIST on error.
-  */
- int atomic_notifier_chain_register(struct atomic_notifier_head *nh,
- 		struct notifier_block *n)
-@@ -216,7 +217,7 @@ NOKPROBE_SYMBOL(atomic_notifier_call_chain);
-  *	Adds a notifier to a blocking notifier chain.
-  *	Must be called in process context.
-  *
-- *	Currently always returns zero.
-+ *	Returns 0 on success, %-EEXIST on error.
-  */
- int blocking_notifier_chain_register(struct blocking_notifier_head *nh,
- 		struct notifier_block *n)
-@@ -335,7 +336,7 @@ EXPORT_SYMBOL_GPL(blocking_notifier_call_chain);
-  *	Adds a notifier to a raw notifier chain.
-  *	All locking must be provided by the caller.
-  *
-- *	Currently always returns zero.
-+ *	Returns 0 on success, %-EEXIST on error.
-  */
- int raw_notifier_chain_register(struct raw_notifier_head *nh,
- 		struct notifier_block *n)
-@@ -406,7 +407,7 @@ EXPORT_SYMBOL_GPL(raw_notifier_call_chain);
-  *	Adds a notifier to an SRCU notifier chain.
-  *	Must be called in process context.
-  *
-- *	Currently always returns zero.
-+ *	Returns 0 on success, %-EEXIST on error.
-  */
- int srcu_notifier_chain_register(struct srcu_notifier_head *nh,
- 		struct notifier_block *n)
--- 
-2.29.2
+- 32-bit brctl on CONFIG_COMPAT=y kernel
+  $ brctl show
+    brctl: SIOCGIFBR: Invalid argument
 
+With both patches
+
+- 64-bit brctl
+  $ brctl show
+  bridge name     bridge id               STP enabled     interfaces
+  br0             8000.000000000000       no
+
+- 32-bit brctl on CONFIG_COMPAT=y kernel
+  $ brctl show
+  bridge name     bridge id               STP enabled     interfaces
+  br0             8000.000000000000       no
+
+[0] commit 561d8352818f ("bridge: use ndo_siocdevprivate")
+[1] https://lkml.org/lkml/2021/12/22/805
+[2] https://lkml.org/lkml/2021/12/22/743
+[3] https://lkml.org/lkml/2021/12/23/212
+
+Thanks,
+
+Remi Pommarel (2):
+  net: bridge: fix ioctl old_deviceless bridge argument
+  net: bridge: Get SIOCGIFBR/SIOCSIFBR ioctl working in compat mode
+
+ net/bridge/br_ioctl.c | 75 ++++++++++++++++++++++++++++---------------
+ net/socket.c          | 20 ++----------
+ 2 files changed, 52 insertions(+), 43 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.33.0
 
-https://people.kernel.org/tglx/notes-about-netiquette

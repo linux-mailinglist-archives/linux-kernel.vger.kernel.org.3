@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6733347DD23
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 973EB47DD1D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:18:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346712AbhLWBQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:16:04 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:27304 "EHLO
+        id S1346351AbhLWBQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:16:00 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:27288 "EHLO
         o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346229AbhLWBOn (ORCPT
+        with ESMTP id S1346231AbhLWBOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:14:43 -0500
+        Wed, 22 Dec 2021 20:14:42 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
         h=from:subject:in-reply-to:references:mime-version:to:cc:
         content-transfer-encoding:content-type;
-        s=sgd; bh=3Uz4xO2jk3PwsoBap/NCYCWsUTTJtakQF5q2JJp4lHQ=;
-        b=AZzNDwI6isj4Br0GlK+kU9dM02F55UA7gnqhdWD4g8J9QC8JK5gEL8nqvU30FKtTH49i
-        NSw1KGcWfQOGA6WrxwehnMkuTcELkuhfmyefoefLBvWE8H8C9g3zI6qunfFcje3ESFh+is
-        0nX4c6szL6ltEyjbImHFOT7Uoi7/3YZ7D5Wz3p5PJVqUCheDVgkPrEd9SwH7QjuryPS1pn
-        SQM/GiZHMfnD0rqlnpcHOtg3IqPsbkbUSP7KTY4rm6honUjP9v0kMWvSgrqc/29aIsCmui
-        ICFxsO7sEc2wao74pm2osw1hddjyx5g+Mb2B5P4Ui4DRYXJ1TdE0/ij+1QXT/JgQ==
-Received: by filterdrecv-656998cfdd-ngmx2 with SMTP id filterdrecv-656998cfdd-ngmx2-1-61C3CD5E-3B
-        2021-12-23 01:14:07.038024374 +0000 UTC m=+7955207.334259020
+        s=sgd; bh=DlCBRu7J1bxJ3/LQJt36l7jN/7IIPnFkxtrjOj9W9fc=;
+        b=RktnbaWJYD0OqoDLrEerbGVsR3Dr+51Mjfx2woNob8Pdz3cneHipQRZwJrRZc9OyHBzE
+        MgABOY16CKah7tXtvTk16MJ9LRGXQozIf5v/FmnVO2Ti5BuQd+O4BRde1v5RNHplHDALrK
+        WB4T6PAIuG9B/Xepe/qA2bXxlj9MIC4KJRxKMOICp8cjmrv50TKxmL3yDurQNlb5MVNBfK
+        /DLnSsSTEJo+OvFrKXvZZmVydSU+9qeSR2AS5yDabnb/i7/wfJksS9Ko7pO3w8I2+Ln8Xj
+        R+bQT+YvCL/u7yJ8I7F7k49zY6AN6aUiXVAjyCvsvnX671Y8fZ4afb4Vx6O0Bljg==
+Received: by filterdrecv-656998cfdd-5st9z with SMTP id filterdrecv-656998cfdd-5st9z-1-61C3CD5F-2
+        2021-12-23 01:14:07.066588987 +0000 UTC m=+7955191.029031746
 Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-6-0 (SG)
+        by geopod-ismtpd-5-1 (SG)
         with ESMTP
-        id qOYqVE5dTvSY-kPoDwTdQg
-        Thu, 23 Dec 2021 01:14:06.874 +0000 (UTC)
+        id LkEsxIgnSluBVp_O0u0jcw
+        Thu, 23 Dec 2021 01:14:06.903 +0000 (UTC)
 Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id C5063701508; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
+        id D1C3570150D; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
 From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH v2 41/50] wilc1000: use more descriptive variable name
+Subject: [PATCH v2 43/50] wilc1000: add support for zero-copy transmit of tx
+ packets
 Date:   Thu, 23 Dec 2021 01:14:07 +0000 (UTC)
-Message-Id: <20211223011358.4031459-42-davidm@egauge.net>
+Message-Id: <20211223011358.4031459-44-davidm@egauge.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211223011358.4031459-1-davidm@egauge.net>
 References: <20211223011358.4031459-1-davidm@egauge.net>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvPuMcF=2FBHm6zz5zzm?=
- =?us-ascii?Q?psOhjqu7S67FdJWIs8jvoN5AmbDIi6dQ8lNtN54?=
- =?us-ascii?Q?xxhDmyuQ276OPAzpKlpaoXNFiJAEfxrg0c8r9Es?=
- =?us-ascii?Q?O9Da3SIjzbjjQ8jb98tgTlDIsTp9my0W9+3Zgj2?=
- =?us-ascii?Q?9nrdu9XXNulAcIA2sS3c44Jpiv0L0N5xQ6p0eZB?=
- =?us-ascii?Q?7Q2o2N=2FSrKN2CK=2F3Fk4nw=3D=3D?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvCpc2ftgM2qu67NNB?=
+ =?us-ascii?Q?uHZcfjZzUnbiHUNZbafQh3Mqs3rJrxKIhGH79qo?=
+ =?us-ascii?Q?89Du1mpWVV3Bd5CTB5MIKKbipe9JjI8qjmO70lT?=
+ =?us-ascii?Q?zO5hcqe9PGUOdYeozSzqN=2F1AmHyXEo5IQe4ax8Y?=
+ =?us-ascii?Q?OABy9Pt6aATgSuuuXbekPr8jzLOd9L3wyRioUE4?=
+ =?us-ascii?Q?+vhIbxolesMtmD8=2F3QfdQ=3D=3D?=
 To:     Ajay Singh <ajay.kathat@microchip.com>
 Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
         Kalle Valo <kvalo@kernel.org>,
@@ -60,102 +61,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the factoring is done, again rename "i" to "vmm_table_len" to
-improve readability.
+Add the infrastructure to enable zero-copy transmits.  This is
+currently a no-op as the SPI or SDIO drivers will need to implement
+hif_sk_buffs_tx to take advantage of this.
 
 Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
 ---
- .../net/wireless/microchip/wilc1000/wlan.c    | 31 +++++++++----------
- 1 file changed, 14 insertions(+), 17 deletions(-)
+ .../net/wireless/microchip/wilc1000/wlan.c    | 43 ++++++++++++++++++-
+ .../net/wireless/microchip/wilc1000/wlan.h    |  2 +
+ 2 files changed, 44 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
-index f01f7bade6189..f89ea4839aa61 100644
+index 08f3e96bf72cf..d96a7e2a0bd59 100644
 --- a/drivers/net/wireless/microchip/wilc1000/wlan.c
 +++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
-@@ -681,7 +681,7 @@ static void set_header(struct wilc *wilc, struct sk_buff *tqe,
-  * WILC_VMM_TBL_SIZE packets or up to WILC_TX_BUFF_SIZE bytes.
-  */
- static int schedule_packets(struct wilc *wilc,
--			    int i, u32 vmm_table[WILC_VMM_TBL_SIZE])
-+			    int vmm_table_len, u32 vmm_table[WILC_VMM_TBL_SIZE])
- {
- 	u8 k, ac;
- 	static const u8 ac_preserve_ratio[NQUEUES] = {1, 1, 1, 1};
-@@ -702,8 +702,8 @@ static int schedule_packets(struct wilc *wilc,
- 
- 			ac_exist = 1;
- 			for (k = 0; k < num_pkts_to_add[ac]; k++) {
--				if (i >= WILC_VMM_TBL_SIZE - 1)
--					return i;
-+				if (vmm_table_len >= WILC_VMM_TBL_SIZE - 1)
-+					return vmm_table_len;
- 
- 				tqe = skb_dequeue(&wilc->txq[ac]);
- 				if (!tqe)
-@@ -717,21 +717,21 @@ static int schedule_packets(struct wilc *wilc,
- 				if (wilc->chipq_bytes + vmm_sz > WILC_TX_BUFF_SIZE) {
- 					/* return packet to its queue */
- 					skb_queue_head(&wilc->txq[ac], tqe);
--					return i;
-+					return vmm_table_len;
- 				}
- 				atomic_dec(&wilc->txq_entries);
- 
- 				__skb_queue_tail(&wilc->chipq, tqe);
- 				wilc->chipq_bytes += tqe->len;
- 
--				vmm_table[i] = vmm_table_entry(tqe, vmm_sz);
--				i++;
-+				vmm_table[vmm_table_len] = vmm_table_entry(tqe, vmm_sz);
-+				vmm_table_len++;
- 
- 			}
- 		}
- 		num_pkts_to_add = ac_preserve_ratio;
- 	} while (ac_exist);
--	return i;
-+	return vmm_table_len;
+@@ -935,6 +935,44 @@ static int copy_and_send_packets(struct wilc *wilc, int entries)
+ 	return ret;
  }
  
- /**
-@@ -747,13 +747,10 @@ static int schedule_packets(struct wilc *wilc,
-  */
- static int fill_vmm_table(struct wilc *wilc, u32 vmm_table[WILC_VMM_TBL_SIZE])
++/**
++ * zero_copy_send_packets() - send packets to the chip (copy-free).
++ * @wilc: Pointer to the wilc structure.
++ * @entries: The number of packets to send from the VMM table.
++ *
++ * Zero-copy version of sending the packets in the VMM table to the
++ * chip.
++ *
++ * Context: The wilc1000 bus must have been released but the chip
++ *	must be awake.
++ *
++ * Return: Negative number on error, 0 on success.
++ */
++static int zero_copy_send_packets(struct wilc *wilc, int entries)
++{
++	const struct wilc_hif_func *func = wilc->hif_func;
++	struct wilc_skb_tx_cb *tx_cb;
++	struct sk_buff *tqe;
++	int ret, i = 0;
++
++	acquire_bus(wilc, WILC_BUS_ACQUIRE_ONLY);
++
++	ret = func->hif_clear_int_ext(wilc, ENABLE_TX_VMM);
++	if (ret == 0)
++		ret = func->hif_sk_buffs_tx(wilc, 0, entries, &wilc->chipq);
++
++	release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP);
++
++	for (i = 0; i < entries; ++i) {
++		tqe = __skb_dequeue(&wilc->chipq);
++		tx_cb = WILC_SKB_TX_CB(tqe);
++		wilc->fw[tx_cb->q_num].count++;
++		wilc->chipq_bytes -= tqe->len;
++		wilc_wlan_tx_packet_done(tqe, ret == 0);
++	}
++	return ret;
++}
++
+ int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
  {
--	int i;
--	int vmm_sz = 0;
-+	int vmm_table_len = 0, vmm_sz = 0;
- 	struct sk_buff *tqe;
- 	struct wilc_skb_tx_cb *tx_cb;
- 
--	i = 0;
--
- 	if (unlikely(wilc->chipq_bytes > 0)) {
- 		/* fill in packets that are already on the chipq: */
- 		skb_queue_walk(&wilc->chipq, tqe) {
-@@ -761,16 +758,16 @@ static int fill_vmm_table(struct wilc *wilc, u32 vmm_table[WILC_VMM_TBL_SIZE])
- 			vmm_sz = tx_hdr_len(tx_cb->type);
- 			vmm_sz += tqe->len;
- 			vmm_sz = ALIGN(vmm_sz, 4);
--			vmm_table[i++] = vmm_table_entry(tqe, vmm_sz);
-+			vmm_table[vmm_table_len++] = vmm_table_entry(tqe, vmm_sz);
- 		}
+ 	int vmm_table_len, entries;
+@@ -966,7 +1004,10 @@ int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
+ 	if (entries <= 0) {
+ 		ret = entries;
+ 	} else {
+-		ret = copy_and_send_packets(wilc, entries);
++		if (wilc->hif_func->hif_sk_buffs_tx)
++			ret = zero_copy_send_packets(wilc, entries);
++		else
++			ret = copy_and_send_packets(wilc, entries);
  	}
- 
--	i = schedule_packets(wilc, i, vmm_table);
--	if (i > 0) {
--		WARN_ON(i >= WILC_VMM_TBL_SIZE);
--		vmm_table[i] = 0x0;
-+	vmm_table_len = schedule_packets(wilc, vmm_table_len, vmm_table);
-+	if (vmm_table_len > 0) {
-+		WARN_ON(vmm_table_len >= WILC_VMM_TBL_SIZE);
-+		vmm_table[vmm_table_len] = 0x0;
- 	}
--	return i;
-+	return vmm_table_len;
- }
- 
- /**
+ 	if (ret >= 0 && entries < vmm_table_len)
+ 		ret = WILC_VMM_ENTRY_FULL_RETRY;
+diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.h b/drivers/net/wireless/microchip/wilc1000/wlan.h
+index 11a54320ffd05..bda31f0970bda 100644
+--- a/drivers/net/wireless/microchip/wilc1000/wlan.h
++++ b/drivers/net/wireless/microchip/wilc1000/wlan.h
+@@ -367,6 +367,8 @@ struct wilc_hif_func {
+ 	int (*hif_read_size)(struct wilc *wilc, u32 *size);
+ 	int (*hif_block_tx_ext)(struct wilc *wilc, u32 addr, u8 *buf, u32 size);
+ 	int (*hif_block_rx_ext)(struct wilc *wilc, u32 addr, u8 *buf, u32 size);
++	int (*hif_sk_buffs_tx)(struct wilc *wilc, u32 addr,
++			       size_t num_skbs, struct sk_buff_head *skbs);
+ 	int (*hif_sync_ext)(struct wilc *wilc, int nint);
+ 	int (*enable_interrupt)(struct wilc *nic);
+ 	void (*disable_interrupt)(struct wilc *nic);
 -- 
 2.25.1
 

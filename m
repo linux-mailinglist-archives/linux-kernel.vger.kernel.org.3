@@ -2,191 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B25B47E0DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 10:28:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AADC247E0D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 10:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347485AbhLWJ2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 04:28:41 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:54650 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347461AbhLWJ2i (ORCPT
+        id S1347448AbhLWJ1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 04:27:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235992AbhLWJ1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 04:28:38 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 1BN9SUJJ0024154, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 1BN9SUJJ0024154
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 23 Dec 2021 17:28:30 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 23 Dec 2021 17:28:30 +0800
-Received: from fc34.localdomain (172.21.177.102) by RTEXMBS04.realtek.com.tw
- (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 23 Dec
- 2021 17:28:29 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     <kuba@kernel.org>, <davem@davemloft.net>
-CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
-        <linux-kernel@vger.kernel.org>, Hayes Wang <hayeswang@realtek.com>
-Subject: [PATCH net 2/2] r8152: sync ocp base
-Date:   Thu, 23 Dec 2021 17:27:02 +0800
-Message-ID: <20211223092702.23841-388-nic_swsd@realtek.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211223092702.23841-386-nic_swsd@realtek.com>
-References: <20211223092702.23841-386-nic_swsd@realtek.com>
+        Thu, 23 Dec 2021 04:27:19 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7050BC061401;
+        Thu, 23 Dec 2021 01:27:19 -0800 (PST)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id C010522246;
+        Thu, 23 Dec 2021 10:27:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1640251636;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hlMDJ9bXqxykliuXyFIOvVoMPRwjLuBybvKEe/SqbUk=;
+        b=Ds/DAzbwBso52saig2DEac2R4aIvhEuSvqPkoTAm1T3t7wIODivddoIjTk4gKwpTOgyqgQ
+        vZ0M847HjhMQXYxXwc6ojzp6BWp+2MWlCDfPd+gUb77AqyttirpbHl9WXkh3LGFX01HuVA
+        OiCMLg97ao3XYo1joApgu2CIJoHIPXY=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.21.177.102]
-X-ClientProxiedBy: RTEXH36504.realtek.com.tw (172.21.6.27) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
-X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: trusted connection
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Deterministic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 12/23/2021 09:07:00
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzEyLzIzIKRXpMggMDc6MTU6MDA=?=
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 23 Dec 2021 10:27:15 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: Re: [PATCH v2] PCI: Fix Intel i210 by avoiding overlapping of BARs
+In-Reply-To: <20211221174808.GA1094860@bhelgaas>
+References: <20211221174808.GA1094860@bhelgaas>
+User-Agent: Roundcube Webmail/1.4.12
+Message-ID: <39ecedffaf8e2ee931379de7e2f7924f@walle.cc>
+X-Sender: michael@walle.cc
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are some chances that the actual base of hardware is different
-from the value recorded by driver, so we have to reset the variable
-of ocp_base to sync it.
+Hi Bjorn,
 
-Set ocp_base to -1. Then, it would be updated and the new base would be
-set to the hardware next time.
+Am 2021-12-21 18:48, schrieb Bjorn Helgaas:
+> [+to Jesse, Tony for Intel advice;
+> beginning of thread:
+> https://lore.kernel.org/all/20201230185317.30915-1-michael@walle.cc/]
+> 
+> On Mon, Dec 20, 2021 at 06:43:03PM +0100, Michael Walle wrote:
+>> ...
+>> ping #4
+>> 
+>> In a few days this is a year old. Please have a look at it and
+>> either add my quirk patch or apply your patch. This is still
+>> breaking i210 on my board.
+>> 
+>> TBH, this is really frustrating.
+> 
+> You are right to be frustrated.  I'm very sorry that I have dropped
+> the ball on this.  Thanks for reminding me *again*.
+> 
+> I think we agree that this looks like an I210 defect.  I210 should
+> ignore the ROM BAR contents unless PCI_ROM_ADDRESS_ENABLE is set.  It
+> would be great if an Intel person could confirm/deny this and supply
+> an erratum reference and verify the affected device IDs.
+> 
+> It seems that when the BARs are programmed like this:
+> 
+>   BAR 0: 0x40000000 (32-bit, non-prefetchable) [size=1M]
+>   BAR 3: 0x40200000 (32-bit, non-prefetchable) [size=16K]
+>   ROM:   0x40200000 (disabled) [size=1M]
+> 
+> networking doesn't work at all and the transmit queue times out.
+> 
+> Linux assigns non-overlapping address space to the ROM BAR, but
+> pci_std_update_resource() currently doesn't update the BAR itself
+> unless it is enabled.
+> 
+> My proposal [1] worked around the defect by always updating the BAR,
+> but there's no clue that this covers up the I210 issue, so it remains
+> as sort of a land mine.  A future change could re-expose the problem,
+> so I don't think this was a good approach.
+> 
+> Your original patch [2] makes it clear that it's an issue with I210,
+> but there's an implicit connection between the normal BAR update path
+> (which skips the actual BAR write) and the quirk that does the BAR
+> write:
+> 
+>   <enumeration resource assignment>
+>     ...
+>       pci_assign_resource
+>         pci_update_resource
+>           pci_std_update_resource
+>             if (ROM && ROM-disabled)
+>               return
+>             pci_write_config_dword      # ROM BAR update (skipped)
+> 
+>   pci_fixup_write_rom_bar               # final fixup
+>     pci_write_config_dword              # ROM BAR update
+> 
+> In the boot-time resource assignment path, this works fine, but if
+> pci_assign_resource() is called from pci_map_rom(), the fixup will not
+> happen, so we could still have problem.
 
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
----
- drivers/net/usb/r8152.c | 26 ++++++++++++++++++++++----
- 1 file changed, 22 insertions(+), 4 deletions(-)
+I'm not sure I follow. pci_map_rom() should work fine. That was also
+the workaround IIRC, that is, enable the rom via sysfs. pci_map_rom()
+will call pci_enable_rom(), which should be the same as the fixup.
+If memory serves correctly, that is where I shamelessly copied the
+code from ;)
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index a817dfd5c9eb..3085e8118d7f 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -32,7 +32,7 @@
- #define NETNEXT_VERSION		"12"
- 
- /* Information for net */
--#define NET_VERSION		"11"
-+#define NET_VERSION		"12"
- 
- #define DRIVER_VERSION		"v1." NETNEXT_VERSION "." NET_VERSION
- #define DRIVER_AUTHOR "Realtek linux nic maintainers <nic_swsd@realtek.com>"
-@@ -4016,6 +4016,11 @@ static void rtl_clear_bp(struct r8152 *tp, u16 type)
- 	ocp_write_word(tp, type, PLA_BP_BA, 0);
- }
- 
-+static inline void rtl_reset_ocp_base(struct r8152 *tp)
-+{
-+	tp->ocp_base = -1;
-+}
-+
- static int rtl_phy_patch_request(struct r8152 *tp, bool request, bool wait)
- {
- 	u16 data, check;
-@@ -4087,8 +4092,6 @@ static int rtl_post_ram_code(struct r8152 *tp, u16 key_addr, bool wait)
- 
- 	rtl_phy_patch_request(tp, false, wait);
- 
--	ocp_write_word(tp, MCU_TYPE_PLA, PLA_OCP_GPHY_BASE, tp->ocp_base);
--
- 	return 0;
- }
- 
-@@ -4800,6 +4803,8 @@ static void rtl_ram_code_speed_up(struct r8152 *tp, struct fw_phy_speed_up *phy,
- 	u32 len;
- 	u8 *data;
- 
-+	rtl_reset_ocp_base(tp);
-+
- 	if (sram_read(tp, SRAM_GPHY_FW_VER) >= __le16_to_cpu(phy->version)) {
- 		dev_dbg(&tp->intf->dev, "PHY firmware has been the newest\n");
- 		return;
-@@ -4845,7 +4850,8 @@ static void rtl_ram_code_speed_up(struct r8152 *tp, struct fw_phy_speed_up *phy,
- 		}
- 	}
- 
--	ocp_write_word(tp, MCU_TYPE_PLA, PLA_OCP_GPHY_BASE, tp->ocp_base);
-+	rtl_reset_ocp_base(tp);
-+
- 	rtl_phy_patch_request(tp, false, wait);
- 
- 	if (sram_read(tp, SRAM_GPHY_FW_VER) == __le16_to_cpu(phy->version))
-@@ -4861,6 +4867,8 @@ static int rtl8152_fw_phy_ver(struct r8152 *tp, struct fw_phy_ver *phy_ver)
- 	ver_addr = __le16_to_cpu(phy_ver->ver.addr);
- 	ver = __le16_to_cpu(phy_ver->ver.data);
- 
-+	rtl_reset_ocp_base(tp);
-+
- 	if (sram_read(tp, ver_addr) >= ver) {
- 		dev_dbg(&tp->intf->dev, "PHY firmware has been the newest\n");
- 		return 0;
-@@ -4877,6 +4885,8 @@ static void rtl8152_fw_phy_fixup(struct r8152 *tp, struct fw_phy_fixup *fix)
- {
- 	u16 addr, data;
- 
-+	rtl_reset_ocp_base(tp);
-+
- 	addr = __le16_to_cpu(fix->setting.addr);
- 	data = ocp_reg_read(tp, addr);
- 
-@@ -4908,6 +4918,8 @@ static void rtl8152_fw_phy_union_apply(struct r8152 *tp, struct fw_phy_union *ph
- 	u32 length;
- 	int i, num;
- 
-+	rtl_reset_ocp_base(tp);
-+
- 	num = phy->pre_num;
- 	for (i = 0; i < num; i++)
- 		sram_write(tp, __le16_to_cpu(phy->pre_set[i].addr),
-@@ -4938,6 +4950,8 @@ static void rtl8152_fw_phy_nc_apply(struct r8152 *tp, struct fw_phy_nc *phy)
- 	u32 length, i, num;
- 	__le16 *data;
- 
-+	rtl_reset_ocp_base(tp);
-+
- 	mode_reg = __le16_to_cpu(phy->mode_reg);
- 	sram_write(tp, mode_reg, __le16_to_cpu(phy->mode_pre));
- 	sram_write(tp, __le16_to_cpu(phy->ba_reg),
-@@ -5107,6 +5121,7 @@ static void rtl8152_apply_firmware(struct r8152 *tp, bool power_cut)
- 	if (rtl_fw->post_fw)
- 		rtl_fw->post_fw(tp);
- 
-+	rtl_reset_ocp_base(tp);
- 	strscpy(rtl_fw->version, fw_hdr->version, RTL_VER_SIZE);
- 	dev_info(&tp->intf->dev, "load %s successfully\n", rtl_fw->version);
- }
-@@ -8484,6 +8499,8 @@ static int rtl8152_resume(struct usb_interface *intf)
- 
- 	mutex_lock(&tp->control);
- 
-+	rtl_reset_ocp_base(tp);
-+
- 	if (test_bit(SELECTIVE_SUSPEND, &tp->flags))
- 		ret = rtl8152_runtime_resume(tp);
- 	else
-@@ -8499,6 +8516,7 @@ static int rtl8152_reset_resume(struct usb_interface *intf)
- 	struct r8152 *tp = usb_get_intfdata(intf);
- 
- 	clear_bit(SELECTIVE_SUSPEND, &tp->flags);
-+	rtl_reset_ocp_base(tp);
- 	tp->rtl_ops.init(tp);
- 	queue_delayed_work(system_long_wq, &tp->hw_phy_work, 0);
- 	set_ethernet_addr(tp, true);
--- 
-2.31.1
+btw. the problem is not in pci_assign_resource() which assigns the
+correct offsets, but that they are not written to the PCI card.
+Eg. see lspci:
 
+# lspci -s 2:1:0 -v
+0002:01:00.0 Ethernet controller: Intel Corporation I210 Gigabit Network 
+Connection (rev 03)
+	Subsystem: Hewlett-Packard Company Ethernet I210-T1 GbE NIC
+	Flags: bus master, fast devsel, latency 0, IRQ 34, IOMMU group 8
+	Memory at 8840000000 (32-bit, non-prefetchable) [size=1M]
+	Memory at 8840200000 (32-bit, non-prefetchable) [size=16K]
+	Expansion ROM at 8840100000 [disabled] [size=1M]
+	Capabilities: [40] Power Management version 3
+	Capabilities: [50] MSI: Enable- Count=1/1 Maskable+ 64bit+
+	Capabilities: [70] MSI-X: Enable+ Count=5 Masked-
+	Capabilities: [a0] Express Endpoint, MSI 00
+	Capabilities: [100] Advanced Error Reporting
+	Capabilities: [140] Device Serial Number 00-de-ad-ff-ff-be-ef-04
+	Capabilities: [1a0] Transaction Processing Hints
+	Kernel driver in use: igb
+lspci: Unable to load libkmod resources: error -2
+
+# lspci -s 2:1:0 -xx
+0002:01:00.0 Ethernet controller: Intel Corporation I210 Gigabit Network 
+Connection (rev 03)
+00: 86 80 33 15 06 04 10 00 03 00 00 02 08 00 00 00
+10: 00 00 00 40 00 00 00 00 00 00 00 00 00 00 20 40
+20: 00 00 00 00 00 00 00 00 00 00 00 00 3c 10 03 00
+30: 00 00 20 40 40 00 00 00 00 00 00 00 22 01 00 00
+
+Note the difference between "Expansion ROM at 8840100000" (assigned
+by pci_assign_resource() I guess) and the actual value at offset
+0x30: 0x40200000. The latter will be updated either by pci_enable_rom()
+or my pci fixup quirk.
+
+> If we tweaked pci_std_update_resource() to take account of this
+> defect, I think we could cover that path, too.
+> 
+> Can you try the patch below?
+
+I tried, but it doesn't work because the fixup function is called
+after pci_std_update_resource(), thus dev->rom_bar_overlap is still
+0.
+
+Thanks,
+-michael

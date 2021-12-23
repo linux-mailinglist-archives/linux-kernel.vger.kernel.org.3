@@ -2,117 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DFF247DF2C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 07:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF2347DF54
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 08:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242316AbhLWGwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 01:52:01 -0500
-Received: from mga05.intel.com ([192.55.52.43]:51973 "EHLO mga05.intel.com"
+        id S1346735AbhLWHGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 02:06:51 -0500
+Received: from ni.piap.pl ([195.187.100.5]:44708 "EHLO ni.piap.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232658AbhLWGwB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 01:52:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640242321; x=1671778321;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ETlPicAg5K5TzwnAcel8FfoloJM1jW6cl1eerFKA0cY=;
-  b=ACMqpc/M4uzXFo+YUnptQop1FgVELVkVyz50+PhT1ehi2RHFpBW/CFT0
-   eB2VodYuSia4EH0NeOEuwpE52eqWntNejW07LwQ2EvqPsj7MGvrNJGqxG
-   0gG29g0NyesVmZIOYHjqzfFiQGN/DdgDSqUNKHradHM8g+meC9sHMx3cM
-   HrmZFEspdf+nmuGBZH8WHWJyGFyWRW6voFKuSsofJtIaq896+9lcJbf+X
-   xsf1+C5fZ0t1vO3NnU4Ph97svNAax36ENPxytJCk16fTuoBs+PSvX0wwX
-   Zz+X0D5HXEEPdtEK5TaFnQjDkkoLxmtzyY8iiQtGiqBKrgA2IxqtNNpi1
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="327078023"
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="327078023"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 22:52:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="664497944"
-Received: from zxingrtx.sh.intel.com ([10.239.159.110])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Dec 2021 22:51:58 -0800
-From:   zhengjun.xing@linux.intel.com
-To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     adrian.hunter@intel.com, alexander.shishkin@intel.com,
-        ak@linux.intel.com, kan.liang@linux.intel.com,
-        zhengjun.xing@linux.intel.com, stable@vger.kernel.org
-Subject: [PATCH v4] perf/x86/intel/uncore: Fix CAS_COUNT_WRITE issue for ICX
-Date:   Thu, 23 Dec 2021 22:48:26 +0800
-Message-Id: <20211223144826.841267-1-zhengjun.xing@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        id S232658AbhLWHGv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 02:06:51 -0500
+Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
+        by ni.piap.pl (Postfix) with ESMTPSA id 10B88C36955A;
+        Thu, 23 Dec 2021 07:57:31 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl 10B88C36955A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=piap.pl; s=mail;
+        t=1640242651; bh=wDABSN9XOsYTWLnjJ1s3d8KCamrgcQiveBz0/t+xmxY=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=KGGaCQFFq9r/hoPuE/tn9N2gweP8Ty4xZgoXbCWHA948o0KwrtRLpUxABJivb06y/
+         Dq5/f+6bVz+aDsAXCwpSTvn54zYNP7DnMim3NQ2DaOnygsXMosBBqnd/rniaWkLgKp
+         2W+kUoaQfAiaGTMgQ4/QFtM+zlAnq2VcoQ2hDhVQ=
+From:   =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: [PATCH v6 1/2] dt-binding: media: document ON Semi AR0521 sensor
+ bindings
+References: <m3ee63hkuu.fsf@t19.piap.pl>
+Sender: khalasa@piap.pl
+Date:   Thu, 23 Dec 2021 07:57:30 +0100
+In-Reply-To: <m3ee63hkuu.fsf@t19.piap.pl> ("Krzysztof =?utf-8?Q?Ha=C5=82as?=
+ =?utf-8?Q?a=22's?= message of
+        "Thu, 23 Dec 2021 07:54:33 +0100")
+Message-ID: <m3a6grhkpx.fsf@t19.piap.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-KLMS-Rule-ID: 3
+X-KLMS-Message-Action: skipped
+X-KLMS-AntiSpam-Status: not scanned, whitelist
+X-KLMS-AntiPhishing: not scanned, whitelist
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, not scanned, whitelist
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+This file documents DT bindings for the AR0521 camera sensor driver.
 
-The user recently report a perf issue in the ICX platform, when test by
-perf event “uncore_imc_x/cas_count_write”,the write bandwidth is always
-very small (only 0.38MB/s), it is caused by the wrong "umask" for the
-"cas_count_write" event. When double-checking, find "cas_count_read"
-also is wrong.
+Signed-off-by: Krzysztof Ha=C5=82asa <khalasa@piap.pl>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-The public document for ICX uncore:
-
-3rd Gen Intel® Xeon® Processor Scalable Family, Codename Ice Lake,Uncore
-Performance Monitoring Reference Manual, Revision 1.00, May 2021
-
-On 2.4.7, it defines Unit Masks for CAS_COUNT:
-RD b00001111
-WR b00110000
-
-So corrected both "cas_count_read" and "cas_count_write" for ICX.
-
-Old settings:
- hswep_uncore_imc_events
-	INTEL_UNCORE_EVENT_DESC(cas_count_read,  "event=0x04,umask=0x03")
- 	INTEL_UNCORE_EVENT_DESC(cas_count_write, "event=0x04,umask=0x0c")
-
-New settings:
- snr_uncore_imc_events
-	INTEL_UNCORE_EVENT_DESC(cas_count_read,  "event=0x04,umask=0x0f")
-	INTEL_UNCORE_EVENT_DESC(cas_count_write, "event=0x04,umask=0x30")
-
-Fixes: 2b3b76b5ec67 ("perf/x86/intel/uncore: Add Ice Lake server uncore support")
-Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-Cc: stable@vger.kernel.org
----
-Change log:
-  
-  v4:
-    * update commit log as Kan's suggestion
-
-  v3:
-    * Add change log
-
-  v2:
-    * Add stable tag
-
- arch/x86/events/intel/uncore_snbep.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/events/intel/uncore_snbep.c b/arch/x86/events/intel/uncore_snbep.c
-index 3660f698fb2a..ed869443efb2 100644
---- a/arch/x86/events/intel/uncore_snbep.c
-+++ b/arch/x86/events/intel/uncore_snbep.c
-@@ -5482,7 +5482,7 @@ static struct intel_uncore_type icx_uncore_imc = {
- 	.fixed_ctr_bits	= 48,
- 	.fixed_ctr	= SNR_IMC_MMIO_PMON_FIXED_CTR,
- 	.fixed_ctl	= SNR_IMC_MMIO_PMON_FIXED_CTL,
--	.event_descs	= hswep_uncore_imc_events,
-+	.event_descs	= snr_uncore_imc_events,
- 	.perf_ctr	= SNR_IMC_MMIO_PMON_CTR0,
- 	.event_ctl	= SNR_IMC_MMIO_PMON_CTL0,
- 	.event_mask	= SNBEP_PMON_RAW_EVENT_MASK,
--- 
-2.25.1
-
+diff --git a/Documentation/devicetree/bindings/media/i2c/onnn,ar0521.yaml b=
+/Documentation/devicetree/bindings/media/i2c/onnn,ar0521.yaml
+new file mode 100644
+index 000000000000..b617cc5c6a9f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/onnn,ar0521.yaml
+@@ -0,0 +1,112 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/onnn,ar0521.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ON Semiconductor AR0521 MIPI CSI-2 sensor
++
++maintainers:
++  - Krzysztof Ha=C5=82asa <khalasa@piap.pl>
++
++description: |-
++  The AR0521 is a raw CMOS image sensor with MIPI CSI-2 and
++  I2C-compatible control interface.
++
++properties:
++  compatible:
++    const: onnn,ar0521
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    const: extclk
++
++  vaa-supply:
++    description:
++      Definition of the regulator used as analog (2.7 V) voltage supply.
++
++  vdd-supply:
++    description:
++      Definition of the regulator used as digital core (1.2 V) voltage sup=
+ply.
++
++  vdd_io-supply:
++    description:
++      Definition of the regulator used as digital I/O (1.8 V) voltage supp=
+ly.
++
++  reset-gpios:
++    description: reset GPIO, usually active low
++    maxItems: 1
++
++  port:
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    unevaluatedProperties: false
++    description: |
++      Video output port.
++
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          bus-type:
++            const: 4
++          data-lanes:
++            anyOf:
++              - items:
++                  - const: 1
++              - items:
++                  - const: 1
++                  - const: 2
++              - items:
++                  - const: 1
++                  - const: 2
++                  - const: 3
++                  - const: 4
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - vaa-supply
++  - vdd-supply
++  - vdd_io-supply
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/clock/imx6qdl-clock.h>
++
++    i2c {
++            #address-cells =3D <1>;
++            #size-cells =3D <0>;
++
++            ar0521: camera-sensor@36 {
++                    compatible =3D "onnn,ar0521";
++                    reg =3D <0x36>;
++                    pinctrl-names =3D "default";
++                    pinctrl-0 =3D <&pinctrl_mipi_camera>;
++                    clocks =3D <&clks IMX6QDL_CLK_CKO>;
++                    clock-names =3D "extclk";
++                    reset-gpios =3D <&gpio1 7 GPIO_ACTIVE_LOW>;
++                    vaa-supply =3D <&reg_2p7v>;
++                    vdd-supply =3D <&reg_1p2v>;
++                    vdd_io-supply =3D <&reg_1p8v>;
++
++                    port {
++                           mipi_camera_to_mipi_csi2: endpoint {
++                                    remote-endpoint =3D <&mipi_csi2_in>;
++                                    data-lanes =3D <1 2 3 4>;
++                            };
++                    };
++            };
++    };

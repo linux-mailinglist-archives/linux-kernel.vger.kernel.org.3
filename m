@@ -2,158 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7779047E610
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 16:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2E147E613
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 16:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244530AbhLWPxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 10:53:31 -0500
-Received: from mail-bn8nam12on2087.outbound.protection.outlook.com ([40.107.237.87]:1759
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S244501AbhLWPxa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 10:53:30 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jhvEYu3JYhSjrZEeXX55L8iBf5im9VJh2SyNRuJui8WtRFO3aVC7EToIXrSv8lXcvvPaIpdwdy1RYJSp/uvnu9nrAQuCLiTWVyakPYz48RjLmb1x19GlpnExu3iBSSHUwKRl0mQ0eKLgXWj265L2VoI2lAwzQxbT7NZJQCzZGt8UdOdUBF9+e4dl4ASEoEG1vJiec2lbte684+c+tJwJWmrmX/tQmzx/XoPmqhKBx3fpfr1uUmjhB2lKBXGIXuKXd0UDbQe1yYHGkv7DG+RVxHKVgntTJWw958T6NSAdHpNN+upoRUoWl+rAyHKVW3HMaxIsla4HSnJR7OJDHXjChg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KOBIEYlsGbPAb9XnBFuVS74eBO2nShucx0pLW3gw6ks=;
- b=AJ7g3vJBLsPpfXIXxMpTdDkTl3mgULzVVOEvr2I6m/SqKaChl7oJqEAfSe+NUECqPnuwWYHauq3+oN4plJPeKSjBYEULUlfhLUlzmOp5a6oqx66PDB3BAPSVrTY+LJ7FIyKZTfBhZ+aYccvyr26SbXJnFSRxCB0P9MzbKJj4501UG609VTNQEjpX71vXYglFPe4jcZ4wEtC+w+Y51JWZ/NsAUIZ779RYvELFfa/tU8kkH5NZecxvq68rbTVW36bdvNIqBc3fqwsyjf/p8aZWXxwoeStnpjdwBKXs6hO1Oo3rDsmw8U0BkdV/sdTpde+CjfDvfhtAMX1Kcyaei73T8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KOBIEYlsGbPAb9XnBFuVS74eBO2nShucx0pLW3gw6ks=;
- b=SXlQqwWUClms5ZmBkEgLfjb6tYupTTGeQR1SylQrRy1Vqf2TSKrbTn64ToJkhsaYV4Ur/ruLem++vUab0IVs7UWMR0v4JBHBK8tBvb8Gc3tjsWqn5yTFrVYc8/mRSh+w37u1ofN5F9PXY75YXXcLSNMV9N5Bov58iOgpeN/CoTE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by CO6PR12MB5492.namprd12.prod.outlook.com (2603:10b6:5:35d::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Thu, 23 Dec
- 2021 15:53:28 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::e492:c86b:9906:1b46]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::e492:c86b:9906:1b46%7]) with mapi id 15.20.4823.019; Thu, 23 Dec 2021
- 15:53:28 +0000
-Message-ID: <5bc5dd90-fbf7-e999-8024-1269eeb78b93@amd.com>
-Date:   Thu, 23 Dec 2021 10:53:23 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] drm/amd/display: fix dereference before NULL check
-Content-Language: en-US
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Cc:     sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, charlene.liu@amd.com,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20211216181443.38155-1-jose.exposito89@gmail.com>
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <20211216181443.38155-1-jose.exposito89@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQXPR0101CA0015.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c00:15::28) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+        id S244557AbhLWPyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 10:54:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37054 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244501AbhLWPx7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 10:53:59 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32ADEC061401
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 07:53:59 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id d198-20020a1c1dcf000000b0034569cdd2a2so3459941wmd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 07:53:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=FqMj15pr+a7HiZ0A1HaQ6YqXDt0s7H/sHdsb8xKr4DI=;
+        b=KjLS/oRCjnl/V3wbZCyuVMKLyyjEG1xgl7FovVZoalSS+L3wAywJCY3k+UgrOcFnm0
+         icwwA1BApWPPJ7OSs5O2D71S4FkckvbVITzTQHZ71VvFL6jTU9DyR6Z37YwDUR65xcgq
+         PC6hqt/5Uaut8km/cFyDiiP7ovViBJKuwgS3RudBfxlNVkmp/PlUijbzdp/m3T5OWnnn
+         rRwSMUoKtwdRgmW3ZbQ3LGZ7ASBcs87HmaD0e1FanLwAJJakEXvs+DbgVl2IijccjSL1
+         Gw9uYUrevDg0PTrbMNKS+g+hj5Byi37jgUqlC7YdCzK2HsvL43z85h8f0HN2NA1okWuN
+         lteQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=FqMj15pr+a7HiZ0A1HaQ6YqXDt0s7H/sHdsb8xKr4DI=;
+        b=aDyaV+KOpkYFNRnmfJiC1rYSiJInBYk+Meg81qf5qm/FGW2MSfJaMMoW7UBkN1vKNU
+         EVQw+uMjl5D7y8+iHWAgVRuAi8NwshW6I+Gu6LOj1huJVw6dGWjSl4DoCkBQeElxsvS7
+         p/XPCUkDVSrxyd6AEUH6uqw6C4vaigH6naXhOgUAQkfeDydn5cNtPmE76M1B4va45h/K
+         7grjwxukv3eyvBc4JMlQepIFTaTkITK+Q9YvU06HF+4FYUgt+7nzMQ+ZXXTIzdVH1Pe+
+         5Rbx+ZOFh2cbDv/klKzX1rjd1WkrBkmKifpA7jyygObvb2O3GqJ/0qqKNd9CLNk731OQ
+         SrWA==
+X-Gm-Message-State: AOAM533BsHFtBO58xQpO7wdhxldKnzxu4PTQXly1j1fEq9i8IPk/kBE1
+        RWaS0loIGANJBsaTdeSyRwKs+w==
+X-Google-Smtp-Source: ABdhPJzsOke/2QZSeNEQqHJrra2yODFAwrNHsArkj7UCuV9NATinz1PiIqpFz6r1TD1UA+3mvcjCaw==
+X-Received: by 2002:a05:600c:1e8b:: with SMTP id be11mr2257567wmb.51.1640274837681;
+        Thu, 23 Dec 2021 07:53:57 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:34ca:f67b:b782:1949? ([2a01:e34:ed2f:f020:34ca:f67b:b782:1949])
+        by smtp.googlemail.com with ESMTPSA id c8sm5778726wmq.34.2021.12.23.07.53.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Dec 2021 07:53:57 -0800 (PST)
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Oleksij Rempel <linux@rempel-privat.de>,
+        Paul Gerber <Paul.Gerber@tq-group.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        rikard.falkeborn@gmail.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] thermal for v5.17
+Message-ID: <d393e7d8-b192-ff15-65f1-35f11e1a06bc@linaro.org>
+Date:   Thu, 23 Dec 2021 16:53:53 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 02f39b6e-1299-4262-e02a-08d9c62c5c40
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5492:EE_
-X-Microsoft-Antispam-PRVS: <CO6PR12MB54924FC55B18C6ACCF976B378C7E9@CO6PR12MB5492.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qigGkhnQT7oGGDe3Sllvw/HM4wC0ghh17PsgPJYpqoBorY3PBRv6GhIYfaosq6tbC1YVYw5pqQoG3Q1GJQtXU7sTAbC+Gif1Vj9mU48oQ7FvMqFSpvShkTHV9NdsJSfpCdCHwuTobIEpb5gz8bc7P+bD/hQB6kcWsmQMOTdqEkPoIIOGc/L2rGLjVKUtqr/m1MDSTd9jteL0Hup3I/1m7hDrKQrvOnZ0NTIVB4zhP5Cv5Y0byWh5NxareQ5cH4j0CMxnyxjGu62uJOeb9FeFegR+P0OJQdUEL1Y8cF90bEMFK6EV0WGFQtUc/WWS7uQ4T0OIbYJnlPTfxWng8csrN2FlZUPS4viihG04HuYDBMnS50beLaZ/kBinzS2c1X0FKqhwaXgfgY4YVtvomLu3jaBYtBoeZY1vSUxlJOsquoln0IqWt3ht/C4tjBOcxJQ7R5uL1KfY2Eac1AWCj909WtzVY0XDRsHHTvr/Xyce5PZBIaIy5H+KUwqMaSs3v77qWPnXgAp2+LahdqV+af1PDow3gWTHatRqeJaa/3l/uGJcl21i3mRjMpOFgwhfYB+VyvZPGmhJjnOqXA98bwU8KBqyag9bNVhib5+SkDe+lAefFnNHwX+sNFn9RCVQaEQjF++R8tHxnJ8FJMH+AnVepbGIFvs2pkJN4dGDg9wsmGoA0yk19K1o89MCb2fGelLaCxXtodfMnnyXSsYnmU1AsypkOylSbKWNyJolaMV/Yys1BD/FXtNH2cfB9LPzihML
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(316002)(66946007)(508600001)(186003)(6512007)(36756003)(2616005)(44832011)(5660300002)(6666004)(8936002)(66476007)(6486002)(8676002)(53546011)(31686004)(6506007)(66574015)(4326008)(38100700002)(2906002)(86362001)(4001150100001)(26005)(31696002)(66556008)(83380400001)(6916009)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UlRrY25CdGV6dU1XZmlucXB2ZTdEVTArK2xQM1lIQm5vbXdRVHIxVnY4cjhK?=
- =?utf-8?B?MGFtTk16T25vTmtDK3prMUZENVFYaEdSemVXSm4rZktOL2o2NjVtTFp4Zkg3?=
- =?utf-8?B?MGZyMGF2cWpqT0docUFLRnppV0w0ZDdJWkFvUzQ4ZUZOQW56Y3hHVXVQUkxN?=
- =?utf-8?B?akpMWUt6VW9PUjhrR1F4Z1NGc05qMWlwQzVEZ09nRDVqSExlUVY2UWcrM0FM?=
- =?utf-8?B?dTgyR0tIaGdhMm95ZFE2VVF1dWFJdU44cXNJNURyNGt4QzRUUUxHeElIZTBZ?=
- =?utf-8?B?a1NZVHBOR1U4WE8yWVFRN0ZBekN5SzF4RGozTjBBaFRYazIyamNXckI5cW5V?=
- =?utf-8?B?dGptdXY1SkoyR2p6UENoMDUvRG9QN0p4a3N0ckFJU0t1MWRUSEVmZ1Zkc3Vr?=
- =?utf-8?B?N05pbk1pTDZ3bHQyZTNYTllkUUhMV05uYXVyN3hXZElkakQxbmZ4TUo3V1Zp?=
- =?utf-8?B?QVVsMTc5VjFlZ1htSXRzUG92ZWRoTTZXa0I2akVCdk1iMWhDalhuVDNoL01W?=
- =?utf-8?B?ZjdCMkEraVJzWE9MTDM0OFBZYlJuMG5WaXRVWXlFMHptc1BHdTZJTkp5by9M?=
- =?utf-8?B?RS9DaTJkKzQzbVNDRlZmdmJ2Q2VpbUdFVWd4aDY2UkVJbmc4T2JrdVdnQ3B0?=
- =?utf-8?B?cXAzR0M0RHMxNVAyWEZEaURWUTlwUG1mRXZVUUp3eTBQWVVjbEs4OTREMENt?=
- =?utf-8?B?WXBRWHZmTi8vdmNIcktsczIwNDFrQUw4L0taeFhQTDdDMk9xOEhmN1EwNWJm?=
- =?utf-8?B?c3YxSmp2NHNjZE5CYWtFUjhYMnFjc3cwdElMSE9yRGl1c21HZTRWOFhTYnk0?=
- =?utf-8?B?dVpva0FlSlMvZTRrMnh5Zi9KcGRScUJmOExSVzF5WlBNeXNWeGkzWVpJNndt?=
- =?utf-8?B?QlVGTC8vcjhweS9Sc3RFcEIzMlhqNkxJOGdYSDhKc25Lb3libFFWaDJmZXAr?=
- =?utf-8?B?cEF1d3E0NkQ2dU9JRldNMDVrMlJlRG9TLy9vODBwdkNIRjVKc3I4NGNtU1lo?=
- =?utf-8?B?ZElEQVlLOUZKMjBhbzZQMDdFSmEvdCtMT21VOUNWZjNhcVQycW9CRytQd0ts?=
- =?utf-8?B?ei9QUUphRG5ubTBLeWpHS1lQQUh0SDRhTUhpaDk2SkViUXk5VW4zK1FwUEpZ?=
- =?utf-8?B?M1EwcGhkN2NZQ09YTmN1TUd3blhGODB4elJvL000NkRMQWFRMW1GVE9WcmpV?=
- =?utf-8?B?SGduU2xGN0pEVTREcEt0akJ2T3pTNFpDRW1LSndDZUYzZUpmVmpxVkUyZlE4?=
- =?utf-8?B?TzBtZDB3bGE2djcreElzVWh5b3VjUlBpTWJCd0RIcXBneDIxOFhjR05GUmox?=
- =?utf-8?B?cVViSFdjV1l0WUdRd0tRM2JQYkVGeEJIMkZ2aHNUdlBCd2Jqa21WbWF4S0F1?=
- =?utf-8?B?NGpnTFFXb3FSRnk0VkN6c282cjNyQlZJRlJUVVg0SGh3eWRMZFhKaHJwcjgx?=
- =?utf-8?B?WUtyaVBvOHBXU1BRL3ZVVm00TC9HUVN1SEtiSmZwamRuWXlmV0JQb2g2M0xC?=
- =?utf-8?B?bnhFZVRidkNoc09rczF2OEF5STFSSTBDWXJndUhFY0ZLdnFQTmc2ZTQ2Tlpi?=
- =?utf-8?B?aVo3bnBzU2ZXTytsRWpLUmh0SDhIUnR2L21rTUxicVVPV281aXRDQ3RUckxw?=
- =?utf-8?B?VUJ6MEpyd1Z0SHlVL2xTQmpHcHNVcmVaQUlhT3VPc0NlaDdwNCtDV3FJUTZI?=
- =?utf-8?B?YUVzdVpqbnJsMzJ4RU1TcnJDSWlQc3dVdHZUWTJXaGRiUnhWdVF1UVpWRGQz?=
- =?utf-8?B?VzArNXNqUkNLUGw5VUpFUnN0aEt3MVM3SU9CUFQxZTRhOUpKc1ZIZDc3U1l2?=
- =?utf-8?B?Q2ZPcExhYWdjd0k4UFMyVTdBQUl5d2J5UGlBTTBxb2lnNnd6a005dUdTTm9m?=
- =?utf-8?B?YVJkeERBdUJsY1FBaFJRK0V1TkZYYUdLejh3VUxsY0ZqMXVhQlQ4MytqaDli?=
- =?utf-8?B?SGdiZGd5aytKTU9xTGVUUTVoS3JCWXpUbUg1Tmk3cmtjMWJ3UWRwY3JWR1NN?=
- =?utf-8?B?S0NYeFovelBlb3lhZTRGa3UwVytLNWVMZVAvMVFBS2NsTURiSGRORGViWlVz?=
- =?utf-8?B?V0d0MSs0dkNZOVY3N0QzRmpYT3ZwTmN5STFzUTB5c21WeHRubm9sTDVjUXA2?=
- =?utf-8?B?cGZCVHpYMHNwWUNvdHlpem1Rb3BoRjdxZFh2ZlliNEZqY2dRdWJOMkZzYk9G?=
- =?utf-8?Q?wO4Z1nstTJ37pFjWpMJfEfg=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 02f39b6e-1299-4262-e02a-08d9c62c5c40
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Dec 2021 15:53:28.0780
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Vg/Y9GrEtrEgrwL8SQuavrdDhkBCqi78Knreia5tdJB7l1txSSm2HiMK2RRj6pXm7M3BYER+Ntk+X9s2FfTw3A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5492
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-16 13:14, José Expósito wrote:
-> The "plane_state" pointer was access before checking if it was NULL.
-> 
-> Avoid a possible NULL pointer dereference by accessing the plane
-> address after the check.
-> 
-> Addresses-Coverity-ID: 1474582 ("Dereference before null check")
-> Fixes: 3f68c01be9a22 ("drm/amd/display: add cyan_skillfish display support")
-> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+Hi Rafael,
 
-Harry
 
-> ---
->  drivers/gpu/drm/amd/display/dc/dcn201/dcn201_hwseq.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_hwseq.c b/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_hwseq.c
-> index cfd09b3f705e..fe22530242d2 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_hwseq.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_hwseq.c
-> @@ -134,11 +134,12 @@ void dcn201_update_plane_addr(const struct dc *dc, struct pipe_ctx *pipe_ctx)
->  	PHYSICAL_ADDRESS_LOC addr;
->  	struct dc_plane_state *plane_state = pipe_ctx->plane_state;
->  	struct dce_hwseq *hws = dc->hwseq;
-> -	struct dc_plane_address uma = plane_state->address;
-> +	struct dc_plane_address uma;
->  
->  	if (plane_state == NULL)
->  		return;
->  
-> +	uma = plane_state->address;
->  	addr_patched = patch_address_for_sbs_tb_stereo(pipe_ctx, &addr);
->  
->  	plane_address_in_gpu_space_to_uma(hws, &uma);
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+tags/thermal-v5.17-rc1
+
+for you to fetch changes up to 8ee1c0f6526ce942b7595951c7bb0165010051c2:
+
+  thermal/drivers/rz2gl: Add error check for reset_control_deassert()
+(2021-12-09 15:58:09 +0100)
+
+----------------------------------------------------------------
+- Fix PM issue on the iMX driver when suspend/resume is happening by
+  implementing PM runtime support (Oleksij Rempel)
+
+- Add 'const' annotation to the thermal_cooling_ops in the Intel
+  powerclamp driver (Rikard Falkeborn)
+
+- Add TSU driver and bindings for the RZ/G2L platform (Biju Das)
+
+- Fix the missing ADC bit set on iMX8MP to enable the sensor (Paul
+  Gerber)
+
+- Fix missing check when calling reset_control_deassert() (Biju Das)
+
+----------------------------------------------------------------
+Biju Das (3):
+      dt-bindings: thermal: Document Renesas RZ/G2L TSU
+      thermal/drivers: Add TSU driver for RZ/G2L
+      thermal/drivers/rz2gl: Add error check for reset_control_deassert()
+
+Oleksij Rempel (1):
+      thermal/drivers/imx: Implement runtime PM support
+
+Paul Gerber (1):
+      thermal/drivers/imx8mm: Enable ADC when enabling monitor
+
+Rikard Falkeborn (1):
+      thermal/drivers/intel_powerclamp: Constify static
+thermal_cooling_device_ops
+
+ .../devicetree/bindings/thermal/rzg2l-thermal.yaml |  76 +++++++
+ drivers/thermal/Kconfig                            |   9 +
+ drivers/thermal/Makefile                           |   1 +
+ drivers/thermal/imx8mm_thermal.c                   |   3 +
+ drivers/thermal/imx_thermal.c                      | 145 +++++++-----
+ drivers/thermal/intel/intel_powerclamp.c           |   2 +-
+ drivers/thermal/rzg2l_thermal.c                    | 242
++++++++++++++++++++++
+ 7 files changed, 423 insertions(+), 55 deletions(-)
+ create mode 100644
+Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml
+ create mode 100644 drivers/thermal/rzg2l_thermal.c
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

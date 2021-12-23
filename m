@@ -2,105 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E058547E557
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 16:08:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5218947E55D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 16:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244129AbhLWPIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 10:08:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55010 "EHLO
+        id S1348854AbhLWPOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 10:14:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239868AbhLWPIn (ORCPT
+        with ESMTP id S244129AbhLWPOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 10:08:43 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE286C061401
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 07:08:43 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso7365615otf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 07:08:43 -0800 (PST)
+        Thu, 23 Dec 2021 10:14:14 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20779C061756
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 07:14:14 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id o17so5150388qtk.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 07:14:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1u8duC2IeWmL+KdsxLTbMsS3G/N3KVyTVG5m2HVZMZg=;
-        b=Bed56Qw8wMYeIin9CNr9UYH/AqbY7DdY6GAq5FFzrAq9mlF3I3W0OdTZxN8giUqBnR
-         gL0yD8AnRZoWftcF1BiGzZ3yqZHzYiZ5J9ULKiDpNKK/7AZ6eoqftlfZ0nFD8N3xT6Of
-         xN9qGoS3c9zYmohpzzYPdKOGN9UjhLRISXCh1ywFrQ/oLI9gSf5pitMyFDNbW6fMoT6a
-         +9YIvWPYfx3GqU4L4uMRKt4Bf9jgdHnRDBym6WiCUQU40NHzs8qCRZV5LU/tQqjZWRhF
-         vf4r4he0+/AIYJ5Aqkx1bPJWHFtSMgRLCtsxGRXDGk3Nd5pZXBfFaAGiLM2r3+3ZJSTI
-         V3fg==
+        bh=t/trXJx8RMPAN3LWudnaUQxfD3uy1w2bAsHfBMgTUD4=;
+        b=fRFCt19eMNuoU6PtktXS7n1jOThMCMfDUdupLVqGWLLRLo37s/AnQ6Fy5/pHuxQUd6
+         zgx1aHowl6rAzUxtffE+zbjOdfcezueIRzTm2vLPGFHg64asQp1rBfZmzfqdnlWiEaK/
+         5y/MsoJA7Bm/fL9BtN5O/6oeIAapMuMeEuuLTZQEm+hqPlCu80Td+bYNqjFMC+Dpg7rW
+         mZkmTMBMKpTsY61ma0kPQrkKHCrZCjgP9oXwO0yJjxgkriQioWZvyff6+eZw/+yPS8dS
+         m1vKZJAGjPm5JdGB88cFB28/Q304zxS5JbN+DFl8dIplqLvoxM9rqMgOddej7TGjdPPN
+         b83Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1u8duC2IeWmL+KdsxLTbMsS3G/N3KVyTVG5m2HVZMZg=;
-        b=O1tXiNU/mwWhQ4htxHjSQlM5RIIKH7ybego2nIQylHHj7bgJsp6YK1K4NbR/XsuKan
-         rhjasv2JvW9tv+voONEn9M33Gk8Ogo96ltmsMga9nZrrM559VDT2kbZgG/MqMYJ24uQB
-         x9g/W2e0ylgdkC+sdvtJc58VkH0ocCfBMFQC4qv9Yzu9iWl6Ccq0jPnURk6lOYLG456h
-         08T6pp/L5K3IlOGM2c6bkkcMd0Op8dU+4VmEvnagmSl0j/SXIf+Ux6/7QTJoHBNTy9KL
-         AV4V/KCyy3swxI5opRAHWq3pEVVwmKhpYHbLZ076cIe+ZFpb2aB9FbViK/p4QXLnzWVT
-         PByQ==
-X-Gm-Message-State: AOAM5309U+958WsGoUigyP/kFLSp4+ZKF880xXWY7zrQYgkbzbsRxxwn
-        +SMnTrXRcoERyisNukiFYRrO5BzgtRvND8ycDWGsUg==
-X-Google-Smtp-Source: ABdhPJwXnzm70vqeatqGNT4zIBvnsyg6GXdzi5hGrjHB6FeauzUu8nkOBZ+tBDDztmjYpMuuA1jYUfDjmn9uRJL/MSA=
-X-Received: by 2002:a9d:2ae1:: with SMTP id e88mr1644066otb.157.1640272122858;
- Thu, 23 Dec 2021 07:08:42 -0800 (PST)
+        bh=t/trXJx8RMPAN3LWudnaUQxfD3uy1w2bAsHfBMgTUD4=;
+        b=UA9e4oTnqRGAqbnpHOybGnOpEOCzVCNnDVSVMJ5v7i8vIoDgLItif2XV6iA3301IAx
+         V09cC0WvUxMh7eCJZcKAmsJ6Y0vD0oLMBfxDRdiRF8r7xkN6u1H8sI7WnERT+MQQzCEH
+         /032bmo8WpWHDA/FEWvSuH/up+RT+E+XQ+BBL0e0Y7CvYDZVgq24KbcL6GjfnI07r2RX
+         zM+ere0TFRYMHXDUFWnQppI+3SSYxdzw8TfBU3bWuu0f3rqRYZDGZpN/TS9AYOPDN4UO
+         tHhVCymbTNW2tYRwI0VZ36tg/UPkGJLlj6Cy7RA8VTmg9d/NUZT1Lrb8pLzJGKw+yL2u
+         bAjg==
+X-Gm-Message-State: AOAM531Rz6xxlbM88x06tcSdklDPZTURZ0zxshlO/Ca+KgmKOWRrkehT
+        cs/NU3NIWjNTQDn141ipTZdePrYWbVeO0v65zdwyDw==
+X-Google-Smtp-Source: ABdhPJzo5jfo5EIyTNbDJSgwmDIgON2Qh/6AVrAP6YjCcBIc4AmF0ZPAPrBaCJHusO72lnkIuFbgN/2EcyzhZHf4g8k=
+X-Received: by 2002:ac8:47d3:: with SMTP id d19mr2039424qtr.72.1640272453114;
+ Thu, 23 Dec 2021 07:14:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20211222075406.57191-1-qiang1.zhang@intel.com>
-In-Reply-To: <20211222075406.57191-1-qiang1.zhang@intel.com>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 23 Dec 2021 16:08:31 +0100
-Message-ID: <CANpmjNOmaSxqTjUd8y=A+sK0jGg6c00t8uvmOey+QrJsDamsmQ@mail.gmail.com>
-Subject: Re: [PATCH] rcu: record kasan stack before enter local_irq_save()/restore()
- critical area
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     paulmck@kernel.org, ryabinin.a.a@gmail.com, urezki@gmail.com,
-        jun.miao@intel.com, linux-kernel@vger.kernel.org
+References: <1640189262-9699-1-git-send-email-quic_c_pmaliset@quicinc.com>
+In-Reply-To: <1640189262-9699-1-git-send-email-quic_c_pmaliset@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 23 Dec 2021 18:14:02 +0300
+Message-ID: <CAA8EJpoq1xPj3nkZfjjviCQdLq-LcMVThTK6HzrW7AdmfebuhA@mail.gmail.com>
+Subject: Re: [PATCH v1] PCI: qcom: Add system PM support
+To:     Prasad Malisetty <quic_c_pmaliset@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
+        manivannan.sadhasivam@linaro.org, swboyd@chromium.org,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Dec 2021 at 08:54, Zqiang <qiang1.zhang@intel.com> wrote:
-> The kasan_record_aux_stack_noalloc() only record stack, it doesn't need
-> to be called in local_irq_save()/restore() critical area, and the global
-> spinlock (depot_lock) will be acquired in this function, When enable
-> kasan stack, locking contention may increase the time in the critical area.
+On Wed, 22 Dec 2021 at 19:08, Prasad Malisetty
+<quic_c_pmaliset@quicinc.com> wrote:
+>
+> From: Prasad Malisetty <quic_pmaliset@quicinc.com>
+>
+> Add suspend_noirq and resume_noirq callbacks to handle
+> System suspend and resume in dwc pcie controller driver.
+>
+> When system suspends, send PME turnoff message to enter
+> link into L2 state. Along with powerdown the PHY, disable
+> pipe clock, switch gcc_pcie_1_pipe_clk_src to XO if mux is
+> supported and disable the pcie clocks, regulators.
 
-I think the change itself is harmless, because
-kasan_record_aux_stack_noalloc() doesn't care if interrupts are
-enabled or not when called, but the justification isn't clear to me.
+The GDSC stays on, if I'm not mistaken. Is this an expected behaviour
+for the suspend procedure?
 
-What "locking contention" are you speaking about? You're moving a
-local_irq_save() which disables interrupts. Yes, it might be nice to
-reduce the time interrupts are disabled, but in this case the benefit
-(if any) isn't clear at all, also because this only benefits
-non-production KASAN kernels.
+Also as a side note, the qcom-pcie driver supports a variety of SoCs
+from different generations. Which platforms were really tested?
+Judging from your patch I suppose that you did not test this on any
+non-recent platform.
 
-Can you provide better justification? Did you encounter a specific
-problem, maybe together with data?
-
-Thanks,
--- Marco
-
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> When system resumes, PCIe link will be re-established and
+> setup rc settings.
+>
+> Signed-off-by: Prasad Malisetty <quic_pmaliset@quicinc.com>
 > ---
->  kernel/rcu/tree.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/pci/controller/dwc/pcie-qcom.c | 103 +++++++++++++++++++++++++++++++++
+>  1 file changed, 103 insertions(+)
 >
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 347dae1876a6..5198e44cb124 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -3030,8 +3030,8 @@ __call_rcu(struct rcu_head *head, rcu_callback_t func)
->         }
->         head->func = func;
->         head->next = NULL;
-> -       local_irq_save(flags);
->         kasan_record_aux_stack_noalloc(head);
-> +       local_irq_save(flags);
->         rdp = this_cpu_ptr(&rcu_data);
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index c19cd506..24dcf5a 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -73,6 +73,8 @@
 >
->         /* Add the callback to our list. */
+>  #define PCIE20_PARF_Q2A_FLUSH                  0x1AC
+>
+> +#define PCIE20_PARF_PM_STTS                     0x24
+> +
+>  #define PCIE20_MISC_CONTROL_1_REG              0x8BC
+>  #define DBI_RO_WR_EN                           1
+>
+> @@ -1616,6 +1618,107 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>         return ret;
+>  }
+>
+> +static int qcom_pcie_send_pme_turnoff_msg(struct qcom_pcie *pcie)
+> +{
+> +       int ret = 0;
+> +       u32 val = 0, poll_val = 0;
+> +       uint64_t l23_rdy_poll_timeout = 100000;
+> +       struct dw_pcie *pci = pcie->pci;
+> +       struct device *dev = pci->dev;
+> +
+> +       val = readl(pcie->elbi + PCIE20_ELBI_SYS_CTRL);
+> +       val |= BIT(4);
+> +       writel(val, pcie->elbi + PCIE20_ELBI_SYS_CTRL);
+> +
+> +       ret = readl_poll_timeout((pcie->parf + PCIE20_PARF_PM_STTS), poll_val,
+> +                       (poll_val & BIT(5)), 10000, l23_rdy_poll_timeout);
+> +       if (!ret)
+> +               dev_dbg(dev, "PCIe: PM_Enter_L23 is received\n");
+> +       else
+> +               dev_err(dev, "PM_Enter_L23 is NOT received.PARF_PM_STTS 0x%x\n",
+> +                       readl_relaxed(pcie->parf + PCIE20_PARF_PM_STTS));
+> +
+> +       return ret;
+> +}
+> +
+> +static void qcom_pcie_host_disable(struct qcom_pcie *pcie)
+> +{
+> +       struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
+> +
+> +       /*Assert the reset of endpoint */
+> +       qcom_ep_reset_assert(pcie);
+> +
+> +       /* Put PHY into POWER DOWN state */
+> +       phy_power_off(pcie->phy);
+> +
+> +       writel(1, pcie->parf + PCIE20_PARF_PHY_CTRL);
+> +
+> +       /* Disable pipe clock */
+> +       pcie->ops->post_deinit(pcie);
+> +
+> +       /* Change GCC_PCIE_1_PIPE_MUXR register to 0x2 for XO as parent */
+> +       if (pcie->pipe_clk_need_muxing)
+> +               clk_set_parent(res->pipe_clk_src, res->ref_clk_src);
+> +
+> +       /* Disable PCIe clocks and regulators*/
+> +       pcie->ops->deinit(pcie);
+> +}
+> +
+> +static int __maybe_unused qcom_pcie_pm_suspend_noirq(struct device *dev)
+> +{
+> +       int ret = 0;
+> +       struct qcom_pcie *pcie = dev_get_drvdata(dev);
+> +       struct dw_pcie *pci = pcie->pci;
+> +
+> +       if (!dw_pcie_link_up(pci)) {
+> +               dev_err(dev, "Power has been turned off already\n");
+> +               return ret;
+> +       }
+> +
+> +       /* Send PME turnoff msg */
+> +       ret = qcom_pcie_send_pme_turnoff_msg(pcie);
+> +       if (ret)
+> +               return ret;
+> +
+> +       /* Power down the PHY, disable clock and regulators */
+> +       qcom_pcie_host_disable(pcie);
+> +
+> +       dev_info(dev, "PM: PCI is suspended\n");
+> +       return ret;
+> +}
+> +
+> +/* Resume the PCIe link */
+> +static int __maybe_unused qcom_pcie_pm_resume_noirq(struct device *dev)
+> +{
+> +       int ret = 0;
+> +       struct qcom_pcie *pcie = dev_get_drvdata(dev);
+> +       struct dw_pcie *pci = pcie->pci;
+> +       struct pcie_port *pp = &pci->pp;
+> +
+> +       dev_info(dev, "PM: Resuming\n");
+> +
+> +       /* Initialize PCIe host */
+> +       ret = qcom_pcie_host_init(pp);
+> +       if (ret)
+> +               dev_err(dev, "cannot initialize host\n");
+> +
+> +       dw_pcie_iatu_detect(pci);
+> +       dw_pcie_setup_rc(pp);
+> +
+> +       /* Start the PCIe link */
+> +       qcom_pcie_start_link(pci);
+> +
+> +       ret = dw_pcie_wait_for_link(pci);
+> +       if (ret)
+> +               dev_err(dev, "Link never came up, Resume failed\n");
+> +
+> +       return ret;
+> +}
+> +
+> +static const struct dev_pm_ops qcom_pcie_pm_ops = {
+> +       SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(qcom_pcie_pm_suspend_noirq, qcom_pcie_pm_resume_noirq)
+> +};
+> +
+>  static const struct of_device_id qcom_pcie_match[] = {
+>         { .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
+>         { .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
 > --
-> 2.25.1
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+> of Code Aurora Forum, hosted by The Linux Foundation
 >
+
+
+-- 
+With best wishes
+Dmitry

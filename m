@@ -2,83 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AACB947E333
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB7347E33A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348220AbhLWM1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 07:27:01 -0500
-Received: from mga03.intel.com ([134.134.136.65]:51618 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243438AbhLWM07 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 07:26:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640262419; x=1671798419;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=EsO/C6TP2k5lECpkQDcYXdFNp6zHeSuOgOuojLwJg/U=;
-  b=T/HBN5SFjur99cMzlvFznjkUaOUY2dba1Go99ZLOVrCCfPVDwyt9wMmS
-   DvZlj3aGmib7IDaXtqIixv5PXpr1EqNkqSD8SqJL5jXG962FG4WolUOue
-   QD6aHkpwxdtfDYyOd0M19eC9RJ4zNIZK5hVTEPJnqSmqbNO/K+Dl0wlXP
-   Dp/RQZzXfLDiZMBfSv/Z4l+ipBq4LEU2z7G+dqAdb1wnRS8juBBmWQhRN
-   jVKGv0yApgFmE18H+vha7zNH7v4LRVxXJWtcj+MMGPd+VDNxkMDnsSwG0
-   zlPkDl2EpPp8EX092YgtD2yWN9MIPYl8FpQS0Oi3Baa+N93PuXdo3zEsR
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="240769028"
-X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
-   d="scan'208";a="240769028"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 04:26:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
-   d="scan'208";a="522077258"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 23 Dec 2021 04:26:34 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 94A4A120; Thu, 23 Dec 2021 14:26:42 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thierry Reding <treding@nvidia.com>,
-        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] gpio: tegra: Get rid of duplicate of_node assignment
-Date:   Thu, 23 Dec 2021 14:26:39 +0200
-Message-Id: <20211223122639.86923-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1348246AbhLWM2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 07:28:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348245AbhLWM2F (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 07:28:05 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3052CC061756
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 04:28:05 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso8691726pji.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 04:28:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=UTE+esZ/4TZyUTsTUlc3WjOYgKLVtNI6J28jxD1ZZj8=;
+        b=eKdRwn9hwBJl059PMqq+lnBBSTypk064f7yg18Ny/uZ59Hb68D0LVTJrvbjEzYTtF8
+         4FoSN5D3fheMvB3OpF0za9TXOssZShkP1wdhyGxlvQqcjUgirkVO9pRWpxo/hWKJ+22V
+         fCgRVIyMS4h9qXoR+5RVrohd5h7HOoUqGWM44isEcFLQ7BO/00WehZKdLA5lqLlAG7Rs
+         Wmx9fx67QRs/NJrUyVqN9OjQPZYt6D/IUUiiKxfEoQJ64xRHTg7w13JuXHPMWq7Pp1iJ
+         4dJ1yV8Vfon9Cy97+iygodECXB6OB2TPB4Yu8JwC3vh7x1LzNIfQ6g9BUTbuLO1tnple
+         L7qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=UTE+esZ/4TZyUTsTUlc3WjOYgKLVtNI6J28jxD1ZZj8=;
+        b=Lot31+0Kjs8p+18ktQcJzMCG9VBpIgMW/wHLcpnhOqm426Cx9rsV5klpi22uO+eg95
+         6hfDAnijkZJI3t/SzH/PgyfeaomOuWPjvq+AtGRcXjnUSFuW/1zo4DWmC0rJySKU/3TG
+         T5GF/4m8ci8g5TFQLfItzsqpHJmU/18iDVmS8szU+vEcSUPXgB0Bh2YSAni+pF7Cq/JP
+         6dqyDnXcJ42dEKL9mXQCOoAOvIhE2Mxz++SApktT6DSvbEHzHOCpYc5fEq8rl+tmxbAH
+         s3XDvxQ41O2SuyaDVy2A1imkKdA3jjO8k/xxlm5PJ55ZByG85XTWM6/ni71AJpLFAN2q
+         iQGw==
+X-Gm-Message-State: AOAM533MB0Me2COLGl3FOiuG9a9gILK+wRXGLNW+3JJG2huOBn+HKJ8z
+        RmwAIJPjGNtSUcxIZzzplAk=
+X-Google-Smtp-Source: ABdhPJzg7Mwt96r2GaK4bRD0hzz5ri5NBVjYic7qtdtpte0/085VWWJToSGswgWI55UpkOaOAy8byA==
+X-Received: by 2002:a17:902:b197:b0:148:a2f7:9d88 with SMTP id s23-20020a170902b19700b00148a2f79d88mr2130486plr.167.1640262484345;
+        Thu, 23 Dec 2021 04:28:04 -0800 (PST)
+Received: from localhost.localdomain ([117.254.32.221])
+        by smtp.googlemail.com with ESMTPSA id bk17sm8853512pjb.3.2021.12.23.04.28.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Dec 2021 04:28:03 -0800 (PST)
+From:   Ajith P V <ajithpv.linux@gmail.com>
+To:     gregkh@linuxfoundation.org, arve@android.com, tkjos@android.com,
+        maco@android.com, joel@joelfernandes.org, christian@brauner.io,
+        hridya@google.com, surenb@google.com
+Cc:     linux-kernel@vger.kernel.org, Ajith P V <ajithpv.linux@gmail.com>
+Subject: [PATCH] binder: remove repeat word from comment to avoid warning
+Date:   Thu, 23 Dec 2021 17:57:25 +0530
+Message-Id: <20211223122725.29842-1-ajithpv.linux@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GPIO library does copy the of_node from the parent device of
-the GPIO chip, there is no need to repeat this in the individual
-drivers. Remove these assignment all at once.
+binder.c file comment produce warning with checkpatch as below:
+WARNING: Possible repeated word: 'and'
+Remove the repeated word from the comment to avoid this warning.
 
-For the details one may look into the of_gpio_dev_init() implementation.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Ajith P V <ajithpv.linux@gmail.com>
 ---
- drivers/gpio/gpio-tegra.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/android/binder.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpio/gpio-tegra.c b/drivers/gpio/gpio-tegra.c
-index 7f5bc10a6479..ff2d2a1f9c73 100644
---- a/drivers/gpio/gpio-tegra.c
-+++ b/drivers/gpio/gpio-tegra.c
-@@ -691,7 +691,6 @@ static int tegra_gpio_probe(struct platform_device *pdev)
- 	tgi->gc.base			= 0;
- 	tgi->gc.ngpio			= tgi->bank_count * 32;
- 	tgi->gc.parent			= &pdev->dev;
--	tgi->gc.of_node			= pdev->dev.of_node;
+diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+index cffbe57a8e08..fc0f4e8b58bd 100644
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -4436,7 +4436,7 @@ static int binder_thread_release(struct binder_proc *proc,
  
- 	tgi->ic.name			= "GPIO";
- 	tgi->ic.irq_ack			= tegra_gpio_irq_ack;
+ 	/*
+ 	 * This is needed to avoid races between wake_up_poll() above and
+-	 * and ep_remove_waitqueue() called for other reasons (eg the epoll file
++	 * ep_remove_waitqueue() called for other reasons (eg the epoll file
+ 	 * descriptor being closed); ep_remove_waitqueue() holds an RCU read
+ 	 * lock, so we can be sure it's done after calling synchronize_rcu().
+ 	 */
 -- 
-2.34.1
+2.17.1
 

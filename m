@@ -2,76 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D607F47E8FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 22:19:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F8947E906
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 22:21:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350328AbhLWVTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 16:19:08 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40356 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233222AbhLWVTG (ORCPT
+        id S1350338AbhLWVV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 16:21:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233222AbhLWVVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 16:19:06 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40DD061F91;
-        Thu, 23 Dec 2021 21:19:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA63C36AE9;
-        Thu, 23 Dec 2021 21:19:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640294345;
-        bh=RHwR7WJnTDGHXUR+NlikicbsjnB3cUEtRLcjjNBCDdI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ms47wMwQ5bSMZzlGNt1qIns2K5kVThKoXd7e938Yd+RYxGappMdZ9P9hGHax/vz0c
-         so3KAjEt9dAtJ1+Jr4sxu1o+7Nj/tBwFtkeq1ZWaEpu6+IIuAGo0ng1lfSvR4CdlJB
-         8LIsm9OOuMseMIMRf7LUulx2OfCAua1Rnq0HRKpnt+P4QnFoHI4KbpoQnOTvPHzDm7
-         pHgiavo3NAJACrgVglfxzthKmVe5DmWsSvX8neOfCRgytf8Gq6h/uwaIRKLqOA33tm
-         AxCB2aJi6bXQBnzQ1y0Wi5bULn/DUeWIt+/Ag18gm9iRxaaIOcgLiK4D9XuspQIUPN
-         NWKsE2mbCbjiA==
-Received: by mail-ed1-f43.google.com with SMTP id z29so26038699edl.7;
-        Thu, 23 Dec 2021 13:19:05 -0800 (PST)
-X-Gm-Message-State: AOAM5330ESLaUH5UIVAUgCWbJso4y4FtV4a1zVGizZG1SfIWKVt4SZLc
-        gSTFXfglANfZJo+x9hDVpoGS2NKYqiyrL76rxg==
-X-Google-Smtp-Source: ABdhPJzi5ldYUkBvCrQJ/P23jc2Mhr2nETWi9GjrXsmkOXNTU7ndvABfAN+OgXiAUuPyp+SfEtlmtIzFARpBZb0X6rw=
-X-Received: by 2002:a17:907:3d94:: with SMTP id he20mr3155428ejc.14.1640294343703;
- Thu, 23 Dec 2021 13:19:03 -0800 (PST)
+        Thu, 23 Dec 2021 16:21:24 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9686C061401;
+        Thu, 23 Dec 2021 13:21:24 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id gj24so6039421pjb.0;
+        Thu, 23 Dec 2021 13:21:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DTIdj4RaXLtlrp+r65BDVsD3Sau1mr41CGpuUX0r64Y=;
+        b=O8AWEdwEPgElj8UoLoYPC3gMFYVKmTGtAbCF2OMgxvBAVeKpFkPBwmRGRua5mdsUjR
+         KG51Jj8S82+QkbUdOCobo0mVG3QN5zBvIe4stqrO7mjvbuLDjKadUDYUOfTRnTKCafeS
+         T2KoDprD7zKSaxa8pGwQ1ONOKIZs+J3tqFLbBT2mF/LYpxDpILKxBjs44iV6LQgrUD7x
+         eDfAeDjRhrcMazqp8W2XH8Fr1EQ0cvgeL+WhoHMa8gkddXBmUhjycDtsAnzz/nBcZEPs
+         krdvAinmw9wjjloveywVgNpLlkTUbigGE8TVq0uVoxBZ+F4FW+GoxtwhYjSDbllW+36r
+         4Kyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DTIdj4RaXLtlrp+r65BDVsD3Sau1mr41CGpuUX0r64Y=;
+        b=N9LFkTcp82TCAcBiyq4/SED+rgx1ml8UuibGozWqpNv3kLAQrqbFin17bPCl/kVPXy
+         UR3A3+2uoeUb5PkOxnNhBIqtCwmk9UXw/KwNwds1VovlqxqBbkGUA2/i7IvEI4qpXT58
+         aH2j6X87LrZiNu6UKoU2K7DIe2/COSAwpJ/MjMX1E6sDsHSw4YsS1P9dTJ1i1LUJT8/+
+         2oCXaAKGJHtuKozhx5gIJGP3HWcJMSfQiLDbl4wofyBLPCwFBonIKj3G01brxYOX4GP/
+         Dxmq1nQ5cx2xHTsrxCI8x/LrgkNyn2XytVrJmc27Y36WLaIS5yb4Efvc9ubNb1xx1KKx
+         NsjQ==
+X-Gm-Message-State: AOAM532mcvnlVvMzqcpw6KVOPZcNz/eiUMcrJdhSHjULAWgqxDnNoX6i
+        T62+ci2BdVtiw9hzusHaAxO8JqX6ch8=
+X-Google-Smtp-Source: ABdhPJzyidRIMksQmItyUN0kVoD0eAGTAfAPwMFUhHo4dUqWYQ3CTokDzTe5t60mHIp4I8++YVjWVg==
+X-Received: by 2002:a17:90b:3b46:: with SMTP id ot6mr4540663pjb.62.1640294484114;
+        Thu, 23 Dec 2021 13:21:24 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:e54e:1f66:583f:ea16])
+        by smtp.gmail.com with ESMTPSA id y65sm5630284pgd.79.2021.12.23.13.21.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Dec 2021 13:21:22 -0800 (PST)
+Date:   Thu, 23 Dec 2021 13:21:20 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Raul E Rangel <rrangel@chromium.org>, linux-kernel@vger.kernel.org,
+        mario.limonciello@amd.com, linux-input@vger.kernel.org,
+        dianders@chromium.org, "jingle.wu" <jingle.wu@emc.com.tw>
+Subject: Re: [PATCH 2/3] Input: elan_i2c - Use PM subsystem to manage wake irq
+Message-ID: <YcToUCQ8gzzSWbrm@google.com>
+References: <20211220234346.2798027-1-rrangel@chromium.org>
+ <20211220163823.2.Id022caf53d01112188308520915798f08a33cd3e@changeid>
+ <YcE+xrSnS7qw0G1/@google.com>
+ <9b004b3d-deed-1b63-2344-a445a9e53b61@redhat.com>
 MIME-Version: 1.0
-References: <20211223110755.22722-1-zajec5@gmail.com> <20211223110755.22722-4-zajec5@gmail.com>
-In-Reply-To: <20211223110755.22722-4-zajec5@gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 23 Dec 2021 17:18:52 -0400
-X-Gmail-Original-Message-ID: <CAL_JsqK2TMu+h4MgQqjN0bvEzqdhsEviBwWiiR9hfNbC5eOCKg@mail.gmail.com>
-Message-ID: <CAL_JsqK2TMu+h4MgQqjN0bvEzqdhsEviBwWiiR9hfNbC5eOCKg@mail.gmail.com>
-Subject: Re: [PATCH 3/5] dt-bindings: nvmem: allow referencing device defined
- cells by names
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9b004b3d-deed-1b63-2344-a445a9e53b61@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 7:08 AM Rafa=C5=82 Mi=C5=82ecki <zajec5@gmail.com> =
-wrote:
->
-> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
->
-> Not every NVMEM has predefined cells at hardcoded addresses. Some
-> devices store cells in internal structs and custom formats. Referencing
-> such cells is still required to let other bindings use them.
->
-> Modify binding to require "reg" xor "label". The later one can be used
-> to match "dynamic" NVMEM cells by their names.
+On Thu, Dec 23, 2021 at 03:42:24PM +0100, Hans de Goede wrote:
+> Hi,
+> 
+> On 12/21/21 03:41, Dmitry Torokhov wrote:
+> > Hi Raul,
+> > 
+> > On Mon, Dec 20, 2021 at 04:43:45PM -0700, Raul E Rangel wrote:
+> >> @@ -1368,11 +1367,13 @@ static int elan_probe(struct i2c_client *client,
+> >>  	}
+> >>  
+> >>  	/*
+> >> -	 * Systems using device tree should set up wakeup via DTS,
+> >> +	 * Systems using device tree or ACPI should set up wakeup via DTS/ACPI,
+> >>  	 * the rest will configure device as wakeup source by default.
+> >>  	 */
+> >> -	if (!dev->of_node)
+> >> +	if (!dev->of_node && !ACPI_COMPANION(dev)) {
+> > 
+> > I think this will break our Rambis that use ACPI for enumeration but
+> > actually lack _PRW. As far as I remember their trackpads were capable
+> > of waking up the system.
+> > 
+> > I think we should remove this chunk completely and instead add necessary
+> > code to drivers/platform/chrome/chrome-laptop.c (I suppose we need to
+> > have additional member in struct acpi_peripheral to indicate whether
+> > device needs to be configured for wakeup and then act upon it in
+> > chromeos_laptop_adjust_client().
 
-'label' is supposed to correspond to a sticker on a port or something
-human identifiable. It generally should be something optional to
-making the OS functional. Yes, there are already some abuses of that,
-but this case is too far for me.
+FWIW I looked at Rambi some more and I see that it actually defines a
+separate device an ACPI to handle wakeups, it is separate from the ACPI
+node for the trackpad:
 
-Rob
+Scope (\_SB)
+{
+#ifdef BOARD_TRACKPAD_IRQ
+        /* Wake device for touchpad */
+        Device (TPAD)
+        {
+                Name (_HID, EisaId ("PNP0C0E"))
+                Name (_UID, 1)
+                Name (_PRW, Package() { BOARD_TRACKPAD_WAKE_GPIO, 0x3 })
+
+                Name (RBUF, ResourceTemplate()
+                {
+                        Interrupt (ResourceConsumer, Level, ActiveLow)
+                        {
+                                BOARD_TRACKPAD_IRQ
+                        }
+                })
+
+                Method (_CRS)
+                {
+                        /* Only return interrupt if I2C1 is PCI mode */
+                        If (LEqual (\S1EN, 0)) {
+                                Return (^RBUF)
+                        }
+
+                        /* Return empty resource template otherwise */
+                        Return (ResourceTemplate() {})
+                }
+        }
+#endif
+
+I am not quite sure why we did this...
+
+> > 
+> >>  		device_init_wakeup(dev, true);
+> >> +		dev_pm_set_wake_irq(dev, client->irq);
+> >> +	}
+> 
+> As I already mentioned in my other reply in this thread:
+> 
+> https://lore.kernel.org/linux-input/f594afab-8c1a-8821-a775-e5512e17ce8f@redhat.com/
+> 
+> AFAICT most x86 ACPI laptops do not use GPEs for wakeup by touchpad and
+> as such they do not have a _PRW method.
+> 
+> So for wakeup by elan_i2c touchpads to keep working this code is not
+> just necessary for some ChromeOS devices, but it is necessary on
+> most ACPI devices.
+> 
+> The problem of not making these calls on devices where a GPE is actually
+> used for touchpad wakeup (which at least for now is the exception not
+> the rule) should probably be fixed by no running this "chunk"
+> when the device has an ACPI_COMPANION (as this patch already checks)
+> *and* that ACPI_COMPANION has a valid _PRW method.
+> 
+> Simply removing this chunk, or taking this patch as is will very
+> likely lead to regressions on various x86 laptop models.
+
+Hans, could you share a couple of DSDTs for devices that do not use GPEs
+for wakeup?
+
+For OF we already recognize that wakeup source/interrupt might differ
+from "main" I2C interrupt, I guess we need to do similar for ACPI cases.
+The question is to how determine if a device is supposed to be a wakeup
+source if it does not have _PRW.
+
+Thanks.
+
+-- 
+Dmitry

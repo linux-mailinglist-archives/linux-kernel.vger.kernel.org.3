@@ -2,91 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3659E47DE2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 04:56:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A0C147DE30
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 05:03:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346273AbhLWD4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 22:56:12 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:29285 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238699AbhLWD4L (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 22:56:11 -0500
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JKGZ90PsgzbjVD;
-        Thu, 23 Dec 2021 11:55:45 +0800 (CST)
-Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 23 Dec 2021 11:56:09 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpeml500017.china.huawei.com (7.185.36.243) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 23 Dec 2021 11:56:08 +0800
-Subject: Re: [PATCH -next] scsi: efct: Use GFP_ATOMIC under spin lock
-To:     Christoph Hellwig <hch@lst.de>
-CC:     <linux-kernel@vger.kernel.org>, <target-devel@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <james.smart@broadcom.com>,
-        <martin.petersen@oracle.com>
-References: <20211221113706.329791-1-yangyingliang@huawei.com>
- <20211221142859.GA30187@lst.de>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <44ff658e-4a00-ee5b-1f84-fa89f9b9291f@huawei.com>
-Date:   Thu, 23 Dec 2021 11:56:08 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1346283AbhLWEDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 23:03:31 -0500
+Received: from mout.gmx.net ([212.227.17.21]:34501 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238699AbhLWED3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 23:03:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1640232199;
+        bh=4ILo/VJm8wgroPorTTpv5tAKucJx98LcPaR7SD+bkw8=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=hrf0cYhm4HEHji31aXKDeXveSfpishJEHt0cTeypZ1L0ZVeK+rKflKdvzgutBCaca
+         winCaQv6CFuGUAhzE8wQHgGdrcnb8CmBV9ofdlbZbWI+feBq/sUtSLE+rdE21J7xjq
+         MQfMiAUEMX01uIrjc9cCkAVE0MPs9lNLgKbE7rWQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from Venus.fritz.box ([46.223.119.124]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N1fii-1mKDZ039ei-011zLn; Thu, 23
+ Dec 2021 05:03:18 +0100
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Cc:     p.rosenberger@kunbus.com, stefanb@linux.ibm.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>, stable@vger.kernel.org
+Subject: [PATCH v3] tpm: fix potential NULL pointer access in tpm_del_char_device
+Date:   Thu, 23 Dec 2021 05:02:46 +0100
+Message-Id: <20211223040246.6575-1-LinoSanfilippo@gmx.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20211221142859.GA30187@lst.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500017.china.huawei.com (7.185.36.243)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:2kDWMu0wWMr7HLmwOpt7VP3fzse20/ciSnJzNIltI1yar+OtMxB
+ 6XrkoGlLhABtmA+RWtFcAwJr8tXhG8It642u3/HFEOHbK7LyNQCl7Wn4PdwYgcj3SujBfVk
+ FKDKHRTllKA6kUlZcbisqn6PgsT8WBdDgxtlbGiu9QhnxKvk2zk6WjG0ZYq8FFkwVOqXyeJ
+ QJMSvilLhUxGxh5Pedh4Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:g85bodK0EJ8=:RR6KOWkI1oIuahrmq37tih
+ 3qeasUJCSto5uPGPyYK+OZAP4MoMOupg8Sh4OTfDNqYpkXg0TRLiodBGjNQN6YMVmBHVujrQH
+ F+AMp0X/MPE58fIBII5SEZeysswyI73FxAMTtASQTJ8vhcWeBZFVCDrdbmUPL5d1FHdEupelh
+ x5L9QbW/OSv76T59XTMv9/DJ27hxLbTsfkR8utrpTO24eGwSZHY+oFJ/xg9ROVKo0QhAX3GmX
+ 4mT7zRNEAtC/16e1njXD9D7CRgwWTEScCtCN0l7Lks0/zeq1mHVjz9M8xc0qoScAc9K0YgPtH
+ SrB214JkLSJl0eCU1qrJUL9CsYCyDZ1ex3BZRzK559PuueOkFrYJy2gbz8TD2UxHgzX1iO51n
+ /ydFMq8xW54sDYuFS5a30bwDzPwSJS8KlVNm1oN/KT0D98a7dzNb1OZ8gpKcfO8Hw3Rdo1rc/
+ eUIgsBdNr9dQv3OS7VwXHaDmz12Mo88rA2A67Yq2fe4+c3aKWG4rX/tEZJu3c5Sk2yLfjU9F8
+ bg1K0iLiY/GyKt+Ek6NjfBDV4H1sW5Ct9ZRyWYpPPtnXRa3Go9qsu4wdlAm8ZFom/BkpFX2dy
+ EYdm2NoUwIh7Z3pRDE025q+xIrN/JCSVTI7lDVld+ReAS1/0zBXnxrIoD4m59YkFNG4VuKAzN
+ QT6yE4I2eVNuIBCoJuW9frxc3lyi/NcyT679G+qd9pLAeNeN2KVildRqIXSyGCjAJsCcX7aSx
+ nDXroty/i816krTerEwJNERjZALaxyr4fiS6Mxz2T3Wf7D1XSHbxbaWnyYX8lnYz762sRpsmS
+ uBdPIynVcw5IO51lN+Taowhg7vyogFa/5FwPG8iuUrJWHoEiWyeEDPsRS5/56fKSrrqyS5GAd
+ riYnEWr0i3anposHhWlivB7A2pX3tjopQVQ6H6eBguf/o+p06MmIc9MdkZQT+xyf2o84dIJxh
+ I5TY/6v+hBGeIpUhqr1myCcF216EpaGkhi+8RVbJ9rs+ziTsu+PKSoebnBAhN6LEn2Nd/vd8a
+ Jfl5w0QIUhJLZQBlsgilBokt0SmfxlZb/dBsqPM2HWympJ1ryOpgwIMFtBvBrOBXyNvM0nlN/
+ FGjemhUQC6yMEc=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2021/12/21 22:28, Christoph Hellwig wrote:
-> On Tue, Dec 21, 2021 at 07:37:06PM +0800, Yang Yingliang wrote:
->> A spin lock is taken here so we should use GFP_ATOMIC.
->>
->> Fixes: efac162a4e4d ("scsi: efct: Don't pass GFP_DMA to dma_alloc_coherent()")
-> No, it does not fix that commit.  The driver did sleeping allocations
-> even before the commit.
->
-> But wher is "here"?  Can we look into not holding that lock over an
-> allocation if it is preferable?  If not we should at least pass down
-> the gfp_flags so that only the caller(s) that can't sleep pass GFP_ATOMIC.
-
-According the comment of els_ios_lock, it's used to protect els ios 
-list, I think we
-
-can move down the spin lock like this:
-
-
---- a/drivers/scsi/elx/libefc/efc_els.c
-+++ b/drivers/scsi/elx/libefc/efc_els.c
-@@ -46,8 +46,6 @@ efc_els_io_alloc_size(struct efc_node *node, u32 
-reqlen, u32 rsplen)
-
-         efc = node->efc;
-
--       spin_lock_irqsave(&node->els_ios_lock, flags);
--
-         if (!node->els_io_enabled) {
-                 efc_log_err(efc, "els io alloc disabled\n");
-                 spin_unlock_irqrestore(&node->els_ios_lock, flags);
-@@ -88,6 +86,8 @@ efc_els_io_alloc_size(struct efc_node *node, u32 
-reqlen, u32 rsplen)
-                 els = NULL;
-         }
-
-+       spin_lock_irqsave(&node->els_ios_lock, flags);
-+
-         if (els) {
-                 /* initialize fields */
-                 els->els_retries_remaining = EFC_FC_ELS_DEFAULT_RETRIES;
-
+U29tZSBTUEkgY29udHJvbGxlciBkcml2ZXJzIHVucmVnaXN0ZXIgdGhlIGNvbnRyb2xsZXIgaW4g
+dGhlIHNodXRkb3duCmhhbmRsZXIgKGUuZy4gQkNNMjgzNSkuIElmIHN1Y2ggYSBjb250cm9sbGVy
+IGlzIHVzZWQgd2l0aCBhIFRQTSAyIHNsYXZlCmNoaXAtPm9wcyBtYXkgYmUgYWNjZXNzZWQgd2hl
+biBpdCBpcyBhbHJlYWR5IE5VTEw6CgpBdCBzeXN0ZW0gc2h1dGRvd24gdGhlIHByZS1zaHV0ZG93
+biBoYW5kbGVyIHRwbV9jbGFzc19zaHV0ZG93bigpIHNodXRzIGRvd24KVFBNIDIgYW5kIHNldHMg
+Y2hpcC0+b3BzIHRvIE5VTEwuIFRoZW4gYXQgU1BJIGNvbnRyb2xsZXIgdW5yZWdpc3RyYXRpb24K
+dHBtX3Rpc19zcGlfcmVtb3ZlKCkgaXMgY2FsbGVkIGFuZCBldmVudHVhbGx5IGNhbGxzIHRwbV9k
+ZWxfY2hhcl9kZXZpY2UoKQp3aGljaCB0cmllcyB0byBzaHV0IGRvd24gVFBNIDIgYWdhaW4uIFRo
+ZXJlYnkgaXQgYWNjZXNzZXMgY2hpcC0+b3BzIGFnYWluOgoodHBtX2RlbF9jaGFyX2RldmljZSBj
+YWxscyB0cG1fY2hpcF9zdGFydCB3aGljaCBjYWxscyB0cG1fY2xrX2VuYWJsZSB3aGljaApjYWxs
+cyBjaGlwLT5vcHMtPmNsa19lbmFibGUpLgoKQXZvaWQgdGhlIE5VTEwgcG9pbnRlciBhY2Nlc3Mg
+YnkgdGVzdGluZyBpZiBjaGlwLT5vcHMgaXMgdmFsaWQgYW5kIHNraXBwaW5nCnRoZSBUUE0gMiBz
+aHV0ZG93biBwcm9jZWR1cmUgaW4gY2FzZSBpdCBpcyBOVUxMLgoKRml4ZXM6IGRjYmVhYjE5NDY0
+NTQgKCJ0cG06IGZpeCBjcmFzaCBpbiB0cG1fdGlzIGRlaW5pdGlhbGl6YXRpb24iKQpGaXhlczog
+MzlkMDA5OWY5NDM5ICgicG93ZXJwYy9wc2VyaWVzOiBBZGQgc2h1dGRvd24oKSB0byB2aW9fZHJp
+dmVyIGFuZCB2aW9fYnVzIikKQ2M6IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmcKVGVzdGVkLWJ5OiBT
+dGVmYW4gQmVyZ2VyIDxzdGVmYW5iQGxpbnV4LmlibS5jb20+ClJldmlld2VkLWJ5OiBTdGVmYW4g
+QmVyZ2VyIDxzdGVmYW5iQGxpbnV4LmlibS5jb20+ClNpZ25lZC1vZmYtYnk6IExpbm8gU2FuZmls
+aXBwbyA8TGlub1NhbmZpbGlwcG9AZ214LmRlPgotLS0KQ2hhbmdlcyBpbiB2MzoKLSBhZGRlZCB0
+YWdzIGZvciBTdGVmYW5zIHJldmlldyBhbmQgdGVzdAotIGNvcnJlY3RlZCB0aGUgc291cmNlIGNv
+ZGUgY29tbWVudAoKQ2hhbmdlcyBpbiB2MjoKLSByZXBocmFzZWQgdGhlIGNvbW1pdCBtZXNzYWdl
+IHRvIGNsYXJpZnkgdGhlIGNpcmN1bXN0YW5jZXMgdW5kZXIgd2hpY2gKICB0aGlzIGJ1ZyB0cmln
+Z2VycyAoYXMgcmVxdWVzdGVkIGJ5IEphcmtrbykKCkkgd2FzIGFibGUgdG8gcmVwcm9kdWNlIHRo
+aXMgaXNzdWUgd2l0aCBhIFNMQiA5NjcwIFRQTSBjaGlwIGNvbnRyb2xsZWQgYnkgCmEgQkNNMjgz
+NSBTUEkgY29udHJvbGxlci4gCgpUaGUgYXBwcm9hY2ggdG8gZml4IHRoaXMgaXNzdWUgaW4gdGhl
+IEJDTTI4MzUgZHJpdmVyIHdhcyByZWplY3RlZCBhZnRlciBhCmRpc2N1c3Npb24gb24gdGhlIG1h
+aWxpbmcgbGlzdDoKCmh0dHBzOi8vbWFyYy5pbmZvLz9sPWxpbnV4LWludGVncml0eSZtPTE2MzI4
+NTkwNjcyNTM2NyZ3PTIKClRoZSByZWFzb24gZm9yIHRoZSByZWplY3Rpb24gd2FzIHRoZSByZWFs
+aXphdGlvbiwgdGhhdCB0aGlzIGlzc3VlIHNob3VsZCByYXRoZXIKYmUgZml4ZWQgaW4gdGhlIFRQ
+TSBjb2RlOgoKaHR0cHM6Ly9tYXJjLmluZm8vP2w9bGludXgtc3BpJm09MTYzMzExMDg3NDIzMjcx
+Jnc9MgoKU28gdGhpcyBpcyB0aGUgcmV3b3JrZWQgdmVyc2lvbiBvZiBhIHBhdGNoIHRoYXQgaXMg
+c3VwcG9zZWQgdG8gZG8gdGhhdC4KCgogZHJpdmVycy9jaGFyL3RwbS90cG0tY2hpcC5jIHwgMTYg
+KysrKysrKysrKystLS0tLQogMSBmaWxlIGNoYW5nZWQsIDExIGluc2VydGlvbnMoKyksIDUgZGVs
+ZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9jaGFyL3RwbS90cG0tY2hpcC5jIGIvZHJp
+dmVycy9jaGFyL3RwbS90cG0tY2hpcC5jCmluZGV4IGRkYWVjZWI3ZTEwOS4uMDMxMjJkNjI0Njcw
+IDEwMDY0NAotLS0gYS9kcml2ZXJzL2NoYXIvdHBtL3RwbS1jaGlwLmMKKysrIGIvZHJpdmVycy9j
+aGFyL3RwbS90cG0tY2hpcC5jCkBAIC00NzQsMTMgKzQ3NCwxOSBAQCBzdGF0aWMgdm9pZCB0cG1f
+ZGVsX2NoYXJfZGV2aWNlKHN0cnVjdCB0cG1fY2hpcCAqY2hpcCkKIAogCS8qIE1ha2UgdGhlIGRy
+aXZlciB1bmNhbGxhYmxlLiAqLwogCWRvd25fd3JpdGUoJmNoaXAtPm9wc19zZW0pOwotCWlmIChj
+aGlwLT5mbGFncyAmIFRQTV9DSElQX0ZMQUdfVFBNMikgewotCQlpZiAoIXRwbV9jaGlwX3N0YXJ0
+KGNoaXApKSB7Ci0JCQl0cG0yX3NodXRkb3duKGNoaXAsIFRQTTJfU1VfQ0xFQVIpOwotCQkJdHBt
+X2NoaXBfc3RvcChjaGlwKTsKKwkvKiBJbiBjYXNlIHRoYXQgdGhlIFNQSSBtYXN0ZXIgaXMgdW5y
+ZWdpc3RlcmVkIGluIGl0cyBkcml2ZXJzCisJICogc2h1dGRvd24gaGFuZGxlciwgdHBtX2NsYXNz
+X3NodXRkb3duKCkgaGFzIGFscmVhZHkgYmVlbiBjYWxsZWQKKwkgKiBhbmQgc2V0IGNoaXAtPm9w
+cyB0byBOVUxMLiBTbyBjaGVjayBpZiBpdCBpcyBzdGlsbCB2YWxpZC4KKwkgKi8KKwlpZiAoY2hp
+cC0+b3BzKSB7CisJCWlmIChjaGlwLT5mbGFncyAmIFRQTV9DSElQX0ZMQUdfVFBNMikgeworCQkJ
+aWYgKCF0cG1fY2hpcF9zdGFydChjaGlwKSkgeworCQkJCXRwbTJfc2h1dGRvd24oY2hpcCwgVFBN
+Ml9TVV9DTEVBUik7CisJCQkJdHBtX2NoaXBfc3RvcChjaGlwKTsKKwkJCX0KIAkJfQorCQljaGlw
+LT5vcHMgPSBOVUxMOwogCX0KLQljaGlwLT5vcHMgPSBOVUxMOwogCXVwX3dyaXRlKCZjaGlwLT5v
+cHNfc2VtKTsKIH0KIAoKYmFzZS1jb21taXQ6IGJjNDkxZmIxMjUxM2U3OTcwMmM2ZjkzNmM4Mzhm
+NzkyYjUzODkxMjkKLS0gCjIuMzQuMQoK

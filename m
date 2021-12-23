@@ -2,216 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 775E647E297
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 12:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3300147E29E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 12:50:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348017AbhLWLuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 06:50:07 -0500
-Received: from foss.arm.com ([217.140.110.172]:40338 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229623AbhLWLuH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 06:50:07 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6F7DA1FB;
-        Thu, 23 Dec 2021 03:50:06 -0800 (PST)
-Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 390853F5A1;
-        Thu, 23 Dec 2021 03:50:04 -0800 (PST)
-Date:   Thu, 23 Dec 2021 11:49:58 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Hongxing Zhu <hongxing.zhu@nxp.com>
-Cc:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        "tharvey@gateworks.com" <tharvey@gateworks.com>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "galak@kernel.crashing.org" <galak@kernel.crashing.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH v7 8/8] PCI: imx: Add the imx8mm pcie support
-Message-ID: <20211223114958.GA30243@lpieralisi>
-References: <1638432158-4119-1-git-send-email-hongxing.zhu@nxp.com>
- <1638432158-4119-9-git-send-email-hongxing.zhu@nxp.com>
- <Ybtuo0CzfUhoJwsT@rocinante>
- <AS8PR04MB8676F7F8BBE79E36D3EAFB6B8C789@AS8PR04MB8676.eurprd04.prod.outlook.com>
+        id S1348045AbhLWLud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 06:50:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348025AbhLWLu1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 06:50:27 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FA9C061756;
+        Thu, 23 Dec 2021 03:50:26 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 09C2A1EC054E;
+        Thu, 23 Dec 2021 12:50:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640260221;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=cuJ+soGkmwGVdG30YPS/F1N7S/DbyJYTLWnol8x+5u4=;
+        b=Rsvnfq2qxXXOgXEVluwWck3R4Eyw+KHKRdwmXra1wDyjKVwD1FsCFugMErEl59E6zC09t+
+        7CnZ2kUaKkSUR4FmgVCit4Y+JvrquvY0CLpilS0y9xMwmq1YCHGFBnupRwRbzYYqxst3b+
+        O8/fud/q7zcxWW+af8iQXU/ftTyZoOs=
+Date:   Thu, 23 Dec 2021 12:50:22 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v8 12/40] x86/sev: Add helper for validating pages in
+ early enc attribute changes
+Message-ID: <YcRifo82cGk+wP+a@zn.tnic>
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-13-brijesh.singh@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <AS8PR04MB8676F7F8BBE79E36D3EAFB6B8C789@AS8PR04MB8676.eurprd04.prod.outlook.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20211210154332.11526-13-brijesh.singh@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 05:54:21AM +0000, Hongxing Zhu wrote:
-> > -----Original Message-----
-> > From: Krzysztof Wilczyński <kw@linux.com>
-> > Sent: Friday, December 17, 2021 12:52 AM
-> > To: Hongxing Zhu <hongxing.zhu@nxp.com>
-> > Cc: l.stach@pengutronix.de; bhelgaas@google.com;
-> > lorenzo.pieralisi@arm.com; Marcel Ziswiler
-> > <marcel.ziswiler@toradex.com>; tharvey@gateworks.com;
-> > kishon@ti.com; vkoul@kernel.org; robh@kernel.org;
-> > galak@kernel.crashing.org; shawnguo@kernel.org;
-> > linux-phy@lists.infradead.org; devicetree@vger.kernel.org;
-> > linux-pci@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
-> > linux-kernel@vger.kernel.org; kernel@pengutronix.de; dl-linux-imx
-> > <linux-imx@nxp.com>
-> > Subject: Re: [PATCH v7 8/8] PCI: imx: Add the imx8mm pcie support
-> > 
-> > Hi Richard,
-> > 
-> > Apologies for a very late review!  Especially since Lorenzo already took
-> > patches as per:
-> > 
-> > 
-> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flor
-> > e.kernel.org%2Flinux-pci%2F163965080404.20006.52416095516435017
-> > 49.b4-ty%40arm.com%2F&amp;data=04%7C01%7Chongxing.zhu%40nxp
-> > .com%7C8afb673348214261883608d9c0b45b1d%7C686ea1d3bc2b4c6fa
-> > 92cd99c5c301635%7C0%7C0%7C637752703124166805%7CUnknown%7
-> > CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1ha
-> > WwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=rfmN1Xojubap2vi3J4Jol3ozy
-> > N1Q2q7YiBM5bqMm22s%3D&amp;reserved=0
-> > 
-> > However, perhaps it's not too late.
-> [Richard Zhu] Hi Krzysztof: 
-> Thanks for your review.
-> But I don't know how to handle this situation.
-> How about that I add this refine patch into the following bug fix and
->  refine patch-set later?
-> PCI: imx6: refine codes and add compliance tests mode support
-> " https://patchwork.kernel.org/project/linux-arm-kernel/cover/1635747478-25562-1-git-send-email-hongxing.zhu@nxp.com/"
-> 
-> > 
-> > [...]
-> > > @@ -446,6 +452,13 @@ static int imx6_pcie_enable_ref_clk(struct
-> > imx6_pcie *imx6_pcie)
-> > >  		break;
-> > >  	case IMX7D:
-> > >  		break;
-> > > +	case IMX8MM:
-> > > +		ret = clk_prepare_enable(imx6_pcie->pcie_aux);
-> > > +		if (ret) {
-> > > +			dev_err(dev, "unable to enable pcie_aux clock\n");
-> > > +			break;
-> > > +		}
-> > > +		break;
-> > 
-> > You can drop the inner break, it wouldn't do much here, unless this was
-> > intended to be a return?
-> [Richard Zhu] Yes, it is. The inner break can be dropped. The error return
-> would be handled in the end.
-> 
-> > 
-> > > @@ -538,6 +559,10 @@ static void
-> > imx6_pcie_deassert_core_reset(struct imx6_pcie *imx6_pcie)
-> > >  	case IMX8MQ:
-> > >  		reset_control_deassert(imx6_pcie->pciephy_reset);
-> > >  		break;
-> > > +	case IMX8MM:
-> > > +		if (phy_init(imx6_pcie->phy) != 0)
-> > > +			dev_err(dev, "Waiting for PHY ready timeout!\n");
-> > > +		break;
-> > 
-> > If the above, you can keep the same style as used throughout the file
-> > already, so it would just simply be:
-> > 
-> >   if (phy_init(imx6_pcie->phy))
-> > 
-> > Also, a nitpick: to be consistent with other such messages here, the error
-> > message would be all lower-case letters.
-> [Richard Zhu] Yes, it is.
-> > 
-> > [...]
-> > > @@ -614,6 +639,8 @@ static void imx6_pcie_configure_type(struct
-> > > imx6_pcie *imx6_pcie)  static void imx6_pcie_init_phy(struct
-> > imx6_pcie
-> > > *imx6_pcie)  {
-> > >  	switch (imx6_pcie->drvdata->variant) {
-> > > +	case IMX8MM:
-> > > +		break;
-> > >  	case IMX8MQ:
-> > 
-> > Would it warrant a comment that adds a note there to this single bare
-> > break?  Perhaps this version is not support, lack this particular
-> > functionality, etc.
-> [Richard Zhu] Yes, it's easier to understand after add one comment.
-> > 
-> > [...]
-> > > @@ -1089,10 +1122,39 @@ static int imx6_pcie_probe(struct
-> > platform_device *pdev)
-> > >  			dev_err(dev, "Failed to get PCIE APPS reset control\n");
-> > >  			return PTR_ERR(imx6_pcie->apps_reset);
-> > >  		}
-> > > +		break;
-> > > +	case IMX8MM:
-> > > +		imx6_pcie->pcie_aux = devm_clk_get(dev, "pcie_aux");
-> > > +		if (IS_ERR(imx6_pcie->pcie_aux))
-> > > +			return dev_err_probe(dev,
-> > PTR_ERR(imx6_pcie->pcie_aux),
-> > > +					     "pcie_aux clock source missing or
-> > invalid\n");
-> > > +		imx6_pcie->apps_reset =
-> > devm_reset_control_get_exclusive(dev,
-> > > +									 "apps");
-> > > +		if (IS_ERR(imx6_pcie->apps_reset)) {
-> > > +			dev_err(dev, "Failed to get PCIE APPS reset control\n");
-> > > +			return PTR_ERR(imx6_pcie->apps_reset);
-> > > +		}
-> > > +
-> > > +		imx6_pcie->phy = devm_phy_get(dev, "pcie-phy");
-> > > +		if (IS_ERR(imx6_pcie->phy)) {
-> > > +			if (PTR_ERR(imx6_pcie->phy) == -EPROBE_DEFER)
-> > > +				return -EPROBE_DEFER;
-> > > +			dev_err(dev, "Failed to get PCIE PHY\n");
-> > > +			return PTR_ERR(imx6_pcie->phy);
-> > > +		}
-> > 
-> > A question about handling of the -EPROBE_DEFER above: why not to use
-> > the
-> > dev_err_probe() helper similarly to the code above and below?  Would
-> > there be something different preventing the use of dev_err_probe() here
-> > too?
-> [Richard Zhu] To be aligned, the above one can be replaced totally.
-> I didn't want to dump the error message when -EPROBE_DEFFER occurs.
-> Anyway, I can make them aligned later.
+On Fri, Dec 10, 2021 at 09:43:04AM -0600, Brijesh Singh wrote:
+> The early_set_memory_{encrypt,decrypt}() are used for changing the
+					^
+					ed()
 
-Can you send me an update for this patch only so that I can update
-the corresponding commit according to this review please ?
 
-Thanks,
-Lorenzo
-
-> Best Regards
-> Richard
+> page from decrypted (shared) to encrypted (private) and vice versa.
+> When SEV-SNP is active, the page state transition needs to go through
+> additional steps.
 > 
-> > 
-> > >  		break;
-> > >  	default:
-> > >  		break;
-> > >  	}
-> > > +	/* Don't fetch the pcie_phy clock, if it has abstract PHY driver */
-> > > +	if (imx6_pcie->phy == NULL) {
-> > > +		imx6_pcie->pcie_phy = devm_clk_get(dev, "pcie_phy");
-> > > +		if (IS_ERR(imx6_pcie->pcie_phy))
-> > > +			return dev_err_probe(dev,
-> > PTR_ERR(imx6_pcie->pcie_phy),
-> > > +					     "pcie_phy clock source missing or
-> > invalid\n");
-> > > +	}
-> > 
-> > Thank you for another amazing patch!
-> > 
-> > 	Krzysztof
+> If the page is transitioned from shared to private, then perform the
+> following after the encryption attribute is set in the page table:
+> 
+> 1. Issue the page state change VMGEXIT to add the page as a private
+>    in the RMP table.
+> 2. Validate the page after its successfully added in the RMP table.
+> 
+> To maintain the security guarantees, if the page is transitioned from
+> private to shared, then perform the following before clearing the
+> encryption attribute from the page table.
+> 
+> 1. Invalidate the page.
+> 2. Issue the page state change VMGEXIT to make the page shared in the
+>    RMP table.
+> 
+> The early_set_memory_{encrypt,decrypt} can be called before the GHCB
+
+ditto.
+
+> is setup, use the SNP page state MSR protocol VMGEXIT defined in the GHCB
+> specification to request the page state change in the RMP table.
+> 
+> While at it, add a helper snp_prep_memory() that can be used outside
+> the sev specific files to change the page state for a specified memory
+
+"outside of the sev specific"? What is that trying to say?
+
+/me goes and looks at the whole patchset...
+
+Right, so that is used only in probe_roms(). So that should say:
+
+"Add a helper ... which will be used in probe_roms(), in a later patch."
+
+> range.
+> 
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>  arch/x86/include/asm/sev.h |  10 ++++
+>  arch/x86/kernel/sev.c      | 102 +++++++++++++++++++++++++++++++++++++
+>  arch/x86/mm/mem_encrypt.c  |  51 +++++++++++++++++--
+
+Right, for the next revision, that file is called mem_encrypt_amd.c now.
+
+...
+
+> diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
+> index 3ba801ff6afc..5d19aad06670 100644
+> --- a/arch/x86/mm/mem_encrypt.c
+> +++ b/arch/x86/mm/mem_encrypt.c
+> @@ -31,6 +31,7 @@
+>  #include <asm/processor-flags.h>
+>  #include <asm/msr.h>
+>  #include <asm/cmdline.h>
+> +#include <asm/sev.h>
+>  
+>  #include "mm_internal.h"
+>  
+> @@ -49,6 +50,34 @@ EXPORT_SYMBOL_GPL(sev_enable_key);
+>  /* Buffer used for early in-place encryption by BSP, no locking needed */
+>  static char sme_early_buffer[PAGE_SIZE] __initdata __aligned(PAGE_SIZE);
+>  
+> +/*
+> + * When SNP is active, change the page state from private to shared before
+> + * copying the data from the source to destination and restore after the copy.
+> + * This is required because the source address is mapped as decrypted by the
+> + * caller of the routine.
+> + */
+> +static inline void __init snp_memcpy(void *dst, void *src, size_t sz,
+> +				     unsigned long paddr, bool decrypt)
+> +{
+> +	unsigned long npages = PAGE_ALIGN(sz) >> PAGE_SHIFT;
+> +
+> +	if (!cc_platform_has(CC_ATTR_SEV_SNP) || !decrypt) {
+
+Yeah, looking at this again, I don't really like this multiplexing.
+Let's do this instead, diff ontop:
+
+---
+diff --git a/arch/x86/mm/mem_encrypt_amd.c b/arch/x86/mm/mem_encrypt_amd.c
+index c14fd8254198..e3f7a84449bb 100644
+--- a/arch/x86/mm/mem_encrypt_amd.c
++++ b/arch/x86/mm/mem_encrypt_amd.c
+@@ -49,24 +49,18 @@ EXPORT_SYMBOL(sme_me_mask);
+ static char sme_early_buffer[PAGE_SIZE] __initdata __aligned(PAGE_SIZE);
+ 
+ /*
+- * When SNP is active, change the page state from private to shared before
+- * copying the data from the source to destination and restore after the copy.
+- * This is required because the source address is mapped as decrypted by the
+- * caller of the routine.
++ * SNP-specific routine which needs to additionally change the page state from
++ * private to shared before copying the data from the source to destination and
++ * restore after the copy.
+  */
+ static inline void __init snp_memcpy(void *dst, void *src, size_t sz,
+ 				     unsigned long paddr, bool decrypt)
+ {
+ 	unsigned long npages = PAGE_ALIGN(sz) >> PAGE_SHIFT;
+ 
+-	if (!cc_platform_has(CC_ATTR_SEV_SNP) || !decrypt) {
+-		memcpy(dst, src, sz);
+-		return;
+-	}
+-
+ 	/*
+-	 * With SNP, the paddr needs to be accessed decrypted, mark the page
+-	 * shared in the RMP table before copying it.
++	 * @paddr needs to be accessed decrypted, mark the page shared in the
++	 * RMP table before copying it.
+ 	 */
+ 	early_snp_set_memory_shared((unsigned long)__va(paddr), paddr, npages);
+ 
+@@ -124,8 +118,13 @@ static void __init __sme_early_enc_dec(resource_size_t paddr,
+ 		 * Use a temporary buffer, of cache-line multiple size, to
+ 		 * avoid data corruption as documented in the APM.
+ 		 */
+-		snp_memcpy(sme_early_buffer, src, len, paddr, enc);
+-		snp_memcpy(dst, sme_early_buffer, len, paddr, !enc);
++		if (cc_platform_has(CC_ATTR_SEV_SNP)) {
++			snp_memcpy(sme_early_buffer, src, len, paddr, enc);
++			snp_memcpy(dst, sme_early_buffer, len, paddr, !enc);
++		} else {
++			memcpy(sme_early_buffer, src, len);
++			memcpy(dst, sme_early_buffer, len);
++		}
+ 
+ 		early_memunmap(dst, len);
+ 		early_memunmap(src, len);
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

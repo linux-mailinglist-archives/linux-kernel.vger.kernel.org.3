@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9176A47DD5A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9389C47DD2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:18:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345934AbhLWBR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:17:29 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:27158 "EHLO
+        id S1346450AbhLWBQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:16:18 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:27422 "EHLO
         o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346207AbhLWBOh (ORCPT
+        with ESMTP id S1346263AbhLWBOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:14:37 -0500
+        Wed, 22 Dec 2021 20:14:54 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
         h=from:subject:in-reply-to:references:mime-version:to:cc:
         content-transfer-encoding:content-type;
-        s=sgd; bh=EbITibNsBXzvKKlU+piJIV+uEtgNRqVMqmU3tYGIQcU=;
-        b=xzHrFlKjQzAtjaW8yiDPgKpwVk301omL4rrVVi8w8Wn5+ps/av+vh+5OfXPZEERTPYPt
-        /W99RjK/+Ra1HWGnMvN4BkuLRimUWd3HUT5joH31sv2h9xq+esNyqdoHCAOvTFy+FJRevZ
-        ekxP5YtIX8x9iYHauJ9tEFmtAlvociUKCh8SKNsnABibWrDzZZbzoM3m1O+utHpr7+s4yM
-        ZW6SUsBW8M5pZLX+Ee+75eOiQc3+NsnylO+gY7a3n9fIlt317EgfxB64fageRmVHUsGhMJ
-        pT37rWDgO0SGrLHKUVJ+CiSLRoI/7n9vh78VXlW7zNOnWWG11+xLFDlnj3lm1DvQ==
-Received: by filterdrecv-64fcb979b9-dthbb with SMTP id filterdrecv-64fcb979b9-dthbb-1-61C3CD5E-2A
-        2021-12-23 01:14:06.798901564 +0000 UTC m=+8644642.033288874
+        s=sgd; bh=HXaP0alwXTa+EUaGACQmixi4C0QDifAyWeipd/C364U=;
+        b=SNp27uMOGIAxB3Rg0Io+eW/LkRik1tfEtBcYaHE08DmgMTAgDHrb2m3XbN4Uf41YTFES
+        gNf4zp/MmowjRXFPPRn7GJdq3HTjDfMR0TLmA1/I2W4YSbUEsK/IHI0xsG/x6DVU1wK5ID
+        rF0EG9fuBKCazZFpsllfaWr2DmQSPDlF8m/Ajo7sK3w0WTolQlyl9JtCpKkKIQlBFX3zKg
+        g+jX2rkSvSsRT8fYu0CufKKMw08NU4M0It+ZnLi7BRiZtv7CO8ZduDwHB4qHAlHdj5JBq9
+        fYcGBA0JwnUPFefMOqb/zWBGsl1lo/cGJenxnd3T6c95xgBi3+FLfkCGmedIeFuQ==
+Received: by filterdrecv-7bf5c69d5-v7fwm with SMTP id filterdrecv-7bf5c69d5-v7fwm-1-61C3CD5E-46
+        2021-12-23 01:14:07.013080821 +0000 UTC m=+9687233.251367922
 Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-5-0 (SG)
+        by geopod-ismtpd-1-1 (SG)
         with ESMTP
-        id EaVvzUYwQcujwsJtTuNFnQ
-        Thu, 23 Dec 2021 01:14:06.651 +0000 (UTC)
+        id Fs4muI52RmC81AQUs-BOJQ
+        Thu, 23 Dec 2021 01:14:06.863 +0000 (UTC)
 Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id A1A667014DF; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
+        id C26E2701501; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
 From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH v2 32/50] wilc1000: introduce vmm_table_entry() helper
- function
+Subject: [PATCH v2 40/50] wilc1000: introduce schedule_packets() function
 Date:   Thu, 23 Dec 2021 01:14:07 +0000 (UTC)
-Message-Id: <20211223011358.4031459-33-davidm@egauge.net>
+Message-Id: <20211223011358.4031459-41-davidm@egauge.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211223011358.4031459-1-davidm@egauge.net>
 References: <20211223011358.4031459-1-davidm@egauge.net>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvLgTn20zR8huEqDJ0?=
- =?us-ascii?Q?MxRBKbzqZl9pgBv8ieFLgCozwXIMY+YaD2HCv+S?=
- =?us-ascii?Q?nV6T96yvIyZ5Zej8MBI9aX5ZsbvXSxbkqS1vuYr?=
- =?us-ascii?Q?cpDqKkCkQw1x4o6qvjAf1jgnc7uW=2Fxz=2FU4bUiQI?=
- =?us-ascii?Q?WE2DLHfW4eB0A4NdBmKEkYTqJDR+3jvOxnILRn=2F?=
- =?us-ascii?Q?LD8RoX3h4+jY5OsFcq7iQ=3D=3D?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvMOna4O64C+EU0IbF?=
+ =?us-ascii?Q?+d1EnOG7clc59szXsBOdaG1ztylnbJHADMhMEtQ?=
+ =?us-ascii?Q?p2I=2FxpqLi9YzOWNpcnRckNLLmFj7jbC9J0xuuR=2F?=
+ =?us-ascii?Q?SiFjRfp9lLTFQWhqE0B7hIwOK4vRVe9pgCrPetz?=
+ =?us-ascii?Q?Wevl99UBukZO2hr9CtZZRe42Q8DiAuEGgTpGEK9?=
+ =?us-ascii?Q?eIUDHok9WYhzxohq6oHbQ=3D=3D?=
 To:     Ajay Singh <ajay.kathat@microchip.com>
 Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
         Kalle Valo <kvalo@kernel.org>,
@@ -61,49 +60,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This simplifies fill_vmm_table() a bit more and will become even more
-useful with the following patches.
+Move the packet scheduling code in its own function for improved
+readability.
 
 Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
 ---
- drivers/net/wireless/microchip/wilc1000/wlan.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ .../net/wireless/microchip/wilc1000/wlan.c    | 78 ++++++++++++-------
+ 1 file changed, 50 insertions(+), 28 deletions(-)
 
 diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
-index cff70f7d38c89..5939ed5b2db68 100644
+index 67f5293370d35..f01f7bade6189 100644
 --- a/drivers/net/wireless/microchip/wilc1000/wlan.c
 +++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
-@@ -629,6 +629,17 @@ static u32 tx_hdr_len(u8 type)
- 	}
+@@ -669,22 +669,20 @@ static void set_header(struct wilc *wilc, struct sk_buff *tqe,
  }
  
-+static u32 vmm_table_entry(struct sk_buff *tqe, u32 vmm_sz)
-+{
-+	struct wilc_skb_tx_cb *tx_cb = WILC_SKB_TX_CB(tqe);
-+	u32 entry;
-+
-+	entry = vmm_sz / 4;
-+	if (tx_cb->type == WILC_CFG_PKT)
-+		entry |= WILC_VMM_CFG_PKT;
-+	return cpu_to_le32(entry);
+ /**
+- * fill_vmm_table() - fill VMM table with packets to be sent
++ * schedule_packets() - schedule packets for transmission
+  * @wilc: Pointer to the wilc structure.
++ * @vmm_table_len: Current length of the VMM table.
+  * @vmm_table: Pointer to the VMM table to fill.
+  *
+- * Fill VMM table with packets waiting to be sent.  The packets are
+- * added based on access category (priority) but also balanced to
+- * provide fairness.
+- *
+- * Return:
+- *	The number of VMM entries filled in.  The table is 0-terminated
+- *	so the returned number is at most WILC_VMM_TBL_SIZE-1.
++ * Schedule packets from the access-category queues for transmission.
++ * The scheduling is primarily in order of priority, but also takes
++ * fairness into account.  As many packets as possible are moved to
++ * the chip queue.  The chip queue has space for up to
++ * WILC_VMM_TBL_SIZE packets or up to WILC_TX_BUFF_SIZE bytes.
+  */
+-static int fill_vmm_table(struct wilc *wilc,
+-			  u32 vmm_table[WILC_VMM_TBL_SIZE])
++static int schedule_packets(struct wilc *wilc,
++			    int i, u32 vmm_table[WILC_VMM_TBL_SIZE])
+ {
+-	int i;
+ 	u8 k, ac;
+ 	static const u8 ac_preserve_ratio[NQUEUES] = {1, 1, 1, 1};
+ 	u8 ac_desired_ratio[NQUEUES];
+@@ -694,19 +692,6 @@ static int fill_vmm_table(struct wilc *wilc,
+ 	struct sk_buff *tqe;
+ 	struct wilc_skb_tx_cb *tx_cb;
+ 
+-	i = 0;
+-
+-	if (unlikely(wilc->chipq_bytes > 0)) {
+-		/* fill in packets that are already on the chipq: */
+-		skb_queue_walk(&wilc->chipq, tqe) {
+-			tx_cb = WILC_SKB_TX_CB(tqe);
+-			vmm_sz = tx_hdr_len(tx_cb->type);
+-			vmm_sz += tqe->len;
+-			vmm_sz = ALIGN(vmm_sz, 4);
+-			vmm_table[i++] = vmm_table_entry(tqe, vmm_sz);
+-		}
+-	}
+-
+ 	ac_balance(wilc, ac_desired_ratio);
+ 	num_pkts_to_add = ac_desired_ratio;
+ 	do {
+@@ -718,7 +703,7 @@ static int fill_vmm_table(struct wilc *wilc,
+ 			ac_exist = 1;
+ 			for (k = 0; k < num_pkts_to_add[ac]; k++) {
+ 				if (i >= WILC_VMM_TBL_SIZE - 1)
+-					goto out;
++					return i;
+ 
+ 				tqe = skb_dequeue(&wilc->txq[ac]);
+ 				if (!tqe)
+@@ -732,7 +717,7 @@ static int fill_vmm_table(struct wilc *wilc,
+ 				if (wilc->chipq_bytes + vmm_sz > WILC_TX_BUFF_SIZE) {
+ 					/* return packet to its queue */
+ 					skb_queue_head(&wilc->txq[ac], tqe);
+-					goto out;
++					return i;
+ 				}
+ 				atomic_dec(&wilc->txq_entries);
+ 
+@@ -746,8 +731,45 @@ static int fill_vmm_table(struct wilc *wilc,
+ 		}
+ 		num_pkts_to_add = ac_preserve_ratio;
+ 	} while (ac_exist);
+-out:
+-	vmm_table[i] = 0x0;
++	return i;
 +}
 +
- /**
-  * fill_vmm_table() - Fill VMM table with packets to be sent
-  * @wilc: Pointer to the wilc structure.
-@@ -691,11 +702,7 @@ static int fill_vmm_table(const struct wilc *wilc,
++/**
++ * fill_vmm_table() - fill VMM table with packets to be sent
++ * @wilc: Pointer to the wilc structure.
++ * @vmm_table: Pointer to the VMM table to fill.
++ *
++ * Fill VMM table with packets waiting to be sent.
++ *
++ * Return: The number of VMM entries filled in.  The table is
++ *	0-terminated so the returned number is at most
++ *	WILC_VMM_TBL_SIZE-1.
++ */
++static int fill_vmm_table(struct wilc *wilc, u32 vmm_table[WILC_VMM_TBL_SIZE])
++{
++	int i;
++	int vmm_sz = 0;
++	struct sk_buff *tqe;
++	struct wilc_skb_tx_cb *tx_cb;
++
++	i = 0;
++
++	if (unlikely(wilc->chipq_bytes > 0)) {
++		/* fill in packets that are already on the chipq: */
++		skb_queue_walk(&wilc->chipq, tqe) {
++			tx_cb = WILC_SKB_TX_CB(tqe);
++			vmm_sz = tx_hdr_len(tx_cb->type);
++			vmm_sz += tqe->len;
++			vmm_sz = ALIGN(vmm_sz, 4);
++			vmm_table[i++] = vmm_table_entry(tqe, vmm_sz);
++		}
++	}
++
++	i = schedule_packets(wilc, i, vmm_table);
++	if (i > 0) {
++		WARN_ON(i >= WILC_VMM_TBL_SIZE);
++		vmm_table[i] = 0x0;
++	}
+ 	return i;
+ }
  
- 				if (sum + vmm_sz > WILC_TX_BUFF_SIZE)
- 					goto out;
--				vmm_table[i] = vmm_sz / 4;
--				if (tx_cb->type == WILC_CFG_PKT)
--					vmm_table[i] |= WILC_VMM_CFG_PKT;
--
--				cpu_to_le32s(&vmm_table[i]);
-+				vmm_table[i] = vmm_table_entry(tqe_q[ac], vmm_sz);
- 				vmm_entries_ac[i] = ac;
- 
- 				i++;
 -- 
 2.25.1
 

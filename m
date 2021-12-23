@@ -2,129 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D17CB47E03C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 09:16:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF00347E042
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 09:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347111AbhLWIQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 03:16:23 -0500
-Received: from mga01.intel.com ([192.55.52.88]:28533 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239315AbhLWIQT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 03:16:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640247379; x=1671783379;
+        id S242708AbhLWITk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 03:19:40 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:39298 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235068AbhLWITj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 03:19:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1640247579; x=1671783579;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ZGjf2BsKqKmCiWOumvWShxieb989cWfWjiqvu1NglXs=;
-  b=MPy80rf2L6+okhZooKZsS6kol3HUmSV+ppp/wj0T6TfjZ1Em3JKJkt0E
-   JekETYww5G6HsvZCzYxlGz9RkqsTtYx7NCemLmGqIdKbVucxHs7v2n0zG
-   wlmkqONKwNY3OhN1WBCYS1VVylVzk1E99u0TcRtOoeCg5GWRejKPEzkbO
-   7iPoMimD2qFm2WRu8FXBD09dza/0WopgA720tkJJia6kzKuv0JxhUM2gj
-   qt13WxbTLvTW7ZYqjrw2dShsO6NM3TsyefYNSSfYLpWaqUdOj7DtLb2iL
-   o9UZPF72CcMv9n3yT3zqUVH0xhq6DtzM3BrP37Sxw3nRb5ejQrC2x5OpM
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="264990671"
+  bh=JRoAnEY3r8cgHd59JP9JgzeC0rdQQn8RTC7yoR73nTo=;
+  b=FtxLEB5RX5f9E9QcVVhmpHrsvkLpJrRFRkiaTLFpFYxaRXBQvHEm7lDB
+   MQHgRApDYo4KIgG9PpCOFjFXYTb3AgSplXe5bY0eK5rZZV6srH9VRMp6W
+   fx2oqz8vYiWmMKJEqs3IuOj2S+nDWS20LpSY6Em4Ixm2cB7wnybp5g6+e
+   L5ZTzbzZRCnyY6oV3+2GU9nmE5aFucZoCLmuiGcGd/Ffnav+CcX71t5Vx
+   IjoKzrNmkPmEfZ2TjaWGbpaudyMBzUYFVBYuDcqhqa76f+TtnMPLkH3vh
+   jA/6gSKxssX0m13UrTrEnqSrH9C4+zWW3p6ooYeFc2Bbyt+slQlusjQGh
+   Q==;
+IronPort-SDR: WZDh+lJxetnRjEE4izqzl818toaMq8pJDzi/H12mKRCqXDTHWWKa6yGvwOHYZlEXl2wQCkKJQy
+ vdDFSfT46mzz1suMCM6/LvrH46+sGKHDHM3F08SSlNsqXiVsYx3wqeOov2bjPQ6IH8u89QSLLp
+ m3jcIZDN11fjrETYOl1N2B7pNRcXFdEXx5fcK7VZEOpH6Z7Rl53zD8EPAkhTkDZtzNlRa5hbtg
+ 70nUSfXVKXOyJpQkTm+oYhyE5nu7V/aLTW3BuHXzHLeiXLapKAc7cnClOtbsfWeRYVnFPqCnlU
+ Q5/zFqbmskwKDAJWQwf6cWvY
 X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="264990671"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 00:16:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="664515517"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Dec 2021 00:16:17 -0800
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 2/5] acpi: Store CRC-32 hash of the _PLD in struct acpi_device
-Date:   Thu, 23 Dec 2021 11:16:17 +0300
-Message-Id: <20211223081620.45479-3-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211223081620.45479-1-heikki.krogerus@linux.intel.com>
-References: <20211223081620.45479-1-heikki.krogerus@linux.intel.com>
+   d="scan'208";a="140688299"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Dec 2021 01:19:38 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 23 Dec 2021 01:19:38 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 23 Dec 2021 01:19:36 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>, <michael@walle.cc>,
+        <vigneshr@ti.com>, <p.yadav@ti.com>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mtd: spi-nor: Constify part specific fixup hooks
+Date:   Thu, 23 Dec 2021 10:19:34 +0200
+Message-ID: <164024756845.186441.13039859160300606228.b4-ty@microchip.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211106102915.153552-1-tudor.ambarus@microchip.com>
+References: <20211106102915.153552-1-tudor.ambarus@microchip.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Storing CRC-32 hash of the Physical Location of Device
-object (_PLD) with devices that have it. The hash is stored
-to a new struct acpi_device member "pld_crc".
+On Sat, 6 Nov 2021 12:29:15 +0200, Tudor Ambarus wrote:
+> Respect flash_info structure declaration.
 
-The hash makes it easier to find devices that share a
-location, as there is no need to evaluate the entire object
-every time. Knowledge about devices that share a location
-can be used in device drivers that need to know the
-connections to other components inside a system. USB3 ports
-will for example always share their location with a USB2
-port.
+Applied to spi-nor/next, thanks!
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/acpi/scan.c     | 16 ++++++++++++++++
- include/acpi/acpi_bus.h |  1 +
- 2 files changed, 17 insertions(+)
+[1/1] mtd: spi-nor: Constify part specific fixup hooks
+      https://git.kernel.org/mtd/c/65b54ff67afa
 
-diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-index 7ff55a197a583..113414c46b713 100644
---- a/drivers/acpi/scan.c
-+++ b/drivers/acpi/scan.c
-@@ -19,6 +19,7 @@
- #include <linux/dma-map-ops.h>
- #include <linux/platform_data/x86/apple.h>
- #include <linux/pgtable.h>
-+#include <linux/crc32.h>
- 
- #include "internal.h"
- 
-@@ -667,6 +668,19 @@ static int acpi_tie_acpi_dev(struct acpi_device *adev)
- 	return 0;
- }
- 
-+static void acpi_store_pld_crc(struct acpi_device *adev)
-+{
-+	struct acpi_pld_info *pld;
-+	acpi_status status;
-+
-+	status = acpi_get_physical_device_location(adev->handle, &pld);
-+	if (ACPI_FAILURE(status))
-+		return;
-+
-+	adev->pld_crc = crc32(~0, pld, sizeof(*pld));
-+	ACPI_FREE(pld);
-+}
-+
- static int __acpi_device_add(struct acpi_device *device,
- 			     void (*release)(struct device *))
- {
-@@ -725,6 +739,8 @@ static int __acpi_device_add(struct acpi_device *device,
- 	if (device->wakeup.flags.valid)
- 		list_add_tail(&device->wakeup_list, &acpi_wakeup_device_list);
- 
-+	acpi_store_pld_crc(device);
-+
- 	mutex_unlock(&acpi_device_lock);
- 
- 	if (device->parent)
-diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-index 8e87ead2af341..f8c945418df23 100644
---- a/include/acpi/acpi_bus.h
-+++ b/include/acpi/acpi_bus.h
-@@ -360,6 +360,7 @@ struct acpi_gpio_mapping;
- 
- /* Device */
- struct acpi_device {
-+	u32 pld_crc;
- 	int device_type;
- 	acpi_handle handle;		/* no handle for fixed hardware */
- 	struct fwnode_handle fwnode;
+Best regards,
 -- 
-2.34.1
-
+Tudor Ambarus <tudor.ambarus@microchip.com>

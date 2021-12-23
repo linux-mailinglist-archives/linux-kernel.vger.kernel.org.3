@@ -2,100 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 197C847E93B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 22:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0B547E93E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 22:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350397AbhLWV4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 16:56:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
+        id S245286AbhLWV7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 16:59:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350360AbhLWV4B (ORCPT
+        with ESMTP id S240782AbhLWV67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 16:56:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F79AC061401;
-        Thu, 23 Dec 2021 13:56:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48DDC61DF1;
-        Thu, 23 Dec 2021 21:56:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06346C36AE5;
-        Thu, 23 Dec 2021 21:55:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640296559;
-        bh=dr7iVkk0LkwcDcx/bOyQpEUgPSkNDbhiM8ZpQoQDc7U=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=SiEbRSIjWiVgUYMZWSaX6jGvqtMgeVnC8EWeOotCHKOtmkqiCUTl+M84gYJnbsJjY
-         1MXwWdPhmMk+W+207p+H4QMR1aPHemvvuQXIrwWC/7/u/N3xFRiIUBuiEktw7EAKFg
-         8h8wALf996Z0MqsdiKNSZLEG0L7qdL6vVQRRUhkS5uOfUH4Mepj1D8xnCuXtdKPglu
-         b0MOnqf11OVWqPlMzNc/OXH36DhrX/DKHOWJRNCi/ehMbOziFwJAGBa64eagiCxE6J
-         ArmLBgS5XDkC2SUvyM1SP6YZCWxFOHx5vDgpJ9chKY4icVB5/NQ/aunGo6RS7oc6m/
-         rnvd8MKduyB8g==
-Subject: Re: linux-next: manual merge of the nand tree with the drivers-memory
- tree
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20211223104704.35fa3a41@canb.auug.org.au>
- <ce08a9b7-4fc5-2cc7-2a5a-dbab6eabea14@canonical.com>
-From:   Roger Quadros <rogerq@kernel.org>
-Message-ID: <e189f3c2-7b3d-39d6-6717-ad6558638a1b@kernel.org>
-Date:   Thu, 23 Dec 2021 23:55:55 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 23 Dec 2021 16:58:59 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C116C061401;
+        Thu, 23 Dec 2021 13:58:59 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id y22so26426123edq.2;
+        Thu, 23 Dec 2021 13:58:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=tHmZrintmsfr/VUUizaz4/mfgzPKrPwPFlMKH0k4wW8=;
+        b=ipD+HLnlhbtF6BV3FwaIg6tOcqXdp69mRp4zQVgF2PPERKLDZvuhKmjRZVzdMxAvY5
+         d+8U6MMfdpx5w13OLnFpn9dDTFWTckl4I1cAxClgpuSB7y3F6HeBe3toAhnvyWP5UNZu
+         5hojP4ilGIcfK5AyhYWN5uaZbv4PTCGLZqCO3zlShYz8LvoKdx9AgqqyoNltCp7Sj6H9
+         JCXGKIJcJ4VtIon+I93Do/vBx1UCZnSJQZkoLKtQW256JYL6pTcAWG1pEYtEwp4+W9cw
+         qYDs22587Fedpgyp0ci35fRY8wGxC5hpEjU1xFlv6uiyUsgQ0kA4RxyUKHngMvWahvNS
+         gFZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tHmZrintmsfr/VUUizaz4/mfgzPKrPwPFlMKH0k4wW8=;
+        b=iZDDVWvUNDcs6h+GTwGDQVPNH8ESnZnf+1JrNeWcuEqOKaxHSspvuucrBfMjXLaJJ+
+         Fm44sXXfp35QQrYEEEv0oc/T8KVWQpnnvHwTT6nJAr3MfzYBnQESf4Cx2drfGAfqptWp
+         3dNchokqhad7WqjqHkV/y+hu3W/4CTOMeT+0S07dH1kQi4SAG3lxy90Zmeq/i5s1wXSN
+         dCxbi/8kNKL+uumilMLKxg1+yBASB/sCMP/Jw/nVgheN619wVHamvuixIgvRELLVHTsC
+         JGq5W+VOVpFQoJpcOzxm7/hbc4W6kHDT7Cd+8gV3cwlbrZ2RLWC7z/FUb93lo9feoIya
+         Ewfg==
+X-Gm-Message-State: AOAM530GEP77JMbhf2XeUIf2R2ppMTM2tBW/fKA0vX7+ZK8zmGdxH7Ev
+        hdp6oOGJTDCYy34RITOffxbOssF6Tlk=
+X-Google-Smtp-Source: ABdhPJzBQxAu318JRQ9x+W/KUbHqz2Qhd+rfY/gTD5nSlsGqJ/FRrGyV/k+ErGGpME4ZLkuB4rzx6g==
+X-Received: by 2002:aa7:d2d1:: with SMTP id k17mr3650108edr.250.1640296737531;
+        Thu, 23 Dec 2021 13:58:57 -0800 (PST)
+Received: from [192.168.1.41] (83.25.198.180.ipv4.supernova.orange.pl. [83.25.198.180])
+        by smtp.googlemail.com with ESMTPSA id gt17sm2116379ejc.151.2021.12.23.13.58.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Dec 2021 13:58:57 -0800 (PST)
+Message-ID: <f173d7a6-70e7-498f-8a04-b025c75f2b66@gmail.com>
+Date:   Thu, 23 Dec 2021 22:58:56 +0100
 MIME-Version: 1.0
-In-Reply-To: <ce08a9b7-4fc5-2cc7-2a5a-dbab6eabea14@canonical.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH 3/5] dt-bindings: nvmem: allow referencing device defined
+ cells by names
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20211223110755.22722-1-zajec5@gmail.com>
+ <20211223110755.22722-4-zajec5@gmail.com>
+ <CAL_JsqK2TMu+h4MgQqjN0bvEzqdhsEviBwWiiR9hfNbC5eOCKg@mail.gmail.com>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <CAL_JsqK2TMu+h4MgQqjN0bvEzqdhsEviBwWiiR9hfNbC5eOCKg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 23/12/2021 23:17, Krzysztof Kozlowski wrote:
-> On 23/12/2021 00:47, Stephen Rothwell wrote:
->> Hi all,
+On 23.12.2021 22:18, Rob Herring wrote:
+> On Thu, Dec 23, 2021 at 7:08 AM Rafał Miłecki <zajec5@gmail.com> wrote:
 >>
->> Today's linux-next merge of the nand tree got a conflict in:
+>> From: Rafał Miłecki <rafal@milecki.pl>
 >>
->>   drivers/mtd/nand/raw/omap2.c
+>> Not every NVMEM has predefined cells at hardcoded addresses. Some
+>> devices store cells in internal structs and custom formats. Referencing
+>> such cells is still required to let other bindings use them.
 >>
->> between commit:
->>
->>   f2f8115fe8b3 ("memory: omap-gpmc: Use a compatible match table when checking for NAND controller")
->>
->> from the drivers-memory tree and commit:
->>
->>   0137c74ad873 ("mtd: rawnand: omap2: Add compatible for AM64 SoC")
->>
->> from the nand tree.
->>
->> I fixed it up (I used the former version and added the following patch)
->> and can carry the fix as necessary. This is now fixed as far as linux-next
->> is concerned, but any non trivial conflicts should be mentioned to your
->> upstream maintainer when your tree is submitted for merging.  You may
->> also want to consider cooperating with the maintainer of the conflicting
->> tree to minimise any particularly complex conflicts.
->>
+>> Modify binding to require "reg" xor "label". The later one can be used
+>> to match "dynamic" NVMEM cells by their names.
 > 
-> Thanks Stephen, the fix looks correct.
-> 
-> Roger,
-> It seems you sent two separate patches touching exactly the same files
-> recently for two different trees. One for memory controllers moving the
-> NAND ids and second for MTD tree with adding new compatible.
-> Please don't, instead second should base on the other and these should
-> go via one tree. This is a non-trivial conflict which could be avoided.
+> 'label' is supposed to correspond to a sticker on a port or something
+> human identifiable. It generally should be something optional to
+> making the OS functional. Yes, there are already some abuses of that,
+> but this case is too far for me.
 
-Thanks Stephen and Krzysztof.
+Good to learn that!
 
-Sorry for the trouble. I will be more careful next time.
+"name" is special & not allowed I think.
 
-cheers,
--roger
+Any suggestion what to use? I'm not native. What about "title"? Or maybe
+"term", "entity", "tag"?
+

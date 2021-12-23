@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A4D47DD37
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0626247DD25
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346454AbhLWBQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:16:32 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:27384 "EHLO
+        id S1346742AbhLWBQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:16:07 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:27334 "EHLO
         o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346254AbhLWBOu (ORCPT
+        with ESMTP id S1346237AbhLWBOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:14:50 -0500
+        Wed, 22 Dec 2021 20:14:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
         h=from:subject:in-reply-to:references:mime-version:to:cc:
         content-transfer-encoding:content-type;
-        s=sgd; bh=GoRCB1qp+NT2deD6O9F/OqL86QNfyIxkoZDwvyfsbMo=;
-        b=lFqhO/+PNUc/uADkjVfHwOdQFkGTAjnHitQFjZGkikHzAXCIZE87fwv0ZgPt4pTmm+/H
-        GN6K/yYa6m+WN168nBItYqvn+jF3U67cf/1453LvM9bY5PCIH0m4IiNUWz2TvYGSRhZdup
-        JSFFiBrIKkTSLwQ2AikuTMms+3tUCTF7LlKJSSG2iE0vDVUzx8+kUAlZqFza0n3VsFmspT
-        XMiKp3JHjVLR0ii+k3OB2Si42NReWF3wr7PDChcr5CV1ptFvhpug5H+6EOsVaPY65ZG3CZ
-        9ZBjf7viyaOJBawFKsTbFBO1NLr6upwsB4GMAGpETcZssOhqPE+R7xRm8c36q6Vw==
-Received: by filterdrecv-75ff7b5ffb-bdt5z with SMTP id filterdrecv-75ff7b5ffb-bdt5z-1-61C3CD5E-4A
-        2021-12-23 01:14:06.973210454 +0000 UTC m=+9687191.495886346
+        s=sgd; bh=yps8dWzMUKU9RpPhjdHxIE2MYXvMyKmHNVpEu8C+Av8=;
+        b=YDmkak+OJEFHYXe/bj0Hi6XL2ELKUc4fCQN0z5nFM2oYV6GPyJxBnSq9OPl6vD1wKRHA
+        cOcYfPSCr3Eckn5sQ4WMg/PwZIf6yjIPG9KgH8qSbL3TfcKGTfo3mIrcm/KuaUg+Fww3ch
+        M03YDD0sBTbfHuCZFpFHard5V3ByPZK66/6RACPSdLgc6lgNBuBOu38VdUbEfrIUR4jNXc
+        WVC+ivPgLdV6s7LL1FPa1EHQ5Pu05r+Ry5C7lBNumIwlMeHLccJ7hl0A1x2uon7n6DF4ZP
+        vlRBywOeK3Atj11UpaYoWdlKgueDtgXMsgbDFpwAzU9oVNjYWTRd9iiBK9jUQG2Q==
+Received: by filterdrecv-656998cfdd-phncc with SMTP id filterdrecv-656998cfdd-phncc-1-61C3CD5F-4
+        2021-12-23 01:14:07.130091855 +0000 UTC m=+7955208.316338637
 Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-2-0 (SG)
+        by geopod-ismtpd-6-0 (SG)
         with ESMTP
-        id j9HPaFX1RKqwFyYUORk8dQ
-        Thu, 23 Dec 2021 01:14:06.858 +0000 (UTC)
+        id cnVlM2Y7Qw-Hv8JFSNpx_A
+        Thu, 23 Dec 2021 01:14:06.990 +0000 (UTC)
 Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id B9D61700BB0; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
+        id 20C9E700BFC; Wed, 22 Dec 2021 18:14:06 -0700 (MST)
 From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH v2 37/50] wilc1000: introduce set_header() function
+Subject: [PATCH v2 50/50] wilc1000: add module parameter
+ "disable_zero_copy_tx" to SPI driver
 Date:   Thu, 23 Dec 2021 01:14:07 +0000 (UTC)
-Message-Id: <20211223011358.4031459-38-davidm@egauge.net>
+Message-Id: <20211223011358.4031459-51-davidm@egauge.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211223011358.4031459-1-davidm@egauge.net>
 References: <20211223011358.4031459-1-davidm@egauge.net>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvN1V65Kxvy8FSt8Tq?=
- =?us-ascii?Q?vXxPJ4NYhhzW59EiQOJdXjEbKiDG1I=2FgLb8fMJL?=
- =?us-ascii?Q?j1arpTJuPbRzYLx7qBu=2FkxTrwwnlEmsfK8WpYLk?=
- =?us-ascii?Q?Nhy5X1vMIHD1JBHK+oImfhoisLADN1rbvuKAouo?=
- =?us-ascii?Q?BGw9P5d7tPbU83XrZsdRY71=2FNJO0csLg7k12RBs?=
- =?us-ascii?Q?oHUkU2AyywpmG4YM3XwEw=3D=3D?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvNU=2FAiSwPXGwNeF4R?=
+ =?us-ascii?Q?8pktv6qIQV9=2FvaYSYgd73qzUc+WcF+3KTLAn0Dz?=
+ =?us-ascii?Q?BHXeSqbDC7G4R7ZfYu1EAHyy3Sq2tG4byisGyd2?=
+ =?us-ascii?Q?qmo38tC9F5T2qmg=2Fpn8TXE3jyaOiU+UDITPGro4?=
+ =?us-ascii?Q?e5Jq6l2P2YbawALWFgyfe3o6Pmduip+K2qFF1qs?=
+ =?us-ascii?Q?=2F7vQHUWDarfmxjBGFKTPw=3D=3D?=
 To:     Ajay Singh <ajay.kathat@microchip.com>
 Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
         Kalle Valo <kvalo@kernel.org>,
@@ -60,110 +61,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Refactor the transmit packet header initialization into its own
-set_header() function.
+Add a module parameter to disable the zero-copy transmit path.  This
+is useful for testing and performance measurement, for example.
 
 Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
 ---
- .../net/wireless/microchip/wilc1000/wlan.c    | 56 +++++++++++--------
- 1 file changed, 33 insertions(+), 23 deletions(-)
+ drivers/net/wireless/microchip/wilc1000/spi.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
-index c3802a34defed..86b945e5ee076 100644
---- a/drivers/net/wireless/microchip/wilc1000/wlan.c
-+++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
-@@ -640,6 +640,37 @@ static u32 vmm_table_entry(struct sk_buff *tqe, u32 vmm_sz)
- 	return cpu_to_le32(entry);
+diff --git a/drivers/net/wireless/microchip/wilc1000/spi.c b/drivers/net/wireless/microchip/wilc1000/spi.c
+index 8d94f111ffc49..588cec326a74b 100644
+--- a/drivers/net/wireless/microchip/wilc1000/spi.c
++++ b/drivers/net/wireless/microchip/wilc1000/spi.c
+@@ -31,6 +31,11 @@ MODULE_PARM_DESC(enable_crc16,
+ 		 "\t\t\tData transfers can be large and the CPU-cycle cost\n"
+ 		 "\t\t\tof enabling this may be substantial.");
+ 
++static bool disable_zero_copy_tx;
++module_param(disable_zero_copy_tx, bool, 0644);
++MODULE_PARM_DESC(disable_zero_copy_tx,
++		 "Disable zero-copy when sending packets.");
++
+ /*
+  * For CMD_SINGLE_READ and CMD_INTERNAL_READ, WILC may insert one or
+  * more zero bytes between the command response and the DATA Start tag
+@@ -41,7 +46,7 @@ MODULE_PARM_DESC(enable_crc16,
+  */
+ #define WILC_SPI_RSP_HDR_EXTRA_DATA	8
+ 
+-static const struct wilc_hif_func wilc_hif_spi;
++static struct wilc_hif_func wilc_hif_spi;
+ 
+ static int wilc_spi_reset(struct wilc *wilc);
+ static int wilc_spi_write_sk_buffs(struct wilc *wilc, u32 addr,
+@@ -254,6 +259,9 @@ static int wilc_bus_probe(struct spi_device *spi)
+ 	if (!spi_priv)
+ 		return -ENOMEM;
+ 
++	if (!disable_zero_copy_tx)
++		wilc_hif_spi.hif_sk_buffs_tx = wilc_spi_write_sk_buffs;
++
+ 	ret = wilc_cfg80211_init(&wilc, &spi->dev, WILC_HIF_SPI, &wilc_hif_spi);
+ 	if (ret)
+ 		goto free;
+@@ -1424,7 +1432,7 @@ static int wilc_spi_sync_ext(struct wilc *wilc, int nint)
  }
  
-+/**
-+ * set_header() - set WILC-specific header
-+ * @wilc: Pointer to the wilc structure.
-+ * @tqe: The packet to add to the chip queue.
-+ * @vmm_sz: The final size of the packet, including VMM header and padding.
-+ * @hdr: Pointer to the header to set
-+ */
-+static void set_header(struct wilc *wilc, struct sk_buff *tqe,
-+		       u32 vmm_sz, void *hdr)
-+{
-+	struct wilc_skb_tx_cb *tx_cb = WILC_SKB_TX_CB(tqe);
-+	u32 mgmt_pkt = 0, vmm_hdr, prio, data_len = tqe->len;
-+	struct wilc_vif *vif;
-+
-+	/* add the VMM header word: */
-+	if (tx_cb->type == WILC_MGMT_PKT)
-+		mgmt_pkt = FIELD_PREP(WILC_VMM_HDR_MGMT_FIELD, 1);
-+	vmm_hdr = cpu_to_le32(mgmt_pkt |
-+			      FIELD_PREP(WILC_VMM_HDR_TYPE, tx_cb->type) |
-+			      FIELD_PREP(WILC_VMM_HDR_PKT_SIZE, data_len) |
-+			      FIELD_PREP(WILC_VMM_HDR_BUFF_SIZE, vmm_sz));
-+	memcpy(hdr, &vmm_hdr, 4);
-+
-+	if (tx_cb->type == WILC_NET_PKT) {
-+		vif = netdev_priv(tqe->dev);
-+		prio = cpu_to_le32(tx_cb->q_num);
-+		memcpy(hdr + 4, &prio, sizeof(prio));
-+		memcpy(hdr + 8, vif->bssid, ETH_ALEN);
-+	}
-+}
-+
- /**
-  * fill_vmm_table() - Fill VMM table with packets to be sent
-  * @wilc: Pointer to the wilc structure.
-@@ -827,7 +858,6 @@ static int copy_packets(struct wilc *wilc, int entries, u32 *vmm_table,
- 	u8 ac_pkt_num_to_chip[NQUEUES] = {0, 0, 0, 0};
- 	struct wilc_skb_tx_cb *tx_cb;
- 	u8 *txb = wilc->tx_buffer;
--	struct wilc_vif *vif;
- 	int i, vmm_sz;
- 	u32 offset;
- 
-@@ -835,9 +865,7 @@ static int copy_packets(struct wilc *wilc, int entries, u32 *vmm_table,
- 	i = 0;
- 	do {
- 		struct sk_buff *tqe;
--		u32 header, buffer_offset;
--		char *bssid;
--		u8 mgmt_ptk = 0;
-+		u32 buffer_offset;
- 
- 		tqe = skb_dequeue(&wilc->txq[vmm_entries_ac[i]]);
- 		if (!tqe)
-@@ -845,7 +873,6 @@ static int copy_packets(struct wilc *wilc, int entries, u32 *vmm_table,
- 
- 		atomic_dec(&wilc->txq_entries);
- 		ac_pkt_num_to_chip[vmm_entries_ac[i]]++;
--		vif = netdev_priv(tqe->dev);
- 		tx_cb = WILC_SKB_TX_CB(tqe);
- 		if (vmm_table[i] == 0)
- 			break;
-@@ -854,25 +881,8 @@ static int copy_packets(struct wilc *wilc, int entries, u32 *vmm_table,
- 		vmm_sz = FIELD_GET(WILC_VMM_BUFFER_SIZE, vmm_table[i]);
- 		vmm_sz *= 4;
- 
--		if (tx_cb->type == WILC_MGMT_PKT)
--			mgmt_ptk = 1;
--
--		header = (FIELD_PREP(WILC_VMM_HDR_TYPE, tx_cb->type) |
--			  FIELD_PREP(WILC_VMM_HDR_MGMT_FIELD, mgmt_ptk) |
--			  FIELD_PREP(WILC_VMM_HDR_PKT_SIZE, tqe->len) |
--			  FIELD_PREP(WILC_VMM_HDR_BUFF_SIZE, vmm_sz));
--
--		cpu_to_le32s(&header);
--		memcpy(&txb[offset], &header, 4);
- 		buffer_offset = tx_hdr_len(tx_cb->type);
--		if (tx_cb->type == WILC_NET_PKT) {
--			int prio = tx_cb->q_num;
--
--			bssid = vif->bssid;
--			memcpy(&txb[offset + 4], &prio, sizeof(prio));
--			memcpy(&txb[offset + 8], bssid, 6);
--		}
--
-+		set_header(wilc, tqe, vmm_sz, txb + offset);
- 		memcpy(&txb[offset + buffer_offset], tqe->data, tqe->len);
- 		offset += vmm_sz;
- 		i++;
+ /* Global spi HIF function table */
+-static const struct wilc_hif_func wilc_hif_spi = {
++static struct wilc_hif_func wilc_hif_spi = {
+ 	.hif_init = wilc_spi_init,
+ 	.hif_deinit = wilc_spi_deinit,
+ 	.hif_read_reg = wilc_spi_read_reg,
+@@ -1436,7 +1444,6 @@ static const struct wilc_hif_func wilc_hif_spi = {
+ 	.hif_read_size = wilc_spi_read_size,
+ 	.hif_block_tx_ext = wilc_spi_write,
+ 	.hif_block_rx_ext = wilc_spi_read,
+-	.hif_sk_buffs_tx = wilc_spi_write_sk_buffs,
+ 	.hif_sync_ext = wilc_spi_sync_ext,
+ 	.hif_reset = wilc_spi_reset,
+ };
 -- 
 2.25.1
 

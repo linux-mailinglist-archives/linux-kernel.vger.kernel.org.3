@@ -2,208 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C65047E671
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 17:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E9047E679
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 17:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349261AbhLWQg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 11:36:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:45867 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1349246AbhLWQg2 (ORCPT
+        id S1349273AbhLWQh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 11:37:57 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:40824 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240125AbhLWQh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 11:36:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640277387;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VnMgFshQCk4H2aviO2aDotAcxDTpL1gsve23sQb3mus=;
-        b=COyr+qfeRNDZPF1C1Fq81yz7+GvGr0nkRG0c+owPy0kCP+a3E5mKjEoh35jXpiw/p2HXcR
-        XGYSVS60iPq9IloymslV7BZTagWvho+dd6b42OwqG9pQbYNJqzvB+Ne20KSj/MX1I8IklQ
-        Flf6MZCysyJ1BHPFXpyqZ6O0vIBnkKs=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-145-WdSAfTdaN0OsFwWX-l3XWQ-1; Thu, 23 Dec 2021 11:36:26 -0500
-X-MC-Unique: WdSAfTdaN0OsFwWX-l3XWQ-1
-Received: by mail-ed1-f72.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso4862975edt.20
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 08:36:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VnMgFshQCk4H2aviO2aDotAcxDTpL1gsve23sQb3mus=;
-        b=zIea3NNwpPtt543m4Z9Y6v/kYll1FuKji59Aj3FIM1Q4o+Zd/vaZ52TlKstBXJ476Q
-         I3eSu0wSvdbCjm8EZX9ax8BFZC/CumyXLjcPEs93kr/vvEEP9mGWux71+fuyfYO1/c6d
-         pTH6czBkq27jU8lR41mCSuOLSwtwpQlK2eIGEWwVWyCFcBQS0v0nzqmzYqW8cH+t2I7u
-         aullfRlLgrzcGMgarLUTnvBK2bIGI1bXWO6hEMg+/7BuQ0Bq6VOO/ceY6uOQyCnzMgA4
-         cmzXUWp9lAOStXVdROR9wI/9eAMwLeRDQVP9xIMaR/omH2XBqyRYHVbvbc5fNY1oUejw
-         EmZw==
-X-Gm-Message-State: AOAM531ivFsVLqUbaRTVtLbtGD7Jf+Oo8oC4su3SI+TkrmaMYBo8VlOY
-        emhmP+V3UUHLR0//t9P3RDVBMiyl/2Lut9aqBa/fbQzWa7Rp5h/VXr5QsHl4nVjrclZHqtZNzWS
-        MYdTEfo58KZrufx10ziELCPfx
-X-Received: by 2002:a05:6402:4386:: with SMTP id o6mr2718878edc.47.1640277385410;
-        Thu, 23 Dec 2021 08:36:25 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJybYzBVsP6qb8DsgTwNs41sNtraY7y2+U2l4h5Ei5i/50HTzdvEGT1u4q5PFrTjOTqU1QpfDQ==
-X-Received: by 2002:a05:6402:4386:: with SMTP id o6mr2718865edc.47.1640277385250;
-        Thu, 23 Dec 2021 08:36:25 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id p7sm2134763edu.84.2021.12.23.08.36.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Dec 2021 08:36:24 -0800 (PST)
-Message-ID: <31a528b8-8318-dc09-3a06-80f76771744a@redhat.com>
-Date:   Thu, 23 Dec 2021 17:36:24 +0100
+        Thu, 23 Dec 2021 11:37:57 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5B4761DEB;
+        Thu, 23 Dec 2021 16:37:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE709C36AE9;
+        Thu, 23 Dec 2021 16:37:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640277476;
+        bh=I9a8MK1bhxraYlvGnDhWvhoRW/AU+35GD1j/Ku3yvJw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=D0sa+/eqq0bqcZINEkvF4aGoeNYXBZwW2h6cio461cdRY0uWRcqAE6o7Hd1PdLlkw
+         BzLxuIFaOJ2O2gCtWuuBk45VnicC+wjU7JWhfciRTWJQGaSvSzhAjoXMZ+CVvBOJOR
+         Cya3TNlSdW/GSyevnMB4aGVJiDI4HI6YGjjqA/8thS8A1K1k0yRbiWUdqcKU5Tuieo
+         J3/62yRBJuzfzWd/9d++bIiCS2zpa3sMY3NiUZGvRGA4TGR02F9QmfNDN4vEDgDE6D
+         xufritCx5bj+Fmsrby/BdVhzT4G+w3zNtE5EKb6fYYDedc8rN1P6kM0X3vVxFSks6I
+         Fvrpgjt4G1MwA==
+Date:   Thu, 23 Dec 2021 10:37:54 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: Re: [PATCH v2] PCI: Fix Intel i210 by avoiding overlapping of BARs
+Message-ID: <20211223163754.GA1267351@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] ACPI: battery: Add the ThinkPad "Not Charging" quirk
-Content-Language: en-US
-To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
-        linux-acpi@vger.kernel.org, Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, markpearson@lenovo.com,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Ognjen Galic <smclt30p@gmail.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Bastien Nocera <hadess@hadess.net>,
-        David Zeuthen <davidz@redhat.com>,
-        Richard Hughes <richard@hughsie.com>
-References: <20211222212014.66971-1-linux@weissschuh.net>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20211222212014.66971-1-linux@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <39ecedffaf8e2ee931379de7e2f7924f@walle.cc>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Thu, Dec 23, 2021 at 10:27:15AM +0100, Michael Walle wrote:
+> Am 2021-12-21 18:48, schrieb Bjorn Helgaas:
+> > [+to Jesse, Tony for Intel advice;
+> > beginning of thread:
+> > https://lore.kernel.org/all/20201230185317.30915-1-michael@walle.cc/]
+> > 
+> > On Mon, Dec 20, 2021 at 06:43:03PM +0100, Michael Walle wrote:
+> > > ...
+> > > ping #4
+> > > 
+> > > In a few days this is a year old. Please have a look at it and
+> > > either add my quirk patch or apply your patch. This is still
+> > > breaking i210 on my board.
+> > > 
+> > > TBH, this is really frustrating.
+> > 
+> > You are right to be frustrated.  I'm very sorry that I have dropped
+> > the ball on this.  Thanks for reminding me *again*.
+> > 
+> > I think we agree that this looks like an I210 defect.  I210 should
+> > ignore the ROM BAR contents unless PCI_ROM_ADDRESS_ENABLE is set.  It
+> > would be great if an Intel person could confirm/deny this and supply
+> > an erratum reference and verify the affected device IDs.
+> > 
+> > It seems that when the BARs are programmed like this:
+> > 
+> >   BAR 0: 0x40000000 (32-bit, non-prefetchable) [size=1M]
+> >   BAR 3: 0x40200000 (32-bit, non-prefetchable) [size=16K]
+> >   ROM:   0x40200000 (disabled) [size=1M]
+> > 
+> > networking doesn't work at all and the transmit queue times out.
+> > 
+> > Linux assigns non-overlapping address space to the ROM BAR, but
+> > pci_std_update_resource() currently doesn't update the BAR itself
+> > unless it is enabled.
+> > 
+> > My proposal [1] worked around the defect by always updating the BAR,
+> > but there's no clue that this covers up the I210 issue, so it remains
+> > as sort of a land mine.  A future change could re-expose the problem,
+> > so I don't think this was a good approach.
+> > 
+> > Your original patch [2] makes it clear that it's an issue with I210,
+> > but there's an implicit connection between the normal BAR update path
+> > (which skips the actual BAR write) and the quirk that does the BAR
+> > write:
+> > 
+> >   <enumeration resource assignment>
+> >     ...
+> >       pci_assign_resource
+> >         pci_update_resource
+> >           pci_std_update_resource
+> >             if (ROM && ROM-disabled)
+> >               return
+> >             pci_write_config_dword      # ROM BAR update (skipped)
+> > 
+> >   pci_fixup_write_rom_bar               # final fixup
+> >     pci_write_config_dword              # ROM BAR update
+> > 
+> > In the boot-time resource assignment path, this works fine, but if
+> > pci_assign_resource() is called from pci_map_rom(), the fixup will not
+> > happen, so we could still have problem.
+> 
+> I'm not sure I follow. pci_map_rom() should work fine. That was also
+> the workaround IIRC, that is, enable the rom via sysfs. pci_map_rom()
+> will call pci_enable_rom(), which should be the same as the fixup.
+> If memory serves correctly, that is where I shamelessly copied the
+> code from ;)
 
-On 12/22/21 22:20, Thomas Weißschuh wrote:
-> The EC/ACPI firmware on Lenovo ThinkPads used to report a status
-> of "Unknown" when the battery is between the charge start and
-> charge stop thresholds. On Windows, it reports "Not Charging"
-> so the quirk has been added to also report correctly.
-> 
-> Now the "status" attribute returns "Not Charging" when the
-> battery on ThinkPads is not physicaly charging.
-> 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Ah, you're right, I missed the fact that pci_enable_rom() would do the
+write.
 
-Thanks, patch looks good to me.
+> btw. the problem is not in pci_assign_resource() which assigns the
+> correct offsets, but that they are not written to the PCI card.
+> Eg. see lspci:
+> 
+> # lspci -s 2:1:0 -v
+> 0002:01:00.0 Ethernet controller: Intel Corporation I210 Gigabit Network
+> Connection (rev 03)
+> 	Subsystem: Hewlett-Packard Company Ethernet I210-T1 GbE NIC
+> 	Flags: bus master, fast devsel, latency 0, IRQ 34, IOMMU group 8
+> 	Memory at 8840000000 (32-bit, non-prefetchable) [size=1M]
+> 	Memory at 8840200000 (32-bit, non-prefetchable) [size=16K]
+> 	Expansion ROM at 8840100000 [disabled] [size=1M]
+> 	Capabilities: [40] Power Management version 3
+> 	Capabilities: [50] MSI: Enable- Count=1/1 Maskable+ 64bit+
+> 	Capabilities: [70] MSI-X: Enable+ Count=5 Masked-
+> 	Capabilities: [a0] Express Endpoint, MSI 00
+> 	Capabilities: [100] Advanced Error Reporting
+> 	Capabilities: [140] Device Serial Number 00-de-ad-ff-ff-be-ef-04
+> 	Capabilities: [1a0] Transaction Processing Hints
+> 	Kernel driver in use: igb
+> lspci: Unable to load libkmod resources: error -2
+> 
+> # lspci -s 2:1:0 -xx
+> 0002:01:00.0 Ethernet controller: Intel Corporation I210 Gigabit Network
+> Connection (rev 03)
+> 00: 86 80 33 15 06 04 10 00 03 00 00 02 08 00 00 00
+> 10: 00 00 00 40 00 00 00 00 00 00 00 00 00 00 20 40
+> 20: 00 00 00 00 00 00 00 00 00 00 00 00 3c 10 03 00
+> 30: 00 00 20 40 40 00 00 00 00 00 00 00 22 01 00 00
+> 
+> Note the difference between "Expansion ROM at 8840100000" (assigned
+> by pci_assign_resource() I guess) and the actual value at offset
+> 0x30: 0x40200000. The latter will be updated either by pci_enable_rom()
+> or my pci fixup quirk.
 
-As for the userspace issues in dealing with the
-POWER_SUPPLY_STATUS_NOT_CHARGING status, those indeed
-have long been fixed and this status is already returned
-acpi//battery.c from the acpi_battery_handle_discharging()
-function for a while no; and we have had no complaints
-about that:
+Yes, I understand that.  I think it's better to do the update in
+pci_std_update_resource() instead of relying on a future fixup or
+pci_enable_rom().  There's no explicit connection between the
+assignment and the BAR write, so it's fragile.
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> > Can you try the patch below?
+> 
+> I tried, but it doesn't work because the fixup function is called
+> after pci_std_update_resource(), thus dev->rom_bar_overlap is still
+> 0.
 
-Regards,
+I intended to change the quirk from FINAL to EARLY, but obviously
+forgot.  Here's the updated version:
 
-Hans
+commit bb5639b73a2d ("PCI: Work around Intel I210 ROM BAR overlap defect")
+Author: Bjorn Helgaas <bhelgaas@google.com>
+Date:   Tue Dec 21 10:45:07 2021 -0600
 
+    PCI: Work around Intel I210 ROM BAR overlap defect
+    
+    Per PCIe r5, sec 7.5.1.2.4, a device must not claim accesses to its
+    Expansion ROM unless both the Memory Space Enable and the Expansion ROM
+    Enable bit are set.  But apparently some Intel I210 NICs don't work
+    correctly if the ROM BAR overlaps another BAR, even if the Expansion ROM is
+    disabled.
+    
+    Michael reported that on a Kontron SMARC-sAL28 ARM64 system with U-Boot
+    v2021.01-rc3, the ROM BAR overlaps BAR 3, and networking doesn't work at
+    all:
+    
+      BAR 0: 0x40000000 (32-bit, non-prefetchable) [size=1M]
+      BAR 3: 0x40200000 (32-bit, non-prefetchable) [size=16K]
+      ROM:   0x40200000 (disabled) [size=1M]
+    
+      NETDEV WATCHDOG: enP2p1s0 (igb): transmit queue 0 timed out
+      Hardware name: Kontron SMARC-sAL28 (Single PHY) on SMARC Eval 2.0 carrier (DT)
+      igb 0002:01:00.0 enP2p1s0: Reset adapter
+    
+    Previously, pci_std_update_resource() wrote the assigned ROM address to the
+    BAR only when the ROM was enabled.  This meant that the I210 ROM BAR could
+    be left with an address assigned by firmware, which might overlap with
+    other BARs.
+    
+    Quirk these I210 devices so pci_std_update_resource() always writes the
+    assigned address to the ROM BAR, whether or not the ROM is enabled.
+    
+    Link: https://lore.kernel.org/r/20201230185317.30915-1-michael@walle.cc
+    Link: https://bugzilla.kernel.org/show_bug.cgi?id=211105
+    Reported-by: Michael Walle <michael@walle.cc>
+    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 
-
-
-> ---
-> 
-> This is the same as: https://patchwork.kernel.org/patch/10205359/
-> 
-> Previously this patch has been applied[0] but then reverted from -next
-> because it caused a regression in UPower.
-> This regression however has been fixed in UPower in late 2018[1],
-> with the fixed version 0.99.10 released in early 2019 [2].
-> So maybe it is now time to reintroduce this change.
-> 
-> Ognen:
-> 
-> As the patch was originally developed by you, could send a
-> Signed-off-by-tag, so I can attribute you as co-developer?
-> 
-> Or maybe the original patch could just be re-applied?
-> 
-> The original patch had the following tags, which I'm not sure to handle
-> for this case:
-> 
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Signed-off-by: Ognjen Galic <smclt30p@gmail.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Also Cc-ing the UPower maintainers for their opinion:
-> 
-> Cc: Bastien Nocera <hadess@hadess.net>
-> Cc: David Zeuthen <davidz@redhat.com>
-> Cc: Richard Hughes <richard@hughsie.com>
-> 
-> [0] Applied as 91eea70e5e5ce12eb1c7cd922e561fab43e201bd
-> [1] https://gitlab.freedesktop.org/upower/upower/-/merge_requests/19/commits
-> [2] https://gitlab.freedesktop.org/upower/upower/-/commit/215049e7b80c5f24cb35cd229a445c6cf19bd381
-> ---
->  drivers/acpi/battery.c | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> 
-> base-commit: fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf
-> 
-> diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
-> index 8afa85d6eb6a..ead0114f27c9 100644
-> --- a/drivers/acpi/battery.c
-> +++ b/drivers/acpi/battery.c
-> @@ -53,6 +53,7 @@ static int battery_bix_broken_package;
->  static int battery_notification_delay_ms;
->  static int battery_ac_is_broken;
->  static int battery_check_pmic = 1;
-> +static int battery_quirk_notcharging;
->  static unsigned int cache_time = 1000;
->  module_param(cache_time, uint, 0644);
->  MODULE_PARM_DESC(cache_time, "cache time in milliseconds");
-> @@ -217,6 +218,8 @@ static int acpi_battery_get_property(struct power_supply *psy,
->  			val->intval = POWER_SUPPLY_STATUS_CHARGING;
->  		else if (acpi_battery_is_charged(battery))
->  			val->intval = POWER_SUPPLY_STATUS_FULL;
-> +		else if (battery_quirk_notcharging)
-> +			val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
->  		else
->  			val->intval = POWER_SUPPLY_STATUS_UNKNOWN;
->  		break;
-> @@ -1111,6 +1114,12 @@ battery_do_not_check_pmic_quirk(const struct dmi_system_id *d)
->  	return 0;
->  }
->  
-> +static int __init battery_quirk_not_charging(const struct dmi_system_id *d)
-> +{
-> +	battery_quirk_notcharging = 1;
-> +	return 0;
-> +}
-> +
->  static const struct dmi_system_id bat_dmi_table[] __initconst = {
->  	{
->  		/* NEC LZ750/LS */
-> @@ -1155,6 +1164,19 @@ static const struct dmi_system_id bat_dmi_table[] __initconst = {
->  			DMI_MATCH(DMI_PRODUCT_VERSION, "Lenovo MIIX 320-10ICR"),
->  		},
->  	},
-> +	{
-> +		/*
-> +		 * On Lenovo ThinkPads the BIOS specification defines
-> +		 * a state when the bits for charging and discharging
-> +		 * are both set to 0. That state is "Not Charging".
-> +		 */
-> +		.callback = battery_quirk_not_charging,
-> +		.ident = "Lenovo ThinkPad",
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad"),
-> +		},
-> +	},
->  	{},
->  };
->  
-> 
-
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index 003950c738d2..46ff04091fa3 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -5857,3 +5857,13 @@ static void nvidia_ion_ahci_fixup(struct pci_dev *pdev)
+ 	pdev->dev_flags |= PCI_DEV_FLAGS_HAS_MSI_MASKING;
+ }
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NVIDIA, 0x0ab8, nvidia_ion_ahci_fixup);
++
++static void rom_bar_overlap_defect(struct pci_dev *dev)
++{
++	pci_info(dev, "working around ROM BAR overlap defect\n");
++	dev->rom_bar_overlap = 1;
++}
++DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x1533, rom_bar_overlap_defect);
++DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x1536, rom_bar_overlap_defect);
++DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x1537, rom_bar_overlap_defect);
++DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x1538, rom_bar_overlap_defect);
+diff --git a/drivers/pci/setup-res.c b/drivers/pci/setup-res.c
+index 7f1acb3918d0..439ac5f5907a 100644
+--- a/drivers/pci/setup-res.c
++++ b/drivers/pci/setup-res.c
+@@ -75,12 +75,16 @@ static void pci_std_update_resource(struct pci_dev *dev, int resno)
+ 		 * as zero when disabled, so don't update ROM BARs unless
+ 		 * they're enabled.  See
+ 		 * https://lore.kernel.org/r/43147B3D.1030309@vc.cvut.cz/
++		 * But we must update ROM BAR for buggy devices where even a
++		 * disabled ROM can conflict with other BARs.
+ 		 */
+-		if (!(res->flags & IORESOURCE_ROM_ENABLE))
++		if (!(res->flags & IORESOURCE_ROM_ENABLE) &&
++		    !dev->rom_bar_overlap)
+ 			return;
+ 
+ 		reg = dev->rom_base_reg;
+-		new |= PCI_ROM_ADDRESS_ENABLE;
++		if (res->flags & IORESOURCE_ROM_ENABLE)
++			new |= PCI_ROM_ADDRESS_ENABLE;
+ 	} else
+ 		return;
+ 
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 18a75c8e615c..51c4a063f489 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -455,6 +455,7 @@ struct pci_dev {
+ 	unsigned int	link_active_reporting:1;/* Device capable of reporting link active */
+ 	unsigned int	no_vf_scan:1;		/* Don't scan for VFs after IOV enablement */
+ 	unsigned int	no_command_memory:1;	/* No PCI_COMMAND_MEMORY */
++	unsigned int	rom_bar_overlap:1;	/* ROM BAR disable broken */
+ 	pci_dev_flags_t dev_flags;
+ 	atomic_t	enable_cnt;	/* pci_enable_device has been called */
+ 

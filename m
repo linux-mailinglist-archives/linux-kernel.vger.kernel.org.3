@@ -2,85 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D95B47E75E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:01:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B3B47E760
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:02:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349666AbhLWSBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 13:01:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37302 "EHLO
+        id S1349676AbhLWSCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 13:02:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244522AbhLWSBl (ORCPT
+        with ESMTP id S244522AbhLWSCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 13:01:41 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F2EC061756
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:01:41 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso7964390otf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:01:41 -0800 (PST)
+        Thu, 23 Dec 2021 13:02:16 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1F1C061401
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:02:15 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id e8so4816736ilm.13
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:02:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=dfUzlOAn94ad16aOxRm80CzpKeAMYFpuYv2vYBOrxD0=;
-        b=wRZycaNpkP/MAWgXqpVP8rTmHZd5Ji6GA6B0AQAtnZKPr0L07pGBFY1r/MuK/LUWtO
-         IGWJoIvyvjtb5Z4DCBh6xKB71pMp9rCPrSx+5nAFOln9ObI7shc+b9W+eBQ8EYLBjubn
-         DgAadQ2xH85EAHVp9aisfULspwT5jLfnC8FvzRVbxOqN5dEVJpweSqgtGB+SCfHFJ+CW
-         TwQqAzcIW5k0KWoAyrILA207dmuTa1sfdUx5Db+92e4lPzYi75qXm+6OtcgrgXYGOqO8
-         HTPX4V8hN2iPNWoborWKkYGTTs0leuMI4ZOTh6/kpgJJ6Lyw9SGkcmGb+9N8wloP9ukF
-         3bcw==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=crcalCbsdsuGUt7vADUyZgFYhL5+xBKGp5LdAom+KUc=;
+        b=VJoR1oMjuYKabXAOvgTkMPuLCPzALe+MaI4KQ9kRyhExxQsViEwxzTgHgUP7GqUnpD
+         TyTlkB68AAujP9TtFt2qJoBcJ5tri7ynvcjNkSmAUf+SEsXAYt5mjB/OVWFS3PA/MpQA
+         hYYOzUW0weEqMTHebFGMgITqzvsfsmsRMTcmg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=dfUzlOAn94ad16aOxRm80CzpKeAMYFpuYv2vYBOrxD0=;
-        b=yqggOuk2uimCXXtlwfTnekVxb9lfDIefVS1nyd5I0xfQcDJIMWKZv0PJ1kaWQJU/b8
-         Nqn4IL0f9T96YZaBUbyZGLBZDSRcwyylckhZIOGTCHqqlxGKOU6qpz0k6ROnv4rLp2PO
-         ogXPdlONJg+wnEMOVZEUlbGnzjI1/F6w0b1Mw0Un3lgV59YZVks2ik7Y9s6yOBxdN7DX
-         xtCeK6ewnYmcaAbw5k+eZL1pvtXqomAIF8M78lUf23b2YJRtBvp3fKhBcuDPAi5RLyr4
-         0xm/xhjv/V1CmNWdFUnEOppz+aRzCKs4XI6N/Cr+Uem52dmvjsd9sQL1Q5e11/U1BuMZ
-         xLbw==
-X-Gm-Message-State: AOAM531Tmq9/oEZ3reP0El1s9e0LvglgqixTlbpMfeYefDqe0LEWWpBt
-        TKUbEqQsk5SuE86pwNxAgrFI7Q==
-X-Google-Smtp-Source: ABdhPJz9+drNpXFMlEsgLFs1STnT0bgyub2hZqb6hfaPnVTkAWC0pq7p42Q8iMpw3GXpp56eea9Lqw==
-X-Received: by 2002:a9d:2cd:: with SMTP id 71mr2106805otl.107.1640282500577;
-        Thu, 23 Dec 2021 10:01:40 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id b24sm616515oic.16.2021.12.23.10.01.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Dec 2021 10:01:39 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] Revert "dt-bindings: arm: qcom: Document SDX65 platform and boards"
-Date:   Thu, 23 Dec 2021 12:01:38 -0600
-Message-Id: <164028248954.3843593.5026213913703078453.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211223173339.GA3925@standask-GA-A55M-S2HP>
-References: <20211223173339.GA3925@standask-GA-A55M-S2HP>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=crcalCbsdsuGUt7vADUyZgFYhL5+xBKGp5LdAom+KUc=;
+        b=O9gUyWYZhSndMakp34yhZDsPJcZOKp41Beh5lBlr6yUK0zv32l7zWG1oamGaoy6yIB
+         moYugQsFLGsZjzv14UKz8SU5nrBe4hFWPSRsccGi0W/TtAhGB/GkwAEX575hsumwi+dd
+         ZDGlW/GGCMQ5qTDAgDWJ6yWyerlTggL+FBCnDTu8RTfd2ccE8TBYQrCrLjPR+TEme+6Y
+         5Xdcqvcjl5V6h3qM2coH71BTwcId6F4Y+0PmLMWXSw+im2HnzpEW+Y6Es6ugMRVvx51f
+         VHBeXcZLm2f0JBVa4FPiuxqzaBOlQtnj2FF1v5HFppJu0gSINPq/eiWMBMmqGbPvJ6su
+         AfRg==
+X-Gm-Message-State: AOAM5335yrMTYY6eiY8PMem/Pgc+7YL0Gqu2E1DiyquKwu45De/XEvPz
+        700FR2wjpz6qJtZPfGhQJbgzG4EavTpSoQ==
+X-Google-Smtp-Source: ABdhPJySs6IxOqMyO+caDCjivQrp/33rxoe2g7fjdQFztJUypZEhZJcO1t5hrQ1IPVmJpDxLB2l6Hg==
+X-Received: by 2002:a05:6e02:152a:: with SMTP id i10mr1674953ilu.145.1640282535026;
+        Thu, 23 Dec 2021 10:02:15 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id j5sm3066703ilo.77.2021.12.23.10.02.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Dec 2021 10:02:14 -0800 (PST)
+Subject: Re: [PATCH] tools/power/cpupower/{ToDo => TODO}: Rename the todo file
+To:     Onur Ozkan <onurozkan.dev@gmail.com>, trenn@suse.com
+Cc:     shuah@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Onur Ozkan <work@onurozkan.dev>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20211204134439.79754-1-work@onurozkan.dev>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f0c8e0ac-b182-848e-6e60-38c1904ff9e1@linuxfoundation.org>
+Date:   Thu, 23 Dec 2021 11:02:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211204134439.79754-1-work@onurozkan.dev>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Dec 2021 18:33:39 +0100, Stanislav Jakubek wrote:
-> This reverts commit 3b338c9a6a2afd6db46d5d8e39ae4f5eef420bf8.
+Hi,
+
+On 12/4/21 6:44 AM, Onur Ozkan wrote:
+> Renamed the to-do file to 'TODO' instead of 'ToDo' to
+> comply with the naming standard.
 > 
-> This was a duplicate of 61339f368d59d25e22401731f89de44e3215508b,
-> causing the sdx65 compatible and its board to be documented twice.
+> Signed-off-by: Onur Ozkan <work@onurozkan.dev>
+> ---
+>   tools/power/cpupower/{ToDo => TODO} | 0
+>   1 file changed, 0 insertions(+), 0 deletions(-)
+>   rename tools/power/cpupower/{ToDo => TODO} (100%)
 > 
+> diff --git a/tools/power/cpupower/ToDo b/tools/power/cpupower/TODO
+> similarity index 100%
+> rename from tools/power/cpupower/ToDo
+> rename to tools/power/cpupower/TODO
 > 
 
-Applied, thanks!
+Please add reference to the new naming standard to the change log
+and send me v2.
 
-[1/1] Revert "dt-bindings: arm: qcom: Document SDX65 platform and boards"
-      commit: fc5a40694ba684fb3b7009819965ec38e829118f
-
-Best regards,
--- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+thanks,
+-- Shuah

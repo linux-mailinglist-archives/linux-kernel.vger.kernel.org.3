@@ -2,205 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DD9E47DC53
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 01:47:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F02E447DC55
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 01:48:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238309AbhLWArM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 19:47:12 -0500
-Received: from mga14.intel.com ([192.55.52.115]:53913 "EHLO mga14.intel.com"
+        id S238428AbhLWAsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 19:48:13 -0500
+Received: from mga12.intel.com ([192.55.52.136]:62262 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238185AbhLWArJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 19:47:09 -0500
+        id S235262AbhLWAsH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 19:48:07 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640220429; x=1671756429;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BDkevwZcPC1lV5iGmPBU8XCAUFg0Tix5/IkG1xiFR2s=;
-  b=iOCk8/5UB41Aj/e0ez+HAGJAc5Gyk9jopmnBxAHOMFMMoK3x/L/zUtBP
-   C3WEYN7R8XZTrXqxeFlLwDMK4ye1tjKBz5xxVQEsiDkf1NolCJC3vfqOV
-   RAZ4cL0/fstfbKySImlXJGNdob7EkCpdy46A7R2cgKv6Va2YuySoNmRtt
-   3/zwix7DUw+T0ouBUMWZm4E2R2veya/X1q3ryuCatN0RFVT92kVErMyzC
-   pLa9HKkH4PJxKt5ka1qezCPcReYuwHTGq2GVSKTd6W5x4NgXAkXz8puBH
-   go0LrKFdyNiKqQ8Kxj1M7iicUGfX7wWW75fIp8pbPh/MTrxBCmwCgQLK0
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="240954790"
+  t=1640220487; x=1671756487;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/MXkza4Qhh/fbe5qq35sCh9ao/7HSfrBo4PH2DSpeI4=;
+  b=K6FvHaJglSUOkMDw2irdpYK4m6CJcBopmwixs3VVtbkKoUpBiAZhqRfm
+   U8zWh3SSeyb9fgg4knUoicDf81O42IBcDAhWy54aIzffoOlFcXYr/vcd/
+   sXv+pfZu8zzIIt+yc7OPKXWpQeDddEdrBNRYh0zdawEfe3Q8sVuVo0f6c
+   YatqShJ78LB6Z8acLz2oHi7F9mn4tmj9ZZABlQgm1usstL3tvglgfic2j
+   XwtUoJ83YBkOjTTFDQ8iGQCa5fX6vw7VvmRy3EZnUDYdG5WEQqJpCOs0+
+   hUPPcvv6UxRXZU+4CW25yUnDtEQaaX1GNptdKGY9Vu/w5IT2HKbYZLmU9
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="220741224"
 X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="240954790"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:47:08 -0800
+   d="scan'208";a="220741224"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:48:07 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="468353664"
+   d="scan'208";a="508668884"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 22 Dec 2021 16:47:06 -0800
+  by orsmga007.jf.intel.com with ESMTP; 22 Dec 2021 16:48:05 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1n0CG9-00016A-92; Thu, 23 Dec 2021 00:47:05 +0000
-Date:   Thu, 23 Dec 2021 08:46:53 +0800
+        id 1n0CH7-00016O-Al; Thu, 23 Dec 2021 00:48:05 +0000
+Date:   Thu, 23 Dec 2021 08:47:50 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Bo Jiao <Bo.Jiao@mediatek.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
-        Sujuan Chen <sujuan.chen@mediatek.com>,
-        Ryder Lee <ryder.lee@mediatek.com>
-Subject: [nbd168-wireless:mt76 10/28]
- drivers/net/wireless/mediatek/mt76/mt7915/mac.c:472:5: warning: variable
- 'flags' set but not used
-Message-ID: <202112230801.vyMZPnaw-lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/mm] BUILD SUCCESS
+ b64dfcde1ca9cb82e38e573753f0c0db8fb841c2
+Message-ID: <61c3c736.fSUZwn9yLTft9upT%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/nbd168/wireless mt76
-head:   05f0500c7b0147353e97de7369d504c5fbd3951e
-commit: 0aa6b534b5e1cfe82e676d1d8f90bcea584565d3 [10/28] mt76: mt7915: update rx rate reporting for mt7916
-config: mips-randconfig-r033-20211222 (https://download.01.org/0day-ci/archive/20211223/202112230801.vyMZPnaw-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project de4e0195ae1c39f1c3b07834b8e32c113f4f20eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/nbd168/wireless/commit/0aa6b534b5e1cfe82e676d1d8f90bcea584565d3
-        git remote add nbd168-wireless https://github.com/nbd168/wireless
-        git fetch --no-tags nbd168-wireless mt76
-        git checkout 0aa6b534b5e1cfe82e676d1d8f90bcea584565d3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/wireless/mediatek/mt76/mt7915/
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/mm
+branch HEAD: b64dfcde1ca9cb82e38e573753f0c0db8fb841c2  x86/mm: Prevent early boot triple-faults with instrumentation
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+elapsed time: 730m
 
-All warnings (new ones prefixed by >>):
+configs tested: 120
+configs skipped: 95
 
->> drivers/net/wireless/mediatek/mt76/mt7915/mac.c:472:5: warning: variable 'flags' set but not used [-Wunused-but-set-variable]
-           u8 flags, stbc, gi, bw, dcm, mode, nss;
-              ^
->> drivers/net/wireless/mediatek/mt76/mt7915/mac.c:535:3: warning: variable 'flags' is uninitialized when used here [-Wuninitialized]
-                   flags |= RATE_INFO_FLAGS_HE_MCS;
-                   ^~~~~
-   drivers/net/wireless/mediatek/mt76/mt7915/mac.c:472:10: note: initialize the variable 'flags' to silence this warning
-           u8 flags, stbc, gi, bw, dcm, mode, nss;
-                   ^
-                    = '\0'
-   2 warnings generated.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211222
+arm                         shannon_defconfig
+m68k                         apollo_defconfig
+powerpc                      katmai_defconfig
+arm                        magician_defconfig
+powerpc64                        alldefconfig
+arm                       aspeed_g4_defconfig
+parisc                              defconfig
+powerpc                     pseries_defconfig
+xtensa                         virt_defconfig
+sh                          polaris_defconfig
+mips                         tb0226_defconfig
+microblaze                      mmu_defconfig
+sh                        sh7757lcr_defconfig
+arm                             ezx_defconfig
+mips                           ip32_defconfig
+powerpc                     ksi8560_defconfig
+arm                      jornada720_defconfig
+powerpc                   motionpro_defconfig
+arm                        clps711x_defconfig
+sh                           se7343_defconfig
+ia64                      gensparse_defconfig
+xtensa                           allyesconfig
+powerpc                  mpc866_ads_defconfig
+powerpc                 xes_mpc85xx_defconfig
+mips                           rs90_defconfig
+mips                          ath25_defconfig
+arm                          pxa3xx_defconfig
+sh                          rsk7264_defconfig
+powerpc64                           defconfig
+sh                        edosk7760_defconfig
+ia64                             allyesconfig
+powerpc                     kilauea_defconfig
+sh                          sdk7786_defconfig
+sparc                       sparc64_defconfig
+arm                         lpc32xx_defconfig
+arm                          pxa168_defconfig
+powerpc                      makalu_defconfig
+arm                        trizeps4_defconfig
+arm                          moxart_defconfig
+powerpc                     tqm8555_defconfig
+arm                         mv78xx0_defconfig
+arm                          lpd270_defconfig
+sh                      rts7751r2d1_defconfig
+s390                             allyesconfig
+openrisc                            defconfig
+m68k                       bvme6000_defconfig
+alpha                               defconfig
+riscv             nommu_k210_sdcard_defconfig
+arm                         bcm2835_defconfig
+powerpc               mpc834x_itxgp_defconfig
+powerpc                     sequoia_defconfig
+mips                        bcm47xx_defconfig
+arm                        multi_v7_defconfig
+i386                             allyesconfig
+arm                     eseries_pxa_defconfig
+powerpc                 mpc8540_ads_defconfig
+nds32                             allnoconfig
+nios2                            alldefconfig
+sh                 kfr2r09-romimage_defconfig
+powerpc                 mpc8272_ads_defconfig
+mips                  maltasmvp_eva_defconfig
+powerpc                     stx_gp3_defconfig
+arm                        shmobile_defconfig
+sh                            titan_defconfig
+mips                            gpr_defconfig
+arm                  randconfig-c002-20211222
+ia64                             allmodconfig
+ia64                                defconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                            allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a001-20211222
+x86_64               randconfig-a003-20211222
+x86_64               randconfig-a005-20211222
+x86_64               randconfig-a006-20211222
+x86_64               randconfig-a004-20211222
+x86_64               randconfig-a002-20211222
+i386                 randconfig-a006-20211222
+i386                 randconfig-a004-20211222
+i386                 randconfig-a002-20211222
+i386                 randconfig-a003-20211222
+i386                 randconfig-a001-20211222
+i386                 randconfig-a005-20211222
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-vim +/flags +472 drivers/net/wireless/mediatek/mt76/mt7915/mac.c
-
-   464	
-   465	static int
-   466	mt7915_mac_fill_rx_rate(struct mt7915_dev *dev,
-   467				struct mt76_rx_status *status,
-   468				struct ieee80211_supported_band *sband,
-   469				__le32 *rxv)
-   470	{
-   471		u32 v0, v2;
- > 472		u8 flags, stbc, gi, bw, dcm, mode, nss;
-   473		int i, idx;
-   474		bool cck = false;
-   475	
-   476		v0 = le32_to_cpu(rxv[0]);
-   477		v2 = le32_to_cpu(rxv[2]);
-   478	
-   479		idx = i = FIELD_GET(MT_PRXV_TX_RATE, v0);
-   480		nss = FIELD_GET(MT_PRXV_NSTS, v0) + 1;
-   481	
-   482		if (!is_mt7915(&dev->mt76)) {
-   483			stbc = FIELD_GET(MT_PRXV_HT_STBC, v0);
-   484			gi = FIELD_GET(MT_PRXV_HT_SHORT_GI, v0);
-   485			mode = FIELD_GET(MT_PRXV_TX_MODE, v0);
-   486			dcm = FIELD_GET(MT_PRXV_DCM, v0);
-   487			bw = FIELD_GET(MT_PRXV_FRAME_MODE, v0);
-   488		} else {
-   489			stbc = FIELD_GET(MT_CRXV_HT_STBC, v2);
-   490			gi = FIELD_GET(MT_CRXV_HT_SHORT_GI, v2);
-   491			mode = FIELD_GET(MT_CRXV_TX_MODE, v2);
-   492			dcm = !!(idx & GENMASK(3, 0) & MT_PRXV_TX_DCM);
-   493			bw = FIELD_GET(MT_CRXV_FRAME_MODE, v2);
-   494		}
-   495	
-   496		switch (mode) {
-   497		case MT_PHY_TYPE_CCK:
-   498			cck = true;
-   499			fallthrough;
-   500		case MT_PHY_TYPE_OFDM:
-   501			i = mt76_get_rate(&dev->mt76, sband, i, cck);
-   502			break;
-   503		case MT_PHY_TYPE_HT_GF:
-   504		case MT_PHY_TYPE_HT:
-   505			status->encoding = RX_ENC_HT;
-   506			if (i > 31)
-   507				return -EINVAL;
-   508	
-   509			flags = RATE_INFO_FLAGS_MCS;
-   510			if (gi)
-   511				flags |= RATE_INFO_FLAGS_SHORT_GI;
-   512			break;
-   513		case MT_PHY_TYPE_VHT:
-   514			status->nss = nss;
-   515			status->encoding = RX_ENC_VHT;
-   516			if (i > 9)
-   517				return -EINVAL;
-   518	
-   519			flags = RATE_INFO_FLAGS_VHT_MCS;
-   520			if (gi)
-   521				flags |= RATE_INFO_FLAGS_SHORT_GI;
-   522			break;
-   523		case MT_PHY_TYPE_HE_MU:
-   524		case MT_PHY_TYPE_HE_SU:
-   525		case MT_PHY_TYPE_HE_EXT_SU:
-   526		case MT_PHY_TYPE_HE_TB:
-   527			status->nss = nss;
-   528			status->encoding = RX_ENC_HE;
-   529			i &= GENMASK(3, 0);
-   530	
-   531			if (gi <= NL80211_RATE_INFO_HE_GI_3_2)
-   532				status->he_gi = gi;
-   533	
-   534			status->he_dcm = dcm;
- > 535			flags |= RATE_INFO_FLAGS_HE_MCS;
-   536			break;
-   537		default:
-   538			return -EINVAL;
-   539		}
-   540		status->rate_idx = i;
-   541	
-   542		switch (bw) {
-   543		case IEEE80211_STA_RX_BW_20:
-   544			break;
-   545		case IEEE80211_STA_RX_BW_40:
-   546			if (mode & MT_PHY_TYPE_HE_EXT_SU &&
-   547			    (idx & MT_PRXV_TX_ER_SU_106T)) {
-   548				status->bw = RATE_INFO_BW_HE_RU;
-   549				status->he_ru =
-   550					NL80211_RATE_INFO_HE_RU_ALLOC_106;
-   551			} else {
-   552				status->bw = RATE_INFO_BW_40;
-   553			}
-   554			break;
-   555		case IEEE80211_STA_RX_BW_80:
-   556			status->bw = RATE_INFO_BW_80;
-   557			break;
-   558		case IEEE80211_STA_RX_BW_160:
-   559			status->bw = RATE_INFO_BW_160;
-   560			break;
-   561		default:
-   562			return -EINVAL;
-   563		}
-   564	
-   565		status->enc_flags |= RX_ENC_FLAG_STBC_MASK * stbc;
-   566		if (mode < MT_PHY_TYPE_HE_SU && gi)
-   567			status->enc_flags |= RX_ENC_FLAG_SHORT_GI;
-   568	
-   569		return 0;
-   570	}
-   571	
+clang tested configs:
+hexagon              randconfig-r041-20211222
+hexagon              randconfig-r045-20211222
+riscv                randconfig-r042-20211222
+s390                 randconfig-r044-20211222
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

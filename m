@@ -2,93 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E2047E73F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 18:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9A247E738
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 18:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244610AbhLWRuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 12:50:08 -0500
-Received: from relay033.a.hostedemail.com ([64.99.140.33]:48421 "EHLO
-        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229962AbhLWRuG (ORCPT
+        id S244565AbhLWRph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 12:45:37 -0500
+Received: from relay10.mail.gandi.net ([217.70.178.230]:36181 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229962AbhLWRpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 12:50:06 -0500
-Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay09.hostedemail.com (Postfix) with ESMTP id 3CFB321967;
-        Thu, 23 Dec 2021 17:50:02 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf03.hostedemail.com (Postfix) with ESMTPA id 1522560014;
-        Thu, 23 Dec 2021 17:49:55 +0000 (UTC)
-Message-ID: <cee1bbe6c8dda1c79ba19f7bbf68fc1d74558cae.camel@perches.com>
-Subject: Re: [PATCH v6 2/2] Driver for ON Semi AR0521 camera sensor
-From:   Joe Perches <joe@perches.com>
-To:     Krzysztof =?UTF-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Date:   Thu, 23 Dec 2021 09:49:58 -0800
-In-Reply-To: <m35yrfhkaf.fsf@t19.piap.pl>
-References: <m3ee63hkuu.fsf@t19.piap.pl> <m35yrfhkaf.fsf@t19.piap.pl>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Thu, 23 Dec 2021 12:45:36 -0500
+Received: (Authenticated sender: repk@triplefau.lt)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 740DE24000D;
+        Thu, 23 Dec 2021 17:45:33 +0000 (UTC)
+Date:   Thu, 23 Dec 2021 18:50:30 +0100
+From:   Remi Pommarel <repk@triplefau.lt>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        bridge@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 2/2] net: bridge: Get SIOCGIFBR/SIOCSIFBR ioctl
+ working in compat mode
+Message-ID: <YcS25oqoo+xnAIIW@pilgrim>
+References: <20211223153139.7661-1-repk@triplefau.lt>
+ <20211223153139.7661-3-repk@triplefau.lt>
+ <20211223085944.55b43857@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Stat-Signature: np36hfktpep65hys3tpd4hjqng9646pj
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: 1522560014
-X-Spam-Status: No, score=-3.31
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19Z3GPdwpXmwkGYSFVpQF+GO7Dm2x4ydkg=
-X-HE-Tag: 1640281795-678023
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211223085944.55b43857@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2021-12-23 at 08:06 +0100, Krzysztof Hałasa wrote:
-> The driver has been extensively tested in an i.MX6-based system.
-> AR0521 is a 5.7 mm x 4.3 mm, 5 MPix RGGB MIPI/HiSPi BSI CMOS sensor
-> from On Semiconductor.
+On Thu, Dec 23, 2021 at 08:59:44AM -0800, Jakub Kicinski wrote:
+> On Thu, 23 Dec 2021 16:31:39 +0100 Remi Pommarel wrote:
+> > In compat mode SIOC{G,S}IFBR ioctls were only supporting
+> > BRCTL_GET_VERSION returning an artificially version to spur userland
+> > tool to use SIOCDEVPRIVATE instead. But some userland tools ignore that
+> > and use SIOC{G,S}IFBR unconditionally as seen with busybox's brctl.
+> > 
+> > Example of non working 32-bit brctl with CONFIG_COMPAT=y:
+> > $ brctl show
+> > brctl: SIOCGIFBR: Invalid argument
+> > 
+> > Example of fixed 32-bit brctl with CONFIG_COMPAT=y:
+> > $ brctl show
+> > bridge name     bridge id               STP enabled     interfaces
+> > br0
+> > 
+> > Signed-off-by: Remi Pommarel <repk@triplefau.lt>
+> > Co-developed-by: Arnd Bergmann <arnd@arndb.de>
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> Since Arnd said this is not supposed to be backported I presume it
+> should go to net-next?
 
-trivial notes:
+Yes, out of curiosity, is it appropriate to mix "[PATCH net]" and
+"[PATCH net-next]" in the same serie ?
 
-> diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
-[]
-> +/* External clock (extclk) frequencies */
-> +#define AR0521_EXTCLK_MIN	  (10 * 1000 * 1000)
+Thanks
 
-Generally, adding a prefix like AR0521_ to defines that are
-locally defined in a single file unnecessarily increases
-identifier length.
-
-It makes using short line lengths difficult.
-
-e.g. Using this identifier anywhere
-
-> +#define AR0521_REG_HISPI_CONTROL_STATUS_FRAMER_TEST_MODE_ENABLE 0x80
-
-Many of the 80 column line lengths and line wrapping used in this
-file are not really nice to read.  I believe you don't have to be
-strict about 80 column lines.
-
-> +#define be		cpu_to_be16
-
-It's a pity there's no way to declare an array with all members
-having a specific endianness.  Making sure all elements in these
-arrays are declared with be() is tedious.
-
-> +#define AR0521_NUM_SUPPLIES ARRAY_SIZE(ar0521_supply_names)
-
-It's almost always better to use ARRAY_SIZE directly and not
-use a #define for the array size.
-
-> +static int ar0521_set_gains(struct ar0521_dev *sensor)
-> +{
-[]
-> +	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
-
-ftrace works and perhaps all the similar debug logging uses aren't
-really necessary.
-
-
+-- 
+Remi

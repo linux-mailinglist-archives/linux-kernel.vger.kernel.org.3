@@ -2,57 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C803147E373
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 664A847E382
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348439AbhLWMcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 07:32:23 -0500
-Received: from ssl.serverraum.org ([176.9.125.105]:34077 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348430AbhLWMcW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 07:32:22 -0500
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id BC74E223E9;
-        Thu, 23 Dec 2021 13:32:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1640262740;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Adq8KD1q0bwqULNzKvvB4egbuoMmHsacFlZtoJtCnVY=;
-        b=J8OMEgcdPSZ/ZmjTdVpGipRQ5vyMnaQ91RkMH4pdmFBK5xUO8wEnz85pnuBvaQNMRm2uXO
-        FK151qR8QcAMVfPOVRIj+dVzUuJ1d6mgAey1BeGBZsIea0UyBS5v61Pa4urH7kWMQ8a1x1
-        Qyb7J98KWnIOcnXQ1lTtt6vnAFlrbnw=
+        id S1348508AbhLWMdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 07:33:00 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:47584 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1348490AbhLWMcv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 07:32:51 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowAAnLy9gbMRh4h1oBA--.49853S2;
+        Thu, 23 Dec 2021 20:32:33 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     andy.shevchenko@gmail.com, davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] drivers: net: smc911x: Check for error irq
+Date:   Thu, 23 Dec 2021 20:32:32 +0800
+Message-Id: <20211223123232.1353785-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 23 Dec 2021 13:32:19 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH v1 1/1] gpio: regmap: Switch to use fwnode instead of
- of_node
-In-Reply-To: <20211223121606.67055-1-andriy.shevchenko@linux.intel.com>
-References: <20211223121606.67055-1-andriy.shevchenko@linux.intel.com>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <84b97cb42349270bda5f6f49bc413741@walle.cc>
-X-Sender: michael@walle.cc
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowAAnLy9gbMRh4h1oBA--.49853S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zr15Kr48KrWktw4UJr1fJFb_yoW8JFWfpw
+        48Kayxurs7Ka40gFZrJw18ua98AasFqryxGFW7KayfZ3s8trnxJryktFWjkF1DJrZ8tw4a
+        vr45ZrWfAFn8Z3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW5JwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUr8nnUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2021-12-23 13:16, schrieb Andy Shevchenko:
-> GPIO library now accepts fwnode as a firmware node, so
-> switch the driver to use it.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Thursday, December 23, 2021, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> Do other way around.
+> ret = ...
+> if (ret < 0)
+>   ...
+> irq = ret;
 
-Reviewed-by: Michael Walle <michael@walle.cc>
+This version I correct the patch by using error variable, too.
+And the commit message is as follow.
+
+Because platform_get_irq() could fail and return error irq.
+Therefore, it might be better to check it in order to avoid the use of
+error irq.
+
+Fixes: ae150435b59e ("smsc: Move the SMC (SMSC) drivers")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changlog:
+
+v1 -> v2
+
+*Change 1. Using error varaible to check.
+---
+ drivers/net/ethernet/smsc/smc911x.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/smsc/smc911x.c b/drivers/net/ethernet/smsc/smc911x.c
+index 22cdbf12c823..9470d9c07fed 100644
+--- a/drivers/net/ethernet/smsc/smc911x.c
++++ b/drivers/net/ethernet/smsc/smc911x.c
+@@ -2069,7 +2069,12 @@ static int smc911x_drv_probe(struct platform_device *pdev)
+ 	SET_NETDEV_DEV(ndev, &pdev->dev);
+ 
+ 	ndev->dma = (unsigned char)-1;
+-	ndev->irq = platform_get_irq(pdev, 0);
++
++	ret = platform_get_irq(pdev, 0);
++	if (ret < 0)
++		goto release_both;
++	ndev->irq = ret;
++
+ 	lp = netdev_priv(ndev);
+ 	lp->netdev = ndev;
+ #ifdef SMC_DYNAMIC_BUS_CONFIG
+-- 
+2.25.1
+

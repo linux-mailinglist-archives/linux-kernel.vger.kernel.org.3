@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0524747DF34
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 07:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 238FD47DF37
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 07:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242410AbhLWG4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 01:56:49 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39834 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232658AbhLWG4r (ORCPT
+        id S1346665AbhLWG6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 01:58:08 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47686 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232658AbhLWG6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 01:56:47 -0500
+        Thu, 23 Dec 2021 01:58:06 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10DF661DC8
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 06:56:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2AF3C36AE5;
-        Thu, 23 Dec 2021 06:56:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D963B81F7F
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 06:58:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CD26C36AE9;
+        Thu, 23 Dec 2021 06:58:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640242606;
-        bh=ISmOxWI6u5C+k89d6ZQbgZNWCUXFaswndd35sG+K8z0=;
+        s=k20201202; t=1640242684;
+        bh=EzQ75FlGoi7auE3z70CQ4I37sP8CGTCjYus3IThKn/w=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CM5fWh+lMBnLGGltiQMXQB7+PEgxoswhmZAuKApX00qzBb3NfFokxD4noPYkg/cVQ
-         wgUdYG/RZMTm/zX3xDONpueRwRrrjkR3y/uhpPDaO/GL42wOkRXpQyjLXzaD6w1lMe
-         /TmcrIzy6VnFP2YATaKERGFUIDt4mDY9aYDEgYsQUgym9E9HTZf2pR/QBx12kY+ULs
-         T9VABz36aSbtnJAxULLUUtmQ8jcf9vN+QXaY23GsRQ5pn4xd9wGChDwnM/dwRfkxJX
-         OqKDW4cVI7xR/d1v/rBco8uIQspbDX86T/MRANXjomdMEXbc62kYTKR2FiTQ4y9xXB
-         UuCvjuCx+cuwQ==
-Date:   Thu, 23 Dec 2021 12:26:41 +0530
+        b=WyFNywQhsRhKX4zrOb0FMUOoVf5QlZCAYU21WCoLjDQjraAXHYYiJJCxAVohR6Ls1
+         zgldUacvdHGfe3aWUR33MMa80gxKPehT1qpZ6A5jdlxXfzFXiru/mFG8/aXn8COZnt
+         p8Kusleb31RMVIq4RTVeiwtRoddnw0rnP4QBUBT7hrmxitZwwh1MecaoCf+E9ISDOo
+         zg4NJL4aXEsa3cXnIW2N+rHsJoTI+ij6SCS2QzvCdh8VptVPvJ2QCYoej45zOA1v1O
+         IWEF3rlnr2GDE0uWXfuy1QTMhxCX5OmaHHE0/J0YR2TCIaEJOu+Dy/yL8D085ZRadQ
+         phxi6arp/e32w==
+Date:   Thu, 23 Dec 2021 12:28:00 +0530
 From:   Vinod Koul <vkoul@kernel.org>
 To:     Bard Liao <yung-chuan.liao@linux.intel.com>
 Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
@@ -37,66 +37,59 @@ Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
         srinivas.kandagatla@linaro.org,
         pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
         bard.liao@intel.com
-Subject: Re: [PATCH 3/7] soundwire: intel: improve suspend flows
-Message-ID: <YcQdqT6M+W9du8wy@matsya>
+Subject: Re: [PATCH 6/7] soundwire: intel: remove unnecessary init
+Message-ID: <YcQd+FTe+C4/Xpt1@matsya>
 References: <20211213054634.30088-1-yung-chuan.liao@linux.intel.com>
- <20211213054634.30088-4-yung-chuan.liao@linux.intel.com>
+ <20211213054634.30088-7-yung-chuan.liao@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20211213054634.30088-4-yung-chuan.liao@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211213054634.30088-7-yung-chuan.liao@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 13-12-21, 13:46, Bard Liao wrote:
-> From: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+> From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 > 
-> This patch provides both a simplification of the suspend flows and a
-> better balanced operation during suspend/resume transition, as part of
-> the transition of Sound Open Firmware (SOF) to dynamic pipelines: the
-> DSP resources are only enabled when required instead of enabled on
-> startup.
+> cppcheck warning:
 > 
-> The exiting code relies on a convoluted way of dealing with suspend
-> signals. Since there is no .suspend DAI callback, we used the
-> component .suspend and marked all the component DAI dmas as
-> 'suspended'. The information was used in the .prepare stage to
-> differentiate resume operations from xrun handling, and only
-> reinitialize SHIM registers and DMA in the former case.
+> drivers/soundwire/intel.c:1487:10: style: Variable 'ret' is assigned a
+> value that is never used. [unreadVariable]
+>  int ret = 0;
+>          ^
 > 
-> While this solution has been working reliably for about 2 years, there
-> is a much better solution consisting in trapping the TRIGGER_SUSPEND
-> in the .trigger DAI ops. The DMA is still marked in the same way for
-> the .prepare op to run, but in addition the callbacks sent to DSP
-> firmware are now balanced.
+> Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
+> Reviewed-by: Rander Wang <rander.wang@intel.com>
+> Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+> ---
+>  drivers/soundwire/intel.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Normal operation:
-> hw_params -> intel_params_stream
-> hw_free   -> intel_free_stream
-> 
-> suspend    -> intel_free_stream
-> prepare    -> intel_params_stream
-> 
-> This balanced operation was not required with existing SOF firmware
-> relying on static pipelines instantiated at every boot. With the
-> on-going transition to dynamic pipelines, it's however a requirement
-> to keep the use count for the DAI widget balanced across all
-> transitions.
-> 
-> The component suspend is not removed but instead modified to deal with
-> a corner case: when a substream is PAUSED, the ALSA core does not
-> throw the TRIGGER_SUSPEND. This is problematic since the refcount for
-> all pipelines and widgets is not balanced, leading to issues on
-> resume. The trigger callback keeps track of the 'paused' state with a
-> new flag, which is tested during the component suspend called later to
-> release the remaining DSP resources. These resources will be
-> re-enabled in the .prepare step.
-> 
-> The IPC used in the TRIGGER_SUSPEND to release DSP resources is not a
-> problem since the BE dailink is already marked as non-atomic.
+> diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
+> index e946d1283892..45ea55a7d0c8 100644
+> --- a/drivers/soundwire/intel.c
+> +++ b/drivers/soundwire/intel.c
+> @@ -1613,7 +1613,7 @@ static int __maybe_unused intel_pm_prepare(struct device *dev)
+>  	struct sdw_intel *sdw = cdns_to_intel(cdns);
+>  	struct sdw_bus *bus = &cdns->bus;
+>  	u32 clock_stop_quirks;
+> -	int ret = 0;
+> +	int ret;
+
+Ideally this should not be part of this series!
+
+If Mark wants to pick:
 
 Acked-By: Vinod Koul <vkoul@kernel.org>
+
+>  
+>  	if (bus->prop.hw_disabled || !sdw->startup_done) {
+>  		dev_dbg(dev, "SoundWire master %d is disabled or not-started, ignoring\n",
+> -- 
+> 2.17.1
 
 -- 
 ~Vinod

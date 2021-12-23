@@ -2,96 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E394F47E195
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 11:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC66547E1B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 11:46:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347776AbhLWKiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 05:38:10 -0500
-Received: from mga14.intel.com ([192.55.52.115]:29250 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347755AbhLWKiI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 05:38:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640255887; x=1671791887;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PuR52/Ba94yPsgQ4lSZpBqqDPD9qPXxRGfzZH9LoHw8=;
-  b=KmkPKtePD+ZbztE7IWV24FNuik5c78VLQn4XKsJfAI0Vim9De2oXzbpA
-   1gln9F/EuibwIRduI/p1vETqUGOA9MnFH6cGh+kKMmYIRwwmW5VaoX550
-   ZX5gFDCGDNir/9nK6qQXMBeD9o8LQi9ERTl/npU4rbv5wz+IGARKGzB9k
-   /9r2CLr+Mdkd0dqo2h6hUv1XAQjvHZ0M6rMjAfkeMiDYR8oEW3+ehybRE
-   yW7DlJ2n5TCTzVJ6o0kiEgKlQU/Y1LomgeV2Q4YPTJqCv0XqKr7HI4v1l
-   Z/oKKJEJ7goT79HPQWqtyQeYkfk6dSIlJofbtVXYYLPXBwyVjFhmpIN9u
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="241027274"
-X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
-   d="scan'208";a="241027274"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 02:38:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
-   d="scan'208";a="664546190"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Dec 2021 02:38:05 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id AD5ADD4; Thu, 23 Dec 2021 12:38:13 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Cc:     Hoan Tran <hoan@os.amperecomputing.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v1 2/2] gpio: dwapb: Switch to use fwnode instead of of_node
-Date:   Thu, 23 Dec 2021 12:38:09 +0200
-Message-Id: <20211223103809.12343-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211223103809.12343-1-andriy.shevchenko@linux.intel.com>
-References: <20211223103809.12343-1-andriy.shevchenko@linux.intel.com>
+        id S1347764AbhLWKqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 05:46:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243211AbhLWKqS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 05:46:18 -0500
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F631C061401;
+        Thu, 23 Dec 2021 02:46:17 -0800 (PST)
+Received: by mail-vk1-xa2f.google.com with SMTP id u198so2955731vkb.13;
+        Thu, 23 Dec 2021 02:46:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=udkI7QMUeDrVioHXKLugL+N72UQFHAQI9ILWskSEf2E=;
+        b=Rc0SRinyGXdlYdn0ZVN1Y935n9Dl1CIaD+7eWT3czQueDH2PxPcw7Uzxzct7gYF/4A
+         y3ptI26CJIsKq39UAQ9i96cwBKuYYMz/Dy6RrWXmvke/LljlZ3qT4wFhIqq3JZWQnhGS
+         dwjsBKFfTeCzBYryc5wT1bYHeFJmcMOmBWPXJ6kn3Vo/8x2epHuIHkhdRwdhPhdfs/vl
+         kEpwmjeTNo81kA53aIebSZPVYIQA7p3feT3mklXBlrYSOpcEuMS6/L0hgqkGrWWIiV89
+         q+wTTueB9O2Mu9tKIboe6XZhOEj7zqkKEy0/ITGkGp/yT1CdUIAvNv9GO8krPdPXrhT+
+         QlTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=udkI7QMUeDrVioHXKLugL+N72UQFHAQI9ILWskSEf2E=;
+        b=7JpswZShdSWk54sILSLwCx96O9BFdP0dn5x4yLUzLkQ4LA2ET9N6ue9ewUYSua297T
+         ta5ZQy91egiopWFip2GTTdxMqlEkdwNgwKOPbJ8JYxChzd3/DUH0u4JVnJv8Egh7N0F2
+         VDbhxGwkhe/SZbU8pLtNob++BO2NrCCxAseC1RrY6QaKCX/zphvMrV6DM1By6OwqFNCN
+         6oUQCrI6V1bwpxFuP6BaE2VcfcKoKx23ZVyeAzeI8SCKtltxODBZW6JmwvZzCCyjM/3o
+         tlvBZOkAc/AclAU8CtOvm2s6YNBe+/5eKwmynCySnrbFWE21SwR/RvVIy5pDGrBXyg8h
+         XJfQ==
+X-Gm-Message-State: AOAM531YLZ8FFqwlmzKiDl7Myz4CJyeDS9w9bk1AGTr36lakz4+/kHh2
+        yDcPBWmg8yvhFeaVy06IGhhDWuoPeqrqm0MXBJ4=
+X-Google-Smtp-Source: ABdhPJwFv+t2sLKF20hGj3tcSWKJno8hh4couorNtGMG0CPg4D7X9f5hsSO1PYZ2XzpeJ0JpICQEs+iw/Yeyu2ejeBc=
+X-Received: by 2002:ac5:c395:: with SMTP id s21mr570745vkk.3.1640256376693;
+ Thu, 23 Dec 2021 02:46:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211222163256.66270-1-andriy.shevchenko@linux.intel.com>
+ <CAHNKnsS_1fQh1UL-VX0kXfDp_umMtfSnDwJXWxiBXFdyrK1pYA@mail.gmail.com>
+ <YcRL8Ttxm8yMj77U@smile.fi.intel.com> <YcRMlp6ux+R0op3Q@smile.fi.intel.com>
+In-Reply-To: <YcRMlp6ux+R0op3Q@smile.fi.intel.com>
+From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Date:   Thu, 23 Dec 2021 13:46:05 +0300
+Message-ID: <CAHNKnsSuo52J0Az_fNfRUj6P8CCZMWm+SVkYjoik_Py74N6Yzg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] wwan: Replace kernel.h with the necessary inclusions
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Johannes Berg <johannes@sipsolutions.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GPIO library now accepts fwnode as a firmware node, so
-switch the driver to use it and hence rectify the ACPI
-case which uses software nodes.
+On Thu, Dec 23, 2021 at 1:18 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> On Thu, Dec 23, 2021 at 12:14:09PM +0200, Andy Shevchenko wrote:
+>> On Wed, Dec 22, 2021 at 11:38:44PM +0300, Sergey Ryazanov wrote:
+>>> On Wed, Dec 22, 2021 at 7:32 PM Andy Shevchenko
+>>> <andriy.shevchenko@linux.intel.com> wrote:
+>
+> ...
+>
+>> Not sure what it's supposed from me to do. The forward declarations are
+>> the tighten part of the cleanup (*) and it's exactly what is happening h=
+ere,
+>> i.e.  replacing kernel.h "with the list of what is really being used".
+>>
+>> *) Either you need a header, or you need a forward declaration, or rely =
+on
+>>    the compiler not to be so strict. I prefer the second option out of t=
+hree.
+>
+> Ah, seems indeed the skbuf and netdevice ones can be split. Do you want m=
+e to
+> resend as series of two?
 
-Note, in this case it's rather logical fix that doesn't
-affect functionality, thus no backporting required.
+No. The single patch cleanup looks pretty good.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/gpio/gpio-dwapb.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+It might be worth pointing out in the commit message that the other
+included headers were removed as they indirectly include the kernel.h
+header. This will be helpful for future readers. But I don=E2=80=99t think
+such a comment is worth a patch update. So I am Ok if this patch will
+be applied as is.
 
-diff --git a/drivers/gpio/gpio-dwapb.c b/drivers/gpio/gpio-dwapb.c
-index ec0767d7800d..b0f3aca61974 100644
---- a/drivers/gpio/gpio-dwapb.c
-+++ b/drivers/gpio/gpio-dwapb.c
-@@ -15,7 +15,6 @@
- #include <linux/irq.h>
- #include <linux/mod_devicetable.h>
- #include <linux/module.h>
--#include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/property.h>
- #include <linux/reset.h>
-@@ -515,9 +514,7 @@ static int dwapb_gpio_add_port(struct dwapb_gpio *gpio,
- 		return err;
- 	}
- 
--#ifdef CONFIG_OF_GPIO
--	port->gc.of_node = to_of_node(pp->fwnode);
--#endif
-+	port->gc.fwnode = pp->fwnode;
- 	port->gc.ngpio = pp->ngpio;
- 	port->gc.base = pp->gpio_base;
- 
--- 
-2.34.1
+> (Sorry I have sent many similar changes and haven't remembered by heart w=
+here
+>  I did what exactly, but here it looks natural to cleanup that stuff at t=
+he
+>  same time, so the question is if it should be a separate change or not)
 
+The patch looks good. Thank you for this hard cleanup work!
+
+--=20
+Sergey

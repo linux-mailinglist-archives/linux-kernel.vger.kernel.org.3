@@ -2,124 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FDA347E79A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C0647E79D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349825AbhLWSVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 13:21:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233586AbhLWSVv (ORCPT
+        id S1349830AbhLWS1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 13:27:04 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:52860 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349767AbhLWS1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 13:21:51 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F37AC061401;
-        Thu, 23 Dec 2021 10:21:51 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id f17so4843159ilj.11;
-        Thu, 23 Dec 2021 10:21:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oRUs2l6ZeMJEDsITkS4VxxkYh4G2HLR8PEyMwu7ux5Y=;
-        b=Z+oqpgoSb+vRReCCj+8rAPO1e/AxPHDRGYHVvJI5IgOFc8u9L4mzvJq2U2gcVlFWCV
-         FNApvBRKv2YHQr58Y9TpjzCgWw2vclhF15mfGpkWRseX12nzr4sL5+apxo6RqgX/ZWnn
-         z5u9rxvlEHRMskEWLVshOKBmr7AXln/ZhG3P4xurOzLPiJ7Ntqm/nIx9KTWmhzwrKU8V
-         niysS/W7bG9Zjtf2cPWgS3UymJMI5W3znLPKpjSrn6+LVWf97QAX5zmMtBEUhKMzJPPF
-         1UY1kYV7j9BZ91/dj7zCWN9siKq3Epa3ccycr2khMbJmYzmiLLapHNPUWixnBdHY4Kgj
-         0Vow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oRUs2l6ZeMJEDsITkS4VxxkYh4G2HLR8PEyMwu7ux5Y=;
-        b=x2q7Nu3oZMSG9HPvzqg47WJI95bR7t8P4NgGYlQtk/pE7F+8C0FamYIe/cU5WhKWfG
-         KjYdAhRRVfJ5xYmi7ozYBB5YZ9ST84Op3WBAopJPYA3YpkOgVvzliGsF+nsGrXRr72Iq
-         9PKGKSmSIqOkSH/MtT2NUURlH2N+x6jPFjQiu+IRvW8hEx4P4WSwYSZQ+ZZ6L/xM2wST
-         klHneajHmcCPr79LAIB92a2ZMqltkt3WqO0obZ3SUm7tlnGyq5IJAcToeCKmkYdBLkEr
-         09Byf9GDeMAb/s4pgP3pO456aXI0GBnb3cUu0HGcq6zHh5VVeYfa84uImP3YMVWf/pSi
-         7M4w==
-X-Gm-Message-State: AOAM530Bcgf2yvZpHipzaNxClp6aRreQAyvNExTwDtTMQBtutuPaQoSH
-        h4dMirWWZrbwCmb6ief9qXY2la1uRQ9hyb+PlJw=
-X-Google-Smtp-Source: ABdhPJzppK8OQBJ8UFCCzqGUOU1/JpKognXqs+kdRlyz7hMf3MeFWh170Hw579k8dBLqZyDBJ7zuEHBlKqN56k5nKMk=
-X-Received: by 2002:a05:6e02:1a21:: with SMTP id g1mr1640062ile.71.1640283710886;
- Thu, 23 Dec 2021 10:21:50 -0800 (PST)
+        Thu, 23 Dec 2021 13:27:02 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EFDB61F41
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 18:27:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 673BDC36AE5;
+        Thu, 23 Dec 2021 18:26:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640284021;
+        bh=4U8UtwVy0KszuMa67n1hL7aI5XZh6iDm1CqeBYOSGDU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MCyLkLPZupeIqlIzPLu8CFnZ+okNCpZea/S7RsWdAb/6lC1ohbhVoaPzCy9xgRnOb
+         1N/yZGlSFEHdb2mvgGP9E2iKTm8Zaf+ZgwTm+FhjybeLoKStaLOYe+K7e8hYzesYPV
+         aZoG1CbP59GpsSL+K5SZtpYTAaOePATQyAbXQZuJKnCqV/LM/V7IbeDERfCet4E5b5
+         k8Xd276foRyBp/vjq2ZGHwA9hiByMtLnkQzMreRf3gPUc3NJ03xMttEeOSQsSojYLU
+         Vi1j61JokYUPtQ7Xmvr4WREO/21kPvbXmfDDdjzSABP3mzX0XmwOh6vp9GktK908xM
+         6crW5tp4dxOwQ==
+Date:   Thu, 23 Dec 2021 18:26:56 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Bard Liao <yung-chuan.liao@linux.intel.com>
+Cc:     alsa-devel@alsa-project.org, vkoul@kernel.org,
+        vinod.koul@linaro.org, linux-kernel@vger.kernel.org, tiwai@suse.de,
+        gregkh@linuxfoundation.org, srinivas.kandagatla@linaro.org,
+        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
+        bard.liao@intel.com
+Subject: Re: [PATCH 7/7] soundwire: intel: remove PDM support
+Message-ID: <YcS/cPb0UXsc9SWm@sirena.org.uk>
+References: <20211213054634.30088-1-yung-chuan.liao@linux.intel.com>
+ <20211213054634.30088-8-yung-chuan.liao@linux.intel.com>
 MIME-Version: 1.0
-References: <20211223052007.4111674-1-pulehui@huawei.com>
-In-Reply-To: <20211223052007.4111674-1-pulehui@huawei.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 23 Dec 2021 10:21:39 -0800
-Message-ID: <CAEf4BzY29kWicH0fdh9NnYu4nn1E4odL2ES2EYTGkyvHbo2c4g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix cross compiling error when
- using userspace pt_regs
-To:     Pu Lehui <pulehui@huawei.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oH+CFB7uVqhnu6IS"
+Content-Disposition: inline
+In-Reply-To: <20211213054634.30088-8-yung-chuan.liao@linux.intel.com>
+X-Cookie: A modem is a baudy house.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 8:56 PM Pu Lehui <pulehui@huawei.com> wrote:
->
-> When cross compiling arm64 bpf selftests in x86_64 host, the following
-> error occur:
->
-> progs/loop2.c:20:7: error: incomplete definition of type 'struct
-> user_pt_regs'
->
-> Some archs, like arm64 and riscv, use userspace pt_regs in bpf_tracing.h.
-> When arm64 bpf selftests cross compiling in x86_64 host, clang cannot
-> find the arch specific uapi ptrace.h. We can add arch specific header
-> file directory to fix this issue.
->
-> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> ---
-> v1->v2:
-> - use vmlinux.h directly might lead to verifier fail.
-> - use source arch header file directory suggested by Andrii Nakryiko.
->
->  tools/testing/selftests/bpf/Makefile | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 42ffc24e9e71..1ecb6d192953 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -12,6 +12,7 @@ BPFDIR := $(LIBDIR)/bpf
->  TOOLSINCDIR := $(TOOLSDIR)/include
->  BPFTOOLDIR := $(TOOLSDIR)/bpf/bpftool
->  APIDIR := $(TOOLSINCDIR)/uapi
-> +ARCH_APIDIR := $(abspath ../../../../arch/$(SRCARCH)/include/uapi)
->  GENDIR := $(abspath ../../../../include/generated)
->  GENHDR := $(GENDIR)/autoconf.h
->
-> @@ -294,7 +295,8 @@ MENDIAN=$(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
->  CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
->  BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)                  \
->              -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)                   \
-> -            -I$(abspath $(OUTPUT)/../usr/include)
-> +            -I$(abspath $(OUTPUT)/../usr/include)                      \
-> +            -I$(ARCH_APIDIR)
->
 
-This causes compilation error, see [0]. I think we'll have to wait for
-my patch ([1]) to land and then add kernel-side variants for accessing
-pt_regs.
+--oH+CFB7uVqhnu6IS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  [0] https://github.com/kernel-patches/bpf/runs/4614606900?check_suite_focus=true
-  [1] https://patchwork.kernel.org/project/netdevbpf/patch/20211222213924.1869758-1-andrii@kernel.org/
+On Mon, Dec 13, 2021 at 01:46:34PM +0800, Bard Liao wrote:
+> From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+>=20
+> While the hardware supports PDM streams, this capability has never
+> been tested or enabled on any product, so this is dead-code. Let's
+> remove all this.
 
+This doesn't build with current code, I'm guessing due to a Soundwire
+dependency I don't have:
 
->  CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
->                -Wno-compare-distinct-pointer-types
-> --
-> 2.25.1
->
+/mnt/kernel/drivers/soundwire/intel.c:1142:3: error: 'const struct snd_soc_=
+dai_ops' has no member named 'set_sdw_stream'; did you mean 'set_stream'?
+ 1142 |  .set_sdw_stream =3D intel_pdm_set_sdw_stream,
+      |   ^~~~~~~~~~~~~~
+      |   set_stream
+/mnt/kernel/drivers/soundwire/intel.c:1142:20: error: initialization of 'in=
+t (*)(struct snd_pcm_substream *, struct snd_pcm_hw_params *, struct snd_so=
+c_dai *)' from incompatible pointer type 'int (*)(struct snd_soc_dai *, voi=
+d *, int)' [-Werror=3Dincompatible-pointer-types]
+ 1142 |  .set_sdw_stream =3D intel_pdm_set_sdw_stream,
+      |                    ^~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/kernel/drivers/soundwire/intel.c:1142:20: note: (near initialization f=
+or 'intel_pdm_dai_ops.hw_params')
+/mnt/kernel/drivers/soundwire/intel.c:1143:3: error: 'const struct snd_soc_=
+dai_ops' has no member named 'get_sdw_stream'; did you mean 'get_stream'?
+ 1143 |  .get_sdw_stream =3D intel_get_sdw_stream,
+      |   ^~~~~~~~~~~~~~
+      |   get_stream
+/mnt/kernel/drivers/soundwire/intel.c:1143:20: error: initialization of 'in=
+t (*)(struct snd_pcm_substream *, struct snd_soc_dai *)' from incompatible =
+pointer type 'void * (*)(struct snd_soc_dai *, int)' [-Werror=3Dincompatibl=
+e-pointer-types]
+ 1143 |  .get_sdw_stream =3D intel_get_sdw_stream,
+      |                    ^~~~~~~~~~~~~~~~~~~~
+/mnt/kernel/drivers/soundwire/intel.c:1143:20: note: (near initialization f=
+or 'intel_pdm_dai_ops.hw_free')
+cc1: all warnings being treated as errors
+make[3]: *** [/mnt/kernel/scripts/Makefile.build:287: drivers/soundwire/int=
+el.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+make[2]: *** [/mnt/kernel/scripts/Makefile.build:549: drivers/soundwire] Er=
+ror 2
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [/mnt/kernel/Makefile:1846: drivers] Error 2
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:219: __sub-make] Error 2
+
+--oH+CFB7uVqhnu6IS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHEv28ACgkQJNaLcl1U
+h9COhQf/XJITxI7uwmAdAs5euRIHx45jbk3mP4sDaiWxN/zxKpNsUhk9g1K/aBuo
+Vcdo0H4FKTG5R/PvxRC14VTcDd3NexCOqmUgDxsR6WP0DLNqYPSYO+2RcHqWv/zb
+MMpn3TIgNO4nGEmIrLaygph/u4t814+TUlCD8wjnXdkJgzXwwXk2EcrHfibCOetX
+9WWWRB59W5ULjHVveRjxdYzRakTpLNAmthvU0R7OdfLcXW/u8v9rHmN4TAhXvx9w
+wK7gabo+1fU16VIiNUSVLcwhVRbcyijIPPU6n0T7oiGbgQgVi0a/ihCUa+MHAYn5
+4MZMyaEPEwOOaHmnZuS43gmkq7y8eQ==
+=abL6
+-----END PGP SIGNATURE-----
+
+--oH+CFB7uVqhnu6IS--

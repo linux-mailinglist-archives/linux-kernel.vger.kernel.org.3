@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E325347DBB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 01:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E6347DBB8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 01:23:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345609AbhLWAWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 19:22:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
+        id S1345586AbhLWAW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 19:22:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345495AbhLWAWo (ORCPT
+        with ESMTP id S1345544AbhLWAWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 19:22:44 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFB7C061748;
-        Wed, 22 Dec 2021 16:22:44 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id x15so3055106plg.1;
-        Wed, 22 Dec 2021 16:22:44 -0800 (PST)
+        Wed, 22 Dec 2021 19:22:46 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B654C061756;
+        Wed, 22 Dec 2021 16:22:46 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id t123so3693659pfc.13;
+        Wed, 22 Dec 2021 16:22:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ooOQpqGI8yqwBdhnAO1DTOd+XDWRopDBw4/NhIv0RTg=;
-        b=Caau2MVJF8vOqLzcwoVJXvMhtrKVgzUKS7PfAM0T86L5n6vh3B5MtIy4/0vpJflYMk
-         8o8O97LLzApN2bfBSOuJpaMQQxa1GFs31k74LvcYSDIkjAbezmh99XHexENvLCNprvrG
-         qoo/VAhQuqVPEUfszUKj4xDs+Nk/cJ82RVgF20dS8FT5kSs/ayOMxIe2FDgK4ShFRzJ5
-         QQ5YVpQmoMoZoQhiFYsRUpTvsVshweqH6AfWc64S4kEYgoriaWvJHsKqPoad/us8KpwT
-         gGTpy8Musa+aPKHIeRnKTOeLEaVgYR0UYiN+Rsj1CTbWmsZqk+wE64BBS5Au920rBMyL
-         a74g==
+        bh=yy0dKp0QqTKRDDm+DzMuRMtHniPa8Xch60bze9ubGZk=;
+        b=oiAcd/kTGkJc+314HWZKIChHC7+TT85eKuknVt2Qrl8fgIWwHb4HZLCou6kEMJC6dG
+         kCTzfc6Kr6EpxJUfSYWl+8oE5OK2D8o+Nm0h7ql13+5TALigNZZeRApbq6regGDtSBBL
+         YaszKtin8mMpaoJs9XguPE/UvrytJjv8GgNjG9pBw4Jmx+pzb4VTjgG+Y5dRnd5HYq0c
+         fGXZPnXlyu3Wvifus+DHtjdqcGdKRPoWQeaChpnd6vrzgUjzwnnXkQpk3RubZWUdFXWn
+         PwsLixClBkBVFpKtFCUFvDm4y249kx/F933+WTZWnCerksgh8P81xdJLIajz8hIJhlno
+         fI1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ooOQpqGI8yqwBdhnAO1DTOd+XDWRopDBw4/NhIv0RTg=;
-        b=462VMHyHrsXxJtjU4BLY5mjr7rRX8TnFvP2s4lDfkPJCNe1tHcpLgr60JM07mffnpT
-         Lgy2ngHAtZpmFORa2pZeJqEW1Gth9r69Kgq/d9tELZoriCD+psnAO+M1EuYVSpQcMKqX
-         iwiNJFKzEpyqj+mE9NdCc+8DmiD37BxH9zDHvWMjft7WlC63y+WVf/YmEzMWSfIKy1fK
-         T5nzpTZ7XJYgL1sFM9sKHYbE/orE0ZW9GphgD+qoXFiol+kQu+x66bhnUjoAq+fxoz6Y
-         dznF+ZFkUt1M96QApAWZF6GKUDRy1Okx9wByCBzjTN7pWs69daO1LTWBf69+UIF+mINT
-         892w==
-X-Gm-Message-State: AOAM530b/i1ESW5saPggs6/aPhlgrRm41e/Cmf6N8vutTNR4qEgePdGO
-        0WpAA6Mu3NDGt2WCqx2YV9M=
-X-Google-Smtp-Source: ABdhPJxa7BlJTDNL5Bl9zH3S6qNvt+nePjZ4VIg972BHLrDi/rIXlBQtfu1Tm6HFn1XrrNRYwtePuw==
-X-Received: by 2002:a17:90a:6b44:: with SMTP id x4mr49967pjl.27.1640218963819;
-        Wed, 22 Dec 2021 16:22:43 -0800 (PST)
+        bh=yy0dKp0QqTKRDDm+DzMuRMtHniPa8Xch60bze9ubGZk=;
+        b=4ZD+EhFl21h/AoyWKc5XuRN/AdWFaF7F9m5BwnzHIrmkT+0rSe/WlLiez4LCLT8yz0
+         yiQPhPeqD6iMPPyIVZ0dpZpDv4auIyj4f97afdSdD1L2sOkqCZ+QzXbo+HTF+1kKVGif
+         vFWJknRXPVCQol8FQl5LVJT9O+ctJm4241/5s9C2hu3x3KX58zhDKS2nxHvMGzIvdyts
+         xwYA1cP97HTT41HBhNoq6pYvaAkQSC7Pbc2aj93yZzxdzfqSYZMiq3euZjqgOi746AOj
+         cdvq9aWLiFdPg7rH+hY53vIAz9Tot9Z5NnEsUhfin0BQ6ssG/PPnvBOD/je9GIGigEYa
+         jdIA==
+X-Gm-Message-State: AOAM533ywqmYP1jQwX+v9V40FN4Fl3Wd0HOJVzBiE8ZL540pZNroadei
+        VF9MAL27GrIvCTmWH0fPllk=
+X-Google-Smtp-Source: ABdhPJyEsAVWK4JWRbMSF91GaDuMQ+6a9Y/KzuHDIAlj+nme3qw1QD74G5FuOcQ6YCrjDXd27UQEEw==
+X-Received: by 2002:a05:6a00:18a9:b0:4ba:d14d:88 with SMTP id x41-20020a056a0018a900b004bad14d0088mr158299pfh.59.1640218965581;
+        Wed, 22 Dec 2021 16:22:45 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id e24sm6720703pjt.45.2021.12.22.16.22.42
+        by smtp.gmail.com with ESMTPSA id e24sm6720703pjt.45.2021.12.22.16.22.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 16:22:43 -0800 (PST)
+        Wed, 22 Dec 2021 16:22:45 -0800 (PST)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-mtd@lists.infradead.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -65,9 +65,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         (BCMA)),
         bcm-kernel-feedback-list@broadcom.com (open list:BROADCOM STB NAND
         FLASH DRIVER)
-Subject: [PATCH 7/9] mtd: rawnand: brcmnand: Allow platform data instantation
-Date:   Wed, 22 Dec 2021 16:22:23 -0800
-Message-Id: <20211223002225.3738385-8-f.fainelli@gmail.com>
+Subject: [PATCH 8/9] mtd: rawnand: brcmnand: BCMA controller uses command shift of 0
+Date:   Wed, 22 Dec 2021 16:22:24 -0800
+Message-Id: <20211223002225.3738385-9-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211223002225.3738385-1-f.fainelli@gmail.com>
 References: <20211223002225.3738385-1-f.fainelli@gmail.com>
@@ -77,127 +77,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make use of the recently refactored code in brcmnand_init_cs() and
-derive the chip-select from the platform data that is supplied. Update
-the various code paths to avoid relying on possibly non-existent
-resources, too.
+For some odd and unexplained reason the BCMA NAND controller, albeit
+revision 3.4 uses a command shift of 0 instead of 24 as it should be,
+quirk that.
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- drivers/mtd/nand/raw/brcmnand/brcmnand.c | 45 ++++++++++++++++++------
- 1 file changed, 35 insertions(+), 10 deletions(-)
+ drivers/mtd/nand/raw/brcmnand/brcmnand.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-index e7947cff4dd1..2f2aaa554282 100644
+index 2f2aaa554282..2dfb94c4cc93 100644
 --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
 +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-@@ -9,6 +9,7 @@
- #include <linux/delay.h>
- #include <linux/device.h>
- #include <linux/platform_device.h>
-+#include <linux/platform_data/brcmnand.h>
- #include <linux/err.h>
- #include <linux/completion.h>
- #include <linux/interrupt.h>
-@@ -2760,7 +2761,8 @@ static const struct nand_controller_ops brcmnand_controller_ops = {
- 	.attach_chip = brcmnand_attach_chip,
- };
+@@ -908,6 +908,12 @@ static void brcmnand_wr_corr_thresh(struct brcmnand_host *host, u8 val)
  
--static int brcmnand_init_cs(struct brcmnand_host *host)
-+static int brcmnand_init_cs(struct brcmnand_host *host,
-+			    const char * const *part_probe_types)
+ static inline int brcmnand_cmd_shift(struct brcmnand_controller *ctrl)
  {
- 	struct brcmnand_controller *ctrl = host->ctrl;
- 	struct device *dev = ctrl->dev;
-@@ -2813,7 +2815,7 @@ static int brcmnand_init_cs(struct brcmnand_host *host)
- 	if (ret)
- 		return ret;
- 
--	ret = mtd_device_register(mtd, NULL, 0);
-+	ret = mtd_device_parse_register(mtd, part_probe_types, NULL, NULL, 0);
- 	if (ret)
- 		nand_cleanup(chip);
- 
-@@ -2982,17 +2984,15 @@ static int brcmnand_edu_setup(struct platform_device *pdev)
- 
- int brcmnand_probe(struct platform_device *pdev, struct brcmnand_soc *soc)
- {
-+	struct brcmnand_platform_data *pd = dev_get_platdata(&pdev->dev);
- 	struct device *dev = &pdev->dev;
- 	struct device_node *dn = dev->of_node, *child;
- 	struct brcmnand_controller *ctrl;
-+	struct brcmnand_host *host;
- 	struct resource *res;
- 	int ret;
- 
--	/* We only support device-tree instantiation */
--	if (!dn)
--		return -ENODEV;
--
--	if (!of_match_node(brcmnand_of_match, dn))
-+	if (dn && !of_match_node(brcmnand_of_match, dn))
- 		return -ENODEV;
- 
- 	ctrl = devm_kzalloc(dev, sizeof(*ctrl), GFP_KERNEL);
-@@ -3013,7 +3013,7 @@ int brcmnand_probe(struct platform_device *pdev, struct brcmnand_soc *soc)
- 	/* NAND register range */
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	ctrl->nand_base = devm_ioremap_resource(dev, res);
--	if (IS_ERR(ctrl->nand_base))
-+	if (IS_ERR(ctrl->nand_base) && !brcmnand_soc_has_ops(soc))
- 		return PTR_ERR(ctrl->nand_base);
- 
- 	/* Enable clock before using NAND registers */
-@@ -3157,7 +3157,6 @@ int brcmnand_probe(struct platform_device *pdev, struct brcmnand_soc *soc)
- 
- 	for_each_available_child_of_node(dn, child) {
- 		if (of_device_is_compatible(child, "brcm,nandcs")) {
--			struct brcmnand_host *host;
- 
- 			host = devm_kzalloc(dev, sizeof(*host), GFP_KERNEL);
- 			if (!host) {
-@@ -3177,7 +3176,7 @@ int brcmnand_probe(struct platform_device *pdev, struct brcmnand_soc *soc)
- 
- 			nand_set_flash_node(&host->chip, dn);
- 
--			ret = brcmnand_init_cs(host);
-+			ret = brcmnand_init_cs(host, NULL);
- 			if (ret) {
- 				devm_kfree(dev, host);
- 				continue; /* Try all chip-selects */
-@@ -3187,6 +3186,32 @@ int brcmnand_probe(struct platform_device *pdev, struct brcmnand_soc *soc)
- 		}
- 	}
- 
-+	if (!list_empty(&ctrl->host_list))
++	/* Kludge for the BCMA-based NAND controller which does not actually
++	 * shift the command
++	 */
++	if (ctrl->nand_version == 0x0304 && brcmnand_soc_has_ops(ctrl->soc))
 +		return 0;
 +
-+	if (!pd) {
-+		ret = -ENODEV;
-+		goto err;
-+	}
-+
-+	/* If we got there we must have been probing via platform data */
-+	host = devm_kzalloc(dev, sizeof(*host), GFP_KERNEL);
-+	if (!host) {
-+		ret = -ENOMEM;
-+		goto err;
-+	}
-+	host->pdev = pdev;
-+	host->ctrl = ctrl;
-+	host->cs = pd->chip_select;
-+	host->chip.ecc.size = pd->ecc_stepsize;
-+	host->chip.ecc.strength = pd->ecc_strength;
-+
-+	ret = brcmnand_init_cs(host, pd->part_probe_types);
-+	if (ret)
-+		goto err;
-+
-+	list_add_tail(&host->node, &ctrl->host_list);
-+
- 	/* No chip-selects could initialize properly */
- 	if (list_empty(&ctrl->host_list)) {
- 		ret = -ENODEV;
+ 	if (ctrl->nand_version < 0x0602)
+ 		return 24;
+ 	return 0;
 -- 
 2.25.1
 

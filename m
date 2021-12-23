@@ -2,110 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3109347E7C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A8F347E7C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:51:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349899AbhLWSsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 13:48:17 -0500
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:52795 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349895AbhLWSsG (ORCPT
+        id S244791AbhLWSvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 13:51:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235724AbhLWSvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 13:48:06 -0500
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id AF3ED1BF206;
-        Thu, 23 Dec 2021 18:48:01 +0000 (UTC)
-Date:   Thu, 23 Dec 2021 19:48:56 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Joe Perches <joe@perches.com>
-Cc:     Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>
-Subject: Re: [PATCH v6 2/2] Driver for ON Semi AR0521 camera sensor
-Message-ID: <20211223184856.v34ecibwzepahsju@uno.localdomain>
-References: <m3ee63hkuu.fsf@t19.piap.pl>
- <m35yrfhkaf.fsf@t19.piap.pl>
- <cee1bbe6c8dda1c79ba19f7bbf68fc1d74558cae.camel@perches.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cee1bbe6c8dda1c79ba19f7bbf68fc1d74558cae.camel@perches.com>
+        Thu, 23 Dec 2021 13:51:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFC0C061401;
+        Thu, 23 Dec 2021 10:51:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 27029B821C5;
+        Thu, 23 Dec 2021 18:51:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CF040C36AE5;
+        Thu, 23 Dec 2021 18:51:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640285476;
+        bh=Tgl+MKDk+85l8sVmigHob+brGWpqOkWI/vDT+BRJo6Y=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=R2as4zdcgeuJBNrpsjamXeOjQr682WHpxhMQeBIWj2v/gd1C9e/hghgrpU9uoTebT
+         Dr1Sl5hT9z9k3ZLZRbLKWFENpmhTMQ/uyiqutG1kRAtsipFP09V/5YiBEe2Q/OPI+t
+         JZhpq2L29U9PB6u+0ekVTrpDQjGzr7uB1HkdiJWG3VbwKDtC7wHmYOFjg1vnT84Mhf
+         4oytUY8knLkIMLlO+sW+QmPjzY/Xn4x5tXRA/ad2oUOOf2J8Lj/MRI95OpYkIus/bx
+         9SdiIEqv0bPZQCNaQzpVYSFNLriw2w3hadJeniXcEejF85fLfDwmVujT6EH6mFYZ5v
+         vEPiP1uRg/Xug==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AF3D0EAC060;
+        Thu, 23 Dec 2021 18:51:16 +0000 (UTC)
+Subject: Re: [GIT PULL] Networking for 5.16-rc7
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20211223184316.3916057-1-kuba@kernel.org>
+References: <20211223184316.3916057-1-kuba@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20211223184316.3916057-1-kuba@kernel.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.16-rc7
+X-PR-Tracked-Commit-Id: 391e5975c0208ce3739587b33eba08be3e473d79
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 76657eaef4a759e695eb1883d4f1d9af1e4ff9a8
+Message-Id: <164028547664.17442.5249424011037739118.pr-tracker-bot@kernel.org>
+Date:   Thu, 23 Dec 2021 18:51:16 +0000
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pablo@netfilter.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joe,
-  sorry to jump in
+The pull request you sent on Thu, 23 Dec 2021 10:43:16 -0800:
 
-On Thu, Dec 23, 2021 at 09:49:58AM -0800, Joe Perches wrote:
-> On Thu, 2021-12-23 at 08:06 +0100, Krzysztof Hałasa wrote:
-> > The driver has been extensively tested in an i.MX6-based system.
-> > AR0521 is a 5.7 mm x 4.3 mm, 5 MPix RGGB MIPI/HiSPi BSI CMOS sensor
-> > from On Semiconductor.
->
-> trivial notes:
->
-> > diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
-> []
-> > +/* External clock (extclk) frequencies */
-> > +#define AR0521_EXTCLK_MIN	  (10 * 1000 * 1000)
->
-> Generally, adding a prefix like AR0521_ to defines that are
-> locally defined in a single file unnecessarily increases
-> identifier length.
->
-> It makes using short line lengths difficult.
->
-> e.g. Using this identifier anywhere
->
-> > +#define AR0521_REG_HISPI_CONTROL_STATUS_FRAMER_TEST_MODE_ENABLE 0x80
->
-> Many of the 80 column line lengths and line wrapping used in this
-> file are not really nice to read.  I believe you don't have to be
-> strict about 80 column lines.
->
+> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.16-rc7
 
-Krzysztof first version had much longer lines, and in facts it has
-been asked by me to reduce them to 80 cols. The media subsystem
-requires to validate patches with
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/76657eaef4a759e695eb1883d4f1d9af1e4ff9a8
 
-        ./scripts/checkpatch.pl --strict --max-line-length=80
+Thank you!
 
-We longly debated this and I believe it's now generally accepted to go
-over 80 when it makes sense, but not regularly span to 120 cols like
-in the previous version.
-
-I think this 80-cols limit not being an hard limit anymore is doing
-more worse than good, as each subsystem applies a different rule, and
-I know how frustrating is for Krzysztof to be pushed in different
-direction, as the same happened to me when I contributed to other
-subsystems and I've been asked to span to 100 cols while I was trying
-to stay in 80 no matter what.
-
-Thanks
-   j
-
-> > +#define be		cpu_to_be16
->
-> It's a pity there's no way to declare an array with all members
-> having a specific endianness.  Making sure all elements in these
-> arrays are declared with be() is tedious.
->
-> > +#define AR0521_NUM_SUPPLIES ARRAY_SIZE(ar0521_supply_names)
->
-> It's almost always better to use ARRAY_SIZE directly and not
-> use a #define for the array size.
->
-> > +static int ar0521_set_gains(struct ar0521_dev *sensor)
-> > +{
-> []
-> > +	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
->
-> ftrace works and perhaps all the similar debug logging uses aren't
-> really necessary.
->
->
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

@@ -2,65 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E97F847E1F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 12:06:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A5A47E1FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 12:08:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347856AbhLWLF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 06:05:56 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:42938 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239611AbhLWLFz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 06:05:55 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 14F9A1EC058C;
-        Thu, 23 Dec 2021 12:05:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640257550;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mjlpL30YRZjpB7+65FML0QnfEiaj5dKWWL+9Ghjy3ok=;
-        b=jIaG5S11ItoSZM6KfQVnCBVUhMxTrHBPAQyF7sHSo4Fea+SuMS8qXHk2vqnI2/Cle9Uowm
-        1wG0burx1LaOzE0rF0nXR2SCoW07MnC8sGpGrQGulS5t5PvJc6GJJFaJPAFE2HiIHILHLz
-        nIQSeyybIEvpkFrrSKcdgsqXxS7cFFU=
-Date:   Thu, 23 Dec 2021 12:05:51 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH RESEND v2] x86: warn on native_io_delay() before DMI scan
-Message-ID: <YcRYD9drK5lRgEyY@zn.tnic>
-References: <20211017192558.266809-1-mat.jonczyk@o2.pl>
+        id S1347863AbhLWLIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 06:08:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57214 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232847AbhLWLIF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 06:08:05 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AE9C061401;
+        Thu, 23 Dec 2021 03:08:04 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id j11so9875027lfg.3;
+        Thu, 23 Dec 2021 03:08:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f78OHizdSqkieU+gvXnx+72ezSg/jv19k6AuheS2zOU=;
+        b=Pj9UG/Y/o9c5+eqHC9KA0Q3ImqEcmX212ft2GGDPqHPP0BsAdNehTZDL1/mWZ00uwo
+         l26BdFsSn3UulVGtOIm7lYoCjYWmCKKJXIcN2q87vCZf75QXAVJVqBjexZNmHIcJ7/2a
+         PNGX7mhqBCIVNyROpSAuEHqpq87tToN9B7S3HIbNdR3rXfKZrC/bKLKA0y//fA66NaJA
+         q5g/YwzQj0noSth6tvc/mYkNK6HJZz5l7PmQwqE6H6oO51aDQy9aiLcEtKk2MrZ5rGkr
+         AZ9FfTXAtuqEnLqOJRyvdXoEt9saJrKjb1R/ssHa4CEz8HQAb8v0TF+/DEf80hxzKNbk
+         T/Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f78OHizdSqkieU+gvXnx+72ezSg/jv19k6AuheS2zOU=;
+        b=VJu9Sp7VqS6J3/1zBxfam8Ro+B9KcFmDnwKbAvJ3ZGQSxOrAAXEzQDSErr9UhdK9ux
+         KOrpLSsthNrkkuAXe9ut+HF79cwFBl6+ZRg/6E0W6D+zWvBVEsScVdFq5SKXBMg5fic2
+         3P6AwAvlocEragqtoJMVM9leP/Dfe082fNx0XeAoZJ8MA8xK+XW1QMjaf4jIWKvF3bp9
+         02JgNjptEEBu4LGXPLxpFePUXz4D4Z5MpybuFSuMLvckSpyp/NRPoBMfLSV0VSSztHFn
+         rB5hZefQpMZWqg3AIQD7SSu7QRBGGATfS3RLEhppH843jygweQywMxIRPYMAplAcM4Gm
+         5Htw==
+X-Gm-Message-State: AOAM530m8QdtMl4QOHOlrM9RaQ1Ok1rAuLB7CRMfPl98ezyTg6JqzGeR
+        HPqA9Vs5Ryc5/WL4LwWSNMQBoxY/pyQ=
+X-Google-Smtp-Source: ABdhPJxecF5JpqY7/M1nkQeaOEzcwPAwxa5Kq4FhuIrvPbIRM8kCyxGvjwonGUfdwYaHFPKLZ0j6hA==
+X-Received: by 2002:a05:6512:1395:: with SMTP id p21mr1584374lfa.98.1640257682906;
+        Thu, 23 Dec 2021 03:08:02 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id t7sm473047lfg.115.2021.12.23.03.08.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Dec 2021 03:08:02 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH 0/5] nvmem: support more NVMEM cells variants
+Date:   Thu, 23 Dec 2021 12:07:50 +0100
+Message-Id: <20211223110755.22722-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211017192558.266809-1-mat.jonczyk@o2.pl>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 17, 2021 at 09:25:58PM +0200, Mateusz Jończyk wrote:
-> Writing to IO port 0x80 in native_io_delay() causes system lockups on
-> some laptops. This is handled by io_delay_init(), which scans DMI info
-> and changes io_delay_type on these laptops.
-> 
-> Therefore, calling native_io_delay() / outb_p() / inb_p() / etc. before
-> io_delay_init() may cause problems there and may constitute a kernel
-> bug. Warn if this happens.
+From: Rafał Miłecki <rafal@milecki.pl>
 
-When/how does this happen?
+Some NVMEM devices don't have NVMEM cells at hardcoded offsets and they
+can't be strictly specified in a binding. Those devices usually store
+NVMEM cells in some internal format. We still need a way of referencing
+such hidden / dynamic NVMEM cells.
 
-io_delay_init() gets called pretty early in setup_arch()...
+This patchset adds support for bindings like:
 
-Thx.
+nvram@1eff0000 {
+	compatible = "brcm,nvram";
+	reg = <0x1eff0000 0x10000>;
+
+	mac_addr: cell-0 {
+		label = "et0macaddr";
+	};
+};
+
+ethernet@18024000 {
+	compatible = "brcm,amac";
+	reg = <0x18024000 0x800>;
+
+	nvmem-cells = <&mac_addr>;
+	nvmem-cell-names = "mac-address";
+};
+
+Rafał Miłecki (5):
+  dt-bindings: nvmem: add "label" property to allow more flexible cells
+    names
+  nvmem: core: read OF defined NVMEM cell name from "label" property
+  dt-bindings: nvmem: allow referencing device defined cells by names
+  dt-bindings: nvmem: brcm,nvram: add NVMEM cell to example
+  nvmem: core: add cell name based matching of DT cell nodes
+
+ .../devicetree/bindings/nvmem/brcm,nvram.yaml |  8 +++--
+ .../devicetree/bindings/nvmem/nvmem.yaml      | 16 +++++++--
+ drivers/nvmem/core.c                          | 36 ++++++++++++++++++-
+ 3 files changed, 55 insertions(+), 5 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.31.1
 
-https://people.kernel.org/tglx/notes-about-netiquette

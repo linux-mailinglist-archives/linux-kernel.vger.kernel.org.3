@@ -2,129 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA44A47E68B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 17:56:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32DB147E68E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 17:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349299AbhLWQzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 11:55:47 -0500
-Received: from mga18.intel.com ([134.134.136.126]:43909 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233597AbhLWQzr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 11:55:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640278546; x=1671814546;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EIbGWKBabvxgEfOoZhx/EGM4lcrtAH/4qkhaNcy2FQw=;
-  b=WkcEliI50bienu6tayXsGcwFpYbQdx8RcvIi18RrmBN7JXwkYEXsgyDS
-   VairJdQGHjcXqHlWudNTKY2QLpCVVPirvFulz+vivwmHSArLWINq8tCVf
-   kBmDqina3calps0+RE0h3JHtUgmYwNqPYoMoa/cklsKHLq0UAT4GXIUFR
-   GHgA6qzAv+1BbfwXXonXF0zoZ3xfu7UdUjPGM5AxIy4SU3hzj1adDLx2Q
-   C8VeXwS1JcQjJpVnhVw/hiQJm6KShDtrRr/SK8Z3FbiNNDCVn8Rf3FYLc
-   V67OSKL0AoO1MAWl27ZS7g3JMoCJhLvr3JyDYOhCRtvrKNEKTva8m1RbF
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10207"; a="227696606"
-X-IronPort-AV: E=Sophos;i="5.88,230,1635231600"; 
-   d="scan'208";a="227696606"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 08:55:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,230,1635231600"; 
-   d="scan'208";a="759207328"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Dec 2021 08:55:40 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 471A8125; Thu, 23 Dec 2021 18:55:49 +0200 (EET)
-Date:   Thu, 23 Dec 2021 19:55:48 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/26] x86/tdx: Add __tdx_module_call() and
- __tdx_hypercall() helper functions
-Message-ID: <20211223165548.xr57h25g4diixivp@black.fi.intel.com>
-References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
- <20211214150304.62613-4-kirill.shutemov@linux.intel.com>
- <YcIm8fngUsVulUoI@zn.tnic>
+        id S1349325AbhLWQ5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 11:57:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50996 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349310AbhLWQ5N (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 11:57:13 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E340C061401
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 08:57:13 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id bg2-20020a05600c3c8200b0034565c2be15so6024320wmb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 08:57:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=x19kNH14ExPsQ28C6SlBYVGa8akiQhXJZ1zBC3AV6iQ=;
+        b=M227YuJRwIPX/CPb7Lg+WOaaHsKzAMYXB/Da0yMQGvxGa0saRVV+di4RqWZbiRK50Q
+         trtNNAA5U+lBSeLSDkBTYNHzvTkoRut7yqBa7TwaK2JiNuabxmv5BOwtUV4KRi5pR2ah
+         +So40Cr4Iob4Tt6iSivBaTYonKePYDmJoO96G2315qHEemCOzvUnpTMv67mZ828dG624
+         KlLSAQZAPCK0t6oW5/w0P/ratE8Q/gOGGcfxxVQgmWw9mxWxwPnvkTDBy6VlAIJ/qwC5
+         FqwkC9EauN7+/9F2aBN7XWx0UBUkBy4Fy8msCrRtBKZG4HbI823JZ/pJxnGPdlZrGi+r
+         XB+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=x19kNH14ExPsQ28C6SlBYVGa8akiQhXJZ1zBC3AV6iQ=;
+        b=UNnrsTfYjrzkHOCfDvFMqj3vJoWV2las/jzyw5GRmP9+31D3hmt619Rste9ALvIBY5
+         w3bpr6hmIIoau/2cmqj1ZbeXU4gb/Vj0oWsbCwFvM0kANDcHVYuBG5g6DY+WDM9CLqG5
+         rA9BAXEjd6RJ2/NRWq1QUNpqBE3ILaDb0xaXsJXxh8PvmxBz0ksW8ZTIb9aK+E+Ya/Ii
+         vmDA5LgUE8lLlp6sO0BE1hHiEem1sB2cxXgwgGONFFq+MOuyvEQBrsqAxsPLGGkKiahH
+         u9lXWcxK6VXUYm6zfjLjmqCmmhFqBgvu45/uH9SQsYebsil88e7DJGu+kgNP+YgTmddz
+         IxTg==
+X-Gm-Message-State: AOAM533rCoPL7Zny1Qr5wBaSBQYqLP/TNCL06hmdqFf4DUhrT/kn4B67
+        1q43ADDmS0lxixZXCioVtnY=
+X-Google-Smtp-Source: ABdhPJx0hYSOm4vDZR/gdV0QEOZLF2E0+HdDedp9MlR3fSt42MKgNwt3bY/4NeUgqZTjBr+NJEe+5g==
+X-Received: by 2002:a1c:1d0d:: with SMTP id d13mr2448580wmd.78.1640278632133;
+        Thu, 23 Dec 2021 08:57:12 -0800 (PST)
+Received: from elementary ([217.113.240.86])
+        by smtp.gmail.com with ESMTPSA id u23sm4893233wmc.7.2021.12.23.08.57.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Dec 2021 08:57:11 -0800 (PST)
+Date:   Thu, 23 Dec 2021 17:57:06 +0100
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+Cc:     Simon Ser <contact@emersion.fr>, airlied@linux.ie,
+        alexandre.torgue@foss.st.com, benjamin.gaignard@linaro.org,
+        linux-stm32@st-md-mailman.stormreply.com, marex@denx.de,
+        linux-imx@nxp.com, intel-gfx@lists.freedesktop.org,
+        tzimmermann@suse.de, s.hauer@pengutronix.de,
+        rodrigo.vivi@intel.com, kernel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, yannick.fertre@foss.st.com,
+        linux-kernel@vger.kernel.org, philippe.cornu@foss.st.com,
+        mcoquelin.stm32@gmail.com, dmitry.baryshkov@linaro.org,
+        shawnguo@kernel.org
+Subject: Re: [PATCH v2 1/6] =?iso-8859-1?Q?drm=2Fpl?=
+ =?iso-8859-1?Q?ane=3A_Make_format=5Fmod=5Fsupported_truly=A0optional?=
+Message-ID: <20211223165706.GA11019@elementary>
+References: <20211222090552.25972-1-jose.exposito89@gmail.com>
+ <20211222090552.25972-2-jose.exposito89@gmail.com>
+ <YcRkB7uWyt4EbcZm@intel.com>
+ <PIq2EEI7giz2rOuv2cfySbdxwht8AaCye140X5C7NejjXT6kD67E3E28uvg4Ebhob12EJUBtAxGPFNOgZwSWLYEfMtdhRNt3mR8bBGBJmU4=@emersion.fr>
+ <YcSPt+81fuzteeCu@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YcIm8fngUsVulUoI@zn.tnic>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YcSPt+81fuzteeCu@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 08:11:45PM +0100, Borislav Petkov wrote:
-> On Tue, Dec 14, 2021 at 06:02:41PM +0300, Kirill A. Shutemov wrote:
-> > From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> > 
-> > Guests communicate with VMMs with hypercalls. Historically, these
-> > are implemented using instructions that are known to cause VMEXITs
-> > like VMCALL, VMLAUNCH, etc. However, with TDX, VMEXITs no longer
-> > expose the guest state to the host. This prevents the old hypercall
-> > mechanisms from working. So, to communicate with VMM, TDX
-> > specification defines a new instruction called TDCALL.
-> > 
-> > In a TDX based VM, since the VMM is an untrusted entity, an intermediary
-> > layer (TDX module) exists in the CPU to facilitate secure communication
-> 
-> in the CPU?!
-> 
-> I think you wanna say, "it is loaded like a firmware into a special CPU
-> mode called SEAM..." or so.
+Thanks for your reviews :) I'll wait a couple of days to see
+if somebody else wants to comment and I'll send v3 adding the
+reviewed by tags and fixing the compiler warning.
 
-What about this?
+On Thu, Dec 23, 2021 at 05:03:19PM +0200, Ville Syrjälä wrote:
+> Another related thing that might be worth checking is whether
+> drivers generally do anything to validate the modifiers in
+> the addfb2 ioctl. Looks like i915 and amdgpu are the only ones
+> to use drm_any_plane_has_format() for that, so all the other
+> drivers must either be checking it manually (or they're just
+> potentially broken when handed unexpected modifiers by evil
+> userspace).
 
-	In a TDX based VM, since the VMM is an untrusted entity, an intermediary
-	layer -- TDX module -- facilitates secure communication between the host
-	and the guest. TDX module is loaded like a firmware into a special CPU
-	mode called SEAM. TDX guests communicate with the TDX module using the
-	TDCALL instruction.
+I'm pretty new to this subsystem, so please correct me if I'm 
+wrong, but after looking into a couple of drivers I think you
+are right, this check is missing in some drivers.
 
-Does it look fine?
+This possible bug reminds me of this ToDo task [1]:
 
-> > (using the TDCALL instruction).
-> > 
-> > __tdx_hypercall()    - Used by the guest to request services from the
-> > 		       VMM (via TDVMCALL).
-> > __tdx_module_call()  - Used to communicate with the TDX Module (via
-> > 		       TDCALL).
-> 
-> "module". No need to capitalize every word like in CPU manuals.
+> Many drivers wrap drm_gem_fb_create() only to check for valid formats. For
+> atomic drivers we could check for valid formats by calling
+> drm_plane_check_pixel_format() against all planes, and pass if any plane
+> supports the format. For non-atomic that's not possible since like the format
+> list for the primary plane is fake and we'd therefor reject valid formats.
 
-Okay, I will change it globally over the whole patchset.
+I had a look to the Raspberry Pi driver (mainly because I'm trying
+to understand it) and it looks like the check is missing. Other
+drivers, for example Mali, are checking the format modifier manually.
 
-> > Originally-by: Sean Christopherson <seanjc@google.com>
-> 
-> Just state that in free text in the commit message:
-> 
-> "Based on a previous patch by Sean... "
+I'll try to do some actual testing during Christmas and see
+how it goes.
 
-Okay.
+José Expósito
 
-> > +	/*
-> > +	 * Since this function can be initiated without an output pointer,
-> > +	 * check if caller provided an output struct before storing
-> > +	 * output registers.
-> > +	 */
-> > +	test %r12, %r12
-> > +	jz mcall_done
-> 
-> All those local label names need to be prefixed with .L so that they
-> don't appear in the vmlinux symbol table unnecessarily:
-> 
-> 	jz .Lno_output_struct
-
-Ah, okay. I did not know about special treatment for .L labels.
-Again, will check whole patchset.
-
--- 
- Kirill A. Shutemov
+[1] https://www.kernel.org/doc/html/latest/gpu/todo.html#drm-framebuffer-funcs-and-drm-mode-config-funcs-fb-create-cleanup

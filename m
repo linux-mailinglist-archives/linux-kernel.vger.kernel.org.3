@@ -2,70 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7104547E0DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 10:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9290D47E0E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 10:32:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347428AbhLWJbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 04:31:24 -0500
-Received: from mxout02.lancloud.ru ([45.84.86.82]:47054 "EHLO
-        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234179AbhLWJbX (ORCPT
+        id S1347493AbhLWJc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 04:32:29 -0500
+Received: from relmlor1.renesas.com ([210.160.252.171]:16249 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234179AbhLWJc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 04:31:23 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 3E44722F2B43
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Message-ID: <d879552f-3085-91e6-77fa-d391b890fb6b@omp.ru>
-Date:   Thu, 23 Dec 2021 12:31:06 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] ata: libahci_platform: Remove abundant check
-Content-Language: en-US
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, <hdegoede@redhat.com>,
-        <axboe@kernel.dk>, <p.zabel@pengutronix.de>
-CC:     <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20211222072446.1096168-1-jiasheng@iscas.ac.cn>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-In-Reply-To: <20211222072446.1096168-1-jiasheng@iscas.ac.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+        Thu, 23 Dec 2021 04:32:28 -0500
+X-IronPort-AV: E=Sophos;i="5.88,229,1635174000"; 
+   d="scan'208";a="104472104"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 23 Dec 2021 18:32:26 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id A765C4012B0D;
+        Thu, 23 Dec 2021 18:32:24 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: [PATCH] clk: renesas: r9a07g044: Update multiplier and divider values for PLL2/3
+Date:   Thu, 23 Dec 2021 09:32:23 +0000
+Message-Id: <20211223093223.4725-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+As per the HW manual (Rev.1.00 Sep, 2021) PLL2 and PLL3 should be 1600MHz,
+but with current multiplier and divider values this resulted to 1596MHz.
 
-On 22.12.2021 10:24, Jiasheng Jiang wrote:
+This patch updates the multiplier and divider values for PLL2 and PLL3
+so that we get the exact (1600MHz) values.
 
-> It can be found that platform_get_irq() returns nagative code but not
-> null when fails.
+Fixes: 17f0ff3d49ff1 ("clk: renesas: Add support for R9A07G044 SoC")
+Suggested-by: Biju Das <biju.das.jz@bp.renesas.com>
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+Hi,
 
-    s/null/zero/?
+Below is the log for before and after this patch.
 
-> The comment of the platform_get_irq clearly shows that.
+Clock output before the patch:
+root@smarc-rzg2l:~# cat /sys/kernel/debug/clk/clk_summary | grep -E 'pll1|pll2|pll3'
+    .pll3                             1        2        0  1596000000          0     0  50000         Y
+       .pll3_div2                     1        1        0   798000000          0     0  50000         Y
+          .pll3_div2_4                3        3        0   199500000          0     0  50000         Y
+             .pll3_div2_4_2           2        2        0    99750000          0     0  50000         Y
+          .pll3_div2_2                0        0        0   399000000          0     0  50000         Y
+       .pll3_533                      0        2        0   532000000          0     0  50000         Y
+          .sel_pll3_3                 0        1        0   532000000          0     0  50000         Y
+       .pll3_400                      0        0        0   399000000          0     0  50000         Y
+    .pll2                             2        2        0  1596000000          0     0  50000         Y
+       .pll2_div2                     1        2        0   798000000          0     0  50000         Y
+          .pll2_div2_10               0        1        0    79800000          0     0  50000         Y
+          .pll2_div2_8                1        1        0    99750000          0     0  50000         Y
+    .pll1                             0        0        0  1200000000          0     0  50000         Y
+root@smarc-rzg2l:~#
 
-    This comment still doesn't correspond to reality -- 0 can be returned 
-(although this would cause a WARN() call)...
+Clock output after the patch:
+root@smarc-rzg2l:~# cat /sys/kernel/debug/clk/clk_summary | grep -E 'pll1|pll2|pll3'
+    .pll3                             1        2        0  1600000000          0     0  50000         Y
+       .pll3_div2                     1        1        0   800000000          0     0  50000         Y
+          .pll3_div2_4                3        3        0   200000000          0     0  50000         Y
+             .pll3_div2_4_2           2        2        0   100000000          0     0  50000         Y
+          .pll3_div2_2                0        0        0   400000000          0     0  50000         Y
+       .pll3_533                      0        2        0   533333333          0     0  50000         Y
+          .sel_pll3_3                 0        1        0   533333333          0     0  50000         Y
+       .pll3_400                      0        0        0   400000000          0     0  50000         Y
+    .pll2                             2        2        0  1600000000          0     0  50000         Y
+       .pll2_div2                     1        2        0   800000000          0     0  50000         Y
+          .pll2_div2_10               0        1        0    80000000          0     0  50000         Y
+          .pll2_div2_8                1        1        0   100000000          0     0  50000         Y
+    .pll1                             0        0        0  1200000000          0     0  50000         Y
+root@smarc-rzg2l:~#
 
-> Therefore it should be better to remove the useless check.
+Cheers,
+Prabhakar
+---
+ drivers/clk/renesas/r9a07g044-cpg.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-    This patch is correct but premature. I have a (not yet merged) patch:
+diff --git a/drivers/clk/renesas/r9a07g044-cpg.c b/drivers/clk/renesas/r9a07g044-cpg.c
+index f4537345126d..22923f8949b1 100644
+--- a/drivers/clk/renesas/r9a07g044-cpg.c
++++ b/drivers/clk/renesas/r9a07g044-cpg.c
+@@ -89,8 +89,8 @@ static const struct cpg_core_clk r9a07g044_core_clks[] __initconst = {
+ 	DEF_FIXED(".osc", R9A07G044_OSCCLK, CLK_EXTAL, 1, 1),
+ 	DEF_FIXED(".osc_div1000", CLK_OSC_DIV1000, CLK_EXTAL, 1, 1000),
+ 	DEF_SAMPLL(".pll1", CLK_PLL1, CLK_EXTAL, PLL146_CONF(0)),
+-	DEF_FIXED(".pll2", CLK_PLL2, CLK_EXTAL, 133, 2),
+-	DEF_FIXED(".pll3", CLK_PLL3, CLK_EXTAL, 133, 2),
++	DEF_FIXED(".pll2", CLK_PLL2, CLK_EXTAL, 200, 3),
++	DEF_FIXED(".pll3", CLK_PLL3, CLK_EXTAL, 200, 3),
+ 	DEF_FIXED(".pll3_400", CLK_PLL3_400, CLK_PLL3, 1, 4),
+ 	DEF_FIXED(".pll3_533", CLK_PLL3_533, CLK_PLL3, 1, 3),
+ 
+-- 
+2.17.1
 
-https://marc.info/?l=linux-kernel&m=163623041902285
-
-    It actually disables reporting IRQ0. Until it's merged we have to filter 
-out IRQ0 in the libata drivers as libata treats 0 as an indication of the 
-polling mode...
-
-> Fixes: fd990556f0fa ("ata: move library code from ahci_platform.c to libahci_platform.c")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-[...]
-
-MBR, Sergey

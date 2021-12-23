@@ -2,81 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 026A047E91C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 22:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A808147E923
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 22:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350357AbhLWVdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 16:33:49 -0500
-Received: from smtp08.smtpout.orange.fr ([80.12.242.130]:58885 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350347AbhLWVds (ORCPT
+        id S1350364AbhLWVh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 16:37:58 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:54252 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229684AbhLWVh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 16:33:48 -0500
-Received: from pop-os.home ([86.243.171.122])
-        by smtp.orange.fr with ESMTPA
-        id 0VianGsLVbyf90VibnnW85; Thu, 23 Dec 2021 22:33:45 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 23 Dec 2021 22:33:45 +0100
-X-ME-IP: 86.243.171.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     jiri@nvidia.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] lib: objagg: Use the bitmap API when applicable
-Date:   Thu, 23 Dec 2021 22:33:42 +0100
-Message-Id: <f9541b085ec68e573004e1be200c11c9c901181a.1640295165.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Thu, 23 Dec 2021 16:37:57 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CD059CE2208;
+        Thu, 23 Dec 2021 21:37:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1112C36AE5;
+        Thu, 23 Dec 2021 21:37:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640295474;
+        bh=PDCCeDS+WiwJeugTg1oJTd9lOUQUWukHtBR7ZbZWTus=;
+        h=From:To:Cc:Subject:Date:From;
+        b=I9/8e01DZ3DVu0kywDsK95Fvv2J7/TZvsBEZsCdo1yOWwVAdpfieGaz/PK1aSDQ1Q
+         Z0E5gxLLr3yw11iJIJihrcPHLXra+xAmwhic/L+/fYqv2dCStJnrmSs7vPwbIpsWEC
+         EnernGMKvwJGxoz3BozTcqMUfowDe0KCxbr+eQHX3ryUCNmaQ4bH3j0isD2iScgn0y
+         iSxp8zVSiIYvHTt/U+p87SLrp3hF+HMDlJf8qXl1mCvO6MyNDXVhqkFCTwfCX3g5Fp
+         MJSEzmMGDmi4A/oLhxkr8MiByP4Evhrum0f57IuTZu4uZ5ilCkKI7PdPAQQ/BKeWXi
+         cFh7mh0M+wgvQ==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     linux-pci@vger.kernel.org
+Cc:     Pratyush Anand <pratyush.anand@gmail.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH 0/2] PCI: Clean up address space warnings
+Date:   Thu, 23 Dec 2021 15:37:47 -0600
+Message-Id: <20211223213749.1314142-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use 'bitmap_zalloc()' to simplify code, improve the semantic and reduce
-some open-coded arithmetic in allocator arguments.
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-Also change the corresponding 'kfree()' into 'bitmap_free()' to keep
-consistency.
+Fix some sparse warnings, found by "make C=2 drivers/pci/controller/".
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- lib/objagg.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+Bjorn Helgaas (2):
+  PCI: hisi: Avoid invalid address space conversions
+  PCI: spear13xx: Avoid invalid address space conversions
 
-diff --git a/lib/objagg.c b/lib/objagg.c
-index 5e1676ccdadd..1e248629ed64 100644
---- a/lib/objagg.c
-+++ b/lib/objagg.c
-@@ -781,7 +781,6 @@ static struct objagg_tmp_graph *objagg_tmp_graph_create(struct objagg *objagg)
- 	struct objagg_tmp_node *node;
- 	struct objagg_tmp_node *pnode;
- 	struct objagg_obj *objagg_obj;
--	size_t alloc_size;
- 	int i, j;
- 
- 	graph = kzalloc(sizeof(*graph), GFP_KERNEL);
-@@ -793,9 +792,7 @@ static struct objagg_tmp_graph *objagg_tmp_graph_create(struct objagg *objagg)
- 		goto err_nodes_alloc;
- 	graph->nodes_count = nodes_count;
- 
--	alloc_size = BITS_TO_LONGS(nodes_count * nodes_count) *
--		     sizeof(unsigned long);
--	graph->edges = kzalloc(alloc_size, GFP_KERNEL);
-+	graph->edges = bitmap_zalloc(nodes_count * nodes_count, GFP_KERNEL);
- 	if (!graph->edges)
- 		goto err_edges_alloc;
- 
-@@ -833,7 +830,7 @@ static struct objagg_tmp_graph *objagg_tmp_graph_create(struct objagg *objagg)
- 
- static void objagg_tmp_graph_destroy(struct objagg_tmp_graph *graph)
- {
--	kfree(graph->edges);
-+	bitmap_free(graph->edges);
- 	kfree(graph->nodes);
- 	kfree(graph);
- }
+ drivers/pci/controller/dwc/pcie-hisi.c      | 32 ++++++++++++++-------
+ drivers/pci/controller/dwc/pcie-spear13xx.c |  8 +++---
+ 2 files changed, 26 insertions(+), 14 deletions(-)
+
 -- 
-2.32.0
+2.25.1
 

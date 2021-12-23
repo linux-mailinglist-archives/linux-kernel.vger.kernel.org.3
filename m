@@ -2,129 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C8B47DD9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 03:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B14847DD9E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 03:09:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242629AbhLWCIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 21:08:44 -0500
-Received: from mga06.intel.com ([134.134.136.31]:27609 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229788AbhLWCIm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 21:08:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640225322; x=1671761322;
-  h=cc:subject:to:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=U3C5yVoX5E5uvujjF66oQQmBBqdF/yUhDK/aFppaBqg=;
-  b=TbNJhDRKor6O4L53WjQ4e5SC4yAcIm8ODaRpiL9vF7mKIcVlsPjD2Oc3
-   uno4ictJPYbDat8uCqxJdaq5i/glyEREoTBsukfQpKqrCPXW9RQ+chJFB
-   A2f5Y/MFgKqLITvFjiA1SBln8qodSzdYcJAL0b+1c1QIC36WXVehWK/Sg
-   VPvZERXfOvAgs6m0WUtUettp7IdoLscbYJY9M8F5eSUSa4KFGjtHTynu9
-   iSNbvn9cTqP3yrCUPVSFeZXKLWtx4luUSOhLQ2x1mBlAVCllX77vMcNXp
-   Uhpfty/blmDbniLCg1K+0zJGO5fx4v2mG2LUvQKykE9Z6GDtKlA5GmXgm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="301503759"
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="301503759"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 18:08:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="664445608"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Dec 2021 18:08:35 -0800
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 02/13] driver core: Set DMA ownership during driver
- bind/unbind
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20211217063708.1740334-1-baolu.lu@linux.intel.com>
- <20211217063708.1740334-3-baolu.lu@linux.intel.com>
- <YcMeZlN3798noycN@kroah.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <40d67b07-b56b-d626-f71b-54ef5c80275c@linux.intel.com>
-Date:   Thu, 23 Dec 2021 10:08:11 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1345610AbhLWCJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 21:09:41 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:30096 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229788AbhLWCJk (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 21:09:40 -0500
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JKD844RkLz1DK6h;
+        Thu, 23 Dec 2021 10:06:28 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 23 Dec 2021 10:09:38 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 23 Dec 2021 10:09:37 +0800
+Subject: Re: [PATCH v18 01/17] x86/setup: Move CRASH_ALIGN and
+ CRASH_ADDR_{LOW|HIGH}_MAX to asm/kexec.h
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        "John Donnelly" <John.p.donnelly@oracle.com>
+References: <20211222130820.1754-1-thunder.leizhen@huawei.com>
+ <20211222130820.1754-2-thunder.leizhen@huawei.com> <YcON5Y7DKitiQhHu@zn.tnic>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <c7b8ed2f-7280-faf9-66e8-ad329dbc10f6@huawei.com>
+Date:   Thu, 23 Dec 2021 10:09:25 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <YcMeZlN3798noycN@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <YcON5Y7DKitiQhHu@zn.tnic>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
 
-On 12/22/21 8:47 PM, Greg Kroah-Hartman wrote:
-> Which one will actually care about the iommu_device_set_dma_owner()
-> call?  All of them?  None of them?  Some of them?
+
+On 2021/12/23 4:43, Borislav Petkov wrote:
+> On Wed, Dec 22, 2021 at 09:08:04PM +0800, Zhen Lei wrote:
+>> From: Chen Zhou <chenzhou10@huawei.com>
+>>
+>> We want to make function reserve_crashkernel[_low](), which is implemented
+>   ^^
 > 
-> Again, why can't this just happen in the (very few) bus callbacks that
-> care about this?  In following patches in this series, you turn off this
-> for the pci_dma_configure users, so what is left?  3 odd bus types that
-> are not used often.  How well did you test devices of those types with
-> this patchset?
+> Please use passive voice in your commit message: no "we" or "I", etc,
+> and describe your changes in imperative mood.
+
+My bad language habits. I've made this mistake several times.
+
 > 
-> It's fine to have "suppress" fields when they are the minority, but here
-> it's a_very_  tiny tiny number of actual devices in a system that will
-> ever get the chance to have this check happen for them and trigger,
-> right?
+> Also, pls read section "2) Describe your changes" in
+> Documentation/process/submitting-patches.rst for more details.
+> 
+> Bottom line is: personal pronouns are ambiguous in text, especially with
+> so many parties/companies/etc developing the kernel so let's avoid them
+> please.
 
-Thank you for your comments. Current VFIO implementation supports
-devices on pci/platform/amba/fls-mc buses for user-space DMA. So only
-those buses need to call iommu_device_set/release_dma_owner() in their
-dma_configure/cleanup() callbacks.
+OK, I'll check the description of the other patches.
 
-The "suppress" field is only for a few device drivers (not devices), for
-example,
+> 
+>> by X86, available to other architectures. It references macro CRASH_ALIGN
+> 
+> "x86"
 
-- vfio-pci, a PCI device driver used to bind to a PCI device so that it
-   could be assigned for user-space DMA.
+OK
 
-Other similar drivers in drivers/vfio are vfio-fsl-mc, vfio-amba and
-vfio-platform. These drivers will call
-iommu_device_set/release_dma_owner(DMA_OWNER_USER) explicitly when the
-device is assigned to user.
+> 
+>> and will be moved to public crash_core.c. But the defined values of
+>> CRASH_ALIGN may be different in different architectures. So moving the
+>> definition of CRASH_ALIGN to asm/kexec.h is a good choice.
+>>
+>> The reason for moving CRASH_ADDR_{LOW|HIGH}_MAX is the same as above.
+> 
+> This commit message needs to say something along the lines of:
+> 
+> "Move CRASH_ALIGN and ... to the arch-specific header in preparation
+> of making reserve_crashkernel[_low]() generic, used by other
+> architectures."
 
-The logic is that on the affected buses (pci/platform/amba/fls-mc),
+OK, I will use this one, thanks.
 
-- for non-vfio drivers, bus dma_configure/cleanup() will automatically
-   call iommu_device_set_dma_owner(KERNEL) for the device; [This is the
-   majority cases.]
+By the way, patch 0004-0006 were written based on your suggestion. Can you
+take a moment to review it? I think I forgot to add "Suggested-by".
 
-- for vfio drivers, the auto-call will be suppressed, and the vfio
-   drivers are supposed to call iommu_device_set_dma_owner(USER) before
-   device is assigned to the userspace. [This is the rare case.]
-
-The KERNEL and USER conflict will be detected in
-iommu_device_set_dma_owner() with a -EBUSY return value. In that case,
-the driver binding or device assignment should be aborted.
-
-Best regards,
-baolu
+> 
+> or so.
+> 

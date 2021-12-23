@@ -2,70 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B2A47E3A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 673E647E3A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:41:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243817AbhLWMkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 07:40:55 -0500
-Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:57985 "EHLO
-        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233015AbhLWMky (ORCPT
+        id S243859AbhLWMlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 07:41:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233015AbhLWMlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 07:40:54 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R311e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=cruzzhao@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0V.XbQOB_1640263250;
-Received: from 30.21.164.116(mailfrom:cruzzhao@linux.alibaba.com fp:SMTPD_---0V.XbQOB_1640263250)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 23 Dec 2021 20:40:51 +0800
-Message-ID: <10c12ba2-81cc-1f26-f48f-66b95db2c4ec@linux.alibaba.com>
-Date:   Thu, 23 Dec 2021 20:40:50 +0800
+        Thu, 23 Dec 2021 07:41:50 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38E3C061401;
+        Thu, 23 Dec 2021 04:41:49 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id e136so16058778ybc.4;
+        Thu, 23 Dec 2021 04:41:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KMFcygJOqx2hcVsxt5vWXtekAovZBeJCWpY0ATwarLo=;
+        b=HI98DRduBhuffS4+1P9Y1dm7p8F5NgMLd3EpBfgpVldac6dM/pfJarkGyCySSc3ig3
+         IT3JMr2miSBSH60WGbvGwWwjr3hAUWTdREHK7DnJXhQALkBka5Sn7u3sz+3n0S/d4nAd
+         95HIdBf7rxbiBC13koFgFHej7upm3L6oB4Ls8Dh+WMRFi+yHSeI+RyKZps+CgedDvEfc
+         IZsaR6Xvs3TXElxeUxWELcsn4JBvfQ1HNSdNi9DQtdS7lvio3sKrQuRVipzXgmfTsOmG
+         w+Swm8NRqJJwBgJkyvGTpjnvIVyOg0TlGQc4/AvGBspyC84IjHQ4xCifQEBW3JPQWNa6
+         nN/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KMFcygJOqx2hcVsxt5vWXtekAovZBeJCWpY0ATwarLo=;
+        b=eECjukm3hvq/0Wtib4E1A0F37EJumZQ+kBBC5eAR4wcWewqwVUZOxsBU4rRFiGO7Gh
+         vNEmpb4xTkoABdfFFmtQxfqXvQ56xH7jpSSl61ZWy/fQsbcA5/NAxBi5u+xMtn+dG91Y
+         Qv6Sn4RHwATa4GKWyysPk9baQW8TbC4h2jqK3Th6fhHLKudFDjte2/FlMAyhOjQhHhrD
+         3x7PvKmQiKYWQp2EDnJEKgRQxUT6kJCwtv8NXah0VNObvK1o35xAhrcHfZhP/M51tILy
+         0nxo3EllxZyWjjvZYQk5+CLAHkpVjCyG8sQ1fNmSqxEEQEqtWiRa2neC1gfuQ1gH4Ot9
+         UNJA==
+X-Gm-Message-State: AOAM532Da3qmhzVBl1xXP99zZ/KUXhXfxOAws/vPToFXszciyG6ZbniD
+        llP+NfhaBn2UpalKPoSyYOQlz3J2z6gghE+v4/yPEQzi
+X-Google-Smtp-Source: ABdhPJxepOFwSslsh7zK8xgJih6RR3ovUUWt+TYOCT4MJuC+MZVGjLUAvm3k2lglBNCkM7IYXlpEhJ135XhLHlh03fQ=
+X-Received: by 2002:a25:dfd1:: with SMTP id w200mr2924404ybg.359.1640263309089;
+ Thu, 23 Dec 2021 04:41:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH 0/2] Forced idle time accounting per cpu
-Content-Language: en-US
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com
-Cc:     adobriyan@gmail.com, joshdon@google.com, edumazet@google.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-References: <1640262603-19339-1-git-send-email-CruzZhao@linux.alibaba.com>
-From:   cruzzhao <cruzzhao@linux.alibaba.com>
-In-Reply-To: <1640262603-19339-1-git-send-email-CruzZhao@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20211223123003.6947-1-lukas.bulwahn@gmail.com> <20211223123724.GA23339@lst.de>
+In-Reply-To: <20211223123724.GA23339@lst.de>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Thu, 23 Dec 2021 13:41:38 +0100
+Message-ID: <CAKXUXMxGcJDiw9ZckCEuv-qiYvTZFh7d6PH5oXG-oS1KknDOew@mail.gmail.com>
+Subject: Re: [PATCH] block: drop needless assignment in set_task_ioprio()
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        linux-block@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here's also a problem confused me: how to account the uncookie'd forced
-idle from the perspective of task. A feasible method is to divide the
-uncookie'd forced idle time by the number of tasks in the core_tree, and
-add the result to these tasks, but it will cost a lot on traversing the
-core_tree.
+On Thu, Dec 23, 2021 at 1:37 PM Christoph Hellwig <hch@lst.de> wrote:
+>
+> >               if (task->io_context) {
+> >                       kmem_cache_free(iocontext_cachep, ioc);
+> > -                     ioc = task->io_context;
+> >               } else {
+> >                       task->io_context = ioc;
+> >               }
+>
+> Please also drop the now superflous braces.
 
-在 2021/12/23 下午8:30, Cruz Zhao 写道:
-> Josh Don's patch 4feee7d12603 ("sched/core: Forced idle accounting")
-> provides one means to measure the cost of enabling core scheduling
-> from the perspective of the task, and this patchset provides another
-> means to do that from the perspective of the cpu.
-> 
-> Forced idle can be divided into two types, forced idle with cookie'd task
-> running on it SMT sibling, and forced idle with uncookie'd task running
-> on it SMT sibling, which should be accounting to measure the cost of
-> enabling core scheduling too. This patchset accounts both and the sum
-> of both, which are displayed via /proc/stat.
-> 
-> Cruz Zhao (2):
->   sched/core: Cookied forceidle accounting per cpu
->   sched/core: Uncookied force idle accounting per cpu
-> 
->  fs/proc/stat.c              | 26 ++++++++++++++++++++++++++
->  include/linux/kernel_stat.h |  4 ++++
->  kernel/sched/core.c         |  7 +++----
->  kernel/sched/core_sched.c   | 21 +++++++++++++++++++--
->  kernel/sched/sched.h        | 10 ++--------
->  5 files changed, 54 insertions(+), 14 deletions(-)
-> 
-> base commit: 2850c2311ef4bf30ae8dd8927f0f66b026ff08fb
-> 
+Will do. Patch v2 will be there in a second... Lukas

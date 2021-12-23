@@ -2,85 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB7347E33A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8F947E336
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348246AbhLWM2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 07:28:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348245AbhLWM2F (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 07:28:05 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3052CC061756
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 04:28:05 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso8691726pji.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 04:28:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=UTE+esZ/4TZyUTsTUlc3WjOYgKLVtNI6J28jxD1ZZj8=;
-        b=eKdRwn9hwBJl059PMqq+lnBBSTypk064f7yg18Ny/uZ59Hb68D0LVTJrvbjEzYTtF8
-         4FoSN5D3fheMvB3OpF0za9TXOssZShkP1wdhyGxlvQqcjUgirkVO9pRWpxo/hWKJ+22V
-         fCgRVIyMS4h9qXoR+5RVrohd5h7HOoUqGWM44isEcFLQ7BO/00WehZKdLA5lqLlAG7Rs
-         Wmx9fx67QRs/NJrUyVqN9OjQPZYt6D/IUUiiKxfEoQJ64xRHTg7w13JuXHPMWq7Pp1iJ
-         4dJ1yV8Vfon9Cy97+iygodECXB6OB2TPB4Yu8JwC3vh7x1LzNIfQ6g9BUTbuLO1tnple
-         L7qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=UTE+esZ/4TZyUTsTUlc3WjOYgKLVtNI6J28jxD1ZZj8=;
-        b=Lot31+0Kjs8p+18ktQcJzMCG9VBpIgMW/wHLcpnhOqm426Cx9rsV5klpi22uO+eg95
-         6hfDAnijkZJI3t/SzH/PgyfeaomOuWPjvq+AtGRcXjnUSFuW/1zo4DWmC0rJySKU/3TG
-         T5GF/4m8ci8g5TFQLfItzsqpHJmU/18iDVmS8szU+vEcSUPXgB0Bh2YSAni+pF7Cq/JP
-         6dqyDnXcJ42dEKL9mXQCOoAOvIhE2Mxz++SApktT6DSvbEHzHOCpYc5fEq8rl+tmxbAH
-         s3XDvxQ41O2SuyaDVy2A1imkKdA3jjO8k/xxlm5PJ55ZByG85XTWM6/ni71AJpLFAN2q
-         iQGw==
-X-Gm-Message-State: AOAM533MB0Me2COLGl3FOiuG9a9gILK+wRXGLNW+3JJG2huOBn+HKJ8z
-        RmwAIJPjGNtSUcxIZzzplAk=
-X-Google-Smtp-Source: ABdhPJzg7Mwt96r2GaK4bRD0hzz5ri5NBVjYic7qtdtpte0/085VWWJToSGswgWI55UpkOaOAy8byA==
-X-Received: by 2002:a17:902:b197:b0:148:a2f7:9d88 with SMTP id s23-20020a170902b19700b00148a2f79d88mr2130486plr.167.1640262484345;
-        Thu, 23 Dec 2021 04:28:04 -0800 (PST)
-Received: from localhost.localdomain ([117.254.32.221])
-        by smtp.googlemail.com with ESMTPSA id bk17sm8853512pjb.3.2021.12.23.04.28.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Dec 2021 04:28:03 -0800 (PST)
-From:   Ajith P V <ajithpv.linux@gmail.com>
-To:     gregkh@linuxfoundation.org, arve@android.com, tkjos@android.com,
-        maco@android.com, joel@joelfernandes.org, christian@brauner.io,
-        hridya@google.com, surenb@google.com
-Cc:     linux-kernel@vger.kernel.org, Ajith P V <ajithpv.linux@gmail.com>
-Subject: [PATCH] binder: remove repeat word from comment to avoid warning
-Date:   Thu, 23 Dec 2021 17:57:25 +0530
-Message-Id: <20211223122725.29842-1-ajithpv.linux@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1348228AbhLWM1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 07:27:30 -0500
+Received: from mga01.intel.com ([192.55.52.88]:55676 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243438AbhLWM13 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 07:27:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640262449; x=1671798449;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dNPeiHUfQEwh0MOOenGj8Gw+5i/UqdlyMV+wEfV1pQs=;
+  b=GYfp75mtTZn16uGsWlsIgMHl2c/9icKQMyHhB/JccjubElBildK2nEio
+   +uzI2trzEqEQURe8FrmYS2toeuYUEzIDrd0/HjGgR9t2NGQRaiND1nyR8
+   skjDSpt+2ldbRq60kJOXZMw31oxxN07t2OBznSER39DCiYzKKKb9N7M23
+   VyoAu/U9eEhfOi0AxEcVU28WV09OEJZZbQVAIovZ07smS4uueIJ8BwIk3
+   nMUa1DvLm7Zwhj4NjxeNIm9/L49IsGnUfHXNkarnvJEjvw+RqBCy7SDL9
+   zI8BmhMIaOCgqjVclqu+ruZmQ9/oV4eZm1m9Xd5J7xDYdQqwhWeskB+j9
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="265026225"
+X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
+   d="scan'208";a="265026225"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 04:27:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
+   d="scan'208";a="607742322"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Dec 2021 04:27:27 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id AD489120; Thu, 23 Dec 2021 14:27:35 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Alexandru Ardelean <aardelean@deviqon.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Thor Thayer <thor.thayer@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] gpio: altera-a10sr: Switch to use fwnode instead of of_node
+Date:   Thu, 23 Dec 2021 14:27:33 +0200
+Message-Id: <20211223122733.86981-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-binder.c file comment produce warning with checkpatch as below:
-WARNING: Possible repeated word: 'and'
-Remove the repeated word from the comment to avoid this warning.
+GPIO library now accepts fwnode as a firmware node, so
+switch the driver to use it.
 
-Signed-off-by: Ajith P V <ajithpv.linux@gmail.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/android/binder.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpio/gpio-altera-a10sr.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-index cffbe57a8e08..fc0f4e8b58bd 100644
---- a/drivers/android/binder.c
-+++ b/drivers/android/binder.c
-@@ -4436,7 +4436,7 @@ static int binder_thread_release(struct binder_proc *proc,
+diff --git a/drivers/gpio/gpio-altera-a10sr.c b/drivers/gpio/gpio-altera-a10sr.c
+index 6af51feda06f..be1ed7ee5225 100644
+--- a/drivers/gpio/gpio-altera-a10sr.c
++++ b/drivers/gpio/gpio-altera-a10sr.c
+@@ -10,6 +10,7 @@
+ #include <linux/gpio/driver.h>
+ #include <linux/mfd/altera-a10sr.h>
+ #include <linux/module.h>
++#include <linux/property.h>
  
- 	/*
- 	 * This is needed to avoid races between wake_up_poll() above and
--	 * and ep_remove_waitqueue() called for other reasons (eg the epoll file
-+	 * ep_remove_waitqueue() called for other reasons (eg the epoll file
- 	 * descriptor being closed); ep_remove_waitqueue() holds an RCU read
- 	 * lock, so we can be sure it's done after calling synchronize_rcu().
- 	 */
+ /**
+  * struct altr_a10sr_gpio - Altera Max5 GPIO device private data structure
+@@ -88,7 +89,7 @@ static int altr_a10sr_gpio_probe(struct platform_device *pdev)
+ 
+ 	gpio->gp = altr_a10sr_gc;
+ 	gpio->gp.parent = pdev->dev.parent;
+-	gpio->gp.of_node = pdev->dev.of_node;
++	gpio->gp.fwnode = dev_fwnode(&pdev->dev);
+ 
+ 	return devm_gpiochip_add_data(&pdev->dev, &gpio->gp, gpio);
+ }
 -- 
-2.17.1
+2.34.1
 

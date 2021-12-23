@@ -2,134 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D865647E064
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 09:26:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFB847E075
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 09:36:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347199AbhLWI0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 03:26:40 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:36433 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242789AbhLWI0i (ORCPT
+        id S1347214AbhLWIgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 03:36:02 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:49796 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229785AbhLWIgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 03:26:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1640247998; x=1671783998;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tsbbwV3m9R3lXLMuTG4CLaGu1mXzu3V+ZwyYbTmrtew=;
-  b=SndVs4A4mpYuk81xadHWF/EnxVMOSkduaFbfNrMR0avyR8IOHms4mEIP
-   GOYU3NviWSw4PNnZjBKeVlqjC5yPkAjPknHpXBsul8KeN7zRj7+FKaBau
-   QdqowJPu/gSogZrQ4GIpTp1jb4fMPeUkKKqVHkOrow2lna86eOMrX5DE2
-   HilG2flOfjw0VkCLpb+GpP9UaHpo+aDVUH+UuPky5Eswq42OSKTdIDaQk
-   RIk5UagqtlNHX8Z9Bc5REWa3vVFOelcbhsX3DVF6RiBuRgZtt3PTppzYm
-   LJG6ObhWOZsGMMdDD6VCudpuxtS5Mg3zubgBZVuU6PId7+R5yYTaNHZAa
-   Q==;
-IronPort-SDR: iSpOM5cQaVrBBzSlEvVPMN5PajQ1mbfU7ZeAgZdFJhFyp3yFQRJ3A03h8kTOcVXwXMKqEwc6kx
- ZmH3eUBA6CZeJSnRjcZ6xCE3WP/1fQWh3ud+GNCXgIf/T0Wa6SM9GbNud7i5Po/N+UsKYSWdbd
- Dh1kPdM4dOZSpIWfKO8R9eso4l2zg3ouUXEfnHynvwiy0zt82wCvQT7NEjtN8T18w1918BWC3U
- fjQVBJa8QnNwbCiKNVsWhMi2tQWUGHUc4TddUEw/4ol9KDKqlQxgXYf2h/Iup/tBAtmkiIzK4M
- SVr7yfaasxbQmxNEQlqL6LvR
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="148153563"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Dec 2021 01:26:38 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 23 Dec 2021 01:26:37 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 23 Dec 2021 01:26:36 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <kuba@kernel.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH resend net-next] net: phy: micrel: Add config_init for LAN8814
-Date:   Thu, 23 Dec 2021 09:28:26 +0100
-Message-ID: <20211223082826.1726649-1-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
+        Thu, 23 Dec 2021 03:36:00 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 63EA91F38A;
+        Thu, 23 Dec 2021 08:35:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1640248559;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MV/5K9zmhuw4wh4GeKO1RwxfharP8GGckwYEIlHrrJs=;
+        b=I1mUbTlQhKbIjakUkJDnAqJ8ux/WptWSs6mhucuFKxa3m3xOnIJHU7K6sBKacyOqwsAyer
+        H24Zl9qygEDtc1AqBpwybII8+Ya9yQ1TrS24rUT+LXYTD9/+zk4ZiNEg2s/oEcdyG9b+18
+        qN0sAQc6NdstxsXco0E9K0u34OBsAwY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1640248559;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MV/5K9zmhuw4wh4GeKO1RwxfharP8GGckwYEIlHrrJs=;
+        b=C0A1smGAleYucDeFJ93gCVnGl/89pYnGeaKSwPQxbYppxBnR6M9mrcNLVC3DkiFUoPPEpN
+        aJvgvGjLw82nfoDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E974913E82;
+        Thu, 23 Dec 2021 08:35:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id jQ5wNu40xGEGZwAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Thu, 23 Dec 2021 08:35:58 +0000
+Date:   Thu, 23 Dec 2021 09:35:57 +0100
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Nageswara Sastry <rnsastry@linux.ibm.com>,
+        Takashi Iwai <tiwai@suse.de>, Joey Lee <jlee@suse.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] selftests/kexec: update searching for the Kconfig
+Message-ID: <YcQ07bX74r/qbkPD@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20211222213052.6771-1-zohar@linux.ibm.com>
+ <20211222213052.6771-3-zohar@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211222213052.6771-3-zohar@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add config_init for LAN8814. This function is required for the following
-reasons:
-- we need to make sure that the PHY is reset,
-- disable ANEG with QSGMII PCS Host side
-- swap the MDI-X A,B transmit so that there will not be any link flip-flaps
-  when the PHY gets a link.
+> First check /lib/modules/`uname -r`/config, before using the IKCONFIG.
+> In addition, the configs.ko might be compressed.  Fix the configs.ko
+> name.
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
-This patch is resent because the proposed change request for using
-read/write_page will not work for this device. Because lan8814 has a
-more complicated mechanism to access extended pages.
----
- drivers/net/phy/micrel.c | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+> Distros: is storing the Kconfig in /lib/modules/`uname -r`/config common?
 
-diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-index c6a97fcca0e6..4570cb9535b7 100644
---- a/drivers/net/phy/micrel.c
-+++ b/drivers/net/phy/micrel.c
-@@ -1578,6 +1578,14 @@ static int ksz886x_cable_test_get_status(struct phy_device *phydev,
- #define LAN_EXT_PAGE_ACCESS_ADDRESS_DATA		0x17
- #define LAN_EXT_PAGE_ACCESS_CTRL_EP_FUNC		0x4000
- 
-+#define LAN8814_QSGMII_SOFT_RESET			0x43
-+#define LAN8814_QSGMII_SOFT_RESET_BIT			BIT(0)
-+#define LAN8814_QSGMII_PCS1G_ANEG_CONFIG		0x13
-+#define LAN8814_QSGMII_PCS1G_ANEG_CONFIG_ANEG_ENA	BIT(3)
-+#define LAN8814_ALIGN_SWAP				0x4a
-+#define LAN8814_ALIGN_TX_A_B_SWAP			0x1
-+#define LAN8814_ALIGN_TX_A_B_SWAP_MASK			GENMASK(2, 0)
-+
- #define LAN8804_ALIGN_SWAP				0x4a
- #define LAN8804_ALIGN_TX_A_B_SWAP			0x1
- #define LAN8804_ALIGN_TX_A_B_SWAP_MASK			GENMASK(2, 0)
-@@ -1614,6 +1622,29 @@ static int lanphy_write_page_reg(struct phy_device *phydev, int page, u16 addr,
- 	return 0;
- }
- 
-+static int lan8814_config_init(struct phy_device *phydev)
-+{
-+	int val;
-+
-+	/* Reset the PHY */
-+	val = lanphy_read_page_reg(phydev, 4, LAN8814_QSGMII_SOFT_RESET);
-+	val |= LAN8814_QSGMII_SOFT_RESET_BIT;
-+	lanphy_write_page_reg(phydev, 4, LAN8814_QSGMII_SOFT_RESET, val);
-+
-+	/* Disable ANEG with QSGMII PCS Host side */
-+	val = lanphy_read_page_reg(phydev, 5, LAN8814_QSGMII_PCS1G_ANEG_CONFIG);
-+	val &= ~LAN8814_QSGMII_PCS1G_ANEG_CONFIG_ANEG_ENA;
-+	lanphy_write_page_reg(phydev, 5, LAN8814_QSGMII_PCS1G_ANEG_CONFIG, val);
-+
-+	/* MDI-X setting for swap A,B transmit */
-+	val = lanphy_read_page_reg(phydev, 2, LAN8814_ALIGN_SWAP);
-+	val &= ~LAN8814_ALIGN_TX_A_B_SWAP_MASK;
-+	val |= LAN8814_ALIGN_TX_A_B_SWAP;
-+	lanphy_write_page_reg(phydev, 2, LAN8814_ALIGN_SWAP, val);
-+
-+	return 0;
-+}
-+
- static int lan8804_config_init(struct phy_device *phydev)
- {
- 	int val;
-@@ -1858,6 +1889,7 @@ static struct phy_driver ksphy_driver[] = {
- 	.phy_id		= PHY_ID_LAN8814,
- 	.phy_id_mask	= MICREL_PHY_ID_MASK,
- 	.name		= "Microchip INDY Gigabit Quad PHY",
-+	.config_init	= lan8814_config_init,
- 	.driver_data	= &ksz9021_type,
- 	.probe		= kszphy_probe,
- 	.soft_reset	= genphy_soft_reset,
--- 
-2.33.0
+>  tools/testing/selftests/kexec/kexec_common_lib.sh | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
 
+> diff --git a/tools/testing/selftests/kexec/kexec_common_lib.sh b/tools/testing/selftests/kexec/kexec_common_lib.sh
+> index 43017cfe88f7..5a1b8ae04c64 100755
+> --- a/tools/testing/selftests/kexec/kexec_common_lib.sh
+> +++ b/tools/testing/selftests/kexec/kexec_common_lib.sh
+> @@ -138,15 +138,20 @@ kconfig_enabled()
+>  	return 0
+>  }
+
+> -# Attempt to get the kernel config first via proc, and then by
+> -# extracting it from the kernel image or the configs.ko using
+> -# scripts/extract-ikconfig.
+> +# Attempt to get the kernel config first by checking the modules directory
+> +# then via proc, and finally by extracting it from the kernel image or the
+> +# configs.ko using scripts/extract-ikconfig.
+>  # Return 1 for found.
+>  get_kconfig()
+>  {
+>  	local proc_config="/proc/config.gz"
+>  	local module_dir="/lib/modules/`uname -r`"
+> -	local configs_module="$module_dir/kernel/kernel/configs.ko"
+> +	local configs_module="$module_dir/kernel/kernel/configs.ko*"
+I wonder if * will later work:
+
+if [ ! -f $configs_module ]; then
+
+But there should be just one variant: either configs.ko or configs.ko.xz
+(or something other), so it should work, right?
+
+Thus
+Reviewed-by: Petr Vorel <pvorel@suse.cz>
+
+Kind regards,
+Petr
+
+> +
+> +	if [ -f $module_dir/config ]; then
+> +		IKCONFIG=$module_dir/config
+> +		return 1
+> +	fi
+
+>  	if [ ! -f $proc_config ]; then
+>  		modprobe configs > /dev/null 2>&1

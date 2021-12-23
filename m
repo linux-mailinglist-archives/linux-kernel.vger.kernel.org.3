@@ -2,392 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF8F47E462
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 15:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F45347E463
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 15:12:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348769AbhLWOLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 09:11:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
+        id S1348776AbhLWOLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 09:11:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232279AbhLWOLn (ORCPT
+        with ESMTP id S1348774AbhLWOLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 09:11:43 -0500
+        Thu, 23 Dec 2021 09:11:50 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A989EC061401;
-        Thu, 23 Dec 2021 06:11:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9191CC061401
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 06:11:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41B6861DED;
-        Thu, 23 Dec 2021 14:11:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7DC0C36AE5;
-        Thu, 23 Dec 2021 14:11:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2474761E79
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 14:11:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01ED5C36AE5;
+        Thu, 23 Dec 2021 14:11:48 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Sa9kYG8s"
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="bqPb4GeZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1640268700;
+        t=1640268708;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=73Mtk8sXdiILu8P5svDG0nDKWCq4cqCvtIWk+xgc8yY=;
-        b=Sa9kYG8siDydw7qttkZiZhgRqeTBBUVUNcBOU99j7waghBIVABPCnbjh7zgPbRQ7WE/top
-        e16epg1uGXKhiJa0IIz8O3gxCB5ujDkY+yOObHRQ0Ce3nBCeM3vUtHSVIB+7+aX6tMXn70
-        h/Cw8ejDhLQvBjjue/ht+Xm0DdPbta0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a35a0f90 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 23 Dec 2021 14:11:39 +0000 (UTC)
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f4DmGTSwziehMGkvR6F0DgNT8cpV9eG8uyGp6gtv+FQ=;
+        b=bqPb4GeZBeFdZmQl8bO8ErRvhA0DPMUqOg1N36n20MidxP5gjnB/aqJQNTeV9nBCUIiXLy
+        hDt0JzuvFb+i8857MVN1d/Yz0dSgOPw00cYHGklP7nVpKPL34FUqSUkw7iBWXDQOuBEzCF
+        869AAB7GRbfs09hyeMxL7e5WXMRiZAk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 776185b1 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 23 Dec 2021 14:11:47 +0000 (UTC)
 From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
 To:     linux-kernel@vger.kernel.org, tytso@mit.edu,
         gregkh@linuxfoundation.org
 Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-crypto@vger.kernel.org
-Subject: [PATCH v2 1/2] lib/crypto: blake2s: include as built-in
-Date:   Thu, 23 Dec 2021 15:11:12 +0100
-Message-Id: <20211223141113.1240679-1-Jason@zx2c4.com>
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
+Subject: [PATCH v2 2/2] random: use BLAKE2s instead of SHA1 in extraction
+Date:   Thu, 23 Dec 2021 15:11:13 +0100
+Message-Id: <20211223141113.1240679-2-Jason@zx2c4.com>
+In-Reply-To: <20211223141113.1240679-1-Jason@zx2c4.com>
+References: <20211223141113.1240679-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for using blake2s in the RNG, we change the way that it
-is wired-in to the build system. Instead of kconfig mazes and ifdefs, we
-use weak symbols, so that an arch version can override the generic
-version. Then we include the generic version in lib-y, so that it can be
-removed from the image if the arch version doesn't fallback to it (as is
-the case on arm though not x86). The result should be a bit simpler and
-smaller than the code it replaces.
+This commit addresses one of the lower hanging fruits of the RNG: its
+usage of SHA1.
 
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: linux-crypto@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+BLAKE2s is generally faster, and certainly more secure, than SHA1, which
+has [1] been [2] really [3] very [4] broken [5]. Additionally, the
+current construction in the RNG doesn't use the full SHA1 function, as
+specified, and allows overwriting the IV with RDRAND output in an
+undocumented way, even in the case when RDRAND isn't set to "trusted",
+which means potential malicious IV choices. And its short length means
+that keeping only half of it secret when feeding back into the mixer
+gives us only 2^80 bits of forward secrecy. In other words, not only is
+the choice of hash function dated, but the use of it isn't really great
+either.
+
+This commit aims to fix both of these issues while also keeping the
+general structure and semantics as close to the original as possible.
+Specifically:
+
+   a) Rather than overwriting the hash IV with RDRAND, we put it into
+      BLAKE2's documented "salt" and "personal" fields, which were
+      specifically created for this type of usage.
+   b) Since this function feeds the full hash result back into the
+      entropy collector, we only return from it half the length of the
+      hash, just as it was done before. This increases the
+      construction's forward secrecy from 2^80 to a much more
+      comfortable 2^128.
+   c) Rather than using the raw "sha1_transform" function alone, we
+      instead use the full proper BLAKE2s function, with finalization.
+
+This also has the advantage of supplying 16 bytes at a time rather than
+SHA1's 10 bytes, which, in addition to having a faster compression
+function to begin with, means faster extraction in general. On an Intel
+i7-11850H, this commit makes initial seeding around 131% faster.
+
+BLAKE2s itself has the nice property of internally being based on the
+ChaCha permutation, which the RNG is already using for expansion, so
+there shouldn't be any issue with newness, funkiness, or surprising CPU
+behavior, since it's based on something already in use.
+
+[1] https://eprint.iacr.org/2005/010.pdf
+[2] https://www.iacr.org/archive/crypto2005/36210017/36210017.pdf
+[3] https://eprint.iacr.org/2015/967.pdf
+[4] https://shattered.io/static/shattered.pdf
+[5] https://www.usenix.org/system/files/sec20-leurent.pdf
+
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
-Herbert - I intend to take this via the crng/random.git tree, since it
-forms a dependency and I'd like to send a pull early in 5.17 cycle.
+v1->v2:
+- Moved the blake2s lib/crypto/ build system changes to prior commit,
+  since it's a bit more involved than initially thought.
 
- Makefile                          |  2 +-
- arch/arm/crypto/Kconfig           |  3 +--
- arch/arm/crypto/blake2s-core.S    |  8 ++++----
- arch/arm/crypto/blake2s-glue.c    |  6 +++---
- arch/s390/configs/debug_defconfig |  1 -
- arch/s390/configs/defconfig       |  1 -
- arch/x86/crypto/blake2s-glue.c    | 11 +++++------
- crypto/Kconfig                    |  5 +----
- drivers/net/Kconfig               |  1 -
- include/crypto/internal/blake2s.h |  6 +++---
- lib/Makefile                      |  2 +-
- lib/crypto/Kconfig                | 25 -------------------------
- lib/crypto/Makefile               |  7 +++----
- lib/crypto/blake2s-generic.c      |  6 +++++-
- lib/crypto/blake2s.c              |  6 ------
- 15 files changed, 27 insertions(+), 63 deletions(-)
+ drivers/char/random.c | 64 ++++++++++++++++++-------------------------
+ 1 file changed, 27 insertions(+), 37 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index d85f1ff79f5c..892ea632ea63 100644
---- a/Makefile
-+++ b/Makefile
-@@ -668,7 +668,7 @@ drivers-y	:= drivers/ sound/
- drivers-$(CONFIG_SAMPLES) += samples/
- drivers-$(CONFIG_NET) += net/
- drivers-y	+= virt/
--libs-y		:= lib/
-+libs-y		:= lib/ lib/crypto/
- endif # KBUILD_EXTMOD
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 13c968b950c5..e3827d45d2f2 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -78,12 +78,12 @@
+  * an *estimate* of how many bits of randomness have been stored into
+  * the random number generator's internal state.
+  *
+- * When random bytes are desired, they are obtained by taking the SHA
+- * hash of the contents of the "entropy pool".  The SHA hash avoids
++ * When random bytes are desired, they are obtained by taking the BLAKE2s
++ * hash of the contents of the "entropy pool".  The BLAKE2s hash avoids
+  * exposing the internal state of the entropy pool.  It is believed to
+  * be computationally infeasible to derive any useful information
+- * about the input of SHA from its output.  Even if it is possible to
+- * analyze SHA in some clever way, as long as the amount of data
++ * about the input of BLAKE2s from its output.  Even if it is possible to
++ * analyze BLAKE2s in some clever way, as long as the amount of data
+  * returned from the generator is less than the inherent entropy in
+  * the pool, the output data is totally unpredictable.  For this
+  * reason, the routine decreases its internal estimate of how many
+@@ -93,7 +93,7 @@
+  * If this estimate goes to zero, the routine can still generate
+  * random numbers; however, an attacker may (at least in theory) be
+  * able to infer the future output of the generator from prior
+- * outputs.  This requires successful cryptanalysis of SHA, which is
++ * outputs.  This requires successful cryptanalysis of BLAKE2s, which is
+  * not believed to be feasible, but there is a remote possibility.
+  * Nonetheless, these numbers should be useful for the vast majority
+  * of purposes.
+@@ -347,7 +347,7 @@
+ #include <linux/completion.h>
+ #include <linux/uuid.h>
+ #include <crypto/chacha.h>
+-#include <crypto/sha1.h>
++#include <crypto/blake2s.h>
  
- # The all: target is the default when no target is given on the
-diff --git a/arch/arm/crypto/Kconfig b/arch/arm/crypto/Kconfig
-index 2b575792363e..47cb22645746 100644
---- a/arch/arm/crypto/Kconfig
-+++ b/arch/arm/crypto/Kconfig
-@@ -63,8 +63,7 @@ config CRYPTO_SHA512_ARM
- 	  using optimized ARM assembler and NEON, when available.
- 
- config CRYPTO_BLAKE2S_ARM
--	tristate "BLAKE2s digest algorithm (ARM)"
--	select CRYPTO_ARCH_HAVE_LIB_BLAKE2S
-+	bool "BLAKE2s digest algorithm (ARM)"
- 	help
- 	  BLAKE2s digest algorithm optimized with ARM scalar instructions.  This
- 	  is faster than the generic implementations of BLAKE2s and BLAKE2b, but
-diff --git a/arch/arm/crypto/blake2s-core.S b/arch/arm/crypto/blake2s-core.S
-index 86345751bbf3..df40e46601f1 100644
---- a/arch/arm/crypto/blake2s-core.S
-+++ b/arch/arm/crypto/blake2s-core.S
-@@ -167,8 +167,8 @@
- .endm
- 
- //
--// void blake2s_compress_arch(struct blake2s_state *state,
--//			      const u8 *block, size_t nblocks, u32 inc);
-+// void blake2s_compress(struct blake2s_state *state,
-+//			 const u8 *block, size_t nblocks, u32 inc);
- //
- // Only the first three fields of struct blake2s_state are used:
- //	u32 h[8];	(inout)
-@@ -176,7 +176,7 @@
- //	u32 f[2];	(in)
- //
- 	.align		5
--ENTRY(blake2s_compress_arch)
-+ENTRY(blake2s_compress)
- 	push		{r0-r2,r4-r11,lr}	// keep this an even number
- 
- .Lnext_block:
-@@ -303,4 +303,4 @@ ENTRY(blake2s_compress_arch)
- 	str		r3, [r12], #4
- 	bne		1b
- 	b		.Lcopy_block_done
--ENDPROC(blake2s_compress_arch)
-+ENDPROC(blake2s_compress)
-diff --git a/arch/arm/crypto/blake2s-glue.c b/arch/arm/crypto/blake2s-glue.c
-index f2cc1e5fc9ec..09d3a0cabd2c 100644
---- a/arch/arm/crypto/blake2s-glue.c
-+++ b/arch/arm/crypto/blake2s-glue.c
-@@ -11,17 +11,17 @@
- #include <linux/module.h>
- 
- /* defined in blake2s-core.S */
--EXPORT_SYMBOL(blake2s_compress_arch);
-+EXPORT_SYMBOL(blake2s_compress);
- 
- static int crypto_blake2s_update_arm(struct shash_desc *desc,
- 				     const u8 *in, unsigned int inlen)
- {
--	return crypto_blake2s_update(desc, in, inlen, blake2s_compress_arch);
-+	return crypto_blake2s_update(desc, in, inlen, blake2s_compress);
- }
- 
- static int crypto_blake2s_final_arm(struct shash_desc *desc, u8 *out)
- {
--	return crypto_blake2s_final(desc, out, blake2s_compress_arch);
-+	return crypto_blake2s_final(desc, out, blake2s_compress);
- }
- 
- #define BLAKE2S_ALG(name, driver_name, digest_size)			\
-diff --git a/arch/s390/configs/debug_defconfig b/arch/s390/configs/debug_defconfig
-index e45cc27716de..caa3d1d6a0e8 100644
---- a/arch/s390/configs/debug_defconfig
-+++ b/arch/s390/configs/debug_defconfig
-@@ -757,7 +757,6 @@ CONFIG_CRYPTO_USER_API_SKCIPHER=m
- CONFIG_CRYPTO_USER_API_RNG=m
- CONFIG_CRYPTO_USER_API_AEAD=m
- CONFIG_CRYPTO_STATS=y
--CONFIG_CRYPTO_LIB_BLAKE2S=m
- CONFIG_CRYPTO_LIB_CURVE25519=m
- CONFIG_CRYPTO_LIB_CHACHA20POLY1305=m
- CONFIG_ZCRYPT=m
-diff --git a/arch/s390/configs/defconfig b/arch/s390/configs/defconfig
-index 1c750bfca2d8..fffc6af5358c 100644
---- a/arch/s390/configs/defconfig
-+++ b/arch/s390/configs/defconfig
-@@ -744,7 +744,6 @@ CONFIG_CRYPTO_USER_API_SKCIPHER=m
- CONFIG_CRYPTO_USER_API_RNG=m
- CONFIG_CRYPTO_USER_API_AEAD=m
- CONFIG_CRYPTO_STATS=y
--CONFIG_CRYPTO_LIB_BLAKE2S=m
- CONFIG_CRYPTO_LIB_CURVE25519=m
- CONFIG_CRYPTO_LIB_CHACHA20POLY1305=m
- CONFIG_ZCRYPT=m
-diff --git a/arch/x86/crypto/blake2s-glue.c b/arch/x86/crypto/blake2s-glue.c
-index a40365ab301e..ef91a3167d27 100644
---- a/arch/x86/crypto/blake2s-glue.c
-+++ b/arch/x86/crypto/blake2s-glue.c
-@@ -28,9 +28,8 @@ asmlinkage void blake2s_compress_avx512(struct blake2s_state *state,
- static __ro_after_init DEFINE_STATIC_KEY_FALSE(blake2s_use_ssse3);
- static __ro_after_init DEFINE_STATIC_KEY_FALSE(blake2s_use_avx512);
- 
--void blake2s_compress_arch(struct blake2s_state *state,
--			   const u8 *block, size_t nblocks,
--			   const u32 inc)
-+void blake2s_compress(struct blake2s_state *state, const u8 *block,
-+		      size_t nblocks, const u32 inc)
- {
- 	/* SIMD disables preemption, so relax after processing each page. */
- 	BUILD_BUG_ON(SZ_4K / BLAKE2S_BLOCK_SIZE < 8);
-@@ -56,17 +55,17 @@ void blake2s_compress_arch(struct blake2s_state *state,
- 		block += blocks * BLAKE2S_BLOCK_SIZE;
- 	} while (nblocks);
- }
--EXPORT_SYMBOL(blake2s_compress_arch);
-+EXPORT_SYMBOL(blake2s_compress);
- 
- static int crypto_blake2s_update_x86(struct shash_desc *desc,
- 				     const u8 *in, unsigned int inlen)
- {
--	return crypto_blake2s_update(desc, in, inlen, blake2s_compress_arch);
-+	return crypto_blake2s_update(desc, in, inlen, blake2s_compress);
- }
- 
- static int crypto_blake2s_final_x86(struct shash_desc *desc, u8 *out)
- {
--	return crypto_blake2s_final(desc, out, blake2s_compress_arch);
-+	return crypto_blake2s_final(desc, out, blake2s_compress);
- }
- 
- #define BLAKE2S_ALG(name, driver_name, digest_size)			\
-diff --git a/crypto/Kconfig b/crypto/Kconfig
-index 285f82647d2b..bfda2c82774d 100644
---- a/crypto/Kconfig
-+++ b/crypto/Kconfig
-@@ -685,7 +685,6 @@ config CRYPTO_BLAKE2B
- 
- config CRYPTO_BLAKE2S
- 	tristate "BLAKE2s digest algorithm"
--	select CRYPTO_LIB_BLAKE2S_GENERIC
- 	select CRYPTO_HASH
- 	help
- 	  Implementation of cryptographic hash function BLAKE2s
-@@ -702,10 +701,8 @@ config CRYPTO_BLAKE2S
- 	  See https://blake2.net for further information.
- 
- config CRYPTO_BLAKE2S_X86
--	tristate "BLAKE2s digest algorithm (x86 accelerated version)"
-+	bool "BLAKE2s digest algorithm (x86 accelerated version)"
- 	depends on X86 && 64BIT
--	select CRYPTO_LIB_BLAKE2S_GENERIC
--	select CRYPTO_ARCH_HAVE_LIB_BLAKE2S
- 
- config CRYPTO_CRCT10DIF
- 	tristate "CRCT10DIF algorithm"
-diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
-index 6cccc3dc00bc..b2a4f998c180 100644
---- a/drivers/net/Kconfig
-+++ b/drivers/net/Kconfig
-@@ -81,7 +81,6 @@ config WIREGUARD
- 	select CRYPTO
- 	select CRYPTO_LIB_CURVE25519
- 	select CRYPTO_LIB_CHACHA20POLY1305
--	select CRYPTO_LIB_BLAKE2S
- 	select CRYPTO_CHACHA20_X86_64 if X86 && 64BIT
- 	select CRYPTO_POLY1305_X86_64 if X86 && 64BIT
- 	select CRYPTO_BLAKE2S_X86 if X86 && 64BIT
-diff --git a/include/crypto/internal/blake2s.h b/include/crypto/internal/blake2s.h
-index 8e50d487500f..d39cfa0d333e 100644
---- a/include/crypto/internal/blake2s.h
-+++ b/include/crypto/internal/blake2s.h
-@@ -11,11 +11,11 @@
- #include <crypto/internal/hash.h>
- #include <linux/string.h>
- 
--void blake2s_compress_generic(struct blake2s_state *state,const u8 *block,
-+void blake2s_compress_generic(struct blake2s_state *state, const u8 *block,
- 			      size_t nblocks, const u32 inc);
- 
--void blake2s_compress_arch(struct blake2s_state *state,const u8 *block,
--			   size_t nblocks, const u32 inc);
-+void blake2s_compress(struct blake2s_state *state, const u8 *block,
-+		      size_t nblocks, const u32 inc);
- 
- bool blake2s_selftest(void);
- 
-diff --git a/lib/Makefile b/lib/Makefile
-index 364c23f15578..bb57b2e466fa 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -139,7 +139,7 @@ endif
- obj-$(CONFIG_DEBUG_INFO_REDUCED) += debug_info.o
- CFLAGS_debug_info.o += $(call cc-option, -femit-struct-debug-detailed=any)
- 
--obj-y += math/ crypto/
-+obj-y += math/
- 
- obj-$(CONFIG_GENERIC_IOMAP) += iomap.o
- obj-$(CONFIG_GENERIC_PCI_IOMAP) += pci_iomap.o
-diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
-index 545ccbddf6a1..31c6e2be3b84 100644
---- a/lib/crypto/Kconfig
-+++ b/lib/crypto/Kconfig
-@@ -8,31 +8,6 @@ config CRYPTO_LIB_AES
- config CRYPTO_LIB_ARC4
- 	tristate
- 
--config CRYPTO_ARCH_HAVE_LIB_BLAKE2S
--	tristate
--	help
--	  Declares whether the architecture provides an arch-specific
--	  accelerated implementation of the Blake2s library interface,
--	  either builtin or as a module.
+ #include <asm/processor.h>
+ #include <linux/uaccess.h>
+@@ -367,10 +367,7 @@
+ #define INPUT_POOL_WORDS	(1 << (INPUT_POOL_SHIFT-5))
+ #define OUTPUT_POOL_SHIFT	10
+ #define OUTPUT_POOL_WORDS	(1 << (OUTPUT_POOL_SHIFT-5))
+-#define EXTRACT_SIZE		10
 -
--config CRYPTO_LIB_BLAKE2S_GENERIC
--	tristate
--	help
--	  This symbol can be depended upon by arch implementations of the
--	  Blake2s library interface that require the generic code as a
--	  fallback, e.g., for SIMD implementations. If no arch specific
--	  implementation is enabled, this implementation serves the users
--	  of CRYPTO_LIB_BLAKE2S.
 -
--config CRYPTO_LIB_BLAKE2S
--	tristate "BLAKE2s hash function library"
--	depends on CRYPTO_ARCH_HAVE_LIB_BLAKE2S || !CRYPTO_ARCH_HAVE_LIB_BLAKE2S
--	select CRYPTO_LIB_BLAKE2S_GENERIC if CRYPTO_ARCH_HAVE_LIB_BLAKE2S=n
--	help
--	  Enable the Blake2s library interface. This interface may be fulfilled
--	  by either the generic implementation or an arch-specific one, if one
--	  is available and enabled.
--
- config CRYPTO_ARCH_HAVE_LIB_CHACHA
- 	tristate
- 	help
-diff --git a/lib/crypto/Makefile b/lib/crypto/Makefile
-index 73205ed269ba..42e1d932c077 100644
---- a/lib/crypto/Makefile
-+++ b/lib/crypto/Makefile
-@@ -10,10 +10,9 @@ libaes-y					:= aes.o
- obj-$(CONFIG_CRYPTO_LIB_ARC4)			+= libarc4.o
- libarc4-y					:= arc4.o
+-#define LONGS(x) (((x) + sizeof(unsigned long) - 1)/sizeof(unsigned long))
++#define EXTRACT_SIZE		(BLAKE2S_HASH_SIZE / 2)
  
--obj-$(CONFIG_CRYPTO_LIB_BLAKE2S_GENERIC)	+= libblake2s-generic.o
--libblake2s-generic-y				+= blake2s-generic.o
--
--obj-$(CONFIG_CRYPTO_LIB_BLAKE2S)		+= libblake2s.o
-+# blake2s is used by the /dev/random driver which is always builtin
-+lib-y						+= blake2s-generic.o
-+obj-y						+= libblake2s.o
- libblake2s-y					+= blake2s.o
+ /*
+  * To allow fractional bits to be tracked, the entropy_count field is
+@@ -406,7 +403,7 @@ static int random_write_wakeup_bits = 28 * OUTPUT_POOL_WORDS;
+  * Thanks to Colin Plumb for suggesting this.
+  *
+  * The mixing operation is much less sensitive than the output hash,
+- * where we use SHA-1.  All that we want of mixing operation is that
++ * where we use BLAKE2s.  All that we want of mixing operation is that
+  * it be a good non-cryptographic hash; i.e. it not produce collisions
+  * when fed "random" data of the sort we expect to see.  As long as
+  * the pool state differs for different inputs, we have preserved the
+@@ -1384,54 +1381,47 @@ static size_t account(struct entropy_store *r, size_t nbytes, int min,
+  */
+ static void extract_buf(struct entropy_store *r, __u8 *out)
+ {
+-	int i;
+-	union {
+-		__u32 w[5];
+-		unsigned long l[LONGS(20)];
+-	} hash;
+-	__u32 workspace[SHA1_WORKSPACE_WORDS];
++	struct blake2s_state state __aligned(__alignof__(unsigned long));
++	u8 hash[BLAKE2S_HASH_SIZE];
++	unsigned long *salt;
+ 	unsigned long flags;
  
- obj-$(CONFIG_CRYPTO_LIB_CHACHA20POLY1305)	+= libchacha20poly1305.o
-diff --git a/lib/crypto/blake2s-generic.c b/lib/crypto/blake2s-generic.c
-index 04ff8df24513..75ccb3e633e6 100644
---- a/lib/crypto/blake2s-generic.c
-+++ b/lib/crypto/blake2s-generic.c
-@@ -37,7 +37,11 @@ static inline void blake2s_increment_counter(struct blake2s_state *state,
- 	state->t[1] += (state->t[0] < inc);
- }
- 
--void blake2s_compress_generic(struct blake2s_state *state,const u8 *block,
-+void blake2s_compress(struct blake2s_state *state, const u8 *block,
-+		      size_t nblocks, const u32 inc)
-+		      __weak __alias(blake2s_compress_generic);
++	blake2s_init(&state, sizeof(hash));
 +
-+void blake2s_compress_generic(struct blake2s_state *state, const u8 *block,
- 			      size_t nblocks, const u32 inc)
- {
- 	u32 m[16];
-diff --git a/lib/crypto/blake2s.c b/lib/crypto/blake2s.c
-index 4055aa593ec4..93f2ae051370 100644
---- a/lib/crypto/blake2s.c
-+++ b/lib/crypto/blake2s.c
-@@ -16,12 +16,6 @@
- #include <linux/init.h>
- #include <linux/bug.h>
+ 	/*
+ 	 * If we have an architectural hardware random number
+-	 * generator, use it for SHA's initial vector
++	 * generator, use it for BLAKE2's salt & personal fields.
+ 	 */
+-	sha1_init(hash.w);
+-	for (i = 0; i < LONGS(20); i++) {
++	for (salt = (unsigned long *)&state.h[4];
++	     salt < (unsigned long *)&state.h[8]; ++salt) {
+ 		unsigned long v;
+ 		if (!arch_get_random_long(&v))
+ 			break;
+-		hash.l[i] = v;
++		*salt ^= v;
+ 	}
  
--#if IS_ENABLED(CONFIG_CRYPTO_ARCH_HAVE_LIB_BLAKE2S)
--#  define blake2s_compress blake2s_compress_arch
--#else
--#  define blake2s_compress blake2s_compress_generic
--#endif
+-	/* Generate a hash across the pool, 16 words (512 bits) at a time */
++	/* Generate a hash across the pool */
+ 	spin_lock_irqsave(&r->lock, flags);
+-	for (i = 0; i < r->poolinfo->poolwords; i += 16)
+-		sha1_transform(hash.w, (__u8 *)(r->pool + i), workspace);
++	blake2s_update(&state, (const u8 *)r->pool,
++		       r->poolinfo->poolwords * sizeof(*r->pool));
++	blake2s_final(&state, hash); /* final zeros out state */
+ 
+ 	/*
+ 	 * We mix the hash back into the pool to prevent backtracking
+ 	 * attacks (where the attacker knows the state of the pool
+ 	 * plus the current outputs, and attempts to find previous
+-	 * ouputs), unless the hash function can be inverted. By
+-	 * mixing at least a SHA1 worth of hash data back, we make
++	 * outputs), unless the hash function can be inverted. By
++	 * mixing at least a hash worth of hash data back, we make
+ 	 * brute-forcing the feedback as hard as brute-forcing the
+ 	 * hash.
+ 	 */
+-	__mix_pool_bytes(r, hash.w, sizeof(hash.w));
++	__mix_pool_bytes(r, hash, sizeof(hash));
+ 	spin_unlock_irqrestore(&r->lock, flags);
+ 
+-	memzero_explicit(workspace, sizeof(workspace));
 -
- void blake2s_update(struct blake2s_state *state, const u8 *in, size_t inlen)
- {
- 	__blake2s_update(state, in, inlen, blake2s_compress);
+-	/*
+-	 * In case the hash function has some recognizable output
+-	 * pattern, we fold it in half. Thus, we always feed back
+-	 * twice as much data as we output.
++	/* Note that EXTRACT_SIZE is half of hash size here, because above
++	 * we've dumped the full length back into mixer. By reducing the
++	 * amount that we emit, we retain a level of forward secrecy.
+ 	 */
+-	hash.w[0] ^= hash.w[3];
+-	hash.w[1] ^= hash.w[4];
+-	hash.w[2] ^= rol32(hash.w[2], 16);
+-
+ 	memcpy(out, &hash, EXTRACT_SIZE);
+ 	memzero_explicit(&hash, sizeof(hash));
+ }
 -- 
 2.34.1
 

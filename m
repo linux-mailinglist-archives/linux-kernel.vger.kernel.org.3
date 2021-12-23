@@ -2,191 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F02E447DC55
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 01:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF33247DC5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 01:50:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238428AbhLWAsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 19:48:13 -0500
-Received: from mga12.intel.com ([192.55.52.136]:62262 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235262AbhLWAsH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 19:48:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640220487; x=1671756487;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/MXkza4Qhh/fbe5qq35sCh9ao/7HSfrBo4PH2DSpeI4=;
-  b=K6FvHaJglSUOkMDw2irdpYK4m6CJcBopmwixs3VVtbkKoUpBiAZhqRfm
-   U8zWh3SSeyb9fgg4knUoicDf81O42IBcDAhWy54aIzffoOlFcXYr/vcd/
-   sXv+pfZu8zzIIt+yc7OPKXWpQeDddEdrBNRYh0zdawEfe3Q8sVuVo0f6c
-   YatqShJ78LB6Z8acLz2oHi7F9mn4tmj9ZZABlQgm1usstL3tvglgfic2j
-   XwtUoJ83YBkOjTTFDQ8iGQCa5fX6vw7VvmRy3EZnUDYdG5WEQqJpCOs0+
-   hUPPcvv6UxRXZU+4CW25yUnDtEQaaX1GNptdKGY9Vu/w5IT2HKbYZLmU9
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="220741224"
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="220741224"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:48:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="508668884"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 22 Dec 2021 16:48:05 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n0CH7-00016O-Al; Thu, 23 Dec 2021 00:48:05 +0000
-Date:   Thu, 23 Dec 2021 08:47:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/mm] BUILD SUCCESS
- b64dfcde1ca9cb82e38e573753f0c0db8fb841c2
-Message-ID: <61c3c736.fSUZwn9yLTft9upT%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S239138AbhLWAux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 19:50:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238150AbhLWAuw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 19:50:52 -0500
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50078C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 16:50:52 -0800 (PST)
+Received: by mail-qv1-xf33.google.com with SMTP id fo11so3809360qvb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 16:50:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5ojLwmjQpkbFYUPrgr9e5LBbVEdE5fLHBr16hsYVDs8=;
+        b=ZFc9wRu/xtOdyh2hglOWsy8PxyPGLBNp2wRznQCYjdhbQ85WoeZRfxnBonPI7i/ga7
+         ttCz25lTHf/u6edQuVFJVGtKFyncjOo1oTG8mSH0Y/Vvwagrx94+4d1yPmnHYxV8rhi2
+         d2PHIPUgadHq6oEKQ9rcmtZaQ/NUKWMcTNequq+mjzDcArvs7JwM959M5VN/Y4EY9kui
+         oZ42vRx6is0M2fvEfPbIArVrHot0JnRTC93c2d358YNwwA4pEmfIWywW/Fzd8CJOTMTh
+         T7zdNEMvlyWMgCMfrGwG8lLwqYJAaBy1vf1Vir8fvVYLA7WMNq2YZgwut0lsFDq06BlP
+         biYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5ojLwmjQpkbFYUPrgr9e5LBbVEdE5fLHBr16hsYVDs8=;
+        b=m1exwo/2OJ0bC4NwTcAwvPAxAq3dbh5qw4ztM/Ac0c0ocIpT5lFT6K27TlEHujGQtT
+         BDWrv/QU0oj6iGSKi0xJHvm7fZ8mmeHlzjKCEhu1XRScLXr75eW0soprWEaaiyObtjFQ
+         yKQjyz04SjZiiTc5WLy42W7Se8jeNRYML5yam3U/Afu4tlJzUqR8RodFcBHEtkTxrE4/
+         BMLXYEcI5+kMrDzvYW8yciYycRrl1COG1KeuFqVlUbeA+UZbbXoZ74hN/1oXzd9LBk+A
+         sRFX3HYsCUUbCMz6WqZl88G7wL6tcgYehZa3QqXHi89RJodsWJfsRRKO+RvsdwLYSfCd
+         iudg==
+X-Gm-Message-State: AOAM530BuBQPDa2PcYI5+rVF1CZyhYqkbKI0JZ9GdsCVb4nMCP73rdiB
+        Xf8KEBRTvz/L/PrN5S4+0+Hj035fqMe8ELbThw0=
+X-Google-Smtp-Source: ABdhPJzcZhSaI4yJNcOImOTYhAE+s8f8/SkSTThE6t6JN7xPRbvP4MLjHsQkhBWhX6JJbyr1tCBtcCScaZzHzMVObEk=
+X-Received: by 2002:a05:6214:c21:: with SMTP id a1mr29492qvd.15.1640220651470;
+ Wed, 22 Dec 2021 16:50:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <1640132668-28249-1-git-send-email-huangzhaoyang@gmail.com> <CAJuCfpFdb7VAZExs=ejqG0FDJqRi4LwOEu5E1EM8rtyv1HzbaQ@mail.gmail.com>
+In-Reply-To: <CAJuCfpFdb7VAZExs=ejqG0FDJqRi4LwOEu5E1EM8rtyv1HzbaQ@mail.gmail.com>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Thu, 23 Dec 2021 08:50:31 +0800
+Message-ID: <CAGWkznGJE32mQAve+MB3YrCwmLAGbwd9oyn3rWN2SZj07ez9jw@mail.gmail.com>
+Subject: Re: [PATCH v3] psi: fix possible trigger missing in the window
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/mm
-branch HEAD: b64dfcde1ca9cb82e38e573753f0c0db8fb841c2  x86/mm: Prevent early boot triple-faults with instrumentation
+@Peter Zijlstra @Johannes Weiner
+Would you please review this patch? We would like to have it be merged
+ASAP. Thanks.
 
-elapsed time: 730m
-
-configs tested: 120
-configs skipped: 95
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211222
-arm                         shannon_defconfig
-m68k                         apollo_defconfig
-powerpc                      katmai_defconfig
-arm                        magician_defconfig
-powerpc64                        alldefconfig
-arm                       aspeed_g4_defconfig
-parisc                              defconfig
-powerpc                     pseries_defconfig
-xtensa                         virt_defconfig
-sh                          polaris_defconfig
-mips                         tb0226_defconfig
-microblaze                      mmu_defconfig
-sh                        sh7757lcr_defconfig
-arm                             ezx_defconfig
-mips                           ip32_defconfig
-powerpc                     ksi8560_defconfig
-arm                      jornada720_defconfig
-powerpc                   motionpro_defconfig
-arm                        clps711x_defconfig
-sh                           se7343_defconfig
-ia64                      gensparse_defconfig
-xtensa                           allyesconfig
-powerpc                  mpc866_ads_defconfig
-powerpc                 xes_mpc85xx_defconfig
-mips                           rs90_defconfig
-mips                          ath25_defconfig
-arm                          pxa3xx_defconfig
-sh                          rsk7264_defconfig
-powerpc64                           defconfig
-sh                        edosk7760_defconfig
-ia64                             allyesconfig
-powerpc                     kilauea_defconfig
-sh                          sdk7786_defconfig
-sparc                       sparc64_defconfig
-arm                         lpc32xx_defconfig
-arm                          pxa168_defconfig
-powerpc                      makalu_defconfig
-arm                        trizeps4_defconfig
-arm                          moxart_defconfig
-powerpc                     tqm8555_defconfig
-arm                         mv78xx0_defconfig
-arm                          lpd270_defconfig
-sh                      rts7751r2d1_defconfig
-s390                             allyesconfig
-openrisc                            defconfig
-m68k                       bvme6000_defconfig
-alpha                               defconfig
-riscv             nommu_k210_sdcard_defconfig
-arm                         bcm2835_defconfig
-powerpc               mpc834x_itxgp_defconfig
-powerpc                     sequoia_defconfig
-mips                        bcm47xx_defconfig
-arm                        multi_v7_defconfig
-i386                             allyesconfig
-arm                     eseries_pxa_defconfig
-powerpc                 mpc8540_ads_defconfig
-nds32                             allnoconfig
-nios2                            alldefconfig
-sh                 kfr2r09-romimage_defconfig
-powerpc                 mpc8272_ads_defconfig
-mips                  maltasmvp_eva_defconfig
-powerpc                     stx_gp3_defconfig
-arm                        shmobile_defconfig
-sh                            titan_defconfig
-mips                            gpr_defconfig
-arm                  randconfig-c002-20211222
-ia64                             allmodconfig
-ia64                                defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                            allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a001-20211222
-x86_64               randconfig-a003-20211222
-x86_64               randconfig-a005-20211222
-x86_64               randconfig-a006-20211222
-x86_64               randconfig-a004-20211222
-x86_64               randconfig-a002-20211222
-i386                 randconfig-a006-20211222
-i386                 randconfig-a004-20211222
-i386                 randconfig-a002-20211222
-i386                 randconfig-a003-20211222
-i386                 randconfig-a001-20211222
-i386                 randconfig-a005-20211222
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-hexagon              randconfig-r041-20211222
-hexagon              randconfig-r045-20211222
-riscv                randconfig-r042-20211222
-s390                 randconfig-r044-20211222
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+On Wed, Dec 22, 2021 at 8:31 AM Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> On Tue, Dec 21, 2021 at 4:24 PM Huangzhaoyang <huangzhaoyang@gmail.com> wrote:
+> >
+> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+>
+> Please remember to CC Peter.
+>
+> >
+> > When a new threshold breaching stall happens after a psi event was
+> > generated and within the window duration, the new event is not
+> > generated because the events are rate-limited to one per window. If
+> > after that no new stall is recorded then the event will not be
+> > generated even after rate-limiting duration has passed. This is
+> > happening because with no new stall, window_update will not be called
+> > even though threshold was previously breached. To fix this, record
+> > threshold breaching occurrence and generate the event once window
+> > duration is passed.
+> >
+> > Suggested-by: Suren Baghdasaryan <surenb@google.com>
+> > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > ---
+> > v2: modify the logic according to Suren's suggestion
+> > v3: update commit message
+> > ---
+> > ---
+> >  include/linux/psi_types.h |  2 ++
+> >  kernel/sched/psi.c        | 38 +++++++++++++++++++++++---------------
+> >  2 files changed, 25 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+> > index 0a23300..87b694a 100644
+> > --- a/include/linux/psi_types.h
+> > +++ b/include/linux/psi_types.h
+> > @@ -132,6 +132,8 @@ struct psi_trigger {
+> >
+> >         /* Refcounting to prevent premature destruction */
+> >         struct kref refcount;
+> > +
+> > +       bool threshold_breach;
+> >  };
+> >
+> >  struct psi_group {
+> > diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> > index 1652f2b..5c67ab9 100644
+> > --- a/kernel/sched/psi.c
+> > +++ b/kernel/sched/psi.c
+> > @@ -524,24 +524,29 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+> >          */
+> >         list_for_each_entry(t, &group->triggers, node) {
+> >                 u64 growth;
+> > +               bool trigger_stalled =
+> > +                       group->polling_total[t->state] != total[t->state];
+> >
+> > -               /* Check for stall activity */
+> > -               if (group->polling_total[t->state] == total[t->state])
+> > -                       continue;
+> > -
+> > -               /*
+> > -                * Multiple triggers might be looking at the same state,
+> > -                * remember to update group->polling_total[] once we've
+> > -                * been through all of them. Also remember to extend the
+> > -                * polling time if we see new stall activity.
+> > -                */
+> > -               new_stall = true;
+> > -
+> > -               /* Calculate growth since last update */
+> > -               growth = window_update(&t->win, now, total[t->state]);
+> > -               if (growth < t->threshold)
+> > +               /* Check for stall activity or a previous threshold breach */
+> > +               if (!trigger_stalled && !t->threshold_breach)
+> >                         continue;
+> >
+> > +               if (trigger_stalled) {
+> > +                       /*
+> > +                        * Multiple triggers might be looking at the same state,
+> > +                        * remember to update group->polling_total[] once we've
+> > +                        * been through all of them. Also remember to extend the
+> > +                        * polling time if we see new stall activity.
+> > +                        */
+> > +                       new_stall = true;
+> > +
+> > +                       /* Calculate growth since last update */
+> > +                       growth = window_update(&t->win, now, total[t->state]);
+> > +                       if (growth < t->threshold)
+> > +                               continue;
+> > +
+> > +                       t->threshold_breach = true;
+> > +               }
+> >                 /* Limit event signaling to once per window */
+> >                 if (now < t->last_event_time + t->win.size)
+> >                         continue;
+> > @@ -550,6 +555,8 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+> >                 if (cmpxchg(&t->event, 0, 1) == 0)
+> >                         wake_up_interruptible(&t->event_wait);
+> >                 t->last_event_time = now;
+> > +               /* Reset threshold breach flag once event got generated */
+> > +               t->threshold_breach = false;
+> >         }
+> >
+> >         if (new_stall)
+> > @@ -1152,6 +1159,7 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
+> >         t->last_event_time = 0;
+> >         init_waitqueue_head(&t->event_wait);
+> >         kref_init(&t->refcount);
+> > +       t->threshold_breach = false;
+> >
+> >         mutex_lock(&group->trigger_lock);
+> >
+> > --
+> > 1.9.1
+> >

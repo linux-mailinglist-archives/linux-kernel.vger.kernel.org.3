@@ -2,62 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4DB47DF96
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 08:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F4447DFAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 08:40:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346871AbhLWH2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 02:28:15 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:53638 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346850AbhLWH2K (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 02:28:10 -0500
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 665601A0425;
-        Thu, 23 Dec 2021 08:28:09 +0100 (CET)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 2FB831A0410;
-        Thu, 23 Dec 2021 08:28:09 +0100 (CET)
-Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 78937183AD05;
-        Thu, 23 Dec 2021 15:28:07 +0800 (+08)
-From:   Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
-To:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kuba@kernel.org, peppe.cavallaro@st.com,
-        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-        Jose.Abreu@synopsys.com, mst@redhat.com, Joao.Pinto@synopsys.com,
-        xiaoliang.yang_1@nxp.com
-Subject: [PATCH net] net: stmmac: ptp: fix potentially overflowing expression
-Date:   Thu, 23 Dec 2021 15:39:28 +0800
-Message-Id: <20211223073928.37371-1-xiaoliang.yang_1@nxp.com>
-X-Mailer: git-send-email 2.17.1
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1346884AbhLWHkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 02:40:47 -0500
+Received: from smtp04.smtpout.orange.fr ([80.12.242.126]:58192 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346874AbhLWHkq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 02:40:46 -0500
+Received: from pop-os.home ([86.243.171.122])
+        by smtp.orange.fr with ESMTPA
+        id 0IiQnZlqWwEZf0IiRn1Rhj; Thu, 23 Dec 2021 08:40:44 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Thu, 23 Dec 2021 08:40:44 +0100
+X-ME-IP: 86.243.171.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     hminas@synopsys.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] usb: dwc2: Simplify a bitmap declaration
+Date:   Thu, 23 Dec 2021 08:40:41 +0100
+Message-Id: <a2bf604d26dbe9816fdaae0faf4b4837ecacc6d3.1640245180.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the u32 variable to type u64 in a context where expression of
-type u64 is required to avoid potential overflow.
+Use DECLARE_BITMAP() instead of hand writing it.
 
-Fixes: e9e3720002f6 ("net: stmmac: ptp: update tas basetime after ptp adjust")
-Signed-off-by: Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/dwc2/core.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c
-index 580cc035536b..be9b58b2abf9 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c
-@@ -102,7 +102,7 @@ static int stmmac_adjust_time(struct ptp_clock_info *ptp, s64 delta)
- 		time.tv_nsec = priv->plat->est->btr_reserve[0];
- 		time.tv_sec = priv->plat->est->btr_reserve[1];
- 		basetime = timespec64_to_ktime(time);
--		cycle_time = priv->plat->est->ctr[1] * NSEC_PER_SEC +
-+		cycle_time = (u64)priv->plat->est->ctr[1] * NSEC_PER_SEC +
- 			     priv->plat->est->ctr[0];
- 		time = stmmac_calc_tas_basetime(basetime,
- 						current_time_ns,
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index e2fe64239328..8a63da3ab39d 100644
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -1154,8 +1154,7 @@ struct dwc2_hsotg {
+ 	struct list_head periodic_sched_queued;
+ 	struct list_head split_order;
+ 	u16 periodic_usecs;
+-	unsigned long hs_periodic_bitmap[
+-		DIV_ROUND_UP(DWC2_HS_SCHEDULE_US, BITS_PER_LONG)];
++	DECLARE_BITMAP(hs_periodic_bitmap, DWC2_HS_SCHEDULE_US);
+ 	u16 periodic_qh_count;
+ 	bool new_connection;
+ 
 -- 
-2.17.1
+2.32.0
 

@@ -2,70 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF00347E042
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 09:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5967E47E03B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 09:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242708AbhLWITk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 03:19:40 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:39298 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235068AbhLWITj (ORCPT
+        id S1346986AbhLWIQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 03:16:21 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:15969 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243230AbhLWIQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 03:19:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1640247579; x=1671783579;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=JRoAnEY3r8cgHd59JP9JgzeC0rdQQn8RTC7yoR73nTo=;
-  b=FtxLEB5RX5f9E9QcVVhmpHrsvkLpJrRFRkiaTLFpFYxaRXBQvHEm7lDB
-   MQHgRApDYo4KIgG9PpCOFjFXYTb3AgSplXe5bY0eK5rZZV6srH9VRMp6W
-   fx2oqz8vYiWmMKJEqs3IuOj2S+nDWS20LpSY6Em4Ixm2cB7wnybp5g6+e
-   L5ZTzbzZRCnyY6oV3+2GU9nmE5aFucZoCLmuiGcGd/Ffnav+CcX71t5Vx
-   IjoKzrNmkPmEfZ2TjaWGbpaudyMBzUYFVBYuDcqhqa76f+TtnMPLkH3vh
-   jA/6gSKxssX0m13UrTrEnqSrH9C4+zWW3p6ooYeFc2Bbyt+slQlusjQGh
-   Q==;
-IronPort-SDR: WZDh+lJxetnRjEE4izqzl818toaMq8pJDzi/H12mKRCqXDTHWWKa6yGvwOHYZlEXl2wQCkKJQy
- vdDFSfT46mzz1suMCM6/LvrH46+sGKHDHM3F08SSlNsqXiVsYx3wqeOov2bjPQ6IH8u89QSLLp
- m3jcIZDN11fjrETYOl1N2B7pNRcXFdEXx5fcK7VZEOpH6Z7Rl53zD8EPAkhTkDZtzNlRa5hbtg
- 70nUSfXVKXOyJpQkTm+oYhyE5nu7V/aLTW3BuHXzHLeiXLapKAc7cnClOtbsfWeRYVnFPqCnlU
- Q5/zFqbmskwKDAJWQwf6cWvY
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="140688299"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Dec 2021 01:19:38 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+        Thu, 23 Dec 2021 03:16:18 -0500
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JKNH62kzXzZdYt;
+        Thu, 23 Dec 2021 16:13:06 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 23 Dec 2021 01:19:38 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 23 Dec 2021 01:19:36 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>, <michael@walle.cc>,
-        <vigneshr@ti.com>, <p.yadav@ti.com>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mtd: spi-nor: Constify part specific fixup hooks
-Date:   Thu, 23 Dec 2021 10:19:34 +0200
-Message-ID: <164024756845.186441.13039859160300606228.b4-ty@microchip.com>
+ 15.1.2308.20; Thu, 23 Dec 2021 16:16:16 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 23 Dec
+ 2021 16:16:15 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <alsa-devel@alsa-project.org>
+CC:     <ricardw@axis.com>, <broonie@kernel.org>
+Subject: [PATCH -next] ASoC: codec: tlv320adc3xxx: Fix missing clk_disable_unprepare() on error in adc3xxx_i2c_probe()
+Date:   Thu, 23 Dec 2021 16:22:12 +0800
+Message-ID: <20211223082212.3342184-1-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211106102915.153552-1-tudor.ambarus@microchip.com>
-References: <20211106102915.153552-1-tudor.ambarus@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 6 Nov 2021 12:29:15 +0200, Tudor Ambarus wrote:
-> Respect flash_info structure declaration.
+Fix the missing clk_disable_unprepare() before return
+from adc3xxx_i2c_probe() in the error handling case.
 
-Applied to spi-nor/next, thanks!
+Fixes: e9a3b57efd28 ("ASoC: codec: tlv320adc3xxx: New codec driver")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ sound/soc/codecs/tlv320adc3xxx.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-[1/1] mtd: spi-nor: Constify part specific fixup hooks
-      https://git.kernel.org/mtd/c/65b54ff67afa
-
-Best regards,
+diff --git a/sound/soc/codecs/tlv320adc3xxx.c b/sound/soc/codecs/tlv320adc3xxx.c
+index a683bda7eb36..4baf3d881633 100644
+--- a/sound/soc/codecs/tlv320adc3xxx.c
++++ b/sound/soc/codecs/tlv320adc3xxx.c
+@@ -1232,21 +1232,21 @@ static int adc3xxx_i2c_probe(struct i2c_client *i2c,
+ 
+ 	ret = adc3xxx_parse_dt_gpio(adc3xxx, "ti,dmdin-gpio1", &adc3xxx->gpio_cfg[0]);
+ 	if (ret < 0)
+-		return ret;
++		goto err_unprepare_mclk;
+ 	ret = adc3xxx_parse_dt_gpio(adc3xxx, "ti,dmclk-gpio2", &adc3xxx->gpio_cfg[1]);
+ 	if (ret < 0)
+-		return ret;
++		goto err_unprepare_mclk;
+ 	ret = adc3xxx_parse_dt_micbias(adc3xxx, "ti,micbias1-vg", &adc3xxx->micbias_vg[0]);
+ 	if (ret < 0)
+-		return ret;
++		goto err_unprepare_mclk;
+ 	ret = adc3xxx_parse_dt_micbias(adc3xxx, "ti,micbias2-vg", &adc3xxx->micbias_vg[1]);
+ 	if (ret < 0)
+-		return ret;
++		goto err_unprepare_mclk;
+ 
+ 	adc3xxx->regmap = devm_regmap_init_i2c(i2c, &adc3xxx_regmap);
+ 	if (IS_ERR(adc3xxx->regmap)) {
+ 		ret = PTR_ERR(adc3xxx->regmap);
+-		return ret;
++		goto err_unprepare_mclk;
+ 	}
+ 
+ 	i2c_set_clientdata(i2c, adc3xxx);
+@@ -1263,9 +1263,15 @@ static int adc3xxx_i2c_probe(struct i2c_client *i2c,
+ 
+ 	ret = snd_soc_register_component(dev,
+ 			&soc_component_dev_adc3xxx, &adc3xxx_dai, 1);
+-	if (ret < 0)
++	if (ret < 0) {
+ 		dev_err(dev, "Failed to register codec: %d\n", ret);
++		goto err_unprepare_mclk;
++	}
++
++	return 0;
+ 
++err_unprepare_mclk:
++	clk_disable_unprepare(adc3xxx->mclk);
+ 	return ret;
+ }
+ 
 -- 
-Tudor Ambarus <tudor.ambarus@microchip.com>
+2.25.1
+

@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B065447DD24
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1736D47DD38
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:18:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346728AbhLWBQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:16:05 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:27196 "EHLO
+        id S1346907AbhLWBQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:16:35 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:27264 "EHLO
         o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346221AbhLWBOo (ORCPT
+        with ESMTP id S1346244AbhLWBOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:14:44 -0500
+        Wed, 22 Dec 2021 20:14:47 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
         h=from:subject:in-reply-to:references:mime-version:to:cc:
         content-transfer-encoding:content-type;
-        s=sgd; bh=yVIQwUE9JRNbIa/ZfSEZSItfnS3OUxif3uKX0p0Ts4Q=;
-        b=rImcg9Iom5wm2dvirQ5mQuphAMZvnGxdeOhd39ze3yjq4jLPi/gxhVf0fOgBnqVwiR2N
-        Qos7mDvDdO1g0HDa6zLKJTwsRBVjLHtZzfdlnDr6lYcP7NZ1ly11vtTxmFsNPyvoWbFHKA
-        vfAdL9L1lUTbIPmJOkyJ0o2Ctt57qfaWDiBMXRxjJcjS7KbhyfbKXxUljMbpDfNV8nd3Zo
-        RIzpiJgXE2zsjf0i/VuLQCOngjIDnhdRhz6SzXHbybtvnxmSmYTRt+Apx0zq8vLhJg7ToJ
-        x8p4hZLjgs9mJpHzl5N1rvFtTSH22JBUsWT40BraJy1Cw0CIQvROShStiVgt1E0w==
-Received: by filterdrecv-75ff7b5ffb-bcbbj with SMTP id filterdrecv-75ff7b5ffb-bcbbj-1-61C3CD5E-1A
-        2021-12-23 01:14:06.714544574 +0000 UTC m=+9687191.029415880
+        s=sgd; bh=rJXQOqUi7Z+t6XaVH9q545zE1/vlk/+8IKkDxm7FsTA=;
+        b=Jq09PeTp4tmdjzejIOn7GRnC8UQC9IhgNf/MfNPwBoqpbYRwFJtGIfqa6r2xAD0hyGmo
+        qUeXV00uwMEkb+EBMYhzu7YgoYrmkruDeMJkoZxKeoTJcnboQeJrEw4B2M1FGAvlJkbiaU
+        WB/+71VeYb3IykMHEHb2bcS8avWSq7PTbPWCksOS36o0zT7DhgudGZA6GnBiYrF1nLHWSV
+        S9NhShvSMR9CQcj9crOZ/p8MSIUZ0tYtKwHEEcuosNiS7sJ0d5U+798B3MQZY/CZFmiBJ5
+        YnsnbZCm1pOPWeRE86KFDMaJXU5nVe/TvRhIzIjDPQEtai2E4zUlIxm471YQNmEg==
+Received: by filterdrecv-75ff7b5ffb-v6hzv with SMTP id filterdrecv-75ff7b5ffb-v6hzv-1-61C3CD5E-45
+        2021-12-23 01:14:06.791119181 +0000 UTC m=+9687188.981580391
 Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-3-0 (SG)
+        by geopod-ismtpd-3-1 (SG)
         with ESMTP
-        id 2tIlyEXETV22Sdh0w6UE5A
-        Thu, 23 Dec 2021 01:14:06.581 +0000 (UTC)
+        id W-w5aYJ6SZyvTvooy91cCw
+        Thu, 23 Dec 2021 01:14:06.662 +0000 (UTC)
 Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id 7CD5B7014A3; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
+        id AB1DB70054A; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
 From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH v2 28/50] wilc1000: improve send_packets() a bit
+Subject: [PATCH v2 33/50] wilc1000: move ac_desired_ratio calculation to where
+ its needed
 Date:   Thu, 23 Dec 2021 01:14:06 +0000 (UTC)
-Message-Id: <20211223011358.4031459-29-davidm@egauge.net>
+Message-Id: <20211223011358.4031459-34-davidm@egauge.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211223011358.4031459-1-davidm@egauge.net>
 References: <20211223011358.4031459-1-davidm@egauge.net>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvH7VqQfef+8M9fWl+?=
- =?us-ascii?Q?BgjYTNO1iE732BTkQPVhTFQ+A1qQ3TSiRj3VpHa?=
- =?us-ascii?Q?EhNKjRi77SgeRSGIId18kL=2FiLTtApC7daijm4nG?=
- =?us-ascii?Q?tQ9AOZtPMJltjt9orcK3BnaRRlxBO1UExC8KJF5?=
- =?us-ascii?Q?blJbmFvwyN23qYphPgNU6tb9AoDSwIF=2FYpq1VoR?=
- =?us-ascii?Q?sRA4TXlxrHnaI25tXHwCA=3D=3D?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvO2CLe60Vy4lC9UTY?=
+ =?us-ascii?Q?Ro5Pro2bUgGjRcBWEHwUu4+dWi6YKfFFjN5hIcG?=
+ =?us-ascii?Q?IpVl0qlV=2FIHf4fP0BO1pHkp5BWIRRkgc3cMGIAw?=
+ =?us-ascii?Q?qMZf07X1j=2FyWToUo8SL=2FPYWzLbuiQSdm=2F1BT3kx?=
+ =?us-ascii?Q?oz+fPVTpqCo=2FVekUAmFMA+LiOxaPOp3Y3XSWU7l?=
+ =?us-ascii?Q?D85MkY20J2F8WyI4WwQKw=3D=3D?=
 To:     Ajay Singh <ajay.kathat@microchip.com>
 Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
         Kalle Valo <kvalo@kernel.org>,
@@ -60,52 +61,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Improve the documentation and simplify the code a bit.
+Move ac_desired_ratio calculation to fill_vmm_table() since that's the
+only place that needs it.  Note that it is unnecessary to initialize
+the array since ac_balance() is guaranteed to fill it in.
 
 Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
 ---
- drivers/net/wireless/microchip/wilc1000/wlan.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ drivers/net/wireless/microchip/wilc1000/wlan.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
-index 287c0843ba152..033979cc85b43 100644
+index 5939ed5b2db68..64497754a36b1 100644
 --- a/drivers/net/wireless/microchip/wilc1000/wlan.c
 +++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
-@@ -858,29 +858,26 @@ static int copy_packets(struct wilc *wilc, int entries, u32 *vmm_table,
- }
- 
+@@ -643,8 +643,6 @@ static u32 vmm_table_entry(struct sk_buff *tqe, u32 vmm_sz)
  /**
-- * send_packets() - Send packets to the chip
-+ * send_packets() - send the transmit buffer to the chip
+  * fill_vmm_table() - Fill VMM table with packets to be sent
   * @wilc: Pointer to the wilc structure.
-- * @len: The length of the buffer containing the packets to be sent to
-- *	the chip.
-+ * @len: The length of the buffer containing the packets to be to the chip.
-  *
-- * Send the packets in the VMM table to the chip.
-+ * Send the packets in the transmit buffer to the chip.
-  *
-  * Context: The bus must have been acquired.
-  *
-- * Return:
-- *	Negative number on error, 0 on success.
-+ * Return: Negative number on error, 0 on success.
+- * @ac_desired_ratio: First-round limit on number of packets to add from the
+- *	respective queue.
+  * @vmm_table: Pointer to the VMM table to fill.
+  * @vmm_entries_ac: Pointer to the queue-number table to fill.
+  *	For each packet added to the VMM table, this will be filled in
+@@ -664,7 +662,6 @@ static u32 vmm_table_entry(struct sk_buff *tqe, u32 vmm_sz)
+  *	so the returned number is at most WILC_VMM_TBL_SIZE-1.
   */
- static int send_packets(struct wilc *wilc, int len)
+ static int fill_vmm_table(const struct wilc *wilc,
+-			  u8 ac_desired_ratio[NQUEUES],
+ 			  u32 vmm_table[WILC_VMM_TBL_SIZE],
+ 			  u8 vmm_entries_ac[WILC_VMM_TBL_SIZE])
  {
- 	const struct wilc_hif_func *func = wilc->hif_func;
- 	int ret;
--	u8 *txb = wilc->tx_buffer;
+@@ -672,6 +669,7 @@ static int fill_vmm_table(const struct wilc *wilc,
+ 	u8 k, ac;
+ 	u32 sum;
+ 	static const u8 ac_preserve_ratio[NQUEUES] = {1, 1, 1, 1};
++	u8 ac_desired_ratio[NQUEUES];
+ 	const u8 *num_pkts_to_add;
+ 	bool ac_exist = 0;
+ 	int vmm_sz = 0;
+@@ -683,6 +681,8 @@ static int fill_vmm_table(const struct wilc *wilc,
  
- 	ret = func->hif_clear_int_ext(wilc, ENABLE_TX_VMM);
- 	if (ret)
- 		return ret;
- 
--	return func->hif_block_tx_ext(wilc, 0, txb, len);
-+	return func->hif_block_tx_ext(wilc, 0, wilc->tx_buffer, len);
- }
- 
+ 	i = 0;
+ 	sum = 0;
++
++	ac_balance(wilc, ac_desired_ratio);
+ 	num_pkts_to_add = ac_desired_ratio;
+ 	do {
+ 		ac_exist = 0;
+@@ -909,7 +909,6 @@ static int send_packets(struct wilc *wilc, int len)
  int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
+ {
+ 	int vmm_table_len, entries, len;
+-	u8 ac_desired_ratio[NQUEUES] = {0, 0, 0, 0};
+ 	u8 vmm_entries_ac[WILC_VMM_TBL_SIZE];
+ 	int ret = 0;
+ 	u32 vmm_table[WILC_VMM_TBL_SIZE];
+@@ -919,8 +918,6 @@ int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
+ 	if (wilc->quit)
+ 		goto out_update_cnt;
+ 
+-	ac_balance(wilc, ac_desired_ratio);
+-
+ 	mutex_lock(&wilc->txq_add_to_head_cs);
+ 
+ 	srcu_idx = srcu_read_lock(&wilc->srcu);
+@@ -928,7 +925,7 @@ int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
+ 		wilc_wlan_txq_filter_dup_tcp_ack(vif->ndev);
+ 	srcu_read_unlock(&wilc->srcu, srcu_idx);
+ 
+-	vmm_table_len = fill_vmm_table(wilc, ac_desired_ratio, vmm_table, vmm_entries_ac);
++	vmm_table_len = fill_vmm_table(wilc, vmm_table, vmm_entries_ac);
+ 	if (vmm_table_len == 0)
+ 		goto out_unlock;
+ 
 -- 
 2.25.1
 

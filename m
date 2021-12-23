@@ -2,185 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 734E747DCBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A02EC47DCC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345904AbhLWBMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:12:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345897AbhLWBMG (ORCPT
+        id S1345863AbhLWBOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:14:11 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:17764 "EHLO
+        o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237775AbhLWBOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:12:06 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63F8C061757
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 17:11:52 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id j2so11533678ybg.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 17:11:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qRpS9GO+nyuDq6fnvSY9uBB02k3InwFJwb2n473ioEY=;
-        b=Zc5D/VDQT1bzGScMnBP2qSmhie5dDKT2bySJqKk24sWYsc69eqsngsVKBIl1AbNvWb
-         Ye4VAAhECbBZdAr1b/KrQuD3jSg6gOLXyc2556Wfmtct87GOn1Wp5TG5Rbwt6bgYL270
-         QtgBVI7Zuk/Ehrq+VAwKYOGH4DaSj2CdBqApTyPsAq/ScKHkJTwLrQrRIk8m5pCl4DZ3
-         Em0hjEjqX0ro7ZMIgSQBZTqN/cyW3db8Qjgz4/7j3K0xS7wQIEZlszLQyJAXdFyc9sO/
-         RPwB6m98Blf2HpSuGJbX8SmU5iZsFgnT9DPWZ3GdE8/EpCHWlLYWRC15PYwUX7GI1YyP
-         QcgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qRpS9GO+nyuDq6fnvSY9uBB02k3InwFJwb2n473ioEY=;
-        b=awdrmaBgE0XFvFnn4NlSC6Gr9ZFtuLq30Ih+LINGpyfi0YjHHjdjX3uzQV7DNBuHt3
-         gYO/nmIEf5Ful6eqM+sfi/rpilNO+EF2TFDsl9otv74Sqz+PByrr3HGu66hq6Q9VeQBG
-         zZp3VYqjcsEONh6/aDr1O3PEKkr60r6evsEkEmT+67UGQK13H0zaSJmVlpg0Zp5iJd/C
-         9UEi6LWF/YWEniMVErNcsvH0PL1/6EqUYDWrnPuLE5LFhlrQv/GpPSYYCbJin1Y+8d/c
-         PShSi8C0lv68xzYFCl9B9oj136USmWc+6x2au7kJ1TJ8H0Xb+SiV+dP3s85d1TJmt8gp
-         gUgg==
-X-Gm-Message-State: AOAM530cFWI6eag0lL98vKcg9GCrVaH3YH5B5wpmOhU00KlRdG0zZy9S
-        y/45x0EHCXnEPi462e2U3U5/LBM6YjK22+/0I4E09Q==
-X-Google-Smtp-Source: ABdhPJx2NYMONbioCxps3nJVWm787JBFhNgsc0twm+/smBnB0ZR3vjY5R+FOqqjTOXDx2waYp4OGbVClZheFLgNZvuI=
-X-Received: by 2002:a05:6902:552:: with SMTP id z18mr352788ybs.318.1640221911761;
- Wed, 22 Dec 2021 17:11:51 -0800 (PST)
+        Wed, 22 Dec 2021 20:14:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
+        h=from:subject:in-reply-to:references:mime-version:to:cc:
+        content-transfer-encoding:content-type;
+        s=sgd; bh=emRedEXnN1E6Sca8nTmnylU6pLvfF71PWPx92q9deco=;
+        b=Op0A18i9PVkUdlsJon3r7sJVA+uM9i5UwiX/lsv8rSrubQTNq6lINUOnGDqkl85vgR0D
+        L5B4FLVb69DTzotAVTuPSBaSXA2ToMkCotY2KXRuYVdf50hDCCWwmHcZVOlxE9/70VY6BF
+        oLCsPNU6rc8m3DNeiOjuFMpZPorEkIgStW+5gyUa2YNsflQ9+iEQNTmtyX5u2dHjUwWyc2
+        lrRXafceBZ4x2Gfd0PifmBFMFxCHfdHAaFU6b7xOcTX0NmzcgMbma82/NmavOpxJP1QH/r
+        E1XEbkgK39i7oQkOoUn35A7V4AiAqXq2A8A/Kw4hWTDsOlO/4l+OmvjS2jJK1VCQ==
+Received: by filterdrecv-64fcb979b9-7lnp4 with SMTP id filterdrecv-64fcb979b9-7lnp4-1-61C3CD5D-36
+        2021-12-23 01:14:05.795334457 +0000 UTC m=+8644592.725894849
+Received: from pearl.egauge.net (unknown)
+        by geopod-ismtpd-6-0 (SG)
+        with ESMTP
+        id P5TgjB1ZSFKLRRrKRnDvVg
+        Thu, 23 Dec 2021 01:14:05.577 +0000 (UTC)
+Received: by pearl.egauge.net (Postfix, from userid 1000)
+        id D47DE700604; Wed, 22 Dec 2021 18:14:04 -0700 (MST)
+From:   David Mosberger-Tang <davidm@egauge.net>
+Subject: [PATCH v2 02/50] wilc1000: switch txq_event from completion to
+ waitqueue
+Date:   Thu, 23 Dec 2021 01:14:05 +0000 (UTC)
+Message-Id: <20211223011358.4031459-3-davidm@egauge.net>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211223011358.4031459-1-davidm@egauge.net>
+References: <20211223011358.4031459-1-davidm@egauge.net>
 MIME-Version: 1.0
-References: <1640132668-28249-1-git-send-email-huangzhaoyang@gmail.com>
- <CAJuCfpFdb7VAZExs=ejqG0FDJqRi4LwOEu5E1EM8rtyv1HzbaQ@mail.gmail.com> <CAGWkznGJE32mQAve+MB3YrCwmLAGbwd9oyn3rWN2SZj07ez9jw@mail.gmail.com>
-In-Reply-To: <CAGWkznGJE32mQAve+MB3YrCwmLAGbwd9oyn3rWN2SZj07ez9jw@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 22 Dec 2021 17:11:40 -0800
-Message-ID: <CAJuCfpG0Y8BstFhKV8c_EcT-REmXpwrxXXPk_JwiUwK9k2RMgA@mail.gmail.com>
-Subject: Re: [PATCH v3] psi: fix possible trigger missing in the window
-To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvKKbokcqBZrOnU5kE?=
+ =?us-ascii?Q?pG8h+syelvS85jzqTtTcv7YHcinBYmG949gzYNe?=
+ =?us-ascii?Q?S+CPI21kQiP7YmP1MedO60V8pEhFGOCredqr8ve?=
+ =?us-ascii?Q?mjiK4j+7YY03Dvf2Jx8OAd89cqyQrakPPjC5Vci?=
+ =?us-ascii?Q?TZOYp8xYGdNyFRoeD3fp5sEC9i76Rb=2Ftx22U8yB?=
+ =?us-ascii?Q?4IB+dkjo7JRX9A6iLuBsw=3D=3D?=
+To:     Ajay Singh <ajay.kathat@microchip.com>
+Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        David Mosberger-Tang <davidm@egauge.net>
+X-Entity-ID: Xg4JGAcGrJFIz2kDG9eoaQ==
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 4:50 PM Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
->
-> @Peter Zijlstra @Johannes Weiner
-> Would you please review this patch? We would like to have it be merged
-> ASAP. Thanks.
+Completion structs are essentially counting semaphores: every
+complete() call wakes up exactly one thread, either immediately (when
+there are waiters queued) or in the future (when a waiter arrives).
+This isn't really the appropriate synchronization structure for the
+wilc1000 transmit queue handler (wilc_wlan_handle_txq) because it will
+consume zero, one, or more packets on each call.  Instead, use a
+waitqueue as a condition variable: wake_up_interruptible() wakes up
+the tx queue handler from a call to wait_event_interruptible()
+whenever something interesting happens and it then takes the
+appropriate action.  This has a couple of benefits:
 
-It's the holiday season, so I would not expect a quick turnaround.
+ - Since the transmit queue handler often transfers multiple packets
+   to the chip on each call, repeated calls to wait_for_completion()
+   when there is no actual work to do are avoided.
 
->
-> On Wed, Dec 22, 2021 at 8:31 AM Suren Baghdasaryan <surenb@google.com> wrote:
-> >
-> > On Tue, Dec 21, 2021 at 4:24 PM Huangzhaoyang <huangzhaoyang@gmail.com> wrote:
-> > >
-> > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> >
-> > Please remember to CC Peter.
-> >
-> > >
-> > > When a new threshold breaching stall happens after a psi event was
-> > > generated and within the window duration, the new event is not
-> > > generated because the events are rate-limited to one per window. If
-> > > after that no new stall is recorded then the event will not be
-> > > generated even after rate-limiting duration has passed. This is
-> > > happening because with no new stall, window_update will not be called
-> > > even though threshold was previously breached. To fix this, record
-> > > threshold breaching occurrence and generate the event once window
-> > > duration is passed.
-> > >
-> > > Suggested-by: Suren Baghdasaryan <surenb@google.com>
-> > > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > > ---
-> > > v2: modify the logic according to Suren's suggestion
-> > > v3: update commit message
-> > > ---
-> > > ---
-> > >  include/linux/psi_types.h |  2 ++
-> > >  kernel/sched/psi.c        | 38 +++++++++++++++++++++++---------------
-> > >  2 files changed, 25 insertions(+), 15 deletions(-)
-> > >
-> > > diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
-> > > index 0a23300..87b694a 100644
-> > > --- a/include/linux/psi_types.h
-> > > +++ b/include/linux/psi_types.h
-> > > @@ -132,6 +132,8 @@ struct psi_trigger {
-> > >
-> > >         /* Refcounting to prevent premature destruction */
-> > >         struct kref refcount;
-> > > +
-> > > +       bool threshold_breach;
-> > >  };
-> > >
-> > >  struct psi_group {
-> > > diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> > > index 1652f2b..5c67ab9 100644
-> > > --- a/kernel/sched/psi.c
-> > > +++ b/kernel/sched/psi.c
-> > > @@ -524,24 +524,29 @@ static u64 update_triggers(struct psi_group *group, u64 now)
-> > >          */
-> > >         list_for_each_entry(t, &group->triggers, node) {
-> > >                 u64 growth;
-> > > +               bool trigger_stalled =
-> > > +                       group->polling_total[t->state] != total[t->state];
-> > >
-> > > -               /* Check for stall activity */
-> > > -               if (group->polling_total[t->state] == total[t->state])
-> > > -                       continue;
-> > > -
-> > > -               /*
-> > > -                * Multiple triggers might be looking at the same state,
-> > > -                * remember to update group->polling_total[] once we've
-> > > -                * been through all of them. Also remember to extend the
-> > > -                * polling time if we see new stall activity.
-> > > -                */
-> > > -               new_stall = true;
-> > > -
-> > > -               /* Calculate growth since last update */
-> > > -               growth = window_update(&t->win, now, total[t->state]);
-> > > -               if (growth < t->threshold)
-> > > +               /* Check for stall activity or a previous threshold breach */
-> > > +               if (!trigger_stalled && !t->threshold_breach)
-> > >                         continue;
-> > >
-> > > +               if (trigger_stalled) {
-> > > +                       /*
-> > > +                        * Multiple triggers might be looking at the same state,
-> > > +                        * remember to update group->polling_total[] once we've
-> > > +                        * been through all of them. Also remember to extend the
-> > > +                        * polling time if we see new stall activity.
-> > > +                        */
-> > > +                       new_stall = true;
-> > > +
-> > > +                       /* Calculate growth since last update */
-> > > +                       growth = window_update(&t->win, now, total[t->state]);
-> > > +                       if (growth < t->threshold)
-> > > +                               continue;
-> > > +
-> > > +                       t->threshold_breach = true;
-> > > +               }
-> > >                 /* Limit event signaling to once per window */
-> > >                 if (now < t->last_event_time + t->win.size)
-> > >                         continue;
-> > > @@ -550,6 +555,8 @@ static u64 update_triggers(struct psi_group *group, u64 now)
-> > >                 if (cmpxchg(&t->event, 0, 1) == 0)
-> > >                         wake_up_interruptible(&t->event_wait);
-> > >                 t->last_event_time = now;
-> > > +               /* Reset threshold breach flag once event got generated */
-> > > +               t->threshold_breach = false;
-> > >         }
-> > >
-> > >         if (new_stall)
-> > > @@ -1152,6 +1159,7 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
-> > >         t->last_event_time = 0;
-> > >         init_waitqueue_head(&t->event_wait);
-> > >         kref_init(&t->refcount);
-> > > +       t->threshold_breach = false;
-> > >
-> > >         mutex_lock(&group->trigger_lock);
-> > >
-> > > --
-> > > 1.9.1
-> > >
+ - When the transmit queue handler cannot transfer any packets at all,
+   it'll simply give up the current time slice and then tries again.
+   Previously, the transmit would stall until a new packet showed up
+   (which potentially could cause extended stalls).  It would be even
+   better to wait for a "tx queue not full" interrupt but, sadly, I'm
+   told the wilc1000 firmware doesn't provide that.
+
+ - There is no longer any need for wilc_wlan_txq_filter_dup_tcp_ack()
+   to adjust the completion structs wait count by calling
+   wait_for_completion_timeout() for each dropped packet.
+
+Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
+---
+ drivers/net/wireless/microchip/wilc1000/cfg80211.c |  2 +-
+ drivers/net/wireless/microchip/wilc1000/netdev.c   | 13 +++++++++----
+ drivers/net/wireless/microchip/wilc1000/netdev.h   |  2 +-
+ drivers/net/wireless/microchip/wilc1000/wlan.c     | 12 ++----------
+ 4 files changed, 13 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/net/wireless/microchip/wilc1000/cfg80211.c b/drivers/net/wireless/microchip/wilc1000/cfg80211.c
+index 8d8378bafd9b0..be387a8abb6af 100644
+--- a/drivers/net/wireless/microchip/wilc1000/cfg80211.c
++++ b/drivers/net/wireless/microchip/wilc1000/cfg80211.c
+@@ -1692,7 +1692,7 @@ static void wlan_init_locks(struct wilc *wl)
+ 	spin_lock_init(&wl->txq_spinlock);
+ 	mutex_init(&wl->txq_add_to_head_cs);
+ 
+-	init_completion(&wl->txq_event);
++	init_waitqueue_head(&wl->txq_event);
+ 	init_completion(&wl->cfg_event);
+ 	init_completion(&wl->sync_event);
+ 	init_completion(&wl->txq_thread_started);
+diff --git a/drivers/net/wireless/microchip/wilc1000/netdev.c b/drivers/net/wireless/microchip/wilc1000/netdev.c
+index 643bddaae32ad..d5969f2e369c4 100644
+--- a/drivers/net/wireless/microchip/wilc1000/netdev.c
++++ b/drivers/net/wireless/microchip/wilc1000/netdev.c
+@@ -144,10 +144,12 @@ static int wilc_txq_task(void *vp)
+ 	int ret;
+ 	u32 txq_count;
+ 	struct wilc *wl = vp;
++	long timeout;
+ 
+ 	complete(&wl->txq_thread_started);
+ 	while (1) {
+-		wait_for_completion(&wl->txq_event);
++		wait_event_interruptible(wl->txq_event,
++					 (wl->txq_entries > 0 || wl->close));
+ 
+ 		if (wl->close) {
+ 			complete(&wl->txq_thread_started);
+@@ -170,6 +172,11 @@ static int wilc_txq_task(void *vp)
+ 				}
+ 				srcu_read_unlock(&wl->srcu, srcu_idx);
+ 			}
++			if (ret == WILC_VMM_ENTRY_FULL_RETRY) {
++				timeout = msecs_to_jiffies(1);
++				set_current_state(TASK_INTERRUPTIBLE);
++				schedule_timeout(timeout);
++			}
+ 		} while (ret == WILC_VMM_ENTRY_FULL_RETRY && !wl->close);
+ 	}
+ 	return 0;
+@@ -419,12 +426,11 @@ static void wlan_deinitialize_threads(struct net_device *dev)
+ 
+ 	wl->close = 1;
+ 
+-	complete(&wl->txq_event);
+-
+ 	if (wl->txq_thread) {
+ 		kthread_stop(wl->txq_thread);
+ 		wl->txq_thread = NULL;
+ 	}
++	wake_up_interruptible(&wl->txq_event);
+ }
+ 
+ static void wilc_wlan_deinitialize(struct net_device *dev)
+@@ -446,7 +452,6 @@ static void wilc_wlan_deinitialize(struct net_device *dev)
+ 			wl->hif_func->disable_interrupt(wl);
+ 			mutex_unlock(&wl->hif_cs);
+ 		}
+-		complete(&wl->txq_event);
+ 
+ 		wlan_deinitialize_threads(dev);
+ 		deinit_irq(dev);
+diff --git a/drivers/net/wireless/microchip/wilc1000/netdev.h b/drivers/net/wireless/microchip/wilc1000/netdev.h
+index f4fc2cc392bd0..c07f58a86bc76 100644
+--- a/drivers/net/wireless/microchip/wilc1000/netdev.h
++++ b/drivers/net/wireless/microchip/wilc1000/netdev.h
+@@ -237,7 +237,7 @@ struct wilc {
+ 
+ 	struct completion cfg_event;
+ 	struct completion sync_event;
+-	struct completion txq_event;
++	wait_queue_head_t txq_event;
+ 	struct completion txq_thread_started;
+ 
+ 	struct task_struct *txq_thread;
+diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
+index c4da14147dd04..26fa7078acffd 100644
+--- a/drivers/net/wireless/microchip/wilc1000/wlan.c
++++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
+@@ -75,7 +75,7 @@ static void wilc_wlan_txq_add_to_tail(struct net_device *dev, u8 q_num,
+ 
+ 	spin_unlock_irqrestore(&wilc->txq_spinlock, flags);
+ 
+-	complete(&wilc->txq_event);
++	wake_up_interruptible(&wilc->txq_event);
+ }
+ 
+ static void wilc_wlan_txq_add_to_head(struct wilc_vif *vif, u8 q_num,
+@@ -94,7 +94,7 @@ static void wilc_wlan_txq_add_to_head(struct wilc_vif *vif, u8 q_num,
+ 
+ 	spin_unlock_irqrestore(&wilc->txq_spinlock, flags);
+ 	mutex_unlock(&wilc->txq_add_to_head_cs);
+-	complete(&wilc->txq_event);
++	wake_up_interruptible(&wilc->txq_event);
+ }
+ 
+ #define NOT_TCP_ACK			(-1)
+@@ -196,7 +196,6 @@ static void wilc_wlan_txq_filter_dup_tcp_ack(struct net_device *dev)
+ 	struct wilc *wilc = vif->wilc;
+ 	struct tcp_ack_filter *f = &vif->ack_filter;
+ 	u32 i = 0;
+-	u32 dropped = 0;
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&wilc->txq_spinlock, flags);
+@@ -226,7 +225,6 @@ static void wilc_wlan_txq_filter_dup_tcp_ack(struct net_device *dev)
+ 					tqe->tx_complete_func(tqe->priv,
+ 							      tqe->status);
+ 				kfree(tqe);
+-				dropped++;
+ 			}
+ 		}
+ 	}
+@@ -239,12 +237,6 @@ static void wilc_wlan_txq_filter_dup_tcp_ack(struct net_device *dev)
+ 		f->pending_base = 0;
+ 
+ 	spin_unlock_irqrestore(&wilc->txq_spinlock, flags);
+-
+-	while (dropped > 0) {
+-		wait_for_completion_timeout(&wilc->txq_event,
+-					    msecs_to_jiffies(1));
+-		dropped--;
+-	}
+ }
+ 
+ void wilc_enable_tcp_ack_filter(struct wilc_vif *vif, bool value)
+-- 
+2.25.1
+

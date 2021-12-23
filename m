@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 327F747E170
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 11:29:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CACB47E17D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 11:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347709AbhLWK3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 05:29:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
+        id S1347702AbhLWKeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 05:34:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347617AbhLWK27 (ORCPT
+        with ESMTP id S243143AbhLWKeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 05:28:59 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CEEC061401
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 02:28:59 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id bp20so11406184lfb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 02:28:59 -0800 (PST)
+        Thu, 23 Dec 2021 05:34:04 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21141C061401
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 02:34:04 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id g17so14979617ybe.13
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 02:34:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=U1cVREp4DtwU9YITZiC1XVaw5pLe266nS8afUQu8CpXhAY/bxFwP16sNUE9mO5gnvF
-         JQUC/qPali5OngTNtsLNIljclypoKXcO6EGsRfeJ5NOynlVPAq1y+neSRldRD5AdV0Y6
-         zdPCmkLU6G3U+xSOyK+z00nmKrY/1LD9OK144Du9KlpR0pdzT9/uZ/dkFm3mI3MbEyQm
-         IBrhl80mKYVX87Ikf+7gdAprYSMkgm01Dh+dZYq9EWa4q3etGkJa13aN4dazf4pkTO0p
-         eEYLbiDALWKRhtaGbdkgbeLnlQluhbhKGcvJWWgXs2mJ9xEHqdqugedFBZIq34NGTEZC
-         FIZg==
+        h=mime-version:sender:in-reply-to:references:from:date:message-id
+         :subject:to;
+        bh=SKhdgtknuKYN0ojcipde8C0qHw3TX1wov+DvJSuFN6M=;
+        b=dI9U8Ws0UFPlnGiVsyE/HdnFxgNcuCriq3ccqi/4Gtd2PgA8JwT4Pcm3kTR63JpqIn
+         04/xFpcZB4aMd1RG6toDuxSiLTXvBuKPU7eDrU3UeWfP2au2WozszMl95e6tNrsiyV2M
+         MJE0/qLQmThxnfkYQ6eF9jivXyqmv16prQtg9VQdpo12C0pGWYDiFU4sl+5ZB8kc5qCG
+         Qz+oi/SGVKqyX+8myxaj/YXT/3mF6yJfS0u8QvMYmXUqucF/HGlOSMDJoELOG325mPpc
+         hjM1W3X3MyBpVVs3+ND0pr+3pmXAdHWQqlFOzU+CG/CDFOGbTGlLoksJdkG00sdgz/UE
+         hcrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=AHINhiuUmBLIBkD6nAntuYYCs5vsDnDNER7Z8+vJ2uT3MxTpc1x+R9y4nzUS66dxMn
-         RwPnute1UiMnh/hmPyrRBc8ixLtzyA7JtQFgbHlkdwht0a/lF/fvlotSanvXtjT3UBh5
-         17BqjvW5khKFdwiEUafJrbeyVdYaNPgF9P1etO9img4aH0dVbXeVUJyjvpeUezKKwbba
-         b02IpQNIRnXnPbiWHm5PwQbZ2pu7GajsZmVez9gHSprqWYfKOJk1os5pgeHZxFBNt8Fr
-         0O0mqbQG+SDG2H4VguPWdDZL8D125khlcB8AS3c5NULi/K1ZHv7ouCQTm8iSIYhuE2iL
-         qqJg==
-X-Gm-Message-State: AOAM531w7eBAumuKxrAm0n0YLMCIOaNQsCPRJ7hkVqnDLTS21aTdUrw6
-        F0qnVuaBn15FQuOH1I9l3YmkuNEwstQdVYVUIDo=
-X-Google-Smtp-Source: ABdhPJwJJG+PT2v5xrZYlswxth9p6yyqNd/d1EIuJ/IhYpoPPE6xGc3XD552VpjlUkf+/L3n7uWEV2zYLr9SahuBUDc=
-X-Received: by 2002:ac2:4c45:: with SMTP id o5mr1422349lfk.687.1640255337535;
- Thu, 23 Dec 2021 02:28:57 -0800 (PST)
+        h=x-gm-message-state:mime-version:sender:in-reply-to:references:from
+         :date:message-id:subject:to;
+        bh=SKhdgtknuKYN0ojcipde8C0qHw3TX1wov+DvJSuFN6M=;
+        b=z8SNANGFdiLMBpD98WudxTe1jABTRSSW18jbhRQ7i8GvroXj/1XWOqgpXsXVVN9ZXr
+         2pec8g0nDRgcEwtEeJE3XTiLS7aDYWBNr6F0WJfGZ3W+6CQCpzdAguYKYmMExqGuosnD
+         m7QIlfkHkL7au5oaeCRqsBoQiaxNCjMf7I0sHwKQgY6IJ3JwuuCoiBoPPe0ICvJ8iYgW
+         TCkHEmcFhdilERJst+wIk60Bb0DlkwowBZFq35LSAi5RrJhz+NHvN1OXdpnEs6v0gUNq
+         efMPsD4L+PD9JEPM5FaJaP1twvUB9VwUkSOeqYlwfOeGz+C0GSFhZDe6fjcneuRAyRp1
+         LTmg==
+X-Gm-Message-State: AOAM532nOiOtekMqmqDQlemWOKJ++KxmsJKpgZwJSVsUSRGImDnTa7L1
+        9Hlo35ZX/iczhiom6nei8q0QqB4trmCrw1BkPtSsLTXC4Kh5Yg==
+X-Google-Smtp-Source: ABdhPJwFrzqw1hu3Wc/LhAknajd0wIgYA1CzY2DhhtE3sWHSjGatzbF4RmCRdnx1VilnPPAvcblMK5V1kFtyO4CVLXg=
+X-Received: by 2002:a25:aaaa:: with SMTP id t39mr2196331ybi.201.1640255643146;
+ Thu, 23 Dec 2021 02:34:03 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6520:187:b0:16f:d0a9:794d with HTTP; Thu, 23 Dec 2021
- 02:28:56 -0800 (PST)
-Reply-To: davidnelson7702626@gmail.com
-From:   "Aleen Aleen." <franckattilaa@gmail.com>
-Date:   Thu, 23 Dec 2021 11:28:56 +0100
-Message-ID: <CAGxUA9aTU6AHutqf__6Fx_WKs5Z9A50F6vNJVPWhVjsxidCp9w@mail.gmail.com>
-Subject: 
+Sender: mohameddjibo363@gmail.com
+Received: by 2002:a05:7000:5c53:0:0:0:0 with HTTP; Thu, 23 Dec 2021 02:34:02
+ -0800 (PST)
+In-Reply-To: <CAFu14DvPcmOHn6y4cFBXA2TDDwhzvh7Q5+Ak41oeyeYRaWO5Mw@mail.gmail.com>
+References: <CAFu14DvPcmOHn6y4cFBXA2TDDwhzvh7Q5+Ak41oeyeYRaWO5Mw@mail.gmail.com>
+From:   camille <camillejackson021@gmail.com>
+Date:   Thu, 23 Dec 2021 10:34:02 +0000
+X-Google-Sender-Auth: I4R3AEIV-ymKpzaa9wN9thIm2Gk
+Message-ID: <CAFu14Ds15Nz59+UG5A-mhn7TEdDPWHpO93fFpDCCtwR6uiryqQ@mail.gmail.com>
+Subject: hello,
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello friend, I want to send money to you to enable me invest in your
-country get back to me if you are interested.
+How are you doing today, i hope you are good please respond back to me
+now thanks

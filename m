@@ -2,68 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A2847E11D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 11:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3BF547E121
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 11:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347617AbhLWKK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 05:10:26 -0500
-Received: from mail-4018.proton.ch ([185.70.40.18]:12588 "EHLO
-        mail-4018.proton.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242964AbhLWKKY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 05:10:24 -0500
-Date:   Thu, 23 Dec 2021 10:10:22 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
-        s=protonmail; t=1640254223;
-        bh=JZk2QkwvQMw2dr3xN0Nul1fIObR/x6Mzssnku9CKGxI=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc;
-        b=jogA9ITM2pLDQetcpufIntC4yTHzrr4+DWIpmT87TPMpju4Ot4RMQ+WoPBM247Tpu
-         O8vwV/m9VY6TxbagfU0VqDfUoySRpsVQo8xeuk9rtka7kmhULzDeBU2qj80qLAr/Pl
-         tyDxdNlMTeN0/VI1nIPmPi2rBZGD7vDOaQvRjOwGNN+LymeR2yX0gOrADjxqBRv/DK
-         ozo9R/9VLfI7qonEXrrdE+T/byG6eNDz/7xkaNdebwMR90q+uJRbnzVrYS6X2DgczQ
-         EA5Qt9X6ExeKkKVzmhOOM5KaR6wD89AGhOi8m7lMoK37T0naYw47i++tgbFwpoVybB
-         Jjs8alSOHkPVQ==
-To:     =?utf-8?Q?Jos=C3=A9_Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-From:   Simon Ser <contact@emersion.fr>
-Cc:     dmitry.baryshkov@linaro.org, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de, airlied@linux.ie,
-        daniel@ffwll.ch, jani.nikula@linux.intel.com,
-        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
-        marex@denx.de, stefan@agner.ch, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, yannick.fertre@foss.st.com,
-        philippe.cornu@foss.st.com, benjamin.gaignard@linaro.org,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Ville Syrjala <ville.syrjala@linux.intel.com>
-Reply-To: Simon Ser <contact@emersion.fr>
-Subject: =?utf-8?Q?Re:_[PATCH_v2_1/6]_drm/plane:_Make_format=5Fmod=5Fsupported_truly=C2=A0optional?=
-Message-ID: <8OwW5vWFemsZ6SHYICEo6Ic972ApufOImdVLLprAxvjF3AxrjQghwFAZsQ1WJNqrv2fCTyB16g4JALC8omFmZ8-vcmTV289KfBEIkKMS5xc=@emersion.fr>
-In-Reply-To: <20211222090552.25972-2-jose.exposito89@gmail.com>
-References: <20211222090552.25972-1-jose.exposito89@gmail.com> <20211222090552.25972-2-jose.exposito89@gmail.com>
+        id S1347624AbhLWKLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 05:11:23 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:37280 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S242964AbhLWKLW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 05:11:22 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowADn71ctS8RhuY7nBA--.3389S2;
+        Thu, 23 Dec 2021 18:10:54 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] rtc: m41t80: Check failure of i2c_transfer
+Date:   Thu, 23 Dec 2021 18:10:52 +0800
+Message-Id: <20211223101052.1283277-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowADn71ctS8RhuY7nBA--.3389S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KF17uFW5GFWxWF4kAw4DXFb_yoW8WFyUpa
+        1qkr13CFnYq3Wv9a1xGw1DuF45t3s3J343KayfW3sav3ZxJa48Grs5Ka4UtFn7JrWrWr12
+        vrWqy3W5CFW7tw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8twCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUboKZJUUUUU==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday, December 22nd, 2021 at 10:05, Jos=C3=A9 Exp=C3=B3sito <jose.e=
-xposito89@gmail.com> wrote:
+Because the i2c_transfer could be failure and return nagative code or
+other number but not the right number of messages executed.
+Therefore, it should be better to check the return value and deal with
+it.
+This time, for the sake of convenience, I only fix one as an example.
+If the patch is right, I will submit a new version including others,
+like wdt_disable().
 
-> Make "create_in_format_blob" behave as documented.
+Fixes: 617780d290bd ("rtc: watchdog support for rtc-m41t80 driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/rtc/rtc-m41t80.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-LGTM, nice!
+diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
+index 89128fc29ccc..1efb689dc6a6 100644
+--- a/drivers/rtc/rtc-m41t80.c
++++ b/drivers/rtc/rtc-m41t80.c
+@@ -604,8 +604,9 @@ static int boot_flag;
+  *	Reload counter one with the watchdog timeout. We don't bother reloading
+  *	the cascade counter.
+  */
+-static void wdt_ping(void)
++static int wdt_ping(void)
+ {
++	int ret;
+ 	unsigned char i2c_data[2];
+ 	struct i2c_msg msgs1[1] = {
+ 		{
+@@ -634,7 +635,12 @@ static void wdt_ping(void)
+ 	if (clientdata->features & M41T80_FEATURE_WD)
+ 		i2c_data[1] &= ~M41T80_WATCHDOG_RB2;
+ 
+-	i2c_transfer(save_client->adapter, msgs1, 1);
++	ret = i2c_transfer(save_client->adapter, msgs1, 1);
++	if (ret == 1)
++		return 0;
++	if (ret < 0)
++		return ret;
++	return -EIO;
+ }
+ 
+ /**
+@@ -689,8 +695,12 @@ static void wdt_disable(void)
+ static ssize_t wdt_write(struct file *file, const char __user *buf,
+ 			 size_t count, loff_t *ppos)
+ {
++	int ret;
+ 	if (count) {
+-		wdt_ping();
++		ret = wdt_ping();
++		if (ret)
++			return 0;
++
+ 		return 1;
+ 	}
+ 	return 0;
+-- 
+2.25.1
 
-Reviewed-by: Simon Ser <contact@emersion.fr>
-
-CC Ville just in case

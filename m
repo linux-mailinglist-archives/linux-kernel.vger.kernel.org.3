@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2661D47E960
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 23:24:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8FC47E964
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 23:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350562AbhLWWY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 17:24:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
+        id S1350798AbhLWWYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 17:24:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350543AbhLWWYB (ORCPT
+        with ESMTP id S1350553AbhLWWYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 17:24:01 -0500
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D972CC06175C
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 14:24:00 -0800 (PST)
-Received: by mail-pg1-x549.google.com with SMTP id r4-20020a654984000000b0033ae6493472so3899011pgs.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 14:24:00 -0800 (PST)
+        Thu, 23 Dec 2021 17:24:02 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DA2C06175D
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 14:24:02 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id t29-20020a62d15d000000b004baa073f34fso3994189pfl.12
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 14:24:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=tXPFxhfZ38aogkCCFXR452Gm2Zs80lNiXFSNHzjj/7o=;
-        b=p7+PPvAqhGGhQ5aEVa1JNV8vAw5XpTM3/Wrv87i5kJeKFT+kaipf8ekswCgoZUrLbI
-         MKVRtcz4gr4Zvo3LqAnyL3cJ3xL5UU9626f0vTktOe4OuXhzBNfo0UfAx0LS7wuR2Mkb
-         evpm+bunpn6FMxR8usQd7RrYCnyymmX6HLX7hyRuV4rppD5LGI0q3KrnB7lp4ZYbCN9u
-         DnW5BigL08AoHCEnr4bRyG3fPuHzCzEUdX/zj80SrzDoBmGLi3v2F9MjIDFOn4KLRi+k
-         ZfYElpUe4qJt8s8Y/wc6NhsSjCv0kP5rtFPkauhbNtJrB6jfwoWYJDtyo0mBs5ivyomB
-         6qJQ==
+        bh=BNCCSYnc3JAlm7sEigQj1irsmiDBhrB62HCDCGqzwM4=;
+        b=hsx3AHY9e9KGs5P9Y/6uTZVutXLJXF3CgK88i4NdUo3gvWGHAaH/hzMV99ToAe8QNh
+         yh8fX6SyxC12fB88YAwO7kI032Jxfa3v6wrr/20tiI0G5ZTkBxI5gW15jV1Zhe58uCKU
+         5RZ6gBAO1oksMgd5g0+eF/Eu3NQ5gNj/BE9/GGs9fAct3ToiAprcvH90xNW7o0nNzTuz
+         vPi+xQVbNURRJL/SM40i++TwCmFGkFyUeEcHJngaIdf9XWBJWs3LlgKLmCZdcpRBLzuC
+         VZyL1E1m/JZ3MTBSITppI5+IHIb/04xt62Xx3BwYUs/MLhjQ/ozRh8weHP29er8X78xs
+         7oWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=tXPFxhfZ38aogkCCFXR452Gm2Zs80lNiXFSNHzjj/7o=;
-        b=XBt9THy2MyNEaRKno8Hq5AEuasY1UKjBfTWxsQIGMX4eF1czBCummiEkJicbCUL/vo
-         7Z2HW8zDsASziqlOgeZvw+k5ivaDkUhP1Eu/eHdscn70PW68WhXLHfCPOv3g8dG4tjUL
-         zShn5KYxrGZEmjwIW/f64O4l5Qtg4Bc2n9uELRa4IkWonUA4YsG2ZF7tREl5fjw314K3
-         ieN7IHlAGBfmqD3AA+eq0ZmzUTbBMUPM05N0cbl3Rhf1+WKKYoooKT19lrmXSsv6wZ00
-         3M8mP16HrS0Ez5FpizTWli4U46mXYfwaMOERrieSIG26kk/aw4HLjT8ScbVTNKKc0lA8
-         zXKg==
-X-Gm-Message-State: AOAM530vSZ3Zi2h+TdhD9peYd3hOMl71CTKq3hL2FGB3SFVlTfQPsWMJ
-        Bb9kROMyvVLXaId4uCZ7f7nciRP/UGA=
-X-Google-Smtp-Source: ABdhPJxlR40Lrq8sq395rYUNf+4uJtceakhLDojMiy+LdkXIUmsw0PNh1W6lOHb3Ww3/W19kz2FPjVsshCI=
+        bh=BNCCSYnc3JAlm7sEigQj1irsmiDBhrB62HCDCGqzwM4=;
+        b=bKf8s8aphVEOfFz7AEWcB/IHv5NGsqh1XieNvDO+9nOcI4HSHXmqOCjfbjODsqF/lB
+         SWhJWap2+lsycJR6nx7OuFP53zwghyw/WVgkWTnqR49dM5A/vbiwRDbuGnsaBPEByEmc
+         nJrStBLNPL+/q+jLCRQEQDvdwinYkh7gBUuZqhjPh2vOcVKh0yBrYeVHJ+9Fq5obj1os
+         5y89DOsB+xjIpqxS23kfX/plMWTHuJvakgMaV12tl00Bc6Y3JIEHGSsFvp8DWl4Nw+xa
+         CFtO1kcChhA/OezTW0CeZFTB3FL9i3lxQTO+Rjakv//DfOhghnjY5pTQlDYBtkL9OVyL
+         I8nw==
+X-Gm-Message-State: AOAM530QKaZwSDZ7XJNI8OpoTLR5Th6y/tg0mRYNx6i1dCS4n/UcbaC4
+        0+9gU89EtXCUWp/0K/zSKqnUznHt7Ms=
+X-Google-Smtp-Source: ABdhPJyrIjNroCeHcGoLme72TYYoLeEFX8HuM7VJuuvDeTFICp/qElBwDUte+nFyADv0mybL0LB72crz4rk=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a63:1f52:: with SMTP id q18mr3702466pgm.386.1640298240415;
- Thu, 23 Dec 2021 14:24:00 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90b:e91:: with SMTP id
+ fv17mr4976856pjb.217.1640298241971; Thu, 23 Dec 2021 14:24:01 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 23 Dec 2021 22:23:00 +0000
+Date:   Thu, 23 Dec 2021 22:23:01 +0000
 In-Reply-To: <20211223222318.1039223-1-seanjc@google.com>
-Message-Id: <20211223222318.1039223-13-seanjc@google.com>
+Message-Id: <20211223222318.1039223-14-seanjc@google.com>
 Mime-Version: 1.0
 References: <20211223222318.1039223-1-seanjc@google.com>
 X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
-Subject: [PATCH v2 12/30] KVM: x86/mmu: Batch TLB flushes from TDP MMU for MMU
- notifier change_spte
+Subject: [PATCH v2 13/30] KVM: x86/mmu: Drop RCU after processing each root in
+ MMU notifier hooks
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -69,40 +69,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Batch TLB flushes (with other MMUs) when handling ->change_spte()
-notifications in the TDP MMU.  The MMU notifier path in question doesn't
-allow yielding and correcty flushes before dropping mmu_lock.
+Drop RCU protection after processing each root when handling MMU notifier
+hooks that aren't the "unmap" path, i.e. aren't zapping.  Temporarily
+drop RCU to let RCU do its thing between roots, and to make it clear that
+there's no special behavior that relies on holding RCU across all roots.
+
+Currently, the RCU protection is completely superficial, it's necessary
+only to make rcu_dereference() of SPTE pointers happy.  A future patch
+will rely on holding RCU as a proxy for vCPUs in the guest, e.g. to
+ensure shadow pages aren't freed before all vCPUs do a TLB flush (or
+rather, acknowledge the need for a flush), but in that case RCU needs to
+be held until the flush is complete if and only if the flush is needed
+because a shadow page may have been removed.  And except for the "unmap"
+path, MMU notifier events cannot remove SPs (don't toggle PRESENT bit,
+and can't change the PFN for a SP).
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 Reviewed-by: Ben Gardon <bgardon@google.com>
 ---
- arch/x86/kvm/mmu/tdp_mmu.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ arch/x86/kvm/mmu/tdp_mmu.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index 05f35541ff2f..6c51548d89b1 100644
+index 6c51548d89b1..47424e22a681 100644
 --- a/arch/x86/kvm/mmu/tdp_mmu.c
 +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -1174,13 +1174,12 @@ static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
-  */
- bool kvm_tdp_mmu_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
- {
--	bool flush = kvm_tdp_mmu_handle_gfn(kvm, range, set_spte_gfn);
--
--	/* FIXME: return 'flush' instead of flushing here. */
--	if (flush)
--		kvm_flush_remote_tlbs_with_address(kvm, range->start, 1);
--
--	return false;
-+	/*
-+	 * No need to handle the remote TLB flush under RCU protection, the
-+	 * target SPTE _must_ be a leaf SPTE, i.e. cannot result in freeing a
-+	 * shadow page.  See the WARN on pfn_changed in __handle_changed_spte().
-+	 */
-+	return kvm_tdp_mmu_handle_gfn(kvm, range, set_spte_gfn);
- }
+@@ -1071,18 +1071,19 @@ static __always_inline bool kvm_tdp_mmu_handle_gfn(struct kvm *kvm,
+ 	struct tdp_iter iter;
+ 	bool ret = false;
  
- /*
+-	rcu_read_lock();
+-
+ 	/*
+ 	 * Don't support rescheduling, none of the MMU notifiers that funnel
+ 	 * into this helper allow blocking; it'd be dead, wasteful code.
+ 	 */
+ 	for_each_tdp_mmu_root(kvm, root, range->slot->as_id) {
++		rcu_read_lock();
++
+ 		tdp_root_for_each_leaf_pte(iter, root, range->start, range->end)
+ 			ret |= handler(kvm, &iter, range);
++
++		rcu_read_unlock();
+ 	}
+ 
+-	rcu_read_unlock();
+ 
+ 	return ret;
+ }
 -- 
 2.34.1.448.ga2b2bfdf31-goog
 

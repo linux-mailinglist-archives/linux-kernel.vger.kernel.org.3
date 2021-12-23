@@ -2,254 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D488147DCBB
+	by mail.lfdr.de (Postfix) with ESMTP id 734E747DCBA
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:12:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345913AbhLWBMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:12:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
+        id S1345904AbhLWBMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:12:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345908AbhLWBMH (ORCPT
+        with ESMTP id S1345897AbhLWBMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:12:07 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBC3C06175A;
-        Wed, 22 Dec 2021 17:11:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8E495CE1F05;
-        Thu, 23 Dec 2021 01:11:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B32BC36AE8;
-        Thu, 23 Dec 2021 01:11:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640221911;
-        bh=NIHlxx32hZquI6e6s7ce33q6+j4ig8ruxqlAWwHME8s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q0CiPqthI0XC+sVnpYnHPXcP0K2YhieePFjgiVH+s2E0u6hIs1HSo5MzttON2ai8S
-         FfbTnK/jBmE74ntz5xYnVXaOAc0Lw082Bb6jYop7sK4TJtmP6yec8DuuM8XFiy+uFb
-         YoaVgN1BmL97qrD8RQ2OJRdlMlnUqSzmkKGohRPJWUwo3QBm58UbjSPMsCpMHtWsmB
-         1CTg+j9ZLJdYP9SsedjFFSeXcZ3ie50nMg5epoQsxDS4OiwaQsECaDXLbGOi7wAgm5
-         zY1fuWZ3vlL9AbO6HR1xpXYeuHAoordqu/sGkWWd6IwZP9lOv1N6rXchDSCSPqacFu
-         dYzqEfMr48j3A==
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     linux-pci@vger.kernel.org, Fan Fei <ffclaire1224@gmail.com>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 23/23] PCI: xilinx-cpm: Rename xilinx_cpm_pcie_port to xilinx_cpm_pcie
-Date:   Wed, 22 Dec 2021 19:10:54 -0600
-Message-Id: <20211223011054.1227810-24-helgaas@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211223011054.1227810-1-helgaas@kernel.org>
-References: <20211223011054.1227810-1-helgaas@kernel.org>
+        Wed, 22 Dec 2021 20:12:06 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63F8C061757
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 17:11:52 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id j2so11533678ybg.9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 17:11:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qRpS9GO+nyuDq6fnvSY9uBB02k3InwFJwb2n473ioEY=;
+        b=Zc5D/VDQT1bzGScMnBP2qSmhie5dDKT2bySJqKk24sWYsc69eqsngsVKBIl1AbNvWb
+         Ye4VAAhECbBZdAr1b/KrQuD3jSg6gOLXyc2556Wfmtct87GOn1Wp5TG5Rbwt6bgYL270
+         QtgBVI7Zuk/Ehrq+VAwKYOGH4DaSj2CdBqApTyPsAq/ScKHkJTwLrQrRIk8m5pCl4DZ3
+         Em0hjEjqX0ro7ZMIgSQBZTqN/cyW3db8Qjgz4/7j3K0xS7wQIEZlszLQyJAXdFyc9sO/
+         RPwB6m98Blf2HpSuGJbX8SmU5iZsFgnT9DPWZ3GdE8/EpCHWlLYWRC15PYwUX7GI1YyP
+         QcgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qRpS9GO+nyuDq6fnvSY9uBB02k3InwFJwb2n473ioEY=;
+        b=awdrmaBgE0XFvFnn4NlSC6Gr9ZFtuLq30Ih+LINGpyfi0YjHHjdjX3uzQV7DNBuHt3
+         gYO/nmIEf5Ful6eqM+sfi/rpilNO+EF2TFDsl9otv74Sqz+PByrr3HGu66hq6Q9VeQBG
+         zZp3VYqjcsEONh6/aDr1O3PEKkr60r6evsEkEmT+67UGQK13H0zaSJmVlpg0Zp5iJd/C
+         9UEi6LWF/YWEniMVErNcsvH0PL1/6EqUYDWrnPuLE5LFhlrQv/GpPSYYCbJin1Y+8d/c
+         PShSi8C0lv68xzYFCl9B9oj136USmWc+6x2au7kJ1TJ8H0Xb+SiV+dP3s85d1TJmt8gp
+         gUgg==
+X-Gm-Message-State: AOAM530cFWI6eag0lL98vKcg9GCrVaH3YH5B5wpmOhU00KlRdG0zZy9S
+        y/45x0EHCXnEPi462e2U3U5/LBM6YjK22+/0I4E09Q==
+X-Google-Smtp-Source: ABdhPJx2NYMONbioCxps3nJVWm787JBFhNgsc0twm+/smBnB0ZR3vjY5R+FOqqjTOXDx2waYp4OGbVClZheFLgNZvuI=
+X-Received: by 2002:a05:6902:552:: with SMTP id z18mr352788ybs.318.1640221911761;
+ Wed, 22 Dec 2021 17:11:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <1640132668-28249-1-git-send-email-huangzhaoyang@gmail.com>
+ <CAJuCfpFdb7VAZExs=ejqG0FDJqRi4LwOEu5E1EM8rtyv1HzbaQ@mail.gmail.com> <CAGWkznGJE32mQAve+MB3YrCwmLAGbwd9oyn3rWN2SZj07ez9jw@mail.gmail.com>
+In-Reply-To: <CAGWkznGJE32mQAve+MB3YrCwmLAGbwd9oyn3rWN2SZj07ez9jw@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 22 Dec 2021 17:11:40 -0800
+Message-ID: <CAJuCfpG0Y8BstFhKV8c_EcT-REmXpwrxXXPk_JwiUwK9k2RMgA@mail.gmail.com>
+Subject: Re: [PATCH v3] psi: fix possible trigger missing in the window
+To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+On Wed, Dec 22, 2021 at 4:50 PM Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
+>
+> @Peter Zijlstra @Johannes Weiner
+> Would you please review this patch? We would like to have it be merged
+> ASAP. Thanks.
 
-Rename struct xilinx_cpm_pcie_port to xilinx_cpm_pcie to match the
-convention of <driver>_pcie. No functional change intended.
+It's the holiday season, so I would not expect a quick turnaround.
 
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Michal Simek <michal.simek@xilinx.com>
-Cc: linux-arm-kernel@lists.infradead.org
----
- drivers/pci/controller/pcie-xilinx-cpm.c | 44 ++++++++++++------------
- 1 file changed, 22 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/pci/controller/pcie-xilinx-cpm.c b/drivers/pci/controller/pcie-xilinx-cpm.c
-index 95426df03200..c7cd44ed4dfc 100644
---- a/drivers/pci/controller/pcie-xilinx-cpm.c
-+++ b/drivers/pci/controller/pcie-xilinx-cpm.c
-@@ -99,10 +99,10 @@
- #define XILINX_CPM_PCIE_REG_PSCR_LNKUP		BIT(11)
- 
- /**
-- * struct xilinx_cpm_pcie_port - PCIe port information
-+ * struct xilinx_cpm_pcie - PCIe port information
-+ * @dev: Device pointer
-  * @reg_base: Bridge Register Base
-  * @cpm_base: CPM System Level Control and Status Register(SLCR) Base
-- * @dev: Device pointer
-  * @intx_domain: Legacy IRQ domain pointer
-  * @cpm_domain: CPM IRQ domain pointer
-  * @cfg: Holds mappings of config space window
-@@ -110,10 +110,10 @@
-  * @irq: Error interrupt number
-  * @lock: lock protecting shared register access
-  */
--struct xilinx_cpm_pcie_port {
-+struct xilinx_cpm_pcie {
-+	struct device			*dev;
- 	void __iomem			*reg_base;
- 	void __iomem			*cpm_base;
--	struct device			*dev;
- 	struct irq_domain		*intx_domain;
- 	struct irq_domain		*cpm_domain;
- 	struct pci_config_window	*cfg;
-@@ -122,24 +122,24 @@ struct xilinx_cpm_pcie_port {
- 	raw_spinlock_t			lock;
- };
- 
--static u32 pcie_read(struct xilinx_cpm_pcie_port *port, u32 reg)
-+static u32 pcie_read(struct xilinx_cpm_pcie *port, u32 reg)
- {
- 	return readl_relaxed(port->reg_base + reg);
- }
- 
--static void pcie_write(struct xilinx_cpm_pcie_port *port,
-+static void pcie_write(struct xilinx_cpm_pcie *port,
- 		       u32 val, u32 reg)
- {
- 	writel_relaxed(val, port->reg_base + reg);
- }
- 
--static bool cpm_pcie_link_up(struct xilinx_cpm_pcie_port *port)
-+static bool cpm_pcie_link_up(struct xilinx_cpm_pcie *port)
- {
- 	return (pcie_read(port, XILINX_CPM_PCIE_REG_PSCR) &
- 		XILINX_CPM_PCIE_REG_PSCR_LNKUP);
- }
- 
--static void cpm_pcie_clear_err_interrupts(struct xilinx_cpm_pcie_port *port)
-+static void cpm_pcie_clear_err_interrupts(struct xilinx_cpm_pcie *port)
- {
- 	unsigned long val = pcie_read(port, XILINX_CPM_PCIE_REG_RPEFR);
- 
-@@ -153,7 +153,7 @@ static void cpm_pcie_clear_err_interrupts(struct xilinx_cpm_pcie_port *port)
- 
- static void xilinx_cpm_mask_leg_irq(struct irq_data *data)
- {
--	struct xilinx_cpm_pcie_port *port = irq_data_get_irq_chip_data(data);
-+	struct xilinx_cpm_pcie *port = irq_data_get_irq_chip_data(data);
- 	unsigned long flags;
- 	u32 mask;
- 	u32 val;
-@@ -167,7 +167,7 @@ static void xilinx_cpm_mask_leg_irq(struct irq_data *data)
- 
- static void xilinx_cpm_unmask_leg_irq(struct irq_data *data)
- {
--	struct xilinx_cpm_pcie_port *port = irq_data_get_irq_chip_data(data);
-+	struct xilinx_cpm_pcie *port = irq_data_get_irq_chip_data(data);
- 	unsigned long flags;
- 	u32 mask;
- 	u32 val;
-@@ -211,7 +211,7 @@ static const struct irq_domain_ops intx_domain_ops = {
- 
- static void xilinx_cpm_pcie_intx_flow(struct irq_desc *desc)
- {
--	struct xilinx_cpm_pcie_port *port = irq_desc_get_handler_data(desc);
-+	struct xilinx_cpm_pcie *port = irq_desc_get_handler_data(desc);
- 	struct irq_chip *chip = irq_desc_get_chip(desc);
- 	unsigned long val;
- 	int i;
-@@ -229,7 +229,7 @@ static void xilinx_cpm_pcie_intx_flow(struct irq_desc *desc)
- 
- static void xilinx_cpm_mask_event_irq(struct irq_data *d)
- {
--	struct xilinx_cpm_pcie_port *port = irq_data_get_irq_chip_data(d);
-+	struct xilinx_cpm_pcie *port = irq_data_get_irq_chip_data(d);
- 	u32 val;
- 
- 	raw_spin_lock(&port->lock);
-@@ -241,7 +241,7 @@ static void xilinx_cpm_mask_event_irq(struct irq_data *d)
- 
- static void xilinx_cpm_unmask_event_irq(struct irq_data *d)
- {
--	struct xilinx_cpm_pcie_port *port = irq_data_get_irq_chip_data(d);
-+	struct xilinx_cpm_pcie *port = irq_data_get_irq_chip_data(d);
- 	u32 val;
- 
- 	raw_spin_lock(&port->lock);
-@@ -273,7 +273,7 @@ static const struct irq_domain_ops event_domain_ops = {
- 
- static void xilinx_cpm_pcie_event_flow(struct irq_desc *desc)
- {
--	struct xilinx_cpm_pcie_port *port = irq_desc_get_handler_data(desc);
-+	struct xilinx_cpm_pcie *port = irq_desc_get_handler_data(desc);
- 	struct irq_chip *chip = irq_desc_get_chip(desc);
- 	unsigned long val;
- 	int i;
-@@ -327,7 +327,7 @@ static const struct {
- 
- static irqreturn_t xilinx_cpm_pcie_intr_handler(int irq, void *dev_id)
- {
--	struct xilinx_cpm_pcie_port *port = dev_id;
-+	struct xilinx_cpm_pcie *port = dev_id;
- 	struct device *dev = port->dev;
- 	struct irq_data *d;
- 
-@@ -350,7 +350,7 @@ static irqreturn_t xilinx_cpm_pcie_intr_handler(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
--static void xilinx_cpm_free_irq_domains(struct xilinx_cpm_pcie_port *port)
-+static void xilinx_cpm_free_irq_domains(struct xilinx_cpm_pcie *port)
- {
- 	if (port->intx_domain) {
- 		irq_domain_remove(port->intx_domain);
-@@ -369,7 +369,7 @@ static void xilinx_cpm_free_irq_domains(struct xilinx_cpm_pcie_port *port)
-  *
-  * Return: '0' on success and error value on failure
-  */
--static int xilinx_cpm_pcie_init_irq_domain(struct xilinx_cpm_pcie_port *port)
-+static int xilinx_cpm_pcie_init_irq_domain(struct xilinx_cpm_pcie *port)
- {
- 	struct device *dev = port->dev;
- 	struct device_node *node = dev->of_node;
-@@ -410,7 +410,7 @@ static int xilinx_cpm_pcie_init_irq_domain(struct xilinx_cpm_pcie_port *port)
- 	return -ENOMEM;
- }
- 
--static int xilinx_cpm_setup_irq(struct xilinx_cpm_pcie_port *port)
-+static int xilinx_cpm_setup_irq(struct xilinx_cpm_pcie *port)
- {
- 	struct device *dev = port->dev;
- 	struct platform_device *pdev = to_platform_device(dev);
-@@ -462,7 +462,7 @@ static int xilinx_cpm_setup_irq(struct xilinx_cpm_pcie_port *port)
-  * xilinx_cpm_pcie_init_port - Initialize hardware
-  * @port: PCIe port information
-  */
--static void xilinx_cpm_pcie_init_port(struct xilinx_cpm_pcie_port *port)
-+static void xilinx_cpm_pcie_init_port(struct xilinx_cpm_pcie *port)
- {
- 	if (cpm_pcie_link_up(port))
- 		dev_info(port->dev, "PCIe Link is UP\n");
-@@ -497,7 +497,7 @@ static void xilinx_cpm_pcie_init_port(struct xilinx_cpm_pcie_port *port)
-  *
-  * Return: '0' on success and error value on failure
-  */
--static int xilinx_cpm_pcie_parse_dt(struct xilinx_cpm_pcie_port *port,
-+static int xilinx_cpm_pcie_parse_dt(struct xilinx_cpm_pcie *port,
- 				    struct resource *bus_range)
- {
- 	struct device *dev = port->dev;
-@@ -523,7 +523,7 @@ static int xilinx_cpm_pcie_parse_dt(struct xilinx_cpm_pcie_port *port,
- 	return 0;
- }
- 
--static void xilinx_cpm_free_interrupts(struct xilinx_cpm_pcie_port *port)
-+static void xilinx_cpm_free_interrupts(struct xilinx_cpm_pcie *port)
- {
- 	irq_set_chained_handler_and_data(port->intx_irq, NULL, NULL);
- 	irq_set_chained_handler_and_data(port->irq, NULL, NULL);
-@@ -537,7 +537,7 @@ static void xilinx_cpm_free_interrupts(struct xilinx_cpm_pcie_port *port)
-  */
- static int xilinx_cpm_pcie_probe(struct platform_device *pdev)
- {
--	struct xilinx_cpm_pcie_port *port;
-+	struct xilinx_cpm_pcie *port;
- 	struct device *dev = &pdev->dev;
- 	struct pci_host_bridge *bridge;
- 	struct resource_entry *bus;
--- 
-2.25.1
-
+>
+> On Wed, Dec 22, 2021 at 8:31 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > On Tue, Dec 21, 2021 at 4:24 PM Huangzhaoyang <huangzhaoyang@gmail.com> wrote:
+> > >
+> > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> >
+> > Please remember to CC Peter.
+> >
+> > >
+> > > When a new threshold breaching stall happens after a psi event was
+> > > generated and within the window duration, the new event is not
+> > > generated because the events are rate-limited to one per window. If
+> > > after that no new stall is recorded then the event will not be
+> > > generated even after rate-limiting duration has passed. This is
+> > > happening because with no new stall, window_update will not be called
+> > > even though threshold was previously breached. To fix this, record
+> > > threshold breaching occurrence and generate the event once window
+> > > duration is passed.
+> > >
+> > > Suggested-by: Suren Baghdasaryan <surenb@google.com>
+> > > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > > ---
+> > > v2: modify the logic according to Suren's suggestion
+> > > v3: update commit message
+> > > ---
+> > > ---
+> > >  include/linux/psi_types.h |  2 ++
+> > >  kernel/sched/psi.c        | 38 +++++++++++++++++++++++---------------
+> > >  2 files changed, 25 insertions(+), 15 deletions(-)
+> > >
+> > > diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+> > > index 0a23300..87b694a 100644
+> > > --- a/include/linux/psi_types.h
+> > > +++ b/include/linux/psi_types.h
+> > > @@ -132,6 +132,8 @@ struct psi_trigger {
+> > >
+> > >         /* Refcounting to prevent premature destruction */
+> > >         struct kref refcount;
+> > > +
+> > > +       bool threshold_breach;
+> > >  };
+> > >
+> > >  struct psi_group {
+> > > diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> > > index 1652f2b..5c67ab9 100644
+> > > --- a/kernel/sched/psi.c
+> > > +++ b/kernel/sched/psi.c
+> > > @@ -524,24 +524,29 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+> > >          */
+> > >         list_for_each_entry(t, &group->triggers, node) {
+> > >                 u64 growth;
+> > > +               bool trigger_stalled =
+> > > +                       group->polling_total[t->state] != total[t->state];
+> > >
+> > > -               /* Check for stall activity */
+> > > -               if (group->polling_total[t->state] == total[t->state])
+> > > -                       continue;
+> > > -
+> > > -               /*
+> > > -                * Multiple triggers might be looking at the same state,
+> > > -                * remember to update group->polling_total[] once we've
+> > > -                * been through all of them. Also remember to extend the
+> > > -                * polling time if we see new stall activity.
+> > > -                */
+> > > -               new_stall = true;
+> > > -
+> > > -               /* Calculate growth since last update */
+> > > -               growth = window_update(&t->win, now, total[t->state]);
+> > > -               if (growth < t->threshold)
+> > > +               /* Check for stall activity or a previous threshold breach */
+> > > +               if (!trigger_stalled && !t->threshold_breach)
+> > >                         continue;
+> > >
+> > > +               if (trigger_stalled) {
+> > > +                       /*
+> > > +                        * Multiple triggers might be looking at the same state,
+> > > +                        * remember to update group->polling_total[] once we've
+> > > +                        * been through all of them. Also remember to extend the
+> > > +                        * polling time if we see new stall activity.
+> > > +                        */
+> > > +                       new_stall = true;
+> > > +
+> > > +                       /* Calculate growth since last update */
+> > > +                       growth = window_update(&t->win, now, total[t->state]);
+> > > +                       if (growth < t->threshold)
+> > > +                               continue;
+> > > +
+> > > +                       t->threshold_breach = true;
+> > > +               }
+> > >                 /* Limit event signaling to once per window */
+> > >                 if (now < t->last_event_time + t->win.size)
+> > >                         continue;
+> > > @@ -550,6 +555,8 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+> > >                 if (cmpxchg(&t->event, 0, 1) == 0)
+> > >                         wake_up_interruptible(&t->event_wait);
+> > >                 t->last_event_time = now;
+> > > +               /* Reset threshold breach flag once event got generated */
+> > > +               t->threshold_breach = false;
+> > >         }
+> > >
+> > >         if (new_stall)
+> > > @@ -1152,6 +1159,7 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
+> > >         t->last_event_time = 0;
+> > >         init_waitqueue_head(&t->event_wait);
+> > >         kref_init(&t->refcount);
+> > > +       t->threshold_breach = false;
+> > >
+> > >         mutex_lock(&group->trigger_lock);
+> > >
+> > > --
+> > > 1.9.1
+> > >

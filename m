@@ -2,153 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1E947E082
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 09:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 791EC47E086
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 09:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347262AbhLWIi0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 23 Dec 2021 03:38:26 -0500
-Received: from coyote.holtmann.net ([212.227.132.17]:39432 "EHLO
-        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbhLWIiY (ORCPT
+        id S242840AbhLWIkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 03:40:43 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:52906 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229785AbhLWIkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 03:38:24 -0500
-Received: from smtpclient.apple (p5b3d2e91.dip0.t-ipconnect.de [91.61.46.145])
-        by mail.holtmann.org (Postfix) with ESMTPSA id 22EF4CED21;
-        Thu, 23 Dec 2021 09:38:23 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
-Subject: Re: [PATCH v3 1/3] Bluetooth: mt7921s: Support wake on bluetooth
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <ceafc644ca9ce926a9fb07f7b3f4e2f701e69c8d.1640165092.git.sean.wang@kernel.org>
-Date:   Thu, 23 Dec 2021 09:38:22 +0100
-Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
-        =?utf-8?B?Ik1hcmstWVcgQ2hlbiAo6Zmz5o+a5paHKSI=?= 
-        <Mark-YW.Chen@mediatek.com>, Soul.Huang@mediatek.com,
-        YN.Chen@mediatek.com, Leon.Yen@mediatek.com,
-        Eric-SY.Chang@mediatek.com, Deren.Wu@mediatek.com,
-        km.lin@mediatek.com, robin.chiu@mediatek.com,
-        Eddie.Chen@mediatek.com, ch.yeh@mediatek.com,
-        posh.sun@mediatek.com, ted.huang@mediatek.com,
-        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
-        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
-        frankgor@google.com, jemele@google.com, abhishekpandit@google.com,
-        Michael Sun <michaelfsun@google.com>,
-        Miao-chen Chou <mcchou@chromium.org>, shawnku@google.com,
-        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <3ED64734-D1D6-4DC3-8065-849AFC79866B@holtmann.org>
-References: <ceafc644ca9ce926a9fb07f7b3f4e2f701e69c8d.1640165092.git.sean.wang@kernel.org>
-To:     Sean Wang <sean.wang@mediatek.com>
-X-Mailer: Apple Mail (2.3693.40.0.1.81)
+        Thu, 23 Dec 2021 03:40:42 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BN8eaet001555;
+        Thu, 23 Dec 2021 02:40:36 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1640248836;
+        bh=FRcSWyBsMFdpNi6q15QKtk8vskpou3CpjToRLckx8mM=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=GvNITeHM6WXxRtU4ANWumMl0c6CnkF/iTKdrb+Xd+Wwm9e6evdfZLAtty+C3eI1Q1
+         JxpFT4PCJDT+c9U3hhpOBZQvdPJe2l9TKlSxRs0D40ddywXkas4Fii23m5vM6XP9Pq
+         uHym4ARgrhJ/otAd4UHbV1oavrzI01j8bM/iUZU0=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BN8eaEg036672
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 23 Dec 2021 02:40:36 -0600
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 23
+ Dec 2021 02:40:35 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 23 Dec 2021 02:40:35 -0600
+Received: from [10.250.235.203] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BN8eX0J098078;
+        Thu, 23 Dec 2021 02:40:34 -0600
+Message-ID: <d9481b0b-cce9-9410-5190-f86ac41a3e3b@ti.com>
+Date:   Thu, 23 Dec 2021 14:10:32 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] arm64: defconfig: Increase the maximum number of
+ 8250/16550 serial ports
+Content-Language: en-US
+To:     Aswath Govindraju <a-govindraju@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Nishanth Menon <nm@ti.com>
+References: <20211208080737.10761-1-a-govindraju@ti.com>
+ <163955131474.14033.3915304006426054820.b4-ty@ti.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <163955131474.14033.3915304006426054820.b4-ty@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
+Hi
 
-> Enable wake on bluetooth on mt7921s that can be supported since the
-> firmware with version 20211129211059 was added, and the patch would
-> not cause any harm even when the old firmware is applied.
-> 
-> The patch was tested by setting up an HID or HOGP profile to connect a
-> Bluetooth keyboard and mouse, then putting the system to suspend, then
-> trying to wake up the system by moving the Bluetooth keyboard or mouse,
-> and then checking if the system can wake up and be brought back to
-> the normal state.
-> 
-> Co-developed-by: Sean Wang <sean.wang@mediatek.com>
-> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-> Signed-off-by: Mark Chen <mark-yw.chen@mediatek.com>
-> ---
-> v2: refine the git message
-> v3:
->    1. fit to single line as possible
->    2. move the skb variable into local scope
->    3. free skb after calling __hci_cmd_sync
->    4. make bt_awake as const struct btmtk_wakeon
-> ---
-> drivers/bluetooth/btmtk.h     |  8 ++++++++
-> drivers/bluetooth/btmtksdio.c | 33 ++++++++++++++++++++++++++++++++-
-> 2 files changed, 40 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/bluetooth/btmtk.h b/drivers/bluetooth/btmtk.h
-> index 6e7b0c7567c0..2be1d2680ad8 100644
-> --- a/drivers/bluetooth/btmtk.h
-> +++ b/drivers/bluetooth/btmtk.h
-> @@ -68,6 +68,14 @@ struct btmtk_tci_sleep {
-> 	u8 time_compensation;
-> } __packed;
-> 
-> +struct btmtk_wakeon {
-> +	u8 mode;
-> +	u8 gpo;
-> +	u8 active_high;
-> +	__le16 enable_delay;
-> +	__le16 wakeup_delay;
-> +} __packed;
-> +
-> struct btmtk_hci_wmt_params {
-> 	u8 op;
-> 	u8 flag;
-> diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-> index b5ea8d3bffaa..b79cee84f590 100644
-> --- a/drivers/bluetooth/btmtksdio.c
-> +++ b/drivers/bluetooth/btmtksdio.c
-> @@ -958,6 +958,32 @@ static int btmtksdio_send_frame(struct hci_dev *hdev, struct sk_buff *skb)
-> 	return 0;
-> }
-> 
-> +static bool btmtk_sdio_wakeup(struct hci_dev *hdev)
-> +{
-> +	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev);
-> +	bool may_wakeup = device_may_wakeup(bdev->dev);
-> +	const struct btmtk_wakeon bt_awake = {
-> +		.mode = 0x1,
-> +		.gpo = 0,
-> +		.active_high = 0x1,
-> +		.enable_delay = cpu_to_le16(0xc80),
-> +		.wakeup_delay = cpu_to_le16(0x20)
-> +	};
-> +
-> +	if (may_wakeup && bdev->data->chipid == 0x7921) {
-> +		struct sk_buff *skb;
-> +
-> +		skb =  __hci_cmd_sync(hdev, 0xfc27, sizeof(bt_awake),
-> +				      &bt_awake, HCI_CMD_TIMEOUT);
-> +		if (IS_ERR(skb))
-> +			may_wakeup = false;
-> +
-> +		kfree_skb(skb);
-> +	}
-> +
-> +	return may_wakeup;
-> +}
-> +
-> static int btmtksdio_probe(struct sdio_func *func,
-> 			   const struct sdio_device_id *id)
-> {
-> @@ -998,6 +1024,7 @@ static int btmtksdio_probe(struct sdio_func *func,
-> 	hdev->shutdown = btmtksdio_shutdown;
-> 	hdev->send     = btmtksdio_send_frame;
-> 	hdev->set_bdaddr = btmtk_set_bdaddr;
-> +	hdev->wakeup = btmtk_sdio_wakeup;
-> 
-> 	SET_HCIDEV_DEV(hdev, &func->dev);
-> 
-> @@ -1032,7 +1059,11 @@ static int btmtksdio_probe(struct sdio_func *func,
-> 	 */
-> 	pm_runtime_put_noidle(bdev->dev);
-> 
-> -	return 0;
-> +	err = device_init_wakeup(bdev->dev, true);
-> +	if (err)
-> +		bt_dev_err(hdev, "%s: failed to init_wakeup", __func__);
+On 15/12/21 12:41 pm, Vignesh Raghavendra wrote:
+> Hi Aswath Govindraju,
+>  
+> On Wed, 8 Dec 2021 13:37:35 +0530, Aswath Govindraju wrote:
+>> On some TI SoCs the number of UART instances used can be greater than 4.
+>> For example in TI's J721S2 SoC, 11th instance of UART is used as console.
+>> So, increase the maximum number of instances to 16.
+>>
+>>
+>  
+> I have applied the following to branch ti-k3-config-next on [1].
+> Thank you!
+>  
+> [1/1] arm64: defconfig: Increase the maximum number of 8250/16550 serial ports
+>       commit: 8e799ff45baebab781cf392be51a54b1f3fceb23
+>  
 
-I missed this the first time around, no __func__ in error messages. Write a proper English one.
+I have dropped this patch from the queue, based on comments at:
 
-Regards
-
-Marcel
-
+https://lore.kernel.org/linux-arm-kernel/CAK8P3a2VSBvOn1o+q1PYZaQ6LS9U4cz+DZGuDbisHkwNs2dAAw@mail.gmail.com/T/#m4ecb0dc6a78c84631f072faa1b0df0df46333d09

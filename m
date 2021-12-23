@@ -2,85 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D4147E459
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 15:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 256CC47E45C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 15:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243771AbhLWOKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 09:10:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
+        id S1348755AbhLWOKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 09:10:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232279AbhLWOKG (ORCPT
+        with ESMTP id S232279AbhLWOKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 09:10:06 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D001CC061401;
-        Thu, 23 Dec 2021 06:10:05 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id f5so21896862edq.6;
-        Thu, 23 Dec 2021 06:10:05 -0800 (PST)
+        Thu, 23 Dec 2021 09:10:21 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD44C061401
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 06:10:21 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id y11so1943060iod.6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 06:10:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=UjJkKz/JWKKHY4Lc0BtDfzIifxG8kvNPIELEZ6V+jDY=;
-        b=NKzwnSNRYOXEwAggF5JDNwy5v8Mn81zuzcbWVzsjbz0srosH/h7yCUbFTUfmLmWdeC
-         +DsN8gvOMvgVKOfXVPiakOi1CU/mA+PZBpVZRCAfBrFV+a/oF0lyzG5mOQ8r8eahej4Q
-         0DatHCDcM3TODghtsFjPp2ULnRNgTmQcH7ZmzgLJGfE1fbGRi4mJhaBRtBKKKZ0q+L3M
-         P12fXNAuYPEVT5lrsLUG89P5RcFy0L8pNCMC+Ntj5rFjC9HjMuL2S/E/Awb4KpuI4PMd
-         U0mdBf+gZHHLuhyymQddTKZXknf9pbmC/IW5/sS0K4Bq3h2Kjxj4iT5rzIwpZi9SrDkZ
-         PhBQ==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
+         :mime-version:content-transfer-encoding;
+        bh=gMMkG6ShZ8Fp8sfGbq2eA4arzE/ALNfZG3xl3bXJNac=;
+        b=zJGqbUATsUbBv6aa3sXgvVdq8FU+nNsnuNULbWOe0Aq65kN627RrJBdYAnXPEOU573
+         57oO5OnVaYU37dWODlrEEKJxu79VLTm7VDq8++2Xf4HnqRqI/dI13K6+B5bgFE7GJPmr
+         guGqNeGmHAXcM3tB1dRoG1i9eNhAlm9LzYfYlwaepBgd8HNjB4Vnc2MJQmADlG63OqK7
+         zJUuK9teis2aL3R6Lj5EJCYhMV3NVEXzXlnp83F1fJ1DyziTsvU5mxOopnk24a5kG6nL
+         teLIYhVOw9/0RNEza/SfcUotZISuE2BFRFDUUCcLXTtod4BfdYdRqQ6FkopKNaEyoQxd
+         8aCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=UjJkKz/JWKKHY4Lc0BtDfzIifxG8kvNPIELEZ6V+jDY=;
-        b=BKwzbAIwmR/qg9ILTbB5w5pLs/AkwRi/AA4EJNCsb2vZ9WM1DzTtCE/v/QBIZhIm4+
-         zXVQgTVAftlfQpxfaAv7JqALi8z959Mrz1WPQZgMOxM8SE2fdWtZ+4rdkvuKU8TS8ns0
-         RlGq744wupwe7yn/78kBmU5Z5ME9XbQeTYKDna83jXS3whHbWQ8CqFijGr3HIpzPnh2B
-         u6PixF2NAlZqNAgStCUJDMwwEGGapINgeX6y/IhdImIKFZN7ILOoRUc7Fm6cGS0Gc+rB
-         gGZHdWTrjFwRAyF6AQdG6wohlWLegiM6LyYOMFS3f+9HoBHC6ndBQRpiQup8WR/7DRTk
-         EqwA==
-X-Gm-Message-State: AOAM531DPIyoPGDkkwt2SR/cCW+cK0kVbR7v62KSNDZt2iCKPakJTq3x
-        teYi8CGIp5CEw36U6sFI36mGr66gyuQ=
-X-Google-Smtp-Source: ABdhPJwED6pkRIcLk+EsacuGOReF+17cVzQfVNLpZvtcQGcSn16U9mhv+DWleHQztAyaEnftcWQ2iQ==
-X-Received: by 2002:a17:907:7295:: with SMTP id dt21mr2023199ejc.441.1640268604463;
-        Thu, 23 Dec 2021 06:10:04 -0800 (PST)
-Received: from standask-GA-A55M-S2HP ([188.123.115.255])
-        by smtp.gmail.com with ESMTPSA id 27sm1784451ejm.41.2021.12.23.06.10.03
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=gMMkG6ShZ8Fp8sfGbq2eA4arzE/ALNfZG3xl3bXJNac=;
+        b=KotqG+YE9laa8WNxiWXd3qswfBUFPoyl+0anxjFaVJVFqebnm2jVpMcTaXYOPiOGvY
+         4cEyPWDgIoVB4DktvKGZ/d8g7y6g6MctuL3vxFL2jUqy5B0rMvu5yRdblk5q2Af96e57
+         kJAYEDPng2arM47g5/6jgpSGFfGlLUDO1DyFTRNvhsEBdqHgBpj3oh5+PCordqj8GIu8
+         tt/o75wsAzeYgtxWpNpGB1oQjGv9Uh/Yv5EvQcaeKmS/vGgU+wqUJSiqXubyAvIr2i2/
+         KkcHNVPR7M9MsF4JPeNa9GmUV9r1B0xFa9qFy6Wp97ntEp5JUFWxB7PgXDErP4x28qqV
+         tvyg==
+X-Gm-Message-State: AOAM531E/uuwWmOFqfa14Fu1rwTdirNHlRGB2TfLn/7ziVAntruSKH/F
+        ilPkV5BjaRwJap3tvFUooiGq0Q==
+X-Google-Smtp-Source: ABdhPJwe/yp49IOX3sR4spMvhOeNOgkGUATD0XvuuA62Fz9OMMcM+zMLkz/p2WC4YR3YMJG1IZdJkA==
+X-Received: by 2002:a05:6638:2495:: with SMTP id x21mr104131jat.258.1640268620593;
+        Thu, 23 Dec 2021 06:10:20 -0800 (PST)
+Received: from [192.168.1.116] ([66.219.217.159])
+        by smtp.gmail.com with ESMTPSA id k1sm1549005ilu.80.2021.12.23.06.10.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Dec 2021 06:10:04 -0800 (PST)
-Date:   Thu, 23 Dec 2021 15:10:02 +0100
-From:   Stanislav Jakubek <stano.jakubek@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] dt-bindings: vendor-prefixes: add OnePlus
-Message-ID: <20211223141002.GA5979@standask-GA-A55M-S2HP>
+        Thu, 23 Dec 2021 06:10:20 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Jan Kara <jack@suse.cz>, linux-block@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        kernel-janitors@vger.kernel.org
+In-Reply-To: <20211223125300.20691-1-lukas.bulwahn@gmail.com>
+References: <20211223125300.20691-1-lukas.bulwahn@gmail.com>
+Subject: Re: [PATCH v2] block: drop needless assignment in set_task_ioprio()
+Message-Id: <164026861975.771757.2667766405282712502.b4-ty@kernel.dk>
+Date:   Thu, 23 Dec 2021 07:10:19 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add vendor prefix for OnePlus (https://www.oneplus.com/)
+On Thu, 23 Dec 2021 13:53:00 +0100, Lukas Bulwahn wrote:
+> Commit 5fc11eebb4a9 ("block: open code create_task_io_context in
+> set_task_ioprio") introduces a needless assignment
+> 'ioc = task->io_context', as the local variable ioc is not further
+> used before returning.
+> 
+> Even after the further fix, commit a957b61254a7 ("block: fix error in
+> handling dead task for ioprio setting"), the assignment still remains
+> needless.
+> 
+> [...]
 
-Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
----
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+Applied, thanks!
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 1497303e2600..a13d6a19c2b4 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -858,6 +858,8 @@ patternProperties:
-     description: OLIMEX Ltd.
-   "^olpc,.*":
-     description: One Laptop Per Child
-+  "^oneplus,.*":
-+    description: OnePlus Technology (Shenzhen) Co., Ltd.
-   "^onion,.*":
-     description: Onion Corporation
-   "^onnn,.*":
+[1/1] block: drop needless assignment in set_task_ioprio()
+      commit: 669a064625fa3a06ddf8a4ac1f35b7436b99f133
+
+Best regards,
 -- 
-2.25.1
+Jens Axboe
+
 

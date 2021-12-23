@@ -2,129 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0B247E208
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 12:08:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 891B747E20C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 12:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347930AbhLWLIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 06:08:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347900AbhLWLIM (ORCPT
+        id S239657AbhLWLIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 06:08:54 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:59946 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347895AbhLWLIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 06:08:12 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB389C06175A;
-        Thu, 23 Dec 2021 03:08:11 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id p8so8487530ljo.5;
-        Thu, 23 Dec 2021 03:08:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=84LeHW/e19a5g89AaewWo8yiJv+44/hW3Ak/xWdyyA8=;
-        b=LnZGA5tObecQRuwxdzey7KYJRuQO7Du0GYRah5VyFrCTa6a0Chg6WIzADqa51h7qpp
-         +8TczdT/VPZHAagcOijkp1UlluvbIuWap+Bt/h02HLcq/v0dhmNQQ6/YtXanFiiWpjGk
-         w7wu3wSBqLJ1fHWJju2xPOTWHC3xGrK/K22SkPMeC+AbwUvfha/G5wmThbNZgq7Gd9jm
-         JlNG6TVGuRk1oKyoq2E8YfJfK4aQ/XfPR07sk7V1A7tnDwbAlfJoLZcheQJr8Zru7q2l
-         x1C0XMQFZaM+amyqrESqPUctvg3ESz0+OY4v5MtZpz2GLH89bemWgs4wcc3OWKBEjJxo
-         eLDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=84LeHW/e19a5g89AaewWo8yiJv+44/hW3Ak/xWdyyA8=;
-        b=HixRQIUUeMBUSGV9ZckDiZh8or5GqmXpcttjktbCqIxbBu/QMsAXVxARm1D/x282T4
-         P4VPwCcmLZgkLbtxqRGAdP1bWU0IHUnQ9N99nUhuxVLIZzhWyHznTRGGSUb8yXlCsCCQ
-         15nMxoaamouyO84Qy9QXs9AsDOPdjaMX/JaDN9NT/saaKd5B3pzh0URMcxT+zA+3Y98M
-         zDn6i8mLcKJsIlFyVgiqPsbc3O/PItFj+rxHiNdP6GgOrHkuYnel8LsP399jmiKvQOiO
-         lJ3gb09YXNZENvyJRAhnMglleHnglWe+7t2JRS4OkOr3SQ6Zwk0dzMJkUwX6iFpjnmKs
-         PQxg==
-X-Gm-Message-State: AOAM532i0BQNAkKGHOoRbBGogMkmS+Vr+FqH71kGyKsnS3vyCAUfnEyJ
-        Z0+7mAs5yhSjl5LELiGDJ8w=
-X-Google-Smtp-Source: ABdhPJwHtj537VAWY1ZrCuOV3QEoO+Y8FoZA8+jyb0dgmaT1NpPfixRyUYbGFo0vvvpZ1afm2Rbwng==
-X-Received: by 2002:a2e:9192:: with SMTP id f18mr1316446ljg.211.1640257690200;
-        Thu, 23 Dec 2021 03:08:10 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id t7sm473047lfg.115.2021.12.23.03.08.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Dec 2021 03:08:09 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH 5/5] nvmem: core: add cell name based matching of DT cell nodes
-Date:   Thu, 23 Dec 2021 12:07:55 +0100
-Message-Id: <20211223110755.22722-6-zajec5@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211223110755.22722-1-zajec5@gmail.com>
-References: <20211223110755.22722-1-zajec5@gmail.com>
+        Thu, 23 Dec 2021 06:08:46 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 51CC221128;
+        Thu, 23 Dec 2021 11:08:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1640257725; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LLyiXrFXVKmCxSGs1dhYd9u4D7SzC6X7urXbFh45ixw=;
+        b=bFS7SZki+gGKtR2A4w1SniEtzRtthqAjszqfCI/sgYaIgp1I6Zs6wmR4JrDAqxV0/TXlmJ
+        Hndl0mkXQvvAypsnLTLq5GfemLxkiv0ilH57tnjkF8CXXQMDuf2IdKnu1ZgGFXS9BU9Agb
+        dJv+3wQMM70MUu566+bild2yacRadkg=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 0D96FA3BAE;
+        Thu, 23 Dec 2021 11:08:45 +0000 (UTC)
+Date:   Thu, 23 Dec 2021 12:08:41 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     David Vernet <void@manifault.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, jpoimboe@redhat.com, jikos@kernel.org,
+        mbenes@suse.cz, joe.lawrence@redhat.com, corbet@lwn.net
+Subject: Re: [PATCH v3] Documentation: livepatch: Add livepatch API page
+Message-ID: <YcRYuW78jIU+VxIH@alley>
+References: <20211221145743.4098360-1-void@manifault.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221145743.4098360-1-void@manifault.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On Tue 2021-12-21 06:57:45, David Vernet wrote:
+> The livepatch subsystem has several exported functions and objects with
+> kerneldoc comments. Though the livepatch documentation contains handwritten
+> descriptions of all of these exported functions, they are currently not
+> pulled into the docs build using the kernel-doc directive.
+> 
+> In order to allow readers of the documentation to see the full kerneldoc
+> comments in the generated documentation files, this change adds a new
+> Documentation/livepatch/api.rst page which contains kernel-doc directives
+> to link the kerneldoc comments directly in the documentation.  With this,
+> all of the hand-written descriptions of the APIs now cross-reference the
+> kerneldoc comments on the new Livepatching APIs page, and running
+> ./scripts/find-unused-docs.sh on kernel/livepatch no longer shows any files
+> as missing documentation.
+> 
+> Note that all of the handwritten API descriptions were left alone with the
+> exception of Documentation/livepatch/system-state.rst, which was updated to
+> allow the cross-referencing to work correctly. The file now follows the
+> cross-referencing formatting guidance specified in
+> Documentation/doc-guide/kernel-doc.rst. Furthermore, some comments around
+> klp_shadow_free_all() were updated to say <_, id> rather than <*, id> to
+> match the rest of the file, and to prevent the docs build from emitting an
+> "Inline emphasis start-string without end string" error.
+> 
+> Signed-off-by: David Vernet <void@manifault.com>
 
-When adding NVMEM cells defined by driver it's important to match them
-with DT nodes that specify matching names. That way other bindings &
-drivers can reference such "dynamic" NVMEM cells.
+JFYI, the patch has been committed into livepatch.git, branch
+for-5.17/fixes.
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- drivers/nvmem/core.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
-
-diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-index 45c39ac401bd..5fe92751645a 100644
---- a/drivers/nvmem/core.c
-+++ b/drivers/nvmem/core.c
-@@ -499,6 +499,33 @@ static int nvmem_cell_info_to_nvmem_cell_entry(struct nvmem_device *nvmem,
- 	return 0;
- }
- 
-+/**
-+ * nvmem_find_cell_of_node() - Find DT node matching nvmem cell
-+ *
-+ * @nvmem: nvmem device to add cells to.
-+ * @name: nvmem cell name
-+ *
-+ * Runtime created nvmem cells (those not coming from DT) may still need to be
-+ * referenced in DT. This function allows finding DT node referencing nvmem cell
-+ * by its name. Such a DT node can be used by nvmem consumers.
-+ *
-+ * Return: NULL or pointer to DT node
-+ */
-+static struct device_node *nvmem_find_cell_of_node(struct nvmem_device *nvmem,
-+						   const char *name)
-+{
-+	struct device_node *child;
-+	const char *label;
-+
-+	for_each_child_of_node(nvmem->dev.of_node, child) {
-+		if (!of_property_read_string(child, "label", &label) &&
-+		    !strcmp(label, name))
-+			return child;
-+	}
-+
-+	return NULL;
-+}
-+
- /**
-  * nvmem_add_cells() - Add cell information to an nvmem device
-  *
-@@ -532,6 +559,8 @@ static int nvmem_add_cells(struct nvmem_device *nvmem,
- 			goto err;
- 		}
- 
-+		cells[i]->np = nvmem_find_cell_of_node(nvmem, cells[i]->name);
-+
- 		nvmem_cell_entry_add(cells[i]);
- 	}
- 
--- 
-2.31.1
-
+Best Regards,
+Petr

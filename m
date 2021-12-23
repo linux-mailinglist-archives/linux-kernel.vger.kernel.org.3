@@ -2,76 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2AFA47E67F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 17:40:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8B247E681
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 17:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349290AbhLWQkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 11:40:37 -0500
-Received: from mga07.intel.com ([134.134.136.100]:40686 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240012AbhLWQkg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 11:40:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640277636; x=1671813636;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dfSiGzoHn4jhgzXe9/dQYD8rIt36YpcL4EadkkrmPkw=;
-  b=LaRMGA8tlSF5bK3spVDth5OtXHgslFFLXjLYJQWjJS24sNtTQCUv2J60
-   dvryzZ4O93fshFzpa2DjvRSZH9+/vCb5mhXQcsbiIn5R12UddvwWBmnCK
-   tG2fQynEI4kSAR9H2T898VZmpw6jtpfISJtr1FjbYVur0TphSnQSTzZPd
-   tANEn+uHOkl5UPebxLelHBqfCghuvOO01CKlL0X5xabGD/cHaxiW76XKM
-   ZlfJCa5WBbvTTGhWs0EOjKjVoq/HN6WQtaLYaO5bF06i/zHTDsmGnwLHE
-   H31CkZTcFI0C32hC/KXF527PwVflOV+Jq/NZMRfMi3kNLI3u4IzFemmOa
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10207"; a="304222205"
-X-IronPort-AV: E=Sophos;i="5.88,230,1635231600"; 
-   d="scan'208";a="304222205"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 08:40:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,230,1635231600"; 
-   d="scan'208";a="522147370"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga008.jf.intel.com with ESMTP; 23 Dec 2021 08:40:35 -0800
-Date:   Thu, 23 Dec 2021 08:39:11 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: [PATCH v2] sched/fair: fix all kernel-doc warnings
-Message-ID: <20211223163911.GA633@ranerica-svr.sc.intel.com>
-References: <20211218055900.2704-1-rdunlap@infradead.org>
+        id S1349299AbhLWQk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 11:40:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240012AbhLWQk6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 11:40:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757BAC061401;
+        Thu, 23 Dec 2021 08:40:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C60061EFC;
+        Thu, 23 Dec 2021 16:40:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EFBCC36AE5;
+        Thu, 23 Dec 2021 16:40:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640277656;
+        bh=wLg/tBD/PjWGqRYN8osxxTH2d+iMjRJQa7SeHtuFGxY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=nI4CvWsrWH2IxtN5jTnse16OV9MonHlCu1WphHc+QYffIfNMzwMY3EDJpCbNiZnM2
+         af0Gkg5JwKLlIaE344ypErBsl/y5kUYTnzhvbbGXKtR//isTRD8hvTRPeHAEDAdGJx
+         6vui6Zk6aMdDFo5PVDgnUik6UyCLeQ6BNN98cHRg1I1dg2wW3MKhtSZoNzBxhlhjKP
+         jRxqMJnvzzIkp1GZYQ9UiYS/32ioWuJhl3d79HwN8sDv5xUUDzUkKzs7ve4DSGoGW6
+         qaMuUJaL3EGHajXMRwy4jXYoR9RnqvRMm8jOAEDfx8czN5FmVwrqWTev3PGo0sPtKa
+         XG5rFu2RNZlsw==
+Date:   Thu, 23 Dec 2021 10:40:54 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     linux-pci <linux-pci@vger.kernel.org>,
+        Fan Fei <ffclaire1224@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Subject: Re: [PATCH v2 16/23] PCI: mt7621: Make pci_ops static
+Message-ID: <20211223164054.GA1269587@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211218055900.2704-1-rdunlap@infradead.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CAMhs-H-nSTLiqgw4LxEPBiTGLh7L4n1mm4FbgOCdzCGxK5e47w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 09:59:00PM -0800, Randy Dunlap wrote:
-> Quieten all kernel-doc warnings in kernel/sched/fair.c:
+On Thu, Dec 23, 2021 at 07:04:32AM +0100, Sergio Paracuellos wrote:
+> Hi Bjorn,
 > 
-> kernel/sched/fair.c:3663: warning: No description found for return value of 'update_cfs_rq_load_avg'
-> kernel/sched/fair.c:8601: warning: No description found for return value of 'asym_smt_can_pull_tasks'
-> kernel/sched/fair.c:8673: warning: Function parameter or member 'sds' not described in 'update_sg_lb_stats'
-> kernel/sched/fair.c:9483: warning: contents before sections
+> On Thu, Dec 23, 2021 at 2:11 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > From: Bjorn Helgaas <bhelgaas@google.com>
+> >
+> > mt7621_pci_ops is used only in this file.  Make it static.
+> >
+> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> > Cc: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> > Cc: linux-arm-kernel@lists.infradead.org
+> > Cc: linux-mediatek@lists.infradead.org
+> > ---
+> >  drivers/pci/controller/pcie-mt7621.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/pci/controller/pcie-mt7621.c b/drivers/pci/controller/pcie-mt7621.c
+> > index b60dfb45ef7b..4138c0e83513 100644
+> > --- a/drivers/pci/controller/pcie-mt7621.c
+> > +++ b/drivers/pci/controller/pcie-mt7621.c
+> > @@ -148,7 +148,7 @@ static void __iomem *mt7621_pcie_map_bus(struct pci_bus *bus,
+> >         return pcie->base + RALINK_PCI_CONFIG_DATA + (where & 3);
+> >  }
+> >
+> > -struct pci_ops mt7621_pci_ops = {
+> > +static struct pci_ops mt7621_pci_ops = {
+> >         .map_bus        = mt7621_pcie_map_bus,
+> >         .read           = pci_generic_config_read,
+> >         .write          = pci_generic_config_write,
+> > --
+> > 2.25.1
+> >
 > 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Juri Lelli <juri.lelli@redhat.com>
-> Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> ---
-> v2: Tweak the Return: text of asym_smt_can_pull_tasks() [per Ricardo]
+> This one was already sent and added to Lorenzo's tree. See:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git/commit/?h=pci/mt7621&id=8a0c1afb8560c2f64bcbdb559931f5ca8b83de87
 
-Thank you very much considering the proposed tweak, and also taking care
-of this issue.
+Thanks, I dropped this one.
 
-FWIW, Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Bjorn

@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E56547DD15
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:18:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A4D47DD37
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:18:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346674AbhLWBPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:15:50 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:27166 "EHLO
+        id S1346454AbhLWBQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:16:32 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:27384 "EHLO
         o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346210AbhLWBOi (ORCPT
+        with ESMTP id S1346254AbhLWBOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:14:38 -0500
+        Wed, 22 Dec 2021 20:14:50 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
         h=from:subject:in-reply-to:references:mime-version:to:cc:
         content-transfer-encoding:content-type;
-        s=sgd; bh=6N7dj4qJUKtMM/lJa8tbpsQXTpV3hh508uNFMCeLTmw=;
-        b=vr+cyHY2pvPEH42hDN8WIQdKRBy7fQiQTie0z7EgQ7iJcIbs1LSTZYR7mEUfwFqWDZDh
-        5eh39xKSQJsPmXg0qm9SZecMP4+N2M3Dsp4XOZI2ureZ36yZWB1L4zPYkQBy/FIabKx85L
-        WhAbvaYhcxqjFoUA6Ig/vFhMhvANjYyAoNnQjaqctzadT252UF1LaXebuRIj3dtOt3jU4y
-        sTPETVrmyUPUDm2UDsUewXIa4bqSiZoVm/LnZcQiqsfCiIGH4mydq+a9v6GhInK6h8K6dA
-        oGM7H7iq6m9YlvrN9ndnefOeUCQExmMlHsHa0kGZvOn4g0oWBiFMo3zSggd5ZCTg==
-Received: by filterdrecv-64fcb979b9-4vrtk with SMTP id filterdrecv-64fcb979b9-4vrtk-1-61C3CD5E-33
-        2021-12-23 01:14:06.639603191 +0000 UTC m=+8644640.706394453
+        s=sgd; bh=GoRCB1qp+NT2deD6O9F/OqL86QNfyIxkoZDwvyfsbMo=;
+        b=lFqhO/+PNUc/uADkjVfHwOdQFkGTAjnHitQFjZGkikHzAXCIZE87fwv0ZgPt4pTmm+/H
+        GN6K/yYa6m+WN168nBItYqvn+jF3U67cf/1453LvM9bY5PCIH0m4IiNUWz2TvYGSRhZdup
+        JSFFiBrIKkTSLwQ2AikuTMms+3tUCTF7LlKJSSG2iE0vDVUzx8+kUAlZqFza0n3VsFmspT
+        XMiKp3JHjVLR0ii+k3OB2Si42NReWF3wr7PDChcr5CV1ptFvhpug5H+6EOsVaPY65ZG3CZ
+        9ZBjf7viyaOJBawFKsTbFBO1NLr6upwsB4GMAGpETcZssOhqPE+R7xRm8c36q6Vw==
+Received: by filterdrecv-75ff7b5ffb-bdt5z with SMTP id filterdrecv-75ff7b5ffb-bdt5z-1-61C3CD5E-4A
+        2021-12-23 01:14:06.973210454 +0000 UTC m=+9687191.495886346
 Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-4-1 (SG)
+        by geopod-ismtpd-2-0 (SG)
         with ESMTP
-        id XtinkhGEQb2hIYycvpVgXQ
-        Thu, 23 Dec 2021 01:14:06.505 +0000 (UTC)
+        id j9HPaFX1RKqwFyYUORk8dQ
+        Thu, 23 Dec 2021 01:14:06.858 +0000 (UTC)
 Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id 6AE00701474; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
+        id B9D61700BB0; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
 From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH v2 26/50] wilc1000: reduce amount of time ack_filter_lock is
- held
+Subject: [PATCH v2 37/50] wilc1000: introduce set_header() function
 Date:   Thu, 23 Dec 2021 01:14:07 +0000 (UTC)
-Message-Id: <20211223011358.4031459-27-davidm@egauge.net>
+Message-Id: <20211223011358.4031459-38-davidm@egauge.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211223011358.4031459-1-davidm@egauge.net>
 References: <20211223011358.4031459-1-davidm@egauge.net>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvGGquUt9ycIje3WqF?=
- =?us-ascii?Q?lCafr+1TG2O9DDHkxjFYdcB99nE90QGpbToWeya?=
- =?us-ascii?Q?nt9YrHssVEPslyq=2FMdXIm7BTKB7tj7bIhBcy7Tg?=
- =?us-ascii?Q?hLMrs4frDMKt81CSEcu+GVPW2LDjjWAt8ImuUCO?=
- =?us-ascii?Q?wAaE4DfvmHM7kfTbVwFWqQX3wieADAhPse9ODP4?=
- =?us-ascii?Q?nLRKa9zMZFc=2Fe6vASnoHQ=3D=3D?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvN1V65Kxvy8FSt8Tq?=
+ =?us-ascii?Q?vXxPJ4NYhhzW59EiQOJdXjEbKiDG1I=2FgLb8fMJL?=
+ =?us-ascii?Q?j1arpTJuPbRzYLx7qBu=2FkxTrwwnlEmsfK8WpYLk?=
+ =?us-ascii?Q?Nhy5X1vMIHD1JBHK+oImfhoisLADN1rbvuKAouo?=
+ =?us-ascii?Q?BGw9P5d7tPbU83XrZsdRY71=2FNJO0csLg7k12RBs?=
+ =?us-ascii?Q?oHUkU2AyywpmG4YM3XwEw=3D=3D?=
 To:     Ajay Singh <ajay.kathat@microchip.com>
 Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
         Kalle Valo <kvalo@kernel.org>,
@@ -61,59 +60,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In tcp_process(), only hold the ack_filter_lock while accessing the
-ack_filter state.
+Refactor the transmit packet header initialization into its own
+set_header() function.
 
 Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
 ---
- drivers/net/wireless/microchip/wilc1000/wlan.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ .../net/wireless/microchip/wilc1000/wlan.c    | 56 +++++++++++--------
+ 1 file changed, 33 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
-index 81180b2f9f4e1..5ea9129b36925 100644
+index c3802a34defed..86b945e5ee076 100644
 --- a/drivers/net/wireless/microchip/wilc1000/wlan.c
 +++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
-@@ -130,15 +130,13 @@ static inline void tcp_process(struct net_device *dev, struct sk_buff *tqe)
- 	const struct tcphdr *tcp_hdr_ptr;
- 	u32 ihl, total_length, data_offset;
- 
--	mutex_lock(&vif->ack_filter_lock);
--
- 	if (eth_hdr_ptr->h_proto != htons(ETH_P_IP))
--		goto out;
-+		return;
- 
- 	ip_hdr_ptr = buffer + ETH_HLEN;
- 
- 	if (ip_hdr_ptr->protocol != IPPROTO_TCP)
--		goto out;
-+		return;
- 
- 	ihl = ip_hdr_ptr->ihl << 2;
- 	tcp_hdr_ptr = buffer + ETH_HLEN + ihl;
-@@ -150,6 +148,9 @@ static inline void tcp_process(struct net_device *dev, struct sk_buff *tqe)
- 
- 		seq_no = ntohl(tcp_hdr_ptr->seq);
- 		ack_no = ntohl(tcp_hdr_ptr->ack_seq);
-+
-+		mutex_lock(&vif->ack_filter_lock);
-+
- 		for (i = 0; i < f->tcp_session; i++) {
- 			u32 j = f->ack_session_info[i].seq_num;
- 
-@@ -163,10 +164,9 @@ static inline void tcp_process(struct net_device *dev, struct sk_buff *tqe)
- 			add_tcp_session(vif, 0, 0, seq_no);
- 
- 		add_tcp_pending_ack(vif, ack_no, i, tqe);
--	}
- 
--out:
--	mutex_unlock(&vif->ack_filter_lock);
-+		mutex_unlock(&vif->ack_filter_lock);
-+	}
+@@ -640,6 +640,37 @@ static u32 vmm_table_entry(struct sk_buff *tqe, u32 vmm_sz)
+ 	return cpu_to_le32(entry);
  }
  
- static void wilc_wlan_tx_packet_done(struct sk_buff *tqe, int status)
++/**
++ * set_header() - set WILC-specific header
++ * @wilc: Pointer to the wilc structure.
++ * @tqe: The packet to add to the chip queue.
++ * @vmm_sz: The final size of the packet, including VMM header and padding.
++ * @hdr: Pointer to the header to set
++ */
++static void set_header(struct wilc *wilc, struct sk_buff *tqe,
++		       u32 vmm_sz, void *hdr)
++{
++	struct wilc_skb_tx_cb *tx_cb = WILC_SKB_TX_CB(tqe);
++	u32 mgmt_pkt = 0, vmm_hdr, prio, data_len = tqe->len;
++	struct wilc_vif *vif;
++
++	/* add the VMM header word: */
++	if (tx_cb->type == WILC_MGMT_PKT)
++		mgmt_pkt = FIELD_PREP(WILC_VMM_HDR_MGMT_FIELD, 1);
++	vmm_hdr = cpu_to_le32(mgmt_pkt |
++			      FIELD_PREP(WILC_VMM_HDR_TYPE, tx_cb->type) |
++			      FIELD_PREP(WILC_VMM_HDR_PKT_SIZE, data_len) |
++			      FIELD_PREP(WILC_VMM_HDR_BUFF_SIZE, vmm_sz));
++	memcpy(hdr, &vmm_hdr, 4);
++
++	if (tx_cb->type == WILC_NET_PKT) {
++		vif = netdev_priv(tqe->dev);
++		prio = cpu_to_le32(tx_cb->q_num);
++		memcpy(hdr + 4, &prio, sizeof(prio));
++		memcpy(hdr + 8, vif->bssid, ETH_ALEN);
++	}
++}
++
+ /**
+  * fill_vmm_table() - Fill VMM table with packets to be sent
+  * @wilc: Pointer to the wilc structure.
+@@ -827,7 +858,6 @@ static int copy_packets(struct wilc *wilc, int entries, u32 *vmm_table,
+ 	u8 ac_pkt_num_to_chip[NQUEUES] = {0, 0, 0, 0};
+ 	struct wilc_skb_tx_cb *tx_cb;
+ 	u8 *txb = wilc->tx_buffer;
+-	struct wilc_vif *vif;
+ 	int i, vmm_sz;
+ 	u32 offset;
+ 
+@@ -835,9 +865,7 @@ static int copy_packets(struct wilc *wilc, int entries, u32 *vmm_table,
+ 	i = 0;
+ 	do {
+ 		struct sk_buff *tqe;
+-		u32 header, buffer_offset;
+-		char *bssid;
+-		u8 mgmt_ptk = 0;
++		u32 buffer_offset;
+ 
+ 		tqe = skb_dequeue(&wilc->txq[vmm_entries_ac[i]]);
+ 		if (!tqe)
+@@ -845,7 +873,6 @@ static int copy_packets(struct wilc *wilc, int entries, u32 *vmm_table,
+ 
+ 		atomic_dec(&wilc->txq_entries);
+ 		ac_pkt_num_to_chip[vmm_entries_ac[i]]++;
+-		vif = netdev_priv(tqe->dev);
+ 		tx_cb = WILC_SKB_TX_CB(tqe);
+ 		if (vmm_table[i] == 0)
+ 			break;
+@@ -854,25 +881,8 @@ static int copy_packets(struct wilc *wilc, int entries, u32 *vmm_table,
+ 		vmm_sz = FIELD_GET(WILC_VMM_BUFFER_SIZE, vmm_table[i]);
+ 		vmm_sz *= 4;
+ 
+-		if (tx_cb->type == WILC_MGMT_PKT)
+-			mgmt_ptk = 1;
+-
+-		header = (FIELD_PREP(WILC_VMM_HDR_TYPE, tx_cb->type) |
+-			  FIELD_PREP(WILC_VMM_HDR_MGMT_FIELD, mgmt_ptk) |
+-			  FIELD_PREP(WILC_VMM_HDR_PKT_SIZE, tqe->len) |
+-			  FIELD_PREP(WILC_VMM_HDR_BUFF_SIZE, vmm_sz));
+-
+-		cpu_to_le32s(&header);
+-		memcpy(&txb[offset], &header, 4);
+ 		buffer_offset = tx_hdr_len(tx_cb->type);
+-		if (tx_cb->type == WILC_NET_PKT) {
+-			int prio = tx_cb->q_num;
+-
+-			bssid = vif->bssid;
+-			memcpy(&txb[offset + 4], &prio, sizeof(prio));
+-			memcpy(&txb[offset + 8], bssid, 6);
+-		}
+-
++		set_header(wilc, tqe, vmm_sz, txb + offset);
+ 		memcpy(&txb[offset + buffer_offset], tqe->data, tqe->len);
+ 		offset += vmm_sz;
+ 		i++;
 -- 
 2.25.1
 

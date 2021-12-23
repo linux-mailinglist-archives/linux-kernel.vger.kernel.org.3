@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C550F47DCEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:15:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE8E47DCD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346255AbhLWBPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:15:14 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:17762 "EHLO
+        id S1345806AbhLWBO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:14:28 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:18296 "EHLO
         o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238009AbhLWBOH (ORCPT
+        with ESMTP id S1345736AbhLWBOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:14:07 -0500
+        Wed, 22 Dec 2021 20:14:14 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
-        h=from:subject:mime-version:to:cc:content-transfer-encoding:
-        content-type;
-        s=sgd; bh=sqK3n4KAn/bFCIZgOngBsx4n4PZvfSggV2zGspKRJnk=;
-        b=RHQ51xrjxq9tDevjJI2vs7stnJm69FoFmsx6aDLC/9A15CJ7pfadfRIeIDqiDtoTyqcT
-        RBBKtSj7ClOiglfoJ+17g3xUxOGLb3coZtzMPTtHmpSSj6bALe+uZEj3QvuEDjWzKXAeHa
-        qixZrPJSZvktHdnIGYRiLVsPZAFzEPHaR69FttK394PhbkluXxgH+T9ZOClpE98ia73HT3
-        NhI8OhcbhiWZOEt9HAaROEIhsWbAHJuFc0KahUgCA+tNtSZVcyOB7z6ZXxpSjr2nfy4CC1
-        nQqvZs2wYY6Oy6qIsDfcDg2U/SNNWlCHswik2JB3fQ5FxSeRuD5puRYAfCWNa+/Q==
-Received: by filterdrecv-656998cfdd-v2fsg with SMTP id filterdrecv-656998cfdd-v2fsg-1-61C3CD5D-2C
-        2021-12-23 01:14:05.85301251 +0000 UTC m=+7955206.079180242
+        h=from:subject:in-reply-to:references:mime-version:to:cc:
+        content-transfer-encoding:content-type;
+        s=sgd; bh=vZhKpwkeABx3tV5464sBNHKmLdYJetnkUWgiwVq0e+M=;
+        b=gSMXBJmGkyQjVJdOl21pxvi7KtiMRQGaum/3+DtPG8VdaTSmBRxB4u3bBD7ONHGsUDdK
+        D0MqI+fKkvqCGZ0KHlGCdQQonTTGWBE7YsoGen4n0GYppz/JWQHCeREwd1RIbu0qlErWjN
+        ypjuBG9V/G9aryFUlOHjy2WMfEHzg/J9O8ujPsHg0BmjUdte6fOsFRnatK6Zw3FB6TGiHx
+        2RQ3xIje6YFOxwdPVeOIwXttEYRjhOp/k8oBfADCM8/blRARaa21IXPZD1Do5cYZr1yDQu
+        a619dWd5snsWW7nh4HRrmytA0L5Z7xKw0Pa/5zrPUeSF7C73Iqlmr2+QWm4NiCFg==
+Received: by filterdrecv-64fcb979b9-stcmh with SMTP id filterdrecv-64fcb979b9-stcmh-1-61C3CD5E-19
+        2021-12-23 01:14:06.641297648 +0000 UTC m=+8644585.985703208
 Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-6-0 (SG)
+        by geopod-ismtpd-5-0 (SG)
         with ESMTP
-        id vbucpfIiSqi5TqOhTl6K8A
-        Thu, 23 Dec 2021 01:14:05.577 +0000 (UTC)
+        id kYQx10e9SJ-POfpDVVT99Q
+        Thu, 23 Dec 2021 01:14:06.439 +0000 (UTC)
 Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id CF34A700394; Wed, 22 Dec 2021 18:14:04 -0700 (MST)
+        id 36E4A701321; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
 From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH v2 00/50] wilc1000: rework tx path to use sk_buffs throughout
+Subject: [PATCH v2 18/50] wilc1000: split huge tx handler into subfunctions
 Date:   Thu, 23 Dec 2021 01:14:06 +0000 (UTC)
-Message-Id: <20211223011358.4031459-1-davidm@egauge.net>
+Message-Id: <20211223011358.4031459-19-davidm@egauge.net>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211223011358.4031459-1-davidm@egauge.net>
+References: <20211223011358.4031459-1-davidm@egauge.net>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvFYw=2FjcbvhZcqgNlT?=
- =?us-ascii?Q?QDMsFFPh1nkoeqdwNK+Wpr1q3dcBMq5RjcZpWx3?=
- =?us-ascii?Q?RmrrlFu8O3k2VAugLWDHq0Np4VKwGUhFw3Zw6PG?=
- =?us-ascii?Q?aoCCQsH72llzMJtUuNoiK7GyzhKWzj+sgZYpNd6?=
- =?us-ascii?Q?odt3GmZwaFvB1DhMcOIBLTvIQZgPHfItJ=2FE+g6T?=
- =?us-ascii?Q?a3yrDaUy4hcOqyTifgI=2Fw=3D=3D?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvN=2FgGHiwjRLSHlTP9?=
+ =?us-ascii?Q?0xv=2FCkD5McJdotNU1IWUaiA5rlUOQzfOXej2buH?=
+ =?us-ascii?Q?57ZdJ8RFuS2M85fKVNxTd4qP8KXY0N=2FT0=2FP78DO?=
+ =?us-ascii?Q?qmzFZNjnH2fG9IE1nN3UZp0MFvPK3JiFrLyRDqH?=
+ =?us-ascii?Q?b9VqjPwFDmiogKa5NJjAl11092aCtDzof6uqKHv?=
+ =?us-ascii?Q?y6uqz9SSratHx6DExmuxQ=3D=3D?=
 To:     Ajay Singh <ajay.kathat@microchip.com>
 Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
         Kalle Valo <kvalo@kernel.org>,
@@ -58,109 +60,279 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-OK, so I'm nervous about such a large patch series, but it took a lot
-of work to break things down into atomic changes.  This should be it
-for the transmit path as far as I'm concerned.
+This makes the code easier to read and less error prone.  There are no
+functional changes in this patch.
 
-- v2:
-	- Fix 64-bit architecture compile breakage found by
-          kernel build daemon.
-	- Fix kernel-doc issues.
-	- All patches compie with "make W=1" now and pass scripts/checkpatch.pl
-        - Expand series to clean up some locking issues.
-        - Expand series to support zero-copy tx transfers for SPI.
-        - Rebase to latest wireless-drivers-next
+Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
+---
+ .../net/wireless/microchip/wilc1000/wlan.c    | 206 +++++++++++++-----
+ 1 file changed, 157 insertions(+), 49 deletions(-)
 
-Rework tx path to use sk_buffs throughout and optionally provide
-zero-copy transmit.
-
-Based on the earlier discussion (RFC: wilc1000: refactor TX path to
-use sk_buff queue), here is the full patch series to clean up and
-simplify the TX path.
-
-The biggest patch is 0016, which is the one actually switching the
-queue data type, but I worked hard to minimize it to only direct
-changes due to the type changes.
-
-There is no dramatic performance difference due to this patch.  I'd
-expect the new code to be slightly faster, but my WLAN
-test-environment is not sufficiently controlled to be sure of that.
-
-original iperf3 performance (duration 120 seconds):
-
-                TX [Mbps]	RX [Mbps]
-  PSM off:	14.8		18.9
-  PSM  on:	10.5		17.1
-
-iperf3 performance with this patch-series applied:
-
-		TX [Mbps]	RX [Mbps]
-  PSM off:	16.0		19.9
-  PSM  on:	11.7		18.0
-
-(PSM == power-save-mode; controlled by iw dev wlan0 set power_save on/off)
-
-David Mosberger-Tang (50):
-  wilc1000: don't hold txq_spinlock while initializing AC queue limits
-  wilc1000: switch txq_event from completion to waitqueue
-  wilc1000: move receive-queue stats from txq to wilc structure
-  wilc1000: factor common code in wilc_wlan_cfg_set() and wilc_wlan_cfg_get()
-  wilc1000: add wilc_wlan_tx_packet_done() function
-  wilc1000: move tx packet drop code into its own function
-  wilc1000: increment tx_dropped stat counter on tx packet drop
-  wilc1000: fix management packet type inconsistency
-  wilc1000: prepare wilc_wlan_tx_packet_done() for sk_buff changes
-  wilc1000: factor initialization of tx queue-specific packet fields
-  wilc1000: convert tqx_entries from "int" to "atomic_t"
-  wilc1000: refactor wilc_wlan_cfg_commit() a bit
-  wilc1000: sanitize config packet sequence number management a bit
-  wilc1000: if there is no tx packet, don't increment packets-sent counter
-  wilc1000: add struct wilc_skb_tx_cb as an alias of struct txq_entry_t
-  wilc1000: switch tx queue to normal sk_buff entries
-  wilc1000: remove no longer used "vif" argument from init_txq_entry()
-  wilc1000: split huge tx handler into subfunctions
-  wilc1000: don't tell the chip to go to sleep while copying tx packets
-  wilc1000: eliminate "max_size_over" variable in fill_vmm_table
-  wilc1000: declare read-only ac_preserve_ratio as static and const
-  wilc1000: minor syntax cleanup
-  wilc1000: introduce symbolic names for two tx-related control bits
-  wilc1000: protect tx_q_limit with a mutex instead of a spinlock
-  wilc1000: replace txq_spinlock with ack_filter_lock mutex
-  wilc1000: reduce amount of time ack_filter_lock is held
-  wilc1000: simplify ac_balance() a bit
-  wilc1000: improve send_packets() a bit
-  wilc1000: factor header length calculation into a new function
-  wilc1000: use more descriptive variable names
-  wilc1000: eliminate another magic constant
-  wilc1000: introduce vmm_table_entry() helper function
-  wilc1000: move ac_desired_ratio calculation to where its needed
-  wilc1000: restructure wilc-wlan_handle_txq() for clarity
-  wilc1000: introduce copy_and_send_packets() helper function
-  wilc1000: introduce transmit path chip queue
-  wilc1000: introduce set_header() function
-  wilc1000: take advantage of chip queue
-  wilc1000: eliminate txq_add_to_head_cs mutex
-  wilc1000: introduce schedule_packets() function
-  wilc1000: use more descriptive variable name
-  wilc1000: simplify code by adding header/padding to skb
-  wilc1000: add support for zero-copy transmit of tx packets
-  wilc1000: don't allocate tx_buffer when zero-copy is available
-  wilc1000: move struct wilc_spi declaration
-  wilc1000: remove duplicate CRC calculation code
-  wilc1000: factor SPI DMA command initialization code into a function
-  wilc1000: introduce function to find and check DMA response
-  wilc1000: implement zero-copy transmit support for SPI
-  wilc1000: add module parameter "disable_zero_copy_tx" to SPI driver
-
- .../wireless/microchip/wilc1000/cfg80211.c    |  45 +-
- drivers/net/wireless/microchip/wilc1000/mon.c |  36 +-
- .../net/wireless/microchip/wilc1000/netdev.c  |  46 +-
- .../net/wireless/microchip/wilc1000/netdev.h  |  41 +-
- drivers/net/wireless/microchip/wilc1000/spi.c | 293 ++++-
- .../net/wireless/microchip/wilc1000/wlan.c    | 998 ++++++++++--------
- .../net/wireless/microchip/wilc1000/wlan.h    |  55 +-
- 7 files changed, 888 insertions(+), 626 deletions(-)
-
+diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
+index 8bff1d8050b11..54dfb2b9f3524 100644
+--- a/drivers/net/wireless/microchip/wilc1000/wlan.c
++++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
+@@ -605,43 +605,43 @@ void host_sleep_notify(struct wilc *wilc)
+ }
+ EXPORT_SYMBOL_GPL(host_sleep_notify);
+ 
+-int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
++/**
++ * fill_vmm_table() - Fill VMM table with packets to be sent
++ * @wilc: Pointer to the wilc structure.
++ * @ac_desired_ratio: First-round limit on number of packets to add from the
++ *	respective queue.
++ * @vmm_table: Pointer to the VMM table to fill.
++ * @vmm_entries_ac: Pointer to the queue-number table to fill.
++ *	For each packet added to the VMM table, this will be filled in
++ *	with the queue-number (access-category) that the packet is coming
++ *	from.
++ *
++ * Fill VMM table with packets waiting to be sent.  The packets are
++ * added based on access category (priority) but also balanced to
++ * provide fairness.
++ *
++ * Context: Since this function peeks at the packet queues, the
++ * txq_add_to_head_cs mutex must be acquired before calling this
++ * function.
++ *
++ * Return:
++ *	The number of VMM entries filled in.  The table is 0-terminated
++ *	so the returned number is at most WILC_VMM_TBL_SIZE-1.
++ */
++static int fill_vmm_table(const struct wilc *wilc,
++			  u8 ac_desired_ratio[NQUEUES],
++			  u32 vmm_table[WILC_VMM_TBL_SIZE],
++			  u8 vmm_entries_ac[WILC_VMM_TBL_SIZE])
+ {
+-	int i, entries = 0;
++	int i;
+ 	u8 k, ac;
+ 	u32 sum;
+-	u32 reg;
+-	u8 ac_desired_ratio[NQUEUES] = {0, 0, 0, 0};
+ 	u8 ac_preserve_ratio[NQUEUES] = {1, 1, 1, 1};
+ 	u8 *num_pkts_to_add;
+-	u8 vmm_entries_ac[WILC_VMM_TBL_SIZE];
+-	u32 offset = 0;
+ 	bool max_size_over = 0, ac_exist = 0;
+ 	int vmm_sz = 0;
+ 	struct sk_buff *tqe_q[NQUEUES];
+ 	struct wilc_skb_tx_cb *tx_cb;
+-	int ret = 0;
+-	int counter;
+-	int timeout;
+-	u32 vmm_table[WILC_VMM_TBL_SIZE];
+-	u8 ac_pkt_num_to_chip[NQUEUES] = {0, 0, 0, 0};
+-	const struct wilc_hif_func *func;
+-	int srcu_idx;
+-	u8 *txb = wilc->tx_buffer;
+-	struct wilc_vif *vif;
+-
+-	if (wilc->quit)
+-		goto out_update_cnt;
+-
+-	if (ac_balance(wilc, ac_desired_ratio))
+-		return -EINVAL;
+-
+-	mutex_lock(&wilc->txq_add_to_head_cs);
+-
+-	srcu_idx = srcu_read_lock(&wilc->srcu);
+-	list_for_each_entry_rcu(vif, &wilc->vif_list, list)
+-		wilc_wlan_txq_filter_dup_tcp_ack(vif->ndev);
+-	srcu_read_unlock(&wilc->srcu, srcu_idx);
+ 
+ 	for (ac = 0; ac < NQUEUES; ac++)
+ 		tqe_q[ac] = skb_peek(&wilc->txq[ac]);
+@@ -695,11 +695,31 @@ int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
+ 		num_pkts_to_add = ac_preserve_ratio;
+ 	} while (!max_size_over && ac_exist);
+ 
+-	if (i == 0)
+-		goto out_unlock;
+ 	vmm_table[i] = 0x0;
++	return i;
++}
++
++/**
++ * send_vmm_table() - Send the VMM table to the chip
++ * @wilc: Pointer to the wilc structure.
++ * @i: The number of entries in the VMM table.
++ * @vmm_table: The VMM table to send.
++ *
++ * Send the VMM table to the chip and get back the number of entries
++ * that the chip can accept.
++ *
++ * Context: The bus must have been acquired before calling this
++ * function.
++ *
++ * Return:
++ *	The number of VMM table entries the chip can accept.
++ */
++static int send_vmm_table(struct wilc *wilc, int i, const u32 *vmm_table)
++{
++	const struct wilc_hif_func *func;
++	int ret, counter, entries, timeout;
++	u32 reg;
+ 
+-	acquire_bus(wilc, WILC_BUS_ACQUIRE_AND_WAKEUP);
+ 	counter = 0;
+ 	func = wilc->hif_func;
+ 	do {
+@@ -721,7 +741,7 @@ int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
+ 	} while (!wilc->quit);
+ 
+ 	if (ret)
+-		goto out_release_bus;
++		return ret;
+ 
+ 	timeout = 200;
+ 	do {
+@@ -759,22 +779,38 @@ int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
+ 				break;
+ 			reg &= ~BIT(0);
+ 			ret = func->hif_write_reg(wilc, WILC_HOST_TX_CTRL, reg);
++		} else {
++			ret = entries;
+ 		}
+ 	} while (0);
++	return ret;
++}
+ 
+-	if (ret)
+-		goto out_release_bus;
+-
+-	if (entries == 0) {
+-		/*
+-		 * No VMM space available in firmware so retry to transmit
+-		 * the packet from tx queue.
+-		 */
+-		ret = WILC_VMM_ENTRY_FULL_RETRY;
+-		goto out_release_bus;
+-	}
+-
+-	release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP);
++/**
++ * copy_packets() - Copy packets to the transmit buffer
++ * @wilc: Pointer to the wilc structure.
++ * @entries: The number of packets to send from the VMM table.
++ * @vmm_table: The VMM table to send.
++ * @vmm_entries_ac: Table index i contains the number of the queue to
++ *	take the i-th packet from.
++ *
++ * Copy a set of packets to the transmit buffer.
++ *
++ * Context: The txq_add_to_head_cs mutex must still be held when
++ * calling this function.
++ *
++ * Return:
++ *	Negative number on error, 0 on success.
++ */
++static int copy_packets(struct wilc *wilc, int entries, u32 *vmm_table,
++			u8 *vmm_entries_ac)
++{
++	u8 ac_pkt_num_to_chip[NQUEUES] = {0, 0, 0, 0};
++	struct wilc_skb_tx_cb *tx_cb;
++	u8 *txb = wilc->tx_buffer;
++	struct wilc_vif *vif;
++	int i, vmm_sz;
++	u32 offset;
+ 
+ 	offset = 0;
+ 	i = 0;
+@@ -829,16 +865,88 @@ int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
+ 	} while (--entries);
+ 	for (i = 0; i < NQUEUES; i++)
+ 		wilc->fw[i].count += ac_pkt_num_to_chip[i];
++	return offset;
++}
+ 
+-	acquire_bus(wilc, WILC_BUS_ACQUIRE_AND_WAKEUP);
++/**
++ * send_packets() - Send packets to the chip
++ * @wilc: Pointer to the wilc structure.
++ * @len: The length of the buffer containing the packets to be sent to
++ *	the chip.
++ *
++ * Send the packets in the VMM table to the chip.
++ *
++ * Context: The bus must have been acquired.
++ *
++ * Return:
++ *	Negative number on error, 0 on success.
++ */
++static int send_packets(struct wilc *wilc, int len)
++{
++	const struct wilc_hif_func *func = wilc->hif_func;
++	int ret;
++	u8 *txb = wilc->tx_buffer;
+ 
+ 	ret = func->hif_clear_int_ext(wilc, ENABLE_TX_VMM);
+ 	if (ret)
+-		goto out_release_bus;
++		return ret;
++
++	return func->hif_block_tx_ext(wilc, 0, txb, len);
++}
++
++int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
++{
++	int i, entries, len;
++	u8 ac_desired_ratio[NQUEUES] = {0, 0, 0, 0};
++	u8 vmm_entries_ac[WILC_VMM_TBL_SIZE];
++	int ret = 0;
++	u32 vmm_table[WILC_VMM_TBL_SIZE];
++	int srcu_idx;
++	struct wilc_vif *vif;
++
++	if (wilc->quit)
++		goto out_update_cnt;
++
++	if (ac_balance(wilc, ac_desired_ratio))
++		return -EINVAL;
++
++	mutex_lock(&wilc->txq_add_to_head_cs);
++
++	srcu_idx = srcu_read_lock(&wilc->srcu);
++	list_for_each_entry_rcu(vif, &wilc->vif_list, list)
++		wilc_wlan_txq_filter_dup_tcp_ack(vif->ndev);
++	srcu_read_unlock(&wilc->srcu, srcu_idx);
++
++	i = fill_vmm_table(wilc, ac_desired_ratio, vmm_table, vmm_entries_ac);
++	if (i == 0)
++		goto out_unlock;
++
++	acquire_bus(wilc, WILC_BUS_ACQUIRE_AND_WAKEUP);
++
++	ret = send_vmm_table(wilc, i, vmm_table);
++
++	release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP);
++
++	if (ret < 0)
++		goto out_unlock;
++
++	entries = ret;
++	if (entries == 0) {
++		/* No VMM space available in firmware.  Inform caller
++		 * to retry later.
++		 */
++		ret = WILC_VMM_ENTRY_FULL_RETRY;
++		goto out_unlock;
++	}
++
++	len = copy_packets(wilc, entries, vmm_table, vmm_entries_ac);
++	if (len <= 0)
++		goto out_unlock;
++
++	acquire_bus(wilc, WILC_BUS_ACQUIRE_AND_WAKEUP);
+ 
+-	ret = func->hif_block_tx_ext(wilc, 0, txb, offset);
++	ret = send_packets(wilc, len);
+ 
+-out_release_bus:
+ 	release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP);
+ 
+ out_unlock:
 -- 
 2.25.1
 

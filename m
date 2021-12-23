@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 557ED47DD0D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C550F47DCEF
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:15:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346621AbhLWBPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:15:41 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:18408 "EHLO
+        id S1346255AbhLWBPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:15:14 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:17762 "EHLO
         o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345804AbhLWBOT (ORCPT
+        with ESMTP id S238009AbhLWBOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:14:19 -0500
+        Wed, 22 Dec 2021 20:14:07 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
-        h=from:subject:in-reply-to:references:mime-version:to:cc:
-        content-transfer-encoding:content-type;
-        s=sgd; bh=9GhperGdLp5mSs2oGPGWX3vVh6QZlgVmNWU2J8h4eJY=;
-        b=LDUXjoktAgidrqd0DknbCqj+Cq40xD+T0dA+omHvM5a/4tAsOr8lu85ZnBVyl117D4T1
-        FF/7RavN0zfbhSOk65PFCRePblFoKBm7YovjdXl36Irqi5OE0cZerC77CMMg778yvMHGOA
-        4LQvwb8c/Sa5XuP3gfzg0bWBOzGIC4GeFNSiViaBFUloEd1urrYLDtOBRa8VKL3ZJjDrPe
-        HBXWnwHuUWJxbf9WKQZS2ZbRYEtdF9hZLmGCSMNC9oNE7TvGuLp41zLzEMZkmjB3UaN17Q
-        vAIQJ6EZkyay17ZVb9Lr0l2llKMvaffc9QCNvyD8Ah15pv21Nq8rtulondgJF2Nw==
-Received: by filterdrecv-656998cfdd-vtnvg with SMTP id filterdrecv-656998cfdd-vtnvg-1-61C3CD5E-1E
-        2021-12-23 01:14:06.716473164 +0000 UTC m=+7955207.766253174
+        h=from:subject:mime-version:to:cc:content-transfer-encoding:
+        content-type;
+        s=sgd; bh=sqK3n4KAn/bFCIZgOngBsx4n4PZvfSggV2zGspKRJnk=;
+        b=RHQ51xrjxq9tDevjJI2vs7stnJm69FoFmsx6aDLC/9A15CJ7pfadfRIeIDqiDtoTyqcT
+        RBBKtSj7ClOiglfoJ+17g3xUxOGLb3coZtzMPTtHmpSSj6bALe+uZEj3QvuEDjWzKXAeHa
+        qixZrPJSZvktHdnIGYRiLVsPZAFzEPHaR69FttK394PhbkluXxgH+T9ZOClpE98ia73HT3
+        NhI8OhcbhiWZOEt9HAaROEIhsWbAHJuFc0KahUgCA+tNtSZVcyOB7z6ZXxpSjr2nfy4CC1
+        nQqvZs2wYY6Oy6qIsDfcDg2U/SNNWlCHswik2JB3fQ5FxSeRuD5puRYAfCWNa+/Q==
+Received: by filterdrecv-656998cfdd-v2fsg with SMTP id filterdrecv-656998cfdd-v2fsg-1-61C3CD5D-2C
+        2021-12-23 01:14:05.85301251 +0000 UTC m=+7955206.079180242
 Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-4-0 (SG)
+        by geopod-ismtpd-6-0 (SG)
         with ESMTP
-        id FZOMOdXcTZSqSpHTHFO7eA
-        Thu, 23 Dec 2021 01:14:06.545 +0000 (UTC)
+        id vbucpfIiSqi5TqOhTl6K8A
+        Thu, 23 Dec 2021 01:14:05.577 +0000 (UTC)
 Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id 3DED070133A; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
+        id CF34A700394; Wed, 22 Dec 2021 18:14:04 -0700 (MST)
 From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH v2 19/50] wilc1000: don't tell the chip to go to sleep while
- copying tx packets
+Subject: [PATCH v2 00/50] wilc1000: rework tx path to use sk_buffs throughout
 Date:   Thu, 23 Dec 2021 01:14:06 +0000 (UTC)
-Message-Id: <20211223011358.4031459-20-davidm@egauge.net>
+Message-Id: <20211223011358.4031459-1-davidm@egauge.net>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211223011358.4031459-1-davidm@egauge.net>
-References: <20211223011358.4031459-1-davidm@egauge.net>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvP9gs2xqRpyIBtGYR?=
- =?us-ascii?Q?lDavY3uO9Y96GusEhphEvR8U2Or9IV1GN9AtCEU?=
- =?us-ascii?Q?roMXcil4bWWz0vBANOAMeohSevp9gTXHIlh=2FsAZ?=
- =?us-ascii?Q?HYRVNVZ3n3hCHJMS90SmO+hpy2xJZq83MKSAfKR?=
- =?us-ascii?Q?IqAqJvS4eEsTYn7qepezzG8CAjdYWSy29ZEVttH?=
- =?us-ascii?Q?JN6DhPfjEayTq+mO87S9A=3D=3D?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvFYw=2FjcbvhZcqgNlT?=
+ =?us-ascii?Q?QDMsFFPh1nkoeqdwNK+Wpr1q3dcBMq5RjcZpWx3?=
+ =?us-ascii?Q?RmrrlFu8O3k2VAugLWDHq0Np4VKwGUhFw3Zw6PG?=
+ =?us-ascii?Q?aoCCQsH72llzMJtUuNoiK7GyzhKWzj+sgZYpNd6?=
+ =?us-ascii?Q?odt3GmZwaFvB1DhMcOIBLTvIQZgPHfItJ=2FE+g6T?=
+ =?us-ascii?Q?a3yrDaUy4hcOqyTifgI=2Fw=3D=3D?=
 To:     Ajay Singh <ajay.kathat@microchip.com>
 Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
         Kalle Valo <kvalo@kernel.org>,
@@ -61,60 +58,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Putting the chip to sleep and waking it up again is relatively slow,
-so there is no point to put the chip to sleep for the short time it
-takes to copy a couple of packets.
+OK, so I'm nervous about such a large patch series, but it took a lot
+of work to break things down into atomic changes.  This should be it
+for the transmit path as far as I'm concerned.
 
-Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
----
- .../net/wireless/microchip/wilc1000/wlan.c    | 24 +++++++++----------
- 1 file changed, 11 insertions(+), 13 deletions(-)
+- v2:
+	- Fix 64-bit architecture compile breakage found by
+          kernel build daemon.
+	- Fix kernel-doc issues.
+	- All patches compie with "make W=1" now and pass scripts/checkpatch.pl
+        - Expand series to clean up some locking issues.
+        - Expand series to support zero-copy tx transfers for SPI.
+        - Rebase to latest wireless-drivers-next
 
-diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
-index 54dfb2b9f3524..a6064a85140b4 100644
---- a/drivers/net/wireless/microchip/wilc1000/wlan.c
-+++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
-@@ -924,29 +924,27 @@ int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
- 	acquire_bus(wilc, WILC_BUS_ACQUIRE_AND_WAKEUP);
- 
- 	ret = send_vmm_table(wilc, i, vmm_table);
-+	if (ret <= 0) {
-+		if (ret == 0)
-+			/* No VMM space available in firmware.  Inform
-+			 * caller to retry later.
-+			 */
-+			ret = WILC_VMM_ENTRY_FULL_RETRY;
-+		goto out_release_bus;
-+	}
- 
--	release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP);
--
--	if (ret < 0)
--		goto out_unlock;
-+	release_bus(wilc, WILC_BUS_RELEASE_ONLY);
- 
- 	entries = ret;
--	if (entries == 0) {
--		/* No VMM space available in firmware.  Inform caller
--		 * to retry later.
--		 */
--		ret = WILC_VMM_ENTRY_FULL_RETRY;
--		goto out_unlock;
--	}
--
- 	len = copy_packets(wilc, entries, vmm_table, vmm_entries_ac);
- 	if (len <= 0)
- 		goto out_unlock;
- 
--	acquire_bus(wilc, WILC_BUS_ACQUIRE_AND_WAKEUP);
-+	acquire_bus(wilc, WILC_BUS_ACQUIRE_ONLY);
- 
- 	ret = send_packets(wilc, len);
- 
-+out_release_bus:
- 	release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP);
- 
- out_unlock:
+Rework tx path to use sk_buffs throughout and optionally provide
+zero-copy transmit.
+
+Based on the earlier discussion (RFC: wilc1000: refactor TX path to
+use sk_buff queue), here is the full patch series to clean up and
+simplify the TX path.
+
+The biggest patch is 0016, which is the one actually switching the
+queue data type, but I worked hard to minimize it to only direct
+changes due to the type changes.
+
+There is no dramatic performance difference due to this patch.  I'd
+expect the new code to be slightly faster, but my WLAN
+test-environment is not sufficiently controlled to be sure of that.
+
+original iperf3 performance (duration 120 seconds):
+
+                TX [Mbps]	RX [Mbps]
+  PSM off:	14.8		18.9
+  PSM  on:	10.5		17.1
+
+iperf3 performance with this patch-series applied:
+
+		TX [Mbps]	RX [Mbps]
+  PSM off:	16.0		19.9
+  PSM  on:	11.7		18.0
+
+(PSM == power-save-mode; controlled by iw dev wlan0 set power_save on/off)
+
+David Mosberger-Tang (50):
+  wilc1000: don't hold txq_spinlock while initializing AC queue limits
+  wilc1000: switch txq_event from completion to waitqueue
+  wilc1000: move receive-queue stats from txq to wilc structure
+  wilc1000: factor common code in wilc_wlan_cfg_set() and wilc_wlan_cfg_get()
+  wilc1000: add wilc_wlan_tx_packet_done() function
+  wilc1000: move tx packet drop code into its own function
+  wilc1000: increment tx_dropped stat counter on tx packet drop
+  wilc1000: fix management packet type inconsistency
+  wilc1000: prepare wilc_wlan_tx_packet_done() for sk_buff changes
+  wilc1000: factor initialization of tx queue-specific packet fields
+  wilc1000: convert tqx_entries from "int" to "atomic_t"
+  wilc1000: refactor wilc_wlan_cfg_commit() a bit
+  wilc1000: sanitize config packet sequence number management a bit
+  wilc1000: if there is no tx packet, don't increment packets-sent counter
+  wilc1000: add struct wilc_skb_tx_cb as an alias of struct txq_entry_t
+  wilc1000: switch tx queue to normal sk_buff entries
+  wilc1000: remove no longer used "vif" argument from init_txq_entry()
+  wilc1000: split huge tx handler into subfunctions
+  wilc1000: don't tell the chip to go to sleep while copying tx packets
+  wilc1000: eliminate "max_size_over" variable in fill_vmm_table
+  wilc1000: declare read-only ac_preserve_ratio as static and const
+  wilc1000: minor syntax cleanup
+  wilc1000: introduce symbolic names for two tx-related control bits
+  wilc1000: protect tx_q_limit with a mutex instead of a spinlock
+  wilc1000: replace txq_spinlock with ack_filter_lock mutex
+  wilc1000: reduce amount of time ack_filter_lock is held
+  wilc1000: simplify ac_balance() a bit
+  wilc1000: improve send_packets() a bit
+  wilc1000: factor header length calculation into a new function
+  wilc1000: use more descriptive variable names
+  wilc1000: eliminate another magic constant
+  wilc1000: introduce vmm_table_entry() helper function
+  wilc1000: move ac_desired_ratio calculation to where its needed
+  wilc1000: restructure wilc-wlan_handle_txq() for clarity
+  wilc1000: introduce copy_and_send_packets() helper function
+  wilc1000: introduce transmit path chip queue
+  wilc1000: introduce set_header() function
+  wilc1000: take advantage of chip queue
+  wilc1000: eliminate txq_add_to_head_cs mutex
+  wilc1000: introduce schedule_packets() function
+  wilc1000: use more descriptive variable name
+  wilc1000: simplify code by adding header/padding to skb
+  wilc1000: add support for zero-copy transmit of tx packets
+  wilc1000: don't allocate tx_buffer when zero-copy is available
+  wilc1000: move struct wilc_spi declaration
+  wilc1000: remove duplicate CRC calculation code
+  wilc1000: factor SPI DMA command initialization code into a function
+  wilc1000: introduce function to find and check DMA response
+  wilc1000: implement zero-copy transmit support for SPI
+  wilc1000: add module parameter "disable_zero_copy_tx" to SPI driver
+
+ .../wireless/microchip/wilc1000/cfg80211.c    |  45 +-
+ drivers/net/wireless/microchip/wilc1000/mon.c |  36 +-
+ .../net/wireless/microchip/wilc1000/netdev.c  |  46 +-
+ .../net/wireless/microchip/wilc1000/netdev.h  |  41 +-
+ drivers/net/wireless/microchip/wilc1000/spi.c | 293 ++++-
+ .../net/wireless/microchip/wilc1000/wlan.c    | 998 ++++++++++--------
+ .../net/wireless/microchip/wilc1000/wlan.h    |  55 +-
+ 7 files changed, 888 insertions(+), 626 deletions(-)
+
 -- 
 2.25.1
 

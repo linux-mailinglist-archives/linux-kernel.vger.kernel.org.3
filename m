@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6842F47DD3B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:18:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F50F47DD33
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:18:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346925AbhLWBQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:16:39 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:27358 "EHLO
+        id S1346867AbhLWBQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:16:25 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:27440 "EHLO
         o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346243AbhLWBOp (ORCPT
+        with ESMTP id S1346262AbhLWBOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:14:45 -0500
+        Wed, 22 Dec 2021 20:14:53 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
         h=from:subject:in-reply-to:references:mime-version:to:cc:
         content-transfer-encoding:content-type;
-        s=sgd; bh=O3ZizfkdwvjAFL0IllFWvZYbWlz/CPB//NPk13szDnA=;
-        b=XTCcYYMiXOfOO8UZtTG2f4+h7DnLy2umVMF+CdELsqaDItfv4WYfrK+AW4TM2ZY7Wiz5
-        hc3RNIYrxa5LoCQedwb+b4jaEdcBZJYqBWbR4RQ8qhU01QPzbUblFv4RAINGa0R6UPBXr6
-        accQA7xeA371StT45tuT9cpy/iWPU8Cc1EdmRZPoG56rEypnktm6AM3IilMihvm75KNBEl
-        IYvFNEPcfLHWEJxS/lqNTlroQHVDUvrDRGPQMaB1D4AHnh2U4hQjkmVZ5g0sJmVEvTrB2J
-        bH8gzmyLyFuYSgzbupsRv9Fozsi72vtPL1ZnYAQrsXhBhPwVXMFITMWAGBNyENTg==
-Received: by filterdrecv-64fcb979b9-6vbpf with SMTP id filterdrecv-64fcb979b9-6vbpf-1-61C3CD5F-5
-        2021-12-23 01:14:07.110980273 +0000 UTC m=+8644638.115216542
+        s=sgd; bh=xddQg0IvMbQSPuAc5H694hthTJIRjKrXhZw1xq1hEks=;
+        b=Wrmx8l0su8dp9ndnFNO6sOW5lBaz+uiSFn7IMZNva52x3OVqh2+M/sZoOYrQVQTYyRs8
+        Md/+jjaQSKOr8aoFyr6TuKZsXSXEMia5qHZsgwWiDmnGAen0fPe1z+f3jjOQArqNr1dsT5
+        FnGMg9TlUXC3+VHoFrFYzpd7WxFc1I1umCcCnBPmcCXIMxJhmn7CJPF6Lcv9DJz0MfbSr9
+        1ZD5xWt5xk86qtbENBu5Oz6SogHrZ1GNfgSqsYi9Ntw+gnUg3xB3K7VIRXMRHOycOwW5Kk
+        Yh9HSkAtrTOkCyIHSAztMVeWqXQvdI7AEJTRYhkXwph7WSPBrZK3FGmz4I9fxNag==
+Received: by filterdrecv-7bf5c69d5-5zdgz with SMTP id filterdrecv-7bf5c69d5-5zdgz-1-61C3CD5F-9
+        2021-12-23 01:14:07.092312815 +0000 UTC m=+9687226.301035880
 Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-5-1 (SG)
+        by geopod-ismtpd-2-0 (SG)
         with ESMTP
-        id TsQv68ysQ0ubKGaRoRZ4qw
-        Thu, 23 Dec 2021 01:14:06.927 +0000 (UTC)
+        id VtsPa1YnRSSp8kNi4WOeEw
+        Thu, 23 Dec 2021 01:14:06.971 +0000 (UTC)
 Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id E53EE701518; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
+        id 03A30701537; Wed, 22 Dec 2021 18:14:06 -0700 (MST)
 From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH v2 45/50] wilc1000: move struct wilc_spi declaration
+Subject: [PATCH v2 47/50] wilc1000: factor SPI DMA command initialization code
+ into a function
 Date:   Thu, 23 Dec 2021 01:14:07 +0000 (UTC)
-Message-Id: <20211223011358.4031459-46-davidm@egauge.net>
+Message-Id: <20211223011358.4031459-48-davidm@egauge.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211223011358.4031459-1-davidm@egauge.net>
 References: <20211223011358.4031459-1-davidm@egauge.net>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvH9Cvv=2F5ehKJw4467?=
- =?us-ascii?Q?7quhFIAFUnbiUWmbmmTg6+hqXGuYJ3ieEzuxpbm?=
- =?us-ascii?Q?7Je+yt+BbiVHKqzw5OrYGLhvWgBHh5hmLhcwiGx?=
- =?us-ascii?Q?vUDvb09wx1aTcHtWXta2tqSykUGcpxENuXbfHgf?=
- =?us-ascii?Q?4jsGU=2FjvTtzO1inI253zcbm3p25fq0VAhXBfw9A?=
- =?us-ascii?Q?sJCvUMz2Rvkvv44n+cUSg=3D=3D?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvANxWyaBzmrT8i6kB?=
+ =?us-ascii?Q?IwcOApodCCbwNMcx6CCkJweUuGfzFJsSRyTzgz3?=
+ =?us-ascii?Q?Qq5GQeAeySg3GXqJwB66FAOqWelVjAimJ3EHSeX?=
+ =?us-ascii?Q?KaQFQV50GpNDqd6go3HUqQsVWe8uk5KewzCWteY?=
+ =?us-ascii?Q?uCOD6=2FOlLY6OZwvCCmx1X6g3wUpkFW74bRzwQr7?=
+ =?us-ascii?Q?9f=2FmbxJoG55lhc1NsyROA=3D=3D?=
 To:     Ajay Singh <ajay.kathat@microchip.com>
 Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
         Kalle Valo <kvalo@kernel.org>,
@@ -60,54 +61,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just move the structure down by a few lines so that a later patch can
-be understood more easily.  No functional change.
+Introduce wilc_spi_dma_init_cmd() as a helper function as this will
+come in handy later.
 
 Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
 ---
- drivers/net/wireless/microchip/wilc1000/spi.c | 22 +++++++++----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ drivers/net/wireless/microchip/wilc1000/spi.c | 41 +++++++++++++------
+ 1 file changed, 28 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/net/wireless/microchip/wilc1000/spi.c b/drivers/net/wireless/microchip/wilc1000/spi.c
-index 2c2ed4b09efd5..5f73b3d2d2112 100644
+index 189907580d921..3e2022b43ee70 100644
 --- a/drivers/net/wireless/microchip/wilc1000/spi.c
 +++ b/drivers/net/wireless/microchip/wilc1000/spi.c
-@@ -41,17 +41,6 @@ MODULE_PARM_DESC(enable_crc16,
-  */
- #define WILC_SPI_RSP_HDR_EXTRA_DATA	8
+@@ -650,21 +650,14 @@ static int wilc_spi_write_cmd(struct wilc *wilc, u8 cmd, u32 adr, u32 data,
+ 	return 0;
+ }
  
--struct wilc_spi {
--	bool isinit;		/* true if SPI protocol has been configured */
--	bool probing_crc;	/* true if we're probing chip's CRC config */
--	bool crc7_enabled;	/* true if crc7 is currently enabled */
--	bool crc16_enabled;	/* true if crc16 is currently enabled */
--	struct wilc_gpios {
--		struct gpio_desc *enable;	/* ENABLE GPIO or NULL */
--		struct gpio_desc *reset;	/* RESET GPIO or NULL */
--	} gpios;
--};
--
- static const struct wilc_hif_func wilc_hif_spi;
+-static int wilc_spi_dma_rw(struct wilc *wilc, u8 cmd, u32 adr, u8 *b, u32 sz)
++static int wilc_spi_dma_init_cmd(struct wilc *wilc, struct wilc_spi_cmd *c,
++				 u8 cmd, u32 adr, u32 sz)
+ {
+ 	struct spi_device *spi = to_spi_device(wilc->dev);
+ 	struct wilc_spi *spi_priv = wilc->bus_data;
+-	u16 crc_recv, crc_calc;
+-	u8 wb[32], rb[32];
+-	int cmd_len, resp_len;
+-	int retry, ix = 0;
+-	u8 crc[2], *crc7;
+-	struct wilc_spi_cmd *c;
+-	struct wilc_spi_rsp_data *r;
++	int cmd_len;
++	u8 *crc7;
  
- static int wilc_spi_reset(struct wilc *wilc);
-@@ -109,6 +98,17 @@ static int wilc_spi_reset(struct wilc *wilc);
- #define WILC_SPI_COMMAND_STAT_SUCCESS		0
- #define WILC_GET_RESP_HDR_START(h)		(((h) >> 4) & 0xf)
- 
-+struct wilc_spi {
-+	bool isinit;		/* true if SPI protocol has been configured */
-+	bool probing_crc;	/* true if we're probing chip's CRC config */
-+	bool crc7_enabled;	/* true if crc7 is currently enabled */
-+	bool crc16_enabled;	/* true if crc16 is currently enabled */
-+	struct wilc_gpios {
-+		struct gpio_desc *enable;	/* ENABLE GPIO or NULL */
-+		struct gpio_desc *reset;	/* RESET GPIO or NULL */
-+	} gpios;
-+};
+-	memset(wb, 0x0, sizeof(wb));
+-	memset(rb, 0x0, sizeof(rb));
+-	c = (struct wilc_spi_cmd *)wb;
+ 	c->cmd_type = cmd;
+ 	if (cmd == CMD_DMA_WRITE || cmd == CMD_DMA_READ) {
+ 		c->u.dma_cmd.addr[0] = adr >> 16;
+@@ -687,10 +680,32 @@ static int wilc_spi_dma_rw(struct wilc *wilc, u8 cmd, u32 adr, u8 *b, u32 sz)
+ 		return -EINVAL;
+ 	}
+ 	if (spi_priv->crc7_enabled) {
+-		crc7 = wb + cmd_len;
+-		*crc7 = wilc_get_crc7(wb, cmd_len);
++		crc7 = (u8 *)c + cmd_len;
++		*crc7 = wilc_get_crc7((u8 *)c, cmd_len);
+ 		cmd_len += 1;
+ 	}
++	return cmd_len;
++}
 +
- struct wilc_spi_cmd {
- 	u8 cmd_type;
- 	union {
++static int wilc_spi_dma_rw(struct wilc *wilc, u8 cmd, u32 adr, u8 *b, u32 sz)
++{
++	struct spi_device *spi = to_spi_device(wilc->dev);
++	struct wilc_spi *spi_priv = wilc->bus_data;
++	u16 crc_recv, crc_calc;
++	u8 wb[32], rb[32];
++	int cmd_len, resp_len;
++	int retry, ix = 0;
++	u8 crc[2];
++	struct wilc_spi_cmd *c;
++	struct wilc_spi_rsp_data *r;
++
++	memset(wb, 0x0, sizeof(wb));
++	memset(rb, 0x0, sizeof(rb));
++	c = (struct wilc_spi_cmd *)wb;
++
++	cmd_len = wilc_spi_dma_init_cmd(wilc, c, cmd, adr, sz);
++	if (cmd_len < 0)
++		return -EINVAL;
+ 
+ 	resp_len = sizeof(*r);
+ 
 -- 
 2.25.1
 

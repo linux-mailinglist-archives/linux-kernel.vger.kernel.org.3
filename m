@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2822547DCD1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D4F47DCCD
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:15:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345940AbhLWBOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:14:18 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:18100 "EHLO
+        id S1345914AbhLWBOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:14:15 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:18044 "EHLO
         o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241655AbhLWBOK (ORCPT
+        with ESMTP id S240022AbhLWBOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Dec 2021 20:14:10 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
         h=from:subject:in-reply-to:references:mime-version:to:cc:
         content-transfer-encoding:content-type;
-        s=sgd; bh=RrC6yl4xH6yjl3QxLWQ7ovhkZ1xBTAY6/gvQ4887ii8=;
-        b=lCw62VJ1nIh5yKKDj+tjObc0DQ0ZSv6WcUyofX/1byILozJ8h7to26jWmhcnCtzxHlLJ
-        bH45ZcIk7s2IET4bqlz760PYwUBMjXcHhE4JpkLp7chnwPWKZ2byUaavmZHS6jTaK2+4qN
-        qhghAXn9QDkv6LHyawWdfObgmKPeLVPQuuirXJbYzSspe+zicQQsG6to7vpGZiUGhSvfzl
-        oZARFFcgQHYw7vLh9ieNTCHImbirj9PZUnFcIjhBw06WRwoyzBm5rU/xHPr0Nahdb3Onbm
-        LBEwXtgDA6rkyBUOL8aP3Qx1S4MtrrqX1hppa4Lq6G6wYvoHBfZVDnKhkWu9MGyw==
-Received: by filterdrecv-75ff7b5ffb-ndqvq with SMTP id filterdrecv-75ff7b5ffb-ndqvq-1-61C3CD5E-13
-        2021-12-23 01:14:06.305257498 +0000 UTC m=+9687224.905653124
+        s=sgd; bh=pzoQ8/2NNAK4ATykxYPnsdStYUF1CXuhMggSoBJHvS0=;
+        b=kggOZLvyCFjQAqRfjyC9khGmtSKnSeXjxfIsv+w51tombRHzqOpGaFpK9w2ov+HqwPoR
+        9BPqJvOQSOQjv6YEi/EhxXzCxYDpt/qJ08xCeIiisJtCZgJ+D+I3ANQGtn4lH83h39khPg
+        SGSDy6n4CfttLWBPA05HuQG9KoQWistIbE9Gx5W5I+r3w0Ra0TC8tZr8WQ2Ug5riEi4RjY
+        aH+xXV08CVVdhALm9hiHTHNpYo+bDqrdqloVrwKKk+0fkhslOiKRgeHaSsbtNAu0o91u7g
+        ImUfgZQq3gmreCmdkE8oDCqHpspEl27cqk4Atw0MNZxzfCoJKoD9sIPNY6zZDbzw==
+Received: by filterdrecv-75ff7b5ffb-6sw96 with SMTP id filterdrecv-75ff7b5ffb-6sw96-1-61C3CD5E-7
+        2021-12-23 01:14:06.163181464 +0000 UTC m=+9687258.234840275
 Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-2-0 (SG)
+        by geopod-ismtpd-1-0 (SG)
         with ESMTP
-        id ZcYzltZZSCi_lFJvTySvaw
-        Thu, 23 Dec 2021 01:14:06.174 +0000 (UTC)
+        id mXqZGDqcQA29k1_iIsj-2g
+        Thu, 23 Dec 2021 01:14:06.024 +0000 (UTC)
 Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id 00E3E70101D; Wed, 22 Dec 2021 18:14:04 -0700 (MST)
+        id 088427010AC; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
 From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH v2 10/50] wilc1000: factor initialization of tx queue-specific
- packet fields
+Subject: [PATCH v2 11/50] wilc1000: convert tqx_entries from "int" to
+ "atomic_t"
 Date:   Thu, 23 Dec 2021 01:14:06 +0000 (UTC)
-Message-Id: <20211223011358.4031459-11-davidm@egauge.net>
+Message-Id: <20211223011358.4031459-12-davidm@egauge.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211223011358.4031459-1-davidm@egauge.net>
 References: <20211223011358.4031459-1-davidm@egauge.net>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvCJLlBTC4xumxACeW?=
- =?us-ascii?Q?N+4uQ8hRebKr63nOnFFNqzj5hYSEwCbOzbV+zUL?=
- =?us-ascii?Q?cwe6Kk0CVpAqADDFfmHNMM=2FvUvf=2FWXRI7Fr0kJY?=
- =?us-ascii?Q?X9v5S4LOnLgtceaCErDIbpovJ=2FZGvdk8IovLiOi?=
- =?us-ascii?Q?vJ3L=2FvhfsIGhOBb7ykwMo7hoBk3krHO17MyrBPz?=
- =?us-ascii?Q?LARKpt75YFV1rsF9+59mA=3D=3D?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvMpnkY6SXEETBOQOb?=
+ =?us-ascii?Q?cjnMOudSn0Sbh67pCS5DMiOw3ECgFuH=2FG=2FUpuN+?=
+ =?us-ascii?Q?chI5OwysiIgY+5fa81Ji5w2rnvCHgzJAUNY9Y3Q?=
+ =?us-ascii?Q?Ez2yNPnPTQ9X=2F5YyDqQMkKdszgWRzjtrE0UQYji?=
+ =?us-ascii?Q?a36KI47CocXq00K+5GTtqQB45=2F5w6SnyVGqyG6a?=
+ =?us-ascii?Q?YCj9gTxj6goAQcifw95YA=3D=3D?=
 To:     Ajay Singh <ajay.kathat@microchip.com>
 Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
         Kalle Valo <kvalo@kernel.org>,
@@ -61,145 +61,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This ensures that the fields are initialized consistently for all
-packets on the tx queues.
+This is in preparation of converting the tx queue to struct sk_buffs
+entries.  atomic_t isn't necessary for the current code, but it is a
+safe change.
 
 Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
 ---
- .../net/wireless/microchip/wilc1000/wlan.c    | 45 ++++++++++---------
- 1 file changed, 24 insertions(+), 21 deletions(-)
+ drivers/net/wireless/microchip/wilc1000/netdev.c |  3 ++-
+ drivers/net/wireless/microchip/wilc1000/netdev.h |  2 +-
+ drivers/net/wireless/microchip/wilc1000/wlan.c   | 12 ++++++------
+ 3 files changed, 9 insertions(+), 8 deletions(-)
 
+diff --git a/drivers/net/wireless/microchip/wilc1000/netdev.c b/drivers/net/wireless/microchip/wilc1000/netdev.c
+index d5969f2e369c4..486091a4cb993 100644
+--- a/drivers/net/wireless/microchip/wilc1000/netdev.c
++++ b/drivers/net/wireless/microchip/wilc1000/netdev.c
+@@ -149,7 +149,8 @@ static int wilc_txq_task(void *vp)
+ 	complete(&wl->txq_thread_started);
+ 	while (1) {
+ 		wait_event_interruptible(wl->txq_event,
+-					 (wl->txq_entries > 0 || wl->close));
++					 (atomic_read(&wl->txq_entries) > 0 ||
++					  wl->close));
+ 
+ 		if (wl->close) {
+ 			complete(&wl->txq_thread_started);
+diff --git a/drivers/net/wireless/microchip/wilc1000/netdev.h b/drivers/net/wireless/microchip/wilc1000/netdev.h
+index d88fee8f9a6b0..60f4871a7d579 100644
+--- a/drivers/net/wireless/microchip/wilc1000/netdev.h
++++ b/drivers/net/wireless/microchip/wilc1000/netdev.h
+@@ -255,7 +255,7 @@ struct wilc {
+ 	u8 *tx_buffer;
+ 
+ 	struct txq_handle txq[NQUEUES];
+-	int txq_entries;
++	atomic_t txq_entries;
+ 	struct txq_fw_recv_queue_stat fw[NQUEUES];
+ 
+ 	struct wilc_tx_queue_status tx_q_limit;
 diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
-index 77dd91c23faad..781c40f2c930c 100644
+index 781c40f2c930c..26b7d219ecbbb 100644
 --- a/drivers/net/wireless/microchip/wilc1000/wlan.c
 +++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
-@@ -12,8 +12,12 @@
- 
- #define WAKE_UP_TRIAL_RETRY		10000
- 
-+#define NOT_TCP_ACK			(-1)
-+
- static const u8 factors[NQUEUES] = {1, 1, 1, 1};
- 
-+static void tcp_process(struct net_device *, struct txq_entry_t *);
-+
- static inline bool is_wilc1000(u32 id)
+@@ -41,7 +41,7 @@ static void wilc_wlan_txq_remove(struct wilc *wilc, u8 q_num,
+ 				 struct txq_entry_t *tqe)
  {
- 	return (id & (~WILC_CHIP_REV_FIELD)) == WILC_1000_BASE_ID;
-@@ -60,13 +64,26 @@ wilc_wlan_txq_remove_from_head(struct wilc *wilc, u8 q_num)
- 	return tqe;
+ 	list_del(&tqe->list);
+-	wilc->txq_entries -= 1;
++	atomic_dec(&wilc->txq_entries);
+ 	wilc->txq[q_num].count--;
  }
  
--static void wilc_wlan_txq_add_to_tail(struct net_device *dev, u8 q_num,
-+static void init_txq_entry(struct txq_entry_t *tqe, struct wilc_vif *vif,
-+			   u8 type, enum ip_pkt_priority q_num)
-+{
-+	tqe->vif = vif;
-+	tqe->q_num = q_num;
-+	tqe->type = type;
-+	tqe->ack_idx = NOT_TCP_ACK;
-+}
-+
-+static void wilc_wlan_txq_add_to_tail(struct net_device *dev, u8 type, u8 q_num,
- 				      struct txq_entry_t *tqe)
- {
- 	unsigned long flags;
- 	struct wilc_vif *vif = netdev_priv(dev);
- 	struct wilc *wilc = vif->wilc;
- 
-+	init_txq_entry(tqe, vif, type, q_num);
-+	if (type == WILC_NET_PKT && vif->ack_filter.enabled)
-+		tcp_process(dev, tqe);
-+
+@@ -57,7 +57,7 @@ wilc_wlan_txq_remove_from_head(struct wilc *wilc, u8 q_num)
+ 		tqe = list_first_entry(&wilc->txq[q_num].txq_head.list,
+ 				       struct txq_entry_t, list);
+ 		list_del(&tqe->list);
+-		wilc->txq_entries -= 1;
++		atomic_dec(&wilc->txq_entries);
+ 		wilc->txq[q_num].count--;
+ 	}
+ 	spin_unlock_irqrestore(&wilc->txq_spinlock, flags);
+@@ -87,7 +87,7 @@ static void wilc_wlan_txq_add_to_tail(struct net_device *dev, u8 type, u8 q_num,
  	spin_lock_irqsave(&wilc->txq_spinlock, flags);
  
  	list_add_tail(&tqe->list, &wilc->txq[q_num].txq_head.list);
-@@ -78,12 +95,14 @@ static void wilc_wlan_txq_add_to_tail(struct net_device *dev, u8 q_num,
- 	wake_up_interruptible(&wilc->txq_event);
- }
+-	wilc->txq_entries += 1;
++	atomic_inc(&wilc->txq_entries);
+ 	wilc->txq[q_num].count++;
  
--static void wilc_wlan_txq_add_to_head(struct wilc_vif *vif, u8 q_num,
-+static void wilc_wlan_txq_add_to_head(struct wilc_vif *vif, u8 type, u8 q_num,
- 				      struct txq_entry_t *tqe)
- {
- 	unsigned long flags;
- 	struct wilc *wilc = vif->wilc;
- 
-+	init_txq_entry(tqe, vif, type, q_num);
-+
- 	mutex_lock(&wilc->txq_add_to_head_cs);
- 
+ 	spin_unlock_irqrestore(&wilc->txq_spinlock, flags);
+@@ -108,7 +108,7 @@ static void wilc_wlan_txq_add_to_head(struct wilc_vif *vif, u8 type, u8 q_num,
  	spin_lock_irqsave(&wilc->txq_spinlock, flags);
-@@ -97,8 +116,6 @@ static void wilc_wlan_txq_add_to_head(struct wilc_vif *vif, u8 q_num,
- 	wake_up_interruptible(&wilc->txq_event);
+ 
+ 	list_add(&tqe->list, &wilc->txq[q_num].txq_head.list);
+-	wilc->txq_entries += 1;
++	atomic_inc(&wilc->txq_entries);
+ 	wilc->txq[q_num].count++;
+ 
+ 	spin_unlock_irqrestore(&wilc->txq_spinlock, flags);
+@@ -484,7 +484,7 @@ int wilc_wlan_txq_add_net_pkt(struct net_device *dev,
+ 		kfree(tqe);
+ 	}
+ 
+-	return wilc->txq_entries;
++	return atomic_read(&wilc->txq_entries);
  }
  
--#define NOT_TCP_ACK			(-1)
--
- static inline void add_tcp_session(struct wilc_vif *vif, u32 src_prt,
- 				   u32 dst_prt, u32 seq)
- {
-@@ -281,16 +298,12 @@ static int wilc_wlan_txq_add_cfg_pkt(struct wilc_vif *vif, u8 *buffer,
- 		return 0;
- 	}
+ int wilc_wlan_txq_add_mgmt_pkt(struct net_device *dev, void *priv, u8 *buffer,
+@@ -952,7 +952,7 @@ int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
+ 	mutex_unlock(&wilc->txq_add_to_head_cs);
  
--	tqe->type = WILC_CFG_PKT;
- 	tqe->buffer = buffer;
- 	tqe->buffer_size = buffer_size;
- 	tqe->tx_complete_func = NULL;
- 	tqe->priv = NULL;
--	tqe->q_num = AC_VO_Q;
--	tqe->ack_idx = NOT_TCP_ACK;
--	tqe->vif = vif;
- 
--	wilc_wlan_txq_add_to_head(vif, AC_VO_Q, tqe);
-+	wilc_wlan_txq_add_to_head(vif, WILC_CFG_PKT, AC_VO_Q, tqe);
- 
- 	return 1;
- }
-@@ -452,15 +465,12 @@ int wilc_wlan_txq_add_net_pkt(struct net_device *dev,
- 		tx_complete_fn(tx_data, 0);
- 		return 0;
- 	}
--	tqe->type = WILC_NET_PKT;
- 	tqe->buffer = buffer;
- 	tqe->buffer_size = buffer_size;
- 	tqe->tx_complete_func = tx_complete_fn;
- 	tqe->priv = tx_data;
--	tqe->vif = vif;
- 
- 	q_num = ac_classify(wilc, tx_data->skb);
--	tqe->q_num = q_num;
- 	if (ac_change(wilc, &q_num)) {
- 		tx_complete_fn(tx_data, 0);
- 		kfree(tqe);
-@@ -468,10 +478,7 @@ int wilc_wlan_txq_add_net_pkt(struct net_device *dev,
- 	}
- 
- 	if (is_ac_q_limit(wilc, q_num)) {
--		tqe->ack_idx = NOT_TCP_ACK;
--		if (vif->ack_filter.enabled)
--			tcp_process(dev, tqe);
--		wilc_wlan_txq_add_to_tail(dev, q_num, tqe);
-+		wilc_wlan_txq_add_to_tail(dev, WILC_NET_PKT, q_num, tqe);
- 	} else {
- 		tx_complete_fn(tx_data, 0);
- 		kfree(tqe);
-@@ -505,15 +512,11 @@ int wilc_wlan_txq_add_mgmt_pkt(struct net_device *dev, void *priv, u8 *buffer,
- 		tx_complete_fn(priv, 0);
- 		return 0;
- 	}
--	tqe->type = WILC_MGMT_PKT;
- 	tqe->buffer = buffer;
- 	tqe->buffer_size = buffer_size;
- 	tqe->tx_complete_func = tx_complete_fn;
- 	tqe->priv = priv;
--	tqe->q_num = AC_VO_Q;
--	tqe->ack_idx = NOT_TCP_ACK;
--	tqe->vif = vif;
--	wilc_wlan_txq_add_to_tail(dev, AC_VO_Q, tqe);
-+	wilc_wlan_txq_add_to_tail(dev, WILC_MGMT_PKT, AC_VO_Q, tqe);
- 	return 1;
+ out_update_cnt:
+-	*txq_count = wilc->txq_entries;
++	*txq_count = atomic_read(&wilc->txq_entries);
+ 	return ret;
  }
  
 -- 

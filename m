@@ -2,123 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F348447E2C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 12:57:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7A547E2C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 12:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243417AbhLWL5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 06:57:03 -0500
-Received: from mga04.intel.com ([192.55.52.120]:62904 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236799AbhLWL5C (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 06:57:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640260622; x=1671796622;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=l7/Ec1k8g+Fuqc+4+s0zclAcRcBVVg9oTnf/81Ddgz8=;
-  b=kYc3sNibFvI+YB1x1ukeZUl8W29DH/QdJbCOecGr02Q7EdxTHm7h0cU0
-   BE1KQp1pYgg9j2meS62cnO2f5Tio7fngBLC3i70N88bjc5QfA0+rwliIh
-   qCBZ/yK24fOXIha9bpOzcSbJVLXZ5aFrGfblWJFvYjKZknfW65fxhwHMh
-   1i7kpK+p1PGkIgXPueCa3c4TCvk4FW3V5s4BpxduA7Qs2Dx4aNOnftnn9
-   2mtqOvk64GwwR4wSpZMM29vXG12c76onjergnNWfa0B0uNK+swa+mcbnI
-   6jdPJTgiodCPoYrdvgh4cDhKDe5PZYv6thsnW25kqljYE1vuDp6J2rN1s
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="239568213"
-X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
-   d="scan'208";a="239568213"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 03:57:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
-   d="scan'208";a="607735683"
-Received: from stinkbox.fi.intel.com (HELO stinkbox) ([10.237.72.147])
-  by FMSMGA003.fm.intel.com with SMTP; 23 Dec 2021 03:56:55 -0800
-Received: by stinkbox (sSMTP sendmail emulation); Thu, 23 Dec 2021 13:56:55 +0200
-Date:   Thu, 23 Dec 2021 13:56:55 +0200
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-Cc:     contact@emersion.fr, airlied@linux.ie,
-        alexandre.torgue@foss.st.com, benjamin.gaignard@linaro.org,
-        linux-stm32@st-md-mailman.stormreply.com, marex@denx.de,
-        linux-imx@nxp.com, intel-gfx@lists.freedesktop.org,
-        tzimmermann@suse.de, s.hauer@pengutronix.de,
-        rodrigo.vivi@intel.com, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, yannick.fertre@foss.st.com,
-        linux-kernel@vger.kernel.org, philippe.cornu@foss.st.com,
-        mcoquelin.stm32@gmail.com, dmitry.baryshkov@linaro.org,
-        shawnguo@kernel.org
-Subject: Re: [PATCH v2 1/6] =?iso-8859-1?Q?drm=2Fpl?=
- =?iso-8859-1?Q?ane=3A_Make_format=5Fmod=5Fsupported_truly=A0optional?=
-Message-ID: <YcRkB7uWyt4EbcZm@intel.com>
-References: <20211222090552.25972-1-jose.exposito89@gmail.com>
- <20211222090552.25972-2-jose.exposito89@gmail.com>
+        id S1348054AbhLWL6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 06:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236799AbhLWL6S (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 06:58:18 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D01C061401;
+        Thu, 23 Dec 2021 03:58:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=iK7wDAwick6nFYx5tXVJTYVwmdXGami6Czk02iyfMrg=; b=Os595
+        put7l/h9S8BqTnuowCESHiRIeaompRmSrrN3phH79gOmkPywk6hpF0J3M72NzoDEzOolnhNUt+MGx
+        gYoj/U7oEJaokwcBExvW9wtcuK9jTm18xLbqjd+ihSLabikv9voh4R4wvdMsbvpFSBFNKPZN+hFij
+        Oi4xgpw/fE5MT+vyNwjwWqOFTbpp58MwA/8J6Wd+V5AhNYyzOgg8VvXIeqsrOnxDGXrtbQbv7icKk
+        WHGIKSnkfIskjxOq0hF6la2ZYednVYm5AhORZWEd3s/uXaeVCFGYh5g0iAD+5ujGCJF8lJbYaXLCs
+        BHzsCGQliLvq4ChmBVYjbTTBSRCLg==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1n0Mjb-0004IQ-Nw; Thu, 23 Dec 2021 11:58:11 +0000
+Date:   Thu, 23 Dec 2021 11:58:10 +0000
+From:   John Keeping <john@metanate.com>
+To:     Valentin Schneider <valentin.schneider@arm.com>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-rt-users@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RT] BUG in sched/cpupri.c
+Message-ID: <YcRkUt8nFCWI7PHn@donbot>
+References: <Yb3vXx3DcqVOi+EA@donbot>
+ <71ddbe51-2b7f-2b13-5f22-9013506471dc@arm.com>
+ <87zgou6iq1.mognet@arm.com>
+ <20211221164528.3c84543f.john@metanate.com>
+ <31a47e99-6de3-76ec-62ad-9c98d092ead5@arm.com>
+ <87r1a4775a.mognet@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211222090552.25972-2-jose.exposito89@gmail.com>
-X-Patchwork-Hint: comment
+In-Reply-To: <87r1a4775a.mognet@arm.com>
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 10:05:47AM +0100, José Expósito wrote:
-> The documentation for "drm_plane_funcs.format_mod_supported" reads:
+On Wed, Dec 22, 2021 at 07:48:33PM +0000, Valentin Schneider wrote:
+> On 22/12/21 18:46, Dietmar Eggemann wrote:
+> > On 21.12.21 17:45, John Keeping wrote:
+> >> On Tue, 21 Dec 2021 16:11:34 +0000
+> >> Valentin Schneider <valentin.schneider@arm.com> wrote:
+> >>
+> >>> On 20/12/21 18:35, Dietmar Eggemann wrote:
+> >
+> > [...]
+> >
+> >>> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+> >>> index fd7c4f972aaf..7d61ceec1a3b 100644
+> >>> --- a/kernel/sched/deadline.c
+> >>> +++ b/kernel/sched/deadline.c
+> >>> @@ -2467,10 +2467,13 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
+> >>>      * this is the right place to try to pull some other one
+> >>>      * from an overloaded CPU, if any.
+> >>>      */
+> >>> -	if (!task_on_rq_queued(p) || rq->dl.dl_nr_running)
+> >>> +	if (!task_on_rq_queued(p))
+> >>>             return;
+> >>>
+> >>> -	deadline_queue_pull_task(rq);
+> >>> +	if (!rq->dl.dl_nr_running)
+> >>> +		deadline_queue_pull_task(rq);
+> >>> +	else if (task_current(rq, p) && (p->sched_class < &dl_sched_class))
+> >>> +		resched_curr(rq);
+> >>>  }
+> >>>
+> >>>  /*
+> >>> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+> >>> index ef8228d19382..1ea2567612fb 100644
+> >>> --- a/kernel/sched/rt.c
+> >>> +++ b/kernel/sched/rt.c
+> >>> @@ -2322,10 +2322,13 @@ static void switched_from_rt(struct rq *rq, struct task_struct *p)
+> >>>      * we may need to handle the pulling of RT tasks
+> >>>      * now.
+> >>>      */
+> >>> -	if (!task_on_rq_queued(p) || rq->rt.rt_nr_running)
+> >>> +	if (!task_on_rq_queued(p))
+> >>>             return;
+> >>>
+> >>> -	rt_queue_pull_task(rq);
+> >>> +	if (!rq->rt.rt_nr_running)
+> >>> +		rt_queue_pull_task(rq);
+> >>> +	else if (task_current(rq, p) && (p->sched_class < &rt_sched_class))
+> >>> +		resched_curr(rq);
+> >
+> > switched_from_rt() -> rt_queue_pull_task(, pull_rt_task)
+> >   pull_rt_task()->tell_cpu_to_push()->irq_work_queue_on(&rq->rd->rto_push_work,)
+> >     rto_push_irq_work_func() -> push_rt_task(rq, true)
+> >
+> > seems to be the only way with pull=true.
+> >
+> > In my tests, rq->rt.rt_nr_running seems to be 0 when it happens.
+> >
+> > [   22.288537] CPU3 switched_to_rt: p=[ksoftirqd/3 35]
+> > [   22.288554] rt_mutex_setprio: CPU3 p=[ksoftirqd/3 35] pi_task=[rcu_preempt 11] queued=1 running=0 prio=98 oldprio=120
+> > [   22.288636] CPU3 switched_from_rt: p=[ksoftirqd/3 35] rq->rt.rt_nr_running=0
+> >                                                          ^^^^^^^^^^^^^^^^^^^^^^
+> > [   22.288649] rt_mutex_setprio: CPU3 p=[ksoftirqd/3 35] queued=1 running=1 prio=120 oldprio=98
+> > [   22.288681] CPU3 push_rt_task: next_task=[rcu_preempt 11] migr_dis=1 rq->curr=[ksoftirqd/3 35] pull=1
+> >                                                              ^^^^^^^^^^                           ^^^^^^
 > 
->   This *optional* hook is used for the DRM to determine if the given
->   format/modifier combination is valid for the plane. This allows the
->   DRM to generate the correct format bitmask (which formats apply to
->   which modifier), and to validate modifiers at atomic_check time.
+> mark_wakeup_next_waiter() first deboosts the previous owner and then
+> wakeups the next top waiter. Seems like you somehow have the wakeup happen
+> before the push_rt_task IRQ work is run. Also, tell_cpu_to_push() should
+> only pick a CPU that is in rq->rd->rto_mask, which requires having at least
+> 2 RT tasks there...
 > 
->   *If not present*, then any modifier in the plane's modifier
->   list is allowed with any of the plane's formats.
-> 
-> However, where the function is not present, an invalid IN_FORMATS blob
-> property with modifiers but no formats is exposed to user-space.
-> 
-> This breaks the latest Weston [1]. For testing purposes, I extracted the
-> affected code to a standalone program [2].
-> 
-> Make "create_in_format_blob" behave as documented.
-> 
-> [1] https://gitlab.freedesktop.org/wayland/weston/-/blob/9.0/libweston/backend-drm/kms.c#L431
-> [2] https://github.com/JoseExposito/drm-sandbox/blob/main/in_formats.c
-> 
-> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+> Now, that wakeup from the rtmutex unlock would give us a resched_curr() via
+> check_preempt_curr() if required, which is good, though I think we are
+> still missing some for sched_setscheduler() (there are no wakeups
+> there). So if we just have to live with an IRQ work popping in before we
+> get to preempt_schedule_irq() (or somesuch), then perhaps the below would
+> be sufficient.
+
+With this patch I ran 100 reboots without hitting the BUG, so it looks
+like this is the solution!
+
+If you post this as a patch, feel free to add:
+
+	Tested-by: John Keeping <john@metanate.com>
+
 > ---
->  drivers/gpu/drm/drm_plane.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/drm_plane.c b/drivers/gpu/drm/drm_plane.c
-> index 82afb854141b..c1186b7215ee 100644
-> --- a/drivers/gpu/drm/drm_plane.c
-> +++ b/drivers/gpu/drm/drm_plane.c
-> @@ -202,17 +202,13 @@ static int create_in_format_blob(struct drm_device *dev, struct drm_plane *plane
+> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+> index fd7c4f972aaf..7d61ceec1a3b 100644
+> --- a/kernel/sched/deadline.c
+> +++ b/kernel/sched/deadline.c
+> @@ -2467,10 +2467,13 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
+>  	 * this is the right place to try to pull some other one
+>  	 * from an overloaded CPU, if any.
+>  	 */
+> -	if (!task_on_rq_queued(p) || rq->dl.dl_nr_running)
+> +	if (!task_on_rq_queued(p))
+>  		return;
 >  
->  	memcpy(formats_ptr(blob_data), plane->format_types, formats_size);
+> -	deadline_queue_pull_task(rq);
+> +	if (!rq->dl.dl_nr_running)
+> +		deadline_queue_pull_task(rq);
+> +	else if (task_current(rq, p) && (p->sched_class < &dl_sched_class))
+> +		resched_curr(rq);
+>  }
 >  
-> -	/* If we can't determine support, just bail */
-> -	if (!plane->funcs->format_mod_supported)
-> -		goto done;
+>  /*
+> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+> index ef8228d19382..8f3e3a1367b6 100644
+> --- a/kernel/sched/rt.c
+> +++ b/kernel/sched/rt.c
+> @@ -1890,6 +1890,16 @@ static int push_rt_task(struct rq *rq, bool pull)
+>  	if (!next_task)
+>  		return 0;
+>  
+> +	/*
+> +	 * It's possible that the next_task slipped in of higher priority than
+> +	 * current, or current has *just* changed priority.  If that's the case
+> +	 * just reschedule current.
+> +	 */
+> +	if (unlikely(next_task->prio < rq->curr->prio)) {
+> +		resched_curr(rq);
+> +		return 0;
+> +	}
+> +
+>  retry:
+>  	if (is_migration_disabled(next_task)) {
+>  		struct task_struct *push_task = NULL;
+> @@ -1922,16 +1932,6 @@ static int push_rt_task(struct rq *rq, bool pull)
+>  	if (WARN_ON(next_task == rq->curr))
+>  		return 0;
+>  
+> -	/*
+> -	 * It's possible that the next_task slipped in of
+> -	 * higher priority than current. If that's the case
+> -	 * just reschedule current.
+> -	 */
+> -	if (unlikely(next_task->prio < rq->curr->prio)) {
+> -		resched_curr(rq);
+> -		return 0;
+> -	}
 > -
->  	mod = modifiers_ptr(blob_data);
->  	for (i = 0; i < plane->modifier_count; i++) {
->  		for (j = 0; j < plane->format_count; j++) {
-> -			if (plane->funcs->format_mod_supported(plane,
-> +			if (!plane->funcs->format_mod_supported ||
-> +			    plane->funcs->format_mod_supported(plane,
->  							       plane->format_types[j],
->  							       plane->modifiers[i])) {
-
-So instead of skipping the whole loop you just skip doing anything
-inside the loop? Can't see how that achieves anything at all.
-
-https://patchwork.freedesktop.org/series/83018/
-is what I had in mind earlier but no one reviewed it and 
-the discussion veered off track IIRC.
-
--- 
-Ville Syrjälä
-Intel
+>  	/* We might release rq lock */
+>  	get_task_struct(next_task);
+>  
+> @@ -2322,10 +2322,13 @@ static void switched_from_rt(struct rq *rq, struct task_struct *p)
+>  	 * we may need to handle the pulling of RT tasks
+>  	 * now.
+>  	 */
+> -	if (!task_on_rq_queued(p) || rq->rt.rt_nr_running)
+> +	if (!task_on_rq_queued(p))
+>  		return;
+>  
+> -	rt_queue_pull_task(rq);
+> +	if (!rq->rt.rt_nr_running)
+> +		rt_queue_pull_task(rq);
+> +	else if (task_current(rq, p) && (p->sched_class < &rt_sched_class))
+> +		resched_curr(rq);
+>  }
+>  
+>  void __init init_sched_rt_class(void)

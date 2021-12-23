@@ -2,146 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B3E47DDFC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 04:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE6247DE05
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 04:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346134AbhLWDDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 22:03:32 -0500
-Received: from mga09.intel.com ([134.134.136.24]:62604 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231389AbhLWDD0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 22:03:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640228606; x=1671764606;
-  h=cc:subject:to:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=5d4GcwvuSuDNN/LCrM8VSrs/VLqePmPsfkX8JRr6fXw=;
-  b=dJ6qRIXP9J3TpHKRIw5tBkStO2iFZp4TxNQp/YSdb2oBwmL6lT9T0W6n
-   DL+6GFjowKD2gsynz6Sgh+oArg/X4vTV0hUJ4uoKTawVt+EMJdIzDZ7hX
-   A8fWLaZcfw3nSoFGVQqTiuifTfxyn0GhJ6vdrYJkgnNjP/YW98X1cHUJB
-   9mJgkfJ0s7anDf/4qkNDX2GVaR9/50LepMggmBtI5nD6vQoQsExRiMCr9
-   FuS4WeFJBm0ob9yDU37q83H7cruTBV7KkX59hAXl5ATVgSsc1CihFRO6x
-   DWaUbjD3ko5FzyiiCYEBLYdoVq1/UjeDwQvTMBg8/TjCRE+47k7Kt155r
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="240549254"
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="240549254"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 19:03:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="664454653"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Dec 2021 19:03:18 -0800
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 02/13] driver core: Set DMA ownership during driver
- bind/unbind
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20211217063708.1740334-1-baolu.lu@linux.intel.com>
- <20211217063708.1740334-3-baolu.lu@linux.intel.com>
- <YcMeZlN3798noycN@kroah.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <94e37c45-abc1-c682-5adf-1cc4b6887640@linux.intel.com>
-Date:   Thu, 23 Dec 2021 11:02:54 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1346152AbhLWDMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 22:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231389AbhLWDMa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 22:12:30 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F23C061574;
+        Wed, 22 Dec 2021 19:12:30 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id kd9so4006002qvb.11;
+        Wed, 22 Dec 2021 19:12:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=SeDS6NYXrws6CvV5v+btXZxjBWdFilmIPCi4J1Jsij4=;
+        b=lnIpIIstAdf8lX2ODAZU9QNo9iQZyp9uwnlJLN2ClL3+GSd4fWiDnDfqr1uWNJujiK
+         RTUMqsGf8o2locvL6oq8YRGvnVJdiLm49jG8tn6wyl1yec/RfIsaTtYeYQfQ0/BmXWih
+         S3IGmpQp/E4qf2Zwlc8zWhKttfM4eAlZEZqqg7I5vqhM/LsMjkwUiWVHUTYkzut8PwbA
+         C/yT3sQl15YacavA9xrNDW9SWFpa8mXsfejkxAT26IUlaPmkF5i1vTKI67BFdXPx3WwB
+         VYT3zBky2vSCJF6hGyHkn7TwnIuMX42IVTUab08Je0Dsaliqns+kKUNk0syzLgQp1V58
+         zEzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=SeDS6NYXrws6CvV5v+btXZxjBWdFilmIPCi4J1Jsij4=;
+        b=CdcOPPyeQTC67KhPW9P5Ow1muVNrcCh+HFvglmSA0nGO5+7mX1RmPIAMAedHujK/Yd
+         j7WUbQjJuf/gJ36drJVauKMGu/O4c0ySKSpOo9bjCGVoOfXVPhP8SHaKiFHHaFKBlV56
+         CCnd8ds9z26qZoWZz1rYghOnhy/iHA8PETZMI1NLmNCNYY6ajLr2/llaMbZNhHxEAMSg
+         j4SSCHUS2cJXANOAJTt554avEsA7TGWTYGdc/QOr6mck0scoepECl0FzPV4FhbtRsLp0
+         63hYsZO/pzgqDZ3UddQJjCgr57u3fSk9OXUf6e/H+wUPZBn0GSOpmu5iR4O3tPlyC6YS
+         kBOA==
+X-Gm-Message-State: AOAM530pBwIjjCCeCfXSqt7EULUEei8k8XsaxBIVaivgQht85x4QoS5A
+        /9JHAY6VoE2/3dmB+13RreE=
+X-Google-Smtp-Source: ABdhPJxkdOIAJTvKBiHqUS5KFlaxqCE8351plW30Qdp+Jliw+yEmj3hiVcN6Dxs+fIMnMShQt7x9tA==
+X-Received: by 2002:a05:6214:4f0:: with SMTP id cl16mr448995qvb.72.1640229149594;
+        Wed, 22 Dec 2021 19:12:29 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id bp38sm3275653qkb.66.2021.12.22.19.12.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 19:12:29 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     manfred@colorfullife.com
+Cc:     stable@vger.kernel.org, akpm@linux-foundation.org, arnd@arndb.de,
+        cgel.zte@gmail.com, chi.minghao@zte.com.cn, dbueso@suse.de,
+        linux-kernel@vger.kernel.org, rdunlap@infradead.org,
+        shakeelb@google.com, unixbhaskar@gmail.com, vvs@virtuozzo.com,
+        zealci@zte.com.cn
+Subject: [PATCH v2] ipc/sem: do not sleep with a spin lock held
+Date:   Thu, 23 Dec 2021 03:12:07 +0000
+Message-Id: <20211223031207.556189-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <63840bf3-2199-3240-bdfa-abb55518b5f9@colorfullife.com>
+References: <63840bf3-2199-3240-bdfa-abb55518b5f9@colorfullife.com>
 MIME-Version: 1.0
-In-Reply-To: <YcMeZlN3798noycN@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-On 12/22/21 8:47 PM, Greg Kroah-Hartman wrote:
->> +
->> +	return ret;
->> +}
->> +
->> +static void device_dma_cleanup(struct device *dev, struct device_driver *drv)
->> +{
->> +	if (!dev->bus->dma_configure)
->> +		return;
->> +
->> +	if (!drv->suppress_auto_claim_dma_owner)
->> +		iommu_device_release_dma_owner(dev, DMA_OWNER_DMA_API);
->> +}
->> +
->>   static int really_probe(struct device *dev, struct device_driver *drv)
->>   {
->>   	bool test_remove = IS_ENABLED(CONFIG_DEBUG_TEST_DRIVER_REMOVE) &&
->> @@ -574,11 +601,8 @@ static int really_probe(struct device *dev, struct device_driver *drv)
->>   	if (ret)
->>   		goto pinctrl_bind_failed;
->>   
->> -	if (dev->bus->dma_configure) {
->> -		ret = dev->bus->dma_configure(dev);
->> -		if (ret)
->> -			goto probe_failed;
->> -	}
->> +	if (device_dma_configure(dev, drv))
->> +		goto pinctrl_bind_failed;
-> Are you sure you are jumping to the proper error path here?  It is not
-> obvious why you changed this.
+We can't call kvfree() with a spin lock held, so defer it.
+Fixes: fc37a3b8b438 ("[PATCH] ipc sem: use kvmalloc for sem_undo
+allocation")
 
-The error handling path in really_probe() seems a bit wrong. For
-example,
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+changelog since v2:
++ Fixes: fc37a3b8b438 ("[PATCH] ipc sem: use kvmalloc for sem_undo
++ allocation")
+ ipc/sem.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-  572         /* If using pinctrl, bind pins now before probing */
-  573         ret = pinctrl_bind_pins(dev);
-  574         if (ret)
-  575                 goto pinctrl_bind_failed;
+diff --git a/ipc/sem.c b/ipc/sem.c
+index 6693daf4fe11..0dbdb98fdf2d 100644
+--- a/ipc/sem.c
++++ b/ipc/sem.c
+@@ -1964,6 +1964,7 @@ static struct sem_undo *find_alloc_undo(struct ipc_namespace *ns, int semid)
+ 	 */
+ 	un = lookup_undo(ulp, semid);
+ 	if (un) {
++		spin_unlock(&ulp->lock);
+ 		kvfree(new);
+ 		goto success;
+ 	}
+@@ -1976,9 +1977,8 @@ static struct sem_undo *find_alloc_undo(struct ipc_namespace *ns, int semid)
+ 	ipc_assert_locked_object(&sma->sem_perm);
+ 	list_add(&new->list_id, &sma->list_id);
+ 	un = new;
+-
+-success:
+ 	spin_unlock(&ulp->lock);
++success:
+ 	sem_unlock(sma, -1);
+ out:
+ 	return un;
+--
+2.25.1
 
-[...]
-
-  663 pinctrl_bind_failed:
-  664         device_links_no_driver(dev);
-  665         devres_release_all(dev);
-  666         arch_teardown_dma_ops(dev);
-  667         kfree(dev->dma_range_map);
-  668         dev->dma_range_map = NULL;
-  669         driver_sysfs_remove(dev);
-              ^^^^^^^^^^^^^^^^^^^^^^^^^
-  670         dev->driver = NULL;
-  671         dev_set_drvdata(dev, NULL);
-  672         if (dev->pm_domain && dev->pm_domain->dismiss)
-  673                 dev->pm_domain->dismiss(dev);
-  674         pm_runtime_reinit(dev);
-  675         dev_pm_set_driver_flags(dev, 0);
-  676 done:
-  677         return ret;
-
-The driver_sysfs_remove() will be called even driver_sysfs_add() hasn't
-been called yet. I can fix this in a separated patch if I didn't miss
-anything.
-
-Best regards,
-baolu

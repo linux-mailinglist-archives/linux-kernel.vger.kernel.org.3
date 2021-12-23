@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1709E47E819
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 20:16:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA5447E81C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 20:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350009AbhLWTQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 14:16:48 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:48584 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349984AbhLWTQq (ORCPT
+        id S1350017AbhLWTQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 14:16:53 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:47578 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349965AbhLWTQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 14:16:46 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGfdt031738;
-        Thu, 23 Dec 2021 13:16:41 -0600
+        Thu, 23 Dec 2021 14:16:50 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGjL9029367;
+        Thu, 23 Dec 2021 13:16:45 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1640287001;
-        bh=UOBoBf5jPZmq44GOkxtvSQRyD77EhLUs4Xa2ASMj/QI=;
+        s=ti-com-17Q1; t=1640287005;
+        bh=hugen2iF9pOeMe2j/Up7HEzH64lhEKNpA6zbe/IDWdY=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=IrLNwhyEpfSX8nToCy2oSsmwhwDRZw8DFM2g2w5HTKQXOxjNKIvq7w7azHAL6Cay2
-         eBQTPPEQ4jYsrnjSkqNfPg2s9cwFy8AjKHcrZfTTQwiLp3kRL/sqM5lE34Vh44+E3p
-         UbnuWRCZ5VkQ3eewBQLrfiS1vB4utSoyNkO3ePUo=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BNJGfdC124494
+        b=cX4J+0PjZsvPnFONO2i7b4MWXWd6qkloDWMKEm9FPXs3u9i3eUTC4qKY1oMcVuUZ6
+         70HXpVrg0arUWRxt0y8Ut+zyaH7ww3A152z2j+n63v5QbIBK4kbiXyPu8Zzl2KsYsu
+         vtKIws/1eD/dTihuv0ft6rNxl9g8yyocZuZPd5YA=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BNJGjBf006692
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 23 Dec 2021 13:16:41 -0600
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 23 Dec 2021 13:16:45 -0600
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 23
- Dec 2021 13:16:40 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ Dec 2021 13:16:44 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 23 Dec 2021 13:16:40 -0600
+ Frontend Transport; Thu, 23 Dec 2021 13:16:44 -0600
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGGQS006164;
-        Thu, 23 Dec 2021 13:16:37 -0600
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGGQT006164;
+        Thu, 23 Dec 2021 13:16:41 -0600
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 CC:     Pratyush Yadav <p.yadav@ti.com>,
@@ -52,9 +52,9 @@ CC:     Pratyush Yadav <p.yadav@ti.com>,
         <niklas.soderlund+renesas@ragnatech.se>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-media@vger.kernel.org>
-Subject: [PATCH v5 05/14] media: cadence: csi2rx: Soft reset the streams before starting capture
-Date:   Fri, 24 Dec 2021 00:46:06 +0530
-Message-ID: <20211223191615.17803-6-p.yadav@ti.com>
+Subject: [PATCH v5 06/14] media: cadence: csi2rx: Set the STOP bit when stopping a stream
+Date:   Fri, 24 Dec 2021 00:46:07 +0530
+Message-ID: <20211223191615.17803-7-p.yadav@ti.com>
 X-Mailer: git-send-email 2.33.1.835.ge9e5ba39a7
 In-Reply-To: <20211223191615.17803-1-p.yadav@ti.com>
 References: <20211223191615.17803-1-p.yadav@ti.com>
@@ -66,10 +66,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This resets the stream state machines and FIFOs, giving them a clean
-slate. On J721E if the streams are not reset before starting the
-capture, the captured frame gets wrapped around vertically on every run
-after the first.
+The stream stop procedure says that the STOP bit should be set when the
+stream is to be stopped, and then the ready bit in stream status
+register polled to make sure the STOP operation is finished.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
@@ -77,47 +76,62 @@ Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
 
 Changes in v5:
-- Make i unsigned.
+- Change %d to %u
 - Add Laurent's R-by.
 
- drivers/media/platform/cadence/cdns-csi2rx.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index afd4a0da8235..baf8ec649a25 100644
+index baf8ec649a25..86546074c555 100644
 --- a/drivers/media/platform/cadence/cdns-csi2rx.c
 +++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -39,6 +39,7 @@
- #define CSI2RX_STREAM_BASE(n)		(((n) + 1) * 0x100)
+@@ -8,6 +8,7 @@
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/io.h>
++#include <linux/iopoll.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_graph.h>
+@@ -40,8 +41,12 @@
  
  #define CSI2RX_STREAM_CTRL_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x000)
-+#define CSI2RX_STREAM_CTRL_SOFT_RST			BIT(4)
+ #define CSI2RX_STREAM_CTRL_SOFT_RST			BIT(4)
++#define CSI2RX_STREAM_CTRL_STOP				BIT(1)
  #define CSI2RX_STREAM_CTRL_START			BIT(0)
  
++#define CSI2RX_STREAM_STATUS_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x004)
++#define CSI2RX_STREAM_STATUS_RDY			BIT(31)
++
  #define CSI2RX_STREAM_DATA_CFG_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x008)
-@@ -135,12 +136,22 @@ struct csi2rx_priv *v4l2_subdev_to_csi2rx(struct v4l2_subdev *subdev)
- 
- static void csi2rx_reset(struct csi2rx_priv *csi2rx)
+ #define CSI2RX_STREAM_DATA_CFG_EN_VC_SELECT		BIT(31)
+ #define CSI2RX_STREAM_DATA_CFG_VC_SELECT(n)		BIT((n) + 16)
+@@ -312,12 +317,23 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
  {
-+	unsigned int i;
-+
- 	writel(CSI2RX_SOFT_RESET_PROTOCOL | CSI2RX_SOFT_RESET_FRONT,
- 	       csi2rx->base + CSI2RX_SOFT_RESET_REG);
+ 	unsigned int i;
++	u32 val;
++	int ret;
  
- 	udelay(10);
+ 	clk_prepare_enable(csi2rx->p_clk);
+ 	clk_disable_unprepare(csi2rx->sys_clk);
  
- 	writel(0, csi2rx->base + CSI2RX_SOFT_RESET_REG);
-+
-+	/* Reset individual streams. */
-+	for (i = 0; i < csi2rx->max_streams; i++) {
-+		writel(CSI2RX_STREAM_CTRL_SOFT_RST,
+ 	for (i = 0; i < csi2rx->max_streams; i++) {
+-		writel(0, csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
++		writel(CSI2RX_STREAM_CTRL_STOP,
 +		       csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
-+		usleep_range(10, 20);
-+		writel(0, csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
-+	}
- }
++
++		ret = readl_relaxed_poll_timeout(csi2rx->base +
++						 CSI2RX_STREAM_STATUS_REG(i),
++						 val,
++						 (val & CSI2RX_STREAM_STATUS_RDY),
++						 10, 10000);
++		if (ret)
++			dev_warn(csi2rx->dev, "Failed to stop stream%u\n", i);
  
- static int csi2rx_configure_external_dphy(struct csi2rx_priv *csi2rx)
+ 		clk_disable_unprepare(csi2rx->pixel_clk[i]);
+ 	}
 -- 
 2.33.1.835.ge9e5ba39a7
 

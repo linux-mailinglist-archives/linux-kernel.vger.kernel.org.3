@@ -2,140 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D345E47DE21
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 04:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 053CD47DE25
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 04:51:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346196AbhLWDkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 22:40:20 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:39430 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242010AbhLWDkT (ORCPT
+        id S1346252AbhLWDvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 22:51:06 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:30167 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242010AbhLWDvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 22:40:19 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3273C1F389;
-        Thu, 23 Dec 2021 03:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1640230818; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oqEZj9Ynr/lqpqMDeWnJrddzDJzzUwUUL4YhGemGfck=;
-        b=IV/WUm1fBoiYdBwrSp2P/Exxjz7+M8A0KBktN+Q6PINaQSXSJ3M3DkR2oncJhBjshPhLzV
-        R2jTbgGqrG4tLzzmxLnfw9LoJN6EcM5+5CHChoURXTyPUOCLLN2fmizTK/CxXehUzerHQo
-        d6Afg2nQhOK3N5/6/5uwi3l2A4uEJnE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1640230818;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oqEZj9Ynr/lqpqMDeWnJrddzDJzzUwUUL4YhGemGfck=;
-        b=X3qOzB6A00iA3cyRoaZcVJx80gcRq40FRxMPs6Zqn1PAcVLZUCvPkeFfSPtZejBjPWn853
-        Fqu58iLot6ZwsJBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1702F13E39;
-        Thu, 23 Dec 2021 03:40:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BpsDBaLvw2G2DQAAMHmgww
-        (envelope-from <dbueso@suse.de>); Thu, 23 Dec 2021 03:40:18 +0000
+        Wed, 22 Dec 2021 22:51:05 -0500
+Received: from kwepemi500005.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JKGQ150Qqz8vnq;
+        Thu, 23 Dec 2021 11:48:41 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ kwepemi500005.china.huawei.com (7.221.188.179) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 23 Dec 2021 11:51:02 +0800
+Received: from [127.0.0.1] (10.174.177.249) by kwepemm600003.china.huawei.com
+ (7.193.23.202) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 23 Dec
+ 2021 11:51:02 +0800
+To:     <corbet@lwn.net>, Jan Kara <jack@suse.cz>,
+        "Darrick J. Wong" <djwong@kernel.org>, <axboe@kernel.dk>,
+        "zhangyi (F)" <yi.zhang@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   Zhiqiang Liu <liuzhiqiang26@huawei.com>
+CC:     <linux-doc@vger.kernel.org>, linfeilong <linfeilong@huawei.com>
+Subject: [PATCH] doc: fs: remove bdev_try_to_free_page related doc
+Message-ID: <c45e6351-b0f8-3410-787e-02c6aeb3efe6@huawei.com>
+Date:   Thu, 23 Dec 2021 11:51:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Date:   Wed, 22 Dec 2021 19:40:17 -0800
-From:   Davidlohr Bueso <dbueso@suse.de>
-To:     Manfred Spraul <manfred@colorfullife.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Averin <vvs@virtuozzo.com>, cgel.zte@gmail.com,
-        shakeelb@google.com, rdunlap@infradead.org, unixbhaskar@gmail.com,
-        chi.minghao@zte.com.cn, arnd@arndb.de,
-        Zeal Robot <zealci@zte.com.cn>, linux-mm@kvack.org,
-        1vier1@web.de, stable@vger.kernel.org, mhocko@kernel.org,
-        willy@infradead.org, vbabka@suse.cz
-Subject: Re: [PATCH] mm/util.c: Make kvfree() safe for calling while holding
- spinlocks
-In-Reply-To: <20211222194828.15320-1-manfred@colorfullife.com>
-References: <20211222194828.15320-1-manfred@colorfullife.com>
-User-Agent: Roundcube Webmail
-Message-ID: <a3212f020c7e8e2efbeffbb5e0a02424@suse.de>
-X-Sender: dbueso@suse.de
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.249]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cc'ing more mm folks.
 
-On 2021-12-22 11:48, Manfred Spraul wrote:
-> One codepath in find_alloc_undo() calls kvfree() while holding a 
-> spinlock.
-> Since vfree() can sleep this is a bug.
+In commit acc6100d3ffa ("fs: remove bdev_try_to_free_page callback"),
+bdev_try_to_free_page has been removed.
 
-afaict the only other offender is devx_async_cmd_event_destroy_uobj(), 
-in drivers/infiniband/hw/mlx5/devx.c. I was expecting to find more, 
-actually.
+We should remove its doc.
 
-> Previously, the code path used kfree(), and kfree() is safe to be 
-> called
-> while holding a spinlock.
-> 
-> Minghao proposed to fix this by updating find_alloc_undo().
-> 
-> Alternate proposal to fix this: Instead of changing find_alloc_undo(),
-> change kvfree() so that the same rules as for kfree() apply:
-> Having different rules for kfree() and kvfree() just asks for bugs.
+Signed-off-by: Zhiqiang Liu <liuzhiqiang26@huawei.com>
+---
+ Documentation/filesystems/locking.rst | 5 -----
+ 1 file changed, 5 deletions(-)
 
-I agree that it is best to have the same atomic semantics across all 
-family of calls.
+diff --git a/Documentation/filesystems/locking.rst b/Documentation/filesystems/locking.rst
+index d36fe79167b3..3f9b1497ebb8 100644
+--- a/Documentation/filesystems/locking.rst
++++ b/Documentation/filesystems/locking.rst
+@@ -169,7 +169,6 @@ prototypes::
+ 	int (*show_options)(struct seq_file *, struct dentry *);
+ 	ssize_t (*quota_read)(struct super_block *, int, char *, size_t, loff_t);
+ 	ssize_t (*quota_write)(struct super_block *, int, const char *, size_t, loff_t);
+-	int (*bdev_try_to_free_page)(struct super_block*, struct page*, gfp_t);
 
-> 
-> Disadvantage: Releasing vmalloc'ed memory will be delayed a bit.
+ locking rules:
+ 	All may block [not true, see below]
+@@ -194,7 +193,6 @@ umount_begin:		no
+ show_options:		no		(namespace_sem)
+ quota_read:		no		(see below)
+ quota_write:		no		(see below)
+-bdev_try_to_free_page:	no		(see below)
+ ======================	============	========================
 
-I would not expect the added latency to be a big deal unless under 
-serious memory pressure, for which case things are already fragile to 
-begin with. Furthermore users of kvfree() are already warned that this 
-is the slower choice. Feel free to add my:
+ ->statfs() has s_umount (shared) when called by ustat(2) (native or
+@@ -210,9 +208,6 @@ dqio_sem) (unless an admin really wants to screw up something and
+ writes to quota files with quotas on). For other details about locking
+ see also dquot_operations section.
 
-Acked-by: Davidlohr Bueso <dbueso@suse.de>
+-->bdev_try_to_free_page is called from the ->releasepage handler of
+-the block device inode.  See there for more details.
+-
+ file_system_type
+ ================
 
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Reported-by: Minghao Chi <chi.minghao@zte.com.cn>
-> Link:
-> https://lore.kernel.org/all/20211222081026.484058-1-chi.minghao@zte.com.cn/
-> Fixes: fc37a3b8b438 ("[PATCH] ipc sem: use kvmalloc for sem_undo 
-> allocation")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Manfred Spraul <manfred@colorfullife.com>
-> ---
->  mm/util.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/util.c b/mm/util.c
-> index 741ba32a43ac..7f9181998835 100644
-> --- a/mm/util.c
-> +++ b/mm/util.c
-> @@ -610,12 +610,12 @@ EXPORT_SYMBOL(kvmalloc_node);
->   * It is slightly more efficient to use kfree() or vfree() if you are 
-> certain
->   * that you know which one to use.
->   *
-> - * Context: Either preemptible task context or not-NMI interrupt.
-> + * Context: Any context except NMI interrupt.
->   */
->  void kvfree(const void *addr)
->  {
->  	if (is_vmalloc_addr(addr))
-> -		vfree(addr);
-> +		vfree_atomic(addr);
->  	else
->  		kfree(addr);
->  }
+-- 
+2.23.0
+
+
+

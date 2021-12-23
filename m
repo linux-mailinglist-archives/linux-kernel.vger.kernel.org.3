@@ -2,132 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D80547E618
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 16:55:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E962F47E620
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 17:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244576AbhLWPzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 10:55:32 -0500
-Received: from mga05.intel.com ([192.55.52.43]:47181 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231974AbhLWPzb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 10:55:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640274931; x=1671810931;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Eoq3IQ3HEs2cTlYpYY/HXtuejXWzsO7qZJoQ6uinrMU=;
-  b=KpkDSfxkMD/+eOjwDqvI78OB9nfKqhTpr4RDlct/Y3LTtFZFPL4MFt64
-   9ettBKW0nxTL3p/OF8m1hMwmcB/ttYKTvsFrMoRlD65GHHjMNWOkBnWbm
-   XY1QNa94lqIt6SjIW4MdUmeHmTH6vWue5zDygOAFE+3rR1mLAQuCXPek+
-   XgJ5jUN11wmWE+Efh30O+s5IeMlNJoxLsvEX6x13/VqmUJVEpeJVcrPjf
-   mXVQmzaS141mYwc4ekbYldrzXVmNtxB7tdurTTOHYrFblqxN3Ti0ZBFMu
-   QV9PDvw1rMTpIjh5F4+hQ2nTXJ3RCDBWIWV/SlytoOM+p9tCIC4Cce4vi
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="327157245"
-X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
-   d="scan'208";a="327157245"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 07:55:31 -0800
-X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
-   d="scan'208";a="587346317"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 07:55:26 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1n0QPp-001Iqq-B3;
-        Thu, 23 Dec 2021 17:54:01 +0200
-Date:   Thu, 23 Dec 2021 17:54:01 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Gross <markgross@kernel.org>,
-        Henning Schild <henning.schild@siemens.com>
-Subject: Re: [PATCH v3 0/8] platform/x86: introduce p2sb_bar() helper
-Message-ID: <YcSbmQq4sCd9Dshy@smile.fi.intel.com>
-References: <20211221181526.53798-1-andriy.shevchenko@linux.intel.com>
+        id S236973AbhLWQC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 11:02:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229552AbhLWQCZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 11:02:25 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E6DC061401
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 08:02:25 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id w20so3383654wra.9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 08:02:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=Gmz+I9YOWUFBoJ3b8t5RcyDp1oBXQrMfwOu7m1+e4oc=;
+        b=kCpiZ4Yxxr+HJMxmCAWeXSKoTq1bqZHJRB5MOqMrJDjJAXMKbgZkNezFgrT1Gx7z7V
+         wYHjGQYjFA/Y9tzZ7dbqd12HQWp/vHPtCISZoM/A8kQkdCucYVbeMm3a7dvc775VrtEV
+         FW+JhCBaQdvKJGUCC5xqOfrQm1bYkmvQwpNigFK1cDyBWg7AEfABJmQDiNR7StE3xzSk
+         XrdAshoSqivvKTB5zH7RDhSn3OqvzqJ1R64JKh6op6L/d+suqqXHPNRV0IFBSK8uHCXI
+         ZG5H+MGhNS84wqwksvH1W0rgktA8++8OjEvUHZ8foFBi9iufpSGCnXE8jBpxtxIAclAu
+         s0Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=Gmz+I9YOWUFBoJ3b8t5RcyDp1oBXQrMfwOu7m1+e4oc=;
+        b=laEjwLXwD86v1sgrZf+cke8Aw/85qH5wdx1+6QHAJXGoFegVNd5SnpA9qd2xgQQy4s
+         /dlzdTAh5c/qLJDJ/Sj9p9pkgXz/YJYwLu3H09fUpocjmbJV9XPT88FDteXAvpG9JLTh
+         JbA19XKfjX93RmOLBbopxzXWMMm7ide/jhiq9uFazTRnF+rrjgt2w7t8vAvJn64IePki
+         2KMrH7/aFSup1rzt7f6S8Tk/FbVbH41YDgyGF6+SDwcMs6qq7gIpznhcTMsTAix/D56a
+         FiNX+qEyPRcoaiCSWbAxtfirH7LW4E2S4cj5+A9ejOtozG0BNW+ZlDqcsbKE/e15tln6
+         ib/A==
+X-Gm-Message-State: AOAM531XiqtOp11KCmOFozY1uPXXDlyN4hVKu5dSOUX0fcbU+U1ZSfeh
+        GsgxOhEJjwrNhtB1+SCjgNYPLw==
+X-Google-Smtp-Source: ABdhPJynqNZQq5iIVvl9LNrEkjZokX6G2VkRE1WFIeLkjjKnEeMKchCyO6nXP2vIrfsIcpERCuY5YA==
+X-Received: by 2002:adf:d226:: with SMTP id k6mr2074178wrh.243.1640275343827;
+        Thu, 23 Dec 2021 08:02:23 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:34ca:f67b:b782:1949? ([2a01:e34:ed2f:f020:34ca:f67b:b782:1949])
+        by smtp.googlemail.com with ESMTPSA id n9sm9545318wmq.37.2021.12.23.08.02.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Dec 2021 08:02:21 -0800 (PST)
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] dtpm for v5.17
+Message-ID: <ffbefd9a-5dff-5c3d-8a24-2d42b3aa42ca@linaro.org>
+Date:   Thu, 23 Dec 2021 17:02:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211221181526.53798-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 08:15:18PM +0200, Andy Shevchenko wrote:
-> There are a few users and at least one more is coming that would
-> like to utilize P2SB mechanism of hiding and unhiding a device from
-> the PCI configuration space.
-> 
-> Here is the series to deduplicate existing users and provide
-> a generic way for new comers.
-> 
-> It also includes a patch to enable GPIO controllers on Apollo Lake
-> when it's used with ABL bootloader w/o ACPI support.
-> 
-> The patch that bring the helper ("platform/x86/intel: Add Primary
-> to Sideband (P2SB) bridge support") has a commit message that
-> sheds a light on what the P2SB is and why this is needed.
-> 
-> Please, comment on the approach and individual patches.
-> 
-> The changes made in v2 do not change the main idea and the functionality
-> in a big scale. What we need is probably one more (RE-)test done by Henning.
-> I hope to have it merged to v5.17-rc1 that Siemens can develop their changes
-> based on this series.
-> 
-> I have tested this on Apollo Lake platform (I'm able to see SPI NOR and
-> since we have an ACPI device for GPIO I do not see any attempts to recreate
-> one).
-> 
-> (Since it's cross subsystem, the PDx86 seems the main one and
-> I think it makes sense to route it throught it with immutable
-> tag or branch provided for the others).
-> 
-> Bjorn, are you okay with this approach and the commit message in the main
-> patch?
-> 
-> Changes in v3:
-> - resent with cover letter
-> 
-> Changes in v2:
-> - added parentheses around bus in macros (Joe)
-> - added tag (Jean)
-> - fixed indentation and wrapping in the header (Christoph)
-> - moved out of PCI realm to PDx86 as the best common denominator (Bjorn)
-> - added a verbose commit message to explain P2SB thingy (Bjorn)
-> - converted first parameter from pci_dev to pci_bus
-> - made first two parameters (bus and devfn) optional (Henning, Lee)
-> - added Intel pin control patch to the series (Henning, Mika)
-> - fixed English style in the commit message of one of MFD patch (Lee)
-> - added tags to my MFD LPC ICH patches (Lee)
-> - used consistently (c) (Lee)
-> - made indexing for MFD cell and resource arrays (Lee)
-> - fixed the resource size in i801 (Jean)
 
-I'm going to be on vacation till 2022-01-03, I'll address comments if any
-during the first week of January and I hope it can make v5.17. Hans, what
-do you think?
+Hi Rafael,
 
-(Meanwhile I'm expecting that my patch to fix dependencies will be applied,
- so kbuild bot won't complain anymore on them being broken)
+please consider pulling this little changes for DTPM
+
+Thanks
+
+  -- Daniel
+
+The following changes since commit a7904a538933c525096ca2ccde1e60d0ee62c08e:
+
+  Linux 5.16-rc6 (2021-12-19 14:14:33 -0800)
+
+are available in the Git repository at:
+
+  https://git.linaro.org/people/daniel.lezcano/linux.git tags/dtpm-v5.17
+
+for you to fetch changes up to c1af85e442278fe120974358cf71c41bc48e0580:
+
+  powercap/drivers/dtpm: Reduce trace verbosity (2021-12-23 16:57:36 +0100)
+
+----------------------------------------------------------------
+- Cleanup and reduce trace verbosity (Daniel Lezcano)
+
+----------------------------------------------------------------
+Daniel Lezcano (2):
+      powercap/drivers/dtpm: Remove unused function definition
+      powercap/drivers/dtpm: Reduce trace verbosity
+
+ drivers/powercap/dtpm.c | 6 +++---
+ include/linux/dtpm.h    | 2 --
+ 2 files changed, 3 insertions(+), 5 deletions(-)
+
 
 -- 
-With Best Regards,
-Andy Shevchenko
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

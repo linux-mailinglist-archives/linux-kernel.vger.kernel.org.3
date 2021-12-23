@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A3B247DBAC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 01:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67B0047DBAE
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 01:23:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345518AbhLWAWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 19:22:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55202 "EHLO
+        id S1345532AbhLWAWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 19:22:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345469AbhLWAWh (ORCPT
+        with ESMTP id S1345493AbhLWAWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 19:22:37 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF5EC061574;
-        Wed, 22 Dec 2021 16:22:37 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id v11so3742476pfu.2;
-        Wed, 22 Dec 2021 16:22:37 -0800 (PST)
+        Wed, 22 Dec 2021 19:22:39 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71595C061574;
+        Wed, 22 Dec 2021 16:22:39 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id gj24so3628375pjb.0;
+        Wed, 22 Dec 2021 16:22:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=igV+0PYJ8LgFBo0u2TcB0EcsmeY4woP3bELald8J87k=;
-        b=IkOkTM0nQMWsqsA8TsFwC1jyekX63htbHYb7OcaRLvWw9x3E9Am5hhV6hugOwjwgqu
-         99lIUBcPvnecQcDFnGK9HlsGfOqy05UbgnM+I16eOeK7vo56xTFHoLnseFzU94sb3xtE
-         Gi7vhRtNVHoRR9ROjMKdiIy9cc4y2lpmyo7csvM6VSJKpD3oj1lvw2VjNy6VUgK0R7QW
-         sxGymUfy3b+CnGudIjMqE8tXBgUYfi79gohXtV9MJgrkIkeVodQPrjySpvu+WxJqdI90
-         2bPFUVUsd22zpkg1RXfJ2vgZDNWbH6y9azv65UD2Vb89SeCrILkSL8wt26vNVTUqofaB
-         7BCg==
+        bh=F2NATCUWUg4iwnRGoqM+mgzKzp/1tXDebp9cGfC5HfA=;
+        b=OkvKBUsGESkn9oq3lyl1KbJ8FGgqluSGLkS7IDTN0WsZiBYkxuPVNKZbs1RYS5T6u4
+         x0wbqRMPulF/zKWIdAba3clMX3vnNJrtwqGl3PAHPziIUbQVwUnrVR4WRXjkS7Q3s5eI
+         3xAc+ImwQLgy/q6vQ7Dvuzt5w21haF7mia58Fl2M16RadovRJC4ozxvnD5lcy1aabKic
+         uJJnDYOfCjlcfVUJQyLkVyGYEYDcFmmsfSBgoCHlVJ5C2EPg/hVscwHp7VQ96M+6sdEY
+         sq9SFghUcWesgJ96cWs5VNx5ism+i64xPGERCJ2uZ1ZPYVTK+dACkvGodDyeqvRsf1sV
+         4lRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=igV+0PYJ8LgFBo0u2TcB0EcsmeY4woP3bELald8J87k=;
-        b=6HI6it2hOrvLdZp4Bx5fds06l31ZgHEzZmgnNckK4ufVvK5VhoTYRgSHqdyu5Mf9RT
-         LAX5xv2PD2UGqW+fosW832C+Ki/9qveB33nBCPG46FlewSgS6/u9eTwFmQuNnsUs60mJ
-         MdFTL5KT8iBAuMnFsfGPFvoBvdIS0r3YifRWutJQAUzonDQmhhQG/FUc17hnh9d12Tns
-         4kOnh3aQ1DVay+TdychLevumbv/2WURGu1djeBX4TKKa8Zc6BUIxOmHzY4GN+48hhW0X
-         IOHO0sN1L4z0QlVfqqLSJXYvMvOA3/Pty74LkbIKv3qijrsd8GaLjj1GaHeNoaVfLj9y
-         aFrg==
-X-Gm-Message-State: AOAM530UsB1W7shOxBIyMEAEy2xOEKqoFvVgaMsfEEAELpZ1eSyh/yvk
-        mfYRnPrkxobch+7Jx5n0ayA=
-X-Google-Smtp-Source: ABdhPJxSckAZe9DaFM1bKLCv01xSnOpLQbV9TIEX6AathClFk7dRqG6dOadtWskP52LFfxtnCFC1dA==
-X-Received: by 2002:a05:6a00:1582:b0:4ba:e636:391 with SMTP id u2-20020a056a00158200b004bae6360391mr100399pfk.55.1640218956782;
-        Wed, 22 Dec 2021 16:22:36 -0800 (PST)
+        bh=F2NATCUWUg4iwnRGoqM+mgzKzp/1tXDebp9cGfC5HfA=;
+        b=IX0Je3I3v8iPDMsKCMcU+VKYqETovfnm2yQRq5+yJz6x7DzTSMLC8WfwkWLgeIU2yY
+         tojNTXRdztyOd5LyI19A9VbMfz5T/EWvBxbNPf5GMBVXC5PjbIQOdu/PU/dhJfDI5NVF
+         umVl1j/abk2zCib2PICrTSCt2jZP0i5kFbonzP+YwOtTWbQwu7Yfjabgq5noQtg3ZrGj
+         +Dy2E4R67N1UqChL4R36YbUu6SsYMTxGM7ENmljkHPIiSvd2LloV/4NZwUDZgF1jjAez
+         UAo4OM+IdVJxirZrXpTjUXtorwiBe4pH8G16njzmKEh1KnX7848XfjYVG742dAqYhQZm
+         jUkg==
+X-Gm-Message-State: AOAM53178X3tgzbq3vR5xpZBbk/WFTRjNCoU6xQ0vl65N02y8c6pSfBI
+        ZBNpXHRK+u9CylcXEJQ1SwY=
+X-Google-Smtp-Source: ABdhPJwjNO0Ihj3L5T0ypAgnFYpoTOdk2YWaXKlYWeEVPK/HEnwmcop3KmKEUFbkY0u8nZRvReO5mw==
+X-Received: by 2002:a17:90b:4a09:: with SMTP id kk9mr45266pjb.53.1640218958532;
+        Wed, 22 Dec 2021 16:22:38 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id e24sm6720703pjt.45.2021.12.22.16.22.35
+        by smtp.gmail.com with ESMTPSA id e24sm6720703pjt.45.2021.12.22.16.22.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 16:22:36 -0800 (PST)
+        Wed, 22 Dec 2021 16:22:38 -0800 (PST)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-mtd@lists.infradead.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -65,9 +65,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         (BCMA)),
         bcm-kernel-feedback-list@broadcom.com (open list:BROADCOM STB NAND
         FLASH DRIVER)
-Subject: [PATCH 3/9] mtd: rawnand: brcmnand: Avoid pdev in brcmnand_init_cs()
-Date:   Wed, 22 Dec 2021 16:22:19 -0800
-Message-Id: <20211223002225.3738385-4-f.fainelli@gmail.com>
+Subject: [PATCH 4/9] mtd: rawnand: brcmnand: Move OF operations out of brcmnand_init_cs()
+Date:   Wed, 22 Dec 2021 16:22:20 -0800
+Message-Id: <20211223002225.3738385-5-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211223002225.3738385-1-f.fainelli@gmail.com>
 References: <20211223002225.3738385-1-f.fainelli@gmail.com>
@@ -77,55 +77,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for encapsulation more of what the loop calling
-brcmnand_init_cs() does, avoid using platform_device when it is the
-device behind platform_device that we are using for printing errors.
-
-No functional change.
+In order to initialize a given chip select object for use by the
+brcmnand driver, move all of the Device Tree specific routines outside
+of brcmnand_init_cs() in order to make it usable in a platform data
+configuration which will be necessary for supporting BCMA chips.
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- drivers/mtd/nand/raw/brcmnand/brcmnand.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/mtd/nand/raw/brcmnand/brcmnand.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-index fcea5a7443e8..35f8d8e02d4a 100644
+index 35f8d8e02d4a..60a7f375df83 100644
 --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
 +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-@@ -2763,7 +2763,7 @@ static const struct nand_controller_ops brcmnand_controller_ops = {
- static int brcmnand_init_cs(struct brcmnand_host *host, struct device_node *dn)
+@@ -2760,7 +2760,7 @@ static const struct nand_controller_ops brcmnand_controller_ops = {
+ 	.attach_chip = brcmnand_attach_chip,
+ };
+ 
+-static int brcmnand_init_cs(struct brcmnand_host *host, struct device_node *dn)
++static int brcmnand_init_cs(struct brcmnand_host *host)
  {
  	struct brcmnand_controller *ctrl = host->ctrl;
--	struct platform_device *pdev = host->pdev;
-+	struct device *dev = ctrl->dev;
- 	struct mtd_info *mtd;
- 	struct nand_chip *chip;
+ 	struct device *dev = ctrl->dev;
+@@ -2769,16 +2769,9 @@ static int brcmnand_init_cs(struct brcmnand_host *host, struct device_node *dn)
  	int ret;
-@@ -2771,7 +2771,7 @@ static int brcmnand_init_cs(struct brcmnand_host *host, struct device_node *dn)
+ 	u16 cfg_offs;
  
- 	ret = of_property_read_u32(dn, "reg", &host->cs);
- 	if (ret) {
--		dev_err(&pdev->dev, "can't get chip-select\n");
-+		dev_err(dev, "can't get chip-select\n");
- 		return -ENXIO;
- 	}
+-	ret = of_property_read_u32(dn, "reg", &host->cs);
+-	if (ret) {
+-		dev_err(dev, "can't get chip-select\n");
+-		return -ENXIO;
+-	}
+-
+ 	mtd = nand_to_mtd(&host->chip);
+ 	chip = &host->chip;
  
-@@ -2780,13 +2780,13 @@ static int brcmnand_init_cs(struct brcmnand_host *host, struct device_node *dn)
- 
- 	nand_set_flash_node(chip, dn);
+-	nand_set_flash_node(chip, dn);
  	nand_set_controller_data(chip, host);
--	mtd->name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "brcmnand.%d",
-+	mtd->name = devm_kasprintf(dev, GFP_KERNEL, "brcmnand.%d",
+ 	mtd->name = devm_kasprintf(dev, GFP_KERNEL, "brcmnand.%d",
  				   host->cs);
- 	if (!mtd->name)
- 		return -ENOMEM;
+@@ -3179,7 +3172,16 @@ int brcmnand_probe(struct platform_device *pdev, struct brcmnand_soc *soc)
+ 			host->pdev = pdev;
+ 			host->ctrl = ctrl;
  
- 	mtd->owner = THIS_MODULE;
--	mtd->dev.parent = &pdev->dev;
-+	mtd->dev.parent = dev;
- 
- 	chip->legacy.cmd_ctrl = brcmnand_cmd_ctrl;
- 	chip->legacy.cmdfunc = brcmnand_cmdfunc;
+-			ret = brcmnand_init_cs(host, child);
++			ret = of_property_read_u32(dn, "reg", &host->cs);
++			if (ret) {
++				dev_err(dev, "can't get chip-select\n");
++				devm_kfree(dev, host);
++				continue;
++			}
++
++			nand_set_flash_node(&host->chip, dn);
++
++			ret = brcmnand_init_cs(host);
+ 			if (ret) {
+ 				devm_kfree(dev, host);
+ 				continue; /* Try all chip-selects */
 -- 
 2.25.1
 

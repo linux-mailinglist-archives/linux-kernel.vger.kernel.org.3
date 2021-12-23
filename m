@@ -2,114 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE33847E942
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 23:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EA647E946
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 23:22:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234802AbhLWWPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 17:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234511AbhLWWPE (ORCPT
+        id S1350400AbhLWWWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 17:22:05 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48390 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234511AbhLWWWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 17:15:04 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FE6C061401
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 14:15:04 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id x15so26549180edv.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 14:15:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=oiC/rweM7PDyBEylmxgJ15XBNpKsLom+FHSsECX/FB4=;
-        b=phlIUx2yCg+uIRsMEf5ybGdFUQflg6SUAa1RN24K+tMEkanM6bg08r10hzYQPS9SoH
-         A6cZUmbsLKTpPlkNqUUQCTvJTV/98WgqZ9eAeObbyNbRhayX7su0tPvG6/U2a3EQpLyo
-         w+7ZRAB6pPkgeUv2hB7iMnj5S7jeINOLHG7G+ea6pd3JsQuhF/2L5tdt4hzMlumkRzlq
-         bHhN8LcQzVLMKyClcSw3HNHWqpepbZN+H6IuNk5ylHm6g8R43yHtGopf4MOc988SjGA1
-         sR91ScetKS8WlzbKtUKzN2L3lB2DA7GyMCEqYrjMgP5jSfAiZ3ajgyQ46c4uHQAQPa/E
-         dK9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=oiC/rweM7PDyBEylmxgJ15XBNpKsLom+FHSsECX/FB4=;
-        b=NVPsp7qog8oGp2SCjimV4JcS4ZZItNOb6XzswdlbxbQaZ94TtNRe6LiTtuzH5f5RUb
-         E+nDkt63WACLFTHf5d44s5ng2qpIsSsvcP6PheoFHqCHdxMoBM31X11XIQUDaZvdFePV
-         CE6hHVhF5l9E3czZ2Qzz2XvG50gNKqhkEH3RKJE/t9rk8tH/0J4R5lTfOYGSrnehbZc4
-         ItkRrgxDtToqvKmO4Hzf4GSidwee3kLtE2R9rYAG/RKPUDcOFP/P+0eVUzxZYZUHddSf
-         rHsr+PexkxkBgJTxmIHjvOV9BfpduEIR76rOdysgccRqNCCUjXswESTug5N7XNl7g5uJ
-         0jQw==
-X-Gm-Message-State: AOAM530TI5u9ugRGcFAcwehXLK8YhG7k0Iqg2LUP5IsyrTQgY4L78eoB
-        e1e/qJO6VzpMjbolYaBOGWSoM6Mph+aDGtLrBTevXzu9j02m0w==
-X-Google-Smtp-Source: ABdhPJwvp4yqlmJJZZrkoV+Qi9rU47x16CUkFs0EbEddT8pEHWfk7HDv9u1tqB4MFkSA3CUzhWIuPNylLYGDIiYXPKA=
-X-Received: by 2002:a17:906:6805:: with SMTP id k5mr3342104ejr.750.1640297702721;
- Thu, 23 Dec 2021 14:15:02 -0800 (PST)
+        Thu, 23 Dec 2021 17:22:05 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6DFAB82218;
+        Thu, 23 Dec 2021 22:22:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30437C36AE5;
+        Thu, 23 Dec 2021 22:22:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640298122;
+        bh=UxoJa3uQnvxGZMIg6OiN0I0O5ZfIJYWcZNx7h6H53CM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gvcIZgp1w4b70jBT6xQhf1FtELSTyqzhPA0uszhahayD0lWs95U4D3+nsK1t9nNhW
+         s5H/dhNELRQdRVj7O9Sc7AD+spZlpNQGrpv0orvXDI+BMnUJPzG8KiTd6+9kJ+wg7/
+         F7Tv1U0TeOvRb0sy1Vm/SaT72LXJKY4W9QRars3QgReSKVqJB4oYNSdCg5aR5/yeuD
+         d4IIh2HYI4kzL31QquxqOBddA0JC0QQNvadkeTryVKrID85ahP/W2/jPJkzO1gCiCG
+         +55DAVNevrAtdmJMMlwRAWdtgCbW/S1fy/m7goFojt3ZgOlI0el3YlP/u5O0Z4pbRw
+         GTMyzFV2YfMLQ==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Sekhar Nori <nsekhar@ti.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>, stable@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH] ARM: davinci: da850-evm: Avoid NULL pointer dereference
+Date:   Thu, 23 Dec 2021 15:21:41 -0700
+Message-Id: <20211223222141.1253092-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 24 Dec 2021 08:14:51 +1000
-Message-ID: <CAPM=9ty=B0ZvuwiQExR2-RoCZo18DZYrKMzTfK8-00psKncw9w@mail.gmail.com>
-Subject: [git pull] drm fixes for 5.16-rc7
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus.
+With newer versions of GCC, there is a panic in da850_evm_config_emac()
+when booting multi_v5_defconfig in QEMU under the palmetto-bmc machine:
 
-Happy Xmas, pull request. Nothing major, one mediatek and a couple of
-i915 locking fixes. There might be a few stragglers over next week or
-so but I don't expect much before next release.
+Unable to handle kernel NULL pointer dereference at virtual address 00000020
+pgd = (ptrval)
+[00000020] *pgd=00000000
+Internal error: Oops: 5 [#1] PREEMPT ARM
+Modules linked in:
+CPU: 0 PID: 1 Comm: swapper Not tainted 5.15.0 #1
+Hardware name: Generic DT based system
+PC is at da850_evm_config_emac+0x1c/0x120
+LR is at do_one_initcall+0x50/0x1e0
 
-Dave.
+The emac_pdata pointer in soc_info is NULL because davinci_soc_info only
+gets populated on davinci machines but da850_evm_config_emac() is called
+on all machines via device_initcall().
 
-drm-fixes-2021-12-24:
-drm fixes for 5.16-rc7
+Move the rmii_en assignment below the machine check so that it is only
+dereferenced when running on a supported SoC.
 
-mediatek:
-- NULL pointer check
+Cc: stable@vger.kernel.org
+Fixes: bae105879f2f ("davinci: DA850/OMAP-L138 EVM: implement autodetect of RMII PHY")
+Link: https://lore.kernel.org/r/YcS4xVWs6bQlQSPC@archlinux-ax161/
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/arm/mach-davinci/board-da850-evm.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-i915:
-- guc submission locking fixes
-The following changes since commit a7904a538933c525096ca2ccde1e60d0ee62c08e:
+diff --git a/arch/arm/mach-davinci/board-da850-evm.c b/arch/arm/mach-davinci/board-da850-evm.c
+index 428012687a80..7f7f6bae21c2 100644
+--- a/arch/arm/mach-davinci/board-da850-evm.c
++++ b/arch/arm/mach-davinci/board-da850-evm.c
+@@ -1101,11 +1101,13 @@ static int __init da850_evm_config_emac(void)
+ 	int ret;
+ 	u32 val;
+ 	struct davinci_soc_info *soc_info = &davinci_soc_info;
+-	u8 rmii_en = soc_info->emac_pdata->rmii_en;
++	u8 rmii_en;
+ 
+ 	if (!machine_is_davinci_da850_evm())
+ 		return 0;
+ 
++	rmii_en = soc_info->emac_pdata->rmii_en;
++
+ 	cfg_chip3_base = DA8XX_SYSCFG0_VIRT(DA8XX_CFGCHIP3_REG);
+ 
+ 	val = __raw_readl(cfg_chip3_base);
 
-  Linux 5.16-rc6 (2021-12-19 14:14:33 -0800)
+base-commit: a7904a538933c525096ca2ccde1e60d0ee62c08e
+-- 
+2.34.1
 
-are available in the Git repository at:
-
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2021-12-24
-
-for you to fetch changes up to dbfba788c7ef839849e013264fef551e4d119d0b:
-
-  Merge tag 'drm-intel-fixes-2021-12-22' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes (2021-12-23
-11:21:44 +1000)
-
-----------------------------------------------------------------
-drm fixes for 5.16-rc7
-
-mediatek:
-- NULL pointer check
-
-i915:
-- guc submission locking fixes
-
-----------------------------------------------------------------
-AngeloGioacchino Del Regno (1):
-      drm/mediatek: hdmi: Perform NULL pointer check for mtk_hdmi_conf
-
-Dave Airlie (2):
-      Merge tag 'mediatek-drm-fixes-5.16' of
-https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux
-into drm-fixes
-      Merge tag 'drm-intel-fixes-2021-12-22' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
-
-Matthew Brost (2):
-      drm/i915/guc: Use correct context lock when callig clr_context_registered
-      drm/i915/guc: Only assign guc_id.id when stealing guc_id
-
- drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c |  6 +++---
- drivers/gpu/drm/mediatek/mtk_hdmi.c               | 12 +++++++-----
- 2 files changed, 10 insertions(+), 8 deletions(-)

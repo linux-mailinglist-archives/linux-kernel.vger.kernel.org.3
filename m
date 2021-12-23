@@ -2,78 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E68A47E0AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 10:03:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7497B47E0AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 10:04:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347352AbhLWJDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 04:03:44 -0500
-Received: from smtp02.smtpout.orange.fr ([80.12.242.124]:58903 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347339AbhLWJDn (ORCPT
+        id S1347358AbhLWJEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 04:04:52 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39866 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347339AbhLWJEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 04:03:43 -0500
-Received: from pop-os.home ([86.243.171.122])
-        by smtp.orange.fr with ESMTPA
-        id 0K0hniYVYS9NT0K0hnoUUg; Thu, 23 Dec 2021 10:03:41 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 23 Dec 2021 10:03:41 +0100
-X-ME-IP: 86.243.171.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] ice: Optimize a few bitmap operations
-Date:   Thu, 23 Dec 2021 10:03:37 +0100
-Message-Id: <b0cf67c12895e40b403a435192d47b0ac1a00def.1640250120.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Thu, 23 Dec 2021 04:04:50 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7594FB81F9F
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 09:04:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54F06C36AE9;
+        Thu, 23 Dec 2021 09:04:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640250288;
+        bh=GLtZZPLmwbU+EfifaiOw0EMJpcnVumWosfcpIfQSxmc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FVf5U7fxSnn2gRKpJIxZxZ/1Q7MfiRk2/Qoh8zjQssn1Ps6pi0ynw/W2m8HqbZjw5
+         Sw5NM+EmlbUaiytVsKEw4JQEwfL5Db8LqQrm6dOZawUldJ9GjEjUdi+2DBuqsSwm/k
+         L00mbrYTwkuWxYyLyK7SdfT4Ds4346xyCoGeVhB0=
+Date:   Thu, 23 Dec 2021 10:04:43 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ronak Jain <ronakj@xilinx.com>
+Cc:     Michal Simek <michals@xilinx.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rajan Vaja <RAJANV@xilinx.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        Sai Krishna Potthuri <lakshmis@xilinx.com>
+Subject: Re: [PATCH v4 1/3] firmware: xilinx: Add support for runtime features
+Message-ID: <YcQ7qynk9vk336b+@kroah.com>
+References: <20211206112101.24955-1-ronak.jain@xilinx.com>
+ <20211206112101.24955-2-ronak.jain@xilinx.com>
+ <YcGbvXzvLtgBo+sq@kroah.com>
+ <BYAPR02MB448806DCF28EA41AFE4B3D0EA47E9@BYAPR02MB4488.namprd02.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR02MB448806DCF28EA41AFE4B3D0EA47E9@BYAPR02MB4488.namprd02.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a bitmap is local to a function, it is safe to use the non-atomic
-__[set|clear]_bit(). No concurrent accesses can occur.
+On Thu, Dec 23, 2021 at 08:55:09AM +0000, Ronak Jain wrote:
+> Hi Greg,
+> 
+> > -----Original Message-----
+> > From: Greg KH <gregkh@linuxfoundation.org>
+> > Sent: Tuesday, December 21, 2021 2:48 PM
+> > To: Ronak Jain <ronakj@xilinx.com>
+> > Cc: Michal Simek <michals@xilinx.com>; linux-kernel@vger.kernel.org; Rajan
+> > Vaja <RAJANV@xilinx.com>; corbet@lwn.net; linux-arm-
+> > kernel@lists.infradead.org; arnd@arndb.de; Sai Krishna Potthuri
+> > <lakshmis@xilinx.com>
+> > Subject: Re: [PATCH v4 1/3] firmware: xilinx: Add support for runtime features
+> > 
+> > On Mon, Dec 06, 2021 at 03:20:59AM -0800, Ronak Jain wrote:
+> > > Add support for runtime features by using an IOCTL call. The features
+> > > can be enabled or disabled from the firmware as well as the features
+> > > can be configured at runtime by querying IOCTL_SET_FEATURE_CONFIG id.
+> > >  Similarly, the user can get the configured values of features by
+> > > querying IOCTL_GET_FEATURE_CONFIG id.
+> > >
+> > > Signed-off-by: Ronak Jain <ronak.jain@xilinx.com>
+> > > ---
+> > > Changes in v4:
+> > > - Update commit message
+> > >
+> > > Changes in v3:
+> > > - Resolved merged conflict
+> > >
+> > > Changes in v2:
+> > > - Resolved merged conflict
+> > > - Update commit message
+> > > ---
+> > >  drivers/firmware/xilinx/zynqmp.c     | 27 +++++++++++++++++++++++++++
+> > >  include/linux/firmware/xlnx-zynqmp.h | 25 +++++++++++++++++++++++++
+> > >  2 files changed, 52 insertions(+)
+> > 
+> > I still get merge conflicts with this change:
+> > 
+> > checking file drivers/firmware/xilinx/zynqmp.c Hunk #1 succeeded at 1156
+> > (offset 27 lines).
+> > checking file include/linux/firmware/xlnx-zynqmp.h
+> > Hunk #1 FAILED at 126.
+> > Hunk #2 succeeded at 376 (offset 17 lines).
+> > Hunk #3 FAILED at 435.
+> > Hunk #4 succeeded at 697 (offset 31 lines).
+> > 2 out of 4 hunks FAILED
+> > 
+> > 
+> > What branch/tree are you making it against?
+> > 
+> I have created patches on the master branch of https://github.com/torvalds/linux.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/net/ethernet/intel/ice/ice_flex_pipe.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Please work against linux-next, it has the combined work of everyone
+else as well.
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_flex_pipe.c b/drivers/net/ethernet/intel/ice/ice_flex_pipe.c
-index d29197ab3d02..4deb2c9446ec 100644
---- a/drivers/net/ethernet/intel/ice/ice_flex_pipe.c
-+++ b/drivers/net/ethernet/intel/ice/ice_flex_pipe.c
-@@ -4440,7 +4440,7 @@ ice_update_fd_swap(struct ice_hw *hw, u16 prof_id, struct ice_fv_word *es)
- 		for (j = 0; j < ICE_FD_SRC_DST_PAIR_COUNT; j++)
- 			if (es[i].prot_id == ice_fd_pairs[j].prot_id &&
- 			    es[i].off == ice_fd_pairs[j].off) {
--				set_bit(j, pair_list);
-+				__set_bit(j, pair_list);
- 				pair_start[j] = i;
- 			}
- 	}
-@@ -4710,7 +4710,7 @@ ice_add_prof(struct ice_hw *hw, enum ice_block blk, u64 id, u8 ptypes[],
- 			if (test_bit(ptg, ptgs_used))
- 				continue;
- 
--			set_bit(ptg, ptgs_used);
-+			__set_bit(ptg, ptgs_used);
- 			/* Check to see there are any attributes for
- 			 * this PTYPE, and add them if found.
- 			 */
-@@ -5339,7 +5339,7 @@ ice_adj_prof_priorities(struct ice_hw *hw, enum ice_block blk, u16 vsig,
- 			}
- 
- 			/* keep track of used ptgs */
--			set_bit(t->tcam[i].ptg, ptgs_used);
-+			__set_bit(t->tcam[i].ptg, ptgs_used);
- 		}
- 	}
- 
--- 
-2.32.0
+thanks,
 
+greg k-h

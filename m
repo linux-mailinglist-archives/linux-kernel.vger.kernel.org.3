@@ -2,104 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 978DE47E3C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D1247E3C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:54:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348462AbhLWMxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 07:53:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348321AbhLWMxO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 07:53:14 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51193C061401;
-        Thu, 23 Dec 2021 04:53:13 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id q14so13449924edi.3;
-        Thu, 23 Dec 2021 04:53:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=5IhcIiQyVUKu9L30Vg5+RpyU7OW/xb9Dw8MgAKsUEjk=;
-        b=mwUBnMelq83wCnTnDoClQVq2L2qe26xnPznhGvDGH11V5/RF9FSrS9ipjHARyx4gZs
-         wHQrtZCdlCxwg6ULpTBy/ovF/aVcLInz6axTCu48yprWzoMjISczJ7lA2EkAoMTUNEgI
-         vmMsf/Yr9lvNFeTyhJya5x/7hmS8y5gm1IoTu0Eajz1lyDKj1y9GHgE67Ck2ilTivwoH
-         nEmdPr/Ny3XSAM7JZ50b06Cg9iLgW5typ9TErvhY5GX/GzwxSTYFQeuU3z0cdhNsReyy
-         xju5qQ5Qo9zzBSwA+VsvEvU4X8Kq5TgKHm47qZAPk7b76pWwuonTCTqooTcjqMl6078p
-         9Z2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=5IhcIiQyVUKu9L30Vg5+RpyU7OW/xb9Dw8MgAKsUEjk=;
-        b=wF8wPktCGrl/H749NYhTC38jt6OaZE8juOq5RQ+tbukp9nPjlcFxw4zyxmGm0YBode
-         vOuMl6yebAfWvL8ilhgbjJfnXnu7AcO430x0ctO/GKLHBf7YxUek8xMjydriwBGbak1C
-         eQ8YNiMCiU+EiP5njTfaE0o4MSEq6Oo2rtL4uPfYuBtMhiiTiAk0O7l3o8m9U3vyf9xW
-         BAfC1HIsHzX+Kouygagz9tXUub+ImsSHXYUEGW7i6TUFaTV3RDlTAH3+I74NG3YBYEg0
-         uLhipWzmDFia/0JLAI9WtD7UiM1wNo0INqXJsm4k1RtWhjYMub9YnmjdLP+iogewi3zd
-         mlXw==
-X-Gm-Message-State: AOAM533jYMCewOZ1N2fKeoCdIgJkzf62kyY6bPSuZ13VoFGCRzHC97i+
-        HvEpdob2Ax+gaacIT17Xk3o=
-X-Google-Smtp-Source: ABdhPJxTMr/s3T6yhgpP4siJZageNjtMVxnC1LixKDvJXv7VwSEQjKmQCpp0A6bcOp/C6pG/gceXOg==
-X-Received: by 2002:a17:906:af19:: with SMTP id lx25mr1832627ejb.338.1640263991848;
-        Thu, 23 Dec 2021 04:53:11 -0800 (PST)
-Received: from felia.fritz.box ([2001:16b8:2606:5e00:3112:93fc:fc68:4d9e])
-        by smtp.gmail.com with ESMTPSA id ho14sm1728852ejc.73.2021.12.23.04.53.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Dec 2021 04:53:11 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Jan Kara <jack@suse.cz>, linux-block@vger.kernel.org
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH v2] block: drop needless assignment in set_task_ioprio()
-Date:   Thu, 23 Dec 2021 13:53:00 +0100
-Message-Id: <20211223125300.20691-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1348470AbhLWMyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 07:54:21 -0500
+Received: from foss.arm.com ([217.140.110.172]:41548 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232966AbhLWMyU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 07:54:20 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 28C55D6E;
+        Thu, 23 Dec 2021 04:54:20 -0800 (PST)
+Received: from [10.57.66.229] (unknown [10.57.66.229])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 846F23F5A1;
+        Thu, 23 Dec 2021 04:54:18 -0800 (PST)
+Message-ID: <bd63bad8-df67-4d98-8dd0-26af33ae961b@arm.com>
+Date:   Thu, 23 Dec 2021 12:54:06 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v3] serial: mps2-uart: Check for error irq
+Content-Language: en-GB
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, andy.shevchenko@gmail.com,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        liviu.dudau@arm.com, sudeep.holla@arm.com,
+        lorenzo.pieralisi@arm.com
+Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20211223121418.1330239-1-jiasheng@iscas.ac.cn>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20211223121418.1330239-1-jiasheng@iscas.ac.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 5fc11eebb4a9 ("block: open code create_task_io_context in
-set_task_ioprio") introduces a needless assignment
-'ioc = task->io_context', as the local variable ioc is not further
-used before returning.
+On 2021-12-23 12:14, Jiasheng Jiang wrote:
+> Because of the possible failure of the platform_get_irq(), it should be
+> better to check it to avoid the use of error irq.
 
-Even after the further fix, commit a957b61254a7 ("block: fix error in
-handling dead task for ioprio setting"), the assignment still remains
-needless.
+As far as I can see, the only "use" of error values is that they will be 
+passed to request_irq(), which will then return -EINVAL because they are 
+not valid IRQ numbers, and that error will be handled appropriately. I 
+think that's a relatively common pattern, so your commit message should 
+really describe why you think it's a problem and why this addition is a 
+meaningful improvement.
 
-Drop this needless assignment in set_task_ioprio().
+Robin.
 
-This code smell was identified with 'make clang-analyzer'.
-
-Fixes: 5fc11eebb4a9 ("block: open code create_task_io_context in set_task_ioprio")
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- block/blk-ioc.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/block/blk-ioc.c b/block/blk-ioc.c
-index 71c3a933cf16..11f49f78db32 100644
---- a/block/blk-ioc.c
-+++ b/block/blk-ioc.c
-@@ -284,12 +284,10 @@ int set_task_ioprio(struct task_struct *task, int ioprio)
- 			kmem_cache_free(iocontext_cachep, ioc);
- 			goto out;
- 		}
--		if (task->io_context) {
-+		if (task->io_context)
- 			kmem_cache_free(iocontext_cachep, ioc);
--			ioc = task->io_context;
--		} else {
-+		else
- 			task->io_context = ioc;
--		}
- 	}
- 	task->io_context->ioprio = ioprio;
- out:
--- 
-2.17.1
-
+> Fixes: 041f031def33 ("serial: mps2-uart: add MPS2 UART driver")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+> Changelog:
+> 
+> v2 -> v3
+> 
+> *Change 1. Using error variable to check.
+> *Change 2. Add new commit message.
+> ---
+>   drivers/tty/serial/mps2-uart.c | 26 ++++++++++++++++++++++----
+>   1 file changed, 22 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/mps2-uart.c b/drivers/tty/serial/mps2-uart.c
+> index 587b42f754cb..24a52300d8d9 100644
+> --- a/drivers/tty/serial/mps2-uart.c
+> +++ b/drivers/tty/serial/mps2-uart.c
+> @@ -584,11 +584,29 @@ static int mps2_init_port(struct platform_device *pdev,
+>   
+>   
+>   	if (mps_port->flags & UART_PORT_COMBINED_IRQ) {
+> -		mps_port->port.irq = platform_get_irq(pdev, 0);
+> +		ret = platform_get_irq(pdev, 0);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		mps_port->port.irq = ret;
+>   	} else {
+> -		mps_port->rx_irq = platform_get_irq(pdev, 0);
+> -		mps_port->tx_irq = platform_get_irq(pdev, 1);
+> -		mps_port->port.irq = platform_get_irq(pdev, 2);
+> +		ret = platform_get_irq(pdev, 0);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		mps_port->rx_irq = ret;
+> +
+> +		ret = platform_get_irq(pdev, 1);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		mps_port->tx_irq = ret;
+> +
+> +		ret = platform_get_irq(pdev, 2);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		mps_port->port.irq = ret;
+>   	}
+>   
+>   	return ret;

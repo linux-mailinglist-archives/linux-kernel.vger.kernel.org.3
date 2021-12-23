@@ -2,117 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C87C47E6BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 18:15:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B354A47E6C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 18:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244424AbhLWRP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 12:15:29 -0500
-Received: from mga17.intel.com ([192.55.52.151]:29383 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240188AbhLWRP1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 12:15:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640279727; x=1671815727;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QqFBfmp5RzVWtBEjuzqJTnU0qdscrlJtGqwQLoPJA7o=;
-  b=boXvP8PY2lomknruH4HSq0sbnqeKc6WIcND63hOqu7YxrVW5T9836eLk
-   KE4TrDAQH26OJeCCOrqZlnecrx3J4TF73qTlZhlSm01UqmI7bduPmqaq8
-   qOanoaQGb00psnnxIyepTd62R4h0d7Cs18lfjyZId9cN6cB6fkYKPMC+U
-   56V7NJ8JIB1dUhWhg+MObHD8+hMZSL7MIiZf5b+HntJr6WQmYDh/odwzW
-   f8cCPY0w/47bMdyAaAo9pGGZ9frwOqNSG/Db0lMta4IV+32uYoYBsFtGt
-   gmjHxpskUc5imgyV+pl+6zx2YmFwBx4C+mKPj9Cy9gH7csVVj/DUWatn3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10207"; a="221532085"
-X-IronPort-AV: E=Sophos;i="5.88,230,1635231600"; 
-   d="scan'208";a="221532085"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 09:15:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,230,1635231600"; 
-   d="scan'208";a="664639357"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Dec 2021 09:15:21 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 42F7F125; Thu, 23 Dec 2021 19:15:30 +0200 (EET)
-Date:   Thu, 23 Dec 2021 20:15:30 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 19/26] x86/tdx: Make pages shared in ioremap()
-Message-ID: <20211223171530.v73posbqizb5l3md@black.fi.intel.com>
-References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
- <20211214150304.62613-20-kirill.shutemov@linux.intel.com>
- <87c288d6-9bf8-5a94-a628-1e0aaa7de690@amd.com>
+        id S1349448AbhLWRRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 12:17:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:20752 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240188AbhLWRRH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 12:17:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640279827;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5tKxu5jvc2qNkzWCP2pb4IkOAYj+EJYXt6ivrVtbtg4=;
+        b=AX8V6Xm8R3ybVrGzprhX3WdrIx55WJGc25H3fMfb6Ax+tZIdynfEQDnQCYQiwZL452XELt
+        CNuyeWLksNZnfeYKoI4SfbkI+mCHBtMosvnYdfxniRoPn8FL3f/SIlbtgrVnB7S13yX4Zn
+        EFpwt3D27rsK9X1dYuWW+91//SwWB24=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-664-_1UwYIyBO62-VSJ1uyrxaA-1; Thu, 23 Dec 2021 12:17:05 -0500
+X-MC-Unique: _1UwYIyBO62-VSJ1uyrxaA-1
+Received: by mail-ed1-f70.google.com with SMTP id y14-20020a056402440e00b003f81d896346so4986500eda.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 09:17:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5tKxu5jvc2qNkzWCP2pb4IkOAYj+EJYXt6ivrVtbtg4=;
+        b=tcvQMxgJLHUPxQL+/rVeF2M55yc5jZw7BttrDGcW+soXava2Gk+8/XPe4i2hH0tbZy
+         xRku49KsdS/xkZv5gEUjR0QsxH+VRxVxfVDQ/Ep4nxIKoUXl9VuX38cXepujAjJN3T8E
+         7dyW3M/G6fq07amyYydlBvUkc2myWPAXh3QQivSeNQiMOtgAKuoJoI1GgGP48Xf9n9SR
+         sacds5h/1j9zZE9Ou6S9YRhMjPNPwWo9pNyjZXlKXiQ8rx6e469olrH18tZXqPjK1tY1
+         z8yWa5WxlSdgqxBX30XU7WDW4pjTMn2+m9mtlEym6Z0X3AUEcPDXNXrHojef4PrbiB7k
+         q5uw==
+X-Gm-Message-State: AOAM533u7psDCsCUtZbhA6UV0Z+AZ+ba3xJ+uJdlUnjdBiULTc9SWvls
+        yryR4pptvGDvlsdR4PrYZIurIiwcE/eaHyfRC2lzk799glw3z2K6RcnfhRX5Wqig8y6AyFWcRP4
+        6/fxBC/HPW3xAh78yHu3T/6Bm
+X-Received: by 2002:a05:6402:1203:: with SMTP id c3mr2823832edw.253.1640279824641;
+        Thu, 23 Dec 2021 09:17:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzuQV2fwk4RqZ2vQ67AF5f6k8exjGMP0tCUN/8g51odv/cVFyvaVH9DnbUlOrIu52FAAhF7cg==
+X-Received: by 2002:a05:6402:1203:: with SMTP id c3mr2823817edw.253.1640279824478;
+        Thu, 23 Dec 2021 09:17:04 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id y5sm1906647ejk.203.2021.12.23.09.17.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Dec 2021 09:17:03 -0800 (PST)
+Message-ID: <674e8c50-ece7-9aad-7876-c739dbc96498@redhat.com>
+Date:   Thu, 23 Dec 2021 18:17:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87c288d6-9bf8-5a94-a628-1e0aaa7de690@amd.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v5 0/4] add device drivers for Siemens Industrial PCs
+Content-Language: en-US
+To:     Henning Schild <henning.schild@siemens.com>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-watchdog@vger.kernel.org
+Cc:     Srikanth Krishnakar <skrishnakar@gmail.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Enrico Weigelt <lkml@metux.net>
+References: <20211213120502.20661-1-henning.schild@siemens.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20211213120502.20661-1-henning.schild@siemens.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 11:26:59AM -0600, Tom Lendacky wrote:
-> On 12/14/21 9:02 AM, Kirill A. Shutemov wrote:
-> > In TDX guests, guest memory is protected from host access. If a guest
-> > performs I/O, it needs to explicitly share the I/O memory with the host.
-> > 
-> > Make all ioremap()ed pages that are not backed by normal memory
-> > (IORES_DESC_NONE or IORES_DESC_RESERVED) mapped as shared.
-> > 
-> > Since TDX memory encryption support is similar to AMD SEV architecture,
-> > reuse the infrastructure from AMD SEV code. Introduce CC_ATTR_GUEST_TDX
-> > to add TDX-specific changes to the AMD SEV/SME memory encryption code.
-> > 
-> > Add tdx_shared_mask() interface to get the TDX guest shared bitmask.
-> > 
-> > pgprot_decrypted() is used by drivers (i915, virtio_gpu, vfio). Export
-> > both pgprot_encrypted() and pgprot_decrypted().
-> > 
+Hi,
+
+On 12/13/21 13:04, Henning Schild wrote:
+> changes since v4:
+> - make everything around GPIO memory usage more verbose
+>   - commit messages, FIXME in p1, cover-letter
 > 
-> > --- a/arch/x86/mm/mem_encrypt.c
-> > +++ b/arch/x86/mm/mem_encrypt.c
-> > @@ -14,6 +14,33 @@
-> >   #include <linux/mem_encrypt.h>
-> >   #include <linux/virtio_config.h>
-> > +#include <asm/tdx.h>
-> > +
-> > +/*
-> > + * Set or unset encryption attribute in vendor agnostic way.
-> > + */
-> > +pgprot_t pgprot_cc_encrypted(pgprot_t prot)
-> > +{
-> > +	if (cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT))
-> > +		return __pgprot(__sme_set(pgprot_val(prot)));
-> > +	else if (cc_platform_has(CC_ATTR_GUEST_TDX))
-> > +		return __pgprot(pgprot_val(prot) & ~tdx_shared_mask());
-> > +
+> changes since v3:
 > 
-> Hmmm... I believe this breaks SEV guests. __sme_set() uses sme_me_mask which
-> is used for both SME and SEV. With the current checks, an SEV guest will end
-> up never setting an encrypted address through this path. Ditto below on the
-> decrypted path.
+> - fix io access width and region reservations
+> - fix style in p1
+> 
+> changes since v2:
+> 
+> - remove "simatic-ipc" prefix from LED names
+> - fix style issues found in v2, mainly LED driver
+> - fix OEM specific dmi code, and remove magic numbers
+> - more "simatic_ipc" name prefixing
+> - improved pmc quirk code using callbacks
+> 
+> changes since v1:
+> 
+> - fixed lots of style issues found in v1
+>   - (debug) printing
+>   - header ordering
+> - fixed license issues GPLv2 and SPDX in all files
+> - module_platform_driver instead of __init __exit
+> - wdt simplifications cleanup
+> - lots of fixes in wdt driver, all that was found in v1
+> - fixed dmi length in dmi helper
+> - changed LED names to allowed ones
+> - move led driver to simple/
+> - switched pmc_atom to dmi callback with global variable
+> 
+> 
+> This series adds support for watchdogs and leds of several x86 devices
+> from Siemens.
+> 
+> It is structured with a platform driver that mainly does identification
+> of the machines. It might trigger loading of the actual device drivers
+> by attaching devices to the platform bus.
+> 
+> The identification is vendor specific, parsing a special binary DMI
+> entry. The implementation of that platform identification is applied on
+> pmc_atom clock quirks in the final patch.
+> 
+> It is all structured in a way that we can easily add more devices and
+> more platform drivers later. Internally we have some more code for
+> hardware monitoring, more leds, watchdogs etc. This will follow some
+> day.
+> 
+> The LED as well as the watchdog drivers access GPIO memory directly.
+> Using pinctrl is not possible because the machines lack ACPI entries for
+> the pinctrl drivers. Updates to the ACPI tables are not expected. So we
+> can rule out a conflict where two drivers would try and access that GPIO
+> memory.
+> So we do not use those pins as "general purpose" but as "Siemens
+> purpose", after having identified the devices very clearly. 
+> 
+> Henning Schild (4):
+>   platform/x86: simatic-ipc: add main driver for Siemens devices
+>   leds: simatic-ipc-leds: add new driver for Siemens Industial PCs
+>   watchdog: simatic-ipc-wdt: add new driver for Siemens Industrial PCs
+>   platform/x86: pmc_atom: improve critclk_systems matching for Siemens
+>     PCs
 
-Hm, okay. What if I rewrite code like this:
 
-	pgprot_t pgprot_cc_encrypted(pgprot_t prot)
-	{
-		if (cc_platform_has(CC_ATTR_GUEST_TDX))
-			return __pgprot(pgprot_val(prot) & ~tdx_shared_mask());
-		else
-			return __pgprot(__sme_set(pgprot_val(prot)));
-	}
+Thank you for your patch-series, I've applied the series to my
+review-hans branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-I believe it should cover all cases, right?
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
 
--- 
- Kirill A. Shutemov
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
+
+
+> 
+>  drivers/leds/Kconfig                          |   3 +
+>  drivers/leds/Makefile                         |   3 +
+>  drivers/leds/simple/Kconfig                   |  11 +
+>  drivers/leds/simple/Makefile                  |   2 +
+>  drivers/leds/simple/simatic-ipc-leds.c        | 202 ++++++++++++++++
+>  drivers/platform/x86/Kconfig                  |  12 +
+>  drivers/platform/x86/Makefile                 |   3 +
+>  drivers/platform/x86/pmc_atom.c               |  54 +++--
+>  drivers/platform/x86/simatic-ipc.c            | 176 ++++++++++++++
+>  drivers/watchdog/Kconfig                      |  11 +
+>  drivers/watchdog/Makefile                     |   1 +
+>  drivers/watchdog/simatic-ipc-wdt.c            | 228 ++++++++++++++++++
+>  .../platform_data/x86/simatic-ipc-base.h      |  29 +++
+>  include/linux/platform_data/x86/simatic-ipc.h |  72 ++++++
+>  14 files changed, 786 insertions(+), 21 deletions(-)
+>  create mode 100644 drivers/leds/simple/Kconfig
+>  create mode 100644 drivers/leds/simple/Makefile
+>  create mode 100644 drivers/leds/simple/simatic-ipc-leds.c
+>  create mode 100644 drivers/platform/x86/simatic-ipc.c
+>  create mode 100644 drivers/watchdog/simatic-ipc-wdt.c
+>  create mode 100644 include/linux/platform_data/x86/simatic-ipc-base.h
+>  create mode 100644 include/linux/platform_data/x86/simatic-ipc.h
+> 
+

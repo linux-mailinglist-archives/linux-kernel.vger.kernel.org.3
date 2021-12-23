@@ -2,138 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 746F047E2FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:09:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B202F47E309
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:14:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243479AbhLWMJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 07:09:50 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:56295 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348188AbhLWMJh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 07:09:37 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JKTWy6QMCz4xmv;
-        Thu, 23 Dec 2021 23:09:34 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1640261375;
-        bh=1siwOFFYtHZKwcy5kaBtuBB1w+GNVODRs2v3Bz3XFmo=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=VZoDl5yIll8mfNypSDImwT8BfYJpgWtZVSLJE9ro7S+4dxphp4hgv6LRMp84uivNr
-         TaaOz6AaOOY5rX+/N1Zd4Ql21GwTymw52MSwQGzma7R/2yHWTMj1IKeST7CExcFeZ3
-         +tnPioruVIJ5Tft6vlOKunm0GLzSu1+H6bJ2ZMOgZFR7IIowP4o0xlLgmJ1CsrTjZA
-         zxw1WDo3OCnejfW/fhWdUvtdh8SzsdQpWOE62OfgGm7mPqtmhHpOuxMMbnKKcH1/gf
-         x7zUtxxOTInc1+M0jw9GZmP1KkljR3rvRf6Ck1J6j93x+W+FJn/f34MAzA//xLQEfs
-         J+wAdARCD/LCw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Maxime Bizon <mbizon@freebox.fr>,
-        Russell Currey <ruscur@russell.cc>
-Subject: Re: [PATCH v2 1/2] powerpc/set_memory: Avoid spinlock recursion in
- change_page_attr()
-In-Reply-To: <112b55c5fe019fefc284e3361772b00345fa0967.1639676816.git.christophe.leroy@csgroup.eu>
-References: <112b55c5fe019fefc284e3361772b00345fa0967.1639676816.git.christophe.leroy@csgroup.eu>
-Date:   Thu, 23 Dec 2021 23:09:34 +1100
-Message-ID: <871r2334ld.fsf@mpe.ellerman.id.au>
+        id S1348054AbhLWMOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 07:14:46 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:44752 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S243398AbhLWMOo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 07:14:44 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowABngJIbaMRhmsZnBA--.30430S2;
+        Thu, 23 Dec 2021 20:14:19 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     andy.shevchenko@gmail.com, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, liviu.dudau@arm.com, sudeep.holla@arm.com,
+        lorenzo.pieralisi@arm.com
+Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v3] serial: mps2-uart: Check for error irq
+Date:   Thu, 23 Dec 2021 20:14:18 +0800
+Message-Id: <20211223121418.1330239-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowABngJIbaMRhmsZnBA--.30430S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFWUZr13KFWxZF1DGF48JFb_yoW8Gw1fpF
+        1ktFZ8ArW8Ga4SgasrXr1UJF43C3yvva9rX342934293WrJFnxC34rCFnIvF1kZrWDJr4f
+        Zrs8tF4ruF10va7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
+        n2IY04v7MxkIecxEwVAFwVW5JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF
+        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
+        VjvjDU0xZFpf9x0JUQqXdUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-> Commit 1f9ad21c3b38 ("powerpc/mm: Implement set_memory() routines")
-> included a spin_lock() to change_page_attr() in order to
-> safely perform the three step operations. But then
-> commit 9f7853d7609d ("powerpc/mm: Fix set_memory_*() against
-> concurrent accesses") modify it to use pte_update() and do
-> the operation atomically.
+Because of the possible failure of the platform_get_irq(), it should be
+better to check it to avoid the use of error irq.
 
-It's not really atomic, it's just safe against concurrent access.
+Fixes: 041f031def33 ("serial: mps2-uart: add MPS2 UART driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog:
 
-We still do a read / modify / write of the pte value.
+v2 -> v3
 
-Which isn't safe against concurrent calls to change_page_attr() for the
-same address.
+*Change 1. Using error variable to check.
+*Change 2. Add new commit message.
+---
+ drivers/tty/serial/mps2-uart.c | 26 ++++++++++++++++++++++----
+ 1 file changed, 22 insertions(+), 4 deletions(-)
 
-But maybe that's OK? AFAICS other architectures (eg. arm64) have no
-protection against concurrent callers. I think the assumption is higher
-level code is ensuring there's only a single caller at a time.
+diff --git a/drivers/tty/serial/mps2-uart.c b/drivers/tty/serial/mps2-uart.c
+index 587b42f754cb..24a52300d8d9 100644
+--- a/drivers/tty/serial/mps2-uart.c
++++ b/drivers/tty/serial/mps2-uart.c
+@@ -584,11 +584,29 @@ static int mps2_init_port(struct platform_device *pdev,
+ 
+ 
+ 	if (mps_port->flags & UART_PORT_COMBINED_IRQ) {
+-		mps_port->port.irq = platform_get_irq(pdev, 0);
++		ret = platform_get_irq(pdev, 0);
++		if (ret < 0)
++			return ret;
++
++		mps_port->port.irq = ret;
+ 	} else {
+-		mps_port->rx_irq = platform_get_irq(pdev, 0);
+-		mps_port->tx_irq = platform_get_irq(pdev, 1);
+-		mps_port->port.irq = platform_get_irq(pdev, 2);
++		ret = platform_get_irq(pdev, 0);
++		if (ret < 0)
++			return ret;
++
++		mps_port->rx_irq = ret;
++
++		ret = platform_get_irq(pdev, 1);
++		if (ret < 0)
++			return ret;
++
++		mps_port->tx_irq = ret;
++
++		ret = platform_get_irq(pdev, 2);
++		if (ret < 0)
++			return ret;
++
++		mps_port->port.irq = ret;
+ 	}
+ 
+ 	return ret;
+-- 
+2.25.1
 
-On the other hand x86 and s390 do have locking (cpa_lock / cpa_mutex).
-But it seems that's mostly to protect against splitting of page tables,
-which we aren't doing.
-
-We'd be a bit safer if we used pte_update() "properly", like I did in:
-
-  https://lore.kernel.org/linuxppc-dev/20210817132552.3375738-1-mpe@ellerman.id.au/
-
-
-cheers
-
-> In the meantime, Maxime reported some spinlock recursion.
->
-> [   15.351649] BUG: spinlock recursion on CPU#0, kworker/0:2/217
-> [   15.357540]  lock: init_mm+0x3c/0x420, .magic: dead4ead, .owner: kworker/0:2/217, .owner_cpu: 0
-> [   15.366563] CPU: 0 PID: 217 Comm: kworker/0:2 Not tainted 5.15.0+ #523
-> [   15.373350] Workqueue: events do_free_init
-> [   15.377615] Call Trace:
-> [   15.380232] [e4105ac0] [800946a4] do_raw_spin_lock+0xf8/0x120 (unreliable)
-> [   15.387340] [e4105ae0] [8001f4ec] change_page_attr+0x40/0x1d4
-> [   15.393413] [e4105b10] [801424e0] __apply_to_page_range+0x164/0x310
-> [   15.400009] [e4105b60] [80169620] free_pcp_prepare+0x1e4/0x4a0
-> [   15.406045] [e4105ba0] [8016c5a0] free_unref_page+0x40/0x2b8
-> [   15.411979] [e4105be0] [8018724c] kasan_depopulate_vmalloc_pte+0x6c/0x94
-> [   15.418989] [e4105c00] [801424e0] __apply_to_page_range+0x164/0x310
-> [   15.425451] [e4105c50] [80187834] kasan_release_vmalloc+0xbc/0x134
-> [   15.431898] [e4105c70] [8015f7a8] __purge_vmap_area_lazy+0x4e4/0xdd8
-> [   15.438560] [e4105d30] [80160d10] _vm_unmap_aliases.part.0+0x17c/0x24c
-> [   15.445283] [e4105d60] [801642d0] __vunmap+0x2f0/0x5c8
-> [   15.450684] [e4105db0] [800e32d0] do_free_init+0x68/0x94
-> [   15.456181] [e4105dd0] [8005d094] process_one_work+0x4bc/0x7b8
-> [   15.462283] [e4105e90] [8005d614] worker_thread+0x284/0x6e8
-> [   15.468227] [e4105f00] [8006aaec] kthread+0x1f0/0x210
-> [   15.473489] [e4105f40] [80017148] ret_from_kernel_thread+0x14/0x1c
->
-> Remove the spin_lock() in change_page_attr().
->
-> Reported-by: Maxime Bizon <mbizon@freebox.fr>
-> Link: https://lore.kernel.org/all/20211212112152.GA27070@sakura/
-> Cc: Russell Currey <ruscur@russell.cc>
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  arch/powerpc/mm/pageattr.c | 4 ----
->  1 file changed, 4 deletions(-)
->
-> diff --git a/arch/powerpc/mm/pageattr.c b/arch/powerpc/mm/pageattr.c
-> index edea388e9d3f..308adc51da9d 100644
-> --- a/arch/powerpc/mm/pageattr.c
-> +++ b/arch/powerpc/mm/pageattr.c
-> @@ -30,8 +30,6 @@ static int change_page_attr(pte_t *ptep, unsigned long addr, void *data)
->  	long action = (long)data;
->  	pte_t pte;
->  
-> -	spin_lock(&init_mm.page_table_lock);
-> -
->  	pte = ptep_get(ptep);
->  
->  	/* modify the PTE bits as desired, then apply */
-> @@ -61,8 +59,6 @@ static int change_page_attr(pte_t *ptep, unsigned long addr, void *data)
->  
->  	flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
->  
-> -	spin_unlock(&init_mm.page_table_lock);
-> -
->  	return 0;
->  }
->  
-> -- 
-> 2.33.1

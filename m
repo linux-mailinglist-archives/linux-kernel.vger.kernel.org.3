@@ -2,99 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28BE547E866
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 20:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4395947E86F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 20:41:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350112AbhLWTe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 14:34:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58432 "EHLO
+        id S1350047AbhLWTlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 14:41:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350022AbhLWTe6 (ORCPT
+        with ESMTP id S244856AbhLWTlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 14:34:58 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8ABC061401;
-        Thu, 23 Dec 2021 11:34:58 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id w24so5075240ply.12;
-        Thu, 23 Dec 2021 11:34:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:date:in-reply-to:references:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=gfqJf7SzIqbcHPeGopiBGrOBFpo1yLWHJgtQyrjtfMY=;
-        b=TcE1IvMrcW0NGYIvwnazCqtyBlz4RlhZYGOGu5TtQ20BhpOzZD57qxc1wuZzOqHIgY
-         X4+Jwa40ZqUzo/zGlhh8VHdPIRgleOaLLXhbqi0gv6YtxM54DBNwlZ947nvGKa0C75gd
-         +t1wkPQXiaS0167CMDjS+rc2b/Lj1UYOzGURWJfA+L6wmmzAxQ86bn40RHUSgf64mK0V
-         1CkxGBVV0KOP5P7KYrrddGRvTiVo4UFVZ1EQtON5dX5aQe8CYIxXuRSapZchWMiHYdQp
-         FxJEOsa4KWIZw/TzXN3FkVushZTQPipN3PowhfKbAd6bRLdOLrGNYyJ0jK7cemr7GgWZ
-         pLLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=gfqJf7SzIqbcHPeGopiBGrOBFpo1yLWHJgtQyrjtfMY=;
-        b=mUUAAZRSo/qGNvJN2ouzTP+lvUiN0fs+iWMUL7gaRBKE4I5gkJf2KG8Qy0VE+Pn1MY
-         vnCVm4YSeyC3kzhto0CoZpsTBy/rA1QQPOi+6xCsFqWaB5VwNp69AZU4xNIKRrkh2ZJa
-         aTyOAWC64RmZIpzDYZuYnEH8qHeFBxGWF3+QasIg/7hvAbnshdu6xBabRbSkejhv3zxi
-         Unan3mC9ua2gSyyuCWhwfxz7x4gy4cFv6ignyuXFAdMfWFXHH39Cl5msU9CGVpoFyVFo
-         ewKXM2LaHhd0881p5I+z8tBVvoc0DxI/6Q3wXcGcpZKfVLp0EfsYn68kyPuhbk56VsHr
-         72zg==
-X-Gm-Message-State: AOAM532G9yvymL7T2UbrEgXfTowY8BYCR5dC2sbzs2EU/LIVqYx+4aZF
-        bYyNCcNu7EW8V1hGxCYh1tU=
-X-Google-Smtp-Source: ABdhPJx8VCGJ20VqDfKx0XJ2RzpGIAoKL9LsmWga+flt80us4x7/eBQQ2xQW6YrYBZOKIKUgAGDVlg==
-X-Received: by 2002:a17:90b:30c9:: with SMTP id hi9mr4166574pjb.216.1640288097932;
-        Thu, 23 Dec 2021 11:34:57 -0800 (PST)
-Received: from [10.2.59.154] (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id ot6sm7116933pjb.32.2021.12.23.11.34.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Dec 2021 11:34:57 -0800 (PST)
-Message-ID: <d8cf5bd620e65351dbd82d18b0426a22ea77eae2.camel@gmail.com>
-Subject: Re: [PATCH] net: ethernet: mellanox: return errno instead of 1
-From:   Saeed Mahameed <saeed.kernel@gmail.com>
-To:     Qing Wang <wangqing@vivo.com>, Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 23 Dec 2021 11:34:55 -0800
-In-Reply-To: <1640226277-32786-1-git-send-email-wangqing@vivo.com>
-References: <1640226277-32786-1-git-send-email-wangqing@vivo.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        Thu, 23 Dec 2021 14:41:09 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5768FC061401;
+        Thu, 23 Dec 2021 11:41:09 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 3B8F62D7;
+        Thu, 23 Dec 2021 19:41:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3B8F62D7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1640288468; bh=IImowtX5LGoKlTdhC5sVW1k4yjTfbWdEZ6Sx6l8h66c=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=BE+nBTLBJlZHz3eDjKHdi+zCE9WuYVkItmorb39cDwdZuTxEaSluTkTNEJAsy5YP+
+         ZCmYiirXOwi6tG3Ic4m862gxk4iqj8RBpQI1A9Q5UCtg28B3MJ2cq2i2l+VPy6tqVN
+         +PB4haPI73BbYi4PdsfKEZ0Y8uWwhZxw95vWtsq8ZYdCirAA1IunuQicloWbkM75iC
+         W3BnORmPn6+82F5qqQy0YmowM/bNUN42u/gFeLUw3CtHE9Z3XwGMzLdwbVAWC2oi6V
+         3VeaUDcJYTu9Yy2O0QgT4WjrDe8FyRbRZu29qYROtgUBoJ8X757rKb/1LuLeZNdqam
+         QGKgQxPtQirZg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Zhiqiang Liu <liuzhiqiang26@huawei.com>,
+        Jan Kara <jack@suse.cz>, "Darrick J. Wong" <djwong@kernel.org>,
+        "zhangyi (F)" <yi.zhang@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     linux-doc@vger.kernel.org, linfeilong <linfeilong@huawei.com>
+Subject: Re: [PATCH] doc: fs: remove bdev_try_to_free_page related doc
+In-Reply-To: <b75b794d-8c06-bbef-fb12-bef8105f41db@kernel.dk>
+References: <c45e6351-b0f8-3410-787e-02c6aeb3efe6@huawei.com>
+ <b75b794d-8c06-bbef-fb12-bef8105f41db@kernel.dk>
+Date:   Thu, 23 Dec 2021 12:41:07 -0700
+Message-ID: <87h7azf6ss.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2021-12-22 at 18:24 -0800, Qing Wang wrote:
-> From: Wang Qing <wangqing@vivo.com>
-> 
-> mlx5e_hv_vhca_stats_create() better return specific error than 1
-> 
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
-> ---
->  drivers/net/ethernet/mellanox/mlx5/core/en/hv_vhca_stats.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git
-> a/drivers/net/ethernet/mellanox/mlx5/core/en/hv_vhca_stats.c
-> b/drivers/net/ethernet/mellanox/mlx5/core/en/hv_vhca_stats.c
-> index d290d72..04cda3d
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/hv_vhca_stats.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/hv_vhca_stats.c
-> @@ -142,7 +142,7 @@ int mlx5e_hv_vhca_stats_create(struct mlx5e_priv
-> *priv)
->                                     PTR_ERR(agent));
->  
->                 kvfree(priv->stats_agent.buf);
-> -               return IS_ERR_OR_NULL(agent);
-> +               return agent ? PTR_ERR(agent) : -ENODEV;
+Jens Axboe <axboe@kernel.dk> writes:
 
-the single caller of this function ignores the return value,
-I just made a patch to void the return value and added you as Reported-
-by.
+> On 12/22/21 8:51 PM, Zhiqiang Liu wrote:
+>> 
+>> In commit acc6100d3ffa ("fs: remove bdev_try_to_free_page callback"),
+>> bdev_try_to_free_page has been removed.
+>> 
+>> We should remove its doc.
+>
+> Reviewed-by: Jens Axboe <axboe@kernel.dk>
+>
+> Jon, I'm assuming you'll take this one through the doc tree.
 
-Thanks !
+Applied, thanks.
 
-
+jon

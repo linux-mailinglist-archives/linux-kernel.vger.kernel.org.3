@@ -2,99 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6978C47E468
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 15:14:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D0847E46A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 15:14:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348780AbhLWOO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 09:14:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243804AbhLWOOZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 09:14:25 -0500
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13251C061757
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 06:14:25 -0800 (PST)
-Received: by mail-ua1-x936.google.com with SMTP id 107so10108669uaj.10
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 06:14:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=ZUVKji3Do/P3J4cEGIS/Cm6Y/8n8p+cIcEmYJRPs71Q=;
-        b=VWyUuxCSzd9njdBAdH3pYjyJLbPk8KTDjE7GR3R7+Rk5wqlYXTg6mrwMvb1xwNqD5j
-         8vIftZCteMnM3PNWHC2G11RV1RG2JUVcdYdXOAH4GqtF777jEw3NFVbYnOpD2Raw+KJY
-         cQ3rn7iDGbm3R4cGKwK2ZyRZ9MEhgtmx9OFIACa9A3Jv8tOF/vxE2cCIwZPKXv8LP7Hs
-         ExpfD96c0aiyCYU5bvLWCw9lKHTZ29bUF8jKC9we63A0kXtWQpzx2xF5jP3QfARDoFrl
-         3EsxjH0ncg2eKQxDTTFrE4phWb1KIKP8180HZmoCW6xoYG+LEgdeBhx6IkzuZuojfzXV
-         /Ezw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=ZUVKji3Do/P3J4cEGIS/Cm6Y/8n8p+cIcEmYJRPs71Q=;
-        b=wMqdPgMP4u3yybfS3Wc1e+PVmCdumdWuKYODpI1R9zBprkNv1R0ReSAHAqkHMfAyDz
-         XKoLJ9KlhdPdrOoctSSKqdRxtsGJ2Z7ObBz8F1IOPsK6s3gCB1yDf974ldNerAQGV9yo
-         rm35KfPVV9XVkk4WHiatf0RGFXuy8ZWc4everKll0FG2FrhCUtP9ZVX7FHmxlkMbf7dH
-         arljdNZTfsC0D2+MBVd74DFZ0VGP26kVxMinyiEyJcYWMEBjbXz75NE2f5nGyIKNk3Q2
-         3AB2t5v9Zcq0OQw7AtCqktZPDwZXrTaVV/MIXBTi2Z5jwlhTsykaQLgfV6eTIkuydaZm
-         qwig==
-X-Gm-Message-State: AOAM5308cl/Iq7vcZ46Dj4yd7EdC6cg7FZ0A37/MtCgy3mWtxSa8y5+J
-        OpnUZF0WsJBGK4uJrPwx/7YK6Wt4cxFuozMa/7g=
-X-Google-Smtp-Source: ABdhPJxGFFuFkICkqU5kCY9vkFq5c2VCqCxpjYvHK3HuXqNgkI4OoirpGOeY3lDq/odI1szMlBOZg0rruXsQZzaC43U=
-X-Received: by 2002:a67:fa12:: with SMTP id i18mr802900vsq.2.1640268864123;
- Thu, 23 Dec 2021 06:14:24 -0800 (PST)
+        id S1348786AbhLWOOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 09:14:43 -0500
+Received: from foss.arm.com ([217.140.110.172]:42892 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243804AbhLWOOl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 09:14:41 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 75DE6D6E;
+        Thu, 23 Dec 2021 06:14:41 -0800 (PST)
+Received: from [10.57.66.229] (unknown [10.57.66.229])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 920083F5A1;
+        Thu, 23 Dec 2021 06:14:39 -0800 (PST)
+Message-ID: <f9efc8e8-9dc6-8a80-15bb-bc2d9aaf60cb@arm.com>
+Date:   Thu, 23 Dec 2021 14:14:35 +0000
 MIME-Version: 1.0
-Received: by 2002:a67:d50b:0:0:0:0:0 with HTTP; Thu, 23 Dec 2021 06:14:23
- -0800 (PST)
-Reply-To: zdrabrar@gmail.com
-From:   "dr.Abrar Zebadiyah" <amelia.kipkalya3322@gmail.com>
-Date:   Thu, 23 Dec 2021 06:14:23 -0800
-Message-ID: <CABT2H0xzZ8r0bNWE1wrf-TW1LC1FWmHmLop=j90TNor6PxNzkQ@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 1/2] iommu/arm-smmu: Use platform_irq_count() to get the
+ interrupt count
+Content-Language: en-GB
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Will Deacon <will@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Rob Clark <robdclark@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org
+Cc:     Xin Tan <tanxin.ctf@gmail.com>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+References: <20211223130046.9365-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211223130046.9365-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20211223130046.9365-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-My Dear Friend.
+On 2021-12-23 13:00, Lad Prabhakar wrote:
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
+> 
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq_count().
 
-How are you and your family Today? I hope all is well, and I am happy
-to share this transaction with you ,but you must keep everything as
-secret and very confidential.
+Nit: platform_irq_count()
 
-I have a very lucrative business transaction which requires your
-utmost discretion. Please understand that you and me, are to work as
-one team to inherit this fund, hence I am your insider in the bank as
-the transaction commence. I advise you to feel free with me for all is
-going to be well with us. This business is 100% risk free.
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>   drivers/iommu/arm/arm-smmu/arm-smmu.c | 12 ++++++------
+>   1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> index 4bc75c4ce402..4844cd075644 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> @@ -2105,12 +2105,12 @@ static int arm_smmu_device_probe(struct platform_device *pdev)
+>   	if (IS_ERR(smmu))
+>   		return PTR_ERR(smmu);
+>   
+> -	num_irqs = 0;
+> -	while ((res = platform_get_resource(pdev, IORESOURCE_IRQ, num_irqs))) {
+> -		num_irqs++;
+> -		if (num_irqs > smmu->num_global_irqs)
+> -			smmu->num_context_irqs++;
+> -	}
+> +	num_irqs = platform_irq_count(pdev);
+> +	if (num_irqs < 0)
+> +		return num_irqs;
+> +
+> +	if (num_irqs > smmu->num_global_irqs)
+> +		smmu->num_context_irqs += (num_irqs - smmu->num_global_irqs);
 
-Though, I know it would come to you at uttermost surprise unbelief
-because it is virtually impossible to know who is trustworthy and who
-to believed I am dr.Abrar Zebadiyah sum of $10.5 million is lying in
-our bank without claim i want you to help me to claim and receive it
-to your account in your country for our benefit.
+This seems a bit overcomplicated. I reckon:
 
-I am aware of the unsafe nature of the internet, and was compelled to
-use this medium due to the nature of this project.I have access to
-every vital information that can be used to transfer this huge amount
-of money, which may culminate into the investment of the said funds
-into your account or any lucrative company in your country.
+	smmu->num_context_irqs = num_irqs - smmu->num_global_irqs;
+	if (num_irqs <= smmu->num_global_irqs) {
+		dev_err(...
 
-If you will like to assist me as a partner then indicate your
-interest, after which we shall both discuss the modalities and the
-sharing percentage. Upon receipt of your reply on your expression of
-interest, I will give you full details on how the business will be
-executed. I am open for negotiation,
+should do it.
 
-Thanks for your anticipated cooperation.Note you might receive this
-message in your inbox or spam folder, depends on your web host or
-server network
+However, FYI I have some patches refactoring most of the IRQ stuff here 
+that I plan to post next cycle (didn't quite have time to get them done 
+for 5.17 as I'd hoped...), so unless this needs to go in right now as an 
+urgent fix, I'm happy to take care of removing platform_get_resource() 
+as part of that if it's easier.
 
-Contact my private email only if you are interested (zdrabrar@gmail.com)
+Thanks,
+Robin.
 
-Compliment of the day,
-Regards,
-
-dr.Abrar Zebadiyah
+>   
+>   	if (!smmu->num_context_irqs) {
+>   		dev_err(dev, "found %d interrupts but expected at least %d\n",

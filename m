@@ -2,170 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A6C47E8C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 21:30:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D3947E8CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 21:36:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350253AbhLWUaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 15:30:09 -0500
-Received: from mxout04.lancloud.ru ([45.84.86.114]:33086 "EHLO
-        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350241AbhLWUaI (ORCPT
+        id S1350256AbhLWUgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 15:36:03 -0500
+Received: from fanzine2.igalia.com ([213.97.179.56]:48670 "EHLO
+        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245049AbhLWUgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 15:30:08 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru 15CB420A977E
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH v2 2/4] ata: pata_platform: Merge pata_of_platform into
- pata_platform
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <linux-ide@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-References: <20211221162614.25308-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211221162614.25308-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <dc6c931f-493e-cb94-b62c-cb9b87e393ec@omp.ru>
-Date:   Thu, 23 Dec 2021 23:30:01 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 23 Dec 2021 15:36:02 -0500
+X-Greylist: delayed 1120 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Dec 2021 15:36:02 EST
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=0utom7u8Suk0aASpCi+WffUjH+y0e5u1aGXguIC+eLk=; b=F4sU2SokE9igGARLaYk+phyQl/
+        s3HHwN+y28xcld57LRUzhAwE1gy4bhq7gyjAERWmUO7q+4fI+NpXb215PSc+HToUQiZP9Bj8bUR6I
+        Yovj+Nsp5RPwPCD65PDliEr6bD5JjoZT5rmMdO5v/NJKreZSA6bIfLa9/oHaTH4Yh+upUC/79g9yE
+        4I8YiBHA46Aqn7zNcYDO0oi5RBhnj+2t5a2HaKq5xcSrfFgkK0nhDqI6cUatlAF+pnN5X8oYAn0Ej
+        9hkRLOz8FllTWJiE1Cbgb/OQ3DQfCadaLt/GO0sV5OpoxDyl4OWXmgABwWoHKOFeBLxqEAdTh7HSP
+        NomjA2Ww==;
+Received: from [165.90.113.117] (helo=mail.igalia.com)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1n0Uoh-00033I-UD; Thu, 23 Dec 2021 21:36:00 +0100
+Date:   Thu, 23 Dec 2021 19:35:48 -0100
+From:   Melissa Wen <mwen@igalia.com>
+To:     =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     rodrigosiqueiramelo@gmail.com, hamohammed.sa@gmail.com,
+        airlied@linux.ie, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, melissa.srw@gmail.com
+Subject: Re: [PATCH 0/3] drm/vkms: add support for multiple overlay planes
+Message-ID: <20211223203525.4sr7rjfq6l42il5r@mail.igalia.com>
+References: <20211213181131.17223-1-jose.exposito89@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211221162614.25308-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="w6ayn3vj6od4fgba"
+Content-Disposition: inline
+In-Reply-To: <20211213181131.17223-1-jose.exposito89@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
 
-On 12/21/21 7:26 PM, Lad Prabhakar wrote:
+--w6ayn3vj6od4fgba
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Merge the OF pata_of_platform driver into pata_platform. While doing so
-> drop usage of platform_get_resource() and use platform_get_irq_optional().
+On 12/13, Jos=E9 Exp=F3sito wrote:
+> Hi all,
+>=20
+> First of all, let me quickly introduce myself. I'm Jos=E9 Exp=F3sito and
+> I'm a hobbyist open source developer.
+> My contributions are usually in the kernel input/HID subsystems and
+> in its userspace library (libinput) as well as other projects.
+>=20
+> I'm trying to learn more about the GPU and I found VKMS as a good
+> project to get started.
+>=20
+> So, now that you have been warned about my (lack) of experience in this
+> subsystem, let's get into the patches.
+>=20
+> The series adds support for multiple overlay planes by adding a new
+> module parameter=A0that allows=A0to configure the number of overlay planes
+> to add.
+>=20
+> I checked that the planes are properly created using drm_info[1] and
+> also executed the IGT test "kms_plane" to make sure that the planes
+> were listed in the output.
+> In addition, I=A0checked the vkms_composer and -even though I'm not sure
+> how to properly test it- it looks like it is already prepared to
+> compose an arbitrary number of planes.
+> Having said that, I really hope I didn't make any obvious mistakes.
+>=20
+> I noticed that the docs say:
+> >=A0For all of these, we also want to review the igt test coverage and
+> > make sure all relevant igt testcases work on vkms
+>=20
+> I ran some plane related tests, but some of them were already failing
+> without my code, so I'd appreciate some help with this bit.
 
-   Sounds like you need a separate patch for doing that... 
+Hi Jos=E9,
 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> v1-->v2
-> * Dropped check for IRQ0
-> * Dropped setting the irqflags as suggested by Rob
-> * Set just the irq start
-> * Fixed freeing up irq_res when not present in DT
-> * Dropped PATA_OF_PLATFORM entry
-> * Split up sorting of headers in separate patch
-> * Dropped sht from struct pata_platform_priv
-[...]
-> diff --git a/drivers/ata/pata_platform.c b/drivers/ata/pata_platform.c
-> index cb3134bf88eb..d1f7f4d65316 100644
-> --- a/drivers/ata/pata_platform.c
-> +++ b/drivers/ata/pata_platform.c
-[...]
-[...]
-> @@ -108,15 +118,15 @@ int __pata_platform_probe(struct device *dev, struct resource *io_res,
->  	/*
->  	 * Check for MMIO
->  	 */
-> -	mmio = (( io_res->flags == IORESOURCE_MEM) &&
-> -		(ctl_res->flags == IORESOURCE_MEM));
-> +	mmio = ((priv->io_res->flags == IORESOURCE_MEM) &&
-> +		(priv->ctl_res->flags == IORESOURCE_MEM));
->  
->  	/*
->  	 * And the IRQ
->  	 */
-> -	if (irq_res && irq_res->start > 0) {
-> -		irq = irq_res->start;
-> -		irq_flags = (irq_res->flags & IRQF_TRIGGER_MASK) | IRQF_SHARED;
-> +	if (priv->irq_res && priv->irq_res->start > 0) {
+What test did you run? Indeed, not all kms tests are passing and fixes
+are welcome :)
 
-   Can this start < 0 ever happen?
+Last time, I used these testcases for overlay: kms_plane_cursor,
+kms_atomic; and these tests were fine too: kms_cursor_crc, kms_writeback,
+kms_flip
 
-> +		irq = priv->irq_res->start;
-> +		irq_flags = (priv->irq_res->flags & IRQF_TRIGGER_MASK) | IRQF_SHARED;
->  	}
->  
->  	/*
-[...]
-> @@ -168,23 +178,81 @@ int __pata_platform_probe(struct device *dev, struct resource *io_res,
-[...]
-> -static int pata_platform_probe(struct platform_device *pdev)
-> +static int pata_of_platform_get_pdata(struct platform_device *ofdev,
-> +				      struct pata_platform_priv *priv)
->  {
-> +	struct device_node *dn = ofdev->dev.of_node;
->  	struct resource *io_res;
->  	struct resource *ctl_res;
->  	struct resource *irq_res;
-> +	int pio_mode = 0;
-> +	int irq;
-> +	int ret;
-> +
-> +	io_res = devm_kzalloc(&ofdev->dev, sizeof(*io_res), GFP_KERNEL);
-> +	ctl_res = devm_kzalloc(&ofdev->dev, sizeof(*ctl_res), GFP_KERNEL);
-> +	irq_res = devm_kzalloc(&ofdev->dev, sizeof(*irq_res), GFP_KERNEL);
-> +	if (!io_res || !ctl_res || !irq_res)
-> +		return -ENOMEM;
-> +
-> +	ret = of_address_to_resource(dn, 0, io_res);
+Did you find any regression? Also, a good practice is to report in the
+commit message which IGT tests you used to check the proposed changes.
 
-   Why not switch to platform_mem_or_io() -- either before or after this patch?
+Btw, thanks for your patchset.
 
-> +	if (ret) {
-> +		dev_err(&ofdev->dev, "can't get IO address from device tree\n");
-> +		return -EINVAL;
-> +	}
-> +	priv->io_res = io_res;
-> +
-> +	ret = of_address_to_resource(dn, 1, ctl_res);
+Melissa
 
-   Ditto.
+>=20
+> Thank you very much in advance for your time. Any suggestions=A0to
+> improve this patchset or about what to work on next are very welcome.
+>=20
+> Jose
+>=20
+> [1]=A0https://github.com/ascent12/drm_info
+>=20
+> Jos=E9 Exp=F3sito (3):
+>   drm/vkms: refactor overlay plane creation
+>   drm/vkms: add support for multiple overlay planes
+>   drm/vkms: drop "Multiple overlay planes" TODO
+>=20
+>  Documentation/gpu/vkms.rst         |  2 --
+>  drivers/gpu/drm/vkms/vkms_drv.c    |  5 +++++
+>  drivers/gpu/drm/vkms/vkms_drv.h    |  1 +
+>  drivers/gpu/drm/vkms/vkms_output.c | 29 ++++++++++++++++++++++-------
+>  4 files changed, 28 insertions(+), 9 deletions(-)
+>=20
+> --=20
+> 2.25.1
+>=20
 
-> +	if (ret) {
-> +		dev_err(&ofdev->dev, "can't get CTL address from device tree\n");
-> +		return -EINVAL;
-> +	}
-> +	priv->ctl_res = ctl_res;
-> +
-> +	irq = platform_get_irq_optional(ofdev, 0);
+--w6ayn3vj6od4fgba
+Content-Type: application/pgp-signature; name="signature.asc"
 
-   Contrariwise, either keep the old code and update it in pata_of_platform before
-this patch or do it after this patch. Otherwise it seems somewhat inconsistent WRT
-the of_address_to_resource() calls which you don't convert...
+-----BEGIN PGP SIGNATURE-----
 
-[...]
-> @@ -198,32 +266,60 @@ static int pata_platform_probe(struct platform_device *pdev)
->  	/*
->  	 * Get the I/O base first
->  	 */
-> -	io_res = platform_get_mem_or_io(pdev, 0);
-> -	if (unlikely(!io_res))
-> +	priv->io_res = platform_get_mem_or_io(pdev, 0);
-> +	if (unlikely(!priv->io_res))
+iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmHE3aMACgkQwqF3j0dL
+ehyuJw//aMCE2lh3Tr1ZiSbqNApTXl/pkod/wzI7FqFPLbkTcpYz3N3+ThePrFZm
+xNfZMM7PQagOZThwOA3u1ZRBdgtXR02eMmCA+JatKTnizcObhVr6P+ZxIwSN54VK
+dd6jCv2jTda3rYpCjQFulOGK7ZwdMRTVhyYmuM4EYEi16gjm+GtOs9JUvR2DWJhK
+R5KHka1mf0jH9AZFH9hLzOSqdfc2Uyeoh+Zp+b6kOpQ65B9HE8HF/1a3jcAj9NEy
+WhCnAhyYrHcx7nqaXpyZlhey3oAE551k/Npj0BlElosBd1DA7aCgq/tMzu1OOAyp
+KXx20FNZN/NAE61TomZ1DF3vIf4ffkvFOYF86yUJ6OFo9cjfKoIesBYIBJaiA+Dm
+KO1yJBn7IEmTM8Z3o/2L2tuRbD/qldLDLiKXR1G8/IwzZEQO1ArYfJETbUm+HDUh
+ZM9FMjhd2GHbnyEkU7/Zymy3AxqWTrvuSZp74MaKz1N/c7+683GgOorj82SQgkri
+kle73XzlxHiXJ0dE4ohzuLoZbKntlNpqJf1lWyiWoNlrMgZylrkcTms7D//CT/AN
+IYiMvqhYNBBotJ2MGTY1yIyMLruKAXEMrk5az/jSi+jlSKNRx1LWn1Iu7GGUsmcR
+cjz5paXhrr60GSELJGIISkxdA3OJ6HMT7eftZRsQFeMvuYJkVos=
+=LuhI
+-----END PGP SIGNATURE-----
 
-   As Damien said, you can drop unlikely() here...
-
->  		return -EINVAL;
->  
->  	/*
->  	 * Then the CTL base
->  	 */
-> -	ctl_res = platform_get_mem_or_io(pdev, 1);
-> -	if (unlikely(!ctl_res))
-> +	priv->ctl_res = platform_get_mem_or_io(pdev, 1);
-> +	if (unlikely(!priv->ctl_res))
-
-   Ditto.
-
-[...]
-
-MBR, Sergey
+--w6ayn3vj6od4fgba--

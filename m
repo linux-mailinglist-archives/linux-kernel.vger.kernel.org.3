@@ -2,110 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE6247DE05
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 04:12:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F35F147DE0A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 04:21:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346152AbhLWDMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 22:12:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbhLWDMa (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 22:12:30 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F23C061574;
-        Wed, 22 Dec 2021 19:12:30 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id kd9so4006002qvb.11;
-        Wed, 22 Dec 2021 19:12:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SeDS6NYXrws6CvV5v+btXZxjBWdFilmIPCi4J1Jsij4=;
-        b=lnIpIIstAdf8lX2ODAZU9QNo9iQZyp9uwnlJLN2ClL3+GSd4fWiDnDfqr1uWNJujiK
-         RTUMqsGf8o2locvL6oq8YRGvnVJdiLm49jG8tn6wyl1yec/RfIsaTtYeYQfQ0/BmXWih
-         S3IGmpQp/E4qf2Zwlc8zWhKttfM4eAlZEZqqg7I5vqhM/LsMjkwUiWVHUTYkzut8PwbA
-         C/yT3sQl15YacavA9xrNDW9SWFpa8mXsfejkxAT26IUlaPmkF5i1vTKI67BFdXPx3WwB
-         VYT3zBky2vSCJF6hGyHkn7TwnIuMX42IVTUab08Je0Dsaliqns+kKUNk0syzLgQp1V58
-         zEzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SeDS6NYXrws6CvV5v+btXZxjBWdFilmIPCi4J1Jsij4=;
-        b=CdcOPPyeQTC67KhPW9P5Ow1muVNrcCh+HFvglmSA0nGO5+7mX1RmPIAMAedHujK/Yd
-         j7WUbQjJuf/gJ36drJVauKMGu/O4c0ySKSpOo9bjCGVoOfXVPhP8SHaKiFHHaFKBlV56
-         CCnd8ds9z26qZoWZz1rYghOnhy/iHA8PETZMI1NLmNCNYY6ajLr2/llaMbZNhHxEAMSg
-         j4SSCHUS2cJXANOAJTt554avEsA7TGWTYGdc/QOr6mck0scoepECl0FzPV4FhbtRsLp0
-         63hYsZO/pzgqDZ3UddQJjCgr57u3fSk9OXUf6e/H+wUPZBn0GSOpmu5iR4O3tPlyC6YS
-         kBOA==
-X-Gm-Message-State: AOAM530pBwIjjCCeCfXSqt7EULUEei8k8XsaxBIVaivgQht85x4QoS5A
-        /9JHAY6VoE2/3dmB+13RreE=
-X-Google-Smtp-Source: ABdhPJxkdOIAJTvKBiHqUS5KFlaxqCE8351plW30Qdp+Jliw+yEmj3hiVcN6Dxs+fIMnMShQt7x9tA==
-X-Received: by 2002:a05:6214:4f0:: with SMTP id cl16mr448995qvb.72.1640229149594;
-        Wed, 22 Dec 2021 19:12:29 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id bp38sm3275653qkb.66.2021.12.22.19.12.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 19:12:29 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     manfred@colorfullife.com
-Cc:     stable@vger.kernel.org, akpm@linux-foundation.org, arnd@arndb.de,
-        cgel.zte@gmail.com, chi.minghao@zte.com.cn, dbueso@suse.de,
-        linux-kernel@vger.kernel.org, rdunlap@infradead.org,
-        shakeelb@google.com, unixbhaskar@gmail.com, vvs@virtuozzo.com,
-        zealci@zte.com.cn
-Subject: [PATCH v2] ipc/sem: do not sleep with a spin lock held
-Date:   Thu, 23 Dec 2021 03:12:07 +0000
-Message-Id: <20211223031207.556189-1-chi.minghao@zte.com.cn>
+        id S1346165AbhLWDVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 22:21:55 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:60746 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231389AbhLWDVx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 22:21:53 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowAC3v1s468Nh8QlfBA--.30561S2;
+        Thu, 23 Dec 2021 11:21:29 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     andy.shevchenko@gmail.com, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, liviu.dudau@arm.com, sudeep.holla@arm.com,
+        lorenzo.pieralisi@arm.com
+Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: Re: [PATCH] serial: mps2-uart: Check for error irq
+Date:   Thu, 23 Dec 2021 11:21:27 +0800
+Message-Id: <20211223032127.1259695-1-jiasheng@iscas.ac.cn>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <63840bf3-2199-3240-bdfa-abb55518b5f9@colorfullife.com>
-References: <63840bf3-2199-3240-bdfa-abb55518b5f9@colorfullife.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowAC3v1s468Nh8QlfBA--.30561S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYD7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2js
+        IEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7
+        M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2
+        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+        6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IY
+        s7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
+        0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU-miiUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On Thursday, December 23, 2021, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+>> I find that platform_get_irq() will not always succeed.
+>> It will return error irq in case there is no suitable irq.
+>> Therefore, it might be better to check it if order to avoid the use of
+>> error irq.
 
-We can't call kvfree() with a spin lock held, so defer it.
-Fixes: fc37a3b8b438 ("[PATCH] ipc sem: use kvmalloc for sem_undo
-allocation")
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
-changelog since v2:
-+ Fixes: fc37a3b8b438 ("[PATCH] ipc sem: use kvmalloc for sem_undo
-+ allocation")
- ipc/sem.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> IRQ
+>
+>
+> You haven't compiled it, right?
 
-diff --git a/ipc/sem.c b/ipc/sem.c
-index 6693daf4fe11..0dbdb98fdf2d 100644
---- a/ipc/sem.c
-+++ b/ipc/sem.c
-@@ -1964,6 +1964,7 @@ static struct sem_undo *find_alloc_undo(struct ipc_namespace *ns, int semid)
- 	 */
- 	un = lookup_undo(ulp, semid);
- 	if (un) {
-+		spin_unlock(&ulp->lock);
- 		kvfree(new);
- 		goto success;
- 	}
-@@ -1976,9 +1977,8 @@ static struct sem_undo *find_alloc_undo(struct ipc_namespace *ns, int semid)
- 	ipc_assert_locked_object(&sma->sem_perm);
- 	list_add(&new->list_id, &sma->list_id);
- 	un = new;
--
--success:
- 	spin_unlock(&ulp->lock);
-+success:
- 	sem_unlock(sma, -1);
- out:
- 	return un;
---
-2.25.1
+Actually, I compile the patch again.
+But I still gain no error.
+Please give me more detail.
+
+Sincerely thanks,
+Jiasheng
 

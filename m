@@ -2,358 +2,436 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C1747E83C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 20:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C32A847E840
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 20:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240663AbhLWTS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 14:18:28 -0500
-Received: from polaris.svanheule.net ([84.16.241.116]:51974 "EHLO
-        polaris.svanheule.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350134AbhLWTRe (ORCPT
+        id S240405AbhLWTTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 14:19:06 -0500
+Received: from relay032.a.hostedemail.com ([64.99.140.32]:53942 "EHLO
+        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233253AbhLWTTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 14:17:34 -0500
-Received: from [IPv6:2a02:a03f:eafe:c901:64fb:1efb:3747:a81f] (unknown [IPv6:2a02:a03f:eafe:c901:64fb:1efb:3747:a81f])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 76B1D2869E8;
-        Thu, 23 Dec 2021 20:17:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1640287050;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=N/D/xbdc72y/mmve9fT7fWUkVgQ/h0pbMus9F1FcDoI=;
-        b=K414AwIJjB8iAsEd2IvkgVQZz6xkKuikIKuTd4MgU2nZPjPrBLTbxn9WjE0lTCW7sh/YG7
-        JYDcQ4fWxc7t/EUqyO9Tft9zlS4jETQfuLqW4GqqRg/GyQjD360aaVw4/qM1+kt4PLkEIx
-        imEzeAhzZZrSSZUHTswTMhbhPrdiyq81laG/8elpHAhNVoQsepxhxwjwi1zB9HtrJs60yB
-        /JZqcLcNjAdFEzfdnKSpl4MjJjiwtNIrj+gCdK3fcarcaOuN+dYvvtqzzcwpddgk8j758i
-        VMZFX9F5jhxs1MN5v+7mdJ0N3VbZ/Dr0PIKvTqxEpW2VShslpprJT+U5FvG7gg==
-Message-ID: <91b50d9a362b3f108df55cd766739b79637e4797.camel@svanheule.net>
-Subject: Re: [RFC PATCH v1 2/4] irqchip: realtek-rtl: use per-parent irq
- handling
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Birger Koblitz <mail@birger-koblitz.de>,
-        Bert Vermeulen <bert@biot.com>,
-        John Crispin <john@phrozen.org>, linux-kernel@vger.kernel.org
-Date:   Thu, 23 Dec 2021 20:17:28 +0100
-In-Reply-To: <87zgoryzj1.wl-maz@kernel.org>
-References: <cover.1640261161.git.sander@svanheule.net>
-         <81bebcf62dfdc63155a69c3bdb2acefe4f5995ac.1640261161.git.sander@svanheule.net>
-         <87zgoryzj1.wl-maz@kernel.org>
+        Thu, 23 Dec 2021 14:19:04 -0500
+Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay08.hostedemail.com (Postfix) with ESMTP id 7332A20303;
+        Thu, 23 Dec 2021 19:19:02 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf05.hostedemail.com (Postfix) with ESMTPA id 5982520015;
+        Thu, 23 Dec 2021 19:18:55 +0000 (UTC)
+Message-ID: <228ca42e53c6db97d5972b90786f9dd30e3a56b5.camel@perches.com>
+Subject: Re: [PATCH v6 2/2] Driver for ON Semi AR0521 camera sensor
+From:   Joe Perches <joe@perches.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Krzysztof =?UTF-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>
+Date:   Thu, 23 Dec 2021 11:19:00 -0800
+In-Reply-To: <20211223184856.v34ecibwzepahsju@uno.localdomain>
+References: <m3ee63hkuu.fsf@t19.piap.pl> <m35yrfhkaf.fsf@t19.piap.pl>
+         <cee1bbe6c8dda1c79ba19f7bbf68fc1d74558cae.camel@perches.com>
+         <20211223184856.v34ecibwzepahsju@uno.localdomain>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Stat-Signature: py7xrhtk9fgs3zbiekogdxjf8ag7ipu1
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: 5982520015
+X-Spam-Status: No, score=-3.40
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18vRg5YHdWx/vRQzPDIInnA/39bgJ0Yc4Q=
+X-HE-Tag: 1640287135-701640
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On Thu, 2021-12-23 at 19:48 +0100, Jacopo Mondi wrote:
+> Hi Joe,
+>   sorry to jump in
 
-Thanks for your feedback.
+No worries.  It's all just a bikeshed and doesn't really matter
+to the correctness of the code.
 
-On Thu, 2021-12-23 at 17:57 +0000, Marc Zyngier wrote:
-> Hi Sander,
-> 
-> nit: please check the way the irqchip patches have their title
-> formatted, and make sure you follow these rules. In this case, it
-> should read:
-> 
-> irqchip/realtek-rtl: Use per-parent...
-
-I'll update the titles.
-
-> On Thu, 23 Dec 2021 12:08:32 +0000,
-> Sander Vanheule <sander@svanheule.net> wrote:
+> On Thu, Dec 23, 2021 at 09:49:58AM -0800, Joe Perches wrote:
+> > On Thu, 2021-12-23 at 08:06 +0100, Krzysztof Hałasa wrote:
+> > > The driver has been extensively tested in an i.MX6-based system.
+> > > AR0521 is a 5.7 mm x 4.3 mm, 5 MPix RGGB MIPI/HiSPi BSI CMOS sensor
+> > > from On Semiconductor.
 > > 
-> > The interrupt router controller is used to route 32 SoC interrupts to up
-> > to 6 MIPS CPU interrupts. This means that the SoC interrupts inherit the
-> > priority of to the target CPU interrupt.
+> > trivial notes:
 > > 
-> > Currently the driver handles all SoC interrupts equally, independent of
-> > which CPU interrupt it is routed to. The use of __ffs actually gives
-> > higher priority to lower IRQ lines, effectively bypassing the CPU
-> > interrupt priority.
+> > > diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
+> > []
+> > > +/* External clock (extclk) frequencies */
+> > > +#define AR0521_EXTCLK_MIN	  (10 * 1000 * 1000)
 > > 
-> > Additionally, this indiscriminate handling of SoC interrupts masked
-> > another issue. There is an actually an offset between routing values
-> > (1..6) and CPU interrupts (2..7), but the current mapping makes no
-> > distinction between these two values. This issue was also hidden during
-> > testing, because an interrupt mapping was used where for each required
-> > interrupt another (unused) routing was configured, with an offset of +1.
+> > Generally, adding a prefix like AR0521_ to defines that are
+> > locally defined in a single file unnecessarily increases
+> > identifier length.
 > > 
-> > Rework the driver to use a separate handler for each used CPU interrupt,
-> > and use the correct routing values. Instead of assuming that the parent
-> > interrupt controller is the MIPS CPU interrupt controller
-> > ("mti,cpu-interrupt-controller"), this is now checked explicitly to
-> > correctly handle the timer interrupt.
+> > It makes using short line lengths difficult.
 > > 
-> > Fixes: 9f3a0f34b84a ("irqchip: Add support for Realtek RTL838x/RTL839x interrupt
-> > controller")
-> > Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> > ---
+> > e.g. Using this identifier anywhere
 > > 
-> > This patch makes a few changes at the same time, and introduces the
-> > *_irr functions, which aren't strictly required. This allows the last
-> > patch to be a bit smaller, and seeks to add some clarity to the code.
+> > > +#define AR0521_REG_HISPI_CONTROL_STATUS_FRAMER_TEST_MODE_ENABLE 0x80
 > > 
-> > Please let me know if this should be split into separate patches with
-> > more incremental changes (in addition to other likely comments).
-> > ---
-> >  drivers/irqchip/irq-realtek-rtl.c | 153 +++++++++++++++++++++---------
-> >  1 file changed, 108 insertions(+), 45 deletions(-)
+> > Many of the 80 column line lengths and line wrapping used in this
+> > file are not really nice to read.  I believe you don't have to be
+> > strict about 80 column lines.
 > > 
-> > diff --git a/drivers/irqchip/irq-realtek-rtl.c b/drivers/irqchip/irq-realtek-rtl.c
-> > index d6788dd93c7b..71366f1cf721 100644
-> > --- a/drivers/irqchip/irq-realtek-rtl.c
-> > +++ b/drivers/irqchip/irq-realtek-rtl.c
-> > @@ -7,6 +7,7 @@
-> >  
-> >  #include <linux/of_irq.h>
-> >  #include <linux/irqchip.h>
-> > +#include <linux/interrupt.h>
-> >  #include <linux/spinlock.h>
-> >  #include <linux/of_address.h>
-> >  #include <linux/irqchip/chained_irq.h>
-> > @@ -21,10 +22,43 @@
-> >  #define RTL_ICTL_IRR2          0x10
-> >  #define RTL_ICTL_IRR3          0x14
-> >  
-> > -#define REG(x)         (realtek_ictl_base + x)
-> > +#define RTL_ICTL_NUM_PRIO      6
-> > +
-> > +#define REG(x)                 (realtek_ictl_base + x)
 > 
-> Spurious change?
-
-The indentation didn't match with the other defines, but I can leave out this change here.
-
-
-> > 
-> >  static DEFINE_RAW_SPINLOCK(irq_lock);
-> >  static void __iomem *realtek_ictl_base;
-> > +static struct irq_domain *realtek_ictl_domain;
-> > +
-> > +struct realtek_ictl_priority {
-> > +       unsigned int routing_value;
-> > +       u32 child_mask;
-> > +};
-> > +
-> > +static struct realtek_ictl_priority priorities[RTL_ICTL_NUM_PRIO];
-> > +
-> > +/*
-> > + * IRR0-IRR3 store 4 bits per interrupt, but Realtek uses inverted
-> > + * numbering, placing IRQ 31 in the first four bits.
-> > + */
-> > +#define IRR_OFFSET(idx)                (4 * (3 - (idx * 4) / 32))
-> > +#define IRR_SHIFT(idx)         ((idx * 4) % 32)
-> > +
-> > +static inline u32 read_irr(void __iomem *irr0, int idx)
-> > +{
-> > +       return (readl(irr0 + IRR_OFFSET(idx)) >> IRR_SHIFT(idx)) & 0xf;
-> > +}
-> > +
-> > +static inline void write_irr(void __iomem *irr0, int idx, u32 value)
-> > +{
-> > +       unsigned int offset = IRR_OFFSET(idx);
-> > +       unsigned int shift = IRR_SHIFT(idx);
-> > +       u32 irr;
-> > +
-> > +       irr = readl(irr0 + offset) & ~(0xf << shift);
-> > +       irr |= (value & 0xf) << shift;
-> > +       writel(irr, irr0 + offset);
+> Krzysztof first version had much longer lines, and in facts it has
+> been asked by me to reduce them to 80 cols. The media subsystem
+> requires to validate patches with
 > 
-> Are you always in a situation where this doesn't need any locking?
-
-These are currently only used on initialisation, so that's before any interrupts should be
-active.
-
-
-> > +}
-> >  
-> >  static void realtek_ictl_unmask_irq(struct irq_data *i)
-> >  {
-> > @@ -72,43 +106,67 @@ static const struct irq_domain_ops irq_domain_ops = {
-> >         .xlate = irq_domain_xlate_onecell,
-> >  };
-> >  
-> > -static void realtek_irq_dispatch(struct irq_desc *desc)
-> > +static irqreturn_t realtek_irq_dispatch(int irq, void *devid)
+>         ./scripts/checkpatch.pl --strict --max-line-length=80
 > 
-> No, that's definitely not on. Interrupt handlers are not chained
-> handlers. They have different guarantees, and they aren't
-> interchangeable. It is only in limited circumstances that you can do
-> this change (threaded interrupts).
-> 
-> >  {
-> > -       struct irq_chip *chip = irq_desc_get_chip(desc);
-> > -       struct irq_domain *domain;
-> > -       unsigned int pending;
-> > -
-> > -       chained_irq_enter(chip, desc);
-> > -       pending = readl(REG(RTL_ICTL_GIMR)) & readl(REG(RTL_ICTL_GISR));
-> > -       if (unlikely(!pending)) {
-> > -               spurious_interrupt();
-> > -               goto out;
-> > +       struct realtek_ictl_priority *priority = devid;
-> 
-> So this is *why* you made this change. We have per-interrupt data that
-> you can use, and get rid of this horrible hack.
+> We longly debated this and I believe it's now generally accepted to go
+> over 80 when it makes sense, but not regularly span to 120 cols like
+> in the previous version.
 
-Aha, I'll need to have another look then. I'll make sure to switch back to chained
-handlers for the next version.
+IMO: Many of the lines here could be lengthened to < 100 to
+improve readability.
+
+> I think this 80-cols limit not being an hard limit anymore is doing
+> more worse than good, as each subsystem applies a different rule, and
+> I know how frustrating is for Krzysztof to be pushed in different
+> direction, as the same happened to me when I contributed to other
+> subsystems and I've been asked to span to 100 cols while I was trying
+> to stay in 80 no matter what.
+
+Up to you all.
+
+But there's a tension between long identifiers and short lines.
+
+And anything using a 55 character identifier basically guarantees
+that the code will exceed 80 columns.
+
+Using identifiers with 10 character or so is generally OK, but
+there are dozens of longer identifiers specific to this code.
+
+I'd suggest because of these long identifiers that the code
+be restricted to 100 columns, but not strictly at 80.
+
+And there are quite a few long lines in drivers/media/i2c and
+espcially for drivers/media/
+
+A few of them are grotesquely long.
+Probably all of them are historic and don't warrant change.
+
+Just for i2c:
+
+$ git ls-files -- 'drivers/media/i2c/*.[ch]' | \
+  xargs awk '{print length($0); }' | \
+  sort -rn | uniq -c
+      2 143
+      1 141
+      1 123
+      4 118
+      2 114
+      1 111
+      1 110
+      1 109
+      1 107
+      1 105
+      4 104
+      2 102
+      3 101
+      1 100
+      2 99
+     11 98
+      7 97
+      8 96
+      4 95
+     11 94
+      8 93
+     19 92
+     13 91
+     28 90
+     20 89
+     28 88
+     39 87
+     18 86
+     33 85
+     42 84
+     86 83
+     38 82
+     47 81
+    167 80
+    110 79
+    155 78
+    363 77
+    230 76
+    219 75
+    217 74
+    427 73
+    695 72
+    471 71
+    538 70
+    525 69
+    679 68
+    661 67
+   1046 66
+    757 65
+   1002 64
+    942 63
+   1053 62
+    967 61
+   1018 60
+   1132 59
+   1307 58
+   1366 57
+   3206 56
+   1240 55
+   2191 54
+   1829 53
+   1719 52
+   1503 51
+   1795 50
+   1714 49
+   1640 48
+   1567 47
+   1550 46
+   1880 45
+   2155 44
+   1780 43
+   1880 42
+   1854 41
+   1962 40
+   2031 39
+   2009 38
+   2022 37
+   2240 36
+   2252 35
+   2152 34
+   2178 33
+   2074 32
+   2185 31
+   2462 30
+   2478 29
+   2186 28
+   1988 27
+   1846 26
+   1926 25
+   2177 24
+   2048 23
+   1804 22
+   1267 21
+   1414 20
+   1563 19
+   6154 18
+   3619 17
+   7222 16
+   1682 15
+   2685 14
+   3037 13
+   2142 12
+   1704 11
+   3013 10
+   3191 9
+   1609 8
+    230 7
+    461 6
+    571 5
+    878 4
+   2790 3
+   6524 2
+   7732 1
+  24729 0
+
+And for all of drivers/media:
+
+$ git ls-files -- 'drivers/media/*.[ch]' | \
+  xargs awk '{print length($0);}' | \
+  sort -rn | uniq -c
+      1 338
+      1 314
+      1 268
+      1 261
+      1 255
+      1 254
+      1 242
+      1 234
+      1 228
+      1 213
+      1 207
+      1 205
+      1 198
+      2 197
+      3 192
+      2 188
+      2 177
+      1 174
+      2 172
+      2 169
+      3 168
+      2 167
+      1 166
+      1 165
+      1 164
+      3 163
+      2 162
+      2 161
+      2 160
+      6 158
+     10 157
+      3 156
+      2 155
+      3 154
+      2 153
+     12 152
+      8 151
+     49 150
+      4 148
+      2 147
+      3 146
+      3 145
+      5 144
+      5 143
+      1 142
+      6 141
+      7 140
+      8 139
+      6 138
+     10 137
+     14 136
+     13 135
+     14 134
+     13 133
+     11 132
+      7 131
+      6 130
+     15 129
+     21 128
+     17 127
+     13 126
+     10 125
+     13 124
+     12 123
+     25 122
+     20 121
+     25 120
+     15 119
+     18 118
+     20 117
+     23 116
+     30 115
+     23 114
+     26 113
+     35 112
+     35 111
+     40 110
+     60 109
+     50 108
+     72 107
+     42 106
+     47 105
+    105 104
+     72 103
+     90 102
+    110 101
+    144 100
+     79 99
+    122 98
+    226 97
+    644 96
+    115 95
+    135 94
+    135 93
+    166 92
+    210 91
+    227 90
+    218 89
+    208 88
+    279 87
+    292 86
+   1260 85
+   1122 84
+    879 83
+   1288 82
+   1489 81
+   2505 80
+   6241 79
+   3653 78
+   5268 77
+   2012 76
+   2168 75
+   2279 74
+   3297 73
+   4343 72
+   3741 71
+   4018 70
+   4360 69
+   4487 68
+   4433 67
+   6014 66
+   6098 65
+   6547 64
+   6661 63
+   7312 62
+   7684 61
+   7610 60
+   8157 59
+   9052 58
+  10047 57
+  12064 56
+   9904 55
+  11075 54
+  11271 53
+  13259 52
+  11585 51
+  15036 50
+  13930 49
+  15159 48
+  14221 47
+  13349 46
+  14243 45
+  15887 44
+  17829 43
+  16620 42
+  17759 41
+  17569 40
+  16653 39
+  17386 38
+  17480 37
+  18296 36
+  18205 35
+  18782 34
+  18352 33
+  18137 32
+  19556 31
+  19229 30
+  19403 29
+  19570 28
+  19447 27
+  19581 26
+  19255 25
+  19300 24
+  17038 23
+  18523 22
+  15609 21
+  16188 20
+  14634 19
+  19426 18
+  20979 17
+  21548 16
+  13476 15
+  16713 14
+  18914 13
+  17577 12
+  12828 11
+  19525 10
+  21665 9
+  13912 8
+   3261 7
+   5375 6
+   6756 5
+   8260 4
+  23448 3
+  48708 2
+  55786 1
+ 182329 0
 
 
-> > +       unsigned long pending;
-> > +       int soc_irq;
-> > +       int ret = 0;
-> > +
-> > +       pending = readl(REG(RTL_ICTL_GIMR)) & readl(REG(RTL_ICTL_GISR))
-> > +               & priority->child_mask;
-> > +
-> > +       for_each_set_bit(soc_irq, &pending, BITS_PER_LONG) {
-> > +               generic_handle_domain_irq(realtek_ictl_domain, soc_irq);
-> > +               ret = 1;
-> >         }
-> > -       domain = irq_desc_get_handler_data(desc);
-> > -       generic_handle_domain_irq(domain, __ffs(pending));
-> >  
-> > -out:
-> > -       chained_irq_exit(chip, desc);
-> > +       return IRQ_RETVAL(ret);
-> >  }
-> >  
-> > -/*
-> > - * SoC interrupts are cascaded to MIPS CPU interrupts according to the
-> > - * interrupt-map in the device tree. Each SoC interrupt gets 4 bits for
-> > - * the CPU interrupt in an Interrupt Routing Register. Max 32 SoC interrupts
-> > - * thus go into 4 IRRs.
-> > - */
-> > -static int __init map_interrupts(struct device_node *node, struct irq_domain *domain)
-> > +static void __init set_routing(struct realtek_ictl_priority *priority, unsigned int
-> > soc_int)
-> >  {
-> > +       unsigned int priority_old;
-> > +
-> > +       priority_old = read_irr(REG(RTL_ICTL_IRR0), soc_int);
-> > +       if (priority_old) {
-> > +               pr_warn("int %d already routed to %d, not updating\n", soc_int,
-> > priority_old);
-> > +               return;
-> > +       }
-> > +
-> > +       priority->child_mask |= BIT(soc_int);
-> > +       write_irr(REG(RTL_ICTL_IRR0), soc_int, priority->routing_value);
-> > +}
-> > +
-> > +static int __init setup_parent_interrupt(struct realtek_ictl_priority *prio_ctl, int
-> > parent)
-> > +{
-> > +       struct device_node *parent_node;
-> > +       struct irq_data *irqd;
-> > +       unsigned int flags;
-> > +       int parent_hwirq;
-> > +
-> > +       irqd = irq_get_irq_data(parent);
-> > +       if (!irqd)
-> > +               return -ENOENT;
-> > +
-> > +       parent_node = to_of_node(irqd->domain->fwnode);
-> > +       parent_hwirq = irqd_to_hwirq(irqd);
-> > +
-> > +       flags = IRQF_PERCPU | IRQF_SHARED;
-> > +       if (of_device_is_compatible(parent_node, "mti,cpu-interrupt-controller")
-> > +               && parent_hwirq == 7)
-> > +               flags |= IRQF_TIMER;
-> > +
-> > +       return request_irq(parent, realtek_irq_dispatch, flags, "rtl-intc", prio_ctl);
-> 
-> This really is mixing two different things. Why aren't the flags on
-> the actual endpoint interrupt? This really is the business of the
-> driver requesting the interrupt, and not the irqchip.
-
-I needed to set the flags, because otherwise the CEVT-R4K timer couldn't use the timer
-interrupt any more. But I assume that's a side effect of using an interrupt handler
-instead of a chained handler, and this will disappear when I use the correct handler type.
-
-
-> > +}
-> > +
-> > +static int __init map_interrupts(struct device_node *node)
-> > +{
-> > +       struct realtek_ictl_priority *prio_ctl;
-> >         struct device_node *cpu_ictl;
-> >         const __be32 *imap;
-> > -       u32 imaplen, soc_int, cpu_int, tmp, regs[4];
-> > -       int ret, i, irr_regs[] = {
-> > -               RTL_ICTL_IRR3,
-> > -               RTL_ICTL_IRR2,
-> > -               RTL_ICTL_IRR1,
-> > -               RTL_ICTL_IRR0,
-> > -       };
-> > -       u8 mips_irqs_set;
-> > +       u32 imaplen, soc_int, priority, tmp;
-> > +       int ret, i;
-> >  
-> >         ret = of_property_read_u32(node, "#address-cells", &tmp);
-> >         if (ret || tmp)
-> > @@ -118,8 +176,6 @@ static int __init map_interrupts(struct device_node *node, struct
-> > irq_domain *do
-> >         if (!imap || imaplen % 3)
-> >                 return -EINVAL;
-> >  
-> > -       mips_irqs_set = 0;
-> > -       memset(regs, 0, sizeof(regs));
-> >         for (i = 0; i < imaplen; i += 3 * sizeof(u32)) {
-> >                 soc_int = be32_to_cpup(imap);
-> >                 if (soc_int > 31)
-> > @@ -133,42 +189,49 @@ static int __init map_interrupts(struct device_node *node,
-> > struct irq_domain *do
-> >                         return -EINVAL;
-> >                 of_node_put(cpu_ictl);
-> >  
-> > -               cpu_int = be32_to_cpup(imap + 2);
-> > -               if (cpu_int > 7)
-> > +               /* Map priority (1..6) to MIPS CPU interrupt (2..7) */
-> > +               priority = be32_to_cpup(imap + 2);
-> 
-> I don't understand this. As far as the binding describes it, this is
-> the target interrupt, and not a priority. Either the binding is wrong,
-> and it needs fixing, or this is wrong. What gives?
-
-The "interrupt-map" values that my (and OpenWrt's) DTS-s have could also be amended to
-provide correct <soc_int &parent_node parent_hwirq> tuples, instead of the current (wrong)
-<soc_int &parent_node routing_value> tuples. That would probably make it possible to limit
-this patch only to the per-parent chained handlers.
-
-However, that would require me to keep the assumption that output lines (1..6) are mapped
-to CPU interrupts (2..7). This is what I wanted to get rid of by using "interrupt-parent"
-+ "realtek,interrupt-routing". Maybe this will be clearer if I can isolate these two
-issues in a v2.
-
-
-> If the binding is really describing a priority, how is the interrupt
-> priority actually mapped to the CPU interrupt? Why can't you just
-> ignore the DT-provided priority and simply have a flat priority
-> scheme, allocating mapping input lines to output lines as they get
-> allocated?
-
-I updated the bindings quite late while cleaning up my changes, the priority naming is
-wrong. Because the SoC interrupts are always routed to MIPS CPU interrupts (in my
-hardware), they "inherit" a priority, and this is what I had in mind when I started on
-these patches.
-
-While updating the binding, I realised that there doesn't need to be a priority to the
-output interrupts of this controller. We don't have any real documentation on the
-hardware, so for all we know they could maybe even be routed to different interrupt
-controllers. I'll update the naming to something else throughout the patch.
-
-
-Best,
-Sander

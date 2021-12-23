@@ -2,119 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D29E47E927
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 22:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D70347E92C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 22:43:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350379AbhLWViC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 16:38:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56976 "EHLO
+        id S1350360AbhLWVnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 16:43:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350360AbhLWViB (ORCPT
+        with ESMTP id S240686AbhLWVnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 16:38:01 -0500
+        Thu, 23 Dec 2021 16:43:18 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F58BC061756;
-        Thu, 23 Dec 2021 13:38:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4206AC061401;
+        Thu, 23 Dec 2021 13:43:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 53E4ECE2200;
-        Thu, 23 Dec 2021 21:37:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AE86C36AE9;
-        Thu, 23 Dec 2021 21:37:57 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7AE5DCE2208;
+        Thu, 23 Dec 2021 21:43:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C85FEC36AEA;
+        Thu, 23 Dec 2021 21:43:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640295477;
-        bh=44GMKBWOMz8CYw7hOFvtvXHi1D2y4pTa6iH6EqHFN9s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oB6RVHIFmFVg4Zy7m8F1ScDCmnhFSsKsfVz9m94zXw3ZMjvvROSubpQW31hC3GQ2k
-         5cyFOPeQ+qDcr6VbrlBLHkjXuma26s6ECtHfgyzLNCVHlabNrhzWbWACQ4Pv5HZtbA
-         XJ6zyFpxXE4bjxbyLK271TwjBz+SuQ5dhHq66hVcFbyOc5B4NnepWjXy5GPf+0FXuj
-         U1gso8lasZHIjYZiWMXAwmrmUo0gnKk85sL2oHXcL5VZ7RwqqRVyOsCtBZkZMwj/Ja
-         u2DKF/NXKv8h5l/f7DyJiMRQ1xQfclNx4u6F/LI8Ln0B5+gdCTJDY3C6DcE2aW3jkA
-         H4m8YRL1eGV6w==
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     linux-pci@vger.kernel.org
-Cc:     Pratyush Anand <pratyush.anand@gmail.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH 2/2] PCI: spear13xx: Avoid invalid address space conversions
-Date:   Thu, 23 Dec 2021 15:37:49 -0600
-Message-Id: <20211223213749.1314142-3-helgaas@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211223213749.1314142-1-helgaas@kernel.org>
-References: <20211223213749.1314142-1-helgaas@kernel.org>
+        s=k20201202; t=1640295794;
+        bh=YZG2vX676ItJy3+kJRWOsS2iMCGgY1eqBlxO8esua7k=;
+        h=From:Date:Subject:To:Cc:From;
+        b=AFfyfJfylrPYTx9StY/CF6lMb4wD5XehUOUZH9qMPNQ/u4I33ZQIGVkN4fK1oTsEL
+         S3J8hke9AyyiwFMd8LxSexuGbGtAhtR8UHNu2vmxwMF8a/PrbxzLy4GqXkS5pOt1LY
+         2NMgZF50eiKyoVXlMQwtMpwHVJTP6S1LgkwLeImtAOCny0E/YI0IMVZKHaww3ZX7K7
+         11QDAh+hCfe37h72ZpYNWboHz3TFIvVt17IY2KIuM6vox2EhyO/PxlfvVTv0UFYj2/
+         Fc+zV1Ce/uD0AhadNpJOoBfQX6deMd6K1c0ZwVSwCRtXSCHVDLMf4LP4D0tN2AyoiP
+         tneGAJlVQVZjA==
+Received: by mail-wr1-f49.google.com with SMTP id s1so13889004wra.6;
+        Thu, 23 Dec 2021 13:43:14 -0800 (PST)
+X-Gm-Message-State: AOAM531UTSYgI11rmZGPgBJQxyrui03Qyr5Vza0bzllzcoOPcXAacpr1
+        3eX3j+B0hImR9nSFSfY15XQ/hvajODlrShegk+k=
+X-Google-Smtp-Source: ABdhPJxGnmkmwfJuofdStb9OMaZZAS7Asd+mhazJrq2O1sPYplNi8Szl6RNei35+vaGLMqTCAbvXATegCNAhfMORJlo=
+X-Received: by 2002:a5d:6989:: with SMTP id g9mr2832508wru.12.1640295793148;
+ Thu, 23 Dec 2021 13:43:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Thu, 23 Dec 2021 22:42:57 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2ajcXkh4OAfJseUSiCsfU7gOXbDwiWHNGKgByzDwcycg@mail.gmail.com>
+Message-ID: <CAK8P3a2ajcXkh4OAfJseUSiCsfU7gOXbDwiWHNGKgByzDwcycg@mail.gmail.com>
+Subject: [GIT PULL] asm-generic: cleanups for 5.17
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>, wasin@wasin.io
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+The following changes since commit d58071a8a76d779eedab38033ae4c821c30295a5:
 
-The sparse checker complains about converting pointers between address
-spaces.  We correctly stored an __iomem pointer in struct spear13xx_pcie,
-but discarded the __iomem when extracting app_base, causing one warning.
-Then we passed the non-__iomem pointer to writel(), which expects an
-__iomem pointer, causing another warning.
+  Linux 5.16-rc3 (2021-11-28 14:09:19 -0800)
 
-Add the appropriate annotations.
+are available in the Git repository at:
 
-The sparse warnings look like this:
+  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
+tags/asm-generic-5.17
 
-  $ make C=2 drivers/pci/controller/
-  drivers/pci/controller/dwc/pcie-spear13xx.c:72:54: warning: incorrect type in initializer (different address spaces)
-  drivers/pci/controller/dwc/pcie-spear13xx.c:72:54:    expected struct pcie_app_reg *app_reg
-  drivers/pci/controller/dwc/pcie-spear13xx.c:72:54:    got void [noderef] __iomem *app_base
-  drivers/pci/controller/dwc/pcie-spear13xx.c:78:26: warning: incorrect type in argument 2 (different address spaces)
-  drivers/pci/controller/dwc/pcie-spear13xx.c:78:26:    expected void volatile [noderef] __iomem *addr
-  drivers/pci/controller/dwc/pcie-spear13xx.c:78:26:    got unsigned int *
+for you to fetch changes up to 733e417518a69b71061c3bafc2bf106109565eee:
 
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Pratyush Anand <pratyush.anand@gmail.com>
----
- drivers/pci/controller/dwc/pcie-spear13xx.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+  asm-generic/error-injection.h: fix a spelling mistake, and a coding
+style issue (2021-12-17 14:12:14 +0100)
 
-diff --git a/drivers/pci/controller/dwc/pcie-spear13xx.c b/drivers/pci/controller/dwc/pcie-spear13xx.c
-index 1a9e353bef55..1569e82b5568 100644
---- a/drivers/pci/controller/dwc/pcie-spear13xx.c
-+++ b/drivers/pci/controller/dwc/pcie-spear13xx.c
-@@ -69,7 +69,7 @@ struct pcie_app_reg {
- static int spear13xx_pcie_start_link(struct dw_pcie *pci)
- {
- 	struct spear13xx_pcie *spear13xx_pcie = to_spear13xx_pcie(pci);
--	struct pcie_app_reg *app_reg = spear13xx_pcie->app_base;
-+	struct pcie_app_reg __iomem *app_reg = spear13xx_pcie->app_base;
- 
- 	/* enable ltssm */
- 	writel(DEVICE_TYPE_RC | (1 << MISCTRL_EN_ID)
-@@ -83,7 +83,7 @@ static int spear13xx_pcie_start_link(struct dw_pcie *pci)
- static irqreturn_t spear13xx_pcie_irq_handler(int irq, void *arg)
- {
- 	struct spear13xx_pcie *spear13xx_pcie = arg;
--	struct pcie_app_reg *app_reg = spear13xx_pcie->app_base;
-+	struct pcie_app_reg __iomem *app_reg = spear13xx_pcie->app_base;
- 	struct dw_pcie *pci = spear13xx_pcie->pci;
- 	struct pcie_port *pp = &pci->pp;
- 	unsigned int status;
-@@ -102,7 +102,7 @@ static irqreturn_t spear13xx_pcie_irq_handler(int irq, void *arg)
- 
- static void spear13xx_pcie_enable_interrupts(struct spear13xx_pcie *spear13xx_pcie)
- {
--	struct pcie_app_reg *app_reg = spear13xx_pcie->app_base;
-+	struct pcie_app_reg __iomem *app_reg = spear13xx_pcie->app_base;
- 
- 	/* Enable MSI interrupt */
- 	if (IS_ENABLED(CONFIG_PCI_MSI))
-@@ -113,7 +113,7 @@ static void spear13xx_pcie_enable_interrupts(struct spear13xx_pcie *spear13xx_pc
- static int spear13xx_pcie_link_up(struct dw_pcie *pci)
- {
- 	struct spear13xx_pcie *spear13xx_pcie = to_spear13xx_pcie(pci);
--	struct pcie_app_reg *app_reg = spear13xx_pcie->app_base;
-+	struct pcie_app_reg __iomem *app_reg = spear13xx_pcie->app_base;
- 
- 	if (readl(&app_reg->app_status_1) & XMLH_LINK_UP)
- 		return 1;
--- 
-2.25.1
+----------------------------------------------------------------
+asm-generic: cleanups for 5.17
 
+A few minor cleanups for cross-architecture code: Alexandre Ghiti
+deals with removing some leftovers from drivers and features that
+have been removed, and Wasin Thonkaew has a cosmetic change.
+
+----------------------------------------------------------------
+As with the soc pull requests, this is also early, as I won't be working
+before the start of the merge window.
+
+Alexandre Ghiti (4):
+      Documentation, arch: Remove leftovers from raw device
+      Documentation, arch: Remove leftovers from CIFS_WEAK_PW_HASH
+      arch: Remove leftovers from mandatory file locking
+      arch: Remove leftovers from prism54 wireless driver
+
+Wasin Thonkaew (1):
+      asm-generic/error-injection.h: fix a spelling mistake, and a
+coding style issue
+
+ Documentation/admin-guide/cifs/usage.rst    | 7 +++----
+ Documentation/admin-guide/devices.txt       | 8 +-------
+ arch/arm/configs/cm_x300_defconfig          | 1 -
+ arch/arm/configs/ezx_defconfig              | 1 -
+ arch/arm/configs/imote2_defconfig           | 1 -
+ arch/arm/configs/nhk8815_defconfig          | 1 -
+ arch/arm/configs/pxa_defconfig              | 1 -
+ arch/arm/configs/spear13xx_defconfig        | 1 -
+ arch/arm/configs/spear3xx_defconfig         | 1 -
+ arch/arm/configs/spear6xx_defconfig         | 1 -
+ arch/mips/configs/decstation_64_defconfig   | 1 -
+ arch/mips/configs/decstation_defconfig      | 1 -
+ arch/mips/configs/decstation_r4k_defconfig  | 1 -
+ arch/mips/configs/fuloong2e_defconfig       | 1 -
+ arch/mips/configs/ip27_defconfig            | 1 -
+ arch/mips/configs/malta_defconfig           | 1 -
+ arch/mips/configs/malta_kvm_defconfig       | 1 -
+ arch/mips/configs/malta_qemu_32r6_defconfig | 1 -
+ arch/mips/configs/maltaaprp_defconfig       | 1 -
+ arch/mips/configs/maltasmvp_defconfig       | 1 -
+ arch/mips/configs/maltasmvp_eva_defconfig   | 1 -
+ arch/mips/configs/maltaup_defconfig         | 1 -
+ arch/mips/configs/maltaup_xpa_defconfig     | 1 -
+ arch/powerpc/configs/pmac32_defconfig       | 1 -
+ arch/powerpc/configs/ppc6xx_defconfig       | 1 -
+ arch/powerpc/configs/pseries_defconfig      | 1 -
+ arch/sh/configs/titan_defconfig             | 1 -
+ include/asm-generic/error-injection.h       | 4 ++--
+ 28 files changed, 6 insertions(+), 38 deletions(-)

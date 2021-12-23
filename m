@@ -2,154 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8068347E55E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 16:14:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F187347E564
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 16:16:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244129AbhLWPOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 10:14:24 -0500
-Received: from mail-eopbgr90050.outbound.protection.outlook.com ([40.107.9.50]:34624
-        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1348870AbhLWPOX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 10:14:23 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N8DMxAd/00X8cTMOB39hPoYBEJhZAwKMh2ZkMBDfM8u2Fnu1a9sGo2FwDHXT5BUzqrQLu1hOPPRwxPvD3ZTUJ2VGfPHfMB0KLpYD9FG8h96muCXYtT5z5ICaDNIkvGQsjgDTPLeJkfY2sp/W2g4MQXQrS3zwjxWZkcgDlN/t/SGBEwzvVIUIZIB9g/ap+oe5Fo4IbT9MyL7jqi8H77BfNXML6/NNeQ6waW2JV9371vO3RvRhKanjHFnzg5n6JiGRULdzctyIM74AZxcX7ufrUZr9Yz1wzVwxX24hCbzVmSCV4LjlNgyXDHQtkzmle0VkKDt7ef1QUs8t94X7KXIkBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mInH2qTAnOiU4rAlJLdM6u4nERFuz+YPQBmhuy/VQGg=;
- b=cKhhpuoVAeSglrte+NgljBecfTQVBqsWeblf25RRKIYpYPUqNUwb5iMLyG/5JLY/MltyopiUoMwhwgJdNoypV7csEsr86Bi8jUeYKOOWQ9PkwadHXLt2XKWZ/4lX2+vAjiUIzGsTUwwk3WMnvB4XgxhP21elabmyHtoHBkXR/WjljBZ+iT7306Ifh6qhw7vGnL0iNivJ3U5Y3w6t8KGAps2QrRsq3wbqryp3W3VmNEO+V7gXF5T3llW8DnUhzpyg+nFTRqnHig7QUFcShVhAnL2YgBz2dsRvNM0VxhU+qVmEZMev6o/HTNVQ/sDq7dQ4hYaY/ciOcfnOYtVBxFtf7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRXP264MB0279.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:21::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.18; Thu, 23 Dec
- 2021 15:14:20 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::f0ef:856d:b0de:e85d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::f0ef:856d:b0de:e85d%7]) with mapi id 15.20.4823.019; Thu, 23 Dec 2021
- 15:14:20 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Maxime Bizon <mbizon@freebox.fr>,
-        Russell Currey <ruscur@russell.cc>
-Subject: Re: [PATCH v2 1/2] powerpc/set_memory: Avoid spinlock recursion in
- change_page_attr()
-Thread-Topic: [PATCH v2 1/2] powerpc/set_memory: Avoid spinlock recursion in
- change_page_attr()
-Thread-Index: AQHX8qUBgZlGk5AZtkeEGUMOS24Ae6xABpsAgAAznoA=
-Date:   Thu, 23 Dec 2021 15:14:20 +0000
-Message-ID: <e07eefc3-6f84-2e95-05f2-8c56eb6a0c1f@csgroup.eu>
-References: <112b55c5fe019fefc284e3361772b00345fa0967.1639676816.git.christophe.leroy@csgroup.eu>
- <871r2334ld.fsf@mpe.ellerman.id.au>
-In-Reply-To: <871r2334ld.fsf@mpe.ellerman.id.au>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8c8b9928-d5aa-416d-6972-08d9c626e4fe
-x-ms-traffictypediagnostic: MRXP264MB0279:EE_
-x-microsoft-antispam-prvs: <MRXP264MB02794770CE6E3F749E7077C4ED7E9@MRXP264MB0279.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:3513;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: j6KVhrLp213GRXkAWxOryooO7u7BeKXMdS2aneA1wEhMCcSTVe6WDljywG78iEF3f7MaAqAGHaLtFsjcWOvifVtt/5tXSx9A6BEZsjm7u+JYoxFHiquJx7XwWQ7/EqmMJLqhMfAWoU6tSpBIg/C79l1G4UPtylS3mnY1s1aMsmqUXLJeLBuZihQ1nmvZbE7TjDRU9f6JEUILvei8OgmOpQ/+D5M/j0leQ4/x5FyXI16dN7OiNDAy769Kcn7/oYKBMsltsEi33aOpnYD0b12wxZmYY3qLLQzxlDoBRTYCfVbl//nfwskLE3cVKYkMxEl6zqybyZcqiJYMvJ01QjPBQZZzuoV0jl4LmKltkXNsniMmLNHkEkGxjd8W/QgqKVcqPvanII9rk7UJRpMKU4oYm5UE7VgcE5Ox18/7D3huo1dDwDeIxAGCmurpFgpjQ0z5ZkuOgc61JDwTjuVyh0S5+wv+lVLmMe7vmnXQo+JLQHeXsRiTDYaIFHM/Ij+tOqk+q1SD3JI33T4osXDXDzX9AiA2TQeZCSC/uPXMiPtGkbbxyOO81SGiVQicr4EfcR5E14/NVBW2aXyqMB2WtpnfmLUEj/pikswN8eAKUB9Rveg4HsZVN7D4ZaNWoYnHKS+NWlQSiV+H/ttITmloMznRd4OGSXaYadcl4LWHdd+Wpcu8N3ahucmUEfCi0UJcVUUrx90kf8+k8m1TBQc/8YDCpU+uQfbAN/T4WsTzy1+q91bZF5ePOioiyK3w+PzQPisgilfT03CQrZpwD9jnvZn9mkOEcdc9DaKHwE/l+zVlr6xJHrM/O3Dj/p0lvUrsSAsHdcjwGG0zXwiTOwQ20EWHStQZc1xdw90hRZyfl1sERwA=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(66946007)(71200400001)(64756008)(86362001)(4326008)(76116006)(8676002)(316002)(91956017)(66556008)(38070700005)(2616005)(44832011)(8936002)(66574015)(66446008)(66476007)(186003)(6506007)(26005)(54906003)(110136005)(31686004)(122000001)(83380400001)(2906002)(508600001)(6486002)(31696002)(966005)(5660300002)(36756003)(38100700002)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OU5IOHhib3JicE1aNjY2L0M0Vzc5VjZJUThPaWkzdFFrdjVMSzNpNVFLbUJW?=
- =?utf-8?B?UDB4Sy9oSlhCVlk3Mmg5OFpWSXhsK0h5WjhxVzlYaVRpblExc2RLYytSNzF0?=
- =?utf-8?B?WkxMbjNXckZKY1c3QmVSdlZmdk5mWFV6RnY3RlJhN1RQY2lIRXQvOXFCWTc1?=
- =?utf-8?B?M2RhM2NwRm8rMDU2VTV3VWNrOWNQd2kwWkV5MHI1WlgzaTNNdGQ5dW5iNjBP?=
- =?utf-8?B?ZlhHZ3hjUWdDN0ZZRTgzRytLRE85R2V1WG1MUEd4WTVONm1JdHFCNnlPTXRh?=
- =?utf-8?B?L2pMeTlqZFNlU0dWQy9na1k3M25RTVFIcnQwMVpNTWxQdGxsRzlTZUc3ZkRJ?=
- =?utf-8?B?bWlYZ0Vod0tkSXE2NExtYkFtTWVwbS9Ialk0Zkl6VStCTnlZUEN6SFJnRVY3?=
- =?utf-8?B?LzN6RldFWTExbXp0djZrV0srckFPMWZRU0s2OUZrOHlBdVFlV241NkhDL2Yx?=
- =?utf-8?B?STY1WUw0cHJLbE4yVzVHd2VBYXo3NlVWMHEvRDNTMmRoNkgzWkVCTElOeGF6?=
- =?utf-8?B?dkk2Y2xGMmRMQ0pHQ3ZTeWdPZUdtaHk0RGhsVHUrSks3M3UwUmZiaTNmRnpt?=
- =?utf-8?B?Z2NacVpMdnNIRHRMOWhvMVN3ekpZTHBtT3Npc0xrRzQrZk00M01EaG9QYnY4?=
- =?utf-8?B?YTg0bC9uOUI2cGtUdVBHNGlHUmtEVUFXWTlCZVpoTXo2a1BDVmVYTG1raHhy?=
- =?utf-8?B?c2xKcXB5N2hpZGdmbTVEUFljRjJta1Vha3hKem9adS9tN25LNFRTZVp6OWhO?=
- =?utf-8?B?MDU3VjNRL28rWkxraUZZMUFRcWhqUWJEZEFRUHpZWUhBa05mdTVVNUNuejVV?=
- =?utf-8?B?UUhldWI4SE16QzNlQTBNN0pMMUxtN1kwL1RMWWszektLRFNBS0hOZTI5T2gw?=
- =?utf-8?B?MnZuM2lRMnQvWDlaN1dWQk80VDBhV2JWS2VOQlJFUC9mQTdSSEtEMnFaN1ZP?=
- =?utf-8?B?TVRuQy9NOUFZc0VxTGhjZHNtaTZKanJYNC9DeUwvM2t1SzJEM2JhMFhTaThl?=
- =?utf-8?B?VnlDVUpVbTNCM2UvWHVCQTV5WFZDU01SaE9SZFI0eXMvNldrRzNCY2ZWMkIy?=
- =?utf-8?B?QXd4Q0FlTSt3MmNnWVlZTmlwSC9ZTE1lcW9VdGJSQ0o5L3ZBWDkyMjl0YWFV?=
- =?utf-8?B?R0xBZVB5YU40RUVTZVBQSXR2U2hkQTdzUXllQ2pFSU5hVTRaNTFXN08xQVQx?=
- =?utf-8?B?c2FWOHo0NWZHMTVLNStxbmZ5NTlrZllqc3NibkJwNjJwNEk3Vi9WdWx0UjBU?=
- =?utf-8?B?ZXl5cXRkVXNzbjdZajV6VXNtYy9OWmx6NlcyRVF5SHcvbS85ZWZxdkkwNSt0?=
- =?utf-8?B?NWFjSnAxbkVWNmYxZjc1WGQ0T0pNMnVtd2YvVk9HRC9taGVtYkhrY3NuamdP?=
- =?utf-8?B?T3pEek0xcnRuM0Y4aXFkQXVkUmduajdWQm56ZHlMZDhjWk1zZUVqN2JuNm9J?=
- =?utf-8?B?aUJsOEpPMTlvbDRuZllxSktsS1ArUExSc1dGWWtHQ0tRS3dDQjBwbko3Q2lj?=
- =?utf-8?B?aG1WYlgybFhicUlOY2RhbVNNVUNNL1Y3Z3p6Vk1TSWI0ZkR6Q2VtVStDbUVi?=
- =?utf-8?B?WGsxRFhnVkpVajRkS0QxMExIY1k2MG84b1lLekdZRk1xLzVoellMUWNpQnNW?=
- =?utf-8?B?SzkyMkVjU2lkcFRYelhzUlB3WitrYXpUTmNvTFNtZ1E4UmtFSEJVTmhxQjJx?=
- =?utf-8?B?d2FRUzdCTFJUUjJNNUV4NU1RdmhrZTVWaWpudStzZ3I1K1Zhc01ESnRyOWIw?=
- =?utf-8?B?RGJ0MGNWbk5oMjJ6NmkrMTVOVUk1bW1HZldmWnNRMkpZMm1DTEJwTUEvcDFI?=
- =?utf-8?B?VXR3VGlDS0Q5S0RYNmhlSUVLbW94SVYwQU9EY2diTW5MVUFyV1A3aFFoOFpE?=
- =?utf-8?B?QlRJK2VQbU5zYkNDZE9MNHFiN0g2d0lseEc5ZStqSS9tOWZ2K2JSN0JzVXYr?=
- =?utf-8?B?dWgvVFhWKzJzd3haMTVUaDI0ZFNaSHh5WVpsOWthcmxGYms0c1FPS0kzanp0?=
- =?utf-8?B?N2xJekh5bGhidHBRLzVDWHVRSEdiUzA4dDZsNzBXSFEvVlE4SWZnWk9UY2Vx?=
- =?utf-8?B?V3dQREFtZ2xSUnUxZHlEaThUSjZGbURzSVAvc3VrWUJVQXRJcFE4QVUrYUNG?=
- =?utf-8?B?VHJPV09kWDZOSHZPekpjZ3cwUmd6V0JLV3FSQXdmRzFzb1prd3dWNjFyclUr?=
- =?utf-8?B?RVpaWS96N0p3TVhSSVJKTDlNRjdseThHOHY2Y29ZbmhXbU9icGZEb0V5bFZw?=
- =?utf-8?Q?dFnuwz952h7X+tTZYG0YiUPYza/IddpkthvQBNsuw8=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4B6F39807F7D8F419DEA675686769333@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        id S1348963AbhLWPQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 10:16:19 -0500
+Received: from mga05.intel.com ([192.55.52.43]:44626 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348870AbhLWPQP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 10:16:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640272575; x=1671808575;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ulq2OafBgJ5WWCya4qBGGzVaxV3Xslda9NQaS+urvvE=;
+  b=WPgH4hFJlAzgUrogJTYL7hxkMX8lWKtjighH/K6yXRkJ8nPDxpB4gyGi
+   JpmXQwe2aaamMJt/P8ha2uq8AwdZR31+38cQLgeuXbOErsDjLdvVeKGYf
+   yPqH1vq9mOHAqVB5/4eyraNnhiMBMwL/L/tZ1wQ+tzQjRrLq2hME2Sai3
+   EQ3f60jTqKlRogPyO4Q7n5u9dIQKCqg1hOLXfNa2r92w4hEwF4MLELqm1
+   tkhpu3BJEXrzE3QXwYA0AYYGfpHF+ukoVnLaN/Z7XcElcHuwBLLR9zTNP
+   rz0u6akYe660rRc0LbkLHwXRmHsXx0kJB293L2OYt1ZrERq3lzAdeItVi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="327152536"
+X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
+   d="scan'208";a="327152536"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 07:16:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
+   d="scan'208";a="485119426"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga002.jf.intel.com with ESMTP; 23 Dec 2021 07:16:05 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BNFG2Jp021426;
+        Thu, 23 Dec 2021 15:16:02 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     linux-hardening@vger.kernel.org, x86@kernel.org
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        Andy Lavr <andy.lavr@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
+        live-patching@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v9 00/15] Function Granular KASLR
+Date:   Thu, 23 Dec 2021 16:15:04 +0100
+Message-Id: <20211223151504.1409203-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c8b9928-d5aa-416d-6972-08d9c626e4fe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Dec 2021 15:14:20.1945
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BeYA4uIAMkH8vSMUznQe8qsbVfYpmwzV0Afda0WdWP0GZ9IDyj3I/4QvhnDmBDToxIo0gOHG/BWSZp3prR5FNUh+QuTV5EsYg9SrpU1B3uU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRXP264MB0279
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDIzLzEyLzIwMjEgw6AgMTM6MDksIE1pY2hhZWwgRWxsZXJtYW4gYSDDqWNyaXTCoDoN
-Cj4gQ2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1PiB3cml0ZXM6
-DQo+PiBDb21taXQgMWY5YWQyMWMzYjM4ICgicG93ZXJwYy9tbTogSW1wbGVtZW50IHNldF9tZW1v
-cnkoKSByb3V0aW5lcyIpDQo+PiBpbmNsdWRlZCBhIHNwaW5fbG9jaygpIHRvIGNoYW5nZV9wYWdl
-X2F0dHIoKSBpbiBvcmRlciB0bw0KPj4gc2FmZWx5IHBlcmZvcm0gdGhlIHRocmVlIHN0ZXAgb3Bl
-cmF0aW9ucy4gQnV0IHRoZW4NCj4+IGNvbW1pdCA5Zjc4NTNkNzYwOWQgKCJwb3dlcnBjL21tOiBG
-aXggc2V0X21lbW9yeV8qKCkgYWdhaW5zdA0KPj4gY29uY3VycmVudCBhY2Nlc3NlcyIpIG1vZGlm
-eSBpdCB0byB1c2UgcHRlX3VwZGF0ZSgpIGFuZCBkbw0KPj4gdGhlIG9wZXJhdGlvbiBhdG9taWNh
-bGx5Lg0KPiANCj4gSXQncyBub3QgcmVhbGx5IGF0b21pYywgaXQncyBqdXN0IHNhZmUgYWdhaW5z
-dCBjb25jdXJyZW50IGFjY2Vzcy4NCj4gDQo+IFdlIHN0aWxsIGRvIGEgcmVhZCAvIG1vZGlmeSAv
-IHdyaXRlIG9mIHRoZSBwdGUgdmFsdWUuDQo+IA0KPiBXaGljaCBpc24ndCBzYWZlIGFnYWluc3Qg
-Y29uY3VycmVudCBjYWxscyB0byBjaGFuZ2VfcGFnZV9hdHRyKCkgZm9yIHRoZQ0KPiBzYW1lIGFk
-ZHJlc3MuDQo+IA0KPiBCdXQgbWF5YmUgdGhhdCdzIE9LPyBBRkFJQ1Mgb3RoZXIgYXJjaGl0ZWN0
-dXJlcyAoZWcuIGFybTY0KSBoYXZlIG5vDQo+IHByb3RlY3Rpb24gYWdhaW5zdCBjb25jdXJyZW50
-IGNhbGxlcnMuIEkgdGhpbmsgdGhlIGFzc3VtcHRpb24gaXMgaGlnaGVyDQo+IGxldmVsIGNvZGUg
-aXMgZW5zdXJpbmcgdGhlcmUncyBvbmx5IGEgc2luZ2xlIGNhbGxlciBhdCBhIHRpbWUuDQo+IA0K
-PiBPbiB0aGUgb3RoZXIgaGFuZCB4ODYgYW5kIHMzOTAgZG8gaGF2ZSBsb2NraW5nIChjcGFfbG9j
-ayAvIGNwYV9tdXRleCkuDQo+IEJ1dCBpdCBzZWVtcyB0aGF0J3MgbW9zdGx5IHRvIHByb3RlY3Qg
-YWdhaW5zdCBzcGxpdHRpbmcgb2YgcGFnZSB0YWJsZXMsDQo+IHdoaWNoIHdlIGFyZW4ndCBkb2lu
-Zy4NCj4gDQo+IFdlJ2QgYmUgYSBiaXQgc2FmZXIgaWYgd2UgdXNlZCBwdGVfdXBkYXRlKCkgInBy
-b3Blcmx5IiwgbGlrZSBJIGRpZCBpbjoNCj4gDQo+ICAgIGh0dHBzOi8vbG9yZS5rZXJuZWwub3Jn
-L2xpbnV4cHBjLWRldi8yMDIxMDgxNzEzMjU1Mi4zMzc1NzM4LTEtbXBlQGVsbGVybWFuLmlkLmF1
-Lw0KPiANCj4gDQoNClByb2JhYmx5IG5vdCBzbyBzaW1wbGUgYXMgdGhhdCBwYXRjaCwgYnV0IEkg
-Z2V0IHRoZSBpZGVhLg0KDQpTZWUgYjZjYjIwZmRjMjczICgicG93ZXJwYy9ib29rM2U6IEZpeCBz
-ZXRfbWVtb3J5X3goKSBhbmQgc2V0X21lbW9yeV9ueCgpIikNCg0KSSB0aGluayB3ZSB0aGVuIG5l
-ZWQgdG8gZGVmaW5lIHBsYXRmb3JtIHNwZWNpZmljIGhlbHBlcnMgdG8gZG8gaXQsIA0Kc2ltaWxh
-ciB0byBwdGVwX3NldF93cnByb3RlY3QoKSBhbmQgYXZvaWQgYW4gI2lmZGVmZXJ5IGluIGNoYW5n
-ZV9wYWdlX2F0dHIoKQ0KDQpDaHJpc3RvcGhl
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
+Date: Thu, 23 Dec 2021 01:21:54 +0100
+
+> This is a massive rework and a respin of Kristen Accardi's marvellous
+> FG-KASLR series (v5).
+
+[ snip ]
+
+> The series is also available here: [3]
+
+As per request, I've published a version rebased ontop of
+linux-next-20211223 here: [4].
+
+During the rebasing, I saw that some ASM code conflicts with, I
+guess, Peter's "execute past ret" mitigation.
+So I would also like to ask you to give me a branch which I should
+pick to base my series on top of. There's a bunch of different x86
+branches, like several in peterz-queue, x86/core etc., so I got lost
+a little.
+The one posted yesterday was based on the mainline 5.16-rc6.
+
+> [0] https://lore.kernel.org/kernel-hardening/20200923173905.11219-1-kristen@linux.intel.com
+> [1] https://lore.kernel.org/kernel-hardening/20211202223214.72888-1-alexandr.lobakin@intel.com
+> [2] https://lore.kernel.org/kernel-hardening/20210831144114.154-1-alexandr.lobakin@intel.com
+> [3] https://github.com/alobakin/linux/pull/3
+
+[4] https://github.com/alobakin/linux/commits/next-fgkaslr
+
+[ snip ]
+
+Thanks,
+Al

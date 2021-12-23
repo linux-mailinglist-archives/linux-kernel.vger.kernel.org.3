@@ -2,41 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 514C447E876
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 20:45:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B19447E877
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 20:45:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350134AbhLWTpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 14:45:25 -0500
-Received: from mga17.intel.com ([192.55.52.151]:40586 "EHLO mga17.intel.com"
+        id S1350138AbhLWTpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 14:45:45 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:56898 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244856AbhLWTpY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 14:45:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640288724; x=1671824724;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=j8eIjUTXW9JyiXE6K/txhHNEDG17b/pLKDktFtjKMN4=;
-  b=RH+CzYIxOX4KOwZa2iVykKmurdLxE8mNqlAM7pQMbn3OUKGyOya6nPp9
-   KUzfZemyFu7xri1EBV1Q4PyV5VZPjEP8G/C6Ag/16DEHEMXNbhJR0BOJK
-   P1nsz33y6TuGBmsUI9eu0+i6+4vabETmu/c8VCya3D4EH06/x4pk9GlWS
-   CD1Xa3Ad0hki250v5uDtK3gVSnssq2aJtxZl2Y+94pyAUW1We7tScshW7
-   R7mZSsXlzXDHEDzYHdRyU6G5fzNnSHb9BHChmbipgqGNcghPHFvvVOROs
-   +DE/H9u6UYBV9EDSWR8boPuucPlvTfm40RGEE/Ey4rd6iegWOOMSHpTWJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10207"; a="221552446"
-X-IronPort-AV: E=Sophos;i="5.88,230,1635231600"; 
-   d="scan'208";a="221552446"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 11:45:23 -0800
-X-IronPort-AV: E=Sophos;i="5.88,230,1635231600"; 
-   d="scan'208";a="485183615"
-Received: from sameersi-mobl.amr.corp.intel.com (HELO [10.212.229.5]) ([10.212.229.5])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 11:45:22 -0800
-Subject: Re: [PATCH 19/26] x86/tdx: Make pages shared in ioremap()
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        id S244856AbhLWTpn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 14:45:43 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 96A771EC052C;
+        Thu, 23 Dec 2021 20:45:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640288738;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=GIRBlL+iiTgH3dproQOBfea9NGLTBWmifcVI0uoj7Hw=;
+        b=eI0VnDr5E3I3aFabWxYfx/M21f7MFwsFH2L24MFvjt5L3ni1vs5W/73BHwFouPS3p9kMvx
+        w9ltHAn8NMKmKlB5uU7HDs069v1ox1kosW4gfheSldWXKQ4TR8+FzVZCqqpfxLENDUW0BO
+        oesuOmi9psOoEbvMpN7xReVuzXT286U=
+Date:   Thu, 23 Dec 2021 20:45:40 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
         luto@kernel.org, peterz@infradead.org,
         sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
         ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
@@ -44,112 +36,90 @@ Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
         pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
         tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Subject: Re: [PATCH 04/26] x86/traps: Add #VE support for TDX guest
+Message-ID: <YcTR5HnkHi7CjVyx@zn.tnic>
 References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
- <20211214150304.62613-20-kirill.shutemov@linux.intel.com>
- <87c288d6-9bf8-5a94-a628-1e0aaa7de690@amd.com>
- <20211223171530.v73posbqizb5l3md@black.fi.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <f61b591b-a06c-bc29-4b9b-a5d46111fe4e@intel.com>
-Date:   Thu, 23 Dec 2021 11:45:19 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ <20211214150304.62613-5-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20211223171530.v73posbqizb5l3md@black.fi.intel.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+In-Reply-To: <20211214150304.62613-5-kirill.shutemov@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/23/21 9:15 AM, Kirill A. Shutemov wrote:
->>> +pgprot_t pgprot_cc_encrypted(pgprot_t prot)
->>> +{
->>> +	if (cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT))
->>> +		return __pgprot(__sme_set(pgprot_val(prot)));
->>> +	else if (cc_platform_has(CC_ATTR_GUEST_TDX))
->>> +		return __pgprot(pgprot_val(prot) & ~tdx_shared_mask());
->>> +
->> Hmmm... I believe this breaks SEV guests. __sme_set() uses sme_me_mask which
->> is used for both SME and SEV. With the current checks, an SEV guest will end
->> up never setting an encrypted address through this path. Ditto below on the
->> decrypted path.
-> Hm, okay. What if I rewrite code like this:
+On Tue, Dec 14, 2021 at 06:02:42PM +0300, Kirill A. Shutemov wrote:
+> Virtualization Exceptions (#VE) are delivered to TDX guests due to
+> specific guest actions which may happen in either user space or the
+> kernel:
 > 
-> 	pgprot_t pgprot_cc_encrypted(pgprot_t prot)
-> 	{
-> 		if (cc_platform_has(CC_ATTR_GUEST_TDX))
-> 			return __pgprot(pgprot_val(prot) & ~tdx_shared_mask());
-> 		else
-> 			return __pgprot(__sme_set(pgprot_val(prot)));
-> 	}
+>  * Specific instructions (WBINVD, for example)
+>  * Specific MSR accesses
+>  * Specific CPUID leaf accesses
+>  * Access to unmapped pages (EPT violation)
 > 
-> I believe it should cover all cases, right?
+> In the settings that Linux will run in, virtual exceptions are never
+> generated on accesses to normal, TD-private memory that has been
+> accepted.
+> 
+> The #VE handler implementation is simplified by the fact that entry
+> paths do not trigger #VE and that the handler may not be interrupted.
+> Specifically, the implementation assumes that the entry paths do not
+> access TD-shared memory, MMIO regions, use #VE triggering MSRs,
+> instructions, or CPUID leaves that might generate #VE. Interrupts,
+> including NMIs, are blocked by the hardware starting with #VE delivery
+> until TDGETVEINFO is called. All of this combined  eliminates the
+> chance of a #VE during the syscall gap, or paranoid entry paths.
+> 
+> After TDGETVEINFO, #VE could happen in theory (e.g. through an NMI),
+> but it is expected not to happen because TDX expects NMIs not to
+> trigger #VEs. Another case where #VE could happen is if the #VE
+> exception panics, but in this case, since the platform is already in
+> a panic state, nested #VE is not a concern.
+> 
+> If a guest kernel action which would normally cause a #VE occurs in
+> the interrupt-disabled region before TDGETVEINFO, a #DF (fault
+> exception) is delivered to the guest which will result in an oops
+> (and should eventually be a panic, as it is expected panic_on_oops is
+> set to 1 for TDX guests).
 
-I _think_ that should be fine for now.  But, it does expose that
-__sme_set() is weird because it get used on non-SME systems while
-tdx_shared_mask() is only used on TDX systems.
+So until here there are a lot of expectations and assumptions. What
+happens if those are violated?
 
-Ideally, we'd eventually get to something close to what you had originally:
+What happens if the NMI handler triggers a #VE after all? Or where is it
+enforced that TDX guests should set panic_on_oops?
 
-pgprot_t pgprot_cc_encrypted(pgprot_t prot)
-{
-	if (cc_platform_has(CC_ATTR_GUEST_TDX))
-		return __pgprot(pgprot_val(prot) & ~tdx_shared_mask());
-	if (cc_platform_has(CC_ATTR_SME_SOMETHING??))
-		return __pgprot(pgprot_val(prot) | sme_me_mask));
+It all reads really weird, like the TDX guest is a big bird which simply
+sticks its head in the sand in the face of danger...
 
-	return prot;
-}
+...
 
-CC_ATTR_SME_SOMETHING would get set when sme_me_mask is initialized to
-something non-zero.  That will keep folks from falling into the same
-trap that you did in the long term.
+> +/*
+> + * Handle the user initiated #VE.
+> + *
+> + * For example, executing the CPUID instruction from the user
 
-The SEV code wasn't crazy for doing what it did when it was the only
-game in town.  But, now that TDX is joining the party, we need to make
-sure that SEV isn't special.
+"... from userspace... " no "the"
+
+> + * space is a valid case and hence the resulting #VE had to
+
+s/had/has/
+
+> + * be handled.
+> + *
+> + * For dis-allowed or invalid #VE just return failure.
+> + *
+> + * Return True on success and False on failure.
+
+You lost me here - function returns false unconditionally. And that
+bla about CPUID from user being a valid case doesn't really look like
+one when I look at the code. Especially since ve_raise_fault() sends a
+SIGSEGV for user #VEs.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

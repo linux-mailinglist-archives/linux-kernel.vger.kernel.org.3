@@ -2,90 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 768DA47DE8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 06:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5FB47DEBB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 06:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346322AbhLWFTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 00:19:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbhLWFTv (ORCPT
+        id S1346378AbhLWF1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 00:27:10 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55274 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230035AbhLWF1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 00:19:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BB6C061401
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 21:19:51 -0800 (PST)
+        Thu, 23 Dec 2021 00:27:08 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 23CC3B81F75
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 05:19:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00BB0C36AE9;
-        Thu, 23 Dec 2021 05:19:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA66761DBE
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 05:27:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3948C36AE9;
+        Thu, 23 Dec 2021 05:27:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640236789;
-        bh=7zJHmCoxTHJyGHd+FsDCG+BUarl2qNlDg2wAXE0J1/I=;
+        s=k20201202; t=1640237227;
+        bh=Sh6jpk/Rbr2ag37WBYje8V7bPWoR/w5w/sUmeauAzJw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CuLuhtzoG+n0sPa/rQnBXLgsb4KwfJS8oNo3hce821FZDpb3XShWu0AghSyk9Qjia
-         qs+HNtqZe5sTVBmUJIe9je4kpSsfFs/1h8D2JCmKe8WQXhNsXQbGajOLi3hqOnr4Ze
-         RUPOzq5+3JWzyqf4PGSym1eHyMVDmmc9LFZMpXIPT0zbo/fxNwaMmn/loM3nkA3eCu
-         oP/0oAa8O6CYziRpUud/VQo2/1AQvX6gRp+ui+44hfsUYDiX6CUSLZMkeOADTYZ9uz
-         KGmKEjAvS7HteFaM4yjNvuENORD0tFbG7b4HfAgm1Idy14KT7wyZkTyjchdSCb6PPi
-         mgvIVclW2P5pg==
-Date:   Thu, 23 Dec 2021 10:49:44 +0530
+        b=jZow9MqGsJXa294P3rt+I2VYegmI+cNC1fSO2AgctovFOIj03x8vA6pLIcK61aR80
+         wzbO+i2Q3HCCcH+uQZeyiyayqsh0TQq8eZUiYImk5jBGny/fjHodzdhv71Ll/GlnjV
+         kgpVSfRlLA6bIbOMR4Ff98w8PZpDmlFrTgBs/e0O3wsdn9eeYtUZ8OAUxBq5TpaLkm
+         MmEqkxpquCyVc9Ayz0v091tuZSGPfFGQ2qkmXW3R40xOqZoco4fsj1pi9AcpKcQthn
+         ncldgfA0UaZ/FNC9/YWEVNg2e/TTswLMW1fDmKytvr6y79ISK6cZmgqCOsWSsM55WK
+         lAluvfnkXpYLQ==
+Date:   Thu, 23 Dec 2021 10:57:03 +0530
 From:   Vinod Koul <vkoul@kernel.org>
-To:     "Liao, Bard" <bard.liao@intel.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+To:     Li Chen <lchen@ambarella.com>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tiwai@suse.de" <tiwai@suse.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "srinivas.kandagatla@linaro.org" <srinivas.kandagatla@linaro.org>,
-        "pierre-louis.bossart@linux.intel.com" 
-        <pierre-louis.bossart@linux.intel.com>,
-        "Kale, Sanyog R" <sanyog.r.kale@intel.com>
-Subject: Re: [PATCH 0/7] ASoC/SoundWire: improve suspend flows and use
- set_stream() instead of set_tdm_slots() for HDAudio
-Message-ID: <YcQG8EjC5J+5721e@matsya>
-References: <20211213054634.30088-1-yung-chuan.liao@linux.intel.com>
- <YcIYT57YLpHR1+9A@sirena.org.uk>
- <DM6PR11MB40741309EE8E5A7977210EC5FF7D9@DM6PR11MB4074.namprd11.prod.outlook.com>
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: Re: [PATCH] Revert "phy: cadence-torrent: Do not configure SERDES if
+ it's already configured"
+Message-ID: <YcQIp3IJ0eki3hY2@matsya>
+References: <CH2PR19MB4024BE31FB249744412071F6A0639@CH2PR19MB4024.namprd19.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DM6PR11MB40741309EE8E5A7977210EC5FF7D9@DM6PR11MB4074.namprd11.prod.outlook.com>
+In-Reply-To: <CH2PR19MB4024BE31FB249744412071F6A0639@CH2PR19MB4024.namprd19.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-12-21, 13:47, Liao, Bard wrote:
-> > -----Original Message-----
-> > From: Mark Brown <broonie@kernel.org>
-> > Sent: Wednesday, December 22, 2021 2:09 AM
-> > To: Bard Liao <yung-chuan.liao@linux.intel.com>
-> > Cc: alsa-devel@alsa-project.org; vkoul@kernel.org; vinod.koul@linaro.org;
-> > linux-kernel@vger.kernel.org; tiwai@suse.de; gregkh@linuxfoundation.org;
-> > srinivas.kandagatla@linaro.org; pierre-louis.bossart@linux.intel.com; Kale,
-> > Sanyog R <sanyog.r.kale@intel.com>; Liao, Bard <bard.liao@intel.com>
-> > Subject: Re: [PATCH 0/7] ASoC/SoundWire: improve suspend flows and use
-> > set_stream() instead of set_tdm_slots() for HDAudio
-> > 
-> > On Mon, Dec 13, 2021 at 01:46:27PM +0800, Bard Liao wrote:
-> > 
-> > > The topics are independent but the changes are dependent. So please
-> > > allow me to send them in one series.
-> > 
-> > What's the plan for getting these merged?  Looks like they're mainly
-> > ASoC changes?
+On 26-11-21, 05:06, Li Chen wrote:
+> This reverts commit
+> b69d39f68419("phy: cadence-torrent: Do not configure SERDES if it's already configured")
+
+space between commit id and open brace...
+
 > 
-> Yes, maybe Vinod can ack and these patches can go through ASoC tree.
+> our soc will hang on any regmap field read before reset.
 
-I didnt have this series :( and on checking found that gmail tagged
-these and bunch of other alsa patches as spam, even my linaro email
-seems to have been unsubscribed due to bounces...
+okay, in this case the right fix would be to keep track of reset in SW
+and still skip reset if it is already configured?
 
-Not sure what is going on, will check the patches now...
+> 
+> Signed-off-by: Li Chen <lchen@ambarella.com>
+> ---
+>  drivers/phy/cadence/phy-cadence-torrent.c | 31 +++++++----------------
+>  1 file changed, 9 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/phy/cadence/phy-cadence-torrent.c b/drivers/phy/cadence/phy-cadence-torrent.c
+> index 415ace64adc5c..e57e0b1523aff 100644
+> --- a/drivers/phy/cadence/phy-cadence-torrent.c
+> +++ b/drivers/phy/cadence/phy-cadence-torrent.c
+> @@ -2031,11 +2031,6 @@ static int cdns_torrent_noop_phy_on(struct phy *phy)
+>  	return 0;
+>  }
+>  
+> -static const struct phy_ops noop_ops = {
+> -	.power_on	= cdns_torrent_noop_phy_on,
+> -	.owner		= THIS_MODULE,
+> -};
+> -
+>  static
+>  int cdns_torrent_phy_configure_multilink(struct cdns_torrent_phy *cdns_phy)
+>  {
+> @@ -2282,7 +2277,6 @@ static int cdns_torrent_phy_probe(struct platform_device *pdev)
+>  	struct device_node *child;
+>  	int ret, subnodes, node = 0, i;
+>  	u32 total_num_lanes = 0;
+> -	int already_configured;
+>  	u8 init_dp_regmap = 0;
+>  	u32 phy_type;
+>  
+> @@ -2321,20 +2315,16 @@ static int cdns_torrent_phy_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	regmap_field_read(cdns_phy->phy_pma_cmn_ctrl_1, &already_configured);
+> -
+> -	if (!already_configured) {
+> -		ret = cdns_torrent_reset(cdns_phy);
+> -		if (ret)
+> -			goto clk_cleanup;
+> +	ret = cdns_torrent_reset(cdns_phy);
+> +	if (ret)
+> +		goto clk_cleanup;
+>  
+> -		ret = cdns_torrent_clk(cdns_phy);
+> -		if (ret)
+> -			goto clk_cleanup;
+> +	ret = cdns_torrent_clk(cdns_phy);
+> +	if (ret)
+> +		goto clk_cleanup;
+>  
+>  		/* Enable APB */
+> -		reset_control_deassert(cdns_phy->apb_rst);
+> -	}
+> +	reset_control_deassert(cdns_phy->apb_rst);
+>  
+>  	for_each_available_child_of_node(dev->of_node, child) {
+>  		struct phy *gphy;
+> @@ -2404,10 +2394,7 @@ static int cdns_torrent_phy_probe(struct platform_device *pdev)
+>  		of_property_read_u32(child, "cdns,ssc-mode",
+>  				     &cdns_phy->phys[node].ssc_mode);
+>  
+> -		if (!already_configured)
+> -			gphy = devm_phy_create(dev, child, &cdns_torrent_phy_ops);
+> -		else
+> -			gphy = devm_phy_create(dev, child, &noop_ops);
+> +		gphy = devm_phy_create(dev, child, &cdns_torrent_phy_ops);
+>  		if (IS_ERR(gphy)) {
+>  			ret = PTR_ERR(gphy);
+>  			goto put_child;
+> @@ -2490,7 +2477,7 @@ static int cdns_torrent_phy_probe(struct platform_device *pdev)
+>  		goto put_lnk_rst;
+>  	}
+>  
+> -	if (cdns_phy->nsubnodes > 1 && !already_configured) {
+> +	if (cdns_phy->nsubnodes > 1) {
+>  		ret = cdns_torrent_phy_configure_multilink(cdns_phy);
+>  		if (ret)
+>  			goto put_lnk_rst;
+> -- 
+> 2.33.1
+>  
+> 
+> **********************************************************************
+> This email and attachments contain Ambarella Proprietary and/or Confidential Information and is intended solely for the use of the individual(s) to whom it is addressed. Any unauthorized review, use, disclosure, distribute, copy, or print is prohibited. If you are not an intended recipient, please contact the sender by reply email and destroy all copies of the original message. Thank you.
+
+Aha!!!
+
+Okay destroyed this now!
 
 -- 
 ~Vinod

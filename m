@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0626247DD25
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6733347DD23
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:18:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346742AbhLWBQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:16:07 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:27334 "EHLO
+        id S1346712AbhLWBQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:16:04 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:27304 "EHLO
         o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346237AbhLWBOp (ORCPT
+        with ESMTP id S1346229AbhLWBOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:14:45 -0500
+        Wed, 22 Dec 2021 20:14:43 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
         h=from:subject:in-reply-to:references:mime-version:to:cc:
         content-transfer-encoding:content-type;
-        s=sgd; bh=yps8dWzMUKU9RpPhjdHxIE2MYXvMyKmHNVpEu8C+Av8=;
-        b=YDmkak+OJEFHYXe/bj0Hi6XL2ELKUc4fCQN0z5nFM2oYV6GPyJxBnSq9OPl6vD1wKRHA
-        cOcYfPSCr3Eckn5sQ4WMg/PwZIf6yjIPG9KgH8qSbL3TfcKGTfo3mIrcm/KuaUg+Fww3ch
-        M03YDD0sBTbfHuCZFpFHard5V3ByPZK66/6RACPSdLgc6lgNBuBOu38VdUbEfrIUR4jNXc
-        WVC+ivPgLdV6s7LL1FPa1EHQ5Pu05r+Ry5C7lBNumIwlMeHLccJ7hl0A1x2uon7n6DF4ZP
-        vlRBywOeK3Atj11UpaYoWdlKgueDtgXMsgbDFpwAzU9oVNjYWTRd9iiBK9jUQG2Q==
-Received: by filterdrecv-656998cfdd-phncc with SMTP id filterdrecv-656998cfdd-phncc-1-61C3CD5F-4
-        2021-12-23 01:14:07.130091855 +0000 UTC m=+7955208.316338637
+        s=sgd; bh=3Uz4xO2jk3PwsoBap/NCYCWsUTTJtakQF5q2JJp4lHQ=;
+        b=AZzNDwI6isj4Br0GlK+kU9dM02F55UA7gnqhdWD4g8J9QC8JK5gEL8nqvU30FKtTH49i
+        NSw1KGcWfQOGA6WrxwehnMkuTcELkuhfmyefoefLBvWE8H8C9g3zI6qunfFcje3ESFh+is
+        0nX4c6szL6ltEyjbImHFOT7Uoi7/3YZ7D5Wz3p5PJVqUCheDVgkPrEd9SwH7QjuryPS1pn
+        SQM/GiZHMfnD0rqlnpcHOtg3IqPsbkbUSP7KTY4rm6honUjP9v0kMWvSgrqc/29aIsCmui
+        ICFxsO7sEc2wao74pm2osw1hddjyx5g+Mb2B5P4Ui4DRYXJ1TdE0/ij+1QXT/JgQ==
+Received: by filterdrecv-656998cfdd-ngmx2 with SMTP id filterdrecv-656998cfdd-ngmx2-1-61C3CD5E-3B
+        2021-12-23 01:14:07.038024374 +0000 UTC m=+7955207.334259020
 Received: from pearl.egauge.net (unknown)
         by geopod-ismtpd-6-0 (SG)
         with ESMTP
-        id cnVlM2Y7Qw-Hv8JFSNpx_A
-        Thu, 23 Dec 2021 01:14:06.990 +0000 (UTC)
+        id qOYqVE5dTvSY-kPoDwTdQg
+        Thu, 23 Dec 2021 01:14:06.874 +0000 (UTC)
 Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id 20C9E700BFC; Wed, 22 Dec 2021 18:14:06 -0700 (MST)
+        id C5063701508; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
 From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH v2 50/50] wilc1000: add module parameter
- "disable_zero_copy_tx" to SPI driver
+Subject: [PATCH v2 41/50] wilc1000: use more descriptive variable name
 Date:   Thu, 23 Dec 2021 01:14:07 +0000 (UTC)
-Message-Id: <20211223011358.4031459-51-davidm@egauge.net>
+Message-Id: <20211223011358.4031459-42-davidm@egauge.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211223011358.4031459-1-davidm@egauge.net>
 References: <20211223011358.4031459-1-davidm@egauge.net>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvNU=2FAiSwPXGwNeF4R?=
- =?us-ascii?Q?8pktv6qIQV9=2FvaYSYgd73qzUc+WcF+3KTLAn0Dz?=
- =?us-ascii?Q?BHXeSqbDC7G4R7ZfYu1EAHyy3Sq2tG4byisGyd2?=
- =?us-ascii?Q?qmo38tC9F5T2qmg=2Fpn8TXE3jyaOiU+UDITPGro4?=
- =?us-ascii?Q?e5Jq6l2P2YbawALWFgyfe3o6Pmduip+K2qFF1qs?=
- =?us-ascii?Q?=2F7vQHUWDarfmxjBGFKTPw=3D=3D?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvPuMcF=2FBHm6zz5zzm?=
+ =?us-ascii?Q?psOhjqu7S67FdJWIs8jvoN5AmbDIi6dQ8lNtN54?=
+ =?us-ascii?Q?xxhDmyuQ276OPAzpKlpaoXNFiJAEfxrg0c8r9Es?=
+ =?us-ascii?Q?O9Da3SIjzbjjQ8jb98tgTlDIsTp9my0W9+3Zgj2?=
+ =?us-ascii?Q?9nrdu9XXNulAcIA2sS3c44Jpiv0L0N5xQ6p0eZB?=
+ =?us-ascii?Q?7Q2o2N=2FSrKN2CK=2F3Fk4nw=3D=3D?=
 To:     Ajay Singh <ajay.kathat@microchip.com>
 Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
         Kalle Valo <kvalo@kernel.org>,
@@ -61,66 +60,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a module parameter to disable the zero-copy transmit path.  This
-is useful for testing and performance measurement, for example.
+Now that the factoring is done, again rename "i" to "vmm_table_len" to
+improve readability.
 
 Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
 ---
- drivers/net/wireless/microchip/wilc1000/spi.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ .../net/wireless/microchip/wilc1000/wlan.c    | 31 +++++++++----------
+ 1 file changed, 14 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/net/wireless/microchip/wilc1000/spi.c b/drivers/net/wireless/microchip/wilc1000/spi.c
-index 8d94f111ffc49..588cec326a74b 100644
---- a/drivers/net/wireless/microchip/wilc1000/spi.c
-+++ b/drivers/net/wireless/microchip/wilc1000/spi.c
-@@ -31,6 +31,11 @@ MODULE_PARM_DESC(enable_crc16,
- 		 "\t\t\tData transfers can be large and the CPU-cycle cost\n"
- 		 "\t\t\tof enabling this may be substantial.");
- 
-+static bool disable_zero_copy_tx;
-+module_param(disable_zero_copy_tx, bool, 0644);
-+MODULE_PARM_DESC(disable_zero_copy_tx,
-+		 "Disable zero-copy when sending packets.");
-+
- /*
-  * For CMD_SINGLE_READ and CMD_INTERNAL_READ, WILC may insert one or
-  * more zero bytes between the command response and the DATA Start tag
-@@ -41,7 +46,7 @@ MODULE_PARM_DESC(enable_crc16,
+diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
+index f01f7bade6189..f89ea4839aa61 100644
+--- a/drivers/net/wireless/microchip/wilc1000/wlan.c
++++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
+@@ -681,7 +681,7 @@ static void set_header(struct wilc *wilc, struct sk_buff *tqe,
+  * WILC_VMM_TBL_SIZE packets or up to WILC_TX_BUFF_SIZE bytes.
   */
- #define WILC_SPI_RSP_HDR_EXTRA_DATA	8
+ static int schedule_packets(struct wilc *wilc,
+-			    int i, u32 vmm_table[WILC_VMM_TBL_SIZE])
++			    int vmm_table_len, u32 vmm_table[WILC_VMM_TBL_SIZE])
+ {
+ 	u8 k, ac;
+ 	static const u8 ac_preserve_ratio[NQUEUES] = {1, 1, 1, 1};
+@@ -702,8 +702,8 @@ static int schedule_packets(struct wilc *wilc,
  
--static const struct wilc_hif_func wilc_hif_spi;
-+static struct wilc_hif_func wilc_hif_spi;
+ 			ac_exist = 1;
+ 			for (k = 0; k < num_pkts_to_add[ac]; k++) {
+-				if (i >= WILC_VMM_TBL_SIZE - 1)
+-					return i;
++				if (vmm_table_len >= WILC_VMM_TBL_SIZE - 1)
++					return vmm_table_len;
  
- static int wilc_spi_reset(struct wilc *wilc);
- static int wilc_spi_write_sk_buffs(struct wilc *wilc, u32 addr,
-@@ -254,6 +259,9 @@ static int wilc_bus_probe(struct spi_device *spi)
- 	if (!spi_priv)
- 		return -ENOMEM;
+ 				tqe = skb_dequeue(&wilc->txq[ac]);
+ 				if (!tqe)
+@@ -717,21 +717,21 @@ static int schedule_packets(struct wilc *wilc,
+ 				if (wilc->chipq_bytes + vmm_sz > WILC_TX_BUFF_SIZE) {
+ 					/* return packet to its queue */
+ 					skb_queue_head(&wilc->txq[ac], tqe);
+-					return i;
++					return vmm_table_len;
+ 				}
+ 				atomic_dec(&wilc->txq_entries);
  
-+	if (!disable_zero_copy_tx)
-+		wilc_hif_spi.hif_sk_buffs_tx = wilc_spi_write_sk_buffs;
-+
- 	ret = wilc_cfg80211_init(&wilc, &spi->dev, WILC_HIF_SPI, &wilc_hif_spi);
- 	if (ret)
- 		goto free;
-@@ -1424,7 +1432,7 @@ static int wilc_spi_sync_ext(struct wilc *wilc, int nint)
+ 				__skb_queue_tail(&wilc->chipq, tqe);
+ 				wilc->chipq_bytes += tqe->len;
+ 
+-				vmm_table[i] = vmm_table_entry(tqe, vmm_sz);
+-				i++;
++				vmm_table[vmm_table_len] = vmm_table_entry(tqe, vmm_sz);
++				vmm_table_len++;
+ 
+ 			}
+ 		}
+ 		num_pkts_to_add = ac_preserve_ratio;
+ 	} while (ac_exist);
+-	return i;
++	return vmm_table_len;
  }
  
- /* Global spi HIF function table */
--static const struct wilc_hif_func wilc_hif_spi = {
-+static struct wilc_hif_func wilc_hif_spi = {
- 	.hif_init = wilc_spi_init,
- 	.hif_deinit = wilc_spi_deinit,
- 	.hif_read_reg = wilc_spi_read_reg,
-@@ -1436,7 +1444,6 @@ static const struct wilc_hif_func wilc_hif_spi = {
- 	.hif_read_size = wilc_spi_read_size,
- 	.hif_block_tx_ext = wilc_spi_write,
- 	.hif_block_rx_ext = wilc_spi_read,
--	.hif_sk_buffs_tx = wilc_spi_write_sk_buffs,
- 	.hif_sync_ext = wilc_spi_sync_ext,
- 	.hif_reset = wilc_spi_reset,
- };
+ /**
+@@ -747,13 +747,10 @@ static int schedule_packets(struct wilc *wilc,
+  */
+ static int fill_vmm_table(struct wilc *wilc, u32 vmm_table[WILC_VMM_TBL_SIZE])
+ {
+-	int i;
+-	int vmm_sz = 0;
++	int vmm_table_len = 0, vmm_sz = 0;
+ 	struct sk_buff *tqe;
+ 	struct wilc_skb_tx_cb *tx_cb;
+ 
+-	i = 0;
+-
+ 	if (unlikely(wilc->chipq_bytes > 0)) {
+ 		/* fill in packets that are already on the chipq: */
+ 		skb_queue_walk(&wilc->chipq, tqe) {
+@@ -761,16 +758,16 @@ static int fill_vmm_table(struct wilc *wilc, u32 vmm_table[WILC_VMM_TBL_SIZE])
+ 			vmm_sz = tx_hdr_len(tx_cb->type);
+ 			vmm_sz += tqe->len;
+ 			vmm_sz = ALIGN(vmm_sz, 4);
+-			vmm_table[i++] = vmm_table_entry(tqe, vmm_sz);
++			vmm_table[vmm_table_len++] = vmm_table_entry(tqe, vmm_sz);
+ 		}
+ 	}
+ 
+-	i = schedule_packets(wilc, i, vmm_table);
+-	if (i > 0) {
+-		WARN_ON(i >= WILC_VMM_TBL_SIZE);
+-		vmm_table[i] = 0x0;
++	vmm_table_len = schedule_packets(wilc, vmm_table_len, vmm_table);
++	if (vmm_table_len > 0) {
++		WARN_ON(vmm_table_len >= WILC_VMM_TBL_SIZE);
++		vmm_table[vmm_table_len] = 0x0;
+ 	}
+-	return i;
++	return vmm_table_len;
+ }
+ 
+ /**
 -- 
 2.25.1
 

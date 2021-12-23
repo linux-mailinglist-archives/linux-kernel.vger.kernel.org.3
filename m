@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1ADC47DD54
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A435A47DD52
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346510AbhLWBRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:17:02 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:18458 "EHLO
+        id S1346034AbhLWBQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:16:57 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:18762 "EHLO
         o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345821AbhLWBOV (ORCPT
+        with ESMTP id S1345847AbhLWBOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:14:21 -0500
+        Wed, 22 Dec 2021 20:14:24 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
         h=from:subject:in-reply-to:references:mime-version:to:cc:
         content-transfer-encoding:content-type;
-        s=sgd; bh=/EyEEryj91qJLUiXheTiSQXnfpShGhTXZyiF3Fj6NOE=;
-        b=q/ktgvMgsfoIZL1oIY5FDcoHRa952fgBF/tSQCzetaW6A6iSaECMJBZjNeNkj2K3OeMP
-        nEW33KEzv4pfCdNxtFl7i+KCLMPH2usx8VFOH7uGiFc8MOMwVNJRqlOpSMgSljRda9t5fF
-        ulq7AzGlvmrw75pKEuGZTRhlxn+//l3Ay0JbDTQ2O+hDJCDgNMKIOsgLTQpj/Tc2IKOTEV
-        oZyYAt/d/fL7x61CNKA8SAFggJJ8pjcyDcImy1wO91cMO+pBd+kkzmjlds1WxsxCsUFfv9
-        Lqn0BQ+8JRP15/3fokjqzAmKPrTIJ01RWskrvTm9Ycdj6tATTfz8Hl+83X6xAKXQ==
-Received: by filterdrecv-64fcb979b9-zwvj5 with SMTP id filterdrecv-64fcb979b9-zwvj5-1-61C3CD5E-30
-        2021-12-23 01:14:06.829827724 +0000 UTC m=+8644582.987173852
+        s=sgd; bh=K3gvUb3OfxsaOhe9tlq0tGnjjw1iUXxBhXljWscLEpA=;
+        b=EyL6nlfgr9jVdtVhMT6au8qt34Za+LdjzKKipZCKpqlgz6G1wl5F3+25Hbw0xEDLe2wu
+        FrihvBjOH6zXmTgA3DRnJftUG5FCjuj5rCxeHcC251pZQuyGFJCwfV5v7gDc1e/y/avUCB
+        0UO1lhho1nSvG87xayM8xWqixfBePLN9481Ei9NJQ53z6p07N2K4bk1XHoWIKjhnDSnikd
+        6bOlQ5ulnfrVrLW5DvvVKo4ESFryeS2RHRZcYuHoU/LyoDffXjFEEavVG+/Ri/6snSR7Ul
+        NGt1Q+S0RbMcoGGgtYpyydfsRRVmyTHAieajpg3t3EgvBkqMFC0e4bMSQph529TA==
+Received: by filterdrecv-75ff7b5ffb-ndqvq with SMTP id filterdrecv-75ff7b5ffb-ndqvq-1-61C3CD5F-F
+        2021-12-23 01:14:07.170941284 +0000 UTC m=+9687225.771336929
 Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-5-1 (SG)
+        by geopod-ismtpd-2-0 (SG)
         with ESMTP
-        id NjOZgUDzQ4eb6TiIrCXIPw
-        Thu, 23 Dec 2021 01:14:06.686 +0000 (UTC)
+        id IA6WsOnwRGSzJ75Zl9-9BQ
+        Thu, 23 Dec 2021 01:14:07.020 +0000 (UTC)
 Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id B08E5700394; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
+        id EE86B70152F; Wed, 22 Dec 2021 18:14:05 -0700 (MST)
 From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH v2 34/50] wilc1000: restructure wilc-wlan_handle_txq() for
- clarity
+Subject: [PATCH v2 46/50] wilc1000: remove duplicate CRC calculation code
 Date:   Thu, 23 Dec 2021 01:14:07 +0000 (UTC)
-Message-Id: <20211223011358.4031459-35-davidm@egauge.net>
+Message-Id: <20211223011358.4031459-47-davidm@egauge.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211223011358.4031459-1-davidm@egauge.net>
 References: <20211223011358.4031459-1-davidm@egauge.net>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvPrUup0j1uxIpwHi0?=
- =?us-ascii?Q?Qdt824iAYJZBYYzjLIm4TfOHHZ+R40nsdoqq+2g?=
- =?us-ascii?Q?FdQlY5Su9zFVWJ0l69QnER98Ee0W5AyFIAMsCTH?=
- =?us-ascii?Q?1v5NaNBzWTtQcnbCQSgNbWRC1eHTJEN485YC7Ue?=
- =?us-ascii?Q?a14cR0pCPHJ3BOTKEFv5aF66AL7q4vKnHloe5BT?=
- =?us-ascii?Q?mALRSWdFAVkJDj2GFaC3A=3D=3D?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvCNKwj+DYMFZnlIhP?=
+ =?us-ascii?Q?R3K1iY1ejP=2F1ZZy1gRWB3YD8=2FXZCKVGtzkSucLw?=
+ =?us-ascii?Q?WRtW7fomsuWltgqRjiEBKbxvD+9e=2Fp2qcVJwvSk?=
+ =?us-ascii?Q?YmBPk=2FjZutd8UUMr8rhQpmJwu39LuLE4gR1E+Nl?=
+ =?us-ascii?Q?6AqvFLt0CGv4K+GMCLAgNtfyiN=2FsVx3=2FW12+sXV?=
+ =?us-ascii?Q?TND+x+XmcmKUXHyI7NTzA=3D=3D?=
 To:     Ajay Singh <ajay.kathat@microchip.com>
 Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
         Kalle Valo <kvalo@kernel.org>,
@@ -61,85 +60,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This restructures the function to make it much clearer how the bus
-hand-off works.  The patch is unfortunately a bit difficult to read,
-but the final code is clearer and eliminates some gotos.
+Factor two copies of the same calculation into a single instance.
 
 Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
 ---
- .../net/wireless/microchip/wilc1000/wlan.c    | 43 ++++++++-----------
- 1 file changed, 19 insertions(+), 24 deletions(-)
+ drivers/net/wireless/microchip/wilc1000/spi.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
-index 64497754a36b1..803d35b18d2e0 100644
---- a/drivers/net/wireless/microchip/wilc1000/wlan.c
-+++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
-@@ -818,8 +818,8 @@ static int send_vmm_table(struct wilc *wilc,
-  * Context: The txq_add_to_head_cs mutex must still be held when
-  * calling this function.
-  *
-- * Return:
-- *	Negative number on error, 0 on success.
-+ * Return: Number of bytes copied to the transmit buffer (always
-+ *	non-negative).
-  */
- static int copy_packets(struct wilc *wilc, int entries, u32 *vmm_table,
- 			u8 *vmm_entries_ac)
-@@ -908,7 +908,7 @@ static int send_packets(struct wilc *wilc, int len)
+diff --git a/drivers/net/wireless/microchip/wilc1000/spi.c b/drivers/net/wireless/microchip/wilc1000/spi.c
+index 5f73b3d2d2112..189907580d921 100644
+--- a/drivers/net/wireless/microchip/wilc1000/spi.c
++++ b/drivers/net/wireless/microchip/wilc1000/spi.c
+@@ -658,7 +658,7 @@ static int wilc_spi_dma_rw(struct wilc *wilc, u8 cmd, u32 adr, u8 *b, u32 sz)
+ 	u8 wb[32], rb[32];
+ 	int cmd_len, resp_len;
+ 	int retry, ix = 0;
+-	u8 crc[2];
++	u8 crc[2], *crc7;
+ 	struct wilc_spi_cmd *c;
+ 	struct wilc_spi_rsp_data *r;
  
- int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
- {
--	int vmm_table_len, entries, len;
-+	int vmm_table_len, entries;
- 	u8 vmm_entries_ac[WILC_VMM_TBL_SIZE];
- 	int ret = 0;
- 	u32 vmm_table[WILC_VMM_TBL_SIZE];
-@@ -931,29 +931,24 @@ int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
- 
- 	acquire_bus(wilc, WILC_BUS_ACQUIRE_AND_WAKEUP);
- 
--	ret = send_vmm_table(wilc, vmm_table_len, vmm_table);
--	if (ret <= 0) {
--		if (ret == 0)
--			/* No VMM space available in firmware.  Inform
--			 * caller to retry later.
--			 */
--			ret = WILC_VMM_ENTRY_FULL_RETRY;
--		goto out_release_bus;
--	}
--
--	release_bus(wilc, WILC_BUS_RELEASE_ONLY);
--
--	entries = ret;
--	len = copy_packets(wilc, entries, vmm_table, vmm_entries_ac);
--	if (len <= 0)
--		goto out_unlock;
--
--	acquire_bus(wilc, WILC_BUS_ACQUIRE_ONLY);
-+	entries = send_vmm_table(wilc, vmm_table_len, vmm_table);
- 
--	ret = send_packets(wilc, len);
-+	release_bus(wilc, (entries > 0 ?
-+			   WILC_BUS_RELEASE_ONLY :
-+			   WILC_BUS_RELEASE_ALLOW_SLEEP));
- 
--out_release_bus:
--	release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP);
-+	if (entries <= 0) {
-+		ret = entries;
-+	} else {
-+		ret = copy_packets(wilc, entries, vmm_table, vmm_entries_ac);
-+		if (ret > 0) {
-+			acquire_bus(wilc, WILC_BUS_ACQUIRE_ONLY);
-+			ret = send_packets(wilc, ret);
-+			release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP);
-+		}
+@@ -673,8 +673,6 @@ static int wilc_spi_dma_rw(struct wilc *wilc, u8 cmd, u32 adr, u8 *b, u32 sz)
+ 		c->u.dma_cmd.size[0] = sz >> 8;
+ 		c->u.dma_cmd.size[1] = sz;
+ 		cmd_len = offsetof(struct wilc_spi_cmd, u.dma_cmd.crc);
+-		if (spi_priv->crc7_enabled)
+-			c->u.dma_cmd.crc[0] = wilc_get_crc7(wb, cmd_len);
+ 	} else if (cmd == CMD_DMA_EXT_WRITE || cmd == CMD_DMA_EXT_READ) {
+ 		c->u.dma_cmd_ext.addr[0] = adr >> 16;
+ 		c->u.dma_cmd_ext.addr[1] = adr >> 8;
+@@ -683,15 +681,16 @@ static int wilc_spi_dma_rw(struct wilc *wilc, u8 cmd, u32 adr, u8 *b, u32 sz)
+ 		c->u.dma_cmd_ext.size[1] = sz >> 8;
+ 		c->u.dma_cmd_ext.size[2] = sz;
+ 		cmd_len = offsetof(struct wilc_spi_cmd, u.dma_cmd_ext.crc);
+-		if (spi_priv->crc7_enabled)
+-			c->u.dma_cmd_ext.crc[0] = wilc_get_crc7(wb, cmd_len);
+ 	} else {
+ 		dev_err(&spi->dev, "dma read write cmd [%x] not supported\n",
+ 			cmd);
+ 		return -EINVAL;
+ 	}
+-	if (spi_priv->crc7_enabled)
++	if (spi_priv->crc7_enabled) {
++		crc7 = wb + cmd_len;
++		*crc7 = wilc_get_crc7(wb, cmd_len);
+ 		cmd_len += 1;
 +	}
-+	if (ret >= 0 && entries < vmm_table_len)
-+		ret = WILC_VMM_ENTRY_FULL_RETRY;
  
- out_unlock:
- 	mutex_unlock(&wilc->txq_add_to_head_cs);
+ 	resp_len = sizeof(*r);
+ 
 -- 
 2.25.1
 

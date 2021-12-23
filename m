@@ -2,81 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1710747DE81
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 06:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A9A47DE85
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 06:09:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236869AbhLWFJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 00:09:33 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:37662 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235176AbhLWFJb (ORCPT
+        id S1346241AbhLWFJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 00:09:44 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:17426 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237188AbhLWFJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 00:09:31 -0500
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BN0FYxs006038;
-        Thu, 23 Dec 2021 05:09:26 GMT
+        Thu, 23 Dec 2021 00:09:42 -0500
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BN0JQvW016934;
+        Thu, 23 Dec 2021 05:09:28 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=FDWwdngnvPH/Wvq/ezAVHj1XYTtbmZ3sfJ0Mbe+YuRE=;
- b=cJhGVdPGaEg8sCtNRVfBcoNS7BLj0sL267IbtQtHVCEecC0w9MLBbNOUKv51RkKn8qu8
- jsPGZZYB2N/S7lIIyWCgA6B1pXnzzhP3S7d9emqV1/aJBL8eM5UbWhwsCBFQXOx96ift
- 00qX3HNJUItlsyRzfCTFKDLochILP1VvIXCCSSN54/5jitSCMEh8OHFkhjDEe6JBt3n5
- i7D9rLJK04ri5IF1gN5oF4WeWCju8uknIkQkmA/Hde4wh+9Q+IUJZcEyyoa2EhtIpH23
- /b/3C0Mx4lxGOcQh2Mn3OtfMSr/hePocmVITN6wemc4IRPPJa357RpgOxMEJfU1gnwBN nw== 
+ bh=OMvW6eO+PlYGQA9n9eHRPOe3ElC9aaRa9SFIhD8SZcI=;
+ b=GhGyOUAivpddHjHv6AewkztRa1FEB4JEQGIUNDFz3wcPPdJFt0VOMB6w2IStZjlYsHBH
+ Ev/z9r6ZmLhm2ZoGgVcj+CGX727BhTR2LOBSL+uIwj+yxCoxVGOuUTXg7glMZi7IDaNM
+ eDYm2LaSFkb2sotJTYzV8+QgGkSMCrE87pZNq/QGBXBeLepkL5/qrtqxF8vVfKy1DzFG
+ cu2cdhT1GXcz7UC4ZUtGSDVH9WVvfv0V6lOS/LReps8C7yJYMqOivt+IJJo8SGUBwHGM
+ qLAGgAlblNBmjjWXyR2fuQHXCLyBin/hOCD4clLU8MjF42ybU4/F3D8j7k8xaeQvUa9S zw== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3d2udcfs3j-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3d46qn1ne3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 Dec 2021 05:09:26 +0000
+        Thu, 23 Dec 2021 05:09:28 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BN50vTK102222;
-        Thu, 23 Dec 2021 05:09:25 GMT
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BN50vOT102251;
+        Thu, 23 Dec 2021 05:09:27 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by aserp3020.oracle.com with ESMTP id 3d17f68vdr-1
+        by aserp3020.oracle.com with ESMTP id 3d17f68veb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 Dec 2021 05:09:25 +0000
+        Thu, 23 Dec 2021 05:09:27 +0000
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 1BN59OTc125399;
-        Thu, 23 Dec 2021 05:09:24 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 1BN59OTg125399;
+        Thu, 23 Dec 2021 05:09:26 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by aserp3020.oracle.com with ESMTP id 3d17f68vdd-1;
-        Thu, 23 Dec 2021 05:09:24 +0000
+        by aserp3020.oracle.com with ESMTP id 3d17f68vdd-3;
+        Thu, 23 Dec 2021 05:09:26 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org, Daniel Wagner <dwagner@suse.de>
+To:     beanhuo@micron.com, stanley.chu@mediatek.com, cang@codeaurora.org,
+        bvanassche@acm.org, avri.altman@wdc.com, alim.akhtar@samsung.com,
+        tomas.winkler@intel.com, asutoshd@codeaurora.org,
+        Bean Huo <huobean@gmail.com>, jejb@linux.ibm.com
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        linux-kernel@vger.kernel.org, Nilesh Javali <njavali@marvell.com>,
-        Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH v3] qla2xxx: synchronize rport dev_loss_tmo setting
-Date:   Thu, 23 Dec 2021 00:09:20 -0500
-Message-Id: <164023594701.4594.3994093759396390802.b4-ty@oracle.com>
+        Amit Pundir <amit.pundir@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        YongQin Liu <yongqin.liu@linaro.org>
+Subject: Re: [PATCH v2] scsi: ufs: Fix deadlock issue in ufshcd_wait_for_doorbell_clr()
+Date:   Thu, 23 Dec 2021 00:09:22 -0500
+Message-Id: <164023594702.4594.97056831726187754.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211214111139.52503-1-dwagner@suse.de>
-References: <20211214111139.52503-1-dwagner@suse.de>
+In-Reply-To: <20211214120537.531628-1-huobean@gmail.com>
+References: <20211214120537.531628-1-huobean@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: NbFOlJI6VQrgrU3gI98Qz09y5mXlhsoM
-X-Proofpoint-GUID: NbFOlJI6VQrgrU3gI98Qz09y5mXlhsoM
+X-Proofpoint-ORIG-GUID: VnYxAGQiFM4wiqX4YeIxK0F0JtQP86IK
+X-Proofpoint-GUID: VnYxAGQiFM4wiqX4YeIxK0F0JtQP86IK
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Dec 2021 12:11:39 +0100, Daniel Wagner wrote:
+On Tue, 14 Dec 2021 13:05:37 +0100, Bean Huo wrote:
 
-> From: Hannes Reinecke <hare@suse.de>
+> From: Bean Huo <beanhuo@micron.com>
 > 
-> Currently, the dev_loss_tmo setting is only ever used for SCSI
-> devices. This patch reshuffles initialisation such that the SCSI
-> remote ports are registered before the NVMe ones, allowing the
-> dev_loss_tmo setting to be synchronized between SCSI and NVMe.
+> Call shost_for_each_device() with holding host->host_lock will cause
+> a deadlock situation, which will cause the system to stall (the log
+> as follow). Fix this issue by using __shost_for_each_device() in
+> ufshcd_pending_cmds().
 > 
 > [...]
 
 Applied to 5.17/scsi-queue, thanks!
 
-[1/1] qla2xxx: synchronize rport dev_loss_tmo setting
-      https://git.kernel.org/mkp/scsi/c/baea0e833f76
+[1/1] scsi: ufs: Fix deadlock issue in ufshcd_wait_for_doorbell_clr()
+      https://git.kernel.org/mkp/scsi/c/99c66a8868e3
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering

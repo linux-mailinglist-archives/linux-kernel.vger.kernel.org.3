@@ -2,107 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76AC247E525
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 15:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F07247E528
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 15:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239748AbhLWOwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 09:52:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236473AbhLWOwS (ORCPT
+        id S239887AbhLWO40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 09:56:26 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:45906 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232601AbhLWO4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 09:52:18 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CE1C061756
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 06:52:18 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id x15so4549563plg.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 06:52:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CugRxVCOm+9iRZokknJxYJHgL5jpmQMZdVEfQBT3ih0=;
-        b=azASY7fooyhQwm0kP2LA7PXxfvet31Lg+pCCnSZ/MzmYitl6uAWKbr5bUpGIsylhQL
-         mpt3vCHPk2sWO9IiSzqqheoBPwLf3j/MBl1LrcKvAkBugwW/LoP1X+l7vAFMmJfzuS4Y
-         6670miVH+970PYWSFW1rOkT5+NAYEIA9oYuRY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CugRxVCOm+9iRZokknJxYJHgL5jpmQMZdVEfQBT3ih0=;
-        b=E6iXwQ6J+M+JMsdf4zSFREpNhNAmB6e3jSbTFt4/Noe4enRrfS/nAh7ewVhv6j88HZ
-         0GLeyCnc4H8JYGcmUy7ybME8TTz1rxC2j1n74hx5TpWN+nRAEA51DmjVjZqEAwH/I28K
-         0wE02oeVz7lfh2PdzkgXEe78EFMiihw185zV5iCRnc4t0qiiQPPDvmGrU8RucQnpja7g
-         iB0dz6mwPYzrspSiSCjO5mhJx/UdRvOUnZUcLadKn+/46FwkDBGWYZVGooQb9IyFhNaF
-         IoTm/6aKOPhnrOYMk/mWNnyNU44rh2go17d3aGIPM6iVZMFjqjU3nsjnLg8DLkhOyl6C
-         wzRw==
-X-Gm-Message-State: AOAM533ejIGyBUW+sKq4go+QRUs/rk/PRfmtT7C0+B3npeHXIbdi7rnp
-        DQPzhK0jfQYADN654a1nA4EwJId2ShyEAA==
-X-Google-Smtp-Source: ABdhPJyfLxyAXYp9QiVqz2zUGDKewLjq4d4yM6owaB+h09ApXc0/BFgKN3Y4X6+jokx/Nuk4iT/Guw==
-X-Received: by 2002:a17:903:22cb:b0:149:208f:d5dd with SMTP id y11-20020a17090322cb00b00149208fd5ddmr2492863plg.60.1640271138001;
-        Thu, 23 Dec 2021 06:52:18 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:bc36:6516:dfc5:c35c])
-        by smtp.gmail.com with UTF8SMTPSA id h191sm5313697pge.55.2021.12.23.06.52.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Dec 2021 06:52:17 -0800 (PST)
-Date:   Thu, 23 Dec 2021 06:52:16 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thermal/core: Clear all mitigation when thermal zone is
- disabled
-Message-ID: <YcSNIJVnCQvx6ttg@google.com>
-References: <1640083318-19277-1-git-send-email-quic_manafm@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1640083318-19277-1-git-send-email-quic_manafm@quicinc.com>
+        Thu, 23 Dec 2021 09:56:25 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 1377721128;
+        Thu, 23 Dec 2021 14:56:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1640271384; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=QD0X3YKY4Cu84MhZhedZradTZFawlH61qwDTtUOXmU0=;
+        b=DJa7QA/lqhjcrt1E1YsjQ0L9rhRd+mGxHeurvcCPGZXrgEP4exy+/M/u+ef2yWKK7pyvB7
+        2goA83N0NcQvjRDP+IuuxNLQH6p8y+iTEAUPuJGCxdUvsxxHamre+nKE6fohkh0FXuK+v9
+        Ya0MspbTotS+stDq8XAnFnqjZyzRCBw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1640271384;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=QD0X3YKY4Cu84MhZhedZradTZFawlH61qwDTtUOXmU0=;
+        b=iOD7VA7Ih8cp0FBJWMKzLgoFgXLwaiFMucLwpa8d3NL6eaM0fGXJMn1AlhuBWx2xdb/B7b
+        fnmbXz/tNYSic+AA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 0AE91A3B84;
+        Thu, 23 Dec 2021 14:56:24 +0000 (UTC)
+Date:   Thu, 23 Dec 2021 15:56:24 +0100
+Message-ID: <s5ha6grqsiv.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 5.16-rc7
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 04:11:58PM +0530, Manaf Meethalavalappu Pallikunhi wrote:
-> Whenever a thermal zone is in trip violated state, there is a chance
-> that the same thermal zone mode can be disabled either via thermal
-> core API or via thermal zone sysfs. Once it is disabled, the framework
-> bails out any re-evaluation of thermal zone. It leads to a case where
-> if it is already in mitigation state, it will stay the same state
-> until it is re-enabled.
-> 
-> To avoid above mentioned issue, on thermal zone disable request
-> reset thermal zone and clear mitigation for each trip explicitly.
-> 
-> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-> ---
->  drivers/thermal/thermal_core.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 51374f4..a8ae340 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -427,6 +427,7 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
->  					enum thermal_device_mode mode)
->  {
->  	int ret = 0;
-> +	int count;
->  
->  	mutex_lock(&tz->lock);
->  
-> @@ -449,8 +450,14 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
->  
->  	if (mode == THERMAL_DEVICE_ENABLED)
->  		thermal_notify_tz_enable(tz->id);
-> -	else
-> +	else {
-> +		/* make sure all previous throttlings are cleared */
-> +		thermal_zone_device_init(tz);
-> +		for (count = 0; count < tz->trips; count++)
-> +			handle_thermal_trip(tz, count);
+Linus,
 
-nit: s/count/trip/
+please pull sound fixes for v5.16-rc7 from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-5.16-rc7
+
+The topmost commit is edca7cc4b0accfa69dc032442fe0684e59c691b8
+
+----------------------------------------------------------------
+
+sound fixes for 5.16-rc7
+
+Quite a few small fixes, hopefully the last batch for 5.16.
+Most of them are device-specific quirks and/or fixes, and nothing
+looks scary for the late stage.
+
+----------------------------------------------------------------
+
+Bradley Scott (2):
+      ALSA: hda/realtek: Amp init fixup for HP ZBook 15 G6
+      ALSA: hda/realtek: Add new alc285-hp-amp-init model
+
+Colin Ian King (1):
+      ALSA: drivers: opl3: Fix incorrect use of vp->state
+
+Derek Fang (1):
+      ASoC: rt5682: fix the wrong jack type detected
+
+Dmitry Osipenko (2):
+      ASoC: tegra: Add DAPM switches for headphones and mic jack
+      ASoC: tegra: Restore headphones jack name on Nyan Big
+
+Jaroslav Kysela (1):
+      ALSA: rawmidi - fix the uninitalized user_pversion
+
+Jeremy Szu (1):
+      ALSA: hda/realtek: fix mute/micmute LEDs for a HP ProBook
+
+Kai Vehmanen (2):
+      ASoC: SOF: Intel: pci-tgl: add ADL-N support
+      ASoC: SOF: Intel: pci-tgl: add new ADL-P variant
+
+Libin Yang (2):
+      ALSA: hda: intel-sdw-acpi: harden detection of controller
+      ALSA: hda: intel-sdw-acpi: go through HDAS ACPI at max depth of 2
+
+Martin Blumenstingl (2):
+      ASoC: meson: aiu: fifo: Add missing dma_coerce_mask_and_coherent()
+      ASoC: meson: aiu: Move AIU_I2S_MISC hold setting to aiu-fifo-i2s
+
+Martin Povišer (1):
+      ASoC: tas2770: Fix setting of high sample rates
+
+Ville Syrjälä (1):
+      ALSA: hda/hdmi: Disable silent stream on GLK
+
+Werner Sembach (1):
+      ALSA: hda/realtek: Fix quirk for Clevo NJ51CU
+
+Xiaoke Wang (1):
+      ALSA: jack: Check the return value of kstrdup()
+
+---
+ Documentation/sound/hd-audio/models.rst |  2 ++
+ sound/core/jack.c                       |  4 ++++
+ sound/core/rawmidi.c                    |  1 +
+ sound/drivers/opl3/opl3_midi.c          |  2 +-
+ sound/hda/intel-sdw-acpi.c              | 13 ++++++++++---
+ sound/pci/hda/patch_hdmi.c              | 21 +++++++++++++++------
+ sound/pci/hda/patch_realtek.c           | 29 ++++++++++++++++++++++++++++-
+ sound/soc/codecs/rt5682.c               |  4 ++++
+ sound/soc/codecs/tas2770.c              |  4 ++--
+ sound/soc/meson/aiu-encoder-i2s.c       | 33 ---------------------------------
+ sound/soc/meson/aiu-fifo-i2s.c          | 19 +++++++++++++++++++
+ sound/soc/meson/aiu-fifo.c              |  6 ++++++
+ sound/soc/sof/intel/pci-tgl.c           |  4 ++++
+ sound/soc/tegra/tegra_asoc_machine.c    | 11 ++++++++++-
+ sound/soc/tegra/tegra_asoc_machine.h    |  1 +
+ 15 files changed, 107 insertions(+), 47 deletions(-)
+

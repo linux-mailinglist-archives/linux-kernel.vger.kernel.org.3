@@ -2,67 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB80F47E454
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 15:05:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D4147E459
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 15:10:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348749AbhLWOFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 09:05:22 -0500
-Received: from foss.arm.com ([217.140.110.172]:42740 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229449AbhLWOFV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 09:05:21 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6CF3AD6E;
-        Thu, 23 Dec 2021 06:05:20 -0800 (PST)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.196.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D1FCF3F5A1;
-        Thu, 23 Dec 2021 06:05:18 -0800 (PST)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     John Keeping <john@metanate.com>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-rt-users@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RT] BUG in sched/cpupri.c
-In-Reply-To: <YcRkUt8nFCWI7PHn@donbot>
-References: <Yb3vXx3DcqVOi+EA@donbot> <71ddbe51-2b7f-2b13-5f22-9013506471dc@arm.com> <87zgou6iq1.mognet@arm.com> <20211221164528.3c84543f.john@metanate.com> <31a47e99-6de3-76ec-62ad-9c98d092ead5@arm.com> <87r1a4775a.mognet@arm.com> <YcRkUt8nFCWI7PHn@donbot>
-Date:   Thu, 23 Dec 2021 14:05:13 +0000
-Message-ID: <87mtkr76xy.mognet@arm.com>
+        id S243771AbhLWOKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 09:10:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232279AbhLWOKG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 09:10:06 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D001CC061401;
+        Thu, 23 Dec 2021 06:10:05 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id f5so21896862edq.6;
+        Thu, 23 Dec 2021 06:10:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=UjJkKz/JWKKHY4Lc0BtDfzIifxG8kvNPIELEZ6V+jDY=;
+        b=NKzwnSNRYOXEwAggF5JDNwy5v8Mn81zuzcbWVzsjbz0srosH/h7yCUbFTUfmLmWdeC
+         +DsN8gvOMvgVKOfXVPiakOi1CU/mA+PZBpVZRCAfBrFV+a/oF0lyzG5mOQ8r8eahej4Q
+         0DatHCDcM3TODghtsFjPp2ULnRNgTmQcH7ZmzgLJGfE1fbGRi4mJhaBRtBKKKZ0q+L3M
+         P12fXNAuYPEVT5lrsLUG89P5RcFy0L8pNCMC+Ntj5rFjC9HjMuL2S/E/Awb4KpuI4PMd
+         U0mdBf+gZHHLuhyymQddTKZXknf9pbmC/IW5/sS0K4Bq3h2Kjxj4iT5rzIwpZi9SrDkZ
+         PhBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=UjJkKz/JWKKHY4Lc0BtDfzIifxG8kvNPIELEZ6V+jDY=;
+        b=BKwzbAIwmR/qg9ILTbB5w5pLs/AkwRi/AA4EJNCsb2vZ9WM1DzTtCE/v/QBIZhIm4+
+         zXVQgTVAftlfQpxfaAv7JqALi8z959Mrz1WPQZgMOxM8SE2fdWtZ+4rdkvuKU8TS8ns0
+         RlGq744wupwe7yn/78kBmU5Z5ME9XbQeTYKDna83jXS3whHbWQ8CqFijGr3HIpzPnh2B
+         u6PixF2NAlZqNAgStCUJDMwwEGGapINgeX6y/IhdImIKFZN7ILOoRUc7Fm6cGS0Gc+rB
+         gGZHdWTrjFwRAyF6AQdG6wohlWLegiM6LyYOMFS3f+9HoBHC6ndBQRpiQup8WR/7DRTk
+         EqwA==
+X-Gm-Message-State: AOAM531DPIyoPGDkkwt2SR/cCW+cK0kVbR7v62KSNDZt2iCKPakJTq3x
+        teYi8CGIp5CEw36U6sFI36mGr66gyuQ=
+X-Google-Smtp-Source: ABdhPJwED6pkRIcLk+EsacuGOReF+17cVzQfVNLpZvtcQGcSn16U9mhv+DWleHQztAyaEnftcWQ2iQ==
+X-Received: by 2002:a17:907:7295:: with SMTP id dt21mr2023199ejc.441.1640268604463;
+        Thu, 23 Dec 2021 06:10:04 -0800 (PST)
+Received: from standask-GA-A55M-S2HP ([188.123.115.255])
+        by smtp.gmail.com with ESMTPSA id 27sm1784451ejm.41.2021.12.23.06.10.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Dec 2021 06:10:04 -0800 (PST)
+Date:   Thu, 23 Dec 2021 15:10:02 +0100
+From:   Stanislav Jakubek <stano.jakubek@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] dt-bindings: vendor-prefixes: add OnePlus
+Message-ID: <20211223141002.GA5979@standask-GA-A55M-S2HP>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/12/21 11:58, John Keeping wrote:
-> On Wed, Dec 22, 2021 at 07:48:33PM +0000, Valentin Schneider wrote:
->> mark_wakeup_next_waiter() first deboosts the previous owner and then
->> wakeups the next top waiter. Seems like you somehow have the wakeup happen
->> before the push_rt_task IRQ work is run. Also, tell_cpu_to_push() should
->> only pick a CPU that is in rq->rd->rto_mask, which requires having at least
->> 2 RT tasks there...
->> 
->> Now, that wakeup from the rtmutex unlock would give us a resched_curr() via
->> check_preempt_curr() if required, which is good, though I think we are
->> still missing some for sched_setscheduler() (there are no wakeups
->> there). So if we just have to live with an IRQ work popping in before we
->> get to preempt_schedule_irq() (or somesuch), then perhaps the below would
->> be sufficient.
->
-> With this patch I ran 100 reboots without hitting the BUG, so it looks
-> like this is the solution!
->
-> If you post this as a patch, feel free to add:
->
-> 	Tested-by: John Keeping <john@metanate.com>
+Add vendor prefix for OnePlus (https://www.oneplus.com/)
 
-Thanks!
+Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I still need to convince myself beyond reasonable doubt that this is really
-what is happening (esp the sched_setscheduler()) part, so the next episode
-will probably air after the break :-)
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 1497303e2600..a13d6a19c2b4 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -858,6 +858,8 @@ patternProperties:
+     description: OLIMEX Ltd.
+   "^olpc,.*":
+     description: One Laptop Per Child
++  "^oneplus,.*":
++    description: OnePlus Technology (Shenzhen) Co., Ltd.
+   "^onion,.*":
+     description: Onion Corporation
+   "^onnn,.*":
+-- 
+2.25.1
+

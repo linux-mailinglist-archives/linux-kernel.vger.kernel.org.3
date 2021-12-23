@@ -2,149 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8735A47E09E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 09:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8B647E0A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 09:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347309AbhLWIxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 03:53:17 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37846 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbhLWIxQ (ORCPT
+        id S1347322AbhLWIzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 03:55:03 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:60530 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229563AbhLWIzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 03:53:16 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 066BC61DF2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 08:53:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DD27C36AE9;
-        Thu, 23 Dec 2021 08:53:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640249595;
-        bh=76ZrrhIxMSZSloyiIsMRVOIpWVxAsx2mj6poB/Fp4gQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=MIab8DsKYgj+4YI4EHviGFdVrlVDeVX8wRRkYSWY94OePUBV8XIvux/iBO57VFFZa
-         fsCUDXmfxG2/Vrwnlz5uRk8EtzEm4nDmdOT8SfDlvJKXJU0V3TH8zpQSALqdSdZ78H
-         Bd7KxTkld7F/mVJmjg58dpclM66zhc7608nunEDURTub8VIWmA8VtQRBU+BQj9WCTN
-         AauKKIlD3XSf9GRvrgCqoFIX9B9S/33DS9o0f/vyvFD0ZVWTeHN3YFJMUl9JUe07J2
-         iKZn5lGsRHqiNkYqh7Wac/MJC6semhOQ/GQNn9HJyrkGJanim9D7MYPGoILPV7QBvK
-         IPB6ziE1PS5fw==
-From:   SeongJae Park <sj@kernel.org>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org,
-        ying.huang@intel.com, dave.hansen@linux.intel.com, ziy@nvidia.com,
-        shy828301@gmail.com, zhongjiang-ali@linux.alibaba.com,
-        xlpang@linux.alibaba.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] mm/damon: Add a new scheme to support demotion on tiered memory system
-Date:   Thu, 23 Dec 2021 08:53:12 +0000
-Message-Id: <20211223085312.19748-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <9db4baa1-2efe-8c01-e2e0-f275cc192fec@linux.alibaba.com>
+        Thu, 23 Dec 2021 03:55:02 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BN8svLR012320;
+        Thu, 23 Dec 2021 02:54:57 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1640249697;
+        bh=MAexO+PYsxzMl0a2eYUCxmbuJwH0ZBBPTo7IPT6ob0A=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=kjzRQgQvaq68HQlxsT8cJkK76LVHVVnCK/ypVKuFRnHWwd1KzFUoOaPi5HOu+MP9v
+         OvJ8z+0AKEPuCl9vt7vNZCAfnHyy3HF3FkmgMPxTJJ04KsPcsY/uxwnMNpEIarCJrU
+         5aIVcxxpmG4YnFObSdAlpmxo8FvVI3vM7lijflF4=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BN8svbY113123
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 23 Dec 2021 02:54:57 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 23
+ Dec 2021 02:54:56 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 23 Dec 2021 02:54:57 -0600
+Received: from uda0132425 (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BN8ssqJ076776;
+        Thu, 23 Dec 2021 02:54:54 -0600
+Date:   Thu, 23 Dec 2021 14:24:53 +0530
+From:   Vignesh R <vigneshr@ti.com>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v3 0/5] J721S2: Add initial support
+Message-ID: <20211223085453.GD7862@uda0132425>
+References: <20211207080904.14324-1-a-govindraju@ti.com>
+ <163955230562.15251.10921015972649910083.b4-ty@ti.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="J5MfuwkIyy7RmF4Q"
+Content-Disposition: inline
+In-Reply-To: <163955230562.15251.10921015972649910083.b4-ty@ti.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Dec 2021 17:15:18 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+--J5MfuwkIyy7RmF4Q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> 
-> On 12/22/2021 4:43 PM, SeongJae Park wrote:
-> > On Tue, 21 Dec 2021 22:18:06 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
-> > 
-> >> Hi SeongJae,
-> >>
-> >> On 12/21/2021 9:24 PM, SeongJae Park Wrote:
-> >>> Hi Baolin,
-> >>>
-> >>>
-> >>> Thank you for this great patch!  I left some comments below.
-> >>>
-> >>> On Tue, 21 Dec 2021 17:18:04 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
-> >>>
-> >>>> On tiered memory system, the reclaim path in shrink_page_list() already
-> >>>> support demoting pages to slow memory node instead of discarding the
-> >>>> pages. However, at that time the fast memory node memory wartermark is
-> >>>> already tense, which will increase the memory allocation latency during
-> >>>> page demotion.
-> >>>>
-> >>>> We can rely on the DAMON in user space to help to monitor the cold
-> >>>> memory on fast memory node, and demote the cold pages to slow memory
-> >>>> node proactively to keep the fast memory node in a healthy state.
-> >>>> Thus this patch introduces a new scheme named DAMOS_DEMOTE to support
-> >>>> this feature.
-> >>>>
-> >>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> >>>> ---
-> 
-> [snip]
-> 
-> >>
-> >>>
-> >>>> +		list_add(&page->lru, &pagelist);
-> >>>> +		target_nid = next_demotion_node(page_to_nid(page));
-> >>>> +		nr_pages = thp_nr_pages(page);
-> >>>> +
-> >>>> +		ret = migrate_pages(&pagelist, alloc_demote_page, NULL,
-> >>>> +				    target_nid, MIGRATE_SYNC, MR_DEMOTION,
-> >>>> +				    &nr_succeeded);
-> >>>> +		if (ret) {
-> >>>> +			if (!list_empty(&pagelist)) {
-> >>>> +				list_del(&page->lru);
-> >>>> +				mod_node_page_state(page_pgdat(page),
-> >>>> +						    NR_ISOLATED_ANON + page_is_file_lru(page),
-> >>>> +						    -nr_pages);
-> >>>> +				putback_lru_page(page);
-> >>>> +			}
-> >>>> +		} else {
-> >>>> +			__count_vm_events(PGDEMOTE_DIRECT, nr_succeeded);
-> >>>> +			demoted_pages += nr_succeeded;
-> >>>> +		}
-> >>>
-> >>> Why should we do above work for each page on our own instead of exporting and
-> >>> calling 'demote_page_list()'?
-> >>
-> >> Cuase demote_page_list() is used for demote cold pages which are from
-> >> one same fast memory node, they can have one same target demotion node.
-> >>
-> >> But for the regions for the process, we can get some cold pages from
-> >> different fast memory nodes (suppose we have mulptiple dram node on the
-> >> system), so its target demotion node may be different. Thus we should
-> >> migrate each cold pages with getting the correct target demotion node.
-> > 
-> > Thank you for the kind explanation.  But, I still want to reuse the code rather
-> > than copying if possible.  How about below dumb ideas off the top of my head?
-> > 
-> > 1. Call demote_page_list() for each page from here
-> 
-> Sounds reasonable.
-> 
-> > 2. Call demote_page_list() for each page from damos_migrate_pmd_entry()
-> 
-> We are under mmap lock in damos_migrate_pmd_entry(), it is not suitable 
-> to do page migration.
-> 
-> > 3. Make damos_migrate_pages_walk_ops to configure multiple demote_pages lists,
-> >     each per fast memory node, and calling demote_page_list() here for each
-> >     per-fast-memory-node demote_pages list.
-> 
-> Which will bring more complexity I think, and we should avoid doing 
-> migration under mmap lock.
-> 
-> > 4. Make demote_page_list() handles this case and use it.  e.g., NULL pgdat
-> >     parameter means the pages are not from same node.
-> 
-> Thanks for your suggestion, actually after more thinking, I think we can 
-> reuse the demote_page_list() and it can be easy to change. Somethink 
-> like below on top of my current patch, how do you think? Thanks.
+On Wed, Dec 15, 2021 at 02:08:04PM +0530, Vignesh Raghavendra wrote:
+> Hi Aswath Govindraju,
+> =20
+> On Tue, 7 Dec 2021 13:38:59 +0530, Aswath Govindraju wrote:
+> > The J721S2 SoC belongs to the K3 Multicore SoC architecture platform,
+> > providing advanced system integration in automotive ADAS applications a=
+nd
+> > industrial applications requiring AI at the network edge. This SoC exte=
+nds
+> > the Jacinto 7 family of SoCs with focus on lowering system costs and po=
+wer
+> > while providing interfaces, memory architecture and compute performance=
+ for
+> > single and multi-sensor applications.
+> >=20
+> > [...]
+> =20
+> I have applied the following to branch ti-k3-dts-next on [1].
+> Thank you!
+> =20
+> [1/5] dt-bindings: arm: ti: Add bindings for J721s2 SoC
+>       commit: 6b1caf4dea3e0a961b7a11cff6757ff74c1c34ea
+> [2/5] dt-bindings: pinctrl: k3: Introduce pinmux definitions for J721S2
+>       commit: beba81faad86fc2bad567b1c029d6a000a43ca78
+> [3/5] arm64: dts: ti: Add initial support for J721S2 SoC
+>       commit: b8545f9d3a5426a5f76814c8aaebc5cb46a3213a
+> [4/5] arm64: dts: ti: Add initial support for J721S2 System on Module
+>       commit: d502f852d22af1ca33e7a2fedd7426831f6dbaef
+> [5/5] arch: arm64: ti: Add support J721S2 Common Processor Board
+>       commit: effb32e931dd4feb8aa3cee7b5b4ddda43c8b701
+> =20
 
-So, you selected the option 1.  I personally think option 3 or 4 would be more
-optimal, but also agree that it could increase the complexity.  As we already
-have the time/space quota feature for schemes overhead control, I think
-starting with this simple approach makes sense to me.
+Dropped in favour of v4
 
+--=20
+Regards
+Vignesh
 
-Thanks,
-SJ
+--J5MfuwkIyy7RmF4Q
+Content-Type: application/pgp-signature; name="signature.asc"
 
-[...]
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEEyRC2zAhGcGjrhiNExEYeRXyRFuMFAmHEOVMACgkQxEYeRXyR
+FuMeCAf/XkqFZR/5h46LQQNhODf3Sgw+Y8WkqSV5QAyhjKlWUkQegVFjbzVI6nKY
++jmg5IoS/FCH+v98FcY3KawDl3IqnE8jhOZhzZYM5WPgIi2sLgv6cKImTL3TAUVb
+C/7fjshpmhPTFIc05hfq0qNQKRWkysU8VGpzIfcdBR9VlwG7bbgq9UhmwjZYR/k9
+ierJlrLs8Q/NCH19nJ3z9SaEXccdAuaJd+cDcPNrNVXKidg40QwWr686+hvqpdFx
+F909IBSEuOhLaOT/eF2NECTeXPUoq5+a9zUEgsVbobI/Az05/wsKL5g4mpNUUGPb
+em1nBDrCbwXl6st55H3Q+mU2JqgCCQ==
+=nO1t
+-----END PGP SIGNATURE-----
+
+--J5MfuwkIyy7RmF4Q--

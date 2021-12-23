@@ -2,87 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51FA447E30D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 427F547E310
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:17:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348161AbhLWMQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 07:16:05 -0500
-Received: from mga18.intel.com ([134.134.136.126]:23528 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348111AbhLWMQE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 07:16:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640261764; x=1671797764;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=7FQ2IEmT8mWBPh81vbvG7hrcxIOTKBMWQNfn4dHMECo=;
-  b=jHTfo8qmD1CrzeVoMXlIlT9h8kzCYrEXPLQtlmZpPpKFlJlVem41cjVV
-   uylxyNg4CEPYczxPKBiVhXgumg7oaU78ze2TxAnR2yVkI59Lzb/OByxaU
-   zEirEuUeYx8TQa6oM5a+xyx+AC2TUXjVtXun3l5RxsPEVzS/BS5KFsAKi
-   SMsyLmQYpswKC7GpW4RbK9+iZEsUqGZmfvFdaOpU+Q6zzxq2c4JzvYdmL
-   SNhHhPs7wnkLdCSqq5GTBewhS+UbvP4yl/NIp1Bh9cNx3H1cF1Emvg1A7
-   h5LXApdsj3uxt38F9FbCI/fMlSiuHHrMm6TWL5q/LYDIEDh5X3CLyhmqq
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="227659140"
-X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
-   d="scan'208";a="227659140"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 04:16:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
-   d="scan'208";a="756781942"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 23 Dec 2021 04:16:02 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id C051A120; Thu, 23 Dec 2021 14:16:10 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Michael Walle <michael@walle.cc>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH v1 1/1] gpio: regmap: Switch to use fwnode instead of of_node
-Date:   Thu, 23 Dec 2021 14:16:06 +0200
-Message-Id: <20211223121606.67055-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        id S1348171AbhLWMRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 07:17:01 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:45222 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S243479AbhLWMRA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 07:17:00 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowADX3FinaMRhtdFnBA--.41853S2;
+        Thu, 23 Dec 2021 20:16:40 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     andy.shevchenko@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        yangyingliang@huawei.com, sashal@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v4] fjes: Check for error irq
+Date:   Thu, 23 Dec 2021 20:16:39 +0800
+Message-Id: <20211223121639.1330292-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowADX3FinaMRhtdFnBA--.41853S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7XFyUKw48XF4DWw4fKw45KFg_yoWkXrg_Cr
+        n2va17Ww409ryvkF1DGr43Z3W2kr1qqr10gas2yaySq398Ca47XryDZrs8J3y5W34YyF9F
+        kr9xXr43A343AjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb2AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
+        1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
+        cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
+        ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6ryUMxAI
+        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJw
+        CI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU6wZcUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GPIO library now accepts fwnode as a firmware node, so
-switch the driver to use it.
+The platform_get_irq() is possible to fail.
+So the return value needs to check to prevent the use of error irq
+number.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Fixes: 658d439b2292 ("fjes: Introduce FUJITSU Extended Socket Network Device driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- drivers/gpio/gpio-regmap.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+Changelog:
 
-diff --git a/drivers/gpio/gpio-regmap.c b/drivers/gpio/gpio-regmap.c
-index 69c219742083..6383136cbe59 100644
---- a/drivers/gpio/gpio-regmap.c
-+++ b/drivers/gpio/gpio-regmap.c
-@@ -244,16 +244,12 @@ struct gpio_regmap *gpio_regmap_register(const struct gpio_regmap_config *config
- 
- 	chip = &gpio->gpio_chip;
- 	chip->parent = config->parent;
-+	chip->fwnode = config->fwnode;
- 	chip->base = -1;
- 	chip->ngpio = config->ngpio;
- 	chip->names = config->names;
- 	chip->label = config->label ?: dev_name(config->parent);
- 
--#if defined(CONFIG_OF_GPIO)
--	/* gpiolib will use of_node of the parent if chip->of_node is NULL */
--	chip->of_node = to_of_node(config->fwnode);
--#endif /* CONFIG_OF_GPIO */
--
- 	/*
- 	 * If our regmap is fast_io we should probably set can_sleep to false.
- 	 * Right now, the regmap doesn't save this property, nor is there any
+v3 -> v4
+
+*Change 1. Using error variable to check.
+*Change 2. Correct the word.
+*Change 3. Add new commit message.
+---
+ drivers/net/fjes/fjes_main.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/fjes/fjes_main.c b/drivers/net/fjes/fjes_main.c
+index e449d9466122..17f2fd937e4d 100644
+--- a/drivers/net/fjes/fjes_main.c
++++ b/drivers/net/fjes/fjes_main.c
+@@ -1268,7 +1268,12 @@ static int fjes_probe(struct platform_device *plat_dev)
+ 	}
+ 	hw->hw_res.start = res->start;
+ 	hw->hw_res.size = resource_size(res);
+-	hw->hw_res.irq = platform_get_irq(plat_dev, 0);
++
++	err = platform_get_irq(plat_dev, 0);
++	if (err < 0)
++		goto err_free_control_wq;
++	hw->hw_res.irq = err;
++
+ 	err = fjes_hw_init(&adapter->hw);
+ 	if (err)
+ 		goto err_free_control_wq;
 -- 
-2.34.1
+2.25.1
 

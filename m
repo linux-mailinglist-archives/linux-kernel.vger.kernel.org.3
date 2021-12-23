@@ -2,225 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5D047DEEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 07:10:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9BB47DEFD
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 07:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346555AbhLWGKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 01:10:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346546AbhLWGKf (ORCPT
+        id S1346591AbhLWGQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 01:16:25 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:31185 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232070AbhLWGQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 01:10:35 -0500
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8881C061401;
-        Wed, 22 Dec 2021 22:10:34 -0800 (PST)
-Received: by mail-ua1-x930.google.com with SMTP id u6so970936uaq.0;
-        Wed, 22 Dec 2021 22:10:34 -0800 (PST)
+        Thu, 23 Dec 2021 01:16:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1640240183; x=1671776183;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=GVitA5QEbF0ZrjzHTrpIDFbkATDtvbvoZTe2RFkotgc=;
+  b=EyQO47C19uKXD5EQVKidmCIqPioF1aNzik8e+zZeZQZu4Z+9zyyYQjoz
+   69PRE2Ntu/JTnBvxTbWGO6ntn1nWurcZEPXtW1TMKWB91Wc32Tq+ugFUq
+   6FgiirJGiWzJQAGYz3IK9u74McgadA+uutMvtS6oJ+Bq/cQk34mhF4iG2
+   +DPYesKifEbjBGA7iWfebmtsZ4uykev1oRtPIK0DeK1FnDatB+YI7LeG3
+   OHs806iEo4FGIHHXZSbIy5MrGV4mhGEVxBNwbi2gVpmKZnAwTi3u/niMe
+   z2V3EEvhQbTLEtz/kbgsw0cpk77Rgwpq9tUDO8S+Yi+9IusPdobWcnB62
+   A==;
+IronPort-SDR: AIvBnlg/+UQsFWn1ul1vXdCtZjsNxCAHFfFNsYCutgc9sADiECXApaaOFVl9hm3d2yx7GkHkKM
+ xNqCBfa9NN34wMndbIQ4O9qUlP6o+q5NDQnPJx7pFULjPVdj1aauRgCbEnZMKcntVkWY4u3y3e
+ NYWp0TtrCbutx/dazaEyyg/IuKIYCS2xNm3ILnjeMwcN0K6bN8AYn5rboapm5ISLX54COS8MZP
+ c5sRpxp8bT8HXm4liFYA+ShEiACT23wnkhc2Rwx2GSGkAyG5+744icxEKEn2a5FkzpfVrPqRk9
+ 6XdyjiKd5o2S6qnK9PaZ2R/2
+X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
+   d="scan'208";a="140676230"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Dec 2021 23:16:22 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 22 Dec 2021 23:16:22 -0700
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Wed, 22 Dec 2021 23:16:22 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CPlIz/5GroDYL10PhZpZJ1fWyLck2zLN5JIwfhizHwP0k6+bpBF11utQ6wgH7deWO/MWLvc2Zl5eWfCfTQyRIgoDgJer8DRrrZaLvQJCI2lKWhFnw24zQaXYgVhlfGzkfDfFf/eyDZf4lxJc9dFgFKIn8KY7lWpDJjy/VQIkocljLbPbS8HnkKJWBcOWwtBMO8ygXKgrsfkQSSYxE2UE6tCVIDiRTM7U55k7AKk8VByjJpMOF6u/sf642GU3uk9UdeI9Npm+foyZYv8wj+8XltAl4VrSnTxEYoWyvjIzHUhXAXgYrPGZ1ZO0JknS8FrruOc4fmaLlXc7MINaMQpn4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GVitA5QEbF0ZrjzHTrpIDFbkATDtvbvoZTe2RFkotgc=;
+ b=J9ncdIU+eZALuBnzT3iGM4NiP3V2VCVMF2sCvcu4Y7wzIm/d0HUwl4q/cEzDVfAAJK4vqXkZ4Ko4OxacBn7DJk9Imt6HCSDhjMSNC3ztKjJ2GDVtcGAby2VpzUorwSmQ783QVB4b9xKGYfDVlv7eqcclj2R62zm0UO5qWCNqx8FtOGHcfVrZgGIBv8NyAlmZB7phiUYLcGmGE+a8RxosUoArWGLOgjOf/MK1WA0EyKddSn98Ms+hvZYfWBGT6uvTBV0JXP5Ds3V0KtJsoY2HOxULDN2Oe52PGLr3HQwclfAT0El40k90SZCnSeq5dikXhYqsFikmQ47342uih4b6RQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mbHNzp0204AmGb5gPBzrhCaSQYS/qpv5OEmWLv004RY=;
-        b=nmQzvwN31vfL6pLvMdPSyGBKc0/BjhCPChI0XF/UNmsxfyCq3noCj+jkkNrOSiBJ36
-         n1Gf+iv9aqSOSU2Ji9nOt63ud5W88rSKrphUFbnk58wgWVMdQVr02G1uHiDSGbbKZv/u
-         7X6oVkRrvi7rDZBwdishmTglfL4Om0uH9K2gTpjevxI5zeJYOO8merwJVWKQ8qcY4AgY
-         Ikxt7b5+Xegk3CimZi5E8bNjWH5CFf/JWvHqLEZoieNx2x+pshuebOqjMikH9W/0wZPf
-         94LQJ6r6i2V9HoLfMKH8Nkvueghodi58kfP32lARiLLvfmKVv1x5mG8ZMVQcKch+k3/U
-         bioQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mbHNzp0204AmGb5gPBzrhCaSQYS/qpv5OEmWLv004RY=;
-        b=MF8okNVfNYCxGwE37FnmGd4EUa8n0Aua0MeY72cGOLXHYFb7u6R4C8mA/7iVDgSOgJ
-         284WptuRHggKAu6+MVNKci9YpsGhcre/l710rbse2bas6vVAFjNOIl/0E3ZQfwHVUdVf
-         4EtIQ4AVAMs+3HLR9KcQWx/X0eu7zGBI9EhaMbFRUYykvELiwvm7tEgPVTCRKU7umqGP
-         N3JgNR/G7wH6zjhaXgyyAd/L00tTfOpL5P8LdMNpx+uLO3sgPKdK0XB3AULFIqIiihjE
-         GiEVkp7psyL61BtC176hHbs/W+9SsS6Zfa+qQhb55MNAUb0c2yGpHHwrcGJayo+JLu0q
-         vF1A==
-X-Gm-Message-State: AOAM532+cXCPuuh9x5d/GCdPz6xRybsk80i05px09Rf4iFpM66qVNyOa
-        +2V+fLaAVN5vtY1Tr92Vq66O4RrTInuepid03tviCV/j
-X-Google-Smtp-Source: ABdhPJxX4ofazdWru2duop3h2wcaB6hEw3qBHoxMUWn6OqVNFWPGiu3x2H6Mq80mQcMyVr2Kx3X5B3k7gd0i1DLMZMY=
-X-Received: by 2002:a9f:25b6:: with SMTP id 51mr257897uaf.0.1640239833796;
- Wed, 22 Dec 2021 22:10:33 -0800 (PST)
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GVitA5QEbF0ZrjzHTrpIDFbkATDtvbvoZTe2RFkotgc=;
+ b=DJvy8DGZpdL1uKeHFpHJEbfdCWu1TWkjy5i1CtrxSJ5smnQV8uB9J10acTbAopp+Xi1cnzOI1Zmbgeq8U+trdm8cCyg5HL1mrEWnNb6WZx8f03UbnOLTLbkJzJ3FFgqXDlK90/mMI9YbHgNAS3jCmjJvKYPXuHscFzg6oZ3kISM=
+Received: from SJ0PR11MB4943.namprd11.prod.outlook.com (2603:10b6:a03:2ad::17)
+ by BY5PR11MB4276.namprd11.prod.outlook.com (2603:10b6:a03:1b9::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.19; Thu, 23 Dec
+ 2021 06:16:17 +0000
+Received: from SJ0PR11MB4943.namprd11.prod.outlook.com
+ ([fe80::b481:2fde:536c:20a0]) by SJ0PR11MB4943.namprd11.prod.outlook.com
+ ([fe80::b481:2fde:536c:20a0%8]) with mapi id 15.20.4801.020; Thu, 23 Dec 2021
+ 06:16:17 +0000
+From:   <Ajay.Kathat@microchip.com>
+To:     <davidm@egauge.net>
+CC:     <Claudiu.Beznea@microchip.com>, <kvalo@kernel.org>,
+        <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 00/50] wilc1000: rework tx path to use sk_buffs
+ throughout
+Thread-Topic: [PATCH v2 00/50] wilc1000: rework tx path to use sk_buffs
+ throughout
+Thread-Index: AQHX95pt5gQke/CIVkahHDmyKBCK26w/mfoA
+Date:   Thu, 23 Dec 2021 06:16:17 +0000
+Message-ID: <adce9591-0cf2-f771-25b9-2eebea05f1bc@microchip.com>
+References: <20211223011358.4031459-1-davidm@egauge.net>
+In-Reply-To: <20211223011358.4031459-1-davidm@egauge.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c30daa07-9a56-4db5-ac3a-08d9c5dbbaf2
+x-ms-traffictypediagnostic: BY5PR11MB4276:EE_
+x-microsoft-antispam-prvs: <BY5PR11MB42768D9B50ADBD82FFB31A46E37E9@BY5PR11MB4276.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Q0TRBn4YpbvdH70t6N7t/ibT01YFGjFg4ZkzMEj6FlhAYw3h30B67INdbpIWywx6rxpadJTO3TQeg6CezCWOKrk9xOf/orMlZZcasSWvv6AloNy2+4lcYQ4JzzVN6VuNXweMZl4IFDrb/QAisJKPxhfLMXbfYyhaQ6k9TNbTkYfxGhe9hRzCfF47aIlE9D/AZ0iDYNbE8PlmcisTyoBtVVPVjIQnF08eaC8EZhs1tb8R4gHcBh9YsH3v1FXYGeSkcfwb3doyZ4Mk6mOW1lzP3B1978sq1ZcXlnHVMQsmSbMxiy/ZNH6SNjuMk8hXwqNtBy9Omt8QehHQWVOBJ7og1kjUzoEp0yiGUpfCDkSwYh9OA4amr8E0YnmPV8gHowVSijCdl/E9+et2bYCizHVVE8Suf6HF7LTXRfxmwB3Jq8NgPcJk4B/UsFCFIly+zRGeyZyiAfKgDX4fQOkCDVe48dve/6IxLRCOI7j+e63DHVAMVq8682qPyYxkyvu7YroiZPZPkMguGWi8fImioe3HDfGOnlSiQcK4pTzP5V2nHxyopNbJq8gqEq8GZRTPZ8zvOh7j8YbfHRrSbpeg50sTc1WB6amUL3eUJGlAPEF2v+jP0LqFkfub/OGQkqh/Scy/Mqh+TOBolHdOvlXTVlAqrdUzD42BwUps/zIzce7EQnorYuqM26JDy4v2iDDUxTTN05qJ/GS2DTXd4xlwsphkDihntJYwCEk3n3bUoe9ab67R0FMK5fKOsu/XO54lISDNZ9CqZ7wRIOPC0roMS61JtQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB4943.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(83380400001)(6486002)(6506007)(55236004)(38070700005)(53546011)(2906002)(122000001)(31696002)(6916009)(36756003)(38100700002)(316002)(2616005)(5660300002)(4326008)(8676002)(6512007)(76116006)(86362001)(186003)(66946007)(66556008)(66476007)(91956017)(54906003)(508600001)(8936002)(26005)(31686004)(71200400001)(64756008)(66446008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?c3FQVkVXQzg5dGZqNGhhNjZhOC9sMlZFbU5IcHJJaFB6V2hFR3JnbVJ3QTR3?=
+ =?utf-8?B?NWxXVVZpbWZrVGd2RXRDcnZCTmM3N0Y2QWxjUzdVWWhVUnBBYXN5RjVDWVpW?=
+ =?utf-8?B?R2ZRV1BvTWd0N1B3ZXBCRXV1RkpWNjU0MDJYcElWOTVwNnVTWDJBdnNnY1Zw?=
+ =?utf-8?B?cFk3MU01OExkR2NQU1ZaWFRUZk1YL2JhcVFmNGtIeEROeG03WHBqSHNaaDlK?=
+ =?utf-8?B?cUl0TGFiK3d3citkeUF1a29XSTU4R2lhOGxyWThBVmRGM3dweUZKK0FuYXlk?=
+ =?utf-8?B?cVYwV2RDMS80bUNoNW5RaFJuMlpTcVJUa21OZCt4YkpUUDk4aDEzZmVFRTFJ?=
+ =?utf-8?B?aXRIV1RrY0xiZFpmbXJmVU5NZnB4ZjVySDNXQjFCTHc4S3ErNFF6TkpHNlMr?=
+ =?utf-8?B?V2RSbHJwZFd1bXVmUzR3bDFueEtXY251VlgyU3NYTzBFcnp1LzY2dzR1SUw5?=
+ =?utf-8?B?bWJBRU9kQ2h1MFBvYmNkeFh0Q2gyZjAzaXh3am1adHRNbTlwZDg4K01LR1Fn?=
+ =?utf-8?B?bzFDZTdJbFZRVG11KytZZldjSjZPd2MyQVVkbTQ2d3pKUEJqYmgyOFdCYnEw?=
+ =?utf-8?B?T0YxS1cxWnQzUHVsN2IxaGdhTUs3eExnbmg5T2JwMHVXMm1BeFYwMnJFbkdM?=
+ =?utf-8?B?ckZabm1tczE3Smo5cTNpZGxFaVFoL0dLOG03Y2pLTXpwQm9MZW9EenJkUnlJ?=
+ =?utf-8?B?dG01VDYyNzBpWWdUeU1NU05zSjN2RndlMWU2UzNueTJodXp4azY4NUZ5Skti?=
+ =?utf-8?B?R0g5dGp3MWdXVXVQdDFyZkgvWUl5TksyTDFDTnE5QUROdHdnVXlkNW05NWdJ?=
+ =?utf-8?B?aWtHRkV5OThBdkowUzFIT2lKYkdBdC9BdU9NWXZLakl0SmZYb0RPR1hqUnZB?=
+ =?utf-8?B?ZGVweElydUtYUnJQOEdwbkdoVmhXeUQzSWJlQUdieXZHU3pzekpXeklEYzQ1?=
+ =?utf-8?B?TTRFSXRvaytqR2ZoSnM1aXBDNHl1VG9IOW9mZmhSRnR2RktIRVB1cFIzUS9I?=
+ =?utf-8?B?MFl3WkFNMWhHTU1STG84OW40di95OXQ2UEZNOVVma1gva2c2QUtzYVArQ2JY?=
+ =?utf-8?B?M1M1S1lFa1lFdG40Zk9GQlJZMk5scWpGdHFNbjlsZWpJSDJtZmNCcEJkVWl2?=
+ =?utf-8?B?QlQ0MkNUZmwyeWlMOXJVL1hSTHBtQXJHUnJSTDUxdUYvOXdwUWRMSFRsWUFR?=
+ =?utf-8?B?TmpYNGlYbzhhWEhJSlFRb3I3eVdUK3hXTXlSUzYwY1liRTlhNE1lRUFWVWxn?=
+ =?utf-8?B?M01hTnVnMnZMeTVoUUE2MW5BQldlNWZUdnluTGkvMGtQbU5WT2diUHJsNXZK?=
+ =?utf-8?B?T0RDaU5RZTNCOFhyT3VhM0J0VC9rR2tEQ2lOWXlxcjh2VGZRQ2JkajBTbTlN?=
+ =?utf-8?B?WnV0bjVuVzNRZFV1V0VSK25Bb3dOUFE0SEpydi9KY1gvdUwvYWxZbFkrU0VZ?=
+ =?utf-8?B?RFFiZUFuWGVEUTVPUDRVNDZtVDhtTWJiZjN1a3Z0eHkzaTAwTWlPRVF2TnF0?=
+ =?utf-8?B?VHl5WGx4SHVzZmVENG9CYVplNm12U0RmaHFraTU5L1AwTU9KSGo0N2Naa2Zo?=
+ =?utf-8?B?am5wREh5VzMwTjhOT0svSnh0L0VJWW02QnFsRE1BL01Pa3BpRm1LWG1GZW5a?=
+ =?utf-8?B?T2JOQktOWWF3dm5jWjNYY2w0Szd3czAyMFNLdDlHb1U0WTNmbWVCQnF0STJo?=
+ =?utf-8?B?ZzhzT3dvdE1FUFF4bDkxZ2dMOGhpT29WVDFyV1ZnWXUwK3BIQlQ5L0g4SCth?=
+ =?utf-8?B?VWNpQUtMMVdQWVBkQXh2WTFhVHVjZjVFV1JpRHJuOVlISmd4S0Q5aWxlNng4?=
+ =?utf-8?B?Snk2WHZYVm5mL1F3cGdOWDNVNEVhR2JxMlYyU3BUb0dqRkQ1ak04ajFPcmlI?=
+ =?utf-8?B?ZHN6bHFGU3BoVWQrSmV0NmViTlJpVjlRdWZ4bDE2Qlppd1duV3NwTDFmNnRG?=
+ =?utf-8?B?eVd1WE5ESnRyTUkrbE5uZnBkdG5oSDFyelI4L3lpcUFlYkRpaWhrY2J2NFJL?=
+ =?utf-8?B?cVhsaTVaVW5qeEdzVDA5T01UL3ZYcjU5TEZRMFE4SWhlRXpNSjcvQzlCaVU4?=
+ =?utf-8?B?dXRLdExwK3IxTWVQMXJCYms3ZWU3Mkt6cEw3OWhKS3licjZmNjJSYlFhdzRK?=
+ =?utf-8?B?dG9GZmF1Tm44Z0lSR1MzaWdKNVBLeG5vbTBJY28wTlZXcld6ZytBWGRBTUVI?=
+ =?utf-8?B?dllsVUZmcFlCRUZUanNCOXd1TDJtRWpQSWxnOVhqUnFpNnZxMkhiK3Z0WWJL?=
+ =?utf-8?B?RTREVU1acitEdEZ2akNyOHdiODV3PT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <52830BB48CD00043AC02DB6A615C68B4@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20211223011054.1227810-1-helgaas@kernel.org> <20211223011054.1227810-18-helgaas@kernel.org>
-In-Reply-To: <20211223011054.1227810-18-helgaas@kernel.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Thu, 23 Dec 2021 07:10:22 +0100
-Message-ID: <CAMhs-H_dTkp6_1Loq973JqotW26GtRYQv-vdQ2i6Heo7oGCL3w@mail.gmail.com>
-Subject: Re: [PATCH v2 17/23] PCI: mt7621: Rename mt7621_pci_ to mt7621_pcie_
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci <linux-pci@vger.kernel.org>,
-        Fan Fei <ffclaire1224@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB4943.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c30daa07-9a56-4db5-ac3a-08d9c5dbbaf2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Dec 2021 06:16:17.3247
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: DhXVzMYqmGCKJuoufz5K4o1Ytm8oU035S/wg6UQZP0snXkW9oeNDRY5RqrGHisqHYyS2ddBMwAvXb1AK7kHf2ZdgGfo6FIw72dBt9g1AH+0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4276
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
-
-On Thu, Dec 23, 2021 at 2:11 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> From: Bjorn Helgaas <bhelgaas@google.com>
->
-> Rename mt7621_pci_* structs and functions to mt7621_pcie_* for consistency
-> with the rest of the file.
->
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-mediatek@lists.infradead.org
-> ---
->  drivers/pci/controller/pcie-mt7621.c | 36 ++++++++++++++--------------
->  1 file changed, 18 insertions(+), 18 deletions(-)
->
-> diff --git a/drivers/pci/controller/pcie-mt7621.c b/drivers/pci/controller/pcie-mt7621.c
-> index 4138c0e83513..b8fea7afdb1b 100644
-> --- a/drivers/pci/controller/pcie-mt7621.c
-> +++ b/drivers/pci/controller/pcie-mt7621.c
-> @@ -93,8 +93,8 @@ struct mt7621_pcie_port {
->   * reset lines are inverted.
->   */
->  struct mt7621_pcie {
-> -       void __iomem *base;
->         struct device *dev;
-> +       void __iomem *base;
-
-This change is unrelated to the commit message and the rest of the
-changes of this patch.
-
->         struct list_head ports;
->         bool resets_inverted;
->  };
-> @@ -129,7 +129,7 @@ static inline void pcie_port_write(struct mt7621_pcie_port *port,
->         writel_relaxed(val, port->base + reg);
->  }
->
-> -static inline u32 mt7621_pci_get_cfgaddr(unsigned int bus, unsigned int slot,
-> +static inline u32 mt7621_pcie_get_cfgaddr(unsigned int bus, unsigned int slot,
->                                          unsigned int func, unsigned int where)
->  {
->         return (((where & 0xf00) >> 8) << 24) | (bus << 16) | (slot << 11) |
-> @@ -140,7 +140,7 @@ static void __iomem *mt7621_pcie_map_bus(struct pci_bus *bus,
->                                          unsigned int devfn, int where)
->  {
->         struct mt7621_pcie *pcie = bus->sysdata;
-> -       u32 address = mt7621_pci_get_cfgaddr(bus->number, PCI_SLOT(devfn),
-> +       u32 address = mt7621_pcie_get_cfgaddr(bus->number, PCI_SLOT(devfn),
->                                              PCI_FUNC(devfn), where);
->
->         writel_relaxed(address, pcie->base + RALINK_PCI_CONFIG_ADDR);
-> @@ -148,7 +148,7 @@ static void __iomem *mt7621_pcie_map_bus(struct pci_bus *bus,
->         return pcie->base + RALINK_PCI_CONFIG_DATA + (where & 3);
->  }
->
-> -static struct pci_ops mt7621_pci_ops = {
-> +static struct pci_ops mt7621_pcie_ops = {
->         .map_bus        = mt7621_pcie_map_bus,
->         .read           = pci_generic_config_read,
->         .write          = pci_generic_config_write,
-> @@ -156,7 +156,7 @@ static struct pci_ops mt7621_pci_ops = {
->
->  static u32 read_config(struct mt7621_pcie *pcie, unsigned int dev, u32 reg)
->  {
-> -       u32 address = mt7621_pci_get_cfgaddr(0, dev, 0, reg);
-> +       u32 address = mt7621_pcie_get_cfgaddr(0, dev, 0, reg);
->
->         pcie_write(pcie, address, RALINK_PCI_CONFIG_ADDR);
->         return pcie_read(pcie, RALINK_PCI_CONFIG_DATA);
-> @@ -165,7 +165,7 @@ static u32 read_config(struct mt7621_pcie *pcie, unsigned int dev, u32 reg)
->  static void write_config(struct mt7621_pcie *pcie, unsigned int dev,
->                          u32 reg, u32 val)
->  {
-> -       u32 address = mt7621_pci_get_cfgaddr(0, dev, 0, reg);
-> +       u32 address = mt7621_pcie_get_cfgaddr(0, dev, 0, reg);
->
->         pcie_write(pcie, address, RALINK_PCI_CONFIG_ADDR);
->         pcie_write(pcie, val, RALINK_PCI_CONFIG_DATA);
-> @@ -505,16 +505,16 @@ static int mt7621_pcie_register_host(struct pci_host_bridge *host)
->  {
->         struct mt7621_pcie *pcie = pci_host_bridge_priv(host);
->
-> -       host->ops = &mt7621_pci_ops;
-> +       host->ops = &mt7621_pcie_ops;
->         host->sysdata = pcie;
->         return pci_host_probe(host);
->  }
->
-> -static const struct soc_device_attribute mt7621_pci_quirks_match[] = {
-> +static const struct soc_device_attribute mt7621_pcie_quirks_match[] = {
->         { .soc_id = "mt7621", .revision = "E2" }
->  };
->
-> -static int mt7621_pci_probe(struct platform_device *pdev)
-> +static int mt7621_pcie_probe(struct platform_device *pdev)
->  {
->         struct device *dev = &pdev->dev;
->         const struct soc_device_attribute *attr;
-> @@ -535,7 +535,7 @@ static int mt7621_pci_probe(struct platform_device *pdev)
->         platform_set_drvdata(pdev, pcie);
->         INIT_LIST_HEAD(&pcie->ports);
->
-> -       attr = soc_device_match(mt7621_pci_quirks_match);
-> +       attr = soc_device_match(mt7621_pcie_quirks_match);
->         if (attr)
->                 pcie->resets_inverted = true;
->
-> @@ -572,7 +572,7 @@ static int mt7621_pci_probe(struct platform_device *pdev)
->         return err;
->  }
->
-> -static int mt7621_pci_remove(struct platform_device *pdev)
-> +static int mt7621_pcie_remove(struct platform_device *pdev)
->  {
->         struct mt7621_pcie *pcie = platform_get_drvdata(pdev);
->         struct mt7621_pcie_port *port;
-> @@ -583,18 +583,18 @@ static int mt7621_pci_remove(struct platform_device *pdev)
->         return 0;
->  }
->
-> -static const struct of_device_id mt7621_pci_ids[] = {
-> +static const struct of_device_id mt7621_pcie_ids[] = {
->         { .compatible = "mediatek,mt7621-pci" },
->         {},
->  };
-> -MODULE_DEVICE_TABLE(of, mt7621_pci_ids);
-> +MODULE_DEVICE_TABLE(of, mt7621_pcie_ids);
->
-> -static struct platform_driver mt7621_pci_driver = {
-> -       .probe = mt7621_pci_probe,
-> -       .remove = mt7621_pci_remove,
-> +static struct platform_driver mt7621_pcie_driver = {
-> +       .probe = mt7621_pcie_probe,
-> +       .remove = mt7621_pcie_remove,
->         .driver = {
->                 .name = "mt7621-pci",
-> -               .of_match_table = of_match_ptr(mt7621_pci_ids),
-> +               .of_match_table = of_match_ptr(mt7621_pcie_ids),
->         },
->  };
-> -builtin_platform_driver(mt7621_pci_driver);
-> +builtin_platform_driver(mt7621_pcie_driver);
-> --
-> 2.25.1
->
-
-Other than that minor unrelated change, this looks good to me:
-
-Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-
-Best regards,
-    Sergio Paracuellos
+T24gMjMvMTIvMjEgMDY6NDQsIERhdmlkIE1vc2Jlcmdlci1UYW5nIHdyb3RlOg0KPiBFWFRFUk5B
+TCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlv
+dSBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4NCj4gT0ssIHNvIEknbSBuZXJ2b3VzIGFib3V0
+IHN1Y2ggYSBsYXJnZSBwYXRjaCBzZXJpZXMsIGJ1dCBpdCB0b29rIGEgbG90DQo+IG9mIHdvcmsg
+dG8gYnJlYWsgdGhpbmdzIGRvd24gaW50byBhdG9taWMgY2hhbmdlcy4gIFRoaXMgc2hvdWxkIGJl
+IGl0DQo+IGZvciB0aGUgdHJhbnNtaXQgcGF0aCBhcyBmYXIgYXMgSSdtIGNvbmNlcm5lZC4NCg0K
+DQpUaGFua3MgRGF2aWQgZm9yIHRoZSBlZmZvcnRzIHRvIGJyZWFrIGRvd24gdGhlIGNoYW5nZXMu
+IEkgYW0gc3RpbGwgDQpyZXZpZXdpbmcgYW5kIHRlc3RpbmcgdGhlIHByZXZpb3VzIHNlcmllcyBh
+bmQgZm91bmQgc29tZSBpbmNvbnNpc3RlbnQgDQpyZXN1bHRzLiBJIGFtIG5vdCBzdXJlIGFib3V0
+IHRoZSBjYXVzZSBvZiB0aGUgZGlmZmVyZW5jZS4gRm9yIHNvbWUgDQp0ZXN0cywgdGhlIHRocm91
+Z2hwdXQgaXMgaW1wcm92ZWQofjFNYnBzKSBidXQgZm9yIHNvbWUgQ0kgdGVzdHMsIHRoZSANCnRo
+cm91Z2hwdXQgaXMgbGVzcyBjb21wYXJlZCh+MU1icHMgaW4gc2FtZSByYW5nZSkgdG8gdGhlIHBy
+ZXZpb3VzLiANClRob3VnaCBub3Qgb2JzZXJ2ZWQgbXVjaCBkaWZmZXJlbmNlLg0KDQpOb3cgdGhl
+IG5ldyBwYXRjaGVzIGFyZSBhZGRlZCB0byB0aGUgc2FtZSBzZXJpZXMgc28gaXQgaXMgZGlmZmlj
+dWx0IHRvIA0KcmV2aWV3IHRoZW0gaW4gb25lIGdvLg0KDQpJIGhhdmUgYSByZXF1ZXN0LCBpbmNh
+c2UgdGhlcmUgYXJlIG5ldyBwYXRjaGVzIHBsZWFzZSBpbmNsdWRlIHRoZW0gaW4gDQpzZXBhcmF0
+ZSBzZXJpZXMuIEJyZWFraW5nIGRvd24gdGhlIHBhdGNoIGhlbHBzIHRvIGlkZW50aWZ5IHRoZSBu
+b24gDQpyZWxhdGVkIGNoYW5nZXMgd2hpY2ggY2FuIGdvIGluIHNlcGFyYXRlIHNlcmllcy4gVGhl
+IHBhdGNoZXMoY2hhbmdlKSBtYXkgDQpiZSByZWxhdGVkIHRvIFRYIHBhdGggZmxvdyBidXQgY2Fu
+IGdvIGluIHNlcGFyYXRlIHNlcmllcy4NCg0KDQpSZWdhcmRzLA0KQWpheQ0KDQo=

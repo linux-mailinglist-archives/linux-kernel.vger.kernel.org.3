@@ -2,107 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B202F47E309
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:14:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51FA447E30D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 13:16:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348054AbhLWMOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 07:14:46 -0500
-Received: from smtp23.cstnet.cn ([159.226.251.23]:44752 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S243398AbhLWMOo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 07:14:44 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowABngJIbaMRhmsZnBA--.30430S2;
-        Thu, 23 Dec 2021 20:14:19 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     andy.shevchenko@gmail.com, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, liviu.dudau@arm.com, sudeep.holla@arm.com,
-        lorenzo.pieralisi@arm.com
-Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v3] serial: mps2-uart: Check for error irq
-Date:   Thu, 23 Dec 2021 20:14:18 +0800
-Message-Id: <20211223121418.1330239-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1348161AbhLWMQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 07:16:05 -0500
+Received: from mga18.intel.com ([134.134.136.126]:23528 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348111AbhLWMQE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 07:16:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640261764; x=1671797764;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7FQ2IEmT8mWBPh81vbvG7hrcxIOTKBMWQNfn4dHMECo=;
+  b=jHTfo8qmD1CrzeVoMXlIlT9h8kzCYrEXPLQtlmZpPpKFlJlVem41cjVV
+   uylxyNg4CEPYczxPKBiVhXgumg7oaU78ze2TxAnR2yVkI59Lzb/OByxaU
+   zEirEuUeYx8TQa6oM5a+xyx+AC2TUXjVtXun3l5RxsPEVzS/BS5KFsAKi
+   SMsyLmQYpswKC7GpW4RbK9+iZEsUqGZmfvFdaOpU+Q6zzxq2c4JzvYdmL
+   SNhHhPs7wnkLdCSqq5GTBewhS+UbvP4yl/NIp1Bh9cNx3H1cF1Emvg1A7
+   h5LXApdsj3uxt38F9FbCI/fMlSiuHHrMm6TWL5q/LYDIEDh5X3CLyhmqq
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="227659140"
+X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
+   d="scan'208";a="227659140"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 04:16:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
+   d="scan'208";a="756781942"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 23 Dec 2021 04:16:02 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id C051A120; Thu, 23 Dec 2021 14:16:10 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Michael Walle <michael@walle.cc>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH v1 1/1] gpio: regmap: Switch to use fwnode instead of of_node
+Date:   Thu, 23 Dec 2021 14:16:06 +0200
+Message-Id: <20211223121606.67055-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowABngJIbaMRhmsZnBA--.30430S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KFWUZr13KFWxZF1DGF48JFb_yoW8Gw1fpF
-        1ktFZ8ArW8Ga4SgasrXr1UJF43C3yvva9rX342934293WrJFnxC34rCFnIvF1kZrWDJr4f
-        Zrs8tF4ruF10va7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
-        n2IY04v7MxkIecxEwVAFwVW5JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF
-        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
-        VjvjDU0xZFpf9x0JUQqXdUUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because of the possible failure of the platform_get_irq(), it should be
-better to check it to avoid the use of error irq.
+GPIO library now accepts fwnode as a firmware node, so
+switch the driver to use it.
 
-Fixes: 041f031def33 ("serial: mps2-uart: add MPS2 UART driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
-Changelog:
+ drivers/gpio/gpio-regmap.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-v2 -> v3
-
-*Change 1. Using error variable to check.
-*Change 2. Add new commit message.
----
- drivers/tty/serial/mps2-uart.c | 26 ++++++++++++++++++++++----
- 1 file changed, 22 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/tty/serial/mps2-uart.c b/drivers/tty/serial/mps2-uart.c
-index 587b42f754cb..24a52300d8d9 100644
---- a/drivers/tty/serial/mps2-uart.c
-+++ b/drivers/tty/serial/mps2-uart.c
-@@ -584,11 +584,29 @@ static int mps2_init_port(struct platform_device *pdev,
+diff --git a/drivers/gpio/gpio-regmap.c b/drivers/gpio/gpio-regmap.c
+index 69c219742083..6383136cbe59 100644
+--- a/drivers/gpio/gpio-regmap.c
++++ b/drivers/gpio/gpio-regmap.c
+@@ -244,16 +244,12 @@ struct gpio_regmap *gpio_regmap_register(const struct gpio_regmap_config *config
  
+ 	chip = &gpio->gpio_chip;
+ 	chip->parent = config->parent;
++	chip->fwnode = config->fwnode;
+ 	chip->base = -1;
+ 	chip->ngpio = config->ngpio;
+ 	chip->names = config->names;
+ 	chip->label = config->label ?: dev_name(config->parent);
  
- 	if (mps_port->flags & UART_PORT_COMBINED_IRQ) {
--		mps_port->port.irq = platform_get_irq(pdev, 0);
-+		ret = platform_get_irq(pdev, 0);
-+		if (ret < 0)
-+			return ret;
-+
-+		mps_port->port.irq = ret;
- 	} else {
--		mps_port->rx_irq = platform_get_irq(pdev, 0);
--		mps_port->tx_irq = platform_get_irq(pdev, 1);
--		mps_port->port.irq = platform_get_irq(pdev, 2);
-+		ret = platform_get_irq(pdev, 0);
-+		if (ret < 0)
-+			return ret;
-+
-+		mps_port->rx_irq = ret;
-+
-+		ret = platform_get_irq(pdev, 1);
-+		if (ret < 0)
-+			return ret;
-+
-+		mps_port->tx_irq = ret;
-+
-+		ret = platform_get_irq(pdev, 2);
-+		if (ret < 0)
-+			return ret;
-+
-+		mps_port->port.irq = ret;
- 	}
- 
- 	return ret;
+-#if defined(CONFIG_OF_GPIO)
+-	/* gpiolib will use of_node of the parent if chip->of_node is NULL */
+-	chip->of_node = to_of_node(config->fwnode);
+-#endif /* CONFIG_OF_GPIO */
+-
+ 	/*
+ 	 * If our regmap is fast_io we should probably set can_sleep to false.
+ 	 * Right now, the regmap doesn't save this property, nor is there any
 -- 
-2.25.1
+2.34.1
 

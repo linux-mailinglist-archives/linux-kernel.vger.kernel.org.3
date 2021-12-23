@@ -2,126 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C152947E7C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3109347E7C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349900AbhLWSsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 13:48:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37579 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1349879AbhLWSsC (ORCPT
+        id S1349899AbhLWSsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 13:48:17 -0500
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:52795 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349895AbhLWSsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 13:48:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640285281;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yA57few3f6tSjdsufvGnJgK9V8OGmZJcp6eJoOPkJr0=;
-        b=U6g/Vv53cIi6wJaAKfNkUCRucsoMMl63B11gM0rPT+i9uNcUkRLG7IpUFizYMTVJ5PMvTd
-        cVlDxamOd4IqFXTYJr9zmmC7eBLamOnoQfaGkNFsP5I2hqeWrnY9hzqODskRfcVPj4+39Z
-        +/TL3SflfIvf2Ff6kBo9N1jNGrpUfZc=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-478-6aukRXdpN1qbnWXGdadm8A-1; Thu, 23 Dec 2021 13:47:59 -0500
-X-MC-Unique: 6aukRXdpN1qbnWXGdadm8A-1
-Received: by mail-ed1-f70.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso5094379edt.20
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:47:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yA57few3f6tSjdsufvGnJgK9V8OGmZJcp6eJoOPkJr0=;
-        b=ZJaETpHQQqtaG3baH1ev6hJpS78CApCOsjz9vicMeWe50Fq0Pb2m4r3RgxIRnCOyNa
-         AThAduGm+Ej19uyoAfWBn1gthPATTsxOmgOPdh0XclgDoO0FIWaws1tVWahJRUNMWxLw
-         gbGnWo703N8Fwo7TQgoiezPSUHPkgBSeTXqB1WMd4Ew9b6245pw88gx9nm2p4dXX2ETL
-         S5DMfFCCN36JoTLMDYs0op1fubN1He9YbIJ5SNRniXEA1wIIyfPEriTk/Pa/n+R07toU
-         sV8z5rwNrDwXh2QUofdo7vyUGJen4WnBuxLQ6kgeA+Wqd3VSOEJBYHNOeHAFfBB/UdOj
-         r5Ow==
-X-Gm-Message-State: AOAM530bjEduuzuRKcTlXpB+HtFY/2Fa4kzu/eJ2RrqcxQA/o86aktpr
-        fQ37WK6UCYpUc4CGJwhSvowqPRh9gqr4twn1OD4U8m2iXYavrdOwwF7bKAKEkHFDsb6OvmOvG6W
-        vRV2QbxWpcuAA0zSBrVMIFJYB
-X-Received: by 2002:a17:907:9718:: with SMTP id jg24mr2884532ejc.621.1640285278314;
-        Thu, 23 Dec 2021 10:47:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwLj3Q95ZXvQgGzi+c46JIGWosBY7rxtPaJg64hB/Fu20F/lDeeGqVgOJtfAqpWbB04AGr8Jw==
-X-Received: by 2002:a17:907:9718:: with SMTP id jg24mr2884515ejc.621.1640285278050;
-        Thu, 23 Dec 2021 10:47:58 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id b4sm1976103ejl.206.2021.12.23.10.47.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Dec 2021 10:47:57 -0800 (PST)
-Message-ID: <117383d0-6bc7-4093-53b8-e90e86c29db7@redhat.com>
-Date:   Thu, 23 Dec 2021 19:47:57 +0100
+        Thu, 23 Dec 2021 13:48:06 -0500
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id AF3ED1BF206;
+        Thu, 23 Dec 2021 18:48:01 +0000 (UTC)
+Date:   Thu, 23 Dec 2021 19:48:56 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Joe Perches <joe@perches.com>
+Cc:     Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>
+Subject: Re: [PATCH v6 2/2] Driver for ON Semi AR0521 camera sensor
+Message-ID: <20211223184856.v34ecibwzepahsju@uno.localdomain>
+References: <m3ee63hkuu.fsf@t19.piap.pl>
+ <m35yrfhkaf.fsf@t19.piap.pl>
+ <cee1bbe6c8dda1c79ba19f7bbf68fc1d74558cae.camel@perches.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] platform/x86: intel_pmc_core: fix memleak on registration
- failure
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>,
-        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-        David E Box <david.e.box@intel.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20211222105023.6205-1-johan@kernel.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20211222105023.6205-1-johan@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cee1bbe6c8dda1c79ba19f7bbf68fc1d74558cae.camel@perches.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Joe,
+  sorry to jump in
 
-On 12/22/21 11:50, Johan Hovold wrote:
-> In case device registration fails during module initialisation, the
-> platform device structure needs to be freed using platform_device_put()
-> to properly free all resources (e.g. the device name).
-> 
-> Fixes: 938835aa903a ("platform/x86: intel_pmc_core: do not create a static struct device")
-> Cc: stable@vger.kernel.org      # 5.9
-> Signed-off-by: Johan Hovold <johan@kernel.org>
+On Thu, Dec 23, 2021 at 09:49:58AM -0800, Joe Perches wrote:
+> On Thu, 2021-12-23 at 08:06 +0100, Krzysztof Hałasa wrote:
+> > The driver has been extensively tested in an i.MX6-based system.
+> > AR0521 is a 5.7 mm x 4.3 mm, 5 MPix RGGB MIPI/HiSPi BSI CMOS sensor
+> > from On Semiconductor.
+>
+> trivial notes:
+>
+> > diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
+> []
+> > +/* External clock (extclk) frequencies */
+> > +#define AR0521_EXTCLK_MIN	  (10 * 1000 * 1000)
+>
+> Generally, adding a prefix like AR0521_ to defines that are
+> locally defined in a single file unnecessarily increases
+> identifier length.
+>
+> It makes using short line lengths difficult.
+>
+> e.g. Using this identifier anywhere
+>
+> > +#define AR0521_REG_HISPI_CONTROL_STATUS_FRAMER_TEST_MODE_ENABLE 0x80
+>
+> Many of the 80 column line lengths and line wrapping used in this
+> file are not really nice to read.  I believe you don't have to be
+> strict about 80 column lines.
+>
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+Krzysztof first version had much longer lines, and in facts it has
+been asked by me to reduce them to 80 cols. The media subsystem
+requires to validate patches with
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
+        ./scripts/checkpatch.pl --strict --max-line-length=80
 
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
+We longly debated this and I believe it's now generally accepted to go
+over 80 when it makes sense, but not regularly span to 120 cols like
+in the previous version.
 
-Regards,
+I think this 80-cols limit not being an hard limit anymore is doing
+more worse than good, as each subsystem applies a different rule, and
+I know how frustrating is for Krzysztof to be pushed in different
+direction, as the same happened to me when I contributed to other
+subsystems and I've been asked to span to 100 cols while I was trying
+to stay in 80 no matter what.
 
-Hans
+Thanks
+   j
 
-
-
-> ---
->  drivers/platform/x86/intel/pmc/pltdrv.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/x86/intel/pmc/pltdrv.c b/drivers/platform/x86/intel/pmc/pltdrv.c
-> index 73797680b895..15ca8afdd973 100644
-> --- a/drivers/platform/x86/intel/pmc/pltdrv.c
-> +++ b/drivers/platform/x86/intel/pmc/pltdrv.c
-> @@ -65,7 +65,7 @@ static int __init pmc_core_platform_init(void)
->  
->  	retval = platform_device_register(pmc_core_device);
->  	if (retval)
-> -		kfree(pmc_core_device);
-> +		platform_device_put(pmc_core_device);
->  
->  	return retval;
->  }
-> 
-
+> > +#define be		cpu_to_be16
+>
+> It's a pity there's no way to declare an array with all members
+> having a specific endianness.  Making sure all elements in these
+> arrays are declared with be() is tedious.
+>
+> > +#define AR0521_NUM_SUPPLIES ARRAY_SIZE(ar0521_supply_names)
+>
+> It's almost always better to use ARRAY_SIZE directly and not
+> use a #define for the array size.
+>
+> > +static int ar0521_set_gains(struct ar0521_dev *sensor)
+> > +{
+> []
+> > +	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
+>
+> ftrace works and perhaps all the similar debug logging uses aren't
+> really necessary.
+>
+>

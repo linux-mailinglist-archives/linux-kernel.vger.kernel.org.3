@@ -2,119 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F187347E564
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 16:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A61D247E56C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 16:24:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348963AbhLWPQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 10:16:19 -0500
-Received: from mga05.intel.com ([192.55.52.43]:44626 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348870AbhLWPQP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 10:16:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640272575; x=1671808575;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ulq2OafBgJ5WWCya4qBGGzVaxV3Xslda9NQaS+urvvE=;
-  b=WPgH4hFJlAzgUrogJTYL7hxkMX8lWKtjighH/K6yXRkJ8nPDxpB4gyGi
-   JpmXQwe2aaamMJt/P8ha2uq8AwdZR31+38cQLgeuXbOErsDjLdvVeKGYf
-   yPqH1vq9mOHAqVB5/4eyraNnhiMBMwL/L/tZ1wQ+tzQjRrLq2hME2Sai3
-   EQ3f60jTqKlRogPyO4Q7n5u9dIQKCqg1hOLXfNa2r92w4hEwF4MLELqm1
-   tkhpu3BJEXrzE3QXwYA0AYYGfpHF+ukoVnLaN/Z7XcElcHuwBLLR9zTNP
-   rz0u6akYe660rRc0LbkLHwXRmHsXx0kJB293L2OYt1ZrERq3lzAdeItVi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="327152536"
-X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
-   d="scan'208";a="327152536"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 07:16:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
-   d="scan'208";a="485119426"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga002.jf.intel.com with ESMTP; 23 Dec 2021 07:16:05 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BNFG2Jp021426;
-        Thu, 23 Dec 2021 15:16:02 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     linux-hardening@vger.kernel.org, x86@kernel.org
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        Andy Lavr <andy.lavr@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
-        live-patching@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v9 00/15] Function Granular KASLR
-Date:   Thu, 23 Dec 2021 16:15:04 +0100
-Message-Id: <20211223151504.1409203-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+        id S232417AbhLWPYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 10:24:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58356 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230365AbhLWPYM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 10:24:12 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AD3C061756
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 07:24:12 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id d17so4431629ioz.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 07:24:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=egauge.net; s=google;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :organization:user-agent:mime-version:content-transfer-encoding;
+        bh=4zVajV20KPdu35E00sbLWdAM4v9gyfqdQSaA3gZjTR4=;
+        b=TwFLoxLFOztBwNFjsxZWAfCmiUj1qLcH59zeFdKKNAMYZsbepHXZm9TsMibwJg4beO
+         9snaDSBShu+v9uYTtopaTAdos6yOG/+TYWKYu30pI+Lv9pX3BCNJ9w9lEp5P/OY5q4G9
+         Yoz75RrkSRPQX8NVLHvfxekF9y2dPgciNMzdJJvFxDNzmcx5oaUfaabY4DBbHHlxr8hk
+         WizyYO503AZDSzu5BH+YRh6BM8LcJquWJdqcUbWLDB+UINWgm4R+sN9yIj/ZBlWm2kQZ
+         4eDTk9sEf6xE8GCKsy90Az5L72zxhoCE601XfMBvKajAI5P4xnQMHXHNHFtU0k+53QK9
+         PBUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=4zVajV20KPdu35E00sbLWdAM4v9gyfqdQSaA3gZjTR4=;
+        b=P1NETqq4tEG/Xo7dkdAK/0/AJSQUTrRwGsx7ttg9kRjhi2IRmRMMW7Ar86KYmSQxgG
+         WiKl/E0egUZiqe7eHahX7fQbU+2CXibHniegi559adB2u3UWP2DhvUK8Ce8TzCc0mWGi
+         xZvUSvDqPva4oRD/sd8EwJobyYmdi5kZ0AuusrPWnPypbGVrHnT/eix0AIDQSRfT81ub
+         sv4cODd+BNJjXE3V023nZ4NYpRRbNYeFj/muUHCG+zbLWz5HGE188KAhctg3uoQiQAUI
+         9VHuV5/RBNvoSjWAGs8ozUllo4MLImMAJ53ahN3/OkvvAr8s9fR+ITFFBj8CSZ1YYbfA
+         hhIw==
+X-Gm-Message-State: AOAM532qlbhu2xuTbBHBF2IIWnxin+OI2D3Ns/kQpXjy7nguTIZpY6Ge
+        Mf9Uw4JuTbS4mpcNRbt86BmB
+X-Google-Smtp-Source: ABdhPJz3spx+ZRSfVyyYfskEe9qB3cMmiKbQXp22JTrUVK6hxwOrWxKfXuCSXD5Qk3A3rZGlMq+pqQ==
+X-Received: by 2002:a02:cf39:: with SMTP id s25mr1401366jar.17.1640273051175;
+        Thu, 23 Dec 2021 07:24:11 -0800 (PST)
+Received: from ?IPv6:2601:281:8300:4e0:2ba9:697d:eeec:13b? ([2601:281:8300:4e0:2ba9:697d:eeec:13b])
+        by smtp.gmail.com with ESMTPSA id x5sm3558270iov.50.2021.12.23.07.24.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Dec 2021 07:24:10 -0800 (PST)
+Message-ID: <18a0da3ad5d5a2aba9b7c35907b227e6ad5620f3.camel@egauge.net>
+Subject: Re: [PATCH v2 00/50] wilc1000: rework tx path to use sk_buffs
+ throughout
+From:   David Mosberger-Tang <davidm@egauge.net>
+To:     Ajay.Kathat@microchip.com
+Cc:     Claudiu.Beznea@microchip.com, kvalo@kernel.org,
+        davem@davemloft.net, kuba@kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 23 Dec 2021 08:23:59 -0700
+In-Reply-To: <adce9591-0cf2-f771-25b9-2eebea05f1bc@microchip.com>
+References: <20211223011358.4031459-1-davidm@egauge.net>
+         <adce9591-0cf2-f771-25b9-2eebea05f1bc@microchip.com>
+Organization: eGauge Systems LLC
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-Date: Thu, 23 Dec 2021 01:21:54 +0100
+On Thu, 2021-12-23 at 06:16 +0000, Ajay.Kathat@microchip.com wrote:
+> On 23/12/21 06:44, David Mosberger-Tang wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > OK, so I'm nervous about such a large patch series, but it took a lot
+> > of work to break things down into atomic changes.  This should be it
+> > for the transmit path as far as I'm concerned.
+> 
+> Thanks David for the efforts to break down the changes. I am still 
+> reviewing and testing the previous series and found some inconsistent 
+> results. I am not sure about the cause of the difference. For some 
+> tests, the throughput is improved(~1Mbps) but for some CI tests, the 
+> throughput is less compared(~1Mbps in same range) to the previous. 
+> Though not observed much difference.
 
-> This is a massive rework and a respin of Kristen Accardi's marvellous
-> FG-KASLR series (v5).
+There shouldn't be any significant performance regressions.  From my
+observations, +/-1Mbps in throughput is quite possible due to cache-
+effects.
 
-[ snip ]
+> Now the new patches are added to the same series so it is difficult to 
+> review them in one go.
 
-> The series is also available here: [3]
+Ah, OK, sorry about that.  After the automated error reports, I waited
+for a day or two and after not seeing any further feedback, I figured
+it'd be fine to add to the series.
 
-As per request, I've published a version rebased ontop of
-linux-next-20211223 here: [4].
+I take it that as long as a patch shows up in patchworks with a
+state==Action required, I should assume the patch is being worked on
+(or will be worked on).
 
-During the rebasing, I saw that some ASM code conflicts with, I
-guess, Peter's "execute past ret" mitigation.
-So I would also like to ask you to give me a branch which I should
-pick to base my series on top of. There's a bunch of different x86
-branches, like several in peterz-queue, x86/core etc., so I got lost
-a little.
-The one posted yesterday was based on the mainline 5.16-rc6.
+> I have a request, incase there are new patches please include them in 
+> separate series.
 
-> [0] https://lore.kernel.org/kernel-hardening/20200923173905.11219-1-kristen@linux.intel.com
-> [1] https://lore.kernel.org/kernel-hardening/20211202223214.72888-1-alexandr.lobakin@intel.com
-> [2] https://lore.kernel.org/kernel-hardening/20210831144114.154-1-alexandr.lobakin@intel.com
-> [3] https://github.com/alobakin/linux/pull/3
+I'm not planning on adding more patches.
 
-[4] https://github.com/alobakin/linux/commits/next-fgkaslr
+  --david
 
-[ snip ]
 
-Thanks,
-Al

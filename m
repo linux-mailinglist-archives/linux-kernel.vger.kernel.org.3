@@ -2,155 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C17647DD65
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC9C47DD6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:34:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239092AbhLWBdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:33:24 -0500
-Received: from mga05.intel.com ([192.55.52.43]:18900 "EHLO mga05.intel.com"
+        id S241423AbhLWBeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:34:19 -0500
+Received: from smtpbg604.qq.com ([59.36.128.82]:38235 "EHLO smtpbg604.qq.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238646AbhLWBdX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:33:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640223203; x=1671759203;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=A1UCJY5KcT6Ok9CTJHUbNWQUH2PoOO80Lp+x1mu1V64=;
-  b=aAeliVWMbnJ5OBMBIqSRRL3Q2x8ARh7x64G0QgdbKJVAVmUeVr1GlLeN
-   BvZIGxrCMJn/ZcDCS64yn5lO/jlPRiRB4D5TwB0VbZqzr4EjgVxXjdBlA
-   gC8tH9cNgv+pw+6MwDaIk9o6Gsvk0djavdcQXiDBcc+4xlDFSwLuYjRnk
-   jPiVYfAvFevICTMj81rDAVOFkRh6r9l9hFrxlQHSl3A02wCiRcmNzW8Kd
-   /mV25SVgT+LPIzZ5awe8ldZHilSfVhqZMxySs8N2oeIeTdW14/hjCzPL2
-   +dmVOT2qQS7HdFFArppnpS3D4rr1GPDcGuiccH2UeHx8A2hNVJyBhtOJB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="327043126"
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="327043126"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 17:33:23 -0800
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="521898380"
-Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.238.4.155]) ([10.238.4.155])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 17:33:20 -0800
-Message-ID: <9a163f6a-ea8e-45cb-238a-ded1b2218e3d@linux.intel.com>
-Date:   Thu, 23 Dec 2021 09:33:17 +0800
+        id S238646AbhLWBeS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 20:34:18 -0500
+X-QQ-mid: bizesmtp43t1640223251t5bblo38
+Received: from localhost.localdomain (unknown [111.30.215.244])
+        by esmtp6.qq.com (ESMTP) with 
+        id ; Thu, 23 Dec 2021 09:34:10 +0800 (CST)
+X-QQ-SSF: 01000000002000506000B00A0000000
+X-QQ-FEAT: YOSTkFbe9CQ7ZJ8ETrL1TY+91SqTY9TBZZOGZEIQvJKIuMvDCmRQRHVRmSMzw
+        40cW2NZVEe6U0ynE/4V79ScufjQVIcV++5+zAw8GcAaDsUN8KCP48wBWzxNPZA4RVEWW1PY
+        EYpYkn7yLaNWmFFMJIpiCiH1PUkxMygr/r5eE7pSPgBZoT8/piNOXylwYXlSkCwpMtGfxGk
+        0nMIGRL7r3UDlDK97z/8qViCYu0jDpgQeDQ9WHLO0sIom1iwA1Fd3H05AQQU5gHQkJPE9Vz
+        38OMR7SvkzfFkZ0XabMrcKX+Ugli5ZM2S24GZP9b+IOPpFuiIcBMRh0AE=
+X-QQ-GoodBg: 0
+From:   gchen@itskywalker.com
+To:     pbonzini@redhat.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chen Gang <gchen@itskywalker.com>
+Subject: [PATCH] KVM: return the error code from kvm_arch_create_vm_debugfs when it fails
+Date:   Thu, 23 Dec 2021 09:34:08 +0800
+Message-Id: <20211223013408.153595-1-gchen@itskywalker.com>
+X-Mailer: git-send-email 2.24.0.308.g228f53135a
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v3] perf/x86/intel/uncore: Fix CAS_COUNT_WRITE issue for
- ICX
-Content-Language: en-US
-To:     "Liang, Kan" <kan.liang@linux.intel.com>, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org, linux-kernel@vger.kernel.org
-Cc:     adrian.hunter@intel.com, alexander.shishkin@intel.com,
-        ak@linux.intel.com, kan.liang@intel.com, stable@vger.kernel.org
-References: <20211118160241.329657-1-zhengjun.xing@linux.intel.com>
- <e4a9aa08-1594-1b7b-a9e6-b1d9221e44d3@linux.intel.com>
-From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
-In-Reply-To: <e4a9aa08-1594-1b7b-a9e6-b1d9221e44d3@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:itskywalker.com:qybgspam:qybgspam4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Chen Gang <gchen@itskywalker.com>
 
+At present, kvm_arch_create_vm_debugfs is a new interface for arch, and
+it assumes return an none-zero error code, so the caller need check it
+and return it to the user mode.
 
-On 12/23/2021 12:30 AM, Liang, Kan wrote:
-> 
-> 
-> On 11/18/2021 11:02 AM, zhengjun.xing@linux.intel.com wrote:
->> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
->>
->> The user recently report a perf issue in the ICX platform, when test by
-> 
-> If you have the user's name, you may want to add a Reported-by tag to 
-> give them credit. If you don't have, it doesn't matter either.
-> 
-Unfortunately, I haven't the exactly user's name.
+Signed-off-by: Chen Gang <gchen@itskywalker.com>
+---
+ virt/kvm/kvm_main.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
->> perf event “uncore_imc_x/cas_count_write”,the write bandwidth is always
->> very small (only 0.38MB/s), it is caused by the wrong "umask" for the
->> "cas_count_write" event. When double-checking, find "cas_count_read"
->> also is wrong.
->>
->> The public document for ICX uncore:
->>
->> https://www.intel.com/content/www/us/en/develop/download/3rd-gen-intel-xeon-processor-scalable-uncore-pm.html 
->>
->>
->> On page 142, Table 2-143, defines Unit Masks for CAS_COUNT:
->> RD b00001111
->> WR b00110000
->>
-> 
-> I think we usually want a permanent reference in the change log. The 
-> document may be updated later. The page number or the table number may 
-> not be accurate anymore.
-> 
-> I guess you may want to give the exact document name and the version 
-> number here. So people can still easily locate the information several 
-> years later.
-> E.g., "3rd Gen Intel® Xeon® Processor Scalable Family, Codename Ice 
-> Lake, Uncore Performance Monitoring Reference Manual, Revision 1.00, May 
-> 2021"
-> 
->
-Thanks, I will update it in the new version patch.
-
->> So Corrected both "cas_count_read" and "cas_count_write" for ICX.
->>
->> Old settings:
->>   hswep_uncore_imc_events
->>     INTEL_UNCORE_EVENT_DESC(cas_count_read,  "event=0x04,umask=0x03")
->>       INTEL_UNCORE_EVENT_DESC(cas_count_write, "event=0x04,umask=0x0c")
->>
->> New settings:
->>   snr_uncore_imc_events
->>     INTEL_UNCORE_EVENT_DESC(cas_count_read,  "event=0x04,umask=0x0f")
->>     INTEL_UNCORE_EVENT_DESC(cas_count_write, "event=0x04,umask=0x30"),
->>
->> Fixes: 2b3b76b5ec67 ("perf/x86/intel/uncore: Add Ice Lake server 
->> uncore support")
->> Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
-> 
-> Other than the above comments, the patch looks good to me.
-> 
-> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-> 
-> 
-> Thanks,
-> Kan
-> 
->> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
->> Cc: stable@vger.kernel.org
->> ---
->> Change log:
->>
->>    v3:
->>      * Add change log
->>
->>    v2:
->>      * Add stable tag
->>
->>   arch/x86/events/intel/uncore_snbep.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/events/intel/uncore_snbep.c 
->> b/arch/x86/events/intel/uncore_snbep.c
->> index 5ddc0f30db6f..a6fd8eb410a9 100644
->> --- a/arch/x86/events/intel/uncore_snbep.c
->> +++ b/arch/x86/events/intel/uncore_snbep.c
->> @@ -5468,7 +5468,7 @@ static struct intel_uncore_type icx_uncore_imc = {
->>       .fixed_ctr_bits    = 48,
->>       .fixed_ctr    = SNR_IMC_MMIO_PMON_FIXED_CTR,
->>       .fixed_ctl    = SNR_IMC_MMIO_PMON_FIXED_CTL,
->> -    .event_descs    = hswep_uncore_imc_events,
->> +    .event_descs    = snr_uncore_imc_events,
->>       .perf_ctr    = SNR_IMC_MMIO_PMON_CTR0,
->>       .event_ctl    = SNR_IMC_MMIO_PMON_CTL0,
->>       .event_mask    = SNBEP_PMON_RAW_EVENT_MASK,
-
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index d8a1a17bcb7e..b2de428bd4c7 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -1015,7 +1015,7 @@ static int kvm_create_vm_debugfs(struct kvm *kvm, int fd)
+ 	ret = kvm_arch_create_vm_debugfs(kvm);
+ 	if (ret) {
+ 		kvm_destroy_vm_debugfs(kvm);
+-		return i;
++		return ret;
+ 	}
+ 
+ 	return 0;
+@@ -4727,7 +4727,7 @@ EXPORT_SYMBOL_GPL(file_is_kvm);
+ 
+ static int kvm_dev_ioctl_create_vm(unsigned long type)
+ {
+-	int r;
++	int r, ret;
+ 	struct kvm *kvm;
+ 	struct file *file;
+ 
+@@ -4759,10 +4759,11 @@ static int kvm_dev_ioctl_create_vm(unsigned long type)
+ 	 * cases it will be called by the final fput(file) and will take
+ 	 * care of doing kvm_put_kvm(kvm).
+ 	 */
+-	if (kvm_create_vm_debugfs(kvm, r) < 0) {
++	ret = kvm_create_vm_debugfs(kvm, r);
++	if (ret) {
+ 		put_unused_fd(r);
+ 		fput(file);
+-		return -ENOMEM;
++		return ret;
+ 	}
+ 	kvm_uevent_notify_change(KVM_EVENT_CREATE_VM, kvm);
+ 
 -- 
-Zhengjun Xing
+2.24.0.308.g228f53135a
+

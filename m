@@ -2,188 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB43447DEC1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 06:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1BA447DEC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 06:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346435AbhLWFc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 00:32:26 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:43934 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346414AbhLWFcZ (ORCPT
+        id S1346449AbhLWFgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 00:36:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346414AbhLWFgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 00:32:25 -0500
-Received: by mail-io1-f71.google.com with SMTP id j13-20020a0566022ccd00b005e9684c80c6so2548937iow.10
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 21:32:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=3CLZiLFF405jT2WdEAO9CtD0OFkbBGpKriTt/oxie+4=;
-        b=KdsmIJDMVBwc/Iq3cud1Ujr4jo2WwnQHSoSLDk+m2kZLU+cehECz1WrdnLlFvcHxDb
-         2ZrQhOApvibMqTpfNagksYZ0/JzgHF7mIkDlbQ5aDLZgBHjrfD1BB1CpdtGcsj53Yqb1
-         iUg6u5ud5osEXvPsi1DXkdL7ksb4t6UsYZVu/X2sDt8wyS0tCrpVFDWQBRgrrYmjZHz0
-         HH2/iijcRKY9P1pbRPrXhMEkbb4Xg/Vx13ULnXXQR7KdZegeK4HDb4aWDT8zrrt9y6Ba
-         +LQCqFG7bMzCvn1adTrvi8LCJkW505TXsh6aq/l38/KK6CKWxZ8fp+9Lz7RJ6emJCqvu
-         ICgw==
-X-Gm-Message-State: AOAM531yBqPUIa64dq2tUYxkSrBLAV3BcHjqufrsQff5YNERdFFUx8EV
-        mbDNlNl+FZbuZMmquIgqdcbqN7GXd3nV3+EkG0mNTLpfGKrX
-X-Google-Smtp-Source: ABdhPJwA7db+Pvu3SL7oFifrFuZ1GKT1pJ1+LA++nXSqBQmu1BNUQOJfDjOZGhU9UQymRPV4WOX8TuClNub+A83TPCi1/vMYItPv
+        Thu, 23 Dec 2021 00:36:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8CEC061401;
+        Wed, 22 Dec 2021 21:36:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 659DAB81EA5;
+        Thu, 23 Dec 2021 05:36:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D8B5C36AE5;
+        Thu, 23 Dec 2021 05:36:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640237794;
+        bh=+RESyguACPEDh1QytdBXRrgftqqCYuF45pA3Mr9Wjxg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R+B4fqLuFIRpKY4PBoPuzC9E+gil3cRxeN4MSMcE0Hppy+Zt6KIU44I12ZCBLPdlf
+         i3ElEdyK2+UclrKL2BtzQnoJ95nhXnzOz7gbgwTNHTjlj0laLTa7M9ifI6dZQ6vL7G
+         U78XZLkeyxkxIgzm1w4vFb5cuuvXuOCmKFiScF5iabrOZwUPS3vIrkHSAIN59O9rls
+         kg9/qaWTB+SKOg1Z5ddg38N7xijd10OTJyKPazAoxX4HmTOaveA5TJbOalaAy3eQLG
+         I8ZGZJZVSOa21DrWdbz9SbNWzlxRX6d4syPwv8LT1SXlrE8Nf4qEbTk6uWRvnt4Jgj
+         fHR/7xxRU7z4w==
+Date:   Thu, 23 Dec 2021 11:06:29 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Subject: Re: [PATCH v6 1/4] phy: cadence: Add Cadence D-PHY Rx driver
+Message-ID: <YcQK3WVEo6FyEtVa@matsya>
+References: <20211214180703.3268-1-p.yadav@ti.com>
+ <20211214180703.3268-2-p.yadav@ti.com>
+ <YcCh1PU+Tc1+pzEL@aptenodytes>
+ <20211222184545.atci25onvpw6f2ed@ti.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:b23:: with SMTP id e3mr313922ilu.32.1640237544994;
- Wed, 22 Dec 2021 21:32:24 -0800 (PST)
-Date:   Wed, 22 Dec 2021 21:32:24 -0800
-In-Reply-To: <00000000000032992d05d370f75f@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000377ea405d3c9906d@google.com>
-Subject: Re: [syzbot] INFO: task hung in jbd2_journal_commit_transaction (3)
-From:   syzbot <syzbot+9c3fb12e9128b6e1d7eb@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, jack@suse.com, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu,
-        viro@zeniv.linux.org.uk, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211222184545.atci25onvpw6f2ed@ti.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On 23-12-21, 00:15, Pratyush Yadav wrote:
+> On 20/12/21 04:31PM, Paul Kocialkowski wrote:
+> > Hi Pratyush,
+> > 
+> > On Tue 14 Dec 21, 23:37, Pratyush Yadav wrote:
+> > > The Cadence D-PHY can be configured in Tx (DSI) mode or Rx (CSI) mode.
+> > > Both modes have a different programming sequence and share little among
+> > > them. In addition, a PHY configured in Tx mode cannot be used in Rx mode
+> > > and vice versa. For this reason, create a separate driver for the Rx
+> > > mode to make it easier to read and maintain.
+> > > 
+> > > Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+> > > 
+> > > ---
+> > > 
+> > > Changes in v6:
+> > > - Move to a separate driver.
+> > > 
+> > > Changes in v5:
+> > > - Use the new cdns_dphy_info to specify PHY ops.
+> > > - Re-order include in alphabetical order.
+> > > - Make bands const.
+> > > - Drop num_bands.
+> > > - Make i, lanes unsigned.
+> > > - Drop the maximum check in cdns_dphy_rx_get_band_ctrl(). Let the loop
+> > >   complete and return -EOPNOTSUPP when we reach the end.
+> > > - Drop the "rate < bands[i].min_rate" check since the bands are in
+> > >   ascending order.
+> > > - Move data_lane_ctrl to start of function and make it static const.
+> > > 
+> > > Changes in v4:
+> > > - Drop the submode parts. Use a different compatible for the Rx ops.
+> > > - Make bands and num_bands static.
+> > > 
+> > > Changes in v3:
+> > > - Use a table to select the band.
+> > > - Use a table to poll the data lane ready bits.
+> > > - Multiply the DPHY HS clock rate by 2 to get the bit rate since the
+> > >   clock is DDR.
+> > > 
+> > >  drivers/phy/cadence/Kconfig        |   8 +
+> > >  drivers/phy/cadence/Makefile       |   1 +
+> > >  drivers/phy/cadence/cdns-dphy-rx.c | 250 +++++++++++++++++++++++++++++
+> > >  3 files changed, 259 insertions(+)
+> > >  create mode 100644 drivers/phy/cadence/cdns-dphy-rx.c
+> > > 
+> > > diff --git a/drivers/phy/cadence/Kconfig b/drivers/phy/cadence/Kconfig
+> > > index a62910ff5591..1adde2d99ae7 100644
+> > > --- a/drivers/phy/cadence/Kconfig
+> > > +++ b/drivers/phy/cadence/Kconfig
+> > > @@ -22,6 +22,14 @@ config PHY_CADENCE_DPHY
+> > >  	  system. If M is selected, the module will be called
+> > >  	  cdns-dphy.
+> > >  
+> > > +config PHY_CADENCE_DPHY_RX
+> > > +	tristate "Cadence D-PHY Rx Support"
+> > > +	depends on HAS_IOMEM && OF
+> > > +	select GENERIC_PHY
+> > > +	select GENERIC_PHY_MIPI_DPHY
+> > > +	help
+> > > +	  Support for Cadence D-PHY in Rx configuration.
+> > > +
+> > >  config PHY_CADENCE_SIERRA
+> > >  	tristate "Cadence Sierra PHY Driver"
+> > >  	depends on OF && HAS_IOMEM && RESET_CONTROLLER
+> > > diff --git a/drivers/phy/cadence/Makefile b/drivers/phy/cadence/Makefile
+> > > index 26e16bd34efe..e17f035ddece 100644
+> > > --- a/drivers/phy/cadence/Makefile
+> > > +++ b/drivers/phy/cadence/Makefile
+> > > @@ -1,5 +1,6 @@
+> > >  # SPDX-License-Identifier: GPL-2.0-only
+> > >  obj-$(CONFIG_PHY_CADENCE_TORRENT)	+= phy-cadence-torrent.o
+> > >  obj-$(CONFIG_PHY_CADENCE_DPHY)	+= cdns-dphy.o
+> > > +obj-$(CONFIG_PHY_CADENCE_DPHY_RX)	+= cdns-dphy-rx.o
+> > >  obj-$(CONFIG_PHY_CADENCE_SIERRA)	+= phy-cadence-sierra.o
+> > >  obj-$(CONFIG_PHY_CADENCE_SALVO)	+= phy-cadence-salvo.o
+> > > diff --git a/drivers/phy/cadence/cdns-dphy-rx.c b/drivers/phy/cadence/cdns-dphy-rx.c
+> > > new file mode 100644
+> > > index 000000000000..fb75e645e662
+> > > --- /dev/null
+> > > +++ b/drivers/phy/cadence/cdns-dphy-rx.c
+> > > @@ -0,0 +1,250 @@
+> > > +// SPDX-License-Identifier: GPL-2.0+
+> > > +/*
+> > > + * Copyright (C) 2021 Texas Instruments Incorporated - https://www.ti.com/
+> > > + */
+> > > +
+> > > +#include <linux/bitfield.h>
+> > > +#include <linux/bitops.h>
+> > > +#include <linux/io.h>
+> > > +#include <linux/iopoll.h>
+> > > +#include <linux/module.h>
+> > > +#include <linux/phy/phy.h>
+> > > +#include <linux/phy/phy-mipi-dphy.h>
+> > > +#include <linux/platform_device.h>
+> > > +
+> > > +#define DPHY_PMA_CMN(reg)		(reg)
+> > > +#define DPHY_PCS(reg)			(0xb00 + (reg))
+> > > +#define DPHY_ISO(reg)			(0xc00 + (reg))
+> > > +
+> > > +#define DPHY_CMN_SSM			DPHY_PMA_CMN(0x20)
+> > > +#define DPHY_CMN_RX_MODE_EN		BIT(10)
+> > > +#define DPHY_CMN_RX_BANDGAP_TIMER_MASK	GENMASK(8, 1)
+> > > +#define DPHY_CMN_SSM_EN			BIT(0)
+> > > +
+> > > +#define DPHY_CMN_RX_BANDGAP_TIMER	0x14
+> > > +
+> > > +#define DPHY_BAND_CFG			DPHY_PCS(0x0)
+> > > +#define DPHY_BAND_CFG_RIGHT_BAND	GENMASK(9, 5)
+> > > +#define DPHY_BAND_CFG_LEFT_BAND		GENMASK(4, 0)
+> > > +
+> > > +#define DPHY_POWER_ISLAND_EN_DATA	DPHY_PCS(0x8)
+> > > +#define DPHY_POWER_ISLAND_EN_DATA_VAL	0xaaaaaaaa
+> > > +
+> > > +#define DPHY_POWER_ISLAND_EN_CLK	DPHY_PCS(0xc)
+> > > +#define DPHY_POWER_ISLAND_EN_CLK_VAL	0xaa
+> > > +
+> > > +#define DPHY_ISO_CL_CTRL_L		DPHY_ISO(0x10)
+> > > +#define DPHY_ISO_DL_CTRL_L0		DPHY_ISO(0x14)
+> > > +#define DPHY_ISO_DL_CTRL_L1		DPHY_ISO(0x20)
+> > > +#define DPHY_ISO_DL_CTRL_L2		DPHY_ISO(0x30)
+> > > +#define DPHY_ISO_DL_CTRL_L3		DPHY_ISO(0x3c)
+> > > +
+> > > +#define DPHY_ISO_LANE_READY_BIT		0
+> > > +#define DPHY_ISO_LANE_READY_TIMEOUT_MS	100UL
+> > > +
+> > > +#define DPHY_LANES_MIN			1
+> > > +#define DPHY_LANES_MAX			4
+> > > +
+> > > +struct cdns_dphy_rx {
+> > > +	void __iomem *regs;
+> > > +	struct device *dev;
+> > > +	struct phy *phy;
+> > > +};
+> > > +
+> > > +struct cdns_dphy_rx_band {
+> > > +	/* Rates are in Mbps. */
+> > > +	unsigned int min_rate;
+> > > +	unsigned int max_rate;
+> > > +};
+> > > +
+> > > +/* Order of bands is important since the index is the band number. */
+> > > +static const struct cdns_dphy_rx_band bands[] = {
+> > > +	{80, 100}, {100, 120}, {120, 160}, {160, 200}, {200, 240},
+> > > +	{240, 280}, {280, 320}, {320, 360}, {360, 400}, {400, 480},
+> > > +	{480, 560}, {560, 640}, {640, 720}, {720, 800}, {800, 880},
+> > > +	{880, 1040}, {1040, 1200}, {1200, 1350}, {1350, 1500}, {1500, 1750},
+> > > +	{1750, 2000}, {2000, 2250}, {2250, 2500}
+> > 
+> > Cosmetic suggestion: add whitespaces after { and before }.
+> 
+> I think it would just add noise. I would like to keep it compact.
 
-HEAD commit:    3f066e882bf1 Merge tag 'for-5.16/parisc-7' of git://git.ke..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13aeaedbb00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6104739ac5f067ea
-dashboard link: https://syzkaller.appspot.com/bug?extid=9c3fb12e9128b6e1d7eb
-compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=130e8ea5b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15b3620db00000
+No, it makes it look lot more neater and is usually the convention
+followed in kernel
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9c3fb12e9128b6e1d7eb@syzkaller.appspotmail.com
-
-INFO: task jbd2/sda1-8:2935 blocked for more than 143 seconds.
-      Not tainted 5.16.0-rc6-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:jbd2/sda1-8     state:D stack:24688 pid: 2935 ppid:     2 flags:0x00004000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- __schedule+0xb72/0x1460 kernel/sched/core.c:6253
- schedule+0x12b/0x1f0 kernel/sched/core.c:6326
- jbd2_journal_commit_transaction+0xc24/0x5c00 fs/jbd2/commit.c:496
- kjournald2+0x4b4/0x940 fs/jbd2/journal.c:213
- kthread+0x468/0x490 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30
- </TASK>
-
-Showing all locks held in the system:
-1 lock held by khungtaskd/27:
- #0: ffffffff8cb1de00 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
-2 locks held by getty/3281:
- #0: ffff88814b4a6098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x21/0x70 drivers/tty/tty_ldisc.c:252
- #1: ffffc90002b962e8 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x6c5/0x1c60 drivers/tty/n_tty.c:2113
-2 locks held by syz-executor272/3690:
- #0: ffff88806d05dda8 (&type->i_mutex_dir_key#4){++++}-{3:3}, at: iterate_dir+0x124/0x640 fs/readdir.c:55
- #1: ffff88814b6d0460 (sb_writers#5){.+.+}-{0:0}, at: file_accessed include/linux/fs.h:2505 [inline]
- #1: ffff88814b6d0460 (sb_writers#5){.+.+}-{0:0}, at: iterate_dir+0x552/0x640 fs/readdir.c:70
-2 locks held by syz-executor272/3689:
- #0: ffff88806d0349b8 (&type->i_mutex_dir_key#4){++++}-{3:3}, at: iterate_dir+0x124/0x640 fs/readdir.c:55
- #1: ffff88814b6d0460 (sb_writers#5){.+.+}-{0:0}, at: file_accessed include/linux/fs.h:2505 [inline]
- #1: ffff88814b6d0460 (sb_writers#5){.+.+}-{0:0}, at: iterate_dir+0x552/0x640 fs/readdir.c:70
-3 locks held by syz-executor272/3691:
- #0: ffff88814b6d0460 (sb_writers#5){.+.+}-{0:0}, at: mnt_want_write+0x3b/0x80 fs/namespace.c:376
- #1: ffff888074dcf198 (&type->i_mutex_dir_key#4/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:818 [inline]
- #1: ffff888074dcf198 (&type->i_mutex_dir_key#4/1){+.+.}-{3:3}, at: filename_create+0x1da/0x4e0 fs/namei.c:3654
- #2: ffff88814b6d4990 (jbd2_handle){++++}-{0:0}, at: start_this_handle+0x136d/0x1630 fs/jbd2/transaction.c:466
-2 locks held by syz-executor272/3693:
- #0: ffff88806d0317e0 (&type->i_mutex_dir_key#4){++++}-{3:3}, at: iterate_dir+0x124/0x640 fs/readdir.c:55
- #1: ffff88814b6d0460 (sb_writers#5){.+.+}-{0:0}, at: file_accessed include/linux/fs.h:2505 [inline]
- #1: ffff88814b6d0460 (sb_writers#5){.+.+}-{0:0}, at: iterate_dir+0x552/0x640 fs/readdir.c:70
-2 locks held by syz-executor272/3694:
- #0: ffff88806d0617e0 (&type->i_mutex_dir_key#4){++++}-{3:3}, at: iterate_dir+0x124/0x640 fs/readdir.c:55
- #1: ffff88814b6d0460 (sb_writers#5){.+.+}-{0:0}, at: file_accessed include/linux/fs.h:2505 [inline]
- #1: ffff88814b6d0460 (sb_writers#5){.+.+}-{0:0}, at: iterate_dir+0x552/0x640 fs/readdir.c:70
-2 locks held by syz-executor272/3695:
- #0: ffff88806d035da8 (&type->i_mutex_dir_key#4){++++}-{3:3}, at: iterate_dir+0x124/0x640 fs/readdir.c:55
- #1: ffff88814b6d0460 (sb_writers#5){.+.+}-{0:0}, at: file_accessed include/linux/fs.h:2505 [inline]
- #1: ffff88814b6d0460 (sb_writers#5){.+.+}-{0:0}, at: iterate_dir+0x552/0x640 fs/readdir.c:70
-2 locks held by kworker/u4:1/3719:
-4 locks held by kworker/u4:4/3847:
- #0: ffff888013bf3938 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x7ca/0x1140
- #1: ffffc90003167d20 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x808/0x1140 kernel/workqueue.c:2273
- #2: ffff88814b6d00e0 (&type->s_umount_key#31){++++}-{3:3}, at: trylock_super+0x1b/0xf0 fs/super.c:418
- #3: ffff88814b6d2bd8 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: ext4_writepages+0x1dd/0x4080 fs/ext4/inode.c:2655
-
-=============================================
-
-NMI backtrace for cpu 0
-CPU: 0 PID: 27 Comm: khungtaskd Not tainted 5.16.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1dc/0x2d8 lib/dump_stack.c:106
- nmi_cpu_backtrace+0x45f/0x490 lib/nmi_backtrace.c:111
- nmi_trigger_cpumask_backtrace+0x16a/0x280 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:210 [inline]
- watchdog+0xc82/0xcd0 kernel/hung_task.c:295
- kthread+0x468/0x490 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30
- </TASK>
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 PID: 3719 Comm: kworker/u4:1 Not tainted 5.16.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: bat_events batadv_nc_worker
-RIP: 0010:mark_lock+0x6/0x1e00 kernel/locking/lockdep.c:4566
-Code: 07 80 c1 03 38 c1 0f 8c 6f ff ff ff 4c 89 ff e8 80 fb 69 00 e9 62 ff ff ff e8 26 e7 ac 08 66 0f 1f 44 00 00 55 48 89 e5 41 57 <41> 56 41 55 41 54 53 48 83 e4 e0 48 81 ec c0 01 00 00 65 48 8b 04
-RSP: 0018:ffffc900029bf8e8 EFLAGS: 00000046
-RAX: 0000000000000002 RBX: ffff8880217761d0 RCX: 00000000ffffffff
-RDX: 0000000000000008 RSI: ffff8880217761b0 RDI: ffff888021775700
-RBP: ffffc900029bf8f0 R08: dffffc0000000000 R09: fffffbfff1ff3ff8
-R10: fffffbfff1ff3ff8 R11: 0000000000000000 R12: 000000000000000a
-R13: ffff8880217761b0 R14: ffff888021775700 R15: ffff8880217761d0
-FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005621d6c67680 CR3: 000000000c88e000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- mark_usage kernel/locking/lockdep.c:4526 [inline]
- __lock_acquire+0xd38/0x2b00 kernel/locking/lockdep.c:4981
- lock_acquire+0x19f/0x4d0 kernel/locking/lockdep.c:5637
- rcu_lock_acquire+0x2a/0x30 include/linux/rcupdate.h:268
- rcu_read_lock include/linux/rcupdate.h:688 [inline]
- batadv_nc_purge_orig_hash net/batman-adv/network-coding.c:412 [inline]
- batadv_nc_worker+0xc8/0x5b0 net/batman-adv/network-coding.c:723
- process_one_work+0x853/0x1140 kernel/workqueue.c:2298
- worker_thread+0xac1/0x1320 kernel/workqueue.c:2445
- kthread+0x468/0x490 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30
- </TASK>
-----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0:	80 c1 03             	add    $0x3,%cl
-   3:	38 c1                	cmp    %al,%cl
-   5:	0f 8c 6f ff ff ff    	jl     0xffffff7a
-   b:	4c 89 ff             	mov    %r15,%rdi
-   e:	e8 80 fb 69 00       	callq  0x69fb93
-  13:	e9 62 ff ff ff       	jmpq   0xffffff7a
-  18:	e8 26 e7 ac 08       	callq  0x8ace743
-  1d:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
-  23:	55                   	push   %rbp
-  24:	48 89 e5             	mov    %rsp,%rbp
-  27:	41 57                	push   %r15
-* 29:	41 56                	push   %r14 <-- trapping instruction
-  2b:	41 55                	push   %r13
-  2d:	41 54                	push   %r12
-  2f:	53                   	push   %rbx
-  30:	48 83 e4 e0          	and    $0xffffffffffffffe0,%rsp
-  34:	48 81 ec c0 01 00 00 	sub    $0x1c0,%rsp
-  3b:	65                   	gs
-  3c:	48                   	rex.W
-  3d:	8b                   	.byte 0x8b
-  3e:	04                   	.byte 0x4
-
+-- 
+~Vinod

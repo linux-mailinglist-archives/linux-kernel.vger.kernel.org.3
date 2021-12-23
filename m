@@ -2,386 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E711947DB9F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 01:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7BE47DBA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 01:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345339AbhLWAI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 19:08:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
+        id S1344351AbhLWAVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 19:21:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbhLWAI2 (ORCPT
+        with ESMTP id S231232AbhLWAVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 19:08:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D901C061574;
-        Wed, 22 Dec 2021 16:08:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C26A1B81EB1;
-        Thu, 23 Dec 2021 00:08:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F003C36AE5;
-        Thu, 23 Dec 2021 00:08:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640218105;
-        bh=rN88q3v0SstBDK8FyIjQuucfgYlpwOzIvoiYq0mUrKc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=poNm1kmztJ4it7GRAfUB0BWiQ1inSqGVU/KwbLXa7iTpeoa7Bedc/+VJ9xlUUo6Be
-         M9DUgoQyczvSj3ZFPIObkhkrrBo76vurj4xF7zMRNauSQIguOLE6a0lRBiySylIX1X
-         R28jdy/glSevy5AEoKasdmSyBVoI5aFZJWSn/qdwEggTbyY6LlSPjDjTJRTvNJAu6D
-         5YWtDyHYsPmngNjUe1Vobj75Svd+bIBwQ5+IZ3QyrXsfIk3B6Mwjo1XtA/aDmt2C9T
-         FNpjw5wAPXpSk/LVbH/a/PCYsm5v1+nw6y03S770WBBW0jSB3fDOZ1mhLBjteqQGz1
-         HgS2LqdoRM0Bw==
-Date:   Thu, 23 Dec 2021 09:08:22 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 11/12] user_events: Validate user payloads for size
- and null termination
-Message-Id: <20211223090822.a14244522fef64b4b4398fe0@kernel.org>
-In-Reply-To: <20211216173511.10390-12-beaub@linux.microsoft.com>
-References: <20211216173511.10390-1-beaub@linux.microsoft.com>
-        <20211216173511.10390-12-beaub@linux.microsoft.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Wed, 22 Dec 2021 19:21:22 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC61BC061574;
+        Wed, 22 Dec 2021 16:21:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=47BEa1hBBev4vX+Gi5bGfRRBsw7bv8W386eAVjO1ObE=; b=eQy3zB97VxV99BacLcEaJWTRRs
+        tE0WyDHbK77GpmAPcW7qbHLnAr0KDQ++U2pIULowmjTm6tOyWF5rpc6j7YQQNU2DoOs5IH9MZiZ6e
+        pX8voct0+kLRvyyLzq53tykTDw/Jia+YeA7IQd6MtXXI6InXHTgySPfWXi91cPvBm98WmwSM5YSoX
+        3ni5EcnDHHx1JaHxWmMC1Gdx4k0LlrS3OWE6LF2Qt8/bdsuZECflTMtqZiVUK0D8ibE/cVbDQ09Tr
+        dotXGPxlQpWzFvXOHAZeAFdvS0rHLlsBABk5wzXUDrYwTsNFjStdGyeWERKodf5npN5Dg1BS9b7W6
+        HdqSIzbg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n0Br0-003oXl-KT; Thu, 23 Dec 2021 00:21:06 +0000
+Date:   Thu, 23 Dec 2021 00:21:06 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Jan Kara <jack@suse.cz>, Jason Gunthorpe <jgg@nvidia.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Nadav Amit <namit@vmware.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+Message-ID: <YcPA8gJ0OBPTdCdB@casper.infradead.org>
+References: <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
+ <20211221010312.GC1432915@nvidia.com>
+ <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
+ <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
+ <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
+ <20211221190706.GG1432915@nvidia.com>
+ <3e0868e6-c714-1bf8-163f-389989bf5189@redhat.com>
+ <dfe1c8d5-6fac-9040-0272-6d77bafa6a16@redhat.com>
+ <20211222124141.GA685@quack2.suse.cz>
+ <4a28e8a0-2efa-8b5e-10b5-38f1fc143a98@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4a28e8a0-2efa-8b5e-10b5-38f1fc143a98@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Dec 2021 09:35:10 -0800
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
-
-> Add validation to ensure data is at or greater than the min size for the
-> fields of the event. If a dynamic array is used and is a type of char,
-> ensure null termination of the array exists.
-
-OK, looks good to me except a few nitpicks.
-
-Reveiewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-I added some comments below.
-
+On Wed, Dec 22, 2021 at 02:09:41PM +0100, David Hildenbrand wrote:
+> Right, from an API perspective we really want people to use FOLL_PIN.
 > 
-> Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
-> ---
->  kernel/trace/trace_events_user.c | 147 +++++++++++++++++++++++++++----
->  1 file changed, 132 insertions(+), 15 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-> index fa3e26281fc3..58b8c9607c80 100644
-> --- a/kernel/trace/trace_events_user.c
-> +++ b/kernel/trace/trace_events_user.c
-> @@ -64,9 +64,11 @@ struct user_event {
->  	struct dyn_event devent;
->  	struct hlist_node node;
->  	struct list_head fields;
-> +	struct list_head validators;
->  	atomic_t refcnt;
->  	int index;
->  	int flags;
-> +	int min_size;
->  };
->  
->  /*
-> @@ -81,8 +83,17 @@ struct user_event_refs {
->  	struct user_event *events[];
->  };
->  
-> +#define VALIDATOR_ENSURE_NULL (1 << 0)
-> +#define VALIDATOR_REL (1 << 1)
-> +
-> +struct user_event_validator {
-> +	struct list_head link;
-> +	int offset;
-> +	int flags;
-> +};
-> +
->  typedef void (*user_event_func_t) (struct user_event *user, struct iov_iter *i,
-> -				   void *tpdata);
-> +				   void *tpdata, bool *faulted);
+> To optimize this case in particular it would help if we would have the
+> FOLL flags on the unpin path. Then we could just decide internally
+> "well, short-term R/O FOLL_PIN can be really lightweight, we can treat
+> this like a FOLL_GET instead". And we would need that as well if we were
+> to keep different counters for R/O vs. R/W pinned.
 
-Why don't you just return "int" value? ;-)
+FYI, in my current tree, there's a gup_put_folio() which replaces
+put_compound_head:
 
->  
->  static int user_event_parse(char *name, char *args, char *flags,
->  			    struct user_event **newuser);
-> @@ -214,6 +225,17 @@ static int user_field_size(const char *type)
->  	return -EINVAL;
->  }
->  
-> +static void user_event_destroy_validators(struct user_event *user)
-> +{
-> +	struct user_event_validator *validator, *next;
-> +	struct list_head *head = &user->validators;
-> +
-> +	list_for_each_entry_safe(validator, next, head, link) {
-> +		list_del(&validator->link);
-> +		kfree(validator);
-> +	}
-> +}
-> +
->  static void user_event_destroy_fields(struct user_event *user)
->  {
->  	struct ftrace_event_field *field, *next;
-> @@ -229,13 +251,43 @@ static int user_event_add_field(struct user_event *user, const char *type,
->  				const char *name, int offset, int size,
->  				int is_signed, int filter_type)
->  {
-> +	struct user_event_validator *validator;
->  	struct ftrace_event_field *field;
-> +	int validator_flags = 0;
->  
->  	field = kmalloc(sizeof(*field), GFP_KERNEL);
->  
->  	if (!field)
->  		return -ENOMEM;
->  
-> +	if (str_has_prefix(type, "__data_loc "))
-> +		goto add_validator;
-> +
-> +	if (str_has_prefix(type, "__rel_loc ")) {
-> +		validator_flags |= VALIDATOR_REL;
-> +		goto add_validator;
-> +	}
-> +
-> +	goto add_field;
-> +
-> +add_validator:
-> +	if (strstr(type, "char") != 0)
-> +		validator_flags |= VALIDATOR_ENSURE_NULL;
-> +
-> +	validator = kmalloc(sizeof(*validator), GFP_KERNEL);
-> +
-> +	if (!validator) {
-> +		kfree(field);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	validator->flags = validator_flags;
-> +	validator->offset = offset;
-> +
-> +	/* Want sequential access when validating */
-> +	list_add_tail(&validator->link, &user->validators);
-> +
-> +add_field:
->  	field->type = type;
->  	field->name = name;
->  	field->offset = offset;
-> @@ -245,6 +297,12 @@ static int user_event_add_field(struct user_event *user, const char *type,
->  
->  	list_add(&field->link, &user->fields);
->  
-> +	/*
-> +	 * Min size from user writes that are required, this does not include
-> +	 * the size of trace_entry (common fields).
-> +	 */
-> +	user->min_size = (offset + size) - sizeof(struct trace_entry);
-> +
->  	return 0;
->  }
->  
-> @@ -516,6 +574,7 @@ static int destroy_user_event(struct user_event *user)
->  	clear_bit(user->index, page_bitmap);
->  	hash_del(&user->node);
->  
-> +	user_event_destroy_validators(user);
->  	kfree(user->call.print_fmt);
->  	kfree(EVENT_NAME(user));
->  	kfree(user);
-> @@ -537,15 +596,49 @@ static struct user_event *find_user_event(char *name, u32 *outkey)
->  	return NULL;
->  }
->  
-> +static int user_event_validate(struct user_event *user, void *data, int len)
-> +{
-> +	struct list_head *head = &user->validators;
-> +	struct user_event_validator *validator;
-> +	void *pos, *end = data + len;
-> +	u32 loc, offset, size;
-> +
-> +	list_for_each_entry(validator, head, link) {
-> +		pos = data + validator->offset;
-> +
-> +		/* Already done min_size check, no bounds check here */
-> +		loc = *(u32 *)pos;
-> +		offset = loc & 0xffff;
-> +		size = loc >> 16;
-> +
-> +		if (likely(validator->flags & VALIDATOR_REL))
-> +			pos += offset + sizeof(loc);
-> +		else
-> +			pos = data + offset;
-> +
-> +		pos += size;
-> +
-> +		if (unlikely(pos > end))
-> +			return -EFAULT;
-> +
-> +		if (likely(validator->flags & VALIDATOR_ENSURE_NULL))
-> +			if (unlikely(*(char *)(pos - 1) != 0))
+static void gup_put_folio(struct folio *folio, int refs, unsigned int flags)
+{
+        if (flags & FOLL_PIN) {
+                node_stat_mod_folio(folio, NR_FOLL_PIN_RELEASED, refs);
+                if (hpage_pincount_available(&folio->page))
+                        hpage_pincount_sub(&folio->page, refs);
+                else
+                        refs *= GUP_PIN_COUNTING_BIAS;
+        }
 
-As we discussed in the previous version, isn't it '\0' ?
-(just a style comment)
+        folio_put_refs(folio, refs);
+}
 
-> +				return -EFAULT;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  /*
->   * Writes the user supplied payload out to a trace file.
->   */
->  static void user_event_ftrace(struct user_event *user, struct iov_iter *i,
-> -			      void *tpdata)
-> +			      void *tpdata, bool *faulted)
->  {
->  	struct trace_event_file *file;
->  	struct trace_entry *entry;
->  	struct trace_event_buffer event_buffer;
-> +	size_t size = sizeof(*entry) + i->count;
->  
->  	file = (struct trace_event_file *)tpdata;
->  
-> @@ -555,19 +648,25 @@ static void user_event_ftrace(struct user_event *user, struct iov_iter *i,
->  		return;
->  
->  	/* Allocates and fills trace_entry, + 1 of this is data payload */
-> -	entry = trace_event_buffer_reserve(&event_buffer, file,
-> -					   sizeof(*entry) + i->count);
-> +	entry = trace_event_buffer_reserve(&event_buffer, file, size);
->  
->  	if (unlikely(!entry))
->  		return;
->  
-> -	if (unlikely(!copy_nofault(entry + 1, i->count, i))) {
-> -		__trace_event_discard_commit(event_buffer.buffer,
-> -					     event_buffer.event);
-> -		return;
-> -	}
-> +	if (unlikely(!copy_nofault(entry + 1, i->count, i)))
-> +		goto discard;
-
-OK, this is a fault error.
-
-> +
-> +	if (!list_empty(&user->validators) &&
-> +	    unlikely(user_event_validate(user, entry, size)))
-> +		goto discard;
-
-But this maybe an invalid parameter error.
-
-Thank you,
-
->  
->  	trace_event_buffer_commit(&event_buffer);
-> +
-> +	return;
-> +discard:
-> +	*faulted = true;
-> +	__trace_event_discard_commit(event_buffer.buffer,
-> +				     event_buffer.event);
->  }
->  
->  #ifdef CONFIG_PERF_EVENTS
-> @@ -622,7 +721,7 @@ static void user_event_bpf(struct user_event *user, struct iov_iter *i)
->   * Writes the user supplied payload out to perf ring buffer or eBPF program.
->   */
->  static void user_event_perf(struct user_event *user, struct iov_iter *i,
-> -			    void *tpdata)
-> +			    void *tpdata, bool *faulted)
->  {
->  	struct hlist_head *perf_head;
->  
-> @@ -645,14 +744,21 @@ static void user_event_perf(struct user_event *user, struct iov_iter *i,
->  
->  		perf_fetch_caller_regs(regs);
->  
-> -		if (unlikely(!copy_nofault(perf_entry + 1, i->count, i))) {
-> -			perf_swevent_put_recursion_context(context);
-> -			return;
-> -		}
-> +		if (unlikely(!copy_nofault(perf_entry + 1, i->count, i)))
-> +			goto discard;
-> +
-> +		if (!list_empty(&user->validators) &&
-> +		    unlikely(user_event_validate(user, perf_entry, size)))
-> +			goto discard;
->  
->  		perf_trace_buf_submit(perf_entry, size, context,
->  				      user->call.event.type, 1, regs,
->  				      perf_head, NULL);
-> +
-> +		return;
-> +discard:
-> +		*faulted = true;
-> +		perf_swevent_put_recursion_context(context);
->  	}
->  }
->  #endif
-> @@ -967,6 +1073,7 @@ static int user_event_parse(char *name, char *args, char *flags,
->  
->  	INIT_LIST_HEAD(&user->class.fields);
->  	INIT_LIST_HEAD(&user->fields);
-> +	INIT_LIST_HEAD(&user->validators);
->  
->  	user->tracepoint.name = name;
->  
-> @@ -1015,6 +1122,7 @@ static int user_event_parse(char *name, char *args, char *flags,
->  	return 0;
->  put_user:
->  	user_event_destroy_fields(user);
-> +	user_event_destroy_validators(user);
->  	kfree(user);
->  	return ret;
->  }
-> @@ -1072,6 +1180,9 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
->  	if (unlikely(user == NULL))
->  		return -ENOENT;
->  
-> +	if (unlikely(i->count < user->min_size))
-> +		return -EINVAL;
-> +
->  	tp = &user->tracepoint;
->  
->  	/*
-> @@ -1083,10 +1194,13 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
->  		user_event_func_t probe_func;
->  		struct iov_iter copy;
->  		void *tpdata;
-> +		bool faulted;
->  
->  		if (unlikely(iov_iter_fault_in_readable(i, i->count)))
->  			return -EFAULT;
->  
-> +		faulted = false;
-> +
->  		rcu_read_lock_sched();
->  
->  		probe_func_ptr = rcu_dereference_sched(tp->funcs);
-> @@ -1096,11 +1210,14 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
->  				copy = *i;
->  				probe_func = probe_func_ptr->func;
->  				tpdata = probe_func_ptr->data;
-> -				probe_func(user, &copy, tpdata);
-> +				probe_func(user, &copy, tpdata, &faulted);
->  			} while ((++probe_func_ptr)->func);
->  		}
->  
->  		rcu_read_unlock_sched();
-> +
-> +		if (unlikely(faulted))
-> +			return -EFAULT;
->  	}
->  
->  	return ret;
-> -- 
-> 2.17.1
-> 
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+That can become non-static if it's needed.  I'm still working on that
+series, because I'd like to get it to a point where we return one
+folio pointer instead of N page pointers.  Not quite there yet.

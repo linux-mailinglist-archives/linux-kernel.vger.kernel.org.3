@@ -2,74 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9EA347DC75
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C9147DC7E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:04:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239969AbhLWBA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:00:26 -0500
-Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:36489 "EHLO
-        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238387AbhLWBAX (ORCPT
+        id S240557AbhLWBEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:04:01 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:29281 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230041AbhLWBD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:00:23 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R671e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0V.TB1Hv_1640221220;
-Received: from 30.21.164.23(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V.TB1Hv_1640221220)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 23 Dec 2021 09:00:21 +0800
-Message-ID: <362fb4fe-34c8-d83d-b8be-a4140e19b244@linux.alibaba.com>
-Date:   Thu, 23 Dec 2021 09:01:05 +0800
+        Wed, 22 Dec 2021 20:03:59 -0500
+Received: from kwepemi500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JKBlT2612zbjbb;
+        Thu, 23 Dec 2021 09:03:33 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500002.china.huawei.com (7.221.188.171) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 23 Dec 2021 09:03:57 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 23 Dec 2021 09:03:56 +0800
+Subject: Re: [PATCH 4/4] block, bfq: update pos_root for idle bfq_queue in
+ bfq_bfqq_move()
+To:     Jan Kara <jack@suse.cz>
+CC:     <tj@kernel.org>, <axboe@kernel.dk>, <paolo.valente@linaro.org>,
+        <fchecconi@gmail.com>, <avanzini.arianna@gmail.com>,
+        <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20211221032135.878550-1-yukuai3@huawei.com>
+ <20211221032135.878550-5-yukuai3@huawei.com>
+ <20211221115001.GD24748@quack2.suse.cz>
+ <6ca1e924-47fa-b94e-598c-69a9549eb68e@huawei.com>
+ <20211222141722.GC685@quack2.suse.cz>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <69bd1c5e-b692-3c8c-e90e-adc4d71eb04d@huawei.com>
+Date:   Thu, 23 Dec 2021 09:03:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 0/2] Add a new scheme to support demotion on tiered
- memory system
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     sj@kernel.org, ying.huang@intel.com, dave.hansen@linux.intel.com,
-        ziy@nvidia.com, shy828301@gmail.com,
-        zhongjiang-ali@linux.alibaba.com, xlpang@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <cover.1640171137.git.baolin.wang@linux.alibaba.com>
- <20211222160105.a267eaacefae77ae094c050e@linux-foundation.org>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20211222160105.a267eaacefae77ae094c050e@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20211222141722.GC685@quack2.suse.cz>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/23/2021 8:01 AM, Andrew Morton wrote:
-> On Wed, 22 Dec 2021 19:14:39 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
-> 
->> Now on tiered memory system with different memory types, the reclaim path in
->> shrink_page_list() already support demoting pages to slow memory node instead
->> of discarding the pages. However, at that time the fast memory node memory
->> wartermark is already tense, which will increase the memory allocation latency
->> during page demotion. So a new method from user space demoting cold pages
->> proactively will be more helpful.
+在 2021/12/22 22:17, Jan Kara 写道:
+> On Wed 22-12-21 11:12:45, yukuai (C) wrote:
+>> 在 2021/12/21 19:50, Jan Kara 写道:
+>>> On Tue 21-12-21 11:21:35, Yu Kuai wrote:
+>>>> During code review, we found that if bfqq is not busy in
+>>>> bfq_bfqq_move(), bfq_pos_tree_add_move() won't be called for the bfqq,
+>>>> thus bfqq->pos_root still points to the old bfqg. However, the ref
+>>>> that bfqq hold for the old bfqg will be released, so it's possible
+>>>> that the old bfqg can be freed. This is problematic because the freed
+>>>> bfqg can still be accessed by bfqq->pos_root.
+>>>>
+>>>> Fix the problem by calling bfq_pos_tree_add_move() for idle bfqq
+>>>> as well.
+>>>>
+>>>> Fixes: e21b7a0b9887 ("block, bfq: add full hierarchical scheduling and cgroups support")
+>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>>>
+>>> I'm just wondering, how can it happen that !bfq_bfqq_busy() queue is in
+>>> pos_tree? Because bfq_remove_request() takes care to remove bfqq from the
+>>> pos_tree...
 >>
->> We can rely on the DAMON in user space to help to monitor the cold memory on
->> fast memory node, and demote the cold pages to slow memory node proactively to
->> keep the fast memory node in a healthy state.
+>> Hi,
 >>
->> This patch set introduces a new scheme named DAMOS_DEMOTE to support this feature,
->> and works well from my testing. Any comments are welcome. Thanks.
+>> It's right this is not a problem in common case. The problem seems to
+>> relate to queue merging and task migration. Because I once reporduced
+>> it with the same reporducer for the problem that offlined bfqg can be
+>> inserted into service tree. The uaf is exactly in
+>> bfq_remove_request->rb_rease(). However I didn't save the stack...
+>>
+>> I guess this is because bfq_del_bfqq_busy() is called from
+>> bfq_release_process_ref(), and queue merging prevert sunch bfqq to be
+>> freed, thus such bfqq is not in service tree, and it's pos_root can
+>> point to the old bfqg after bfq_bic_update_cgroup->bfq_bfqq_move.
+>>
+>> I haven't confirmed this, however, this patch itself only cleared
+>> bfqq->pos_root for idle bfqq, there should be no harm.
 > 
-> This is interesting.
+> Well, I agree this patch does no harm but in my opinion it is just papering
+> over the real problem which is that we leave bfqq without any request in
+> the pos_tree which can have also other unexpected consequences. I don't
+> think your scenario with bfq_release_process_ref() calling
+> bfq_del_bfqq_busy() really answers my question because we call
+> bfq_del_bfqq_busy() only if RB_EMPTY_ROOT(&bfqq->sort_list) (i.e., bfqq has
+> no requests) and when sort_list was becoming empty, bfq_remove_request()
+> should have removed bfqq from the pos_tree. So I think proper fix lies
+> elsewhere and I would not merge this patch until we better understand what
+> is happening in this case.
+
+Hi,
+
+I'll try to reporduce the UAF, and take a look at it.
+
+Thanks,
+Kuai
 > 
-> I think it would be helpful if we could have some example scenarios in
-> this changelog, help people understand how to use DAMOS_DEMOTE and what
-> effects it has.
-
-Sure.
-
+> 								Honza
 > 
-> Documentation/admin-guide/mm/damon/usage.rst would like an update?
-
-Ah, I missed updating de Doc, and will do in v3.
-
-> And the DAMON user space tool?
-
-Yes. Thanks for your comments.

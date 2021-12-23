@@ -2,104 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D0847E46A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 15:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFD747E46D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 15:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348786AbhLWOOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 09:14:43 -0500
-Received: from foss.arm.com ([217.140.110.172]:42892 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243804AbhLWOOl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 09:14:41 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 75DE6D6E;
-        Thu, 23 Dec 2021 06:14:41 -0800 (PST)
-Received: from [10.57.66.229] (unknown [10.57.66.229])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 920083F5A1;
-        Thu, 23 Dec 2021 06:14:39 -0800 (PST)
-Message-ID: <f9efc8e8-9dc6-8a80-15bb-bc2d9aaf60cb@arm.com>
-Date:   Thu, 23 Dec 2021 14:14:35 +0000
+        id S1348791AbhLWOP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 09:15:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236840AbhLWOP6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 09:15:58 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1B5C061756
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 06:15:58 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id w1so4332369ilh.9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 06:15:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=6M3SYeSgnofgcr0rRAkYeNuD1vSEpPccTA7ix3B/fBA=;
+        b=lKoVrQOEc7rUd4lDbLBB5Y+FyTyY1odHrgbUfYxGCLVl0fu8oxO3BM0gFh632eB6tv
+         wQIIPK146Xn6o1rzPVSqWYq5cVW/oXSffgXuQISgijTDXfhTI1wa4Kb+1srMOVsrsy0F
+         yPS6rVW5rK2rMZBVmKhMqBxKo4QNsTGhgLtePlK7Hwe5IfYH+IT9AyFPMtqIDWVdNmqQ
+         8I/E+RY5RQhVESxEYBvb986vizccjxbcCb2mMI+w0MitvjJvZo+2VdIYPcedEyn1UAA1
+         7ODPuTVkvKF+0qAm9uC6aWXCkRUeQlfEj6FgYmuFMJqPufE9J1UdTvYcqS36oyyDisjG
+         Kqlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6M3SYeSgnofgcr0rRAkYeNuD1vSEpPccTA7ix3B/fBA=;
+        b=Zzz//EhPG+grfHynS1bCq1GodGx89mI82OtxyF4BBLlUhl77DV1EzF+zjTRN955PKU
+         MUeVDJSoL+6qTAXVmjXSwCVdvUikmU5n1MLDwXSB+QiLHyubwhrpCLbFfKf45ZTJkdGV
+         QE8vNgRClEuIYBk/zcjkGaPPkqeZtcJ7Kdc7/a5ferBWS/KTfnhMfvr3wP0+zKLP+ja3
+         1FhXFe9JaVzXryOIHTj2wDZ25LCzNFq86O5s9wvc9Uv0XfXzsCEwKC6J7066WUCWDQSL
+         jviefI/6Xn41TKsJhC4dI/dL0gpoh77lxiYcOk6q+SHd1MGgcvMwsO093bnNmPhr7BC8
+         yHcg==
+X-Gm-Message-State: AOAM531jRfgB8Qu3Nust9YBYLFMdSaolIV62E6zHr1zqVWXuUAT6+gB+
+        ZXVMtvKABHUymSXRUxmc3Z1Rd3oeaplV6w==
+X-Google-Smtp-Source: ABdhPJx/LAR5uAFMamgfq9YBAPXyM/5rnQoWlZpcvlX7xk8lLgHEj5G5xnoLGFoj93AiUozpZbcqVQ==
+X-Received: by 2002:a92:1e09:: with SMTP id e9mr1077167ile.224.1640268957569;
+        Thu, 23 Dec 2021 06:15:57 -0800 (PST)
+Received: from [192.168.1.116] ([66.219.217.159])
+        by smtp.gmail.com with ESMTPSA id w19sm3798722iov.12.2021.12.23.06.15.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Dec 2021 06:15:57 -0800 (PST)
+Subject: Re: [PATCH] doc: fs: remove bdev_try_to_free_page related doc
+To:     Zhiqiang Liu <liuzhiqiang26@huawei.com>, corbet@lwn.net,
+        Jan Kara <jack@suse.cz>, "Darrick J. Wong" <djwong@kernel.org>,
+        "zhangyi (F)" <yi.zhang@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     linux-doc@vger.kernel.org, linfeilong <linfeilong@huawei.com>
+References: <c45e6351-b0f8-3410-787e-02c6aeb3efe6@huawei.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <b75b794d-8c06-bbef-fb12-bef8105f41db@kernel.dk>
+Date:   Thu, 23 Dec 2021 07:15:56 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH 1/2] iommu/arm-smmu: Use platform_irq_count() to get the
- interrupt count
-Content-Language: en-GB
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Will Deacon <will@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Rob Clark <robdclark@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org
-Cc:     Xin Tan <tanxin.ctf@gmail.com>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>
-References: <20211223130046.9365-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211223130046.9365-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20211223130046.9365-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <c45e6351-b0f8-3410-787e-02c6aeb3efe6@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-23 13:00, Lad Prabhakar wrote:
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
+On 12/22/21 8:51 PM, Zhiqiang Liu wrote:
 > 
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq_count().
-
-Nit: platform_irq_count()
-
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->   drivers/iommu/arm/arm-smmu/arm-smmu.c | 12 ++++++------
->   1 file changed, 6 insertions(+), 6 deletions(-)
+> In commit acc6100d3ffa ("fs: remove bdev_try_to_free_page callback"),
+> bdev_try_to_free_page has been removed.
 > 
-> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-> index 4bc75c4ce402..4844cd075644 100644
-> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
-> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-> @@ -2105,12 +2105,12 @@ static int arm_smmu_device_probe(struct platform_device *pdev)
->   	if (IS_ERR(smmu))
->   		return PTR_ERR(smmu);
->   
-> -	num_irqs = 0;
-> -	while ((res = platform_get_resource(pdev, IORESOURCE_IRQ, num_irqs))) {
-> -		num_irqs++;
-> -		if (num_irqs > smmu->num_global_irqs)
-> -			smmu->num_context_irqs++;
-> -	}
-> +	num_irqs = platform_irq_count(pdev);
-> +	if (num_irqs < 0)
-> +		return num_irqs;
-> +
-> +	if (num_irqs > smmu->num_global_irqs)
-> +		smmu->num_context_irqs += (num_irqs - smmu->num_global_irqs);
+> We should remove its doc.
 
-This seems a bit overcomplicated. I reckon:
+Reviewed-by: Jens Axboe <axboe@kernel.dk>
 
-	smmu->num_context_irqs = num_irqs - smmu->num_global_irqs;
-	if (num_irqs <= smmu->num_global_irqs) {
-		dev_err(...
+Jon, I'm assuming you'll take this one through the doc tree.
 
-should do it.
+-- 
+Jens Axboe
 
-However, FYI I have some patches refactoring most of the IRQ stuff here 
-that I plan to post next cycle (didn't quite have time to get them done 
-for 5.17 as I'd hoped...), so unless this needs to go in right now as an 
-urgent fix, I'm happy to take care of removing platform_get_resource() 
-as part of that if it's easier.
-
-Thanks,
-Robin.
-
->   
->   	if (!smmu->num_context_irqs) {
->   		dev_err(dev, "found %d interrupts but expected at least %d\n",

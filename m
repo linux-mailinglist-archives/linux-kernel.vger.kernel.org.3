@@ -2,91 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D212B47DDA5
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 03:15:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 272F147DDA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 03:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345693AbhLWCPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 21:15:35 -0500
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net ([165.227.154.27]:52021
-        "HELO zg8tmty1ljiyny4xntqumjca.icoremail.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with SMTP id S229788AbhLWCPb (ORCPT
+        id S1345756AbhLWCQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 21:16:17 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:15967 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229788AbhLWCQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 21:15:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=Gc2peLWVrP
-        Ce1WMAtOEAOlkjXLnzxq87QH1KHL93r4E=; b=BtF1JRGcOjBltYke80Au/FNhtb
-        pu8yd6PiAFM4s3JGLg2IhKkj6JmJHxvMQNocqD98OesuVnkwX63caNx1C3aJ4Sm7
-        EvW+aXNrwMojf+lZUZtPBlPQnS33iQ46f+OUh3KuDlRKrbhWG1jjjPq59uCbid6a
-        10dbXshTS6X3Nv8YY=
-Received: from localhost.localdomain (unknown [10.102.225.147])
-        by app1 (Coremail) with SMTP id XAUFCgAHD2uf28Nh4N8SAA--.779S4;
-        Thu, 23 Dec 2021 10:15:10 +0800 (CST)
-From:   Xin Xiong <xiongx18@fudan.edu.cn>
-To:     VMware Graphics <linux-graphics-maintainer@vmware.com>,
-        Zack Rusin <zackr@vmware.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     yuanxzhang@fudan.edu.cn, Xin Xiong <xiongx18@fudan.edu.cn>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>
-Subject: [PATCH] drm/vmwgfx:fix refcount leak in vmw_kms_fb_create()
-Date:   Thu, 23 Dec 2021 10:13:42 +0800
-Message-Id: <20211223021342.3650-1-xiongx18@fudan.edu.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 22 Dec 2021 21:16:16 -0500
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JKDHh6hNNzZdns;
+        Thu, 23 Dec 2021 10:13:04 +0800 (CST)
+Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 23 Dec 2021 10:16:14 +0800
+Received: from [10.67.103.212] (10.67.103.212) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 23 Dec 2021 10:16:14 +0800
+Subject: Re: [PATCH] crypto: hisilicon/qm - cleanup warning in qm_vf_read_qos
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20211222020811.26292-1-yekai13@huawei.com>
+ <CAHp75VfoxrEjV+M3kSECo2gLReZsnkPcNsGdPNYHhaJCfQxqCg@mail.gmail.com>
+CC:     "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "wangzhou1@hisilicon.com" <wangzhou1@hisilicon.com>
+From:   "yekai(A)" <yekai13@huawei.com>
+Message-ID: <0915e7b7-05e7-6e96-60e8-2a3113cf337a@huawei.com>
+Date:   Thu, 23 Dec 2021 10:16:14 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: XAUFCgAHD2uf28Nh4N8SAA--.779S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7JrW5ZrWkXFy8Jw4xAry3CFg_yoW8Jr4rpr
-        43Cry2krWfXa12gFZrAa95WFyUt3ZFgFyFkFWkuwn8Gr13Z3sxt3y5A3yjgryDCrWkAr4r
-        XF1Ikw4UCF4qyFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9l14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26rxl
-        6s0DM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8Jw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
-        YxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IY
-        s7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
-        WUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUFYFADUUUU
-X-CM-SenderInfo: arytiiqsuqiimz6i3vldqovvfxof0/1tbiARACEFKp452wKgABsd
+In-Reply-To: <CAHp75VfoxrEjV+M3kSECo2gLReZsnkPcNsGdPNYHhaJCfQxqCg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.103.212]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This issue happens in one error path of vmw_kms_fb_create(). The
-function forgets to decrement the refcount of a ttm_base_object obj,
-which is increased by vmw_user_lookup_handle() earlier, when
-vmw_user_lookup_handle() returns 0 but vfb is not yet created. This
-may incur reference count leak.
 
-Fix it by decrement reference count in that error path instead of
-assigning the obj to vfb->user_obj.
 
-Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
-Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
----
- drivers/gpu/drm/vmwgfx/vmwgfx_kms.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2021/12/23 9:51, Andy Shevchenko wrote:
+>
+>
+> On Wednesday, December 22, 2021, Kai Ye <yekai13@huawei.com
+> <mailto:yekai13@huawei.com>> wrote:
+>
+>     The kernel test rebot report this warning: Uninitialized variable: ret.
+>     Here is fix it.
+>
+>
+> How do you know that 0 is the correct value?
+>
+>
+>
+>     Signed-off-by: Kai Ye <yekai13@huawei.com <mailto:yekai13@huawei.com>>
+>     ---
+>      drivers/crypto/hisilicon/qm.c | 3 +--
+>      1 file changed, 1 insertion(+), 2 deletions(-)
+>
+>     diff --git a/drivers/crypto/hisilicon/qm.c
+>     b/drivers/crypto/hisilicon/qm.c
+>     index b1fe9c7b8cc8..c6e9ad2041c3 100644
+>     --- a/drivers/crypto/hisilicon/qm.c
+>     +++ b/drivers/crypto/hisilicon/qm.c
+>     @@ -4279,8 +4279,7 @@ static void qm_vf_get_qos(struct hisi_qm *qm,
+>     u32 fun_num)
+>
+>      static int qm_vf_read_qos(struct hisi_qm *qm)
+>      {
+>     -       int cnt = 0;
+>     -       int ret;
+>     +       int cnt = 0, ret = 0;
+>
+>             /* reset mailbox qos val */
+>             qm->mb_qos = 0;
+>     --
+>     2.33.0
+>
+>
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
+we set the 0 to success in kernel style.
 
-diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_kms.c b/drivers/gpu/drm/vmwgfx/vmwgfx_kms.c
-index 74fa41909..453fa714f 100644
---- a/drivers/gpu/drm/vmwgfx/vmwgfx_kms.c
-+++ b/drivers/gpu/drm/vmwgfx/vmwgfx_kms.c
-@@ -1426,7 +1426,7 @@ static struct drm_framebuffer *vmw_kms_fb_create(struct drm_device *dev,
- 	if (surface)
- 		vmw_surface_unreference(&surface);
- 
--	if (ret) {
-+	if (ret || !vfb) {
- 		DRM_ERROR("failed to create vmw_framebuffer: %i\n", ret);
- 		ttm_base_object_unref(&user_obj);
- 		return ERR_PTR(ret);
--- 
-2.25.1
-
+thanks
+Kai

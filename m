@@ -2,134 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F16A47E89D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 21:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABBD47E89F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 21:11:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350201AbhLWUHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 15:07:04 -0500
-Received: from mga04.intel.com ([192.55.52.120]:36629 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233073AbhLWUHE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 15:07:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640290024; x=1671826024;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=H3CipibIqZbEhIQv9vI3VoBQ6zDUfMhw2PDAz9s+NSw=;
-  b=Q4bLr0hm34iwWxVYoMV1HmEXjaB22YF0sqmZurTeSQhSvdpXiSlmdRQJ
-   CO9JZpEmu2SUMWuV7KnNj0+yfCX4fik+dombSZ5eNA0GLWCMFdOm7p5Aa
-   TQU1t5jM50Xzr1a6USksaIi8JNfjqhbSYo5wHuevudaSKwwG9yk4NkQLJ
-   6CWggMqvQIhZtNEyBARnBuDkhOLmB8kkKj7Qx+pLnenevozPzdKPXBfK4
-   ZNjxJ+5UGXitBTRF/bVBvBHrkUIGg8M0xkCZ0eJjprLAvGIdw+WsdQ8eE
-   au88Qu6JkO3kt/DAB3LbhoihXld8doYk/baV0YivlBdGuLCSXebIvNKHB
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10207"; a="239653516"
-X-IronPort-AV: E=Sophos;i="5.88,230,1635231600"; 
-   d="scan'208";a="239653516"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 12:07:03 -0800
-X-IronPort-AV: E=Sophos;i="5.88,230,1635231600"; 
-   d="scan'208";a="522205778"
-Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.146])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 12:07:03 -0800
-Date:   Thu, 23 Dec 2021 12:07:01 -0800
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Youquan Song <youquan.song@intel.com>
-Subject: [PATCH v2] x86/mce: Reduce number of machine checks taken during
- recovery
-Message-ID: <YcTW5dh8yTGucDd+@agluck-desk2.amr.corp.intel.com>
-References: <20211215222016.1390235-1-tony.luck@intel.com>
- <20211218005322.GM16608@worktop.programming.kicks-ass.net>
+        id S1350206AbhLWULc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 15:11:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233073AbhLWULa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 15:11:30 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37019C061401;
+        Thu, 23 Dec 2021 12:11:30 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id j6so25405070edw.12;
+        Thu, 23 Dec 2021 12:11:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+Z0W+uNVLefCvGenGTWY6S3Ph9n5iOBFk9YTlc8vDc8=;
+        b=eMjsHlFQ7izRRsjczN5qKrPvXKW4HRt16BdOixLAkEnLdLnE/debRO8zo4NmTQAefO
+         ued5YzGRMKGD5zL/kTmn+y+24slEG+iNfAkEq5kWhQTLnarzyQJoY9A+DY8AnNw2ZbSo
+         TdVyinRKlG7VpiIozrCBJ/fg4meV1pUnw41KXqgavn3nTupyiUZHVw13lssjahkM3wDk
+         2C5GBVoEvOU+WsXuZrBx/xGEZdM9VsjLuD3iFLsTx4ORDFsDsmadQw01JeYnLA0lSt6H
+         hS0Kt2KEeeloku77jndCY5i45dAyuDxUWPTggs67SMBu0UXHDHVJhp2zp/Lazc3rjETy
+         /xtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+Z0W+uNVLefCvGenGTWY6S3Ph9n5iOBFk9YTlc8vDc8=;
+        b=nNngSZJV9OKAlPrOj1q338nhOrZHVdpR2HZvsffD3M3uJhXGFfDjWhWgFqhdIqpU0a
+         S0m5qdA9danOqKbClzXbCg5mmgomV5k0wy8+yHWWxKbVEEJfVdLsqQdnLAhANFfQXvjY
+         UAYhlhMiolbO3HAqeqGRpwbuPRTN7hLmEO1xC6YTxodn8nMxCJgv1uP+qBqxjciZtb9h
+         +ZcflgZ/001aG/qR+rbtX5ZKngZWkE3nanYJfxkTLQ5M9pCx2YkCvcdAAj7X22VBXRXy
+         pwEHWjPhsGsolohaFBZsR/0umY4iVXAIqOvKVQwq2/Co1uZY1AVr6vpMOPquW6HfPtM1
+         oATw==
+X-Gm-Message-State: AOAM531UkdCKRUY+w2RSlyOwG9T2HdD1qB6Ulr490kQhhWgswWEUrJs9
+        tfDrPRmf+n+BXTE2xsX/bDknMnWNAbnemUkBbx4=
+X-Google-Smtp-Source: ABdhPJwrrW8MmRZCCatjVSXKEr03lsImIO+p9ufdkuSu5Vih456wCAUQfFFq0Kdeb4SrV2hEHjXB/FeGSRC7qOfpvlY=
+X-Received: by 2002:a17:906:f283:: with SMTP id gu3mr3017338ejb.768.1640290288588;
+ Thu, 23 Dec 2021 12:11:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211218005322.GM16608@worktop.programming.kicks-ass.net>
+References: <20211223032337.5198-1-yinxin.x@bytedance.com> <20211223032337.5198-2-yinxin.x@bytedance.com>
+In-Reply-To: <20211223032337.5198-2-yinxin.x@bytedance.com>
+From:   harshad shirwadkar <harshadshirwadkar@gmail.com>
+Date:   Thu, 23 Dec 2021 12:11:17 -0800
+Message-ID: <CAD+ocbxF=GdQdVryoSgbf5uJJk7H0uawLoQTKdDCKfnWgbmuxA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] ext4: use ext4_ext_remove_space() for fast commit
+ replay delete range
+To:     Xin Yin <yinxin.x@bytedance.com>
+Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Looks good to me.
 
-From: Youquan Song <youquan.song@intel.com>
+Reviewed-by: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
 
-When any of the copy functions in arch/x86/lib/copy_user_64.S take a
-fault, the fixup code copies the remaining byte count from %ecx to %edx
-and unconditionally jumps to .Lcopy_user_handle_tail to continue the
-copy in case any more bytes can be copied.
-
-If the fault was #PF this may copy more bytes (because the page fault
-handler might have fixed the fault). But when the fault is a machine
-check the original copy code will have copied all the way to the poisoned
-cache line. So .Lcopy_user_handle_tail will just take another machine
-check for no good reason.
-
-Every code path to .Lcopy_user_handle_tail comes from an exception fixup
-path, so add a check there to check the trap type (in %eax) and simply
-return the count of remaining bytes if the trap was a machine check.
-
-Doing this reduces the number of machine checks taken during synthetic
-tests from four to three.
-
-As well as reducing the number of machine checks, this also allows
-Skylake generation Xeons to recover some cases that currently fail. The
-is because "rep movsb" is only recoverable when source and destination
-are well aligned and the byte count is large. That useless call to
-.Lcopy_user_handle_tail may violate one or more of these conditions and
-generate a fatal machine check.
-
-[Tony: Added more details to commit message]
-
-Signed-off-by: Youquan Song <youquan.song@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
- arch/x86/lib/copy_user_64.S | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-V2: Update based on comments from PeterZ
-	- Rebase to tip x86/core branch
-	- Add comment documenting eax is now part of calling convention
-	  for .Lcopy_user_handle_tail
-	- Trim commit comment to make it easier to see that I did
-	  audit all the call sequences for .Lcopy_user_handle_tail
-
-diff --git a/arch/x86/lib/copy_user_64.S b/arch/x86/lib/copy_user_64.S
-index e6ac38587b40..26781cbe7e37 100644
---- a/arch/x86/lib/copy_user_64.S
-+++ b/arch/x86/lib/copy_user_64.S
-@@ -212,6 +212,7 @@ EXPORT_SYMBOL(copy_user_enhanced_fast_string)
-  * Don't try to copy the tail if machine check happened
-  *
-  * Input:
-+ * eax x86 trap number - set by fixup_excpetion()
-  * rdi destination
-  * rsi source
-  * rdx count
-@@ -220,12 +221,20 @@ EXPORT_SYMBOL(copy_user_enhanced_fast_string)
-  * eax uncopied bytes or 0 if successful.
-  */
- SYM_CODE_START_LOCAL(.Lcopy_user_handle_tail)
-+	cmp $X86_TRAP_MC,%eax
-+	je 3f
-+
- 	movl %edx,%ecx
- 1:	rep movsb
- 2:	mov %ecx,%eax
- 	ASM_CLAC
- 	RET
- 
-+3:
-+	movl %edx,%eax
-+	ASM_CLAC
-+	RET
-+
- 	_ASM_EXTABLE_CPY(1b, 2b)
- 
- .Lcopy_user_handle_align:
-
-base-commit: 82a8954acd93ae95d6252fb93a3d210c8f71b093
--- 
-2.31.1
-
+On Wed, Dec 22, 2021 at 7:24 PM Xin Yin <yinxin.x@bytedance.com> wrote:
+>
+> For now ,we use ext4_punch_hole() during fast commit replay delete range
+> procedure. But it will be affected by inode->i_size, which may not
+> correct during fast commit replay procedure. The following test will
+> failed.
+>
+> -create & write foo (len 1000K)
+> -falloc FALLOC_FL_ZERO_RANGE foo (range 400K - 600K)
+> -create & fsync bar
+> -falloc FALLOC_FL_PUNCH_HOLE foo (range 300K-500K)
+> -fsync foo
+> -crash before a full commit
+>
+> After the fast_commit reply procedure, the range 400K-500K will not be
+> removed. Because in this case, when calling ext4_punch_hole() the
+> inode->i_size is 0, and it just retruns with doing nothing.
+>
+> Change to use ext4_ext_remove_space() instead of ext4_punch_hole()
+> to remove blocks of inode directly.
+>
+> Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
+> ---
+>  fs/ext4/fast_commit.c | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+>
+> diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
+> index aa05b23f9c14..3deb97b22ca4 100644
+> --- a/fs/ext4/fast_commit.c
+> +++ b/fs/ext4/fast_commit.c
+> @@ -1708,11 +1708,14 @@ ext4_fc_replay_del_range(struct super_block *sb, struct ext4_fc_tl *tl,
+>                 }
+>         }
+>
+> -       ret = ext4_punch_hole(inode,
+> -               le32_to_cpu(lrange.fc_lblk) << sb->s_blocksize_bits,
+> -               le32_to_cpu(lrange.fc_len) <<  sb->s_blocksize_bits);
+> -       if (ret)
+> -               jbd_debug(1, "ext4_punch_hole returned %d", ret);
+> +       down_write(&EXT4_I(inode)->i_data_sem);
+> +       ret = ext4_ext_remove_space(inode, lrange.fc_lblk,
+> +                               lrange.fc_lblk + lrange.fc_len - 1);
+> +       up_write(&EXT4_I(inode)->i_data_sem);
+> +       if (ret) {
+> +               iput(inode);
+> +               return 0;
+> +       }
+>         ext4_ext_replay_shrink_inode(inode,
+>                 i_size_read(inode) >> sb->s_blocksize_bits);
+>         ext4_mark_inode_dirty(NULL, inode);
+> --
+> 2.20.1
+>

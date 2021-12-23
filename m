@@ -2,90 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B3B47E760
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:02:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C91947E763
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349676AbhLWSCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 13:02:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37448 "EHLO
+        id S1349687AbhLWSCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 13:02:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244522AbhLWSCQ (ORCPT
+        with ESMTP id S244679AbhLWSCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 13:02:16 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1F1C061401
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:02:15 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id e8so4816736ilm.13
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:02:15 -0800 (PST)
+        Thu, 23 Dec 2021 13:02:38 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F540C061756
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:02:38 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id f125so5737799pgc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:02:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=crcalCbsdsuGUt7vADUyZgFYhL5+xBKGp5LdAom+KUc=;
-        b=VJoR1oMjuYKabXAOvgTkMPuLCPzALe+MaI4KQ9kRyhExxQsViEwxzTgHgUP7GqUnpD
-         TyTlkB68AAujP9TtFt2qJoBcJ5tri7ynvcjNkSmAUf+SEsXAYt5mjB/OVWFS3PA/MpQA
-         hYYOzUW0weEqMTHebFGMgITqzvsfsmsRMTcmg=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=F3vp7cNpz2qk0OIvJVZgGpZrlLI8cGs8eddNh3pH4O0=;
+        b=V6LVAQd/8UIn8ldsx5JR1O9YpJZeToHbDLZbS7mg8/+loFV7/N7sZ+XhcLN4ER+wrt
+         a4OJl94CKbfUSCf2rds4kBh5Lrrm72ej4Vw2jCZdwyaTpvW1Rfri5/b6D0d+XdP6rcLq
+         EnCBOIjnXfg4hlKeBatFlHOFTTdwmCQQ6xeF/Ly1U82igCJHWiW1VL+d3kr+QmXcuLv8
+         0JyTkQyChwcIVqzmWpqo1NlewbWrHW4RFSMnsRxLAB2r1vNJbOQ7FxBRMK3jdWuCu2Zf
+         vQb1n9Yb12+2OopiSqPqPM/6Qm6od8AV54HqElWU29SUVdpkee1DGnFa+7+XiW0B251Y
+         fEzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=crcalCbsdsuGUt7vADUyZgFYhL5+xBKGp5LdAom+KUc=;
-        b=O9gUyWYZhSndMakp34yhZDsPJcZOKp41Beh5lBlr6yUK0zv32l7zWG1oamGaoy6yIB
-         moYugQsFLGsZjzv14UKz8SU5nrBe4hFWPSRsccGi0W/TtAhGB/GkwAEX575hsumwi+dd
-         ZDGlW/GGCMQ5qTDAgDWJ6yWyerlTggL+FBCnDTu8RTfd2ccE8TBYQrCrLjPR+TEme+6Y
-         5Xdcqvcjl5V6h3qM2coH71BTwcId6F4Y+0PmLMWXSw+im2HnzpEW+Y6Es6ugMRVvx51f
-         VHBeXcZLm2f0JBVa4FPiuxqzaBOlQtnj2FF1v5HFppJu0gSINPq/eiWMBMmqGbPvJ6su
-         AfRg==
-X-Gm-Message-State: AOAM5335yrMTYY6eiY8PMem/Pgc+7YL0Gqu2E1DiyquKwu45De/XEvPz
-        700FR2wjpz6qJtZPfGhQJbgzG4EavTpSoQ==
-X-Google-Smtp-Source: ABdhPJySs6IxOqMyO+caDCjivQrp/33rxoe2g7fjdQFztJUypZEhZJcO1t5hrQ1IPVmJpDxLB2l6Hg==
-X-Received: by 2002:a05:6e02:152a:: with SMTP id i10mr1674953ilu.145.1640282535026;
-        Thu, 23 Dec 2021 10:02:15 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id j5sm3066703ilo.77.2021.12.23.10.02.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Dec 2021 10:02:14 -0800 (PST)
-Subject: Re: [PATCH] tools/power/cpupower/{ToDo => TODO}: Rename the todo file
-To:     Onur Ozkan <onurozkan.dev@gmail.com>, trenn@suse.com
-Cc:     shuah@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Onur Ozkan <work@onurozkan.dev>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211204134439.79754-1-work@onurozkan.dev>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f0c8e0ac-b182-848e-6e60-38c1904ff9e1@linuxfoundation.org>
-Date:   Thu, 23 Dec 2021 11:02:13 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=F3vp7cNpz2qk0OIvJVZgGpZrlLI8cGs8eddNh3pH4O0=;
+        b=Psq5EpxUjWcbhxFGYCPdGOn5RgIkU7YCcbEyyocP+dOM+kRkPGZ68vwQx+tQ1+xhn4
+         UtgttA3FjMw/USygx5glXhE/FpCS2hqujYTAtcFSqwpRWHBQ2CWWRF1hTpHvfsV9F7xC
+         i45NwwRxKpjNlplGtUEEJ5xFiwN2muQ4FG+5qJ3pjg29lwryfr/oZvcpM5EsQnOuARtv
+         y/uwMAy82Bfh9rqKxobHQvVlkkZRAfPsTxRubgm3XqRHg3h1OyDC0E9JvqhIFeZdyZqv
+         OZMe9e3S87NFod6m/1I8kwyILIc5kYnYUX3w4BM5z0rWpzuCL84dWmFWF7VK26kFspl0
+         elZQ==
+X-Gm-Message-State: AOAM5330AOgFLDDqYseRlvn7jIsYR+G7n2qYR//7ky98Tq3mXubcqyiK
+        bLFY0bX/Gm0stWJ2xtfRn2KPbg==
+X-Google-Smtp-Source: ABdhPJwrV3ydO2yyHoylZ6+Gjlc1pXLEXn2GLpfX+eRE21Of6xThdp2NrJD74NCN2Jt8w5I9duli3Q==
+X-Received: by 2002:a65:648b:: with SMTP id e11mr3022987pgv.138.1640282557705;
+        Thu, 23 Dec 2021 10:02:37 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id gg23sm9329532pjb.31.2021.12.23.10.02.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Dec 2021 10:02:36 -0800 (PST)
+Date:   Thu, 23 Dec 2021 18:02:33 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com
+Subject: Re: [PATCH v3 kvm/queue 05/16] KVM: Maintain ofs_tree for fast
+ memslot lookup by file offset
+Message-ID: <YcS5uStTallwRs0G@google.com>
+References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
+ <20211223123011.41044-6-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20211204134439.79754-1-work@onurozkan.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211223123011.41044-6-chao.p.peng@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Dec 23, 2021, Chao Peng wrote:
+> Similar to hva_tree for hva range, maintain interval tree ofs_tree for
+> offset range of a fd-based memslot so the lookup by offset range can be
+> faster when memslot count is high.
 
-On 12/4/21 6:44 AM, Onur Ozkan wrote:
-> Renamed the to-do file to 'TODO' instead of 'ToDo' to
-> comply with the naming standard.
-> 
-> Signed-off-by: Onur Ozkan <work@onurozkan.dev>
-> ---
->   tools/power/cpupower/{ToDo => TODO} | 0
->   1 file changed, 0 insertions(+), 0 deletions(-)
->   rename tools/power/cpupower/{ToDo => TODO} (100%)
-> 
-> diff --git a/tools/power/cpupower/ToDo b/tools/power/cpupower/TODO
-> similarity index 100%
-> rename from tools/power/cpupower/ToDo
-> rename to tools/power/cpupower/TODO
-> 
+This won't work.  The hva_tree relies on there being exactly one virtual address
+space, whereas with private memory, userspace can map multiple files into the
+guest at different gfns, but with overlapping offsets.
 
-Please add reference to the new naming standard to the change log
-and send me v2.
+I also dislike hijacking __kvm_handle_hva_range() in patch 07.
 
-thanks,
--- Shuah
+KVM also needs to disallow mapping the same file+offset into multiple gfns, which
+I don't see anywhere in this series.
+
+In other words, there needs to be a 1:1 gfn:file+offset mapping.  Since userspace
+likely wants to allocate a single file for guest private memory and map it into
+multiple discontiguous slots, e.g. to skip the PCI hole, the best idea off the top
+of my head would be to register the notifier on a per-slot basis, not a per-VM
+basis.  It would require a 'struct kvm *' in 'struct kvm_memory_slot', but that's
+not a huge deal.
+
+That way, KVM's notifier callback already knows the memslot and can compute overlap
+between the memslot and the range by reversing the math done by kvm_memfd_get_pfn().
+Then, armed with the gfn and slot, invalidation is just a matter of constructing
+a struct kvm_gfn_range and invoking kvm_unmap_gfn_range().

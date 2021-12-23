@@ -2,120 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF6E47E7B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9EA347E7B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 19:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349874AbhLWSkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 13:40:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349866AbhLWSj5 (ORCPT
+        id S1349879AbhLWSnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 13:43:20 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54996 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244754AbhLWSnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 13:39:57 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD6CC061756
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:39:57 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id s189-20020a252cc6000000b005c1f206d91eso11370309ybs.14
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 10:39:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=4EEDTZmDfhZAbqDhiNkD0X+w29KWo6DZt4UFTZYEt94=;
-        b=oxili4+eOhdfDfSC+JP6bfRidYbINU+gPPIep1nyhDU/M07MpIXBUEI7cuxyVGWjGg
-         WMR8FqgyYYHCnCpK5PHC/YTNtoUqgDqP+cGY02KwD7WeQnSLiSt1veAax7lpPE4xuBSE
-         C68MqSyRxLTbeeYx9OsiZaH3cjyfNrtjGSLzPF2NB07SGXHeBpZp+KDSeX3dsL7OD3b2
-         XKhXAZh9Nb+1afy4ehkL+4UvlUt11bJ8Ftg+MW09sRI1WUStAydlnDoX1m4/3MTgbeAk
-         3FBj5vAfQY85JPKXkPDiXtZ1J74WyBcmtwm1m73yjIGd3MOkCZjSMhvREQuQ2FeWmWwP
-         pgbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=4EEDTZmDfhZAbqDhiNkD0X+w29KWo6DZt4UFTZYEt94=;
-        b=KS3rvb8k4qvnD4dUug88YxSbhSQ4h99lGCmdrfdC9k1zDdlx7X6PZPK4wbnYlh/4Tr
-         Cja1zw1v9U94lgfSwPz9nSE12dHw2HkmNqNrQ+OwoizXEGWLqXe1E+KztYZvvJz3xF53
-         YP2xTcdON2F8tmfCFSaD5jo8yyRjxjRmEyO13z/scTqvFbr4XZeiqyzWGzZP+0lprEn4
-         K529XTFO+4ECzu6DoNsFWjxOZcGvW84IYRPWqyqnpZ1A3Gzzw8ubj2PHpxGhSAfZBciF
-         vJWrfgggggcphGWz/S38psz9tifq2unJbVz41ayZH+j4HfQfRJlhpt59MmsI4mA87OLl
-         ez2Q==
-X-Gm-Message-State: AOAM531JWPGh484/VZ6mw1QqMH5cK70MCesYV2/gKqgf231ucZO70HCM
-        kJIEatbBZihOKgp/5uSYWQftGFRn4ZQl
-X-Google-Smtp-Source: ABdhPJzD/T2ne/P0+Tfvokle5nmv3pghifBobxdpm9J7oq4IdT+Zts20UZJKTrPxj3/sxdHdb4skmHVL7Z+x
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:1c9d:afe4:ff2f:9382])
- (user=irogers job=sendgmr) by 2002:a05:6902:1144:: with SMTP id
- p4mr5262901ybu.189.1640284796416; Thu, 23 Dec 2021 10:39:56 -0800 (PST)
-Date:   Thu, 23 Dec 2021 10:39:48 -0800
-In-Reply-To: <20211223183948.3423989-1-irogers@google.com>
-Message-Id: <20211223183948.3423989-2-irogers@google.com>
-Mime-Version: 1.0
-References: <20211223183948.3423989-1-irogers@google.com>
-X-Mailer: git-send-email 2.34.1.307.g9b7440fafd-goog
-Subject: [PATCH v2 2/2] perf evsel: Improve error message for uncore events
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     eranian@google.com, Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 23 Dec 2021 13:43:19 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6993B81094;
+        Thu, 23 Dec 2021 18:43:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CB60C36AE9;
+        Thu, 23 Dec 2021 18:43:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640284997;
+        bh=C31ZIEfBdG0jwSBwBBaHDjlPdBYPENbeZQHFIjtNgLo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rWdWrcVx69LyvyMBacclq+Zw5NR8b5l9BffnIO1NTKtNXOD7IELYGbTAik8wSNVjd
+         RIIrZA+jE9/ugVbtmxlsa5DoHHGTkGMuEzDUDJqDM16GZCaZj32jQMw5h9NlLH7V5J
+         HpA2VT2QIVMxYhDcQ4WJ/aHBUUGhmQJLTOipH8pptm/7nr+MMelPhNmbonOnbm8CPR
+         xgYRvvya/Zl7KKctAw/fMQ1KwOPTRSYgsOZ8v+iLMGx3Akob8fTGXMjr+MlSm6Dzv8
+         XECboLHQ726SERTJnZOzpsxGRKpn1d8PitFAMOFAqBiaxkwsRDD4YW184o6TjanLel
+         Ow2upMUsCMYfg==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pablo@netfilter.org
+Subject: [GIT PULL] Networking for 5.16-rc7
+Date:   Thu, 23 Dec 2021 10:43:16 -0800
+Message-Id: <20211223184316.3916057-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a group has multiple events and the leader fails it can yield
-errors like:
+Hi Linus!
 
-$ perf stat -e '{uncore_imc/cas_count_read/},instructions' /bin/true
-Error:
-The sys_perf_event_open() syscall returned with 22 (Invalid argument) for event (uncore_imc/cas_count_read/).
-/bin/dmesg | grep -i perf may provide additional information.
+The following changes since commit 6441998e2e37131b0a4c310af9156d79d3351c16:
 
-However, when not the group leader <not supported> is given:
+  Merge tag 'audit-pr-20211216' of git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit (2021-12-16 15:24:46 -0800)
 
-$ perf stat -e '{instructions,uncore_imc/cas_count_read/}' /bin/true
-...
-         1,619,057      instructions
-   <not supported> MiB  uncore_imc/cas_count_read/
+are available in the Git repository at:
 
-This is necessary because get_group_fd will fail if the leader fails and
-is the direct result of the check on line 750 of builtin-stat.c in
-stat_handle_error that returns COUNTER_SKIP for the latter case.
+  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.16-rc7
 
-This patch improves the error message to:
+for you to fetch changes up to 391e5975c0208ce3739587b33eba08be3e473d79:
 
-$ perf stat -e '{uncore_imc/cas_count_read/},instructions' /bin/true
-Error:
-Invalid event (uncore_imc/cas_count_read/) in per-thread mode, enable system wide with '-a'.
+  net: stmmac: dwmac-visconti: Fix value of ETHER_CLK_SEL_FREQ_SEL_2P5M (2021-12-23 09:58:13 -0800)
 
-v2. Changed the test to use !target__has_cpu as suggested by Namhyung
-    Kim.
+----------------------------------------------------------------
+Networking fixes for 5.16-rc7, including fixes from netfilter.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/evsel.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Current release - regressions:
 
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index 656c30b988ce..a0acf53a2510 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -2931,6 +2931,10 @@ int evsel__open_strerror(struct evsel *evsel, struct target *target,
- 			return scnprintf(msg, size, "wrong clockid (%d).", clockid);
- 		if (perf_missing_features.aux_output)
- 			return scnprintf(msg, size, "The 'aux_output' feature is not supported, update the kernel.");
-+		if (!target__has_cpu(target))
-+			return scnprintf(msg, size,
-+	"Invalid event (%s) in per-thread mode, enable system wide with '-a'.",
-+					evsel__name(evsel));
- 		break;
- 	case ENODATA:
- 		return scnprintf(msg, size, "Cannot collect data source with the load latency event alone. "
--- 
-2.34.1.307.g9b7440fafd-goog
+ - revert "tipc: use consistent GFP flags"
 
+Previous releases - regressions:
+
+ - igb: fix deadlock caused by taking RTNL in runtime resume path
+
+ - accept UFOv6 packages in virtio_net_hdr_to_skb
+
+ - netfilter: fix regression in looped (broad|multi)cast's MAC handling
+
+ - bridge: fix ioctl old_deviceless bridge argument
+
+ - ice: xsk: do not clear status_error0 for ntu + nb_buffs descriptor,
+	avoid stalls when multiple sockets use an interface
+
+Previous releases - always broken:
+
+ - inet: fully convert sk->sk_rx_dst to RCU rules
+
+ - veth: ensure skb entering GRO are not cloned
+
+ - sched: fix zone matching for invalid conntrack state
+
+ - bonding: fix ad_actor_system option setting to default
+
+ - nf_tables: fix use-after-free in nft_set_catchall_destroy()
+
+ - lantiq_xrx200: increase buffer reservation to avoid mem corruption
+
+ - ice: xsk: avoid leaking app buffers during clean up
+
+ - tun: avoid double free in tun_free_netdev
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+
+----------------------------------------------------------------
+Aleksander Jan Bajkowski (1):
+      net: lantiq_xrx200: increase buffer reservation
+
+Alexander Lobakin (1):
+      ice: remove dead store on XSK hotpath
+
+David S. Miller (2):
+      Merge git://git.kernel.org/pub/scm/linux/kernel/git/pablo/nf
+      Merge branch '100GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue
+
+Eric Dumazet (2):
+      netfilter: nf_tables: fix use-after-free in nft_set_catchall_destroy()
+      inet: fully convert sk->sk_rx_dst to RCU rules
+
+Fernando Fernandez Mancera (1):
+      bonding: fix ad_actor_system option setting to default
+
+Florian Westphal (1):
+      netfilter: ctnetlink: remove expired entries first
+
+George Kennedy (1):
+      tun: avoid double free in tun_free_netdev
+
+Hayes Wang (2):
+      r8152: fix the force speed doesn't work for RTL8156
+      r8152: sync ocp base
+
+Heiner Kallweit (1):
+      igb: fix deadlock caused by taking RTNL in RPM resume path
+
+Hoang Le (1):
+      Revert "tipc: use consistent GFP flags"
+
+Ignacy Gawędzki (1):
+      netfilter: fix regression in looped (broad|multi)cast's MAC handling
+
+Jakub Kicinski (2):
+      Merge branch 'net-sched-fix-ct-zone-matching-for-invalid-conntrack-state'
+      Merge branch 'r8152-fix-bugs'
+
+Jeroen de Borst (1):
+      gve: Correct order of processing device options
+
+Jiasheng Jiang (6):
+      qlcnic: potential dereference null pointer of rx_queue->page_ring
+      fjes: Check for error irq
+      drivers: net: smc911x: Check for error irq
+      net: ks8851: Check for error irq
+      sfc: Check null pointer of rx_queue->page_ring
+      sfc: falcon: Check null pointer of rx_queue->page_ring
+
+Johannes Berg (1):
+      mac80211: fix locking in ieee80211_start_ap error path
+
+Lin Ma (2):
+      hamradio: improve the incomplete fix to avoid NPD
+      ax25: NPD bug when detaching AX25 device
+
+Maciej Fijalkowski (5):
+      ice: xsk: return xsk buffers back to pool when cleaning the ring
+      ice: xsk: allocate separate memory for XDP SW ring
+      ice: xsk: do not clear status_error0 for ntu + nb_buffs descriptor
+      ice: xsk: allow empty Rx descriptors on XSK ZC data path
+      ice: xsk: fix cleaned_count setting
+
+Nobuhiro Iwamatsu (1):
+      net: stmmac: dwmac-visconti: Fix value of ETHER_CLK_SEL_FREQ_SEL_2P5M
+
+Paolo Abeni (1):
+      veth: ensure skb entering GRO are not cloned.
+
+Paul Blakey (3):
+      net/sched: Extend qdisc control block with tc control block
+      net/sched: flow_dissector: Fix matching on zone id for invalid conns
+      net: openvswitch: Fix matching zone id for invalid conns arriving from tc
+
+Pavel Skripkin (2):
+      asix: fix uninit-value in asix_mdio_read()
+      asix: fix wrong return value in asix_check_host_enable()
+
+Remi Pommarel (1):
+      net: bridge: fix ioctl old_deviceless bridge argument
+
+Rémi Denis-Courmont (1):
+      phonet/pep: refuse to enable an unbound pipe
+
+Sean Anderson (1):
+      docs: networking: dpaa2: Fix DPNI header
+
+Willem de Bruijn (3):
+      docs: networking: replace skb_hwtstamp_tx with skb_tstamp_tx
+      net: accept UFOv6 packages in virtio_net_hdr_to_skb
+      net: skip virtio_net_hdr_set_proto if protocol already set
+
+Xiang wangx (1):
+      net: fix typo in a comment
+
+Xiaoliang Yang (2):
+      net: dsa: tag_ocelot: use traffic class to map priority on injected header
+      net: stmmac: ptp: fix potentially overflowing expression
+
+Yevhen Orlov (2):
+      net: marvell: prestera: fix incorrect return of port_find
+      net: marvell: prestera: fix incorrect structure access
+
+ Documentation/networking/bonding.rst               |  11 +-
+ .../ethernet/freescale/dpaa2/overview.rst          |   1 +
+ Documentation/networking/timestamping.rst          |   4 +-
+ drivers/net/bonding/bond_options.c                 |   2 +-
+ drivers/net/ethernet/google/gve/gve_adminq.c       |   8 +-
+ drivers/net/ethernet/intel/ice/ice_base.c          |  17 +++
+ drivers/net/ethernet/intel/ice/ice_txrx.c          |  19 ++--
+ drivers/net/ethernet/intel/ice/ice_txrx.h          |   1 -
+ drivers/net/ethernet/intel/ice/ice_xsk.c           |  66 ++++++------
+ drivers/net/ethernet/intel/igb/igb_main.c          |  19 ++--
+ drivers/net/ethernet/lantiq_xrx200.c               |  34 ++++--
+ .../net/ethernet/marvell/prestera/prestera_main.c  |  35 ++++---
+ drivers/net/ethernet/micrel/ks8851_par.c           |   2 +
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h  |   2 +-
+ .../ethernet/qlogic/qlcnic/qlcnic_sriov_common.c   |  12 ++-
+ .../net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c   |   4 +-
+ drivers/net/ethernet/sfc/falcon/rx.c               |   5 +-
+ drivers/net/ethernet/sfc/rx_common.c               |   5 +-
+ drivers/net/ethernet/smsc/smc911x.c                |   5 +
+ .../net/ethernet/stmicro/stmmac/dwmac-visconti.c   |   2 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c   |   2 +-
+ drivers/net/fjes/fjes_main.c                       |   5 +
+ drivers/net/hamradio/mkiss.c                       |   4 +-
+ drivers/net/tun.c                                  | 115 +++++++++++----------
+ drivers/net/usb/asix_common.c                      |   8 +-
+ drivers/net/usb/r8152.c                            |  43 +++++++-
+ drivers/net/veth.c                                 |   8 +-
+ include/linux/netdevice.h                          |   2 +-
+ include/linux/skbuff.h                             |   3 +-
+ include/linux/virtio_net.h                         |  25 ++++-
+ include/net/pkt_sched.h                            |  16 +++
+ include/net/sch_generic.h                          |   2 -
+ include/net/sock.h                                 |   2 +-
+ net/ax25/af_ax25.c                                 |   4 +-
+ net/bridge/br_ioctl.c                              |   2 +-
+ net/core/dev.c                                     |   8 +-
+ net/core/flow_dissector.c                          |   3 +-
+ net/dsa/tag_ocelot.c                               |   6 +-
+ net/ipv4/af_inet.c                                 |   2 +-
+ net/ipv4/tcp.c                                     |   3 +-
+ net/ipv4/tcp_input.c                               |   2 +-
+ net/ipv4/tcp_ipv4.c                                |  11 +-
+ net/ipv4/udp.c                                     |   6 +-
+ net/ipv6/tcp_ipv6.c                                |  11 +-
+ net/ipv6/udp.c                                     |   4 +-
+ net/mac80211/cfg.c                                 |   3 +
+ net/netfilter/nf_conntrack_netlink.c               |   5 +-
+ net/netfilter/nf_tables_api.c                      |   4 +-
+ net/netfilter/nfnetlink_log.c                      |   3 +-
+ net/netfilter/nfnetlink_queue.c                    |   3 +-
+ net/openvswitch/flow.c                             |   8 +-
+ net/phonet/pep.c                                   |   2 +
+ net/sched/act_ct.c                                 |  15 +--
+ net/sched/cls_api.c                                |   7 +-
+ net/sched/cls_flower.c                             |   6 +-
+ net/sched/sch_frag.c                               |   3 +-
+ net/tipc/crypto.c                                  |   8 +-
+ 57 files changed, 405 insertions(+), 213 deletions(-)

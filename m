@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EF647DD27
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD8847DD26
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 02:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346754AbhLWBQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 20:16:14 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:27490 "EHLO
+        id S1346065AbhLWBQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 20:16:11 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:27376 "EHLO
         o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346272AbhLWBOy (ORCPT
+        with ESMTP id S1346245AbhLWBOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:14:54 -0500
+        Wed, 22 Dec 2021 20:14:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
         h=from:subject:in-reply-to:references:mime-version:to:cc:
         content-transfer-encoding:content-type;
-        s=sgd; bh=Hgcvux2x80iJNHTT8Ywl3SP3JaAxVpVY4jdADVtyp24=;
-        b=Zxb6E2yywaTqNbgdk7xF0Hb7M6bZBGfSj3ue71HXm4EUzTfmYCieKc5YrGHzJivzvITU
-        2jjwWex4r8C0OEf36dCqam1wf463/NKRRF9WVkndExYOdxJqUngipCu0twbUaT3ISfBFf7
-        q1+FWbqsZOvxOo1IhHi5uehOOd2NY8lx6/jz6LDTB49CrLLlO3omRSuO+wX48ggI28hcf3
-        X4DQKtvgpP9Q+hJSvn5nuRSy5seVlrXDm8n/C6Rv3V0RK1sBARuARnz8WjnSHbjY8VWMwQ
-        1fbdWTSv3g9oDNr/YFMFuS11NrbVdTR8CU868BHcJCva9Jlkj50HxtaYkYIzAaPA==
-Received: by filterdrecv-7bf5c69d5-n84ln with SMTP id filterdrecv-7bf5c69d5-n84ln-1-61C3CD5E-B
-        2021-12-23 01:14:06.168607769 +0000 UTC m=+9687225.761254579
+        s=sgd; bh=xa4Us+PL63HXTtD7NxFyiz9UQq8xrKpb1fAV6hO+Qos=;
+        b=WiZqrxgJlOKay0jg9TQu/g1baC7D/NHFCmEBfBMFkyg2Y/etuV58hyWZC1NZspf9lXvi
+        f/jbkAQqQ85c1JPaBNTUTKfyzpKvp8/hrhdK0FQ6zM9aU6x6UaII3FO8FBWU24e5QecB7Y
+        7bIYYro2Bc9OBEWb3px/lQv2rb07DekYdzV6yUktA2Zn1cft2a5mThYNtCoFrrnDx7Gve3
+        90zLzkaEh/l3Jkug+xb6kRY+zKClA1e91wxm+uBSS0N0T2QEpCK/h3npFW1Yfdq15Cynx6
+        C6NgCT0pnOr/k43D0G1uleBotenNddXjH4pYkftOpD8MQ26k0VRwwAWl+WkMJKqg==
+Received: by filterdrecv-656998cfdd-gwqfx with SMTP id filterdrecv-656998cfdd-gwqfx-1-61C3CD5F-8
+        2021-12-23 01:14:07.173124434 +0000 UTC m=+7955180.579837087
 Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-1-1 (SG)
+        by geopod-ismtpd-4-0 (SG)
         with ESMTP
-        id SbsXXKDTRbKHV6cqEM3tPw
-        Thu, 23 Dec 2021 01:14:06.029 +0000 (UTC)
+        id qmYqcDsPSkiR11jDDKCxIg
+        Thu, 23 Dec 2021 01:14:07.006 +0000 (UTC)
 Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id E32C1700BFC; Wed, 22 Dec 2021 18:14:04 -0700 (MST)
+        id 0D143701564; Wed, 22 Dec 2021 18:14:06 -0700 (MST)
 From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH v2 05/50] wilc1000: add wilc_wlan_tx_packet_done() function
+Subject: [PATCH v2 48/50] wilc1000: introduce function to find and check DMA
+ response
 Date:   Thu, 23 Dec 2021 01:14:07 +0000 (UTC)
-Message-Id: <20211223011358.4031459-6-davidm@egauge.net>
+Message-Id: <20211223011358.4031459-49-davidm@egauge.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211223011358.4031459-1-davidm@egauge.net>
 References: <20211223011358.4031459-1-davidm@egauge.net>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvCKFafSZUZYOu1P05?=
- =?us-ascii?Q?CEj+Zsb9CK5JKRSqsrljNdImB023LgVhJEGXKH0?=
- =?us-ascii?Q?RMK5+rzygP7Kr=2FZNSpO4YzuYBgPGjO47BNoSu6x?=
- =?us-ascii?Q?ucblNqztTA6oVa1MnqWOIDTWz=2FN7Zk223PDRRyM?=
- =?us-ascii?Q?q+X7M2XcTZLbyaC1vKvXwXTwp1mCRPsN=2FEiSdtr?=
- =?us-ascii?Q?Iq8S3KfVsh7kFqFfW4G=2Fw=3D=3D?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvHaV6O7GMUw=2FW4PJd?=
+ =?us-ascii?Q?G4gRHrkryCd=2F53ygKA8OXI7MLM8aSLx7D5aeIlN?=
+ =?us-ascii?Q?Edbxks55dlrMYbZ9kHO1bo7vRbn7Y8d2hC1aSCb?=
+ =?us-ascii?Q?21oTOMfn+Zo0RhKHLMiFSwscVNdiWwbAlBaY1xx?=
+ =?us-ascii?Q?=2FSuIxojWa+K18TMEWg0ziNo9r67rZ3h1qPunt+N?=
+ =?us-ascii?Q?2waf0iru1bcfQSSIGsnYA=3D=3D?=
 To:     Ajay Singh <ajay.kathat@microchip.com>
 Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
         Kalle Valo <kvalo@kernel.org>,
@@ -60,76 +61,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Factor common tx packet-done handling code into a function.
+Refactor DMA response checking from spi_data_rsp() into its own
+function spi_data_check_rsp() as that will come in handy later.
 
 Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
 ---
- .../net/wireless/microchip/wilc1000/wlan.c    | 31 +++++++++----------
- 1 file changed, 14 insertions(+), 17 deletions(-)
+ drivers/net/wireless/microchip/wilc1000/spi.c | 52 +++++++++++--------
+ 1 file changed, 30 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
-index 97624f758cbe4..7b7ee6ee9f849 100644
---- a/drivers/net/wireless/microchip/wilc1000/wlan.c
-+++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
-@@ -190,6 +190,16 @@ static inline void tcp_process(struct net_device *dev, struct txq_entry_t *tqe)
- 	spin_unlock_irqrestore(&wilc->txq_spinlock, flags);
+diff --git a/drivers/net/wireless/microchip/wilc1000/spi.c b/drivers/net/wireless/microchip/wilc1000/spi.c
+index 3e2022b43ee70..8951202ed76e2 100644
+--- a/drivers/net/wireless/microchip/wilc1000/spi.c
++++ b/drivers/net/wireless/microchip/wilc1000/spi.c
+@@ -80,6 +80,18 @@ static int wilc_spi_reset(struct wilc *wilc);
+ #define PROTOCOL_REG_CRC16_MASK			GENMASK(3, 3)
+ #define PROTOCOL_REG_CRC7_MASK			GENMASK(2, 2)
+ 
++/* The response to data packets is two bytes long.  For efficiency's
++ * sake, when DMAing data to WILC, we ignore the responses for all
++ * data packets except the final one.  The downside of this
++ * optimization is that when the final data packet is short, we may
++ * receive (part of) the response to the second-to-last packet before
++ * the one for the final packet.  To handle this, we always read 4
++ * bytes and then search for the last byte that contains the "Response
++ * Start" code (0xc in the top 4 bits).  We then know that this byte
++ * is the first response byte of the final data packet.
++ */
++#define WILC_SPI_DATA_RSP_BYTES	4
++
+ /*
+  * The SPI data packet size may be any integer power of two in the
+  * range from 256 to 8192 bytes.
+@@ -950,31 +962,13 @@ static int wilc_spi_write_reg(struct wilc *wilc, u32 addr, u32 data)
+ 	return 0;
  }
  
-+static void wilc_wlan_tx_packet_done(struct txq_entry_t *tqe, int status)
+-static int spi_data_rsp(struct wilc *wilc, u8 cmd)
++static int spi_data_check_rsp(struct wilc *wilc,
++			      u8 rsp[WILC_SPI_DATA_RSP_BYTES])
+ {
+ 	struct spi_device *spi = to_spi_device(wilc->dev);
+-	int result, i;
+-	u8 rsp[4];
+-
+-	/*
+-	 * The response to data packets is two bytes long.  For
+-	 * efficiency's sake, wilc_spi_write() wisely ignores the
+-	 * responses for all packets but the final one.  The downside
+-	 * of that optimization is that when the final data packet is
+-	 * short, we may receive (part of) the response to the
+-	 * second-to-last packet before the one for the final packet.
+-	 * To handle this, we always read 4 bytes and then search for
+-	 * the last byte that contains the "Response Start" code (0xc
+-	 * in the top 4 bits).  We then know that this byte is the
+-	 * first response byte of the final data packet.
+-	 */
+-	result = wilc_spi_rx(wilc, rsp, sizeof(rsp));
+-	if (result) {
+-		dev_err(&spi->dev, "Failed bus error...\n");
+-		return result;
+-	}
++	int i;
+ 
+-	for (i = sizeof(rsp) - 2; i >= 0; --i)
++	for (i = WILC_SPI_DATA_RSP_BYTES - 2; i >= 0; --i)
+ 		if (FIELD_GET(RSP_START_FIELD, rsp[i]) == RSP_START_TAG)
+ 			break;
+ 
+@@ -996,6 +990,20 @@ static int spi_data_rsp(struct wilc *wilc, u8 cmd)
+ 	return 0;
+ }
+ 
++static int spi_data_rsp(struct wilc *wilc, u8 cmd)
 +{
-+	tqe->status = status;
-+	if (tqe->tx_complete_func)
-+		tqe->tx_complete_func(tqe->priv, tqe->status);
-+	if (tqe->ack_idx != NOT_TCP_ACK && tqe->ack_idx < MAX_PENDING_ACKS)
-+		tqe->vif->ack_filter.pending_acks[tqe->ack_idx].txqe = NULL;
-+	kfree(tqe);
++	struct spi_device *spi = to_spi_device(wilc->dev);
++	u8 rsp[WILC_SPI_DATA_RSP_BYTES];
++	int result;
++
++	result = wilc_spi_rx(wilc, rsp, sizeof(rsp));
++	if (result) {
++		dev_err(&spi->dev, "Failed bus error...\n");
++		return result;
++	}
++	return spi_data_check_rsp(wilc, rsp);
 +}
 +
- static void wilc_wlan_txq_filter_dup_tcp_ack(struct net_device *dev)
+ static int wilc_spi_write(struct wilc *wilc, u32 addr, u8 *buf, u32 size)
  {
- 	struct wilc_vif *vif = netdev_priv(dev);
-@@ -220,11 +230,7 @@ static void wilc_wlan_txq_filter_dup_tcp_ack(struct net_device *dev)
- 			tqe = f->pending_acks[i].txqe;
- 			if (tqe) {
- 				wilc_wlan_txq_remove(wilc, tqe->q_num, tqe);
--				tqe->status = 1;
--				if (tqe->tx_complete_func)
--					tqe->tx_complete_func(tqe->priv,
--							      tqe->status);
--				kfree(tqe);
-+				wilc_wlan_tx_packet_done(tqe, 1);
- 			}
- 		}
- 	}
-@@ -911,13 +917,7 @@ int wilc_wlan_handle_txq(struct wilc *wilc, u32 *txq_count)
- 		       tqe->buffer, tqe->buffer_size);
- 		offset += vmm_sz;
- 		i++;
--		tqe->status = 1;
--		if (tqe->tx_complete_func)
--			tqe->tx_complete_func(tqe->priv, tqe->status);
--		if (tqe->ack_idx != NOT_TCP_ACK &&
--		    tqe->ack_idx < MAX_PENDING_ACKS)
--			vif->ack_filter.pending_acks[tqe->ack_idx].txqe = NULL;
--		kfree(tqe);
-+		wilc_wlan_tx_packet_done(tqe, 1);
- 	} while (--entries);
- 	for (i = 0; i < NQUEUES; i++)
- 		wilc->fw[i].count += ac_pkt_num_to_chip[i];
-@@ -1236,11 +1236,8 @@ void wilc_wlan_cleanup(struct net_device *dev)
- 
- 	wilc->quit = 1;
- 	for (ac = 0; ac < NQUEUES; ac++) {
--		while ((tqe = wilc_wlan_txq_remove_from_head(wilc, ac))) {
--			if (tqe->tx_complete_func)
--				tqe->tx_complete_func(tqe->priv, 0);
--			kfree(tqe);
--		}
-+		while ((tqe = wilc_wlan_txq_remove_from_head(wilc, ac)))
-+			wilc_wlan_tx_packet_done(tqe, 0);
- 	}
- 
- 	while ((rqe = wilc_wlan_rxq_remove(wilc)))
+ 	struct spi_device *spi = to_spi_device(wilc->dev);
 -- 
 2.25.1
 

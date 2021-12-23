@@ -2,65 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2229247E29B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 12:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0DAA47E2A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 12:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348028AbhLWLu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 06:50:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
+        id S243350AbhLWLwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 06:52:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbhLWLuZ (ORCPT
+        with ESMTP id S233724AbhLWLwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 06:50:25 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FAEC061401;
-        Thu, 23 Dec 2021 03:50:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jN4W7V/DKmT3sEjHZdJJG0OYk3hQiWIlt6ROG0e5110=; b=A8+rMjJj7+zIoLXVrSzuuQgtX3
-        FC18qgYDhAvzNlz73HYh1fhvTmsCNsFGLaDPXN2WAf8VpOep8pVXQLLjkzUsBTyp/W7nOp3lzUWg3
-        sYUYFU5acqxNldiW5xybkYrBJS0K6etgpLeu2U5F5Mrj+URr5NbkZC5oLXBr04lHzVTrrv2EEBtJb
-        k9abJqzBG91h8OUFPKC/VFN+NMM30AMvunStEIFG4Oy0z1IRMKTnsd3oJ57sRKs/3jp0Z2BxbipvJ
-        1X27y8ige9wnn1+klRnxSMtEblPVn8BxGMKwR+eqRXYPtkc9rOGo3XqGHmsNqmuHzZEIXiFn9y1G6
-        bH+ijzFw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n0Mc3-00Ccyi-H0; Thu, 23 Dec 2021 11:50:23 +0000
-Date:   Thu, 23 Dec 2021 03:50:23 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        linux-block@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
-        ming.lei@redhat.com, hch@lst.de, Long Li <longli@microsoft.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: very low IOPS due to "block: reduce
- kblockd_mod_delayed_work_on() CPU consumption"
-Message-ID: <YcRif3u3GxUdP3il@infradead.org>
-References: <1639853092.524jxfaem2.none.ref@localhost>
- <1639853092.524jxfaem2.none@localhost>
- <7d1e4bb8-1a73-9529-3191-66df4ff2d5fe@kernel.dk>
- <12f43a71-713b-a74f-a169-b6ac3d804e50@kernel.dk>
- <237bd7d8-9e75-01b5-ebe7-8b1eb747474b@kernel.dk>
+        Thu, 23 Dec 2021 06:52:30 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60557C061401
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 03:52:30 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id g132so3467236wmg.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 03:52:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=colorfullife-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=vz4h/RJ8rZ3VS60YQh1WzGOuxDSr5YtX1Zwui52SKVc=;
+        b=SQOpFeLuoIK3AUyO8KTyYlw5E20xMmt6Y85TplQ3xxU4QTHzjk26xwSIFYRtKEdG+J
+         mP4s7UlLqs1+r5kLlZFQbF0R/Gb/cjcy8A8xJpWn6BggMskkHY0ieIIBIvMJW2XBMxj/
+         wc2pOSlw/ItFJRt4xfC9M/5zEvwZXQfy4D0YQz6oIwplLnn4PbDwQSIH1/9ueRehVcpz
+         mXVL2Kv7pjM6TTEg5ng8zONcg/VDur0BL1Wmavj7WpeIYOFCd4Ax4Y3EmJERfrV49TvK
+         G6+RP2c/u9fl7PDQsrnoxE2Dt3+/u7Yy0FT/q1sIg5+W+liYVJaTedRZWciOBw1OmKTB
+         0Zug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vz4h/RJ8rZ3VS60YQh1WzGOuxDSr5YtX1Zwui52SKVc=;
+        b=o7XiMTqakIkRfhobUwwpYJfCvQ/OZcN9hhGyJvPV92ITIfDQcpAxu9PqXgi91k+lZE
+         kQi3R8QF5srqGohNoTkHf3VJjpAsDMJtlK/QTaSIPHifGenYImakzMQguMFO5dfu85ZD
+         WEKviHgp7weEDqDiKkxIu7/pC1LWmyGN7jQ5DaJdbo9/CJZit+MFzNqckvoPxrlX+Bsh
+         4j8vcgzNV1wTXzH7xUlhQCG6Di8fPMioqkQs3+bAj8BjNfyaaDci5DWEuAz+/H4oqX2G
+         UFHBJozQK7YD/YGi6eCrLUJrJlJh73KFmkhZhd6TfgwoUbx6fS01fHtBkYW720p4eW0T
+         lVhA==
+X-Gm-Message-State: AOAM530vIr5TSPe4MjCsRN/XVU7LBbd44weDsi93RWhcmHUgSjbp3JYJ
+        BjbMemw5YvP02fia6n6ek2KmOA==
+X-Google-Smtp-Source: ABdhPJxr2eV0xUcmK0kd5NhXFsKWLzuRNo0SVcNrD/CNu9SSi5hSue+5jMAuBJrcIgxQQ3TVVNPbwQ==
+X-Received: by 2002:a1c:c908:: with SMTP id f8mr1440221wmb.193.1640260348998;
+        Thu, 23 Dec 2021 03:52:28 -0800 (PST)
+Received: from ?IPV6:2003:d9:970a:ab00:ae94:992d:1079:bfc? (p200300d9970aab00ae94992d10790bfc.dip0.t-ipconnect.de. [2003:d9:970a:ab00:ae94:992d:1079:bfc])
+        by smtp.googlemail.com with ESMTPSA id i1sm7601297wml.26.2021.12.23.03.52.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Dec 2021 03:52:18 -0800 (PST)
+Message-ID: <937f1320-6b7e-9aa2-2a21-7fd2f94eeb32@colorfullife.com>
+Date:   Thu, 23 Dec 2021 12:52:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <237bd7d8-9e75-01b5-ebe7-8b1eb747474b@kernel.dk>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] mm/util.c: Make kvfree() safe for calling while holding
+ spinlocks
+Content-Language: en-US
+To:     Vasily Averin <vvs@virtuozzo.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     cgel.zte@gmail.com, shakeelb@google.com, rdunlap@infradead.org,
+        dbueso@suse.de, unixbhaskar@gmail.com, chi.minghao@zte.com.cn,
+        arnd@arndb.de, Zeal Robot <zealci@zte.com.cn>, linux-mm@kvack.org,
+        1vier1@web.de, stable@vger.kernel.org
+References: <20211222194828.15320-1-manfred@colorfullife.com>
+ <3ca4dec8-f0bd-740f-73c8-34fc6fc1cf66@virtuozzo.com>
+From:   Manfred Spraul <manfred@colorfullife.com>
+In-Reply-To: <3ca4dec8-f0bd-740f-73c8-34fc6fc1cf66@virtuozzo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 19, 2021 at 08:28:18AM -0700, Jens Axboe wrote:
-> > 
-> > Dexuan, can you test this for your test case too? I'm going to queue
-> > up a revert for -rc6 just in case.
-> 
-> This one should be better...
+Hello Vasily,
 
-We might just want something like a revert of
-9f993737906b30d7b2454a38637d1f70ffd60f2f.
+On 12/23/21 08:21, Vasily Averin wrote:
+>
+> I would prefer to release memory ASAP if it's possible.
+> What do you think about this change?
+> --- a/mm/util.c
+> +++ b/mm/util.c
+> @@ -614,9 +614,12 @@ EXPORT_SYMBOL(kvmalloc_node);
+>    */
+>   void kvfree(const void *addr)
+>   {
+> -       if (is_vmalloc_addr(addr))
+> -               vfree(addr);
+> -       else
+> +       if (is_vmalloc_addr(addr)) {
+> +               if (in_atomic())
+> +                       vfree_atomic();
+> +               else
+> +                       vfree(addr);
+> +       } else
+>                  kfree(addr);
+>   }
+>   EXPORT_SYMBOL(kvfree);
+>
+Unfortunately this cannot work:
 
-Or just always use a normal work queue for run_work, and then use a
-timer to schedule it for the relatively rare delayed case.
+> /*
+> * Are we running in atomic context?  WARNING: this macro cannot
+> * always detect atomic context; in particular, it cannot know about
+> * held spinlocks in non-preemptible kernels.  Thus it should not be
+> * used in the general case to determine whether sleeping is possible.
+> * Do not use in_atomic() in driver code.
+> */
+> #define in_atomic()     (preempt_count() != 0)
+>
+
+--
+
+     Manfred
+

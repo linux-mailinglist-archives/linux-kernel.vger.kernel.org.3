@@ -2,127 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9421347E72C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 18:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B806B47E730
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 18:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244477AbhLWRgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 12:36:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59858 "EHLO
+        id S244502AbhLWRhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 12:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235671AbhLWRgY (ORCPT
+        with ESMTP id S237588AbhLWRhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 12:36:24 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971D6C06175A
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 09:36:24 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso9402653pji.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 09:36:24 -0800 (PST)
+        Thu, 23 Dec 2021 12:37:23 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4895FC061401
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 09:37:23 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id d10so18594479ybe.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 09:37:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dPYUZWC+77UBrBLBUUxU9fHb6AxVTt9UdaUWIxpei+o=;
-        b=L0sjRUzYInvoF3lTrWwfgbrnXNR7T+eXsaPmPTag7OLNZPysAOAy+7D/eWdc8Y8pWa
-         ZYd8pC2fEDwzZy3dX8MHG6cokMq+LvNvhyVHt7n4Ot4zwmRwldtutxXO3oyyhccGcTGj
-         6HqoZZOHqzyqhn2YiN2yvj0pdcsduMD2RNXRxGoK6VCf9RFwFffI4Bcz668E4CDGnHCe
-         W9InkcEY0CD9FxjiRL4s4xROMFQ19FlU2EzPctV1dHFiCYC2qFsXNDzh4+eMW8ZOMg0i
-         GvYkYHgDSayVhkayneoGjmk9tIMU7TKP2/FjiXoGEbnsbQKYI7gPlGu5VC6SGmmrwTQd
-         Q6mA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KUeVodc32xriSm1pts3x5c9nn/1tURjzxfW/sn365PQ=;
+        b=pUhYAX/xZmgCQH10337pELpQwQeqYlsrNaSrJZpIiPKfCv2VZngQDBpaelUOctwRmA
+         fMtJpgbEovFrAn7Ot6fv6ujwLBpifVJ0C1ZyGGOJ7Y2hK45Xd8pBWRfEw2JT+3+j968v
+         4YT3bxpFsoPhvoXKxbJC2lUrlk7KHXCfeKJoJbwhefbBm8KFrX6TjECv/N5vHTj06nde
+         wYDllw8uCKfuPCElnv+gNk2zP94g2ne/LlvxK68l/xdu2a/inS2gCaSJ9slb5vToqOwQ
+         16OeASno9PbnY4U2kcO36hCGwtJUCuXAn6WH05Wa9Ciunc7FLb37OPNQ7wfUnB1GvJDj
+         5Prw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=dPYUZWC+77UBrBLBUUxU9fHb6AxVTt9UdaUWIxpei+o=;
-        b=DOx73POf5PiXMulDzScndOK/b6lbZdIsheU8USMHHBgSgdU819I9AmNc7F/7yQsuPI
-         gamIhouIDQ2uSF6l5fwYVoEK+3Lu75oqERCaPLgo+YBUervSdTlubUxMiqmMMEC3S5HU
-         dK7cbKKB2AU0rXPsgpIUEZ/zcakLWi9ed+5NCmLg2KFr9KcMwcmEoZ/FkAPSbV/XYpgK
-         4bdasUV8iVzjuqRzw7CY5fhs9ABurC+poLNeyGUfL96cWvL63atxzSKNDUXvUQjK46Gd
-         Ahp9OUJhVgaCvF9hlcGQCAp00TFeeNAoG6PZ2+gn9Jd4dn7D88ufkDFsBnKfFYPrBJa2
-         uutA==
-X-Gm-Message-State: AOAM53200cEs4tSyvUmME8hg9PkUuEuT1Iy0Obbzgvq124BgGg5Eyeyl
-        sbWkPBR2SBa2su49gGkEdPMr1w==
-X-Google-Smtp-Source: ABdhPJypoRaM/7mbkBhlfvlUN6kGHVEF9KQ22b8kXscmQCQL7JNkF0LVo3y3phgMBogpBLz4jmYGaw==
-X-Received: by 2002:a17:90b:4d07:: with SMTP id mw7mr3712671pjb.69.1640280983976;
-        Thu, 23 Dec 2021 09:36:23 -0800 (PST)
-Received: from localhost ([12.163.77.120])
-        by smtp.gmail.com with ESMTPSA id g6sm7407727pfj.156.2021.12.23.09.36.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Dec 2021 09:36:23 -0800 (PST)
-Date:   Thu, 23 Dec 2021 09:36:23 -0800 (PST)
-X-Google-Original-Date: Thu, 23 Dec 2021 09:36:07 PST (-0800)
-Subject:     Re: [PATCH v2 17/17] MAINTAINERS: update riscv/microchip entry
-In-Reply-To: <05d6a273-19f6-2147-75ba-1fff726a0f70@microchip.com>
-CC:     krzysztof.kozlowski@canonical.com, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, robh+dt@kernel.org,
-        jassisinghbrar@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, broonie@kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        geert@linux-m68k.org, bin.meng@windriver.com, heiko@sntech.de,
-        Lewis.Hanly@microchip.com, Daire.McNamara@microchip.com,
-        Ivan.Griffin@microchip.com, Atish Patra <atishp@rivosinc.com>
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor.Dooley@microchip.com
-Message-ID: <mhng-0e4cde83-cfa1-4bf6-9f2c-611d9a4ddb5f@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KUeVodc32xriSm1pts3x5c9nn/1tURjzxfW/sn365PQ=;
+        b=kfaCKpQ+eNqqTjgmr0wht/lQm30mT0J5ez5PI+LGCpxXEm+fCfAj+UH7CSg70b6NdU
+         UzGtcHXWxx5M1a3Rr0ApjQqPRgEeI/JA7jabenPM4jaPsI+BzmvbmrWLsK0omuu5PtvD
+         ccp9HbyGq78C0IOGQV0b2O2RuZZJRDIQR1exFaydUEQYwAe+Nv4E75eyc+Jaf1UHtPPs
+         XrwQG2+BljZQNQsvVybYhmhKKut3ZNd56kJjmCK4EGPgy6SdGGgrkvLodJ7bzLXaobRg
+         bO73Hz/arpCb2ysS6mehYKXbSyt/UxFsv6aNAo+27pDj/od9i8lr4fbVfOXrjGllUpkY
+         y+Ig==
+X-Gm-Message-State: AOAM532EcpVRgTjC5l44IAzSShGwwKDOx+iKXsTy3cukDp2ar2NygULT
+        e3NRAJfEfDJpFrFO7kXiSlSuGoo40HjIfnX1XeU=
+X-Google-Smtp-Source: ABdhPJwGp0CD0g7j0WHniWa/we1JWICoA+6kOxGAF1A+2M8FxbUKy01MKjP6qea2hb9gkJFTI8naq162/Tn1tOLAmVc=
+X-Received: by 2002:a25:98c4:: with SMTP id m4mr4574126ybo.613.1640281042468;
+ Thu, 23 Dec 2021 09:37:22 -0800 (PST)
+MIME-Version: 1.0
+References: <20211223130046.9365-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211223130046.9365-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <f9efc8e8-9dc6-8a80-15bb-bc2d9aaf60cb@arm.com>
+In-Reply-To: <f9efc8e8-9dc6-8a80-15bb-bc2d9aaf60cb@arm.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 23 Dec 2021 17:36:56 +0000
+Message-ID: <CA+V-a8vqpX=z9a+s=pgCY07EE6=uhdtq_NJOr+8VoGZ21kUmLQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] iommu/arm-smmu: Use platform_irq_count() to get the
+ interrupt count
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Will Deacon <will@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Rob Clark <robdclark@chromium.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        Xin Tan <tanxin.ctf@gmail.com>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Dec 2021 06:56:45 PST (-0800), Conor.Dooley@microchip.com wrote:
-> On 17/12/2021 15:09, Krzysztof Kozlowski wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->> 
->> On 17/12/2021 10:33, conor.dooley@microchip.com wrote:
->>> From: Conor Dooley <conor.dooley@microchip.com>
->>>
->>> Update the RISC-V/Microchip entry by adding the microchip dts
->>> directory and myself as maintainer
->>>
->>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->>> ---
->>>   MAINTAINERS | 2 ++
->>>   1 file changed, 2 insertions(+)
->>>
->>> diff --git a/MAINTAINERS b/MAINTAINERS
->>> index 7a2345ce8521..3b1d6be7bd56 100644
->>> --- a/MAINTAINERS
->>> +++ b/MAINTAINERS
->>> @@ -16348,8 +16348,10 @@ K:   riscv
->>>
->>>   RISC-V/MICROCHIP POLARFIRE SOC SUPPORT
->>>   M:   Lewis Hanly <lewis.hanly@microchip.com>
->>> +M:   Conor Dooley <conor.dooley@microchip.com>
->>>   L:   linux-riscv@lists.infradead.org
->>>   S:   Supported
->>> +F:   arch/riscv/boot/dts/microchip/
->>>   F:   drivers/mailbox/mailbox-mpfs.c
->>>   F:   drivers/soc/microchip/
->>>   F:   include/soc/microchip/mpfs.h
->>>
->> 
->> Good to have the DTS covered, so FWIW:
->> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->> 
->> You still should get Lewis' ack (unless he merges it)
-> Aye, it'll be an ack. We don't currently have a tree & would rather do 
-> this via risc-v than the at91/sam arm soc tree.
+Hi Robin,
 
-WFM.  I'll be awaiting the ack.  I don't see any fundamental issues from 
-my end, as long is it's got all the acks/reviews then I'm generally fine 
-with this sort of stuff.  I'll take a look before merging it, I'm kind 
-of buried right now.  Sorry!
+Thank you for the review.
 
->> 
->> Best regards,
->> Krzysztof
->> 
-> 
+On Thu, Dec 23, 2021 at 2:14 PM Robin Murphy <robin.murphy@arm.com> wrote:
+>
+> On 2021-12-23 13:00, Lad Prabhakar wrote:
+> > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> > allocation of IRQ resources in DT core code, this causes an issue
+> > when using hierarchical interrupt domains using "interrupts" property
+> > in the node as this bypasses the hierarchical setup and messes up the
+> > irq chaining.
+> >
+> > In preparation for removal of static setup of IRQ resource from DT core
+> > code use platform_get_irq_count().
+>
+> Nit: platform_irq_count()
+>
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> >   drivers/iommu/arm/arm-smmu/arm-smmu.c | 12 ++++++------
+> >   1 file changed, 6 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> > index 4bc75c4ce402..4844cd075644 100644
+> > --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> > +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> > @@ -2105,12 +2105,12 @@ static int arm_smmu_device_probe(struct platform_device *pdev)
+> >       if (IS_ERR(smmu))
+> >               return PTR_ERR(smmu);
+> >
+> > -     num_irqs = 0;
+> > -     while ((res = platform_get_resource(pdev, IORESOURCE_IRQ, num_irqs))) {
+> > -             num_irqs++;
+> > -             if (num_irqs > smmu->num_global_irqs)
+> > -                     smmu->num_context_irqs++;
+> > -     }
+> > +     num_irqs = platform_irq_count(pdev);
+> > +     if (num_irqs < 0)
+> > +             return num_irqs;
+> > +
+> > +     if (num_irqs > smmu->num_global_irqs)
+> > +             smmu->num_context_irqs += (num_irqs - smmu->num_global_irqs);
+>
+> This seems a bit overcomplicated. I reckon:
+>
+>         smmu->num_context_irqs = num_irqs - smmu->num_global_irqs;
+>         if (num_irqs <= smmu->num_global_irqs) {
+>                 dev_err(...
+>
+> should do it.
+>
+Agreed.
+
+> However, FYI I have some patches refactoring most of the IRQ stuff here
+> that I plan to post next cycle (didn't quite have time to get them done
+> for 5.17 as I'd hoped...), so unless this needs to go in right now as an
+> urgent fix, I'm happy to take care of removing platform_get_resource()
+> as part of that if it's easier.
+>
+Fine by me, let me know if it gets any later than planned I'll send a v2.
+
+Cheers,
+Prabhakar

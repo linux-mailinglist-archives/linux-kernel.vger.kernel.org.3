@@ -2,135 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9078A47DE6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 06:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0443A47DE72
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 06:06:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbhLWFFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 00:05:55 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40686 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbhLWFFx (ORCPT
+        id S231659AbhLWFGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 00:06:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230113AbhLWFGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 00:05:53 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 070ABB81E95;
-        Thu, 23 Dec 2021 05:05:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3C7FC36AE9;
-        Thu, 23 Dec 2021 05:05:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640235950;
-        bh=agQnUbtfJwOPtqzN1B0I5CnVnwhcfTy4lYFDUwaExz0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sxDtlfMlAAzg5bHDijj0UlQQd+24Ss8y1SsP5TxK7Yx+Nb7naanEdu38eeH9OOXFN
-         p4sxDtTveDDT4RakT7i4fHsH3xGlNEYydzUPZw3bFe87k1dgMCls1CLDgYfs3fykcV
-         qqHb2GcUbKzg07JB5yfCQHGthapUsVNBALzOz0tfoKAMLkNaEIF/U73OpW0Y4m0qK3
-         KwDhswVLdaOwjtyZ6dFXOjyRzf2/bs61WMD6SL2tsA7F4WleZaSxJTJSLRhJMMGlHh
-         dhnCo/s7VC+4SpfhucEBWv4tV1ov8GPyQbinpDHCSk4i62qHtQPsWyq7PjNH+LTKPA
-         fyXAEcAy2Zr1w==
-Date:   Thu, 23 Dec 2021 10:35:46 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: dts: qcom: sm8350: Correct UFS symbol clocks
-Message-ID: <YcQDqg7r6tWI+KcU@matsya>
-References: <20211222162058.3418902-1-bjorn.andersson@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211222162058.3418902-1-bjorn.andersson@linaro.org>
+        Thu, 23 Dec 2021 00:06:19 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9158CC061401;
+        Wed, 22 Dec 2021 21:06:19 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so4613897pjp.0;
+        Wed, 22 Dec 2021 21:06:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=XFoLoAfHvUopZGfcI85P/HbrBRpFH7LK7Y429vPP4Ks=;
+        b=gudjkiSFEMIjShAdAtPshkLMKvpKkGIp/D/FfV2XNe24yU1U4J5C8ky++TXjNMKwju
+         IStLeqpQygcpdgXBh9CBRVZqhjv1B0/X112Dv+zrHQKrWgf87QDljyMYz3+bKrTjkGn6
+         OH2MbCoBL4lZvXkm0UrCIXe+2CWD5BSPbe9tP7bmJxKSgKaV61WvyhcI8acq/3AVhmfi
+         3AIso3vl1JabAM5vJqHhk8BkOs+KS9pE1+sDcVrfM80+XM6fb3wjTmw7lRSL+PV/8LRZ
+         J02ecdWpEHwgm0La6eNXN5LvggrkW0i0zPsSYh4fd4ozX9dCNR79VLmIfdbEtRW4Iyn2
+         PANA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=XFoLoAfHvUopZGfcI85P/HbrBRpFH7LK7Y429vPP4Ks=;
+        b=mN3IHTCAbpV6MxjUdmTrfTuJ85Nw8OXUHU3MnDKzEIeKzfyIOxditr1YX0jqPV71oy
+         Nlr/9lswUPy3XQ6Jj4U2zqOSAg8PQ2BMx7fjz6EJ1a3vJu5heBcqSk595oT/rx4BQSWR
+         QawvcrAMcKWlEEqz6VMj0VgMj6X8eBl9j4i0jLaRlxLN1oQvoA5HJf7nxhyjbdBcfJ5g
+         JE4uQW36UPF4d39G2h+PC7VqxPVqzxONIY4TrVyhxxmxgsQJEiVgsidx0n7cs5jaAcVv
+         56eodNsk9+5pMB32ReyshjWmiyrEsxCTFNcRX4VXMQ/u3zMfHVrdYFdJnRZEHNSlynS/
+         5gsw==
+X-Gm-Message-State: AOAM531iFiyCCmsMGlUY3Es5g8P1spvE56YkzyOyCZkKH1+4T0i5UBSG
+        i0u2+5n2tZQSm7oKGGLUhK8=
+X-Google-Smtp-Source: ABdhPJwzIzHkbEZ0uhJygATvC4lYyt2Y6df98Jg9YbOzYK6eZit1E9XRTN82W+KZXqBJY6KHuWIS2w==
+X-Received: by 2002:a17:902:e541:b0:149:2af:fa6a with SMTP id n1-20020a170902e54100b0014902affa6amr926124plf.27.1640235978886;
+        Wed, 22 Dec 2021 21:06:18 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id oo13sm4170936pjb.25.2021.12.22.21.06.17
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 22 Dec 2021 21:06:18 -0800 (PST)
+From:   Li-hao Kuo <lhjeff911@gmail.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, robh+dt@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     wells.lu@sunplus.com, Li-hao Kuo <lhjeff911@gmail.com>
+Subject: [PATCH v2 0/2] Add THERMAL control driver for Sunplus SP7021 SoC
+Date:   Thu, 23 Dec 2021 13:06:24 +0800
+Message-Id: <cover.1640235724.git.lhjeff911@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-12-21, 08:20, Bjorn Andersson wrote:
-> The introduction of '9a61f813fcc8 ("clk: qcom: regmap-mux: fix parent
-> clock lookup")' broke UFS support on SM8350.
-> 
-> The cause for this is that the symbol clocks have a specified rate in
-> the "freq-table-hz" table in the UFS node, which causes the UFS code to
-> request a rate change, for which the "bi_tcxo" happens to provide the
-> closest rate.  Prior to the change in regmap-mux it was determined
-> (incorrectly) that no change was needed and everything worked.
-> 
-> The rates of 75 and 300MHz matches the documentation for the symbol
-> clocks, but we don't represent the parent clocks today. So let's mimic
-> the configuration found in other platforms, by omitting the rate for the
-> symbol clocks as well to avoid the rate change.
-> 
-> While at it also fill in the dummy symbol clocks that was dropped from
-> the GCC driver as it was upstreamed.
+This is a patch series for SPI driver for Sunplus SP7021 SoC.
 
-Reviewed-by: Vinod Koul <vkoul@kernel.org>
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control.
 
-> 
-> Fixes: 59c7cf814783 ("arm64: dts: qcom: sm8350: Add UFS nodes")
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
-> 
-> Changes since v1:
-> - Updated commit message to clarify that the removed numbers are correct.
-> 
->  arch/arm64/boot/dts/qcom/sm8350.dtsi | 28 +++++++++++++++++++++++-----
->  1 file changed, 23 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> index bc176c252bca..ceb064a83038 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> @@ -38,6 +38,24 @@ sleep_clk: sleep-clk {
->  			clock-frequency = <32000>;
->  			#clock-cells = <0>;
->  		};
-> +
-> +		ufs_phy_rx_symbol_0_clk: ufs-phy-rx-symbol-0 {
-> +			compatible = "fixed-clock";
-> +			clock-frequency = <1000>;
-> +			#clock-cells = <0>;
-> +		};
-> +
-> +		ufs_phy_rx_symbol_1_clk: ufs-phy-rx-symbol-1 {
-> +			compatible = "fixed-clock";
-> +			clock-frequency = <1000>;
-> +			#clock-cells = <0>;
-> +		};
-> +
-> +		ufs_phy_tx_symbol_0_clk: ufs-phy-tx-symbol-0 {
-> +			compatible = "fixed-clock";
-> +			clock-frequency = <1000>;
-> +			#clock-cells = <0>;
-> +		};
->  	};
->  
->  	cpus {
-> @@ -606,9 +624,9 @@ gcc: clock-controller@100000 {
->  				 <0>,
->  				 <0>,
->  				 <0>,
-> -				 <0>,
-> -				 <0>,
-> -				 <0>,
-> +				 <&ufs_phy_rx_symbol_0_clk>,
-> +				 <&ufs_phy_rx_symbol_1_clk>,
-> +				 <&ufs_phy_tx_symbol_0_clk>,
->  				 <0>,
->  				 <0>;
->  		};
-> @@ -2079,8 +2097,8 @@ ufs_mem_hc: ufshc@1d84000 {
->  				<75000000 300000000>,
->  				<0 0>,
->  				<0 0>,
-> -				<75000000 300000000>,
-> -				<75000000 300000000>;
-> +				<0 0>,
-> +				<0 0>;
->  			status = "disabled";
->  		};
->  
-> -- 
-> 2.33.1
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
+
+Li-hao Kuo (2):
+  THERMAL: Add THERMAL driver for Sunplus SP7021
+  devicetree: bindings THERMAL Add bindings doc for Sunplus SP7021
+
+ .../bindings/thermal/sunplus_thermal.yaml          |  49 +++++++
+ MAINTAINERS                                        |   7 +
+ drivers/thermal/Kconfig                            |  10 ++
+ drivers/thermal/Makefile                           |   1 +
+ drivers/thermal/sunplus_thermal.c                  | 161 +++++++++++++++++++++
+ 5 files changed, 228 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
+ create mode 100644 drivers/thermal/sunplus_thermal.c
 
 -- 
-~Vinod
+2.7.4
+

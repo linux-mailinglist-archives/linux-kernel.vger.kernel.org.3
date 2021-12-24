@@ -2,262 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A39147F02F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 17:34:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC4B47F035
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 17:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352259AbhLXQeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 11:34:06 -0500
-Received: from ixit.cz ([94.230.151.217]:49702 "EHLO ixit.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236414AbhLXQdw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 11:33:52 -0500
-Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 9D58924CB8;
-        Fri, 24 Dec 2021 17:33:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1640363630;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4hkebrIoAiDD60fzq+M86/TZxadYzVrxi/cJu5DOHEg=;
-        b=ZZq/tkVcfIiMGhwP9bwYMPzJnXtznQA6lo/Tts1u5Pp58lAX4cgO4bnx8fGK7rJTR714v5
-        ZeLOiD6aSCnoi0RIx7kd/ND06A57vHlvw079lkeDgP0YClhCovseD0MczVySeOB7rJhIy9
-        /Xw8/Fd2eUpKpBkOSpBUMMOBW8F5EUM=
-From:   David Heidelberg <david@ixit.cz>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: spmi: convert QCOM PMIC SPMI bindings to yaml
-Date:   Fri, 24 Dec 2021 17:33:44 +0100
-Message-Id: <20211224163344.54177-2-david@ixit.cz>
+        id S1351618AbhLXQrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 11:47:17 -0500
+Received: from out162-62-57-49.mail.qq.com ([162.62.57.49]:43031 "EHLO
+        out162-62-57-49.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236414AbhLXQrQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 24 Dec 2021 11:47:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1640364433;
+        bh=qsrEJxqRUFWS/DX0h7FNYqOcPEzoji39Lm5z8DMHrWE=;
+        h=From:To:Cc:Subject:Date;
+        b=BkgDe1+sWQ+z3VD8/sDEi0OX0A7L2D2pTenlNhS2TW1Vns7Ef8XdHjmsQemO3kbLS
+         mQT4bV/8yenHZVWhVrak92RxFH+7k4gxKteSq919kuVvqEH0XPEN9MWLPXAGsV1OKl
+         v5ERqgrUywN+K9KAJeQ2e0xIdB4Xq9Orhbsp1niU=
+Received: from localhost.localdomain ([116.199.80.130])
+        by newxmesmtplogicsvrsza8.qq.com (NewEsmtp) with SMTP
+        id AEF0E25A; Sat, 25 Dec 2021 00:43:47 +0800
+X-QQ-mid: xmsmtpt1640364227twemsygy4
+Message-ID: <tencent_DC7B4D416B69D6D6789356010B5B9647C606@qq.com>
+X-QQ-XMAILINFO: NDi8vvHAEgriQ2sDiVntGiXMzq38xJtB0o/wLs+NnaTIBRVOyB5Wn/j31JLfSS
+         NqEKtzEIAX2m4cuacevvmID7XcICvqA4+3Hc/y56fProRWLmU9PdYOFlGmpMxeYMBQ3pw/1e0MpW
+         x8Yy6D/974mbxZqABTEuO1Mcez+ywXy1SJb9pl7yh69Sgn6P7aVz1XwoeHtR1+A5sfBhAHmZrgw5
+         BXvv8E8vsUK8fsbeReGyVfvtvCeggxWmQS0DLS7UX8rbnHWw2CZCr7u0SYr5txldnoTK9lBIun7E
+         fk8SrjIzPzfTBnSulXlc8chBmVorMiVOySlqKCeRiR6Diz3XN48RR3p82t7xIFXJ5ejKBFaTTM28
+         JBSPKpikvTUQYUgN+dbQP9voWPteUl2lqW6lcmEFGnvyPFODh90TwuUTd9DCL2a3s9eb21QOsbWO
+         Ir8BsQE68kl9rWpm3CTaW55kz+HhNm1LPGg6JQIzOXLFZjWJ41pcrND9N6+8XxHAPpaiVbfZ+nTW
+         +nyaOH5BQLNPo92ZLHzWuwU8Qysp/5kBrplzmueek0oEwqSqg8+7Cmk81uFkSa49alFG9Kfu1Xno
+         On4yddDAlzLMxzhiW3hnfALV7u26wFcPCshsKFwNnGYygILShiQawVoSZF0QGcG9dxTA/4LJ56h4
+         EvDFR59Ziie3WvNjQ7RZz/cvj1j/oeKnuDUm/OZQcap6ZLMT81lHtYiHs4q3d6Mg+8PialpnBqf9
+         lVKmWipUhiFfzXpq8E7+6zutdQ4nl0/AZ9OPLSNcZhpZJVKqJKuffwybY54Eik5+qEOVkodhwmLV
+         QAuA5smIQx/bwU3XiX2XROMcehBRQGVHH51XCo/S6JMWZ+xW1CUUptzjt8wyi10eI=
+From:   conleylee@foxmail.com
+To:     mripard@kernel.org, wens@csie.org
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Conley Lee <conleylee@foxmail.com>
+Subject: [PATCH] sun7i-a20-marsboard.dts: add marsboard-a20 support
+Date:   Sat, 25 Dec 2021 00:43:41 +0800
+X-OQ-MSGID: <20211224164341.17321-1-conleylee@foxmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211224163344.54177-1-david@ixit.cz>
-References: <20211224163344.54177-1-david@ixit.cz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Qualcomm PMIC SPMI binding to yaml format.
+From: Conley Lee <conleylee@foxmail.com>
 
-Signed-off-by: David Heidelberg <david@ixit.cz>
+ARM dts: sun7i: Add Marsboard A20 board
 
+This patch add support for Marsboard A20 board.
+
+The Marsboard A20 is a A20 based SBC with 1G RAM, 8G Flash, micro SD
+card slot , SATA socketm 10/100 ethernet, HDMI port, 4 USB2.0 ports, 2
+USB2.0 OTG, USB WIFI(RTL8188EU) with antenna.
+
+Signed-off-by: Conley Lee <conleylee@foxmail.com>
 ---
-Patches for fixing dt-schema warnings for SDX55 and MSM8998 qcom,spmi
-already sent to ML.
+ .../devicetree/bindings/arm/sunxi.yaml        |   5 +
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/sun7i-a20-marsboard.dts     | 220 ++++++++++++++++++
+ 3 files changed, 226 insertions(+)
+ create mode 100644 arch/arm/boot/dts/sun7i-a20-marsboard.dts
 
-Signed-off-by: David Heidelberg <david@ixit.cz>
----
- .../bindings/spmi/qcom,spmi-pmic-arb.txt      |  65 ----------
- .../bindings/spmi/qcom,spmi-pmic-arb.yaml     | 118 ++++++++++++++++++
- 2 files changed, 118 insertions(+), 65 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
- create mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
-
-diff --git a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
-deleted file mode 100644
-index ca645e21fe47..000000000000
---- a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
-+++ /dev/null
-@@ -1,65 +0,0 @@
--Qualcomm SPMI Controller (PMIC Arbiter)
--
--The SPMI PMIC Arbiter is found on Snapdragon chipsets.  It is an SPMI
--controller with wrapping arbitration logic to allow for multiple on-chip
--devices to control a single SPMI master.
--
--The PMIC Arbiter can also act as an interrupt controller, providing interrupts
--to slave devices.
--
--See Documentation/devicetree/bindings/spmi/spmi.yaml for the generic SPMI
--controller binding requirements for child nodes.
--
--See Documentation/devicetree/bindings/interrupt-controller/interrupts.txt for
--generic interrupt controller binding documentation.
--
--Required properties:
--- compatible : should be "qcom,spmi-pmic-arb".
--- reg-names  : must contain:
--     "core" - core registers
--     "intr" - interrupt controller registers
--     "cnfg" - configuration registers
--   Registers used only for V2 PMIC Arbiter:
--     "chnls"  - tx-channel per virtual slave registers.
--     "obsrvr" - rx-channel (called observer) per virtual slave registers.
--
--- reg : address + size pairs describing the PMIC arb register sets; order must
--        correspond with the order of entries in reg-names
--- #address-cells : must be set to 2
--- #size-cells : must be set to 0
--- qcom,ee : indicates the active Execution Environment identifier (0-5)
--- qcom,channel : which of the PMIC Arb provided channels to use for accesses (0-5)
--- interrupts : interrupt list for the PMIC Arb controller, must contain a
--               single interrupt entry for the peripheral interrupt
--- interrupt-names : corresponding interrupt names for the interrupts
--                    listed in the 'interrupts' property, must contain:
--     "periph_irq" - summary interrupt for PMIC peripherals
--- interrupt-controller : boolean indicator that the PMIC arbiter is an interrupt controller
--- #interrupt-cells :  must be set to 4. Interrupts are specified as a 4-tuple:
--    cell 1: slave ID for the requested interrupt (0-15)
--    cell 2: peripheral ID for requested interrupt (0-255)
--    cell 3: the requested peripheral interrupt (0-7)
--    cell 4: interrupt flags indicating level-sense information, as defined in
--            dt-bindings/interrupt-controller/irq.h
--
--Example:
--
--	spmi {
--		compatible = "qcom,spmi-pmic-arb";
--		reg-names = "core", "intr", "cnfg";
--		reg = <0xfc4cf000 0x1000>,
--		      <0xfc4cb000 0x1000>,
--		      <0xfc4ca000 0x1000>;
--
--		interrupt-names = "periph_irq";
--		interrupts = <0 190 0>;
--
--		qcom,ee = <0>;
--		qcom,channel = <0>;
--
--		#address-cells = <2>;
--		#size-cells = <0>;
--
--		interrupt-controller;
--		#interrupt-cells = <4>;
--	};
-diff --git a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
+diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentation/devicetree/bindings/arm/sunxi.yaml
+index 889128acf49a..4bd93ae26bd1 100644
+--- a/Documentation/devicetree/bindings/arm/sunxi.yaml
++++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
+@@ -444,6 +444,11 @@ properties:
+           - const: haoyu,a10-marsboard
+           - const: allwinner,sun4i-a10
+ 
++      - description: HAOYU Electronics Marsboard A20
++        items:
++          - const: haoyu,a20-marsboard
++          - const: allwinner,sun7i-a20
++
+       - description: MapleBoard MP130
+         items:
+           - const: mapleboard,mp130
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 0de64f237cd8..4628a2617313 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1219,6 +1219,7 @@ dtb-$(CONFIG_MACH_SUN7I) += \
+ 	sun7i-a20-icnova-swac.dtb \
+ 	sun7i-a20-lamobo-r1.dtb \
+ 	sun7i-a20-linutronix-testbox-v2.dtb \
++	sun7i-a20-marsboard.dtb \
+ 	sun7i-a20-m3.dtb \
+ 	sun7i-a20-mk808c.dtb \
+ 	sun7i-a20-olimex-som-evb.dtb \
+diff --git a/arch/arm/boot/dts/sun7i-a20-marsboard.dts b/arch/arm/boot/dts/sun7i-a20-marsboard.dts
 new file mode 100644
-index 000000000000..54d1220cf692
+index 000000000000..159e69e148e7
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
-@@ -0,0 +1,118 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spmi/qcom,spmi-pmic-arb.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/arch/arm/boot/dts/sun7i-a20-marsboard.dts
+@@ -0,0 +1,220 @@
++/*
++ * Copyright 2021 Conley Lee
++ * Conley Lee <conleylee@foxmail.com>
++ *
++ * This file is dual-licensed: you can use it either under the terms
++ * of the GPL or the X11 license, at your option. Note that this dual
++ * licensing only applies to this file, and not this project as a
++ * whole.
++ *
++ *  a) This file is free software; you can redistribute it and/or
++ *     modify it under the terms of the GNU General Public License as
++ *     published by the Free Software Foundation; either version 2 of the
++ *     License, or (at your option) any later version.
++ *
++ *     This file is distributed in the hope that it will be useful,
++ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *     GNU General Public License for more details.
++ *
++ * Or, alternatively,
++ *
++ *  b) Permission is hereby granted, free of charge, to any person
++ *     obtaining a copy of this software and associated documentation
++ *     files (the "Software"), to deal in the Software without
++ *     restriction, including without limitation the rights to use,
++ *     copy, modify, merge, publish, distribute, sublicense, and/or
++ *     sell copies of the Software, and to permit persons to whom the
++ *     Software is furnished to do so, subject to the following
++ *     conditions:
++ *
++ *     The above copyright notice and this permission notice shall be
++ *     included in all copies or substantial portions of the Software.
++ *
++ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++ *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
++ *     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++ *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
++ *     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
++ *     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
++ *     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
++ *     OTHER DEALINGS IN THE SOFTWARE.
++ */
 +
-+title: Qualcomm SPMI Controller (PMIC Arbiter)
++/dts-v1/;
++#include "sun7i-a20.dtsi"
++#include "sunxi-common-regulators.dtsi"
 +
-+maintainers:
-+  - Stephen Boyd <sboyd@kernel.org>
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/interrupt-controller/irq.h>
 +
-+description: |
-+  The SPMI PMIC Arbiter is found on Snapdragon chipsets. It is an SPMI
-+  controller with wrapping arbitration logic to allow for multiple on-chip
-+  devices to control a single SPMI master.
++/ {
++	model = "HAOYU Electronics Marsboard A20";
++	compatible = "haoyu,a20-marsboard", "allwinner,sun7i-a20";
 +
-+  The PMIC Arbiter can also act as an interrupt controller, providing interrupts
-+  to slave devices.
++	aliases {
++		serial0 = &uart0;
++	};
 +
-+allOf:
-+  - $ref: spmi.yaml
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
 +
-+properties:
-+  compatible:
-+    const: qcom,spmi-pmic-arb
++	hdmi-connector {
++		compatible = "hdmi-connector";
++		type = "a";
 +
-+  reg:
-+    oneOf:
-+      - items: # V1
-+          - description: core registers
-+          - description: interrupt controller registers
-+          - description: configuration registers
-+      - items: # V2
-+          - description: core registers
-+          - description: tx-channel per virtual slave regosters
-+          - description: rx-channel (called observer) per virtual slave registers
-+          - description: interrupt controller registers
-+          - description: configuration registers
++		port {
++			hdmi_con_in: endpoint {
++				remote-endpoint = <&hdmi_out_con>;
++			};
++		};
++	};
++};
 +
-+  reg-names:
-+    oneOf:
-+      - items:
-+          - const: core
-+          - const: intr
-+          - const: cnfg
-+      - items:
-+          - const: core
-+          - const: chnls
-+          - const: obsrvr
-+          - const: intr
-+          - const: cnfg
++&ahci {
++	target-supply = <&reg_ahci_5v>;
++	status = "okay";
++};
 +
-+  interrupts:
-+    maxItems: 1
++&codec {
++	status = "okay";
++};
 +
-+  interrupt-names:
-+    const: periph_irq
++&cpu0 {
++	cpu-supply = <&reg_dcdc2>;
++};
 +
-+  interrupt-controller: true
++&de {
++	status = "okay";
++};
 +
-+  '#interrupt-cells':
-+    const: 4
-+    description: |
-+      cell 1: slave ID for the requested interrupt (0-15)
-+      cell 2: peripheral ID for requested interrupt (0-255)
-+      cell 3: the requested peripheral interrupt (0-7)
-+      cell 4: interrupt flags indicating level-sense information,
-+              as defined in dt-bindings/interrupt-controller/irq.h
++&ehci0 {
++	status = "okay";
++};
 +
++&ehci1 {
++	status = "okay";
++};
 +
-+  qcom,ee:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 0
-+    maximum: 5
-+    description: >
-+      indicates the active Execution Environment identifier
++&gmac_mii_pins {
++	pins = "PA0", "PA1", "PA2",
++	"PA3", "PA4", "PA5", "PA6",
++	"PA7", "PA8", "PA9", "PA10",
++	"PA11", "PA12", "PA13", "PA14",
++	"PA15", "PA16", "PA17";
++};
 +
-+  qcom,channel:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 0
-+    maximum: 5
-+    description: >
-+      which of the PMIC Arb provided channels to use for accesses
++&gmac {
++	pinctrl-names = "default";
++	pinctrl-0 = <&gmac_mii_pins>;
++	phy-handle = <&phy0>;
++	phy-mode = "mii";
++	status = "okay";
++};
 +
-+required:
-+  - compatible
-+  - reg-names
-+  - interrupts
-+  - interrupt-names
-+  - '#interrupt-cells'
-+  - qcom,ee
-+  - qcom,channel
++&hdmi {
++	status = "okay";
++};
 +
-+unevaluatedProperties: false
++&hdmi_out {
++	hdmi_out_con: endpoint {
++		remote-endpoint = <&hdmi_con_in>;
++	};
++};
 +
-+examples:
-+  - |
-+    #include <dt-bindings/spmi/spmi.h>
-+    spmi {
-+        compatible = "qcom,spmi-pmic-arb";
-+        reg-names = "core", "intr", "cnfg";
-+        reg = <0xfc4cf000 0x1000>,
-+              <0xfc4cb000 0x1000>,
-+              <0xfc4ca000 0x1000>;
++&i2c0 {
++	status = "okay";
 +
-+        interrupt-names = "periph_irq";
-+        interrupts = <0 190 0>;
++	axp209: pmic@34 {
++		reg = <0x34>;
++		interrupt-parent = <&nmi_intc>;
++		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
++	};
++};
 +
-+        qcom,ee = <0>;
-+        qcom,channel = <0>;
++&mmc0 {
++	vmmc-supply = <&reg_vcc3v3>;
++	bus-width = <4>;
++	cd-gpios = <&pio 7 10 GPIO_ACTIVE_LOW>; /* PH10 */
++	status = "okay";
++};
 +
-+        #address-cells = <2>;
-+        #size-cells = <0>;
++&gmac_mdio {
++	phy0: ethernet-phy@0 {
++		reg = <0>;
++	};
++};
 +
-+        interrupt-controller;
-+        #interrupt-cells = <4>;
-+    };
++&ohci0 {
++	status = "okay";
++};
 +
++&ohci1 {
++	status = "okay";
++};
++
++&otg_sram {
++	status = "okay";
++};
++
++&reg_ahci_5v {
++	status = "okay";
++};
++
++#include "axp209.dtsi"
++
++&ac_power_supply {
++	status = "okay";
++};
++
++&reg_dcdc2 {
++	regulator-always-on;
++	regulator-min-microvolt = <1000000>;
++	regulator-max-microvolt = <1450000>;
++	regulator-name = "vdd-cpu";
++};
++
++&reg_dcdc3 {
++	regulator-always-on;
++	regulator-min-microvolt = <1000000>;
++	regulator-max-microvolt = <1400000>;
++	regulator-name = "vdd-int-dll";
++};
++
++&reg_ldo1 {
++	regulator-name = "vdd-rtc";
++};
++
++&reg_ldo2 {
++	regulator-always-on;
++	regulator-min-microvolt = <3000000>;
++	regulator-max-microvolt = <3000000>;
++	regulator-name = "avcc";
++};
++
++&reg_usb1_vbus {
++	status = "okay";
++};
++
++&reg_usb2_vbus {
++	status = "okay";
++};
++
++&uart0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart0_pb_pins>;
++	status = "okay";
++};
++
++&usb_otg {
++	dr_mode = "otg";
++	status = "okay";
++};
++
++&usbphy {
++	usb0_id_det-gpios = <&pio 7 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; /* PH4 */
++	usb1_vbus-supply = <&reg_usb1_vbus>;
++	usb2_vbus-supply = <&reg_usb2_vbus>;
++	status = "okay";
++};
 -- 
 2.34.1
 

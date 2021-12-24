@@ -2,140 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE3147EBF7
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 07:10:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F27E547EC05
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 07:23:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351474AbhLXGKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 01:10:37 -0500
-Received: from mail-eopbgr90078.outbound.protection.outlook.com ([40.107.9.78]:55520
-        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S245665AbhLXGKg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 01:10:36 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gBEHNc+Ccgqjiv90oVUHDKD7/0Tu6huNRNQ+JQ61vhVB9PjrtID4YsHlpwL6//rD5ixPkj1huhkJUGsjx+5Y7FVUdpaYX44zmCh/8XJvQwsDvdbzX+NtWUq3Zjn61E6trP5F5qbEbC00WRtNM0ocTl4W77MX8blGXSC/aN2ctnBPvxb/yxOz+slZO6x50JhgIyXOFCxQ1clRcpiaKN3yfNrertfP8cnw+g+RXyi+JfwqZql1xeF3vfm2PaoMIlJC+WGiQOZHfY6r9XVYalYjYlotCgszpbzLwBqIR2ZQicIuuEbM4rR88T/2eV2sobDmFMf4LNNX8WezhjTrpSFx4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tYfYlP/ZorviMIZ+RtEYpwXT7dJwdA7a3JZrUJZm7Gs=;
- b=kERA4ermxTi+1XLnWKW/PlCuN5QXmHXWGRj+2tLi1t9fm+FeHYsH5Fd3K+TXPiLtFF5TprAN7OhKmteQJaOUoyMdaURCY0VWj3Dlb7alTsgfOzMYMsBOdMFgun8lHl9STXLnSTBgmCY8n415gjX4ioiQSdb7oaBTFp/l40C2j+DgFi4meSXRO5K24g/VFyV9ngICa4R+NtkLmGoFsd4DFW6kTlUyupQ3T3Vy1s6z3LOMXPa66AOGtKtAko44KrGMM6JRR2/Vm8QkBJ4CqVLD7G6ICUPZFUKncJo3DpYpdYV9rGhRjHP0tneWynZbFB7ReScb7gFGRtGhPM13XsTMGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRZP264MB2780.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:19::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.18; Fri, 24 Dec
- 2021 06:10:33 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::f0ef:856d:b0de:e85d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::f0ef:856d:b0de:e85d%7]) with mapi id 15.20.4823.021; Fri, 24 Dec 2021
- 06:10:33 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-CC:     kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: code conditional on non-existing PPC_EARLY_DEBUG_MICROWATT.
-Thread-Topic: code conditional on non-existing PPC_EARLY_DEBUG_MICROWATT.
-Thread-Index: AQHX9+bpwKxnLB6mCUGSdobyDruDOqxBKhwA
-Date:   Fri, 24 Dec 2021 06:10:33 +0000
-Message-ID: <27eefbf2-fc2c-7800-1397-8acfea7ed7e8@csgroup.eu>
-References: <CAKXUXMxa6zuTncNjTVHeU7nJ9uvv3KqMtSDocMC7P5hxfrkakQ@mail.gmail.com>
-In-Reply-To: <CAKXUXMxa6zuTncNjTVHeU7nJ9uvv3KqMtSDocMC7P5hxfrkakQ@mail.gmail.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 88e845c2-985e-4159-fddd-08d9c6a41820
-x-ms-traffictypediagnostic: MRZP264MB2780:EE_
-x-microsoft-antispam-prvs: <MRZP264MB2780C14517FB91FF8BC49649ED7F9@MRZP264MB2780.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:1751;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MBw5kXQWEyUYPc392iTCH0yg8iHuV9KUsWops/GjrwQxEaluHeMZm/9hHaBHYktRofX/ctA5BuIYwoGROtrX5O26tVBkleQlV2MBPEUuIz2E9B/27em2Mfm003m7bpJ2vHF4UZ7VZ+mraepJIucFhWrh1dvL6lCcJNwgm+LJ4F6MW17Gt6scfZD9mdBMHub5DqXBFskm5jYEgZIKrU2hwrMTkFptKVyNf2qQZm6syLkZl6OmL9SUklZX2EtluObHrlQdgMfde2WOZ3cBqUr/RpJ6dA7vFZrxiyvsUqcFTiayiop3MPE84kL5D8UgjCHE7l0YGyVrfQfkcl/RAJCu0VVu7BQPTelOZSjDtEvhUjfCOQZ2ot4Rzz1Rl2k4CBuAC226vmpTdgRQK4sjzovULLklOa+tOwuOG5xwCfoREnARJiq5L0whVBXn4F3BaVPEcLNTp3RRd9obRIzTuljlmyzR+fa0PPDjEvBI6dwh5lt53lxZKOytA/7ATag4IgURD0nNF7WBkttAvXcI1QPm1oYPoXMYHDwSk/v4MQVQTDshZtIjC6XjtBo189J1PQz8CFoQAGEjBjtnmbrZYvgg1v2tc4EdtTbvdMnTWgtlbu0NULYe45uoVfiTPqm+UBjbnRT/64ktBnqKqn20qvGW+1aLhN/XWi78xMexTXUsQKEmvb6w7Eo+hbRcbRARLR6MxMElPG7fqZDJI3OK17zgnvEdXrLG+CAaTYVIg98p/805dvm5ARqmx8GpiRHQARzVOxHQScoZwWV1z3tIoO7zdBdAK/cKfrc1Lb8kGVGuFif2waHmpXbLdo4eRK8Xr6IWl5ueuUeZeOSePMl1GAU/Tvl9nALxwd/VsgeXUqLjGps=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(31686004)(36756003)(38100700002)(508600001)(26005)(4744005)(66946007)(66446008)(6506007)(76116006)(966005)(91956017)(54906003)(122000001)(71200400001)(83380400001)(64756008)(66476007)(66556008)(31696002)(2616005)(110136005)(5660300002)(2906002)(4326008)(8676002)(316002)(66574015)(186003)(44832011)(6486002)(38070700005)(8936002)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Q1NhcE9Jb0l3TmU3VzgrcHBmRlR0TFE3OExzeEs5MDA2ZTJnSFdyMHpXUG9T?=
- =?utf-8?B?UHd2NktCK1pLRmJZMmRxc2dEUFJqcExpU0hiclFVRmU4WWFjYmtKVU4wTGts?=
- =?utf-8?B?Tkh6dHB4NHQ0QXBLV204ODFld2dyb3JpYWgyanhkRktQV2NZekhWN2k2YXJ2?=
- =?utf-8?B?dGd5TzZlWktBZkQrSFIrbXZZWjZKMDdMeVdsbDJhaGVMWG4rb1hndmxzb2Rm?=
- =?utf-8?B?K3dYZ0YxVm5PSU1BVDRXaTlUYTZVLzN0cVlDc0U3VnpJTFlNQmVrdWlubWxh?=
- =?utf-8?B?ODVuc0gwL2xUbDY1Sno3dkZ1ZmFFVDBLODJtYjBpcmIwakxYUVN3UlZyS2tV?=
- =?utf-8?B?K3orbTIwU1YwNDFMbHNPam5FQWRrOFhrUEJKZ2djUG1nY1hJRVA3c25qL0VQ?=
- =?utf-8?B?eVR3Q3dwZmMyS0xYSGlVa3pYQTJwVnVHd0xRSFVpaytvNCtDalJaNjdwcWFi?=
- =?utf-8?B?dGU1eTZjdXNIZDZTenB1c1d2Z1V6TG5FMXRhVkZLQlhieXc3YmJIQXg5VmMv?=
- =?utf-8?B?M0VDSXFtMmZPTFJZMi9HaXl4QXc2cmhyNy83WWdtdTZJWHdBcy9lUVBJVVJN?=
- =?utf-8?B?N3RGeEdZSnloSGJORlhRaHYvOXNlb1pmbGlzMXJHaHlnRHJKVHA4WENPd1E2?=
- =?utf-8?B?STU2TEFzNU9Gc1RlVGRPeG00cWJWaG9KLzUvLzBEazFFekZhRUVUTW9BNkVT?=
- =?utf-8?B?eFpwVTlPU2tVTkZYME9jQ1phQmRocXVBdTVCVXNqcHk2NFlaZVRsY01HRlBX?=
- =?utf-8?B?anV0SG45aFc1bjZiNUZqZm50Ylg5NzZVSHQwdUpHejFtd1lXcXluTHdtNEVo?=
- =?utf-8?B?ZGpKZ0RmNmhUeFlkNFE0c01SYWp3ZUUwTDQ4MENBMG5HMXRyUmJRVjNLWGx4?=
- =?utf-8?B?SjlHdmhXZEF1WUhFdHNXUm0rVXNmODNVRGxYUzNGWE12YXEzRmtkQmtlWC9n?=
- =?utf-8?B?TU53SDRrdlo4SkhzSnMrd2R6L3lpWHRrV002eDZCOHRVaHhHQy8wWGFVSWMx?=
- =?utf-8?B?MUVJQkFZME9VS0VXYXA2SVBLSUZrM2RtcGdCT25DZFRmYkc3d2s3QU1iN3pF?=
- =?utf-8?B?M3loTGo3cFExVk91MnZ6MEh6YnJ6bXRJSXRBdXRFSWUyK1B1dUwxU2JYK0dJ?=
- =?utf-8?B?ZzduRU5GMGI0ZGp4S1RmZENkNHFVdE9PRU5IVmdCbjk4TExLR2E4WXk2SC8x?=
- =?utf-8?B?TWxpRG5lUXR4dXAxdURuaVBNQStRdW5pM0RUTTZkREgza0IrM1ZPSit3SFVY?=
- =?utf-8?B?dFNGWHo5aFBhcHpmNjl5bFpDd2xKUm0yRXVsZ1BIeVRydEd6ZGxSWEtkT0d1?=
- =?utf-8?B?eDZheWFscFRJOHo1SkIyNEpxR2lWU0RYZzV4SG1UZlhuNGdLWGwrNGREa3Ru?=
- =?utf-8?B?OGNEV3RMNkkwQzE4c0RpbDc2SHhYa3JhUldqVGs5VGhtNEhqblEwOEJ2aU9C?=
- =?utf-8?B?bVJ0U3BhL2lSU0QrNFpxRXRnNk1QcTdNMFhpWTJyQXpCZHhVUmhUS2JPbSsz?=
- =?utf-8?B?cXE0c1pjOWN6ZFhqTWhEdHlib3NoN1dFdmV0N2FCcHRsSlpjOEM3U3ZDUW5X?=
- =?utf-8?B?aXVUZlh6L0E1SnhPWC90N2xycW1nQ3pYVkpuUEpOaStWMFNMTXlTaTh5VmJ0?=
- =?utf-8?B?cWJBdjY3TVNsM3FNU013VFZtSXdsSlhjZWZtZTlUVlF2b0hkYjk4cllrTmww?=
- =?utf-8?B?bkltVjV1L2tXclBxNzNEbnhwUWlnQVJOTFpHV0hYQndKbjRXNGFmTkMveVFl?=
- =?utf-8?B?eTJzWFlNUkhlUnZNcG13ZHoxUzIwYkJPKzgveUFERWhsQVV3blZGZU80SkRS?=
- =?utf-8?B?d3JBZG5PYnJoNnpTdEFNZi9sdGZNN3dJR1dxdzNPME95eHU3MmRnbTZySWZl?=
- =?utf-8?B?bHhQOHFsTllzRnNNeWFkd0VOSmo4YVRBSUZ2V0pnM3hrdnY0R3ZDUjJTV2to?=
- =?utf-8?B?VXE2RHVGbXlvYzRuSjVwWHpwZWQ4RXExT3ZXays4Y2dxSVpsaDVTWjNLeElW?=
- =?utf-8?B?S1luMmhyZWRjd292R29ZY1ppYWZwQXFvMTFFZkszVk1HVHJSZ1NqYkk4MEVX?=
- =?utf-8?B?Vi9nSTkxVFdMdHlTZEtCTXAxNmM1YzlDV2xwYWg4akpTR1ZHWGhaRTlRRVBi?=
- =?utf-8?B?cURvanFiemtBaFNsZzBBbW9kWUwrVVdkaTczRExtTUdiNmQ3UGY3djFDQjlC?=
- =?utf-8?B?WHIyWklBNlJqSWIrdGR2bmg2SFNVZExqZ096ZWl2eDJMK0ZPaG9qUUd0WVFX?=
- =?utf-8?Q?du98xYjWtR7i6SuuxX0WwTukn468s0rejpQQlz44Zo=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A0FE4D49D4F44844B7F5878F027863AA@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        id S1351494AbhLXGXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 01:23:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58454 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234081AbhLXGXB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 24 Dec 2021 01:23:01 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDAFC061401;
+        Thu, 23 Dec 2021 22:23:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=/K3wK83gm1vxGvQ2of6pgx0wWagBVp6MCfLQSf6er3g=; b=Ki0C8Up9yI82NGKofQWdL/i656
+        66EJ/ZzqJkg/NMxKRDp3oozHV26+eo88/sLu+i3og65b171io2eRNIlpXNBLLMwQHVXQ/oNj4P9qv
+        NzVvMVeKI5M97yvvPAyLgK2dhSppfq2dI0KC3Gmt+JfAhMyn6ZvapS/Jc1r16kdsOVrh1Srcw7Q5+
+        f31b+VSwGvgRvNr16lky3gecLrmCeMhCqYgVJGPaqiD/pes5G18Lrm77W9kWnWDrYtWjAm2406hA9
+        rNnFKH/mZcDc94hCI/fEIFR14NMCjRcJiBBsS7xZ4H4zdPx/J3bQZ6UozNSz8mxlCbnEtTirss1XG
+        a35lnxsQ==;
+Received: from p4fdb0b85.dip0.t-ipconnect.de ([79.219.11.133] helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n0dyb-00Dmy6-DQ; Fri, 24 Dec 2021 06:22:49 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: remove Xen tmem leftovers
+Date:   Fri, 24 Dec 2021 07:22:33 +0100
+Message-Id: <20211224062246.1258487-1-hch@lst.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 88e845c2-985e-4159-fddd-08d9c6a41820
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Dec 2021 06:10:33.1074
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aEOB3x7zj60x7TEJnSEsAkFTwRBSztetWlpJ/1bnoEeS3VDCaizSvhgxheEzDw5qS0Zx8MWFGNbUCRw8hc+i1Dxs/+i9uXapy5MwJrX8qNo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB2780
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDIzLzEyLzIwMjEgw6AgMTE6MjEsIEx1a2FzIEJ1bHdhaG4gYSDDqWNyaXTCoDoNCj4g
-RGVhciBCZW5qYW1pbiwgZGVhciBQYXVsLCBkZWFyIE1pY2hhZWwsDQo+IA0KPiB3aXRoIGNvbW1p
-dCA0OGI1NDViODAxOGQgKCJwb3dlcnBjL21pY3Jvd2F0dDogVXNlIHN0YW5kYXJkIDE2NTUwIFVB
-UlQNCj4gZm9yIGNvbnNvbGUiKSwgeW91IGhhdmUgc29tZSBjb2RlIGluIGFyY2gvcG93ZXJwYy9r
-ZXJuZWwvdWRiZ18xNjU1MC5jLA0KPiBjb25kaXRpb25hbCBvbiB0aGUgS2NvbmZpZyBzeW1ib2wg
-UFBDX0VBUkxZX0RFQlVHX01JQ1JPV0FUVC4gSG93ZXZlciwNCj4gc2luY2UgdGhlbiwgdGhlIGRl
-ZmluaXRpb24gb2YgdGhpcyBLY29uZmlnIHN5bWJvbCB3YXMgbmV2ZXIgaW50cm9kdWNlZA0KPiB0
-byB0aGUgbWFpbmxpbmUgcmVwb3NpdG9yeSBvciBjdXJyZW50IGxpbnV4LW5leHQsIG5vciBhbSBJ
-IGZpbmRpbmcgYW55DQo+IHBlbmRpbmcgcGF0Y2ggZm9yIHRoYXQuDQo+IA0KPiBBcmUgeW91IGdv
-aW5nIHRvIGFkZCB0aGlzIGNvbmZpZyBkZWZpbml0aW9uIHNvb24/IE9yIGRpZCB5b3UgaWRlbnRp
-ZnkNCj4gdGhhdCB0aGlzIHNldHVwIGNvZGUgaW4gdWRiZ18xNjU1MC5jIGlzIG5vdCBhY3R1YWxs
-eSBuZWVkZWQgYW5kIGNhbiB3ZQ0KPiBzaW1wbHkgZHJvcCB0aGlzIGNvZGUgYWdhaW4/DQo+IA0K
-PiBUaGlzIGlzc3VlIHdhcyBpZGVudGlmaWVkIHdpdGggdGhlIHNjcmlwdCAuL3NjcmlwdHMvY2hl
-Y2trY29uZmlnc3ltYm9scy5weS4NCj4gDQoNCg0KV2FzIGl0IGZvcmdvdHRlbiB3aGVuIGhhbmRs
-aW5nIGNvbW1lbnRzIHRvIA0KaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2xp
-bnV4cHBjLWRldi9wYXRjaC8yMDIwMDUwOTA1MDM0MC5HRDE0NjQ5NTRAdGhpbmtzLnBhdWx1cy5v
-emxhYnMub3JnLyANCj8=
+Hi all,
+
+since the remove of the Xen tmem driver in 2019, the cleancache hooks are
+entirely unused, as are large parts of frontswap.  This series against
+linux-next (with the folio changes included) removes cleancaches, and cuts
+down frontswap to the bits actually used by zswap.
+
+Diffstat:
+ Documentation/vm/cleancache.rst        |  296 -------------------------------
+ b/Documentation/vm/frontswap.rst       |   31 ---
+ b/Documentation/vm/index.rst           |    1 
+ b/MAINTAINERS                          |    7 
+ b/arch/arm/configs/bcm2835_defconfig   |    1 
+ b/arch/arm/configs/qcom_defconfig      |    1 
+ b/arch/m68k/configs/amiga_defconfig    |    1 
+ b/arch/m68k/configs/apollo_defconfig   |    1 
+ b/arch/m68k/configs/atari_defconfig    |    1 
+ b/arch/m68k/configs/bvme6000_defconfig |    1 
+ b/arch/m68k/configs/hp300_defconfig    |    1 
+ b/arch/m68k/configs/mac_defconfig      |    1 
+ b/arch/m68k/configs/multi_defconfig    |    1 
+ b/arch/m68k/configs/mvme147_defconfig  |    1 
+ b/arch/m68k/configs/mvme16x_defconfig  |    1 
+ b/arch/m68k/configs/q40_defconfig      |    1 
+ b/arch/m68k/configs/sun3_defconfig     |    1 
+ b/arch/m68k/configs/sun3x_defconfig    |    1 
+ b/arch/s390/configs/debug_defconfig    |    1 
+ b/arch/s390/configs/defconfig          |    1 
+ b/block/bdev.c                         |    5 
+ b/fs/btrfs/extent_io.c                 |   10 -
+ b/fs/btrfs/super.c                     |    2 
+ b/fs/ext4/readpage.c                   |    6 
+ b/fs/ext4/super.c                      |    3 
+ b/fs/f2fs/data.c                       |    7 
+ b/fs/mpage.c                           |    7 
+ b/fs/ntfs3/ntfs_fs.h                   |    1 
+ b/fs/ocfs2/super.c                     |    2 
+ b/fs/super.c                           |    3 
+ b/include/linux/frontswap.h            |   35 ---
+ b/include/linux/fs.h                   |    5 
+ b/include/linux/shmem_fs.h             |    3 
+ b/include/linux/swapfile.h             |    3 
+ b/mm/Kconfig                           |   40 ----
+ b/mm/Makefile                          |    1 
+ b/mm/filemap.c                         |   11 -
+ b/mm/frontswap.c                       |  259 +--------------------------
+ b/mm/shmem.c                           |   33 ---
+ b/mm/swapfile.c                        |   90 ++-------
+ b/mm/truncate.c                        |   15 -
+ b/mm/zswap.c                           |    8 
+ include/linux/cleancache.h             |  124 ------------
+ mm/cleancache.c                        |  315 ---------------------------------
+ 44 files changed, 65 insertions(+), 1274 deletions(-)

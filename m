@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D4E47EA79
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 03:11:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C32BC47EA7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 03:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350937AbhLXCK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 21:10:59 -0500
-Received: from mga06.intel.com ([134.134.136.31]:13938 "EHLO mga06.intel.com"
+        id S1350960AbhLXCLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 21:11:20 -0500
+Received: from mga09.intel.com ([134.134.136.24]:54155 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230044AbhLXCK6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 21:10:58 -0500
+        id S245561AbhLXCLQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 21:11:16 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640311858; x=1671847858;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YcGTT1NiJdneR6cPRXjoyXeQB5bPeHDfRr7+OIjpQJ8=;
-  b=LkXIDFXg3Yr7wrf7+PUK1ruA7I9GazH8dsUU3tVVzNhu/tdaYcVP1pEN
-   Sk8LJl8n3YqH7FnXUmyvmtTrwrTXaiiyyIuK+NePhJi9PHi3Tv8xtHseQ
-   C5/9Z4MvJ+CshFzIDTNn213ENVvpFzgPJL7CVb2xlmB2SAuiVewoR5+VK
-   8oB+Ly7aGo4U35azP5YH2VHDHaYaRdGcncTipD4zY7ZaMFW4gEWGpKWmW
-   7Mq2MQCemGSO5i/X031jg/7DPr/SfdmZaUOTpbEpWiQz9kQ3ERKIICn4I
-   WAsiH32XXrKRut9d9t03QvZRhAjUgGItv12RISPwtpJEjPpHX5dSptv5+
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10207"; a="301676366"
+  t=1640311876; x=1671847876;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=alLTBXDy3O+6GzU4DwFSKQ3fIJ/zBnApQ/F3BpD6psQ=;
+  b=m1z4uok5WIeohSinu30jvBwAhrsxjupyhBdc1vSOyH2dx4hWkR5aZPai
+   bScvfmNuFVli3itlCOSmiJx3djyND5ISVbthKRDnhAq3QsBYi8K7hH3V0
+   +aWiHEJcBIb3nr2E88O3oH6XFRUVCt/2fmHeh+kdHiIe6I5HG3qm4MGc3
+   RGX7eq6SPDp8bmN6TEZiBsMaM/GUG9QstywPJ8sxemEs7te1iYlk02CQm
+   PcUQcpkFevmPIkqr7jPzXle2ljpyxBiVxUlibT5JatBaIaS3KSUXt9mq+
+   UqU7fre/13fTwySba9U+o5gxYB+V4nCD8N8dFfVEi3rPQo9uZNucHuD1j
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10207"; a="240715087"
 X-IronPort-AV: E=Sophos;i="5.88,231,1635231600"; 
-   d="scan'208";a="301676366"
+   d="scan'208";a="240715087"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 18:10:57 -0800
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 18:11:14 -0800
 X-IronPort-AV: E=Sophos;i="5.88,231,1635231600"; 
-   d="scan'208";a="467156187"
+   d="scan'208";a="467156195"
 Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 18:10:45 -0800
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 18:10:48 -0800
 From:   Bard Liao <yung-chuan.liao@linux.intel.com>
 To:     alsa-devel@alsa-project.org, vkoul@kernel.org
 Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org, tiwai@suse.de,
@@ -40,72 +40,56 @@ Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org, tiwai@suse.de,
         srinivas.kandagatla@linaro.org,
         pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
         bard.liao@intel.com
-Subject: [PATCH v2 0/7] ASoC/SoundWire: improve suspend flows and use set_stream() instead of set_tdm_slots() for HDAudio
-Date:   Fri, 24 Dec 2021 10:10:27 +0800
-Message-Id: <20211224021034.26635-1-yung-chuan.liao@linux.intel.com>
+Subject: [PATCH v2 1/7] ASOC: SOF: Intel: use snd_soc_dai_get_widget()
+Date:   Fri, 24 Dec 2021 10:10:28 +0800
+Message-Id: <20211224021034.26635-2-yung-chuan.liao@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211224021034.26635-1-yung-chuan.liao@linux.intel.com>
+References: <20211224021034.26635-1-yung-chuan.liao@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series contains three topics.
-1. SoundWire: Intel: remove pdm support
-2. ASoC/SoundWire: dai: expand 'stream' concept beyond SoundWire
-3. ASoC/SOF/SoundWire: fix suspend-resume on pause with dynamic pipelines
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-The topics are independent but the changes are dependent. So please
-allow me to send them in one series.
+We have a helper, use it to simplify widget lookup
 
-The code is basically not changed, so I still take Vinod Koul's Ack.
+Suggested-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Ranjani Sridharan <ranjani.sridharan@intel.com>
+Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+---
+ sound/soc/sof/intel/hda.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-v2:
-- ASoC/SoundWire: dai: expand 'stream' concept beyond SoundWire: rename
-  .set_sdw_stream to .set_stream and .get_sdw_stream to .get_stream
-  in intel_pdm_dai_ops.
-
-Pierre-Louis Bossart (6):
-  ASOC: SOF: Intel: use snd_soc_dai_get_widget()
-  ASoC/soundwire: intel: simplify callbacks for params/hw_free
-  ASoC/SoundWire: dai: expand 'stream' concept beyond SoundWire
-  ASoC: Intel/SOF: use set_stream() instead of set_tdm_slots() for
-    HDAudio
-  soundwire: intel: remove unnecessary init
-  soundwire: intel: remove PDM support
-
-Ranjani Sridharan (1):
-  soundwire: intel: improve suspend flows
-
- drivers/soundwire/cadence_master.c  |  36 +---
- drivers/soundwire/cadence_master.h  |  14 +-
- drivers/soundwire/intel.c           | 253 ++++++++++++++--------------
- drivers/soundwire/qcom.c            |   8 +-
- drivers/soundwire/stream.c          |   4 +-
- include/linux/soundwire/sdw_intel.h |   4 +-
- include/sound/soc-dai.h             |  32 ++--
- sound/soc/codecs/hdac_hda.c         |  22 +--
- sound/soc/codecs/max98373-sdw.c     |   2 +-
- sound/soc/codecs/rt1308-sdw.c       |   2 +-
- sound/soc/codecs/rt1316-sdw.c       |   2 +-
- sound/soc/codecs/rt5682-sdw.c       |   2 +-
- sound/soc/codecs/rt700.c            |   2 +-
- sound/soc/codecs/rt711-sdca.c       |   2 +-
- sound/soc/codecs/rt711.c            |   2 +-
- sound/soc/codecs/rt715-sdca.c       |   2 +-
- sound/soc/codecs/rt715.c            |   2 +-
- sound/soc/codecs/sdw-mockup.c       |   2 +-
- sound/soc/codecs/wcd938x.c          |   2 +-
- sound/soc/codecs/wsa881x.c          |   2 +-
- sound/soc/intel/boards/sof_sdw.c    |   6 +-
- sound/soc/intel/skylake/skl-pcm.c   |   7 +-
- sound/soc/qcom/sdm845.c             |   4 +-
- sound/soc/qcom/sm8250.c             |   4 +-
- sound/soc/sof/intel/hda-dai.c       |   7 +-
- sound/soc/sof/intel/hda.c           |  12 +-
- 26 files changed, 190 insertions(+), 247 deletions(-)
-
+diff --git a/sound/soc/sof/intel/hda.c b/sound/soc/sof/intel/hda.c
+index 18abbd13d593..99255028d3fe 100644
+--- a/sound/soc/sof/intel/hda.c
++++ b/sound/soc/sof/intel/hda.c
+@@ -189,10 +189,7 @@ static int sdw_params_stream(struct device *dev,
+ 	struct snd_soc_dai *d = params_data->dai;
+ 	struct snd_soc_dapm_widget *w;
+ 
+-	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+-		w = d->playback_widget;
+-	else
+-		w = d->capture_widget;
++	w = snd_soc_dai_get_widget(d, substream->stream);
+ 
+ 	return sdw_dai_config_ipc(sdev, w, params_data->link_id, params_data->alh_stream_id,
+ 				  d->id, true);
+@@ -206,10 +203,7 @@ static int sdw_free_stream(struct device *dev,
+ 	struct snd_soc_dai *d = free_data->dai;
+ 	struct snd_soc_dapm_widget *w;
+ 
+-	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+-		w = d->playback_widget;
+-	else
+-		w = d->capture_widget;
++	w = snd_soc_dai_get_widget(d, substream->stream);
+ 
+ 	/* send invalid stream_id */
+ 	return sdw_dai_config_ipc(sdev, w, free_data->link_id, 0xFFFF, d->id, false);
 -- 
 2.17.1
 

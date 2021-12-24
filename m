@@ -2,163 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9890447EC36
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 07:44:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED7647EC40
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 07:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343519AbhLXGop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 01:44:45 -0500
-Received: from mailout3.samsung.com ([203.254.224.33]:42974 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245745AbhLXGon (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 01:44:43 -0500
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20211224064440epoutp03f7636f55f6523aca37fd0f8cf3d98f39~DneFxODsk2267522675epoutp03o
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 06:44:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20211224064440epoutp03f7636f55f6523aca37fd0f8cf3d98f39~DneFxODsk2267522675epoutp03o
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1640328280;
-        bh=Q65SdoUxVF82yqKEiz3o/mcQDWD7Y0oAKClGnD10t4s=;
-        h=To:Cc:From:Subject:Date:References:From;
-        b=TBPPJ9Zf6jepxEoTaoYwrQQ6lGbAhJRA4C295q1s66cwcRuBBLWzOXV7B4Mv+VGD7
-         GPxrrR7mVbsPro7fz8ex+swJBNZnOrHtu/+E/oCrqjUvVzw8qHNOHpo0HE06LN4yIo
-         0T7rLXXux20fFw+WRPcv2fgx3N0TfpWJksZ+zCJM=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20211224064440epcas1p20b65f9be32d7b814fb28b74d24cde42d~DneFcDOk_0369603696epcas1p23;
-        Fri, 24 Dec 2021 06:44:40 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.38.233]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4JKyGV2b7xz4x9Q7; Fri, 24 Dec
-        2021 06:44:34 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6A.24.28648.D4C65C16; Fri, 24 Dec 2021 15:44:29 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20211224064428epcas1p40282064859748cd6735279bb7274a753~Dnd6p8RvA2512325123epcas1p4N;
-        Fri, 24 Dec 2021 06:44:28 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20211224064428epsmtrp24173e6cfc5022e9a55cc9d49ed883914~Dnd6pI2mS2975829758epsmtrp2-;
-        Fri, 24 Dec 2021 06:44:28 +0000 (GMT)
-X-AuditID: b6c32a39-813e6a8000006fe8-d9-61c56c4d7af9
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B3.56.29871.C4C65C16; Fri, 24 Dec 2021 15:44:28 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20211224064428epsmtip1e41359287ede42cba7bbda827b722868~Dnd6bCW0X1524715247epsmtip1d;
-        Fri, 24 Dec 2021 06:44:28 +0000 (GMT)
-To:     "Rafael J. Wysocki <rjw@rjwysocki.net>" <rjw@rjwysocki.net>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Chanwoo Choi (samsung.com)" <cw00.choi@samsung.com>,
-        "Chanwoo Choi (chanwoo@kernel.org)" <chanwoo@kernel.org>,
-        =?UTF-8?B?7ZWo66qF7KO8?= <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Subject: [GIT PULL] devfreq next for v5.17
-Organization: Samsung Electronics
-Message-ID: <09ff8415-0ebb-c8f2-026b-65af27f58f44@samsung.com>
-Date:   Fri, 24 Dec 2021 16:07:40 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        id S1351562AbhLXGtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 01:49:18 -0500
+Received: from mail-dm3nam07on2085.outbound.protection.outlook.com ([40.107.95.85]:39840
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1351547AbhLXGtR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 24 Dec 2021 01:49:17 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nyf6hIRaalgrkm3bhkYrmmoEt0wxpunUWOxpE0u7HgqUbKoae1R9mpat5ZEiFyEjb5lTAKZOtVrQaB77e8TtdheUfekheVQPpV/aCmhcLMC/u7ac824Mx0u/yK3NOCrFTwyiWB5yaLdkOWmPT95c1xjpEcA+CgqW2vGwEc7vZvgW9cRGdrOHW8YvKG1ee1bcmyrzpVxlvga2lxGvZPLiuwF9eenuWpmZl7H1aPOOCeW3uCLnnH9NCaiEIhLS7/2dE9aRjI6bO1o5SMBAWkpDl5oOR7WyDRVdghAs66yOuv5bOhWtJJwX2pEBZslU7+50t1YrPtxopI+0POYkKqFysA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=g6LMz7Yoi27L63wZ/I3ay6P8cXRud0Rk7r6R3yJ+jsU=;
+ b=cqJYty5G4YBcKgJdc9bCIlSXqhtEvEdmGysqoyYUlGhUtjtBJh6h2EN5BTLiivViWdSjuAmHTKJHNUZf8QPT2LEmGq5y5DTlCQhKS9TbHlQe8ERVBYqB5WGLvXa0QezXBMTSChTRpGt5fU4q4bZv8iZYzvDJWz0WyZPJA0MSAdWNCzIh12VWYSMCgNn3NALUQ4vmgret9CxvYUEoqg+lKlJZXCEvpw7XcsKRwnwUtY6iWlN6PgOgILZ+R3PE8dSzcg2l1nghVX8Fhsw/e8lZ+10/F4Yk3KWpbtGEb8l8exSV6RYShlH3AP34EA/hVai/tiDAnF9oS1HCTR3toYX+pw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=g6LMz7Yoi27L63wZ/I3ay6P8cXRud0Rk7r6R3yJ+jsU=;
+ b=mXZUAYECeYjG86XSXAGAcfpmVQpTC3Lm/pqIB/6bC5OaUbPmy4AzSh/YG2yB8jWgfNjR78QAJdMMiHZIqWWbsGuTMwZkSEAJXXm7YCp9WD4UBt8f7n9zacQ0FawyVDdVuMexNZifIZpW5i51Ntplqj/4L7U24Zvf+Dde0rNY1XA=
+Received: from DM5PR15CA0050.namprd15.prod.outlook.com (2603:10b6:3:ae::12) by
+ BN9PR12MB5082.namprd12.prod.outlook.com (2603:10b6:408:133::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.18; Fri, 24 Dec
+ 2021 06:49:15 +0000
+Received: from DM6NAM11FT052.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:3:ae:cafe::37) by DM5PR15CA0050.outlook.office365.com
+ (2603:10b6:3:ae::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.14 via Frontend
+ Transport; Fri, 24 Dec 2021 06:49:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ DM6NAM11FT052.mail.protection.outlook.com (10.13.172.111) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4823.18 via Frontend Transport; Fri, 24 Dec 2021 06:49:14 +0000
+Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Fri, 24 Dec
+ 2021 00:49:14 -0600
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB07.amd.com
+ (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Thu, 23 Dec
+ 2021 22:49:13 -0800
+Received: from sof-System-Product-Name.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.17
+ via Frontend Transport; Fri, 24 Dec 2021 00:49:05 -0600
+From:   V sujith kumar Reddy <vsujithkumar.reddy@amd.com>
+To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
+CC:     <Vijendar.Mukunda@amd.com>, <Alexander.Deucher@amd.com>,
+        <Basavaraj.Hiregoudar@amd.com>, <Sunil-kumar.Dommati@amd.com>,
+        <ajitkumar.pandey@amd.com>,
+        V sujith kumar Reddy <vsujithkumar.reddy@amd.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        "Jaroslav Kysela" <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Arnd Bergmann <arnd@arndb.de>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ASoC: amd: acp: Power on/off the speaker enable gpio pin based on DAPM callback.
+Date:   Fri, 24 Dec 2021 20:30:43 +0530
+Message-ID: <20211224150058.2444776-1-vsujithkumar.reddy@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMJsWRmVeSWpSXmKPExsWy7bCmvq5vztFEg0PfBC0m3rjCYnH9y3NW
-        i7NNb9gtLu+aw2bxufcIo8XtxhVsFmdOX2J1YPfYtKqTzWPL1XYWj74tqxg9Pm+SC2CJyrbJ
-        SE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMAbpASaEsMacU
-        KBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgWqBXnJhbXJqXrpeXWmJlaGBgZApUmJCd8eLy
-        ddaCa3wVM6ZfYm5g/MfdxcjBISFgInFkckwXIxeHkMAORokjH2YyQTifGCWu/vzGDOF8Y5R4
-        tbWDsYuRE6xj49ezjBCJvYwSV67tgKp6zygxff1CNpC5IgL2Eh0fMkHizAIXmCSOPtjIBtLN
-        JqAlsf/FDTBbGMhetmQOmM0voChx9cdjsA28AnYS9x5NZAaxWQRUJfp/N4LZogJhEie3tUDV
-        CEqcnPmEBcRmFhCXuPVkPhOELS+x/e0cZohLf7JLrDjsB2G7SNz5d54JwhaWeHV8CzuELSXx
-        +d1eNpBDJQSWMUr8mtzJBOGsZ5R4OasTapKxxP6lk5lAPmMW0JRYv0sfIqwosfP3XEaIxXwS
-        7772sEIClVeio00IokRZ4vKDu1B7JSUWt3eyQdgeElvavzFNYFScheSdWUjemYXknVkIixcw
-        sqxiFEstKM5NTy02LDCFx3Zyfu4mRnDq1LLcwTj97Qe9Q4xMHIyHGCU4mJVEeD1XHUkU4k1J
-        rKxKLcqPLyrNSS0+xGgKDOCJzFKiyfnA5J1XEm9oYmlgYmZkbGJhaGaoJM773H96opBAemJJ
-        anZqakFqEUwfEwenVAPTqlcOL1VineWepB/iPvf5k/fPbcIl7qsfrJnlfWllwoMcrlBG/337
-        px9d/jFmi910lwxOXQsv9ncnXPqZL/5qlkuc8L5c7vxCH8PYH5NVHSu/vFYoWy4nWcv1612j
-        v9mE/2Gn3B73xlzkZLWqvml/s/6R+t4ClTZHU87nbv7iux8s59T7MPem/pz6a6+3/WCavUCL
-        o53xy8Gcz/waO1mubbUJM5uzc3vmd2mmhhlHXiR+Zz/O2VQoJbBu/v67H/zXiJ2bxNZzcc5Z
-        NZvaD7VyD9Y2uvh6Ge74Uvx8KY+MnOHbGzLrgm7m9GzyW3AhwUdeuIPv1NqFuzdvzvh82DI9
-        dqGawHquogXCfte3TspersRSnJFoqMVcVJwIAF2WdPUmBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrCLMWRmVeSWpSXmKPExsWy7bCSnK5PztFEgwfvzS0m3rjCYnH9y3NW
-        i7NNb9gtLu+aw2bxufcIo8XtxhVsFmdOX2J1YPfYtKqTzWPL1XYWj74tqxg9Pm+SC2CJ4rJJ
-        Sc3JLEst0rdL4Mp4cfk6a8E1vooZ0y8xNzD+4+5i5OSQEDCR2Pj1LGMXIxeHkMBuRokLjw+y
-        QSQkJaZdPMrcxcgBZAtLHD5cDFHzllHi+OUvYHERAXuJjg+ZIOXMApeYJN6fZQWx2QS0JPa/
-        uAE2RhjIXrZkDpjNL6AocfXHY0YQm1fATuLeo4nMIDaLgKpE/+9GMFtUIExi55LHTBA1ghIn
-        Zz5hgZivLvFn3iVmCFtc4taT+UwQtrzE9rdzmCcwCs5C0jILScssJC2zkLQsYGRZxSiZWlCc
-        m55bbFhgmJdarlecmFtcmpeul5yfu4kRHBFamjsYt6/6oHeIkYmD8RCjBAezkgiv56ojiUK8
-        KYmVValF+fFFpTmpxYcYpTlYlMR5L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUwret7sav3xert
-        sX7F0+48bl58WvX9O+EI/TeO0y7dYrYSqfr8UXsC33ZzNp85vV0zf7lNOfm08uCmpmeF0z37
-        JS+JGzVsszyQuj6O9bT1pT9LRF52p6ydcW5x5etFcSu5j0wXPB/nyHng6vRPN5QWHU4XWsbw
-        Zcf6CMUVq+svHc0sKsrrFfWveWR8l7tU5HIhY7OL4uEDKx6/U5bZdqzwvcPjy1srV9zuVjqc
-        Ksy+yVF29YmVmz+X7P/mfjbDjM0+sFhKJUfc8d+tlETLzKpb7o8slRfVnT+W47ZH7sAsL7X0
-        3InO9zrry1hXvY/y27zVQFpC86/klXlX3HbfTIt+9qjiLWPijtBdlvN4pLW3WSqxFGckGmox
-        FxUnAgBxlh4Z9wIAAA==
-X-CMS-MailID: 20211224064428epcas1p40282064859748cd6735279bb7274a753
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20211224064428epcas1p40282064859748cd6735279bb7274a753
-References: <CGME20211224064428epcas1p40282064859748cd6735279bb7274a753@epcas1p4.samsung.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ab977388-1be9-430a-0ae1-08d9c6a98000
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5082:EE_
+X-Microsoft-Antispam-PRVS: <BN9PR12MB508231B6E50F4E4C0D0B5F22927F9@BN9PR12MB5082.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:538;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: g9Yl8VtTskCjfV9dmkKPz9so+TEPwXXZlI7hCtZPz/yTiX021Eg3igmIs1wMfbQucEOOeHgKU2n6GYfGRnwnkJzID9fALui5WM3JsGcS3YdJQhCti7jA8SDU/rn7vrq7K3kgj7L/C6uU+IqiuU+owUW48+odS62NUrviiEqcavdfsDEHgbVY+Dwhcd6FCrmqVE42W89KLcFjWX+y9goWCLetgYv+mJYi1F4wjnNWzm0GX++OCuaEYkSqJdyodAJOk7waeuFKVedlK5M1uBxbn6A7lrE8tzdPPC2aWkb1IJT/A5dDtGzoMYXJxDxH2C2rFvRcQL9ieSlizcIwuCchITNeobBYNZFqwfSioMNGBTSxA6xkWhdhLuzTOhSQ1daNrSPYAnyNDbhctypJVdE7nBp3sgZcJV+nzue64PIo+CtCUP/5rgfYtUMSbDymK4readOjdb4PBBFAu3L4RXal/1ACnwe9EuPccvZ4vgP4j6ryAdbl+GlnUMrNZemaB1M4ueadljhLyY7sijkOQz+Te6PwdzleEARisr/l3bZ+RyzRAs+26ZUoi1W182TJ07ixcWUP0YoqiZnQgibNCgZjZL+WnkHiTBgYcwjaodD8zsbfse3HiLhoty6JrmDn4SYk6Uz4bCwXVSSkDLxpf49zSV1rd+E4YvidRTW8CTi0bLLL1EX6ZjwDhcR5Y9qGel6+b/H5Ck1+unt84ZJ8piZcJdvduef1wHh/K/BLzojkXCjr6tYBegk7MWMRmFW0JQiMLix8K+7xMPglZrdEF97nqHhQraaKfjxOoJqZCdDnkghhnolfFuVzNvOlJO+vx7bq
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(40470700002)(36840700001)(46966006)(336012)(83380400001)(70206006)(2616005)(40460700001)(508600001)(82310400004)(5660300002)(70586007)(426003)(8936002)(4326008)(8676002)(7696005)(1076003)(6666004)(81166007)(36756003)(110136005)(36860700001)(54906003)(86362001)(26005)(2906002)(186003)(356005)(47076005)(316002)(461764006)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Dec 2021 06:49:14.7957
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ab977388-1be9-430a-0ae1-08d9c6a98000
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT052.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5082
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Rafael,
+Configure the speaker gpio pin based on power sequence of the DAPM
+speaker events.
+Enable speaker after widget power up and Disable before widget  powerdown.
 
-This is devfreq-next pull request for v5.17-rc1. I add detailed description of
-this pull request on the following tag. Please pull devfreq with following updates.
+Signed-off-by: V sujith kumar Reddy <vsujithkumar.reddy@amd.com>
+---
+ sound/soc/amd/acp/Kconfig           |  6 +++---
+ sound/soc/amd/acp/acp-legacy-mach.c | 19 ++++++++++++++++---
+ sound/soc/amd/acp/acp-mach-common.c | 25 +++++++++++++++++++++++++
+ sound/soc/amd/acp/acp-mach.h        | 10 +++++++++-
+ sound/soc/amd/acp/acp-sof-mach.c    | 21 ++++++++++++++++++---
+ 5 files changed, 71 insertions(+), 10 deletions(-)
 
-Best Regards,
-Chanwoo Choi
+diff --git a/sound/soc/amd/acp/Kconfig b/sound/soc/amd/acp/Kconfig
+index 154be5e70821..d5838df3064b 100644
+--- a/sound/soc/amd/acp/Kconfig
++++ b/sound/soc/amd/acp/Kconfig
+@@ -32,7 +32,7 @@ config SND_AMD_ASOC_RENOIR
+ 
+ config SND_SOC_AMD_MACH_COMMON
+ 	tristate
+-	depends on X86 && PCI && I2C
++	depends on X86 && PCI && I2C && GPIOLIB
+ 	select CLK_FIXED_FCH
+ 	select SND_SOC_RT5682_I2C
+ 	select SND_SOC_DMIC
+@@ -44,14 +44,14 @@ config SND_SOC_AMD_MACH_COMMON
+ 
+ config SND_SOC_AMD_LEGACY_MACH
+ 	tristate "AMD Legacy Machine Driver Support"
+-	depends on X86 && PCI && I2C
++	depends on X86 && PCI && I2C && GPIOLIB
+ 	select SND_SOC_AMD_MACH_COMMON
+ 	help
+ 	  This option enables legacy sound card support for ACP audio.
+ 
+ config SND_SOC_AMD_SOF_MACH
+ 	tristate "AMD SOF Machine Driver Support"
+-	depends on X86 && PCI && I2C
++	depends on X86 && PCI && I2C && GPIOLIB
+ 	select SND_SOC_AMD_MACH_COMMON
+ 	help
+ 	  This option enables SOF sound card support for ACP audio.
+diff --git a/sound/soc/amd/acp/acp-legacy-mach.c b/sound/soc/amd/acp/acp-legacy-mach.c
+index de0f8024e2fb..0ad1cf41b308 100644
+--- a/sound/soc/amd/acp/acp-legacy-mach.c
++++ b/sound/soc/amd/acp/acp-legacy-mach.c
+@@ -27,6 +27,7 @@ static struct acp_card_drvdata rt5682_rt1019_data = {
+ 	.hs_codec_id = RT5682,
+ 	.amp_codec_id = RT1019,
+ 	.dmic_codec_id = NONE,
++	.gpio_spkr_en = EN_SPKR_GPIO_GB,
+ };
+ 
+ static const struct snd_kcontrol_new acp_controls[] = {
+@@ -41,15 +42,16 @@ static const struct snd_kcontrol_new acp_controls[] = {
+ static const struct snd_soc_dapm_widget acp_widgets[] = {
+ 	SND_SOC_DAPM_HP("Headphone Jack", NULL),
+ 	SND_SOC_DAPM_MIC("Headset Mic", NULL),
+-	SND_SOC_DAPM_SPK("Spk", NULL),
+-	SND_SOC_DAPM_SPK("Left Spk", NULL),
+-	SND_SOC_DAPM_SPK("Right Spk", NULL),
++	SND_SOC_DAPM_SPK("Spk", event_spkr_handler),
++	SND_SOC_DAPM_SPK("Left Spk", event_spkr_handler),
++	SND_SOC_DAPM_SPK("Right Spk", event_spkr_handler),
+ };
+ 
+ static int acp_asoc_probe(struct platform_device *pdev)
+ {
+ 	struct snd_soc_card *card = NULL;
+ 	struct device *dev = &pdev->dev;
++	unsigned int spkr_gpio;
+ 	int ret;
+ 
+ 	if (!pdev->id_entry)
+@@ -67,9 +69,20 @@ static int acp_asoc_probe(struct platform_device *pdev)
+ 	card->controls = acp_controls;
+ 	card->num_controls = ARRAY_SIZE(acp_controls);
+ 	card->drvdata = (struct acp_card_drvdata *)pdev->id_entry->driver_data;
++	spkr_gpio = ((struct acp_card_drvdata *)(card->drvdata))->gpio_spkr_en;
+ 
+ 	acp_legacy_dai_links_create(card);
+ 
++	if (gpio_is_valid(spkr_gpio)) {
++		ret = devm_gpio_request(dev, spkr_gpio, "spkren");
++		if (ret) {
++			dev_err(dev, "(%s) gpio request failed: %d\n",
++				__func__, ret);
++			return ret;
++		}
++		gpio_direction_output(spkr_gpio, 0);
++	}
++
+ 	ret = devm_snd_soc_register_card(&pdev->dev, card);
+ 	if (ret) {
+ 		dev_err(&pdev->dev,
+diff --git a/sound/soc/amd/acp/acp-mach-common.c b/sound/soc/amd/acp/acp-mach-common.c
+index 7785f12aa006..03d8d1af14b3 100644
+--- a/sound/soc/amd/acp/acp-mach-common.c
++++ b/sound/soc/amd/acp/acp-mach-common.c
+@@ -71,6 +71,31 @@ static const struct snd_soc_dapm_route rt5682_map[] = {
+ 	{ "IN1P", NULL, "Headset Mic" },
+ };
+ 
++int event_spkr_handler(struct snd_soc_dapm_widget *w,
++			struct snd_kcontrol *k, int event)
++{
++	struct snd_soc_dapm_context *dapm = w->dapm;
++	struct snd_soc_card *card = dapm->card;
++	struct acp_card_drvdata *drvdata = snd_soc_card_get_drvdata(card);
++
++	if (!gpio_is_valid(drvdata->gpio_spkr_en))
++		return 0;
++
++	switch (event) {
++	case SND_SOC_DAPM_POST_PMU:
++		gpio_set_value(drvdata->gpio_spkr_en, 1);
++		break;
++	case SND_SOC_DAPM_PRE_PMD:
++		gpio_set_value(drvdata->gpio_spkr_en, 0);
++		break;
++	default:
++		dev_warn(card->dev, "%s invalid setting\n", __func__);
++		break;
++	}
++	return 0;
++}
++EXPORT_SYMBOL_NS_GPL(event_spkr_handler, SND_SOC_AMD_MACH);
++
+ /* Define card ops for RT5682 CODEC */
+ static int acp_card_rt5682_init(struct snd_soc_pcm_runtime *rtd)
+ {
+diff --git a/sound/soc/amd/acp/acp-mach.h b/sound/soc/amd/acp/acp-mach.h
+index 5dc47cfbff10..fd6299844ebe 100644
+--- a/sound/soc/amd/acp/acp-mach.h
++++ b/sound/soc/amd/acp/acp-mach.h
+@@ -17,6 +17,12 @@
+ #include <linux/input.h>
+ #include <linux/module.h>
+ #include <sound/soc.h>
++#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
++
++#define EN_SPKR_GPIO_GB                0x11F
++#define EN_SPKR_GPIO_NK                0x146
++#define EN_SPKR_GPIO_NONE      -EINVAL
+ 
+ enum be_id {
+ 	HEADSET_BE_ID = 0,
+@@ -49,9 +55,11 @@ struct acp_card_drvdata {
+ 	unsigned int dai_fmt;
+ 	struct clk *wclk;
+ 	struct clk *bclk;
++	unsigned int gpio_spkr_en;
+ };
+ 
+ int acp_sofdsp_dai_links_create(struct snd_soc_card *card);
+ int acp_legacy_dai_links_create(struct snd_soc_card *card);
+-
++int event_spkr_handler(struct snd_soc_dapm_widget *w,
++			struct snd_kcontrol *k, int event);
+ #endif
+diff --git a/sound/soc/amd/acp/acp-sof-mach.c b/sound/soc/amd/acp/acp-sof-mach.c
+index 854eb7214cea..07de46142655 100644
+--- a/sound/soc/amd/acp/acp-sof-mach.c
++++ b/sound/soc/amd/acp/acp-sof-mach.c
+@@ -27,6 +27,7 @@ static struct acp_card_drvdata sof_rt5682_rt1019_data = {
+ 	.hs_codec_id = RT5682,
+ 	.amp_codec_id = RT1019,
+ 	.dmic_codec_id = DMIC,
++	.gpio_spkr_en = EN_SPKR_GPIO_GB,
+ };
+ 
+ static struct acp_card_drvdata sof_rt5682_max_data = {
+@@ -36,6 +37,7 @@ static struct acp_card_drvdata sof_rt5682_max_data = {
+ 	.hs_codec_id = RT5682,
+ 	.amp_codec_id = MAX98360A,
+ 	.dmic_codec_id = DMIC,
++	.gpio_spkr_en = EN_SPKR_GPIO_NK,
+ };
+ 
+ static struct acp_card_drvdata sof_rt5682s_max_data = {
+@@ -45,6 +47,7 @@ static struct acp_card_drvdata sof_rt5682s_max_data = {
+ 	.hs_codec_id = RT5682S,
+ 	.amp_codec_id = MAX98360A,
+ 	.dmic_codec_id = DMIC,
++	.gpio_spkr_en = EN_SPKR_GPIO_NK,
+ };
+ 
+ static const struct snd_kcontrol_new acp_controls[] = {
+@@ -58,15 +61,16 @@ static const struct snd_kcontrol_new acp_controls[] = {
+ static const struct snd_soc_dapm_widget acp_widgets[] = {
+ 	SND_SOC_DAPM_HP("Headphone Jack", NULL),
+ 	SND_SOC_DAPM_MIC("Headset Mic", NULL),
+-	SND_SOC_DAPM_SPK("Spk", NULL),
+-	SND_SOC_DAPM_SPK("Left Spk", NULL),
+-	SND_SOC_DAPM_SPK("Right Spk", NULL),
++	SND_SOC_DAPM_SPK("Spk", event_spkr_handler),
++	SND_SOC_DAPM_SPK("Left Spk", event_spkr_handler),
++	SND_SOC_DAPM_SPK("Right Spk", event_spkr_handler),
+ };
+ 
+ static int acp_sof_probe(struct platform_device *pdev)
+ {
+ 	struct snd_soc_card *card = NULL;
+ 	struct device *dev = &pdev->dev;
++	unsigned int spkr_gpio;
+ 	int ret;
+ 
+ 	if (!pdev->id_entry)
+@@ -84,9 +88,20 @@ static int acp_sof_probe(struct platform_device *pdev)
+ 	card->controls = acp_controls;
+ 	card->num_controls = ARRAY_SIZE(acp_controls);
+ 	card->drvdata = (struct acp_card_drvdata *)pdev->id_entry->driver_data;
++	spkr_gpio = ((struct acp_card_drvdata *)(card->drvdata))->gpio_spkr_en;
+ 
+ 	acp_sofdsp_dai_links_create(card);
+ 
++	if (gpio_is_valid(spkr_gpio)) {
++		ret = devm_gpio_request(dev, spkr_gpio, "spkren");
++		if (ret) {
++			dev_err(dev, "(%s) gpio request failed: %d\n",
++				__func__, ret);
++			return ret;
++		}
++		gpio_direction_output(spkr_gpio, 0);
++	}
++
+ 	ret = devm_snd_soc_register_card(&pdev->dev, card);
+ 	if (ret) {
+ 		dev_err(&pdev->dev,
+-- 
+2.25.1
 
-
-The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
-
-  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-5.17
-
-for you to fetch changes up to 4667431419e93b63b4edfe7abdfc96cefcbcc051:
-
-  PM / devfreq: Reduce log severity for informative message (2021-12-16 11:29:54 +0900)
-
-----------------------------------------------------------------
-Update devfreq next for v5.17
-
-Detailed description for this pull request:
-1. Add new DRAM controller driver for sunXi SoCs
-- Add DRAM frequency controller devfreq driver for Allwinner sunXi SoCs
-in order to support dynamic frequency scaling of DRAM frequency. It
-calculates the supported frequency list from source clock in the range
-of full speed to quarter speed instead of devicetree.
-
-- Add COMMON_CLK dependency to fix build error
-
-2. Reduce log severity for informative message about frequency transition fail
-----------------------------------------------------------------
-
-Arnd Bergmann (1):
-      PM / devfreq: sun8i: addd COMMON_CLK dependency
-
-Samuel Holland (1):
-      PM / devfreq: Add a driver for the sun8i/sun50i MBUS
-
-Tzung-Bi Shih (1):
-      PM / devfreq: Reduce log severity for informative message
-
- drivers/devfreq/Kconfig          |   9 +
- drivers/devfreq/Makefile         |   1 +
- drivers/devfreq/devfreq.c        |   4 +-
- drivers/devfreq/sun8i-a33-mbus.c | 511 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 523 insertions(+), 2 deletions(-)
- create mode 100644 drivers/devfreq/sun8i-a33-mbus.c

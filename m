@@ -2,107 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 389E047ED1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 09:26:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53ADE47ED38
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 09:32:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351995AbhLXI0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 03:26:21 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:52970 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1351985AbhLXI0U (ORCPT
+        id S1351993AbhLXIcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 03:32:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58852 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343611AbhLXIcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 03:26:20 -0500
-X-UUID: df60c8d495e448578b599849faf97569-20211224
-X-UUID: df60c8d495e448578b599849faf97569-20211224
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <sean.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 572292281; Fri, 24 Dec 2021 16:26:17 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 24 Dec 2021 16:26:16 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 24 Dec 2021 16:26:16 +0800
-From:   <sean.wang@mediatek.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
-CC:     <Mark-YW.Chen@mediatek.com>, <sean.wang@mediatek.com>,
-        <Soul.Huang@mediatek.com>, <YN.Chen@mediatek.com>,
-        <Leon.Yen@mediatek.com>, <Eric-SY.Chang@mediatek.com>,
-        <Deren.Wu@mediatek.com>, <km.lin@mediatek.com>,
-        <robin.chiu@mediatek.com>, <Eddie.Chen@mediatek.com>,
-        <ch.yeh@mediatek.com>, <posh.sun@mediatek.com>,
-        <ted.huang@mediatek.com>, <Eric.Liang@mediatek.com>,
-        <Stella.Chang@mediatek.com>, <Tom.Chou@mediatek.com>,
-        <steve.lee@mediatek.com>, <jsiuda@google.com>,
-        <frankgor@google.com>, <jemele@google.com>,
-        <abhishekpandit@google.com>, <michaelfsun@google.com>,
-        <mcchou@chromium.org>, <shawnku@google.com>,
-        <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 3/3] Bluetooth: btmtksdio: move struct reg_read_cmd to common file
-Date:   Fri, 24 Dec 2021 16:26:02 +0800
-Message-ID: <068921e3eecab99a66fdf949a2597d4fded0c223.1640334021.git.sean.wang@kernel.org>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <91dfa736b7629cdb94bd2029f05717eeae77b07d.1640334021.git.sean.wang@kernel.org>
-References: <91dfa736b7629cdb94bd2029f05717eeae77b07d.1640334021.git.sean.wang@kernel.org>
+        Fri, 24 Dec 2021 03:32:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E67C061401;
+        Fri, 24 Dec 2021 00:32:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 698B1B82234;
+        Fri, 24 Dec 2021 08:32:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7584DC36AE5;
+        Fri, 24 Dec 2021 08:32:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640334770;
+        bh=oAGJa1eQZdR4k8gaHp+oWjXb51Y31FZ01er7yJKkMOI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eUv9EiLyLp7rAXeV2DY3PM6Ci3kQf/LPxlARr3ea+c4lU8gY7hDvWmUxS0p6/3XWm
+         q4w4vwFGH6Rk/InS30d/o3V5XGw7C0s4P7lCU8xHnsO65KgGJFTpUrCUndyg6YFy/1
+         lmHAOe6plivc/xHjQWNEqw7aYRNmmztia9FBkrXU=
+Date:   Fri, 24 Dec 2021 09:32:44 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Quan Nguyen <quan@os.amperecomputing.com>
+Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Subject: Re: [PATCH v6 6/9] misc: smpro-errmon: Add Ampere's SMpro error
+ monitor driver
+Message-ID: <YcWFrCjWSG65KQgb@kroah.com>
+References: <20211224041352.29405-1-quan@os.amperecomputing.com>
+ <20211224041352.29405-7-quan@os.amperecomputing.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211224041352.29405-7-quan@os.amperecomputing.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
+On Fri, Dec 24, 2021 at 11:13:49AM +0700, Quan Nguyen wrote:
+> This commit adds Ampere's SMpro error monitor driver for monitoring
+> and reporting RAS-related errors as reported by SMpro co-processor
+> found on Ampere's Altra processor family.
+> 
+> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+> ---
+> Change in v6:
+>   + First introduced in v6 [Quan]
+> 
+>  drivers/mfd/smpro-mfd.c     |   1 +
+>  drivers/misc/Kconfig        |   7 +
+>  drivers/misc/Makefile       |   1 +
+>  drivers/misc/smpro-errmon.c | 571 ++++++++++++++++++++++++++++++++++++
+>  4 files changed, 580 insertions(+)
+>  create mode 100644 drivers/misc/smpro-errmon.c
 
-move struct reg_read_cmd to btmtk.h to allow other mtk drivers refer to.
+You need Documentation/ABI/ updates when you add sysfs files.  Please do
+that for your next version of this patch.
 
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
----
-v2, v3 and v4: no change
----
- drivers/bluetooth/btmtk.h     | 7 +++++++
- drivers/bluetooth/btmtksdio.c | 7 +------
- 2 files changed, 8 insertions(+), 6 deletions(-)
+Also remember that sysfs is only "one value per file", this driver seems
+to violate that in huge ways and is not ok.
 
-diff --git a/drivers/bluetooth/btmtk.h b/drivers/bluetooth/btmtk.h
-index fc57ef09d132..fb76d9765ce0 100644
---- a/drivers/bluetooth/btmtk.h
-+++ b/drivers/bluetooth/btmtk.h
-@@ -87,6 +87,13 @@ struct btmtk_sco {
- 	u8 channel_select_config;
- } __packed;
- 
-+struct reg_read_cmd {
-+	u8 type;
-+	u8 rsv;
-+	u8 num;
-+	__le32 addr;
-+} __packed;
-+
- struct reg_write_cmd {
- 	u8 type;
- 	u8 rsv;
-diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-index f6fb82b317de..92371be9f4b2 100644
---- a/drivers/bluetooth/btmtksdio.c
-+++ b/drivers/bluetooth/btmtksdio.c
-@@ -800,12 +800,7 @@ static int mt79xx_setup(struct hci_dev *hdev, const char *fwname)
- static int btsdio_mtk_reg_read(struct hci_dev *hdev, u32 reg, u32 *val)
- {
- 	struct btmtk_hci_wmt_params wmt_params;
--	struct reg_read_cmd {
--		u8 type;
--		u8 rsv;
--		u8 num;
--		__le32 addr;
--	} __packed reg_read = {
-+	struct reg_read_cmd reg_read = {
- 		.type = 1,
- 		.num = 1,
- 	};
--- 
-2.25.1
+thanks,
 
+greg k-h

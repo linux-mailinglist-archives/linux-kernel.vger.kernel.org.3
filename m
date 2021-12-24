@@ -2,159 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8A347ECC7
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 08:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7458947ECCA
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 08:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351881AbhLXHia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 02:38:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
+        id S1351906AbhLXHik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 02:38:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343542AbhLXHi3 (ORCPT
+        with ESMTP id S1351904AbhLXHie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 02:38:29 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A32C061759
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 23:38:29 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id h6so2281339plf.6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 23:38:29 -0800 (PST)
+        Fri, 24 Dec 2021 02:38:34 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4733CC061759
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 23:38:34 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id t18so15990597wrg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 23:38:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=H4F2V9c1PkaLdgAGnpv/RVBL4kcIo1QcKpTTOJdHTl8=;
-        b=5g17BbspCXEjkr/biCb9GIUQZp6ikmFHO9oQ7M9syNHod4TQPjy9KgaAhfyp/pDYIa
-         6wo2jxDJH3sf7U3taB21xkPkZSbbdsSwjAOUj9X7pB/QlqFk1T0w7gK7VFiBNxH3MPie
-         gONr5XgIk7HlnswoqMwk+Vv9I5sgS+KnP+sSMcKHAyulFhOp6DQbTpeTAlq7q22t7Pey
-         vukNgxmR/vobRl9HgrXSxUfL6OTROePcoqXiJdOn/SwZu/YfnBem7RCzpBJqiAoAoTyR
-         /D89UkytgMOKtDiP26wuFbGfatHXwL0EJp+2Ffpr/GrLOleRBiitmofzKape974xNi6M
-         J8HQ==
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zehQu19sG8zPf6sTX7xbu4Pim5UWCx0QpvBAMXBdZsM=;
+        b=Kc7Vq0z4QdQj5VZQWUJruEHr1vXWKQiy/GE0lgTeAHMJ4QcMlUr277gJ16+XTFn0sT
+         bCYygv81STggBYOWNbKSVNP33Mf5gaXHpN6prAkGu49yN9Lc1a2AzJgDyFm+L/j6TY8J
+         1TbfOhCJ5PL1CYsdhIUw1iNEc/OPIHjiNth0Rd3IIw0HtxMXHgeiVcCbcoedWKe3Uggb
+         Y2P8QXdgyVAnBvghox7tN127eJJHfkYWyxMcYTGkjEHmnvin+ATSuiQ0GcZRWkcgnbPB
+         UTMntwFq2Ch2n6jpZn4siAdn3phBB2Lpu8GsYvDbAQAPw6gIQzgS1cCMh0/dWS8B/KRf
+         N2lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=H4F2V9c1PkaLdgAGnpv/RVBL4kcIo1QcKpTTOJdHTl8=;
-        b=XlggDDTsvYNJ+7v6QnN/E6aX7wyjEmapcOKS3OukWvm7qH0wRJMypz/fiCwjIdb+wk
-         L46ZXpczidVjop/SoSAjlJaWrNAEAV0BrW/kCPiDY9vzpW8HbOMg9wapCFuq+kU9plZs
-         J6lMZgqjBVgiuiYdGVgQgHSEnWjDm2W36Noo6nytIwAp76Cyu/C+TeXxyS1ZeE+pqPrA
-         AD+hGKK36cyaYKQpK8F2feenSE6iStDzmog6MnQm27ow/QJ9hoqNpnXxkG4j/wTai13r
-         HTsv732T3Xkjwslzku6rAXANWBIhglv//od+845QAC9mf4yG2nUxB1UtpF1CqImIozKZ
-         kykQ==
-X-Gm-Message-State: AOAM530cP45GVtDkgBBL5wihErG2Tmw3BSKKsLMfYUs/KIN4UhGwbZHO
-        aCj6zHEC3HeFwtvxNDcXpSzxlw==
-X-Google-Smtp-Source: ABdhPJyAuuuagOuqWpDZBvJEssG6KbMUcW2iSpjeuECd5mLWotysn9+jj4/g+7wtBYp3NHlntU1IIA==
-X-Received: by 2002:a17:902:ecc3:b0:149:5a6d:c5e with SMTP id a3-20020a170902ecc300b001495a6d0c5emr3080082plh.20.1640331508636;
-        Thu, 23 Dec 2021 23:38:28 -0800 (PST)
-Received: from [10.255.186.155] ([139.177.225.249])
-        by smtp.gmail.com with ESMTPSA id z2sm8564478pfe.93.2021.12.23.23.38.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Dec 2021 23:38:28 -0800 (PST)
-Message-ID: <5dcbb13e-322f-a8d0-3bcf-d91b72ab51b9@bytedance.com>
-Date:   Fri, 24 Dec 2021 15:38:20 +0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zehQu19sG8zPf6sTX7xbu4Pim5UWCx0QpvBAMXBdZsM=;
+        b=nOGBtNo0aJO3Ym+EK25ZYJLKqSukesxDqgNbNyHrSjOkJPhrlk49BwnXelIex3ErMx
+         19jzqjZdxaWYd5oZcEOf/CwYf6ZENSYLoT7lPX4FDLJ9WfRok50icaI2sNi4L1P/nDp7
+         dgVZQTtj8D+4vQ0xpez4TZSbdGWvwmC9RirHEt7pnQ4W+ye7MbioLp6PJbKGrOpIfHjc
+         VPQ1TLHERtSFPgkbortlvsSPsDaol3BGrIBu5Xr5fzoHwev8gRZ9idLuV4wjo1Q0XvUA
+         SkMQJXNkpecqN/0wd73WEO52J8upOGWteNPbEV5KHlDk2yy4ebtIQ8n4mUFTvXGH++qc
+         7TdA==
+X-Gm-Message-State: AOAM530nFJdqqdN5IH7AuvBACekyiZzNBuOKiEqlLjaG6/IwD8nAI5D2
+        iCZ7O+cOelRB5hffKzBI4OT+xs8zE24/pShEE4TlLw==
+X-Google-Smtp-Source: ABdhPJyl+RLF9H+jUZa+5CGrWYy5DZy8pF9QpRofT4U/ZZybydpgrPxqo7pr1Asa3GRAZQ7HMCHf7E3gnAL6mmS40iw=
+X-Received: by 2002:a5d:4d91:: with SMTP id b17mr3999415wru.214.1640331512744;
+ Thu, 23 Dec 2021 23:38:32 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [External] Re: Fix repeated legacy kprobes on same function
-Content-Language: en-US
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Qiang Wang <wangqiang.wq.frank@bytedance.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        duanxiongchun@bytedance.com, shekairui@bytedance.com,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <c84094d2-75c1-a50d-ea9e-9dded5f01fb9@bytedance.com>
- <CAEf4Bza200bB3d-E3rMyxZs7wxijbzJ_0xmRSy+=tHm2Ot14Eg@mail.gmail.com>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <CAEf4Bza200bB3d-E3rMyxZs7wxijbzJ_0xmRSy+=tHm2Ot14Eg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20211224073604.1085464-1-anup.patel@wdc.com>
+In-Reply-To: <20211224073604.1085464-1-anup.patel@wdc.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Fri, 24 Dec 2021 13:08:21 +0530
+Message-ID: <CAAhSdy2Gm96UVZhFMmbER+trrMgi-gFCpMvURR9Thb8NiNd88g@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] KVM RISC-V 64-bit selftests support
+To:     Anup Patel <anup.patel@wdc.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        KVM General <kvm@vger.kernel.org>,
+        kvm-riscv@lists.infradead.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/24 2:57 下午, Andrii Nakryiko wrote:
-> On Thu, Dec 23, 2021 at 8:01 PM Qiang Wang
-> <wangqiang.wq.frank@bytedance.com> wrote:
->>
->> If repeated legacy kprobes on same function in one process,
->> libbpf will register using the same probe name and got -EBUSY
->> error. So append index to the probe name format to fix this
->> problem.
->>
->> And fix a bug in commit 46ed5fc33db9, which wrongly used the
->> func_name instead of probe_name to register.
->>
->> Fixes: 46ed5fc33db9 ("libbpf: Refactor and simplify legacy kprobe code")
->> Co-developed-by: Chengming Zhou <zhouchengming@bytedance.com>
->> Signed-off-by: Qiang Wang <wangqiang.wq.frank@bytedance.com>
->> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
->>
->> ---
->>   tools/lib/bpf/libbpf.c | 5 +++--
->>   1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
->> index 7c74342bb668..7d1097958459 100644
->> --- a/tools/lib/bpf/libbpf.c
->> +++ b/tools/lib/bpf/libbpf.c
->> @@ -9634,7 +9634,8 @@ static int append_to_file(const char *file, const
->> char *fmt, ...)
->>   static void gen_kprobe_legacy_event_name(char *buf, size_t buf_sz,
->>                                           const char *kfunc_name, size_t
->> offset)
->>   {
->> -       snprintf(buf, buf_sz, "libbpf_%u_%s_0x%zx", getpid(),
->> kfunc_name, offset);
->> +       static int index = 0;
->> +       snprintf(buf, buf_sz, "libbpf_%u_%s_0x%zx_%d", getpid(),
->> kfunc_name, offset, index++);
-> 
-> BCC doesn't add this auto-increment (which is also not thread-safe)
-> and it seems like that works fine for all users.
-> 
+Hi All,
 
-Yes, BCC has the same problem, we will send a fix patch to BCC later.
-We thought libbpf was used in single-threaded environment, so will
-change to use __sync_fetch_and_add() to keep thread-safe. Thanks for
-pointing this out.
+On Fri, Dec 24, 2021 at 1:06 PM Anup Patel <anup.patel@wdc.com> wrote:
+>
+> This series adds initial support for testing KVM RISC-V 64-bit using
+> kernel selftests framework. The PATCH1 & PATCH2 of this series does
+> some ground work in KVM RISC-V to implement RISC-V support in the KVM
+> selftests whereas remaining patches does required changes in the KVM
+> selftests.
+>
+> These patches can be found in riscv_kvm_selftests_v3 branch at:
+> https://github.com/avpatel/linux.git
 
-> What is the use case where you'd like to attach to the same kernel
-> function multiple times with legacy kprobe?
-> 
+This is actually v3 series so please ignore the "PATCH v4" subject prefix.
 
-We used many different BPF modules writen by different people in one
-monitor process to analyze all data, there maybe repeated legacy kprobes
-on the same function. So we want to add a unique index suffix to support
-this use case.
+Regards,
+Anup
 
->>   }
->>
->>   static int add_kprobe_event_legacy(const char *probe_name, bool retprobe,
->> @@ -9735,7 +9736,7 @@ bpf_program__attach_kprobe_opts(const struct
->> bpf_program *prog,
->>                  gen_kprobe_legacy_event_name(probe_name,
->> sizeof(probe_name),
->>                                               func_name, offset);
->>
->> -               legacy_probe = strdup(func_name);
->> +               legacy_probe = strdup(probe_name);
-> 
-> please send this as a separate fix
-> 
-
-Ok, will do.
-
-Thanks.
-
->>                  if (!legacy_probe)
->>                          return libbpf_err_ptr(-ENOMEM);
->>
->> --
->> 2.20.1
->>
+>
+> Changes since v2:
+>  - Rebased series on Linux-5.16-rc6
+>  - Renamed kvm_riscv_stage2_gpa_size() to kvm_riscv_stage2_gpa_bits()
+>    in PATCH2
+>
+> Changes since v1:
+>  - Renamed kvm_sbi_ext_expevend_handler() to kvm_sbi_ext_forward_handler()
+>    in PATCH1
+>  - Renamed KVM_CAP_RISCV_VM_GPA_SIZE to KVM_CAP_VM_GPA_BITS in PATCH2
+>    and PATCH4
+>
+> Anup Patel (4):
+>   RISC-V: KVM: Forward SBI experimental and vendor extensions
+>   RISC-V: KVM: Add VM capability to allow userspace get GPA bits
+>   KVM: selftests: Add EXTRA_CFLAGS in top-level Makefile
+>   KVM: selftests: Add initial support for RISC-V 64-bit
+>
+>  arch/riscv/include/asm/kvm_host.h             |   1 +
+>  arch/riscv/kvm/mmu.c                          |   5 +
+>  arch/riscv/kvm/vcpu_sbi.c                     |   4 +
+>  arch/riscv/kvm/vcpu_sbi_base.c                |  27 ++
+>  arch/riscv/kvm/vm.c                           |   3 +
+>  include/uapi/linux/kvm.h                      |   1 +
+>  tools/testing/selftests/kvm/Makefile          |  14 +-
+>  .../testing/selftests/kvm/include/kvm_util.h  |  10 +
+>  .../selftests/kvm/include/riscv/processor.h   | 135 +++++++
+>  tools/testing/selftests/kvm/lib/guest_modes.c |  10 +
+>  .../selftests/kvm/lib/riscv/processor.c       | 362 ++++++++++++++++++
+>  tools/testing/selftests/kvm/lib/riscv/ucall.c |  87 +++++
+>  12 files changed, 658 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/kvm/include/riscv/processor.h
+>  create mode 100644 tools/testing/selftests/kvm/lib/riscv/processor.c
+>  create mode 100644 tools/testing/selftests/kvm/lib/riscv/ucall.c
+>
+> --
+> 2.25.1
+>

@@ -2,114 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86EAA47EB11
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 05:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4FD747EB13
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 05:11:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351227AbhLXEGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 23:06:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235118AbhLXEF7 (ORCPT
+        id S1351233AbhLXELF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 23:11:05 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:59527 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235118AbhLXELE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 23:05:59 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6EFC061401
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 20:05:59 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id be32so11863347oib.11
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 20:05:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AK/GoBD4NSOHwSVqZthu2O08Jw7u+mwsxqJi3Ry3nKc=;
-        b=gq2yQoCaJnKxdj0aHEXvs8IGPBaDHeTzTaYt/ryWsKz+mIDvAu9iIBhc2ZkzWM1dOD
-         tEu2K97Is8ypqo+4uHCIyWDHFikuEd0awybqFuyTHjZE7wnwRhO2UE9ryQXiKxIKfuna
-         cqjppHyaaZXsq3bFvQROZpaikTDEru/hXH3SUQgRMUbQ1JXiw5+qJGPvOxtocEarf1Ty
-         Ie66oOBvLSZ9QlTXAcC1gqlUQ+xQGNm/iYsoWS5WzMaqaHJ0BptL1180107BLwHzx7Ad
-         uZBNx6khDhyGorIvjqLJTFeFxkGm4BVRqnw2F6ut+jL0OP4JXOozlmYqtzsB5HLe6GRL
-         RNjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AK/GoBD4NSOHwSVqZthu2O08Jw7u+mwsxqJi3Ry3nKc=;
-        b=1R/nmGN0i0k9VT8B0SLsxVNtkvCa9HKlUFdiaAQYpxrO/NpG1YOSORvXnoZXBYLbCP
-         5hInl1j0yX+xvfWQILOJbzMZI11qCrRw7ppLGZtUZj+B1gboJQE6J8pgZSPtSZoH/4Bw
-         bRwl54RcFK9QiwnIhDiS3e3m15TfQ73F8gtwyBQxC5H92EqKdFwtRECvMSOn43NTkbHr
-         bMuKnczAIraXQn33Ky8PbbOLQZj0k3K8F6SkoqbeChqdsPOJZc8FQQo3WhCrUqPnRxVD
-         TQEgyiX9CBbA65Reyvt6cxvCmAwinmroSzQMJxN87qhgto/6JEbmFoUk5KKreQALzSGj
-         dPdA==
-X-Gm-Message-State: AOAM530zrq0NlG8Ek0iRbJggjyQ3YyfFlYmhVGJIbzJgdDHta5YSZCxM
-        8gcDoVADnK/NMnQjZr0ews9za32rDmmgpmvqg4ZC8Q==
-X-Google-Smtp-Source: ABdhPJxQOSzC8McVfBe3KmWsuME/BKDeKWRpaj/52MKdPsPCfZWTUeKA3YUfD7+a3GmNhmxsLircXMO8+Vb1K/pQrgM=
-X-Received: by 2002:a54:4613:: with SMTP id p19mr3662521oip.162.1640318758486;
- Thu, 23 Dec 2021 20:05:58 -0800 (PST)
+        Thu, 23 Dec 2021 23:11:04 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JKtsL1VPMz4xgr;
+        Fri, 24 Dec 2021 15:11:01 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1640319062;
+        bh=wSyVyz5FBNDlPu0quD9cfNONAVyr9hVDfj3L9iuRy1A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fHm6m5G9PwaBd7ZZwJ51fdwoVH42Z/qDAhk68iESlV/tdwZb7/IZuTUvb/7lOAh0L
+         rZ1azt53ZthUDc1fBv3BGI/BAZPUiF6Q+/pMbCccCuBWVb0HGr3osQ1xf2U6NOi1mo
+         Cz9XT07tEwc8wH0GZU6SyXEuZOZEFWmknns/F2QJSztCaqjcixX+GW88pn4gXq5Sc0
+         bFpW6IKtOwNhEjk106hhAfmy9EpCfamShmsn2MkEj1GSlgu7O2HyWx//3pqT9a1RDc
+         Ug74fkfW3zGiObBPFfigu+SYJr79jPwTZ3Bfpg515aVlWIDZowWjoAlhfDFdWtyN0X
+         Y2RnJKaIhebMw==
+Date:   Fri, 24 Dec 2021 15:11:01 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mike Christie <michael.christie@oracle.com>
+Subject: linux-next: manual merge of the userns tree with the vhost tree
+Message-ID: <20211224151101.5e56b7b5@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20211218085843.212497-1-cuigaosheng1@huawei.com>
- <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com>
- <dfc25b22-2f66-4404-66c4-44c9c8c3bab4@huawei.com> <CAK8P3a0aNoU693ft3pHCPJOcGubZ1dMFyOmWozO0N_8-F_JkLQ@mail.gmail.com>
- <CACRpkdaNv7850mOyXRMgmPf8TQxiM-C5VEkGnLfd+wvffW8FAg@mail.gmail.com> <CAMj1kXHgptq47g3mSPTKW9KMnqTH4K2Q7riBVwX4iA1V9YWYiA@mail.gmail.com>
-In-Reply-To: <CAMj1kXHgptq47g3mSPTKW9KMnqTH4K2Q7riBVwX4iA1V9YWYiA@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 24 Dec 2021 05:05:46 +0100
-Message-ID: <CACRpkdafoc_erHyfkby9X1LhkYgkBQsad=qNyXh+Tq_32zr_yg@mail.gmail.com>
-Subject: Re: [PATCH -next 0/3] replace open coded VA->PA calculation
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        cuigaosheng <cuigaosheng1@huawei.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        SoC Team <soc@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        gongruiqi1@huawei.com, wangweiyang2@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/2rxGSefMHPvDSO0UYw0i8b.";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 10:30 AM Ard Biesheuvel <ardb@kernel.org> wrote:
-> On Wed, 22 Dec 2021 at 03:31, Linus Walleij <linus.walleij@linaro.org> wrote:
-> > On Tue, Dec 21, 2021 at 10:16 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > > I think for CPUs that can use LPAE, we want to eventually move to the 4G:4G
-> > > memory model, which in turn depends on having the kernel in vmalloc space, as
-> > > implemented by Linus Walleij in
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/log/?h=kernel-in-vmalloc-v5.14-rc1
-> >
-> > Yeah I'm still working on this series. The 4/4 split works pretty well,
+--Sig_/2rxGSefMHPvDSO0UYw0i8b.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Actually it's just kernel-in-vmalloc, 4/4 comes after that.
+Hi all,
 
-> > but it breaks KASan and I was in the process of fixing that when I left
-> > for parental leave.
-> >
-> > The reason it breaks would be related to KASan not expecting
-> > executable code in the vmalloc area, and since the shadowing
-> > algorithm is a simple pointer offset, and since we go to lengths
-> > to chisel shadow memory out of lowmem at a fixed offset from
-> > TEXT_OFFSET, we have a problem.
-> >
->
-> Vmap'ed stacks actually has a similar problem, which is why it is
-> disabled when KAsan is enabled. But this can be fixed by enabling arch
-> support for KASAN_VMALLOC, and I suspect it may address the vmap'ed
-> kernel as well.
+Today's linux-next merge of the userns tree got a conflict in:
 
-Yep after seeing the other convo on the topic I realized that this
-is indeed the same as I'm seeing. I can't disable KASAN just
-because the kernel is in VMALLOC though, so I suppose when
-I finally get back to this I have to fix KASAN_VMALLOC too
-if noone beats me to it.
+  kernel/fork.c
 
-(It'd be great if someone could beat me to it...)
+between commit:
 
-Yours,
-Linus Walleij
+  d109de6eb40d ("fork/vm: Move common PF_IO_WORKER behavior to new flag")
+
+from the vhost tree and commit:
+
+  329b30af470a ("kthread: Generalize pf_io_worker so it can point to struct=
+ kthread")
+
+from the userns tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc kernel/fork.c
+index e3e7150bcb1a,6f0293cb29c9..000000000000
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@@ -2012,15 -2032,6 +2012,9 @@@ static __latent_entropy struct task_str
+  		siginitsetinv(&p->blocked, sigmask(SIGKILL)|sigmask(SIGSTOP));
+  	}
+ =20
+ +	if (args->worker_flags & USER_WORKER)
+ +		p->flags |=3D PF_USER_WORKER;
+ +
+- 	/*
+- 	 * This _must_ happen before we call free_task(), i.e. before we jump
+- 	 * to any of the bad_fork_* labels. This is to avoid freeing
+- 	 * p->set_child_tid which is (ab)used as a kthread's data pointer for
+- 	 * kernel threads (PF_KTHREAD).
+- 	 */
+  	p->set_child_tid =3D (clone_flags & CLONE_CHILD_SETTID) ? args->child_ti=
+d : NULL;
+  	/*
+  	 * Clear TID on mm_release()?
+
+--Sig_/2rxGSefMHPvDSO0UYw0i8b.
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHFSFUACgkQAVBC80lX
+0GwgwQf/amtUYFE/0Danh7EY5KFcR9RQghIT9qpICydVBy93p8QL1hULNCYLfVLy
+ImB4wo6qlZvqIsIhkpuPlZAAV5NgAGYxsL6VQBKpLl+2hhXVvG/svVTLwpIfFRfb
+uiKaxCXo5uDplUuFa81M4f22hgvY8gj8mtmc0M0e9RJRMTMOj6SZi+5wi0giZ1RN
+dJ3hnigp4myZ8pg/1UMfBXjV8hlEypFGj939qfqEJVO+49LEt9wt9tJHZRAteG5r
+SE7KyuWGEWSBxcfyyaxGjqUHH5HnbNgEtKmF3AvZ4D5oeUylevTXuGMGouRfDqR+
+cJOcIVnjOUS83NxLjPHgrS0uVzUddg==
+=6xhG
+-----END PGP SIGNATURE-----
+
+--Sig_/2rxGSefMHPvDSO0UYw0i8b.--

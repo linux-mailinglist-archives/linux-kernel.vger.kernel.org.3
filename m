@@ -2,98 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56FAF47EC58
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 07:57:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9890447EC36
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 07:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351647AbhLXG5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 01:57:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37948 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351654AbhLXG5n (ORCPT
+        id S1343519AbhLXGop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 01:44:45 -0500
+Received: from mailout3.samsung.com ([203.254.224.33]:42974 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245745AbhLXGon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 01:57:43 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F10C061759
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 22:57:43 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id w24so6047655ply.12
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 22:57:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=i+Om8CUBFbbiGYcwD1vEJMNJB8KZwFnP8OoPGSPB78A=;
-        b=AxjTX43BGCBHkubVDj4xJFjp3veZ8CeoSJVzBvVndcchGGSW43PcoSkkDP+0Qn3BVF
-         dtISfUCWP7zPHO8LuraVWIOvMV5YWtjIg6fmpBymkxFpwfWG8CrUrVNa1nf7vVevPwx1
-         85IyFU/kxLEm8XCC97PTG639k2OI9NL5s06tEDzHhKJmEHwmIQN5q25S604r1gzPPqYE
-         jRdvcM7+7yH/ZsJnEgKWWeStJaCbbqCkKCeERpOsgnYfNV5DsuR0g8mulN0LBgYzmZNv
-         ZFaCZOMRuKk0QLyxmKwo0qv/1tjxr/xbMOYu1BbSRLmEASZfgiY5Fy/3EozW2ZG282nL
-         VJuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=i+Om8CUBFbbiGYcwD1vEJMNJB8KZwFnP8OoPGSPB78A=;
-        b=QLRso3c8ecy2WxxObrq0ZKEWnOvvANurHV4MnPp7rNQgL0hxF+VlBk6irA5Els0ZrF
-         aYeU0Q343mR0mlxhOZ8dOpdcULVpZjLQvcpbGstCS5SMlO8NOVbpxL56wMTpNPzx08l3
-         TEeenTuFOGthCGX+sb+5u1R+ptASBuFJxWvK4r3dxHYCwFEAuQEOLBW2DgqNp9Yg9QXj
-         2K8N+PYKMvfhLau54OfS6L6CPtjMyRr08H3KZyv1ecIcbMy1MqCUe1bpfXS7HLm6K3fH
-         e6lNFAWCB1iZM2AJdbBpi2cNnvK5tZ0b2c1KkjAWHPAKPDB6F5+Q3hhkadndzwb7o/E1
-         KjUg==
-X-Gm-Message-State: AOAM530XwoL0Dz0GcCjR9jGJx0/i+9kF+jixCCPn9Q8LxdfG4FRKipHu
-        tJpRiaWJyM//BaJvWFq5sGYI7g==
-X-Google-Smtp-Source: ABdhPJwo1+lGB/2cwbm1vE2CWTqK5ITZii/N97FqtQGMsQtVKTYXDyBjyw24JGib+W8sxRvnJuUCGg==
-X-Received: by 2002:a17:90b:3a8c:: with SMTP id om12mr6709434pjb.232.1640329062678;
-        Thu, 23 Dec 2021 22:57:42 -0800 (PST)
-Received: from yinxin.bytedance.net ([139.177.225.235])
-        by smtp.gmail.com with ESMTPSA id h19sm5154089pfh.112.2021.12.23.22.57.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Dec 2021 22:57:42 -0800 (PST)
-From:   Xin Yin <yinxin.x@bytedance.com>
-To:     harshadshirwadkar@gmail.com, tytso@mit.edu,
-        adilger.kernel@dilger.ca
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xin Yin <yinxin.x@bytedance.com>
-Subject: [PATCH RESEND] ext4:fix different behavior of fsync when use fast commit
-Date:   Fri, 24 Dec 2021 14:57:28 +0800
-Message-Id: <20211224065728.5820-1-yinxin.x@bytedance.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 24 Dec 2021 01:44:43 -0500
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20211224064440epoutp03f7636f55f6523aca37fd0f8cf3d98f39~DneFxODsk2267522675epoutp03o
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 06:44:40 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20211224064440epoutp03f7636f55f6523aca37fd0f8cf3d98f39~DneFxODsk2267522675epoutp03o
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1640328280;
+        bh=Q65SdoUxVF82yqKEiz3o/mcQDWD7Y0oAKClGnD10t4s=;
+        h=To:Cc:From:Subject:Date:References:From;
+        b=TBPPJ9Zf6jepxEoTaoYwrQQ6lGbAhJRA4C295q1s66cwcRuBBLWzOXV7B4Mv+VGD7
+         GPxrrR7mVbsPro7fz8ex+swJBNZnOrHtu/+E/oCrqjUvVzw8qHNOHpo0HE06LN4yIo
+         0T7rLXXux20fFw+WRPcv2fgx3N0TfpWJksZ+zCJM=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20211224064440epcas1p20b65f9be32d7b814fb28b74d24cde42d~DneFcDOk_0369603696epcas1p23;
+        Fri, 24 Dec 2021 06:44:40 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.38.233]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4JKyGV2b7xz4x9Q7; Fri, 24 Dec
+        2021 06:44:34 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        6A.24.28648.D4C65C16; Fri, 24 Dec 2021 15:44:29 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20211224064428epcas1p40282064859748cd6735279bb7274a753~Dnd6p8RvA2512325123epcas1p4N;
+        Fri, 24 Dec 2021 06:44:28 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20211224064428epsmtrp24173e6cfc5022e9a55cc9d49ed883914~Dnd6pI2mS2975829758epsmtrp2-;
+        Fri, 24 Dec 2021 06:44:28 +0000 (GMT)
+X-AuditID: b6c32a39-813e6a8000006fe8-d9-61c56c4d7af9
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B3.56.29871.C4C65C16; Fri, 24 Dec 2021 15:44:28 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20211224064428epsmtip1e41359287ede42cba7bbda827b722868~Dnd6bCW0X1524715247epsmtip1d;
+        Fri, 24 Dec 2021 06:44:28 +0000 (GMT)
+To:     "Rafael J. Wysocki <rjw@rjwysocki.net>" <rjw@rjwysocki.net>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Chanwoo Choi (samsung.com)" <cw00.choi@samsung.com>,
+        "Chanwoo Choi (chanwoo@kernel.org)" <chanwoo@kernel.org>,
+        =?UTF-8?B?7ZWo66qF7KO8?= <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Subject: [GIT PULL] devfreq next for v5.17
+Organization: Samsung Electronics
+Message-ID: <09ff8415-0ebb-c8f2-026b-65af27f58f44@samsung.com>
+Date:   Fri, 24 Dec 2021 16:07:40 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMJsWRmVeSWpSXmKPExsWy7bCmvq5vztFEg0PfBC0m3rjCYnH9y3NW
+        i7NNb9gtLu+aw2bxufcIo8XtxhVsFmdOX2J1YPfYtKqTzWPL1XYWj74tqxg9Pm+SC2CJyrbJ
+        SE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMAbpASaEsMacU
+        KBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgWqBXnJhbXJqXrpeXWmJlaGBgZApUmJCd8eLy
+        ddaCa3wVM6ZfYm5g/MfdxcjBISFgInFkckwXIxeHkMAORokjH2YyQTifGCWu/vzGDOF8Y5R4
+        tbWDsYuRE6xj49ezjBCJvYwSV67tgKp6zygxff1CNpC5IgL2Eh0fMkHizAIXmCSOPtjIBtLN
+        JqAlsf/FDTBbGMhetmQOmM0voChx9cdjsA28AnYS9x5NZAaxWQRUJfp/N4LZogJhEie3tUDV
+        CEqcnPmEBcRmFhCXuPVkPhOELS+x/e0cZohLf7JLrDjsB2G7SNz5d54JwhaWeHV8CzuELSXx
+        +d1eNpBDJQSWMUr8mtzJBOGsZ5R4OasTapKxxP6lk5lAPmMW0JRYv0sfIqwosfP3XEaIxXwS
+        7772sEIClVeio00IokRZ4vKDu1B7JSUWt3eyQdgeElvavzFNYFScheSdWUjemYXknVkIixcw
+        sqxiFEstKM5NTy02LDCFx3Zyfu4mRnDq1LLcwTj97Qe9Q4xMHIyHGCU4mJVEeD1XHUkU4k1J
+        rKxKLcqPLyrNSS0+xGgKDOCJzFKiyfnA5J1XEm9oYmlgYmZkbGJhaGaoJM773H96opBAemJJ
+        anZqakFqEUwfEwenVAPTqlcOL1VineWepB/iPvf5k/fPbcIl7qsfrJnlfWllwoMcrlBG/337
+        px9d/jFmi910lwxOXQsv9ncnXPqZL/5qlkuc8L5c7vxCH8PYH5NVHSu/vFYoWy4nWcv1612j
+        v9mE/2Gn3B73xlzkZLWqvml/s/6R+t4ClTZHU87nbv7iux8s59T7MPem/pz6a6+3/WCavUCL
+        o53xy8Gcz/waO1mubbUJM5uzc3vmd2mmhhlHXiR+Zz/O2VQoJbBu/v67H/zXiJ2bxNZzcc5Z
+        NZvaD7VyD9Y2uvh6Ge74Uvx8KY+MnOHbGzLrgm7m9GzyW3AhwUdeuIPv1NqFuzdvzvh82DI9
+        dqGawHquogXCfte3TspersRSnJFoqMVcVJwIAF2WdPUmBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrCLMWRmVeSWpSXmKPExsWy7bCSnK5PztFEgwfvzS0m3rjCYnH9y3NW
+        i7NNb9gtLu+aw2bxufcIo8XtxhVsFmdOX2J1YPfYtKqTzWPL1XYWj74tqxg9Pm+SC2CJ4rJJ
+        Sc3JLEst0rdL4Mp4cfk6a8E1vooZ0y8xNzD+4+5i5OSQEDCR2Pj1LGMXIxeHkMBuRokLjw+y
+        QSQkJaZdPMrcxcgBZAtLHD5cDFHzllHi+OUvYHERAXuJjg+ZIOXMApeYJN6fZQWx2QS0JPa/
+        uAE2RhjIXrZkDpjNL6AocfXHY0YQm1fATuLeo4nMIDaLgKpE/+9GMFtUIExi55LHTBA1ghIn
+        Zz5hgZivLvFn3iVmCFtc4taT+UwQtrzE9rdzmCcwCs5C0jILScssJC2zkLQsYGRZxSiZWlCc
+        m55bbFhgmJdarlecmFtcmpeul5yfu4kRHBFamjsYt6/6oHeIkYmD8RCjBAezkgiv56ojiUK8
+        KYmVValF+fFFpTmpxYcYpTlYlMR5L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUwret7sav3xert
+        sX7F0+48bl58WvX9O+EI/TeO0y7dYrYSqfr8UXsC33ZzNp85vV0zf7lNOfm08uCmpmeF0z37
+        JS+JGzVsszyQuj6O9bT1pT9LRF52p6ydcW5x5etFcSu5j0wXPB/nyHng6vRPN5QWHU4XWsbw
+        Zcf6CMUVq+svHc0sKsrrFfWveWR8l7tU5HIhY7OL4uEDKx6/U5bZdqzwvcPjy1srV9zuVjqc
+        Ksy+yVF29YmVmz+X7P/mfjbDjM0+sFhKJUfc8d+tlETLzKpb7o8slRfVnT+W47ZH7sAsL7X0
+        3InO9zrry1hXvY/y27zVQFpC86/klXlX3HbfTIt+9qjiLWPijtBdlvN4pLW3WSqxFGckGmox
+        FxUnAgBxlh4Z9wIAAA==
+X-CMS-MailID: 20211224064428epcas1p40282064859748cd6735279bb7274a753
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20211224064428epcas1p40282064859748cd6735279bb7274a753
+References: <CGME20211224064428epcas1p40282064859748cd6735279bb7274a753@epcas1p4.samsung.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the follow test example:
--mkdir test/
--create&write test/a.txt
--fsync test/a.txt
--crash (before a full commit)
+Dear Rafael,
 
-If fast commit is used then "a.txt" will lost, while the normal
-journaling can recover it.
+This is devfreq-next pull request for v5.17-rc1. I add detailed description of
+this pull request on the following tag. Please pull devfreq with following updates.
 
-We should keep behavior of fsync unchanged when use fast commit.
+Best Regards,
+Chanwoo Choi
 
-other report: https://www.spinics.net/lists/linux-ext4/msg80514.html
 
-Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
----
- fs/ext4/fast_commit.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
 
-diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
-index 3deb97b22ca4..4b843648ffe5 100644
---- a/fs/ext4/fast_commit.c
-+++ b/fs/ext4/fast_commit.c
-@@ -423,7 +423,7 @@ void __ext4_fc_track_create(handle_t *handle, struct inode *inode,
- 	args.op = EXT4_FC_TAG_CREAT;
- 
- 	ret = ext4_fc_track_template(handle, inode, __track_dentry_update,
--					(void *)&args, 0);
-+					(void *)&args, 1);
- 	trace_ext4_fc_track_create(inode, dentry, ret);
- }
- 
--- 
-2.20.1
+  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-5.17
+
+for you to fetch changes up to 4667431419e93b63b4edfe7abdfc96cefcbcc051:
+
+  PM / devfreq: Reduce log severity for informative message (2021-12-16 11:29:54 +0900)
+
+----------------------------------------------------------------
+Update devfreq next for v5.17
+
+Detailed description for this pull request:
+1. Add new DRAM controller driver for sunXi SoCs
+- Add DRAM frequency controller devfreq driver for Allwinner sunXi SoCs
+in order to support dynamic frequency scaling of DRAM frequency. It
+calculates the supported frequency list from source clock in the range
+of full speed to quarter speed instead of devicetree.
+
+- Add COMMON_CLK dependency to fix build error
+
+2. Reduce log severity for informative message about frequency transition fail
+----------------------------------------------------------------
+
+Arnd Bergmann (1):
+      PM / devfreq: sun8i: addd COMMON_CLK dependency
+
+Samuel Holland (1):
+      PM / devfreq: Add a driver for the sun8i/sun50i MBUS
+
+Tzung-Bi Shih (1):
+      PM / devfreq: Reduce log severity for informative message
+
+ drivers/devfreq/Kconfig          |   9 +
+ drivers/devfreq/Makefile         |   1 +
+ drivers/devfreq/devfreq.c        |   4 +-
+ drivers/devfreq/sun8i-a33-mbus.c | 511 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 523 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/devfreq/sun8i-a33-mbus.c

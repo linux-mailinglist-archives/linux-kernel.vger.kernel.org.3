@@ -2,96 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0E647EF1C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 14:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9538147EF28
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 14:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241681AbhLXNTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 08:19:48 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40826 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbhLXNTr (ORCPT
+        id S241764AbhLXN2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 08:28:09 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:15580 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230463AbhLXN2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 08:19:47 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B242862043;
-        Fri, 24 Dec 2021 13:19:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FF53C36AE5;
-        Fri, 24 Dec 2021 13:19:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640351985;
-        bh=RRC0/259fcqHbTn1tWwd3RXhY57VSROcl0lc6qKKWdY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EEJ8KMwBUMwKQVwvE8D34Otw7cDN5W5yRIX4/F/mJXKzKsHAlFf2b/ujW+9dkkq9m
-         nvwlgHv29Gs1iv1gzJHkweZW3DN3N6qgfMmviBXMCEDKw0Dq52WZHYiyAKffwqoBb8
-         qG0kyPcnBpujUGB+4SC5+LJvN+/+bNqtuV16aaWYfkZzf/b/i0VVr51Dpi5ZGQt9Jy
-         oIshsV73npxECqQXUFaT1DRB46FwXtTWvK6Sn4e1yKxWcEn4imNsszFopXtZFNJrm2
-         pkjABeo5XycsVYISnnjbIQZK+DajbUAnL+DPZUJ7/YOTykmQJW+MQNSMFJfVlRRg46
-         wwoSQXY6bt+ng==
-Date:   Fri, 24 Dec 2021 13:19:43 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v6 5/9] regmap: Introduces regmap lock helpers
-Message-ID: <YcXI73GKNdx/gvUb@sirena.org.uk>
-References: <20211224041352.29405-1-quan@os.amperecomputing.com>
- <20211224041352.29405-6-quan@os.amperecomputing.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mlX9XU0JAkRu6gCR"
-Content-Disposition: inline
-In-Reply-To: <20211224041352.29405-6-quan@os.amperecomputing.com>
-X-Cookie: I brake for chezlogs!
+        Fri, 24 Dec 2021 08:28:08 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BOCbFTU019444;
+        Fri, 24 Dec 2021 13:28:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=tHh/8uCQy9JgVntyacpMExlylc9GjZK/DoUajQE0/jo=;
+ b=hrSOc1T6+p3wYuEcCerVjVQBQfZUxEZ7fTSjln++qeNoTdSxdZUZ3oO5oi2J1ha3yAKz
+ RmzdulqSxiAY4RD1/Sy1YU70Itpjh+bwEkOlMHus0GElUO9bN1lpijebYFaRtcqceFtn
+ E6WNiVbcjywGgrKp++w/t0/yr9pEoQxNB5eOCHY2qoacmXyQM/wyOYbeATMjHleOz+uq
+ HjBuZ1c134O9pdRneSW52gcaYgSe3Yjb3eKAT0KV2ByOL23lMOEZDg3dUTSgRWdXqFrW
+ HaN/Y5RYhGE2WPO+Ck2hCioYvTbckaavJvSmWKd1x3QidgcUeD4ddNjd10T3EJf+QfR9 hQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d5e0b10f2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Dec 2021 13:28:07 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BODOC4Q010275;
+        Fri, 24 Dec 2021 13:28:06 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d5e0b10en-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Dec 2021 13:28:06 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BODITci025079;
+        Fri, 24 Dec 2021 13:28:05 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma02fra.de.ibm.com with ESMTP id 3d179abf08-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Dec 2021 13:28:05 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BODJgDk44171616
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 24 Dec 2021 13:19:42 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6343F11C054;
+        Fri, 24 Dec 2021 13:28:02 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ADADA11C052;
+        Fri, 24 Dec 2021 13:28:01 +0000 (GMT)
+Received: from sig-9-65-66-205.ibm.com (unknown [9.65.66.205])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 24 Dec 2021 13:28:01 +0000 (GMT)
+Message-ID: <c3a1c7afed5962da2bf89d347fa5eea5fea40daf.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] ima: silence measurement list hexdump during kexec
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Bruno Meneguele <bmeneg@redhat.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 24 Dec 2021 08:28:01 -0500
+In-Reply-To: <20211224131454.45577-1-bmeneg@redhat.com>
+References: <20211224131454.45577-1-bmeneg@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: sI6B3ix5sKMoiqYjIz_-g-tu-EwMxpKi
+X-Proofpoint-GUID: LSqAM1gc3xMRAI_fwF-rSLtBudC1wneY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-24_04,2021-12-24_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 adultscore=0 suspectscore=0 spamscore=0 phishscore=0
+ impostorscore=0 clxscore=1015 bulkscore=0 mlxscore=0 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112240064
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Bruno,
 
---mlX9XU0JAkRu6gCR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Fri, 2021-12-24 at 10:14 -0300, Bruno Meneguele wrote:
+> The measurement list is dumped during a soft reset (kexec) through the call
+> to print_hex_dump(KERN_DEBUG, ...), printing to the system log ignoring both
+> DEBUG build flag and CONFIG_DYNAMIC_DEBUG option.
 
-On Fri, Dec 24, 2021 at 11:13:48AM +0700, Quan Nguyen wrote:
-> This commit introduces regmap_acquire/release_lock() functions and makes
-> them available for drivers that need atomic access of regmap registers
+Before upstreaming this patch, the reason for the config options "being
+ignored", if that is really what is happening, needs to be understood
+and documented here in the patch description.
 
-You've not explained what something would need this for and how
-it's expected to work - we don't provide unlocked access to the
-regmap to client drivers so I don't see how one could safely use
-this.  It's unclear to me what this would mean or why it's not
-better implemented in the client driver.
+thanks,
 
---mlX9XU0JAkRu6gCR
-Content-Type: application/pgp-signature; name="signature.asc"
+Mimi
 
------BEGIN PGP SIGNATURE-----
+> 
+> To honor the above conditions the macro print_hex_dump_debug() should be
+> used instead, thus depending on the enabled option/flag the output is given
+> by a different function call or even silenced.
+> 
+> Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHFyO4ACgkQJNaLcl1U
-h9DaeAf+LrT+e8nVJuT7C0PxLOgU/FymUBhAX0UdyOknH3zdIG0c7DcvOXau1O1x
-Kld90ZKSql9M73A3NpWy7ZnamQwLSd+7ik25B9lSL6lY7yRK7Or2N5YL0yWWg9Tl
-fJq5v7gTLRLHk5DYQaO7OGXpW5GHKuE4VB7u2aoiWGH1/ovF1odyGVRhbFz6Yn2c
-8PaAz4+ja4FDk77vird8NbSpHWOTFVPJg1hq9Kl1ru/ylihcqcNQOlYdubCxLudc
-LZSmGUv3WYRRq6ruyjGgQblUkYdlakLVTk8lNi5LaJamD2gKBqPOi1Q1NvPGrhZi
-JIMOd8EICA6jR9Hj+s1SIxK4RJNPDQ==
-=Dgc1
------END PGP SIGNATURE-----
-
---mlX9XU0JAkRu6gCR--

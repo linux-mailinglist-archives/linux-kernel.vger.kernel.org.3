@@ -2,92 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4732C47EFBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 15:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4EE447EFBE
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 15:59:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353018AbhLXO6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 09:58:03 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:52340 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1352999AbhLXO6C (ORCPT
+        id S1353025AbhLXO7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 09:59:19 -0500
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:37220
+        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1352999AbhLXO7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 09:58:02 -0500
-X-IronPort-AV: E=Sophos;i="5.88,232,1635174000"; 
-   d="scan'208";a="104624983"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 24 Dec 2021 23:58:01 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 6487142C25A2;
-        Fri, 24 Dec 2021 23:57:59 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     linux-gpio@vger.kernel.org,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 2/2] pinctrl: at91-pio4: Use platform_get_irq_optional() to get the interrupt
-Date:   Fri, 24 Dec 2021 14:57:48 +0000
-Message-Id: <20211224145748.18754-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211224145748.18754-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20211224145748.18754-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Fri, 24 Dec 2021 09:59:19 -0500
+Received: from HP-EliteBook-840-G7.. (1-171-246-32.dynamic-ip.hinet.net [1.171.246.32])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 713B241933;
+        Fri, 24 Dec 2021 14:59:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640357951;
+        bh=4tETf+TR8k8tlTxIJMQAaz/Rs8+Y89BnDyFUfMAEh7Y=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=ulMIx2vxVYEnqITGTCNkYFpP/y6VvlrufJI+hv1Vhfud0HwBeTN3SjrdipkHJK6PV
+         RQyGwsrva9bqxHUiruniysMoti47KOZApBSm9kFDZfcrrZitqpKvDgCdsKAE5Yiual
+         K6YMem1RxqO+1LzZVU5tzLD36e8o324eB7vgi02pYraeUXkMPti2RZzQHIRKDzhdiD
+         SgMqY9C85mGJC9ITeAi0OX/B3ixRyzfu/OBUw0tBNEFPbCei6OBdYuZciHm660eJO1
+         cExG1HPtbWrurfR4zb3VpTsKJ5IkomzEiECrezMpj2ka+qamEbRVWP1Ct2hQHSg0PJ
+         jgUik8fro6Ctg==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     jic23@kernel.org, lars@metafoo.de
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Chris Lesiak <chris.lesiak@licor.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iio: humidity: hdc100x: Add ACPI HID table
+Date:   Fri, 24 Dec 2021 22:59:01 +0800
+Message-Id: <20211224145903.368999-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.33.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypasses the hierarchical setup and messes up the
-irq chaining.
+x86 boards may use ACPI HID "HDC1010" to for hdc100x device.
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq_optional().
+So add an ACPI match table for that accordingly.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 ---
- drivers/pinctrl/pinctrl-at91-pio4.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ drivers/iio/humidity/hdc100x.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/pinctrl/pinctrl-at91-pio4.c b/drivers/pinctrl/pinctrl-at91-pio4.c
-index fafd1f55cba7..ebfb106be97d 100644
---- a/drivers/pinctrl/pinctrl-at91-pio4.c
-+++ b/drivers/pinctrl/pinctrl-at91-pio4.c
-@@ -1045,7 +1045,6 @@ static int atmel_pinctrl_probe(struct platform_device *pdev)
- 	const char **group_names;
- 	const struct of_device_id *match;
- 	int i, ret;
--	struct resource	*res;
- 	struct atmel_pioctrl *atmel_pioctrl;
- 	const struct atmel_pioctrl_data *atmel_pioctrl_data;
+diff --git a/drivers/iio/humidity/hdc100x.c b/drivers/iio/humidity/hdc100x.c
+index 9e0fce917ce4c..ad1dfac543c52 100644
+--- a/drivers/iio/humidity/hdc100x.c
++++ b/drivers/iio/humidity/hdc100x.c
+@@ -417,10 +417,18 @@ static const struct of_device_id hdc100x_dt_ids[] = {
+ };
+ MODULE_DEVICE_TABLE(of, hdc100x_dt_ids);
  
-@@ -1164,16 +1163,15 @@ static int atmel_pinctrl_probe(struct platform_device *pdev)
- 
- 	/* There is one controller but each bank has its own irq line. */
- 	for (i = 0; i < atmel_pioctrl->nbanks; i++) {
--		res = platform_get_resource(pdev, IORESOURCE_IRQ, i);
--		if (!res) {
-+		ret = platform_get_irq_optional(pdev, i);
-+		if (ret < 0) {
- 			dev_err(dev, "missing irq resource for group %c\n",
- 				'A' + i);
--			return -EINVAL;
-+			return ret;
- 		}
--		atmel_pioctrl->irqs[i] = res->start;
--		irq_set_chained_handler_and_data(res->start,
--			atmel_gpio_irq_handler, atmel_pioctrl);
--		dev_dbg(dev, "bank %i: irq=%pr\n", i, res);
-+		atmel_pioctrl->irqs[i] = ret;
-+		irq_set_chained_handler_and_data(ret, atmel_gpio_irq_handler, atmel_pioctrl);
-+		dev_dbg(dev, "bank %i: irq=%d\n", i, ret);
- 	}
- 
- 	atmel_pioctrl->irq_domain = irq_domain_add_linear(dev->of_node,
++static const struct acpi_device_id hdc100x_acpi_match[] = {
++	{"HDC1010"},
++	{ },
++};
++
++MODULE_DEVICE_TABLE(acpi, hdc100x_acpi_match);
++
+ static struct i2c_driver hdc100x_driver = {
+ 	.driver = {
+ 		.name	= "hdc100x",
+ 		.of_match_table = hdc100x_dt_ids,
++		.acpi_match_table = ACPI_PTR(hdc100x_acpi_match),
+ 	},
+ 	.probe = hdc100x_probe,
+ 	.id_table = hdc100x_id,
 -- 
-2.17.1
+2.33.1
 

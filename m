@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF7147EBF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 07:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B715E47EBF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 07:05:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351464AbhLXGFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 01:05:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
+        id S1351486AbhLXGFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 01:05:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351456AbhLXGFf (ORCPT
+        with ESMTP id S1351456AbhLXGFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 01:05:35 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93BDC061401;
-        Thu, 23 Dec 2021 22:05:34 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id o63-20020a17090a0a4500b001b1c2db8145so10679966pjo.5;
-        Thu, 23 Dec 2021 22:05:34 -0800 (PST)
+        Fri, 24 Dec 2021 01:05:37 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0215FC061401;
+        Thu, 23 Dec 2021 22:05:37 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id f125so6991206pgc.0;
+        Thu, 23 Dec 2021 22:05:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :in-reply-to:references;
-        bh=io0jEHVM1SGX/XNwlRfG6hpAA4WvKdtKzO4OYMuucf0=;
-        b=Usd4vxcIi+CYKD6pVV62irCZGBSJ90wZw+k6NgLLsbXULWvQ8OHahaaLWiq7AI1AH6
-         K9xsAN6/qkee+xWt0WqUNO1sqbBvg/fzpgjSGTaiLsKT8YToV2UcTUc5JaZ1+VjbnBxN
-         2x8rUGteZmedUKTBuNst5kplZzuBnaXBjGgFmPJnax6QwoM6IZrDKz8U5t7Wtf+KTwnf
-         Lt5ckxs6M19xJJHo1/bF+7/fDkAFPZWV+he/HtOz2UGmze3PfCMP1Tt2O1L3teW5LgXr
-         8OH0FQJzLZBBqSpZRp2gpFFQbFvF/lnzxDUU82wqeoeW2aS5CVoR6x/GLXF0Jn2x39aV
-         JM7g==
+        bh=RigX7Ns/+Snrt8UrcXUuA0iJDA0F661A3lbO8ib7J24=;
+        b=l5Th39v8L5CbG7sXwIziiK522KwUbSaFEiYIdVHoOfyPxFqw7VyPnhCtKWioILYdxF
+         VGqqhYMBhCycrm8JehpNwgEN7yb5RIIZI5hVc72lCsyqw8g2beN8oIf1CBbc8np1kc/M
+         UwQmzd8Vl2Of5nRFCenH0L6qXh4A5XzyZ0D6gUkIbIFBMyrTGLfULnR1SF3/ZUQFIVbO
+         HqyRcy6ngC5qahw39OiIpupezHrRASoBwI7InSQeNwAED/tCxKceMUknXNk1vb9u//6l
+         asCrEw/G2LeQaSWDmR2iNVt5ilCkx2Iu2BlrLR5EoivYmvtruTamYbpAXGoia2GFkGSR
+         xeWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:in-reply-to:references;
-        bh=io0jEHVM1SGX/XNwlRfG6hpAA4WvKdtKzO4OYMuucf0=;
-        b=GoGOtEdPy1+beM4EA7AwzEiaVKIVJscNHfyPD1NVI5ZyKlnT7X3ZJJCBJJCoXJutQ2
-         m7MK5kTIWU1sewrxLNODEUGbRB62lGk4xcRzNpzR3PNCISzTIRA1O54CE0Vn02QVWAAa
-         j3hQr+cleFJF88Ef87usUg1e9QsHzsP6FgPUiegQcNeRo8h/m467DpBc4OfONGBxOpgG
-         mK5lGm+qx5p4lVkrAUJiNCuI5u3rHhIn4hrY84+1o0ntMbEJdaUqLmMiq0o+/s61GR59
-         5PaWUUMMLU6Vy2tJ4dqNY4XBC9hUYMIuWpx7g3QtJWq8CWjmuW/MQY7i0HEHHznl9khj
-         AdxQ==
-X-Gm-Message-State: AOAM532AAGNIKA1OPUZt9CC3p4if+6aXObZkHkgh4lIN2dYBtA1Rh2bI
-        Owg2Fyy8yTjvDesUZIcsfXo=
-X-Google-Smtp-Source: ABdhPJzbxHNjm8pjbyGEbCo7FCdtL6FG1znq6y2kWLsGxfdq7rlBuroS8yut2XXP7ONFww9okP3c4A==
-X-Received: by 2002:a17:90b:1297:: with SMTP id fw23mr6219324pjb.97.1640325934115;
-        Thu, 23 Dec 2021 22:05:34 -0800 (PST)
+        bh=RigX7Ns/+Snrt8UrcXUuA0iJDA0F661A3lbO8ib7J24=;
+        b=4pO5jL3pexaR2dE/2lB8ibLHH+ihzb2Pw34BW/pweOegnkAgFT0gsDyu7qv/XJA3GY
+         Iro9bxym4g+vYLo6GTW2Vp8s6q5dbu9E2549FsFEfa1pnzP9xmB5f5W19KvGdx5ygPM9
+         k2l1Blmh9Vqv8ztVhy9lWZHhbakDaVDzfVBQoRJn5FDpt0haEgXklpQeA+9eeVqADEsV
+         g3YIZTs5pCGQqd2tO6JWV3y2SCmSZ0Ouo/JF0DUM2u5Y1oC+my8HbHzYN8wOaHCldCkY
+         KH9+uPQj4AyvDEeLUK9/yAShrZI8uN4bTAjrWSDUPtji4oIojswOiOF3iDmqY8A+eHvf
+         z2Zw==
+X-Gm-Message-State: AOAM533UXXuBSfotgbDLFa7Sw/bHQk+aaXSVtMq81mS/74pM+hyLTLhG
+        x3roqzZLk1nfC84COUPLfIA=
+X-Google-Smtp-Source: ABdhPJyVFtvywx4KAl6kX7WiOwHtvzIbuBrIlYHVSmfp72GYA4CHhLkhJvTjYuH1APzCZMzXpFZRWQ==
+X-Received: by 2002:a63:c009:: with SMTP id h9mr4906351pgg.36.1640325936383;
+        Thu, 23 Dec 2021 22:05:36 -0800 (PST)
 Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id y128sm8234736pfb.24.2021.12.23.22.05.31
+        by smtp.googlemail.com with ESMTPSA id y128sm8234736pfb.24.2021.12.23.22.05.34
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 23 Dec 2021 22:05:33 -0800 (PST)
+        Thu, 23 Dec 2021 22:05:36 -0800 (PST)
 From:   Li-hao Kuo <lhjeff911@gmail.com>
 To:     p.zabel@pengutronix.de, daniel.thompson@linaro.org,
         lee.jones@linaro.org, u.kleine-koenig@pengutronix.de,
@@ -56,9 +56,9 @@ To:     p.zabel@pengutronix.de, daniel.thompson@linaro.org,
         devicetree@vger.kernel.org
 Cc:     lh.kuo@sunplus.com, wells.lu@sunplus.com,
         Li-hao Kuo <lhjeff911@gmail.com>
-Subject: [PATCH v3 1/2] mmc: Add SD/SDIO driver for Sunplus SP7021
-Date:   Fri, 24 Dec 2021 14:05:38 +0800
-Message-Id: <d42857a0150442d9df70308db370614764647d4a.1640325539.git.lhjeff911@gmail.com>
+Subject: [PATCH v3 2/2] devicetree bindings mmc Add bindings doc for Sunplus SP7021
+Date:   Fri, 24 Dec 2021 14:05:39 +0800
+Message-Id: <9da84bfbb6d4d086a8f905dd0d80fb81720987f7.1640325539.git.lhjeff911@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1640325539.git.lhjeff911@gmail.com>
 References: <cover.1640325539.git.lhjeff911@gmail.com>
@@ -68,7 +68,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add SD/SDIO driver for Sunplus SP7021.
+Add devicetree bindings mmc Add bindings doc for Sunplus SP7021
 
 Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
 ---
@@ -76,1177 +76,103 @@ Changes in v3:
  - Addressed all comments from Mr. Rob Herring
  - Modified SD/SDIO driver.
 
- MAINTAINERS                    |    6 +
- drivers/mmc/host/Kconfig       |   12 +
- drivers/mmc/host/Makefile      |    1 +
- drivers/mmc/host/sunplus_sd2.c | 1107 ++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 1126 insertions(+)
- create mode 100644 drivers/mmc/host/sunplus_sd2.c
+ .../devicetree/bindings/mmc/sunplus-sd2.yaml       | 73 ++++++++++++++++++++++
+ MAINTAINERS                                        |  1 +
+ 2 files changed, 74 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mmc/sunplus-sd2.yaml
 
+diff --git a/Documentation/devicetree/bindings/mmc/sunplus-sd2.yaml b/Documentation/devicetree/bindings/mmc/sunplus-sd2.yaml
+new file mode 100644
+index 0000000..2f96e35
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mmc/sunplus-sd2.yaml
+@@ -0,0 +1,73 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright (C) Sunplus Co., Ltd.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mmc/sunplus-sd2.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Sunplus SD/SDIO controller
++
++maintainers:
++  - Li-hao Kuo <lhjeff911@gmail.com>
++
++properties:
++  compatible:
++    enum:
++      - sunplus,sp7021-card
++      - sunplus,sp7021-sdio
++
++  reg:
++    items:
++      - description: Base address and length of the SD/SDIO registers
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  max-frequency: true
++
++allOf:
++  - $ref: "mmc-controller.yaml"
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - resets
++  - pinctrl-names
++  - pinctrl-0
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/sp-sp7021.h>
++    #include <dt-bindings/reset/sp-sp7021.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    sdcard: sdcard@9c003e80 {
++       compatible = "sunplus,sp7021-card";
++       reg = <0x9c003e80 0x280>;
++       interrupts = <21 IRQ_TYPE_LEVEL_HIGH>;
++       clocks = <&clkc CARD_CTL1>;
++       resets = <&rstc RST_CARD_CTL1>;
++       pinctrl-names = "default";
++       pinctrl-0 = <&mmc1_mux &mmc1_mux_cd>;
++       max-frequency = <52000000>;
++    };
++    sdio: mmc@9c008400 {
++       compatible = "sunplus,sp7021-sdio";
++       reg = <0x9c008400 0x280>;
++       interrupts = <21 IRQ_TYPE_LEVEL_HIGH>;
++       clocks = <&clkc CARD_CTL1>;
++       resets = <&rstc RST_CARD_CTL1>;
++       pinctrl-names = "default";
++       pinctrl-0 = <&pins_sdio>;
++       max-frequency = <52000000>;
++    };
++...
+\ No newline at end of file
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 8912b2c..2c1d9e8 100644
+index 2c1d9e8..297d512 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -18242,6 +18242,12 @@ L:	netdev@vger.kernel.org
+@@ -18246,6 +18246,7 @@ SUNPLUS SD/SDIO HOST CONTROLLER INTERFACE DRIVER
+ M:	Li-hao Kuo <lhjeff911@gmail.com>
+ L:	linux-mmc@vger.kernel.org
  S:	Maintained
- F:	drivers/net/ethernet/dlink/sundance.c
++F:	Documentation/devicetree/bindings/mmc/sunplus-sd2.yaml
+ F:	drivers/mmc/host/sunplus_sd2.c
  
-+SUNPLUS SD/SDIO HOST CONTROLLER INTERFACE DRIVER
-+M:	Li-hao Kuo <lhjeff911@gmail.com>
-+L:	linux-mmc@vger.kernel.org
-+S:	Maintained
-+F:	drivers/mmc/host/sunplus_sd2.c
-+
  SUPERH
- M:	Yoshinori Sato <ysato@users.sourceforge.jp>
- M:	Rich Felker <dalias@libc.org>
-diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-index 5af8494..612c8af 100644
---- a/drivers/mmc/host/Kconfig
-+++ b/drivers/mmc/host/Kconfig
-@@ -1091,5 +1091,17 @@ config MMC_OWL
- 	  This selects support for the SD/MMC Host Controller on
- 	  Actions Semi Owl SoCs.
- 
-+config MMC_SP_SDV2
-+	tristate "Sunplus SP7021 SD/SDIO Controller"
-+	depends on SOC_SP7021 || COMPILE_TEST
-+	help
-+	  This selects the Sunplus Host Controller Interface
-+	  support present in Sunplus SP7021 SoCs. The controller
-+	  supports SD/SDIO devices.
-+
-+	  If you have a controller with this interface, say Y or M here.
-+
-+	  If unsure, say N.
-+
- config MMC_SDHCI_EXTERNAL_DMA
- 	bool
-diff --git a/drivers/mmc/host/Makefile b/drivers/mmc/host/Makefile
-index ea36d37..167aa5c 100644
---- a/drivers/mmc/host/Makefile
-+++ b/drivers/mmc/host/Makefile
-@@ -101,6 +101,7 @@ obj-$(CONFIG_MMC_CQHCI)			+= cqhci.o
- cqhci-y					+= cqhci-core.o
- cqhci-$(CONFIG_MMC_CRYPTO)		+= cqhci-crypto.o
- obj-$(CONFIG_MMC_HSQ)			+= mmc_hsq.o
-+obj-$(CONFIG_MMC_SP_SDV2)		+= sunplus_sd2.o
- 
- ifeq ($(CONFIG_CB710_DEBUG),y)
- 	CFLAGS-cb710-mmc	+= -DDEBUG
-diff --git a/drivers/mmc/host/sunplus_sd2.c b/drivers/mmc/host/sunplus_sd2.c
-new file mode 100644
-index 0000000..85f2b10
---- /dev/null
-+++ b/drivers/mmc/host/sunplus_sd2.c
-@@ -0,0 +1,1107 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) Sunplus Inc.
-+ * Author: Li-hao Kuo <lhjeff911@gmail.com>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/clk.h>
-+#include <linux/delay.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/interrupt.h>
-+#include <linux/mmc/core.h>
-+#include <linux/mmc/host.h>
-+#include <linux/mmc/mmc.h>
-+#include <linux/mmc/sdio.h>
-+#include <linux/mmc/slot-gpio.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/reset.h>
-+
-+#define SPSDC_MIN_CLK			400000
-+#define SPSDC_MAX_CLK			52000000
-+#define SPSDC_50M_CLK			50000000
-+#define SPSDC_MAX_BLK_COUNT		65536
-+
-+#define SPSD2_MEDIA_TYPE_REG		0x0000
-+#define SPSDC_MEDIA_MASK		GENMASK(2, 0)
-+#define SPSDC_MEDIA_NONE		0
-+#define SPSDC_MEDIA_SD			6
-+#define SPSDC_MEDIA_MS			7
-+
-+#define SPSD2_SDRAM_SECTOR_SIZE_REG	0x0010
-+#define SPSDC_MAX_DMA_MEMORY_SECTORS	8
-+
-+#define SPSD2_SDRAM_SECTOR_ADDR_REG	0x001C
-+#define SPSD2_SD_INT_REG		0x00B0
-+#define SPSDC_SDINT_SDCMPEN		BIT(0)
-+#define SPSDC_SDINT_SDCMP		BIT(1)
-+#define SPSDC_SDINT_SDCMP_CLR		BIT(2)
-+#define SPSDC_SDINT_SDIOEN		BIT(4)
-+#define SPSDC_SDINT_SDIO		BIT(5)
-+#define SPSDC_SDINT_SDIO_CLR		BIT(6)
-+
-+#define SPSD2_SD_PAGE_NUM_REG		0x00B4
-+#define SPSD2_SD_CONF0_REG		0x00B8
-+#define SPSDC_CONF0_SDPIO_MODE		BIT(0)
-+#define SPSDC_CONF0_SDLEN_MODE		BIT(2)
-+#define SPSDC_CONF0_TRANS_MODE		GENMASK(5, 4)
-+#define SPSDC_TRANS_CMD_MODE		0
-+#define SPSDC_TRANS_WR_MODE		1
-+#define SPSDC_TRANS_RD_MODE		2
-+#define SPSDC_CONF0_AUTORSP		BIT(6)
-+#define SPSDC_CONF0_CMDDUMMY		BIT(7)
-+#define SPSDC_CONF0_RSPCHK		BIT(8)
-+
-+#define SPSD2_SDIO_CTRL_REG		0x00BC
-+#define SPSDC_SDIO_CTRL_MULTI_TRIG	BIT(6)
-+
-+#define SPSD2_SD_RST_REG		0x00C0
-+#define SPSDC_RST_ALL			0x07
-+
-+#define SPSD2_SD_CONF_REG		0x00C4
-+#define SPSDC_CONF_CLK_DIV		GENMASK(11, 0)
-+#define SPSDC_CONF_4BIT_MODE		BIT(12)
-+#define SPSDC_CONF_SDRSP_TYPE		BIT(13)
-+#define SPSDC_CONF_SD_MODE		BIT(16)
-+#define SPSDC_CONF_MMC8BIT		BIT(18)
-+#define SPSDC_CONF_SDIO_MODE		BIT(20)
-+#define SPSDC_MODE_SDIO			2
-+#define SPSDC_MODE_EMMC			1
-+#define SPSDC_MODE_SD			0
-+
-+#define SPSD2_SD_CTRL_REG		0x00C8
-+#define SPSDC_CTRL_CMD_TRIG		BIT(0)
-+#define SPSDC_CTRL_TXDUMMY_TRIG		BIT(1)
-+
-+#define SPSD2_SD_STATUS_REG		0x00CC
-+#define SPSDC_STS_DUMMY_RDY		BIT(0)
-+#define SPSDC_STS_RSP_BUF_FULL		BIT(1)
-+#define SPSDC_STS_TX_BUF_EMP		BIT(2)
-+#define SPSDC_STS_RX_BUF_FULL		BIT(3)
-+#define SPSDC_STS_CMD_PIN_STS		BIT(4)
-+#define SPSDC_STS_DAT0_PIN_STS		BIT(5)
-+#define SPSDC_STS_RSP_TIMEOUT		BIT(6)
-+#define SPSDC_STS_CARD_CRC_TIMEOUT	BIT(7)
-+#define SPSDC_STS_STB_TIMEOUT		BIT(8)
-+#define SPSDC_STS_RSP_CRC7_ERR		BIT(9)
-+#define SPSDC_STS_CRC_TOKEN_ERR		BIT(10)
-+#define SPSDC_STS_RDATA_CRC16_ERR	BIT(11)
-+#define SPSDC_STS_SUSPEND_STATE_RDY	BIT(12)
-+#define SPSDC_STS_BUSY_CYCLE		BIT(13)
-+
-+#define SPSD2_SD_STATE_REG		0x00D0
-+#define SPSDC_STATE_IDLE		(0x0)
-+#define SPSDC_STATE_TXDUMMY		(0x1)
-+#define SPSDC_STATE_TXCMD		(0x2)
-+#define SPSDC_STATE_RXRSP		(0x3)
-+#define SPSDC_STATE_TXDATA		(0x4)
-+#define SPSDC_STATE_RXCRC		(0x5)
-+#define SPSDC_STATE_RXDATA		(0x6)
-+#define SPSDC_STATE_MASK		(0x7)
-+#define SPSDC_STATE_ERROR		BIT(13)
-+#define SPSDC_STATE_FINISH		BIT(14)
-+
-+#define SPSD2_BLOCKSIZE_REG		0x00D4
-+#define SPSD2_SD_TIMING_CONF0_REG	0x00DC
-+#define SPSDC_TIMING_CONF0_HS_EN	BIT(11)
-+#define SPSDC_TIMING_CONF0_WRTD		GENMASK(14, 12)
-+
-+#define SPSD2_SD_TIMING_CONF1_REG	0x00E0
-+#define SPSDC_TIMING_CONF1_RDTD		GENMASK(15, 13)
-+
-+#define SPSD2_SD_PIO_TX_REG		0x00E4
-+#define SPSD2_SD_PIO_RX_REG		0x00E8
-+#define SPSD2_SD_CMD_BUF0_REG		0x00EC
-+#define SPSD2_SD_CMD_BUF1_REG		0x00F0
-+#define SPSD2_SD_CMD_BUF2_REG		0x00F4
-+#define SPSD2_SD_CMD_BUF3_REG		0x00F8
-+#define SPSD2_SD_CMD_BUF4_REG		0x00FC
-+#define SPSD2_SD_RSP_BUF0_3_REG		0x0100
-+#define SPSD2_SD_RSP_BUF4_5_REG		0x0104
-+#define SPSD2_DMA_SRCDST_REG		0x0204
-+#define SPSD2_DMA_SIZE_REG		0x0208
-+#define SPSD2_DMA_STOP_RST_REG		0x020c
-+#define SPSD2_DMA_CTRL_REG		0x0210
-+#define SPSD2_DMA_BASE_ADDR0_REG	0x0214
-+#define SPSD2_DMA_BASE_ADDR16_REG	0x0218
-+
-+struct spsdc_tuning_info {
-+	int need_tuning;
-+#define SPSDC_MAX_RETRIES (8 * 8)
-+	int retried; /* how many times has been retried */
-+	u32 wr_dly:3;
-+	u32 rd_dly:3;
-+	u32 clk_dly:3;
-+};
-+
-+enum {
-+	SPSDC_DMA_MODE = 0,
-+	SPSDC_PIO_MODE = 1,
-+};
-+
-+struct spsdc_host {
-+	void __iomem *base;
-+	struct clk *clk;
-+	struct reset_control *rstc;
-+	int mode; /* SD/SDIO/eMMC */
-+	spinlock_t lock; /* controller lock */
-+	struct mutex mrq_lock;
-+	/* tasklet used to handle error then finish the request */
-+	struct tasklet_struct tsklet_finish_req;
-+	struct mmc_host *mmc;
-+	struct mmc_request *mrq; /* current mrq */
-+	int irq;
-+	int use_int; /* should raise irq when done */
-+	int power_state; /* current power state: off/up/on */
-+	int restore_4bit_sdio_bus;
-+	int dmapio_mode;
-+	/* for purpose of reducing context switch, only when transfer data that
-+	 *  length is greater than `dma_int_threshold' should use interrupt
-+	 */
-+	int dma_int_threshold;
-+	int dma_use_int; /* should raise irq when dma done */
-+	struct sg_mapping_iter sg_miter; /* for pio mode to access sglist */
-+	struct spsdc_tuning_info tuning_info;
-+};
-+
-+/**
-+ * wait for transaction done, return -1 if error.
-+ */
-+static inline int spsdc_wait_finish(struct spsdc_host *host)
-+{
-+	/* Wait for transaction finish */
-+	unsigned long timeout = jiffies + msecs_to_jiffies(5000);
-+
-+	while (!time_after(jiffies, timeout)) {
-+		if (readl(host->base + SPSD2_SD_STATE_REG) & SPSDC_STATE_FINISH)
-+			return 0;
-+		if (readl(host->base + SPSD2_SD_STATE_REG) & SPSDC_STATE_ERROR)
-+			return -1;
-+	}
-+	return -1;
-+}
-+
-+static inline int spsdc_wait_sdstatus(struct spsdc_host *host, unsigned int status_bit)
-+{
-+	unsigned long timeout = jiffies + msecs_to_jiffies(5000);
-+
-+	while (!time_after(jiffies, timeout)) {
-+		if (readl(host->base + SPSD2_SD_STATUS_REG) & status_bit)
-+			return 0;
-+		if (readl(host->base + SPSD2_SD_STATE_REG) & SPSDC_STATE_ERROR)
-+			return -1;
-+	}
-+	return -1;
-+}
-+
-+#define spsdc_wait_rspbuf_full(host) spsdc_wait_sdstatus(host, SPSDC_STS_RSP_BUF_FULL)
-+#define spsdc_wait_rxbuf_full(host) spsdc_wait_sdstatus(host, SPSDC_STS_RX_BUF_FULL)
-+#define spsdc_wait_txbuf_empty(host) spsdc_wait_sdstatus(host, SPSDC_STS_TX_BUF_EMP)
-+
-+static void spsdc_get_rsp(struct spsdc_host *host, struct mmc_command *cmd)
-+{
-+	u32 value0_3, value4_5;
-+
-+	if (unlikely(!(cmd->flags & MMC_RSP_PRESENT)))
-+		return;
-+	if (unlikely(cmd->flags & MMC_RSP_136)) {
-+		if (spsdc_wait_rspbuf_full(host))
-+			return;
-+		value0_3 = readl(host->base + SPSD2_SD_RSP_BUF0_3_REG);
-+		value4_5 = readl(host->base + SPSD2_SD_RSP_BUF4_5_REG) & 0xffff;
-+		cmd->resp[0] = (value0_3 << 8) | (value4_5 >> 8);
-+		cmd->resp[1] = value4_5 << 24;
-+		if (spsdc_wait_rspbuf_full(host))
-+			return;
-+		value0_3 = readl(host->base + SPSD2_SD_RSP_BUF0_3_REG);
-+		value4_5 = readl(host->base + SPSD2_SD_RSP_BUF4_5_REG) & 0xffff;
-+		cmd->resp[1] |= value0_3 >> 8;
-+		cmd->resp[2] = value0_3 << 24;
-+		cmd->resp[2] |= value4_5 << 8;
-+		if (spsdc_wait_rspbuf_full(host))
-+			return;
-+		value0_3 = readl(host->base + SPSD2_SD_RSP_BUF0_3_REG);
-+		value4_5 = readl(host->base + SPSD2_SD_RSP_BUF4_5_REG) & 0xffff;
-+		cmd->resp[2] |= value0_3 >> 24;
-+		cmd->resp[3] = value0_3 << 8;
-+		cmd->resp[3] |= value4_5 >> 8;
-+	} else {
-+		if (spsdc_wait_rspbuf_full(host))
-+			return;
-+		value0_3 = readl(host->base + SPSD2_SD_RSP_BUF0_3_REG);
-+		value4_5 = readl(host->base + SPSD2_SD_RSP_BUF4_5_REG) & 0xffff;
-+		cmd->resp[0] = (value0_3 << 8) | (value4_5 >> 8);
-+		cmd->resp[1] = value4_5 << 24;
-+	}
-+}
-+
-+static void spsdc_set_bus_clk(struct spsdc_host *host, int clk)
-+{
-+	unsigned int clkdiv;
-+	int f_min = host->mmc->f_min;
-+	int f_max = host->mmc->f_max;
-+	u32 value = readl(host->base + SPSD2_SD_CONF_REG);
-+
-+	if (clk < f_min)
-+		clk = f_min;
-+	if (clk > f_max)
-+		clk = f_max;
-+
-+	// SD 2.0 only max set to 50Mhz CLK
-+	if (clk >= SPSDC_50M_CLK)
-+		clk = f_max;
-+
-+	clkdiv = (clk_get_rate(host->clk) + clk) / clk - 1;
-+	if (clkdiv > 0xfff)
-+		clkdiv = 0xfff;
-+
-+	value &= ~SPSDC_CONF_CLK_DIV;
-+	value |= FIELD_PREP(SPSDC_CONF_CLK_DIV, clkdiv);
-+	writel(value, host->base + SPSD2_SD_CONF_REG);
-+	/* In order to reduce the frequency of context switch,
-+	 * if it is high speed or upper, we do not use interrupt
-+	 * when send a command that without data.
-+	 */
-+	if (clk > 25000000)
-+		host->use_int = 0;
-+	else
-+		host->use_int = 1;
-+}
-+
-+static void spsdc_set_bus_timing(struct spsdc_host *host, unsigned int timing)
-+{
-+	u32 value = readl(host->base + SPSD2_SD_TIMING_CONF0_REG);
-+	int clkdiv = FIELD_GET(SPSDC_CONF_CLK_DIV, readl(host->base + SPSD2_SD_CONF_REG));
-+	int delay = (clkdiv / 2 < 7) ? clkdiv / 2 : 7;
-+	char *timing_name;
-+
-+	switch (timing) {
-+	case MMC_TIMING_LEGACY:
-+		value &= ~SPSDC_TIMING_CONF0_HS_EN;
-+		timing_name = "legacy";
-+		break;
-+	case MMC_TIMING_SD_HS:
-+	case MMC_TIMING_MMC_HS:
-+		value |= SPSDC_TIMING_CONF0_HS_EN |
-+			FIELD_PREP(SPSDC_TIMING_CONF0_WRTD, delay);
-+		timing_name = "hs";
-+		break;
-+	}
-+	writel(value, host->base + SPSD2_SD_TIMING_CONF0_REG);
-+}
-+
-+static void spsdc_set_bus_width(struct spsdc_host *host, int width)
-+{
-+	u32 value = readl(host->base + SPSD2_SD_CONF_REG);
-+	int bus_width;
-+
-+	switch (width) {
-+	case MMC_BUS_WIDTH_8:
-+		value &= ~SPSDC_CONF_4BIT_MODE;
-+		value |= SPSDC_CONF_MMC8BIT;
-+		bus_width = 8;
-+		break;
-+	case MMC_BUS_WIDTH_4:
-+		value |= SPSDC_CONF_4BIT_MODE;
-+		value &= ~SPSDC_CONF_MMC8BIT;
-+		bus_width = 4;
-+		break;
-+	default:
-+		value &= ~SPSDC_CONF_4BIT_MODE;
-+		value &= ~SPSDC_CONF_MMC8BIT;
-+		bus_width = 1;
-+		break;
-+	};
-+	writel(value, host->base + SPSD2_SD_CONF_REG);
-+}
-+
-+/**
-+ * select the working mode of controller: sd/sdio/emmc
-+ */
-+static void spsdc_select_mode(struct spsdc_host *host, int mode)
-+{
-+	u32 value = readl(host->base + SPSD2_SD_CONF_REG);
-+
-+	host->mode = mode;
-+	/* set `sdmmcmode', as it will sample data at fall edge
-+	 * of SD bus clock if `sdmmcmode' is not set when
-+	 * `sd_high_speed_en' is not set, which is not compliant
-+	 * with SD specification
-+	 */
-+	value |= SPSDC_CONF_SD_MODE;
-+	switch (mode) {
-+	case SPSDC_MODE_EMMC:
-+		value &= ~SPSDC_CONF_SDIO_MODE;
-+		writel(value, host->base + SPSD2_SD_CONF_REG);
-+		break;
-+	case SPSDC_MODE_SDIO:
-+		value |= SPSDC_CONF_SDIO_MODE;
-+		writel(value, host->base + SPSD2_SD_CONF_REG);
-+		value = readl(host->base + SPSD2_SDIO_CTRL_REG);
-+		value |= SPSDC_SDIO_CTRL_MULTI_TRIG;
-+		writel(value, host->base + SPSD2_SDIO_CTRL_REG);
-+		break;
-+	case SPSDC_MODE_SD:
-+	default:
-+		value &= ~SPSDC_CONF_SDIO_MODE;
-+		host->mode = SPSDC_MODE_SD;
-+		writel(value, host->base + SPSD2_SD_CONF_REG);
-+		break;
-+	}
-+}
-+
-+static void spsdc_sw_reset(struct spsdc_host *host)
-+{
-+	writel(SPSDC_RST_ALL, host->base + SPSD2_SD_RST_REG);
-+	writel(0x6, host->base + SPSD2_DMA_STOP_RST_REG);
-+	while (readl(host->base + SPSD2_DMA_STOP_RST_REG) & BIT(2))
-+		;
-+	/* reset dma operation */
-+	writel(0x0, host->base + SPSD2_DMA_CTRL_REG);
-+	writel(0x1, host->base + SPSD2_DMA_CTRL_REG);
-+	writel(0x0, host->base + SPSD2_DMA_CTRL_REG);
-+}
-+
-+static void spsdc_prepare_cmd(struct spsdc_host *host, struct mmc_command *cmd)
-+{
-+	u32 value;
-+
-+	writeb((u8)(cmd->opcode | 0x40), host->base + SPSD2_SD_CMD_BUF0_REG);
-+	writeb((u8)((cmd->arg >> 24) & 0x000000ff), host->base + SPSD2_SD_CMD_BUF1_REG);
-+	writeb((u8)((cmd->arg >> 16) & 0x000000ff), host->base + SPSD2_SD_CMD_BUF2_REG);
-+	writeb((u8)((cmd->arg >> 8) & 0x000000ff), host->base + SPSD2_SD_CMD_BUF3_REG);
-+	writeb((u8)((cmd->arg >> 0) & 0x000000ff), host->base + SPSD2_SD_CMD_BUF4_REG);
-+
-+	/* disable interrupt if needed */
-+	value = readl(host->base + SPSD2_SD_INT_REG);
-+	value |= SPSDC_SDINT_SDCMP_CLR;
-+	if (likely(!host->use_int || cmd->flags & MMC_RSP_136))
-+		value &= ~SPSDC_SDINT_SDCMPEN;
-+	else
-+		value |= SPSDC_SDINT_SDCMPEN;
-+	writel(value, host->base + SPSD2_SD_INT_REG);
-+
-+	value = readl(host->base + SPSD2_SD_CONF0_REG);
-+	value &= ~SPSDC_CONF0_TRANS_MODE; /* sd_trans_mode = 0 cmd mode */
-+	value |= SPSDC_CONF0_CMDDUMMY;
-+	if (likely(cmd->flags & MMC_RSP_PRESENT)) {
-+		value |= SPSDC_CONF0_AUTORSP;
-+	} else {
-+		value &= ~SPSDC_CONF0_AUTORSP;
-+		writel(value, host->base + SPSD2_SD_CONF0_REG);
-+		return;
-+	}
-+	/*
-+	 * Currently, host is not capable of checking R2's CRC7,
-+	 * thus, enable crc7 check only for 48 bit response commands
-+	 */
-+	if (likely(cmd->flags & MMC_RSP_CRC && !(cmd->flags & MMC_RSP_136)))
-+		value |= SPSDC_CONF0_RSPCHK;
-+	else
-+		value &= ~SPSDC_CONF0_RSPCHK;
-+
-+	writel(value, host->base + SPSD2_SD_CONF0_REG);
-+	value = readl(host->base + SPSD2_SD_CONF_REG);
-+	if (unlikely(cmd->flags & MMC_RSP_136))
-+		value |= SPSDC_CONF_SDRSP_TYPE;
-+	else
-+		value &= ~SPSDC_CONF_SDRSP_TYPE;
-+	writel(value, host->base + SPSD2_SD_CONF_REG);
-+}
-+
-+static void spsdc_prepare_data(struct spsdc_host *host, struct mmc_data *data)
-+{
-+	u32 value;
-+
-+	writel(data->blocks - 1, host->base + SPSD2_SD_PAGE_NUM_REG);
-+	writel(data->blksz - 1, host->base + SPSD2_BLOCKSIZE_REG);
-+	value = readl(host->base + SPSD2_SD_CONF0_REG);
-+	value &= ~SPSDC_CONF0_TRANS_MODE;
-+	if (data->flags & MMC_DATA_READ) {
-+		value &= ~(SPSDC_CONF0_AUTORSP | SPSDC_CONF0_CMDDUMMY);
-+		value |= FIELD_PREP(SPSDC_CONF0_TRANS_MODE, SPSDC_TRANS_RD_MODE);
-+		writel(0x12, host->base + SPSD2_DMA_SRCDST_REG);
-+	} else {
-+		value |= FIELD_PREP(SPSDC_CONF0_TRANS_MODE, SPSDC_TRANS_WR_MODE);
-+		writel(0x21, host->base + SPSD2_DMA_SRCDST_REG);
-+	}
-+	/* to prevent of the responses of CMD18/25 being by CMD12's,
-+	 * send CMD12 by ourself instead of by controller automatically
-+	 *
-+	 *	#if 0
-+	 *	if ((cmd->opcode == MMC_READ_MULTIPLE_BLOCK)
-+	 *	 || (cmd->opcode == MMC_WRITE_MULTIPLE_BLOCK))
-+	 *		value = bitfield_replace(value, 2, 1, 0); //sd_len_mode
-+	 *	else
-+	 *		value = bitfield_replace(value, 2, 1, 1);
-+	 *	#endif
-+	 */
-+	value |= SPSDC_CONF0_SDLEN_MODE;
-+	if (likely(host->dmapio_mode == SPSDC_DMA_MODE)) {
-+		struct scatterlist *sg;
-+		dma_addr_t dma_addr;
-+		unsigned int dma_size;
-+		void __iomem *reg_addr;
-+		int dma_direction = data->flags & MMC_DATA_READ ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
-+		int i, count = dma_map_sg(host->mmc->parent, data->sg, data->sg_len, dma_direction);
-+
-+		if (unlikely(!count || count > SPSDC_MAX_DMA_MEMORY_SECTORS)) {
-+			data->error = -EINVAL;
-+			return;
-+		}
-+		for_each_sg(data->sg, sg, count, i) {
-+			dma_addr = sg_dma_address(sg);
-+			dma_size = sg_dma_len(sg) / data->blksz - 1;
-+			//dma_size = sg_dma_len(sg) / 512 - 1;
-+			if (i == 0) {
-+				writel(dma_addr, host->base + SPSD2_DMA_BASE_ADDR0_REG);
-+				writel(dma_addr >> 16, host->base + SPSD2_DMA_BASE_ADDR16_REG);
-+				writel(dma_size, host->base + SPSD2_SDRAM_SECTOR_SIZE_REG);
-+			} else {
-+				reg_addr = host->base + (SPSD2_SDRAM_SECTOR_ADDR_REG + (i - 1) * 8);
-+				writel(dma_addr, reg_addr);
-+				writel(dma_size, reg_addr + 4);
-+			}
-+		}
-+		value &= ~SPSDC_CONF0_SDPIO_MODE;
-+		writel(value, host->base + SPSD2_SD_CONF0_REG);
-+		writel(data->blksz - 1, host->base + SPSD2_DMA_SIZE_REG);
-+		/* enable interrupt if needed */
-+		if (!host->use_int && data->blksz * data->blocks > host->dma_int_threshold) {
-+			host->dma_use_int = 1;
-+			value = readl(host->base + SPSD2_SD_INT_REG);
-+			value |= SPSDC_SDINT_SDCMPEN;
-+			writel(value, host->base + SPSD2_SD_INT_REG);
-+		}
-+	} else {
-+		value |= SPSDC_CONF0_SDPIO_MODE;
-+		writel(value, host->base + SPSD2_SD_CONF0_REG);
-+	}
-+}
-+
-+static inline void spsdc_trigger_transaction(struct spsdc_host *host)
-+{
-+	u32 value = readl(host->base + SPSD2_SD_CTRL_REG);
-+
-+	value |= SPSDC_CTRL_CMD_TRIG;
-+	writel(value, host->base + SPSD2_SD_CTRL_REG);
-+}
-+
-+static int __send_stop_cmd(struct spsdc_host *host, struct mmc_command *stop)
-+{
-+	u32 value;
-+
-+	spsdc_prepare_cmd(host, stop);
-+	value = readl(host->base + SPSD2_SD_INT_REG);
-+	value &= ~SPSDC_SDINT_SDCMPEN;
-+	writel(value, host->base + SPSD2_SD_INT_REG);
-+	spsdc_trigger_transaction(host);
-+	if (spsdc_wait_finish(host)) {
-+		value = readl(host->base + SPSD2_SD_STATUS_REG);
-+		if (value & SPSDC_STS_RSP_CRC7_ERR)
-+			stop->error = -EILSEQ;
-+		else
-+			stop->error = -ETIMEDOUT;
-+		return -1;
-+	}
-+	spsdc_get_rsp(host, stop);
-+	return 0;
-+}
-+
-+static int __switch_sdio_bus_width(struct spsdc_host *host, int width)
-+{
-+	struct mmc_command cmd = {0};
-+	int ret = 0;
-+	u32 value;
-+	u8 ctrl;
-+
-+	cmd.opcode = SD_IO_RW_DIRECT;
-+	cmd.arg |= SDIO_CCCR_IF << 9;
-+	cmd.flags = MMC_RSP_R5;
-+	spsdc_prepare_cmd(host, &cmd);
-+	value = readl(host->base + SPSD2_SD_INT_REG);
-+	value &= ~SPSDC_SDINT_SDCMPEN;
-+	writel(value, host->base + SPSD2_SD_INT_REG);
-+	spsdc_trigger_transaction(host);
-+	ret = spsdc_wait_finish(host);
-+	if (ret) {
-+		spsdc_sw_reset(host);
-+		return ret;
-+	}
-+	spsdc_get_rsp(host, &cmd);
-+	ctrl = cmd.resp[0] & 0xff;
-+
-+	ctrl &= ~SDIO_BUS_WIDTH_MASK;
-+	if (width == MMC_BUS_WIDTH_4) {
-+		/* set to 4-bit bus width */
-+		ctrl |= SDIO_BUS_WIDTH_4BIT;
-+	}
-+
-+	cmd.arg |= 0x80000000;
-+	cmd.arg |= ctrl;
-+	spsdc_prepare_cmd(host, &cmd);
-+	value = readl(host->base + SPSD2_SD_INT_REG);
-+	value |= ~SPSDC_SDINT_SDCMPEN;
-+	writel(value, host->base + SPSD2_SD_INT_REG);
-+	spsdc_trigger_transaction(host);
-+	ret = spsdc_wait_finish(host);
-+	if (ret) {
-+		spsdc_sw_reset(host);
-+		return ret;
-+	}
-+	spsdc_get_rsp(host, &cmd);
-+	spsdc_set_bus_width(host, width);
-+
-+	return ret;
-+}
-+
-+/**
-+ * check if error during transaction.
-+ * @host -  host
-+ * @mrq - the mrq
-+ * @return 0 if no error otherwise the error number.
-+ */
-+static int spsdc_check_error(struct spsdc_host *host, struct mmc_request *mrq)
-+{
-+	struct mmc_command *cmd = mrq->cmd;
-+	struct mmc_data *data = mrq->data;
-+	int ret = 0;
-+	u32 value = readl(host->base + SPSD2_SD_STATE_REG);
-+
-+	if (unlikely(value & SPSDC_STATE_ERROR)) {
-+		u32 timing_cfg0, timing_cfg1;
-+
-+		value = readl(host->base + SPSD2_SD_STATUS_REG);
-+		timing_cfg0 = readl(host->base + SPSD2_SD_TIMING_CONF0_REG);
-+		host->tuning_info.wr_dly = FIELD_GET(SPSDC_TIMING_CONF0_WRTD, timing_cfg0);
-+		timing_cfg1 = readl(host->base + SPSD2_SD_TIMING_CONF1_REG);
-+		host->tuning_info.rd_dly = FIELD_GET(SPSDC_TIMING_CONF1_RDTD, timing_cfg1);
-+		if (value & SPSDC_STS_RSP_TIMEOUT) {
-+			ret = -ETIMEDOUT;
-+			host->tuning_info.wr_dly++;
-+		} else if (value & SPSDC_STS_RSP_CRC7_ERR) {
-+			ret = -EILSEQ;
-+			host->tuning_info.rd_dly++;
-+		}
-+		if (data) {
-+			if ((value & SPSDC_STS_STB_TIMEOUT) ||
-+			    (value & SPSDC_STS_CARD_CRC_TIMEOUT)) {
-+				ret = -ETIMEDOUT;
-+				host->tuning_info.rd_dly++;
-+			} else if (value & SPSDC_STS_CRC_TOKEN_ERR) {
-+				ret = -EILSEQ;
-+				host->tuning_info.wr_dly++;
-+			} else if (value & SPSDC_STS_RDATA_CRC16_ERR) {
-+				ret = -EILSEQ;
-+				host->tuning_info.rd_dly++;
-+			}
-+			data->error = ret;
-+			data->bytes_xfered = 0;
-+		}
-+		cmd->error = ret;
-+		if (!host->tuning_info.need_tuning)
-+			cmd->retries = SPSDC_MAX_RETRIES; /* retry it */
-+		spsdc_sw_reset(host);
-+		timing_cfg0 |= FIELD_PREP(SPSDC_TIMING_CONF0_WRTD, host->tuning_info.wr_dly);
-+		writel(timing_cfg0, host->base + SPSD2_SD_TIMING_CONF0_REG);
-+		timing_cfg1 |= FIELD_PREP(SPSDC_TIMING_CONF1_RDTD, host->tuning_info.rd_dly);
-+		writel(timing_cfg1, host->base + SPSD2_SD_TIMING_CONF1_REG);
-+
-+	} else if (data) {
-+		data->bytes_xfered = data->blocks * data->blksz;
-+	}
-+	host->tuning_info.need_tuning = ret;
-+	return ret;
-+}
-+
-+static inline __maybe_unused void spsdc_txdummy(struct spsdc_host *host)
-+{
-+	u32 value = readl(host->base + SPSD2_SD_CTRL_REG);
-+
-+	value |= SPSDC_CTRL_TXDUMMY_TRIG;
-+	writel(value, host->base + SPSD2_SD_CTRL_REG);
-+}
-+
-+static void spsdc_xfer_data_pio(struct spsdc_host *host, struct mmc_data *data)
-+{
-+	int data_left = data->blocks * data->blksz;
-+	int consumed, remain;
-+	struct sg_mapping_iter *sg_miter = &host->sg_miter;
-+	unsigned int flags = 0;
-+	u16 *buf; /* tx/rx 2 bytes one time in pio mode */
-+
-+	if (data->flags & MMC_DATA_WRITE)
-+		flags |= SG_MITER_FROM_SG;
-+	else
-+		flags |= SG_MITER_TO_SG;
-+	sg_miter_start(&host->sg_miter, data->sg, data->sg_len, flags);
-+	while (data_left > 0) {
-+		consumed = 0;
-+		if (!sg_miter_next(sg_miter))
-+			break;
-+		buf = sg_miter->addr;
-+		remain = sg_miter->length;
-+		do {
-+			if (data->flags & MMC_DATA_WRITE) {
-+				if (spsdc_wait_txbuf_empty(host))
-+					goto done;
-+				writel(*buf, host->base + SPSD2_SD_PIO_TX_REG);
-+			} else {
-+				if (spsdc_wait_rxbuf_full(host))
-+					goto done;
-+				*buf = readl(host->base + SPSD2_SD_PIO_RX_REG);
-+			}
-+			buf++;
-+			consumed += 2;
-+			remain -= 2;
-+		} while (remain);
-+		sg_miter->consumed = consumed;
-+		data_left -= consumed;
-+	}
-+done:
-+	sg_miter_stop(sg_miter);
-+}
-+
-+static void spsdc_controller_init(struct spsdc_host *host)
-+{
-+	u32 value;
-+	int ret = reset_control_assert(host->rstc);
-+
-+	if (!ret) {
-+		usleep_range(1000, 1250);
-+		ret = reset_control_deassert(host->rstc);
-+	}
-+	value = readl(host->base + SPSD2_MEDIA_TYPE_REG);
-+	value &= ~SPSDC_MEDIA_MASK;
-+	value |= FIELD_PREP(SPSDC_MEDIA_MASK, SPSDC_MEDIA_SD);
-+	writel(value, host->base + SPSD2_MEDIA_TYPE_REG);
-+}
-+
-+static void spsdc_set_power_mode(struct spsdc_host *host, struct mmc_ios *ios)
-+{
-+	if (host->power_state == ios->power_mode)
-+		return;
-+
-+	switch (ios->power_mode) {
-+		/* power off->up->on */
-+	case MMC_POWER_ON:
-+		spsdc_controller_init(host);
-+		pm_runtime_get_sync(host->mmc->parent);
-+		break;
-+	case MMC_POWER_UP:
-+		break;
-+	case MMC_POWER_OFF:
-+		pm_runtime_put(host->mmc->parent);
-+		break;
-+	}
-+	host->power_state = ios->power_mode;
-+}
-+
-+/**
-+ * 1. unmap scatterlist if needed;
-+ * 2. get response & check error conditions;
-+ * 3. unlock host->mrq_lock
-+ * 4. notify mmc layer the request is done
-+ */
-+static void spsdc_finish_request(struct spsdc_host *host, struct mmc_request *mrq)
-+{
-+	struct mmc_command *cmd;
-+	struct mmc_data *data;
-+
-+	if (!mrq)
-+		return;
-+
-+	cmd = mrq->cmd;
-+	data = mrq->data;
-+	if (data && SPSDC_DMA_MODE == host->dmapio_mode) {
-+		int dma_direction = data->flags & MMC_DATA_READ ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
-+
-+		dma_unmap_sg(host->mmc->parent, data->sg, data->sg_len, dma_direction);
-+		host->dma_use_int = 0;
-+	}
-+	spsdc_get_rsp(host, cmd);
-+	spsdc_check_error(host, mrq);
-+	if (mrq->stop) {
-+		if (__send_stop_cmd(host, mrq->stop))
-+			spsdc_sw_reset(host);
-+	}
-+	host->mrq = NULL;
-+
-+	if (host->restore_4bit_sdio_bus) {
-+		__switch_sdio_bus_width(host, MMC_BUS_WIDTH_4);
-+		host->restore_4bit_sdio_bus = 0;
-+	}
-+	mutex_unlock(&host->mrq_lock);
-+	mmc_request_done(host->mmc, mrq);
-+}
-+
-+/* Interrupt Service Routine */
-+irqreturn_t spsdc_irq(int irq, void *dev_id)
-+{
-+	struct spsdc_host *host = dev_id;
-+	u32 value = readl(host->base + SPSD2_SD_INT_REG);
-+
-+	spin_lock(&host->lock);
-+	if ((value & SPSDC_SDINT_SDCMP) && (value & SPSDC_SDINT_SDCMPEN)) {
-+		value &= ~SPSDC_SDINT_SDCMP;
-+		value |= SPSDC_SDINT_SDCMP_CLR;
-+		writel(value, host->base + SPSD2_SD_INT_REG);
-+		/* we may need send stop command to stop data transaction,
-+		 * which is time consuming, so make use of tasklet to handle this.
-+		 */
-+		if (host->mrq && host->mrq->stop)
-+			tasklet_schedule(&host->tsklet_finish_req);
-+		else
-+			spsdc_finish_request(host, host->mrq);
-+	}
-+
-+	if ((value & SPSDC_SDINT_SDIO) && (value & SPSDC_SDINT_SDIOEN))
-+		mmc_signal_sdio_irq(host->mmc);
-+	spin_unlock(&host->lock);
-+	return IRQ_HANDLED;
-+}
-+
-+static void spsdc_request(struct mmc_host *mmc, struct mmc_request *mrq)
-+{
-+	struct spsdc_host *host = mmc_priv(mmc);
-+	struct mmc_command *cmd;
-+	struct mmc_data *data;
-+	int bus_width = mmc->ios.bus_width;
-+
-+	mutex_lock_interruptible(&host->mrq_lock);
-+	host->mrq = mrq;
-+	data = mrq->data;
-+	cmd = mrq->cmd;
-+
-+	if (cmd->opcode == SD_IO_RW_EXTENDED && bus_width ==
-+			MMC_BUS_WIDTH_4 && data->blocks * data->blksz <= 4) {
-+		if (__switch_sdio_bus_width(host, MMC_BUS_WIDTH_1)) {
-+			cmd->error = -1;
-+			host->mrq = NULL;
-+			mutex_unlock(&host->mrq_lock);
-+			mmc_request_done(host->mmc, mrq);
-+			return;
-+		}
-+		host->restore_4bit_sdio_bus = 1;
-+	}
-+
-+	spsdc_prepare_cmd(host, cmd);
-+	/* we need manually read response R2. */
-+	if (unlikely(cmd->flags & MMC_RSP_136)) {
-+		spsdc_trigger_transaction(host);
-+		spsdc_get_rsp(host, cmd);
-+		spsdc_wait_finish(host);
-+		spsdc_check_error(host, mrq);
-+		host->mrq = NULL;
-+		mutex_unlock(&host->mrq_lock);
-+		mmc_request_done(host->mmc, mrq);
-+	} else {
-+		if (data)
-+			spsdc_prepare_data(host, data);
-+
-+		if ((host->dmapio_mode && data) ==  SPSDC_PIO_MODE) {
-+			u32 value;
-+			/* pio data transfer do not use interrupt */
-+			value = readl(host->base + SPSD2_SD_INT_REG);
-+			value &= ~SPSDC_SDINT_SDCMPEN;
-+			writel(value, host->base + SPSD2_SD_INT_REG);
-+			spsdc_trigger_transaction(host);
-+			spsdc_xfer_data_pio(host, data);
-+			spsdc_wait_finish(host);
-+			spsdc_finish_request(host, mrq);
-+		} else {
-+			if (!(host->use_int || host->dma_use_int)) {
-+				spsdc_trigger_transaction(host);
-+				spsdc_wait_finish(host);
-+				spsdc_finish_request(host, mrq);
-+			} else {
-+				spsdc_trigger_transaction(host);
-+			}
-+		}
-+	}
-+}
-+
-+static void spsdc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
-+{
-+	struct spsdc_host *host = (struct spsdc_host *)mmc_priv(mmc);
-+
-+	mutex_lock(&host->mrq_lock);
-+	spsdc_set_power_mode(host, ios);
-+	spsdc_set_bus_clk(host, ios->clock);
-+	spsdc_set_bus_timing(host, ios->timing);
-+	spsdc_set_bus_width(host, ios->bus_width);
-+	/* ensure mode is correct, because we might have hw reset the controller */
-+	spsdc_select_mode(host, host->mode);
-+	mutex_unlock(&host->mrq_lock);
-+}
-+
-+/**
-+ * Return values for the get_cd callback should be:
-+ *   0 for a absent card
-+ *   1 for a present card
-+ *   -ENOSYS when not supported (equal to NULL callback)
-+ *   or a negative errno value when something bad happened
-+ */
-+int spsdc_get_cd(struct mmc_host *mmc)
-+{
-+	int ret = 0;
-+
-+	if (mmc_can_gpio_cd(mmc))
-+		ret = mmc_gpio_get_cd(mmc);
-+	if (ret < 0)
-+		ret = 0;
-+
-+	return ret;
-+}
-+
-+static void spsdc_enable_sdio_irq(struct mmc_host *mmc, int enable)
-+{
-+	struct spsdc_host *host = mmc_priv(mmc);
-+	u32 value = readl(host->base + SPSD2_SD_INT_REG);
-+
-+	value |= SPSDC_SDINT_SDIO_CLR;
-+	if (enable)
-+		value |= SPSDC_SDINT_SDIOEN;
-+	else
-+		value &= ~SPSDC_SDINT_SDIOEN;
-+	writel(value, host->base + SPSD2_SD_INT_REG);
-+}
-+
-+static const struct mmc_host_ops spsdc_ops = {
-+	.request = spsdc_request,
-+	.set_ios = spsdc_set_ios,
-+	.get_cd = spsdc_get_cd,
-+	.enable_sdio_irq = spsdc_enable_sdio_irq,
-+};
-+
-+static void tsklet_func_finish_req(unsigned long data)
-+{
-+	struct spsdc_host *host = (struct spsdc_host *)data;
-+
-+	spin_lock(&host->lock);
-+	spsdc_finish_request(host, host->mrq);
-+	spin_unlock(&host->lock);
-+}
-+
-+static void spsdc_disable_unprepare(void *data)
-+{
-+	clk_disable_unprepare(data);
-+}
-+
-+static void spsdc_reset_control_assert(void *data)
-+{
-+	reset_control_assert(data);
-+}
-+
-+static int spsdc_drv_probe(struct platform_device *pdev)
-+{
-+	struct mmc_host *mmc;
-+	struct resource *res;
-+	struct spsdc_host *host;
-+	unsigned int mode;
-+	int ret = 0;
-+
-+	mmc = mmc_alloc_host(sizeof(*host), &pdev->dev);
-+	if (!mmc) {
-+		ret = -ENOMEM;
-+		goto probe_free_host;
-+	}
-+	host = mmc_priv(mmc);
-+	host->mmc = mmc;
-+	host->power_state = MMC_POWER_OFF;
-+	host->dma_int_threshold = 1024;
-+	host->dmapio_mode = SPSDC_DMA_MODE;
-+	host->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-+	if (IS_ERR(host->base))
-+		return PTR_ERR(host->base);
-+
-+	host->irq = platform_get_irq(pdev, 0);
-+	if (host->irq <= 0)
-+		return host->irq;
-+
-+	ret = devm_request_irq(&pdev->dev, host->irq, spsdc_irq,
-+			       IRQF_SHARED, dev_name(&pdev->dev), host);
-+	if (ret)
-+		return ret;
-+
-+	host->clk = devm_clk_get(&pdev->dev, NULL);
-+	if (IS_ERR(host->clk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(host->clk), "clk get fail\n");
-+
-+	host->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
-+	if (IS_ERR(host->rstc))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(host->rstc), "rst get fail\n");
-+
-+	ret = clk_prepare_enable(host->clk);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret, "failed to enable clk\n");
-+
-+	ret = devm_add_action_or_reset(&pdev->dev, spsdc_disable_unprepare, host->clk);
-+	if (ret)
-+		return ret;
-+
-+	ret = reset_control_deassert(host->rstc);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret, "failed to deassert reset\n");
-+
-+	ret = devm_add_action_or_reset(&pdev->dev, spsdc_reset_control_assert, host->rstc);
-+	if (ret)
-+		return ret;
-+
-+	ret = mmc_of_parse(mmc);
-+	if (ret)
-+		goto probe_free_host;
-+
-+	spin_lock_init(&host->lock);
-+	mutex_init(&host->mrq_lock);
-+	tasklet_init(&host->tsklet_finish_req, tsklet_func_finish_req, (unsigned long)host);
-+	mmc->ops = &spsdc_ops;
-+	mmc->f_min = SPSDC_MIN_CLK;
-+	if (mmc->f_max > SPSDC_MAX_CLK)
-+		mmc->f_max = SPSDC_MAX_CLK;
-+
-+	mmc->ocr_avail = MMC_VDD_32_33 | MMC_VDD_33_34;
-+	mmc->max_seg_size = SPSDC_MAX_BLK_COUNT * 512;
-+	/* Host controller supports up to "SPSDC_MAX_DMA_MEMORY_SECTORS",
-+	 * a.k.a. max scattered memory segments per request
-+	 */
-+	/* Limited by the max value of dma_size & data_length, set it to 512 bytes for now */
-+	mmc->max_segs = SPSDC_MAX_DMA_MEMORY_SECTORS;
-+	mmc->max_req_size = SPSDC_MAX_BLK_COUNT * 512;
-+	mmc->max_blk_size = 512;
-+	mmc->max_blk_count = SPSDC_MAX_BLK_COUNT; /* Limited by sd_page_num */
-+
-+	dev_set_drvdata(&pdev->dev, host);
-+	spsdc_controller_init(host);
-+	mode = (int)of_device_get_match_data(&pdev->dev);
-+	spsdc_select_mode(host, mode);
-+	mmc_add_host(mmc);
-+	pm_runtime_set_active(&pdev->dev);
-+	pm_runtime_enable(&pdev->dev);
-+	return ret;
-+
-+probe_free_host:
-+	if (mmc)
-+		mmc_free_host(mmc);
-+
-+	return ret;
-+}
-+
-+static int spsdc_drv_remove(struct platform_device *dev)
-+{
-+	struct spsdc_host *host = platform_get_drvdata(dev);
-+
-+	mmc_remove_host(host->mmc);
-+	pm_runtime_disable(&dev->dev);
-+	platform_set_drvdata(dev, NULL);
-+	mmc_free_host(host->mmc);
-+
-+	return 0;
-+}
-+
-+static int spsdc_drv_suspend(struct platform_device *dev, pm_message_t state)
-+{
-+	struct spsdc_host *host;
-+
-+	host = platform_get_drvdata(dev);
-+	mutex_lock(&host->mrq_lock); /* Make sure that no one is holding the controller */
-+	mutex_unlock(&host->mrq_lock);
-+	clk_disable(host->clk);
-+	return 0;
-+}
-+
-+static int spsdc_drv_resume(struct platform_device *dev)
-+{
-+	struct spsdc_host *host;
-+
-+	host = platform_get_drvdata(dev);
-+	return clk_enable(host->clk);
-+}
-+
-+#ifdef CONFIG_PM
-+#ifdef CONFIG_PM_SLEEP
-+static int spsdc_pm_suspend(struct device *dev)
-+{
-+	pm_runtime_force_suspend(dev);
-+	return 0;
-+}
-+
-+static int spsdc_pm_resume(struct device *dev)
-+{
-+	pm_runtime_force_resume(dev);
-+	return 0;
-+}
-+#endif /* ifdef CONFIG_PM_SLEEP */
-+
-+#ifdef CONFIG_PM_RUNTIME_SD
-+static int spsdc_pm_runtime_suspend(struct device *dev)
-+{
-+	struct spsdc_host *host;
-+
-+	host = dev_get_drvdata(dev);
-+	if (__clk_is_enabled(host->clk))
-+		clk_disable(host->clk);
-+	return 0;
-+}
-+
-+static int spsdc_pm_runtime_resume(struct device *dev)
-+{
-+	struct spsdc_host *host;
-+	int ret = 0;
-+
-+	host = dev_get_drvdata(dev);
-+	if (!host->mmc)
-+		return -EINVAL;
-+	if (mmc_can_gpio_cd(host->mmc)) {
-+		ret = mmc_gpio_get_cd(host->mmc);
-+		if (!ret)
-+			return 0;
-+	}
-+	return clk_enable(host->clk);
-+}
-+#endif /* ifdef CONFIG_PM_RUNTIME_SD */
-+
-+static const struct dev_pm_ops spsdc_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(spsdc_pm_suspend, spsdc_pm_resume)
-+#ifdef CONFIG_PM_RUNTIME_SD
-+	SET_RUNTIME_PM_OPS(spsdc_pm_runtime_suspend, spsdc_pm_runtime_resume, NULL)
-+#endif
-+};
-+#endif /* ifdef CONFIG_PM */
-+
-+static const struct of_device_id spsdc_of_table[] = {
-+	{
-+		.compatible = "sunplus,sp7021-card",
-+		.data = (void *)SPSDC_MODE_SD,
-+	},
-+	{
-+		.compatible = "sunplus,sp7021-sdio",
-+		.data = (void *)SPSDC_MODE_SDIO,
-+	},
-+	{/* sentinel */}
-+
-+};
-+MODULE_DEVICE_TABLE(of, spsdc_of_table);
-+
-+static struct platform_driver spsdc_driver = {
-+	.probe = spsdc_drv_probe,
-+	.remove = spsdc_drv_remove,
-+	.suspend = spsdc_drv_suspend,
-+	.resume = spsdc_drv_resume,
-+	.driver = {
-+		.name = "spsdc",
-+#ifdef CONFIG_PM
-+		.pm = &spsdc_pm_ops,
-+#endif
-+		.of_match_table = spsdc_of_table,
-+	},
-+};
-+module_platform_driver(spsdc_driver);
-+
-+MODULE_AUTHOR("Li-hao Kuo <lhjeff911@gmail.com>");
-+MODULE_DESCRIPTION("Thermal driver for SP7021 SoC");
-+MODULE_LICENSE("GPL v2");
 -- 
 2.7.4
 

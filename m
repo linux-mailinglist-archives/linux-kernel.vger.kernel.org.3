@@ -2,119 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED0747EA8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 03:14:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A2047EA91
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 03:15:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245378AbhLXCOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 21:14:54 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:55461 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232088AbhLXCOx (ORCPT
+        id S1350891AbhLXCPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 21:15:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232088AbhLXCPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 21:14:53 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JKrHH5nrlz4xdB;
-        Fri, 24 Dec 2021 13:14:51 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1640312092;
-        bh=63gcLwqrHg8Fe3e63Lc6fgRXbrll9PwcAYa+KR7BT/w=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QqKEZ0rMGfhbuJ0rtx9AHs1+Lz9Z3Zw4CTC04yF9joe5cTWG8e9oLl7FHwieuDlMc
-         HxMXCTqoRVB9MzUGhLVlYRo8yjCyNna7WPdx2qYegPjhBUXuVN0SJqeUnY8GMqKVhh
-         q3BofHXG0LRThahHG84vetrq6hG/9+VbJYJGSo2n934zGj9Qrh8oRjO1Ms3cD+cZUp
-         cAudiJWr6M80lTW6Sa/VWgBrS7QXb355fNRYePhG0xjwa/HoQyf0De4o+3hC8oyG6P
-         TW5s8unWWbKJTf9IgS7zsLRgSW5pESge9BbwrF27ZrLhLwKVObrIHV2LWotbpxvzqV
-         uHn9DoIx4rKBg==
-Date:   Fri, 24 Dec 2021 13:14:50 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "David E. Box" <david.e.box@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the driver-core tree with the
- drivers-x86-fixes tree
-Message-ID: <20211224131450.2c7e0dae@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/P_rhayNAE1PCLetlDULf7=i";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        Thu, 23 Dec 2021 21:15:06 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CF3C061401;
+        Thu, 23 Dec 2021 18:15:06 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id 2so6352244pgb.12;
+        Thu, 23 Dec 2021 18:15:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=+u80chd0X9IdJbC9rzVa4i2Ic75GmOj9yENvhOzHlCY=;
+        b=eWerUxLhX08ma0gyDkT8WzZQK1o79q5638ooWjYSRttVegdMABmLjs+KP/hcBKHhMo
+         StRsMGRiXarH46psOk95RKyAfWTP5n11VRNoiiV8DaaxMxjDUsA8ccnDR+mquHlLyvOd
+         sL4wb/psKaTLLC1LZvgptDiP32lIrarYjJc9wFsodL68LFuVjPOh5Tuf+7H5or70YEVX
+         Xuxym5VWqma5hrhvZ8kFeUS1oDYM9DvAHg6DCil5P8CEYUj4+3RLTiEg9ASmM3CX9uoa
+         cSMYZ2FE1S/w6aFWgMYyDfgXr1Di07rUg+p0mPFRC1sEaX9SvXJO2/iA4EODIPpRGI4a
+         MggA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=+u80chd0X9IdJbC9rzVa4i2Ic75GmOj9yENvhOzHlCY=;
+        b=FNHiAMsnrcmNtmY6lqrT1b5MpxzdG0WTsdWOmPAQI2tzEJHUfnxmSOjRkfTqXfvlst
+         M0Wtue+ACX9X9B9xpeyI3qZ2CcktsTCFfZpNqBKS9BcP5IBx/g81aHYCOmr5hVRL535+
+         FLoojD/+DxzLUOYxpg2xksdTluWnw4r97ThneXfI0blVUhuZuXOpsPxDBbNHCXVLb8Ju
+         fqDRLPJqQBsNCNtq8SXhBz0kaoEzYJBZA/BkZDJdH7V6nNwwJKulMpMNcBk9qURxVzrU
+         7/0jgvn+j/CoEkc3RWRH2hZhcJhcsQxA/PQ8znjkdhclLja7cRnRamwTe1sbyT0KZK1f
+         YIrA==
+X-Gm-Message-State: AOAM531YyOaJqhmyqoccGP76P8BU/YxZ2h2YobK66EM0V3g1kO7Hvks4
+        hJWKP64788DZ45FZy6YyXJM=
+X-Google-Smtp-Source: ABdhPJynCA6P9/woMAiJH6+7MUSjDD0Se4EqhrD7wr2wYeB+2u+TxFyISICUOSSFGlOEQKfw/LX1WQ==
+X-Received: by 2002:a63:86c8:: with SMTP id x191mr4214239pgd.475.1640312106169;
+        Thu, 23 Dec 2021 18:15:06 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id on2sm10285245pjb.19.2021.12.23.18.15.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Dec 2021 18:15:05 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: phy: fixed_phy: Fix NULL vs IS_ERR() checking in __fixed_phy_register
+Date:   Fri, 24 Dec 2021 02:14:59 +0000
+Message-Id: <20211224021500.10362-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/P_rhayNAE1PCLetlDULf7=i
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The fixed_phy_get_gpiod function() returns NULL, it doesn't return error
+pointers, using NULL checking to fix this.i
 
-Hi all,
+Fixes: 5468e82f7034 ("net: phy: fixed-phy: Drop GPIO from fixed_phy_add()")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/net/phy/fixed_phy.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Today's linux-next merge of the driver-core tree got a conflict in:
+diff --git a/drivers/net/phy/fixed_phy.c b/drivers/net/phy/fixed_phy.c
+index c65fb5f5d2dc..a0c256bd5441 100644
+--- a/drivers/net/phy/fixed_phy.c
++++ b/drivers/net/phy/fixed_phy.c
+@@ -239,8 +239,8 @@ static struct phy_device *__fixed_phy_register(unsigned int irq,
+ 	/* Check if we have a GPIO associated with this fixed phy */
+ 	if (!gpiod) {
+ 		gpiod = fixed_phy_get_gpiod(np);
+-		if (IS_ERR(gpiod))
+-			return ERR_CAST(gpiod);
++		if (!gpiod)
++			return ERR_PTR(-EINVAL);
+ 	}
+ 
+ 	/* Get the next available PHY address, up to PHY_MAX_ADDR */
+-- 
+2.17.1
 
-  drivers/platform/x86/intel/Kconfig
-
-between commit:
-
-  4f6c131c3c31 ("platform/x86/intel: Remove X86_PLATFORM_DRIVERS_INTEL")
-
-from the drivers-x86-fixes tree and commit:
-
-  a3c8f906ed5f ("platform/x86/intel: Move intel_pmt from MFD to Auxiliary B=
-us")
-
-from the driver-core tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/platform/x86/intel/Kconfig
-index 40096b25994a,35a5d1a5eba8..000000000000
---- a/drivers/platform/x86/intel/Kconfig
-+++ b/drivers/platform/x86/intel/Kconfig
-@@@ -170,3 -183,16 +170,14 @@@ config INTEL_UNCORE_FREQ_CONTRO
- =20
-  	  To compile this driver as a module, choose M here: the module
-  	  will be called intel-uncore-frequency.
-+=20
-+ config INTEL_VSEC
-+ 	tristate "Intel Vendor Specific Extended Capabilities Driver"
-+ 	depends on PCI
-+ 	select AUXILIARY_BUS
-+ 	help
-+ 	  Adds support for feature drivers exposed using Intel PCIe VSEC and
-+ 	  DVSEC.
-+=20
-+ 	  To compile this driver as a module, choose M here: the module will
-+ 	  be called intel_vsec.
- -
- -endif # X86_PLATFORM_DRIVERS_INTEL
-
---Sig_/P_rhayNAE1PCLetlDULf7=i
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHFLRoACgkQAVBC80lX
-0Gzpugf9E0/ttnF1guRE1jmsBeeLCh+ars5+/LX6DXvmMOCwxFVRxy/CTAXaYsId
-/CMagQGa9D9IryjcEScTTAOc83HsForqKc+RlTSRaM1r4gCOFAhBHc4BDTJpZqra
-xHC/2XOh//xmIYYVsbH/eDwE1b86io1FO7ybzTChGYjd+Z4F/OyvJ25BMX6IMeCt
-Qlik6fsurOywC60s5Ydbva0Ir7QJF2j8V6SrftSXkfe16mPtm6Tg6EFPZhNgPP8k
-3k/p01oKUVWwtmuxj/zWKz4XIk/FChczDhmB6y57z0b3pgiqyUmTqD++r6alfLjP
-xFxi02u5eisAyC9ZVmYLvrIy/pYmtw==
-=YTih
------END PGP SIGNATURE-----
-
---Sig_/P_rhayNAE1PCLetlDULf7=i--

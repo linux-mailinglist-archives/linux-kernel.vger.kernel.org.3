@@ -2,116 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07BDC47EA1C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 02:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0728F47EA1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 02:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235793AbhLXBMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 20:12:34 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46424 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229995AbhLXBMd (ORCPT
+        id S245067AbhLXBWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 20:22:16 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51402 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235793AbhLXBWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 20:12:33 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BO175Xw018647;
-        Fri, 24 Dec 2021 01:12:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=NcT3ysjtJESuIVVpCtisdKBE1Dd2aThqk8vQduNnOpA=;
- b=QShAs9+1a8eNTcuItKQaEIKesHAbL8beH9Gn77oPlPW+jW+6RoWAR2zhw3CephuGIRZ/
- EfPYPamTUBaykFtvR2hVvx6otkXmVLD/1nxKOmHNktxe6VqEGCBry2hr690x1c6svVP2
- w+RVIXVRdDmMDMTypUgv6+ikWjMSHGc4k0tJPhOs0sauKj3yRBrwhnkQDguXPPes1aT4
- liULvGDFODaXsAJmYZdzGDGdeybrfAxFEdO6IjyKge5j1//qDRMkQ8xLUXaJfyh3slUr
- yxsZRbbZGZG/Ic7QoHEY4W/cQBqV3lvVK8F2Bu7a0TDph7QbwMMVPSGYxNbPJa+srkNL 0A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d53er8nbc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Dec 2021 01:12:25 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BO1COLx016349;
-        Fri, 24 Dec 2021 01:12:24 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d53er8nb5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Dec 2021 01:12:24 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BO18Oc8017357;
-        Fri, 24 Dec 2021 01:12:23 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma05wdc.us.ibm.com with ESMTP id 3d179cjftt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Dec 2021 01:12:23 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BO1CMSQ32899514
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Dec 2021 01:12:22 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 857DE136055;
-        Fri, 24 Dec 2021 01:12:22 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 18B81136051;
-        Fri, 24 Dec 2021 01:12:21 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 24 Dec 2021 01:12:21 +0000 (GMT)
-Message-ID: <eaad369c-f02e-8d83-94b1-fdac7ae84388@linux.ibm.com>
-Date:   Thu, 23 Dec 2021 20:12:21 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v4 1/2] selftests: tpm2: Determine available PCR bank
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-References: <20211128041052.1395504-1-stefanb@linux.vnet.ibm.com>
- <20211128041052.1395504-2-stefanb@linux.vnet.ibm.com>
- <YaVkw5dnCewnFybR@iki.fi>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <YaVkw5dnCewnFybR@iki.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: xyxYc-MQo0TGsoyoLjdFQZLRiKq0NiLA
-X-Proofpoint-GUID: 0dFsPYYrfZ2EI2Db5bbTYP74_AHKPmQg
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-23_04,2021-12-22_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0 bulkscore=0
- adultscore=0 spamscore=0 mlxlogscore=826 clxscore=1015 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112240003
+        Thu, 23 Dec 2021 20:22:15 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BBD42B8224F;
+        Fri, 24 Dec 2021 01:22:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 84C61C36AE5;
+        Fri, 24 Dec 2021 01:22:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640308932;
+        bh=xm3Vj5goYYccdBozB75K4lm+Ob70Qf5rWD1y8iszGTA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=fkcIRHrehLGlba9A9O7TSD3Y2NA9eB2DK5veNYG3S6cDijQoh4pVdZCvd7ntzSJtn
+         ekTI3tY8F0LN+ZGWzFICozyAPqJ1hW0L0VKQVu4PH0HMy5kv5scMiq5s14KIVAMMKd
+         fdhQF/yODOSnHS9a6JTuYu+N3Q4zLB2FveUlgnAM9ryw3c4HNKiMbxkTaon81L92pI
+         6HajZPUAJSfcVu+a+c/DP3UAP6EBN4Lhb6HPeotMznuRb4lLGsodRbtNDb8gSxJfDC
+         CumC/Nwq93x+2G1nn6+xhinznadJZOMT7j1RRiJqN7dNH4M8GVyWcbW2LsrNOXTWWG
+         XuxYEQ8BKibkQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 60B91EAC06C;
+        Fri, 24 Dec 2021 01:22:12 +0000 (UTC)
+Subject: Re: [GIT PULL] ksmbd fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAH2r5mvWBb7-Br3fz-Y6Jn4d3vQL_OEpRcnR_AjqEpSmNwxHtQ@mail.gmail.com>
+References: <CAH2r5mvWBb7-Br3fz-Y6Jn4d3vQL_OEpRcnR_AjqEpSmNwxHtQ@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAH2r5mvWBb7-Br3fz-Y6Jn4d3vQL_OEpRcnR_AjqEpSmNwxHtQ@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.samba.org/ksmbd.git tags/5.16-rc5-ksmbd-fixes
+X-PR-Tracked-Commit-Id: 83912d6d55be10d65b5268d1871168b9ebe1ec4b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 7a29b11da9651ef6a970e2f6bfd276f053aeb06a
+Message-Id: <164030893232.23059.557863938742866724.pr-tracker-bot@kernel.org>
+Date:   Fri, 24 Dec 2021 01:22:12 +0000
+To:     Steve French <smfrench@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shuah,
+The pull request you sent on Thu, 23 Dec 2021 18:45:52 -0600:
 
-   are you going to take this fix here - only 1/2 ?
+> git://git.samba.org/ksmbd.git tags/5.16-rc5-ksmbd-fixes
 
-https://lore.kernel.org/lkml/20211128041052.1395504-1-stefanb@linux.vnet.ibm.com/T/#m21209a978c237368499ce5f082f3c0fc03bcbbeb
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/7a29b11da9651ef6a970e2f6bfd276f053aeb06a
 
-   Stefan
+Thank you!
 
-On 11/29/21 18:39, Jarkko Sakkinen wrote:
-> On Sat, Nov 27, 2021 at 11:10:51PM -0500, Stefan Berger wrote:
->> From: Stefan Berger <stefanb@linux.ibm.com>
->>
->> Determine an available PCR bank to be used by a test case by querying the
->> capability TPM2_GET_CAP. The TPM2 returns TPML_PCR_SELECTIONS that
->> contains an array of TPMS_PCR_SELECTIONs indicating available PCR banks
->> and the bitmasks that show which PCRs are enabled in each bank. Collect
->> the data in a dictionary. From the dictionary determine the PCR bank that
->> has the PCRs enabled that the test needs. This avoids test failures with
->> TPM2's that either to not have a SHA-1 bank or whose SHA-1 bank is
->> disabled.
->>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
->
-> /Jarkko
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

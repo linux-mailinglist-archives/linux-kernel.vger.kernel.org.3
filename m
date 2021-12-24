@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A731747ED5A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 09:43:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B788C47ED5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 09:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352078AbhLXIn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 03:43:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32954 "EHLO
+        id S1352072AbhLXInb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 03:43:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352046AbhLXIn1 (ORCPT
+        with ESMTP id S1352081AbhLXIn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 03:43:27 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6D4C061757
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 00:43:26 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id m15so7112420pgu.11
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 00:43:26 -0800 (PST)
+        Fri, 24 Dec 2021 03:43:29 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8B1C06175A
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 00:43:29 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id a23so7146433pgm.4
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 00:43:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=V96MCrbuR3Cmo1QVQzxpqsi+EQJPA/QIWspHhrAknFM=;
-        b=ReCdFld7cLRApbe6SnnREZYfmIU0RcbRDBmmnqe94U4ghsTmrWoWtRGyuVcdLv0Cvh
-         koAodEaY+50Vg+QPhpVBofstR7JJJCw53QBki/gDLSV6kp56h4qKqd+HPN+9B5mLWbP8
-         sda5TpVrDtXTGEzwCEUWPd15aRIhv+frOnbD0=
+        bh=eVYg6vqK0bkjeQRhVKIbYAOnwHGxgaBimTUyzl5wfWU=;
+        b=DSi9fT87X/aQ8j99LRzb46Wq1GH2EqAtDCrJVsAMspshyX9URQfBz6K+q5fJwVCHCb
+         e46+U5RO2/BSYx742BVsAROr8Xn3nEPAx0d+GnFEf7cu5S+E+qbRxAEIaGb9HMSi/CPU
+         3W2UEziHeqoFpnqAvvSCfeYnqfr1K91xIZC/s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=V96MCrbuR3Cmo1QVQzxpqsi+EQJPA/QIWspHhrAknFM=;
-        b=VPd/u9Dp7TyOVu91acrEqrYimEGBJAwpSfMpjUArP8fElJwWZqrOT5cc5DXzdlycAQ
-         h1eFFvXTqQg7u04ufD1Xd/H+bfiAkI83DiEIWfjzgzBsFt7xyZn8WWBDXynCkvIBAJQa
-         jdQxTZqUhOVDvzgLnnnTZ96qE94VnE/9TG5SkQjqsQDNxv4L4WCmHf8mVIfHGYPn3Qjg
-         Vjp0zPeVdawPItJRo2K10QZru+G1MHGdAAeQScxO7D+FjrkrFrK445iAwWpa08kxO/Xt
-         hc9lf1pFNXB1SVY0rSRW1PITZM2o0Vz2mu+L38Tx7YN1n8c7iJTSu8tykmYfBrTtN/Wi
-         ejRA==
-X-Gm-Message-State: AOAM533KKczL3L8JInpuCMKDnLDAqIWmkNeKSKv4nTDXONQTwrer1Pon
-        xGHYOotY1oG1Ixik1Whawk+wIA==
-X-Google-Smtp-Source: ABdhPJycSb22GWmoTlWD+t4pDQjqs8Efzd6cRWdANOKAxMm8MlvU3BBpMjxjkO9FubRD/Q7BSmpdaA==
-X-Received: by 2002:a63:6ac9:: with SMTP id f192mr5281162pgc.79.1640335406365;
-        Fri, 24 Dec 2021 00:43:26 -0800 (PST)
+        bh=eVYg6vqK0bkjeQRhVKIbYAOnwHGxgaBimTUyzl5wfWU=;
+        b=kUPRb0Mk0yrP5LEsAIWRt/YapI2V8/wzTLK5SjJ/Z9hZMTo9Bm4UWkwhkq9QOIGN9e
+         XaJICkDBIG+At7LepDXwrpQvLvJh9c4D3heBekx7tC6KZuGIEVuQMWwYzIN8JqknPV5R
+         DCFy/E0ExFiwxdCqBPeGlQJv4tlapkF+FW2K5wmAd4FEFy3/xTtwJTAhTlsl2s8yIHzT
+         aWHww0LeYH/b+hjmbCtGemAQnMCQovXja361+ci1ho5jJGAbZGio1xnp5pn3Wh/gOhoX
+         1/imLizBYUqdbwq1/7PIbLXDFz7F8g8KnDDPgHgbJqguHyrxQj9mxKNrnDkLUMaCU9o9
+         Xh5Q==
+X-Gm-Message-State: AOAM533qJRw+T/mDr6fo983R71GrmjUR9ZoOSCeSczr8a1j21ng/1T/d
+        OGwmvcE3HijMCYZ2F06PTnn0Uw==
+X-Google-Smtp-Source: ABdhPJxZbbX4Ne8SBwTui1zct2EjoGavD3KorLUC07IOY5SGzG1gbt9det+g1w/jEAaZ0gxMh+oSgQ==
+X-Received: by 2002:a05:6a00:15cb:b0:4ba:edb1:c03c with SMTP id o11-20020a056a0015cb00b004baedb1c03cmr5970245pfu.54.1640335408697;
+        Fri, 24 Dec 2021 00:43:28 -0800 (PST)
 Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:fd40:cbd0:c42a:3c26])
-        by smtp.gmail.com with ESMTPSA id p13sm436369pgl.23.2021.12.24.00.43.24
+        by smtp.gmail.com with ESMTPSA id p13sm436369pgl.23.2021.12.24.00.43.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Dec 2021 00:43:26 -0800 (PST)
+        Fri, 24 Dec 2021 00:43:28 -0800 (PST)
 From:   Chen-Yu Tsai <wenst@chromium.org>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -55,9 +55,9 @@ Cc:     Tomasz Figa <tfiga@chromium.org>,
         Chen-Yu Tsai <wenst@chromium.org>, linux-media@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH RFT 4/7] media: hantro: jpeg: Add JFIF APP0 segment to JPEG encoder output
-Date:   Fri, 24 Dec 2021 16:42:45 +0800
-Message-Id: <20211224084248.3070568-5-wenst@chromium.org>
+Subject: [PATCH RFT 5/7] media: hantro: jpeg: Add COM segment to JPEG header to align image scan
+Date:   Fri, 24 Dec 2021 16:42:46 +0800
+Message-Id: <20211224084248.3070568-6-wenst@chromium.org>
 X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
 In-Reply-To: <20211224084248.3070568-1-wenst@chromium.org>
 References: <20211224084248.3070568-1-wenst@chromium.org>
@@ -67,69 +67,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While the V4L2_PIX_FMT_JPEG format doesn't specify any requirements for
-the APP0 or APP1 segments, it would be nice if the output is JFIF
-compliant. While some programs can read JPEG streams that aren't, some
-guess work is involved.
+The JPEG header size is not 64-bit aligned. This makes the driver
+require a bounce buffer for the encoded JPEG image scan output.
 
-Add the standard JFIF APP0 segment to the JPEG header, so that the JPEG
-encoder output is JFIF compliant.
+Add a COM (comment) segment to the JPEG header so that the header size
+is a multiple of 64 bits. This will then allow dropping the use of the
+bounce buffer, and instead have the hardware write out to the capture
+buffer directly.
 
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- drivers/staging/media/hantro/hantro_jpeg.c | 21 +++++++++++++--------
- drivers/staging/media/hantro/hantro_jpeg.h |  2 +-
- 2 files changed, 14 insertions(+), 9 deletions(-)
+ drivers/staging/media/hantro/hantro_jpeg.c | 3 +++
+ drivers/staging/media/hantro/hantro_jpeg.h | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/staging/media/hantro/hantro_jpeg.c b/drivers/staging/media/hantro/hantro_jpeg.c
-index df62fbdff7c9..7d4018bd6876 100644
+index 7d4018bd6876..51e67e5cf86f 100644
 --- a/drivers/staging/media/hantro/hantro_jpeg.c
 +++ b/drivers/staging/media/hantro/hantro_jpeg.c
-@@ -12,15 +12,15 @@
- #include "hantro_jpeg.h"
- #include "hantro.h"
+@@ -247,6 +247,9 @@ static const unsigned char hantro_jpeg_header[JPEG_HEADER_SIZE] = {
+ 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+ 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
  
--#define LUMA_QUANT_OFF		7
--#define CHROMA_QUANT_OFF	72
--#define HEIGHT_OFF		141
--#define WIDTH_OFF		143
-+#define LUMA_QUANT_OFF		25
-+#define CHROMA_QUANT_OFF	90
-+#define HEIGHT_OFF		159
-+#define WIDTH_OFF		161
- 
--#define HUFF_LUMA_DC_OFF	160
--#define HUFF_LUMA_AC_OFF	193
--#define HUFF_CHROMA_DC_OFF	376
--#define HUFF_CHROMA_AC_OFF	409
-+#define HUFF_LUMA_DC_OFF	178
-+#define HUFF_LUMA_AC_OFF	211
-+#define HUFF_CHROMA_DC_OFF	394
-+#define HUFF_CHROMA_AC_OFF	427
- 
- /* Default tables from JPEG ITU-T.81
-  * (ISO/IEC 10918-1) Annex K, tables K.1 and K.2
-@@ -144,6 +144,11 @@ static const unsigned char hantro_jpeg_header[JPEG_HEADER_SIZE] = {
- 	/* SOI */
- 	0xff, 0xd8,
- 
-+	/* JFIF-APP0 */
-+	0xff, 0xe0, 0x00, 0x10, 0x4a, 0x46, 0x49, 0x46,
-+	0x00, 0x01, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01,
-+	0x00, 0x00,
++	/* COM */
++	0xff, 0xfe, 0x00, 0x03, 0x00,
 +
- 	/* DQT */
- 	0xff, 0xdb, 0x00, 0x84,
- 
+ 	/* SOS */
+ 	0xff, 0xda, 0x00, 0x0c, 0x03, 0x01, 0x00, 0x02,
+ 	0x11, 0x03, 0x11, 0x00, 0x3f, 0x00,
 diff --git a/drivers/staging/media/hantro/hantro_jpeg.h b/drivers/staging/media/hantro/hantro_jpeg.h
-index 035ab25b803f..f33c492134e4 100644
+index f33c492134e4..0b49d0b82caa 100644
 --- a/drivers/staging/media/hantro/hantro_jpeg.h
 +++ b/drivers/staging/media/hantro/hantro_jpeg.h
 @@ -1,6 +1,6 @@
  /* SPDX-License-Identifier: GPL-2.0+ */
  
--#define JPEG_HEADER_SIZE	601
-+#define JPEG_HEADER_SIZE	619
+-#define JPEG_HEADER_SIZE	619
++#define JPEG_HEADER_SIZE	624
  #define JPEG_QUANT_SIZE		64
  
  struct hantro_jpeg_ctx {

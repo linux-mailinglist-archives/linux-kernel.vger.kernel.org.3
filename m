@@ -2,53 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1858247F00C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 17:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E6847F00D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 17:17:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353198AbhLXQRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 11:17:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353194AbhLXQRd (ORCPT
+        id S1353218AbhLXQRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 11:17:41 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45224 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353201AbhLXQRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 11:17:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94027C061757
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 08:17:33 -0800 (PST)
+        Fri, 24 Dec 2021 11:17:38 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F10C620CA
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 16:17:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3C00C36AEA;
-        Fri, 24 Dec 2021 16:17:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93966B82337
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 16:17:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 363AFC36AE5;
+        Fri, 24 Dec 2021 16:17:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640362652;
-        bh=Ug7MgkARQjzTdBT5xt2EBO4kufmFltAfOCADeAkS8DQ=;
+        s=k20201202; t=1640362656;
+        bh=uSaKRhe6AicqI5f3I9EbmjggqJ18n5c3iIi82wvBO2w=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=tivlVGhlNtPLzZMoW5SpMeW1y4mTPFkq/im04/MvwXR7VqSQnCF0LBZs7qDFg1iiq
-         zMxV39Eg0tQeDedRr98u3bUtxc4rHQRAOeYNSJKEPlXZotZV71OflQJbQmXtIj/k7e
-         O8dvZIhw3wSNx+IC804bWaRpvFfLr2LVDejfgVnR7psHN8B7HTjjeRoGJ2f0qOxreV
-         vQ2QxRD1p+7Ly+IekZw2f19W6AcsI2qKrgWLJB2el7dnqXtoN875vAejFui1kfwGfZ
-         k9J6JBzkkykqLKJpZxFHHYHZOPtJ68KCiTRo2MIwn5+uQtQ4NDQAfGQV1ImfSQisLm
-         pzDjVrQIUXVHw==
+        b=n5NMZ84Y8mQq5ERhlN0Lwd5RPUxwnBxaKbDdy7orOEdZSDsP0LvmJ2g2Qm0XWFJge
+         vd/N7r+980JU0K78fjaRpvw2IOsbVsYBeDxhunUhjwwwK7Uvc2/tErlj7mq99EHRfv
+         Effy1N95l8rg7Rlh+H17DwfkmIc6xm3r2TTkI0c/cGobVsm27ljeL24yHOFYej7DIK
+         YymeqEnKArztgvMk0Ou6Ppb6ys9Az3EIK3vZTP9MKBV68jAvewGla+Xbdb2ov/cQb3
+         0+H5AKYK9JRemSFyB05/W12WAB3mCGQLdF1+eqavG5aVG8NqUjgq2g2je61vzk1upf
+         CpOfAb7XwrC8g==
 From:   Mark Brown <broonie@kernel.org>
-To:     alsa-devel@alsa-project.org,
-        V sujith kumar Reddy <vsujithkumar.reddy@amd.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        Sunil-kumar.Dommati@amd.com, Basavaraj.Hiregoudar@amd.com,
-        Vijendar.Mukunda@amd.com, ajitkumar.pandey@amd.com,
-        Arnd Bergmann <arnd@arndb.de>,
-        Liam Girdwood <lgirdwood@gmail.com>, Alexander.Deucher@amd.com,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-In-Reply-To: <20211224150058.2444776-1-vsujithkumar.reddy@amd.com>
-References: <20211224150058.2444776-1-vsujithkumar.reddy@amd.com>
-Subject: Re: [PATCH] ASoC: amd: acp: Power on/off the speaker enable gpio pin based on DAPM callback.
-Message-Id: <164036264944.3720027.17021218639884939671.b4-ty@kernel.org>
-Date:   Fri, 24 Dec 2021 16:17:29 +0000
+To:     Bard Liao <yung-chuan.liao@linux.intel.com>,
+        alsa-devel@alsa-project.org, vkoul@kernel.org
+Cc:     linux-kernel@vger.kernel.org, srinivas.kandagatla@linaro.org,
+        tiwai@suse.de, vinod.koul@linaro.org, gregkh@linuxfoundation.org,
+        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com,
+        sanyog.r.kale@intel.com
+In-Reply-To: <20211224021034.26635-1-yung-chuan.liao@linux.intel.com>
+References: <20211224021034.26635-1-yung-chuan.liao@linux.intel.com>
+Subject: Re: [PATCH v2 0/7] ASoC/SoundWire: improve suspend flows and use set_stream() instead of set_tdm_slots() for HDAudio
+Message-Id: <164036265394.3720027.13130210179491813810.b4-ty@kernel.org>
+Date:   Fri, 24 Dec 2021 16:17:33 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,12 +48,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Dec 2021 20:30:43 +0530, V sujith kumar Reddy wrote:
-> Configure the speaker gpio pin based on power sequence of the DAPM
-> speaker events.
-> Enable speaker after widget power up and Disable before widget  powerdown.
+On Fri, 24 Dec 2021 10:10:27 +0800, Bard Liao wrote:
+> This series contains three topics.
+> 1. SoundWire: Intel: remove pdm support
+> 2. ASoC/SoundWire: dai: expand 'stream' concept beyond SoundWire
+> 3. ASoC/SOF/SoundWire: fix suspend-resume on pause with dynamic pipelines
 > 
+> The topics are independent but the changes are dependent. So please
+> allow me to send them in one series.
 > 
+> [...]
 
 Applied to
 
@@ -69,8 +65,20 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: amd: acp: Power on/off the speaker enable gpio pin based on DAPM callback.
-      commit: 5c5f08f7fc0bee9a1bc3fbdcb7a21cfd0648ab14
+[1/7] ASOC: SOF: Intel: use snd_soc_dai_get_widget()
+      commit: da893a93eaf8eb2bce03862e00b9998463eeaecf
+[2/7] ASoC/soundwire: intel: simplify callbacks for params/hw_free
+      commit: b86947b52f0d0e5b6e6f0510933ca13aad266e47
+[3/7] soundwire: intel: improve suspend flows
+      commit: 8ddeafb957a9a6dd33b2c80309d726d3141df08f
+[4/7] ASoC/SoundWire: dai: expand 'stream' concept beyond SoundWire
+      commit: e8444560b4d9302a511f0996f4cfdf85b628f4ca
+[5/7] ASoC: Intel/SOF: use set_stream() instead of set_tdm_slots() for HDAudio
+      commit: 636110411ca726f19ef8e87b0be51bb9a4cdef06
+[6/7] soundwire: intel: remove unnecessary init
+      commit: 9283b6f923f3bdd92bdeaf259c6b7a5e9dac6900
+[7/7] soundwire: intel: remove PDM support
+      commit: 63a6aa963dd01b66019b7834cc84d032e145bb00
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

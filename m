@@ -2,126 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3263C47ECB1
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 08:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B57E47ECB4
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 08:35:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351821AbhLXHdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 02:33:54 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:54478 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1351813AbhLXHdx (ORCPT
+        id S1351834AbhLXHfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 02:35:41 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:34422 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351823AbhLXHfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 02:33:53 -0500
-X-UUID: 642cc6016aae4d9092443f83fa7722ca-20211224
-X-UUID: 642cc6016aae4d9092443f83fa7722ca-20211224
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <roger.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1548116192; Fri, 24 Dec 2021 15:33:48 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 24 Dec 2021 15:33:48 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 24 Dec 2021 15:33:47 +0800
-Message-ID: <a5c9133e2bc856f8f9cbf6c70bc5196bce61639e.camel@mediatek.com>
-Subject: Re: [PATCH v16 2/7] arm64: dts: mt8183: add svs device information
-From:   Roger Lu <roger.lu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 24 Dec 2021 15:33:47 +0800
-In-Reply-To: <70e71210-6d17-92e3-4e3f-01b83380be42@collabora.com>
-References: <20210428065440.3704-1-roger.lu@mediatek.com>
-         <20210428065440.3704-3-roger.lu@mediatek.com>
-         <70e71210-6d17-92e3-4e3f-01b83380be42@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 24 Dec 2021 02:35:40 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 6FA421F45C66
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1640331339;
+        bh=WINHbJLV9eXPHd3DKDaRQMBzPBk5TS4eplE1U/AnVJk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=YirKHeiET6IAA19/LQcKvEt/Rn/FgNuJu9JMVmK4ozo0uZCQhTo6k6rRT0pYusuay
+         2Z131erpjaVflHXP+twKNaDU3LlF6/NXatdtZF4/6hXRruMRoH0usVq2VCRa37Gway
+         yJxth6Eqef87XstOG/L/E5owdoc7DaTpu/EHFbblpbNuM5aG9So55rTLff2CSiw7tZ
+         sR4/E267Huu55Z2E1zyNqLRWI/U/I86trr2UDfK93uWeeBUHvpzy9ULnNrLcJCWQGw
+         6Pdbc4rjkYF38OcA/+t3f6hpaO9wdoRwr2PdBcTf2sQxSkwNxrhO5jJ7Gig75vVvhG
+         zvgLcf9D0xX+w==
+Date:   Fri, 24 Dec 2021 12:35:30 +0500
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Po-Hao Huang <phhuang@realtek.com>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        "open list:REALTEK WIRELESS DRIVER (rtw88)" 
+        <linux-wireless@vger.kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     usama.anjum@collabora.com, kernel@collabora.com
+Subject: [PATCH v2] rtw88: check for validity before using a pointer
+Message-ID: <YcV4Qkc9PrrmkOim@debian-BULLSEYE-live-builder-AMD64>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi AngeloGioacchino,
+ieee80211_probereq_get() can return NULL. Pointer skb should be checked
+for validty before use. If it is not valid, list of skbs needs to be
+freed to not memory leak.
 
-Sorry for the late reply. 
+Fixes: 10d162b2ed39 ("rtw88: 8822c: add ieee80211_ops::hw_scan")
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-On Wed, 2021-10-20 at 17:20 +0200, AngeloGioacchino Del Regno wrote:
-> Il 28/04/21 08:54, Roger Lu ha scritto:
-> > add compitable/reg/irq/clock/efuse setting in svs node
-> > 
-> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> > ---
-> >   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 18 ++++++++++++++++++
-> >   1 file changed, 18 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > index 80519a145f13..441d617ece43 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > @@ -657,6 +657,18 @@
-> >   			status = "disabled";
-> >   		};
-> >   
-> > +		svs: svs@1100b000 {
-> > +			compatible = "mediatek,mt8183-svs";
-> > +			reg = <0 0x1100b000 0 0x1000>;
-> > +			interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_LOW>;
-> > +			clocks = <&infracfg CLK_INFRA_THERM>;
-> > +			clock-names = "main";
-> > +			nvmem-cells = <&svs_calibration>,
-> > +				      <&thermal_calibration>;
-> > +			nvmem-cell-names = "svs-calibration-data",
-> > +					   "t-calibration-data";
-> > +		};
-> > +
-> >   		pwm0: pwm@1100e000 {
-> >   			compatible = "mediatek,mt8183-disp-pwm";
-> >   			reg = <0 0x1100e000 0 0x1000>;
-> > @@ -941,9 +953,15 @@
-> >   			reg = <0 0x11f10000 0 0x1000>;
-> >   			#address-cells = <1>;
-> >   			#size-cells = <1>;
-> > +			thermal_calibration: calib@180 {
-> > +				reg = <0x180 0xc>;
-> > +			};
-> >   			mipi_tx_calibration: calib@190 {
-> >   				reg = <0x190 0xc>;
-> >   			};
-> > +			svs_calibration: calib@580 {
-> > +				reg = <0x580 0x64>;
-> > +			};
-> >   		};
-> >   
-> >   		u3phy: usb-phy@11f40000 {
-> > 
-> 
-> This patch doesn't apply on the latest linux-next due to some new commits in
-> mt8183.dtsi, can you please rebase?
+---
+v2:
+Free the list in case of error
+---
+ drivers/net/wireless/realtek/rtw88/fw.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-Okay. I'll rebase it.
-
-> Thanks,
-> - Angelo
+diff --git a/drivers/net/wireless/realtek/rtw88/fw.c b/drivers/net/wireless/realtek/rtw88/fw.c
+index 2f7c036f9022..7e1fab7afb69 100644
+--- a/drivers/net/wireless/realtek/rtw88/fw.c
++++ b/drivers/net/wireless/realtek/rtw88/fw.c
+@@ -1857,7 +1857,7 @@ static int rtw_hw_scan_update_probe_req(struct rtw_dev *rtwdev,
+ {
+ 	struct cfg80211_scan_request *req = rtwvif->scan_req;
+ 	struct sk_buff_head list;
+-	struct sk_buff *skb;
++	struct sk_buff *skb, *tmp;
+ 	u8 num = req->n_ssids, i;
+ 
+ 	skb_queue_head_init(&list);
+@@ -1866,11 +1866,19 @@ static int rtw_hw_scan_update_probe_req(struct rtw_dev *rtwdev,
+ 					     req->ssids[i].ssid,
+ 					     req->ssids[i].ssid_len,
+ 					     req->ie_len);
++		if (!skb)
++			goto out;
+ 		rtw_append_probe_req_ie(rtwdev, skb, &list, rtwvif);
+ 		kfree_skb(skb);
+ 	}
+ 
+ 	return _rtw_hw_scan_update_probe_req(rtwdev, num, &list);
++
++out:
++	skb_queue_walk_safe(&list, skb, tmp)
++		kfree_skb(skb);
++
++	return -ENOMEM;
+ }
+ 
+ static int rtw_add_chan_info(struct rtw_dev *rtwdev, struct rtw_chan_info *info,
+-- 
+2.30.2
 

@@ -2,177 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B715E47EBF4
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 07:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE3147EBF7
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 07:10:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351486AbhLXGFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 01:05:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351456AbhLXGFh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 01:05:37 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0215FC061401;
-        Thu, 23 Dec 2021 22:05:37 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id f125so6991206pgc.0;
-        Thu, 23 Dec 2021 22:05:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=RigX7Ns/+Snrt8UrcXUuA0iJDA0F661A3lbO8ib7J24=;
-        b=l5Th39v8L5CbG7sXwIziiK522KwUbSaFEiYIdVHoOfyPxFqw7VyPnhCtKWioILYdxF
-         VGqqhYMBhCycrm8JehpNwgEN7yb5RIIZI5hVc72lCsyqw8g2beN8oIf1CBbc8np1kc/M
-         UwQmzd8Vl2Of5nRFCenH0L6qXh4A5XzyZ0D6gUkIbIFBMyrTGLfULnR1SF3/ZUQFIVbO
-         HqyRcy6ngC5qahw39OiIpupezHrRASoBwI7InSQeNwAED/tCxKceMUknXNk1vb9u//6l
-         asCrEw/G2LeQaSWDmR2iNVt5ilCkx2Iu2BlrLR5EoivYmvtruTamYbpAXGoia2GFkGSR
-         xeWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=RigX7Ns/+Snrt8UrcXUuA0iJDA0F661A3lbO8ib7J24=;
-        b=4pO5jL3pexaR2dE/2lB8ibLHH+ihzb2Pw34BW/pweOegnkAgFT0gsDyu7qv/XJA3GY
-         Iro9bxym4g+vYLo6GTW2Vp8s6q5dbu9E2549FsFEfa1pnzP9xmB5f5W19KvGdx5ygPM9
-         k2l1Blmh9Vqv8ztVhy9lWZHhbakDaVDzfVBQoRJn5FDpt0haEgXklpQeA+9eeVqADEsV
-         g3YIZTs5pCGQqd2tO6JWV3y2SCmSZ0Ouo/JF0DUM2u5Y1oC+my8HbHzYN8wOaHCldCkY
-         KH9+uPQj4AyvDEeLUK9/yAShrZI8uN4bTAjrWSDUPtji4oIojswOiOF3iDmqY8A+eHvf
-         z2Zw==
-X-Gm-Message-State: AOAM533UXXuBSfotgbDLFa7Sw/bHQk+aaXSVtMq81mS/74pM+hyLTLhG
-        x3roqzZLk1nfC84COUPLfIA=
-X-Google-Smtp-Source: ABdhPJyVFtvywx4KAl6kX7WiOwHtvzIbuBrIlYHVSmfp72GYA4CHhLkhJvTjYuH1APzCZMzXpFZRWQ==
-X-Received: by 2002:a63:c009:: with SMTP id h9mr4906351pgg.36.1640325936383;
-        Thu, 23 Dec 2021 22:05:36 -0800 (PST)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id y128sm8234736pfb.24.2021.12.23.22.05.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 23 Dec 2021 22:05:36 -0800 (PST)
-From:   Li-hao Kuo <lhjeff911@gmail.com>
-To:     p.zabel@pengutronix.de, daniel.thompson@linaro.org,
-        lee.jones@linaro.org, u.kleine-koenig@pengutronix.de,
-        ulf.hansson@linaro.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     lh.kuo@sunplus.com, wells.lu@sunplus.com,
-        Li-hao Kuo <lhjeff911@gmail.com>
-Subject: [PATCH v3 2/2] devicetree bindings mmc Add bindings doc for Sunplus SP7021
-Date:   Fri, 24 Dec 2021 14:05:39 +0800
-Message-Id: <9da84bfbb6d4d086a8f905dd0d80fb81720987f7.1640325539.git.lhjeff911@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1640325539.git.lhjeff911@gmail.com>
-References: <cover.1640325539.git.lhjeff911@gmail.com>
-In-Reply-To: <cover.1640325539.git.lhjeff911@gmail.com>
-References: <cover.1640325539.git.lhjeff911@gmail.com>
+        id S1351474AbhLXGKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 01:10:37 -0500
+Received: from mail-eopbgr90078.outbound.protection.outlook.com ([40.107.9.78]:55520
+        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S245665AbhLXGKg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 24 Dec 2021 01:10:36 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gBEHNc+Ccgqjiv90oVUHDKD7/0Tu6huNRNQ+JQ61vhVB9PjrtID4YsHlpwL6//rD5ixPkj1huhkJUGsjx+5Y7FVUdpaYX44zmCh/8XJvQwsDvdbzX+NtWUq3Zjn61E6trP5F5qbEbC00WRtNM0ocTl4W77MX8blGXSC/aN2ctnBPvxb/yxOz+slZO6x50JhgIyXOFCxQ1clRcpiaKN3yfNrertfP8cnw+g+RXyi+JfwqZql1xeF3vfm2PaoMIlJC+WGiQOZHfY6r9XVYalYjYlotCgszpbzLwBqIR2ZQicIuuEbM4rR88T/2eV2sobDmFMf4LNNX8WezhjTrpSFx4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tYfYlP/ZorviMIZ+RtEYpwXT7dJwdA7a3JZrUJZm7Gs=;
+ b=kERA4ermxTi+1XLnWKW/PlCuN5QXmHXWGRj+2tLi1t9fm+FeHYsH5Fd3K+TXPiLtFF5TprAN7OhKmteQJaOUoyMdaURCY0VWj3Dlb7alTsgfOzMYMsBOdMFgun8lHl9STXLnSTBgmCY8n415gjX4ioiQSdb7oaBTFp/l40C2j+DgFi4meSXRO5K24g/VFyV9ngICa4R+NtkLmGoFsd4DFW6kTlUyupQ3T3Vy1s6z3LOMXPa66AOGtKtAko44KrGMM6JRR2/Vm8QkBJ4CqVLD7G6ICUPZFUKncJo3DpYpdYV9rGhRjHP0tneWynZbFB7ReScb7gFGRtGhPM13XsTMGg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MRZP264MB2780.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:19::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.18; Fri, 24 Dec
+ 2021 06:10:33 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::f0ef:856d:b0de:e85d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::f0ef:856d:b0de:e85d%7]) with mapi id 15.20.4823.021; Fri, 24 Dec 2021
+ 06:10:33 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+CC:     kernel-janitors <kernel-janitors@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: code conditional on non-existing PPC_EARLY_DEBUG_MICROWATT.
+Thread-Topic: code conditional on non-existing PPC_EARLY_DEBUG_MICROWATT.
+Thread-Index: AQHX9+bpwKxnLB6mCUGSdobyDruDOqxBKhwA
+Date:   Fri, 24 Dec 2021 06:10:33 +0000
+Message-ID: <27eefbf2-fc2c-7800-1397-8acfea7ed7e8@csgroup.eu>
+References: <CAKXUXMxa6zuTncNjTVHeU7nJ9uvv3KqMtSDocMC7P5hxfrkakQ@mail.gmail.com>
+In-Reply-To: <CAKXUXMxa6zuTncNjTVHeU7nJ9uvv3KqMtSDocMC7P5hxfrkakQ@mail.gmail.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 88e845c2-985e-4159-fddd-08d9c6a41820
+x-ms-traffictypediagnostic: MRZP264MB2780:EE_
+x-microsoft-antispam-prvs: <MRZP264MB2780C14517FB91FF8BC49649ED7F9@MRZP264MB2780.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:1751;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: MBw5kXQWEyUYPc392iTCH0yg8iHuV9KUsWops/GjrwQxEaluHeMZm/9hHaBHYktRofX/ctA5BuIYwoGROtrX5O26tVBkleQlV2MBPEUuIz2E9B/27em2Mfm003m7bpJ2vHF4UZ7VZ+mraepJIucFhWrh1dvL6lCcJNwgm+LJ4F6MW17Gt6scfZD9mdBMHub5DqXBFskm5jYEgZIKrU2hwrMTkFptKVyNf2qQZm6syLkZl6OmL9SUklZX2EtluObHrlQdgMfde2WOZ3cBqUr/RpJ6dA7vFZrxiyvsUqcFTiayiop3MPE84kL5D8UgjCHE7l0YGyVrfQfkcl/RAJCu0VVu7BQPTelOZSjDtEvhUjfCOQZ2ot4Rzz1Rl2k4CBuAC226vmpTdgRQK4sjzovULLklOa+tOwuOG5xwCfoREnARJiq5L0whVBXn4F3BaVPEcLNTp3RRd9obRIzTuljlmyzR+fa0PPDjEvBI6dwh5lt53lxZKOytA/7ATag4IgURD0nNF7WBkttAvXcI1QPm1oYPoXMYHDwSk/v4MQVQTDshZtIjC6XjtBo189J1PQz8CFoQAGEjBjtnmbrZYvgg1v2tc4EdtTbvdMnTWgtlbu0NULYe45uoVfiTPqm+UBjbnRT/64ktBnqKqn20qvGW+1aLhN/XWi78xMexTXUsQKEmvb6w7Eo+hbRcbRARLR6MxMElPG7fqZDJI3OK17zgnvEdXrLG+CAaTYVIg98p/805dvm5ARqmx8GpiRHQARzVOxHQScoZwWV1z3tIoO7zdBdAK/cKfrc1Lb8kGVGuFif2waHmpXbLdo4eRK8Xr6IWl5ueuUeZeOSePMl1GAU/Tvl9nALxwd/VsgeXUqLjGps=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(31686004)(36756003)(38100700002)(508600001)(26005)(4744005)(66946007)(66446008)(6506007)(76116006)(966005)(91956017)(54906003)(122000001)(71200400001)(83380400001)(64756008)(66476007)(66556008)(31696002)(2616005)(110136005)(5660300002)(2906002)(4326008)(8676002)(316002)(66574015)(186003)(44832011)(6486002)(38070700005)(8936002)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Q1NhcE9Jb0l3TmU3VzgrcHBmRlR0TFE3OExzeEs5MDA2ZTJnSFdyMHpXUG9T?=
+ =?utf-8?B?UHd2NktCK1pLRmJZMmRxc2dEUFJqcExpU0hiclFVRmU4WWFjYmtKVU4wTGts?=
+ =?utf-8?B?Tkh6dHB4NHQ0QXBLV204ODFld2dyb3JpYWgyanhkRktQV2NZekhWN2k2YXJ2?=
+ =?utf-8?B?dGd5TzZlWktBZkQrSFIrbXZZWjZKMDdMeVdsbDJhaGVMWG4rb1hndmxzb2Rm?=
+ =?utf-8?B?K3dYZ0YxVm5PSU1BVDRXaTlUYTZVLzN0cVlDc0U3VnpJTFlNQmVrdWlubWxh?=
+ =?utf-8?B?ODVuc0gwL2xUbDY1Sno3dkZ1ZmFFVDBLODJtYjBpcmIwakxYUVN3UlZyS2tV?=
+ =?utf-8?B?K3orbTIwU1YwNDFMbHNPam5FQWRrOFhrUEJKZ2djUG1nY1hJRVA3c25qL0VQ?=
+ =?utf-8?B?eVR3Q3dwZmMyS0xYSGlVa3pYQTJwVnVHd0xRSFVpaytvNCtDalJaNjdwcWFi?=
+ =?utf-8?B?dGU1eTZjdXNIZDZTenB1c1d2Z1V6TG5FMXRhVkZLQlhieXc3YmJIQXg5VmMv?=
+ =?utf-8?B?M0VDSXFtMmZPTFJZMi9HaXl4QXc2cmhyNy83WWdtdTZJWHdBcy9lUVBJVVJN?=
+ =?utf-8?B?N3RGeEdZSnloSGJORlhRaHYvOXNlb1pmbGlzMXJHaHlnRHJKVHA4WENPd1E2?=
+ =?utf-8?B?STU2TEFzNU9Gc1RlVGRPeG00cWJWaG9KLzUvLzBEazFFekZhRUVUTW9BNkVT?=
+ =?utf-8?B?eFpwVTlPU2tVTkZYME9jQ1phQmRocXVBdTVCVXNqcHk2NFlaZVRsY01HRlBX?=
+ =?utf-8?B?anV0SG45aFc1bjZiNUZqZm50Ylg5NzZVSHQwdUpHejFtd1lXcXluTHdtNEVo?=
+ =?utf-8?B?ZGpKZ0RmNmhUeFlkNFE0c01SYWp3ZUUwTDQ4MENBMG5HMXRyUmJRVjNLWGx4?=
+ =?utf-8?B?SjlHdmhXZEF1WUhFdHNXUm0rVXNmODNVRGxYUzNGWE12YXEzRmtkQmtlWC9n?=
+ =?utf-8?B?TU53SDRrdlo4SkhzSnMrd2R6L3lpWHRrV002eDZCOHRVaHhHQy8wWGFVSWMx?=
+ =?utf-8?B?MUVJQkFZME9VS0VXYXA2SVBLSUZrM2RtcGdCT25DZFRmYkc3d2s3QU1iN3pF?=
+ =?utf-8?B?M3loTGo3cFExVk91MnZ6MEh6YnJ6bXRJSXRBdXRFSWUyK1B1dUwxU2JYK0dJ?=
+ =?utf-8?B?ZzduRU5GMGI0ZGp4S1RmZENkNHFVdE9PRU5IVmdCbjk4TExLR2E4WXk2SC8x?=
+ =?utf-8?B?TWxpRG5lUXR4dXAxdURuaVBNQStRdW5pM0RUTTZkREgza0IrM1ZPSit3SFVY?=
+ =?utf-8?B?dFNGWHo5aFBhcHpmNjl5bFpDd2xKUm0yRXVsZ1BIeVRydEd6ZGxSWEtkT0d1?=
+ =?utf-8?B?eDZheWFscFRJOHo1SkIyNEpxR2lWU0RYZzV4SG1UZlhuNGdLWGwrNGREa3Ru?=
+ =?utf-8?B?OGNEV3RMNkkwQzE4c0RpbDc2SHhYa3JhUldqVGs5VGhtNEhqblEwOEJ2aU9C?=
+ =?utf-8?B?bVJ0U3BhL2lSU0QrNFpxRXRnNk1QcTdNMFhpWTJyQXpCZHhVUmhUS2JPbSsz?=
+ =?utf-8?B?cXE0c1pjOWN6ZFhqTWhEdHlib3NoN1dFdmV0N2FCcHRsSlpjOEM3U3ZDUW5X?=
+ =?utf-8?B?aXVUZlh6L0E1SnhPWC90N2xycW1nQ3pYVkpuUEpOaStWMFNMTXlTaTh5VmJ0?=
+ =?utf-8?B?cWJBdjY3TVNsM3FNU013VFZtSXdsSlhjZWZtZTlUVlF2b0hkYjk4cllrTmww?=
+ =?utf-8?B?bkltVjV1L2tXclBxNzNEbnhwUWlnQVJOTFpHV0hYQndKbjRXNGFmTkMveVFl?=
+ =?utf-8?B?eTJzWFlNUkhlUnZNcG13ZHoxUzIwYkJPKzgveUFERWhsQVV3blZGZU80SkRS?=
+ =?utf-8?B?d3JBZG5PYnJoNnpTdEFNZi9sdGZNN3dJR1dxdzNPME95eHU3MmRnbTZySWZl?=
+ =?utf-8?B?bHhQOHFsTllzRnNNeWFkd0VOSmo4YVRBSUZ2V0pnM3hrdnY0R3ZDUjJTV2to?=
+ =?utf-8?B?VXE2RHVGbXlvYzRuSjVwWHpwZWQ4RXExT3ZXays4Y2dxSVpsaDVTWjNLeElW?=
+ =?utf-8?B?S1luMmhyZWRjd292R29ZY1ppYWZwQXFvMTFFZkszVk1HVHJSZ1NqYkk4MEVX?=
+ =?utf-8?B?Vi9nSTkxVFdMdHlTZEtCTXAxNmM1YzlDV2xwYWg4akpTR1ZHWGhaRTlRRVBi?=
+ =?utf-8?B?cURvanFiemtBaFNsZzBBbW9kWUwrVVdkaTczRExtTUdiNmQ3UGY3djFDQjlC?=
+ =?utf-8?B?WHIyWklBNlJqSWIrdGR2bmg2SFNVZExqZ096ZWl2eDJMK0ZPaG9qUUd0WVFX?=
+ =?utf-8?Q?du98xYjWtR7i6SuuxX0WwTukn468s0rejpQQlz44Zo=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A0FE4D49D4F44844B7F5878F027863AA@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 88e845c2-985e-4159-fddd-08d9c6a41820
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Dec 2021 06:10:33.1074
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aEOB3x7zj60x7TEJnSEsAkFTwRBSztetWlpJ/1bnoEeS3VDCaizSvhgxheEzDw5qS0Zx8MWFGNbUCRw8hc+i1Dxs/+i9uXapy5MwJrX8qNo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB2780
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add devicetree bindings mmc Add bindings doc for Sunplus SP7021
-
-Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
----
-Changes in v3:
- - Addressed all comments from Mr. Rob Herring
- - Modified SD/SDIO driver.
-
- .../devicetree/bindings/mmc/sunplus-sd2.yaml       | 73 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 74 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mmc/sunplus-sd2.yaml
-
-diff --git a/Documentation/devicetree/bindings/mmc/sunplus-sd2.yaml b/Documentation/devicetree/bindings/mmc/sunplus-sd2.yaml
-new file mode 100644
-index 0000000..2f96e35
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mmc/sunplus-sd2.yaml
-@@ -0,0 +1,73 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (C) Sunplus Co., Ltd.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mmc/sunplus-sd2.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Sunplus SD/SDIO controller
-+
-+maintainers:
-+  - Li-hao Kuo <lhjeff911@gmail.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - sunplus,sp7021-card
-+      - sunplus,sp7021-sdio
-+
-+  reg:
-+    items:
-+      - description: Base address and length of the SD/SDIO registers
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  max-frequency: true
-+
-+allOf:
-+  - $ref: "mmc-controller.yaml"
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - resets
-+  - pinctrl-names
-+  - pinctrl-0
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/sp-sp7021.h>
-+    #include <dt-bindings/reset/sp-sp7021.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    sdcard: sdcard@9c003e80 {
-+       compatible = "sunplus,sp7021-card";
-+       reg = <0x9c003e80 0x280>;
-+       interrupts = <21 IRQ_TYPE_LEVEL_HIGH>;
-+       clocks = <&clkc CARD_CTL1>;
-+       resets = <&rstc RST_CARD_CTL1>;
-+       pinctrl-names = "default";
-+       pinctrl-0 = <&mmc1_mux &mmc1_mux_cd>;
-+       max-frequency = <52000000>;
-+    };
-+    sdio: mmc@9c008400 {
-+       compatible = "sunplus,sp7021-sdio";
-+       reg = <0x9c008400 0x280>;
-+       interrupts = <21 IRQ_TYPE_LEVEL_HIGH>;
-+       clocks = <&clkc CARD_CTL1>;
-+       resets = <&rstc RST_CARD_CTL1>;
-+       pinctrl-names = "default";
-+       pinctrl-0 = <&pins_sdio>;
-+       max-frequency = <52000000>;
-+    };
-+...
-\ No newline at end of file
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2c1d9e8..297d512 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18246,6 +18246,7 @@ SUNPLUS SD/SDIO HOST CONTROLLER INTERFACE DRIVER
- M:	Li-hao Kuo <lhjeff911@gmail.com>
- L:	linux-mmc@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/mmc/sunplus-sd2.yaml
- F:	drivers/mmc/host/sunplus_sd2.c
- 
- SUPERH
--- 
-2.7.4
-
+DQoNCkxlIDIzLzEyLzIwMjEgw6AgMTE6MjEsIEx1a2FzIEJ1bHdhaG4gYSDDqWNyaXTCoDoNCj4g
+RGVhciBCZW5qYW1pbiwgZGVhciBQYXVsLCBkZWFyIE1pY2hhZWwsDQo+IA0KPiB3aXRoIGNvbW1p
+dCA0OGI1NDViODAxOGQgKCJwb3dlcnBjL21pY3Jvd2F0dDogVXNlIHN0YW5kYXJkIDE2NTUwIFVB
+UlQNCj4gZm9yIGNvbnNvbGUiKSwgeW91IGhhdmUgc29tZSBjb2RlIGluIGFyY2gvcG93ZXJwYy9r
+ZXJuZWwvdWRiZ18xNjU1MC5jLA0KPiBjb25kaXRpb25hbCBvbiB0aGUgS2NvbmZpZyBzeW1ib2wg
+UFBDX0VBUkxZX0RFQlVHX01JQ1JPV0FUVC4gSG93ZXZlciwNCj4gc2luY2UgdGhlbiwgdGhlIGRl
+ZmluaXRpb24gb2YgdGhpcyBLY29uZmlnIHN5bWJvbCB3YXMgbmV2ZXIgaW50cm9kdWNlZA0KPiB0
+byB0aGUgbWFpbmxpbmUgcmVwb3NpdG9yeSBvciBjdXJyZW50IGxpbnV4LW5leHQsIG5vciBhbSBJ
+IGZpbmRpbmcgYW55DQo+IHBlbmRpbmcgcGF0Y2ggZm9yIHRoYXQuDQo+IA0KPiBBcmUgeW91IGdv
+aW5nIHRvIGFkZCB0aGlzIGNvbmZpZyBkZWZpbml0aW9uIHNvb24/IE9yIGRpZCB5b3UgaWRlbnRp
+ZnkNCj4gdGhhdCB0aGlzIHNldHVwIGNvZGUgaW4gdWRiZ18xNjU1MC5jIGlzIG5vdCBhY3R1YWxs
+eSBuZWVkZWQgYW5kIGNhbiB3ZQ0KPiBzaW1wbHkgZHJvcCB0aGlzIGNvZGUgYWdhaW4/DQo+IA0K
+PiBUaGlzIGlzc3VlIHdhcyBpZGVudGlmaWVkIHdpdGggdGhlIHNjcmlwdCAuL3NjcmlwdHMvY2hl
+Y2trY29uZmlnc3ltYm9scy5weS4NCj4gDQoNCg0KV2FzIGl0IGZvcmdvdHRlbiB3aGVuIGhhbmRs
+aW5nIGNvbW1lbnRzIHRvIA0KaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2xp
+bnV4cHBjLWRldi9wYXRjaC8yMDIwMDUwOTA1MDM0MC5HRDE0NjQ5NTRAdGhpbmtzLnBhdWx1cy5v
+emxhYnMub3JnLyANCj8=

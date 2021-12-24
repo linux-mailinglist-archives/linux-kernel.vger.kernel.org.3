@@ -2,150 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A2047F06B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 18:38:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 616E847F06D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 18:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353358AbhLXRin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 12:38:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353335AbhLXRil (ORCPT
+        id S1344025AbhLXRmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 12:42:45 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42674 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232195AbhLXRmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 12:38:41 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72395C061757
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 09:38:41 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id w1so7033362ilh.9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 09:38:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=egauge.net; s=google;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :organization:user-agent:mime-version:content-transfer-encoding;
-        bh=U47rTAPXH+aLFRV5bwaR5qoQIKBvtt8C4VdyaJsNXDc=;
-        b=YT53nncZQkXbKVlUkM490Q/adPXhTSoawpsSGMxPGkw2Hgz3QHlCS1hD0/tBG8zQ6F
-         AzWS4093FHsc897g452gLe9pUqRHXitZTCZlvI5JxM3q8u8pJOh+2NwoRrGFDJaZ1Enu
-         H/+a45kB87oTu99tP/wh+ZfDY1OzWMiVSGnINGplU55dQb3PL/m9f7nU+l5BUhv3DgTo
-         lYm8a/wz8HQ33jpBwaUtUhMupOb2aaCt9NNwt9JMXXgD5INW2HhLZQ3NgiYqtcw0dFpn
-         EFFSlA7DT+qm1aigkwJsXgMuRZQpaYU4bsJEWyM1YvFS5E11kQ+RyzEpN3q9cJGxvA9/
-         Q9Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=U47rTAPXH+aLFRV5bwaR5qoQIKBvtt8C4VdyaJsNXDc=;
-        b=usEZ/9hqeWC1pLX3iwpUK8RfeIPnZN3oaFd8p2Hh4sUuO9FoHSKbTdl3E5RdeHSGUq
-         /fR2/XBnx9ssPnJIIpx501e/gInClHqw2Fu5kCGr3ZgtlLO9NUAgHJId/lu4DcQ25ovx
-         I09vYxyCtBshYpwEG0TKozB7k0VBkGymHM6iCnwYrTKBQ734XViaC+1jggpWoxehXmgv
-         1EkBHgprAhFIMHuQEJKejjlNeJEEF+G+IPAOV4UJigXrIEQX7CO1p3Bw6na3GzMQDBQw
-         E4ChZPkrsotm3eOJvtltUxPHJZLYHU6Kv8jSHuXpeFKXAoGkUNuFJSIvS+ci2pWvDlRX
-         shIg==
-X-Gm-Message-State: AOAM531QB5q8FIQxWM0MqgkhG4+hSmm1w7Zb4cPLj2RgxDjPMv0auVdk
-        517I+uNvKcS/L7NjZ+BaZuNn
-X-Google-Smtp-Source: ABdhPJwsSrpQmBjHLE7h+SrvCAYWvXBcLL6X7fPC9nsRP+9XodzueLnH/Y5A0hSfBSPJLAhheZn6xg==
-X-Received: by 2002:a92:c681:: with SMTP id o1mr3342064ilg.23.1640367520820;
-        Fri, 24 Dec 2021 09:38:40 -0800 (PST)
-Received: from ?IPv6:2601:281:8300:4e0:2ba9:697d:eeec:13b? ([2601:281:8300:4e0:2ba9:697d:eeec:13b])
-        by smtp.gmail.com with ESMTPSA id j5sm4687504ilo.77.2021.12.24.09.38.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Dec 2021 09:38:40 -0800 (PST)
-Message-ID: <e7247265d5309165140d7a9a3af646129a789d58.camel@egauge.net>
-Subject: Re: [PATCH] wilc1000: Allow setting power_save before driver is
- initialized
-From:   David Mosberger-Tang <davidm@egauge.net>
-To:     Ajay.Kathat@microchip.com
-Cc:     Claudiu.Beznea@microchip.com, kvalo@codeaurora.org,
-        davem@davemloft.net, kuba@kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 24 Dec 2021 10:38:37 -0700
-In-Reply-To: <9272b86e-61ab-1c25-0efb-3cdd2c590db8@microchip.com>
-References: <20211212011835.3719001-1-davidm@egauge.net>
-         <6fc9f00aa0b0867029fb6406a55c1e72d4c13af6.camel@egauge.net>
-         <5378e756-8173-4c63-1f0d-e5836b235a48@microchip.com>
-         <31d5e7447e4574d0fcfc46019d7ca96a3db4ecb6.camel@egauge.net>
-         <49a5456d-6a63-652e-d356-9678f6a9b266@microchip.com>
-         <523698d845e0b235e4cbb2a0f3cfaa0f5ed98ec0.camel@egauge.net>
-         <122f79b7-7936-325c-b2d9-e15db6642d0f@microchip.com>
-         <be3c95c8310504222e88c602a937b7f05cc01286.camel@egauge.net>
-         <9272b86e-61ab-1c25-0efb-3cdd2c590db8@microchip.com>
-Organization: eGauge Systems LLC
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Fri, 24 Dec 2021 12:42:44 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1BF4620D3;
+        Fri, 24 Dec 2021 17:42:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A9BBC36AE8;
+        Fri, 24 Dec 2021 17:42:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640367763;
+        bh=g6XVpxzQARxtHmP/1T2ky85FNUldvcDQeWuopHo5gtY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=W3iorgEaeUxfCvixYCZoOeLSKYSGKUE3OViD3MkCb8lfGSfH6RmPaSxtp+iTngyf2
+         xRwST8EF5iRhTLJ3Cmpwd3/Ei1h7XybzTvX1pqIvd598Rei5WFHSzC0Y6o+U3q6a7d
+         30u408fOF2MapmslmcJhJZImCxBNupady20q2FBZEMa+P7MmWg8IemfeKrcg/2JS1h
+         VOGhuD55muNSHOAVRSdNk8JbWCZ43KAdq/qll4ptvQh4U33Jojrofl5wvHNjghla0g
+         gIEvFs4Zcyl6cb7/n/wHzlakK21FleljJjzf00s8d/M2oce2mXinK81qSdkKzzlIKV
+         MdEbwcU/u87DA==
+Message-ID: <75ec3ad1-6234-ae1f-1b83-482793e4fd23@kernel.org>
+Date:   Fri, 24 Dec 2021 09:42:39 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v4 11/13] crypto: x86/aes-kl - Support AES algorithm using
+ Key Locker instructions
+Content-Language: en-US
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>, tglx@linutronix.de,
+        bp@suse.de, dave.hansen@linux.intel.com, mingo@kernel.org,
+        x86@kernel.org, herbert@gondor.apana.org.au
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        ebiggers@kernel.org, dan.j.williams@intel.com,
+        charishma1.gairuboyina@intel.com, kumar.n.dwarakanath@intel.com,
+        lalithambika.krishnakumar@intel.com, ravi.v.shankar@intel.com
+References: <20211214005212.20588-1-chang.seok.bae@intel.com>
+ <20211214005212.20588-12-chang.seok.bae@intel.com>
+From:   Andy Lutomirski <luto@kernel.org>
+In-Reply-To: <20211214005212.20588-12-chang.seok.bae@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ajay,
-
-On Fri, 2021-12-24 at 16:20 +0000, Ajay.Kathat@microchip.com wrote:
-> On 23/12/21 22:38, David Mosberger-Tang wrote:
-> > First, on a freshly booted system and with wilc1000-spi autoloaded by
-> > the kernel, try this sequence (copy & paste the commands):
-> > 
-> >     /usr/sbin/wpa_supplicant -Bs -iwlan0 -c/etc/wpa_supplicant.conf
-> >     sleep 10
-> >     iw dev wlan0 set power_save on
-> > 
-> > The above yields a power consumption of 1.4W reliably.  The "sleep 10"
-> > doesn't matter here; the behavior is the same with or without it.  I
-> > tried waiting up to 120 seconds with no difference.
+On 12/13/21 16:52, Chang S. Bae wrote:
+> Key Locker is a CPU feature to reduce key exfiltration opportunities while
+> maintaining a programming interface similar to AES-NI. It converts the AES
+> key into an encoded form, called the 'key handle'.
 > 
-> I have tested by making the WILC as build-in module to insert driver 
-> automatically at boot-up. I hope it should be fine. Because I have 
-> already tested as loadable module earlier.
+> The key handle is a wrapped version of the clear-text key where the
+> wrapping key has limited exposure. Once converted via setkey(), all
+> subsequent data encryption using new AES instructions ('AES-KL') uses this
+> key handle, reducing the exposure of private key material in memory.
 > 
-> Below are the number observed
-> ------------------------------ --------------------------
-> - before starting wpa_supplicant             : ~16.3 mA
-> - wpa_supplicant started                         : ~40 mA
-> - PSM on                                                  :  ~6 mA
+> AES-KL is analogous to that of AES-NI. Most assembly code is translated
+> from the AES-NI code. They are operational in both 32-bit and 64-bit modes
+> like AES-NI. However, users need to be aware of the following differences:
 > 
+> == Key Handle ==
 > 
-> The 'sleep 10' would have no impact in my setup because I have measured 
-> the current consumption for wilc1000 chip.
+> AES-KL may fail with an invalid key handle. It could be corrupted or fail
+> with handle restriction. A key handle may be encoded with some
+> restrictions. The implementation restricts every handle only available
+> in kernel mode via setkey().
 > 
-> I have shared the screenshot at https://postimg.cc/67S41dkb
 
-Huh, that's curious.  I definitely cannot reproduce this.  To match
-your setup as closely as possibly, I also built wilc1000-spi into the
-kernel, but that makes no difference (as expected).
+I find it a bit bizarre that this tries to be a drop-in replacement for 
+normal AES.  Is this actually what we want, or do we want users to opt 
+in to the KL implementation?
 
-What kernel version are you on?  I switched to wireless-drivers-next as
-of today (latest commit d430dffbe9dd30759f3c64b65bf85b0245c8d8ab).
+It seems like it might make more sense for tools like cryptsetup (or 
+dm-crypt -- the actual layer is subject to some degree of debate) to 
+explicitly create a key handle and then ask the kernel to use that key 
+handle, not for the kernel to do this by magic.
 
-With this kernel, the numbers are about 100mW lower than reported
-before, but the relative behavior is the same: about 300mW higher
-power-consumption when PSM is not taking effect properly.
+What happens when someone applies your patches and runs dmsetup table 
+--showkeys?
 
-To recap, back with wilc1000-spi being a module again, after freshly
-booting the system and issuing this commands:
+Why should the use of keylocker be part of the luksFormat operation? 
+Surely a non-KL machine should still be able to decrypt a nominally 
+KL-using volume in a pinch, for recovery purposes if nothing else.
 
-   /usr/sbin/wpa_supplicant -Bs -iwlan0 -c/etc/wpa_supplicant.conf
-   /usr/sbin/iw dev wlan0 set power_save on
-
-I see a power-consumption of about 1.25W.  PSM on/off makes no
-difference in this state.  Then, if I issue the commands:
-
-rmmod wilc1000-spi
-modprobe wilc1000-spi
-sleep 10
-iw dev wlan0 set power_save on
-
-power-consumption drops to about 0.9W.
-
-Here is a screenshot that shows the annotated power-measurements:
-
-   https://postimg.cc/3dbKSGht
-
-Apart from kernel version, the only things that I can think of that'd
-be different is that we don't have the ENABLE pin wired to a GPIO.
- Instead, the chip is always enabled.  I doubt this would explain the
-difference (~RESET is wired to a GPIO).
-
-
-  --david
-
-
+--Andy

@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 668A647F0A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 20:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A265147F0AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 20:26:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233428AbhLXTZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 14:25:50 -0500
-Received: from ixit.cz ([94.230.151.217]:49956 "EHLO ixit.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229553AbhLXTZt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 14:25:49 -0500
-Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 182842243C;
-        Fri, 24 Dec 2021 20:25:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1640373947;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=uq+pd2cBQPP3mCP6SdirmaMt2hCmEe5DR66+la6dDTM=;
-        b=F1dT4Kx27/UiJH2WE9v8TvS9DlKDPAmPKlbljxy2W4wjbFeo20GSlf18WCV0AD2YSkBp8S
-        t8EzfVxAxC/A1arwAQ/ughhsWmoYKjupyySZGdIHbMsxeIgaSBIW09ohDcib9xsCdzHSqD
-        S4EiE+o7TnRUpPrjRNB4GZVOALMoS5k=
-From:   David Heidelberg <david@ixit.cz>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Thierry Reding <treding@nvidia.com>
-Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
-        Rob Herring <robh@kernel.org>, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: mmc: PL18x stop relying on order of dma-names
-Date:   Fri, 24 Dec 2021 20:25:45 +0100
-Message-Id: <20211224192545.74528-1-david@ixit.cz>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S236987AbhLXT0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 14:26:35 -0500
+Received: from relmlor1.renesas.com ([210.160.252.171]:11823 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234457AbhLXT0f (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 24 Dec 2021 14:26:35 -0500
+X-IronPort-AV: E=Sophos;i="5.88,233,1635174000"; 
+   d="scan'208";a="104635847"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 25 Dec 2021 04:26:33 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 4CB3840F521F;
+        Sat, 25 Dec 2021 04:26:32 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     netdev@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 0/8] net: Use platform_get_irq*() variants to fetch IRQ's
+Date:   Fri, 24 Dec 2021 19:26:18 +0000
+Message-Id: <20211224192626.15843-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We don't care in which order are "rx" and "tx" DMA names supplied.
+Hi All,
 
-Fixes: 4df297aaeb9c ("dt-bindings: mmc: Add missing properties used in examples")
+This patch series aims to drop using platform_get_resource() for IRQ types
+in preparation for removal of static setup of IRQ resource from DT core
+code.
 
-Signed-off-by: David Heidelberg <david@ixit.cz>
----
- Documentation/devicetree/bindings/mmc/arm,pl18x.yaml | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+Dropping usage of platform_get_resource() was agreed based on
+the discussion [0].
 
-diff --git a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
-index f0a44b2cfa79..a4f74bec68a3 100644
---- a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
-+++ b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
-@@ -70,9 +70,13 @@ properties:
-     maxItems: 2
- 
-   dma-names:
--    items:
--      - const: rx
--      - const: tx
-+    oneOf:
-+      - items:
-+          - const: tx
-+          - const: rx
-+      - items:
-+          - const: rx
-+          - const: tx
- 
-   power-domains: true
- 
+[0] https://patchwork.kernel.org/project/linux-renesas-soc/
+patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+Cheers,
+Prabhakar
+
+Lad Prabhakar (8):
+  ethernet: netsec: Use platform_get_irq() to get the interrupt
+  net: pxa168_eth: Use platform_get_irq() to get the interrupt
+  fsl/fman: Use platform_get_irq() to get the interrupt
+  net: ethoc: Use platform_get_irq() to get the interrupt
+  net: xilinx: emaclite: Use platform_get_irq() to get the interrupt
+  wcn36xx: Use platform_get_irq_byname() to get the interrupt
+  ath10k: Use platform_get_irq() to get the interrupt
+  net: ethernet: ti: davinci_emac: Use platform_get_irq() to get the
+    interrupt
+
+ drivers/net/ethernet/ethoc.c                  |  9 +--
+ drivers/net/ethernet/freescale/fman/fman.c    | 32 ++++-----
+ drivers/net/ethernet/marvell/pxa168_eth.c     |  9 +--
+ drivers/net/ethernet/socionext/netsec.c       | 13 ++--
+ drivers/net/ethernet/ti/davinci_emac.c        | 69 +++++++++++--------
+ drivers/net/ethernet/xilinx/xilinx_emaclite.c |  9 +--
+ drivers/net/wireless/ath/ath10k/snoc.c        | 15 ++--
+ drivers/net/wireless/ath/wcn36xx/main.c       | 21 +++---
+ 8 files changed, 88 insertions(+), 89 deletions(-)
+
 -- 
-2.34.1
+2.17.1
 

@@ -2,91 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C9847EB64
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 05:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF01F47EB6A
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 05:37:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245667AbhLXE0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 23:26:40 -0500
-Received: from mga02.intel.com ([134.134.136.20]:40249 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229752AbhLXE0j (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 23:26:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640319999; x=1671855999;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=XVICpTcj5dklnFFnMTQIYshv6lyZmXqWiuOZMigDHD4=;
-  b=XrCFEYcODreSC2ByYZGGZU5TaNJn+a3POjvTrQrMIBxMyaCJpPYYYZNy
-   F0tcMsTI1w+AiT1lLuzoQcdnWalZ4GEySKYmWOh0tHWBdVDsti3xWVjWf
-   9vWawJfpNTOI9L2ze0Uykn/C/HHZma5etjwMEOCFfGRFtfSc0sX6paLeb
-   pdIHt6+2eyEAJWsTChbN5CPJ7qqwPKL0Za9olyL40YWmA0AEz4ptQM/Zv
-   G34jL2nDoHyRtU+UZK7sEFT/NcNuP9TWnGKGXv/hKRymZUyHpdl26ziDZ
-   RPaDlsOh4BMyjKE/gZ+pfTS6KfPTIl3CxoaRJI2LEFzn1BjpsWJS6qEvm
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10207"; a="228226524"
-X-IronPort-AV: E=Sophos;i="5.88,231,1635231600"; 
-   d="scan'208";a="228226524"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 20:26:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,231,1635231600"; 
-   d="scan'208";a="664767253"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Dec 2021 20:26:31 -0800
-Date:   Fri, 24 Dec 2021 12:25:54 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, qemu-devel@nongnu.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com
-Subject: Re: [PATCH v3 kvm/queue 06/16] KVM: Implement fd-based memory using
- MEMFD_OPS interfaces
-Message-ID: <20211224042554.GD44042@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
- <20211223123011.41044-7-chao.p.peng@linux.intel.com>
- <YcTBLpVlETdI8JHi@google.com>
- <e3fe04eb-1a01-bea4-f1ea-cb9ee98ee216@redhat.com>
+        id S245700AbhLXEhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 23:37:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240362AbhLXEha (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 23:37:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E09C061401;
+        Thu, 23 Dec 2021 20:37:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0CF0BB82251;
+        Fri, 24 Dec 2021 04:37:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17CDEC36AE8;
+        Fri, 24 Dec 2021 04:37:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640320645;
+        bh=o5SDSUBWw2ZtcjmlpZGs0bUmBos2G1Mi5xXAX5hWM6E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fyirxl+EnrJu7QK+qD2z3fc3N30l9Ud3cj4fbWBAMxkihTe1ODmjhbgs94AvFLUQC
+         t2p/F1rr58uLPLOVy9MrFCYWRRq5dnskQdeO5czkiy+VtQApz1MNPNV9CTcyMwqXMi
+         06v/SuyqHVP4QsoDo5tj3RmvSNGnT3pLhaMO8i2kIuL48O1qwA6M2ontVFTOi38uCi
+         XbxBcgMleesOOS+x9QGmw8RD1hAjwFnG5DRQBsdcKS8OJ+Tg4sQndAuAU5vvlz7BBC
+         7Gz7J0vXUqQGIKVBMCkJ8QfZ11EY57/6oJXgZXC1b1yEPR2XsWOpt2ZlYJYmTZH8AT
+         AMf2FI4WTc6zw==
+Date:   Fri, 24 Dec 2021 10:07:22 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the phy-next tree
+Message-ID: <YcVOgkEStxUTTEA4@matsya>
+References: <20211224140302.33d25020@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e3fe04eb-1a01-bea4-f1ea-cb9ee98ee216@redhat.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20211224140302.33d25020@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 24, 2021 at 12:09:47AM +0100, Paolo Bonzini wrote:
-> On 12/23/21 19:34, Sean Christopherson wrote:
-> > >   	select HAVE_KVM_PM_NOTIFIER if PM
-> > > +	select MEMFD_OPS
-> > MEMFD_OPS is a weird Kconfig name given that it's not just memfd() that can
-> > implement the ops.
-> > 
+On 24-12-21, 14:03, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Or, it's kvm that implements them to talk to memfd?
-
-The only thing is VFIO may also use the same set of callbacks, as
-discussed in the v2. But I think that's fine.
-
-Chao
+> After merging the phy-next tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 > 
-> Paolo
+> drivers/phy/phy-can-transceiver.c: In function 'can_transceiver_phy_power_on':
+> drivers/phy/phy-can-transceiver.c:35:9: error: implicit declaration of function 'mux_state_select'; did you mean 'mux_control_select'? [-Werror=implicit-function-declaration]
+>    35 |   ret = mux_state_select(can_transceiver_phy->mux_state);
+>       |         ^~~~~~~~~~~~~~~~
+>       |         mux_control_select
+> drivers/phy/phy-can-transceiver.c: In function 'can_transceiver_phy_power_off':
+> drivers/phy/phy-can-transceiver.c:59:3: error: implicit declaration of function 'mux_state_deselect'; did you mean 'mux_control_deselect'? [-Werror=implicit-function-declaration]
+>    59 |   mux_state_deselect(can_transceiver_phy->mux_state);
+>       |   ^~~~~~~~~~~~~~~~~~
+>       |   mux_control_deselect
+> drivers/phy/phy-can-transceiver.c: In function 'can_transceiver_phy_probe':
+> drivers/phy/phy-can-transceiver.c:113:15: error: implicit declaration of function 'devm_mux_state_get'; did you mean 'devm_mux_control_get'? [-Werror=implicit-function-declaration]
+>   113 |   mux_state = devm_mux_state_get(dev, NULL);
+>       |               ^~~~~~~~~~~~~~~~~~
+>       |               devm_mux_control_get
+> drivers/phy/phy-can-transceiver.c:113:13: error: assignment to 'struct mux_state *' from 'int' makes pointer from integer without a cast [-Werror=int-conversion]
+>   113 |   mux_state = devm_mux_state_get(dev, NULL);
+>       |             ^
+> cc1: all warnings being treated as errors
+> 
+> Caused by commit
+> 
+>   1e68cd3ff73e ("phy: phy-can-transceiver: Add support for setting mux")
+> 
+> I have used the phy-next tree from next-20211223 for today.
+
+Thanks for letting me know. I have dropped the offending commit
+
+
+-- 
+~Vinod

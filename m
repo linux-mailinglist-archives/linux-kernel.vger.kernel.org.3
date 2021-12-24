@@ -2,282 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4F447EFB1
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 15:48:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE9447EFB5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 15:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241913AbhLXOsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 09:48:41 -0500
-Received: from ixit.cz ([94.230.151.217]:49562 "EHLO ixit.cz"
+        id S1352956AbhLXO4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 09:56:52 -0500
+Received: from nautica.notk.org ([91.121.71.147]:55836 "EHLO nautica.notk.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231836AbhLXOsk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 09:48:40 -0500
-Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 68F952243C;
-        Fri, 24 Dec 2021 15:48:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1640357317;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=mR8uorQ2/cBIUnBEfvoxTcBWsRXZKWWQDqPfp3FOr4w=;
-        b=Jf8D8BQMMhmvd2f4Xil1oR2+DH6IVSKw/WXb6zuzH4xrxPGoI73taWeAsLFHxW+leZwQdB
-        InZNMcdISkSvUS6DhJ3MjhwIOzwRfgi5psZDgVbdL6YAFgARDHZ0+SVUVTJaDoOVLxcULz
-        AaCHB8nAJpFy32G+DWhx4FSG7bTW8AE=
-From:   David Heidelberg <david@ixit.cz>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] dt-bindings: arm: merge qcom,idle-state with idle-state
-Date:   Fri, 24 Dec 2021 15:48:34 +0100
-Message-Id: <20211224144835.39193-1-david@ixit.cz>
-X-Mailer: git-send-email 2.34.1
+        id S231836AbhLXO4v (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 24 Dec 2021 09:56:51 -0500
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id CF83CC009; Fri, 24 Dec 2021 15:56:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1640357809; bh=nEVxjBgIHnPIs5D5WENJIX174TMUU1r26CncUlg8waU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=fQuCefnHECg5/uop9AlUMr/9Le4MvFka3+vpKv1wR178qIr6yRXmz35ydWyfFRPEe
+         R4ujOz7cefSC33v8WLiLZ8E+OUyLOwYF6nY2EETaRl8gJ3+uxPDfaNOmetGWm9flau
+         LE+aelkRPs6kYBC9TDavnHOBrHypLQ9ZCO7EveQ8jE5imiMREXx+aw/RAkKBXZHVdS
+         9FZk/RuzU7xHxJ4PHuT2TDHm1VxDte9Z4zWHVqMDfkcyuLmkpG1BtCNoXM6EyCv131
+         N4nNZuxi9ere6NwAi2aRcb14csL+zKgtGup7Ta1W9FKm66OMtQqkwfguOAvbY8N8vH
+         bEPFTne398stA==
+X-Spam-Checker-Version: SpamAssassin 3.3.2 (2011-06-06) on nautica.notk.org
+X-Spam-Level: 
+X-Spam-Status: No, score=0.0 required=5.0 tests=UNPARSEABLE_RELAY
+        autolearn=unavailable version=3.3.2
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 89FDEC009;
+        Fri, 24 Dec 2021 15:56:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1640357808; bh=nEVxjBgIHnPIs5D5WENJIX174TMUU1r26CncUlg8waU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=iXdVzxOv6RsOKwb0c+tWtgI30V4NUm4Xl+LFOakJds0yN1JiKhWY/ibKyUZIWlMgc
+         iJwn3CN8cHbRrsiNQj0BYYRG5Dx7qGbtOKfFpp9MmcYaA7hUPfHMtM0BLNGvqcaRec
+         0wrj+cnGY0qMRIuCxu7HYDyTE9oR5ud0+4WlLUL/n6LwvsRmaP/ypvnzFX8Gj9b6fU
+         0WugExpRXRNTiv5B7PCOq833WD/FbmTnQLL+R1nz853Pm0SAXhGuXv8m+DFd6E9r3T
+         ivnXbrtvxKQ0rQeHfGZuIO375qg/cnnWwpIKB1sFeu7+jfAhd2eefPcgeLq60wKCwi
+         h6xvOUUiLKK0Q==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 8adb1ba1;
+        Fri, 24 Dec 2021 14:56:42 +0000 (UTC)
+Date:   Fri, 24 Dec 2021 23:56:27 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Vasily Averin <vvs@virtuozzo.com>
+Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>, kernel@openvz.org,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        "J. Bruce Fields" <bfields@fieldses.org>
+Subject: Re: [PATCH] v9fs: handle async processing of F_SETLK with FL_SLEEP
+ flag
+Message-ID: <YcXfm6U/6+Xmv7be@codewreck.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a979a5bc-f2bc-7035-beed-6a3919471d39@virtuozzo.com>
+ <d0e10f8b-565c-3772-75df-5cc2d729ff8a@virtuozzo.com>
+ <05ab1af5-9b5f-f505-2a68-c90f50a1fb46@virtuozzo.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Merge Qualcomm specific idle-state binding with generic one.
+Vasily Averin wrote on Fri, Dec 24, 2021 at 01:18:54PM +0300:
+> > On the other hand, just clearing the FL_SLEEP flag like you've done for
+> > 9p will make the server think the lock has been queued when it hasn't
+> > really been.
+> > That means the client lock request will hang forever and never be
+> > granted even when the lock becomes available later on, so unless I
+> > misunderstood something here I don't think that's a reasonable fallback.
+> 
+> I did not get your this statement. Could you please elaborate it in more details?
+> 
+> Right now nfsd/lockd/ksmbd drop FL_SLEEP on own side, and this looks acceptable for them:
+> instead of blocking lock they submit non-blocking SETLK and it's enough to avoid server deadlock. 
+> 
+> If the lock is already taken: SETLK just return an error and will not wait.
+> I'm agree it isn't ideal, and perhaps  can cause server will return some unexpected errno,
+> but I do not see how it can make the server think the lock has been queued.
 
-Signed-off-by: David Heidelberg <david@ixit.cz>
+Right, sorry I was still under the assumption that SETLK+sleep would
+return error + enqueue something.
+Reading again it must return FILE_LOCK_DEFERRED if enqueued, so the
+server can make the difference, and we're "just" not respecting the
+client's request to enqueue the lock as you say -- I guess that's
+acceptable.
 
----
-v3:
- - integrate into idle-state.yml
- - orig. patch name was:
-   "[v2] dt-bindings: arm/msm/qcom,idle-state convert to YAML"
+> diff --git a/fs/9p/vfs_file.c b/fs/9p/vfs_file.c
+> index 612e297f3763..27ede4a4a6f4 100644
+> --- a/fs/9p/vfs_file.c
+> +++ b/fs/9p/vfs_file.c
+> @@ -142,10 +142,15 @@ static int v9fs_file_do_lock(struct file *filp, int cmd, struct file_lock *fl)
+>  	if ((fl->fl_flags & FL_POSIX) != FL_POSIX)
+>  		BUG();
+>  
+> -	res = locks_lock_file_wait(filp, fl);
+> -	if (res < 0)
+> -		goto out;
+> -
+> +	if ((fl->fl_flags & FL_SLEEP) && IS_SETLK(cmd)) {
+> +		res = posix_lock_file(filp, fl, NULL);
 
-Signed-off-by: David Heidelberg <david@ixit.cz>
----
- .../devicetree/bindings/arm/idle-states.yaml  | 107 ++++++++++++++++++
- .../bindings/arm/msm/qcom,idle-state.txt      |  84 --------------
- 2 files changed, 107 insertions(+), 84 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,idle-state.txt
+Should we also check fl->fl_flags & (FL_POSIX|FL_FLOCK) like
+locks_lock_file_wait does, to call either posix_lock_file or ... there
+doesn't seem to be an exported flock_lock_file equivalent in the other
+case, so back to wait variant there?
+(or rephrasing the question, what happens if the lock is a FL_FLOCK lock
+and we call posix_lock_file on it? Or are we guaranted that if FL_SLEEP
+is set we're about posix locks?)
 
-diff --git a/Documentation/devicetree/bindings/arm/idle-states.yaml b/Documentation/devicetree/bindings/arm/idle-states.yaml
-index 52bce5dbb11f..fde1557f2332 100644
---- a/Documentation/devicetree/bindings/arm/idle-states.yaml
-+++ b/Documentation/devicetree/bindings/arm/idle-states.yaml
-@@ -241,6 +241,64 @@ description: |+
-   [6] ARM Linux Kernel documentation - Booting AArch64 Linux
-       Documentation/arm64/booting.rst
- 
-+  ===========================================
-+  5 - Qualcomm specific STATES
-+  ===========================================
-+
-+  cpuidle-qcom is the cpuidle driver for Qualcomm SoCs and uses these idle
-+  states. Idle states have different enter/exit latency and residency values.
-+  The idle states supported by the QCOM SoC are defined as -
-+
-+    * Standby
-+    * Retention
-+    * Standalone Power Collapse (Standalone PC or SPC)
-+    * Power Collapse (PC)
-+
-+  Standby: Standby does a little more in addition to architectural clock gating.
-+  When the WFI instruction is executed the ARM core would gate its internal
-+  clocks. In addition to gating the clocks, QCOM cpus use this instruction as a
-+  trigger to execute the SPM state machine. The SPM state machine waits for the
-+  interrupt to trigger the core back in to active. This triggers the cache
-+  hierarchy to enter standby states, when all cpus are idle. An interrupt brings
-+  the SPM state machine out of its wait, the next step is to ensure that the
-+  cache hierarchy is also out of standby, and then the cpu is allowed to resume
-+  execution. This state is defined as a generic ARM WFI state by the ARM cpuidle
-+  driver and is not defined in the DT. The SPM state machine should be
-+  configured to execute this state by default and after executing every other
-+  state below.
-+
-+  Retention: Retention is a low power state where the core is clock gated and
-+  the memory and the registers associated with the core are retained. The
-+  voltage may be reduced to the minimum value needed to keep the processor
-+  registers active. The SPM should be configured to execute the retention
-+  sequence and would wait for interrupt, before restoring the cpu to execution
-+  state. Retention may have a slightly higher latency than Standby.
-+
-+  Standalone PC: A cpu can power down and warmboot if there is a sufficient time
-+  between the time it enters idle and the next known wake up. SPC mode is used
-+  to indicate a core entering a power down state without consulting any other
-+  cpu or the system resources. This helps save power only on that core.  The SPM
-+  sequence for this idle state is programmed to power down the supply to the
-+  core, wait for the interrupt, restore power to the core, and ensure the
-+  system state including cache hierarchy is ready before allowing core to
-+  resume. Applying power and resetting the core causes the core to warmboot
-+  back into Elevation Level (EL) which trampolines the control back to the
-+  kernel. Entering a power down state for the cpu, needs to be done by trapping
-+  into a EL. Failing to do so, would result in a crash enforced by the warm boot
-+  code in the EL for the SoC. On SoCs with write-back L1 cache, the cache has to
-+  be flushed in s/w, before powering down the core.
-+
-+  Power Collapse: This state is similar to the SPC mode, but distinguishes
-+  itself in that the cpu acknowledges and permits the SoC to enter deeper sleep
-+  modes. In a hierarchical power domain SoC, this means L2 and other caches can
-+  be flushed, system bus, clocks - lowered, and SoC main XO clock gated and
-+  voltages reduced, provided all cpus enter this state.  Since the span of low
-+  power modes possible at this state is vast, the exit latency and the residency
-+  of this low power mode would be considered high even though at a cpu level,
-+  this essentially is cpu power down. The SPM in this state also may handshake
-+  with the Resource power manager (RPM) processor in the SoC to indicate a
-+  complete application processor subsystem shut down.
-+
- properties:
-   $nodename:
-     const: idle-states
-@@ -323,6 +381,44 @@ patternProperties:
-       - exit-latency-us
-       - min-residency-us
- 
-+  "^(ret|spc|pc)$":
-+    type: object
-+    description:
-+      Each state node represents a domain idle state description.
-+
-+    properties:
-+      compatible:
-+        items:
-+          - enum:
-+              - qcom,idle-state-ret
-+              - qcom,idle-state-spc
-+              - qcom,idle-state-pc
-+          - const: arm,idle-state
-+
-+      entry-latency-us:
-+        description:
-+          The worst case latency in microseconds required to enter the idle
-+          state. Note that, the exit-latency-us duration may be guaranteed only
-+          after the entry-latency-us has passed.
-+
-+      exit-latency-us:
-+        description:
-+          The worst case latency in microseconds required to exit the idle
-+          state.
-+
-+      min-residency-us:
-+        description:
-+          The minimum residency duration in microseconds after which the idle
-+          state will yield power benefits, after overcoming the overhead while
-+          entering the idle state.
-+
-+    required:
-+      - compatible
-+      - entry-latency-us
-+      - exit-latency-us
-+      - min-residency-us
-+
-+
- additionalProperties: false
- 
- examples:
-@@ -658,4 +754,15 @@ examples:
-         };
-     };
- 
-+  - |
-+    // Example 3 - QCOM SPC
-+    idle-states {
-+      cpu_spc: spc {
-+        compatible = "qcom,idle-state-spc", "arm,idle-state";
-+        entry-latency-us = <150>;
-+        exit-latency-us = <200>;
-+        min-residency-us = <2000>;
-+      };
-+    };
-+
- ...
-diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,idle-state.txt b/Documentation/devicetree/bindings/arm/msm/qcom,idle-state.txt
-deleted file mode 100644
-index 6ce0b212ec6d..000000000000
---- a/Documentation/devicetree/bindings/arm/msm/qcom,idle-state.txt
-+++ /dev/null
-@@ -1,84 +0,0 @@
--QCOM Idle States for cpuidle driver
--
--ARM provides idle-state node to define the cpuidle states, as defined in [1].
--cpuidle-qcom is the cpuidle driver for Qualcomm SoCs and uses these idle
--states. Idle states have different enter/exit latency and residency values.
--The idle states supported by the QCOM SoC are defined as -
--
--    * Standby
--    * Retention
--    * Standalone Power Collapse (Standalone PC or SPC)
--    * Power Collapse (PC)
--
--Standby: Standby does a little more in addition to architectural clock gating.
--When the WFI instruction is executed the ARM core would gate its internal
--clocks. In addition to gating the clocks, QCOM cpus use this instruction as a
--trigger to execute the SPM state machine. The SPM state machine waits for the
--interrupt to trigger the core back in to active. This triggers the cache
--hierarchy to enter standby states, when all cpus are idle. An interrupt brings
--the SPM state machine out of its wait, the next step is to ensure that the
--cache hierarchy is also out of standby, and then the cpu is allowed to resume
--execution. This state is defined as a generic ARM WFI state by the ARM cpuidle
--driver and is not defined in the DT. The SPM state machine should be
--configured to execute this state by default and after executing every other
--state below.
--
--Retention: Retention is a low power state where the core is clock gated and
--the memory and the registers associated with the core are retained. The
--voltage may be reduced to the minimum value needed to keep the processor
--registers active. The SPM should be configured to execute the retention
--sequence and would wait for interrupt, before restoring the cpu to execution
--state. Retention may have a slightly higher latency than Standby.
--
--Standalone PC: A cpu can power down and warmboot if there is a sufficient time
--between the time it enters idle and the next known wake up. SPC mode is used
--to indicate a core entering a power down state without consulting any other
--cpu or the system resources. This helps save power only on that core.  The SPM
--sequence for this idle state is programmed to power down the supply to the
--core, wait for the interrupt, restore power to the core, and ensure the
--system state including cache hierarchy is ready before allowing core to
--resume. Applying power and resetting the core causes the core to warmboot
--back into Elevation Level (EL) which trampolines the control back to the
--kernel. Entering a power down state for the cpu, needs to be done by trapping
--into a EL. Failing to do so, would result in a crash enforced by the warm boot
--code in the EL for the SoC. On SoCs with write-back L1 cache, the cache has to
--be flushed in s/w, before powering down the core.
--
--Power Collapse: This state is similar to the SPC mode, but distinguishes
--itself in that the cpu acknowledges and permits the SoC to enter deeper sleep
--modes. In a hierarchical power domain SoC, this means L2 and other caches can
--be flushed, system bus, clocks - lowered, and SoC main XO clock gated and
--voltages reduced, provided all cpus enter this state.  Since the span of low
--power modes possible at this state is vast, the exit latency and the residency
--of this low power mode would be considered high even though at a cpu level,
--this essentially is cpu power down. The SPM in this state also may handshake
--with the Resource power manager (RPM) processor in the SoC to indicate a
--complete application processor subsystem shut down.
--
--The idle-state for QCOM SoCs are distinguished by the compatible property of
--the idle-states device node.
--
--The devicetree representation of the idle state should be -
--
--Required properties:
--
--- compatible: Must be one of -
--			"qcom,idle-state-ret",
--			"qcom,idle-state-spc",
--			"qcom,idle-state-pc",
--		and "arm,idle-state".
--
--Other required and optional properties are specified in [1].
--
--Example:
--
--	idle-states {
--		CPU_SPC: spc {
--			compatible = "qcom,idle-state-spc", "arm,idle-state";
--			entry-latency-us = <150>;
--			exit-latency-us = <200>;
--			min-residency-us = <2000>;
--		};
--	};
--
--[1]. Documentation/devicetree/bindings/arm/idle-states.yaml
+> +		if (res)
+> +			goto out;
+> +	} else {
+> +		res = locks_lock_file_wait(filp, fl);
+> +		if (res < 0)
+> +			goto out;
+> +	}
+>  	/* convert posix lock to p9 tlock args */
+>  	memset(&flock, 0, sizeof(flock));
+>  	/* map the lock type */
+
+Vasily Averin wrote on Fri, Dec 24, 2021 at 03:07:38PM +0300:
+ > On 24.12.2021 10:31, Dominique Martinet wrote:
+> > If that process is made asynchronous, we need a way to run more
+> > 9p-specific code in that one's lm_grant callback, so we can proceed onto
+> > the second step which is...
+> > 
+> >  - send the lock request to the 9p server and wait for its reply
+> > (note that the current code is always synchronous here: even if you
+> > request SETLK without the SLEEP flag you can be made to wait here.
+> > I have work in the closest to make some requests asynchronous, so
+> > locking could be made asynchronous when that lands, but my code
+> > introduced a race somewhere I haven't had the time to fix so this
+> > improvement will come later)
+> > 
+> > What would you suggest with that?
+> 
+> It isn't necessary to make request asynchronous,
+> it's enough to avoid blocking locks.
+
+Well, it depends on what you have in mind with blocking.
+A synchronous RPC to some server which might never reply if it doesn't
+feel like it (bug or whatever) is very much blocking in my opinion.
+
+> As far as  I understand blocking does not happen for SETLK command,
+> so it should be enough to chenge first part and call non-blocking 
+> posix_file_lock() instead of blocking locks_lock_file_wait().
+> 
+> It would be great to make processing of 2nd part asynchronous too,
+> but I think it looks like over-engineering, because we even are not
+> 100% sure that someone really uses this functionality.
+
+Yes, it will have to wait anyway, that asynchronous code has been
+waiting for me to debug it for at least two years so it won't be ready
+tomorrow... Let's start with what we can do; I'm happy with your
+approach if it doesn't bring obvious problems.
+
 -- 
-2.34.1
-
+Dominique

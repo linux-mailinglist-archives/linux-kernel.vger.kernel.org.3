@@ -2,82 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20AAD47EAAD
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 03:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6057E47EAB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 03:58:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351035AbhLXCxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 21:53:41 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:49598 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1351000AbhLXCxj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 21:53:39 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowAD3_wMfNsVh7TXHBA--.5387S2;
-        Fri, 24 Dec 2021 10:53:19 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com
-Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] Bluetooth: hci_bcm: Check for error irq
-Date:   Fri, 24 Dec 2021 10:53:18 +0800
-Message-Id: <20211224025318.1541232-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1351070AbhLXC57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 21:57:59 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16856 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231928AbhLXC54 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 21:57:56 -0500
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JKsCx2Vssz91sc;
+        Fri, 24 Dec 2021 10:57:01 +0800 (CST)
+Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 24 Dec 2021 10:57:52 +0800
+Received: from [10.67.109.184] (10.67.109.184) by
+ dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 24 Dec 2021 10:57:52 +0800
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix cross compiling error when
+ using userspace pt_regs
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20211223052007.4111674-1-pulehui@huawei.com>
+ <CAEf4BzY29kWicH0fdh9NnYu4nn1E4odL2ES2EYTGkyvHbo2c4g@mail.gmail.com>
+From:   Pu Lehui <pulehui@huawei.com>
+Message-ID: <6bf1e9cb-77c8-7bb8-c55d-bf85a09819cd@huawei.com>
+Date:   Fri, 24 Dec 2021 10:57:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAD3_wMfNsVh7TXHBA--.5387S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7JF48ur15ur43CryfCF47CFg_yoWkZFg_uw
-        1kuFy3Jr48ArsavFnrtw13urZayws5WFn7Wrn3Xa4fXryUG342qr17XFn8Ca13u3y8KFyU
-        CFyDuF4fAr1S9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbcAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJV
-        W0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Gr1l
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUojg4DUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+In-Reply-To: <CAEf4BzY29kWicH0fdh9NnYu4nn1E4odL2ES2EYTGkyvHbo2c4g@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.109.184]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500019.china.huawei.com (7.185.36.180)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the possible failure of the platform_get_irq(), the returned irq
-could be error number and will finally cause the failure of the
-request_irq().
-Consider that platform_get_irq() can now in certain cases return
--EPROBE_DEFER, and the consequences of letting request_irq() effectively
-convert that into -EINVAL, even at probe time rather than later on.
-So it might be better to check just now.
 
-Fixes: 0395ffc1ee05 ("Bluetooth: hci_bcm: Add PM for BCM devices")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/bluetooth/hci_bcm.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/bluetooth/hci_bcm.c b/drivers/bluetooth/hci_bcm.c
-index 3cd57fc56ade..3f939fe89998 100644
---- a/drivers/bluetooth/hci_bcm.c
-+++ b/drivers/bluetooth/hci_bcm.c
-@@ -1182,7 +1182,12 @@ static int bcm_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	dev->dev = &pdev->dev;
--	dev->irq = platform_get_irq(pdev, 0);
-+
-+	ret = platform_get_irq(pdev, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	dev->irq = ret;
- 
- 	/* Initialize routing field to an unused value */
- 	dev->pcm_int_params[0] = 0xff;
--- 
-2.25.1
-
+On 2021/12/24 2:21, Andrii Nakryiko wrote:
+> On Wed, Dec 22, 2021 at 8:56 PM Pu Lehui <pulehui@huawei.com> wrote:
+>>
+>> When cross compiling arm64 bpf selftests in x86_64 host, the following
+>> error occur:
+>>
+>> progs/loop2.c:20:7: error: incomplete definition of type 'struct
+>> user_pt_regs'
+>>
+>> Some archs, like arm64 and riscv, use userspace pt_regs in bpf_tracing.h.
+>> When arm64 bpf selftests cross compiling in x86_64 host, clang cannot
+>> find the arch specific uapi ptrace.h. We can add arch specific header
+>> file directory to fix this issue.
+>>
+>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+>> ---
+>> v1->v2:
+>> - use vmlinux.h directly might lead to verifier fail.
+>> - use source arch header file directory suggested by Andrii Nakryiko.
+>>
+>>   tools/testing/selftests/bpf/Makefile | 4 +++-
+>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+>> index 42ffc24e9e71..1ecb6d192953 100644
+>> --- a/tools/testing/selftests/bpf/Makefile
+>> +++ b/tools/testing/selftests/bpf/Makefile
+>> @@ -12,6 +12,7 @@ BPFDIR := $(LIBDIR)/bpf
+>>   TOOLSINCDIR := $(TOOLSDIR)/include
+>>   BPFTOOLDIR := $(TOOLSDIR)/bpf/bpftool
+>>   APIDIR := $(TOOLSINCDIR)/uapi
+>> +ARCH_APIDIR := $(abspath ../../../../arch/$(SRCARCH)/include/uapi)
+>>   GENDIR := $(abspath ../../../../include/generated)
+>>   GENHDR := $(GENDIR)/autoconf.h
+>>
+>> @@ -294,7 +295,8 @@ MENDIAN=$(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
+>>   CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
+>>   BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)                  \
+>>               -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)                   \
+>> -            -I$(abspath $(OUTPUT)/../usr/include)
+>> +            -I$(abspath $(OUTPUT)/../usr/include)                      \
+>> +            -I$(ARCH_APIDIR)
+>>
+> 
+> This causes compilation error, see [0]. I think we'll have to wait for
+> my patch ([1]) to land and then add kernel-side variants for accessing
+> pt_regs.
+> 
+>    [0] https://github.com/kernel-patches/bpf/runs/4614606900?check_suite_focus=true
+>    [1] https://patchwork.kernel.org/project/netdevbpf/patch/20211222213924.1869758-1-andrii@kernel.org/
+> 
+> 
+OK, I'll keep follow it.
+>>   CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
+>>                 -Wno-compare-distinct-pointer-types
+>> --
+>> 2.25.1
+>>
+> .
+> 

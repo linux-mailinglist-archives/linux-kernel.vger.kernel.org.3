@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF6847F14D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 23:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9E147F14F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 23:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbhLXWKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 17:10:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
+        id S229624AbhLXWME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 17:12:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbhLXWKm (ORCPT
+        with ESMTP id S229464AbhLXWMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 17:10:42 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A01C061401;
-        Fri, 24 Dec 2021 14:10:42 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id r5so8481500pgi.6;
-        Fri, 24 Dec 2021 14:10:42 -0800 (PST)
+        Fri, 24 Dec 2021 17:12:03 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05365C061401;
+        Fri, 24 Dec 2021 14:12:01 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id g2so8484500pgo.9;
+        Fri, 24 Dec 2021 14:12:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6injo+Q0oQXSDRi2mhIPBwQgXLxhoXVMLzA0WkpHeDY=;
-        b=F4V5fLr+C+bYxQEbZjs1QZZKOPrJBa6a9wxAPU/DI2smTDl5poSSxqYXYdi3fG/KnY
-         uhpW7DFuUTOC5a12LxRvq9yS3e1pnlZokOIFmMJt/gIHyWYJGMhb2JXAfoQ1oyBNeeSI
-         qJvwxVbsD6YM/qydjdiisqJnbpqhdjEuha0RRDfn0zw38BJKFCW4aXEzcMPj3/VUTiPm
-         ODzXBJs8hBGaAygXWOlZX6iiFHj5TeXeXyoctPUsSzOumy8ZceQcdOBNwzeXq3weLFBj
-         cC2S5CtjYXKEVDf5Lo1n0+iSw9nnLhxgiAaggj8FWU11EH4X3nFKGPkAYScba7VJwThp
-         jmsg==
+        bh=8Q9rJlUXSRgbhz8EFCRzzeIiJprfQp4GPhKMSBPYpkE=;
+        b=UKuLj8YfeWXLMwA8QCvyYIWWUy67vGEJdJ2flNwpc574CQmzyKPwy2wXLOTKklUnor
+         AWELYw8a8krkgkJgsTkdRMsrqJG6W4QsOGm45YMtQ3/Y4FBHlZ6yR2k4gvcKNYuOj7JO
+         GJYRTFEr/AU9eV9/A22wM8Qrs2sC60c0Mr6Hl9/Urkw/hUybMKqUtrs21XfUEiUJmfQR
+         Qs44JYJdPvdX4CPydLwPXpKCjfK6EDysC4A7/bKYJvJmR+sT+Akmh9zEZ9cfif4xHSNr
+         sAyMEanNRGFhDuCQAqMr6odA/vI6yHGGnYST37inkCOdEuZU3e7xTpscAuXgbQOFUv25
+         wTLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=6injo+Q0oQXSDRi2mhIPBwQgXLxhoXVMLzA0WkpHeDY=;
-        b=gNF9uBwVxjtZrQUsOB3j+5YavwgFleNWtcUSBFM7lPStOOaQp7G0ue+OgiXLMp7vuH
-         EpjUQVVB9nO+gcBpzhPXVcez6hPNQnt3ZnOIFr2FCLy74I7z3wMh5ewrArMG83rv6Fq0
-         dstIBNTQmdISt39eBoyoPbTQ52XDCDiWojTGfQTwJ2LOYrBen+p3lX8IvADG0Tav1VpS
-         vll9V25ZAX4ITf5SwllgyQlAeMQ29dBuucYj9LqXxEOi4TdlDVV1WBx6A0ktlsYEqhhZ
-         2XbuLfAjoaumrA/REGKtIW7uVht8fqAki6908Lti7cu5qkLEpLHLLXAdhqZW181UozKy
-         /PNg==
-X-Gm-Message-State: AOAM531YKwaA3oQQifd9mK+xri6ShP8ywm7JbX8qOgdB3vlMhsmqacVj
-        kiTpGROvcNKjHSlnNUHg1Qg=
-X-Google-Smtp-Source: ABdhPJwOEDLL+5KHSOXoX9xSPyIvBIekEcBsor9cESLEHqbU3LM3Tfuk2VzCfhPeiSC4UOosWHEDWA==
-X-Received: by 2002:a63:4554:: with SMTP id u20mr7445295pgk.463.1640383841570;
-        Fri, 24 Dec 2021 14:10:41 -0800 (PST)
+        bh=8Q9rJlUXSRgbhz8EFCRzzeIiJprfQp4GPhKMSBPYpkE=;
+        b=jQBqT0DQTtBHq6dcXsqC9bB6aMjQr8t1COY5UhaZYBWHL8hL0qPHvXt8UgVdRbtYiy
+         sFBuVf2cXgC0OBk0iLnxV4O5jKv8gUZHcm+W5OqNUQuZwOFRzFwt67cPX2lB8xVEMQj/
+         hUwm0cXbhHBw10SgviQnHzqvOYBTEVWPTpGM5U1MgUDCWh7jGtDFREsSMIOClYYlbRNh
+         EveP6V84cZJ+4DQu0tkD3o1se4WyFIo7OqBri68uHsmTG9acPcFdJpbVRla5u3rzPBxz
+         vqFTnp5BspnZnNxS99+jvV7+0EDGdpu/OkBfhaEqmyX1njXBIqOWu+5meiHhlkd5vzhL
+         iX7g==
+X-Gm-Message-State: AOAM5312nbMH6Pv837JBkGQxuL4Zg05iI88g4hUvvtmXpvAqV1wxNVGY
+        GXwFObhUwha6xGEQWRULs+CYDdyXDyI=
+X-Google-Smtp-Source: ABdhPJyuz7FSv6unXXhlUtdH6M65fdUCmw1lGbEnSUTip8lZ4gDL7sQew0PcIeZYeRql0Y31/Qw3Dg==
+X-Received: by 2002:a05:6a00:8cc:b0:4a8:262:49e1 with SMTP id s12-20020a056a0008cc00b004a8026249e1mr8200515pfu.28.1640383920498;
+        Fri, 24 Dec 2021 14:12:00 -0800 (PST)
 Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id k8sm4617958pjs.53.2021.12.24.14.10.40
+        by smtp.gmail.com with ESMTPSA id g21sm10126471pfc.75.2021.12.24.14.11.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Dec 2021 14:10:41 -0800 (PST)
-Message-ID: <3913a3c2-2ae9-00a2-6c08-bab2afaa7cb3@gmail.com>
-Date:   Fri, 24 Dec 2021 14:10:39 -0800
+        Fri, 24 Dec 2021 14:12:00 -0800 (PST)
+Message-ID: <00032713-ba91-008f-e7a7-f846b2554cbd@gmail.com>
+Date:   Fri, 24 Dec 2021 14:11:58 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.1
-Subject: Re: [PATCH 02/10] serial: 8250_bcm7271: Use platform_get_irq() to get
- the interrupt
+Subject: Re: [PATCH 03/10] serial: 8250_bcm7271: Propagate error codes from
+ brcmuart_probe()
 Content-Language: en-US
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         linux-serial@vger.kernel.org, Al Cooper <alcooperx@gmail.com>,
@@ -65,9 +65,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         bcm-kernel-feedback-list@broadcom.com
 References: <20211224142917.6966-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211224142917.6966-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211224142917.6966-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20211224142917.6966-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20211224142917.6966-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -77,15 +77,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 12/24/2021 6:29 AM, Lad Prabhakar wrote:
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
+> In case of failures brcmuart_probe() always returned -ENODEV, this
+> isn't correct for example platform_get_irq_byname() may return
+> -EPROBE_DEFER to handle such cases propagate error codes in
+> brcmuart_probe() in case of failures.
 > 
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq().
-> 
+> Fixes: 41a469482de25 ("serial: 8250: Add new 8250-core based Broadcom STB driver")
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
 Acked-by: Florian Fainelli <f.fainelli@gmail.com>

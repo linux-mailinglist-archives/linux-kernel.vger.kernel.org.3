@@ -2,81 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F1E47EA20
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 02:22:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 904A347EA2C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 02:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245325AbhLXBWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 20:22:44 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:53614 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S245155AbhLXBWn (ORCPT
+        id S1350508AbhLXBZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 20:25:07 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:25905 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244989AbhLXBZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 20:22:43 -0500
-X-UUID: d1b0cde0f1974c7b9b841b7003a60278-20211224
-X-UUID: d1b0cde0f1974c7b9b841b7003a60278-20211224
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <yt.chang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1894363230; Fri, 24 Dec 2021 09:22:41 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 24 Dec 2021 09:22:40 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 24 Dec 2021 09:22:40 +0800
-From:   YT Chang <yt.chang@mediatek.com>
-To:     YT Chang <yt.chang@mediatek.com>, Ingo Molnar <mingo@redhat.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        "Vincent Guittot" <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        "Daniel Bristot de Oliveira" <bristot@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <wsd_upstream@mediatek.com>
-Subject: [PATCH 1/1] sched: Add update_rq_clock() in sched_rt_rq_enqueue()
-Date:   Fri, 24 Dec 2021 09:22:39 +0800
-Message-ID: <20211224012239.4694-1-yt.chang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Thu, 23 Dec 2021 20:25:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1640309105; x=1671845105;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UFIZga4oh8vcATkIn3X5ozLYc1LQ3aq9KFSoPVhRJ3Y=;
+  b=I7+gTk2UsvGUGONCuqpSUzTFIrk8g/Y5433dmlW/DAv/Xl4QXtOOBzPC
+   mZUZarO2U4iExTrvst5uVwtqK6vC2Kun64/D7Q/oa5o0g/z011jsYPUfm
+   82bL14841KVmlRQ7hOyMQ2iCCWVyuADKE9LxfgqKw8l17re2Lj4TCjKX0
+   g/WOTrdrRw8LBPbq+9FIyAr4l9flRNCNs8BsaDHmC4Jg4dz8zgY7WVw4x
+   kCoS0xDFI7MAyrHtve1V3RyVzvB/bfS0+ocH5x9VCA+iTQAD6mUR/I8GJ
+   71o+Yauuj+CHr7cqndiW41UIT9m8RYkW14jA27ykCHl8XdxiwCCoXC+ua
+   A==;
+IronPort-SDR: mm53mf2+zM4KOPbvhHY2bQQhXRQ81TQG9hueu5oC2BINL7CkmXVXzmLI9wRzaJcxOElzl9QR8G
+ VNmf1b4ABCpm1YeVY/Z6sqqi+8H0p4ieTvaYVkO+URBMwmPCtd7ECs2LpQz/2VbuJCDI905LIL
+ yOD6RFkkEChJB98gC3wwrDor/FNQN5YlVHJAPPVrn/yaZaHB0jaiGwYDCoCKpRpwBLSKcZ1ZBY
+ 8krfWycGsxPsIOkvGCPOi3MmFHWq75RxIfW3eMebX6JdujJ08JNYjhqUOiut+YChDN9tDn9nXa
+ BWnR62u1sV3OqJe/Aq1r6jfK
+X-IronPort-AV: E=Sophos;i="5.88,231,1635231600"; 
+   d="scan'208";a="80533966"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Dec 2021 18:25:04 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 23 Dec 2021 18:25:04 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 23 Dec 2021 18:25:04 -0700
+From:   Kelvin Cao <kelvin.cao@microchip.com>
+To:     Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Jon Mason <jdmason@kudzu.us>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Allen Hubbe <allenbh@gmail.com>, <linux-pci@vger.kernel.org>,
+        <linux-ntb@googlegroups.com>, <linux-kernel@vger.kernel.org>
+CC:     Kelvin Cao <kelvin.cao@microchip.com>, <kelvincao@outlook.com>,
+        "Jeremy Pallotta" <jmpallotta@gmail.com>
+Subject: [PATCH 0/6] Switchtec NTB Fixes and Improvements
+Date:   Thu, 23 Dec 2021 17:23:28 -0800
+Message-ID: <20211224012334.89173-1-kelvin.cao@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add update_rq_clock() in sched_rt_rq_enqueue() to
-prevent the warning "rq->clock_update_flags < RQCF_ACT_SKIP"
-when call rq_clock() in cpufreq_update_util().
+Hi,
 
-sched_rt_rq_enqueue ->
-   enqueue_top_rt_rq ->
-      cpufreq_update_util ->
-         rq_clock ->
-            assert_clock_updated
+Please find a bunch of patches for the Switchtec NTB driver.
 
-Signed-off-by: YT Chang <yt.chang@mediatek.com>
-Change-Id: I4fba5a561b7064aafa991d7f1a34431607779cb4
----
- kernel/sched/rt.c | 1 +
- 1 file changed, 1 insertion(+)
+Patche 1, 2 and 6 fix three minor bugs. Patch 3 works around a minor
+firmware issue. Patch 4 updates the method of getting management VEP
+instance ID based on a new firmware change. Patch 5 removes code that
+disables ID protection to avoid conflict with static Switchtec config
+settings.
 
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index b48baaba2fc2..faf1a68c0723 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -539,6 +539,7 @@ static void sched_rt_rq_enqueue(struct rt_rq *rt_rq)
- 
- 	int cpu = cpu_of(rq);
- 
-+	update_rq_clock(rq);
- 	rt_se = rt_rq->tg->rt_se[cpu];
- 
- 	if (rt_rq->rt_nr_running) {
+This patchset is based on 5.16.0-rc5.
+
+Thanks,
+Kelvin
+
+Jeremy Pallotta (2):
+  ntb_hw_switchtec: Fix pff ioread to read into mmio_part_cfg_all
+  ntb_hw_switchtec: AND with the part_map for a valid tpart_vec
+
+Kelvin Cao (3):
+  ntb_hw_switchtec: Update the way of getting VEP instance ID
+  ntb_hw_switchtec: Remove code for disabling ID protection
+  ntb_hw_switchtec: Fix a minor issue in config_req_id_table()
+
+Wesley Sheng (1):
+  ntb_hw_switchtec: Fix bug with more than 32 partitions
+
+ drivers/ntb/hw/mscc/ntb_hw_switchtec.c | 24 +++++++++++-------------
+ include/linux/switchtec.h              |  2 --
+ 2 files changed, 11 insertions(+), 15 deletions(-)
+
 -- 
-2.18.0
+2.25.1
 

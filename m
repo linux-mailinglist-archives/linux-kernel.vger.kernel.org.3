@@ -2,125 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD0C47EDD5
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 10:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5FC47EDD9
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 10:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352279AbhLXJew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 04:34:52 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:35128 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241582AbhLXJev (ORCPT
+        id S1352289AbhLXJgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 04:36:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241582AbhLXJgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 04:34:51 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id D8F331F45BEC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1640338490;
-        bh=qZF4je+LerA+OqBTDGJZEJVXwlNuPorsNcMLYzAa4mE=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Wg3hniFlgAgdm3+vcSd+eEaeyLtW+YGGquc/J66XoOcZZJmWSoP5yHq1QqHbFJ8xg
-         a6UBjbyr1qNmhueOZ38UDEgHWRyyB9HeL1TLmBnOdlSHC+WDvm6nGCL4aBd4S8OdET
-         wRdm7ILxTeJ0O4Zji5PCMyoIlwnJj/T0UphNwoFSvybGmnV9fGfuQbjCDWXnFX7Ec4
-         o8Cw2NB7P3KIUiX8UOG4znfp3z/DNk0gprvhs/ZzD74KMPQKhgW7dSq7jKxDnQZx9J
-         rsFOuzP2hrT568VUNyAGUxmBMsX2TqnJkkn9gMaa+8n20439BASD3L6vOzf9fUil9M
-         NJ2HkW59ys1KA==
-Subject: Re: [PATCH v16 3/7] soc: mediatek: SVS: introduce MTK SVS engine
-To:     Roger Lu <roger.lu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20210428065440.3704-1-roger.lu@mediatek.com>
- <20210428065440.3704-4-roger.lu@mediatek.com>
- <c97f7dcd-32e5-616e-1bf9-fbd110ecd218@collabora.com>
- <6cdc903250723a6c547bccf2546dd10091b76249.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <fc825af2-7331-fa05-26e0-f3054557333a@collabora.com>
-Date:   Fri, 24 Dec 2021 10:34:46 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Fri, 24 Dec 2021 04:36:09 -0500
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26977C061757
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 01:36:09 -0800 (PST)
+Received: by mail-qt1-x844.google.com with SMTP id v4so4589167qtk.0
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 01:36:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=DA2RfWm5BfTc8dY4tRUxJejPvziWb2AgHmDwtjqgqi8=;
+        b=Dmz6FrBcR2aEijQRPzVJTf2mewFyG8SQzQKY0pqC0BymdLlTOPPU2AdKiALbTF7owm
+         n8/MANkbayR1f8ZAfffGghnNbg+Tq89tYZFzkir1v1t24AQpGNaQ14GHHAfxbOeuxxVR
+         52aIWFkAT2U1F9y89ROTlRSbn7Gc/Rm4VBtxE/Y61xdq7x2u2pUHwcR0z0ps1R6D+ssV
+         8i8+5LMGnkM/JnuBPPIBXc9Nd1l178ksRA+LmoWCLh9b79JVt5+yw6Fu5ZGzV1cgSHP3
+         SFd7OrsEpTzxnjL1Mq9AodPzTGt0Lr5YzpLQaG1BDrSDL2acQpFCeqNeHLbl9+kd5GDM
+         DdeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=DA2RfWm5BfTc8dY4tRUxJejPvziWb2AgHmDwtjqgqi8=;
+        b=bySbBjca9DxrHu31UGurvwjdOMjoyrMRqhpLXCm1/vZrRgkpAckIcL+k+01TMf/4bX
+         hqZw8UJzw80kNufK2CPnIKm78cIO18RQNBYdq64MIV7k0PLHqpWZKLktf4l0I5tm0SSt
+         80APivNUgWjr1DT13XQHZLcx74i9mUlJ9tjrPq4cbAzrsYUk2XXWBTWKTLw886h9ctTL
+         28ulZQnEnJJI+oHNdGBaVaJRrn5E1v6fTyyxXTOXy1n4CFsFSvooW2iokbGXNFSzoIHT
+         CRLhLpjZr3okzf9+TlyJtS8tj5dnZdtYay6DvWMfj8drki3Gh2uK6B+ZP0x6BbzkshEk
+         or2g==
+X-Gm-Message-State: AOAM532rMQLrxFLgBZs26qWQIInj9CEWjD2T1Z+FEOyUTVVGfC0V7Yks
+        5e1cFMmWk41CNKTYcXZNH7URYfufjho3iSUgOH4=
+X-Google-Smtp-Source: ABdhPJyTpfsHIM6GILEORIcPDgr2DW9t/34sanai00eg9Glz7nKVi0ztOTXFxG4ENGcxIXeMOO0cGiTD/h+ea3o11LY=
+X-Received: by 2002:a05:622a:120b:: with SMTP id y11mr4934347qtx.544.1640338568275;
+ Fri, 24 Dec 2021 01:36:08 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <6cdc903250723a6c547bccf2546dd10091b76249.camel@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:ad4:5c62:0:0:0:0:0 with HTTP; Fri, 24 Dec 2021 01:36:07
+ -0800 (PST)
+Reply-To: williamsreneta2019@gmail.com
+From:   MISS WILLIAMS <info.turvateealfastar@gmail.com>
+Date:   Fri, 24 Dec 2021 01:36:07 -0800
+Message-ID: <CAM-qQYYQ+ViJovNW_QHRTpcXJtiGqNwwH7zs1d-+SknS-rnFGA@mail.gmail.com>
+Subject: Greetings Dearest One,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 24/12/21 10:27, Roger Lu ha scritto:
-> Hi AngeloGioacchino,
-> 
-> Sorry for the late reply and thanks for all the advices.
-> 
-> On Thu, 2021-10-21 at 10:46 +0200, AngeloGioacchino Del Regno wrote:
->> Il 28/04/21 08:54, Roger Lu ha scritto:
->>> The Smart Voltage Scaling(SVS) engine is a piece of hardware
->>> which calculates suitable SVS bank voltages to OPP voltage table.
->>> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
->>> when receiving OPP_EVENT_ADJUST_VOLTAGE.
->>>
->>> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
->>> ---
->>>    drivers/soc/mediatek/Kconfig   |   10 +
->>>    drivers/soc/mediatek/Makefile  |    1 +
->>>    drivers/soc/mediatek/mtk-svs.c | 1723 ++++++++++++++++++++++++++++++++
->>>    3 files changed, 1734 insertions(+)
->>>    create mode 100644 drivers/soc/mediatek/mtk-svs.c
-> 
-> [snip]
-> 
->>> +/* svs bank common setting */
->>> +#define SVSB_DET_CLK_EN			BIT(31)
->>> +#define SVSB_TZONE_HIGH_TEMP_MAX	U32_MAX
->>> +#define SVSB_RUNCONFIG_DEFAULT		0x80000000
->>> +#define SVSB_DC_SIGNED_BIT		0x8000
->>> +#define SVSB_INTEN_INIT0x		0x00005f01
->>> +#define SVSB_INTEN_MONVOPEN		0x00ff0000
->>> +#define SVSB_EN_OFF			0x0
->>> +#define SVSB_EN_MASK			0x7
->>> +#define SVSB_EN_INIT01			0x1
->>> +#define SVSB_EN_INIT02			0x5
->>> +#define SVSB_EN_MON			0x2
->>> +#define SVSB_INTSTS_MONVOP		0x00ff0000
->>> +#define SVSB_INTSTS_COMPLETE		0x1
->>> +#define SVSB_INTSTS_CLEAN		0x00ffffff
->>> +
->>> +static DEFINE_SPINLOCK(mtk_svs_lock);
->>> +
->>> +/*
->>
->> Thanks for using kernel-doc!! However, to be proper, this has to be
->> /**
->>    * ..........
-> 
-> Oh okay. Thanks. I will use /** to add multi-line comments. However, I checked
-> kernel doc-guide and it uses indent as below. So, I'll follow it. If I'm doing
-> it wrong, please correct me. Thanks a lot.
-> https://www.kernel.org/doc/html/latest/doc-guide/kernel-doc.html
-> 
-> /**
->   * .........
-> 
+Greetings Dearest One,
 
-You're welcome! By the way, yes, the indentation is as shown on the documentation.
+How are you today, together with your family?Hope fine.I would like to
+use this opportunity to introduce myself to you. I am Miss Reneta
+Williams, From Benin Republic, West Africa. And my late parents are
+Mr. and Mrs. Dikko Williams; my father was a highly reputable business
+magnet who operated in Benin Republic during his days.
+
+I am writing this mail to you with tears and sorrow from my heart.
+With due respect trust and humanity, I know this mail will come to you
+as a surprise since we haven't known or come across each other before,
+considering the fact that I sourced your email contact through the
+Internet in search of trusted person who can be trusted and will
+assist me.
+
+It is sad to say that he passed away mysteriously in France during one
+of his business trips abroad. Though his sudden death was linked or
+rather suspected to have been masterminded by an uncle of his who
+traveled with him at that time. But God knows the truth! My mother
+died when I was just 6yrs old, and since then my father took me so
+special.
+
+Before his death, he called me and informed me that he has the sum of
+Eighteen Million Five Hundred , United State Dollar
+(USD$18.500,000.00) left in fixed deposit account in one of the
+leading banks in Africa. He further told me that he deposited the
+money in my name, and also gave me all the necessary but legal
+documents to this fund with the bank.
+
+I am 21 years old and a university undergraduate and really don't know
+what to do. Now I want an account overseas where I can transfer this
+funds and after the transaction I will come and reside permanently in
+your country till such a time that it will be convenient for me to
+return back home if I so desire.
+
+The death of my father actually brought sorrow to my life. I also want
+to invest the fund under your care because I am ignorant of business
+world. I am in a sincere desire of your humble assistance in this
+regards. Your suggestions and ideas will be highly regarded.
+
+Now permit me to ask these few questions:
+
+1. Can you honestly help me from your heart?
+
+2. Can I completely trust you?
+
+3. What percentage of the total amount in question will be good for
+you after the money is in your account?
+
+Please, consider this and get back to me as soon as
+possible.Immediately and confirm your willingness on this my
+email(williamsreneta2019@gmail.com), here is one of my Picture and
+also i will inform you more details involved in this matter.
 
 Regards,
-- Angelo
+
+Miss Reneta Williams.

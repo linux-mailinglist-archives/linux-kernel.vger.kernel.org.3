@@ -2,93 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E21547EA5A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 02:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3AA47EA99
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 03:33:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350777AbhLXBfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 20:35:14 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:48806 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S245122AbhLXBfM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 20:35:12 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowAA3FxS3I8VhQ4LFBA--.65364S2;
-        Fri, 24 Dec 2021 09:34:48 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     robin.murphy@arm.com, andy.shevchenko@gmail.com,
-        davem@davemloft.net, kuba@kernel.org, yangyingliang@huawei.com,
-        sashal@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v5] fjes: Check for error irq
-Date:   Fri, 24 Dec 2021 09:34:45 +0800
-Message-Id: <20211224013445.1400507-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1350324AbhLXCdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 21:33:23 -0500
+Received: from cloud48395.mywhc.ca ([173.209.37.211]:42350 "EHLO
+        cloud48395.mywhc.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233638AbhLXCdX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 21:33:23 -0500
+X-Greylist: delayed 3505 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Dec 2021 21:33:22 EST
+Received: from modemcable064.203-130-66.mc.videotron.ca ([66.130.203.64]:42768 helo=[192.168.1.179])
+        by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <olivier@trillion01.com>)
+        id 1n0ZU0-0002N8-9d; Thu, 23 Dec 2021 20:34:56 -0500
+Message-ID: <b3e43e07c68696b83a5bf25664a3fa912ba747e2.camel@trillion01.com>
+Subject: Re: [RFC] coredump: Do not interrupt dump for TIF_NOTIFY_SIGNAL
+From:   Olivier Langlois <olivier@trillion01.com>
+To:     Pavel Begunkov <asml.silence@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 23 Dec 2021 20:34:54 -0500
+In-Reply-To: <1b519092-2ebf-3800-306d-c354c24a9ad1@gmail.com>
+References: <192c9697e379bf084636a8213108be6c3b948d0b.camel@trillion01.com>
+         <9692dbb420eef43a9775f425cb8f6f33c9ba2db9.camel@trillion01.com>
+         <87h7i694ij.fsf_-_@disp2133>
+         <1b519092-2ebf-3800-306d-c354c24a9ad1@gmail.com>
+Organization: Trillion01 Inc
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.42.2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAA3FxS3I8VhQ4LFBA--.65364S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFyrJw1xGF17uF4kXrW5Jrb_yoW8Xr17pF
-        4UKasxZrWkJay0ka12yr48ZF9Iva18tw4UC390k3Wfu3sYqFsxAFy5tFW0qrs7XrZ5X3Wa
-        ya1YvrW8uFn8uFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
-        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
-        KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUOMKZDUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - trillion01.com
+X-Get-Message-Sender-Via: cloud48395.mywhc.ca: authenticated_id: olivier@trillion01.com
+X-Authenticated-Sender: cloud48395.mywhc.ca: olivier@trillion01.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The platform_get_irq() is possible to fail.
-And the returned irq could be error number and will finally cause the
-failure of the request_irq().
-Consider that platform_get_irq() can now in certain cases return
--EPROBE_DEFER, and the consequences of letting request_irq() effectively
-convert that into -EINVAL, even at probe time rather than later on.
-So it might be better to check just now.
+On Fri, 2021-10-22 at 15:13 +0100, Pavel Begunkov wrote:
+> On 6/9/21 21:17, Eric W. Biederman wrote:
+> > 
+> > Folks,
+> > 
+> > Olivier Langlois has been struggling with coredumps getting
+> > truncated in
+> > tasks using io_uring.  He has also apparently been struggling with
+> > the some of his email messages not making it to the lists.
+> 
+> Looks syzbot hit something relevant, see
+> https://lore.kernel.org/io-
+> uring/0000000000000012fb05cee99477@google.com/
+> 
+> In short, a task creates an io_uring worker thread, then the worker
+> submits a task_work item to the creator task and won't die until
+> the item is executed/cancelled. And I found that the creator task is
+> sleeping in do_coredump() -> wait_for_completion()
+> 
+> 0xffffffff81343ccb is in do_coredump (fs/coredump.c:469).
+> 464
+> 465             if (core_waiters > 0) {
+> 466                     struct core_thread *ptr;
+> 467
+> 468                     freezer_do_not_count();
+> 469                     wait_for_completion(&core_state->startup);
+> 470                     freezer_count();
+> 
+> 
+> A hack executing tws there helps (see diff below).
+> Any chance anyone knows what this is and how to fix it?
+> 
+> 
+> diff --git a/fs/coredump.c b/fs/coredump.c
+> index 3224dee44d30..f6f9dfb02296 100644
+> --- a/fs/coredump.c
+> +++ b/fs/coredump.c
+> @@ -466,7 +466,8 @@ static int coredump_wait(int exit_code, struct
+> core_state *core_state)
+>           struct core_thread *ptr;
+>   
+>           freezer_do_not_count();
+> -        wait_for_completion(&core_state->startup);
+> +        while (wait_for_completion_interruptible(&core_state-
+> >startup))
+> +            tracehook_notify_signal();
+>           freezer_count();
+>           /*
+>            * Wait for all the threads to become inactive, so that
+> 
+> 
+> 
+> 
+Pavel,
 
-Fixes: 658d439b2292 ("fjes: Introduce FUJITSU Extended Socket Network Device driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+I cannot comment on the merit of the proposed hack but my proposed
+patch to fix the coredump truncation issue when a process using
+io_uring core dumps that I submitted back in August is still
+unreviewed!
 
-v4 -> v5
+https://lore.kernel.org/lkml/1625bc89782bf83d9d8c7c63e8ffcb651ccb15fa.1629655338.git.olivier@trillion01.com/
 
-*Change 1. Using error variable to check.
-*Change 2. Correct the word.
-*Change 3. Add new commit message.
-*Change 4. Refine the commit message to be more reasonable.
----
- drivers/net/fjes/fjes_main.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+I have been using it since then I must have generated many dozens of
+perfect core dump files with it and I have not seen a single truncated
+core dump files like I used to have prior to the patch.
 
-diff --git a/drivers/net/fjes/fjes_main.c b/drivers/net/fjes/fjes_main.c
-index e449d9466122..17f2fd937e4d 100644
---- a/drivers/net/fjes/fjes_main.c
-+++ b/drivers/net/fjes/fjes_main.c
-@@ -1268,7 +1268,12 @@ static int fjes_probe(struct platform_device *plat_dev)
- 	}
- 	hw->hw_res.start = res->start;
- 	hw->hw_res.size = resource_size(res);
--	hw->hw_res.irq = platform_get_irq(plat_dev, 0);
-+
-+	err = platform_get_irq(plat_dev, 0);
-+	if (err < 0)
-+		goto err_free_control_wq;
-+	hw->hw_res.irq = err;
-+
- 	err = fjes_hw_init(&adapter->hw);
- 	if (err)
- 		goto err_free_control_wq;
--- 
-2.25.1
+I am bringing back my patch to your attention because one nice side
+effect of it is that it would have avoided totally the problem that you
+have encountered in coredump_wait() since it does cancel io_uring
+resources before calling coredump_wait()!
+
+Greetings,
+Olivier
 

@@ -2,113 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6057E47EAB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 03:58:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC27047EA56
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 02:32:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351070AbhLXC57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 21:57:59 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:16856 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231928AbhLXC54 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 21:57:56 -0500
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JKsCx2Vssz91sc;
-        Fri, 24 Dec 2021 10:57:01 +0800 (CST)
-Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 24 Dec 2021 10:57:52 +0800
-Received: from [10.67.109.184] (10.67.109.184) by
- dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 24 Dec 2021 10:57:52 +0800
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix cross compiling error when
- using userspace pt_regs
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20211223052007.4111674-1-pulehui@huawei.com>
- <CAEf4BzY29kWicH0fdh9NnYu4nn1E4odL2ES2EYTGkyvHbo2c4g@mail.gmail.com>
-From:   Pu Lehui <pulehui@huawei.com>
-Message-ID: <6bf1e9cb-77c8-7bb8-c55d-bf85a09819cd@huawei.com>
-Date:   Fri, 24 Dec 2021 10:57:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <CAEf4BzY29kWicH0fdh9NnYu4nn1E4odL2ES2EYTGkyvHbo2c4g@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.109.184]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500019.china.huawei.com (7.185.36.180)
-X-CFilter-Loop: Reflected
+        id S1350736AbhLXBcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 20:32:53 -0500
+Received: from mga18.intel.com ([134.134.136.126]:9874 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245122AbhLXBcv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 20:32:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640309571; x=1671845571;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=G+4Blk1PEnOk/BdXn40Lnu8L0XGoZgem6KDA9qaNe2c=;
+  b=RDU9/wYFtQQbwhIMn8sbu7y9ig1FPuGgJ5Gb6flvGMQA9OIk/tFo6gpb
+   6NrzyVhp+IbKHQErF1Al7U7WVukhSTXBcQfw10e8WJr+l/de/ZXsme5C4
+   Wda0Sr3xNxCF9b6pgGyMKT3Kfb/vqJtXhaR7G3O2KQvIwl863qO7GmoSI
+   GIjkPtQ5PR/P3TxlVvhBjFXYmX2j+z8jaS+QgD83egIZ9FiGlqm9aOQl1
+   B8qoQGI1WT5UhOMRHeQsqFfeieQOWl0wOXm8ByXB8oIxU248zD3qcOjLq
+   sNwN/oTDYnNs4Lgwrz/FMnSJEUmJtzu6pV7aR6wG9DzFTmM/+BpP7oQZB
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10207"; a="227753434"
+X-IronPort-AV: E=Sophos;i="5.88,231,1635231600"; 
+   d="scan'208";a="227753434"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 17:32:49 -0800
+X-IronPort-AV: E=Sophos;i="5.88,231,1635231600"; 
+   d="scan'208";a="756991241"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.115])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 17:32:47 -0800
+From:   Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] EDAC/i10nm: Release mdev/mbase when failing to detect HBM
+Date:   Fri, 24 Dec 2021 04:11:26 -0500
+Message-Id: <20211224091126.1246-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <202112161000.15tF7PTx-lkp@intel.com>
+References: <202112161000.15tF7PTx-lkp@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit in Fixes doesn't release mdev/mbase when failing to detect
+HBM. Add the code to release mdev/mbase when failing to detect HBM.
 
+Fixes: c945088384d0 ("EDAC/i10nm: Add support for high bandwidth memory")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+---
+ drivers/edac/i10nm_base.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-On 2021/12/24 2:21, Andrii Nakryiko wrote:
-> On Wed, Dec 22, 2021 at 8:56 PM Pu Lehui <pulehui@huawei.com> wrote:
->>
->> When cross compiling arm64 bpf selftests in x86_64 host, the following
->> error occur:
->>
->> progs/loop2.c:20:7: error: incomplete definition of type 'struct
->> user_pt_regs'
->>
->> Some archs, like arm64 and riscv, use userspace pt_regs in bpf_tracing.h.
->> When arm64 bpf selftests cross compiling in x86_64 host, clang cannot
->> find the arch specific uapi ptrace.h. We can add arch specific header
->> file directory to fix this issue.
->>
->> Signed-off-by: Pu Lehui <pulehui@huawei.com>
->> ---
->> v1->v2:
->> - use vmlinux.h directly might lead to verifier fail.
->> - use source arch header file directory suggested by Andrii Nakryiko.
->>
->>   tools/testing/selftests/bpf/Makefile | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
->> index 42ffc24e9e71..1ecb6d192953 100644
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->> @@ -12,6 +12,7 @@ BPFDIR := $(LIBDIR)/bpf
->>   TOOLSINCDIR := $(TOOLSDIR)/include
->>   BPFTOOLDIR := $(TOOLSDIR)/bpf/bpftool
->>   APIDIR := $(TOOLSINCDIR)/uapi
->> +ARCH_APIDIR := $(abspath ../../../../arch/$(SRCARCH)/include/uapi)
->>   GENDIR := $(abspath ../../../../include/generated)
->>   GENHDR := $(GENDIR)/autoconf.h
->>
->> @@ -294,7 +295,8 @@ MENDIAN=$(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
->>   CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
->>   BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)                  \
->>               -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)                   \
->> -            -I$(abspath $(OUTPUT)/../usr/include)
->> +            -I$(abspath $(OUTPUT)/../usr/include)                      \
->> +            -I$(ARCH_APIDIR)
->>
-> 
-> This causes compilation error, see [0]. I think we'll have to wait for
-> my patch ([1]) to land and then add kernel-side variants for accessing
-> pt_regs.
-> 
->    [0] https://github.com/kernel-patches/bpf/runs/4614606900?check_suite_focus=true
->    [1] https://patchwork.kernel.org/project/netdevbpf/patch/20211222213924.1869758-1-andrii@kernel.org/
-> 
-> 
-OK, I'll keep follow it.
->>   CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
->>                 -Wno-compare-distinct-pointer-types
->> --
->> 2.25.1
->>
-> .
-> 
+diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
+index 83345bfac246..6cf50ee0b77c 100644
+--- a/drivers/edac/i10nm_base.c
++++ b/drivers/edac/i10nm_base.c
+@@ -358,6 +358,9 @@ static int i10nm_get_hbm_munits(void)
+ 
+ 			mbase = ioremap(base + off, I10NM_HBM_IMC_MMIO_SIZE);
+ 			if (!mbase) {
++				pci_dev_put(d->imc[lmc].mdev);
++				d->imc[lmc].mdev = NULL;
++
+ 				i10nm_printk(KERN_ERR, "Failed to ioremap for hbm mc 0x%llx\n",
+ 					     base + off);
+ 				return -ENOMEM;
+@@ -368,6 +371,12 @@ static int i10nm_get_hbm_munits(void)
+ 
+ 			mcmtr = I10NM_GET_MCMTR(&d->imc[lmc], 0);
+ 			if (!I10NM_IS_HBM_IMC(mcmtr)) {
++				iounmap(d->imc[lmc].mbase);
++				d->imc[lmc].mbase = NULL;
++				d->imc[lmc].hbm_mc = false;
++				pci_dev_put(d->imc[lmc].mdev);
++				d->imc[lmc].mdev = NULL;
++
+ 				i10nm_printk(KERN_ERR, "This isn't an hbm mc!\n");
+ 				return -ENODEV;
+ 			}
+-- 
+2.17.1
+

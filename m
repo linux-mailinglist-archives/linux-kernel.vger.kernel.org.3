@@ -2,233 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C4447EEA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 12:42:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D70E47EEA4
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 12:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352603AbhLXLmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 06:42:08 -0500
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:36739 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343860AbhLXLmH (ORCPT
+        id S1352614AbhLXLuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 06:50:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235597AbhLXLuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 06:42:07 -0500
-Received: (Authenticated sender: repk@triplefau.lt)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 12E0B40005;
-        Fri, 24 Dec 2021 11:42:03 +0000 (UTC)
-From:   Remi Pommarel <repk@triplefau.lt>
-To:     netdev@vger.kernel.org
-Cc:     Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        bridge@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Remi Pommarel <repk@triplefau.lt>
-Subject: [PATCH net-next] net: bridge: Get SIOCGIFBR/SIOCSIFBR ioctl working in compat mode
-Date:   Fri, 24 Dec 2021 12:46:40 +0100
-Message-Id: <20211224114640.29679-1-repk@triplefau.lt>
-X-Mailer: git-send-email 2.33.0
+        Fri, 24 Dec 2021 06:50:18 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2675FC061401
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 03:50:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mJHt544TExE5Pu4Gn+mq7gBB4fnKpsXYDsqrLap7G7o=; b=bwYCRyE5MfpCFrPWwbwI5LCmgj
+        rsC8E12BQg36YBNdX/6+FlrZaAiOMKt/sILnOZUe9INKQAde7dtYZdsISl5KNCEknjnRdEVRYq0Ny
+        VSxmuyTzxdpm2qTfIclCKW737bCbIT3zJfBvoyNq3qoVQKARW+Ylx1re0BpNJvrI3kbbqwM0WJgi7
+        mSF2bqvN9JO2W4xwp0m1UQ0+8pAoCB+wFZvywLcOjBYz3/ccWuRQ3TmMOobbdLFMJsV95gWkmU3XP
+        BFUa5+8OUAr0qULOXj4VDOblc9oMDLpXrIYZNXymV3112vsTNy/9TZ72SSxmGsX7QYJkYy7uQyDBQ
+        gk7r1voQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n0j5G-003HWr-Lq; Fri, 24 Dec 2021 11:50:02 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A621330003C;
+        Fri, 24 Dec 2021 12:50:01 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 89FC72024319B; Fri, 24 Dec 2021 12:50:01 +0100 (CET)
+Date:   Fri, 24 Dec 2021 12:50:01 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Youquan Song <youquan.song@intel.com>
+Subject: Re: [PATCH v2] x86/mce: Reduce number of machine checks taken during
+ recovery
+Message-ID: <YcWz6aEfsOZlHHXp@hirez.programming.kicks-ass.net>
+References: <20211215222016.1390235-1-tony.luck@intel.com>
+ <20211218005322.GM16608@worktop.programming.kicks-ass.net>
+ <YcTW5dh8yTGucDd+@agluck-desk2.amr.corp.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YcTW5dh8yTGucDd+@agluck-desk2.amr.corp.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In compat mode SIOC{G,S}IFBR ioctls were only supporting
-BRCTL_GET_VERSION returning an artificially version to spur userland
-tool to use SIOCDEVPRIVATE instead. But some userland tools ignore that
-and use SIOC{G,S}IFBR unconditionally as seen with busybox's brctl.
+On Thu, Dec 23, 2021 at 12:07:01PM -0800, Luck, Tony wrote:
+> diff --git a/arch/x86/lib/copy_user_64.S b/arch/x86/lib/copy_user_64.S
+> index e6ac38587b40..26781cbe7e37 100644
+> --- a/arch/x86/lib/copy_user_64.S
+> +++ b/arch/x86/lib/copy_user_64.S
+> @@ -212,6 +212,7 @@ EXPORT_SYMBOL(copy_user_enhanced_fast_string)
+>   * Don't try to copy the tail if machine check happened
+>   *
+>   * Input:
+> + * eax x86 trap number - set by fixup_excpetion()
 
-Example of non working 32-bit brctl with CONFIG_COMPAT=y:
-$ brctl show
-brctl: SIOCGIFBR: Invalid argument
+That's inaccurate, fixup_exception() (event if it's spelled correctly)
+does not unconditionally set the trap number in RAX, that's only done by
+ex_handler_fault() (or ex_handler_sgx()), which means all flows into
+this function must pass through: EX_TYPE_FAULT, EX_TYPE_FAULT_MCE or
+EX_TYPE_COPY.
 
-Example of fixed 32-bit brctl with CONFIG_COMPAT=y:
-$ brctl show
-bridge name     bridge id               STP enabled     interfaces
-br0
+Boris might fix up your comment if he applies I suppose..
 
-Signed-off-by: Remi Pommarel <repk@triplefau.lt>
-Co-developed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- net/bridge/br_ioctl.c | 75 ++++++++++++++++++++++++++++---------------
- net/socket.c          | 20 ++----------
- 2 files changed, 52 insertions(+), 43 deletions(-)
-
-diff --git a/net/bridge/br_ioctl.c b/net/bridge/br_ioctl.c
-index 891cfcf45644..5f3c1cf7f6ad 100644
---- a/net/bridge/br_ioctl.c
-+++ b/net/bridge/br_ioctl.c
-@@ -102,37 +102,56 @@ static int add_del_if(struct net_bridge *br, int ifindex, int isadd)
- 	return ret;
- }
- 
-+#define BR_UARGS_MAX 4
-+static int br_dev_read_uargs(unsigned long *args, size_t nr_args,
-+			     void __user **argp, void __user *data)
-+{
-+	int ret;
-+
-+	if (nr_args < 2 || nr_args > BR_UARGS_MAX)
-+		return -EINVAL;
-+
-+	if (in_compat_syscall()) {
-+		unsigned int cargs[BR_UARGS_MAX];
-+		int i;
-+
-+		ret = copy_from_user(cargs, data, nr_args * sizeof(*cargs));
-+		if (ret)
-+			goto fault;
-+
-+		for (i = 0; i < nr_args; ++i)
-+			args[i] = cargs[i];
-+
-+		*argp = compat_ptr(args[1]);
-+	} else {
-+		ret = copy_from_user(args, data, nr_args * sizeof(*args));
-+		if (ret)
-+			goto fault;
-+		*argp = (void __user *)args[1];
-+	}
-+
-+	return 0;
-+fault:
-+	return -EFAULT;
-+}
-+
- /*
-  * Legacy ioctl's through SIOCDEVPRIVATE
-  * This interface is deprecated because it was too difficult
-  * to do the translation for 32/64bit ioctl compatibility.
-  */
--int br_dev_siocdevprivate(struct net_device *dev, struct ifreq *rq, void __user *data, int cmd)
-+int br_dev_siocdevprivate(struct net_device *dev, struct ifreq *rq,
-+			  void __user *data, int cmd)
- {
- 	struct net_bridge *br = netdev_priv(dev);
- 	struct net_bridge_port *p = NULL;
- 	unsigned long args[4];
- 	void __user *argp;
--	int ret = -EOPNOTSUPP;
--
--	if (in_compat_syscall()) {
--		unsigned int cargs[4];
--
--		if (copy_from_user(cargs, data, sizeof(cargs)))
--			return -EFAULT;
--
--		args[0] = cargs[0];
--		args[1] = cargs[1];
--		args[2] = cargs[2];
--		args[3] = cargs[3];
--
--		argp = compat_ptr(args[1]);
--	} else {
--		if (copy_from_user(args, data, sizeof(args)))
--			return -EFAULT;
-+	int ret;
- 
--		argp = (void __user *)args[1];
--	}
-+	ret = br_dev_read_uargs(args, ARRAY_SIZE(args), &argp, data);
-+	if (ret)
-+		return ret;
- 
- 	switch (args[0]) {
- 	case BRCTL_ADD_IF:
-@@ -301,6 +320,9 @@ int br_dev_siocdevprivate(struct net_device *dev, struct ifreq *rq, void __user
- 
- 	case BRCTL_GET_FDB_ENTRIES:
- 		return get_fdb_entries(br, argp, args[2], args[3]);
-+
-+	default:
-+		ret = -EOPNOTSUPP;
- 	}
- 
- 	if (!ret) {
-@@ -313,12 +335,15 @@ int br_dev_siocdevprivate(struct net_device *dev, struct ifreq *rq, void __user
- 	return ret;
- }
- 
--static int old_deviceless(struct net *net, void __user *uarg)
-+static int old_deviceless(struct net *net, void __user *data)
- {
- 	unsigned long args[3];
-+	void __user *argp;
-+	int ret;
- 
--	if (copy_from_user(args, uarg, sizeof(args)))
--		return -EFAULT;
-+	ret = br_dev_read_uargs(args, ARRAY_SIZE(args), &argp, data);
-+	if (ret)
-+		return ret;
- 
- 	switch (args[0]) {
- 	case BRCTL_GET_VERSION:
-@@ -337,7 +362,7 @@ static int old_deviceless(struct net *net, void __user *uarg)
- 
- 		args[2] = get_bridge_ifindices(net, indices, args[2]);
- 
--		ret = copy_to_user((void __user *)args[1], indices,
-+		ret = copy_to_user(argp, indices,
- 				   array_size(args[2], sizeof(int)))
- 			? -EFAULT : args[2];
- 
-@@ -353,7 +378,7 @@ static int old_deviceless(struct net *net, void __user *uarg)
- 		if (!ns_capable(net->user_ns, CAP_NET_ADMIN))
- 			return -EPERM;
- 
--		if (copy_from_user(buf, (void __user *)args[1], IFNAMSIZ))
-+		if (copy_from_user(buf, argp, IFNAMSIZ))
- 			return -EFAULT;
- 
- 		buf[IFNAMSIZ-1] = 0;
-diff --git a/net/socket.c b/net/socket.c
-index 7f64a6eccf63..6b2a898055ca 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -3233,21 +3233,6 @@ static int compat_ifr_data_ioctl(struct net *net, unsigned int cmd,
- 	return dev_ioctl(net, cmd, &ifreq, data, NULL);
- }
- 
--/* Since old style bridge ioctl's endup using SIOCDEVPRIVATE
-- * for some operations; this forces use of the newer bridge-utils that
-- * use compatible ioctls
-- */
--static int old_bridge_ioctl(compat_ulong_t __user *argp)
--{
--	compat_ulong_t tmp;
--
--	if (get_user(tmp, argp))
--		return -EFAULT;
--	if (tmp == BRCTL_GET_VERSION)
--		return BRCTL_VERSION + 1;
--	return -EINVAL;
--}
--
- static int compat_sock_ioctl_trans(struct file *file, struct socket *sock,
- 			 unsigned int cmd, unsigned long arg)
- {
-@@ -3259,9 +3244,6 @@ static int compat_sock_ioctl_trans(struct file *file, struct socket *sock,
- 		return sock_ioctl(file, cmd, (unsigned long)argp);
- 
- 	switch (cmd) {
--	case SIOCSIFBR:
--	case SIOCGIFBR:
--		return old_bridge_ioctl(argp);
- 	case SIOCWANDEV:
- 		return compat_siocwandev(net, argp);
- 	case SIOCGSTAMP_OLD:
-@@ -3290,6 +3272,8 @@ static int compat_sock_ioctl_trans(struct file *file, struct socket *sock,
- 	case SIOCGSTAMP_NEW:
- 	case SIOCGSTAMPNS_NEW:
- 	case SIOCGIFCONF:
-+	case SIOCSIFBR:
-+	case SIOCGIFBR:
- 		return sock_ioctl(file, cmd, arg);
- 
- 	case SIOCGIFFLAGS:
--- 
-2.33.0
-
+>   * rdi destination
+>   * rsi source
+>   * rdx count
+> @@ -220,12 +221,20 @@ EXPORT_SYMBOL(copy_user_enhanced_fast_string)
+>   * eax uncopied bytes or 0 if successful.
+>   */
+>  SYM_CODE_START_LOCAL(.Lcopy_user_handle_tail)
+> +	cmp $X86_TRAP_MC,%eax
+> +	je 3f
+> +
+>  	movl %edx,%ecx
+>  1:	rep movsb
+>  2:	mov %ecx,%eax
+>  	ASM_CLAC
+>  	RET
+>  
+> +3:
+> +	movl %edx,%eax
+> +	ASM_CLAC
+> +	RET
+> +
+>  	_ASM_EXTABLE_CPY(1b, 2b)
+>  
+>  .Lcopy_user_handle_align:
+> 
+> base-commit: 82a8954acd93ae95d6252fb93a3d210c8f71b093
+> -- 
+> 2.31.1
+> 

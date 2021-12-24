@@ -2,147 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C02347EE8E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 12:28:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB1347EE8F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 12:28:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352561AbhLXL2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 06:28:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30560 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344108AbhLXL17 (ORCPT
+        id S1352568AbhLXL2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 06:28:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344108AbhLXL2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 06:27:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640345279;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=8XQNItkHvztHDkow0Cptlxf4zXbwc0CF9zV8fZFGlRk=;
-        b=BJj+6FiWUShoURE1hke83xfJU7z5okwuUAEL+Fn/GLwgMloyYOeGtj5jKik3RMjjZJzLeZ
-        PdkpZOBW05mRwO77/Mn+81AKX6X3m+v/4/ZYXzq2c9CQsMyxUsr+ktkdXRlGqXOFl7qWlS
-        V8wGbeHN0ao8hMBeUuSuUuZUT2gD2f0=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-628-yVlPtDeeNpmyx3U-KG2lJA-1; Fri, 24 Dec 2021 06:27:58 -0500
-X-MC-Unique: yVlPtDeeNpmyx3U-KG2lJA-1
-Received: by mail-ed1-f72.google.com with SMTP id d7-20020aa7ce07000000b003f84e9b9c2fso6597408edv.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 03:27:58 -0800 (PST)
+        Fri, 24 Dec 2021 06:28:20 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B817AC061401
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 03:28:19 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id y13so32305880edd.13
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 03:28:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MBXXgPzp1aLWOzuWai3CTOo0xznoopWMsr8l2TBVg94=;
+        b=eXrrB526ee8Lq5qqJ15Y78ua1OHokgF80/1jYrgtOnnt4mkjanyt2THjgsweqYC9gh
+         dkmcMtmzFsyrddu1e7ITyxtXVNObyuHc2a+dUSq9bz4vJYcgZOW6ZO+7BAcRgqI2j30c
+         yTBs5ywGFv4aawywBzyszqoDJiTC8q27yScbt6UCW+l3QV6cMLah56K6sO1YXrX2apdH
+         3pwILSFCGh/CWAjsE5g1o6O3GCMK9ESVQ3v0qq8GGF38HuQK5ntyy8SZex8GfNlk9qEI
+         tBy9O36ziEtN8lme8Ia2ye5LK8EyriXpRTVqZCvlyWUIPHV16vkjEWkmcp3eFTOIXBAR
+         hYNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:content-language:content-transfer-encoding;
-        bh=8XQNItkHvztHDkow0Cptlxf4zXbwc0CF9zV8fZFGlRk=;
-        b=Ul0fKagOfCRnUokW+u+z4hBWTOEMUmqFPbxWxiBiFYOb0xF9zgnlt4gncaNr2XSjFc
-         chbdsywTEsEoWRjDGBW89TSRnJuiKja7AH1io+XC1QAAvVOtHukKyrrgpOqVmat5g2RZ
-         fT4vsGAKs4w25LsmMupN+uNT/QRLhi40G2Bram/JRpuMlv15OqyAc9+ij8zVF83ULlsY
-         6j1IWQGPdw0xetAUkrLHpOfVu+qyvvBpa2nJ6f/OFR5fbVwLsyQTDs1lIHGnu//3+c7h
-         S9MkOHG2IZdnKqJFtYmBg7TptjgLUTZkrdtaDSO/brIlWrvnJbqje6kLbcfWP8iw+Yvt
-         vbnQ==
-X-Gm-Message-State: AOAM533vsgpz6wP+yKL4gnuNIP0jb2H2UflKSpLqNi6jIKoQvHuj6cem
-        6aWsfE7P8CIhRXUptC5C+rHLYXlxyK8wV+D91DF9xQNR3we+0h9hngOFuXk9Uvdj81ZgQ9R0L3o
-        PjActZxqk6eCjYQODKKVpSpUc
-X-Received: by 2002:a17:907:118f:: with SMTP id uz15mr5109128ejb.726.1640345277143;
-        Fri, 24 Dec 2021 03:27:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw811lPIqVt7UGBqixNFbdtutB4UBMb2MQsvMvpJ3nfoKULW//G41M25v8zszhQS9HCgd+leQ==
-X-Received: by 2002:a17:907:118f:: with SMTP id uz15mr5109120ejb.726.1640345276979;
-        Fri, 24 Dec 2021 03:27:56 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id b22sm435730edt.96.2021.12.24.03.27.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Dec 2021 03:27:56 -0800 (PST)
-Message-ID: <312bc446-6f8c-c447-b3cd-bf2d46581f8b@redhat.com>
-Date:   Fri, 24 Dec 2021 12:27:56 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MBXXgPzp1aLWOzuWai3CTOo0xznoopWMsr8l2TBVg94=;
+        b=O3AitEE49/kffX8DI1TlmU0pwgjNKq8abXyKfGrLgDtDjPzrCFWzLmY2gkpiax5mW6
+         fIlMWEsCSm3diwQVDZh/MZMACDaZEfx2aBMA6MLqOsOcl6WOv00xRSkiEDEKZYRPCb6M
+         1m9Sa6tF6ulaLL/H75zKDjzJWhBIKvYLLthmv+ovG+3UgKtZ+KidAecRDVvuXUaIrcGd
+         LS1k4/+j4FovBo+oPdXokv7Au1i53OjMiutz29ZBs5VmvQBTL/5Am63mAmqNO2xRc2CF
+         tnUZgGIGFmSyscYUdOeGjwEhf/LaAathyKoeE6hCMJagZmDhAHBU3FQq+nEyAyTv1cIk
+         gOyw==
+X-Gm-Message-State: AOAM531qyZg74McMIIGzY/IJOg1jbb7t8C6S/FG3pPyK/yzPKVqOFbIR
+        04ohjshzve/Ayub0Nf0zrq0P3GbmQ9x5zNzJH2n2EV2q
+X-Google-Smtp-Source: ABdhPJzXY9DO74b0WQch4op0O2W25jrLAUic7PM4B2ItUWmNUxELt8hNO4OmjXbLVNBI3nFCnRNJ3QqOhCKohPGwpU8=
+X-Received: by 2002:a17:907:968a:: with SMTP id hd10mr4903494ejc.269.1640345298344;
+ Fri, 24 Dec 2021 03:28:18 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-From:   Hans de Goede <hdegoede@redhat.com>
-Subject: [GIT PULL] platform-drivers-x86 for 5.16-4
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mark Gross <mgross@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20211220084756.955307-1-wangborong@cdjrlc.com>
+In-Reply-To: <20211220084756.955307-1-wangborong@cdjrlc.com>
+From:   Max Filippov <jcmvbkbc@gmail.com>
+Date:   Fri, 24 Dec 2021 03:28:07 -0800
+Message-ID: <CAMo8BfLnPFWwOZTpycKfRuGvYV2wumtPxv9n2UjkM0s3LBB-9w@mail.gmail.com>
+Subject: Re: [PATCH] xtensa: use strscpy to copy strings
+To:     Jason Wang <wangborong@cdjrlc.com>
+Cc:     Chris Zankel <chris@zankel.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Mon, Dec 20, 2021 at 12:50 AM Jason Wang <wangborong@cdjrlc.com> wrote:
+>
+> The strlcpy should not be used because it doesn't limit the source
+> length. So that it will lead some potential bugs.
+>
+> But the strscpy doesn't require reading memory from the src string
+> beyond the specified "count" bytes, and since the return value is
+> easier to error-check than strlcpy()'s. In addition, the implementation
+> is robust to the string changing out from underneath it, unlike the
+> current strlcpy() implementation.
+>
+> Thus, replace strlcpy with strscpy.
+>
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+> ---
+>  arch/xtensa/kernel/setup.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-Here is the third round of bug-fixes for platform-drivers-x86
-for 5.16.
+Applied to my xtensa tree. Thanks.
 
-This consists of just a few small bug-fixes.
-
-Regards,
-
-Hans
-
-
-The following changes since commit 7d0c009043f6a970f62dbf5aecda9f8c3ccafcff:
-
-  platform/x86/intel: hid: add quirk to support Surface Go 3 (2021-12-06 22:28:18 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v5.16-4
-
-for you to fetch changes up to 26a8b09437804fabfb1db080d676b96c0de68e7c:
-
-  platform/x86: intel_pmc_core: fix memleak on registration failure (2021-12-23 19:30:32 +0100)
-
-----------------------------------------------------------------
-platform-drivers-x86 for v5.16-4
-
-Various bug-fixes.
-
-The following is an automated git shortlog grouped by driver:
-
-amd-pmc:
- -  only use callbacks for suspend
-
-apple-gmux:
- -  use resource_size() with res
-
-intel_pmc_core:
- -  fix memleak on registration failure
-
-platform/mellanox:
- -  mlxbf-pmc: Fix an IS_ERR() vs NULL bug in mlxbf_pmc_map_counters
-
-platform/x86/intel:
- -  Remove X86_PLATFORM_DRIVERS_INTEL
-
-system76_acpi:
- -  Guard System76 EC specific functionality
-
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      platform/x86/intel: Remove X86_PLATFORM_DRIVERS_INTEL
-
-Johan Hovold (1):
-      platform/x86: intel_pmc_core: fix memleak on registration failure
-
-Mario Limonciello (1):
-      platform/x86: amd-pmc: only use callbacks for suspend
-
-Miaoqian Lin (1):
-      platform/mellanox: mlxbf-pmc: Fix an IS_ERR() vs NULL bug in mlxbf_pmc_map_counters
-
-Tim Crawford (1):
-      platform/x86: system76_acpi: Guard System76 EC specific functionality
-
-Wang Qing (1):
-      platform/x86: apple-gmux: use resource_size() with res
-
- drivers/platform/mellanox/mlxbf-pmc.c   |  4 +--
- drivers/platform/x86/Makefile           |  2 +-
- drivers/platform/x86/amd-pmc.c          |  3 +-
- drivers/platform/x86/apple-gmux.c       |  2 +-
- drivers/platform/x86/intel/Kconfig      | 15 ---------
- drivers/platform/x86/intel/pmc/pltdrv.c |  2 +-
- drivers/platform/x86/system76_acpi.c    | 58 +++++++++++++++++----------------
- 7 files changed, 37 insertions(+), 49 deletions(-)
-
+-- Max

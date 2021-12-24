@@ -2,105 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E5847EEA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 12:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83DBD47EEB1
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 13:02:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352621AbhLXLzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 06:55:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46696 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232442AbhLXLzn (ORCPT
+        id S1352632AbhLXMC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 07:02:29 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:15972 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232442AbhLXMC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 06:55:43 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D554C061401
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 03:55:43 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id j18so17123173wrd.2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 03:55:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=0xcpi0Gitd25v86mG6F6era86f13f6qHaOx3JaAv2Wk=;
-        b=Jb1E2qfhC1puRpMi6Q1ZzifIouvCGhE9PxgxYuTqMCWnqWRXhiCbyrOakGhZm9b5zK
-         93yaF9Lu31EF5r3CFvyl+XwTHOpafxR5KRrSue2dGTsiAN7Pm+hIesvmqFeL4m6X4QsM
-         Tv0Be197fSgjK1S5hczU4hWrsReIBovZ6qlhobfFlr0UelimWpFXg+uK3WFCpNCp8HVq
-         Res88GuLYTcgLBPbpJ0yv/vgZn3mzSSvuEopldz6+dieWuIiUrOB+Kt1lw9LPUVhtGFD
-         YQU6CaHGnBBW6ydj0V/Cu7dKOeagkdxZvt7zhVz8Sbn1hzHKWBOF5q4q2W13K+mXTMxK
-         umyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=0xcpi0Gitd25v86mG6F6era86f13f6qHaOx3JaAv2Wk=;
-        b=wdvN7Shs5K2SgENM3IIkegHkoAt9kTWkDx+HbxUux/JHzJ26W93A4fG3LGpJiAdWdU
-         dwlu85qb3XDPda46F2RdY9cnxQkxvswLRX4F+mDN1Vy6jHZEL/rcBqI9Q4v9oGYNpZiQ
-         E8bazUy6a62Yo6omiZ3Kzc75EQ4Q/MiZTUgM7viznl2WunBQmW6aXcqGUSLX0T3vhK9D
-         WMRN3NxCcRP1puzbSFsTBY6QfpxsakQRKaMtWzICoHnLCNNczPK4E0LLK6DRF2GAj9U3
-         ndd9ynav/tMdGw3bDmyib7n+ngZEzFqp4BeLxPSWMWqNZNAr1/tb1zBfie0b1iHDGhaw
-         d50A==
-X-Gm-Message-State: AOAM5326UwbAl3TF/EsX5W/XlLKujz/ZIVV8xkZ6d8wGPq0lIZ8LaNur
-        z6/6i1/bSpJnMbqZ3bsFuSCnEMkbWFbG0g==
-X-Google-Smtp-Source: ABdhPJzCsvdI7GfNUjI1YJ/T3AOvfGvHVotvGVkPfECl5Rm8QPqkbWJmKa/QqxDA6GFj5QWv70EEBA==
-X-Received: by 2002:a05:6000:50d:: with SMTP id a13mr1867759wrf.538.1640346941695;
-        Fri, 24 Dec 2021 03:55:41 -0800 (PST)
-Received: from elementary ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id u10sm7697029wrs.28.2021.12.24.03.55.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Dec 2021 03:55:41 -0800 (PST)
-Date:   Fri, 24 Dec 2021 12:55:37 +0100
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     Melissa Wen <mwen@igalia.com>
-Cc:     rodrigosiqueiramelo@gmail.com, hamohammed.sa@gmail.com,
-        airlied@linux.ie, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, melissa.srw@gmail.com
-Subject: Re: [PATCH 0/3] drm/vkms: add support for multiple overlay planes
-Message-ID: <20211224115537.GA9505@elementary>
-References: <20211213181131.17223-1-jose.exposito89@gmail.com>
- <20211223203525.4sr7rjfq6l42il5r@mail.igalia.com>
+        Fri, 24 Dec 2021 07:02:27 -0500
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JL5FX5y1mzVflm;
+        Fri, 24 Dec 2021 19:59:12 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 24 Dec
+ 2021 20:02:24 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <kys@microsoft.com>, <haiyangz@microsoft.com>,
+        <sthemmin@microsoft.com>, <wei.liu@kernel.org>,
+        <decui@microsoft.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <mikelley@microsoft.com>,
+        <Tianyu.Lan@microsoft.com>, <longli@microsoft.com>
+CC:     <linux-hyperv@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] scsi: storvsc: Fix unsigned comparison to zero
+Date:   Fri, 24 Dec 2021 20:02:16 +0800
+Message-ID: <20211224120216.35896-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211223203525.4sr7rjfq6l42il5r@mail.igalia.com>
+Content-Type: text/plain
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Melissa,
+The unsigned variable sg_count is being assigned a return value
+from the call to scsi_dma_map() that can return -ENOMEM.
 
-Thank you very much for your review.
+Fixes: 743b237c3a7b ("scsi: storvsc: Add Isolation VM support for storvsc driver")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/scsi/storvsc_drv.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> On Thu, Dec 23, 2021 at 07:35:48PM -0100, Melissa Wen wrote:
-> What test did you run? Indeed, not all kms tests are passing and fixes
-> are welcome :)
-> 
-> Last time, I used these testcases for overlay: kms_plane_cursor,
-> kms_atomic; and these tests were fine too: kms_cursor_crc, kms_writeback,
-> kms_flip
+diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+index ae293600d799..072c752a8c36 100644
+--- a/drivers/scsi/storvsc_drv.c
++++ b/drivers/scsi/storvsc_drv.c
+@@ -1837,7 +1837,7 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
+ 		unsigned int hvpg_count = HVPFN_UP(offset_in_hvpg + length);
+ 		struct scatterlist *sg;
+ 		unsigned long hvpfn, hvpfns_to_add;
+-		int j, i = 0;
++		int sg_cnt, j, i = 0;
+ 
+ 		if (hvpg_count > MAX_PAGE_BUFFER_COUNT) {
+ 
+@@ -1851,11 +1851,11 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
+ 		payload->range.len = length;
+ 		payload->range.offset = offset_in_hvpg;
+ 
+-		sg_count = scsi_dma_map(scmnd);
+-		if (sg_count < 0)
++		sg_cnt = scsi_dma_map(scmnd);
++		if (sg_cnt < 0)
+ 			return SCSI_MLQUEUE_DEVICE_BUSY;
+ 
+-		for_each_sg(sgl, sg, sg_count, j) {
++		for_each_sg(sgl, sg, sg_cnt, j) {
+ 			/*
+ 			 * Init values for the current sgl entry. hvpfns_to_add
+ 			 * is in units of Hyper-V size pages. Handling the
+-- 
+2.17.1
 
-For the different patches I have been working on I have tested mainly
-with kms_atomic, kms_plane_cursor and kms_plane_alpha_blend.
-
-For some reason, kms_cursor_crc suspends my PC. I still need to
-investigate the cause.
-
-I'll include a table with success/skip/fail tests before and after
-the patch on v2 :)
-
-> However, I think we need some limits for this number
-> of planes. I would suggest to just expand the enable_overlay option to
-> expose a predefined number of planes
-> [...]
-> I don't have a strong opinion on an exact/practical number. I took a
-> quick look at other drivers and exposing 8 planes seems reasonable to
-> me.
-
-8 planes sound reasonable to me, I'll change it and send a revision
-of [1] as well using the new constant.
-
-Thanks again for taking the time to review this,
-José Expósito
-
-[1] https://lore.kernel.org/dri-devel/20211223081030.16629-1-jose.exposito89@gmail.com/T/

@@ -2,103 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B2447F110
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 21:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D830B47F117
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 21:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234142AbhLXUWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 15:22:51 -0500
-Received: from relmlor2.renesas.com ([210.160.252.172]:61703 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229683AbhLXUWv (ORCPT
+        id S1344354AbhLXUiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 15:38:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234485AbhLXUiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 15:22:51 -0500
-X-IronPort-AV: E=Sophos;i="5.88,233,1635174000"; 
-   d="scan'208";a="105123796"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 25 Dec 2021 05:22:49 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 2142F40062AB;
-        Sat, 25 Dec 2021 05:22:47 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Nishanth Menon <nm@ti.com>, Santosh Shilimkar <ssantosh@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3] soc: ti: smartreflex: Use platform_get_irq_optional() to get the interrupt
-Date:   Fri, 24 Dec 2021 20:22:31 +0000
-Message-Id: <20211224202231.31130-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 24 Dec 2021 15:38:13 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2103C061757
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 12:38:12 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id o7so10195058ioo.9
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 12:38:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=konsulko.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XTcZcXn3gMOw5s9nKkpc/pq0+6ofltOh101RdlFXywg=;
+        b=GCfk2ROsvayGIwCXiI69gTj0R65gRZ8uuaQ1bckvSFzeB5k+g5bwM65L60y39tzbNM
+         80WJ9XfaWcbA0pCSh5gtKwD0xPB7E/vUYoznJEyvWPPy7VS0dieiZwmIGCJNFqwO7g+6
+         QDv0fNgnNDvxYQIxO9I1ITFjB7ef3IwQ7LbEM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XTcZcXn3gMOw5s9nKkpc/pq0+6ofltOh101RdlFXywg=;
+        b=BvLAhSU5WRwQqm0WDPWC58TMHFZ9HQGf6Qc0mrUPOcVcCUX9CpWqsA0Wu/Efbj0lyV
+         i1x+UoEfQiyGi8B0OLdi5gnSUIoFvmnS5kKXqRRlMUr0MKD9p4gdLkEgtBZYEhCFXWm9
+         hsKCcm6B8Sg6KXupIDS/OKmyyocUmqO9RHNNmbgkqOvxuGL0KreGCH6lPmWxspKFG6Cw
+         RkizSJ0mgiemo9CTcWXT1ZalaTUxV4Z2Ys+ovjCuX1P4D45iv2ikemjakA/XQE1Lk9VB
+         k20NT2N9o/4664FqoZZ5zW+0uWqRLObY2jckRa9+Rk8s4pbnb+vNJSI898jHOrRmRzgP
+         T3Bg==
+X-Gm-Message-State: AOAM5328z6zVrbdOKyprDFaHNjxH8AYe3B/ynK+FzXiYloVr8HZFyypk
+        hdsH7+uEUenZ2QH8rK0tCJB5mXangx70Gd28puvAVw==
+X-Google-Smtp-Source: ABdhPJxq4MyJjI5Utf9Da7ShlxsZIGegUECocbNEUBmjAAFvHRo+/7Q9uwmH+JzSc/QtRg5T+NT7D0yLMBrqkW1i3S4=
+X-Received: by 2002:a5d:9d92:: with SMTP id ay18mr3676343iob.130.1640378292291;
+ Fri, 24 Dec 2021 12:38:12 -0800 (PST)
+MIME-Version: 1.0
+References: <20211224145903.368999-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20211224145903.368999-1-kai.heng.feng@canonical.com>
+From:   Matt Ranostay <matt.ranostay@konsulko.com>
+Date:   Fri, 24 Dec 2021 12:37:59 -0800
+Message-ID: <CAJCx=gmPB_nqNt-OQXTEiKKaPh6sw1y6deUON3-t=QUJOQ3nNg@mail.gmail.com>
+Subject: Re: [PATCH] iio: humidity: hdc100x: Add ACPI HID table
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Chris Lesiak <chris.lesiak@licor.com>,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypasses the hierarchical setup and messes up the
-irq chaining.
+On Fri, Dec 24, 2021 at 6:59 AM Kai-Heng Feng
+<kai.heng.feng@canonical.com> wrote:
+>
+> x86 boards may use ACPI HID "HDC1010" to for hdc100x device.
+>
+> So add an ACPI match table for that accordingly.
+>
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq_optional().
+Acked-by: Matt Ranostay <matt.ranostay@konsulko.com>
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-v2->v3
-* Switch back to platform_get_irq_optional()
-* Only print error in case of error, and not when interrupt is missing.
-
-v1->v2
-* Updated commit message
-* Drop check for IRQ0
-* Switched to using platform_get_irq() so that the probe won't
-  fail silently as requested by Nishanth.
-
-v1:
-* https://www.spinics.net/lists/arm-kernel/msg942549.html
----
- drivers/soc/ti/smartreflex.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/soc/ti/smartreflex.c b/drivers/soc/ti/smartreflex.c
-index b5b2fa538d5c..e2e3eb3db4cc 100644
---- a/drivers/soc/ti/smartreflex.c
-+++ b/drivers/soc/ti/smartreflex.c
-@@ -819,7 +819,7 @@ static int omap_sr_probe(struct platform_device *pdev)
- {
- 	struct omap_sr *sr_info;
- 	struct omap_sr_data *pdata = pdev->dev.platform_data;
--	struct resource *mem, *irq;
-+	struct resource *mem;
- 	struct dentry *nvalue_dir;
- 	int i, ret = 0;
- 
-@@ -844,7 +844,14 @@ static int omap_sr_probe(struct platform_device *pdev)
- 	if (IS_ERR(sr_info->base))
- 		return PTR_ERR(sr_info->base);
- 
--	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-+	ret = platform_get_irq_optional(pdev, 0);
-+	if (ret < 0 && ret != -ENXIO) {
-+		dev_err(&pdev->dev, "%s: failed to get IRQ resource\n", __func__);
-+		return ret;
-+	}
-+	if (ret > 0)
-+		sr_info->irq = ret;
-+	ret = 0;
- 
- 	sr_info->fck = devm_clk_get(pdev->dev.parent, "fck");
- 	if (IS_ERR(sr_info->fck))
-@@ -870,9 +877,6 @@ static int omap_sr_probe(struct platform_device *pdev)
- 	sr_info->autocomp_active = false;
- 	sr_info->ip_type = pdata->ip_type;
- 
--	if (irq)
--		sr_info->irq = irq->start;
--
- 	sr_set_clk_length(sr_info);
- 
- 	list_add(&sr_info->node, &sr_list);
--- 
-2.17.1
-
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+>  drivers/iio/humidity/hdc100x.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/drivers/iio/humidity/hdc100x.c b/drivers/iio/humidity/hdc100x.c
+> index 9e0fce917ce4c..ad1dfac543c52 100644
+> --- a/drivers/iio/humidity/hdc100x.c
+> +++ b/drivers/iio/humidity/hdc100x.c
+> @@ -417,10 +417,18 @@ static const struct of_device_id hdc100x_dt_ids[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, hdc100x_dt_ids);
+>
+> +static const struct acpi_device_id hdc100x_acpi_match[] = {
+> +       {"HDC1010"},
+> +       { },
+> +};
+> +
+> +MODULE_DEVICE_TABLE(acpi, hdc100x_acpi_match);
+> +
+>  static struct i2c_driver hdc100x_driver = {
+>         .driver = {
+>                 .name   = "hdc100x",
+>                 .of_match_table = hdc100x_dt_ids,
+> +               .acpi_match_table = ACPI_PTR(hdc100x_acpi_match),
+>         },
+>         .probe = hdc100x_probe,
+>         .id_table = hdc100x_id,
+> --
+> 2.33.1
+>

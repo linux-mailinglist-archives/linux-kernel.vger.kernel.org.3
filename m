@@ -2,72 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C0E47F02A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 17:33:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7830047F02E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 17:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245488AbhLXQdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 11:33:19 -0500
-Received: from relay030.a.hostedemail.com ([64.99.140.30]:55602 "EHLO
-        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230213AbhLXQdT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 11:33:19 -0500
-Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay02.hostedemail.com (Postfix) with ESMTP id 7087621CB1;
-        Fri, 24 Dec 2021 16:33:17 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf05.hostedemail.com (Postfix) with ESMTPA id 68F9220019;
-        Fri, 24 Dec 2021 16:33:08 +0000 (UTC)
-Message-ID: <bc5b21934b2b871d2745dab8f469ce6458222594.camel@perches.com>
-Subject: Re: [PATCH v2 1/2] zram: zram_drv: add SPDX license identifiers
-From:   Joe Perches <joe@perches.com>
-To:     Miko Larsson <mikoxyzzz@gmail.com>, minchan@kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org, axboe@kernel.dk,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-Cc:     hch@infradead.org
-Date:   Fri, 24 Dec 2021 08:33:13 -0800
-In-Reply-To: <985cf51402ff6ea2c199869c3501a43a6588ae4f.camel@gmail.com>
-References: <20211217063224.3474-1-mikoxyzzz@gmail.com>
-         <20211217063224.3474-2-mikoxyzzz@gmail.com>
-         <b71570d5bc14181c656f8dd7ba69a397fd775495.camel@perches.com>
-         <985cf51402ff6ea2c199869c3501a43a6588ae4f.camel@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        id S1344062AbhLXQd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 11:33:57 -0500
+Received: from ixit.cz ([94.230.151.217]:49696 "EHLO ixit.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230213AbhLXQds (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 24 Dec 2021 11:33:48 -0500
+Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id 1BCFA2243C;
+        Fri, 24 Dec 2021 17:33:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1640363626;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=FoA5iIkkF6H+aVXyAyIGl68mDWYX9Ghj7Pu9I1UcMTk=;
+        b=Lam7IlCcYZ9rbjbVarQFfEqOx5eVAKDBlKssLc0uDa3KyzCQBe/KEOre/yEBaGZgRO0G2H
+        DxrLm4xB4LhY/mD1dhRgUI0NSOXJHnh7kJlfSnnhU3gM+//A9V1qy1NcJNl+yloflkFzrP
+        sn2F1K43IE4NGY7N3v6Md0TOpmVijWo=
+From:   David Heidelberg <david@ixit.cz>
+To:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: spmi: spmi can have at least up to 5 registers
+Date:   Fri, 24 Dec 2021 17:33:43 +0100
+Message-Id: <20211224163344.54177-1-david@ixit.cz>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: 5phd8tk73e3sh895x1zw56qx3f765fsn
-X-Spam-Status: No, score=-4.88
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: 68F9220019
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX199oY8bydCSIdLHs8JRyNoPq2HxB+fe+ZQ=
-X-HE-Tag: 1640363588-879701
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(resending, original sent with an html part, unknown how)
+Since Qualcomm SPMI Controller (PMIC Arbiter) can have 5,
+bump reg up to maxItems 5.
 
-On Fri, 2021-12-24 at 14:13 +0100, Miko Larsson wrote:
-> On Tue, 2021-12-21 at 01:33 -0800, Joe Perches wrote:
-> > GPL v2 is a permissive license and this SPDX tag should probably be
-> > 
-> > // SPDX-License-Identifier: GPL-2.0-or-later or BSD-3-Clause
-> 
-> It shouldn't be GPL-2.0-or-later, because the original copyright notice
-> doesn't have an "or later" clause.
+Fixes warning as:
+arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: spmi@c440000: reg: [[0, 205783040, 0, 4352], [0, 207618048, 0, 33554432], [0, 241172480, 0, 1048576], [0, 242221056, 0, 655360], [0, 205561856, 0, 155648]] is too long
+        From schema: Documentation/devicetree/bindings/spmi/spmi.yaml
 
-On its face, a GPL-2.0 license notice grant does _not_ need to
-include any 'or later' content.
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ Documentation/devicetree/bindings/spmi/spmi.yaml | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-The GPL 2.0 license is permissive, it's at the _grantee's_ option.
-
-I believe Nitin Gupta, the original author and submitter, should
-declare whether or not he intended the license to include the
-'or later' option.
-
-Nitin?
-
-Did you intend to use GPL-2.0 only and exclude GPL-3.0 or any later
-version?
-
+diff --git a/Documentation/devicetree/bindings/spmi/spmi.yaml b/Documentation/devicetree/bindings/spmi/spmi.yaml
+index 1d243faef2f8..d7d9345d7c60 100644
+--- a/Documentation/devicetree/bindings/spmi/spmi.yaml
++++ b/Documentation/devicetree/bindings/spmi/spmi.yaml
+@@ -25,7 +25,8 @@ properties:
+     pattern: "^spmi@.*"
+ 
+   reg:
+-    maxItems: 1
++    minItems: 1
++    maxItems: 5
+ 
+   "#address-cells":
+     const: 2
+-- 
+2.34.1
 

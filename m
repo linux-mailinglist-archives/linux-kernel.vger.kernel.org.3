@@ -2,88 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD0847EFA1
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 15:30:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 203C747EFB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 15:49:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353000AbhLXOaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 09:30:15 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:55816 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1352956AbhLXOaI (ORCPT
+        id S1343840AbhLXOsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 09:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55942 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343849AbhLXOsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 09:30:08 -0500
-X-IronPort-AV: E=Sophos;i="5.88,232,1635174000"; 
-   d="scan'208";a="104623572"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 24 Dec 2021 23:30:07 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 202D04000AA9;
-        Fri, 24 Dec 2021 23:30:04 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 10/10] serial: pmac_zilog: Use platform_get_irq() to get the interrupt
-Date:   Fri, 24 Dec 2021 14:29:16 +0000
-Message-Id: <20211224142917.6966-11-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211224142917.6966-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20211224142917.6966-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Fri, 24 Dec 2021 09:48:54 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081F4C061401
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 06:48:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=h6TSfmTuL7ftgtvLoRTjxtkYWFFbSSFkXY0fzO/SUDY=; b=m2TYgIu4yzYXx0XYdpBiRwbNdt
+        P4mOpo74aj/PPHaO1zHmqggesyBIVDuMVzHS7swl6OJIXgvhcATBwM0MmXjRNqIatHfqXSu54jivG
+        0yLIDXg9lRzqsVv1YAFdomGOrb402lCbWPRhQ+IboMWkR25LacY5FOAHrmFV9Tnt0PPc1Coh+E/yA
+        BtHg8IBNlbKO05KweDFxYCUWUv248FEvJJsNZLa4I11x6SCVt5yb/Fmw+zQWqMCXnJv9uXhWEmR8p
+        XanKG7dICCGO/XtareJpHGUv/V/XhKwKmBD62XBQY6UQvOiFsSM0SIURxMlFB0XHBegEnrMcX15Ra
+        TfZwyiNw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n0lry-005ARv-Nn; Fri, 24 Dec 2021 14:48:30 +0000
+Date:   Fri, 24 Dec 2021 14:48:30 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zi Yan <ziy@nvidia.com>,
+        Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] mm/migration: Add trace events for THP migrations
+Message-ID: <YcXdvnLC5SyiSZTc@casper.infradead.org>
+References: <1640328398-20698-1-git-send-email-anshuman.khandual@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1640328398-20698-1-git-send-email-anshuman.khandual@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypasses the hierarchical setup and messes up the
-irq chaining.
+On Fri, Dec 24, 2021 at 12:16:38PM +0530, Anshuman Khandual wrote:
+> This adds two trace events for PMD based THP migration without split. These
+> events closely follow the implementation details like setting and removing
+> of PMD migration entries, which are essential operations for THP migration.
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq().
+Why are you printing the address of a struct page?  What useful
+information does this supply?  Same question for the struct mm.
+And the pmdp, for that matter.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- drivers/tty/serial/pmac_zilog.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+You haven't said _why_ you want these tracepoints.  So it's impossible
+to suggest what you _should_ be doing, because what you _are_ doing
+is obviously wrong.
 
-diff --git a/drivers/tty/serial/pmac_zilog.c b/drivers/tty/serial/pmac_zilog.c
-index 12ce150b0ad4..5359236b32d6 100644
---- a/drivers/tty/serial/pmac_zilog.c
-+++ b/drivers/tty/serial/pmac_zilog.c
-@@ -1702,17 +1702,21 @@ extern struct platform_device scc_a_pdev, scc_b_pdev;
- 
- static int __init pmz_init_port(struct uart_pmac_port *uap)
- {
--	struct resource *r_ports, *r_irq;
-+	struct resource *r_ports;
-+	int irq;
- 
- 	r_ports = platform_get_resource(uap->pdev, IORESOURCE_MEM, 0);
--	r_irq = platform_get_resource(uap->pdev, IORESOURCE_IRQ, 0);
--	if (!r_ports || !r_irq)
-+	if (!r_ports)
- 		return -ENODEV;
- 
-+	irq = platform_get_irq(uap->pdev, 0);
-+	if (irq < 0)
-+		return irq;
-+
- 	uap->port.mapbase  = r_ports->start;
- 	uap->port.membase  = (unsigned char __iomem *) r_ports->start;
- 	uap->port.iotype   = UPIO_MEM;
--	uap->port.irq      = r_irq->start;
-+	uap->port.irq      = irq;
- 	uap->port.uartclk  = ZS_CLOCK;
- 	uap->port.fifosize = 1;
- 	uap->port.ops      = &pmz_pops;
--- 
-2.17.1
-
+> +	TP_printk("mm=%p, address=%lx, pmdp=%p, page=%p pmdval=%lx",
+> +		__entry->mm,
+> +		__entry->address,
+> +		__entry->pmdp,
+> +		__entry->page,
+> +		__entry->pmdval)
+> +);

@@ -2,117 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6414147EF43
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 14:51:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13D8D47EF45
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 14:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352800AbhLXNvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 08:51:17 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:51976 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235825AbhLXNvQ (ORCPT
+        id S1352816AbhLXNyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 08:54:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235825AbhLXNyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 08:51:16 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BODouiJ025195;
-        Fri, 24 Dec 2021 07:50:56 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1640353856;
-        bh=atzD/w/TVai0FPN0B6eJVShepwKKCijB+8dorelxp5c=;
-        h=Date:From:To:CC:Subject;
-        b=m0tOaN+VmTI2pIxZkGNq5WtrZ0YIB9qt/aqI9PCoBbPThPkOmxkxq8YjHLThTvsl/
-         NJ9bTudibLGWLDxNQdgSzPe8wFVZActUk28JcTZLeUpBWAlJ/Dm9gXDm7pPnrRfcef
-         FllQ3cqHyLg4nIaN+qHziGkIfcq7Fv8HEq8NLG8s=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BODouXP106066
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 24 Dec 2021 07:50:56 -0600
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 24
- Dec 2021 07:50:56 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 24 Dec 2021 07:50:56 -0600
-Received: from [172.24.145.18] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BODosuO057338;
-        Fri, 24 Dec 2021 07:50:55 -0600
-Message-ID: <cbb28885-fb36-2847-d691-cf1dc5e5c386@ti.com>
-Date:   Fri, 24 Dec 2021 19:20:53 +0530
+        Fri, 24 Dec 2021 08:54:36 -0500
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150A8C061401
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 05:54:36 -0800 (PST)
+Received: by mail-yb1-xb43.google.com with SMTP id v138so25909992ybb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 05:54:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
+         :subject:cc;
+        bh=24EFpZU5AMMCntdM+3YfQ+A/kKth8PZ34wiS7rq1lOE=;
+        b=UurZZuYyggXyvA+720tOXY42Y74kcB3/Evm/o8OZfYDGqzao5gEMqJopVS56CVwwju
+         7fLFx1z8GeA95WJac1P57zndLfCIuWzoh3z0AGo80V+7hXtYFVbt0Wlya0nXY+mctFd7
+         Z/KAUGOaMvjFHMSZMtk8W6MZe3xzg3cS4VMANT1cQlfo+H/hS7vgJbkur6YOT32yn1eK
+         6rPhG2hIRMZl8yz+RvZrfbsTnnALDcf7QvsHtJt/WhVdE8qYpVxObtknFcDEyNpj/yy0
+         dWINn/tBm2QBC3Nu0fFdMHon2g2LFRdg4QDDbFD7WhP8VoqF5+WplYfIydgMdRCEViI8
+         dC3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
+         :from:date:message-id:subject:cc;
+        bh=24EFpZU5AMMCntdM+3YfQ+A/kKth8PZ34wiS7rq1lOE=;
+        b=Pjjwkiegx1A+fJKR3VMzIVHLjffSSfSdiLqUlQ2FrYK4B040Ik5Mn2bD3ZZCq5NjpL
+         GRlZdY8wJUnE8iUOwVcYhyKIIqRmgebwSGPPiCqwOS01cf1yo6W4aRMdMWedUESm1gMh
+         01NphLFAS+STOYcZiAEyA/LYAJIvP6lb8mfHRGDP9QfSP4ViWGxCCbHc04Q3XKeLYo+e
+         rBd/J7qlrKQdDp+vU6XQJPx1lKQyJ1SZfnFMCFn5DYQcL+iCi5wsQTps5DLxPin2CEVA
+         gHZG0sDYDHSBqn2iMDRSwn9E94dHbCS98P5dqjG9DLHTuWWh24T7TRinsaJHhzMGcKdv
+         Eb7w==
+X-Gm-Message-State: AOAM530DiqZPuHpmOYQU0occrlHmSuZgIWH9puQGULYIY+MwUxXLKMV/
+        Fe2TFd0TGpVqHbp5ZQvvQfly0zzQI8Oya2D7Guc=
+X-Received: by 2002:a5b:d05:: with SMTP id y5mt8886804ybp.568.1640354074910;
+ Fri, 24 Dec 2021 05:54:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>
-CC:     MTD Maling List <linux-mtd@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?Q?=5bGIT_PULL=5d_CFI_and_HyperFlash_changes_for_v5=2e17-rc1?=
- =?UTF-8?B?4oCL?=
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature";
-        boundary="------------n11j1AkCcdbMt7v4MEl7v6m6"
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Received: by 2002:a81:11c9:0:0:0:0:0 with HTTP; Fri, 24 Dec 2021 05:54:33
+ -0800 (PST)
+Reply-To: israelbarney287@gmail.com
+In-Reply-To: <CAH6eeoG64RM59E0-ASeBVLygjG+o+t_RJFMvvLSLk4XpUotjsA@mail.gmail.com>
+References: <CAH6eeoHsCQ1=9zgTjy1YdkcjkjDQmC9q=7XtTT1LmBop=Bj-mA@mail.gmail.com>
+ <CAH6eeoGZfPNTB4qrSpA-xYXviwq0hfo-SbCmuZc3fhgxeDJ2Nw@mail.gmail.com>
+ <CAH6eeoHK1QEoq+1fz+gLy=J_1QP5TheXYYC0FVC6BbxP-T=d1g@mail.gmail.com> <CAH6eeoG64RM59E0-ASeBVLygjG+o+t_RJFMvvLSLk4XpUotjsA@mail.gmail.com>
+From:   israel barney <griestkristen667@gmail.com>
+Date:   Fri, 24 Dec 2021 14:54:33 +0100
+Message-ID: <CAH6eeoESj=vF=qdc17UM++SEcX0ERYbH15S9q9MU7jS5_wmUaw@mail.gmail.com>
+Subject: Greetings
+Cc:     israelbarney287@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---------------n11j1AkCcdbMt7v4MEl7v6m6
-Content-Type: multipart/mixed; boundary="------------nuZVpgtA9NFdZC4thV9SvGhK";
- protected-headers="v1"
-From: Vignesh Raghavendra <vigneshr@ti.com>
-To: Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>
-Cc: MTD Maling List <linux-mtd@lists.infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Message-ID: <cbb28885-fb36-2847-d691-cf1dc5e5c386@ti.com>
-Subject: =?UTF-8?Q?=5bGIT_PULL=5d_CFI_and_HyperFlash_changes_for_v5=2e17-rc1?=
- =?UTF-8?B?4oCL?=
+Good Day My Good Friend.
 
---------------nuZVpgtA9NFdZC4thV9SvGhK
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+I am deeply sorry if I have in any manner disturbed your privacy.
+Please forgive this unusual manner of contacting you, there is
+absolutely going to be a great doubt and distrust in your heart in
+respect for this email. There is no way for me to know whether I will
+be properly understood, but it is my duty to write and reach out to
+you as a person of transparency, honesty and high caliber. I'll
+introduce myself once again, I am Mr. Israel Barney, from Togo Republic. I
+am also the Branch Bank Manager of Biatogo Bank, I was also the
+Account Manager of my late client Mrs. Anna Who might or might
+not be related to you.
 
-SGkgIE1pcXVlbCwgUmljaGFyZCwNCg0KSGVyZSBpcyB0aGUgSHlwZXJCdXMvSHlwZXJGbGFz
-aCByZWxhdGVkIFBSIGZvciB2NS4xNy1yYzEuIFRoYW5rcyENCg0KUmVnYXJkcw0KVmlnbmVz
-aA0KDQpUaGUgZm9sbG93aW5nIGNoYW5nZXMgc2luY2UgY29tbWl0IGZhNTViN2RjZGM0M2Mx
-YWExYmExMmJjYTlkMmRkNDMxOGMyYTBkYmY6DQoNCiAgIExpbnV4IDUuMTYtcmMxICgyMDIx
-LTExLTE0IDEzOjU2OjUyIC0wODAwKQ0KDQphcmUgYXZhaWxhYmxlIGluIHRoZSBHaXQgcmVw
-b3NpdG9yeSBhdDoNCg0KICAgaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4
-L2tlcm5lbC9naXQvbXRkL2xpbnV4LmdpdCB0YWdzL2NmaS9mb3ItNS4xNw0KDQpmb3IgeW91
-IHRvIGZldGNoIGNoYW5nZXMgdXAgdG8gYmFhZjk2NWY5NDMwODMwMWQyZGM1NTRkNzJhODdk
-NzQzMmNkNWNlNjoNCg0KICAgbXRkOiBoeXBlcmJ1czogcnBjLWlmOiBmaXggYnVnIGluIHJw
-Y2lmX2hiX3JlbW92ZSAoMjAyMS0xMS0yMSAxNzoyMTo0MCArMDUzMCkNCg0KLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LQ0KSHlwZXJidXMgY2hhbmdlcyBmb3IgdjUuMTctcmMxDQoNCkh5cGVyYnVzIGNoYW5nZXM6
-DQoNCkNvdXBsZSBvZiBmaXhlcyBpbiBSZW5lc2FzIGh5cGVyYnVzIHJwYy1pZiBkcml2ZXIg
-dG8gYXZvaWQgY3Jhc2ggb24NCm1vZHVsZSByZW1vdmUgYW5kIGZvciBtaXNzaW5nIGNoZWNr
-IGZvciBlcnJvciB2YWx1ZSBpbiBwcm9iZS4NCg0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KR2VvcmdlIEcuIERh
-dmlzICgxKToNCiAgICAgICBtdGQ6IGh5cGVyYnVzOiBycGMtaWY6IGZpeCBidWcgaW4gcnBj
-aWZfaGJfcmVtb3ZlDQoNCkxhZCBQcmFiaGFrYXIgKDEpOg0KICAgICAgIG10ZDogaHlwZXJi
-dXM6IHJwYy1pZjogQ2hlY2sgcmV0dXJuIHZhbHVlIG9mIHJwY2lmX3N3X2luaXQoKQ0KDQog
-IGRyaXZlcnMvbXRkL2h5cGVyYnVzL3JwYy1pZi5jIHwgOCArKysrKy0tLQ0KICAxIGZpbGUg
-Y2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KDQotLQ0KUmVnYXJk
-cw0KVmlnbmVzaA0K
+She traveled down to china on the 28th of December 2019 on a five
+weeks business trip and after the successful transaction in china, she
+flew back, not knowing she has been infected with the deadly
+Coronavirus (COVID-19). And she sadly passed away on March 20th 2020.
+She left the sum of $3.2 Million (Three Million, Two Hundred Thousand
+United States Dollars) in our financial institute (Bank), she
+specifically confided in me told me that "no one else knows about her
+funds in our bank" that the funds was for a project before she passed
+away while she was ill. And down here in our country at this present
+day, once anyone passes away, after 1 Year if no relatives of the late
+the customer doesn't come to claim the funds/assets, it'll be recycled, and
+reported to the Central Bank where the greedy government will then
+want to have their hands on the funds.
 
---------------nuZVpgtA9NFdZC4thV9SvGhK--
+That's where you come in, since you bear the same surnames with her, I
+want you to stand as her next of kin since no one else knows about
+this funds in our bank besides me, and i don't think anyone will be
+coming for it. I promise you that if you agree to assist in claiming
+this funds from my Bank, we'll not bridge the law in any way because
+I'll be your eyes and ears here in the Bank.
 
---------------n11j1AkCcdbMt7v4MEl7v6m6
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+After all is settled we'll share the fund $3.2 Million 50% equally or
+rather invest on whatever we choose. So I would really like to know
+what you have to say in regards to my proposal.
 
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEyRC2zAhGcGjrhiNExEYeRXyRFuMFAmHF0D0FAwAAAAAACgkQxEYeRXyRFuMv
-sQgApD4ZRkT87u6AZ6A4ONUL6IOJwXhXI09rZ99Ysd/GVQeOrOgh+6NtFpYNfMxy8u+5mptNHjft
-G0Pi/K+T29i3bhSGZKpIzJ/hBbuyJ9zj3fOUSiqOpCVZdgP4eg2E1+78vadbQKz3SViZROoIxEYZ
-9ZrWIWSy0q9HyvyFeojy1CkTJK+Zer+Px5yEpZFkprlHmi/1KJ4aWKs9hqokv0+JiA4JLM00Jjx2
-Sbh5QjTysg/DALJ7Ln0zLNdu56q74Bm3jZ+w7Suo2gSB1jlDIjXaIeoKzT9qUnlT3MQ61R4tycbX
-32tcoLSt7GPq04ZTkWTne5I07Kgs7SXnAfOUe40vRg==
-=G+50
------END PGP SIGNATURE-----
-
---------------n11j1AkCcdbMt7v4MEl7v6m6--
+Thanks
+Mr. Israel Barney.

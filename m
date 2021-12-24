@@ -2,89 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 043AB47EF41
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 14:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6414147EF43
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 14:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352786AbhLXNs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 08:48:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235783AbhLXNs1 (ORCPT
+        id S1352800AbhLXNvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 08:51:17 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:51976 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235825AbhLXNvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 08:48:27 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4406DC061759
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 05:48:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 86FD4CE22C6
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 13:48:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C95B8C36AE8;
-        Fri, 24 Dec 2021 13:48:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640353703;
-        bh=yA7t71iAlP/UtjV9v7EQSu7GuXC/Jl/UzoU4P06wCP4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Vj6H8JevMEqfhr5sMdmV5pI/9J8+WC9GGl3zUJ6ZlgUWMU1AfRrD/znxIekxsnJXM
-         G2aebehC4kwBWgmjPOI1KBSWMKyZy3beUkENibHPFM00NR6feAOTRJoAfjnUIQ3ySs
-         pzv7CF067wY9qthfb6V+c2l4Fw7OjrwlK+0tyUpj7EFQCiNYPNd4piJ8bvBPQZwUl9
-         aJkPEwLBAty3ladUeJrHz9X9UzP2mWtyGV9CkKLCxhfAcBHmmM46UHVItXc7wS8tJz
-         NCc+X4KzVaQFtrCFDa6J4P74CrDjpueQCBiuYp9SsWcF2heOOJVbIzVTLcJA5cup1s
-         iP+phsyXbacLg==
-Date:   Fri, 24 Dec 2021 22:48:20 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Geliang Tang <geliang.tang@suse.com>
-Cc:     "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tracing: fix mismatched comment in __string_len
-Message-Id: <20211224224820.cd2f6b2289d7c741cf1f8ba6@kernel.org>
-In-Reply-To: <5c012db463392d0e6d4f0636203d778962ad060a.1640170494.git.geliang.tang@suse.com>
-References: <5c012db463392d0e6d4f0636203d778962ad060a.1640170494.git.geliang.tang@suse.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Fri, 24 Dec 2021 08:51:16 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BODouiJ025195;
+        Fri, 24 Dec 2021 07:50:56 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1640353856;
+        bh=atzD/w/TVai0FPN0B6eJVShepwKKCijB+8dorelxp5c=;
+        h=Date:From:To:CC:Subject;
+        b=m0tOaN+VmTI2pIxZkGNq5WtrZ0YIB9qt/aqI9PCoBbPThPkOmxkxq8YjHLThTvsl/
+         NJ9bTudibLGWLDxNQdgSzPe8wFVZActUk28JcTZLeUpBWAlJ/Dm9gXDm7pPnrRfcef
+         FllQ3cqHyLg4nIaN+qHziGkIfcq7Fv8HEq8NLG8s=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BODouXP106066
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 24 Dec 2021 07:50:56 -0600
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 24
+ Dec 2021 07:50:56 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 24 Dec 2021 07:50:56 -0600
+Received: from [172.24.145.18] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BODosuO057338;
+        Fri, 24 Dec 2021 07:50:55 -0600
+Message-ID: <cbb28885-fb36-2847-d691-cf1dc5e5c386@ti.com>
+Date:   Fri, 24 Dec 2021 19:20:53 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>
+CC:     MTD Maling List <linux-mtd@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?Q?=5bGIT_PULL=5d_CFI_and_HyperFlash_changes_for_v5=2e17-rc1?=
+ =?UTF-8?B?4oCL?=
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature";
+        boundary="------------n11j1AkCcdbMt7v4MEl7v6m6"
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Dec 2021 19:00:25 +0800
-Geliang Tang <geliang.tang@suse.com> wrote:
+--------------n11j1AkCcdbMt7v4MEl7v6m6
+Content-Type: multipart/mixed; boundary="------------nuZVpgtA9NFdZC4thV9SvGhK";
+ protected-headers="v1"
+From: Vignesh Raghavendra <vigneshr@ti.com>
+To: Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>
+Cc: MTD Maling List <linux-mtd@lists.infradead.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Message-ID: <cbb28885-fb36-2847-d691-cf1dc5e5c386@ti.com>
+Subject: =?UTF-8?Q?=5bGIT_PULL=5d_CFI_and_HyperFlash_changes_for_v5=2e17-rc1?=
+ =?UTF-8?B?4oCL?=
 
-> Here __assign_str_len() should be used for the __string_len type, instead
-> of __assign_str().
-> 
+--------------nuZVpgtA9NFdZC4thV9SvGhK
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Yeah, the comment in the above line is correct :)
+SGkgIE1pcXVlbCwgUmljaGFyZCwNCg0KSGVyZSBpcyB0aGUgSHlwZXJCdXMvSHlwZXJGbGFz
+aCByZWxhdGVkIFBSIGZvciB2NS4xNy1yYzEuIFRoYW5rcyENCg0KUmVnYXJkcw0KVmlnbmVz
+aA0KDQpUaGUgZm9sbG93aW5nIGNoYW5nZXMgc2luY2UgY29tbWl0IGZhNTViN2RjZGM0M2Mx
+YWExYmExMmJjYTlkMmRkNDMxOGMyYTBkYmY6DQoNCiAgIExpbnV4IDUuMTYtcmMxICgyMDIx
+LTExLTE0IDEzOjU2OjUyIC0wODAwKQ0KDQphcmUgYXZhaWxhYmxlIGluIHRoZSBHaXQgcmVw
+b3NpdG9yeSBhdDoNCg0KICAgaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4
+L2tlcm5lbC9naXQvbXRkL2xpbnV4LmdpdCB0YWdzL2NmaS9mb3ItNS4xNw0KDQpmb3IgeW91
+IHRvIGZldGNoIGNoYW5nZXMgdXAgdG8gYmFhZjk2NWY5NDMwODMwMWQyZGM1NTRkNzJhODdk
+NzQzMmNkNWNlNjoNCg0KICAgbXRkOiBoeXBlcmJ1czogcnBjLWlmOiBmaXggYnVnIGluIHJw
+Y2lmX2hiX3JlbW92ZSAoMjAyMS0xMS0yMSAxNzoyMTo0MCArMDUzMCkNCg0KLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LQ0KSHlwZXJidXMgY2hhbmdlcyBmb3IgdjUuMTctcmMxDQoNCkh5cGVyYnVzIGNoYW5nZXM6
+DQoNCkNvdXBsZSBvZiBmaXhlcyBpbiBSZW5lc2FzIGh5cGVyYnVzIHJwYy1pZiBkcml2ZXIg
+dG8gYXZvaWQgY3Jhc2ggb24NCm1vZHVsZSByZW1vdmUgYW5kIGZvciBtaXNzaW5nIGNoZWNr
+IGZvciBlcnJvciB2YWx1ZSBpbiBwcm9iZS4NCg0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KR2VvcmdlIEcuIERh
+dmlzICgxKToNCiAgICAgICBtdGQ6IGh5cGVyYnVzOiBycGMtaWY6IGZpeCBidWcgaW4gcnBj
+aWZfaGJfcmVtb3ZlDQoNCkxhZCBQcmFiaGFrYXIgKDEpOg0KICAgICAgIG10ZDogaHlwZXJi
+dXM6IHJwYy1pZjogQ2hlY2sgcmV0dXJuIHZhbHVlIG9mIHJwY2lmX3N3X2luaXQoKQ0KDQog
+IGRyaXZlcnMvbXRkL2h5cGVyYnVzL3JwYy1pZi5jIHwgOCArKysrKy0tLQ0KICAxIGZpbGUg
+Y2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KDQotLQ0KUmVnYXJk
+cw0KVmlnbmVzaA0K
 
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+--------------nuZVpgtA9NFdZC4thV9SvGhK--
 
-Thanks!
+--------------n11j1AkCcdbMt7v4MEl7v6m6
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> Signed-off-by: Geliang Tang <geliang.tang@suse.com>
-> ---
->  samples/trace_events/trace-events-sample.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/samples/trace_events/trace-events-sample.h b/samples/trace_events/trace-events-sample.h
-> index 5ab74fc9a2df..cbbbb83beced 100644
-> --- a/samples/trace_events/trace-events-sample.h
-> +++ b/samples/trace_events/trace-events-sample.h
-> @@ -155,7 +155,7 @@
->   *
->   *         To assign this string, use the helper macro __assign_str_len().
->   *
-> - *         __assign_str(foo, bar, len);
-> + *         __assign_str_len(foo, bar, len);
->   *
->   *         Then len + 1 is allocated to the ring buffer, and a nul terminating
->   *         byte is added. This is similar to:
-> -- 
-> 2.31.1
-> 
+-----BEGIN PGP SIGNATURE-----
 
+wsB5BAABCAAjFiEEyRC2zAhGcGjrhiNExEYeRXyRFuMFAmHF0D0FAwAAAAAACgkQxEYeRXyRFuMv
+sQgApD4ZRkT87u6AZ6A4ONUL6IOJwXhXI09rZ99Ysd/GVQeOrOgh+6NtFpYNfMxy8u+5mptNHjft
+G0Pi/K+T29i3bhSGZKpIzJ/hBbuyJ9zj3fOUSiqOpCVZdgP4eg2E1+78vadbQKz3SViZROoIxEYZ
+9ZrWIWSy0q9HyvyFeojy1CkTJK+Zer+Px5yEpZFkprlHmi/1KJ4aWKs9hqokv0+JiA4JLM00Jjx2
+Sbh5QjTysg/DALJ7Ln0zLNdu56q74Bm3jZ+w7Suo2gSB1jlDIjXaIeoKzT9qUnlT3MQ61R4tycbX
+32tcoLSt7GPq04ZTkWTne5I07Kgs7SXnAfOUe40vRg==
+=G+50
+-----END PGP SIGNATURE-----
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+--------------n11j1AkCcdbMt7v4MEl7v6m6--

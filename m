@@ -2,85 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E617C47EE46
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 11:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C5047EE4C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 11:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352452AbhLXKeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 05:34:23 -0500
-Received: from mga04.intel.com ([192.55.52.120]:42918 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1343932AbhLXKeU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 05:34:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640342060; x=1671878060;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fP3b2t2Pjntt0Wdr6XjS+C58Cbsr3y9eDyRba8+g9ik=;
-  b=W+8daErbtT873oDbEuRdIPbTnrSAgSZobzVdKS3XDRVip1IhX5L2e0UF
-   tQWK6pmKDysrnwm9EeDHsilRoSXToPqxZRJe1qi24eU0AUzNvYzLnQeJG
-   3b14czCRk+J2R4o47KIw1VjdhPYw6+kDOpfVYqDb+5PNf7f61Cd//O8Kv
-   ODxEu6Yt/R4eE6Lfyl83/dssPsnbHjT7+41w+lQ1I1+nCIKs3KCLU8rkT
-   BoKodgxvPuhdlo4wFCORk+N7RpRckQvbGmYs1Hzju1UnHtVJiwo88iz52
-   ntczzZF5MGQTq5j8L2kffZP/qvq6jUTujbIlB/cOIqifoRaRSA6umJFe0
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10207"; a="239749131"
-X-IronPort-AV: E=Sophos;i="5.88,232,1635231600"; 
-   d="scan'208";a="239749131"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2021 02:34:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,232,1635231600"; 
-   d="scan'208";a="468812954"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 24 Dec 2021 02:34:02 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 19F3F11E; Fri, 24 Dec 2021 12:34:11 +0200 (EET)
-Date:   Fri, 24 Dec 2021 13:34:10 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Borislav Petkov <bp@alien8.de>, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@intel.com, luto@kernel.org,
-        peterz@infradead.org, sathyanarayanan.kuppuswamy@linux.intel.com,
-        aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
-        david@redhat.com, hpa@zytor.com, jgross@suse.com,
-        jmattson@google.com, joro@8bytes.org, jpoimboe@redhat.com,
-        knsathya@kernel.org, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/26] x86/tdx: Add __tdx_module_call() and
- __tdx_hypercall() helper functions
-Message-ID: <20211224103410.okuku7njt2cnk6mz@black.fi.intel.com>
-References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
- <20211214150304.62613-4-kirill.shutemov@linux.intel.com>
- <YcIm8fngUsVulUoI@zn.tnic>
- <20211223165548.xr57h25g4diixivp@black.fi.intel.com>
- <f67229d5-c92e-5953-5f77-1dee2c7643b3@redhat.com>
+        id S1352461AbhLXKiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 05:38:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343932AbhLXKiK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 24 Dec 2021 05:38:10 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81EEC061401;
+        Fri, 24 Dec 2021 02:38:09 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id i22so16680146wrb.13;
+        Fri, 24 Dec 2021 02:38:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XjBGi+dJXXQnmTq7rq+KjohVrDPP5Z8h7UOS9LTpl7A=;
+        b=Rj37lDjhRFUc7q2M+C6fi9hbOPuyZjdMGbHyY4K6HHo3T1eJHJGMoM/400ZwXdh9sB
+         ltN6Zd82Ah1EEaxr+ol7thpVVvDzlZKSDrTC4QgoT3mkjKRc5wAFPRVV5hPf/UjNqdYl
+         I8D5Ou9/Ofl56PLVyO+s2wNMP+TLGZkvvGYPx6yDoiPM7iYCgbFhXHwUoB/73pjTSz8k
+         pPZTQ4BuDb+if26Rp2Hb4ItZOQZH++3kuu8SxXIVnLD36SlAMyp/E3V94KBPYPBzgJr0
+         5oi5+oTPgs8ujfXKyZhDhTsAyPyx9C6GK8w1cYr+bedjnMAMVNj/8xLQOLUkPxRFmrik
+         d6yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XjBGi+dJXXQnmTq7rq+KjohVrDPP5Z8h7UOS9LTpl7A=;
+        b=Zhzxpo8z6PSuun6bneeo+evkMMhf8RapTv4Vo0ZhjvGNqCWffIzYZVJZHvTZ/DlC6/
+         vpJZwJg6O22+G0wjYkXiwgUrgLw7fiICubG/TPiQBKiOSQn46iI/j+kiOgY0T/J3Z+xH
+         TvPtDROcEHPzh2IFmHKqBFbV1Gb308fFbkgGN4CLFVd3Gfl3xPLlsJwXVkWjnE4gQ0+7
+         1ObmRFexBB8IMy0nKNpXttoRhZ9XFGvZM08JxnxcSJyFCMwjOmE+agqIT3fVSIUFRxE8
+         R9ewkmVCNZRaRSNhaoBEL0VJmjtSnU8UtBMsL6OtEXMzwx3W+dBxhAB8JAh0tDakmmFi
+         Vvog==
+X-Gm-Message-State: AOAM531VwKj+YCX0Qp977lH5/Syndz9tH0DpXPsjwY9CdKvsX4hsa/TQ
+        iEcoxCWHhE7+zTcuXT3jQrGOUajnMlM=
+X-Google-Smtp-Source: ABdhPJys90a3kGzt+UsOHuNN9q/es+YbAMysaOzL5WhNevcs2Vf/ooc2d4G0kjBwoGEKL3i9w4pl7Q==
+X-Received: by 2002:a5d:6049:: with SMTP id j9mr4166002wrt.332.1640342288320;
+        Fri, 24 Dec 2021 02:38:08 -0800 (PST)
+Received: from [192.168.8.198] ([148.252.132.189])
+        by smtp.gmail.com with ESMTPSA id a1sm7598466wru.113.2021.12.24.02.38.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Dec 2021 02:38:07 -0800 (PST)
+Message-ID: <13250a8d-1a59-4b7b-92e4-1231d73cbdda@gmail.com>
+Date:   Fri, 24 Dec 2021 10:37:31 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f67229d5-c92e-5953-5f77-1dee2c7643b3@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC] coredump: Do not interrupt dump for TIF_NOTIFY_SIGNAL
+Content-Language: en-US
+To:     Olivier Langlois <olivier@trillion01.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <192c9697e379bf084636a8213108be6c3b948d0b.camel@trillion01.com>
+ <9692dbb420eef43a9775f425cb8f6f33c9ba2db9.camel@trillion01.com>
+ <87h7i694ij.fsf_-_@disp2133> <1b519092-2ebf-3800-306d-c354c24a9ad1@gmail.com>
+ <b3e43e07c68696b83a5bf25664a3fa912ba747e2.camel@trillion01.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <b3e43e07c68696b83a5bf25664a3fa912ba747e2.camel@trillion01.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 24, 2021 at 10:16:16AM +0100, Paolo Bonzini wrote:
-> On 12/23/21 17:55, Kirill A. Shutemov wrote:
-> > 	In a TDX based VM, since the VMM is an untrusted entity, an intermediary
-> > 	layer -- TDX module -- facilitates secure communication between the host
-> > 	and the guest. TDX module is loaded like a firmware into a special CPU
-> > 	mode called SEAM. TDX guests communicate with the TDX module using the
-> > 	TDCALL instruction.
-> > 
-> > Does it look fine?
+On 12/24/21 01:34, Olivier Langlois wrote:
+> On Fri, 2021-10-22 at 15:13 +0100, Pavel Begunkov wrote:
+>> On 6/9/21 21:17, Eric W. Biederman wrote:
+>> In short, a task creates an io_uring worker thread, then the worker
+>> submits a task_work item to the creator task and won't die until
+>> the item is executed/cancelled. And I found that the creator task is
+>> sleeping in do_coredump() -> wait_for_completion()
+>>
+[...]
+>> A hack executing tws there helps (see diff below).
+>> Any chance anyone knows what this is and how to fix it?
+>>
+[...]
+> Pavel,
 > 
-> Looks good but I wouldn't say "like a firmware".  The TDX module is the
-> "real" hypervisor, it's not firmware.
+> I cannot comment on the merit of the proposed hack but my proposed
+> patch to fix the coredump truncation issue when a process using
+> io_uring core dumps that I submitted back in August is still
+> unreviewed!
 
-We are talking about the way it gets loaded, not about its functionality.
+That's unfortunate. Not like I can help in any case, but I assumed
+it was dealt with by
+
+commit 06af8679449d4ed282df13191fc52d5ba28ec536
+Author: Eric W. Biederman <ebiederm@xmission.com>
+Date:   Thu Jun 10 15:11:11 2021 -0500
+
+     coredump: Limit what can interrupt coredumps
+     
+     Olivier Langlois has been struggling with coredumps being incompletely written in
+     processes using io_uring.
+     ...
+
+> https://lore.kernel.org/lkml/1625bc89782bf83d9d8c7c63e8ffcb651ccb15fa.1629655338.git.olivier@trillion01.com/
 > 
-> Paolo
+> I have been using it since then I must have generated many dozens of
+> perfect core dump files with it and I have not seen a single truncated
+> core dump files like I used to have prior to the patch.
 > 
+> I am bringing back my patch to your attention because one nice side
+> effect of it is that it would have avoided totally the problem that you
+> have encountered in coredump_wait() since it does cancel io_uring
+> resources before calling coredump_wait()!
+
+FWIW, I worked it around in io_uring back then by breaking the
+dependency.
 
 -- 
- Kirill A. Shutemov
+Pavel Begunkov

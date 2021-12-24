@@ -2,86 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF5847EB19
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 05:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C93947EB45
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 05:15:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351255AbhLXEOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 23:14:38 -0500
-Received: from mga14.intel.com ([192.55.52.115]:27452 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235118AbhLXEOg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 23:14:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640319276; x=1671855276;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=/49miauxNDl94xdxNi7g5SLdNpWpXmBxfwYVTy6gkAk=;
-  b=Uc8aVQYvYlnaZ1oA3tYiIBqqylVisX+Gq3d+vPrgRg2vSpxtt8aVPw+b
-   6ab0wOpM4t31gDlkczzxpm+57t6ou7I9qi/K4339+cyKXawm5DIhBzFmp
-   GdbZv+gWqErWxLYiv9yIK8pncNBUaQ5t3/0roYa62x4gIihBsIKZYHUz3
-   YojrfjDJJ2jrUQRrXq+7XDiEBIeHY9qQ8Il2xFTgHfd9qEaFQ79HPwqNz
-   abuOmRaiUly87/zG2cGaFKsb/+XWWstM+XP3hXUDLgF52Js8UpkhIDVwn
-   mwph7VSqel9h6rNTpKqpqKSShGlp0wlkwaJH+1jndXIrA55i9kv3VTARu
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10207"; a="241148365"
-X-IronPort-AV: E=Sophos;i="5.88,231,1635231600"; 
-   d="scan'208";a="241148365"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 20:14:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,231,1635231600"; 
-   d="scan'208";a="664765610"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Dec 2021 20:14:29 -0800
-Date:   Fri, 24 Dec 2021 12:13:51 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com
-Subject: Re: [PATCH v3 kvm/queue 11/16] KVM: Add kvm_map_gfn_range
-Message-ID: <20211224041351.GB44042@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
- <20211223123011.41044-12-chao.p.peng@linux.intel.com>
- <YcS6m9CieYaIGA3F@google.com>
+        id S1351387AbhLXEPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 23:15:55 -0500
+Received: from mail-co1nam11on2114.outbound.protection.outlook.com ([40.107.220.114]:37953
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1351315AbhLXEPp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 23:15:45 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eC/RauzfLNAT14NhqLUpHuLgKhNKu0wRXmGUggUdG160JbpSH3P5mf2yg31QoSyS3J1/hv5aQcU/WZ1o4kDwmpvtHKRB5WQxXhtqWXxIMKTpzdNhMNPlaTAqIJqfiQ8DI3FSQlOtW+kBg7/TFQwwg4+V8qV084DgvRMOYVcuoARpcvwFX+7TClQ2Bkwyx5VmcNtx+tIrR/8t6usxEYGFDTKEO6mYxMhoS6L8VZ3YmH81q8xBN2WraM0436QyX3zuC/PRAMj6KSfzLT/8Y6oLpV+OZqvKL/v2bmuV65rDfNfdU5CE9JADvwc/ni2/d3yEE5SG+Vun3OBopC7aLkRhFw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s38IKSR2RFss8Paq83CL2kMZhmzdC/VFzoqi/vXv8JU=;
+ b=ci0scw+5NeejBrQ7rx79YjFKonzOJet1jAY38tQ0+kR59tmA7D+/+rTcN3fapY5Va+mpVLbtmHQG+33BHQmYUiAm4qZOHmZJlG1B2/lGzzqzG8nNPTorKDg3HE+Cr1oftBOuMOCdEsh6vdhcKW5zg9leCudrJlV/SLOoVzaXWC6YCASPb7H+pKDUcQLSrvzSAuACHVga4AOD0jahRJc4c0RtztovFMpBbiDC6bUR/VfRTooCl65qYAbhGbL2UIWQqbBGPkDR01GuRAuwuxAIXirQTjIrs1Y5LQ9TlHLpl27LQGtadVYzgCZepuaGAeoNnxBT1ZiUuyIbzkHiHBGm9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s38IKSR2RFss8Paq83CL2kMZhmzdC/VFzoqi/vXv8JU=;
+ b=XXJFUdtxjKNbkSBvOG0fFOKP9RYotOyO8HiiZy5aKR5MJ3mOH5HlMBB2wQbThdzOvdEDpin+LmYkCEc2qZYpfpvgswOBK06ycj6m++7PCTdxB9XjhxZ/KCME0udKcjxCvTt7x+RI9jvwpl4WnpKMMAFXl/vry48jk5O133sGwyM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
+ BYAPR01MB5189.prod.exchangelabs.com (2603:10b6:a03:78::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4823.21; Fri, 24 Dec 2021 04:15:41 +0000
+Received: from SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::f957:680d:69b0:9999]) by SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::f957:680d:69b0:9999%4]) with mapi id 15.20.4801.019; Fri, 24 Dec 2021
+ 04:15:41 +0000
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
+Cc:     Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
+        Quan Nguyen <quan@os.amperecomputing.com>,
+        Thu Nguyen <thu@os.amperecomputing.com>
+Subject: [PATCH v6 9/9] docs: misc-devices: (smpro-misc) Add documentation
+Date:   Fri, 24 Dec 2021 11:13:52 +0700
+Message-Id: <20211224041352.29405-10-quan@os.amperecomputing.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20211224041352.29405-1-quan@os.amperecomputing.com>
+References: <20211224041352.29405-1-quan@os.amperecomputing.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0134.apcprd06.prod.outlook.com
+ (2603:1096:1:1f::12) To SJ0PR01MB7282.prod.exchangelabs.com
+ (2603:10b6:a03:3f2::24)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YcS6m9CieYaIGA3F@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 756b32ae-3772-4052-bd5f-08d9c6940c52
+X-MS-TrafficTypeDiagnostic: BYAPR01MB5189:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR01MB5189D209238234FC89E35AC3F27F9@BYAPR01MB5189.prod.exchangelabs.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RY6f11ZqOS08OYo5CWMvvsgoAxytNdUFFT4z+akDBPtVARt/vO7eUln0S+5VLy639TbBB29llq8jZpH+ieJsVDkuMRaodMKwHLzqZtAHZjvMOYdNHuz9wUEyo/JyhcU7NmicfexAE7Y6PwXt3f47PcaQGbDOMyEOEqGTmDMGBAjhKtOabCb93v3EegkA70Ks1Yha/p7iPnUCaEpvEMJOmzJFxyO1Lgwp6J2v5H9clJ47TXFhYprKRnjp72MKrXTuORTE7CGffe0FJLWbbf9U749HeL9OUDO+MxAxIw5HTX03Mv1YAoA0mZe6I1X263s9qrNNglF46WEpL0VmtygqsCQ2OHWNlO5dRuoW3Opatzxa4BcHF58XeZ7QMcLAwOfrPuaMWzG0o/dbSLLiTm5swV6kb1Eljmg4bkW7fm7oAkNNawy4pJDV3qcLJ1X9i5bWjO1rXEUdDXev9yHTI/vnqYV/9En5P40eGj4fQoR/OC9LPgb8SA27IS4jaYn4sCpgugdumZLCcUKgVwM41APvIRKuMH6Z7fI8Td2vdzQBPVnEUR9dYF5KShzdX9jQzIacGQUAWeRhNtVzWsZnxuXFjYgc96er/j9h5JdWhqyIh9CLscdCB5JvcRt4dGGDPTD0/t4o3KX3kFp/CyCa3FrhQ2RY/RT/yZaivjIMRCMEitHLtPvbx90elOzBSrCkNyMkYUIyRdfRK5SqS1MGhHb40ntVv7KeJtEOrAJQclpzM1Q=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(110136005)(54906003)(86362001)(38100700002)(38350700002)(83380400001)(66476007)(52116002)(5660300002)(107886003)(2616005)(8676002)(66946007)(6666004)(66556008)(2906002)(508600001)(1076003)(4326008)(316002)(6506007)(8936002)(6486002)(26005)(186003)(6512007)(7416002)(921005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?awYqxjEsgevOTpb8EMeqo7BGpqGSmeMyS0LTSHnvBzPRZfGecrUWIKTK1FU+?=
+ =?us-ascii?Q?oYZpNgwgpaZqKBpxWA83SrHuIuvVOirSDno2vdIwxLcDJO7qgMvOVjpZwvt1?=
+ =?us-ascii?Q?IetXyqkNr1b/kUps8PECAVt9Mc5m/ygApqUccWhIfkYkDyGEeKiZLXOnUVoc?=
+ =?us-ascii?Q?8XtBXcFgm2xP+uBBq0Sr7IZQK9i3HG5pVadBDK0RPYGOVC18z5Jhd4t9KyLw?=
+ =?us-ascii?Q?+OkzPlXs21lOH050JPh8HF4K2/GhRW3Zpk6ukf7afbCMSPuUlNcFOujWjjwf?=
+ =?us-ascii?Q?qdopBaFfh3IejqAbw/Ay8yeEdkPg124n1wgInaDlxJ9/ZxKDtsVJH8aMWBka?=
+ =?us-ascii?Q?9KNjwDZIrI7GlepR6pQ6bkqsIAT5qkujXAZf9VwnwfSb9YZpnnIDEkf9px+K?=
+ =?us-ascii?Q?jf86KWiiQQYiVIM9EI/nETBv8Q5UW5y/2YSZXD3WCjdu6TFWz8uNpqpLGsaj?=
+ =?us-ascii?Q?Ttn7h6VlcLmqd1NZR9B5WebqmEe8+gNSpLgi9VHhqP96BT/JP92uEcAW1XKA?=
+ =?us-ascii?Q?ptfFCeuhgkNuno8jVfpbp1ejFflL4SdubApqM0NAP0506EmADshumj03kAf7?=
+ =?us-ascii?Q?xBz2MEpo3oNSDb7uah/vHjqpF+3QjyWDtuKxFUg4R6TlAH/Ef9NARbm0t1xq?=
+ =?us-ascii?Q?W+aZfCZqrUM4EPivvS0sbEn5u0dlmVyEty7bBdDliUFaMSg+z5TUcjNsBk+B?=
+ =?us-ascii?Q?M4B1w3pcypvd258vct1gqXo36w+879c/ve0uBuysXiih18ykqLM1xvLkcVVt?=
+ =?us-ascii?Q?Cdde/cCES5klkd/6U96ZrJeuD072G/+CJYdKbRhb0vC/KtjCR4k7aI694dda?=
+ =?us-ascii?Q?9SFsZToPSPWUKCX/FQPuOlEEmWvePfB5J4GZ82dR+HlnIQTw2Hc6aSMIJ0kO?=
+ =?us-ascii?Q?j1WKUwGRNVk+gp+GNIlQ5k/FPgSpcLYCcrJPW/2yuNGz1TCj8OP6jL3QWo7k?=
+ =?us-ascii?Q?zVE9FcKPu9jggGXhrIlFgoEJaMVZ8EmhFuAbSz0xxFjkyyI+oxApoEybMnLb?=
+ =?us-ascii?Q?ohoNVp9+dYuDEP1PBeZW3yjvXm7JPouydOyCcj/zsAlmM05pYZxdA/Lfs/SM?=
+ =?us-ascii?Q?sNlsKcMhx+6dYcowraPnIoBFrb9TXq9u9h37BBD7G7q/bg0SOTd4RxkFlZLN?=
+ =?us-ascii?Q?YHuN2K3p/UlnPHscuvvCFV1TQPE7o2Rm2EaU1G4BqgNKfS/0Wr64WdJm173r?=
+ =?us-ascii?Q?hAO/bN26hMAiSt17g/zeYkXQzhmsgzwMUT5e01nSsaqF1Oj779qySR/3wx6Z?=
+ =?us-ascii?Q?37qdtDzTUrYh+IbvI12jh+ylatJhzttLLUqMvJvFOY9Ie0GHp3q5OUpT0nV+?=
+ =?us-ascii?Q?93Kvv+zt4HT5iar6IQQ8FAWMbzeD9tRAATc4G/qF5oy92ULOdsuvTiTxVq7t?=
+ =?us-ascii?Q?D9to7nXq73GEPvA2h95F2Ugt5gvE7NEtGIy3ow0lIAM/q5pW6xl0SRAxBplP?=
+ =?us-ascii?Q?CpnYPM0WsypP2s02wEa+3u5A/yZnJUa1swcdknJK916CO446RB+203w4epnz?=
+ =?us-ascii?Q?6/hhHZnbCSBXuByZOd+Ljz1dS5A6R5b98e25zOVogQohHxdTJNOhKg0Dratr?=
+ =?us-ascii?Q?2aXtAwKiz1kR5CyoLcC56qJdUXkoo0HNAyvsXYaZdoRToEFwQmliZYbS2pXA?=
+ =?us-ascii?Q?i+dlNF80VCrEy5cXrvCbJ42HZlrMqCeo7nnklMl1EBoaAVKPSbQbu9Gb/w3l?=
+ =?us-ascii?Q?pl2AMm7uAMKa0zLVysWibxU2FL0=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 756b32ae-3772-4052-bd5f-08d9c6940c52
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Dec 2021 04:15:41.7763
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FC68NAzdgdt3YQzQDDjmNG8MaVWhSyUwCAj6qIfJnYSC7fjtrlt8ieZRZbOY6c7NcwF2mScJ88vJK3UnGLv/8JjYHzaYwBJXVku2ooP+IfU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR01MB5189
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 06:06:19PM +0000, Sean Christopherson wrote:
-> On Thu, Dec 23, 2021, Chao Peng wrote:
-> > This new function establishes the mapping in KVM page tables for a
-> > given gfn range. It can be used in the memory fallocate callback for
-> > memfd based memory to establish the mapping for KVM secondary MMU when
-> > the pages are allocated in the memory backend.
-> 
-> NAK, under no circumstance should KVM install SPTEs in response to allocating
-> memory in a file.   The correct thing to do is to invalidate the gfn range
-> associated with the newly mapped range, i.e. wipe out any shared SPTEs associated
-> with the memslot.
+Adds documentation for the Ampere(R)'s Altra(R) SMpro misc driver.
 
-Right, thanks.
+Signed-off-by: Thu Nguyen <thu@os.amperecomputing.com>
+Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+---
+Change in v6:
+  + First introduced in v6 [Quan]
+
+ Documentation/misc-devices/index.rst      |  1 +
+ Documentation/misc-devices/smpro-misc.rst | 82 +++++++++++++++++++++++
+ 2 files changed, 83 insertions(+)
+ create mode 100644 Documentation/misc-devices/smpro-misc.rst
+
+diff --git a/Documentation/misc-devices/index.rst b/Documentation/misc-devices/index.rst
+index 7a6a6263cbab..284568eca747 100644
+--- a/Documentation/misc-devices/index.rst
++++ b/Documentation/misc-devices/index.rst
+@@ -27,6 +27,7 @@ fit into other categories.
+    max6875
+    pci-endpoint-test
+    smpro-errmon
++   smpro-misc
+    spear-pcie-gadget
+    uacce
+    xilinx_sdfec
+diff --git a/Documentation/misc-devices/smpro-misc.rst b/Documentation/misc-devices/smpro-misc.rst
+new file mode 100644
+index 000000000000..7c856eb1a7f3
+--- /dev/null
++++ b/Documentation/misc-devices/smpro-misc.rst
+@@ -0,0 +1,82 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
++
++Kernel driver Ampere(R) Altra(R) SMpro miscellaneous
++====================================================
++
++Supported chips:
++
++  * Ampere(R) Altra(R)
++
++    Prefix: 'smpro'
++
++    Reference: Altra SoC BMC Interface Specification
++
++Author: Thu Nguyen <thu@os.amperecomputing.com>
++
++Description
++-----------
++
++This driver support the monitoring and configuration of various miscellaneous
++data provided by Ampere(R) Altra(R) SMpro processor.
++At this time, these include:
++
++  * Reading Boot Progress information
++  * Configuring SoC Power Limit
++
++Sysfs entries
++-------------
++
++1) Boot progress
++
++SMpro misc driver creates the sysfs files ``boot_progress``.
++The format of ``boot_progress`` file is as below::
++
++<boot stage> <boot status> <boot progress>
++
++Where:
++
++* Boot stage::
++
++    0: SMpro firmware booting.
++    1: PMpro firmware booting.
++    2: ATF BL1 firmware booting.
++    3: DDR initialization.
++    4: DDR training report status.
++    5: ATF BL2 firmware booting.
++    6: ATF BL31 firmware booting.
++    7: ATF BL32 firmware booting.
++    8: UEFI firmware booting.
++    9: OS booting.
++
++* Boot status::
++
++    0: Not started.
++    1: Started.
++    2: Complete without error.
++    3: Failure.
++
++* boot progress: 32 bits boot progress code
++
++The sysfs ``boot_progress`` only reports the boot state when the host is booting.
++If the host is already booted, it returns latest state.
++
++Example::
++
++    #cat boot_progress
++    0x01 0x02 0x808454A8
++
++2) SoC Power Limit
++
++SMpro misc driver creates the sysfs file ``soc_power_limit`` to get/set the SoC Power Limit.
++
++Reading this sysfs return the current setting of SoC Power Limit (W) in decimal string.
++Writing the desired value in decimal string to set the SoC Power Limit in Watt (W).
++The range of SoC Power Limit is 90-500(W) and will be ignored if out of range.
++
++Example::
++
++    #cat soc_power_limit
++    90
++    #echo 95 > soc_power_limit
++    #cat soc_power_limit
++    95
+-- 
+2.28.0
+

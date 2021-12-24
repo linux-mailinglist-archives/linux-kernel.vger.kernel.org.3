@@ -2,98 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4B947EFCE
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 16:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B89547EFDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 16:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353077AbhLXPPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 10:15:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238876AbhLXPPh (ORCPT
+        id S1353088AbhLXPiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 10:38:07 -0500
+Received: from relmlor2.renesas.com ([210.160.252.172]:50957 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1353080AbhLXPiH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 10:15:37 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D548C061401;
-        Fri, 24 Dec 2021 07:15:37 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id i11so1945485ljm.13;
-        Fri, 24 Dec 2021 07:15:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Kl0YYPYD5040RHk8tdUC5mMa6Ge8dZ75v7xiKZepmfQ=;
-        b=TdibYtwGxEk3xJK5BKqfhxRSGn0kwEs7mi3sd9Jwqmtyjdc1pHJFynRD4PJjvY+o2K
-         +6uRtu+hvwIv1fxKIUHmqsipqsxFNm2zp/7DK3W03gdkUmjlG8oTh7zBand97wfsAmfo
-         bhL282nL7UGVtnxGVhMmTRzzw+xSqXPMeBPBzzbkhxhCdFQJQTMbT3hgXchHZEGvviff
-         CX7G0ONo96bzdxQ5bSPdNR5ZADZu25z7X1dIkc7JVb7MhiYmCQOlqAp8ONlRGRgoWcbw
-         vrk1c15Krp9maIduMTMEvoVV/y2iKaaN6eUlIZV10p66RMzYQb8nD/5qfcWIktZAk2FD
-         aZHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Kl0YYPYD5040RHk8tdUC5mMa6Ge8dZ75v7xiKZepmfQ=;
-        b=YbBj8EnezkMwd1WlYGRDiM/dgBE7mqef0BjK8GOZKmKGat+BTj9dWxVMu/yGXWTBAD
-         RVSmMzTx8ZdLQjOu3dv1Kr4pnVDOgM/S6mcdfQEg9GHSVdUNEiZFxDTewpFO6OIFUlId
-         7bEfkx8/KwAtdnKkTe0bxpes0rFr1CzBevciA38OTfAl8KopZyoU62tvl6iOUhHDBhni
-         KDfe/+A5ZjpzIsAQeRxnWQ2h5hrJ7U9Sk/Ei75HKiziATbeyBnYS7T7E3ZBQ47kZbJbP
-         nm8hO7Vkhvg/LOkVL4HnGhzg8vKRjrLuoU/9x34FBRKmS59NzGp4TnBihOjJJdvfG55R
-         xLEg==
-X-Gm-Message-State: AOAM532+D/Sw63uCEmr0BimqoMwhUr73/Zvz0mIFcUV1lPNJmSB+pc3f
-        l3mzm9xRlVtctWJw0mw0oLaqyAlaKyUK/bozick=
-X-Google-Smtp-Source: ABdhPJycFT6tNzlLJNgcf4f6fB2GoEbU/rKg+UQBbjMijLF4lW1jPgAVwtQvmTSu8G8DKZfefm2uQkyCSQCjNU8xRwY=
-X-Received: by 2002:a2e:9c8a:: with SMTP id x10mr2384131lji.209.1640358935120;
- Fri, 24 Dec 2021 07:15:35 -0800 (PST)
-MIME-Version: 1.0
-References: <20211221004809.213602-1-colin.i.king@gmail.com>
-In-Reply-To: <20211221004809.213602-1-colin.i.king@gmail.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Fri, 24 Dec 2021 09:15:24 -0600
-Message-ID: <CAH2r5ms_VWd6WEh6c6ydfF0it+xdnS9YJL02RwN-baVzdiHmQA@mail.gmail.com>
-Subject: Re: [PATCH] cifs: remove redundant assignment to pointer p
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Steve French <sfrench@samba.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 24 Dec 2021 10:38:07 -0500
+X-IronPort-AV: E=Sophos;i="5.88,232,1635174000"; 
+   d="scan'208";a="105112283"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 25 Dec 2021 00:38:05 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 155A9400BC04;
+        Sat, 25 Dec 2021 00:38:03 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] tty: goldfish: Use platform_get_irq() to get the interrupt
+Date:   Fri, 24 Dec 2021 15:37:53 +0000
+Message-Id: <20211224153753.22210-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-merged into cifs-2.6.git for-next
+platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+allocation of IRQ resources in DT core code, this causes an issue
+when using hierarchical interrupt domains using "interrupts" property
+in the node as this bypasses the hierarchical setup and messes up the
+irq chaining.
 
-On Mon, Dec 20, 2021 at 8:01 PM Colin Ian King <colin.i.king@gmail.com> wrote:
->
-> The pointer p is being assigned with a value that is never read. The
-> pointer is being re-assigned a different value inside the do-while
-> loop. The assignment is redundant and can be removed.
->
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  fs/cifs/cifsfs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-> index d3f3acf340f1..61091eed8c65 100644
-> --- a/fs/cifs/cifsfs.c
-> +++ b/fs/cifs/cifsfs.c
-> @@ -775,7 +775,7 @@ cifs_get_root(struct smb3_fs_context *ctx, struct super_block *sb)
->
->         sep = CIFS_DIR_SEP(cifs_sb);
->         dentry = dget(sb->s_root);
-> -       p = s = full_path;
-> +       s = full_path;
->
->         do {
->                 struct inode *dir = d_inode(dentry);
-> --
-> 2.32.0
->
+In preparation for removal of static setup of IRQ resource from DT core
+code use platform_get_irq().
 
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ drivers/tty/goldfish.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
+diff --git a/drivers/tty/goldfish.c b/drivers/tty/goldfish.c
+index c01cd36dda41..5ed19a9857ad 100644
+--- a/drivers/tty/goldfish.c
++++ b/drivers/tty/goldfish.c
+@@ -298,7 +298,7 @@ static int goldfish_tty_probe(struct platform_device *pdev)
+ 	struct resource *r;
+ 	struct device *ttydev;
+ 	void __iomem *base;
+-	u32 irq;
++	int irq;
+ 	unsigned int line;
+ 
+ 	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+@@ -313,14 +313,12 @@ static int goldfish_tty_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 	}
+ 
+-	r = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!r) {
+-		pr_err("goldfish_tty: No IRQ resource available!\n");
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0) {
++		ret = irq;
+ 		goto err_unmap;
+ 	}
+ 
+-	irq = r->start;
+-
+ 	mutex_lock(&goldfish_tty_lock);
+ 
+ 	if (pdev->id == PLATFORM_DEVID_NONE)
 -- 
-Thanks,
+2.17.1
 
-Steve

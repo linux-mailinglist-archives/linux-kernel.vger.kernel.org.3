@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FFE947F003
+	by mail.lfdr.de (Postfix) with ESMTP id 59B3147F004
 	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 17:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353160AbhLXQNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 11:13:41 -0500
+        id S1353166AbhLXQNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 11:13:43 -0500
 Received: from relmlor1.renesas.com ([210.160.252.171]:8123 "EHLO
         relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S241833AbhLXQNk (ORCPT
+        by vger.kernel.org with ESMTP id S1353145AbhLXQNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 11:13:40 -0500
+        Fri, 24 Dec 2021 11:13:41 -0500
 X-IronPort-AV: E=Sophos;i="5.88,232,1635174000"; 
-   d="scan'208";a="104628874"
+   d="scan'208";a="104628878"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 25 Dec 2021 01:13:38 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 25 Dec 2021 01:13:40 +0900
 Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 8B8D44018934;
-        Sat, 25 Dec 2021 01:13:37 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id CE9AD4018924;
+        Sat, 25 Dec 2021 01:13:39 +0900 (JST)
 From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
+To:     linux-kernel@vger.kernel.org
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] perf/arm-ccn: Use platform_get_irq() to get the interrupt
-Date:   Fri, 24 Dec 2021 16:13:31 +0000
-Message-Id: <20211224161334.31123-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] platform: goldfish: pipe: Use platform_get_irq() to get the interrupt
+Date:   Fri, 24 Dec 2021 16:13:32 +0000
+Message-Id: <20211224161334.31123-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211224161334.31123-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20211224161334.31123-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
@@ -56,37 +56,28 @@ patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
 Cheers,
 Prabhakar
 ---
- drivers/perf/arm-ccn.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/platform/goldfish/goldfish_pipe.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/perf/arm-ccn.c b/drivers/perf/arm-ccn.c
-index a96c31604545..40b352e8aa7f 100644
---- a/drivers/perf/arm-ccn.c
-+++ b/drivers/perf/arm-ccn.c
-@@ -1460,8 +1460,7 @@ static irqreturn_t arm_ccn_irq_handler(int irq, void *dev_id)
- static int arm_ccn_probe(struct platform_device *pdev)
- {
- 	struct arm_ccn *ccn;
--	struct resource *res;
--	unsigned int irq;
-+	int irq;
- 	int err;
+diff --git a/drivers/platform/goldfish/goldfish_pipe.c b/drivers/platform/goldfish/goldfish_pipe.c
+index b67539f9848c..7737d56191d7 100644
+--- a/drivers/platform/goldfish/goldfish_pipe.c
++++ b/drivers/platform/goldfish/goldfish_pipe.c
+@@ -896,11 +896,9 @@ static int goldfish_pipe_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 	}
  
- 	ccn = devm_kzalloc(&pdev->dev, sizeof(*ccn), GFP_KERNEL);
-@@ -1474,10 +1473,9 @@ static int arm_ccn_probe(struct platform_device *pdev)
- 	if (IS_ERR(ccn->base))
- 		return PTR_ERR(ccn->base);
- 
--	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (!res)
+-	r = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!r)
 -		return -EINVAL;
--	irq = res->start;
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
+-
+-	dev->irq = r->start;
++	dev->irq = platform_get_irq(pdev, 0);
++	if (dev->irq < 0)
++		return dev->irq;
  
- 	/* Check if we can use the interrupt */
- 	writel(CCN_MN_ERRINT_STATUS__PMU_EVENTS__DISABLE,
+ 	/*
+ 	 * Exchange the versions with the host device
 -- 
 2.17.1
 

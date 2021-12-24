@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2C447F03F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 17:50:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D7B47F044
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 18:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352593AbhLXQuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 11:50:20 -0500
-Received: from ixit.cz ([94.230.151.217]:49730 "EHLO ixit.cz"
+        id S1353271AbhLXRCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 12:02:47 -0500
+Received: from ixit.cz ([94.230.151.217]:49762 "EHLO ixit.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236414AbhLXQuT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 11:50:19 -0500
+        id S236414AbhLXRCq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 24 Dec 2021 12:02:46 -0500
 Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id A47842243C;
-        Fri, 24 Dec 2021 17:50:17 +0100 (CET)
+        by ixit.cz (Postfix) with ESMTPSA id 802A92243C;
+        Fri, 24 Dec 2021 18:02:43 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1640364618;
+        t=1640365363;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=0hPROkzSJG3RWXzy2nCv6OuuMMuRGi/5ZutaTzY09Lk=;
-        b=TcVg8jctekCD9HNYhsjtS9+GsoVBlMGETFqIK7lOqlJuvIuKn4o1+skshZISOhFcJRNB6b
-        bi38/U2DeY51ffzMOoDSSXQqr7CTIiGsKpKbO69QAwfDTIu6oXOivSDYGqj+ovd171N6tw
-        rvagwEfKgkkL4rbWvuS5esxMaz72WE8=
+        bh=HbmIZwLuV6VZPMQ2LsqtWZDS7tE+7vlqNV7H+vpBED0=;
+        b=lfeE112a7wnQxddN8gP4N6WncHhMYn9EUXBgFow+Li0+umYK5u9LN9Uv+Y8U9Ws3fffWo/
+        YxvXmVbiBWEGXbTHelN4pltsw1BYQDJWpO7gyTbEmAs+TcazwNmDfeZNcddBhd/sqbAGqF
+        +I4LPzc8tdnONr068KDTr9pNY8XcM14=
 From:   David Heidelberg <david@ixit.cz>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
 Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
-        iommu@lists.linux-foundation.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH] dt-bindings: iommu: Convert msm,iommu-v0 to yaml
-Date:   Fri, 24 Dec 2021 17:50:14 +0100
-Message-Id: <20211224165014.56308-1-david@ixit.cz>
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: phy: convert Qualcomm USB HS phy to yaml
+Date:   Fri, 24 Dec 2021 18:02:41 +0100
+Message-Id: <20211224170242.57816-1-david@ixit.cz>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -45,187 +45,197 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Qualcomm IOMMU v0 implementation to yaml format.
+Conversion of Qualcomm USB HS phy documentation to yaml.
 
 Signed-off-by: David Heidelberg <david@ixit.cz>
 ---
- .../bindings/iommu/msm,iommu-v0.txt           | 64 -------------
- .../bindings/iommu/qcom,iommu-v0.yaml         | 96 +++++++++++++++++++
- 2 files changed, 96 insertions(+), 64 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/iommu/msm,iommu-v0.txt
- create mode 100644 Documentation/devicetree/bindings/iommu/qcom,iommu-v0.yaml
+ .../bindings/phy/qcom,usb-hs-phy.txt          | 84 ------------------
+ .../bindings/phy/qcom,usb-hs-phy.yaml         | 86 +++++++++++++++++++
+ 2 files changed, 86 insertions(+), 84 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.txt
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
 
-diff --git a/Documentation/devicetree/bindings/iommu/msm,iommu-v0.txt b/Documentation/devicetree/bindings/iommu/msm,iommu-v0.txt
+diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.txt b/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.txt
 deleted file mode 100644
-index 20236385f26e..000000000000
---- a/Documentation/devicetree/bindings/iommu/msm,iommu-v0.txt
+index b3b75c1e6285..000000000000
+--- a/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.txt
 +++ /dev/null
-@@ -1,64 +0,0 @@
--* QCOM IOMMU
+@@ -1,84 +0,0 @@
+-Qualcomm's USB HS PHY
 -
--The MSM IOMMU is an implementation compatible with the ARM VMSA short
--descriptor page tables. It provides address translation for bus masters outside
--of the CPU, each connected to the IOMMU through a port called micro-TLB.
+-PROPERTIES
 -
--Required Properties:
+-- compatible:
+-    Usage: required
+-    Value type: <string>
+-    Definition: Should contain "qcom,usb-hs-phy" and more specifically one of the
+-                following:
 -
--  - compatible: Must contain "qcom,apq8064-iommu".
--  - reg: Base address and size of the IOMMU registers.
--  - interrupts: Specifiers for the MMU fault interrupts. For instances that
--    support secure mode two interrupts must be specified, for non-secure and
--    secure mode, in that order. For instances that don't support secure mode a
--    single interrupt must be specified.
--  - #iommu-cells: The number of cells needed to specify the stream id. This
--		  is always 1.
--  - qcom,ncb:	  The total number of context banks in the IOMMU.
--  - clocks	: List of clocks to be used during SMMU register access. See
--		  Documentation/devicetree/bindings/clock/clock-bindings.txt
--		  for information about the format. For each clock specified
--		  here, there must be a corresponding entry in clock-names
--		  (see below).
+-                        "qcom,usb-hs-phy-apq8064"
+-                        "qcom,usb-hs-phy-msm8916"
+-                        "qcom,usb-hs-phy-msm8974"
 -
--  - clock-names	: List of clock names corresponding to the clocks specified in
--		  the "clocks" property (above).
--		  Should be "smmu_pclk" for specifying the interface clock
--		  required for iommu's register accesses.
--		  Should be "smmu_clk" for specifying the functional clock
--		  required by iommu for bus accesses.
+-- #phy-cells:
+-    Usage: required
+-    Value type: <u32>
+-    Definition: Should contain 0
 -
--Each bus master connected to an IOMMU must reference the IOMMU in its device
--node with the following property:
+-- clocks:
+-    Usage: required
+-    Value type: <prop-encoded-array>
+-    Definition: Should contain clock specifier for the reference and sleep
+-                clocks
 -
--  - iommus: A reference to the IOMMU in multiple cells. The first cell is a
--	    phandle to the IOMMU and the second cell is the stream id.
--	    A single master device can be connected to more than one iommu
--	    and multiple contexts in each of the iommu. So multiple entries
--	    are required to list all the iommus and the stream ids that the
--	    master is connected to.
+-- clock-names:
+-    Usage: required
+-    Value type: <stringlist>
+-    Definition: Should contain "ref" and "sleep" for the reference and sleep
+-                clocks respectively
 -
--Example: mdp iommu and its bus master
+-- resets:
+-    Usage: required
+-    Value type: <prop-encoded-array>
+-    Definition: Should contain the phy and POR resets
 -
--                mdp_port0: iommu@7500000 {
--			compatible = "qcom,apq8064-iommu";
--			#iommu-cells = <1>;
--			clock-names =
--			    "smmu_pclk",
--			    "smmu_clk";
--			clocks =
--			    <&mmcc SMMU_AHB_CLK>,
--			    <&mmcc MDP_AXI_CLK>;
--			reg = <0x07500000 0x100000>;
--			interrupts =
--			    <GIC_SPI 63 0>,
--			    <GIC_SPI 64 0>;
--			qcom,ncb = <2>;
+-- reset-names:
+-    Usage: required
+-    Value type: <stringlist>
+-    Definition: Should contain "phy" and "por" for the phy and POR resets
+-                respectively
+-
+-- v3p3-supply:
+-    Usage: required
+-    Value type: <phandle>
+-    Definition: Should contain a reference to the 3.3V supply
+-
+-- v1p8-supply:
+-    Usage: required
+-    Value type: <phandle>
+-    Definition: Should contain a reference to the 1.8V supply
+-
+-- extcon:
+-    Usage: optional
+-    Value type: <prop-encoded-array>
+-    Definition: Should contain the vbus extcon
+-
+-- qcom,init-seq:
+-    Usage: optional
+-    Value type: <u8 array>
+-    Definition: Should contain a sequence of ULPI address and value pairs to
+-                program into the ULPI_EXT_VENDOR_SPECIFIC area. This is related
+-                to Device Mode Eye Diagram test. The addresses are offsets
+-                from the ULPI_EXT_VENDOR_SPECIFIC address, for example,
+-                <0x1 0x53> would mean "write the value 0x53 to address 0x81".
+-
+-EXAMPLE
+-
+-otg: usb-controller {
+-	ulpi {
+-		phy {
+-			compatible = "qcom,usb-hs-phy-msm8974", "qcom,usb-hs-phy";
+-			#phy-cells = <0>;
+-			clocks = <&xo_board>, <&gcc GCC_USB2A_PHY_SLEEP_CLK>;
+-			clock-names = "ref", "sleep";
+-			resets = <&gcc GCC_USB2A_PHY_BCR>, <&otg 0>;
+-			reset-names = "phy", "por";
+-			v3p3-supply = <&pm8941_l24>;
+-			v1p8-supply = <&pm8941_l6>;
+-			extcon = <&smbb>;
+-			qcom,init-seq = /bits/ 8 <0x1 0x63>;
 -		};
--
--		mdp: qcom,mdp@5100000 {
--			compatible = "qcom,mdp";
--			...
--			iommus = <&mdp_port0 0
--				  &mdp_port0 2>;
--		};
-diff --git a/Documentation/devicetree/bindings/iommu/qcom,iommu-v0.yaml b/Documentation/devicetree/bindings/iommu/qcom,iommu-v0.yaml
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
 new file mode 100644
-index 000000000000..989f7dc643a4
+index 000000000000..202c42754188
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/iommu/qcom,iommu-v0.yaml
-@@ -0,0 +1,96 @@
++++ b/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
+@@ -0,0 +1,86 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
++$id: http://devicetree.org/schemas/phy/qcom,usb-hs-phy.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+$id: "http://devicetree.org/schemas/iommu/msm,iommu-v0.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Qualcomm IOMMU for APQ8064
++title: Qualcomm's USB HS PHY binding description
 +
 +maintainers:
-+  - Will Deacon <will@kernel.org>
-+
-+description: >
-+  The MSM IOMMU is an implementation compatible with the ARM VMSA short
-+  descriptor page tables. It provides address translation for bus masters
-+  outside of the CPU, each connected to the IOMMU through a port called micro-TLB.
++  - Bjorn Andersson <bjorn.andersson@linaro.org>
 +
 +properties:
 +  compatible:
-+    const: qcom,apq8064-iommu
-+
-+  clocks:
 +    items:
-+      - description: interface clock for register accesses
-+      - description: functional clock for bus accesses
++      - enum:
++          - qcom,usb-hs-phy-apq8064
++          - qcom,usb-hs-phy-msm8916
++          - qcom,usb-hs-phy-msm8974
++      - const: qcom,usb-hs-phy
++
++  clocks: true
 +
 +  clock-names:
 +    oneOf:
 +      - items:
-+          - const: smmu_pclk
-+          - const: smmu_clk
++          - const: ref
++          - const: sleep
 +      - items:
-+          - const: smmu_pclk
-+          - const: iommu_clk
-+  reg:
-+    maxItems: 1
++          - const: sleep
++          - const: ref
 +
-+  interrupts:
-+    description: >
-+      Specifiers for the MMU fault interrupts. For instances that
-+      support secure mode two interrupts must be specified, for non-secure and
-+      secure mode, in that order. For instances that don't support secure mode a
-+      single interrupt must be specified.
++  resets: true
 +
-+  "#iommu-cells":
-+    const: 1
++  reset-names:
++    oneOf:
++      - items:
++          - const: por
++      - items:
++          - const: phy
++          - const: por
 +
-+  qcom,ncb:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: The total number of context banks in the IOMMU.
++  v1p8-supply: true
 +
-+# Each bus master connected to an IOMMU must reference the IOMMU
-+# in its device node with the following property:
-+#   A reference to the IOMMU in multiple cells. The first cell is a
-+#   phandle to the IOMMU and the second cell is the stream id.
-+#   A single master device can be connected to more than one iommu
-+#   and multiple contexts in each of the iommu. So multiple entries
-+#   are required to list all the iommus and the stream ids that the
-+#   master is connected to.
++  v3p3-supply: true
++
++  extcon: true
++
++  "#phy-cells":
++    const: 0
++
++  qcom,init-seq:
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    description: |
++      Should contain a sequence of ULPI address and value pairs to
++      program into the ULPI_EXT_VENDOR_SPECIFIC area. This is related
++      to Device Mode Eye Diagram test. The addresses are offsets
++      from the ULPI_EXT_VENDOR_SPECIFIC address, for example,
++      <0x1 0x53> would mean "write the value 0x53 to address 0x81".
 +
 +required:
 +  - clocks
 +  - clock-names
-+  - reg
-+  - interrupts
-+  - qcom,ncb
++  - resets
++  - reset-names
++  - "#phy-cells"
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    #include <dt-bindings/clock/qcom,mmcc-msm8960.h>
-+
-+    mdp_port0: iommu@7500000 {
-+            compatible = "qcom,apq8064-iommu";
-+            #iommu-cells = <1>;
-+            clock-names =
-+                "smmu_pclk",
-+                "smmu_clk";
-+            clocks =
-+                <&clk SMMU_AHB_CLK>,
-+                <&clk MDP_AXI_CLK>;
-+            reg = <0x07500000 0x100000>;
-+            interrupts =
-+                <0 63 0>,
-+                <0 64 0>;
-+            qcom,ncb = <2>;
-+    };
-+
-+    mdp: mdp@5100000 {
-+            compatible = "qcom,mdp4";
-+            // ...
-+
-+            iommus = <&mdp_port0 0
-+                      &mdp_port0 2>;
++    otg: usb-controller {
++      ulpi {
++        phy {
++          compatible = "qcom,usb-hs-phy-msm8974", "qcom,usb-hs-phy";
++          #phy-cells = <0>;
++          clocks = <&clk 0>, <&clk 258>;
++          clock-names = "ref", "sleep";
++          resets = <&gcc 10>, <&otg 0>;
++          reset-names = "phy", "por";
++          v3p3-supply = <&pm8941_l24>;
++          v1p8-supply = <&pm8941_l6>;
++          extcon = <&smbb>;
++          qcom,init-seq = /bits/ 8 <0x1 0x63>;
++        };
++      };
 +    };
 -- 
 2.34.1

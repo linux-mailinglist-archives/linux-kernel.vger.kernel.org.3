@@ -2,34 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B8847F006
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 17:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A30E47F007
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 17:13:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353177AbhLXQNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 11:13:45 -0500
-Received: from relmlor2.renesas.com ([210.160.252.172]:61243 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1353168AbhLXQNo (ORCPT
+        id S1353184AbhLXQNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 11:13:47 -0500
+Received: from relmlor1.renesas.com ([210.160.252.171]:8123 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1353174AbhLXQNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 11:13:44 -0500
+        Fri, 24 Dec 2021 11:13:45 -0500
 X-IronPort-AV: E=Sophos;i="5.88,232,1635174000"; 
-   d="scan'208";a="105113748"
+   d="scan'208";a="104628883"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 25 Dec 2021 01:13:43 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 25 Dec 2021 01:13:45 +0900
 Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 91FB64018934;
-        Sat, 25 Dec 2021 01:13:41 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 43A8D4018924;
+        Sat, 25 Dec 2021 01:13:44 +0900 (JST)
 From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [PATCH] slimbus: qcom-ngd-ctrl: Use platform_get_irq() to get the interrupt
-Date:   Fri, 24 Dec 2021 16:13:33 +0000
-Message-Id: <20211224161334.31123-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        linux-staging@lists.linux.dev
+Subject: [PATCH] staging: axis-fifo: Use platform_get_irq() to get the interrupt
+Date:   Fri, 24 Dec 2021 16:13:34 +0000
+Message-Id: <20211224161334.31123-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211224161334.31123-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20211224161334.31123-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -59,31 +58,41 @@ patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
 Cheers,
 Prabhakar
 ---
- drivers/slimbus/qcom-ngd-ctrl.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/staging/axis-fifo/axis-fifo.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
-index 7040293c2ee8..0f29a08b4c09 100644
---- a/drivers/slimbus/qcom-ngd-ctrl.c
-+++ b/drivers/slimbus/qcom-ngd-ctrl.c
-@@ -1526,13 +1526,11 @@ static int qcom_slim_ngd_ctrl_probe(struct platform_device *pdev)
- 	if (IS_ERR(ctrl->base))
- 		return PTR_ERR(ctrl->base);
+diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
+index 632f140dddbc..dfd2b357f484 100644
+--- a/drivers/staging/axis-fifo/axis-fifo.c
++++ b/drivers/staging/axis-fifo/axis-fifo.c
+@@ -809,7 +809,6 @@ static int axis_fifo_parse_dt(struct axis_fifo *fifo)
  
--	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (!res) {
--		dev_err(&pdev->dev, "no slimbus IRQ resource\n");
--		return -ENODEV;
+ static int axis_fifo_probe(struct platform_device *pdev)
+ {
+-	struct resource *r_irq; /* interrupt resources */
+ 	struct resource *r_mem; /* IO mem resources */
+ 	struct device *dev = &pdev->dev; /* OS device (from device tree) */
+ 	struct axis_fifo *fifo = NULL;
+@@ -882,16 +881,12 @@ static int axis_fifo_probe(struct platform_device *pdev)
+ 	 */
+ 
+ 	/* get IRQ resource */
+-	r_irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!r_irq) {
+-		dev_err(fifo->dt_device, "no IRQ found for 0x%pa\n",
+-			&r_mem->start);
+-		rc = -EIO;
++	rc = platform_get_irq(pdev, 0);
++	if (rc < 0)
+ 		goto err_initial;
 -	}
-+	ret = platform_get_irq(pdev, 0);
-+	if (ret < 0)
-+		return ret;
  
--	ret = devm_request_irq(dev, res->start, qcom_slim_ngd_interrupt,
-+	ret = devm_request_irq(dev, ret, qcom_slim_ngd_interrupt,
- 			       IRQF_TRIGGER_HIGH, "slim-ngd", ctrl);
- 	if (ret) {
- 		dev_err(&pdev->dev, "request IRQ failed\n");
+ 	/* request IRQ */
+-	fifo->irq = r_irq->start;
++	fifo->irq = rc;
+ 	rc = devm_request_irq(fifo->dt_device, fifo->irq, &axis_fifo_irq, 0,
+ 			      DRIVER_NAME, fifo);
+ 	if (rc) {
 -- 
 2.17.1
 

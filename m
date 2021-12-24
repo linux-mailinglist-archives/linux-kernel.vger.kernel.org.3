@@ -2,101 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D830B47F117
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 21:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E6547F11F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 21:58:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344354AbhLXUiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 15:38:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234485AbhLXUiN (ORCPT
+        id S1344389AbhLXU4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 15:56:48 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49040 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344365AbhLXU4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 15:38:13 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2103C061757
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 12:38:12 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id o7so10195058ioo.9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 12:38:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XTcZcXn3gMOw5s9nKkpc/pq0+6ofltOh101RdlFXywg=;
-        b=GCfk2ROsvayGIwCXiI69gTj0R65gRZ8uuaQ1bckvSFzeB5k+g5bwM65L60y39tzbNM
-         80WJ9XfaWcbA0pCSh5gtKwD0xPB7E/vUYoznJEyvWPPy7VS0dieiZwmIGCJNFqwO7g+6
-         QDv0fNgnNDvxYQIxO9I1ITFjB7ef3IwQ7LbEM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XTcZcXn3gMOw5s9nKkpc/pq0+6ofltOh101RdlFXywg=;
-        b=BvLAhSU5WRwQqm0WDPWC58TMHFZ9HQGf6Qc0mrUPOcVcCUX9CpWqsA0Wu/Efbj0lyV
-         i1x+UoEfQiyGi8B0OLdi5gnSUIoFvmnS5kKXqRRlMUr0MKD9p4gdLkEgtBZYEhCFXWm9
-         hsKCcm6B8Sg6KXupIDS/OKmyyocUmqO9RHNNmbgkqOvxuGL0KreGCH6lPmWxspKFG6Cw
-         RkizSJ0mgiemo9CTcWXT1ZalaTUxV4Z2Ys+ovjCuX1P4D45iv2ikemjakA/XQE1Lk9VB
-         k20NT2N9o/4664FqoZZ5zW+0uWqRLObY2jckRa9+Rk8s4pbnb+vNJSI898jHOrRmRzgP
-         T3Bg==
-X-Gm-Message-State: AOAM5328z6zVrbdOKyprDFaHNjxH8AYe3B/ynK+FzXiYloVr8HZFyypk
-        hdsH7+uEUenZ2QH8rK0tCJB5mXangx70Gd28puvAVw==
-X-Google-Smtp-Source: ABdhPJxq4MyJjI5Utf9Da7ShlxsZIGegUECocbNEUBmjAAFvHRo+/7Q9uwmH+JzSc/QtRg5T+NT7D0yLMBrqkW1i3S4=
-X-Received: by 2002:a5d:9d92:: with SMTP id ay18mr3676343iob.130.1640378292291;
- Fri, 24 Dec 2021 12:38:12 -0800 (PST)
+        Fri, 24 Dec 2021 15:56:46 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3942BB8234A
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 20:56:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4577DC36AE5;
+        Fri, 24 Dec 2021 20:56:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640379404;
+        bh=MSzL8BX281RUQPjX6tmbREkMRBM9dD7XbKS/YGZyVic=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nFerkcZaMhP3pZmML9KmSsRisL9cEZvKkbjQg8M2WyCqz1QbXbgy6927ORFBWDIk7
+         MgBSGa3GwxIMXw2Fg7NW4OL6aTBBM4mFPzQ9+NlBYd4Hp6R9/rOcnU3VX/lRhZaGTy
+         1YvmtjLNKABVk7L61/r8dGkJwvTXf3MLfmNQAYRdA9BJg8mtUfuAwN1xpbYHpzAECq
+         6luqg3ScUs1XxtT2Nb975PcsWdp2hCf0iei6vOtbzKQL4SiYHrygjWYhmehTawdsrf
+         mQxW+uzXMiWQGp3oHCygUbliqmnULVdvcCqIPocxqB4VHCwYN+QD/phZ3YWzehghLp
+         +6BUz5aBA1MpQ==
+Date:   Fri, 24 Dec 2021 14:56:37 -0600
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, tytso@mit.edu,
+        gregkh@linuxfoundation.org,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
+Subject: Re: [PATCH v2 2/2] random: use BLAKE2s instead of SHA1 in extraction
+Message-ID: <YcY0BR8cfviTkUqj@quark>
+References: <20211223141113.1240679-1-Jason@zx2c4.com>
+ <20211223141113.1240679-2-Jason@zx2c4.com>
 MIME-Version: 1.0
-References: <20211224145903.368999-1-kai.heng.feng@canonical.com>
-In-Reply-To: <20211224145903.368999-1-kai.heng.feng@canonical.com>
-From:   Matt Ranostay <matt.ranostay@konsulko.com>
-Date:   Fri, 24 Dec 2021 12:37:59 -0800
-Message-ID: <CAJCx=gmPB_nqNt-OQXTEiKKaPh6sw1y6deUON3-t=QUJOQ3nNg@mail.gmail.com>
-Subject: Re: [PATCH] iio: humidity: hdc100x: Add ACPI HID table
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Chris Lesiak <chris.lesiak@licor.com>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211223141113.1240679-2-Jason@zx2c4.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 24, 2021 at 6:59 AM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
->
-> x86 boards may use ACPI HID "HDC1010" to for hdc100x device.
->
-> So add an ACPI match table for that accordingly.
->
+On Thu, Dec 23, 2021 at 03:11:13PM +0100, Jason A. Donenfeld wrote:
+> This commit addresses one of the lower hanging fruits of the RNG: its
+> usage of SHA1.
+> 
+> BLAKE2s is generally faster, and certainly more secure, than SHA1, which
+> has [1] been [2] really [3] very [4] broken [5]. Additionally, the
+> current construction in the RNG doesn't use the full SHA1 function, as
+> specified, and allows overwriting the IV with RDRAND output in an
+> undocumented way, even in the case when RDRAND isn't set to "trusted",
+> which means potential malicious IV choices. And its short length means
+> that keeping only half of it secret when feeding back into the mixer
+> gives us only 2^80 bits of forward secrecy. In other words, not only is
+> the choice of hash function dated, but the use of it isn't really great
+> either.
+> 
+> This commit aims to fix both of these issues while also keeping the
+> general structure and semantics as close to the original as possible.
+> Specifically:
+> 
+>    a) Rather than overwriting the hash IV with RDRAND, we put it into
+>       BLAKE2's documented "salt" and "personal" fields, which were
+>       specifically created for this type of usage.
+>    b) Since this function feeds the full hash result back into the
+>       entropy collector, we only return from it half the length of the
+>       hash, just as it was done before. This increases the
+>       construction's forward secrecy from 2^80 to a much more
+>       comfortable 2^128.
+>    c) Rather than using the raw "sha1_transform" function alone, we
+>       instead use the full proper BLAKE2s function, with finalization.
+> 
+> This also has the advantage of supplying 16 bytes at a time rather than
+> SHA1's 10 bytes, which, in addition to having a faster compression
+> function to begin with, means faster extraction in general. On an Intel
+> i7-11850H, this commit makes initial seeding around 131% faster.
+> 
+> BLAKE2s itself has the nice property of internally being based on the
+> ChaCha permutation, which the RNG is already using for expansion, so
+> there shouldn't be any issue with newness, funkiness, or surprising CPU
+> behavior, since it's based on something already in use.
+> 
+> [1] https://eprint.iacr.org/2005/010.pdf
+> [2] https://www.iacr.org/archive/crypto2005/36210017/36210017.pdf
+> [3] https://eprint.iacr.org/2015/967.pdf
+> [4] https://shattered.io/static/shattered.pdf
+> [5] https://www.usenix.org/system/files/sec20-leurent.pdf
+> 
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-Acked-by: Matt Ranostay <matt.ranostay@konsulko.com>
+Looks good.  I had thought about replacing this with SHA-256, but BLAKE2s is
+arguably a better choice here.  You can add:
 
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->  drivers/iio/humidity/hdc100x.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/drivers/iio/humidity/hdc100x.c b/drivers/iio/humidity/hdc100x.c
-> index 9e0fce917ce4c..ad1dfac543c52 100644
-> --- a/drivers/iio/humidity/hdc100x.c
-> +++ b/drivers/iio/humidity/hdc100x.c
-> @@ -417,10 +417,18 @@ static const struct of_device_id hdc100x_dt_ids[] = {
->  };
->  MODULE_DEVICE_TABLE(of, hdc100x_dt_ids);
->
-> +static const struct acpi_device_id hdc100x_acpi_match[] = {
-> +       {"HDC1010"},
-> +       { },
-> +};
-> +
-> +MODULE_DEVICE_TABLE(acpi, hdc100x_acpi_match);
-> +
->  static struct i2c_driver hdc100x_driver = {
->         .driver = {
->                 .name   = "hdc100x",
->                 .of_match_table = hdc100x_dt_ids,
-> +               .acpi_match_table = ACPI_PTR(hdc100x_acpi_match),
->         },
->         .probe = hdc100x_probe,
->         .id_table = hdc100x_id,
-> --
-> 2.33.1
->
+	Reviewed-by: Eric Biggers <ebiggers@google.com>
+
+A couple comments about the new development process though:
+
+It seems that you're applying patches to
+https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git, but that git
+repository isn't listed in the MAINTAINERS file entry.  Can you add it?
+
+Also, this patch was only sent to linux-kernel, not to linux-crypto, so I only
+found it because I happened to see it in the above git repository, then dig it
+up from lore.kernel.org.  How about Cc'ing all random.c patches to linux-crypto,
+and putting that in the MAINTAINERS file entry?
+
+- Eric

@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C44447EFBA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 15:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4732C47EFBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 15:58:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352993AbhLXO6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 09:58:00 -0500
-Received: from relmlor2.renesas.com ([210.160.252.172]:57063 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231836AbhLXO6A (ORCPT
+        id S1353018AbhLXO6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 09:58:03 -0500
+Received: from relmlor1.renesas.com ([210.160.252.171]:52340 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1352999AbhLXO6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 09:58:00 -0500
+        Fri, 24 Dec 2021 09:58:02 -0500
 X-IronPort-AV: E=Sophos;i="5.88,232,1635174000"; 
-   d="scan'208";a="105109884"
+   d="scan'208";a="104624983"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 24 Dec 2021 23:57:58 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 24 Dec 2021 23:58:01 +0900
 Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 5EA8F42C25A2;
-        Fri, 24 Dec 2021 23:57:56 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 6487142C25A2;
+        Fri, 24 Dec 2021 23:57:59 +0900 (JST)
 From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     linux-gpio@vger.kernel.org, Tomasz Figa <tomasz.figa@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>
+To:     linux-gpio@vger.kernel.org,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 1/2] pinctrl: samsung: Use platform_get_irq_optional() to get the interrupt
-Date:   Fri, 24 Dec 2021 14:57:47 +0000
-Message-Id: <20211224145748.18754-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 2/2] pinctrl: at91-pio4: Use platform_get_irq_optional() to get the interrupt
+Date:   Fri, 24 Dec 2021 14:57:48 +0000
+Message-Id: <20211224145748.18754-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211224145748.18754-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20211224145748.18754-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -50,36 +50,44 @@ code use platform_get_irq_optional().
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
- drivers/pinctrl/samsung/pinctrl-samsung.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/pinctrl/pinctrl-at91-pio4.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/samsung/pinctrl-samsung.c
-index 8941f658e7f1..0f6e9305fec5 100644
---- a/drivers/pinctrl/samsung/pinctrl-samsung.c
-+++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
-@@ -1095,7 +1095,6 @@ static int samsung_pinctrl_probe(struct platform_device *pdev)
- 	struct samsung_pinctrl_drv_data *drvdata;
- 	const struct samsung_pin_ctrl *ctrl;
- 	struct device *dev = &pdev->dev;
--	struct resource *res;
- 	int ret;
+diff --git a/drivers/pinctrl/pinctrl-at91-pio4.c b/drivers/pinctrl/pinctrl-at91-pio4.c
+index fafd1f55cba7..ebfb106be97d 100644
+--- a/drivers/pinctrl/pinctrl-at91-pio4.c
++++ b/drivers/pinctrl/pinctrl-at91-pio4.c
+@@ -1045,7 +1045,6 @@ static int atmel_pinctrl_probe(struct platform_device *pdev)
+ 	const char **group_names;
+ 	const struct of_device_id *match;
+ 	int i, ret;
+-	struct resource	*res;
+ 	struct atmel_pioctrl *atmel_pioctrl;
+ 	const struct atmel_pioctrl_data *atmel_pioctrl_data;
  
- 	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
-@@ -1109,9 +1108,11 @@ static int samsung_pinctrl_probe(struct platform_device *pdev)
+@@ -1164,16 +1163,15 @@ static int atmel_pinctrl_probe(struct platform_device *pdev)
+ 
+ 	/* There is one controller but each bank has its own irq line. */
+ 	for (i = 0; i < atmel_pioctrl->nbanks; i++) {
+-		res = platform_get_resource(pdev, IORESOURCE_IRQ, i);
+-		if (!res) {
++		ret = platform_get_irq_optional(pdev, i);
++		if (ret < 0) {
+ 			dev_err(dev, "missing irq resource for group %c\n",
+ 				'A' + i);
+-			return -EINVAL;
++			return ret;
+ 		}
+-		atmel_pioctrl->irqs[i] = res->start;
+-		irq_set_chained_handler_and_data(res->start,
+-			atmel_gpio_irq_handler, atmel_pioctrl);
+-		dev_dbg(dev, "bank %i: irq=%pr\n", i, res);
++		atmel_pioctrl->irqs[i] = ret;
++		irq_set_chained_handler_and_data(ret, atmel_gpio_irq_handler, atmel_pioctrl);
++		dev_dbg(dev, "bank %i: irq=%d\n", i, ret);
  	}
- 	drvdata->dev = dev;
  
--	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (res)
--		drvdata->irq = res->start;
-+	ret = platform_get_irq_optional(pdev, 0);
-+	if (ret < 0 && ret != -ENXIO)
-+		return ret;
-+	if (ret > 0)
-+		drvdata->irq = ret;
- 
- 	if (ctrl->retention_data) {
- 		drvdata->retention_ctrl = ctrl->retention_data->init(drvdata,
+ 	atmel_pioctrl->irq_domain = irq_domain_add_linear(dev->of_node,
 -- 
 2.17.1
 

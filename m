@@ -2,294 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF2847EE71
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 12:07:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A74D947EE76
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 12:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344077AbhLXLHo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 24 Dec 2021 06:07:44 -0500
-Received: from mail-eopbgr90074.outbound.protection.outlook.com ([40.107.9.74]:8074
-        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1344029AbhLXLHn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 06:07:43 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C5QPRqd95sXgtZAsXBxL/t/QhjC37VHeqDHanbqS4PjR3h2GNNIsv/Q/6wlRvhAujimnJPBmPoVgExQa8JOtsdCrgo3L0Xm0fKugw03cbW7u/jNtdavyObf2o5AaJMh4Itjn9YPN8JBWfrOFC7g+7b/zmkDH34fakd0Ae9+B6uk11N8Gx2sQUFq0rhxwZUAI5ERJT/sVrOpypExQTuddQGAjEH22ZiMMoKP4oL1kqhXbdBKoFyzN86ke/7/kq7bBbkHSIrhiOKPJIYX2Phi6wHMQVPSEBwIKhfKo4CCAq59IvFeCUiEhK3BAnFGoF+w+1K1aAOo7SHE6bX+Ns0UUng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cIMKLbEc1X7ojhyPl/Wd/bkJLWi83d+e8lOVZJrwAGY=;
- b=YRWS0pBp0zBQDEJscZqaD7eZlaxgpVhXP1JTe9H7hq/iKUyWWHCnY+y4AgL92wqpLZP2Yk9r1Wt5EBvQXatuGFfsqfFMoMaoSwUnWMxoyf0cVh5kGe0jv1gdFYRtHJSk8nXb7nN5l6UtgDSnnrRGF5mHvcUYPtQY1gAyOnpVeiYE0QFgfgDlimL8JZxepv5K8l8dUmV4qeJyXLGmpzaUbVHagqxKgQBLibfcoEBH5JMsqbHDJDY96RKrpX09HAK8dNE6FPfoYX78e5zfSHEzjkiEFsOJmZKlY8OtD2x7btX4+iEwBm0N6dEwjRzLwLYE9I7DM7m1x/reKLWbLi1KBw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRXP264MB0005.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:25::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.20; Fri, 24 Dec
- 2021 11:07:41 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::f0ef:856d:b0de:e85d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::f0ef:856d:b0de:e85d%7]) with mapi id 15.20.4823.021; Fri, 24 Dec 2021
- 11:07:41 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Maxime Bizon <mbizon@freebox.fr>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Russell Currey <ruscur@russell.cc>
-Subject: [PATCH v3 2/2] powerpc: Add set_memory_{p/np}() and remove
- set_memory_attr()
-Thread-Topic: [PATCH v3 2/2] powerpc: Add set_memory_{p/np}() and remove
- set_memory_attr()
-Thread-Index: AQHX+LZ3pRpnIABVV0eAi8LQLOkMHw==
-Date:   Fri, 24 Dec 2021 11:07:40 +0000
-Message-ID: <cda2b44b55c96f9ac69fa92e68c01084ec9495c5.1640344012.git.christophe.leroy@csgroup.eu>
-References: <43c3c76a1175ae6dc1a3d3b5c3f7ecb48f683eea.1640344012.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <43c3c76a1175ae6dc1a3d3b5c3f7ecb48f683eea.1640344012.git.christophe.leroy@csgroup.eu>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: aba06c92-3e17-470b-c780-08d9c6cd9a5c
-x-ms-traffictypediagnostic: MRXP264MB0005:EE_
-x-microsoft-antispam-prvs: <MRXP264MB000571A0402F30C5C4948049ED7F9@MRXP264MB0005.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:551;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: w3IMcNUJC4LHwXm6ZEWHflyt6AP8qzMGEDKQeo7RjtDwdqB4ZnTv+d+gpkFdduzPnFwhIB59ABOBhrUpGl6iTFZ7rGRfxzs27NtGRRHmY2Im7Qz44cvmfFl7oxjOrxVCm8GQ13JeY8BtnkNKI+qthsM3wKUHo1/syejB1uPDlvdUKV1PZ5lHTJqBCQpahy6apOjPS+M23zJDN8jRlYky6dOjJ11DjmTJDuehl/5ELvz2ud/RlpuQIyj8uJv3sdZn9HH1sMBC4C1EtNOy25wJehM/Ab3G5S9pT6KuUUM9YtNpIT8cLH7sbfT9xlpZU6+rlgvEWl0OQWeSq4DPTyGpLbVVllTu/6jc5NMZYMLcXZC84FetWuwQOWT5YA3N6ECJnjg1GlFIECSDBWurg8cc/uIVpQSobJRFIhFvZy/Kxy3UZWVdoTYum2p6myVDqeAv0FFD2lQ4vkRwCkSjenBrKYRUEFQdL3Dulm+5+NDGbMlRmx+cfKH+H/kuZnF19vo21qpwz9TaxLMaaY9nmeUsFOJII1yflS0QSamtEEgJlSKF9hZslL6OoWna+X27Kfe7UIcW5+gmk2UaMfuN6+iWX4hBRolLUPMEEqjXp3J72j3pe2QU2Nwl+z5qeNRoAr/nHVWQ9h1keM9qxweqygCfkoy4yQgwWrIrUClHUs4yjLB0w7SxHfsJ6Bw6Y9Pe7trai2BVzloiT1wAUVwnAi6J4g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(54906003)(110136005)(2906002)(4326008)(2616005)(44832011)(64756008)(508600001)(5660300002)(66556008)(66446008)(66476007)(6506007)(91956017)(76116006)(66946007)(8676002)(71200400001)(8936002)(26005)(38070700005)(316002)(186003)(36756003)(38100700002)(122000001)(83380400001)(6486002)(6512007)(86362001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?akAsGyhJd1k1h0d6j5m7jAGwVmErJjHNh70pcKb2qQRy7/9XoUiRLT/2f9?=
- =?iso-8859-1?Q?O3wo9tNLZ5ruOFLO6iOh9DVwtPKfC950wd0dQZx0rhTgnzZSMxWIGk1uhs?=
- =?iso-8859-1?Q?z49JC+EoUUsD78V0J9Qs9ZYW+fAD3n1eeAov/xgK2yddBT6NWI9FUhSNVu?=
- =?iso-8859-1?Q?qFIHc+mF6VHkXqO4/h8sZQ05rfRiGsmlr2pVIRuUaFq9pEoqzaa6vpagPu?=
- =?iso-8859-1?Q?7/YNC5Q5iHXcAYHeWiSZV7v2JDxetijoefx0Y+V5rGaZWOaKdN8tEhc8RO?=
- =?iso-8859-1?Q?aLrLDC6wLN28faLfbvbr0Epw5UqLgwhgULcx/G294hoNaJgR5XeZpiVGeJ?=
- =?iso-8859-1?Q?RXVcG4T0WP+pRYBiw+bF4kdY7fwPoITJkjNh3XYJNKzUgbUDwSZutGCnrU?=
- =?iso-8859-1?Q?c66TN8fXIuRIH4u36BGbcO0WQYp2rQC+Ike51VfA3lh9Kc7CTMjgwTVvj2?=
- =?iso-8859-1?Q?M3Q3OYvUglxPDbyrs2iSZFMRB7XT1D7Yp+obhlMLMxNtntXJIDjR8cdirT?=
- =?iso-8859-1?Q?clBd0j74tnq/R9D65rCaUMElzrh+/qRcwsxHI/NkrFeRRAzl71CjpeB69G?=
- =?iso-8859-1?Q?C7VxtOX0Htssmvp4uehsBKdaweqshxJb9BtxEYJkNtxSVXjVpOJ+uqNKes?=
- =?iso-8859-1?Q?zrr/5Ce9xeNuDPBOzHka+fpGr7xMr+pA3jui+aMom5rBeaw8pfEFW1ydKw?=
- =?iso-8859-1?Q?pm/PLvejLR/IwqFxbJK2rCtHApLrAX8vstFqVXOdWrRMUw65nyx3HF5ahR?=
- =?iso-8859-1?Q?utNgwS8g9HTO+J6hoJGt1oosl8+gHn7MmW1zThQIM+tdboufTM4NsYjO8+?=
- =?iso-8859-1?Q?SjWu4L3Vovo3r/5a8/pS0/o4ttzUunmoZJuv1Bucuv22JiWTEv49xw7xMK?=
- =?iso-8859-1?Q?NWp+a0lugKQiWMfqBKD8OMPsiiMrrRPyxYWA/I/s9zVhT1wLGT/B4wI/Yw?=
- =?iso-8859-1?Q?Zra6xNdRwUQgaKej4YcxWM/0J2+f+gF7+iHupb47qpUMkFBN0Qd+w/JSKy?=
- =?iso-8859-1?Q?eTsupDt1viycxaSzhmEH6NhcPVybbv7vYFwx01h6UXPsIVmTeZJHZItESn?=
- =?iso-8859-1?Q?8vtyUpZWXI/8O54mW2R162RT+U5N2ejECYP45aMVg9Ib651snNiVeYeq/t?=
- =?iso-8859-1?Q?sZwtVCNyDtaUWeXtptF/92ttSsyoI9aWfxJUcVYmm0nvTNz6bc9n+DLgXF?=
- =?iso-8859-1?Q?3pn/PZmX+9rnBJhz1x6LSi5dUdXNrWrIfelruyzqQqHbCpCTbdyzG3Nbbn?=
- =?iso-8859-1?Q?5juM0kDeT7Qub8vuNAxzYWCNLtRiFAG6oXo+wG2qeUN1lyuVRZlLItq0Vi?=
- =?iso-8859-1?Q?qpK67IEVb1N4Mkrps+hKky4Em9amqbZA5rq2NURLkQAt3gawcuAFaH+Gme?=
- =?iso-8859-1?Q?kxM3bqdQrq2WNm+kuPsquZXtNBAKCyqdK00W63klLSmmrNHZI5inmxbwI8?=
- =?iso-8859-1?Q?e3go334OyTxwMMHPpPGAeBGTkp6AEaXXm2A/UFoJ9AJT+WaoW3JhTG8r4a?=
- =?iso-8859-1?Q?/fMTR9LMKopVSvi5gh1Je5z6a1iSgKg9ZGnLW8mF1dMcgFi0zyTSuBjSUK?=
- =?iso-8859-1?Q?kpZiX3axYEBF8L5lKqZLalP6I3W7FDhX28WO0rOh4aZVhxHw0e/EPfwfp6?=
- =?iso-8859-1?Q?zkAMaijVBoNt/DJkMBDyc34R9RlCfCqkD/+0XzMYV7FVsLjlE9aD1Mc7QZ?=
- =?iso-8859-1?Q?Icd8xYgRwbU6h85ntMXqSg/w2V/cwvDfX0GrVVsluUjU9FL2WJ04caPB7F?=
- =?iso-8859-1?Q?1MufVBEFG/uEw0Xe32yMxlSfg=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        id S1344223AbhLXLI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 06:08:57 -0500
+Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:43469
+        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230375AbhLXLI4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 24 Dec 2021 06:08:56 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3A1Pb2SajOnN4kMFK2d+OiLfL1X161dxEKZh0ujC4?=
+ =?us-ascii?q?5NGQNrF6WrkUHzzcbXDzSP/aINGL8L9t0aNy+9xxUv8TWz4RmGgppr3w8FHgiR?=
+ =?us-ascii?q?ejtVY3IdB+oV8+xBpSeFxw/t512huEtnanYd1eEzvuWGuWn/SkUOZ2gHOKmUbe?=
+ =?us-ascii?q?eYHwpH2eIdQ964f5ds79g6mJXqYjha++9kYuaT/z3YDdJ6RYsWo4nw/7rRCdUg?=
+ =?us-ascii?q?RjHkGhwUmrSyhx8lAS2e3E9VPrzLEwqRpfyatE88uWSH44vwFwll1418SvBCvv?=
+ =?us-ascii?q?9+lr6Wk0DTqTTMA7mZnh+C/Xk3EgE/3ZrlP9kb5Lwam8O49mNt9JszNRE85i5V?=
+ =?us-ascii?q?g4tOoXNnv4cWl9WCUmSOIUXpeCceifXXcu7iheun2HX6+9nAkg7OaUb9/xxDGU?=
+ =?us-ascii?q?I8uYXQBgGcwqZgOC72r+pYvNtnck+NI/tMZ93kmp6zDfYE/89B4jKRanQ+MFR0?=
+ =?us-ascii?q?D4YgsFIAOaYZswFZD4pZxPFCzVLN1EdIJEzhuGlgj/4aTIwgEyUv6cs4y7Q0Ql?=
+ =?us-ascii?q?4ypDpMdzcYNvMQt9a9m6cp2Tb7yHhBzkEO9GFjzmI6HShgqnIhyyTcIYTEqCos?=
+ =?us-ascii?q?/1nmluewkQNBxAME1i2u/+0jgi5Qd03A0kV/CUphbI/+EyiUp/2WBjQiGaJohM?=
+ =?us-ascii?q?GSfJRFeMg4Q2Aw6aS5ByWbkAGUyRALtgrsMs3bSYn2l+Ag5XiAjkHmKOUT3mQ8?=
+ =?us-ascii?q?KvSoi6zJTQSMUcGZCkNVwxD5MPsyLzfJDqnos1LSfHuyISvQHeuk3ba8W4kiqt?=
+ =?us-ascii?q?VlsARkaO24Tj6b/uXjsChZmYICs//BwpJNj9EWbM=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AQneXvqFKfBizBN2dpLqEiceALOsnbusQ8zAX?=
+ =?us-ascii?q?PiFKJyC9Hfb5qynDpoV56faWslkssQ8b+OxoUZPoKRi3yXcf2+Us1NmZMTXbhA?=
+ =?us-ascii?q?=3D=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,232,1635199200"; 
+   d="scan'208";a="957337"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Dec 2021 12:08:54 +0100
+Date:   Fri, 24 Dec 2021 12:08:53 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+cc:     Francisco Jerez <currojerez@riseup.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
+In-Reply-To: <CAJZ5v0jyusD4r1eK_hv8CXuaoOXZ6gY8TVdomW5q75dS3wNq5A@mail.gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2112241207410.3217@hadrien>
+References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com> <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net> <alpine.DEB.2.22.394.2112172258480.2968@hadrien>
+ <87fsqqu6by.fsf@riseup.net> <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net> <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net> <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net>
+ <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com> <878rwdse9o.fsf@riseup.net> <CAJZ5v0jyusD4r1eK_hv8CXuaoOXZ6gY8TVdomW5q75dS3wNq5A@mail.gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: aba06c92-3e17-470b-c780-08d9c6cd9a5c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Dec 2021 11:07:40.9221
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UhFtoMtJwRZTfizeR9Qs9ErbLB6SNnaq3m2wagiu1tctGBdLXRkyB/A8tq3BlteSirjiKEYBMj7/PXuMQmowXRGLqC3rCozA2+9pK7VjZQ8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRXP264MB0005
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-set_memory_attr() was implemented by commit 4d1755b6a762 ("powerpc/mm:
-implement set_memory_attr()") because the set_memory_xx() couldn't
-be used at that time to modify memory "on the fly" as explained it
-the commit.
 
-But set_memory_attr() uses set_pte_at() which leads to warnings when
-CONFIG_DEBUG_VM is selected, because set_pte_at() is unexpected for
-updating existing page table entries.
 
-The check could be bypassed by using __set_pte_at() instead,
-as it was the case before commit c988cfd38e48 ("powerpc/32:
-use set_memory_attr()") but since commit 9f7853d7609d ("powerpc/mm:
-Fix set_memory_*() against concurrent accesses") it is now possible
-to use set_memory_xx() functions to update page table entries
-"on the fly" because the update is now atomic.
+On Wed, 22 Dec 2021, Rafael J. Wysocki wrote:
 
-For DEBUG_PAGEALLOC we need to clear and set back _PAGE_PRESENT.
-Add set_memory_np() and set_memory_p() for that.
+> On Wed, Dec 22, 2021 at 12:57 AM Francisco Jerez <currojerez@riseup.net> wrote:
+> >
+> > "Rafael J. Wysocki" <rafael@kernel.org> writes:
+> >
+> > > On Sun, Dec 19, 2021 at 11:10 PM Francisco Jerez <currojerez@riseup.net> wrote:
+> > >>
+> > >> Julia Lawall <julia.lawall@inria.fr> writes:
+> > >>
+> > >> > On Sat, 18 Dec 2021, Francisco Jerez wrote:
+> > >
+> > > [cut]
+> > >
+> > >> > I did some experiements with forcing different frequencies.  I haven't
+> > >> > finished processing the results, but I notice that as the frequency goes
+> > >> > up, the utilization (specifically the value of
+> > >> > map_util_perf(sg_cpu->util) at the point of the call to
+> > >> > cpufreq_driver_adjust_perf in sugov_update_single_perf) goes up as well.
+> > >> > Is this expected?
+> > >> >
+> > >>
+> > >> Actually, it *is* expected based on our previous hypothesis that these
+> > >> workloads are largely latency-bound: In cases where a given burst of CPU
+> > >> work is not parallelizable with any other tasks the thread needs to
+> > >> complete subsequently, its overall runtime will decrease monotonically
+> > >> with increasing frequency, therefore the number of instructions executed
+> > >> per unit of time will increase monotonically with increasing frequency,
+> > >> and with it its frequency-invariant utilization.
+> > >
+> > > But shouldn't these two effects cancel each other if the
+> > > frequency-invariance mechanism works well?
+> >
+> > No, they won't cancel each other out under our hypothesis that these
+> > workloads are largely latency-bound, since the performance of the
+> > application will increase steadily with increasing frequency, and with
+> > it the amount of computational resources it utilizes per unit of time on
+> > the average, and therefore its frequency-invariant utilization as well.
+>
+> OK, so this is a workload in which the maximum performance is only
+> achieved at the maximum available frequency.  IOW, there's no
+> performance saturation point and increasing the frequency (if
+> possible) will always cause more work to be done per unit of time.
+>
+> For this type of workloads, requirements regarding performance (for
+> example, upper bound on the expected time of computations) need to be
+> known in order to determine the "most suitable" frequency to run them
+> and I agree that schedutil doesn't help much in that respect.
+>
+> It is probably better to run them with intel_pstate in the active mode
+> (ie. "pure HWP") or decrease EPP via sysfs to allow HWP to ramp up
+> turbo more aggressively.
 
-Replace all uses of set_memory_attr() by the relevant set_memory_xx()
-and remove set_memory_attr().
+active mode + powersave indeed both gives faster runtimes and less energy
+consumption for these examples.
 
-Reported-by: Maxime Bizon <mbizon@freebox.fr>
-Fixes: c988cfd38e48 ("powerpc/32: use set_memory_attr()")
-Cc: stable@vger.kernel.org
-Depends-on: 9f7853d7609d ("powerpc/mm: Fix set_memory_*() against concurrent accesses")
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Reviewed-by: Russell Currey <ruscur@russell.cc>
-Tested-by: Maxime Bizon <mbizon@freebox.fr>
----
-v3: Use _PAGE_PRESENT directly as all platforms have the bit
-
-v2: Add comment to SET_MEMORY_P and SET_MEMORY_NP
----
- arch/powerpc/include/asm/set_memory.h | 12 ++++++++-
- arch/powerpc/mm/pageattr.c            | 39 +++++----------------------
- arch/powerpc/mm/pgtable_32.c          | 24 ++++++++---------
- 3 files changed, 28 insertions(+), 47 deletions(-)
-
-diff --git a/arch/powerpc/include/asm/set_memory.h b/arch/powerpc/include/asm/set_memory.h
-index b040094f7920..7ebc807aa8cc 100644
---- a/arch/powerpc/include/asm/set_memory.h
-+++ b/arch/powerpc/include/asm/set_memory.h
-@@ -6,6 +6,8 @@
- #define SET_MEMORY_RW	1
- #define SET_MEMORY_NX	2
- #define SET_MEMORY_X	3
-+#define SET_MEMORY_NP	4	/* Set memory non present */
-+#define SET_MEMORY_P	5	/* Set memory present */
- 
- int change_memory_attr(unsigned long addr, int numpages, long action);
- 
-@@ -29,6 +31,14 @@ static inline int set_memory_x(unsigned long addr, int numpages)
- 	return change_memory_attr(addr, numpages, SET_MEMORY_X);
- }
- 
--int set_memory_attr(unsigned long addr, int numpages, pgprot_t prot);
-+static inline int set_memory_np(unsigned long addr, int numpages)
-+{
-+	return change_memory_attr(addr, numpages, SET_MEMORY_NP);
-+}
-+
-+static inline int set_memory_p(unsigned long addr, int numpages)
-+{
-+	return change_memory_attr(addr, numpages, SET_MEMORY_P);
-+}
- 
- #endif
-diff --git a/arch/powerpc/mm/pageattr.c b/arch/powerpc/mm/pageattr.c
-index 8812454e70ff..85753e32a4de 100644
---- a/arch/powerpc/mm/pageattr.c
-+++ b/arch/powerpc/mm/pageattr.c
-@@ -46,6 +46,12 @@ static int change_page_attr(pte_t *ptep, unsigned long addr, void *data)
- 	case SET_MEMORY_X:
- 		pte_update_delta(ptep, addr, _PAGE_KERNEL_RO, _PAGE_KERNEL_ROX);
- 		break;
-+	case SET_MEMORY_NP:
-+		pte_update(&init_mm, addr, ptep, _PAGE_PRESENT, 0, 0);
-+		break;
-+	case SET_MEMORY_P:
-+		pte_update(&init_mm, addr, ptep, 0, _PAGE_PRESENT, 0);
-+		break;
- 	default:
- 		WARN_ON_ONCE(1);
- 		break;
-@@ -90,36 +96,3 @@ int change_memory_attr(unsigned long addr, int numpages, long action)
- 	return apply_to_existing_page_range(&init_mm, start, size,
- 					    change_page_attr, (void *)action);
- }
--
--/*
-- * Set the attributes of a page:
-- *
-- * This function is used by PPC32 at the end of init to set final kernel memory
-- * protection. It includes changing the maping of the page it is executing from
-- * and data pages it is using.
-- */
--static int set_page_attr(pte_t *ptep, unsigned long addr, void *data)
--{
--	pgprot_t prot = __pgprot((unsigned long)data);
--
--	spin_lock(&init_mm.page_table_lock);
--
--	set_pte_at(&init_mm, addr, ptep, pte_modify(*ptep, prot));
--	flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
--
--	spin_unlock(&init_mm.page_table_lock);
--
--	return 0;
--}
--
--int set_memory_attr(unsigned long addr, int numpages, pgprot_t prot)
--{
--	unsigned long start = ALIGN_DOWN(addr, PAGE_SIZE);
--	unsigned long sz = numpages * PAGE_SIZE;
--
--	if (numpages <= 0)
--		return 0;
--
--	return apply_to_existing_page_range(&init_mm, start, sz, set_page_attr,
--					    (void *)pgprot_val(prot));
--}
-diff --git a/arch/powerpc/mm/pgtable_32.c b/arch/powerpc/mm/pgtable_32.c
-index 906e4e4328b2..f71ededdc02a 100644
---- a/arch/powerpc/mm/pgtable_32.c
-+++ b/arch/powerpc/mm/pgtable_32.c
-@@ -135,10 +135,12 @@ void mark_initmem_nx(void)
- 	unsigned long numpages = PFN_UP((unsigned long)_einittext) -
- 				 PFN_DOWN((unsigned long)_sinittext);
- 
--	if (v_block_mapped((unsigned long)_sinittext))
-+	if (v_block_mapped((unsigned long)_sinittext)) {
- 		mmu_mark_initmem_nx();
--	else
--		set_memory_attr((unsigned long)_sinittext, numpages, PAGE_KERNEL);
-+	} else {
-+		set_memory_nx((unsigned long)_sinittext, numpages);
-+		set_memory_rw((unsigned long)_sinittext, numpages);
-+	}
- }
- 
- #ifdef CONFIG_STRICT_KERNEL_RWX
-@@ -152,18 +154,14 @@ void mark_rodata_ro(void)
- 		return;
- 	}
- 
--	numpages = PFN_UP((unsigned long)_etext) -
--		   PFN_DOWN((unsigned long)_stext);
--
--	set_memory_attr((unsigned long)_stext, numpages, PAGE_KERNEL_ROX);
- 	/*
--	 * mark .rodata as read only. Use __init_begin rather than __end_rodata
--	 * to cover NOTES and EXCEPTION_TABLE.
-+	 * mark .text and .rodata as read only. Use __init_begin rather than
-+	 * __end_rodata to cover NOTES and EXCEPTION_TABLE.
- 	 */
- 	numpages = PFN_UP((unsigned long)__init_begin) -
--		   PFN_DOWN((unsigned long)__start_rodata);
-+		   PFN_DOWN((unsigned long)_stext);
- 
--	set_memory_attr((unsigned long)__start_rodata, numpages, PAGE_KERNEL_RO);
-+	set_memory_ro((unsigned long)_stext, numpages);
- 
- 	// mark_initmem_nx() should have already run by now
- 	ptdump_check_wx();
-@@ -179,8 +177,8 @@ void __kernel_map_pages(struct page *page, int numpages, int enable)
- 		return;
- 
- 	if (enable)
--		set_memory_attr(addr, numpages, PAGE_KERNEL);
-+		set_memory_p(addr, numpages);
- 	else
--		set_memory_attr(addr, numpages, __pgprot(0));
-+		set_memory_np(addr, numpages);
- }
- #endif /* CONFIG_DEBUG_PAGEALLOC */
--- 
-2.33.1
+thanks,
+julia

@@ -2,118 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7CC47EDF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 10:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1D047EE0F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 10:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352314AbhLXJmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 04:42:45 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55654 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241614AbhLXJmo (ORCPT
+        id S1352344AbhLXJvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 04:51:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343853AbhLXJvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 04:42:44 -0500
+        Fri, 24 Dec 2021 04:51:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805AAC061401
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 01:51:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E4826202D;
-        Fri, 24 Dec 2021 09:42:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C056FC36AEC;
-        Fri, 24 Dec 2021 09:42:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06707B8227A
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 09:51:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4FD6C36AE8;
+        Fri, 24 Dec 2021 09:51:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640338963;
-        bh=Rdn9oXTeHcImgFihzpqZ1fI0UPcOuss6aruBMOmC2/k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Laaln0yGIAIH+L6HGuF+pEObSII1GuNdLEi5TeJsNWdLMRNTZCrinVlmhbuXbXh9O
-         VwSQRC4r28nlV1XnJ4EjF46CQmKFXM7uXnpcbJskuM6haToGgul40ePhSMZDh3Odun
-         9z9nasLvEEeq8KvPGu9NfBTy6YCxsbsYJpc+6HWpvgXQnnSJDei7J80hqplkKJGfpp
-         3Js/VfTf9XSonM1vNdMd+godShZ/m/b1rSb0sHasa89+JPLet8Ka8xMsnLQVvWz+YI
-         db7i2Ow/3WhXXwQg62PVZV79hd4KyEKB2BJ3tlu0hE3uj9p9uxrK+uA7zNJny8LJ4a
-         D6mzoKHafKYiQ==
-Received: by mail-vk1-f170.google.com with SMTP id u198so4651628vkb.13;
-        Fri, 24 Dec 2021 01:42:43 -0800 (PST)
-X-Gm-Message-State: AOAM530a40FqFiRWQxztDh5nhgf47pxEUUedoMIvItO/dqqNO7j5o6zR
-        CC1KKjV6W7vZ3vOGWmmeW57NuCiKw2r//gqL5DA=
-X-Google-Smtp-Source: ABdhPJxcJSJu2En8JVFZ+Ldq0fMZSqfS1yBXDZhXIwO3+MFkNQtCgMAjeZ2QrdzfLYykbg9IrlsFHRLb9DfFS2fW7l0=
-X-Received: by 2002:a1f:ae91:: with SMTP id x139mr2017891vke.2.1640338962651;
- Fri, 24 Dec 2021 01:42:42 -0800 (PST)
-MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-6-guoren@kernel.org>
- <CAK8P3a2XOVYB1Fm5TBdjtKx9DXoG93Zrw7TiquYL_Zy916dLwQ@mail.gmail.com>
- <CAJF2gTR2fAU=+0fvW_VCqaZfDkSTAxQ=cKE9iAYOoGORb3m+4g@mail.gmail.com>
- <CAK8P3a17A3MU_atWNEretDcr5sLRc7540tM4vfc=H4M8qVCDEg@mail.gmail.com> <CAK8P3a2b0zun=b84d=LhrjrwLDiKh5_KgyZbBAjTz+40NZri=A@mail.gmail.com>
-In-Reply-To: <CAK8P3a2b0zun=b84d=LhrjrwLDiKh5_KgyZbBAjTz+40NZri=A@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 24 Dec 2021 17:42:31 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRG4wRTEb_YHuZo3Xg6gcShduD2WnbEM1M4wg1rVz4qng@mail.gmail.com>
-Message-ID: <CAJF2gTRG4wRTEb_YHuZo3Xg6gcShduD2WnbEM1M4wg1rVz4qng@mail.gmail.com>
-Subject: Re: [PATCH 05/13] riscv: compat: syscall: Add compat_sys_call_table implementation
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+        s=k20201202; t=1640339505;
+        bh=5ZBLSnr8id7hvyy51ilunilPWg3IJnArfzyG5Z0ToRM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=M9nlL7aYoz1UvR7uNlasqQAQCKMM8h8ehKg2FwsjieQ4A/jFtcRbfyAmLEadTfqsr
+         O+E3QTa1DX+Cyd+pBw+aabRjrM5peuwzEYc+eLE5kMR3PH5JRXjjTNuGIdHHypzrtq
+         1lf7LgENNQM7NVAnNDBLFkMWTwnGYV3kidNnkS+kgRzqOlhyryu0ZT/ytyPKmukMcU
+         Ai2o8YC9b7QM0etodl3krzt/5uUshvnabj+PVM2dbk8SGvDspBzlxWINskGIo8NnC3
+         IfwTXP+mimSoUeqDgVSPOq4CvwXVESk5IF1rGGqO78sv6P/DlkBLb8oU+bAh4ZF/w7
+         1LStyqSJ/dqTA==
+Received: from 91-161-240-24.subs.proxad.net ([91.161.240.24] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n0hEl-00E6SM-JJ; Fri, 24 Dec 2021 09:51:43 +0000
+Date:   Fri, 24 Dec 2021 09:51:44 +0000
+Message-ID: <87wnjuz5xr.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH V8 02/10] irqchip/loongson-pch-pic: Add ACPI init support
+In-Reply-To: <CAAhV-H6VFaRtiyhgq-vDQPUbiAtf9L1M6ZNyeApTu11O9JCXnw@mail.gmail.com>
+References: <20211216125157.631992-1-chenhuacai@loongson.cn>
+        <20211216125356.632067-1-chenhuacai@loongson.cn>
+        <20211216125356.632067-2-chenhuacai@loongson.cn>
+        <87pmpwwpw5.wl-maz@kernel.org>
+        <CAAhV-H75SwqWiRjey_9MiRQtY-_Wjm7Tppx31XM8EfLDb_YUhQ@mail.gmail.com>
+        <87czlrwk2k.wl-maz@kernel.org>
+        <CAAhV-H6VFaRtiyhgq-vDQPUbiAtf9L1M6ZNyeApTu11O9JCXnw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 91.161.240.24
+X-SA-Exim-Rcpt-To: chenhuacai@gmail.com, chenhuacai@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, jiaxun.yang@flygoat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 10:00 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, Dec 22, 2021 at 2:21 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > On Wed, Dec 22, 2021 at 1:43 PM Guo Ren <guoren@kernel.org> wrote:
+On Fri, 24 Dec 2021 07:31:53 +0000,
+Huacai Chen <chenhuacai@gmail.com> wrote:
+> 
+> Hi, Marc,
+> 
+> On Mon, Dec 20, 2021 at 8:13 PM Marc Zyngier <maz@kernel.org> wrote:
 > >
-> > Right, I think the patch would be a nice cleanup, but it appears that
-> > riscv is among the few architectures that have defined their own
-> > nonstandard mmap2() syscall after all, despite using the standard
-> > name for the entry point. Not sure how this slipped past my original
-> > review, but it certainly can't be changed now.
->
-> No, I misread, the calling conventions are fine after all, it's
-> just written in a rather odd way.
->
-> > Maybe leave it there and change the #ifdef to build mmap2 for both
-> > native rv32 and compat mode.
->
-> This bit still applies though, I don't think you need to add another
-> helper, just use the one that is already there.
-Yes, I will:
+> > On Fri, 17 Dec 2021 04:45:24 +0000,
+> > Huacai Chen <chenhuacai@gmail.com> wrote:
+> > >
+> > > Hi, Marc,
+> > >
+> > > On Thu, Dec 16, 2021 at 11:06 PM Marc Zyngier <maz@kernel.org> wrote:
+> > > >
+> > > > On Thu, 16 Dec 2021 12:53:48 +0000,
+> > > > Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > > > >
+> > > > > We are preparing to add new Loongson (based on LoongArch, not compatible
+> > > > > with old MIPS-based Loongson) support. LoongArch use ACPI other than DT
+> > > > > as its boot protocol, so add ACPI init support.
+> > > > >
+> > > > > PCH-PIC/PCH-MSI stands for "Interrupt Controller" that described in
+> > > > > Section 5 of "Loongson 7A1000 Bridge User Manual". For more information
+> > > > > please refer Documentation/loongarch/irq-chip-model.rst.
+> > > > >
+> > > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > > > > ---
+> > > > >  drivers/irqchip/irq-loongson-pch-pic.c | 108 ++++++++++++++++++-------
+> > > > >  1 file changed, 81 insertions(+), 27 deletions(-)
+> > > >
+> > > > [...]
+> > > >
+> > > > >
+> > > > > +#ifdef CONFIG_ACPI
+> > > > > +
+> > > > > +struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
+> > > > > +                                     struct acpi_madt_bio_pic *acpi_pchpic)
+> > > >
+> > > > Who is calling this? This works the opposite way from what the arm64
+> > > > irqchips are doing. Why? I have the ugly feeling that this is called
+> > > > from the arch code, bypassing the existing infrastructure...
+> > > Yes, this is called from the arch code and a bit ugly, but I can't
+> > > find a better way to do this.
+> > >
+> > > Is the "existing infrastructure" declare the irqchip init function
+> > > with  IRQCHIP_ACPI_DECLARE and the arch code only need to call
+> > > irqchip_init()? Then we have a problem: our irqchips have a 4 level
+> > > hierachy and the parent should be initialized before its children. In
+> > > FDT world this is not a problem, because of_irq_init() will sort
+> > > irqchip drivers to ensure the right order. But in ACPI world,
+> > > acpi_probe_device_table just call init functions in the linking order.
+> > > If we want to control the order, it seems we can only sort the drivers
+> > > in drivers/irq/Makefile. But I don't think this is a good idea...
+> > >
+> > > If there are better solutions, please let me know. Thanks.
+> >
+> > We have the exact same thing on the arm64 side, and we don't need of
+> > this to be arch specific:
+> >
+> > - The MADT table describes the root interrupt controller, and it is
+> >   probed via IRQCHIP_ACPI_DECLARE().
+> >
+> > - Each children controller is declared in ACPI as a *device*, and is
+> >   both an interrupt producer and an interrupt consumer. Normal probe
+> >   deferral rules apply. See irq-mbigen.c for an example of how this is
+> >   done.
+> Thank you for your suggestions, I have tried but failed. It seems
+> there are some differences between irq-mbigen.c and our irqchips.
+> Because our irqchips are mandatory while mbigen is optional.
 
-diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-index 12f8a7fce78b..9c0194f176fc 100644
---- a/arch/riscv/kernel/sys_riscv.c
-+++ b/arch/riscv/kernel/sys_riscv.c
-@@ -33,7 +33,9 @@ SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
- {
-        return riscv_sys_mmap(addr, len, prot, flags, fd, offset, 0);
- }
--#else
-+#endif
-+
-+#if defined(CONFIG_32BIT) || defined(CONFIG_COMPAT)
- SYSCALL_DEFINE6(mmap2, unsigned long, addr, unsigned long, len,
-        unsigned long, prot, unsigned long, flags,
-        unsigned long, fd, off_t, offset)
-@@ -44,7 +46,7 @@ SYSCALL_DEFINE6(mmap2, unsigned long, addr, unsigned
-long, len,
-         */
-        return riscv_sys_mmap(addr, len, prot, flags, fd, offset, 12);
- }
--#endif /* !CONFIG_64BIT */
-+#endif
+The fact that this is optional has nothing to do with it. On a system
+that requires mbigen to boot (both mass storage and networking are
+hanging off it), there is a guarantee that the probe order will
+respect the resource dependency.
 
->
->         Arnd
+And if that's not enough, -EPROBE_DEFER is your friend, always.
 
+> If we declare our irqchips as devices, they are initialized in the
+> initcall phase, which is too late for pci devices.
 
+This suggests that your PCIe driver is either not enforcing the
+dependencies on the interrupt controller (bad), or that the core code
+is not made aware of the dependencies (equally bad).
+
+In any case, this needs sorting, because a new architecture should be
+able to boot without resorting to handcrafted dependencies that will
+inevitably result in a larger pile of hacks over time. It is much
+easier to solve it before day-1.
+
+	M.
 
 -- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Without deviation from the norm, progress is not possible.

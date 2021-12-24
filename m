@@ -2,84 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3687D47EA70
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 03:03:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4824047EA72
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 03:05:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350899AbhLXCDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 21:03:19 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:56176 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230044AbhLXCDS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 21:03:18 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowACHjwNSKsVhji7GBA--.1595S2;
-        Fri, 24 Dec 2021 10:02:59 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] tty: serial: Check for error irq
-Date:   Fri, 24 Dec 2021 10:02:57 +0800
-Message-Id: <20211224020257.1424096-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1350906AbhLXCFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 21:05:54 -0500
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:58451 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230044AbhLXCFx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 21:05:53 -0500
+Received: (Authenticated sender: joao@overdrivepizza.com)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPA id C46F620003;
+        Fri, 24 Dec 2021 02:05:50 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowACHjwNSKsVhji7GBA--.1595S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1DAryDAF4DuF18uw4DArb_yoW8Gr4DpF
-        srtFZ8ZrWkGFWS9a9rArnxZF4a9ay0gr4xGrW2k3sxu3s5tF1kury5AFnYvFWDAr4kJw1r
-        Cr4FyrWUu3WUAFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
-        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
-        Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU5vtCUU
-        UUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Date:   Thu, 23 Dec 2021 18:05:50 -0800
+From:   joao@overdrivepizza.com
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, hjl.tools@gmail.com, jpoimboe@redhat.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
+        samitolvanen@google.com
+Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
+In-Reply-To: <20211122170805.338489412@infradead.org>
+References: <20211122170301.764232470@infradead.org>
+ <20211122170805.338489412@infradead.org>
+Message-ID: <6ebb0ab131c522f20c094294d49091fc@overdrivepizza.com>
+X-Sender: joao@overdrivepizza.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the possible failure of the platform_get_irq(), the returned irq
-could be error number and will finally cause the failure of the
-request_irq().
-Consider that platform_get_irq() can now in certain cases return
--EPROBE_DEFER, and the consequences of letting request_irq() effectively
-convert that into -EINVAL, even at probe time rather than later on.
-So it might be better to check just now.
+On 2021-11-22 09:03, Peter Zijlstra wrote:
+> Objtool based IBT validation in 3 passes:
+> 
+>  --ibt-fix-direct:
+> 
+>     Detect and rewrite any code/reloc from a JMP/CALL instruction
+>     to an ENDBR instruction. This is basically a compiler bug since
+>     neither needs the ENDBR and decoding it is a pure waste of time.
+> 
+>  --ibt:
+> 
+>     Report code relocs that are not JMP/CALL and don't point to ENDBR
+> 
+>     There's a bunch of false positives, for eg. static_call_update()
+>     and copy_thread() and kprobes. But most of them were due to
+>     _THIS_IP_ which has been taken care of with the prior annotation.
+> 
+>  --ibt-seal:
+> 
+>     Find and NOP superfluous ENDBR instructions. Any function that
+>     doesn't have it's address taken should not have an ENDBR
+>     instruction. This removes about 1-in-4 ENDBR instructions.
+> 
 
-Fixes: 09864c1cdf5c ("tty: serial: Add linflexuart driver for S32V234")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/tty/serial/fsl_linflexuart.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+I did some experimentation with compiler-based implementation for two of 
+the features described here (plus an additional one). Before going into 
+details, just a quick highlight that the compiler has limited visibility 
+over handwritten assembly sources thus, depending on the feature, a 
+compiler-based approach will not cover as much as objtool. All the 
+observations below were made when compiling the kernel with defconfig, + 
+CLANG-related options, + LTO sometimes. Here I used kernel revision 
+0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1 with PeterZ's IBT Beginning 
+patches applied on top (plus changes to Kbuild), thus, IBT was not 
+really enforced. Tests consisted mostly of Clang's synthetics tests + 
+booting a compiled kernel.
 
-diff --git a/drivers/tty/serial/fsl_linflexuart.c b/drivers/tty/serial/fsl_linflexuart.c
-index d87048073abe..5b08913511a5 100644
---- a/drivers/tty/serial/fsl_linflexuart.c
-+++ b/drivers/tty/serial/fsl_linflexuart.c
-@@ -852,7 +852,13 @@ static int linflex_probe(struct platform_device *pdev)
- 	sport->dev = &pdev->dev;
- 	sport->type = PORT_LINFLEXUART;
- 	sport->iotype = UPIO_MEM;
--	sport->irq = platform_get_irq(pdev, 0);
-+
-+	ret = platform_get_irq(pdev, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	sport->irq = ret;
-+
- 	sport->ops = &linflex_pops;
- 	sport->flags = UPF_BOOT_AUTOCONF;
- 	sport->has_sysrq = IS_ENABLED(CONFIG_SERIAL_FSL_LINFLEXUART_CONSOLE);
--- 
-2.25.1
+Prototypes of the features are available in: 
+https://github.com/lvwr/llvm/tree/joao/ibt -- I fixed as many corner 
+cases I could find while trying it out, but I believe some might still 
+be haunting. Also, I'm not very keen to Kbuild internals nor to however 
+the kernel patches itself during runtime, so I may have missed some 
+details.
 
+Finally, I'm interested in general feedback about this... better ways of 
+implementing, alternative approaches, new possible optimizations and 
+everything. I should be AFK for a few days in the next weeks, but I'll 
+be glad to discuss this in January and then. Happy Holidays :)
+
+The features:
+
+-mibt-seal:
+
+Add ENDBRs exclusively to address-taken functions regardless of its 
+linkage visibility. Only make sense together with LTO.
+
+Observations: Reduced drastically the number of ENDBRs placed in the 
+kernel binary (From 44383 to 33192), but still missed some that were 
+later fixed by objtool (Number of fixes by objtool reduced from 11730 to 
+540). I did not investigate further why these superfluous ENDBRs were 
+still left in the binary, but at this point my hypotheses spin around 
+(i) false-positive address-taken conclusions by the compiler, possibly 
+due to things like exported symbols and such; (ii) assembly sources 
+which are invisible to the compiler (although this would more likely 
+hide address taken functions); (iii) other binary level transformations 
+done by objtool.
+
+Runtime testing: The kernel was verified to properly boot after being 
+compiled with -mibt-seal (+ LTO).
+
+Note: This feature was already submitted for upstreaming with the 
+llvm-project: https://reviews.llvm.org/D116070
+
+-mibt-fix-direct:
+
+Direct calls to functions which are known to have ENDBR instructions are 
+fixed to target the first instruction after the ENDBR (+4 offset). Does 
+not necessarily depend on LTO, but is meaningfully improved by it 
+because it depends on after-linking stuff to successfully identify 
+targets that will have ENDBRs (aliases and assembly functions are a big 
+complication here, so this currently won't try to optimize calls to 
+functions which exist in the compiler context as declarations).
+
+Observations: I did a quick change on objtool to collect stats on the 
+number of fixes applied. Without -mibt-fix-direct objtool had to fix 
+227552 direct calls/jmps. Without LTO, -mibt-fix-direct reduced this 
+number to 218455. With LTO this number was reduced to 1728.
+
+Runtime testing: The kernel was verified to properly boot when compiled 
+with -mibt-fix-direct both with and without LTO. I tried a more 
+aggressive approach for non-LTO compilation, which was trying to 
+optimize based on declarations (when functions were not visible) and 
+noticed that in this scenario the kernel would crash very early in the 
+boot process. I did not investigate further, but my hypothesis is that 
+this approach mistakenly optimizes calls to assembly functions without 
+ENDBRs, leading to random weirdness and doom.
+
+-mibt-preceding-endbr:
+
+Instead of placing ENDBRs after the function entry label, place it right 
+before. Indirect calls are fixed (using a sub instr) to target 4 bytes 
+before the function entry point. Address values which are reused after 
+the indirect call are fixed back to their original value (using an add 
+instr). Indirect calls that use in-memory pointers are transformed to 
+first load the function pointer from memory into a free register, then 
+do the sub, then call it. This does not depend on LTO.
+
+Runtime testing: The runtime test was done using a kernel whose asm 
+functions were not fixed regarding the position of ENDBRs. Yet, perhaps 
+surprisingly, the kernel still boots when compiled with 
+-mibt-preceding-endbr. I don't really know how many indirect calls to 
+assembly functions happened, but I assume that these would have crashed 
+if IBT was being enforced due to the misplaced ENDBRs (and it could also 
+have crashed in these early tests due to indirect calls targeting 
+unknown instruction 4 bytes before assembly functions, thus the surprise 
+factor when I saw the kernel booting). Kernel booted alright with 
+-mibt-preceding-endbr with and without LTO. CONFIG_RETPOLINE was 
+disabled for testing this.

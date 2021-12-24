@@ -2,94 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBAD47EE6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 12:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7042947EE6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 12:03:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352521AbhLXLCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 06:02:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35222 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343986AbhLXLCf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 06:02:35 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2617C061401
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 03:02:34 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id v6so13203245oib.13
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 03:02:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DRkmRcWICaT3K2xvivfj413v6vpyCItI+k2BNDZU4sE=;
-        b=LGfFibG61EBVMIUGE4EqFFQNIHatHmN6b8E/NsQ2pUtXiUXu3UuoGDwIt5WOiWbe0j
-         D1Jmcwev+0HJmL0rXD8M8YgHeTOwDbVr+Bsj0n7byXrVorgphdMS0ZF7f0ZYdMCGRPQ/
-         gb6WVTQ9DiDwDvBFabGoJWyF2IA4Vf71Z7G02I8f0haH43aQGldKVCF9GlDHCT6tzEG7
-         upVjwMfYvDvkton7b5k831fGo4fF3jBRJcP9u4L51KA8mXPe0acnpgapeh5DSrLCypjX
-         HsdaP+q8RNsCunRaffv+sIHlAZX9DrTdVKAMBjLStdZHwsOujRWwOsffPzMPyL4TJyt1
-         7BPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DRkmRcWICaT3K2xvivfj413v6vpyCItI+k2BNDZU4sE=;
-        b=gflPBWWeHK92wpMsQoG29fG9je002xPeA1ciIgrUax32JNce1f9Turq7xV9LIM0pXQ
-         P5M4JqSGV/UVB5cVzu41aAdlhnFfSmG8k1ql9by7OsZf2sxazRLvfnMfvlGZusuYmttP
-         HJCUnHX5aia1IiZLq1c6Uy5Ws2/UiRESO+SRdJ3qz49aFl51SX0Fosh75AUcyfAprCV2
-         /w+Rvs2gjxYdfaYhVRvkBlHEwgF6dfcaLo9hwBK7j7BJZ+bAdcG2AAKdpBcv2Qf1iitR
-         9yKwrsG1A+LK5HyVRDKltY3GV4b8+VN+WqMOI5b6g2dgzve8CXYgFFIM7SRqziqjvhqb
-         aRFA==
-X-Gm-Message-State: AOAM532FrG42qtO58NZG/+5FqvVPEZ4CPUXteLOKa27rLqZXUuaPkPHr
-        tqFylFzQTdIdahAJwa2DzjLCkQ4vEiWOznm1NsYKyUYFkSs=
-X-Google-Smtp-Source: ABdhPJw06dgPfwzlWiKFI8d4NDKavUrrwfkOMaM+Il5BMucDkf8Q9kywuWGWWxWEH3D+0Dc1xQMO/5NQaDcL3jSIuaU=
-X-Received: by 2002:a05:6808:1925:: with SMTP id bf37mr3900617oib.7.1640343752831;
- Fri, 24 Dec 2021 03:02:32 -0800 (PST)
+        id S1352529AbhLXLC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 06:02:59 -0500
+Received: from mga17.intel.com ([192.55.52.151]:7982 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1352524AbhLXLC6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 24 Dec 2021 06:02:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640343778; x=1671879778;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2sBxp1S7i2xOh6symJ3U/3bblwf9to+sMboPWcqsbjU=;
+  b=c5XBD8aDwZrU9/6CKy1iHUS/e49+nuMLIIHDiFHXsox0hcFkAP5iT+gk
+   qBrMXmZI4OgP9/7RE5lPIQ64Gac1Vii+8sYto8JRaFD+tjCGOxC9wQwy2
+   HAq2A4NiNk8vB7JEyuCgJvvfla57Wpx7YE8aryhcsVS1BD4vxApjIR9H7
+   lqTJCe4uY5pM/z953X7hm7X9Um10iB2u27w2wct+DPou1FGgTc1kOS1Cq
+   DQo5aUT+dsCHLLVtT8b7v/qTOL79By62fajEi8Zcq9PzOcdF3L4vCA+yb
+   9U0ywb21n4OYGJ9FXqPkwdr5oK5m1utaETZ4FIX/DPViMOBJGnyvEFhoI
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10207"; a="221637201"
+X-IronPort-AV: E=Sophos;i="5.88,232,1635231600"; 
+   d="scan'208";a="221637201"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2021 03:02:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,232,1635231600"; 
+   d="scan'208";a="522410729"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 24 Dec 2021 03:02:51 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 7CCCB11E; Fri, 24 Dec 2021 13:03:00 +0200 (EET)
+Date:   Fri, 24 Dec 2021 14:03:00 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, tglx@linutronix.de,
+        mingo@redhat.com, luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 19/26] x86/tdx: Make pages shared in ioremap()
+Message-ID: <20211224110300.7zj3nc5nbbv7jobp@black.fi.intel.com>
+References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
+ <20211214150304.62613-20-kirill.shutemov@linux.intel.com>
+ <87c288d6-9bf8-5a94-a628-1e0aaa7de690@amd.com>
+ <20211223171530.v73posbqizb5l3md@black.fi.intel.com>
+ <f61b591b-a06c-bc29-4b9b-a5d46111fe4e@intel.com>
+ <YcTTt4LXKfDO+9u3@zn.tnic>
+ <20211223205604.g44kez5d7iedatfo@box.shutemov.name>
+ <YcTlhp1PUfrMOelI@zn.tnic>
 MIME-Version: 1.0
-References: <20211222075406.57191-1-qiang1.zhang@intel.com>
- <CANpmjNOmaSxqTjUd8y=A+sK0jGg6c00t8uvmOey+QrJsDamsmQ@mail.gmail.com> <PH0PR11MB58802F642473BA6213446AB7DA7F9@PH0PR11MB5880.namprd11.prod.outlook.com>
-In-Reply-To: <PH0PR11MB58802F642473BA6213446AB7DA7F9@PH0PR11MB5880.namprd11.prod.outlook.com>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 24 Dec 2021 12:02:21 +0100
-Message-ID: <CANpmjNPU9Yw3RtsSrn0ZfdKQ7XUEp-Ecu9Wcx4HGhH3D+6-CrQ@mail.gmail.com>
-Subject: Re: [PATCH] rcu: record kasan stack before enter local_irq_save()/restore()
- critical area
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "paulmck@kernel.org" <paulmck@kernel.org>,
-        "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
-        "urezki@gmail.com" <urezki@gmail.com>,
-        "Miao, Jun" <jun.miao@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YcTlhp1PUfrMOelI@zn.tnic>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Dec 2021 at 04:23, Zhang, Qiang1 <qiang1.zhang@intel.com> wrote:
->
->
-> On Wed, 22 Dec 2021 at 08:54, Zqiang <qiang1.zhang@intel.com> wrote:
-> > The kasan_record_aux_stack_noalloc() only record stack, it doesn't
-> > need to be called in local_irq_save()/restore() critical area, and the
-> > global spinlock (depot_lock) will be acquired in this function, When
-> > enable kasan stack, locking contention may increase the time in the critical area.
-> >
-> >I think the change itself is harmless, because
-> >kasan_record_aux_stack_noalloc() doesn't care if interrupts are enabled or not when called, but the justification isn't clear to me.
-> >
-> >What "locking contention" are you speaking about? You're moving a
-> >local_irq_save() which disables interrupts. Yes, it might be nice to reduce the time interrupts are disabled, but in this case the benefit (if any) isn't clear at all, also because this only benefits non-production KASAN kernels.
-> >
-> >Can you provide better justification? Did you encounter a specific problem, maybe together with data?
-> >
->
-> Thanks for reply, Yes, this only benefits non-production KASAN kernel.  In KASAN kernel,
-> there may be a lot of call stack recorded, in addition to locking competition, the find_stack()  will
-> also take a long time.
+On Thu, Dec 23, 2021 at 10:09:26PM +0100, Borislav Petkov wrote:
+> On Thu, Dec 23, 2021 at 11:56:04PM +0300, Kirill A. Shutemov wrote:
+> > Except CC_ATTR_MEM_ENCRYPT is true for TDX too, so it will also depend on
+> > check order. It is fragile.
+> 
+> So the query you wanna do is:
+> 
+> 	if (memory encryption in use)
+> 		use mask;
+> 
+> and the mask you use depends on whether it is SEV or TDX. Right?
+> 
+> If so, you can either do a cc_get_mask() function which gives you either
+> the SEV or TDX mask or simply do:
+> 
+> 	if (CC_ATTR_MEM_ENCRYPT) {
+> 		if (CC_ATTR_GUEST_TDX)
+> 			mask = tdx_shared_mask();
+> 		else if (sme_me_mask)
+> 			mask = sme_me_mask;
+> 	}
+> 
+> Yeah, sme_me_mask has become synonymous with the kernel running as a AMD
+> confidential guest. I need to think about how to make this cleaner...
 
-But there's no locking here, it's disabling interrupts. Yes, a lock is
-taken inside kasan_record_aux_stack_noalloc(), but that's not one you
-can do much about.
+Okay. Meanwhile I leave it this way:
 
-I don't mind this patch, but I think there might be some confusion. A
-better explanation (in commit message or otherwise) would help make
-sure we're not talking about different things.
+	pgprot_t pgprot_cc_encrypted(pgprot_t prot)
+	{
+		if (cc_platform_has(CC_ATTR_MEM_ENCRYPT)) {
+			if (cc_platform_has(CC_ATTR_GUEST_TDX))
+				return __pgprot(pgprot_val(prot) & ~tdx_shared_mask());
+			else if (sme_me_mask)
+				return __pgprot(__sme_set(pgprot_val(prot)));
+			else
+				WARN_ON_ONCE(1);
+		}
+
+		return prot;
+	}
+	EXPORT_SYMBOL_GPL(pgprot_cc_encrypted);
+
+	pgprot_t pgprot_cc_decrypted(pgprot_t prot)
+	{
+		if (cc_platform_has(CC_ATTR_MEM_ENCRYPT)) {
+			if (cc_platform_has(CC_ATTR_GUEST_TDX))
+				return __pgprot(pgprot_val(prot) | tdx_shared_mask());
+			else if (sme_me_mask)
+				return __pgprot(__sme_clr(pgprot_val(prot)));
+			else
+				WARN_ON_ONCE(1);
+		}
+
+		return prot;
+	}
+	EXPORT_SYMBOL_GPL(pgprot_cc_decrypted);
+
+-- 
+ Kirill A. Shutemov

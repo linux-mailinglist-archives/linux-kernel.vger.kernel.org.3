@@ -2,243 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C93947EB45
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 05:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B90F47EB54
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 05:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351387AbhLXEPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 23:15:55 -0500
-Received: from mail-co1nam11on2114.outbound.protection.outlook.com ([40.107.220.114]:37953
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1351315AbhLXEPp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 23:15:45 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eC/RauzfLNAT14NhqLUpHuLgKhNKu0wRXmGUggUdG160JbpSH3P5mf2yg31QoSyS3J1/hv5aQcU/WZ1o4kDwmpvtHKRB5WQxXhtqWXxIMKTpzdNhMNPlaTAqIJqfiQ8DI3FSQlOtW+kBg7/TFQwwg4+V8qV084DgvRMOYVcuoARpcvwFX+7TClQ2Bkwyx5VmcNtx+tIrR/8t6usxEYGFDTKEO6mYxMhoS6L8VZ3YmH81q8xBN2WraM0436QyX3zuC/PRAMj6KSfzLT/8Y6oLpV+OZqvKL/v2bmuV65rDfNfdU5CE9JADvwc/ni2/d3yEE5SG+Vun3OBopC7aLkRhFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=s38IKSR2RFss8Paq83CL2kMZhmzdC/VFzoqi/vXv8JU=;
- b=ci0scw+5NeejBrQ7rx79YjFKonzOJet1jAY38tQ0+kR59tmA7D+/+rTcN3fapY5Va+mpVLbtmHQG+33BHQmYUiAm4qZOHmZJlG1B2/lGzzqzG8nNPTorKDg3HE+Cr1oftBOuMOCdEsh6vdhcKW5zg9leCudrJlV/SLOoVzaXWC6YCASPb7H+pKDUcQLSrvzSAuACHVga4AOD0jahRJc4c0RtztovFMpBbiDC6bUR/VfRTooCl65qYAbhGbL2UIWQqbBGPkDR01GuRAuwuxAIXirQTjIrs1Y5LQ9TlHLpl27LQGtadVYzgCZepuaGAeoNnxBT1ZiUuyIbzkHiHBGm9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+        id S245613AbhLXEUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 23:20:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237285AbhLXEUj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 23:20:39 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D01FC061759
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 20:20:38 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id v138so22326445ybb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 20:20:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s38IKSR2RFss8Paq83CL2kMZhmzdC/VFzoqi/vXv8JU=;
- b=XXJFUdtxjKNbkSBvOG0fFOKP9RYotOyO8HiiZy5aKR5MJ3mOH5HlMBB2wQbThdzOvdEDpin+LmYkCEc2qZYpfpvgswOBK06ycj6m++7PCTdxB9XjhxZ/KCME0udKcjxCvTt7x+RI9jvwpl4WnpKMMAFXl/vry48jk5O133sGwyM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
- BYAPR01MB5189.prod.exchangelabs.com (2603:10b6:a03:78::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4823.21; Fri, 24 Dec 2021 04:15:41 +0000
-Received: from SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::f957:680d:69b0:9999]) by SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::f957:680d:69b0:9999%4]) with mapi id 15.20.4801.019; Fri, 24 Dec 2021
- 04:15:41 +0000
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
-Cc:     Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
-        Quan Nguyen <quan@os.amperecomputing.com>,
-        Thu Nguyen <thu@os.amperecomputing.com>
-Subject: [PATCH v6 9/9] docs: misc-devices: (smpro-misc) Add documentation
-Date:   Fri, 24 Dec 2021 11:13:52 +0700
-Message-Id: <20211224041352.29405-10-quan@os.amperecomputing.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20211224041352.29405-1-quan@os.amperecomputing.com>
-References: <20211224041352.29405-1-quan@os.amperecomputing.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR06CA0134.apcprd06.prod.outlook.com
- (2603:1096:1:1f::12) To SJ0PR01MB7282.prod.exchangelabs.com
- (2603:10b6:a03:3f2::24)
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=jYo6YkmVrLTkVANAZPQsd6sDnBee07nclp7YcfHkw2Q=;
+        b=ISMBhG2WYO0XFD/SK7m9lApvFe7IqI7+VQN/v/bq9HrF1/HDscB3xfEyopMCVqRHbu
+         wfYAXg60HgtNJDz+E1vIEA+QlBw8ZX8UV8zheW0+2/90Sy8aevgZYrl/pn2Sqvi16tTG
+         zbEEf5YFgPwn3MXzhOcjrc90BrI0QzVnHo7aeNqD/LLEF9Bo9ZtbLo3csvG1xOH5gM5K
+         v65zCl1ZWsnvAg9vfowIwxP5kKo0jjWy7t8Nt86NtkZ3s7mlzH9Clrtr1FJg7j2J0YQ4
+         S+LLoHJbEBapwwq/nv4S7VFuPfbk0cRPn1meYZA+cLyMvO+vGfqokCWPy0BLksqaNV9g
+         xG3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=jYo6YkmVrLTkVANAZPQsd6sDnBee07nclp7YcfHkw2Q=;
+        b=EVBRIhEO8zWIR+d3H+4vXvhfm4gJJ7DB1eH4wgg9A3dDdAa3BIbWrkch7QAkNH/iLL
+         FelS38BBbggeCaRHDljEe0pBxkYeemODKInnccbgIe5PFn5vDGh9NPaCycySs5Egkq0d
+         Dn0ek6hzoLo4JFfiI4CC6A5IAgm5EniFhvTr+dxkfZahQHFxj4oUZgPs6QrejV79G4JH
+         aEs/5PXaAQlaTzvfadyn1o4pAoai6adO4vUme7eP+F8EQUYDQS/7xHUT6me0E0v6CozQ
+         hrzucZK9snEEk0RSlQVXGvQXYivVaa5aWcLvDgpgQbI03JUcsT30zFrJtB0EjDM7Losu
+         LUVg==
+X-Gm-Message-State: AOAM533J2TyETEobt/WfmYp+lqT7X20VMoicmP8h16r4miNnjxXMw43Z
+        p27FOR0zk/KPvK/hZy+uBBT1yjMDM2abmEB0YpRpjgSojxN4Mg==
+X-Google-Smtp-Source: ABdhPJwn+QTa4c/Txxk/fnSeFaEwZN/JlL0o6VcTneifm/QJQ5n2iBGzBWyXNz+lf16D15CunaRgGxIhR3qpG8H3EkQ=
+X-Received: by 2002:a25:60a:: with SMTP id 10mr7211569ybg.704.1640319637270;
+ Thu, 23 Dec 2021 20:20:37 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 756b32ae-3772-4052-bd5f-08d9c6940c52
-X-MS-TrafficTypeDiagnostic: BYAPR01MB5189:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR01MB5189D209238234FC89E35AC3F27F9@BYAPR01MB5189.prod.exchangelabs.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RY6f11ZqOS08OYo5CWMvvsgoAxytNdUFFT4z+akDBPtVARt/vO7eUln0S+5VLy639TbBB29llq8jZpH+ieJsVDkuMRaodMKwHLzqZtAHZjvMOYdNHuz9wUEyo/JyhcU7NmicfexAE7Y6PwXt3f47PcaQGbDOMyEOEqGTmDMGBAjhKtOabCb93v3EegkA70Ks1Yha/p7iPnUCaEpvEMJOmzJFxyO1Lgwp6J2v5H9clJ47TXFhYprKRnjp72MKrXTuORTE7CGffe0FJLWbbf9U749HeL9OUDO+MxAxIw5HTX03Mv1YAoA0mZe6I1X263s9qrNNglF46WEpL0VmtygqsCQ2OHWNlO5dRuoW3Opatzxa4BcHF58XeZ7QMcLAwOfrPuaMWzG0o/dbSLLiTm5swV6kb1Eljmg4bkW7fm7oAkNNawy4pJDV3qcLJ1X9i5bWjO1rXEUdDXev9yHTI/vnqYV/9En5P40eGj4fQoR/OC9LPgb8SA27IS4jaYn4sCpgugdumZLCcUKgVwM41APvIRKuMH6Z7fI8Td2vdzQBPVnEUR9dYF5KShzdX9jQzIacGQUAWeRhNtVzWsZnxuXFjYgc96er/j9h5JdWhqyIh9CLscdCB5JvcRt4dGGDPTD0/t4o3KX3kFp/CyCa3FrhQ2RY/RT/yZaivjIMRCMEitHLtPvbx90elOzBSrCkNyMkYUIyRdfRK5SqS1MGhHb40ntVv7KeJtEOrAJQclpzM1Q=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(110136005)(54906003)(86362001)(38100700002)(38350700002)(83380400001)(66476007)(52116002)(5660300002)(107886003)(2616005)(8676002)(66946007)(6666004)(66556008)(2906002)(508600001)(1076003)(4326008)(316002)(6506007)(8936002)(6486002)(26005)(186003)(6512007)(7416002)(921005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?awYqxjEsgevOTpb8EMeqo7BGpqGSmeMyS0LTSHnvBzPRZfGecrUWIKTK1FU+?=
- =?us-ascii?Q?oYZpNgwgpaZqKBpxWA83SrHuIuvVOirSDno2vdIwxLcDJO7qgMvOVjpZwvt1?=
- =?us-ascii?Q?IetXyqkNr1b/kUps8PECAVt9Mc5m/ygApqUccWhIfkYkDyGEeKiZLXOnUVoc?=
- =?us-ascii?Q?8XtBXcFgm2xP+uBBq0Sr7IZQK9i3HG5pVadBDK0RPYGOVC18z5Jhd4t9KyLw?=
- =?us-ascii?Q?+OkzPlXs21lOH050JPh8HF4K2/GhRW3Zpk6ukf7afbCMSPuUlNcFOujWjjwf?=
- =?us-ascii?Q?qdopBaFfh3IejqAbw/Ay8yeEdkPg124n1wgInaDlxJ9/ZxKDtsVJH8aMWBka?=
- =?us-ascii?Q?9KNjwDZIrI7GlepR6pQ6bkqsIAT5qkujXAZf9VwnwfSb9YZpnnIDEkf9px+K?=
- =?us-ascii?Q?jf86KWiiQQYiVIM9EI/nETBv8Q5UW5y/2YSZXD3WCjdu6TFWz8uNpqpLGsaj?=
- =?us-ascii?Q?Ttn7h6VlcLmqd1NZR9B5WebqmEe8+gNSpLgi9VHhqP96BT/JP92uEcAW1XKA?=
- =?us-ascii?Q?ptfFCeuhgkNuno8jVfpbp1ejFflL4SdubApqM0NAP0506EmADshumj03kAf7?=
- =?us-ascii?Q?xBz2MEpo3oNSDb7uah/vHjqpF+3QjyWDtuKxFUg4R6TlAH/Ef9NARbm0t1xq?=
- =?us-ascii?Q?W+aZfCZqrUM4EPivvS0sbEn5u0dlmVyEty7bBdDliUFaMSg+z5TUcjNsBk+B?=
- =?us-ascii?Q?M4B1w3pcypvd258vct1gqXo36w+879c/ve0uBuysXiih18ykqLM1xvLkcVVt?=
- =?us-ascii?Q?Cdde/cCES5klkd/6U96ZrJeuD072G/+CJYdKbRhb0vC/KtjCR4k7aI694dda?=
- =?us-ascii?Q?9SFsZToPSPWUKCX/FQPuOlEEmWvePfB5J4GZ82dR+HlnIQTw2Hc6aSMIJ0kO?=
- =?us-ascii?Q?j1WKUwGRNVk+gp+GNIlQ5k/FPgSpcLYCcrJPW/2yuNGz1TCj8OP6jL3QWo7k?=
- =?us-ascii?Q?zVE9FcKPu9jggGXhrIlFgoEJaMVZ8EmhFuAbSz0xxFjkyyI+oxApoEybMnLb?=
- =?us-ascii?Q?ohoNVp9+dYuDEP1PBeZW3yjvXm7JPouydOyCcj/zsAlmM05pYZxdA/Lfs/SM?=
- =?us-ascii?Q?sNlsKcMhx+6dYcowraPnIoBFrb9TXq9u9h37BBD7G7q/bg0SOTd4RxkFlZLN?=
- =?us-ascii?Q?YHuN2K3p/UlnPHscuvvCFV1TQPE7o2Rm2EaU1G4BqgNKfS/0Wr64WdJm173r?=
- =?us-ascii?Q?hAO/bN26hMAiSt17g/zeYkXQzhmsgzwMUT5e01nSsaqF1Oj779qySR/3wx6Z?=
- =?us-ascii?Q?37qdtDzTUrYh+IbvI12jh+ylatJhzttLLUqMvJvFOY9Ie0GHp3q5OUpT0nV+?=
- =?us-ascii?Q?93Kvv+zt4HT5iar6IQQ8FAWMbzeD9tRAATc4G/qF5oy92ULOdsuvTiTxVq7t?=
- =?us-ascii?Q?D9to7nXq73GEPvA2h95F2Ugt5gvE7NEtGIy3ow0lIAM/q5pW6xl0SRAxBplP?=
- =?us-ascii?Q?CpnYPM0WsypP2s02wEa+3u5A/yZnJUa1swcdknJK916CO446RB+203w4epnz?=
- =?us-ascii?Q?6/hhHZnbCSBXuByZOd+Ljz1dS5A6R5b98e25zOVogQohHxdTJNOhKg0Dratr?=
- =?us-ascii?Q?2aXtAwKiz1kR5CyoLcC56qJdUXkoo0HNAyvsXYaZdoRToEFwQmliZYbS2pXA?=
- =?us-ascii?Q?i+dlNF80VCrEy5cXrvCbJ42HZlrMqCeo7nnklMl1EBoaAVKPSbQbu9Gb/w3l?=
- =?us-ascii?Q?pl2AMm7uAMKa0zLVysWibxU2FL0=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 756b32ae-3772-4052-bd5f-08d9c6940c52
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Dec 2021 04:15:41.7763
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FC68NAzdgdt3YQzQDDjmNG8MaVWhSyUwCAj6qIfJnYSC7fjtrlt8ieZRZbOY6c7NcwF2mScJ88vJK3UnGLv/8JjYHzaYwBJXVku2ooP+IfU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR01MB5189
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 24 Dec 2021 09:50:26 +0530
+Message-ID: <CA+G9fYvKSrW9PSZ2YmgL60v3Q4Po+WVKejughrmy_TpjdORx-w@mail.gmail.com>
+Subject: WARNING: CPU: 2 PID: 7 at drivers/reset/core.c:765 __reset_control_get_internal
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        regressions@lists.linux.dev, linux-usb@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds documentation for the Ampere(R)'s Altra(R) SMpro misc driver.
+While booting Linux next 20211220 on dragonboard 410c device
+the following kernel warning was noticed.
 
-Signed-off-by: Thu Nguyen <thu@os.amperecomputing.com>
-Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
----
-Change in v6:
-  + First introduced in v6 [Quan]
+[    0.000000] Linux version 5.16.0-rc5-next-20211220
+(tuxmake@tuxmake) (aarch64-linux-gnu-gcc (Debian 11.2.0-9) 11.2.0, GNU
+ld (GNU Binutils for Debian) 2.37) #1 SMP PREEMPT @1640001868
+[    0.000000] Machine model: Qualcomm Technologies, Inc. APQ 8016 SBC
+<>
+[    2.456354] ------------[ cut here ]------------
+[    2.456471] l12: Bringing 0uV into 1750000-1750000uV
+[    2.459881] WARNING: CPU: 2 PID: 7 at drivers/reset/core.c:765
+__reset_control_get_internal+0x70/0x170
+[    2.465553] l13: Bringing 0uV into 1750000-1750000uV
+[    2.469438] Modules linked in:
+[    2.469448] CPU: 2 PID: 7 Comm: kworker/u8:0 Not tainted
+5.16.0-rc5-next-20211220 #1
+[    2.469460] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+[    2.469467] Workqueue: events_unbound deferred_probe_work_func
+[    2.479645] l14: Bringing 0uV into 1750000-1750000uV
+[    2.483658]
+[    2.483663] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    2.483675] pc : __reset_control_get_internal+0x70/0x170
+[    2.487640] l15: Bringing 0uV into 1750000-1750000uV
+[    2.494430] lr : __of_reset_control_get+0x178/0x1e0
+[    2.494442] sp : ffff80000805b5c0
+[    2.494447] x29: ffff80000805b5c0 x28: 0000000000000000
+[    2.502681] l16: Bringing 0uV into 1750000-1750000uV
+[    2.506752]  x27: 0000000000000000
+[    2.506761] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000001
+[    2.506778] x23: 0000000000000000 x22: ffff000003838b90 x21: 0000000000000022
+[    2.513016] l17: Bringing 0uV into 3300000-3300000uV
+[    2.513353] x20: ffff000003838bb0 x19: ffff000003804980
+[    2.521207] l18: Bringing 0uV into 1750000-1750000uV
+[    2.525588]  x18: ffffffffffffffff
+[    2.525597] x17: 000000040044ffff x16: 00400032b5503510 x15: ffff000004b70a1c
+[    2.584795] x14: ffffffffffffffff x13: 0000000000000000 x12: 0101010101010101
+[    2.592001] x11: 0000000000000038 x10: 0101010101010101 x9 : ffff80000896e3a8
+[    2.599117] x8 : 7f7f7f7f7f7f7f7f x7 : ff726b6b64622c73 x6 : 0000000000000001
+[    2.606235] x5 : fffffbfffdc0a678 x4 : 0000000000000000 x3 : 0000000000000001
+[    2.613354] x2 : 0000000000000022 x1 : 0000000000000022 x0 : 0000000000000000
+[    2.620473] Call trace:
+[    2.627578]  __reset_control_get_internal+0x70/0x170
+[    2.629843]  __of_reset_control_get+0x178/0x1e0
+[    2.635048]  __reset_control_get+0x54/0x1e4
+[    2.639301]  __devm_reset_control_get+0x84/0xfc
+[    2.643469]  ci_hdrc_msm_probe+0xa4/0x410
+[    2.647983]  platform_probe+0x74/0xf0
+[    2.652148]  really_probe+0xc4/0x470
+[    2.655793]  __driver_probe_device+0x11c/0x190
+[    2.659441]  driver_probe_device+0x48/0x104
+[    2.663694]  __device_attach_driver+0xa4/0x140
+[    2.667774]  bus_for_each_drv+0x84/0xe0
+[    2.672287]  __device_attach+0xe4/0x1c0
+[    2.676020]  device_initial_probe+0x20/0x30
+[    2.679840]  bus_probe_device+0xa4/0xb0
+[    2.684005]  device_add+0x3c4/0x8d0
+[    2.687824]  platform_device_add+0x124/0x280
+[    2.691299]  ci_hdrc_add_device+0x4e0/0x600
+[    2.695812]  ci_hdrc_msm_probe+0x2fc/0x410
+[    2.699719]  platform_probe+0x74/0xf0
+[    2.703885]  really_probe+0xc4/0x470
+[    2.707616]  __driver_probe_device+0x11c/0x190
+[    2.711264]  driver_probe_device+0x48/0x104
+[    2.715516]  __device_attach_driver+0xa4/0x140
+[    2.719598]  bus_for_each_drv+0x84/0xe0
+[    2.724110]  __device_attach+0xe4/0x1c0
+[    2.727842]  device_initial_probe+0x20/0x30
+[    2.731663]  bus_probe_device+0xa4/0xb0
+[    2.735829]  deferred_probe_work_func+0xa8/0xfc
+[    2.739649]  process_one_work+0x1e0/0x48c
+[    2.744162]  worker_thread+0x2c8/0x470
+[    2.748330]  kthread+0x16c/0x180
+[    2.751974]  ret_from_fork+0x10/0x20
+[    2.755360] ---[ end trace 0000000000000000 ]---
+[    2.759144] msm_hsusb: probe of ci_hdrc.0 failed with error -16
 
- Documentation/misc-devices/index.rst      |  1 +
- Documentation/misc-devices/smpro-misc.rst | 82 +++++++++++++++++++++++
- 2 files changed, 83 insertions(+)
- create mode 100644 Documentation/misc-devices/smpro-misc.rst
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-diff --git a/Documentation/misc-devices/index.rst b/Documentation/misc-devices/index.rst
-index 7a6a6263cbab..284568eca747 100644
---- a/Documentation/misc-devices/index.rst
-+++ b/Documentation/misc-devices/index.rst
-@@ -27,6 +27,7 @@ fit into other categories.
-    max6875
-    pci-endpoint-test
-    smpro-errmon
-+   smpro-misc
-    spear-pcie-gadget
-    uacce
-    xilinx_sdfec
-diff --git a/Documentation/misc-devices/smpro-misc.rst b/Documentation/misc-devices/smpro-misc.rst
-new file mode 100644
-index 000000000000..7c856eb1a7f3
---- /dev/null
-+++ b/Documentation/misc-devices/smpro-misc.rst
-@@ -0,0 +1,82 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
-+
-+Kernel driver Ampere(R) Altra(R) SMpro miscellaneous
-+====================================================
-+
-+Supported chips:
-+
-+  * Ampere(R) Altra(R)
-+
-+    Prefix: 'smpro'
-+
-+    Reference: Altra SoC BMC Interface Specification
-+
-+Author: Thu Nguyen <thu@os.amperecomputing.com>
-+
-+Description
-+-----------
-+
-+This driver support the monitoring and configuration of various miscellaneous
-+data provided by Ampere(R) Altra(R) SMpro processor.
-+At this time, these include:
-+
-+  * Reading Boot Progress information
-+  * Configuring SoC Power Limit
-+
-+Sysfs entries
-+-------------
-+
-+1) Boot progress
-+
-+SMpro misc driver creates the sysfs files ``boot_progress``.
-+The format of ``boot_progress`` file is as below::
-+
-+<boot stage> <boot status> <boot progress>
-+
-+Where:
-+
-+* Boot stage::
-+
-+    0: SMpro firmware booting.
-+    1: PMpro firmware booting.
-+    2: ATF BL1 firmware booting.
-+    3: DDR initialization.
-+    4: DDR training report status.
-+    5: ATF BL2 firmware booting.
-+    6: ATF BL31 firmware booting.
-+    7: ATF BL32 firmware booting.
-+    8: UEFI firmware booting.
-+    9: OS booting.
-+
-+* Boot status::
-+
-+    0: Not started.
-+    1: Started.
-+    2: Complete without error.
-+    3: Failure.
-+
-+* boot progress: 32 bits boot progress code
-+
-+The sysfs ``boot_progress`` only reports the boot state when the host is booting.
-+If the host is already booted, it returns latest state.
-+
-+Example::
-+
-+    #cat boot_progress
-+    0x01 0x02 0x808454A8
-+
-+2) SoC Power Limit
-+
-+SMpro misc driver creates the sysfs file ``soc_power_limit`` to get/set the SoC Power Limit.
-+
-+Reading this sysfs return the current setting of SoC Power Limit (W) in decimal string.
-+Writing the desired value in decimal string to set the SoC Power Limit in Watt (W).
-+The range of SoC Power Limit is 90-500(W) and will be ignored if out of range.
-+
-+Example::
-+
-+    #cat soc_power_limit
-+    90
-+    #echo 95 > soc_power_limit
-+    #cat soc_power_limit
-+    95
--- 
-2.28.0
+Test log link,
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211220/testrun/6957084/suite/linux-log-parser/test/check-kernel-warning-4175814/log
+https://lkft.validation.linaro.org/scheduler/job/4175814#L2228
 
+
+metadata:
+  git branch: master
+  git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git commit: 07f8c60fe60f84977dc815ec8a6b1100827c34dd
+  git describe: next-20211220
+  make_kernelversion: 5.16.0-rc5
+  kernel-config: https://builds.tuxbuild.com/22Y5Y3VmXo40DO70QoRQ1izVM5p/config
+  build: https://builds.tuxbuild.com/22Y5Y3VmXo40DO70QoRQ1izVM5p/
+  vmlinux: https://builds.tuxbuild.com/22Y5Y3VmXo40DO70QoRQ1izVM5p/vmlinux.xz
+  System.map: https://builds.tuxbuild.com/22Y5Y3VmXo40DO70QoRQ1izVM5p/System.map
+
+--
+Linaro LKFT
+https://lkft.linaro.org

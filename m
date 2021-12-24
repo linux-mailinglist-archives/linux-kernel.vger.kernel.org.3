@@ -2,125 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F35A47E9E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 01:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3BD47E9E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 01:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350410AbhLXA26 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 23 Dec 2021 19:28:58 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:38060 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbhLXA2z (ORCPT
+        id S1350458AbhLXAqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 19:46:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229995AbhLXAqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 19:28:55 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 1BO0SYiH4000307, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 1BO0SYiH4000307
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 24 Dec 2021 08:28:34 +0800
-Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 24 Dec 2021 08:28:34 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.15; Fri, 24 Dec 2021 08:28:34 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::65a3:1e23:d911:4b01]) by
- RTEXMBS04.realtek.com.tw ([fe80::65a3:1e23:d911:4b01%5]) with mapi id
- 15.01.2308.020; Fri, 24 Dec 2021 08:28:33 +0800
-From:   Pkshih <pkshih@realtek.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bernie Huang <phhuang@realtek.com>,
-        "open list:REALTEK WIRELESS DRIVER (rtw88)" 
-        <linux-wireless@vger.kernel.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-CC:     "kernel@collabora.com" <kernel@collabora.com>
-Subject: RE: [PATCH] rtw88: check for validity before using pointer
-Thread-Topic: [PATCH] rtw88: check for validity before using pointer
-Thread-Index: AQHX+CW4CiEO5Mr47Uyo81NvZcLlw6xAwyPg
-Date:   Fri, 24 Dec 2021 00:28:33 +0000
-Message-ID: <100d06e2398742bb82bd5300ce70d900@realtek.com>
-References: <YcS3D2lwMd0Kox3z@debian-BULLSEYE-live-builder-AMD64>
-In-Reply-To: <YcS3D2lwMd0Kox3z@debian-BULLSEYE-live-builder-AMD64>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2021/12/23_=3F=3F_07:48:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 23 Dec 2021 19:46:06 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85EEC061401;
+        Thu, 23 Dec 2021 16:46:05 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id r22so11491274ljk.11;
+        Thu, 23 Dec 2021 16:46:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=Y7lGzIGJA/SrDoJPFHjLxzVUJb2W2HU99JuGJnsMimY=;
+        b=bgsoOT2XqcPymxvpF+nTHe884XwvaE0m5QI6NmfCXH6chURLow0flQwGwuwpEDuNV6
+         uHEfrZa8eM5JupXl2FiHzxMX+s8gn1yUaKXbtchjYJK1QwIpBKdVQULm3dOedNa4Fnj0
+         i+NaN0pQv0hNk+4Fv+SQ+59uJNzwxkjfBw1VzgHXyTGUut8A7uPLeQZhopoOgmFbsGgu
+         7sjADfvZzBWCsNIeZOeF8kKWtvJz59Z3AKF6MYzMb7+jsZaPYML93HLPgJm7XXESRpjv
+         7WB5PAUoOgf2p52yh/wSRXsPcI6X9FaSLdI6nSJFcLAVjNTJWwD8mFGK0zrxP/jnSU3j
+         Z7NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=Y7lGzIGJA/SrDoJPFHjLxzVUJb2W2HU99JuGJnsMimY=;
+        b=dWkHvafPSlWpr+ffse3mLLFfzXmvU5UMkfM//xiEQsiz7LxF+VwmMewao/vqlJFVtd
+         415kQd8u8Nq/Ft/AI5QRxwXHo0tJ52BwhBh5iDhVECHUP6A2mhm1V9R9ytZAG3jGnGPt
+         uviF7F8YsbiuqiIoeIqZw6EyV6FJFLUSZBZ1BBeAd2oFOrmKgQhEUiwcoKVddbD9wzck
+         Z4sDelEsWclbu3lqFYQGVOt98cOfWPwDS+6rvDEKC/5RF/Hjk3Lu/Z4RjVQbHu4OQWp4
+         YAK8WcDOX7vXP0U0pjHUa8CaGtc+lLZHrv28DD0RcyLIY9R7kD3+XtHa3HU3r5S+rMwg
+         iZGw==
+X-Gm-Message-State: AOAM5302mzg3a8KyW3qCn3CI9wKaiEUK+YTeUDHWDk6wFjMTZ3ZW4cmO
+        8vE5MS2zBypkMkgTeK3rZyTCElMvsBH2OL3GQcTWFLQWLpU=
+X-Google-Smtp-Source: ABdhPJw8/MHMppQt0xYdXEcxyoLc8i4TYiwKCOxkwpO6+YVMLSojUAqW6PbxLziLZZTkfjT/vrk+wt9yUrrywkgiExU=
+X-Received: by 2002:a2e:2a46:: with SMTP id q67mr3107394ljq.398.1640306763699;
+ Thu, 23 Dec 2021 16:46:03 -0800 (PST)
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 23 Dec 2021 18:45:52 -0600
+Message-ID: <CAH2r5mvWBb7-Br3fz-Y6Jn4d3vQL_OEpRcnR_AjqEpSmNwxHtQ@mail.gmail.com>
+Subject: [GIT PULL] ksmbd fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Namjae Jeon <linkinjeon@kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Please pull the following changes since commit
+2585cf9dfaaddf00b069673f27bb3f8530e2039c:
 
+  Linux 5.16-rc5 (2021-12-12 14:53:01 -0800)
 
-> -----Original Message-----
-> From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> Sent: Friday, December 24, 2021 1:51 AM
-> To: Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; David S. Miller
-> <davem@davemloft.net>; Jakub Kicinski <kuba@kernel.org>; Pkshih <pkshih@realtek.com>; Bernie Huang
-> <phhuang@realtek.com>; open list:REALTEK WIRELESS DRIVER (rtw88) <linux-wireless@vger.kernel.org>; open
-> list:NETWORKING DRIVERS <netdev@vger.kernel.org>; open list <linux-kernel@vger.kernel.org>
-> Cc: usama.anjum@collabora.com; kernel@collabora.com
-> Subject: [PATCH] rtw88: check for validity before using pointer
-> 
-> ieee80211_probereq_get() can return NULL. Pointer skb should be checked
-> for validty before use.
-> 
-> Fixes: 10d162b2ed39 ("rtw88: 8822c: add ieee80211_ops::hw_scan")
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->  drivers/net/wireless/realtek/rtw88/fw.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/net/wireless/realtek/rtw88/fw.c b/drivers/net/wireless/realtek/rtw88/fw.c
-> index 2f7c036f9022..0fc05a810d05 100644
-> --- a/drivers/net/wireless/realtek/rtw88/fw.c
-> +++ b/drivers/net/wireless/realtek/rtw88/fw.c
-> @@ -1866,6 +1866,8 @@ static int rtw_hw_scan_update_probe_req(struct rtw_dev *rtwdev,
->  					     req->ssids[i].ssid,
->  					     req->ssids[i].ssid_len,
->  					     req->ie_len);
-> +		if (!skb)
-> +			return -ENOMEM;
->  		rtw_append_probe_req_ie(rtwdev, skb, &list, rtwvif);
->  		kfree_skb(skb);
->  	}
+are available in the Git repository at:
 
-Without properly freeing skb(s) in list, it leads memory leak.
-We need something below to free them:
+  git://git.samba.org/ksmbd.git tags/5.16-rc5-ksmbd-fixes
 
-	if (!skb)
-		goto out;
+for you to fetch changes up to 83912d6d55be10d65b5268d1871168b9ebe1ec4b:
 
-	[...]
+  ksmbd: disable SMB2_GLOBAL_CAP_ENCRYPTION for SMB 3.1.1 (2021-12-17
+19:19:45 -0600)
 
-out:
-	skb_queue_walk(&list, skb)
-		kfree_skb(skb);
+----------------------------------------------------------------
+Three ksmbd fixes, all for stable.
+- Two fix potential uninitialized memory
+- One fixes a security problem where encryption ends up
+unintentionally disabled from some clients
 
-	return -ENOMEM;
+Regression test results:
+http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/8/builds/97
+----------------------------------------------------------------
+Dan Carpenter (1):
+      ksmbd: fix error code in ndr_read_int32()
 
-So, NACK this patch.
+Marcos Del Sol Vives (1):
+      ksmbd: disable SMB2_GLOBAL_CAP_ENCRYPTION for SMB 3.1.1
 
---
-Ping-Ke
+Namjae Jeon (1):
+      ksmbd: fix uninitialized symbol 'pntsd_size'
 
+ fs/ksmbd/ndr.c     |  2 +-
+ fs/ksmbd/smb2ops.c |  3 ---
+ fs/ksmbd/smb2pdu.c | 29 +++++++++++++++++++++++++----
+ 3 files changed, 26 insertions(+), 8 deletions(-)
+
+-- 
+Thanks,
+
+Steve

@@ -2,91 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A2047EA91
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 03:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E76BF47EA96
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 03:30:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350891AbhLXCPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 21:15:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232088AbhLXCPG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 21:15:06 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CF3C061401;
-        Thu, 23 Dec 2021 18:15:06 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id 2so6352244pgb.12;
-        Thu, 23 Dec 2021 18:15:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=+u80chd0X9IdJbC9rzVa4i2Ic75GmOj9yENvhOzHlCY=;
-        b=eWerUxLhX08ma0gyDkT8WzZQK1o79q5638ooWjYSRttVegdMABmLjs+KP/hcBKHhMo
-         StRsMGRiXarH46psOk95RKyAfWTP5n11VRNoiiV8DaaxMxjDUsA8ccnDR+mquHlLyvOd
-         sL4wb/psKaTLLC1LZvgptDiP32lIrarYjJc9wFsodL68LFuVjPOh5Tuf+7H5or70YEVX
-         Xuxym5VWqma5hrhvZ8kFeUS1oDYM9DvAHg6DCil5P8CEYUj4+3RLTiEg9ASmM3CX9uoa
-         cSMYZ2FE1S/w6aFWgMYyDfgXr1Di07rUg+p0mPFRC1sEaX9SvXJO2/iA4EODIPpRGI4a
-         MggA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=+u80chd0X9IdJbC9rzVa4i2Ic75GmOj9yENvhOzHlCY=;
-        b=FNHiAMsnrcmNtmY6lqrT1b5MpxzdG0WTsdWOmPAQI2tzEJHUfnxmSOjRkfTqXfvlst
-         M0Wtue+ACX9X9B9xpeyI3qZ2CcktsTCFfZpNqBKS9BcP5IBx/g81aHYCOmr5hVRL535+
-         FLoojD/+DxzLUOYxpg2xksdTluWnw4r97ThneXfI0blVUhuZuXOpsPxDBbNHCXVLb8Ju
-         fqDRLPJqQBsNCNtq8SXhBz0kaoEzYJBZA/BkZDJdH7V6nNwwJKulMpMNcBk9qURxVzrU
-         7/0jgvn+j/CoEkc3RWRH2hZhcJhcsQxA/PQ8znjkdhclLja7cRnRamwTe1sbyT0KZK1f
-         YIrA==
-X-Gm-Message-State: AOAM531YyOaJqhmyqoccGP76P8BU/YxZ2h2YobK66EM0V3g1kO7Hvks4
-        hJWKP64788DZ45FZy6YyXJM=
-X-Google-Smtp-Source: ABdhPJynCA6P9/woMAiJH6+7MUSjDD0Se4EqhrD7wr2wYeB+2u+TxFyISICUOSSFGlOEQKfw/LX1WQ==
-X-Received: by 2002:a63:86c8:: with SMTP id x191mr4214239pgd.475.1640312106169;
-        Thu, 23 Dec 2021 18:15:06 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id on2sm10285245pjb.19.2021.12.23.18.15.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Dec 2021 18:15:05 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: phy: fixed_phy: Fix NULL vs IS_ERR() checking in __fixed_phy_register
-Date:   Fri, 24 Dec 2021 02:14:59 +0000
-Message-Id: <20211224021500.10362-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        id S244957AbhLXCXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 21:23:50 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:41842 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236710AbhLXCXt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 21:23:49 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowAB3fAAaL8Vh253GBA--.1046S2;
+        Fri, 24 Dec 2021 10:23:22 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     kyungmin.park@samsung.com, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] mtd: onenand: Check for error irq
+Date:   Fri, 24 Dec 2021 10:23:21 +0800
+Message-Id: <20211224022321.1470969-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAB3fAAaL8Vh253GBA--.1046S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1DAryDAFy8Kr1fXF13Jwb_yoW8JF4DpF
+        Z2kay3Cr48K3WrCa9Fyw1DuF1Yk3WxKrWUtFnIvry8Z3s8Jw13u3s5JFW2qFWUAFWrJw4a
+        qF4Fqa95CF1kurDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
+        JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr
+        0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUCg4hUUU
+        UU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The fixed_phy_get_gpiod function() returns NULL, it doesn't return error
-pointers, using NULL checking to fix this.i
+For the possible failure of the platform_get_irq(), the returned irq
+could be error number and will finally cause the failure of the
+request_irq().
+Consider that platform_get_irq() can now in certain cases return
+-EPROBE_DEFER, and the consequences of letting request_irq() effectively
+convert that into -EINVAL, even at probe time rather than later on.
+So it might be better to check just now.
 
-Fixes: 5468e82f7034 ("net: phy: fixed-phy: Drop GPIO from fixed_phy_add()")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Fixes: 26777d37216c ("mtd: Move onenand code base to drivers/mtd/nand/onenand")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- drivers/net/phy/fixed_phy.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/mtd/nand/onenand/generic.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/phy/fixed_phy.c b/drivers/net/phy/fixed_phy.c
-index c65fb5f5d2dc..a0c256bd5441 100644
---- a/drivers/net/phy/fixed_phy.c
-+++ b/drivers/net/phy/fixed_phy.c
-@@ -239,8 +239,8 @@ static struct phy_device *__fixed_phy_register(unsigned int irq,
- 	/* Check if we have a GPIO associated with this fixed phy */
- 	if (!gpiod) {
- 		gpiod = fixed_phy_get_gpiod(np);
--		if (IS_ERR(gpiod))
--			return ERR_CAST(gpiod);
-+		if (!gpiod)
-+			return ERR_PTR(-EINVAL);
+diff --git a/drivers/mtd/nand/onenand/generic.c b/drivers/mtd/nand/onenand/generic.c
+index 8b6f4da5d720..a4b8b65fe15f 100644
+--- a/drivers/mtd/nand/onenand/generic.c
++++ b/drivers/mtd/nand/onenand/generic.c
+@@ -53,7 +53,12 @@ static int generic_onenand_probe(struct platform_device *pdev)
  	}
  
- 	/* Get the next available PHY address, up to PHY_MAX_ADDR */
+ 	info->onenand.mmcontrol = pdata ? pdata->mmcontrol : NULL;
+-	info->onenand.irq = platform_get_irq(pdev, 0);
++
++	err = platform_get_irq(pdev, 0);
++	if (err < 0)
++		goto out_iounmap;
++
++	info->onenand.irq = err;
+ 
+ 	info->mtd.dev.parent = &pdev->dev;
+ 	info->mtd.priv = &info->onenand;
 -- 
-2.17.1
+2.25.1
 

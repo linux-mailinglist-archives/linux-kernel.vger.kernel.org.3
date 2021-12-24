@@ -2,118 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC64547EFC7
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 16:08:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0ABE47EFC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 16:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353057AbhLXPIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 10:08:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55493 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241810AbhLXPIk (ORCPT
+        id S1353064AbhLXPKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 10:10:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238876AbhLXPKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 10:08:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640358520;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=VANKkwXTML/2/9ot1sh770YbPivcKWxATAmwzqHleQQ=;
-        b=Gg+mhdgfCarVZ1A9Qg6RTt7a0wZ/dvoc3TCEIiHEjW+iI1WMHMuE6DC6yOGzw70C+JcU0E
-        r8qAhcSJ1tkeBVAnUnyTKV54T3Su40YU56j1HwVgqtQqDCBw8bRfDVaUOHrkipj1jDNH0r
-        fbyrDY1Chp+wMg8EtjREJ18vjY8ImY0=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-564-AoSaJmjMNZyJ7lvbA9TUFg-1; Fri, 24 Dec 2021 10:08:39 -0500
-X-MC-Unique: AoSaJmjMNZyJ7lvbA9TUFg-1
-Received: by mail-qt1-f200.google.com with SMTP id y1-20020ac87041000000b002c3db9c25f8so5879742qtm.5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 07:08:38 -0800 (PST)
+        Fri, 24 Dec 2021 10:10:09 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D54C061401;
+        Fri, 24 Dec 2021 07:10:09 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id j83so5180363ybg.2;
+        Fri, 24 Dec 2021 07:10:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6doRrvb+MW2ZsOVkICav/FngCWORNfpHOqxU12iEIjw=;
+        b=Xf2wwCSyrjDia3R2CMEI0FTzBwB5N6jBdhAVXZDe5epUaYFNdqU7zKEPxxZXTmB9qh
+         QlP6JkKgJ4cZoBJnBPkOO2k/pOCofjNEGTIumUfMrPf/0mGsvsihprbNFUJ5eGLdLIOP
+         9EZydgQdoBpmfaseovbMUN57Efh8krcB5RJthZ5+McWgH6VWvqQhGnK/viG6156fvQ9T
+         sCE0ZWlpovtigrCb3dZZVEl2p1HHokawv5rYvvmUKOtju28UeBVnDLAUWw6zU4Ncs5X2
+         eqc7FFWWLYEd6u1zU5iTZpCJaU7H47BkbehMlLBkTQpQFyOODNTB6FjtP1YPUpnyxSUM
+         qAig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VANKkwXTML/2/9ot1sh770YbPivcKWxATAmwzqHleQQ=;
-        b=W4zguD6BDUKTJqxyUqZMhDLXQP4S1HOu1D5gFH58x4RpBcDuwdSRUjkSYjx9dUOXfL
-         7uEZRgfe8plN6V3moEBd43TJM2dzZXoRS0l5PiAkQaf7ZUcvh16vT4ZjBZdZE7CYOix/
-         q/BhY3wd8YDDmU6ML9CFDnT1vtnO3ykQJV4mGX6z7Zvo/7jY0wHXZm8Wn4fvWkn/bbfr
-         OrXv5GWLVcQgfELoZUhHkgcq4Ih0GDgJs/VJTum+aZtRYR22nXCzxSgWifZqkfJn0laV
-         UlztXgI4Gi7tljMXSaSgYuemjssdK/nV2uNrV4Z9jwEqMD3735CYVi/kLvV+Wob+x/cJ
-         te8A==
-X-Gm-Message-State: AOAM530dcy3+CPGQXEmeePLo3bkgEARR+tsTxTTu64fywHcsPG4H+/QJ
-        EZIuKmKDHuKCZAKX2DJD5o/KpQIZkEdWgickucW1x1HFSWp5i+yTKHBBxxJyT6ApVYeWdOUPGUv
-        EAmzBNeVNhRXehl8PKSQEaVWK
-X-Received: by 2002:ac8:4a87:: with SMTP id l7mr5860363qtq.310.1640358518543;
-        Fri, 24 Dec 2021 07:08:38 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwKkj/oUpZ8SgPSGh8spTXveLPNfIswgd7mJJYvqRjSeHCVzNFqxnzEZiIsSaW0BbAzrBkQHA==
-X-Received: by 2002:ac8:4a87:: with SMTP id l7mr5860343qtq.310.1640358518355;
-        Fri, 24 Dec 2021 07:08:38 -0800 (PST)
-Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id b11sm6512248qtx.85.2021.12.24.07.08.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Dec 2021 07:08:38 -0800 (PST)
-From:   trix@redhat.com
-To:     jacopo@jmondi.org, jic23@kernel.org, lars@metafoo.de,
-        nathan@kernel.org, ndesaulniers@google.com
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] iio: chemical: set val parameter only on success
-Date:   Fri, 24 Dec 2021 07:08:33 -0800
-Message-Id: <20211224150833.3278236-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6doRrvb+MW2ZsOVkICav/FngCWORNfpHOqxU12iEIjw=;
+        b=4JwnuGLcL3k7LOzE+VBpHsQAp2ThIyO0/28nQOZ86AioOBJvLiGTCbsh834qXLp7pV
+         r3wdtLf0JDHC3PetwrE00hy6BjO1O7cQdJ3Z7Mr4OKShc96/qHj3C/80QHbUZNFREaR3
+         JfskhLDGnrS9kcpzL7sUnpc4rSi/3ODyCoGdm9TPHLLZWUMGFxfKB4f+3DyTFVacQIM7
+         qfwq9qCwUpJlnPeR30QhR+b+L0vUyHOc3d3wDc0ABp0jaMia4QyPMA6CzayvO152dZaS
+         mioFqnd5xfKwyIXETrAet6HOP61NldLtcqah1/dbu5nqKEMx+4kQmbdVEUcN5WkezBuP
+         yNQA==
+X-Gm-Message-State: AOAM532G6EqICI+bB7PWY0CuLsQK8L0ce2UIWGAgq9snfN0Yy5MwmH0n
+        3nssDVG7rFPBZPW2ZiGUxWnMcLLy9MrRCBoaYm1yIHQnyjAc6w==
+X-Google-Smtp-Source: ABdhPJxvuKsql6MSB+L0WeF3XLc7px85LpC0vVSaCjkcH4PdVSon1OvKMaGCDIgjvO0IB0J9oNhlMV92z90+oSqNq2k=
+X-Received: by 2002:a25:cb97:: with SMTP id b145mr9038837ybg.186.1640358608228;
+ Fri, 24 Dec 2021 07:10:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211224145748.18754-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211224145748.18754-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <YcXhPrvOsBRVAJ8w@piout.net>
+In-Reply-To: <YcXhPrvOsBRVAJ8w@piout.net>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Fri, 24 Dec 2021 15:09:42 +0000
+Message-ID: <CA+V-a8teu=9Eeyjd78Va1hEs7BCD_+zMSS_T_WPz82bXwvcgjw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] pinctrl: at91-pio4: Use platform_get_irq_optional()
+ to get the interrupt
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+Hi Alexandre,
 
-Clang static analysis reports this representative warning
+Thank you for the review.
 
-sunrise_co2.c:410:9: warning: Assigned value is garbage or undefined
-  *val = value;
-       ^ ~~~~~
+On Fri, Dec 24, 2021 at 3:03 PM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> On 24/12/2021 14:57:48+0000, Lad Prabhakar wrote:
+> > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> > allocation of IRQ resources in DT core code, this causes an issue
+> > when using hierarchical interrupt domains using "interrupts" property
+> > in the node as this bypasses the hierarchical setup and messes up the
+> > irq chaining.
+> >
+> > In preparation for removal of static setup of IRQ resource from DT core
+> > code use platform_get_irq_optional().
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> >  drivers/pinctrl/pinctrl-at91-pio4.c | 14 ++++++--------
+> >  1 file changed, 6 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/drivers/pinctrl/pinctrl-at91-pio4.c b/drivers/pinctrl/pinctrl-at91-pio4.c
+> > index fafd1f55cba7..ebfb106be97d 100644
+> > --- a/drivers/pinctrl/pinctrl-at91-pio4.c
+> > +++ b/drivers/pinctrl/pinctrl-at91-pio4.c
+> > @@ -1045,7 +1045,6 @@ static int atmel_pinctrl_probe(struct platform_device *pdev)
+> >       const char **group_names;
+> >       const struct of_device_id *match;
+> >       int i, ret;
+> > -     struct resource *res;
+> >       struct atmel_pioctrl *atmel_pioctrl;
+> >       const struct atmel_pioctrl_data *atmel_pioctrl_data;
+> >
+> > @@ -1164,16 +1163,15 @@ static int atmel_pinctrl_probe(struct platform_device *pdev)
+> >
+> >       /* There is one controller but each bank has its own irq line. */
+> >       for (i = 0; i < atmel_pioctrl->nbanks; i++) {
+> > -             res = platform_get_resource(pdev, IORESOURCE_IRQ, i);
+> > -             if (!res) {
+> > +             ret = platform_get_irq_optional(pdev, i);
+>
+> I don't think the irq should be optional here.
+>
+The only difference between platform_get_irq() and
+platform_get_irq_optional() is that platform_get_irq() prints an error
+message in case of error. Since we are already printing an sane error
+message "missing irq resource for group %c\n" in the driver I've
+chosen platform_get_irq_optional() instead platform_get_irq().
 
-The ealier call to sunrise_read_word can fail without setting
-value.  So defer setting val until we know the read was successful.
+Let me know if you want me to drop platform_get_irq_optional() and use
+platform_get_irq() instead, in that case I'll also drop the error
+message "missing irq resource for group %c\n" from the driver.
 
-Fixes: c397894e24f1 ("iio: chemical: Add Senseair Sunrise 006-0-007 driver")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/iio/chemical/sunrise_co2.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Cheers,
+Prabhakar
 
-diff --git a/drivers/iio/chemical/sunrise_co2.c b/drivers/iio/chemical/sunrise_co2.c
-index 233bd0f379c93..8440dc0c77cfe 100644
---- a/drivers/iio/chemical/sunrise_co2.c
-+++ b/drivers/iio/chemical/sunrise_co2.c
-@@ -407,24 +407,24 @@ static int sunrise_read_raw(struct iio_dev *iio_dev,
- 			mutex_lock(&sunrise->lock);
- 			ret = sunrise_read_word(sunrise, SUNRISE_CO2_FILTERED_COMP_REG,
- 						&value);
--			*val = value;
- 			mutex_unlock(&sunrise->lock);
- 
- 			if (ret)
- 				return ret;
- 
-+			*val = value;
- 			return IIO_VAL_INT;
- 
- 		case IIO_TEMP:
- 			mutex_lock(&sunrise->lock);
- 			ret = sunrise_read_word(sunrise, SUNRISE_CHIP_TEMPERATURE_REG,
- 						&value);
--			*val = value;
- 			mutex_unlock(&sunrise->lock);
- 
- 			if (ret)
- 				return ret;
- 
-+			*val = value;
- 			return IIO_VAL_INT;
- 
- 		default:
--- 
-2.26.3
-
+> > +             if (ret < 0) {
+> >                       dev_err(dev, "missing irq resource for group %c\n",
+> >                               'A' + i);
+> > -                     return -EINVAL;
+> > +                     return ret;
+> >               }
+> > -             atmel_pioctrl->irqs[i] = res->start;
+> > -             irq_set_chained_handler_and_data(res->start,
+> > -                     atmel_gpio_irq_handler, atmel_pioctrl);
+> > -             dev_dbg(dev, "bank %i: irq=%pr\n", i, res);
+> > +             atmel_pioctrl->irqs[i] = ret;
+> > +             irq_set_chained_handler_and_data(ret, atmel_gpio_irq_handler, atmel_pioctrl);
+> > +             dev_dbg(dev, "bank %i: irq=%d\n", i, ret);
+> >       }
+> >
+> >       atmel_pioctrl->irq_domain = irq_domain_add_linear(dev->of_node,
+> > --
+> > 2.17.1
+> >
+>
+> --
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com

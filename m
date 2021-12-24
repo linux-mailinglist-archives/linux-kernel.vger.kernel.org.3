@@ -2,101 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A76247EDCC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 10:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD0C47EDD5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 10:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352269AbhLXJan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 04:30:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352252AbhLXJaj (ORCPT
+        id S1352279AbhLXJew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 04:34:52 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:35128 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241582AbhLXJev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 04:30:39 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941A4C061401;
-        Fri, 24 Dec 2021 01:30:39 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id q16so16496789wrg.7;
-        Fri, 24 Dec 2021 01:30:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=EJQtFTzz9lwvfgf1qw1K/0Ljk8OXzOsLX8IG2GBDVhk=;
-        b=SLOebor4t29N3kvyTeRO9KKbsNldrRZ1/WIKSilbdlggR1xPz+64+QcVEh/QWpvfJm
-         wmz8OfwLUIlRtmvKBYdcCYnvZ/lVb5LFIt7/lVBIbbYr9AvTNxGyhLvOjQ3oE5+Ainp/
-         Eqjba0RLE56yetCzhECjH4EuJxOIqno4gmyn3WMLIwU5cBOf/1WwNprHJtYupcZYACkj
-         dsoPsZNejZJMVfB7qEy2TbGpn1ZfD5gvw6eXz85NKTpeBzC86IUQ11m91FuLav7V99aM
-         bqwXA04fTE0/8/4TEyWmoZT8Vh+2mgzPfmbHyDJq1Og/TtfBz2xp5ggKpTIvPg9jsrKP
-         Ua/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=EJQtFTzz9lwvfgf1qw1K/0Ljk8OXzOsLX8IG2GBDVhk=;
-        b=vczsmbL23w4awuxi/Mhr80CDRenzr+Z4QLd2c6WTKXuRzaJAQv4Vt3aqGfKMd2/fuN
-         nQtRecksm0ZD1WpqmhsK6oN/dIMkwr8L55wK17kPfOODH2vU16aYSJzjBvvyJ9Fg3H5I
-         T1zpWS4+Xv95SUnIbJysUock//QaA+WWIPG0vFMhN6jY+g7eJVPx3XDNB4l2WA/aImlI
-         Hy5RL/fiTzG7YmVYHOPwY8y6j0jhfVgJKiyHuQU3hd/1ar9/uX4dbPk/4NDtF0hAEs34
-         fbFvuD86Ieq3sS8aAA2EgUewCfbbXfa8iTZOd0TEZFaG659qTXT5RkRV9qaUU70fuy+R
-         zMLA==
-X-Gm-Message-State: AOAM530NhvWXBeq5Cmu0lEB3nyJb6mH3T+RwU+Pyv1a3tA5NT23ZBNKi
-        DvOM0mH12Cng9b7Z3fMVkZFH8pqbdTM=
-X-Google-Smtp-Source: ABdhPJwyhGykyU41jwFR7DtKGJCl4l+j+5Heq+Q4I/odmPNJmBAg6G/C57xgLMGmbrCbaJ9hvxXbLQ==
-X-Received: by 2002:a5d:540f:: with SMTP id g15mr4238550wrv.126.1640338238191;
-        Fri, 24 Dec 2021 01:30:38 -0800 (PST)
-Received: from ?IPV6:2003:ea:8f24:fd00:8bf:4fa4:e765:100f? (p200300ea8f24fd0008bf4fa4e765100f.dip0.t-ipconnect.de. [2003:ea:8f24:fd00:8bf:4fa4:e765:100f])
-        by smtp.googlemail.com with ESMTPSA id v1sm8101709wru.45.2021.12.24.01.30.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Dec 2021 01:30:37 -0800 (PST)
-Message-ID: <30be5b7d-3049-6bb9-9dc2-61b80fed10e0@gmail.com>
-Date:   Fri, 24 Dec 2021 10:30:30 +0100
+        Fri, 24 Dec 2021 04:34:51 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id D8F331F45BEC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1640338490;
+        bh=qZF4je+LerA+OqBTDGJZEJVXwlNuPorsNcMLYzAa4mE=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Wg3hniFlgAgdm3+vcSd+eEaeyLtW+YGGquc/J66XoOcZZJmWSoP5yHq1QqHbFJ8xg
+         a6UBjbyr1qNmhueOZ38UDEgHWRyyB9HeL1TLmBnOdlSHC+WDvm6nGCL4aBd4S8OdET
+         wRdm7ILxTeJ0O4Zji5PCMyoIlwnJj/T0UphNwoFSvybGmnV9fGfuQbjCDWXnFX7Ec4
+         o8Cw2NB7P3KIUiX8UOG4znfp3z/DNk0gprvhs/ZzD74KMPQKhgW7dSq7jKxDnQZx9J
+         rsFOuzP2hrT568VUNyAGUxmBMsX2TqnJkkn9gMaa+8n20439BASD3L6vOzf9fUil9M
+         NJ2HkW59ys1KA==
+Subject: Re: [PATCH v16 3/7] soc: mediatek: SVS: introduce MTK SVS engine
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20210428065440.3704-1-roger.lu@mediatek.com>
+ <20210428065440.3704-4-roger.lu@mediatek.com>
+ <c97f7dcd-32e5-616e-1bf9-fbd110ecd218@collabora.com>
+ <6cdc903250723a6c547bccf2546dd10091b76249.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <fc825af2-7331-fa05-26e0-f3054557333a@collabora.com>
+Date:   Fri, 24 Dec 2021 10:34:46 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
+In-Reply-To: <6cdc903250723a6c547bccf2546dd10091b76249.camel@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>, davem@davemloft.net
-Cc:     kuba@kernel.org, andrew@lunn.ch, linux@armlinux.org.uk,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20211224091208.32274-1-yang.lee@linux.alibaba.com>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH -next] net: phy: micrel: use min() macro instead of doing
- it manually
-In-Reply-To: <20211224091208.32274-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.12.2021 10:12, Yang Li wrote:
-> Fix following coccicheck warning:
-> ./drivers/net/phy/micrel.c:1482:12-13: WARNING opportunity for min()
+Il 24/12/21 10:27, Roger Lu ha scritto:
+> Hi AngeloGioacchino,
 > 
-Please always check whether a coccicheck warning makes sense,
-and don't create "fixes" mechanically w/o thinking.
-Here using min() doesn't make sense because it's not about a
-numerical operation. ret < 0 is equivalent to is_err(ret).
-
-
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->  drivers/net/phy/micrel.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Sorry for the late reply and thanks for all the advices.
 > 
-> diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-> index c6a97fcca0e6..dda426596445 100644
-> --- a/drivers/net/phy/micrel.c
-> +++ b/drivers/net/phy/micrel.c
-> @@ -1479,7 +1479,7 @@ static int ksz886x_cable_test_wait_for_completion(struct phy_device *phydev)
->  				    !(val & KSZ8081_LMD_ENABLE_TEST),
->  				    30000, 100000, true);
->  
-> -	return ret < 0 ? ret : 0;
-> +	return min(ret, 0);
->  }
->  
->  static int ksz886x_cable_test_one_pair(struct phy_device *phydev, int pair)
+> On Thu, 2021-10-21 at 10:46 +0200, AngeloGioacchino Del Regno wrote:
+>> Il 28/04/21 08:54, Roger Lu ha scritto:
+>>> The Smart Voltage Scaling(SVS) engine is a piece of hardware
+>>> which calculates suitable SVS bank voltages to OPP voltage table.
+>>> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
+>>> when receiving OPP_EVENT_ADJUST_VOLTAGE.
+>>>
+>>> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+>>> ---
+>>>    drivers/soc/mediatek/Kconfig   |   10 +
+>>>    drivers/soc/mediatek/Makefile  |    1 +
+>>>    drivers/soc/mediatek/mtk-svs.c | 1723 ++++++++++++++++++++++++++++++++
+>>>    3 files changed, 1734 insertions(+)
+>>>    create mode 100644 drivers/soc/mediatek/mtk-svs.c
+> 
+> [snip]
+> 
+>>> +/* svs bank common setting */
+>>> +#define SVSB_DET_CLK_EN			BIT(31)
+>>> +#define SVSB_TZONE_HIGH_TEMP_MAX	U32_MAX
+>>> +#define SVSB_RUNCONFIG_DEFAULT		0x80000000
+>>> +#define SVSB_DC_SIGNED_BIT		0x8000
+>>> +#define SVSB_INTEN_INIT0x		0x00005f01
+>>> +#define SVSB_INTEN_MONVOPEN		0x00ff0000
+>>> +#define SVSB_EN_OFF			0x0
+>>> +#define SVSB_EN_MASK			0x7
+>>> +#define SVSB_EN_INIT01			0x1
+>>> +#define SVSB_EN_INIT02			0x5
+>>> +#define SVSB_EN_MON			0x2
+>>> +#define SVSB_INTSTS_MONVOP		0x00ff0000
+>>> +#define SVSB_INTSTS_COMPLETE		0x1
+>>> +#define SVSB_INTSTS_CLEAN		0x00ffffff
+>>> +
+>>> +static DEFINE_SPINLOCK(mtk_svs_lock);
+>>> +
+>>> +/*
+>>
+>> Thanks for using kernel-doc!! However, to be proper, this has to be
+>> /**
+>>    * ..........
+> 
+> Oh okay. Thanks. I will use /** to add multi-line comments. However, I checked
+> kernel doc-guide and it uses indent as below. So, I'll follow it. If I'm doing
+> it wrong, please correct me. Thanks a lot.
+> https://www.kernel.org/doc/html/latest/doc-guide/kernel-doc.html
+> 
+> /**
+>   * .........
+> 
 
+You're welcome! By the way, yes, the indentation is as shown on the documentation.
+
+Regards,
+- Angelo

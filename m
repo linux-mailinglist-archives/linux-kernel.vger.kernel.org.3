@@ -2,153 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3E947EC6E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 08:06:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5283447EC73
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 08:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351712AbhLXHG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 02:06:29 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:29286 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241206AbhLXHG2 (ORCPT
+        id S1351727AbhLXHHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 02:07:08 -0500
+Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:56806 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351716AbhLXHHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 02:06:28 -0500
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JKylG1zS0zbjZS;
-        Fri, 24 Dec 2021 15:06:02 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 24 Dec 2021 15:06:27 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.20; Fri, 24 Dec 2021 15:06:26 +0800
-Message-ID: <96fe1826-aeaf-4ea0-9f01-03d6b3933b34@huawei.com>
-Date:   Fri, 24 Dec 2021 15:06:25 +0800
+        Fri, 24 Dec 2021 02:07:07 -0500
+Received: from pop-os.home ([86.243.171.122])
+        by smtp.orange.fr with ESMTPA
+        id 0efJn3FOo65jH0efJnacG6; Fri, 24 Dec 2021 08:07:06 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Fri, 24 Dec 2021 08:07:06 +0100
+X-ME-IP: 86.243.171.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     james.smart@broadcom.com, dick.kennedy@broadcom.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH 0/2] scsi: lpfc: Cleanup some bitmap handling.
+Date:   Fri, 24 Dec 2021 08:06:56 +0100
+Message-Id: <cover.1640328930.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] Revert "mm/usercopy: Drop extra is_vmalloc_or_module()
- check"
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Kees Cook <keescook@chromium.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-References: <20211223102126.161848-1-wangkefeng.wang@huawei.com>
- <ffd77bcf-b9d8-956c-9f83-14b9f0b496e7@csgroup.eu>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <ffd77bcf-b9d8-956c-9f83-14b9f0b496e7@csgroup.eu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggeme702-chm.china.huawei.com (10.1.199.98) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The 1st patch of this serie uses bitmap_zalloc() to simplify code.
+The 2nd patch makes sure that the whole bitmap is cleared, should it need more
+than 1 long.
 
-On 2021/12/24 14:01, Christophe Leroy wrote:
->
-> Le 23/12/2021 à 11:21, Kefeng Wang a écrit :
->> This reverts commit 517e1fbeb65f5eade8d14f46ac365db6c75aea9b.
->>
->>     usercopy: Kernel memory exposure attempt detected from SLUB object not in SLUB page?! (offset 0, size 1048)!
->>     kernel BUG at mm/usercopy.c:99
->>     ...
->>     usercopy_abort+0x64/0xa0 (unreliable)
->>     __check_heap_object+0x168/0x190
->>     __check_object_size+0x1a0/0x200
->>     dev_ethtool+0x2494/0x2b20
->>     dev_ioctl+0x5d0/0x770
->>     sock_do_ioctl+0xf0/0x1d0
->>     sock_ioctl+0x3ec/0x5a0
->>     __se_sys_ioctl+0xf0/0x160
->>     system_call_exception+0xfc/0x1f0
->>     system_call_common+0xf8/0x200
->>
->> When run ethtool eth0, the BUG occurred, the code shows below,
->>
->>     data = vzalloc(array_size(gstrings.len, ETH_GSTRING_LEN));
->>     copy_to_user(useraddr, data, gstrings.len * ETH_GSTRING_LEN))
->>
->> The data is alloced by vmalloc(),  virt_addr_valid(ptr) will return true
->> on PowerPC64, which leads to the panic, add back the is_vmalloc_or_module()
->> check to fix it.
-> Is it expected that virt_addr_valid() returns true on PPC64 for
-> vmalloc'ed memory ? If that's the case it also means that
-> CONFIG_DEBUG_VIRTUAL won't work as expected either.
+However, this 'fcf_rr_bmask' is small (LPFC_SLI4_FCF_TBL_INDX_MAX = 32 bits), so
+another option could be to use DECLARE_BITMAP instead of dynamic allocation.
 
-Our product reports this bug to me, after let them do some test,
+This would simplify code (no more allocation and associated error handling) and
+be slighly more efficient (1 less indirection when accessing the bitmap).
+In the case the 2nd patch could also be removed (using bitmap_zero() would still
+be cleaner (IMHO), but the actual memset+sizeof would work as expected)
 
-I found virt_addr_valid return true for vmalloc'ed memory on their board.
+Let me know if I should send a v2 with this other approach.
 
-I think DEBUG_VIRTUAL could not be work well too, but I can't test it.
+Christophe JAILLET (2):
+  scsi: lpfc: Use bitmap_zalloc() when applicable
+  scsi: lpfc: Make sure to completely clear some bitmaps
 
->
-> If it is unexpected, I think you should fix PPC64 instead of adding this
-> hack back. Maybe the ARM64 fix can be used as a starting point, see
-> commit 68dd8ef32162 ("arm64: memory: Fix virt_addr_valid() using
-> __is_lm_address()")
+ drivers/scsi/lpfc/lpfc_hbadisc.c |  7 ++++---
+ drivers/scsi/lpfc/lpfc_init.c    | 10 ++++------
+ drivers/scsi/lpfc/lpfc_sli.c     |  3 +--
+ 3 files changed, 9 insertions(+), 11 deletions(-)
 
-Yes， I check the history,  fix virt_addr_valid() on PowerPC is what I 
-firstly want to do,
+-- 
+2.32.0
 
-but I am not familiar with PPC, and also HARDENED_USERCOPY on other's 
-ARCHs could
-
-has this issue too, so I add the workaround back.
-
-
-1) PPC maintainer/expert, any suggestion ?
-
-2) Maybe we could add some check to WARN this scenario.
-
---- a/mm/usercopy.c
-+++ b/mm/usercopy.c
-@@ -229,6 +229,8 @@ static inline void check_heap_object(const void 
-*ptr, unsigned long n,
-         if (!virt_addr_valid(ptr))
-                 return;
-
-+       WARN_ON_ONCE(is_vmalloc_or_module_addr(ptr));
-
-> In the meantime, can you provide more information on your config,
-> especially which memory model is used ?
-
-Some useful configs,
-
-CONFIG_PPC64=y
-CONFIG_PPC_BOOK3E_64=y
-CONFIG_E5500_CPU=y
-CONFIG_TARGET_CPU_BOOL=y
-CONFIG_PPC_BOOK3E=y
-CONFIG_E500=y
-CONFIG_PPC_E500MC=y
-CONFIG_PPC_FPU=y
-CONFIG_FSL_EMB_PERFMON=y
-CONFIG_FSL_EMB_PERF_EVENT=y
-CONFIG_FSL_EMB_PERF_EVENT_E500=y
-CONFIG_BOOKE=y
-CONFIG_PPC_FSL_BOOK3E=y
-CONFIG_PTE_64BIT=y
-CONFIG_PHYS_64BIT=y
-CONFIG_PPC_MMU_NOHASH=y
-CONFIG_PPC_BOOK3E_MMU=y
-CONFIG_SELECT_MEMORY_MODEL=y
-CONFIG_FLATMEM_MANUAL=y
-CONFIG_FLATMEM=y
-CONFIG_FLAT_NODE_MEM_MAP=y
-CONFIG_SPARSEMEM_VMEMMAP_ENABLE=y
-
->
-> Christophe

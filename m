@@ -2,70 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6809A47F066
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 18:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A2047F06B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 18:38:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353318AbhLXRcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 12:32:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
+        id S1353358AbhLXRin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 12:38:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbhLXRcR (ORCPT
+        with ESMTP id S1353335AbhLXRil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 12:32:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAAFC061401;
-        Fri, 24 Dec 2021 09:32:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89914B82337;
-        Fri, 24 Dec 2021 17:32:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 250BFC36AE5;
-        Fri, 24 Dec 2021 17:32:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640367134;
-        bh=cin1GhoUT3laVMSQIXbb7E7uqZ2aJSb8aUaMmGLmLV0=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=dtMnx4d13r9DLRLkzPEIpGfzRn5zYX34jAIotV2W1Cz3QcX4wefsFLL8L4BFyNSTU
-         3cshxbTgpkCUk7SlAiFd84SBML/XjEBXqdy1SiYC0ufreqhA8RK9evkZdwgQuJ0PQk
-         muVFYBcsc0/pBngnyZdwFE9QaH08jFXSRqQ66AauFZlILHLk5Q6+x9YGg/Qczgg1Cr
-         EnHwGAswFY3SR21lFFpLDx6asqSB/LMykqgoTUrKSQa1MZfjxVtBKsNA5oSW0BX628
-         otH1dbqAwPrrPnOJB+AVOVS45+c036XyonprpiaCM++P9sl2axdGb0mXX4dvybOzqM
-         8AfYEUrRwM7Tg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 08D10EAC068;
-        Fri, 24 Dec 2021 17:32:14 +0000 (UTC)
-Subject: Re: [GIT PULL] platform-drivers-x86 for 5.16-4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <312bc446-6f8c-c447-b3cd-bf2d46581f8b@redhat.com>
-References: <312bc446-6f8c-c447-b3cd-bf2d46581f8b@redhat.com>
-X-PR-Tracked-List-Id: <platform-driver-x86.vger.kernel.org>
-X-PR-Tracked-Message-Id: <312bc446-6f8c-c447-b3cd-bf2d46581f8b@redhat.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v5.16-4
-X-PR-Tracked-Commit-Id: 26a8b09437804fabfb1db080d676b96c0de68e7c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c8831184c56d60669fb4925c1ec721dcda2e2c6a
-Message-Id: <164036713398.24477.3596137639500008587.pr-tracker-bot@kernel.org>
-Date:   Fri, 24 Dec 2021 17:32:13 +0000
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org
+        Fri, 24 Dec 2021 12:38:41 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72395C061757
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 09:38:41 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id w1so7033362ilh.9
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 09:38:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=egauge.net; s=google;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :organization:user-agent:mime-version:content-transfer-encoding;
+        bh=U47rTAPXH+aLFRV5bwaR5qoQIKBvtt8C4VdyaJsNXDc=;
+        b=YT53nncZQkXbKVlUkM490Q/adPXhTSoawpsSGMxPGkw2Hgz3QHlCS1hD0/tBG8zQ6F
+         AzWS4093FHsc897g452gLe9pUqRHXitZTCZlvI5JxM3q8u8pJOh+2NwoRrGFDJaZ1Enu
+         H/+a45kB87oTu99tP/wh+ZfDY1OzWMiVSGnINGplU55dQb3PL/m9f7nU+l5BUhv3DgTo
+         lYm8a/wz8HQ33jpBwaUtUhMupOb2aaCt9NNwt9JMXXgD5INW2HhLZQ3NgiYqtcw0dFpn
+         EFFSlA7DT+qm1aigkwJsXgMuRZQpaYU4bsJEWyM1YvFS5E11kQ+RyzEpN3q9cJGxvA9/
+         Q9Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=U47rTAPXH+aLFRV5bwaR5qoQIKBvtt8C4VdyaJsNXDc=;
+        b=usEZ/9hqeWC1pLX3iwpUK8RfeIPnZN3oaFd8p2Hh4sUuO9FoHSKbTdl3E5RdeHSGUq
+         /fR2/XBnx9ssPnJIIpx501e/gInClHqw2Fu5kCGr3ZgtlLO9NUAgHJId/lu4DcQ25ovx
+         I09vYxyCtBshYpwEG0TKozB7k0VBkGymHM6iCnwYrTKBQ734XViaC+1jggpWoxehXmgv
+         1EkBHgprAhFIMHuQEJKejjlNeJEEF+G+IPAOV4UJigXrIEQX7CO1p3Bw6na3GzMQDBQw
+         E4ChZPkrsotm3eOJvtltUxPHJZLYHU6Kv8jSHuXpeFKXAoGkUNuFJSIvS+ci2pWvDlRX
+         shIg==
+X-Gm-Message-State: AOAM531QB5q8FIQxWM0MqgkhG4+hSmm1w7Zb4cPLj2RgxDjPMv0auVdk
+        517I+uNvKcS/L7NjZ+BaZuNn
+X-Google-Smtp-Source: ABdhPJwsSrpQmBjHLE7h+SrvCAYWvXBcLL6X7fPC9nsRP+9XodzueLnH/Y5A0hSfBSPJLAhheZn6xg==
+X-Received: by 2002:a92:c681:: with SMTP id o1mr3342064ilg.23.1640367520820;
+        Fri, 24 Dec 2021 09:38:40 -0800 (PST)
+Received: from ?IPv6:2601:281:8300:4e0:2ba9:697d:eeec:13b? ([2601:281:8300:4e0:2ba9:697d:eeec:13b])
+        by smtp.gmail.com with ESMTPSA id j5sm4687504ilo.77.2021.12.24.09.38.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Dec 2021 09:38:40 -0800 (PST)
+Message-ID: <e7247265d5309165140d7a9a3af646129a789d58.camel@egauge.net>
+Subject: Re: [PATCH] wilc1000: Allow setting power_save before driver is
+ initialized
+From:   David Mosberger-Tang <davidm@egauge.net>
+To:     Ajay.Kathat@microchip.com
+Cc:     Claudiu.Beznea@microchip.com, kvalo@codeaurora.org,
+        davem@davemloft.net, kuba@kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 24 Dec 2021 10:38:37 -0700
+In-Reply-To: <9272b86e-61ab-1c25-0efb-3cdd2c590db8@microchip.com>
+References: <20211212011835.3719001-1-davidm@egauge.net>
+         <6fc9f00aa0b0867029fb6406a55c1e72d4c13af6.camel@egauge.net>
+         <5378e756-8173-4c63-1f0d-e5836b235a48@microchip.com>
+         <31d5e7447e4574d0fcfc46019d7ca96a3db4ecb6.camel@egauge.net>
+         <49a5456d-6a63-652e-d356-9678f6a9b266@microchip.com>
+         <523698d845e0b235e4cbb2a0f3cfaa0f5ed98ec0.camel@egauge.net>
+         <122f79b7-7936-325c-b2d9-e15db6642d0f@microchip.com>
+         <be3c95c8310504222e88c602a937b7f05cc01286.camel@egauge.net>
+         <9272b86e-61ab-1c25-0efb-3cdd2c590db8@microchip.com>
+Organization: eGauge Systems LLC
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 24 Dec 2021 12:27:56 +0100:
+Ajay,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v5.16-4
+On Fri, 2021-12-24 at 16:20 +0000, Ajay.Kathat@microchip.com wrote:
+> On 23/12/21 22:38, David Mosberger-Tang wrote:
+> > First, on a freshly booted system and with wilc1000-spi autoloaded by
+> > the kernel, try this sequence (copy & paste the commands):
+> > 
+> >     /usr/sbin/wpa_supplicant -Bs -iwlan0 -c/etc/wpa_supplicant.conf
+> >     sleep 10
+> >     iw dev wlan0 set power_save on
+> > 
+> > The above yields a power consumption of 1.4W reliably.  The "sleep 10"
+> > doesn't matter here; the behavior is the same with or without it.  I
+> > tried waiting up to 120 seconds with no difference.
+> 
+> I have tested by making the WILC as build-in module to insert driver 
+> automatically at boot-up. I hope it should be fine. Because I have 
+> already tested as loadable module earlier.
+> 
+> Below are the number observed
+> ------------------------------ --------------------------
+> - before starting wpa_supplicant             : ~16.3 mA
+> - wpa_supplicant started                         : ~40 mA
+> - PSM on                                                  :  ~6 mA
+> 
+> 
+> The 'sleep 10' would have no impact in my setup because I have measured 
+> the current consumption for wilc1000 chip.
+> 
+> I have shared the screenshot at https://postimg.cc/67S41dkb
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c8831184c56d60669fb4925c1ec721dcda2e2c6a
+Huh, that's curious.  I definitely cannot reproduce this.  To match
+your setup as closely as possibly, I also built wilc1000-spi into the
+kernel, but that makes no difference (as expected).
 
-Thank you!
+What kernel version are you on?  I switched to wireless-drivers-next as
+of today (latest commit d430dffbe9dd30759f3c64b65bf85b0245c8d8ab).
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+With this kernel, the numbers are about 100mW lower than reported
+before, but the relative behavior is the same: about 300mW higher
+power-consumption when PSM is not taking effect properly.
+
+To recap, back with wilc1000-spi being a module again, after freshly
+booting the system and issuing this commands:
+
+   /usr/sbin/wpa_supplicant -Bs -iwlan0 -c/etc/wpa_supplicant.conf
+   /usr/sbin/iw dev wlan0 set power_save on
+
+I see a power-consumption of about 1.25W.  PSM on/off makes no
+difference in this state.  Then, if I issue the commands:
+
+rmmod wilc1000-spi
+modprobe wilc1000-spi
+sleep 10
+iw dev wlan0 set power_save on
+
+power-consumption drops to about 0.9W.
+
+Here is a screenshot that shows the annotated power-measurements:
+
+   https://postimg.cc/3dbKSGht
+
+Apart from kernel version, the only things that I can think of that'd
+be different is that we don't have the ENABLE pin wired to a GPIO.
+ Instead, the chip is always enabled.  I doubt this would explain the
+difference (~RESET is wired to a GPIO).
+
+
+  --david
+
+

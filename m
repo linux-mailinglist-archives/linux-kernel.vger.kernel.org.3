@@ -2,76 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2AE47F064
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 18:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6809A47F066
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 18:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353310AbhLXR32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 12:29:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
+        id S1353318AbhLXRcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 12:32:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbhLXR31 (ORCPT
+        with ESMTP id S229539AbhLXRcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 12:29:27 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965F6C061401;
-        Fri, 24 Dec 2021 09:29:26 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id x15so35659158edv.1;
-        Fri, 24 Dec 2021 09:29:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=d++DuyGAvsDciM6eGzuNhohbcfflkfo8Updj8Oi3lko=;
-        b=Zcgxx/PFCm1Gk9GInJ75jZeRJmqq+ExTbcJMmRAvxyiOVA+59v9fa3/PuW3YvcvsDF
-         g85lUn+o/rV5qvQGZiSuYuT+rLAwLPTeEAswjwVl2rNPxELY2uuymt+2Cf/jVIn8yATz
-         ebKzbFXBB5ZkbiKrQnkh6i/RpKyZNGuCUlkp7JdSFASSS98wdgmqe4yhJgRQcb8VGuhy
-         NEPmU/3iHbo5x/SO1JoU57djIwQzdt4IWlrTSY9nWipTxtfGe7KP2jof41JOCvMuFVCz
-         rH9AR/PQv2INTq7/mlz0JHx2gdHAbLYUtVG/AXnE3RJmzCA+B8h/72Ff70D3rAwrJTGO
-         c1XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=d++DuyGAvsDciM6eGzuNhohbcfflkfo8Updj8Oi3lko=;
-        b=YUKSat71CZB+oQl5xi1yLCpAY8cSq0bd57NplGikGQPSsX1sTdWdb45m4oK2vhOZeL
-         Y+AJDz6kzlU3MQT/eFKEU/JNtXmIp0qvaNoocJq5UI/2PvMIMjvXRAiXAhIxaAPsli0N
-         NaN80uT+O7+fxvZ2AvREcRKuZox/MDRJs/23wrIBp59qoIOCbzlVCUBw8DCCvS090sXC
-         hkXGvzmjwGaLWFOl3wq38KC//UwJVmz1qx9/f4pCMpPnqFSL0QXfJ0QMTewXw88VfVWV
-         ucVwZnZeCpUyEK2tL4f5mCJUxWkIW7B8L4DyYQot6fMtWQ+zxPhGFRpHNT5kGUcBhyuz
-         sTBg==
-X-Gm-Message-State: AOAM531agVeI4Cmt0w0hWGZ3HoASBM2m7q5RrYXFm2qPHCWtOai3kqc5
-        3UIty0Firro4V1fSkL6QFSy9JjxdHkTfCU3xDJg=
-X-Google-Smtp-Source: ABdhPJy5VXGB5ok/CmgPeHloEn/RJrG5bmqnry8/oB6sB1YLfj9+63el5LzYjEmKrtfP3c0Dlx2ODZUCIBVT/XgsVe8=
-X-Received: by 2002:a05:6402:518a:: with SMTP id q10mr4538306edd.29.1640366965079;
- Fri, 24 Dec 2021 09:29:25 -0800 (PST)
-MIME-Version: 1.0
-References: <20211221030146.522-1-xianwei.zhao@amlogic.com>
-In-Reply-To: <20211221030146.522-1-xianwei.zhao@amlogic.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Fri, 24 Dec 2021 18:29:14 +0100
-Message-ID: <CAFBinCDgQbjZ2QyTBbFuj--e6=mdxcd1PgYJNZJQFEvo3vco5g@mail.gmail.com>
-Subject: Re: [PATCH V2] dt-bindings: serial: amlogic, meson-uart: support S4
-To:     Xianwei Zhao <xianwei.zhao@amlogic.com>
-Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>, kelvin.zhang@amlogic.com
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 24 Dec 2021 12:32:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAAFC061401;
+        Fri, 24 Dec 2021 09:32:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89914B82337;
+        Fri, 24 Dec 2021 17:32:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 250BFC36AE5;
+        Fri, 24 Dec 2021 17:32:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640367134;
+        bh=cin1GhoUT3laVMSQIXbb7E7uqZ2aJSb8aUaMmGLmLV0=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=dtMnx4d13r9DLRLkzPEIpGfzRn5zYX34jAIotV2W1Cz3QcX4wefsFLL8L4BFyNSTU
+         3cshxbTgpkCUk7SlAiFd84SBML/XjEBXqdy1SiYC0ufreqhA8RK9evkZdwgQuJ0PQk
+         muVFYBcsc0/pBngnyZdwFE9QaH08jFXSRqQ66AauFZlILHLk5Q6+x9YGg/Qczgg1Cr
+         EnHwGAswFY3SR21lFFpLDx6asqSB/LMykqgoTUrKSQa1MZfjxVtBKsNA5oSW0BX628
+         otH1dbqAwPrrPnOJB+AVOVS45+c036XyonprpiaCM++P9sl2axdGb0mXX4dvybOzqM
+         8AfYEUrRwM7Tg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 08D10EAC068;
+        Fri, 24 Dec 2021 17:32:14 +0000 (UTC)
+Subject: Re: [GIT PULL] platform-drivers-x86 for 5.16-4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <312bc446-6f8c-c447-b3cd-bf2d46581f8b@redhat.com>
+References: <312bc446-6f8c-c447-b3cd-bf2d46581f8b@redhat.com>
+X-PR-Tracked-List-Id: <platform-driver-x86.vger.kernel.org>
+X-PR-Tracked-Message-Id: <312bc446-6f8c-c447-b3cd-bf2d46581f8b@redhat.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v5.16-4
+X-PR-Tracked-Commit-Id: 26a8b09437804fabfb1db080d676b96c0de68e7c
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c8831184c56d60669fb4925c1ec721dcda2e2c6a
+Message-Id: <164036713398.24477.3596137639500008587.pr-tracker-bot@kernel.org>
+Date:   Fri, 24 Dec 2021 17:32:13 +0000
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The pull request you sent on Fri, 24 Dec 2021 12:27:56 +0100:
 
-On Tue, Dec 21, 2021 at 4:01 AM Xianwei Zhao <xianwei.zhao@amlogic.com> wrote:
->
-> Add serial bindings support menson S4 SoC family.
-please fix the typo here: menson -> meson
+> git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v5.16-4
 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c8831184c56d60669fb4925c1ec721dcda2e2c6a
 
-Best regards,
-Martin
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

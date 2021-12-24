@@ -2,76 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCD147EF04
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 14:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E90947EF0D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 14:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352865AbhLXNNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 08:13:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352766AbhLXNNU (ORCPT
+        id S238023AbhLXNOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 08:14:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:47405 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230463AbhLXNOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 08:13:20 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD311C061761;
-        Fri, 24 Dec 2021 05:13:19 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id y22so33403368edq.2;
-        Fri, 24 Dec 2021 05:13:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=1HOHy0keKQpVOdFGSD3b7czxWNidYu54FMob3Fejw/c=;
-        b=ESSrB2GK3yeEN6DHbA1RPADMjQWU8OnZYs2QJnd5CjEooRgJgU7fGtziObh5mCUp5y
-         DDdfiKXLQGFXZbAF7vo2yjbVKaSW0xhw/IJyojow7d7AuMMqnNuaedAClFO4BWF0d5SP
-         u3aIt1Ovs8LI3SDhcrxejnkvCcaie0Yxp1uLpC0y9PNF+v4FgZpzveHvzsLgk0QGtmEc
-         Krg9d9oWleQ4+/UmXfwznmThSAU6ZC2vkXMKGDOWKbnLnoYqFoRUMXq7kidRrJ5lclw5
-         nS2X2izt9cjrIrI+DPKCnx09X6zK0KndiNWoKLRmfdHeFSr82o1yL6QfkLhDm0/1muSm
-         TIZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=1HOHy0keKQpVOdFGSD3b7czxWNidYu54FMob3Fejw/c=;
-        b=vVUzMo5zAtnyjZzvwUbDOyjY4Sxh3/Wyc5d8kugOCMH06ymRU+YNR5BoxxZdZ98yH2
-         faGZ021hTjFe3HuSFUW58oi1Ri23C41gWVbDk6gFDNfZL+SGppg4GKEtIuRt2pATXl4b
-         tLirv0Q3VxO6bGSNjU4mgr/6qGp7bDE9QRdOug45YDKf3inKZmZbohgX1D5qPYCYnRto
-         XkY/GKFQWlXkrl5UoAYO0MdCsXGMiUgd96njo/QrSbBZA5El4PGVHo114R33YmrULkY/
-         kXfeQiejbRT9E4cddfJHG5Wy36vWSu6nJ8LGt6R/5G2YTJhaM2bNUeoo/FcPm/6R0eN8
-         Et+g==
-X-Gm-Message-State: AOAM531BEOg4jmoozsYVKBpcycK+gxV+DdZwqa6BAvoW9NxipSTNKA5e
-        iyHT9oLs9EGRaC+d7hazM2s=
-X-Google-Smtp-Source: ABdhPJz6jKKfbHIAecMUs3UMcUpV1ym7wAu3gVdxWZgZvS1hCKJzH4op9tszz6o5Nkpl9fLTWal0TA==
-X-Received: by 2002:a17:906:4796:: with SMTP id cw22mr5557920ejc.594.1640351598286;
-        Fri, 24 Dec 2021 05:13:18 -0800 (PST)
-Received: from zenorus.myxoz.lan (2-248-181-218-no2390.tbcn.telia.com. [2.248.181.218])
-        by smtp.gmail.com with ESMTPSA id 5sm2636998ejm.132.2021.12.24.05.13.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Dec 2021 05:13:18 -0800 (PST)
-Message-ID: <985cf51402ff6ea2c199869c3501a43a6588ae4f.camel@gmail.com>
-Subject: Re: [PATCH v2 1/2] zram: zram_drv: add SPDX license identifiers
-From:   Miko Larsson <mikoxyzzz@gmail.com>
-To:     Joe Perches <joe@perches.com>, minchan@kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org, axboe@kernel.dk,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-Cc:     hch@infradead.org
-Date:   Fri, 24 Dec 2021 14:13:17 +0100
-In-Reply-To: <b71570d5bc14181c656f8dd7ba69a397fd775495.camel@perches.com>
-References: <20211217063224.3474-1-mikoxyzzz@gmail.com>
-         <20211217063224.3474-2-mikoxyzzz@gmail.com>
-         <b71570d5bc14181c656f8dd7ba69a397fd775495.camel@perches.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        Fri, 24 Dec 2021 08:14:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640351690;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bxlEvALMK9lzn0nPdbICOgS36zyGodPPp1ZtECyg394=;
+        b=D3Ha81zEow9LLkruuCHR+bnyupfyuteWngVR6jEkQ5X5gCXH5sZPJ/GDaHyYBRTdPZ2FMC
+        53bSag4m2n6pk9WbS9+QfEUw3P5tG3bQjV2IzBaiemf6j2wLEKjZ6z+UrPf4w4jENMONpw
+        OwhoqGR71VCwmWOiHVlzT5zjgROWL3c=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-459-LqCCXgrnOFKugTBbvE3d6g-1; Fri, 24 Dec 2021 08:14:48 -0500
+X-MC-Unique: LqCCXgrnOFKugTBbvE3d6g-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BB8B01006AA5;
+        Fri, 24 Dec 2021 13:14:47 +0000 (UTC)
+Received: from localhost (unknown [10.22.8.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 586E9519B7;
+        Fri, 24 Dec 2021 13:14:47 +0000 (UTC)
+Date:   Fri, 24 Dec 2021 10:14:46 -0300
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ima: silence measurement list hexdump during kexec
+Message-ID: <YcXHxgP1w2Us72bS@glitch>
+References: <20211222191623.376174-1-bmeneg@redhat.com>
+ <31d71e1957e84d2440f41d43d2570b112e91a27b.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="kki6z1n8KXFa6VqM"
+Content-Disposition: inline
+In-Reply-To: <31d71e1957e84d2440f41d43d2570b112e91a27b.camel@linux.ibm.com>
+X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-12-21 at 01:33 -0800, Joe Perches wrote:
-> GPL v2 is a permissive license and this SPDX tag should probably be
-> 
-> // SPDX-License-Identifier: GPL-2.0-or-later or BSD-3-Clause
 
-It shouldn't be GPL-2.0-or-later, because the original copyright notice
-doesn't have an "or later" clause.
+--kki6z1n8KXFa6VqM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Dec 22, 2021 at 05:13:56PM -0500, Mimi Zohar wrote:
+> Hi Bruno,
+>=20
+> On Wed, 2021-12-22 at 16:16 -0300, Bruno Meneguele wrote:
+> > The measurement list is dumped during a soft reset (kexec) through the =
+call
+> > to "print_hex_dump(KERN_DEBUG, ...)", which ignores the DEBUG build fla=
+g.
+> > Instead, use "print_hex_dump_debug(...)", honoring the build flag.
+> >=20
+> > Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
+>=20
+> The patch description needs to at least explain why using
+> print_hex_dump() isn't sufficent.   Look at how print_hex_dump() is
+> defined.  Based on whether CONFIG_DYNAMIC_DEBUG is enabled, different
+> functions are used.
+
+Sending the v2 in a sec :)
+
+Thanks Mimi
+
+>=20
+> Mimi
+>=20
+> > ---
+> >  security/integrity/ima/ima_kexec.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >=20
+> > diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/im=
+a/ima_kexec.c
+> > index f799cc278a9a..13753136f03f 100644
+> > --- a/security/integrity/ima/ima_kexec.c
+> > +++ b/security/integrity/ima/ima_kexec.c
+> > @@ -61,9 +61,9 @@ static int ima_dump_measurement_list(unsigned long *b=
+uffer_size, void **buffer,
+> >  	}
+> >  	memcpy(file.buf, &khdr, sizeof(khdr));
+> > =20
+> > -	print_hex_dump(KERN_DEBUG, "ima dump: ", DUMP_PREFIX_NONE,
+> > -			16, 1, file.buf,
+> > -			file.count < 100 ? file.count : 100, true);
+> > +	print_hex_dump_debug("ima dump: ", DUMP_PREFIX_NONE, 16, 1,
+> > +			     file.buf, file.count < 100 ? file.count : 100,
+> > +			     true);
+> > =20
+> >  	*buffer_size =3D file.count;
+> >  	*buffer =3D file.buf;
+>=20
+>=20
+
+--=20
+bmeneg=20
+PGP Key: http://bmeneg.com/pubkey.txt
+
+--kki6z1n8KXFa6VqM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAmHFx8YACgkQYdRkFR+R
+okPreQgAnqpFVqEElAwuWlt1HoxsbRlLag8dnhRrGaWr1tWQabQwgEgEcCw8KFXI
+7KIpzscweZEKsMrBT8yu62PCnBN2DGZpXg4FuGS0f66pzhS5b+XN/2gZB0AfaPUm
+R1oDOPGcMu73l0Y9cXaveWt3GdWFstFDFRTtBJK3SlmmrY6S6YmMSVAAQPb4nt5u
+QtgfIU5biLpICpjATmfoCd5Ja/xf17Nv7F/8UP7IihVCL3qMVqeAj3rWGIQrITNy
+hGK6U85n2Hc3ZCVhZOEf6M68guAnd04BHeDLjqPggFyhhF50BLTrJyAhj1awj7pm
+S5QTNCcJOH2c5W8bPu4qdh27TQengA==
+=9i6w
+-----END PGP SIGNATURE-----
+
+--kki6z1n8KXFa6VqM--
+

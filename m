@@ -2,114 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A3A47EABA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 04:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E53E47EAC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 04:15:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351074AbhLXDDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 22:03:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43130 "EHLO
+        id S1351101AbhLXDOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 22:14:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241120AbhLXDDF (ORCPT
+        with ESMTP id S1351076AbhLXDOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 22:03:05 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F094C061401;
-        Thu, 23 Dec 2021 19:03:05 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JKsLv1ZPcz4xgr;
-        Fri, 24 Dec 2021 14:03:02 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1640314983;
-        bh=nsw/1j+8CPJziQ6m79BTrSOPmx/dg+esVKJNra7XgEs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TW+dld0zttRLwP3gPX3/v6U4NmmAHk1SEiAlYinPD+OX2Wc1NsqQb3bSLQy3mPHS1
-         5LvsD56yQxH3Q2DjO7ViWPOGVFQO0dPW4jBI/g8Kgks+PXUj+xib0onzPlPeF2FCWo
-         ouu8AapCg+IbnvEzTu5PIGH9Ha6yGkOtNmjjlsp4PXHqKSFx6nAckq3HWdI6d3R5Pb
-         NrYipTUG7MrsaNNQq1bFWwtHp4VEeo2SHr1IeG5p9dN2IquTODaYOBdInad9SX5Psr
-         0JLSWUMTjf7m++ZCszqsMXZSOpPtkzZ6+W2ZQN7tiZ3mIzoOCSVl7THRcW4Xntpmi1
-         pzx+UdDeP5FxA==
-Date:   Fri, 24 Dec 2021 14:03:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Aswath Govindraju <a-govindraju@ti.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the phy-next tree
-Message-ID: <20211224140302.33d25020@canb.auug.org.au>
+        Thu, 23 Dec 2021 22:14:02 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE78EC061401
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 19:14:01 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id i9so3549310oih.4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 19:14:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=i+p7JMtxiJhKbk+HUedbmrpIzQr2u83bgpY8rPoMJJA=;
+        b=pskhFOzCnGEdju9s5EhQoo+ZNY1bCn5Wr/ci04PuSe0X1TX6IJKJq+Qb0hy3m3gmev
+         Y8AKXJMkspitxSXNVhTA6pD26Pr49RNvYAztpYZKEEf3xvZFzFviCBka9lL8wEhRSXZA
+         71LJ0oDHrHycvWhQZKzm7X9MVf4qS+Oau3gFtpWF/AawX93Ushill2r3/Fx8/u/Cb6nj
+         zIallqUZkUXHOBwHpNUIaAoJ1uSrL665NfYHbtTLBCXeqFtk8HFG7Y/ZnlDv1WvJvJwS
+         XDECikXEj4ofg5S5eBAG2yoJvHxxi2EfCENYWPuNmHrdwZTGA891CVoXpD3YBG3XIGbe
+         3d+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i+p7JMtxiJhKbk+HUedbmrpIzQr2u83bgpY8rPoMJJA=;
+        b=iwYe42sMI1Fi+DBndussPzicrKEENyj59OQ+eKVVaPHl8ebPzIgXe7GUXjT80n60ja
+         bouPrz6VqIKlxGemlqzOJnM7s3Xz+UczWqwRQsIq5VVAks/8/FFKALGRwM4o42zGeIoC
+         mj6BM+AQXaq9gQCu6LJHkOQYIXAEGv3l1MR3RSd08+jo+ai8tIunXTqw2m+23F0N8Muh
+         sAQUP96ny2mJOR8Pu3CpKxLccwbPKcvM929Wu8yHbR1JTxmVhVeyU2kY5UeGFleXCM+2
+         AuibJuQfzff8olH4qwGEMBJ3o5VK5t8pP0fjbxTcD8xwjiopFLVNtV49SaDmM9EKOyRv
+         hEXg==
+X-Gm-Message-State: AOAM532n5S2mCUXcwylRfeZ7kvJS9lcRi56R7FJf90N/H8djvVXsJ1Ur
+        /GTy31kdSZ330GZ1ZwWQnTCaMiBWddzwYvmksDAAtg==
+X-Google-Smtp-Source: ABdhPJxHSnVNs3ApHjh2RKvlFsUpUtEw5fQs/N7STxMDeXGWX6Yj0Aa4HW5EWu9ZNUowT0Dj4Q0Pc5ojVlEHJei3IDM=
+X-Received: by 2002:a54:4613:: with SMTP id p19mr3571744oip.162.1640315641099;
+ Thu, 23 Dec 2021 19:14:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_LnCfqenqwgTvRCzXp2Ppt_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20211223101551.19991-1-lecopzer.chen@mediatek.com> <CAMj1kXGL++stjcuryn8zVwMgH4F05mONoU3Kca9Ch8N2dW-_bg@mail.gmail.com>
+In-Reply-To: <CAMj1kXGL++stjcuryn8zVwMgH4F05mONoU3Kca9Ch8N2dW-_bg@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 24 Dec 2021 04:13:49 +0100
+Message-ID: <CACRpkda_42LSWcaq0Q8aGB+12bo2494snk1Tua62UTLjVE1fQA@mail.gmail.com>
+Subject: Re: [PATCH] ARM: module: fix MODULE_PLTS not work for KASAN
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Lecopzer Chen <lecopzer.chen@mediatek.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Abbott Liu <liuwenliang@huawei.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>, yj.chiang@mediatek.com,
+        "# 3.4.x" <stable@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/_LnCfqenqwgTvRCzXp2Ppt_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Dec 23, 2021 at 12:01 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> On Thu, 23 Dec 2021 at 11:16, Lecopzer Chen <lecopzer.chen@mediatek.com> wrote:
+> >
+> > When we run out of module space address with ko insertion,
+> > and with MODULE_PLTS, module would turn to try to find memory
+> > from VMALLOC address space.
+> >
+> > Unfortunately, with KASAN enabled, VMALLOC doesn't work without
+> > VMALLOC_KASAN which is unimplemented in ARM.
+(...)
+> This is not the right place to fix this. If module PLTs are
+> incompatible with KAsan, they should not be selectable in Kconfig at
+> the same time.
+>
+> But ideally, we should implement KASAN_VMALLOC for ARM as well - we
+> also need this for the vmap'ed stacks.
 
-Hi all,
+I also need it for my kernel-in-vmalloc patch, I guess it's the
+reason why I can't seem to get it to work. So a lot depends on
+this.
 
-After merging the phy-next tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
-
-drivers/phy/phy-can-transceiver.c: In function 'can_transceiver_phy_power_o=
-n':
-drivers/phy/phy-can-transceiver.c:35:9: error: implicit declaration of func=
-tion 'mux_state_select'; did you mean 'mux_control_select'? [-Werror=3Dimpl=
-icit-function-declaration]
-   35 |   ret =3D mux_state_select(can_transceiver_phy->mux_state);
-      |         ^~~~~~~~~~~~~~~~
-      |         mux_control_select
-drivers/phy/phy-can-transceiver.c: In function 'can_transceiver_phy_power_o=
-ff':
-drivers/phy/phy-can-transceiver.c:59:3: error: implicit declaration of func=
-tion 'mux_state_deselect'; did you mean 'mux_control_deselect'? [-Werror=3D=
-implicit-function-declaration]
-   59 |   mux_state_deselect(can_transceiver_phy->mux_state);
-      |   ^~~~~~~~~~~~~~~~~~
-      |   mux_control_deselect
-drivers/phy/phy-can-transceiver.c: In function 'can_transceiver_phy_probe':
-drivers/phy/phy-can-transceiver.c:113:15: error: implicit declaration of fu=
-nction 'devm_mux_state_get'; did you mean 'devm_mux_control_get'? [-Werror=
-=3Dimplicit-function-declaration]
-  113 |   mux_state =3D devm_mux_state_get(dev, NULL);
-      |               ^~~~~~~~~~~~~~~~~~
-      |               devm_mux_control_get
-drivers/phy/phy-can-transceiver.c:113:13: error: assignment to 'struct mux_=
-state *' from 'int' makes pointer from integer without a cast [-Werror=3Din=
-t-conversion]
-  113 |   mux_state =3D devm_mux_state_get(dev, NULL);
-      |             ^
-cc1: all warnings being treated as errors
-
-Caused by commit
-
-  1e68cd3ff73e ("phy: phy-can-transceiver: Add support for setting mux")
-
-I have used the phy-next tree from next-20211223 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/_LnCfqenqwgTvRCzXp2Ppt_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHFOGYACgkQAVBC80lX
-0GwCrAf8DL6zbDl9ESktqLhwGxSJEXJAmo+se5EdfU/mRmFEOJhzYmELemrqoGkP
-VVBmKBL5JEbZTEsAeeTvSksjf5gFmtwFLnsN7prbMe4kTpDqtNvY0lf8JtXoHAS/
-kb1OdOAWcpD/E+bIpyc8YBJTRFwMLpIv1VEIE8lBuUskrZTkLHLNlm4EnvaqPPrA
-QH6luJsG7vWKrIICRrgpZYTacQMNsmviMrxkh+YLoEUwWOEBWyQXTF8Ta3OeT/Yt
-QiLhJXAee6W1rmUyNvWIgzuTbmRYStzHLx4YErWRDtamlCbQiXFxIwevzLJiZyZ+
-Qbs1DKk/YZEO6I9DELPu/VajH6wA6Q==
-=xBdi
------END PGP SIGNATURE-----
-
---Sig_/_LnCfqenqwgTvRCzXp2Ppt_--
+Yours,
+Linus Walleij

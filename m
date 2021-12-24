@@ -2,129 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A45447F185
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 00:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E8447F188
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 01:06:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbhLXXqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 18:46:35 -0500
-Received: from ixit.cz ([94.230.151.217]:50350 "EHLO ixit.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230328AbhLXXqe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 18:46:34 -0500
-Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 790C72243C;
-        Sat, 25 Dec 2021 00:46:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1640389592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=txYaCsV6ZDsx+W4Kr5aHreCF51BTg6Mh94S+HysQwlw=;
-        b=oSPWcJ6zHe1/RR4irukuVEVw4wW9CAQyktQtWiwnn4TPd7iY6cjonJoAtFXi+7Oo6I3Uhw
-        gMD/kSZ6fPqA284n7aYTz6Pb3dYBJgjuzMwFoSLT+38p5F69LbwpI109m1OTH+8UciKZk9
-        Vu6Wu9JOCZcOh1Q/pNGW02YqmBrenRQ=
-From:   David Heidelberg <david@ixit.cz>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: qcom: fix timer node clock-frequency
-Date:   Sat, 25 Dec 2021 00:46:30 +0100
-Message-Id: <20211224234631.109315-1-david@ixit.cz>
-X-Mailer: git-send-email 2.34.1
+        id S231513AbhLYAAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 19:00:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230052AbhLYAAr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 24 Dec 2021 19:00:47 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509D7C061401
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 16:00:47 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id k4so8605621pgb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 16:00:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Va+3Qc5m9iXppR5P+VJ2i2dR9+eZyMwUougtx+C2x7I=;
+        b=inGTUfdpcAfkC2x2+fiG3/o/aNuAx4qjYEhvziSFuXvvPcmOyoomIfF4uwIpwABbRB
+         5xf8ajvblIJBybY48Xgo2eNugEW/0kMVNKWij8LcA/rNo+6PNbhX9m4ub7uNYLAzj/jU
+         8clBQBOruEilqpMi5dxFwa1PhKEdiDGNf1bs/8cLNgDUd28CfzuE3Xt6A+cNArMwrt3L
+         n0VCwqaKBp3SXD4s19ZqVwI+HatH/rmy3khyxufu4HYdF9wWE+kKOlQT4eMo1rtKrJq7
+         l7y1XiQZ5C8/m79E9tVCbpltmYbgvA2clRdFqIndI3QxhqJeMgxDcB0RawtC3KowLNAQ
+         vhaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Va+3Qc5m9iXppR5P+VJ2i2dR9+eZyMwUougtx+C2x7I=;
+        b=JGcLwsI0KwOP2hhhBGoy45INP03wTWQyar0Yx0FA/qTaJpYgaQwDlo4QBVQYVsvGfc
+         9b3opGTVYKRivdtA7zlQ/pXPKAftYihw0XKJWsys95kZDJ0StGHUT3FZpQmqhr6XYovL
+         eSSUal6yp1FRS6XQbXtLPGRZNesoBu9qHS7Pjxygvt7/ufWEPeaIwdauqfq5p87JVLvD
+         6P7uWMBv0sIMZDWFR/Ruz0q+EVteR7cWQ/sMrJsH9RmXR0GVTvrEB7Tst0o8+UdgYAz6
+         GVKy5BLqeaxdTDrHl0cLKAgjlsH8webc7vxRYH3UHu01JXr5wzW4XoE/OYvUizoyj51c
+         bqxg==
+X-Gm-Message-State: AOAM532ueen4xD4g4ow+krfyOHWKT80Y4DF8Tzkfs7lxXimzdkbHgItI
+        cSackW6KYZfPk/TvAfWZ0P3vY0xEvH+eOOiVO2VUQE3wHtrOGg==
+X-Google-Smtp-Source: ABdhPJxEltgIDxYYX63f8ia2tXkWIBL2u1BEfeZS8BAjDwBrKmiOrcA3ua8IhL3JZA/JKEN5IR6ycCc+yvPe3gAH3yI=
+X-Received: by 2002:a62:8449:0:b0:4ad:56ba:2f1d with SMTP id
+ k70-20020a628449000000b004ad56ba2f1dmr8541245pfd.37.1640390090225; Fri, 24
+ Dec 2021 15:54:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6a20:c512:b0:68:78a0:e47b with HTTP; Fri, 24 Dec 2021
+ 15:54:49 -0800 (PST)
+Reply-To: bankdtb160@gmail.com
+From:   DTB Bank of Tanzania <efffbi12@gmail.com>
+Date:   Fri, 24 Dec 2021 15:54:49 -0800
+Message-ID: <CANLFAeThXbgR-E9B-AFvFS45A7+Y7PY1gK87NXOZT70n2BQdog@mail.gmail.com>
+Subject: DTB Bank of Tanzania,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clock frequency is read by driver a single uint32,
-so the second value was never processed.
+Hello
 
-Signed-off-by: David Heidelberg <david@ixit.cz>
----
- arch/arm/boot/dts/qcom-apq8064.dtsi | 3 +--
- arch/arm/boot/dts/qcom-ipq8064.dtsi | 3 +--
- arch/arm/boot/dts/qcom-mdm9615.dtsi | 3 +--
- arch/arm/boot/dts/qcom-msm8660.dtsi | 3 +--
- arch/arm/boot/dts/qcom-msm8960.dtsi | 3 +--
- 5 files changed, 5 insertions(+), 10 deletions(-)
+We write to inform you regarding your inheritance award winning cheque
+of $2.8 million USD which was issued out from DTB Bank of Tanzania
+last week, although the cheque has been cashed & converted to ATM Visa
+card, reason, the cheue was cashed & loaded into a card is because the
+cheque may get expired before it gets to your possession, therefore we have
+to registered the ATM card with EMS SPEED POSTAL SERVICE company here.
+So you are advise to contact DTB Bank of Tanzania through
+E-mail;bankdtb160@gmail.com via their info below,
+please be sure you send your current home address where to deliver the
+ATM card to avoid mistake or misplacing.
 
-diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
-index 2d539d77bad4..3d5d9ffb66af 100644
---- a/arch/arm/boot/dts/qcom-apq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
-@@ -380,8 +380,7 @@ timer@200a000 {
- 				     <1 2 0x301>,
- 				     <1 3 0x301>;
- 			reg = <0x0200a000 0x100>;
--			clock-frequency = <27000000>,
--					  <32768>;
-+			clock-frequency = <27000000>;
- 			cpu-offset = <0x80000>;
- 		};
- 
-diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-index 996f4458d9fc..d663521bdd02 100644
---- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-@@ -458,8 +458,7 @@ IRQ_TYPE_EDGE_RISING)>,
- 				     <GIC_PPI 5 (GIC_CPU_MASK_SIMPLE(2) |
- 						 IRQ_TYPE_EDGE_RISING)>;
- 			reg = <0x0200a000 0x100>;
--			clock-frequency = <25000000>,
--					  <32768>;
-+			clock-frequency = <25000000>;
- 			clocks = <&sleep_clk>;
- 			clock-names = "sleep";
- 			cpu-offset = <0x80000>;
-diff --git a/arch/arm/boot/dts/qcom-mdm9615.dtsi b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-index c32415f0e66d..8b58f80093e8 100644
---- a/arch/arm/boot/dts/qcom-mdm9615.dtsi
-+++ b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-@@ -120,8 +120,7 @@ timer@200a000 {
- 				     <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_EDGE_RISING)>,
- 				     <GIC_PPI 3 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_EDGE_RISING)>;
- 			reg = <0x0200a000 0x100>;
--			clock-frequency = <27000000>,
--					  <32768>;
-+			clock-frequency = <27000000>;
- 			cpu-offset = <0x80000>;
- 		};
- 
-diff --git a/arch/arm/boot/dts/qcom-msm8660.dtsi b/arch/arm/boot/dts/qcom-msm8660.dtsi
-index 1e8aab357f9c..b16060b65593 100644
---- a/arch/arm/boot/dts/qcom-msm8660.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8660.dtsi
-@@ -105,8 +105,7 @@ timer@2000000 {
- 				     <1 1 0x301>,
- 				     <1 2 0x301>;
- 			reg = <0x02000000 0x100>;
--			clock-frequency = <27000000>,
--					  <32768>;
-+			clock-frequency = <27000000>;
- 			cpu-offset = <0x40000>;
- 		};
- 
-diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
-index 2a0ec97a264f..ca093b89c9ea 100644
---- a/arch/arm/boot/dts/qcom-msm8960.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
-@@ -99,8 +99,7 @@ timer@200a000 {
- 				     <1 2 0x301>,
- 				     <1 3 0x301>;
- 			reg = <0x0200a000 0x100>;
--			clock-frequency = <27000000>,
--					  <32768>;
-+			clock-frequency = <27000000>;
- 			cpu-offset = <0x80000>;
- 		};
- 
--- 
-2.34.1
+Finally you advice to take this serious as we have done all the
+necessary arrangement to released your ATM Visa Card on your behalf.
+Thanks & happy Xmas  and prosperous new year.in advance.
 
+Contact the Manager Mr. Abdul Samji
+The Executive Governor Of DTB Bank of Tanzania
+E-mail;bankdtb160@gmail.com
+Telephone:+255 8983 0023
+
+Regards,
+Samuel Brida

@@ -2,84 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E76BF47EA96
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 03:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C997947EAB1
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 03:56:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244957AbhLXCXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 21:23:50 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:41842 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236710AbhLXCXt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 21:23:49 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowAB3fAAaL8Vh253GBA--.1046S2;
-        Fri, 24 Dec 2021 10:23:22 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     kyungmin.park@samsung.com, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] mtd: onenand: Check for error irq
-Date:   Fri, 24 Dec 2021 10:23:21 +0800
-Message-Id: <20211224022321.1470969-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAB3fAAaL8Vh253GBA--.1046S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1DAryDAFy8Kr1fXF13Jwb_yoW8JF4DpF
-        Z2kay3Cr48K3WrCa9Fyw1DuF1Yk3WxKrWUtFnIvry8Z3s8Jw13u3s5JFW2qFWUAFWrJw4a
-        qF4Fqa95CF1kurDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
-        JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr
-        0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUCg4hUUU
-        UU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+        id S1351058AbhLXC45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 21:56:57 -0500
+Received: from inva021.nxp.com ([92.121.34.21]:41550 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1351000AbhLXC44 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 21:56:56 -0500
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 0AE67200B6A;
+        Fri, 24 Dec 2021 03:56:55 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id C47DB200B07;
+        Fri, 24 Dec 2021 03:56:54 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 2D74F183ACCB;
+        Fri, 24 Dec 2021 10:56:53 +0800 (+08)
+From:   Richard Zhu <hongxing.zhu@nxp.com>
+To:     lorenzo.pieralisi@arm.com, kw@linux.com, l.stach@pengutronix.de,
+        bhelgaas@google.com, marcel.ziswiler@toradex.com,
+        tharvey@gateworks.com, robh@kernel.org
+Cc:     hongxing.zhu@nxp.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Subject: [PATCH v8] PCI: imx: Add the imx8mm pcie support
+Date:   Fri, 24 Dec 2021 10:28:04 +0800
+Message-Id: <1640312885-31142-1-git-send-email-hongxing.zhu@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the possible failure of the platform_get_irq(), the returned irq
-could be error number and will finally cause the failure of the
-request_irq().
-Consider that platform_get_irq() can now in certain cases return
--EPROBE_DEFER, and the consequences of letting request_irq() effectively
-convert that into -EINVAL, even at probe time rather than later on.
-So it might be better to check just now.
+Based on previous review patch-set [1] and no function changes, create
+one update for the last patch only after merge the comments provided
+by Krzysztof.
+- Clean up codes. Drop the redundant inner break, and use the dev_err_probe
+  replace dev_err in _probe().
+- To be consistent, let the error message to be all lower-case letters.
+- Add one comment to explain that there is one single bare break for
+  i.MX8MM in imx6_pcie_init_phy()
 
-Fixes: 26777d37216c ("mtd: Move onenand code base to drivers/mtd/nand/onenand")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/mtd/nand/onenand/generic.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+[1] https://patchwork.ozlabs.org/project/linux-pci/patch/1638432158-4119-9-git-send-email-hongxing.zhu@nxp.com/
 
-diff --git a/drivers/mtd/nand/onenand/generic.c b/drivers/mtd/nand/onenand/generic.c
-index 8b6f4da5d720..a4b8b65fe15f 100644
---- a/drivers/mtd/nand/onenand/generic.c
-+++ b/drivers/mtd/nand/onenand/generic.c
-@@ -53,7 +53,12 @@ static int generic_onenand_probe(struct platform_device *pdev)
- 	}
- 
- 	info->onenand.mmcontrol = pdata ? pdata->mmcontrol : NULL;
--	info->onenand.irq = platform_get_irq(pdev, 0);
-+
-+	err = platform_get_irq(pdev, 0);
-+	if (err < 0)
-+		goto out_iounmap;
-+
-+	info->onenand.irq = err;
- 
- 	info->mtd.dev.parent = &pdev->dev;
- 	info->mtd.priv = &info->onenand;
--- 
-2.25.1
+[PATCH v8] PCI: imx: Add the imx8mm pcie support
+
+drivers/pci/controller/dwc/pci-imx6.c | 81 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--------
+1 file changed, 73 insertions(+), 8 deletions(-)
 

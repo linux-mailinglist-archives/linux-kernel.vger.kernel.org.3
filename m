@@ -2,103 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D8D47EF45
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 14:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E2947EF47
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 14:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352816AbhLXNyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 08:54:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235825AbhLXNyg (ORCPT
+        id S1352826AbhLXN5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 08:57:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38047 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235825AbhLXN5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 08:54:36 -0500
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150A8C061401
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 05:54:36 -0800 (PST)
-Received: by mail-yb1-xb43.google.com with SMTP id v138so25909992ybb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 05:54:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
-         :subject:cc;
-        bh=24EFpZU5AMMCntdM+3YfQ+A/kKth8PZ34wiS7rq1lOE=;
-        b=UurZZuYyggXyvA+720tOXY42Y74kcB3/Evm/o8OZfYDGqzao5gEMqJopVS56CVwwju
-         7fLFx1z8GeA95WJac1P57zndLfCIuWzoh3z0AGo80V+7hXtYFVbt0Wlya0nXY+mctFd7
-         Z/KAUGOaMvjFHMSZMtk8W6MZe3xzg3cS4VMANT1cQlfo+H/hS7vgJbkur6YOT32yn1eK
-         6rPhG2hIRMZl8yz+RvZrfbsTnnALDcf7QvsHtJt/WhVdE8qYpVxObtknFcDEyNpj/yy0
-         dWINn/tBm2QBC3Nu0fFdMHon2g2LFRdg4QDDbFD7WhP8VoqF5+WplYfIydgMdRCEViI8
-         dC3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
-         :from:date:message-id:subject:cc;
-        bh=24EFpZU5AMMCntdM+3YfQ+A/kKth8PZ34wiS7rq1lOE=;
-        b=Pjjwkiegx1A+fJKR3VMzIVHLjffSSfSdiLqUlQ2FrYK4B040Ik5Mn2bD3ZZCq5NjpL
-         GRlZdY8wJUnE8iUOwVcYhyKIIqRmgebwSGPPiCqwOS01cf1yo6W4aRMdMWedUESm1gMh
-         01NphLFAS+STOYcZiAEyA/LYAJIvP6lb8mfHRGDP9QfSP4ViWGxCCbHc04Q3XKeLYo+e
-         rBd/J7qlrKQdDp+vU6XQJPx1lKQyJ1SZfnFMCFn5DYQcL+iCi5wsQTps5DLxPin2CEVA
-         gHZG0sDYDHSBqn2iMDRSwn9E94dHbCS98P5dqjG9DLHTuWWh24T7TRinsaJHhzMGcKdv
-         Eb7w==
-X-Gm-Message-State: AOAM530DiqZPuHpmOYQU0occrlHmSuZgIWH9puQGULYIY+MwUxXLKMV/
-        Fe2TFd0TGpVqHbp5ZQvvQfly0zzQI8Oya2D7Guc=
-X-Received: by 2002:a5b:d05:: with SMTP id y5mt8886804ybp.568.1640354074910;
- Fri, 24 Dec 2021 05:54:34 -0800 (PST)
+        Fri, 24 Dec 2021 08:57:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640354230;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qTmPWkzIZC5aWPRjLdnf4zJKYHz2Hk/mR4QZBXXyBeQ=;
+        b=B609GfbgvqlG5uNbHMGlpzIzD0SFsqljiFSxDO4YC4HZphO127kqJfj6ajw28l9db3eNQ2
+        bIz4lzYdFTFLbC6D8td6SHgTDkS8NWQH62vBI6kHUheyWC+AWJdL0yH6hciSoP2tBTZH8+
+        CDqNKGRJ69YA9GJisa1OqsPEixQevf8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-494-ecoo1U9FPkuI3E4jabJtJQ-1; Fri, 24 Dec 2021 08:57:07 -0500
+X-MC-Unique: ecoo1U9FPkuI3E4jabJtJQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 48B701023F4D;
+        Fri, 24 Dec 2021 13:57:06 +0000 (UTC)
+Received: from localhost (unknown [10.22.8.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D7FDD5BD35;
+        Fri, 24 Dec 2021 13:57:05 +0000 (UTC)
+Date:   Fri, 24 Dec 2021 10:57:04 -0300
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] ima: silence measurement list hexdump during kexec
+Message-ID: <YcXRsLxFsMCQeYJ6@glitch>
+References: <20211224131454.45577-1-bmeneg@redhat.com>
+ <c3a1c7afed5962da2bf89d347fa5eea5fea40daf.camel@linux.ibm.com>
 MIME-Version: 1.0
-Received: by 2002:a81:11c9:0:0:0:0:0 with HTTP; Fri, 24 Dec 2021 05:54:33
- -0800 (PST)
-Reply-To: israelbarney287@gmail.com
-In-Reply-To: <CAH6eeoG64RM59E0-ASeBVLygjG+o+t_RJFMvvLSLk4XpUotjsA@mail.gmail.com>
-References: <CAH6eeoHsCQ1=9zgTjy1YdkcjkjDQmC9q=7XtTT1LmBop=Bj-mA@mail.gmail.com>
- <CAH6eeoGZfPNTB4qrSpA-xYXviwq0hfo-SbCmuZc3fhgxeDJ2Nw@mail.gmail.com>
- <CAH6eeoHK1QEoq+1fz+gLy=J_1QP5TheXYYC0FVC6BbxP-T=d1g@mail.gmail.com> <CAH6eeoG64RM59E0-ASeBVLygjG+o+t_RJFMvvLSLk4XpUotjsA@mail.gmail.com>
-From:   israel barney <griestkristen667@gmail.com>
-Date:   Fri, 24 Dec 2021 14:54:33 +0100
-Message-ID: <CAH6eeoESj=vF=qdc17UM++SEcX0ERYbH15S9q9MU7jS5_wmUaw@mail.gmail.com>
-Subject: Greetings
-Cc:     israelbarney287@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="wr48hpfUzuL4NGwl"
+Content-Disposition: inline
+In-Reply-To: <c3a1c7afed5962da2bf89d347fa5eea5fea40daf.camel@linux.ibm.com>
+X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good Day My Good Friend.
 
-I am deeply sorry if I have in any manner disturbed your privacy.
-Please forgive this unusual manner of contacting you, there is
-absolutely going to be a great doubt and distrust in your heart in
-respect for this email. There is no way for me to know whether I will
-be properly understood, but it is my duty to write and reach out to
-you as a person of transparency, honesty and high caliber. I'll
-introduce myself once again, I am Mr. Israel Barney, from Togo Republic. I
-am also the Branch Bank Manager of Biatogo Bank, I was also the
-Account Manager of my late client Mrs. Anna Who might or might
-not be related to you.
+--wr48hpfUzuL4NGwl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-She traveled down to china on the 28th of December 2019 on a five
-weeks business trip and after the successful transaction in china, she
-flew back, not knowing she has been infected with the deadly
-Coronavirus (COVID-19). And she sadly passed away on March 20th 2020.
-She left the sum of $3.2 Million (Three Million, Two Hundred Thousand
-United States Dollars) in our financial institute (Bank), she
-specifically confided in me told me that "no one else knows about her
-funds in our bank" that the funds was for a project before she passed
-away while she was ill. And down here in our country at this present
-day, once anyone passes away, after 1 Year if no relatives of the late
-the customer doesn't come to claim the funds/assets, it'll be recycled, and
-reported to the Central Bank where the greedy government will then
-want to have their hands on the funds.
+Hi Mimi,
 
-That's where you come in, since you bear the same surnames with her, I
-want you to stand as her next of kin since no one else knows about
-this funds in our bank besides me, and i don't think anyone will be
-coming for it. I promise you that if you agree to assist in claiming
-this funds from my Bank, we'll not bridge the law in any way because
-I'll be your eyes and ears here in the Bank.
+On Fri, Dec 24, 2021 at 08:28:01AM -0500, Mimi Zohar wrote:
+> Hi Bruno,
+>=20
+> On Fri, 2021-12-24 at 10:14 -0300, Bruno Meneguele wrote:
+> > The measurement list is dumped during a soft reset (kexec) through the =
+call
+> > to print_hex_dump(KERN_DEBUG, ...), printing to the system log ignoring=
+ both
+> > DEBUG build flag and CONFIG_DYNAMIC_DEBUG option.
+>=20
+> Before upstreaming this patch, the reason for the config options "being
+> ignored", if that is really what is happening, needs to be understood
+> and documented here in the patch description.
 
-After all is settled we'll share the fund $3.2 Million 50% equally or
-rather invest on whatever we choose. So I would really like to know
-what you have to say in regards to my proposal.
+I don't see why the code would intentionally ignore the option,
+considering that CONFIG_DYNAMIC_DEBUG basically give the user the
+ability to enable/disable pr_debug/printk(KERN_DEBUG) calls during
+runtime. Maybe I shouldn't use the word "ignoring" in the description,
+would it make things clearer?
 
-Thanks
-Mr. Israel Barney.
+>=20
+> thanks,
+>=20
+> Mimi
+>=20
+> >=20
+> > To honor the above conditions the macro print_hex_dump_debug() should be
+> > used instead, thus depending on the enabled option/flag the output is g=
+iven
+> > by a different function call or even silenced.
+> >=20
+> > Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
+>=20
+
+--=20
+bmeneg=20
+PGP Key: http://bmeneg.com/pubkey.txt
+
+--wr48hpfUzuL4NGwl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAmHF0bAACgkQYdRkFR+R
+okN/mQgAoczefwSZW9duV1llX85yUc6FDLKgNuqfQ3A0Ntz8wXw6sQ19WLkpXs0P
+OivxILmNWtFR/voP2p/m5P8FfhE6aPtqQO7GZDkLlGx0ytDEVQqLEhBmwkSsoE4V
+IIq7zJUmlV6/1p7aUZkmMnOGsItbY2gOt7kLThBh6kCVokJj+kW48KopPAywqw5P
+Hrs+VvGYLCxKumOh1vC6mkldn7W97YWJ5a0by2C/XTPbZHA4I3Q6ef2dgdo9P/xp
+DzgQ9KRI7x/6TSADXteQzpNEORUEYCl+IBoDvKtjlW+Rv9vIa3zl4ftzA3rWUBkm
+uW2fM56+9lKxJ70fgm70Jy+agX+qzg==
+=5je9
+-----END PGP SIGNATURE-----
+
+--wr48hpfUzuL4NGwl--
+

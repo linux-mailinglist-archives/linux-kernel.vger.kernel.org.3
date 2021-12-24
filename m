@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FEFD47EE50
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 11:39:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68ADC47EE54
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 11:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352470AbhLXKjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 05:39:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
+        id S1352476AbhLXKn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 05:43:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352463AbhLXKjv (ORCPT
+        with ESMTP id S240741AbhLXKnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 05:39:51 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7102FC061401;
-        Fri, 24 Dec 2021 02:39:50 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id q16so16781974wrg.7;
-        Fri, 24 Dec 2021 02:39:50 -0800 (PST)
+        Fri, 24 Dec 2021 05:43:55 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC88AC061401;
+        Fri, 24 Dec 2021 02:43:54 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id t26so16780190wrb.4;
+        Fri, 24 Dec 2021 02:43:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=2VTxUkTc3HIQTt7B5afXBlxj2AMRCOqLliY7kCfqs+g=;
-        b=TY8fPk9FgTNlJHDIcebaugpRo5I0q9FMiENQTQWqB17aWt79q7UC0cM1ZjTYbhKSPF
-         LpE/SUo7idU0uph7hmplrTa1q6IjbyVE8DNUmP7mPXjPK5/i8/ZVYmJFRAFd/NPDq4pi
-         lOguRr+cIp5aVpzo1+Iq2LU663Il2A0qeJ+k0Iq2r7AIbwjugWbxrWej5YbkVvmhRaZr
-         jBKdCVFsyTvWD/PBWCDphaMWXAsoFf/cgehiAo1gFXNgYaZSNk1aJttQFvCLPQAu7yno
-         sp4bH/zOHo6lYEDnjVhs5ZEd1eSw7Wllw1/+0Kk1h2OBh1xC0JNLIt+ikjgCVnKVEgvO
-         XAlw==
+        bh=GYowiWvO/gbLV76oGiytYGNx7I5pruViggqU/wNr2S0=;
+        b=f1D+y6mEvMN8p/Tbw86vSVh0C8fX8qS2ns/R4s8EtzG+npVnDoCtQ0ruzaKO3S6NuF
+         rZOh1tZXD8aVJZ2dUKJMLMB8lbXN8ZM11TVZIfVH7c8g4yWket7eHo+JKoIaJHlQCouw
+         yC+Ws7TLFZgNlIeq2AHFySwkaEPnz/dLT2NupaM1gvw3/PfIOqkoOnQMAYRwuuXnCJG1
+         avQNJDU9coXcWQmcdHP0DPiHzIl8RiSl3nnTnM8YJHxTGPSI1ryMVcCF5sKcrfNfeziz
+         1x7rYi7u9kbAolp38OF5bNlmbbVCL0YkofsLQxRdpjSqbAbezFmaJeEh6dRcg3Lc6aIo
+         c/hQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=2VTxUkTc3HIQTt7B5afXBlxj2AMRCOqLliY7kCfqs+g=;
-        b=7DDWsrIOnwR/Evfks3BLLHofJmlBVU29QCLrGk/hUJESImjqVwU93SUHqOuu2NW7K4
-         /lbvD2WT7kzbXAiI3kkQPVcLVtu+eNnUlh2QIuX2+Em5sOTKhMq/hQC6AvehDZW7gjRX
-         N/E+XMfydDM1cOS/lYCbdRO2oNZPwVp967vzALp2TRYNBWkv6we8PFgx3PH0V6EhWqdB
-         /dlIIPFZZrQzrM07gyvCgQO42b8HzEHkD8idkk20+qWcVeVYHdi4BmHTXfMemPUw+Uvc
-         mBdTzyEr6irL8rqBomPdxKSnZ4XTxF8YKYfhoHeZm5Ox9t6nPg+k3hSvSSoLPwSeKgjS
-         Ihgg==
-X-Gm-Message-State: AOAM532KdLPdIw+ZPb7iPe4O9qmjjhrHbpty7Cxspq+x8OJETCOAvNrk
-        2FO/KOjq/iHO7PGMJfpMwl0VjXvjAHY=
-X-Google-Smtp-Source: ABdhPJz3RFPIcD9zZR5XM7WTKZdOQf0O5QBhZYYNZSuf436szRc8z8XGyzMI++WawKKKE/fx7Sov4w==
-X-Received: by 2002:a5d:4588:: with SMTP id p8mr4350655wrq.106.1640342389019;
-        Fri, 24 Dec 2021 02:39:49 -0800 (PST)
+        bh=GYowiWvO/gbLV76oGiytYGNx7I5pruViggqU/wNr2S0=;
+        b=v1bhpYeEA/z5TVJuMPvY8UCvYuXPElYQqk5opgV/CmI/W+zy51nRsbm+Wx8ej60Yfb
+         5wu0r50qX/2+gF0WuWTESaN6UOLWBawRIXEJtT6P2ZpqSF22hPussRqJraUdExFjxw5F
+         SWRkaL2b5+K0MQX0RH3g/WPvIQdOa7Yitnr2sbWASCOvmWcWNOH4MKucmlw9JRbQDoGL
+         nEc8ZudhHWyyGzchbzbRy+RL19/SaF1nqvo3u2uMTlOsAdOPvHfJgnvwSPvr+LXq4LFg
+         9z1h0v7miUl65ziVfGtr78tDlDy3jiE/h8nVNvbQfQ/cI9fjjtAs/HfPRtCQPNBESCmE
+         TWCQ==
+X-Gm-Message-State: AOAM533Wo58L8ARbh8SvphfFZF5Ygc5S53s+KjldYJcEJYoEo287HIlB
+        zDJ4VK15h0yx+f4rTrywteo=
+X-Google-Smtp-Source: ABdhPJwHMEnOlEEKQIS2WBM5zLk6VIpwNdZypIDwWhx4qHnaGlYDccnMSyCietL8L303VVVanaPrmg==
+X-Received: by 2002:adf:ef81:: with SMTP id d1mr4324396wro.132.1640342633198;
+        Fri, 24 Dec 2021 02:43:53 -0800 (PST)
 Received: from fedora.domain.name ([95.70.245.16])
-        by smtp.googlemail.com with ESMTPSA id f6sm11785353wmq.6.2021.12.24.02.39.48
+        by smtp.googlemail.com with ESMTPSA id l2sm7640352wrs.43.2021.12.24.02.43.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Dec 2021 02:39:48 -0800 (PST)
+        Fri, 24 Dec 2021 02:43:52 -0800 (PST)
 From:   Onur Ozkan <onurozkan.dev@gmail.com>
 X-Google-Original-From: Onur Ozkan <work@onurozkan.dev>
 To:     trenn@suse.com
 Cc:     shuah@kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, Onur Ozkan <work@onurozkan.dev>
-Subject: [PATCH v2] tools/power/cpupower/{ToDo => TODO}: Rename the todo file
-Date:   Fri, 24 Dec 2021 13:39:28 +0300
-Message-Id: <20211224103928.29480-1-work@onurozkan.dev>
+Subject: [PATCH v3] tools/power/cpupower/{ToDo => TODO}: Rename the todo file
+Date:   Fri, 24 Dec 2021 13:43:43 +0300
+Message-Id: <20211224104343.33331-1-work@onurozkan.dev>
 X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -133,40 +133,14 @@ Here are the all other todo file references in kernel source code:
 
 Signed-off-by: Onur Ozkan <work@onurozkan.dev>
 ---
- tools/power/cpupower/ToDo | 24 ------------------------
- 1 file changed, 24 deletions(-)
- delete mode 100644 tools/power/cpupower/ToDo
+ tools/power/cpupower/{ToDo => TODO} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename tools/power/cpupower/{ToDo => TODO} (100%)
 
-diff --git a/tools/power/cpupower/ToDo b/tools/power/cpupower/ToDo
-deleted file mode 100644
-index b196a139a3e4..000000000000
---- a/tools/power/cpupower/ToDo
-+++ /dev/null
-@@ -1,24 +0,0 @@
--ToDos sorted by priority:
--
--- Use bitmask functions to parse CPU topology more robust
--  (current implementation has issues on AMD)
--- Try to read out boost states and frequencies on Intel
--- Somewhere saw the ability to read power consumption of
--  RAM from HW on Intel SandyBridge -> another monitor?
--- Add another c1e debug idle monitor
--  -> Is by design racy with BIOS, but could be added
--     with a --force option and some "be careful" messages
--- Add cpu_start()/cpu_stop() callbacks for monitor
--  -> This is to move the per_cpu logic from inside the
--     monitor to outside it. This can be given higher
--     priority in fork_it.
--- Fork as many processes as there are CPUs in case the
--  per_cpu_schedule flag is set.
--  -> Bind forked process to each cpu.
--  -> Execute start measures via the forked processes on
--     each cpu.
--  -> Run test executable in a forked process.
--  -> Execute stop measures via the forked processes on
--     each cpu.
--  This would be ideal as it will not introduce noise in the
--  tested executable.
+diff --git a/tools/power/cpupower/ToDo b/tools/power/cpupower/TODO
+similarity index 100%
+rename from tools/power/cpupower/ToDo
+rename to tools/power/cpupower/TODO
 -- 
 2.33.1
 

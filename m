@@ -2,128 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7042947EE6C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 12:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC2147EE6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 12:07:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352529AbhLXLC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 06:02:59 -0500
-Received: from mga17.intel.com ([192.55.52.151]:7982 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1352524AbhLXLC6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 06:02:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640343778; x=1671879778;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2sBxp1S7i2xOh6symJ3U/3bblwf9to+sMboPWcqsbjU=;
-  b=c5XBD8aDwZrU9/6CKy1iHUS/e49+nuMLIIHDiFHXsox0hcFkAP5iT+gk
-   qBrMXmZI4OgP9/7RE5lPIQ64Gac1Vii+8sYto8JRaFD+tjCGOxC9wQwy2
-   HAq2A4NiNk8vB7JEyuCgJvvfla57Wpx7YE8aryhcsVS1BD4vxApjIR9H7
-   lqTJCe4uY5pM/z953X7hm7X9Um10iB2u27w2wct+DPou1FGgTc1kOS1Cq
-   DQo5aUT+dsCHLLVtT8b7v/qTOL79By62fajEi8Zcq9PzOcdF3L4vCA+yb
-   9U0ywb21n4OYGJ9FXqPkwdr5oK5m1utaETZ4FIX/DPViMOBJGnyvEFhoI
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10207"; a="221637201"
-X-IronPort-AV: E=Sophos;i="5.88,232,1635231600"; 
-   d="scan'208";a="221637201"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2021 03:02:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,232,1635231600"; 
-   d="scan'208";a="522410729"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 24 Dec 2021 03:02:51 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 7CCCB11E; Fri, 24 Dec 2021 13:03:00 +0200 (EET)
-Date:   Fri, 24 Dec 2021 14:03:00 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, tglx@linutronix.de,
-        mingo@redhat.com, luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 19/26] x86/tdx: Make pages shared in ioremap()
-Message-ID: <20211224110300.7zj3nc5nbbv7jobp@black.fi.intel.com>
-References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
- <20211214150304.62613-20-kirill.shutemov@linux.intel.com>
- <87c288d6-9bf8-5a94-a628-1e0aaa7de690@amd.com>
- <20211223171530.v73posbqizb5l3md@black.fi.intel.com>
- <f61b591b-a06c-bc29-4b9b-a5d46111fe4e@intel.com>
- <YcTTt4LXKfDO+9u3@zn.tnic>
- <20211223205604.g44kez5d7iedatfo@box.shutemov.name>
- <YcTlhp1PUfrMOelI@zn.tnic>
+        id S1343962AbhLXLHh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 24 Dec 2021 06:07:37 -0500
+Received: from mail-eopbgr90047.outbound.protection.outlook.com ([40.107.9.47]:61712
+        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229513AbhLXLHg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 24 Dec 2021 06:07:36 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Fe8GIc+YjFF10mAegw2KHr1v062PWgv1uR7tNvS8JzMdCJGZHbbM2S+v98RMjZuRp9vmKY7VaYYqBLTrhErIux7ZucRPAyTSbgjfKxh9VY1hosZDzYpLSmm75o5pHQSzTunVTN4+y7d0X86clPTRAc0MAyIB8xTxmLb3kkviXYPqK8LGhuu9hH4bntym+On5CFFa0h7fgQQeG7K1/D2vZ0HL5I1GqbY5OqSzDCakP4W85OR4GDPtL0q8wcKhQ5R/8Pg8Ac1qa+B+aa5Y5wLCRMNxDU0BbOlzEG/bDtSjM8Dflf1+WhTx+tATIDelGYFzdS+Iqv73bDjL35fIBHvXLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b8SQB0l3rFQjDxDv4Y1goDNGhPMne+ApOmfRu3PcMDM=;
+ b=RFSxSSRSZ6dBoLEuDgOlV/j+ss0UlOZp6QKyJoN2YLKTlveQZXVzBfSADLumWyb+tiq3Du4NMCehqyXBJ9oowdfsentT4s5evSLF8xPunu4aIjHxTJvG/oU4FuhJWWAyPzdhd11DRpF0xK0At19a2kSm+YmgRGtd3bSt1OlHfyeGnyOprT2PoWSP0Fj8d9K0bcFFWFf4YDiSwTAcRSw2GXYggNQ5PZmeI6hIq9hHbriw0fE4Q3cttVJQ/SnePEU3izcR06/lSihy2fqOKzu5ciQPDbc11rke9AGfz18W92pN8lVmD4jpLAuWM6SfiLHAdSLrQDWsuOmiZVdlSdxjEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MRXP264MB0005.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:25::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.20; Fri, 24 Dec
+ 2021 11:07:34 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::f0ef:856d:b0de:e85d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::f0ef:856d:b0de:e85d%7]) with mapi id 15.20.4823.021; Fri, 24 Dec 2021
+ 11:07:34 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Maxime Bizon <mbizon@freebox.fr>,
+        Russell Currey <ruscur@russell.cc>
+Subject: [PATCH v3 1/2] powerpc/set_memory: Avoid spinlock recursion in
+ change_page_attr()
+Thread-Topic: [PATCH v3 1/2] powerpc/set_memory: Avoid spinlock recursion in
+ change_page_attr()
+Thread-Index: AQHX+LZz8qLd0m1ne0WotvwFO7oMmA==
+Date:   Fri, 24 Dec 2021 11:07:33 +0000
+Message-ID: <43c3c76a1175ae6dc1a3d3b5c3f7ecb48f683eea.1640344012.git.christophe.leroy@csgroup.eu>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 473d59b2-c065-4008-4f91-08d9c6cd963a
+x-ms-traffictypediagnostic: MRXP264MB0005:EE_
+x-microsoft-antispam-prvs: <MRXP264MB00057E5843A3E68D386FD2F4ED7F9@MRXP264MB0005.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:497;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GGLL1T/5KHF2ztVOBd2Y3HdBjYu1V6Hhw35rxyFQGXZJkRydSW3XpPKA0H8DedfHdRKMxNyuehKCMk3JxoBqO+D7Qxx/+MOhDJAF2BUmk3mF4oXIOVtKorpZVNsQMY02M5Rq8ppqQE1CDZ8hWBwQMIs8yk5Py84WG0ncAo4mQY3c8KknS+kkpxAOOP38r7/D2h8x/y+waZ5Y79Tem/uv0PMaVKto8f7esqBLobD7zJ0845an6W1ntcDy4DT5fCdcMPGJBSZxpWWlZcP/TJKymU2X5E7D9pmzFbEa50j2b1NSTlrv+fGaMIWy5p2EcNSGhzwAcyvnn9V+YujzLTJ48/mMqTv1UmAjRhvD/3P8eiteXvR9ABwd8EF4w/0p0WMlt3bo/WebXQQcDXcBL3q0EW/bXsSnVb693hrgqWcc6hN3jtRA+B6Bd2CQ7FCfrf9Bmo6bu2edVv2s6HqZ5efMRjq6pTu/LeVbHrlLbpWIkAJt6jkWsLCR+iFt/9X9UwkRsFHwAk1HrXJR9Hyc++LZFJM4xUl83DlryZkeIlE+kzT0HyeCvInz4c+Oc5H4K5iPQx7kWzxdofaK5NX7fSOS6C07hL6vZhsgTdFvH95FU3uxwHlyP1BdPXnxtMlN4P2w09K0Pw+LWxnqMQWLWltTmuPdo7WYz2eU87YGmiJVYVMZx9NKH7vABhZNf0zzqs73WSwaOAsb4oS0xIlduDYEfK9KJ3fOne1KXFDNMukRAJrceYiLjSr79iuLidwIX5uSP2XH4I2T/ja1rd3gkmHVAn4g2ffVobIpvKLQlkob7q0=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(54906003)(110136005)(2906002)(4326008)(2616005)(44832011)(64756008)(508600001)(5660300002)(66556008)(66446008)(66476007)(6506007)(91956017)(76116006)(66946007)(8676002)(966005)(71200400001)(8936002)(26005)(38070700005)(316002)(186003)(36756003)(38100700002)(122000001)(83380400001)(6486002)(6512007)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?G/ONU0JNODi3vo9+B9E1vbWGwTtyb8Lxc7j5uhISNrsFs7aNrIc+9QDpj1?=
+ =?iso-8859-1?Q?pwpd9QtGmAfbuhVdROwmHiTXZxAB07+2+7lJanZUVqBUjP84k0p2Rsd5ga?=
+ =?iso-8859-1?Q?8IYEUbeRa+oaqaSyT5SfTgfBtqs0LclXeNdBMs70WWeISgbftsGmzWC9Cs?=
+ =?iso-8859-1?Q?SIhSoP6xHKJL0TCy5CqetXoYH2oREUt3+g27cbxeGJr+pil/M28RDjQIqw?=
+ =?iso-8859-1?Q?17vbqsMdqWUVNHIed5AJT/+uj45fgJ5bOpkWNDMktvBGOGlNaiDJ9R/hcn?=
+ =?iso-8859-1?Q?tYjs8J1HR/dpUXyc/qQSE5hoInvLtXFluc/UtjABUEnB67qsCbrErVR8yS?=
+ =?iso-8859-1?Q?ROns5U2vHgfgSIf1mQ3JMB7mcK06VVuOZItaBPw8++4RX1fGws23SdJx3f?=
+ =?iso-8859-1?Q?fgg89JK/J1JRzUGuRlNq/DyqyBlsnZY9e1coVnQEFEtOOH2xRVS3KH1/r7?=
+ =?iso-8859-1?Q?Jb5va5DtAFSDo9eHhOXKgaW1jp/g9usJS44vpztVsGylSXfQoWg8bCQNl4?=
+ =?iso-8859-1?Q?uzbzrgQ2X/u760oiOXRrB0RYa56Yc8/qRb+vu5LwtRlFyc5O9hyITxPFHK?=
+ =?iso-8859-1?Q?55b9tNRhs5hvFLeqO5k7tICnP7jFbnl8DHM3h7j2xe4POTzeEAlzjgWDls?=
+ =?iso-8859-1?Q?P8CW/eQO78kG+U2OTNUbDV9RpupeGpVq5Kuxiny4cAGZinsvv9fK60B4hD?=
+ =?iso-8859-1?Q?DoRCeqP/KC7QhtOq3XdJrtXhVBFr+X3Oh0uUdIsi3srtWwECBHEkEZPYWs?=
+ =?iso-8859-1?Q?TdWhnXKJgDtv50kQel5L2i8NSfgYgFpsr53mIF7QEt4Ca+G/0+W+d6aXjp?=
+ =?iso-8859-1?Q?6f08w7pnqlD05eTaz4Lv2ghYWcNQj8gaQVRUyoyteWfjXgB2WcmrRjP+SN?=
+ =?iso-8859-1?Q?UyHiGaSEovBwuNO0UX7JPxbjT58RCcnSzqTK853QWiBPkW3Rla8z7E8eYy?=
+ =?iso-8859-1?Q?S61lkmhLEvxeUO64mC7vzt0HtV6Gf4X0MZqQmkyyMQECKIEDtelUeuAKzf?=
+ =?iso-8859-1?Q?+KDF5d4gBx9wSsP0CFETJ1tUBXsLQojpFM8TADUfFbw5Smb+fO1SuXMW8+?=
+ =?iso-8859-1?Q?L71F2TQb4SH0YFkzOZryVleI4czA9z1Kdm59tIy+mIrDuZDsia/GNyIpbE?=
+ =?iso-8859-1?Q?0BW9NLzB15beCQ2lu70P2V9yn6RgRMCtvFQeC46KAd3C3TDCRa6F3p6fql?=
+ =?iso-8859-1?Q?lSGOvZ/9QPwRMm9doa12QQ/txREeWrM0qbmOTGCcPZFzY73ldRmSuxxgzR?=
+ =?iso-8859-1?Q?5x46wr29k/zIbPOxXay7bVmXiayYaQwfPEdPCjxm1x88WFl19J6/NXQCJ9?=
+ =?iso-8859-1?Q?f3wZpgnbOoUqymzcX+eB83P7pmWQEz1YwkKIfWiaGhAnI9kiga/Mo7kYMm?=
+ =?iso-8859-1?Q?+p+cc1uOljwP3A47faPm+GvVD7BYbe5W2CSFwZOmQignUIaKPyCQNaSafg?=
+ =?iso-8859-1?Q?zSV3MwUaPKk3lvfu2vV0MJljuAZ5GW8g7K2Wxhnu3WnTbjr772zESjMY4n?=
+ =?iso-8859-1?Q?FgiXQyDc+bV87jnDedyhH55DHsV9k20GG+eUE/sUnM7UnRKwmNC2FePkI0?=
+ =?iso-8859-1?Q?Ni7zWqMfbgsIv5ujYfAYNdEwio/GMLwF5BUiNM5PaEyXk7VMmwGUeLS7+P?=
+ =?iso-8859-1?Q?1VlpRV+Kfon4dDFuhQMhNfoifBFEXJxDxj364NTqYBuZPYi3xLJvDsF8cL?=
+ =?iso-8859-1?Q?qCp6enCZXMJ6tojDdxJdD/CHDNSi/AbrIBovNPJaAb9eK6iOKgRhO+qQ/u?=
+ =?iso-8859-1?Q?JtHr2YwKpKbZsKEuuqLM9NVxs=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YcTlhp1PUfrMOelI@zn.tnic>
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 473d59b2-c065-4008-4f91-08d9c6cd963a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Dec 2021 11:07:33.9542
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KirlBBPWKmCBXT04xO35KR51Bed1AhF0lbo5oOMYwtxczl/dBRjc8Gl7BDu4lP/i5qEgK5s1nu7gRVk4aDuRABtVvE8tCdAxvRBildEMrA8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRXP264MB0005
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 10:09:26PM +0100, Borislav Petkov wrote:
-> On Thu, Dec 23, 2021 at 11:56:04PM +0300, Kirill A. Shutemov wrote:
-> > Except CC_ATTR_MEM_ENCRYPT is true for TDX too, so it will also depend on
-> > check order. It is fragile.
-> 
-> So the query you wanna do is:
-> 
-> 	if (memory encryption in use)
-> 		use mask;
-> 
-> and the mask you use depends on whether it is SEV or TDX. Right?
-> 
-> If so, you can either do a cc_get_mask() function which gives you either
-> the SEV or TDX mask or simply do:
-> 
-> 	if (CC_ATTR_MEM_ENCRYPT) {
-> 		if (CC_ATTR_GUEST_TDX)
-> 			mask = tdx_shared_mask();
-> 		else if (sme_me_mask)
-> 			mask = sme_me_mask;
-> 	}
-> 
-> Yeah, sme_me_mask has become synonymous with the kernel running as a AMD
-> confidential guest. I need to think about how to make this cleaner...
+Commit 1f9ad21c3b38 ("powerpc/mm: Implement set_memory() routines")
+included a spin_lock() to change_page_attr() in order to
+safely perform the three step operations. But then
+commit 9f7853d7609d ("powerpc/mm: Fix set_memory_*() against
+concurrent accesses") modify it to use pte_update() and do
+the operation safely against concurrent access.
 
-Okay. Meanwhile I leave it this way:
+In the meantime, Maxime reported some spinlock recursion.
 
-	pgprot_t pgprot_cc_encrypted(pgprot_t prot)
-	{
-		if (cc_platform_has(CC_ATTR_MEM_ENCRYPT)) {
-			if (cc_platform_has(CC_ATTR_GUEST_TDX))
-				return __pgprot(pgprot_val(prot) & ~tdx_shared_mask());
-			else if (sme_me_mask)
-				return __pgprot(__sme_set(pgprot_val(prot)));
-			else
-				WARN_ON_ONCE(1);
-		}
+[   15.351649] BUG: spinlock recursion on CPU#0, kworker/0:2/217
+[   15.357540]  lock: init_mm+0x3c/0x420, .magic: dead4ead, .owner: kworker/0:2/217, .owner_cpu: 0
+[   15.366563] CPU: 0 PID: 217 Comm: kworker/0:2 Not tainted 5.15.0+ #523
+[   15.373350] Workqueue: events do_free_init
+[   15.377615] Call Trace:
+[   15.380232] [e4105ac0] [800946a4] do_raw_spin_lock+0xf8/0x120 (unreliable)
+[   15.387340] [e4105ae0] [8001f4ec] change_page_attr+0x40/0x1d4
+[   15.393413] [e4105b10] [801424e0] __apply_to_page_range+0x164/0x310
+[   15.400009] [e4105b60] [80169620] free_pcp_prepare+0x1e4/0x4a0
+[   15.406045] [e4105ba0] [8016c5a0] free_unref_page+0x40/0x2b8
+[   15.411979] [e4105be0] [8018724c] kasan_depopulate_vmalloc_pte+0x6c/0x94
+[   15.418989] [e4105c00] [801424e0] __apply_to_page_range+0x164/0x310
+[   15.425451] [e4105c50] [80187834] kasan_release_vmalloc+0xbc/0x134
+[   15.431898] [e4105c70] [8015f7a8] __purge_vmap_area_lazy+0x4e4/0xdd8
+[   15.438560] [e4105d30] [80160d10] _vm_unmap_aliases.part.0+0x17c/0x24c
+[   15.445283] [e4105d60] [801642d0] __vunmap+0x2f0/0x5c8
+[   15.450684] [e4105db0] [800e32d0] do_free_init+0x68/0x94
+[   15.456181] [e4105dd0] [8005d094] process_one_work+0x4bc/0x7b8
+[   15.462283] [e4105e90] [8005d614] worker_thread+0x284/0x6e8
+[   15.468227] [e4105f00] [8006aaec] kthread+0x1f0/0x210
+[   15.473489] [e4105f40] [80017148] ret_from_kernel_thread+0x14/0x1c
 
-		return prot;
-	}
-	EXPORT_SYMBOL_GPL(pgprot_cc_encrypted);
+Remove the read / modify / write sequence to make the operation atomic
+and remove the spin_lock() in change_page_attr().
 
-	pgprot_t pgprot_cc_decrypted(pgprot_t prot)
-	{
-		if (cc_platform_has(CC_ATTR_MEM_ENCRYPT)) {
-			if (cc_platform_has(CC_ATTR_GUEST_TDX))
-				return __pgprot(pgprot_val(prot) | tdx_shared_mask());
-			else if (sme_me_mask)
-				return __pgprot(__sme_clr(pgprot_val(prot)));
-			else
-				WARN_ON_ONCE(1);
-		}
+To do the operation atomically, we can't use pte modification helpers
+anymore. Because all platforms have different combination of bits, it
+is not easy to use those bits directly. But all have the
+_PAGE_KERNEL_{RO/ROX/RW/RWX} set of flags. All we need it to compare
+two sets to know which bits are set or cleared.
 
-		return prot;
-	}
-	EXPORT_SYMBOL_GPL(pgprot_cc_decrypted);
+For instance, by comparing _PAGE_KERNEL_ROX and _PAGE_KERNEL_RO you
+know which bit gets cleared and which bit get set when changing exec
+permission.
 
+Reported-by: Maxime Bizon <mbizon@freebox.fr>
+Link: https://lore.kernel.org/all/20211212112152.GA27070@sakura/
+Cc: Russell Currey <ruscur@russell.cc>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+v3: Use pte_update() directly instead of having a read / modify / write sequence
+---
+ arch/powerpc/mm/pageattr.c | 32 +++++++++++++-------------------
+ 1 file changed, 13 insertions(+), 19 deletions(-)
+
+diff --git a/arch/powerpc/mm/pageattr.c b/arch/powerpc/mm/pageattr.c
+index edea388e9d3f..8812454e70ff 100644
+--- a/arch/powerpc/mm/pageattr.c
++++ b/arch/powerpc/mm/pageattr.c
+@@ -15,12 +15,14 @@
+ #include <asm/pgtable.h>
+ 
+ 
++static pte_basic_t pte_update_delta(pte_t *ptep, unsigned long addr,
++				    unsigned long old, unsigned long new)
++{
++	return pte_update(&init_mm, addr, ptep, old & ~new, new & ~old, 0);
++}
++
+ /*
+- * Updates the attributes of a page in three steps:
+- *
+- * 1. take the page_table_lock
+- * 2. install the new entry with the updated attributes
+- * 3. flush the TLB
++ * Updates the attributes of a page atomically.
+  *
+  * This sequence is safe against concurrent updates, and also allows updating the
+  * attributes of a page currently being executed or accessed.
+@@ -28,41 +30,33 @@
+ static int change_page_attr(pte_t *ptep, unsigned long addr, void *data)
+ {
+ 	long action = (long)data;
+-	pte_t pte;
+-
+-	spin_lock(&init_mm.page_table_lock);
+-
+-	pte = ptep_get(ptep);
+ 
+-	/* modify the PTE bits as desired, then apply */
++	/* modify the PTE bits as desired */
+ 	switch (action) {
+ 	case SET_MEMORY_RO:
+-		pte = pte_wrprotect(pte);
++		/* Don't clear DIRTY bit */
++		pte_update_delta(ptep, addr, _PAGE_KERNEL_RW & ~_PAGE_DIRTY, _PAGE_KERNEL_RO);
+ 		break;
+ 	case SET_MEMORY_RW:
+-		pte = pte_mkwrite(pte_mkdirty(pte));
++		pte_update_delta(ptep, addr, _PAGE_KERNEL_RO, _PAGE_KERNEL_RW);
+ 		break;
+ 	case SET_MEMORY_NX:
+-		pte = pte_exprotect(pte);
++		pte_update_delta(ptep, addr, _PAGE_KERNEL_ROX, _PAGE_KERNEL_RO);
+ 		break;
+ 	case SET_MEMORY_X:
+-		pte = pte_mkexec(pte);
++		pte_update_delta(ptep, addr, _PAGE_KERNEL_RO, _PAGE_KERNEL_ROX);
+ 		break;
+ 	default:
+ 		WARN_ON_ONCE(1);
+ 		break;
+ 	}
+ 
+-	pte_update(&init_mm, addr, ptep, ~0UL, pte_val(pte), 0);
+-
+ 	/* See ptesync comment in radix__set_pte_at() */
+ 	if (radix_enabled())
+ 		asm volatile("ptesync": : :"memory");
+ 
+ 	flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+ 
+-	spin_unlock(&init_mm.page_table_lock);
+-
+ 	return 0;
+ }
+ 
 -- 
- Kirill A. Shutemov
+2.33.1

@@ -2,84 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF99947EC3B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 07:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6E447EC3F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 07:49:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343518AbhLXGsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 01:48:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
+        id S1351543AbhLXGs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 01:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbhLXGsG (ORCPT
+        with ESMTP id S229832AbhLXGs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 01:48:06 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B25C061401;
-        Thu, 23 Dec 2021 22:48:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
-        :Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=aNK0QUdexJ+kRgB+i3vf9HVKEuQOqBN6P2TycATdPsk=; b=WhaFslx7HqTY91sXHE9t0kpF03
-        F7dmblQhF9onaIX36ER27pRpZ2XU3o+AZQ9AtzZJcTjc2uFFD2kpW3qDeR2g+6UXJ03xCfrwDsPRp
-        6FDbgyvG7HW89GpY04paPpc3WWQ4SXYWSgsQvIUUOO7eJGkPqBsBYYHNZmicLZs1jE7EFMik0MrSB
-        tq8wbFZzqhS1kN9TF/9PihhK+gwOuvBXZM7XreMIVSEQL1RxrUuEFTUxshlNU+kxhXFn6+MUvRy/S
-        bvk+o+rmx9zwqBKV5UPRDGsKHWV86Abg0efutnrAPaEv6G43Mk0pYrRO098LTTmDVLjT4XmBYF8es
-        v4fb/Bnw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n0eMt-00DoS6-Op; Fri, 24 Dec 2021 06:47:55 +0000
-Date:   Thu, 23 Dec 2021 22:47:55 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Vimal Agrawal <avimalin@gmail.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Vimal Agrawal <vimal.Agrawal@sophos.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Jan Beulich <JBeulich@suse.com>, Jeff Mahoney <jeffm@suse.com>,
-        Sam Ravnborg <sam@ravnborg.org>, linux-kbuild@vger.kernel.org,
-        jeyu@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] kernel/module.c: heuristic enhancement when
- INSTALL_MOD_STRIP= "--strip-unneeded" is used
-Message-ID: <YcVtG26b/sO9k7ox@infradead.org>
-References: <YcJZWiQ407ZxMM+y@bombadil.infradead.org>
- <20211222132332.7817-1-vimal.agrawal@sophos.com>
- <YcRRQCMZFepB/hzX@infradead.org>
- <CALkUMdRxTm6STT4CncTuvQ9hM_bez+B91TsuenEj71KPxFgMsg@mail.gmail.com>
+        Fri, 24 Dec 2021 01:48:57 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74353C061401;
+        Thu, 23 Dec 2021 22:48:57 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id y16-20020a17090a6c9000b001b13ffaa625so10798351pjj.2;
+        Thu, 23 Dec 2021 22:48:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=H0q+XDRfnZXxgq12FkhmCb0ciBJ4BstWZtud1YzQGTo=;
+        b=Kn/iAchpftdVczpWSjgc9ps3mXs4dI7cdL9/2qUaQPakfcnjLt2EgPYohgeYtyatZ+
+         dhMlqNDkPxfhzK24dYpvrDQJ8PFkP5as0i9VikD3C6rqnrvWTriesAYT4MEvVDIEM7Os
+         A1pGE6aV/+4Vm4pnU4ESBe/QUKwcHnYwS3yV9C9W+XfSBuZLvjaMnRZBuQxipCrom0BV
+         w2kjvwxN9mL2cSSye6sy7MM+iJphTzc0/LNJORtmBU23nd94gtdUOixdW8zMW/A7Kf9P
+         wdoOVzuWpLezqn7+y/Idi0q4WOvbag45naQbqbEy17pLtinPb5BoGIQZNfrMNDV1zDSC
+         RR3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=H0q+XDRfnZXxgq12FkhmCb0ciBJ4BstWZtud1YzQGTo=;
+        b=MOqcButx7W/LUBA/28RamzNAKQ4hj+/6iYYFQdTprPq8aoaikxVyoYXXXSRFLBwGX/
+         sMofJcnnxy8QynOaDAMRUbncfAbXH+t9z/DHDjx21H9VXA9YXNWxi7RaBFE9QPVjlzT8
+         ZmlI7k2BDK2tigF7EuL5/rYz38iIt0yC9dOA3sigGqOMTMED3o8RmcB3y2izltZqeUBz
+         vdSlBqnTSjrRCUPNJsbcwruI7BToITMr/uTfyhJxy+oz2d/gs0HQ2GHRqiosjoSuyeqi
+         fniK0qyC/hgZn+NTlM5t+F0JQE5edpWoDPfyMCDgmGbjHEPGwWJXPP3j1OGoljrrvdkU
+         s9Hw==
+X-Gm-Message-State: AOAM5336WGahjh7meNlHdbaY1y1SoQlZMgnFkaZyaAsd7IH4xNiPfc6x
+        jXQYdYbu/qNiz8nj/nC1yrnJV3xtzx/aSUJ6
+X-Google-Smtp-Source: ABdhPJx1Jwh0/c7vIVV9uaa+8rFODIi0ETGFnueus2zFfFrTNmqTpjRelv7AkPp8uuy4CJTL589EPQ==
+X-Received: by 2002:a17:90b:3507:: with SMTP id ls7mr6516834pjb.220.1640328537105;
+        Thu, 23 Dec 2021 22:48:57 -0800 (PST)
+Received: from ruantu-linux-2.. ([174.139.180.74])
+        by smtp.gmail.com with ESMTPSA id w7sm8653393pfu.180.2021.12.23.22.48.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Dec 2021 22:48:56 -0800 (PST)
+From:   Yu-Tung Chang <mtwget@gmail.com>
+To:     tony0620emma@gmail.com
+Cc:     kvalo@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yu-Tung Chang <mtwget@gmail.com>
+Subject: [PATCH] rtw88: add quirk to disable pci caps on HP Slim Desktop S01-pF1000i
+Date:   Fri, 24 Dec 2021 14:48:46 +0800
+Message-Id: <20211224064846.1171-1-mtwget@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALkUMdRxTm6STT4CncTuvQ9hM_bez+B91TsuenEj71KPxFgMsg@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 04:39:15PM +0530, Vimal Agrawal wrote:
-> Hi Christoph,
-> 
-> On Thu, Dec 23, 2021 at 4:06 PM Christoph Hellwig <hch@infradead.org> wrote:
-> >
-> > We never build modules with that ёption, so this is completely pointless.
-> >
-> we use openwrt for build and packaging and it has been using this
-> option for long.
-> 
-> kbuild documentation says the following for INSTALL_MOD_STRIP:
-> If this variable is specified, it will cause modules to be stripped
-> after they are installed. If INSTALL_MOD_STRIP is ‘1’, then the
-> default option –strip-debug will be used. Otherwise, the
-> INSTALL_MOD_STRIP value will be used as the option(s) to the strip
-> command.
-> 
-> So if kbuild does not support INSTALL_MOD_STRIP=--strip-unneeded
-> option then we should call out what it supports and should not even
-> allow what is not supported. We don't know what other options others
-> may be using but if we allow it then we should support it and it
-> should not behave erratic just because someone is using a
-> non-recommended option.
+8821CE causes random freezes on HP Slim Desktop S01-pF1000i. Add a quirk
+to disable pci ASPM capability.
 
-I don't think we can support passing arbitrary linker options and
-expects things to work.  If we want to support --strip-unneeded
-it needs a good rationale and be added as a direct config option.
+Signed-off-by: Yu-Tung Chang <mtwget@gmail.com>
+---
+ drivers/net/wireless/realtek/rtw88/pci.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/net/wireless/realtek/rtw88/pci.c b/drivers/net/wireless/realtek/rtw88/pci.c
+index a7a6ebfaa203..f8999d7dee61 100644
+--- a/drivers/net/wireless/realtek/rtw88/pci.c
++++ b/drivers/net/wireless/realtek/rtw88/pci.c
+@@ -1738,6 +1738,15 @@ static const struct dmi_system_id rtw88_pci_quirks[] = {
+ 		},
+ 		.driver_data = (void *)BIT(QUIRK_DIS_PCI_CAP_ASPM),
+ 	},
++	{
++		.callback = disable_pci_caps,
++		.ident = "HP HP Slim Desktop S01-pF1xxx",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "HP Slim Desktop S01-pF1xxx"),
++		},
++		.driver_data = (void *)BIT(QUIRK_DIS_PCI_CAP_ASPM),
++	},
+ 	{}
+ };
+ 
+-- 
+2.34.1
+

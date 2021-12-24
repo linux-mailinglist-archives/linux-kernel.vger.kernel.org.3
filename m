@@ -2,104 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E78E047EE23
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 11:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E44F047EE11
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 10:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352382AbhLXKBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 05:01:53 -0500
-Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:47761 "EHLO
-        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343894AbhLXKBv (ORCPT
+        id S1352352AbhLXJwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 04:52:14 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:30103 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343853AbhLXJwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 05:01:51 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R321e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0V.cRDq9_1640340105;
-Received: from 30.240.100.46(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0V.cRDq9_1640340105)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 24 Dec 2021 18:01:47 +0800
-Message-ID: <ed4ec4f9-9ede-8718-811c-8eae92c220bb@linux.alibaba.com>
-Date:   Fri, 24 Dec 2021 18:01:44 +0800
+        Fri, 24 Dec 2021 04:52:09 -0500
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JL2MD0YpBz1DKGZ;
+        Fri, 24 Dec 2021 17:48:56 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by canpemm500010.china.huawei.com
+ (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 24 Dec
+ 2021 17:52:07 +0800
+From:   Ye Bin <yebin10@huawei.com>
+To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
+        <lczerner@redhat.com>, Ye Bin <yebin10@huawei.com>
+Subject: [PATCH -next] ext4: Fix null-ptr-deref in '__ext4_journal_ensure_credits'
+Date:   Fri, 24 Dec 2021 18:03:41 +0800
+Message-ID: <20211224100341.3299128-1-yebin10@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH v3 0/6] Introduce x86 assembly accelerated implementation
- for SM3 algorithm
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Gilad Ben-Yossef <gilad@benyossef.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-crypto@vger.kernel.org,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20211223043547.32297-1-tianjia.zhang@linux.alibaba.com>
- <YcRPYHg3SMezrfiX@zn.tnic>
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-In-Reply-To: <YcRPYHg3SMezrfiX@zn.tnic>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Borislav,
+We got issue as follows when run syzkaller test:
+[ 1901.130043] EXT4-fs error (device vda): ext4_remount:5624: comm syz-executor.5: Abort forced by user
+[ 1901.130901] Aborting journal on device vda-8.
+[ 1901.131437] EXT4-fs error (device vda): ext4_journal_check_start:61: comm syz-executor.16: Detected aborted journal
+[ 1901.131566] EXT4-fs error (device vda): ext4_journal_check_start:61: comm syz-executor.11: Detected aborted journal
+[ 1901.132586] EXT4-fs error (device vda): ext4_journal_check_start:61: comm syz-executor.18: Detected aborted journal
+[ 1901.132751] EXT4-fs error (device vda): ext4_journal_check_start:61: comm syz-executor.9: Detected aborted journal
+[ 1901.136149] EXT4-fs error (device vda) in ext4_reserve_inode_write:6035: Journal has aborted
+[ 1901.136837] EXT4-fs error (device vda): ext4_journal_check_start:61: comm syz-fuzzer: Detected aborted journal
+[ 1901.136915] ==================================================================
+[ 1901.138175] BUG: KASAN: null-ptr-deref in __ext4_journal_ensure_credits+0x74/0x140 [ext4]
+[ 1901.138343] EXT4-fs error (device vda): ext4_journal_check_start:61: comm syz-executor.13: Detected aborted journal
+[ 1901.138398] EXT4-fs error (device vda): ext4_journal_check_start:61: comm syz-executor.1: Detected aborted journal
+[ 1901.138808] Read of size 8 at addr 0000000000000000 by task syz-executor.17/968
+[ 1901.138817]
+[ 1901.138852] EXT4-fs error (device vda): ext4_journal_check_start:61: comm syz-executor.30: Detected aborted journal
+[ 1901.144779] CPU: 1 PID: 968 Comm: syz-executor.17 Not tainted 4.19.90-vhulk2111.1.0.h893.eulerosv2r10.aarch64+ #1
+[ 1901.146479] Hardware name: linux,dummy-virt (DT)
+[ 1901.147317] Call trace:
+[ 1901.147552]  dump_backtrace+0x0/0x2d8
+[ 1901.147898]  show_stack+0x28/0x38
+[ 1901.148215]  dump_stack+0xec/0x15c
+[ 1901.148746]  kasan_report+0x108/0x338
+[ 1901.149207]  __asan_load8+0x58/0xb0
+[ 1901.149753]  __ext4_journal_ensure_credits+0x74/0x140 [ext4]
+[ 1901.150579]  ext4_xattr_delete_inode+0xe4/0x700 [ext4]
+[ 1901.151316]  ext4_evict_inode+0x524/0xba8 [ext4]
+[ 1901.151985]  evict+0x1a4/0x378
+[ 1901.152353]  iput+0x310/0x428
+[ 1901.152733]  do_unlinkat+0x260/0x428
+[ 1901.153056]  __arm64_sys_unlinkat+0x6c/0xc0
+[ 1901.153455]  el0_svc_common+0xc8/0x320
+[ 1901.153799]  el0_svc_handler+0xf8/0x160
+[ 1901.154265]  el0_svc+0x10/0x218
+[ 1901.154682] ==================================================================
 
-On 12/23/21 6:28 PM, Borislav Petkov wrote:
-> On Thu, Dec 23, 2021 at 12:35:41PM +0800, Tianjia Zhang wrote:
->> This series of patches creates an stand-alone library for SM3 hash
->> algorithm in the lib/crypto directory, and makes the implementations
->> that originally depended on sm3-generic depend on the stand-alone SM3
->> library, which also includes sm3-generic itself.
->>
->> On this basis, the AVX assembly acceleration implementation of SM3
->> algorithm is introduced, the main algorithm implementation based on
->> SM3 AES/BMI2 accelerated work by libgcrypt at:
->> https://gnupg.org/software/libgcrypt/index.html
->>
->>  From the performance benchmark data, the performance improvement of
->> SM3 algorithm after AVX optimization can reach up to 38%.
->>
->> ---
->> v3 changes:
->>   - update git commit message for patch 01
->>
->> v2 changes:
->>   - x86/sm3: Change K macros to signed decimal and use LEA and 32-bit offset
-> 
-> So you sent v2 yesterday. One day later, you're spamming again.
-> 
-> So we have those process rules for a reason - use the time to read them
-> before sending again a day later please.
-> 
-> Documentation/process/submitting-patches.rst:
-> 
-> "Don't get discouraged - or impatient
-> ------------------------------------
-> 
-> After you have submitted your change, be patient and wait.  Reviewers are
-> busy people and may not get to your patch right away.
-> 
-> Once upon a time, patches used to disappear into the void without comment,
-> but the development process works more smoothly than that now.  You should
-> receive comments within a week or so; if that does not happen, make sure
-> that you have sent your patches to the right place.  Wait for a minimum of
-> one week before resubmitting or pinging reviewers - possibly longer during
-> busy times like merge windows."
-> 
+This issue may happens like this:
+	Process1                               Process2
+ext4_evict_inode
+  ext4_journal_start
+   ext4_truncate
+     ext4_ind_truncate
+       ext4_free_branches
+         ext4_ind_truncate_ensure_credits
+	   ext4_journal_ensure_credits_fn
+	     ext4_journal_restart
+	       handle->h_transaction = NULL;
+                                           mount -o remount,abort  /mnt
+					   -> trigger JBD abort
+               start_this_handle -> will return failed
+  ext4_xattr_delete_inode
+    ext4_journal_ensure_credits
+      ext4_journal_ensure_credits_fn
+        __ext4_journal_ensure_credits
+	  jbd2_handle_buffer_credits
+	    journal = handle->h_transaction->t_journal; ->null-ptr-deref
 
-I'm sorry for the trouble to the community and reviews. Thanks for your 
-reminder. I will control the time interval when sending patches in the 
-future.
+Now, indirect truncate process didn't handle error. To solve this issue
+maybe simply add check handle is abort in '__ext4_journal_ensure_credits'
+is enough, and i also think this is necessary.
 
-Merry Christmas Eve.
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ fs/ext4/ext4_jbd2.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Tianjia
+diff --git a/fs/ext4/ext4_jbd2.c b/fs/ext4/ext4_jbd2.c
+index 6def7339056d..3477a16d08ae 100644
+--- a/fs/ext4/ext4_jbd2.c
++++ b/fs/ext4/ext4_jbd2.c
+@@ -162,6 +162,8 @@ int __ext4_journal_ensure_credits(handle_t *handle, int check_cred,
+ {
+ 	if (!ext4_handle_valid(handle))
+ 		return 0;
++	if (is_handle_aborted(handle))
++		return -EROFS;
+ 	if (jbd2_handle_buffer_credits(handle) >= check_cred &&
+ 	    handle->h_revoke_credits >= revoke_cred)
+ 		return 0;
+-- 
+2.31.1
+

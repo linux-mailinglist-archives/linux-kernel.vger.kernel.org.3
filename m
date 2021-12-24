@@ -2,130 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9474747EC56
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 07:57:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56FAF47EC58
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 07:57:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351637AbhLXG5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 01:57:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
+        id S1351647AbhLXG5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 01:57:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241330AbhLXG5d (ORCPT
+        with ESMTP id S1351654AbhLXG5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 01:57:33 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A688C061401;
-        Thu, 23 Dec 2021 22:57:33 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id r2so5926118ilb.10;
-        Thu, 23 Dec 2021 22:57:33 -0800 (PST)
+        Fri, 24 Dec 2021 01:57:43 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F10C061759
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 22:57:43 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id w24so6047655ply.12
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 22:57:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=il9ZsHhcrefB2NTmfHYGwtXJdwA7dkSBq3okcSCwdaQ=;
-        b=B0hDCgB2ikHU2bh9TgOWmxgp4NwMpsfCd9QeiSEZg77U/NU6kfs0DFVTPoI0sVIffL
-         0Q+c6TQZbqF5HdEARSX5PybHd1EdP+4TPG7qTSP4jElAmsANVpmJaQuVnhZn+tiw7mq8
-         l//s3NsdbemZMDbrQJobx63OhU1DsvHLDIXlpWc9NotJa7L2txhJ3zDmyEtoBWVR0Xnv
-         UCzle1BfPUuR2YzULknSm3c2L88Xr94g+I+Pc2ZLzAJS9mni8RKTcuKnzqLo2oJuGnbo
-         q4W2SiFap/JMPtAsgMS1DiItHn+8PGgu8MCarbY7NiA81Jmoayq+zw1jEzOMiifo8IXS
-         oRag==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i+Om8CUBFbbiGYcwD1vEJMNJB8KZwFnP8OoPGSPB78A=;
+        b=AxjTX43BGCBHkubVDj4xJFjp3veZ8CeoSJVzBvVndcchGGSW43PcoSkkDP+0Qn3BVF
+         dtISfUCWP7zPHO8LuraVWIOvMV5YWtjIg6fmpBymkxFpwfWG8CrUrVNa1nf7vVevPwx1
+         85IyFU/kxLEm8XCC97PTG639k2OI9NL5s06tEDzHhKJmEHwmIQN5q25S604r1gzPPqYE
+         jRdvcM7+7yH/ZsJnEgKWWeStJaCbbqCkKCeERpOsgnYfNV5DsuR0g8mulN0LBgYzmZNv
+         ZFaCZOMRuKk0QLyxmKwo0qv/1tjxr/xbMOYu1BbSRLmEASZfgiY5Fy/3EozW2ZG282nL
+         VJuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=il9ZsHhcrefB2NTmfHYGwtXJdwA7dkSBq3okcSCwdaQ=;
-        b=45S+gBxUAcEL6Fa7b0wBgslli1miLgeXRi1tTyWwJMMAjio+f9W5E/aL81tYwJZZuj
-         LRuiF2Nn79qjeiEVi5YGddCDaZ9xY8xF1bxuT9pF/5k6WpULJ3sW5KCI2daEUUBdNnkH
-         faPAcgHXkRhJa06EN4uoSadgFmVxJf+phNQW2sS8/zjTMmF4pCfJS+njitl7EOl4uIH9
-         kLDKIEBAJ2K7CiDKq85Sc4LrXqAzrk8vY+ync45BIiSnI+xs/wNokGCDM+2M2QlMhZmF
-         vRHZgvMUAn4MvL4gFGvnZ9C26DkSHDymNZGBbhu1Fvc5fvFd8g8ASSRCJQqpAL7Zwd6y
-         rr1A==
-X-Gm-Message-State: AOAM532B6vS/1gzCB3p6JQm4WdtouoDOGfYGL4XKcOwGF0fYano/j2MY
-        6MtIUqrCdFPh204FDzcLyyUiHa5aWcmT0dXQj/8=
-X-Google-Smtp-Source: ABdhPJyjmuj2ip8cGVIqWma2BZFOOosThmhpHT5U2RgqboTRqYfnbOPX4aKMytO5ZE1YBTfPWAKg1AiFb1AozuOmJGg=
-X-Received: by 2002:a05:6e02:1a24:: with SMTP id g4mr82005ile.71.1640329052759;
- Thu, 23 Dec 2021 22:57:32 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i+Om8CUBFbbiGYcwD1vEJMNJB8KZwFnP8OoPGSPB78A=;
+        b=QLRso3c8ecy2WxxObrq0ZKEWnOvvANurHV4MnPp7rNQgL0hxF+VlBk6irA5Els0ZrF
+         aYeU0Q343mR0mlxhOZ8dOpdcULVpZjLQvcpbGstCS5SMlO8NOVbpxL56wMTpNPzx08l3
+         TEeenTuFOGthCGX+sb+5u1R+ptASBuFJxWvK4r3dxHYCwFEAuQEOLBW2DgqNp9Yg9QXj
+         2K8N+PYKMvfhLau54OfS6L6CPtjMyRr08H3KZyv1ecIcbMy1MqCUe1bpfXS7HLm6K3fH
+         e6lNFAWCB1iZM2AJdbBpi2cNnvK5tZ0b2c1KkjAWHPAKPDB6F5+Q3hhkadndzwb7o/E1
+         KjUg==
+X-Gm-Message-State: AOAM530XwoL0Dz0GcCjR9jGJx0/i+9kF+jixCCPn9Q8LxdfG4FRKipHu
+        tJpRiaWJyM//BaJvWFq5sGYI7g==
+X-Google-Smtp-Source: ABdhPJwo1+lGB/2cwbm1vE2CWTqK5ITZii/N97FqtQGMsQtVKTYXDyBjyw24JGib+W8sxRvnJuUCGg==
+X-Received: by 2002:a17:90b:3a8c:: with SMTP id om12mr6709434pjb.232.1640329062678;
+        Thu, 23 Dec 2021 22:57:42 -0800 (PST)
+Received: from yinxin.bytedance.net ([139.177.225.235])
+        by smtp.gmail.com with ESMTPSA id h19sm5154089pfh.112.2021.12.23.22.57.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Dec 2021 22:57:42 -0800 (PST)
+From:   Xin Yin <yinxin.x@bytedance.com>
+To:     harshadshirwadkar@gmail.com, tytso@mit.edu,
+        adilger.kernel@dilger.ca
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xin Yin <yinxin.x@bytedance.com>
+Subject: [PATCH RESEND] ext4:fix different behavior of fsync when use fast commit
+Date:   Fri, 24 Dec 2021 14:57:28 +0800
+Message-Id: <20211224065728.5820-1-yinxin.x@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <c84094d2-75c1-a50d-ea9e-9dded5f01fb9@bytedance.com>
-In-Reply-To: <c84094d2-75c1-a50d-ea9e-9dded5f01fb9@bytedance.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 23 Dec 2021 22:57:21 -0800
-Message-ID: <CAEf4Bza200bB3d-E3rMyxZs7wxijbzJ_0xmRSy+=tHm2Ot14Eg@mail.gmail.com>
-Subject: Re: Fix repeated legacy kprobes on same function
-To:     Qiang Wang <wangqiang.wq.frank@bytedance.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, zhouchengming@bytedance.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        duanxiongchun@bytedance.com, shekairui@bytedance.com,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 8:01 PM Qiang Wang
-<wangqiang.wq.frank@bytedance.com> wrote:
->
-> If repeated legacy kprobes on same function in one process,
-> libbpf will register using the same probe name and got -EBUSY
-> error. So append index to the probe name format to fix this
-> problem.
->
-> And fix a bug in commit 46ed5fc33db9, which wrongly used the
-> func_name instead of probe_name to register.
->
-> Fixes: 46ed5fc33db9 ("libbpf: Refactor and simplify legacy kprobe code")
-> Co-developed-by: Chengming Zhou <zhouchengming@bytedance.com>
-> Signed-off-by: Qiang Wang <wangqiang.wq.frank@bytedance.com>
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
->
-> ---
->   tools/lib/bpf/libbpf.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 7c74342bb668..7d1097958459 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -9634,7 +9634,8 @@ static int append_to_file(const char *file, const
-> char *fmt, ...)
->   static void gen_kprobe_legacy_event_name(char *buf, size_t buf_sz,
->                                           const char *kfunc_name, size_t
-> offset)
->   {
-> -       snprintf(buf, buf_sz, "libbpf_%u_%s_0x%zx", getpid(),
-> kfunc_name, offset);
-> +       static int index = 0;
-> +       snprintf(buf, buf_sz, "libbpf_%u_%s_0x%zx_%d", getpid(),
-> kfunc_name, offset, index++);
+For the follow test example:
+-mkdir test/
+-create&write test/a.txt
+-fsync test/a.txt
+-crash (before a full commit)
 
-BCC doesn't add this auto-increment (which is also not thread-safe)
-and it seems like that works fine for all users.
+If fast commit is used then "a.txt" will lost, while the normal
+journaling can recover it.
 
-What is the use case where you'd like to attach to the same kernel
-function multiple times with legacy kprobe?
+We should keep behavior of fsync unchanged when use fast commit.
 
->   }
->
->   static int add_kprobe_event_legacy(const char *probe_name, bool retprobe,
-> @@ -9735,7 +9736,7 @@ bpf_program__attach_kprobe_opts(const struct
-> bpf_program *prog,
->                  gen_kprobe_legacy_event_name(probe_name,
-> sizeof(probe_name),
->                                               func_name, offset);
->
-> -               legacy_probe = strdup(func_name);
-> +               legacy_probe = strdup(probe_name);
+other report: https://www.spinics.net/lists/linux-ext4/msg80514.html
 
-please send this as a separate fix
+Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
+---
+ fs/ext4/fast_commit.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->                  if (!legacy_probe)
->                          return libbpf_err_ptr(-ENOMEM);
->
-> --
-> 2.20.1
->
+diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
+index 3deb97b22ca4..4b843648ffe5 100644
+--- a/fs/ext4/fast_commit.c
++++ b/fs/ext4/fast_commit.c
+@@ -423,7 +423,7 @@ void __ext4_fc_track_create(handle_t *handle, struct inode *inode,
+ 	args.op = EXT4_FC_TAG_CREAT;
+ 
+ 	ret = ext4_fc_track_template(handle, inode, __track_dentry_update,
+-					(void *)&args, 0);
++					(void *)&args, 1);
+ 	trace_ext4_fc_track_create(inode, dentry, ret);
+ }
+ 
+-- 
+2.20.1
+

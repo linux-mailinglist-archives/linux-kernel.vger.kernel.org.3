@@ -2,103 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A3847EEBD
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 13:09:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 793FE47EEC1
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 13:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352646AbhLXMJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 07:09:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49688 "EHLO
+        id S1352652AbhLXMLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 07:11:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232964AbhLXMJl (ORCPT
+        with ESMTP id S232964AbhLXMLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 07:09:41 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EBDC061401;
-        Fri, 24 Dec 2021 04:09:40 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id b13so32689736edd.8;
-        Fri, 24 Dec 2021 04:09:40 -0800 (PST)
+        Fri, 24 Dec 2021 07:11:16 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A46C061401
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 04:11:16 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id x15so6550609plg.1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 04:11:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MiMXbgOIp0SVuHAYNLqtLbjj/zPi/YpQLt8sEUphp+4=;
-        b=jLENgQqi0no/dZEXnAKsJ2z1g99Rhxy6jHlIV7wSERdGdYye0MkOnLfMFPwh6lRjcb
-         2mslvZtHsbOZJpZpDHtVNPvLqT40+qXvhPYJKQI51dRIkiba5Ymr52w+db7d0Kj+9H8v
-         i+wV1zMNFmCrevcyVIRDlPLh1BIrRlQl6eT66s1CGRrXYVJTy+8kDHLeaI+aJHF1imiK
-         GL7tbNc8MVrTmNkef7dL4mFd/AkSH+/rTM3/d4gpLg1E7zwtFKA4/Hw/p81X/P0YiKOw
-         nYo6g5wJ6AdYiVtWJQao4F8DaadiNX11Qoa9KfZ9E22oS91OLEQ8mdmicn32WPyyC5zE
-         Cx3Q==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eLRsIPs2YlObaX94PJ2gtnsp2s66ALN3C2c1+XvIaAA=;
+        b=LJDZsQ7rVTVbdZzMSvllJ2ILUIgHVKV2b9P1Y/Mu2j80ULnPrnUK3JeUbwPS/Bo8Cs
+         wcoAoVpLTbdRDa0y4R/K6K30413Ox9cEJmzgkVfBNhdhVW6Xs9+Ho7VvfCqjEvFGD1i+
+         3cXZuuW6AnPAABGURM3oUdSWb2M9M4qTEKsUNla7OSy5xF2IbfoRQdWDtAnx2OtZoqci
+         SzWihexL6btxoBM+r9TpWYviAJoqW8VB7X8tWE43NmxlXBa9saD/z/+f3hfq4nG1umFS
+         zZ396rYVT3LntD6rP0+fl6csSIoY9Rs4xDZpMIC/Hv+QW77NRj2+5xCI8sldGMB9YBjv
+         fm7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MiMXbgOIp0SVuHAYNLqtLbjj/zPi/YpQLt8sEUphp+4=;
-        b=tICwhg1FFzlVNkpvEBEfw1YJ7rsWkdVJ2mqShltZI/AsRL4dqaI6N1R+IvHtI8YtyE
-         pvnAsMXvZVPWBXZ2n8iKad1MQoAYyq7yo3sn2WWMRNL9ncDUF683Ss6Ff/JxRUMn218z
-         Dc9GDbNGhS/NdYeC8Toz8YWdmQOvA4CKOCtFUaBcd//W7ssBdzoc837X0UcRr+ufTBtU
-         qK1CvZwEppdNi1icsnOzWTfnK2NzSA462J5jeVbwDWSx/VQL63dOpXlDISYMO7JspuA4
-         AElLQf8bNZKQ/eof8fWtSCoVUzcuBtwdYLBKCCsfwZlHgKjr+fXvxeXAGzPTg5t8bfnj
-         cZPQ==
-X-Gm-Message-State: AOAM531n7LXgdMA1hPrWbYBoIdhmX2MEBXumAi2A5fBb9dJfbgDhw2Wf
-        x4btTDnufjA5QzsUozDOVlJtxppX5q9/1pz1F3U=
-X-Google-Smtp-Source: ABdhPJxtlyzC5rs1/oMbGTnC43dJAQLxjW7WhWwQsQunbsjtMx5IexRP5EYp5YUQWrgVKHcj2qlmB/cu290g9TPAAAM=
-X-Received: by 2002:a05:6402:50cf:: with SMTP id h15mr5704494edb.318.1640347779006;
- Fri, 24 Dec 2021 04:09:39 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eLRsIPs2YlObaX94PJ2gtnsp2s66ALN3C2c1+XvIaAA=;
+        b=XrFH/8ZhLjeyhWuSjrSf07K8yeEUkKO1hGcUaCyXmPdtS5MKnwKr+/Wj9kph6Yo7Ye
+         7kz15pArBoHHv9iucEEQFrMPnPMcn0RVIi0MGfkjppoCvo2E+2atgryV0IwS7CzNbq0e
+         AFX229+nABjQt3LgsvrRYbwbkwOaeQshkRI8vNdx1GOb76AySLOZwlqyJfsdoBPcH6DJ
+         KnQGj4VNG3ycFrU835IUxiFNUztozhrFlyMeqmpMPEAHy0+IjT+PENen/uR2r1l6qw8F
+         o+CgrL9I6hQbmfjW+gEeAU79AG++CJ2oA3pCfdBHXDNrrmLxy1lK5YBe6e24b0mgVWnH
+         izZQ==
+X-Gm-Message-State: AOAM531T6Vq0AHQKj6qhFmcdorskXaQHSLlPy4kuvwDXFyy36zFeVJk9
+        wC/50h5D4jUhrXQDrECSamcXXjPCSnQ=
+X-Google-Smtp-Source: ABdhPJwVKis/iBpumb86o3yaM2fzVdi4PSkxzjKNzY2lHBVVSiauCuKydNExi9UYyvL2yFd3o0OL1Q==
+X-Received: by 2002:a17:902:8a84:b0:148:a2f7:9d8d with SMTP id p4-20020a1709028a8400b00148a2f79d8dmr6374310plo.172.1640347875602;
+        Fri, 24 Dec 2021 04:11:15 -0800 (PST)
+Received: from localhost.localdomain ([122.164.161.127])
+        by smtp.googlemail.com with ESMTPSA id h17sm3729047pfv.217.2021.12.24.04.11.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Dec 2021 04:11:14 -0800 (PST)
+From:   Abdun Nihaal <abdun.nihaal@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk, martin@kaiser.cx,
+        abdun.nihaal@gmail.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: r8188eu: include variable declarations from Hal8188EPwrSeq.h
+Date:   Fri, 24 Dec 2021 17:40:43 +0530
+Message-Id: <20211224121043.175650-1-abdun.nihaal@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <202112061844.RuSQXzxk-lkp@intel.com> <CAK8P3a0wboR0evmNGL_VEsNNdLd9x_v8k3APH70t5gfu9D=A6w@mail.gmail.com>
-In-Reply-To: <CAK8P3a0wboR0evmNGL_VEsNNdLd9x_v8k3APH70t5gfu9D=A6w@mail.gmail.com>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Fri, 24 Dec 2021 04:09:27 -0800
-Message-ID: <CAMo8BfKa8xNEWdaeZCbLbyQ2ZgmNaLeNE8uB7Hntj9op0fTQ_w@mail.gmail.com>
-Subject: Re: ERROR: modpost: "__divsi3_table" [lib/lz4/lz4_compress.ko] undefined!
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Chris Zankel <chris@zankel.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+Variable declarations of rtl8188E_power_on_flow, rtl8188E_card_disable_flow
+and rtl8188E_enter_lps_flow are present in Hal8188EPwrSeq.h.
 
-On Mon, Dec 6, 2021 at 3:02 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Mon, Dec 6, 2021 at 11:30 AM kernel test robot <lkp@intel.com> wrote:
-> > First bad commit (maybe != root cause):
-> > commit: 570a82b9c36f76a5959b5e47900629b0d413931d media: i2c: select V4L2_ASYNC where needed
->
-> Right, that is clearly unrelated.
->
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All errors (new ones prefixed by >>, old ones prefixed by <<):
-> >
-> > >> ERROR: modpost: "__divsi3_table" [lib/lz4/lz4_compress.ko] undefined!
->
-> lz4 was recently updated, and apparently now does a 32-bit division. I
-> assume this
-> is the decompressor, as arch/mips had similar problems.
->
-> The possible fixes are:
->
-> - disable lz4 compressed kernels on xtensa
-> - change lz4 to not perform any division
-> - change the xtensa decompressor to include the divsi3 helper code from the
->   main kernel, see fbf3bce45821 ("MIPS: boot/compressed/: add __ashldi3 to
->   target for ZSTD compression")
+A previous commit changed Hal8188EPwrSeq.c to include HalPwrSeqCmd.h
+directly instead of Hal8188EPwrSeq.h, causing these sparse warnings:
+- symbol 'rtl8188E_power_on_flow' was not declared. Should it be static?
+- symbol 'rtl8188E_card_disable_flow' was not declared.Should it be static?
+- symbol 'rtl8188E_enter_lps_flow' was not declared. Should it be static?
 
-I couldn't reproduce this on xtensa with 5.16-rc6 and I don't think there
-is such issue with xtensa because it has config-specific assembly
-implementation of __divsi3 that doesn't use __divsi3_table.
+This patch reverts the include line to include the declarations.
 
-Also the report is against nios2.
+Fixes: 4f458ec5f497 ("staging: r8188: move the steps into Hal8188EPwrSeq.c")
+Signed-off-by: Abdun Nihaal <abdun.nihaal@gmail.com>
+---
+ drivers/staging/r8188eu/hal/Hal8188EPwrSeq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/staging/r8188eu/hal/Hal8188EPwrSeq.c b/drivers/staging/r8188eu/hal/Hal8188EPwrSeq.c
+index 566a1701302c..6505e1fcb070 100644
+--- a/drivers/staging/r8188eu/hal/Hal8188EPwrSeq.c
++++ b/drivers/staging/r8188eu/hal/Hal8188EPwrSeq.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright(c) 2007 - 2011 Realtek Corporation. */
+ 
+-#include "../include/HalPwrSeqCmd.h"
++#include "../include/Hal8188EPwrSeq.h"
+ #include "../include/rtl8188e_hal.h"
+ 
+ struct wl_pwr_cfg rtl8188E_power_on_flow[] = {
 -- 
-Thanks.
--- Max
+2.34.1
+

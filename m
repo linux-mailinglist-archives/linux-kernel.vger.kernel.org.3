@@ -2,125 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7458947ECCA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 08:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 174C947ECD8
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 08:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351906AbhLXHik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 02:38:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
+        id S1343589AbhLXHuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 02:50:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351904AbhLXHie (ORCPT
+        with ESMTP id S234111AbhLXHut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 02:38:34 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4733CC061759
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 23:38:34 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id t18so15990597wrg.11
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Dec 2021 23:38:34 -0800 (PST)
+        Fri, 24 Dec 2021 02:50:49 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D349C061401;
+        Thu, 23 Dec 2021 23:50:48 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id r138so7014217pgr.13;
+        Thu, 23 Dec 2021 23:50:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zehQu19sG8zPf6sTX7xbu4Pim5UWCx0QpvBAMXBdZsM=;
-        b=Kc7Vq0z4QdQj5VZQWUJruEHr1vXWKQiy/GE0lgTeAHMJ4QcMlUr277gJ16+XTFn0sT
-         bCYygv81STggBYOWNbKSVNP33Mf5gaXHpN6prAkGu49yN9Lc1a2AzJgDyFm+L/j6TY8J
-         1TbfOhCJ5PL1CYsdhIUw1iNEc/OPIHjiNth0Rd3IIw0HtxMXHgeiVcCbcoedWKe3Uggb
-         Y2P8QXdgyVAnBvghox7tN127eJJHfkYWyxMcYTGkjEHmnvin+ATSuiQ0GcZRWkcgnbPB
-         UTMntwFq2Ch2n6jpZn4siAdn3phBB2Lpu8GsYvDbAQAPw6gIQzgS1cCMh0/dWS8B/KRf
-         N2lw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=jPo9yF90yb6Tml8cLFg4vSSw+Zf7GoEQngD5eTEX1OY=;
+        b=o6AZ60TksFPsSJSQ72DUDRRzpUTtoGNPTBNGcr+wGf7lQ1LC2fDWb6Wp2pWlMWU+gr
+         r+OrkV3RhoGY/YdyXuC7B5NRyUQOrvpLAknVyXgsWzzem4e6FkHsFjK+UHbtzTwTofne
+         W1Ff5TsY6ReEsTZdGidJM/4LxxRrprscedzYY0ix/cg9jkuBx4lhIMHZcT6x7i6eqp/c
+         aUGXFMzFq37hO+ivg1jmeG7tC2uxvT9JeQEdknzB/IZN3Jc+v+xAM6eRit0kNsjrb1Oc
+         wDj3jEONytF9chIcDoEzAFWWPDYxCqWTYd7Ri/jqdbHZkexwZlbkZFjj4QTh4sx4pnl5
+         IiMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zehQu19sG8zPf6sTX7xbu4Pim5UWCx0QpvBAMXBdZsM=;
-        b=nOGBtNo0aJO3Ym+EK25ZYJLKqSukesxDqgNbNyHrSjOkJPhrlk49BwnXelIex3ErMx
-         19jzqjZdxaWYd5oZcEOf/CwYf6ZENSYLoT7lPX4FDLJ9WfRok50icaI2sNi4L1P/nDp7
-         dgVZQTtj8D+4vQ0xpez4TZSbdGWvwmC9RirHEt7pnQ4W+ye7MbioLp6PJbKGrOpIfHjc
-         VPQ1TLHERtSFPgkbortlvsSPsDaol3BGrIBu5Xr5fzoHwev8gRZ9idLuV4wjo1Q0XvUA
-         SkMQJXNkpecqN/0wd73WEO52J8upOGWteNPbEV5KHlDk2yy4ebtIQ8n4mUFTvXGH++qc
-         7TdA==
-X-Gm-Message-State: AOAM530nFJdqqdN5IH7AuvBACekyiZzNBuOKiEqlLjaG6/IwD8nAI5D2
-        iCZ7O+cOelRB5hffKzBI4OT+xs8zE24/pShEE4TlLw==
-X-Google-Smtp-Source: ABdhPJyl+RLF9H+jUZa+5CGrWYy5DZy8pF9QpRofT4U/ZZybydpgrPxqo7pr1Asa3GRAZQ7HMCHf7E3gnAL6mmS40iw=
-X-Received: by 2002:a5d:4d91:: with SMTP id b17mr3999415wru.214.1640331512744;
- Thu, 23 Dec 2021 23:38:32 -0800 (PST)
-MIME-Version: 1.0
-References: <20211224073604.1085464-1-anup.patel@wdc.com>
-In-Reply-To: <20211224073604.1085464-1-anup.patel@wdc.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Fri, 24 Dec 2021 13:08:21 +0530
-Message-ID: <CAAhSdy2Gm96UVZhFMmbER+trrMgi-gFCpMvURR9Thb8NiNd88g@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] KVM RISC-V 64-bit selftests support
-To:     Anup Patel <anup.patel@wdc.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        KVM General <kvm@vger.kernel.org>,
-        kvm-riscv@lists.infradead.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=jPo9yF90yb6Tml8cLFg4vSSw+Zf7GoEQngD5eTEX1OY=;
+        b=DKATj2wsE/XwaTQ6v5bEoVK/e9Yrci1PgRnkQKyRrtIbHeNTihW7Q2Qk8D7DSDVy2O
+         7VOh4ETVKby80BWNx2cBqrAF25+z3vspPfiDl8hP8wmNaTXqC1tufiYWxkUmfAuKKiah
+         trvZxBAsH6JruYM+AGdLmOwd/xYNQ8aG9q4IEYSU9S/nD1ImCnErktZF9L1eg7aLnIBL
+         /TycLosV2eegtcNPhRMtbevSqLz03Jxz1H8ohdImCP3JuM0Q4ph781+kndpm0uHAUfHt
+         JsZ6zCvjt+Tc7BdREnoZ2W4JGaGc6D5UMSPznLwafG3NOEgOMqdPYMNEECqnAJoksLB/
+         edaw==
+X-Gm-Message-State: AOAM530wQcdzzQSVlVmIg+pjTsdbukFlPGlyCbqh0VvujC2bCZSM6qL1
+        hLJ9PCuX92LGXr2RQ9TPXlU=
+X-Google-Smtp-Source: ABdhPJyL+M7kwA3RB1jOBULDmZL382fyohtjDHLYMATrFA4XD7buEb0hwEr5OLXp0B5kr89XXQRzGQ==
+X-Received: by 2002:a63:7c1b:: with SMTP id x27mr5158267pgc.176.1640332247743;
+        Thu, 23 Dec 2021 23:50:47 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id h15sm8649164pfc.134.2021.12.23.23.50.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 23 Dec 2021 23:50:47 -0800 (PST)
+From:   Wells Lu <wellslutw@gmail.com>
+To:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     wells.lu@sunplus.com, dvorkin@tibbo.com,
+        Wells Lu <wellslutw@gmail.com>
+Subject: [PATCH v5 0/2] This is a patch series for pinctrl driver of Sunplus SP7021 SoC.
+Date:   Fri, 24 Dec 2021 15:42:57 +0800
+Message-Id: <1640331779-18277-1-git-send-email-wellslutw@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control
+applications.
 
-On Fri, Dec 24, 2021 at 1:06 PM Anup Patel <anup.patel@wdc.com> wrote:
->
-> This series adds initial support for testing KVM RISC-V 64-bit using
-> kernel selftests framework. The PATCH1 & PATCH2 of this series does
-> some ground work in KVM RISC-V to implement RISC-V support in the KVM
-> selftests whereas remaining patches does required changes in the KVM
-> selftests.
->
-> These patches can be found in riscv_kvm_selftests_v3 branch at:
-> https://github.com/avpatel/linux.git
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-This is actually v3 series so please ignore the "PATCH v4" subject prefix.
+Wells Lu (2):
+  dt-bindings: pinctrl: Add dt-bindings for Sunplus SP7021
+  pinctrl: Add driver for Sunplus SP7021
 
-Regards,
-Anup
+ .../bindings/pinctrl/sunplus,sp7021-pinctrl.yaml   |  373 +++++++
+ MAINTAINERS                                        |   10 +
+ drivers/pinctrl/Kconfig                            |    1 +
+ drivers/pinctrl/Makefile                           |    1 +
+ drivers/pinctrl/sunplus/Kconfig                    |   21 +
+ drivers/pinctrl/sunplus/Makefile                   |    5 +
+ drivers/pinctrl/sunplus/sppctl.c                   | 1178 ++++++++++++++++++++
+ drivers/pinctrl/sunplus/sppctl.h                   |  155 +++
+ drivers/pinctrl/sunplus/sppctl_sp7021.c            |  584 ++++++++++
+ include/dt-bindings/pinctrl/sppctl-sp7021.h        |  171 +++
+ include/dt-bindings/pinctrl/sppctl.h               |   30 +
+ 11 files changed, 2529 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/sunplus,sp7021-pinctrl.yaml
+ create mode 100644 drivers/pinctrl/sunplus/Kconfig
+ create mode 100644 drivers/pinctrl/sunplus/Makefile
+ create mode 100644 drivers/pinctrl/sunplus/sppctl.c
+ create mode 100644 drivers/pinctrl/sunplus/sppctl.h
+ create mode 100644 drivers/pinctrl/sunplus/sppctl_sp7021.c
+ create mode 100644 include/dt-bindings/pinctrl/sppctl-sp7021.h
+ create mode 100644 include/dt-bindings/pinctrl/sppctl.h
 
->
-> Changes since v2:
->  - Rebased series on Linux-5.16-rc6
->  - Renamed kvm_riscv_stage2_gpa_size() to kvm_riscv_stage2_gpa_bits()
->    in PATCH2
->
-> Changes since v1:
->  - Renamed kvm_sbi_ext_expevend_handler() to kvm_sbi_ext_forward_handler()
->    in PATCH1
->  - Renamed KVM_CAP_RISCV_VM_GPA_SIZE to KVM_CAP_VM_GPA_BITS in PATCH2
->    and PATCH4
->
-> Anup Patel (4):
->   RISC-V: KVM: Forward SBI experimental and vendor extensions
->   RISC-V: KVM: Add VM capability to allow userspace get GPA bits
->   KVM: selftests: Add EXTRA_CFLAGS in top-level Makefile
->   KVM: selftests: Add initial support for RISC-V 64-bit
->
->  arch/riscv/include/asm/kvm_host.h             |   1 +
->  arch/riscv/kvm/mmu.c                          |   5 +
->  arch/riscv/kvm/vcpu_sbi.c                     |   4 +
->  arch/riscv/kvm/vcpu_sbi_base.c                |  27 ++
->  arch/riscv/kvm/vm.c                           |   3 +
->  include/uapi/linux/kvm.h                      |   1 +
->  tools/testing/selftests/kvm/Makefile          |  14 +-
->  .../testing/selftests/kvm/include/kvm_util.h  |  10 +
->  .../selftests/kvm/include/riscv/processor.h   | 135 +++++++
->  tools/testing/selftests/kvm/lib/guest_modes.c |  10 +
->  .../selftests/kvm/lib/riscv/processor.c       | 362 ++++++++++++++++++
->  tools/testing/selftests/kvm/lib/riscv/ucall.c |  87 +++++
->  12 files changed, 658 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/kvm/include/riscv/processor.h
->  create mode 100644 tools/testing/selftests/kvm/lib/riscv/processor.c
->  create mode 100644 tools/testing/selftests/kvm/lib/riscv/ucall.c
->
-> --
-> 2.25.1
->
+-- 
+2.7.4
+

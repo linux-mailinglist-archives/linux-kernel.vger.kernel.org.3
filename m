@@ -2,105 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3144F47EB6F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 05:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA86E47EB78
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 05:53:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351240AbhLXEms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 23:42:48 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:34724 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S240362AbhLXEmq (ORCPT
+        id S1351308AbhLXEx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 23:53:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236525AbhLXExz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 23:42:46 -0500
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 1BO4gUu9029484
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Dec 2021 23:42:32 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 257F615C00C8; Thu, 23 Dec 2021 23:42:30 -0500 (EST)
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     linux-ext4@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
-        adilger.kernel@dilger.ca
-Cc:     "Theodore Ts'o" <tytso@mit.edu>, lczerner@redhat.com,
-        linux-kernel@vger.kernel.org, jack@suse.cz
-Subject: Re: [PATCH -next v2] ext4: Fix BUG_ON in ext4_bread when write quota data
-Date:   Thu, 23 Dec 2021 23:42:29 -0500
-Message-Id: <164032093754.3048709.7733859615094609303.b4-ty@mit.edu>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20211223015506.297766-1-yebin10@huawei.com>
-References: <20211223015506.297766-1-yebin10@huawei.com>
+        Thu, 23 Dec 2021 23:53:55 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1F4C061401;
+        Thu, 23 Dec 2021 20:53:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Q8w6vJlPkDbS/DrH5IOenXLh3tsJgjfSoA1ZgPxsyRg=; b=RLa6CpDWsILp5BM50R2uDaFxLY
+        kckmBXACDfFG18rbWU451uZgJf2XJ6YxtUUeNLNZmEWFd0bzKnYVXpCPc6tGF8TT52vEyvbQIf5bD
+        MdWiWj22xuFFnEWraqZZlU5OFHtDMSJkSyl6WS/CqP+8NzAmJFq/crbD3+u0ycPbxtg6alM7OQAS7
+        0rxKqIjEMrapCBDpChh+XaNVK9bFLaUjZ6T/wbs741J9fKkComlKwv/7xxFAxg3wgl4AVqgrDGBfm
+        fec1iv69kA5NXlRg5KuUaX0Cvdkji5gnIC+RedwkG4oWu9cxd2swHojNuY5D5/rDqLghNmFwOcEx9
+        o/OObrqg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n0caI-004px5-1k; Fri, 24 Dec 2021 04:53:38 +0000
+Date:   Fri, 24 Dec 2021 04:53:38 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     David Hildenbrand <david@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Nadav Amit <namit@vmware.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+Message-ID: <YcVSUmfzTrhjZapc@casper.infradead.org>
+References: <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
+ <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
+ <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
+ <20211221190706.GG1432915@nvidia.com>
+ <3e0868e6-c714-1bf8-163f-389989bf5189@redhat.com>
+ <dfe1c8d5-6fac-9040-0272-6d77bafa6a16@redhat.com>
+ <20211222124141.GA685@quack2.suse.cz>
+ <4a28e8a0-2efa-8b5e-10b5-38f1fc143a98@redhat.com>
+ <YcPA8gJ0OBPTdCdB@casper.infradead.org>
+ <20211224025309.GF1779224@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211224025309.GF1779224@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Dec 2021 09:55:06 +0800, Ye Bin wrote:
-> We got issue as follows when run syzkaller:
-> [  167.936972] EXT4-fs error (device loop0): __ext4_remount:6314: comm rep: Abort forced by user
-> [  167.938306] EXT4-fs (loop0): Remounting filesystem read-only
-> [  167.981637] Assertion failure in ext4_getblk() at fs/ext4/inode.c:847: '(EXT4_SB(inode->i_sb)->s_mount_state & EXT4_FC_REPLAY) || handle != NULL || create == 0'
-> [  167.983601] ------------[ cut here ]------------
-> [  167.984245] kernel BUG at fs/ext4/inode.c:847!
-> [  167.984882] invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-> [  167.985624] CPU: 7 PID: 2290 Comm: rep Tainted: G    B             5.16.0-rc5-next-20211217+ #123
-> [  167.986823] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20190727_073836-buildvm-ppc64le-16.ppc.fedoraproject.org-3.fc31 04/01/2014
-> [  167.988590] RIP: 0010:ext4_getblk+0x17e/0x504
-> [  167.989189] Code: c6 01 74 28 49 c7 c0 a0 a3 5c 9b b9 4f 03 00 00 48 c7 c2 80 9c 5c 9b 48 c7 c6 40 b6 5c 9b 48 c7 c7 20 a4 5c 9b e8 77 e3 fd ff <0f> 0b 8b 04 244
-> [  167.991679] RSP: 0018:ffff8881736f7398 EFLAGS: 00010282
-> [  167.992385] RAX: 0000000000000094 RBX: 1ffff1102e6dee75 RCX: 0000000000000000
-> [  167.993337] RDX: 0000000000000001 RSI: ffffffff9b6e29e0 RDI: ffffed102e6dee66
-> [  167.994292] RBP: ffff88816a076210 R08: 0000000000000094 R09: ffffed107363fa09
-> [  167.995252] R10: ffff88839b1fd047 R11: ffffed107363fa08 R12: ffff88816a0761e8
-> [  167.996205] R13: 0000000000000000 R14: 0000000000000021 R15: 0000000000000001
-> [  167.997158] FS:  00007f6a1428c740(0000) GS:ffff88839b000000(0000) knlGS:0000000000000000
-> [  167.998238] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  167.999025] CR2: 00007f6a140716c8 CR3: 0000000133216000 CR4: 00000000000006e0
-> [  167.999987] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [  168.000944] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [  168.001899] Call Trace:
-> [  168.002235]  <TASK>
-> [  168.007167]  ext4_bread+0xd/0x53
-> [  168.007612]  ext4_quota_write+0x20c/0x5c0
-> [  168.010457]  write_blk+0x100/0x220
-> [  168.010944]  remove_free_dqentry+0x1c6/0x440
-> [  168.011525]  free_dqentry.isra.0+0x565/0x830
-> [  168.012133]  remove_tree+0x318/0x6d0
-> [  168.014744]  remove_tree+0x1eb/0x6d0
-> [  168.017346]  remove_tree+0x1eb/0x6d0
-> [  168.019969]  remove_tree+0x1eb/0x6d0
-> [  168.022128]  qtree_release_dquot+0x291/0x340
-> [  168.023297]  v2_release_dquot+0xce/0x120
-> [  168.023847]  dquot_release+0x197/0x3e0
-> [  168.024358]  ext4_release_dquot+0x22a/0x2d0
-> [  168.024932]  dqput.part.0+0x1c9/0x900
-> [  168.025430]  __dquot_drop+0x120/0x190
-> [  168.025942]  ext4_clear_inode+0x86/0x220
-> [  168.026472]  ext4_evict_inode+0x9e8/0xa22
-> [  168.028200]  evict+0x29e/0x4f0
-> [  168.028625]  dispose_list+0x102/0x1f0
-> [  168.029148]  evict_inodes+0x2c1/0x3e0
-> [  168.030188]  generic_shutdown_super+0xa4/0x3b0
-> [  168.030817]  kill_block_super+0x95/0xd0
-> [  168.031360]  deactivate_locked_super+0x85/0xd0
-> [  168.031977]  cleanup_mnt+0x2bc/0x480
-> [  168.033062]  task_work_run+0xd1/0x170
-> [  168.033565]  do_exit+0xa4f/0x2b50
-> [  168.037155]  do_group_exit+0xef/0x2d0
-> [  168.037666]  __x64_sys_exit_group+0x3a/0x50
-> [  168.038237]  do_syscall_64+0x3b/0x90
-> [  168.038751]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+On Thu, Dec 23, 2021 at 10:53:09PM -0400, Jason Gunthorpe wrote:
+> On Thu, Dec 23, 2021 at 12:21:06AM +0000, Matthew Wilcox wrote:
+> > On Wed, Dec 22, 2021 at 02:09:41PM +0100, David Hildenbrand wrote:
+> > > Right, from an API perspective we really want people to use FOLL_PIN.
+> > > 
+> > > To optimize this case in particular it would help if we would have the
+> > > FOLL flags on the unpin path. Then we could just decide internally
+> > > "well, short-term R/O FOLL_PIN can be really lightweight, we can treat
+> > > this like a FOLL_GET instead". And we would need that as well if we were
+> > > to keep different counters for R/O vs. R/W pinned.
+> > 
+> > FYI, in my current tree, there's a gup_put_folio() which replaces
+> > put_compound_head:
+> > 
+> > static void gup_put_folio(struct folio *folio, int refs, unsigned int flags)
+> > {
+> >         if (flags & FOLL_PIN) {
+> >                 node_stat_mod_folio(folio, NR_FOLL_PIN_RELEASED, refs);
+> >                 if (hpage_pincount_available(&folio->page))
+> >                         hpage_pincount_sub(&folio->page, refs);
+> >                 else
+> >                         refs *= GUP_PIN_COUNTING_BIAS;
+> >         }
+> > 
+> >         folio_put_refs(folio, refs);
+> > }
+> > 
+> > That can become non-static if it's needed.  I'm still working on that
+> > series, because I'd like to get it to a point where we return one
+> > folio pointer instead of N page pointers.  Not quite there yet.
 > 
-> [...]
+> I'm keen to see what that looks like, every driver I'm working on that
+> calls PUP goes through gyrations to recover contiguous pages, so this
+> is most welcomed!
 
-Applied, thanks!
+I'm about to take some time off, so alas, you won't see it any time
+soon.  It'd be good to talk with some of the interested users because
+it's actually a pretty tricky problem.  We can't just return an array
+of the struct folios because the actual memory you want to access
+might be anywhere in that folio, and you don't want to have to redo
+the lookup just to find out which subpages of the folio are meant.
 
-[1/1] ext4: Fix BUG_ON in ext4_bread when write quota data
-      commit: ce85548ab4295234b4f8e63a0eea0c157d2f6b25
+So I'm currently thinking about returning a bio_vec:
 
-Best regards,
--- 
-Theodore Ts'o <tytso@mit.edu>
+struct bio_vec {
+        struct page     *bv_page;
+        unsigned int    bv_len;
+        unsigned int    bv_offset;
+};
+
+In the iomap patchset which should go upstream in the next merge window,
+you can iterate over a bio like this:
+
+        struct folio_iter fi;
+
+        bio_for_each_folio_all(fi, bio)
+                iomap_finish_folio_read(fi.folio, fi.offset, fi.length, error);
+
+There aren't any equivalent helpers for a bvec yet, but obviously we can
+add them so that you can iterate over each folio in a contiguous range.
+
+But now that each component in it is variable length, the caller can't
+know how large an array of bio_vecs to allocate.
+
+1. The callee can allocate the array and let the caller free it when it's
+   finished
+2. The caller passes in a (small, fixed-size, on-stack) array of bio_vecs
+   over (potentially) multiple calls.
+3. The caller can overallocate and ignore that most of the array isn't
+   used.
+
+Any preferences?  I don't like #3.

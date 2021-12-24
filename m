@@ -2,44 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB31F47EAD7
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 04:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE77B47EAD9
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Dec 2021 04:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351137AbhLXDZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Dec 2021 22:25:13 -0500
-Received: from helcar.hmeau.com ([216.24.177.18]:58448 "EHLO fornost.hmeau.com"
+        id S1351147AbhLXDZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Dec 2021 22:25:15 -0500
+Received: from helcar.hmeau.com ([216.24.177.18]:58450 "EHLO fornost.hmeau.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234131AbhLXDZM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Dec 2021 22:25:12 -0500
+        id S234131AbhLXDZO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Dec 2021 22:25:14 -0500
 Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
         by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
-        id 1n0bCZ-0006Ge-8E; Fri, 24 Dec 2021 14:25:04 +1100
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 24 Dec 2021 14:25:03 +1100
-Date:   Fri, 24 Dec 2021 14:25:03 +1100
+        id 1n0bCh-0006Gi-58; Fri, 24 Dec 2021 14:25:12 +1100
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 24 Dec 2021 14:25:10 +1100
+Date:   Fri, 24 Dec 2021 14:25:10 +1100
 From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Yang Shen <shenyang39@huawei.com>
-Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, wangzhou1@hisilicon.com,
-        liulongfang@huawei.com
-Subject: Re: [PATCH] crypto: hisilicon/zip - add new algorithms for uacce
- device
-Message-ID: <YcU9j60rAFNLeXVI@gondor.apana.org.au>
-References: <20211214064509.58773-1-shenyang39@huawei.com>
+To:     sgoutham@marvell.com
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sunil.kovvuri@gmail.com, Bharat Bhushan <bbhushan2@marvell.com>,
+        Joseph Longever <jlongever@marvell.com>
+Subject: Re: [PATCH v2] hwrng: cn10k: Add random number generator support
+Message-ID: <YcU9lt5QZZip7lg2@gondor.apana.org.au>
+References: <1639479068-22101-1-git-send-email-sgoutham@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211214064509.58773-1-shenyang39@huawei.com>
+In-Reply-To: <1639479068-22101-1-git-send-email-sgoutham@marvell.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 02:45:09PM +0800, Yang Shen wrote:
-> Enable deflate/lz77_zstd algorithm for uacce device on Kunpeng930.
+On Tue, Dec 14, 2021 at 04:21:08PM +0530, sgoutham@marvell.com wrote:
+> From: Sunil Goutham <sgoutham@marvell.com>
 > 
-> Signed-off-by: Yang Shen <shenyang39@huawei.com>
+> CN10K series of silicons support true random number
+> generators. This patch adds support for the same. Also
+> supports entropy health status checking.
+> 
+> Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
+> Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
+> Signed-off-by: Joseph Longever <jlongever@marvell.com>
 > ---
->  drivers/crypto/hisilicon/zip/zip_main.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> v1 -> v2:
+> 	Fixed warnings reported by kernel test robot.
+> 	Also modified TRNG read logix to address an issue where TRNG_STATUS
+> 	read from HW could be incorrect.
+> ---
+>  drivers/char/hw_random/Kconfig     |  11 +++
+>  drivers/char/hw_random/Makefile    |   1 +
+>  drivers/char/hw_random/cn10k-rng.c | 181 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 193 insertions(+)
+>  create mode 100644 drivers/char/hw_random/cn10k-rng.c
 
 Patch applied.  Thanks.
 -- 

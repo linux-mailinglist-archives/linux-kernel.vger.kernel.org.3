@@ -2,85 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17FE747F3D6
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 17:29:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 339C747F3D9
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 17:37:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232273AbhLYQ3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 11:29:43 -0500
-Received: from mga06.intel.com ([134.134.136.31]:11068 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229987AbhLYQ3m (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 11:29:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640449782; x=1671985782;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8zcxy2gafScdkxV8HxBW7DzD3ZKWqwyjLH83mcuftug=;
-  b=YVuUvVozIAMH3F5iPkgJn30Fb++BrkXyql2p4pDzzSIS7SRCDmE7USOn
-   ZGzbGHKZStHzQxZUIuUt6KRUq4Far/LbYy/x8bHkZArLZc7/ExRmlPRpM
-   537aautQkIG8dL0RvB7bMZfUnqVbzChZkFCbrlY+EyaL2ig24uvexyQDT
-   UZe4f2wcVExTnHUaP3sfviZB4xg9NnhcCdAFdHtIekKmYPvSBOLMZV+ca
-   NX4jpUBAbi/8h50CH4U5I3zfQB99RFd6Ri7XcQO4NNTb5cVIFnTYREI2k
-   phL+xIWeOcRSNUtgk91RDZXqdtK3sEfLNvbno+S7An0yPA2Tw5bD+GL+J
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10208"; a="301815520"
-X-IronPort-AV: E=Sophos;i="5.88,235,1635231600"; 
-   d="scan'208";a="301815520"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2021 08:29:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,235,1635231600"; 
-   d="scan'208";a="469316247"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 25 Dec 2021 08:29:41 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n19vQ-0004Ql-Tf; Sat, 25 Dec 2021 16:29:40 +0000
-Date:   Sun, 26 Dec 2021 00:28:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Helge Deller <deller@gmx.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [deller-parisc:5.16-vdso-5 1/1] kernel/signal.c:2994
- sys_restart_syscall() warn: inconsistent indenting
-Message-ID: <202112260013.QoIueYEH-lkp@intel.com>
+        id S232288AbhLYQhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 11:37:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49604 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229987AbhLYQhu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 25 Dec 2021 11:37:50 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E1BC061401;
+        Sat, 25 Dec 2021 08:37:50 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id w16so44332815edc.11;
+        Sat, 25 Dec 2021 08:37:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tp14R7GSqiYR9/6km+gt56wkm7AN4wImp9Bt9uzwo8A=;
+        b=orr5VkWZ2RUz2gwv5ntyrfNI0H2QPgETyCgYMeL66rWrSs93CuRYKa39T3GzmGTAYm
+         Ex+Mq7yilvbI/tGjq+JmQG2LYqcKosCRTr3Fd4e+0Fk4FRVM/ACaLG/ktAL9hQmpcoOl
+         vYrG+CLyp1Vi6Nls4lm6wE1RdzhLel/9A72g9zdvfeo0dYeJhbLK7MCLRJ2rftALhfOT
+         h/KOJU1VbQcep/HAEoOG+ZchVUjPaoGhFi6JK0xuRqxed6yIhCDutv6PselSOCBpFDUp
+         UekBOsEe0PyUP3O66BI6JFHiF+UkHtz7ur9OawOXgKuNj7f3G4rrHH+DWTeJjLfas5bz
+         03TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tp14R7GSqiYR9/6km+gt56wkm7AN4wImp9Bt9uzwo8A=;
+        b=fFTzaE+L5qeVlTD4pHV+2e/37Msr4vD1I5hDqdGvmRsQOYuqzP0Ldb/iOpDmYQZpOM
+         YmKIi2oL+DjXi79eT/68QkJh+Itbza5WfOMDKaLoXbJakxtXSzv+BSF3a4CN1R+cQyAh
+         E1T0TfgW0vom5yKM18U0As7Y9QiBayNtu9X3XJtDvcAELUce9Cbyviuxex4ZQff1P0PM
+         L8hPPDMSpZ5fsuq/wRQs/IbBDhWUrWBcZK+kjXlINKLmdLKkS19u90G6lqtQEWKvzdFV
+         zUCwp1NrklkWa28KLzph1LFYaumyegQoAUjSZRSRUu2zKY8N+dR+Mbyb9hMrf5kaeM59
+         5lJQ==
+X-Gm-Message-State: AOAM5339LzzwjtuFFnSy7f/JlpxQl4e9zIBR3aV6EBddZTinwr/duabr
+        G7anDTfIz4N62HkvjTkefbSXsJs3A8suGKWzbYx21C8lqLBsJw==
+X-Google-Smtp-Source: ABdhPJzLELowdgw2LAqP2+ZLzXCIwhbHFPm0W89lpc2u8NuEknXTdv50O0phcI6Q9cloPRJuZPYsHEgMlmbZwKiTbWo=
+X-Received: by 2002:a17:906:3ed0:: with SMTP id d16mr8369159ejj.636.1640450268909;
+ Sat, 25 Dec 2021 08:37:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211117020346.4088302-1-swboyd@chromium.org> <20211203044718.b6nqn5rcbkrnpchp@vireshk-i7>
+In-Reply-To: <20211203044718.b6nqn5rcbkrnpchp@vireshk-i7>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 25 Dec 2021 18:37:12 +0200
+Message-ID: <CAHp75VdkxbJP7T-qaS=NKAUb7dXJdKeGRneQw+A1XN5AGtajeA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: qcom-hw: Use optional irq API
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git 5.16-vdso-5
-head:   31c51d49e3f587cdcdf22b313b5bbce80b31405f
-commit: 31c51d49e3f587cdcdf22b313b5bbce80b31405f [1/1] add testing vDSO support (v5)
-config: ia64-randconfig-m031-20211225 (https://download.01.org/0day-ci/archive/20211226/202112260013.QoIueYEH-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.2.0
+On Mon, Dec 6, 2021 at 5:26 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 16-11-21, 18:03, Stephen Boyd wrote:
+> > Use platform_get_irq_optional() to avoid a noisy error message when the
+> > irq isn't specified. The irq is definitely optional given that we only
+> > care about errors that are -EPROBE_DEFER here.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> > +     data->throttle_irq = platform_get_irq_optional(pdev, index);
+> > +     if (data->throttle_irq == -ENXIO)
+> > +             return 0;
+> > +     if (data->throttle_irq < 0)
+> > +             return data->throttle_irq;
 
-smatch warnings:
-kernel/signal.c:2994 sys_restart_syscall() warn: inconsistent indenting
+This adds more work for the future.
+The best approach is
 
-vim +2994 kernel/signal.c
+ret = platform_get_irq_optional(...);
+if (ret < 0 && ret != -ENXIO)
+  return ret;
+if (ret > 0)
+  ...we got it...
 
-  2983	
-  2984	/*
-  2985	 * System call entry points.
-  2986	 */
-  2987	
-  2988	/**
-  2989	 *  sys_restart_syscall - restart a system call
-  2990	 */
-  2991	SYSCALL_DEFINE0(restart_syscall)
-  2992	{
-  2993		struct restart_block *restart = &current->restart_block;
-> 2994	printk("************** RESTART SYSCALL gestartet\n");
-  2995		return restart->fn(restart);
-  2996	}
-  2997	
+It will allow the future API fix of platform_get_irq_optional() to be
+really optional.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+With Best Regards,
+Andy Shevchenko

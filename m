@@ -2,186 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6DB47F405
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 18:16:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A369847F409
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 18:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232460AbhLYRQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 12:16:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58138 "EHLO
+        id S232470AbhLYRSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 12:18:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbhLYRQw (ORCPT
+        with ESMTP id S229488AbhLYRSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 12:16:52 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB56C061401;
-        Sat, 25 Dec 2021 09:16:51 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id z29so44593134edl.7;
-        Sat, 25 Dec 2021 09:16:51 -0800 (PST)
+        Sat, 25 Dec 2021 12:18:16 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15C9C061401;
+        Sat, 25 Dec 2021 09:18:16 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id d10so34478176ybn.0;
+        Sat, 25 Dec 2021 09:18:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ZwmoDMvJfRTv5mzUf7v4iWJ/fYCTGqaTgMmilJ0yXlc=;
-        b=PTB2Yyqnp56XPAPnIK5T3yKhssOQ/lPKEBuQGF5jZ79FYxhDvbIC5c3vLns1cTl2EB
-         jGY/at7+07R+w6GS2wDj0dl/mIM+klTuDZNbcoUKliW1IQxTXlVLLlEh+Le3/ZHmqfrb
-         9I8lCP5LUvmcbD1yq6Oar36n2teP+kozb2mVnYAd+mfL4gUoW2QJudOueB/b0Uw4hgut
-         MbROzbxUX3p3crNPMCIfaAReLhicmT13sGBXtPS/5xLh1wWg6KdkWoszHEQ68t/EYQ6I
-         QmHGiexHKR3p5yqArjkzvvjIGRkvw2hRLgrjJzLhbNyfpKELA/BDyo1Qa0G2gFSaZw7n
-         slhg==
+        bh=cwNlOJL6+nTpPQ0bQe4LhDmUn6tSXE052qJuMPuWowI=;
+        b=Hi/rsuhGnO97sjZH7Lwv/9kXCCCOhcRLuk3JE6I0sQMyoZWgQGaqupQTYJr3gEH6qa
+         gMaqjoGzEkgTkrCTfJbn8YN6dkwSx6oQH/Nv1yCqN6EfT8BH4zpH0fRDWBf1706rXEw2
+         9HP6tHo0d10x0bxFIgFC+qOkvTzwEkI/vyveN6DAxMb1v5fO84LG+0zD7OibcyXo+0EA
+         B/Gu7xv6/1pFLLMHz+4bqLPFGkbVArUIUoh//iL0ESaRxdYJVergJ8kml7bJhKPbmzY8
+         Grr7Yt3N+8lsaoncJ38ZFWMTKAPLpQTkj28TIzoXxLe5qGPJaqS8OY+a6G5gX5hC2+xJ
+         ZqbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ZwmoDMvJfRTv5mzUf7v4iWJ/fYCTGqaTgMmilJ0yXlc=;
-        b=u0ii6AREjmWB2uAC6lBXD4MDrmBjSYirxI+cf+dtzN5II109HZliQGID4J+iktnlF6
-         hQOxXdo76N553Ym3bZ2L/+F6LgZsZ5mAvePPEW1PpPXHKkRtWeikuFuGq5MH1e3ANhfb
-         3wi3eu5DcF7N8Q06sz0tO/7dWTzEqXXQikkE7bW0DalezGRm4KcAbh20lOhtvbvsM8kS
-         jfmsl41PFdlvKAwpOYn/XLJhoZS1H6CxiAMh5fCzTDptn5BGFPgYEn5GVdTt88BJEFLs
-         xxkssWmncri+5mvckvZYP2stnK3ifKsBbpIX7EpASihdrWbxQJAlGClipm5k9Y48swsP
-         NUhg==
-X-Gm-Message-State: AOAM531e3ZFolUBueuUVxGEJMhhu/iR24QtSaUYOUfiIH2YVyLpRwFyB
-        SEucJBX1KcBR3ADpEqjNcralRF6suYgd7G1Po2QJf+iri08g6w==
-X-Google-Smtp-Source: ABdhPJzPDeH1WqgHGYUcf+tZ6Sj0tLuND4JNyohQXY6Voe91W3vvSHhrD2ygqDdygroKgmrVFIsuF19B6Av1ngW5K5M=
-X-Received: by 2002:a17:906:a3c6:: with SMTP id ca6mr8517248ejb.639.1640452610335;
- Sat, 25 Dec 2021 09:16:50 -0800 (PST)
+        bh=cwNlOJL6+nTpPQ0bQe4LhDmUn6tSXE052qJuMPuWowI=;
+        b=6kqUwUXdeibVstArMYJAVM0C54+dX7Qr09UOQ7lkvhFyPz2T0/cAjAT9gnM55urCGX
+         N7S02GY26A3If79jrKqDWb3lazNy+aAVmw96/BEQbbJKYsBvIYvMhUeL37h02Mh2+5x9
+         Yih3sGL7HFtSaWOwiqyV2IjWodJRQFYSH5M0lj9+YCNmrpuBUfrN+ATD10VOUEY3Ewff
+         Ab1Bt8WA63KM95TJmHuy31qW/hAyNFEPN5WZxZs0bkMgSjUtvF547Fme7lzduvp88EUP
+         2BcmBB9MP2zCUZJ00aQ60oSSZ7/eCAx9P2p8XGs51eQdmRAqis+wh5csGhyzJIELsMKp
+         qI8w==
+X-Gm-Message-State: AOAM530WjCWnYezbJkWXd+GLgwfYAE7BW/oG1Bd9ZsoF82eYzvfZLsst
+        WzgKc3S1W/88ui6GqZzm0OhlXcsmHEpH9agqIac=
+X-Google-Smtp-Source: ABdhPJxdJr5GL3Hd+8jIEnSRoCdZb/BNzFvqysSW+BSC3SGwNEIHJxOVinXGVjVqxrL0Bsc+bMgKlJ0xEbQkzrol3dA=
+X-Received: by 2002:a25:c586:: with SMTP id v128mr3131214ybe.186.1640452695879;
+ Sat, 25 Dec 2021 09:18:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20211224131300.18198-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211224131300.18198-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20211224131300.18198-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 25 Dec 2021 19:16:13 +0200
-Message-ID: <CAHp75VcgknapFkZx5YhNhUgaHKGHBXdeTZ+pBcP_G9wnwfFSnw@mail.gmail.com>
-Subject: Re: [PATCH v3 07/10] ata: pata_platform: Merge pata_of_platform into pata_platform
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
+References: <20211224192626.15843-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211224192626.15843-9-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAHp75Vd60ftgzvWqz+r5YcptimDwURmwOucOBw-WqdHega6NqA@mail.gmail.com>
+In-Reply-To: <CAHp75Vd60ftgzvWqz+r5YcptimDwURmwOucOBw-WqdHega6NqA@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Sat, 25 Dec 2021 17:17:50 +0000
+Message-ID: <CA+V-a8tuc02C85T5rWg16qW+1jY7=a3Q-kBiuuDahVfyX7hQcw@mail.gmail.com>
+Subject: Re: [PATCH 8/8] net: ethernet: ti: davinci_emac: Use
+ platform_get_irq() to get the interrupt
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        netdev <netdev@vger.kernel.org>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>, linux-ide@vger.kernel.org
+        Linux OMAP Mailing List <linux-omap@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 25, 2021 at 3:56 AM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+Hi Andy,
+
+Thank you for the review.
+
+On Sat, Dec 25, 2021 at 4:59 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
 >
-> Merge the OF pata_of_platform driver into pata_platform.
+> On Sat, Dec 25, 2021 at 4:06 AM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> >
+> > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> > allocation of IRQ resources in DT core code, this causes an issue
+> > when using hierarchical interrupt domains using "interrupts" property
+> > in the node as this bypasses the hierarchical setup and messes up the
+> > irq chaining.
+> >
+> > In preparation for removal of static setup of IRQ resource from DT core
+> > code use platform_get_irq() for DT users only.
+> >
+> > While at it propagate error code in case request_irq() fails instead of
+> > returning -EBUSY.
+>
+>
+> > +       if (dev_of_node(&priv->pdev->dev)) {
+>
+> Why?! What's wrong with using the same approach in all cases?
+>
+The earlier code looped the resource from start to end and then
+requested the resources. So I believed the the IORESOURCE_IRQ was
+sending the range of interrupts. But now looking at the mach-davinci
+folder I can confirm its just send an single IRQ resource. So this
+check can be dropped and same approach can be used for OF and non OF
+users.
 
-For the further improvements...
+> > +               while ((ret = platform_get_irq_optional(priv->pdev, res_num)) != -ENXIO) {
+>
+> This is wrong.
+>
+> You need to check better as I pointed several times against your patches.
+>
+Right, Ill have a look.
 
-...
-
-> +MODULE_PARM_DESC(pio_mask, "PIO modes supported, mode 0 only by default (param valid only for non DT users)");
-
-non-DT
-
-...
-
-> +/**
-> + * struct pata_platform_priv - Private info
-> + * @io_res: Resource representing I/O base
-> + * @ctl_res: Resource representing CTL base
-
-> + * @irq_res: Resource representing IRQ and its flags
-
-Why do we need to keep entire resource for just one value?
-
-> + * @ioport_shift: I/O port shift
-> + * @pio_mask: PIO mask
-> + * @use16bit: Flag to indicate 16-bit IO instead of 32-bit
-> + */
-
-...
-
->         ata_port_desc(ap, "%s cmd 0x%llx ctl 0x%llx", mmio ? "mmio" : "ioport",
-> -                     (unsigned long long)io_res->start,
-> -                     (unsigned long long)ctl_res->start);
-> +                     (unsigned long long)priv->io_res->start,
-> +                     (unsigned long long)priv->ctl_res->start);
-
-Using castings here is not fully correct. Instead just use %pR/%pR or
-at least %pa.
-
-...
-
->         irq = platform_get_irq_optional(pdev, 0);
->         if (irq < 0 && irq != -ENXIO)
->                 return irq;
-> +
-
-Stray change?
-
->         if (irq > 0) {
-> -               memset(&irq_res, 0x0, sizeof(struct resource));
-> -               irq_res.start = irq;
-> +               struct resource *irq_res;
-> +
-> +               irq_res = devm_kzalloc(&pdev->dev, sizeof(*irq_res), GFP_KERNEL);
-> +               if (!irq_res)
-> +                       return -ENOMEM;
-> +
-> +               irq_res->start = irq;
-> +               priv->irq_res = irq_res;
->         }
-
-...
-
-> +       ret = of_property_read_u32(dn, "pio-mode", &pio_mode);
-> +       if (!ret) {
-> +               if (pio_mode > 6) {
-
-> +                       dev_err(&ofdev->dev, "invalid pio-mode\n");
-> +                       return -EINVAL;
-
-return dev_err_probe(...); ?
-
-> +               }
-> +       } else {
-> +               dev_info(&ofdev->dev, "pio-mode unspecified, assuming PIO0\n");
-> +       }
-
-...
-
-> +       priv->pio_mask = 1 << pio_mode;
-> +       priv->pio_mask |= (1 << pio_mode) - 1;
-
-So, pio_mode defines the MSB in the mask, why not to use
-
- ->pio_mask = GENMASK(pio_mode, 0);
-
-?
-
-...
-
-> +       if ((pdev->num_resources != 3) && (pdev->num_resources != 2)) {
-> +               dev_err(&pdev->dev, "invalid number of resources\n");
-> +               return -EINVAL;
-
-return dev_err_probe(); ?
-
-> +       }
-
-...
-
-> +       if (!dev_of_node(&pdev->dev))
-> +               ret = pata_platform_get_pdata(pdev, priv);
-> +       else
-> +               ret = pata_of_platform_get_pdata(pdev, priv);
-
-What the difference between them? Can't you unify them and leave only
-DT related part separately?
-
-...
-
-> +static const struct of_device_id pata_of_platform_match[] = {
-> +       { .compatible = "ata-generic", },
-
-> +       { },
-
-No comma for terminator line.
-
-> +};
-
--- 
-With Best Regards,
-Andy Shevchenko
+Cheers,
+Prabhakar
+> > +                       if (ret < 0)
+> > +                               goto rollback;
+> >
+> > +                       ret = request_irq(ret, emac_irq, 0, ndev->name, ndev);
+> > +                       if (ret) {
+> > +                               dev_err(emac_dev, "DaVinci EMAC: request_irq() failed\n");
+> >                                 goto rollback;
+> >                         }
+> > +                       res_num++;
+> >                 }
+> > -               res_num++;
+> > +       } else {
+> > +               while ((res = platform_get_resource(priv->pdev, IORESOURCE_IRQ, res_num))) {
+> > +                       for (irq_num = res->start; irq_num <= res->end; irq_num++) {
+> > +                               ret = request_irq(irq_num, emac_irq, 0, ndev->name, ndev);
+> > +                               if (ret) {
+> > +                                       dev_err(emac_dev, "DaVinci EMAC: request_irq() failed\n");
+> > +                                       goto rollback;
+> > +                               }
+> > +                       }
+> > +                       res_num++;
+> > +               }
+> > +               /* prepare counters for rollback in case of an error */
+> > +               res_num--;
+> > +               irq_num--;
+> >         }
+>
+> --
+> With Best Regards,
+> Andy Shevchenko

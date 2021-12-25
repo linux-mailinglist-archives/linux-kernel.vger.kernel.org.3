@@ -2,76 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 156E347F198
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 02:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1926047F19A
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 02:08:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232009AbhLYBAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 20:00:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
+        id S231935AbhLYBIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 20:08:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbhLYBAe (ORCPT
+        with ESMTP id S229549AbhLYBIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 20:00:34 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BA4C061401
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 17:00:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CC7A7CE2345
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 01:00:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C38D7C36AEA;
-        Sat, 25 Dec 2021 01:00:29 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="IzUQPv+C"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1640394028;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=hq8m6d/730E5cuUPQiSTXZEq/EnTJ9dNV6E7hz3q2hY=;
-        b=IzUQPv+CzKnGZl9VFZ0FOSEmJD8ywH7f3IEsGnl2hemT5H4fveEcXxR3zOuK2JFT2Xv33f
-        AyYolv6x+M1YT9/hJdt+9w2WsZJNlAv8WraxU26bGnnjyNiTVsQcVgUQz9YptXdvAstujv
-        ZA5G/Ml3H3kJUlr9FuC718i4dKfIIxM=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0b18722d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sat, 25 Dec 2021 01:00:27 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     tytso@mit.edu, linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH] random: do not sign extend bytes for rotation when mixing
-Date:   Sat, 25 Dec 2021 02:00:11 +0100
-Message-Id: <20211225010011.1909938-1-Jason@zx2c4.com>
+        Fri, 24 Dec 2021 20:08:15 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05A7C061401;
+        Fri, 24 Dec 2021 17:08:14 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id f18-20020a17090aa79200b001ad9cb23022so9472620pjq.4;
+        Fri, 24 Dec 2021 17:08:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EL3Dq5TmzKZTYH6R2nxXnIMQFNr3bo4ypkh6vrYhshc=;
+        b=ANTs6AaMh9Xv+SEq9FN84UnQyFkAK1wzteyLgRzWsZm/ZIXEny+gVkpCCF38PmCCPD
+         U3kVZ17ysox/ZyS+K2kYpIuRBKB7eTCl3r04NqQ/013gVFmp5eQUcU0890833IUYF9kZ
+         wiVgM5kJsRssyTvs/JvHwiyYbncWnH2EKHVp9uw97vjCm+AaIb2VUlzDR998e0qfYHwH
+         44Tq0lIMr9S0xcf78NXAlzvWPCTBG9HJCkrflYqYbyrMsJ6vrp68nc4WHSGMjVAbW/vj
+         XE2FQZrk7zzAiTZplGbydnc7CNJuAGcUVU/sHqsv5QQyCREB1oOk5eGr016PuYKzIiCQ
+         mLTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EL3Dq5TmzKZTYH6R2nxXnIMQFNr3bo4ypkh6vrYhshc=;
+        b=ShZBsrZPEyapMIPQNsq4mYVLCMqek/MvIft9DShmyqgT+h/ZQ+Xb6OtktI5eN0ukhN
+         L5T6UZEndJ98j6uukZJlwXx8ZJUiYGzvphYaw/YDWHZYKC0TC75k+2cmRaM2KyTOFrbj
+         G5MkrHyXH4y7RJSwteo/z2TpPa2iQg0bb3AEVgUSe5wdHrNUGAyij4MlUbaBddpGblQo
+         B3um8gxAHP5FgMYgVkt5VBIz8GIpHr485AjCbkv5PNQq9xfUXUwLBXch0Lao/RxoRpOC
+         ysbWzABn9RjWxi5NC329nswB9lMJyZrTWKcV22evzvnmp0jsMGPqYra/G0rQzilVsI+c
+         lJkg==
+X-Gm-Message-State: AOAM532BV2tQgokPIgq1NlfaRTqGPyN/PEijnZaN4Ry7H9GE1aDe+qYI
+        vQn/IH0QBVCy/LkvQ/rQh7B5PNEKfbMjKr5SMVk=
+X-Google-Smtp-Source: ABdhPJzfK61jo474Cn7NsNqiEL1YxMVo77g1HDHOVNp8m8YOqeXaNFT2FKY6v56SdxDN1qkFoVjO/Q1A6KMul1lntKc=
+X-Received: by 2002:a17:903:1212:b0:148:ac36:25fb with SMTP id
+ l18-20020a170903121200b00148ac3625fbmr8470206plh.147.1640394493261; Fri, 24
+ Dec 2021 17:08:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <YcJZWiQ407ZxMM+y@bombadil.infradead.org> <20211222132332.7817-1-vimal.agrawal@sophos.com>
+ <YcRRQCMZFepB/hzX@infradead.org> <CALkUMdRxTm6STT4CncTuvQ9hM_bez+B91TsuenEj71KPxFgMsg@mail.gmail.com>
+ <YcVtG26b/sO9k7ox@infradead.org>
+In-Reply-To: <YcVtG26b/sO9k7ox@infradead.org>
+From:   Vimal Agrawal <avimalin@gmail.com>
+Date:   Sat, 25 Dec 2021 06:38:02 +0530
+Message-ID: <CALkUMdSY3XCHqhH9dDQ+0VHykv9AiBiqLgoC+cj5P=9Q1jdXrg@mail.gmail.com>
+Subject: Re: [PATCH v2] kernel/module.c: heuristic enhancement when
+ INSTALL_MOD_STRIP= "--strip-unneeded" is used
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Vimal Agrawal <vimal.Agrawal@sophos.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Jan Beulich <JBeulich@suse.com>, Jeff Mahoney <jeffm@suse.com>,
+        Sam Ravnborg <sam@ravnborg.org>, linux-kbuild@vger.kernel.org,
+        jeyu@kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By using `char` instead of `unsigned char`, certain platforms will sign
-extend the byte when `w = rol32(*bytes++, input_rotate)` is called,
-meaning that bit 7 is overrepresented when mixing. This isn't a real
-problem (unless the mixer itself is already broken) since it's still
-invertible, but it's not quite correct either. Fix this by using an
-explicit unsigned type.
+On Fri, Dec 24, 2021 at 12:17 PM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> I don't think we can support passing arbitrary linker options and
+> expects things to work.  If we want to support --strip-unneeded
+> it needs a good rationale and be added as a direct config option.
+INSTALL_MOD_STRIP was provided to give flexibility for providing
+strippping options. It will be a separate discussion if we want to
+continue allowing this flexibility or not but it is available now. I
+see that it works but just that it is behaving erratically during
+symbol decodes. I tried few other stripping options. --strip-all does
+not work and insmod fails as it needs some symbols which is fine as it
+is hinting the user there is a problem with stripping option. This is
+not the case with --strip-unneeded option as it builds and loads/works
+fine but fails to decode symbols properly sometimes.
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+One of the rationale for --strip-unneeded option is that it
+significantly reduces the size of .ko without affecting its
+functionality ( though debuggability takes a hit). I guess many
+platforms/products that need limited memory footprint might be using
+this option.
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 99cce575a79c..82db125aaed7 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -546,7 +546,7 @@ static void _mix_pool_bytes(struct entropy_store *r, const void *in,
- 	unsigned long i, tap1, tap2, tap3, tap4, tap5;
- 	int input_rotate;
- 	int wordmask = r->poolinfo->poolwords - 1;
--	const char *bytes = in;
-+	const unsigned char *bytes = in;
- 	__u32 w;
- 
- 	tap1 = r->poolinfo->tap1;
--- 
-2.34.1
+I am fine if we decide to say that --strip-unneeded option is not
+supported by kbuild/INSTALL_MOD_STRIP which is not the case now. In
+that case, I agree that this patch will not even be required.
 
+Vimal

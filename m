@@ -2,36 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7DF47F1E3
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 05:55:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA75047F1E6
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 05:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbhLYEzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 23:55:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40088 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbhLYEzI (ORCPT
+        id S229793AbhLYEzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 23:55:14 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45360 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229736AbhLYEzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 23:55:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5FDC06175C;
-        Fri, 24 Dec 2021 20:55:08 -0800 (PST)
+        Fri, 24 Dec 2021 23:55:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BF28B8072F;
-        Sat, 25 Dec 2021 04:55:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB97FC36B02;
-        Sat, 25 Dec 2021 04:55:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D3CCDB80AEA;
+        Sat, 25 Dec 2021 04:55:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67BE3C36AEA;
+        Sat, 25 Dec 2021 04:55:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640408105;
-        bh=RZHxDhGeVX15oaLNc4kx+vq7jlXyQAqs6QHL/XY/HJ4=;
+        s=k20201202; t=1640408110;
+        bh=lhZLi2fHARrNEq4LLSfdR+qEsQoJ5dBnyjq9x9/osWY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HBUzN/dAdq53By2AFjyJLl1rUToAPIE0DArdtg2/nQcxIbo2Jb3T2uQD9h6V/j4lD
-         AO4KrkZ4eaF7bxV4pwuJO32Huq9luMfiaNEVYeguq1ne+OKSWWzZUNNCOT6cxHxrDx
-         4JDLSz2JRUouJ9fKJYqyJKJvEuA9MfTfc6Zvk8XyN084gA0wgj6BswXD2r1Em3nWPh
-         yechGLYta7pErAUHHEbq2C0fTrmRGMUusAWTOSbZOMW9bHLi8RnXR4j/w+G46CaIX6
-         Dqv5PslHxbh88YCZyfjD1r6NBxa40/8zEDDYYj+vE0A0TeoQNT+g2bNBr7Pxe+Igwf
-         sn/mteg33tFgw==
+        b=O47U4vTrj3QNxk6GmpLhVdXkGt5KIq0adYPONhPiS9zlmdIF6dLUKm0ctzE/UgxMe
+         AOO+ct+kJG9RjRRx17r37NUn60LQ+rja9ygBdLrloP3wt0Bl5PnSmL+VzMw9xQogy2
+         jX7VJKQb09vFq2it5MjwIV32f/uONVr7d2xEbZ8u/DwV08SQ/FGn9B4+heWUVT31rU
+         hRfkOMfWGSoTbXWqjwcGV2B+YN4kEZ1zNryRBx5lmDeCdiQALPnsWs6AoCf+ksoVYK
+         4E7ExCWDluxwuV4SMgi8C0SrGLz7GoJ//7HdRHpqJhZZzVYe71q2yKQWEDIPHvZHOQ
+         yx1fmsSGGF6rA==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, will@kernel.org, tglx@linutronix.de,
         benh@kernel.crashing.org, arnd@arndb.de, mingo@redhat.com,
@@ -42,9 +39,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         linuxppc-dev@lists.ozlabs.org, inux-parisc@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         x86@kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V2 3/8] sched: sparc: Remove unused TASK_SIZE_OF
-Date:   Sat, 25 Dec 2021 12:54:25 +0800
-Message-Id: <20211225045430.2868608-4-guoren@kernel.org>
+Subject: [PATCH V2 4/8] sched: powerpc: Remove unused TASK_SIZE_OF
+Date:   Sat, 25 Dec 2021 12:54:26 +0800
+Message-Id: <20211225045430.2868608-5-guoren@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211225045430.2868608-1-guoren@kernel.org>
 References: <20211225045430.2868608-1-guoren@kernel.org>
@@ -56,29 +53,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-This macro isn't used in Linux, now. Delete in
+This macro isn't used in Linux sched, now. Delete in
 include/linux/sched.h and arch's include/asm.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/sparc/include/asm/processor_64.h | 3 ---
- 1 file changed, 3 deletions(-)
+ arch/powerpc/include/asm/task_size_64.h | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/arch/sparc/include/asm/processor_64.h b/arch/sparc/include/asm/processor_64.h
-index ae851e8fce4c..628349fc4cdd 100644
---- a/arch/sparc/include/asm/processor_64.h
-+++ b/arch/sparc/include/asm/processor_64.h
-@@ -27,9 +27,6 @@
- #define VPTE_SIZE	(1 << (VA_BITS - PAGE_SHIFT + 3))
- #endif
+diff --git a/arch/powerpc/include/asm/task_size_64.h b/arch/powerpc/include/asm/task_size_64.h
+index c993482237ed..38fdf8041d12 100644
+--- a/arch/powerpc/include/asm/task_size_64.h
++++ b/arch/powerpc/include/asm/task_size_64.h
+@@ -44,11 +44,7 @@
+  */
+ #define TASK_SIZE_USER32 (0x0000000100000000UL - (1 * PAGE_SIZE))
  
--#define TASK_SIZE_OF(tsk) \
--	(test_tsk_thread_flag(tsk,TIF_32BIT) ? \
--	 (1UL << 32UL) : ((unsigned long)-VPTE_SIZE))
- #define TASK_SIZE \
- 	(test_thread_flag(TIF_32BIT) ? \
- 	 (1UL << 32UL) : ((unsigned long)-VPTE_SIZE))
+-#define TASK_SIZE_OF(tsk)						\
+-	(test_tsk_thread_flag(tsk, TIF_32BIT) ? TASK_SIZE_USER32 :	\
+-						TASK_SIZE_USER64)
+-
+-#define TASK_SIZE TASK_SIZE_OF(current)
++#define TASK_SIZE (is_32bit_task() ? TASK_SIZE_USER32 : TASK_SIZE_USER64)
+ 
+ #define TASK_UNMAPPED_BASE_USER32 (PAGE_ALIGN(TASK_SIZE_USER32 / 4))
+ #define TASK_UNMAPPED_BASE_USER64 (PAGE_ALIGN(DEFAULT_MAP_WINDOW_USER64 / 4))
 -- 
 2.25.1
 

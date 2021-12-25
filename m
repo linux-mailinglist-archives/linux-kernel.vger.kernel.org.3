@@ -2,155 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 140BA47F1AC
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 02:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E2F47F1AD
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 03:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232127AbhLYB7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 20:59:02 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:33910 "EHLO
+        id S231678AbhLYCFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 21:05:21 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:33911 "EHLO
         szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbhLYB7B (ORCPT
+        with ESMTP id S229539AbhLYCFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 20:59:01 -0500
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JLRt15xQxzcc3c;
-        Sat, 25 Dec 2021 09:58:33 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+        Fri, 24 Dec 2021 21:05:20 -0500
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JLS1J6R83zcbrD;
+        Sat, 25 Dec 2021 10:04:52 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 25 Dec 2021 09:58:58 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 25 Dec 2021 09:58:57 +0800
-Subject: Re: [PATCH v18 04/17] x86/setup: Add helper
- parse_crashkernel_in_order()
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>
-CC:     Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Chen Zhou" <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>
-References: <20211222130820.1754-1-thunder.leizhen@huawei.com>
- <20211222130820.1754-5-thunder.leizhen@huawei.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <9291bf01-d295-583c-399c-ea5b544be474@huawei.com>
-Date:   Sat, 25 Dec 2021 09:58:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+ 15.1.2308.20; Sat, 25 Dec 2021 10:05:18 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2308.20; Sat, 25 Dec 2021 10:05:17 +0800
+Message-ID: <ccf311bd-c0ed-3e42-8057-849a9c3e9a98@huawei.com>
+Date:   Sat, 25 Dec 2021 10:05:16 +0800
 MIME-Version: 1.0
-In-Reply-To: <20211222130820.1754-5-thunder.leizhen@huawei.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH] Revert "mm/usercopy: Drop extra is_vmalloc_or_module()
+ check"
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Kees Cook <keescook@chromium.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Nick Piggin <npiggin@gmail.com>
+References: <20211223102126.161848-1-wangkefeng.wang@huawei.com>
+ <ffd77bcf-b9d8-956c-9f83-14b9f0b496e7@csgroup.eu>
+ <96fe1826-aeaf-4ea0-9f01-03d6b3933b34@huawei.com>
+ <6e2ddc83-bec3-fdd4-4d91-3ade0de0b7c8@csgroup.eu>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <6e2ddc83-bec3-fdd4-4d91-3ade0de0b7c8@csgroup.eu>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggeme706-chm.china.huawei.com (10.1.199.102) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 2021/12/24 21:18, Christophe Leroy wrote:
+>
+> Le 24/12/2021 à 08:06, Kefeng Wang a écrit :
+>> On 2021/12/24 14:01, Christophe Leroy wrote:
+>>> Le 23/12/2021 à 11:21, Kefeng Wang a écrit :
+>>>> This reverts commit 517e1fbeb65f5eade8d14f46ac365db6c75aea9b.
+>>>>
+>>>>      usercopy: Kernel memory exposure attempt detected from SLUB
+>>>> object not in SLUB page?! (offset 0, size 1048)!
+>>>>      kernel BUG at mm/usercopy.c:99
+>>>>      ...
+>>>>      usercopy_abort+0x64/0xa0 (unreliable)
+>>>>      __check_heap_object+0x168/0x190
+>>>>      __check_object_size+0x1a0/0x200
+>>>>      dev_ethtool+0x2494/0x2b20
+>>>>      dev_ioctl+0x5d0/0x770
+>>>>      sock_do_ioctl+0xf0/0x1d0
+>>>>      sock_ioctl+0x3ec/0x5a0
+>>>>      __se_sys_ioctl+0xf0/0x160
+>>>>      system_call_exception+0xfc/0x1f0
+>>>>      system_call_common+0xf8/0x200
+>>>>
+>>>> When run ethtool eth0, the BUG occurred, the code shows below,
+>>>>
+>>>>      data = vzalloc(array_size(gstrings.len, ETH_GSTRING_LEN));
+>>>>      copy_to_user(useraddr, data, gstrings.len * ETH_GSTRING_LEN))
+>>>>
+>>>> The data is alloced by vmalloc(),  virt_addr_valid(ptr) will return true
+>>>> on PowerPC64, which leads to the panic, add back the
+>>>> is_vmalloc_or_module()
+>>>> check to fix it.
+>>> Is it expected that virt_addr_valid() returns true on PPC64 for
+>>> vmalloc'ed memory ? If that's the case it also means that
+>>> CONFIG_DEBUG_VIRTUAL won't work as expected either.
+>> Our product reports this bug to me, after let them do some test,
+>>
+>> I found virt_addr_valid return true for vmalloc'ed memory on their board.
+>>
+>> I think DEBUG_VIRTUAL could not be work well too, but I can't test it.
+>>
+>>> If it is unexpected, I think you should fix PPC64 instead of adding this
+>>> hack back. Maybe the ARM64 fix can be used as a starting point, see
+>>> commit 68dd8ef32162 ("arm64: memory: Fix virt_addr_valid() using
+>>> __is_lm_address()")
+>> Yes， I check the history,  fix virt_addr_valid() on PowerPC is what I
+>> firstly want to do,
+>>
+>> but I am not familiar with PPC, and also HARDENED_USERCOPY on other's
+>> ARCHs could
+>>
+>> has this issue too, so I add the workaround back.
+>>
+>>
+>> 1) PPC maintainer/expert, any suggestion ?
+>>
+>> 2) Maybe we could add some check to WARN this scenario.
+>>
+>> --- a/mm/usercopy.c
+>> +++ b/mm/usercopy.c
+>> @@ -229,6 +229,8 @@ static inline void check_heap_object(const void
+>> *ptr, unsigned long n,
+>>           if (!virt_addr_valid(ptr))
+>>                   return;
+>>
+>> +       WARN_ON_ONCE(is_vmalloc_or_module_addr(ptr));
 
-On 2021/12/22 21:08, Zhen Lei wrote:
-> Currently, there are two possible combinations of configurations.
-> (1) crashkernel=X[@offset]
-> (2) crashkernel=X,high, with or without crashkernel=X,low
-> 
-> (1) has the highest priority, if it is configured correctly, (2) will be
-> ignored. Similarly, in combination (2), crashkernel=X,low is valid only
-> when crashkernel=X,high is valid.
-> 
-> Putting the operations of parsing all "crashkernel=" configurations in one
-> function helps to sort out the strong dependency.
-> 
-> So add helper parse_crashkernel_in_order(). The "__maybe_unused" will be
-> removed in the next patch.
-> 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> ---
->  arch/x86/kernel/setup.c | 51 +++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 51 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-> index d9080bfa131a654..f997074d36f2484 100644
-> --- a/arch/x86/kernel/setup.c
-> +++ b/arch/x86/kernel/setup.c
-> @@ -439,6 +439,57 @@ static int __init reserve_crashkernel_low(void)
->  }
->  #endif
->  
-> +#define CRASHKERNEL_MEM_NONE		0x0	/* crashkernel= is not exist or invalid */
-> +#define CRASHKERNEL_MEM_CLASSIC		0x1	/* crashkernel=X[@offset] is valid */
-> +#define CRASHKERNEL_MEM_HIGH		0x2	/* crashkernel=X,high is valid */
-> +#define CRASHKERNEL_MEM_LOW		0x4	/* crashkernel=X,low is valid */
-> +
-> +/**
-> + * parse_crashkernel_in_order - Parse all "crashkernel=" configurations in
-> + *				priority order until a valid combination is found.
-> + * @cmdline:	The bootup command line.
-> + * @system_ram: Total system memory size.
-> + * @crash_size: Save the memory size specified by "crashkernel=X[@offset]" or
-> + *		"crashkernel=X,high".
-> + * @crash_base: Save the base address specified by "crashkernel=X@offset"
-> + * @low_size:	Save the memory size specified by "crashkernel=X,low"
-> + *
-> + * Returns the status flag of the parsing result of "crashkernel=", such as
-> + * CRASHKERNEL_MEM_NONE, CRASHKERNEL_MEM_HIGH.
-> + */
-> +__maybe_unused
-> +static int __init parse_crashkernel_in_order(char *cmdline,
-> +					     unsigned long long system_ram,
-> +					     unsigned long long *crash_size,
-> +					     unsigned long long *crash_base,
-> +					     unsigned long long *low_size)
+>>
+>>> In the meantime, can you provide more information on your config,
+>>> especially which memory model is used ?
+>> Some useful configs,
+>>
+>> CONFIG_PPC64=y
+>> CONFIG_PPC_BOOK3E_64=y
+>> CONFIG_E5500_CPU=y
+>> CONFIG_TARGET_CPU_BOOL=y
+>> CONFIG_PPC_BOOK3E=y
+>> CONFIG_E500=y
+>> CONFIG_PPC_E500MC=y
+>> CONFIG_PPC_FPU=y
+>> CONFIG_FSL_EMB_PERFMON=y
+>> CONFIG_FSL_EMB_PERF_EVENT=y
+>> CONFIG_FSL_EMB_PERF_EVENT_E500=y
+>> CONFIG_BOOKE=y
+>> CONFIG_PPC_FSL_BOOK3E=y
+>> CONFIG_PTE_64BIT=y
+>> CONFIG_PHYS_64BIT=y
+>> CONFIG_PPC_MMU_NOHASH=y
+>> CONFIG_PPC_BOOK3E_MMU=y
+>> CONFIG_SELECT_MEMORY_MODEL=y
+>> CONFIG_FLATMEM_MANUAL=y
+>> CONFIG_FLATMEM=y
+>> CONFIG_FLAT_NODE_MEM_MAP=y
+>> CONFIG_SPARSEMEM_VMEMMAP_ENABLE=y
+>>
+> OK so it is PPC64 book3e and with flatmem.
+>
+> The problem is virt_to_pfn() which uses __pa()
+>
+> __pa(x) on PPC64 is (x) & 0x0fffffffffffffffUL
+>
+> And on book3e/64 we have
+>
+> VMALLOC_START = KERN_VIRT_START = ASM_CONST(0x8000000000000000)
+>
+>
+> It means that __pa() will return a valid PFN for VMALLOCed addresses.
+>
+>
+> So an additional check is required in virt_addr_valid(), maybe check
+> that (kaddr & PAGE_OFFSET) == PAGE_OFFSET
+>
+> Can you try that ?
+>
+> #define virt_addr_valid(kaddr)	((kaddr & PAGE_OFFSET) == PAGE_OFFSET &&
+> pfn_valid(virt_to_pfn(kaddr)))
 
-I rethought yesterday that this function name is not self-annotated. In addition,
-the meaning of the return value is not mainstream. It would be better to change it
-to parse_crashkernel_high_low().
+I got this commit,
 
-> +{
-> +	int ret, flag = CRASHKERNEL_MEM_NONE;
-> +
-> +	BUG_ON(!crash_size || !crash_base || !low_size);
-> +
-> +	/* crashkernel=X[@offset] */
-> +	ret = parse_crashkernel(cmdline, system_ram, crash_size, crash_base);
-> +	if (!ret && crash_size > 0)
-> +		return CRASHKERNEL_MEM_CLASSIC;
-> +
-> +#ifdef CONFIG_X86_64
-> +	/* crashkernel=X,high */
-> +	ret = parse_crashkernel_high(cmdline, system_ram, crash_size, crash_base);
-> +	if (ret || crash_size <= 0)
-> +		return CRASHKERNEL_MEM_NONE;
-> +
-> +	flag = CRASHKERNEL_MEM_HIGH;
-> +
-> +	/* crashkernel=Y,low */
-> +	ret = parse_crashkernel_low(cmdline, system_ram, low_size, crash_base);
-> +	if (!ret)
-> +		flag |= CRASHKERNEL_MEM_LOW;
-> +#endif
-> +
-> +	return flag;
-> +}
-> +
->  static void __init reserve_crashkernel(void)
->  {
->  	unsigned long long crash_size, crash_base, total_mem;
-> 
+commit 4dd7554a6456d124c85e0a4ad156625b71390b5c
+
+Author: Nicholas Piggin <npiggin@gmail.com>
+Date:   Wed Jul 24 18:46:37 2019 +1000
+
+     powerpc/64: Add VIRTUAL_BUG_ON checks for __va and __pa addresses
+
+     Ensure __va is given a physical address below PAGE_OFFSET, and __pa is
+     given a virtual address above PAGE_OFFSET.
+
+It has check the PAGE_OFFSET in __pa,  will test it and resend the 
+patch(with above warning changes).
+
+Thanks.
+
+>
+>
+> Thanks
+> Christophe

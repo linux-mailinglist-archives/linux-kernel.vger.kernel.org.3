@@ -2,157 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F206247F349
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 14:05:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A2247F34E
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 14:14:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbhLYNFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 08:05:37 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:54940
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231734AbhLYNFg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 08:05:36 -0500
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
+        id S231765AbhLYNOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 08:14:02 -0500
+Received: from ixit.cz ([94.230.151.217]:55778 "EHLO ixit.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231743AbhLYNOB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 25 Dec 2021 08:14:01 -0500
+Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1DC353F1A9
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 13:05:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1640437530;
-        bh=5vgRgsACjyf0KpwZ4x9GcJr9J4OAYwXoNUUUezQLgDc=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=mrBxaNboGGkBzjwYzds86DoqJZMEQV3GRjfbojidYgWgDButKBIKbM2xydv0m/1N8
-         ket00qf2gmTeEE7bWzE1YXZVkobDdMSgdYvWPquNqXD2TTrtc17MWyzNV6divnLfSW
-         vZO4ykzjn1If3//C50Oq2ML3wXwj5KxVWGVpFDEyk779qoR8mN/81OL2staDxaVPc9
-         GF3XDHSO6HUHeC3wMPLjalMKGC/hB1zBitT8yuM8iKyw/eKzVeEpiblDElgE/EP+Xr
-         Y3wCUekaqUIpMkd+ZE8RWyNPWZDa9E7Mf/KvDYFyCArFOjOqKlbcsPhi6Pk0xKje2i
-         ZoXsSZYZqSjYg==
-Received: by mail-oi1-f197.google.com with SMTP id be34-20020a05680821a200b002bd24f9a87bso6245506oib.17
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 05:05:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5vgRgsACjyf0KpwZ4x9GcJr9J4OAYwXoNUUUezQLgDc=;
-        b=4yHewR0XnlhJp3Z9F9PcBPD1p9efSu5hCzQcOVMqaxOLZ6rjX/HNA1Fd0NYyQb1Cur
-         hJ8XO/supIWaK1kIJPgOu4+yFt+P5mfM8Md5hv2YslxvunXE65mfX8Gf3M+S+01GZn/p
-         deCP1iDoPBEBdXMvJsQ5+KNcY0P1z8YSRTN3Vvd9jqN5/SSTNstM0ZUjxHz39s+MZG40
-         Hhny6PsGqg9TwGFrb/fTpbEZv+yQG2qQr95USZWbWVmq6O3e3h00BSiHo5NtXB4DPk6C
-         X48TLbVriz6g2IYhzeB3QYo1erWWwT6ErP6HF/ghmSTQdB9b/sQ1OX0RwY9SHjH6LEo+
-         iIBw==
-X-Gm-Message-State: AOAM533lP0LyjL0NGqR987YAaAsT3Bv+AS58pYKwpFqEeInF3RXFpjfr
-        n2bTVr3nCM/VjZ0tSSglW3ogZvaYAFuG256O6QyCkyznqGDUE1eVVwgINGyKqIN33/zaGMKOLfe
-        xGXILXh+UIUl7Xevf/ezXiKSyTiN031JZRBuOTfSQ1hSvbqiOrwl1pNPRhQ==
-X-Received: by 2002:a05:6808:199c:: with SMTP id bj28mr7775522oib.98.1640437528976;
-        Sat, 25 Dec 2021 05:05:28 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJywtcV8AugdqKTUuFYNwYzhOpgFEsipGaIvGTQ7BlGJn7EdZ03wzS7bG4U9zk080L/wAGwxtR5BygeeP15fWjk=
-X-Received: by 2002:a05:6808:199c:: with SMTP id bj28mr7775512oib.98.1640437528728;
- Sat, 25 Dec 2021 05:05:28 -0800 (PST)
+        by ixit.cz (Postfix) with ESMTPSA id C3B992243C;
+        Sat, 25 Dec 2021 14:13:58 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1640438039;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VJWlRuPzJOqcT5asA00arhApjIIpC9euESZj1pbjNmg=;
+        b=j6q8IynU/dfVM5jqpvpk9c2ce6igFKf1aJ2ba1r+VCIsoIe+9wsb7eMHJUt6HvDEtA4Z8o
+        XQ4OzZR1Qt/e5Ji7+FCn/flSA2EXBJhzTh5ancFyR6bzOdYxYnA0AkSvZj0q0kM7fX+Ezk
+        dKWKaMwLFGMnRNhlToUYYIsoB/mk2aI=
+From:   David Heidelberg <david@ixit.cz>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: dts: apq8064: adjust dsi node name to match dt-schema
+Date:   Sat, 25 Dec 2021 14:13:56 +0100
+Message-Id: <20211225131357.13751-1-david@ixit.cz>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20211224145903.368999-1-kai.heng.feng@canonical.com> <CAHp75Vd3RhVUe_Yoz-fPErzYcV=+gtOVsxNTmn2_52JbSUaMaA@mail.gmail.com>
-In-Reply-To: <CAHp75Vd3RhVUe_Yoz-fPErzYcV=+gtOVsxNTmn2_52JbSUaMaA@mail.gmail.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Sat, 25 Dec 2021 21:05:17 +0800
-Message-ID: <CAAd53p7bu=+bs5c2Y1LQLC7fPLUihNX_QHw-yOh=fUKUdXWWhg@mail.gmail.com>
-Subject: Re: [PATCH] iio: humidity: hdc100x: Add ACPI HID table
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Chris Lesiak <chris.lesiak@licor.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 25, 2021 at 7:32 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
->
->
-> On Friday, December 24, 2021, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
->>
->> x86 boards may use ACPI HID "HDC1010" to for hdc100x device.
->>
->> So add an ACPI match table for that accordingly.
->
->
-> No. We do not add abusing IDs blindly.
-> Why this is in use? Is the creative creator of that informed that is an ACPI spec abuse?
+Adjust node naming to match requirements from dt-schema.
+Also add only and default required PHY name "dsi" to the node.
 
-Can you please elaborate more on this topic? How is this an ACPI spec abuse?
-I did suggest them to use PRP0001, but I also don't think this is an abuse.
+Fixes warnings generated by `make qcom-apq8064-asus-nexus7-flo.dtb`:
+arch/arm/boot/dts/qcom-apq8064-sony-xperia-yuga.dt.yaml: mdss_dsi@4700000: $nodename:0: 'mdss_dsi@4700000' does not match '^dsi(@.*)?$'
+	From schema: Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
 
-> What devices are those? Is it available on the market? Where is the link to DSDT?
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts  | 2 +-
+ arch/arm/boot/dts/qcom-apq8064-sony-xperia-yuga.dts | 2 +-
+ arch/arm/boot/dts/qcom-apq8064.dtsi                 | 3 ++-
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-It's not on the market yet. Do you need the full DSDT? Or just the
-part of the ACPI device?
-I'll need approve from customer to disclose these info.
+diff --git a/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts b/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
+index 03010c4818a5..e02428f5ffb1 100644
+--- a/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
++++ b/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
+@@ -244,7 +244,7 @@ mdp_dsi1_out: endpoint {
+ 			};
+ 		};
+ 
+-		dsi0: mdss_dsi@4700000 {
++		dsi0: dsi@4700000 {
+ 			status = "okay";
+ 			vdda-supply = <&pm8921_l2>;/*VDD_MIPI1 to 4*/
+ 			vdd-supply = <&pm8921_l8>;
+diff --git a/arch/arm/boot/dts/qcom-apq8064-sony-xperia-yuga.dts b/arch/arm/boot/dts/qcom-apq8064-sony-xperia-yuga.dts
+index b1b914a229ce..2f1b8f86e8d9 100644
+--- a/arch/arm/boot/dts/qcom-apq8064-sony-xperia-yuga.dts
++++ b/arch/arm/boot/dts/qcom-apq8064-sony-xperia-yuga.dts
+@@ -345,7 +345,7 @@ mdp_dsi1_out: endpoint {
+ 		};
+ 
+ 
+-		dsi0: mdss_dsi@4700000 {
++		dsi0: dsi@4700000 {
+ 			status = "okay";
+ 			vdda-supply = <&pm8921_l2>;/*VDD_MIPI1 to 4*/
+ 			//vdd-supply = <&pm8921_l8>;
+diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
+index 7e623aca224d..5ae14c564c30 100644
+--- a/arch/arm/boot/dts/qcom-apq8064.dtsi
++++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
+@@ -1239,7 +1239,7 @@ mmss_sfpb: syscon@5700000 {
+ 			reg = <0x5700000 0x70>;
+ 		};
+ 
+-		dsi0: mdss_dsi@4700000 {
++		dsi0: dsi@4700000 {
+ 			compatible = "qcom,mdss-dsi-ctrl";
+ 			label = "MDSS DSI CTRL->0";
+ 			#address-cells = <1>;
+@@ -1269,6 +1269,7 @@ dsi0: mdss_dsi@4700000 {
+ 						<&dsi0_phy 1>;
+ 			syscon-sfpb = <&mmss_sfpb>;
+ 			phys = <&dsi0_phy>;
++			phy-names = "dsi";
+ 			ports {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+-- 
+2.34.1
 
->
-> Does TI has an ID for that?
-
-I was told by customer this is approved by TI.
-
->
-> NAK until all above is answered in the commit message and all parties are informed.
-
-OK, I hope this can be resolved.
-
-Kai-Heng
-
->
->
->>
->> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->> ---
->>  drivers/iio/humidity/hdc100x.c | 8 ++++++++
->>  1 file changed, 8 insertions(+)
->>
->> diff --git a/drivers/iio/humidity/hdc100x.c b/drivers/iio/humidity/hdc100x.c
->> index 9e0fce917ce4c..ad1dfac543c52 100644
->> --- a/drivers/iio/humidity/hdc100x.c
->> +++ b/drivers/iio/humidity/hdc100x.c
->> @@ -417,10 +417,18 @@ static const struct of_device_id hdc100x_dt_ids[] = {
->>  };
->>  MODULE_DEVICE_TABLE(of, hdc100x_dt_ids);
->>
->> +static const struct acpi_device_id hdc100x_acpi_match[] = {
->> +       {"HDC1010"},
->> +       { },
->
->
-> No comma.
->
->>
->> +};
->> +
->> +MODULE_DEVICE_TABLE(acpi, hdc100x_acpi_match);
->> +
->>  static struct i2c_driver hdc100x_driver = {
->>         .driver = {
->>                 .name   = "hdc100x",
->>                 .of_match_table = hdc100x_dt_ids,
->> +               .acpi_match_table = ACPI_PTR(hdc100x_acpi_match),
->
->
-> Use of ACPI_PTR() is wrong here.
->
->>
->>         },
->>         .probe = hdc100x_probe,
->>         .id_table = hdc100x_id,
->> --
->> 2.33.1
->>
->
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->

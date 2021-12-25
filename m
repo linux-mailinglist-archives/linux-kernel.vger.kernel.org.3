@@ -2,108 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED92447F413
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 18:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A93EC47F414
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 18:29:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232496AbhLYR2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 12:28:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbhLYR2L (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 12:28:11 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C5DC061401
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 09:28:11 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id w184so12043849ybg.5
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 09:28:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=A1qLIvrTw1D3bCRhZw96HarlOs/PMrWHeiq9DapCt1g=;
-        b=gMLEIUqC4QRi022j7haW7SrzvaQO4ZMj1ZGrzrhCs/kff6dIgNdULKtYhLdPhV+kTR
-         Q/3aR0rzUqVRtwNOUv8E4sycTy9JPH6OP2UL3gW0BoGPv/5Nc9yuq+iNwlR17I1YrQVP
-         FLT8ueQp6rNKQU/+PWafW8eX1uJZ7AOTxkkKUEM0Q8HE7AQ757qzcAgVrigpdDktkFJ2
-         UuH7E/D0ombQqwnkEP3AUhqP8wo8qS8R08mRSSo+7+fLkl3JjM33+rYc4cgxcYGDQSQx
-         byM3mbzwFrbeWuVoEQK4eZq8OIzUt2NhuBjuDN1wqeZee71PLsw2q0nwjZ2mZItRj4Hg
-         49AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=A1qLIvrTw1D3bCRhZw96HarlOs/PMrWHeiq9DapCt1g=;
-        b=sD5b0NRWf4GvxTBoHZ1BRJeGlXRJcxxSd32MGrV6+UsUmOgk1LwkTqJNjHluGRtZGE
-         E7Hn0dfKUAyrzwt+34eDaakxEnXFP9wdQNSIZ9JZMzuZMuMEh/j5C60/4zz8SCQFcmKb
-         yYLhpkAfLz+6M1dsBOgPZgWN2LHUAa72/J1BblWhpgCcAsXGpS1q2A9MZ1cH/HAfw3tI
-         b2nXjwInuX9KA/2/vZ8PJnTwB7bGgXubU/hlsV3Fq6oaWctXY/IW/TGrEJ/6hn2NHl+O
-         5svgy7ZDRgl/bCh2E1EFGsSByLM05sysgEgctCWhmmAjr2Is+CS8HjQI5Jftoq+5Y+g8
-         v9qQ==
-X-Gm-Message-State: AOAM530Nc1nZrf7dR6antXM8PjwDqitxVAeZeq0cLwJG4s13fDAcmyUv
-        cjNFWQVRkkWFArcp6LAkOPT8eIWFI+awsDBKikg=
-X-Google-Smtp-Source: ABdhPJwoZ5G9IkzDTs3gx3/1x2Wuq5TGB7Wk0aVKL/Dy+X/l8kQ9FDmC1CmNb3okTwb4L6iiDRPAAEFeIScT/AKX9pw=
-X-Received: by 2002:a25:dc4d:: with SMTP id y74mr14147237ybe.422.1640453290693;
- Sat, 25 Dec 2021 09:28:10 -0800 (PST)
+        id S232507AbhLYR3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 12:29:46 -0500
+Received: from mga07.intel.com ([134.134.136.100]:12521 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229488AbhLYR3p (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 25 Dec 2021 12:29:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640453385; x=1671989385;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RXnKKps3s7gdA3XpCWp5O615YkZeZisBOJcqDEMda3k=;
+  b=F7fiR/gNNb0A0cTsV9VE1uHvQmdhE0sZuZHL6WoWoGaZMJ1Sx6B9hu5f
+   ilci+E9zwgptlXwcFGmpUlRZG6IlFGopbJfGLg1H+5SW5V8QR7eBAki8S
+   8WI1CcJKi0DAS7oXzoUujUXCwWutc++wBSU8sWTJ6s+f6J1GJdoCaSlkR
+   W06W+SaGPFpwobXJMjQ+oWTjJQfuZcsm8mPj2e+2BtdPmKOwGSpDQVkad
+   p0srA1rdP7JAU1wL0SA1NMnfOXH7Jr9Wb7JNX9ftWixJfWVgRUsGumT1v
+   67JeSEUK0wMYUwbSCtzoXdd9gBUxDRyxYCOuRpTTkDJkwECMby/4ImGnB
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10208"; a="304425144"
+X-IronPort-AV: E=Sophos;i="5.88,235,1635231600"; 
+   d="scan'208";a="304425144"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2021 09:29:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,235,1635231600"; 
+   d="scan'208";a="469322545"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 25 Dec 2021 09:29:43 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n1ArX-0004Ur-0w; Sat, 25 Dec 2021 17:29:43 +0000
+Date:   Sun, 26 Dec 2021 01:29:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: drivers/media/common/saa7146/saa7146_hlp.c:648:5: warning: stack
+ frame size (1072) exceeds limit (1024) in 'saa7146_enable_overlay'
+Message-ID: <202112260105.aWgXZDC6-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211215234946.6494-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAHp75VfGwQ7G2b39GO4tN=sxQoiahO2uudy25ALxEkrNcP9eVw@mail.gmail.com>
-In-Reply-To: <CAHp75VfGwQ7G2b39GO4tN=sxQoiahO2uudy25ALxEkrNcP9eVw@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Sat, 25 Dec 2021 17:27:45 +0000
-Message-ID: <CA+V-a8t1myOt0rhJExem_T2tJUM3PLL9KuXn0=_LtucJPHLkbA@mail.gmail.com>
-Subject: Re: [PATCH] irqchip/renesas-irqc: Use platform_get_irq_optional() to
- get the interrupt
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b927dfc67d05a72167ab980c375ed98b2ee9c2c6
+commit: 8341dcfbd8dda98a3b2836a421016f7d88e35b1c riscv: Enable Undefined Behavior Sanitizer UBSAN
+date:   4 months ago
+config: riscv-randconfig-c006-20211225 (https://download.01.org/0day-ci/archive/20211226/202112260105.aWgXZDC6-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project a9e8b1ee7fd44b53c555a7823ae8fd1a8209c520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8341dcfbd8dda98a3b2836a421016f7d88e35b1c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8341dcfbd8dda98a3b2836a421016f7d88e35b1c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/media/common/saa7146/
 
-Thank you for the review.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Sat, Dec 25, 2021 at 4:46 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Thu, Dec 16, 2021 at 9:52 AM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> >
-> > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> > allocation of IRQ resources in DT core code, this causes an issue
-> > when using hierarchical interrupt domains using "interrupts" property
-> > in the node as this bypassed the hierarchical setup and messed up the
-> > irq chaining.
-> >
-> > In preparation for removal of static setup of IRQ resource from DT core
-> > code use platform_get_irq_optional().
->
->
-> > +               ret = platform_get_irq_optional(pdev, k);
-> > +               if (ret == -EPROBE_DEFER)
-> > +                       goto err_runtime_pm_disable;
-> > +               if (ret < 0)
-> >                         break;
->
-> The best approach is
->
-> ret = platform_get_irq_optional(...);
-> if (ret < 0 && ret != -ENXIO)
->   return ret;
-> if (ret > 0)
->   ...we got it...
->
-> It will allow the future API fix of platform_get_irq_optional() to be
-> really optional.
->
-Later patch [0] (merged into -next) does check for -ENXIO first.
+All warnings (new ones prefixed by >>):
 
-[0] https://lore.kernel.org/lkml/20211216182121.5323-1-prabhakar.mahadev-lad.rj@bp.renesas.com/t/
+>> drivers/media/common/saa7146/saa7146_hlp.c:648:5: warning: stack frame size (1072) exceeds limit (1024) in 'saa7146_enable_overlay' [-Wframe-larger-than]
+   int saa7146_enable_overlay(struct saa7146_fh *fh)
+       ^
+   1 warning generated.
 
-Cheers,
-Prabhakar
+
+vim +/saa7146_enable_overlay +648 drivers/media/common/saa7146/saa7146_hlp.c
+
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  647  
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16 @648  int saa7146_enable_overlay(struct saa7146_fh *fh)
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  649  {
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  650  	struct saa7146_dev *dev = fh->dev;
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  651  	struct saa7146_vv *vv = dev->vv_data;
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  652  
+5da545ad08a3c6 drivers/media/common/saa7146_hlp.c Hans Verkuil   2012-05-01  653  	saa7146_set_window(dev, vv->ov.win.w.width, vv->ov.win.w.height, vv->ov.win.field);
+5da545ad08a3c6 drivers/media/common/saa7146_hlp.c Hans Verkuil   2012-05-01  654  	saa7146_set_position(dev, vv->ov.win.w.left, vv->ov.win.w.top, vv->ov.win.w.height, vv->ov.win.field, vv->ov_fmt->pixelformat);
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  655  	saa7146_set_output_format(dev, vv->ov_fmt->trans);
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  656  	saa7146_set_clipping_rect(fh);
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  657  
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  658  	/* enable video dma1 */
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  659  	saa7146_write(dev, MC1, (MASK_06 | MASK_22));
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  660  	return 0;
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  661  }
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  662  
+
+:::::: The code at line 648 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

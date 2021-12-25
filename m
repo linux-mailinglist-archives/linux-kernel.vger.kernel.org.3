@@ -2,76 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D0747F192
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 01:35:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E262647F196
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 01:58:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231742AbhLYAfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 19:35:07 -0500
-Received: from ixit.cz ([94.230.151.217]:50420 "EHLO ixit.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229549AbhLYAfG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 19:35:06 -0500
-Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 2A9892243C;
-        Sat, 25 Dec 2021 01:35:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1640392504;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=QmNKqV7f0D0TBzS3OpgeqiKYRzzQwlf0aCQ6OPL4pB8=;
-        b=OAlQytCGvKQ7CvyM9+Gus1uOCGb+rShzpBa0Yw6qXNvuS5x7slOl8yhtqUqeGmpRugeGPE
-        Yb4YRmr/pgvMWZ248vRnA3AOtqM8budCuFWM5TVTJzu2H2kJgwWkRXgDXSmduBmAiFcfxV
-        IEIo3QygU3J5cYWR/WRsHw/vZrlsKks=
-From:   David Heidelberg <david@ixit.cz>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: apq8064: make pci regs property dt-schema compliant
-Date:   Sat, 25 Dec 2021 01:35:02 +0100
-Message-Id: <20211225003502.115502-1-david@ixit.cz>
-X-Mailer: git-send-email 2.34.1
+        id S231528AbhLYA5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 19:57:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229549AbhLYA5C (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 24 Dec 2021 19:57:02 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA955C061401;
+        Fri, 24 Dec 2021 16:57:01 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id mj19so8706601pjb.3;
+        Fri, 24 Dec 2021 16:57:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kuXYWh4++SJmPwpnU9xEwsXfzzE1IjvMK2Lt9SAVUYw=;
+        b=Veanz8KHkiJeCda93YvcURxjzL7nz9RQtY7qiI+Nbr785i2CWj6KKdVywHvp77jPTs
+         2wS3HHloHFfgIRwRRrSGQFVLRB8n5aOtgmWVGFZbW96pXi85bSOp0SI/705SQa5UnA7Q
+         vsCV6q3d2Z9KuU2Iz7kvIZ54P0xtMtLVRXWl6H+VcoWAVFyoyBl/PiZxL/AOlsCXybq5
+         yC6Z4qiBfEopCweEWJ6V+Up7tFLoDs3bhKC9l+kFY9OXIEBKOFlN5qfbCP5IROnzTR59
+         FSzLDarLtwyTK31Kb8DW0HgFt0TpGLtAWMwfN6zwFt+2fYr9bpdz6Rln14Nfyg6vavve
+         gQrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kuXYWh4++SJmPwpnU9xEwsXfzzE1IjvMK2Lt9SAVUYw=;
+        b=A3evWO820BAcG7u6cw1Sm361btkAE+pdmKvBm4jMNATPSVi7ApAdD895+RNZtCvFdN
+         MTYYOf7PB08jZRhwKPzxiic/Lj7dTqE/AWe3Gjb7+gx8/vgQKgaGYz36c4Tacsn2BX/S
+         jj7KjFYecVY2e8poESqtSA6shN/n1qKFxOYx3a9djJFWrJ30Ys8/sB7rJdeek+DjBjWI
+         Hvf2MWcmEhaL+e5FXRcTFJpqF/oXBE91Q4WF+s7PwOHP3jAo9RiQa40b3GFA5u+VmfCk
+         S/wbIzX12h9CMlPRW6geiwnjpzAaJFflDo6lbkxk2Lug/OOr6C3Sr0/P/DxDuTGBLXrR
+         fX0A==
+X-Gm-Message-State: AOAM533b7D8HlGxuAEdlz8LGE99QCHIOKfOFm+D6T3XdHn6QA5dhYAJb
+        vs7OJSsy1iS3vIfnVyo/84US4kSf4ew=
+X-Google-Smtp-Source: ABdhPJz4rPnr27ObZgryYPo9ij4abeMzrqyQnizEHX71SzONTel03n/77R8ayiQxRbCWiwsv256wmw==
+X-Received: by 2002:a17:90a:5992:: with SMTP id l18mr10636078pji.160.1640393821293;
+        Fri, 24 Dec 2021 16:57:01 -0800 (PST)
+Received: from masabert ([202.12.244.3])
+        by smtp.gmail.com with ESMTPSA id v4sm9445350pjk.38.2021.12.24.16.57.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Dec 2021 16:57:00 -0800 (PST)
+Received: by masabert (Postfix, from userid 1000)
+        id A159F2360ECB; Sat, 25 Dec 2021 09:56:58 +0900 (JST)
+From:   Masanari Iida <standby24x7@gmail.com>
+To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, linux-kernel@vger.kernel.org,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Masanari Iida <standby24x7@gmail.com>
+Subject: [PATCH] perf bpf: Fix a typo in bpf_counter_cgroup.c
+Date:   Sat, 25 Dec 2021 09:55:58 +0900
+Message-Id: <20211225005558.503935-1-standby24x7@gmail.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correctly format register pairs.
+This patch fixes a spelling typo in error message.
 
-Fixes warning generated by `make qcom-apq8064-asus-nexus7-flo.dtb` as:
-arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dt.yaml: soc: pci@1b500000:reg:0: [458227712, 4096, 458235904, 128, 459276288, 256, 267386880, 1048576] is too long
-
-Signed-off-by: David Heidelberg <david@ixit.cz>
+Signed-off-by: Masanari Iida <standby24x7@gmail.com>
 ---
- arch/arm/boot/dts/qcom-apq8064.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/perf/util/bpf_counter_cgroup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
-index 3d5d9ffb66af..4f65a035dbb9 100644
---- a/arch/arm/boot/dts/qcom-apq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
-@@ -1367,10 +1367,10 @@ gfx3d1: iommu@7d00000 {
- 
- 		pcie: pci@1b500000 {
- 			compatible = "qcom,pcie-apq8064", "snps,dw-pcie";
--			reg = <0x1b500000 0x1000
--			       0x1b502000 0x80
--			       0x1b600000 0x100
--			       0x0ff00000 0x100000>;
-+			reg = <0x1b500000 0x1000>,
-+			      <0x1b502000 0x80>,
-+			      <0x1b600000 0x100>,
-+			      <0x0ff00000 0x100000>;
- 			reg-names = "dbi", "elbi", "parf", "config";
- 			device_type = "pci";
- 			linux,pci-domain = <0>;
+diff --git a/tools/perf/util/bpf_counter_cgroup.c b/tools/perf/util/bpf_counter_cgroup.c
+index cbc6c2bca488..fea5f2ca03f6 100644
+--- a/tools/perf/util/bpf_counter_cgroup.c
++++ b/tools/perf/util/bpf_counter_cgroup.c
+@@ -266,7 +266,7 @@ static int bperf_cgrp__read(struct evsel *evsel)
+ 		idx = evsel->core.idx;
+ 		err = bpf_map_lookup_elem(reading_map_fd, &idx, values);
+ 		if (err) {
+-			pr_err("bpf map lookup falied: idx=%u, event=%s, cgrp=%s\n",
++			pr_err("bpf map lookup failed: idx=%u, event=%s, cgrp=%s\n",
+ 			       idx, evsel__name(evsel), evsel->cgrp->name);
+ 			goto out;
+ 		}
 -- 
-2.34.1
+2.25.0
 

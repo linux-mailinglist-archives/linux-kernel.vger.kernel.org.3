@@ -2,138 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9CF47F3CE
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 17:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98ECD47F3D2
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 17:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbhLYQTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 11:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45740 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbhLYQTy (ORCPT
+        id S232262AbhLYQ0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 11:26:35 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:18126 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229987AbhLYQ0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 11:19:54 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04683C061401;
-        Sat, 25 Dec 2021 08:19:53 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id m21so45480349edc.0;
-        Sat, 25 Dec 2021 08:19:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UsdPYpm1DtVrhyxxHtm/LRi0HP6GcDMlcCiYeTd9gAY=;
-        b=DBuPiQjuMuhPNfWWQy6bNRFOKdcwLTJbYbtu/VPNqL3NITwnLHm8oXZzVoJtbbVLt6
-         gpYl5Vtji8Iht7Py1LIjWZqa9dIDF9hYVFFmqQ6qSmO0Id8rORquYHO/TzWmFHKTFemr
-         aEDWcXGKPWv4m91k6JnPHImDeQuBFmVPv0JF42/9QZ+8Hnpsh+V14gl1YbGGF0R0I3lc
-         HvP1QwBGMmhhGzzAIoXhPMRJe8B6lpR0P6Fw0VtF/iy2GIPmVVGu8lHkoDg1YHpdHIHl
-         +kcm5hYi/PXeXaKAhBfdonoTLABlwFqY/AL2AcYMkXzBIqM6ygL31I50+Jj1cweN63jS
-         myMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UsdPYpm1DtVrhyxxHtm/LRi0HP6GcDMlcCiYeTd9gAY=;
-        b=yNu5yQRG1F70Ig/0zckGv62IV1y9fTmSwFWpHFbIkpl3oMGva8DKc2bAQ4cU5tkI4Q
-         r+zW3alUvwMYQ0/kFZHSCnhvsDYf8Azh+/Hefbwx1xqGVid1ua7EcB/nR9rARBFgLhdZ
-         blHAr+pA2Yel3iBzhYv8dzf8/H/fFZ/N5oSxazB8OTm7dWd9oQF4OFcJQnQLL8gDeG4W
-         Zn/WD9nlyNVQ5V05n3HgeGvU/QuMfiSXT+4DLarCFXR9y8vvNAoCbhMD5OTM7XrzMEg5
-         uHsAS8r1A1S3zErZXuCz+GZaKuFHD+DT8zDwA249qbm2cSOIofxQywVqutvrtSQeq+Ws
-         12zg==
-X-Gm-Message-State: AOAM53004N4LA1SMtCOJQdmgi1h440GWN21J9gqLKTIv0MybifHcpOpF
-        3Gm1vWwXQOZXv8FChObkCGmpPzfNHZl9cxlqta8=
-X-Google-Smtp-Source: ABdhPJxGyNpikOCL5/GEECxckYkRk1Ur/E/IGIyu2LWJJKZsC3jsfXtHUs+THG9Fy/XdQiG4nntekHnYWpiwsFhqzBg=
-X-Received: by 2002:a05:6402:4301:: with SMTP id m1mr9059887edc.125.1640449192335;
- Sat, 25 Dec 2021 08:19:52 -0800 (PST)
+        Sat, 25 Dec 2021 11:26:34 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BPFbYVI007744;
+        Sat, 25 Dec 2021 16:25:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=VMq+orNvVrYzmkq8guGGYpWmBSvGM4QTihzK/n+8Nws=;
+ b=bu6sJrVd6ld2DWxDDjHBvx0dsuDz1uZdLP6LejUVknyiOidJHvtW2IlUTCiGAm239iBb
+ bbPyIjvuyHoO5N7p0Y9vbm7pNX/CPZ50qo1BUhGJwnMfmCt0gkRxePcAv6wUpq1PLQYh
+ 6U5c2JNv+QOtJFwUhNE+3ee5Xt3jDP1SYsbnKNBjHZPPsOX84FsFTUlhlK1H/Cf1j6jj
+ XqQI7ClUiwMObh3Cfchv0nguWTUT6E11d124eSOlJ6UviIRCLQdx5HrUW53U41n1OKRj
+ WQQ5KeddfveRCRdrqs0dGaOF89dnVqgxAGEezFatPdg4alK15JvkANGyFQtEAcSAqJSz dQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d64ugh4vm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 25 Dec 2021 16:25:54 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BPGPf7P008499;
+        Sat, 25 Dec 2021 16:25:54 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d64ugh4va-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 25 Dec 2021 16:25:54 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BPGKU9m001117;
+        Sat, 25 Dec 2021 16:25:52 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06fra.de.ibm.com with ESMTP id 3d5tjj25jw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 25 Dec 2021 16:25:51 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BPGPniJ46924238
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 25 Dec 2021 16:25:49 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A2C0B11C04A;
+        Sat, 25 Dec 2021 16:25:49 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DA26211C04C;
+        Sat, 25 Dec 2021 16:25:48 +0000 (GMT)
+Received: from osiris (unknown [9.145.52.227])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Sat, 25 Dec 2021 16:25:48 +0000 (GMT)
+Date:   Sat, 25 Dec 2021 17:25:47 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     guoren@kernel.org
+Cc:     will@kernel.org, tglx@linutronix.de, benh@kernel.crashing.org,
+        arnd@arndb.de, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, christophe.leroy@csgroup.eu,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.or,
+        linuxppc-dev@lists.ozlabs.org, inux-parisc@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V2 5/8] sched: s390: Remove unused TASK_SIZE_OF
+Message-ID: <YcdGC4ZNejSgZgRG@osiris>
+References: <20211225045430.2868608-1-guoren@kernel.org>
+ <20211225045430.2868608-6-guoren@kernel.org>
 MIME-Version: 1.0
-References: <20211224145903.368999-1-kai.heng.feng@canonical.com>
- <CAHp75Vd3RhVUe_Yoz-fPErzYcV=+gtOVsxNTmn2_52JbSUaMaA@mail.gmail.com> <CAAd53p7bu=+bs5c2Y1LQLC7fPLUihNX_QHw-yOh=fUKUdXWWhg@mail.gmail.com>
-In-Reply-To: <CAAd53p7bu=+bs5c2Y1LQLC7fPLUihNX_QHw-yOh=fUKUdXWWhg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 25 Dec 2021 18:19:16 +0200
-Message-ID: <CAHp75VeVFcaJJeacDCMBEaAVNXUgEF_oaHWXUpHobAYX4EmBuQ@mail.gmail.com>
-Subject: Re: [PATCH] iio: humidity: hdc100x: Add ACPI HID table
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Chris Lesiak <chris.lesiak@licor.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211225045430.2868608-6-guoren@kernel.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -atRMtwxqSfN1mZI4uRDUeADm09Mlt3_
+X-Proofpoint-ORIG-GUID: nmg8Ty_J-4NM8K4-4F2UN7I-J9MfO6Hp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-25_03,2021-12-24_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
+ priorityscore=1501 malwarescore=0 mlxscore=0 bulkscore=0 impostorscore=0
+ suspectscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112250080
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 25, 2021 at 3:05 PM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
-> On Sat, Dec 25, 2021 at 7:32 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Friday, December 24, 2021, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
-> >>
-> >> x86 boards may use ACPI HID "HDC1010" to for hdc100x device.
-> >>
-> >> So add an ACPI match table for that accordingly.
-> >
-> > No. We do not add abusing IDs blindly.
-> > Why this is in use? Is the creative creator of that informed that is an ACPI spec abuse?
->
-> Can you please elaborate more on this topic? How is this an ACPI spec abuse?
+On Sat, Dec 25, 2021 at 12:54:27PM +0800, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> This macro isn't used in Linux sched, now. Delete in
+> include/linux/sched.h and arch's include/asm.
+> 
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/s390/include/asm/processor.h | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 
-Yes, https://uefi.org/PNP_ACPI_Registry has links to PNP and ACPI ID registries.
-Note, the main differences between them are:
-- PNP uses 3-letter vendor ID, ACPI uses 4-letter
-- PNP is in maintenance mode and shouldn't be expanded
+I could pick this up for s390, however sender (From: field) of this patch
+series does not match From: and Signed-off-by: fields above.
 
-So, Since above should formally satisfy the PNP ID, the HDC is not a
-TI vendor ID in the PNP ID registry.
-
-The section in the spec that refers to it:
-https://uefi.org/specs/ACPI/6.4/06_Device_Configuration/Device_Configuration.html#hid-hardware-id
-
-> I did suggest them to use PRP0001, but I also don't think this is an abuse.
-
-The PRP0001 is not an abuse per se, but rather it is highly _not_
-recommended for a production use.
-
-> > What devices are those? Is it available on the market? Where is the link to DSDT?
->
-> It's not on the market yet.
-
-Thank God!
-
-> Do you need the full DSDT? Or just the
-> part of the ACPI device?
-> I'll need approve from customer to disclose these info.
-
-This is a requirement only for the devices on the market when nobody
-prevented the disaster from becoming... Since it's not yet, no need
-for it.
-
-> > Does TI has an ID for that?
->
-> I was told by customer this is approved by TI.
-
-How can TI approve that for "HARDCOM ELEKTRONIK & DATATEKNIK"? Is
-there evidence that this company has been bought by TI or TI got full
-rights on their IPs?
-
-ACPI: TEXAS INSTRUMENTS TXNW
-PNP: TEXAS INSTURMENTS TXN
-(seems a typo in the company's name, but it should be notified to the
-appropriate channels)
-
-So, the ID should start with one of the above, and not HDC as far as I
-understood.
-
-PNP: TEXAS MICROSYSTEM TMI
-This one probably is not related, but I'm not informed.
-
-I would like you (and your customer) to point to my blog post on the
-topic and it explains how the things should be done with the ACPI IDs:
-https://andy-shev.dreamwidth.org/151340.html
-
-Hope this will help and be resolved soon.
-
--- 
-With Best Regards,
-Andy Shevchenko
+In general I don't pick up such patches, since this doesn't match the
+"Developer's Certificate of Origin" requirements.
+-> Documentation/process/submitting-patches.rst

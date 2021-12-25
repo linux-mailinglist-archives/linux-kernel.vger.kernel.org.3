@@ -2,94 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B17D47F46A
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 21:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5BB47F471
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 21:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbhLYUou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 15:44:50 -0500
-Received: from mga02.intel.com ([134.134.136.20]:39892 "EHLO mga02.intel.com"
+        id S232831AbhLYUyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 15:54:14 -0500
+Received: from ixit.cz ([94.230.151.217]:56204 "EHLO ixit.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229532AbhLYUot (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 15:44:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640465089; x=1672001089;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Uhv/HjV5aHoLgons/I7STq0fjEebXVNFzh8ACXoie7U=;
-  b=VHtPp61h9EEE1LTFzZ5xCn6bezQfKYEbiEwyX9GWo9lGyIXwx5oq6mVF
-   fqjKEb9CclCDWaOgtg+631u5kEIo191vi6r2yN7+whwlG0enf1E2F/Yvs
-   PYIFF0TRkBBJCuCpt+AkFFkc87pTW+MQJa8Lv5FjS/HyiLN1dQK62dPSG
-   kx48XGjzkf0cSv1b7FUUJ96loh+8dUmKaBQD1KrRy7bUCYKFnyRMwupyt
-   t14dvjQkn+cpbI8cQwIvLhgNNseXeWcNtFI4bZpGoNBG5kYlmQRWBAHlE
-   xIPq+R/A8n7MHUekMq3j0rC8Q4/XSuDlfwTsYqZeqBtr6UOSpy0Ye5L/0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10208"; a="228369366"
-X-IronPort-AV: E=Sophos;i="5.88,236,1635231600"; 
-   d="scan'208";a="228369366"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2021 12:44:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,236,1635231600"; 
-   d="scan'208";a="509437400"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 25 Dec 2021 12:44:48 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n1DuJ-0004ft-F1; Sat, 25 Dec 2021 20:44:47 +0000
-Date:   Sun, 26 Dec 2021 04:43:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [l1k:rs485_fixes 2/5] drivers/tty/serial/8250/8250_alpha.c:6:6:
- warning: no previous prototype for 'alpha_jensen_machine'
-Message-ID: <202112260407.JHmHBph5-lkp@intel.com>
+        id S229796AbhLYUyM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 25 Dec 2021 15:54:12 -0500
+Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id 500D42243C;
+        Sat, 25 Dec 2021 21:54:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1640465649;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=150UHBr6HzAaBdUskEOm6GoTKRc5CVonpyHjfrtUJVo=;
+        b=GpsEd06seJGr8ThNPxco1TE8cGwqqioyusv18iGfQrQza222peA8uCV4vxR39gC96V65aP
+        hrP/8AWPcittQo8hvrujChvReDls5fMQ6nFst2HgytZpC0xPp9yjwz+bN2nKHFbwkho6wR
+        Q91dZMq3xSyWFzbjsRdaqmzgbWkeu3Y=
+From:   David Heidelberg <david@ixit.cz>
+To:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krishna Manikandan <mkrishn@codeaurora.org>
+Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] Discussion: dt-bindings: display: msm: dsi-controller-main: fix the binding
+Date:   Sat, 25 Dec 2021 21:53:51 +0100
+Message-Id: <20211225205352.76827-1-david@ixit.cz>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/l1k/linux rs485_fixes
-head:   a62f8fcb06b22e357034ec7dc1835d5e54f62aee
-commit: ede7cb8cc196acdc42e495e9805291b8d5190468 [2/5] serial: 8250: Move Alpha-specific quirk out of the core
-config: alpha-defconfig (https://download.01.org/0day-ci/archive/20211226/202112260407.JHmHBph5-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/l1k/linux/commit/ede7cb8cc196acdc42e495e9805291b8d5190468
-        git remote add l1k https://github.com/l1k/linux
-        git fetch --no-tags l1k rs485_fixes
-        git checkout ede7cb8cc196acdc42e495e9805291b8d5190468
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/tty/serial/8250/
+This binding is not much validating the old DSI v2.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Currently we don't differentiate old v2 from new versions,
+so we need to figure out how to validate them.
 
-All warnings (new ones prefixed by >>):
+I propose specific compatible depending on mdss version, but I would be
+glad, if someone with deeper knowledge proposed the names.
 
->> drivers/tty/serial/8250/8250_alpha.c:6:6: warning: no previous prototype for 'alpha_jensen_machine' [-Wmissing-prototypes]
-       6 | bool alpha_jensen_machine(void)
-         |      ^~~~~~~~~~~~~~~~~~~~
->> drivers/tty/serial/8250/8250_alpha.c:11:6: warning: no previous prototype for 'alpha_jensen_set_mctrl' [-Wmissing-prototypes]
-      11 | void alpha_jensen_set_mctrl(struct uart_port *port, unsigned int mctrl)
-         |      ^~~~~~~~~~~~~~~~~~~~~~
+I'm willing to implement it then and back from autodetection.
 
-
-vim +/alpha_jensen_machine +6 drivers/tty/serial/8250/8250_alpha.c
-
-     5	
-   > 6	bool alpha_jensen_machine(void)
-     7	{
-     8		return !strcmp(alpha_mv.vector_name, "Jensen");
-     9	}
-    10	
-  > 11	void alpha_jensen_set_mctrl(struct uart_port *port, unsigned int mctrl)
-
+David
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ .../display/msm/dsi-controller-main.yaml      | 53 ++++++++++++-------
+ 1 file changed, 35 insertions(+), 18 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+index 35426fde8610..6688ddcd7526 100644
+--- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+@@ -27,22 +27,34 @@ properties:
+     maxItems: 1
+ 
+   clocks:
+-    items:
+-      - description: Display byte clock
+-      - description: Display byte interface clock
+-      - description: Display pixel clock
+-      - description: Display escape clock
+-      - description: Display AHB clock
+-      - description: Display AXI clock
++    oneOf:
++      - minItems: 7 # APQ8064
++        maxItems: 7
++      - items:
++          - description: Display byte clock
++          - description: Display byte interface clock
++          - description: Display pixel clock
++          - description: Display escape clock
++          - description: Display AHB clock
++          - description: Display AXI clock
+ 
+   clock-names:
+-    items:
+-      - const: byte
+-      - const: byte_intf
+-      - const: pixel
+-      - const: core
+-      - const: iface
+-      - const: bus
++    oneOf:
++      - items: # DSI v2 (APQ8064)
++          - const: iface # from dsi_v2_bus_clk_names
++          - const: bus
++          - const: core_mmss
++          - const: src # from dsi_clk_init_v2
++          - const: byte # from dsi_clk_init
++          - const: pixel
++          - const: core
++      - items:
++          - const: byte
++          - const: byte_intf
++          - const: pixel
++          - const: core
++          - const: iface
++          - const: bus
+ 
+   phys:
+     maxItems: 1
+@@ -66,15 +78,17 @@ properties:
+ 
+   assigned-clocks:
+     minItems: 2
+-    maxItems: 2
++    maxItems: 4
+     description: |
+       Parents of "byte" and "pixel" for the given platform.
++      For older v2, "byte", "esc", "src" and "pixel".
+ 
+   assigned-clock-parents:
+     minItems: 2
+-    maxItems: 2
++    maxItems: 4
+     description: |
+       The Byte clock and Pixel clock PLL outputs provided by a DSI PHY block.
++      For older v2, Byte, Escape, Source and Pixel clock PLL outputs.
+ 
+   power-domains:
+     maxItems: 1
+@@ -124,6 +138,9 @@ properties:
+       - port@0
+       - port@1
+ 
++patternProperties:
++  '^(avdd|vdd|vdda)-supply$': true # FIXME only APQ8064 supplies
++
+ required:
+   - compatible
+   - reg
+@@ -135,8 +152,8 @@ required:
+   - phy-names
+   - assigned-clocks
+   - assigned-clock-parents
+-  - power-domains
+-  - operating-points-v2
++  # - power-domains # v2 doesn't seems to need it?
++  # - operating-points-v2 # v2 doesn't have opp implemented yet
+   - ports
+ 
+ additionalProperties: false
+-- 
+2.34.1
+

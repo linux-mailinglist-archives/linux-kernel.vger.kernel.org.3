@@ -2,152 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 850F647F33D
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 13:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2F247F33F
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 13:39:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231699AbhLYMUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 07:20:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
+        id S231715AbhLYMjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 07:39:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbhLYMU3 (ORCPT
+        with ESMTP id S229556AbhLYMjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 07:20:29 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF957C061401;
-        Sat, 25 Dec 2021 04:20:28 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id w184so10424488ybg.5;
-        Sat, 25 Dec 2021 04:20:28 -0800 (PST)
+        Sat, 25 Dec 2021 07:39:32 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF66AC061401;
+        Sat, 25 Dec 2021 04:39:31 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id h21so5794710ljh.3;
+        Sat, 25 Dec 2021 04:39:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=p+43WiB59oN0B5WcFMgOGcjPd0Wu8v0DLecWvDIH/vQ=;
-        b=n3BgSX3nAAWilH9e7B/C9YVPEMDqLCmUEfnCzSmkMs69CIWikJDr2kQpCN1hTFxG7J
-         Ixy/ixvH8AuuS35qJp5sS7UnUXXDSOCRSltfwdpAUb5+KJVZEJl3isscaFMaHMemqhtZ
-         nYGqcWT1f8jLaP4TgXUyI80MJ8aTQWHYVXjOGOhHRHQ1No2pICaD2+CSV1Q/k/Ixuz4u
-         T2unxA/09w4xaMBoynKprw7Kid+pgUavqvK4StT3kcT5aWgpz6yzBAEDm9qHZ8/rg8+d
-         OG+1jxfLBYYpvKpqkQYxAK845w16nMMncmkWm+jmMmODrpctjwWaUO4Wr1l6azbkKvMv
-         8wEw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to;
+        bh=Y0EGtTyg3mP/YEUrMu8z7SNmBjPe8bhxbkpOT3BOeas=;
+        b=FAw2w5mkf4GyZVPcTl/9WFDhDByOcf0b0ENsT4B7lq6vxaPGpg5OjXmXU8NYpaMwyG
+         ScV1XumFBQBpEq0EYyhBb9w+M/2GX99Ix76ZE7m8qxGt1PI+Bbx6+bweKT1V0xttAdyQ
+         hweIUQVYqOdumiyqGG3re1liPZHNvHv6KeZ+lAxgv9PmuU5iNgeha8f5J2NZd2t4UKqk
+         1ChVkucKmN/tKs4wbmKya8DB1qNaAB2yv/wXoWD5TFB1QFEv7LTI2yi97WWDd8FDhR+t
+         cFgVwYgHcQc+HD4Yv0GxUr5GfON0iYxP7bPUfhXgureWVvLauN6L5A3RInjT3TI8EYMr
+         pbPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=p+43WiB59oN0B5WcFMgOGcjPd0Wu8v0DLecWvDIH/vQ=;
-        b=4Pc37TMClqDR/CkYDD0yp1Kc7Fu3ZzJ+6sYrKSgCJLfIb43EE3xxwrpZo21YdoKLE0
-         vuabPgN20lDb4giVPp+2K29Qe2vwAA00GrD+fOqUs2CTzRorrLpymJrG4kPKl08uZb11
-         P83lQcBjYnDPf+/V/sUv+D3c+S7AlR+6dINZzpI4rhuM+NjQmpX8a41XqOQ76y7XIb4a
-         xn+/Wto+KqSZJJZq76j7DU1VymBgt0FkU1durUWLYmkW2NqoiN0tRDl8g/LW9dyTfkfX
-         3q0s+LL1qJUvakyvNjAGseOBGZdfr+UOwi7eGdjnNSVtaH0SBdtbI+vgI/QF7le9YGH+
-         LYgQ==
-X-Gm-Message-State: AOAM532db8DRbaVk7Q7q+B2GXSQPR/pnXbTSPnghfWQy4+X3F5nEcWgy
-        qYmEVITx6Cdy+DoYk0fHQ+7+Mi+SZBwXRLof8NCN2UwxWLE=
-X-Google-Smtp-Source: ABdhPJzcdV7GXniYR0W2CUYJuOOeSN6ZhrQXe6xy0Q/hpx9II0hPyB6TdnLEJIp+vdXAGX/MSS6C6h5Djftqy5kWJFQ=
-X-Received: by 2002:a25:1004:: with SMTP id 4mr13377567ybq.669.1640434828304;
- Sat, 25 Dec 2021 04:20:28 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to;
+        bh=Y0EGtTyg3mP/YEUrMu8z7SNmBjPe8bhxbkpOT3BOeas=;
+        b=iCF8CJ+wRR/KteF+htbfdzoS5sbeGLBhUSAuj+rPEka4r97mKk/2Idne0kGqXm06NO
+         JJiPW5PhU+Rn1C4573BY7K/HLnZKnPlN03iUVTMkqfgK6mH6RgI/9JePBcMdig34RQD8
+         0jlA7ROdjijB4VIIZEDTJilaBdNGl0piUyFUJtJdVMkpSCX1toHqEfDWDemKKYf9fw7k
+         QR05O4AsAEvWbvNS0FwPhkoMIb1gicb7BNzd2mVMPOvwKganRrb9fkWlcFpo++Vuey4s
+         jZT1wgqL+gvnVScSlHWNPCHjUR7mOc4u9O9VTsAetr4Ox3kgJDQt7/KvyQoQ0NZR6v2Q
+         l8jw==
+X-Gm-Message-State: AOAM530NLEo6jNz/izcVJcMFSFMfTNHr8QbhOJVprm7pFb0IsurjONcE
+        h6XRlJ2snNOgfQiRL/2SK/k=
+X-Google-Smtp-Source: ABdhPJxgId8CbnICHenDxjk8kfBc4ZQeWE9pLZSIYCh95MrrX/786S1Z+Qljt16iduOlsX2g+w05/Q==
+X-Received: by 2002:a05:651c:b13:: with SMTP id b19mr1239595ljr.298.1640435969772;
+        Sat, 25 Dec 2021 04:39:29 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.235.97])
+        by smtp.gmail.com with ESMTPSA id c20sm1030611ljf.37.2021.12.25.04.39.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Dec 2021 04:39:28 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------QhlAo1ObBFuXZqz8o3xtSPmU"
+Message-ID: <0c5a424c-4089-9623-9276-9e9473191deb@gmail.com>
+Date:   Sat, 25 Dec 2021 15:39:27 +0300
 MIME-Version: 1.0
-References: <20211224142917.6966-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211224142917.6966-4-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAHp75VdC+JifneoYRS3yoXoAhio+TXQzca3pku7ug=A_ewWrsg@mail.gmail.com>
-In-Reply-To: <CAHp75VdC+JifneoYRS3yoXoAhio+TXQzca3pku7ug=A_ewWrsg@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Sat, 25 Dec 2021 12:20:02 +0000
-Message-ID: <CA+V-a8tzcCtnD9GDm8g+-84tKAdcPaj3Qy0s=vJmn5qMxLp=3g@mail.gmail.com>
-Subject: Re: [PATCH 03/10] serial: 8250_bcm7271: Propagate error codes from brcmuart_probe()
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [syzbot] WARNING in __i2c_transfer (2)
+Content-Language: en-US
+To:     syzbot <syzbot+e417648b303855b91d8a@syzkaller.appspotmail.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, wsa@kernel.org
+References: <000000000000b5e7f105d0d2d165@google.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <000000000000b5e7f105d0d2d165@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+This is a multi-part message in MIME format.
+--------------QhlAo1ObBFuXZqz8o3xtSPmU
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for the review.
+On 11/15/21 15:19, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    c8c109546a19 Merge tag 'zstd-for-linus-v5.16' of git://git..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=10a5bb32b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=a262045c4c15a9e0
+> dashboard link: https://syzkaller.appspot.com/bug?extid=e417648b303855b91d8a
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: i386
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+e417648b303855b91d8a@syzkaller.appspotmail.com
+> 
 
-On Sat, Dec 25, 2021 at 11:20 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
->
->
-> On Friday, December 24, 2021, Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
->>
->> In case of failures brcmuart_probe() always returned -ENODEV, this
->> isn't correct for example platform_get_irq_byname() may return
->> -EPROBE_DEFER to handle such cases propagate error codes in
->> brcmuart_probe() in case of failures.
->>
->> Fixes: 41a469482de25 ("serial: 8250: Add new 8250-core based Broadcom STB driver")
->> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->> ---
->>  drivers/tty/serial/8250/8250_bcm7271.c | 11 ++++++++---
->>  1 file changed, 8 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/tty/serial/8250/8250_bcm7271.c b/drivers/tty/serial/8250/8250_bcm7271.c
->> index 7ecfcc650d28..cc60a7874e8b 100644
->> --- a/drivers/tty/serial/8250/8250_bcm7271.c
->> +++ b/drivers/tty/serial/8250/8250_bcm7271.c
->> @@ -1074,14 +1074,18 @@ static int brcmuart_probe(struct platform_device *pdev)
->>                 priv->rx_bufs = dma_alloc_coherent(dev,
->>                                                    priv->rx_size,
->>                                                    &priv->rx_addr, GFP_KERNEL);
->> -               if (!priv->rx_bufs)
->> +               if (!priv->rx_bufs) {
->> +                       ret = -EINVAL;
->
->
->
-> For memory allocation we usually return -ENOMEM.
->
-Agreed, will fix that.
+#syz test
+git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 
-Cheers,
-Prabhakar
->>
->>                         goto err;
->> +               }
->>                 priv->tx_size = UART_XMIT_SIZE;
->>                 priv->tx_buf = dma_alloc_coherent(dev,
->>                                                   priv->tx_size,
->>                                                   &priv->tx_addr, GFP_KERNEL);
->> -               if (!priv->tx_buf)
->> +               if (!priv->tx_buf) {
->> +                       ret = -EINVAL;
->>                         goto err;
->> +               }
->>         }
->>
->>         ret = serial8250_register_8250_port(&up);
->> @@ -1095,6 +1099,7 @@ static int brcmuart_probe(struct platform_device *pdev)
->>         if (priv->dma_enabled) {
->>                 dma_irq = platform_get_irq_byname(pdev,  "dma");
->>                 if (dma_irq < 0) {
->> +                       ret = dma_irq;
->>                         dev_err(dev, "no IRQ resource info\n");
->>                         goto err1;
->>                 }
->> @@ -1114,7 +1119,7 @@ static int brcmuart_probe(struct platform_device *pdev)
->>  err:
->>         brcmuart_free_bufs(dev, priv);
->>         brcmuart_arbitration(priv, 0);
->> -       return -ENODEV;
->> +       return ret;
->>  }
->>
->>  static int brcmuart_remove(struct platform_device *pdev)
->> --
->> 2.17.1
->>
->
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+
+With regards,
+Pavel Skripkin
+--------------QhlAo1ObBFuXZqz8o3xtSPmU
+Content-Type: text/plain; charset=UTF-8; name="ph"
+Content-Disposition: attachment; filename="ph"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvaTJjL2kyYy1kZXYuYyBiL2RyaXZlcnMvaTJjL2kyYy1k
+ZXYuYwppbmRleCBiY2UwZThiYjc4NTIuLjNiNTRlZmE0YjFlYyAxMDA2NDQKLS0tIGEvZHJp
+dmVycy9pMmMvaTJjLWRldi5jCisrKyBiL2RyaXZlcnMvaTJjL2kyYy1kZXYuYwpAQCAtNTM1
+LDcgKzUzNSw3IEBAIHN0YXRpYyBsb25nIGNvbXBhdF9pMmNkZXZfaW9jdGwoc3RydWN0IGZp
+bGUgKmZpbGUsIHVuc2lnbmVkIGludCBjbWQsIHVuc2lnbmVkIGxvCiAJCQkJICAgc2l6ZW9m
+KHJkd3JfYXJnKSkpCiAJCQlyZXR1cm4gLUVGQVVMVDsKIAotCQlpZiAocmR3cl9hcmcubm1z
+Z3MgPiBJMkNfUkRXUl9JT0NUTF9NQVhfTVNHUykKKwkJaWYgKCFyZHdyX2FyZy5ubXNncyB8
+fCByZHdyX2FyZy5ubXNncyA+IEkyQ19SRFdSX0lPQ1RMX01BWF9NU0dTKQogCQkJcmV0dXJu
+IC1FSU5WQUw7CiAKIAkJcmR3cl9wYSA9IGttYWxsb2NfYXJyYXkocmR3cl9hcmcubm1zZ3Ms
+IHNpemVvZihzdHJ1Y3QgaTJjX21zZyksCg==
+--------------QhlAo1ObBFuXZqz8o3xtSPmU--
+

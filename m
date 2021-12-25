@@ -2,101 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C4047F3B3
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 17:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9CF47F3CE
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 17:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232200AbhLYQH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 11:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
+        id S232245AbhLYQTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 11:19:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232141AbhLYQH2 (ORCPT
+        with ESMTP id S229987AbhLYQTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 11:07:28 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DF1C061401;
-        Sat, 25 Dec 2021 08:07:28 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id s73so18191447oie.5;
-        Sat, 25 Dec 2021 08:07:27 -0800 (PST)
+        Sat, 25 Dec 2021 11:19:54 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04683C061401;
+        Sat, 25 Dec 2021 08:19:53 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id m21so45480349edc.0;
+        Sat, 25 Dec 2021 08:19:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OWAr+F/sFkIDhJFUa/ld0SbXsdO26UYsk+EaKlbiKfA=;
-        b=GBg0LFKpw5VRsyFNZMK4SrFgzX5teZB3rwK8OJeGKz+xNCJuAgPKCtz5pN2QjKTq2g
-         k2Wxt/OYRVR/6S/KS8RrlfJj0fKCB3QxXZFtk+ndbm7SGIMWXSieu8ojBnAsjcKr4/KI
-         +zGU8H5RSslaYRy8qO17U8hwaf5HVNMQ+VpTkJwSeteEIMwPDzPcWx+zfml79kbyLzbO
-         //vzfpnTrwOfOzHp9sXnjalJG189uvs1X46PYq34BSinoVJvYw+bCUv5sC4fSiQYTTKA
-         FrG544lYI6314TfAyAum/1Jswxu+vgJsxqWgPRHKO2uEiAnJqedC5c74sW2vNyFvBsjG
-         I3BQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UsdPYpm1DtVrhyxxHtm/LRi0HP6GcDMlcCiYeTd9gAY=;
+        b=DBuPiQjuMuhPNfWWQy6bNRFOKdcwLTJbYbtu/VPNqL3NITwnLHm8oXZzVoJtbbVLt6
+         gpYl5Vtji8Iht7Py1LIjWZqa9dIDF9hYVFFmqQ6qSmO0Id8rORquYHO/TzWmFHKTFemr
+         aEDWcXGKPWv4m91k6JnPHImDeQuBFmVPv0JF42/9QZ+8Hnpsh+V14gl1YbGGF0R0I3lc
+         HvP1QwBGMmhhGzzAIoXhPMRJe8B6lpR0P6Fw0VtF/iy2GIPmVVGu8lHkoDg1YHpdHIHl
+         +kcm5hYi/PXeXaKAhBfdonoTLABlwFqY/AL2AcYMkXzBIqM6ygL31I50+Jj1cweN63jS
+         myMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=OWAr+F/sFkIDhJFUa/ld0SbXsdO26UYsk+EaKlbiKfA=;
-        b=idxHhpH9TIJSXracx4ktQ9MMyMRM0b8MnHZv8eoJyEJRNr12LDzpwyUkgli7lM3Up+
-         SvBbymQi6sTqHDky9vgAcSKLylw1RcdAdc3ozc9k+Vj4gm4Y8cs4ExJc133iBhoB4gl7
-         Q/fTSwJPtgMQclt9vdI3rIDqIP3heO8YlXk7+kkddV+spHggTU6jlAw7H28bBuY63u9W
-         ChCpP+LmpR4ojoJxWcPxziWCy+63w3PRz9H6qDod8rmwZ5JO0r6yYpGuHxilV5OOSa7g
-         5kVS8mV74s2ZhlQBxzDVEsxg6mW42/bHjMX+IT9yjVRu994gBLt4jZualZ63MM0ldawe
-         Vjow==
-X-Gm-Message-State: AOAM533Rew+JNs+zzUronHYQzCewAyD087V/uZA2ES7sGqQUQ9YLPeTJ
-        0Zg/Ce07pic4yFeDZjeF9hTS/HvBRCY=
-X-Google-Smtp-Source: ABdhPJxSluJxEpJF8+ipkK9HmPg9F1/zbF3qYQDjrIkcVC2lnf7iBV+iVnp/JsN+9i0WvRhcabSoGw==
-X-Received: by 2002:aca:1708:: with SMTP id j8mr7737469oii.62.1640448447306;
-        Sat, 25 Dec 2021 08:07:27 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v19sm1979551ott.13.2021.12.25.08.07.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Dec 2021 08:07:26 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v5.16-rc7
-Date:   Sat, 25 Dec 2021 08:07:24 -0800
-Message-Id: <20211225160724.3120253-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.33.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UsdPYpm1DtVrhyxxHtm/LRi0HP6GcDMlcCiYeTd9gAY=;
+        b=yNu5yQRG1F70Ig/0zckGv62IV1y9fTmSwFWpHFbIkpl3oMGva8DKc2bAQ4cU5tkI4Q
+         r+zW3alUvwMYQ0/kFZHSCnhvsDYf8Azh+/Hefbwx1xqGVid1ua7EcB/nR9rARBFgLhdZ
+         blHAr+pA2Yel3iBzhYv8dzf8/H/fFZ/N5oSxazB8OTm7dWd9oQF4OFcJQnQLL8gDeG4W
+         Zn/WD9nlyNVQ5V05n3HgeGvU/QuMfiSXT+4DLarCFXR9y8vvNAoCbhMD5OTM7XrzMEg5
+         uHsAS8r1A1S3zErZXuCz+GZaKuFHD+DT8zDwA249qbm2cSOIofxQywVqutvrtSQeq+Ws
+         12zg==
+X-Gm-Message-State: AOAM53004N4LA1SMtCOJQdmgi1h440GWN21J9gqLKTIv0MybifHcpOpF
+        3Gm1vWwXQOZXv8FChObkCGmpPzfNHZl9cxlqta8=
+X-Google-Smtp-Source: ABdhPJxGyNpikOCL5/GEECxckYkRk1Ur/E/IGIyu2LWJJKZsC3jsfXtHUs+THG9Fy/XdQiG4nntekHnYWpiwsFhqzBg=
+X-Received: by 2002:a05:6402:4301:: with SMTP id m1mr9059887edc.125.1640449192335;
+ Sat, 25 Dec 2021 08:19:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211224145903.368999-1-kai.heng.feng@canonical.com>
+ <CAHp75Vd3RhVUe_Yoz-fPErzYcV=+gtOVsxNTmn2_52JbSUaMaA@mail.gmail.com> <CAAd53p7bu=+bs5c2Y1LQLC7fPLUihNX_QHw-yOh=fUKUdXWWhg@mail.gmail.com>
+In-Reply-To: <CAAd53p7bu=+bs5c2Y1LQLC7fPLUihNX_QHw-yOh=fUKUdXWWhg@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 25 Dec 2021 18:19:16 +0200
+Message-ID: <CAHp75VeVFcaJJeacDCMBEaAVNXUgEF_oaHWXUpHobAYX4EmBuQ@mail.gmail.com>
+Subject: Re: [PATCH] iio: humidity: hdc100x: Add ACPI HID table
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     "jic23@kernel.org" <jic23@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Chris Lesiak <chris.lesiak@licor.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Sat, Dec 25, 2021 at 3:05 PM Kai-Heng Feng
+<kai.heng.feng@canonical.com> wrote:
+> On Sat, Dec 25, 2021 at 7:32 PM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> > On Friday, December 24, 2021, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
+> >>
+> >> x86 boards may use ACPI HID "HDC1010" to for hdc100x device.
+> >>
+> >> So add an ACPI match table for that accordingly.
+> >
+> > No. We do not add abusing IDs blindly.
+> > Why this is in use? Is the creative creator of that informed that is an ACPI spec abuse?
+>
+> Can you please elaborate more on this topic? How is this an ACPI spec abuse?
 
-Please pull hwmon fixes for Linux v5.16-rc7 from signed tag:
+Yes, https://uefi.org/PNP_ACPI_Registry has links to PNP and ACPI ID registries.
+Note, the main differences between them are:
+- PNP uses 3-letter vendor ID, ACPI uses 4-letter
+- PNP is in maintenance mode and shouldn't be expanded
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.16-rc7
+So, Since above should formally satisfy the PNP ID, the HDC is not a
+TI vendor ID in the PNP ID registry.
 
-Thanks,
-Guenter
-------
+The section in the spec that refers to it:
+https://uefi.org/specs/ACPI/6.4/06_Device_Configuration/Device_Configuration.html#hid-hardware-id
 
-The following changes since commit 2585cf9dfaaddf00b069673f27bb3f8530e2039c:
+> I did suggest them to use PRP0001, but I also don't think this is an abuse.
 
-  Linux 5.16-rc5 (2021-12-12 14:53:01 -0800)
+The PRP0001 is not an abuse per se, but rather it is highly _not_
+recommended for a production use.
 
-are available in the Git repository at:
+> > What devices are those? Is it available on the market? Where is the link to DSDT?
+>
+> It's not on the market yet.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.16-rc7
+Thank God!
 
-for you to fetch changes up to cdc5287acad9ede121924a9c9313544b80d15842:
+> Do you need the full DSDT? Or just the
+> part of the ACPI device?
+> I'll need approve from customer to disclose these info.
 
-  hwmon: (lm90) Do not report 'busy' status bit as alarm (2021-12-12 16:22:53 -0800)
+This is a requirement only for the devices on the market when nobody
+prevented the disaster from becoming... Since it's not yet, no need
+for it.
 
-----------------------------------------------------------------
-hwmon fixes for v5.16-rc7
+> > Does TI has an ID for that?
+>
+> I was told by customer this is approved by TI.
 
-A couple of lm90 driver fixes. None of them are critical,
-but they should nevertheless be fixed.
+How can TI approve that for "HARDCOM ELEKTRONIK & DATATEKNIK"? Is
+there evidence that this company has been bought by TI or TI got full
+rights on their IPs?
 
-----------------------------------------------------------------
-Guenter Roeck (5):
-      hwmon: (lm90) Fix usage of CONFIG2 register in detect function
-      hwmon: (lm90) Prevent integer overflow/underflow in hysteresis calculations
-      hwmon: (lm90) Drop critical attribute support for MAX6654
-      hwmom: (lm90) Fix citical alarm status for MAX6680/MAX6681
-      hwmon: (lm90) Do not report 'busy' status bit as alarm
+ACPI: TEXAS INSTRUMENTS TXNW
+PNP: TEXAS INSTURMENTS TXN
+(seems a typo in the company's name, but it should be notified to the
+appropriate channels)
 
- drivers/hwmon/lm90.c | 106 ++++++++++++++++++++++++++++++---------------------
- 1 file changed, 62 insertions(+), 44 deletions(-)
+So, the ID should start with one of the above, and not HDC as far as I
+understood.
+
+PNP: TEXAS MICROSYSTEM TMI
+This one probably is not related, but I'm not informed.
+
+I would like you (and your customer) to point to my blog post on the
+topic and it explains how the things should be done with the ACPI IDs:
+https://andy-shev.dreamwidth.org/151340.html
+
+Hope this will help and be resolved soon.
+
+-- 
+With Best Regards,
+Andy Shevchenko

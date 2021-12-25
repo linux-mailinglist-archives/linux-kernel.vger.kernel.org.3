@@ -2,90 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E262647F196
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 01:58:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 156E347F198
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 02:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbhLYA5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 19:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45824 "EHLO
+        id S232009AbhLYBAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 20:00:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbhLYA5C (ORCPT
+        with ESMTP id S229549AbhLYBAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 19:57:02 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA955C061401;
-        Fri, 24 Dec 2021 16:57:01 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id mj19so8706601pjb.3;
-        Fri, 24 Dec 2021 16:57:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kuXYWh4++SJmPwpnU9xEwsXfzzE1IjvMK2Lt9SAVUYw=;
-        b=Veanz8KHkiJeCda93YvcURxjzL7nz9RQtY7qiI+Nbr785i2CWj6KKdVywHvp77jPTs
-         2wS3HHloHFfgIRwRRrSGQFVLRB8n5aOtgmWVGFZbW96pXi85bSOp0SI/705SQa5UnA7Q
-         vsCV6q3d2Z9KuU2Iz7kvIZ54P0xtMtLVRXWl6H+VcoWAVFyoyBl/PiZxL/AOlsCXybq5
-         yC6Z4qiBfEopCweEWJ6V+Up7tFLoDs3bhKC9l+kFY9OXIEBKOFlN5qfbCP5IROnzTR59
-         FSzLDarLtwyTK31Kb8DW0HgFt0TpGLtAWMwfN6zwFt+2fYr9bpdz6Rln14Nfyg6vavve
-         gQrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kuXYWh4++SJmPwpnU9xEwsXfzzE1IjvMK2Lt9SAVUYw=;
-        b=A3evWO820BAcG7u6cw1Sm361btkAE+pdmKvBm4jMNATPSVi7ApAdD895+RNZtCvFdN
-         MTYYOf7PB08jZRhwKPzxiic/Lj7dTqE/AWe3Gjb7+gx8/vgQKgaGYz36c4Tacsn2BX/S
-         jj7KjFYecVY2e8poESqtSA6shN/n1qKFxOYx3a9djJFWrJ30Ys8/sB7rJdeek+DjBjWI
-         Hvf2MWcmEhaL+e5FXRcTFJpqF/oXBE91Q4WF+s7PwOHP3jAo9RiQa40b3GFA5u+VmfCk
-         S/wbIzX12h9CMlPRW6geiwnjpzAaJFflDo6lbkxk2Lug/OOr6C3Sr0/P/DxDuTGBLXrR
-         fX0A==
-X-Gm-Message-State: AOAM533b7D8HlGxuAEdlz8LGE99QCHIOKfOFm+D6T3XdHn6QA5dhYAJb
-        vs7OJSsy1iS3vIfnVyo/84US4kSf4ew=
-X-Google-Smtp-Source: ABdhPJz4rPnr27ObZgryYPo9ij4abeMzrqyQnizEHX71SzONTel03n/77R8ayiQxRbCWiwsv256wmw==
-X-Received: by 2002:a17:90a:5992:: with SMTP id l18mr10636078pji.160.1640393821293;
-        Fri, 24 Dec 2021 16:57:01 -0800 (PST)
-Received: from masabert ([202.12.244.3])
-        by smtp.gmail.com with ESMTPSA id v4sm9445350pjk.38.2021.12.24.16.57.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Dec 2021 16:57:00 -0800 (PST)
-Received: by masabert (Postfix, from userid 1000)
-        id A159F2360ECB; Sat, 25 Dec 2021 09:56:58 +0900 (JST)
-From:   Masanari Iida <standby24x7@gmail.com>
-To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, linux-kernel@vger.kernel.org,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, linux-perf-users@vger.kernel.org
-Cc:     Masanari Iida <standby24x7@gmail.com>
-Subject: [PATCH] perf bpf: Fix a typo in bpf_counter_cgroup.c
-Date:   Sat, 25 Dec 2021 09:55:58 +0900
-Message-Id: <20211225005558.503935-1-standby24x7@gmail.com>
-X-Mailer: git-send-email 2.25.0
+        Fri, 24 Dec 2021 20:00:34 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BA4C061401
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 17:00:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CC7A7CE2345
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 01:00:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C38D7C36AEA;
+        Sat, 25 Dec 2021 01:00:29 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="IzUQPv+C"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1640394028;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=hq8m6d/730E5cuUPQiSTXZEq/EnTJ9dNV6E7hz3q2hY=;
+        b=IzUQPv+CzKnGZl9VFZ0FOSEmJD8ywH7f3IEsGnl2hemT5H4fveEcXxR3zOuK2JFT2Xv33f
+        AyYolv6x+M1YT9/hJdt+9w2WsZJNlAv8WraxU26bGnnjyNiTVsQcVgUQz9YptXdvAstujv
+        ZA5G/Ml3H3kJUlr9FuC718i4dKfIIxM=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0b18722d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sat, 25 Dec 2021 01:00:27 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     tytso@mit.edu, linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH] random: do not sign extend bytes for rotation when mixing
+Date:   Sat, 25 Dec 2021 02:00:11 +0100
+Message-Id: <20211225010011.1909938-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes a spelling typo in error message.
+By using `char` instead of `unsigned char`, certain platforms will sign
+extend the byte when `w = rol32(*bytes++, input_rotate)` is called,
+meaning that bit 7 is overrepresented when mixing. This isn't a real
+problem (unless the mixer itself is already broken) since it's still
+invertible, but it's not quite correct either. Fix this by using an
+explicit unsigned type.
 
-Signed-off-by: Masanari Iida <standby24x7@gmail.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- tools/perf/util/bpf_counter_cgroup.c | 2 +-
+ drivers/char/random.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/bpf_counter_cgroup.c b/tools/perf/util/bpf_counter_cgroup.c
-index cbc6c2bca488..fea5f2ca03f6 100644
---- a/tools/perf/util/bpf_counter_cgroup.c
-+++ b/tools/perf/util/bpf_counter_cgroup.c
-@@ -266,7 +266,7 @@ static int bperf_cgrp__read(struct evsel *evsel)
- 		idx = evsel->core.idx;
- 		err = bpf_map_lookup_elem(reading_map_fd, &idx, values);
- 		if (err) {
--			pr_err("bpf map lookup falied: idx=%u, event=%s, cgrp=%s\n",
-+			pr_err("bpf map lookup failed: idx=%u, event=%s, cgrp=%s\n",
- 			       idx, evsel__name(evsel), evsel->cgrp->name);
- 			goto out;
- 		}
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 99cce575a79c..82db125aaed7 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -546,7 +546,7 @@ static void _mix_pool_bytes(struct entropy_store *r, const void *in,
+ 	unsigned long i, tap1, tap2, tap3, tap4, tap5;
+ 	int input_rotate;
+ 	int wordmask = r->poolinfo->poolwords - 1;
+-	const char *bytes = in;
++	const unsigned char *bytes = in;
+ 	__u32 w;
+ 
+ 	tap1 = r->poolinfo->tap1;
 -- 
-2.25.0
+2.34.1
 

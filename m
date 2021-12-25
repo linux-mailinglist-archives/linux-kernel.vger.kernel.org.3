@@ -2,81 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA3847F49E
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 23:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E73EC47F4A6
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 23:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232996AbhLYWmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 17:42:52 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:57393 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231916AbhLYWmv (ORCPT
+        id S233004AbhLYW6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 17:58:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232841AbhLYW6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 17:42:51 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JLzTj6CNfz4xps;
-        Sun, 26 Dec 2021 09:42:49 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1640472170;
-        bh=qiVqpRlRRXS0iAH2nX/AkQBYFrUOx2vQ2Vqp7kM0LCw=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ECKWTM9gdi+sCsiy1dHQXyULGKSSWTz2ZLVhuUvcXREX9nG51Nm07U1fOp7KeiGI/
-         WFmzX7vg/CXq/BsT5Q5iGJZGoAgB+IkGwm1Ig1mf4/7GC8PgX3M6JUSOvCJgySS9tN
-         GMYrpOWwOCAt5rq1FE7zyCzfyPNMmEk1wQ3RZBRLaIvWVOoPU4dpwZAm4wDAvfxwfC
-         IQo1vaVUXbCBblQbpa0a41VYClo3FWcRXlzbfHXhTugyjRyIz340RAK0gQly+D+vi9
-         GGvp8MMYzz/6Ur5oTIViGAoSb8xsI6nAXfbZcD6MSW3rdh0CF/YT/7TFiJs34cefOd
-         tgW+6sSNJ1pzQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Cc:     kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: code conditional on non-existing PPC_EARLY_DEBUG_MICROWATT.
-In-Reply-To: <27eefbf2-fc2c-7800-1397-8acfea7ed7e8@csgroup.eu>
-References: <CAKXUXMxa6zuTncNjTVHeU7nJ9uvv3KqMtSDocMC7P5hxfrkakQ@mail.gmail.com>
- <27eefbf2-fc2c-7800-1397-8acfea7ed7e8@csgroup.eu>
-Date:   Sun, 26 Dec 2021 09:42:48 +1100
-Message-ID: <87y2481f2v.fsf@mpe.ellerman.id.au>
+        Sat, 25 Dec 2021 17:58:38 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA75C061401;
+        Sat, 25 Dec 2021 14:58:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jwyn7J+5HFBWS8k5TLrBn4kjmRBNmjy0LNtn6dt0gQQ=; b=jMGiaPSBzB2N/vNCwVxThESdyG
+        0Km4bTq+EYMi0Mky9AHHz8cNRt+dHAg6KgVATJsAmXX1cATNJM4bSSAzrtDlXWo9qg2BjfKp81hJm
+        oin5+4GT2NeGycfra81v5V5GL2coTH5OGsrVIjT15Q/ogUa3lmPPyOsFmeKbxASqq6TsVKheDvx8w
+        OxIuby3T0U4mZaMt9eN0uRtwrM8KEf6r2f1FpXvmpggmgsqmZ6swhXiviq++I8y9TFNcFgcsR00X3
+        2bJEV70NFPpa7YjVB97bIF5Xl6RVFEUHqfxWlAjYzbrzplFWPScqWh5MqMjSSsCNpP6yI6fBu/9mD
+        4AGVMxKw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n1Fzh-006952-W0; Sat, 25 Dec 2021 22:58:30 +0000
+Date:   Sat, 25 Dec 2021 22:58:29 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     Manfred Spraul <manfred@colorfullife.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vvs@virtuozzo.com>, cgel.zte@gmail.com,
+        shakeelb@google.com, rdunlap@infradead.org, dbueso@suse.de,
+        unixbhaskar@gmail.com, chi.minghao@zte.com.cn, arnd@arndb.de,
+        Zeal Robot <zealci@zte.com.cn>, linux-mm@kvack.org,
+        1vier1@web.de, stable@vger.kernel.org
+Subject: Re: [PATCH] mm/util.c: Make kvfree() safe for calling while holding
+ spinlocks
+Message-ID: <YceiFXyoGcgPaLeJ@casper.infradead.org>
+References: <20211222194828.15320-1-manfred@colorfullife.com>
+ <Ycdo1PHC9KDD8eGD@pc638.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ycdo1PHC9KDD8eGD@pc638.lan>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-> Le 23/12/2021 =C3=A0 11:21, Lukas Bulwahn a =C3=A9crit=C2=A0:
->> Dear Benjamin, dear Paul, dear Michael,
->>=20
->> with commit 48b545b8018d ("powerpc/microwatt: Use standard 16550 UART
->> for console"), you have some code in arch/powerpc/kernel/udbg_16550.c,
->> conditional on the Kconfig symbol PPC_EARLY_DEBUG_MICROWATT. However,
->> since then, the definition of this Kconfig symbol was never introduced
->> to the mainline repository or current linux-next, nor am I finding any
->> pending patch for that.
->>=20
->> Are you going to add this config definition soon? Or did you identify
->> that this setup code in udbg_16550.c is not actually needed and can we
->> simply drop this code again?
->>=20
->> This issue was identified with the script ./scripts/checkkconfigsymbols.=
-py.
->>=20
->
-> Was it forgotten when handling comments to=20
-> https://patchwork.ozlabs.org/project/linuxppc-dev/patch/20200509050340.GD=
-1464954@thinks.paulus.ozlabs.org/=20
-> ?
+On Sat, Dec 25, 2021 at 07:54:12PM +0100, Uladzislau Rezki wrote:
+> +static void drain_vmap_area(struct work_struct *work)
+> +{
+> +	if (mutex_trylock(&vmap_purge_lock)) {
+> +		__purge_vmap_area_lazy(ULONG_MAX, 0);
+> +		mutex_unlock(&vmap_purge_lock);
+> +	}
+> +}
+> +
+> +static DECLARE_WORK(drain_vmap_area_work, drain_vmap_area);
 
-Yes. I reported it internally to some folks but I guess they haven't had
-time to send a fixup patch.
+Presuambly if the worker fails to get the mutex, it should reschedule
+itself?  And should it even trylock or just always lock?
 
-I'm pretty sure we just need the first three hunks of that patch, but it
-would be good if someone with a Microwatt setup could test it.
+This kind of ties into something I've been wondering about -- we have
+a number of places in the kernel which cache 'freed' vmalloc allocations
+in order to speed up future allocations of the same size.  Kind of like
+slab.  Would we be better off trying to cache frequent allocations
+inside vmalloc instead of always purging them?
 
-cheers

@@ -2,68 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6350947F47C
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 22:10:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45AB347F47D
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 22:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232850AbhLYVKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 16:10:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51642 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232844AbhLYVKS (ORCPT
+        id S232905AbhLYVK6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 25 Dec 2021 16:10:58 -0500
+Received: from lithops.sigma-star.at ([195.201.40.130]:36890 "EHLO
+        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230299AbhLYVK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 16:10:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C0AC061401;
-        Sat, 25 Dec 2021 13:10:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 075C9B80D88;
-        Sat, 25 Dec 2021 21:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CC406C36AE9;
-        Sat, 25 Dec 2021 21:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640466614;
-        bh=ZmWjQMGGQocLzqM876tKGHWSeRHHb5x8dDwtlhPKg/k=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=P04GJxOobVh/UrC/MdigcAAOuea+DnI2kr5SNfV5laC86QTfhYgu0Y6POphc2rtdP
-         YdZz9pHyQtrwPbyswedgedqLg5lPOzPOZ4KStZfSst+3XbNLqM5qibdnJqiB8w/mvY
-         7c+RT/QI8RzIXtw7Hvw1AB/KF9Y8+ggqK8MTWAW5R8Tjigq7rb0JvzZW0T+8/HM9Ek
-         JTO/eUJbNqf/Mx1q8h27YdZOZfnyfjOwxfeCyWWv7Ouze8Nsss8AYtfiMhliE7Y/Dy
-         w+m38E8zMcMzFf5vfCKkYIp88GVVOcX7bBjJDyoJrLPvleEy1zz9zBTiEmL9wivd6B
-         ADq1KDPG3u4zg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B7C2AEAC06B;
-        Sat, 25 Dec 2021 21:10:14 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon fixes for v5.16-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20211225160724.3120253-1-linux@roeck-us.net>
-References: <20211225160724.3120253-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20211225160724.3120253-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.16-rc7
-X-PR-Tracked-Commit-Id: cdc5287acad9ede121924a9c9313544b80d15842
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e2ae0d4a6b0ba461542f0fd0ba0b828658013e9f
-Message-Id: <164046661474.5738.3881297464456118828.pr-tracker-bot@kernel.org>
-Date:   Sat, 25 Dec 2021 21:10:14 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        Sat, 25 Dec 2021 16:10:58 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id DDCEC62DA5F2;
+        Sat, 25 Dec 2021 22:10:56 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 2nHCJFw-JoPn; Sat, 25 Dec 2021 22:10:56 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 79A5962DA600;
+        Sat, 25 Dec 2021 22:10:56 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id IUBUKu06XHCJ; Sat, 25 Dec 2021 22:10:56 +0100 (CET)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 5427962DA5F2;
+        Sat, 25 Dec 2021 22:10:56 +0100 (CET)
+Date:   Sat, 25 Dec 2021 22:10:56 +0100 (CET)
+From:   Richard Weinberger <richard@nod.at>
+To:     s921975628@gmail.com
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <1212908852.202017.1640466656269.JavaMail.zimbra@nod.at>
+In-Reply-To: <20211225100648.119011-1-s921975628@gmail.com>
+References: <20211225100648.119011-1-s921975628@gmail.com>
+Subject: Re: [PATCH 2/3] mtd: rawnand: nandsim: Merge repeat codes in
+ ns_switch_state
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF95 (Linux)/8.8.12_GA_3809)
+Thread-Topic: rawnand: nandsim: Merge repeat codes in ns_switch_state
+Thread-Index: fv0rjzqWWQR1xTfN26WhgafFcDHqNw==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sat, 25 Dec 2021 08:07:24 -0800:
+----- Ursprüngliche Mail -----
+> Von: s921975628@gmail.com
+> An: "richard" <richard@nod.at>, "Vignesh Raghavendra" <vigneshr@ti.com>, "Miquel Raynal" <miquel.raynal@bootlin.com>
+> CC: "linux-mtd" <linux-mtd@lists.infradead.org>, "linux-kernel" <linux-kernel@vger.kernel.org>, "RinHizakura"
+> <s921975628@gmail.com>
+> Gesendet: Samstag, 25. Dezember 2021 11:06:48
+> Betreff: [PATCH 2/3] mtd: rawnand: nandsim: Merge repeat codes in ns_switch_state
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.16-rc7
+> From: RinHizakura <s921975628@gmail.com>
+> 
+> The moving block of codes is shared between both 'if' and 'else' condition,
+> we can move it out to reduce the duplication.
+> 
+> Signed-off-by: RinHizakura <s921975628@gmail.com>
+> ---
+> drivers/mtd/nand/raw/nandsim.c | 19 ++++++-------------
+> 1 file changed, 6 insertions(+), 13 deletions(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e2ae0d4a6b0ba461542f0fd0ba0b828658013e9f
+Reviewed-by: Richard Weinberger <richard@nod.at>
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks,
+//richard

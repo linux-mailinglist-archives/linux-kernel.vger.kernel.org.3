@@ -2,55 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A06647F394
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 15:58:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7B1647F39B
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 16:16:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbhLYO6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 09:58:06 -0500
-Received: from ixit.cz ([94.230.151.217]:55888 "EHLO ixit.cz"
+        id S232035AbhLYPQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 10:16:09 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:41616 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229896AbhLYO6F (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 09:58:05 -0500
-Received: from [192.168.1.138] (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id B4F292243C;
-        Sat, 25 Dec 2021 15:58:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1640444281; h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type; bh=/LnLMxqfZ7m239b7PJ+Ig6oQYO7elvpQqGQ3CYEemms=;
-        b=roVJfviBv3coP/BbjRNHUaOckQ7XDEQ1iZwLyLUi2Z9tV7Y83bPMYrzrY+tY93PfOkqIle
-        viKroG6j/lLLIKq7Q9hGDsjYoQaqeeW7H1VJg59wUO4g4z+gUBwCOH2+EjMhjSZ1dmy4ei
-        ltekRHlhWA4+NZm6KHMfR6scMaC2PHw=
-Date:   Sat, 25 Dec 2021 15:57:55 +0100
-From:   David Heidelberg <david@ixit.cz>
-Reply-To: 20200622075956.171058-5-bjorn.andersson@linaro.org
-Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: sm8250: Drop tcsr_mutex syscon
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Message-Id: <JWEO4R.7M77VCZXYS531@ixit.cz>
-X-Mailer: geary/40.0
+        id S229896AbhLYPQJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 25 Dec 2021 10:16:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=1V61VPt57awWKS3Oz2V8gKxYnEMgb/khzTfF8nc3rl0=; b=sXM30RHmUnvzhG5O8a/+RR2Pzw
+        9aRlsagZElcOkTJXfrzVBEIUVCqZoIrXdxdTaNYTg/qFD7eJuWIWDZFhYndxZh+CSyQVcZzAcS4C0
+        CAdyB/VWViQJD18FGcJz0BaPm1Jl6JQur51iAjYM7rR6WhbtdLzzR41az/5Y/4eL5nSY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1n18mA-00HTB4-1p; Sat, 25 Dec 2021 16:16:02 +0100
+Date:   Sat, 25 Dec 2021 16:16:02 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/8] net: pxa168_eth: Use platform_get_irq() to get the
+ interrupt
+Message-ID: <Ycc1squoiTh0iyM/@lunn.ch>
+References: <20211224192626.15843-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211224192626.15843-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAHp75VcurBNEcMFnAHTg8PTbJOhO7QA4iv1t4W=siC=D-AkHAw@mail.gmail.com>
+ <CA+V-a8tuD-WKyRL_kwitqOyxJDMu1J14AtZ12LbSF9+8mj+=FQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+V-a8tuD-WKyRL_kwitqOyxJDMu1J14AtZ12LbSF9+8mj+=FQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+> >> +               goto err_netdev;
+> >> +       BUG_ON(dev->irq < 0);
+> >
+> >
+> > ??? What is this and how it supposed to work?
+> >
+> .. should have been BUG_ON(dev->irq < 0);
 
-any particular reason, why you did applied this patch only to sm8250?
+Is this fatal to the machine as a whole, now way to recover, all that
+can be done is to limit the damage while it explodes?
 
-Is it safe to convert rest of tcsr-mutex nodes to new schema without 
-additional testing?
+If not, please use WARN_ON(), not BUG_ON(). There is an email from
+Linus about this, not using BUG_ON() in general.
 
-Thanks
-David
-
-
+   Andrew

@@ -2,20 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C56B347F1FF
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 06:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA9447F238
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 06:41:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbhLYFKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 00:10:04 -0500
-Received: from regular1.263xmail.com ([211.150.70.198]:39298 "EHLO
+        id S229847AbhLYFVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 00:21:12 -0500
+Received: from regular1.263xmail.com ([211.150.70.197]:43094 "EHLO
         regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbhLYFKD (ORCPT
+        with ESMTP id S229714AbhLYFVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 00:10:03 -0500
-X-Greylist: delayed 366 seconds by postgrey-1.27 at vger.kernel.org; Sat, 25 Dec 2021 00:10:03 EST
-Received: from localhost (unknown [192.168.167.70])
-        by regular1.263xmail.com (Postfix) with ESMTP id 3F92A14CD;
-        Sat, 25 Dec 2021 13:03:46 +0800 (CST)
+        Sat, 25 Dec 2021 00:21:11 -0500
+Received: from localhost (unknown [192.168.167.13])
+        by regular1.263xmail.com (Postfix) with ESMTP id 61F3F1B85;
+        Sat, 25 Dec 2021 13:21:09 +0800 (CST)
 X-MAIL-GRAY: 0
 X-MAIL-DELIVERY: 1
 X-ADDR-CHECKED4: 1
@@ -23,32 +22,32 @@ X-SKE-CHECKED: 1
 X-ABS-CHECKED: 1
 X-ANTISPAM-LEVEL: 2
 Received: from [192.168.1.10] (unknown [111.30.214.151])
-        by smtp.263.net (postfix) whith ESMTP id P30236T139925202663168S1640408624201373_;
-        Sat, 25 Dec 2021 13:03:44 +0800 (CST)
+        by smtp.263.net (postfix) whith ESMTP id P14038T140177747977984S1640409669296931_;
+        Sat, 25 Dec 2021 13:21:09 +0800 (CST)
 X-IP-DOMAINF: 1
 X-RL-SENDER: chengang@emindsoft.com.cn
 X-SENDER: chengang@emindsoft.com.cn
 X-LOGIN-NAME: chengang@emindsoft.com.cn
 X-FST-TO: linux-kernel@vger.kernel.org
-X-RCPT-COUNT: 3
+X-RCPT-COUNT: 2
 X-LOCAL-RCPT-COUNT: 0
 X-MUTI-DOMAIN-COUNT: 0
 X-SENDER-IP: 111.30.214.151
 X-ATTACHMENT-NUM: 0
-X-UNIQUE-TAG: <cc46c3a784750941edfa1ebf190541bf>
+X-UNIQUE-TAG: <a2157fcba5714bbc0889f36a0a2aee01>
 X-System-Flag: 0
-Subject: Re: [PATCH] KVM: return the error code from
- kvm_arch_create_vm_debugfs when it fails
-To:     pbonzini@redhat.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211223013408.153595-1-gchen@itskywalker.com>
+Subject: Re: [PATCH] kernel: time: Return ENXIO instead of ENODEV when call
+ smp_call_function_single fail in clockevents_unbind
+To:     tglx@linutronix.de
+Cc:     linux-kernel@vger.kernel.org
+References: <20211219152929.479876-1-gchen@itskywalker.com>
 From:   Chen Gang <chengang@emindsoft.com.cn>
-Message-ID: <85efe6de-7e54-be20-e4b8-5c4a08b70166@emindsoft.com.cn>
-Date:   Sat, 25 Dec 2021 13:03:44 +0800
+Message-ID: <b198847b-557e-542f-a3a2-9cc7cab72d45@emindsoft.com.cn>
+Date:   Sat, 25 Dec 2021 13:21:08 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20211223013408.153595-1-gchen@itskywalker.com>
+In-Reply-To: <20211219152929.479876-1-gchen@itskywalker.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -63,54 +62,30 @@ another mailbox.
 
 Thanks.
 
-On 12/23/21 9:34 AM, gchen@itskywalker.com wrote:
+On 12/19/21 11:29 PM, gchen@itskywalker.com wrote:
 > From: Chen Gang <gchen@itskywalker.com>
 > 
-> At present, kvm_arch_create_vm_debugfs is a new interface for arch, and
-> it assumes return an none-zero error code, so the caller need check it
-> and return it to the user mode.
+> smp_call_function_single will return -ENXIO for failure, so ENXIO needs
+> to be as the default value of cu.res for return instead of ENODEV.
 > 
 > Signed-off-by: Chen Gang <gchen@itskywalker.com>
 > ---
->  virt/kvm/kvm_main.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
+>  kernel/time/clockevents.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index d8a1a17bcb7e..b2de428bd4c7 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -1015,7 +1015,7 @@ static int kvm_create_vm_debugfs(struct kvm *kvm, int fd)
->  	ret = kvm_arch_create_vm_debugfs(kvm);
->  	if (ret) {
->  		kvm_destroy_vm_debugfs(kvm);
-> -		return i;
-> +		return ret;
->  	}
->  
->  	return 0;
-> @@ -4727,7 +4727,7 @@ EXPORT_SYMBOL_GPL(file_is_kvm);
->  
->  static int kvm_dev_ioctl_create_vm(unsigned long type)
+> diff --git a/kernel/time/clockevents.c b/kernel/time/clockevents.c
+> index 003ccf338d20..59b83bee03e6 100644
+> --- a/kernel/time/clockevents.c
+> +++ b/kernel/time/clockevents.c
+> @@ -416,7 +416,7 @@ static void __clockevents_unbind(void *arg)
+>   */
+>  static int clockevents_unbind(struct clock_event_device *ced, int cpu)
 >  {
-> -	int r;
-> +	int r, ret;
->  	struct kvm *kvm;
->  	struct file *file;
+> -	struct ce_unbind cu = { .ce = ced, .res = -ENODEV };
+> +	struct ce_unbind cu = { .ce = ced, .res = -ENXIO };
 >  
-> @@ -4759,10 +4759,11 @@ static int kvm_dev_ioctl_create_vm(unsigned long type)
->  	 * cases it will be called by the final fput(file) and will take
->  	 * care of doing kvm_put_kvm(kvm).
->  	 */
-> -	if (kvm_create_vm_debugfs(kvm, r) < 0) {
-> +	ret = kvm_create_vm_debugfs(kvm, r);
-> +	if (ret) {
->  		put_unused_fd(r);
->  		fput(file);
-> -		return -ENOMEM;
-> +		return ret;
->  	}
->  	kvm_uevent_notify_change(KVM_EVENT_CREATE_VM, kvm);
->  
+>  	smp_call_function_single(cpu, __clockevents_unbind, &cu, 1);
+>  	return cu.res;
 > 
 
 

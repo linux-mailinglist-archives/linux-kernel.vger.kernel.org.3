@@ -2,91 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B34F747F420
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 18:40:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2A447F41F
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 18:40:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232582AbhLYRkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 12:40:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35076 "EHLO
+        id S232573AbhLYRkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 12:40:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbhLYRke (ORCPT
+        with ESMTP id S229488AbhLYRkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 12:40:34 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F06C061401
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 09:40:33 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id b13so44731737edd.8
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 09:40:33 -0800 (PST)
+        Sat, 25 Dec 2021 12:40:07 -0500
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3961AC061401
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 09:40:07 -0800 (PST)
+Received: by mail-oo1-xc2b.google.com with SMTP id v7-20020a4a2447000000b002daf9b0cb1eso2091787oov.8
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 09:40:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=S9bXsUsdOmkN2j/Yll9QiHcS6DeDyMc7r7Kj1H7frv4=;
-        b=eBRUIlw985mdXBb0ZXlBrZ0J4cX4OzbtuGg5y0cSr5H2t5BD+2YqdgdrLQh1exaZ53
-         itQ3LNxK3GWncjbanlkeS/ej4tOY3qtJlHNZiakHUTu0R5h642Qjw4h/182gpa6DREWa
-         rwcBwyEGMCvTi2b3+UGpkCp0Q12vvJGzY6OH1Lz7MeWPmPhA3Cy+aQNNY2+pahRGYlPt
-         EZ2c5oesEPgjsjlahUTEhLeZ/y0CgAF99Opc+q1bZlNAZYHRhgtMkj1awQ1Nm39Y08QD
-         uicCpzixx+di0tD6pm0s4gQyay1w8yag1S+KRYOPai4pjVLr0dqr2htymw7ib2KDM6+l
-         iVDg==
+        d=kali.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WfzhWj1jtwCdxEak/D97aNhkHTpQCqGgLyMJk8IXEwI=;
+        b=eaAoE4ztF41KiZpnzSfaK9/FXh47Z15i/58PZS//afGbMpjYyS2woT9xWMHQvEJeZ4
+         bK8MppOg/i4qnbJie6j7sWtJ7DGauG30E0V7rDy8BmdJfBeXDMbumgI1fm5bCHxI5XYO
+         tfIwqEzLG9RVVBP1WWMq9TPuMm/Jt/K8xlFZWn+NsPSk1g/FSE1p1+6V1IqOEvPLuKOI
+         wA+qcKwIBZm3rCsf3L/ZPj7+DYd5gRbXWH5uWOaJxZjOipCEBBLqJZCfP7Q50xm9mBTN
+         2RAfJHyd4eH4p5j189+F/LnRv4qAFKuBdN/Wk9PN/nUF0W6qBU4wZW0u/m5Fy5qDyOX7
+         F5Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S9bXsUsdOmkN2j/Yll9QiHcS6DeDyMc7r7Kj1H7frv4=;
-        b=WqXWMI64F0N+6hM9/3LyL3pmmRcShQgeMHTxrvyW6nzmd2/k/xQhHAXX45MfSfRQuo
-         G6grliohZyPPhw7H3UZAc/Z6a1txWVeMrqHvaSW0+X2AZ508aykCttBS4qyR4hijFfbi
-         OvxwasepLtZ6NOTZZXPasPziGwwEkq2zkSLRL864hzgTWvegnzK0Se4Di/GgF3LUpmVd
-         kucQOxd/RhF8SsuyFgN6pNsInq5HoMkdjlx4Ljjat+0LTKYZB+WTVirM3+MrVjjhjbP/
-         l7KJu0ZJryuLEaP6UF88vRSjHOVB5TaErVGTX0/dPjdzP+6ayf7DjdttkKyri/2crjy6
-         yE7w==
-X-Gm-Message-State: AOAM530ocK+jDC/OyY47yQVFRSW3zNW4TssYHlp3p9z7LfvSEq099hF0
-        SeVVosSklw1eidFemr1WSh2caOxskhCLEH9teVs=
-X-Google-Smtp-Source: ABdhPJymVyN3Hgu2lVSfDDJad687aQzBGLB3dzg+dliiAowerTMzBQJGn0SViqV2WSkHt4NVJimv/LQOUuAG0iD2O5g=
-X-Received: by 2002:a05:6402:12c4:: with SMTP id k4mr9927399edx.218.1640454032520;
- Sat, 25 Dec 2021 09:40:32 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WfzhWj1jtwCdxEak/D97aNhkHTpQCqGgLyMJk8IXEwI=;
+        b=Ss5vJseKrsTcr4efy0FwtF/Ee6EGhdHPZGrSQCsvi6fCRdgwV8K4WMc1X3s8oLVG7d
+         DTkbqNPxN8nSEsqf9dr7BenxNF7KXb3fA/SDyVii7KHegeyLFM/qUFTvQR6fWmH5zj2T
+         0N2NklIwLEtnPn1iYR5QWoZwRzyWJjTZBMEjOtcoup/Tc2nsbT99a8FRDxZqIo76epU1
+         oV9cVkpm67pZzn4+FwyEOKUhDcRp2ez0WAr9tI3hQ378Nwg1nv1updOwUd1NK3TsHxjq
+         ZBq+Wq+bHLdm8UPYWPV+HMAt4oPH3hhnx0vby7Rsc4ujPi+HPdbkR3wtslVg+0R4a2dc
+         XEmw==
+X-Gm-Message-State: AOAM532NPYE1JyPnJ3VnSt5LQrTFfJnc46z2FskP8WVEQCtrFn0psXdW
+        /tRdK2PjlojvnMzrJBCzeEISMg==
+X-Google-Smtp-Source: ABdhPJwTd64h6NmnuJkKrnhyJ8AydZv/uOcsiocQB/wkmdKbXj9YXiW8i6BntXb/sn4Bbg1VBBPEpA==
+X-Received: by 2002:a4a:9612:: with SMTP id q18mr7025002ooi.36.1640454006594;
+        Sat, 25 Dec 2021 09:40:06 -0800 (PST)
+Received: from [192.168.11.48] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
+        by smtp.gmail.com with ESMTPSA id v20sm2018193otj.27.2021.12.25.09.40.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Dec 2021 09:40:06 -0800 (PST)
+Message-ID: <85cc3f89-6e87-6fc7-311e-d410833d75da@kali.org>
+Date:   Sat, 25 Dec 2021 11:40:01 -0600
 MIME-Version: 1.0
-References: <20211215234946.6494-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAHp75VfGwQ7G2b39GO4tN=sxQoiahO2uudy25ALxEkrNcP9eVw@mail.gmail.com> <CA+V-a8t1myOt0rhJExem_T2tJUM3PLL9KuXn0=_LtucJPHLkbA@mail.gmail.com>
-In-Reply-To: <CA+V-a8t1myOt0rhJExem_T2tJUM3PLL9KuXn0=_LtucJPHLkbA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 25 Dec 2021 19:39:56 +0200
-Message-ID: <CAHp75VdXKVAZMKqC=0RbkAKKxFsdcxBc0M3N6OQMivHj-w+DHw@mail.gmail.com>
-Subject: Re: [PATCH] irqchip/renesas-irqc: Use platform_get_irq_optional() to
- get the interrupt
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH] slimbus: qcom-ngd-ctrl: Use platform_get_irq() to get the
+ interrupt
+Content-Language: en-US
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org
+References: <20211224161334.31123-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211224161334.31123-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Steev Klimaszewski <steev@kali.org>
+In-Reply-To: <20211224161334.31123-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 25, 2021 at 7:28 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Sat, Dec 25, 2021 at 4:46 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Thu, Dec 16, 2021 at 9:52 AM Lad Prabhakar
-> > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 
-> > ret = platform_get_irq_optional(...);
-> > if (ret < 0 && ret != -ENXIO)
-> >   return ret;
-> > if (ret > 0)
-> >   ...we got it...
-> >
-> > It will allow the future API fix of platform_get_irq_optional() to be
-> > really optional.
-> >
-> Later patch [0] (merged into -next) does check for -ENXIO first.
+On 12/24/21 10:13 AM, Lad Prabhakar wrote:
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
 >
-> [0] https://lore.kernel.org/lkml/20211216182121.5323-1-prabhakar.mahadev-lad.rj@bp.renesas.com/t/
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq().
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> Hi,
+>
+> Dropping usage of platform_get_resource() was agreed based on
+> the discussion [0].
+>
+> [0] https://patchwork.kernel.org/project/linux-renesas-soc/
+> patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+>
+> Cheers,
+> Prabhakar
+> ---
+>   drivers/slimbus/qcom-ngd-ctrl.c | 10 ++++------
+>   1 file changed, 4 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
+> index 7040293c2ee8..0f29a08b4c09 100644
+> --- a/drivers/slimbus/qcom-ngd-ctrl.c
+> +++ b/drivers/slimbus/qcom-ngd-ctrl.c
+> @@ -1526,13 +1526,11 @@ static int qcom_slim_ngd_ctrl_probe(struct platform_device *pdev)
+>   	if (IS_ERR(ctrl->base))
+>   		return PTR_ERR(ctrl->base);
+>   
+> -	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+> -	if (!res) {
+> -		dev_err(&pdev->dev, "no slimbus IRQ resource\n");
+> -		return -ENODEV;
+> -	}
+> +	ret = platform_get_irq(pdev, 0);
+> +	if (ret < 0)
+> +		return ret;
+>   
+> -	ret = devm_request_irq(dev, res->start, qcom_slim_ngd_interrupt,
+> +	ret = devm_request_irq(dev, ret, qcom_slim_ngd_interrupt,
+>   			       IRQF_TRIGGER_HIGH, "slim-ngd", ctrl);
+>   	if (ret) {
+>   		dev_err(&pdev->dev, "request IRQ failed\n");
 
-The problem is that it doesn't consider 0 as no IRQ.
+Tested on Lenovo Yoga C630
 
--- 
-With Best Regards,
-Andy Shevchenko
+Tested-By: Steev Klimaszewski <steev@kali.org>
+

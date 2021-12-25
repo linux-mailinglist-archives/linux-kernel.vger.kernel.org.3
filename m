@@ -2,66 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D18D47F23A
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 06:41:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16F0547F23B
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 06:46:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbhLYFk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 00:40:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49928 "EHLO
+        id S229887AbhLYFmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 00:42:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbhLYFk4 (ORCPT
+        with ESMTP id S229853AbhLYFmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 00:40:56 -0500
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AD7C061401
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 21:40:55 -0800 (PST)
-Received: by mail-qv1-xf2a.google.com with SMTP id ke6so9290133qvb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 21:40:55 -0800 (PST)
+        Sat, 25 Dec 2021 00:42:42 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E066C061401
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 21:42:41 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id a1so9052727qtx.11
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 21:42:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=atishpatra.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=eVf5ASnQyWxFtVYPQd2gNN7mzIEJUDef/ygen8sz+zE=;
-        b=PcDn2aMMB/ta7fNug/Eg1rGzoxogfr9ZGi6vqFEcF2W9OVLs2z8JpP0oLc334v0L4/
-         bwFJvVn4GHAzBkwtcFhHl6p7uDixF9muZlb4+cRL1xFqjhNXZDawB+w0e/9Kq3Nc3L4o
-         q1n5aYZ/W95lPMAFQyPMXqOekvGc8GqDy8OKc=
+        b=cxEOCsLI1iR6mob8oXonSRBrSl5uhUiTMWpmd0Qop5b/vrhUkMkGC1ftYRrhuceoEW
+         0zIHLrgH+wncE0uymLQv4j7Q4bUs9i9oyPzP3TUlPvHIfAWQfpCaUvfo6MER+19I5R70
+         kfUY4kCku4LIuhQefI5GZSvZSSNBzpQ4J/eiE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=eVf5ASnQyWxFtVYPQd2gNN7mzIEJUDef/ygen8sz+zE=;
-        b=ydu3Sk6S8OJLMGKGdzUv9MonknYONpUGJ2KIcfoi3GSsDI3FFqmLvJHaz+pkCYjV/8
-         z2OTcgzXFeANY9fP9Q71OTL6TyXdyEfHfERH5dVYgxnaIUYf75NLhBJWSHV7GYIcXvZH
-         FSC1QRV/4aWapbTdxmmmzwI2iroiN+N8rW8sZTnzpChh9kRV0bDLXktFXhQMlvT/bTrn
-         UCC7RIi29/iVlDD989MHnifo5V9XNZ3/xaqfBLD1Hwy2ZUMgNeayJxyKLBXCiJwabYPQ
-         Zbh2wJ99JpFqmpQhtKG9o3GMfZ9ak3n9AoyCPLha96ZiCdU2s9z+BTF9tJbujX+SgmJ1
-         zTxg==
-X-Gm-Message-State: AOAM5302muPMVsQje93WoboPUYFoN04ex/LOcBzrsSDwG7kMcoYy48tt
-        iNbGPxxUReu9fKXiJG0T9FR6Z3t0uPXg
-X-Google-Smtp-Source: ABdhPJyePniAwy5ZyhYMohnPAZTIi0GW7ngbYpDu0HOnwDS56/Kn/8JYC72l7Oi8/Qc6ymk+XJII4g==
-X-Received: by 2002:a05:6214:301e:: with SMTP id ke30mr8000803qvb.2.1640410854258;
-        Fri, 24 Dec 2021 21:40:54 -0800 (PST)
+        b=r88Kqi92y/dEYxZaxXwyplgV1hREq1a3SheyO9tKH8l9DwCDwG2VjVQ+m4v5W56jyB
+         pIAYdUcQ+xWQYoDqJ+353Cc7dlvmGCk6vz4TnDZZlhn1a8NZ6AgthiyyX19Q29U0LoPf
+         IF7UEYUJiY/2Mqg62KioD0BEoKoxuMJAqW6jSaA/nQTOm/9HIOAtYEtrnI7HkjeSFIcX
+         RSk9p+qs9ES8Zm/f373+lZJ2VwLXTzjZv0OGQnfzRGP+59O9gx9MoJKJHlG1uZaTUC45
+         jU7T/bbnmV/6oGeU4790ZC9cfBhDZq/K/YyHf8bQe7I+8VT55CNXDL1V+ze08FYlfgMB
+         I80Q==
+X-Gm-Message-State: AOAM5307zPVMxr6/4HQRBd0fRSCToCNlzT/iuQmmVXCh/cNmUy8Ux3rU
+        H5OLICA/uKGCCcyzQKglvdGZPmfR7d4g
+X-Google-Smtp-Source: ABdhPJwBGgW4IrJrMMmcsEOaDQm3eFIA7A0Tavn+dTNSY4ax3GCfrBSAReX39PP2GgjINl1Qm0e1Fg==
+X-Received: by 2002:ac8:57ce:: with SMTP id w14mr8025149qta.252.1640410960229;
+        Fri, 24 Dec 2021 21:42:40 -0800 (PST)
 Received: from fedora.. (adsl-70-228-75-190.dsl.akrnoh.ameritech.net. [70.228.75.190])
-        by smtp.gmail.com with ESMTPSA id x16sm8304574qko.15.2021.12.24.21.40.52
+        by smtp.gmail.com with ESMTPSA id v1sm8438486qtw.65.2021.12.24.21.42.39
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Dec 2021 21:40:53 -0800 (PST)
+        Fri, 24 Dec 2021 21:42:40 -0800 (PST)
 From:   Atish Patra <atishp@atishpatra.org>
 X-Google-Original-From: Atish Patra <atishp@rivosinc.com>
 To:     linux-kernel@vger.kernel.org
-Cc:     Atish Patra <atishp@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        devicetree@vger.kernel.org, Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-riscv@lists.infradead.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>
 Subject: [v5 0/9] Improve RISC-V Perf support using SBI PMU and sscofpmf extension
-Date:   Fri, 24 Dec 2021 21:40:18 -0800
-Message-Id: <20211225054027.1750075-1-atishp@rivosinc.com>
+Date:   Fri, 24 Dec 2021 21:42:29 -0800
+Message-Id: <20211225054238.1750241-1-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

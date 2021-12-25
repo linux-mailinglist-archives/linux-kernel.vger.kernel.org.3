@@ -2,102 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D22C47F3B1
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 16:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C4047F3B3
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 17:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232182AbhLYP7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 10:59:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
+        id S232200AbhLYQH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 11:07:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232141AbhLYP73 (ORCPT
+        with ESMTP id S232141AbhLYQH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 10:59:29 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A2AC061401;
-        Sat, 25 Dec 2021 07:59:29 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id o6so44129061edc.4;
-        Sat, 25 Dec 2021 07:59:29 -0800 (PST)
+        Sat, 25 Dec 2021 11:07:28 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DF1C061401;
+        Sat, 25 Dec 2021 08:07:28 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id s73so18191447oie.5;
+        Sat, 25 Dec 2021 08:07:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TenvAiJ90C5hePUyjR/4VW2hAVkpn7rtvVoE6E1BK5k=;
-        b=Saq5EkEo+7Yc69Hn2p9L8mftuMep3Goz7JXSbtUuaFjJtL2NjrdHov6FM/aKELwsnP
-         8gBglqnWKfFbbc1R2+1mYjo91CPDk0Sc1fSu3bKIzgEclCWIJWMmfiAiX0sxLmqMww24
-         n9tyqWSqK8FGyoRj6BSRBrwE+5egj6NfxilNC/FHxpQMsYXAlBJXp6NH+LyRnRz++9Bz
-         92qmYPbji3Z5ad0Zc3w6TZJ7jkMeY5rmWnOgxiMveJuYwl1h+QNguwoU2yL58MvRXN5w
-         Iyplyf1ipNba0vnGjIcbOm8j5i41vq7o3E8CXvQ5IXNpwXcNLbQU43z6Lu+CS+vlhF7m
-         5CNg==
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OWAr+F/sFkIDhJFUa/ld0SbXsdO26UYsk+EaKlbiKfA=;
+        b=GBg0LFKpw5VRsyFNZMK4SrFgzX5teZB3rwK8OJeGKz+xNCJuAgPKCtz5pN2QjKTq2g
+         k2Wxt/OYRVR/6S/KS8RrlfJj0fKCB3QxXZFtk+ndbm7SGIMWXSieu8ojBnAsjcKr4/KI
+         +zGU8H5RSslaYRy8qO17U8hwaf5HVNMQ+VpTkJwSeteEIMwPDzPcWx+zfml79kbyLzbO
+         //vzfpnTrwOfOzHp9sXnjalJG189uvs1X46PYq34BSinoVJvYw+bCUv5sC4fSiQYTTKA
+         FrG544lYI6314TfAyAum/1Jswxu+vgJsxqWgPRHKO2uEiAnJqedC5c74sW2vNyFvBsjG
+         I3BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TenvAiJ90C5hePUyjR/4VW2hAVkpn7rtvVoE6E1BK5k=;
-        b=pabqOIpKK68ZUkcEG1qQxCb5ROi9iabwwVWzp6iwR3qvR6bBIRNZ7YtfAMGURnD2ko
-         oV+D7mMTIdRYA0gshebwsZWZZUGY2ykoskqib1iDQXsQILFJ82L2BspJIwr7zecB1bg8
-         HfHYo9INFoYMxKvk9eDkqTc0t9vv6xAMrk+Q2kRfi5DlZiMqWx0v3Mu3O793ov+dKrd8
-         r5skBNRR1nESuEFtJ/nLbfKbb1UhS8ehKa3fkoi7ii1Zhe1s7JbcUKHbHPAVm2LfOBvS
-         dH2XNc/xw8CfQnPoxagO6dgqQ5xYwGhrkFGPw0vFGaidEiW86ZQGYNwurXTFt+vd7U6k
-         FlzA==
-X-Gm-Message-State: AOAM530YhFDRaY+5KogT1mUx70+x6pMIgtmIFFkVKgqSR7qCm7Z1q/PG
-        0KCWS3k+tx6BSbe4upjsF/Y9DnNpWdYueYiPN9Q=
-X-Google-Smtp-Source: ABdhPJzTYlqwkcyPP/VMOEbXuatxgvBbhAT31Z04KO4cwF6blxsUrnYpdiHKC2zAfnnDglty13s7fII5DV67NlHdQL0=
-X-Received: by 2002:a17:906:a3c6:: with SMTP id ca6mr8363942ejb.639.1640447967656;
- Sat, 25 Dec 2021 07:59:27 -0800 (PST)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=OWAr+F/sFkIDhJFUa/ld0SbXsdO26UYsk+EaKlbiKfA=;
+        b=idxHhpH9TIJSXracx4ktQ9MMyMRM0b8MnHZv8eoJyEJRNr12LDzpwyUkgli7lM3Up+
+         SvBbymQi6sTqHDky9vgAcSKLylw1RcdAdc3ozc9k+Vj4gm4Y8cs4ExJc133iBhoB4gl7
+         Q/fTSwJPtgMQclt9vdI3rIDqIP3heO8YlXk7+kkddV+spHggTU6jlAw7H28bBuY63u9W
+         ChCpP+LmpR4ojoJxWcPxziWCy+63w3PRz9H6qDod8rmwZ5JO0r6yYpGuHxilV5OOSa7g
+         5kVS8mV74s2ZhlQBxzDVEsxg6mW42/bHjMX+IT9yjVRu994gBLt4jZualZ63MM0ldawe
+         Vjow==
+X-Gm-Message-State: AOAM533Rew+JNs+zzUronHYQzCewAyD087V/uZA2ES7sGqQUQ9YLPeTJ
+        0Zg/Ce07pic4yFeDZjeF9hTS/HvBRCY=
+X-Google-Smtp-Source: ABdhPJxSluJxEpJF8+ipkK9HmPg9F1/zbF3qYQDjrIkcVC2lnf7iBV+iVnp/JsN+9i0WvRhcabSoGw==
+X-Received: by 2002:aca:1708:: with SMTP id j8mr7737469oii.62.1640448447306;
+        Sat, 25 Dec 2021 08:07:27 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v19sm1979551ott.13.2021.12.25.08.07.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Dec 2021 08:07:26 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v5.16-rc7
+Date:   Sat, 25 Dec 2021 08:07:24 -0800
+Message-Id: <20211225160724.3120253-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20211222094558.2098791-1-jsd@semihalf.com>
-In-Reply-To: <20211222094558.2098791-1-jsd@semihalf.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 25 Dec 2021 17:58:51 +0200
-Message-ID: <CAHp75VeQAXW0Pzo=sxrHTB_VeD9BZo_iKsDUW79No4OyLtqZCQ@mail.gmail.com>
-Subject: Re: [RFC 0/2] i2c-designware: Add support for AMD PSP semaphore
-To:     Jan Dabros <jsd@semihalf.com>, Hans de Goede <hdegoede@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 4:43 PM Jan Dabros <jsd@semihalf.com> wrote:
->
-> This patchset comprises support for new i2c-designware controller setup on some
-> AMD Cezanne SoCs, where x86 is sharing i2c bus with PSP. PSP uses the same
-> controller and acts as an i2c arbitrator there (x86 is leasing bus from it).
->
-> First commit aims to improve generic i2c-designware code by adding extra locking
-> on probe() and disable() paths. I would like to ask someone with access to
-> boards which use Intel BayTrail(CONFIG_I2C_DESIGNWARE_BAYTRAIL) to verify
-> behavior of my changes on such setup.
->
-> Second commit adds support for new PSP semaphore arbitration mechanism.
-> Implementation is similar to the one from i2c-designware-baytrail.c however
-> there are two main differences:
-> 1) Add new ACPI ID in order to protect against silent binding of the old driver
-> to the setup with PSP semaphore. Extra flag ARBITRATION_SEMAPHORE added to this
-> new _HID allows to recognize setup with PSP.
-> 2) Beside acquire_lock() and release_lock() methods we are also applying quirks
-> to the lock_bus() and unlock_bus() global adapter methods. With this in place
-> all i2c clients drivers may lock i2c bus for a desired number of i2c
-> transactions (e.g. write-wait-read) without being aware of that such bus is
-> shared with another entity.
->
-> Mark this patchset as RFC, since waiting for new ACPI ID value. As a temporary
-> measure use "AMDI9999". Once proper one will be ready, will re-send this CL for
-> review & merge.
->
-> Looking forward to some feedback.
+Hi Linus,
 
-When you will be ready, CC a new version also to Hans, he may look at
-it from the Baytrail functionality perspective.
+Please pull hwmon fixes for Linux v5.16-rc7 from signed tag:
 
--- 
-With Best Regards,
-Andy Shevchenko
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.16-rc7
+
+Thanks,
+Guenter
+------
+
+The following changes since commit 2585cf9dfaaddf00b069673f27bb3f8530e2039c:
+
+  Linux 5.16-rc5 (2021-12-12 14:53:01 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.16-rc7
+
+for you to fetch changes up to cdc5287acad9ede121924a9c9313544b80d15842:
+
+  hwmon: (lm90) Do not report 'busy' status bit as alarm (2021-12-12 16:22:53 -0800)
+
+----------------------------------------------------------------
+hwmon fixes for v5.16-rc7
+
+A couple of lm90 driver fixes. None of them are critical,
+but they should nevertheless be fixed.
+
+----------------------------------------------------------------
+Guenter Roeck (5):
+      hwmon: (lm90) Fix usage of CONFIG2 register in detect function
+      hwmon: (lm90) Prevent integer overflow/underflow in hysteresis calculations
+      hwmon: (lm90) Drop critical attribute support for MAX6654
+      hwmom: (lm90) Fix citical alarm status for MAX6680/MAX6681
+      hwmon: (lm90) Do not report 'busy' status bit as alarm
+
+ drivers/hwmon/lm90.c | 106 ++++++++++++++++++++++++++++++---------------------
+ 1 file changed, 62 insertions(+), 44 deletions(-)

@@ -2,121 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD8D47F2C8
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 10:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF44B47F2C9
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 10:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbhLYJgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 04:36:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44098 "EHLO
+        id S231276AbhLYJlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 04:41:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbhLYJgP (ORCPT
+        with ESMTP id S229561AbhLYJlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 04:36:15 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F508C061401
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 01:36:15 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id v22-20020a9d4e96000000b005799790cf0bso13812728otk.5
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 01:36:15 -0800 (PST)
+        Sat, 25 Dec 2021 04:41:12 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210A1C061401
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 01:41:12 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id z9so9367200qtj.9
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 01:41:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sroP+99PYY1sqFqgqdNQk02GgpKt/uXRxPmq42MiTbA=;
-        b=nsJQtxDlylIm6dRRBzdTfQ7iYNeOVmEI11OFgIPNWxoOzy2XcJpNJ23mi9cUDQsFwd
-         IsS7clec+npxjVjyiANrCjYXR3D1BsdIWiq+4zzIFqTlEWdVvcewfj8G7SgoXpVMxQ0a
-         IMchIjTRmJJWAzePquZO+TJFAJGDKumiXfDB85wZ1c4cmjscMU47zzZ7p6Kpd0wJih/B
-         GDGSxINczqYIg3YMU8A+MTElTbH774UZMbnr8qoihJC5gC02Qk1tsGHzzbiFzJcMqatV
-         ib5YJyW+8UoBSWDST6Fb9WQywIgINbG32JCy8nrowxGhs0y/zjHsjJX0PNThLosSGzi5
-         3IAA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zSLg1sVivxppYxme4VG7yM6rxhjRKrfG8yCADiK/1dg=;
+        b=hxgIRgzXLL7bFpBWkYSP215G59jJQqx9ex0RJfVPDZ4GtPVr5AyOqhM9rZSJJfOF2O
+         DQytruJgV2p7s1255rhu5ne0sE5MOop0z4Q9yvc0KlCPWCZ04srahO0z5mxDVycvGNqz
+         /JM3Rm5nMALB7Hbb8Fs0ZBIfwYRhPyxqp5PuZRJ3YnsSGXgyq897d1UmrMyTouI8Y1ad
+         nEzoEe5Ir/LSKbtrulnbSaVskHPse9/xsQREnovDGdCg9kj6irs6faN1t2DVz/g+V8d2
+         1xhcnaQoZsnyRxzRRxZRLrQCVki9GPlMnkjaOHmhbH0IgKds8StLfy1CiDb7u7ddfW9Y
+         fkqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sroP+99PYY1sqFqgqdNQk02GgpKt/uXRxPmq42MiTbA=;
-        b=EOYZV1d05aEoJflq58hMb/GbJR63vJZBH7zhnB8+Yh8D61C44dlW0TSZhSvBF075X6
-         g+KlM6hslUNFWPFWORDhrJdpf/MxA99VwLUmyLExmoONHfG8WDyl/5CMpV5/TlfUmc3d
-         Ts44VrrzF71AU83vcedxhVVCJzYjyyQpDPJAb6p23TeYuiE/vgRm4hNEu1C3LdXkerUT
-         OJi6Gs/dRlquhis+J0BoMzw8cakc8djuTDccUQUGQqHvlqypi/JbtWts/e9GI6fEfyOx
-         PqWil8kvqpoRHG0WmacwoNdMft+szwa4xtItVqAYiLpAr6Dxu4OQbFIJ4xQB4uCBu8Vi
-         AXhg==
-X-Gm-Message-State: AOAM530yUNC8AIKfDMweZ/DVh7pBeJOJWrx9bIoBrwRixVvTfHUXT1dO
-        R29O9IW7SDBTKRGoRrHkQ8CJLZ7MsvTfVddAon6j+w==
-X-Google-Smtp-Source: ABdhPJydBlcJPibzbvxvGPgXeu/h06+DMbnQi6jSI7xPEHPY6+CUUy5PVJw4EGvEKDnb+sRWk+YU8lLqQUiN6pJ4eaI=
-X-Received: by 2002:a9d:7f10:: with SMTP id j16mr6596628otq.92.1640424974367;
- Sat, 25 Dec 2021 01:36:14 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zSLg1sVivxppYxme4VG7yM6rxhjRKrfG8yCADiK/1dg=;
+        b=M35zqJWvJe/f3MqYG89Du+0oLuO1HzRLwjZ2Uwut+vKolBOVh0NfUihagDr1s6d7DN
+         i/u61BDKB82xMYqbVNWKkq/8UpLTXycjKAoRzo9EZKxfp+f8xEFEIGdGmCBqpEtd5F4N
+         AGAZM/euAY/eU5CDC8ZAzJA18bSwLtU8qbT+VhNUVyped9qhNhKcfULQ2hXpv9h2dQqQ
+         2vSQsh9wnbioXFe9sP9NKD9AmCK0I6pwB1UABf98miN9UF9eVbPThGTBXzdP7ixqOuXa
+         xjFIL8g8/cn+1BheLwsT1gCSmdZjI/7TovBMh3O9ZJRaxf0xKIP0p39F37QZ7NpzYqDU
+         KEEA==
+X-Gm-Message-State: AOAM532L0ovLFZyDbDeq/QtcTwBVI6sZYzF9VMrdqvyAykR7H0/Q703+
+        ELycuExNA8daXFQHE20Ovmyqa/pVhCs=
+X-Google-Smtp-Source: ABdhPJy3ceojF3/mbxHNzx6mC2dPUJ+jC2Ui5omROTlEQCDzlH+K1nwcq76StAFpe0KD1SPk8kBSgA==
+X-Received: by 2002:a05:622a:1713:: with SMTP id h19mr8269225qtk.464.1640425271268;
+        Sat, 25 Dec 2021 01:41:11 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id j14sm8942483qkp.28.2021.12.25.01.41.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Dec 2021 01:41:10 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: yang.yang29@zte.com.cn
+To:     akpm@linux-foundation.org, yang.shi@linux.alibaba.com,
+        ying.huang@intel.com
+Cc:     dave.hansen@linux.intel.com, yang.yang29@zte.com.cn,
+        minchan@kernel.org, saravanand@fb.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH] mm/vmstat: add events for THP max_ptes_* exceeds
+Date:   Sat, 25 Dec 2021 09:40:37 +0000
+Message-Id: <20211225094036.574157-1-yang.yang29@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211222075406.57191-1-qiang1.zhang@intel.com>
- <CANpmjNOmaSxqTjUd8y=A+sK0jGg6c00t8uvmOey+QrJsDamsmQ@mail.gmail.com>
- <PH0PR11MB58802F642473BA6213446AB7DA7F9@PH0PR11MB5880.namprd11.prod.outlook.com>
- <CANpmjNPU9Yw3RtsSrn0ZfdKQ7XUEp-Ecu9Wcx4HGhH3D+6-CrQ@mail.gmail.com> <PH0PR11MB5880B73436ADB3B8216C045DDA409@PH0PR11MB5880.namprd11.prod.outlook.com>
-In-Reply-To: <PH0PR11MB5880B73436ADB3B8216C045DDA409@PH0PR11MB5880.namprd11.prod.outlook.com>
-From:   Marco Elver <elver@google.com>
-Date:   Sat, 25 Dec 2021 10:36:03 +0100
-Message-ID: <CANpmjNP2kz9eYY2V_A82fqWbvJuVt045e2Ni9NFrmuO-uAvGeg@mail.gmail.com>
-Subject: Re: [PATCH] rcu: record kasan stack before enter local_irq_save()/restore()
- critical area
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "paulmck@kernel.org" <paulmck@kernel.org>,
-        "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
-        "urezki@gmail.com" <urezki@gmail.com>,
-        "Miao, Jun" <jun.miao@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 25 Dec 2021 at 09:39, Zhang, Qiang1 <qiang1.zhang@intel.com> wrote:
-[...]
-> Hi Marco, Are the following modifications clear to you?
+From: Yang Yang <yang.yang29@zte.com.cn>
 
-I understood now that the contention you're talking about is from
-depot_lock, which wasn't clear before (I thought you intended to
-reduce contention by shortening some other critical section).
+There are interfaces to adjust max_ptes_none, max_ptes_swap,
+max_ptes_shared values, see
+/sys/kernel/mm/transparent_hugepage/khugepaged/.
 
-> Subject: [PATCH] rcu: Reduce the consumption time of
->  local_irq_save()/restore() critical area
+But system administrator maynot know which value is the best. So
+Add those events to support adjusting max_ptes_* to suitable values.
 
-Subject: rcu, kasan: Record work creation stack trace with interrupts enabled
+For example, if default max_ptes_swap value causes too much failures,
+and system uses zram whose IO is fast, administrator could increase
+max_ptes_swap until THP_SCAN_EXCEED_SWAP_PTE not increase anymore.
 
-> In non-production KASAN kernel, a large number of call stacks are recorded,
-> it takes some time to acquire the global spinlock(depot_lock) inside
-> kasan_record_aux_stack_noalloc(), increased interrupts disable time,
-> kasan_record_aux_stack_noalloc() doesn't care if interrupts are enabled or
-> not when called, so move it outside the critical area.
+Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+---
+ include/linux/vm_event_item.h | 3 +++
+ mm/khugepaged.c               | 7 +++++++
+ mm/vmstat.c                   | 3 +++
+ 3 files changed, 13 insertions(+)
 
-I think this might be clearer:
+diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_item.h
+index a185cc75ff52..7b2363388bfa 100644
+--- a/include/linux/vm_event_item.h
++++ b/include/linux/vm_event_item.h
+@@ -98,6 +98,9 @@ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
+ 		THP_SPLIT_PAGE_FAILED,
+ 		THP_DEFERRED_SPLIT_PAGE,
+ 		THP_SPLIT_PMD,
++		THP_SCAN_EXCEED_NONE_PTE,
++		THP_SCAN_EXCEED_SWAP_PTE,
++		THP_SCAN_EXCEED_SHARED_PTE,
+ #ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
+ 		THP_SPLIT_PUD,
+ #endif
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 7720189a2da7..abcd6bd8b97a 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -618,6 +618,7 @@ static int __collapse_huge_page_isolate(struct vm_area_struct *vma,
+ 				continue;
+ 			} else {
+ 				result = SCAN_EXCEED_NONE_PTE;
++				count_vm_event(THP_SCAN_EXCEED_NONE_PTE);
+ 				goto out;
+ 			}
+ 		}
+@@ -636,6 +637,7 @@ static int __collapse_huge_page_isolate(struct vm_area_struct *vma,
+ 		if (page_mapcount(page) > 1 &&
+ 				++shared > khugepaged_max_ptes_shared) {
+ 			result = SCAN_EXCEED_SHARED_PTE;
++			count_vm_event(THP_SCAN_EXCEED_SHARED_PTE);
+ 			goto out;
+ 		}
+ 
+@@ -1253,6 +1255,7 @@ static int khugepaged_scan_pmd(struct mm_struct *mm,
+ 				continue;
+ 			} else {
+ 				result = SCAN_EXCEED_SWAP_PTE;
++				count_vm_event(THP_SCAN_EXCEED_SWAP_PTE);
+ 				goto out_unmap;
+ 			}
+ 		}
+@@ -1262,6 +1265,7 @@ static int khugepaged_scan_pmd(struct mm_struct *mm,
+ 				continue;
+ 			} else {
+ 				result = SCAN_EXCEED_NONE_PTE;
++				count_vm_event(THP_SCAN_EXCEED_NONE_PTE);
+ 				goto out_unmap;
+ 			}
+ 		}
+@@ -1290,6 +1294,7 @@ static int khugepaged_scan_pmd(struct mm_struct *mm,
+ 		if (page_mapcount(page) > 1 &&
+ 				++shared > khugepaged_max_ptes_shared) {
+ 			result = SCAN_EXCEED_SHARED_PTE;
++			count_vm_event(THP_SCAN_EXCEED_SHARED_PTE);
+ 			goto out_unmap;
+ 		}
+ 
+@@ -2006,6 +2011,7 @@ static void khugepaged_scan_file(struct mm_struct *mm,
+ 		if (xa_is_value(page)) {
+ 			if (++swap > khugepaged_max_ptes_swap) {
+ 				result = SCAN_EXCEED_SWAP_PTE;
++				count_vm_event(THP_SCAN_EXCEED_SWAP_PTE);
+ 				break;
+ 			}
+ 			continue;
+@@ -2056,6 +2062,7 @@ static void khugepaged_scan_file(struct mm_struct *mm,
+ 	if (result == SCAN_SUCCEED) {
+ 		if (present < HPAGE_PMD_NR - khugepaged_max_ptes_none) {
+ 			result = SCAN_EXCEED_NONE_PTE;
++			count_vm_event(THP_SCAN_EXCEED_NONE_PTE);
+ 		} else {
+ 			node = khugepaged_find_target_node();
+ 			collapse_file(mm, file, start, hpage, node);
+diff --git a/mm/vmstat.c b/mm/vmstat.c
+index d701c335628c..4057372745d0 100644
+--- a/mm/vmstat.c
++++ b/mm/vmstat.c
+@@ -1353,6 +1353,9 @@ const char * const vmstat_text[] = {
+ 	"thp_split_page_failed",
+ 	"thp_deferred_split_page",
+ 	"thp_split_pmd",
++	"thp_scan_exceed_none_pte",
++	"thp_scan_exceed_swap_pte",
++	"thp_scan_exceed_share_pte",
+ #ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
+ 	"thp_split_pud",
+ #endif
+-- 
+2.25.1
 
-"Recording the work creation stack trace for KASAN reports in
-call_rcu() is expensive, due to unwinding the stack, but also due to
-acquiring depot_lock inside stackdepot (which may be contended).
-Because calling kasan_record_aux_stack_noalloc() does not require
-interrupts to already be disabled, this may unnecessarily extend the
-time with interrupts disabled.
-
-Therefore, move calling kasan_record_aux_stack() before the section
-with interrupts disabled."
-
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-
-Acked-by: Marco Elver <elver@google.com>
-
-> ---
->  kernel/rcu/tree.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 9b58bae0527a..36bd3f9e57b3 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -3068,8 +3068,8 @@ void call_rcu(struct rcu_head *head, rcu_callback_t func)
->         }
->         head->func = func;
->         head->next = NULL;
-> -       local_irq_save(flags);
->         kasan_record_aux_stack_noalloc(head);
-> +       local_irq_save(flags);
->         rdp = this_cpu_ptr(&rcu_data);
->
-> Thanks,
-> Zqiang

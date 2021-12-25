@@ -2,338 +2,347 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E18FC47F25E
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 07:09:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A12A547F260
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 07:14:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbhLYGJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 01:09:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
+        id S230037AbhLYGMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 01:12:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbhLYGJz (ORCPT
+        with ESMTP id S229747AbhLYGMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 01:09:55 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4EDC061401
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 22:09:55 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id y130so3863015ybe.8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 22:09:55 -0800 (PST)
+        Sat, 25 Dec 2021 01:12:32 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18CAC061757
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 22:12:31 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id k69so12881300ybf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 22:12:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=atishpatra.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=C0a5/ROElbHF7H2S7bFI1s+r5RUzmHzCdZt07fjfWzk=;
-        b=EAWOpOvu3FcR7iO6DmwUxRNdvnrkcV/zIpc0PSIVstaAA9S0W06jdTml5u+tGFlKfq
-         zeh4xVN7+aKxfjHZDM8a+PK9hPFsBmmhXWBhvzxn3oohUn1wS4j4j6GtGA0P7S9qThnl
-         tVbSgtGPOtngPqEK4wBZgpi9v6smH/BFj0s/M=
+         :cc:content-transfer-encoding;
+        bh=dzkabnF+DJWBBK27hKdSbhfuLgzQlCBq4aSNcChshzM=;
+        b=q9XpPc3Hj0+A1w06/ay49FUWMkPEH14U4f9q5kkSRsq5EiLae+4mumW2qoXQVA0eNM
+         RgADOQgeSxq/BfuHW7VI82XEuvpgCbpJmQVBsYXKb6CAa9hfrmw6KbPwHx/SI9eTKofI
+         mtcS4hjlrbf7jBzp1I0p1WsjCPnXy8whVwSxY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C0a5/ROElbHF7H2S7bFI1s+r5RUzmHzCdZt07fjfWzk=;
-        b=erhKec6B5zagwyQx9CTEIDcwrR9jXKl0L8PuXxARLTMI7cuoFqWmjL477oNxawtZzM
-         hWpZwg75CUDt1d6b1tg86f5ZKUCF9FoITJGP5B6ZAjJaiXGUfP+PJy5yjtdEXTr5krBB
-         0mSoeN79/UXeZ+5KtHCd0SWi/w2wsaHWlqdSDasPlItOc/dzsE2BqS/kp6OmbFZKf/yp
-         1tD7sDPS7MW187AjWEV7YjjWmcQRPS6/OwG8QTdbsmAgFZkTrSPrhszOn9Kc+ZAn8sZ1
-         NBz7VD6vL5Mkmd/8Sj2DaF2B6fS04oXnhPMIG4asWWKswXXYVJUopd3RWGo3srjqXVv3
-         Yk1g==
-X-Gm-Message-State: AOAM530joCHnz/APEPW64cINMz6qDsy4qK9kvnmXWmdmVoPafgTyw/2c
-        PRMholKynLKhzbaPHGFQ+MBLyYfVkaNAm/DAU4ah
-X-Google-Smtp-Source: ABdhPJyAgO00d6l0GOB96GI7Hr9Kqb4UiZvi6xgIq97UVVNENtVnOn/3GfvJlVIrV26Wi7qefbCMrz2/seG0Dg3hOiQ=
-X-Received: by 2002:a5b:b90:: with SMTP id l16mr12521155ybq.632.1640412594055;
- Fri, 24 Dec 2021 22:09:54 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=dzkabnF+DJWBBK27hKdSbhfuLgzQlCBq4aSNcChshzM=;
+        b=66yQkulnMW88iZZQwYF6evuDrhf4aVIO48wmePPOq+ecscNnDhqXgQJRldRCmk+9m0
+         b5mJeS5BhfoTDTKNMOAzZutDgIY4AE6wRHjy8sKiEc0Orei8VXWkBdTGvx/3OassiYFj
+         YXbbH9UFVOPybjOOGeL5dFeUiKQKFkixr6sIEXapbslYb8mJOvtK/3n9NR/eXCd9wIB8
+         /YhRDtUCMKGvLpFz+b7vYVPp01ZfQooB5hJ6kpRwvjV+gsDUV9IT/DP0Q/EDnuV/oXOZ
+         aeMFy+oWZj15Wk8kEAPpA8PjjBfqErXE3QrY997BIwVrb6mvBymTwoj4DPYtrpVSnJ6C
+         TieA==
+X-Gm-Message-State: AOAM531PWsBmVRosX1fU7+uqTcGuda8mi1tlTUSPivamswg3slu77/6e
+        f++ZrT4P3BA4TEru8YcPqj/03bU6lqxVFs6PyI/oM+Glv7bn
+X-Google-Smtp-Source: ABdhPJyL136Wsn2OUBJHP6++MUVbop0RN/qSVlJsm2qxwTJXjJPuHCOJTdaahIG3tKMNX7J7CIovmAQHtDBOOfmzRhE=
+X-Received: by 2002:a5b:b92:: with SMTP id l18mr11462503ybq.10.1640412750951;
+ Fri, 24 Dec 2021 22:12:30 -0800 (PST)
 MIME-Version: 1.0
-References: <20211224211632.1698523-1-atishp@rivosinc.com> <20211224211632.1698523-2-atishp@rivosinc.com>
- <01a238a6-4f0e-623f-4c49-8b0a3f896205@irq.a4lg.com>
-In-Reply-To: <01a238a6-4f0e-623f-4c49-8b0a3f896205@irq.a4lg.com>
+References: <20211225054647.1750577-1-atishp@rivosinc.com>
+In-Reply-To: <20211225054647.1750577-1-atishp@rivosinc.com>
 From:   Atish Patra <atishp@atishpatra.org>
-Date:   Fri, 24 Dec 2021 22:09:43 -0800
-Message-ID: <CAOnJCUKgt1+SVXTBmGChJf74JrsqeqACXbjQAXnhFALkXhPFew@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] RISC-V: Provide a framework for parsing
- multi-letter ISA extensions
-To:     Tsukasa OI <research_trasio@irq.a4lg.com>
-Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Date:   Fri, 24 Dec 2021 22:12:20 -0800
+Message-ID: <CAOnJCU+duqiLAX5G=DQOfb=ugeP_ZVPLPd=HKzG7PMU2XEH6yg@mail.gmail.com>
+Subject: Re: [v5 0/9] Improve RISC-V Perf support using SBI PMU and sscofpmf extension
+To:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 24, 2021 at 7:13 PM Tsukasa OI <research_trasio@irq.a4lg.com> wrote:
+On Fri, Dec 24, 2021 at 9:47 PM Atish Patra <atishp@atishpatra.org> wrote:
 >
-> Hello Atish,
+> This series adds improved perf support for RISC-V based system using
+> SBI PMU extension[1] and Sscofpmf extension[2]. The SBI PMU extension all=
+ows
+> the kernel to program the counters for different events and start/stop co=
+unters
+> while the sscofpmf extension allows the counter overflow interrupt and pr=
+ivilege
+> mode filtering. An hardware platform can leverage SBI PMU extension witho=
+ut
+> the sscofpmf extension if it supports mcounteren at least. Perf stat will=
+ work
+> but record won't work as sscofpmf & mcountinhibit is required to support =
+that.
+> A platform can support both features event counting and sampling using pe=
+rf
+> tool only if sscofpmf is supported.
 >
-> On 2021/12/25 6:16, Atish Patra wrote:
-> > Recently, there were 15 specifications/40 ISA extensions were ratified.
-> > Except hypervisor ('H') extension, all of them are multi-letter extensions.
-> > Going forward, there will be more number of multi-letter extensions as
-> > well. Parsing all of these extensions from ISA string is not scalable.
+> This series introduces a platform perf driver instead of a existing arch
+> specific implementation. The new perf implementation has adopted a modula=
+r
+> approach where most of the generic event handling is done in the core lib=
+rary
+> while individual PMUs need to only implement necessary features specific =
+to
+> the PMU. This is easily extensible and any future RISC-V PMU implementati=
+on
+> can leverage this. Currently, SBI PMU driver & legacy PMU driver are impl=
+emented
+> as a part of this series.
 >
-> Accepting multi-letter extensions and providing framework is very nice.
+> The legacy driver tries to reimplement the existing minimal perf under a =
+new
+> config to maintain backward compatibility. This implementation only allow=
+s
+> monitoring of always running cycle/instruction counters. Moreover, they c=
+an
+> not be started or stopped. In general, this is very limited and not very =
+useful.
+> That's why, I am not very keen to carry the support into the new driver.
+> However, I don't want to break perf for any existing hardware platforms.
+> If everybody agrees that we don't need legacy perf implementation for old=
+er
+> implementation, I will be happy to drop PATCH 4.
 >
-> But would you enlighten me how and why "parsing all of these extensions
-> from ISA string is not scalable"? That's the only thing I'm not convinced.
+> This series has been tested in Qemu (RV64 & RV32) and HiFive Unmatched.
+> Qemu patches[4] and OpenSBI v1.0 is required to test it on Qemu and a dt =
+patch
+> required in U-Boot[5] for HiFive Unmatched. Qemu changes are not
+> backward compatible. That means, you can not use perf anymore on older Qe=
+mu
+> versions with latest OpenSBI and/or Kernel. However, newer kernel will
+> just use legacy pmu driver if old OpenSBI is detected.
 >
-
-I thought we already discussed the merits in this thread.
-https://lore.kernel.org/lkml/9fa0492d-b448-045b-ba8f-e3d68b46d673@irq.a4lg.com/
-
-Anyways, here is summary of disadvantages of "riscv,isa" string
-parsing that you proposed
-
-1. The isa string in DT will be really really long. It is time
-consuming to parse it and becomes
-somewhat unreadable after a point.
-2. Currently, /proc/cpuinfo dumps the entire riscv,isa string. That
-works for base/single letter extensions.
-However, dumping the entire string will not work in userspace. Imagine
-the 10~20 extensions string in your terminal.
-3. If you want to group them into different extensions, you have to
-parse them again and create separate extensions
-which I am doing in this patch.
-4. In future, there will be subnodes in the isa-ext which will only
-describe the ISA-extensions corresponding to Sv* or Sh* or Z*
-groups. I did not add those in this version because the unpriv
-specification doesn't define them clearly and may change in the future
-(as suggested by Greg [1].)
-
-[1] https://github.com/riscv/riscv-isa-manual/issues/781#issuecomment-983233088
-
-It is very easy to create such groupings in the Device tree and
-display it to the userspace. However, the isa string has to perform
-additional string parsing even for that.
-
-> Parsing ISA string is per-hart but one-time only (in kernel space) and
-> doesn't take much long.  Yes, the ISA string will get longer and longer
-> over time (which might affect the boot performance on many-core systems)
-> but once we get heterogeneous systems (as you mentioned), we will have
-> per-hart "isa-ext" anyway and we will have pretty much the same situation.
-> We could take per-group approach instead of per-hart for efficiency but
-> that means ISA string parsing can be optimized just as "isa-ext".
+> The U-Boot patch is just an example that encodes few of the events define=
+d
+> in fu740 documentation [6] in the DT. We can update the DT to include all=
+ the
+> events defined if required.
 >
-> Current RISC-V systems have not long ISA string and not many cores (making
-> per-hart ISA string processing not a problem).  Future complex RISC-V
-> systems may have many cores, heterogeneous capabilities and long ISA
-> strings that need to be taken care.  However, "isa-ext" will have a
-> similar scaling issue over time (just as the ISA string).
+> This series depends on the ISA extension parsing series[7].
 >
-
-No. The scaling issue in isa-ext will not be as near as the riscv,isa
-string as the early boot code will
-load a value from the array and check a DT property.
-
-> So, I don't see any merits of "isa-ext" in the long or short term.
+> Here is an output of perf stat/report while running perf benchmark with O=
+penSBI,
+> Linux kernel and U-Boot patches applied.
 >
-
-On the other hand, I don't understand what is the disadvantage of the
-isa-ext approach. Even if you don't
-agree on the performance and simplicity front, it certainly becomes
-more human readable.
-
-
-> Regards,
+> HiFive Unmatched:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> perf stat -e cycles -e instructions -e L1-icache-load-misses -e branches =
+-e branch-misses \
+> -e r0000000000000200 -e r0000000000000400 \
+> -e r0000000000000800 perf bench sched messaging -g 25 -l 15
+>
+> # Running 'sched/messaging' benchmark:
+> # 20 sender and receiver processes per group
+> # 25 groups =3D=3D 1000 processes run
+>
+>      Total time: 0.826 [sec]
+>
+>  Performance counter stats for 'perf bench sched messaging -g 25 -l 15':
+>
+>         3426710073      cycles                (65.92%)
+>         1348772808      instructions          #0.39  insn per cycle  (75.=
+44%)
+>                  0      L1-icache-load-misses (72.28%)
+>          201133996      branches              (67.88%)
+>           44663584      branch-misses         #22.21% of all branches (35=
+.01%)
+>          248194747      r0000000000000200     (41.94%) --> Integer load i=
+nstruction retired
+>          156879950      r0000000000000400     (43.58%) --> Integer store =
+instruction retired
+>            6988678      r0000000000000800     (47.91%) --> Atomic memory =
+operation retired
+>
+>        1.931335000 seconds time elapsed
+>
+>        1.100415000 seconds user
+>        3.755176000 seconds sys
 >
 >
-> > Thus, this patch provides a DT based framework to for easy parsing and
-> > querying of any ISA extensions. It facilitates custom user visible strings
-> > for the ISA extensions via /proc/cpuinfo as well.
-> >
-> > Currently, there are no platforms with heterogeneous Linux capable harts.
-> > That's why, this patch supports only a single DT node which can only work
-> > for systems with homogeneous harts. To support heterogeneous systems, this
-> > cpu node must be a subnode for each cpu.
-> >
-> > Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> > ---
-> >  arch/riscv/include/asm/hwcap.h | 31 ++++++++++++++++++
-> >  arch/riscv/kernel/cpu.c        | 16 ++++++++++
-> >  arch/riscv/kernel/cpufeature.c | 58 +++++++++++++++++++++++++++++++++-
-> >  3 files changed, 104 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-> > index 5ce50468aff1..368ab0f330c8 100644
-> > --- a/arch/riscv/include/asm/hwcap.h
-> > +++ b/arch/riscv/include/asm/hwcap.h
-> > @@ -34,7 +34,36 @@ extern unsigned long elf_hwcap;
-> >  #define RISCV_ISA_EXT_s              ('s' - 'a')
-> >  #define RISCV_ISA_EXT_u              ('u' - 'a')
-> >
-> > +/*
-> > + * Increse this to higher value as kernel support more ISA extensions.
-> > + */
-> >  #define RISCV_ISA_EXT_MAX    64
-> > +#define RISCV_ISA_EXT_NAME_LEN_MAX 32
-> > +/* The base ID for multi-letter ISA extensions */
-> > +#define RISCV_ISA_EXT_BASE 26
-> > +
-> > +/*
-> > + * This enum represent the logical ID for each multi-letter RISC-V ISA extension.
-> > + * The logical ID should start from RISCV_ISA_EXT_BASE and must not exceed
-> > + * RISCV_ISA_EXT_MAX. 0-25 range is reserved for single letter
-> > + * extensions while all the multi-letter extensions should define the next
-> > + * available logical extension id.
-> > + */
-> > +enum riscv_isa_ext_id {
-> > +     RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
-> > +};
-> > +
-> > +struct riscv_isa_ext_data {
-> > +     struct list_head node;
-> > +     /* Name of the extension property in DT */
-> > +     char dtprop[RISCV_ISA_EXT_NAME_LEN_MAX];
-> > +     /* Name of the extension displayed to userspace via /proc/cpuinfo */
-> > +     char uprop[RISCV_ISA_EXT_NAME_LEN_MAX];
-> > +     /* The logical ISA extension ID */
-> > +     unsigned int isa_ext_id;
-> > +};
-> > +
-> > +extern struct list_head riscv_isa_ext_list;
-> >
-> >  unsigned long riscv_isa_extension_base(const unsigned long *isa_bitmap);
-> >
-> > @@ -44,6 +73,8 @@ bool __riscv_isa_extension_available(const unsigned long *isa_bitmap, int bit);
-> >  #define riscv_isa_extension_available(isa_bitmap, ext)       \
-> >       __riscv_isa_extension_available(isa_bitmap, RISCV_ISA_EXT_##ext)
-> >
-> > +int riscv_isa_ext_list_add(struct riscv_isa_ext_data *edata);
-> > +
-> >  #endif
-> >
-> >  #endif /* _ASM_RISCV_HWCAP_H */
-> > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> > index f13b2c9ea912..dad95bdd3cca 100644
-> > --- a/arch/riscv/kernel/cpu.c
-> > +++ b/arch/riscv/kernel/cpu.c
-> > @@ -71,6 +71,21 @@ static void print_isa(struct seq_file *f, const char *isa)
-> >       seq_puts(f, "\n");
-> >  }
-> >
-> > +static void print_isa_ext(struct seq_file *f)
-> > +{
-> > +     struct riscv_isa_ext_data *edata;
-> > +     int count = 0;
-> > +
-> > +     seq_puts(f, "isa-ext\t\t: ");
-> > +     list_for_each_entry(edata, &riscv_isa_ext_list, node) {
-> > +             if (count)
-> > +                     seq_puts(f, ",");
-> > +             seq_write(f, edata->uprop, strnlen(edata->uprop, RISCV_ISA_EXT_NAME_LEN_MAX));
-> > +             count++;
-> > +     }
-> > +     seq_puts(f, "\n");
-> > +}
-> > +
-> >  static void print_mmu(struct seq_file *f, const char *mmu_type)
-> >  {
-> >  #if defined(CONFIG_32BIT)
-> > @@ -113,6 +128,7 @@ static int c_show(struct seq_file *m, void *v)
-> >       seq_printf(m, "hart\t\t: %lu\n", cpuid_to_hartid_map(cpu_id));
-> >       if (!of_property_read_string(node, "riscv,isa", &isa))
-> >               print_isa(m, isa);
-> > +     print_isa_ext(m);
-> >       if (!of_property_read_string(node, "mmu-type", &mmu))
-> >               print_mmu(m, mmu);
-> >       if (!of_property_read_string(node, "compatible", &compat)
-> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> > index d959d207a40d..c70eeec17f5b 100644
-> > --- a/arch/riscv/kernel/cpufeature.c
-> > +++ b/arch/riscv/kernel/cpufeature.c
-> > @@ -7,6 +7,8 @@
-> >   */
-> >
-> >  #include <linux/bitmap.h>
-> > +#include <linux/list.h>
-> > +#include <linux/slab.h>
-> >  #include <linux/of.h>
-> >  #include <asm/processor.h>
-> >  #include <asm/hwcap.h>
-> > @@ -18,6 +20,8 @@ unsigned long elf_hwcap __read_mostly;
-> >  /* Host ISA bitmap */
-> >  static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
-> >
-> > +LIST_HEAD(riscv_isa_ext_list);
-> > +
-> >  #ifdef CONFIG_FPU
-> >  __ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_fpu);
-> >  #endif
-> > @@ -59,12 +63,60 @@ bool __riscv_isa_extension_available(const unsigned long *isa_bitmap, int bit)
-> >  }
-> >  EXPORT_SYMBOL_GPL(__riscv_isa_extension_available);
-> >
-> > +#define __RISCV_ISA_EXT_DATA(DTPROP, UPROP, EXTID) \
-> > +     {                                                       \
-> > +             .dtprop = #DTPROP,                              \
-> > +             .uprop = #UPROP,                                \
-> > +             .isa_ext_id = EXTID,                            \
-> > +     }
-> > +
-> > +static struct riscv_isa_ext_data isa_ext_arr[] = {
-> > +     __RISCV_ISA_EXT_DATA("", "", RISCV_ISA_EXT_MAX),
-> > +};
-> > +
-> > +int riscv_isa_ext_list_add(struct riscv_isa_ext_data *edata)
-> > +{
-> > +     struct device_node *node, *enode;
-> > +     int eid;
-> > +
-> > +     if (!edata || !edata->dtprop)
-> > +             return -EINVAL;
-> > +
-> > +     node = of_find_node_by_path("/cpus");
-> > +     if (!node) {
-> > +             pr_err("No CPU information found in DT\n");
-> > +             return -ENOENT;
-> > +     }
-> > +
-> > +     enode = of_get_child_by_name(node, "riscv,isa-ext");
-> > +     if (!enode) {
-> > +             pr_err("No riscv-isa-ext found in DT\n");
-> > +             return -ENOENT;
-> > +     }
-> > +
-> > +     eid = edata->isa_ext_id;
-> > +     if (eid < RISCV_ISA_EXT_BASE || eid >= RISCV_ISA_EXT_MAX)
-> > +             return -EINVAL;
-> > +
-> > +     if (!of_property_read_bool(enode, edata->dtprop)) {
-> > +             pr_err("The ISA extension %s is not present in DT\n", edata->dtprop);
-> > +             return -ENODEV;
-> > +     }
-> > +
-> > +     /* Enable the extension id in the riscv_isa for easier probing */
-> > +     riscv_isa[0] |= 1 << eid;
-> > +     list_add(&edata->node, &riscv_isa_ext_list);
-> > +     pr_info("RISC-V ISA extension '%s' available\n", edata->uprop);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> >  void __init riscv_fill_hwcap(void)
-> >  {
-> >       struct device_node *node;
-> >       const char *isa;
-> >       char print_str[BITS_PER_LONG + 1];
-> > -     size_t i, j, isa_len;
-> > +     size_t i, j, isa_len, ext_arr_sz;
-> >       static unsigned long isa2hwcap[256] = {0};
-> >
-> >       isa2hwcap['i'] = isa2hwcap['I'] = COMPAT_HWCAP_ISA_I;
-> > @@ -148,4 +200,8 @@ void __init riscv_fill_hwcap(void)
-> >       if (elf_hwcap & (COMPAT_HWCAP_ISA_F | COMPAT_HWCAP_ISA_D))
-> >               static_branch_enable(&cpu_hwcap_fpu);
-> >  #endif
-> > +
-> > +     ext_arr_sz = ARRAY_SIZE(isa_ext_arr);
-> > +     for (i = 0; i < ext_arr_sz - 1; i++)
-> > +             riscv_isa_ext_list_add(&isa_ext_arr[i]);
-> >  }
+> QEMU:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D
+> Perf stat:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D
 >
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> [root@fedora-riscv riscv]# perf stat -e r8000000000000005 -e r80000000000=
+00007 \
+> -e r8000000000000006 -e r0000000000020002 -e r0000000000020004 -e branch-=
+misses \
+> -e cache-misses -e dTLB-load-misses -e dTLB-store-misses -e iTLB-load-mis=
+ses \
+> -e cycles -e instructions perf bench sched messaging -g 15 -l 10 \
+> Running with 15*40 (=3D=3D 600) tasks.
+> Time: 6.578
+>
+>  Performance counter stats for './hackbench -pipe 15 process':
+>
+>              1,794      r8000000000000005      (52.59%) --> SBI_PMU_FW_SE=
+T_TIMER
+>              2,859      r8000000000000007      (60.74%) --> SBI_PMU_FW_IP=
+I_RECVD
+>              4,205      r8000000000000006      (68.71%) --> SBI_PMU_FW_IP=
+I_SENT
+>                  0      r0000000000020002      (81.69%)
+>      <not counted>      r0000000000020004      (0.00%)
+>      <not counted>      branch-misses          (0.00%)
+>      <not counted>      cache-misses           (0.00%)
+>          7,878,328      dTLB-load-misses       (15.60%)
+>            680,270      dTLB-store-misses      (28.45%)
+>          8,287,931      iTLB-load-misses       (39.24%)
+>     20,008,506,675      cycles                 (48.60%)
+>     21,484,427,932      instructions   # 1.07  insn per cycle (56.60%)
+>
+>        1.681344735 seconds time elapsed
+>
+>        0.614460000 seconds user
+>        8.313254000 seconds sys
+>
+>
+> [root@fedora-riscv ~]# perf stat -e cycles -e instructions -e dTLB-load-m=
+isses -e dTLB-store-misses -e iTLB-load-misses \
+> > perf bench sched messaging -g 1 -l 10
+> # Running 'sched/messaging' benchmark:
+> # 20 sender and receiver processes per group
+> # 1 groups =3D=3D 40 processes run
+>
+>      Total time: 0.218 [sec]
+>
+>  Performance counter stats for 'perf bench sched messaging -g 1 -l 10':
+>
+>      3,685,401,394      cycles
+>      3,684,529,388      instructions              #    1.00  insn per cyc=
+le
+>          3,006,042      dTLB-load-misses
+>            258,144      dTLB-store-misses
+>          1,992,860      iTLB-load-misses
+>
+>        0.588717389 seconds time elapsed
+>
+>        0.324009000 seconds user
+>        0.937087000 seconds sys
+>
+> [root@fedora-riscv ~]# perf record -e cycles -e instructions -e dTLB-load=
+-misses -e dTLB-store-misses \
+> -e iTLB-load-misses -c 10000 perf bench sched messaging -g 1 -l 10
+> # Running 'sched/messaging' benchmark:
+> # 20 sender and receiver processes per group
+> # 1 groups =3D=3D 40 processes run
+>
+>      Total time: 2.160 [sec]
+> [ perf record: Woken up 11 times to write data ]
+> Warning:
+> Processed 291769 events and lost 1 chunks!
+>
+> [root@fedora-riscv ~]# perf report
+>
+> Available samples
+> 146K cycles                                                              =
+      =E2=97=86
+> 146K instructions                                                        =
+      =E2=96=92
+> 298 dTLB-load-misses                                                     =
+      =E2=96=92
+> 8 dTLB-store-misses                                                      =
+      =E2=96=92
+> 211 iTLB-load-misses
+>
+> [1] https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/riscv-sbi.=
+adoc
+> [2] https://drive.google.com/file/d/171j4jFjIkKdj5LWcExphq4xG_2sihbfd/edi=
+t
+> [3] https://github.com/atishp04/linux/tree/riscv_pmu_v5
+> [4] https://github.com/atishp04/qemu/tree/riscv_pmu_v3
+> [5] https://github.com/atishp04/u-boot/tree/hifive_unmatched_dt_pmu
+> [6] https://sifive.cdn.prismic.io/sifive/de1491e5-077c-461d-9605-e8a0ce57=
+337d_fu740-c000-manual-v1p3.pdf
+> [7] https://lkml.org/lkml/2021/12/24/313
+>
+> Changes from v4->v5:
+> 1. Fixed few corner case issues in perf interrupt handling.
+> 2. Changed the set_period API so that the caller can compute the initiali=
+ze
+>    value.
+> 3. Fixed the per cpu interrupt enablement issue.
+> 4. Fixed a bug for the privilege mode filtering.
+> 5. Modified the sbi driver independent of the DT.
+> 6. Removed any DT related modifications.
+>
+> Changes from v3->v4:
+> 1. Do not proceed overflow handler if event doesn't set for sampling.
+> 2. overflow status register is only read after counters are stopped.
+> 3. Added the PMU DT node for HiFive Unmatched.
+>
+> Changes from v2->v3:
+> 1. Added interrupt overflow support.
+> 2. Cleaned up legacy driver initialization.
+> 3. Supports perf record now.
+> 4. Added the DT binding and maintainers file.
+> 5. Changed cpu hotplug notifier to be multi-state.
+> 6. OpenSBI doesn't disable cycle/instret counter during boot. Update the
+>    perf code to disable all the counter during the boot.
+>
+> Changes from v1->v2
+> 1. Implemented the latest SBI PMU extension specification.
+> 2. The core platform driver was changed to operate as a library while onl=
+y
+>    sbi based PMU is built as a driver. The legacy one is just a fallback =
+if
+>    SBI PMU extension is not available.
+>
+> Atish Patra (9):
+> RISC-V: Remove the current perf implementation
+> RISC-V: Add CSR encodings for all HPMCOUNTERS
+> RISC-V: Add a perf core library for pmu drivers
+> RISC-V: Add a simple platform driver for RISC-V legacy perf
+> RISC-V: Add RISC-V SBI PMU extension definitions
+> RISC-V: Add perf platform driver based on SBI PMU extension
+> RISC-V: Add sscofpmf extension support
+> Documentation: riscv: Remove the old documentation
+> MAINTAINERS: Add entry for RISC-V PMU drivers
+>
+> Documentation/riscv/pmu.rst         | 255 ----------
+> MAINTAINERS                         |   9 +
+> arch/riscv/Kconfig                  |  13 -
+> arch/riscv/include/asm/csr.h        |  66 ++-
+> arch/riscv/include/asm/hwcap.h      |   1 +
+> arch/riscv/include/asm/perf_event.h |  72 ---
+> arch/riscv/include/asm/sbi.h        |  97 ++++
+> arch/riscv/kernel/Makefile          |   1 -
+> arch/riscv/kernel/cpufeature.c      |   1 +
+> arch/riscv/kernel/perf_event.c      | 485 ------------------
+> drivers/perf/Kconfig                |  30 ++
+> drivers/perf/Makefile               |   5 +
+> drivers/perf/riscv_pmu.c            | 330 ++++++++++++
+> drivers/perf/riscv_pmu_legacy.c     | 143 ++++++
+> drivers/perf/riscv_pmu_sbi.c        | 762 ++++++++++++++++++++++++++++
+> include/linux/cpuhotplug.h          |   1 +
+> include/linux/perf/riscv_pmu.h      |  73 +++
+> 17 files changed, 1517 insertions(+), 827 deletions(-)
+> delete mode 100644 Documentation/riscv/pmu.rst
+> delete mode 100644 arch/riscv/kernel/perf_event.c
+> create mode 100644 drivers/perf/riscv_pmu.c
+> create mode 100644 drivers/perf/riscv_pmu_legacy.c
+> create mode 100644 drivers/perf/riscv_pmu_sbi.c
+> create mode 100644 include/linux/perf/riscv_pmu.h
+>
+> --
+> 2.33.1
+>
 
+Apologies for multiple emails on this series (in case you are
+subscribed to linux-kernel@vger.kernel.org as well).
+I messed up my script earlier and it removed all the CC entries and
+sent the email just to lkml by mistake.
+Sorry for the noise.
 
-
--- 
+--=20
 Regards,
 Atish

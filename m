@@ -2,100 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F1747F30F
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 12:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B3847F318
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 12:54:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbhLYLQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 06:16:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
+        id S231523AbhLYLyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 06:54:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231484AbhLYLQC (ORCPT
+        with ESMTP id S231448AbhLYLyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 06:16:02 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A680EC061401;
-        Sat, 25 Dec 2021 03:16:01 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id x21so24025426lfa.5;
-        Sat, 25 Dec 2021 03:16:01 -0800 (PST)
+        Sat, 25 Dec 2021 06:54:33 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D026C061759
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 03:54:33 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id k21so24208968lfu.0
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 03:54:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=jD3Ho49ZXVfN6HlbKxzdGSI6sz6nWNyLf9zcGh6i8pk=;
-        b=bvQ1dMcEqw0yfAIAJZhBI4hSQrXQDRvrQdCHqD1vyeg/pceL0cduJSPLXOwW7MDAOx
-         IUIt6P1SmR9bBsd0sDlno33k5NMM/ohOOd6sEnBFldx+lzb5pAItCz/cnlz7FJCUek/o
-         /p12JJStViW5vfzuS1qXXof0SShP1I70C2rGFXJIlM3t52A0nnOs5sTRhBJBlUTbA9f/
-         ms1KuDX+I8v2FUkBH6KgwppAbeg5SysCfzbQiFRmVfRXKUuJl2vei+lVebl5+7tqTj43
-         YxDPoQ9ZUfXcm3g4K0H7Lpv++J+bRM+OqvM9/4FP1ZIPGaDPsvRCvcdNCB2aHeSbjmX0
-         UjZA==
+        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jekdnbYh9G4CN1Ds17WRd92yJsjR3300LoVLcZLYxzY=;
+        b=gtIHbIqA7tKe8mwYwmT7QEQnRQ4hgKodDgKug7BZtIRF9wuciZgDtjYP9U/AYMdY+Y
+         Jw+2CgatMFhonIoK+zFFOY9dkms/z0pAjJ1u/Lwf1pEHae0X108guZq80MKVJ/YiQZsM
+         8PQJ6y/lndi3mQVXBISI34aIxVYBvq3TYbAVkEey5/rYSpYgMyYAnkjPD43SS9yrU/WL
+         RjcNR3E6A/7HswKlal2RAEkB8e5izQfByjg0BGhs/y8EU1ucbqYr/ZuI3a9uSnPfx//m
+         TQpJAnjfzsJ9yK+dRzg3Uvy2naOANDQbIgtkm2RehQSaa6v2fCWy+3e3UgpY7GjCjTVi
+         nmBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=jD3Ho49ZXVfN6HlbKxzdGSI6sz6nWNyLf9zcGh6i8pk=;
-        b=axvOD2Fp72Te4MlRnPsyrF48TxxZxjSd8lpxRDVWEYO/S6TZEDJiIl+jxiBWgdvgP7
-         21mZMefgZ1YtFA2GdVVMqbqTlSL1Pkc4RHj+ZR+VanaJokoIGpSDh0Igcn1Yl3jzYdxS
-         Cyu6mJR854PMxkQXsSjaJPScCDBR3z+YbZaybYyru4QY9M/MitfXCHnJKaQaqwGz3w4f
-         AJ/VWkEbDcJTooqUp1bGtMnZGls96s3wS20RtxckbF00w+23/Kccw9iYxTmAY15gG24n
-         Rpws00ugzM3lKgHv6QddaZvhQa4mxSXtsgcKK4k/OYAU+ViAt/2nUbfY6SIlsv1Ubkpt
-         V+vQ==
-X-Gm-Message-State: AOAM5326dtnQhIroshZIt5YWKvER1nAVHu5fZmKZHI+0cVvInjd7IwXG
-        ZhYVFzMy/BJuuv035VmMCbw=
-X-Google-Smtp-Source: ABdhPJwvYB0w3n8Ru3efRBiK7m5ojAAr3OM0vWrkkFa2fkcpgQfKuQ3nnAJlFknilSRiF+cdPZVAcw==
-X-Received: by 2002:a05:6512:30f:: with SMTP id t15mr5280604lfp.650.1640430959306;
-        Sat, 25 Dec 2021 03:15:59 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.235.97])
-        by smtp.gmail.com with ESMTPSA id s4sm1016787ljp.40.2021.12.25.03.15.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Dec 2021 03:15:58 -0800 (PST)
-Message-ID: <45e8c415-8aa1-7a2a-c435-3e014f3856eb@gmail.com>
-Date:   Sat, 25 Dec 2021 14:15:57 +0300
+        bh=jekdnbYh9G4CN1Ds17WRd92yJsjR3300LoVLcZLYxzY=;
+        b=zv7SHzmKNrkAB+ezhIztfZDR5J2tEfKJKnpCoL2GSUz35NBwTkdJvfCoTx60dpII5r
+         m2UK8ISnKDptMYeNMxaF8eXjPhcSfw0/AOoz4FuFT0zciGX2o4rEs/9k49O3v1DO+8x7
+         cOQrb3b9OpkqJzljvBR1/aq+ro3rfITKXmDhpC9JWQ4CF59FP6ZsFs26q+LOiXvqjR7G
+         A3ED3S/SSjDv8zkpdwWVTGOK6DqXhya0hmvWl81sl4mUQ8J2cm9Ge5bxcgP6JEJtGyHC
+         q9vBaFsHPOUeq5bZ3HYu5n1o+UuYs7USykbEl0YD6pdGsXZy6WPhbedp2n6wYoNqDUGV
+         H6qw==
+X-Gm-Message-State: AOAM531etfeFqrql08Z4FsNBO5c9H0baQXg8En3J2w9lw/xOsS/JcVO9
+        nC+QKj2mHzl3Vy02JwLJ3baaxA==
+X-Google-Smtp-Source: ABdhPJxCJhS0qtre782NmekcMV3NiXQ1EiYU3QU6aZy5+paSlNVQbdi3FB+LAsBhurtMp4ZTMZJbBw==
+X-Received: by 2002:a05:6512:1506:: with SMTP id bq6mr8765711lfb.444.1640433271070;
+        Sat, 25 Dec 2021 03:54:31 -0800 (PST)
+Received: from cobook.home (nikaet.starlink.ru. [94.141.168.29])
+        by smtp.gmail.com with ESMTPSA id 9sm726678ljq.120.2021.12.25.03.54.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Dec 2021 03:54:30 -0800 (PST)
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Subject: [PATCH] arm64: dts: renesas: ulcb-kf: add KF HDMI output
+Date:   Sat, 25 Dec 2021 14:53:09 +0300
+Message-Id: <20211225115308.2152364-1-nikita.yoush@cogentembedded.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [syzbot] KMSAN: uninit-value in ax88772a_hw_reset
-Content-Language: en-US
-To:     syzbot <syzbot+8d179821571093c5f928@syzkaller.appspotmail.com>,
-        andrew@lunn.ch, davem@davemloft.net, glider@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux@rempel-privat.de,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <0000000000005fb57e05d1620da1@google.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <0000000000005fb57e05d1620da1@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/22/21 18:12, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    412af9cd936d ioremap.c: move an #include around
-> git tree:       https://github.com/google/kmsan.git master
-> console output: https://syzkaller.appspot.com/x/log.txt?x=136fb126b00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=2d142cdf4204061
-> dashboard link: https://syzkaller.appspot.com/bug?extid=8d179821571093c5f928
-> compiler:       clang version 14.0.0 (git@github.com:llvm/llvm-project.git 0996585c8e3b3d409494eb5f1cad714b9e1f7fb5), GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+8d179821571093c5f928@syzkaller.appspotmail.com
-> 
-> asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
-> asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
-> asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0016: -71
-> asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
-> asix 4-1:0.0 (unnamed net_device) (uninitialized): Failed to enable hardware MII access
+This patch adds nodes needed to enable DRM video output over HDMI
+connector located on KF board.
 
+Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+---
+ arch/arm64/boot/dts/renesas/ulcb-kf.dtsi | 93 ++++++++++++++++++++++++
+ 1 file changed, 93 insertions(+)
 
-#syz fix: asix: fix uninit-value in asix_mdio_read()
+diff --git a/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi b/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi
+index 61bd4df09df0..a66301a4081d 100644
+--- a/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi
++++ b/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi
+@@ -51,6 +51,31 @@ wlan_en: regulator-wlan_en {
+ 		startup-delay-us = <70000>;
+ 		enable-active-high;
+ 	};
++
++	hdmi_1v8: regulator-hdmi-1v8 {
++		compatible = "regulator-fixed";
++		regulator-name = "hdmi-1v8";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++	};
++
++	hdmi_3v3: regulator-hdmi-3v3 {
++		compatible = "regulator-fixed";
++		regulator-name = "hdmi-3v3";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++	};
++
++	hdmi1-out {
++		compatible = "hdmi-connector";
++		type = "a";
++
++		port {
++			hdmi1_con: endpoint {
++				remote-endpoint = <&adv7513_out>;
++			};
++		};
++	};
+ };
+ 
+ &can0 {
+@@ -91,6 +116,58 @@ i2cswitch2: i2c-switch@71 {
+ 		reg = <0x71>;
+ 		reset-gpios = <&gpio5 3 GPIO_ACTIVE_LOW>;
+ 
++		/* HDMIoSDA, HDMIoSCL */
++		i2c@4 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <4>;
++
++			hdmi@3d {
++				compatible = "adi,adv7513";
++				reg = <0x3d>;
++
++				pinctrl-0 = <&hdmi1_pins>;
++				pinctrl-names = "default";
++
++				interrupt-parent = <&gpio2>;
++				interrupts = <14 IRQ_TYPE_LEVEL_LOW>;
++
++				clocks = <&cs2000>;
++				clock-names = "cec";
++
++				pd-gpios = <&gpio_exp_75 5 GPIO_ACTIVE_LOW>;
++
++				avdd-supply = <&hdmi_1v8>;
++				dvdd-supply = <&hdmi_1v8>;
++				pvdd-supply = <&hdmi_1v8>;
++				dvdd-3v-supply = <&hdmi_3v3>;
++				bgvdd-supply = <&hdmi_1v8>;
++
++				adi,input-depth = <8>;
++				adi,input-colorspace = "rgb";
++				adi,input-clock = "1x";
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++						adv7513_in: endpoint {
++							remote-endpoint = <&du_out_rgb>;
++						};
++					};
++
++					port@1 {
++						reg = <1>;
++						adv7513_out: endpoint {
++							remote-endpoint = <&hdmi1_con>;
++						};
++					};
++				};
++			};
++		};
++
+ 		/* Audio_SDA, Audio_SCL */
+ 		i2c@7 {
+ 			#address-cells = <1>;
+@@ -236,6 +313,10 @@ gpio_exp_77: gpio@77 {
+ 	};
+ };
+ 
++&du_out_rgb {
++	remote-endpoint = <&adv7513_in>;
++};
++
+ &ohci0 {
+ 	dr_mode = "otg";
+ 	status = "okay";
+@@ -289,6 +370,18 @@ usb0_pins: usb0 {
+ 		groups = "usb0";
+ 		function = "usb0";
+ 	};
++
++	hdmi1_pins: hdmi1 {
++		du {
++			groups = "du_rgb888", "du_sync", "du_clk_out_0", "du_disp";
++			function = "du";
++		};
++
++		adv7513-interrupt {
++			pins = "GP_2_14";
++			bias-pull-up;
++		};
++	};
+ };
+ 
+ &rcar_sound {
+-- 
+2.30.2
 
-
-With regards,
-Pavel Skripkin

@@ -2,107 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A6247F3E3
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 17:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0426147F3E4
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 17:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232316AbhLYQoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 11:44:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50940 "EHLO
+        id S232327AbhLYQqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 11:46:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbhLYQoA (ORCPT
+        with ESMTP id S229914AbhLYQqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 11:44:00 -0500
+        Sat, 25 Dec 2021 11:46:11 -0500
 Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A92C061401;
-        Sat, 25 Dec 2021 08:44:00 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id b13so44382349edd.8;
-        Sat, 25 Dec 2021 08:44:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5FCC061401
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 08:46:10 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id x15so44535711edv.1
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 08:46:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=q0jRj1jdzTuB6XYaS0/5SdS54hmWcBJmIKPZbi3JBY8=;
-        b=YvCVonbrJnMuunfe3wQSyZbWvayF0yv9wX/Rijq2ZatfTXjRlivUauB25ASPF9OgR1
-         Khf4pA/yfXUEVbTZADw4DAf6iTPswTIlyjDYdbVtl9e7FTD+QvrIJATDCJ/yJ/Ovk1No
-         IslHmZTI2mk57WnGrv2KPMZWAvXVs9fLCYDzzZK0/ptqKD5SJzXx0pTJ1sLmvyCbgc0n
-         aFVIsubyfVcQW+IEaQytbPrbnxdJBBMO4NVZ45P1++qbBznxqoyYkWxVeBd8H3+u3MHp
-         OVDouXmfPmaAFV3lH/5/clc7sv0XUCKTYAhcCO+oHpqZ5Y3YeV8a0vnZ2bjJIo76z9vq
-         xsgA==
+        bh=9zL1+4E4xmrW8u8bUjqstWaJv4Fnr4rWUE+7STrZsgY=;
+        b=XfDZhry7hsYdJf4VFjXoa9mvCWEhCdcEsjqNkiDC74FAkTIokppZPtAyO2biV1P+sV
+         NxZw9DRjCvRcBXpBv2BrJpKaYkdXdOt8VafJBu9prJ5Jda1mc2SuUfPC7I0SCxXvPcM9
+         k8Rlk4gcy/BaR1GCmyg6BOKY07WT4+Yj5vTaFAWWf130O02CJvTdykTjg8XHK9pL8J6E
+         MIFxn4AxLWeuepofT+p59m+x4xghX6u2qrUNK2w92pzRgV/kzo6UfEWCYmeESnOTWpHD
+         /SqcH1svs5n6wqrpIcz4xrSK/qBDTGY3fjrQKVT6u8A9yoy+MQlmMq9bhLFUeFvBnQ36
+         d0Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=q0jRj1jdzTuB6XYaS0/5SdS54hmWcBJmIKPZbi3JBY8=;
-        b=7CNcFpLY0bXY5xOx0Nlxy8L6zFaPEvwnYSHye6EMQiuk0R7nugp63jrTJc5Y/w+1q+
-         cQBZzNEGcmv1eXFgBtwLiyrIE4J0ucEwMqQPKXZJTMSi6vbC2nO0PQiv2hVvCreixjzR
-         hNcr6jmxta4GM61nwdFUfpbSXS1Rrh1hQ9Y96/00Z+7kzxLuPjI9Lqncz9QBZGaHVLjd
-         2toTW+6QBjJbIm66lErIPNO/XzYFbJISQN00zmD+7o3LeiwGvudvR2GTlv1w8rjm6nV1
-         5Larq87LB2nJPoCg9aT5FTRNEt8dfNln7bjqkJyT4Gb4CDaNm6kwAI5/1n+kdLYRzCAX
-         j62g==
-X-Gm-Message-State: AOAM532iGbZhhJKEZBHZ+Z1pRxTCrNvRIs/DVTfNvja4gDQ+9M05p9dc
-        PdUcZAxI6OQx25tmp2arV+c3SXknSH5U4l9NU9Y=
-X-Google-Smtp-Source: ABdhPJwqcEGaPeapQCWpiQCPL+GhsE3uusCeaHYZBBWY263lPZfqrSNaV2pNoriOWCKD85SELwQ8NXCNaZDfVITiTzg=
-X-Received: by 2002:a17:906:3ed0:: with SMTP id d16mr8380110ejj.636.1640450638917;
- Sat, 25 Dec 2021 08:43:58 -0800 (PST)
+        bh=9zL1+4E4xmrW8u8bUjqstWaJv4Fnr4rWUE+7STrZsgY=;
+        b=tgUkHMEk4IsNFalavHOXp47z4V3dyBbArhCxT6Own+r05p803TvXB3df2LWCkdJTCM
+         MyxIzYdMus10waoxrf5O5UH59F8ipMA1psQHrn8SUMtUPdiaVeSSUnUb2SUaPXLKbBW6
+         jaCQjJ3UDToDvN0e5o6ay1xeI0Wu8U/LYr2r1tfj5gOtF4t2VZ+sqy8xFXIit1IFfnqH
+         ykVlYPtLpCes7C9UQ8JxZhwWpGxU+d6gpo6adb8Cjdsw8brOPcu3qQr+YLP9NFPdRWsd
+         WEN+3/NL/ueEV56MUwe6fHshewrUyR3LSUWQ6rT15VW0BRXXW3qnybCtAJf27ob9wV+4
+         xLug==
+X-Gm-Message-State: AOAM532uzMxGzGWv7RPKfQpoojXtFIoCGTPqhv1lKhIrP1nASnGnsDiw
+        XZ+2SquiUnH2ZT4V1dAFufxq1giviws2ex8OERmK9dgP+YE13bNn
+X-Google-Smtp-Source: ABdhPJxyndgi+pHKr0bHgYOo+iSFWTT0MoXFuFxUfn0TOQ+g7dcAhjJb2vpD9yP0WmgSqC+tadHNiEURWYy1WjhlyuQ=
+X-Received: by 2002:a50:e611:: with SMTP id y17mr9811812edm.270.1640450769160;
+ Sat, 25 Dec 2021 08:46:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20211215130711.111186-1-gsomlo@gmail.com> <20211215130711.111186-4-gsomlo@gmail.com>
-In-Reply-To: <20211215130711.111186-4-gsomlo@gmail.com>
+References: <20211215234946.6494-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20211215234946.6494-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 25 Dec 2021 18:43:22 +0200
-Message-ID: <CAHp75Vf7ktdoBoOHVE72LO19vxZiQ82eBg9_xP2ywB6c4yqXWQ@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] mmc: Add driver for LiteX's LiteSDCard interface
-To:     Gabriel Somlo <gsomlo@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Date:   Sat, 25 Dec 2021 18:45:33 +0200
+Message-ID: <CAHp75VfGwQ7G2b39GO4tN=sxQoiahO2uudy25ALxEkrNcP9eVw@mail.gmail.com>
+Subject: Re: [PATCH] irqchip/renesas-irqc: Use platform_get_irq_optional() to
+ get the interrupt
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>, krakoczy@antmicro.com,
-        mdudek@internships.antmicro.com, paulus@ozlabs.org,
-        Joel Stanley <joel@jms.id.au>,
-        Stafford Horne <shorne@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        david.abdurachmanov@sifive.com, florent@enjoy-digital.fr,
-        Randy Dunlap <rdunlap@infradead.org>
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 10:00 PM Gabriel Somlo <gsomlo@gmail.com> wrote:
+On Thu, Dec 16, 2021 at 9:52 AM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 >
-> LiteX (https://github.com/enjoy-digital/litex) is a SoC framework
-> that targets FPGAs. LiteSDCard is a small footprint, configurable
-> SDCard core commonly used in LiteX designs.
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypassed the hierarchical setup and messed up the
+> irq chaining.
 >
-> The driver was first written in May 2020 and has been maintained
-> cooperatively by the LiteX community. Thanks to all contributors!
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq_optional().
 
-...
 
-> +       int ret;
-> +
-> +       host->irq = platform_get_irq_optional(host->dev, 0);
-> +       if (host->irq <= 0) {
-> +               dev_warn(dev, "Failed to get IRQ, using polling\n");
-> +               goto use_polling;
-> +       }
+> +               ret = platform_get_irq_optional(pdev, k);
+> +               if (ret == -EPROBE_DEFER)
+> +                       goto err_runtime_pm_disable;
+> +               if (ret < 0)
+>                         break;
 
-Same comment as per v3.
+The best approach is
 
-...
+ret = platform_get_irq_optional(...);
+if (ret < 0 && ret != -ENXIO)
+  return ret;
+if (ret > 0)
+  ...we got it...
 
-> +#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
+It will allow the future API fix of platform_get_irq_optional() to be
+really optional.
 
-Why under ifdeffery?
 
-> +       /* increase from default 32 on 64-bit-DMA capable architectures */
-> +       ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-> +       if (ret)
-> +               goto err;
-> +#endif
-
--- 
+--
 With Best Regards,
 Andy Shevchenko

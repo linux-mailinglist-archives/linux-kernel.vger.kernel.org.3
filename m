@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F2147F2B3
+	by mail.lfdr.de (Postfix) with ESMTP id 9146447F2B4
 	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 09:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbhLYIz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 03:55:28 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:34934 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbhLYIz2 (ORCPT
+        id S231217AbhLYI4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 03:56:11 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:59342 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229471AbhLYI4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 03:55:28 -0500
+        Sat, 25 Dec 2021 03:56:10 -0500
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 289F31F37B;
-        Sat, 25 Dec 2021 08:55:27 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTP id 45B6221122;
+        Sat, 25 Dec 2021 08:56:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1640422527; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1640422569; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=gHMYAfiG/XH7TbZtWF+oQ/6AQ6YwkF9KUGW/AQmw7rk=;
-        b=JV/SwrYr7K+Z3CA/O7O4c/xZfJ6Nr2SZBnUisY3VqObhUx7rs892AIdE5X8BA+48aw0gjH
-        kINMWIBPkIn7vJQoE7q33N7WPc7w6GYugYIJSuiuJxAoPfUVERE22Xj3D8x7KWRM/xWjry
-        HWzZFm4LVvLFj0ojTT0ZlIMQUrx7/Lk=
+        bh=i0wVixnq34RSXq841zKZ7UCSGBnUUOxseHyZXtHHxq8=;
+        b=RDHmbFIOsniL1LKYCQYPSetvUZKjPHrV+I6AS8aB6fyU3H+d6QHOwzvOegO5IBVG1Hy0i5
+        0Nl9+cw3C2Hmt3YOYGRBFOEk6z/Z/PcxCXGq3W4cV9DJLoX6swRTsHiyBsB2tRiJ7YkF3u
+        jrx0pTtInvffktW3Jmr3pJaEobI0EVg=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1640422527;
+        s=susede2_ed25519; t=1640422569;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=gHMYAfiG/XH7TbZtWF+oQ/6AQ6YwkF9KUGW/AQmw7rk=;
-        b=L3G1mJ/AUw5cUyrYt3fDUx1eCXSKcUx5pZI802t+LoISN5Eq4+L9zauuQrBdRd6+iiJpAX
-        dXBJ2IocSu+38hBw==
+        bh=i0wVixnq34RSXq841zKZ7UCSGBnUUOxseHyZXtHHxq8=;
+        b=YAzAh2X5lHBYNX9iEbSx7LBAAKZ4JAvatOxZNLJXX1IwkYy1MoJcgOhdAKK7HIpQilCyJC
+        mGLLypHAm/zOJHAA==
 Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
-        by relay2.suse.de (Postfix) with ESMTP id 84476A3B81;
-        Sat, 25 Dec 2021 08:55:26 +0000 (UTC)
-Date:   Sat, 25 Dec 2021 09:55:26 +0100
-Message-ID: <s5hzgopoygx.wl-tiwai@suse.de>
+        by relay2.suse.de (Postfix) with ESMTP id 2DDA4A3B81;
+        Sat, 25 Dec 2021 08:56:09 +0000 (UTC)
+Date:   Sat, 25 Dec 2021 09:56:09 +0100
+Message-ID: <s5hy249oyfq.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     arsgeiger@gmail.com
-Cc:     alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org (open list),
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     tiwai@suse.com, Jaroslav Kysela <perex@perex.cz>,
         Jeremy Szu <jeremy.szu@canonical.com>,
         Werner Sembach <wse@tuxedocomputers.com>,
         Hui Wang <hui.wang@canonical.com>,
         Cameron Berkenpas <cam@neo-zeon.de>,
         Kailang Yang <kailang@realtek.com>, Sami Loone <sami@loone.fi>,
-        Elia Devito <eliadevito@gmail.com>
-Subject: Re: [PATCH] ALSA: hda/realtek: Add speaker fixup for some Yoga 15ITL5 devices
-In-Reply-To: <20211223232857.30741-1-arsgeiger@gmail.com>
-References: <20211223232857.30741-1-arsgeiger@gmail.com>
+        Elia Devito <eliadevito@gmail.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda/realtek: Use ALC285_FIXUP_HP_GPIO_LED on another HP laptop
+In-Reply-To: <20211224035015.310068-1-kai.heng.feng@canonical.com>
+References: <20211224035015.310068-1-kai.heng.feng@canonical.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
  FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
  (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -60,19 +58,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Dec 2021 00:28:57 +0100,
-arsgeiger@gmail.com wrote:
+On Fri, 24 Dec 2021 04:50:13 +0100,
+Kai-Heng Feng wrote:
 > 
-> From: Arie Geiger <arsgeiger@gmail.com>
+> The audio mute and mic mute LEDs don't work, so use the quirk to make
+> them work.
 > 
-> This patch adds another possible subsystem ID for the ALC287 used by
-> the Lenovo Yoga 15ITL5.
-> It uses the same initalization as the others.
-> This patch has been tested and works for my device.
-> 
-> Signed-off-by: Arie Geiger <arsgeiger@gmail.com>
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-Thanks, applied.
+Applied now.  Thanks.
 
 
 Takashi

@@ -2,172 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 507D847F2E7
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 11:17:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E50F247F2ED
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 11:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231354AbhLYKRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 05:17:00 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:16862 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbhLYKRA (ORCPT
+        id S231378AbhLYKSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 05:18:23 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:52598
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229743AbhLYKSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 05:17:00 -0500
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JLfw431BRz90Jk;
-        Sat, 25 Dec 2021 18:16:04 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 25 Dec 2021 18:16:57 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 25 Dec 2021 18:16:56 +0800
-Subject: Re: [PATCH v18 02/17] x86/setup: Move xen_pv_domain() check and
- insert_resource() to setup_arch()
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
-        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        "John Donnelly" <John.p.donnelly@oracle.com>
-References: <20211222130820.1754-1-thunder.leizhen@huawei.com>
- <20211222130820.1754-3-thunder.leizhen@huawei.com> <YcSxLodOnxXHx0sV@zn.tnic>
- <d6226aa2-f1f2-24cc-c9d2-9762bd615686@huawei.com>
- <5d8aed79-b20f-2575-3c3f-8945d8cbac3f@huawei.com>
-Message-ID: <aaa219c5-aca6-adb5-58d8-365693be249c@huawei.com>
-Date:   Sat, 25 Dec 2021 18:16:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Sat, 25 Dec 2021 05:18:21 -0500
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 7BB793F044
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 10:18:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640427500;
+        bh=94o5d0o97vug3NAEYaKgCxWAnPubZXlQ072PvpKMaV4=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=pO5j6QEpfIuLB+IxR+jeqh7xJdfZassGWHe+A+cXZF+bjFMKYpJf7njac99LdrcG/
+         fyJrlN3R0xS8gFRVzSQz4FJu2oztQFtVFVld8yg3clLx1zxfN5Dg04pYVTdrKVdP/s
+         Bn/g57yYp1lnBq5jFuBEBhgeR2qVkVpRX3XNYi0kq8d5Fj6pj0hcqmUVeCECPSc2zI
+         FuVYD8IWZrOCY2RqhbP30xpUQc+bAYxGBcVLV8ILiX8zTQQpKDzvFhfDGejMy6A7QV
+         xY06BreA9Tkx+jweeLuI7Nx5T/V9DzyvXhvjaCP3kQ/8WWXJD+r8WFIwGMl7d9k/07
+         +948r+QU6cCGA==
+Received: by mail-lj1-f197.google.com with SMTP id bd7-20020a05651c168700b0022d71e1839bso2879106ljb.9
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 02:18:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=94o5d0o97vug3NAEYaKgCxWAnPubZXlQ072PvpKMaV4=;
+        b=yhX4AQn1stVtBhfDIHLQMS5/7D8hLwvW0cvPq1mmweU0QG7QDsbFPKhE0agCCpyDtJ
+         xwwv0kCIPS2JmyuRUex4/Vcv5sMVFOslR/kEssNzKaofcFpGGDnwxzD+zEuw3DYkmGfu
+         vSObnoVvsTfw3e1pqZi7SMZo6zfwAAXZc34EvbWg5J02fdXuA5srpqDXGjvd15fgqqju
+         P4YFNyVlNl9Q2PKVQq4ZL1DTb4p4W9Y3ZQAeFngFP5dya6/hge/vzsnF06bq4fIv0vSU
+         x5PooAk94MFcqzYbd7GQjALsZWHK+72DnJNdDF/8kPIgNTNm8IHqzXxQCsW01UwMg3U3
+         t0bw==
+X-Gm-Message-State: AOAM531FTlKTFN9B+EipRelfztVunCN1l6sMLUJHKE1KSieqpBwWpDaN
+        AesS9ukrRE+YGzLs10ER9sHKczaUCTndiX51PHUWz0y3PDoqsJDBS1srz4TIC5TYlVJeMzmKj9q
+        V44qi938MlM2bdfprfZmw4hW2O2MhBa2iwqBXx30Fmg==
+X-Received: by 2002:a05:6512:3988:: with SMTP id j8mr6874757lfu.351.1640427499980;
+        Sat, 25 Dec 2021 02:18:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxXz+wZ4nuQVsKj6gt9lsiW4qR17i5ihkM9J/CWQwKtfUvupodcrU3sp5EnfGF88NTo+IXSRA==
+X-Received: by 2002:a05:6512:3988:: with SMTP id j8mr6874747lfu.351.1640427499838;
+        Sat, 25 Dec 2021 02:18:19 -0800 (PST)
+Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id v77sm1072255lfa.68.2021.12.25.02.18.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Dec 2021 02:18:19 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        linux-gpio@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: (subset) [PATCH 1/2] pinctrl: samsung: Use platform_get_irq_optional() to get the interrupt
+Date:   Sat, 25 Dec 2021 11:18:17 +0100
+Message-Id: <164042749388.4557.7914263989187822148.b4-ty@canonical.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211224145748.18754-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20211224145748.18754-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211224145748.18754-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-In-Reply-To: <5d8aed79-b20f-2575-3c3f-8945d8cbac3f@huawei.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2021/12/25 9:53, Leizhen (ThunderTown) wrote:
->>> This is exactly why I say that making those functions generic and shared
->>> might not be such a good idea, after all, because then you'd have to
->>> sprinkle around arch-specific stuff.
-
-Hi Borislav and all:
-  Merry Christmas!
-
-  I have a new idea now. It helps us get around all the arguments and
-minimizes changes to the x86 (also to arm64).
-  Previously, Chen Zhou and I tried to share the entire function
-reserve_crashkernel(), which led to the following series of problems:
-1. reserve_crashkernel() is also defined on other architectures, so we should
-   add build option ARCH_WANT_RESERVE_CRASH_KERNEL to avoid conflicts.
-2. Move xen_pv_domain() check out of reserve_crashkernel().
-3. Move insert_resource() out of reserve_crashkernel()
-
-Others:
-4. start = memblock_phys_alloc_range(crash_size, SZ_1M, crash_base,
-                                                  crash_base + crash_size);
-   Change SZ_1M to CRASH_ALIGN, or keep it no change.
-   The current conclusion is no change. But I think adding a new macro
-   CRASH_FIXED_ALIGN is also a way. 2M alignment allows page tables to
-   use block mappings for most architectures.
-5. if (crash_base >= (1ULL << 32) && reserve_crashkernel_low())
-   Change (1ULL << 32) to CRASH_ADDR_LOW_MAX, or keep it no change.
-   I reanalyzed it, and this doesn't need to be changed.
-
-So for 1-3，why not add a new function reserve_crashkernel_mem() and rename
-reserve_crashkernel_low() to reserve_crashkernel_mem_low().
-On x86:
-static void __init reserve_crashkernel(void)
-{
-	//Parse all "crashkernel=" configurations in priority order until
-        //a valid combination is found. Or return upon failure.
-	
-	if (xen_pv_domain()) {
-                pr_info("Ignoring crashkernel for a Xen PV domain\n");
-                return;
-        }
-
-	//Call reserve_crashkernel_mem() to reserve crashkernel memory, it will
-	//call reserve_crashkernel_mem_low() if needed.
-
-	if (crashk_low_res.end)
-		insert_resource(&iomem_resource, &crashk_low_res);
-	insert_resource(&iomem_resource, &crashk_res);
-}
-
-On arm64:
-static void __init reserve_crashkernel(void)
-{
-	//Parse all "crashkernel=" configurations in priority order until
-        //a valid combination is found. Or return upon failure.
-	
-	//Call reserve_crashkernel_mem() to reserve crashkernel memory, it will
-	//call reserve_crashkernel_mem_low() if needed.
-}
-
-
-1. reserve_crashkernel() is still static, so that there is no
-   need to add ARCH_WANT_RESERVE_CRASH_KERNEL.
-2. The xen_pv_domain() check have not been affected in any way.
-   Hi Borislav:
-     As you mentioned, this check may also be needed on arm64. But it may be
-   better not to add it until the problem is actually triggered on arm64.
-3. insert_resource() is not moved outside reserve_crashkernel() on x86.
-   Hi Borislav:
-     Currently, I haven't figured out why request_resource() can't be replaced
-   with insert_resource() on arm64. But I have a hunch that the kexec tool may
-   be involved. The cost of modification on arm64 is definitely higher than that
-   on x86. Other architectures that want to use reserve_crashkernel_mem() may
-   also face the same problem. So it's probably better that function
-   reserve_crashkernel_mem() doesn't invoke insert_resource().
-
-I guess you have a long Christmas holiday. So I'm going to send the next version
-without waiting for your response.
-
-
->> Yes, I'm thinking about that too. Perhaps they are not suitable for full
->> code sharing, but it looks like there's some code that can be shared.
->> For example, the function parse_crashkernel_in_order() that I extracted
->> based on your suggestion, it could also be parse_crashkernel_high_low().
->> Or the function reserve_crashkernel_low().
->>
->> There are two ways to reserve memory above 4G:
->> 1. Use crashkernel=X,high, with or without crashkernel=X,low
->> 2. Use crashkernel=X,[offset], but try low memory first. If failed, then
->>    try high memory, and retry at least 256M low memory.
->>
->> I plan to only implement 2 in the next version so that there can be fewer
->> changes. Then implement 1 after 2 is applied.
-> I tried it yesterday and it didn't work. I still have to deal with the
-> problem of adjusting insert_resource().
+On Fri, 24 Dec 2021 14:57:47 +0000, Lad Prabhakar wrote:
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
 > 
-> How about I isolate some cleanup patches first? Strive for them to be
-> merged into v5.17. This way, we can focus on the core changes in the
-> next version. And I can also save some repetitive rebase workload.
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq_optional().
 > 
+> [...]
 
+Applied, thanks!
+
+[1/2] pinctrl: samsung: Use platform_get_irq_optional() to get the interrupt
+      commit: a382d568f144b9e533ad210117c6c50d8dbdcaf1
+
+Best regards,
 -- 
-Regards,
-  Zhen Lei
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>

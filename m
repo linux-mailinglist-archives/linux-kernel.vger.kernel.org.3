@@ -2,97 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 260AB47F418
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 18:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D7147F41B
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 18:37:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232540AbhLYRfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 12:35:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbhLYRfG (ORCPT
+        id S230119AbhLYRhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 12:37:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40981 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229488AbhLYRhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 12:35:06 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33727C061401
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 09:35:06 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id q14so37041765edi.3
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 09:35:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YgTnPIC9YP7wdodBdY0fSo9j7jZM6/evdbFzplwCYO0=;
-        b=genMatVYTiM84x5h3vOTjUgU3vXcIy8B17eW2WodptBO5iex7nBrazzcfUuK+p+r2H
-         PPs0xI/tZCm7uUehlhsuWpYSP1dzPZr3EANIoodRd8ZG6HDohYu+cZeFLqoKdXRi8IS8
-         wyA1nCpVgOlG5MC421Uxxjp1J5iOmPfksENNYS2HHnbPrkXT2C7clO7aUNr+p/27a6lI
-         7HpopZnrUvlCW/c1lrlHKg6L1Hv9EH7B/ALnL2YTeTf4PXWp1SAI/9I9jOmF/n8MFgfa
-         SbzOkno7Y932J5tm2v4QbeWXS+cBqaPD9AqQe93DyiN2AT6BQ/wR5TsBpZ9Kn2rvTQF1
-         YP1w==
+        Sat, 25 Dec 2021 12:37:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640453871;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=PfLJ4QS3XWM5eK1msunIWbFBBtS4PdHQDRSrD6MoMIQ=;
+        b=hEMdLU1XsmSNYmzDEPfA5ViuHjzaPZQNnVVBs/8lZ9J6pfhs8/BA8vLAXpWbT925ZHcKJZ
+        rqiEwXRduXccS4kdPXx4GJU4e+qIDlJ8TKiyyEh6VN7V6aPtu2pEoN8SWeBYGXFb95rl6G
+        /Eoo0sJP5erk/x9Kjuwi44ZgPL4nBbA=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-512-fD9aaZdFOaidkWnr1fl9_g-1; Sat, 25 Dec 2021 12:37:50 -0500
+X-MC-Unique: fD9aaZdFOaidkWnr1fl9_g-1
+Received: by mail-qt1-f197.google.com with SMTP id l15-20020a05622a050f00b002c09d62865fso8241677qtx.4
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 09:37:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=YgTnPIC9YP7wdodBdY0fSo9j7jZM6/evdbFzplwCYO0=;
-        b=XvM44IIZi9ohZm2XjPjE6Gtcy7m31NklragRHTsI62snBt2WY/fWK/P9FrDfzBEeZ7
-         XpOGbNFrEJxoR9+7kThhGYwMy0r4sI5J02XD8mjw17iv/7WlIJ2ASv5FRLv9BaQZHAor
-         VyuXu4O4lvkG+akt9JBewvIYec48lTQf72luJdis7md56kh8ZHL5gcbQbKcYjt36ngtx
-         ljNreLUK4uwmfT0e5xXxEL2RWtd7qDPFfMr7sigZpsi0PIlH7FnYjMb9u87FWwGl+XCx
-         3cIM9/VAZ/FblYzSxa44OEry57EpfRrTZyMEzDLvTFJgB+ff+asE64Ly0w25XIrbsCwu
-         C7iQ==
-X-Gm-Message-State: AOAM530U7Yhcp2xP+9ASf986vagQg79SnmTQGkXGBwoJR6ptFgmmzxKc
-        Djt0/XC/jnrLR8CGngLoJxI=
-X-Google-Smtp-Source: ABdhPJy7+K89Yfy2APO+P/Soru9MTPkun8qF5b+pJCTKsObTEow/pIRzpUnqiJXunbDcTa/4ut+p0w==
-X-Received: by 2002:a05:6402:5112:: with SMTP id m18mr6085207edd.191.1640453704659;
-        Sat, 25 Dec 2021 09:35:04 -0800 (PST)
-Received: from tom-desktop.station (net-93-71-218-227.cust.vodafonedsl.it. [93.71.218.227])
-        by smtp.gmail.com with ESMTPSA id j5sm3596102ejo.177.2021.12.25.09.35.02
+        bh=PfLJ4QS3XWM5eK1msunIWbFBBtS4PdHQDRSrD6MoMIQ=;
+        b=4mIcpkNwZxxt3TegGkFW38u7gihyU2eEE0m+yjvi+ARxPlq2AHKX6zHyafeXesGGYt
+         +NsoSbGVWzilbO1Db/xrXMrQxSUdOB5fvlEMOkwOhwWKZRAuFeq+z5NSfC8G85HxEP9C
+         QPwElXzrsjSW/xDtklUNgqNyk5iwGCE9pGUcHNzbKn+ScaSzn7IG4opJPwrDJ+2i+3dt
+         NC3G9ZDwjYRCbu7RFPRMmBMpzdrpY5JKif4MFDuMv5zDj8+t894+Dk4DV+tbSK4TIaV9
+         28BQhp5/vr/FWcSY0ScE1Ilki2h4zWl/lGebufojEMD4uioTvvxJ/M4+/qQzIty2N+cB
+         +bqw==
+X-Gm-Message-State: AOAM5301vJRu/93AK6tJ9TlikE1F25f4MySURhpaBS9kXGivPLm9NYYb
+        tzyX3n9AxcdBnuIMDuwYjU4eqtRKMMrLgDXh3Gp4eu7mBrCPqA1od3SBwxqROa7Tu6Wp+zlsDP3
+        nt98umHQd/JCJ/a7o+1rqTmUa
+X-Received: by 2002:a05:620a:28d3:: with SMTP id l19mr7881253qkp.675.1640453870032;
+        Sat, 25 Dec 2021 09:37:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzuz8tvTMB4bLDfW0C5YAfFnb48WucYFQPi8z7cn1vFPp20Nl24sKrKoPFWCh7qrmcYrRCnew==
+X-Received: by 2002:a05:620a:28d3:: with SMTP id l19mr7881238qkp.675.1640453869787;
+        Sat, 25 Dec 2021 09:37:49 -0800 (PST)
+Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id q196sm6036372qke.18.2021.12.25.09.37.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Dec 2021 09:35:03 -0800 (PST)
-From:   Tommaso Merciai <tomm.merciai@gmail.com>
-Cc:     tomm.merciai@gmail.com, linuxfancy@googlegroups.com,
-        Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Karolina Drobnik <karolinadrobnik@gmail.com>,
-        =?UTF-8?q?Aldas=20Tara=C5=A1kevi=C4=8Dius?= <aldas60@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] staging: vt6655: drop off byRxMode var in device.h
-Date:   Sat, 25 Dec 2021 18:34:57 +0100
-Message-Id: <20211225173500.5459-1-tomm.merciai@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 25 Dec 2021 09:37:49 -0800 (PST)
+From:   trix@redhat.com
+To:     pablo@netfilter.org, kadlec@netfilter.org, fw@strlen.de,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] netfilter: extend CONFIG_NF_CONNTRACK compile time checks
+Date:   Sat, 25 Dec 2021 09:37:44 -0800
+Message-Id: <20211225173744.3318250-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop off unused variable byRxMode in device.h
+From: Tom Rix <trix@redhat.com>
 
-Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
+Extends
+commit 83ace77f5117 ("netfilter: ctnetlink: remove get_ct indirection")
+
+Add some compile time checks by following the ct and ctinfo variables
+that are only set when CONFIG_NF_CONNTRACK is enabled.
+
+In nfulnl_log_packet(), ct is only set when CONFIG_NF_CONNTRACK
+is enabled. ct's later use in __build_packet_message() is only
+meaningful when CONFIG_NF_CONNTRACK is enabled, so add a check.
+
+In nfqnl_build_packet_message(), ct and ctinfo are only set when
+CONFIG_NF_CONNTRACK is enabled.  Add a check for their decl and use.
+
+nfqnl_ct_parse() is a static function, move the check to the whole
+function.
+
+In nfqa_parse_bridge(), ct and ctinfo are only set by the only
+call to nfqnl_ct_parse(), so add a check for their decl and use.
+
+Consistently initialize ctinfo to 0.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-Changes since v1:
- - Remove trailing whitespace in changelog as suggested by gregkh
+ net/netfilter/nfnetlink_log.c   |  4 +++-
+ net/netfilter/nfnetlink_queue.c | 18 +++++++++++++-----
+ 2 files changed, 16 insertions(+), 6 deletions(-)
 
-Changes since v2:
- - Fix commit body as suggested by gregkh
-
- drivers/staging/vt6655/device.h | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/drivers/staging/vt6655/device.h b/drivers/staging/vt6655/device.h
-index 4706bde1ec1d..84b1dcf80e47 100644
---- a/drivers/staging/vt6655/device.h
-+++ b/drivers/staging/vt6655/device.h
-@@ -128,8 +128,6 @@ struct vnt_private {
- 	u32                         memaddr;
- 	u32                         ioaddr;
+diff --git a/net/netfilter/nfnetlink_log.c b/net/netfilter/nfnetlink_log.c
+index ae9c0756bba59..e79d152184b71 100644
+--- a/net/netfilter/nfnetlink_log.c
++++ b/net/netfilter/nfnetlink_log.c
+@@ -627,9 +627,11 @@ __build_packet_message(struct nfnl_log_net *log,
+ 			 htonl(atomic_inc_return(&log->global_seq))))
+ 		goto nla_put_failure;
  
--	unsigned char byRxMode;
--
- 	spinlock_t                  lock;
++#if IS_ENABLED(CONFIG_NF_CONNTRACK)
+ 	if (ct && nfnl_ct->build(inst->skb, ct, ctinfo,
+ 				 NFULA_CT, NFULA_CT_INFO) < 0)
+ 		goto nla_put_failure;
++#endif
  
- 	volatile int                iTDUsed[TYPE_MAXTD];
+ 	if ((pf == NFPROTO_NETDEV || pf == NFPROTO_BRIDGE) &&
+ 	    nfulnl_put_bridge(inst, skb) < 0)
+@@ -689,7 +691,7 @@ nfulnl_log_packet(struct net *net,
+ 	struct nfnl_log_net *log = nfnl_log_pernet(net);
+ 	const struct nfnl_ct_hook *nfnl_ct = NULL;
+ 	struct nf_conn *ct = NULL;
+-	enum ip_conntrack_info ctinfo;
++	enum ip_conntrack_info ctinfo = 0;
+ 
+ 	if (li_user && li_user->type == NF_LOG_TYPE_ULOG)
+ 		li = li_user;
+diff --git a/net/netfilter/nfnetlink_queue.c b/net/netfilter/nfnetlink_queue.c
+index 44c3de176d186..d59cae7561bf8 100644
+--- a/net/netfilter/nfnetlink_queue.c
++++ b/net/netfilter/nfnetlink_queue.c
+@@ -386,8 +386,10 @@ nfqnl_build_packet_message(struct net *net, struct nfqnl_instance *queue,
+ 	struct sk_buff *entskb = entry->skb;
+ 	struct net_device *indev;
+ 	struct net_device *outdev;
++#if IS_ENABLED(CONFIG_NF_CONNTRACK)
+ 	struct nf_conn *ct = NULL;
+ 	enum ip_conntrack_info ctinfo = 0;
++#endif
+ 	struct nfnl_ct_hook *nfnl_ct;
+ 	bool csum_verify;
+ 	char *secdata = NULL;
+@@ -595,8 +597,10 @@ nfqnl_build_packet_message(struct net *net, struct nfqnl_instance *queue,
+ 	if (seclen && nla_put(skb, NFQA_SECCTX, seclen, secdata))
+ 		goto nla_put_failure;
+ 
++#if IS_ENABLED(CONFIG_NF_CONNTRACK)
+ 	if (ct && nfnl_ct->build(skb, ct, ctinfo, NFQA_CT, NFQA_CT_INFO) < 0)
+ 		goto nla_put_failure;
++#endif
+ 
+ 	if (cap_len > data_len &&
+ 	    nla_put_be32(skb, NFQA_CAP_LEN, htonl(cap_len)))
+@@ -1104,13 +1108,13 @@ static int nfqnl_recv_verdict_batch(struct sk_buff *skb,
+ 	return 0;
+ }
+ 
++#if IS_ENABLED(CONFIG_NF_CONNTRACK)
+ static struct nf_conn *nfqnl_ct_parse(struct nfnl_ct_hook *nfnl_ct,
+ 				      const struct nlmsghdr *nlh,
+ 				      const struct nlattr * const nfqa[],
+ 				      struct nf_queue_entry *entry,
+ 				      enum ip_conntrack_info *ctinfo)
+ {
+-#if IS_ENABLED(CONFIG_NF_CONNTRACK)
+ 	struct nf_conn *ct;
+ 
+ 	ct = nf_ct_get(entry->skb, ctinfo);
+@@ -1125,10 +1129,8 @@ static struct nf_conn *nfqnl_ct_parse(struct nfnl_ct_hook *nfnl_ct,
+ 				      NETLINK_CB(entry->skb).portid,
+ 				      nlmsg_report(nlh));
+ 	return ct;
+-#else
+-	return NULL;
+-#endif
+ }
++#endif
+ 
+ static int nfqa_parse_bridge(struct nf_queue_entry *entry,
+ 			     const struct nlattr * const nfqa[])
+@@ -1172,11 +1174,13 @@ static int nfqnl_recv_verdict(struct sk_buff *skb, const struct nfnl_info *info,
+ 	struct nfnl_queue_net *q = nfnl_queue_pernet(info->net);
+ 	u_int16_t queue_num = ntohs(info->nfmsg->res_id);
+ 	struct nfqnl_msg_verdict_hdr *vhdr;
+-	enum ip_conntrack_info ctinfo;
+ 	struct nfqnl_instance *queue;
+ 	struct nf_queue_entry *entry;
+ 	struct nfnl_ct_hook *nfnl_ct;
++#if IS_ENABLED(CONFIG_NF_CONNTRACK)
+ 	struct nf_conn *ct = NULL;
++	enum ip_conntrack_info ctinfo = 0;
++#endif
+ 	unsigned int verdict;
+ 	int err;
+ 
+@@ -1198,11 +1202,13 @@ static int nfqnl_recv_verdict(struct sk_buff *skb, const struct nfnl_info *info,
+ 	/* rcu lock already held from nfnl->call_rcu. */
+ 	nfnl_ct = rcu_dereference(nfnl_ct_hook);
+ 
++#if IS_ENABLED(CONFIG_NF_CONNTRACK)
+ 	if (nfqa[NFQA_CT]) {
+ 		if (nfnl_ct != NULL)
+ 			ct = nfqnl_ct_parse(nfnl_ct, info->nlh, nfqa, entry,
+ 					    &ctinfo);
+ 	}
++#endif
+ 
+ 	if (entry->state.pf == PF_BRIDGE) {
+ 		err = nfqa_parse_bridge(entry, nfqa);
+@@ -1218,8 +1224,10 @@ static int nfqnl_recv_verdict(struct sk_buff *skb, const struct nfnl_info *info,
+ 				 payload_len, entry, diff) < 0)
+ 			verdict = NF_DROP;
+ 
++#if IS_ENABLED(CONFIG_NF_CONNTRACK)
+ 		if (ct && diff)
+ 			nfnl_ct->seq_adjust(entry->skb, ct, ctinfo, diff);
++#endif
+ 	}
+ 
+ 	if (nfqa[NFQA_MARK])
 -- 
-2.25.1
+2.26.3
 

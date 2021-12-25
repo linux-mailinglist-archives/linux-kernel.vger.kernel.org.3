@@ -2,97 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E2F47F3F4
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 18:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C7347F3F6
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 18:04:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232399AbhLYRCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 12:02:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbhLYRCD (ORCPT
+        id S232408AbhLYREp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 12:04:45 -0500
+Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:42133 "EHLO
+        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229914AbhLYREo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 12:02:03 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F55C061401;
-        Sat, 25 Dec 2021 09:02:02 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id x15so44635943edv.1;
-        Sat, 25 Dec 2021 09:02:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=allLbQ90rxouBvcpZIIL+jJIydJg34w7sYljavKuAz0=;
-        b=DFfBC5s44n3NXp3E91x7/nUEN6IDHJU/8wHBeCR0dDrqbCS1HK5/7GXaWohCMMzA4J
-         1cYTFNav5i0mcOri6+8LP3u+qK3tWetD15HVUo0jr4sgHbkPsfzDMHl1aXLdSyx8QIQk
-         IrQbh4afBETKgEqGpb02LKWNUZQFk2OxL1Wep4fjXcHXpNvAFWeAXHtfCBRN9ZFa4Ntg
-         Osn/WH54KmgAmi9yuVr/0iKH1Zu2pHeCHgbQXZun0puPeWV9RnCdhXfyL8xWKDznBAW4
-         pep1f1H6P2qB/YG9kdyIRa4vRcp1NWgg892+E9gvm6glM8wQkWwhRfr88Vd+haDG+kcb
-         NwIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=allLbQ90rxouBvcpZIIL+jJIydJg34w7sYljavKuAz0=;
-        b=56YlkqmNxwaZB96BMo0rIVe1RpwGe4nKcDLa21LPGFwDp/GjCWcGS2zbkE1CnW1/tI
-         Ih6pW/rWIk7QJHi+s1hmPZpLdy/a0h7DmQKAnoQBJG3qm7FiGwAfUZWkxqG1Sb2LuDzL
-         PGuAiVSXPyK3n4szwogL2pWl0874cpRQOYnYl2b0MY+v1op1Inhe6rwABv6iSLro4Yld
-         a+jlFu22NeD3gaIg7XWSFERljLFJKtfVeTNplTVoQpcXcxEFhXTfxeb2s8eTR9ybVadR
-         jm5Yk+1ycVS40CyNm+jt1ORsnZWM3UTKNUhns/jsOZjLTpW49ziJtjo7a+OZND6kGr4x
-         e8/w==
-X-Gm-Message-State: AOAM531XRNegP0GhFc8SagjgvAxD3d+UyLBN6TOH+mF1Y6P18LGiEawM
-        /XG9ZA8AvZmcTOxZ3CD/oS+uhP/vkkxb9nD4804=
-X-Google-Smtp-Source: ABdhPJxJ0LYaPiXmh+h6TqfA7IxbUrr8s+xOP/Agw9UN1zl2MdDESBev9O+182+1jNw2MqsNeOAIL+Faib8p6P/ofK0=
-X-Received: by 2002:a05:6402:4301:: with SMTP id m1mr9159028edc.125.1640451721302;
- Sat, 25 Dec 2021 09:02:01 -0800 (PST)
+        Sat, 25 Dec 2021 12:04:44 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V.j7Uhg_1640451878;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V.j7Uhg_1640451878)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sun, 26 Dec 2021 01:04:41 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     Larry.Finger@lwfinger.net
+Cc:     phil@philpotter.co.uk, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH v4] staging: r8188eu: Use strndup_user instead of kmalloc/copy_from_user
+Date:   Sun, 26 Dec 2021 01:04:36 +0800
+Message-Id: <20211225170436.111000-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-References: <20211224131300.18198-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211224131300.18198-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20211224131300.18198-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 25 Dec 2021 19:01:24 +0200
-Message-ID: <CAHp75VdLOuzpjzrwQw71KWNM82-_TwPtYrE7ukrmZoDN3x0gQA@mail.gmail.com>
-Subject: Re: [PATCH v3 03/10] ata: pata_of_platform: Use platform_get_irq_optional()
- to get the interrupt
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>, linux-ide@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 25, 2021 at 3:55 AM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
->
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
->
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq_optional().
+This code assumes that the user is going to give us a NUL terminated
+string which is not necessarily true.
 
-...
+Fix following coccicheck warning:
 
-> +       irq = platform_get_irq_optional(ofdev, 0);
-> +       if (irq < 0 && irq != -ENXIO)
-> +               return irq;
-> +
-> +       if (irq > 0) {
+./drivers/staging/r8188eu/os_dep/ioctl_linux.c:4253:8-15: WARNING
+opportunity for memdup_user.
 
-> +               memset(&irq_res, 0x0, sizeof(struct resource));
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Fixes: 2b42bd58b321 ("staging: r8188eu: introduce new os_dep dir for RTL8188eu driver")
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+Changes in v2:
+  -This function does nothing, so it should just be deleted entirely.
 
-Why do you need that variable at all?
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c | 38 --------------------
+ 1 file changed, 38 deletions(-)
 
-0x0 -> 0
-sizeof(irq_res)
-
-> +               irq_res.start = irq;
-> +       }
-
+diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+index e7f35143dfe1..518625730883 100644
+--- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
++++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+@@ -4229,43 +4229,6 @@ static int rtw_tdls_get(struct net_device *dev,
+ 	return 0;
+ }
+ 
+-static int rtw_test(
+-	struct net_device *dev,
+-	struct iw_request_info *info,
+-	union iwreq_data *wrqu, char *extra)
+-{
+-	u32 len;
+-	u8 *pbuf, *pch;
+-	char *ptmp;
+-	u8 *delim = ",";
+-
+-	DBG_88E("+%s\n", __func__);
+-	len = wrqu->data.length;
+-
+-	pbuf = kzalloc(len, GFP_KERNEL);
+-	if (!pbuf) {
+-		DBG_88E("%s: no memory!\n", __func__);
+-		return -ENOMEM;
+-	}
+-
+-	if (copy_from_user(pbuf, wrqu->data.pointer, len)) {
+-		kfree(pbuf);
+-		DBG_88E("%s: copy from user fail!\n", __func__);
+-		return -EFAULT;
+-	}
+-	DBG_88E("%s: string =\"%s\"\n", __func__, pbuf);
+-
+-	ptmp = (char *)pbuf;
+-	pch = strsep(&ptmp, delim);
+-	if (!pch || strlen(pch) == 0) {
+-		kfree(pbuf);
+-		DBG_88E("%s: parameter error(level 1)!\n", __func__);
+-		return -EFAULT;
+-	}
+-	kfree(pbuf);
+-	return 0;
+-}
+-
+ static iw_handler rtw_handlers[] = {
+ 	IW_HANDLER(SIOCGIWNAME, rtw_wx_get_name),
+ 	IW_HANDLER(SIOCGIWFREQ, rtw_wx_get_freq),
+@@ -4431,7 +4394,6 @@ NULL,					/* 0x03 */
+ 	NULL,				/* 0x1A */
+ 	NULL,				/* 0x1B */
+ 	NULL,				/*  0x1C is reserved for hostapd */
+-	rtw_test,			/*  0x1D */
+ };
+ 
+ static struct iw_statistics *rtw_get_wireless_stats(struct net_device *dev)
 -- 
-With Best Regards,
-Andy Shevchenko
+2.20.1.7.g153144c
+

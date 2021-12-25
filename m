@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C8B47F3F1
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 17:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E2F47F3F4
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 18:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232396AbhLYQ7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 11:59:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
+        id S232399AbhLYRCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 12:02:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbhLYQ7X (ORCPT
+        with ESMTP id S229914AbhLYRCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 11:59:23 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3F6C061401;
-        Sat, 25 Dec 2021 08:59:23 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id m21so45732703edc.0;
-        Sat, 25 Dec 2021 08:59:23 -0800 (PST)
+        Sat, 25 Dec 2021 12:02:03 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F55C061401;
+        Sat, 25 Dec 2021 09:02:02 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id x15so44635943edv.1;
+        Sat, 25 Dec 2021 09:02:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+k69rh8SFucKX8UvshO5DlBjGVGk6P6s2e6v5dk7jDA=;
-        b=CHuldeveHO3cBSB0YH2ZCDhXFLYfDo1mYQ/wgPs8EKLL6KNV0EbAdVZHj46IHUewsy
-         2WzMu6lOXmkuXVfP24BY6VpSzII7VGcKQgGTk8lztrgEsO6hRyxayX0xvSDpEjMgjBE6
-         FvNaqhyqeoE63oGPLaI2gHzHRCmNy7ueQWkKA2WNVZTmBBJ7rpUBNbT0X2/5fWon0EMC
-         06tg3kWDc0hxz7UwlpeHI3FVc7XnNhIhUEMcPQoUsByVuMothnIOeL27O5SrL1HiQH3K
-         m7CfeoxSL1IQcUstiNfP8tY0wF2mDJktIqVyFExh0osLKKm9r7X4cZUXJHmqZ9kwzT8h
-         GU2w==
+        bh=allLbQ90rxouBvcpZIIL+jJIydJg34w7sYljavKuAz0=;
+        b=DFfBC5s44n3NXp3E91x7/nUEN6IDHJU/8wHBeCR0dDrqbCS1HK5/7GXaWohCMMzA4J
+         1cYTFNav5i0mcOri6+8LP3u+qK3tWetD15HVUo0jr4sgHbkPsfzDMHl1aXLdSyx8QIQk
+         IrQbh4afBETKgEqGpb02LKWNUZQFk2OxL1Wep4fjXcHXpNvAFWeAXHtfCBRN9ZFa4Ntg
+         Osn/WH54KmgAmi9yuVr/0iKH1Zu2pHeCHgbQXZun0puPeWV9RnCdhXfyL8xWKDznBAW4
+         pep1f1H6P2qB/YG9kdyIRa4vRcp1NWgg892+E9gvm6glM8wQkWwhRfr88Vd+haDG+kcb
+         NwIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+k69rh8SFucKX8UvshO5DlBjGVGk6P6s2e6v5dk7jDA=;
-        b=E/wExDyNQ+1OKSPxLFZIzzHzExWjXkW2Vw5tfn9uSm1e4/wXmGDO38lCh1pmgJd2u1
-         2jUBHZUVtkakJZzE1KKPfdPGvJE/7lz2FlDEyrH4Ttz9oRYmDU2+0XotdaH8mQGM1fYD
-         rfPphGeV0Ufz1GiYhkS+c7vz9L1SfAO4KAlPuU5JNukKTpCobnOkcFi+coEuBRtWeeXy
-         lr1UQEgWU0UZp9th6XH4xDH5nXZ4sL7/ikqVmHwA8OR959mcIBUiUVQJ2XWScKuqpCy5
-         la6QGfmr99zPG2vwS4g82NO/Ox/2ogy+0HDzrp1OAub1HtcU2HKmfZ1DY56QL61P+XMd
-         bOcw==
-X-Gm-Message-State: AOAM531BWtuJ8Yj0IT9BmNgNeMk/KkfPhYmE43p0TCl43AtSDqCtw2tS
-        ulfiOrUOZch3h0+JhKhphVj6UX8FmiiLF3lhhiI=
-X-Google-Smtp-Source: ABdhPJwSdHYOQY3OO23NCjyzqTvku0bzifaBH7915iI/CgIg2/nAGx6Sx2YjqbAUTut9knwmBbRYwl9BsR3BMCXdrGQ=
-X-Received: by 2002:a17:906:ced9:: with SMTP id si25mr9308621ejb.77.1640451561707;
- Sat, 25 Dec 2021 08:59:21 -0800 (PST)
+        bh=allLbQ90rxouBvcpZIIL+jJIydJg34w7sYljavKuAz0=;
+        b=56YlkqmNxwaZB96BMo0rIVe1RpwGe4nKcDLa21LPGFwDp/GjCWcGS2zbkE1CnW1/tI
+         Ih6pW/rWIk7QJHi+s1hmPZpLdy/a0h7DmQKAnoQBJG3qm7FiGwAfUZWkxqG1Sb2LuDzL
+         PGuAiVSXPyK3n4szwogL2pWl0874cpRQOYnYl2b0MY+v1op1Inhe6rwABv6iSLro4Yld
+         a+jlFu22NeD3gaIg7XWSFERljLFJKtfVeTNplTVoQpcXcxEFhXTfxeb2s8eTR9ybVadR
+         jm5Yk+1ycVS40CyNm+jt1ORsnZWM3UTKNUhns/jsOZjLTpW49ziJtjo7a+OZND6kGr4x
+         e8/w==
+X-Gm-Message-State: AOAM531XRNegP0GhFc8SagjgvAxD3d+UyLBN6TOH+mF1Y6P18LGiEawM
+        /XG9ZA8AvZmcTOxZ3CD/oS+uhP/vkkxb9nD4804=
+X-Google-Smtp-Source: ABdhPJxJ0LYaPiXmh+h6TqfA7IxbUrr8s+xOP/Agw9UN1zl2MdDESBev9O+182+1jNw2MqsNeOAIL+Faib8p6P/ofK0=
+X-Received: by 2002:a05:6402:4301:: with SMTP id m1mr9159028edc.125.1640451721302;
+ Sat, 25 Dec 2021 09:02:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20211224192626.15843-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211224192626.15843-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20211224192626.15843-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20211224131300.18198-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211224131300.18198-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20211224131300.18198-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 25 Dec 2021 18:58:45 +0200
-Message-ID: <CAHp75Vd60ftgzvWqz+r5YcptimDwURmwOucOBw-WqdHega6NqA@mail.gmail.com>
-Subject: Re: [PATCH 8/8] net: ethernet: ti: davinci_emac: Use
- platform_get_irq() to get the interrupt
+Date:   Sat, 25 Dec 2021 19:01:24 +0200
+Message-ID: <CAHp75VdLOuzpjzrwQw71KWNM82-_TwPtYrE7ukrmZoDN3x0gQA@mail.gmail.com>
+Subject: Re: [PATCH v3 03/10] ata: pata_of_platform: Use platform_get_irq_optional()
+ to get the interrupt
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     netdev <netdev@vger.kernel.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
         Rob Herring <robh+dt@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Linux OMAP Mailing List <linux-omap@vger.kernel.org>
+        Prabhakar <prabhakar.csengg@gmail.com>, linux-ide@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 25, 2021 at 4:06 AM Lad Prabhakar
+On Sat, Dec 25, 2021 at 3:55 AM Lad Prabhakar
 <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 >
 > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
@@ -76,48 +73,25 @@ On Sat, Dec 25, 2021 at 4:06 AM Lad Prabhakar
 > irq chaining.
 >
 > In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq() for DT users only.
->
-> While at it propagate error code in case request_irq() fails instead of
-> returning -EBUSY.
+> code use platform_get_irq_optional().
 
+...
 
-> +       if (dev_of_node(&priv->pdev->dev)) {
+> +       irq = platform_get_irq_optional(ofdev, 0);
+> +       if (irq < 0 && irq != -ENXIO)
+> +               return irq;
+> +
+> +       if (irq > 0) {
 
-Why?! What's wrong with using the same approach in all cases?
+> +               memset(&irq_res, 0x0, sizeof(struct resource));
 
-> +               while ((ret = platform_get_irq_optional(priv->pdev, res_num)) != -ENXIO) {
+Why do you need that variable at all?
 
-This is wrong.
+0x0 -> 0
+sizeof(irq_res)
 
-You need to check better as I pointed several times against your patches.
-
-> +                       if (ret < 0)
-> +                               goto rollback;
->
-> +                       ret = request_irq(ret, emac_irq, 0, ndev->name, ndev);
-> +                       if (ret) {
-> +                               dev_err(emac_dev, "DaVinci EMAC: request_irq() failed\n");
->                                 goto rollback;
->                         }
-> +                       res_num++;
->                 }
-> -               res_num++;
-> +       } else {
-> +               while ((res = platform_get_resource(priv->pdev, IORESOURCE_IRQ, res_num))) {
-> +                       for (irq_num = res->start; irq_num <= res->end; irq_num++) {
-> +                               ret = request_irq(irq_num, emac_irq, 0, ndev->name, ndev);
-> +                               if (ret) {
-> +                                       dev_err(emac_dev, "DaVinci EMAC: request_irq() failed\n");
-> +                                       goto rollback;
-> +                               }
-> +                       }
-> +                       res_num++;
-> +               }
-> +               /* prepare counters for rollback in case of an error */
-> +               res_num--;
-> +               irq_num--;
->         }
+> +               irq_res.start = irq;
+> +       }
 
 -- 
 With Best Regards,

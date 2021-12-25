@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD6247F28D
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 08:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD33D47F290
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 08:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbhLYH0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 02:26:41 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:33913 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbhLYH0i (ORCPT
+        id S230487AbhLYH0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 02:26:47 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16861 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230377AbhLYH0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 02:26:38 -0500
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JLb826Bckzcc4V;
-        Sat, 25 Dec 2021 15:26:10 +0800 (CST)
+        Sat, 25 Dec 2021 02:26:40 -0500
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JLb7Y2GlNz91t2;
+        Sat, 25 Dec 2021 15:25:45 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 25 Dec 2021 15:26:36 +0800
+ 15.1.2308.20; Sat, 25 Dec 2021 15:26:37 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 25 Dec 2021 15:26:35 +0800
+ 15.1.2308.20; Sat, 25 Dec 2021 15:26:36 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -44,9 +44,9 @@ CC:     Zhen Lei <thunder.leizhen@huawei.com>,
         Kefeng Wang <wangkefeng.wang@huawei.com>,
         Chen Zhou <dingguo.cz@antgroup.com>,
         "John Donnelly" <John.p.donnelly@oracle.com>
-Subject: [PATCH 3/4] kdump: make parse_crashkernel_{high|low}() static
-Date:   Sat, 25 Dec 2021 15:23:26 +0800
-Message-ID: <20211225072327.1807-4-thunder.leizhen@huawei.com>
+Subject: [PATCH 4/4] kdump: reduce unnecessary parameters of parse_crashkernel_{high|low}()
+Date:   Sat, 25 Dec 2021 15:23:27 +0800
+Message-ID: <20211225072327.1807-5-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20211225072327.1807-1-thunder.leizhen@huawei.com>
 References: <20211225072327.1807-1-thunder.leizhen@huawei.com>
@@ -61,52 +61,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make parse_crashkernel_{high|low}() static, they are only referenced by
-parse_crashkernel_high_low() in the same file. The latter is recommended.
+Delete confusing parameters 'system_ram' and 'crash_base' of
+parse_crashkernel_{high|low}(), they are only needed by the case of
+"crashkernel=X@[offset]".
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- include/linux/crash_core.h | 4 ----
- kernel/crash_core.c        | 4 ++--
- 2 files changed, 2 insertions(+), 6 deletions(-)
+ kernel/crash_core.c | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
 
-diff --git a/include/linux/crash_core.h b/include/linux/crash_core.h
-index 2d3a64761d18998..598fd55d83c169e 100644
---- a/include/linux/crash_core.h
-+++ b/include/linux/crash_core.h
-@@ -79,10 +79,6 @@ void final_note(Elf_Word *buf);
- 
- int __init parse_crashkernel(char *cmdline, unsigned long long system_ram,
- 		unsigned long long *crash_size, unsigned long long *crash_base);
--int parse_crashkernel_high(char *cmdline, unsigned long long system_ram,
--		unsigned long long *crash_size, unsigned long long *crash_base);
--int parse_crashkernel_low(char *cmdline, unsigned long long system_ram,
--		unsigned long long *crash_size, unsigned long long *crash_base);
- int __init parse_crashkernel_high_low(char *cmdline,
- 				      unsigned long long *high_size,
- 				      unsigned long long *low_size);
 diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-index 8ab59a0e04f178f..97001820396295e 100644
+index 97001820396295e..0ebf5efce3119c5 100644
 --- a/kernel/crash_core.c
 +++ b/kernel/crash_core.c
-@@ -277,7 +277,7 @@ int __init parse_crashkernel(char *cmdline,
- 					"crashkernel=", NULL);
+@@ -278,20 +278,20 @@ int __init parse_crashkernel(char *cmdline,
  }
  
--int __init parse_crashkernel_high(char *cmdline,
-+static int __init parse_crashkernel_high(char *cmdline,
- 			     unsigned long long system_ram,
- 			     unsigned long long *crash_size,
- 			     unsigned long long *crash_base)
-@@ -286,7 +286,7 @@ int __init parse_crashkernel_high(char *cmdline,
+ static int __init parse_crashkernel_high(char *cmdline,
+-			     unsigned long long system_ram,
+-			     unsigned long long *crash_size,
+-			     unsigned long long *crash_base)
++					 unsigned long long *crash_size)
+ {
+-	return __parse_crashkernel(cmdline, system_ram, crash_size, crash_base,
++	unsigned long long base;
++
++	return __parse_crashkernel(cmdline, 0, crash_size, &base,
  				"crashkernel=", suffix_tbl[SUFFIX_HIGH]);
  }
  
--int __init parse_crashkernel_low(char *cmdline,
-+static int __init parse_crashkernel_low(char *cmdline,
- 			     unsigned long long system_ram,
- 			     unsigned long long *crash_size,
- 			     unsigned long long *crash_base)
+ static int __init parse_crashkernel_low(char *cmdline,
+-			     unsigned long long system_ram,
+-			     unsigned long long *crash_size,
+-			     unsigned long long *crash_base)
++					unsigned long long *crash_size)
+ {
+-	return __parse_crashkernel(cmdline, system_ram, crash_size, crash_base,
++	unsigned long long base;
++
++	return __parse_crashkernel(cmdline, 0, crash_size, &base,
+ 				"crashkernel=", suffix_tbl[SUFFIX_LOW]);
+ }
+ 
+@@ -310,12 +310,11 @@ int __init parse_crashkernel_high_low(char *cmdline,
+ 				      unsigned long long *low_size)
+ {
+ 	int ret;
+-	unsigned long long base;
+ 
+ 	BUG_ON(!high_size || !low_size);
+ 
+ 	/* crashkernel=X,high */
+-	ret = parse_crashkernel_high(cmdline, 0, high_size, &base);
++	ret = parse_crashkernel_high(cmdline, high_size);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -323,7 +322,7 @@ int __init parse_crashkernel_high_low(char *cmdline,
+ 		return -EINVAL;
+ 
+ 	/* crashkernel=Y,low */
+-	ret = parse_crashkernel_low(cmdline, 0, low_size, &base);
++	ret = parse_crashkernel_low(cmdline, low_size);
+ 	if (ret)
+ 		*low_size = -1;
+ 
 -- 
 2.25.1
 

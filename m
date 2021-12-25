@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE0F47F256
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 06:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5887D47F258
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 06:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbhLYFrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 00:47:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51478 "EHLO
+        id S230117AbhLYFr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 00:47:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbhLYFrl (ORCPT
+        with ESMTP id S230136AbhLYFrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 00:47:41 -0500
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0801FC061757
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 21:47:41 -0800 (PST)
-Received: by mail-qv1-xf33.google.com with SMTP id kk22so9330773qvb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 21:47:40 -0800 (PST)
+        Sat, 25 Dec 2021 00:47:43 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25D6C0617A0
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 21:47:42 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id q3so9267334qvc.7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 21:47:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=atishpatra.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=1BN5OzyaysjU4EeFWXcqwFTDp+AYSLqwKPfhAYkhC9c=;
-        b=nXt0CkNa9ythdj9ygB1JtmFckOHgqKfHVyVhw897R7Xs07GoSNdta7gr/DWR7CGzEq
-         nVtmpwLLlYFGX4l8iPgZTcSADphuzo1R25Hi1/w76xcyz1CPSuVs2SnDWXU0B3mowJyi
-         /Qk4h2Dp/O/gLjkCa3k7NegAfdOWmYCPdjo54=
+        bh=41wdKXgGrsSO6HWLhIMgAPjkxUvL5wj+ghWe1IddQpQ=;
+        b=mLEgf336Jh4jtGZHnWTDpWFuKGC0TBAeiLjASbhF+3ZOFbEJTLnwxlRJLFj5KaWoPF
+         ZR8O14cysT3ihXbo+nu422/FHGpA6S3mhlnAd12CSgQxeIx40Ge0YkUPOzR57f2XQ5SN
+         nscEzAiOxFf+DeYRE8dGgm9jHCMSajY4N1si8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1BN5OzyaysjU4EeFWXcqwFTDp+AYSLqwKPfhAYkhC9c=;
-        b=FchZ0Mg88OXm9+65JnPl6v0IAM0hsJcHG933LlhYLFCM5QrSZYU87TWdEhJY1OM37+
-         BT33BZk/Zks7UzWbLZJ4GUYsZqdl/vZuHcXBK7JD2D9A/0ZjnDTIljbqW4GWGBc1rfUi
-         nrQ+grCWcm6FLfv9jNk6pk4QEFtsiDg3QJHjj+T2Ujexjv/UD1lfTGZMKV/K7G1jtr7a
-         Acd+kBdeXdbkiTa0Ljmf7KLvj5950xrJ7PSjSgG3qEQmJBKtozyEMgfb1W0JgpkWTYXz
-         haSpyzf1n9QBR9RwvWLPoAtl7bi3i1Kl7IN9MI/tjlUzGafL32F+o8N/fxfVPPqn3wI1
-         45qQ==
-X-Gm-Message-State: AOAM531xtwCagiUEsYrGM3oJ9K0IUk/dF2mXsLrdYFL5E8qC4C8tGQvm
-        BxlRdef/KLOj6OPCTzV3CRBTlRKybIY/
-X-Google-Smtp-Source: ABdhPJw4ICtwdk0U3tJLFgFf+hIS355/Ly5G15NWpjBDT05hkAwCmNMBYzsTeDrxaB51llx9KtzECQ==
-X-Received: by 2002:a05:6214:230a:: with SMTP id gc10mr8018115qvb.115.1640411260074;
-        Fri, 24 Dec 2021 21:47:40 -0800 (PST)
+        bh=41wdKXgGrsSO6HWLhIMgAPjkxUvL5wj+ghWe1IddQpQ=;
+        b=3q6XSH7psQdaRw7Sc/ZU2dcMg9VHn6tBVlPR5VSYVkiro3bd9qALLtneP00iMyQk07
+         Je2hyAsC9EQ3QyFj+1p2+PUD6Pikr4dNvrr8tWrpBPq5dvlWAppNWvNQaoZ9AVbTRUN8
+         5Q5r0KkCjptykV/QYGhOigcpr0xsCxdARqPn5UQ7dbCgQlUiEZK37sK2LSCdlQZ6o3SQ
+         8pgJh2zC/t/MdZ4lHQsWxu2eNiIDo/VxWn3b20W/gMxAPK456ysCoJmZUyIoaPEF4/8u
+         6a0Wkin6/EI2JoZ4WOrCa1Dm/JTZQzZgHtUtMiCRl4saQIiuOdxj9Vh105EQeETjYwdo
+         Ur0g==
+X-Gm-Message-State: AOAM531OnBjDN2TUQYXxUNrxFfeqmaXXXeyjb0wYQudFlgy456AEofj+
+        HnGVUEGHCgeExXrN+znwpA5Fkg41ED4w
+X-Google-Smtp-Source: ABdhPJz97aTlBSch1xA7XcjOEY7iTC6SBWqxEb4v/bXb40MA7bEoqcGp+0cUlupSxOXBFgHeakkz2Q==
+X-Received: by 2002:a05:6214:d05:: with SMTP id 5mr7889804qvh.46.1640411261630;
+        Fri, 24 Dec 2021 21:47:41 -0800 (PST)
 Received: from fedora.. (adsl-70-228-75-190.dsl.akrnoh.ameritech.net. [70.228.75.190])
-        by smtp.gmail.com with ESMTPSA id c7sm8492780qtx.67.2021.12.24.21.47.38
+        by smtp.gmail.com with ESMTPSA id c7sm8492780qtx.67.2021.12.24.21.47.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Dec 2021 21:47:39 -0800 (PST)
+        Fri, 24 Dec 2021 21:47:41 -0800 (PST)
 From:   Atish Patra <atishp@atishpatra.org>
 X-Google-Original-From: Atish Patra <atishp@rivosinc.com>
 To:     linux-kernel@vger.kernel.org
@@ -59,9 +59,9 @@ Cc:     Atish Patra <atishp@rivosinc.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Rob Herring <robh+dt@kernel.org>
-Subject: [v5 7/9] RISC-V: Add sscofpmf extension support
-Date:   Fri, 24 Dec 2021 21:46:45 -0800
-Message-Id: <20211225054647.1750577-8-atishp@rivosinc.com>
+Subject: [v5 8/9] Documentation: riscv: Remove the old documentation
+Date:   Fri, 24 Dec 2021 21:46:46 -0800
+Message-Id: <20211225054647.1750577-9-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211225054647.1750577-1-atishp@rivosinc.com>
 References: <20211225054647.1750577-1-atishp@rivosinc.com>
@@ -73,387 +73,281 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Atish Patra <atish.patra@wdc.com>
 
-The sscofpmf extension allows counter overflow and filtering for
-programmable counters. Enable the perf driver to handle the overflow
-interrupt. The overflow interrupt is a hart local interrupt.
-Thus, per cpu overflow interrupts are setup as a child under the root
-INTC irq domain.
+The existing pmu documentation describes the limitation of perf
+infrastructure in RISC-V ISA and limited feature set of perf in RISC-V.
+
+However, SBI PMU extension and sscofpmf extension(ISA extension) allows to
+implement most of the required features of perf. Remove the old
+documentation which is not accurate anymore.
 
 Signed-off-by: Atish Patra <atish.patra@wdc.com>
 Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/include/asm/csr.h   |   8 +-
- arch/riscv/include/asm/hwcap.h |   1 +
- arch/riscv/kernel/cpufeature.c |   1 +
- drivers/perf/riscv_pmu_sbi.c   | 218 +++++++++++++++++++++++++++++++--
- include/linux/perf/riscv_pmu.h |   2 +
- 5 files changed, 222 insertions(+), 8 deletions(-)
+ Documentation/riscv/pmu.rst | 255 ------------------------------------
+ 1 file changed, 255 deletions(-)
+ delete mode 100644 Documentation/riscv/pmu.rst
 
-diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-index e4d369830af4..8518eb0014bc 100644
---- a/arch/riscv/include/asm/csr.h
-+++ b/arch/riscv/include/asm/csr.h
-@@ -63,6 +63,7 @@
- #define IRQ_M_TIMER		7
- #define IRQ_S_EXT		9
- #define IRQ_M_EXT		11
-+#define IRQ_PMU_OVF		13
- 
- /* Exception causes */
- #define EXC_INST_MISALIGNED	0
-@@ -151,6 +152,8 @@
- #define CSR_HPMCOUNTER30H	0xc9e
- #define CSR_HPMCOUNTER31H	0xc9f
- 
-+#define CSR_SSCOUNTOVF		0xda0
-+
- #define CSR_SSTATUS		0x100
- #define CSR_SIE			0x104
- #define CSR_STVEC		0x105
-@@ -212,7 +215,10 @@
- # define RV_IRQ_SOFT		IRQ_S_SOFT
- # define RV_IRQ_TIMER	IRQ_S_TIMER
- # define RV_IRQ_EXT		IRQ_S_EXT
--#endif /* CONFIG_RISCV_M_MODE */
-+# define RV_IRQ_PMU	IRQ_PMU_OVF
-+# define SIP_LCOFIP     (_AC(0x1, UL) << IRQ_PMU_OVF)
-+
-+#endif /* !CONFIG_RISCV_M_MODE */
- 
- /* IE/IP (Supervisor/Machine Interrupt Enable/Pending) flags */
- #define IE_SIE		(_AC(0x1, UL) << RV_IRQ_SOFT)
-diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-index 368ab0f330c8..417e0840647a 100644
---- a/arch/riscv/include/asm/hwcap.h
-+++ b/arch/riscv/include/asm/hwcap.h
-@@ -50,6 +50,7 @@ extern unsigned long elf_hwcap;
-  * available logical extension id.
-  */
- enum riscv_isa_ext_id {
-+	RISCV_ISA_EXT_SSCOFPMF = RISCV_ISA_EXT_BASE,
- 	RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
- };
- 
-diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-index c70eeec17f5b..3eedfb9ecd48 100644
---- a/arch/riscv/kernel/cpufeature.c
-+++ b/arch/riscv/kernel/cpufeature.c
-@@ -71,6 +71,7 @@ EXPORT_SYMBOL_GPL(__riscv_isa_extension_available);
- 	}
- 
- static struct riscv_isa_ext_data isa_ext_arr[] = {
-+	__RISCV_ISA_EXT_DATA(sscofpmf, sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
- 	__RISCV_ISA_EXT_DATA("", "", RISCV_ISA_EXT_MAX),
- };
- 
-diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
-index f078d423a89a..ff8692ac43a5 100644
---- a/drivers/perf/riscv_pmu_sbi.c
-+++ b/drivers/perf/riscv_pmu_sbi.c
-@@ -11,8 +11,13 @@
- #include <linux/mod_devicetable.h>
- #include <linux/perf/riscv_pmu.h>
- #include <linux/platform_device.h>
-+#include <linux/irq.h>
-+#include <linux/irqdomain.h>
-+#include <linux/of_irq.h>
-+#include <linux/of.h>
- 
- #include <asm/sbi.h>
-+#include <asm/hwcap.h>
- 
- union sbi_pmu_ctr_info {
- 	unsigned long value;
-@@ -33,6 +38,7 @@ union sbi_pmu_ctr_info {
-  * per_cpu in case of harts with different pmu counters
-  */
- static union sbi_pmu_ctr_info *pmu_ctr_list;
-+static unsigned int riscv_pmu_irq;
- 
- struct pmu_event_data {
- 	union {
-@@ -450,33 +456,223 @@ static int pmu_sbi_get_ctrinfo(int nctr)
- 	return 0;
- }
- 
-+static inline void pmu_sbi_stop_all(struct riscv_pmu *pmu)
-+{
-+	int idx = 0;
-+	struct cpu_hw_events *cpu_hw_evt = this_cpu_ptr(pmu->hw_events);
-+	unsigned long cmask = 0;
-+	union sbi_pmu_ctr_info *info;
-+
-+	/* We should only stop the used hardware counters */
-+	for_each_set_bit(idx, cpu_hw_evt->used_event_ctrs, RISCV_MAX_COUNTERS) {
-+		info = &pmu_ctr_list[idx];
-+		if (info->type != SBI_PMU_CTR_TYPE_FW)
-+			cmask |= (1 << idx);
-+	}
-+	/* No need to check the error here as we can't do anything about the error */
-+	sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_STOP, 0, cmask, 0, 0, 0, 0);
-+}
-+
-+/**
-+ * This function starts all the used counters in two step approach.
-+ * Any counter that did not overflow can be start in a single step
-+ * while the overflowed counters need to be started with updated initialization
-+ * value.
-+ */
-+static inline void pmu_sbi_start_overflow_mask(struct riscv_pmu *pmu,
-+					       unsigned long ctr_ovf_mask)
-+{
-+	int idx = 0;
-+	struct cpu_hw_events *cpu_hw_evt = this_cpu_ptr(pmu->hw_events);
-+	struct perf_event *event;
-+	unsigned long flag = SBI_PMU_START_FLAG_SET_INIT_VALUE;
-+	unsigned long ctr_start_mask = 0;
-+	uint64_t max_period;
-+	struct hw_perf_event *hwc;
-+	u64 init_val = 0;
-+
-+	ctr_start_mask = cpu_hw_evt->used_event_ctrs[0] & ~ctr_ovf_mask;
-+
-+	/* Start all the counters that did not overflow in a single shot */
-+	sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_START, 0, ctr_start_mask,
-+		  0, 0, 0, 0);
-+
-+	/* Reinitialize and start all the counter that overflowed */
-+	while (ctr_ovf_mask) {
-+		if (ctr_ovf_mask & 0x01) {
-+			event = cpu_hw_evt->events[idx];
-+			hwc = &event->hw;
-+			max_period = riscv_pmu_ctr_get_width_mask(event);
-+			init_val = local64_read(&hwc->prev_count) & max_period;
-+			sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_START, idx, 1,
-+				  flag, init_val, 0, 0);
-+		}
-+		ctr_ovf_mask = ctr_ovf_mask >> 1;
-+		idx++;
-+	}
-+}
-+
-+static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
-+{
-+	struct perf_sample_data data;
-+	struct pt_regs *regs;
-+	struct hw_perf_event *hw_evt;
-+	union sbi_pmu_ctr_info *info;
-+	int lidx, hidx, fidx;
-+	struct riscv_pmu *pmu;
-+	struct perf_event *event;
-+	struct cpu_hw_events *cpu_hw_evt = dev;
-+	unsigned long overflow;
-+	unsigned long overflowed_ctrs = 0;
-+
-+	fidx = find_first_bit(cpu_hw_evt->used_event_ctrs, RISCV_MAX_COUNTERS);
-+	event = cpu_hw_evt->events[fidx];
-+	if (!event) {
-+		csr_clear(CSR_SIP, SIP_LCOFIP);
-+		return IRQ_NONE;
-+	}
-+
-+	pmu = to_riscv_pmu(event->pmu);
-+	pmu_sbi_stop_all(pmu);
-+
-+	/* Overflow status register should only be read after counter are stopped */
-+	overflow = csr_read(CSR_SSCOUNTOVF);
-+
-+	/**
-+	 * Overflow interrupt pending bit should only be cleared after stopping
-+	 * all the counters to avoid any race condition.
-+	 */
-+	csr_clear(CSR_SIP, SIP_LCOFIP);
-+
-+	/* No overflow bit is set */
-+	if (!overflow)
-+		return IRQ_NONE;
-+
-+	regs = get_irq_regs();
-+
-+	for_each_set_bit(lidx, cpu_hw_evt->used_event_ctrs, RISCV_MAX_COUNTERS) {
-+		struct perf_event *event = cpu_hw_evt->events[lidx];
-+
-+		/* Skip if invalid event or user did not request a sampling */
-+		if (!event || !is_sampling_event(event))
-+			continue;
-+
-+		info = &pmu_ctr_list[lidx];
-+		/* Firmware counter don't support overflow yet */
-+		if (!info || info->type == SBI_PMU_CTR_TYPE_FW)
-+			continue;
-+
-+		/* compute hardware counter index */
-+		hidx = info->csr - CSR_CYCLE;
-+		/* check if the corresponding bit is set in sscountovf */
-+		if (!(overflow & (1 << hidx)))
-+			continue;
-+
-+		/*
-+		 * Keep a track of overflowed counters so that they can be started
-+		 * with updated initial value.
-+		 */
-+		overflowed_ctrs |= 1 << lidx;
-+		hw_evt = &event->hw;
-+		riscv_pmu_event_update(event);
-+		perf_sample_data_init(&data, 0, hw_evt->last_period);
-+		if (riscv_pmu_event_set_period(event)) {
-+			/*
-+			 * Unlike other ISAs, RISC-V don't have to disable interrupts
-+			 * to avoid throttling here. As per the specification, the
-+			 * interrupt remains disabled until the OF bit is set.
-+			 * Interrupts are enabled again only during the start.
-+			 * TODO: We will need to stop the guest counters once
-+			 * virtualization support is added.
-+			 */
-+			perf_event_overflow(event, &data, regs);
-+		}
-+	}
-+	pmu_sbi_start_overflow_mask(pmu, overflowed_ctrs);
-+
-+	return IRQ_HANDLED;
-+}
-+
- static int pmu_sbi_starting_cpu(unsigned int cpu, struct hlist_node *node)
- {
- 	struct riscv_pmu *pmu = hlist_entry_safe(node, struct riscv_pmu, node);
-+	struct cpu_hw_events __percpu *hw_events = pmu->hw_events;
- 
- 	/* Enable the access for TIME csr only from the user mode now */
- 	csr_write(CSR_SCOUNTEREN, 0x2);
- 
- 	/* Stop all the counters so that they can be enabled from perf */
--	sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_STOP,
--		  0, GENMASK_ULL(pmu->num_counters - 1, 0), 0, 0, 0, 0);
-+	pmu_sbi_stop_all(pmu);
-+
-+	if (riscv_isa_extension_available(NULL, SSCOFPMF)) {
-+		hw_events->irq = riscv_pmu_irq;
-+		csr_clear(CSR_IP, BIT(RV_IRQ_PMU));
-+		csr_set(CSR_IE, BIT(RV_IRQ_PMU));
-+		enable_percpu_irq(riscv_pmu_irq, IRQ_TYPE_NONE);
-+	}
- 
- 	return 0;
- }
- 
- static int pmu_sbi_dying_cpu(unsigned int cpu, struct hlist_node *node)
- {
-+	if (riscv_isa_extension_available(NULL, SSCOFPMF)) {
-+		disable_percpu_irq(riscv_pmu_irq);
-+		csr_clear(CSR_IE, BIT(RV_IRQ_PMU));
-+	}
-+
- 	/* Disable all counters access for user mode now */
- 	csr_write(CSR_SCOUNTEREN, 0x0);
- 
- 	return 0;
- }
- 
-+static int pmu_sbi_setup_irqs(struct riscv_pmu *pmu, struct platform_device *pdev)
-+{
-+	int ret;
-+	struct cpu_hw_events __percpu *hw_events = pmu->hw_events;
-+	struct device_node *cpu, *child;
-+	struct irq_domain *domain = NULL;
-+
-+	if (!riscv_isa_extension_available(NULL, SSCOFPMF))
-+		return -EOPNOTSUPP;
-+
-+	for_each_of_cpu_node(cpu) {
-+		child = of_get_compatible_child(cpu, "riscv,cpu-intc");
-+		if (!child) {
-+			pr_err("Failed to find INTC node\n");
-+			return -ENODEV;
-+		}
-+		domain = irq_find_host(child);
-+		of_node_put(child);
-+		if (domain)
-+			break;
-+	}
-+	if (!domain) {
-+		pr_err("Failed to find INTC IRQ root domain\n");
-+		return -ENODEV;
-+	}
-+
-+	riscv_pmu_irq = irq_create_mapping(domain, RV_IRQ_PMU);
-+	if (!riscv_pmu_irq) {
-+		pr_err("Failed to map PMU interrupt for node\n");
-+		return -ENODEV;
-+	}
-+
-+	ret = request_percpu_irq(riscv_pmu_irq, pmu_sbi_ovf_handler, "riscv-pmu", hw_events);
-+	if (ret) {
-+		pr_err("registering percpu irq failed [%d]\n", ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static int pmu_sbi_device_probe(struct platform_device *pdev)
- {
- 	struct riscv_pmu *pmu = NULL;
- 	int num_counters;
--	int ret;
-+	int ret = -ENODEV;
- 
- 	pr_info("SBI PMU extension is available\n");
- 	/* Notify legacy implementation that SBI pmu is available*/
-@@ -488,13 +684,19 @@ static int pmu_sbi_device_probe(struct platform_device *pdev)
- 	num_counters = pmu_sbi_find_num_ctrs();
- 	if (num_counters < 0) {
- 		pr_err("SBI PMU extension doesn't provide any counters\n");
--		return -ENODEV;
-+		goto out_free;
- 	}
- 
- 	/* cache all the information about counters now */
- 	if (pmu_sbi_get_ctrinfo(num_counters))
--		return -ENODEV;
-+		goto out_free;
- 
-+	ret = pmu_sbi_setup_irqs(pmu, pdev);
-+	if (ret < 0) {
-+		pr_info("Perf sampling/filtering is not supported as sscof extension is not available\n");
-+		pmu->pmu.capabilities |= PERF_PMU_CAP_NO_INTERRUPT;
-+		pmu->pmu.capabilities |= PERF_PMU_CAP_NO_EXCLUDE;
-+	}
- 	pmu->num_counters = num_counters;
- 	pmu->ctr_start = pmu_sbi_ctr_start;
- 	pmu->ctr_stop = pmu_sbi_ctr_stop;
-@@ -515,6 +717,10 @@ static int pmu_sbi_device_probe(struct platform_device *pdev)
- 	}
- 
- 	return 0;
-+
-+out_free:
-+	kfree(pmu);
-+	return ret;
- }
- 
- static struct platform_driver pmu_sbi_driver = {
-@@ -544,8 +750,6 @@ static int __init pmu_sbi_devinit(void)
- 	}
- 
- 	ret = platform_driver_register(&pmu_sbi_driver);
--	if (ret)
--		return ret;
- 
- 	pdev = platform_device_register_simple(RISCV_PMU_PDEV_NAME, -1, NULL, 0);
- 	if (IS_ERR(pdev)) {
-diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_pmu.h
-index 52672de540c2..c7e2d689063a 100644
---- a/include/linux/perf/riscv_pmu.h
-+++ b/include/linux/perf/riscv_pmu.h
-@@ -29,6 +29,8 @@
- struct cpu_hw_events {
- 	/* currently enabled events */
- 	int			n_events;
-+	/* Counter overflow interrupt */
-+	int		irq;
- 	/* currently enabled events */
- 	struct perf_event	*events[RISCV_MAX_COUNTERS];
- 	/* currently enabled counters */
+diff --git a/Documentation/riscv/pmu.rst b/Documentation/riscv/pmu.rst
+deleted file mode 100644
+index acb216b99c26..000000000000
+--- a/Documentation/riscv/pmu.rst
++++ /dev/null
+@@ -1,255 +0,0 @@
+-===================================
+-Supporting PMUs on RISC-V platforms
+-===================================
+-
+-Alan Kao <alankao@andestech.com>, Mar 2018
+-
+-Introduction
+-------------
+-
+-As of this writing, perf_event-related features mentioned in The RISC-V ISA
+-Privileged Version 1.10 are as follows:
+-(please check the manual for more details)
+-
+-* [m|s]counteren
+-* mcycle[h], cycle[h]
+-* minstret[h], instret[h]
+-* mhpeventx, mhpcounterx[h]
+-
+-With such function set only, porting perf would require a lot of work, due to
+-the lack of the following general architectural performance monitoring features:
+-
+-* Enabling/Disabling counters
+-  Counters are just free-running all the time in our case.
+-* Interrupt caused by counter overflow
+-  No such feature in the spec.
+-* Interrupt indicator
+-  It is not possible to have many interrupt ports for all counters, so an
+-  interrupt indicator is required for software to tell which counter has
+-  just overflowed.
+-* Writing to counters
+-  There will be an SBI to support this since the kernel cannot modify the
+-  counters [1].  Alternatively, some vendor considers to implement
+-  hardware-extension for M-S-U model machines to write counters directly.
+-
+-This document aims to provide developers a quick guide on supporting their
+-PMUs in the kernel.  The following sections briefly explain perf' mechanism
+-and todos.
+-
+-You may check previous discussions here [1][2].  Also, it might be helpful
+-to check the appendix for related kernel structures.
+-
+-
+-1. Initialization
+------------------
+-
+-*riscv_pmu* is a global pointer of type *struct riscv_pmu*, which contains
+-various methods according to perf's internal convention and PMU-specific
+-parameters.  One should declare such instance to represent the PMU.  By default,
+-*riscv_pmu* points to a constant structure *riscv_base_pmu*, which has very
+-basic support to a baseline QEMU model.
+-
+-Then he/she can either assign the instance's pointer to *riscv_pmu* so that
+-the minimal and already-implemented logic can be leveraged, or invent his/her
+-own *riscv_init_platform_pmu* implementation.
+-
+-In other words, existing sources of *riscv_base_pmu* merely provide a
+-reference implementation.  Developers can flexibly decide how many parts they
+-can leverage, and in the most extreme case, they can customize every function
+-according to their needs.
+-
+-
+-2. Event Initialization
+------------------------
+-
+-When a user launches a perf command to monitor some events, it is first
+-interpreted by the userspace perf tool into multiple *perf_event_open*
+-system calls, and then each of them calls to the body of *event_init*
+-member function that was assigned in the previous step.  In *riscv_base_pmu*'s
+-case, it is *riscv_event_init*.
+-
+-The main purpose of this function is to translate the event provided by user
+-into bitmap, so that HW-related control registers or counters can directly be
+-manipulated.  The translation is based on the mappings and methods provided in
+-*riscv_pmu*.
+-
+-Note that some features can be done in this stage as well:
+-
+-(1) interrupt setting, which is stated in the next section;
+-(2) privilege level setting (user space only, kernel space only, both);
+-(3) destructor setting.  Normally it is sufficient to apply *riscv_destroy_event*;
+-(4) tweaks for non-sampling events, which will be utilized by functions such as
+-    *perf_adjust_period*, usually something like the follows::
+-
+-      if (!is_sampling_event(event)) {
+-              hwc->sample_period = x86_pmu.max_period;
+-              hwc->last_period = hwc->sample_period;
+-              local64_set(&hwc->period_left, hwc->sample_period);
+-      }
+-
+-In the case of *riscv_base_pmu*, only (3) is provided for now.
+-
+-
+-3. Interrupt
+-------------
+-
+-3.1. Interrupt Initialization
+-
+-This often occurs at the beginning of the *event_init* method. In common
+-practice, this should be a code segment like::
+-
+-  int x86_reserve_hardware(void)
+-  {
+-        int err = 0;
+-
+-        if (!atomic_inc_not_zero(&pmc_refcount)) {
+-                mutex_lock(&pmc_reserve_mutex);
+-                if (atomic_read(&pmc_refcount) == 0) {
+-                        if (!reserve_pmc_hardware())
+-                                err = -EBUSY;
+-                        else
+-                                reserve_ds_buffers();
+-                }
+-                if (!err)
+-                        atomic_inc(&pmc_refcount);
+-                mutex_unlock(&pmc_reserve_mutex);
+-        }
+-
+-        return err;
+-  }
+-
+-And the magic is in *reserve_pmc_hardware*, which usually does atomic
+-operations to make implemented IRQ accessible from some global function pointer.
+-*release_pmc_hardware* serves the opposite purpose, and it is used in event
+-destructors mentioned in previous section.
+-
+-(Note: From the implementations in all the architectures, the *reserve/release*
+-pair are always IRQ settings, so the *pmc_hardware* seems somehow misleading.
+-It does NOT deal with the binding between an event and a physical counter,
+-which will be introduced in the next section.)
+-
+-3.2. IRQ Structure
+-
+-Basically, a IRQ runs the following pseudo code::
+-
+-  for each hardware counter that triggered this overflow
+-
+-      get the event of this counter
+-
+-      // following two steps are defined as *read()*,
+-      // check the section Reading/Writing Counters for details.
+-      count the delta value since previous interrupt
+-      update the event->count (# event occurs) by adding delta, and
+-                 event->hw.period_left by subtracting delta
+-
+-      if the event overflows
+-          sample data
+-          set the counter appropriately for the next overflow
+-
+-          if the event overflows again
+-              too frequently, throttle this event
+-          fi
+-      fi
+-
+-  end for
+-
+-However as of this writing, none of the RISC-V implementations have designed an
+-interrupt for perf, so the details are to be completed in the future.
+-
+-4. Reading/Writing Counters
+----------------------------
+-
+-They seem symmetric but perf treats them quite differently.  For reading, there
+-is a *read* interface in *struct pmu*, but it serves more than just reading.
+-According to the context, the *read* function not only reads the content of the
+-counter (event->count), but also updates the left period to the next interrupt
+-(event->hw.period_left).
+-
+-But the core of perf does not need direct write to counters.  Writing counters
+-is hidden behind the abstraction of 1) *pmu->start*, literally start counting so one
+-has to set the counter to a good value for the next interrupt; 2) inside the IRQ
+-it should set the counter to the same resonable value.
+-
+-Reading is not a problem in RISC-V but writing would need some effort, since
+-counters are not allowed to be written by S-mode.
+-
+-
+-5. add()/del()/start()/stop()
+------------------------------
+-
+-Basic idea: add()/del() adds/deletes events to/from a PMU, and start()/stop()
+-starts/stop the counter of some event in the PMU.  All of them take the same
+-arguments: *struct perf_event *event* and *int flag*.
+-
+-Consider perf as a state machine, then you will find that these functions serve
+-as the state transition process between those states.
+-Three states (event->hw.state) are defined:
+-
+-* PERF_HES_STOPPED:	the counter is stopped
+-* PERF_HES_UPTODATE:	the event->count is up-to-date
+-* PERF_HES_ARCH:	arch-dependent usage ... we don't need this for now
+-
+-A normal flow of these state transitions are as follows:
+-
+-* A user launches a perf event, resulting in calling to *event_init*.
+-* When being context-switched in, *add* is called by the perf core, with a flag
+-  PERF_EF_START, which means that the event should be started after it is added.
+-  At this stage, a general event is bound to a physical counter, if any.
+-  The state changes to PERF_HES_STOPPED and PERF_HES_UPTODATE, because it is now
+-  stopped, and the (software) event count does not need updating.
+-
+-  - *start* is then called, and the counter is enabled.
+-    With flag PERF_EF_RELOAD, it writes an appropriate value to the counter (check
+-    previous section for detail).
+-    Nothing is written if the flag does not contain PERF_EF_RELOAD.
+-    The state now is reset to none, because it is neither stopped nor updated
+-    (the counting already started)
+-
+-* When being context-switched out, *del* is called.  It then checks out all the
+-  events in the PMU and calls *stop* to update their counts.
+-
+-  - *stop* is called by *del*
+-    and the perf core with flag PERF_EF_UPDATE, and it often shares the same
+-    subroutine as *read* with the same logic.
+-    The state changes to PERF_HES_STOPPED and PERF_HES_UPTODATE, again.
+-
+-  - Life cycle of these two pairs: *add* and *del* are called repeatedly as
+-    tasks switch in-and-out; *start* and *stop* is also called when the perf core
+-    needs a quick stop-and-start, for instance, when the interrupt period is being
+-    adjusted.
+-
+-Current implementation is sufficient for now and can be easily extended to
+-features in the future.
+-
+-A. Related Structures
+----------------------
+-
+-* struct pmu: include/linux/perf_event.h
+-* struct riscv_pmu: arch/riscv/include/asm/perf_event.h
+-
+-  Both structures are designed to be read-only.
+-
+-  *struct pmu* defines some function pointer interfaces, and most of them take
+-  *struct perf_event* as a main argument, dealing with perf events according to
+-  perf's internal state machine (check kernel/events/core.c for details).
+-
+-  *struct riscv_pmu* defines PMU-specific parameters.  The naming follows the
+-  convention of all other architectures.
+-
+-* struct perf_event: include/linux/perf_event.h
+-* struct hw_perf_event
+-
+-  The generic structure that represents perf events, and the hardware-related
+-  details.
+-
+-* struct riscv_hw_events: arch/riscv/include/asm/perf_event.h
+-
+-  The structure that holds the status of events, has two fixed members:
+-  the number of events and the array of the events.
+-
+-References
+-----------
+-
+-[1] https://github.com/riscv/riscv-linux/pull/124
+-
+-[2] https://groups.google.com/a/groups.riscv.org/forum/#!topic/sw-dev/f19TmCNP6yA
 -- 
 2.33.1
 

@@ -2,71 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C9047F48F
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 23:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4878A47F49A
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 23:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232964AbhLYWGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 17:06:41 -0500
-Received: from hosting.gsystem.sk ([212.5.213.30]:38276 "EHLO
-        hosting.gsystem.sk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbhLYWGl (ORCPT
+        id S232979AbhLYWcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 17:32:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229494AbhLYWcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 17:06:41 -0500
-X-Greylist: delayed 452 seconds by postgrey-1.27 at vger.kernel.org; Sat, 25 Dec 2021 17:06:40 EST
-Received: from gsql.ggedos.sk (off-20.infotel.telecom.sk [212.5.213.20])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by hosting.gsystem.sk (Postfix) with ESMTPSA id 7E1447A0156;
-        Sat, 25 Dec 2021 22:59:07 +0100 (CET)
-From:   Ondrej Zary <linux@zary.sk>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] bttv: fix WARNING regression on tunerless devices
-Date:   Sat, 25 Dec 2021 22:58:44 +0100
-Message-Id: <20211225215844.24189-1-linux@zary.sk>
-X-Mailer: git-send-email 2.20.1
+        Sat, 25 Dec 2021 17:32:53 -0500
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B323C061401;
+        Sat, 25 Dec 2021 14:32:52 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1640471568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=bQtXtryogCMjBVY3/k4gfUtoHHlEfbKEdPsvtG8nGX0=;
+        b=NPqwKxmYJQbRt6rRKmYIxtG4GqDaCxsGgEHTjuX+TCJadaQk4JODOBBvtvTLFOGShQOxT0
+        ESEe9QD9pHCCVruUWHtCakoaZfM2uOIABDQH9YqlDnBPlge4QCn4AxZZ/L6Klywp+BpClx
+        Qajc3lgXE1JFJy0L/LzP5yz/oUcp0GI=
+From:   andrey.konovalov@linux.dev
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: raw-gadget: upgrade license identifier
+Date:   Sat, 25 Dec 2021 23:32:36 +0100
+Message-Id: <f55721ade28b2715eaf54b28a1bbfaad7b5adc0d.1640471342.git.andreyknvl@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 2161536516ed ("media: media/pci: set device_caps in struct video_device")
-introduced a regression: V4L2_CAP_TUNER is always present in device_caps,
-even when the device has no tuner.
+From: Andrey Konovalov <andreyknvl@gmail.com>
 
-This causes a warning:
-WARNING: CPU: 0 PID: 249 at drivers/media/v4l2-core/v4l2-ioctl.c:1102 v4l_querycap+0xa0/0xb0 [videodev]
+Most of the USB gadget modules are licensed as GPL-2.0+. There is no
+reason not to allow using Raw Gadget code under a newer GPL version.
 
-Fixes: 2161536516ed ("media: media/pci: set device_caps in struct video_device")
-Signed-off-by: Ondrej Zary <linux@zary.sk>
+Change SPDX identifier from GPL-2.0 to GPL-2.0+.
+
+Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
+
 ---
- drivers/media/pci/bt8xx/bttv-driver.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-index 0e9df8b35ac6..661ebfa7bf3f 100644
---- a/drivers/media/pci/bt8xx/bttv-driver.c
-+++ b/drivers/media/pci/bt8xx/bttv-driver.c
-@@ -3890,7 +3890,7 @@ static int bttv_register_video(struct bttv *btv)
- 
- 	/* video */
- 	vdev_init(btv, &btv->video_dev, &bttv_video_template, "video");
--	btv->video_dev.device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_TUNER |
-+	btv->video_dev.device_caps = V4L2_CAP_VIDEO_CAPTURE |
- 				     V4L2_CAP_READWRITE | V4L2_CAP_STREAMING;
- 	if (btv->tuner_type != TUNER_ABSENT)
- 		btv->video_dev.device_caps |= V4L2_CAP_TUNER;
-@@ -3911,7 +3911,7 @@ static int bttv_register_video(struct bttv *btv)
- 	/* vbi */
- 	vdev_init(btv, &btv->vbi_dev, &bttv_video_template, "vbi");
- 	btv->vbi_dev.device_caps = V4L2_CAP_VBI_CAPTURE | V4L2_CAP_READWRITE |
--				   V4L2_CAP_STREAMING | V4L2_CAP_TUNER;
-+				   V4L2_CAP_STREAMING;
- 	if (btv->tuner_type != TUNER_ABSENT)
- 		btv->vbi_dev.device_caps |= V4L2_CAP_TUNER;
- 
+I don't know whether such license change is possible and what it
+requires.
+
+Initially, when creating raw_gadget.c, I just copied GPL-2.0 from
+somewhere as it didn't seem to matter. Recently, I was looking into
+adding a license to a project that reuses both dummy_hcd.c and
+raw_gadget.c, and I noticed the difference in licensing rules.
+
+Hence this patch.
+---
+ drivers/usb/gadget/legacy/raw_gadget.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+index c5a2c734234a..79d2363cb2b4 100644
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++// SPDX-License-Identifier: GPL-2.0+
+ /*
+  * USB Raw Gadget driver.
+  * See Documentation/usb/raw-gadget.rst for more details.
 -- 
-Ondrej Zary
+2.25.1
 

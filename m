@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B80B947F33B
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 13:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 850F647F33D
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 13:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbhLYMTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 07:19:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
+        id S231699AbhLYMUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 07:20:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbhLYMTg (ORCPT
+        with ESMTP id S229556AbhLYMU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 07:19:36 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA96EC061401;
-        Sat, 25 Dec 2021 04:19:36 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id k69so14582040ybf.1;
-        Sat, 25 Dec 2021 04:19:36 -0800 (PST)
+        Sat, 25 Dec 2021 07:20:29 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF957C061401;
+        Sat, 25 Dec 2021 04:20:28 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id w184so10424488ybg.5;
+        Sat, 25 Dec 2021 04:20:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=kx+36xsr0Ny2N7LS8kpmmApX5XKoC8oiXANGbtnyyDA=;
-        b=PRjiA6HCvaAn0PACGcBU9DJT7nVBbcPAuVOxVtsPUXIFcTnE4axx4aTEULvrFHDoyT
-         MFX3sTHuFkEsKdOI2OnKKZSngVkub+MkLGUYrQzbZ1IqCWDM/SD18rsHpOzk+iG/+2aM
-         6slt7lu+tbTEE+TNRrySq+HRx0kMlCoGG/wqAXwM8uPxaw+P+ZqbJel2uCJgqkglZUEH
-         xBW58pN9Mn/c7TofZoPQcuNnarwJTrNGmanZzCNTu/CojP4z9ewN/vwZTkeJat/B1G5H
-         XOTb0a+2yMjQiWtgeJBX6Jku8YDvZ8uGlLNde4W1eI0lzDoqTPrXgTPH/AwCqb84nrwc
-         /2aw==
+        bh=p+43WiB59oN0B5WcFMgOGcjPd0Wu8v0DLecWvDIH/vQ=;
+        b=n3BgSX3nAAWilH9e7B/C9YVPEMDqLCmUEfnCzSmkMs69CIWikJDr2kQpCN1hTFxG7J
+         Ixy/ixvH8AuuS35qJp5sS7UnUXXDSOCRSltfwdpAUb5+KJVZEJl3isscaFMaHMemqhtZ
+         nYGqcWT1f8jLaP4TgXUyI80MJ8aTQWHYVXjOGOhHRHQ1No2pICaD2+CSV1Q/k/Ixuz4u
+         T2unxA/09w4xaMBoynKprw7Kid+pgUavqvK4StT3kcT5aWgpz6yzBAEDm9qHZ8/rg8+d
+         OG+1jxfLBYYpvKpqkQYxAK845w16nMMncmkWm+jmMmODrpctjwWaUO4Wr1l6azbkKvMv
+         8wEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=kx+36xsr0Ny2N7LS8kpmmApX5XKoC8oiXANGbtnyyDA=;
-        b=5qcrb/dfFhght7CN+uSTNSf2uSXrN5Oq9Sxh+XaS/fF0k7t/pZc6KYD99S/HdIU853
-         wtqMhZhekm++QL61iE4rIyppJ/vd7uZWZVDxz+emp5dBmvXhq8SAu8RYg9DHw3fiKBpq
-         WFnuMthyuKg4XlqsBoLdqmIda2hQAY5kgeZwGXCZ5PVjBspKFuSEzb6XmmypUbEiKmfD
-         TkaiASubLjzzJDoVQ79ACoJODKfVnY4GO+UsNdrP2gSqn4Dd9IpCIWA9gkyuNAyRXKBV
-         K2RJRSfhtajbxv0Y/K7rSqmRepilK7/iql7tnNFatXTOGPD9Tfc1DdDdlKQwsB1zps7T
-         z5vA==
-X-Gm-Message-State: AOAM533Y4vk9bP1sbkue65RlTyVnUaSpaU3IDwyfTC2+OM8d7mz7nh2O
-        sZ67ym8AbxSX24MGJCsC3RfByFyT3+q+70lCVRgxMHObXOouAQ==
-X-Google-Smtp-Source: ABdhPJzWPnf1J0cQdExxgB+EfJZiasfQNGIO8fpp8WmWtWW54AXDzPVelHTOckdMZ8zFeBDgPuqpLhHnsDdWnqdk2JU=
-X-Received: by 2002:a25:dc4d:: with SMTP id y74mr13112043ybe.422.1640434775870;
- Sat, 25 Dec 2021 04:19:35 -0800 (PST)
+        bh=p+43WiB59oN0B5WcFMgOGcjPd0Wu8v0DLecWvDIH/vQ=;
+        b=4Pc37TMClqDR/CkYDD0yp1Kc7Fu3ZzJ+6sYrKSgCJLfIb43EE3xxwrpZo21YdoKLE0
+         vuabPgN20lDb4giVPp+2K29Qe2vwAA00GrD+fOqUs2CTzRorrLpymJrG4kPKl08uZb11
+         P83lQcBjYnDPf+/V/sUv+D3c+S7AlR+6dINZzpI4rhuM+NjQmpX8a41XqOQ76y7XIb4a
+         xn+/Wto+KqSZJJZq76j7DU1VymBgt0FkU1durUWLYmkW2NqoiN0tRDl8g/LW9dyTfkfX
+         3q0s+LL1qJUvakyvNjAGseOBGZdfr+UOwi7eGdjnNSVtaH0SBdtbI+vgI/QF7le9YGH+
+         LYgQ==
+X-Gm-Message-State: AOAM532db8DRbaVk7Q7q+B2GXSQPR/pnXbTSPnghfWQy4+X3F5nEcWgy
+        qYmEVITx6Cdy+DoYk0fHQ+7+Mi+SZBwXRLof8NCN2UwxWLE=
+X-Google-Smtp-Source: ABdhPJzcdV7GXniYR0W2CUYJuOOeSN6ZhrQXe6xy0Q/hpx9II0hPyB6TdnLEJIp+vdXAGX/MSS6C6h5Djftqy5kWJFQ=
+X-Received: by 2002:a25:1004:: with SMTP id 4mr13377567ybq.669.1640434828304;
+ Sat, 25 Dec 2021 04:20:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20211224192626.15843-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211224192626.15843-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAHp75VcurBNEcMFnAHTg8PTbJOhO7QA4iv1t4W=siC=D-AkHAw@mail.gmail.com>
-In-Reply-To: <CAHp75VcurBNEcMFnAHTg8PTbJOhO7QA4iv1t4W=siC=D-AkHAw@mail.gmail.com>
+References: <20211224142917.6966-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211224142917.6966-4-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAHp75VdC+JifneoYRS3yoXoAhio+TXQzca3pku7ug=A_ewWrsg@mail.gmail.com>
+In-Reply-To: <CAHp75VdC+JifneoYRS3yoXoAhio+TXQzca3pku7ug=A_ewWrsg@mail.gmail.com>
 From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Sat, 25 Dec 2021 12:19:09 +0000
-Message-ID: <CA+V-a8tuD-WKyRL_kwitqOyxJDMu1J14AtZ12LbSF9+8mj+=FQ@mail.gmail.com>
-Subject: Re: [PATCH 2/8] net: pxa168_eth: Use platform_get_irq() to get the interrupt
+Date:   Sat, 25 Dec 2021 12:20:02 +0000
+Message-ID: <CA+V-a8tzcCtnD9GDm8g+-84tKAdcPaj3Qy0s=vJmn5qMxLp=3g@mail.gmail.com>
+Subject: Re: [PATCH 03/10] serial: 8250_bcm7271: Propagate error codes from brcmuart_probe()
 To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
@@ -68,70 +71,76 @@ Hi Andy,
 
 Thank you for the review.
 
-On Sat, Dec 25, 2021 at 11:24 AM Andy Shevchenko
+On Sat, Dec 25, 2021 at 11:20 AM Andy Shevchenko
 <andy.shevchenko@gmail.com> wrote:
 >
 >
 >
 > On Friday, December 24, 2021, Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 >>
->> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
->> allocation of IRQ resources in DT core code, this causes an issue
->> when using hierarchical interrupt domains using "interrupts" property
->> in the node as this bypasses the hierarchical setup and messes up the
->> irq chaining.
+>> In case of failures brcmuart_probe() always returned -ENODEV, this
+>> isn't correct for example platform_get_irq_byname() may return
+>> -EPROBE_DEFER to handle such cases propagate error codes in
+>> brcmuart_probe() in case of failures.
 >>
->> In preparation for removal of static setup of IRQ resource from DT core
->> code use platform_get_irq().
->>
+>> Fixes: 41a469482de25 ("serial: 8250: Add new 8250-core based Broadcom STB driver")
 >> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >> ---
->>  drivers/net/ethernet/marvell/pxa168_eth.c | 9 +++++----
->>  1 file changed, 5 insertions(+), 4 deletions(-)
+>>  drivers/tty/serial/8250/8250_bcm7271.c | 11 ++++++++---
+>>  1 file changed, 8 insertions(+), 3 deletions(-)
 >>
->> diff --git a/drivers/net/ethernet/marvell/pxa168_eth.c b/drivers/net/ethernet/marvell/pxa168_eth.c
->> index 1d607bc6b59e..52bef50f5a0d 100644
->> --- a/drivers/net/ethernet/marvell/pxa168_eth.c
->> +++ b/drivers/net/ethernet/marvell/pxa168_eth.c
->> @@ -1388,7 +1388,6 @@ static int pxa168_eth_probe(struct platform_device *pdev)
->>  {
->>         struct pxa168_eth_private *pep = NULL;
->>         struct net_device *dev = NULL;
->> -       struct resource *res;
->>         struct clk *clk;
->>         struct device_node *np;
->>         int err;
->> @@ -1419,9 +1418,11 @@ static int pxa168_eth_probe(struct platform_device *pdev)
->>                 goto err_netdev;
->>         }
->>
->> -       res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
->> -       BUG_ON(!res);
->> -       dev->irq = res->start;
->> +       err = platform_get_irq(pdev, 0);
->> +       if (err == -EPROBE_DEFER)
+>> diff --git a/drivers/tty/serial/8250/8250_bcm7271.c b/drivers/tty/serial/8250/8250_bcm7271.c
+>> index 7ecfcc650d28..cc60a7874e8b 100644
+>> --- a/drivers/tty/serial/8250/8250_bcm7271.c
+>> +++ b/drivers/tty/serial/8250/8250_bcm7271.c
+>> @@ -1074,14 +1074,18 @@ static int brcmuart_probe(struct platform_device *pdev)
+>>                 priv->rx_bufs = dma_alloc_coherent(dev,
+>>                                                    priv->rx_size,
+>>                                                    &priv->rx_addr, GFP_KERNEL);
+>> -               if (!priv->rx_bufs)
+>> +               if (!priv->rx_bufs) {
+>> +                       ret = -EINVAL;
 >
 >
->  What about other errors?
 >
-Ouch I missed it...
+> For memory allocation we usually return -ENOMEM.
 >
->>
->> +               goto err_netdev;
->> +       BUG_ON(dev->irq < 0);
->
->
-> ??? What is this and how it supposed to work?
->
-.. should have been BUG_ON(dev->irq < 0);
+Agreed, will fix that.
 
 Cheers,
 Prabhakar
 >>
->> +       dev->irq = err;
->>         dev->netdev_ops = &pxa168_eth_netdev_ops;
->>         dev->watchdog_timeo = 2 * HZ;
->>         dev->base_addr = 0;
+>>                         goto err;
+>> +               }
+>>                 priv->tx_size = UART_XMIT_SIZE;
+>>                 priv->tx_buf = dma_alloc_coherent(dev,
+>>                                                   priv->tx_size,
+>>                                                   &priv->tx_addr, GFP_KERNEL);
+>> -               if (!priv->tx_buf)
+>> +               if (!priv->tx_buf) {
+>> +                       ret = -EINVAL;
+>>                         goto err;
+>> +               }
+>>         }
+>>
+>>         ret = serial8250_register_8250_port(&up);
+>> @@ -1095,6 +1099,7 @@ static int brcmuart_probe(struct platform_device *pdev)
+>>         if (priv->dma_enabled) {
+>>                 dma_irq = platform_get_irq_byname(pdev,  "dma");
+>>                 if (dma_irq < 0) {
+>> +                       ret = dma_irq;
+>>                         dev_err(dev, "no IRQ resource info\n");
+>>                         goto err1;
+>>                 }
+>> @@ -1114,7 +1119,7 @@ static int brcmuart_probe(struct platform_device *pdev)
+>>  err:
+>>         brcmuart_free_bufs(dev, priv);
+>>         brcmuart_arbitration(priv, 0);
+>> -       return -ENODEV;
+>> +       return ret;
+>>  }
+>>
+>>  static int brcmuart_remove(struct platform_device *pdev)
 >> --
 >> 2.17.1
 >>

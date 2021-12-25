@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE6547F284
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 08:26:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2CF47F289
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 08:26:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbhLYH0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 02:26:35 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15973 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbhLYH0f (ORCPT
+        id S230375AbhLYH0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 02:26:38 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16859 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230339AbhLYH0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 02:26:35 -0500
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JLb4m1C5tzZddv;
-        Sat, 25 Dec 2021 15:23:20 +0800 (CST)
+        Sat, 25 Dec 2021 02:26:36 -0500
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JLb7T1dqfz91nM;
+        Sat, 25 Dec 2021 15:25:41 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 25 Dec 2021 15:26:32 +0800
+ 15.1.2308.20; Sat, 25 Dec 2021 15:26:34 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 25 Dec 2021 15:26:31 +0800
+ 15.1.2308.20; Sat, 25 Dec 2021 15:26:32 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -44,10 +44,12 @@ CC:     Zhen Lei <thunder.leizhen@huawei.com>,
         Kefeng Wang <wangkefeng.wang@huawei.com>,
         Chen Zhou <dingguo.cz@antgroup.com>,
         "John Donnelly" <John.p.donnelly@oracle.com>
-Subject: [PATCH 0/4] kdump: add parse_crashkernel_high_low() to replace parse_crashkernel_{high|low}()
-Date:   Sat, 25 Dec 2021 15:23:23 +0800
-Message-ID: <20211225072327.1807-1-thunder.leizhen@huawei.com>
+Subject: [PATCH 1/4] kdump: add helper parse_crashkernel_high_low()
+Date:   Sat, 25 Dec 2021 15:23:24 +0800
+Message-ID: <20211225072327.1807-2-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
+In-Reply-To: <20211225072327.1807-1-thunder.leizhen@huawei.com>
+References: <20211225072327.1807-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -62,37 +64,73 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 The bootup command line option crashkernel=Y,low is valid only when
 crashkernel=X,high is specified. Putting their parsing into a separate
 function makes the code logic clearer and easier to understand the strong
-dependencies between them. So add parse_crashkernel_high_low() and use it
-to repalce parse_crashkernel_{high|low}(). Then make the latter static,
-and reduce two confusing parameters 'system_ram' and 'crash_base' of them.
+dependencies between them.
 
-All four patches in this series do the cleanups, no functional change. This
-patchset is also a preparation for supporting reserve crashkernel above 4G
-on arm64, and share code with x86.
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ include/linux/crash_core.h |  3 +++
+ kernel/crash_core.c        | 35 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
 
-The main proposal was made by Borislav Petkov.
-> As I've already alluded to in another mail, ontop of this there should
-> be a patch or multiple patches which clean this up more and perhaps even
-> split it into separate functions doing stuff in this order:
->
-> 1. Parse all crashkernel= cmdline options
-> 2. Do all crash_base, crash_size etc checks
-> 3. Do the memory reservations
->
-> And all that supplied with comments explaining why stuff is being done.
-
-
-Zhen Lei (4):
-  kdump: add helper parse_crashkernel_high_low()
-  x86/setup: Use parse_crashkernel_high_low() to simplify code
-  kdump: make parse_crashkernel_{high|low}() static
-  kdump: reduce unnecessary parameters of parse_crashkernel_{high|low}()
-
- arch/x86/kernel/setup.c    | 21 +++++++--------
- include/linux/crash_core.h |  7 +++--
- kernel/crash_core.c        | 54 +++++++++++++++++++++++++++++++-------
- 3 files changed, 56 insertions(+), 26 deletions(-)
-
+diff --git a/include/linux/crash_core.h b/include/linux/crash_core.h
+index de62a722431e7db..2d3a64761d18998 100644
+--- a/include/linux/crash_core.h
++++ b/include/linux/crash_core.h
+@@ -83,5 +83,8 @@ int parse_crashkernel_high(char *cmdline, unsigned long long system_ram,
+ 		unsigned long long *crash_size, unsigned long long *crash_base);
+ int parse_crashkernel_low(char *cmdline, unsigned long long system_ram,
+ 		unsigned long long *crash_size, unsigned long long *crash_base);
++int __init parse_crashkernel_high_low(char *cmdline,
++				      unsigned long long *high_size,
++				      unsigned long long *low_size);
+ 
+ #endif /* LINUX_CRASH_CORE_H */
+diff --git a/kernel/crash_core.c b/kernel/crash_core.c
+index eb53f5ec62c900f..8ab59a0e04f178f 100644
+--- a/kernel/crash_core.c
++++ b/kernel/crash_core.c
+@@ -295,6 +295,41 @@ int __init parse_crashkernel_low(char *cmdline,
+ 				"crashkernel=", suffix_tbl[SUFFIX_LOW]);
+ }
+ 
++/**
++ * parse_crashkernel_high_low - Parsing "crashkernel=X,high" and possible
++ *				"crashkernel=Y,low".
++ * @cmdline:	The bootup command line.
++ * @high_size:	Save the memory size specified by "crashkernel=X,high".
++ * @low_size:	Save the memory size specified by "crashkernel=Y,low" or "-1"
++		if it's not specified.
++ *
++ * Returns 0 on success, else a negative status code.
++ */
++int __init parse_crashkernel_high_low(char *cmdline,
++				      unsigned long long *high_size,
++				      unsigned long long *low_size)
++{
++	int ret;
++	unsigned long long base;
++
++	BUG_ON(!high_size || !low_size);
++
++	/* crashkernel=X,high */
++	ret = parse_crashkernel_high(cmdline, 0, high_size, &base);
++	if (ret)
++		return ret;
++
++	if (*high_size <= 0)
++		return -EINVAL;
++
++	/* crashkernel=Y,low */
++	ret = parse_crashkernel_low(cmdline, 0, low_size, &base);
++	if (ret)
++		*low_size = -1;
++
++	return 0;
++}
++
+ Elf_Word *append_elf_note(Elf_Word *buf, char *name, unsigned int type,
+ 			  void *data, size_t data_len)
+ {
 -- 
 2.25.1
 

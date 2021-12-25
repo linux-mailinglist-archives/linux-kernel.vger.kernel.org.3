@@ -2,130 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D4947F2FD
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 11:36:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C42447F302
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 11:41:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbhLYKgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 05:36:07 -0500
-Received: from mail-ua1-f43.google.com ([209.85.222.43]:46825 "EHLO
-        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbhLYKgG (ORCPT
+        id S231454AbhLYKli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 05:41:38 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:53354
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231440AbhLYKlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 05:36:06 -0500
-Received: by mail-ua1-f43.google.com with SMTP id 30so18600668uag.13;
-        Sat, 25 Dec 2021 02:36:05 -0800 (PST)
+        Sat, 25 Dec 2021 05:41:36 -0500
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C2EC83F1F2
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 10:41:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640428895;
+        bh=QauqV2pTGxSKDYX2CC7YbyGe29QyyH/cOCLamRKi74c=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=k6RSmyukQKrar1hdhfhDJ5N6bWvPhaQAna8hnJgPSfvuiLG61Z8b7a4VMYSMxn+CL
+         mbymK63MwA6w4fdgWU1WlQrS0IQ33wNL52TQvi+nhqzD4b1UFLOIyW6l7HSEexVCeE
+         Ow/MHvnglv+SRqUnUfRWpm2V3nRnxwMxOPmPFjtHZ712e4ABMqvufjXI6c4Nuix/KG
+         +kQMycqGba24nFXySx+fhr8T6EtXzrxzDNASTwn5NlNL5fpIUC6tjGn3pa+wby15GP
+         FlyWsH/LkOJWKyMPsDFou4N+E38Kn3kqapvJSe9ZcdRgu0xtPe1RbyMtSKb99HjSnw
+         y5GCzAFEfiLGg==
+Received: by mail-lj1-f197.google.com with SMTP id 83-20020a2e0956000000b0022d68f4a68aso2907973ljj.12
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 02:41:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WSqSuMuP1GC9zuDtXwCcS1k5lJH6Ajg56eS0dRt9IM8=;
-        b=Pms/GE/5CD7rgHExdwFv6+gOtbNA/SaBCo4KMlzBWIIbaLTDHOAb9ErCFcX3c02MXE
-         8btmTuHz6mEylZyNrVd49oG5Jes5hNg1UvERfzhRJZIdaQbTbeIee8uHNIzqd5HJN1V8
-         ddteujHYcpQcd7nsIhHkRcw85XcXH1WmvuxotRXe8b6E5UIXwcJ8OgkqVP4vhIXIf0to
-         Q4ALlSIaI/A8NSlqiSz2wic1T/gMdmy0ZXAG6HEXplfJ+gyfDiFwTVJDbB4xJqWTQ/rL
-         OPYkoPjqukq6/1jG3nCLfIrHpUGcH4P1+F2SqPqSDYw97P3MOKzvvD+1xjdC2w3J6HLG
-         Ka+A==
-X-Gm-Message-State: AOAM531o4gK1CLfxckVbUZ0BVkdeph2G9X2aqJo0qX6AyYOhTBUDDbJr
-        3N/o4AdKMd5KO2XS6ENm1FrwE+JGPcystQ==
-X-Google-Smtp-Source: ABdhPJwI2Ec9NQHfGojFI5MM10AYxO7BHlp9FJuU8sn3S4JK9g62KEpnCbrHZOuEJ+Y7uao7FyCm/g==
-X-Received: by 2002:a05:6102:b04:: with SMTP id b4mr2819364vst.61.1640428565121;
-        Sat, 25 Dec 2021 02:36:05 -0800 (PST)
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
-        by smtp.gmail.com with ESMTPSA id p12sm2036914uae.18.2021.12.25.02.36.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Dec 2021 02:36:04 -0800 (PST)
-Received: by mail-ua1-f46.google.com with SMTP id p37so18661544uae.8;
-        Sat, 25 Dec 2021 02:36:04 -0800 (PST)
-X-Received: by 2002:a67:c81c:: with SMTP id u28mr2771847vsk.38.1640428563782;
- Sat, 25 Dec 2021 02:36:03 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QauqV2pTGxSKDYX2CC7YbyGe29QyyH/cOCLamRKi74c=;
+        b=3zsfKvIGA8wJCwuvTvF+yy+GoVxh+Dvqjm1NQS5tYbCOgCqRYImFt3PsCDm9qUMQbB
+         qSJWIdsipgNHQxtiRH/QmJ/yUweF3RPUsk+tmnhXhHUDQf+omXE+4H8NYoaQax3Kv9nN
+         NmHRba0m7pmO/CS6Fz4AoZl1e+geT52CgXKF6mCSZFnetkvrq2yDjn3EdmpIMQjs/6GA
+         ivVVXjgGDx0/Pxk6Q8/hRUtUcPG3BVelb5Sm9pP01SavE0SpoC67pbmccLwrhNUlvuOW
+         LNEvD3V7nfIFe59ZKgDsyshUFafKuX+LSg0KzRm3XdUpvafyRDyWaLaT1jQv49XgDReO
+         jRrw==
+X-Gm-Message-State: AOAM5335Qf0wPjHGs385TcGZ/Szk50SSeqx38aBGS3Cz15U4tg4p/hYp
+        EL+R5WBX+/E8KlGvVhCuz8CH9B2sxvX7by0MNCCBrt3qryfFQjQ0E2CjPNCyrtFCwRzMljgUGoD
+        xZmG5lwytN+3b/+gycE+kGaF/LLgvJRO3DKWJITDPJQ==
+X-Received: by 2002:a2e:9d4:: with SMTP id 203mr3998873ljj.437.1640428895159;
+        Sat, 25 Dec 2021 02:41:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw+fdyArzWCtOfCrFbRkFIfMjOff+PenYaeghN2vyX7RnRFogTvS0/Oy2lypvtzNtOU6hdlYA==
+X-Received: by 2002:a2e:9d4:: with SMTP id 203mr3998847ljj.437.1640428894858;
+        Sat, 25 Dec 2021 02:41:34 -0800 (PST)
+Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id e12sm1077330lfr.179.2021.12.25.02.41.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Dec 2021 02:41:34 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] pinctrl: samsung: drivers for v5.17
+Date:   Sat, 25 Dec 2021 11:41:29 +0100
+Message-Id: <20211225104129.56077-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20211224062246.1258487-1-hch@lst.de> <20211224062246.1258487-2-hch@lst.de>
-In-Reply-To: <20211224062246.1258487-2-hch@lst.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sat, 25 Dec 2021 11:35:52 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWcfnALb7G-5yiEZ-_s3gG_5NXgffk+hCcv24aFojwObQ@mail.gmail.com>
-Message-ID: <CAMuHMdWcfnALb7G-5yiEZ-_s3gG_5NXgffk+hCcv24aFojwObQ@mail.gmail.com>
-Subject: Re: [PATCH 01/13] mm: remove cleancache
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Hugh Dickins <hughd@google.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 25, 2021 at 2:41 AM Christoph Hellwig <hch@lst.de> wrote:
-> The cleancache subsystem is unused since the removal of Xen tmem driver
-> in commit 814bbf49dcd0 ("xen: remove tmem driver").
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+Hi Linus,
 
->  arch/m68k/configs/amiga_defconfig    |   1 -
->  arch/m68k/configs/apollo_defconfig   |   1 -
->  arch/m68k/configs/atari_defconfig    |   1 -
->  arch/m68k/configs/bvme6000_defconfig |   1 -
->  arch/m68k/configs/hp300_defconfig    |   1 -
->  arch/m68k/configs/mac_defconfig      |   1 -
->  arch/m68k/configs/multi_defconfig    |   1 -
->  arch/m68k/configs/mvme147_defconfig  |   1 -
->  arch/m68k/configs/mvme16x_defconfig  |   1 -
->  arch/m68k/configs/q40_defconfig      |   1 -
->  arch/m68k/configs/sun3_defconfig     |   1 -
->  arch/m68k/configs/sun3x_defconfig    |   1 -
+Samsung stuff for v5.17.
 
-Although this would be removed during the next refresh anyway:
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Best regards,
+Krzysztof
 
-> --- a/mm/Kconfig
-> +++ b/mm/Kconfig
-> @@ -444,28 +444,6 @@ config USE_PERCPU_NUMA_NODE_ID
->  config HAVE_SETUP_PER_CPU_AREA
->         bool
->
-> -config CLEANCACHE
-> -       bool "Enable cleancache driver to cache clean pages if tmem is present"
-> -       help
-> -         Cleancache can be thought of as a page-granularity victim cache
-> -         for clean pages that the kernel's pageframe replacement algorithm
-> -         (PFRA) would like to keep around, but can't since there isn't enough
-> -         memory.  So when the PFRA "evicts" a page, it first attempts to use
-> -         cleancache code to put the data contained in that page into
-> -         "transcendent memory", memory that is not directly accessible or
-> -         addressable by the kernel and is of unknown and possibly
-> -         time-varying size.  And when a cleancache-enabled
-> -         filesystem wishes to access a page in a file on disk, it first
-> -         checks cleancache to see if it already contains it; if it does,
-> -         the page is copied into the kernel and a disk access is avoided.
-> -         When a transcendent memory driver is available (such as zcache or
-> -         Xen transcendent memory), a significant I/O reduction
-> -         may be achieved.  When none is available, all cleancache calls
-> -         are reduced to a single pointer-compare-against-NULL resulting
-> -         in a negligible performance hit.
-> -
-> -         If unsure, say Y to enable cleancache
 
-Ah, the joy of good advice...
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
-> -
->  config FRONTSWAP
->         bool "Enable frontswap to cache swap pages if tmem is present"
->         depends on SWAP
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 
-Gr{oetje,eeting}s,
+are available in the Git repository at:
 
-                        Geert
+  https://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/samsung.git tags/samsung-pinctrl-5.17
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+for you to fetch changes up to a382d568f144b9e533ad210117c6c50d8dbdcaf1:
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+  pinctrl: samsung: Use platform_get_irq_optional() to get the interrupt (2021-12-25 11:18:06 +0100)
+
+----------------------------------------------------------------
+Samsung pinctrl drivers changes for v5.17
+
+1. Add support for Exynos7885.
+2. Drop usage of platform_get_resource().
+
+----------------------------------------------------------------
+David Virag (2):
+      dt-bindings: pinctrl: samsung: Document Exynos7885
+      pinctrl: samsung: Add Exynos7885 SoC specific data
+
+Lad Prabhakar (1):
+      pinctrl: samsung: Use platform_get_irq_optional() to get the interrupt
+
+Wei Yongjun (1):
+      pinctrl: samsung: Make symbol 'exynos7885_pin_ctrl' static
+
+ .../bindings/pinctrl/samsung-pinctrl.txt           |  1 +
+ drivers/pinctrl/samsung/pinctrl-exynos-arm64.c     | 81 ++++++++++++++++++++++
+ drivers/pinctrl/samsung/pinctrl-samsung.c          | 11 +--
+ drivers/pinctrl/samsung/pinctrl-samsung.h          |  1 +
+ 4 files changed, 90 insertions(+), 4 deletions(-)

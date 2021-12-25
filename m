@@ -2,260 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A3547F450
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 20:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B1347F454
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 20:22:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232732AbhLYTTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 14:19:01 -0500
-Received: from ixit.cz ([94.230.151.217]:56110 "EHLO ixit.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232653AbhLYTTA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 14:19:00 -0500
-Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 91F142243C;
-        Sat, 25 Dec 2021 20:18:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1640459937;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=T8OjGOdlVg2ZEdX1g4mS/t35gyVDcyzmM4q91LVcSQo=;
-        b=Cm4m8t1ZOhV6tG1UQAHi8BConpEzRosKmE/UJBcBXyYHy/j1ozOtbQ+XPPdnVUYLQqBsOo
-        /XuNlAyI/aH53uqd7y1mqhSTdy42zvF/NCKFWqZBcx+2ci4mYPO5qGiKez1lGP42Sq8iJ1
-        5ltDp5aOTIPN5JhFpS2Fo88qbqJoP2k=
-From:   David Heidelberg <david@ixit.cz>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: spmi: convert QCOM PMIC SPMI bindings to yaml
-Date:   Sat, 25 Dec 2021 20:18:55 +0100
-Message-Id: <20211225191856.64587-1-david@ixit.cz>
-X-Mailer: git-send-email 2.34.1
+        id S232755AbhLYTWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 14:22:10 -0500
+Received: from fanzine2.igalia.com ([213.97.179.56]:48452 "EHLO
+        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232739AbhLYTWJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 25 Dec 2021 14:22:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version
+        :Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=NGtJZ5xa5kqlpRhS8Hm8lqpR3Vce3uFVp9NQv+IosLM=; b=PYPPp8fe9snSBdD/Yq6pTKJ6YV
+        q3fW31LWHMi+MXJRVGuFC2K7q0llSpA03Rt3gIEztpUfpjuzNNOwGCS9jPmnExb74gR6snfK19AMH
+        YnpUCurS6LgcFhuGWchVvwFykVKSAR9glZ6Khk8eqKhFhm5VZFXFPZy5rxaOCbPQo4YuEU5xTFPz/
+        VMqXFf9+8M+oLK2dN5D9CaYBqYZJgEg7/s2eV6gwRWkMP+ChFivU5gH0T6EMQftoRoEXwGNIpUj7o
+        qaWVAoIYm4c7vuy3jNMaxTrDb25dRW8P/yXSvSKOrhP9ZMqaoxmQD+UnIyktMC3HIJIQVVYYMW91c
+        uKnUhOlw==;
+Received: from [187.39.124.208] (helo=[192.168.0.109])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1n1Cbn-0002On-C0; Sat, 25 Dec 2021 20:21:35 +0100
+Subject: Re: [PATCH 3/3] panic: Allow printing extra panic information on
+ kdump
+To:     Dave Young <dyoung@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, mcgrof@kernel.org,
+        keescook@chromium.org, yzaikin@google.com,
+        akpm@linux-foundation.org, feng.tang@intel.com,
+        siglesias@igalia.com, kernel@gpiccoli.net,
+        kexec@lists.infradead.org
+References: <20211109202848.610874-1-gpiccoli@igalia.com>
+ <20211109202848.610874-4-gpiccoli@igalia.com>
+ <YcMPzs6t8MKpEacq@dhcp-128-65.nay.redhat.com>
+ <2d24ea70-e315-beb5-0028-683880c438be@igalia.com>
+ <YcUj0EJvQt77OVs2@dhcp-128-65.nay.redhat.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Message-ID: <5b817a4f-0bba-7d79-8aab-33c58e922293@igalia.com>
+Date:   Sat, 25 Dec 2021 16:21:17 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YcUj0EJvQt77OVs2@dhcp-128-65.nay.redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Qualcomm PMIC SPMI binding to yaml format.
+On 23/12/2021 22:35, Dave Young wrote:
+> Hi Guilherme,
+> [...]
+> If only the doc update, I think it is fine to be another follup-up
+> patch.
+> 
+> About your 1st option in patch log, there is crash_kexec_post_notifiers
+> kernel param which can be used to switch on panic notifiers before kdump
+> bootup.   Another way probably you can try to move panic print to be
+> panic notifier. Have this been discussed before? 
+> 
 
-Signed-off-by: David Heidelberg <david@ixit.cz>
+Hey Dave, thanks for the suggestion. I've considered that but didn't
+like the idea. My reasoning was: allowing post notifiers on kdump will
+highly compromise the reliability, whereas the panic_print is a solo
+option, and not very invasive.
 
----
-v2:
- - add #address and #size-cells
- - add reg and remove spmi include from example
+To mix it with all panic notifiers would just increase a lot the risk of
+a kdump failure. Put in other words: if I'm a kdump user and in order to
+have this panic_print setting I'd also need to enable post notifiers,
+certainly I'll not use the feature, 'cause I don't wanna risk kdump too
+much.
 
- .../bindings/spmi/qcom,spmi-pmic-arb.txt      |  65 ----------
- .../bindings/spmi/qcom,spmi-pmic-arb.yaml     | 120 ++++++++++++++++++
- 2 files changed, 120 insertions(+), 65 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
- create mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
+One other option I've considered however, and I'd appreciate your
+opinion here, would be a new option on crash_kexec_post_notifiers that
+allows the users to select *which few notifiers* they want to enable.
+Currently it's all or nothing, and this approach is too heavy/risky I
+believe. Allowing customization on which post notifiers the user wants
+would be much better and in this case, having a post notifier for
+panic_print makes a lot of sense. What do you think?
 
-diff --git a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
-deleted file mode 100644
-index ca645e21fe47..000000000000
---- a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
-+++ /dev/null
-@@ -1,65 +0,0 @@
--Qualcomm SPMI Controller (PMIC Arbiter)
--
--The SPMI PMIC Arbiter is found on Snapdragon chipsets.  It is an SPMI
--controller with wrapping arbitration logic to allow for multiple on-chip
--devices to control a single SPMI master.
--
--The PMIC Arbiter can also act as an interrupt controller, providing interrupts
--to slave devices.
--
--See Documentation/devicetree/bindings/spmi/spmi.yaml for the generic SPMI
--controller binding requirements for child nodes.
--
--See Documentation/devicetree/bindings/interrupt-controller/interrupts.txt for
--generic interrupt controller binding documentation.
--
--Required properties:
--- compatible : should be "qcom,spmi-pmic-arb".
--- reg-names  : must contain:
--     "core" - core registers
--     "intr" - interrupt controller registers
--     "cnfg" - configuration registers
--   Registers used only for V2 PMIC Arbiter:
--     "chnls"  - tx-channel per virtual slave registers.
--     "obsrvr" - rx-channel (called observer) per virtual slave registers.
--
--- reg : address + size pairs describing the PMIC arb register sets; order must
--        correspond with the order of entries in reg-names
--- #address-cells : must be set to 2
--- #size-cells : must be set to 0
--- qcom,ee : indicates the active Execution Environment identifier (0-5)
--- qcom,channel : which of the PMIC Arb provided channels to use for accesses (0-5)
--- interrupts : interrupt list for the PMIC Arb controller, must contain a
--               single interrupt entry for the peripheral interrupt
--- interrupt-names : corresponding interrupt names for the interrupts
--                    listed in the 'interrupts' property, must contain:
--     "periph_irq" - summary interrupt for PMIC peripherals
--- interrupt-controller : boolean indicator that the PMIC arbiter is an interrupt controller
--- #interrupt-cells :  must be set to 4. Interrupts are specified as a 4-tuple:
--    cell 1: slave ID for the requested interrupt (0-15)
--    cell 2: peripheral ID for requested interrupt (0-255)
--    cell 3: the requested peripheral interrupt (0-7)
--    cell 4: interrupt flags indicating level-sense information, as defined in
--            dt-bindings/interrupt-controller/irq.h
--
--Example:
--
--	spmi {
--		compatible = "qcom,spmi-pmic-arb";
--		reg-names = "core", "intr", "cnfg";
--		reg = <0xfc4cf000 0x1000>,
--		      <0xfc4cb000 0x1000>,
--		      <0xfc4ca000 0x1000>;
--
--		interrupt-names = "periph_irq";
--		interrupts = <0 190 0>;
--
--		qcom,ee = <0>;
--		qcom,channel = <0>;
--
--		#address-cells = <2>;
--		#size-cells = <0>;
--
--		interrupt-controller;
--		#interrupt-cells = <4>;
--	};
-diff --git a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
-new file mode 100644
-index 000000000000..55d379c85fd9
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
-@@ -0,0 +1,120 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spmi/qcom,spmi-pmic-arb.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm SPMI Controller (PMIC Arbiter)
-+
-+maintainers:
-+  - Stephen Boyd <sboyd@kernel.org>
-+
-+description: |
-+  The SPMI PMIC Arbiter is found on Snapdragon chipsets. It is an SPMI
-+  controller with wrapping arbitration logic to allow for multiple on-chip
-+  devices to control a single SPMI master.
-+
-+  The PMIC Arbiter can also act as an interrupt controller, providing interrupts
-+  to slave devices.
-+
-+allOf:
-+  - $ref: spmi.yaml
-+
-+properties:
-+  compatible:
-+    const: qcom,spmi-pmic-arb
-+
-+  reg:
-+    oneOf:
-+      - items: # V1
-+          - description: core registers
-+          - description: interrupt controller registers
-+          - description: configuration registers
-+      - items: # V2
-+          - description: core registers
-+          - description: tx-channel per virtual slave regosters
-+          - description: rx-channel (called observer) per virtual slave registers
-+          - description: interrupt controller registers
-+          - description: configuration registers
-+
-+  reg-names:
-+    oneOf:
-+      - items:
-+          - const: core
-+          - const: intr
-+          - const: cnfg
-+      - items:
-+          - const: core
-+          - const: chnls
-+          - const: obsrvr
-+          - const: intr
-+          - const: cnfg
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  interrupt-names:
-+    const: periph_irq
-+
-+  interrupt-controller: true
-+
-+  '#address-cells': true
-+
-+  '#interrupt-cells':
-+    const: 4
-+    description: |
-+      cell 1: slave ID for the requested interrupt (0-15)
-+      cell 2: peripheral ID for requested interrupt (0-255)
-+      cell 3: the requested peripheral interrupt (0-7)
-+      cell 4: interrupt flags indicating level-sense information,
-+              as defined in dt-bindings/interrupt-controller/irq.h
-+
-+  '#size-cells': true
-+
-+  qcom,ee:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 0
-+    maximum: 5
-+    description: >
-+      indicates the active Execution Environment identifier
-+
-+  qcom,channel:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 0
-+    maximum: 5
-+    description: >
-+      which of the PMIC Arb provided channels to use for accesses
-+
-+required:
-+  - compatible
-+  - reg-names
-+  - interrupts
-+  - interrupt-names
-+  - '#interrupt-cells'
-+  - qcom,ee
-+  - qcom,channel
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    spmi@fc4cf000 {
-+        compatible = "qcom,spmi-pmic-arb";
-+        reg-names = "core", "intr", "cnfg";
-+        reg = <0xfc4cf000 0x1000>,
-+              <0xfc4cb000 0x1000>,
-+              <0xfc4ca000 0x1000>;
-+
-+        interrupt-names = "periph_irq";
-+        interrupts = <0 190 0>;
-+
-+        qcom,ee = <0>;
-+        qcom,channel = <0>;
-+
-+        #address-cells = <2>;
-+        #size-cells = <0>;
-+
-+        interrupt-controller;
-+        #interrupt-cells = <4>;
-+    };
-+
--- 
-2.34.1
-
+Thanks!

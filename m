@@ -2,62 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF44B47F2C9
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 10:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1CF47F2D8
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 11:06:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbhLYJlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 04:41:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45152 "EHLO
+        id S231308AbhLYKGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 05:06:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbhLYJlM (ORCPT
+        with ESMTP id S229663AbhLYKGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 04:41:12 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210A1C061401
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 01:41:12 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id z9so9367200qtj.9
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 01:41:12 -0800 (PST)
+        Sat, 25 Dec 2021 05:06:41 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F49DC061401
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 02:06:41 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id 200so9450896pgg.3
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 02:06:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=zSLg1sVivxppYxme4VG7yM6rxhjRKrfG8yCADiK/1dg=;
-        b=hxgIRgzXLL7bFpBWkYSP215G59jJQqx9ex0RJfVPDZ4GtPVr5AyOqhM9rZSJJfOF2O
-         DQytruJgV2p7s1255rhu5ne0sE5MOop0z4Q9yvc0KlCPWCZ04srahO0z5mxDVycvGNqz
-         /JM3Rm5nMALB7Hbb8Fs0ZBIfwYRhPyxqp5PuZRJ3YnsSGXgyq897d1UmrMyTouI8Y1ad
-         nEzoEe5Ir/LSKbtrulnbSaVskHPse9/xsQREnovDGdCg9kj6irs6faN1t2DVz/g+V8d2
-         1xhcnaQoZsnyRxzRRxZRLrQCVki9GPlMnkjaOHmhbH0IgKds8StLfy1CiDb7u7ddfW9Y
-         fkqQ==
+        bh=tr5XUUdLtNZAp31+iJJ7YFpkXDTAliU1rXFTU2oYGMU=;
+        b=TdLQSmlB2gLGwclAt9mNo/9QYOsMYBTP6PtsssOCdDO8bqXtBVo4b82w9kiJMKhu2I
+         KjXNz1BTS7KmgAcQV52Ax7V5/af0eW8lhhqJtf35K7XUK8bJ3KQYlSWVgMXt8spIm4Wp
+         LStF6Jkn8THpepotqmceR60qAD5jCcB8YF8m0yuE/xuDU8ber2J5XsEIRvOA96zt8TpP
+         4gk1v1tdzSeqRJmvvjVVtdmLlTeEik7uoRuPARjrb65yWgXmmFwO+shXIbgpDnjZLU6Q
+         hip/z9SpD3R8d1+MFESviY3B93KqLgTIVX1vYOpj3dSl0BsV1sVGL9LdnlBOx4q3wh/Y
+         vV4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=zSLg1sVivxppYxme4VG7yM6rxhjRKrfG8yCADiK/1dg=;
-        b=M35zqJWvJe/f3MqYG89Du+0oLuO1HzRLwjZ2Uwut+vKolBOVh0NfUihagDr1s6d7DN
-         i/u61BDKB82xMYqbVNWKkq/8UpLTXycjKAoRzo9EZKxfp+f8xEFEIGdGmCBqpEtd5F4N
-         AGAZM/euAY/eU5CDC8ZAzJA18bSwLtU8qbT+VhNUVyped9qhNhKcfULQ2hXpv9h2dQqQ
-         2vSQsh9wnbioXFe9sP9NKD9AmCK0I6pwB1UABf98miN9UF9eVbPThGTBXzdP7ixqOuXa
-         xjFIL8g8/cn+1BheLwsT1gCSmdZjI/7TovBMh3O9ZJRaxf0xKIP0p39F37QZ7NpzYqDU
-         KEEA==
-X-Gm-Message-State: AOAM532L0ovLFZyDbDeq/QtcTwBVI6sZYzF9VMrdqvyAykR7H0/Q703+
-        ELycuExNA8daXFQHE20Ovmyqa/pVhCs=
-X-Google-Smtp-Source: ABdhPJy3ceojF3/mbxHNzx6mC2dPUJ+jC2Ui5omROTlEQCDzlH+K1nwcq76StAFpe0KD1SPk8kBSgA==
-X-Received: by 2002:a05:622a:1713:: with SMTP id h19mr8269225qtk.464.1640425271268;
-        Sat, 25 Dec 2021 01:41:11 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id j14sm8942483qkp.28.2021.12.25.01.41.07
+        bh=tr5XUUdLtNZAp31+iJJ7YFpkXDTAliU1rXFTU2oYGMU=;
+        b=11sIRn6Cj0LAh+deQqr4hT+0cWqSj2xrwQJ7G4AwDSSLxZTWU+PWxsmSCCeT1GMn+N
+         EkH5iS4ikLehk7vx6QId1mHtXlCRqshziEw5r4BEGp6+1hvQVwltwHO9S5qBqcpp3zVq
+         43RsV6okpVQKhGST98h8CXwgDMLre9L8dbdqQsXMesk5vpC+T0osx4Adjyo7zDyZk9Fi
+         r/SrYcn3MjNyxskhzlOYm9Z1pfZwN3kNuB2z/9X79c0efm0DGr1H3jIqRo7b148bcDnX
+         bTvJhvLUW4NLmuYjS1Z2TLqZ5etddA2jbYNcs/QFFle6GCv53rQaM9b6ju3j4wBS8oNb
+         tveA==
+X-Gm-Message-State: AOAM533fc+6Gt4veqwz4TaWb9n14aXZdNn3Zns0LBpbcA6VXxzvLEmku
+        zKireLkX2qGGVEAQUQvK8fw=
+X-Google-Smtp-Source: ABdhPJykZ17Xl6Xri6yGAWosneOSr6CIeXWUESSCcoFY6BfxQ2EBaj2kpbkeORUEzSNLWQ439uyexg==
+X-Received: by 2002:a65:6241:: with SMTP id q1mr8931713pgv.98.1640426800696;
+        Sat, 25 Dec 2021 02:06:40 -0800 (PST)
+Received: from localhost.localdomain (1-34-229-86.hinet-ip.hinet.net. [1.34.229.86])
+        by smtp.gmail.com with ESMTPSA id ob8sm15980723pjb.38.2021.12.25.02.06.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Dec 2021 01:41:10 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: yang.yang29@zte.com.cn
-To:     akpm@linux-foundation.org, yang.shi@linux.alibaba.com,
-        ying.huang@intel.com
-Cc:     dave.hansen@linux.intel.com, yang.yang29@zte.com.cn,
-        minchan@kernel.org, saravanand@fb.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH] mm/vmstat: add events for THP max_ptes_* exceeds
-Date:   Sat, 25 Dec 2021 09:40:37 +0000
-Message-Id: <20211225094036.574157-1-yang.yang29@zte.com.cn>
+        Sat, 25 Dec 2021 02:06:40 -0800 (PST)
+From:   s921975628@gmail.com
+To:     richard@nod.at, vigneshr@ti.com, miquel.raynal@bootlin.com
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        RinHizakura <s921975628@gmail.com>
+Subject: [PATCH 1/3] mtd: rawnand: nandsim: Replace overflow check with kzalloc to single kcalloc
+Date:   Sat, 25 Dec 2021 18:06:07 +0800
+Message-Id: <20211225100607.118932-1-s921975628@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -65,114 +62,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yang <yang.yang29@zte.com.cn>
+From: RinHizakura <s921975628@gmail.com>
 
-There are interfaces to adjust max_ptes_none, max_ptes_swap,
-max_ptes_shared values, see
-/sys/kernel/mm/transparent_hugepage/khugepaged/.
+Instead of self-checking overflow and allocating an array of specific size
+by counting the total required space handy, we already have existed kernel
+API which responses for all these works.
 
-But system administrator maynot know which value is the best. So
-Add those events to support adjusting max_ptes_* to suitable values.
-
-For example, if default max_ptes_swap value causes too much failures,
-and system uses zram whose IO is fast, administrator could increase
-max_ptes_swap until THP_SCAN_EXCEED_SWAP_PTE not increase anymore.
-
-Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+Signed-off-by: RinHizakura <s921975628@gmail.com>
 ---
- include/linux/vm_event_item.h | 3 +++
- mm/khugepaged.c               | 7 +++++++
- mm/vmstat.c                   | 3 +++
- 3 files changed, 13 insertions(+)
+ drivers/mtd/nand/raw/nandsim.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_item.h
-index a185cc75ff52..7b2363388bfa 100644
---- a/include/linux/vm_event_item.h
-+++ b/include/linux/vm_event_item.h
-@@ -98,6 +98,9 @@ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
- 		THP_SPLIT_PAGE_FAILED,
- 		THP_DEFERRED_SPLIT_PAGE,
- 		THP_SPLIT_PMD,
-+		THP_SCAN_EXCEED_NONE_PTE,
-+		THP_SCAN_EXCEED_SWAP_PTE,
-+		THP_SCAN_EXCEED_SHARED_PTE,
- #ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
- 		THP_SPLIT_PUD,
- #endif
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 7720189a2da7..abcd6bd8b97a 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -618,6 +618,7 @@ static int __collapse_huge_page_isolate(struct vm_area_struct *vma,
- 				continue;
- 			} else {
- 				result = SCAN_EXCEED_NONE_PTE;
-+				count_vm_event(THP_SCAN_EXCEED_NONE_PTE);
- 				goto out;
- 			}
- 		}
-@@ -636,6 +637,7 @@ static int __collapse_huge_page_isolate(struct vm_area_struct *vma,
- 		if (page_mapcount(page) > 1 &&
- 				++shared > khugepaged_max_ptes_shared) {
- 			result = SCAN_EXCEED_SHARED_PTE;
-+			count_vm_event(THP_SCAN_EXCEED_SHARED_PTE);
- 			goto out;
- 		}
+diff --git a/drivers/mtd/nand/raw/nandsim.c b/drivers/mtd/nand/raw/nandsim.c
+index 0750121ac..3698fb430 100644
+--- a/drivers/mtd/nand/raw/nandsim.c
++++ b/drivers/mtd/nand/raw/nandsim.c
+@@ -979,15 +979,8 @@ static int ns_read_error(unsigned int page_no)
  
-@@ -1253,6 +1255,7 @@ static int khugepaged_scan_pmd(struct mm_struct *mm,
- 				continue;
- 			} else {
- 				result = SCAN_EXCEED_SWAP_PTE;
-+				count_vm_event(THP_SCAN_EXCEED_SWAP_PTE);
- 				goto out_unmap;
- 			}
- 		}
-@@ -1262,6 +1265,7 @@ static int khugepaged_scan_pmd(struct mm_struct *mm,
- 				continue;
- 			} else {
- 				result = SCAN_EXCEED_NONE_PTE;
-+				count_vm_event(THP_SCAN_EXCEED_NONE_PTE);
- 				goto out_unmap;
- 			}
- 		}
-@@ -1290,6 +1294,7 @@ static int khugepaged_scan_pmd(struct mm_struct *mm,
- 		if (page_mapcount(page) > 1 &&
- 				++shared > khugepaged_max_ptes_shared) {
- 			result = SCAN_EXCEED_SHARED_PTE;
-+			count_vm_event(THP_SCAN_EXCEED_SHARED_PTE);
- 			goto out_unmap;
- 		}
- 
-@@ -2006,6 +2011,7 @@ static void khugepaged_scan_file(struct mm_struct *mm,
- 		if (xa_is_value(page)) {
- 			if (++swap > khugepaged_max_ptes_swap) {
- 				result = SCAN_EXCEED_SWAP_PTE;
-+				count_vm_event(THP_SCAN_EXCEED_SWAP_PTE);
- 				break;
- 			}
- 			continue;
-@@ -2056,6 +2062,7 @@ static void khugepaged_scan_file(struct mm_struct *mm,
- 	if (result == SCAN_SUCCEED) {
- 		if (present < HPAGE_PMD_NR - khugepaged_max_ptes_none) {
- 			result = SCAN_EXCEED_NONE_PTE;
-+			count_vm_event(THP_SCAN_EXCEED_NONE_PTE);
- 		} else {
- 			node = khugepaged_find_target_node();
- 			collapse_file(mm, file, start, hpage, node);
-diff --git a/mm/vmstat.c b/mm/vmstat.c
-index d701c335628c..4057372745d0 100644
---- a/mm/vmstat.c
-+++ b/mm/vmstat.c
-@@ -1353,6 +1353,9 @@ const char * const vmstat_text[] = {
- 	"thp_split_page_failed",
- 	"thp_deferred_split_page",
- 	"thp_split_pmd",
-+	"thp_scan_exceed_none_pte",
-+	"thp_scan_exceed_swap_pte",
-+	"thp_scan_exceed_share_pte",
- #ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
- 	"thp_split_pud",
- #endif
+ static int ns_setup_wear_reporting(struct mtd_info *mtd)
+ {
+-	size_t mem;
+-
+ 	wear_eb_count = div_u64(mtd->size, mtd->erasesize);
+-	mem = wear_eb_count * sizeof(unsigned long);
+-	if (mem / sizeof(unsigned long) != wear_eb_count) {
+-		NS_ERR("Too many erase blocks for wear reporting\n");
+-		return -ENOMEM;
+-	}
+-	erase_block_wear = kzalloc(mem, GFP_KERNEL);
++	erase_block_wear = kcalloc(wear_eb_count, sizeof(unsigned long), GFP_KERNEL);
+ 	if (!erase_block_wear) {
+ 		NS_ERR("Too many erase blocks for wear reporting\n");
+ 		return -ENOMEM;
 -- 
 2.25.1
 

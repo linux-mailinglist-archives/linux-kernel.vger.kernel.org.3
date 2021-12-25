@@ -2,128 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B835947F428
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 18:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 254D847F42B
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 18:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232604AbhLYRtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 12:49:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36988 "EHLO
+        id S232617AbhLYRxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 12:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbhLYRtY (ORCPT
+        with ESMTP id S229488AbhLYRxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 12:49:24 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62653C061401;
-        Sat, 25 Dec 2021 09:49:24 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id f5so44802321edq.6;
-        Sat, 25 Dec 2021 09:49:24 -0800 (PST)
+        Sat, 25 Dec 2021 12:53:42 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C25C061401;
+        Sat, 25 Dec 2021 09:53:41 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id l5so10139580edj.13;
+        Sat, 25 Dec 2021 09:53:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=gM3VpFGbnRlsUdu/qU43co/kdMZXZwIKIYTPggeA3/c=;
-        b=Zpo3jRJagdt8cSZ6tuYV2LzBTh56FD1vaWBUSZWUqabX40Qh+y+LXphzIMClqKQH/k
-         UVu8CKKTXXrAe9fgGF6well70V7ogypPUERe0BxoqJUoQxqlxWH5FLCRrerjp/rZN4Rl
-         DB1/eM2SKhzgFsn0QQFyCzgM1nP1YCgY77aBkZWe/TPbpjLlLwIVb9fIMTUwMRK6ii3x
-         cQ7INo8bvLJL8883EJsfO5FjDx7ugbkfAQdDiNgssiEL/6q9dUNeAQBDFPpU5vunZ7dH
-         21qJK1jG63sqHhW7M+Poyd5o2LVx4vo88G90JrdblJdEvTDT/jVuspP50qtBf6+devqF
-         3zNQ==
+        bh=bvBcn3go1F0UEyng6sygvztSeY/tE15qrvLo8Sthp8E=;
+        b=jm5No03DzpQHKfB3xjgoBgb52aAfH/3xSxsf+RLSzXaDBiitmSsy/PMor5903XxSx2
+         D6MzQdIBx+3gFsOA0x+OMUmfR5TtuhvPLaJOqMerG4cRDWiCYEco+nfm2AJo7QeBRnaN
+         R7G3rHmBx+t2vod7yIls23tKHAeEOBQwEd5IRr2heyBCq9zF2QYnSmRXCb6vfjuP96lu
+         rVYJy6cP7HpshLMsPYEkVHIuv0pV/fx6McEjNFi3bDRirYtNw572P9/bC1wQmrzjAEe3
+         162X1LJRmVvk6nr1larRoervN0ZUJCRBHrVFnsuvylf2+gQZqVPz5VYky7WBX3s/DfWv
+         tHcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gM3VpFGbnRlsUdu/qU43co/kdMZXZwIKIYTPggeA3/c=;
-        b=dJ0e1qCATKDhJG7wLDefixEqIbyAWMdHWwZa/AOhJyH+aHkWJJ/AolsxkeQ+j00CEN
-         su2SB/7E8kD7bCup+Lc1vZlbCBMkpoqpnpmeaGT+NtDskQTJ5ylD4Dtz4c/kdj78Mm9C
-         MvqcB3IRMSom2J2ewOKTLUDxsjWFKyaC4bcmyNYo4bMdDToxNXC1Jg0PFuaC6C+C/iVW
-         1E2APClTnPX5mgsZHw2ZraL7gFtwURmll1dsydKpVodzXpLjJDjShR70kI9Yrxg5KBPH
-         1LwP4Grr34mjw4T/duu4oHgDkXdVLPfODRzQ6M8jWBBZY1PBpdFbx7r7zygpR4eixGVR
-         LB/g==
-X-Gm-Message-State: AOAM532sCtZ9RIs18n5c7VcQNw9xayA8if2nxXEupoxyv4bHixKAkciE
-        SGffGTDjDuU8ZnaLVA5mJ53bHdoWiwyFBgzBql4=
-X-Google-Smtp-Source: ABdhPJy7x6W89zkrinOTPZz0lb4PsAdSjaFqF/BP/cBoCZYOiEv0gzK46jeBYq8/j34jt1lO3eHUQNERWm9JkeR+YFc=
-X-Received: by 2002:a05:6402:2693:: with SMTP id w19mr9901452edd.158.1640454562884;
- Sat, 25 Dec 2021 09:49:22 -0800 (PST)
+        bh=bvBcn3go1F0UEyng6sygvztSeY/tE15qrvLo8Sthp8E=;
+        b=nAyZcDPyFbqVy/kTxGGpA0R8oz149rHHURO7KRa7O+UqH2Kh2obKaEk2kXfqcA2gjL
+         UmDFumd3ds46pJUjs0/PtkC5AX6NmSSqqe3LuiraBRtOgk8cdkBpM5N7xwR08zC++p6a
+         ic/gBfiOhl+nBsUQwl7LyYYnQf3HF/CIr8jQ1SZHtLa+UGTnTzCcZa8DF4rSwKa2LvJ9
+         qN6jboBJGd17zLZbzWIdq9ZnciaGzGPgOBomV5H8Wd5EiSDD92fxDPiypEJ0evqIAsM5
+         t9cNymfqitHhjF1xHG0PQdHAEbn5qy0M/M5vLJ3aVeXkgIjZQ3ErHoF3YqzaAre9kE/C
+         DqAw==
+X-Gm-Message-State: AOAM5320Cr7JewvZmmfOokbHLmnQmaGk2GXVch+UFa40A3KFJa46YKpB
+        qML0HCLGveWP3sELyd21JD/MMB2Kw/92MzV/WGM=
+X-Google-Smtp-Source: ABdhPJwf4DKDgBNSmgD5A7KJ3JAODmu7a9nqSr92jT1HXJ33P85sZgHGahAW42Hz1Z0RxuStNOYhe93YX+kxb1LB1XQ=
+X-Received: by 2002:a05:6402:12c5:: with SMTP id k5mr10300335edx.296.1640454820084;
+ Sat, 25 Dec 2021 09:53:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20211221175322.7096-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211221175322.7096-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20211221175322.7096-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20211218144136.6663-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <5f8e2432-1214-3435-fb62-2f407ced0472@linaro.org> <CAMuHMdXgRzM4+OjR0or0aTk-ogPcAYajaVALsLF6E=MxEzeRQg@mail.gmail.com>
+ <bdec1a89-ad1b-1e16-a248-029f7f02ae80@linaro.org> <CAMuHMdWjUG57trhkOevb0Pju1fFptXZwM+BKKvgnG0+vAM64gA@mail.gmail.com>
+In-Reply-To: <CAMuHMdWjUG57trhkOevb0Pju1fFptXZwM+BKKvgnG0+vAM64gA@mail.gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 25 Dec 2021 19:48:46 +0200
-Message-ID: <CAHp75VcxCGjPiuQi9w5M3Gv97nj+TQVMdF86TQXi6bxgSTL1mQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] i2c: sh_mobile: Use platform_get_irq_optional() to
+Date:   Sat, 25 Dec 2021 19:53:04 +0200
+Message-ID: <CAHp75VdgC=605KMonG_86rzZxSFdurXtWCpuWr-1DtgvxEXfDw@mail.gmail.com>
+Subject: Re: [PATCH] thermal: rcar_thermal: Use platform_get_irq_optional() to
  get the interrupt
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakarprabhakar.csengg@gmail.com
+        Prabhakar <prabhakar.csengg@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 2:41 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+On Mon, Dec 20, 2021 at 8:08 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Mon, Dec 20, 2021 at 3:19 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+> > On 20/12/2021 14:48, Geert Uytterhoeven wrote:
+> > > On Mon, Dec 20, 2021 at 1:29 PM Daniel Lezcano
+> > > <daniel.lezcano@linaro.org> wrote:
+> > >> On 18/12/2021 15:41, Lad Prabhakar wrote:
+
+
+> > >>> +             irq = platform_get_irq_optional(pdev, i);
+> > >>> +             if (irq <= 0 && irq != -ENXIO) {
+> > >>> +                     ret = irq ? irq : -ENXIO;
+> > >>> +                     goto error_unregister;
+> > >>> +             }
+> > >>> +             if (irq == -ENXIO)
+> > >>>                       continue;
+> > >>
+> > >> Why not invert the conditions?
+> > >>
+> > >>                 if (irq == -ENXIO)
+> > >>                         continue;
+> > >
+> > > And this can be break.
+> > >
+> > >>
+> > >>                 if (irq <= 0) {
+> > >>                         ret = irq ? irq : -ENXIO;
+> > >
+> > > irq == 0 cannot happen.
+
+Even if it's so, it adds a burden on my shoulders in the future.
+
+> > >>                         goto out_unregister;
+> > >>                 }
+
+> I think so, as I don't see your point, neither ;-)
 >
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
+> I meant (a) there is no need to continue the loop when there are no
+> more interrupts present, and (b) irq == 0 cannot happen, so the cod
+> can be simplified to:
 >
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq_optional() for DT users only.
+>     if (irq == -ENXIO)
+>             break;
 
-...
+This should be a better check to include 0 as no IRQ case. It will
+allow the platform_get_irq_optional() API to be aligned with other
+_optional() APIs.
 
-> +       if (np) {
-
-Same comments as per your other patches, i.e.
-Why is this check here?
-
-> +               int irq;
-> +
-> +               while ((irq = platform_get_irq_optional(dev, k)) != -ENXIO) {
-
-Consider 0 as no IRQ.
-
-> +                       if (irq < 0)
-> +                               return irq;
-> +                       ret = devm_request_irq(&dev->dev, irq, sh_mobile_i2c_isr,
-> +                                              0, dev_name(&dev->dev), pd);
->                         if (ret) {
-> -                               dev_err(&dev->dev, "cannot request IRQ %pa\n", &n);
-> +                               dev_err(&dev->dev, "cannot request IRQ %d\n", irq);
->                                 return ret;
->                         }
-> +                       k++;
-> +               };
-> +       } else {
-> +               struct resource *res;
-> +               resource_size_t n;
-> +
-> +               while ((res = platform_get_resource(dev, IORESOURCE_IRQ, k))) {
-> +                       for (n = res->start; n <= res->end; n++) {
-> +                               ret = devm_request_irq(&dev->dev, n, sh_mobile_i2c_isr,
-> +                                                      0, dev_name(&dev->dev), pd);
-> +                               if (ret) {
-> +                                       dev_err(&dev->dev, "cannot request IRQ %pa\n", &n);
-> +                                       return ret;
-> +                               }
-> +                       }
-> +                       k++;
->                 }
-> -               k++;
->         }
+>     if (irq < 0) {
+>             ret = irq;
+>             goto out_unregister;
+>     }
 
 -- 
 With Best Regards,

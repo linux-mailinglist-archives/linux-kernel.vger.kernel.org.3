@@ -2,83 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E8447F188
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 01:06:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3948747F18B
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 01:12:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbhLYAAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Dec 2021 19:00:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
+        id S231659AbhLYAJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Dec 2021 19:09:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbhLYAAr (ORCPT
+        with ESMTP id S230087AbhLYAJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Dec 2021 19:00:47 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509D7C061401
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 16:00:47 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id k4so8605621pgb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Dec 2021 16:00:47 -0800 (PST)
+        Fri, 24 Dec 2021 19:09:46 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3F1C061757;
+        Fri, 24 Dec 2021 16:09:46 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id f5so38054297edq.6;
+        Fri, 24 Dec 2021 16:09:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Va+3Qc5m9iXppR5P+VJ2i2dR9+eZyMwUougtx+C2x7I=;
-        b=inGTUfdpcAfkC2x2+fiG3/o/aNuAx4qjYEhvziSFuXvvPcmOyoomIfF4uwIpwABbRB
-         5xf8ajvblIJBybY48Xgo2eNugEW/0kMVNKWij8LcA/rNo+6PNbhX9m4ub7uNYLAzj/jU
-         8clBQBOruEilqpMi5dxFwa1PhKEdiDGNf1bs/8cLNgDUd28CfzuE3Xt6A+cNArMwrt3L
-         n0VCwqaKBp3SXD4s19ZqVwI+HatH/rmy3khyxufu4HYdF9wWE+kKOlQT4eMo1rtKrJq7
-         l7y1XiQZ5C8/m79E9tVCbpltmYbgvA2clRdFqIndI3QxhqJeMgxDcB0RawtC3KowLNAQ
-         vhaQ==
+        h=from:to:cc:subject:date:message-id;
+        bh=sT/KIGohhkLRHjE3wm2QpMED803gmT90EUceteaiTMI=;
+        b=Veny7lRRrWZ6cPaqOR1uySyz7YnyTWPGVAUtA23S03w2GGa/Sj2f9sCm89ozYiU3Qo
+         hUhntjifTiyQxfwN7y5vW6QdTtXlhqM6U7RhP3cWSxfNm0ZfhwbUrJB/jjVdtE7jD29t
+         lnPiuzVjMwD5PPwFFYR6jxA/Dijs21s2jg7TWGNf43364LTSwWT5O/A4hZRfvT2UTQgN
+         PO9bf4FnsSzdsu1kM9AxU8XHitS2y1rnXZp9FL1mxEJEENOSoGuHhjCgh/+yURhmQKuW
+         aEFoqMqwvq6hmOnomkBSchjGntX73QCZ86RhRytOX4U1+A8UkOh/84oejldtuLZKDRgt
+         Zl2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Va+3Qc5m9iXppR5P+VJ2i2dR9+eZyMwUougtx+C2x7I=;
-        b=JGcLwsI0KwOP2hhhBGoy45INP03wTWQyar0Yx0FA/qTaJpYgaQwDlo4QBVQYVsvGfc
-         9b3opGTVYKRivdtA7zlQ/pXPKAftYihw0XKJWsys95kZDJ0StGHUT3FZpQmqhr6XYovL
-         eSSUal6yp1FRS6XQbXtLPGRZNesoBu9qHS7Pjxygvt7/ufWEPeaIwdauqfq5p87JVLvD
-         6P7uWMBv0sIMZDWFR/Ruz0q+EVteR7cWQ/sMrJsH9RmXR0GVTvrEB7Tst0o8+UdgYAz6
-         GVKy5BLqeaxdTDrHl0cLKAgjlsH8webc7vxRYH3UHu01JXr5wzW4XoE/OYvUizoyj51c
-         bqxg==
-X-Gm-Message-State: AOAM532ueen4xD4g4ow+krfyOHWKT80Y4DF8Tzkfs7lxXimzdkbHgItI
-        cSackW6KYZfPk/TvAfWZ0P3vY0xEvH+eOOiVO2VUQE3wHtrOGg==
-X-Google-Smtp-Source: ABdhPJxEltgIDxYYX63f8ia2tXkWIBL2u1BEfeZS8BAjDwBrKmiOrcA3ua8IhL3JZA/JKEN5IR6ycCc+yvPe3gAH3yI=
-X-Received: by 2002:a62:8449:0:b0:4ad:56ba:2f1d with SMTP id
- k70-20020a628449000000b004ad56ba2f1dmr8541245pfd.37.1640390090225; Fri, 24
- Dec 2021 15:54:50 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a05:6a20:c512:b0:68:78a0:e47b with HTTP; Fri, 24 Dec 2021
- 15:54:49 -0800 (PST)
-Reply-To: bankdtb160@gmail.com
-From:   DTB Bank of Tanzania <efffbi12@gmail.com>
-Date:   Fri, 24 Dec 2021 15:54:49 -0800
-Message-ID: <CANLFAeThXbgR-E9B-AFvFS45A7+Y7PY1gK87NXOZT70n2BQdog@mail.gmail.com>
-Subject: DTB Bank of Tanzania,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=sT/KIGohhkLRHjE3wm2QpMED803gmT90EUceteaiTMI=;
+        b=fiW5Dg2VoVHjzokc8nkBXCW39Pp6l6vHeP2RXvTFH2LfrHI3hOzmYhVwZ5U3/BJBYG
+         qW3+sf1uHNkrO5yxGdHz90wkAL2FxEBTgbwq1eipAmKuezMIQpp05HYMrt5HLDfe4h/m
+         +W7JJN6s7L0bJplovQfc348gOFAIZuKE/t0Oc4ho+40MLv5WsMCyzfb8oOCT7X5N3xeO
+         DbEjHEEwP7knOFoLbPbaW4Q1pIcRPixhwaPXPNUWVwmC9IOn5VS+m08iXMDDwOXOb56d
+         2APiSPVU0Mt3FsE2Tavjybb2KdLzBY8xAb6u+DbgiWdJJcJDnuOvXKtYL17UObf+ZpmS
+         0j9Q==
+X-Gm-Message-State: AOAM530S+ZvQpXOroTltu4/pef6IrPGzrQUV4PHn4T+ZRSloCquXFXx8
+        NNdDFH5BD687QDNAJCsvB2Y=
+X-Google-Smtp-Source: ABdhPJxfOJL4hEtLTz7LFV0uoWA8Zq4W7yvzwO+EDf6X5MmBwjeF9LmGUL8aDyhlKwTdW+36yEN/qA==
+X-Received: by 2002:aa7:d788:: with SMTP id s8mr7503399edq.9.1640390983968;
+        Fri, 24 Dec 2021 16:09:43 -0800 (PST)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id k12sm3011051ejx.119.2021.12.24.16.09.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 24 Dec 2021 16:09:43 -0800 (PST)
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wei Yang <richard.weiyang@gmail.com>
+Subject: [PATCH 1/2] cgroup: rstat: explicitly put loop variant in while
+Date:   Sat, 25 Dec 2021 00:09:31 +0000
+Message-Id: <20211225000932.7253-1-richard.weiyang@gmail.com>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello
+Instead of do while unconditionally, let's put the loop variant in
+while.
 
-We write to inform you regarding your inheritance award winning cheque
-of $2.8 million USD which was issued out from DTB Bank of Tanzania
-last week, although the cheque has been cashed & converted to ATM Visa
-card, reason, the cheue was cashed & loaded into a card is because the
-cheque may get expired before it gets to your possession, therefore we have
-to registered the ATM card with EMS SPEED POSTAL SERVICE company here.
-So you are advise to contact DTB Bank of Tanzania through
-E-mail;bankdtb160@gmail.com via their info below,
-please be sure you send your current home address where to deliver the
-ATM card to avoid mistake or misplacing.
+Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+---
+ kernel/cgroup/rstat.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Finally you advice to take this serious as we have done all the
-necessary arrangement to released your ATM Visa Card on your behalf.
-Thanks & happy Xmas  and prosperous new year.in advance.
+diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
+index 1486768f2318..a9d344e0521d 100644
+--- a/kernel/cgroup/rstat.c
++++ b/kernel/cgroup/rstat.c
+@@ -124,12 +124,10 @@ static struct cgroup *cgroup_rstat_cpu_pop_updated(struct cgroup *pos,
+ 
+ 			prstatc = cgroup_rstat_cpu(parent, cpu);
+ 			nextp = &prstatc->updated_children;
+-			while (true) {
++			while (*nextp != pos) {
+ 				struct cgroup_rstat_cpu *nrstatc;
+ 
+ 				nrstatc = cgroup_rstat_cpu(*nextp, cpu);
+-				if (*nextp == pos)
+-					break;
+ 				WARN_ON_ONCE(*nextp == parent);
+ 				nextp = &nrstatc->updated_next;
+ 			}
+-- 
+2.33.1
 
-Contact the Manager Mr. Abdul Samji
-The Executive Governor Of DTB Bank of Tanzania
-E-mail;bankdtb160@gmail.com
-Telephone:+255 8983 0023
-
-Regards,
-Samuel Brida

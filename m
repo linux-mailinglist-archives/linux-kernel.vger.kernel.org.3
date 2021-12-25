@@ -2,131 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F9BC47F41D
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 18:38:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B34F747F420
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 18:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232565AbhLYRih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 12:38:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34636 "EHLO
+        id S232582AbhLYRkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 12:40:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbhLYRig (ORCPT
+        with ESMTP id S229488AbhLYRke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 12:38:36 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465CEC061401;
-        Sat, 25 Dec 2021 09:38:36 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id m21so45975909edc.0;
-        Sat, 25 Dec 2021 09:38:36 -0800 (PST)
+        Sat, 25 Dec 2021 12:40:34 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F06C061401
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 09:40:33 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id b13so44731737edd.8
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 09:40:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=SxjIoyuRm3DZSyGPx2vwUleKF+JefAM1hQqDa8HoKQ8=;
-        b=Chi4IM4kZaNTIPUDMojAIhzU9R4Y1fFQUPMwLJA1E2wZnT7uqSOwtach3DT3d5myKg
-         pZBLgtVPK/+4G4vh6zx8wLAwATIhWyEghb4mnNk99tmAS8WvVI5ijxZbUkvSVN2RbrTT
-         8I36QLNuw69Fo2iSnD6GIh4KUX+Hv3frSPBqDO0J4hSKeBKgJFgjgpDdkmZySZWfxMv1
-         xcKHQ/2qAthzn3Z+p2ctmBlZnLwOg+zGLt3SC5QjG6vywtYpCbyVtrSj7Rp/zCw0Leo1
-         eNL8SUYrM51gWwy851hjrV0jO/lOWU907bHFrfKL7NbRLqew9GnbJtkG23/Z4roMX6bJ
-         HsZw==
+        bh=S9bXsUsdOmkN2j/Yll9QiHcS6DeDyMc7r7Kj1H7frv4=;
+        b=eBRUIlw985mdXBb0ZXlBrZ0J4cX4OzbtuGg5y0cSr5H2t5BD+2YqdgdrLQh1exaZ53
+         itQ3LNxK3GWncjbanlkeS/ej4tOY3qtJlHNZiakHUTu0R5h642Qjw4h/182gpa6DREWa
+         rwcBwyEGMCvTi2b3+UGpkCp0Q12vvJGzY6OH1Lz7MeWPmPhA3Cy+aQNNY2+pahRGYlPt
+         EZ2c5oesEPgjsjlahUTEhLeZ/y0CgAF99Opc+q1bZlNAZYHRhgtMkj1awQ1Nm39Y08QD
+         uicCpzixx+di0tD6pm0s4gQyay1w8yag1S+KRYOPai4pjVLr0dqr2htymw7ib2KDM6+l
+         iVDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=SxjIoyuRm3DZSyGPx2vwUleKF+JefAM1hQqDa8HoKQ8=;
-        b=QG/f0jEGVFI8VbJfvSy0CEleIXeo36oVfP/ZiV/n5pqEFM1r4gg5e+NS3/VMofgdR7
-         PU+AVT2gPzTKzE3NIFKF1XAPVPzcJJUOoAyTICkw3gJOkB7PB4xgOaHy/oSjddQ6AOky
-         PztGTNc54Pq9h1xg7IWJ+9OSESPdHQauZd7DCqI9k73mR+gb8aBlP4Jl4IMpI2V262xK
-         1Gyro1cqZ39n0kSta3Ohr9yqFgZ7fPp4wvtX3p3loGfYQB0fjMktg/OSp6cxt8tfHiE0
-         ZRHjtZn3Pw44m/X4G5eqcbZVKpRtI/K7KsJ74V6Iqqkf9lLuMLSm5ktXioxSdYc2xVKT
-         Hi9w==
-X-Gm-Message-State: AOAM5334q8YUmkEnHIeMDWd+cIywAm4L09KB6sX1D/yO27MYxJtyTjnk
-        FUD7ZeggaTknGRaALeJ28VScjxR45vvH5cCuONo=
-X-Google-Smtp-Source: ABdhPJzxTd2dAw6kFEECAUW5ka6IFfxwzDEXW8iyEGBdeg8u5vFYzverec2zZWVuydwcBqFxJ2Ce9IqsOX2+FP6dT0Y=
-X-Received: by 2002:a17:906:3ed0:: with SMTP id d16mr8484327ejj.636.1640453914794;
- Sat, 25 Dec 2021 09:38:34 -0800 (PST)
+        bh=S9bXsUsdOmkN2j/Yll9QiHcS6DeDyMc7r7Kj1H7frv4=;
+        b=WqXWMI64F0N+6hM9/3LyL3pmmRcShQgeMHTxrvyW6nzmd2/k/xQhHAXX45MfSfRQuo
+         G6grliohZyPPhw7H3UZAc/Z6a1txWVeMrqHvaSW0+X2AZ508aykCttBS4qyR4hijFfbi
+         OvxwasepLtZ6NOTZZXPasPziGwwEkq2zkSLRL864hzgTWvegnzK0Se4Di/GgF3LUpmVd
+         kucQOxd/RhF8SsuyFgN6pNsInq5HoMkdjlx4Ljjat+0LTKYZB+WTVirM3+MrVjjhjbP/
+         l7KJu0ZJryuLEaP6UF88vRSjHOVB5TaErVGTX0/dPjdzP+6ayf7DjdttkKyri/2crjy6
+         yE7w==
+X-Gm-Message-State: AOAM530ocK+jDC/OyY47yQVFRSW3zNW4TssYHlp3p9z7LfvSEq099hF0
+        SeVVosSklw1eidFemr1WSh2caOxskhCLEH9teVs=
+X-Google-Smtp-Source: ABdhPJymVyN3Hgu2lVSfDDJad687aQzBGLB3dzg+dliiAowerTMzBQJGn0SViqV2WSkHt4NVJimv/LQOUuAG0iD2O5g=
+X-Received: by 2002:a05:6402:12c4:: with SMTP id k4mr9927399edx.218.1640454032520;
+ Sat, 25 Dec 2021 09:40:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20211224131300.18198-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211224131300.18198-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAHp75VcgknapFkZx5YhNhUgaHKGHBXdeTZ+pBcP_G9wnwfFSnw@mail.gmail.com> <CA+V-a8smDqOfC8xxscuhDvicUk=Xf=29-KQS5CGKr3qgb8-1LA@mail.gmail.com>
-In-Reply-To: <CA+V-a8smDqOfC8xxscuhDvicUk=Xf=29-KQS5CGKr3qgb8-1LA@mail.gmail.com>
+References: <20211215234946.6494-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAHp75VfGwQ7G2b39GO4tN=sxQoiahO2uudy25ALxEkrNcP9eVw@mail.gmail.com> <CA+V-a8t1myOt0rhJExem_T2tJUM3PLL9KuXn0=_LtucJPHLkbA@mail.gmail.com>
+In-Reply-To: <CA+V-a8t1myOt0rhJExem_T2tJUM3PLL9KuXn0=_LtucJPHLkbA@mail.gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 25 Dec 2021 19:37:58 +0200
-Message-ID: <CAHp75Veb5H0mpfq8R5OeOTPvqqMinkEhnzmJWJ=W5Lk_2U+h=A@mail.gmail.com>
-Subject: Re: [PATCH v3 07/10] ata: pata_platform: Merge pata_of_platform into pata_platform
+Date:   Sat, 25 Dec 2021 19:39:56 +0200
+Message-ID: <CAHp75VdXKVAZMKqC=0RbkAKKxFsdcxBc0M3N6OQMivHj-w+DHw@mail.gmail.com>
+Subject: Re: [PATCH] irqchip/renesas-irqc: Use platform_get_irq_optional() to
+ get the interrupt
 To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 25, 2021 at 7:25 PM Lad, Prabhakar
+On Sat, Dec 25, 2021 at 7:28 PM Lad, Prabhakar
 <prabhakar.csengg@gmail.com> wrote:
-> On Sat, Dec 25, 2021 at 5:16 PM Andy Shevchenko
+> On Sat, Dec 25, 2021 at 4:46 PM Andy Shevchenko
 > <andy.shevchenko@gmail.com> wrote:
-> > On Sat, Dec 25, 2021 at 3:56 AM Lad Prabhakar
+> > On Thu, Dec 16, 2021 at 9:52 AM Lad Prabhakar
 > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 
-> > For the further improvements...
-
-As above, it means that I understand that you simply integrate an old
-code, so consider additional changes on top of it.
-
-...
-
-> > >         ata_port_desc(ap, "%s cmd 0x%llx ctl 0x%llx", mmio ? "mmio" : "ioport",
-> > > -                     (unsigned long long)io_res->start,
-> > > -                     (unsigned long long)ctl_res->start);
-> > > +                     (unsigned long long)priv->io_res->start,
-> > > +                     (unsigned long long)priv->ctl_res->start);
+> > ret = platform_get_irq_optional(...);
+> > if (ret < 0 && ret != -ENXIO)
+> >   return ret;
+> > if (ret > 0)
+> >   ...we got it...
 > >
-> > Using castings here is not fully correct. Instead just use %pR/%pr or
-> > at least %pa.
+> > It will allow the future API fix of platform_get_irq_optional() to be
+> > really optional.
 > >
-> Ok will use %pa.
+> Later patch [0] (merged into -next) does check for -ENXIO first.
+>
+> [0] https://lore.kernel.org/lkml/20211216182121.5323-1-prabhakar.mahadev-lad.rj@bp.renesas.com/t/
 
-Perhaps %pR?
-
-...
-
-> > > +               if (pio_mode > 6) {
-> >
-> > > +                       dev_err(&ofdev->dev, "invalid pio-mode\n");
-> > > +                       return -EINVAL;
-> >
-> > return dev_err_probe(...); ?
-> >
-> Is it just to reduce the lines?
-
-Yes, a lot of LOCs if being used in all suitable cases.
-
-> > > +               }
-
-...
-
-> > > +       if (!dev_of_node(&pdev->dev))
-
-Just noticed, why not use positive conditional?
-
-> > > +               ret = pata_platform_get_pdata(pdev, priv);
-> > > +       else
-> > > +               ret = pata_of_platform_get_pdata(pdev, priv);
-> >
-> > What the difference between them? Can't you unify them and leave only
-> > DT related part separately?
-> >
-> pata_of_platform_get_pdata() basically reads OF data, and there is a
-> function which is already shared by both the functions.
-
-Yeah, but my question is why do you need separate functions?
-Also, can the driver be converted to use device property API and
-eventually get rid of legacy platform data?
+The problem is that it doesn't consider 0 as no IRQ.
 
 -- 
 With Best Regards,

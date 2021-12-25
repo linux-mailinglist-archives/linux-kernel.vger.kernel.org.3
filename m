@@ -2,248 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA24247F322
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 12:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A889447F329
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 13:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbhLYLz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 06:55:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34544 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231575AbhLYLz1 (ORCPT
+        id S229800AbhLYMAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 07:00:25 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:33915 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229463AbhLYMAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 06:55:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640433326;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zOK1xfx1Y0/RBH0zV7wf4P4AcTguPlpOLr1LCIhXkCM=;
-        b=DIddVUDAZy6jsrhzCJ/TFzsagVqGhQQMTaHAa3bFMPq6KizfTu0ILQrfOI+A/IURzHLaN4
-        HFyclI8eOAU780wsLLWZij2L9V8qziQURmC7nevFcdofhnOfnS7d94aZxLTAzpW1556XLO
-        476r7hHcUQJoAt6KLEy1OAp3XRZzGLM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-155-BAp-rHESNqaljP2eDi8_jw-1; Sat, 25 Dec 2021 06:55:23 -0500
-X-MC-Unique: BAp-rHESNqaljP2eDi8_jw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 15BDE2F44;
-        Sat, 25 Dec 2021 11:55:22 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.192.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A5E437ADB4;
-        Sat, 25 Dec 2021 11:55:20 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Lee Jones <lee.jones@linaro.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] platform/x86: Add crystal_cove_charger driver
-Date:   Sat, 25 Dec 2021 12:55:09 +0100
-Message-Id: <20211225115509.94891-5-hdegoede@redhat.com>
-In-Reply-To: <20211225115509.94891-1-hdegoede@redhat.com>
-References: <20211225115509.94891-1-hdegoede@redhat.com>
+        Sat, 25 Dec 2021 07:00:24 -0500
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JLjCx00W9zcc1r;
+        Sat, 25 Dec 2021 19:59:56 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sat, 25 Dec 2021 20:00:22 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2308.20; Sat, 25 Dec 2021 20:00:21 +0800
+Message-ID: <4b4f142a-8d32-e6f5-b9ff-8905bcefb77d@huawei.com>
+Date:   Sat, 25 Dec 2021 20:00:21 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH] Revert "mm/usercopy: Drop extra is_vmalloc_or_module()
+ check"
+Content-Language: en-US
+To:     Nicholas Piggin <npiggin@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Kees Cook <keescook@chromium.org>,
+        Laura Abbott <labbott@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>
+References: <20211223102126.161848-1-wangkefeng.wang@huawei.com>
+ <ffd77bcf-b9d8-956c-9f83-14b9f0b496e7@csgroup.eu>
+ <96fe1826-aeaf-4ea0-9f01-03d6b3933b34@huawei.com>
+ <6e2ddc83-bec3-fdd4-4d91-3ade0de0b7c8@csgroup.eu>
+ <ccf311bd-c0ed-3e42-8057-849a9c3e9a98@huawei.com>
+ <1640429980.38ev9qg7xc.astroid@bobo.none>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <1640429980.38ev9qg7xc.astroid@bobo.none>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggeme714-chm.china.huawei.com (10.1.199.110) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Driver for the external-charger IRQ pass-through function of the
-Bay Trail Crystal Cove PMIC.
 
-Note this is NOT a power_supply class driver, it just deals with IRQ
-pass-through, this requires this separate driver because the PMIC's
-level 2 interrupt for this must be explicitly acked.
+On 2021/12/25 19:04, Nicholas Piggin wrote:
+> Excerpts from Kefeng Wang's message of December 25, 2021 12:05 pm:
+>
+...
+>>> Can you try that ?
+>>>
+>>> #define virt_addr_valid(kaddr)	((kaddr & PAGE_OFFSET) == PAGE_OFFSET &&
+>>> pfn_valid(virt_to_pfn(kaddr)))
+>> I got this commit,
+>>
+>> commit 4dd7554a6456d124c85e0a4ad156625b71390b5c
+>>
+>> Author: Nicholas Piggin <npiggin@gmail.com>
+>> Date:   Wed Jul 24 18:46:37 2019 +1000
+>>
+>>       powerpc/64: Add VIRTUAL_BUG_ON checks for __va and __pa addresses
+>>
+>>       Ensure __va is given a physical address below PAGE_OFFSET, and __pa is
+>>       given a virtual address above PAGE_OFFSET.
+>>
+>> It has check the PAGE_OFFSET in __pa,  will test it and resend the
+>> patch(with above warning changes).
+> What did you get with this commit? Is this what causes the crash?
 
-This new driver gets enabled by the existing X86_ANDROID_TABLETS Kconfig
-option because the x86-android-tablets module is the only user of the
-exported external-charger IRQ.
+I mean that your patch does the check to make sure the virt addr should 
+above PAGE_OFFSET,
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/platform/x86/Makefile               |   2 +-
- drivers/platform/x86/crystal_cove_charger.c | 153 ++++++++++++++++++++
- 2 files changed, 154 insertions(+), 1 deletion(-)
- create mode 100644 drivers/platform/x86/crystal_cove_charger.c
+and we can add the check in the virt_addr_valid too.
 
-diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
-index bd20b435c22b..cce124e3acab 100644
---- a/drivers/platform/x86/Makefile
-+++ b/drivers/platform/x86/Makefile
-@@ -114,7 +114,7 @@ obj-$(CONFIG_I2C_MULTI_INSTANTIATE)	+= i2c-multi-instantiate.o
- obj-$(CONFIG_MLX_PLATFORM)		+= mlx-platform.o
- obj-$(CONFIG_TOUCHSCREEN_DMI)		+= touchscreen_dmi.o
- obj-$(CONFIG_WIRELESS_HOTKEY)		+= wireless-hotkey.o
--obj-$(CONFIG_X86_ANDROID_TABLETS)	+= x86-android-tablets.o
-+obj-$(CONFIG_X86_ANDROID_TABLETS)	+= x86-android-tablets.o crystal_cove_charger.o
- 
- # Intel uncore drivers
- obj-$(CONFIG_INTEL_IPS)				+= intel_ips.o
-diff --git a/drivers/platform/x86/crystal_cove_charger.c b/drivers/platform/x86/crystal_cove_charger.c
-new file mode 100644
-index 000000000000..382c19806b12
---- /dev/null
-+++ b/drivers/platform/x86/crystal_cove_charger.c
-@@ -0,0 +1,153 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Driver for the external-charger IRQ pass-through function of the
-+ * Bay Trail Crystal Cove PMIC.
-+ *
-+ * Note this is NOT a power_supply class driver, it just deals with IRQ
-+ * pass-through, this requires this separate driver because the PMIC's
-+ * level 2 interrupt for this must be explicitly acked.
-+ */
-+
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/irqdomain.h>
-+#include <linux/mfd/intel_soc_pmic.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+#define CHGRIRQ_REG					0x0a
-+
-+struct crystal_cove_charger_data {
-+	struct mutex buslock; /* irq_bus_lock */
-+	struct irq_chip irqchip;
-+	struct regmap *regmap;
-+	struct irq_domain *irq_domain;
-+	int irq;
-+	int charger_irq;
-+	bool irq_enabled;
-+	bool irq_is_enabled;
-+};
-+
-+static irqreturn_t crystal_cove_charger_irq(int irq, void *data)
-+{
-+	struct crystal_cove_charger_data *charger = data;
-+
-+	/* No need to read CHGRIRQ_REG as there is only 1 IRQ */
-+	handle_nested_irq(charger->charger_irq);
-+
-+	/* Ack CHGRIRQ 0 */
-+	regmap_write(charger->regmap, CHGRIRQ_REG, BIT(0));
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void crystal_cove_charger_irq_bus_lock(struct irq_data *data)
-+{
-+	struct crystal_cove_charger_data *charger = irq_data_get_irq_chip_data(data);
-+
-+	mutex_lock(&charger->buslock);
-+}
-+
-+static void crystal_cove_charger_irq_bus_sync_unlock(struct irq_data *data)
-+{
-+	struct crystal_cove_charger_data *charger = irq_data_get_irq_chip_data(data);
-+
-+	if (charger->irq_is_enabled != charger->irq_enabled) {
-+		if (charger->irq_enabled)
-+			enable_irq(charger->irq);
-+		else
-+			disable_irq(charger->irq);
-+
-+		charger->irq_is_enabled = charger->irq_enabled;
-+	}
-+
-+	mutex_unlock(&charger->buslock);
-+}
-+
-+static void crystal_cove_charger_irq_unmask(struct irq_data *data)
-+{
-+	struct crystal_cove_charger_data *charger = irq_data_get_irq_chip_data(data);
-+
-+	charger->irq_enabled = true;
-+}
-+
-+static void crystal_cove_charger_irq_mask(struct irq_data *data)
-+{
-+	struct crystal_cove_charger_data *charger = irq_data_get_irq_chip_data(data);
-+
-+	charger->irq_enabled = false;
-+}
-+
-+static void crystal_cove_charger_rm_irq_domain(void *data)
-+{
-+	struct crystal_cove_charger_data *charger = data;
-+
-+	irq_domain_remove(charger->irq_domain);
-+}
-+
-+static int crystal_cove_charger_probe(struct platform_device *pdev)
-+{
-+	struct intel_soc_pmic *pmic = dev_get_drvdata(pdev->dev.parent);
-+	struct crystal_cove_charger_data *charger;
-+	int ret;
-+
-+	charger = devm_kzalloc(&pdev->dev, sizeof(*charger), GFP_KERNEL);
-+	if (!charger)
-+		return -ENOMEM;
-+
-+	charger->regmap = pmic->regmap;
-+	mutex_init(&charger->buslock);
-+
-+	charger->irq = platform_get_irq(pdev, 0);
-+	if (charger->irq < 0)
-+		return charger->irq;
-+
-+	charger->irq_domain = irq_domain_create_linear(dev_fwnode(pdev->dev.parent), 1,
-+						       &irq_domain_simple_ops, NULL);
-+	if (!charger->irq_domain)
-+		return -ENOMEM;
-+
-+	/* Distuingish IRQ domain from others sharing (MFD) the same fwnode */
-+	irq_domain_update_bus_token(charger->irq_domain, DOMAIN_BUS_WAKEUP);
-+
-+	ret = devm_add_action_or_reset(&pdev->dev, crystal_cove_charger_rm_irq_domain, charger);
-+	if (ret)
-+		return ret;
-+
-+	charger->charger_irq = irq_create_mapping(charger->irq_domain, 0);
-+	if (!charger->charger_irq)
-+		return -ENOMEM;
-+
-+	charger->irqchip.name = KBUILD_MODNAME;
-+	charger->irqchip.irq_unmask = crystal_cove_charger_irq_unmask;
-+	charger->irqchip.irq_mask = crystal_cove_charger_irq_mask;
-+	charger->irqchip.irq_bus_lock = crystal_cove_charger_irq_bus_lock;
-+	charger->irqchip.irq_bus_sync_unlock = crystal_cove_charger_irq_bus_sync_unlock;
-+
-+	irq_set_chip_data(charger->charger_irq, charger);
-+	irq_set_chip_and_handler(charger->charger_irq, &charger->irqchip, handle_simple_irq);
-+	irq_set_nested_thread(charger->charger_irq, true);
-+	irq_set_noprobe(charger->charger_irq);
-+
-+	ret = devm_request_threaded_irq(&pdev->dev, charger->irq, NULL,
-+					crystal_cove_charger_irq,
-+					IRQF_ONESHOT | IRQF_NO_AUTOEN,
-+					KBUILD_MODNAME, charger);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret, "requesting irq\n");
-+
-+	return 0;
-+}
-+
-+static struct platform_driver crystal_cove_charger_driver = {
-+	.probe = crystal_cove_charger_probe,
-+	.driver = {
-+		.name = "crystal_cove_charger",
-+	},
-+};
-+module_platform_driver(crystal_cove_charger_driver);
-+
-+MODULE_AUTHOR("Hans de Goede <hdegoede@redhat.com");
-+MODULE_DESCRIPTION("Bay Trail Crystal Cove external charger IRQ pass-through");
-+MODULE_LICENSE("GPL");
--- 
-2.33.1
-
+>
+> riscv for example with flatmem also relies on pfn_valid to do the right
+> thing, so as far as I can see the check should exclude vmalloc addresses
+> and it's just a matter of virt_addr_valid not to give virt_to_pfn an
+> address < PAGE_OFFSET.
+>
+> If we take riscv's implementation
+>
+> diff --git a/arch/powerpc/include/asm/page.h b/arch/powerpc/include/asm/page.h
+> index 254687258f42..7713188516a6 100644
+> --- a/arch/powerpc/include/asm/page.h
+> +++ b/arch/powerpc/include/asm/page.h
+> @@ -132,7 +132,10 @@ static inline bool pfn_valid(unsigned long pfn)
+>   #define virt_to_page(kaddr)    pfn_to_page(virt_to_pfn(kaddr))
+>   #define pfn_to_kaddr(pfn)      __va((pfn) << PAGE_SHIFT)
+>   
+> -#define virt_addr_valid(kaddr) pfn_valid(virt_to_pfn(kaddr))
+> +#define virt_addr_valid(vaddr) ({                                      \
+> +       unsigned long _addr = (unsigned long)vaddr;                     \
+> +       (unsigned long)(_addr) >= PAGE_OFFSET && pfn_valid(virt_to_pfn(_addr)); \
+> +})
+Yes, I send a new v2  with this change, thanks
+>   
+>   /*
+>    * On Book-E parts we need __va to parse the device tree and we can't
+>
+> .

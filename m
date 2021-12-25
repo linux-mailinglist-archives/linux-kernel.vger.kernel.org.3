@@ -2,135 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D15D47F37A
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 15:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0200547F386
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 15:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231969AbhLYOsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 09:48:54 -0500
-Received: from mail-qt1-f172.google.com ([209.85.160.172]:42579 "EHLO
-        mail-qt1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231944AbhLYOsu (ORCPT
+        id S232027AbhLYOtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 09:49:05 -0500
+Received: from mail-qk1-f175.google.com ([209.85.222.175]:40841 "EHLO
+        mail-qk1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231990AbhLYOs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 09:48:50 -0500
-Received: by mail-qt1-f172.google.com with SMTP id z9so9790454qtj.9;
-        Sat, 25 Dec 2021 06:48:49 -0800 (PST)
+        Sat, 25 Dec 2021 09:48:59 -0500
+Received: by mail-qk1-f175.google.com with SMTP id w27so4454856qkj.7;
+        Sat, 25 Dec 2021 06:48:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=45oXLxsLRy64jxplOJXcctPy/c24XaAFnKJEqdFlaBo=;
-        b=A5atjnQi+jmGb6NrwY5gnpAmmqncwD6EEpLWskjiUeU1+LgdMipOOcQr/YMXXiuDa/
-         txiWdFuIWiQkGPoFhuRmv3Qr9vYfcwDFdNblr2sdzWbsR4nQaJwiB11vK6TD2iwuhwnU
-         KpQGWy6hSMyzUMSJyZYTweQ2flUCVByLUAKY1l0QIg99NwkwJ96HACXusWqtZNpPIPgS
-         TIkbb080uQ+JLeChxXiFZ1WiBjrgVqFJxaima+fbhDrR+XBRdEZqZwYeQ7Cfyh3u9L6I
-         jkOQhxIldC0B5Oxu5dFDo+VoNG8f0O9tMuBrTEDz43woAPuRz9sLzatbZ1evXEPWMVWQ
-         oLQA==
-X-Gm-Message-State: AOAM530fO9YyRisA4YqT/2n+1A9s5tnOGBnFwXUuq7gHJmFgTdFWt6B6
-        ztK+veX4yJJ5Xgv1CvWKAzA6yjCvswL6
-X-Google-Smtp-Source: ABdhPJyLljuvCylzaLdPswZfnibLkqYbGg4ADMyoKFtilZv7iZLTuSnjBlW+wVjn5V0ECHAMd139vQ==
-X-Received: by 2002:ac8:7e83:: with SMTP id w3mr9055830qtj.160.1640443729276;
-        Sat, 25 Dec 2021 06:48:49 -0800 (PST)
+        bh=WwY+LxRGYjmGy4RNrns234zbmxymS+OanKyxEXrqH0s=;
+        b=j3oyBfzWHCUuMt6e9PKFVCsK8OIKYxQiy6cKojwzw5LbzygVDuH2slgwRHM3GtzSDv
+         ZLDdnuzm7HSSq7g7OBhr0yivE6qG+Yjy/nh6KK3LJRFogWSl8gmTVO35GYxMdAZyd+zJ
+         r0AXmzfqHpelZfIEs8aBOp8Kr65sx3Ws25RRf1Ln37lWtjJzYbdhP0ptNZQXd0yzzwzC
+         OrBLPj162s/l23NPXEQO4dbLnvR/KnE5HeQou/OjjVt/dJlKwpdszSKaOVQ3AoxE4A3b
+         05jdHLJyKU6/6VeFk1SDF4KkKmTIUANtYgUk/Oo2MqOze2eSNJSrj8aNwTiz7zo1qZdx
+         +uKQ==
+X-Gm-Message-State: AOAM533d1tW/hUyREeYyfbhbbkWQPPoT10NLUR4hyjBxEVaCXm54JdBa
+        TBXmvwoMHQtrcdTOZhWS7QvBiz4BYWxY
+X-Google-Smtp-Source: ABdhPJz2jdWWd9BmP30Ev0PdnQc4+holyBZlfI1eeuU3s9w4SZsAkposD7j9PHDAyPUIfts91rRKUw==
+X-Received: by 2002:a05:620a:948:: with SMTP id w8mr7409911qkw.475.1640443738482;
+        Sat, 25 Dec 2021 06:48:58 -0800 (PST)
 Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id s6sm9112508qki.23.2021.12.25.06.48.47
+        by smtp.gmail.com with ESMTPSA id q21sm3743646qtw.26.2021.12.25.06.48.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Dec 2021 06:48:48 -0800 (PST)
-Received: (nullmailer pid 363351 invoked by uid 1000);
+        Sat, 25 Dec 2021 06:48:57 -0800 (PST)
+Received: (nullmailer pid 363343 invoked by uid 1000);
         Sat, 25 Dec 2021 14:48:42 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     David Heidelberg <david@ixit.cz>
-Cc:     linux-kernel@vger.kernel.org, ~okias/devicetree@lists.sr.ht,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>
-In-Reply-To: <20211224163344.54177-1-david@ixit.cz>
-References: <20211224163344.54177-1-david@ixit.cz>
-Subject: Re: [PATCH 1/2] dt-bindings: spmi: spmi can have at least up to 5 registers
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        ~okias/devicetree@lists.sr.ht, Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>, Will Deacon <will@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        iommu@lists.linux-foundation.org
+In-Reply-To: <20211224165014.56308-1-david@ixit.cz>
+References: <20211224165014.56308-1-david@ixit.cz>
+Subject: Re: [PATCH] dt-bindings: iommu: Convert msm,iommu-v0 to yaml
 Date:   Sat, 25 Dec 2021 10:48:42 -0400
-Message-Id: <1640443722.949011.363350.nullmailer@robh.at.kernel.org>
+Message-Id: <1640443722.906705.363342.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Dec 2021 17:33:43 +0100, David Heidelberg wrote:
-> Since Qualcomm SPMI Controller (PMIC Arbiter) can have 5,
-> bump reg up to maxItems 5.
-> 
-> Fixes warning as:
-> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: spmi@c440000: reg: [[0, 205783040, 0, 4352], [0, 207618048, 0, 33554432], [0, 241172480, 0, 1048576], [0, 242221056, 0, 655360], [0, 205561856, 0, 155648]] is too long
->         From schema: Documentation/devicetree/bindings/spmi/spmi.yaml
+On Fri, 24 Dec 2021 17:50:14 +0100, David Heidelberg wrote:
+> Convert Qualcomm IOMMU v0 implementation to yaml format.
 > 
 > Signed-off-by: David Heidelberg <david@ixit.cz>
 > ---
->  Documentation/devicetree/bindings/spmi/spmi.yaml | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  .../bindings/iommu/msm,iommu-v0.txt           | 64 -------------
+>  .../bindings/iommu/qcom,iommu-v0.yaml         | 96 +++++++++++++++++++
+>  2 files changed, 96 insertions(+), 64 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/iommu/msm,iommu-v0.txt
+>  create mode 100644 Documentation/devicetree/bindings/iommu/qcom,iommu-v0.yaml
 > 
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+yamllint warnings/errors:
 
-Full log is available here: https://patchwork.ozlabs.org/patch/1573074
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/iommu/qcom,iommu-v0.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/iommu/qcom,iommu-v0.yaml#
+Documentation/devicetree/bindings/iommu/qcom,iommu-v0.example.dts:37.26-43.11: Warning (unit_address_vs_reg): /example-0/mdp@5100000: node has a unit name, but no reg or ranges property
+Documentation/devicetree/bindings/iommu/qcom,iommu-v0.example.dt.yaml:0:0: /example-0/mdp@5100000: failed to match any schema with compatible: ['qcom,mdp4']
 
+doc reference errors (make refcheckdocs):
 
-spmi@c440000: #address-cells:0:0: 2 was expected
-	arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1-lte.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r3.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r3-lte.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r2.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r3.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r4.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1-kb.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1-lte.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-kb.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1-lte.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r2.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r2-lte.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r3.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r3-lte.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-r1-lte.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7280-herobrine.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7280-idp2.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7280-idp.dt.yaml
+See https://patchwork.ozlabs.org/patch/1573077
 
-spmi@c440000: #size-cells:0:0: 0 was expected
-	arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1-lte.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r3.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r3-lte.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r2.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r3.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r4.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1-kb.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1-lte.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-kb.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1-lte.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r2.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r2-lte.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r3.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r3-lte.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-r1-lte.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7280-herobrine.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7280-idp2.dt.yaml
-	arch/arm64/boot/dts/qcom/sc7280-idp.dt.yaml
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 

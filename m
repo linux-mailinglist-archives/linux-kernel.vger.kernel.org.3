@@ -2,69 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D7B47F4C6
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 00:51:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0B447F4C7
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 01:03:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233118AbhLYXvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 18:51:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57752 "EHLO
+        id S233125AbhLYX70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 18:59:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233103AbhLYXvN (ORCPT
+        with ESMTP id S231449AbhLYX7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 18:51:13 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0398EC061401;
-        Sat, 25 Dec 2021 15:51:12 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id e136so35861284ybc.4;
-        Sat, 25 Dec 2021 15:51:12 -0800 (PST)
+        Sat, 25 Dec 2021 18:59:25 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99378C061401
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 15:59:25 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id d10so36066444ybn.0
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 15:59:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mab5mMpRybDmvoFxs8lTizsm2eo8VhM1MviNWFKkilM=;
-        b=fueTjS1Z1RSllHtzC0ybZBt1a6OdyayQl85pLbdG1o9AIgydmuPrOFqFC0L3LvxOXl
-         5foeNBGKeXHj/HpfgE8th+ow9kLSxQReYQ6mZ57GliCp8ldlT3D2VJtjalV6h+U/jqDO
-         Ey+eIL628icYfvC7qDca8DjdBnUHYvJOrzMU6BA+2quGVp7WyAMJQ8IQXcYpThhXV7SN
-         kwUOLd1AcsSSb5YWm0uO404rV9+0eIDr1AAbIp1IRAATKnhmY/+EDDSsOGxJGojB1gca
-         Ckljl7/T/rOU4g+n2BPNaEJ1WbkIUy36KtlKGLYrx8Bdnf94/HHXkcFHfVs+CjOZKs4y
-         HHLQ==
+        bh=e6QgFdjWt319RqSBnL95V73w3iyp/87hxcGkJni0orI=;
+        b=IuYCY2/bNCcZGc9l05pJ3zU6fXl1J1vE3Gwq4wV+Ehu3sGD9LXXrXJ6t4mzvetJjrX
+         bU3/iLs9TT12UY4WfOOL1Jwa5+oHvbvgOD9A0tCuMgn2fYUOJ2pJmLgvh8fctQanXWlW
+         YhbHWtyBkmrN0LL9Dw+TJxF8SsI2H5tTmiaBNsf9fkmewxtupt2pg5tpMtPoPBs5UlC7
+         SE8ci6VebdKzyC02iJT1fuvBZ2JecQtA82OmlEzhvBM420XzxhCM9aNftcDXTyoNTM8Q
+         HkTqtTyWVTIbbh81xa03bU7gNtOS8tmF0RrgtCt/+2DHGfcUSgUZglQ9b1aA0bTj4tLv
+         VZ7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mab5mMpRybDmvoFxs8lTizsm2eo8VhM1MviNWFKkilM=;
-        b=7j5ixjGDe9/qZFZrGhTskeRIRaVww1RzcFFxEJsShy+dFhGK4UXgGINDwZvnDsNHqx
-         orpzu02Ukf2ydu34S3jqvUrL63qbvnmRVP6Qqnx88FOB2KSlE3Rssv9VwPLCo3d3HeW/
-         vpl9616iSHrlo28HbwiSMesJzdt35uGfjp8ZxyFd6IFYW3JEMQwtzIbdM9isPAkRPSrG
-         OAk/houtTuS+tQo3sVnuf7/jBzhxYGfpuTwpgKGQCOgg0l6fCv+8pMenxlL440GkFyKZ
-         VgR8WpZh99KJmi21fHmXrm0ZkFaGfiqEDVoZXhqmJTeEp8fPNuPB/SZBVPHRwU5npOcY
-         QV3g==
-X-Gm-Message-State: AOAM532rtFh3sGiHHri28GQPl/hgMbHhTPwul6pvhe4hGNY6GSwCwv+0
-        C8xlddKXaQoJSgi/4UkR23NIWb7OeRVauMvB9J0=
-X-Google-Smtp-Source: ABdhPJxaY58w66BUMhpMOlodVvGGr1c4xvmHif1u7BWvphaK7ALNnNzFzgtjxpRUkiSpw1KzFZtZkr1oR9Q6i4LT8jg=
-X-Received: by 2002:a25:1004:: with SMTP id 4mr15364823ybq.669.1640476272202;
- Sat, 25 Dec 2021 15:51:12 -0800 (PST)
+        bh=e6QgFdjWt319RqSBnL95V73w3iyp/87hxcGkJni0orI=;
+        b=2fS6EJ9qKcxzQAvF4m6EU8AQ518hr44gN9SxLLWcGA6TgndbM0SUQ3KGIQEueQPbGM
+         IKw1ONMBL5iQwNxQU2e5HNRYui3ckpPgGj5j0B4Bxe2VLhbOrJfyTPBkOUFW0FUm5El3
+         4RnHPJsS/2QxYSCHvh77yGrlSDpdBZAvbd0upRgZCJVVw2lAksDPdyyw2rQ7WF/g5g16
+         nJh0KYJkLfnvXcUTMhccnsDhPe1IOPtC+L+OzRTD5xCKEAOmVe8sDB3QSQEWOthy5m6E
+         krmn7EcCuBeVpgCktLkwcAjzR06AFOz08Gp3Fv7FovDHA3lYldz056RA7N634Y1RwxXX
+         gU3g==
+X-Gm-Message-State: AOAM532A8FJUgL2pQw9smvY4iJ5p5W3rrm8ez0/9rXGtIyDlDXF85Jcn
+        BdaROCxAQoMd+nWBKVOsjtVHVzONtm9hZUBUF/I=
+X-Google-Smtp-Source: ABdhPJxG2fpbWrnPtYAmdBClDeMz6RkqvUB5Xirf1Oh4G+T6a4yVG0u6uXfN6GfmFsu116iummIBgYm/xQR6VqgpLj0=
+X-Received: by 2002:a25:abe3:: with SMTP id v90mr14688159ybi.315.1640476764789;
+ Sat, 25 Dec 2021 15:59:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20211222161534.1263-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211222161534.1263-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAHp75VfC-1Lt2JZ-e_ReySNQTOwOfBi6JLOjEHUMNEyYk5JVyg@mail.gmail.com>
-In-Reply-To: <CAHp75VfC-1Lt2JZ-e_ReySNQTOwOfBi6JLOjEHUMNEyYk5JVyg@mail.gmail.com>
+References: <20211215234946.6494-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAHp75VfGwQ7G2b39GO4tN=sxQoiahO2uudy25ALxEkrNcP9eVw@mail.gmail.com>
+ <CA+V-a8t1myOt0rhJExem_T2tJUM3PLL9KuXn0=_LtucJPHLkbA@mail.gmail.com> <CAHp75VdXKVAZMKqC=0RbkAKKxFsdcxBc0M3N6OQMivHj-w+DHw@mail.gmail.com>
+In-Reply-To: <CAHp75VdXKVAZMKqC=0RbkAKKxFsdcxBc0M3N6OQMivHj-w+DHw@mail.gmail.com>
 From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Sat, 25 Dec 2021 23:50:46 +0000
-Message-ID: <CA+V-a8sXwS2FMjgNhLAGcsTT46kAjuh+N4BC78MUFvvptnjjtA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dmaengine: nbpfaxi: Use platform_get_irq_optional()
- to get the interrupt
+Date:   Sat, 25 Dec 2021 23:58:59 +0000
+Message-ID: <CA+V-a8vbsy94MvRpqWQQuRqfEGiX_ZZTTt+dr0r6qnnJAPaEmA@mail.gmail.com>
+Subject: Re: [PATCH] irqchip/renesas-irqc: Use platform_get_irq_optional() to
+ get the interrupt
 To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
@@ -72,45 +68,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Andy,
 
-Thank you for the review.
-
-On Sat, Dec 25, 2021 at 5:47 PM Andy Shevchenko
+On Sat, Dec 25, 2021 at 5:40 PM Andy Shevchenko
 <andy.shevchenko@gmail.com> wrote:
 >
-> On Fri, Dec 24, 2021 at 3:14 PM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> >
-> > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> > allocation of IRQ resources in DT core code, this causes an issue
-> > when using hierarchical interrupt domains using "interrupts" property
-> > in the node as this bypasses the hierarchical setup and messes up the
-> > irq chaining.
-> >
-> > In preparation for removal of static setup of IRQ resource from DT core
-> > code use platform_get_irq_optional().
-> >
-> > There are no non-DT users for this driver so interrupt range
-> > (irq_res->start-irq_res->end) is no longer required and with DT we will
-> > be sure it will be a single IRQ resource for each index.
+> On Sat, Dec 25, 2021 at 7:28 PM Lad, Prabhakar
+> <prabhakar.csengg@gmail.com> wrote:
+> > On Sat, Dec 25, 2021 at 4:46 PM Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote:
+> > > On Thu, Dec 16, 2021 at 9:52 AM Lad Prabhakar
+> > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 >
-> >         for (i = 0; irqs < ARRAY_SIZE(irqbuf); i++) {
-> > -               irq_res = platform_get_resource(pdev, IORESOURCE_IRQ, i);
-> > -               if (!irq_res)
-> > +               irq = platform_get_irq_optional(pdev, i);
-> > +               if (irq == -ENXIO)
-> >                         break;
-> > -
-> > -               for (irq = irq_res->start; irq <= irq_res->end;
-> > -                    irq++, irqs++)
-> > -                       irqbuf[irqs] = irq;
-> > +               if (irq < 0)
-> > +                       return irq;
-> > +               irqbuf[irqs++] = irq;
-> >         }
+> > > ret = platform_get_irq_optional(...);
+> > > if (ret < 0 && ret != -ENXIO)
+> > >   return ret;
+> > > if (ret > 0)
+> > >   ...we got it...
+> > >
+> > > It will allow the future API fix of platform_get_irq_optional() to be
+> > > really optional.
+> > >
+> > Later patch [0] (merged into -next) does check for -ENXIO first.
+> >
+> > [0] https://lore.kernel.org/lkml/20211216182121.5323-1-prabhakar.mahadev-lad.rj@bp.renesas.com/t/
 >
-> Same comment as per other patch(es), i.e. consider 0 as no IRQ.
+> The problem is that it doesn't consider 0 as no IRQ.
 >
-Will do.
+Can you please point me to the discussion/patch where this API change
+is considered/discussed. Just to clarify now the new API for
+platform_get_irq_optional() will return "0" in case there is no
+interrupt and not not -ENXIO anymore?
+
+When will this patch be merged for the new api, so that I can base my
+patches on top of it to avoid more changes?
 
 Cheers,
 Prabhakar

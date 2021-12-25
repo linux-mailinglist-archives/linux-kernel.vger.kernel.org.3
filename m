@@ -2,108 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A2247F34E
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 14:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE27447F351
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Dec 2021 14:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbhLYNOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 08:14:02 -0500
-Received: from ixit.cz ([94.230.151.217]:55778 "EHLO ixit.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231743AbhLYNOB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 08:14:01 -0500
-Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id C3B992243C;
-        Sat, 25 Dec 2021 14:13:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1640438039;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=VJWlRuPzJOqcT5asA00arhApjIIpC9euESZj1pbjNmg=;
-        b=j6q8IynU/dfVM5jqpvpk9c2ce6igFKf1aJ2ba1r+VCIsoIe+9wsb7eMHJUt6HvDEtA4Z8o
-        XQ4OzZR1Qt/e5Ji7+FCn/flSA2EXBJhzTh5ancFyR6bzOdYxYnA0AkSvZj0q0kM7fX+Ezk
-        dKWKaMwLFGMnRNhlToUYYIsoB/mk2aI=
-From:   David Heidelberg <david@ixit.cz>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: apq8064: adjust dsi node name to match dt-schema
-Date:   Sat, 25 Dec 2021 14:13:56 +0100
-Message-Id: <20211225131357.13751-1-david@ixit.cz>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S231791AbhLYN15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 08:27:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231770AbhLYN14 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 25 Dec 2021 08:27:56 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAC6C061401
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 05:27:56 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id o17so9693995qtk.1
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 05:27:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=ndhwfIHpC1n5b82xHYPKQo0rswOCK+/cEZ6RaVSz/3U=;
+        b=a2yMocf6Lbi4/+KJhcOJp/ZIXcEILb+Hk8ScEFSbPfnTmRKN09ooY5BjZnB+zy+SoJ
+         mZOyP5859LPr98bCQ16XN5TSd3sn0zNoZ3vVIUtXKiRpGUBNIgBiIk64XjlQARJqeErQ
+         G+nAUtXiEEGXI30+2S+p5s41xrVwGmPb9TplPP80YrMiuNwno+1zoP3BABSY0lGtO7Jr
+         tZr5q616NM7P+XgiYX6qYvjF5I6J4m10JjV6wFL/xV4lsWLILV6qEhLOZoYxQIc2mCEE
+         VfVEj8E5rnIGEr0rV0bCx2IenDvv6pAJaNVGYMTn8jabVQdNmho0tilyw1XSHGuvDiHh
+         DnZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=ndhwfIHpC1n5b82xHYPKQo0rswOCK+/cEZ6RaVSz/3U=;
+        b=HaLjmH51d4N90LCMlb/ho/ntY6DWxr2DoqB3KcAVM5GqbSo5jrghEqOyifUpDX+ojZ
+         JpxX88LirdFL94tLuFsNR7gCcghawsUtSXALZWfxk9ps2Ct3VDOpfAPqWUOB36grQlf8
+         XYBpDBgy4F078i6eZxzi8FHwoI4UfVC/QEksIddGqJQ/HJUNOxF6ho/XjU3LJG+dlBVF
+         ME48oZ6issKlt/z0wTZzqsj+l45r+mKu7Impfv84emZR6+5ue0dAa9rSojhanlOjUaLK
+         PelmUW6z5tS4D0bsfwoFItQKD+nOlf6oAfp1thYDCSd8RIYp4SWFBvMzQ4sj/P2JTDQr
+         Wkmw==
+X-Gm-Message-State: AOAM530M34oZJtPSUYpzcMJIxclb8pDEPfufmpHCtdDJEX3ZnlFJSGip
+        DwHXFv0l8i5xyI3pr6PuMi3La9P52HXqetCWV5s=
+X-Google-Smtp-Source: ABdhPJylb6u75nPMw8uybdg5Ga7ZHBe0YpAqvO1o2Y4aQHYAjHaf1v4fK0ISMBoLrI/jwKAMV4ZdTg==
+X-Received: by 2002:ac8:5ccc:: with SMTP id s12mr8806423qta.466.1640438875532;
+        Sat, 25 Dec 2021 05:27:55 -0800 (PST)
+Received: from localhost.localdomain ([2a03:d9c0:1000::1038])
+        by smtp.gmail.com with ESMTPSA id m15sm9112799qkp.76.2021.12.25.05.27.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Dec 2021 05:27:55 -0800 (PST)
+From:   hrshy0629 <hongqiang601217@gmail.com>
+To:     krzysztof.kozlowski@canonical.com, davem@davemloft.net
+Cc:     kuba@kernel.org, linux-kernel@vger.kernel.org,
+        hrshy0629 <hongqiang601217@gmail.com>
+Subject: [PATCH] Module Name: drivers/nfc/pn544/pn544.c    fix a bug
+Date:   Sat, 25 Dec 2021 21:27:28 +0800
+Message-Id: <20211225132728.25111-1-hongqiang601217@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adjust node naming to match requirements from dt-schema.
-Also add only and default required PHY name "dsi" to the node.
+    I noticed that the same usage for API nfc_hci_send_cmd() in line 541 and line 552 of the file pn544.c.
+    And the variable r is checked on line 545 but not checked on line 552.
+    The r in line 552 should be checked.
 
-Fixes warnings generated by `make qcom-apq8064-asus-nexus7-flo.dtb`:
-arch/arm/boot/dts/qcom-apq8064-sony-xperia-yuga.dt.yaml: mdss_dsi@4700000: $nodename:0: 'mdss_dsi@4700000' does not match '^dsi(@.*)?$'
-	From schema: Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-
-Signed-off-by: David Heidelberg <david@ixit.cz>
+Signed-off-by: hrshy0629 <hongqiang601217@gmail.com>
 ---
- arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts  | 2 +-
- arch/arm/boot/dts/qcom-apq8064-sony-xperia-yuga.dts | 2 +-
- arch/arm/boot/dts/qcom-apq8064.dtsi                 | 3 ++-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ drivers/nfc/pn544/pn544.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts b/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
-index 03010c4818a5..e02428f5ffb1 100644
---- a/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
-+++ b/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
-@@ -244,7 +244,7 @@ mdp_dsi1_out: endpoint {
- 			};
- 		};
- 
--		dsi0: mdss_dsi@4700000 {
-+		dsi0: dsi@4700000 {
- 			status = "okay";
- 			vdda-supply = <&pm8921_l2>;/*VDD_MIPI1 to 4*/
- 			vdd-supply = <&pm8921_l8>;
-diff --git a/arch/arm/boot/dts/qcom-apq8064-sony-xperia-yuga.dts b/arch/arm/boot/dts/qcom-apq8064-sony-xperia-yuga.dts
-index b1b914a229ce..2f1b8f86e8d9 100644
---- a/arch/arm/boot/dts/qcom-apq8064-sony-xperia-yuga.dts
-+++ b/arch/arm/boot/dts/qcom-apq8064-sony-xperia-yuga.dts
-@@ -345,7 +345,7 @@ mdp_dsi1_out: endpoint {
- 		};
- 
- 
--		dsi0: mdss_dsi@4700000 {
-+		dsi0: dsi@4700000 {
- 			status = "okay";
- 			vdda-supply = <&pm8921_l2>;/*VDD_MIPI1 to 4*/
- 			//vdd-supply = <&pm8921_l8>;
-diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
-index 7e623aca224d..5ae14c564c30 100644
---- a/arch/arm/boot/dts/qcom-apq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
-@@ -1239,7 +1239,7 @@ mmss_sfpb: syscon@5700000 {
- 			reg = <0x5700000 0x70>;
- 		};
- 
--		dsi0: mdss_dsi@4700000 {
-+		dsi0: dsi@4700000 {
- 			compatible = "qcom,mdss-dsi-ctrl";
- 			label = "MDSS DSI CTRL->0";
- 			#address-cells = <1>;
-@@ -1269,6 +1269,7 @@ dsi0: mdss_dsi@4700000 {
- 						<&dsi0_phy 1>;
- 			syscon-sfpb = <&mmss_sfpb>;
- 			phys = <&dsi0_phy>;
-+			phy-names = "dsi";
- 			ports {
- 				#address-cells = <1>;
- 				#size-cells = <0>;
+diff --git a/drivers/nfc/pn544/pn544.c b/drivers/nfc/pn544/pn544.c
+index 32a61a185142..531eda0d11a2 100644
+--- a/drivers/nfc/pn544/pn544.c
++++ b/drivers/nfc/pn544/pn544.c
+@@ -552,6 +552,8 @@ static int pn544_hci_complete_target_discovered(struct nfc_hci_dev *hdev,
+ 			r = nfc_hci_send_cmd(hdev, PN544_RF_READER_F_GATE,
+ 					     PN544_RF_READER_CMD_ACTIVATE_NEXT,
+ 					     uid_skb->data, uid_skb->len, NULL);
++			if (r < 0)
++				return r;
+ 			kfree_skb(uid_skb);
+ 		}
+ 	} else if (target->supported_protocols & NFC_PROTO_ISO14443_MASK) {
 -- 
-2.34.1
+2.17.1
 

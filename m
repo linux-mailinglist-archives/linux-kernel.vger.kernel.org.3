@@ -2,113 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3716D47F6EB
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 14:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F200547F6ED
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 14:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233529AbhLZNHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 08:07:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
+        id S233539AbhLZNOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 08:14:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbhLZNHJ (ORCPT
+        with ESMTP id S231607AbhLZNN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 08:07:09 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C04CC06173E;
-        Sun, 26 Dec 2021 05:07:09 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id m21so52686835edc.0;
-        Sun, 26 Dec 2021 05:07:09 -0800 (PST)
+        Sun, 26 Dec 2021 08:13:59 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E884DC06173E;
+        Sun, 26 Dec 2021 05:13:58 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id o20so51452012eds.10;
+        Sun, 26 Dec 2021 05:13:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=B2+ZyCKMgaCn+yHM6iaIMiaErSxz8x8VEPA7/E0hwSA=;
-        b=l2yDrf+QDS8RAWsZgi9vW77rfw+j+Rdb9oMINXHtP6SqPqkVii8HAI2Ih4tFLZdmTK
-         6zz96U+qc9gKteY8tlKffzB/EuF07UbiQS9DleCs3TGoSeVdsHgmRrA1PjjVJtHkhVp4
-         L72e9nigt/e1MBR7oIjEIaSENoOV+TEiVwCcNOGxrGXCIWebAu4+cmOJK9b8J9GiDPU5
-         Xz+mIBaqi9mz7TvVbd7viX5hmTttoLWCCj3xvYzIJ3BHfbYRZpgJdcWEv0EzWULNevSV
-         oXyFa/fX7sbi/4B0g1tqB7H9E7lMIhWfdE0fbkaTJy6bauH18GMFUbuGgG8wOInTBwAT
-         PVlQ==
+        bh=NDBYRX8g8nQ9YtQhwbhsiKuyfE1xZPraZ8s81788DlU=;
+        b=Nqxh3bluCvaVqd2Sftmj9CR8mohV1DLx600uew29Go1IkVtzCr2uz2RCfsFMqlpLA5
+         M9XcXww0gbyixZBjsprSrgMkvUnFVVS/Pbe7RpjSSU3XXzMaVZi/PIJwlcnzhO1PZvX8
+         hjI7DgQSVaXFU0pBI3lpFSupQzBgiDvFDKtA+JQle4u9qe1S3Em3lZMleQIn8/NMxAak
+         gM70pWEjJCtvGekXmds+33DpuCZUu1oGmQ5otbZqwS4NfRfo9gBm7CsSbwA/bfwkqQkj
+         unK7jSZH+rq5PLBL9YOkA8SJ7+PTKHHR0qJpMyhflALULISps9K7NT2BI6HboIy4qLx9
+         /J8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=B2+ZyCKMgaCn+yHM6iaIMiaErSxz8x8VEPA7/E0hwSA=;
-        b=iWOHwXztvj4aOzOU2dTBMzQO4Ursqyycdn6pVzG75LiWysuyz5VTo+ZmoL7ZGIlFog
-         eLhEgkeWE3buVGCylEnL0W3hGp1P5Am/aWqchLMl7oOANDgBFXGUj5YEWLCnHLc3znFc
-         qu9OULf9Dth0PUVTUKgk1/J4JW6DGaOSN2yO9G7aN+SXj6jyzfHjh185Uwuch18Qh93N
-         oUG/MNFxrH9prO+GOkMCXeLZhnD4CckxeqCbVWTcrrN0nxx86yXM7nq6JXyLkyVS33nk
-         9TwXkSnSVl+ZF10Fg/GANewG1e7rjLJdVOJSQZaVj9mLhCbPAZfhI184OhP3kiiU07rp
-         BlBw==
-X-Gm-Message-State: AOAM530RjN6In5QD+JvPBE7f4PzSMTIKP4FopBXGSRKmPvaArewI0Rln
-        5FShRp/4m9D6ARQNQi2xG8PUZIyLh6duvrlaof0=
-X-Google-Smtp-Source: ABdhPJzUou2795TF47OxmF5US3Gh4JD147IGIAJSe1uBVIvJQ0UC3+hhhkzQQqz6jlb3Zk+gNB9FWmbxuZro6bk+Vj0=
-X-Received: by 2002:a17:906:7953:: with SMTP id l19mr11214698ejo.71.1640524027713;
- Sun, 26 Dec 2021 05:07:07 -0800 (PST)
+        bh=NDBYRX8g8nQ9YtQhwbhsiKuyfE1xZPraZ8s81788DlU=;
+        b=zmlyKZHmc1eSlBo51Ys9gTP3AAZjg5rKxPjZJIlrLI6oklzeMbpzR5QHmG5iu2gAYs
+         nEAbinLzJdrSIYgat/gv1fDySwr9xLuCKfxf65OBRnT4OXjeQw/Dji2gGjlFPNvn/caP
+         W4tNf0eV0sz3SywvWFhBypzI4pK+3Xf5TyFZRkKwvXnq31zDmiJkX9RGKOszxhSXmjuV
+         zSZ1t/SlqvzSP5GqCNZW17c2x4v4tDNU8gcBAywUWsXuRnAc+qAAt8abzAh9tpMz0fDf
+         ufpzXWioqKrHSmU8KyfXNo/fZwGBam4i+/JHA6pDg+CdBt3Z1h0uXbkOZyJkeuGsZVJt
+         F+sA==
+X-Gm-Message-State: AOAM532ED15cAHHoUPxzfWgzy24nD3nWU9WMvsUogmLkrc2w9KQtC6Ef
+        unGsn4eVQHw18i7MgGQZRSUcJ7V3sECGwHc44j0=
+X-Google-Smtp-Source: ABdhPJwdclhV0uJ9bOWfzw9G8vxMt66jjsyOz4WmgzJm7ahTME73iMMp36yvWiJPys8TfX9hFn1eRvpojzAfExQdurg=
+X-Received: by 2002:a17:906:3ed0:: with SMTP id d16mr10543089ejj.636.1640524437308;
+ Sun, 26 Dec 2021 05:13:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20201121030156.22857-1-s-anna@ti.com>
-In-Reply-To: <20201121030156.22857-1-s-anna@ti.com>
-From:   Christian Gmeiner <christian.gmeiner@gmail.com>
-Date:   Sun, 26 Dec 2021 14:06:56 +0100
-Message-ID: <CAH9NwWfFMv0TrHLbAhL6Ykn78jNZDs8e=c30U-QC0mG3jcY5mw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] remoteproc sysfs fixes/improvements
-To:     Suman Anna <s-anna@ti.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
-        Loic Pallardy <loic.pallardy@st.com>,
-        Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>,
-        Tony Lindgren <tony@atomide.com>,
-        linux-remoteproc@vger.kernel.org, linux-omap@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20211215130711.111186-1-gsomlo@gmail.com> <20211215130711.111186-4-gsomlo@gmail.com>
+ <CAHp75Vf7ktdoBoOHVE72LO19vxZiQ82eBg9_xP2ywB6c4yqXWQ@mail.gmail.com> <YchV5UvIq7xgkbF6@glsvmlin.ini.cmu.edu>
+In-Reply-To: <YchV5UvIq7xgkbF6@glsvmlin.ini.cmu.edu>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 26 Dec 2021 15:13:21 +0200
+Message-ID: <CAHp75VfDq+QM30tmCy2Wg+fj+mqervh2=1LVD5BwyVmbm1PYgQ@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] mmc: Add driver for LiteX's LiteSDCard interface
+To:     "Gabriel L. Somlo" <gsomlo@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>, krakoczy@antmicro.com,
+        mdudek@internships.antmicro.com, paulus@ozlabs.org,
+        Joel Stanley <joel@jms.id.au>,
+        Stafford Horne <shorne@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        david.abdurachmanov@sifive.com, florent@enjoy-digital.fr,
+        Randy Dunlap <rdunlap@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all.
+On Sun, Dec 26, 2021 at 1:45 PM Gabriel L. Somlo <gsomlo@gmail.com> wrote:
+> On Sat, Dec 25, 2021 at 06:43:22PM +0200, Andy Shevchenko wrote:
+> > On Wed, Dec 15, 2021 at 10:00 PM Gabriel Somlo <gsomlo@gmail.com> wrote:
 
-Am Sa., 21. Nov. 2020 um 04:05 Uhr schrieb Suman Anna <s-anna@ti.com>:
->
-> Hi All,
->
-> This is a refresh of the unaccepted patches from an old series [1].
-> Patches 2 and 3 from that series were merged and these are rebased and
-> revised versions of the same patches. I had forgotten about these patches,
-> and am resurrecting these again. Patches are on top of latest 5.10-rc4.
->
-> The features being introduced here will be needed by the recently posted PRU
-> remoteproc driver [2] in addition to the existing Wkup M3 remoteproc driver.
-> Both of these drivers follow a client-driven boot methodology, with the latter
-> strictly booted by another driver in kernel. The PRU remoteproc driver will be
-> supporting both in-kernel clients as well as control from userspace orthogonally.
-> The logic though is applicable and useful to any remoteproc driver not using
-> 'auto-boot' and using an external driver/application to boot the remoteproc.
->
-> regards
-> Suman
->
-> [1] https://patchwork.kernel.org/project/linux-remoteproc/cover/20180915003725.17549-1-s-anna@ti.com/
-> [2] https://patchwork.kernel.org/project/linux-remoteproc/cover/20201119140850.12268-1-grzegorz.jaszczyk@linaro.org/
->
-> Suman Anna (3):
->   remoteproc: Fix unbalanced boot with sysfs for no auto-boot rprocs
->   remoteproc: Introduce deny_sysfs_ops flag
->   remoteproc: wkup_m3: Set deny_sysfs_ops flag
->
->  drivers/remoteproc/remoteproc_sysfs.c | 28 ++++++++++++++++++++++++++-
->  drivers/remoteproc/wkup_m3_rproc.c    |  1 +
->  include/linux/remoteproc.h            |  2 ++
->  3 files changed, 30 insertions(+), 1 deletion(-)
->
-> --
-> 2.28.0
->
+...
 
-Is there any update on this patch series?
+> > This is wrong. It missed the deferred probe, for example.
+> >
+> > The best approach is
+> >
+> > ret = platform_get_irq_optional(...);
+> > if (ret < 0 && ret != -ENXIO)
+> >   return ret;
+> > if (ret > 0)
+> >   ...we got it...
+> >
+> > It will allow the future API fix of platform_get_irq_optional() to be
+> > really optional.
+>
+> Thanks for the example. I still need to work in a decision to use
+> polling, though. How about something like this instead:
+>
+> ret = platform_get_irq_optional(...);
+> if (ret == -ENXIO)
+>   goto use_polling;
+> if (ret < 0)
+>   return ret; // deferred probe (-EAGAIN likely?)
+> if (ret > 0)
+>   ...we got it, keep going...
+
+This doesn't define what you should do when you get 0.
+I suggest to take my variant with below modification
+
+if (ret > 0)
+  ...we have IRQ...
+else
+  goto USE POLLING;
+
+It will take care of the case.
+
+...
+
+> > > +#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
+> >
+> > Why under ifdeffery?
+>
+> Because I only want to do it on 64-bit capable architectures.
+>
+> The alternative would be to call
+>
+>   dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+>
+> on *all* architectures, but ignore the returned error (-EIO,
+> presumably on architetures that only support 32-bit DMA).
+
+I don't understand why you are supposed to ignore errors and why you
+expect to get such.
+
+> Do you think that would be cleaner?
 
 -- 
-greets
---
-Christian Gmeiner, MSc
-
-https://christian-gmeiner.info/privacypolicy
+With Best Regards,
+Andy Shevchenko

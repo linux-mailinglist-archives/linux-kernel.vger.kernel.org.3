@@ -2,230 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F9747F5D7
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 09:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7699A47F5E8
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 09:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbhLZIZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 03:25:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231840AbhLZIZq (ORCPT
+        id S232362AbhLZIdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 03:33:52 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:29288 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231480AbhLZIdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 03:25:46 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA3FC061757
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 00:25:46 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id i11so8199171ljm.13
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 00:25:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=chDftLlpfZefBu1kASm+Uj4rYg+k5HyDlp8m+xvFMms=;
-        b=ciY9qesa9JzmNt+gT9BhWrbLzLFTY9TBsewQ5KoL0iIzeeORigyTVMQ8foohDGUjtb
-         BklcsF9mVQ0OoIKTdOcHR03WGwPELKXBTwfh8f2nDBcnoHphCTHU4Gv9eP8RBPQ8rwvQ
-         CxwlXNlRXKfFm/zyPuVuS6S1cb6z0Wm2HTGiUQlEPf1/rcQQuH/U+AF3g45qsWv+Cptn
-         5UW9Flg4K8bGi2vFoJXDjnc6Y7CdosdEUHhyEZC93oRC+OoKf5+MvQjJgeYsxn6nvcIS
-         Fifj87LwHvukYlI6uWxaEDYVlFA7TwyXIkdkoWRJCxBa6HRsYFK9E9R/I0homsHf6qPU
-         oo2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=chDftLlpfZefBu1kASm+Uj4rYg+k5HyDlp8m+xvFMms=;
-        b=Z/GlzLmb4rekEBZYY/uZAdbD3Alq1Obt8KbgNFFrwhTk5fnxHETK0e47TXe0/mCz7w
-         kFFcHdNsXpBNs9gj+tt3fq3tt+4cJ2Bu4a7TFbtDT0J08Ifs14m8DnD7B4Y0XMHKbo4e
-         b322KRMsxh5GAF5AujsSDEEz//5cuDNs8TMF5M7dSvKN7dGmltv5RrjCx3eDzuXAO8ZN
-         /KYoxdj2KZ2f/6buBRMWKZBw/f+NQZRt+oVfDLZUyDxaUiKPE0k/nTEB2yDHZr2oIqOG
-         gv1vMwJCy9tZaT9JcdOONEM0a00vZO/zkqFSHtGZsH8ebhaXSnibgmC7VLWY/um0vBea
-         O83Q==
-X-Gm-Message-State: AOAM532tkHy3gDucKGAmqi4NiDFTBsnwaWn+qP1hrr42iJ5WMBqFhHLi
-        k4N4vaqldvfARVdXbOejNkel/Q==
-X-Google-Smtp-Source: ABdhPJxfIcJHgOXxzJotXw6A6+bg7ygUciHJ5QpsAOxBT53Ymwkyh6N6PWya3XM+jIkIjkYDkOMbzw==
-X-Received: by 2002:a2e:2ac5:: with SMTP id q188mr9877905ljq.222.1640507144521;
-        Sun, 26 Dec 2021 00:25:44 -0800 (PST)
-Received: from cobook.home (nikaet.starlink.ru. [94.141.168.29])
-        by smtp.gmail.com with ESMTPSA id z5sm1309023lfd.184.2021.12.26.00.25.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Dec 2021 00:25:43 -0800 (PST)
-From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christian Gromm <christian.gromm@microchip.com>
-Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Subject: [PATCH 3/3] arm64: dts: renesas: add MOST device
-Date:   Sun, 26 Dec 2021 11:25:30 +0300
-Message-Id: <20211226082530.2245198-4-nikita.yoush@cogentembedded.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211226082530.2245198-1-nikita.yoush@cogentembedded.com>
-References: <20211226082530.2245198-1-nikita.yoush@cogentembedded.com>
+        Sun, 26 Dec 2021 03:33:50 -0500
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JMDb55RtDzbjYq;
+        Sun, 26 Dec 2021 16:33:21 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sun, 26 Dec 2021 16:33:48 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2308.20; Sun, 26 Dec 2021 16:33:47 +0800
+Message-ID: <60dd4235-865b-6072-d44c-5c50f4683ab4@huawei.com>
+Date:   Sun, 26 Dec 2021 16:33:46 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 1/3] mm: vmalloc: Let user to control huge vmalloc default
+ behavior
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <x86@kernel.org>, <linux-arm-kernel@lists.infradead.org>
+CC:     Nicholas Piggin <npiggin@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+References: <20211226083912.166512-1-wangkefeng.wang@huawei.com>
+ <20211226083912.166512-2-wangkefeng.wang@huawei.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <20211226083912.166512-2-wangkefeng.wang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggeme710-chm.china.huawei.com (10.1.199.106) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds mlp device to dtsi files for R-Car Gen3 SoCs that have
-it.
 
-Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
----
- arch/arm64/boot/dts/renesas/r8a77951.dtsi | 13 +++++++++++++
- arch/arm64/boot/dts/renesas/r8a77960.dtsi | 13 +++++++++++++
- arch/arm64/boot/dts/renesas/r8a77961.dtsi | 13 +++++++++++++
- arch/arm64/boot/dts/renesas/r8a77965.dtsi | 13 +++++++++++++
- arch/arm64/boot/dts/renesas/r8a77990.dtsi | 13 +++++++++++++
- arch/arm64/boot/dts/renesas/r8a77995.dtsi | 13 +++++++++++++
- 6 files changed, 78 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/renesas/r8a77951.dtsi b/arch/arm64/boot/dts/renesas/r8a77951.dtsi
-index 1768a3e6bb8d..179d860ab9c3 100644
---- a/arch/arm64/boot/dts/renesas/r8a77951.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a77951.dtsi
-@@ -2412,6 +2412,19 @@ ssi9: ssi-9 {
- 			};
- 		};
- 
-+		mlp: mlp@ec520000 {
-+			compatible = "renesas,rcar-gen3-mlp";
-+			reg = <0 0xec520000 0 0x800>;
-+			interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 386 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 387 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 388 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 802>;
-+			power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+			status = "disabled";
-+		};
-+
- 		audma0: dma-controller@ec700000 {
- 			compatible = "renesas,dmac-r8a7795",
- 				     "renesas,rcar-dmac";
-diff --git a/arch/arm64/boot/dts/renesas/r8a77960.dtsi b/arch/arm64/boot/dts/renesas/r8a77960.dtsi
-index 2bd8169735d3..e4777bb6701e 100644
---- a/arch/arm64/boot/dts/renesas/r8a77960.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a77960.dtsi
-@@ -2284,6 +2284,19 @@ ssiu97: ssiu-51 {
- 			};
- 		};
- 
-+		mlp: mlp@ec520000 {
-+			compatible = "renesas,rcar-gen3-mlp";
-+			reg = <0 0xec520000 0 0x800>;
-+			interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 386 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 387 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 388 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 802>;
-+			power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+			status = "disabled";
-+		};
-+
- 		audma0: dma-controller@ec700000 {
- 			compatible = "renesas,dmac-r8a7796",
- 				     "renesas,rcar-dmac";
-diff --git a/arch/arm64/boot/dts/renesas/r8a77961.dtsi b/arch/arm64/boot/dts/renesas/r8a77961.dtsi
-index a34d5b1d6431..f97d70a3be52 100644
---- a/arch/arm64/boot/dts/renesas/r8a77961.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a77961.dtsi
-@@ -2128,6 +2128,19 @@ ssiu97: ssiu-51 {
- 			};
- 		};
- 
-+		mlp: mlp@ec520000 {
-+			compatible = "renesas,rcar-gen3-mlp";
-+			reg = <0 0xec520000 0 0x800>;
-+			interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 386 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 387 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 388 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 802>;
-+			power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+			status = "disabled";
-+		};
-+
- 		audma0: dma-controller@ec700000 {
- 			compatible = "renesas,dmac-r8a77961",
- 				     "renesas,rcar-dmac";
-diff --git a/arch/arm64/boot/dts/renesas/r8a77965.dtsi b/arch/arm64/boot/dts/renesas/r8a77965.dtsi
-index 08df75606430..fa8aa00b4b7d 100644
---- a/arch/arm64/boot/dts/renesas/r8a77965.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a77965.dtsi
-@@ -2147,6 +2147,19 @@ ssi9: ssi-9 {
- 			};
- 		};
- 
-+		mlp: mlp@ec520000 {
-+			compatible = "renesas,rcar-gen3-mlp";
-+			reg = <0 0xec520000 0 0x800>;
-+			interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 386 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 387 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 388 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 802>;
-+			power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+			status = "disabled";
-+		};
-+
- 		audma0: dma-controller@ec700000 {
- 			compatible = "renesas,dmac-r8a77965",
- 				     "renesas,rcar-dmac";
-diff --git a/arch/arm64/boot/dts/renesas/r8a77990.dtsi b/arch/arm64/boot/dts/renesas/r8a77990.dtsi
-index 0ea300a8147d..e76c7b0d3d4c 100644
---- a/arch/arm64/boot/dts/renesas/r8a77990.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a77990.dtsi
-@@ -1682,6 +1682,19 @@ ssi9: ssi-9 {
- 			};
- 		};
- 
-+		mlp: mlp@ec520000 {
-+			compatible = "renesas,rcar-gen3-mlp";
-+			reg = <0 0xec520000 0 0x800>;
-+			interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 386 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 387 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 388 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 802>;
-+			power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+			status = "disabled";
-+		};
-+
- 		audma0: dma-controller@ec700000 {
- 			compatible = "renesas,dmac-r8a77990",
- 				     "renesas,rcar-dmac";
-diff --git a/arch/arm64/boot/dts/renesas/r8a77995.dtsi b/arch/arm64/boot/dts/renesas/r8a77995.dtsi
-index 16ad5fc23a67..cd790b0a965a 100644
---- a/arch/arm64/boot/dts/renesas/r8a77995.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a77995.dtsi
-@@ -1132,6 +1132,19 @@ ssi4: ssi-4 {
- 			};
- 		};
- 
-+		mlp: mlp@ec520000 {
-+			compatible = "renesas,rcar-gen3-mlp";
-+			reg = <0 0xec520000 0 0x800>;
-+			interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 386 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 387 IRQ_TYPE_LEVEL_HIGH>,
-+				<GIC_SPI 388 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 802>;
-+			power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+			status = "disabled";
-+		};
-+
- 		audma0: dma-controller@ec700000 {
- 			compatible = "renesas,dmac-r8a77995",
- 				     "renesas,rcar-dmac";
--- 
-2.30.2
-
+On 2021/12/26 16:39, Kefeng Wang wrote:
+> Add HUGE_VMALLOC_DEFAULT_ENABLED to let user to choose whether or
+> not enable huge vmalloc mappings by default, and this could make
+> more architectures to enable huge vmalloc mappings feature but
+> don't want to enable it by default.
+>
+> Add hugevmalloc=on/off parameter to enable or disable this feature
+> at boot time, nohugevmalloc is still supported and equivalent to
+> hugevmalloc=off.
+>
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+>   .../admin-guide/kernel-parameters.txt          | 12 ++++++++++++
+>   arch/powerpc/Kconfig                           |  1 +
+>   mm/Kconfig                                     |  7 +++++++
+>   mm/vmalloc.c                                   | 18 +++++++++++++++++-
+>   4 files changed, 37 insertions(+), 1 deletion(-)
+>
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 2fba82431efb..4107136097a6 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -1629,6 +1629,18 @@
+>   			If both parameters are enabled, hugetlb_free_vmemmap takes
+>   			precedence over memory_hotplug.memmap_on_memory.
+>   
+> +
+> +	hugevmalloc=	[PPC] Reguires CONFIG_HAVE_ARCH_HUGE_VMALLOC
+> +			Format: { on | off }
+> +			Default set by CONFIG_HUGE_VMALLOC_DEFAULT_ENABLED.
+> +
+> +			This parameter enables/disables kernel huge vmalloc
+> +			mappings at boot time.
+> +
+> +			on:  Enable the feature
+> +			off: Disable the feature
+> +			     Equivalent to: nohugevmalloc
+> +
+>   	hung_task_panic=
+>   			[KNL] Should the hung task detector generate panics.
+>   			Format: 0 | 1
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index dea74d7717c0..d59b221be264 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -246,6 +246,7 @@ config PPC
+>   	select HAVE_STATIC_CALL			if PPC32
+>   	select HAVE_SYSCALL_TRACEPOINTS
+>   	select HAVE_VIRT_CPU_ACCOUNTING
+> +	select HUGE_VMALLOC_DEFAULT_ENABLED	if HAVE_ARCH_HUGE_VMALLOC
+>   	select HUGETLB_PAGE_SIZE_VARIABLE	if PPC_BOOK3S_64 && HUGETLB_PAGE
+>   	select IOMMU_HELPER			if PPC64
+>   	select IRQ_DOMAIN
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index 356f4f2c779e..4ba91c0359bd 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -262,6 +262,13 @@ config HUGETLB_PAGE_SIZE_VARIABLE
+>   	  HUGETLB_PAGE_ORDER when there are multiple HugeTLB page sizes available
+>   	  on a platform.
+>   
+> +config HUGE_VMALLOC_DEFAULT_ENABLED
+> +	bool "Enable huge vmalloc mappings by default"
+> +	depends on HAVE_ARCH_HUGE_VMALLOC
+> +	help
+> +	  Enable huge vmalloc mappings by default, this value could be overridden
+> +	  by hugevmalloc=off|on.
+> +
+>   config CONTIG_ALLOC
+>   	def_bool (MEMORY_ISOLATION && COMPACTION) || CMA
+>   
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index d2a00ad4e1dd..3b6f99753816 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -58,7 +58,7 @@ static const unsigned int ioremap_max_page_shift = PAGE_SHIFT;
+>   #endif	/* CONFIG_HAVE_ARCH_HUGE_VMAP */
+>   
+>   #ifdef CONFIG_HAVE_ARCH_HUGE_VMALLOC
+> -static bool __ro_after_init vmap_allow_huge = true;
+> +static bool __ro_after_init vmap_allow_huge = IS_ENABLED(CONFIG_HUGE_VMALLOC_DEFAULT_ENABLED);
+>   
+>   static int __init set_nohugevmalloc(char *str)
+>   {
+> @@ -66,6 +66,22 @@ static int __init set_nohugevmalloc(char *str)
+>   	return 0;
+>   }
+>   early_param("nohugevmalloc", set_nohugevmalloc);
+> +
+> +static int __init set_hugevmalloc(char *str)
+> +{
+> +	if (!str)
+> +		return -EINVAL;
+> +
+> +	if (!strcmp(str, "on"))
+> +		vmap_allow_huge = true;
+> +	else if (!strcmp(str, "off"))
+> +		vmap_allow_huge = true;
+should vmap_allow_huge=false, my mistake...
+> +	else
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +early_param("hugevmalloc=", set_hugevmalloc);
+>   #else /* CONFIG_HAVE_ARCH_HUGE_VMALLOC */
+>   static const bool vmap_allow_huge = false;
+>   #endif	/* CONFIG_HAVE_ARCH_HUGE_VMALLOC */

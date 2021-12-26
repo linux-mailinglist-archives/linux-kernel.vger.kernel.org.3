@@ -2,86 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0053947F66F
+	by mail.lfdr.de (Postfix) with ESMTP id 488F447F670
 	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 11:41:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbhLZKk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 05:40:27 -0500
-Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:56548
-        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231689AbhLZKk0 (ORCPT
+        id S231773AbhLZKlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 05:41:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55200 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231689AbhLZKlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 05:40:26 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3AioyOGKOEZHwESC3vrR1GlcFynXyQoLVcMsFnjC/?=
- =?us-ascii?q?WdQa5hWgi0GYCyWBKD2zUMvvbYTfze4siPd6zp0oD68PVm99gGjLY11k9FiMQ8?=
- =?us-ascii?q?ZKt6fexdxqrYXvKdqUvdK/WhiknQoGowPscEzmM9n9BDpC79SMljPvSGOKlYAL?=
- =?us-ascii?q?5EnsZqTFMGX5JZS1Ly7ZRbr5A2bBVMivV0T/Ai5W31GyNh1aYBlkpB5er83uDi?=
- =?us-ascii?q?hhdVAQw5TTSbdgT1LPXeuJ84Jg3fcldJFOgKmVY83LTegrN8F251juxExYFCtq?=
- =?us-ascii?q?piLf2dCXmQJaCYE7Q2jwPAfHk20cZzsAx+v9T2P40a1pTijzPm9luwdFJnZ22U?=
- =?us-ascii?q?wYgeKPW8AgYe0AASHkuZ/IuFLjvZCLXXdao51LPdXT1wvNhJF83I4pe8eFyaUl?=
- =?us-ascii?q?I9PcfLDkWKAiKg+Om6LO+Q+YqiN5LBMLsN4gekmpx1i3UCPtgRZHbHePE/7dw2?=
- =?us-ascii?q?DY2m9ALHvvEYccdQSRgYQ6GYBBVPFoTTpUkk4+VatPXG9FDgAvK/uxuuTGVklw?=
- =?us-ascii?q?3gOWrKtfLPMeEX4NTk1rwm44PxEyhajlyCTBV4WPtHqqQu9Ly?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Agl1q9a0/H57IXdiBvtS9jwqjBLUkLtp133Aq?=
- =?us-ascii?q?2lEZdPU1SL39qynApp8mPHPP4gr5HUtApTniAtjkfZq/z/5ICOAqVN+ftUvdyQ?=
- =?us-ascii?q?iVxepZg7cKrQeNJ8SzzJ8+6Y5QN5k7MtH2AFRg5PyW3CCzGb8br+W6zA=3D=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,237,1635199200"; 
-   d="scan'208";a="1030827"
-Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 11:40:25 +0100
-Date:   Sun, 26 Dec 2021 11:40:24 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Qing Wang <wangqing@vivo.com>
-cc:     Nicolas Palix <nicolas.palix@imag.fr>, cocci@systeme.lip6.fr,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] coccinelle: adjust the confidence of fen.cocci
-In-Reply-To: <1639484373-76061-1-git-send-email-wangqing@vivo.com>
-Message-ID: <alpine.DEB.2.22.394.2112261139500.3217@hadrien>
-References: <1639484373-76061-1-git-send-email-wangqing@vivo.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Sun, 26 Dec 2021 05:41:10 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A00C06173E
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 02:41:09 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id l4so7861075wmq.3
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 02:41:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iBIfrfnr3GLdb1qUMNUHlNu3PuJL3644gLoGb9X9DGQ=;
+        b=Ock4A3uoGStWAqVLbKFpQ0G5feZlxJ5tGxucKxVG85VNVRD+NoFnpyyXQBFQW+up/y
+         5YjQonEU+szM63am1pR3OVzffe4Rg6DVnQiPggbfPYjGlrBM2+eSjcipDUU/T7pQaWjN
+         oO2p/LoWWIzLj5yfgg9KJHPFLA/nndVKJ+aavpNDpqHA0ULByzl6Uno2+mJVfxaWiAq1
+         KIJ099J6+r6cPfyD+XEKBUK2d6MOGgn53wjVdBcf/o4eVqn46ANPDGZWYiLzQ493NYfw
+         w9z1TFZ2JYl3ZGVggUM0oXgnyPp/gH1Qy+p+JPe77f/3CzMZ5IpYRGWzS2VDL/bk16/e
+         ClbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iBIfrfnr3GLdb1qUMNUHlNu3PuJL3644gLoGb9X9DGQ=;
+        b=cEe5LyOnHk0fLDj7wlTgM2ri6eh8UYPBWfPJWJLIZrOzthV3KFgJGesz6wJMk/qt0H
+         uWbtUH5Myls5D04fboEpUxsutk710bB1CUzYvoPUFffe1gB4bJcfvjRNuLhk8mG28e7V
+         zZJ5fMusdJlaP2mXYSTGR5cfKL+r/RpK+e7yBSD0MbJwj3SiRSxf5SKkZ5w5Jr7tA8zx
+         NYcIqruRI7FfuJhxc5i36tdRzavJH1GPJPs1MjzIwcE8v1TMmtVULDro0RdSIQ0TnUag
+         Wwi1j+/kZ9KlUVmBRkHND6sh2WG2SoDTJkEQ/TigMw9V/a1I6S0nmLpBoWl7RRziD/sy
+         yfUA==
+X-Gm-Message-State: AOAM532N188a0dX/EONnIH1DYrfrRhHdzlGzwAJlM3cWQ5L5b99UU35g
+        ImuKmhDOo+A0SSZnP9y61YM=
+X-Google-Smtp-Source: ABdhPJzt8QgSrDwaC8ul4L8AhTDytNAzH1P6MVQB50CiqghEZHGW//SXTCTmmRT1vZJ4sWLB0EiNQA==
+X-Received: by 2002:a7b:c40e:: with SMTP id k14mr9862595wmi.128.1640515267984;
+        Sun, 26 Dec 2021 02:41:07 -0800 (PST)
+Received: from localhost.localdomain ([217.113.240.86])
+        by smtp.gmail.com with ESMTPSA id g9sm12592729wmq.22.2021.12.26.02.41.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Dec 2021 02:41:07 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     melissa.srw@gmail.com
+Cc:     mwen@igalia.com, rodrigosiqueiramelo@gmail.com,
+        hamohammed.sa@gmail.com, daniel@ffwll.ch, airlied@linux.ie,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH v2 1/3] drm/vkms: refactor overlay plane creation
+Date:   Sun, 26 Dec 2021 11:40:57 +0100
+Message-Id: <20211226104059.11265-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Move the logic to create an overlay plane to its own function.
+Refactor, no functional changes.
 
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+---
+ drivers/gpu/drm/vkms/vkms_output.c | 26 +++++++++++++++++++-------
+ 1 file changed, 19 insertions(+), 7 deletions(-)
 
-On Tue, 14 Dec 2021, Qing Wang wrote:
+diff --git a/drivers/gpu/drm/vkms/vkms_output.c b/drivers/gpu/drm/vkms/vkms_output.c
+index 04406bd3ff02..2e805b2d36ae 100644
+--- a/drivers/gpu/drm/vkms/vkms_output.c
++++ b/drivers/gpu/drm/vkms/vkms_output.c
+@@ -32,6 +32,21 @@ static const struct drm_connector_helper_funcs vkms_conn_helper_funcs = {
+ 	.get_modes    = vkms_conn_get_modes,
+ };
+ 
++static int vkms_add_overlay_plane(struct vkms_device *vkmsdev, int index,
++				  struct drm_crtc *crtc)
++{
++	struct vkms_plane *overlay;
++
++	overlay = vkms_plane_init(vkmsdev, DRM_PLANE_TYPE_OVERLAY, index);
++	if (IS_ERR(overlay))
++		return PTR_ERR(overlay);
++
++	if (!overlay->base.possible_crtcs)
++		overlay->base.possible_crtcs = drm_crtc_mask(crtc);
++
++	return 0;
++}
++
+ int vkms_output_init(struct vkms_device *vkmsdev, int index)
+ {
+ 	struct vkms_output *output = &vkmsdev->output;
+@@ -39,7 +54,7 @@ int vkms_output_init(struct vkms_device *vkmsdev, int index)
+ 	struct drm_connector *connector = &output->connector;
+ 	struct drm_encoder *encoder = &output->encoder;
+ 	struct drm_crtc *crtc = &output->crtc;
+-	struct vkms_plane *primary, *cursor = NULL, *overlay = NULL;
++	struct vkms_plane *primary, *cursor = NULL;
+ 	int ret;
+ 	int writeback;
+ 
+@@ -48,12 +63,9 @@ int vkms_output_init(struct vkms_device *vkmsdev, int index)
+ 		return PTR_ERR(primary);
+ 
+ 	if (vkmsdev->config->overlay) {
+-		overlay = vkms_plane_init(vkmsdev, DRM_PLANE_TYPE_OVERLAY, index);
+-		if (IS_ERR(overlay))
+-			return PTR_ERR(overlay);
+-
+-		if (!overlay->base.possible_crtcs)
+-			overlay->base.possible_crtcs = drm_crtc_mask(crtc);
++		ret = vkms_add_overlay_plane(vkmsdev, index, crtc);
++		if (ret)
++			return ret;
+ 	}
+ 
+ 	if (vkmsdev->config->cursor) {
+-- 
+2.25.1
 
-> From: Wang Qing <wangqing@vivo.com>
->
-> We scan by coccinelle according to the confidence value, then check for
-> potential problems. But the accuracy of this cocci is very low,
-> the scan results are all wrong.
->
-> So, lower its confidence to low.
-
-I have made a patch to delete this.
-
-julia
-
->
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
-> ---
->  scripts/coccinelle/iterators/fen.cocci | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/scripts/coccinelle/iterators/fen.cocci b/scripts/coccinelle/iterators/fen.cocci
-> index b69f966..7b71207
-> --- a/scripts/coccinelle/iterators/fen.cocci
-> +++ b/scripts/coccinelle/iterators/fen.cocci
-> @@ -2,7 +2,7 @@
->  /// These iterators only exit normally when the loop cursor is NULL, so there
->  /// is no point to call of_node_put on the final value.
->  ///
-> -// Confidence: High
-> +// Confidence: Low
->  // Copyright: (C) 2010-2012 Nicolas Palix.
->  // Copyright: (C) 2010-2012 Julia Lawall, INRIA/LIP6.
->  // Copyright: (C) 2010-2012 Gilles Muller, INRIA/LiP6.
-> --
-> 2.7.4
->
->

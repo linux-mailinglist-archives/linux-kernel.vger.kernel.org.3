@@ -2,204 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4C247F683
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 12:13:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B5C47F686
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 12:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233224AbhLZLM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 06:12:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S233234AbhLZLQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 06:16:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233212AbhLZLMx (ORCPT
+        with ESMTP id S233212AbhLZLP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 06:12:53 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CB0C06173E
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 03:12:52 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id k66-20020a1ca145000000b00345fa984108so1241115wme.2
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 03:12:52 -0800 (PST)
+        Sun, 26 Dec 2021 06:15:59 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F95C06173E;
+        Sun, 26 Dec 2021 03:15:58 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id e5so26472316wrc.5;
+        Sun, 26 Dec 2021 03:15:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KeNgCDnr+KkxK1aQI/zTLmWCtb7DQX1Gm0dPobkQJhQ=;
-        b=dChID6gt0nDFRBOt7BCYvos7HP4Omj7fH4BhPX5suCnA81o4ZQYn5GOuQpLhr+V12H
-         lV20Bjw+62nzVusyhbj8eSzQs4ACHSN+vrhlaac5UD5++sEFxN2I4NaTXDE/wITIOqi6
-         rNCClqin6wUacyxH+GzAkDlylR4EdLFBigYk1bCelUOmBcG27IOoygAUjFgozg/B6xTY
-         NrwH51a/zu+qDijyO7hHsLSLpMxFayd1tdpn/n9Te8dRnLO6GYxTvTpjTdaJMBy6vsFH
-         lFVD821PUYpGwcIpe9rfXA5ovIO0RlnYuCkGqgi8AIvHagXGF5x9f4X1T6O4azSICk5Q
-         NoMQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=TNUa90driadOsbaz0gnSXvAWA8gkmxx+yuNQyfbjQpc=;
+        b=ZF1T89SExleYrJ7k2bQ9JQU6dHQx3IL+mXjcKWBpFx7fiTzfqx7DwjnmTE9KGm7pq8
+         eMnjackQYUveZ92mzP2+Yv/KDvOxEhEom6EQhDs12upUxM8lzx1Iz5Wx0ALEC8Cg4t1V
+         2+LhmX869jiVeGPVCGRTTa8aEoN6O1iIwHzrUv+eLWEEo/4hF4RbD6LiRS1Q7oVH/R0T
+         rLXHZuQ9MLD/8AIzOfFOSWBqhAGTbKWDzqdHsc73DMcKdlqoNEggI0kc1KkHVumqEZlq
+         7SEv0y/tEiashZWxYjFBmx/knFL2uZhm79iOysEWcsLekJmsc/sRwv2rc5H5tcQaDfBI
+         12Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KeNgCDnr+KkxK1aQI/zTLmWCtb7DQX1Gm0dPobkQJhQ=;
-        b=uPre1r/BJNUCdAFsTqiV6yyDLKkr5ARC4baoZ9+VBGStn3mcJmbuQPoZonhOvAl60G
-         nYs7hdJYg0eVQriN3Oo+YmupLAGSvkIeiXKWb7Wtyp3Rt5bmnsqHpswYdhDqNeHLi+v8
-         JmqkIjGpTqKHtvYQU375gOIAmkpHMI6//J3uzNFZRCOYFU16caDw9ivBFwxyHnCF+n7C
-         X4xpPAxCherU5SHxGuJnggsXmv9dJqn78DY1BtbweEO3DW18QmYohTvM0tePpVjzPQYq
-         vV8zV/iOvCeEIiU44jnX7fgiP4YRiaq+5j1IcTibrHZIi6jk4Jozu+uk1IPp6ktFbiTX
-         Jhrg==
-X-Gm-Message-State: AOAM531G7g51njTCE7LORxdROnrGGuRFseHFM130EoCSL07dsbOdRlmG
-        pMAiFkiyWDUCxayo2ZUc/6U=
-X-Google-Smtp-Source: ABdhPJy865CFBqADf2jvNLHCedn1O7Bhwh1mztfaff3rDLDWW3mvxKs0n/UrtuExcTgkFua6zT5EYQ==
-X-Received: by 2002:a05:600c:c8:: with SMTP id u8mr10146398wmm.171.1640517171112;
-        Sun, 26 Dec 2021 03:12:51 -0800 (PST)
-Received: from localhost.localdomain ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id q14sm12156970wro.58.2021.12.26.03.12.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Dec 2021 03:12:50 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     melissa.srw@gmail.com
-Cc:     mwen@igalia.com, rodrigosiqueiramelo@gmail.com,
-        hamohammed.sa@gmail.com, daniel@ffwll.ch, airlied@linux.ie,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH v2 1/1] drm/vkms: add zpos plane property
-Date:   Sun, 26 Dec 2021 12:12:19 +0100
-Message-Id: <20211226111219.27616-2-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211226111219.27616-1-jose.exposito89@gmail.com>
-References: <20211226111219.27616-1-jose.exposito89@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TNUa90driadOsbaz0gnSXvAWA8gkmxx+yuNQyfbjQpc=;
+        b=PSdlzM0/8KTvtPeUOiD9YKwanQ9g2KnRFxHoPzk2Id7ULoXZaneDsHt9FBvEo9S5MB
+         yEFQVGeqfWInkF15POFYW6lTxNefvHLXaqy8XDoUhvPWmXuA80U0hbMKtGRO5CHcso6N
+         1fbprLbE/PzR9icgzv1oQTdN5jVhIAfwj+GpSZua5Gsu9ddcLWHbMOSko5zhewf/vHrD
+         pH9j9pdb4myoloe755hOxCOAJLBCUOwqYSm+AslUbXGeohU18vtq8GsQmiPiJA8WxQvR
+         9pl0urKiBNy3Wu+k82m1Jo2yythUTIUgKttEywiMvRZpn7JRpKyePX3Ct0HE/Gc3mwKv
+         2wiQ==
+X-Gm-Message-State: AOAM531JqtYumKK3W7tDLrxlXl4L4WZKPfG1vo7p05/7h+YlBXDPFpP3
+        TzwD/E9re8mzZsSdIT46WMkpGj93ja8=
+X-Google-Smtp-Source: ABdhPJyvJHGbdwPW9MoRZu7idPNdBbjVRlVA7U7+uLCqdVwZ8O9IbICgLYhJ7RzBLX+7W1Xh+NilCw==
+X-Received: by 2002:a5d:4343:: with SMTP id u3mr9628466wrr.450.1640517357435;
+        Sun, 26 Dec 2021 03:15:57 -0800 (PST)
+Received: from ?IPV6:2003:ea:8f24:fd00:c9a7:2d21:f9c0:60ee? (p200300ea8f24fd00c9a72d21f9c060ee.dip0.t-ipconnect.de. [2003:ea:8f24:fd00:c9a7:2d21:f9c0:60ee])
+        by smtp.googlemail.com with ESMTPSA id w21sm9052706wmi.19.2021.12.26.03.15.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Dec 2021 03:15:56 -0800 (PST)
+Message-ID: <bb5a43e5-6036-3788-71ca-c411611e0ad9@gmail.com>
+Date:   Sun, 26 Dec 2021 12:14:55 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 2/8] net: pxa168_eth: Use platform_get_irq() to get the
+ interrupt
+Content-Language: en-US
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20211224192626.15843-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211224192626.15843-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAHp75VcurBNEcMFnAHTg8PTbJOhO7QA4iv1t4W=siC=D-AkHAw@mail.gmail.com>
+ <CA+V-a8tuD-WKyRL_kwitqOyxJDMu1J14AtZ12LbSF9+8mj+=FQ@mail.gmail.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+In-Reply-To: <CA+V-a8tuD-WKyRL_kwitqOyxJDMu1J14AtZ12LbSF9+8mj+=FQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the zpos plane property. Depending on the plane type:
+On 25.12.2021 13:19, Lad, Prabhakar wrote:
+> Hi Andy,
+> 
+> Thank you for the review.
+> 
+> On Sat, Dec 25, 2021 at 11:24 AM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+>>
+>>
+>>
+>> On Friday, December 24, 2021, Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+>>>
+>>> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+>>> allocation of IRQ resources in DT core code, this causes an issue
+>>> when using hierarchical interrupt domains using "interrupts" property
+>>> in the node as this bypasses the hierarchical setup and messes up the
+>>> irq chaining.
+>>>
+>>> In preparation for removal of static setup of IRQ resource from DT core
+>>> code use platform_get_irq().
+>>>
+>>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>>> ---
+>>>  drivers/net/ethernet/marvell/pxa168_eth.c | 9 +++++----
+>>>  1 file changed, 5 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/net/ethernet/marvell/pxa168_eth.c b/drivers/net/ethernet/marvell/pxa168_eth.c
+>>> index 1d607bc6b59e..52bef50f5a0d 100644
+>>> --- a/drivers/net/ethernet/marvell/pxa168_eth.c
+>>> +++ b/drivers/net/ethernet/marvell/pxa168_eth.c
+>>> @@ -1388,7 +1388,6 @@ static int pxa168_eth_probe(struct platform_device *pdev)
+>>>  {
+>>>         struct pxa168_eth_private *pep = NULL;
+>>>         struct net_device *dev = NULL;
+>>> -       struct resource *res;
+>>>         struct clk *clk;
+>>>         struct device_node *np;
+>>>         int err;
+>>> @@ -1419,9 +1418,11 @@ static int pxa168_eth_probe(struct platform_device *pdev)
+>>>                 goto err_netdev;
+>>>         }
+>>>
+>>> -       res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+>>> -       BUG_ON(!res);
+>>> -       dev->irq = res->start;
+>>> +       err = platform_get_irq(pdev, 0);
+>>> +       if (err == -EPROBE_DEFER)
+>>
+>>
+>>  What about other errors?
+>>
+> Ouch I missed it...
+>>
+>>>
+>>> +               goto err_netdev;
+>>> +       BUG_ON(dev->irq < 0);
+>>
+>>
+>> ??? What is this and how it supposed to work?
+>>
+> 
+.. should have been BUG_ON(dev->irq < 0);
 
- - Primary and cursor planes: Create an immutable zpos property. The
-   primary plane is always at the bottom and the cursor plane is always
-   on the top.
- - Overlay planes: Create a mutable zpos property allowing to change
-   their order but always keep them between the primary and cursor
-   planes.
+Usage of BUG_ON() is discouraged. Better handle the error w/o stopping
+the whole system.
 
-As documented, "vkms_crtc_state.active_planes" must be sorted by zpos.
-This is achieved by inserting them in the array at their
-normalized_zpos index.
-
-The following igt-gpu-tools tests were executed:
-
-                    |     master branch     |      this  patch      |
-                    | SUCCESS | SKIP | FAIL | SUCCESS | SKIP | FAIL |
- kms_atomic         |      10 |   02 |   00 |      09 |   02 |   01 |
- kms_plane          |      06 |   00 |   14 |      06 |   00 |   14 |
- kms_plane_cursor   |      09 |   45 |   00 |      09 |   45 |   00 |
- kms_plane_multiple |      01 |   23 |   00 |      01 |   23 |   00 |
- kms_writeback      |      04 |   00 |   00 |      04 |   00 |   00 |
-
-Notice that there is one test failing in the kms_atomic row
-(plane-immutable-zpos) but it is due to timeout capturing CRC.
-This happens when the primary plane is disabled and the composer is not
-able to find the "primary_composer" variable.
-While the timeout bug needs to be fixed in a different series, the zpos
-property works as expected.
-
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-
----
-
-v2:
-
- - Use number of planes constant introduced in "drm/vkms: add support
-   for multiple overlay planes" v2
-
- - Add a test results in the commit message
----
- drivers/gpu/drm/vkms/vkms_crtc.c  |  3 +--
- drivers/gpu/drm/vkms/vkms_drv.c   |  1 +
- drivers/gpu/drm/vkms/vkms_plane.c | 23 +++++++++++++++++++++++
- 3 files changed, 25 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/vkms/vkms_crtc.c b/drivers/gpu/drm/vkms/vkms_crtc.c
-index 57bbd32e9beb..4f23488b15f3 100644
---- a/drivers/gpu/drm/vkms/vkms_crtc.c
-+++ b/drivers/gpu/drm/vkms/vkms_crtc.c
-@@ -207,7 +207,6 @@ static int vkms_crtc_atomic_check(struct drm_crtc *crtc,
- 		return -ENOMEM;
- 	vkms_state->num_active_planes = i;
- 
--	i = 0;
- 	drm_for_each_plane_mask(plane, crtc->dev, crtc_state->plane_mask) {
- 		plane_state = drm_atomic_get_existing_plane_state(crtc_state->state,
- 								  plane);
-@@ -215,7 +214,7 @@ static int vkms_crtc_atomic_check(struct drm_crtc *crtc,
- 		if (!plane_state->visible)
- 			continue;
- 
--		vkms_state->active_planes[i++] =
-+		vkms_state->active_planes[plane_state->normalized_zpos] =
- 			to_vkms_plane_state(plane_state);
- 	}
- 
-diff --git a/drivers/gpu/drm/vkms/vkms_drv.c b/drivers/gpu/drm/vkms/vkms_drv.c
-index 0ffe5f0e33f7..d7ee64f5e339 100644
---- a/drivers/gpu/drm/vkms/vkms_drv.c
-+++ b/drivers/gpu/drm/vkms/vkms_drv.c
-@@ -153,6 +153,7 @@ static int vkms_modeset_init(struct vkms_device *vkmsdev)
- 	 * fbdev helpers. We have to go with 0, meaning "pick the default",
- 	 * which ix XRGB8888 in all cases. */
- 	dev->mode_config.preferred_depth = 0;
-+	dev->mode_config.normalize_zpos = true;
- 	dev->mode_config.helper_private = &vkms_mode_config_helpers;
- 
- 	return vkms_output_init(vkmsdev, 0);
-diff --git a/drivers/gpu/drm/vkms/vkms_plane.c b/drivers/gpu/drm/vkms/vkms_plane.c
-index 32409e15244b..55d22a6a401a 100644
---- a/drivers/gpu/drm/vkms/vkms_plane.c
-+++ b/drivers/gpu/drm/vkms/vkms_plane.c
-@@ -81,6 +81,8 @@ static void vkms_plane_reset(struct drm_plane *plane)
- 	}
- 
- 	__drm_gem_reset_shadow_plane(plane, &vkms_state->base);
-+	vkms_state->base.base.zpos = drm_plane_index(plane);
-+	vkms_state->base.base.normalized_zpos = drm_plane_index(plane);
- }
- 
- static const struct drm_plane_funcs vkms_plane_funcs = {
-@@ -158,6 +160,22 @@ static const struct drm_plane_helper_funcs vkms_primary_helper_funcs = {
- 	DRM_GEM_SHADOW_PLANE_HELPER_FUNCS,
- };
- 
-+static int vkms_plane_create_zpos_property(struct vkms_plane *plane)
-+{
-+	int ret;
-+	unsigned int zpos = drm_plane_index(&plane->base);
-+
-+	if (plane->base.type == DRM_PLANE_TYPE_OVERLAY) {
-+		ret = drm_plane_create_zpos_property(&plane->base, zpos,
-+						     1, NUM_OVERLAY_PLANES);
-+	} else {
-+		ret = drm_plane_create_zpos_immutable_property(&plane->base,
-+							       zpos);
-+	}
-+
-+	return ret;
-+}
-+
- struct vkms_plane *vkms_plane_init(struct vkms_device *vkmsdev,
- 				   enum drm_plane_type type, int index)
- {
-@@ -166,6 +184,7 @@ struct vkms_plane *vkms_plane_init(struct vkms_device *vkmsdev,
- 	struct vkms_plane *plane;
- 	const u32 *formats;
- 	int nformats;
-+	int ret;
- 
- 	switch (type) {
- 	case DRM_PLANE_TYPE_PRIMARY:
-@@ -195,5 +214,9 @@ struct vkms_plane *vkms_plane_init(struct vkms_device *vkmsdev,
- 
- 	drm_plane_helper_add(&plane->base, funcs);
- 
-+	ret = vkms_plane_create_zpos_property(plane);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
- 	return plane;
- }
--- 
-2.25.1
+> 
+> Cheers,
+> Prabhakar
+>>>
+>>> +       dev->irq = err;
+>>>         dev->netdev_ops = &pxa168_eth_netdev_ops;
+>>>         dev->watchdog_timeo = 2 * HZ;
+>>>         dev->base_addr = 0;
+>>> --
+>>> 2.17.1
+>>>
+>>
+>>
+>> --
+>> With Best Regards,
+>> Andy Shevchenko
+>>
+>>
 

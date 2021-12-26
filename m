@@ -2,99 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A99D47F65F
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 11:03:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EDE447F668
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 11:26:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbhLZKDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 05:03:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbhLZKDt (ORCPT
+        id S231651AbhLZK0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 05:26:39 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52168 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229709AbhLZK0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 05:03:49 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF574C06173E;
-        Sun, 26 Dec 2021 02:03:48 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id y130so11412434ybe.8;
-        Sun, 26 Dec 2021 02:03:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PcIdhYGtAe5wiGEmCP4ZpgqtofQF1fYABhObn5o2LIM=;
-        b=Tqi139SclsNTIfh4oyAGZJUQASq4/f+eBNWk4N0vBVBjYr1fJoIf2MChB6Lq+bBEwy
-         HVAPn8ipsSddzr4zed1Lxj95XO6FIqYvyTyhmsnT3Gwpgl1oJex9Nkg3W9BY1aRfChzc
-         RE54WE8HqPET/SGIWXPuCiZmmCyhJq2shQGFATYOtS0rDKEjDcUkiNH7JDrt6QInoaeT
-         7RN0NqHa8EMOUIjdg6uxQ0WEMmoRBm7CMhe55mm9i4QBLZhKLaCILdp4nyMEuwhb2HOk
-         NKCzpoenct8cl3AwHn8Pqcl8MF19YQqn11zN9PcbJVGB/LHK1QMmJ43ztW+zzlEWrufz
-         u2pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PcIdhYGtAe5wiGEmCP4ZpgqtofQF1fYABhObn5o2LIM=;
-        b=pUKDouBNnMpNOosDwI/5rUmf2z6gnCOlHExdXu3xNaFC/55Jgbs2OqUBZ0vrSJ65tK
-         UBF5PfTZAu3ChgPA8EOJrMAhyR6ywVvwECn+kMJwSAMiUIl4HrfZuBptkzhliw8cJAqa
-         OMkfMeSyCXgmD3T/TjmkoggarVGQKRZ2KN6WuEPRohWSThnpsWA7Z4UujsOyA9BEBafo
-         32I8MYZz+q6+3bRquGCsXCBuf6k4XFWtrnUO58oZPqD8lp/G/6SIFmdvBTWN9E9hTVP+
-         9waB4XfAXhkGaZbRHQcTa3Fh4GpY2MqBtUaHDayZKpsKqpEejQKAHl/uv+jkNdfq0gxk
-         +sRg==
-X-Gm-Message-State: AOAM531gCvW4dddjwjO90jAJO5I4NN/jPF0bN+sAx0XlASBjWNQvUe5V
-        aXMcOBPX++PhHScsaHLA/mVGmtWMhpGMy8Hcpg8=
-X-Google-Smtp-Source: ABdhPJy5eauPTYjIdf+IeTzl2CnArYlq43PzOJd+NA5Yj14nbn8+5xGo3U9BQ3S8h4SL1usNm3g+exbbRtvb7xqb6f0=
-X-Received: by 2002:a25:98c4:: with SMTP id m4mr16123099ybo.613.1640513028115;
- Sun, 26 Dec 2021 02:03:48 -0800 (PST)
-MIME-Version: 1.0
-References: <20211221175322.7096-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211221175322.7096-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAHp75VcxCGjPiuQi9w5M3Gv97nj+TQVMdF86TQXi6bxgSTL1mQ@mail.gmail.com>
- <OSZPR01MB70197F402C7BA0147AD50DF6AA409@OSZPR01MB7019.jpnprd01.prod.outlook.com>
- <CAHp75VfzzVuVbP41B-02CT3EdEBoDh-Ewj2KAYdw7jdaHmFvzQ@mail.gmail.com>
-In-Reply-To: <CAHp75VfzzVuVbP41B-02CT3EdEBoDh-Ewj2KAYdw7jdaHmFvzQ@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Sun, 26 Dec 2021 10:03:22 +0000
-Message-ID: <CA+V-a8vPfRK66BFgO9tQ8kBxC5OkXawmK_5shVMgq+NS97QfaA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] i2c: sh_mobile: Use platform_get_irq_optional() to
- get the interrupt
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Chris Brandt <Chris.Brandt@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Sun, 26 Dec 2021 05:26:37 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D501B80D85;
+        Sun, 26 Dec 2021 10:26:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4CCCC36AE9;
+        Sun, 26 Dec 2021 10:26:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640514395;
+        bh=c01Y1sVJff7yPWEv/LS6XlE+5QNdrrtxSt0y+lgu7bc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RWi0TpKKCgFlzCG3UWsVPVUILW2hZm29QHyuwbWZpypalvXYp7Luyaqy1Xp28TnE2
+         OmMZkgFmM9ijs/lxd+JoH3USCMXpDSgcIPSegiZk5vW9cbfyrrt9qQQc6MT43kg9BB
+         n8KibIQFeFdoBV8Fq9or59FBRgEw2Z5grRdxuy7uvE+HthuUGyjto8sdE47OJnbdSr
+         F0JY7Av/XOYretAXqz67GWhD6sycRQrfFVuG4bO8undd8omuRbr18lEACKMaXg/rgo
+         Pq+bbHBGJXcp8Jb6plLSMatTVVbQC2Ids+Eu2DkjRexwZ6yebvLMTmZjkCW+0xwbTb
+         8vcJDE7TZGXPA==
+From:   SeongJae Park <sj@kernel.org>
+To:     stable@vger.kernel.org, gregkh@linuxfoundation.org
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH] mm/damon/dbgfs: protect targets destructions with kdamond_lock
+Date:   Sun, 26 Dec 2021 10:26:32 +0000
+Message-Id: <20211226102632.836-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 26, 2021 at 8:41 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Sun, Dec 26, 2021 at 1:45 AM Prabhakar Mahadev Lad
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > > On Wed, Dec 22, 2021 at 2:41 PM Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
->
-> ...
->
-> > > > +       if (np) {
-> > >
-> > > Same comments as per your other patches, i.e.
-> > > Why is this check here?
-> > >
-> > Because the interrupt resource has range of interrupts in one IRQ resource [0]. Let me know if there is any other alternative way to avoid such case.
->
-> Shouldn't be fixed in platform_get_irq_optional() to return IRQ by
-> index for all cases?
->
-Sorry, I don't get you here. Wasn't your earlier comment for np check?
+commit 34796417964b8d0aef45a99cf6c2d20cebe33733 upstream.
 
-Cheers,
-Prabhakar
+DAMON debugfs interface iterates current monitoring targets in
+'dbgfs_target_ids_read()' while holding the corresponding
+'kdamond_lock'.  However, it also destructs the monitoring targets in
+'dbgfs_before_terminate()' without holding the lock.  This can result in
+a use_after_free bug.  This commit avoids the race by protecting the
+destruction with the corresponding 'kdamond_lock'.
+
+Link: https://lkml.kernel.org/r/20211221094447.2241-1-sj@kernel.org
+Reported-by: Sangwoo Bae <sangwoob@amazon.com>
+Fixes: 4bc05954d007 ("mm/damon: implement a debugfs-based user space interface")
+Signed-off-by: SeongJae Park <sj@kernel.org>
+Cc: <stable@vger.kernel.org> # 5.15.x
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+---
+This is a backport of a DAMON fix that merged in the mainline, for
+v5.15.x stable series.
+
+ mm/damon/dbgfs.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
+index f94d19a690df..d3bc110430f9 100644
+--- a/mm/damon/dbgfs.c
++++ b/mm/damon/dbgfs.c
+@@ -309,10 +309,12 @@ static int dbgfs_before_terminate(struct damon_ctx *ctx)
+ 	if (!targetid_is_pid(ctx))
+ 		return 0;
+ 
++	mutex_lock(&ctx->kdamond_lock);
+ 	damon_for_each_target_safe(t, next, ctx) {
+ 		put_pid((struct pid *)t->id);
+ 		damon_destroy_target(t);
+ 	}
++	mutex_unlock(&ctx->kdamond_lock);
+ 	return 0;
+ }
+ 
+-- 
+2.17.1
+

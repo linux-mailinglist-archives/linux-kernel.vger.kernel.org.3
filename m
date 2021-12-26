@@ -2,101 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B80D47F6B3
+	by mail.lfdr.de (Postfix) with ESMTP id D99F647F6B5
 	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 13:04:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233387AbhLZMEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 07:04:05 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:36048
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233379AbhLZMEC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 07:04:02 -0500
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A753A3FFD2
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 12:04:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1640520241;
-        bh=7ZRYcQP4gwZ7osyzmEc94Zg7aNBaID54stiX6ii0ERI=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
-        b=C5brFjRTtRh8Jfdf8eu9Ei8jXVoouQ+ikrK4MFR94yUsYoazv83u7+a6nQezAGz4x
-         u2/QJJT8gPYP5crV3okAhkRNjd49qyeqT4VV+mhC9fqe/EbfKXANNd5yxxjYRH6P4z
-         YbemOoWN48Qp0zMZT55M/GeJpdfVWhONOM8U3Arh3yASU0lmdcuOQiDWpt0aZWcR1h
-         +4YQEO+PheeYfB1g0Y5eT6vXvzF3tEdQCeW9ldL1vj0bGsYSH4ReuB0Og2s3s8Ayl3
-         mhz6elnkpkr7zM6AmPdMTIhIdz2gPfz46F8Wcvv2ibS9dw2gvR7QcWJl4bVy62JIle
-         MKbmepNSb59ew==
-Received: by mail-lj1-f199.google.com with SMTP id u8-20020a05651c130800b0022d6dad0418so3788613lja.11
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 04:04:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7ZRYcQP4gwZ7osyzmEc94Zg7aNBaID54stiX6ii0ERI=;
-        b=4zFhY/RyWLdGJ9J7y56LGmNgr3guMjpEheM+61CoXqEMRRoRT03K8GSBJhCHNBMrP4
-         NRjV4KVUDMDCIiPdYAZeSJieiD7ugGlQ1WztPyD91y48+ECgibGKFTXzRdT15DBtqQ/W
-         c14wwhjrnux7JcGDNB9olK4ki30MdwadCue5pfiVURsJ9foeYFG74MyQxWd3MemDzWOT
-         RcWY3zn1aOiCDVhOU12XIpjKU6hndAFHoV1SNuWhocfWws+y36dR/dP+80Dg0s2eATkP
-         C032+i3dxl/hKI1hTNe1tFuN7vXqbx8y5p2luJeIckzl66D0lQmcMpnAez8WV1L7h9Ty
-         GJuQ==
-X-Gm-Message-State: AOAM530epEbZvo1+Ktfu0TigVDtSmAE7p/aIfXzry25jkGHpnxItBlUs
-        5IC+67IO7fM2hyJsIob0vcBInQXj8xITt7yHbq1TXJOTseWqOgIshm5MGJEx2Xdz73QQN5KhUx6
-        QwBtAS80oINu0aXrnvbysvHyzDEQ/B9iRTuWlMHXylA==
-X-Received: by 2002:a2e:8718:: with SMTP id m24mr4689950lji.306.1640520240867;
-        Sun, 26 Dec 2021 04:04:00 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx25kcEr8SE2hE6DjZsPPB2SMeCupPe4TFn7Tj9CgX294X8VTyEvkJQoREMl23Oi+cK2yxXkA==
-X-Received: by 2002:a2e:8718:: with SMTP id m24mr4689941lji.306.1640520240712;
-        Sun, 26 Dec 2021 04:04:00 -0800 (PST)
-Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id cf29sm1348719lfb.262.2021.12.26.04.03.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Dec 2021 04:04:00 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-nfc@lists.01.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Dmitry V . Levin" <ldv@altlinux.org>,
-        Arnd Bergmann <arnd@arndb.de>, stable@vger.kernel.org
-Subject: [PATCH] nfc: uapi: use kernel size_t to fix user-space builds
-Date:   Sun, 26 Dec 2021 13:03:47 +0100
-Message-Id: <20211226120347.77602-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        id S233396AbhLZMEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 07:04:53 -0500
+Received: from foss.arm.com ([217.140.110.172]:40026 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233379AbhLZMEw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 26 Dec 2021 07:04:52 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F2AEC6D;
+        Sun, 26 Dec 2021 04:04:51 -0800 (PST)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D822F3F5A1;
+        Sun, 26 Dec 2021 04:04:50 -0800 (PST)
+Date:   Sun, 26 Dec 2021 12:04:45 +0000
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci@vger.kernel.org, Fan Fei <ffclaire1224@gmail.com>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v2 00/23] PCI: Name structs, functions consistently
+Message-ID: <20211226120445.GA19807@lpieralisi>
+References: <20211223011054.1227810-1-helgaas@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211223011054.1227810-1-helgaas@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix user-space builds if it includes /usr/include/linux/nfc.h before
-some of other headers:
+On Wed, Dec 22, 2021 at 07:10:31PM -0600, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> This is a v2 of Fan's patches, previously posted at:
+> 
+>   https://lore.kernel.org/r/cover.1637678103.git.ffclaire1224@gmail.com
+>   https://lore.kernel.org/r/cover.1638021831.git.ffclaire1224@gmail.com
+> 
+> I added a few more patches along the same lines and added driver
+> maintainers to the cc lists.
+> 
+> There should be no functional changes here at all; this is strictly to make
+> the drivers more consistent so it's easier to see defects and opportunities
+> for consolidation.
+> 
+> Lorenzo, if this seems OK, I propose that I merge it after all of your
+> branches so it doesn't get in the way of what you have pending.
 
-  /usr/include/linux/nfc.h:281:9: error: unknown type name ‘size_t’
-    281 |         size_t service_name_len;
-        |         ^~~~~~
+That works for me, thank you very much for putting it together.
 
-Fixes: d646960f7986 ("NFC: Initial LLCP support")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- include/uapi/linux/nfc.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Lorenzo
 
-diff --git a/include/uapi/linux/nfc.h b/include/uapi/linux/nfc.h
-index f6e3c8c9c744..bb94aac5636c 100644
---- a/include/uapi/linux/nfc.h
-+++ b/include/uapi/linux/nfc.h
-@@ -278,7 +278,7 @@ struct sockaddr_nfc_llcp {
- 	__u8 dsap; /* Destination SAP, if known */
- 	__u8 ssap; /* Source SAP to be bound to */
- 	char service_name[NFC_LLCP_MAX_SERVICE_NAME]; /* Service name URI */;
--	size_t service_name_len;
-+	__kernel_size_t service_name_len;
- };
- 
- /* NFC socket protocols */
--- 
-2.32.0
-
+> 
+> This series applies on v5.16-rc1.
+> 
+> Bjorn Helgaas (10):
+>   PCI: j721e: Drop pointless of_device_get_match_data() cast
+>   PCI: j721e: Drop redundant struct device *
+>   PCI: iproc: Rename iproc_pcie_bcma_ to iproc_bcma_pcie_
+>   PCI: iproc: Rename iproc_pcie_pltfm_ to iproc_pltfm_pcie_
+>   PCI: ls-gen4: Rename ls_pcie_g4 to ls_g4_pcie
+>   PCI: microchip: Rename mc_port to mc_pcie
+>   PCI: mt7621: Make pci_ops static
+>   PCI: mt7621: Rename mt7621_pci_ to mt7621_pcie_
+>   PCI: rcar-gen2: Rename rcar_pci_priv to rcar_pci
+>   PCI: xilinx-cpm: Rename xilinx_cpm_pcie_port to xilinx_cpm_pcie
+> 
+> Fan Fei (13):
+>   PCI: altera: Prefer of_device_get_match_data()
+>   PCI: artpec6: Prefer of_device_get_match_data()
+>   PCI: cadence: Prefer of_device_get_match_data()
+>   PCI: designware-plat: Prefer of_device_get_match_data()
+>   PCI: dra7xx: Prefer of_device_get_match_data()
+>   PCI: keystone: Prefer of_device_get_match_data()
+>   PCI: kirin: Prefer of_device_get_match_data()
+>   PCI: intel-gw: Rename intel_pcie_port to intel_pcie
+>   PCI: mediatek-gen3: Rename mtk_pcie_port to mtk_gen3_pcie
+>   PCI: tegra194: Rename tegra_pcie_dw to tegra194_pcie
+>   PCI: uniphier: Rename uniphier_pcie_priv to uniphier_pcie
+>   PCI: xgene: Rename xgene_pcie_port to xgene_pcie
+>   PCI: xilinx: Rename xilinx_pcie_port to xilinx_pcie
+> 
+>  drivers/pci/controller/cadence/pci-j721e.c    |  18 +-
+>  .../controller/cadence/pcie-cadence-plat.c    |   6 +-
+>  drivers/pci/controller/dwc/pci-dra7xx.c       |   6 +-
+>  drivers/pci/controller/dwc/pci-keystone.c     |   4 +-
+>  drivers/pci/controller/dwc/pcie-artpec6.c     |   6 +-
+>  .../pci/controller/dwc/pcie-designware-plat.c |   6 +-
+>  drivers/pci/controller/dwc/pcie-intel-gw.c    | 204 +++++-----
+>  drivers/pci/controller/dwc/pcie-kirin.c       |   6 +-
+>  drivers/pci/controller/dwc/pcie-tegra194.c    | 222 +++++------
+>  drivers/pci/controller/dwc/pcie-uniphier.c    | 147 +++----
+>  .../mobiveil/pcie-layerscape-gen4.c           |  84 ++--
+>  drivers/pci/controller/pci-rcar-gen2.c        |  14 +-
+>  drivers/pci/controller/pci-xgene.c            |  46 +--
+>  drivers/pci/controller/pcie-altera.c          |   8 +-
+>  drivers/pci/controller/pcie-iproc-bcma.c      |  22 +-
+>  drivers/pci/controller/pcie-iproc-platform.c  |  16 +-
+>  drivers/pci/controller/pcie-mediatek-gen3.c   | 372 +++++++++---------
+>  drivers/pci/controller/pcie-microchip-host.c  |  42 +-
+>  drivers/pci/controller/pcie-mt7621.c          |  36 +-
+>  drivers/pci/controller/pcie-xilinx-cpm.c      |  44 +--
+>  drivers/pci/controller/pcie-xilinx.c          | 158 ++++----
+>  21 files changed, 727 insertions(+), 740 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 

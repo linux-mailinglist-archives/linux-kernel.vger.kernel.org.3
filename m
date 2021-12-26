@@ -2,102 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C1847F703
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 14:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C309747F706
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 14:42:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233615AbhLZNiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 08:38:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36890 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233605AbhLZNiB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 08:38:01 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA55AC06173E
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 05:38:01 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id m15so11433446pgu.11
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 05:38:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=X0pjQO5/9khPeF7+OSED9VX6wPiWgrNrYpQLIZD9AHk=;
-        b=GTzjH0MfLpYlGDlB3dNmN7s6hjbTXmI/+vmriEI+s0bn31ycygSdbPu2dWDu5gzO6c
-         YuOngh9T1lW/Kip0RuTnojkW3FHjzUsmd9bSUTZxVniQxu05HDGQ2y7LaRgw2kp3M8a5
-         BIttDFB/LZekqoGHaZJzNXjFR0Zf8C9+JiwxyAntnpa/eKSEO2BuLnWrl7jMSAQHpM0I
-         iNOVjv9c+AFfFK1fS8GaBMA70XBj+0YxCHxiMIEGKUTcVy/27+r6TlBx3X0rmC76cDc+
-         0AKhhaMiEYou08a3XfO1A65fZcCzlsN4OXdbER/6etpxquOZ94PmWR5RAouoplvm29Q8
-         RDWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=X0pjQO5/9khPeF7+OSED9VX6wPiWgrNrYpQLIZD9AHk=;
-        b=NRbEBWio9gEtKZZNUqFsbtfJYu+FMqivwwHoc++QU1KFe6ndPuKnNziBGXW7KhGaX1
-         OSynxnFr5MP66tFTRQr/nr05QqYXGQdFCD5K/23YMHGm2wosWFKRQIQjA7QKnD7pbEkL
-         Cu1B0OkABFbuFbXT7GvbyIE9QR7gbkIVLVejbBm+cYgKdRoHFuAOtlL6yzgz7U69+QEO
-         FNI1UeyPwDuoR92BwmyqcIIVwEQWm52l3Y1/1sZqONkz5s2yr02zSmHDToEOpT5j0Tyl
-         Vnf94W/FYJxm8HWBkACrA4wo2cIC4FalCOVensMoZy0R/2YAK3TgnEHgwuZs7g9xkf8a
-         XIdA==
-X-Gm-Message-State: AOAM533iK1dAfoXtfytxWVr3X+A9cav1ADRxbwLU7yO51yJq59zRBQ1u
-        x75dq1Wj6YVL47HxMCHHP7XoBN0CHgdMzz5FxaQ=
-X-Google-Smtp-Source: ABdhPJzbD0KpXQliM8dwq9pH66F7mAaNFBImSiKW8PkkIuu82XaboeLhoDbix0R0+Eli1+R+DnvTj09Y7rHF43Wnw3Y=
-X-Received: by 2002:a05:6a00:230d:b0:49f:b8ad:ae23 with SMTP id
- h13-20020a056a00230d00b0049fb8adae23mr13852104pfh.80.1640525880801; Sun, 26
- Dec 2021 05:38:00 -0800 (PST)
+        id S233622AbhLZNmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 08:42:49 -0500
+Received: from mga14.intel.com ([192.55.52.115]:22203 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230035AbhLZNms (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 26 Dec 2021 08:42:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640526168; x=1672062168;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=BXSyAfPPKL+BNYyTWCrcjcEA6M7erOc92NWo0C5C1GI=;
+  b=aKG2SaAL05S0G7PjZOT+aY7IVz/D46OsynSnrwDnHD3M05yOrYOKSr+m
+   C9cc+Sa3jgyyUkrLX9CQGx9Qgvjs4du6p1kgzl2sVt8Gbj+/o3j8EZ8cL
+   R7bFy5gCxYDETK3uJ4OgJKoSvnCYLxiUwNmxUfmI4VSlUr5riPcbuk8Dy
+   dmw0315gA2+mhbnrhrniETECydA2Aq8+GfMe4qS2SnyzIuW55g7JM5gY6
+   SudYworHjrqlplkHImGTgOhkxZxaznVKU5hnvI69WwAuSgwmjsmoR73C5
+   esavhjAs1xIjVbMLbtFXWgavGO+28mkwH89AzCx2slKnAbXHicLZSD6u/
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10208"; a="241328560"
+X-IronPort-AV: E=Sophos;i="5.88,237,1635231600"; 
+   d="scan'208";a="241328560"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 05:42:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,237,1635231600"; 
+   d="scan'208";a="467636285"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 26 Dec 2021 05:42:44 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n1TnQ-0005Q1-4l; Sun, 26 Dec 2021 13:42:44 +0000
+Date:   Sun, 26 Dec 2021 21:42:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        melissa.srw@gmail.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, mwen@igalia.com,
+        rodrigosiqueiramelo@gmail.com, hamohammed.sa@gmail.com,
+        daniel@ffwll.ch, airlied@linux.ie, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+Subject: Re: [PATCH v2 1/1] drm/vkms: add zpos plane property
+Message-ID: <202112262151.0Z5oNd2u-lkp@intel.com>
+References: <20211226111219.27616-2-jose.exposito89@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:cd14:0:0:0:0 with HTTP; Sun, 26 Dec 2021 05:38:00
- -0800 (PST)
-Reply-To: cristinacampeell@outlook.com
-From:   "Mrs. Cristina Campbell" <look6532@gmail.com>
-Date:   Sun, 26 Dec 2021 13:38:00 +0000
-Message-ID: <CAJ3bDB5n9e3vs6No8BGTm3=HiDY9EJHAXSd5sz2Oe481eG0oCA@mail.gmail.com>
-Subject: =?UTF-8?B?5L2g6IO95biu5oiR5ZCX?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211226111219.27616-2-jose.exposito89@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-5Lqy54ix55qE77yMDQoNCuivt+aFouaFouS7lOe7humYheivu++8jOWboOS4uuWug+WPr+iDveaY
-r+aCqOaUtuWIsOeahOacgOmHjeimgeeahOeUteWtkOmCruS7tuS5i+S4gOOAguaIkeaYryBDcmlz
-dGluYSBDYW1wYmVsbCDlpKvkurrvvIzmiJHlq4Hnu5nkuoblt7LmlYXnmoQgRWR3YXJkDQpDYW1w
-YmVsbOOAguS7luabvuWcqOS8puaVpuWjs+eJjOefs+ayueW8gOWPkeWFrOWPuOW3peS9nO+8jOS5
-n+aYr+S4gOWQjeS4nOS6muWcsOWMuue7j+mqjOS4sOWvjOeahOaJv+WMheWVhuOAguS7luS6jiAy
-MDAzIOW5tCA3IOaciCAzMQ0K5pel5pif5pyf5LiA5Zyo5be06buO5Y675LiW44CC5oiR5Lus57uT
-5ama5LiD5bm05rKh5pyJ5a2p5a2Q44CCDQoNCuW9k+S9oOivu+WIsOi/memHjOaXtu+8jOaIkeS4
-jeaDs+iuqeS9oOS4uuaIkeaEn+WIsOmavui/h++8jOWboOS4uu+8jOaIkeebuOS/oeavj+S4quS6
-uuaAu+acieS4gOWkqeS8muatu+WOu+OAguaIkeiiq+iviuaWreWHuuaCo+aciemjn+mBk+eZjO+8
-jOaIkeeahOWMu+eUn+WRiuivieaIke+8jOeUseS6juaIkeWkjeadgueahOWBpeW6t+mXrumimO+8
-jOaIkeaSkeS4jeS6huWkmuS5heOAgg0KDQrmiJHluIzmnJvkuIrluJ3mgJzmgq/miJHvvIzmjqXn
-urPmiJHnmoTngbXprYLvvIzmiYDku6XvvIzmiJHlhrPlrprlkJHmhYjlloTnu4Tnu4cv5pWZ5aCC
-L+S9m+aVmeWvuuW6mS/muIXnnJ/lr7ov5peg5q+N5am0L+W8seWKv+e+pOS9k+WSjOWvoeWmh+aW
-veiIje+8jOWboOS4uuaIkeW4jOacm+i/meaYr+acgOWQjueahOWWhOihjOS5i+S4gOaIkeatu+WJ
-jeWcqOWcsOeQg+S4iuWBmuOAguWIsOebruWJjeS4uuatou+8jOaIkeW3sue7j+WQkeiLj+agvOWF
-sOOAgeWogeWwlOWjq+OAgeWwvOaziuWwlOOAgeiKrOWFsOWSjOW3tOilv+eahOS4gOS6m+aFiOWW
-hOe7hOe7h+aNkOasvuOAgueOsOWcqOaIkeeahOWBpeW6t+eKtuWGteaBtuWMluW+l+WmguatpOS4
-pemHje+8jOaIkeS4jeiDveWGjeiHquW3seWBmui/meS7tuS6i+S6huOAgg0KDQrmiJHmm77nu4/o
-poHmsYLmiJHnmoTlrrbkurrlhbPpl63miJHnmoTkuIDkuKrotKbmiLflubblsIbmiJHlnKjpgqPp
-h4znmoTpkrHliIbphY3nu5nkuK3lm73jgIHnuqbml6bjgIHlvrflm73jgIHpn6nlm73lkozml6Xm
-nKznmoTmhYjlloTnu4Tnu4fvvIzku5bku6zmi5Lnu53lubblsIbpkrHnlZnnu5noh6rlt7HjgILl
-m6DmraTvvIzmiJHmsqHmnInkuI3lho3nm7jkv6Hku5bku6zvvIzlm6DkuLrku5bku6zkvLzkuY7k
-uI3kvJrkuI7miJHkuLrku5bku6znlZnkuIvnmoTkuJzopb/mipfooaHjgILmiJHmnIDlkI7kuIDn
-rJTml6Dkurrnn6XpgZPnmoTpkrHmmK/miJHlnKjms7Dlm73kuIDlrrbpk7booYzlrZjlhaXnmoQN
-CjYwMCDkuIfnvo7lhYPnmoTlt6jpop3njrDph5HlrZjmrL7jgILlpoLmnpzmgqjnnJ/or5rvvIzm
-iJHluIzmnJvmgqjlsIbov5nnrJTotYTph5HnlKjkuo7mhYjlloTorqHliJLlubbmlK/mjIHmgqjm
-iYDlnKjlm73lrrYv5Zyw5Yy655qE5Lq657G744CCDQoNCuaIkeWBmuWHuui/meS4quWGs+WumuaY
-r+WboOS4uuaIkeayoeacieWtqeWtkOS8mue7p+aJv+i/meeslOmSse+8jOaIkeS4jeaAleatu++8
-jOaJgOS7peaIkeefpemBk+aIkeimgeWOu+WTqumHjOOAguaIkeefpemBk+aIkeS8muWcqOS4u+ea
-hOaAgOaKsemHjOOAguaUtuWIsOaCqOeahOWbnuWkjeWQju+8jOaIkeS8muWwveW/q+e7meaCqOmT
-tuihjOeahOiBlOezu+aWueW8j++8jOW5tuWQkeaCqOWPkeWHuuaOiOadg+S5pu+8jOaOiOadg+aC
-qOaIkOS4uuivpeWfuumHkeeahOWOn+Wni+WPl+ebiuS6uu+8jOS7peS+v+aCqOeri+WNs+WcqOaC
-qOaJgOWcqOeahOWbveWuti/lnLDljLrlvIDlp4vov5npobnmhYjlloTorqHliJLjgIINCg0K5Y+q
-5pyJ5Li65LuW5Lq66ICM5rS755qE5Lq655Sf5omN5piv5pyJ5Lu35YC855qE44CC5oiR5biM5pyb
-5L2g5rC46L+c5Li65oiR56WI56W377yM5L2g5Zue5aSN55qE5Lu75L2V5bu26L+f6YO95Lya6K6p
-5oiR5pyJ56m66Ze05Li65ZCM5qC355qE55uu55qE5a+75om+5Y+m5LiA5Liq5Lq644CC5aaC5p6c
-5oKo5LiN5oSf5YW06Laj77yM6K+35Y6f6LCF5oiR5LiO5oKo6IGU57O744CC5oKo5Y+v5Lul6YCa
-6L+H5oiR55qE56eB5Lq655S15a2Q6YKu5Lu26IGU57O75oiW5Zue5aSN5oiR77ya77yIY3Jpc3N0
-aW5hY2FtcGVsbEBnbWFpbC5jb23vvInjgIINCg0K6LCi6LCi77yMDQrmraToh7TvvIwNCuWFi+mH
-jOaWr+iSguWonMK35Z2O6LSd5bCU5aSr5Lq6DQrnlLXlrZDpgq7ku7Y7IGNyaXNzdGluYWNhbXBl
-bGxAZ21haWwuY29tDQo=
+Hi "José,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on v5.16-rc6 next-20211224]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Jos-Exp-sito/drm-vkms-zpos/20211226-191434
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: hexagon-randconfig-r041-20211226 (https://download.01.org/0day-ci/archive/20211226/202112262151.0Z5oNd2u-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 0c553cc1af2e4c14100df6cf4a6fc91987e778e6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/48c96494b71972f4bf1769682e94e59724dba874
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jos-Exp-sito/drm-vkms-zpos/20211226-191434
+        git checkout 48c96494b71972f4bf1769682e94e59724dba874
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/vkms/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/vkms/vkms_plane.c:170:15: error: use of undeclared identifier 'NUM_OVERLAY_PLANES'
+                                                        1, NUM_OVERLAY_PLANES);
+                                                           ^
+   1 error generated.
+
+
+vim +/NUM_OVERLAY_PLANES +170 drivers/gpu/drm/vkms/vkms_plane.c
+
+   162	
+   163	static int vkms_plane_create_zpos_property(struct vkms_plane *plane)
+   164	{
+   165		int ret;
+   166		unsigned int zpos = drm_plane_index(&plane->base);
+   167	
+   168		if (plane->base.type == DRM_PLANE_TYPE_OVERLAY) {
+   169			ret = drm_plane_create_zpos_property(&plane->base, zpos,
+ > 170							     1, NUM_OVERLAY_PLANES);
+   171		} else {
+   172			ret = drm_plane_create_zpos_immutable_property(&plane->base,
+   173								       zpos);
+   174		}
+   175	
+   176		return ret;
+   177	}
+   178	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

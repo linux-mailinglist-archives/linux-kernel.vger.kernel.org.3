@@ -2,115 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE06B47F70B
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 15:01:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6341647F70D
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 15:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233641AbhLZOBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 09:01:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbhLZOBl (ORCPT
+        id S233652AbhLZOCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 09:02:30 -0500
+Received: from relay038.a.hostedemail.com ([64.99.140.38]:36299 "EHLO
+        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230035AbhLZOC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 09:01:41 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41569C06173E;
-        Sun, 26 Dec 2021 06:01:41 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id o20so51816929eds.10;
-        Sun, 26 Dec 2021 06:01:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DpJIUbj9tBFYqlvv9yvDGLLOioxncOCxtxthXuJR5jk=;
-        b=HAJP3eQJ6YmuhVuh1u4jcJqBthQhBJAWQbYRUMSo6wnuYFbjYErut4KBp+Sau6Dy73
-         2fDaH0tsQMg+HMipngLmAvCbRUuk4biUpUMCfCJx5FMHKfY3eWcFXWnIeUSjc841d+nC
-         5mISGMsDVJ2Q5WmmaRXd9+m++FIo9OgREYJzH3+puQa8VpHiPdmOLcAzXPXdyvUEUstL
-         4jqQHECwm58KwiWp7u5TFy7XWr4FDq/FQETv/iQQ2gfFqbDKY0K0DWLFXOXAzLV3ehR9
-         SK7bWkeog6L8x6fqb4j1WvaR1H0/QXCTh4hIna/hh1xc+p7MZfAcaRWyFvJV1Xg7NwCT
-         yunA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DpJIUbj9tBFYqlvv9yvDGLLOioxncOCxtxthXuJR5jk=;
-        b=g7tOhcoItpZTvY+D/lsXEh+TuuVyenXDsWGqdMj7J/z0ilkv5idvaajAcxBKhktIKX
-         /065HQCg6ZbkIjaIDZa/U2Itdm897Y0LvH/CUI0CS/vb1wnsLy1nAgYdsoUAmGqPUbN9
-         ThOAf96K6NVbtAKebY1ojcXD33SewcAGn3JqaUz4gMC6uPBVCLAmVjKaz7rQX1xYfQrK
-         RHlXvfMG7QEWIgjrWfuWGyBDwpXbC+VT2u5At4t8Rhb9L1WHIiglGypanDt/QPMQT0pp
-         HK5E+x8Po87xBsAelsIir4TtRWufTLkg3n1vvEpwYppNTQarG17H/QvjB9FpvU4PYDtI
-         zRWQ==
-X-Gm-Message-State: AOAM531QsSexvJLJiT+x/S4CnBfUhj6RbdUtRvbcVTrC1rrcq6nuUObj
-        rGQ6r3tMUC6OLBMGaZ0+zRuLN2YsteRKBiwuXrA=
-X-Google-Smtp-Source: ABdhPJy8YSypp1U3p7uN6w3i/OJLZZZzxtLVOBZz1MUbCsqSBqnzweBiNog30d2xuCFSgXtjdPEpLU+86XwJ81v3ubY=
-X-Received: by 2002:a50:e611:: with SMTP id y17mr12618798edm.270.1640527299727;
- Sun, 26 Dec 2021 06:01:39 -0800 (PST)
+        Sun, 26 Dec 2021 09:02:29 -0500
+Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay06.hostedemail.com (Postfix) with ESMTP id 1C1D221882;
+        Sun, 26 Dec 2021 14:02:28 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id B753B2002F;
+        Sun, 26 Dec 2021 14:02:20 +0000 (UTC)
+Message-ID: <796577bb0052f4f08f58882dfc86734d72f2aa29.camel@perches.com>
+Subject: Re: [PATCH] usb: raw-gadget: upgrade license identifier
+From:   Joe Perches <joe@perches.com>
+To:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     andrey.konovalov@linux.dev, Felipe Balbi <balbi@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Date:   Sun, 26 Dec 2021 06:02:19 -0800
+In-Reply-To: <CA+fCnZeC8PbDg_E3WWtqGBAwUs65Y7=b5DG=whN-CaOEs5uS7g@mail.gmail.com>
+References: <f55721ade28b2715eaf54b28a1bbfaad7b5adc0d.1640471342.git.andreyknvl@gmail.com>
+         <Ycgi7GiU2udbjF2f@kroah.com>
+         <CA+fCnZeC8PbDg_E3WWtqGBAwUs65Y7=b5DG=whN-CaOEs5uS7g@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-References: <20211215130711.111186-1-gsomlo@gmail.com> <20211215130711.111186-4-gsomlo@gmail.com>
- <CAHp75Vf7ktdoBoOHVE72LO19vxZiQ82eBg9_xP2ywB6c4yqXWQ@mail.gmail.com>
- <YchV5UvIq7xgkbF6@glsvmlin.ini.cmu.edu> <CAHp75VfDq+QM30tmCy2Wg+fj+mqervh2=1LVD5BwyVmbm1PYgQ@mail.gmail.com>
- <Ychv7z6ggZGRY08l@glsvmlin.ini.cmu.edu>
-In-Reply-To: <Ychv7z6ggZGRY08l@glsvmlin.ini.cmu.edu>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 26 Dec 2021 16:01:03 +0200
-Message-ID: <CAHp75VcTZzqvOLEOs50PD48P55f_EnBHjDiNBS-LPfSXhMxRAQ@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] mmc: Add driver for LiteX's LiteSDCard interface
-To:     "Gabriel L. Somlo" <gsomlo@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>, krakoczy@antmicro.com,
-        mdudek@internships.antmicro.com, paulus@ozlabs.org,
-        Joel Stanley <joel@jms.id.au>,
-        Stafford Horne <shorne@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        david.abdurachmanov@sifive.com, florent@enjoy-digital.fr,
-        Randy Dunlap <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: ft5xce35ewnq54qgqq4oa1rx6php6xbt
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: B753B2002F
+X-Spam-Status: No, score=-0.97
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/YVLRXQ1kWJwjA0dugZf74JpeaiVhG8e4=
+X-HE-Tag: 1640527340-980293
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 26, 2021 at 3:36 PM Gabriel L. Somlo <gsomlo@gmail.com> wrote:
-> On Sun, Dec 26, 2021 at 03:13:21PM +0200, Andy Shevchenko wrote:
-> > On Sun, Dec 26, 2021 at 1:45 PM Gabriel L. Somlo <gsomlo@gmail.com> wrote:
-> > > On Sat, Dec 25, 2021 at 06:43:22PM +0200, Andy Shevchenko wrote:
-> > > > On Wed, Dec 15, 2021 at 10:00 PM Gabriel Somlo <gsomlo@gmail.com> wrote:
+On Sun, 2021-12-26 at 14:19 +0100, Andrey Konovalov wrote:
+> I wonder if checkpatch could alert about considering GPL-2.0+ when
+> adding new files.
 
-...
+No. Licensing is up to the author/submitter.
 
-> > > > > +#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
-> > > >
-> > > > Why under ifdeffery?
-> > >
-> > > Because I only want to do it on 64-bit capable architectures.
-> > >
-> > > The alternative would be to call
-> > >
-> > >   dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-> > >
-> > > on *all* architectures, but ignore the returned error (-EIO,
-> > > presumably on architetures that only support 32-bit DMA).
-> >
-> > I don't understand why you are supposed to ignore errors and why you
-> > expect to get such.
->
-> If I call `dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));`
-> on a machine where `CONFIG_ARCH_DMA_ADDR_T_64BIT` is *not* set, I
-> expect an error. The implicit default
-> (per Documentation/core-api/dma-api-howto.rst), is DMA_BIT_MASK(32).
-> I'm working under the impression that on machines with
-> CONFIG_ARCH_DMA_ADDR_T_64BIT I should increase that to DMA_BIT_MASK(64).
->
-> So if I don't #ifdef it, that call will fail on machines supporting
-> only 32-bits.
->
-> What am I missing?
+One nit checkpatch could warn about is the use of MODULE_LICENSE("GPL v2")
+rather than MODULE_LICENSE("GPL") as that's an unnecessary distinction.
 
-This thread: https://lkml.org/lkml/2021/6/7/398 ?
+See: https://lore.kernel.org/all/alpine.DEB.2.21.1901282105450.1669@nanos.tec.linutronix.de/
 
--- 
-With Best Regards,
-Andy Shevchenko
+Given there are a several thousand existing uses of "GPL v2" in the
+kernel, do this check only for new patches and not existing files.
+---
+ scripts/checkpatch.pl | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index b01c36a15d9dd..5b00f1f491aff 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -7418,6 +7418,10 @@ sub process {
+ 				WARN("MODULE_LICENSE",
+ 				     "unknown module license " . $extracted_string . "\n" . $herecurr);
+ 			}
++			if (!$file && $extracted_string eq '"GPL v2"') {
++				WARN("MODULE_LICENSE",
++				     "Prefer \"GPL\" over \"GPL v2\" - see: https://lore.kernel.org/all/alpine.DEB.2.21.1901282105450.1669\@nanos.tec.linutronix.de/\n" . $herecurr);
++			}
+ 		}
+ 
+ # check for sysctl duplicate constants
+
+

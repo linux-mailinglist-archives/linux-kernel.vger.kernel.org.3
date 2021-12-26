@@ -2,94 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA22147F508
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 04:30:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B43DF47F50B
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 04:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230525AbhLZDaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 22:30:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
+        id S231206AbhLZDcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 22:32:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbhLZDaE (ORCPT
+        with ESMTP id S230289AbhLZDcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 22:30:04 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD1EC061757
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 19:30:04 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id g79-20020a9d12d5000000b0058f08f31338so16062707otg.2
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 19:30:04 -0800 (PST)
+        Sat, 25 Dec 2021 22:32:06 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F8DC061401
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 19:32:06 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id j124so19780014oih.12
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 19:32:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=YmEWLgcwPX/M/aA7pjXCRvXDNINS6I3lsTZEUUwzH6Y=;
-        b=KfUZB/fRaCyYZetpaRnu3K1awKQjhlrJhT3OoaLsokHmjz9GO0xkTc2uLp8I7rpAk4
-         sbvr1+DNIn1uRKhMH9xm7au/m3O+dj33/oLGfivsAXwLq64zYLNEFXewK4isCNt34pxc
-         JWL2JKfdXdmZP/6aZhUWpbtvN9eizF3CF3jhIuJy/YK9kwZq0b5wEtui9gHgpxZyKjuk
-         pTku0FX89mYdxXIpKsF4b7UTvIy63uj/EIv35A1bl51YgPuGX9UDIqop5Y5enPC8myv3
-         DLtDikk9y4hYUutPMAoQjE2O2lVovEPnOaSi7JijvisR3jPQ87faTxAe9KMfvGnR1at5
-         VzeA==
+        bh=cpSRXjM9kG2rU64CnT289qDrVGElfeL1DhdrYlGUgWM=;
+        b=OIgHtYo7xHRxiQHgjF8+g+ssHpKYVV3glYf/4biLu+pBoJZVXQRO41a1wulGtCYX23
+         40rNim4t7pR4nNL3Ggy9o8x9SN70RiXEPBmpVbDe5XWVl2bVsCenHuPEeBcq9/Msh9Io
+         WJ46G15+nWiEWw5blyy+IIqxyJ1LTwjJJYfE3P1d/DmNqreyALmMyMmTJOTbU4FiOfv6
+         4ebTDJidXnz9wzK7wzgZR8gFbibfbu1kgO+y9ISVrXhrVlb83OAi7xtTIwzfRBzzg3bV
+         Rj9/4ybRYwc07g43h9g6/erSq6yd3IimAhjjWidNZP7Swe9dgrEp3lLdEhEAozYqCVI/
+         3tag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=YmEWLgcwPX/M/aA7pjXCRvXDNINS6I3lsTZEUUwzH6Y=;
-        b=YyX2hNHjBhaA+qH5nBiRL8t83RM9gAOmASY44EOgleXCo3adzG7u1lHm+37/OCVmMs
-         v72ZVMWp74bQRqt33/MXABdBLAgWAfRDAvgpzTlLZeOpp398HOUeP2zQgRUHZMtRd3wl
-         9kCiiU0MeZX7t1SgFoNyNCgHMnCML21tMeg3O989FAFJkqpMqJrRUNAs299C9UkAU2o4
-         TEtWwzCIz+TpGZfetZA89aYFr9Z9MhsBUpfIKZdHRAIZFGEU9pj09+sdOsZvv+72kQVF
-         65OIGdIZswEGCEJ4kSMHj7suPfrm4MFMpjWjSJNm1UzOLNYWzu0uhLbqsdYm2jGCyaGZ
-         JPsQ==
-X-Gm-Message-State: AOAM530jzLBkvFYmKB+3aYwNWVPjXgvWMbEYytvBa246n0gM2MilXoXu
-        54sC8DrX3J1oWtH+8dp94YWfDQOk/mXzyRV/uOCpkw==
-X-Google-Smtp-Source: ABdhPJyYVyfe6hGE0NMy3yrkHpyDOj9Ksh8PUStF6RXF6p4WpJrbiEZkOIQOSQxopbzZSN8TDgso2M99kWfJWDgLuxw=
-X-Received: by 2002:a9d:a42:: with SMTP id 60mr8961227otg.179.1640489403276;
- Sat, 25 Dec 2021 19:30:03 -0800 (PST)
+        bh=cpSRXjM9kG2rU64CnT289qDrVGElfeL1DhdrYlGUgWM=;
+        b=Ai6VrIDM/ZcQ3TBY4oGJwEiQ9tflsKh4ouGPFHXpWT1DPkHu9kFgX0LCp9lKwuzmmX
+         X7LuLK+V0A/JZCl/wU6xE1K6Xhv8AKHaHRMHAOtm9+bn7gMTxvb7KNRFYFgQ7zzfIbva
+         XFkd+0FsUQRxWygRjMrtld4wTs6FlorNw1bIdi5jZQDJciom2wx8GoeKmWZ8ELCd/7j7
+         q0OrVog0TPfeq+TDruAiZq+8+jY6NqIC/57C478YKbTtcfwbl7HDiJEWey89CdJfi281
+         FUtUvBhoQqQa7e6MduBI6UJx6GFgkpyuMjENlVIZoCQhf631cgSzeFsG0x0qlYvqrWL5
+         rNLw==
+X-Gm-Message-State: AOAM530oCHvz8pq9v5ZvFEdKI0zJ6650rXvdwor44fBKzVrNKAzh3hPw
+        oXjtcI2DPU/zlBcg3yp4aNX7H5PijAjhtTnnxvmF0vbLshg=
+X-Google-Smtp-Source: ABdhPJztUoEc1TdEZzCer3ftmiWpd8yh9ma4NkStZRL5zzrUlGrViIzx7eFQAZGqibuH/KPkcT9EBY8sWyRpqa0V6RI=
+X-Received: by 2002:aca:120f:: with SMTP id 15mr9083937ois.132.1640489525295;
+ Sat, 25 Dec 2021 19:32:05 -0800 (PST)
 MIME-Version: 1.0
-References: <20211223181741.3999-1-f.fainelli@gmail.com>
-In-Reply-To: <20211223181741.3999-1-f.fainelli@gmail.com>
+References: <20211224192545.74528-1-david@ixit.cz>
+In-Reply-To: <20211224192545.74528-1-david@ixit.cz>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 26 Dec 2021 04:29:51 +0100
-Message-ID: <CACRpkda_6Uwzoxiq=vpftusKFtQ8_Qbtoau9Wtm_AM8p3BqpVg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: net: dsa: Fix realtek-smi example
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     devicetree@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+Date:   Sun, 26 Dec 2021 04:31:54 +0100
+Message-ID: <CACRpkdaVTuzza-gJDgeCV5+cpTQUynM9ja5k5WLF9_L=opsn1A@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: mmc: PL18x stop relying on order of dma-names
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+        Thierry Reding <treding@nvidia.com>,
+        ~okias/devicetree@lists.sr.ht, Rob Herring <robh@kernel.org>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 7:17 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+On Fri, Dec 24, 2021 at 8:25 PM David Heidelberg <david@ixit.cz> wrote:
 
-> The 'ports' node is not supposed to have a 'reg' property at all, in
-> fact, doing so will lead to dtc issuing warnings looking like these:
+> We don't care in which order are "rx" and "tx" DMA names supplied.
 >
-> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:109.4-14: Warning (reg_format): /switch/ports:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
-> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
-> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
-> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
-> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
-> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:106.9-149.5: Warning (avoid_default_addr_size): /switch/ports: Relying on default #address-cells value
-> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:106.9-149.5: Warning (avoid_default_addr_size): /switch/ports: Relying on default #size-cells value
+> Fixes: 4df297aaeb9c ("dt-bindings: mmc: Add missing properties used in examples")
 >
-> Fix the example by remove the stray 'reg' property.
->
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Fixes: 3b3b6b460f78 ("net: dsa: Add bindings for Realtek SMI DSAs")
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> Signed-off-by: David Heidelberg <david@ixit.cz>
 
-Ooops thanks for fixing this! (Wouldn't happen if we converted
-it to YAML...)
+Good catch!
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,

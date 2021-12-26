@@ -2,68 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 930E147F882
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 19:38:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6F147F883
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 19:42:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234156AbhLZSiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 13:38:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45190 "EHLO
+        id S234164AbhLZSmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 13:42:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbhLZSiQ (ORCPT
+        with ESMTP id S230187AbhLZSmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 13:38:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A764EC06173E
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 10:38:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46CB7B80E35
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 18:38:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F0B05C36AE8;
-        Sun, 26 Dec 2021 18:38:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640543893;
-        bh=FoNfKkob/LtxDUExReZhp3mV8vArum8IFqN3RNHXYJE=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=ndU6zFV/mxjzVtsEZNAspog7mPbrHmCz6/la1XHUmmkiH3VNTHBzVaxdXtEuJM3wU
-         9EFsAJLNCXOvvhOhm7Zv66fCCBMTqzBR5VGy9B4vwQomcPtzIUtsbLvxidJK2/S84W
-         eyiI55CfEsJ6Z0chrc4FfEBO3HCsjIcq1qHyE58Zk232s6lonnp0mx4J02S3KLHt5n
-         HBvYwQoFEHNhNeqwvsCPzW7UrqT8pGDmI2Ge6+TmcKPnnPQHJA5/iQzp+WqoAitJhl
-         SOZ7qgJydtL8a9qQvuET1/3sn2sljRirmvRyAKNt7BfsHQJfv+zSENidWv7lJmQ8PL
-         +8Zj70YIogwuQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CFB7AEAC06D;
-        Sun, 26 Dec 2021 18:38:12 +0000 (UTC)
-Subject: Re: [GIT PULL] x86/urgent for v5.16-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YchikpZ6h1ViNUDv@zn.tnic>
-References: <YchikpZ6h1ViNUDv@zn.tnic>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YchikpZ6h1ViNUDv@zn.tnic>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v5.16_rc7
-X-PR-Tracked-Commit-Id: 57690554abe135fee81d6ac33cc94d75a7e224bb
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e8ffcd3ab0e5d7332cc75c214fe74e52240b117b
-Message-Id: <164054389284.393.2460852268834866577.pr-tracker-bot@kernel.org>
-Date:   Sun, 26 Dec 2021 18:38:12 +0000
-To:     Borislav Petkov <bp@suse.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+        Sun, 26 Dec 2021 13:42:24 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01EBC06173E
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 10:42:23 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id v7so28258774wrv.12
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 10:42:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=j1aFnyHFUtPdBZotM5iBED56xT2FvKcAtJi+DzbG5wA=;
+        b=KdpXsUBvXceMlS3BbbivfGX38reWvw/ataU6adl3aWWSdA0MMAeYpnG/EgMZ6+vdUj
+         D3HZgQF/Vd2gcjsGO77PDmV5n8e5xQKImGcwlcDDg5EvQNVDH3KIbHD7DdYRuiGDpFql
+         1yVswVelaXTskyge3EfGoOQy3NA/lapbL5zCiBz26ycww8I5xpSMZHG/zPGt6Pj2fnYy
+         Mbo2Wxa2gH0gyP7hfhzoT34KtMZ9Eg8A/Sc9qEA2qz1oIsvoKONcj75J+NBHOmy3+Bvi
+         Lp2S2+cE9RdTRwDMR1c/gbscYQbR21JD0pwtnow/a0Dqs9fbVAbHndoSyP+cb2etQTL9
+         bPpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=j1aFnyHFUtPdBZotM5iBED56xT2FvKcAtJi+DzbG5wA=;
+        b=lvWzC/TDw76MAsocvFlDEpHDgQLJC017mcWhbc0dt9zK3ydt8zMTc1LxuWKH33/aAc
+         sHiHWcVXpRzop0IbfA2XsYsp+alJA0qVboBQb3j7viYkIOAShgzQM4PCn1WhTbwqwWIj
+         9uji24lwlgCEWwhar6+LsqsHlwODNWz0qZRI+bE2PhS8jJO4SfUop5pneciLrhmLXRxX
+         86G0jRZxo3HJNK4R9i7k59Wf/fCDx1Sw5HDDp0F6iXKF8JlAyWNnXv3EPWFNR9C461sP
+         5OPY0/srR5LweUuJ9GgWTiimCfJacEHm2H8QRIOUd8Ra+hzWbSHhLoAXXZ2KBYPVld4z
+         uA2Q==
+X-Gm-Message-State: AOAM5318QSm7hSCw5pDF86JEHlltneTvkMGBYcaKIUhI/tV3OyU/oIQD
+        8uKdTcEixv2Rsp+wpwhdoM0=
+X-Google-Smtp-Source: ABdhPJwDY7Ucruwn5gzXi8gy4EPXbNU+4YBcDRBXoC7wULgEfe0NyHFGWdiUFjJPpEF7NIfueAB1Rg==
+X-Received: by 2002:adf:ecc3:: with SMTP id s3mr10351148wro.713.1640544142264;
+        Sun, 26 Dec 2021 10:42:22 -0800 (PST)
+Received: from localhost.localdomain ([2a02:8108:96c0:3b88::abe6])
+        by smtp.gmail.com with ESMTPSA id u10sm13809421wrs.28.2021.12.26.10.42.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Dec 2021 10:42:22 -0800 (PST)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH] staging: r8188eu: remove GET_CVID_ROM_VERSION
+Date:   Sun, 26 Dec 2021 19:42:17 +0100
+Message-Id: <20211226184217.9726-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 26 Dec 2021 13:39:46 +0100:
+The macro GET_CVID_ROM_VERSION is not used. Remove it.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v5.16_rc7
+Signed-off-by: Michael Straube <straube.linux@gmail.com>
+---
+ drivers/staging/r8188eu/include/HalVerDef.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e8ffcd3ab0e5d7332cc75c214fe74e52240b117b
-
-Thank you!
-
+diff --git a/drivers/staging/r8188eu/include/HalVerDef.h b/drivers/staging/r8188eu/include/HalVerDef.h
+index 1d96657e6a98..62b94c993f0d 100644
+--- a/drivers/staging/r8188eu/include/HalVerDef.h
++++ b/drivers/staging/r8188eu/include/HalVerDef.h
+@@ -35,7 +35,6 @@ struct HAL_VERSION {
+ #define GET_CVID_CHIP_TYPE(version)	(((version).ChipType))
+ #define GET_CVID_MANUFACTUER(version)	(((version).VendorType))
+ #define GET_CVID_CUT_VERSION(version)	(((version).CUTVersion))
+-#define GET_CVID_ROM_VERSION(version)	(((version).ROMVer) & ROM_VERSION_MASK)
+ 
+ /* Common Macro. -- */
+ /* HAL_VERSION VersionID */
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.34.1
+

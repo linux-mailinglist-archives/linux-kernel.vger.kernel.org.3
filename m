@@ -2,153 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC9047F6AC
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 12:56:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B6147F6AF
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 12:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233367AbhLZL4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 06:56:41 -0500
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:32016 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233348AbhLZL4k (ORCPT
+        id S233376AbhLZL6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 06:58:15 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:42660
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233348AbhLZL6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 06:56:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1640519801; x=1672055801;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=lILF1bne+jVtQI0XrL8K9ca3K4hGVvPBr8NBF3r/3yI=;
-  b=ln/BCXlVXVGCdKVi/uMy30yzVKf6Zg6oB2ge9QYuiwyEEcMRZ3OxeOwm
-   gHrH7PJShtwpRaLEcMz8XdD75MvxD/FPmrSBOTvCARru4UIIsAxDQfwB9
-   aEUx0+f0/L3DIIk4e8NJ387y3+CvWZ4D+lFl32qvj2uo6O81hsu81djsz
-   /GussqxrQQcxun7edSsJ3QufXdgVMXpgDSP/VGC08mRT73Iv9yUYRJ0Fq
-   mxEGdFU2ZGqxL5+0h8dIqtXialWTZ4D2IvDftJOLGkha7dNtfdG5i9krG
-   YbaEqtD8Cr8ln9om3M+aD/1YDtcO2RkMT66kljhNr9dVE5gSaguX2WHV7
-   A==;
-X-IronPort-AV: E=Sophos;i="5.88,237,1635177600"; 
-   d="scan'208";a="190139239"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 26 Dec 2021 19:56:39 +0800
-IronPort-SDR: sAK5slvYcuIV8eHJVVhciqPXYqP9o3r87yT9Dxj/IQIwUrl9J4Pokcl93bVJ7HVKAxdm80KUFY
- CT5nZXktB9jrRm2vtWCnmNEt4NRPHbcOpeepVqotJipCXgHHi0cQUYSjACTB9AsAhZCza8dsNg
- 0iXUI2HQ3dM0KPPz+FBxhKtCb4rSkIsChx7zSDzmxzayh2XRPeUwqxwzRSAxpaAyQB5ZV3tcLy
- auEyjR7YvDG2xdFhwGgD7sfzRTjIdGWE7gOZTXcIUOAQCmM0Qt/ocrZsUivCseoUG9OMjUu8Wc
- IlUeBNn/0pV/tGh+1rmqq72U
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 03:29:20 -0800
-IronPort-SDR: 0xvvTudFOvCnoxZ7kwKYFjK/pd1sgzFS1poahf0kqnyg6tBNxZyjhcHCk3wAy7GpX4zx1w3gVT
- AVctY8nlbi6EvcCjdHCNM6FyxvRHGz9WLA/eS5GkwiSnrUWHKxd6pXhURx1z1XX7u+9ftsvDma
- +xRnfd09iqnCGr+0NHmbkIwKsV5+JikkgFYfaI9G7xl9PsuwJTx+XZHmbRSA/juEhfQ530S6HM
- k537d3uLc0GW0t+vVby3/GOIOnVAq1gGGMuH8nI5ymFm9aNIrFi+ueYTSqf2ckVYcqJKcN4I90
- GP0=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 03:56:39 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JMK5f3mBVz1RvTh
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 03:56:38 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1640519798; x=1643111799; bh=lILF1bne+jVtQI0XrL8K9ca3K4hGVvPBr8N
-        BF3r/3yI=; b=uRxEF0j6bRN+0YdGM445wNABOUM59J4hnZgdH/Oaed0E/uMp38X
-        MdJ4W/5Jp3y2lYmOTVPZMyLwmBosAfmzcYEbMshVR+PBwnJqnQeGqUh7OcQxqmeE
-        +Hz2B3dJpNoHlvf1WkvQsQWWftoG7gezA8We8X0Ap6GN6dPT8S8llMEGCTJG90yZ
-        tWEMoPQFHrY3m0Xcr1dayLzFu5yInT0gK0SQjnT68ZIPcvo8YvI+lVvZ91Ug326G
-        kT8Zph2Co9wOSCTX4g/w4RZvLHqIQR1qEI97cWg1f88QNzkVW+DJtnvjOjy6XwOG
-        X6L9Dm+Grr7GR/sbg4fUlxXpAbgPpfh35Mw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id IUC-eRD18BrI for <linux-kernel@vger.kernel.org>;
-        Sun, 26 Dec 2021 03:56:38 -0800 (PST)
-Received: from [10.225.163.37] (unknown [10.225.163.37])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JMK5c6Mtfz1RtVG;
-        Sun, 26 Dec 2021 03:56:36 -0800 (PST)
-Message-ID: <3cab75b6-f8f8-318b-4aca-b7bac484b60b@opensource.wdc.com>
-Date:   Sun, 26 Dec 2021 20:56:35 +0900
+        Sun, 26 Dec 2021 06:58:14 -0500
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D55E23F32E
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 11:58:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640519893;
+        bh=k/SriGNptKt8RyID4T8dxyDKW7Ndc6Y4GjEtV/aG7i8=;
+        h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+         In-Reply-To:Content-Type;
+        b=cHDikb6vh2u7lIhoagXpHGoJ/MsNoDChMlSkaavpCkT236KDtt9l67Gt/tXzWgYEr
+         5mkDr5cG81XNTX1ir19peXFknTRmdPS1r2Bqedi//n56vl5QRomo8zgneCa8ztOHph
+         Cm6C6iyyIHvT1x20MF7pyoGjDj2JlBNjqI6OBI3v1u4otvKjI1R64vJiF8ANrw7R3r
+         Enx50gxfSjRWATPtKGbnntY7kxVgxSlsNjLiVi3Kg3LUtvEZeo6/TK6kf3Y5JMSKyC
+         /e5OleiVtzbVrN+U8tLtZ5VB6iuUjpNGl5jPvnOxCGFV9DXE0asAwaI6lBQqH6/CV/
+         IH5pGfxdH+akQ==
+Received: by mail-lj1-f197.google.com with SMTP id b20-20020a2e9894000000b0022dc5a5f841so765919ljj.2
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 03:58:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=k/SriGNptKt8RyID4T8dxyDKW7Ndc6Y4GjEtV/aG7i8=;
+        b=Nx8Ti9xD8DmtxC9V7WqQJwSeD2Pn87GTLg6Ym1mbgOyRLVjvFmEFKfhdnRxc9AM+5u
+         1OrsME62hqcZ43pl7VTkN1Pgo67xsYMYV5POwkRF5XFStgQs5Y+Dj5PUD3tdcbhm8azp
+         AKmFH4vlvPPiPhzkvcow3MY4jLg/WFxEarAg37GWxL38Y+k0YxqI0u/jSnzEXs/KIN6E
+         3fl29CT6ocUbpO8XLzcRPxmwnuAKO3UpuJfnbKM9CL+RxFvKCBMvKh8IxJ/O2wDAgis4
+         CV7ulmCE1Efe6LlVw3O+qqWkZcfoqYa/IEm/LvHj4Grskx0Klvn7Cu7T3zW9tFqsPGpw
+         1o6g==
+X-Gm-Message-State: AOAM531RqwXrwej3pXkem79c1HAjhcvoxtiBZokSTESKuDf1Po9JCrEK
+        7zveBD++hv1NfSFt/BTzZ/0Hl6GfUM0nk/rqRiBykHU4CS3T1y8BqzSPGxV61E2BGKg7tMJH78o
+        ZB0SDAkbraEhf+z2Gb9QIGsPB0h32ehh6QddlkZHi+Q==
+X-Received: by 2002:a2e:9697:: with SMTP id q23mr10531261lji.354.1640519893035;
+        Sun, 26 Dec 2021 03:58:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwymfV342G9Fd2sVTSX4algppqpLEF5/WDV+TJGBx4EKLVPN71lGZ54emmTYy2+X7S+ckGwrA==
+X-Received: by 2002:a2e:9697:: with SMTP id q23mr10531248lji.354.1640519892736;
+        Sun, 26 Dec 2021 03:58:12 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id q10sm1299558lfm.163.2021.12.26.03.58.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Dec 2021 03:58:12 -0800 (PST)
+Message-ID: <3a89b2cf-33e4-7938-08e3-348b655493d7@canonical.com>
+Date:   Sun, 26 Dec 2021 12:58:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v3 02/10] ata: pata_platform: Drop use of unlikely() in
- pata_platform_probe
+ Thunderbird/91.3.1
+Subject: Re: [PATCH resend] uapi: fix linux/nfc.h userspace compilation errors
 Content-Language: en-US
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>
-References: <20211224131300.18198-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211224131300.18198-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <a0a158e2-d77c-e3a4-5858-020674b22d92@omp.ru>
- <CA+V-a8voiYxB+s2rW9s7OhSsasvVzLO6KscO354+kaQFPO6Zsg@mail.gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <CA+V-a8voiYxB+s2rW9s7OhSsasvVzLO6KscO354+kaQFPO6Zsg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     "Dmitry V. Levin" <ldv@altlinux.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20170220181613.GB11185@altlinux.org>
+ <20211225234229.GA5025@altlinux.org>
+ <3d0af5ae-0510-8610-dfc2-b8e5ff682959@canonical.com>
+In-Reply-To: <3d0af5ae-0510-8610-dfc2-b8e5ff682959@canonical.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/25/21 03:02, Lad, Prabhakar wrote:
-> Hi Sergey,
+On 26/12/2021 12:42, Krzysztof Kozlowski wrote:
+> On 26/12/2021 00:42, Dmitry V. Levin wrote:
+>> Replace sa_family_t with __kernel_sa_family_t to fix the following
+>> linux/nfc.h userspace compilation errors:
+>>
+>> /usr/include/linux/nfc.h:266:2: error: unknown type name 'sa_family_t'
+>>   sa_family_t sa_family;
+>> /usr/include/linux/nfc.h:274:2: error: unknown type name 'sa_family_t'
+>>   sa_family_t sa_family;
+>>
+>> Link: https://lore.kernel.org/lkml/20170220181613.GB11185@altlinux.org/
 > 
-> Thank you for the review.
+> Please skip the link. There will be link added for current patch which
+> leads to this discussion. There was no discussion in 2017.
 > 
-> On Fri, Dec 24, 2021 at 5:54 PM Sergey Shtylyov <s.shtylyov@omp.ru> wrote:
+>> Signed-off-by: Dmitry V. Levin <ldv@altlinux.org>
+>> ---
+>>  The patch was submitted almost 5 years ago, and I was under impression
+>>  that it was applied among others of this kind, but, apparently,
+>>  it's still relevant.
 >>
->> On 12/24/21 4:12 PM, Lad Prabhakar wrote:
+>>  include/uapi/linux/nfc.h | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
 >>
->>> pata_platform_probe() isn't a hotpath, which makes it's questionable to
->>> use unlikely(). Therefore let's simply drop it.
->>>
->>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->>> ---
->>> v2-->v3
->>> * New patch
->>> ---
->>>  drivers/ata/pata_platform.c | 4 ++--
->>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/ata/pata_platform.c b/drivers/ata/pata_platform.c
->>> index cb3134bf88eb..29902001e223 100644
->>> --- a/drivers/ata/pata_platform.c
->>> +++ b/drivers/ata/pata_platform.c
->>> @@ -199,14 +199,14 @@ static int pata_platform_probe(struct platform_device *pdev)
->>>        * Get the I/O base first
->>>        */
->>>       io_res = platform_get_mem_or_io(pdev, 0);
->>> -     if (unlikely(!io_res))
->>> +     if (!io_res)
->>>               return -EINVAL;
->>>
->>>       /*
->>>        * Then the CTL base
->>>        */
->>>       ctl_res = platform_get_mem_or_io(pdev, 1);
->>> -     if (unlikely(!ctl_res))
->>> +     if (!ctl_res)
->>>               return -EINVAL;
->>
->>    I think you should combine this with patch #1.
->>
-> I'd like to keep the changes separate from patch #1, as it's unrelated.
-
-But your patch 1 adds the unlikely... So simply do not add it in patch
-one and this patch is not necessary anymore.
-
+>> diff --git a/include/uapi/linux/nfc.h b/include/uapi/linux/nfc.h
+>> index f6e3c8c9c744..aadad43d943a 100644
+>> --- a/include/uapi/linux/nfc.h
+>> +++ b/include/uapi/linux/nfc.h
+>> @@ -263,7 +263,7 @@ enum nfc_sdp_attr {
+>>  #define NFC_SE_ENABLED  0x1
+>>  
+>>  struct sockaddr_nfc {
+>> -	sa_family_t sa_family;
+>> +	__kernel_sa_family_t sa_family;
 > 
-> Cheers,
-> Prabhakar
+> include/uapi/linux/nfc.h includes linux/socket.h which defines typedef:
+>   __kernel_sa_family_t    sa_family_t;
+> so how exactly the build is being fixed? How to reproduce it?
+> 
+
+Ok, I see the error - when user-space does not include sys/socket.h.
+Makes sense, can you resend with removed Link and with:
+Fixes: 23b7869c0fd0 ("NFC: add the NFC socket raw protocol")
+
+Fixes: d646960f7986 ("NFC: Initial LLCP support")
 
 
--- 
-Damien Le Moal
-Western Digital Research
+Best regards,
+Krzysztof

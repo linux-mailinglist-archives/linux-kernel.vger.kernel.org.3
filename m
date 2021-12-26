@@ -2,143 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D5847F6C3
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 13:39:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B118347F6C4
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 13:39:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233379AbhLZMih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 07:38:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbhLZMig (ORCPT
+        id S233409AbhLZMjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 07:39:44 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:57830 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233403AbhLZMjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 07:38:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEECEC06173E;
-        Sun, 26 Dec 2021 04:38:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 26 Dec 2021 07:39:43 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3BCD60DFA;
-        Sun, 26 Dec 2021 12:38:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F5B6C36AF3;
-        Sun, 26 Dec 2021 12:38:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640522315;
-        bh=o76Bq5CH6JQYJurwTN9je+XT2iTobUiIxe/Uui+wias=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=axouHMvAD+06n+Ys1vxkhakSE66du65vKMVR9JaqpQcEGtR+OtBv8OFA4MTuU7Yi5
-         Z065lUIWSARqElBcbA7PMKAlRBflNQxflLMrT+KpHTd/rWhpM/jVuFbDATRkmK0D2j
-         MJOiavy8zhz+GWNngL1ayVtN4w7GhXufo5I4d4UkxDD6Ek9bUPuPFOB9r2KWhWWQLV
-         FWN6eaCconXiFMOjFWoIQyEDTB2wm64+EOR5ehYKGmx/pOorBuA6ombIqUwPWYKAr0
-         utR+MhT0cHa6W9+hv60KMrSyosxXOaD4s369R1pFbF3K2hdAWB+jeTNxAHJUkLhd+9
-         5+kmD9Silgvjg==
-Received: by mail-ua1-f51.google.com with SMTP id v12so10714033uar.7;
-        Sun, 26 Dec 2021 04:38:35 -0800 (PST)
-X-Gm-Message-State: AOAM533ug4vz6AtRErDgeysyQkMWeC5PhsVgsL/M5mfkO5LbxVDT1HLh
-        waIemCDlfO3oaGZ9Rg7axBRxdREIUP9HS/eTyN8=
-X-Google-Smtp-Source: ABdhPJxYXL57S/1WWUdbZ3QalfrT+pnzWcLsk0PLFsmPywHotfGGswokAC8FpojTD1DtObuaVVBfBUXqawlVoiBv9qY=
-X-Received: by 2002:a67:f94b:: with SMTP id u11mr3298864vsq.51.1640522314246;
- Sun, 26 Dec 2021 04:38:34 -0800 (PST)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 90507210F5;
+        Sun, 26 Dec 2021 12:39:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1640522382; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=L6SnzlwOy04Nj28pFCvKVf47U0XVkOy/oPjs2htLF3w=;
+        b=dLxn/cgoekHZQRivda9x6l8dI85OY9vaopld+9sFhX8m2uco7CqKFJxkXmJRFe50zL+RVR
+        5URHwIH5IFhQ7aHeV8i1Jz9HSOpeEdV7SLjBcf+ZGpN5uc1b0SlBxSnhYudW6W1d68P5Wt
+        nogAfdBxitQSBMvbyLsEKTLnBJXbliM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1640522382;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=L6SnzlwOy04Nj28pFCvKVf47U0XVkOy/oPjs2htLF3w=;
+        b=+QWx0BjfZR0CDrM4YYxCkmo9c2y3zxYzzbRQUD+9mWQPt9OScVJEmPuRvadrrexggWC4nw
+        ZlEJn/siuUn67KAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6A4B01330B;
+        Sun, 26 Dec 2021 12:39:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8JeIGY5iyGFaGQAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 26 Dec 2021 12:39:42 +0000
+Date:   Sun, 26 Dec 2021 13:39:46 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/urgent for v5.16-rc7
+Message-ID: <YchikpZ6h1ViNUDv@zn.tnic>
 MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org> <CAK8P3a37+0=CCE7283VQ4QZ1tZqcU+A2POUGXtvdM46ZMHx-gw@mail.gmail.com>
- <CAJF2gTRAxX0qEcNmw+5N=3jZcJw9YF75oRjT7Y5FUMUkHoSz4Q@mail.gmail.com> <20211226162223.795f9417@xhacker>
-In-Reply-To: <20211226162223.795f9417@xhacker>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 26 Dec 2021 20:38:23 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRHND1F_-5+Euzy-UdRRdg2oAXDY4dt8_5p9JxsHDSe6Q@mail.gmail.com>
-Message-ID: <CAJF2gTRHND1F_-5+Euzy-UdRRdg2oAXDY4dt8_5p9JxsHDSe6Q@mail.gmail.com>
-Subject: Re: [PATCH 00/13] riscv: compat: Add COMPAT mode support for rv64
-To:     Jisheng Zhang <jszhang3@mail.ustc.edu.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 26, 2021 at 4:36 PM Jisheng Zhang <jszhang3@mail.ustc.edu.cn> wrote:
->
-> On Wed, 22 Dec 2021 20:59:30 +0800
-> Guo Ren <guoren@kernel.org> wrote:
->
-> > On Wed, Dec 22, 2021 at 2:10 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> > >
-> > > On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
-> > > >
-> > > > From: Guo Ren <guoren@linux.alibaba.com>
-> > > >
-> > > > Currently, most 64-bit architectures (x86, parisc, powerpc, arm64,
-> > > > s390, mips, sparc) have supported COMPAT mode. But they all have
-> > > > history issues and can't use standard linux unistd.h. RISC-V would
-> > > > be first standard __SYSCALL_COMPAT user of include/uapi/asm-generic
-> > > > /unistd.h.
-> > > >
-> > > > The patchset are based on v5.16-rc6, you can compare rv64-compat32
-> > > > v.s. rv32-whole in qemu with following step:
-> > >
-> > > Looks good overall, see my individual replies for minor comments I had.
-> > Thx for the review :)
-> >
-> > >
-> > > I think there is a bigger question to answer though, which is whether this is
-> > > actually a useful feature for rv64. In general, there are two reasons for
-> > > wanting compat mode:
-> > >
-> > > a) compatibility with existing binaries and distros
-> > >
-> > > b) reducing the memory footprint of user space in a memory constrained
-> > > environment, either deeply embedded or in a container.
-> > >
-> > > For the other architectures, a) is clearly the main driver, but equally so
-> > > this is not the case on riscv, which does not have any legacy 32-bit
-> > > code. Without that, adding compat mode would mainly introduce a
-> > > second ABI to a lot of environments that at the moment only need to
-> > > support one, and that adds complexity to the implementation and
-> > > the extra attack surface of the second syscall ABI when an exploit
-> > > may be possible only in compat mode.
-> > >
-> > > There is still some benefit in b), but it would need to be weighed
-> > > against the downsides above. Can you explain in more detail what
-> > > use cases you have in mind, and which CPU cores actually support
-> > > this mode?
-> > The most reason is about b), see our customer's product:
-> > https://www.cnx-software.com/2021/10/25/allwinner-d1s-f133-risc-v-processor-64mb-ddr2/
-> >
-> > So I think all our next generation rv64 cores should support
-> > compat-mode. Compare to releasing rv32-full core, rv64 compat-mode is
-> > very cheap for our CPU design.
-> >
-> > You would get the answer when our new generation CPU is announced and it's soon.
-> >
->
-> What about adding RV64 ILP32 support instead? This don't need HW side
-> modifications so can benefit all RV64.
-ILP32 is another topic in C Language Data Type Models and it couldn't
-replace the standard rv32 ecosystem.
-COMPAT is a common framework in Linux (7 arches have been supported),
-so let rv64 support COMPAT mode is considerable.
+Hi Linus,
 
-Customers would choose ILP32 / RV32-compat by themself and that
-depends on which one has a better ecosystem.
+please pull a couple more x86/urgent fixes for 5.16.
 
->
-> Thanks
->
-> > Currently, only qemu supports rv64 compact mode, that is my colleague
-> > (LIU Zhi Wei) contributed.
->
+Thx.
 
+---
+
+The following changes since commit 2585cf9dfaaddf00b069673f27bb3f8530e2039c:
+
+  Linux 5.16-rc5 (2021-12-12 14:53:01 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v5.16_rc7
+
+for you to fetch changes up to 57690554abe135fee81d6ac33cc94d75a7e224bb:
+
+  x86/pkey: Fix undefined behaviour with PKRU_WD_BIT (2021-12-19 22:44:34 +0100)
+
+----------------------------------------------------------------
+- Prevent potential undefined behavior due to shifting pkey constants into the sign bit
+
+- Move the EFI memory reservation code *after* the efi= cmdline parsing has happened
+
+- Revert two commits which turned out to be the wrong direction to chase
+when accommodating early memblock reservations consolidation and command line parameters
+parsing
+
+----------------------------------------------------------------
+Andrew Cooper (1):
+      x86/pkey: Fix undefined behaviour with PKRU_WD_BIT
+
+Borislav Petkov (2):
+      Revert "x86/boot: Mark prepare_command_line() __init"
+      Revert "x86/boot: Pull up cmdline preparation and early param parsing"
+
+Mike Rapoport (1):
+      x86/boot: Move EFI range reservation after cmdline parsing
+
+ arch/x86/include/asm/pkru.h |  4 +--
+ arch/x86/kernel/setup.c     | 72 +++++++++++++++++++--------------------------
+ 2 files changed, 32 insertions(+), 44 deletions(-)
 
 -- 
-Best Regards
- Guo Ren
+Regards/Gruss,
+    Boris.
 
-ML: https://lore.kernel.org/linux-csky/
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

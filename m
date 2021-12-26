@@ -2,145 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5BBC47F505
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 04:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA22147F508
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 04:30:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbhLZD3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 22:29:32 -0500
-Received: from mga11.intel.com ([192.55.52.93]:22301 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229460AbhLZD3b (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 22:29:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640489371; x=1672025371;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5ElQq4gpAVPALai+j0BM0iv/S75vjYqlUstawFtXNh4=;
-  b=SY3t5tG1lFABufKZ1uh5XgxbzW7+HXCuacb0op5MHB83SMobY68BCEW6
-   JrRwIszYvvVCjsrhv74twLDAvX/ZLX0iBUWUEkIuHMGoMzfXEJuRgd5zi
-   XXPY0Uc7lZGxWUvUYGUl/vPUpbwLnEYRrWmOfGtOoclfL/7y33+ydhOKB
-   qICyVTnkJPNNEyC2qhvPW7NRWgUThNEJP1gyJk815ojlGXT4YETuDurBu
-   WbzYOg53DrRJubhNT7krTOegkgD2c22MCB69i5UwM/bIauwm1QXIkgPPx
-   U9sVXzw3JDbnQP6a5WXhyAFpwxlqJHYvKSNavCx2mdKbeUmnNnWPF1iaa
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10208"; a="238619072"
-X-IronPort-AV: E=Sophos;i="5.88,236,1635231600"; 
-   d="scan'208";a="238619072"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2021 19:29:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,236,1635231600"; 
-   d="scan'208";a="685957085"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 25 Dec 2021 19:29:29 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n1KDw-0004zN-Vg; Sun, 26 Dec 2021 03:29:28 +0000
-Date:   Sun, 26 Dec 2021 11:29:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Axtens <dja@axtens.net>
-Subject: [linux-stable-rc:queue/4.9 7210/9999]
- arch/powerpc/kernel/setup_64.c:739:6: error: no previous declaration for
- 'entry_flush_enable'
-Message-ID: <202112261104.AZtG9CvC-lkp@intel.com>
+        id S230525AbhLZDaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 22:30:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230289AbhLZDaE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 25 Dec 2021 22:30:04 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD1EC061757
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 19:30:04 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id g79-20020a9d12d5000000b0058f08f31338so16062707otg.2
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 19:30:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YmEWLgcwPX/M/aA7pjXCRvXDNINS6I3lsTZEUUwzH6Y=;
+        b=KfUZB/fRaCyYZetpaRnu3K1awKQjhlrJhT3OoaLsokHmjz9GO0xkTc2uLp8I7rpAk4
+         sbvr1+DNIn1uRKhMH9xm7au/m3O+dj33/oLGfivsAXwLq64zYLNEFXewK4isCNt34pxc
+         JWL2JKfdXdmZP/6aZhUWpbtvN9eizF3CF3jhIuJy/YK9kwZq0b5wEtui9gHgpxZyKjuk
+         pTku0FX89mYdxXIpKsF4b7UTvIy63uj/EIv35A1bl51YgPuGX9UDIqop5Y5enPC8myv3
+         DLtDikk9y4hYUutPMAoQjE2O2lVovEPnOaSi7JijvisR3jPQ87faTxAe9KMfvGnR1at5
+         VzeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YmEWLgcwPX/M/aA7pjXCRvXDNINS6I3lsTZEUUwzH6Y=;
+        b=YyX2hNHjBhaA+qH5nBiRL8t83RM9gAOmASY44EOgleXCo3adzG7u1lHm+37/OCVmMs
+         v72ZVMWp74bQRqt33/MXABdBLAgWAfRDAvgpzTlLZeOpp398HOUeP2zQgRUHZMtRd3wl
+         9kCiiU0MeZX7t1SgFoNyNCgHMnCML21tMeg3O989FAFJkqpMqJrRUNAs299C9UkAU2o4
+         TEtWwzCIz+TpGZfetZA89aYFr9Z9MhsBUpfIKZdHRAIZFGEU9pj09+sdOsZvv+72kQVF
+         65OIGdIZswEGCEJ4kSMHj7suPfrm4MFMpjWjSJNm1UzOLNYWzu0uhLbqsdYm2jGCyaGZ
+         JPsQ==
+X-Gm-Message-State: AOAM530jzLBkvFYmKB+3aYwNWVPjXgvWMbEYytvBa246n0gM2MilXoXu
+        54sC8DrX3J1oWtH+8dp94YWfDQOk/mXzyRV/uOCpkw==
+X-Google-Smtp-Source: ABdhPJyYVyfe6hGE0NMy3yrkHpyDOj9Ksh8PUStF6RXF6p4WpJrbiEZkOIQOSQxopbzZSN8TDgso2M99kWfJWDgLuxw=
+X-Received: by 2002:a9d:a42:: with SMTP id 60mr8961227otg.179.1640489403276;
+ Sat, 25 Dec 2021 19:30:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211223181741.3999-1-f.fainelli@gmail.com>
+In-Reply-To: <20211223181741.3999-1-f.fainelli@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 26 Dec 2021 04:29:51 +0100
+Message-ID: <CACRpkda_6Uwzoxiq=vpftusKFtQ8_Qbtoau9Wtm_AM8p3BqpVg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: net: dsa: Fix realtek-smi example
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     devicetree@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/4.9
-head:   df4b9763cd1e19cb238b3ea65d3257f1e10357c3
-commit: fa4bf9f38184ed7ca4916eb64f8c767d1e279c1f [7210/9999] powerpc/64s: flush L1D on kernel entry
-config: powerpc64-allnoconfig (https://download.01.org/0day-ci/archive/20211226/202112261104.AZtG9CvC-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 7.5.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=fa4bf9f38184ed7ca4916eb64f8c767d1e279c1f
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/4.9
-        git checkout fa4bf9f38184ed7ca4916eb64f8c767d1e279c1f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-7.5.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
+On Thu, Dec 23, 2021 at 7:17 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> The 'ports' node is not supposed to have a 'reg' property at all, in
+> fact, doing so will lead to dtc issuing warnings looking like these:
+>
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:109.4-14: Warning (reg_format): /switch/ports:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:106.9-149.5: Warning (avoid_default_addr_size): /switch/ports: Relying on default #address-cells value
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:106.9-149.5: Warning (avoid_default_addr_size): /switch/ports: Relying on default #size-cells value
+>
+> Fix the example by remove the stray 'reg' property.
+>
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Fixes: 3b3b6b460f78 ("net: dsa: Add bindings for Realtek SMI DSAs")
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Note: the linux-stable-rc/queue/4.9 HEAD df4b9763cd1e19cb238b3ea65d3257f1e10357c3 builds fine.
-      It only hurts bisectability.
+Ooops thanks for fixing this! (Wouldn't happen if we converted
+it to YAML...)
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-All errors (new ones prefixed by >>):
-
-   In file included from arch/powerpc/include/asm/bug.h:127:0,
-                    from include/linux/bug.h:4,
-                    from include/linux/thread_info.h:11,
-                    from include/asm-generic/preempt.h:4,
-                    from ./arch/powerpc/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:59,
-                    from include/linux/spinlock.h:50,
-                    from include/linux/seqlock.h:35,
-                    from include/linux/time.h:5,
-                    from include/uapi/linux/timex.h:56,
-                    from include/linux/timex.h:56,
-                    from include/linux/sched.h:19,
-                    from arch/powerpc/kernel/setup_64.c:17:
-   include/linux/dma-mapping.h: In function 'dma_map_resource':
-   arch/powerpc/include/asm/page.h:129:32: error: comparison of unsigned expression >= 0 is always true [-Werror=type-limits]
-    #define pfn_valid(pfn)  ((pfn) >= ARCH_PFN_OFFSET && (pfn) < max_mapnr)
-                                   ^
-   include/asm-generic/bug.h:155:36: note: in definition of macro 'BUG_ON'
-    #define BUG_ON(condition) do { if (condition) BUG(); } while (0)
-                                       ^~~~~~~~~
-   include/linux/dma-mapping.h:284:9: note: in expansion of macro 'pfn_valid'
-     BUG_ON(pfn_valid(PHYS_PFN(phys_addr)));
-            ^~~~~~~~~
-   arch/powerpc/kernel/setup_64.c: At top level:
-   arch/powerpc/kernel/setup_64.c:281:13: error: no previous declaration for 'early_setup' [-Werror=missing-declarations]
-    void __init early_setup(unsigned long dt_ptr)
-                ^~~~~~~~~~~
-   arch/powerpc/kernel/setup_64.c:421:13: error: no previous declaration for 'initialize_cache_info' [-Werror=missing-declarations]
-    void __init initialize_cache_info(void)
-                ^~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/kernel/setup_64.c:514:13: error: no previous declaration for 'irqstack_early_init' [-Werror=missing-declarations]
-    void __init irqstack_early_init(void)
-                ^~~~~~~~~~~~~~~~~~~
-   arch/powerpc/kernel/setup_64.c:563:13: error: no previous declaration for 'emergency_stack_init' [-Werror=missing-declarations]
-    void __init emergency_stack_init(void)
-                ^~~~~~~~~~~~~~~~~~~~
->> arch/powerpc/kernel/setup_64.c:739:6: error: no previous declaration for 'entry_flush_enable' [-Werror=missing-declarations]
-    void entry_flush_enable(bool enable)
-         ^~~~~~~~~~~~~~~~~~
-   In file included from include/linux/serial_8250.h:14:0,
-                    from arch/powerpc/kernel/setup_64.c:33:
-   include/linux/serial_core.h:387:19: error: 'earlycon_init_is_deferred' defined but not used [-Werror=unused-const-variable=]
-    static const bool earlycon_init_is_deferred;
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
-
-
-vim +/entry_flush_enable +739 arch/powerpc/kernel/setup_64.c
-
-   738	
- > 739	void entry_flush_enable(bool enable)
-   740	{
-   741		if (enable) {
-   742			do_entry_flush_fixups(enabled_flush_types);
-   743			on_each_cpu(do_nothing, NULL, 1);
-   744		} else {
-   745			do_entry_flush_fixups(L1D_FLUSH_NONE);
-   746		}
-   747	
-   748		entry_flush = enable;
-   749	}
-   750	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Yours,
+Linus Walleij

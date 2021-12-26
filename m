@@ -2,542 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B99F747F5F7
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 10:16:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4443047F608
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 10:41:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232666AbhLZJH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 04:07:56 -0500
-Received: from smtp2.ustc.edu.cn ([202.38.64.46]:48636 "EHLO ustc.edu.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231529AbhLZJHz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 04:07:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mail.ustc.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
-        Message-ID:In-Reply-To:References:MIME-Version:Content-Type:
-        Content-Transfer-Encoding; bh=KSm2E0Q7gyRZEOeMZaEjmP0qEA4+OqTwc8
-        0xfFrGwY0=; b=mMIAy5nfA9Q+S5LtKtVAjA5SgACXqakprqFRmuNIpdtncISu+2
-        mflTJwERABBZo86xv6NReTdjOOt4Um6+HExyPP9TkNVoA26KOpjrrSrTD5+grbmb
-        123oAqF3JukNWD+XLNJddVauV4T/nwhbxB7CZGZee5H+Q4Kmr904uHv+Q=
-Received: from xhacker (unknown [101.86.42.35])
-        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygCnrkamMMhhprnCAA--.15306S2;
-        Sun, 26 Dec 2021 17:06:47 +0800 (CST)
-Date:   Sun, 26 Dec 2021 16:59:32 +0800
-From:   Jisheng Zhang <jszhang3@mail.ustc.edu.cn>
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Zong Li <zong.li@sifive.com>, Anup Patel <anup@brainfault.org>,
-        Atish Patra <Atish.Patra@rivosinc.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        panqinglin2020@iscas.ac.cn, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v3 07/13] riscv: Implement sv48 support
-Message-ID: <20211226165932.1ded6f73@xhacker>
-In-Reply-To: <20211206104657.433304-8-alexandre.ghiti@canonical.com>
-References: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
- <20211206104657.433304-8-alexandre.ghiti@canonical.com>
+        id S232798AbhLZJ2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 04:28:40 -0500
+Received: from mga02.intel.com ([134.134.136.20]:22850 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231529AbhLZJ2j (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 26 Dec 2021 04:28:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640510919; x=1672046919;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KxToBOjDH0BckICmRIKltdNPqHQwORInrWaePI7n8/U=;
+  b=HkpNpI74YoaNGQZJ+3LiTO3NQVclT8+Ow+Ar4L8zEO4Qg8ryEw1+CIW7
+   nIsKa21R7ACzeaqQcpzULxDlKScIU1nc+ilHxzkS+mJSvjNdq5YBCYsc8
+   5Xu5e6b0BqxDtRoQ5kt+xHZgPrqIJ/ggOlkuPEN2T5OEtDjtQWlhy4Lua
+   f7DkCo3IlK2HokZl6Zc+XsgJdF8UaxgWeEaQa2TvCLav8lVuiShfhzifK
+   gqJxRwhNV4NrP28WZ1tlxUiDHdyt6dVZc/PESdr0xg71EL1sk9OJtupqt
+   pgUiYH1P6GnBajyTJIKTxVLLmgdwY4B6CfwOVEpjuFsZ3KgYwHKVepuFz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10208"; a="228398141"
+X-IronPort-AV: E=Sophos;i="5.88,236,1635231600"; 
+   d="scan'208";a="228398141"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 01:28:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,236,1635231600"; 
+   d="scan'208";a="553326501"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 26 Dec 2021 01:28:37 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n1PpU-0005Gd-P5; Sun, 26 Dec 2021 09:28:36 +0000
+Date:   Sun, 26 Dec 2021 17:28:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: arch/powerpc/kvm/book3s_64_mmu.c:263:28: sparse: sparse: cast to
+ restricted __be64
+Message-ID: <202112261729.FSD0kgxB-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LkAmygCnrkamMMhhprnCAA--.15306S2
-X-Coremail-Antispam: 1UD129KBjvAXoW3tFy3Xw15tFWkAr1kWFWfXwb_yoW8XrW8Zo
-        WxtF42ga1rWw13Cws5Z3W2gFWjvr1vvrZxZ3yYyrW5tFn2qwnYkr48K3ykJw1UGryfKa43
-        Wa109ayDXFsYy3s8n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-        AaLaJ3UjIYCTnIWjp_UUUYO7k0a2IF6w4kM7kC6x804xWl14x267AKxVW5JVWrJwAFc2x0
-        x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj4
-        1l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0
-        I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JV
-        WxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU5q385UUUU
-        U==
-X-CM-SenderInfo: xmv2xttqjtqzxdloh3xvwfhvlgxou0/
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  6 Dec 2021 11:46:51 +0100
-Alexandre Ghiti <alexandre.ghiti@canonical.com> wrote:
+Hi Cédric,
 
-> By adding a new 4th level of page table, give the possibility to 64bit
-> kernel to address 2^48 bytes of virtual address: in practice, that offers
-> 128TB of virtual address space to userspace and allows up to 64TB of
-> physical memory.
-> 
-> If the underlying hardware does not support sv48, we will automatically
-> fallback to a standard 3-level page table by folding the new PUD level into
-> PGDIR level. In order to detect HW capabilities at runtime, we
-> use SATP feature that ignores writes with an unsupported mode.
-> 
-> Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-> ---
->  arch/riscv/Kconfig                      |   4 +-
->  arch/riscv/include/asm/csr.h            |   3 +-
->  arch/riscv/include/asm/fixmap.h         |   1 +
->  arch/riscv/include/asm/kasan.h          |   6 +-
->  arch/riscv/include/asm/page.h           |  14 ++
->  arch/riscv/include/asm/pgalloc.h        |  40 +++++
->  arch/riscv/include/asm/pgtable-64.h     | 108 +++++++++++-
->  arch/riscv/include/asm/pgtable.h        |  24 ++-
->  arch/riscv/kernel/head.S                |   3 +-
->  arch/riscv/mm/context.c                 |   4 +-
->  arch/riscv/mm/init.c                    | 212 +++++++++++++++++++++---
->  arch/riscv/mm/kasan_init.c              | 137 ++++++++++++++-
->  drivers/firmware/efi/libstub/efi-stub.c |   2 +
->  13 files changed, 514 insertions(+), 44 deletions(-)
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index ac6c0cd9bc29..d28fe0148e13 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -150,7 +150,7 @@ config PAGE_OFFSET
->  	hex
->  	default 0xC0000000 if 32BIT
->  	default 0x80000000 if 64BIT && !MMU
-> -	default 0xffffffd800000000 if 64BIT
-> +	default 0xffffaf8000000000 if 64BIT
->  
->  config KASAN_SHADOW_OFFSET
->  	hex
-> @@ -201,7 +201,7 @@ config FIX_EARLYCON_MEM
->  
->  config PGTABLE_LEVELS
->  	int
-> -	default 3 if 64BIT
-> +	default 4 if 64BIT
->  	default 2
->  
->  config LOCKDEP_SUPPORT
-> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-> index 87ac65696871..3fdb971c7896 100644
-> --- a/arch/riscv/include/asm/csr.h
-> +++ b/arch/riscv/include/asm/csr.h
-> @@ -40,14 +40,13 @@
->  #ifndef CONFIG_64BIT
->  #define SATP_PPN	_AC(0x003FFFFF, UL)
->  #define SATP_MODE_32	_AC(0x80000000, UL)
-> -#define SATP_MODE	SATP_MODE_32
->  #define SATP_ASID_BITS	9
->  #define SATP_ASID_SHIFT	22
->  #define SATP_ASID_MASK	_AC(0x1FF, UL)
->  #else
->  #define SATP_PPN	_AC(0x00000FFFFFFFFFFF, UL)
->  #define SATP_MODE_39	_AC(0x8000000000000000, UL)
-> -#define SATP_MODE	SATP_MODE_39
-> +#define SATP_MODE_48	_AC(0x9000000000000000, UL)
->  #define SATP_ASID_BITS	16
->  #define SATP_ASID_SHIFT	44
->  #define SATP_ASID_MASK	_AC(0xFFFF, UL)
-> diff --git a/arch/riscv/include/asm/fixmap.h b/arch/riscv/include/asm/fixmap.h
-> index 54cbf07fb4e9..58a718573ad6 100644
-> --- a/arch/riscv/include/asm/fixmap.h
-> +++ b/arch/riscv/include/asm/fixmap.h
-> @@ -24,6 +24,7 @@ enum fixed_addresses {
->  	FIX_HOLE,
->  	FIX_PTE,
->  	FIX_PMD,
-> +	FIX_PUD,
->  	FIX_TEXT_POKE1,
->  	FIX_TEXT_POKE0,
->  	FIX_EARLYCON_MEM_BASE,
-> diff --git a/arch/riscv/include/asm/kasan.h b/arch/riscv/include/asm/kasan.h
-> index 743e6ff57996..0b85e363e778 100644
-> --- a/arch/riscv/include/asm/kasan.h
-> +++ b/arch/riscv/include/asm/kasan.h
-> @@ -28,7 +28,11 @@
->  #define KASAN_SHADOW_SCALE_SHIFT	3
->  
->  #define KASAN_SHADOW_SIZE	(UL(1) << ((VA_BITS - 1) - KASAN_SHADOW_SCALE_SHIFT))
-> -#define KASAN_SHADOW_START	(KASAN_SHADOW_END - KASAN_SHADOW_SIZE)
-> +/*
-> + * Depending on the size of the virtual address space, the region may not be
-> + * aligned on PGDIR_SIZE, so force its alignment to ease its population.
-> + */
-> +#define KASAN_SHADOW_START	((KASAN_SHADOW_END - KASAN_SHADOW_SIZE) & PGDIR_MASK)
->  #define KASAN_SHADOW_END	MODULES_LOWEST_VADDR
->  #define KASAN_SHADOW_OFFSET	_AC(CONFIG_KASAN_SHADOW_OFFSET, UL)
->  
-> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-> index e03559f9b35e..d089fe46f7d8 100644
-> --- a/arch/riscv/include/asm/page.h
-> +++ b/arch/riscv/include/asm/page.h
-> @@ -31,7 +31,20 @@
->   * When not using MMU this corresponds to the first free page in
->   * physical memory (aligned on a page boundary).
->   */
-> +#ifdef CONFIG_64BIT
-> +#ifdef CONFIG_MMU
-> +#define PAGE_OFFSET		kernel_map.page_offset
-> +#else
-> +#define PAGE_OFFSET		_AC(CONFIG_PAGE_OFFSET, UL)
-> +#endif
-> +/*
-> + * By default, CONFIG_PAGE_OFFSET value corresponds to SV48 address space so
-> + * define the PAGE_OFFSET value for SV39.
-> + */
-> +#define PAGE_OFFSET_L3		_AC(0xffffffd800000000, UL)
-> +#else
->  #define PAGE_OFFSET		_AC(CONFIG_PAGE_OFFSET, UL)
-> +#endif /* CONFIG_64BIT */
->  
->  /*
->   * Half of the kernel address space (half of the entries of the page global
-> @@ -90,6 +103,7 @@ extern unsigned long riscv_pfn_base;
->  #endif /* CONFIG_MMU */
->  
->  struct kernel_mapping {
-> +	unsigned long page_offset;
->  	unsigned long virt_addr;
->  	uintptr_t phys_addr;
->  	uintptr_t size;
-> diff --git a/arch/riscv/include/asm/pgalloc.h b/arch/riscv/include/asm/pgalloc.h
-> index 0af6933a7100..11823004b87a 100644
-> --- a/arch/riscv/include/asm/pgalloc.h
-> +++ b/arch/riscv/include/asm/pgalloc.h
-> @@ -11,6 +11,8 @@
->  #include <asm/tlb.h>
->  
->  #ifdef CONFIG_MMU
-> +#define __HAVE_ARCH_PUD_ALLOC_ONE
-> +#define __HAVE_ARCH_PUD_FREE
->  #include <asm-generic/pgalloc.h>
->  
->  static inline void pmd_populate_kernel(struct mm_struct *mm,
-> @@ -36,6 +38,44 @@ static inline void pud_populate(struct mm_struct *mm, pud_t *pud, pmd_t *pmd)
->  
->  	set_pud(pud, __pud((pfn << _PAGE_PFN_SHIFT) | _PAGE_TABLE));
->  }
-> +
-> +static inline void p4d_populate(struct mm_struct *mm, p4d_t *p4d, pud_t *pud)
-> +{
-> +	if (pgtable_l4_enabled) {
-> +		unsigned long pfn = virt_to_pfn(pud);
-> +
-> +		set_p4d(p4d, __p4d((pfn << _PAGE_PFN_SHIFT) | _PAGE_TABLE));
-> +	}
-> +}
-> +
-> +static inline void p4d_populate_safe(struct mm_struct *mm, p4d_t *p4d,
-> +				     pud_t *pud)
-> +{
-> +	if (pgtable_l4_enabled) {
-> +		unsigned long pfn = virt_to_pfn(pud);
-> +
-> +		set_p4d_safe(p4d,
-> +			     __p4d((pfn << _PAGE_PFN_SHIFT) | _PAGE_TABLE));
-> +	}
-> +}
-> +
-> +#define pud_alloc_one pud_alloc_one
-> +static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long addr)
-> +{
-> +	if (pgtable_l4_enabled)
-> +		return __pud_alloc_one(mm, addr);
-> +
-> +	return NULL;
-> +}
-> +
-> +#define pud_free pud_free
-> +static inline void pud_free(struct mm_struct *mm, pud_t *pud)
-> +{
-> +	if (pgtable_l4_enabled)
-> +		__pud_free(mm, pud);
-> +}
-> +
-> +#define __pud_free_tlb(tlb, pud, addr)  pud_free((tlb)->mm, pud)
->  #endif /* __PAGETABLE_PMD_FOLDED */
->  
->  static inline pgd_t *pgd_alloc(struct mm_struct *mm)
-> diff --git a/arch/riscv/include/asm/pgtable-64.h b/arch/riscv/include/asm/pgtable-64.h
-> index 228261aa9628..bbbdd66e5e2f 100644
-> --- a/arch/riscv/include/asm/pgtable-64.h
-> +++ b/arch/riscv/include/asm/pgtable-64.h
-> @@ -8,16 +8,36 @@
->  
->  #include <linux/const.h>
->  
-> -#define PGDIR_SHIFT     30
-> +extern bool pgtable_l4_enabled;
-> +
-> +#define PGDIR_SHIFT_L3  30
-> +#define PGDIR_SHIFT_L4  39
-> +#define PGDIR_SIZE_L3   (_AC(1, UL) << PGDIR_SHIFT_L3)
-> +
-> +#define PGDIR_SHIFT     (pgtable_l4_enabled ? PGDIR_SHIFT_L4 : PGDIR_SHIFT_L3)
->  /* Size of region mapped by a page global directory */
->  #define PGDIR_SIZE      (_AC(1, UL) << PGDIR_SHIFT)
->  #define PGDIR_MASK      (~(PGDIR_SIZE - 1))
->  
-> +/* pud is folded into pgd in case of 3-level page table */
-> +#define PUD_SHIFT      30
-> +#define PUD_SIZE       (_AC(1, UL) << PUD_SHIFT)
-> +#define PUD_MASK       (~(PUD_SIZE - 1))
-> +
->  #define PMD_SHIFT       21
->  /* Size of region mapped by a page middle directory */
->  #define PMD_SIZE        (_AC(1, UL) << PMD_SHIFT)
->  #define PMD_MASK        (~(PMD_SIZE - 1))
->  
-> +/* Page Upper Directory entry */
-> +typedef struct {
-> +	unsigned long pud;
-> +} pud_t;
-> +
-> +#define pud_val(x)      ((x).pud)
-> +#define __pud(x)        ((pud_t) { (x) })
-> +#define PTRS_PER_PUD    (PAGE_SIZE / sizeof(pud_t))
-> +
->  /* Page Middle Directory entry */
->  typedef struct {
->  	unsigned long pmd;
-> @@ -59,6 +79,16 @@ static inline void pud_clear(pud_t *pudp)
->  	set_pud(pudp, __pud(0));
->  }
->  
-> +static inline pud_t pfn_pud(unsigned long pfn, pgprot_t prot)
-> +{
-> +	return __pud((pfn << _PAGE_PFN_SHIFT) | pgprot_val(prot));
-> +}
-> +
-> +static inline unsigned long _pud_pfn(pud_t pud)
-> +{
-> +	return pud_val(pud) >> _PAGE_PFN_SHIFT;
-> +}
-> +
->  static inline pmd_t *pud_pgtable(pud_t pud)
->  {
->  	return (pmd_t *)pfn_to_virt(pud_val(pud) >> _PAGE_PFN_SHIFT);
-> @@ -69,6 +99,17 @@ static inline struct page *pud_page(pud_t pud)
->  	return pfn_to_page(pud_val(pud) >> _PAGE_PFN_SHIFT);
->  }
->  
-> +#define mm_pud_folded  mm_pud_folded
-> +static inline bool mm_pud_folded(struct mm_struct *mm)
-> +{
-> +	if (pgtable_l4_enabled)
-> +		return false;
-> +
-> +	return true;
-> +}
-> +
-> +#define pmd_index(addr) (((addr) >> PMD_SHIFT) & (PTRS_PER_PMD - 1))
-> +
->  static inline pmd_t pfn_pmd(unsigned long pfn, pgprot_t prot)
->  {
->  	return __pmd((pfn << _PAGE_PFN_SHIFT) | pgprot_val(prot));
-> @@ -84,4 +125,69 @@ static inline unsigned long _pmd_pfn(pmd_t pmd)
->  #define pmd_ERROR(e) \
->  	pr_err("%s:%d: bad pmd %016lx.\n", __FILE__, __LINE__, pmd_val(e))
->  
-> +#define pud_ERROR(e)   \
-> +	pr_err("%s:%d: bad pud %016lx.\n", __FILE__, __LINE__, pud_val(e))
-> +
-> +static inline void set_p4d(p4d_t *p4dp, p4d_t p4d)
-> +{
-> +	if (pgtable_l4_enabled)
-> +		*p4dp = p4d;
-> +	else
-> +		set_pud((pud_t *)p4dp, (pud_t){ p4d_val(p4d) });
-> +}
-> +
-> +static inline int p4d_none(p4d_t p4d)
-> +{
-> +	if (pgtable_l4_enabled)
-> +		return (p4d_val(p4d) == 0);
-> +
-> +	return 0;
-> +}
-> +
-> +static inline int p4d_present(p4d_t p4d)
-> +{
-> +	if (pgtable_l4_enabled)
-> +		return (p4d_val(p4d) & _PAGE_PRESENT);
-> +
-> +	return 1;
-> +}
-> +
-> +static inline int p4d_bad(p4d_t p4d)
-> +{
-> +	if (pgtable_l4_enabled)
-> +		return !p4d_present(p4d);
-> +
-> +	return 0;
-> +}
-> +
-> +static inline void p4d_clear(p4d_t *p4d)
-> +{
-> +	if (pgtable_l4_enabled)
-> +		set_p4d(p4d, __p4d(0));
-> +}
-> +
-> +static inline pud_t *p4d_pgtable(p4d_t p4d)
-> +{
-> +	if (pgtable_l4_enabled)
-> +		return (pud_t *)pfn_to_virt(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
-> +
-> +	return (pud_t *)pud_pgtable((pud_t) { p4d_val(p4d) });
-> +}
-> +
-> +static inline struct page *p4d_page(p4d_t p4d)
-> +{
-> +	return pfn_to_page(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
-> +}
-> +
-> +#define pud_index(addr) (((addr) >> PUD_SHIFT) & (PTRS_PER_PUD - 1))
-> +
-> +#define pud_offset pud_offset
-> +static inline pud_t *pud_offset(p4d_t *p4d, unsigned long address)
-> +{
-> +	if (pgtable_l4_enabled)
-> +		return p4d_pgtable(*p4d) + pud_index(address);
-> +
-> +	return (pud_t *)p4d;
-> +}
-> +
->  #endif /* _ASM_RISCV_PGTABLE_64_H */
-> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> index e1a52e22ad7e..e1c74ef4ead2 100644
-> --- a/arch/riscv/include/asm/pgtable.h
-> +++ b/arch/riscv/include/asm/pgtable.h
-> @@ -51,7 +51,7 @@
->   * position vmemmap directly below the VMALLOC region.
->   */
->  #ifdef CONFIG_64BIT
-> -#define VA_BITS		39
-> +#define VA_BITS		(pgtable_l4_enabled ? 48 : 39)
->  #else
->  #define VA_BITS		32
->  #endif
-> @@ -90,8 +90,7 @@
->  
->  #ifndef __ASSEMBLY__
->  
-> -/* Page Upper Directory not used in RISC-V */
-> -#include <asm-generic/pgtable-nopud.h>
-> +#include <asm-generic/pgtable-nop4d.h>
->  #include <asm/page.h>
->  #include <asm/tlbflush.h>
->  #include <linux/mm_types.h>
-> @@ -113,6 +112,17 @@
->  #define XIP_FIXUP(addr)		(addr)
->  #endif /* CONFIG_XIP_KERNEL */
->  
-> +struct pt_alloc_ops {
-> +	pte_t *(*get_pte_virt)(phys_addr_t pa);
-> +	phys_addr_t (*alloc_pte)(uintptr_t va);
-> +#ifndef __PAGETABLE_PMD_FOLDED
-> +	pmd_t *(*get_pmd_virt)(phys_addr_t pa);
-> +	phys_addr_t (*alloc_pmd)(uintptr_t va);
-> +	pud_t *(*get_pud_virt)(phys_addr_t pa);
-> +	phys_addr_t (*alloc_pud)(uintptr_t va);
-> +#endif
-> +};
-> +
->  #ifdef CONFIG_MMU
->  /* Number of entries in the page global directory */
->  #define PTRS_PER_PGD    (PAGE_SIZE / sizeof(pgd_t))
-> @@ -669,9 +679,11 @@ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
->   * Note that PGDIR_SIZE must evenly divide TASK_SIZE.
->   */
->  #ifdef CONFIG_64BIT
-> -#define TASK_SIZE (PGDIR_SIZE * PTRS_PER_PGD / 2)
-> +#define TASK_SIZE      (PGDIR_SIZE * PTRS_PER_PGD / 2)
-> +#define TASK_SIZE_MIN  (PGDIR_SIZE_L3 * PTRS_PER_PGD / 2)
->  #else
-> -#define TASK_SIZE FIXADDR_START
-> +#define TASK_SIZE	FIXADDR_START
-> +#define TASK_SIZE_MIN	TASK_SIZE
->  #endif
->  
->  #else /* CONFIG_MMU */
-> @@ -697,6 +709,8 @@ extern uintptr_t _dtb_early_pa;
->  #define dtb_early_va	_dtb_early_va
->  #define dtb_early_pa	_dtb_early_pa
->  #endif /* CONFIG_XIP_KERNEL */
-> +extern u64 satp_mode;
-> +extern bool pgtable_l4_enabled;
->  
->  void paging_init(void);
->  void misc_mem_init(void);
-> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-> index 52c5ff9804c5..c3c0ed559770 100644
-> --- a/arch/riscv/kernel/head.S
-> +++ b/arch/riscv/kernel/head.S
-> @@ -95,7 +95,8 @@ relocate:
->  
->  	/* Compute satp for kernel page tables, but don't load it yet */
->  	srl a2, a0, PAGE_SHIFT
-> -	li a1, SATP_MODE
-> +	la a1, satp_mode
-> +	REG_L a1, 0(a1)
->  	or a2, a2, a1
->  
->  	/*
-> diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
-> index ee3459cb6750..a7246872bd30 100644
-> --- a/arch/riscv/mm/context.c
-> +++ b/arch/riscv/mm/context.c
-> @@ -192,7 +192,7 @@ static void set_mm_asid(struct mm_struct *mm, unsigned int cpu)
->  switch_mm_fast:
->  	csr_write(CSR_SATP, virt_to_pfn(mm->pgd) |
->  		  ((cntx & asid_mask) << SATP_ASID_SHIFT) |
-> -		  SATP_MODE);
-> +		  satp_mode);
->  
->  	if (need_flush_tlb)
->  		local_flush_tlb_all();
-> @@ -201,7 +201,7 @@ static void set_mm_asid(struct mm_struct *mm, unsigned int cpu)
->  static void set_mm_noasid(struct mm_struct *mm)
->  {
->  	/* Switch the page table and blindly nuke entire local TLB */
-> -	csr_write(CSR_SATP, virt_to_pfn(mm->pgd) | SATP_MODE);
-> +	csr_write(CSR_SATP, virt_to_pfn(mm->pgd) | satp_mode);
->  	local_flush_tlb_all();
->  }
->  
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index 1552226fb6bd..6a19a1b1caf8 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -37,6 +37,17 @@ EXPORT_SYMBOL(kernel_map);
->  #define kernel_map	(*(struct kernel_mapping *)XIP_FIXUP(&kernel_map))
->  #endif
->  
-> +#ifdef CONFIG_64BIT
-> +u64 satp_mode = !IS_ENABLED(CONFIG_XIP_KERNEL) ? SATP_MODE_48 : SATP_MODE_39;
-> +#else
-> +u64 satp_mode = SATP_MODE_32;
-> +#endif
-> +EXPORT_SYMBOL(satp_mode);
-> +
-> +bool pgtable_l4_enabled = IS_ENABLED(CONFIG_64BIT) && !IS_ENABLED(CONFIG_XIP_KERNEL) ?
-> +				true : false;
+First bad commit (maybe != root cause):
 
-Hi Alex,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   438645193e59e91761ccb3fa55f6ce70b615ff93
+commit: b352ddae7b2ccd2cb29f495ca0a7c9b6848b623f KVM: PPC: Book3S PR: Remove unused variable
+date:   4 months ago
+config: powerpc64-randconfig-s032-20211226 (https://download.01.org/0day-ci/archive/20211226/202112261729.FSD0kgxB-lkp@intel.com/config)
+compiler: powerpc64le-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b352ddae7b2ccd2cb29f495ca0a7c9b6848b623f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b352ddae7b2ccd2cb29f495ca0a7c9b6848b623f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kvm/ drivers/misc/ drivers/pinctrl/nuvoton/
 
-I'm not sure whether we can use static key for pgtable_l4_enabled or
-not. Obviously, for a specific HW platform, pgtable_l4_enabled won't change
-after boot, and it seems it sits hot code path, so IMHO, static key maybe
-suitable for it.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks
 
+sparse warnings: (new ones prefixed by >>)
+>> arch/powerpc/kvm/book3s_64_mmu.c:263:28: sparse: sparse: cast to restricted __be64
+   arch/powerpc/kvm/book3s_64_mmu.c:264:28: sparse: sparse: cast to restricted __be64
+   arch/powerpc/kvm/book3s_64_mmu.c:288:13: sparse: sparse: cast to restricted __be64
+   arch/powerpc/kvm/book3s_64_mmu.c: note: in included file:
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __be64
+   arch/powerpc/include/asm/kvm_ppc.h:966:1: sparse: sparse: cast to restricted __le64
+
+vim +263 arch/powerpc/kvm/book3s_64_mmu.c
+
+a4a0f2524acc2c Paul Mackerras       2013-09-20  190  
+e71b2a39afff24 Alexander Graf       2009-10-30  191  static int kvmppc_mmu_book3s_64_xlate(struct kvm_vcpu *vcpu, gva_t eaddr,
+93b159b466bdc9 Paul Mackerras       2013-09-20  192  				      struct kvmppc_pte *gpte, bool data,
+93b159b466bdc9 Paul Mackerras       2013-09-20  193  				      bool iswrite)
+e71b2a39afff24 Alexander Graf       2009-10-30  194  {
+e71b2a39afff24 Alexander Graf       2009-10-30  195  	struct kvmppc_slb *slbe;
+e71b2a39afff24 Alexander Graf       2009-10-30  196  	hva_t ptegp;
+e71b2a39afff24 Alexander Graf       2009-10-30  197  	u64 pteg[16];
+e71b2a39afff24 Alexander Graf       2009-10-30  198  	u64 avpn = 0;
+b352ddae7b2ccd Cédric Le Goater     2021-08-19  199  	u64 r;
+7e48c101e0c53e Paul Mackerras       2013-08-06  200  	u64 v_val, v_mask;
+7e48c101e0c53e Paul Mackerras       2013-08-06  201  	u64 eaddr_mask;
+e71b2a39afff24 Alexander Graf       2009-10-30  202  	int i;
+7e48c101e0c53e Paul Mackerras       2013-08-06  203  	u8 pp, key = 0;
+e71b2a39afff24 Alexander Graf       2009-10-30  204  	bool found = false;
+7e48c101e0c53e Paul Mackerras       2013-08-06  205  	bool second = false;
+a4a0f2524acc2c Paul Mackerras       2013-09-20  206  	int pgsize;
+e8508940a88691 Alexander Graf       2010-07-29  207  	ulong mp_ea = vcpu->arch.magic_page_ea;
+e8508940a88691 Alexander Graf       2010-07-29  208  
+e8508940a88691 Alexander Graf       2010-07-29  209  	/* Magic page override */
+e8508940a88691 Alexander Graf       2010-07-29  210  	if (unlikely(mp_ea) &&
+e8508940a88691 Alexander Graf       2010-07-29  211  	    unlikely((eaddr & ~0xfffULL) == (mp_ea & ~0xfffULL)) &&
+5deb8e7ad8ac7e Alexander Graf       2014-04-24  212  	    !(kvmppc_get_msr(vcpu) & MSR_PR)) {
+e8508940a88691 Alexander Graf       2010-07-29  213  		gpte->eaddr = eaddr;
+e8508940a88691 Alexander Graf       2010-07-29  214  		gpte->vpage = kvmppc_mmu_book3s_64_ea_to_vp(vcpu, eaddr, data);
+e8508940a88691 Alexander Graf       2010-07-29  215  		gpte->raddr = vcpu->arch.magic_page_pa | (gpte->raddr & 0xfff);
+e8508940a88691 Alexander Graf       2010-07-29  216  		gpte->raddr &= KVM_PAM;
+e8508940a88691 Alexander Graf       2010-07-29  217  		gpte->may_execute = true;
+e8508940a88691 Alexander Graf       2010-07-29  218  		gpte->may_read = true;
+e8508940a88691 Alexander Graf       2010-07-29  219  		gpte->may_write = true;
+a4a0f2524acc2c Paul Mackerras       2013-09-20  220  		gpte->page_size = MMU_PAGE_4K;
+6c7d47c33ed323 Alexey Kardashevskiy 2017-11-22  221  		gpte->wimg = HPTE_R_M;
+e8508940a88691 Alexander Graf       2010-07-29  222  
+e8508940a88691 Alexander Graf       2010-07-29  223  		return 0;
+e8508940a88691 Alexander Graf       2010-07-29  224  	}
+e71b2a39afff24 Alexander Graf       2009-10-30  225  
+c4befc58a0cc5a Paul Mackerras       2011-06-29  226  	slbe = kvmppc_mmu_book3s_64_find_slbe(vcpu, eaddr);
+e71b2a39afff24 Alexander Graf       2009-10-30  227  	if (!slbe)
+e71b2a39afff24 Alexander Graf       2009-10-30  228  		goto no_seg_found;
+e71b2a39afff24 Alexander Graf       2009-10-30  229  
+0f296829b5a59d Paul Mackerras       2013-06-22  230  	avpn = kvmppc_mmu_book3s_64_get_avpn(slbe, eaddr);
+7e48c101e0c53e Paul Mackerras       2013-08-06  231  	v_val = avpn & HPTE_V_AVPN;
+7e48c101e0c53e Paul Mackerras       2013-08-06  232  
+0f296829b5a59d Paul Mackerras       2013-06-22  233  	if (slbe->tb)
+7e48c101e0c53e Paul Mackerras       2013-08-06  234  		v_val |= SLB_VSID_B_1T;
+7e48c101e0c53e Paul Mackerras       2013-08-06  235  	if (slbe->large)
+7e48c101e0c53e Paul Mackerras       2013-08-06  236  		v_val |= HPTE_V_LARGE;
+7e48c101e0c53e Paul Mackerras       2013-08-06  237  	v_val |= HPTE_V_VALID;
+7e48c101e0c53e Paul Mackerras       2013-08-06  238  
+7e48c101e0c53e Paul Mackerras       2013-08-06  239  	v_mask = SLB_VSID_B | HPTE_V_AVPN | HPTE_V_LARGE | HPTE_V_VALID |
+7e48c101e0c53e Paul Mackerras       2013-08-06  240  		HPTE_V_SECONDARY;
+0f296829b5a59d Paul Mackerras       2013-06-22  241  
+a4a0f2524acc2c Paul Mackerras       2013-09-20  242  	pgsize = slbe->large ? MMU_PAGE_16M : MMU_PAGE_4K;
+a4a0f2524acc2c Paul Mackerras       2013-09-20  243  
+9308ab8e2da933 Paul Mackerras       2013-09-20  244  	mutex_lock(&vcpu->kvm->arch.hpt_mutex);
+9308ab8e2da933 Paul Mackerras       2013-09-20  245  
+e71b2a39afff24 Alexander Graf       2009-10-30  246  do_second:
+3ff955024d186c Paul Mackerras       2013-09-20  247  	ptegp = kvmppc_mmu_book3s_64_get_pteg(vcpu, slbe, eaddr, second);
+e71b2a39afff24 Alexander Graf       2009-10-30  248  	if (kvm_is_error_hva(ptegp))
+e71b2a39afff24 Alexander Graf       2009-10-30  249  		goto no_page_found;
+e71b2a39afff24 Alexander Graf       2009-10-30  250  
+e71b2a39afff24 Alexander Graf       2009-10-30  251  	if(copy_from_user(pteg, (void __user *)ptegp, sizeof(pteg))) {
+4da934dc6515af Vipin K Parashar     2017-02-16  252  		printk_ratelimited(KERN_ERR
+4da934dc6515af Vipin K Parashar     2017-02-16  253  			"KVM: Can't copy data from 0x%lx!\n", ptegp);
+e71b2a39afff24 Alexander Graf       2009-10-30  254  		goto no_page_found;
+e71b2a39afff24 Alexander Graf       2009-10-30  255  	}
+e71b2a39afff24 Alexander Graf       2009-10-30  256  
+5deb8e7ad8ac7e Alexander Graf       2014-04-24  257  	if ((kvmppc_get_msr(vcpu) & MSR_PR) && slbe->Kp)
+e71b2a39afff24 Alexander Graf       2009-10-30  258  		key = 4;
+5deb8e7ad8ac7e Alexander Graf       2014-04-24  259  	else if (!(kvmppc_get_msr(vcpu) & MSR_PR) && slbe->Ks)
+e71b2a39afff24 Alexander Graf       2009-10-30  260  		key = 4;
+e71b2a39afff24 Alexander Graf       2009-10-30  261  
+e71b2a39afff24 Alexander Graf       2009-10-30  262  	for (i=0; i<16; i+=2) {
+4e509af9f83deb Alexander Graf       2014-04-24 @263  		u64 pte0 = be64_to_cpu(pteg[i]);
+4e509af9f83deb Alexander Graf       2014-04-24  264  		u64 pte1 = be64_to_cpu(pteg[i + 1]);
+4e509af9f83deb Alexander Graf       2014-04-24  265  
+7e48c101e0c53e Paul Mackerras       2013-08-06  266  		/* Check all relevant fields of 1st dword */
+4e509af9f83deb Alexander Graf       2014-04-24  267  		if ((pte0 & v_mask) == v_val) {
+a4a0f2524acc2c Paul Mackerras       2013-09-20  268  			/* If large page bit is set, check pgsize encoding */
+a4a0f2524acc2c Paul Mackerras       2013-09-20  269  			if (slbe->large &&
+a4a0f2524acc2c Paul Mackerras       2013-09-20  270  			    (vcpu->arch.hflags & BOOK3S_HFLAG_MULTI_PGSIZE)) {
+4e509af9f83deb Alexander Graf       2014-04-24  271  				pgsize = decode_pagesize(slbe, pte1);
+a4a0f2524acc2c Paul Mackerras       2013-09-20  272  				if (pgsize < 0)
+a4a0f2524acc2c Paul Mackerras       2013-09-20  273  					continue;
+a4a0f2524acc2c Paul Mackerras       2013-09-20  274  			}
+7e48c101e0c53e Paul Mackerras       2013-08-06  275  			found = true;
+7e48c101e0c53e Paul Mackerras       2013-08-06  276  			break;
+7e48c101e0c53e Paul Mackerras       2013-08-06  277  		}
+7e48c101e0c53e Paul Mackerras       2013-08-06  278  	}
+e71b2a39afff24 Alexander Graf       2009-10-30  279  
+7e48c101e0c53e Paul Mackerras       2013-08-06  280  	if (!found) {
+7e48c101e0c53e Paul Mackerras       2013-08-06  281  		if (second)
+7e48c101e0c53e Paul Mackerras       2013-08-06  282  			goto no_page_found;
+7e48c101e0c53e Paul Mackerras       2013-08-06  283  		v_val |= HPTE_V_SECONDARY;
+7e48c101e0c53e Paul Mackerras       2013-08-06  284  		second = true;
+7e48c101e0c53e Paul Mackerras       2013-08-06  285  		goto do_second;
+7e48c101e0c53e Paul Mackerras       2013-08-06  286  	}
+e71b2a39afff24 Alexander Graf       2009-10-30  287  
+4e509af9f83deb Alexander Graf       2014-04-24  288  	r = be64_to_cpu(pteg[i+1]);
+7e48c101e0c53e Paul Mackerras       2013-08-06  289  	pp = (r & HPTE_R_PP) | key;
+03a9c90334d611 Paul Mackerras       2013-09-20  290  	if (r & HPTE_R_PP0)
+03a9c90334d611 Paul Mackerras       2013-09-20  291  		pp |= 8;
+e71b2a39afff24 Alexander Graf       2009-10-30  292  
+e71b2a39afff24 Alexander Graf       2009-10-30  293  	gpte->eaddr = eaddr;
+7e48c101e0c53e Paul Mackerras       2013-08-06  294  	gpte->vpage = kvmppc_mmu_book3s_64_ea_to_vp(vcpu, eaddr, data);
+a4a0f2524acc2c Paul Mackerras       2013-09-20  295  
+a4a0f2524acc2c Paul Mackerras       2013-09-20  296  	eaddr_mask = (1ull << mmu_pagesize(pgsize)) - 1;
+7e48c101e0c53e Paul Mackerras       2013-08-06  297  	gpte->raddr = (r & HPTE_R_RPN & ~eaddr_mask) | (eaddr & eaddr_mask);
+a4a0f2524acc2c Paul Mackerras       2013-09-20  298  	gpte->page_size = pgsize;
+e71b2a39afff24 Alexander Graf       2009-10-30  299  	gpte->may_execute = ((r & HPTE_R_N) ? false : true);
+f3383cf80e417e Alexander Graf       2014-05-12  300  	if (unlikely(vcpu->arch.disable_kernel_nx) &&
+f3383cf80e417e Alexander Graf       2014-05-12  301  	    !(kvmppc_get_msr(vcpu) & MSR_PR))
+f3383cf80e417e Alexander Graf       2014-05-12  302  		gpte->may_execute = true;
+e71b2a39afff24 Alexander Graf       2009-10-30  303  	gpte->may_read = false;
+e71b2a39afff24 Alexander Graf       2009-10-30  304  	gpte->may_write = false;
+96df2267695199 Alexey Kardashevskiy 2017-03-24  305  	gpte->wimg = r & HPTE_R_WIMG;
+e71b2a39afff24 Alexander Graf       2009-10-30  306  
+e71b2a39afff24 Alexander Graf       2009-10-30  307  	switch (pp) {
+e71b2a39afff24 Alexander Graf       2009-10-30  308  	case 0:
+e71b2a39afff24 Alexander Graf       2009-10-30  309  	case 1:
+e71b2a39afff24 Alexander Graf       2009-10-30  310  	case 2:
+e71b2a39afff24 Alexander Graf       2009-10-30  311  	case 6:
+e71b2a39afff24 Alexander Graf       2009-10-30  312  		gpte->may_write = true;
+8fc6ba0a205e9a Joe Perches          2020-03-10  313  		fallthrough;
+e71b2a39afff24 Alexander Graf       2009-10-30  314  	case 3:
+e71b2a39afff24 Alexander Graf       2009-10-30  315  	case 5:
+e71b2a39afff24 Alexander Graf       2009-10-30  316  	case 7:
+03a9c90334d611 Paul Mackerras       2013-09-20  317  	case 10:
+e71b2a39afff24 Alexander Graf       2009-10-30  318  		gpte->may_read = true;
+e71b2a39afff24 Alexander Graf       2009-10-30  319  		break;
+e71b2a39afff24 Alexander Graf       2009-10-30  320  	}
+e71b2a39afff24 Alexander Graf       2009-10-30  321  
+e71b2a39afff24 Alexander Graf       2009-10-30  322  	dprintk("KVM MMU: Translated 0x%lx [0x%llx] -> 0x%llx "
+af7b4d104b36e7 Alexander Graf       2010-04-20  323  		"-> 0x%lx\n",
+e71b2a39afff24 Alexander Graf       2009-10-30  324  		eaddr, avpn, gpte->vpage, gpte->raddr);
+e71b2a39afff24 Alexander Graf       2009-10-30  325  
+e71b2a39afff24 Alexander Graf       2009-10-30  326  	/* Update PTE R and C bits, so the guest's swapper knows we used the
+e71b2a39afff24 Alexander Graf       2009-10-30  327  	 * page */
+9308ab8e2da933 Paul Mackerras       2013-09-20  328  	if (gpte->may_read && !(r & HPTE_R_R)) {
+9308ab8e2da933 Paul Mackerras       2013-09-20  329  		/*
+9308ab8e2da933 Paul Mackerras       2013-09-20  330  		 * Set the accessed flag.
+9308ab8e2da933 Paul Mackerras       2013-09-20  331  		 * We have to write this back with a single byte write
+9308ab8e2da933 Paul Mackerras       2013-09-20  332  		 * because another vcpu may be accessing this on
+9308ab8e2da933 Paul Mackerras       2013-09-20  333  		 * non-PAPR platforms such as mac99, and this is
+9308ab8e2da933 Paul Mackerras       2013-09-20  334  		 * what real hardware does.
+9308ab8e2da933 Paul Mackerras       2013-09-20  335  		 */
+740f834eb2505e Alexander Graf       2014-04-24  336                  char __user *addr = (char __user *) (ptegp + (i + 1) * sizeof(u64));
+7e48c101e0c53e Paul Mackerras       2013-08-06  337  		r |= HPTE_R_R;
+9308ab8e2da933 Paul Mackerras       2013-09-20  338  		put_user(r >> 8, addr + 6);
+e71b2a39afff24 Alexander Graf       2009-10-30  339  	}
+93b159b466bdc9 Paul Mackerras       2013-09-20  340  	if (iswrite && gpte->may_write && !(r & HPTE_R_C)) {
+93b159b466bdc9 Paul Mackerras       2013-09-20  341  		/* Set the dirty flag */
+9308ab8e2da933 Paul Mackerras       2013-09-20  342  		/* Use a single byte write */
+740f834eb2505e Alexander Graf       2014-04-24  343                  char __user *addr = (char __user *) (ptegp + (i + 1) * sizeof(u64));
+7e48c101e0c53e Paul Mackerras       2013-08-06  344  		r |= HPTE_R_C;
+9308ab8e2da933 Paul Mackerras       2013-09-20  345  		put_user(r, addr + 7);
+e71b2a39afff24 Alexander Graf       2009-10-30  346  	}
+e71b2a39afff24 Alexander Graf       2009-10-30  347  
+9308ab8e2da933 Paul Mackerras       2013-09-20  348  	mutex_unlock(&vcpu->kvm->arch.hpt_mutex);
+e71b2a39afff24 Alexander Graf       2009-10-30  349  
+93b159b466bdc9 Paul Mackerras       2013-09-20  350  	if (!gpte->may_read || (iswrite && !gpte->may_write))
+6ed1485f65f0eb Paul Mackerras       2013-06-22  351  		return -EPERM;
+e71b2a39afff24 Alexander Graf       2009-10-30  352  	return 0;
+e71b2a39afff24 Alexander Graf       2009-10-30  353  
+e71b2a39afff24 Alexander Graf       2009-10-30  354  no_page_found:
+9308ab8e2da933 Paul Mackerras       2013-09-20  355  	mutex_unlock(&vcpu->kvm->arch.hpt_mutex);
+e71b2a39afff24 Alexander Graf       2009-10-30  356  	return -ENOENT;
+e71b2a39afff24 Alexander Graf       2009-10-30  357  
+e71b2a39afff24 Alexander Graf       2009-10-30  358  no_seg_found:
+e71b2a39afff24 Alexander Graf       2009-10-30  359  	dprintk("KVM MMU: Trigger segment fault\n");
+e71b2a39afff24 Alexander Graf       2009-10-30  360  	return -EINVAL;
+e71b2a39afff24 Alexander Graf       2009-10-30  361  }
+e71b2a39afff24 Alexander Graf       2009-10-30  362  
+
+:::::: The code at line 263 was first introduced by commit
+:::::: 4e509af9f83debe296661d2e09a8a214850efe3c KVM: PPC: Book3S_64 PR: Access HTAB in big endian
+
+:::::: TO: Alexander Graf <agraf@suse.de>
+:::::: CC: Alexander Graf <agraf@suse.de>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

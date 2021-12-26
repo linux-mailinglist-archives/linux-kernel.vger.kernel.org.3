@@ -2,83 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92BC747F4D7
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 01:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D1747F4EB
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 03:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233155AbhLZAwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 19:52:23 -0500
-Received: from mga03.intel.com ([134.134.136.65]:21330 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233146AbhLZAwV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 19:52:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640479941; x=1672015941;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=kfPkIMH7ue+nMTzR4Dl6QOBT9sxSI8f4MNh6jyt9QUo=;
-  b=YC1n+U1WHEKl0oNG3inMXjEbG5FTHqB1LIHeG5J+H5kxAJlZhamLt2MX
-   mLf4YBeG5MQhJk127RD1dOpXkPWc3dKUjPWWcM1c7QJs0h3cvW1oo8njK
-   glmdQxkdziecAwBNId52pJdSqJKkoJJJJ0SFD8UE/y2VrKjLVSX6PLpU5
-   9iwwwQ/BGe1uIGglF39bHASZN9FNCarUN/4DOWniYHpQYkI4NOTHMu5sc
-   PNRdomztIKCHwjA7uMJc6WrY+ms7vYM5NwgIa98v/7PuKYfm/PpjFt66A
-   0wrgwjarNMAqR5F0QtX0rRzy3T8syedzT60AqZDdbUTwFLKznGSlmrZ7/
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10208"; a="241027889"
-X-IronPort-AV: E=Sophos;i="5.88,236,1635231600"; 
-   d="scan'208";a="241027889"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2021 16:52:21 -0800
-X-IronPort-AV: E=Sophos;i="5.88,236,1635231600"; 
-   d="scan'208";a="522863566"
-Received: from zoulin-mobl.ccr.corp.intel.com (HELO zq-VirtualBox.gar.corp.intel.com) ([10.215.246.214])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2021 16:52:15 -0800
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     elver@google.com, paulmck@kernel.org
-Cc:     linux-kernel@vger.kernel.org, qiang1.zhang@intel.com
-Subject: [PATCH v2] rcu, kasan: Record work creation stack trace with interrupts enabled
-Date:   Sun, 26 Dec 2021 08:52:04 +0800
-Message-Id: <20211226005204.6909-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        id S230173AbhLZCYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 21:24:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229456AbhLZCYN (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 25 Dec 2021 21:24:13 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6945AC061401;
+        Sat, 25 Dec 2021 18:24:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=qnMX8qfGbegNg14xNs1sPIKfUUN56fIYJid23oyCc+s=; b=KmRrgkwz2yJzSOdw1nzYfpWo2S
+        iqSROS3f/uusw9vG+35BKYk+8WvKYU6JPUfWT0kOwvTIh/gKPsITmKM/gd8WXsnqYYWtsjDxztUzv
+        HvHtZZr80NiuVUlJxSW+AgBYDI3pzqqi1BLKTclh5hTMlSzrUakObrm0rBC8HJsrgdPvBM4rZ9URg
+        Eu/tEBFqSFLPee3xkvcBt9sjxANZo/NSQwV9L5PLuRwfVTyIPr9QFECJTRqyJ+u3rS8oj8fgFJDI0
+        Z8eHgeu6y/OhPQCIy/FmR3fTQ2XJs0jVz3Xg/Y2KkaXZXXDX6SrstBaa2C5uajs4r9IaCpp2J1OcY
+        6I/Hxpdg==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n1JCm-00FE8M-4f; Sun, 26 Dec 2021 02:24:12 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>, Song Liu <song@kernel.org>,
+        linux-raid@vger.kernel.org
+Subject: [PATCH] md: fix spelling of "its"
+Date:   Sat, 25 Dec 2021 18:24:11 -0800
+Message-Id: <20211226022411.22437-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recording the work creation stack trace for KASAN reports in
-call_rcu() is expensive, due to unwinding the stack, but also
-due to acquiring depot_lock inside stackdepot (which may be contended).
-Because calling kasan_record_aux_stack_noalloc() does not require
-interrupts to already be disabled, this may unnecessarily extend
-the time with interrupts disabled.
+Use the possessive "its" instead of the contraction "it's"
+in printed messages.
 
-Therefore, move calling kasan_record_aux_stack() before the section
-with interrupts disabled.
-
-Acked-by: Marco Elver <elver@google.com>
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Song Liu <song@kernel.org>
+Cc: linux-raid@vger.kernel.org
 ---
- v1->v2:
- Make the submitted information clearer.
+ drivers/md/md-cluster.c |    2 +-
+ drivers/md/md.c         |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- kernel/rcu/tree.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 9b58bae0527a..36bd3f9e57b3 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -3068,8 +3068,8 @@ void call_rcu(struct rcu_head *head, rcu_callback_t func)
+--- linux-next-20211224.orig/drivers/md/md.c
++++ linux-next-20211224/drivers/md/md.c
+@@ -8402,7 +8402,7 @@ int md_setup_cluster(struct mddev *mddev
+ 	spin_lock(&pers_lock);
+ 	/* ensure module won't be unloaded */
+ 	if (!md_cluster_ops || !try_module_get(md_cluster_mod)) {
+-		pr_warn("can't find md-cluster module or get it's reference.\n");
++		pr_warn("can't find md-cluster module or get its reference.\n");
+ 		spin_unlock(&pers_lock);
+ 		return -ENOENT;
  	}
- 	head->func = func;
- 	head->next = NULL;
--	local_irq_save(flags);
- 	kasan_record_aux_stack_noalloc(head);
-+	local_irq_save(flags);
- 	rdp = this_cpu_ptr(&rcu_data);
+--- linux-next-20211224.orig/drivers/md/md-cluster.c
++++ linux-next-20211224/drivers/md/md-cluster.c
+@@ -574,7 +574,7 @@ static int process_recvd_msg(struct mdde
+ 	int ret = 0;
  
- 	/* Add the callback to our list. */
--- 
-2.25.1
-
+ 	if (WARN(mddev->cluster_info->slot_number - 1 == le32_to_cpu(msg->slot),
+-		"node %d received it's own msg\n", le32_to_cpu(msg->slot)))
++		"node %d received its own msg\n", le32_to_cpu(msg->slot)))
+ 		return -1;
+ 	switch (le32_to_cpu(msg->type)) {
+ 	case METADATA_UPDATED:

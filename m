@@ -2,237 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF1E47F6A0
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 12:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3943447F6A1
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 12:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233310AbhLZLas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 06:30:48 -0500
-Received: from mga01.intel.com ([192.55.52.88]:21373 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233273AbhLZLar (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 06:30:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640518247; x=1672054247;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dwfJgey1Y2MycPreC6NGLs3wDjD0V4knPRbCRu14jMA=;
-  b=eZXe47MTyskSdR5KErcGVwZzYbp1RhgOIw33BjLAN9wTbOD+ddSJ8Ylt
-   oL3IN6Ndkyvg0aqV9IrQQsr5aabJ5KZiwt7cPcTRCiHMScwU6pXYEOE0R
-   r5H4BRyNGUOV5en4ALzlEkLbQfudB8IySmRYOK4M9gTO9M54vdZUByQk2
-   tyKJP1zCu+Cq/hnHI2n9IvCi4Avb3BNIKu6RaEdIyA/gjDM2Z2xo9Gmbi
-   kgdwnJAu31ooECMhcyV7KaUUxU4jzxt3/zjUomwP1QOZ1DKV0GuDO1GOO
-   hRQLtpPiRXtM4TNwYA1VUcjXxmNGEKEgJK5xSRJKpYm/cRWzAi0afzlac
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10208"; a="265322901"
-X-IronPort-AV: E=Sophos;i="5.88,237,1635231600"; 
-   d="scan'208";a="265322901"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 03:30:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,237,1635231600"; 
-   d="scan'208";a="686019543"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 26 Dec 2021 03:30:43 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n1Rjd-0005Km-WC; Sun, 26 Dec 2021 11:30:41 +0000
-Date:   Sun, 26 Dec 2021 19:29:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tony Huang <tonyhuang.sunplus@gmail.com>, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org
-Cc:     kbuild-all@lists.01.org, tony.huang@sunplus.com,
-        wells.lu@sunplus.com, Tony Huang <tonyhuang.sunplus@gmail.com>
-Subject: Re: [PATCH v5 2/2] misc: Add iop driver for Sunplus SP7021
-Message-ID: <202112261932.8hwlDwCu-lkp@intel.com>
-References: <75e44cae76b74b16c1e178d2d6bb18a332179bc9.1640332430.git.tonyhuang.sunplus@gmail.com>
+        id S233321AbhLZLb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 06:31:59 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:35768
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233273AbhLZLb6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 26 Dec 2021 06:31:58 -0500
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 8AC7A3F044
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 11:31:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640518311;
+        bh=QZ8gaL4aa27WUfVUCldWKnufxa2EsgFNh9BuKK2Jp1I=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=fwwTQzuPxpuWX07x5S/p1yHEPCMODIrayMpI4kC9u1u06Qorc5RGrwRxPkKk58+4J
+         UA/IrBNeUwd7KHKTqX1S8C1OS8vVneH2icjCqOHYUqLUTvX17z0llWn8QepELm8xB8
+         TTQuHQFXJulAC1BSEDaUR9myiDjHxP9JditeyI82boVZ9GKL++qbOSJ/iDHwuXpkBB
+         I+ktu3nKJiA02ynONVxkHvw40XSCTgSo8FcAI21zuZIRBWLMSnxYYKIoL2FePUxLD1
+         3mHkVYhrNqCxiJwBfpPObzVL2kbRuMC+kWJdvT2Wdn52OafpDctGuPW8G3fDSkH5iR
+         /M0xjkvwYoW+g==
+Received: by mail-lj1-f197.google.com with SMTP id y4-20020a2e95c4000000b0022dbab5f69eso998972ljh.14
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 03:31:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QZ8gaL4aa27WUfVUCldWKnufxa2EsgFNh9BuKK2Jp1I=;
+        b=avogmIhYPr75ke+rfq/NfvuY1MOxP1AOn3egJgNnrco74rTNHKdGHpQLjRpVXlGV/z
+         YoIQmF1BMsS24s93QP5NKByQiQflBRcnK72ff8uQjAuNsuypgiY6v2I2xCxmITX/nuJa
+         Dvoo8eTMrhAir9w/9afa8rI3YZ0n5LM+xp2FqRz24HGeoA/mNhezsOmDc4cKcDzDeCop
+         UCGJdmOHUyl/22PC50HBwm44L18gU/MtNsJIqpGuZqDxvNU2Fq4iWRv9viH1THhSNG5F
+         n80tWM/fk69goG0dyBHdokXElP9M8VuYgb+vw1xG+wAM4Cr0RaxDwNY/MSJiaHxvg1to
+         3MAQ==
+X-Gm-Message-State: AOAM531s+bziJq9sZQ5xEvwGFmCJJkwhAln6P5MmPrhxCbEapj2sGNkV
+        yT8AwwNJHwqbG1V9ebR40ppaerg/Fi4p73UHvGeuOmFA0IVNP1xqBGB0joyK+RXAmCQ5IHsDlHJ
+        UqugtzLSI/0awHzMAKkR/LtUyesTwWVePKhrv8XJSNQ==
+X-Received: by 2002:a05:6512:3614:: with SMTP id f20mr11387111lfs.624.1640518310785;
+        Sun, 26 Dec 2021 03:31:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy6XdnWc2mzd4ot+1nK09YvoP13XVq+mohNXCS/Ujiw65+6pwSIMrKcTpM3t+v4IEWLpRt/vA==
+X-Received: by 2002:a05:6512:3614:: with SMTP id f20mr11387098lfs.624.1640518310569;
+        Sun, 26 Dec 2021 03:31:50 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id f19sm1344110lfg.298.2021.12.26.03.31.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Dec 2021 03:31:50 -0800 (PST)
+Message-ID: <2e7b0365-69c1-e680-8383-bebe3fb8e8f8@canonical.com>
+Date:   Sun, 26 Dec 2021 12:31:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <75e44cae76b74b16c1e178d2d6bb18a332179bc9.1640332430.git.tonyhuang.sunplus@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH] Module Name: drivers/nfc/pn544/pn544.c fix a bug
+Content-Language: en-US
+To:     hrshy0629 <hongqiang601217@gmail.com>, davem@davemloft.net
+Cc:     kuba@kernel.org, linux-kernel@vger.kernel.org
+References: <20211225132728.25111-1-hongqiang601217@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211225132728.25111-1-hongqiang601217@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tony,
+On 25/12/2021 14:27, hrshy0629 wrote:
+>     I noticed that the same usage for API nfc_hci_send_cmd() in line 541 and line 552 of the file pn544.c.
+>     And the variable r is checked on line 545 but not checked on line 552.
+>     The r in line 552 should be checked.
 
-I love your patch! Perhaps something to improve:
+Why 'r' should be tested and returned early in line 552? Just because
+some other code has slightly similar pattern, does not mean you should
+apply it everywhere blindly.
 
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on robh/for-next linux/master linus/master v5.16-rc6 next-20211224]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Patch title and description is not matching coding style. Please, go via
+git history to find how it is being written.
 
-url:    https://github.com/0day-ci/linux/commits/Tony-Huang/Add-iop-driver-for-Sunplus-SP7021/20211224-163743
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 1bb866dcb8cf5054de88f592fc0ec1f275ad9d63
-config: powerpc64-randconfig-s032-20211226 (https://download.01.org/0day-ci/archive/20211226/202112261932.8hwlDwCu-lkp@intel.com/config)
-compiler: powerpc64le-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/a75af7615fe0101c6f3742afc005a39c66b00864
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Tony-Huang/Add-iop-driver-for-Sunplus-SP7021/20211224-163743
-        git checkout a75af7615fe0101c6f3742afc005a39c66b00864
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/misc/ drivers/pinctrl/nuvoton/
+Title must describe what bug exactly you fix. Use imperative mode in the
+commit description. Describe what is the bug and h ow it should be fixed.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> 
+> Signed-off-by: hrshy0629 <hongqiang601217@gmail.com>
+> ---
+>  drivers/nfc/pn544/pn544.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/nfc/pn544/pn544.c b/drivers/nfc/pn544/pn544.c
+> index 32a61a185142..531eda0d11a2 100644
+> --- a/drivers/nfc/pn544/pn544.c
+> +++ b/drivers/nfc/pn544/pn544.c
+> @@ -552,6 +552,8 @@ static int pn544_hci_complete_target_discovered(struct nfc_hci_dev *hdev,
+>  			r = nfc_hci_send_cmd(hdev, PN544_RF_READER_F_GATE,
+>  					     PN544_RF_READER_CMD_ACTIVATE_NEXT,
+>  					     uid_skb->data, uid_skb->len, NULL);
+> +			if (r < 0)
+> +				return r;
+
+This looks like creating a leak, so NAK. Please provide explanation why
+such error patch should be used.
+
+>  			kfree_skb(uid_skb);
 
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/misc/sunplus_iop.c:94:39: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/misc/sunplus_iop.c:95:43: sparse: sparse: cast removes address space '__iomem' of expression
->> drivers/misc/sunplus_iop.c:100:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *p @@     got void [noderef] __iomem *[assigned] iop_kernel_base @@
-   drivers/misc/sunplus_iop.c:100:16: sparse:     expected void *p
-   drivers/misc/sunplus_iop.c:100:16: sparse:     got void [noderef] __iomem *[assigned] iop_kernel_base
-   drivers/misc/sunplus_iop.c:101:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *p @@     got void [noderef] __iomem *[assigned] iop_kernel_base @@
-   drivers/misc/sunplus_iop.c:101:16: sparse:     expected void *p
-   drivers/misc/sunplus_iop.c:101:16: sparse:     got void [noderef] __iomem *[assigned] iop_kernel_base
-   drivers/misc/sunplus_iop.c:103:47: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:103:47: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:103:47: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:105:22: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:105:22: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:105:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:107:22: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:107:22: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:107:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:109:22: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:109:22: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:109:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:111:22: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:111:22: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:111:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:113:22: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:113:22: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:113:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:115:22: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:115:22: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:115:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:118:22: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:118:22: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:118:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:120:22: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:120:22: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:120:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:122:22: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:122:22: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:122:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:124:22: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:124:22: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:124:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:130:39: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/misc/sunplus_iop.c:131:43: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/misc/sunplus_iop.c:136:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *p @@     got void [noderef] __iomem *[assigned] iop_kernel_base @@
-   drivers/misc/sunplus_iop.c:136:16: sparse:     expected void *p
-   drivers/misc/sunplus_iop.c:136:16: sparse:     got void [noderef] __iomem *[assigned] iop_kernel_base
-   drivers/misc/sunplus_iop.c:137:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *p @@     got void [noderef] __iomem *[assigned] iop_kernel_base @@
-   drivers/misc/sunplus_iop.c:137:16: sparse:     expected void *p
-   drivers/misc/sunplus_iop.c:137:16: sparse:     got void [noderef] __iomem *[assigned] iop_kernel_base
-   drivers/misc/sunplus_iop.c:139:47: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:139:47: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:139:47: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:141:22: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:141:22: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:141:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:143:22: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:143:22: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:143:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:145:22: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:145:22: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:145:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:147:22: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:147:22: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:147:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:149:22: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:149:22: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:149:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:151:22: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:151:22: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:151:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:154:22: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:154:22: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:154:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:156:22: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:156:22: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:156:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:158:22: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:158:22: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:158:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:160:22: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:160:22: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:160:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:171:39: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/misc/sunplus_iop.c:172:43: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/misc/sunplus_iop.c:173:47: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/misc/sunplus_iop.c:177:47: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:177:47: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:177:47: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:179:22: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:179:22: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:179:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:181:22: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:181:22: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:181:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:183:22: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:183:22: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:183:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:185:22: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:185:22: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:185:22: sparse:     got unsigned int *
-   drivers/misc/sunplus_iop.c:188:29: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned int * @@
-   drivers/misc/sunplus_iop.c:188:29: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/sunplus_iop.c:188:29: sparse:     got unsigned int *
-
-vim +100 drivers/misc/sunplus_iop.c
-
-    91	
-    92	static void sp_iop_normal_mode(struct sp_iop *iop)
-    93	{
-    94		struct regs_iop *p_iop_reg = (struct regs_iop *)iop->iop_regs;
-    95		struct regs_moon0 *p_moon0_reg = (struct regs_moon0 *)iop->moon0_regs;
-    96		void __iomem *iop_kernel_base;
-    97		unsigned int reg;
-    98	
-    99		iop_kernel_base = ioremap(iop->iop_mem_start, NORMAL_CODE_MAX_SIZE);
- > 100		memset(iop_kernel_base, 0, NORMAL_CODE_MAX_SIZE);
-   101		memcpy(iop_kernel_base, iop->iop_normal_code, NORMAL_CODE_MAX_SIZE);
-   102	
-   103		writel(0x00100010, &p_moon0_reg->clken[0]);
-   104	
-   105		reg = readl(&p_iop_reg->iop_control);
-   106		reg |= 0x01;
-   107		writel(reg, &p_iop_reg->iop_control);
-   108	
-   109		reg = readl(&p_iop_reg->iop_control);
-   110		reg &= ~(0x8000);
-   111		writel(reg, &p_iop_reg->iop_control);
-   112	
-   113		reg = readl(&p_iop_reg->iop_control);
-   114		reg |= 0x0200;//disable watchdog event reset IOP
-   115		writel(reg, &p_iop_reg->iop_control);
-   116	
-   117		reg = (iop->iop_mem_start & 0xFFFF);
-   118		writel(reg, &p_iop_reg->iop_base_adr_l);
-   119		reg	= (iop->iop_mem_start >> 16);
-   120		writel(reg, &p_iop_reg->iop_base_adr_h);
-   121	
-   122		reg = readl(&p_iop_reg->iop_control);
-   123		reg &= ~(0x01);
-   124		writel(reg, &p_iop_reg->iop_control);
-   125		iop->mode = 0;
-   126	}
-   127	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Best regards,
+Krzysztof

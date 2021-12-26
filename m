@@ -2,106 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 843A547F4FC
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 04:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5BBC47F505
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 04:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbhLZDPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 22:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbhLZDPq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 22:15:46 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B4DC061757
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 19:15:46 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id j11so25369036lfg.3
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Dec 2021 19:15:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=ykUfjX5LT2jLYM0XsemzshtieJCaQu4S3FzJvDLxa5c=;
-        b=vOIjXgzHrljYC2cS6fgSQffzfI/3R0zL7ZsId5DYoQaZSQxn3eg5Po0tVVh9mG2700
-         wQF1AAH5hsA46YsU1uWHAwqJD8LftcXXI+dDwbEUjZf4l0Gn1VguHSe521767UlnwoEP
-         iCWq0MGlNOhRwRtQwNx1cRMLy16vUOlSApaVggijn25FQ5tc1FgkcMqRGVRWpF+jPvUu
-         +oIDYBKESvyvz8I0XqUeeUx2nEM5kvlj+bqGgUWkC3BqTLmy97/rOR8SGDcEh1wNo9t+
-         8Adwb1zRPd1/xS87mJTo98w0YHXu0p2uxqGlHlUuB5W5gL6xbMkZrB0W3cu9Llz9BdBS
-         8c5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=ykUfjX5LT2jLYM0XsemzshtieJCaQu4S3FzJvDLxa5c=;
-        b=LKn+NV9OdNRnwVE8v58rDas3U+Y0DjjsGiYabFQ8QGtki5iQENQ/it3I1KysHWzvdz
-         LhFu5Cjpvk/k/FoNwt019nS36jvSZqqBntc5Ht0CXkUyXQNS658OINb3KlerMql0Ult/
-         huq9VrvGqmBbIEq5tKQHu1n/gtizDT81VhoAQWIxJIbFAq/sj5bVdxHtQc52ty7u9Ndx
-         i0mjIZyFfxMx324e0MSgCqRQ+N2tlCqsXtMnlm/ijKpBJGf/tcs+mUu1EA93HwL83+S3
-         iBkvdW6QH6d4dwdi+WoBtUX8YdcIZDBc3zamPDS5pR4ZgNuhFWhkZ47xKDzDU38qv9mF
-         u5Og==
-X-Gm-Message-State: AOAM531vjmecc32demwadtv181fFcoR1n5rek6Xfiw5n97PTm49VPK46
-        +oRRrPS3tjm1V7gyjOKp4egttqyncmbvmuM+fXbbHg==
-X-Google-Smtp-Source: ABdhPJyn8FczVXK27tRYjNZyW5SfT51h0WmIGcbi1ql8NbPyBuFQE5vu9H7hCJDg/xxB4N8XVMal9zdxCqrlIQrgm+g=
-X-Received: by 2002:ac2:5445:: with SMTP id d5mr10759396lfn.349.1640488544426;
- Sat, 25 Dec 2021 19:15:44 -0800 (PST)
+        id S230270AbhLZD3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 22:29:32 -0500
+Received: from mga11.intel.com ([192.55.52.93]:22301 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229460AbhLZD3b (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 25 Dec 2021 22:29:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640489371; x=1672025371;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5ElQq4gpAVPALai+j0BM0iv/S75vjYqlUstawFtXNh4=;
+  b=SY3t5tG1lFABufKZ1uh5XgxbzW7+HXCuacb0op5MHB83SMobY68BCEW6
+   JrRwIszYvvVCjsrhv74twLDAvX/ZLX0iBUWUEkIuHMGoMzfXEJuRgd5zi
+   XXPY0Uc7lZGxWUvUYGUl/vPUpbwLnEYRrWmOfGtOoclfL/7y33+ydhOKB
+   qICyVTnkJPNNEyC2qhvPW7NRWgUThNEJP1gyJk815ojlGXT4YETuDurBu
+   WbzYOg53DrRJubhNT7krTOegkgD2c22MCB69i5UwM/bIauwm1QXIkgPPx
+   U9sVXzw3JDbnQP6a5WXhyAFpwxlqJHYvKSNavCx2mdKbeUmnNnWPF1iaa
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10208"; a="238619072"
+X-IronPort-AV: E=Sophos;i="5.88,236,1635231600"; 
+   d="scan'208";a="238619072"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2021 19:29:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,236,1635231600"; 
+   d="scan'208";a="685957085"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 25 Dec 2021 19:29:29 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n1KDw-0004zN-Vg; Sun, 26 Dec 2021 03:29:28 +0000
+Date:   Sun, 26 Dec 2021 11:29:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Axtens <dja@axtens.net>
+Subject: [linux-stable-rc:queue/4.9 7210/9999]
+ arch/powerpc/kernel/setup_64.c:739:6: error: no previous declaration for
+ 'entry_flush_enable'
+Message-ID: <202112261104.AZtG9CvC-lkp@intel.com>
 MIME-Version: 1.0
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 26 Dec 2021 04:15:32 +0100
-Message-ID: <CACRpkdaJMVS5vmw5KweS8c1ptz+OoEguifdqRFP4mzU_chH8-w@mail.gmail.com>
-Subject: [GIT PULL] pin control fixes for v5.16
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/4.9
+head:   df4b9763cd1e19cb238b3ea65d3257f1e10357c3
+commit: fa4bf9f38184ed7ca4916eb64f8c767d1e279c1f [7210/9999] powerpc/64s: flush L1D on kernel entry
+config: powerpc64-allnoconfig (https://download.01.org/0day-ci/archive/20211226/202112261104.AZtG9CvC-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 7.5.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=fa4bf9f38184ed7ca4916eb64f8c767d1e279c1f
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/4.9
+        git checkout fa4bf9f38184ed7ca4916eb64f8c767d1e279c1f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-7.5.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-here are some hopefully final pin control fixes for the
-v5.16 kernel series.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Please pull it in!
+Note: the linux-stable-rc/queue/4.9 HEAD df4b9763cd1e19cb238b3ea65d3257f1e10357c3 builds fine.
+      It only hurts bisectability.
 
-God Jul och Gott Nytt =C3=85r
-Linus Walleij
+All errors (new ones prefixed by >>):
 
-The following changes since commit 136057256686de39cc3a07c2e39ef6bc43003ff6=
-:
+   In file included from arch/powerpc/include/asm/bug.h:127:0,
+                    from include/linux/bug.h:4,
+                    from include/linux/thread_info.h:11,
+                    from include/asm-generic/preempt.h:4,
+                    from ./arch/powerpc/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:59,
+                    from include/linux/spinlock.h:50,
+                    from include/linux/seqlock.h:35,
+                    from include/linux/time.h:5,
+                    from include/uapi/linux/timex.h:56,
+                    from include/linux/timex.h:56,
+                    from include/linux/sched.h:19,
+                    from arch/powerpc/kernel/setup_64.c:17:
+   include/linux/dma-mapping.h: In function 'dma_map_resource':
+   arch/powerpc/include/asm/page.h:129:32: error: comparison of unsigned expression >= 0 is always true [-Werror=type-limits]
+    #define pfn_valid(pfn)  ((pfn) >= ARCH_PFN_OFFSET && (pfn) < max_mapnr)
+                                   ^
+   include/asm-generic/bug.h:155:36: note: in definition of macro 'BUG_ON'
+    #define BUG_ON(condition) do { if (condition) BUG(); } while (0)
+                                       ^~~~~~~~~
+   include/linux/dma-mapping.h:284:9: note: in expansion of macro 'pfn_valid'
+     BUG_ON(pfn_valid(PHYS_PFN(phys_addr)));
+            ^~~~~~~~~
+   arch/powerpc/kernel/setup_64.c: At top level:
+   arch/powerpc/kernel/setup_64.c:281:13: error: no previous declaration for 'early_setup' [-Werror=missing-declarations]
+    void __init early_setup(unsigned long dt_ptr)
+                ^~~~~~~~~~~
+   arch/powerpc/kernel/setup_64.c:421:13: error: no previous declaration for 'initialize_cache_info' [-Werror=missing-declarations]
+    void __init initialize_cache_info(void)
+                ^~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/kernel/setup_64.c:514:13: error: no previous declaration for 'irqstack_early_init' [-Werror=missing-declarations]
+    void __init irqstack_early_init(void)
+                ^~~~~~~~~~~~~~~~~~~
+   arch/powerpc/kernel/setup_64.c:563:13: error: no previous declaration for 'emergency_stack_init' [-Werror=missing-declarations]
+    void __init emergency_stack_init(void)
+                ^~~~~~~~~~~~~~~~~~~~
+>> arch/powerpc/kernel/setup_64.c:739:6: error: no previous declaration for 'entry_flush_enable' [-Werror=missing-declarations]
+    void entry_flush_enable(bool enable)
+         ^~~~~~~~~~~~~~~~~~
+   In file included from include/linux/serial_8250.h:14:0,
+                    from arch/powerpc/kernel/setup_64.c:33:
+   include/linux/serial_core.h:387:19: error: 'earlycon_init_is_deferred' defined but not used [-Werror=unused-const-variable=]
+    static const bool earlycon_init_is_deferred;
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
 
-  Linux 5.16-rc2 (2021-11-21 13:47:39 -0800)
 
-are available in the Git repository at:
+vim +/entry_flush_enable +739 arch/powerpc/kernel/setup_64.c
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git
-tags/pinctrl-v5.16-3
+   738	
+ > 739	void entry_flush_enable(bool enable)
+   740	{
+   741		if (enable) {
+   742			do_entry_flush_fixups(enabled_flush_types);
+   743			on_each_cpu(do_nothing, NULL, 1);
+   744		} else {
+   745			do_entry_flush_fixups(L1D_FLUSH_NONE);
+   746		}
+   747	
+   748		entry_flush = enable;
+   749	}
+   750	
 
-for you to fetch changes up to b67210cc217f9ca1c576909454d846970c13dfd4:
-
-  pinctrl: stm32: consider the GPIO offset to expose all the GPIO
-lines (2021-12-16 04:14:56 +0100)
-
-----------------------------------------------------------------
-Some hopefully final pin control fixes for the v5.16 kernel:
-
-- Fix an out-of-bounds bug in the Mediatek driver
-- Fix an init order bug in the Broadcom BCM2835 driver
-- Fix a GPIO offset bug in the STM32 driver
-
-----------------------------------------------------------------
-Fabien Dessenne (1):
-      pinctrl: stm32: consider the GPIO offset to expose all the GPIO lines
-
-Guodong Liu (1):
-      pinctrl: mediatek: fix global-out-of-bounds issue
-
-Phil Elwell (1):
-      pinctrl: bcm2835: Change init order for gpio hogs
-
- drivers/pinctrl/bcm/pinctrl-bcm2835.c            | 29 +++++++++++++-------=
-----
- drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c |  8 +++++--
- drivers/pinctrl/stm32/pinctrl-stm32.c            |  8 +++----
- 3 files changed, 26 insertions(+), 19 deletions(-)
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

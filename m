@@ -2,112 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C29747F6DB
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 14:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 284F147F6E2
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 14:02:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233459AbhLZNAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 08:00:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
+        id S233497AbhLZNCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 08:02:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbhLZNAQ (ORCPT
+        with ESMTP id S231607AbhLZNB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 08:00:16 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F16CC06173E;
-        Sun, 26 Dec 2021 05:00:15 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id f5so51405113edq.6;
-        Sun, 26 Dec 2021 05:00:15 -0800 (PST)
+        Sun, 26 Dec 2021 08:01:59 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD46C06173E;
+        Sun, 26 Dec 2021 05:01:58 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id o6so51454356edc.4;
+        Sun, 26 Dec 2021 05:01:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=KX2upN7lVMvP7KxPsUIxf4otN3C1XyFORAeifAgwa9Q=;
-        b=NRcegHRcUTALBuw2JA8M3RNUoWmZ5rUW0EH33YHkauYgFsn4Gbl1FmeyLB+l50F5ca
-         T3ImxolWDzh5ErkZVzeK0451ogcqGbmUBzsZ44kZMI4y0TopK6dLo5PiUCqHrrxZnM7T
-         8aBoJTztEkeHf3sNYe+zq4SdQS82VRfDuoo58IAu1/VMmew85fkCGggZ8xGW2mXlBldP
-         zXrKkDhKCgZcvQowCbZH/M2VvedBpritYK3p65WjuGPKXDwVSYY5RlpMv8Aa7M/qTcsG
-         4zHCCtXvLHB2093d1i3noP5/3B+2VwCIp6i+DBeHcl5c4VUcVoHP7h5aB3tsHbgi926R
-         97iQ==
+        bh=cWXG/wpOejQOdrx5XQxBTnJYDtdO0T6bCWMUqJj50R8=;
+        b=Tscwg1pTF5kpW3XpiSi0x/c33OEie/J7Wn428BUMyI+oRzxaVqrc9oyPqEWu3LkV+d
+         eFgPVQgQHiGyBKgz/Da7uXqp68a9hoezmQ+ZGlSAt2G+z48eU7y0Ll9CsHuCI2EA1hK/
+         YguQZVKQbJ7vmpJlQffLV4rDB1EilN19HEKqcpDpzFsZbXKNj2uLJDOc9PlQX2JMeEeg
+         7ROoC6xIxpW+LfbOJJPCX0McIz+QA0Ras/4Gu3IMCu4A09sAkUQcDxTTSYFifL3fyzTy
+         2TdIG8Ma9WUr7tus+ILih+1+RmepgglDKgMIaZ3zTbfLk739YGSeKCH3uN0+cqdbDx24
+         7sTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=KX2upN7lVMvP7KxPsUIxf4otN3C1XyFORAeifAgwa9Q=;
-        b=tFYK8R89++w2irT9Dv7QzZSNmLr9MntHsdz0TLk7F4ev9rDY6eMsEayBtYOPz5uAzH
-         cqlB5CoH8Buy/G1xYoTTqOHRqrAe0Gcc9VeqhxFgYMkVNh6heIDPL9nydxc38iYCgM+k
-         HQw7qQY4WNKi4msXXdSXkRiSaXQqmuKmyTxq9xli/wCHgh8AdVMpPhAkgqzHxJZ9mbtS
-         NTW8ut07qAn/BzDkoCUhn2+ist4XIgqUHr0/ByvJZe10t5sDMvIC0ttiR2BgzTMEoDoi
-         RngPyKmiT90fVe5c42IMOADpFXz7bp0iPSTSGuny/R8j9FdTlwKMXoOiTlCU8mN9zd1q
-         tPgA==
-X-Gm-Message-State: AOAM5328yMpjZn2ZI/6m6K+Bmcia6uKwM+hsVda0mXn+IM7qhc/3Jfag
-        6A/arcCQf8IEo6GAYapz8gCDue8vWyk5QpkuoqjUo8LX
-X-Google-Smtp-Source: ABdhPJxQ+bZq6kRE/3/e0qbgonSeiFY6lRVPfwW8z3QhAFnZxTBkS+cqBKy3IXqhmqVx4RMFh7RBKh7AJ09b+XtRcXo=
-X-Received: by 2002:a17:906:1643:: with SMTP id n3mr10428732ejd.733.1640523614056;
- Sun, 26 Dec 2021 05:00:14 -0800 (PST)
+        bh=cWXG/wpOejQOdrx5XQxBTnJYDtdO0T6bCWMUqJj50R8=;
+        b=oxkkENN4YblWBLSzNhcITNF2nN5RSJ2B38Ph1uJTRWoR7xb+DSiy5rWnpChYeIJh1R
+         NIxNWE1H2fa7/KuTdqMRJByHvwpxNgz4BjYQPYhiNq62CqR2ILXZFrk3AhsIPGUUCojr
+         GvTFaq5NlCNELxb1ekXNOos1VeiQ3DPsGzOshb+cB5uoF1ro+3SQ0TA5HpI+tUO22ftk
+         G1FtK/XxlyLzjDZ704gHMlWU7ociGmmccRj/QjrT8cAH91blzvzna4RnPu6V7kNUyoWI
+         J/y7C17fVahAR0zCdWlarPxPmCxzpKwPgil79AsjgC9/g3t3OV+KeOEARDLljzhUmlxj
+         UHHw==
+X-Gm-Message-State: AOAM531r8rDnvoDw1rc9MEmEYauWlA5zEc+6WefevkRpty+MxYyhaBHP
+        AsHAaLN2vtJ8+HpblL6gcG4w8SEA1ENoEu7seWbrjZQ1rj/+Dw==
+X-Google-Smtp-Source: ABdhPJzdQxmtM1oLI/CYExu+x0hic0HJqydHBOt9IJ/kN8cpOmHnfL+cE4MDBXAM+9XgZ0L9IJPzQmOxYbTUbJi14XE=
+X-Received: by 2002:a05:6402:4301:: with SMTP id m1mr11769126edc.125.1640523717117;
+ Sun, 26 Dec 2021 05:01:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20201216165239.2744-1-grzegorz.jaszczyk@linaro.org>
- <20210106232704.GE9149@xps15> <11303a1b-5ab4-def5-77b1-c500894c9c87@ti.com>
- <20210107224448.GB43045@xps15> <75365443-57e3-e2e0-5865-f78af9d5890b@ti.com>
- <b0e32ad0-487f-9d57-7287-835eee836514@oracle.com> <c5252e8d-094a-dcb7-7ccb-172e58ab3413@ti.com>
-In-Reply-To: <c5252e8d-094a-dcb7-7ccb-172e58ab3413@ti.com>
-From:   Christian Gmeiner <christian.gmeiner@gmail.com>
-Date:   Sun, 26 Dec 2021 14:00:02 +0100
-Message-ID: <CAH9NwWfJHRc5A5D4qwU_wzGhLzQiYwkOq9RtLGc2SpnruKKHxA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] Introduce PRU remoteproc consumer API
-To:     Suman Anna <s-anna@ti.com>
-Cc:     "santosh.shilimkar@oracle.com" <santosh.shilimkar@oracle.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, ssantosh@kernel.org,
-        linux-remoteproc@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        praneeth@ti.com, rogerq@kernel.org
+References: <20211215130711.111186-1-gsomlo@gmail.com> <20211215130711.111186-4-gsomlo@gmail.com>
+ <CAHp75Vf7ktdoBoOHVE72LO19vxZiQ82eBg9_xP2ywB6c4yqXWQ@mail.gmail.com> <YchV5UvIq7xgkbF6@glsvmlin.ini.cmu.edu>
+In-Reply-To: <YchV5UvIq7xgkbF6@glsvmlin.ini.cmu.edu>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 26 Dec 2021 15:01:20 +0200
+Message-ID: <CAHp75VcESv4xEWcs5yRzCJ7AgC=ogMUybdWhQRDMfDvVgos6OA@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] mmc: Add driver for LiteX's LiteSDCard interface
+To:     "Gabriel L. Somlo" <gsomlo@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>, krakoczy@antmicro.com,
+        mdudek@internships.antmicro.com, paulus@ozlabs.org,
+        Joel Stanley <joel@jms.id.au>,
+        Stafford Horne <shorne@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        david.abdurachmanov@sifive.com, florent@enjoy-digital.fr,
+        Randy Dunlap <rdunlap@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI all,
-
-Am Di., 26. Jan. 2021 um 06:58 Uhr schrieb Suman Anna <s-anna@ti.com>:
+On Sun, Dec 26, 2021 at 1:45 PM Gabriel L. Somlo <gsomlo@gmail.com> wrote:
 >
-> Hi Santosh,
+> Hi Andy,
 >
-> On 1/24/21 10:34 PM, santosh.shilimkar@oracle.com wrote:
-> > Hi Suman, Mathieu,
+> Thanks for the feedback!
+>
+> On Sat, Dec 25, 2021 at 06:43:22PM +0200, Andy Shevchenko wrote:
+> > On Wed, Dec 15, 2021 at 10:00 PM Gabriel Somlo <gsomlo@gmail.com> wrote:
+> > >
+> > > LiteX (https://github.com/enjoy-digital/litex) is a SoC framework
+> > > that targets FPGAs. LiteSDCard is a small footprint, configurable
+> > > SDCard core commonly used in LiteX designs.
+> > >
+> > > The driver was first written in May 2020 and has been maintained
+> > > cooperatively by the LiteX community. Thanks to all contributors!
 > >
-> > On 1/7/21 2:49 PM, Suman Anna wrote:
-> >> On 1/7/21 4:44 PM, Mathieu Poirier wrote:
-> >>> On Wed, Jan 06, 2021 at 06:03:25PM -0600, Suman Anna wrote:
-> >>>> Hi Mathieu,
-> >>>>
-> > [...]
-> >>> I only see input from Andy and Lars in the thread you point out, nothing from
-> >>> Greg.  I have also taken a look at the patch [1] that made checkpatch complain
-> >>> about ENOTSUPP.  From what I see in that commit log the goal is to prevent new
-> >>> additions of ENOTSUPP to the kernel.
-> >>>
-> >>> Please modify and resend, otherwise I'm sure someone will send another patch to
-> >>> fix it before the end of the cycle.
-> >>
-> >> Yeah ok. I will send out a v3.
-> >>
-> > I haven't seen v3 of this series yet. Please post it
-> > if you would like to include it for 5.12.
+> > ...
+> >
+> > > +       int ret;
+> > > +
+> > > +       host->irq = platform_get_irq_optional(host->dev, 0);
+> > > +       if (host->irq <= 0) {
+> > > +               dev_warn(dev, "Failed to get IRQ, using polling\n");
+> > > +               goto use_polling;
+> > > +       }
+> >
+> > [Same comment as per v3.]
 >
-> This series is dependent on couple of patches that would have to come through
-> the remoteproc tree first, and I need to post the next versions of those as
-> well. So, let me sort out those first. You can drop this from your queue for 5.12.
+> > This is wrong. It missed the deferred probe, for example.
+> >
+> > The best approach is
+> >
+> > ret = platform_get_irq_optional(...);
+> > if (ret < 0 && ret != -ENXIO)
+> >   return ret;
+> > if (ret > 0)
+> >   ...we got it...
+> >
+> > It will allow the future API fix of platform_get_irq_optional() to be
+> > really optional.
 >
+> Thanks for the example. I still need to work in a decision to use
+> polling, though. How about something like this instead:
+>
+> ret = platform_get_irq_optional(...);
+> if (ret == -ENXIO)
+>   goto use_polling;
+> if (ret < 0)
+>   return ret; // deferred probe (-EAGAIN likely?)
+> if (ret > 0)
+>   ...we got it, keep going...
+>
+> >
+> > ...
+> >
+> > > +#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
+> >
+> > Why under ifdeffery?
+>
+> Because I only want to do it on 64-bit capable architectures.
+>
+> The alternative would be to call
+>
+>   dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+>
+> on *all* architectures, but ignore the returned error (-EIO,
+> presumably on architetures that only support 32-bit DMA).
+>
+> Do you think that would be cleaner?
+>
+> Thanks,
+> --Gabriel
+>
+> > > +       /* increase from default 32 on 64-bit-DMA capable architectures */
+> > > +       ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+> > > +       if (ret)
+> > > +               goto err;
+> > > +#endif
+> >
+> > With Best Regards,
+> > Andy Shevchenko
 
-Is there any update on this patch series?
+
 
 -- 
-greets
---
-Christian Gmeiner, MSc
-
-https://christian-gmeiner.info/privacypolicy
+With Best Regards,
+Andy Shevchenko

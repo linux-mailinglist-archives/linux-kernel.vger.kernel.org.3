@@ -2,91 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D6E47F86C
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 18:47:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5C147F86F
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 18:51:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233216AbhLZRq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 12:46:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbhLZRq5 (ORCPT
+        id S233949AbhLZRvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 12:51:50 -0500
+Received: from smtp10.smtpout.orange.fr ([80.12.242.132]:57093 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233092AbhLZRvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 12:46:57 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5765C06173E;
-        Sun, 26 Dec 2021 09:46:56 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id bq20so30249967lfb.4;
-        Sun, 26 Dec 2021 09:46:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=1w90fj4mBw0ATe2jw+OEN+E/mxrPl/6mvO0lB1elWYw=;
-        b=NhelbEc7H25j4w4qqmn1ZesJ/IXwasoOkXAE4oe0kZiPgWYOwPpbwD06+S1fAlo8hX
-         1Qux5McMz+OwHDoItUKob6/hDqqXYTFrENaD5/mNALjRcZZvCj5jxR4N8SvmZRZTPMfZ
-         l5Lsmqe5h6C2OhRz90l34/LcGs4rr4XE6uaUsm0I/3Mu8OBIoriEki7CNhCOg5yU0ex0
-         YWlML6ikurmBlFTnpRDm/VDZHLt71PR64NI27fKj6nNll5wq5LP8gRjQLKLSjyiU7J0k
-         z3srxtrF1KltKXCTh659Z5FZqnYzSDzeqZ/QB7C5b4kI0X5AVRDupd/jxtP1Rvx/Od0S
-         aFuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=1w90fj4mBw0ATe2jw+OEN+E/mxrPl/6mvO0lB1elWYw=;
-        b=rmooN1DIatom91C+mtcufT9eiaxnywYTsyMJDl5HnLmOAfkiMXGQrtIoDNAwCMKO+G
-         ajp4/YkaidUGjC/yeutL9iWHPfsjZp7YWPrh0uHZ4xiryMqbW6DUNIfEq+2F86deQ1Cu
-         M8NCYo31apRxiNaOJxAul6eP/6ODXWHs0+wcqunwTsnK3wYbZ2QL52ktY6BWCtLHyfSn
-         FpuUZ59q+EHqvhVTjR/Qv75AS4wDKsz5XJmx3pV6wMCznrO8F/KqPospimfYHHVHSMKq
-         M2YokLCT/aaIh6bY7lQ19PXfR16bFHCx1MH5CSO1Y9XwVicX5acAmNuv9HtXGtvi7qmV
-         yIEA==
-X-Gm-Message-State: AOAM531vsz4qUdR6L8KeU4voMFagbK+yqWeDbHnXlHg/2TH+gRmiNp4c
-        JJXramrPJLRpmdYT0XWv7XM=
-X-Google-Smtp-Source: ABdhPJwGbMTS2uWuY4yPIEhkOprjE/nskYYB4CkNKpfaTldSDtEP89dPvQTKl/OeIjTgRx8CTq+ujg==
-X-Received: by 2002:a19:644f:: with SMTP id b15mr12241624lfj.76.1640540814978;
-        Sun, 26 Dec 2021 09:46:54 -0800 (PST)
-Received: from [192.168.1.100] ([178.176.72.233])
-        by smtp.gmail.com with ESMTPSA id by8sm181807ljb.106.2021.12.26.09.46.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Dec 2021 09:46:54 -0800 (PST)
-Message-ID: <e0a56147-e800-914b-1df3-51ca7003a69d@gmail.com>
-Date:   Sun, 26 Dec 2021 20:46:50 +0300
+        Sun, 26 Dec 2021 12:51:49 -0500
+Received: from pop-os.home ([86.243.171.122])
+        by smtp.orange.fr with ESMTPA
+        id 1XgPnz7tj3ptZ1XgQnZJF6; Sun, 26 Dec 2021 18:51:47 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 26 Dec 2021 18:51:47 +0100
+X-ME-IP: 86.243.171.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     chris.snook@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        andrew@lunn.ch, linux@rempel-privat.de
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] net: ag71xx: Fix a potential double free in error handling paths
+Date:   Sun, 26 Dec 2021 18:51:44 +0100
+Message-Id: <b2da37192380cdb9e81cad6484754b3159d12400.1640541019.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] clk: renesas: r8a7799[05]: Add MLP clocks
-Content-Language: en-US
-To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211225193957.2195012-1-nikita.yoush@cogentembedded.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-In-Reply-To: <20211225193957.2195012-1-nikita.yoush@cogentembedded.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.12.2021 22:39, Nikita Yushchenko wrote:
+'ndev' is a managed resource allocated with devm_alloc_etherdev(), so there
+is no need to call free_netdev() explicitly or there will be a double
+free().
 
-> Add clocks for MLP modules on Renesas R-Car E3 and D3 SoCs.
-> 
-> Similar to other R-Car Gen3 SoC, exact information on parent for MLP
-> clock on E3 and D3 is not available. However, since parent for this
-> clocl is not anyhow software-controllable, the only harm from this
+Simplify all error handling paths accordingly.
 
-    s/clocl/clock/. :-)
+Fixes: d51b6ce441d3 ("net: ethernet: add ag71xx driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+This is only compile tested.
 
-> is inexact information exported via debugfs. So just keep the parent
-> set in the same way as with other Gen3 SoCs.
-> 
-> Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-[...]
+I don't have the needed toolchain and when I modify KConfig to try to
+compile, I get some errors that look unrelated to this patch:
 
-MBR, Sergey
+error: passing argument 2 of ‘ag71xx_hw_set_macaddr’ discards ‘const’ qualifier from pointer target type [-Werror=discarded-qualifiers]
+
+Changing the prototype of ag71xx_hw_set_macaddr() to:
+static void ag71xx_hw_set_macaddr(struct ag71xx *ag, const unsigned char *mac)
+                                                     ^^^^^
+makes it work for me, but I don't know if it is the right way to fix this
+build issue.
+---
+ drivers/net/ethernet/atheros/ag71xx.c | 23 ++++++++---------------
+ 1 file changed, 8 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/net/ethernet/atheros/ag71xx.c b/drivers/net/ethernet/atheros/ag71xx.c
+index 270c2935591b..ec167af0e3b2 100644
+--- a/drivers/net/ethernet/atheros/ag71xx.c
++++ b/drivers/net/ethernet/atheros/ag71xx.c
+@@ -1862,15 +1862,12 @@ static int ag71xx_probe(struct platform_device *pdev)
+ 	ag->mac_reset = devm_reset_control_get(&pdev->dev, "mac");
+ 	if (IS_ERR(ag->mac_reset)) {
+ 		netif_err(ag, probe, ndev, "missing mac reset\n");
+-		err = PTR_ERR(ag->mac_reset);
+-		goto err_free;
++		return PTR_ERR(ag->mac_reset);
+ 	}
+ 
+ 	ag->mac_base = devm_ioremap(&pdev->dev, res->start, resource_size(res));
+-	if (!ag->mac_base) {
+-		err = -ENOMEM;
+-		goto err_free;
+-	}
++	if (!ag->mac_base)
++		return -ENOMEM;
+ 
+ 	ndev->irq = platform_get_irq(pdev, 0);
+ 	err = devm_request_irq(&pdev->dev, ndev->irq, ag71xx_interrupt,
+@@ -1878,7 +1875,7 @@ static int ag71xx_probe(struct platform_device *pdev)
+ 	if (err) {
+ 		netif_err(ag, probe, ndev, "unable to request IRQ %d\n",
+ 			  ndev->irq);
+-		goto err_free;
++		return err;
+ 	}
+ 
+ 	ndev->netdev_ops = &ag71xx_netdev_ops;
+@@ -1906,10 +1903,8 @@ static int ag71xx_probe(struct platform_device *pdev)
+ 	ag->stop_desc = dmam_alloc_coherent(&pdev->dev,
+ 					    sizeof(struct ag71xx_desc),
+ 					    &ag->stop_desc_dma, GFP_KERNEL);
+-	if (!ag->stop_desc) {
+-		err = -ENOMEM;
+-		goto err_free;
+-	}
++	if (!ag->stop_desc)
++		return -ENOMEM;
+ 
+ 	ag->stop_desc->data = 0;
+ 	ag->stop_desc->ctrl = 0;
+@@ -1924,7 +1919,7 @@ static int ag71xx_probe(struct platform_device *pdev)
+ 	err = of_get_phy_mode(np, &ag->phy_if_mode);
+ 	if (err) {
+ 		netif_err(ag, probe, ndev, "missing phy-mode property in DT\n");
+-		goto err_free;
++		return err;
+ 	}
+ 
+ 	netif_napi_add(ndev, &ag->napi, ag71xx_poll, AG71XX_NAPI_WEIGHT);
+@@ -1932,7 +1927,7 @@ static int ag71xx_probe(struct platform_device *pdev)
+ 	err = clk_prepare_enable(ag->clk_eth);
+ 	if (err) {
+ 		netif_err(ag, probe, ndev, "Failed to enable eth clk.\n");
+-		goto err_free;
++		return err;
+ 	}
+ 
+ 	ag71xx_wr(ag, AG71XX_REG_MAC_CFG1, 0);
+@@ -1968,8 +1963,6 @@ static int ag71xx_probe(struct platform_device *pdev)
+ 	ag71xx_mdio_remove(ag);
+ err_put_clk:
+ 	clk_disable_unprepare(ag->clk_eth);
+-err_free:
+-	free_netdev(ndev);
+ 	return err;
+ }
+ 
+-- 
+2.32.0
+

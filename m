@@ -2,119 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C309747F706
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 14:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C83CB47F708
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 15:01:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233622AbhLZNmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 08:42:49 -0500
-Received: from mga14.intel.com ([192.55.52.115]:22203 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230035AbhLZNms (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 08:42:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640526168; x=1672062168;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=BXSyAfPPKL+BNYyTWCrcjcEA6M7erOc92NWo0C5C1GI=;
-  b=aKG2SaAL05S0G7PjZOT+aY7IVz/D46OsynSnrwDnHD3M05yOrYOKSr+m
-   C9cc+Sa3jgyyUkrLX9CQGx9Qgvjs4du6p1kgzl2sVt8Gbj+/o3j8EZ8cL
-   R7bFy5gCxYDETK3uJ4OgJKoSvnCYLxiUwNmxUfmI4VSlUr5riPcbuk8Dy
-   dmw0315gA2+mhbnrhrniETECydA2Aq8+GfMe4qS2SnyzIuW55g7JM5gY6
-   SudYworHjrqlplkHImGTgOhkxZxaznVKU5hnvI69WwAuSgwmjsmoR73C5
-   esavhjAs1xIjVbMLbtFXWgavGO+28mkwH89AzCx2slKnAbXHicLZSD6u/
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10208"; a="241328560"
-X-IronPort-AV: E=Sophos;i="5.88,237,1635231600"; 
-   d="scan'208";a="241328560"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 05:42:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,237,1635231600"; 
-   d="scan'208";a="467636285"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 26 Dec 2021 05:42:44 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n1TnQ-0005Q1-4l; Sun, 26 Dec 2021 13:42:44 +0000
-Date:   Sun, 26 Dec 2021 21:42:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-        melissa.srw@gmail.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, mwen@igalia.com,
-        rodrigosiqueiramelo@gmail.com, hamohammed.sa@gmail.com,
-        daniel@ffwll.ch, airlied@linux.ie, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-Subject: Re: [PATCH v2 1/1] drm/vkms: add zpos plane property
-Message-ID: <202112262151.0Z5oNd2u-lkp@intel.com>
-References: <20211226111219.27616-2-jose.exposito89@gmail.com>
+        id S233627AbhLZNzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 08:55:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230035AbhLZNzL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 26 Dec 2021 08:55:11 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECACDC06173E
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 05:55:10 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id jw3so11354486pjb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 05:55:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EIaMoqUxFiiUxyBq+wPrrTf5jUX6jSpbT47dWykk9D4=;
+        b=qJ6HhOM4nEJ/vAU/1zGVzSteIJoAvH03kPWHDMScA1AICLZ39COnqKlVw0RwqyBrSS
+         4+e6UjeI3Wrcxzj9l29/E6nUg0+7mlwWTvqVfG3FDMVT6FI/r4c6mGtatHgZOTIaPgq+
+         E4hVzXW15DXnUbzt48aOaQ4uV2OuU7fS8VXxo3o7pxtzEZxF4jRtJ4VM0AehhMK42ey+
+         rZsgjuq1pz+8biwPv77Wk3loETZLclimL/jd2ITaoEFm8sYtObscYD0gyhgd1pNPX3tI
+         csDDJGC5RySaePXjmOnS5vldfpjJqjdzPLTzDR9DXwRh6NgUrcJRFYASe7TC5/8H2eSu
+         gOJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EIaMoqUxFiiUxyBq+wPrrTf5jUX6jSpbT47dWykk9D4=;
+        b=6OU6RBgNGNhRH7oDwFlUVBdTiv/Vup/1gDlKvWR7axq70OaLve7iT0vOGWL6c/1Y2G
+         Z0KswN6gyUbVtxnAz9PAHbplSgRt92q0Jg4Qbw5ZKcNjmeD0EA0NoRSbBZwU50VTsVf+
+         B8WLqP55xGH68hRraT6HGXfkwnls16r6WrGB+LZ2uPRlyJBHk1oRCCR1aTz3TyxErTCK
+         1r5nCk1chpoQ3Dh0OUvavLV1v3bCiF9pI9Abf1xXkUkgOnlIr2vXKvEucSyLAvojyuWg
+         x05G52MT4SLHqop97G0ULUNvFG6e5OYlAKD4ZrZe22cs/Ttg4skpOCRsBhiPYbwagF78
+         nl+w==
+X-Gm-Message-State: AOAM531dDCwg/5rHONxS9C6W4VJBZLqjf7TWx30O2tlM1cm9CH0jeF+c
+        pMInbeFRF7eYMp4Xngh9luBVOVDlVyo=
+X-Google-Smtp-Source: ABdhPJwMORIXN8+a6PzVjBGzReSTLE1RuvvPpjPEObsJQH2lATNuMEfeIi6FWpmaf7Zz3nLWt7cipw==
+X-Received: by 2002:a17:90b:3551:: with SMTP id lt17mr16844169pjb.1.1640526909797;
+        Sun, 26 Dec 2021 05:55:09 -0800 (PST)
+Received: from integral2.. ([180.254.126.2])
+        by smtp.gmail.com with ESMTPSA id y65sm11990625pgd.79.2021.12.26.05.55.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Dec 2021 05:55:09 -0800 (PST)
+From:   Ammar Faizi <ammarfaizi2@gmail.com>
+To:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Cc:     Ammar Faizi <ammarfaizi2@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+Subject: [PATCH] powerpc/xive: Add missing null check after calling kmalloc
+Date:   Sun, 26 Dec 2021 20:54:02 +0700
+Message-Id: <20211226135314.251221-1-ammar.faizi@intel.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211226111219.27616-2-jose.exposito89@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "José,
+Commit 930914b7d528fc ("powerpc/xive: Add a debugfs file to dump
+internal XIVE state") forgot to add a null check.
 
-Thank you for the patch! Yet something to improve:
+Add it.
 
-[auto build test ERROR on drm/drm-next]
-[also build test ERROR on v5.16-rc6 next-20211224]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Jos-Exp-sito/drm-vkms-zpos/20211226-191434
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: hexagon-randconfig-r041-20211226 (https://download.01.org/0day-ci/archive/20211226/202112262151.0Z5oNd2u-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 0c553cc1af2e4c14100df6cf4a6fc91987e778e6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/48c96494b71972f4bf1769682e94e59724dba874
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jos-Exp-sito/drm-vkms-zpos/20211226-191434
-        git checkout 48c96494b71972f4bf1769682e94e59724dba874
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/vkms/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/vkms/vkms_plane.c:170:15: error: use of undeclared identifier 'NUM_OVERLAY_PLANES'
-                                                        1, NUM_OVERLAY_PLANES);
-                                                           ^
-   1 error generated.
-
-
-vim +/NUM_OVERLAY_PLANES +170 drivers/gpu/drm/vkms/vkms_plane.c
-
-   162	
-   163	static int vkms_plane_create_zpos_property(struct vkms_plane *plane)
-   164	{
-   165		int ret;
-   166		unsigned int zpos = drm_plane_index(&plane->base);
-   167	
-   168		if (plane->base.type == DRM_PLANE_TYPE_OVERLAY) {
-   169			ret = drm_plane_create_zpos_property(&plane->base, zpos,
- > 170							     1, NUM_OVERLAY_PLANES);
-   171		} else {
-   172			ret = drm_plane_create_zpos_immutable_property(&plane->base,
-   173								       zpos);
-   174		}
-   175	
-   176		return ret;
-   177	}
-   178	
-
+Cc: CÃ©dric Le Goater <clg@kaod.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Fixes: 930914b7d528fc6b0249bffc00564100bcf6ef75 ("powerpc/xive: Add a debugfs file to dump internal XIVE state")
+Signed-off-by: Ammar Faizi <ammarfaizi2@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ arch/powerpc/sysdev/xive/spapr.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/powerpc/sysdev/xive/spapr.c b/arch/powerpc/sysdev/xive/spapr.c
+index f143b6f111ac..1179632560b8 100644
+--- a/arch/powerpc/sysdev/xive/spapr.c
++++ b/arch/powerpc/sysdev/xive/spapr.c
+@@ -653,6 +653,9 @@ static int xive_spapr_debug_show(struct seq_file *m, void *private)
+ 	struct xive_irq_bitmap *xibm;
+ 	char *buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
+
++	if (!buf)
++		return -ENOMEM;
++
+ 	list_for_each_entry(xibm, &xive_irq_bitmaps, list) {
+ 		memset(buf, 0, PAGE_SIZE);
+ 		bitmap_print_to_pagebuf(true, buf, xibm->bitmap, xibm->count);
+--
+2.32.0
+

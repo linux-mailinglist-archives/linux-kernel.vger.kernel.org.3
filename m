@@ -2,151 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5423147F4F5
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 03:52:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEFB447F4F7
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 03:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbhLZCwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Dec 2021 21:52:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbhLZCwT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Dec 2021 21:52:19 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0580BC061401;
-        Sat, 25 Dec 2021 18:52:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=gX5evYVinjGbsiStWzjEEIK31bgPDuqwX+4DvdyTdbM=; b=kiN31DSAJePpsd7sVUHXvsgB0U
-        CLk6HeeLqg7JLhHzYydmOeagUcBbnkP0zvFcafhMty1X6/GrqbS9HqL70esy/kZANc2P5DWOuxuNk
-        gsfUFZn3vZUESiVFPnScoMEtyUOgDPGfEaSLziN4J38HoIY3n1+jukxC/qZfks3tu4RQjdYFI2Jau
-        AvOOLJ3DegYzYq6VZWqzo06M9BwDLBRWa36bO+738yEqaMZNF+Zq11/nEjAbgZ0nQopkyjGoWT0bp
-        JVbyg5hDDFKiX4+CbtxxhvFeKIbcag+gboI/LvfM/izdUMO8ekWhXD50x/hqlJQeg8EtSuxh3BNbu
-        UVIOGy4w==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n1Jdw-00FErp-JS; Sun, 26 Dec 2021 02:52:16 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: [PATCH] perf: fix typos of "its" and "reponse"
-Date:   Sat, 25 Dec 2021 18:52:15 -0800
-Message-Id: <20211226025215.22866-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        id S231135AbhLZC7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Dec 2021 21:59:32 -0500
+Received: from mga06.intel.com ([134.134.136.31]:59513 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229456AbhLZC7b (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 25 Dec 2021 21:59:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640487570; x=1672023570;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=Jbz3u5gJydZHb6lOxXr8ZHFuls8hGbfCbxperOuOAC4=;
+  b=B6tdSlgS39PyatxyNtAX8C0UOk+s2oBmvPHELRw4VIMuGvf/IPQOozPt
+   WGdqpndzvdx8IGOUMxHRIQVoUrnXT0L3Ta5dzYVSI3oFF1bhnPLVIIHhL
+   n2h1UoKh0A1A8EtSS9qCuP4UrUAwpV2DMe71TiLjAI5qDL4FKw8ITT7Jg
+   XInoI157MI3jJoQudT0xj70iTvzYC6YA6aNKspnh7JuQIVO5Nk9xqNVdI
+   herj/O+2YQAJCulY7lq1zPaFNNUs2tZwFt+lF3GGvTXMPc+zyfylXLkhL
+   lHG2ZmFByBok15H/83z63nhjeaFoC2I5E4hnag57rzUiQ3XD6eETc6pdk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10208"; a="301838506"
+X-IronPort-AV: E=Sophos;i="5.88,236,1635231600"; 
+   d="scan'208";a="301838506"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2021 18:59:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,236,1635231600"; 
+   d="scan'208";a="571707909"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 25 Dec 2021 18:59:29 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n1Jku-0004yD-DU; Sun, 26 Dec 2021 02:59:28 +0000
+Date:   Sun, 26 Dec 2021 10:58:54 +0800
+From:   kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: drivers/input/touchscreen/ads7846.c:705:24: warning: taking address
+ of packed member 'data' of class or structure 'ads7846_buf' may result in an
+ unaligned pointer value
+Message-ID: <202112261050.OodYJnM4-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the possessive "its" instead of the contraction of "it is" ("it's")
-where needed in user-viewable messages.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e2ae0d4a6b0ba461542f0fd0ba0b828658013e9f
+commit: 415e915fdfc775ad0c6675fde1008f6f43dd6251 Merge tag 'v5.11' into next
+date:   10 months ago
+config: mips-randconfig-r033-20211226 (https://download.01.org/0day-ci/archive/20211226/202112261050.OodYJnM4-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 0c553cc1af2e4c14100df6cf4a6fc91987e778e6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=415e915fdfc775ad0c6675fde1008f6f43dd6251
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 415e915fdfc775ad0c6675fde1008f6f43dd6251
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/input/touchscreen/
 
-Correct typos of "reponse" to "response" (reported by checkpatch).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: linux-perf-users@vger.kernel.org
+All warnings (new ones prefixed by >>):
+
+>> drivers/input/touchscreen/ads7846.c:705:24: warning: taking address of packed member 'data' of class or structure 'ads7846_buf' may result in an unaligned pointer value [-Waddress-of-packed-member]
+           value = be16_to_cpup(&buf->data);
+                                 ^~~~~~~~~
+   1 warning generated.
+
+
+vim +705 drivers/input/touchscreen/ads7846.c
+
+2991a1ca6e9b13 Jason Wang     2010-10-13  700  
+6965eece2a89c3 Oleksij Rempel 2021-01-20  701  static int ads7846_get_value(struct ads7846_buf *buf)
+2991a1ca6e9b13 Jason Wang     2010-10-13  702  {
+879f2fea8a5a74 Andrey Gelman  2015-10-06  703  	int value;
+2991a1ca6e9b13 Jason Wang     2010-10-13  704  
+6965eece2a89c3 Oleksij Rempel 2021-01-20 @705  	value = be16_to_cpup(&buf->data);
+879f2fea8a5a74 Andrey Gelman  2015-10-06  706  
+879f2fea8a5a74 Andrey Gelman  2015-10-06  707  	/* enforce ADC output is 12 bits width */
+879f2fea8a5a74 Andrey Gelman  2015-10-06  708  	return (value >> 3) & 0xfff;
+2991a1ca6e9b13 Jason Wang     2010-10-13  709  }
+ffa458c1bd9b6f David Brownell 2006-01-08  710  
+
+:::::: The code at line 705 was first introduced by commit
+:::::: 6965eece2a89c3f1d00881c6052ee1e987870c08 Input: ads7846 - convert to one message
+
+:::::: TO: Oleksij Rempel <o.rempel@pengutronix.de>
+:::::: CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+
 ---
- tools/perf/pmu-events/arch/x86/broadwell/uncore.json          |    6 +++---
- tools/perf/pmu-events/arch/x86/cascadelakex/uncore-other.json |    4 ++--
- tools/perf/pmu-events/arch/x86/haswell/uncore.json            |    6 +++---
- tools/perf/pmu-events/arch/x86/skylakex/uncore-other.json     |    4 ++--
- 4 files changed, 10 insertions(+), 10 deletions(-)
-
---- linux-next-20211224.orig/tools/perf/pmu-events/arch/x86/broadwell/uncore.json
-+++ linux-next-20211224/tools/perf/pmu-events/arch/x86/broadwell/uncore.json
-@@ -184,8 +184,8 @@
-     "EventCode": "0x80",
-     "UMask": "0x01",
-     "EventName": "UNC_ARB_TRK_OCCUPANCY.ALL",
--    "BriefDescription": "Each cycle count number of all Core outgoing valid entries. Such entry is defined as valid from it's allocation till first of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-coherent traffic.",
--    "PublicDescription": "Each cycle count number of all Core outgoing valid entries. Such entry is defined as valid from it's allocation till first of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-coherent traffic.",
-+    "BriefDescription": "Each cycle count number of all Core outgoing valid entries. Such entry is defined as valid from its allocation till first of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-coherent traffic.",
-+    "PublicDescription": "Each cycle count number of all Core outgoing valid entries. Such entry is defined as valid from its allocation till first of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-coherent traffic.",
-     "Counter": "0,",
-     "CounterMask": "0",
-     "Invert": "0",
-@@ -275,4 +275,4 @@
-     "Invert": "0",
-     "EdgeDetect": "0"
-   }
--]
-\ No newline at end of file
-+]
---- linux-next-20211224.orig/tools/perf/pmu-events/arch/x86/cascadelakex/uncore-other.json
-+++ linux-next-20211224/tools/perf/pmu-events/arch/x86/cascadelakex/uncore-other.json
-@@ -514,7 +514,7 @@
-         "EventCode": "0x5C",
-         "EventName": "UNC_CHA_SNOOP_RESP.RSP_FWD_WB",
-         "PerPkg": "1",
--        "PublicDescription": "Counts when a transaction with the opcode type Rsp*Fwd*WB Snoop Response was received which indicates the data was written back to it's home socket, and the cacheline was forwarded to the requestor socket.  This snoop response is only used in >= 4 socket systems.  It is used when a snoop HITM's in a remote caching agent and it directly forwards data to a requestor, and simultaneously returns data to it's home socket to be written back to memory.",
-+        "PublicDescription": "Counts when a transaction with the opcode type Rsp*Fwd*WB Snoop Response was received which indicates the data was written back to its home socket, and the cacheline was forwarded to the requestor socket.  This snoop response is only used in >= 4 socket systems.  It is used when a snoop HITM's in a remote caching agent and it directly forwards data to a requestor, and simultaneously returns data to its home socket to be written back to memory.",
-         "UMask": "0x20",
-         "Unit": "CHA"
-     },
-@@ -524,7 +524,7 @@
-         "EventCode": "0x5C",
-         "EventName": "UNC_CHA_SNOOP_RESP.RSP_WBWB",
-         "PerPkg": "1",
--        "PublicDescription": "Counts when a transaction with the opcode type Rsp*WB Snoop Response was received which indicates which indicates the data was written back to it's home.  This is returned when a non-RFO request hits a cacheline in the Modified state. The Cache can either downgrade the cacheline to a S (Shared) or I (Invalid) state depending on how the system has been configured.  This reponse will also be sent when a cache requests E (Exclusive) ownership of a cache line without receiving data, because the cache must acquire ownership.",
-+        "PublicDescription": "Counts when a transaction with the opcode type Rsp*WB Snoop Response was received which indicates which indicates the data was written back to its home.  This is returned when a non-RFO request hits a cacheline in the Modified state. The Cache can either downgrade the cacheline to a S (Shared) or I (Invalid) state depending on how the system has been configured.  This response will also be sent when a cache requests E (Exclusive) ownership of a cache line without receiving data, because the cache must acquire ownership.",
-         "UMask": "0x10",
-         "Unit": "CHA"
-     },
---- linux-next-20211224.orig/tools/perf/pmu-events/arch/x86/haswell/uncore.json
-+++ linux-next-20211224/tools/perf/pmu-events/arch/x86/haswell/uncore.json
-@@ -304,8 +304,8 @@
-     "EventCode": "0x80",
-     "UMask": "0x01",
-     "EventName": "UNC_ARB_TRK_OCCUPANCY.ALL",
--    "BriefDescription": "Each cycle count number of all Core outgoing valid entries. Such entry is defined as valid from it's allocation till first of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-coherent traffic.",
--    "PublicDescription": "Each cycle count number of all Core outgoing valid entries. Such entry is defined as valid from it's allocation till first of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-coherent traffic.",
-+    "BriefDescription": "Each cycle count number of all Core outgoing valid entries. Such entry is defined as valid from its allocation till first of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-coherent traffic.",
-+    "PublicDescription": "Each cycle count number of all Core outgoing valid entries. Such entry is defined as valid from its allocation till first of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-coherent traffic.",
-     "Counter": "0",
-     "CounterMask": "0",
-     "Invert": "0",
-@@ -371,4 +371,4 @@
-     "Invert": "0",
-     "EdgeDetect": "0"
-   }
--]
-\ No newline at end of file
-+]
---- linux-next-20211224.orig/tools/perf/pmu-events/arch/x86/skylakex/uncore-other.json
-+++ linux-next-20211224/tools/perf/pmu-events/arch/x86/skylakex/uncore-other.json
-@@ -514,7 +514,7 @@
-         "EventCode": "0x5C",
-         "EventName": "UNC_CHA_SNOOP_RESP.RSP_FWD_WB",
-         "PerPkg": "1",
--        "PublicDescription": "Counts when a transaction with the opcode type Rsp*Fwd*WB Snoop Response was received which indicates the data was written back to it's home socket, and the cacheline was forwarded to the requestor socket.  This snoop response is only used in >= 4 socket systems.  It is used when a snoop HITM's in a remote caching agent and it directly forwards data to a requestor, and simultaneously returns data to it's home socket to be written back to memory.",
-+        "PublicDescription": "Counts when a transaction with the opcode type Rsp*Fwd*WB Snoop Response was received which indicates the data was written back to its home socket, and the cacheline was forwarded to the requestor socket.  This snoop response is only used in >= 4 socket systems.  It is used when a snoop HITM's in a remote caching agent and it directly forwards data to a requestor, and simultaneously returns data to its home socket to be written back to memory.",
-         "UMask": "0x20",
-         "Unit": "CHA"
-     },
-@@ -524,7 +524,7 @@
-         "EventCode": "0x5C",
-         "EventName": "UNC_CHA_SNOOP_RESP.RSP_WBWB",
-         "PerPkg": "1",
--        "PublicDescription": "Counts when a transaction with the opcode type Rsp*WB Snoop Response was received which indicates which indicates the data was written back to it's home.  This is returned when a non-RFO request hits a cacheline in the Modified state. The Cache can either downgrade the cacheline to a S (Shared) or I (Invalid) state depending on how the system has been configured.  This reponse will also be sent when a cache requests E (Exclusive) ownership of a cache line without receiving data, because the cache must acquire ownership.",
-+        "PublicDescription": "Counts when a transaction with the opcode type Rsp*WB Snoop Response was received which indicates which indicates the data was written back to its home.  This is returned when a non-RFO request hits a cacheline in the Modified state. The Cache can either downgrade the cacheline to a S (Shared) or I (Invalid) state depending on how the system has been configured.  This response will also be sent when a cache requests E (Exclusive) ownership of a cache line without receiving data, because the cache must acquire ownership.",
-         "UMask": "0x10",
-         "Unit": "CHA"
-     },
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

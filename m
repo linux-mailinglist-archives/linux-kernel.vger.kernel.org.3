@@ -2,126 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B6147F6AF
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 12:58:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B80D47F6B3
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 13:04:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233376AbhLZL6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 06:58:15 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:42660
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233348AbhLZL6O (ORCPT
+        id S233387AbhLZMEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 07:04:05 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:36048
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233379AbhLZMEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 06:58:14 -0500
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
+        Sun, 26 Dec 2021 07:04:02 -0500
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D55E23F32E
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 11:58:13 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A753A3FFD2
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 12:04:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1640519893;
-        bh=k/SriGNptKt8RyID4T8dxyDKW7Ndc6Y4GjEtV/aG7i8=;
-        h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-         In-Reply-To:Content-Type;
-        b=cHDikb6vh2u7lIhoagXpHGoJ/MsNoDChMlSkaavpCkT236KDtt9l67Gt/tXzWgYEr
-         5mkDr5cG81XNTX1ir19peXFknTRmdPS1r2Bqedi//n56vl5QRomo8zgneCa8ztOHph
-         Cm6C6iyyIHvT1x20MF7pyoGjDj2JlBNjqI6OBI3v1u4otvKjI1R64vJiF8ANrw7R3r
-         Enx50gxfSjRWATPtKGbnntY7kxVgxSlsNjLiVi3Kg3LUtvEZeo6/TK6kf3Y5JMSKyC
-         /e5OleiVtzbVrN+U8tLtZ5VB6iuUjpNGl5jPvnOxCGFV9DXE0asAwaI6lBQqH6/CV/
-         IH5pGfxdH+akQ==
-Received: by mail-lj1-f197.google.com with SMTP id b20-20020a2e9894000000b0022dc5a5f841so765919ljj.2
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 03:58:13 -0800 (PST)
+        s=20210705; t=1640520241;
+        bh=7ZRYcQP4gwZ7osyzmEc94Zg7aNBaID54stiX6ii0ERI=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
+        b=C5brFjRTtRh8Jfdf8eu9Ei8jXVoouQ+ikrK4MFR94yUsYoazv83u7+a6nQezAGz4x
+         u2/QJJT8gPYP5crV3okAhkRNjd49qyeqT4VV+mhC9fqe/EbfKXANNd5yxxjYRH6P4z
+         YbemOoWN48Qp0zMZT55M/GeJpdfVWhONOM8U3Arh3yASU0lmdcuOQiDWpt0aZWcR1h
+         +4YQEO+PheeYfB1g0Y5eT6vXvzF3tEdQCeW9ldL1vj0bGsYSH4ReuB0Og2s3s8Ayl3
+         mhz6elnkpkr7zM6AmPdMTIhIdz2gPfz46F8Wcvv2ibS9dw2gvR7QcWJl4bVy62JIle
+         MKbmepNSb59ew==
+Received: by mail-lj1-f199.google.com with SMTP id u8-20020a05651c130800b0022d6dad0418so3788613lja.11
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 04:04:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=k/SriGNptKt8RyID4T8dxyDKW7Ndc6Y4GjEtV/aG7i8=;
-        b=Nx8Ti9xD8DmtxC9V7WqQJwSeD2Pn87GTLg6Ym1mbgOyRLVjvFmEFKfhdnRxc9AM+5u
-         1OrsME62hqcZ43pl7VTkN1Pgo67xsYMYV5POwkRF5XFStgQs5Y+Dj5PUD3tdcbhm8azp
-         AKmFH4vlvPPiPhzkvcow3MY4jLg/WFxEarAg37GWxL38Y+k0YxqI0u/jSnzEXs/KIN6E
-         3fl29CT6ocUbpO8XLzcRPxmwnuAKO3UpuJfnbKM9CL+RxFvKCBMvKh8IxJ/O2wDAgis4
-         CV7ulmCE1Efe6LlVw3O+qqWkZcfoqYa/IEm/LvHj4Grskx0Klvn7Cu7T3zW9tFqsPGpw
-         1o6g==
-X-Gm-Message-State: AOAM531RqwXrwej3pXkem79c1HAjhcvoxtiBZokSTESKuDf1Po9JCrEK
-        7zveBD++hv1NfSFt/BTzZ/0Hl6GfUM0nk/rqRiBykHU4CS3T1y8BqzSPGxV61E2BGKg7tMJH78o
-        ZB0SDAkbraEhf+z2Gb9QIGsPB0h32ehh6QddlkZHi+Q==
-X-Received: by 2002:a2e:9697:: with SMTP id q23mr10531261lji.354.1640519893035;
-        Sun, 26 Dec 2021 03:58:13 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwymfV342G9Fd2sVTSX4algppqpLEF5/WDV+TJGBx4EKLVPN71lGZ54emmTYy2+X7S+ckGwrA==
-X-Received: by 2002:a2e:9697:: with SMTP id q23mr10531248lji.354.1640519892736;
-        Sun, 26 Dec 2021 03:58:12 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id q10sm1299558lfm.163.2021.12.26.03.58.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Dec 2021 03:58:12 -0800 (PST)
-Message-ID: <3a89b2cf-33e4-7938-08e3-348b655493d7@canonical.com>
-Date:   Sun, 26 Dec 2021 12:58:11 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH resend] uapi: fix linux/nfc.h userspace compilation errors
-Content-Language: en-US
+        bh=7ZRYcQP4gwZ7osyzmEc94Zg7aNBaID54stiX6ii0ERI=;
+        b=4zFhY/RyWLdGJ9J7y56LGmNgr3guMjpEheM+61CoXqEMRRoRT03K8GSBJhCHNBMrP4
+         NRjV4KVUDMDCIiPdYAZeSJieiD7ugGlQ1WztPyD91y48+ECgibGKFTXzRdT15DBtqQ/W
+         c14wwhjrnux7JcGDNB9olK4ki30MdwadCue5pfiVURsJ9foeYFG74MyQxWd3MemDzWOT
+         RcWY3zn1aOiCDVhOU12XIpjKU6hndAFHoV1SNuWhocfWws+y36dR/dP+80Dg0s2eATkP
+         C032+i3dxl/hKI1hTNe1tFuN7vXqbx8y5p2luJeIckzl66D0lQmcMpnAez8WV1L7h9Ty
+         GJuQ==
+X-Gm-Message-State: AOAM530epEbZvo1+Ktfu0TigVDtSmAE7p/aIfXzry25jkGHpnxItBlUs
+        5IC+67IO7fM2hyJsIob0vcBInQXj8xITt7yHbq1TXJOTseWqOgIshm5MGJEx2Xdz73QQN5KhUx6
+        QwBtAS80oINu0aXrnvbysvHyzDEQ/B9iRTuWlMHXylA==
+X-Received: by 2002:a2e:8718:: with SMTP id m24mr4689950lji.306.1640520240867;
+        Sun, 26 Dec 2021 04:04:00 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx25kcEr8SE2hE6DjZsPPB2SMeCupPe4TFn7Tj9CgX294X8VTyEvkJQoREMl23Oi+cK2yxXkA==
+X-Received: by 2002:a2e:8718:: with SMTP id m24mr4689941lji.306.1640520240712;
+        Sun, 26 Dec 2021 04:04:00 -0800 (PST)
+Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id cf29sm1348719lfb.262.2021.12.26.04.03.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Dec 2021 04:04:00 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     "Dmitry V. Levin" <ldv@altlinux.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, netdev@vger.kernel.org,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-nfc@lists.01.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20170220181613.GB11185@altlinux.org>
- <20211225234229.GA5025@altlinux.org>
- <3d0af5ae-0510-8610-dfc2-b8e5ff682959@canonical.com>
-In-Reply-To: <3d0af5ae-0510-8610-dfc2-b8e5ff682959@canonical.com>
+Cc:     "Dmitry V . Levin" <ldv@altlinux.org>,
+        Arnd Bergmann <arnd@arndb.de>, stable@vger.kernel.org
+Subject: [PATCH] nfc: uapi: use kernel size_t to fix user-space builds
+Date:   Sun, 26 Dec 2021 13:03:47 +0100
+Message-Id: <20211226120347.77602-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/12/2021 12:42, Krzysztof Kozlowski wrote:
-> On 26/12/2021 00:42, Dmitry V. Levin wrote:
->> Replace sa_family_t with __kernel_sa_family_t to fix the following
->> linux/nfc.h userspace compilation errors:
->>
->> /usr/include/linux/nfc.h:266:2: error: unknown type name 'sa_family_t'
->>   sa_family_t sa_family;
->> /usr/include/linux/nfc.h:274:2: error: unknown type name 'sa_family_t'
->>   sa_family_t sa_family;
->>
->> Link: https://lore.kernel.org/lkml/20170220181613.GB11185@altlinux.org/
-> 
-> Please skip the link. There will be link added for current patch which
-> leads to this discussion. There was no discussion in 2017.
-> 
->> Signed-off-by: Dmitry V. Levin <ldv@altlinux.org>
->> ---
->>  The patch was submitted almost 5 years ago, and I was under impression
->>  that it was applied among others of this kind, but, apparently,
->>  it's still relevant.
->>
->>  include/uapi/linux/nfc.h | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/include/uapi/linux/nfc.h b/include/uapi/linux/nfc.h
->> index f6e3c8c9c744..aadad43d943a 100644
->> --- a/include/uapi/linux/nfc.h
->> +++ b/include/uapi/linux/nfc.h
->> @@ -263,7 +263,7 @@ enum nfc_sdp_attr {
->>  #define NFC_SE_ENABLED  0x1
->>  
->>  struct sockaddr_nfc {
->> -	sa_family_t sa_family;
->> +	__kernel_sa_family_t sa_family;
-> 
-> include/uapi/linux/nfc.h includes linux/socket.h which defines typedef:
->   __kernel_sa_family_t    sa_family_t;
-> so how exactly the build is being fixed? How to reproduce it?
-> 
+Fix user-space builds if it includes /usr/include/linux/nfc.h before
+some of other headers:
 
-Ok, I see the error - when user-space does not include sys/socket.h.
-Makes sense, can you resend with removed Link and with:
-Fixes: 23b7869c0fd0 ("NFC: add the NFC socket raw protocol")
+  /usr/include/linux/nfc.h:281:9: error: unknown type name ‘size_t’
+    281 |         size_t service_name_len;
+        |         ^~~~~~
 
 Fixes: d646960f7986 ("NFC: Initial LLCP support")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ include/uapi/linux/nfc.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/include/uapi/linux/nfc.h b/include/uapi/linux/nfc.h
+index f6e3c8c9c744..bb94aac5636c 100644
+--- a/include/uapi/linux/nfc.h
++++ b/include/uapi/linux/nfc.h
+@@ -278,7 +278,7 @@ struct sockaddr_nfc_llcp {
+ 	__u8 dsap; /* Destination SAP, if known */
+ 	__u8 ssap; /* Source SAP to be bound to */
+ 	char service_name[NFC_LLCP_MAX_SERVICE_NAME]; /* Service name URI */;
+-	size_t service_name_len;
++	__kernel_size_t service_name_len;
+ };
+ 
+ /* NFC socket protocols */
+-- 
+2.32.0
 
-Best regards,
-Krzysztof

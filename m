@@ -2,81 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6341647F70D
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 15:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EDA147F70E
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 15:03:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233652AbhLZOCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 09:02:30 -0500
-Received: from relay038.a.hostedemail.com ([64.99.140.38]:36299 "EHLO
-        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230035AbhLZOC3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 09:02:29 -0500
-Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay06.hostedemail.com (Postfix) with ESMTP id 1C1D221882;
-        Sun, 26 Dec 2021 14:02:28 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id B753B2002F;
-        Sun, 26 Dec 2021 14:02:20 +0000 (UTC)
-Message-ID: <796577bb0052f4f08f58882dfc86734d72f2aa29.camel@perches.com>
-Subject: Re: [PATCH] usb: raw-gadget: upgrade license identifier
-From:   Joe Perches <joe@perches.com>
-To:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     andrey.konovalov@linux.dev, Felipe Balbi <balbi@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Date:   Sun, 26 Dec 2021 06:02:19 -0800
-In-Reply-To: <CA+fCnZeC8PbDg_E3WWtqGBAwUs65Y7=b5DG=whN-CaOEs5uS7g@mail.gmail.com>
-References: <f55721ade28b2715eaf54b28a1bbfaad7b5adc0d.1640471342.git.andreyknvl@gmail.com>
-         <Ycgi7GiU2udbjF2f@kroah.com>
-         <CA+fCnZeC8PbDg_E3WWtqGBAwUs65Y7=b5DG=whN-CaOEs5uS7g@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        id S233659AbhLZODt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 09:03:49 -0500
+Received: from mga05.intel.com ([192.55.52.43]:63282 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230035AbhLZODs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 26 Dec 2021 09:03:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640527428; x=1672063428;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=JyQw84yzbD12QRN6tQ+pCU23brqQBHbn04H85KS1W0c=;
+  b=GCtSZKJRy3xPNWfbTupYmVlOi5BDejtbggdxfBAcUhFX08CQDGZ9+vgT
+   lY1rY8KxqNqlSj2RNvpgz4ImzU5JAtk6MUuXRIyuvwZwnW82ydVwhqH0x
+   iNGBIeBIVJ6XK9vT4j3Oaie3fxR477/hmIFplny981dqY9vVjPait75lu
+   ls6K3spTEkxTF76xJas0QwDdhV9ftFClMIHXKx2uP8StyJqWpNpcGn6Iz
+   vGZkFBA4pHt/OJcuGbDKkT65/apy+LAhLUzoKrpOZv6KqG7DfJX++RjKh
+   oRhYS4+ZUN87HrWbNplqx1cKWo3f0cw+ehm5YVCHmBQHuj/mtHbUZNGWe
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10208"; a="327435644"
+X-IronPort-AV: E=Sophos;i="5.88,237,1635231600"; 
+   d="scan'208";a="327435644"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 06:03:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,237,1635231600"; 
+   d="scan'208";a="618175259"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 26 Dec 2021 06:03:45 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n1U7l-0005Qp-56; Sun, 26 Dec 2021 14:03:45 +0000
+Date:   Sun, 26 Dec 2021 22:02:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        melissa.srw@gmail.com
+Cc:     kbuild-all@lists.01.org, mwen@igalia.com,
+        rodrigosiqueiramelo@gmail.com, hamohammed.sa@gmail.com,
+        daniel@ffwll.ch, airlied@linux.ie, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+Subject: Re: [PATCH v2 1/1] drm/vkms: add zpos plane property
+Message-ID: <202112262122.WMEshF8D-lkp@intel.com>
+References: <20211226111219.27616-2-jose.exposito89@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: ft5xce35ewnq54qgqq4oa1rx6php6xbt
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: B753B2002F
-X-Spam-Status: No, score=-0.97
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/YVLRXQ1kWJwjA0dugZf74JpeaiVhG8e4=
-X-HE-Tag: 1640527340-980293
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211226111219.27616-2-jose.exposito89@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2021-12-26 at 14:19 +0100, Andrey Konovalov wrote:
-> I wonder if checkpatch could alert about considering GPL-2.0+ when
-> adding new files.
+Hi "José,
 
-No. Licensing is up to the author/submitter.
+Thank you for the patch! Yet something to improve:
 
-One nit checkpatch could warn about is the use of MODULE_LICENSE("GPL v2")
-rather than MODULE_LICENSE("GPL") as that's an unnecessary distinction.
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on v5.16-rc6 next-20211224]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-See: https://lore.kernel.org/all/alpine.DEB.2.21.1901282105450.1669@nanos.tec.linutronix.de/
+url:    https://github.com/0day-ci/linux/commits/Jos-Exp-sito/drm-vkms-zpos/20211226-191434
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: arc-randconfig-r043-20211226 (https://download.01.org/0day-ci/archive/20211226/202112262122.WMEshF8D-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/48c96494b71972f4bf1769682e94e59724dba874
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jos-Exp-sito/drm-vkms-zpos/20211226-191434
+        git checkout 48c96494b71972f4bf1769682e94e59724dba874
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/gpu/drm/vkms/
 
-Given there are a several thousand existing uses of "GPL v2" in the
-kernel, do this check only for new patches and not existing files.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/gpu/drm/vkms/vkms_plane.c: In function 'vkms_plane_create_zpos_property':
+>> drivers/gpu/drm/vkms/vkms_plane.c:170:57: error: 'NUM_OVERLAY_PLANES' undeclared (first use in this function)
+     170 |                                                      1, NUM_OVERLAY_PLANES);
+         |                                                         ^~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/vkms/vkms_plane.c:170:57: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +/NUM_OVERLAY_PLANES +170 drivers/gpu/drm/vkms/vkms_plane.c
+
+   162	
+   163	static int vkms_plane_create_zpos_property(struct vkms_plane *plane)
+   164	{
+   165		int ret;
+   166		unsigned int zpos = drm_plane_index(&plane->base);
+   167	
+   168		if (plane->base.type == DRM_PLANE_TYPE_OVERLAY) {
+   169			ret = drm_plane_create_zpos_property(&plane->base, zpos,
+ > 170							     1, NUM_OVERLAY_PLANES);
+   171		} else {
+   172			ret = drm_plane_create_zpos_immutable_property(&plane->base,
+   173								       zpos);
+   174		}
+   175	
+   176		return ret;
+   177	}
+   178	
+
 ---
- scripts/checkpatch.pl | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index b01c36a15d9dd..5b00f1f491aff 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -7418,6 +7418,10 @@ sub process {
- 				WARN("MODULE_LICENSE",
- 				     "unknown module license " . $extracted_string . "\n" . $herecurr);
- 			}
-+			if (!$file && $extracted_string eq '"GPL v2"') {
-+				WARN("MODULE_LICENSE",
-+				     "Prefer \"GPL\" over \"GPL v2\" - see: https://lore.kernel.org/all/alpine.DEB.2.21.1901282105450.1669\@nanos.tec.linutronix.de/\n" . $herecurr);
-+			}
- 		}
- 
- # check for sysctl duplicate constants
-
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

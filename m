@@ -2,155 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 361B747F822
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 16:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F093547F829
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 16:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbhLZPle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 10:41:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35516 "EHLO
+        id S230425AbhLZPqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 10:46:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232940AbhLZPlL (ORCPT
+        with ESMTP id S229711AbhLZPqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 10:41:11 -0500
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B97FC06175B;
-        Sun, 26 Dec 2021 07:41:11 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 52E9344B2A;
-        Sun, 26 Dec 2021 15:41:02 +0000 (UTC)
-From:   Hector Martin <marcan@marcan.st>
-To:     Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Chung-hsien Hsu <chung-hsien.hsu@infineon.com>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "Daniel (Deognyoun) Kim" <dekim@broadcom.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-Subject: [PATCH 34/34] brcmfmac: common: Add support for external calibration blobs
-Date:   Mon, 27 Dec 2021 00:36:24 +0900
-Message-Id: <20211226153624.162281-35-marcan@marcan.st>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211226153624.162281-1-marcan@marcan.st>
-References: <20211226153624.162281-1-marcan@marcan.st>
+        Sun, 26 Dec 2021 10:46:16 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8562BC06173E;
+        Sun, 26 Dec 2021 07:46:16 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id g5so10256812ilj.12;
+        Sun, 26 Dec 2021 07:46:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BryQMJZXYoms+UGfMnL+xv5Mi1tPHhDUFCjz4zjH2WA=;
+        b=OMofkxelneGV9O87DozVyolUMLbZIc9ofJhs5ZPuX9MEuxbzY0CpyhnvLr+awwZ82M
+         BIT4WlrHawkHAqKnbv0xsgmiVP1tp0dDrCL+wnp9n+k2cFHVg8NmXCUu/yYsql5+nbm7
+         fNzG/d4YOx8IBwUWHaS49XlioXPa1ke3gW8IrX0TVuEv6roY0oHT5smLgIXVR1hEpTyh
+         /eJ9tPg2f2jJw/itwbQMLvR3LdDdMIarG2Cp39YILqcysF+YDeLsgk7fiJhrjyTHedDU
+         UenHIZO+rdhWmxJab30y6rN608SEzVB4P0Vjrk5+5Ar5mS29jgX120QilALK3xnm2vFQ
+         eD4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BryQMJZXYoms+UGfMnL+xv5Mi1tPHhDUFCjz4zjH2WA=;
+        b=1D0YC+xu4XJNOKCEcqTq7DZEj/NOKb8D9FyI3QVVT7brBxFTTC2UQqh3v/ER6w8ri8
+         r20fkpTNa/VeObBnHaTyd37jor3MkkEQTZw4UTpr5xfhpO91ZfNJilsFiavxVNYNyXF6
+         duf/4TfLSweIXt8PJAA/acTURBXfWqYSaYtUhvS8loO/RQtAPXPhs6ASw2B8Du6NOcjp
+         Q83jVOIFh+rlFbWzjwgeFe5X/Q7f/X43eTt0eAXoPUOGOnHR5YmfEmLGWdFu+vMvBeXN
+         pHuUp1Ta9tE8XfGjH6vK4Af4t6p4hCiSCy1wPxO28KJfBLj6VB6gvGQmOdCpFRdB+Gja
+         mwHw==
+X-Gm-Message-State: AOAM5324bhbk8sL05i2O2HpcTr0vj236tIqKgQaXYCRLPC9sWTsNwePH
+        zrFNK4CfdDY5RD0mFnHzWoAhwOmDoKN5zboudgk=
+X-Google-Smtp-Source: ABdhPJwChIt10bSVqcuy29//L+D4EwgVfCjZ/oYCUJPSImsvao24EVM4I6Ld1q9DAZnDjQGjqsAOk29LcgZi7fYve/8=
+X-Received: by 2002:a92:1e0a:: with SMTP id e10mr6162133ile.28.1640533575329;
+ Sun, 26 Dec 2021 07:46:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <f55721ade28b2715eaf54b28a1bbfaad7b5adc0d.1640471342.git.andreyknvl@gmail.com>
+ <Ycgi7GiU2udbjF2f@kroah.com> <CA+fCnZeC8PbDg_E3WWtqGBAwUs65Y7=b5DG=whN-CaOEs5uS7g@mail.gmail.com>
+ <796577bb0052f4f08f58882dfc86734d72f2aa29.camel@perches.com>
+ <CA+fCnZcwkmw-phG2nHW=4-dxwxUy3AGFsppk==x96uwJRSEG2Q@mail.gmail.com> <YciH1Z69O85elZ/c@kroah.com>
+In-Reply-To: <YciH1Z69O85elZ/c@kroah.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Sun, 26 Dec 2021 16:46:04 +0100
+Message-ID: <CA+fCnZe5vdz3VSg54To5-zN-xVh8rcYaNXvxLpbL364BBskvow@mail.gmail.com>
+Subject: Re: [PATCH] usb: raw-gadget: upgrade license identifier
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Joe Perches <joe@perches.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        andrey.konovalov@linux.dev, Felipe Balbi <balbi@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        linux-spdx@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The calibration blob for a chip is normally stored in SROM and loaded
-internally by the firmware. However, Apple ARM64 platforms instead store
-it as part of platform configuration data, and provide it via the Apple
-Device Tree. We forward this into the Linux DT in the bootloader.
+On Sun, Dec 26, 2021 at 4:18 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Sun, Dec 26, 2021 at 03:50:43PM +0100, Andrey Konovalov wrote:
+> > On Sun, Dec 26, 2021 at 3:02 PM Joe Perches <joe@perches.com> wrote:
+> > >
+> > > On Sun, 2021-12-26 at 14:19 +0100, Andrey Konovalov wrote:
+> > > > I wonder if checkpatch could alert about considering GPL-2.0+ when
+> > > > adding new files.
+> > >
+> > > No. Licensing is up to the author/submitter.
+> >
+> > You're right. However, knowingly choosing a license requires that the
+> > author doesn't forget to look into the difference and understand it.
+> >
+> > When I contributed this code, I didn't realize that GPL-2.0 and
+> > GPL-2.0+ are different things. I was focused on the excitement of
+> > contributing a new USB gadget driver.
+> >
+> > What would have allowed my to not overlook this, is that if throughout
+> > the _process_ of contributing a new module, something would _ask_ me:
+> > "Is this really the license you want to use?".
+>
+> I normally try to do that when I see GPL-2.0+, sorry I didn't do that
+> this time.
 
-Add support for taking this blob from the DT and loading it into the
-dongle. The loading mechanism is the same as used for the CLM and TxCap
-blobs.
+Do you mean GPL-2.0+ or GPL-2.0? The code wasn't under GPL-2.0+, so
+you would not have said anything, AFAIU.
 
-Signed-off-by: Hector Martin <marcan@marcan.st>
----
- .../broadcom/brcm80211/brcmfmac/common.c      | 24 +++++++++++++++++++
- .../broadcom/brcm80211/brcmfmac/common.h      |  2 ++
- .../wireless/broadcom/brcm80211/brcmfmac/of.c |  8 +++++++
- 3 files changed, 34 insertions(+)
+Anyway, no worries. The only reason I sent the SPDX change was because
+of noticing that the tag doesn't match most of the other drivers.
 
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.c
-index d65308c3f070..ad36e6b5dd47 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.c
-@@ -218,6 +218,23 @@ static int brcmf_c_process_txcap_blob(struct brcmf_if *ifp)
- 	return err;
- }
- 
-+static int brcmf_c_process_cal_blob(struct brcmf_if *ifp)
-+{
-+	struct brcmf_pub *drvr = ifp->drvr;
-+	struct brcmf_mp_device *settings = drvr->settings;
-+	s32 err;
-+
-+	brcmf_dbg(TRACE, "Enter\n");
-+
-+	if (!settings->cal_blob || !settings->cal_size)
-+		return 0;
-+
-+	brcmf_info("Calibration blob provided by platform, loading\n");
-+	err = brcmf_c_download_blob(ifp, settings->cal_blob, settings->cal_size,
-+				    "calload", "calload_status");
-+	return err;
-+}
-+
- int brcmf_c_preinit_dcmds(struct brcmf_if *ifp)
- {
- 	struct brcmf_pub *drvr = ifp->drvr;
-@@ -291,6 +308,13 @@ int brcmf_c_preinit_dcmds(struct brcmf_if *ifp)
- 		goto done;
- 	}
- 
-+	/* Download external calibration blob, if available */
-+	err = brcmf_c_process_cal_blob(ifp);
-+	if (err < 0) {
-+		bphy_err(drvr, "download calibration blob file failed, %d\n", err);
-+		goto done;
-+	}
-+
- 	/* query for 'ver' to get version info from firmware */
- 	memset(buf, 0, sizeof(buf));
- 	err = brcmf_fil_iovar_data_get(ifp, "ver", buf, sizeof(buf));
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.h b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.h
-index a88c4a9310f3..f321346edd01 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.h
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.h
-@@ -51,6 +51,8 @@ struct brcmf_mp_device {
- 	struct brcmfmac_pd_cc *country_codes;
- 	const char	*board_type;
- 	const char	*antenna_sku;
-+	void		*cal_blob;
-+	int		cal_size;
- 	union {
- 		struct brcmfmac_sdio_pd sdio;
- 	} bus;
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-index 453a6cda5abb..2f40d70fdbf1 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-@@ -85,6 +85,14 @@ void brcmf_of_probe(struct device *dev, enum brcmf_bus_type bus_type,
- 	if (!of_property_read_string(np, "apple,antenna-sku", &prop))
- 		settings->antenna_sku = devm_kstrdup(dev, prop, GFP_KERNEL);
- 
-+	/* The WLAN calibration blob is normally stored in SROM, but Apple
-+	 * ARM64 platforms pass it via the DT instead.
-+	 */
-+	prop = of_get_property(np, "brcm,cal-blob", &settings->cal_size);
-+	if (prop && settings->cal_size)
-+		settings->cal_blob = devm_kmemdup(dev, prop, settings->cal_size,
-+						  GFP_KERNEL);
-+
- 	/* Set board-type to the first string of the machine compatible prop */
- 	root = of_find_node_by_path("/");
- 	if (root && !settings->board_type) {
--- 
-2.33.0
+> But really, your open-source training at your employer should have
+> covered all of that.  If not, then something went wrong there :(
 
+This is a weird statement for the general case.
+
+Employers' processes exist to cover their legal bases. They have
+nothing to do with the processes to guide Linux kernel contributors.
+
+Legally, you're right: contributing requires accepting the rules under
+which the contribution happens. Which means that contributors need to
+read and understand all of the licensing documents before sending
+patches. And it's on them, if they forget to do this or make a
+mistake.
+
+This is, however, poor from a contributor experience perspective.
+Especially for independent contributors, who don't have a legal team
+approving each of their actions.

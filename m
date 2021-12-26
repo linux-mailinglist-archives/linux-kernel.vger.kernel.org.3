@@ -2,104 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E638647F5B7
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 08:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C3647F5EB
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 09:36:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbhLZHvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 02:51:11 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:30111 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbhLZHvK (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 02:51:10 -0500
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JMCZd4qj1z1DKDk;
-        Sun, 26 Dec 2021 15:47:53 +0800 (CST)
-Received: from dggpeml500006.china.huawei.com (7.185.36.76) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sun, 26 Dec 2021 15:51:07 +0800
-Received: from huawei.com (10.175.100.227) by dggpeml500006.china.huawei.com
- (7.185.36.76) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Sun, 26 Dec
- 2021 15:51:01 +0800
-From:   Tang Yizhou <tangyizhou@huawei.com>
-To:     <viresh.kumar@linaro.org>, <rafael.j.wysocki@intel.com>,
-        <rafael@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <zhengbin13@huawei.com>,
-        Tang Yizhou <tangyizhou@huawei.com>
-Subject: [PATCH] Documentation: power: Update outdated contents in opp.rst
-Date:   Sun, 26 Dec 2021 16:18:39 +0800
-Message-ID: <20211226081839.13948-1-tangyizhou@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        id S232428AbhLZIgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 03:36:52 -0500
+Received: from smtp2.ustc.edu.cn ([202.38.64.46]:53174 "EHLO ustc.edu.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231480AbhLZIgv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 26 Dec 2021 03:36:51 -0500
+X-Greylist: delayed 382 seconds by postgrey-1.27 at vger.kernel.org; Sun, 26 Dec 2021 03:36:50 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mail.ustc.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
+        Message-ID:In-Reply-To:References:MIME-Version:Content-Type:
+        Content-Transfer-Encoding; bh=aYBtzLSIsckjaVB7NEd+HnkH+vEuZvJZrp
+        ig/CtlFFo=; b=h38x0TYrWNI2mdnzBpWoDq01VjZp6pPsYyjNG+NoBNjYVCpkeq
+        UvvfhDLcbr/JBj0Qxqu6/gd+FwvnfKzfMYGuz9I4U5NnGXsmvo05EAIASa37Xw92
+        8+RO3tjTAxvxkI3sP6UOeFNpH1k4WZYnD0QLmEzUzABBkuRqWF6LsNLLc=
+Received: from xhacker (unknown [101.86.42.35])
+        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygC3v2_yJ8hh8Y3CAA--.59233S2;
+        Sun, 26 Dec 2021 16:29:38 +0800 (CST)
+Date:   Sun, 26 Dec 2021 16:22:23 +0800
+From:   Jisheng Zhang <jszhang3@mail.ustc.edu.cn>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        "Wei Wu (=?UTF-8?B?5ZC05Lyf?=)" <lazyparser@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH 00/13] riscv: compat: Add COMPAT mode support for rv64
+Message-ID: <20211226162223.795f9417@xhacker>
+In-Reply-To: <CAJF2gTRAxX0qEcNmw+5N=3jZcJw9YF75oRjT7Y5FUMUkHoSz4Q@mail.gmail.com>
+References: <20211221163532.2636028-1-guoren@kernel.org>
+ <CAK8P3a37+0=CCE7283VQ4QZ1tZqcU+A2POUGXtvdM46ZMHx-gw@mail.gmail.com>
+ <CAJF2gTRAxX0qEcNmw+5N=3jZcJw9YF75oRjT7Y5FUMUkHoSz4Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.100.227]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500006.china.huawei.com (7.185.36.76)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LkAmygC3v2_yJ8hh8Y3CAA--.59233S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KF13Zr4UXrWfWr1rWF17ZFb_yoW5JF47pa
+        90g3WDtanrAryfAw4Sqw1xXFWYq395tr45ta4jqry8Cws09F18tr18ta1ruasrurnYgw42
+        vFW2gry7ua9ava7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkmb7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8Jw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU7y89DUUUU
+X-CM-SenderInfo: xmv2xttqjtqzxdloh3xvwfhvlgxou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Three problems have been revised:
-1. CONFIG_PM_OPP no longer depends on CONFIG_PM.
-2. opp_find_freq_{ceil, floor} is renamed as dev_pm_opp_find_freq_{ceil,
-   floor}.
-3. Make it clear that the 'opp' struct is actually dev_pm_opp.
+On Wed, 22 Dec 2021 20:59:30 +0800
+Guo Ren <guoren@kernel.org> wrote:
 
-Signed-off-by: Tang Yizhou <tangyizhou@huawei.com>
----
- Documentation/power/opp.rst | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+> On Wed, Dec 22, 2021 at 2:10 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:  
+> > >
+> > > From: Guo Ren <guoren@linux.alibaba.com>
+> > >
+> > > Currently, most 64-bit architectures (x86, parisc, powerpc, arm64,
+> > > s390, mips, sparc) have supported COMPAT mode. But they all have
+> > > history issues and can't use standard linux unistd.h. RISC-V would
+> > > be first standard __SYSCALL_COMPAT user of include/uapi/asm-generic
+> > > /unistd.h.
+> > >
+> > > The patchset are based on v5.16-rc6, you can compare rv64-compat32
+> > > v.s. rv32-whole in qemu with following step:  
+> >
+> > Looks good overall, see my individual replies for minor comments I had.  
+> Thx for the review :)
+> 
+> >
+> > I think there is a bigger question to answer though, which is whether this is
+> > actually a useful feature for rv64. In general, there are two reasons for
+> > wanting compat mode:
+> >
+> > a) compatibility with existing binaries and distros
+> >
+> > b) reducing the memory footprint of user space in a memory constrained
+> > environment, either deeply embedded or in a container.
+> >
+> > For the other architectures, a) is clearly the main driver, but equally so
+> > this is not the case on riscv, which does not have any legacy 32-bit
+> > code. Without that, adding compat mode would mainly introduce a
+> > second ABI to a lot of environments that at the moment only need to
+> > support one, and that adds complexity to the implementation and
+> > the extra attack surface of the second syscall ABI when an exploit
+> > may be possible only in compat mode.
+> >
+> > There is still some benefit in b), but it would need to be weighed
+> > against the downsides above. Can you explain in more detail what
+> > use cases you have in mind, and which CPU cores actually support
+> > this mode?  
+> The most reason is about b), see our customer's product:
+> https://www.cnx-software.com/2021/10/25/allwinner-d1s-f133-risc-v-processor-64mb-ddr2/
+> 
+> So I think all our next generation rv64 cores should support
+> compat-mode. Compare to releasing rv32-full core, rv64 compat-mode is
+> very cheap for our CPU design.
+> 
+> You would get the answer when our new generation CPU is announced and it's soon.
+> 
 
-diff --git a/Documentation/power/opp.rst b/Documentation/power/opp.rst
-index e3cc4f349ea8..a7c03c470980 100644
---- a/Documentation/power/opp.rst
-+++ b/Documentation/power/opp.rst
-@@ -48,9 +48,9 @@ We can represent these as three OPPs as the following {Hz, uV} tuples:
- OPP library provides a set of helper functions to organize and query the OPP
- information. The library is located in drivers/opp/ directory and the header
- is located in include/linux/pm_opp.h. OPP library can be enabled by enabling
--CONFIG_PM_OPP from power management menuconfig menu. OPP library depends on
--CONFIG_PM as certain SoCs such as Texas Instrument's OMAP framework allows to
--optionally boot at a certain OPP without needing cpufreq.
-+CONFIG_PM_OPP from power management menuconfig menu. Certain SoCs such as Texas
-+Instrument's OMAP framework allows to optionally boot at a certain OPP without
-+needing cpufreq.
+What about adding RV64 ILP32 support instead? This don't need HW side
+modifications so can benefit all RV64.
+
+Thanks
  
- Typical usage of the OPP library is as follows::
- 
-@@ -75,8 +75,8 @@ operations until that OPP could be re-enabled if possible.
- 
- OPP library facilitates this concept in its implementation. The following
- operational functions operate only on available opps:
--opp_find_freq_{ceil, floor}, dev_pm_opp_get_voltage, dev_pm_opp_get_freq,
--dev_pm_opp_get_opp_count
-+dev_pm_opp_find_freq_{ceil, floor}, dev_pm_opp_get_voltage, dev_pm_opp_get_freq,
-+dev_pm_opp_get_opp_count.
- 
- dev_pm_opp_find_freq_exact is meant to be used to find the opp pointer
- which can then be used for dev_pm_opp_enable/disable functions to make an
-@@ -103,7 +103,7 @@ dev_pm_opp_add
- 	The OPP is defined using the frequency and voltage. Once added, the OPP
- 	is assumed to be available and control of its availability can be done
- 	with the dev_pm_opp_enable/disable functions. OPP library
--	internally stores and manages this information in the opp struct.
-+	internally stores and manages this information in the dev_pm_opp struct.
- 	This function may be used by SoC framework to define a optimal list
- 	as per the demands of SoC usage environment.
- 
-@@ -247,7 +247,7 @@ dev_pm_opp_disable
- 5. OPP Data Retrieval Functions
- ===============================
- Since OPP library abstracts away the OPP information, a set of functions to pull
--information from the OPP structure is necessary. Once an OPP pointer is
-+information from the dev_pm_opp structure is necessary. Once an OPP pointer is
- retrieved using the search functions, the following functions can be used by SoC
- framework to retrieve the information represented inside the OPP layer.
- 
--- 
-2.17.1
+> Currently, only qemu supports rv64 compact mode, that is my colleague
+> (LIU Zhi Wei) contributed.
 

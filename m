@@ -2,105 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 427B347F76D
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 16:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4006947F770
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 16:34:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232305AbhLZPdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 10:33:50 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60340 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232210AbhLZPdt (ORCPT
+        id S233753AbhLZPe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 10:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33704 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233717AbhLZPe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 10:33:49 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E685460E2D;
-        Sun, 26 Dec 2021 15:33:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CBDCC36AEB;
-        Sun, 26 Dec 2021 15:33:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640532828;
-        bh=qXjCXDpcPsPTyQ6ukQoQTfDzaUiRrYwz51aMcieYhNs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZD5yjJFSDFtV7GuuoWbWXv7pNHjN0oL/6U0n9XbGilI1ftdEsbLQwhXaq+KT2Ov33
-         s/thjAD/g2s++3W7TXHJD5zVXxLFZJdU62TrUnGu624ct/YMRvo+Er/aN/oLulbUYK
-         Nxj7R1/+G0hyCTl4Ls7J2s1B3/+q4kAqNl89ovKcoC6DQ7vVBDLxduKygzqGemVT38
-         mP2717ahX/Jz+ui4KUWWibX8DekCghLY/xT3LCPBO5CaEYJRJeIlwyU2+rwmZ6YQdT
-         ecTh8X20GL/jXtLOQyo7KIKwFVr80x9A19wsNB5wjbZGD9vePsCCcTOu4L+v1hOTdI
-         c4Qk1bylrAM1w==
-Received: by mail-ua1-f45.google.com with SMTP id r15so23209973uao.3;
-        Sun, 26 Dec 2021 07:33:48 -0800 (PST)
-X-Gm-Message-State: AOAM531VDvh2hrVaxSFp+6Wnd70iKTDAXnmovyyIHgFPJT5sIPUGbrrY
-        tICTs0X0Q02DoSmljdRaEQVuEV2R3sUgBKHiavY=
-X-Google-Smtp-Source: ABdhPJwyuGNHWPvWYsjivYwMgG2HNt6BpGFerAtNGcDQ5CFKT21wG/23KX6tdhStjNSAJxjyUtFcKM8wYL9/Nj6YrCc=
-X-Received: by 2002:ab0:1e4a:: with SMTP id n10mr2054361uak.66.1640532827315;
- Sun, 26 Dec 2021 07:33:47 -0800 (PST)
+        Sun, 26 Dec 2021 10:34:26 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C5DC061401
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 07:34:25 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id bq20so29735702lfb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 07:34:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=WKOhgFA6EDwm88QeGjFMZpYe/CzCFPYOKrRLqO3vV1k=;
+        b=SaKmJaAjNcM38WDeiEpQvB/UDGXuxDY9zScCFHrNM8tcwGHY+atfBHItPABb3EYyTE
+         lnj03VfCWZ5yNBTzCfnBCzVDQ0fnfPrz1/wER+E30UP4333/2hY+86NABzb7R11k1OA1
+         0k84s65GEGLtSGcU2VmZdBNcAnHesg7LGIANKwvN3rw29kYyVaGH/uhEoYqRwO8XpX+J
+         b/Ix2TbNX9SLnPktJNZmQJ1jiR4gSDghVU7CV28AGC01u+LG4RI6gYze3wJyk8mCqTM8
+         5/ZF32IgI1hIVVYP0M2PUH8nGf5Lu4Esa+WC7vG9CRVtI8GHohA+TgGa+rJSsmsPsDTD
+         Bnbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=WKOhgFA6EDwm88QeGjFMZpYe/CzCFPYOKrRLqO3vV1k=;
+        b=BGvOkPrnNCwzxKGSxuL2ADiCddMNCC00+qpUYS8io2YKkQXDq/m53V0K4PThgERxPN
+         iAdi58+wFW2yUytfIq33IETFgeE3bWzChXxWOLs6+PH5o/I7hFV4v5gcdgTmuFrio+6l
+         5FOM0iSQwcJ9fj5S1kPIi+WSxQAc6gLHFroGPxpFus/50fDbbWDRad9cJqASa2MAfoVb
+         Pgucy9o8Tdf3ZGy3wVQLEBEr6eNGWIyRu+HdaES9DDI/lsqrStuPfeyXyNFK65NL/fIk
+         L8pUAZx72YCrx0m4Luj8ELn7yF6h80yat7SlFKlU19tpzVAnPNZhIYxtwcr60O4NPvL+
+         H9/g==
+X-Gm-Message-State: AOAM533ne6HdCXUVD6/M2849eFS+uyR9E0XlMo5aJDyLJ/+d3nVETzMl
+        Fti1WV6UWGFE+0Uhy0iGh/btRQ==
+X-Google-Smtp-Source: ABdhPJzKPNqyGHVcxaijR/QircqRFVi3vsCTgIQTUsGh2adgcNzCVL+1DsTHPd7iRHvAttj++G1Cjw==
+X-Received: by 2002:a05:6512:15b:: with SMTP id m27mr9770330lfo.218.1640532863400;
+        Sun, 26 Dec 2021 07:34:23 -0800 (PST)
+Received: from cobook.home ([176.59.43.180])
+        by smtp.gmail.com with ESMTPSA id p14sm1388402ljj.12.2021.12.26.07.34.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Dec 2021 07:34:22 -0800 (PST)
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christian Gromm <christian.gromm@microchip.com>
+Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Subject: [PATCH 3/3 v2] arm64: dts: renesas: add MOST device
+Date:   Sun, 26 Dec 2021 18:33:50 +0300
+Message-Id: <20211226153349.2296024-1-nikita.yoush@cogentembedded.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211226082530.2245198-4-nikita.yoush@cogentembedded.com>
+References: <20211226082530.2245198-4-nikita.yoush@cogentembedded.com>
 MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-4-guoren@kernel.org>
- <CAK8P3a3navO2Z2F5zxisby5EBNDo8rwQ6hxSuyniFgFxrQ5qXQ@mail.gmail.com>
- <CAJF2gTSssufQOQTXqzRjY8h_JjAmMs8jC6R+6d09K728=4fOOA@mail.gmail.com> <CAK8P3a19n3pa+hRfC-ToTPhH2hvgYY=mXo_u6ZWkbbSSY5_JAA@mail.gmail.com>
-In-Reply-To: <CAK8P3a19n3pa+hRfC-ToTPhH2hvgYY=mXo_u6ZWkbbSSY5_JAA@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 26 Dec 2021 23:33:36 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTcafkH5zDYbw=6UhXaHT+SdGskt-+6E==6f08nFj33Gw@mail.gmail.com>
-Message-ID: <CAJF2gTTcafkH5zDYbw=6UhXaHT+SdGskt-+6E==6f08nFj33Gw@mail.gmail.com>
-Subject: Re: [PATCH 03/13] riscv: compat: Add basic compat date type implementation
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 8:47 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, Dec 22, 2021 at 1:03 PM Guo Ren <guoren@kernel.org> wrote:
-> > On Wed, Dec 22, 2021 at 1:13 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> > > On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
-> > >
-> > > > +struct compat_stat {
-> > > > +       compat_ulong_t  st_dev;
-> > > > +       compat_ulong_t  st_ino;
-> > > > +       compat_uint_t   st_mode;
-> > > > +       compat_uint_t   st_nlink;
-> > >
-> > > You should not need a compat_stat, because native rv32 does not have a
-> > > stat() syscall.
-> > We need it:
-> >
-> > $ make ARCH=riscv CROSS_COMPILE=riscv64-unknown-linux-gnu-
-> > EXTRA_CFLAGS+=-g O=../build-riscv/ Image -j > /dev/null
-> > /home/guoren/source/kernel/riscv-linux/fs/stat.c: In function 'cp_compat_stat':
-> > /home/guoren/source/kernel/riscv-linux/fs/stat.c:645:21: error:
-> > storage size of 'tmp' isn't known
-> >   645 |  struct compat_stat tmp;
->
-> I think that's just a bug in fs/stat.c. Every other architecture so
-> far needed it,
-> just not riscv, so we should add an appropriate #ifdef here. I would replace
-> #ifdef CONFIG_COMPAT around these with __ARCH_WANT_COMPAT_STAT
-> and then change all other compat architectures to define that depending
-> on the configuration.
-Agree, but I would keep compat_stat in the next version. You could add
-__ARCH_WANT_COMPAT_STAT next.
+This patch adds mlp device to dtsi files for R-Car Gen3 SoCs that have
+it.
 
->
->         Arnd
+Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+---
+Change from v1:
+- fix power domain ids so all dtbs build properly
 
+ arch/arm64/boot/dts/renesas/r8a77951.dtsi | 13 +++++++++++++
+ arch/arm64/boot/dts/renesas/r8a77960.dtsi | 13 +++++++++++++
+ arch/arm64/boot/dts/renesas/r8a77961.dtsi | 13 +++++++++++++
+ arch/arm64/boot/dts/renesas/r8a77965.dtsi | 13 +++++++++++++
+ arch/arm64/boot/dts/renesas/r8a77990.dtsi | 13 +++++++++++++
+ arch/arm64/boot/dts/renesas/r8a77995.dtsi | 13 +++++++++++++
+ 6 files changed, 78 insertions(+)
 
-
+diff --git a/arch/arm64/boot/dts/renesas/r8a77951.dtsi b/arch/arm64/boot/dts/renesas/r8a77951.dtsi
+index 1768a3e6bb8d..179d860ab9c3 100644
+--- a/arch/arm64/boot/dts/renesas/r8a77951.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a77951.dtsi
+@@ -2412,6 +2412,19 @@ ssi9: ssi-9 {
+ 			};
+ 		};
+ 
++		mlp: mlp@ec520000 {
++			compatible = "renesas,rcar-gen3-mlp";
++			reg = <0 0xec520000 0 0x800>;
++			interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 386 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 387 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 388 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&cpg CPG_MOD 802>;
++			power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
++			status = "disabled";
++		};
++
+ 		audma0: dma-controller@ec700000 {
+ 			compatible = "renesas,dmac-r8a7795",
+ 				     "renesas,rcar-dmac";
+diff --git a/arch/arm64/boot/dts/renesas/r8a77960.dtsi b/arch/arm64/boot/dts/renesas/r8a77960.dtsi
+index 2bd8169735d3..1e90e848d2c8 100644
+--- a/arch/arm64/boot/dts/renesas/r8a77960.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a77960.dtsi
+@@ -2284,6 +2284,19 @@ ssiu97: ssiu-51 {
+ 			};
+ 		};
+ 
++		mlp: mlp@ec520000 {
++			compatible = "renesas,rcar-gen3-mlp";
++			reg = <0 0xec520000 0 0x800>;
++			interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 386 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 387 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 388 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&cpg CPG_MOD 802>;
++			power-domains = <&sysc R8A7796_PD_ALWAYS_ON>;
++			status = "disabled";
++		};
++
+ 		audma0: dma-controller@ec700000 {
+ 			compatible = "renesas,dmac-r8a7796",
+ 				     "renesas,rcar-dmac";
+diff --git a/arch/arm64/boot/dts/renesas/r8a77961.dtsi b/arch/arm64/boot/dts/renesas/r8a77961.dtsi
+index a34d5b1d6431..eb70b601191b 100644
+--- a/arch/arm64/boot/dts/renesas/r8a77961.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a77961.dtsi
+@@ -2128,6 +2128,19 @@ ssiu97: ssiu-51 {
+ 			};
+ 		};
+ 
++		mlp: mlp@ec520000 {
++			compatible = "renesas,rcar-gen3-mlp";
++			reg = <0 0xec520000 0 0x800>;
++			interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 386 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 387 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 388 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&cpg CPG_MOD 802>;
++			power-domains = <&sysc R8A77961_PD_ALWAYS_ON>;
++			status = "disabled";
++		};
++
+ 		audma0: dma-controller@ec700000 {
+ 			compatible = "renesas,dmac-r8a77961",
+ 				     "renesas,rcar-dmac";
+diff --git a/arch/arm64/boot/dts/renesas/r8a77965.dtsi b/arch/arm64/boot/dts/renesas/r8a77965.dtsi
+index 08df75606430..293021f59818 100644
+--- a/arch/arm64/boot/dts/renesas/r8a77965.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a77965.dtsi
+@@ -2147,6 +2147,19 @@ ssi9: ssi-9 {
+ 			};
+ 		};
+ 
++		mlp: mlp@ec520000 {
++			compatible = "renesas,rcar-gen3-mlp";
++			reg = <0 0xec520000 0 0x800>;
++			interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 386 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 387 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 388 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&cpg CPG_MOD 802>;
++			power-domains = <&sysc R8A77965_PD_ALWAYS_ON>;
++			status = "disabled";
++		};
++
+ 		audma0: dma-controller@ec700000 {
+ 			compatible = "renesas,dmac-r8a77965",
+ 				     "renesas,rcar-dmac";
+diff --git a/arch/arm64/boot/dts/renesas/r8a77990.dtsi b/arch/arm64/boot/dts/renesas/r8a77990.dtsi
+index 0ea300a8147d..232391fd0751 100644
+--- a/arch/arm64/boot/dts/renesas/r8a77990.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a77990.dtsi
+@@ -1682,6 +1682,19 @@ ssi9: ssi-9 {
+ 			};
+ 		};
+ 
++		mlp: mlp@ec520000 {
++			compatible = "renesas,rcar-gen3-mlp";
++			reg = <0 0xec520000 0 0x800>;
++			interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 386 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 387 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 388 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&cpg CPG_MOD 802>;
++			power-domains = <&sysc R8A77990_PD_ALWAYS_ON>;
++			status = "disabled";
++		};
++
+ 		audma0: dma-controller@ec700000 {
+ 			compatible = "renesas,dmac-r8a77990",
+ 				     "renesas,rcar-dmac";
+diff --git a/arch/arm64/boot/dts/renesas/r8a77995.dtsi b/arch/arm64/boot/dts/renesas/r8a77995.dtsi
+index 16ad5fc23a67..33d9ed431d9c 100644
+--- a/arch/arm64/boot/dts/renesas/r8a77995.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a77995.dtsi
+@@ -1132,6 +1132,19 @@ ssi4: ssi-4 {
+ 			};
+ 		};
+ 
++		mlp: mlp@ec520000 {
++			compatible = "renesas,rcar-gen3-mlp";
++			reg = <0 0xec520000 0 0x800>;
++			interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 386 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 387 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 388 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&cpg CPG_MOD 802>;
++			power-domains = <&sysc R8A77995_PD_ALWAYS_ON>;
++			status = "disabled";
++		};
++
+ 		audma0: dma-controller@ec700000 {
+ 			compatible = "renesas,dmac-r8a77995",
+ 				     "renesas,rcar-dmac";
 -- 
-Best Regards
- Guo Ren
+2.30.2
 
-ML: https://lore.kernel.org/linux-csky/

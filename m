@@ -2,62 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B371D47F762
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 16:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8B947F769
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Dec 2021 16:18:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbhLZPON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 10:14:13 -0500
-Received: from smtp01.smtpout.orange.fr ([80.12.242.123]:54450 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232224AbhLZPOM (ORCPT
+        id S232272AbhLZPSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 10:18:51 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55390 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232236AbhLZPSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 10:14:12 -0500
-Received: from pop-os.home ([86.243.171.122])
-        by smtp.orange.fr with ESMTPA
-        id 1VDpnig8t1UGB1VDqnOSgw; Sun, 26 Dec 2021 16:14:11 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 26 Dec 2021 16:14:11 +0100
-X-ME-IP: 86.243.171.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     robdclark@gmail.com, sean@poorly.run, quic_abhinavk@quicinc.com,
-        airlied@linux.ie, daniel@ffwll.ch, bjorn.andersson@linaro.org,
-        swboyd@chromium.org, quic_khsieh@quicinc.com
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] drm/msm/dp: Fix a potential double free in an error handling path
-Date:   Sun, 26 Dec 2021 16:14:05 +0100
-Message-Id: <6fd20c8779d6b03a5b54509af25b478049482087.1640531508.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Sun, 26 Dec 2021 10:18:50 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F381960DEE;
+        Sun, 26 Dec 2021 15:18:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 402DFC36AE8;
+        Sun, 26 Dec 2021 15:18:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640531929;
+        bh=SCpncZYOrIU+XpzJbRS128HV5LHt9hTgta9KVKTKG/g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BEfKa6BoONwSmRJfD1kuOQFFVuxkVJdx2l81jDBtkNUBrFkqTOL1uoNCHtEmfXqM8
+         JHzhxKWTfOT5ISBmRYsZQDwxZxfqFVMaqyFnrFlhPVBpnFnRnoE6E+yaFoVOHyliBW
+         0lWqdgPFLSbq4jScPmZCLVDN+aAJwnr1O3nR71OM=
+Date:   Sun, 26 Dec 2021 16:18:45 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andrey Konovalov <andreyknvl@gmail.com>
+Cc:     Joe Perches <joe@perches.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        andrey.konovalov@linux.dev, Felipe Balbi <balbi@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        linux-spdx@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] usb: raw-gadget: upgrade license identifier
+Message-ID: <YciH1Z69O85elZ/c@kroah.com>
+References: <f55721ade28b2715eaf54b28a1bbfaad7b5adc0d.1640471342.git.andreyknvl@gmail.com>
+ <Ycgi7GiU2udbjF2f@kroah.com>
+ <CA+fCnZeC8PbDg_E3WWtqGBAwUs65Y7=b5DG=whN-CaOEs5uS7g@mail.gmail.com>
+ <796577bb0052f4f08f58882dfc86734d72f2aa29.camel@perches.com>
+ <CA+fCnZcwkmw-phG2nHW=4-dxwxUy3AGFsppk==x96uwJRSEG2Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+fCnZcwkmw-phG2nHW=4-dxwxUy3AGFsppk==x96uwJRSEG2Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'dp_bridge' is devm_alloc'ed, so there is no need to free it explicitly or
-there will be a double free().
+On Sun, Dec 26, 2021 at 03:50:43PM +0100, Andrey Konovalov wrote:
+> On Sun, Dec 26, 2021 at 3:02 PM Joe Perches <joe@perches.com> wrote:
+> >
+> > On Sun, 2021-12-26 at 14:19 +0100, Andrey Konovalov wrote:
+> > > I wonder if checkpatch could alert about considering GPL-2.0+ when
+> > > adding new files.
+> >
+> > No. Licensing is up to the author/submitter.
+> 
+> You're right. However, knowingly choosing a license requires that the
+> author doesn't forget to look into the difference and understand it.
+> 
+> When I contributed this code, I didn't realize that GPL-2.0 and
+> GPL-2.0+ are different things. I was focused on the excitement of
+> contributing a new USB gadget driver.
+> 
+> What would have allowed my to not overlook this, is that if throughout
+> the _process_ of contributing a new module, something would _ask_ me:
+> "Is this really the license you want to use?".
 
-Fixes: 8a3b4c17f863 ("drm/msm/dp: employ bridge mechanism for display enable and disable")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/gpu/drm/msm/dp/dp_drm.c | 1 -
- 1 file changed, 1 deletion(-)
+I normally try to do that when I see GPL-2.0+, sorry I didn't do that
+this time.
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
-index 188e77c59885..d4d360d19eba 100644
---- a/drivers/gpu/drm/msm/dp/dp_drm.c
-+++ b/drivers/gpu/drm/msm/dp/dp_drm.c
-@@ -243,7 +243,6 @@ struct drm_bridge *msm_dp_bridge_init(struct msm_dp *dp_display, struct drm_devi
- 	rc = drm_bridge_attach(encoder, bridge, NULL, DRM_BRIDGE_ATTACH_NO_CONNECTOR);
- 	if (rc) {
- 		DRM_ERROR("failed to attach bridge, rc=%d\n", rc);
--		kfree(dp_bridge);
- 		return ERR_PTR(rc);
- 	}
- 
--- 
-2.32.0
+But really, your open-source training at your employer should have
+covered all of that.  If not, then something went wrong there :(
 
+thanks,
+
+greg k-h

@@ -2,61 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52747480158
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 17:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC0948015E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 17:02:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233833AbhL0QAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 11:00:43 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56756 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240972AbhL0QAK (ORCPT
+        id S235687AbhL0QC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 11:02:26 -0500
+Received: from mail-qk1-f175.google.com ([209.85.222.175]:35553 "EHLO
+        mail-qk1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233575AbhL0QCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 11:00:10 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D04A6B810A2;
-        Mon, 27 Dec 2021 16:00:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04168C36AE7;
-        Mon, 27 Dec 2021 16:00:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640620807;
-        bh=UdTvWBp2jSaVvzn2O786rHh31sYKBsj4gE4jncRH6xw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sWCdQNfyoWoKZV8TezoQ5KGht71o8g5OYe6aMea6CyxyKIVTdB/bP2Q2rsu50tIlm
-         kpT5E2XNWWm7I45SP+qrnkbT7ovRneoxDljJDYk1ASPHnJYroTmHbgm3wvpicP1/uI
-         lO2fLTxhg7HKgIfB3aNKIEl+lpr2Mrh/hWCU1X98=
-Date:   Mon, 27 Dec 2021 17:00:04 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: Re: [PATCH 5.15 114/128] Input: i8042 - enable deferred probe quirk
- for ASUS UM325UA
-Message-ID: <YcnjBHKy64XU7Plr@kroah.com>
-References: <20211227151331.502501367@linuxfoundation.org>
- <20211227151335.325998991@linuxfoundation.org>
- <a0258f0acbe50d4ea3c73724eafd4ed1@cavoj.net>
+        Mon, 27 Dec 2021 11:02:23 -0500
+Received: by mail-qk1-f175.google.com with SMTP id 131so14777826qkk.2;
+        Mon, 27 Dec 2021 08:02:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=72b7qtnlhIwvuhkRbhpWgwlpCXI2ABLdzVqP9BokJ/0=;
+        b=dyZkNnQbjYfoKhGDhxI6fjqcw4tMLk6IdLxTE5wBSKn7yyMa6P86laFqSuvg2ySLEh
+         +959vJQhdVVRL/2tqpVX09QPdb4MRr1mGaz3DZfxiVP8HeHTl+hp/VOBFTDKtRnVt5LS
+         299bPofzDFHIbkM94rad/qLPuKZJH8xxDigEit52z8NFZGFRO8BFloAtDABi/2Ow/0fJ
+         Y2SDftexHmt46rY/eceGT5TsSoEneFS2Hz0eLKwVKQdfo9mkwDkk4E54L+M57eUHGcAH
+         0w4yiR2VzAbiWaWpKrXAy+R0SfRqBGH00SZajKM/2xNlmJCF0Ac5X9zr4E2UQ1o6Uxmm
+         x/uA==
+X-Gm-Message-State: AOAM530bNtrevdJQzK3TzByf79bcodSfbpkFsWeeB0tu3ySdIAHwJD73
+        2iHylc7h57aPTOvh85Z6Xw==
+X-Google-Smtp-Source: ABdhPJzhUfn1ljd+iEYwyHyPKRAIZ+0Cuqt0J1Jz8ysNrIC4Q7ORN4kxEELMFLm2rG2UrLLMx6NU5A==
+X-Received: by 2002:a05:620a:1a9e:: with SMTP id bl30mr12229618qkb.130.1640620942770;
+        Mon, 27 Dec 2021 08:02:22 -0800 (PST)
+Received: from robh.at.kernel.org ([24.55.105.145])
+        by smtp.gmail.com with ESMTPSA id z5sm12613140qti.57.2021.12.27.08.02.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Dec 2021 08:02:22 -0800 (PST)
+Received: (nullmailer pid 564562 invoked by uid 1000);
+        Mon, 27 Dec 2021 16:02:19 -0000
+Date:   Mon, 27 Dec 2021 12:02:19 -0400
+From:   Rob Herring <robh@kernel.org>
+To:     Wells Lu =?utf-8?B?5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Cc:     Wells Lu <wellslutw@gmail.com>,
+        "dvorkin@tibbo.com" <dvorkin@tibbo.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>
+Subject: Re: [PATCH v5 1/2] dt-bindings: pinctrl: Add dt-bindings for Sunplus
+ SP7021
+Message-ID: <Ycnji5pNLnA/YZbX@robh.at.kernel.org>
+References: <1640331779-18277-1-git-send-email-wellslutw@gmail.com>
+ <1640331779-18277-2-git-send-email-wellslutw@gmail.com>
+ <1640443722.885735.363337.nullmailer@robh.at.kernel.org>
+ <666ad4caaafa4090a9f3c99f56c10bc8@sphcmbx02.sunplus.com.tw>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a0258f0acbe50d4ea3c73724eafd4ed1@cavoj.net>
+In-Reply-To: <666ad4caaafa4090a9f3c99f56c10bc8@sphcmbx02.sunplus.com.tw>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 04:53:38PM +0100, Samuel Čavoj wrote:
-> Hi Greg,
+On Sun, Dec 26, 2021 at 12:44:25PM +0000, Wells Lu 呂芳騰 wrote:
+> Hi Rob,
 > 
-> it seems this patch is misapplied -- please see the context in the original
-> diff. The quirk in question itself was only added in a recent patch which
-> is not present in stable:
-> commit 9222ba68c3f406 --
-> https://lore.kernel.org/all/20211117063757.11380-1-tiwai@suse.de/
+> Thanks a lot for review.
 > 
-> This seems to be the case for all stable branches.
+> I ran 'make dt_binding_check' and got PASS before I submitted the dt-binding doc (yaml) file.
+> 
+> I found the "dtschema/dtc warnings/errors:" is resulted from lack of vendor name in "vendor-prefixes.yaml".
+> 
+> My colleague has submitted a patch for adding our company name to the yaml file. It was acknowledged by you but not yet committed into Linux tree.
+> 
+> Refer to:
+> 
+> On Mon, 01 Nov 2021 13:01:51 +0800, Qin Jian wrote:
+> > Add vendor prefix for Sunplus Technology Co., Ltd.
+> > 
+> > Signed-off-by: Qin Jian <qinjian@cqplus1.com>
+> > ---
+> >  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> 
+> Acked-by: Rob Herring <robh@kernel.org>
+> 
+> 
+> Can this error be waived?
 
-Ah, good catch, now dropped from all stable branches, thanks!
+No. The patch for vendor prefix has to be applied before this one or 
+we'll keep getting this error.
 
-greg k-h
+> When I send a new patch, should I add "vendor-prefixes.yaml"?
+
+As it doesn't look like that series is going to make 5.17?, I can apply 
+the vendor prefix patch.
+
+Rob

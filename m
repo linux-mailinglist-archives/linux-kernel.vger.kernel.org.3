@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF6447FC01
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:56:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E01AD47FC07
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:56:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236216AbhL0K4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 05:56:12 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:50642 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232508AbhL0K4L (ORCPT
+        id S236272AbhL0K4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 05:56:17 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:42134 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236236AbhL0K4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 05:56:11 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BRAu10P054733;
-        Mon, 27 Dec 2021 04:56:01 -0600
+        Mon, 27 Dec 2021 05:56:14 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BRAu4YX005375;
+        Mon, 27 Dec 2021 04:56:04 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1640602561;
-        bh=39qM0lcUKaymFeUXxkoWLkF9/U5W70yUW3pELoB1frQ=;
+        s=ti-com-17Q1; t=1640602564;
+        bh=oXajD0FwetE/XHBNrETP8S1acJn4mJr3BQS+cPeHJjc=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=faKM4ezsUP7L+07WXqOVS2cpFePcTfCSxeoTEC0aRM5lacfR/SIFJKuk9n37QIk/8
-         yGFSLPs/T9xHwc2V76tFZujHGT1Le9r41sYdc5r3n44C5MLyaz2nyOaiSJ3HROxxkG
-         hf3eXFGSNcKTCsraKtjvQKh4TiB0IE0QL5NnzPmg=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BRAu1RY103427
+        b=w8ZkAO3L9+pOIAs2ObE0Ndh9ybFCJKTZ6SUS/z+AkESEjAA2RQ8Qf5spWrRjnSUYL
+         BsUP6Fwjn0rMTtR/YNkjrVoSZ1ATF6LxLbrwgLdyGh6e6oPKApeirfvq0ENdv7eGmd
+         L3sBSxie1OK4HRSx3tA8FgN8KeKX29z70GWole5Y=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BRAu4Mo066946
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 27 Dec 2021 04:56:01 -0600
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 27 Dec 2021 04:56:04 -0600
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 27
- Dec 2021 04:56:01 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ Dec 2021 04:56:04 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 27 Dec 2021 04:56:00 -0600
+ Frontend Transport; Mon, 27 Dec 2021 04:56:04 -0600
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BRAtkVO029188;
-        Mon, 27 Dec 2021 04:55:57 -0600
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BRAtkVP029188;
+        Mon, 27 Dec 2021 04:56:01 -0600
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Vinod Koul <vkoul@kernel.org>
 CC:     Pratyush Yadav <p.yadav@ti.com>,
@@ -49,9 +49,9 @@ CC:     Pratyush Yadav <p.yadav@ti.com>,
         Swapnil Jakhade <sjakhade@cadence.com>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-phy@lists.infradead.org>
-Subject: [PATCH v7 3/4] phy: dt-bindings: cdns,dphy: add power-domains property
-Date:   Mon, 27 Dec 2021 16:25:44 +0530
-Message-ID: <20211227105545.4852-4-p.yadav@ti.com>
+Subject: [PATCH v7 4/4] phy: dt-bindings: Add Cadence D-PHY Rx bindings
+Date:   Mon, 27 Dec 2021 16:25:45 +0530
+Message-ID: <20211227105545.4852-5-p.yadav@ti.com>
 X-Mailer: git-send-email 2.33.1.835.ge9e5ba39a7
 In-Reply-To: <20211227105545.4852-1-p.yadav@ti.com>
 References: <20211227105545.4852-1-p.yadav@ti.com>
@@ -63,56 +63,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This property is needed on TI platforms to enable the PD of the DPHY
-before it can be used.
+The Rx mode DPHY is different from Tx mode DPHY. Add a separate binding
+for it.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Acked-by: Rob Herring <robh@kernel.org>
 
 ---
 
-(no changes since v3)
+(no changes since v6)
 
-Changes in v3:
-- Add Rob's Ack.
+Changes in v6:
+- Add a new binding for DPHY Rx.
 
-Changes in v2:
-- Add power-domain to the example.
-- Add Laurent's R-by.
-- Re-order subject prefixes.
+ .../devicetree/bindings/phy/cdns,dphy-rx.yaml | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
 
- Documentation/devicetree/bindings/phy/cdns,dphy.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/phy/cdns,dphy.yaml b/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
-index b90a58773bf2..c50629bd1b51 100644
---- a/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
-+++ b/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
-@@ -30,6 +30,9 @@ properties:
-   "#phy-cells":
-     const: 0
- 
+diff --git a/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml b/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
+new file mode 100644
+index 000000000000..07be031d82e6
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
+@@ -0,0 +1,42 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/phy/cdns,dphy-rx.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Cadence DPHY Rx Device Tree Bindings
++
++maintainers:
++  - Pratyush Yadav <p.yadav@ti.com>
++
++properties:
++  compatible:
++    items:
++      - const: cdns,dphy-rx
++
++  reg:
++    maxItems: 1
++
++  "#phy-cells":
++    const: 0
++
 +  power-domains:
 +    maxItems: 1
 +
- required:
-   - compatible
-   - reg
-@@ -41,11 +44,13 @@ additionalProperties: false
- 
- examples:
-   - |
++required:
++  - compatible
++  - reg
++  - "#phy-cells"
++
++additionalProperties: false
++
++examples:
++  - |
 +    #include <dt-bindings/soc/ti,sci_pm_domain.h>
- 
-     dphy0: phy@fd0e0000{
-         compatible = "cdns,dphy";
-         reg = <0xfd0e0000 0x1000>;
-         clocks = <&psm_clk>, <&pll_ref_clk>;
-         clock-names = "psm", "pll_ref";
++
++    dphy0: phy@4580000 {
++        compatible = "cdns,dphy-rx";
++        reg = <0x4580000 0x1100>;
++        #phy-cells = <0>;
 +        power-domains = <&k3_pds 147 TI_SCI_PD_EXCLUSIVE>;
-         #phy-cells = <0>;
-     };
++    };
 -- 
 2.33.1.835.ge9e5ba39a7
 

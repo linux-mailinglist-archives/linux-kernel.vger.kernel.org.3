@@ -2,109 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F6C147F9A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 02:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29DD947F9AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 03:03:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234934AbhL0BqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 20:46:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:23743 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229535AbhL0BqJ (ORCPT
+        id S232322AbhL0B4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 20:56:50 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:29290 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229637AbhL0B4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 20:46:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640569568;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EP0DZntuIs2zJtRh06L63X/Ovho8Wrnvc0Bdbp3iNls=;
-        b=P7t7Boky7EjZOrom0oJCp36OKRqETKWClpVDUD4N46Uhh0zeKkGz+OGp4c2yeqF4YZrAmG
-        nSa3kDjmQQVgxasrk/G8YaRf6JLjEqJxKndKckLCQJ0eqOd6dCdGAD64sSR0UFxfek84bu
-        o1Xu8yFMAWDlTtFZe5XZWF2nbcd/apw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-49-Uk4TCJ8XNeOZr6PFhd7-cw-1; Sun, 26 Dec 2021 20:46:04 -0500
-X-MC-Unique: Uk4TCJ8XNeOZr6PFhd7-cw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C69821006AA4;
-        Mon, 27 Dec 2021 01:46:01 +0000 (UTC)
-Received: from dhcp-128-65.nay.redhat.com (ovpn-13-8.pek2.redhat.com [10.72.13.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A7DCD45D8E;
-        Mon, 27 Dec 2021 01:45:54 +0000 (UTC)
-Date:   Mon, 27 Dec 2021 09:45:51 +0800
-From:   Dave Young <dyoung@redhat.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com,
-        akpm@linux-foundation.org, feng.tang@intel.com,
-        siglesias@igalia.com, kernel@gpiccoli.net,
-        kexec@lists.infradead.org
-Subject: Re: [PATCH 3/3] panic: Allow printing extra panic information on
- kdump
-Message-ID: <Yckaz79zg5HdEgcH@dhcp-128-65.nay.redhat.com>
-References: <20211109202848.610874-1-gpiccoli@igalia.com>
- <20211109202848.610874-4-gpiccoli@igalia.com>
- <YcMPzs6t8MKpEacq@dhcp-128-65.nay.redhat.com>
- <2d24ea70-e315-beb5-0028-683880c438be@igalia.com>
- <YcUj0EJvQt77OVs2@dhcp-128-65.nay.redhat.com>
- <5b817a4f-0bba-7d79-8aab-33c58e922293@igalia.com>
+        Sun, 26 Dec 2021 20:56:49 -0500
+Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JMgkY15x0zbjdq;
+        Mon, 27 Dec 2021 09:56:21 +0800 (CST)
+Received: from [10.67.110.136] (10.67.110.136) by
+ dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.20; Mon, 27 Dec 2021 09:56:48 +0800
+Subject: Re: [PATCH] arm: Show real address of stack limit in __die()
+From:   He Ying <heying24@huawei.com>
+To:     <rmk+kernel@armlinux.org.uk>, <arnd@arndb.de>, <ardb@kernel.org>,
+        <akpm@linux-foundation.org>, <maninder1.s@samsung.com>,
+        <wangkefeng.wang@huawei.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211202061916.204718-1-heying24@huawei.com>
+Message-ID: <3df20137-3a0e-e22b-fccb-4dc7409406ec@huawei.com>
+Date:   Mon, 27 Dec 2021 09:56:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5b817a4f-0bba-7d79-8aab-33c58e922293@igalia.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+In-Reply-To: <20211202061916.204718-1-heying24@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.136]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggeme756-chm.china.huawei.com (10.3.19.102)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/25/21 at 04:21pm, Guilherme G. Piccoli wrote:
-> On 23/12/2021 22:35, Dave Young wrote:
-> > Hi Guilherme,
-> > [...]
-> > If only the doc update, I think it is fine to be another follup-up
-> > patch.
-> > 
-> > About your 1st option in patch log, there is crash_kexec_post_notifiers
-> > kernel param which can be used to switch on panic notifiers before kdump
-> > bootup.   Another way probably you can try to move panic print to be
-> > panic notifier. Have this been discussed before? 
-> > 
-> 
-> Hey Dave, thanks for the suggestion. I've considered that but didn't
-> like the idea. My reasoning was: allowing post notifiers on kdump will
-> highly compromise the reliability, whereas the panic_print is a solo
-> option, and not very invasive.
-> 
-> To mix it with all panic notifiers would just increase a lot the risk of
-> a kdump failure. Put in other words: if I'm a kdump user and in order to
-> have this panic_print setting I'd also need to enable post notifiers,
-> certainly I'll not use the feature, 'cause I don't wanna risk kdump too
-> much.
+Ping. Any ideas about this patch?
 
-Hi Guilherme, yes, I have the same concern.  But there could be more
-things like the panic_print in the future, it looks odd to have more
-kernel cmdline params though.
-
-> 
-> One other option I've considered however, and I'd appreciate your
-> opinion here, would be a new option on crash_kexec_post_notifiers that
-> allows the users to select *which few notifiers* they want to enable.
-> Currently it's all or nothing, and this approach is too heavy/risky I
-> believe. Allowing customization on which post notifiers the user wants
-> would be much better and in this case, having a post notifier for
-> panic_print makes a lot of sense. What do you think?
-
-It is definitely a good idea, I'm more than glad to see this if you
-would like to work on this! 
-
-> 
-> Thanks!
-> 
-
-Thanks
-Dave
-
+ÔÚ 2021/12/2 14:19, He Ying Ð´µÀ:
+> Printing real address of stack limit makes debug easier.
+> And system is dying, there is no security risk to show real
+> address.
+>
+> Signed-off-by: He Ying <heying24@huawei.com>
+> ---
+>   arch/arm/kernel/traps.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/arm/kernel/traps.c b/arch/arm/kernel/traps.c
+> index 195dff58bafc..7d7c86d00482 100644
+> --- a/arch/arm/kernel/traps.c
+> +++ b/arch/arm/kernel/traps.c
+> @@ -273,7 +273,7 @@ static int __die(const char *str, int err, struct pt_regs *regs)
+>   	print_modules();
+>   	__show_regs(regs);
+>   	__show_regs_alloc_free(regs);
+> -	pr_emerg("Process %.*s (pid: %d, stack limit = 0x%p)\n",
+> +	pr_emerg("Process %.*s (pid: %d, stack limit = 0x%px)\n",
+>   		 TASK_COMM_LEN, tsk->comm, task_pid_nr(tsk), end_of_stack(tsk));
+>   
+>   	if (!user_mode(regs) || in_interrupt()) {

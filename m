@@ -2,80 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9627E47FC62
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 12:56:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C798D47FC63
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 12:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236555AbhL0L4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 06:56:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233571AbhL0L4T (ORCPT
+        id S236565AbhL0L4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 06:56:50 -0500
+Received: from mail-out.m-online.net ([212.18.0.9]:60086 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236433AbhL0L4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 06:56:19 -0500
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62788C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 03:56:19 -0800 (PST)
-Received: by mail-pl1-x643.google.com with SMTP id c7so11246609plg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 03:56:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=f7wXvgf/Aj3y55/rH+ZCQ52rW1BTUm618QuBM5WHZWM=;
-        b=YzCAc9SKuEHH3zM3i4I2NJ1XgtSZOKAnHsMCeulQ+ZWj0S7DVGLXg9a5A9bcabxnzu
-         OGZZHDDWo/lq2YRNBxpe5JlVXI6/v8OD6eNg3wS1B9xKoH9cWE4xSQyApdbIbR9RBSnB
-         5TeJJYOoGidqYTzvMGZIakmedrRc8LhcxYYobguUQJf6XepZLhkskEGIedXGNFJS7HNf
-         NuhGIIBa+qQsDIrSRMVDtMmqKq8zLvKc41wCM1v76hTsDiD2Z8Bp2layE/2X+xSBDFpo
-         bHe1f0s4xmdCKz4mip8LS/0+9JybeltPOTGBw0ZXKaDoIpP33NHMNNjlZD9vJpemU1z1
-         Anpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=f7wXvgf/Aj3y55/rH+ZCQ52rW1BTUm618QuBM5WHZWM=;
-        b=YJgbqn1r+504JAbwmzVdlOP61rodmnc6bWRodUBDb3DsmlG/Y18Cr3BFtbFm7sVg+n
-         nEjj2wKepdLGpVlYW6OVW0+dGu7og1zStbTf+SnGuM9pNTb+k0qpeNUkqBXpI4Wo5HSm
-         Ze7p820pO2LBhmhs+sFr3qqL1FnBLw8dwA9ElOiz3kmKBOtovj2qlHcZUQ51Oi+oBF12
-         Hz4QQC/aBS7UeBc8sLdwZ+F6Psp/xYuSHv+g6jfx11a2WVOv4rCjmmLEfh5MN0B953dr
-         JHXmxnpeMlfqo7O/r0YBosz24Y4U2+dmydjGl+UN/DqWsiWW6Z876UDqimTha6yasqW5
-         XP7A==
-X-Gm-Message-State: AOAM531XY1Sg6AyxLfTPiLeJi4C1cJ8nhqTFfbkjq7mBKCQGcxNFyciC
-        QQ/lQQCDCn5tALIXsheo2rgz3ftBAHKKaTkuxtE=
-X-Google-Smtp-Source: ABdhPJwEWvu3Lhtl5Vt0Rh2RGLAQXSfbD/Etn4mtUK/uyQh9TS88BRBsMg8snM2wzhn7y9CI+yKLIeD1B9KHPw7he1E=
-X-Received: by 2002:a17:902:c409:b0:149:51bf:d291 with SMTP id
- k9-20020a170902c40900b0014951bfd291mr16876379plk.46.1640606178596; Mon, 27
- Dec 2021 03:56:18 -0800 (PST)
+        Mon, 27 Dec 2021 06:56:49 -0500
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4JMx3L5WrDz1qwGy;
+        Mon, 27 Dec 2021 12:56:46 +0100 (CET)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4JMx3L546Hz1qqkC;
+        Mon, 27 Dec 2021 12:56:46 +0100 (CET)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id o33Iijis0uSM; Mon, 27 Dec 2021 12:56:46 +0100 (CET)
+X-Auth-Info: uToUgyJz9p2d6vR+4o64kflQcZh+sB8BeRNX0axz9GI+YTe48LuV7d4dns2AwZhX
+Received: from igel.home (ppp-46-244-168-165.dynamic.mnet-online.de [46.244.168.165])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Mon, 27 Dec 2021 12:56:45 +0100 (CET)
+Received: by igel.home (Postfix, from userid 1000)
+        id 6A9652C38D8; Mon, 27 Dec 2021 12:56:45 +0100 (CET)
+From:   Andreas Schwab <schwab@linux-m68k.org>
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     geert@linux-m68k.org, linux-m68k@lists.linux-m68k.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] m68k/kernel: array out of bound access in
+ process_uboot_commandline
+References: <20211227090917.35838-1-hbh25y@gmail.com>
+        <87h7aus8v0.fsf@igel.home>
+        <CAOo-nLJG71QqqD0-cJDyH0rY2VTx1eO9nHVQ5MCe8J0iiME_vw@mail.gmail.com>
+X-Yow:  Yow!  Are we wet yet?
+Date:   Mon, 27 Dec 2021 12:56:45 +0100
+In-Reply-To: <CAOo-nLJG71QqqD0-cJDyH0rY2VTx1eO9nHVQ5MCe8J0iiME_vw@mail.gmail.com>
+        (Hangyu Hua's message of "Mon, 27 Dec 2021 19:52:58 +0800")
+Message-ID: <87bl12s1ky.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.90 (gnu/linux)
 MIME-Version: 1.0
-Received: by 2002:a05:7300:157:b0:4c:1303:af3a with HTTP; Mon, 27 Dec 2021
- 03:56:17 -0800 (PST)
-Reply-To: mrhassanr900@gmail.com
-From:   "Mr. Hassan Rouhani" <mrharchaouiahmedl55@gmail.com>
-Date:   Mon, 27 Dec 2021 03:56:17 -0800
-Message-ID: <CAFc00KkCvG0eYXmXDkqthi6Qn08XHjvqc=Qn2-s8gnYCt9+0MA@mail.gmail.com>
-Subject: YOUR COOPERATION NEEDED
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Friend,
+On Dez 27 2021, Hangyu Hua wrote:
 
-I hope this mail meet you in good health, I'm contacting you for a
-transaction of USD$41.6, Million Dollars. You will be rewarded with
-35% of the total sum for your partnership. Can you handle this? Your
-assistance and support is needed to transfer the Fourth one Million
-Six hundred Thousand US Dollars out of the Institution where I work,
-to your bank account in your Country.
+> If we don't use
+> commandp[0]=0 in len == 0,
+> than commandp will not have a zero-terminated.
 
-This is an abandon sum and it belongs to our late customer Mr. Heidi
-Salf Al-Islam, a Libya oil tycoon who died with his family as result
-of war in Libya on 31th of December  2010/2011. This fund was left
-unclaimed in custody of the Firm for safe keeping and without a
-beneficiary.
+That doesn't make sense.  There is no room for the zero.
 
-The transaction has to be concluded as soon and as I confirm your
-readiness to proceed with me, I will provide you with details.please
-get back to me through this email (mrhassanr900@gmail.com)
-
-My best regards,
-     Mr. Hassan Rouhani
+-- 
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."

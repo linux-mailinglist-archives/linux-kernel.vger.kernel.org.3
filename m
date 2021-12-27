@@ -2,131 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E01AD47FC07
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:56:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ADDD47FC0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:58:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236272AbhL0K4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 05:56:17 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:42134 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236236AbhL0K4O (ORCPT
+        id S233482AbhL0K6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 05:58:21 -0500
+Received: from mail-ua1-f50.google.com ([209.85.222.50]:34454 "EHLO
+        mail-ua1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233404AbhL0K6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 05:56:14 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BRAu4YX005375;
-        Mon, 27 Dec 2021 04:56:04 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1640602564;
-        bh=oXajD0FwetE/XHBNrETP8S1acJn4mJr3BQS+cPeHJjc=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=w8ZkAO3L9+pOIAs2ObE0Ndh9ybFCJKTZ6SUS/z+AkESEjAA2RQ8Qf5spWrRjnSUYL
-         BsUP6Fwjn0rMTtR/YNkjrVoSZ1ATF6LxLbrwgLdyGh6e6oPKApeirfvq0ENdv7eGmd
-         L3sBSxie1OK4HRSx3tA8FgN8KeKX29z70GWole5Y=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BRAu4Mo066946
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 27 Dec 2021 04:56:04 -0600
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 27
- Dec 2021 04:56:04 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 27 Dec 2021 04:56:04 -0600
-Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BRAtkVP029188;
-        Mon, 27 Dec 2021 04:56:01 -0600
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     Pratyush Yadav <p.yadav@ti.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Swapnil Jakhade <sjakhade@cadence.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>
-Subject: [PATCH v7 4/4] phy: dt-bindings: Add Cadence D-PHY Rx bindings
-Date:   Mon, 27 Dec 2021 16:25:45 +0530
-Message-ID: <20211227105545.4852-5-p.yadav@ti.com>
-X-Mailer: git-send-email 2.33.1.835.ge9e5ba39a7
-In-Reply-To: <20211227105545.4852-1-p.yadav@ti.com>
-References: <20211227105545.4852-1-p.yadav@ti.com>
+        Mon, 27 Dec 2021 05:58:20 -0500
+Received: by mail-ua1-f50.google.com with SMTP id t18so18744577uaj.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 02:58:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=n/cGXdZkKsVlyjmx+u0RanycZmtJnAc2tB+BlvaPdZw=;
+        b=xk5EYvNPxOMYAJmVhb3xySdRQ+ZCJyXbUqJI99jh8uizE0cJLSlOxomFmb2N3JFnnC
+         8xLU0Pssqaer8eI1Eold7jUAxhxdCoc0vz7vvag8591DEIW4DgAczlr56gHsnWplQ5Fo
+         hxoAxtm6PMbcXcfrtwI8nd4jpZlYFv1kI5q2JGGEOWI3JbljCS3bv+rmFBr1jIftcjox
+         fnBVJXteY+CJuFK+930p9igC91GLWe7nqr/6WbCI/C34e3gR+/PxrVUZwBxbCVFJGUk1
+         PsUvZbd+86scGXw+9WO+hpUq6lycdC7E7jKH753TUMTxN19pnZFwgxWgWZijak8gb2BK
+         yVZQ==
+X-Gm-Message-State: AOAM533Z4IkHW7bZjfB0QXDOG0qSaDrKBh37dejaJaaIYy/ptw1KAbcl
+        eXVfxlIZcAdTWUX6eI/jQzIRVNeK5PR5Ng==
+X-Google-Smtp-Source: ABdhPJxk+rbgRw/7o3vEsWm0sSIoZzUsn1iSUgEezqgVUgQi0bRJZy6JeHgSqfH42g46PbdkNvCDJQ==
+X-Received: by 2002:a05:6102:212f:: with SMTP id f15mr4461843vsg.83.1640602699473;
+        Mon, 27 Dec 2021 02:58:19 -0800 (PST)
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com. [209.85.222.50])
+        by smtp.gmail.com with ESMTPSA id j27sm2954510vkl.52.2021.12.27.02.58.19
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Dec 2021 02:58:19 -0800 (PST)
+Received: by mail-ua1-f50.google.com with SMTP id v14so8638782uau.2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 02:58:19 -0800 (PST)
+X-Received: by 2002:a05:6102:2155:: with SMTP id h21mr4307509vsg.68.1640602698890;
+ Mon, 27 Dec 2021 02:58:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20211215234946.6494-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAHp75VfGwQ7G2b39GO4tN=sxQoiahO2uudy25ALxEkrNcP9eVw@mail.gmail.com>
+ <CA+V-a8t1myOt0rhJExem_T2tJUM3PLL9KuXn0=_LtucJPHLkbA@mail.gmail.com>
+ <CAHp75VdXKVAZMKqC=0RbkAKKxFsdcxBc0M3N6OQMivHj-w+DHw@mail.gmail.com>
+ <CA+V-a8vbsy94MvRpqWQQuRqfEGiX_ZZTTt+dr0r6qnnJAPaEmA@mail.gmail.com>
+ <CAHp75VfvOOzwcTBjYg3OzbbdhcpWfaPWZ0h7HZRFOPEQAQMT=A@mail.gmail.com>
+ <CAMuHMdWSAOEAvqvr1UqKKmVDMzY3Tb8Y_4XowFPBN6L3TESqYA@mail.gmail.com>
+ <CAHp75Vc2puj45n_wMY50OnDemNmFFu-yepCC9_L+DWp1HAzxPw@mail.gmail.com>
+ <CAMuHMdUDts8LWYrftYp0VSxDX8kaP1a9N5YGZDNCAuAsr84EAw@mail.gmail.com>
+ <CAHp75VeitNg_fU22UkNGSYpAhtQaba1Scd3CPO0QmRpjkqmSMA@mail.gmail.com>
+ <CAMuHMdXpynBNC994vTo8tUc4bcD3HVzb3voNPJS1L8A0MRnyHQ@mail.gmail.com> <CAHp75Vc-QKy=po6WT7Cbx43dDmwaRcdhEfgzMSmMSn3kNQiG7g@mail.gmail.com>
+In-Reply-To: <CAHp75Vc-QKy=po6WT7Cbx43dDmwaRcdhEfgzMSmMSn3kNQiG7g@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 27 Dec 2021 11:58:07 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUMDLf+HaH8OYCCvbBwiX28wy8VW-ROWWJQBzE1orCEHQ@mail.gmail.com>
+Message-ID: <CAMuHMdUMDLf+HaH8OYCCvbBwiX28wy8VW-ROWWJQBzE1orCEHQ@mail.gmail.com>
+Subject: Re: [PATCH] irqchip/renesas-irqc: Use platform_get_irq_optional() to
+ get the interrupt
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Rx mode DPHY is different from Tx mode DPHY. Add a separate binding
-for it.
+Hi Andy,
 
-Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+On Mon, Dec 27, 2021 at 11:49 AM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Mon, Dec 27, 2021 at 12:24 PM Geert Uytterhoeven
+> <geert@linux-m68k.org> wrote:
+> > On Mon, Dec 27, 2021 at 11:10 AM Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote:
+> > > On Mon, Dec 27, 2021 at 12:02 PM Geert Uytterhoeven
+> > > <geert@linux-m68k.org> wrote:
+> > > > On Mon, Dec 27, 2021 at 10:57 AM Andy Shevchenko
+> > > > <andy.shevchenko@gmail.com> wrote:
+> > > > > On Mon, Dec 27, 2021 at 11:45 AM Geert Uytterhoeven
+> > > > > <geert@linux-m68k.org> wrote:
+> > > > > > On Sun, Dec 26, 2021 at 9:49 AM Andy Shevchenko
+> > > > > > <andy.shevchenko@gmail.com> wrote:
+> > > > > > > On Sun, Dec 26, 2021 at 1:59 AM Lad, Prabhakar
+> > > > > > > <prabhakar.csengg@gmail.com> wrote:
+> > > > > > > > When will this patch be merged for the new api, so that I can base my
+> > > > > > > > patches on top of it to avoid more changes?
+> > > > > > >
+> > > > > > > You can simply imply that, I dunno when it gets merged (from my point
+> > > > > > > of view the users should be fixed first, and since you are adding
+> > > > > > > users, the burden is increasing).
+> > > > > >
+> > > > > > Not only users (drivers), but also providers (architecture-specific code).
+> > > > > > IRQ zero is still valid on some architectures, e.g. on SH[1].
+> > > > >
+> > > > > Are we talking about vIRQ?
+> > > > > And users are fine with a big warning?
+> > > >
+> > > > The warning is only seen when a driver uses platorm_get_irq{,_optional}().
+> > > > There are several other ways to obtain interrupts, avoiding the
+> > > > big warning.
+> > >
+> > > Forgot to comment on this, then why is it a problem to allow
+> > > platfiorm_get_irq_optional() use 0 for no IRQ?
+> > > So, it seems you gave me a good justification for my way :-)
+> >
+> > In se that is not a problem, assumed by now everybody should have
+> > seen the warning, right?  Unfortunately that assumption is probably
+> > not true, as people may not upgrade their kernel, cfr. my SH Ethernet
+> > example.
+> >
+> > Apart from that, any new conversion to platfiorm_get_irq_optional()
+> > might cause a regression on an obscure platform still using IRQ0.
+>
+> What architectures?
+> Are there any examples besides ethernet drivers on SH?
 
----
+Sorry, I don't know.
 
-(no changes since v6)
+> Let's start  a list:
+> SH: only few cases related to smc911 Ethernet driver
 
-Changes in v6:
-- Add a new binding for DPHY Rx.
+Time to get rid of SH ;-)
 
- .../devicetree/bindings/phy/cdns,dphy-rx.yaml | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
+> x86: Legacy APIC 1:1 mapping, where 0 is used by timer which doesn't
+> involve platform API
 
-diff --git a/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml b/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
-new file mode 100644
-index 000000000000..07be031d82e6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
-@@ -0,0 +1,42 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/phy/cdns,dphy-rx.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cadence DPHY Rx Device Tree Bindings
-+
-+maintainers:
-+  - Pratyush Yadav <p.yadav@ti.com>
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: cdns,dphy-rx
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#phy-cells":
-+    const: 0
-+
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#phy-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/soc/ti,sci_pm_domain.h>
-+
-+    dphy0: phy@4580000 {
-+        compatible = "cdns,dphy-rx";
-+        reg = <0x4580000 0x1100>;
-+        #phy-cells = <0>;
-+        power-domains = <&k3_pds 147 TI_SCI_PD_EXCLUSIVE>;
-+    };
--- 
-2.33.1.835.ge9e5ba39a7
+Time to get rid of x86 ;-)
 
+> ...???...
+>
+> And what about "getting IRQ without big warning"? What did you have in
+> mind when you put it?
+
+If the driver uses platform_get_resource(..., IORESOURCE_IRQ, ...) to
+get the IRQ number, the warning in platform_get_irq_optional()
+doesn't trigger, as the latter is not called?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

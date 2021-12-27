@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01435480122
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:54:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70FCD47FF1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239505AbhL0Pxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:53:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39430 "EHLO
+        id S238255AbhL0Pfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:35:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240871AbhL0Pt4 (ORCPT
+        with ESMTP id S237986AbhL0PfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:49:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E9FC0698D7;
-        Mon, 27 Dec 2021 07:45:15 -0800 (PST)
+        Mon, 27 Dec 2021 10:35:07 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D95BC06173E;
+        Mon, 27 Dec 2021 07:35:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B61BB81063;
-        Mon, 27 Dec 2021 15:45:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E5D3C36AEA;
-        Mon, 27 Dec 2021 15:45:12 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 70BFACE10C4;
+        Mon, 27 Dec 2021 15:35:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F05DC36AEA;
+        Mon, 27 Dec 2021 15:35:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619913;
-        bh=AOgaUyQijjG4BNWhvmIFMil/Jzl1uMaf0lPBsN4/KCU=;
+        s=korg; t=1640619303;
+        bh=jpEICLU7iA2vFFdDGmu6tR9+fBi/8YEagTm6fPwWY84=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hk/WjZYcT5U1o7KvXA/xYn4ohRMyuHoxEJpPndNgNHdv7z9zXq2cukLkVD9cU3EfP
-         nWUVumeSd/ApxnKVbo3L1UBCR6dRrgbQ14gDuUTG/NxewftG8zjv3xJCkNG/ffPPfg
-         +2J3A5GGCQpKXWnOs2ipreM9TxL0m3p6dcpPOprw=
+        b=MJuQHclA1LS1AncSN7PypKGl4uOCOB6Zh17Tm0iiCKRGqZKyBx/tkDMJLv8Flkha+
+         IjD9UeELrMylyUXCkgyvH44tYvWDunXZG+gwhfv3UOxHipbd7h85WV3JIPDpIm1up1
+         FuQk3zZ0EugOKrYKXTtDmwROK8tVVeXhppuVY1hs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Orr <marcorr@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: [PATCH 5.15 086/128] KVM: x86: Always set kvm_run->if_flag
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH 5.4 25/47] Input: atmel_mxt_ts - fix double free in mxt_read_info_block
 Date:   Mon, 27 Dec 2021 16:31:01 +0100
-Message-Id: <20211227151334.381868731@linuxfoundation.org>
+Message-Id: <20211227151321.666144202@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
+References: <20211227151320.801714429@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,141 +49,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Orr <marcorr@google.com>
+From: José Expósito <jose.exposito89@gmail.com>
 
-commit c5063551bfcae4e48fec890b7bf369598b77526b upstream.
+commit 12f247ab590a08856441efdbd351cf2cc8f60a2d upstream.
 
-The kvm_run struct's if_flag is a part of the userspace/kernel API. The
-SEV-ES patches failed to set this flag because it's no longer needed by
-QEMU (according to the comment in the source code). However, other
-hypervisors may make use of this flag. Therefore, set the flag for
-guests with encrypted registers (i.e., with guest_state_protected set).
+The "id_buf" buffer is stored in "data->raw_info_block" and freed by
+"mxt_free_object_table" in case of error.
 
-Fixes: f1c6366e3043 ("KVM: SVM: Add required changes to support intercepts under SEV-ES")
-Signed-off-by: Marc Orr <marcorr@google.com>
-Message-Id: <20211209155257.128747-1-marcorr@google.com>
+Return instead of jumping to avoid a double free.
+
+Addresses-Coverity-ID: 1474582 ("Double free")
+Fixes: 068bdb67ef74 ("Input: atmel_mxt_ts - fix the firmware update")
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+Link: https://lore.kernel.org/r/20211212194257.68879-1-jose.exposito89@gmail.com
 Cc: stable@vger.kernel.org
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/kvm-x86-ops.h |    1 +
- arch/x86/include/asm/kvm_host.h    |    1 +
- arch/x86/kvm/svm/svm.c             |   21 ++++++++++++---------
- arch/x86/kvm/vmx/vmx.c             |    6 ++++++
- arch/x86/kvm/x86.c                 |    9 +--------
- 5 files changed, 21 insertions(+), 17 deletions(-)
+ drivers/input/touchscreen/atmel_mxt_ts.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/x86/include/asm/kvm-x86-ops.h
-+++ b/arch/x86/include/asm/kvm-x86-ops.h
-@@ -47,6 +47,7 @@ KVM_X86_OP(set_dr7)
- KVM_X86_OP(cache_reg)
- KVM_X86_OP(get_rflags)
- KVM_X86_OP(set_rflags)
-+KVM_X86_OP(get_if_flag)
- KVM_X86_OP(tlb_flush_all)
- KVM_X86_OP(tlb_flush_current)
- KVM_X86_OP_NULL(tlb_remote_flush)
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1341,6 +1341,7 @@ struct kvm_x86_ops {
- 	void (*cache_reg)(struct kvm_vcpu *vcpu, enum kvm_reg reg);
- 	unsigned long (*get_rflags)(struct kvm_vcpu *vcpu);
- 	void (*set_rflags)(struct kvm_vcpu *vcpu, unsigned long rflags);
-+	bool (*get_if_flag)(struct kvm_vcpu *vcpu);
- 
- 	void (*tlb_flush_all)(struct kvm_vcpu *vcpu);
- 	void (*tlb_flush_current)(struct kvm_vcpu *vcpu);
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -1517,6 +1517,15 @@ static void svm_set_rflags(struct kvm_vc
- 	to_svm(vcpu)->vmcb->save.rflags = rflags;
- }
- 
-+static bool svm_get_if_flag(struct kvm_vcpu *vcpu)
-+{
-+	struct vmcb *vmcb = to_svm(vcpu)->vmcb;
-+
-+	return sev_es_guest(vcpu->kvm)
-+		? vmcb->control.int_state & SVM_GUEST_INTERRUPT_MASK
-+		: kvm_get_rflags(vcpu) & X86_EFLAGS_IF;
-+}
-+
- static void svm_cache_reg(struct kvm_vcpu *vcpu, enum kvm_reg reg)
- {
- 	switch (reg) {
-@@ -3485,14 +3494,7 @@ bool svm_interrupt_blocked(struct kvm_vc
- 	if (!gif_set(svm))
- 		return true;
- 
--	if (sev_es_guest(vcpu->kvm)) {
--		/*
--		 * SEV-ES guests to not expose RFLAGS. Use the VMCB interrupt mask
--		 * bit to determine the state of the IF flag.
--		 */
--		if (!(vmcb->control.int_state & SVM_GUEST_INTERRUPT_MASK))
--			return true;
--	} else if (is_guest_mode(vcpu)) {
-+	if (is_guest_mode(vcpu)) {
- 		/* As long as interrupts are being delivered...  */
- 		if ((svm->nested.ctl.int_ctl & V_INTR_MASKING_MASK)
- 		    ? !(svm->vmcb01.ptr->save.rflags & X86_EFLAGS_IF)
-@@ -3503,7 +3505,7 @@ bool svm_interrupt_blocked(struct kvm_vc
- 		if (nested_exit_on_intr(svm))
- 			return false;
- 	} else {
--		if (!(kvm_get_rflags(vcpu) & X86_EFLAGS_IF))
-+		if (!svm_get_if_flag(vcpu))
- 			return true;
+--- a/drivers/input/touchscreen/atmel_mxt_ts.c
++++ b/drivers/input/touchscreen/atmel_mxt_ts.c
+@@ -1794,7 +1794,7 @@ static int mxt_read_info_block(struct mx
+ 	if (error) {
+ 		dev_err(&client->dev, "Error %d parsing object table\n", error);
+ 		mxt_free_object_table(data);
+-		goto err_free_mem;
++		return error;
  	}
  
-@@ -4562,6 +4564,7 @@ static struct kvm_x86_ops svm_x86_ops __
- 	.cache_reg = svm_cache_reg,
- 	.get_rflags = svm_get_rflags,
- 	.set_rflags = svm_set_rflags,
-+	.get_if_flag = svm_get_if_flag,
- 
- 	.tlb_flush_all = svm_flush_tlb,
- 	.tlb_flush_current = svm_flush_tlb,
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -1359,6 +1359,11 @@ void vmx_set_rflags(struct kvm_vcpu *vcp
- 		vmx->emulation_required = vmx_emulation_required(vcpu);
- }
- 
-+static bool vmx_get_if_flag(struct kvm_vcpu *vcpu)
-+{
-+	return vmx_get_rflags(vcpu) & X86_EFLAGS_IF;
-+}
-+
- u32 vmx_get_interrupt_shadow(struct kvm_vcpu *vcpu)
- {
- 	u32 interruptibility = vmcs_read32(GUEST_INTERRUPTIBILITY_INFO);
-@@ -7573,6 +7578,7 @@ static struct kvm_x86_ops vmx_x86_ops __
- 	.cache_reg = vmx_cache_reg,
- 	.get_rflags = vmx_get_rflags,
- 	.set_rflags = vmx_set_rflags,
-+	.get_if_flag = vmx_get_if_flag,
- 
- 	.tlb_flush_all = vmx_flush_tlb_all,
- 	.tlb_flush_current = vmx_flush_tlb_current,
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -8880,14 +8880,7 @@ static void post_kvm_run_save(struct kvm
- {
- 	struct kvm_run *kvm_run = vcpu->run;
- 
--	/*
--	 * if_flag is obsolete and useless, so do not bother
--	 * setting it for SEV-ES guests.  Userspace can just
--	 * use kvm_run->ready_for_interrupt_injection.
--	 */
--	kvm_run->if_flag = !vcpu->arch.guest_state_protected
--		&& (kvm_get_rflags(vcpu) & X86_EFLAGS_IF) != 0;
--
-+	kvm_run->if_flag = static_call(kvm_x86_get_if_flag)(vcpu);
- 	kvm_run->cr8 = kvm_get_cr8(vcpu);
- 	kvm_run->apic_base = kvm_get_apic_base(vcpu);
- 
+ 	data->object_table = (struct mxt_object *)(id_buf + MXT_OBJECT_START);
 
 

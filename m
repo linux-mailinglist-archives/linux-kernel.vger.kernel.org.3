@@ -2,100 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9161047FBD4
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:30:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1560B47FBD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236047AbhL0KaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 05:30:01 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:58666
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236030AbhL0KaA (ORCPT
+        id S236088AbhL0KiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 05:38:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236006AbhL0KiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 05:30:00 -0500
-Received: from localhost.localdomain (unknown [222.129.35.96])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 27 Dec 2021 05:38:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D6CC06173E;
+        Mon, 27 Dec 2021 02:38:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id B42763F1DF;
-        Mon, 27 Dec 2021 10:29:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1640600998;
-        bh=Y2UnV7M80+g2ZN4FJOTnLD7c81Y9JVWXQE8KdwRybLU=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=BOjNDfgQF67Rq96FrVYfRjSb1D3qASnEnUCVpT9x45gJnq4OX3bJMrjFmvaogS1ez
-         tDj9ToTK6kFLgcMt/LC31Z/nXjzNBQ853G4GVxEwc3vUW7nawSeK/CFZFKQ5IiEg5v
-         KpTtk3yC7gpFVUrtTocdP/9ZATBkjsDlyMwMZNwIlW9pvp5w3QVQ2puPCgem1ATcTD
-         0AkKu2DZEhJrz1877GXAcogWbNtbVoFBgC1pgE0YYUV0MWpO+9YwgxrhHMciy7FLc/
-         Sq2H/FuiRoMATn5ypjWy4PupdqdsiD4YbPk40wE2pZlqpkI3N5jtmZjCP/UbxNIDkV
-         MUsv0dYyjGczQ==
-From:   Aaron Ma <aaron.ma@canonical.com>
-To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        matthias.bgg@gmail.com, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, aaron.ma@canonical.com
-Subject: [PATCH] Bluetooth: btusb: Add support for Foxconn QCA 0xe0d0
-Date:   Mon, 27 Dec 2021 18:29:50 +0800
-Message-Id: <20211227102950.17968-1-aaron.ma@canonical.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D40D60F57;
+        Mon, 27 Dec 2021 10:38:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9B40C36AEA;
+        Mon, 27 Dec 2021 10:38:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640601503;
+        bh=3T/QRWR/tP1Z/6mnQLWPvM7J1jyDUH8UoIy5Dro8NcU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Sw7MkueexQle75phO9VmstNWVupfm0KkGWIV0IoRhXpyzZ/VeCrcmB8aam6SxaR3R
+         TVe3Sx6npMAYGKv1Yz5vc7PYA7jRBj0+PNUYctyhBgoP1QUlaHRXCIhngyvXICfY+1
+         ykq6UKa3UoTcp49dz8TvjRyVKOd9jgCstEWUUyitu9xcUlOx/E/QBkvA+KHgLdVIgf
+         CgizjRmYMcNC7v1HtC2Ubgkjj1W0r9yOW3v+uyJCuK24zTAp/J42APgIPH7sxo7P9e
+         82wnG2bmSx481yRYwmZVQTAkT/AIKi9XlNv3I2LcmUPFnaoEQDqdfnzOQ5x76eWEcH
+         uRsZmwQBIHwSA==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n1nOW-00EX5j-QQ; Mon, 27 Dec 2021 10:38:20 +0000
+Date:   Mon, 27 Dec 2021 10:38:20 +0000
+Message-ID: <87sfuez61v.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Bert Vermeulen <bert@biot.com>,
+        John Crispin <john@phrozen.org>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 3/5] irqchip/realtek-rtl: use per-parent irq handling
+In-Reply-To: <73789385f470b7630c19b4c632d60ef7b89a46d0.1640548009.git.sander@svanheule.net>
+References: <cover.1640548009.git.sander@svanheule.net>
+        <73789385f470b7630c19b4c632d60ef7b89a46d0.1640548009.git.sander@svanheule.net>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sander@svanheule.net, tglx@linutronix.de, robh+dt@kernel.org, devicetree@vger.kernel.org, mail@birger-koblitz.de, bert@biot.com, john@phrozen.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an ID of Qualcomm Bluetooth SoC WCN6855.
+On Sun, 26 Dec 2021 19:59:26 +0000,
+Sander Vanheule <sander@svanheule.net> wrote:
+> 
+> The driver handled all SoC interrupts equally, independent of which
+> parent interrupt it is routed to. Between all configured inputs, the use
+> of __ffs actually gives higher priority to lower input lines,
+> effectively bypassing any priority there might be among the parent
+> interrupts.
+> 
+> Rework the driver to use a separate handler for each parent interrupt,
+> to respect the order in which those parents interrupt are handled.
+> 
+> Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> ---
+> With switching back to chained handlers, it became impossible to route a
+> SoC interrupt to the timer interrupt (CPU IRQ 7) on systems using the
+> CEVT-R4K timer. If a chained handler is already set for the timer
+> interrupt, the timer cannot request it anymore (due to IRQ_NOREQUEST)
+> and the system hangs. It is probably a terrible idea to also run e.g.
+> the console on the timer interrupt, but it is possible. If there are no
+> solutions to this, I can live with it though; there are still 5 other
+> interrupts.
 
-T:  Bus=05 Lev=01 Prnt=01 Port=03 Cnt=02 Dev#=  4 Spd=12   MxCh= 0
-D:  Ver= 1.10 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=0489 ProdID=e0d0 Rev= 0.01
-C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=100mA
-I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-I:  If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-I:* If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-I:  If#= 1 Alt= 7 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  65 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  65 Ivl=1ms
+Shared interrupts and chaining don't mix. You can look at it any way
+you want, there is always something that breaks eventually.
 
-Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
----
- drivers/bluetooth/btusb.c | 3 +++
- 1 file changed, 3 insertions(+)
+> 
+> Changes since v1:
+> - Limit scope to per-parent handling
+> - Replace the "priority" naming with the more generic "output"
+> - Don't request interrupts, but stick to chained handlers
+> ---
+>  drivers/irqchip/irq-realtek-rtl.c | 109 ++++++++++++++++++++----------
+>  1 file changed, 74 insertions(+), 35 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-realtek-rtl.c b/drivers/irqchip/irq-realtek-rtl.c
+> index 568614edd88f..1f8f21a0bd1a 100644
+> --- a/drivers/irqchip/irq-realtek-rtl.c
+> +++ b/drivers/irqchip/irq-realtek-rtl.c
+> @@ -7,6 +7,7 @@
+>  
+>  #include <linux/of_irq.h>
+>  #include <linux/irqchip.h>
+> +#include <linux/interrupt.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/of_address.h>
+>  #include <linux/irqchip/chained_irq.h>
+> @@ -21,10 +22,45 @@
+>  #define RTL_ICTL_IRR2		0x10
+>  #define RTL_ICTL_IRR3		0x14
+>  
+> +#define RTL_ICTL_NUM_OUTPUTS	6
+> +
+>  #define REG(x)		(realtek_ictl_base + x)
+>  
+>  static DEFINE_RAW_SPINLOCK(irq_lock);
+>  static void __iomem *realtek_ictl_base;
+> +static struct irq_domain *realtek_ictl_domain;
+> +
+> +struct realtek_ictl_output {
+> +	unsigned int routing_value;
+> +	u32 child_mask;
+> +};
+> +
+> +static struct realtek_ictl_output realtek_ictl_outputs[RTL_ICTL_NUM_OUTPUTS];
+> +
+> +/*
+> + * IRR0-IRR3 store 4 bits per interrupt, but Realtek uses inverted numbering,
+> + * placing IRQ 31 in the first four bits. A routing value of '0' means the
+> + * interrupt is left disconnected. Routing values {1..15} connect to output
+> + * lines {0..14}.
+> + */
+> +#define IRR_OFFSET(idx)		(4 * (3 - (idx * 4) / 32))
+> +#define IRR_SHIFT(idx)		((idx * 4) % 32)
+> +
+> +static inline u32 read_irr(void __iomem *irr0, int idx)
+> +{
+> +	return (readl(irr0 + IRR_OFFSET(idx)) >> IRR_SHIFT(idx)) & 0xf;
+> +}
+> +
+> +static inline void write_irr(void __iomem *irr0, int idx, u32 value)
+> +{
+> +	unsigned int offset = IRR_OFFSET(idx);
+> +	unsigned int shift = IRR_SHIFT(idx);
+> +	u32 irr;
+> +
+> +	irr = readl(irr0 + offset) & ~(0xf << shift);
+> +	irr |= (value & 0xf) << shift;
+> +	writel(irr, irr0 + offset);
+> +}
+>  
+>  static void realtek_ictl_unmask_irq(struct irq_data *i)
+>  {
+> @@ -74,42 +110,45 @@ static const struct irq_domain_ops irq_domain_ops = {
+>  
+>  static void realtek_irq_dispatch(struct irq_desc *desc)
+>  {
+> +	struct realtek_ictl_output *parent = irq_desc_get_handler_data(desc);
+>  	struct irq_chip *chip = irq_desc_get_chip(desc);
+> -	struct irq_domain *domain;
+>  	unsigned int pending;
+>  
+>  	chained_irq_enter(chip, desc);
+> -	pending = readl(REG(RTL_ICTL_GIMR)) & readl(REG(RTL_ICTL_GISR));
+> +	pending = readl(REG(RTL_ICTL_GIMR)) & readl(REG(RTL_ICTL_GISR))
+> +		& parent->child_mask;
+> +
+>  	if (unlikely(!pending)) {
+>  		spurious_interrupt();
+>  		goto out;
+>  	}
+> -	domain = irq_desc_get_handler_data(desc);
+> -	generic_handle_domain_irq(domain, __ffs(pending));
+> +	generic_handle_domain_irq(realtek_ictl_domain, __ffs(pending));
 
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index c6a325fd5d5e..df25360979e8 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -295,6 +295,9 @@ static const struct usb_device_id blacklist_table[] = {
- 	{ USB_DEVICE(0x0cf3, 0xe600), .driver_info = BTUSB_QCA_WCN6855 |
- 						     BTUSB_WIDEBAND_SPEECH |
- 						     BTUSB_VALID_LE_STATES },
-+	{ USB_DEVICE(0x0489, 0xe0d0), .driver_info = BTUSB_QCA_WCN6855 |
-+						     BTUSB_WIDEBAND_SPEECH |
-+						     BTUSB_VALID_LE_STATES },
- 
- 	/* Broadcom BCM2035 */
- 	{ USB_DEVICE(0x0a5c, 0x2009), .driver_info = BTUSB_BCM92035 },
+You were complaining about the use of __ffs() creating artificial
+priorities. And yet you keep using it, recreating the same issue for a
+smaller set of interrupts. Why do we need all the complexity of
+registering multiple handlers when a simple loop on the pending bits
+would ensure some level of fairness?
+
+It looks to me that you are solving a different problem, where you'd
+deliver interrupts that have may not yet been signalled to the CPU
+yet.  And you definitely should consider consuming all the pending
+bits before exiting.
+
+>
+>  out:
+>  	chained_irq_exit(chip, desc);
+>  }
+>  
+> -/*
+> - * SoC interrupts are cascaded to MIPS CPU interrupts according to the
+> - * interrupt-map in the device tree. Each SoC interrupt gets 4 bits for
+> - * the CPU interrupt in an Interrupt Routing Register. Max 32 SoC interrupts
+> - * thus go into 4 IRRs. A routing value of '0' means the interrupt is left
+> - * disconnected. Routing values {1..15} connect to output lines {0..14}.
+> - */
+> -static int __init map_interrupts(struct device_node *node, struct irq_domain *domain)
+> +static void __init set_routing(struct realtek_ictl_output *output, unsigned int soc_int)
+>  {
+> +	unsigned int routing_old;
+> +
+> +	routing_old = read_irr(REG(RTL_ICTL_IRR0), soc_int);
+> +	if (routing_old) {
+> +		pr_warn("int %d already routed to %d, not updating\n", soc_int, routing_old);
+> +		return;
+> +	}
+> +
+> +	output->child_mask |= BIT(soc_int);
+> +	write_irr(REG(RTL_ICTL_IRR0), soc_int, output->routing_value);
+> +}
+> +
+> +static int __init map_interrupts(struct device_node *node)
+> +{
+> +	struct realtek_ictl_output *output;
+>  	struct device_node *cpu_ictl;
+>  	const __be32 *imap;
+> -	u32 imaplen, soc_int, cpu_int, tmp, regs[4];
+> -	int ret, i, irr_regs[] = {
+> -		RTL_ICTL_IRR3,
+> -		RTL_ICTL_IRR2,
+> -		RTL_ICTL_IRR1,
+> -		RTL_ICTL_IRR0,
+> -	};
+> -	u8 mips_irqs_set;
+> +	u32 imaplen, soc_int, cpu_int, tmp;
+> +	int ret, i;
+>  
+>  	ret = of_property_read_u32(node, "#address-cells", &tmp);
+>  	if (ret || tmp)
+> @@ -119,8 +158,6 @@ static int __init map_interrupts(struct device_node *node, struct irq_domain *do
+>  	if (!imap || imaplen % 3)
+>  		return -EINVAL;
+>  
+> -	mips_irqs_set = 0;
+> -	memset(regs, 0, sizeof(regs));
+>  	for (i = 0; i < imaplen; i += 3 * sizeof(u32)) {
+>  		soc_int = be32_to_cpup(imap);
+>  		if (soc_int > 31)
+> @@ -138,39 +175,41 @@ static int __init map_interrupts(struct device_node *node, struct irq_domain *do
+>  		if (cpu_int > 7 || cpu_int < 2)
+>  			return -EINVAL;
+>  
+> -		if (!(mips_irqs_set & BIT(cpu_int))) {
+> -			irq_set_chained_handler_and_data(cpu_int, realtek_irq_dispatch,
+> -							 domain);
+> -			mips_irqs_set |= BIT(cpu_int);
+> +		output = &realtek_ictl_outputs[cpu_int - 2];
+> +
+> +		if (!output->routing_value) {
+> +			irq_set_chained_handler_and_data(cpu_int, realtek_irq_dispatch, output);
+> +			/* Use routing values (1..6) for CPU interrupts (2..7) */
+> +			output->routing_value = cpu_int - 1;
+
+Why do you keep this routing_value around? Its only purpose is to be
+read by set_routing(), which already checks for a programmed value.
+
+	M.
+
 -- 
-2.30.2
-
+Without deviation from the norm, progress is not possible.

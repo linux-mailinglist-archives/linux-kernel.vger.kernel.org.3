@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FC447FF2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:36:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1A04800FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238183AbhL0Pfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:35:54 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:39990 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238196AbhL0Pfa (ORCPT
+        id S237273AbhL0PwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:52:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39288 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240654AbhL0Pta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:35:30 -0500
+        Mon, 27 Dec 2021 10:49:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263CFC061A72;
+        Mon, 27 Dec 2021 07:44:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9FC63CE10CC;
-        Mon, 27 Dec 2021 15:35:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89605C36AEA;
-        Mon, 27 Dec 2021 15:35:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7BB5B810CC;
+        Mon, 27 Dec 2021 15:44:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22357C36AE7;
+        Mon, 27 Dec 2021 15:44:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619327;
-        bh=KR81wHK0O1o6FUNpfeMxbL4c/2FSZpCFuTJeg+zKsW0=;
+        s=korg; t=1640619853;
+        bh=wHBIRSbgOQ/+QBB96w7IWDBvgeY5OzS7/quyOW5HzTQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pNE07VRriwLmjHQIeyRqGe6q0+KzzK8kwYq6sHEBW4YHAd/XgIOAZrwvs0GLHp4IJ
-         aS2vt4yuuy/GxMNZnaFUYDvGZU+pi5Yah7JshDbL0+QgwC/s5SAN4DMbgUnmC5Kngz
-         CxO22mojST3WyxCBNLAr3tS5qmdz4eOqkiTwxwoo=
+        b=HyOdmbIiPgJsKp0IPcj3T7YJ8c7ROPzXAA6bP7jjPYctB93wqNuxiKb+6U3vcQCQ2
+         kKa+fO7PVsEjoeCz3hAbGblu5B0Qqvuph0+O+GFTKW2i9bSLiNuTO4VerfYs0sMDWV
+         Eg7CRumKZS1vTt97TFZAbQf9LGwize7TraFX3/TU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Prathamesh Shete <pshete@nvidia.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
         Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 5.4 32/47] mmc: sdhci-tegra: Fix switch to HS400ES mode
+Subject: [PATCH 5.15 093/128] mmc: sdhci-tegra: Fix switch to HS400ES mode
 Date:   Mon, 27 Dec 2021 16:31:08 +0100
-Message-Id: <20211227151321.900547726@linuxfoundation.org>
+Message-Id: <20211227151334.624130088@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
-References: <20211227151320.801714429@linuxfoundation.org>
+In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
+References: <20211227151331.502501367@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -69,7 +72,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/mmc/host/sdhci-tegra.c
 +++ b/drivers/mmc/host/sdhci-tegra.c
-@@ -340,23 +340,6 @@ static void tegra_sdhci_set_tap(struct s
+@@ -356,23 +356,6 @@ static void tegra_sdhci_set_tap(struct s
  	}
  }
  
@@ -93,7 +96,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  static void tegra_sdhci_reset(struct sdhci_host *host, u8 mask)
  {
  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-@@ -768,6 +751,32 @@ static void tegra_sdhci_set_clock(struct
+@@ -793,6 +776,32 @@ static void tegra_sdhci_set_clock(struct
  	}
  }
  

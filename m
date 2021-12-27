@@ -2,106 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4BBF47FA82
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 07:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5B247FA85
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 07:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235315AbhL0GWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 01:22:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbhL0GWi (ORCPT
+        id S235326AbhL0G3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 01:29:16 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36708 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235318AbhL0G3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 01:22:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6722C06173E
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 22:22:37 -0800 (PST)
+        Mon, 27 Dec 2021 01:29:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE76CB80E41
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 06:22:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DB49C36AE9;
-        Mon, 27 Dec 2021 06:22:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4AA5B80E52;
+        Mon, 27 Dec 2021 06:29:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7F29C36AEA;
+        Mon, 27 Dec 2021 06:29:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640586154;
-        bh=x0C0vb8ishT2V5+rf2VVWHRrHwoEM9zfj/BD07nqD3U=;
+        s=korg; t=1640586552;
+        bh=nfs9cY8hI68fJLHPs5Fa7P0ypNV+LDUhpthBrDIFF8E=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oRGzizb4t67HqTkAWQvWWt+7o2Xk9gqpIjG5wIbw/ieC7810lMfyQNRPwy93xVIOs
-         LQDmoQLjGl0wD9P372VolX4TjECFwVC1DskJP1RiuCNTS6d4ZfRbg7RX7h7HnU6P3J
-         CDS6MiqOOrFRckEL8vV/Usv1YqDjxg/vG/twaKlg=
-Date:   Mon, 27 Dec 2021 07:22:31 +0100
+        b=ABAPlhryXS4apdou9GUXwJ8i5FQcKWPhWFsKp7W0eJWH4AMZRiTk0eGETSG0DstwF
+         84NvaMBh07x3inS0s2BeTyjeaglKmONOOBYVNDTjwo5M006tzcriXVb+OkSmba8D9/
+         dbk303EYzmi5XnWPJJQaYoe70dl6LR7fAjpV0GNQ=
+Date:   Mon, 27 Dec 2021 07:29:07 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Gautam Menghani <gautammenghani14@gmail.com>
-Cc:     nsaenz@kernel.org, stefan.wahren@i2se.com, gascoar@gmail.com,
-        ojaswin98@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     jk@ozlabs.org, joel@jms.id.au, alistair@popple.id.au,
+        eajames@linux.ibm.com, andrew@aj.id.au, linux-fsi@lists.ozlabs.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Remove repeated word in vchiq log warning
-Message-ID: <Yclbp0ZBkT8dxgbu@kroah.com>
-References: <20211226164632.48952-1-gautammenghani14@gmail.com>
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] fsi: Aspeed: Fix a potential double free
+Message-ID: <YcldM9sgYdjMYMtH@kroah.com>
+References: <2cafa0607ca171ebd00ac6c7e073b46808e24f00.1640537669.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211226164632.48952-1-gautammenghani14@gmail.com>
+In-Reply-To: <2cafa0607ca171ebd00ac6c7e073b46808e24f00.1640537669.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 26, 2021 at 10:16:32PM +0530, Gautam Menghani wrote:
-> Signed-off-by: Gautam Menghani <gautammenghani14@gmail.com>
+On Sun, Dec 26, 2021 at 05:56:02PM +0100, Christophe JAILLET wrote:
+> 'aspeed' is a devm_alloc'ed, so there is no need to free it explicitly or
+> there will be a double free().
+
+A struct device can never be devm_alloced for obvious reasons.  Perhaps
+that is the real problem here?
+
+> Remove the 'release' function that is wrong and unneeded.
+> 
+> Fixes: 606397d67f41 ("fsi: Add ast2600 master driver")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
->  drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> This patch is completely theoretical. It looks good to me, but there is a
+> little too much indirections for me. I'm also not that familiar with
+> fixing issue related to 'release' function...
 > 
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> index c650a32bcedf..6759a6261500 100644
-> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> @@ -1661,7 +1661,7 @@ vchiq_dump_service_use_state(struct vchiq_state *state)
->  				  service_data[i].clientid, service_data[i].use_count,
->  				  service_data[i].use_count ? nz : "");
->  	}
-> -	vchiq_log_warning(vchiq_susp_log_level, "----- VCHIQ use count count %d", peer_count);
-> +	vchiq_log_warning(vchiq_susp_log_level, "----- VCHIQ use count %d", peer_count);
->  	vchiq_log_warning(vchiq_susp_log_level, "--- Overall vchiq instance use count %d",
->  			  vc_use_count);
+> ... So review with care :)
+> ---
+>  drivers/fsi/fsi-master-aspeed.c | 9 ---------
+>  1 file changed, 9 deletions(-)
+> 
+> diff --git a/drivers/fsi/fsi-master-aspeed.c b/drivers/fsi/fsi-master-aspeed.c
+> index 8606e55c1721..4a745ccb60cf 100644
+> --- a/drivers/fsi/fsi-master-aspeed.c
+> +++ b/drivers/fsi/fsi-master-aspeed.c
+> @@ -373,14 +373,6 @@ static int aspeed_master_break(struct fsi_master *master, int link)
+>  	return aspeed_master_write(master, link, 0, addr, &cmd, 4);
+>  }
 >  
-> -- 
-> 2.25.1
-> 
-> 
+> -static void aspeed_master_release(struct device *dev)
+> -{
+> -	struct fsi_master_aspeed *aspeed =
+> -		to_fsi_master_aspeed(dev_to_fsi_master(dev));
+> -
+> -	kfree(aspeed);
+> -}
+> -
+>  /* mmode encoders */
+>  static inline u32 fsi_mmode_crs0(u32 x)
+>  {
+> @@ -603,7 +595,6 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
+>  	dev_info(&pdev->dev, "hub version %08x (%d links)\n", reg, links);
+>  
+>  	aspeed->master.dev.parent = &pdev->dev;
+> -	aspeed->master.dev.release = aspeed_master_release;
 
-Hi,
+Odd, then what deletes this device structure when the release function
+wants to be called?  You should have gotten a big warning from the
+kernel when removing the device from the system at runtime, did you test
+this somehow?
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+This does not look correct at all.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what is needed in order to
-  properly describe the change.
-
-- You did not write a descriptive Subject: for the patch, allowing Greg,
-  and everyone else, to know what this patch is all about.  Please read
-  the section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what a proper Subject: line should
-  look like.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+greg k-h

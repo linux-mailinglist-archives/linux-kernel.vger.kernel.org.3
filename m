@@ -2,46 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8B747FE49
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F4C47FE84
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237389AbhL0P1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:27:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237360AbhL0P1o (ORCPT
+        id S237500AbhL0P3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:29:51 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59676 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237620AbhL0P3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:27:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E4DC06173E;
-        Mon, 27 Dec 2021 07:27:44 -0800 (PST)
+        Mon, 27 Dec 2021 10:29:06 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 455946104C;
-        Mon, 27 Dec 2021 15:27:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D92BC36AEA;
-        Mon, 27 Dec 2021 15:27:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17B696104C;
+        Mon, 27 Dec 2021 15:29:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF6FCC36AEB;
+        Mon, 27 Dec 2021 15:29:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640618863;
-        bh=yWohFuXPuhpKh3GBtSuwSt43iyD9kB/bkSGBFhSDcY0=;
+        s=korg; t=1640618945;
+        bh=8NcTJMBUM/PsY5EIjirWHljvPxiDrnTC/nH+pvVWWS0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D+ZeY2vAWDtcUjq81fU0MA6OFrEnkc86vYxwcmZOAI19f9EDFw71Qol6RHcx9W5ww
-         iQCgkc51ZV+4y0/EvlFP6QlhkylvbKXRktRYjf65EB0rrOTuFh2Ci/+EfaU4JXSCwa
-         rILOrb3GkUmbBe8vZpBLA4HXbuUNn8iEehG70I1U=
+        b=1tCu92edS2T+xHpW+XX4U7DoX1k+erj/u4DFLApo6FqHbfBAfKBsb+NYWyazEbJJG
+         62rz5Ny0ynIDOPWZAQhnKbCxCygiI2os2xTROcY7puiWBFq1CVUisCh9dXMu7V7Wyg
+         yuDKplecCWPuUheA+m4Lb9pX2i3r1xuGfgLI4bwc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+2dc91e7fc3dea88b1e8a@syzkaller.appspotmail.com,
-        =?UTF-8?q?R=C3=A9mi=20Denis-Courmont?= <remi@remlab.net>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.4 17/17] phonet/pep: refuse to enable an unbound pipe
-Date:   Mon, 27 Dec 2021 16:27:12 +0100
-Message-Id: <20211227151316.503111560@linuxfoundation.org>
+        stable@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.9 11/19] ALSA: drivers: opl3: Fix incorrect use of vp->state
+Date:   Mon, 27 Dec 2021 16:27:13 +0100
+Message-Id: <20211227151316.915318210@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151315.962187770@linuxfoundation.org>
-References: <20211227151315.962187770@linuxfoundation.org>
+In-Reply-To: <20211227151316.558965545@linuxfoundation.org>
+References: <20211227151316.558965545@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,36 +45,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rémi Denis-Courmont <remi@remlab.net>
+From: Colin Ian King <colin.i.king@gmail.com>
 
-commit 75a2f31520095600f650597c0ac41f48b5ba0068 upstream.
+commit 2dee54b289fbc810669a1b2b8a0887fa1c9a14d7 upstream.
 
-This ioctl() implicitly assumed that the socket was already bound to
-a valid local socket name, i.e. Phonet object. If the socket was not
-bound, two separate problems would occur:
+Static analysis with scan-build has found an assignment to vp2 that is
+never used. It seems that the check on vp->state > 0 should be actually
+on vp2->state instead. Fix this.
 
-1) We'd send an pipe enablement request with an invalid source object.
-2) Later socket calls could BUG on the socket unexpectedly being
-   connected yet not bound to a valid object.
+This dates back to 2002, I found the offending commit from the git
+history git://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git,
+commit 91e39521bbf6 ("[PATCH] ALSA patch for 2.5.4")
 
-Reported-by: syzbot+2dc91e7fc3dea88b1e8a@syzkaller.appspotmail.com
-Signed-off-by: Rémi Denis-Courmont <remi@remlab.net>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20211212172025.470367-1-colin.i.king@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/phonet/pep.c |    2 ++
- 1 file changed, 2 insertions(+)
+ sound/drivers/opl3/opl3_midi.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/phonet/pep.c
-+++ b/net/phonet/pep.c
-@@ -956,6 +956,8 @@ static int pep_ioctl(struct sock *sk, in
- 			ret =  -EBUSY;
- 		else if (sk->sk_state == TCP_ESTABLISHED)
- 			ret = -EISCONN;
-+		else if (!pn->pn_sk.sobject)
-+			ret = -EADDRNOTAVAIL;
- 		else
- 			ret = pep_sock_enable(sk, NULL, 0);
- 		release_sock(sk);
+--- a/sound/drivers/opl3/opl3_midi.c
++++ b/sound/drivers/opl3/opl3_midi.c
+@@ -415,7 +415,7 @@ void snd_opl3_note_on(void *p, int note,
+ 	}
+ 	if (instr_4op) {
+ 		vp2 = &opl3->voices[voice + 3];
+-		if (vp->state > 0) {
++		if (vp2->state > 0) {
+ 			opl3_reg = reg_side | (OPL3_REG_KEYON_BLOCK +
+ 					       voice_offset + 3);
+ 			reg_val = vp->keyon_reg & ~OPL3_KEYON_BIT;
 
 

@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9A847FF7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4581347FF77
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238907AbhL0Phw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:37:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S238867AbhL0Phq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:37:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238671AbhL0PgL (ORCPT
+        with ESMTP id S238579AbhL0PgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:36:11 -0500
+        Mon, 27 Dec 2021 10:36:14 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E029C061190;
-        Mon, 27 Dec 2021 07:35:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B88DC061B38;
+        Mon, 27 Dec 2021 07:35:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C0F01CE10D1;
-        Mon, 27 Dec 2021 15:35:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A5A2C36AEB;
-        Mon, 27 Dec 2021 15:35:43 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9D5E4CE10D9;
+        Mon, 27 Dec 2021 15:35:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65E1CC36AEB;
+        Mon, 27 Dec 2021 15:35:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619344;
-        bh=/ZFHek1EHRCPMAmYTrII+ivizde0ljXrLW/GIWzl/W0=;
+        s=korg; t=1640619346;
+        bh=L3jzjkZJuoA19T9M7XeHKugIqeJMbTHiY4W+mhtIqfo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pPyc5efn0rl8vnHU4Bci93/R+L47Z3URvEsj0prFN2cb3kEG5/mlSCyLQUQoqCCoR
-         0JUTQBNm4qdVy91TC3c9UmUg2M1dOVqyRtUfTP6CFWAJ5r7WlKJqfncOF11UAjlRuZ
-         u+2hUmxIozdsOk1CKKzluG1nHUOstiMz7QUs4TVo=
+        b=nLJ/qNzQPPFbJj3Sr6/O9O2RGgJ9d0KECYSzmQ5QCPa9DwWGM1+4Ar3Nu7AQhT13x
+         sudom1Es/UUHSRRqyTPJ6vP36UImVjtDKh1q02YZiXwEldhk4VMy1qQRyNZLqVCmAC
+         /hljAt7nUalaAQs6lLyBLdx6HC3kcMDp2jOAqk9U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.4 38/47] KVM: VMX: Fix stale docs for kvm-intel.emulate_invalid_guest_state
-Date:   Mon, 27 Dec 2021 16:31:14 +0100
-Message-Id: <20211227151322.105809840@linuxfoundation.org>
+        stable@vger.kernel.org, Andrey Ryabinin <arbn@yandex-team.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        David Rientjes <rientjes@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.4 39/47] mm: mempolicy: fix THP allocations escaping mempolicy restrictions
+Date:   Mon, 27 Dec 2021 16:31:15 +0100
+Message-Id: <20211227151322.146610498@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
 References: <20211227151320.801714429@linuxfoundation.org>
@@ -49,40 +53,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Andrey Ryabinin <arbn@yandex-team.com>
 
-commit 0ff29701ffad9a5d5a24344d8b09f3af7b96ffda upstream.
+commit 338635340669d5b317c7e8dcf4fff4a0f3651d87 upstream.
 
-Update the documentation for kvm-intel's emulate_invalid_guest_state to
-rectify the description of KVM's default behavior, and to document that
-the behavior and thus parameter only applies to L1.
+alloc_pages_vma() may try to allocate THP page on the local NUMA node
+first:
 
-Fixes: a27685c33acc ("KVM: VMX: Emulate invalid guest state by default")
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20211207193006.120997-4-seanjc@google.com>
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+	page = __alloc_pages_node(hpage_node,
+		gfp | __GFP_THISNODE | __GFP_NORETRY, order);
+
+And if the allocation fails it retries allowing remote memory:
+
+	if (!page && (gfp & __GFP_DIRECT_RECLAIM))
+    		page = __alloc_pages_node(hpage_node,
+					gfp, order);
+
+However, this retry allocation completely ignores memory policy nodemask
+allowing allocation to escape restrictions.
+
+The first appearance of this bug seems to be the commit ac5b2c18911f
+("mm: thp: relax __GFP_THISNODE for MADV_HUGEPAGE mappings").
+
+The bug disappeared later in the commit 89c83fb539f9 ("mm, thp:
+consolidate THP gfp handling into alloc_hugepage_direct_gfpmask") and
+reappeared again in slightly different form in the commit 76e654cc91bb
+("mm, page_alloc: allow hugepage fallback to remote nodes when
+madvised")
+
+Fix this by passing correct nodemask to the __alloc_pages() call.
+
+The demonstration/reproducer of the problem:
+
+    $ mount -oremount,size=4G,huge=always /dev/shm/
+    $ echo always > /sys/kernel/mm/transparent_hugepage/defrag
+    $ cat mbind_thp.c
+    #include <unistd.h>
+    #include <sys/mman.h>
+    #include <sys/stat.h>
+    #include <fcntl.h>
+    #include <assert.h>
+    #include <stdlib.h>
+    #include <stdio.h>
+    #include <numaif.h>
+
+    #define SIZE 2ULL << 30
+    int main(int argc, char **argv)
+    {
+        int fd;
+        unsigned long long i;
+        char *addr;
+        pid_t pid;
+        char buf[100];
+        unsigned long nodemask = 1;
+
+        fd = open("/dev/shm/test", O_RDWR|O_CREAT);
+        assert(fd > 0);
+        assert(ftruncate(fd, SIZE) == 0);
+
+        addr = mmap(NULL, SIZE, PROT_READ|PROT_WRITE,
+                           MAP_SHARED, fd, 0);
+
+        assert(mbind(addr, SIZE, MPOL_BIND, &nodemask, 2, MPOL_MF_STRICT|MPOL_MF_MOVE)==0);
+        for (i = 0; i < SIZE; i+=4096) {
+          addr[i] = 1;
+        }
+        pid = getpid();
+        snprintf(buf, sizeof(buf), "grep shm /proc/%d/numa_maps", pid);
+        system(buf);
+        sleep(10000);
+
+        return 0;
+    }
+    $ gcc mbind_thp.c -o mbind_thp -lnuma
+    $ numactl -H
+    available: 2 nodes (0-1)
+    node 0 cpus: 0 2
+    node 0 size: 1918 MB
+    node 0 free: 1595 MB
+    node 1 cpus: 1 3
+    node 1 size: 2014 MB
+    node 1 free: 1731 MB
+    node distances:
+    node   0   1
+      0:  10  20
+      1:  20  10
+    $ rm -f /dev/shm/test; taskset -c 0 ./mbind_thp
+    7fd970a00000 bind:0 file=/dev/shm/test dirty=524288 active=0 N0=396800 N1=127488 kernelpagesize_kB=4
+
+Link: https://lkml.kernel.org/r/20211208165343.22349-1-arbn@yandex-team.com
+Fixes: ac5b2c18911f ("mm: thp: relax __GFP_THISNODE for MADV_HUGEPAGE mappings")
+Signed-off-by: Andrey Ryabinin <arbn@yandex-team.com>
+Acked-by: Michal Hocko <mhocko@suse.com>
+Acked-by: Mel Gorman <mgorman@techsingularity.net>
+Acked-by: David Rientjes <rientjes@google.com>
+Cc: Andrea Arcangeli <aarcange@redhat.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/admin-guide/kernel-parameters.txt |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ mm/mempolicy.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2112,8 +2112,12 @@
- 			Default is 1 (enabled)
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -2143,8 +2143,9 @@ alloc_pages_vma(gfp_t gfp, int order, st
+ 			 * memory as well.
+ 			 */
+ 			if (!page && (gfp & __GFP_DIRECT_RECLAIM))
+-				page = __alloc_pages_node(hpage_node,
+-						gfp | __GFP_NORETRY, order);
++				page = __alloc_pages_nodemask(gfp | __GFP_NORETRY,
++							order, hpage_node,
++							nmask);
  
- 	kvm-intel.emulate_invalid_guest_state=
--			[KVM,Intel] Enable emulation of invalid guest states
--			Default is 0 (disabled)
-+			[KVM,Intel] Disable emulation of invalid guest state.
-+			Ignored if kvm-intel.enable_unrestricted_guest=1, as
-+			guest state is never invalid for unrestricted guests.
-+			This param doesn't apply to nested guests (L2), as KVM
-+			never emulates invalid L2 guest state.
-+			Default is 1 (enabled)
- 
- 	kvm-intel.flexpriority=
- 			[KVM,Intel] Disable FlexPriority feature (TPR shadow).
+ 			goto out;
+ 		}
 
 

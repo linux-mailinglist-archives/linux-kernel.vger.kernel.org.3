@@ -2,77 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 387F347F9B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 03:09:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7427647F9BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 03:25:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234970AbhL0CJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 21:09:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbhL0CJF (ORCPT
+        id S234774AbhL0CVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 21:21:51 -0500
+Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:45942 "EHLO
+        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229637AbhL0CVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 21:09:05 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51598C06173E;
-        Sun, 26 Dec 2021 18:09:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=t6MHcFRQOEAfAbf+pBhcCNXckGDe+GUmSYQySEIVgis=; b=FleukhVUyFoQqc0DFr9Mofp9Bw
-        BAGQvyPVmANzpJ09/f7kPV+IgBFWC/S+iRRIXcwcmO93IL9q6d4m9K7IFKIKmnP2auG7vmsUS4ZFs
-        tCP7Hmsat6c+XiRPf8zPvkfeVQdDglfL+1XeX4nDqiRM2xrhs0Ow5jwQUKmE9GE33DZymihlf5EO2
-        QaVfTaw5bKW5VpuHEx7Ahxd41/rZWyjj1vgvRthdbQpcXo1vkcIOF/UcHB4us4FFIiCS3n9WW+qJm
-        iCVtdYTVNd6fGZCm51kcgpdde6081ZireGvim/HRfR3UfsHR9bsXw0ssRSUNp42gx9xXwOjq3CAXp
-        AG8HfzJw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n1fRa-0074rg-3W; Mon, 27 Dec 2021 02:08:58 +0000
-Date:   Mon, 27 Dec 2021 02:08:58 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>
-Cc:     viro@zeniv.linux.org.uk, Jens Axboe <axboe@kernel.dk>,
-        hch@infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG] fs: super: possible ABBA deadlocks in
- do_thaw_all_callback() and freeze_bdev()
-Message-ID: <YckgOocIWOrOoRvf@casper.infradead.org>
-References: <e3de0d83-1170-05c8-672c-4428e781b988@gmail.com>
+        Sun, 26 Dec 2021 21:21:50 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R911e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V.p-vQR_1640571707;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V.p-vQR_1640571707)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 27 Dec 2021 10:21:48 +0800
+Date:   Mon, 27 Dec 2021 10:21:47 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
+        Yue Hu <huyue2@yulong.com>
+Subject: Re: [PATCH v3 1/5] erofs: tidy up z_erofs_lz4_decompress
+Message-ID: <YckjO1lSbaB6Ixze@B-P7TQMD6M-0146.local>
+References: <20211225070626.74080-1-hsiangkao@linux.alibaba.com>
+ <20211225070626.74080-2-hsiangkao@linux.alibaba.com>
+ <c3fd4833-2483-f77e-fb79-42871e2d4219@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e3de0d83-1170-05c8-672c-4428e781b988@gmail.com>
+In-Reply-To: <c3fd4833-2483-f77e-fb79-42871e2d4219@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 10:03:35AM +0800, Jia-Ju Bai wrote:
-> My static analysis tool reports several possible ABBA deadlocks in Linux
-> 5.10:
-> 
-> do_thaw_all_callback()
->   down_write(&sb->s_umount); --> Line 1028 (Lock A)
->   emergency_thaw_bdev()
->     thaw_bdev()
->       mutex_lock(&bdev->bd_fsfreeze_mutex); --> Line 602 (Lock B)
-> 
-> freeze_bdev()
->   mutex_lock(&bdev->bd_fsfreeze_mutex); --> Line 556 (Lock B)
->   freeze_super()
->     down_write(&sb->s_umount); --> Line 1716 (Lock A)
->     down_write(&sb->s_umount); --> Line 1738 (Lock A)
->   deactivate_super()
->     down_write(&s->s_umount); --> Line 365 (Lock A)
-> 
-> When do_thaw_all_callback() and freeze_bdev() are concurrently executed, the
-> deadlocks can occur.
-> 
-> I am not quite sure whether these possible deadlocks are real and how to fix
-> them if them are real.
-> Any feedback would be appreciated, thanks :)
+Hi Chao,
 
-As a rule, ABBA deadlocks that can actually occur are already found by
-lockdep.    Tools that think they've found something are generally wrong.
-I'm not inclined to look in detail to find out why this tool is wrong
-because lockdep is so effective.
+On Mon, Dec 27, 2021 at 10:08:54AM +0800, Chao Yu wrote:
+> On 2021/12/25 15:06, Gao Xiang wrote:
+> > To prepare for the upcoming ztailpacking feature and further
+> > cleanups, introduce a unique z_erofs_lz4_decompress_ctx to keep
+> > the context, including inpages, outpages and oend, which are
+> > frequently used by the lz4 decompressor.
+> > 
+> > No logic changes.
+> > 
+> > Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> > ---
+> >   fs/erofs/decompressor.c | 80 +++++++++++++++++++++--------------------
+> >   1 file changed, 41 insertions(+), 39 deletions(-)
+> > 
+> > diff --git a/fs/erofs/decompressor.c b/fs/erofs/decompressor.c
+> > index c373a199c407..d1282a8b709e 100644
+> > --- a/fs/erofs/decompressor.c
+> > +++ b/fs/erofs/decompressor.c
+> > @@ -16,6 +16,11 @@
+> >   #define LZ4_DECOMPRESS_INPLACE_MARGIN(srcsize)  (((srcsize) >> 8) + 32)
+> >   #endif
+> > +struct z_erofs_lz4_decompress_ctx {
+> > +	struct z_erofs_decompress_req *rq;
+> > +	unsigned int inpages, outpages, oend;
+> > +};
+> > +
+> 
+> Could you please comment a bit about fields of structure
+> z_erofs_lz4_decompress_ctx?
+> 
+
+Many thanks for the comment! I will revise it in the next version.
+
+Thanks,
+Gao Xiang
+
+> Otherwise, the patch looks good to me.
+> 
+> Reviewed-by: Chao Yu <chao@kernel.org>
+> 
+> Thanks,

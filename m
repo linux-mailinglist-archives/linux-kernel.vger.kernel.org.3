@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF74D47FE40
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D961347FE69
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:29:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237353AbhL0P1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:27:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
+        id S237598AbhL0P2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:28:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237377AbhL0P1c (ORCPT
+        with ESMTP id S237570AbhL0P2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:27:32 -0500
+        Mon, 27 Dec 2021 10:28:31 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E688C06173E;
-        Mon, 27 Dec 2021 07:27:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794B2C06175F;
+        Mon, 27 Dec 2021 07:28:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8F41B810A3;
-        Mon, 27 Dec 2021 15:27:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A36FC36AFC;
-        Mon, 27 Dec 2021 15:27:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3AA76B810AA;
+        Mon, 27 Dec 2021 15:28:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86B16C36AE7;
+        Mon, 27 Dec 2021 15:28:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640618849;
-        bh=lxj0CGnaQWsdrpP+ym0cjNUD1Q9ZWMmAFxZGfZWd1/4=;
+        s=korg; t=1640618909;
+        bh=zBVinueb1qPcRhVa/U2awGqXWZcw1+LUqIXqzfJPmko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AZU79SCaAAErcyL3XJjB+XBBxU4dseioz5c5PvS4Lsq93aZ/IHtGX7LXjsaCirRQI
-         okJI1qxDciPro2BGBrAhjz2CoFvk74dWshQcrz//RMzaBC+CXm0RqJ/p7e9JcwpCpS
-         6GEnZ/tyJxCniKjVglKa4jpSDA+bzmHfLRbvrrVs=
+        b=XwjQ5amzWYKmlf4/LPmy5X1yHDDaB+DUaS1thp3c/G/h2GQvMrwV0UbIVoXHV7B9o
+         NP3t9ilcjSMs/3b1rIeXpTkZAwG+YoqY7nHOfjhNSm4SOqUVBEV8LDjZEanjvLS87o
+         C4PS0Uru3Mm6HfyjrMIcED0ZX+RbWrBx08UW2/jA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "xen-devel@lists.xenproject.org, Juergen Gross" <jgross@suse.com>,
-        Juergen Gross <jgross@suse.com>
-Subject: [PATCH 4.4 12/17] xen/blkfront: fix bug in backported patch
-Date:   Mon, 27 Dec 2021 16:27:07 +0100
-Message-Id: <20211227151316.349920128@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Fernando Fernandez Mancera <ffmancera@riseup.net>,
+        Jay Vosburgh <jay.vosburgh@canonical.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 06/19] bonding: fix ad_actor_system option setting to default
+Date:   Mon, 27 Dec 2021 16:27:08 +0100
+Message-Id: <20211227151316.760655286@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151315.962187770@linuxfoundation.org>
-References: <20211227151315.962187770@linuxfoundation.org>
+In-Reply-To: <20211227151316.558965545@linuxfoundation.org>
+References: <20211227151316.558965545@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,41 +51,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Fernando Fernandez Mancera <ffmancera@riseup.net>
 
-The backport of commit 8f5a695d99000fc ("xen/blkfront: don't take local
-copy of a request from the ring page") to stable 4.4 kernel introduced
-a bug when adding the needed blkif_ring_get_request() function, as
-info->ring.req_prod_pvt was incremented twice now.
+[ Upstream commit 1c15b05baea71a5ff98235783e3e4ad227760876 ]
 
-Fix that be deleting the now superfluous increments after calling that
-function.
+When 802.3ad bond mode is configured the ad_actor_system option is set to
+"00:00:00:00:00:00". But when trying to set the all-zeroes MAC as actors'
+system address it was failing with EINVAL.
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+An all-zeroes ethernet address is valid, only multicast addresses are not
+valid values.
+
+Fixes: 171a42c38c6e ("bonding: add netlink support for sys prio, actor sys mac, and port key")
+Signed-off-by: Fernando Fernandez Mancera <ffmancera@riseup.net>
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+Link: https://lore.kernel.org/r/20211221111345.2462-1-ffmancera@riseup.net
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/xen-blkfront.c |    4 ----
- 1 file changed, 4 deletions(-)
+ Documentation/networking/bonding.txt | 11 ++++++-----
+ drivers/net/bonding/bond_options.c   |  2 +-
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
---- a/drivers/block/xen-blkfront.c
-+++ b/drivers/block/xen-blkfront.c
-@@ -493,8 +493,6 @@ static int blkif_queue_discard_req(struc
- 	else
- 		ring_req->u.discard.flag = 0;
+diff --git a/Documentation/networking/bonding.txt b/Documentation/networking/bonding.txt
+index 57f52cdce32e4..07b53b2b13df8 100644
+--- a/Documentation/networking/bonding.txt
++++ b/Documentation/networking/bonding.txt
+@@ -191,11 +191,12 @@ ad_actor_sys_prio
+ ad_actor_system
  
--	info->ring.req_prod_pvt++;
--
- 	/* Copy the request to the ring page. */
- 	*final_ring_req = *ring_req;
- 	info->shadow[id].inflight = true;
-@@ -711,8 +709,6 @@ static int blkif_queue_rw_req(struct req
- 	if (setup.segments)
- 		kunmap_atomic(setup.segments);
+ 	In an AD system, this specifies the mac-address for the actor in
+-	protocol packet exchanges (LACPDUs). The value cannot be NULL or
+-	multicast. It is preferred to have the local-admin bit set for this
+-	mac but driver does not enforce it. If the value is not given then
+-	system defaults to using the masters' mac address as actors' system
+-	address.
++	protocol packet exchanges (LACPDUs). The value cannot be a multicast
++	address. If the all-zeroes MAC is specified, bonding will internally
++	use the MAC of the bond itself. It is preferred to have the
++	local-admin bit set for this mac but driver does not enforce it. If
++	the value is not given then system defaults to using the masters'
++	mac address as actors' system address.
  
--	info->ring.req_prod_pvt++;
--
- 	/* Copy request(s) to the ring page. */
- 	*final_ring_req = *ring_req;
- 	info->shadow[id].inflight = true;
+ 	This parameter has effect only in 802.3ad mode and is available through
+ 	SysFs interface.
+diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bond_options.c
+index 258cb3999b0e3..5c6a962363096 100644
+--- a/drivers/net/bonding/bond_options.c
++++ b/drivers/net/bonding/bond_options.c
+@@ -1408,7 +1408,7 @@ static int bond_option_ad_actor_system_set(struct bonding *bond,
+ 		mac = (u8 *)&newval->value;
+ 	}
+ 
+-	if (!is_valid_ether_addr(mac))
++	if (is_multicast_ether_addr(mac))
+ 		goto err;
+ 
+ 	netdev_info(bond->dev, "Setting ad_actor_system to %pM\n", mac);
+-- 
+2.34.1
+
 
 

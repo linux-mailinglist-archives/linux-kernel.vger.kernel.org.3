@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD6F4800EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C35047FF18
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:35:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239773AbhL0Pvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:51:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239804AbhL0Pqk (ORCPT
+        id S232970AbhL0PfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:35:18 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:39544 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238122AbhL0Pea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:46:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90CBC08EA71;
-        Mon, 27 Dec 2021 07:42:51 -0800 (PST)
+        Mon, 27 Dec 2021 10:34:30 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55B6F61115;
-        Mon, 27 Dec 2021 15:42:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE12C36AEA;
-        Mon, 27 Dec 2021 15:42:50 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6BECECE10B3;
+        Mon, 27 Dec 2021 15:34:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F91BC36AE7;
+        Mon, 27 Dec 2021 15:34:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619770;
-        bh=Iz5a0+mjhpOdCd0kaMQOvGR4kvYFUlYI6nvi3xw/uEo=;
+        s=korg; t=1640619266;
+        bh=XQGVRJHZHyeiaoSHEu//I3/GPk0uHMx+t2yWR9aF2GA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r1kiGs8jBiZ7OrcBPp+D36WwVHe9ZLv9ORvGzQMdWVPk+/5BcQB8rq/uTqR2MOhzO
-         jZsZZYySDCD+/cvtydM+ISrX07plzypzbo0GhwmuxbD3KEra5bNY0qg24chdq6BRGN
-         FeAjaywIp9a7TngEhaz/NrqrZq8Qpsn9L7kYEGcQ=
+        b=jiJJ/zd6tpUiZa83b8Ejnw0kFviztwVF7imgAxMwikK128rlgT5UD3/MZHpoktLd8
+         89kWcYpIZHJBjdQT6PV7x2iOHBgwFBlu9nXayzv4GImWlwckYfGgWGC/iiUxhDiQjG
+         0MCKJPWI+SocZNjH8Dckesl5t5FSEvKI+DWa4Dn4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
-        Borislav Petkov <bp@suse.de>
-Subject: [PATCH 5.15 064/128] x86/boot: Move EFI range reservation after cmdline parsing
+        stable@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH 5.4 03/47] HID: holtek: fix mouse probing
 Date:   Mon, 27 Dec 2021 16:30:39 +0100
-Message-Id: <20211227151333.633719191@linuxfoundation.org>
+Message-Id: <20211227151320.909662444@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
+References: <20211227151320.801714429@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,75 +45,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Rapoport <rppt@kernel.org>
+From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-commit 2f5b3514c33fecad4003ce0f22ca9691492d310b upstream.
+commit 93a2207c254ca102ebbdae47b00f19bbfbfa7ecd upstream.
 
-The memory reservation in arch/x86/platform/efi/efi.c depends on at
-least two command line parameters. Put it back later in the boot process
-and move efi_memblock_x86_reserve_range() out of early_memory_reserve().
+An overlook from the previous commit: we don't even parse or start the
+device, meaning that the device is not presented to user space.
 
-An attempt to fix this was done in
-
-  8d48bf8206f7 ("x86/boot: Pull up cmdline preparation and early param parsing")
-
-but that caused other troubles so it got reverted.
-
-The bug this is addressing is:
-
-Dan reports that Anjaneya Chagam can no longer use the efi=nosoftreserve
-kernel command line parameter to suppress "soft reservation" behavior.
-
-This is due to the fact that the following call-chain happens at boot:
-
-  early_reserve_memory
-  |-> efi_memblock_x86_reserve_range
-      |-> efi_fake_memmap_early
-
-which does
-
-        if (!efi_soft_reserve_enabled())
-                return;
-
-and that would have set EFI_MEM_NO_SOFT_RESERVE after having parsed
-"nosoftreserve".
-
-However, parse_early_param() gets called *after* it, leading to the boot
-cmdline not being taken into account.
-
-See also https://lore.kernel.org/r/e8dd8993c38702ee6dd73b3c11f158617e665607.camel@intel.com
-
-  [ bp: Turn into a proper patch. ]
-
-Signed-off-by: Mike Rapoport <rppt@kernel.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20211213112757.2612-4-bp@alien8.de
+Fixes: 93020953d0fa ("HID: check for valid USB device for many HID drivers")
+Cc: stable@vger.kernel.org
+Link: https://bugs.archlinux.org/task/73048
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215341
+Link: https://lore.kernel.org/r/e4efbf13-bd8d-0370-629b-6c80c0044b15@leemhuis.info/
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/setup.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/hid/hid-holtek-mouse.c |   15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -713,9 +713,6 @@ static void __init early_reserve_memory(
- 
- 	early_reserve_initrd();
- 
--	if (efi_enabled(EFI_BOOT))
--		efi_memblock_x86_reserve_range();
--
- 	memblock_x86_reserve_range_setup_data();
- 
- 	reserve_ibft_region();
-@@ -890,6 +887,9 @@ void __init setup_arch(char **cmdline_p)
- 
- 	parse_early_param();
- 
-+	if (efi_enabled(EFI_BOOT))
-+		efi_memblock_x86_reserve_range();
+--- a/drivers/hid/hid-holtek-mouse.c
++++ b/drivers/hid/hid-holtek-mouse.c
+@@ -65,8 +65,23 @@ static __u8 *holtek_mouse_report_fixup(s
+ static int holtek_mouse_probe(struct hid_device *hdev,
+ 			      const struct hid_device_id *id)
+ {
++	int ret;
 +
- #ifdef CONFIG_MEMORY_HOTPLUG
- 	/*
- 	 * Memory used by the kernel cannot be hot-removed because Linux
+ 	if (!hid_is_usb(hdev))
+ 		return -EINVAL;
++
++	ret = hid_parse(hdev);
++	if (ret) {
++		hid_err(hdev, "hid parse failed: %d\n", ret);
++		return ret;
++	}
++
++	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
++	if (ret) {
++		hid_err(hdev, "hw start failed: %d\n", ret);
++		return ret;
++	}
++
+ 	return 0;
+ }
+ 
 
 

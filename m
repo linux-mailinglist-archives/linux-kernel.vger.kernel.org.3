@@ -2,91 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9215C47FDAF
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 14:43:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E6B47FDB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 14:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233962AbhL0Nna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 08:43:30 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:53268 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229644AbhL0Nn3 (ORCPT
+        id S234121AbhL0Nn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 08:43:57 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57608 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229644AbhL0Nn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 08:43:29 -0500
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 1BRDhFk8024251
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Dec 2021 08:43:16 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 9C46A15C33A3; Mon, 27 Dec 2021 08:43:15 -0500 (EST)
-Date:   Mon, 27 Dec 2021 08:43:15 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, viro@zeniv.linux.org.uk,
-        Jens Axboe <axboe@kernel.dk>, hch@infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG] fs: super: possible ABBA deadlocks in
- do_thaw_all_callback() and freeze_bdev()
-Message-ID: <YcnC85Vc95OTBJSV@mit.edu>
-References: <e3de0d83-1170-05c8-672c-4428e781b988@gmail.com>
- <YckgOocIWOrOoRvf@casper.infradead.org>
- <YclDafAwrN0TkhCi@mit.edu>
- <a9dde5cc-b919-9c82-a185-851c2eab5442@gmail.com>
+        Mon, 27 Dec 2021 08:43:56 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC57860FFB;
+        Mon, 27 Dec 2021 13:43:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D20C7C36AEC;
+        Mon, 27 Dec 2021 13:43:54 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="HFFJGz7J"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1640612633;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m4VHVmdxDnw/5uH5g0BfZFtqGk916bztPM6sTPKTV3I=;
+        b=HFFJGz7Jf/6zCu4+EYvty3fHiUcbfLWTOpCoGCd45ezPyNkjQCXGF2ytMJnVYHMJtsiMCl
+        yeqsin2ly2k3LOPLI+Eqh66h2VgWi7bqUmFTadWLbexczAAOHON0kOj5SQMbYmomC23H/q
+        eKfu3YSIEUOlo2hchjFpHmkL5NX+FK8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id afd2f686 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 27 Dec 2021 13:43:53 +0000 (UTC)
+Received: by mail-yb1-f176.google.com with SMTP id m19so27295916ybf.9;
+        Mon, 27 Dec 2021 05:43:52 -0800 (PST)
+X-Gm-Message-State: AOAM530oLqxsaFSGEUaYyt2U0MqROCiwp2s6LhzbPgcM7HzP6pBtq9cQ
+        pcLOcuyxLTaCHCWg5Qm++ru03Q2i0ksmkvRd1l0=
+X-Google-Smtp-Source: ABdhPJyLotRuMiaC7IB3M5SDYqi2QUChl9JVn9pBv9Z0RICSjrEf6RfbxaNIxJZEPvJzHbPa4ntJ3UXP062SN4+b0bc=
+X-Received: by 2002:a25:1e83:: with SMTP id e125mr21353761ybe.32.1640612631824;
+ Mon, 27 Dec 2021 05:43:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a9dde5cc-b919-9c82-a185-851c2eab5442@gmail.com>
+References: <20211223141113.1240679-1-Jason@zx2c4.com> <CAK7LNARjb4=9JOVDdfUg1sxLG4OH-Eko44iEewbr+0Wd+CNf1Q@mail.gmail.com>
+ <CAMj1kXG7PFpj1Oz1osVCBW1NhCHQT+Oc=0WMLYSeRtC1QK4e8Q@mail.gmail.com> <CAK7LNATjF13vTrxMn9OTH4rmmrg6m-7aWjH6n3zV9APZwvus9w@mail.gmail.com>
+In-Reply-To: <CAK7LNATjF13vTrxMn9OTH4rmmrg6m-7aWjH6n3zV9APZwvus9w@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 27 Dec 2021 14:43:41 +0100
+X-Gmail-Original-Message-ID: <CAHmME9p95g0yWcRBfbrx_kX56HqFZrw8xcOLt6cn5fzVSCQXyg@mail.gmail.com>
+Message-ID: <CAHmME9p95g0yWcRBfbrx_kX56HqFZrw8xcOLt6cn5fzVSCQXyg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] lib/crypto: blake2s: include as built-in
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 05:32:09PM +0800, Jia-Ju Bai wrote:
-> Thanks for your reply and suggestions.
-> I will try to trigger this possible deadlock by enabling lockdep and using
-> the workloads that you suggested.
-> In my opinion, static analysis can conveniently cover some code that is hard
-> to be covered at runtime, and thus it is useful to detecting some
-> infrequently-triggered bugs.
-> However, it is true that static analysis sometimes has many false positives,
-> which is unsatisfactory :(
-> I am trying some works to relieve this problem in kernel-code analysis.
-> I can understand that the related code is not frequently executed, but I
-> think that finding and fixing bugs should be always useful in practice :)
+Hi Masahiro,
 
-The thing about the sysrq commands is that they are almost always used
-in emergency situations when the system administrator with physical
-access to the console sends a sysrq command (e.g., by sending a BREAK
-to the serial console).  This is usually done when the system has
-*already* locked up for some reason, such as getting livelocked due to
-an out of memory condition, or maybe even a deadlock.  So if sysrq-j
-could potentially cause a deadlock, so what?  Sysrq-j would only be
-used when the system was in a really bad state due to a bug in any
-case.  In over 10 years of kernel development, I can't remember a
-single time when I've needed to use sysrq-j.
+Thanks for your feedback. Indeed it looks like you're right about the
+CONFIG_MODULE case. We'll go back to using the kconfig system
+normally, and cease tempting the beast with libs-y and such. I'll have
+a v+1 for you shortly in case you're curious, though I expect it to be
+sufficiently boring to be no longer worth your time :-).
 
-So it might be that the better way to handle this would be to make
-sure all of the emergency sysrq code in fs/super.c is under the
-CONFIG_MAGIC_SYSRQ #ifdef --- and then do the static analysis without
-CONFIG_MAGIC_SYSRQ defined.
-
-As I said, I agree it's a bug, and if I had infinite resources, I'd
-certainly ask an engineer to completely rework the emergency sysrq-j
-code path to address the potential ABBA deadlock.  The problem is I do
-*not* have infinite resources, which means I have to prioritize which
-bugs get attention, and how much time engineers on my team spend
-working on new features or performance enhacements that can justify
-their salaries and ensure that they get good performance ratings ---
-since leadership, technical difficulty and business impact is how
-engineers get judged at my company.
-
-Unfortunately, judging business impact is one of those things that is
-unfair to expect a static analyzer to do.  And after all, if we have
-infinite resources, why should an OS bother with a VM?  We can just
-pin all process text/data segments in memory, if money (and DRAM
-availability in the supply chain) is no object.  :-)
-
-Cheers,
-
-						- Ted
+Jason

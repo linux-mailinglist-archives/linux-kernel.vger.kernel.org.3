@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3213A480041
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:44:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B67248010A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238099AbhL0PoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:44:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
+        id S233626AbhL0Pwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:52:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239054AbhL0PlD (ORCPT
+        with ESMTP id S233767AbhL0Pr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:41:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F4DC06173E;
-        Mon, 27 Dec 2021 07:39:58 -0800 (PST)
+        Mon, 27 Dec 2021 10:47:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61525C08EAEB;
+        Mon, 27 Dec 2021 07:43:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BBACE610A6;
-        Mon, 27 Dec 2021 15:39:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A55EBC36AEA;
-        Mon, 27 Dec 2021 15:39:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D041B810CC;
+        Mon, 27 Dec 2021 15:43:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EB16C36AEA;
+        Mon, 27 Dec 2021 15:43:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619597;
-        bh=T+CuL0RIRZVbTifmv/VRAKufeWDUHR5KY3Hn/9usjOk=;
+        s=korg; t=1640619810;
+        bh=BEmlgkvqRJDu7LM1uiQZK4A0FdbActFMkSVyx4LKvns=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A5trgej7qgDS4+BTAXZAm5arMf0eM911dt4gU1M746g+mneMO0lVDTYK9hJcrnRIS
-         kdeHfCRj/uUw2g88L8gHDBkwQtD4KnWIQvtMJaUSvLGC/6XaCd8xaDVthkHlgMjJGu
-         M/nQCwKdaYQe2u1Ktuqi7rIdujEBtxA/We+jK+/s=
+        b=v1QtMIVAOIXSJ75ZS3hR3glkyhX05aeH9aFHCuK5pzpDw5DzYtC3lMGZ9e7qy8bDh
+         /Qvi9tifYDL+E+n/HOsouCHQZauiFkX3nU6hgUz6D3lWhQSkwMNzLzpNDm04SRrw5R
+         4wosBa3aENF6WT3rc3vatuf/39WLCOKs5FJE2Yr8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bradley Scott <bscott@teksavvy.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.10 37/76] ALSA: hda/realtek: Add new alc285-hp-amp-init model
+        stable@vger.kernel.org,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Corey Minyard <cminyard@mvista.com>
+Subject: [PATCH 5.15 077/128] ipmi: bail out if init_srcu_struct fails
 Date:   Mon, 27 Dec 2021 16:30:52 +0100
-Message-Id: <20211227151325.992741963@linuxfoundation.org>
+Message-Id: <20211227151334.077304536@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
-References: <20211227151324.694661623@linuxfoundation.org>
+In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
+References: <20211227151331.502501367@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,46 +49,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bradley Scott <bscott@teksavvy.com>
+From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-commit aa72394667e5cea3547e4c41ddff7ca8c632d764 upstream.
+commit 2b5160b12091285c5aca45980f100a9294af7b04 upstream.
 
-Adds a new "alc285-hp-amp-init" model that can be used to apply the ALC285
-HP speaker amplifier initialization fixup to devices that are not already
-known by passing "hda_model=alc285-hp-amp-init" to the
-snd-sof-intel-hda-common module or "model=alc285-hp-amp-init" to the
-snd-hda-intel module, depending on which is being used.
+In case, init_srcu_struct fails (because of memory allocation failure), we
+might proceed with the driver initialization despite srcu_struct not being
+entirely initialized.
 
-Signed-off-by: Bradley Scott <bscott@teksavvy.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20211213162246.506838-1-bscott@teksavvy.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: 913a89f009d9 ("ipmi: Don't initialize anything in the core until something uses it")
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Cc: Corey Minyard <cminyard@mvista.com>
+Cc: stable@vger.kernel.org
+Message-Id: <20211217154410.1228673-1-cascardo@canonical.com>
+Signed-off-by: Corey Minyard <cminyard@mvista.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/sound/hd-audio/models.rst |    2 ++
- sound/pci/hda/patch_realtek.c           |    1 +
- 2 files changed, 3 insertions(+)
+ drivers/char/ipmi/ipmi_msghandler.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/Documentation/sound/hd-audio/models.rst
-+++ b/Documentation/sound/hd-audio/models.rst
-@@ -326,6 +326,8 @@ usi-headset
-     Headset support on USI machines
- dual-codecs
-     Lenovo laptops with dual codecs
-+alc285-hp-amp-init
-+    HP laptops which require speaker amplifier initialization (ALC285)
+--- a/drivers/char/ipmi/ipmi_msghandler.c
++++ b/drivers/char/ipmi/ipmi_msghandler.c
+@@ -5148,7 +5148,9 @@ static int ipmi_init_msghandler(void)
+ 	if (initialized)
+ 		goto out;
  
- ALC680
- ======
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9061,6 +9061,7 @@ static const struct hda_model_fixup alc2
- 	{.id = ALC287_FIXUP_IDEAPAD_BASS_SPK_AMP, .name = "alc287-ideapad-bass-spk-amp"},
- 	{.id = ALC623_FIXUP_LENOVO_THINKSTATION_P340, .name = "alc623-lenovo-thinkstation-p340"},
- 	{.id = ALC255_FIXUP_ACER_HEADPHONE_AND_MIC, .name = "alc255-acer-headphone-and-mic"},
-+	{.id = ALC285_FIXUP_HP_GPIO_AMP_INIT, .name = "alc285-hp-amp-init"},
- 	{}
- };
- #define ALC225_STANDARD_PINS \
+-	init_srcu_struct(&ipmi_interfaces_srcu);
++	rv = init_srcu_struct(&ipmi_interfaces_srcu);
++	if (rv)
++		goto out;
+ 
+ 	timer_setup(&ipmi_timer, ipmi_timeout, 0);
+ 	mod_timer(&ipmi_timer, jiffies + IPMI_TIMEOUT_JIFFIES);
 
 

@@ -2,92 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB4247FBE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C259447FBEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236122AbhL0Kn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 05:43:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56066 "EHLO
+        id S236143AbhL0Kqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 05:46:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236006AbhL0KnZ (ORCPT
+        with ESMTP id S236179AbhL0Koi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 05:43:25 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46628C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 02:43:25 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so10740928wmj.5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 02:43:25 -0800 (PST)
+        Mon, 27 Dec 2021 05:44:38 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E879CC06173E
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 02:44:37 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id j6so60048177edw.12
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 02:44:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6D1iaBgXOAkMH79XbQmEXP2lg5qLQCLAwgOT3lAeyto=;
-        b=jVLvQO/SkxwSpmG2aYr+vTlUlNYWzDiK8cbDvVIMs/ifRD/i2BmYE9rFPu5ximZqG5
-         7p0fllhwni7cE6XGcp46ssIipffO6Ji+5BzpzyyE49Gxik7fna7WnodGaA7HUiIOUrCj
-         KH3I1dPmJ3ROYEi7hP6hhlZjVjr3Mdiq+lSyptO8CHvGAIa+qQTQhpdfsIcDt+2NsHdp
-         RNrnxgWPs6HgOs59tpRznxDKDTL5CMkBFww0AN75UsT0a2pJN3dzDWttf0/BUMa9AGyS
-         xAdxMEjb6lxmm98ohwbVroKcGUPI5Wuxf/1URtckLVFyCQaqKmv61Cfc8dQa94m2l68M
-         IBbQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/is2CBKjUlTd2fxtUHXpcKOCXoknJ+ua3aknre6vQZE=;
+        b=G5iRrdF3v0tP2+jHND3embGWDTBplzHp/nPMV1N4erMWu0ms//Z7Z+GE1bsZ2vndK2
+         E7RAOPgpF8u0GsAh8wHhoZkDE0QMkqI17inAzdR/c6W8DzxHV+rTJQ+FclhkrKLHTVNY
+         795OeJ3JAjpW16onPr+QzSzyAkFMzBHFuNHo70I4jWTnkDDdKB/KFpQp3tO2lFozRAZD
+         aK7mJEqcEydPd5QUqBizW81yXlnImIzhOEzl8OflcIlGtCOvjrXAXJ4phWWUE5XdrOI4
+         yk1ewoXundLmX7UEF78KohJ5GbbZXCnrqaFF4E2LexbZg9VQyIxlVcpknRbPrkqGabii
+         o67A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6D1iaBgXOAkMH79XbQmEXP2lg5qLQCLAwgOT3lAeyto=;
-        b=BTCN7rhi7sDd6svh0qpfsBEtBvEzgdIMdRzw0VrFXzg02wIiEgtjTlOvNX+Ngr6gfE
-         YI/WoxzJE9wU9MsOk5JAU0wNth7edFx011sxANKdwPM/67cbB5rUrZ2QL35GYKyM7f0m
-         pSfgrhp1iY2QSt7RqCYvvWrn1SLSLCXUPRdxLn5dWOpOKlR3ngx2NzchYPtAGyW7jVeG
-         N1jOauBljImahcTZmqV6xLJT5Umn1CbhRXPtkDewCkoF5TKJpAEsdBcASoX8eqrydnd/
-         W//4RNkFgDovvS4s4LRxjl0envYR+CDveMJjduEC5yuOC8ARO/PWErzm5CgIchYUdGIY
-         embA==
-X-Gm-Message-State: AOAM533PTbkPyUglyi2txuVmIHjuhIJmvNN5VAcve9ZB4M0Reo7F3YXm
-        zrQTZFCty1x4+YRBl9pOQgUAbmgcyds=
-X-Google-Smtp-Source: ABdhPJxhedIKRHvaF6GcsvxZqnYw0kYidOc1LXXNsn+OGSOKPv04pzC935HNvh57x5N694hQ3DiXrA==
-X-Received: by 2002:a7b:c3c5:: with SMTP id t5mr1403286wmj.168.1640601803924;
-        Mon, 27 Dec 2021 02:43:23 -0800 (PST)
-Received: from localhost.localdomain ([2a02:8108:96c0:3b88::abe6])
-        by smtp.gmail.com with ESMTPSA id w17sm16089205wmc.14.2021.12.27.02.43.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Dec 2021 02:43:23 -0800 (PST)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH] staging: r8188eu: remove unused enum odm_h2c_cmd
-Date:   Mon, 27 Dec 2021 11:43:12 +0100
-Message-Id: <20211227104312.13163-1-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/is2CBKjUlTd2fxtUHXpcKOCXoknJ+ua3aknre6vQZE=;
+        b=e88JKlaN4wpUTPpZ5jAbr7XJ2mnihM/5HK40gHZUtJHj1z0IddMAmvEUOGlQR6EREv
+         95P/HzbV1BKCaBewCJKmwK1dZ40FENrSnQhakozjgMoA5bC7psnffAfzrYzvRH7/Ahjj
+         h3tsfHkjvV3u1GH0RA9UzOzY8zwDGbmqhD7yKquB0d2fqVDViiYoNZaRwL1YjdzprXAK
+         hn46/ddfr/rnwg+l5ZPOnoK8MKo93+nkhoeFO1ZizUsk9C+0OTHsbZteBYByWsbbY1fK
+         QosHqKwIvXLcFiiG8oHPMVr8QxxWh/iBno982OPRZ5YXOT9UMOiTmbl3nirjh/qM46a7
+         YX+Q==
+X-Gm-Message-State: AOAM533HU8+e8B6ZCqgv3q8ETuH8JefL/FxDnF2Pnan1pwo18BwOTONe
+        2updOf6zOG0RXc7AdQek/bf8ZCzjYYGLjHat7vc=
+X-Google-Smtp-Source: ABdhPJwvwTUd/bVjQHs4pwiajNdMsKjf0URk5RUryJVZpr0oXIy035zgzdyJzUTlM3bmNbHA4gOtRF2HuvGQCAEgN2I=
+X-Received: by 2002:a50:e611:: with SMTP id y17mr15625528edm.270.1640601876405;
+ Mon, 27 Dec 2021 02:44:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211215234946.6494-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAHp75VfGwQ7G2b39GO4tN=sxQoiahO2uudy25ALxEkrNcP9eVw@mail.gmail.com>
+ <CA+V-a8t1myOt0rhJExem_T2tJUM3PLL9KuXn0=_LtucJPHLkbA@mail.gmail.com>
+ <CAHp75VdXKVAZMKqC=0RbkAKKxFsdcxBc0M3N6OQMivHj-w+DHw@mail.gmail.com>
+ <CA+V-a8vbsy94MvRpqWQQuRqfEGiX_ZZTTt+dr0r6qnnJAPaEmA@mail.gmail.com>
+ <CAHp75VfvOOzwcTBjYg3OzbbdhcpWfaPWZ0h7HZRFOPEQAQMT=A@mail.gmail.com>
+ <CAMuHMdWSAOEAvqvr1UqKKmVDMzY3Tb8Y_4XowFPBN6L3TESqYA@mail.gmail.com>
+ <CAHp75Vc2puj45n_wMY50OnDemNmFFu-yepCC9_L+DWp1HAzxPw@mail.gmail.com>
+ <CAMuHMdUDts8LWYrftYp0VSxDX8kaP1a9N5YGZDNCAuAsr84EAw@mail.gmail.com>
+ <CAHp75VeyU8Ub0h_y03b77EBCLtXLeKU7+-pD4E=iBzOo4zNw+Q@mail.gmail.com> <CAMuHMdU+PpVM=_+og0pr8T_O6Dh7gRfA9i-77qKsuJpxzg1SvA@mail.gmail.com>
+In-Reply-To: <CAMuHMdU+PpVM=_+og0pr8T_O6Dh7gRfA9i-77qKsuJpxzg1SvA@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 27 Dec 2021 12:44:00 +0200
+Message-ID: <CAHp75Ve+FtHybakAxGRXMdsafSudpPrkLqSPZZiZv59XbD3TFQ@mail.gmail.com>
+Subject: Re: [PATCH] irqchip/renesas-irqc: Use platform_get_irq_optional() to
+ get the interrupt
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The enum odm_h2c_cmd is not used in this driver. Remove it.
+On Mon, Dec 27, 2021 at 12:19 PM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+>
+> Hi Andy,
+>
+> On Mon, Dec 27, 2021 at 11:06 AM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> > On Mon, Dec 27, 2021 at 12:02 PM Geert Uytterhoeven
+> > <geert@linux-m68k.org> wrote:
+> > > On Mon, Dec 27, 2021 at 10:57 AM Andy Shevchenko
+> > > <andy.shevchenko@gmail.com> wrote:
+> > > > On Mon, Dec 27, 2021 at 11:45 AM Geert Uytterhoeven
+> > > > <geert@linux-m68k.org> wrote:
+> > > > > On Sun, Dec 26, 2021 at 9:49 AM Andy Shevchenko
+> > > > > <andy.shevchenko@gmail.com> wrote:
+> > > > > > On Sun, Dec 26, 2021 at 1:59 AM Lad, Prabhakar
+> > > > > > <prabhakar.csengg@gmail.com> wrote:
+> > > > > > > On Sat, Dec 25, 2021 at 5:40 PM Andy Shevchenko
+> > > > > > > <andy.shevchenko@gmail.com> wrote:
+> > > > > > > > On Sat, Dec 25, 2021 at 7:28 PM Lad, Prabhakar
+> > > > > > > > <prabhakar.csengg@gmail.com> wrote:
+> > > > > > > > > On Sat, Dec 25, 2021 at 4:46 PM Andy Shevchenko
+> > > > > > > > > <andy.shevchenko@gmail.com> wrote:
+> > > > > > > > > > On Thu, Dec 16, 2021 at 9:52 AM Lad Prabhakar
+> > > > > > > > > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > > > > > > >
+> > > > > > > > > > ret = platform_get_irq_optional(...);
+> > > > > > > > > > if (ret < 0 && ret != -ENXIO)
+> > > > > > > > > >   return ret;
+> > > > > > > > > > if (ret > 0)
+> > > > > > > > > >   ...we got it...
+> > > > > > > > > >
+> > > > > > > > > > It will allow the future API fix of platform_get_irq_optional() to be
+> > > > > > > > > > really optional.
+> > > > > > > > > >
+> > > > > > > > > Later patch [0] (merged into -next) does check for -ENXIO first.
+> > > > > > > > >
+> > > > > > > > > [0] https://lore.kernel.org/lkml/20211216182121.5323-1-prabhakar.mahadev-lad.rj@bp.renesas.com/t/
+> > > > > > > >
+> > > > > > > > The problem is that it doesn't consider 0 as no IRQ.
+> > > > > > > >
+> > > > > > > Can you please point me to the discussion/patch where this API change
+> > > > > > > is considered/discussed. Just to clarify now the new API for
+> > > > > > > platform_get_irq_optional() will return "0" in case there is no
+> > > > > > > interrupt and not not -ENXIO anymore?
+> > > > > >
+> > > > > > The longest one happened here:
+> > > > > > https://lore.kernel.org/linux-ide/20211209145937.77719-1-andriy.shevchenko@linux.intel.com/T/#u
+> > > > > >
+> > > > > > It has links to some other discussions on the topic.
+> > > > > >
+> > > > > > > When will this patch be merged for the new api, so that I can base my
+> > > > > > > patches on top of it to avoid more changes?
+> > > > > >
+> > > > > > You can simply imply that, I dunno when it gets merged (from my point
+> > > > > > of view the users should be fixed first, and since you are adding
+> > > > > > users, the burden is increasing).
+> > > > >
+> > > > > Not only users (drivers), but also providers (architecture-specific code).
+> > > > > IRQ zero is still valid on some architectures, e.g. on SH[1].
+> > > >
+> > > > Are we talking about vIRQ?
+> > > > And users are fine with a big warning?
+> > >
+> > > The warning is only seen when a driver uses platorm_get_irq{,_optional}().
+> > > There are several other ways to obtain interrupts, avoiding the
+> > > big warning.
+> > >
+> > > > My understanding is that the architecture code there is broken. It
+> > > > needs to be fixed to use IRQ domains and all that machinery instead of
+> > > > what it does.
+> > > >
+> > > > 0 is "no IRQ" in Linux.
+> > > >
+> > > > > [1] https://lore.kernel.org/linux-renesas-soc/CAMuHMdUg3=q7gyaVHP0XcYUOo3PQUUv8Hc8wp5faVQ+bTBpg4A@mail.gmail.com/
+> > >
+> > > BTW, perhaps the IRQ subsystem should switch from integer IRQ numbers
+> > > to an opaque object, like was done for GPIO before?
+> >
+> > Hasn't it been done a long time ago?
+> > IIRC somewhere in ~2014 timeframe.
+> >
+> > > The IRQ subsystem
+> > > is one of the few (only?) subsystems still using plain integers.
+> >
+> > It uses opaque objects for which the plain integer is a unique key.
+>
+> And the key "cannot" be zero.
+>
+> "cannot": that was the end goal, which is AFAIK still not reached,
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
----
- drivers/staging/r8188eu/include/odm_interface.h | 7 -------
- 1 file changed, 7 deletions(-)
+What do you mean by that? The IRQ 0 is no IRQ in Linux, but the goal is reached.
 
-diff --git a/drivers/staging/r8188eu/include/odm_interface.h b/drivers/staging/r8188eu/include/odm_interface.h
-index 64c29c1da19d..e27ba77577a7 100644
---- a/drivers/staging/r8188eu/include/odm_interface.h
-+++ b/drivers/staging/r8188eu/include/odm_interface.h
-@@ -4,13 +4,6 @@
- #ifndef	__ODM_INTERFACE_H__
- #define __ODM_INTERFACE_H__
- 
--enum odm_h2c_cmd {
--	ODM_H2C_RSSI_REPORT = 0,
--	ODM_H2C_PSD_RESULT= 1,
--	ODM_H2C_PathDiv = 2,
--	ODM_MAX_H2CCMD
--};
--
- /*  2012/02/17 MH For non-MP compile pass only. Linux does not support workitem. */
- /*  Suggest HW team to use thread instead of workitem. Windows also support the feature. */
- typedef void (*RT_WORKITEM_CALL_BACK)(void *pContext);
+> as we
+> still have IRQ zero is struct resource in platform files.
+
+This is not related to the above. The problem is that some (broken)
+code is still in use. Maybe instead of obfuscating platform_get_irq*()
+APIs we start fixing the root cause?
+
+> > > That
+> > > way we don't need this two-step platform_get_irq_optional() conversion
+> > > (step 1: check for both -ENXIO and zero, step 2: drop the check for
+> > > -ENXIO).
+
 -- 
-2.34.1
-
+With Best Regards,
+Andy Shevchenko

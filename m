@@ -2,39 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 396D747FE76
+	by mail.lfdr.de (Postfix) with ESMTP id D49CF47FE78
 	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237774AbhL0P3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:29:22 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59484 "EHLO
+        id S237650AbhL0P3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:29:25 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59534 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237575AbhL0P2t (ORCPT
+        with ESMTP id S237648AbhL0P2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:28:49 -0500
+        Mon, 27 Dec 2021 10:28:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 445FE610A6;
-        Mon, 27 Dec 2021 15:28:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C3EC36AEC;
-        Mon, 27 Dec 2021 15:28:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14C3C6111D;
+        Mon, 27 Dec 2021 15:28:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2178C36AEA;
+        Mon, 27 Dec 2021 15:28:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640618928;
-        bh=l2ifCmZoGS4NZlmlQo+CvDkin/Bq48uyPKwmNDM8yhI=;
+        s=korg; t=1640618931;
+        bh=BeMXSIuH5oYDywkWiJIyxkOiPAd0pbUTjvz5gkPBuMo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K1dFUzuUL51IIUq4SHEHLC6rlAwmCDVP+oDV1d6GE56dyxEBQLQ76/8mArQvuA0RM
-         fZNAmjR/rqRBz9s2syqsxWHIZHdEt9fCeDHoMyv9cmUjNTK0gPEoKrzOQGem+p/rfJ
-         H7YY8OlDPfq9dZlp9Kq/FaMzWPECJYHxFYuhpNsI=
+        b=Bvf6VoUnAlVv9WiryTyNwn+Cr/SOsVZaVv1gv5XuwvICShRec2junDMm8T5Cw9mav
+         BZPLFGfLwnl5kcCDtSwtrCWj06hM/YxxCFKNcXYAdK/wTFb8H4CfMPU6Lg8aMv+yFU
+         kZfusxAFM/WQ0eloy84fPBIx6gQ2oZUaf1FDFQHQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Samuel=20=C4=8Cavoj?= <samuel@cavoj.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: [PATCH 4.9 14/19] Input: i8042 - enable deferred probe quirk for ASUS UM325UA
-Date:   Mon, 27 Dec 2021 16:27:16 +0100
-Message-Id: <20211227151317.013678724@linuxfoundation.org>
+        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 4.9 15/19] hwmon: (lm90) Do not report busy status bit as alarm
+Date:   Mon, 27 Dec 2021 16:27:17 +0100
+Message-Id: <20211227151317.045548821@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211227151316.558965545@linuxfoundation.org>
 References: <20211227151316.558965545@linuxfoundation.org>
@@ -46,40 +44,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Čavoj <samuel@cavoj.net>
+From: Guenter Roeck <linux@roeck-us.net>
 
-commit 44ee250aeeabb28b52a10397ac17ffb8bfe94839 upstream.
+commit cdc5287acad9ede121924a9c9313544b80d15842 upstream.
 
-The ASUS UM325UA suffers from the same issue as the ASUS UX425UA, which
-is a very similar laptop. The i8042 device is not usable immediately
-after boot and fails to initialize, requiring a deferred retry.
+Bit 7 of the status register indicates that the chip is busy
+doing a conversion. It does not indicate an alarm status.
+Stop reporting it as alarm status bit.
 
-Enable the deferred probe quirk for the UM325UA.
-
-BugLink: https://bugzilla.suse.com/show_bug.cgi?id=1190256
-Signed-off-by: Samuel Čavoj <samuel@cavoj.net>
-Link: https://lore.kernel.org/r/20211204015615.232948-1-samuel@cavoj.net
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/input/serio/i8042-x86ia64io.h |    7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/hwmon/lm90.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/input/serio/i8042-x86ia64io.h
-+++ b/drivers/input/serio/i8042-x86ia64io.h
-@@ -1025,6 +1025,13 @@ static const struct dmi_system_id __init
- 			DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 4280"),
- 		},
- 	},
-+	{
-+		/* ASUS ZenBook UM325UA */
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
-+		},
-+	},
- 	{ }
- };
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -196,6 +196,7 @@ enum chips { lm90, adm1032, lm99, lm86,
+ #define LM90_STATUS_RHIGH	(1 << 4) /* remote high temp limit tripped */
+ #define LM90_STATUS_LLOW	(1 << 5) /* local low temp limit tripped */
+ #define LM90_STATUS_LHIGH	(1 << 6) /* local high temp limit tripped */
++#define LM90_STATUS_BUSY	(1 << 7) /* conversion is ongoing */
  
+ #define MAX6696_STATUS2_R2THRM	(1 << 1) /* remote2 THERM limit tripped */
+ #define MAX6696_STATUS2_R2OPEN	(1 << 2) /* remote2 is an open circuit */
+@@ -692,7 +693,7 @@ static int lm90_update_device(struct dev
+ 		val = lm90_read_reg(client, LM90_REG_R_STATUS);
+ 		if (val < 0)
+ 			return val;
+-		data->alarms = val;	/* lower 8 bit of alarms */
++		data->alarms = val & ~LM90_STATUS_BUSY;
+ 
+ 		if (data->kind == max6696) {
+ 			val = lm90_select_remote_channel(client, data, 1);
 
 

@@ -2,86 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA39847FA5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 06:35:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA02847FA5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 06:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbhL0Ff3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 00:35:29 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:35780 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231508AbhL0FfW (ORCPT
+        id S235238AbhL0Fgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 00:36:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231508AbhL0Fge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 00:35:22 -0500
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 1BR5YjS8027878
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Dec 2021 00:34:46 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 84C8515C3444; Mon, 27 Dec 2021 00:34:45 -0500 (EST)
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        Ye Bin <yebin10@huawei.com>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>, linux-kernel@vger.kernel.org,
-        jack@suse.cz, lczerner@redhat.com
-Subject: Re: [PATCH -next] ext4: Fix null-ptr-deref in '__ext4_journal_ensure_credits'
-Date:   Mon, 27 Dec 2021 00:34:43 -0500
-Message-Id: <164058326343.3172825.16437833457845956898.b4-ty@mit.edu>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20211224100341.3299128-1-yebin10@huawei.com>
-References: <20211224100341.3299128-1-yebin10@huawei.com>
+        Mon, 27 Dec 2021 00:36:34 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F75C061401
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 21:36:33 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id x7so32583950lfu.8
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 21:36:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EF+jmTyvegw5LQ6AgqSKm6/snzft5eQBIQojLd8N8v8=;
+        b=F+PdweTyPAgk8X2RpoCfcdyPXddhm/T+/VQlHU50jPyhjtP9wXFSrVmuj/qGVEBtnW
+         2QkCF3oX8bWs0rqHAKwV5WvtDS+1fSq5aFawTroC7uAZKWnSh0rHm6NMElsYZwP0W42n
+         UgvmTvCA7D3FjrpQ4X1TzNJ9xhmlup7SlF8mc/ZNbTF2qLsAyirhPXVVJ7T61bw9JJp6
+         ZrVldFM62Km0RUtK/SijYLvy06LDMC4+IugMqvvMOD3fV0VHLWwFhenw/ejrmXOazyH4
+         Oo8Zmgreg6G9wEKKFTSIMk6+YWL78e5HlKNhkdmDo8fTlsFwJGCmRjyzNg4mWVaX4Tlx
+         0TnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EF+jmTyvegw5LQ6AgqSKm6/snzft5eQBIQojLd8N8v8=;
+        b=2ev588ABcrcB51gr/Z4alPBNYFEA4YyD7GkfiDRc26liK9h1BWAJFN4PzR4Xs7+IhM
+         klo42IDVzep/r1Sv+wWw2nhT9JSQP9hRDZVAXqmKAGLwi8xyl4Q1G3fFoJLx67nTCKeW
+         ovQjdvQo6mNWFbCOOGz7QwYHksMAR/usNdurWh9cxqFGjQajpoNsjYAhb3TuN32tpyzy
+         yXsq85LUMUzicnkZvyCtNEnMlzqukYAqZzjCbYroY2hEyyEJLYR4MJ306xZH1kzjYxxY
+         8/APoNvrZCwMZV7ScPcQTgcnK2zX+o1oQzwG1U2GNBO+q+eIrPJ1N/vsNzjhm6P8LOJz
+         WVAw==
+X-Gm-Message-State: AOAM531fOewbTNLMQA+sXMOqrtq9exzqzJfFKw6BfGsOrqaArSpOpZ5f
+        MFji5oqGSEV6nV6XhjOLZGdBnkwvijjq1+yALAxUZw==
+X-Google-Smtp-Source: ABdhPJyufeH1AWueioCp4YOhlMH2oH9Z8gPmbMp3bV8dLO7KqY7RilFi05M8mSEsfnqmp/ap9/w2ps3tQXkmEAT9oQE=
+X-Received: by 2002:a05:6512:1116:: with SMTP id l22mr14145774lfg.253.1640583391499;
+ Sun, 26 Dec 2021 21:36:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <0e30e1f1bde74bc95085093fb0289007d510a68c.1640529121.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <0e30e1f1bde74bc95085093fb0289007d510a68c.1640529121.git.christophe.jaillet@wanadoo.fr>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Mon, 27 Dec 2021 11:06:17 +0530
+Message-ID: <CAFA6WYOZtMW7bq98JXm8AqgajaYmythiDQ53k-zgew6zE63YCg@mail.gmail.com>
+Subject: Re: [PATCH] optee: Use bitmap_free() to free bitmap
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     jens.wiklander@linaro.org, op-tee@lists.trustedfirmware.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Dec 2021 18:03:41 +0800, Ye Bin wrote:
-> We got issue as follows when run syzkaller test:
-> [ 1901.130043] EXT4-fs error (device vda): ext4_remount:5624: comm syz-executor.5: Abort forced by user
-> [ 1901.130901] Aborting journal on device vda-8.
-> [ 1901.131437] EXT4-fs error (device vda): ext4_journal_check_start:61: comm syz-executor.16: Detected aborted journal
-> [ 1901.131566] EXT4-fs error (device vda): ext4_journal_check_start:61: comm syz-executor.11: Detected aborted journal
-> [ 1901.132586] EXT4-fs error (device vda): ext4_journal_check_start:61: comm syz-executor.18: Detected aborted journal
-> [ 1901.132751] EXT4-fs error (device vda): ext4_journal_check_start:61: comm syz-executor.9: Detected aborted journal
-> [ 1901.136149] EXT4-fs error (device vda) in ext4_reserve_inode_write:6035: Journal has aborted
-> [ 1901.136837] EXT4-fs error (device vda): ext4_journal_check_start:61: comm syz-fuzzer: Detected aborted journal
-> [ 1901.136915] ==================================================================
-> [ 1901.138175] BUG: KASAN: null-ptr-deref in __ext4_journal_ensure_credits+0x74/0x140 [ext4]
-> [ 1901.138343] EXT4-fs error (device vda): ext4_journal_check_start:61: comm syz-executor.13: Detected aborted journal
-> [ 1901.138398] EXT4-fs error (device vda): ext4_journal_check_start:61: comm syz-executor.1: Detected aborted journal
-> [ 1901.138808] Read of size 8 at addr 0000000000000000 by task syz-executor.17/968
-> [ 1901.138817]
-> [ 1901.138852] EXT4-fs error (device vda): ext4_journal_check_start:61: comm syz-executor.30: Detected aborted journal
-> [ 1901.144779] CPU: 1 PID: 968 Comm: syz-executor.17 Not tainted 4.19.90-vhulk2111.1.0.h893.eulerosv2r10.aarch64+ #1
-> [ 1901.146479] Hardware name: linux,dummy-virt (DT)
-> [ 1901.147317] Call trace:
-> [ 1901.147552]  dump_backtrace+0x0/0x2d8
-> [ 1901.147898]  show_stack+0x28/0x38
-> [ 1901.148215]  dump_stack+0xec/0x15c
-> [ 1901.148746]  kasan_report+0x108/0x338
-> [ 1901.149207]  __asan_load8+0x58/0xb0
-> [ 1901.149753]  __ext4_journal_ensure_credits+0x74/0x140 [ext4]
-> [ 1901.150579]  ext4_xattr_delete_inode+0xe4/0x700 [ext4]
-> [ 1901.151316]  ext4_evict_inode+0x524/0xba8 [ext4]
-> [ 1901.151985]  evict+0x1a4/0x378
-> [ 1901.152353]  iput+0x310/0x428
-> [ 1901.152733]  do_unlinkat+0x260/0x428
-> [ 1901.153056]  __arm64_sys_unlinkat+0x6c/0xc0
-> [ 1901.153455]  el0_svc_common+0xc8/0x320
-> [ 1901.153799]  el0_svc_handler+0xf8/0x160
-> [ 1901.154265]  el0_svc+0x10/0x218
-> [ 1901.154682] ==================================================================
-> 
-> [...]
+On Sun, 26 Dec 2021 at 20:02, Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> kfree() and bitmap_free() are the same. But using the latter is more
+> consistent when freeing memory allocated with bitmap_zalloc().
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  drivers/tee/optee/notif.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
 
-Applied, thanks!
+Looks reasonable to me.
 
-[1/1] ext4: Fix null-ptr-deref in '__ext4_journal_ensure_credits'
-      commit: 5bceadc3d3ed3d12a1cf72d80df98cad7f66b1a9
+Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
 
-Best regards,
--- 
-Theodore Ts'o <tytso@mit.edu>
+-Sumit
+
+> diff --git a/drivers/tee/optee/notif.c b/drivers/tee/optee/notif.c
+> index a28fa03dcd0e..05212842b0a5 100644
+> --- a/drivers/tee/optee/notif.c
+> +++ b/drivers/tee/optee/notif.c
+> @@ -121,5 +121,5 @@ int optee_notif_init(struct optee *optee, u_int max_key)
+>
+>  void optee_notif_uninit(struct optee *optee)
+>  {
+> -       kfree(optee->notif.bitmap);
+> +       bitmap_free(optee->notif.bitmap);
+>  }
+> --
+> 2.32.0
+>

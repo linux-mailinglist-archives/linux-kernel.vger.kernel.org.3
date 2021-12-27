@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E164A4800DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A59847FFA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239077AbhL0PvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:51:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233723AbhL0PrX (ORCPT
+        id S237923AbhL0PjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:39:16 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:41100 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238821AbhL0Phh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:47:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8E0C0617A1;
-        Mon, 27 Dec 2021 07:43:08 -0800 (PST)
+        Mon, 27 Dec 2021 10:37:37 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70A06610B1;
-        Mon, 27 Dec 2021 15:43:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A73FC36AEA;
-        Mon, 27 Dec 2021 15:43:07 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 469ABCE10C4;
+        Mon, 27 Dec 2021 15:37:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34B5AC36AE7;
+        Mon, 27 Dec 2021 15:37:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619787;
-        bh=SQynjD/gO8qVV+53+s6MOoRg6pg+dgZHkyHPBaUkksA=;
+        s=korg; t=1640619454;
+        bh=PiHMiKUmWJBNE+xe5un4OtnvCN1YyMmGqbhrOZdbXuI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=caTtKIus/wlUIJhrkvKD1z+SW1y8LMv+kyF3SpkUid1dtyzdo1Xrfl+tq2Bv0iJm9
-         PsroL8iAckUuRPKWMcTFrzU8Ve/GFP1+HxqSet4XSNlIaMvZjH44fpA4iBJLCc4964
-         wcam1bULKnQqgjRADbWto9jaHcAQ+8PWuvvmyvZU=
+        b=wXMMz+ull2HOGhKXwKMSb/EJzxB7IDhVBDlMn3NUBj8wFBXfz5G11ZoTLaijvLzAu
+         JTpvu0PQ7qN5MmtdxkJi/xWOGbQiJZxMF+Ji5PMJX8zZO2t4Bc6YiBl9i82DrgoZfg
+         tDCVx2XzglLb3pxo6IE5SUMgEnjkXPNROTn/qlhE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bradley Scott <Bradley.Scott@zebra.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 069/128] ALSA: hda/realtek: Amp init fixup for HP ZBook 15 G6
+        stable@vger.kernel.org, Phil Elwell <phil@raspberrypi.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 29/76] pinctrl: bcm2835: Change init order for gpio hogs
 Date:   Mon, 27 Dec 2021 16:30:44 +0100
-Message-Id: <20211227151333.793149982@linuxfoundation.org>
+Message-Id: <20211227151325.694918163@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+References: <20211227151324.694661623@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,31 +47,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bradley Scott <Bradley.Scott@zebra.com>
+From: Phil Elwell <phil@raspberrypi.com>
 
-commit d296a74b7b59ff9116236c17edb25f26935dbf70 upstream.
+[ Upstream commit 266423e60ea1b953fcc0cd97f3dad85857e434d1 ]
 
-HP ZBook 15 G6 (SSID 103c:860f) needs the same speaker amplifier
-initialization as used on several other HP laptops using ALC285.
+...and gpio-ranges
 
-Signed-off-by: Bradley Scott <Bradley.Scott@zebra.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20211213154938.503201-1-Bradley.Scott@zebra.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+pinctrl-bcm2835 is a combined pinctrl/gpio driver. Currently the gpio
+side is registered first, but this breaks gpio hogs (which are
+configured during gpiochip_add_data). Part of the hog initialisation
+is a call to pinctrl_gpio_request, and since the pinctrl driver hasn't
+yet been registered this results in an -EPROBE_DEFER from which it can
+never recover.
+
+Change the initialisation sequence to register the pinctrl driver
+first.
+
+This also solves a similar problem with the gpio-ranges property, which
+is required in order for released pins to be returned to inputs.
+
+Fixes: 73345a18d464b ("pinctrl: bcm2835: Pass irqchip when adding gpiochip")
+Signed-off-by: Phil Elwell <phil@raspberrypi.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20211206092237.4105895-2-phil@raspberrypi.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_realtek.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/pinctrl/bcm/pinctrl-bcm2835.c | 29 +++++++++++++++------------
+ 1 file changed, 16 insertions(+), 13 deletions(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -8660,6 +8660,7 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x103c, 0x84da, "HP OMEN dc0019-ur", ALC295_FIXUP_HP_OMEN),
- 	SND_PCI_QUIRK(0x103c, 0x84e7, "HP Pavilion 15", ALC269_FIXUP_HP_MUTE_LED_MIC3),
- 	SND_PCI_QUIRK(0x103c, 0x8519, "HP Spectre x360 15-df0xxx", ALC285_FIXUP_HP_SPECTRE_X360),
-+	SND_PCI_QUIRK(0x103c, 0x860f, "HP ZBook 15 G6", ALC285_FIXUP_HP_GPIO_AMP_INIT),
- 	SND_PCI_QUIRK(0x103c, 0x861f, "HP Elite Dragonfly G1", ALC285_FIXUP_HP_GPIO_AMP_INIT),
- 	SND_PCI_QUIRK(0x103c, 0x869d, "HP", ALC236_FIXUP_HP_MUTE_LED),
- 	SND_PCI_QUIRK(0x103c, 0x86c7, "HP Envy AiO 32", ALC274_FIXUP_HP_ENVY_GPIO),
+diff --git a/drivers/pinctrl/bcm/pinctrl-bcm2835.c b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
+index 1d21129f7751c..40ce18a0d0190 100644
+--- a/drivers/pinctrl/bcm/pinctrl-bcm2835.c
++++ b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
+@@ -1244,6 +1244,18 @@ static int bcm2835_pinctrl_probe(struct platform_device *pdev)
+ 		raw_spin_lock_init(&pc->irq_lock[i]);
+ 	}
+ 
++	pc->pctl_desc = *pdata->pctl_desc;
++	pc->pctl_dev = devm_pinctrl_register(dev, &pc->pctl_desc, pc);
++	if (IS_ERR(pc->pctl_dev)) {
++		gpiochip_remove(&pc->gpio_chip);
++		return PTR_ERR(pc->pctl_dev);
++	}
++
++	pc->gpio_range = *pdata->gpio_range;
++	pc->gpio_range.base = pc->gpio_chip.base;
++	pc->gpio_range.gc = &pc->gpio_chip;
++	pinctrl_add_gpio_range(pc->pctl_dev, &pc->gpio_range);
++
+ 	girq = &pc->gpio_chip.irq;
+ 	girq->chip = &bcm2835_gpio_irq_chip;
+ 	girq->parent_handler = bcm2835_gpio_irq_handler;
+@@ -1251,8 +1263,10 @@ static int bcm2835_pinctrl_probe(struct platform_device *pdev)
+ 	girq->parents = devm_kcalloc(dev, BCM2835_NUM_IRQS,
+ 				     sizeof(*girq->parents),
+ 				     GFP_KERNEL);
+-	if (!girq->parents)
++	if (!girq->parents) {
++		pinctrl_remove_gpio_range(pc->pctl_dev, &pc->gpio_range);
+ 		return -ENOMEM;
++	}
+ 
+ 	if (is_7211) {
+ 		pc->wake_irq = devm_kcalloc(dev, BCM2835_NUM_IRQS,
+@@ -1303,21 +1317,10 @@ static int bcm2835_pinctrl_probe(struct platform_device *pdev)
+ 	err = gpiochip_add_data(&pc->gpio_chip, pc);
+ 	if (err) {
+ 		dev_err(dev, "could not add GPIO chip\n");
++		pinctrl_remove_gpio_range(pc->pctl_dev, &pc->gpio_range);
+ 		return err;
+ 	}
+ 
+-	pc->pctl_desc = *pdata->pctl_desc;
+-	pc->pctl_dev = devm_pinctrl_register(dev, &pc->pctl_desc, pc);
+-	if (IS_ERR(pc->pctl_dev)) {
+-		gpiochip_remove(&pc->gpio_chip);
+-		return PTR_ERR(pc->pctl_dev);
+-	}
+-
+-	pc->gpio_range = *pdata->gpio_range;
+-	pc->gpio_range.base = pc->gpio_chip.base;
+-	pc->gpio_range.gc = &pc->gpio_chip;
+-	pinctrl_add_gpio_range(pc->pctl_dev, &pc->gpio_range);
+-
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
+
 
 

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 376BC480117
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:53:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C85647FEED
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239913AbhL0PxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:53:11 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43920 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236339AbhL0Ppk (ORCPT
+        id S237808AbhL0Pdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:33:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237796AbhL0PdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:45:40 -0500
+        Mon, 27 Dec 2021 10:33:25 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B50C06179B;
+        Mon, 27 Dec 2021 07:33:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECA0F6104C;
-        Mon, 27 Dec 2021 15:45:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFBEAC36AEE;
-        Mon, 27 Dec 2021 15:45:38 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 72A9FCE10CC;
+        Mon, 27 Dec 2021 15:33:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40F00C36AEA;
+        Mon, 27 Dec 2021 15:33:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619939;
-        bh=hv+/2JpEuHxi5CZh6hrtzLgEHoYdUNg8AHnX67g2ILc=;
+        s=korg; t=1640619201;
+        bh=kuW4Gh6HoekXWP2yZW99KB05AYXbMmzd89GbpqaqzFE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gneH8tulytYOk4ZKmpBhG1MRKOD7iQDkWxx9T0ORyD+BNYtQ9vZWv6hQQKpAXgcGn
-         ja8WOy/Lk4O8skmyLEI7u9BDbyI9HfLxhvNNCNzQzpwVel7TRpsUqXUh6BMv/1TXoD
-         o4IDSbXvlBvNx0d4/YLAePPNWV8CI4SFyeY9aOIw=
+        b=cjDHUVH+e3S3gta79O3fZfKDkbfvBryHTWyLQIKRxk3tl1Hz/3DZwiG873e/wvwCB
+         61Z3N86QoiqWM+8Yp6c6Yj/9voTUXqm6F4DxbOgQBxE7MEp7bUUzpve+RludgdnFXP
+         X+MAx6ZwBvdvylbWLy2UaLbatP6uI2KvfW+teyQM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Longpeng (Mike)" <longpeng2@huawei.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 090/128] KVM: VMX: Wake vCPU when delivering posted IRQ even if vCPU == this vCPU
+        stable@vger.kernel.org, Christoph Fritz <chf.fritz@googlemail.com>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 4.19 28/38] pinctrl: stm32: consider the GPIO offset to expose all the GPIO lines
 Date:   Mon, 27 Dec 2021 16:31:05 +0100
-Message-Id: <20211227151334.517742348@linuxfoundation.org>
+Message-Id: <20211227151320.316813625@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
+References: <20211227151319.379265346@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,66 +49,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Fabien Dessenne <fabien.dessenne@foss.st.com>
 
-commit fdba608f15e2427419997b0898750a49a735afcb upstream.
+commit b67210cc217f9ca1c576909454d846970c13dfd4 upstream.
 
-Drop a check that guards triggering a posted interrupt on the currently
-running vCPU, and more importantly guards waking the target vCPU if
-triggering a posted interrupt fails because the vCPU isn't IN_GUEST_MODE.
-If a vIRQ is delivered from asynchronous context, the target vCPU can be
-the currently running vCPU and can also be blocking, in which case
-skipping kvm_vcpu_wake_up() is effectively dropping what is supposed to
-be a wake event for the vCPU.
+Consider the GPIO controller offset (from "gpio-ranges") to compute the
+maximum GPIO line number.
+This fixes an issue where gpio-ranges uses a non-null offset.
+  e.g.: gpio-ranges = <&pinctrl 6 86 10>
+        In that case the last valid GPIO line is not 9 but 15 (6 + 10 - 1)
 
-The "do nothing" logic when "vcpu == running_vcpu" mostly works only
-because the majority of calls to ->deliver_posted_interrupt(), especially
-when using posted interrupts, come from synchronous KVM context.  But if
-a device is exposed to the guest using vfio-pci passthrough, the VFIO IRQ
-and vCPU are bound to the same pCPU, and the IRQ is _not_ configured to
-use posted interrupts, wake events from the device will be delivered to
-KVM from IRQ context, e.g.
-
-  vfio_msihandler()
-  |
-  |-> eventfd_signal()
-      |
-      |-> ...
-          |
-          |->  irqfd_wakeup()
-               |
-               |->kvm_arch_set_irq_inatomic()
-                  |
-                  |-> kvm_irq_delivery_to_apic_fast()
-                      |
-                      |-> kvm_apic_set_irq()
-
-This also aligns the non-nested and nested usage of triggering posted
-interrupts, and will allow for additional cleanups.
-
-Fixes: 379a3c8ee444 ("KVM: VMX: Optimize posted-interrupt delivery for timer fastpath")
 Cc: stable@vger.kernel.org
-Reported-by: Longpeng (Mike) <longpeng2@huawei.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-Message-Id: <20211208015236.1616697-18-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Fixes: 67e2996f72c7 ("pinctrl: stm32: fix the reported number of GPIO lines per bank")
+Reported-by: Christoph Fritz <chf.fritz@googlemail.com>
+Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
+Link: https://lore.kernel.org/r/20211215095808.621716-1-fabien.dessenne@foss.st.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/vmx/vmx.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/pinctrl/stm32/pinctrl-stm32.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -3971,8 +3971,7 @@ static int vmx_deliver_posted_interrupt(
- 	if (pi_test_and_set_on(&vmx->pi_desc))
- 		return 0;
+--- a/drivers/pinctrl/stm32/pinctrl-stm32.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+@@ -1011,10 +1011,10 @@ static int stm32_gpiolib_register_bank(s
+ 		bank_nr = args.args[1] / STM32_GPIO_PINS_PER_BANK;
+ 		bank->gpio_chip.base = args.args[1];
  
--	if (vcpu != kvm_get_running_vcpu() &&
--	    !kvm_vcpu_trigger_posted_interrupt(vcpu, false))
-+	if (!kvm_vcpu_trigger_posted_interrupt(vcpu, false))
- 		kvm_vcpu_kick(vcpu);
- 
- 	return 0;
+-		npins = args.args[2];
+-		while (!of_parse_phandle_with_fixed_args(np, "gpio-ranges", 3,
+-							 ++i, &args))
+-			npins += args.args[2];
++		/* get the last defined gpio line (offset + nb of pins) */
++		npins = args.args[0] + args.args[2];
++		while (!of_parse_phandle_with_fixed_args(np, "gpio-ranges", 3, ++i, &args))
++			npins = max(npins, (int)(args.args[0] + args.args[2]));
+ 	} else {
+ 		bank_nr = pctl->nbanks;
+ 		bank->gpio_chip.base = bank_nr * STM32_GPIO_PINS_PER_BANK;
 
 

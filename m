@@ -2,86 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC5C48027D
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 17:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F269F480282
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 17:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbhL0Q50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 11:57:26 -0500
-Received: from mail-qv1-f53.google.com ([209.85.219.53]:43707 "EHLO
-        mail-qv1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbhL0Q5Z (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 11:57:25 -0500
-Received: by mail-qv1-f53.google.com with SMTP id fq10so14239193qvb.10;
-        Mon, 27 Dec 2021 08:57:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=h9MD2ILL8cJCsMX2TWi0ZW0BbPKpv24auuKjJHOTHVE=;
-        b=6jm1S5sdS+ZFdzQeiJT0HdBUJDuhFRHygGaVLHfCSFEP3Xj0S5DC9nyy9iYmMJfUGk
-         lADbA68ojpDf4shvA+f5ZyaMnMQXuCANEVoFHwvDvK6mJeBA+ne26lE94E8T3/+74sAA
-         +YiuPdmITbtEmDgzUxdugBD0e1oB4gid9NWUPlKeMZ/z3U5rTbKOhYVRgIl90Y9gizPP
-         Pyy6zE363DkB/os7yWBEYuxCcifJUt9WxauaewZKp3gRB4cHOg9vAlzIzZcYqUvaRTyk
-         SsUTeGmhgvHaXb48ImuwoJLVjxH57GE5df7mj2W/KIi1ulpbdAouk0feQkPu5zDEJoj7
-         Wuww==
-X-Gm-Message-State: AOAM530N/5v9sPfPKwoBrXkKidtQrtacqz6JNXbxAs65kxucCFaxCrN/
-        dd+4tHvMcbfXXXLBFN2FSA==
-X-Google-Smtp-Source: ABdhPJxKexGLS6oGqUfy3flP+Go9wPBi6+ZdDc6jbPj363M5hgtTre+ACko+KJJCU7CnuveKZggnfQ==
-X-Received: by 2002:ad4:5aad:: with SMTP id u13mr16025862qvg.46.1640624245151;
-        Mon, 27 Dec 2021 08:57:25 -0800 (PST)
-Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id c7sm14263292qtx.67.2021.12.27.08.57.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Dec 2021 08:57:24 -0800 (PST)
-Received: (nullmailer pid 653619 invoked by uid 1000);
-        Mon, 27 Dec 2021 16:57:22 -0000
-Date:   Mon, 27 Dec 2021 12:57:22 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     Pratyush Yadav <p.yadav@ti.com>
-Cc:     linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Swapnil Jakhade <sjakhade@cadence.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        devicetree@vger.kernel.org, Kishon Vijay Abraham I <kishon@ti.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Subject: Re: [PATCH v7 4/4] phy: dt-bindings: Add Cadence D-PHY Rx bindings
-Message-ID: <YcnwcpPdOOJ7WgSe@robh.at.kernel.org>
-References: <20211227105545.4852-1-p.yadav@ti.com>
- <20211227105545.4852-5-p.yadav@ti.com>
+        id S229853AbhL0Q5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 11:57:52 -0500
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:39869 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229644AbhL0Q5v (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 11:57:51 -0500
+Received: from [192.168.0.2] (ip5f5aea86.dynamic.kabel-deutschland.de [95.90.234.134])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 42C6E61EA1922;
+        Mon, 27 Dec 2021 17:57:49 +0100 (CET)
+Message-ID: <9a47b5ec-f2d1-94d9-3a48-9b326c88cfcb@molgen.mpg.de>
+Date:   Mon, 27 Dec 2021 17:57:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227105545.4852-5-p.yadav@ti.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v3 0/9] Parallel CPU bringup for x86_64
+Content-Language: en-US
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com
+References: <20211215145633.5238-1-dwmw2@infradead.org>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20211215145633.5238-1-dwmw2@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Dec 2021 16:25:45 +0530, Pratyush Yadav wrote:
-> The Rx mode DPHY is different from Tx mode DPHY. Add a separate binding
-> for it.
-> 
-> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-> 
-> ---
-> 
-> (no changes since v6)
-> 
-> Changes in v6:
-> - Add a new binding for DPHY Rx.
-> 
->  .../devicetree/bindings/phy/cdns,dphy-rx.yaml | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
-> 
+Dear David,
 
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
+Am 15.12.21 um 15:56 schrieb David Woodhouse:
+> Doing the INIT/SIPI/SIPI in parallel for all APs and *then* waiting for
+> them shaves about 80% off the AP bringup time on a 96-thread socket
+> Skylake box (EC2 c5.metal) — from about 500ms to 100ms.
+> 
+> There are more wins to be had with further parallelisation, but this is
+> the simple part.
+> 
+> v2: Cut it back to just INIT/SIPI/SIPI in parallel for now, nothing more
+> v3: Clean up x2apic patch, add MTRR optimisation, lock topology update
+>      in preparation for more parallelisation.
+> 
+> 
+> David Woodhouse (8):
+>        x86/apic/x2apic: Fix parallel handling of cluster_mask
+>        cpu/hotplug: Move idle_thread_get() to <linux/smpboot.h>
+>        cpu/hotplug: Add dynamic parallel bringup states before CPUHP_BRINGUP_CPU
+>        x86/smpboot: Reference count on smpboot_setup_warm_reset_vector()
+>        x86/smpboot: Split up native_cpu_up into separate phases and document them
+>        x86/smpboot: Send INIT/SIPI/SIPI to secondary CPUs in parallel
+>        x86/mtrr: Avoid repeated save of MTRRs on boot-time CPU bringup
+>        x86/smpboot: Serialize topology updates for secondary bringup
+> 
+> Thomas Gleixner (1):
+>        x86/smpboot: Support parallel startup of secondary CPUs
+> 
+>   arch/x86/include/asm/realmode.h       |   3 +
+>   arch/x86/include/asm/smp.h            |  13 +-
+>   arch/x86/include/asm/topology.h       |   2 -
+>   arch/x86/kernel/acpi/sleep.c          |   1 +
+>   arch/x86/kernel/apic/apic.c           |   2 +-
+>   arch/x86/kernel/apic/x2apic_cluster.c | 108 +++++++-----
+>   arch/x86/kernel/cpu/common.c          |   6 +-
+>   arch/x86/kernel/cpu/mtrr/mtrr.c       |   9 +
+>   arch/x86/kernel/head_64.S             |  71 ++++++++
+>   arch/x86/kernel/smpboot.c             | 324 ++++++++++++++++++++++++----------
+>   arch/x86/realmode/init.c              |   3 +
+>   arch/x86/realmode/rm/trampoline_64.S  |  14 ++
+>   arch/x86/xen/smp_pv.c                 |   4 +-
+>   include/linux/cpuhotplug.h            |   2 +
+>   include/linux/smpboot.h               |   7 +
+>   kernel/cpu.c                          |  27 ++-
+>   kernel/smpboot.c                      |   2 +-
+>   kernel/smpboot.h                      |   2 -
+>   18 files changed, 441 insertions(+), 159 deletions(-)
 
-If a tag was not added on purpose, please state why and what changed.
+Thank you for working on this. I tested this on a MSI MS-7A37/B350M 
+MORTAR (BIOS 1.MW 11/01/2021) with a Ryzen 3 2200G, but nothing was 
+printed to the screen after the GRUB loading messages, so it crashed or 
+hung somewhere. Unfortunately, this device is used by others, and no 
+serial console is connected and I do not know how to capture the Linux 
+log with other means.
 
+
+Kind regards,
+
+Paul

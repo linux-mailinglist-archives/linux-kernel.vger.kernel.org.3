@@ -2,47 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B73747FEF7
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:34:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A27E548008C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:47:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbhL0PeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:34:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237908AbhL0Pdj (ORCPT
+        id S239986AbhL0PrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:47:01 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44716 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239190AbhL0Pni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:33:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51D0C061763;
-        Mon, 27 Dec 2021 07:33:39 -0800 (PST)
+        Mon, 27 Dec 2021 10:43:38 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55638610A5;
-        Mon, 27 Dec 2021 15:33:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C230C36AEA;
-        Mon, 27 Dec 2021 15:33:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7E4CAB80E5A;
+        Mon, 27 Dec 2021 15:43:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C078EC36AE7;
+        Mon, 27 Dec 2021 15:43:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619218;
-        bh=7X3yna1537mBr6JqBOTlhqj/6Ug7ipBgoves7tOoHfs=;
+        s=korg; t=1640619816;
+        bh=f5aFAvyDMNd5gkQcifmmfeuI9fiRcAM3vdZdoua4GSw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uGapqxDx6hfuR3LxR4qfGbK3gIxaaTZEk6SqEZqYt08+2DIcYnVekMelxCSH44kyz
-         VrNwOmpqUB1m5n6IB7DHIOPpkVHSLclzy4LYDom6qdfUonNzJ1PqtAxNaX7tTq5JYv
-         gP/7wq3VJ/0EjmyET+E52su19A+2krzBP4ui+pxU=
+        b=RdnxK382DXbj9O+/ZVO7ujPBXLbGWxaR/jS9tfcWPgO1wCmOMjrTAdgEnxJePVHIc
+         GRU8RZNNvMZf94YnwAwnmy0l/r72w/xse+9lLQPPicPYLDnaR2oYCUK/2CrMNZWM7Y
+         JAvdvJdTR+xG29RMpfYQZyrrhp6JSY2E2mfvFnf0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Fernando Fernandez Mancera <ffmancera@riseup.net>,
-        Jay Vosburgh <jay.vosburgh@canonical.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 16/38] bonding: fix ad_actor_system option setting to default
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        Mian Yousaf Kaukab <ykaukab@suse.de>,
+        Corey Minyard <cminyard@mvista.com>
+Subject: [PATCH 5.15 078/128] ipmi: ssif: initialize ssif_info->client early
 Date:   Mon, 27 Dec 2021 16:30:53 +0100
-Message-Id: <20211227151319.907631344@linuxfoundation.org>
+Message-Id: <20211227151334.108947289@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
-References: <20211227151319.379265346@linuxfoundation.org>
+In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
+References: <20211227151331.502501367@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,65 +46,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fernando Fernandez Mancera <ffmancera@riseup.net>
+From: Mian Yousaf Kaukab <ykaukab@suse.de>
 
-[ Upstream commit 1c15b05baea71a5ff98235783e3e4ad227760876 ]
+commit 34f35f8f14bc406efc06ee4ff73202c6fd245d15 upstream.
 
-When 802.3ad bond mode is configured the ad_actor_system option is set to
-"00:00:00:00:00:00". But when trying to set the all-zeroes MAC as actors'
-system address it was failing with EINVAL.
+During probe ssif_info->client is dereferenced in error path. However,
+it is set when some of the error checking has already been done. This
+causes following kernel crash if an error path is taken:
 
-An all-zeroes ethernet address is valid, only multicast addresses are not
-valid values.
+[   30.645593][  T674] ipmi_ssif 0-000e: ipmi_ssif: Not probing, Interface already present
+[   30.657616][  T674] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000088
+...
+[   30.657723][  T674] pc : __dev_printk+0x28/0xa0
+[   30.657732][  T674] lr : _dev_err+0x7c/0xa0
+...
+[   30.657772][  T674] Call trace:
+[   30.657775][  T674]  __dev_printk+0x28/0xa0
+[   30.657778][  T674]  _dev_err+0x7c/0xa0
+[   30.657781][  T674]  ssif_probe+0x548/0x900 [ipmi_ssif 62ce4b08badc1458fd896206d9ef69a3c31f3d3e]
+[   30.657791][  T674]  i2c_device_probe+0x37c/0x3c0
+...
 
-Fixes: 171a42c38c6e ("bonding: add netlink support for sys prio, actor sys mac, and port key")
-Signed-off-by: Fernando Fernandez Mancera <ffmancera@riseup.net>
-Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
-Link: https://lore.kernel.org/r/20211221111345.2462-1-ffmancera@riseup.net
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Initialize ssif_info->client before any error path can be taken. Clear
+i2c_client data in the error path to prevent the dangling pointer from
+leaking.
+
+Fixes: c4436c9149c5 ("ipmi_ssif: avoid registering duplicate ssif interface")
+Cc: stable@vger.kernel.org # 5.4.x
+Suggested-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Mian Yousaf Kaukab <ykaukab@suse.de>
+Message-Id: <20211208093239.4432-1-ykaukab@suse.de>
+Signed-off-by: Corey Minyard <cminyard@mvista.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/networking/bonding.txt | 11 ++++++-----
- drivers/net/bonding/bond_options.c   |  2 +-
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ drivers/char/ipmi/ipmi_ssif.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/networking/bonding.txt b/Documentation/networking/bonding.txt
-index d3e5dd26db12d..4035a495c0606 100644
---- a/Documentation/networking/bonding.txt
-+++ b/Documentation/networking/bonding.txt
-@@ -191,11 +191,12 @@ ad_actor_sys_prio
- ad_actor_system
- 
- 	In an AD system, this specifies the mac-address for the actor in
--	protocol packet exchanges (LACPDUs). The value cannot be NULL or
--	multicast. It is preferred to have the local-admin bit set for this
--	mac but driver does not enforce it. If the value is not given then
--	system defaults to using the masters' mac address as actors' system
--	address.
-+	protocol packet exchanges (LACPDUs). The value cannot be a multicast
-+	address. If the all-zeroes MAC is specified, bonding will internally
-+	use the MAC of the bond itself. It is preferred to have the
-+	local-admin bit set for this mac but driver does not enforce it. If
-+	the value is not given then system defaults to using the masters'
-+	mac address as actors' system address.
- 
- 	This parameter has effect only in 802.3ad mode and is available through
- 	SysFs interface.
-diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bond_options.c
-index 80867bd8f44c3..c9aa28eee191d 100644
---- a/drivers/net/bonding/bond_options.c
-+++ b/drivers/net/bonding/bond_options.c
-@@ -1439,7 +1439,7 @@ static int bond_option_ad_actor_system_set(struct bonding *bond,
- 		mac = (u8 *)&newval->value;
+--- a/drivers/char/ipmi/ipmi_ssif.c
++++ b/drivers/char/ipmi/ipmi_ssif.c
+@@ -1659,6 +1659,9 @@ static int ssif_probe(struct i2c_client
+ 		}
  	}
  
--	if (!is_valid_ether_addr(mac))
-+	if (is_multicast_ether_addr(mac))
- 		goto err;
++	ssif_info->client = client;
++	i2c_set_clientdata(client, ssif_info);
++
+ 	rv = ssif_check_and_remove(client, ssif_info);
+ 	/* If rv is 0 and addr source is not SI_ACPI, continue probing */
+ 	if (!rv && ssif_info->addr_source == SI_ACPI) {
+@@ -1679,9 +1682,6 @@ static int ssif_probe(struct i2c_client
+ 		ipmi_addr_src_to_str(ssif_info->addr_source),
+ 		client->addr, client->adapter->name, slave_addr);
  
- 	netdev_dbg(bond->dev, "Setting ad_actor_system to %pM\n", mac);
--- 
-2.34.1
-
+-	ssif_info->client = client;
+-	i2c_set_clientdata(client, ssif_info);
+-
+ 	/* Now check for system interface capabilities */
+ 	msg[0] = IPMI_NETFN_APP_REQUEST << 2;
+ 	msg[1] = IPMI_GET_SYSTEM_INTERFACE_CAPABILITIES_CMD;
+@@ -1881,6 +1881,7 @@ static int ssif_probe(struct i2c_client
+ 
+ 		dev_err(&ssif_info->client->dev,
+ 			"Unable to start IPMI SSIF: %d\n", rv);
++		i2c_set_clientdata(client, NULL);
+ 		kfree(ssif_info);
+ 	}
+ 	kfree(resp);
 
 

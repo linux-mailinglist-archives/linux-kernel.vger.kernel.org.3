@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 553914800BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E7E47FFEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239906AbhL0PtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:49:01 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45566 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240308AbhL0PpB (ORCPT
+        id S238141AbhL0Plx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:41:53 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:41952 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239237AbhL0Pjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:45:01 -0500
+        Mon, 27 Dec 2021 10:39:35 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F7A8B810C6;
-        Mon, 27 Dec 2021 15:45:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85894C36AEA;
-        Mon, 27 Dec 2021 15:44:58 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6EE46CE10CB;
+        Mon, 27 Dec 2021 15:39:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BC80C36AE7;
+        Mon, 27 Dec 2021 15:39:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619899;
-        bh=rBkpXv8jPim6Hu8Lfagn0NCxZCy/3bBQYGIT73hTXV8=;
+        s=korg; t=1640619571;
+        bh=iJ8oCRrMcy9gwmWL+GWPkbD52C48gXdJjhfL3Z82dFQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2Znl8bef+i2All3PLQPDwO/+39xmnHCGwIjjivh1Bc2J1Xya2/NwVCdTDxF99b1A3
-         erRn63Cf+h+BdPT8uRcK9Y+4gng2LznQS7axWBTwCOnnIh9wEEsqrpABdHYKYHNj9a
-         if1ox8mD7zR3Kayj0IaTdPecBsgaSSStQ+hSmauc=
+        b=EgKcmUoG5AlJFClKeR5MjBKoGB6ZhHR14FVUNlQQCSQfjaZp0vwvFu8LMGyIkz1J+
+         z8W954gVBGCi7VUo62yPJQzobjFEgkUI/y508LT0tJba99+icVnOSSFr1fDNtyimmt
+         qJ/Ah+DHPppThAUbBlywZM3ds85zUT0PgNKF3L5U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jeffle Xu <jefflexu@linux.alibaba.com>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Layton <jlayton@redhat.com>
-Subject: [PATCH 5.15 108/128] netfs: fix parameter of cleanup()
-Date:   Mon, 27 Dec 2021 16:31:23 +0100
-Message-Id: <20211227151335.132174127@linuxfoundation.org>
+        stable@vger.kernel.org, Derek Fang <derek.fang@realtek.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.10 69/76] ASoC: rt5682: fix the wrong jack type detected
+Date:   Mon, 27 Dec 2021 16:31:24 +0100
+Message-Id: <20211227151327.076619444@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+References: <20211227151324.694661623@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,54 +45,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeffle Xu <jefflexu@linux.alibaba.com>
+From: Derek Fang <derek.fang@realtek.com>
 
-commit 3cfef1b612e15a0c2f5b1c9d3f3f31ad72d56fcd upstream.
+commit 8deb34a90f06374fd26f722c2a79e15160f66be7 upstream.
 
-The order of these two parameters is just reversed. gcc didn't warn on
-that, probably because 'void *' can be converted from or to other
-pointer types without warning.
+Some powers were changed during the jack insert detection
+and clk's enable/disable in CCF.
+If in parallel, the influence has a chance to detect
+the wrong jack type, so add a lock.
 
-Cc: stable@vger.kernel.org
-Fixes: 3d3c95046742 ("netfs: Provide readahead and readpage netfs helpers")
-Fixes: e1b1240c1ff5 ("netfs: Add write_begin helper")
-Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Jeff Layton <jlayton@redhat.com>
-Link: https://lore.kernel.org/r/20211207031449.100510-1-jefflexu@linux.alibaba.com/ # v1
+Signed-off-by: Derek Fang <derek.fang@realtek.com>
+Link: https://lore.kernel.org/r/20211214105033.471-1-derek.fang@realtek.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/netfs/read_helper.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ sound/soc/codecs/rt5682.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/fs/netfs/read_helper.c
-+++ b/fs/netfs/read_helper.c
-@@ -958,7 +958,7 @@ int netfs_readpage(struct file *file,
- 	rreq = netfs_alloc_read_request(ops, netfs_priv, file);
- 	if (!rreq) {
- 		if (netfs_priv)
--			ops->cleanup(netfs_priv, page_file_mapping(page));
-+			ops->cleanup(page_file_mapping(page), netfs_priv);
- 		unlock_page(page);
- 		return -ENOMEM;
- 	}
-@@ -1185,7 +1185,7 @@ have_page:
- 		goto error;
- have_page_no_wait:
- 	if (netfs_priv)
--		ops->cleanup(netfs_priv, mapping);
-+		ops->cleanup(mapping, netfs_priv);
- 	*_page = page;
- 	_leave(" = 0");
- 	return 0;
-@@ -1196,7 +1196,7 @@ error:
- 	unlock_page(page);
- 	put_page(page);
- 	if (netfs_priv)
--		ops->cleanup(netfs_priv, mapping);
-+		ops->cleanup(mapping, netfs_priv);
- 	_leave(" = %d", ret);
- 	return ret;
- }
+--- a/sound/soc/codecs/rt5682.c
++++ b/sound/soc/codecs/rt5682.c
+@@ -924,6 +924,8 @@ int rt5682_headset_detect(struct snd_soc
+ 	unsigned int val, count;
+ 
+ 	if (jack_insert) {
++		snd_soc_dapm_mutex_lock(dapm);
++
+ 		snd_soc_component_update_bits(component, RT5682_PWR_ANLG_1,
+ 			RT5682_PWR_VREF2 | RT5682_PWR_MB,
+ 			RT5682_PWR_VREF2 | RT5682_PWR_MB);
+@@ -968,6 +970,8 @@ int rt5682_headset_detect(struct snd_soc
+ 		snd_soc_component_update_bits(component, RT5682_MICBIAS_2,
+ 			RT5682_PWR_CLK25M_MASK | RT5682_PWR_CLK1M_MASK,
+ 			RT5682_PWR_CLK25M_PU | RT5682_PWR_CLK1M_PU);
++
++		snd_soc_dapm_mutex_unlock(dapm);
+ 	} else {
+ 		rt5682_enable_push_button_irq(component, false);
+ 		snd_soc_component_update_bits(component, RT5682_CBJ_CTRL_1,
 
 

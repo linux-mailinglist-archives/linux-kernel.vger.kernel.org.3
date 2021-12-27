@@ -2,43 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5467D4800A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:47:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F4748006C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239219AbhL0Prl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:47:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240042AbhL0Pod (ORCPT
+        id S236512AbhL0PqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:46:14 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:39958 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238597AbhL0PmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:44:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278CAC08E855;
-        Mon, 27 Dec 2021 07:41:59 -0800 (PST)
+        Mon, 27 Dec 2021 10:42:00 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2FE5B810C3;
-        Mon, 27 Dec 2021 15:41:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 184E2C36AEA;
-        Mon, 27 Dec 2021 15:41:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09BDE61117;
+        Mon, 27 Dec 2021 15:42:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1E58C36AE7;
+        Mon, 27 Dec 2021 15:41:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619716;
-        bh=Ak0LR/s7Jvnu58KgjJVcfQyjSnc1pLx1bV2DZ3058Ww=;
+        s=korg; t=1640619719;
+        bh=HpIB+Qqk7zYfhKImprC5Q3zJu5RW2bnDE03EC4+3BOQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OSK9EQPiMAHBTcxIrv6/1k5ZeR6dXLriLbdvvZK2fLoosuCFqCWNAGLqAKYKaQX/x
-         dVe2z6QfXjnnibBPhUawwkuQODgooLOYytzRV2Op6Af3S2ofaSWkwui0gBVecFrssJ
-         3wY/LFCUyYBuH+pKl9lDXAiai0u/sDhzCBY8Vd0I=
+        b=Wsz+0p9zi/QwoQ43WzECvRaf1DqZUxM8P1wV0CLJJaaoDVccTyEu3u00+NwxeYkXb
+         Wkxeuh38WuUKBXNc4RLwj0CKQrwWNHRaSBmllEAx5BGYAGeG4Re0b+VyztzbUreD5s
+         E20AxyGHFJlPVDlasJU0+w99uXoyt5qQtL1GgyJU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 043/128] asix: fix wrong return value in asix_check_host_enable()
-Date:   Mon, 27 Dec 2021 16:30:18 +0100
-Message-Id: <20211227151332.958422492@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Samuel Williams <samuel.williams@oriontransfer.co.nz>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 044/128] io_uring: zero iocb->ki_pos for stream file types
+Date:   Mon, 27 Dec 2021 16:30:19 +0100
+Message-Id: <20211227151332.988615420@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
 References: <20211227151331.502501367@linuxfoundation.org>
@@ -50,58 +46,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Jens Axboe <axboe@kernel.dk>
 
-[ Upstream commit d1652b70d07cc3eed96210c876c4879e1655f20e ]
+[ Upstream commit 7b9762a5e8837b92a027d58d396a9d27f6440c36 ]
 
-If asix_read_cmd() returns 0 on 30th interation, 0 will be returned from
-asix_check_host_enable(), which is logically wrong. Fix it by returning
--ETIMEDOUT explicitly if we have exceeded 30 iterations
+io_uring supports using offset == -1 for using the current file position,
+and we read that in as part of read/write command setup. For the non-iter
+read/write types we pass in NULL for the position pointer, but for the
+iter types we should not be passing any anything but 0 for the position
+for a stream.
 
-Also, replaced 30 with #define as suggested by Andrew
+Clear kiocb->ki_pos if the file is a stream, don't leave it as -1. If we
+do, then the request will error with -ESPIPE.
 
-Fixes: a786e3195d6a ("net: asix: fix uninit value bugs")
-Reported-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/ecd3470ce6c2d5697ac635d0d3b14a47defb4acb.1640117288.git.paskripkin@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: ba04291eb66e ("io_uring: allow use of offset == -1 to mean file position")
+Link: https://github.com/axboe/liburing/discussions/501
+Reported-by: Samuel Williams <samuel.williams@oriontransfer.co.nz>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/asix_common.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ fs/io_uring.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
-index b80c2dcfc9084..9aa92076500af 100644
---- a/drivers/net/usb/asix_common.c
-+++ b/drivers/net/usb/asix_common.c
-@@ -9,6 +9,8 @@
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index e9b06e339c4b0..0006fc7479ca3 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -2879,9 +2879,13 @@ static int io_prep_rw(struct io_kiocb *req, const struct io_uring_sqe *sqe,
+ 		req->flags |= REQ_F_ISREG;
  
- #include "asix.h"
- 
-+#define AX_HOST_EN_RETRIES	30
-+
- int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
- 		  u16 size, void *data, int in_pm)
- {
-@@ -68,7 +70,7 @@ static int asix_check_host_enable(struct usbnet *dev, int in_pm)
- 	int i, ret;
- 	u8 smsr;
- 
--	for (i = 0; i < 30; ++i) {
-+	for (i = 0; i < AX_HOST_EN_RETRIES; ++i) {
- 		ret = asix_set_sw_mii(dev, in_pm);
- 		if (ret == -ENODEV || ret == -ETIMEDOUT)
- 			break;
-@@ -83,7 +85,7 @@ static int asix_check_host_enable(struct usbnet *dev, int in_pm)
- 			break;
+ 	kiocb->ki_pos = READ_ONCE(sqe->off);
+-	if (kiocb->ki_pos == -1 && !(file->f_mode & FMODE_STREAM)) {
+-		req->flags |= REQ_F_CUR_POS;
+-		kiocb->ki_pos = file->f_pos;
++	if (kiocb->ki_pos == -1) {
++		if (!(file->f_mode & FMODE_STREAM)) {
++			req->flags |= REQ_F_CUR_POS;
++			kiocb->ki_pos = file->f_pos;
++		} else {
++			kiocb->ki_pos = 0;
++		}
  	}
- 
--	return ret;
-+	return i >= AX_HOST_EN_RETRIES ? -ETIMEDOUT : ret;
- }
- 
- static void reset_asix_rx_fixup_info(struct asix_rx_fixup_info *rx)
+ 	kiocb->ki_hint = ki_hint_validate(file_write_hint(kiocb->ki_filp));
+ 	kiocb->ki_flags = iocb_flags(kiocb->ki_filp);
 -- 
 2.34.1
 

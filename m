@@ -2,145 +2,340 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB21F480491
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 21:36:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABD9480494
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 21:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232913AbhL0UgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 15:36:08 -0500
-Received: from mxout02.lancloud.ru ([45.84.86.82]:42196 "EHLO
-        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbhL0UgH (ORCPT
+        id S232963AbhL0UgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 15:36:16 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:47504
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232944AbhL0UgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 15:36:07 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 1DB5C20B3A29
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH v3 07/10] ata: pata_platform: Merge pata_of_platform into
- pata_platform
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-CC:     Rob Herring <robh+dt@kernel.org>, <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        <linux-ide@vger.kernel.org>
-References: <20211224131300.18198-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211224131300.18198-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <53445984-2fc4-ea3c-b499-5575c7de2f6f@omp.ru>
-Date:   Mon, 27 Dec 2021 23:36:03 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Mon, 27 Dec 2021 15:36:15 -0500
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C34253F175
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 20:36:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640637373;
+        bh=XCiswBVMjHZ39BDgPe7qmfPltHLShKXYf1hnSv3sa44=;
+        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+         Content-Type:Date:Message-ID;
+        b=NQlgG0o3Vl58U0WUhDlG7zfQNL7waJhzRAEh3Lweim9BVurD0R4AsaAJVn9arLrXM
+         LTo74x+Lwuev8gUdIgTodG22siUS3rJnQWprynVhNFSYClCClBPcwR75brV1f+N2c8
+         8gDkSeBgEJW9ybCf1nvHdNZyXNuzdyIIhWu6AZSmr2klzht4xW8A1+84ikCMU/9+fw
+         R59GM8ZJ+JCthivvybRxgEWIj0McJH8ZQUdtercr5jta/EaFFXZYFq5iSc2HnUioEu
+         L/Gs2ul4BR6UHtnQjzs7BltHXQ5o8/iehXkwJi99+j2YkpaBGvAXEzKBV7AXQK9C0E
+         rECSY6CZCB1Bg==
+Received: by mail-pf1-f197.google.com with SMTP id i19-20020a056a00225300b004bb1768d512so9050767pfu.14
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 12:36:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references
+         :comments:mime-version:content-id:content-transfer-encoding:date
+         :message-id;
+        bh=XCiswBVMjHZ39BDgPe7qmfPltHLShKXYf1hnSv3sa44=;
+        b=4c4BwEzgVP7QynkbJ8yxMgvBX5dPo8BZkQG5Aw13pVHiIS9FSt30+I1ZB/334g4mBR
+         W5C9q2jrhyjYomCxpUebOQHPWvJkLh9O7UtPgIMMLGJilPQVwCjxT96Q1LYSvZwvY/Ce
+         ZRva/A4vfHZKRC/v2j0Aonz4ZOzZTqb1VS1nJ7s+Rd/x2M/XCwKMwHFBf1dcfqAFRRGM
+         0fu9aI20yfRwB0LOa0bN1w7MOGNgmgy8fpDSp3Y5szWpjQYxIc/gWpxwQeW+w9TuAKB7
+         j0EYsTqQvS8uSGSJynyVAwrvVCQJCaJwnMCt61wRlOjwospVYeFCmBfHBKNUvYqRLqSY
+         POOg==
+X-Gm-Message-State: AOAM531VzuqB2SuwIeXKSYPpCir2o023mPblRGMe4SB6/RNApXoUs+6K
+        eWQ0oamF7AMFW2qipzXLBjKF7sbOpLs8/SMcnMNi1QcHcg3aK944hjcIUahKIPtetfkC4B+rj2v
+        Qq+NaE8B2TVx/5IN7LhRgbIo49kUZQd+4nuCPMQNvTQ==
+X-Received: by 2002:a17:902:f783:b0:148:a2f7:9d6a with SMTP id q3-20020a170902f78300b00148a2f79d6amr19062910pln.137.1640637372164;
+        Mon, 27 Dec 2021 12:36:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyij8Q4kXCN9ycwCFlkaX6xpsv5a2mhOQUKEbxQXAR0HNaWOtOyIPc8yorgk8fqhV4XiKnrzw==
+X-Received: by 2002:a17:902:f783:b0:148:a2f7:9d6a with SMTP id q3-20020a170902f78300b00148a2f79d6amr19062879pln.137.1640637371791;
+        Mon, 27 Dec 2021 12:36:11 -0800 (PST)
+Received: from famine.localdomain ([50.125.80.157])
+        by smtp.gmail.com with ESMTPSA id v133sm15410458pfc.172.2021.12.27.12.36.11
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 27 Dec 2021 12:36:11 -0800 (PST)
+Received: by famine.localdomain (Postfix, from userid 1000)
+        id 07CE36093D; Mon, 27 Dec 2021 12:36:10 -0800 (PST)
+Received: from famine (localhost [127.0.0.1])
+        by famine.localdomain (Postfix) with ESMTP id 00184A0B22;
+        Mon, 27 Dec 2021 12:36:10 -0800 (PST)
+From:   Jay Vosburgh <jay.vosburgh@canonical.com>
+To:     Sun Shouxin <sunshouxin@chinatelecom.cn>
+cc:     vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn
+Subject: Re: [PATCH v5] net: bonding: Add support for IPV6 ns/na to balance-alb/balance-tlb mode
+In-reply-to: <20211224142512.44182-1-sunshouxin@chinatelecom.cn>
+References: <20211224142512.44182-1-sunshouxin@chinatelecom.cn>
+Comments: In-reply-to Sun Shouxin <sunshouxin@chinatelecom.cn>
+   message dated "Fri, 24 Dec 2021 09:25:12 -0500."
+X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
 MIME-Version: 1.0
-In-Reply-To: <20211224131300.18198-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <24896.1640637370.1@famine>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 27 Dec 2021 12:36:10 -0800
+Message-ID: <24897.1640637370@famine>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/24/21 4:12 PM, Lad Prabhakar wrote:
+Sun Shouxin <sunshouxin@chinatelecom.cn> wrote:
 
-> Merge the OF pata_of_platform driver into pata_platform.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>Since ipv6 neighbor solicitation and advertisement messages
+>isn't handled gracefully in bonding6 driver, we can see packet
+>drop due to inconsistency bewteen mac address in the option
+>message and source MAC .
+>
+>Another examples is ipv6 neighbor solicitation and advertisement
+>messages from VM via tap attached to host brighe, the src mac
+>mighe be changed through balance-alb mode, but it is not synced
+>with Link-layer address in the option message.
+>
+>The patch implements bond6's tx handle for ipv6 neighbor
+>solicitation and advertisement messages.
 
-[...]
-> diff --git a/drivers/ata/pata_platform.c b/drivers/ata/pata_platform.c
-> index f500f631f72b..4273f1a9abd2 100644
-> --- a/drivers/ata/pata_platform.c
-> +++ b/drivers/ata/pata_platform.c
-[...]
->  	/*
->  	 * And the IRQ
->  	 */
-> -	if (irq_res) {
-> -		irq = irq_res->start;
-> -		irq_flags = (irq_res->flags & IRQF_TRIGGER_MASK) | IRQF_SHARED;
-> +	if (priv->irq_res && priv->irq_res->start > 0) {
+	I'm not sure what you've changed here for v5 as there's no
+changelog, but I believe the observed problems to be a transmit side
+effect (i.e., it is induced by the balance-tlb mode balancing of
+outgoing traffic).  As such, the tlb side will rebalance all of the
+traffic every ten seconds, so any MAC ND_OPT_*_LL_ADDR option
+assignments in the outgoing NS/NA datagrams will only be valid for that
+length of time, correct?
 
-    I thought you've just dropped the > 0 check?
+	The topology diagram and example that you've removed from the
+commit log with v5 said, in part, that the issue arose because the
+LL_ADDR option MAC didn't match the actual source MAC.  Since tlb mode
+can reshuffle the flows every ten seconds, how did the proposed solution
+work reliably?
 
-[...]
-> @@ -168,46 +177,34 @@ int __pata_platform_probe(struct device *dev, struct resource *io_res,
->  
->  	ap->ioaddr.altstatus_addr = ap->ioaddr.ctl_addr;
->  
-> -	pata_platform_setup_port(&ap->ioaddr, ioport_shift);
-> +	pata_platform_setup_port(&ap->ioaddr, priv->ioport_shift);
->  
->  	ata_port_desc(ap, "%s cmd 0x%llx ctl 0x%llx", mmio ? "mmio" : "ioport",
-> -		      (unsigned long long)io_res->start,
-> -		      (unsigned long long)ctl_res->start);
-> +		      (unsigned long long)priv->io_res->start,
-> +		      (unsigned long long)priv->ctl_res->start);
+	In any event, my real question is whether simply disabling tlb
+balancing for NS/NA datagrams will resolve the observed issues (i.e.,
+have bond_xmit_tlb_slave_get return NULL for IPv6 NS/NA datagrams).
+Doing so will cause all NS/NA traffic to egress through the active
+interface.  There's already a test in your logic to check for the
+tx_slave !=3D bond->curr_active_slave, so presumably everything works
+correctly if the NS/NA goes out on the curr_active_slave.  If the "edit
+NS/NA datagrams" solution works even in the face of rebalance of
+traffic, then would simply assigning all NS/NA traffic to the
+curr_active_slave eliminate the problem?
 
-   As Andy has noted, these could be converted to %pR (but only after this patch)...
+	-J
 
-[...]
-> @@ -216,21 +213,108 @@ static int pata_platform_probe(struct platform_device *pdev)
->  	irq = platform_get_irq_optional(pdev, 0);
->  	if (irq < 0 && irq != -ENXIO)
->  		return irq;
-> +
->  	if (irq > 0) {
-> -		memset(&irq_res, 0x0, sizeof(struct resource));
-> -		irq_res.start = irq;
-> +		struct resource *irq_res;
-> +
-> +		irq_res = devm_kzalloc(&pdev->dev, sizeof(*irq_res), GFP_KERNEL);
-> +		if (!irq_res)
-> +			return -ENOMEM;
-> +
-> +		irq_res->start = irq;
-> +		priv->irq_res = irq_res;
+>Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+>Reported-by: kernel test robot <lkp@intel.com>
+>Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
+>---
+> drivers/net/bonding/bond_alb.c | 149 +++++++++++++++++++++++++++++++++
+> 1 file changed, 149 insertions(+)
+>
+>diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_al=
+b.c
+>index 533e476988f2..485e4863a365 100644
+>--- a/drivers/net/bonding/bond_alb.c
+>+++ b/drivers/net/bonding/bond_alb.c
+>@@ -22,6 +22,8 @@
+> #include <asm/byteorder.h>
+> #include <net/bonding.h>
+> #include <net/bond_alb.h>
+>+#include <net/ndisc.h>
+>+#include <net/ip6_checksum.h>
+> =
 
-   Is that enough? Flags not needed?
+> static const u8 mac_v6_allmcast[ETH_ALEN + 2] __long_aligned =3D {
+> 	0x33, 0x33, 0x00, 0x00, 0x00, 0x01
+>@@ -1269,6 +1271,137 @@ static int alb_set_mac_address(struct bonding *bo=
+nd, void *addr)
+> 	return res;
+> }
+> =
 
-[...]
-> +static int pata_of_platform_get_pdata(struct platform_device *ofdev,
-> +				      struct pata_platform_priv *priv)
+>+/*determine if the packet is NA or NS*/
+>+static bool __alb_determine_nd(struct icmp6hdr *hdr)
+>+{
+>+	if (hdr->icmp6_type =3D=3D NDISC_NEIGHBOUR_ADVERTISEMENT ||
+>+	    hdr->icmp6_type =3D=3D NDISC_NEIGHBOUR_SOLICITATION) {
+>+		return true;
+>+	}
+>+
+>+	return false;
+>+}
+>+
+>+static void alb_change_nd_option(struct sk_buff *skb, void *data)
+>+{
+>+	struct nd_msg *msg =3D (struct nd_msg *)skb_transport_header(skb);
+>+	struct nd_opt_hdr *nd_opt =3D (struct nd_opt_hdr *)msg->opt;
+>+	struct net_device *dev =3D skb->dev;
+>+	struct icmp6hdr *icmp6h =3D icmp6_hdr(skb);
+>+	struct ipv6hdr *ip6hdr =3D ipv6_hdr(skb);
+>+	u8 *lladdr =3D NULL;
+>+	u32 ndoptlen =3D skb_tail_pointer(skb) - (skb_transport_header(skb) +
+>+				offsetof(struct nd_msg, opt));
+>+
+>+	while (ndoptlen) {
+>+		int l;
+>+
+>+		switch (nd_opt->nd_opt_type) {
+>+		case ND_OPT_SOURCE_LL_ADDR:
+>+		case ND_OPT_TARGET_LL_ADDR:
+>+			lladdr =3D ndisc_opt_addr_data(nd_opt, dev);
+>+			break;
+>+
+>+		default:
+>+			lladdr =3D NULL;
+>+			break;
+>+		}
+>+
+>+		l =3D nd_opt->nd_opt_len << 3;
+>+
+>+		if (ndoptlen < l || l =3D=3D 0)
+>+			return;
+>+
+>+		if (lladdr) {
+>+			memcpy(lladdr, data, dev->addr_len);
+>+			icmp6h->icmp6_cksum =3D 0;
+>+
+>+			icmp6h->icmp6_cksum =3D csum_ipv6_magic(&ip6hdr->saddr,
+>+							      &ip6hdr->daddr,
+>+						ntohs(ip6hdr->payload_len),
+>+						IPPROTO_ICMPV6,
+>+						csum_partial(icmp6h,
+>+							     ntohs(ip6hdr->payload_len), 0));
+>+			return;
+>+		}
+>+		ndoptlen -=3D l;
+>+		nd_opt =3D ((void *)nd_opt) + l;
+>+	}
+>+}
+>+
+>+static u8 *alb_get_lladdr(struct sk_buff *skb)
+>+{
+>+	struct nd_msg *msg =3D (struct nd_msg *)skb_transport_header(skb);
+>+	struct nd_opt_hdr *nd_opt =3D (struct nd_opt_hdr *)msg->opt;
+>+	struct net_device *dev =3D skb->dev;
+>+	u8 *lladdr =3D NULL;
+>+	u32 ndoptlen =3D skb_tail_pointer(skb) - (skb_transport_header(skb) +
+>+				offsetof(struct nd_msg, opt));
+>+
+>+	while (ndoptlen) {
+>+		int l;
+>+
+>+		switch (nd_opt->nd_opt_type) {
+>+		case ND_OPT_SOURCE_LL_ADDR:
+>+		case ND_OPT_TARGET_LL_ADDR:
+>+			lladdr =3D ndisc_opt_addr_data(nd_opt, dev);
+>+			break;
+>+
+>+		default:
+>+			break;
+>+		}
+>+
+>+		l =3D nd_opt->nd_opt_len << 3;
+>+
+>+		if (ndoptlen < l || l =3D=3D 0)
+>+			return NULL;
+>+
+>+		if (lladdr)
+>+			return lladdr;
+>+
+>+		ndoptlen -=3D l;
+>+		nd_opt =3D ((void *)nd_opt) + l;
+>+	}
+>+
+>+	return lladdr;
+>+}
+>+
+>+static void alb_set_nd_option(struct sk_buff *skb, struct bonding *bond,
+>+			      struct slave *tx_slave)
+>+{
+>+	struct ipv6hdr *ip6hdr;
+>+	struct icmp6hdr *hdr;
+>+
+>+	if (skb->protocol =3D=3D htons(ETH_P_IPV6)) {
+>+		if (tx_slave && tx_slave !=3D
+>+		    rcu_access_pointer(bond->curr_active_slave)) {
+>+			ip6hdr =3D ipv6_hdr(skb);
+>+			if (ip6hdr->nexthdr =3D=3D IPPROTO_ICMPV6) {
+>+				hdr =3D icmp6_hdr(skb);
+>+				if (__alb_determine_nd(hdr))
+>+					alb_change_nd_option(skb, tx_slave->dev->dev_addr);
+>+			}
+>+		}
+>+	}
+>+}
+>+
+>+static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
+>+{
+>+	struct ipv6hdr *ip6hdr;
+>+	struct icmp6hdr *hdr;
+>+
+>+	if (skb->protocol =3D=3D htons(ETH_P_IPV6)) {
+>+		ip6hdr =3D ipv6_hdr(skb);
+>+		if (ip6hdr->nexthdr =3D=3D IPPROTO_ICMPV6) {
+>+			hdr =3D icmp6_hdr(skb);
+>+			if (__alb_determine_nd(hdr))
+>+				return true;
+>+		}
+>+	}
+>+
+>+	return false;
+>+}
+>+
+> /************************ exported alb functions ***********************=
+*/
+> =
 
-   Can I suggest another name, like pata_platform_parse_dt()?
+> int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
+>@@ -1350,6 +1483,9 @@ struct slave *bond_xmit_tlb_slave_get(struct bondin=
+g *bond,
+> 		switch (skb->protocol) {
+> 		case htons(ETH_P_IP):
+> 		case htons(ETH_P_IPV6):
+>+			if (alb_determine_nd(skb, bond))
+>+				break;
+>+
+> 			hash_index =3D bond_xmit_hash(bond, skb);
+> 			if (bond->params.tlb_dynamic_lb) {
+> 				tx_slave =3D tlb_choose_channel(bond,
+>@@ -1446,6 +1582,18 @@ struct slave *bond_xmit_alb_slave_get(struct bondi=
+ng *bond,
+> 			break;
+> 		}
+> =
 
-[...]
-> +static int pata_platform_get_pdata(struct platform_device *pdev,
-> +				   struct pata_platform_priv *priv)
+>+		if (alb_determine_nd(skb, bond)) {
+>+			u8 *lladdr;
+>+
+>+			lladdr =3D alb_get_lladdr(skb);
+>+			if (lladdr) {
+>+				if (!bond_slave_has_mac_rx(bond, lladdr)) {
+>+					do_tx_balance =3D false;
+>+					break;
+>+				}
+>+			}
+>+		}
+>+
+> 		hash_start =3D (char *)&ip6hdr->daddr;
+> 		hash_size =3D sizeof(ip6hdr->daddr);
+> 		break;
+>@@ -1489,6 +1637,7 @@ netdev_tx_t bond_alb_xmit(struct sk_buff *skb, stru=
+ct net_device *bond_dev)
+> 	struct slave *tx_slave =3D NULL;
+> =
 
-   Can I suggest another name, like pata_platform_init_pdata()?
+> 	tx_slave =3D bond_xmit_alb_slave_get(bond, skb);
+>+	alb_set_nd_option(skb, bond, tx_slave);
+> 	return bond_do_alb_xmit(skb, bond, tx_slave);
+> }
+> =
 
-> +{
-> +	struct pata_platform_info *pp_info = dev_get_platdata(&pdev->dev);
-> +	int ret;
-> +
-> +	/*
-> +	 * Simple resource validation ..
-> +	 */
-> +	if ((pdev->num_resources != 3) && (pdev->num_resources != 2)) {
-> +		dev_err(&pdev->dev, "invalid number of resources\n");
-> +		return -EINVAL;
-> +	}
+>
+>base-commit: 7a29b11da9651ef6a970e2f6bfd276f053aeb06a
+>-- =
 
-   Hm, do we really need this check? If we drop it beforehand, we could call
-pata_platform_get_resources() only once (and expand it inline?).
+>2.27.0
+>
 
-> +
-> +	ret = pata_platform_get_resources(pdev, priv);
-> +	if (ret)
-> +		return ret;
-> +
-> +	priv->ioport_shift = pp_info ? pp_info->ioport_shift : 0;
-> +	priv->pio_mask = pio_mask;
-> +	priv->use16bit = false;
-> +
-> +	return 0;
-> +}
-> +
-[...]
-
-MBR, Sergey
+---
+	-Jay Vosburgh, jay.vosburgh@canonical.com

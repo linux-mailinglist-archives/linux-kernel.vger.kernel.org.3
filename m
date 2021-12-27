@@ -2,129 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F45480496
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 21:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A22A048049B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 21:38:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232987AbhL0Ug3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 15:36:29 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:46863 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S232972AbhL0Ug1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 15:36:27 -0500
-Received: (qmail 1062827 invoked by uid 1000); 27 Dec 2021 15:36:25 -0500
-Date:   Mon, 27 Dec 2021 15:36:25 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [RFC 31/32] usb: handle HAS_IOPORT dependencies
-Message-ID: <YcojyRhALdm40gfk@rowland.harvard.edu>
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
- <20211227164317.4146918-32-schnelle@linux.ibm.com>
+        id S233023AbhL0Uip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 15:38:45 -0500
+Received: from mga12.intel.com ([192.55.52.136]:41424 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231131AbhL0Uin (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 15:38:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640637523; x=1672173523;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+s36H9N9lS5geSmQnAeo3ibbRrDHDIjsI845MawbcsU=;
+  b=QNUW7UqcYpeqoTwwY3PqF4/6bviV9+d3yrpFebgo3YDoAjvw3jW5eNd9
+   hNu3Aq8SkRoPqnUaskrf0SpG4iGNpAJVUWAt4AoVo1dHJfdFnYBELvszE
+   y//bETyq5ucFH6dUIRW6fNtuJqrzUmk4/k1+JmJ1viouKkEl7oE95IS1D
+   8EuoCuw9wenR4NmOllmPVdCR9vZk5fcPAb7k4wQFFdc4OXTFFc/nmmTBs
+   WeO4kAjly4PlXytYz3Jc6IP4582TeTfVBsU0wqFHbDREv8e92bR0eVuV4
+   G+m48WJRkYwp4x9gALUllJgd65nukgo/633NFDwtbWgl8IP9TzPn8Wd4r
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="221267053"
+X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
+   d="scan'208";a="221267053"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 12:38:42 -0800
+X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
+   d="scan'208";a="523406864"
+Received: from krausnex-mobl.ger.corp.intel.com (HELO [10.255.195.237]) ([10.255.195.237])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 12:38:40 -0800
+Message-ID: <1d2b0af5-540c-df14-2f78-9698f7055e5a@linux.intel.com>
+Date:   Mon, 27 Dec 2021 22:38:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227164317.4146918-32-schnelle@linux.ibm.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [Intel-wired-lan] [PATCH v2] igc: Fix TX timestamp support for
+ non-MSI-X platforms
+Content-Language: en-US
+To:     James McLaughlin <james.mclaughlin@qsc.com>, davem@davemloft.net,
+        kuba@kernel.org, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com
+Cc:     netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-kernel@vger.kernel.org
+References: <20211217234310.740255-1-james.mclaughlin@qsc.com>
+From:   "Kraus, NechamaX" <nechamax.kraus@linux.intel.com>
+In-Reply-To: <20211217234310.740255-1-james.mclaughlin@qsc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 05:43:16PM +0100, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to guard sections of code calling them
-> as alternative access methods with CONFIG_HAS_IOPORT checks. Similarly
-> drivers requiring these functions need to depend on HAS_IOPORT.
-
-A few things in here can be improved.
-
+On 12/18/2021 01:43, James McLaughlin wrote:
+> Time synchronization was not properly enabled on non-MSI-X platforms.
 > 
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> Fixes: 2c344ae24501 ("igc: Add support for TX timestamping")
+> 
+> Signed-off-by: James McLaughlin <james.mclaughlin@qsc.com>
+> Reviewed-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
 > ---
->  drivers/usb/core/hcd-pci.c    |   3 +-
->  drivers/usb/host/Kconfig      |   4 +-
->  drivers/usb/host/pci-quirks.c | 127 ++++++++++++++++++----------------
->  drivers/usb/host/pci-quirks.h |  33 ++++++---
->  drivers/usb/host/uhci-hcd.c   |   2 +-
->  drivers/usb/host/uhci-hcd.h   |  77 ++++++++++++++-------
->  6 files changed, 148 insertions(+), 98 deletions(-)
+> 
+> Having trouble with work email client, understand and agree with comments from Vinicius.
+> v1->v2 updated commit message, email subject, and reference original commit this is fixing.
+> 
+>   drivers/net/ethernet/intel/igc/igc_main.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+Tested-by: Nechama Kraus <nechamax.kraus@linux.intel.com>
 
-> diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
-> index ef08d68b9714..bba320194027 100644
-> --- a/drivers/usb/host/pci-quirks.c
-> +++ b/drivers/usb/host/pci-quirks.c
-
-> +#ifdef CONFIG_USB_PCI_AMD
-> +#if IS_ENABLED(CONFIG_USB_UHCI_HCD) && defined(CONFIG_HAS_IOPORT)
-
-In the original, the following code will be compiled even if
-CONFIG_USB_UHCI_HCD is not enabled.  You shouldn't change that.
-
->  /*
->   * Make sure the controller is completely inactive, unable to
->   * generate interrupts or do DMA.
-
-> @@ -1273,7 +1277,8 @@ static void quirk_usb_early_handoff(struct pci_dev *pdev)
->  			 "Can't enable PCI device, BIOS handoff failed.\n");
->  		return;
->  	}
-> -	if (pdev->class == PCI_CLASS_SERIAL_USB_UHCI)
-> +	if (IS_ENABLED(CONFIG_USB_UHCI_HCD) &&
-> +	    pdev->class == PCI_CLASS_SERIAL_USB_UHCI)
->  		quirk_usb_handoff_uhci(pdev);
-
-Same idea here.
-
->  	else if (pdev->class == PCI_CLASS_SERIAL_USB_OHCI)
->  		quirk_usb_handoff_ohci(pdev);
-> diff --git a/drivers/usb/host/pci-quirks.h b/drivers/usb/host/pci-quirks.h
-> index e729de21fad7..42eb18be37af 100644
-> --- a/drivers/usb/host/pci-quirks.h
-> +++ b/drivers/usb/host/pci-quirks.h
-> @@ -2,33 +2,50 @@
->  #ifndef __LINUX_USB_PCI_QUIRKS_H
->  #define __LINUX_USB_PCI_QUIRKS_H
->  
-> -#ifdef CONFIG_USB_PCI
->  void uhci_reset_hc(struct pci_dev *pdev, unsigned long base);
->  int uhci_check_and_reset_hc(struct pci_dev *pdev, unsigned long base);
-> -int usb_hcd_amd_remote_wakeup_quirk(struct pci_dev *pdev);
-> +
-> +struct pci_dev;
-
-This can't be right; struct pci_dev is referred to three lines earlier.
-You could move this up, but it may not be needed at all.
-
-> diff --git a/drivers/usb/host/uhci-hcd.h b/drivers/usb/host/uhci-hcd.h
-> index 8ae5ccd26753..8e30116b6fd2 100644
-> --- a/drivers/usb/host/uhci-hcd.h
-> +++ b/drivers/usb/host/uhci-hcd.h
-> @@ -586,12 +586,14 @@ static inline int uhci_aspeed_reg(unsigned int reg)
->  
->  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
->  {
-> +#ifdef CONFIG_HAS_IOPORT
->  	if (uhci_has_pci_registers(uhci))
->  		return inl(uhci->io_addr + reg);
-> -	else if (uhci_is_aspeed(uhci))
-> +#endif
-
-Instead of making all these changes (here and in the hunks below), you
-can simply modify the definition of uhci_has_pci_registers() so that it
-always gives 0 when CONFIG_HAS_IOPORT is N.
-
-Alan Stern

@@ -2,96 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 041ED47FC59
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 12:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E14E47FC58
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 12:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236542AbhL0LxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 06:53:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236539AbhL0LxK (ORCPT
+        id S236529AbhL0LxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 06:53:06 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:53920 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233644AbhL0LxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 06:53:10 -0500
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F93AC06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 03:53:10 -0800 (PST)
-Received: by mail-yb1-xb43.google.com with SMTP id y130so19531407ybe.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 03:53:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2wtn22ZQj6nuMCA7EcfwmmH3vdiJIuziM7/bdnMli9k=;
-        b=Ri5e+o+okzSSjDYY+xR11iW1su1dChz4alrWdMbn9swQnKc827HKuuXkhUEj1nN/BF
-         GZNQTe0NPa5UGp7Jj2LN9Febrtv3hpCrl5Ih/Q/XSN42+tOO51JZTi347flO+1x3HXTu
-         DuTGGSaUCZEcwT7POo2SrPcTKjZxgmL/BI9Z32IUuAyoK4Io6U5n+TMbBCENDd2iNKcp
-         J2SsdwFR54mea0VFVAlH2fiw9XYJCnFk6bTyOO2zLfginxOLEF0cpssyk/D3wBq45S9N
-         qo1S8Kxiyqk0mPSEi78deeNZ0+m5PRffoF1DRp/2HjOwiWBUgmIZu3AMpQ+MEUAo5SDT
-         tkYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2wtn22ZQj6nuMCA7EcfwmmH3vdiJIuziM7/bdnMli9k=;
-        b=8JiJUbKox0Ty5/BNmemtxjy8y9Nbs2ZzzXeIS99bLPRhCFddmk32neuAL3kvQ8/nwL
-         812DsWxdVwTG0JwvAEDQvTHgTMwRvV8ZneeM66y66SYJ+tGqhcocER6qUmIrNTgyEHvv
-         fjM7qYxGzjXGaa0SfBwDa4LOVDksvBYfu0dOFddqryKmgnhBJaqkCmkXYVTKWH6OOj+f
-         D3UztwCZhodaTMvoR+ZNy168i3+XlRG/+B7cxAnw/2OUNzE6OYjkoWdp9FtaRSmglAyo
-         3RyIOQTp3lU5Rs1G7Jr/kHTf0UvZKfWuBPdwXsbsvats4jeggjq5Na5rNST5vNkerDJK
-         DK4g==
-X-Gm-Message-State: AOAM530SYF7EpMNigtbSwfib5TUIcwep3vNqI3C7321fED5I3f23VvHn
-        vhkl0vpO1TS9++uU1NGMCQn5f8RZQADh4VCtbLMLpEH+PkuIyZF9
-X-Google-Smtp-Source: ABdhPJzbp6+zVfGc/ClBvGcpyCmS4UFR+CzLYqoiZd0+pr+fXJCpvkYhLIZJkUSja9kFFwbC0U80j7ZIjQ5VM/uklXI=
-X-Received: by 2002:a25:7742:: with SMTP id s63mr2983187ybc.242.1640605989141;
- Mon, 27 Dec 2021 03:53:09 -0800 (PST)
+        Mon, 27 Dec 2021 06:53:05 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EB5D8CE0EF0;
+        Mon, 27 Dec 2021 11:53:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94117C36AEA;
+        Mon, 27 Dec 2021 11:53:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640605982;
+        bh=ZxiIva1jE9faop/ZsprofhcwQ/y/+Bk9xGDjZkcmpKo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JkiTyM2LqbPgxURYEL6nE77yFrxFgyShyEsEErYQhizyrKWU7VL1//v2lWOoCXdbT
+         vMRWuXN3CL/dXRXxTORcsSdCsIGbN4KBb16ExnbHV6wZ/Mdu1dSrXzxYVccUY5ikSh
+         eXbpv5IC1obKpIF24bmPVKe3YfymlUzSg98Cthu0=
+Date:   Mon, 27 Dec 2021 12:52:59 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lars-Peter Clausen <lars@metafoo.de>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 04/23] counter: Provide a wrapper to access device
+ private data
+Message-ID: <YcmpG78dI2nT/N8z@kroah.com>
+References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
+ <20211227094526.698714-5-u.kleine-koenig@pengutronix.de>
+ <YcmdNr8Y1jcMCwQQ@kroah.com>
+ <cb583f3f-2cf9-2de5-8beb-da7c11ff1481@metafoo.de>
 MIME-Version: 1.0
-References: <20211227090917.35838-1-hbh25y@gmail.com> <87h7aus8v0.fsf@igel.home>
-In-Reply-To: <87h7aus8v0.fsf@igel.home>
-From:   Hangyu Hua <hbh25y@gmail.com>
-Date:   Mon, 27 Dec 2021 19:52:58 +0800
-Message-ID: <CAOo-nLJG71QqqD0-cJDyH0rY2VTx1eO9nHVQ5MCe8J0iiME_vw@mail.gmail.com>
-Subject: Re: [PATCH] m68k/kernel: array out of bound access in process_uboot_commandline
-To:     Andreas Schwab <schwab@linux-m68k.org>
-Cc:     geert@linux-m68k.org, linux-m68k@lists.linux-m68k.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cb583f3f-2cf9-2de5-8beb-da7c11ff1481@metafoo.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-But commandp[len -1] is used to add a zero-terminated. If we don't use
-commandp[0]=3D0 in len =3D=3D 0,
-than commandp will not have a zero-terminated. I think strings may
-make some errors beacause of this.
+On Mon, Dec 27, 2021 at 12:34:28PM +0100, Lars-Peter Clausen wrote:
+> On 12/27/21 12:02 PM, Greg Kroah-Hartman wrote:
+> > On Mon, Dec 27, 2021 at 10:45:07AM +0100, Uwe Kleine-König wrote:
+> > > For now this just wraps accessing struct counter_device::priv. However
+> > > this is about to change and converting drivers to this helper
+> > > individually makes fixing device lifetime issues result in easier to
+> > > review patches.
+> > > 
+> > > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> > > ---
+> > >   drivers/counter/counter-core.c | 12 ++++++++++++
+> > >   include/linux/counter.h        |  2 ++
+> > >   2 files changed, 14 insertions(+)
+> > > 
+> > > diff --git a/drivers/counter/counter-core.c b/drivers/counter/counter-core.c
+> > > index f053a43c6c04..00c41f28c101 100644
+> > > --- a/drivers/counter/counter-core.c
+> > > +++ b/drivers/counter/counter-core.c
+> > > @@ -45,6 +45,18 @@ static struct bus_type counter_bus_type = {
+> > >   static dev_t counter_devt;
+> > > +/**
+> > > + * counter_priv - access counter device private data
+> > > + * @counter: counter device
+> > > + *
+> > > + * Get the counter device private data
+> > > + */
+> > > +void *counter_priv(const struct counter_device *const counter)
+> > > +{
+> > > +	return counter->priv;
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(counter_priv);
+> > Shouldn't this be usin gdev_get_drvdata() and using the private data
+> > pointer that is already on the struct device structure itself?  The void
+> > *priv; should be dropped from struct counter_device entirely.
+> > 
+> > Oh ick, I just now looked at 'struct counter_device', there are other
+> > reference counting issues in there (hint, struct cdev has a reference
+> > count...)  But that's independent of this patch series...
+> This is not a problem. The struct cdev holds a reference to the struct dev.
+> This allows them to use the same allocation. As long as there is a reference
+> to the cdev there will be a reference to the dev and the memory will be kept
+> alive.
 
-Thanks.
+Ick, a cdev shouldn't be doing stuff like that, but I see how people
+like to use it that way :(
 
+Ok, it's fine for now, but yet-another-reaason why the cdev api is a
+mess in places...
 
-Andreas Schwab <schwab@linux-m68k.org> =E4=BA=8E2021=E5=B9=B412=E6=9C=8827=
-=E6=97=A5=E5=91=A8=E4=B8=80 17:19=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Dez 27 2021, Hangyu Hua wrote:
->
-> > diff --git a/arch/m68k/kernel/uboot.c b/arch/m68k/kernel/uboot.c
-> > index 928dbd33fc4a..05eca6f653b5 100644
-> > --- a/arch/m68k/kernel/uboot.c
-> > +++ b/arch/m68k/kernel/uboot.c
-> > @@ -101,5 +101,8 @@ __init void process_uboot_commandline(char *command=
-p, int size)
-> >       }
-> >
-> >       parse_uboot_commandline(commandp, len);
-> > -     commandp[len - 1] =3D 0;
-> > +     if (len > 0)
-> > +             commandp[len - 1] =3D 0;
-> > +     else
-> > +             commandp[0] =3D 0;
->
-> If len =3D=3D 0 then even commandp[0] is OOB.
->
-> --
-> Andreas Schwab, schwab@linux-m68k.org
-> GPG Key fingerprint =3D 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC=
-1
-> "And now for something completely different."
+thanks,
+
+greg k-h

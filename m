@@ -2,98 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3704802AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 18:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41BC24802BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 18:23:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbhL0RRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 12:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
+        id S230153AbhL0RXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 12:23:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbhL0RRm (ORCPT
+        with ESMTP id S229508AbhL0RXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 12:17:42 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07907C06173E;
-        Mon, 27 Dec 2021 09:17:42 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id w16so64043891edc.11;
-        Mon, 27 Dec 2021 09:17:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ra0ohVAty7IbgPGWjyDg8crVa8d6l8wg1PZczvY5vYI=;
-        b=nxnhGPi9KfzyxU0RIODHbSGyYDNHt9dHMDCMyn8p2fqevaB6nLVb4tw6lH/VNLS0N4
-         xuvmFXc8/X8Opwlf36KksvPEAaVxC0e5AGMUIzCA5E59U10lfv+BxvGBOQmZvyekU71f
-         WvYPfAC1DSyJsAcORtN5I2RXxiNA9mImGRjWweL0FIUSH3ORWrTnYWGrnXWHzrhwa2gV
-         pV64em7OZHdFyDSsSYbve1KuBowH3r9RKwMKJ3r5oXu4bd3+MymgBGHQ6cDwAlyX90X1
-         0u7FNU7Se4mvkH8TFdwRm60jd6s7C3iZ3boFjhbWZ764w1mL6PXAHb9VMAG0P61g0KhO
-         dY5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ra0ohVAty7IbgPGWjyDg8crVa8d6l8wg1PZczvY5vYI=;
-        b=6Jhi/2m8TgavOrEKWigHS4pCenKV9jm4nvHG2aoLFrgC7sgJZXMAA+XSbAH6hBH6Ao
-         JZQtt5+XjrlgyIqaiXaoiHg321G3KIU8wQVDAAVN0DneusL6RoQ9yVk19+LWAJGueyBd
-         iGe6IuZXQr339IEjQd1DxglTJygumL9giGw+oAhdyvk0WxHg+Kv6YFuDfCe1upsyeGuS
-         I1WYzjfro4JGH7XA3jHd3Uu0z07sJWTy4Ah7nFCyUlKOvOBEj5I1RpX8AQ4z5usCXm+O
-         xe/rlYuKQNYzVfjqoXTdjbqUe+Ei4Fh2srHJYFxMqUf3EhwtoLBmaHWCrUD5UogFbLWW
-         RE2g==
-X-Gm-Message-State: AOAM530gOLnwp5CfgCbRwcob6sxnGsMy12REjNK55ORDq5liLv4Yr+2P
-        W9EsegWjl/c+c6A6ZIg8FHXlWtXdLgjFieX94Wo=
-X-Google-Smtp-Source: ABdhPJyW4nZqhM2+q9hd5SYLXuvlH0XYqSjrZfdwtaAvTwexMQZJMeFU2khkvdT+1sJS2lo1pd+H5+Bo3VSzn6b55NA=
-X-Received: by 2002:a17:907:76d4:: with SMTP id kf20mr14393121ejc.44.1640625460436;
- Mon, 27 Dec 2021 09:17:40 -0800 (PST)
+        Mon, 27 Dec 2021 12:23:14 -0500
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B432C06173E;
+        Mon, 27 Dec 2021 09:23:14 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 79C56419BC;
+        Mon, 27 Dec 2021 17:23:05 +0000 (UTC)
+To:     Rob Herring <robh@kernel.org>
+Cc:     Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+References: <20211226153624.162281-1-marcan@marcan.st>
+ <20211226153624.162281-2-marcan@marcan.st>
+ <YcnrjySZ9mPbkidZ@robh.at.kernel.org>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH 01/34] dt-bindings: net: bcm4329-fmac: Add Apple
+ properties & chips
+Message-ID: <1e5e88a1-5457-2211-dc08-fe98415ae21b@marcan.st>
+Date:   Tue, 28 Dec 2021 02:23:02 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20211222162041.64625-1-andriy.shevchenko@linux.intel.com> <57ef9519-23d5-25f0-9385-7646aba52316@amd.com>
-In-Reply-To: <57ef9519-23d5-25f0-9385-7646aba52316@amd.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 27 Dec 2021 19:17:04 +0200
-Message-ID: <CAHp75Vd3DoxWrVqfHzMtjAi8P2E2xgww35ASCt5vBnkvWvwuyw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] i2c: Introduce common module to instantiate CCGx UCSI
-To:     "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Ajay Gupta <ajayg@nvidia.com>, sanket.goswami@amd.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YcnrjySZ9mPbkidZ@robh.at.kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: es-ES
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 6:45 PM Shah, Nehal-bakulchandra
-<nehal-bakulchandra.shah@amd.com> wrote:
-> Thanks for the this patch series.
-> On 12/22/2021 9:50 PM, Andy Shevchenko wrote:
+On 28/12/2021 01.36, Rob Herring wrote:
+> On Mon, Dec 27, 2021 at 12:35:51AM +0900, Hector Martin wrote:
+>> +  brcm,cal-blob:
+>> +    $ref: /schemas/types.yaml#/definitions/uint8-array
+>> +    description: A per-device calibration blob for the Wi-Fi radio. This
+>> +      should be filled in by the bootloader from platform configuration
+>> +      data, if necessary, and will be uploaded to the device if present.
+>> +
+>> +  apple,module-instance:
+>> +    $ref: /schemas/types.yaml#/definitions/string
+>> +    description: Module codename used to identify a specific board on
+>> +      Apple platforms. This is used to build the firmware filenames, to allow
+>> +      different platforms to have different firmware and/or NVRAM config.
+>> +
+>> +  apple,antenna-sku:
+>> +    $def: /schemas/types.yaml#/definitions/string
+>> +    description: Antenna SKU used to identify a specific antenna configuration
+>> +      on Apple platforms. This is use to build firmware filenames, to allow
+>> +      platforms with different antenna configs to have different firmware and/or
+>> +      NVRAM. This would normally be filled in by the bootloader from platform
+>> +      configuration data.
+> 
+> Is there a known set of strings that can be defined?
 
-...
+For apple,module-instance there is, though it will grow with every new
+machine. If you're happy with me pushing updates to this through
+asahi-soc I can keep it maintained as we add DTs and compatibles there.
 
-> > +EXPORT_SYMBOL_GPL(i2c_new_ccgx_ucsi);c
->   it needs MODULE_LICENSE("GPL"); else if driver is built as module it
-> fails to probe. However after adding this we validated and it is working
-> fine.
+I'm curious whether you prefer this approach or something like
+brcm,board-name instead. Right now we do:
 
-Thanks!
-Dunno if i need to resend or Wolfram can add it when applying.
+apple,module-instance = "honshu"
 
-...
+That gets converted to board_name="apple,honshu" in the code, which is
+what the firmwares are named after (plus extra info later appended, if
+the rest of the Apple data is available).
 
-> > +struct i2c_client *i2c_new_ccgx_ucsi(struct i2c_adapter *adapter, int irq,
-> > +                                  const struct software_node *swnode);
+But we could also do:
 
-> Here, One more suggestion if can be incorporated , instead of passing
-> only irq we should pass irq number and irq type. For example in our next
-> generation platform , CCGX driver is using IRQF_TRIGGER_FALLING type
-> where is default hard coded is IRQF_TRIGGER_HIGH. So in CCGX driver in
-> request_threaded_irq function along with passing irq number , irq type
-> also can be passed.
+brcm,board-name = "apple,honshu"
 
-We don't add dead code in the kernel, so when you have patches ready
-just create another one as a prerequisite that adds that.
+The latter would be more generically useful for other platforms, since
+it would allow e.g. having DTs for different boards that use the same
+WiFi module/subsystem and thus a compatible NVRAM fw file alias to the
+same file name (right now this is done with symlinks in /lib/firmware,
+one for each equivalent board). For non-Apple platforms (i.e. if
+antenna-sku and/or the OTP aren't available to do the funky Apple
+firmware selection), this just ends up replacing what would normally be
+the OF root node compatible in the firmware filename.
+
+E.g. right now we have:
+
+brcmfmac43430-sdio.AP6212.txt
+brcmfmac43430-sdio.raspberrypi,3-model-b.txt
+brcmfmac43430-sdio.raspberrypi,model-zero-w.txt -> brcmfmac43430-sdio.raspberrypi,3-model-b.txt
+brcmfmac43430-sdio.sinovoip,bpi-m2-plus.txt -> brcmfmac43430-sdio.AP6212.txt
+brcmfmac43430-sdio.sinovoip,bpi-m2-ultra.txt -> brcmfmac43430-sdio.AP6212.txt
+brcmfmac43430-sdio.sinovoip,bpi-m2-zero.txt -> brcmfmac43430-sdio.AP6212.txt
+brcmfmac43430-sdio.sinovoip,bpi-m3.txt -> brcmfmac43430-sdio.AP6212.txt
+
+And this could allow the sinovoip.* DTs to say:
+	brcm,board-name = "AP6212";
+
+And the rPi zero one:
+	brcm,board-name = "raspberrypi,3-model-b";
+
+And avoid the symlinks.
+
+The antenna-sku thing is specific to the Apple firmware selection
+process and doesn't make sense as a more generic property.
+
+antenna-sku right now always seems to be one of "ID", "X0", "X2", "X3",
+though that could presumably change in the future. I can add this to the
+binding if you want, though since this will be filled in by the
+bootloader from platform data we wouldn't be validating it anyway. Not
+sure if it's worth it.
+
+> There's also the somewhat standard 'firmware-name' property that
+> serves similar purpose, but if there's multiple files, then I guess
+> this approach is fine.
+
+Yeah, and the firmware name is constructed using non-DT information too
+(and we have several attempted filenames times several firmware types),
+so it wouldn't be complete.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

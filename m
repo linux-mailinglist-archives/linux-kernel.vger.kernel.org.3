@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB1947FACE
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 08:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C7D47FAD0
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 08:49:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235481AbhL0Htk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 02:49:40 -0500
+        id S235538AbhL0Htp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 02:49:45 -0500
 Received: from mail-eopbgr40076.outbound.protection.outlook.com ([40.107.4.76]:15936
         "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235578AbhL0Htg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 02:49:36 -0500
+        id S235561AbhL0Htj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 02:49:39 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IkiZOyKhoDhtfgNpSZraw1HMzo7yrWMf5Wi2AdTEX1dDeM2I5io8pF2ZcZP9rM+0aJAXtOja+1HB7Tf8GR8Azv6bgZRYGaLOvC83egTSsNbw6noT/mykjKXk39UPg8fm6rFCPabsUwWaX4PJx+Q+RGljBWgmyFZGzWKySNQXm4Zj7M0Jx5xq5FPkaLuKUX2+gZEHV56E7wRHVTzVu0YCmWx92Tz707SfHPO9B5mE1YoZMsfPKv+UIFB3odDQHLkwwxEoEhQ0qxopWyogw20+hwHVih1SaWG+IjKM/2u9kLfcyTK3QWhbtDwJdN7bQOrf41Pnis1K/YCZKb5y3uK7Zg==
+ b=QebsHTzFWP8hv5oOQcJ/AmTxW5skCvsVVMOho6BKKtiP5u5y/OTePg6JjmBYW+x1DU+P4qxORMlV8vw28Uz/VCCVf/Fnq63eoJV6KFnO3/OE2DEEMCT9RmYFjnLsYkkIUc0raEdqS+Vth+4CKJ5xfdjTkcAP8Gfp94DDVh7e5E2aHMA4YvYXQEiTfO+ma8cx9hMEoMlAXVbtrsCPJAlwo3D2ChMLEClU/qkPcjam+4ZVBT3OflCwRGhLaP0CEjK7EZ528jOQYQy0cKmSueMpe+awJEl5rWVnzIPoG2h5E0N1lNJrrBpd+QgWQyDNDCXXFWluMVPvvMUX2OPbz6dJww==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A7aOp7JfdPBLB0PjrEzdvSJ9jjA8JHcjYlRhhf1GKyM=;
- b=YA9R3Gj0yjLtpDeud6X+BU1rGursQaVqiNr44mV2XOdhHM9GKzhpcpQHK59/AVOZw2q6gChq1t1tfC6qKSjeGQEoFNtyDamE4pB47H9NyFf5rTRJJBJtg4yqqRQtCYMvinic6MCD+ZmWtriRzZ656UsnXxAyw985O7kDoLfocffZVJFMrHLwtdhBCzXhkBbW5GrUrh43ApFX511nv01hBqhdSjOKZgVNsTI+J+grBBm3KgvvdYwDy9T3FOjrea7r47vrSWWzqsmkHH30ffWhLQpjKtl0tSzI8kH+6hQgCYDBQkjghpLUe64g3No5+33r/lN8XJUFtVfv022Pstmzxg==
+ bh=Q1jezXools/y/l/bcphAuJgmvbXwOynT63sfojpuGy0=;
+ b=gPK/RZBimXxElzPAtVbobBMhBw63OtHsYU5pXxtdwpnlUcuxa6NE2C/pQvKbHfpLLZkDLZ/aV+t+xrg57Z8K03x8hSiq6ea0sJzjt+yEpxnGK5rUCn3wpkIP5wrCRxkh3LJkrMAQ0Bx1gk8pQ1EwdJfxvMI5/6obsXSTqX242K+8n33yAAUxGjr8z//FVhn8xXznJrYSzrfbVtLRvrittj1xKueROf6d4WiwyrWUl3UTe7QrNczmQl9wPm+qzm3kTMWBF163NZgTjNw2ed8noMtdJZoQKZu2lKnlQ4wq+ncx1/VG9+of6ds954g56hQ3D5DL6OdI3rXFbuJ0iKW3/g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A7aOp7JfdPBLB0PjrEzdvSJ9jjA8JHcjYlRhhf1GKyM=;
- b=rly9VN4dEbtEraumLWITrNdu0Y/0omdAUX5g3d71IffZPIM9QqX2y012rJwEY4caJx40IM38zJTL3SHVuhuz1Pqv2LGcX1OV17RgvKICrEwQYfhi0GgZQA8yGq7l4gwAJC2UZSoTxUI5O2wBsMoOLxIf7Vy7dzcvFUHk8fx4JXM=
+ bh=Q1jezXools/y/l/bcphAuJgmvbXwOynT63sfojpuGy0=;
+ b=dUui1vQT25hNDPeC4xnzu+O20wUIt6tsnggz/WwsqRhV1jxoyfzN85mSg1kPvfPGar2EfRXSeYnvWIs7ou3uzUewaRzEd+A4uOJfGYHvMF9d5os1hSAmZtCzFoJEpj6eZtXif/bJ36cpDScX31Oyst2i/4lUQ50A24Ix3d2kcSw=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from VI1PR04MB5631.eurprd04.prod.outlook.com (2603:10a6:803:dd::27)
  by VI1PR04MB5629.eurprd04.prod.outlook.com (2603:10a6:803:de::30) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.18; Mon, 27 Dec
- 2021 07:49:30 +0000
+ 2021 07:49:33 +0000
 Received: from VI1PR04MB5631.eurprd04.prod.outlook.com
  ([fe80::90fe:b60a:94b5:c748]) by VI1PR04MB5631.eurprd04.prod.outlook.com
  ([fe80::90fe:b60a:94b5:c748%5]) with mapi id 15.20.4823.022; Mon, 27 Dec 2021
- 07:49:30 +0000
+ 07:49:33 +0000
 From:   Clark Wang <xiaoning.wang@nxp.com>
 To:     miquel.raynal@bootlin.com
 Cc:     conor.culhane@silvaco.com, alexandre.belloni@bootlin.com,
         linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V5 6/8] i3c: master: svc: add runtime pm support
-Date:   Mon, 27 Dec 2021 15:45:27 +0800
-Message-Id: <20211227074529.1660398-7-xiaoning.wang@nxp.com>
+Subject: [PATCH V5 7/8] i3c: master: svc: add the missing module device table
+Date:   Mon, 27 Dec 2021 15:45:28 +0800
+Message-Id: <20211227074529.1660398-8-xiaoning.wang@nxp.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211227074529.1660398-1-xiaoning.wang@nxp.com>
 References: <20211227074529.1660398-1-xiaoning.wang@nxp.com>
@@ -54,441 +54,85 @@ X-ClientProxiedBy: SG2PR01CA0132.apcprd01.prod.exchangelabs.com
  (2603:10a6:803:dd::27)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 10795e74-4cea-4728-9466-08d9c90d6a39
+X-MS-Office365-Filtering-Correlation-Id: 2562f110-d166-438c-350b-08d9c90d6ba6
 X-MS-TrafficTypeDiagnostic: VI1PR04MB5629:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR04MB5629879475EDF749DD608EB2F3429@VI1PR04MB5629.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:324;
+X-Microsoft-Antispam-PRVS: <VI1PR04MB5629B4A204AD127C4797F7BAF3429@VI1PR04MB5629.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3826;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fxvpLZPi6H4mkqjG3oI2BNu3SOMUh9BXS9HDTS1vkhUC5Kes0Q4Ztgk6Jhbph0+PzLH7YcARRNqdNiAvXlpd0NUbxqXzzdgwcW9MIsabb1eIkwDNUQUzItRV3gIS7xWrObagRjZaYDLXn2SLurRZyaFYwH7lCdmaWuJvr++G1lR9btY/DmIaq7YHlZ4wk6Ko4jgWBY2fJrxLu4jY1dBTgiHY4hq+HZtu1Qws5TK6ZCWK16HeJ8Ov7IdCFUnyzNJiXUOyIfzpwQ/HWzNtB3yPm2vacrsWo4Q776Q8tRczqbW6JJSIQxg1U9VWdXwolKMbpfSy0LN4vKvkTZffq3deLnVPHHBRkPL8rd4pHXjbCo/CVuvKX+SiMAs9ZIVJzt3bJwUZLL5rVV+kPuQpbAwWvMMUlxZU+G+w2zCcI1o2yvIYRf9d8irl99/D1BvTwn/ihasZUbqNQGDLFNHmPuXCl6gNMFu+Qx4tV9w2HVGOrP21MaPm0Ec1sCuLcxQfrzniJPPeqBON8X6PMEVQjC/SIdKy7CupENSHCmnTfUVbRZJxqzxqcU3/nR73oJuLdFFu2SWtWxM1HAu+XJLW7/xZmfmNeHZ9Hoz5phI2p7vxWrLWWMHqqtZkdJ+ftE2Nvji1XarM06cxftmNoY83BfcTeuzuoNRAEyhhqMgzXyUOL3SnJl9Dx9lPlL44cS2IUQw1k/Uk8t3j/nIx9x4dZlYTQg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5631.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6506007)(26005)(2906002)(6916009)(83380400001)(86362001)(36756003)(66556008)(6486002)(66476007)(66946007)(8936002)(52116002)(4326008)(38350700002)(38100700002)(2616005)(186003)(508600001)(6666004)(8676002)(6512007)(1076003)(5660300002)(316002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Efr5EoxNqmdOOudZLsb7NMbbzYi6QmkTh7Fv5XefSBVCvtmJgvVO8xE0ta+udqoXyBwRXeWJkRj/c69WFUlG7gjPtDw5JPY3juQs/eik6aFPSiJ8ImP9VZd9KJ4k31XUTiySoQMHypEFLrKA/S8JMXuOcd6wwBxkSZc3HRZQDXglTfv4JVEU9AZSIlOs8VpqlcxH8qhdh/4Bzfd6vxXKEAcCPQchCQIIQfJ8snGfnXjGuAlNS7K/Z9E0CDF7c4wy8b+lzUexYVigR1K/cahMJlp1rNVxpBeXitPDkwKLl9ugj43WzPw1WENUPeyp86PFihAfed1Q7+bQ8sbJCBmHWHwTomCqrrEJpoFLiD/SXyQqaXPhNydIXYiPzh6zb63XpveJ02B3U0MVHGBArsyto6Ko6p9zNO25h/JAo1FgvVIjWEW+Pg0TTd0zvl8qeNI2TqU4TYcHYfXltrUyLBvFGkl3a3PFp8OJH6zEq9WKOf0gVEG1rAfbezH41N7MniONWbm6N7GoRNrhSncPFAKTjByJTjv6u+JVftzFfcDIPGTbqxCxMTGfs5PcZiQNehEhWBpB7Ll8kCll/Wq51nFa0JIZe+943l70ZXFDS85pKqBdGkddLUTI2YU8R/3sd/tQgz4SQwsfXUiHcZf8YiVjcMWJAvZ0A9RdhfZ04yz30JvOrG/b1Evtl4W5uUmtt79BIHIunVKY4kGWYzxr5JNiog==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5631.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6506007)(26005)(2906002)(6916009)(86362001)(36756003)(66556008)(6486002)(66476007)(66946007)(8936002)(52116002)(4326008)(38350700002)(38100700002)(2616005)(186003)(508600001)(4744005)(6666004)(8676002)(6512007)(1076003)(5660300002)(316002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XjE0p+nRp0EGzzRSThYll5pYqVZZBv9omd/i7ocvXudptKiJQDCvEDlK93Tb?=
- =?us-ascii?Q?A4F90FowVl5WcBAWx2GxDLC60RG+vhSOwR6tiRDd311W57PpVfSzTKkhhvYG?=
- =?us-ascii?Q?DFBMnQYKRmtSjUeG+bx11N0q2agQI8WXUwiMLFgXLAvJWXzyVm6UCdo5r1R/?=
- =?us-ascii?Q?Qllen53vQ887X7uYW4ukFxeC+Jrw/tmmuwwg7EMKoVBUQMrWKqaBpEkeVU+N?=
- =?us-ascii?Q?cLn9kkDuD7FS+5UjvqU/I72d9acfUy/d1NhHL80OuoTe06dE8rM7Us9KWN7Y?=
- =?us-ascii?Q?qXuC7QIhqmXSc3FiRG10GiuksjwgZzNUi8ss0g0MD4Gy4wHT2I4MYhVXAaRq?=
- =?us-ascii?Q?m+AvMNMVj/y/ZWxuLP/snbkllx/HrgtKhk/tOE1/jxqTfTWZCUibNPRBKUgM?=
- =?us-ascii?Q?hic/CI+AlUPSI4HnRLjPK+p9fXFyHgPCqVAq5spgWDTCV7NwrBL1OgbAVNTH?=
- =?us-ascii?Q?TCc4khmNXiKZA+Ms+A+yDm4J9xaXl7GFcB6GUpROV3AgmDLRXfQYvbNlzD77?=
- =?us-ascii?Q?kmcuhPqtEsa0I11/X1j8U9JZp6tXmDIJXHmiqYpPy/7F8m7ifVpP+vhrgiwh?=
- =?us-ascii?Q?H/b70kDRRP/AXchx98WIuDcMc6JtekMWwl+nTJQ1LvndGRMN233mD+zEIY8K?=
- =?us-ascii?Q?YJjWRGqDtdcaxBGSZ0iPn/VzVaHt/pgDQj2PcBeea4Rl5ghKyHP2qEQBJK5a?=
- =?us-ascii?Q?rNsUS1nZoEceKqqc1hSN7TLlWzR0xIXOMHUXh3BxhGRYXLQJZ1WG0dgaKP+j?=
- =?us-ascii?Q?Boovh923PleqbTihdSi9zsgpBSmOaY1Nr8dSd9I6HRQeeKp6HVT32eRfClyQ?=
- =?us-ascii?Q?XPX9/0D4huxTFjI6+5+5tIhJHhXqCjR1yPtVZDKDs0mG1FzTXf38U1u+549Q?=
- =?us-ascii?Q?78zC6MLQh5YhY9ms39PxL72U/iQRbp2jEDD8JLP5+JTZC0e2pA79VTxhhwTT?=
- =?us-ascii?Q?+uE00deet1sgq8gTjYnWQgfTww0TuuzEDTv8f679XV+43FAiEhUCUzpO/wRo?=
- =?us-ascii?Q?jC6PMTr9RK9g8Qgww2mu4cuQlrU9p7PLNrN/Q8qBDDvVXheUpQMtCAAtWgip?=
- =?us-ascii?Q?o4cfvyOyrIJDniA61+0Qb0NmaO8MV0JDyyQXSU3U/G2u17rTRRprDvxd1tM+?=
- =?us-ascii?Q?K93L/aDslYL6VLwz6wxmpG9wZVLOE5lsjM6EbT4HifRIyJKb+4WDUV9tL+YS?=
- =?us-ascii?Q?92UVFjjF5/XrC+rrKrwFsyonPX+/5I3rq2gHbznxNAXfgalm6d6EkkBzbaHd?=
- =?us-ascii?Q?AocwwdCAyu2zXyAHHe9qSfMYIc3f/Fxyg+0AEAdVNB/Lpj+oqoxpnNHxiRM6?=
- =?us-ascii?Q?hKGTDka1Npi1L9P521ZRscp/u0BwsxjUkd1R88TaFEy2mzrWO8wpGXLm4dVj?=
- =?us-ascii?Q?29tWtZUyTdFcoCrY2M2XI9xvHD9VjlueW7jYjHp2JWbj1s9VTadN+Cd2W4p/?=
- =?us-ascii?Q?w6faGkD5QNwVjioXgudEtX25IFd/5L79vV4xRRA1UEZKfyHExmLUwC1oDlO1?=
- =?us-ascii?Q?F4rQoKamhh/5tUeTVOs3T1dwnZrcH1Ovyag7Y4CmojcPH26ivmTk2nLGYBLf?=
- =?us-ascii?Q?0PNtt37x4VplY4sW06zwHAwRzYqUUt64oauqFcA7FuHiUf9ze8F1K4YF/DaS?=
- =?us-ascii?Q?MewUn6LOi7xNhaIv6Ztl+nY=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aUPvWIYZBKerfbNNCVQrTjxvW5tFW/lHnDWqbrHfrZBPP/yOK46tXLhhyUm/?=
+ =?us-ascii?Q?3RY7auzpbPDYbXNelRiyyQ1NhaCbuC6fu1NEoar5O4I0JeLaEF0PRWV7qoUU?=
+ =?us-ascii?Q?ZtT8+OWGmyMKdSe5Y8F8izdpTT4w6fDDth/pOZwGKEKCL8U0ABtVN6C1NerM?=
+ =?us-ascii?Q?E3gcpl04m1zFs9o2NBgd7UBQtmrGd8hGJ8nPa5owZWrdkFC8ahZAV2dAUgJv?=
+ =?us-ascii?Q?a4EmcG3Z+mWMx2IOgKV975yDy7BSASZuG1A6sKYIcIWCrzKQT6023ZuVllB0?=
+ =?us-ascii?Q?aynQzgDi+dJKEqPZ5m9oEk1+JwU25Kxuo1LkAYxmbf8p7e2M0mTCcL6E7rx9?=
+ =?us-ascii?Q?s8Q3PmptD+Wl7+t45BOOCHiTVmy+XvdUkRhQE7ntig3FpVxIPbzSG+Wc8b4H?=
+ =?us-ascii?Q?jzh/N+/k9KVvn5GGRt14eDw4KWqCz6Abjsz9uE93Y3qpBZc67X+SJ22VrsJx?=
+ =?us-ascii?Q?/F0DVzPE9KjqujudBNEXsCCHSEqAXrvRB8FlUZxAdghuPD0tFhGl+4nWE3sg?=
+ =?us-ascii?Q?p2K8OemQa3kusj4zS1PsJG5KdvTWl6pjrRWXMij3zY9Lm6gsc/eZT3PjGvs8?=
+ =?us-ascii?Q?4yRucd4AVwtJLa15O9bc79gMVJgGZnSzaums3cspHK548ohaNUjkVH4IATq5?=
+ =?us-ascii?Q?cvccUzWY0jap53uYPuqhpUTIDAJSez5wXYiNkjsfACh46PXoajEEuf8E5+mw?=
+ =?us-ascii?Q?UbstdbuqFYZLM0ztZH/GOOMdMF1BLQU4azrYf/lUW34GU+ezhMpbi1CTDn6a?=
+ =?us-ascii?Q?1uWVZpJrJHPpWbwCm6cLL9YF5m66gllhD6p1F6+iHpJkSzl2JZfXxbtqQTIw?=
+ =?us-ascii?Q?Bwn9LDr0B0IPaGS8Jgy5BX6Rv3JIo7XQj9ib95cHK/QJvjvrkcw4eurllXSe?=
+ =?us-ascii?Q?1PH8t7Ky2QcnK+tvvm//fXbfqjf63ZPTLGAyr2l/c/8hQZpNsiK1wuGRLEYu?=
+ =?us-ascii?Q?ctbj+XRhkBX/BY5km3UvzSrvdTGeYDeEjY3utACK17qW6yNEdz8qD08hNqCv?=
+ =?us-ascii?Q?kKIEL42JPtrtwe05WCuZU/z9qgHhwxXg5/jHBWkVBDbuqFq5lTSaQrXah7Kw?=
+ =?us-ascii?Q?2kNwfMkm62eO2X8QCk36p4auJ6vmkXxK3eMZbMqeXhV9SsSXFF2KvC5cQnap?=
+ =?us-ascii?Q?VlXeAQyRhGo7jz6qP+FH+E0f5nCo2clnsTW8EmQ9l04Rk6Qs11NMHkjury5P?=
+ =?us-ascii?Q?0aOHpwXXIBW1NF1+O8ry+gbiJQfx/BP7rRdrLd9YIdRd+kL8zfKkNytSdWXp?=
+ =?us-ascii?Q?BiuxoRZ0J1wPA9MbzfADSWoJ+7C7T6Ei4N2f+CSXjs7ysJxlZHWlZTrR5xuw?=
+ =?us-ascii?Q?tI1eZ6ieXOeneVC8ir+AJbqkfqal/Y/u9ZsSQ4vswV58ElpWIKum/Y46Gxhd?=
+ =?us-ascii?Q?9ujHExpW8cXTX6art49HzdJ2lgXvzsiAknl2eyC0H7vJ6mZDsOO7a2YCEYb8?=
+ =?us-ascii?Q?qbNS89Hx8B3hrsVL5XBd0tuwf2XDfo0bTgFbGbhjD4WsC/dhYADqNg7z+JEt?=
+ =?us-ascii?Q?kSbskKV2MyyiajK55AuilFc7zJJquXmUUfHXTdytQA+RKFtZKybJV5z7iNn8?=
+ =?us-ascii?Q?3kS7B5wyZEJKfHKlTfA3bpBi3B1nAMIewAXWO4mIA87mlNk/+eKA9Tf0owht?=
+ =?us-ascii?Q?oYko/wx+M+1aCP6IsfIdnS4=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 10795e74-4cea-4728-9466-08d9c90d6a39
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2562f110-d166-438c-350b-08d9c90d6ba6
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5631.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Dec 2021 07:49:30.6880
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Dec 2021 07:49:33.0886
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /Y99YYUsP/fDiwAJnSBZaUKyeITelRTAdg5bTZwO6bRi57ZcnrCJBZYWiIf7MG6kVgkF1HYA432Zy6MbCtOYyw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: RRnJzSOWuCbmgDMLTiZUE+Y5VIuXSn3TO3InwvMRiwfydynzH/VCJQKQkn2CTHu3kvaHXfVSHR/BIL5ZOyuBRQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5629
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add runtime pm support to dynamically manage the clock.
+The missing MODULE_DEVICE_TABLE() will cause the svc-i3c-master cannot
+be auto probed when it is built in moudle.
+So add it.
 
 Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
 Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
 Reviewed-by: Jun Li <jun.li@nxp.com>
 ---
 V5:
- - create svc_i3c_master_prepare_clks() and svc_i3c_master_unprepare_clks() 
  - add Miquel's reviewed tag
 ---
- drivers/i3c/master/svc-i3c-master.c | 196 ++++++++++++++++++++++------
- 1 file changed, 156 insertions(+), 40 deletions(-)
+ drivers/i3c/master/svc-i3c-master.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/i3c/master/svc-i3c-master.c b/drivers/i3c/master/svc-i3c-master.c
-index bc9c7fd69cbe..884f5349fb76 100644
+index 884f5349fb76..3bc81ef95334 100644
 --- a/drivers/i3c/master/svc-i3c-master.c
 +++ b/drivers/i3c/master/svc-i3c-master.c
-@@ -17,7 +17,9 @@
- #include <linux/list.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
- 
- /* Master Mode Registers */
- #define SVC_I3C_MCONFIG      0x000
-@@ -119,6 +121,7 @@
- #define   SVC_MDYNADDR_ADDR(x) FIELD_PREP(GENMASK(7, 1), (x))
- 
- #define SVC_I3C_MAX_DEVS 32
-+#define SVC_I3C_PM_TIMEOUT_MS 1000
- 
- /* This parameter depends on the implementation and may be tuned */
- #define SVC_I3C_FIFO_SIZE 16
-@@ -480,10 +483,20 @@ static int svc_i3c_master_bus_init(struct i3c_master_controller *m)
- 	u32 ppbaud, pplow, odhpp, odbaud, odstop, i2cbaud, reg;
- 	int ret;
- 
-+	ret = pm_runtime_resume_and_get(master->dev);
-+	if (ret < 0) {
-+		dev_err(master->dev,
-+			"<%s> cannot resume i3c bus master, err: %d\n",
-+			__func__, ret);
-+		return ret;
-+	}
-+
- 	/* Timings derivation */
- 	fclk_rate = clk_get_rate(master->fclk);
--	if (!fclk_rate)
--		return -EINVAL;
-+	if (!fclk_rate) {
-+		ret = -EINVAL;
-+		goto rpm_out;
-+	}
- 
- 	fclk_period_ns = DIV_ROUND_UP(1000000000, fclk_rate);
- 
-@@ -527,7 +540,7 @@ static int svc_i3c_master_bus_init(struct i3c_master_controller *m)
- 		odstop = 1;
- 		break;
- 	default:
--		return -EINVAL;
-+		goto rpm_out;
- 	}
- 
- 	reg = SVC_I3C_MCONFIG_MASTER_EN |
-@@ -545,7 +558,7 @@ static int svc_i3c_master_bus_init(struct i3c_master_controller *m)
- 	/* Master core's registration */
- 	ret = i3c_master_get_free_addr(m, 0);
- 	if (ret < 0)
--		return ret;
-+		goto rpm_out;
- 
- 	info.dyn_addr = ret;
- 
-@@ -554,21 +567,35 @@ static int svc_i3c_master_bus_init(struct i3c_master_controller *m)
- 
- 	ret = i3c_master_set_info(&master->base, &info);
- 	if (ret)
--		return ret;
-+		goto rpm_out;
- 
- 	svc_i3c_master_enable_interrupts(master, SVC_I3C_MINT_SLVSTART);
- 
--	return 0;
-+rpm_out:
-+	pm_runtime_mark_last_busy(master->dev);
-+	pm_runtime_put_autosuspend(master->dev);
-+
-+	return ret;
- }
- 
- static void svc_i3c_master_bus_cleanup(struct i3c_master_controller *m)
- {
- 	struct svc_i3c_master *master = to_svc_i3c_master(m);
-+	int ret;
-+
-+	ret = pm_runtime_resume_and_get(master->dev);
-+	if (ret < 0) {
-+		dev_err(master->dev, "<%s> Cannot get runtime PM.\n", __func__);
-+		return;
-+	}
- 
- 	svc_i3c_master_disable_interrupts(master);
- 
- 	/* Disable master */
- 	writel(0, master->regs + SVC_I3C_MCONFIG);
-+
-+	pm_runtime_mark_last_busy(master->dev);
-+	pm_runtime_put_autosuspend(master->dev);
- }
- 
- static int svc_i3c_master_reserve_slot(struct svc_i3c_master *master)
-@@ -867,31 +894,36 @@ static int svc_i3c_master_do_daa(struct i3c_master_controller *m)
- 	unsigned int dev_nb;
- 	int ret, i;
- 
-+	ret = pm_runtime_resume_and_get(master->dev);
-+	if (ret < 0) {
-+		dev_err(master->dev, "<%s> Cannot get runtime PM.\n", __func__);
-+		return ret;
-+	}
-+
- 	spin_lock_irqsave(&master->xferqueue.lock, flags);
- 	ret = svc_i3c_master_do_daa_locked(master, addrs, &dev_nb);
- 	spin_unlock_irqrestore(&master->xferqueue.lock, flags);
--	if (ret)
--		goto emit_stop;
-+	if (ret) {
-+		svc_i3c_master_emit_stop(master);
-+		svc_i3c_master_clear_merrwarn(master);
-+		goto rpm_out;
-+	}
- 
- 	/* Register all devices who participated to the core */
- 	for (i = 0; i < dev_nb; i++) {
- 		ret = i3c_master_add_i3c_dev_locked(m, addrs[i]);
- 		if (ret)
--			return ret;
-+			goto rpm_out;
- 	}
- 
- 	/* Configure IBI auto-rules */
- 	ret = svc_i3c_update_ibirules(master);
--	if (ret) {
-+	if (ret)
- 		dev_err(master->dev, "Cannot handle such a list of devices");
--		return ret;
--	}
--
--	return 0;
- 
--emit_stop:
--	svc_i3c_master_emit_stop(master);
--	svc_i3c_master_clear_merrwarn(master);
-+rpm_out:
-+	pm_runtime_mark_last_busy(master->dev);
-+	pm_runtime_put_autosuspend(master->dev);
- 
- 	return ret;
- }
-@@ -1060,6 +1092,12 @@ static void svc_i3c_master_start_xfer_locked(struct svc_i3c_master *master)
- 	if (!xfer)
- 		return;
- 
-+	ret = pm_runtime_resume_and_get(master->dev);
-+	if (ret < 0) {
-+		dev_err(master->dev, "<%s> Cannot get runtime PM.\n", __func__);
-+		return;
-+	}
-+
- 	svc_i3c_master_clear_merrwarn(master);
- 	svc_i3c_master_flush_fifo(master);
- 
-@@ -1074,6 +1112,9 @@ static void svc_i3c_master_start_xfer_locked(struct svc_i3c_master *master)
- 			break;
- 	}
- 
-+	pm_runtime_mark_last_busy(master->dev);
-+	pm_runtime_put_autosuspend(master->dev);
-+
- 	xfer->ret = ret;
- 	complete(&xfer->comp);
- 
-@@ -1350,6 +1391,14 @@ static void svc_i3c_master_free_ibi(struct i3c_dev_desc *dev)
- static int svc_i3c_master_enable_ibi(struct i3c_dev_desc *dev)
- {
- 	struct i3c_master_controller *m = i3c_dev_get_master(dev);
-+	struct svc_i3c_master *master = to_svc_i3c_master(m);
-+	int ret;
-+
-+	ret = pm_runtime_resume_and_get(master->dev);
-+	if (ret < 0) {
-+		dev_err(master->dev, "<%s> Cannot get runtime PM.\n", __func__);
-+		return ret;
-+	}
- 
- 	return i3c_master_enec_locked(m, dev->info.dyn_addr, I3C_CCC_EVENT_SIR);
- }
-@@ -1357,8 +1406,15 @@ static int svc_i3c_master_enable_ibi(struct i3c_dev_desc *dev)
- static int svc_i3c_master_disable_ibi(struct i3c_dev_desc *dev)
- {
- 	struct i3c_master_controller *m = i3c_dev_get_master(dev);
-+	struct svc_i3c_master *master = to_svc_i3c_master(m);
-+	int ret;
-+
-+	ret = i3c_master_disec_locked(m, dev->info.dyn_addr, I3C_CCC_EVENT_SIR);
- 
--	return i3c_master_disec_locked(m, dev->info.dyn_addr, I3C_CCC_EVENT_SIR);
-+	pm_runtime_mark_last_busy(master->dev);
-+	pm_runtime_put_autosuspend(master->dev);
-+
-+	return ret;
- }
- 
- static void svc_i3c_master_recycle_ibi_slot(struct i3c_dev_desc *dev,
-@@ -1389,6 +1445,37 @@ static const struct i3c_master_controller_ops svc_i3c_master_ops = {
- 	.disable_ibi = svc_i3c_master_disable_ibi,
- };
- 
-+static int svc_i3c_master_prepare_clks(struct svc_i3c_master *master)
-+{
-+	int ret = 0;
-+
-+	ret = clk_prepare_enable(master->pclk);
-+	if (ret)
-+		return ret;
-+
-+	ret = clk_prepare_enable(master->fclk);
-+	if (ret) {
-+		clk_disable_unprepare(master->pclk);
-+		return ret;
-+	}
-+
-+	ret = clk_prepare_enable(master->sclk);
-+	if (ret) {
-+		clk_disable_unprepare(master->pclk);
-+		clk_disable_unprepare(master->fclk);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void svc_i3c_master_unprepare_clks(struct svc_i3c_master *master)
-+{
-+	clk_disable_unprepare(master->pclk);
-+	clk_disable_unprepare(master->fclk);
-+	clk_disable_unprepare(master->sclk);
-+}
-+
- static int svc_i3c_master_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -1421,24 +1508,16 @@ static int svc_i3c_master_probe(struct platform_device *pdev)
- 
- 	master->dev = dev;
- 
--	ret = clk_prepare_enable(master->pclk);
-+	ret = svc_i3c_master_prepare_clks(master);
- 	if (ret)
- 		return ret;
- 
--	ret = clk_prepare_enable(master->fclk);
--	if (ret)
--		goto err_disable_pclk;
--
--	ret = clk_prepare_enable(master->sclk);
--	if (ret)
--		goto err_disable_fclk;
--
- 	INIT_WORK(&master->hj_work, svc_i3c_master_hj_work);
- 	INIT_WORK(&master->ibi_work, svc_i3c_master_ibi_work);
- 	ret = devm_request_irq(dev, master->irq, svc_i3c_master_irq_handler,
- 			       IRQF_NO_SUSPEND, "svc-i3c-irq", master);
- 	if (ret)
--		goto err_disable_sclk;
-+		goto err_disable_clks;
- 
- 	master->free_slots = GENMASK(SVC_I3C_MAX_DEVS - 1, 0);
- 
-@@ -1452,29 +1531,38 @@ static int svc_i3c_master_probe(struct platform_device *pdev)
- 					 GFP_KERNEL);
- 	if (!master->ibi.slots) {
- 		ret = -ENOMEM;
--		goto err_disable_sclk;
-+		goto err_disable_clks;
- 	}
- 
- 	platform_set_drvdata(pdev, master);
- 
-+	pm_runtime_set_autosuspend_delay(&pdev->dev, SVC_I3C_PM_TIMEOUT_MS);
-+	pm_runtime_use_autosuspend(&pdev->dev);
-+	pm_runtime_get_noresume(&pdev->dev);
-+	pm_runtime_set_active(&pdev->dev);
-+	pm_runtime_enable(&pdev->dev);
-+
- 	svc_i3c_master_reset(master);
- 
- 	/* Register the master */
- 	ret = i3c_master_register(&master->base, &pdev->dev,
- 				  &svc_i3c_master_ops, false);
- 	if (ret)
--		goto err_disable_sclk;
-+		goto rpm_disable;
-+
-+	pm_runtime_mark_last_busy(&pdev->dev);
-+	pm_runtime_put_autosuspend(&pdev->dev);
- 
- 	return 0;
- 
--err_disable_sclk:
--	clk_disable_unprepare(master->sclk);
-+rpm_disable:
-+	pm_runtime_dont_use_autosuspend(&pdev->dev);
-+	pm_runtime_put_noidle(&pdev->dev);
-+	pm_runtime_set_suspended(&pdev->dev);
-+	pm_runtime_disable(&pdev->dev);
- 
--err_disable_fclk:
--	clk_disable_unprepare(master->fclk);
--
--err_disable_pclk:
--	clk_disable_unprepare(master->pclk);
-+err_disable_clks:
-+	svc_i3c_master_unprepare_clks(master);
- 
- 	return ret;
- }
-@@ -1488,13 +1576,40 @@ static int svc_i3c_master_remove(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	clk_disable_unprepare(master->pclk);
--	clk_disable_unprepare(master->fclk);
--	clk_disable_unprepare(master->sclk);
-+	pm_runtime_dont_use_autosuspend(&pdev->dev);
-+	pm_runtime_disable(&pdev->dev);
- 
- 	return 0;
- }
- 
-+static int __maybe_unused svc_i3c_runtime_suspend(struct device *dev)
-+{
-+	struct svc_i3c_master *master = dev_get_drvdata(dev);
-+
-+	svc_i3c_master_unprepare_clks(master);
-+	pinctrl_pm_select_sleep_state(dev);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused svc_i3c_runtime_resume(struct device *dev)
-+{
-+	struct svc_i3c_master *master = dev_get_drvdata(dev);
-+	int ret = 0;
-+
-+	pinctrl_pm_select_default_state(dev);
-+	svc_i3c_master_prepare_clks(master);
-+
-+	return ret;
-+}
-+
-+static const struct dev_pm_ops svc_i3c_pm_ops = {
-+	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
-+				      pm_runtime_force_resume)
-+	SET_RUNTIME_PM_OPS(svc_i3c_runtime_suspend,
-+			   svc_i3c_runtime_resume, NULL)
-+};
-+
- static const struct of_device_id svc_i3c_master_of_match_tbl[] = {
+@@ -1614,6 +1614,7 @@ static const struct of_device_id svc_i3c_master_of_match_tbl[] = {
  	{ .compatible = "silvaco,i3c-master" },
  	{ /* sentinel */ },
-@@ -1506,6 +1621,7 @@ static struct platform_driver svc_i3c_master = {
- 	.driver = {
- 		.name = "silvaco-i3c-master",
- 		.of_match_table = svc_i3c_master_of_match_tbl,
-+		.pm = &svc_i3c_pm_ops,
- 	},
  };
- module_platform_driver(svc_i3c_master);
++MODULE_DEVICE_TABLE(of, svc_i3c_master_of_match_tbl);
+ 
+ static struct platform_driver svc_i3c_master = {
+ 	.probe = svc_i3c_master_probe,
 -- 
 2.25.1
 

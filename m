@@ -2,70 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED84447FDCE
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 15:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA0047FDE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 15:50:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237157AbhL0O2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 09:28:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234125AbhL0O2B (ORCPT
+        id S234125AbhL0OuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 09:50:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47198 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237206AbhL0OuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 09:28:01 -0500
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3524C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 06:28:00 -0800 (PST)
-Received: by mail-lf1-x142.google.com with SMTP id i31so35028765lfv.10
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 06:28:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=DQ/D/5RwlNXnqeWu5DTBN3aYPD0OMi5K51FC+DRL+oY=;
-        b=q40vrZC42DGuqzMn9ukoYgdJUAfwX367a13AtRqP+Qa04I4mYHHvCEPlX01wK4Qdh/
-         YAdWuy1SB6nrP1fkQ8RB7OPDqaAPUICHdnTQHVMdOtVSfPm01RaZiX0yxEj1j4vh6Awy
-         O1asoU0buweiQAQtwbZcGmL8MSjDa+z0lVMGoPEUPNET6VAwlp5zX8jDggkyHXU6dFeA
-         WSeH2ww2cQdkI1qcLUHkHNXCXVgRrIIPrGN778/pTxatxIKzGYThpEjiznPImRsm7z4/
-         e/dZkD49EkCGng1U1Z7exAxt+qwvBipiabnV7B44HMfw5X7Vr8knV1VpR1uuHR/SNVOz
-         JvdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=DQ/D/5RwlNXnqeWu5DTBN3aYPD0OMi5K51FC+DRL+oY=;
-        b=d7LZxhObiSZ1s7wjykhR7FW8IjxZox9k35uO6DIoDjKZN7WeXWUIajDFqAOZJmHl/x
-         xnFxYY0FamM7LgoX721y98fHAgZYkErJROAWMDj9jiH4gBHFBhzQmqyKE3x3wXVTxNIp
-         TtKZnP8Q28t3fdZf3oR1ANvJ1jrsA2dgzjB3lBdTGNmMsrmG3rAVVMedN5hmUVF2stoT
-         72oez9XAp7oMGGEb3SR4TFuqr2KE72xNcOmn+E0kzP9dpyezwhra6dFRH+oMOjxg9pc+
-         ZrESnh/9pNYQEluPXMEBkSeIr78rRjFb/0STxL+fKIZ5kYTMHzjWm64pS6cK+8PuZruO
-         N+Ug==
-X-Gm-Message-State: AOAM530hdjIBNO/1gZQCtVDUaZ3YZKq9HyIPne+c4nOc+OhlO8mXYAsj
-        6+mqh7vF+cYxBm1V/bN5as3mB5J5p/3orTBl7S4=
-X-Google-Smtp-Source: ABdhPJxaxTb/YCXyZZ/7FkQp8FYG21EUieT9VZSDHMhxk3xPugR1OdZel6PdQMlohJfJgMhr5YA26xE3oVQrdbRSwoM=
-X-Received: by 2002:a05:6512:3242:: with SMTP id c2mr14485126lfr.182.1640615278669;
- Mon, 27 Dec 2021 06:27:58 -0800 (PST)
+        Mon, 27 Dec 2021 09:50:10 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 680AD6102C;
+        Mon, 27 Dec 2021 14:50:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C55D8C36AEA;
+        Mon, 27 Dec 2021 14:50:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640616609;
+        bh=nXr/2roQy0fQKkme9c2zWu2ugxNo52GxfhZUVv6FzXM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=HI9FZX1vBPnFcS9yGSAFmDso9i/x/meIcBwVsNyHy/Fc2EinBMxKKV2N9I+jwKcgh
+         n27w1fujFapsBD16omTkTP1AWMrGsBMfmI7R2wCn5V2Svlj+xaMZwlThnXlNRltQB/
+         4UeIcxHvL8EeKTi1eu7dTOhrLryQ0KqaTiQLNIy7u5R9kW/1UPeG2RCJY/ialfiD8s
+         T4vbBjFOdeNt5q81E5gj1u0VFa2OqbnJWI/nc6fYCZAGRlsIeiBHC19/51g/qnah3S
+         hPS5HCC7uGV+eICvqYS9Ee9UiZNPPVSUv3rlPvOto+iqoXpXuZCAi+BEqPopbe0h/a
+         nEHocqVfvcK3g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9EA94C395DD;
+        Mon, 27 Dec 2021 14:50:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Received: by 2002:ac2:4c4b:0:0:0:0:0 with HTTP; Mon, 27 Dec 2021 06:27:57
- -0800 (PST)
-Reply-To: Mr.ahmed_kobani@mail.com
-From:   A_H_M_E_D K_O_B_A_N_I <nadeemark76@gmail.com>
-Date:   Mon, 27 Dec 2021 06:27:57 -0800
-Message-ID: <CAHv+qZo0vprrfG_Ek1veSo6NK--utRXUgTq_y0W-YMoX_rfRtQ@mail.gmail.com>
-Subject: Business Opportunity Urgent Response
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: udp: fix alignment problem in udp4_seq_show()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164061660964.26121.4854651677382199300.git-patchwork-notify@kernel.org>
+Date:   Mon, 27 Dec 2021 14:50:09 +0000
+References: <20211227082951.844543-1-xingwu.yang@gmail.com>
+In-Reply-To: <20211227082951.844543-1-xingwu.yang@gmail.com>
+To:     yangxingwu <xingwu.yang@gmail.com>
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good Day My Good Friend
+Hello:
 
- Let me start by introducing myself I am Mr. Ahmed Kobani from Burkina
-Faso, I am writing you this letter based on latest development in my
-bank which I we like to bring you in. The sum of Six Million Five
-Hundred Thousand United State Dollars ($ 6.5 Million) this is
-legitimate Transition after the transfer we will share it, 60% for me
-and 40% for you. Let me know if you Can you help me, kindly Contact me
-for more details if you are interested in the deal.
- Waiting to hear from you urgent.
- Best regards
-Ahmed Kobani
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Mon, 27 Dec 2021 16:29:51 +0800 you wrote:
+> $ cat /pro/net/udp
+> 
+> before:
+> 
+>   sl  local_address rem_address   st tx_queue rx_queue tr tm->when
+> 26050: 0100007F:0035 00000000:0000 07 00000000:00000000 00:00000000
+> 26320: 0100007F:0143 00000000:0000 07 00000000:00000000 00:00000000
+> 27135: 00000000:8472 00000000:0000 07 00000000:00000000 00:00000000
+> 
+> [...]
+
+Here is the summary with links:
+  - net: udp: fix alignment problem in udp4_seq_show()
+    https://git.kernel.org/netdev/net/c/6c25449e1a32
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

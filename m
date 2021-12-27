@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B74E747FE88
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6923547FEAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:30:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237654AbhL0P34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:29:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237590AbhL0P32 (ORCPT
+        id S238058AbhL0Pat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:30:49 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60042 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237648AbhL0P33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:29:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70617C061792;
-        Mon, 27 Dec 2021 07:29:28 -0800 (PST)
+        Mon, 27 Dec 2021 10:29:29 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F2F1B80E51;
-        Mon, 27 Dec 2021 15:29:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 432ECC36AEA;
-        Mon, 27 Dec 2021 15:29:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55FB5610A7;
+        Mon, 27 Dec 2021 15:29:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AE21C36AEA;
+        Mon, 27 Dec 2021 15:29:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640618966;
-        bh=tvmxJgAuyIBTaEPgVVet/RiLbwCmNwEnH8C46qcFYiQ=;
+        s=korg; t=1640618968;
+        bh=QOfcTuxHylX/Q66Am8z7uBFzVY5vzDckccPl0RX1Kxw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i9Y5LO9skzTDfYUvJWfjdXdI8J3oaOrO5stXNlJSYqEBeo2LbDMD2d2jlQeNqDsKN
-         Itcxg3Es+YCJM0Jc/8c1/w8SCk2gtAo0fwrWatOCYNz2OtB4bjr5zFAoHny+eTt6g7
-         257Bkz2FFpXCuZGCU7g1/I/+10lpKFnZl4PQECRw=
+        b=GDykEZJ/gzzAGvrdJBjE46fJvyo22MzZRkjPC7s3Yyk8/EsvNpWAzv7835pSFpPzA
+         vbzeOOtJZZ6iyGNDsBlGO9FqZUwqkEna3UbYNSC6oHlo+4qXlABLGmAqyjHifMkey/
+         UZFM3f9gL0D1PA2iOFOnZHZfHIHFEZZzbEaPJ8Zo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Andrew Melnichenko <andrew@daynix.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 07/29] qlcnic: potential dereference null pointer of rx_queue->page_ring
-Date:   Mon, 27 Dec 2021 16:27:17 +0100
-Message-Id: <20211227151318.712887304@linuxfoundation.org>
+Subject: [PATCH 4.14 08/29] net: accept UFOv6 packages in virtio_net_hdr_to_skb
+Date:   Mon, 27 Dec 2021 16:27:18 +0100
+Message-Id: <20211227151318.745200077@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211227151318.475251079@linuxfoundation.org>
 References: <20211227151318.475251079@linuxfoundation.org>
@@ -49,101 +47,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Willem de Bruijn <willemb@google.com>
 
-[ Upstream commit 60ec7fcfe76892a1479afab51ff17a4281923156 ]
+[ Upstream commit 7e5cced9ca84df52d874aca6b632f930b3dc5bc6 ]
 
-The return value of kcalloc() needs to be checked.
-To avoid dereference of null pointer in case of the failure of alloc.
-Therefore, it might be better to change the return type of
-qlcnic_sriov_alloc_vlans() and return -ENOMEM when alloc fails and
-return 0 the others.
-Also, qlcnic_sriov_set_guest_vlan_mode() and __qlcnic_pci_sriov_enable()
-should deal with the return value of qlcnic_sriov_alloc_vlans().
+Skb with skb->protocol 0 at the time of virtio_net_hdr_to_skb may have
+a protocol inferred from virtio_net_hdr with virtio_net_hdr_set_proto.
 
-Fixes: 154d0c810c53 ("qlcnic: VLAN enhancement for 84XX adapters")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Unlike TCP, UDP does not have separate types for IPv4 and IPv6. Type
+VIRTIO_NET_HDR_GSO_UDP is guessed to be IPv4/UDP. As of the below
+commit, UFOv6 packets are dropped due to not matching the protocol as
+obtained from dev_parse_header_protocol.
+
+Invert the test to take that L2 protocol field as starting point and
+pass both UFOv4 and UFOv6 for VIRTIO_NET_HDR_GSO_UDP.
+
+Fixes: 924a9bc362a5 ("net: check if protocol extracted by virtio_net_hdr_set_proto is correct")
+Link: https://lore.kernel.org/netdev/CABcq3pG9GRCYqFDBAJ48H1vpnnX=41u+MhQnayF1ztLH4WX0Fw@mail.gmail.com/
+Reported-by: Andrew Melnichenko <andrew@daynix.com>
+Signed-off-by: Willem de Bruijn <willemb@google.com>
+Link: https://lore.kernel.org/r/20211220144901.2784030-1-willemdebruijn.kernel@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h    |  2 +-
- .../net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c | 12 +++++++++---
- drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c |  4 +++-
- 3 files changed, 13 insertions(+), 5 deletions(-)
+ include/linux/virtio_net.h | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h
-index 5f327659efa7a..85b688f60b876 100644
---- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h
-+++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h
-@@ -202,7 +202,7 @@ int qlcnic_sriov_get_vf_vport_info(struct qlcnic_adapter *,
- 				   struct qlcnic_info *, u16);
- int qlcnic_sriov_cfg_vf_guest_vlan(struct qlcnic_adapter *, u16, u8);
- void qlcnic_sriov_free_vlans(struct qlcnic_adapter *);
--void qlcnic_sriov_alloc_vlans(struct qlcnic_adapter *);
-+int qlcnic_sriov_alloc_vlans(struct qlcnic_adapter *);
- bool qlcnic_sriov_check_any_vlan(struct qlcnic_vf_info *);
- void qlcnic_sriov_del_vlan_id(struct qlcnic_sriov *,
- 			      struct qlcnic_vf_info *, u16);
-diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c
-index c58180f408448..44caa7c2077ec 100644
---- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c
-+++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c
-@@ -433,7 +433,7 @@ static int qlcnic_sriov_set_guest_vlan_mode(struct qlcnic_adapter *adapter,
- 					    struct qlcnic_cmd_args *cmd)
- {
- 	struct qlcnic_sriov *sriov = adapter->ahw->sriov;
--	int i, num_vlans;
-+	int i, num_vlans, ret;
- 	u16 *vlans;
+diff --git a/include/linux/virtio_net.h b/include/linux/virtio_net.h
+index 162761f72c142..f5876f7a2ab24 100644
+--- a/include/linux/virtio_net.h
++++ b/include/linux/virtio_net.h
+@@ -7,6 +7,21 @@
+ #include <uapi/linux/udp.h>
+ #include <uapi/linux/virtio_net.h>
  
- 	if (sriov->allowed_vlans)
-@@ -444,7 +444,9 @@ static int qlcnic_sriov_set_guest_vlan_mode(struct qlcnic_adapter *adapter,
- 	dev_info(&adapter->pdev->dev, "Number of allowed Guest VLANs = %d\n",
- 		 sriov->num_allowed_vlans);
- 
--	qlcnic_sriov_alloc_vlans(adapter);
-+	ret = qlcnic_sriov_alloc_vlans(adapter);
-+	if (ret)
-+		return ret;
- 
- 	if (!sriov->any_vlan)
- 		return 0;
-@@ -2164,7 +2166,7 @@ static int qlcnic_sriov_vf_resume(struct qlcnic_adapter *adapter)
- 	return err;
- }
- 
--void qlcnic_sriov_alloc_vlans(struct qlcnic_adapter *adapter)
-+int qlcnic_sriov_alloc_vlans(struct qlcnic_adapter *adapter)
- {
- 	struct qlcnic_sriov *sriov = adapter->ahw->sriov;
- 	struct qlcnic_vf_info *vf;
-@@ -2174,7 +2176,11 @@ void qlcnic_sriov_alloc_vlans(struct qlcnic_adapter *adapter)
- 		vf = &sriov->vf_info[i];
- 		vf->sriov_vlans = kcalloc(sriov->num_allowed_vlans,
- 					  sizeof(*vf->sriov_vlans), GFP_KERNEL);
-+		if (!vf->sriov_vlans)
-+			return -ENOMEM;
- 	}
++static inline bool virtio_net_hdr_match_proto(__be16 protocol, __u8 gso_type)
++{
++	switch (gso_type & ~VIRTIO_NET_HDR_GSO_ECN) {
++	case VIRTIO_NET_HDR_GSO_TCPV4:
++		return protocol == cpu_to_be16(ETH_P_IP);
++	case VIRTIO_NET_HDR_GSO_TCPV6:
++		return protocol == cpu_to_be16(ETH_P_IPV6);
++	case VIRTIO_NET_HDR_GSO_UDP:
++		return protocol == cpu_to_be16(ETH_P_IP) ||
++		       protocol == cpu_to_be16(ETH_P_IPV6);
++	default:
++		return false;
++	}
++}
 +
-+	return 0;
- }
+ static inline int virtio_net_hdr_set_proto(struct sk_buff *skb,
+ 					   const struct virtio_net_hdr *hdr)
+ {
+@@ -88,9 +103,12 @@ static inline int virtio_net_hdr_to_skb(struct sk_buff *skb,
+ 			if (!skb->protocol) {
+ 				__be16 protocol = dev_parse_header_protocol(skb);
  
- void qlcnic_sriov_free_vlans(struct qlcnic_adapter *adapter)
-diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c
-index 50eaafa3eaba3..c9f2cd2462230 100644
---- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c
-+++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c
-@@ -598,7 +598,9 @@ static int __qlcnic_pci_sriov_enable(struct qlcnic_adapter *adapter,
- 	if (err)
- 		goto del_flr_queue;
- 
--	qlcnic_sriov_alloc_vlans(adapter);
-+	err = qlcnic_sriov_alloc_vlans(adapter);
-+	if (err)
-+		goto del_flr_queue;
- 
- 	return err;
- 
+-				virtio_net_hdr_set_proto(skb, hdr);
+-				if (protocol && protocol != skb->protocol)
++				if (!protocol)
++					virtio_net_hdr_set_proto(skb, hdr);
++				else if (!virtio_net_hdr_match_proto(protocol, hdr->gso_type))
+ 					return -EINVAL;
++				else
++					skb->protocol = protocol;
+ 			}
+ retry:
+ 			if (!skb_flow_dissect_flow_keys(skb, &keys, 0)) {
 -- 
 2.34.1
 

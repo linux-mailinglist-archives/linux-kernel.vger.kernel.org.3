@@ -2,109 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E079A47FA0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 05:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C0C47FA10
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 05:15:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235174AbhL0EMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 23:12:14 -0500
-Received: from mga14.intel.com ([192.55.52.115]:65434 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235156AbhL0EMN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 23:12:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640578333; x=1672114333;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GlcD9Zjp1E+9n0H6NzNbutTs+RGmfE5poRkHAv054+Q=;
-  b=ZHs+oMVKlY4jlpxer/B2KHUj3CxfxM9nV9mzuz+rYiSym6wgmTVLNsFK
-   mcYHmv/Qk3q7tqp3Q0mwjcj2aE3OnjDyMwlDvmA86dKRzv9pyGNLobXUK
-   wXdzRkYHau+tbEZOUv2Sw+a89hSkDxj7+WvLaW0WzIIiFPbFftmEzn7Jh
-   LHW03Xkf+v1GKEULnutZxUvBt4AtrLN+5D0/WRfVpV6IEeffGnTjiOhY6
-   G9ejo0gV4NY2Wlzu3ZYVqQn9hRSVQ1HZnQ6iqm66kN2EOr5NEGz/s/WYG
-   IPWH1l9pHmX62dKGbmTCaUxEppdt513+/AMNxjW7PbFBevNq+yBGmc7KD
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="241375310"
-X-IronPort-AV: E=Sophos;i="5.88,238,1635231600"; 
-   d="scan'208";a="241375310"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 20:12:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,238,1635231600"; 
-   d="scan'208";a="553652913"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 26 Dec 2021 20:12:09 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n1hMm-00061b-Sg; Mon, 27 Dec 2021 04:12:08 +0000
-Date:   Mon, 27 Dec 2021 12:11:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, jic23@kernel.org,
-        lars@metafoo.de
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Chris Lesiak <chris.lesiak@licor.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: humidity: hdc100x: Add ACPI HID table
-Message-ID: <202112271213.Z6jyi5YK-lkp@intel.com>
-References: <20211224145903.368999-1-kai.heng.feng@canonical.com>
+        id S235182AbhL0EPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 23:15:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233639AbhL0EPe (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 26 Dec 2021 23:15:34 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07117C06173E
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 20:15:34 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id v11so12712459pfu.2
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 20:15:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=dZHrX8TEd1s1Rvq7azrt0NBXkVOb5WFezTF0/TFNa/E=;
+        b=CmnCQPPWTzj+M0BTCCL947qVsPfzWjH3Pl606mcz9a2S5Bxtez5W7iqDw2ZQN+yLUR
+         RQXdeIg9rqH1ROQYts0zkZHAPEq8tsbFRH0WtkeTvTB6+oQQAI6OCkZc4HEIVMUIajvG
+         mo/Td2ueAp7Ay8a41BAO79BigDIkTnhCR9RcheSGFCBohp5Wbosa1oRXtt3PBiPXJTN9
+         taJU9hdO5yRyzUMhVRMKXXcKnNt4duYCVynwMa9cxFuhvlLdYN9mSn+cviQrbjC9LaiU
+         s54fTFde9PX2uJz88Zs0SGnAHq1TUTYoYFqKE1bfeQVKAwLmgz/OBiTQ+XoxCYiwyzUY
+         qg3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=dZHrX8TEd1s1Rvq7azrt0NBXkVOb5WFezTF0/TFNa/E=;
+        b=FGnAqIB2kbmGkA/DILgGbq41Z/CtKnIsYZJZQ3Jby6odfbwwU+2jKQ1LxogCnbcf63
+         E9C1zROYGqiD/upq0HWRBqeZ9FmO7YCLalxEoeYcdEnBdqXW/1R6bZZ7Nr3aaxA+cNDT
+         PkRAxyaMdc86+fLP+NRD+BBXUC8F+7lEtGiVk48uj3BBwGD6ge4m6NgAPNcgwwkvfyBM
+         JQZItXXnVGfE9/4Ep8cg5SyAgtVn6EbYxZrGDegyshR/x5gAhqb7Lt/IfwI8b0iLV80E
+         UPMWYk21ZcolHXWoQJMk53Ngxa+4Ame+G1EsXHJkUWmzSrTC+b0IwzBe8ypn2Ci8B0TF
+         n0sQ==
+X-Gm-Message-State: AOAM531fhuHke2xVQDugRhn0zY38n/2lUkxamrnEh8+xM1DEuNuKrhbr
+        JuEC+crbRzOLxO9QIo0pBZCCMA==
+X-Google-Smtp-Source: ABdhPJzz/7eIXRXYn/RgMkdl62Ozc24gm2sKtZeKxBbyT2flMNofiYyzcfQjK+wvgEeGVQVlly1E3Q==
+X-Received: by 2002:a05:6a00:14d3:b0:4ba:8ccb:73f1 with SMTP id w19-20020a056a0014d300b004ba8ccb73f1mr16105452pfu.65.1640578533460;
+        Sun, 26 Dec 2021 20:15:33 -0800 (PST)
+Received: from localhost ([106.201.42.111])
+        by smtp.gmail.com with ESMTPSA id g5sm16502101pfj.143.2021.12.26.20.15.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Dec 2021 20:15:32 -0800 (PST)
+Date:   Mon, 27 Dec 2021 09:45:31 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Hector Yuan <hector.yuan@mediatek.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-kernel@vger.kernel.org, wsd_upstream@mediatek.com
+Subject: Re: [PATCH v1 1/1] cpufreq: mediatek-hw: Fix double devm_remap in
+ hotplug case
+Message-ID: <20211227041531.5w5lhrk4a7jzz64x@vireshk-i7>
+References: <1635507743-17919-1-git-send-email-hector.yuan@mediatek.com>
+ <1635507743-17919-2-git-send-email-hector.yuan@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211224145903.368999-1-kai.heng.feng@canonical.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1635507743-17919-2-git-send-email-hector.yuan@mediatek.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kai-Heng,
+On 29-10-21, 19:42, Hector Yuan wrote:
+> From: "Hector.Yuan" <hector.yuan@mediatek.com>
+> 
+> When hotpluging policy cpu, cpu policy init will be called multiple times.
+> Unplug CPU7 -> CPU6 -> CPU5 -> CPU4, then plug CPU4 again.
+> In this case, devm_remap will double remap and resource allocate fail.
+> So replace devm_remap to ioremap and release resources in cpu policy exit.
+> 
+> Signed-off-by: Hector.Yuan <hector.yuan@mediatek.com>
+> ---
+>  drivers/cpufreq/mediatek-cpufreq-hw.c |   33 ++++++++++++++++++++++++++++++---
+>  1 file changed, 30 insertions(+), 3 deletions(-)
 
-Thank you for the patch! Perhaps something to improve:
+Applied. Thanks.
 
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on v5.16-rc7 next-20211224]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Kai-Heng-Feng/iio-humidity-hdc100x-Add-ACPI-HID-table/20211224-230046
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: mips-randconfig-c004-20211227 (https://download.01.org/0day-ci/archive/20211227/202112271213.Z6jyi5YK-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 511726c64d3b6cca66f7c54d457d586aa3129f67)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/59648fe59d706ab2b9e719418c490d505ee5cc93
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Kai-Heng-Feng/iio-humidity-hdc100x-Add-ACPI-HID-table/20211224-230046
-        git checkout 59648fe59d706ab2b9e719418c490d505ee5cc93
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/iio/humidity/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/iio/humidity/hdc100x.c:420:36: warning: unused variable 'hdc100x_acpi_match' [-Wunused-const-variable]
-   static const struct acpi_device_id hdc100x_acpi_match[] = {
-                                      ^
-   1 warning generated.
-
-
-vim +/hdc100x_acpi_match +420 drivers/iio/humidity/hdc100x.c
-
-   419	
- > 420	static const struct acpi_device_id hdc100x_acpi_match[] = {
-   421		{"HDC1010"},
-   422		{ },
-   423	};
-   424	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+viresh

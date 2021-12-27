@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB9547FEE7
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:34:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3574647FF24
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237930AbhL0Pdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:33:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237590AbhL0PdR (ORCPT
+        id S238496AbhL0Pfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:35:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35614 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238242AbhL0PfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:33:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEECC06175D;
-        Mon, 27 Dec 2021 07:33:17 -0800 (PST)
+        Mon, 27 Dec 2021 10:35:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD9F76104C;
-        Mon, 27 Dec 2021 15:33:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98C36C36AEA;
-        Mon, 27 Dec 2021 15:33:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1253C610F4;
+        Mon, 27 Dec 2021 15:35:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC0B1C36AE7;
+        Mon, 27 Dec 2021 15:35:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619196;
-        bh=V2qw+lTL3q3d7YefE0rr8zmZwROjgfEPR1SGAe3lDMc=;
+        s=korg; t=1640619312;
+        bh=ImSu58zj0rM7C3683z1wGhQFyF1wzwbvOqip2KjSwZM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aYocSEJxL/PubA7682+cRYRoeFaMggSON4h12YhfAbVkCO8QAyu7CSD3xslZulqIF
-         7kWTPdz2/dZD2CPJkQ6YjPRAo0WIlWl3kby2snGZaPDEx+KE7rZq2/BvCguYRjrNN+
-         HwB97jN1IfC3luBnVfJxNLI+09s32zdSIYhS92CU=
+        b=zK9E16OrPuF8bevj89HNyyvK4YTh01DoUmCXsOJ44dsSkxgDVpukDCNwD/WEzlheW
+         ofrwmu6HD/YBwC2k6TlO+b7G6pfDMfCORvXrVPMwdT9sVFCVcFC/EAC6kOwvHlqyxY
+         8s26HOzTbwAQ0nXvUVGqvvHAtPaGxuxr878OdNkA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John David Anglin <dave.anglin@bell.net>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 4.19 26/38] parisc: Correct completer in lws start
-Date:   Mon, 27 Dec 2021 16:31:03 +0100
-Message-Id: <20211227151320.254627160@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Corey Minyard <cminyard@mvista.com>,
+        Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>
+Subject: [PATCH 5.4 28/47] ipmi: fix initialization when workqueue allocation fails
+Date:   Mon, 27 Dec 2021 16:31:04 +0100
+Message-Id: <20211227151321.767687961@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
-References: <20211227151319.379265346@linuxfoundation.org>
+In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
+References: <20211227151320.801714429@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,37 +47,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John David Anglin <dave.anglin@bell.net>
+From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-commit 8f66fce0f46560b9e910787ff7ad0974441c4f9c upstream.
+commit 75d70d76cb7b927cace2cb34265d68ebb3306b13 upstream.
 
-The completer in the "or,ev %r1,%r30,%r30" instruction is reversed, so we are
-not clipping the LWS number when we are called from a 32-bit process (W=0).
-We need to nulify the following depdi instruction when the least-significant
-bit of %r30 is 1.
+If the workqueue allocation fails, the driver is marked as not initialized,
+and timer and panic_notifier will be left registered.
 
-If the %r20 register is not clipped, a user process could perform a LWS call
-that would branch to an undefined location in the kernel and potentially crash
-the machine.
+Instead of removing those when workqueue allocation fails, do the workqueue
+initialization before doing it, and cleanup srcu_struct if it fails.
 
-Signed-off-by: John David Anglin <dave.anglin@bell.net>
-Cc: stable@vger.kernel.org # 4.19+
-Signed-off-by: Helge Deller <deller@gmx.de>
+Fixes: 1d49eb91e86e ("ipmi: Move remove_work to dedicated workqueue")
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Cc: Corey Minyard <cminyard@mvista.com>
+Cc: Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>
+Cc: stable@vger.kernel.org
+Message-Id: <20211217154410.1228673-2-cascardo@canonical.com>
+Signed-off-by: Corey Minyard <cminyard@mvista.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/parisc/kernel/syscall.S |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/ipmi/ipmi_msghandler.c |   15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
---- a/arch/parisc/kernel/syscall.S
-+++ b/arch/parisc/kernel/syscall.S
-@@ -478,7 +478,7 @@ lws_start:
- 	extrd,u	%r1,PSW_W_BIT,1,%r1
- 	/* sp must be aligned on 4, so deposit the W bit setting into
- 	 * the bottom of sp temporarily */
--	or,ev	%r1,%r30,%r30
-+	or,od	%r1,%r30,%r30
+--- a/drivers/char/ipmi/ipmi_msghandler.c
++++ b/drivers/char/ipmi/ipmi_msghandler.c
+@@ -5160,20 +5160,23 @@ static int ipmi_init_msghandler(void)
+ 	if (rv)
+ 		goto out;
  
- 	/* Clip LWS number to a 32-bit value for 32-bit processes */
- 	depdi	0, 31, 32, %r20
+-	timer_setup(&ipmi_timer, ipmi_timeout, 0);
+-	mod_timer(&ipmi_timer, jiffies + IPMI_TIMEOUT_JIFFIES);
+-
+-	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
+-
+ 	remove_work_wq = create_singlethread_workqueue("ipmi-msghandler-remove-wq");
+ 	if (!remove_work_wq) {
+ 		pr_err("unable to create ipmi-msghandler-remove-wq workqueue");
+ 		rv = -ENOMEM;
+-		goto out;
++		goto out_wq;
+ 	}
+ 
++	timer_setup(&ipmi_timer, ipmi_timeout, 0);
++	mod_timer(&ipmi_timer, jiffies + IPMI_TIMEOUT_JIFFIES);
++
++	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
++
+ 	initialized = true;
+ 
++out_wq:
++	if (rv)
++		cleanup_srcu_struct(&ipmi_interfaces_srcu);
+ out:
+ 	mutex_unlock(&ipmi_interfaces_mutex);
+ 	return rv;
 
 

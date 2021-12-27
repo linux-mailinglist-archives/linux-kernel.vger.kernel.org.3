@@ -2,187 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0185547F9A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 02:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC1747F9AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 02:47:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234927AbhL0BYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 20:24:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234919AbhL0BYR (ORCPT
+        id S234947AbhL0Bqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 20:46:36 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:30175 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234994AbhL0Boq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 20:24:17 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1920C06173E;
-        Sun, 26 Dec 2021 17:24:16 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id a9so29451025wrr.8;
-        Sun, 26 Dec 2021 17:24:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l7XaE1ox+EybYQK2y5B/cfNwNeDOTbXqYvl+5XQIXz8=;
-        b=T/9OKp2AOg9HhQCvM2Sp4xnYrs66KRUOqO2U/euyTKbk1tGH4PMxPRCiAGsRkdxbig
-         l/cUpAgd2c/0eltisAEBkmUNB0AuHv2YPVLMt5hgWELPVGlQQC+FtScEHXjlIj2Sv1fi
-         9CORxmbOyPGklz1uRLH8yJHS8wHcdvYacrzjAl+MWC7s16+yBpLA6gr0YEHMJFpsjmjW
-         HrsBowXv/GGpqBDUil7uMhA9zHUcfHFrU9IQoOngIhe0ZKKD1t3LmJQDdmNVQ95F+2xD
-         hfzViUM/m7up6QJKjBilrS1s+BkTkMrgcWnqRnnkp4n2REvKJpMasgyeg3q7DS00BmmL
-         68dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l7XaE1ox+EybYQK2y5B/cfNwNeDOTbXqYvl+5XQIXz8=;
-        b=fJetgztvC0wG64JAJpKqOJCUp17bmHVZowC8JME5kCmGGM3z6Lseg7yZQRp9+mSqKT
-         qzLiIuAjqVv+a4up6f2z6sangxF6hjSv45cP4umLpfrPlk/3RCSeG/D6igGos0+ZzRuV
-         0fyT1E4ur2Umw9Q+XlbW92x2zw7387LfQCZZZsF+BBNsCXpbXGZFtjKnJ95lwxBDwlII
-         NMHwo/DK62EbDqYOvkz7MTpKrOJUPqNnBHFvRmOCnBmMkc91IdIjvIZ1kqnEWO5jby2c
-         P3pAIJuJchvtoBbUwqYLOFVdCB+7Lrxtluq7LspJq5IDGK5YV2//s+wc4wJQ1o0Va6PC
-         AgRQ==
-X-Gm-Message-State: AOAM532aaETwhz5U361CSbDkfK/7ILcBQfMz+kkMGoBf9DgvnTSUc9i2
-        41rlLlRI1FaHu5CLK0smMk4Hen1m7WQ=
-X-Google-Smtp-Source: ABdhPJzehXw034muaUcXaBIHhswRgEv6TPVYwXq5XDXCAG+bmTwOZeUL+D6AuLTP6rGzDfrrGXmezg==
-X-Received: by 2002:a05:6000:124a:: with SMTP id j10mr10838235wrx.110.1640568254699;
-        Sun, 26 Dec 2021 17:24:14 -0800 (PST)
-Received: from morpheus.home.roving-it.com (a.7.4.5.7.2.7.b.4.1.9.2.a.3.0.0.1.8.6.2.1.1.b.f.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:fb11:2681:3a:2914:b727:547a])
-        by smtp.googlemail.com with ESMTPSA id g5sm14066000wru.48.2021.12.26.17.24.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Dec 2021 17:24:14 -0800 (PST)
-From:   Peter Robinson <pbrobinson@gmail.com>
-To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Peter Robinson <pbrobinson@gmail.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [RFC PATCH] gnss: usb: add support for U-Blox NEO-M9N
-Date:   Mon, 27 Dec 2021 01:23:57 +0000
-Message-Id: <20211227012357.788966-1-pbrobinson@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Sun, 26 Dec 2021 20:44:46 -0500
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JMgQM26Kvz8w5B;
+        Mon, 27 Dec 2021 09:42:19 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 27 Dec 2021 09:44:25 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2308.20; Mon, 27 Dec 2021 09:44:24 +0800
+Message-ID: <c7037a3a-d0b1-6351-5e31-22be0d8e0e01@huawei.com>
+Date:   Mon, 27 Dec 2021 09:44:24 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 1/3] mm: vmalloc: Let user to control huge vmalloc default
+ behavior
+Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>
+References: <20211226083912.166512-1-wangkefeng.wang@huawei.com>
+ <20211226083912.166512-2-wangkefeng.wang@huawei.com>
+ <6c4bd989-268e-5899-09a7-ac573bd8b4d9@csgroup.eu>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <6c4bd989-268e-5899-09a7-ac573bd8b4d9@csgroup.eu>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggeme704-chm.china.huawei.com (10.1.199.100) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the USB interface of the SparkFun NEO-M9N
-GPS Breakout receiver.
 
-Bus 001 Device 005: ID 1546:01a9 U-Blox AG u-blox GNSS receiver
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               1.10
-  bDeviceClass            2 Communications
-  bDeviceSubClass         0
-  bDeviceProtocol         0
-  bMaxPacketSize0        64
-  idVendor           0x1546 U-Blox AG
-  idProduct          0x01a9
-  bcdDevice            4.04
-  iManufacturer           1 u-blox AG - www.u-blox.com
-  iProduct                2 u-blox GNSS receiver
-  iSerial                 0
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x003e
-    bNumInterfaces          2
-    bConfigurationValue     1
-    iConfiguration          0
-    bmAttributes         0xc0
-      Self Powered
-    MaxPower                0mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2 Communications
-      bInterfaceSubClass      2 Abstract (modem)
-      bInterfaceProtocol      1 AT-commands (v.25ter)
-      iInterface              0
-      CDC Header:
-        bcdCDC               1.10
-      CDC ACM:
-        bmCapabilities       0x02
-          line coding and serial state
-      CDC Call Management:
-        bmCapabilities       0x03
-          call management
-          use DataInterface
-        bDataInterface          1
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval             255
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0
-      bInterfaceProtocol    255 Vendor specific
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-Device Status:     0x0001
-  Self Powered
+On 2021/12/27 1:36, Christophe Leroy wrote:
+>
+> Le 26/12/2021 à 09:39, Kefeng Wang a écrit :
+>> Add HUGE_VMALLOC_DEFAULT_ENABLED to let user to choose whether or
+>> not enable huge vmalloc mappings by default, and this could make
+>> more architectures to enable huge vmalloc mappings feature but
+>> don't want to enable it by default.
+>>
+>> Add hugevmalloc=on/off parameter to enable or disable this feature
+>> at boot time, nohugevmalloc is still supported and equivalent to
+>> hugevmalloc=off.
+>
+> Is there a real added value to have the user be able to select that ?
+>
+> If the architecture supports it, is there any good reason to not use it ?
 
-Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
-Cc: Johan Hovold <johan@kernel.org>
----
-Hi Johan,
+There are some disadvantages[1],  one of the main concerns is the possible
 
-I've tested your GNSS USB series with a pair of U-Blox devices, adding
-the above USB ID. Only one included here for feedback to guage your thoughts.
-By defauly The U-Blox devices enumerate with the CDC ACM driver and output
-NMEA data via /dev/ttyACM0. With this patch and cdc_acm blocked I get
-/dev/gnss0 and can cat it to get NMEA data. Is your expectation to move
-these sort of devices over to the usb gnss driver too?
+memory waste, we have backported this feature to our kernel 5.10, but our
 
-Peter
+downstream in our some scenario(especially in embedded), they don't want
 
- drivers/gnss/usb.c | 1 +
- 1 file changed, 1 insertion(+)
+it enabled by default, and others want it, this is why patch1 comes.
 
-diff --git a/drivers/gnss/usb.c b/drivers/gnss/usb.c
-index 792235a688ea..775d58c2dbe1 100644
---- a/drivers/gnss/usb.c
-+++ b/drivers/gnss/usb.c
-@@ -18,6 +18,7 @@
- 
- static const struct usb_device_id gnss_usb_id_table[] = {
- 	{ USB_DEVICE(0x1199, 0xb000) },		/* Sierra Wireless XM1210 */
-+	{ USB_DEVICE(0x1546, 0x01a9) },		/* U-Blox NEO-M9N GNSS receiver */
- 	{ }
- };
- MODULE_DEVICE_TABLE(usb, gnss_usb_id_table);
--- 
-2.33.1
+>
+> Why not just do like PPC and enable it by default ? Why should it be
+> enabled by default on PPC but disabled by default on ARM64 and X86 ?
+
+The PPC is default enabled, we don't changes this behavior.
+
+Maybe upstream is not care about this, as I said in cover-letter, if 
+arm64/x86
+
+don't want patch1, we could only just select config to enable it.
+
+Let's wait for more feedback.
+
+Thanks.
+
+[1] 
+https://lore.kernel.org/linux-mm/1616036421.amjz2efujj.astroid@bobo.none/
 

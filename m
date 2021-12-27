@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3574647FF24
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:36:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6000A4800C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238496AbhL0Pfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:35:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35614 "EHLO
+        id S240178AbhL0Puu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:50:50 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43264 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238242AbhL0PfN (ORCPT
+        with ESMTP id S240728AbhL0Pph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:35:13 -0500
+        Mon, 27 Dec 2021 10:45:37 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1253C610F4;
-        Mon, 27 Dec 2021 15:35:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC0B1C36AE7;
-        Mon, 27 Dec 2021 15:35:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F53D60C9F;
+        Mon, 27 Dec 2021 15:45:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02075C36AEA;
+        Mon, 27 Dec 2021 15:45:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619312;
-        bh=ImSu58zj0rM7C3683z1wGhQFyF1wzwbvOqip2KjSwZM=;
+        s=korg; t=1640619936;
+        bh=C6Zp6+2bfvVibCrB+uC/baKd/b9bAzS/rmlskemiI7A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zK9E16OrPuF8bevj89HNyyvK4YTh01DoUmCXsOJ44dsSkxgDVpukDCNwD/WEzlheW
-         ofrwmu6HD/YBwC2k6TlO+b7G6pfDMfCORvXrVPMwdT9sVFCVcFC/EAC6kOwvHlqyxY
-         8s26HOzTbwAQ0nXvUVGqvvHAtPaGxuxr878OdNkA=
+        b=skaxKrylNmlGpBoutH7G44OrhMKYl2EBMfLHG8wEri87mD+nso/psm4f703Ors9Fe
+         s+sKr4nsk2ZyvQVl+RdfpnDMwRCuctdhf051C8F7ZJxNZecLrPSxcZQH/mSx4qKZ3Q
+         uQeW45oYAtOTqRFVHxF+kG/R7ZlPmof3shrjIpIA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Corey Minyard <cminyard@mvista.com>,
-        Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>
-Subject: [PATCH 5.4 28/47] ipmi: fix initialization when workqueue allocation fails
+        syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.15 089/128] KVM: VMX: Always clear vmx->fail on emulation_required
 Date:   Mon, 27 Dec 2021 16:31:04 +0100
-Message-Id: <20211227151321.767687961@linuxfoundation.org>
+Message-Id: <20211227151334.486201564@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
-References: <20211227151320.801714429@linuxfoundation.org>
+In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
+References: <20211227151331.502501367@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,59 +48,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+From: Sean Christopherson <seanjc@google.com>
 
-commit 75d70d76cb7b927cace2cb34265d68ebb3306b13 upstream.
+commit a80dfc025924024d2c61a4c1b8ef62b2fce76a04 upstream.
 
-If the workqueue allocation fails, the driver is marked as not initialized,
-and timer and panic_notifier will be left registered.
+Revert a relatively recent change that set vmx->fail if the vCPU is in L2
+and emulation_required is true, as that behavior is completely bogus.
+Setting vmx->fail and synthesizing a VM-Exit is contradictory and wrong:
 
-Instead of removing those when workqueue allocation fails, do the workqueue
-initialization before doing it, and cleanup srcu_struct if it fails.
+  (a) it's impossible to have both a VM-Fail and VM-Exit
+  (b) vmcs.EXIT_REASON is not modified on VM-Fail
+  (c) emulation_required refers to guest state and guest state checks are
+      always VM-Exits, not VM-Fails.
 
-Fixes: 1d49eb91e86e ("ipmi: Move remove_work to dedicated workqueue")
-Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Cc: Corey Minyard <cminyard@mvista.com>
-Cc: Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>
+For KVM specifically, emulation_required is handled before nested exits
+in __vmx_handle_exit(), thus setting vmx->fail has no immediate effect,
+i.e. KVM calls into handle_invalid_guest_state() and vmx->fail is ignored.
+Setting vmx->fail can ultimately result in a WARN in nested_vmx_vmexit()
+firing when tearing down the VM as KVM never expects vmx->fail to be set
+when L2 is active, KVM always reflects those errors into L1.
+
+  ------------[ cut here ]------------
+  WARNING: CPU: 0 PID: 21158 at arch/x86/kvm/vmx/nested.c:4548
+                                nested_vmx_vmexit+0x16bd/0x17e0
+                                arch/x86/kvm/vmx/nested.c:4547
+  Modules linked in:
+  CPU: 0 PID: 21158 Comm: syz-executor.1 Not tainted 5.16.0-rc3-syzkaller #0
+  Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+  RIP: 0010:nested_vmx_vmexit+0x16bd/0x17e0 arch/x86/kvm/vmx/nested.c:4547
+  Code: <0f> 0b e9 2e f8 ff ff e8 57 b3 5d 00 0f 0b e9 00 f1 ff ff 89 e9 80
+  Call Trace:
+   vmx_leave_nested arch/x86/kvm/vmx/nested.c:6220 [inline]
+   nested_vmx_free_vcpu+0x83/0xc0 arch/x86/kvm/vmx/nested.c:330
+   vmx_free_vcpu+0x11f/0x2a0 arch/x86/kvm/vmx/vmx.c:6799
+   kvm_arch_vcpu_destroy+0x6b/0x240 arch/x86/kvm/x86.c:10989
+   kvm_vcpu_destroy+0x29/0x90 arch/x86/kvm/../../../virt/kvm/kvm_main.c:441
+   kvm_free_vcpus arch/x86/kvm/x86.c:11426 [inline]
+   kvm_arch_destroy_vm+0x3ef/0x6b0 arch/x86/kvm/x86.c:11545
+   kvm_destroy_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1189 [inline]
+   kvm_put_kvm+0x751/0xe40 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1220
+   kvm_vcpu_release+0x53/0x60 arch/x86/kvm/../../../virt/kvm/kvm_main.c:3489
+   __fput+0x3fc/0x870 fs/file_table.c:280
+   task_work_run+0x146/0x1c0 kernel/task_work.c:164
+   exit_task_work include/linux/task_work.h:32 [inline]
+   do_exit+0x705/0x24f0 kernel/exit.c:832
+   do_group_exit+0x168/0x2d0 kernel/exit.c:929
+   get_signal+0x1740/0x2120 kernel/signal.c:2852
+   arch_do_signal_or_restart+0x9c/0x730 arch/x86/kernel/signal.c:868
+   handle_signal_work kernel/entry/common.c:148 [inline]
+   exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+   exit_to_user_mode_prepare+0x191/0x220 kernel/entry/common.c:207
+   __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+   syscall_exit_to_user_mode+0x2e/0x70 kernel/entry/common.c:300
+   do_syscall_64+0x53/0xd0 arch/x86/entry/common.c:86
+   entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Fixes: c8607e4a086f ("KVM: x86: nVMX: don't fail nested VM entry on invalid guest state if !from_vmentry")
+Reported-by: syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 Cc: stable@vger.kernel.org
-Message-Id: <20211217154410.1228673-2-cascardo@canonical.com>
-Signed-off-by: Corey Minyard <cminyard@mvista.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20211207193006.120997-2-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/ipmi/ipmi_msghandler.c |   15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ arch/x86/kvm/vmx/vmx.c |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
---- a/drivers/char/ipmi/ipmi_msghandler.c
-+++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -5160,20 +5160,23 @@ static int ipmi_init_msghandler(void)
- 	if (rv)
- 		goto out;
- 
--	timer_setup(&ipmi_timer, ipmi_timeout, 0);
--	mod_timer(&ipmi_timer, jiffies + IPMI_TIMEOUT_JIFFIES);
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -6612,9 +6612,7 @@ static fastpath_t vmx_vcpu_run(struct kv
+ 	 * consistency check VM-Exit due to invalid guest state and bail.
+ 	 */
+ 	if (unlikely(vmx->emulation_required)) {
 -
--	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
--
- 	remove_work_wq = create_singlethread_workqueue("ipmi-msghandler-remove-wq");
- 	if (!remove_work_wq) {
- 		pr_err("unable to create ipmi-msghandler-remove-wq workqueue");
- 		rv = -ENOMEM;
--		goto out;
-+		goto out_wq;
- 	}
+-		/* We don't emulate invalid state of a nested guest */
+-		vmx->fail = is_guest_mode(vcpu);
++		vmx->fail = 0;
  
-+	timer_setup(&ipmi_timer, ipmi_timeout, 0);
-+	mod_timer(&ipmi_timer, jiffies + IPMI_TIMEOUT_JIFFIES);
-+
-+	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
-+
- 	initialized = true;
- 
-+out_wq:
-+	if (rv)
-+		cleanup_srcu_struct(&ipmi_interfaces_srcu);
- out:
- 	mutex_unlock(&ipmi_interfaces_mutex);
- 	return rv;
+ 		vmx->exit_reason.full = EXIT_REASON_INVALID_STATE;
+ 		vmx->exit_reason.failed_vmentry = 1;
 
 

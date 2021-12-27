@@ -2,150 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2015847F9D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 04:11:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32FF947F9E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 04:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235020AbhL0DKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 22:10:02 -0500
-Received: from mga02.intel.com ([134.134.136.20]:32506 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235012AbhL0DKB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 22:10:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640574601; x=1672110601;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=Zbw31OF5Mmys3xkrygmZm/0V3U9gjJ3ZaoPpo/MsOpk=;
-  b=U3xuQp89+FGwIk4W66p2ou6uyFa9ey63bjo3wgNFW9qD9b2cmnHyC6V/
-   MfEhITHK7KYMhNJQZNYH91AHgYnHjCRVd6/SJpejcqBDjYn5/Ks6byH54
-   GIV07RQjcHmKzXqOMQ4LLvxjELYhvpdMuzyOTshH7pslXwUNycErVzlTN
-   jANAcqJFUIJMbXqLBjo2+Tv681UteH85bY6rXU+u5ETFPpMXcLqRssSCp
-   TF1cxPbnRRztIEoHhOoDAwwX0QEvseIBLIFUqy6Yf9Ad6DaGW9TXJzbVK
-   MFWsn877S3LnZvmVKNuAK3sSj74JHmxR3ixC0CjctYkN9wwbgS/G3uayz
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="228458776"
-X-IronPort-AV: E=Sophos;i="5.88,238,1635231600"; 
-   d="scan'208";a="228458776"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 19:10:01 -0800
-X-IronPort-AV: E=Sophos;i="5.88,238,1635231600"; 
-   d="scan'208";a="523133924"
-Received: from unknown (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.11])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 19:09:58 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org, dave.hansen@linux.intel.com,
-        ziy@nvidia.com, shy828301@gmail.com,
-        zhongjiang-ali@linux.alibaba.com, xlpang@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Minchan Kim <minchan@kernel.org>
-Subject: Re: [PATCH v2 0/2] Add a new scheme to support demotion on tiered
- memory system
-References: <20211223113139.20843-1-sj@kernel.org>
-Date:   Mon, 27 Dec 2021 11:09:56 +0800
-In-Reply-To: <20211223113139.20843-1-sj@kernel.org> (SeongJae Park's message
-        of "Thu, 23 Dec 2021 11:31:39 +0000")
-Message-ID: <87o8527ngb.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S235310AbhL0DMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 22:12:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42756 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235086AbhL0DMR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 26 Dec 2021 22:12:17 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163ADC06175C;
+        Sun, 26 Dec 2021 19:12:17 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id v22so12527528qtx.8;
+        Sun, 26 Dec 2021 19:12:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=TnbDwenis0DSVok+PgiD3nCGmJt+xEi6EV/3sU9Vggk=;
+        b=daEwbdkIMCdYpd33oLolUKQq2eSOwdIv7yuWfQMY4MlqHCVdsCobIkrx9azhrvhM/J
+         Qb2Hv96anByxXTfvvGinwMF2T3AOxqdd/8jMgmbDZc3rNTji6a4vwNjQwFhOKOIz7bUx
+         iaV6J+k+CvMuNzfsHES2te+wHG5H0QvpEc/AlUsKodQ/YrtzzYPyqUlB4bPbtaczNyaa
+         q0EHtWRh2htqT86KHm9U3CRavNpuqISNWr3tBFGrlj14R+7dmhYM5QEiGSvY0/dpq79g
+         TuJHEJh4UcF7EyfKQK+HzIX9PEUE8fh+CThuGmMckZe/r8iQ0uSWiHRQw16Fs9gfDNuq
+         F0dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=TnbDwenis0DSVok+PgiD3nCGmJt+xEi6EV/3sU9Vggk=;
+        b=XKENqVTiCF8D2Bd3XtO7nakZmomZ/qtJjqMDG3F5MYRuXG5KTBCOJg3CorJJegbjQB
+         Kp96jvKcJzGCss/3kL+85g7wlLK+cAJIccdlfIENbCXo+AyrFx/4vVijsQmXlKlHRT+D
+         nS4qK0SerrZDtRkIQNTi9XWVXRgfOPJEekbqb9fFSd5f1YhTDYxiYOdTvl7SENraad0Z
+         Hz4mqnAnKZvg/nHhF9EqFY/l0KkHD4Zs9aqZuC6LGunojjOPPN6EQ3XLpm2iEScxcJJ/
+         Ttlha+k9x9ope395YvBB2gb4zkZlUMS3G6TeRBWbptyg2uQdN0CRt7D4Q6w797ormPnK
+         nvuw==
+X-Gm-Message-State: AOAM532SfuXlXF3YntS1VPVNa6hkSm4SnfecUuqOFUkVH73H/nVQSsFs
+        puITDQLEsAIRRc3/4hVNZZk=
+X-Google-Smtp-Source: ABdhPJx+swC7W5NZGQJcYNvt/9+LilJ6br2YetTnjSKOFAzV2SOsILxqKcvgDD5K6ENec4HbmkF1UA==
+X-Received: by 2002:ac8:5816:: with SMTP id g22mr13429789qtg.515.1640574736116;
+        Sun, 26 Dec 2021 19:12:16 -0800 (PST)
+Received: from a-10-27-26-18.dynapool.vpn.nyu.edu (vpnrasa-wwh-pat-01.natpool.nyu.edu. [216.165.95.84])
+        by smtp.gmail.com with ESMTPSA id j13sm8099707qta.76.2021.12.26.19.12.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Dec 2021 19:12:15 -0800 (PST)
+Date:   Sun, 26 Dec 2021 22:12:13 -0500
+From:   Zekun Shen <bruceshenzk@gmail.com>
+To:     bruceshenzk@gmail.com
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Nick Kossifidis <mickflemm@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, brendandg@nyu.edu
+Subject: [PATCH] ath5k: fix OOB in ath5k_eeprom_read_pcal_info_5111
+Message-ID: <YckvDdj3mtCkDRIt@a-10-27-26-18.dynapool.vpn.nyu.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, SeongJae,
+The bug was found during fuzzing. Stacktrace locates it in
+ath5k_eeprom_convert_pcal_info_5111.
+When none of the curve is selected in the loop, idx can go
+up to AR5K_EEPROM_N_PD_CURVES. The line makes pd out of bound.
+pd = &chinfo[pier].pd_curves[idx];
 
-SeongJae Park <sj@kernel.org> writes:
+There are many OOB writes using pd later in the code. So I
+added a sanity check for idx. Checks for other loops involving
+AR5K_EEPROM_N_PD_CURVES are not needed as the loop index is not
+used outside the loops.
 
-> Hi,
->
-> On Thu, 23 Dec 2021 15:51:18 +0800 "Huang, Ying" <ying.huang@intel.com> wrote:
+The patch is NOT tested with real device.
 
-[snip]
+The following is the fuzzing report
 
->> It's good to avoid to change the source code of an application to apply
->> some memory management optimization (for example, use DAMON +
->> madvise()).  But it's much easier to run a user space daemon to optimize
->> for the application.  (for example, use DAMON + other information +
->> process_madvise()).
->> 
->> And this kind of per-application optimization is kind of application
->> specific policy.  This kind of policy may be too complex and flexible to
->> be put in the kernel directly.  For example, in addition to DAMON, some
->> other application specific or system knowledge may be helpful too, so we
->> have process_madvise() for that before DAMON.  Some more complex
->> algorithm may be needed for some applications.
->> 
->> And this kind of application specific policy usually need complex
->> configuration.  It's hard to export all these policy parameters to the
->> user space as the kernel ABI.  Now, DAMON schemes parameters are
->> exported in debugfs so they are not considered ABI.  So they may be
->> changed at any time.  But applications need some stable and
->> well-maintained ABI.
->> 
->> All in all, IMHO, what we need is a user space per-application policy
->> daemon with the information from DAMON and other sources.
->
-> I basically agree to Ying, as I also noted in the coverletter of DAMOS
-> patchset[1]:
->
->     DAMON[1] can be used as a primitive for data access aware memory
->     management optimizations.  For that, users who want such optimizations
->     should run DAMON, read the monitoring results, analyze it, plan a new
->     memory management scheme, and apply the new scheme by themselves.  Such
->     efforts will be inevitable for some complicated optimizations.
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fda504fade7f124858d7022341dc46ff35b45274
->
-> That is, I believe some programs and big companies would definitely have their
-> own information and want such kind of complicated optimizations.  But, such
-> optimizations would depend on characteristics of each program and require
-> investment of some amount of resources.  Some other programs and users wouldn't
-> have such special information, and/or resource to invest for such
-> optimizations.  For them, some amount of benefit would be helpful enough even
-> though its sub-optimal.
->
-> I think we should help both groups, and DAMOS could be useful for the second
-> group.  And I don't think DAMOS is useless for the first group.  They could use
-> their information-based policy in prallel to DAMOS in some cases.  E.g., if
-> they have a way to predict the data access pattern of specific memory region
-> even without help from DAMON, they can use their own policy for the region but
-> DAMOS for other regions.
->
-> Someone could ask why not implement a user-space implementation for the second
-> group, then.  First of all, DAMOS is not only for the user-space driven virtual
-> memory management optimization, but also for kernel-space programs and any
-> DAMOS-supportable address spaces including the physical address space.  And,
-> another important goal of DAMOS for user space driven use case in addition to
-> reducing the redundant code is minimizing the user-kernel context switch
-> overhead for passing the monitoring results information and memory management
-> action requests.
->
-> In summary, I agree the user space per-application policy daemon will be useful
-> for the specialized ultimate optimizations, but we also need DAMOS for another
-> common group of cases.
->
-> If I'm missing something, please feel free to let me know.
+BUG: KASAN: slab-out-of-bounds in ath5k_eeprom_read_pcal_info_5111+0x126a/0x1390 [ath5k]
+Write of size 1 at addr ffff8880174a4d60 by task modprobe/214
 
-I guess that most end-users and quite some system administrators of
-small companies have no enough capability to take advantage of the
-per-application optimizations.  How do they know the appropriate region
-number and proactive reclaim threshold?
+CPU: 0 PID: 214 Comm: modprobe Not tainted 5.6.0 #1
+Call Trace:
+ dump_stack+0x76/0xa0
+ print_address_description.constprop.0+0x16/0x200
+ ? ath5k_eeprom_read_pcal_info_5111+0x126a/0x1390 [ath5k]
+ ? ath5k_eeprom_read_pcal_info_5111+0x126a/0x1390 [ath5k]
+ __kasan_report.cold+0x37/0x7c
+ ? ath5k_eeprom_read_pcal_info_5111+0x126a/0x1390 [ath5k]
+ kasan_report+0xe/0x20
+ ath5k_eeprom_read_pcal_info_5111+0x126a/0x1390 [ath5k]
+ ? apic_timer_interrupt+0xa/0x20
+ ? ath5k_eeprom_init_11a_pcal_freq+0xbc0/0xbc0 [ath5k]
+ ? ath5k_pci_eeprom_read+0x228/0x3c0 [ath5k]
+ ath5k_eeprom_init+0x2513/0x6290 [ath5k]
+ ? ath5k_eeprom_init_11a_pcal_freq+0xbc0/0xbc0 [ath5k]
+ ? usleep_range+0xb8/0x100
+ ? apic_timer_interrupt+0xa/0x20
+ ? ath5k_eeprom_read_pcal_info_2413+0x2f20/0x2f20 [ath5k]
+ ath5k_hw_init+0xb60/0x1970 [ath5k]
+ ath5k_init_ah+0x6fe/0x2530 [ath5k]
+ ? kasprintf+0xa6/0xe0
+ ? ath5k_stop+0x140/0x140 [ath5k]
+ ? _dev_notice+0xf6/0xf6
+ ? apic_timer_interrupt+0xa/0x20
+ ath5k_pci_probe.cold+0x29a/0x3d6 [ath5k]
+ ? ath5k_pci_eeprom_read+0x3c0/0x3c0 [ath5k]
+ ? mutex_lock+0x89/0xd0
+ ? ath5k_pci_eeprom_read+0x3c0/0x3c0 [ath5k]
+ local_pci_probe+0xd3/0x160
+ pci_device_probe+0x23f/0x3e0
+ ? pci_device_remove+0x280/0x280
+ ? pci_device_remove+0x280/0x280
+ really_probe+0x209/0x5d0
 
-So per my understanding, Linux kernel
-need provide,
+Reported-by: Brendan Dolan-Gavitt <brendandg@nyu.edu>
+Signed-off-by: Zekun Shen <bruceshenzk@gmail.com>
+---
+ drivers/net/wireless/ath/ath5k/eeprom.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-1. An in-kernel general policy that is obviously correct and benefits
-   almost all users and applications, at least no regression.  No
-   complex configuration or deep knowledge is needed to take advantage
-   of it.
+diff --git a/drivers/net/wireless/ath/ath5k/eeprom.c b/drivers/net/wireless/ath/ath5k/eeprom.c
+index 1fbc2c198..d444b3d70 100644
+--- a/drivers/net/wireless/ath/ath5k/eeprom.c
++++ b/drivers/net/wireless/ath/ath5k/eeprom.c
+@@ -746,6 +746,9 @@ ath5k_eeprom_convert_pcal_info_5111(struct ath5k_hw *ah, int mode,
+ 			}
+ 		}
+ 
++		if (idx == AR5K_EEPROM_N_PD_CURVES)
++			goto err_out;
++
+ 		ee->ee_pd_gains[mode] = 1;
+ 
+ 		pd = &chinfo[pier].pd_curves[idx];
+-- 
+2.25.1
 
-2. Some way to inspect and control system and application behavior, so
-   that some advanced and customized user space policy daemons can be
-   built to satisfy some advanced users who have the enough knowledge
-   for the applications and systems, for example, oomd.
-
-Best Regards,
-Huang, Ying

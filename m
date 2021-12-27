@@ -2,153 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 267EE47FDBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 15:00:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 899AF47FDC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 15:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237008AbhL0OAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 09:00:24 -0500
-Received: from mga01.intel.com ([192.55.52.88]:38980 "EHLO mga01.intel.com"
+        id S237071AbhL0OOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 09:14:35 -0500
+Received: from mga04.intel.com ([192.55.52.120]:17558 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236955AbhL0OAX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 09:00:23 -0500
+        id S237033AbhL0OOe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 09:14:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640613623; x=1672149623;
+  t=1640614474; x=1672150474;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=fI+vasy/JcocGCw2WSA/p27qt8qZEyylmM6e3KRu2yA=;
-  b=n+J1RWKRnNcRqPDNlUP3bD2nOlC5TqDJD2eZGNRpV8pqM8rv1rQ2gR5/
-   3F6cG4Sk1e7F7TECfjkXgpKv3dK9oei/NpM5BGvcc8YTtwF/SpMKTx3VR
-   Ti5kc4vUrWe4aW4pqG4GKODgQlUsvy5bMLn+0TRQFvIfbPiaZ60CuskXx
-   y7ayVz69FsWRVvnuaoy8QUIJgPKa+Xtjr46d2AFVQGyPdc7LN7iQxdeDW
-   O7MluAfhXzOX5Flo8YBvoKs3V/jTi0p1NGE3Hayqr2ZP25YMc1WgvFt5T
-   v9D7+2fuxa/TI8ib8+ot+creY5pGfKeUppPV0e2PUOB/lDNgtIx+nHxhu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="265433722"
+  bh=UgtgtdOIHCJjUaMoRNmSWb45sxZer46M2+GINuGkZwo=;
+  b=hrWmwn4SfSveDJOs/1AB5IFRNfXMoNdeTkkQPEbTM67JMKP3brnz506n
+   j5Sjt0IV7cLzebj5i3LPG5c1yjZm5kvlxf52/cQiogC4qqtvBKnFBPvsb
+   wum1FbUZWDCWo7UPNCyNwmpz0mf+knXt09CxG1Q2QooajL4E1clH1nHfe
+   uZYPBg4PlvAiXEmFd8LSGNxjtzkq87gm3rbdzbYdDtKOgxXdzQW1kKTCW
+   xoDXs80Jd+5CNEOmMwpgqJ1AkmTBCtnaRqfnH63kNPkn32AwbuTcYz2fD
+   CIqZMQO6tjpj82F+h52ZhYNU/+yW5NePKOieQx88Xze/w/9lg4GVGO1kI
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="239995844"
 X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; 
-   d="scan'208";a="265433722"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 06:00:23 -0800
+   d="scan'208";a="239995844"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 06:14:34 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; 
-   d="scan'208";a="572045895"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Dec 2021 06:00:21 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n1qY0-0006Jq-FC; Mon, 27 Dec 2021 14:00:20 +0000
-Date:   Mon, 27 Dec 2021 22:00:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Laurent Vivier <laurent@vivier.eu>, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org, Laurent Vivier <laurent@vivier.eu>
-Subject: Re: [PATCH v2 1/1] m68k: introduce a virtual m68k machine
-Message-ID: <202112272147.UoQokuQR-lkp@intel.com>
-References: <20211227093931.480329-2-laurent@vivier.eu>
+   d="scan'208";a="553806748"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 27 Dec 2021 06:14:28 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 2E41E12C; Mon, 27 Dec 2021 16:14:36 +0200 (EET)
+Date:   Mon, 27 Dec 2021 17:14:36 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, tglx@linutronix.de,
+        mingo@redhat.com, luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 19/26] x86/tdx: Make pages shared in ioremap()
+Message-ID: <20211227141436.ahvdngnae6xnf4nl@black.fi.intel.com>
+References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
+ <20211214150304.62613-20-kirill.shutemov@linux.intel.com>
+ <87c288d6-9bf8-5a94-a628-1e0aaa7de690@amd.com>
+ <20211223171530.v73posbqizb5l3md@black.fi.intel.com>
+ <f61b591b-a06c-bc29-4b9b-a5d46111fe4e@intel.com>
+ <YcTTt4LXKfDO+9u3@zn.tnic>
+ <20211223205604.g44kez5d7iedatfo@box.shutemov.name>
+ <YcTlhp1PUfrMOelI@zn.tnic>
+ <20211224110300.7zj3nc5nbbv7jobp@black.fi.intel.com>
+ <YcmoucfxOF8mwox8@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211227093931.480329-2-laurent@vivier.eu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YcmoucfxOF8mwox8@zn.tnic>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+On Mon, Dec 27, 2021 at 12:51:21PM +0100, Borislav Petkov wrote:
+> On Fri, Dec 24, 2021 at 02:03:00PM +0300, Kirill A. Shutemov wrote:
+> > Okay. Meanwhile I leave it this way:
+> > 
+> > 	pgprot_t pgprot_cc_encrypted(pgprot_t prot)
+> > 	{
+> > 		if (cc_platform_has(CC_ATTR_MEM_ENCRYPT)) {
+> > 			if (cc_platform_has(CC_ATTR_GUEST_TDX))
+> > 				return __pgprot(pgprot_val(prot) & ~tdx_shared_mask());
+> > 			else if (sme_me_mask)
+> > 				return __pgprot(__sme_set(pgprot_val(prot)));
+> > 			else
+> > 				WARN_ON_ONCE(1);
+> 
+> I'm wondering if defining a generic cc_attr especially for this:
+> 
+> 	if (cc_platform_has(CC_ATTR_MEMORY_SHARING))
+> 
+> to mean, the CC guest needs to do special stuff in order to share memory
+> with the host (naming sucks, ofc) would be cleaner?
 
-Thank you for the patch! Perhaps something to improve:
+Looks like CC_ATTR_MEM_ENCRYPT already does this. The attribute doesn't
+have much meaning beyond that, no?
 
-[auto build test WARNING on geert-m68k/for-next]
-[also build test WARNING on linux/master linus/master v5.16-rc7 next-20211224]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Laurent-Vivier/m68k-Add-Virtual-M68k-Machine/20211227-174054
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/linux-m68k.git for-next
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20211227/202112272147.UoQokuQR-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/02e0dceb9e3bfcc8ef254308394ddb2a6a4cac2f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Laurent-Vivier/m68k-Add-Virtual-M68k-Machine/20211227-174054
-        git checkout 02e0dceb9e3bfcc8ef254308394ddb2a6a4cac2f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/virt/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/m68k/virt/config.c:56:12: warning: no previous prototype for 'virt_parse_bootinfo' [-Wmissing-prototypes]
-      56 | int __init virt_parse_bootinfo(const struct bi_record *record)
-         |            ^~~~~~~~~~~~~~~~~~~
->> arch/m68k/virt/config.c:97:13: warning: no previous prototype for 'config_virt' [-Wmissing-prototypes]
-      97 | void __init config_virt(void)
-         |             ^~~~~~~~~~~
---
->> arch/m68k/virt/ints.c:48:13: warning: no previous prototype for 'virt_nmi_handler' [-Wmissing-prototypes]
-      48 | irqreturn_t virt_nmi_handler(int irq, void *dev_id)
-         |             ^~~~~~~~~~~~~~~~
-
-
-vim +/virt_parse_bootinfo +56 arch/m68k/virt/config.c
-
-    51	
-    52	/*
-    53	 * Parse a virtual-m68k-specific record in the bootinfo
-    54	 */
-    55	
-  > 56	int __init virt_parse_bootinfo(const struct bi_record *record)
-    57	{
-    58		int unknown = 0;
-    59		const void *data = record->data;
-    60	
-    61		switch (be16_to_cpu(record->tag)) {
-    62		case BI_VIRT_QEMU_VERSION:
-    63			virt_bi_data.qemu_version = be32_to_cpup(data);
-    64			break;
-    65		case BI_VIRT_GF_PIC_BASE:
-    66			virt_bi_data.pic.mmio = be32_to_cpup(data);
-    67			data += 4;
-    68			virt_bi_data.pic.irq = be32_to_cpup(data);
-    69			break;
-    70		case BI_VIRT_GF_RTC_BASE:
-    71			virt_bi_data.rtc.mmio = be32_to_cpup(data);
-    72			data += 4;
-    73			virt_bi_data.rtc.irq = be32_to_cpup(data);
-    74			break;
-    75		case BI_VIRT_GF_TTY_BASE:
-    76			virt_bi_data.tty.mmio = be32_to_cpup(data);
-    77			data += 4;
-    78			virt_bi_data.tty.irq = be32_to_cpup(data);
-    79			break;
-    80		case BI_VIRT_CTRL_BASE:
-    81			virt_bi_data.ctrl.mmio = be32_to_cpup(data);
-    82			data += 4;
-    83			virt_bi_data.ctrl.irq = be32_to_cpup(data);
-    84			break;
-    85		case BI_VIRT_VIRTIO_BASE:
-    86			virt_bi_data.virtio.mmio = be32_to_cpup(data);
-    87			data += 4;
-    88			virt_bi_data.virtio.irq = be32_to_cpup(data);
-    89			break;
-    90		default:
-    91			unknown = 1;
-    92			break;
-    93		}
-    94		return unknown;
-    95	}
-    96	
-  > 97	void __init config_virt(void)
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+ Kirill A. Shutemov

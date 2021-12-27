@@ -2,162 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 597BA47FBBE
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A92047FBC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:07:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233553AbhL0KGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 05:06:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233302AbhL0KGQ (ORCPT
+        id S235839AbhL0KG4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Dec 2021 05:06:56 -0500
+Received: from prt-mail.chinatelecom.cn ([42.123.76.222]:59074 "EHLO
+        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233302AbhL0KGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 05:06:16 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1CFC06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 02:06:15 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id x15so59937445edv.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 02:06:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=a0IFERCWVRRvK7i50B8H8ruwc2BOL0IlPbyYMGipFn0=;
-        b=R2piZGnu/rpYdYrYmZ9vbMeEiP/yipyxXMcEBoBEFkUe8AV82JLVSo3/F8NFWirdwb
-         J+NauYnmJuPanJGhLyU/20oMol7u1RRqjx4odFmkqIzciRRETsAiytqZnHNCBdwTSr1m
-         YZ4hLtBEji3KilO4523lVuIH4U/bIVIsuD4ELFss2lcnTzA0gFQfJbRD5S+xOZYEPRdf
-         d49M8b4weLoRVIjqMTQFlBgEBaN4gGXnsf+ChuHlWPVfkI80yRGMHdrRkLmqBsg+N3II
-         Bfn1BI7ptvrHLTypwBnpjdSfv/9x0x72PZsbE5r1MGGTbnrcSZqwE5sSkbFlkIA6ptEO
-         euog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=a0IFERCWVRRvK7i50B8H8ruwc2BOL0IlPbyYMGipFn0=;
-        b=hq3kTob6Ao6m90vbuFMm8p2XAY/O6GlzVQn2HcAOXE0JnxVYGqNR2ODoGDXVY8hLyz
-         SlfsIRVfd6vYOrG6P8zeYK7g7iTskNUbDna8fHOKkoeugnbbcKJpInLa8lRsM7fWMYt9
-         kkEGwfGG2Qg+43U9vDW/fhj3fJ7KdXLWabVy4V4vu4IS2Oy0kiKDKFbQDj2pgEnVNIfv
-         GtRdqOumdDxdwOta6qSksWX7++e8of1xC/uBES7t7y4SpUXuwBVzixQPrMM3zWadXHA8
-         WRr3Al5ZI6ZILK4gms7EglbkEDdy6DqsH7fOKLvP2YIGQf7UFmeQwapi90fJCoVFlCSv
-         HKtQ==
-X-Gm-Message-State: AOAM532eMxNVR14uPvHHJc5puiYBYZU1t7xdsCnFLCDNAB+szLJJ8spB
-        CkbfomuAmRkgix2/nF8wAem8Wv7n3HujvqPkQgo=
-X-Google-Smtp-Source: ABdhPJwdZTdkbtoLcnSJIGGgqOF4TkdrBTRzs0hRCcsYYAni/J2E0PDkruRZtmY6vMPpntYAkk/wtoF7Pb2gfbTP9Kc=
-X-Received: by 2002:a17:906:a3c6:: with SMTP id ca6mr13137879ejb.639.1640599574249;
- Mon, 27 Dec 2021 02:06:14 -0800 (PST)
+        Mon, 27 Dec 2021 05:06:55 -0500
+HMM_SOURCE_IP: 172.18.0.218:50990.267937466
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-10.133.11.243 (unknown [172.18.0.218])
+        by chinatelecom.cn (HERMES) with SMTP id AB2732800B8;
+        Mon, 27 Dec 2021 18:06:50 +0800 (CST)
+X-189-SAVE-TO-SEND: huyd12@chinatelecom.cn
+Received: from  ([172.18.0.218])
+        by app0025 with ESMTP id 845c147ac1e64b3eb3972c3b96c0ac46 for andy@greyhouse.net;
+        Mon, 27 Dec 2021 18:06:53 CST
+X-Transaction-ID: 845c147ac1e64b3eb3972c3b96c0ac46
+X-Real-From: huyd12@chinatelecom.cn
+X-Receive-IP: 172.18.0.218
+X-MEDUSA-Status: 0
+Sender: huyd12@chinatelecom.cn
+From:   <huyd12@chinatelecom.cn>
+To:     <sunshouxin@chinatelecom.cn>, <j.vosburgh@gmail.com>,
+        <vfalico@gmail.com>, <andy@greyhouse.net>, <davem@davemloft.net>,
+        <kuba@kernel.org>
+Cc:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20211224142512.44182-1-sunshouxin@chinatelecom.cn>
+In-Reply-To: <20211224142512.44182-1-sunshouxin@chinatelecom.cn>
+Subject: =?gb2312?B?u9i4tDogW1BBVENIIHY1XSBuZXQ6IGJvbmRpbmc6IEFkZCBzdXBwbw==?=
+        =?gb2312?B?cnQgZm9yIElQVjYgbnMvbmEgdG8gYmFsYW5jZS1hbGIvYmFsYW5jZS10bGI=?=
+        =?gb2312?B?IG1vZGU=?=
+Date:   Mon, 27 Dec 2021 18:06:50 +0800
+Message-ID: <002201d7fb09$796ea210$6c4be630$@chinatelecom.cn>
 MIME-Version: 1.0
-References: <20211215234946.6494-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAHp75VfGwQ7G2b39GO4tN=sxQoiahO2uudy25ALxEkrNcP9eVw@mail.gmail.com>
- <CA+V-a8t1myOt0rhJExem_T2tJUM3PLL9KuXn0=_LtucJPHLkbA@mail.gmail.com>
- <CAHp75VdXKVAZMKqC=0RbkAKKxFsdcxBc0M3N6OQMivHj-w+DHw@mail.gmail.com>
- <CA+V-a8vbsy94MvRpqWQQuRqfEGiX_ZZTTt+dr0r6qnnJAPaEmA@mail.gmail.com>
- <CAHp75VfvOOzwcTBjYg3OzbbdhcpWfaPWZ0h7HZRFOPEQAQMT=A@mail.gmail.com>
- <CAMuHMdWSAOEAvqvr1UqKKmVDMzY3Tb8Y_4XowFPBN6L3TESqYA@mail.gmail.com>
- <CAHp75Vc2puj45n_wMY50OnDemNmFFu-yepCC9_L+DWp1HAzxPw@mail.gmail.com> <CAMuHMdUDts8LWYrftYp0VSxDX8kaP1a9N5YGZDNCAuAsr84EAw@mail.gmail.com>
-In-Reply-To: <CAMuHMdUDts8LWYrftYp0VSxDX8kaP1a9N5YGZDNCAuAsr84EAw@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 27 Dec 2021 12:05:37 +0200
-Message-ID: <CAHp75VeyU8Ub0h_y03b77EBCLtXLeKU7+-pD4E=iBzOo4zNw+Q@mail.gmail.com>
-Subject: Re: [PATCH] irqchip/renesas-irqc: Use platform_get_irq_optional() to
- get the interrupt
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="gb2312"
+Content-Transfer-Encoding: 8BIT
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: zh-cn
+Thread-Index: AQGnB4B8szRZdyiFEwb+aw1WgpK/iqyoAwNQ
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 12:02 PM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
-> On Mon, Dec 27, 2021 at 10:57 AM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Mon, Dec 27, 2021 at 11:45 AM Geert Uytterhoeven
-> > <geert@linux-m68k.org> wrote:
-> > > On Sun, Dec 26, 2021 at 9:49 AM Andy Shevchenko
-> > > <andy.shevchenko@gmail.com> wrote:
-> > > > On Sun, Dec 26, 2021 at 1:59 AM Lad, Prabhakar
-> > > > <prabhakar.csengg@gmail.com> wrote:
-> > > > > On Sat, Dec 25, 2021 at 5:40 PM Andy Shevchenko
-> > > > > <andy.shevchenko@gmail.com> wrote:
-> > > > > > On Sat, Dec 25, 2021 at 7:28 PM Lad, Prabhakar
-> > > > > > <prabhakar.csengg@gmail.com> wrote:
-> > > > > > > On Sat, Dec 25, 2021 at 4:46 PM Andy Shevchenko
-> > > > > > > <andy.shevchenko@gmail.com> wrote:
-> > > > > > > > On Thu, Dec 16, 2021 at 9:52 AM Lad Prabhakar
-> > > > > > > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > > > > >
-> > > > > > > > ret = platform_get_irq_optional(...);
-> > > > > > > > if (ret < 0 && ret != -ENXIO)
-> > > > > > > >   return ret;
-> > > > > > > > if (ret > 0)
-> > > > > > > >   ...we got it...
-> > > > > > > >
-> > > > > > > > It will allow the future API fix of platform_get_irq_optional() to be
-> > > > > > > > really optional.
-> > > > > > > >
-> > > > > > > Later patch [0] (merged into -next) does check for -ENXIO first.
-> > > > > > >
-> > > > > > > [0] https://lore.kernel.org/lkml/20211216182121.5323-1-prabhakar.mahadev-lad.rj@bp.renesas.com/t/
-> > > > > >
-> > > > > > The problem is that it doesn't consider 0 as no IRQ.
-> > > > > >
-> > > > > Can you please point me to the discussion/patch where this API change
-> > > > > is considered/discussed. Just to clarify now the new API for
-> > > > > platform_get_irq_optional() will return "0" in case there is no
-> > > > > interrupt and not not -ENXIO anymore?
-> > > >
-> > > > The longest one happened here:
-> > > > https://lore.kernel.org/linux-ide/20211209145937.77719-1-andriy.shevchenko@linux.intel.com/T/#u
-> > > >
-> > > > It has links to some other discussions on the topic.
-> > > >
-> > > > > When will this patch be merged for the new api, so that I can base my
-> > > > > patches on top of it to avoid more changes?
-> > > >
-> > > > You can simply imply that, I dunno when it gets merged (from my point
-> > > > of view the users should be fixed first, and since you are adding
-> > > > users, the burden is increasing).
-> > >
-> > > Not only users (drivers), but also providers (architecture-specific code).
-> > > IRQ zero is still valid on some architectures, e.g. on SH[1].
-> >
-> > Are we talking about vIRQ?
-> > And users are fine with a big warning?
->
-> The warning is only seen when a driver uses platorm_get_irq{,_optional}().
-> There are several other ways to obtain interrupts, avoiding the
-> big warning.
->
-> > My understanding is that the architecture code there is broken. It
-> > needs to be fixed to use IRQ domains and all that machinery instead of
-> > what it does.
-> >
-> > 0 is "no IRQ" in Linux.
-> >
-> > > [1] https://lore.kernel.org/linux-renesas-soc/CAMuHMdUg3=q7gyaVHP0XcYUOo3PQUUv8Hc8wp5faVQ+bTBpg4A@mail.gmail.com/
->
-> BTW, perhaps the IRQ subsystem should switch from integer IRQ numbers
-> to an opaque object, like was done for GPIO before?
 
-Hasn't it been done a long time ago?
-IIRC somewhere in ~2014 timeframe.
+Hi,
 
-> The IRQ subsystem
-> is one of the few (only?) subsystems still using plain integers.
+I noticed one warning info on spinics, it said the patch "Still breaks
+allmodconfig build".
+I wonder why I didn't get it ,but I still rebuild it with allmodconfig, no
+any warning jump out.
+Anyone can light shouxin a bit?
 
-It uses opaque objects for which the plain integer is a unique key.
-
-> That
-> way we don't need this two-step platform_get_irq_optional() conversion
-> (step 1: check for both -ENXIO and zero, step 2: drop the check for
-> -ENXIO).
+Thanks.
 
 
--- 
-With Best Regards,
-Andy Shevchenko
+------
+胡亚弟
+ 
+中国电信股份有限公司云计算分公司 研发一部
+Mobile: 15810133835
+北京市海淀中街15号远中悦莱
+Email: huyd12@chinatelecom.cn
+------------------------------------------------------------------------
+
+-----邮件原件-----
+发件人: sunshouxin@chinatelecom.cn <sunshouxin@chinatelecom.cn> 
+发送时间: 2021年12月24日 22:25
+收件人: j.vosburgh@gmail.com; vfalico@gmail.com; andy@greyhouse.net;
+davem@davemloft.net; kuba@kernel.org
+抄送: netdev@vger.kernel.org; linux-kernel@vger.kernel.org;
+huyd12@chinatelecom.cn
+主题: [PATCH v5] net: bonding: Add support for IPV6 ns/na to
+balance-alb/balance-tlb mode
+
+Since ipv6 neighbor solicitation and advertisement messages isn't handled
+gracefully in bonding6 driver, we can see packet drop due to inconsistency
+bewteen mac address in the option message and source MAC .
+
+Another examples is ipv6 neighbor solicitation and advertisement messages
+from VM via tap attached to host brighe, the src mac mighe be changed
+through balance-alb mode, but it is not synced with Link-layer address in
+the option message.
+
+The patch implements bond6's tx handle for ipv6 neighbor solicitation and
+advertisement messages.
+
+Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
+---
+ drivers/net/bonding/bond_alb.c | 149 +++++++++++++++++++++++++++++++++
+ 1 file changed, 149 insertions(+)
+
+diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
+index 533e476988f2..485e4863a365 100644
+--- a/drivers/net/bonding/bond_alb.c
++++ b/drivers/net/bonding/bond_alb.c
+@@ -22,6 +22,8 @@
+ #include <asm/byteorder.h>
+ #include <net/bonding.h>
+ #include <net/bond_alb.h>
++#include <net/ndisc.h>
++#include <net/ip6_checksum.h>
+ 
+ static const u8 mac_v6_allmcast[ETH_ALEN + 2] __long_aligned = {
+ 	0x33, 0x33, 0x00, 0x00, 0x00, 0x01
+@@ -1269,6 +1271,137 @@ static int alb_set_mac_address(struct bonding *bond,
+void *addr)
+ 	return res;
+ }
+ 
++/*determine if the packet is NA or NS*/ static bool 
++__alb_determine_nd(struct icmp6hdr *hdr) {
++	if (hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
++	    hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
++		return true;
++	}
++
++	return false;
++}
++
++static void alb_change_nd_option(struct sk_buff *skb, void *data) {
++	struct nd_msg *msg = (struct nd_msg *)skb_transport_header(skb);
++	struct nd_opt_hdr *nd_opt = (struct nd_opt_hdr *)msg->opt;
++	struct net_device *dev = skb->dev;
++	struct icmp6hdr *icmp6h = icmp6_hdr(skb);
++	struct ipv6hdr *ip6hdr = ipv6_hdr(skb);
++	u8 *lladdr = NULL;
++	u32 ndoptlen = skb_tail_pointer(skb) - (skb_transport_header(skb) +
++				offsetof(struct nd_msg, opt));
++
++	while (ndoptlen) {
++		int l;
++
++		switch (nd_opt->nd_opt_type) {
++		case ND_OPT_SOURCE_LL_ADDR:
++		case ND_OPT_TARGET_LL_ADDR:
++			lladdr = ndisc_opt_addr_data(nd_opt, dev);
++			break;
++
++		default:
++			lladdr = NULL;
++			break;
++		}
++
++		l = nd_opt->nd_opt_len << 3;
++
++		if (ndoptlen < l || l == 0)
++			return;
++
++		if (lladdr) {
++			memcpy(lladdr, data, dev->addr_len);
++			icmp6h->icmp6_cksum = 0;
++
++			icmp6h->icmp6_cksum =
+csum_ipv6_magic(&ip6hdr->saddr,
++							
+&ip6hdr->daddr,
++						ntohs(ip6hdr->payload_len),
++						IPPROTO_ICMPV6,
++						csum_partial(icmp6h,
++							
+ntohs(ip6hdr->payload_len), 0));
++			return;
++		}
++		ndoptlen -= l;
++		nd_opt = ((void *)nd_opt) + l;
++	}
++}
++
++static u8 *alb_get_lladdr(struct sk_buff *skb) {
++	struct nd_msg *msg = (struct nd_msg *)skb_transport_header(skb);
++	struct nd_opt_hdr *nd_opt = (struct nd_opt_hdr *)msg->opt;
++	struct net_device *dev = skb->dev;
++	u8 *lladdr = NULL;
++	u32 ndoptlen = skb_tail_pointer(skb) - (skb_transport_header(skb) +
++				offsetof(struct nd_msg, opt));
++
++	while (ndoptlen) {
++		int l;
++
++		switch (nd_opt->nd_opt_type) {
++		case ND_OPT_SOURCE_LL_ADDR:
++		case ND_OPT_TARGET_LL_ADDR:
++			lladdr = ndisc_opt_addr_data(nd_opt, dev);
++			break;
++
++		default:
++			break;
++		}
++
++		l = nd_opt->nd_opt_len << 3;
++
++		if (ndoptlen < l || l == 0)
++			return NULL;
++
++		if (lladdr)
++			return lladdr;
++
++		ndoptlen -= l;
++		nd_opt = ((void *)nd_opt) + l;
++	}
++
++	return lladdr;
++}
++
++static void alb_set_nd_option(struct sk_buff *skb, struct bonding *bond,
++			      struct slave *tx_slave)
++{
++	struct ipv6hdr *ip6hdr;
++	struct icmp6hdr *hdr;
++
++	if (skb->protocol == htons(ETH_P_IPV6)) {
++		if (tx_slave && tx_slave !=
++		    rcu_access_pointer(bond->curr_active_slave)) {
++			ip6hdr = ipv6_hdr(skb);
++			if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
++				hdr = icmp6_hdr(skb);
++				if (__alb_determine_nd(hdr))
++					alb_change_nd_option(skb,
+tx_slave->dev->dev_addr);
++			}
++		}
++	}
++}
++
++static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond) 
++{
++	struct ipv6hdr *ip6hdr;
++	struct icmp6hdr *hdr;
++
++	if (skb->protocol == htons(ETH_P_IPV6)) {
++		ip6hdr = ipv6_hdr(skb);
++		if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
++			hdr = icmp6_hdr(skb);
++			if (__alb_determine_nd(hdr))
++				return true;
++		}
++	}
++
++	return false;
++}
++
+ /************************ exported alb functions ************************/
+ 
+ int bond_alb_initialize(struct bonding *bond, int rlb_enabled) @@ -1350,6
++1483,9 @@ struct slave *bond_xmit_tlb_slave_get(struct bonding *bond,
+ 		switch (skb->protocol) {
+ 		case htons(ETH_P_IP):
+ 		case htons(ETH_P_IPV6):
++			if (alb_determine_nd(skb, bond))
++				break;
++
+ 			hash_index = bond_xmit_hash(bond, skb);
+ 			if (bond->params.tlb_dynamic_lb) {
+ 				tx_slave = tlb_choose_channel(bond, @@
+-1446,6 +1582,18 @@ struct slave *bond_xmit_alb_slave_get(struct bonding
+*bond,
+ 			break;
+ 		}
+ 
++		if (alb_determine_nd(skb, bond)) {
++			u8 *lladdr;
++
++			lladdr = alb_get_lladdr(skb);
++			if (lladdr) {
++				if (!bond_slave_has_mac_rx(bond, lladdr)) {
++					do_tx_balance = false;
++					break;
++				}
++			}
++		}
++
+ 		hash_start = (char *)&ip6hdr->daddr;
+ 		hash_size = sizeof(ip6hdr->daddr);
+ 		break;
+@@ -1489,6 +1637,7 @@ netdev_tx_t bond_alb_xmit(struct sk_buff *skb, struct
+net_device *bond_dev)
+ 	struct slave *tx_slave = NULL;
+ 
+ 	tx_slave = bond_xmit_alb_slave_get(bond, skb);
++	alb_set_nd_option(skb, bond, tx_slave);
+ 	return bond_do_alb_xmit(skb, bond, tx_slave);  }
+ 
+
+base-commit: 7a29b11da9651ef6a970e2f6bfd276f053aeb06a
+--
+2.27.0
+
+

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F57D47FF5E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:37:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 375BB4800CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238554AbhL0Pg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:36:58 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:39592 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238312AbhL0Ped (ORCPT
+        id S238803AbhL0PvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:51:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239312AbhL0Pqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:34:33 -0500
+        Mon, 27 Dec 2021 10:46:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B1CC06175D;
+        Mon, 27 Dec 2021 07:42:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5EB77CE10D7;
-        Mon, 27 Dec 2021 15:34:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A7D1C36AE7;
-        Mon, 27 Dec 2021 15:34:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C568CB810AA;
+        Mon, 27 Dec 2021 15:42:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C400C36AE7;
+        Mon, 27 Dec 2021 15:42:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619269;
-        bh=5DcpuV1CCPdv1Ic6FykzKtMUG8fag1k5i7tb5csgOMs=;
+        s=korg; t=1640619776;
+        bh=lvRUVczAdOaI/eCX12bq7+CKt00xLXnyN8GDCRq0GZU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qvfm5BYZpeQzOU/pxI8SrTOymhMdf3xPTKDx/Q5gF0VDhnHVuecX0BPuo+ZRmhegB
-         +212QzhwtnBjvOMfbt12TV/jTflSQxxRlxm9vU6kJiv5Y+GdE0bv2Xzotcvl3d7vtk
-         bT+PjEgXpr4BhyOzvbv2kARJdmxApcILY0odWWWs=
+        b=SIcwbJWtiQx6CUEFYf5djQC4eLZtSB+p4JrgLwZFSXMcYg1VItpOkm5S6slEf4Pne
+         CSDWwO1ljkXm4+2I3NBwimdzz55WkfP7xNaE5R9FWZODLa5QZY3ueDFHYegMylFt8J
+         wqT2x5rp8qshjNU/8DUsKI6vUN/EPVoVzniRgNno=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        Ron Goossens <rgoossens@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 04/47] arm64: dts: allwinner: orangepi-zero-plus: fix PHY mode
-Date:   Mon, 27 Dec 2021 16:30:40 +0100
-Message-Id: <20211227151320.940634183@linuxfoundation.org>
+        stable@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 066/128] ALSA: drivers: opl3: Fix incorrect use of vp->state
+Date:   Mon, 27 Dec 2021 16:30:41 +0100
+Message-Id: <20211227151333.699106333@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
-References: <20211227151320.801714429@linuxfoundation.org>
+In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
+References: <20211227151331.502501367@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,44 +48,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Marko <robert.marko@sartura.hr>
+From: Colin Ian King <colin.i.king@gmail.com>
 
-[ Upstream commit 08d2061ff9c5319a07bf9ca6bbf11fdec68f704a ]
+commit 2dee54b289fbc810669a1b2b8a0887fa1c9a14d7 upstream.
 
-Orange Pi Zero Plus uses a Realtek RTL8211E RGMII Gigabit PHY, but its
-currently set to plain RGMII mode meaning that it doesn't introduce
-delays.
+Static analysis with scan-build has found an assignment to vp2 that is
+never used. It seems that the check on vp->state > 0 should be actually
+on vp2->state instead. Fix this.
 
-With this setup, TX packets are completely lost and changing the mode to
-RGMII-ID so the PHY will add delays internally fixes the issue.
+This dates back to 2002, I found the offending commit from the git
+history git://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git,
+commit 91e39521bbf6 ("[PATCH] ALSA patch for 2.5.4")
 
-Fixes: a7affb13b271 ("arm64: allwinner: H5: Add Xunlong Orange Pi Zero Plus")
-Acked-by: Chen-Yu Tsai <wens@csie.org>
-Tested-by: Ron Goossens <rgoossens@gmail.com>
-Tested-by: Samuel Holland <samuel@sholland.org>
-Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://lore.kernel.org/r/20211117140222.43692-1-robert.marko@sartura.hr
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20211212172025.470367-1-colin.i.king@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus.dts | 2 +-
+ sound/drivers/opl3/opl3_midi.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus.dts b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus.dts
-index db6ea7b58999b..19f930f43936e 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus.dts
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus.dts
-@@ -72,7 +72,7 @@
- 	pinctrl-0 = <&emac_rgmii_pins>;
- 	phy-supply = <&reg_gmac_3v3>;
- 	phy-handle = <&ext_rgmii_phy>;
--	phy-mode = "rgmii";
-+	phy-mode = "rgmii-id";
- 	status = "okay";
- };
- 
--- 
-2.34.1
-
+--- a/sound/drivers/opl3/opl3_midi.c
++++ b/sound/drivers/opl3/opl3_midi.c
+@@ -397,7 +397,7 @@ void snd_opl3_note_on(void *p, int note,
+ 	}
+ 	if (instr_4op) {
+ 		vp2 = &opl3->voices[voice + 3];
+-		if (vp->state > 0) {
++		if (vp2->state > 0) {
+ 			opl3_reg = reg_side | (OPL3_REG_KEYON_BLOCK +
+ 					       voice_offset + 3);
+ 			reg_val = vp->keyon_reg & ~OPL3_KEYON_BIT;
 
 

@@ -2,130 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E755948050A
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 23:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE05480513
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 23:23:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233715AbhL0WEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 17:04:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbhL0WEr (ORCPT
+        id S233748AbhL0WWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 17:22:45 -0500
+Received: from sonic315-27.consmr.mail.ne1.yahoo.com ([66.163.190.153]:38451
+        "EHLO sonic315-27.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229626AbhL0WWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 17:04:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D117C06173E;
-        Mon, 27 Dec 2021 14:04:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61D21B80D8E;
-        Mon, 27 Dec 2021 22:04:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF63FC36AEA;
-        Mon, 27 Dec 2021 22:04:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640642684;
-        bh=WJL+K0hI3nwJke136i/0N4gSC4MX2UG4T24o5kI2ZCo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=LPLcrpwmwEpR6GXtmPDQxAS5U0HsQLi/CB9P+gregE+DcfQwu7ErElWcKXTZbMdU6
-         XsCtsWEk0WBE+mdjM1tKbunFxcFQikU/+TA0D89rcFi86Y85WxzRdoIY86PRvjVdtG
-         diIwKaiI3YvY4kYq43BX3PuQVbuHlqLoF3LUbX+n+6aL1J9DGg4HhKBvQx2P0XfAy7
-         WusCUz7/Y5id3h1FfcJgYrgH5um91lNX8uL0nwr0Tpepdou9dSJJIXZ6GCtfCdLfBD
-         LIlhhqwlkP3AiKo8eLFOy/k3gO8zizcoVOTtD8CF1BbmHHWy/myCg1kQ1We1WzE6Nq
-         9m7bdLO4V7+kA==
-Date:   Mon, 27 Dec 2021 16:04:42 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org
-Subject: Re: [RFC 27/32] PCI/sysfs: make I/O resource depend on HAS_IOPORT
-Message-ID: <20211227220442.GA1544995@bhelgaas>
+        Mon, 27 Dec 2021 17:22:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1640643763; bh=PMjSN1kNjApqigGpTMB1er2Q4CVeitA18g8sxu27rQE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=n3sAE44LADOHn5Rg/ifAQchsg3uPPFUDTrtuKLVTmLb4Vhoc5IOr9pNfWr2Z/95v69slKO4aRzK6XPpQzBG4J0++TxzHM6mnG8PlzuwMHDZ9ExkM8Buio2An7wyoXmoT50HTIvIpThtH1cYXxgC+JVXCyj5XA+YOjgoRrOHPsA9i4EkM/7tITq+DKCYf74KElQUsZ7H5MGxymW67LXq3mqwYNe/PmHnI1aT34VZ4VkifOk1IgQ+Eo8G0RVoXzblKc2lDN6iZgks/skEHzQjU4P+VSoyxsFjWHMF+mxJWrt3KshEcjOVeofi372OldW6eZdjJo17Q1Gj6xLSRt6dFGw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1640643763; bh=xgudXLyxfDm/H+HFw/Bif2Yq9OYXldm3JxMKwH45RA1=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=F7Ya1mWk0c8utUOuHk83jn/fu+e4YtWFEiuJ+vXbGXLDjMjmW/eXu4GQ8W5NRqy+FanmKX505Zh7j13KYhBEXeTtZj59rGsBeHP0OSD7neReNI1SOt9DzKRElCE/2pCdRAirOzIQxkrpT64pGGaJifec/1L1CCwAwvZiBepQHEdzeKoYPa3mGbj/Dha+edG0WjXz1KCL/VAb8DqcTq1rgmrMCiqqj2eGmItYlhC+yro5DXlhfZcz6WCsgXLqiExkQU69NQgOxbtvWd4mNZpwG85Zd2IUb4SwZOKrMjN1oIPo0YntezjfIJhds2EFHIX3mHf4aT7+CvaKDpcaYEZ4+A==
+X-YMail-OSG: 3XWJ_rUVM1mtAkshZwSoDmesgFtcASWMM.iBpVF9JVIs7Z0f5_tXxwO0lUII2s4
+ llNuqydT5oLxUG98SBeZiSKNxHnseLcU2ZgMpbklciCGgpI6NENIpTbhmVP.KSORR7B4RyF7S69E
+ GYUTjcKai5_jBuGYawR1JJEGmdC5pB_Sn5RtKR.40p0t7J26yN_9K8tYgdUpFjUXH0aoL0USveG9
+ vbhqHm8cm_m.qmzctYMqnvoE_C8oS8dNzed7sgoLhWatiWorNqgT51ePb4dLmKziPg_VtX.bvyc8
+ vGhoiNCZqP8Sw27QWen5szCUg4M7NTgxVFJMQUPCUM3_SsnpJikosCriwSBpN8TBC6wgrIZd.RpT
+ HRSH9Hh37XFL66YDTcsdPCGep0h9FhL6XeLUdD8rlkLiPUGRCuCxhG98WE4cP.mX8sz0MhDsBRoo
+ Kol0NiKTA71n1iZbALvZksaPW_jUQx3mpL4aR9ewd5OanXM3gp0otS_1C3vhZ6CigUFgfJRt_jlz
+ _8y2Vjx4dQwAVjwa9aU5kHvRU45U168iz6KYT9fudrikWkW4sNOJjDR4mlMuFQzM7tEPtrO5ONdJ
+ OOs3nAc7yFbbQAt8DOsOta2cMV2Dj1.l4erFumzZan8cQiQuWk0LxUn1iBc4PIwmeJ2ef_xrbIvw
+ P.JX4W4VQVc6gs6GD5tFjMiJfgOQ.NlRkVtiPTbvPuwTnUJ1F7SyUJgqqTTwTOJG4nsLzh55.4WQ
+ DbhG9GnL0TbB3qXdvUiDNIOv35_PvGbF3OTFRvxkyEdxiNWWqspZhDRJnHJv_mpZFBf8Rajxpk4U
+ jtl.E4O.FQLhsaG8HOH8QTVcZBjP_kLr169fjP2dosRmL.gwg8dCqGHOlRbXSrZvdfEDfVoGY6cO
+ t2g.SrsJHg_2ub_ZEzB8YAl__gXf0hyhIzhBC87O.Z_QYT_wUuCgwEe2aeQMV9UNJPoS7WEAZ2.N
+ W0cKmbhTnpl7S8HIwppHqyP.tFw8AZMvUxOMUEprzz3mLU5_1mJ0COv1k08TNjeZzahpOK0GBDlq
+ IoM9lim0ezylkf7n8JyLbWL._k3TKdkDby3CNmemHhtMm3TrYQbSDexqSwjymVUV_.NnpZddr0JW
+ hSHUs3lcW4OWZYUDH5X.F28Q5OA7YspEYR7.eJiinIy.5YQtdKra8CpWuFZg8_5mLlfnoSytNWxh
+ 3B2Gg.proFr4skvBU_Hxt__4khtplzMS2KiW_B1Jx_ex66LZ771wLjC4JeSbWwPw_d9_t3h14NNF
+ 34KLeGY6LOwBSPLkoPsGAfYzY62puYu29amKAA6TixUg9AmI1Q86wv95UYQes.O1zFj9FOeKWdP0
+ Frp7PZ4B9AlWe8ckfHLukwyZKQ82Sr77GYsKLnO0whDLhSsVpDSFKZOhGiyiFzywfkJ8WJjSF2iG
+ Cx.iKx.1slfbp2cFBocMqoJHQi365uezF5VHW5q.T17.waICRQbEDesdzvJk7wPI6m0FKWLtyq7B
+ YuoFyMqv8Y28RNaUoHBPtvHCVeWMHeQebiBE0x0GTJ2CcdBTn7FOIcoVHjUG6E0lTIzzlH7bo5Jm
+ g_S3u_QFJb8rP7lyxUCXIu0vi9xNCeLNzvX8DKFBQI0FrHQbS74hGSnE.DWtIHkJKpcHEe0K11v2
+ f2NtzN7gUAp8JGSiU.l.AW9QxLT97_vd3UV5Fx7RJQeFvtAzLG9HuBMB5G.XTfw_expd6Eluj5VG
+ fzHdnzMaMDFC2Ere_PO4jTgsa0HG0i0DcWj_P14n3O5yOKR4OsRmTMLw5._6gzjOlQYiC4v4CKsR
+ lgH1BfDzcvJ5F4EHtU0LEEqh2h8BxjbNo7O4suBIBAIBxtEeeqCE5LOYQspEx6rIPJgzRFHChQw_
+ cPEeJNtK71lT4JnfLD47bj2_r.c9jUZ7P60.j5T6wp5dNzpMiwWcErcHvUNFclBTAXGvo_SRlctP
+ jngQYYHrGaPpoBpbKlXY0IZXnENhH.kdUIg4DLTzGy..c3dEkQ_iNC0avXSAdkeXvZitjE0.iEis
+ EDgctsE4dKTDL8pFkeQ1CSS4pmJ9NzQvi06WU0bG.DUkQPCF.0RmRP4Hs3PUp5Lu4WqO2RCShRSs
+ YwaUi8Lhe_TirfPdb8hfhim2jyZ0pbEf4HenMoTtcTS9e0nHnVZcw9gNlkqGSWwQBMjTQvggx.YG
+ SZdzsZXhtOz96QQNxoreFA9eGDktTugdIOb52oSvdoLrNbHFKKt0Mws20_T1.G0QAkz_gFJtmmiH
+ 6haK_9EF00P140FSAyQ0jfTDnB3HRoM0JzXaGDgJ.0P6djlDxEDDcsP3M5LQS
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.ne1.yahoo.com with HTTP; Mon, 27 Dec 2021 22:22:43 +0000
+Received: by kubenode534.mail-prod1.omega.gq1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID ea8660f447881654084117e7f2494ed4;
+          Mon, 27 Dec 2021 22:22:42 +0000 (UTC)
+Message-ID: <7d1d7682-dd19-1b8a-ee5a-50fe6479589b@schaufler-ca.com>
+Date:   Mon, 27 Dec 2021 14:22:41 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227164317.4146918-28-schnelle@linux.ibm.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [RFC PATCH v1 0/2] Add capabilities file to sysfs
+Content-Language: en-US
+To:     Francis Laniel <flaniel@linux.microsoft.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Serge Hallyn <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20211227205500.214777-1-flaniel@linux.microsoft.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20211227205500.214777-1-flaniel@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.19498 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make the subject match historical convention (capitalize "Make").
+On 12/27/2021 12:54 PM, Francis Laniel wrote:
+> Hi.
+>
+>
+> First, I hope you are fine and the same for your relatives.
+>
+> Capabilities are used to check if a thread has the right to perform a given
+> action [1].
+> For example, a thread with CAP_BPF set can use the bpf() syscall.
+>
+> Capabilities are used in the container world.
+> In terms of code, several projects related to container maintain code where the
+> capabilities are written alike include/uapi/linux/capability.h [2][3][4][5].
+> For these projects, their codebase should be updated when a new capability is
+> added to the kernel.
+> Some other projects rely on <sys/capability.h> [6].
+> In this case, this header file should reflect the capabilities offered by the
+> kernel.
+>
+> So, in this series, I added a new file to sysfs: /sys/kernel/capabilities.
 
-On Mon, Dec 27, 2021 at 05:43:12PM +0100, Niklas Schnelle wrote:
-> Exporting I/O resources only makes sense if legacy I/O spaces are
-> supported so conditionally add them only if HAS_IOPORT is set.
+This should be /sys/kernel/security/capabilities.
 
-IIUC, the effect of this is that the "resource%d" file for an I/O BAR
-still appears in /sys, but reads or writes will fail with ENXIO.
-Worth mentioning that in the commit log, since one could interpret the
-above as meaning that the "resource%d" file exists only if HAS_IOPORT
-is set.  I think I will *exist* but not be very useful.
-
-I also wonder what this looks like in the sysfs "resource" file and
-via lspci.  I suppose it's useful if lspci shows the fact that the BAR
-exists and is an I/O BAR, even if the arch doesn't set HAS_IOPORT.
-
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> The goal of this file is to be used by "container world" software to know kernel
+> capabilities at run time instead of compile time.
+>
+> The underlying kernel attribute is read-only and its content is the capability
+> number associated with the capability name:
+> root@vm-amd64:~# cat /sys/kernel/capabilities
+> 0       CAP_CHOWN
+> 1       CAP_DAC_OVERRIDE
+> ...
+> 39      CAP_BPF
+>
+> The kernel already exposes the last capability number under:
+> /proc/sys/kernel/cap_last_cap
+> So, I think there should not be any issue exposing all the capabilities it
+> offers.
+> If there is any, please share it as I do not want to introduce issue with this
+> series.
+>
+> Also, if you see any way to improve this series please share it as it would
+> increase this contribution quality.
+>
+> Francis Laniel (2):
+>    capability: Add cap_strings.
+>    kernel/ksysfs.c: Add capabilities attribute.
+>
+>   include/uapi/linux/capability.h |  1 +
+>   kernel/capability.c             | 45 +++++++++++++++++++++++++++++++++
+>   kernel/ksysfs.c                 | 18 +++++++++++++
+>   3 files changed, 64 insertions(+)
+>
+>
+> Best regards and thank you in advance for your reviews.
 > ---
->  drivers/pci/pci-sysfs.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-> index cfe2f85af09e..a59a85593972 100644
-> --- a/drivers/pci/pci-sysfs.c
-> +++ b/drivers/pci/pci-sysfs.c
-> @@ -1099,6 +1099,7 @@ static int pci_mmap_resource_wc(struct file *filp, struct kobject *kobj,
->  	return pci_mmap_resource(kobj, attr, vma, 1);
->  }
->  
-> +#ifdef CONFIG_HAS_IOPORT
->  static ssize_t pci_resource_io(struct file *filp, struct kobject *kobj,
->  			       struct bin_attribute *attr, char *buf,
->  			       loff_t off, size_t count, bool write)
-> @@ -1157,6 +1158,21 @@ static ssize_t pci_write_resource_io(struct file *filp, struct kobject *kobj,
->  
->  	return pci_resource_io(filp, kobj, attr, buf, off, count, true);
->  }
-> +#else
-> +static ssize_t pci_read_resource_io(struct file *filp, struct kobject *kobj,
-> +				    struct bin_attribute *attr, char *buf,
-> +				    loff_t off, size_t count)
-> +{
-> +	return -ENXIO;
-> +}
-
-I assume the sysfs infrastructure prevents or fails reads/write if
-res_attr->read and res_attr->write are not set at all, so maybe we
-wouldn't need the stubs if we did something like this?
-
-    if (pci_resource_flags(pdev, num) & IORESOURCE_IO) {
-  #ifdef CONFIG_HAS_IOPORT
-      res_attr->read = pci_read_resource_io;
-      res_attr->write = pci_write_resource_io;
-      ...
-  #endif
-    } else {
-
-> +static ssize_t pci_write_resource_io(struct file *filp, struct kobject *kobj,
-> +				     struct bin_attribute *attr, char *buf,
-> +				     loff_t off, size_t count)
-> +{
-> +	return -ENXIO;
-> +}
-> +#endif
->  
->  /**
->   * pci_remove_resource_files - cleanup resource files
-> -- 
-> 2.32.0
-> 
+> [1] man capabilities
+> [2] https://github.com/containerd/containerd/blob/1a078e6893d07fec10a4940a5664fab21d6f7d1e/pkg/cap/cap_linux.go#L135
+> [3] https://github.com/moby/moby/commit/485cf38d48e7111b3d1f584d5e9eab46a902aabc#diff-2e04625b209932e74c617de96682ed72fbd1bb0d0cb9fb7c709cf47a86b6f9c1
+> moby relies on containerd code.
+> [4] https://github.com/syndtr/gocapability/blob/42c35b4376354fd554efc7ad35e0b7f94e3a0ffb/capability/enum.go#L47
+> [5] https://github.com/opencontainers/runc/blob/00f56786bb220b55b41748231880ba0e6380519a/libcontainer/capabilities/capabilities.go#L12
+> runc relies on syndtr package.
+> [6] https://github.com/containers/crun/blob/fafb556f09e6ffd4690c452ff51856b880c089f1/src/libcrun/linux.c#L35
+>

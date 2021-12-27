@@ -2,45 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7AC4800AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:50:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1289547FF42
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239830AbhL0PsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:48:00 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44010 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240169AbhL0Pot (ORCPT
+        id S233050AbhL0Pgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:36:35 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:40304 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238648AbhL0PgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:44:49 -0500
+        Mon, 27 Dec 2021 10:36:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BBD75B810C3;
-        Mon, 27 Dec 2021 15:44:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11651C36AEA;
-        Mon, 27 Dec 2021 15:44:46 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8967ECE10B6;
+        Mon, 27 Dec 2021 15:36:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D109C36AEB;
+        Mon, 27 Dec 2021 15:36:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619887;
-        bh=pr/LukRvYTwOROweWSuVgnlB/I0K3kMD7lKWyQ9n85o=;
+        s=korg; t=1640619361;
+        bh=Ui4OCXFnjgcP/jHTBEkj9DmeSeZ9wFv/NCVz6KZyZqg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Se7BVZNOLOXDgxShRqRF5wvasMovEr7J/nCMdhmox3AA5vyWaZoAJ0yvtySeWphHZ
-         V/F7Z82hs6Y5rarJtdWH/8wEpbVqKrnQ5UGw/GD30gGWZ8xhAOu+EQ6BvS/WxSzmzt
-         D+/dTUSA2Fae9BTLuGoBERRmiP3d8SWT76WJ5XNs=
+        b=n6tZ1KVPH7PKfB0vZSpm6fN0rbZ+ItEYHq3ux9BnXSkrmDd5f3IlanqNNwVOgR/Pe
+         VAun+oJtNRHww26fM/gYZ0S/CdiScZcHspBIM5rWY5c+SZPj/qbLnTIfVGJzNbuCl3
+         SZfhf1qoinUdED9sslhXXut4F8MdBwgfDGQAEYWs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liu Shixin <liushixin2@huawei.com>,
-        Hulk Robot <hulkci@huawei.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 104/128] mm/hwpoison: clear MF_COUNT_INCREASED before retrying get_any_page()
+        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 5.4 43/47] hwmon: (lm90) Do not report busy status bit as alarm
 Date:   Mon, 27 Dec 2021 16:31:19 +0100
-Message-Id: <20211227151334.993801458@linuxfoundation.org>
+Message-Id: <20211227151322.291125681@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
+References: <20211227151320.801714429@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,63 +44,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liu Shixin <liushixin2@huawei.com>
+From: Guenter Roeck <linux@roeck-us.net>
 
-commit 2a57d83c78f889bf3f54eede908d0643c40d5418 upstream.
+commit cdc5287acad9ede121924a9c9313544b80d15842 upstream.
 
-Hulk Robot reported a panic in put_page_testzero() when testing
-madvise() with MADV_SOFT_OFFLINE.  The BUG() is triggered when retrying
-get_any_page().  This is because we keep MF_COUNT_INCREASED flag in
-second try but the refcnt is not increased.
+Bit 7 of the status register indicates that the chip is busy
+doing a conversion. It does not indicate an alarm status.
+Stop reporting it as alarm status bit.
 
-    page dumped because: VM_BUG_ON_PAGE(page_ref_count(page) == 0)
-    ------------[ cut here ]------------
-    kernel BUG at include/linux/mm.h:737!
-    invalid opcode: 0000 [#1] PREEMPT SMP
-    CPU: 5 PID: 2135 Comm: sshd Tainted: G    B             5.16.0-rc6-dirty #373
-    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-    RIP: release_pages+0x53f/0x840
-    Call Trace:
-      free_pages_and_swap_cache+0x64/0x80
-      tlb_flush_mmu+0x6f/0x220
-      unmap_page_range+0xe6c/0x12c0
-      unmap_single_vma+0x90/0x170
-      unmap_vmas+0xc4/0x180
-      exit_mmap+0xde/0x3a0
-      mmput+0xa3/0x250
-      do_exit+0x564/0x1470
-      do_group_exit+0x3b/0x100
-      __do_sys_exit_group+0x13/0x20
-      __x64_sys_exit_group+0x16/0x20
-      do_syscall_64+0x34/0x80
-      entry_SYSCALL_64_after_hwframe+0x44/0xae
-    Modules linked in:
-    ---[ end trace e99579b570fe0649 ]---
-    RIP: 0010:release_pages+0x53f/0x840
-
-Link: https://lkml.kernel.org/r/20211221074908.3910286-1-liushixin2@huawei.com
-Fixes: b94e02822deb ("mm,hwpoison: try to narrow window race for free pages")
-Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
-Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/memory-failure.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/hwmon/lm90.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -2201,6 +2201,7 @@ retry:
- 	} else if (ret == 0) {
- 		if (soft_offline_free_page(page) && try_again) {
- 			try_again = false;
-+			flags &= ~MF_COUNT_INCREASED;
- 			goto retry;
- 		}
- 	}
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -200,6 +200,7 @@ enum chips { lm90, adm1032, lm99, lm86,
+ #define LM90_STATUS_RHIGH	(1 << 4) /* remote high temp limit tripped */
+ #define LM90_STATUS_LLOW	(1 << 5) /* local low temp limit tripped */
+ #define LM90_STATUS_LHIGH	(1 << 6) /* local high temp limit tripped */
++#define LM90_STATUS_BUSY	(1 << 7) /* conversion is ongoing */
+ 
+ #define MAX6696_STATUS2_R2THRM	(1 << 1) /* remote2 THERM limit tripped */
+ #define MAX6696_STATUS2_R2OPEN	(1 << 2) /* remote2 is an open circuit */
+@@ -819,7 +820,7 @@ static int lm90_update_device(struct dev
+ 		val = lm90_read_reg(client, LM90_REG_R_STATUS);
+ 		if (val < 0)
+ 			return val;
+-		data->alarms = val;	/* lower 8 bit of alarms */
++		data->alarms = val & ~LM90_STATUS_BUSY;
+ 
+ 		if (data->kind == max6696) {
+ 			val = lm90_select_remote_channel(data, 1);
 
 

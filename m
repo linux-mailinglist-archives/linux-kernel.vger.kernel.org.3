@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33324480000
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D2647FF55
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239468AbhL0Pm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:42:27 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39524 "EHLO
+        id S238320AbhL0Pgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:36:48 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35012 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239378AbhL0Pjq (ORCPT
+        with ESMTP id S238211AbhL0PeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:39:46 -0500
+        Mon, 27 Dec 2021 10:34:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85B15610A4;
-        Mon, 27 Dec 2021 15:39:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F68EC36AE7;
-        Mon, 27 Dec 2021 15:39:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57CBD610B1;
+        Mon, 27 Dec 2021 15:34:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A440C36AE7;
+        Mon, 27 Dec 2021 15:34:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619586;
-        bh=g+O9WgUXSHzbiuwmIO5MJHkiX5UKdFlqXoPn0X7GwFM=;
+        s=korg; t=1640619246;
+        bh=ZyuiVijWJmMxjvpxQsyz4dR2xVRaSuj9WJ1XVC/2Krc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FeATy4B32ANadktvoaWMG2DlnJJLf1Q5dPe2oKIh3JSBU7F3+YKrilnctfIFNk1M1
-         71taBHqqrQFq2abTn5RTUZVUo3Ld8GcEfFQcPJ0TVPjDLjQkgJshPb4B0fez7JTXRl
-         MHfJvQoAGa3KOrny/dqhXlbtxOcJT63xQvyeougA=
+        b=lWz+9gZAaAMGe4fusKQFIq3lJRWvuTTkyrdrr3qtCvHlViSrDhp587uFVO5n7979f
+         lSi4Lko/vTZYEbg3lSUhFZSjMftjr3PqyLpWMYKvVrFX1954gU/xi+Z2iAUTy3Qg4D
+         HEIEFHbOdYPAhjlxR7uc9ipHEdniDMUDFezq8FPQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Corey Minyard <cminyard@mvista.com>,
-        Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>
-Subject: [PATCH 5.10 43/76] ipmi: fix initialization when workqueue allocation fails
+        stable@vger.kernel.org, Xiaoke Wang <xkernel.wang@foxmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.19 21/38] ALSA: jack: Check the return value of kstrdup()
 Date:   Mon, 27 Dec 2021 16:30:58 +0100
-Message-Id: <20211227151326.197870853@linuxfoundation.org>
+Message-Id: <20211227151320.076319922@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
-References: <20211227151324.694661623@linuxfoundation.org>
+In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
+References: <20211227151319.379265346@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,59 +45,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-commit 75d70d76cb7b927cace2cb34265d68ebb3306b13 upstream.
+commit c01c1db1dc632edafb0dff32d40daf4f9c1a4e19 upstream.
 
-If the workqueue allocation fails, the driver is marked as not initialized,
-and timer and panic_notifier will be left registered.
+kstrdup() can return NULL, it is better to check the return value of it.
 
-Instead of removing those when workqueue allocation fails, do the workqueue
-initialization before doing it, and cleanup srcu_struct if it fails.
-
-Fixes: 1d49eb91e86e ("ipmi: Move remove_work to dedicated workqueue")
-Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Cc: Corey Minyard <cminyard@mvista.com>
-Cc: Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>
-Cc: stable@vger.kernel.org
-Message-Id: <20211217154410.1228673-2-cascardo@canonical.com>
-Signed-off-by: Corey Minyard <cminyard@mvista.com>
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/tencent_094816F3522E0DC704056C789352EBBF0606@qq.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/ipmi/ipmi_msghandler.c |   15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ sound/core/jack.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/char/ipmi/ipmi_msghandler.c
-+++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -5165,20 +5165,23 @@ static int ipmi_init_msghandler(void)
- 	if (rv)
- 		goto out;
+--- a/sound/core/jack.c
++++ b/sound/core/jack.c
+@@ -234,6 +234,10 @@ int snd_jack_new(struct snd_card *card,
+ 		return -ENOMEM;
  
--	timer_setup(&ipmi_timer, ipmi_timeout, 0);
--	mod_timer(&ipmi_timer, jiffies + IPMI_TIMEOUT_JIFFIES);
--
--	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
--
- 	remove_work_wq = create_singlethread_workqueue("ipmi-msghandler-remove-wq");
- 	if (!remove_work_wq) {
- 		pr_err("unable to create ipmi-msghandler-remove-wq workqueue");
- 		rv = -ENOMEM;
--		goto out;
-+		goto out_wq;
- 	}
+ 	jack->id = kstrdup(id, GFP_KERNEL);
++	if (jack->id == NULL) {
++		kfree(jack);
++		return -ENOMEM;
++	}
  
-+	timer_setup(&ipmi_timer, ipmi_timeout, 0);
-+	mod_timer(&ipmi_timer, jiffies + IPMI_TIMEOUT_JIFFIES);
-+
-+	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
-+
- 	initialized = true;
- 
-+out_wq:
-+	if (rv)
-+		cleanup_srcu_struct(&ipmi_interfaces_srcu);
- out:
- 	mutex_unlock(&ipmi_interfaces_mutex);
- 	return rv;
+ 	/* don't creat input device for phantom jack */
+ 	if (!phantom_jack) {
 
 

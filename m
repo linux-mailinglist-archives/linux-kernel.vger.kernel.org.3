@@ -2,94 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC5847FC52
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 12:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F6347FC56
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 12:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236509AbhL0LvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 06:51:25 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:56554 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233644AbhL0LvY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 06:51:24 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        id S236520AbhL0Lvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 06:51:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42968 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233644AbhL0Lvr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 06:51:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D338BC06173E;
+        Mon, 27 Dec 2021 03:51:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 05EBF1EC0136;
-        Mon, 27 Dec 2021 12:51:18 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640605879;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=6S9Z6HJi0RpvpE/wP/S1HAAX4gep/kXzxwMTCr7muTc=;
-        b=IbctMVNq91vzz0GLZWnv2Adwu3mL8IY5R0mf4+taQ/aDN6xGdsirKJ+N0RCABw+pF7JX9n
-        qKK34oL6vhBfQya+k3bZ89+uGIkbRiRV1iM3GmX2unH/Gz0wjc9YHzSFtgHF/AJyGebfU3
-        KriJYB/TbJj6ec8n1hu8ByS2z6sRM5g=
-Date:   Mon, 27 Dec 2021 12:51:21 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, tglx@linutronix.de,
-        mingo@redhat.com, luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 19/26] x86/tdx: Make pages shared in ioremap()
-Message-ID: <YcmoucfxOF8mwox8@zn.tnic>
-References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
- <20211214150304.62613-20-kirill.shutemov@linux.intel.com>
- <87c288d6-9bf8-5a94-a628-1e0aaa7de690@amd.com>
- <20211223171530.v73posbqizb5l3md@black.fi.intel.com>
- <f61b591b-a06c-bc29-4b9b-a5d46111fe4e@intel.com>
- <YcTTt4LXKfDO+9u3@zn.tnic>
- <20211223205604.g44kez5d7iedatfo@box.shutemov.name>
- <YcTlhp1PUfrMOelI@zn.tnic>
- <20211224110300.7zj3nc5nbbv7jobp@black.fi.intel.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73C9460F8D;
+        Mon, 27 Dec 2021 11:51:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CA0CC36AE7;
+        Mon, 27 Dec 2021 11:51:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640605906;
+        bh=1BnnIqoK6MlJteUTtWztTf7Gtju/mdvIX754NFttH70=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J+AK5OdpGffw2+VOn2yiS9tEBaWCnw8vpdk7XhM6c9bBMeQVOSgTJ2z/spdPqZ3SP
+         Ayooshz9NTBYE/inqxiE7ArzQ+YJ6CN4TtseB+7jVFB7+b+fDtoxcXfMpsi86GCBd9
+         zxH5xSoMn3LvfWnuUnebvTfURQBT/nPlstdSpYgs=
+Date:   Mon, 27 Dec 2021 12:51:44 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH v2] asix: Use min() instead of doing it manually
+Message-ID: <Ycmo0A/fnezdGhSa@kroah.com>
+References: <20211227113839.92352-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211224110300.7zj3nc5nbbv7jobp@black.fi.intel.com>
+In-Reply-To: <20211227113839.92352-1-jiapeng.chong@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 24, 2021 at 02:03:00PM +0300, Kirill A. Shutemov wrote:
-> Okay. Meanwhile I leave it this way:
+On Mon, Dec 27, 2021 at 07:38:39PM +0800, Jiapeng Chong wrote:
+> Eliminate following coccicheck warning:
 > 
-> 	pgprot_t pgprot_cc_encrypted(pgprot_t prot)
-> 	{
-> 		if (cc_platform_has(CC_ATTR_MEM_ENCRYPT)) {
-> 			if (cc_platform_has(CC_ATTR_GUEST_TDX))
-> 				return __pgprot(pgprot_val(prot) & ~tdx_shared_mask());
-> 			else if (sme_me_mask)
-> 				return __pgprot(__sme_set(pgprot_val(prot)));
-> 			else
-> 				WARN_ON_ONCE(1);
+> ./drivers/net/usb/asix_common.c:545:12-13: WARNING opportunity for
+> min().
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+> Changes in v2:
+>   -Modified commmit message.
+> 
+>  drivers/net/usb/asix_common.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
+> index 71682970be58..da5a7df312d2 100644
+> --- a/drivers/net/usb/asix_common.c
+> +++ b/drivers/net/usb/asix_common.c
+> @@ -542,7 +542,7 @@ static int __asix_mdio_write(struct net_device *netdev, int phy_id, int loc,
+>  out:
+>  	mutex_unlock(&dev->phy_mutex);
+>  
+> -	return ret < 0 ? ret : 0;
+> +	return min(ret, 0);
 
-I'm wondering if defining a generic cc_attr especially for this:
+This is not a good idea, as was already pointed out.  Please fix your
+tools.
 
-	if (cc_platform_has(CC_ATTR_MEMORY_SHARING))
+thanks,
 
-to mean, the CC guest needs to do special stuff in order to share memory
-with the host (naming sucks, ofc) would be cleaner?
-
-Because then
-
-1. you can return whatever you need to, in the vendor-specific
-cc_platform_has() and
-
-2. this can be a separate attribute as I'm assuming it probably will be
-used in a couple of places where sharing info with the host is needed.
-
-Hmmm.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+greg k-h

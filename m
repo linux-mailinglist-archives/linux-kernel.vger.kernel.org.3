@@ -2,87 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2DDF47FCCD
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 13:53:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E211547FCCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 13:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236765AbhL0MxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 07:53:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56614 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233867AbhL0MxW (ORCPT
+        id S233790AbhL0Myr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 07:54:47 -0500
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:38932 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229996AbhL0Myr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 07:53:22 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B241C06173E;
-        Mon, 27 Dec 2021 04:53:22 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id k66-20020a1ca145000000b00345fa984108so2656878wme.2;
-        Mon, 27 Dec 2021 04:53:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=P/au97/FpQGpCIWXJLd40PtZYg+NpWsNt/T09/0nn+g=;
-        b=i4owH1aagy9ydAw3s1oaf8UoLtfw4gyeld2AiMpsi8EadR9S2YleL5Lv79Jsr1gSLL
-         wJuFUuiw5nyMjo+mj7KmEwImjQGIB9T0Jt4XMcv281+wEmKm3yCGu1YieObGFBrgi+4S
-         7iwgzJdEZ+HwEf1AFaRfc6g8UvNAudzEppHQ1rtxrF/QiSIPJ0ATyAxrNbGvOJkRsj3L
-         XNwVLspZMcZMZTy406rQSX/mHSMHfesO5yN/ueGdH8L/mhdrp2eQINWaUE49A5s4dhbK
-         7VlK9ZsKhejOzCfUNpZBL/8hLfJZ4U+sR2r1AWFiDdUI1G6Wec+yw734WXv6AFs6C0rE
-         YZ6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=P/au97/FpQGpCIWXJLd40PtZYg+NpWsNt/T09/0nn+g=;
-        b=CnI1Jn6ZaxkLEUm39YVJOwDIWIWG4jm7Bo31N4GgQbFbPM5i+liroj9xllm9N5WeCM
-         DX5u/2HJ1/jWvB/pwI5i8CtDf6lBnykidDU1p8n9kZFU0TgFPA17B9kDg+tM2QaKS4zq
-         ubwKdnrNmCXmEVcQgIwYZWGzXTPqS6N5GrEAUeFUbZQomN1c06i9eCnpl4ixHVY4eso8
-         4GVrG7dxhk7dUpMqAOb/xnxZziYxf3sbLvOGv9bxjaiKQAdXg2Xvh5LX3JPJMzQtiTxo
-         mmtUamM1SCKfbti6vwPNy4nqotDh8+EPVTnDAdGOyWe/IAnhxjewAzDdV92XrFP7UmuV
-         DKQQ==
-X-Gm-Message-State: AOAM532kQ8i5s9Acnb+41671OBSbJXo+3Dj/VNxUoWWpSs6nfLXKnQGc
-        Fx50ZGxxY2FOEtGoa5r2KFc=
-X-Google-Smtp-Source: ABdhPJytIe560EhN2h0QMk8mA3ZbjMwKjx9t9jLhWaRh41LdpywGHWtJKnt4PB1nBkNmaDeAtbZdcQ==
-X-Received: by 2002:a05:600c:35cf:: with SMTP id r15mr13190147wmq.106.1640609600481;
-        Mon, 27 Dec 2021 04:53:20 -0800 (PST)
-Received: from felia.fritz.box ([2001:16b8:26c4:7200:610f:609b:d46a:2a08])
-        by smtp.gmail.com with ESMTPSA id y8sm16666635wrd.10.2021.12.27.04.53.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Dec 2021 04:53:19 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] trace: remove unneeded initialization in __trace_uprobe_create()
-Date:   Mon, 27 Dec 2021 13:53:08 +0100
-Message-Id: <20211227125308.25787-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 27 Dec 2021 07:54:47 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0V.xJoOo_1640609684;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V.xJoOo_1640609684)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 27 Dec 2021 20:54:45 +0800
+From:   Jeffle Xu <jefflexu@linux.alibaba.com>
+To:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org
+Cc:     linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 00/23] fscache,erofs: fscache-based demand-read semantics
+Date:   Mon, 27 Dec 2021 20:54:21 +0800
+Message-Id: <20211227125444.21187-1-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to initialize ret with 0, as all the early error branches
-simply return constant values, and the default path always reaches
-ret = kern_path(filename, LOOKUP_FOLLOW, &path), which will reset ret
-before the initial value was ever used.
+changes since RFC:
+- patch set organization:
+  patch 1-16 implement the data plane over fscache without demand
+  reading support, while the demand reading support is left to patch
+  17-23.
+- implement a new devnode ("/dev/cachefiles_demand") for the new mode
+  (patch 1,20-22)
+- use flag bit inside cache->flags to distinguish modes (patch 2) (David
+  Howells)
+- user daemon is responsible for placing blob files under corresponding
+  fan sub directory, and setting "CacheFiles.cache" xattr in advance,
+  so that cachefiles backend doesn't need modification to adapt to the
+  new mode. (David Howells)
+- erofs will allocate an anonymous inode for each backed file. This
+  anonymous inode is responsible for managing page cache of backed file,
+  so that netfs API doesn't need modification to adapt to the new mode.
+  (Gao Xiang)
 
-Remove this unneeded initialization and keep the code succinct.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- kernel/trace/trace_uprobe.c | 1 -
- 1 file changed, 1 deletion(-)
+RFC: https://lore.kernel.org/all/YbRL2glGzjfZkVbH@B-P7TQMD6M-0146.local/t/
 
-diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-index 5921951a0d5c..9da10c5efdce 100644
---- a/kernel/trace/trace_uprobe.c
-+++ b/kernel/trace/trace_uprobe.c
-@@ -548,7 +548,6 @@ static int __trace_uprobe_create(int argc, const char **argv)
- 	bool is_return = false;
- 	int i, ret;
- 
--	ret = 0;
- 	ref_ctr_offset = 0;
- 
- 	switch (argv[0][0]) {
+
+[Background]
+============
+erofs (Enhanced Read-Only File System) is a filesystem specially
+optimised for read-only scenarios. (Documentation/filesystem/erofs.rst)
+
+Recently we are focusing on erofs in container images distribution
+scenario (https://sched.co/pcdL). In this case, erofs can be mounted
+from one bootstrap file (metadata) with (optional) multiple data blob
+files (data) stored on another local filesystem. (All these files are
+actually image files in erofs disk format.)
+
+To accelerate the container startup (fetching container image from remote
+and then start the container), we do hope that the bootstrap blob file
+could support demand read. That is, erofs can be mounted and accessed
+even when the bootstrap/data blob files have not been fully downloaded.
+
+That means we have to manage the cache state of the bootstrap/data blob
+files (if cache hit, read directly from the local cache; if cache miss,
+fetch the data somehow). It would be painful and may be dumb for erofs to
+implement the cache management itself. Thus we prefer fscache/cachefiles
+to do the cache management. Besides, the demand-read feature shall be
+general and it can benefit other using scenarios if it can be implemented
+in fscache level.
+
+
+[Overall Design]
+================
+The upper fs uses a backing file on the local fs as the local cache
+(exactly the "cachefiles" way), and relies on fscache to detect if data
+is ready or not (cache hit/miss). Since currently fscache detects cache
+hit/miss by detecting the hole of the backing files, our demand-read
+mechanism also relies on the hole detecting.
+
+1. initial phase
+On the first beginning, the user daemon will touch the backing files
+(bootstrap/data blob files) under corresponding directory (under
+<root>/cache/<volume>/<fan>/) in advance. These backing files are
+completely sparse files (with zero disk usage). Since these backing
+files are all read-only and the file size is known prior mounting, user
+daemon will set corresponding file size and thus create all these sparse
+backing files in advance.
+
+2. cache miss
+When a file range (of bootstrap/data blob file) is accessed for the
+first time, a cache miss will be triggered and then .issue_op() will be
+called to fetch the data somehow.
+
+In the demand-read case, we relies on a user daemon to fetch the data
+from local/remote. In this case, .issue_op() just packages the file
+range into a message and informs the user daemon. User daemon needs to
+poll and wait on the devnode (/dev/cachefiles_demand). Once awaken, the
+user daemon will read the devnode to get the file range information, and
+then fetch the data corresponding to the file range somehow, e.g.
+download from remote through network. Once data ready, the user daemon
+will write the fetched data into the backing file and then inform
+cachefiles backend by writing to the devnode. Cachefiles backend getting
+blocked on the previous .issue_op() calling will be awaken then. By then
+the data has been ready in the backing file, and the netfs API will
+re-initiate a read request from the backing file.
+
+3. cache hit
+Once data is already ready in the backing file, netfs API will read from
+the backing file directly.
+
+
+[Advantage of fscache-based demand-read]
+========================================
+1. Asynchronous Prefetch
+In current mechanism, fscache is responsible for cache state management,
+while the data plane (fetch data from local/remote on cache miss) is
+done on the user daemon side.
+
+If data has already been ready in the backing file, netfs API will read
+from the backing file directly and won't be trapped to user space anymore.
+Thus the user daemon could fetch data (from remote) asynchronously on the
+background, and thus accelerate the backing file accessing in some degree.
+
+2. Support massive blob files
+Besides this mechanism supports a large amount of backing files, and
+thus can benefit the densely employed scenario.
+
+In our using scenario, one container image can correspond to one
+bootstrap file (required) and multiple data blob files (optional). For
+example, one container image for node.js will corresponds to ~20 files
+in total. In densely employed environment, there could be as many as
+hundreds of containers and thus thousands of backing files on one
+machine.
+
+
+[Test]
+======
+1. create erofs image (bootstrap)
+mkfs.erofs --chunksize=1048576 --blobdev=Dblob1.img -Eforce-chunk-indexes Dtest.img tmp/
+
+2. create sparse blob files under fscache root directory ("/root")
+truncate -s 28672 cache/Ierofs/@9c/Dtest.img
+truncate -s 8040448 cache/Ierofs/@b5/Dblob1.img
+
+3. set "CacheFiles.cache" xattr for blob files in advance (refer to
+https://github.com/lostjeffle/demand-read-cachefilesd/blob/main/setxattr.c)
+
+4. run user daemon
+(https://github.com/lostjeffle/demand-read-cachefilesd/blob/main/cachefilesd2.c)
+./cachefilesd2
+
+5. mount erofs from bootstrap
+mount -t erofs none -o uuid=test.img /mnt/
+
+
+Jeffle Xu (23):
+  cachefiles: add cachefiles_demand devnode
+  cachefiles: add mode command to distinguish modes
+  cachefiles: detect backing file size in demand-read mode
+  netfs: make ops->init_rreq() optional
+  netfs: add inode parameter to netfs_alloc_read_request()
+  erofs: export erofs_map_blocks()
+  erofs: add nodev mode
+  erofs: register global fscache volume
+  erofs: add cookie context helper functions
+  erofs: add anonymous inode managing page cache of blob file
+  erofs: register cookie context for bootstrap
+  erofs: implement fscache-based metadata read
+  erofs: implement fscache-based data read
+  erofs: register cookie context for data blobs
+  erofs: implement fscache-based data read for data blobs
+  erofs: add 'uuid' mount option
+  netfs: support on demand read
+  cachefiles: use idr tree managing pending demand read
+  cachefiles: implement .demand_read() for demand read
+  cachefiles: implement .poll() for demand read
+  cachefiles: implement .read() for demand read
+  cachefiles: add done command for demand read
+  erofs: support on demand read
+
+ fs/cachefiles/daemon.c   | 124 +++++++++++++++++
+ fs/cachefiles/internal.h |  18 +++
+ fs/cachefiles/io.c       |  56 ++++++++
+ fs/cachefiles/main.c     |  12 ++
+ fs/cachefiles/namei.c    |  40 ++++++
+ fs/ceph/addr.c           |   5 -
+ fs/erofs/Makefile        |   2 +-
+ fs/erofs/data.c          |  20 ++-
+ fs/erofs/fscache.c       | 292 +++++++++++++++++++++++++++++++++++++++
+ fs/erofs/inode.c         |   6 +-
+ fs/erofs/internal.h      |  25 ++++
+ fs/erofs/super.c         |  98 ++++++++++---
+ fs/netfs/read_helper.c   |  41 +++++-
+ include/linux/netfs.h    |   4 +
+ 14 files changed, 708 insertions(+), 35 deletions(-)
+ create mode 100644 fs/erofs/fscache.c
+
 -- 
-2.17.1
+2.27.0
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 172154800A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ACDD47FFE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:41:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240069AbhL0PsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:48:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
+        id S238242AbhL0Plv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:41:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240193AbhL0Pov (ORCPT
+        with ESMTP id S238856AbhL0PjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:44:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D09AC061394;
-        Mon, 27 Dec 2021 07:42:06 -0800 (PST)
+        Mon, 27 Dec 2021 10:39:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5B7C07E5F6;
+        Mon, 27 Dec 2021 07:38:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26EDDB810AA;
-        Mon, 27 Dec 2021 15:42:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E348C36AE7;
-        Mon, 27 Dec 2021 15:42:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D493610B1;
+        Mon, 27 Dec 2021 15:38:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74A6FC36AEB;
+        Mon, 27 Dec 2021 15:38:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619725;
-        bh=DkNuUNGZZx6lawxNgzw1fIpCUw5deA3fzlpAajcxNaU=;
+        s=korg; t=1640619483;
+        bh=XQGVRJHZHyeiaoSHEu//I3/GPk0uHMx+t2yWR9aF2GA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D50Gqg5KaVjr2PRhuSE0UONASom/dtXkpbXeuXw8H7vDjijFUWj6mqRpkyxcUXChu
-         dXhP5v2duaCQ6rq1AIf9EjUmf6Q4CKqPnS+DrLYjgArJnwTfUge3VuGHeG7OpTR+AY
-         KLK20bG8AIr1q/7X+cJwKT0GshhquVP92ozlv8KY=
+        b=XqNna11RxFdOxWGgO0Ml5il/f66vJMxMq8Z8x7g1RBjxqlMZSGwwKew3k75JInQ6H
+         qcWsZytrqQtaTcV0y7YYk3DcebHk4wB8S0I5eyPsLnViy8fdgEAj9miBjWj7lO9QVf
+         FNjbu79LrflU5aasC/01pZwNP4f0+J9TqeUtVEkg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 046/128] net: stmmac: ptp: fix potentially overflowing expression
-Date:   Mon, 27 Dec 2021 16:30:21 +0100
-Message-Id: <20211227151333.053881654@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH 5.10 07/76] HID: holtek: fix mouse probing
+Date:   Mon, 27 Dec 2021 16:30:22 +0100
+Message-Id: <20211227151324.968878300@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+References: <20211227151324.694661623@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,37 +48,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
+From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-[ Upstream commit eccffcf4657ab9a148faaa0eb354d2a091caf552 ]
+commit 93a2207c254ca102ebbdae47b00f19bbfbfa7ecd upstream.
 
-Convert the u32 variable to type u64 in a context where expression of
-type u64 is required to avoid potential overflow.
+An overlook from the previous commit: we don't even parse or start the
+device, meaning that the device is not presented to user space.
 
-Fixes: e9e3720002f6 ("net: stmmac: ptp: update tas basetime after ptp adjust")
-Signed-off-by: Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
-Link: https://lore.kernel.org/r/20211223073928.37371-1-xiaoliang.yang_1@nxp.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 93020953d0fa ("HID: check for valid USB device for many HID drivers")
+Cc: stable@vger.kernel.org
+Link: https://bugs.archlinux.org/task/73048
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215341
+Link: https://lore.kernel.org/r/e4efbf13-bd8d-0370-629b-6c80c0044b15@leemhuis.info/
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hid/hid-holtek-mouse.c |   15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c
-index 580cc035536bd..be9b58b2abf9b 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c
-@@ -102,7 +102,7 @@ static int stmmac_adjust_time(struct ptp_clock_info *ptp, s64 delta)
- 		time.tv_nsec = priv->plat->est->btr_reserve[0];
- 		time.tv_sec = priv->plat->est->btr_reserve[1];
- 		basetime = timespec64_to_ktime(time);
--		cycle_time = priv->plat->est->ctr[1] * NSEC_PER_SEC +
-+		cycle_time = (u64)priv->plat->est->ctr[1] * NSEC_PER_SEC +
- 			     priv->plat->est->ctr[0];
- 		time = stmmac_calc_tas_basetime(basetime,
- 						current_time_ns,
--- 
-2.34.1
-
+--- a/drivers/hid/hid-holtek-mouse.c
++++ b/drivers/hid/hid-holtek-mouse.c
+@@ -65,8 +65,23 @@ static __u8 *holtek_mouse_report_fixup(s
+ static int holtek_mouse_probe(struct hid_device *hdev,
+ 			      const struct hid_device_id *id)
+ {
++	int ret;
++
+ 	if (!hid_is_usb(hdev))
+ 		return -EINVAL;
++
++	ret = hid_parse(hdev);
++	if (ret) {
++		hid_err(hdev, "hid parse failed: %d\n", ret);
++		return ret;
++	}
++
++	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
++	if (ret) {
++		hid_err(hdev, "hw start failed: %d\n", ret);
++		return ret;
++	}
++
+ 	return 0;
+ }
+ 
 
 

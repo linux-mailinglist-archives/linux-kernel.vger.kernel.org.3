@@ -2,146 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA50547FBBB
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:04:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98DD347FBBD
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:04:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233414AbhL0KEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 05:04:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233302AbhL0KEK (ORCPT
+        id S233570AbhL0KES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 05:04:18 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47852 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233438AbhL0KEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 05:04:10 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16650C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 02:04:10 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id w16so59769946edc.11
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 02:04:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ax37EWz37q7HMrlq8WJpvNZSYDzBgUjz9207VNi8mqY=;
-        b=jiZt+nGjBYR/e8xx+KWEoVm7u0FpJ9BWSP1m80+eN4AHTwiqDWXhzTCKldb3XtLCI9
-         eihLoeQhA62ldu1xbv+1DMIFxTQw2p6VwTL7WhlH6dWeUfcUYZR0ieHA5GOdONbCZDr3
-         A9PJMHjrASYL8Tn8EOCGb11svmusLD5zub2kWZ7xcAR5JeMBIXGQRQZCv8RrNmt2DBOC
-         0gER2HMx3rxvEXTG34XxqRVui3I4ccL3rJkk0XCagsVWWrw13TOAkqr8qjWdWCl/J1YI
-         HuTDfnh0XsP7Iy/jHdKJo4eG4E1CGSzVptsI7eVtHYsf7m+3Bq+MqFGX1qPesmRfICIq
-         w60A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ax37EWz37q7HMrlq8WJpvNZSYDzBgUjz9207VNi8mqY=;
-        b=QjhH843wM/rUsW1b+eQcFeBdAGGQAU7z3YQUwyB3vocWx5Fzx7qyg2xhvJLvayDJyw
-         iemlYu7m/pn+iy5URl4Ry5+9/Fcbl+y70DjQ+rBo3i3RuH1ffs5w5b90ywO/YkryPzAl
-         qTKRSytNiViM0sr7vXY7RFu21NfRLy6qZYlzhljhKRfr/JaRe9syzL0DTfeqpHfRK5g9
-         vg/yUURB6CF2gKmYssnOuXb1lS2BDhsi8SdiXjMz7iMHL7mG935vycA5Ej4nsVjziMXj
-         p6N/NbmmOj+RXP7ykxxq5mKG0uSMWheIME6uwj6+PUk2LDhAY2iKuYKK/BhqhW9vmYSj
-         EJ9Q==
-X-Gm-Message-State: AOAM530ocFjYTWMEiFsGuenUIIeY5d/8GIN96RYQt7wmCC+AAwGOvN2C
-        lbjmvxkpyiqLBLyljsrOE1o2NIn8gr8P/1ndJrar1ABQuVU=
-X-Google-Smtp-Source: ABdhPJyRjRbVg6JzcAdoJcZ+Lxb8+Vu4ChNjdNF9WmWMiqu5SUbeJHXRY6FzBO49aWVkQGDl4Q9EJVnGSEYkazZHuMU=
-X-Received: by 2002:a05:6402:2693:: with SMTP id w19mr15437747edd.158.1640599448650;
- Mon, 27 Dec 2021 02:04:08 -0800 (PST)
-MIME-Version: 1.0
-References: <20211215234946.6494-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAHp75VfGwQ7G2b39GO4tN=sxQoiahO2uudy25ALxEkrNcP9eVw@mail.gmail.com>
- <CA+V-a8t1myOt0rhJExem_T2tJUM3PLL9KuXn0=_LtucJPHLkbA@mail.gmail.com>
- <CAHp75VdXKVAZMKqC=0RbkAKKxFsdcxBc0M3N6OQMivHj-w+DHw@mail.gmail.com>
- <CA+V-a8vbsy94MvRpqWQQuRqfEGiX_ZZTTt+dr0r6qnnJAPaEmA@mail.gmail.com>
- <CAHp75VfvOOzwcTBjYg3OzbbdhcpWfaPWZ0h7HZRFOPEQAQMT=A@mail.gmail.com>
- <CAMuHMdWSAOEAvqvr1UqKKmVDMzY3Tb8Y_4XowFPBN6L3TESqYA@mail.gmail.com> <CAHp75Vc2puj45n_wMY50OnDemNmFFu-yepCC9_L+DWp1HAzxPw@mail.gmail.com>
-In-Reply-To: <CAHp75Vc2puj45n_wMY50OnDemNmFFu-yepCC9_L+DWp1HAzxPw@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 27 Dec 2021 12:03:32 +0200
-Message-ID: <CAHp75Vd5gGLoVBbiZ1FBWs4fMgq=c4xU2NspQXEpnCf6=b4tCg@mail.gmail.com>
-Subject: Re: [PATCH] irqchip/renesas-irqc: Use platform_get_irq_optional() to
- get the interrupt
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
+        Mon, 27 Dec 2021 05:04:16 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90B2260180;
+        Mon, 27 Dec 2021 10:04:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1057C36AEA;
+        Mon, 27 Dec 2021 10:04:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640599456;
+        bh=dIUo5ofCQLZZ1PsUCb9oGfiTXesB8b/NGHxJvV/9Z0c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eumOjWQo9QHrP6X8xL5qaaoW3R+6hWhiiiUASb5VZs5JBcdwEiRJUHv/r+lb2nUEX
+         HlzLPqz2jWPX5tk2p5b2VWLk+BDRJ2OsDg/HbwkeGU3997sg+I27cBXzIpwJjmwX4V
+         buAzghBEyTMj2qa2JuZSJIpxV5JvojBhp6/qElcbzI3HhxMU/U77YhEAosykA+2QQm
+         1TyOflEI/YuEqchixgq1LyXNRyLLvZ3omYZaWLAOqtOXDokDJCea8wOqM3CfhCCFVh
+         EvH993i/LzYkT6De7V6HNiKXhRrfnRR+vcuygSvNnqaX4RHVPvf7y6tUmsUXkaKQRG
+         mXkwYi6zkix8A==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n1mrV-00EWsK-Ig; Mon, 27 Dec 2021 10:04:13 +0000
+Date:   Mon, 27 Dec 2021 10:04:18 +0000
+Message-ID: <87v8zaz7ml.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, devicetree@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Bert Vermeulen <bert@biot.com>,
+        John Crispin <john@phrozen.org>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v1 3/4] dt-bindings: interrupt-controller: realtek,rtl-intc: replace irq mapping
+In-Reply-To: <add13702d89fdad4ae7a479c0894aaa3be794087.camel@svanheule.net>
+References: <cover.1640261161.git.sander@svanheule.net>
+        <8a5931f18a6f1c92f8c8e4965dc65674d7e5a4c4.1640261161.git.sander@svanheule.net>
+        <87y24byzej.wl-maz@kernel.org>
+        <add13702d89fdad4ae7a479c0894aaa3be794087.camel@svanheule.net>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sander@svanheule.net, tglx@linutronix.de, devicetree@vger.kernel.org, robh+dt@kernel.org, mail@birger-koblitz.de, bert@biot.com, john@phrozen.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 11:56 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Mon, Dec 27, 2021 at 11:45 AM Geert Uytterhoeven
-> <geert@linux-m68k.org> wrote:
-> >
-> > Hi Andy,
-> >
-> > On Sun, Dec 26, 2021 at 9:49 AM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
-> > > On Sun, Dec 26, 2021 at 1:59 AM Lad, Prabhakar
-> > > <prabhakar.csengg@gmail.com> wrote:
-> > > > On Sat, Dec 25, 2021 at 5:40 PM Andy Shevchenko
-> > > > <andy.shevchenko@gmail.com> wrote:
-> > > > > On Sat, Dec 25, 2021 at 7:28 PM Lad, Prabhakar
-> > > > > <prabhakar.csengg@gmail.com> wrote:
-> > > > > > On Sat, Dec 25, 2021 at 4:46 PM Andy Shevchenko
-> > > > > > <andy.shevchenko@gmail.com> wrote:
-> > > > > > > On Thu, Dec 16, 2021 at 9:52 AM Lad Prabhakar
-> > > > > > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > > > >
-> > > > > > > ret = platform_get_irq_optional(...);
-> > > > > > > if (ret < 0 && ret != -ENXIO)
-> > > > > > >   return ret;
-> > > > > > > if (ret > 0)
-> > > > > > >   ...we got it...
-> > > > > > >
-> > > > > > > It will allow the future API fix of platform_get_irq_optional() to be
-> > > > > > > really optional.
-> > > > > > >
-> > > > > > Later patch [0] (merged into -next) does check for -ENXIO first.
-> > > > > >
-> > > > > > [0] https://lore.kernel.org/lkml/20211216182121.5323-1-prabhakar.mahadev-lad.rj@bp.renesas.com/t/
-> > > > >
-> > > > > The problem is that it doesn't consider 0 as no IRQ.
-> > > > >
-> > > > Can you please point me to the discussion/patch where this API change
-> > > > is considered/discussed. Just to clarify now the new API for
-> > > > platform_get_irq_optional() will return "0" in case there is no
-> > > > interrupt and not not -ENXIO anymore?
-> > >
-> > > The longest one happened here:
-> > > https://lore.kernel.org/linux-ide/20211209145937.77719-1-andriy.shevchenko@linux.intel.com/T/#u
-> > >
-> > > It has links to some other discussions on the topic.
-> > >
-> > > > When will this patch be merged for the new api, so that I can base my
-> > > > patches on top of it to avoid more changes?
-> > >
-> > > You can simply imply that, I dunno when it gets merged (from my point
-> > > of view the users should be fixed first, and since you are adding
-> > > users, the burden is increasing).
-> >
-> > Not only users (drivers), but also providers (architecture-specific code).
-> > IRQ zero is still valid on some architectures, e.g. on SH[1].
->
-> Are we talking about vIRQ?
-> And users are fine with a big warning?
->
-> My understanding is that the architecture code there is broken. It
-> needs to be fixed to use IRQ domains and all that machinery instead of
-> what it does.
->
-> 0 is "no IRQ" in Linux.
->
-> > [1] https://lore.kernel.org/linux-renesas-soc/CAMuHMdUg3=q7gyaVHP0XcYUOo3PQUUv8Hc8wp5faVQ+bTBpg4A@mail.gmail.com/
+On Thu, 23 Dec 2021 19:29:23 +0000,
+Sander Vanheule <sander@svanheule.net> wrote:
+> 
+> On Thu, 2021-12-23 at 18:00 +0000, Marc Zyngier wrote:
+> > On Thu, 23 Dec 2021 12:08:33 +0000,
+> > Sander Vanheule <sander@svanheule.net> wrote:
+> > > 
+> > > The binding incorrectly specified the "interrupt-map" property should be
+> > > used, although the use is non-standard. A quirk had to be introduced in
+> > > commit de4adddcbcc2 ("of/irq: Add a quirk for controllers with their own
+> > > definition of interrupt-map") to allow the driver to function again.
+> > 
+> > That's too late. We have released a kernel with this binding, and it
+> > will live on forever until we totally remove the platform from the
+> > tree.
+> > 
+> > DT is an ABI, and only time travel can fix this blunder.
+> 
+> Taking into account your comments on the previous patch, this change
+> wouldn't even be required if I correct the mappings for my
+> devices. But that wouldn't get rid of the assumed mapping between
+> output lines and parent interrupts.
 
-And to the point of the scope of this change, why should we obfuscate
-the code in the case we know that it's not the case? You pointed out
-to the ethernet driver. How does it related here?
+A driver can always ignore some information from the DT and do its own
+thing. No sure if that addresses your problem though.
+
+> 
+> To what extent can the binding be updated to get rid of this
+> assumption? Or would that require a completely new binding?
+
+You can only extend a binding in a two-way fashion: old kernel works
+with new DT, new kernel works old DT. Which means that in practice,
+you can only *add* information to the DT, and have reasonable defaults
+in the driver when you don't find it.
+
+	M.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Without deviation from the norm, progress is not possible.

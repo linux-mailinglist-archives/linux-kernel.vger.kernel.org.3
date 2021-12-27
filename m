@@ -2,60 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FDB547FC18
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 12:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8D747FC21
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 12:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236298AbhL0LIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 06:08:01 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36694 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233404AbhL0LIA (ORCPT
+        id S236320AbhL0LSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 06:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233404AbhL0LSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 06:08:00 -0500
+        Mon, 27 Dec 2021 06:18:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790F1C06173E;
+        Mon, 27 Dec 2021 03:18:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D5F860F15;
-        Mon, 27 Dec 2021 11:08:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23712C36AEA;
-        Mon, 27 Dec 2021 11:07:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C1FA60DD0;
+        Mon, 27 Dec 2021 11:18:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E261BC36AE7;
+        Mon, 27 Dec 2021 11:18:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640603280;
-        bh=lGd8HHkcDZEOoSy237CO/NUiA+Tb3WGAEboNDpfIehI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tk29EfKd9Ez996/BKIIiTsX7pMjITL5y/OgAOG0XZKGWEBoqhQpKzLDcaNZnJzVs0
-         c5CyGuY+QFf3qwFyArs2Dnze14B8mONCDxouymFWUS9pO35FoWY/VwMrb60cP9l4Py
-         VmFO8+TTYpP1f1yJxMYqSc++xzfDq58NaIeUQlpsBVOFsosVRSCB5dD9mKBQ8gnQcu
-         1WLl3fVwt7e3nW0KLIY2GuPwxq0BEkoSbwrorAKQlkHYU2EqpspwAWWnsErWDCfuOL
-         LygSKg3RifaqNO+XYBdqZCzNeVIf85YYM197FRlXgU4lTCP4MPso9HpO8cqUk2sU+5
-         NWmC01vKU6cFA==
-Date:   Mon, 27 Dec 2021 16:37:56 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Swapnil Jakhade <sjakhade@cadence.com>
-Cc:     kishon@ti.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, mparab@cadence.com, a-govindraju@ti.com
-Subject: Re: [PATCH v4 00/15] PHY: Add support for multilink configurations
- in Cadence Sierra PHY driver
-Message-ID: <YcmejF/Xs+RfnTQC@matsya>
-References: <20211223060137.9252-1-sjakhade@cadence.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211223060137.9252-1-sjakhade@cadence.com>
+        s=k20201202; t=1640603880;
+        bh=yxlEvTl8Q6zDlKzWTA2nsGzLMfzCZe2wmB9jnQRBoV0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=naXyCANIjwsqwPSaeA17utH8CuSDbhk/bdbe8kcCAfg19uZVrNI4MjYVhFKRtY4/o
+         VTkyF1L3doiM1Cw9WkqMp881eumNg91b2UdUsBBaV8RgL1MiN4KvSzQyXy5pL09lWr
+         k5yMC8XaeUNCJdNLckQkEkmM9+XDTxc7Hz8lgFDSuIIk02LVNUwPnkFotpRXKgmHAg
+         JJc6peG9m7mj6CJp+D1uuY1APnMSQ8fxtmoRukZltl2mOH0oN3bjiPB12r5dJEYm3D
+         TuR+ld5u8d9ARn8r/cvWlxHBdpkJR4GUQtVgPh/GGhpRGxnYLwCMUyC0h+ZiyRKbE5
+         06eOhlpTyTXxw==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n1o0s-00EXWk-Qk; Mon, 27 Dec 2021 11:17:58 +0000
+Date:   Mon, 27 Dec 2021 11:17:58 +0000
+Message-ID: <87r19yz47t.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Bert Vermeulen <bert@biot.com>,
+        John Crispin <john@phrozen.org>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 4/5] dt-bindings: interrupt-controller: realtek,rtl-intc: map output lines
+In-Reply-To: <0a91967d40d486bb8cccd0dcf5a817df11317cf0.1640548009.git.sander@svanheule.net>
+References: <cover.1640548009.git.sander@svanheule.net>
+        <0a91967d40d486bb8cccd0dcf5a817df11317cf0.1640548009.git.sander@svanheule.net>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sander@svanheule.net, tglx@linutronix.de, robh+dt@kernel.org, devicetree@vger.kernel.org, mail@birger-koblitz.de, bert@biot.com, john@phrozen.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-12-21, 07:01, Swapnil Jakhade wrote:
-> Cadence Sierra PHY is a multiprotocol PHY supporting different multilink
-> PHY configurations. This patch series extends functionality of Sierra PHY
-> driver by adding features like support for multilink multiprotocol
-> configurations, derived reference clock etc.
+On Sun, 26 Dec 2021 19:59:27 +0000,
+Sander Vanheule <sander@svanheule.net> wrote:
 > 
-> The changes have been validated on TI J721E platform.
+> Amend the binding to also require a list of parent interrupts, and an
+> optional mask to specify which parent is mapped to which output.
+> 
+> Without this information, any driver would have to make an assumption on
+> which parent interrupt is connected to which output.
 
-Applied, thanks
+Why should an endpoint driver care at all?
+
+> 
+> Additionally, extend (or add) the relevant descriptions to more clearly
+> describe the inputs and outputs of this router.
+> 
+> Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> ---
+> Since it does not properly describe the hardware, I would still really
+> rather get rid of "interrupt-map", even though that would mean breaking
+> ABI for this binding. As we've argued before [1], that is our prefered
+> solution, and would enable us to not carry more (hacky) code because of
+> a mistake with the initial submission.
+
+Again, this is too late. Broken bindings live forever.
+
+> 
+> Vendors don't ship independent DT blobs for devices with this hardware,
+> so the independent devicetree/kernel upgrades issue is really rather
+> theoretical here. Realtek isn't driving the development of the bindings
+> and associated drivers for this platform. They have their SDK and seem
+> to care very little about proper kernel integration.
+
+Any vendor can do whatever they want. You can do the same thing if you
+really want to.
+
+> 
+> Furthermore, there are currently no device descriptions in the kernel
+> using this binding. There are in OpenWrt, but OpenWrt firmware images
+> for this platform always contain both the kernel and the appended DTB,
+> so there's also no breakage to worry about.
+
+That's just one use case. Who knows who is using this stuff in a
+different context? Nobody can tell.
+
+> 
+> [1] https://lore.kernel.org/all/9c169aad-3c7b-2ffb-90a2-1ca791a3f411@phrozen.org/
+> 
+> Differences with v1:
+> - Don't drop the "interrupt-map" property
+> - Add the "realtek,output-valid-mask" property
+> ---
+>  .../realtek,rtl-intc.yaml                     | 38 ++++++++++++++++---
+>  1 file changed, 33 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
+> index 9e76fff20323..29014673c34e 100644
+> --- a/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
+> @@ -6,6 +6,10 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+>  title: Realtek RTL SoC interrupt controller devicetree bindings
+>  
+> +description:
+> +  Interrupt router for Realtek MIPS SoCs, allowing up to 32 SoC interrupts to
+> +  be routed to one of up to 15 parent interrupts, or left disconnected.
+> +
+>  maintainers:
+>    - Birger Koblitz <mail@birger-koblitz.de>
+>    - Bert Vermeulen <bert@biot.com>
+> @@ -22,7 +26,11 @@ properties:
+>      maxItems: 1
+>  
+>    interrupts:
+> -    maxItems: 1
+> +    minItems: 1
+> +    maxItems: 15
+> +    description:
+> +      List of parent interrupts, in the order that they are connected to this
+> +      interrupt router's outputs.
+
+Is that to support multiple SoCs? I'd expect a given SoC to have a
+fixed number of output interrupts.
+
+>  
+>    interrupt-controller: true
+>  
+> @@ -30,7 +38,21 @@ properties:
+>      const: 0
+>  
+>    interrupt-map:
+> -    description: Describes mapping from SoC interrupts to CPU interrupts
+> +    description:
+> +      List of <soc_int parent_phandle parent_args ...> tuples, where "soc_int"
+> +      is the interrupt input line number as provided by this controller.
+> +      "parent_phandle" and "parent_args" specify which parent interrupt this
+> +      line should be routed to. Note that interrupt specifiers should be
+> +      identical to the parents specified in the "interrupts" property.
+> +
+> +  realtek,output-valid-mask:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Optional bit mask indicating which outputs are connected to the parent
+> +      interrupts. The lowest set bit indicates which output line the first
+> +      interrupt from "interrupts" is connected to, the second lowest set bit
+> +      for the second interrupt, etc. If not provided, parent interrupts will be
+> +      assigned sequentially to the outputs.
+>  
+>  required:
+>    - compatible
+> @@ -39,6 +61,7 @@ required:
+>    - interrupt-controller
+>    - "#address-cells"
+>    - interrupt-map
+> +  - interrupts
+>
+>  additionalProperties: false
+>  
+> @@ -49,9 +72,14 @@ examples:
+>        #interrupt-cells = <1>;
+>        interrupt-controller;
+>        reg = <0x3000 0x20>;
+> +
+> +      interrupt-parent = <&cpuintc>;
+> +      interrupts = <1>, <2>, <5>;
+> +      realtek,output-valid-mask = <0x13>;
+
+What additional information does this bring? From the description
+above, this is all SW configurable, so why should this be described in
+the DT?
+
+> +
+>        #address-cells = <0>;
+>        interrupt-map =
+> -              <31 &cpuintc 2>,
+> -              <30 &cpuintc 1>,
+> -              <29 &cpuintc 5>;
+> +              <31 &cpuintc 2>, /* connect to cpuintc 2 via output 1 */
+> +              <30 &cpuintc 1>, /* connect to cpuintc 1 via output 0 */
+> +              <29 &cpuintc 5>; /* connect to cpuintc 5 via output 4 */
+>      };
+
+My conclusion here is that, as I stated in my initial review of this
+series, you could completely ignore the 3rd field of the map, and let
+the driver decide on the mapping without any extra information.
+
+We already have plenty of crossbar-type drivers in the tree that can
+mux a number of input to a number of outputs and route them
+accordingly to a set of parent interrupts. None of this requires to be
+described in DT.
+
+	M.
 
 -- 
-~Vinod
+Without deviation from the norm, progress is not possible.

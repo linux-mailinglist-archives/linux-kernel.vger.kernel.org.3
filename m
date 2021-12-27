@@ -2,105 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F269F480282
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 17:57:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83FAF480284
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 17:58:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbhL0Q5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 11:57:52 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:39869 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229644AbhL0Q5v (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 11:57:51 -0500
-Received: from [192.168.0.2] (ip5f5aea86.dynamic.kabel-deutschland.de [95.90.234.134])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 42C6E61EA1922;
-        Mon, 27 Dec 2021 17:57:49 +0100 (CET)
-Message-ID: <9a47b5ec-f2d1-94d9-3a48-9b326c88cfcb@molgen.mpg.de>
-Date:   Mon, 27 Dec 2021 17:57:48 +0100
+        id S229863AbhL0Q6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 11:58:17 -0500
+Received: from smtp08.smtpout.orange.fr ([80.12.242.130]:53902 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229644AbhL0Q6R (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 11:58:17 -0500
+Received: from pop-os.home ([86.243.171.122])
+        by smtp.orange.fr with ESMTPA
+        id 1tK8nHljvHQrl1tK9nV4EA; Mon, 27 Dec 2021 17:58:14 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Mon, 27 Dec 2021 17:58:14 +0100
+X-ME-IP: 86.243.171.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     kvalo@kernel.org, davem@davemloft.net, kuba@kernel.org
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] ath: dfs_pattern_detector: Avoid open coded arithmetic in memory allocation
+Date:   Mon, 27 Dec 2021 17:58:10 +0100
+Message-Id: <0fbcd32a0384ac1f87c5a3549e505e4becc60226.1640624216.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v3 0/9] Parallel CPU bringup for x86_64
-Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com
-References: <20211215145633.5238-1-dwmw2@infradead.org>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20211215145633.5238-1-dwmw2@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear David,
+kmalloc_array()/kcalloc() should be used to avoid potential overflow when
+a multiplication is needed to compute the size of the requested memory.
 
+kmalloc_array() can be used here instead of kcalloc() because the array is
+fully initialized in the next 'for' loop.
 
-Am 15.12.21 um 15:56 schrieb David Woodhouse:
-> Doing the INIT/SIPI/SIPI in parallel for all APs and *then* waiting for
-> them shaves about 80% off the AP bringup time on a 96-thread socket
-> Skylake box (EC2 c5.metal) — from about 500ms to 100ms.
-> 
-> There are more wins to be had with further parallelisation, but this is
-> the simple part.
-> 
-> v2: Cut it back to just INIT/SIPI/SIPI in parallel for now, nothing more
-> v3: Clean up x2apic patch, add MTRR optimisation, lock topology update
->      in preparation for more parallelisation.
-> 
-> 
-> David Woodhouse (8):
->        x86/apic/x2apic: Fix parallel handling of cluster_mask
->        cpu/hotplug: Move idle_thread_get() to <linux/smpboot.h>
->        cpu/hotplug: Add dynamic parallel bringup states before CPUHP_BRINGUP_CPU
->        x86/smpboot: Reference count on smpboot_setup_warm_reset_vector()
->        x86/smpboot: Split up native_cpu_up into separate phases and document them
->        x86/smpboot: Send INIT/SIPI/SIPI to secondary CPUs in parallel
->        x86/mtrr: Avoid repeated save of MTRRs on boot-time CPU bringup
->        x86/smpboot: Serialize topology updates for secondary bringup
-> 
-> Thomas Gleixner (1):
->        x86/smpboot: Support parallel startup of secondary CPUs
-> 
->   arch/x86/include/asm/realmode.h       |   3 +
->   arch/x86/include/asm/smp.h            |  13 +-
->   arch/x86/include/asm/topology.h       |   2 -
->   arch/x86/kernel/acpi/sleep.c          |   1 +
->   arch/x86/kernel/apic/apic.c           |   2 +-
->   arch/x86/kernel/apic/x2apic_cluster.c | 108 +++++++-----
->   arch/x86/kernel/cpu/common.c          |   6 +-
->   arch/x86/kernel/cpu/mtrr/mtrr.c       |   9 +
->   arch/x86/kernel/head_64.S             |  71 ++++++++
->   arch/x86/kernel/smpboot.c             | 324 ++++++++++++++++++++++++----------
->   arch/x86/realmode/init.c              |   3 +
->   arch/x86/realmode/rm/trampoline_64.S  |  14 ++
->   arch/x86/xen/smp_pv.c                 |   4 +-
->   include/linux/cpuhotplug.h            |   2 +
->   include/linux/smpboot.h               |   7 +
->   kernel/cpu.c                          |  27 ++-
->   kernel/smpboot.c                      |   2 +-
->   kernel/smpboot.h                      |   2 -
->   18 files changed, 441 insertions(+), 159 deletions(-)
+Finally, 'cd->detectors' is defined as 'struct pri_detector **detectors;'.
+So 'cd->detectors' and '*cd->detectors' are both some pointer.
+So use a more logical 'sizeof(*cd->detectors)'.
 
-Thank you for working on this. I tested this on a MSI MS-7A37/B350M 
-MORTAR (BIOS 1.MW 11/01/2021) with a Ryzen 3 2200G, but nothing was 
-printed to the screen after the GRUB loading messages, so it crashed or 
-hung somewhere. Unfortunately, this device is used by others, and no 
-serial console is connected and I do not know how to capture the Linux 
-log with other means.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/net/wireless/ath/dfs_pattern_detector.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/net/wireless/ath/dfs_pattern_detector.c b/drivers/net/wireless/ath/dfs_pattern_detector.c
+index 75cb53a3ec15..27f4d74a41c8 100644
+--- a/drivers/net/wireless/ath/dfs_pattern_detector.c
++++ b/drivers/net/wireless/ath/dfs_pattern_detector.c
+@@ -197,7 +197,7 @@ static void channel_detector_exit(struct dfs_pattern_detector *dpd,
+ static struct channel_detector *
+ channel_detector_create(struct dfs_pattern_detector *dpd, u16 freq)
+ {
+-	u32 sz, i;
++	u32 i;
+ 	struct channel_detector *cd;
+ 
+ 	cd = kmalloc(sizeof(*cd), GFP_ATOMIC);
+@@ -206,8 +206,8 @@ channel_detector_create(struct dfs_pattern_detector *dpd, u16 freq)
+ 
+ 	INIT_LIST_HEAD(&cd->head);
+ 	cd->freq = freq;
+-	sz = sizeof(cd->detectors) * dpd->num_radar_types;
+-	cd->detectors = kzalloc(sz, GFP_ATOMIC);
++	cd->detectors = kmalloc_array(dpd->num_radar_types,
++				      sizeof(*cd->detectors), GFP_ATOMIC);
+ 	if (cd->detectors == NULL)
+ 		goto fail;
+ 
+-- 
+2.32.0
 
-Kind regards,
-
-Paul

@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 232D94800FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CCD148009A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:47:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237248AbhL0PwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:52:03 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46066 "EHLO
+        id S240307AbhL0Pr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:47:29 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45084 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236444AbhL0Ppu (ORCPT
+        with ESMTP id S238016AbhL0PoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:45:50 -0500
+        Mon, 27 Dec 2021 10:44:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 57F79B810BF;
-        Mon, 27 Dec 2021 15:45:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87052C36AEE;
-        Mon, 27 Dec 2021 15:45:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0EFDDB810C5;
+        Mon, 27 Dec 2021 15:44:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2585EC36AEA;
+        Mon, 27 Dec 2021 15:44:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619948;
-        bh=yYLaS81s/3Fca2GhUspsFGbvMxax28YL/cDscsPIrBY=;
+        s=korg; t=1640619850;
+        bh=7CvqLTU0SnFLvZhWqamFCCCVPEv15CcrecQyE0GsY9U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2XrhfBee/4IBAwXXs94zvGCSkoyDieflW0565ZAZjVRqwqPa0/ZPGKRzZFOOIGxkb
-         Y96yNkQsjLUDi9auK9fqsJLTja2MQb9H2In5VSSKsC7KUWmRw66yYvzdyJEKQKCKTi
-         43uNN3JvxN3ufPPK/7RhupSznaOnAsFMu2ZYycFY=
+        b=S+Q6CI/BFPGnsode7kuBFk0x9tj+lKaA87pkWC0t8SslUfpHwJ2IYk3kLN/giZ2ZL
+         PlSnvMXGLi4n2yXr0uAVL2HyYCvQUfzK96vUNeaeTrl98zTvxytrWrNbXw7MEtQlQ9
+         83xD18PoV5qqNd5mpMsoPLnApbirVbtuwFSK/r6A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrew Cooper <andrew.cooper3@citrix.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@suse.de>
-Subject: [PATCH 5.15 083/128] x86/pkey: Fix undefined behaviour with PKRU_WD_BIT
-Date:   Mon, 27 Dec 2021 16:30:58 +0100
-Message-Id: <20211227151334.272749471@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH 5.15 084/128] platform/x86: amd-pmc: only use callbacks for suspend
+Date:   Mon, 27 Dec 2021 16:30:59 +0100
+Message-Id: <20211227151334.313259104@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
 References: <20211227151331.502501367@linuxfoundation.org>
@@ -46,52 +46,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Cooper <andrew.cooper3@citrix.com>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-commit 57690554abe135fee81d6ac33cc94d75a7e224bb upstream.
+commit 09fc14061f3ed28899c23b8714c066946fdbd43e upstream.
 
-Both __pkru_allows_write() and arch_set_user_pkey_access() shift
-PKRU_WD_BIT (a signed constant) by up to 30 bits, hitting the
-sign bit.
+This driver is intended to be used exclusively for suspend to idle
+so callbacks to send OS_HINT during hibernate and S5 will set OS_HINT
+at the wrong time leading to an undefined behavior.
 
-Use unsigned constants instead.
-
-Clearly pkey 15 has not been used in combination with UBSAN yet.
-
-Noticed by code inspection only.  I can't actually provoke the
-compiler into generating incorrect logic as far as this shift is
-concerned.
-
-[
-  dhansen: add stable@ tag, plus minor changelog massaging,
-
-           For anyone doing backports, these #defines were in
-	   arch/x86/include/asm/pgtable.h before 784a46618f6.
-]
-
-Fixes: 33a709b25a76 ("mm/gup, x86/mm/pkeys: Check VMAs and PTEs for protection keys")
-Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
 Cc: stable@vger.kernel.org
-Link: https://lkml.kernel.org/r/20211216000856.4480-1-andrew.cooper3@citrix.com
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Link: https://lore.kernel.org/r/20211210143529.10594-1-mario.limonciello@amd.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/pkru.h |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/platform/x86/amd-pmc.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/arch/x86/include/asm/pkru.h
-+++ b/arch/x86/include/asm/pkru.h
-@@ -4,8 +4,8 @@
+--- a/drivers/platform/x86/amd-pmc.c
++++ b/drivers/platform/x86/amd-pmc.c
+@@ -375,7 +375,8 @@ static int __maybe_unused amd_pmc_resume
+ }
  
- #include <asm/fpu/xstate.h>
+ static const struct dev_pm_ops amd_pmc_pm_ops = {
+-	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(amd_pmc_suspend, amd_pmc_resume)
++	.suspend_noirq = amd_pmc_suspend,
++	.resume_noirq = amd_pmc_resume,
+ };
  
--#define PKRU_AD_BIT 0x1
--#define PKRU_WD_BIT 0x2
-+#define PKRU_AD_BIT 0x1u
-+#define PKRU_WD_BIT 0x2u
- #define PKRU_BITS_PER_PKEY 2
- 
- #ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
+ static const struct pci_device_id pmc_pci_ids[] = {
 
 

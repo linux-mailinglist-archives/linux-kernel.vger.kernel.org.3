@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D2647FF55
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:37:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 232D94800FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238320AbhL0Pgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:36:48 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35012 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238211AbhL0PeH (ORCPT
+        id S237248AbhL0PwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:52:03 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46066 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236444AbhL0Ppu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:34:07 -0500
+        Mon, 27 Dec 2021 10:45:50 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 57CBD610B1;
-        Mon, 27 Dec 2021 15:34:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A440C36AE7;
-        Mon, 27 Dec 2021 15:34:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57F79B810BF;
+        Mon, 27 Dec 2021 15:45:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87052C36AEE;
+        Mon, 27 Dec 2021 15:45:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619246;
-        bh=ZyuiVijWJmMxjvpxQsyz4dR2xVRaSuj9WJ1XVC/2Krc=;
+        s=korg; t=1640619948;
+        bh=yYLaS81s/3Fca2GhUspsFGbvMxax28YL/cDscsPIrBY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lWz+9gZAaAMGe4fusKQFIq3lJRWvuTTkyrdrr3qtCvHlViSrDhp587uFVO5n7979f
-         lSi4Lko/vTZYEbg3lSUhFZSjMftjr3PqyLpWMYKvVrFX1954gU/xi+Z2iAUTy3Qg4D
-         HEIEFHbOdYPAhjlxR7uc9ipHEdniDMUDFezq8FPQ=
+        b=2XrhfBee/4IBAwXXs94zvGCSkoyDieflW0565ZAZjVRqwqPa0/ZPGKRzZFOOIGxkb
+         Y96yNkQsjLUDi9auK9fqsJLTja2MQb9H2In5VSSKsC7KUWmRw66yYvzdyJEKQKCKTi
+         43uNN3JvxN3ufPPK/7RhupSznaOnAsFMu2ZYycFY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaoke Wang <xkernel.wang@foxmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.19 21/38] ALSA: jack: Check the return value of kstrdup()
+        stable@vger.kernel.org, Andrew Cooper <andrew.cooper3@citrix.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH 5.15 083/128] x86/pkey: Fix undefined behaviour with PKRU_WD_BIT
 Date:   Mon, 27 Dec 2021 16:30:58 +0100
-Message-Id: <20211227151320.076319922@linuxfoundation.org>
+Message-Id: <20211227151334.272749471@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
-References: <20211227151319.379265346@linuxfoundation.org>
+In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
+References: <20211227151331.502501367@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,33 +46,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+From: Andrew Cooper <andrew.cooper3@citrix.com>
 
-commit c01c1db1dc632edafb0dff32d40daf4f9c1a4e19 upstream.
+commit 57690554abe135fee81d6ac33cc94d75a7e224bb upstream.
 
-kstrdup() can return NULL, it is better to check the return value of it.
+Both __pkru_allows_write() and arch_set_user_pkey_access() shift
+PKRU_WD_BIT (a signed constant) by up to 30 bits, hitting the
+sign bit.
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/tencent_094816F3522E0DC704056C789352EBBF0606@qq.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Use unsigned constants instead.
+
+Clearly pkey 15 has not been used in combination with UBSAN yet.
+
+Noticed by code inspection only.  I can't actually provoke the
+compiler into generating incorrect logic as far as this shift is
+concerned.
+
+[
+  dhansen: add stable@ tag, plus minor changelog massaging,
+
+           For anyone doing backports, these #defines were in
+	   arch/x86/include/asm/pgtable.h before 784a46618f6.
+]
+
+Fixes: 33a709b25a76 ("mm/gup, x86/mm/pkeys: Check VMAs and PTEs for protection keys")
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: stable@vger.kernel.org
+Link: https://lkml.kernel.org/r/20211216000856.4480-1-andrew.cooper3@citrix.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/jack.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ arch/x86/include/asm/pkru.h |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/sound/core/jack.c
-+++ b/sound/core/jack.c
-@@ -234,6 +234,10 @@ int snd_jack_new(struct snd_card *card,
- 		return -ENOMEM;
+--- a/arch/x86/include/asm/pkru.h
++++ b/arch/x86/include/asm/pkru.h
+@@ -4,8 +4,8 @@
  
- 	jack->id = kstrdup(id, GFP_KERNEL);
-+	if (jack->id == NULL) {
-+		kfree(jack);
-+		return -ENOMEM;
-+	}
+ #include <asm/fpu/xstate.h>
  
- 	/* don't creat input device for phantom jack */
- 	if (!phantom_jack) {
+-#define PKRU_AD_BIT 0x1
+-#define PKRU_WD_BIT 0x2
++#define PKRU_AD_BIT 0x1u
++#define PKRU_WD_BIT 0x2u
+ #define PKRU_BITS_PER_PKEY 2
+ 
+ #ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
 
 

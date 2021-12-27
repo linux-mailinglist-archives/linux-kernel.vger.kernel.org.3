@@ -2,78 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6149347FC8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 13:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9007347FC91
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 13:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236634AbhL0MTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 07:19:30 -0500
-Received: from www381.your-server.de ([78.46.137.84]:59334 "EHLO
-        www381.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236628AbhL0MT2 (ORCPT
+        id S236657AbhL0MUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 07:20:16 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60198 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236647AbhL0MUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 07:19:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-         s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=bfPvK+uNfy/fPdeX5y49ljPp7IGjMAd0LS6/Rm/FA+M=; b=Ow2aVqdbToumpaIzYajJkeOxix
-        nkcI7oznvYrgTXz9ESLbCfQpUiYwgjWCDYXLfShdxsW5Z83aMUOTE1tDDXjrY01NB134T+8hRwqGS
-        VcV1k+dlgW9J6e6Pu/3qMjAAayR2H6vtzEJZSbWlXlzz6nEpsx9eXIwBNuAh6sCgvhHRznnSmDy7J
-        cN1wIRq/RSW3/PCo7rj/1cOcbCoxNC00GfbVvpUnBS0U8oNSFlhc+55QNLMcXm2ppyFlIqNAfFZv+
-        BPPIbxIVTAPBYWRUzCCTIKxJKEcMgYqgquR9Uo4931bXKUFUxjqc2oZGKLCw9JrH4H/hrVdfaZ+G9
-        g0pphspA==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www381.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <lars@metafoo.de>)
-        id 1n1oyM-000AKd-GN; Mon, 27 Dec 2021 13:19:26 +0100
-Received: from [2001:a61:2bc8:8501:9e5c:8eff:fe01:8578]
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1n1oyM-000553-9Z; Mon, 27 Dec 2021 13:19:26 +0100
-Subject: Re: [PATCH v2 15/23] counter: 104-quad-8: Convert to new counter
- registration
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>
-Cc:     kernel@pengutronix.de,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Syed Nayyar Waris <syednwaris@gmail.com>
-References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
- <20211227094526.698714-16-u.kleine-koenig@pengutronix.de>
-From:   Lars-Peter Clausen <lars@metafoo.de>
-Message-ID: <406d627c-5eb3-b052-6d91-e37933584ed1@metafoo.de>
-Date:   Mon, 27 Dec 2021 13:19:25 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 27 Dec 2021 07:20:11 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F399660F3E;
+        Mon, 27 Dec 2021 12:20:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5A38EC36AEA;
+        Mon, 27 Dec 2021 12:20:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640607610;
+        bh=SQrMEFYra9C4BRKy+1neHE0XyzVXDOv1jiQv0Jv6oN4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Nx0H8CTcdCM68qp/B5BCcCDX74G4OZQO0/qC1muxILT+vFEe9eEUoW5jFK7DkZ8/+
+         6CVurzmLO9jkNMEiMlgVbqzSN1P8FgISVYSoxEbAXtyLrK9n0sGh9Ib9J/puI2l1oU
+         3XbstqNr1dNZ1fNVPaRr420Fe/0o6rG22MiFMz1yhBMPaVhsJJLneXBCJ+3eC6fwlo
+         UncnHCXGnIhv2hBGZcuUJ+DXXRB/X12d7M/zqOooVpZ4bBB5XEbMHClK8uOe+UcKGn
+         2CHMv26MCROBeZekjtMBiFRayqv5XxqoRsxF3S43L+par774XRoxeFFZNoIL4WQVBO
+         TZSFCB4ayIjHg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3F7D8C395E7;
+        Mon, 27 Dec 2021 12:20:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20211227094526.698714-16-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.3/26404/Mon Dec 27 10:34:40 2021)
+Subject: Re: [PATCH net-next] net: lan966x: Fix the vlan used by host ports
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164060761025.26361.3395221354789370724.git-patchwork-notify@kernel.org>
+Date:   Mon, 27 Dec 2021 12:20:10 +0000
+References: <20211223140113.1954778-1-horatiu.vultur@microchip.com>
+In-Reply-To: <20211223140113.1954778-1-horatiu.vultur@microchip.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, davem@davemloft.net, kuba@kernel.org,
+        linux@armlinux.org.uk, f.fainelli@gmail.com,
+        vivien.didelot@gmail.com, vladimir.oltean@nxp.com, andrew@lunn.ch
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/27/21 10:45 AM, Uwe Kleine-König wrote:
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 23 Dec 2021 15:01:13 +0100 you wrote:
+> The blamed commit changed the vlan used by the host ports to be 4095
+> instead of 0.
+> Because of this change the following issues are seen:
+> - when the port is probed first it was adding an entry in the MAC table
+>   with the wrong vlan (port->pvid which is default 0) and not HOST_PVID
+> - when the port is removed from a bridge, it was using the wrong vlan to
+>   add entries in the MAC table. It was using the old PVID and not the
+>   HOST_PVID
+> 
 > [...]
->   
-> -	return devm_counter_register(dev, &priv->counter);
-> +	err = devm_counter_add(dev, counter);
-> +	if (err < 0)
-> +		return dev_err_probe(dev, err, "Failed to add counter\n");
-I wonder if we should put that dev_err_probe into the devm_counter_add 
-since every driver wants to have it anyway.
-> +
-> +	return 0;
->   }
->   
->   static struct isa_driver quad8_driver = {
+
+Here is the summary with links:
+  - [net-next] net: lan966x: Fix the vlan used by host ports
+    https://git.kernel.org/netdev/net-next/c/0c94d657d2a4
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 

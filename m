@@ -2,123 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A11F47FBD1
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49ED947FBD7
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236020AbhL0KYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 05:24:01 -0500
-Received: from mail-ua1-f42.google.com ([209.85.222.42]:39838 "EHLO
-        mail-ua1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236007AbhL0KYA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 05:24:00 -0500
-Received: by mail-ua1-f42.google.com with SMTP id i6so25903491uae.6
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 02:24:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FxvHM5LXWgpwB0/ROzr9DivWkvp9xs4dkuW1sRHIHm0=;
-        b=Rb4V/wLksXfO5kdEfRBWsFe8dmbyFEz8P85npGTngeEQ7+oUqUKfrp/B8OmO8FFacv
-         LcQZUuGSs6Zo8f06YqevGd4UHFpyAWgKG5ZZw759n20sGjg0F0NrO+bY7RfqpLPmbZrN
-         7Y9OBDvoNZeumCOfeuwLalQOpOszOi0LZR+4hZLEgd0NfPdMclwWzXb8pHp4dtGdx1Vl
-         3EDtAa18cBQC4FMlyA2fNrF0LhjzgmGY8JAKb2JPvOLjNy3gty7q8zz4Q8WRdO5Q5V1W
-         8uwaDDWb/CrlLP2bXxIy4eC+xXyXHiZg8f3R9OWsTS+b6LDLRL2gSQS4vxb05aE5DAiq
-         P5+g==
-X-Gm-Message-State: AOAM532dbRoFjq7MiEIq0s5Ow8RAj/gSp1zuMkA7V0hPpuky7ylxQwvc
-        qzu7+GCwe/9RlqNNngsPueH3QNOJtfvPOQ==
-X-Google-Smtp-Source: ABdhPJw8JC5VzgsajS0Ptd7ftDU3+9Buiso7ljMVFtUR8Pel9EOJzZbanhvdzRQOjcNaoV++CKNwDg==
-X-Received: by 2002:a05:6102:1358:: with SMTP id j24mr4327156vsl.60.1640600639592;
-        Mon, 27 Dec 2021 02:23:59 -0800 (PST)
-Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com. [209.85.221.177])
-        by smtp.gmail.com with ESMTPSA id i28sm2959195vkr.16.2021.12.27.02.23.59
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Dec 2021 02:23:59 -0800 (PST)
-Received: by mail-vk1-f177.google.com with SMTP id u1so8189220vkn.10
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 02:23:59 -0800 (PST)
-X-Received: by 2002:a1f:9f04:: with SMTP id i4mr4534025vke.33.1640600638844;
- Mon, 27 Dec 2021 02:23:58 -0800 (PST)
+        id S236077AbhL0KcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 05:32:10 -0500
+Received: from mail.logobject.ch ([81.7.230.227]:38144 "EHLO mail.logobject.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236006AbhL0KcJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 05:32:09 -0500
+X-Greylist: delayed 301 seconds by postgrey-1.27 at vger.kernel.org; Mon, 27 Dec 2021 05:32:09 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=logobject.ch; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
+         references;
+        bh=5fEbQ2oMVXJSMSAMMcAJm5+tGJT29UQz99w7q0SAdE0=;
+        b=hKG15/Tov3EU3MBDzc8PEPvzQt2YvrPlSZZNCDX5NKgd6f8fCjgLWmQ+RlCShiOBCeSEwZWKyiJSn
+         0vXLtsBONxxjMNrybZ1y1K0Z25cOOm4hleP3ujSc4MqctIYeubFuzVXD63+lZKc4Uxbc6og7udu/iL
+         oyylxf15RogrPH6WADjZwmDOafjbvKCUYAwwWqyud+mCK3g/f3gOp05ULFlzUFNhISh3szaeHvlN6k
+         w1UOpiJ9KAQGm8wsWYJhHb+iJfKQeBqOtoDOKl6w1+wUkQTzL9JyzgqCOWqhxZhHdZchsBx5AOARAV
+         CoDpGQq1eIcfp9CPCg7ADx1I9XuY5Dw==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.1.1366, Stamp: 3], Multi: [Enabled, t: (0.000004,0.010844)], BW: [Enabled, t: (0.000014)], RTDA: [Enabled, t: (0.027613), Hit: No, Details: v2.19.0; Id: 15.52k9jh.1fntmrog8.2eu8c], total: 0(700)
+X-Spam-Status: No, hits=0.0 required=5.0
+        tests=KERIO_ANTI_SPAM: -0.000, AWL: 0.013, BAYES_00: -1.665,
+        CUSTOM_RULE_FROM: ALLOW, TOTAL_SCORE: -1.652,autolearn=ham
+X-Spam-Level: 
+X-Footer: bG9nb2JqZWN0LmNo
+Received: from [192.168.112.4] ([217.22.138.64])
+        (authenticated user ortwin.glueck@logobject.ch)
+        by mail.logobject.ch with ESMTPSA
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits));
+        Mon, 27 Dec 2021 11:27:00 +0100
+Content-Type: multipart/mixed; boundary="------------qTCOCjEB9Hs4u3nABFvx3MFz"
+Message-ID: <b0f6f66b-28aa-9d43-0aab-e6887ee0fda8@logobject.ch>
+Date:   Mon, 27 Dec 2021 11:26:59 +0100
 MIME-Version: 1.0
-References: <20211215234946.6494-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAHp75VfGwQ7G2b39GO4tN=sxQoiahO2uudy25ALxEkrNcP9eVw@mail.gmail.com>
- <CA+V-a8t1myOt0rhJExem_T2tJUM3PLL9KuXn0=_LtucJPHLkbA@mail.gmail.com>
- <CAHp75VdXKVAZMKqC=0RbkAKKxFsdcxBc0M3N6OQMivHj-w+DHw@mail.gmail.com>
- <CA+V-a8vbsy94MvRpqWQQuRqfEGiX_ZZTTt+dr0r6qnnJAPaEmA@mail.gmail.com>
- <CAHp75VfvOOzwcTBjYg3OzbbdhcpWfaPWZ0h7HZRFOPEQAQMT=A@mail.gmail.com>
- <CAMuHMdWSAOEAvqvr1UqKKmVDMzY3Tb8Y_4XowFPBN6L3TESqYA@mail.gmail.com>
- <CAHp75Vc2puj45n_wMY50OnDemNmFFu-yepCC9_L+DWp1HAzxPw@mail.gmail.com>
- <CAMuHMdUDts8LWYrftYp0VSxDX8kaP1a9N5YGZDNCAuAsr84EAw@mail.gmail.com> <CAHp75VeitNg_fU22UkNGSYpAhtQaba1Scd3CPO0QmRpjkqmSMA@mail.gmail.com>
-In-Reply-To: <CAHp75VeitNg_fU22UkNGSYpAhtQaba1Scd3CPO0QmRpjkqmSMA@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 27 Dec 2021 11:23:47 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXpynBNC994vTo8tUc4bcD3HVzb3voNPJS1L8A0MRnyHQ@mail.gmail.com>
-Message-ID: <CAMuHMdXpynBNC994vTo8tUc4bcD3HVzb3voNPJS1L8A0MRnyHQ@mail.gmail.com>
-Subject: Re: [PATCH] irqchip/renesas-irqc: Use platform_get_irq_optional() to
- get the interrupt
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+From:   =?UTF-8?Q?Ortwin_Gl=c3=bcck?= <ortwin.glueck@logobject.ch>
+Subject: [PATCH] fix 5.15 init regression for Intel Bluetooth
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-bluetooth@vger.kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+References: <856c5dc7-9fb4-8438-3451-7b369832056a@odi.ch>
+Content-Language: en-US
+In-Reply-To: <856c5dc7-9fb4-8438-3451-7b369832056a@odi.ch>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+This is a multi-part message in MIME format.
+--------------qTCOCjEB9Hs4u3nABFvx3MFz
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Dec 27, 2021 at 11:10 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Mon, Dec 27, 2021 at 12:02 PM Geert Uytterhoeven
-> <geert@linux-m68k.org> wrote:
-> > On Mon, Dec 27, 2021 at 10:57 AM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
-> > > On Mon, Dec 27, 2021 at 11:45 AM Geert Uytterhoeven
-> > > <geert@linux-m68k.org> wrote:
-> > > > On Sun, Dec 26, 2021 at 9:49 AM Andy Shevchenko
-> > > > <andy.shevchenko@gmail.com> wrote:
-> > > > > On Sun, Dec 26, 2021 at 1:59 AM Lad, Prabhakar
-> > > > > <prabhakar.csengg@gmail.com> wrote:
-> > > > > > When will this patch be merged for the new api, so that I can base my
-> > > > > > patches on top of it to avoid more changes?
-> > > > >
-> > > > > You can simply imply that, I dunno when it gets merged (from my point
-> > > > > of view the users should be fixed first, and since you are adding
-> > > > > users, the burden is increasing).
-> > > >
-> > > > Not only users (drivers), but also providers (architecture-specific code).
-> > > > IRQ zero is still valid on some architectures, e.g. on SH[1].
-> > >
-> > > Are we talking about vIRQ?
-> > > And users are fine with a big warning?
-> >
-> > The warning is only seen when a driver uses platorm_get_irq{,_optional}().
-> > There are several other ways to obtain interrupts, avoiding the
-> > big warning.
->
-> Forgot to comment on this, then why is it a problem to allow
-> platfiorm_get_irq_optional() use 0 for no IRQ?
-> So, it seems you gave me a good justification for my way :-)
 
-In se that is not a problem, assumed by now everybody should have
-seen the warning, right?  Unfortunately that assumption is probably
-not true, as people may not upgrade their kernel, cfr. my SH Ethernet
-example.
+Hi
 
-Apart from that, any new conversion to platfiorm_get_irq_optional()
-might cause a regression on an obscure platform still using IRQ0.
+On all 5.15 kernels the Intel Bluetooth no longer works. All was fine in 5.14.
+Apparently the quirk is needed for this device.
 
-Gr{oetje,eeting}s,
+vanilla 5.15.5:
+    Bluetooth: hci0: Reading Intel version command failed (-110)
+    Bluetooth: hci0: command tx timeout
 
-                        Geert
+with patch:
+    Bluetooth: hci0: Legacy ROM 2.5 revision 1.0 build 3 week 17 2014
+    Bluetooth: hci0: Intel device is already patched. patch num: 32
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Please apply to stable too.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks
+
+Ortwin
+--------------qTCOCjEB9Hs4u3nABFvx3MFz
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-Bluetooth-btusb-Add-init-quitk.patch"
+Content-Disposition: attachment;
+ filename="0001-Bluetooth-btusb-Add-init-quitk.patch"
+Content-Transfer-Encoding: base64
+
+RnJvbSBmYjcyMTk4ODQyNWZmZDQwZTA5NjAzYTNlOGIxNDFjMGI0NmI3NGUwIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiA9P1VURi04P3E/T3J0d2luPTIwR2w9QzM9QkNjaz89
+IDxvZGlAb2RpLmNoPgpEYXRlOiBTYXQsIDQgRGVjIDIwMjEgMTQ6MjU6NTYgKzAxMDAKU3Vi
+amVjdDogW1BBVENIXSBCbHVldG9vdGg6IGJ0dXNiOiBBZGQgaW5pdCBxdWl0awpNSU1FLVZl
+cnNpb246IDEuMApDb250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKQ29u
+dGVudC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAoKRml4ZXMgdGhlIGJvb3QgcmVncmVzc2lv
+biBhZ2FpbnN0IDUuMTQ6CiBCbHVldG9vdGg6IGhjaTA6IFJlYWRpbmcgSW50ZWwgdmVyc2lv
+biBjb21tYW5kIGZhaWxlZCAoLTExMCkKIEJsdWV0b290aDogaGNpMDogY29tbWFuZCB0eCB0
+aW1lb3V0CgpTaWduZWQtb2ZmLWJ5OiBPcnR3aW4gR2zDvGNrIDxvZGlAb2RpLmNoPgpDYzog
+c3RhYmxlQHZnZXIua2VybmVsLm9yZwotLS0KIGRyaXZlcnMvYmx1ZXRvb3RoL2J0dXNiLmMg
+fCAzICsrLQogMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigt
+KQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvYmx1ZXRvb3RoL2J0dXNiLmMgYi9kcml2ZXJzL2Js
+dWV0b290aC9idHVzYi5jCmluZGV4IDc5ZDBkYjU0MmRhMy4uMjMyY2ZjYjQxNzM0IDEwMDY0
+NAotLS0gYS9kcml2ZXJzL2JsdWV0b290aC9idHVzYi5jCisrKyBiL2RyaXZlcnMvYmx1ZXRv
+b3RoL2J0dXNiLmMKQEAgLTM2Niw3ICszNjYsOCBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHVz
+Yl9kZXZpY2VfaWQgYmxhY2tsaXN0X3RhYmxlW10gPSB7CiAJeyBVU0JfREVWSUNFKDB4ODA4
+NywgMHgwN2RhKSwgLmRyaXZlcl9pbmZvID0gQlRVU0JfQ1NSIH0sCiAJeyBVU0JfREVWSUNF
+KDB4ODA4NywgMHgwN2RjKSwgLmRyaXZlcl9pbmZvID0gQlRVU0JfSU5URUxfQ09NQklORUQg
+fAogCQkJCQkJICAgICBCVFVTQl9JTlRFTF9CUk9LRU5fSU5JVElBTF9OQ01EIH0sCi0JeyBV
+U0JfREVWSUNFKDB4ODA4NywgMHgwYTJhKSwgLmRyaXZlcl9pbmZvID0gQlRVU0JfSU5URUxf
+Q09NQklORUQgfSwKKwl7IFVTQl9ERVZJQ0UoMHg4MDg3LCAweDBhMmEpLCAuZHJpdmVyX2lu
+Zm8gPSBCVFVTQl9JTlRFTF9DT01CSU5FRCB8CisJCQkJCQkgICAgIEJUVVNCX0lOVEVMX0JS
+T0tFTl9JTklUSUFMX05DTUQgfSwKIAl7IFVTQl9ERVZJQ0UoMHg4MDg3LCAweDBhMmIpLCAu
+ZHJpdmVyX2luZm8gPSBCVFVTQl9JTlRFTF9DT01CSU5FRCB9LAogCXsgVVNCX0RFVklDRSgw
+eDgwODcsIDB4MGFhNyksIC5kcml2ZXJfaW5mbyA9IEJUVVNCX0lOVEVMX0NPTUJJTkVEIH0s
+CiAJeyBVU0JfREVWSUNFKDB4ODA4NywgMHgwYWFhKSwgLmRyaXZlcl9pbmZvID0gQlRVU0Jf
+SU5URUxfQ09NQklORUQgfSwKLS0gCjIuMzIuMAoK
+--------------qTCOCjEB9Hs4u3nABFvx3MFz--
+
+

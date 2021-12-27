@@ -2,95 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7F3480186
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 17:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BECD48018A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 17:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234149AbhL0QSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 11:18:47 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:37655 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231254AbhL0QSq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 11:18:46 -0500
-Received: from [192.168.0.2] (ip5f5aea86.dynamic.kabel-deutschland.de [95.90.234.134])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 3A10361EA1922;
-        Mon, 27 Dec 2021 17:18:45 +0100 (CET)
-Message-ID: <41f9d4f9-eb3a-7a5d-3d69-5361dd9124fc@molgen.mpg.de>
-Date:   Mon, 27 Dec 2021 17:18:44 +0100
+        id S235222AbhL0QVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 11:21:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47518 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231254AbhL0QVc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 11:21:32 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFE1C06173E;
+        Mon, 27 Dec 2021 08:21:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=RSEhGp8eMqXQRr+8UPnF+WguCciA3JX0Md7WUMkePUo=; b=ni+9alY6BXaeUBEkhjtRG7Z1KY
+        VaYrtW/eg4v+NkdveUv1ZkEwl3+GqdtKwA9HdaflPQRA5afQX0/jrH0QodRNeqGohPbUyf3jmSNFd
+        K/T9YeXw5C89URjTY0Fa/huBgaJznW/c8LNbrrvMyLWGkG5QW/N7WAc4/VC+ZjaztxUF/EkLR/YI2
+        8iW1dkRYiXya/zVKl08XslB8RKJSpDPCEyAPVs6rK0x+6sJXlQlje9/+LPZ3sOptUrLd5oTDwBdJy
+        5WXTjjx7SzfCpa2nklXCG2faprJk2L/DAzYUFn2lPpnJIzkVZag+vokBGSTnh87Bz4PUbnk/9H8Dr
+        5xvvuw/Q==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56460)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1n1skY-0001Fb-Ty; Mon, 27 Dec 2021 16:21:26 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1n1skU-0008H4-RQ; Mon, 27 Dec 2021 16:21:22 +0000
+Date:   Mon, 27 Dec 2021 16:21:22 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v3] net: ethernet: mtk_eth_soc: implement Clause 45 MDIO
+ access
+Message-ID: <YcnoAscVe+2YILT8@shell.armlinux.org.uk>
+References: <YcjsFnbg87o45ltd@lunn.ch>
+ <YcjjzNJ159Bo1xk7@lunn.ch>
+ <YcjlMCacTTJ4RsSA@shell.armlinux.org.uk>
+ <YcjepQ2fmkPZ2+pE@makrotopia.org>
+ <YcnlMtninjjjPhjI@makrotopia.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Felix Singer <felixsinger@posteo.net>,
-        Matt DeVillier <matt.devillier@gmail.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Upstream support of Google Chromebook keyboards (udev,
- xkeyboard-config)?
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YcnlMtninjjjPhjI@makrotopia.org>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux folks,
+On Mon, Dec 27, 2021 at 04:09:22PM +0000, Daniel Golle wrote:
+> Implement read and write access to IEEE 802.3 Clause 45 Ethernet
+> phy registers.
+> Tested on the Ubiquiti UniFi 6 LR access point featuring
+> MediaTek MT7622BV WiSoC with Aquantia AQR112C.
+> 
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> ---
+> v3: return -1 instead of 0xffff on error in _mtk_mdio_write
 
+Oh no, not this "-1 disease" again.
 
-Installing a non-Chromium OS distribution like Debian on a Google 
-Chromebook, in this case a Dell Latitude 5400 Chrome (google/sarien), 
-not all keys work as expected.
+        eth->mii_bus->write = mtk_mdio_write;
 
-1.  Non-working super key and two function keys on Google Chromebook 
-Dell Latitute 5400 Chrome (google/sarien) [1]
-2.  Wrong caps lock key and function key mappings on Google Chromebook 
-Dell Latitute 5400 Chrome (google/sarien) [2]
+static int mtk_mdio_write(struct mii_bus *bus, int phy_addr,
+                          int phy_reg, u16 val)
+{
+        struct mtk_eth *eth = bus->priv;
 
-Peter replied, this should be fixed in udev, so it’s not directly 
-related to the Linux kernel, as the Linux kernel exposes the 
-scancodes(?) just fine. But what is the upstream process for this in 
-general? Chromium OS carries `91-chromeos-keyboard.rules` for example.
+        return _mtk_mdio_write(eth, phy_addr, phy_reg, val);
+}
 
-systemd/udev currently has an entry for two Google Chromebook models in 
-`hwdb.d/60-keyboard.hwdb` [4]:
+This means if you return -1 from _mtk_mdio_write() (which for some
+strange reason returns a u32, not an "int") then you actually end
+up returning -EPERM. This is not an appropriate errno code.
 
-     ######################### FIXED MODEL DEVICES 
-#############################
-     # This section lists devices which require special handling in 
-their key
-     # code to keysym mapping by setting the xkb model.
-     # The model must be an xkb compatible model (defined with 
-XKB_FIXED_MODEL).
+As a general rule of thumb, if you're returning an "int" and wish
+to return "this failed" then always return an appropriate negative
+errno code in the kernel so there isn't any possibility of
+accidentially returning -EPERM through using "return -1".
 
-     # Chromebooks
-     evdev:atkbd:dmi:bvn*:bvr*:bd*:svnHewlett-Packard*:pnFalco:pvr*
-     evdev:atkbd:dmi:bvn*:bvr*:bd*:svnAcer*:pnPeppy:pvr*
-      XKB_FIXED_MODEL="chromebook"
+This driver needs fixing _both_ due to returning -1, and also the
+return type from both _mtk_mdio_write() and _mtk_mdio_read().
 
-The Dell Chromebooks, unfortunately, also use the embedded controller 
-with Dell’s proprietary firmware (Wilco(?)), and not Chrome EC making 
-special handling necessary. `91-chromeos-keyboard.rules` has
+To see why it's important to return a proper error code, see
+drivers/net/phy/phy_device.c::get_phy_c22_id() where -ENODEV and
+-EIO are specifically checked. Any other negative value here will
+stop the bus being scanned and cause the bus to be torn down.
 
-     # Wilco keyboard (5220W-C) for Chrome OS
-     SUBSYSTEM=="input", \
-       ATTRS{idVendor}=="413c", ATTRS{idProduct}=="2510", \
-       ENV{CROS_KEYBOARD_TOP_ROW_LAYOUT}="3", \
-       ENV{ID_INPUT_KEYBOARD}="1"
+Thanks.
 
-
-Kind regards,
-
-Paul
-
-
-[1]: 
-https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config/-/issues/298
-[2]: 
-https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config/-/issues/299
-[3]: 
-https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/783bd8563450d9e9e575323a83321fdc67e334bf/sys-fs/udev/files/91-chromeos-keyboard.rules
-[4]: 
-https://github.com/systemd/systemd/commit/d7d31692bf7cde5dce7f4ed3cae429a5b302a9f0?branch=d7d31692bf7cde5dce7f4ed3cae429a5b302a9f0
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

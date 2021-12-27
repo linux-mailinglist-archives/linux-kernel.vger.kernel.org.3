@@ -2,110 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F094804C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 22:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9FB54804C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 22:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233352AbhL0VP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 16:15:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbhL0VP6 (ORCPT
+        id S233382AbhL0VQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 16:16:35 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:40002 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229811AbhL0VQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 16:15:58 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858C6C06173E;
-        Mon, 27 Dec 2021 13:15:58 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 83A6C1EC0136;
-        Mon, 27 Dec 2021 22:15:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640639752;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=v89L9YrJVb3sx+iZgfHzW+0wtMeZVlTyazLamFsjbXw=;
-        b=dOsOj1SyKWdxG+yORljCuoUxeC7qOlw5X4AVLrYbrN9HSyOnBDgKGse8hz/MmHJ3AVOogI
-        9EFlR+1pm5vXBx16RO/9jH9kOWmpk0/RgpD4LA5H5NebihZex2t/Gc0/Bac5RY0i1N9iCt
-        VkbKmKamSEaC25+CKyzWfCp9IzVc5lE=
-Date:   Mon, 27 Dec 2021 22:15:55 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     =?utf-8?B?5byg5a2Q5YuLKFpoYW5nIFppeHVuKQ==?= <zhangzixun1@oppo.com>
-Cc:     "tony.luck@intel.com" <tony.luck@intel.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: A stack overflow found in flags_write()
-Message-ID: <YcotC4QE29+GGUey@zn.tnic>
-References: <TY2PR02MB2815A59F6B963F9C068CBB8A8E429@TY2PR02MB2815.apcprd02.prod.outlook.com>
- <YcnePfF1OOqoQwrX@zn.tnic>
+        Mon, 27 Dec 2021 16:16:34 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id C77A31C0B80; Mon, 27 Dec 2021 22:16:32 +0100 (CET)
+Date:   Mon, 27 Dec 2021 22:16:32 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 4.4 00/17] 4.4.297-rc1 review
+Message-ID: <20211227211632.GA12777@duo.ucw.cz>
+References: <20211227151315.962187770@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="8t9RHnE3ZwKMSgU+"
 Content-Disposition: inline
-In-Reply-To: <YcnePfF1OOqoQwrX@zn.tnic>
+In-Reply-To: <20211227151315.962187770@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As to the issue at hand, that was a good catch - I was just able to
-trigger it so I wrote a proper patch for you.
 
-Lemme know if you're ok with it - I'll queue it soon.
+--8t9RHnE3ZwKMSgU+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thx.
+Hi!
 
----
-From: Zhang Zixun <zhang133010@icloud.com>
-Date: Mon, 27 Dec 2021 22:02:49 +0100
-Subject: [PATCH] x86/mce/inject: Avoid out-of-bounds write when setting flags
+> This is the start of the stable review cycle for the 4.4.297 release.
+> There are 17 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-A contrived zero-length write, for example, by using write(2):
+CIP testing did not find any problems here:
 
-  ...
-  ret = write(fd, str, 0);
-  ...
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+4.4.y
 
-to the "flags" file causes:
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>
 
-  BUG: KASAN: stack-out-of-bounds in flags_write
-  Write of size 1 at addr ffff888019be7ddf by task writefile/3787
+Best regards,
+                                                                Pavel
 
-  CPU: 4 PID: 3787 Comm: writefile Not tainted 5.16.0-rc7+ #12
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
-due to accessing buf one char before its start.
+--8t9RHnE3ZwKMSgU+
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Prevent such out-of-bounds access.
+-----BEGIN PGP SIGNATURE-----
 
-  [ bp: Productize into a proper patch. ]
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYcotLwAKCRAw5/Bqldv6
+8uCRAJ9OUACCynwE9vG62cNOo4kg31ZdzACgjzz3wQ3Yb9LDll+mJtwCSxKev1Y=
+=ItlM
+-----END PGP SIGNATURE-----
 
-Fixes: 0451d14d0561 ("EDAC, mce_amd_inj: Modify flags attribute to use string arguments")
-Signed-off-by: Zhang Zixun <zhang133010@icloud.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/TY2PR02MB2815A59F6B963F9C068CBB8A8E429@TY2PR02MB2815.apcprd02.prod.outlook.com
----
- arch/x86/kernel/cpu/mce/inject.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index 6eac840c64bb..5fbd7ffb3233 100644
---- a/arch/x86/kernel/cpu/mce/inject.c
-+++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -363,7 +363,7 @@ static ssize_t flags_write(struct file *filp, const char __user *ubuf,
- 	char buf[MAX_FLAG_OPT_SIZE], *__buf;
- 	int err;
- 
--	if (cnt > MAX_FLAG_OPT_SIZE)
-+	if (!cnt || cnt > MAX_FLAG_OPT_SIZE)
- 		return -EINVAL;
- 
- 	if (copy_from_user(&buf, ubuf, cnt))
--- 
-2.29.2
-
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+--8t9RHnE3ZwKMSgU+--

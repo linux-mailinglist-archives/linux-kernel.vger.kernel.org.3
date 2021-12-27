@@ -2,40 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BBF147FEFD
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2593E47FF31
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:36:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238227AbhL0PeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:34:10 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34618 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237862AbhL0Pdm (ORCPT
+        id S233110AbhL0PgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:36:04 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:40070 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238288AbhL0Pfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:33:42 -0500
+        Mon, 27 Dec 2021 10:35:38 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30ED461073;
-        Mon, 27 Dec 2021 15:33:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 419B5C36AE7;
-        Mon, 27 Dec 2021 15:33:41 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 233C4CE10B6;
+        Mon, 27 Dec 2021 15:35:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E21DAC36AEB;
+        Mon, 27 Dec 2021 15:35:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619221;
-        bh=hZn2+KMwU2GwO/eyv5PRO21kTJajH9sJQGVi63KP6eI=;
+        s=korg; t=1640619335;
+        bh=JgwP6soaSUk6CkDscb2WJFVFnzQ8SjXk+5Pme/NMhgM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SLnYjxC404LazxddossM91Bp+O57Wqeb0+vzIo2kJwNkzrtroTJHtRlHFrWClY09z
-         ZcTO7EfoDuz0tCGfnMcnWbV5m/RtLk2d+EBLp9ty/DHEK5BcAoOJh8uU6pR6E84Y5q
-         W+lZwJlnxnvZMpWF9PdASR0P6JWUdyHLFlfSyF70=
+        b=gsC+sHoDd5O4n4zvUSSLLF1woB5JSoZq7GHzGxopwwy3QO7eji9obJ4YyzJKtAT7c
+         oSY28ZPbUYv9TyjrNQZU0AlPr1niR5YCffNQlI5Iv3DNqskki2Oh9L8Ah/GdO0HpIQ
+         ikVzroRXPoNNgMfDgSQgrzEo3CB6JECF2qspfCDE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 4.19 34/38] hwmon: (lm90) Do not report busy status bit as alarm
+        stable@vger.kernel.org, Patrik Lantz <patrik.lantz@axis.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>
+Subject: [PATCH 5.4 35/47] tee: optee: Fix incorrect page free bug
 Date:   Mon, 27 Dec 2021 16:31:11 +0100
-Message-Id: <20211227151320.527316810@linuxfoundation.org>
+Message-Id: <20211227151322.004889674@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
-References: <20211227151319.379265346@linuxfoundation.org>
+In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
+References: <20211227151320.801714429@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -44,38 +47,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+From: Sumit Garg <sumit.garg@linaro.org>
 
-commit cdc5287acad9ede121924a9c9313544b80d15842 upstream.
+commit 18549bf4b21c739a9def39f27dcac53e27286ab5 upstream.
 
-Bit 7 of the status register indicates that the chip is busy
-doing a conversion. It does not indicate an alarm status.
-Stop reporting it as alarm status bit.
+Pointer to the allocated pages (struct page *page) has already
+progressed towards the end of allocation. It is incorrect to perform
+__free_pages(page, order) using this pointer as we would free any
+arbitrary pages. Fix this by stop modifying the page pointer.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: ec185dd3ab25 ("optee: Fix memory leak when failing to register shm pages")
+Cc: stable@vger.kernel.org
+Reported-by: Patrik Lantz <patrik.lantz@axis.com>
+Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hwmon/lm90.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/tee/optee/shm_pool.c |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -197,6 +197,7 @@ enum chips { lm90, adm1032, lm99, lm86,
- #define LM90_STATUS_RHIGH	(1 << 4) /* remote high temp limit tripped */
- #define LM90_STATUS_LLOW	(1 << 5) /* local low temp limit tripped */
- #define LM90_STATUS_LHIGH	(1 << 6) /* local high temp limit tripped */
-+#define LM90_STATUS_BUSY	(1 << 7) /* conversion is ongoing */
+--- a/drivers/tee/optee/shm_pool.c
++++ b/drivers/tee/optee/shm_pool.c
+@@ -41,10 +41,8 @@ static int pool_op_alloc(struct tee_shm_
+ 			goto err;
+ 		}
  
- #define MAX6696_STATUS2_R2THRM	(1 << 1) /* remote2 THERM limit tripped */
- #define MAX6696_STATUS2_R2OPEN	(1 << 2) /* remote2 is an open circuit */
-@@ -786,7 +787,7 @@ static int lm90_update_device(struct dev
- 		val = lm90_read_reg(client, LM90_REG_R_STATUS);
- 		if (val < 0)
- 			return val;
--		data->alarms = val;	/* lower 8 bit of alarms */
-+		data->alarms = val & ~LM90_STATUS_BUSY;
+-		for (i = 0; i < nr_pages; i++) {
+-			pages[i] = page;
+-			page++;
+-		}
++		for (i = 0; i < nr_pages; i++)
++			pages[i] = page + i;
  
- 		if (data->kind == max6696) {
- 			val = lm90_select_remote_channel(client, data, 1);
+ 		shm->flags |= TEE_SHM_REGISTER;
+ 		rc = optee_shm_register(shm->ctx, shm, pages, nr_pages,
 
 

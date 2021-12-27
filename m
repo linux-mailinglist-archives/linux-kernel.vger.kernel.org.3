@@ -2,54 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBFAE47FAA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 07:54:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E7047FAAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 07:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235405AbhL0Gyd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Dec 2021 01:54:33 -0500
-Received: from mail-wr1-f97.google.com ([209.85.221.97]:40722 "EHLO
-        mail-wr1-f97.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbhL0Gyc (ORCPT
+        id S235407AbhL0G4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 01:56:12 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:12930 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229490AbhL0G4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 01:54:32 -0500
-Received: by mail-wr1-f97.google.com with SMTP id q16so30601147wrg.7
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 22:54:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:content-description:subject:to:from:date
-         :reply-to;
-        bh=TPPWK3AEJz2BpcFnhUaAzlB0mKAMI/i0SVxqCOEE3R0=;
-        b=LScm7iR3/rf02wb0Mhe+EiUpav5bidW0/cYvxxIdvszMB6vn6zpFRLiYS6uWRM0mOg
-         IADT3Inl3hAaSPmb5eBOQWhcK0igxVUGnsioOa4+IFqg1ngeDEwWfVkvozYat8xzStQU
-         TSGjDBPN9S1I32vOVVBncO+2vOD3cdScxz6MXAoNTgepReIUzodSbQY3/nnQBIFIPP6b
-         GvTlBp7MAp/a4BqiV7UxsK3x42qWmKT9MNC7S0KjV75p0QSYg4H4TxYmCQ+ZlQ+qzId4
-         NcyoeEHOAU/yi+kFQ49MIrTKpPRJlgnTPy0sEx60stklzImo3JEA9EPJEsK1XsVeN3zd
-         q1MA==
-X-Gm-Message-State: AOAM532GyclN2l9QWUY44Q4OEPAHxvRlpYob2H0edzaghC7Bf7zsE8iw
-        m+inHl2eIPoYA5/sc4rEujibTcFGd4cjVG60RRpxPuQ0lAF0JA==
-X-Google-Smtp-Source: ABdhPJyVKWGibvT4n+shZC+mHZTB8EmQUyS6FEv+xnwRHEsr+RYrWXIMGs8y38oOvQw3BJjrE9oaq3WPgruy
-X-Received: by 2002:a05:6000:49:: with SMTP id k9mr12007534wrx.190.1640588070413;
-        Sun, 26 Dec 2021 22:54:30 -0800 (PST)
-Received: from [192.168.0.107] ([164.160.92.174])
-        by smtp-relay.gmail.com with ESMTPS id l19sm680737wms.34.2021.12.26.22.54.19
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Sun, 26 Dec 2021 22:54:30 -0800 (PST)
-X-Relaying-Domain: rewalopiste.com
-Message-ID: <61c96326.1c69fb81.bd2bd.4ce9SMTPIN_ADDED_MISSING@mx.google.com>
-Content-Type: text/plain; charset="iso-8859-1"
+        Mon, 27 Dec 2021 01:56:11 -0500
+Received: from [10.18.29.173] (10.18.29.173) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Mon, 27 Dec
+ 2021 14:56:09 +0800
+Message-ID: <e041c9ed-ff42-a7e7-2fc5-03c96cc69a88@amlogic.com>
+Date:   Mon, 27 Dec 2021 14:56:09 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Business proposal
-To:     Recipients <suzaira@smartglove.com.my>
-From:   "Mrs Amina Medjahed" <suzaira@smartglove.com.my>
-Date:   Sun, 26 Dec 2021 22:54:08 -0800
-Reply-To: mrsaminamedjahedgofbnk@gmail.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 3/3] tty: serial: meson: add UART driver compatible with
+ S4 SoC on-chip
+Content-Language: en-US
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <linux-serial@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>
+References: <20211221071634.25980-1-yu.tu@amlogic.com>
+ <20211221071634.25980-4-yu.tu@amlogic.com>
+ <CAFBinCB9Fre9Lea2CAm_8o8g1e3o8oX4ZONbN_bhykNXoFHDdQ@mail.gmail.com>
+From:   Yu Tu <yu.tu@amlogic.com>
+In-Reply-To: <CAFBinCB9Fre9Lea2CAm_8o8g1e3o8oX4ZONbN_bhykNXoFHDdQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.18.29.173]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good day,
-Please i have a business proposal that will benefit both of us. Please respond if you are interested.
-Thanks and God bless.
+Hi Martin,
+	Thank you very much for your reply.
+
+On 2021/12/25 1:25, Martin Blumenstingl wrote:
+> [ EXTERNAL EMAIL ]
+> 
+> Hello,
+> 
+> On Tue, Dec 21, 2021 at 8:17 AM Yu Tu <yu.tu@amlogic.com> wrote:
+>>
+>> The S4 SoC on-chip UART uses a 12M clock as the clock source for
+>> calculating the baud rate of the UART. But previously, chips used 24M or
+>> other clock sources. So add this change. The specific clock source is
+>> determined by chip design.
+> Does the new S4 SoC use an external 12MHz XTAL or does it use a 24MHz XTAL?
+> If there's still a 24MHz XTAL then I think this description is not
+> correct - at least based on how I understand the UART controller.
+> 
+The S4 SoC uses 12MHz(UART_EE_A_REG5[27]=0x1,the bit is set in romcode). 
+This register description is the same as the G12A and G12B you know.
+
+> SoCs up to GXL and GXM had an internal divide-by-3 (clock divider) in
+> the UART controller IP and an external 24MHz XTAL.
+> This was not configurable, so the clock for all baud-rates had to be
+> derived from an 8MHz (24MHz divided by 3) clock.
+> 
+> With the A311D (G12B, which is still using an external 24MHz XTAL) SoC
+> the UART controller gained two new bits - with configurable dividers -
+> according to the public datasheets:
+> UART_EE_A_REG5[26]:
+> - 0x0: divide the input clock by 3 (meaning: this internally works
+> with an 8MHz clock)
+> - 0x1: use the input clock directly without further division (meaning:
+> this internally work with an 24MHz clock)
+> UART_EE_A_REG5[27]:
+> - 0x0: use the clock as configured in UART_EE_A_REG5[26]
+> - 0x1: divide the input clock by 2 (meaning: this internally works
+> with an 12MHz clock)
+> 
+> While writing this email I did some investigation and found that
+> UART_EE_A_REG5[26] is used in the vendor kernel even for GXL and GXM
+> SoCs.
+> So this probably has been introduced with the GXL generation (and thus
+> is missing on GXBB and earlier SoCs).
+> Also UART_EE_A_REG5[27] seems to have been introduced with the G12A
+> generation of SoCs (not surprising since G12A and G12B peripherals are
+> very similar).
+> 
+> Does the UART controller not work with divide-by-3 (as we have it
+> today) or are these configurable dividers to reduce jitter?
+> 
+The UART controller can work with divide-by-3.
+The chip history as you described above, the current reason for using 
+12MHz clock is really what you call reduce jitter. The UART mainly 
+connects to Bluetooth and uses typical baud rates of 2Mhz, 3MHz and 
+4MHz, so 12MHz is used as the clock source.
+> 
+> Best regards,
+> Martin
+> 

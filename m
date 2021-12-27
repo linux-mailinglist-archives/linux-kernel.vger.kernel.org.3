@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70FCD47FF1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:35:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 951BB47FEE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238255AbhL0Pfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:35:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
+        id S237643AbhL0Pdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:33:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237986AbhL0PfH (ORCPT
+        with ESMTP id S238007AbhL0PdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:35:07 -0500
+        Mon, 27 Dec 2021 10:33:16 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D95BC06173E;
-        Mon, 27 Dec 2021 07:35:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7B7C06175A;
+        Mon, 27 Dec 2021 07:33:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 70BFACE10C4;
-        Mon, 27 Dec 2021 15:35:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F05DC36AEA;
-        Mon, 27 Dec 2021 15:35:03 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 07AE2CE10AF;
+        Mon, 27 Dec 2021 15:33:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C565CC36AE7;
+        Mon, 27 Dec 2021 15:33:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619303;
-        bh=jpEICLU7iA2vFFdDGmu6tR9+fBi/8YEagTm6fPwWY84=;
+        s=korg; t=1640619193;
+        bh=W9VEaQqSXCUfe+dsRHUugV2t0qTTWQKNP6xk+sWz12s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MJuQHclA1LS1AncSN7PypKGl4uOCOB6Zh17Tm0iiCKRGqZKyBx/tkDMJLv8Flkha+
-         IjD9UeELrMylyUXCkgyvH44tYvWDunXZG+gwhfv3UOxHipbd7h85WV3JIPDpIm1up1
-         FuQk3zZ0EugOKrYKXTtDmwROK8tVVeXhppuVY1hs=
+        b=AxKWC5wRnA+g6APFoLE1txfmHA53NFMNHjaYjDJNjAZN0kW+dn4KVEBEXq7jg8FXD
+         JQO58MHsyQ2d8dAPu7eKMFupelZHuJjGKkAGaDhgNADUYkkBbFbUeqokjDAzqRrgrE
+         Na9T2qV2qcTlEpIgyOKktM3w4eP3Qegiva6NRMw0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: [PATCH 5.4 25/47] Input: atmel_mxt_ts - fix double free in mxt_read_info_block
-Date:   Mon, 27 Dec 2021 16:31:01 +0100
-Message-Id: <20211227151321.666144202@linuxfoundation.org>
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Corey Minyard <cminyard@mvista.com>,
+        Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>
+Subject: [PATCH 4.19 25/38] ipmi: fix initialization when workqueue allocation fails
+Date:   Mon, 27 Dec 2021 16:31:02 +0100
+Message-Id: <20211227151320.223854329@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
-References: <20211227151320.801714429@linuxfoundation.org>
+In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
+References: <20211227151319.379265346@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,36 +50,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: José Expósito <jose.exposito89@gmail.com>
+From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-commit 12f247ab590a08856441efdbd351cf2cc8f60a2d upstream.
+commit 75d70d76cb7b927cace2cb34265d68ebb3306b13 upstream.
 
-The "id_buf" buffer is stored in "data->raw_info_block" and freed by
-"mxt_free_object_table" in case of error.
+If the workqueue allocation fails, the driver is marked as not initialized,
+and timer and panic_notifier will be left registered.
 
-Return instead of jumping to avoid a double free.
+Instead of removing those when workqueue allocation fails, do the workqueue
+initialization before doing it, and cleanup srcu_struct if it fails.
 
-Addresses-Coverity-ID: 1474582 ("Double free")
-Fixes: 068bdb67ef74 ("Input: atmel_mxt_ts - fix the firmware update")
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-Link: https://lore.kernel.org/r/20211212194257.68879-1-jose.exposito89@gmail.com
+Fixes: 1d49eb91e86e ("ipmi: Move remove_work to dedicated workqueue")
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Cc: Corey Minyard <cminyard@mvista.com>
+Cc: Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Message-Id: <20211217154410.1228673-2-cascardo@canonical.com>
+Signed-off-by: Corey Minyard <cminyard@mvista.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/input/touchscreen/atmel_mxt_ts.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/ipmi/ipmi_msghandler.c |   15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
---- a/drivers/input/touchscreen/atmel_mxt_ts.c
-+++ b/drivers/input/touchscreen/atmel_mxt_ts.c
-@@ -1794,7 +1794,7 @@ static int mxt_read_info_block(struct mx
- 	if (error) {
- 		dev_err(&client->dev, "Error %d parsing object table\n", error);
- 		mxt_free_object_table(data);
--		goto err_free_mem;
-+		return error;
+--- a/drivers/char/ipmi/ipmi_msghandler.c
++++ b/drivers/char/ipmi/ipmi_msghandler.c
+@@ -5089,20 +5089,23 @@ static int ipmi_init_msghandler(void)
+ 	if (rv)
+ 		goto out;
+ 
+-	timer_setup(&ipmi_timer, ipmi_timeout, 0);
+-	mod_timer(&ipmi_timer, jiffies + IPMI_TIMEOUT_JIFFIES);
+-
+-	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
+-
+ 	remove_work_wq = create_singlethread_workqueue("ipmi-msghandler-remove-wq");
+ 	if (!remove_work_wq) {
+ 		pr_err("unable to create ipmi-msghandler-remove-wq workqueue");
+ 		rv = -ENOMEM;
+-		goto out;
++		goto out_wq;
  	}
  
- 	data->object_table = (struct mxt_object *)(id_buf + MXT_OBJECT_START);
++	timer_setup(&ipmi_timer, ipmi_timeout, 0);
++	mod_timer(&ipmi_timer, jiffies + IPMI_TIMEOUT_JIFFIES);
++
++	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
++
+ 	initialized = true;
+ 
++out_wq:
++	if (rv)
++		cleanup_srcu_struct(&ipmi_interfaces_srcu);
+ out:
+ 	mutex_unlock(&ipmi_interfaces_mutex);
+ 	return rv;
 
 

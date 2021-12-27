@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0174A47FEC4
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6740A480108
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:52:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237828AbhL0Pcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:32:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
+        id S240044AbhL0Pwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:52:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237995AbhL0PcZ (ORCPT
+        with ESMTP id S239806AbhL0Pqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:32:25 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A16DC06173E;
-        Mon, 27 Dec 2021 07:32:25 -0800 (PST)
+        Mon, 27 Dec 2021 10:46:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7640CC08EA6B;
+        Mon, 27 Dec 2021 07:42:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 61919CE10C4;
-        Mon, 27 Dec 2021 15:32:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F77BC36AE7;
-        Mon, 27 Dec 2021 15:32:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 344ACB810AA;
+        Mon, 27 Dec 2021 15:42:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72579C36AEA;
+        Mon, 27 Dec 2021 15:42:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619141;
-        bh=AeXf9CUPHaX5o4aodq+le/lqmNSOCCjahm+AXGnTDE8=;
+        s=korg; t=1640619768;
+        bh=/K+cNPZ8Dte3SrIAEElhuiOMPaQ4cL+zNFe/Hi9sx08=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F+7174rByYadQUH48/Hy6B5MBmkdnF+5TbhusiTSDLRzOmjmVc0aqDeMEHHdUfZvZ
-         s+xAo9DK1GKqGGxfE866cFzTsBb0RSJfmV7Hhq+wrMMZSH0CX/MnbhEc6pj6JmXd4c
-         iZORwUsLQAoWehx0s4Tr0E9SHEdE0N2ces/o4p/o=
+        b=fkWlUhsLpQPycjh6At01Qt+N8ZEbacHA5dkYZo4AnOv+0l5KkMZW2EHCxoIm1Tlym
+         649PFjLqu3/cXBJbMr3TkxpjKPUkvl49uUng72tgddLIB4D+ziZk35lMNGzQDe/oUA
+         zHzIxMPmxAwbHTKEb8mCJnm3qXqTsojqEnWWekm8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Greg Jesionowski <jesionowskigreg@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.19 01/38] net: usb: lan78xx: add Allied Telesis AT29M2-AF
+        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>
+Subject: [PATCH 5.15 063/128] Revert "x86/boot: Pull up cmdline preparation and early param parsing"
 Date:   Mon, 27 Dec 2021 16:30:38 +0100
-Message-Id: <20211227151319.427867164@linuxfoundation.org>
+Message-Id: <20211227151333.601301637@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
-References: <20211227151319.379265346@linuxfoundation.org>
+In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
+References: <20211227151331.502501367@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -51,42 +47,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Jesionowski <jesionowskigreg@gmail.com>
+From: Borislav Petkov <bp@suse.de>
 
-commit ef8a0f6eab1ca5d1a75c242c5c7b9d386735fa0a upstream.
+commit fbe6183998546f8896ee0b620ece86deff5a2fd1 upstream.
 
-This adds the vendor and product IDs for the AT29M2-AF which is a
-lan7801-based device.
+This reverts commit 8d48bf8206f77aa8687f0e241e901e5197e52423.
 
-Signed-off-by: Greg Jesionowski <jesionowskigreg@gmail.com>
-Link: https://lore.kernel.org/r/20211214221027.305784-1-jesionowskigreg@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+It turned out to be a bad idea as it broke supplying mem= cmdline
+parameters due to parse_memopt() requiring preparatory work like setting
+up the e820 table in e820__memory_setup() in order to be able to exclude
+the range specified by mem=.
+
+Pulling that up would've broken Xen PV again, see threads at
+
+  https://lkml.kernel.org/r/20210920120421.29276-1-jgross@suse.com
+
+due to xen_memory_setup() needing the first reservations in
+early_reserve_memory() - kernel and initrd - to have happened already.
+
+This could be fixed again by having Xen do those reservations itself...
+
+Long story short, revert this and do a simpler fix in a later patch.
+
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20211213112757.2612-3-bp@alien8.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/lan78xx.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/x86/kernel/setup.c |   66 +++++++++++++++++++-----------------------------
+ 1 file changed, 27 insertions(+), 39 deletions(-)
 
---- a/drivers/net/usb/lan78xx.c
-+++ b/drivers/net/usb/lan78xx.c
-@@ -75,6 +75,8 @@
- #define LAN7801_USB_PRODUCT_ID		(0x7801)
- #define LAN78XX_EEPROM_MAGIC		(0x78A5)
- #define LAN78XX_OTP_MAGIC		(0x78F3)
-+#define AT29M2AF_USB_VENDOR_ID		(0x07C9)
-+#define AT29M2AF_USB_PRODUCT_ID	(0x0012)
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -742,28 +742,6 @@ dump_kernel_offset(struct notifier_block
+ 	return 0;
+ }
  
- #define	MII_READ			1
- #define	MII_WRITE			0
-@@ -4170,6 +4172,10 @@ static const struct usb_device_id produc
- 	/* LAN7801 USB Gigabit Ethernet Device */
- 	USB_DEVICE(LAN78XX_USB_VENDOR_ID, LAN7801_USB_PRODUCT_ID),
- 	},
-+	{
-+	/* ATM2-AF USB Gigabit Ethernet Device */
-+	USB_DEVICE(AT29M2AF_USB_VENDOR_ID, AT29M2AF_USB_PRODUCT_ID),
-+	},
- 	{},
- };
- MODULE_DEVICE_TABLE(usb, products);
+-static char *prepare_command_line(void)
+-{
+-#ifdef CONFIG_CMDLINE_BOOL
+-#ifdef CONFIG_CMDLINE_OVERRIDE
+-	strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
+-#else
+-	if (builtin_cmdline[0]) {
+-		/* append boot loader cmdline to builtin */
+-		strlcat(builtin_cmdline, " ", COMMAND_LINE_SIZE);
+-		strlcat(builtin_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+-		strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
+-	}
+-#endif
+-#endif
+-
+-	strlcpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
+-
+-	parse_early_param();
+-
+-	return command_line;
+-}
+-
+ /*
+  * Determine if we were loaded by an EFI loader.  If so, then we have also been
+  * passed the efi memmap, systab, etc., so we should use these data structures
+@@ -853,23 +831,6 @@ void __init setup_arch(char **cmdline_p)
+ 	x86_init.oem.arch_setup();
+ 
+ 	/*
+-	 * x86_configure_nx() is called before parse_early_param() (called by
+-	 * prepare_command_line()) to detect whether hardware doesn't support
+-	 * NX (so that the early EHCI debug console setup can safely call
+-	 * set_fixmap()). It may then be called again from within noexec_setup()
+-	 * during parsing early parameters to honor the respective command line
+-	 * option.
+-	 */
+-	x86_configure_nx();
+-
+-	/*
+-	 * This parses early params and it needs to run before
+-	 * early_reserve_memory() because latter relies on such settings
+-	 * supplied as early params.
+-	 */
+-	*cmdline_p = prepare_command_line();
+-
+-	/*
+ 	 * Do some memory reservations *before* memory is added to memblock, so
+ 	 * memblock allocations won't overwrite it.
+ 	 *
+@@ -902,6 +863,33 @@ void __init setup_arch(char **cmdline_p)
+ 	bss_resource.start = __pa_symbol(__bss_start);
+ 	bss_resource.end = __pa_symbol(__bss_stop)-1;
+ 
++#ifdef CONFIG_CMDLINE_BOOL
++#ifdef CONFIG_CMDLINE_OVERRIDE
++	strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
++#else
++	if (builtin_cmdline[0]) {
++		/* append boot loader cmdline to builtin */
++		strlcat(builtin_cmdline, " ", COMMAND_LINE_SIZE);
++		strlcat(builtin_cmdline, boot_command_line, COMMAND_LINE_SIZE);
++		strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
++	}
++#endif
++#endif
++
++	strlcpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
++	*cmdline_p = command_line;
++
++	/*
++	 * x86_configure_nx() is called before parse_early_param() to detect
++	 * whether hardware doesn't support NX (so that the early EHCI debug
++	 * console setup can safely call set_fixmap()). It may then be called
++	 * again from within noexec_setup() during parsing early parameters
++	 * to honor the respective command line option.
++	 */
++	x86_configure_nx();
++
++	parse_early_param();
++
+ #ifdef CONFIG_MEMORY_HOTPLUG
+ 	/*
+ 	 * Memory used by the kernel cannot be hot-removed because Linux
 
 

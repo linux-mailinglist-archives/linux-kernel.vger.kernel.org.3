@@ -2,118 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF3447FA7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 07:15:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF91D47FA7E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 07:20:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235292AbhL0GPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 01:15:04 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:30179 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235267AbhL0GPD (ORCPT
+        id S235302AbhL0GUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 01:20:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230356AbhL0GUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 01:15:03 -0500
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JMnQ52V9xz8w5Q;
-        Mon, 27 Dec 2021 14:12:29 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 27 Dec 2021 14:14:54 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.20; Mon, 27 Dec 2021 14:14:53 +0800
-Message-ID: <eb1813ff-e775-3bb8-b0d0-848d01bdf3e3@huawei.com>
-Date:   Mon, 27 Dec 2021 14:14:53 +0800
+        Mon, 27 Dec 2021 01:20:43 -0500
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB3FC06173E;
+        Sun, 26 Dec 2021 22:20:42 -0800 (PST)
+Received: by mail-pj1-x1044.google.com with SMTP id r16-20020a17090a0ad000b001b276aa3aabso4367995pje.0;
+        Sun, 26 Dec 2021 22:20:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q3qnlUPyv7j+2lJxGhadY9VPUX1fm9lkgG1YxnakR3w=;
+        b=fG4YEC8gkL+8kyTxVDpZWworuNLYPFs1uw5jTPZheRMvFcPLozXaaH9gmzbVfF4ZcL
+         Q5bKSdqyx6qQMm8Rw2ewDyAE5/7BMNcOhf+vVhdE8g/x9cE6LM0z4n/sdmQNxlWn9Ka1
+         aXRCT/hFL4BYE4PYDddefck5uLzsiqoHeYEzFqflzp5BdJOWJimBoE+EtrHAV2yU15Hu
+         3JSErgkUIl5wqrnZHJgYDkAhPILbUSO8OBkxavI+HiL7qrVuDEH0Xk5tAtpceSMW3QUU
+         Wt8fVlm+i+hLjFa6/ccGcQghsmbeaghyhVj5QdQoEDSroC7ocpJAmhdnCD/EqovR2nIj
+         4IZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q3qnlUPyv7j+2lJxGhadY9VPUX1fm9lkgG1YxnakR3w=;
+        b=Paq6nxulpbp6P/RbEMMnxSEqqCVfaKdJQgamM5ChZ+pAP5VLhGWH1m0QhIVgz51nx9
+         P4wZylybr/k0KLW5WuGgwiVbtNIDndBvkVFkBvsRIrTXK8l1lJtbgxVDZv9crjD+CymS
+         g716SQKU+/8qlU5VqmTgH4adwI5HXdm4uHt6dbn8ulZHVu1JvBU76RrSJu0JdF4IZTYs
+         Bzh4YNEw6Wwt3d+KHt3TWPAyV60eJ6u2F9GLt3Ds6x69oAoJzVHSCTFhUdPT0eor1tHJ
+         oVU3FNLO4rbPXhwGG7EOJ11jL3y5iIHZVP4E2ZQuFOomqM6rEHrEZj9GoZRt7hr160/e
+         56mQ==
+X-Gm-Message-State: AOAM531U4U6fxm7QO+5AAAsVErqtLvR1Z7tIQdqogDnQxQ4ROF7P8qno
+        X/e+6JhqgvUfiXlXkPvlvlg=
+X-Google-Smtp-Source: ABdhPJw1GG9gLyD2Ok10MtSX9QuV/UAuAGC+v80GKFDIGZ3WICJnHGXVaPUt+9vLkXa3ttaaqj/cdw==
+X-Received: by 2002:a17:90b:3803:: with SMTP id mq3mr16071698pjb.46.1640586042554;
+        Sun, 26 Dec 2021 22:20:42 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.9])
+        by smtp.gmail.com with ESMTPSA id j23sm13143890pga.59.2021.12.26.22.20.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Dec 2021 22:20:42 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     kuba@kernel.org
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH] net: bpf: handle return value of BPF_CGROUP_RUN_PROG_INET4_POST_BIND()
+Date:   Mon, 27 Dec 2021 14:20:35 +0800
+Message-Id: <20211227062035.3224982-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 1/3] mm: vmalloc: Let user to control huge vmalloc default
- behavior
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Borislav Petkov" <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>
-References: <20211226083912.166512-1-wangkefeng.wang@huawei.com>
- <20211226083912.166512-2-wangkefeng.wang@huawei.com>
- <6c4bd989-268e-5899-09a7-ac573bd8b4d9@csgroup.eu>
- <c7037a3a-d0b1-6351-5e31-22be0d8e0e01@huawei.com>
- <YckwuA8CWcQpQdGO@casper.infradead.org>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <YckwuA8CWcQpQdGO@casper.infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggeme707-chm.china.huawei.com (10.1.199.103) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Menglong Dong <imagedong@tencent.com>
 
-On 2021/12/27 11:19, Matthew Wilcox wrote:
-> On Mon, Dec 27, 2021 at 09:44:24AM +0800, Kefeng Wang wrote:
->> On 2021/12/27 1:36, Christophe Leroy wrote:
->>> Le 26/12/2021 à 09:39, Kefeng Wang a écrit :
->>>> Add HUGE_VMALLOC_DEFAULT_ENABLED to let user to choose whether or
->>>> not enable huge vmalloc mappings by default, and this could make
->>>> more architectures to enable huge vmalloc mappings feature but
->>>> don't want to enable it by default.
->>>>
->>>> Add hugevmalloc=on/off parameter to enable or disable this feature
->>>> at boot time, nohugevmalloc is still supported and equivalent to
->>>> hugevmalloc=off.
->>> Is there a real added value to have the user be able to select that ?
->>>
->>> If the architecture supports it, is there any good reason to not use it ?
->> There are some disadvantages[1],  one of the main concerns is the possible
->>
->> memory waste, we have backported this feature to our kernel 5.10, but our
->>
->> downstream in our some scenario(especially in embedded), they don't want
->>
->> it enabled by default, and others want it, this is why patch1 comes.
->>
->>> Why not just do like PPC and enable it by default ? Why should it be
->>> enabled by default on PPC but disabled by default on ARM64 and X86 ?
->> The PPC is default enabled, we don't changes this behavior.
->>
->> Maybe upstream is not care about this, as I said in cover-letter, if
->> arm64/x86
->>
->> don't want patch1, we could only just select config to enable it.
->>
->> Let's wait for more feedback.
-> We should not have different defaults by architecture.  Either we change
-> the default for PPC, or x86 & arm should have the same default as PPC.
+The return value of BPF_CGROUP_RUN_PROG_INET4_POST_BIND() in
+__inet_bind() is not handled properly. While the return value
+is non-zero, it will set inet_saddr and inet_rcv_saddr to 0 and
+exit:
 
-Ok, since HUGE_VMALLOC_DEFAULT_ENABLED is introduced, we could make it
+	err = BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk);
+	if (err) {
+		inet->inet_saddr = inet->inet_rcv_saddr = 0;
+		goto out_release_sock;
+	}
 
-default y, not only select it on PPC, then the ppc/arm64/x86 have same 
-default value.
+Let's take UDP for example and see what will happen. For UDP
+socket, it will be added to 'udp_prot.h.udp_table->hash' and
+'udp_prot.h.udp_table->hash2' after the sk->sk_prot->get_port()
+called success. If 'inet->inet_rcv_saddr' is specified here,
+then 'sk' will be in the 'hslot2' of 'hash2' that it don't belong
+to (because inet_saddr is changed to 0), and UDP packet received
+will not be passed to this sock. If 'inet->inet_rcv_saddr' is not
+specified here, the sock will work fine, as it can receive packet
+properly, which is wired, as the 'bind()' is already failed.
 
-And if someone don't want it, they could not enable this config.
+I'm not sure what should do here, maybe we should unhash the sock
+for UDP? Therefor, user can try to bind another port?
 
-Meanwhile hugevmalloc=on/off to make this feature to enable/disable at 
-boot time.
+Signed-off-by: Menglong Dong <imagedong@tencent.com>
+---
+ net/ipv4/af_inet.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-I will add some explanation and resend it, thanks.
+diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+index 04067b249bf3..9e5710f40a39 100644
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -530,7 +530,14 @@ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
+ 		if (!(flags & BIND_FROM_BPF)) {
+ 			err = BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk);
+ 			if (err) {
++				if (sk->sk_prot == &udp_prot)
++					sk->sk_prot->unhash(sk);
++				else if (sk->sk_prot == &tcp_prot)
++					inet_put_port(sk);
++
+ 				inet->inet_saddr = inet->inet_rcv_saddr = 0;
++				err = -EPERM;
++
+ 				goto out_release_sock;
+ 			}
+ 		}
+-- 
+2.30.2
 
-> .

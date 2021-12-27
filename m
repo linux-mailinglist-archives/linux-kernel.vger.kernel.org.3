@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 560D747FF15
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1836147FFA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232258AbhL0PfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:35:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
+        id S239225AbhL0Pjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:39:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238288AbhL0Pe1 (ORCPT
+        with ESMTP id S238918AbhL0Phx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:34:27 -0500
+        Mon, 27 Dec 2021 10:37:53 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E1BC061799;
-        Mon, 27 Dec 2021 07:34:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1686EC061759;
+        Mon, 27 Dec 2021 07:37:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5F331CE10B3;
-        Mon, 27 Dec 2021 15:34:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52750C36AE7;
-        Mon, 27 Dec 2021 15:34:23 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8522FCE10AF;
+        Mon, 27 Dec 2021 15:37:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78374C36AEA;
+        Mon, 27 Dec 2021 15:37:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619263;
-        bh=Z5NiYkRq4ZBuXOFNRazdnc+Px0Ijzu3yulWNHV0fxR0=;
+        s=korg; t=1640619438;
+        bh=3bELCSOYN5JdcH6fbxiuyoFk2x1jGY3BEgxliGvI5Ss=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QI7N9YITJurmqvekL2sAsYp8so9HgN9sq8WEeVbGTJTqKOVs5NsZDcgxNljpnIvg+
-         KWFbtnnx1yEnMIdn9WPBi8BZMU6vHRoa/xZO7OQRbtexgevkwYLmy/3Vmury8L0d8m
-         Iy8DLPUQTmX3FVxJs2GZmtnkd2XZzWVu50G2x6wg=
+        b=NA1lF5rwihTOQ/roajpFNfMAL7+1lFLSiB2JMYw8RLO2yLv/aUUxgz/vaMvGzJMRh
+         CE6KhCPMhqC+189Gnkabg1kW94o0MykhdBeXxEfEflt6t3G9ifoeZkXR6OjSygVlYR
+         6ry7JdPEN33DM8ZgbFkoXb+nGE+Nl72BwHFhGnDc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-Subject: [PATCH 5.4 02/47] serial: 8250_fintek: Fix garbled text for console
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 23/76] fjes: Check for error irq
 Date:   Mon, 27 Dec 2021 16:30:38 +0100
-Message-Id: <20211227151320.880488226@linuxfoundation.org>
+Message-Id: <20211227151325.491786053@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
-References: <20211227151320.801714429@linuxfoundation.org>
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+References: <20211227151324.694661623@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,78 +49,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ji-Ze Hong (Peter Hong) <hpeter@gmail.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-commit 6c33ff728812aa18792afffaf2c9873b898e7512 upstream.
+[ Upstream commit db6d6afe382de5a65d6ccf51253ab48b8e8336c3 ]
 
-Commit fab8a02b73eb ("serial: 8250_fintek: Enable high speed mode on Fintek F81866")
-introduced support to use high baudrate with Fintek SuperIO UARTs. It'll
-change clocksources when the UART probed.
+I find that platform_get_irq() will not always succeed.
+It will return error irq in case of the failure.
+Therefore, it might be better to check it if order to avoid the use of
+error irq.
 
-But when user add kernel parameter "console=ttyS0,115200 console=tty0" to make
-the UART as console output, the console will output garbled text after the
-following kernel message.
-
-[    3.681188] Serial: 8250/16550 driver, 32 ports, IRQ sharing enabled
-
-The issue is occurs in following step:
-	probe_setup_port() -> fintek_8250_goto_highspeed()
-
-It change clocksource from 115200 to 921600 with wrong time, it should change
-clocksource in set_termios() not in probed. The following 3 patches are
-implemented change clocksource in fintek_8250_set_termios().
-
-Commit 58178914ae5b ("serial: 8250_fintek: UART dynamic clocksource on Fintek F81216H")
-Commit 195638b6d44f ("serial: 8250_fintek: UART dynamic clocksource on Fintek F81866")
-Commit 423d9118c624 ("serial: 8250_fintek: Add F81966 Support")
-
-Due to the high baud rate had implemented above 3 patches and the patch
-Commit fab8a02b73eb ("serial: 8250_fintek: Enable high speed mode on Fintek F81866")
-is bugged, So this patch will remove it.
-
-Fixes: fab8a02b73eb ("serial: 8250_fintek: Enable high speed mode on Fintek F81866")
-Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
-Link: https://lore.kernel.org/r/20211215075835.2072-1-hpeter+linux_kernel@gmail.com
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 658d439b2292 ("fjes: Introduce FUJITSU Extended Socket Network Device driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/8250/8250_fintek.c |   19 -------------------
- 1 file changed, 19 deletions(-)
+ drivers/net/fjes/fjes_main.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/drivers/tty/serial/8250/8250_fintek.c
-+++ b/drivers/tty/serial/8250/8250_fintek.c
-@@ -285,24 +285,6 @@ static void fintek_8250_set_max_fifo(str
- 	}
- }
- 
--static void fintek_8250_goto_highspeed(struct uart_8250_port *uart,
--			      struct fintek_8250 *pdata)
--{
--	sio_write_reg(pdata, LDN, pdata->index);
--
--	switch (pdata->pid) {
--	case CHIP_ID_F81866: /* set uart clock for high speed serial mode */
--		sio_write_mask_reg(pdata, F81866_UART_CLK,
--			F81866_UART_CLK_MASK,
--			F81866_UART_CLK_14_769MHZ);
--
--		uart->port.uartclk = 921600 * 16;
--		break;
--	default: /* leave clock speed untouched */
--		break;
--	}
--}
--
- static void fintek_8250_set_termios(struct uart_port *port,
- 				    struct ktermios *termios,
- 				    struct ktermios *old)
-@@ -422,7 +404,6 @@ static int probe_setup_port(struct finte
- 
- 				fintek_8250_set_irq_mode(pdata, level_mode);
- 				fintek_8250_set_max_fifo(pdata);
--				fintek_8250_goto_highspeed(uart, pdata);
- 
- 				fintek_8250_exit_key(addr[i]);
- 
+diff --git a/drivers/net/fjes/fjes_main.c b/drivers/net/fjes/fjes_main.c
+index e449d94661225..2a569eea4ee8f 100644
+--- a/drivers/net/fjes/fjes_main.c
++++ b/drivers/net/fjes/fjes_main.c
+@@ -1269,6 +1269,11 @@ static int fjes_probe(struct platform_device *plat_dev)
+ 	hw->hw_res.start = res->start;
+ 	hw->hw_res.size = resource_size(res);
+ 	hw->hw_res.irq = platform_get_irq(plat_dev, 0);
++	if (hw->hw_res.irq < 0) {
++		err = hw->hw_res.irq;
++		goto err_free_control_wq;
++	}
++
+ 	err = fjes_hw_init(&adapter->hw);
+ 	if (err)
+ 		goto err_free_control_wq;
+-- 
+2.34.1
+
 
 

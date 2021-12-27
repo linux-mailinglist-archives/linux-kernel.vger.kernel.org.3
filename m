@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA4D47FF1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:35:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB66548000B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238118AbhL0Pf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:35:28 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:39724 "EHLO
+        id S238262AbhL0Pmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:42:44 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:42042 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238587AbhL0PfE (ORCPT
+        with ESMTP id S239488AbhL0Pjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:35:04 -0500
+        Mon, 27 Dec 2021 10:39:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A607BCE10B3;
-        Mon, 27 Dec 2021 15:35:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94255C36AEA;
-        Mon, 27 Dec 2021 15:35:00 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E2DEFCE1070;
+        Mon, 27 Dec 2021 15:39:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4757C36AE7;
+        Mon, 27 Dec 2021 15:39:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619301;
-        bh=ZoC8FFdqm5CY235+2Xhg1EckXjzUxhmZYTzofsOvb1I=;
+        s=korg; t=1640619591;
+        bh=wQwIfeMq5N/Ew3jURX6tFLuWiq3YBkEI2oAzxNQptHo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PGUX1EwDfabwEQGuXufItpOvWH/TmABxTU9COXKgaMup5PT6TJcc/4rLbuaKoylKa
-         xIA2z7fqtqdFapIA7XAGgtehg0LBWOFYJTDRqQY5PcSAYv9yZtS72tHWrMZ7HmjR9s
-         Wr7wwzrBNS59MKw4bVssm6SmqTRs3/l5p9LqLMfw=
+        b=oN948XAjfvkat1oGFSwXAzE0iGH2aT/F5YJgqJMQZLq0F2va6dX9t3Gbw9L+XtZWs
+         +Naf3PWV4Gvrzw/Ll4nDlP168ilUtuFnY+Q5sQ9yIcKOVEc0vu/Tijckth4us6102y
+         VZ249GpldEWVCB2HCo6MrNEVgOuXrJaSVvqlVEA0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bradley Scott <Bradley.Scott@zebra.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.4 24/47] ALSA: hda/realtek: Amp init fixup for HP ZBook 15 G6
+        stable@vger.kernel.org, John David Anglin <dave.anglin@bell.net>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.10 45/76] parisc: Fix mask used to select futex spinlock
 Date:   Mon, 27 Dec 2021 16:31:00 +0100
-Message-Id: <20211227151321.629272580@linuxfoundation.org>
+Message-Id: <20211227151326.269594782@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
-References: <20211227151320.801714429@linuxfoundation.org>
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+References: <20211227151324.694661623@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,31 +45,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bradley Scott <Bradley.Scott@zebra.com>
+From: John David Anglin <dave.anglin@bell.net>
 
-commit d296a74b7b59ff9116236c17edb25f26935dbf70 upstream.
+commit d3a5a68cff47f6eead84504c3c28376b85053242 upstream.
 
-HP ZBook 15 G6 (SSID 103c:860f) needs the same speaker amplifier
-initialization as used on several other HP laptops using ALC285.
+The address bits used to select the futex spinlock need to match those used in
+the LWS code in syscall.S. The mask 0x3f8 only selects 7 bits.  It should
+select 8 bits.
 
-Signed-off-by: Bradley Scott <Bradley.Scott@zebra.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20211213154938.503201-1-Bradley.Scott@zebra.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+This change fixes the glibc nptl/tst-cond24 and nptl/tst-cond25 tests.
+
+Signed-off-by: John David Anglin <dave.anglin@bell.net>
+Fixes: 53a42b6324b8 ("parisc: Switch to more fine grained lws locks")
+Cc: stable@vger.kernel.org # 5.10+
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/patch_realtek.c |    1 +
- 1 file changed, 1 insertion(+)
+ arch/parisc/include/asm/futex.h |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -8101,6 +8101,7 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x103c, 0x84da, "HP OMEN dc0019-ur", ALC295_FIXUP_HP_OMEN),
- 	SND_PCI_QUIRK(0x103c, 0x84e7, "HP Pavilion 15", ALC269_FIXUP_HP_MUTE_LED_MIC3),
- 	SND_PCI_QUIRK(0x103c, 0x8519, "HP Spectre x360 15-df0xxx", ALC285_FIXUP_HP_SPECTRE_X360),
-+	SND_PCI_QUIRK(0x103c, 0x860f, "HP ZBook 15 G6", ALC285_FIXUP_HP_GPIO_AMP_INIT),
- 	SND_PCI_QUIRK(0x103c, 0x861f, "HP Elite Dragonfly G1", ALC285_FIXUP_HP_GPIO_AMP_INIT),
- 	SND_PCI_QUIRK(0x103c, 0x869d, "HP", ALC236_FIXUP_HP_MUTE_LED),
- 	SND_PCI_QUIRK(0x103c, 0x8724, "HP EliteBook 850 G7", ALC285_FIXUP_HP_GPIO_LED),
+--- a/arch/parisc/include/asm/futex.h
++++ b/arch/parisc/include/asm/futex.h
+@@ -16,7 +16,7 @@ static inline void
+ _futex_spin_lock_irqsave(u32 __user *uaddr, unsigned long int *flags)
+ {
+ 	extern u32 lws_lock_start[];
+-	long index = ((long)uaddr & 0x3f8) >> 1;
++	long index = ((long)uaddr & 0x7f8) >> 1;
+ 	arch_spinlock_t *s = (arch_spinlock_t *)&lws_lock_start[index];
+ 	local_irq_save(*flags);
+ 	arch_spin_lock(s);
+@@ -26,7 +26,7 @@ static inline void
+ _futex_spin_unlock_irqrestore(u32 __user *uaddr, unsigned long int *flags)
+ {
+ 	extern u32 lws_lock_start[];
+-	long index = ((long)uaddr & 0x3f8) >> 1;
++	long index = ((long)uaddr & 0x7f8) >> 1;
+ 	arch_spinlock_t *s = (arch_spinlock_t *)&lws_lock_start[index];
+ 	arch_spin_unlock(s);
+ 	local_irq_restore(*flags);
 
 

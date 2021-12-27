@@ -2,43 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F5347FED8
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 544274800D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238142AbhL0PdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:33:01 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33992 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238049AbhL0Pct (ORCPT
+        id S240192AbhL0PvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:51:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240115AbhL0PrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:32:49 -0500
+        Mon, 27 Dec 2021 10:47:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A65AC061799;
+        Mon, 27 Dec 2021 07:43:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0A4E610A6;
-        Mon, 27 Dec 2021 15:32:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C26F3C36AEB;
-        Mon, 27 Dec 2021 15:32:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41F29B810AA;
+        Mon, 27 Dec 2021 15:43:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 896A5C36AEA;
+        Mon, 27 Dec 2021 15:43:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619168;
-        bh=4bRulaxE7kkQ/lwnl9f1sNtyQRvG9h/NNXObngGG0BA=;
+        s=korg; t=1640619785;
+        bh=Is5ajmjBZ3pPB360/05m2xzCA3wiVN8ciGCE2IAx1jk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nFV5yxeD+TkAQ+0MCNM5qhBWtLPTAmUeqyHexHrQJ699frJtvHPmMUHHt5CundE0Y
-         s+Y6ACEIfxwH4Wfq2avkbMvLRgEArYWbk+l55mE/QRbVOAlNRWX5HN3AeJ+e/IAmRM
-         1kFChayljlIbouOJAOeGOLWCy1EMc53+BfeC9N20=
+        b=i9ARz3xkmDpIZGdwOJjctMloHu3DD9kDW+WaMpwtuM932pv8jd0KB+zdH+YYscc9E
+         JnKmvrT9Pcbt7IHjPwCHVN5G43CcvAAU7bKnPyJegEHx0q5Mi6a6o1RwMUwQpMQhOU
+         s5yZZMldu0F6rEFaKwLAjFJYbslucvKbEvVVAtBc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dmitrii Tcvetkov <demfloro@demfloro.ru>,
-        Douglas Anderson <dianders@chromium.org>,
-        Paolo Valente <paolo.valente@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>, Yu Kuai <yukuai3@huawei.com>
-Subject: [PATCH 4.19 06/38] block, bfq: fix use after free in bfq_bfqq_expire
+        stable@vger.kernel.org, Harsha Priya <harshapriya.n@intel.com>,
+        Emmanuel Jillela <emmanuel.jillela@intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>
+Subject: [PATCH 5.15 068/128] ALSA: hda/hdmi: Disable silent stream on GLK
 Date:   Mon, 27 Dec 2021 16:30:43 +0100
-Message-Id: <20211227151319.590190184@linuxfoundation.org>
+Message-Id: <20211227151333.763895602@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
-References: <20211227151319.379265346@linuxfoundation.org>
+In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
+References: <20211227151331.502501367@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,137 +52,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Valente <paolo.valente@linaro.org>
+From: Ville Syrjälä <ville.syrjala@linux.intel.com>
 
-commit eed47d19d9362bdd958e4ab56af480b9dbf6b2b6 upstream.
+commit b6fd77472dea76b7a2bad3a338ade920152972b8 upstream.
 
-The function bfq_bfqq_expire() invokes the function
-__bfq_bfqq_expire(), and the latter may free the in-service bfq-queue.
-If this happens, then no other instruction of bfq_bfqq_expire() must
-be executed, or a use-after-free will occur.
+The silent stream stuff recurses back into i915 audio
+component .get_power() from the .pin_eld_notify() hook.
+On GLK this will deadlock as i915 may already be holding
+the relevant modeset locks during .pin_eld_notify() and
+the GLK audio vs. CDCLK workaround will try to grab the
+same locks from .get_power().
 
-Basing on the assumption that __bfq_bfqq_expire() invokes
-bfq_put_queue() on the in-service bfq-queue exactly once, the queue is
-assumed to be freed if its refcounter is equal to one right before
-invoking __bfq_bfqq_expire().
+Until someone comes up with a better fix just disable the
+silent stream support on GLK.
 
-But, since commit 9dee8b3b057e ("block, bfq: fix queue removal from
-weights tree") this assumption is false. __bfq_bfqq_expire() may also
-invoke bfq_weights_tree_remove() and, since commit 9dee8b3b057e
-("block, bfq: fix queue removal from weights tree"), also
-the latter function may invoke bfq_put_queue(). So __bfq_bfqq_expire()
-may invoke bfq_put_queue() twice, and this is the actual case where
-the in-service queue may happen to be freed.
-
-To address this issue, this commit moves the check on the refcounter
-of the queue right around the last bfq_put_queue() that may be invoked
-on the queue.
-
-Fixes: 9dee8b3b057e ("block, bfq: fix queue removal from weights tree")
-Reported-by: Dmitrii Tcvetkov <demfloro@demfloro.ru>
-Reported-by: Douglas Anderson <dianders@chromium.org>
-Tested-by: Dmitrii Tcvetkov <demfloro@demfloro.ru>
-Tested-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+Cc: stable@vger.kernel.org
+Cc: Harsha Priya <harshapriya.n@intel.com>
+Cc: Emmanuel Jillela <emmanuel.jillela@intel.com>
+Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Cc: Takashi Iwai <tiwai@suse.de>
+Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/2623
+Fixes: 951894cf30f4 ("ALSA: hda/hdmi: Add Intel silent stream support")
+Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Link: https://lore.kernel.org/r/20211222145350.24342-1-ville.syrjala@linux.intel.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/bfq-iosched.c |   15 +++++++--------
- block/bfq-iosched.h |    2 +-
- block/bfq-wf2q.c    |   17 +++++++++++++++--
- 3 files changed, 23 insertions(+), 11 deletions(-)
+ sound/pci/hda/patch_hdmi.c |   21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
 
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -2816,7 +2816,7 @@ static void bfq_dispatch_remove(struct r
- 	bfq_remove_request(q, rq);
- }
+--- a/sound/pci/hda/patch_hdmi.c
++++ b/sound/pci/hda/patch_hdmi.c
+@@ -2947,7 +2947,8 @@ static int parse_intel_hdmi(struct hda_c
  
--static void __bfq_bfqq_expire(struct bfq_data *bfqd, struct bfq_queue *bfqq)
-+static bool __bfq_bfqq_expire(struct bfq_data *bfqd, struct bfq_queue *bfqq)
+ /* Intel Haswell and onwards; audio component with eld notifier */
+ static int intel_hsw_common_init(struct hda_codec *codec, hda_nid_t vendor_nid,
+-				 const int *port_map, int port_num, int dev_num)
++				 const int *port_map, int port_num, int dev_num,
++				 bool send_silent_stream)
  {
- 	/*
- 	 * If this bfqq is shared between multiple processes, check
-@@ -2849,9 +2849,11 @@ static void __bfq_bfqq_expire(struct bfq
- 	/*
- 	 * All in-service entities must have been properly deactivated
- 	 * or requeued before executing the next function, which
--	 * resets all in-service entites as no more in service.
-+	 * resets all in-service entities as no more in service. This
-+	 * may cause bfqq to be freed. If this happens, the next
-+	 * function returns true.
+ 	struct hdmi_spec *spec;
+ 	int err;
+@@ -2980,7 +2981,7 @@ static int intel_hsw_common_init(struct
+ 	 * Enable silent stream feature, if it is enabled via
+ 	 * module param or Kconfig option
  	 */
--	__bfq_bfqd_reset_in_service(bfqd);
-+	return __bfq_bfqd_reset_in_service(bfqd);
- }
+-	if (enable_silent_stream)
++	if (send_silent_stream)
+ 		spec->send_silent_stream = true;
  
- /**
-@@ -3256,7 +3258,6 @@ void bfq_bfqq_expire(struct bfq_data *bf
- 	bool slow;
- 	unsigned long delta = 0;
- 	struct bfq_entity *entity = &bfqq->entity;
--	int ref;
+ 	return parse_intel_hdmi(codec);
+@@ -2988,12 +2989,18 @@ static int intel_hsw_common_init(struct
  
- 	/*
- 	 * Check whether the process is slow (see bfq_bfqq_is_slow).
-@@ -3325,10 +3326,8 @@ void bfq_bfqq_expire(struct bfq_data *bf
- 	 * reason.
- 	 */
- 	__bfq_bfqq_recalc_budget(bfqd, bfqq, reason);
--	ref = bfqq->ref;
--	__bfq_bfqq_expire(bfqd, bfqq);
--
--	if (ref == 1) /* bfqq is gone, no more actions on it */
-+	if (__bfq_bfqq_expire(bfqd, bfqq))
-+		/* bfqq is gone, no more actions on it */
- 		return;
- 
- 	bfqq->injected_service = 0;
---- a/block/bfq-iosched.h
-+++ b/block/bfq-iosched.h
-@@ -993,7 +993,7 @@ bool __bfq_deactivate_entity(struct bfq_
- 			     bool ins_into_idle_tree);
- bool next_queue_may_preempt(struct bfq_data *bfqd);
- struct bfq_queue *bfq_get_next_queue(struct bfq_data *bfqd);
--void __bfq_bfqd_reset_in_service(struct bfq_data *bfqd);
-+bool __bfq_bfqd_reset_in_service(struct bfq_data *bfqd);
- void bfq_deactivate_bfqq(struct bfq_data *bfqd, struct bfq_queue *bfqq,
- 			 bool ins_into_idle_tree, bool expiration);
- void bfq_activate_bfqq(struct bfq_data *bfqd, struct bfq_queue *bfqq);
---- a/block/bfq-wf2q.c
-+++ b/block/bfq-wf2q.c
-@@ -1600,7 +1600,8 @@ struct bfq_queue *bfq_get_next_queue(str
- 	return bfqq;
- }
- 
--void __bfq_bfqd_reset_in_service(struct bfq_data *bfqd)
-+/* returns true if the in-service queue gets freed */
-+bool __bfq_bfqd_reset_in_service(struct bfq_data *bfqd)
+ static int patch_i915_hsw_hdmi(struct hda_codec *codec)
  {
- 	struct bfq_queue *in_serv_bfqq = bfqd->in_service_queue;
- 	struct bfq_entity *in_serv_entity = &in_serv_bfqq->entity;
-@@ -1624,8 +1625,20 @@ void __bfq_bfqd_reset_in_service(struct
- 	 * service tree either, then release the service reference to
- 	 * the queue it represents (taken with bfq_get_entity).
- 	 */
--	if (!in_serv_entity->on_st)
-+	if (!in_serv_entity->on_st) {
-+		/*
-+		 * If no process is referencing in_serv_bfqq any
-+		 * longer, then the service reference may be the only
-+		 * reference to the queue. If this is the case, then
-+		 * bfqq gets freed here.
-+		 */
-+		int ref = in_serv_bfqq->ref;
- 		bfq_put_queue(in_serv_bfqq);
-+		if (ref == 1)
-+			return true;
-+	}
-+
-+	return false;
+-	return intel_hsw_common_init(codec, 0x08, NULL, 0, 3);
++	return intel_hsw_common_init(codec, 0x08, NULL, 0, 3,
++				     enable_silent_stream);
  }
  
- void bfq_deactivate_bfqq(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+ static int patch_i915_glk_hdmi(struct hda_codec *codec)
+ {
+-	return intel_hsw_common_init(codec, 0x0b, NULL, 0, 3);
++	/*
++	 * Silent stream calls audio component .get_power() from
++	 * .pin_eld_notify(). On GLK this will deadlock in i915 due
++	 * to the audio vs. CDCLK workaround.
++	 */
++	return intel_hsw_common_init(codec, 0x0b, NULL, 0, 3, false);
+ }
+ 
+ static int patch_i915_icl_hdmi(struct hda_codec *codec)
+@@ -3004,7 +3011,8 @@ static int patch_i915_icl_hdmi(struct hd
+ 	 */
+ 	static const int map[] = {0x0, 0x4, 0x6, 0x8, 0xa, 0xb};
+ 
+-	return intel_hsw_common_init(codec, 0x02, map, ARRAY_SIZE(map), 3);
++	return intel_hsw_common_init(codec, 0x02, map, ARRAY_SIZE(map), 3,
++				     enable_silent_stream);
+ }
+ 
+ static int patch_i915_tgl_hdmi(struct hda_codec *codec)
+@@ -3016,7 +3024,8 @@ static int patch_i915_tgl_hdmi(struct hd
+ 	static const int map[] = {0x4, 0x6, 0x8, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf};
+ 	int ret;
+ 
+-	ret = intel_hsw_common_init(codec, 0x02, map, ARRAY_SIZE(map), 4);
++	ret = intel_hsw_common_init(codec, 0x02, map, ARRAY_SIZE(map), 4,
++				    enable_silent_stream);
+ 	if (!ret) {
+ 		struct hdmi_spec *spec = codec->spec;
+ 
 
 

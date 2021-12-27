@@ -2,197 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A1D47FBFA
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8413547FBFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:53:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236185AbhL0Kwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 05:52:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232788AbhL0Kws (ORCPT
+        id S236194AbhL0KxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 05:53:07 -0500
+Received: from vmicros1.altlinux.org ([194.107.17.57]:35186 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232508AbhL0KxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 05:52:48 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1001C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 02:52:48 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1FF541EC02AD;
-        Mon, 27 Dec 2021 11:52:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640602363;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=P966dCeL08Y35QZgSUkpuR6ek63qN6eQPKa9gIdz0FY=;
-        b=J4DbpGPe+Mw7J4vrxspdFxVh0BnxiqwWrI6LscaZANpOy7i+Qn4DrFMOpJysbQiHKKG48g
-        O5AvBU6j1Vaxd1uQrr687e2HGfv+Rq89zd9mQi19ZhRPJs0wUV8RsFDlVSRayNkeeInYUA
-        SZ2qYjDv3i3H2jcPICCse9hn/StkHwQ=
-Date:   Mon, 27 Dec 2021 11:52:46 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        "Luck, Tony" <tony.luck@intel.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Youquan Song <youquan.song@intel.com>
-Subject: Re: [PATCH v2] x86/mce: Reduce number of machine checks taken during
- recovery
-Message-ID: <Ycma/pwpb0prSM2N@zn.tnic>
-References: <20211215222016.1390235-1-tony.luck@intel.com>
- <20211218005322.GM16608@worktop.programming.kicks-ass.net>
- <YcTW5dh8yTGucDd+@agluck-desk2.amr.corp.intel.com>
- <YcWz6aEfsOZlHHXp@hirez.programming.kicks-ass.net>
+        Mon, 27 Dec 2021 05:53:06 -0500
+Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 388A472C8B0;
+        Mon, 27 Dec 2021 13:53:04 +0300 (MSK)
+Received: by mua.local.altlinux.org (Postfix, from userid 508)
+        id 1F4F87CCA1A; Mon, 27 Dec 2021 13:53:04 +0300 (MSK)
+Date:   Mon, 27 Dec 2021 13:53:04 +0300
+From:   "Dmitry V. Levin" <ldv@altlinux.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] uapi: fix asm/shmbuf.h userspace compilation errors
+Message-ID: <20211227105303.GA25101@altlinux.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YcWz6aEfsOZlHHXp@hirez.programming.kicks-ass.net>
+In-Reply-To: <CAK8P3a1=-Q=gVRyk+PwqxTeTPXa4yrmqWKG7SyZng2d7bcbG=g@mail.gmail.com>
+ <CAK8P3a1_QLguZ6XEGC9TdGUmF0R3bKaU2EiJ6m+Gf=KpYnmqqw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 24, 2021 at 12:50:01PM +0100, Peter Zijlstra wrote:
-> That's inaccurate, fixup_exception() (event if it's spelled correctly)
-> does not unconditionally set the trap number in RAX, that's only done by
-> ex_handler_fault() (or ex_handler_sgx()), which means all flows into
-> this function must pass through: EX_TYPE_FAULT, EX_TYPE_FAULT_MCE or
-> EX_TYPE_COPY.
+Userspace cannot compile <asm/shmbuf.h> due to some missing type
+definitions.  For example, compiling it for x86_64 fails with the
+following diagnostics:
 
-Yeah, they all flow through the copy thing, see _ASM_EXTABLE_CPY()
-everywhere in that file.
+  HDRTEST usr/include/asm/shmbuf.h
+In file included from ./usr/include/asm/shmbuf.h:6,
+                 from <command-line>:
+./usr/include/asm-generic/shmbuf.h:26:33: error: field 'shm_perm' has incomplete type
+   26 |         struct ipc64_perm       shm_perm;       /* operation perms */
+      |                                 ^~~~~~~~
+./usr/include/asm-generic/shmbuf.h:27:9: error: unknown type name 'size_t'
+   27 |         size_t                  shm_segsz;      /* size of segment (bytes) */
+      |         ^~~~~~
+./usr/include/asm-generic/shmbuf.h:40:9: error: unknown type name '__kernel_pid_t'
+   40 |         __kernel_pid_t          shm_cpid;       /* pid of creator */
+      |         ^~~~~~~~~~~~~~
+./usr/include/asm-generic/shmbuf.h:41:9: error: unknown type name '__kernel_pid_t'
+   41 |         __kernel_pid_t          shm_lpid;       /* pid of last operator */
+      |         ^~~~~~~~~~~~~~
 
-> Boris might fix up your comment if he applies I suppose..
+Replace size_t with __kernel_size_t and include <asm/ipcbuf.h> to make
+asm/shmbuf.h self-contained, also add it to the compile-test coverage.
 
-I did with the following changes so that tip branches merging can work
-relatively easily and so that I don't pull in the whole x86/core pile
-into ras/core.
-
-The automerge conflict resolve with tip/master is after the patch below
-and it looks ok to me too.
-
-Thoughts?
-
+Signed-off-by: Dmitry V. Levin <ldv@altlinux.org>
 ---
-From 0db3d12d3f1e8ee87a2f1cc6049a3a7c0e1f5e6c Mon Sep 17 00:00:00 2001
-From: Youquan Song <youquan.song@intel.com>
-Date: Thu, 23 Dec 2021 12:07:01 -0800
-Subject: [PATCH] x86/mce: Reduce number of machine checks taken during
- recovery
 
-When any of the copy functions in arch/x86/lib/copy_user_64.S take a
-fault, the fixup code copies the remaining byte count from %ecx to %edx
-and unconditionally jumps to .Lcopy_user_handle_tail to continue the
-copy in case any more bytes can be copied.
+This was submitted almost 5 years ago [1] and acked by Arnd, so I was
+under impression that it was applied among others of this kind, but,
+apparently, it's still relevant.
 
-If the fault was #PF this may copy more bytes (because the page fault
-handler might have fixed the fault). But when the fault is a machine
-check the original copy code will have copied all the way to the poisoned
-cache line. So .Lcopy_user_handle_tail will just take another machine
-check for no good reason.
+v2: squash two patches into a single patch, update commit message,
+remove usr/include/Makefile exception for asm/shmbuf.h.
 
-Every code path to .Lcopy_user_handle_tail comes from an exception fixup
-path, so add a check there to check the trap type (in %eax) and simply
-return the count of remaining bytes if the trap was a machine check.
+[1] https://lore.kernel.org/lkml/20170302004607.GE27132@altlinux.org/T/#u
 
-Doing this reduces the number of machine checks taken during synthetic
-tests from four to three.
+ arch/mips/include/uapi/asm/shmbuf.h    | 6 ++++--
+ arch/parisc/include/uapi/asm/shmbuf.h  | 1 +
+ arch/powerpc/include/uapi/asm/shmbuf.h | 4 +++-
+ arch/sparc/include/uapi/asm/shmbuf.h   | 4 +++-
+ arch/x86/include/uapi/asm/shmbuf.h     | 4 +++-
+ arch/xtensa/include/uapi/asm/shmbuf.h  | 4 +++-
+ include/uapi/asm-generic/shmbuf.h      | 3 ++-
+ usr/include/Makefile                   | 1 -
+ 8 files changed, 19 insertions(+), 8 deletions(-)
 
-As well as reducing the number of machine checks, this also allows
-Skylake generation Xeons to recover some cases that currently fail. The
-is because REP; MOVSB is only recoverable when source and destination
-are well aligned and the byte count is large. That useless call to
-.Lcopy_user_handle_tail may violate one or more of these conditions and
-generate a fatal machine check.
-
-  [ Tony: Add more details to commit message. ]
-  [ bp: Fixup comment.
-    Also, another tip patchset which is adding straight-line speculation
-    mitigation changes the "ret" instruction to an all-caps macro "RET".
-    But, since gas is case-insensitive, use "RET" in the newly added asm block
-    already in order to simplify tip branch merging on its way upstream.
-  ]
-
-Signed-off-by: Youquan Song <youquan.song@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/YcTW5dh8yTGucDd+@agluck-desk2.amr.corp.intel.com
----
- arch/x86/lib/copy_user_64.S | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/arch/x86/lib/copy_user_64.S b/arch/x86/lib/copy_user_64.S
-index 2797e630b9b1..e73b76e5bc09 100644
---- a/arch/x86/lib/copy_user_64.S
-+++ b/arch/x86/lib/copy_user_64.S
-@@ -225,6 +225,7 @@ EXPORT_SYMBOL(copy_user_enhanced_fast_string)
-  * Don't try to copy the tail if machine check happened
-  *
-  * Input:
-+ * eax trap number written by ex_handler_copy()
-  * rdi destination
-  * rsi source
-  * rdx count
-@@ -233,12 +234,20 @@ EXPORT_SYMBOL(copy_user_enhanced_fast_string)
-  * eax uncopied bytes or 0 if successful.
+diff --git a/arch/mips/include/uapi/asm/shmbuf.h b/arch/mips/include/uapi/asm/shmbuf.h
+index 680bb95b2240..cfddd497e6a8 100644
+--- a/arch/mips/include/uapi/asm/shmbuf.h
++++ b/arch/mips/include/uapi/asm/shmbuf.h
+@@ -2,6 +2,8 @@
+ #ifndef _ASM_SHMBUF_H
+ #define _ASM_SHMBUF_H
+ 
++#include <asm/ipcbuf.h>
++
+ /*
+  * The shmid64_ds structure for the MIPS architecture.
+  * Note extra padding because this structure is passed back and forth
+@@ -16,7 +18,7 @@
+ #ifdef __mips64
+ struct shmid64_ds {
+ 	struct ipc64_perm	shm_perm;	/* operation perms */
+-	size_t			shm_segsz;	/* size of segment (bytes) */
++	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
+ 	long			shm_atime;	/* last attach time */
+ 	long			shm_dtime;	/* last detach time */
+ 	long			shm_ctime;	/* last change time */
+@@ -29,7 +31,7 @@ struct shmid64_ds {
+ #else
+ struct shmid64_ds {
+ 	struct ipc64_perm	shm_perm;	/* operation perms */
+-	size_t			shm_segsz;	/* size of segment (bytes) */
++	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
+ 	unsigned long		shm_atime;	/* last attach time */
+ 	unsigned long		shm_dtime;	/* last detach time */
+ 	unsigned long		shm_ctime;	/* last change time */
+diff --git a/arch/parisc/include/uapi/asm/shmbuf.h b/arch/parisc/include/uapi/asm/shmbuf.h
+index 5da3089be65e..4b1d6c0b1216 100644
+--- a/arch/parisc/include/uapi/asm/shmbuf.h
++++ b/arch/parisc/include/uapi/asm/shmbuf.h
+@@ -3,6 +3,7 @@
+ #define _PARISC_SHMBUF_H
+ 
+ #include <asm/bitsperlong.h>
++#include <asm/ipcbuf.h>
+ 
+ /* 
+  * The shmid64_ds structure for parisc architecture.
+diff --git a/arch/powerpc/include/uapi/asm/shmbuf.h b/arch/powerpc/include/uapi/asm/shmbuf.h
+index 00422b2f3c63..8a274dbf7b20 100644
+--- a/arch/powerpc/include/uapi/asm/shmbuf.h
++++ b/arch/powerpc/include/uapi/asm/shmbuf.h
+@@ -2,6 +2,8 @@
+ #ifndef _ASM_POWERPC_SHMBUF_H
+ #define _ASM_POWERPC_SHMBUF_H
+ 
++#include <asm/ipcbuf.h>
++
+ /*
+  * This program is free software; you can redistribute it and/or
+  * modify it under the terms of the GNU General Public License
+@@ -34,7 +36,7 @@ struct shmid64_ds {
+ 	unsigned long		shm_ctime;	/* last change time */
+ 	unsigned long		__unused4;
+ #endif
+-	size_t			shm_segsz;	/* size of segment (bytes) */
++	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
+ 	__kernel_pid_t		shm_cpid;	/* pid of creator */
+ 	__kernel_pid_t		shm_lpid;	/* pid of last operator */
+ 	unsigned long		shm_nattch;	/* no. of current attaches */
+diff --git a/arch/sparc/include/uapi/asm/shmbuf.h b/arch/sparc/include/uapi/asm/shmbuf.h
+index a5d7d8d681c4..1b10b3c91d1b 100644
+--- a/arch/sparc/include/uapi/asm/shmbuf.h
++++ b/arch/sparc/include/uapi/asm/shmbuf.h
+@@ -2,6 +2,8 @@
+ #ifndef _SPARC_SHMBUF_H
+ #define _SPARC_SHMBUF_H
+ 
++#include <asm/ipcbuf.h>
++
+ /* 
+  * The shmid64_ds structure for sparc architecture.
+  * Note extra padding because this structure is passed back and forth
+@@ -25,7 +27,7 @@ struct shmid64_ds {
+ 	unsigned long		shm_ctime_high;
+ 	unsigned long		shm_ctime;	/* last change time */
+ #endif
+-	size_t			shm_segsz;	/* size of segment (bytes) */
++	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
+ 	__kernel_pid_t		shm_cpid;	/* pid of creator */
+ 	__kernel_pid_t		shm_lpid;	/* pid of last operator */
+ 	unsigned long		shm_nattch;	/* no. of current attaches */
+diff --git a/arch/x86/include/uapi/asm/shmbuf.h b/arch/x86/include/uapi/asm/shmbuf.h
+index fce18eaa070c..3e61a65d8512 100644
+--- a/arch/x86/include/uapi/asm/shmbuf.h
++++ b/arch/x86/include/uapi/asm/shmbuf.h
+@@ -13,9 +13,11 @@
+  * from other 32-bit architectures.
   */
- SYM_CODE_START_LOCAL(.Lcopy_user_handle_tail)
-+	cmp $X86_TRAP_MC,%eax
-+	je 3f
-+
- 	movl %edx,%ecx
- 1:	rep movsb
- 2:	mov %ecx,%eax
- 	ASM_CLAC
- 	ret
  
-+3:
-+	movl %edx,%eax
-+	ASM_CLAC
-+	RET
++#include <asm/ipcbuf.h>
 +
- 	_ASM_EXTABLE_CPY(1b, 2b)
- SYM_CODE_END(.Lcopy_user_handle_tail)
+ struct shmid64_ds {
+ 	struct ipc64_perm	shm_perm;	/* operation perms */
+-	size_t			shm_segsz;	/* size of segment (bytes) */
++	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
+ 	__kernel_long_t		shm_atime;	/* last attach time */
+ 	__kernel_long_t		shm_dtime;	/* last detach time */
+ 	__kernel_long_t		shm_ctime;	/* last change time */
+diff --git a/arch/xtensa/include/uapi/asm/shmbuf.h b/arch/xtensa/include/uapi/asm/shmbuf.h
+index 554a57a6a90f..a54411e1ec2a 100644
+--- a/arch/xtensa/include/uapi/asm/shmbuf.h
++++ b/arch/xtensa/include/uapi/asm/shmbuf.h
+@@ -20,9 +20,11 @@
+ #ifndef _XTENSA_SHMBUF_H
+ #define _XTENSA_SHMBUF_H
  
++#include <asm/ipcbuf.h>
++
+ struct shmid64_ds {
+ 	struct ipc64_perm	shm_perm;	/* operation perms */
+-	size_t			shm_segsz;	/* size of segment (bytes) */
++	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
+ 	unsigned long		shm_atime;	/* last attach time */
+ 	unsigned long		shm_atime_high;
+ 	unsigned long		shm_dtime;	/* last detach time */
+diff --git a/include/uapi/asm-generic/shmbuf.h b/include/uapi/asm-generic/shmbuf.h
+index 2bab955e0fed..dc16f82be778 100644
+--- a/include/uapi/asm-generic/shmbuf.h
++++ b/include/uapi/asm-generic/shmbuf.h
+@@ -3,6 +3,7 @@
+ #define __ASM_GENERIC_SHMBUF_H
+ 
+ #include <asm/bitsperlong.h>
++#include <asm/ipcbuf.h>
+ 
+ /*
+  * The shmid64_ds structure for x86 architecture.
+@@ -24,7 +25,7 @@
+ 
+ struct shmid64_ds {
+ 	struct ipc64_perm	shm_perm;	/* operation perms */
+-	size_t			shm_segsz;	/* size of segment (bytes) */
++	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
+ #if __BITS_PER_LONG == 64
+ 	long			shm_atime;	/* last attach time */
+ 	long			shm_dtime;	/* last detach time */
+diff --git a/usr/include/Makefile b/usr/include/Makefile
+index 1c2ae1368079..129d13e71691 100644
+--- a/usr/include/Makefile
++++ b/usr/include/Makefile
+@@ -20,7 +20,6 @@ override c_flags = $(UAPI_CFLAGS) -Wp,-MMD,$(depfile) -I$(objtree)/usr/include
+ # Please consider to fix the header first.
+ #
+ # Sorted alphabetically.
+-no-header-test += asm/shmbuf.h
+ no-header-test += asm/signal.h
+ no-header-test += asm/ucontext.h
+ no-header-test += drm/vmwgfx_drm.h
+
 -- 
-2.29.2
-
-automerge resolve with tip/master:
-
-commit a236a52e9c4b2869211aa1bb515856e625c30ac4 (HEAD -> refs/heads/test)
-Merge: be59580168ba 0db3d12d3f1e
-Author: Borislav Petkov <bp@suse.de>
-Date:   Mon Dec 27 11:46:58 2021 +0100
-
-    Merge branch 'tip-ras-core' into test
-
-diff --cc arch/x86/lib/copy_user_64.S
-index e6ac38587b40,e73b76e5bc09..d4a0494e618b
---- a/arch/x86/lib/copy_user_64.S
-+++ b/arch/x86/lib/copy_user_64.S
-@@@ -224,14 -241,14 +228,19 @@@ SYM_CODE_START_LOCAL(.Lcopy_user_handle
-  1:	rep movsb
-  2:	mov %ecx,%eax
-  	ASM_CLAC
- -	ret
- +	RET
-  
-+ 3:
-+ 	movl %edx,%eax
-+ 	ASM_CLAC
-+ 	RET
-+ 
-  	_ASM_EXTABLE_CPY(1b, 2b)
- +
- +.Lcopy_user_handle_align:
- +	addl %ecx,%edx			/* ecx is zerorest also */
- +	jmp .Lcopy_user_handle_tail
- +
-  SYM_CODE_END(.Lcopy_user_handle_tail)
-  
-  /*
-
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+ldv

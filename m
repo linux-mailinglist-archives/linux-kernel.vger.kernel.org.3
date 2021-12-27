@@ -2,91 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3646E47FBC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:15:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2029847FBCB
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235945AbhL0KPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 05:15:45 -0500
-Received: from polaris.svanheule.net ([84.16.241.116]:50530 "EHLO
-        polaris.svanheule.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235931AbhL0KPp (ORCPT
+        id S235975AbhL0KQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 05:16:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235931AbhL0KQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 05:15:45 -0500
-Received: from [10.0.28.181] (cust-13-241-108-94.dyn.as47377.net [94.108.241.13])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 27 Dec 2021 05:16:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97930C06173E;
+        Mon, 27 Dec 2021 02:16:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 43EAF2886BF;
-        Mon, 27 Dec 2021 11:15:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1640600143;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XQ++rAypcF3cqGDp+CkRP6VSaTvtTw7bDNf/Cjh12yQ=;
-        b=M2Zz/YvhlPTKQhifSHslqT3njncTkVqBXJfMlyj8OJuIqEkdOR7KqzzsvZc7UZEjg4Hg+h
-        GQk1b0xP6xA+3/+a/DzBVqg1TKlF+0Ezc3I0bSK/73aBsi5VHNYr989Xwdfr1HAMK1HC3A
-        i4N+SdqVMCD9GP/jAKtpw9OAghAKLPmHpMoHCxoWvJu/Q1ANKUmLYXxZxvB48JhozlU0sQ
-        nA9BhUF6uy3+DD4kmGIzXtJZUlwxuWLrqX5E/DsG4rQapNHEHJCNNqGx9pjAJAMVRXT/hF
-        ZeqVVw1s0A1HLnYGtzShTl7JKr391m+TPmYiRCP85XD+F7rgc2Me+IlgE2KjwQ==
-X-Priority: 3
-To:     maz@kernel.org
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        mail@birger-koblitz.de, bert@biot.com, john@phrozen.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de
-From:   Sander Vanheule <sander@svanheule.net>
-Subject: Re: [RFC PATCH v1 3/4] dt-bindings: interrupt-controller:
- realtek,rtl-intc: replace irq mapping
-In-Reply-To: <87v8zaz7ml.wl-maz@kernel.org>
-References: <cover.1640261161.git.sander@svanheule.net>
-        <8a5931f18a6f1c92f8c8e4965dc65674d7e5a4c4.1640261161.git.sander@svanheule.net>  <87y24byzej.wl-maz@kernel.org>  <add13702d89fdad4ae7a479c0894aaa3be794087.camel@svanheule.net> <87v8zaz7ml.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: base64
-Date:   Mon, 27 Dec 2021 10:15:41 +0000
-Message-ID: <ofvekt.r4rr67.2rw3hx-qmf@polaris.svanheule.net>
-MIME-Version: 1.0
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62823B80E66;
+        Mon, 27 Dec 2021 10:15:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C509C36AEA;
+        Mon, 27 Dec 2021 10:15:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640600158;
+        bh=4RiHKxZjxpjsHwek5qKC1q/jLc8UAYKeJ68vjH604EA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PT7cHvOkTdvB0IAUbDUnmF3SzF1E31PObIaToOo+bcmDNWeYxZKRIQ5fThOg/R0+h
+         MYcDBMV+RDTq1156vfzSEm/jyX6xYnbVMPZwuC9f9CoZixklnESiErNQgqn5PV7G8o
+         yYaDGXw/z4ac6iPHZyJPguSPRAOPXxvM2hR2+AxwQfmq7fUgTjhPxbn6jc/UMOKMPl
+         kC2G2wWw+dRqU3nzAVqzINLFQmehCcqShAGDMzXux91jZnx9g1qtl4oGsvtzVq6WP4
+         e4wO56HuqzbhRv+ULipKKn/poq2NPkSaQWScv0gVaVKLGw0t/SgcCsUQPaRO+2TGV6
+         k6OZBtiqQOGdA==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n1n2q-00EX0L-1n; Mon, 27 Dec 2021 10:15:56 +0000
+Date:   Mon, 27 Dec 2021 10:16:01 +0000
+Message-ID: <87tueuz732.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Bert Vermeulen <bert@biot.com>,
+        John Crispin <john@phrozen.org>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 2/5] irqchip/realtek-rtl: fix off-by-one in routing
+In-Reply-To: <2235a7748b8f7689a96b1e0f91461e36a946a4ef.1640548009.git.sander@svanheule.net>
+References: <cover.1640548009.git.sander@svanheule.net>
+        <2235a7748b8f7689a96b1e0f91461e36a946a4ef.1640548009.git.sander@svanheule.net>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sander@svanheule.net, tglx@linutronix.de, robh+dt@kernel.org, devicetree@vger.kernel.org, mail@birger-koblitz.de, bert@biot.com, john@phrozen.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgTWFyYywNCg0KT24gTW9uZGF5LCAyNyBEZWNlbWJlciAyMDIxLCBNYXJjIFp5bmdpZXIgd3Jv
-dGU6DQo+IE9uIFRodSwgMjMgRGVjIDIwMjEgMTk6Mjk6MjMgKzAwMDAsDQo+IFNhbmRlciBWYW5o
-ZXVsZSA8c2FuZGVyQHN2YW5oZXVsZS5uZXQ+IHdyb3RlOg0KPiA+IA0KPiA+IE9uIFRodSwgMjAy
-MS0xMi0yMyBhdCAxODowMCArMDAwMCwgTWFyYyBaeW5naWVyIHdyb3RlOg0KPiA+ID4gT24gVGh1
-LCAyMyBEZWMgMjAyMSAxMjowODozMyArMDAwMCwNCj4gPiA+IFNhbmRlciBWYW5oZXVsZSA8c2Fu
-ZGVyQHN2YW5oZXVsZS5uZXQ+IHdyb3RlOg0KPiA+ID4gPiANCj4gPiA+ID4gVGhlIGJpbmRpbmcg
-aW5jb3JyZWN0bHkgc3BlY2lmaWVkIHRoZSAiaW50ZXJydXB0LW1hcCIgcHJvcGVydHkgc2hvdWxk
-IGJlDQo+ID4gPiA+IHVzZWQsIGFsdGhvdWdoIHRoZSB1c2UgaXMgbm9uLXN0YW5kYXJkLiBBIHF1
-aXJrIGhhZCB0byBiZSBpbnRyb2R1Y2VkIGluDQo+ID4gPiA+IGNvbW1pdCBkZTRhZGRkY2JjYzIg
-KCJvZi9pcnE6IEFkZCBhIHF1aXJrIGZvciBjb250cm9sbGVycyB3aXRoIHRoZWlyIG93bg0KPiA+
-ID4gPiBkZWZpbml0aW9uIG9mIGludGVycnVwdC1tYXAiKSB0byBhbGxvdyB0aGUgZHJpdmVyIHRv
-IGZ1bmN0aW9uIGFnYWluLg0KPiA+ID4gDQo+ID4gPiBUaGF0J3MgdG9vIGxhdGUuIFdlIGhhdmUg
-cmVsZWFzZWQgYSBrZXJuZWwgd2l0aCB0aGlzIGJpbmRpbmcsIGFuZCBpdA0KPiA+ID4gd2lsbCBs
-aXZlIG9uIGZvcmV2ZXIgdW50aWwgd2UgdG90YWxseSByZW1vdmUgdGhlIHBsYXRmb3JtIGZyb20g
-dGhlDQo+ID4gPiB0cmVlLg0KPiA+ID4gDQo+ID4gPiBEVCBpcyBhbiBBQkksIGFuZCBvbmx5IHRp
-bWUgdHJhdmVsIGNhbiBmaXggdGhpcyBibHVuZGVyLg0KPiA+IA0KPiA+IFRha2luZyBpbnRvIGFj
-Y291bnQgeW91ciBjb21tZW50cyBvbiB0aGUgcHJldmlvdXMgcGF0Y2gsIHRoaXMgY2hhbmdlDQo+
-ID4gd291bGRuJ3QgZXZlbiBiZSByZXF1aXJlZCBpZiBJIGNvcnJlY3QgdGhlIG1hcHBpbmdzIGZv
-ciBteQ0KPiA+IGRldmljZXMuIEJ1dCB0aGF0IHdvdWxkbid0IGdldCByaWQgb2YgdGhlIGFzc3Vt
-ZWQgbWFwcGluZyBiZXR3ZWVuDQo+ID4gb3V0cHV0IGxpbmVzIGFuZCBwYXJlbnQgaW50ZXJydXB0
-cy4NCj4gDQo+IEEgZHJpdmVyIGNhbiBhbHdheXMgaWdub3JlIHNvbWUgaW5mb3JtYXRpb24gZnJv
-bSB0aGUgRFQgYW5kIGRvIGl0cyBvd24NCj4gdGhpbmcuIE5vIHN1cmUgaWYgdGhhdCBhZGRyZXNz
-ZXMgeW91ciBwcm9ibGVtIHRob3VnaC4NCj4gDQo+ID4gDQo+ID4gVG8gd2hhdCBleHRlbnQgY2Fu
-IHRoZSBiaW5kaW5nIGJlIHVwZGF0ZWQgdG8gZ2V0IHJpZCBvZiB0aGlzDQo+ID4gYXNzdW1wdGlv
-bj8gT3Igd291bGQgdGhhdCByZXF1aXJlIGEgY29tcGxldGVseSBuZXcgYmluZGluZz8NCj4gDQo+
-IFlvdSBjYW4gb25seSBleHRlbmQgYSBiaW5kaW5nIGluIGEgdHdvLXdheSBmYXNoaW9uOiBvbGQg
-a2VybmVsIHdvcmtzDQo+IHdpdGggbmV3IERULCBuZXcga2VybmVsIHdvcmtzIG9sZCBEVC4gV2hp
-Y2ggbWVhbnMgdGhhdCBpbiBwcmFjdGljZSwNCj4geW91IGNhbiBvbmx5ICphZGQqIGluZm9ybWF0
-aW9uIHRvIHRoZSBEVCwgYW5kIGhhdmUgcmVhc29uYWJsZSBkZWZhdWx0cw0KPiBpbiB0aGUgZHJp
-dmVyIHdoZW4geW91IGRvbid0IGZpbmQgaXQuDQoNClRoYW5rcyBmb3IgY2xhcmlmeWluZy4gSW4g
-dGhhdCBjYXNlIEkgZG9uJ3QgdGhpbmsgaXQgaXMgcG9zc2libGUgdG8gZ2V0IHJpZCBvZiB0aGUg
-b3V0cHV0LXRvLXBhcmVudCBhc3N1bXB0aW9uIGVudGlyZWx5LCBzaW5jZSB0aGUgZHJpdmVyIHdv
-dWxkIGFsd2F5cyBuZWVkIHRvIGFjY29tbW9kYXRlIGZvciB0aGUgb3JpZ2luYWwgYmluZGluZywg
-d2hlcmUgdGhlcmUgaXMgbm8gb3V0cHV0IG1hcHBpbmcgc3BlY2lmaWVkIGluIHRoZSBiaW5kaW5n
-LiBUaGVyZSBhcmUgbm8gU29DLXNwZWNpZmljIGNvbXBhdGlibGVzICh3aGVyZSBhIG1hcHBpbmcg
-Y291bGQgYmUgYXNzdW1lZCksIGFuZCBJIGRvbid0IGtub3cgb24gaG93IG1hbnkgTUlQUyBwbGF0
-Zm9ybXMgUmVhbHRlayBoYXMgdXNlZCB0aGlzIGludGVycnVwdCByb3V0ZXIvY29udHJvbGxlci4N
-Cg0KSSBkb24ndCBoYXZlIG11Y2ggdGltZSBhbnltb3JlIHRvZGF5LCBidXQgSSdsbCBicmVhayBt
-eSBoZWFkIG92ZXIgaXQgYWdhaW4gdG9tb3Jyb3cuDQoNCkJlc3QsDQpTYW5kZXI=
+On Sun, 26 Dec 2021 19:59:25 +0000,
+Sander Vanheule <sander@svanheule.net> wrote:
+> 
+> There is an offset between routing values (1..6) and the connected MIPS
+> CPU interrupts (2..7), but no distinction was made between these two
+> values.
+> 
+> This issue was previously hidden during testing, because an interrupt
+> mapping was used where for each required interrupt another (unused)
+> routing was configured, with an offset of +1.
+
+Where does this 'other routing' come from?
+
+> 
+> Offset the CPU IRQ numbers by -1 to retrieve the correct routing value.
+> 
+> Fixes: 9f3a0f34b84a ("irqchip: Add support for Realtek RTL838x/RTL839x interrupt controller")
+> Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> ---
+>  drivers/irqchip/irq-realtek-rtl.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-realtek-rtl.c b/drivers/irqchip/irq-realtek-rtl.c
+> index d6788dd93c7b..568614edd88f 100644
+> --- a/drivers/irqchip/irq-realtek-rtl.c
+> +++ b/drivers/irqchip/irq-realtek-rtl.c
+> @@ -95,7 +95,8 @@ static void realtek_irq_dispatch(struct irq_desc *desc)
+>   * SoC interrupts are cascaded to MIPS CPU interrupts according to the
+>   * interrupt-map in the device tree. Each SoC interrupt gets 4 bits for
+>   * the CPU interrupt in an Interrupt Routing Register. Max 32 SoC interrupts
+> - * thus go into 4 IRRs.
+> + * thus go into 4 IRRs. A routing value of '0' means the interrupt is left
+> + * disconnected. Routing values {1..15} connect to output lines {0..14}.
+>   */
+>  static int __init map_interrupts(struct device_node *node, struct irq_domain *domain)
+>  {
+> @@ -134,7 +135,7 @@ static int __init map_interrupts(struct device_node *node, struct irq_domain *do
+>  		of_node_put(cpu_ictl);
+>  
+>  		cpu_int = be32_to_cpup(imap + 2);
+> -		if (cpu_int > 7)
+> +		if (cpu_int > 7 || cpu_int < 2)
+
+How many output lines do you have? The comment above says something
+about having 15 output lines, but you limit it to 7...
+
+>  			return -EINVAL;
+>  
+>  		if (!(mips_irqs_set & BIT(cpu_int))) {
+> @@ -143,7 +144,8 @@ static int __init map_interrupts(struct device_node *node, struct irq_domain *do
+>  			mips_irqs_set |= BIT(cpu_int);
+>  		}
+>  
+> -		regs[(soc_int * 4) / 32] |= cpu_int << (soc_int * 4) % 32;
+> +		/* Use routing values (1..6) for CPU interrupts (2..7) */
+> +		regs[(soc_int * 4) / 32] |= (cpu_int - 1) << (soc_int * 4) % 32;
+>  		imap += 3;
+>  	}
+>  
+
+What I don't understand is how this worked so far if all mappings were
+off my one. Or the mapping really doesn't matter, because this is all
+under SW control?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

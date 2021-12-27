@@ -2,106 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1491E47FCC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 13:52:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2DDF47FCCD
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 13:53:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236746AbhL0MwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 07:52:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56302 "EHLO
+        id S236765AbhL0MxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 07:53:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233867AbhL0MwB (ORCPT
+        with ESMTP id S233867AbhL0MxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 07:52:01 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60829C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 04:52:01 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id t123so13550978pfc.13
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 04:52:01 -0800 (PST)
+        Mon, 27 Dec 2021 07:53:22 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B241C06173E;
+        Mon, 27 Dec 2021 04:53:22 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id k66-20020a1ca145000000b00345fa984108so2656878wme.2;
+        Mon, 27 Dec 2021 04:53:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id;
-        bh=9aFYPZXKzmDafO2auf3/6QRn9QC7vq8i5WcA0Y9xZ6c=;
-        b=pRyt+gp3oWA47u6eHT7L7R1wOPjSAH54JQ2M5Aze4aIMLsymngl8aOnCELtOjPNDGb
-         roNj1t+86vHcnZmL4oE2QACOyoGclGLCWZ4SzM3mB30keOvKOnOVTytxhMqInK77f8Ua
-         PpvjzT6X/XLyRJJrMyIWuLl3qJzC4jhr1shOwGomSnOtmgwgrL+22UtLUBvwJHhByJh8
-         nVB8H3uCPueHt8vjz0YZAJykx6q/8HdFvR0kGapSPFR1UcnJqNtvc3u/jLK+1PlDbD2Q
-         OFUdTzuU213cKbgOyzbrF8OdnmXPJ43AEEK0W1qEA6ADyxqob7IUB3Dlu9p0mXMa1LCA
-         ln1w==
+        bh=P/au97/FpQGpCIWXJLd40PtZYg+NpWsNt/T09/0nn+g=;
+        b=i4owH1aagy9ydAw3s1oaf8UoLtfw4gyeld2AiMpsi8EadR9S2YleL5Lv79Jsr1gSLL
+         wJuFUuiw5nyMjo+mj7KmEwImjQGIB9T0Jt4XMcv281+wEmKm3yCGu1YieObGFBrgi+4S
+         7iwgzJdEZ+HwEf1AFaRfc6g8UvNAudzEppHQ1rtxrF/QiSIPJ0ATyAxrNbGvOJkRsj3L
+         XNwVLspZMcZMZTy406rQSX/mHSMHfesO5yN/ueGdH8L/mhdrp2eQINWaUE49A5s4dhbK
+         7VlK9ZsKhejOzCfUNpZBL/8hLfJZ4U+sR2r1AWFiDdUI1G6Wec+yw734WXv6AFs6C0rE
+         YZ6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=9aFYPZXKzmDafO2auf3/6QRn9QC7vq8i5WcA0Y9xZ6c=;
-        b=hbbEssy9W6f9sKuruhmUbHgMqH7rFu7SIgIpXKJMgc+IpzQPs+c0Lfpglur6Ms+15n
-         k+gxBEBDs/k390Nu996zz0IERPpPhYWFlPriX0+H8klVqW5BAHyWbuHZNMYJ5D9IME+n
-         TqD0YoD7Ba3a4NFe31J4eol57wXibKeEq6JlmPsuZhnCgJcmsq2ol27c2ovnveM5pM7Z
-         /xzbIUB7usU32+RNsJoeEv4RqPjgTbMnaIOppDui4cLOauJgeeJurc6lQEHWaOC7dALj
-         9p9q3x7Iyp/HIbkMeSmLHth8dM1Dxy8jZK4eXRNAgC1A4wl535QgdMmEpHB+6gXEHOrS
-         Bo8w==
-X-Gm-Message-State: AOAM532GpxbOGJdXJUElJQsqs5i3jqkTYW6wy3ynQWLnKILS1mlzEYpb
-        /BSaGcn82moTu7FOKMfwB/c=
-X-Google-Smtp-Source: ABdhPJx4bN/IiaNPezTWFQQgvtoj8yn9Dh1+jkgDDGKUqVrkqM2F0/V+u1pZgJW7kMOnbicEryw2Ug==
-X-Received: by 2002:a63:af19:: with SMTP id w25mr15608279pge.438.1640609520971;
-        Mon, 27 Dec 2021 04:52:00 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id q16sm13305049pfu.31.2021.12.27.04.51.58
+        bh=P/au97/FpQGpCIWXJLd40PtZYg+NpWsNt/T09/0nn+g=;
+        b=CnI1Jn6ZaxkLEUm39YVJOwDIWIWG4jm7Bo31N4GgQbFbPM5i+liroj9xllm9N5WeCM
+         DX5u/2HJ1/jWvB/pwI5i8CtDf6lBnykidDU1p8n9kZFU0TgFPA17B9kDg+tM2QaKS4zq
+         ubwKdnrNmCXmEVcQgIwYZWGzXTPqS6N5GrEAUeFUbZQomN1c06i9eCnpl4ixHVY4eso8
+         4GVrG7dxhk7dUpMqAOb/xnxZziYxf3sbLvOGv9bxjaiKQAdXg2Xvh5LX3JPJMzQtiTxo
+         mmtUamM1SCKfbti6vwPNy4nqotDh8+EPVTnDAdGOyWe/IAnhxjewAzDdV92XrFP7UmuV
+         DKQQ==
+X-Gm-Message-State: AOAM532kQ8i5s9Acnb+41671OBSbJXo+3Dj/VNxUoWWpSs6nfLXKnQGc
+        Fx50ZGxxY2FOEtGoa5r2KFc=
+X-Google-Smtp-Source: ABdhPJytIe560EhN2h0QMk8mA3ZbjMwKjx9t9jLhWaRh41LdpywGHWtJKnt4PB1nBkNmaDeAtbZdcQ==
+X-Received: by 2002:a05:600c:35cf:: with SMTP id r15mr13190147wmq.106.1640609600481;
+        Mon, 27 Dec 2021 04:53:20 -0800 (PST)
+Received: from felia.fritz.box ([2001:16b8:26c4:7200:610f:609b:d46a:2a08])
+        by smtp.gmail.com with ESMTPSA id y8sm16666635wrd.10.2021.12.27.04.53.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Dec 2021 04:52:00 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Russell King <linux@armlinux.org.uk>,
-        Marc Zyngier <marc.zyngier@altran.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: pxa: Fix error handling in viper_tpm_init
-Date:   Mon, 27 Dec 2021 12:51:53 +0000
-Message-Id: <20211227125154.3145-1-linmq006@gmail.com>
+        Mon, 27 Dec 2021 04:53:19 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] trace: remove unneeded initialization in __trace_uprobe_create()
+Date:   Mon, 27 Dec 2021 13:53:08 +0100
+Message-Id: <20211227125308.25787-1-lukas.bulwahn@gmail.com>
 X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tpm_device get by platform_device_alloc(), which calls device_initialize.
-Call platform_device_put(tpm_device) instead of kfree(tmp_device) to
-prevent memory leak.
+There is no need to initialize ret with 0, as all the early error branches
+simply return constant values, and the default path always reaches
+ret = kern_path(filename, LOOKUP_FOLLOW, &path), which will reset ret
+before the initial value was ever used.
 
-Fixes: 352699a ("Basic support for the Arcom/Eurotech Viper SBC.")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Remove this unneeded initialization and keep the code succinct.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- arch/arm/mach-pxa/viper.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ kernel/trace/trace_uprobe.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/mach-pxa/viper.c b/arch/arm/mach-pxa/viper.c
-index 3aa34e9a15d3..9a0f184dbecb 100644
---- a/arch/arm/mach-pxa/viper.c
-+++ b/arch/arm/mach-pxa/viper.c
-@@ -815,11 +815,11 @@ static void __init viper_tpm_init(void)
- 					      sizeof(i2c_tpm_data))) {
- 			if (platform_device_add(tpm_device)) {
- 				errstr = "register TPM i2c bus";
--				goto error_free_tpm;
-+				goto exit_put_device;
- 			}
- 		} else {
- 			errstr = "allocate TPM i2c bus data";
--			goto error_free_tpm;
-+			goto exit_put_device;
- 		}
- 	} else {
- 		errstr = "allocate TPM i2c device";
-@@ -827,9 +827,8 @@ static void __init viper_tpm_init(void)
- 	}
+diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
+index 5921951a0d5c..9da10c5efdce 100644
+--- a/kernel/trace/trace_uprobe.c
++++ b/kernel/trace/trace_uprobe.c
+@@ -548,7 +548,6 @@ static int __trace_uprobe_create(int argc, const char **argv)
+ 	bool is_return = false;
+ 	int i, ret;
  
- 	return;
--
--error_free_tpm:
--	kfree(tpm_device);
-+exit_put_device:
-+	platform_device_put(tpm_device);
- error_tpm:
- 	pr_err("viper: Couldn't %s, giving up\n", errstr);
- }
+-	ret = 0;
+ 	ref_ctr_offset = 0;
+ 
+ 	switch (argv[0][0]) {
 -- 
 2.17.1
 

@@ -2,93 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E0347FA78
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 07:14:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF3447FA7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 07:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235278AbhL0GOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 01:14:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235267AbhL0GOY (ORCPT
+        id S235292AbhL0GPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 01:15:04 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:30179 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235267AbhL0GPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 01:14:24 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE98BC06173E;
-        Sun, 26 Dec 2021 22:14:23 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id ke6so13111690qvb.1;
-        Sun, 26 Dec 2021 22:14:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u+dFE/6V8YlZA37R5EdGCSZl3b3izh9waYOV/+DOAiA=;
-        b=NsfVTUuMS5ai5U7Nu3Zn7Bv1nmgI3lW5RlCQ3w2GrHEt4XzxF8qtx3r6DphwBZZkU/
-         d5UcoeYma6ORy+kdBdGcMdJ3y8oY4mwShj5xnG/1KdS3+WbI1qd0iAq1rVKIk08EWXwk
-         A4YcUcwdhard8raSsODxopTShJuqXUWpGunTuJxFI2KIAhrGk9EaGeEzYTrU+PMxM+Kx
-         0dnCUGPIgHwRR46WPlS61nErsnswoBORn8L42YApvmRWh2TZVuM7YttAfThRvb7ylwt8
-         Fr9vy0eHYSnTmoIMZW+pcK8Aaer1nklqfHs3i4iHd0WZuQ0VkGYwcn0YexVW2xsfKREl
-         eaqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u+dFE/6V8YlZA37R5EdGCSZl3b3izh9waYOV/+DOAiA=;
-        b=OCFWYPIBqMJR2BS16sRYvugEUYRYIJjIy6gg3RENcADlA/1tiiUnfXfjeiSWBBZPyd
-         CbX+9aaq62VPSbedxIT/fLQhMmsS0wj9bYAGymGuphLKNkAljl5BhfPu31e/jVGVjqIg
-         wBxfln7kGtFEw7hi0gFZZG0GRqfIc7KoWUsPo6rrFbLjGvU7OULv7j7vrp1E1MfmRdEo
-         XXCV5N6UFxSMsd0Fdd+IN3OCWENlPYqkaiM2fAq8Fl19yN+U43fB5/DVQgTvdbUKTDUp
-         3mwbPSLH9kHTZCKrmXYXTJ5pv/EQk2vmI0/cv3PXlMEgdeEO9mmlyk5RRq67zGeHdy0Q
-         1JtA==
-X-Gm-Message-State: AOAM533AWHsYLlfoK+A0mGW3cXQY0fzSWjpiY6mrpM8RSxGWdtOalnvJ
-        hKPvyo+ZY7fMg3sqRvZuECUwIk/6pP0vORmO1U2L3oTeMJAG9A==
-X-Google-Smtp-Source: ABdhPJzwfbXmQgXhLB2hjSWy9HTlJXt0fphlDMkgtleB2CJzEiDIT995tXIPrpdaTfkRSS54/ns6c1sIVRpZk0nAMqQ=
-X-Received: by 2002:ad4:5aac:: with SMTP id u12mr10003470qvg.105.1640585662738;
- Sun, 26 Dec 2021 22:14:22 -0800 (PST)
+        Mon, 27 Dec 2021 01:15:03 -0500
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JMnQ52V9xz8w5Q;
+        Mon, 27 Dec 2021 14:12:29 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 27 Dec 2021 14:14:54 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2308.20; Mon, 27 Dec 2021 14:14:53 +0800
+Message-ID: <eb1813ff-e775-3bb8-b0d0-848d01bdf3e3@huawei.com>
+Date:   Mon, 27 Dec 2021 14:14:53 +0800
 MIME-Version: 1.0
-References: <1640224567-3014-1-git-send-email-huangzhaoyang@gmail.com> <20211223091100.4a86188f@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20211223091100.4a86188f@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Mon, 27 Dec 2021 14:14:02 +0800
-Message-ID: <CAGWkznHcjrM2kth8uWtuu+H-LOdPGXAN70nBYJax7aqcuHkECg@mail.gmail.com>
-Subject: Re: [PATCH] net: remove judgement based on gfp_flags
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        netdev@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 1/3] mm: vmalloc: Let user to control huge vmalloc default
+ behavior
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Borislav Petkov" <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>
+References: <20211226083912.166512-1-wangkefeng.wang@huawei.com>
+ <20211226083912.166512-2-wangkefeng.wang@huawei.com>
+ <6c4bd989-268e-5899-09a7-ac573bd8b4d9@csgroup.eu>
+ <c7037a3a-d0b1-6351-5e31-22be0d8e0e01@huawei.com>
+ <YckwuA8CWcQpQdGO@casper.infradead.org>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <YckwuA8CWcQpQdGO@casper.infradead.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggeme707-chm.china.huawei.com (10.1.199.103) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 24, 2021 at 1:11 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Thu, 23 Dec 2021 09:56:07 +0800 Huangzhaoyang wrote:
-> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> >
-> > The parameter allocation here is used for indicating if the memory
-> > allocation can stall or not. Since we have got the skb buffer, it
-> > doesn't make sense to check if we can yield on the net's congested
-> > via gfp_flags. Remove it now.
->
-> This is checking if we can sleep AFAICT. What are you trying to fix?
-Yes and NO. gfp means *get free pages* which indicate if the embedded
-memory allocation among the process can sleep or not, but without any
-other meanings. The driver which invokes this function could have to
-use GFP_KERNEL for allocating memory as the critical resources but
-don't want to sleep on the netlink's congestion.
 
->
-> > diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-> > index 4c57532..af5b6af 100644
-> > --- a/net/netlink/af_netlink.c
-> > +++ b/net/netlink/af_netlink.c
-> > @@ -1526,7 +1526,7 @@ int netlink_broadcast(struct sock *ssk, struct sk_buff *skb, u32 portid,
-> >       consume_skb(info.skb2);
-> >
-> >       if (info.delivered) {
-> > -             if (info.congested && gfpflags_allow_blocking(allocation))
-> > +             if (info.congested)
-> >                       yield();
-> >               return 0;
-> >       }
->
+On 2021/12/27 11:19, Matthew Wilcox wrote:
+> On Mon, Dec 27, 2021 at 09:44:24AM +0800, Kefeng Wang wrote:
+>> On 2021/12/27 1:36, Christophe Leroy wrote:
+>>> Le 26/12/2021 à 09:39, Kefeng Wang a écrit :
+>>>> Add HUGE_VMALLOC_DEFAULT_ENABLED to let user to choose whether or
+>>>> not enable huge vmalloc mappings by default, and this could make
+>>>> more architectures to enable huge vmalloc mappings feature but
+>>>> don't want to enable it by default.
+>>>>
+>>>> Add hugevmalloc=on/off parameter to enable or disable this feature
+>>>> at boot time, nohugevmalloc is still supported and equivalent to
+>>>> hugevmalloc=off.
+>>> Is there a real added value to have the user be able to select that ?
+>>>
+>>> If the architecture supports it, is there any good reason to not use it ?
+>> There are some disadvantages[1],  one of the main concerns is the possible
+>>
+>> memory waste, we have backported this feature to our kernel 5.10, but our
+>>
+>> downstream in our some scenario(especially in embedded), they don't want
+>>
+>> it enabled by default, and others want it, this is why patch1 comes.
+>>
+>>> Why not just do like PPC and enable it by default ? Why should it be
+>>> enabled by default on PPC but disabled by default on ARM64 and X86 ?
+>> The PPC is default enabled, we don't changes this behavior.
+>>
+>> Maybe upstream is not care about this, as I said in cover-letter, if
+>> arm64/x86
+>>
+>> don't want patch1, we could only just select config to enable it.
+>>
+>> Let's wait for more feedback.
+> We should not have different defaults by architecture.  Either we change
+> the default for PPC, or x86 & arm should have the same default as PPC.
+
+Ok, since HUGE_VMALLOC_DEFAULT_ENABLED is introduced, we could make it
+
+default y, not only select it on PPC, then the ppc/arm64/x86 have same 
+default value.
+
+And if someone don't want it, they could not enable this config.
+
+Meanwhile hugevmalloc=on/off to make this feature to enable/disable at 
+boot time.
+
+I will add some explanation and resend it, thanks.
+
+> .

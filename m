@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2044247FFAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB45147FF3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:37:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238933AbhL0Pko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:40:44 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:41276 "EHLO
+        id S238698AbhL0Pg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:36:26 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:40218 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238929AbhL0Phy (ORCPT
+        with ESMTP id S238206AbhL0Pfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:37:54 -0500
+        Mon, 27 Dec 2021 10:35:55 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 476BDCE10D7;
-        Mon, 27 Dec 2021 15:37:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11BCFC36AEA;
-        Mon, 27 Dec 2021 15:37:50 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3B6A7CE10C4;
+        Mon, 27 Dec 2021 15:35:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 076D5C36AE7;
+        Mon, 27 Dec 2021 15:35:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619471;
-        bh=EGJYDXlMHeVDNvyRLl978rsNAxVBC7mC247kkSuqSb4=;
+        s=korg; t=1640619352;
+        bh=nKfYu5MQaAnI/Noxy4Zf633C7w3wg2e90fKeUXCoH7k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mA7TdiF8yz39sGhTz2BoS13kh//UxLCG/HShpqbCTzkm6/Tacu5WiSzpG4YR8VvEI
-         3IgOsgzizvZwoBTMmxC1U9yVi29AgUqGPKsPJ2v6WV8WzT3HiZNRFT5Zuej2jAO00Q
-         yS7WOUpqPlzYcBGuE+U6xaRl1gfHZGAGlvEYi9p4=
+        b=puygYfQBaDnQ9sQWCODHAnjSaWH+YD7hMo3RYw2MSldWpOwQyO2N62GfMgVyqDtBg
+         aCZ3SsSYOWIZKoU+mFPrRGkTeJMX1yJpFmImXePhJz09liKv6cN21sg9J5WM+KerNq
+         muF7S0j5pyIeT/SOfSyI7MB7OSgH+v1F6aww2ArI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaoke Wang <xkernel.wang@foxmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.10 34/76] ALSA: jack: Check the return value of kstrdup()
-Date:   Mon, 27 Dec 2021 16:30:49 +0100
-Message-Id: <20211227151325.880488323@linuxfoundation.org>
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 14/47] drivers: net: smc911x: Check for error irq
+Date:   Mon, 27 Dec 2021 16:30:50 +0100
+Message-Id: <20211227151321.284674005@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
-References: <20211227151324.694661623@linuxfoundation.org>
+In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
+References: <20211227151320.801714429@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,33 +46,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-commit c01c1db1dc632edafb0dff32d40daf4f9c1a4e19 upstream.
+[ Upstream commit cb93b3e11d405f20a405a07482d01147ef4934a3 ]
 
-kstrdup() can return NULL, it is better to check the return value of it.
+Because platform_get_irq() could fail and return error irq.
+Therefore, it might be better to check it if order to avoid the use of
+error irq.
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/tencent_094816F3522E0DC704056C789352EBBF0606@qq.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: ae150435b59e ("smsc: Move the SMC (SMSC) drivers")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/core/jack.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/ethernet/smsc/smc911x.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/sound/core/jack.c
-+++ b/sound/core/jack.c
-@@ -220,6 +220,10 @@ int snd_jack_new(struct snd_card *card,
- 		return -ENOMEM;
+diff --git a/drivers/net/ethernet/smsc/smc911x.c b/drivers/net/ethernet/smsc/smc911x.c
+index 7b65e79d6ae91..82ca29b6781b2 100644
+--- a/drivers/net/ethernet/smsc/smc911x.c
++++ b/drivers/net/ethernet/smsc/smc911x.c
+@@ -2069,6 +2069,11 @@ static int smc911x_drv_probe(struct platform_device *pdev)
  
- 	jack->id = kstrdup(id, GFP_KERNEL);
-+	if (jack->id == NULL) {
-+		kfree(jack);
-+		return -ENOMEM;
+ 	ndev->dma = (unsigned char)-1;
+ 	ndev->irq = platform_get_irq(pdev, 0);
++	if (ndev->irq < 0) {
++		ret = ndev->irq;
++		goto release_both;
 +	}
- 
- 	/* don't creat input device for phantom jack */
- 	if (!phantom_jack) {
++
+ 	lp = netdev_priv(ndev);
+ 	lp->netdev = ndev;
+ #ifdef SMC_DYNAMIC_BUS_CONFIG
+-- 
+2.34.1
+
 
 

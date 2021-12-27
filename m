@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2811347FF68
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 594F947FF66
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238643AbhL0PhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:37:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35954 "EHLO
+        id S238567AbhL0PhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:37:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238361AbhL0Peg (ORCPT
+        with ESMTP id S238408AbhL0Pel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:34:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538CEC061759;
-        Mon, 27 Dec 2021 07:34:36 -0800 (PST)
+        Mon, 27 Dec 2021 10:34:41 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63030C06175A;
+        Mon, 27 Dec 2021 07:34:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4D6A610A6;
-        Mon, 27 Dec 2021 15:34:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB007C36AE7;
-        Mon, 27 Dec 2021 15:34:34 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B7CF1CE10AF;
+        Mon, 27 Dec 2021 15:34:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ABDBC36AE7;
+        Mon, 27 Dec 2021 15:34:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619275;
-        bh=MEjrB1ZFtSKD7fvFc6dzx00mCzI1U4uJe/V2KVQju90=;
+        s=korg; t=1640619278;
+        bh=prb9N71+bmDBYZRRkjCyiJV+kqqbCLRisMi2tTtotCk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NZuQ40H5c4JkMLryTmcyyU+uWi6AUmIF22/3HmbuZiudb/Uy6HfTmMzfqSobkUBOO
-         FZ6VxrcNnzDsDR/Uph3ijhD71ufb/IqB2JoA7QTB/2suc2f+4OCMETd1MsLY490V+m
-         uAjiVFIS2tKMeHmPu466xVZIwk3xJpzUTm7ZZEFg=
+        b=K+FxiZyJez9uy0cgIUuNJFo7/qnjoMf2WK9k7wRylVZORkxXhJzKB0P4fmmpFb4S1
+         +dpR0P0NQV4zXMaZo/w9H2Bf0YpoVLINNfSgiIDUQqq6nvDzxF7fQ8gBXDspa4T/Dg
+         oTPXa24y+hhL3h0rB1bCUpgSfsxDOYC4aGpRN5Bk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        =?UTF-8?q?Ignacy=20Gaw=C4=99dzki?= 
+        <ignacy.gawedzki@green-communications.fr>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 06/47] IB/qib: Fix memory leak in qib_user_sdma_queue_pkts()
-Date:   Mon, 27 Dec 2021 16:30:42 +0100
-Message-Id: <20211227151321.004411181@linuxfoundation.org>
+Subject: [PATCH 5.4 07/47] netfilter: fix regression in looped (broad|multi)casts MAC handling
+Date:   Mon, 27 Dec 2021 16:30:43 +0100
+Message-Id: <20211227151321.036819113@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
 References: <20211227151320.801714429@linuxfoundation.org>
@@ -51,36 +52,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: José Expósito <jose.exposito89@gmail.com>
+From: Ignacy Gawędzki <ignacy.gawedzki@green-communications.fr>
 
-[ Upstream commit bee90911e0138c76ee67458ac0d58b38a3190f65 ]
+[ Upstream commit ebb966d3bdfed581ecccbb4a7432341baf7619b4 ]
 
-The wrong goto label was used for the error case and missed cleanup of the
-pkt allocation.
+In commit 5648b5e1169f ("netfilter: nfnetlink_queue: fix OOB when mac
+header was cleared"), the test for non-empty MAC header introduced in
+commit 2c38de4c1f8da7 ("netfilter: fix looped (broad|multi)cast's MAC
+handling") has been replaced with a test for a set MAC header.
 
-Fixes: d39bf40e55e6 ("IB/qib: Protect from buffer overflow in struct qib_user_sdma_pkt fields")
-Link: https://lore.kernel.org/r/20211208175238.29983-1-jose.exposito89@gmail.com
-Addresses-Coverity-ID: 1493352 ("Resource leak")
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-Acked-by: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+This breaks the case when the MAC header has been reset (using
+skb_reset_mac_header), as is the case with looped-back multicast
+packets.  As a result, the packets ending up in NFQUEUE get a bogus
+hwaddr interpreted from the first bytes of the IP header.
+
+This patch adds a test for a non-empty MAC header in addition to the
+test for a set MAC header.  The same two tests are also implemented in
+nfnetlink_log.c, where the initial code of commit 2c38de4c1f8da7
+("netfilter: fix looped (broad|multi)cast's MAC handling") has not been
+touched, but where supposedly the same situation may happen.
+
+Fixes: 5648b5e1169f ("netfilter: nfnetlink_queue: fix OOB when mac header was cleared")
+Signed-off-by: Ignacy Gawędzki <ignacy.gawedzki@green-communications.fr>
+Reviewed-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/qib/qib_user_sdma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/netfilter/nfnetlink_log.c   | 3 ++-
+ net/netfilter/nfnetlink_queue.c | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/infiniband/hw/qib/qib_user_sdma.c b/drivers/infiniband/hw/qib/qib_user_sdma.c
-index 5fd28574124fb..fde848b00202b 100644
---- a/drivers/infiniband/hw/qib/qib_user_sdma.c
-+++ b/drivers/infiniband/hw/qib/qib_user_sdma.c
-@@ -941,7 +941,7 @@ static int qib_user_sdma_queue_pkts(const struct qib_devdata *dd,
- 					       &addrlimit) ||
- 			    addrlimit > type_max(typeof(pkt->addrlimit))) {
- 				ret = -EINVAL;
--				goto free_pbc;
-+				goto free_pkt;
- 			}
- 			pkt->addrlimit = addrlimit;
+diff --git a/net/netfilter/nfnetlink_log.c b/net/netfilter/nfnetlink_log.c
+index 7ca2ca4bba055..b36af4741ad3c 100644
+--- a/net/netfilter/nfnetlink_log.c
++++ b/net/netfilter/nfnetlink_log.c
+@@ -557,7 +557,8 @@ __build_packet_message(struct nfnl_log_net *log,
+ 		goto nla_put_failure;
+ 
+ 	if (indev && skb->dev &&
+-	    skb->mac_header != skb->network_header) {
++	    skb_mac_header_was_set(skb) &&
++	    skb_mac_header_len(skb) != 0) {
+ 		struct nfulnl_msg_packet_hw phw;
+ 		int len;
+ 
+diff --git a/net/netfilter/nfnetlink_queue.c b/net/netfilter/nfnetlink_queue.c
+index a8cb562da3fea..ca21f8f4a47c1 100644
+--- a/net/netfilter/nfnetlink_queue.c
++++ b/net/netfilter/nfnetlink_queue.c
+@@ -562,7 +562,8 @@ nfqnl_build_packet_message(struct net *net, struct nfqnl_instance *queue,
+ 		goto nla_put_failure;
+ 
+ 	if (indev && entskb->dev &&
+-	    skb_mac_header_was_set(entskb)) {
++	    skb_mac_header_was_set(entskb) &&
++	    skb_mac_header_len(entskb) != 0) {
+ 		struct nfqnl_msg_packet_hw phw;
+ 		int len;
  
 -- 
 2.34.1

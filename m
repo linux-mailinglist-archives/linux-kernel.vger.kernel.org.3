@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 685754800F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DDF747FF0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237058AbhL0Pvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:51:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239875AbhL0PsD (ORCPT
+        id S238135AbhL0PfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:35:06 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34842 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238132AbhL0Pd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:48:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F83C0613A5;
-        Mon, 27 Dec 2021 07:43:40 -0800 (PST)
+        Mon, 27 Dec 2021 10:33:57 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A86B8610D5;
-        Mon, 27 Dec 2021 15:43:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B5C0C36AEB;
-        Mon, 27 Dec 2021 15:43:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 70200610AB;
+        Mon, 27 Dec 2021 15:33:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F824C36AFD;
+        Mon, 27 Dec 2021 15:33:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619819;
-        bh=44V4qTvTyLeIAtv3pEmrIpppU+AAjFa49EPdxf1o8bU=;
+        s=korg; t=1640619235;
+        bh=V23xmepXQpNh+1K3DBR2bkdewhILfHHQySS2HhjdccY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NoLTZxzVKdlby9P6F7LMNoq8UeFiRUdmJlWq+sc6exTDJvCUZSO9ksWGMvJxWOrNG
-         /w/dsyv7m2U8eBiOJlKLyIHPqvEc8mYvHB9AI3uInJ8sgvmp7K9faHZlaD5jGLmCJO
-         8VK5YxYwI+nVjxYQC10Kgp7QzYDaBKAo7+2WIdR0=
+        b=pCCSzxc+SwoH37CxrVCXVf48neHj0FXGB1SULRoAGhcaBij/fsLuu3/nsgys5bvoF
+         j8oYFqEsGvfnFHY/CmOksu1NMV+lb2ummTA6wg3bd+J3whfj/CEwjby4M7RWyX7lJL
+         8g7DWzGGqp3sAglg+utBR0eanqm0uaPKV6Mmw8fI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Corey Minyard <cminyard@mvista.com>,
-        Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>
-Subject: [PATCH 5.15 079/128] ipmi: fix initialization when workqueue allocation fails
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 17/38] fjes: Check for error irq
 Date:   Mon, 27 Dec 2021 16:30:54 +0100
-Message-Id: <20211227151334.140959208@linuxfoundation.org>
+Message-Id: <20211227151319.944118461@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
+References: <20211227151319.379265346@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,59 +46,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-commit 75d70d76cb7b927cace2cb34265d68ebb3306b13 upstream.
+[ Upstream commit db6d6afe382de5a65d6ccf51253ab48b8e8336c3 ]
 
-If the workqueue allocation fails, the driver is marked as not initialized,
-and timer and panic_notifier will be left registered.
+I find that platform_get_irq() will not always succeed.
+It will return error irq in case of the failure.
+Therefore, it might be better to check it if order to avoid the use of
+error irq.
 
-Instead of removing those when workqueue allocation fails, do the workqueue
-initialization before doing it, and cleanup srcu_struct if it fails.
-
-Fixes: 1d49eb91e86e ("ipmi: Move remove_work to dedicated workqueue")
-Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Cc: Corey Minyard <cminyard@mvista.com>
-Cc: Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>
-Cc: stable@vger.kernel.org
-Message-Id: <20211217154410.1228673-2-cascardo@canonical.com>
-Signed-off-by: Corey Minyard <cminyard@mvista.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 658d439b2292 ("fjes: Introduce FUJITSU Extended Socket Network Device driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/ipmi/ipmi_msghandler.c |   15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ drivers/net/fjes/fjes_main.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/drivers/char/ipmi/ipmi_msghandler.c
-+++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -5152,20 +5152,23 @@ static int ipmi_init_msghandler(void)
- 	if (rv)
- 		goto out;
- 
--	timer_setup(&ipmi_timer, ipmi_timeout, 0);
--	mod_timer(&ipmi_timer, jiffies + IPMI_TIMEOUT_JIFFIES);
--
--	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
--
- 	remove_work_wq = create_singlethread_workqueue("ipmi-msghandler-remove-wq");
- 	if (!remove_work_wq) {
- 		pr_err("unable to create ipmi-msghandler-remove-wq workqueue");
- 		rv = -ENOMEM;
--		goto out;
-+		goto out_wq;
- 	}
- 
-+	timer_setup(&ipmi_timer, ipmi_timeout, 0);
-+	mod_timer(&ipmi_timer, jiffies + IPMI_TIMEOUT_JIFFIES);
+diff --git a/drivers/net/fjes/fjes_main.c b/drivers/net/fjes/fjes_main.c
+index 778d3729f460a..89b3bc389f469 100644
+--- a/drivers/net/fjes/fjes_main.c
++++ b/drivers/net/fjes/fjes_main.c
+@@ -1284,6 +1284,11 @@ static int fjes_probe(struct platform_device *plat_dev)
+ 	hw->hw_res.start = res->start;
+ 	hw->hw_res.size = resource_size(res);
+ 	hw->hw_res.irq = platform_get_irq(plat_dev, 0);
++	if (hw->hw_res.irq < 0) {
++		err = hw->hw_res.irq;
++		goto err_free_control_wq;
++	}
 +
-+	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
-+
- 	initialized = true;
- 
-+out_wq:
-+	if (rv)
-+		cleanup_srcu_struct(&ipmi_interfaces_srcu);
- out:
- 	mutex_unlock(&ipmi_interfaces_mutex);
- 	return rv;
+ 	err = fjes_hw_init(&adapter->hw);
+ 	if (err)
+ 		goto err_free_control_wq;
+-- 
+2.34.1
+
 
 

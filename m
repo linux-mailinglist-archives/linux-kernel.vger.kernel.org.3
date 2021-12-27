@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2467F47FEA1
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EFAC47FE72
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:29:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237634AbhL0Pal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:30:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237757AbhL0P3S (ORCPT
+        id S237751AbhL0P3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:29:17 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59430 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237526AbhL0P2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:29:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BA5C061379;
-        Mon, 27 Dec 2021 07:29:15 -0800 (PST)
+        Mon, 27 Dec 2021 10:28:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8DF361073;
-        Mon, 27 Dec 2021 15:29:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF45DC36AE7;
-        Mon, 27 Dec 2021 15:29:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8ABF9610A7;
+        Mon, 27 Dec 2021 15:28:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71C94C36AE7;
+        Mon, 27 Dec 2021 15:28:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640618954;
-        bh=zQ8vvOoixBGGLwwy+ukLE3ZLYdW2CEhpCp6iJpG+xGk=;
+        s=korg; t=1640618923;
+        bh=xb4tb8uy3L7bcElN1Su5MwnCoifGY8U9WwZMcQL9OpE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BOELKmpkgW2RRS3W2KdkAb8xqn3zbUCiIVwh4q5wVBtVcNto1hhVBl5p9+lwjyZ8f
-         k74XkjFpHKL8kFtzB6YWPTVY8i8v7AXul3vGcvnbZDFRoL9xrL6dQHNwS+y0MO7IwY
-         l+nZgHULu2aysUlWPOQofw1QCG+VUCHTwIZGSvw0=
+        b=dsoA+7sZqVvggN273LqcSFU1I/KRDlQwQ2WuVDWRy8fBAbBZXCRgLehpBAkaP/Wl0
+         zSl7R5an46vuz3NbTYewP9sZnEQE7TcJpu0jUPOFheH3CTWgSmsC1T0xz2JqFj6pMs
+         iysr46IGu4u/JeFNAnxP3aZMqwiqZr/C2W8D2rZY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH 4.14 03/29] HID: holtek: fix mouse probing
-Date:   Mon, 27 Dec 2021 16:27:13 +0100
-Message-Id: <20211227151318.587437067@linuxfoundation.org>
+        stable@vger.kernel.org, Andrew Cooper <andrew.cooper3@citrix.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH 4.9 12/19] x86/pkey: Fix undefined behaviour with PKRU_WD_BIT
+Date:   Mon, 27 Dec 2021 16:27:14 +0100
+Message-Id: <20211227151316.946081190@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151318.475251079@linuxfoundation.org>
-References: <20211227151318.475251079@linuxfoundation.org>
+In-Reply-To: <20211227151316.558965545@linuxfoundation.org>
+References: <20211227151316.558965545@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,49 +46,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+From: Andrew Cooper <andrew.cooper3@citrix.com>
 
-commit 93a2207c254ca102ebbdae47b00f19bbfbfa7ecd upstream.
+commit 57690554abe135fee81d6ac33cc94d75a7e224bb upstream.
 
-An overlook from the previous commit: we don't even parse or start the
-device, meaning that the device is not presented to user space.
+Both __pkru_allows_write() and arch_set_user_pkey_access() shift
+PKRU_WD_BIT (a signed constant) by up to 30 bits, hitting the
+sign bit.
 
-Fixes: 93020953d0fa ("HID: check for valid USB device for many HID drivers")
+Use unsigned constants instead.
+
+Clearly pkey 15 has not been used in combination with UBSAN yet.
+
+Noticed by code inspection only.  I can't actually provoke the
+compiler into generating incorrect logic as far as this shift is
+concerned.
+
+[
+  dhansen: add stable@ tag, plus minor changelog massaging,
+
+           For anyone doing backports, these #defines were in
+	   arch/x86/include/asm/pgtable.h before 784a46618f6.
+]
+
+Fixes: 33a709b25a76 ("mm/gup, x86/mm/pkeys: Check VMAs and PTEs for protection keys")
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
 Cc: stable@vger.kernel.org
-Link: https://bugs.archlinux.org/task/73048
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215341
-Link: https://lore.kernel.org/r/e4efbf13-bd8d-0370-629b-6c80c0044b15@leemhuis.info/
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Link: https://lkml.kernel.org/r/20211216000856.4480-1-andrew.cooper3@citrix.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hid-holtek-mouse.c |   15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ arch/x86/include/asm/pgtable.h |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/hid/hid-holtek-mouse.c
-+++ b/drivers/hid/hid-holtek-mouse.c
-@@ -68,8 +68,23 @@ static __u8 *holtek_mouse_report_fixup(s
- static int holtek_mouse_probe(struct hid_device *hdev,
- 			      const struct hid_device_id *id)
- {
-+	int ret;
-+
- 	if (!hid_is_usb(hdev))
- 		return -EINVAL;
-+
-+	ret = hid_parse(hdev);
-+	if (ret) {
-+		hid_err(hdev, "hid parse failed: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
-+	if (ret) {
-+		hid_err(hdev, "hw start failed: %d\n", ret);
-+		return ret;
-+	}
-+
- 	return 0;
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -1028,8 +1028,8 @@ static inline pte_t pte_swp_clear_soft_d
  }
+ #endif
  
+-#define PKRU_AD_BIT 0x1
+-#define PKRU_WD_BIT 0x2
++#define PKRU_AD_BIT 0x1u
++#define PKRU_WD_BIT 0x2u
+ #define PKRU_BITS_PER_PKEY 2
+ 
+ static inline bool __pkru_allows_read(u32 pkru, u16 pkey)
 
 

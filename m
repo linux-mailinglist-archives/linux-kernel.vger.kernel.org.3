@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB9947FF14
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D8048011F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238241AbhL0PfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:35:13 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:39404 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238238AbhL0PeN (ORCPT
+        id S240137AbhL0Pxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:53:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240852AbhL0Ptx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:34:13 -0500
+        Mon, 27 Dec 2021 10:49:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA960C0698D2;
+        Mon, 27 Dec 2021 07:44:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 62B7DCE10AF;
-        Mon, 27 Dec 2021 15:34:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF58C36AE7;
-        Mon, 27 Dec 2021 15:34:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D0BA60C9F;
+        Mon, 27 Dec 2021 15:44:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 646C0C36AEA;
+        Mon, 27 Dec 2021 15:44:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619249;
-        bh=vSi4a0PeyAs2P+eFhzGP25R9YR6Fs0KLSDvyanQxgKc=;
+        s=korg; t=1640619881;
+        bh=kLKKv40xnTeG7cN/TPHjmxO2KbHkjocY/RT6Zv7TsGY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WTOBGPanlKCYZmQ1IIzB2U6rEJ+AyjXTPWrbAkeVEA0+Ij1YMzVarbkNbg6hIUGbX
-         ezzvuJjn7DQlt+PevP35PiVFRLrTabiSCR0/zDA8WYO+2NaBh9bKBrqjvnK0TrW1D7
-         Fuya0ZgYiOdQpB1Cm1ncLr4ZZ28LS9nhW6aPVN8w=
+        b=03IQQUC2c2vs2EatPPLzi+BS3/fwR+xk2uHLCEapX97FOdA2s40e7xU4cg9/fxT3j
+         aA2h6n/LYni1atWnSlnd/WR1G9cJ9NiTxIgHnffuwvMKwtlbJTi4Uwjtb9EHqS2c+u
+         HxFWiUlUvIPcC01FOSgV2Imsb328TDE3dXJjSXMk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.19 22/38] ALSA: drivers: opl3: Fix incorrect use of vp->state
-Date:   Mon, 27 Dec 2021 16:30:59 +0100
-Message-Id: <20211227151320.113475760@linuxfoundation.org>
+        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH 5.15 085/128] platform/x86: intel_pmc_core: fix memleak on registration failure
+Date:   Mon, 27 Dec 2021 16:31:00 +0100
+Message-Id: <20211227151334.344340883@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
-References: <20211227151319.379265346@linuxfoundation.org>
+In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
+References: <20211227151331.502501367@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,37 +48,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Colin Ian King <colin.i.king@gmail.com>
+From: Johan Hovold <johan@kernel.org>
 
-commit 2dee54b289fbc810669a1b2b8a0887fa1c9a14d7 upstream.
+commit 26a8b09437804fabfb1db080d676b96c0de68e7c upstream.
 
-Static analysis with scan-build has found an assignment to vp2 that is
-never used. It seems that the check on vp->state > 0 should be actually
-on vp2->state instead. Fix this.
+In case device registration fails during module initialisation, the
+platform device structure needs to be freed using platform_device_put()
+to properly free all resources (e.g. the device name).
 
-This dates back to 2002, I found the offending commit from the git
-history git://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git,
-commit 91e39521bbf6 ("[PATCH] ALSA patch for 2.5.4")
-
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20211212172025.470367-1-colin.i.king@gmail.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: 938835aa903a ("platform/x86: intel_pmc_core: do not create a static struct device")
+Cc: stable@vger.kernel.org      # 5.9
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20211222105023.6205-1-johan@kernel.org
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/drivers/opl3/opl3_midi.c |    2 +-
+ drivers/platform/x86/intel/pmc/pltdrv.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/drivers/opl3/opl3_midi.c
-+++ b/sound/drivers/opl3/opl3_midi.c
-@@ -412,7 +412,7 @@ void snd_opl3_note_on(void *p, int note,
- 	}
- 	if (instr_4op) {
- 		vp2 = &opl3->voices[voice + 3];
--		if (vp->state > 0) {
-+		if (vp2->state > 0) {
- 			opl3_reg = reg_side | (OPL3_REG_KEYON_BLOCK +
- 					       voice_offset + 3);
- 			reg_val = vp->keyon_reg & ~OPL3_KEYON_BIT;
+--- a/drivers/platform/x86/intel/pmc/pltdrv.c
++++ b/drivers/platform/x86/intel/pmc/pltdrv.c
+@@ -65,7 +65,7 @@ static int __init pmc_core_platform_init
+ 
+ 	retval = platform_device_register(pmc_core_device);
+ 	if (retval)
+-		kfree(pmc_core_device);
++		platform_device_put(pmc_core_device);
+ 
+ 	return retval;
+ }
 
 

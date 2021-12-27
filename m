@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB0D47FF22
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D53E47FFEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:42:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238466AbhL0Pfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:35:41 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:39764 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238162AbhL0PfJ (ORCPT
+        id S238540AbhL0Pl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:41:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239420AbhL0Pjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:35:09 -0500
+        Mon, 27 Dec 2021 10:39:49 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A04C0619D9;
+        Mon, 27 Dec 2021 07:38:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 59069CE10B6;
-        Mon, 27 Dec 2021 15:35:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28096C36AE7;
-        Mon, 27 Dec 2021 15:35:05 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 92C56CE10CC;
+        Mon, 27 Dec 2021 15:38:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6103EC36AEA;
+        Mon, 27 Dec 2021 15:38:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619306;
-        bh=R4tZ80uam6UsmuLNMhP7DQ0TOfnMtcu+gfsg/K6c7jQ=;
+        s=korg; t=1640619502;
+        bh=8B6eKPu1EARTYrAO6luOPP+2EBH0qmto8tzaeewAB7U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cCdL//N9ETEfenxpgzQluL/Ghd6qTWezUa152o5ydJ7YHDbJYIZE2acLiadFPx9EJ
-         U1qHwRwWxoORqoYstyUZ+1xySJ6onmNOqIeU0vYj/crr+qzLkLUuNrCV938hO5/zPN
-         PXHvkMNx7GPy3H1SExdBGOKpJEkp+jwpjWwt3XXA=
+        b=dbxH5HaXMb1gfx7d6G3XRA1kcnPakkbbVLsELzYvQq7Me0FkdXkHH2TPkV1v77EX/
+         8A1PypoSKw5SYJxZe9V0Orv6E4WGLJcg0n3xdxLfKYIlkrhTV7+4nhGBDZ9+Gp5n0a
+         fHhVZs/28aqafYrmrFvqkF3VcWMkD96o+rIjjfBU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Corey Minyard <cminyard@mvista.com>
-Subject: [PATCH 5.4 26/47] ipmi: bail out if init_srcu_struct fails
+        stable@vger.kernel.org, Andrew Cooper <andrew.cooper3@citrix.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH 5.10 47/76] x86/pkey: Fix undefined behaviour with PKRU_WD_BIT
 Date:   Mon, 27 Dec 2021 16:31:02 +0100
-Message-Id: <20211227151321.703382890@linuxfoundation.org>
+Message-Id: <20211227151326.334537667@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
-References: <20211227151320.801714429@linuxfoundation.org>
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+References: <20211227151324.694661623@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,37 +49,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+From: Andrew Cooper <andrew.cooper3@citrix.com>
 
-commit 2b5160b12091285c5aca45980f100a9294af7b04 upstream.
+commit 57690554abe135fee81d6ac33cc94d75a7e224bb upstream.
 
-In case, init_srcu_struct fails (because of memory allocation failure), we
-might proceed with the driver initialization despite srcu_struct not being
-entirely initialized.
+Both __pkru_allows_write() and arch_set_user_pkey_access() shift
+PKRU_WD_BIT (a signed constant) by up to 30 bits, hitting the
+sign bit.
 
-Fixes: 913a89f009d9 ("ipmi: Don't initialize anything in the core until something uses it")
-Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Cc: Corey Minyard <cminyard@mvista.com>
+Use unsigned constants instead.
+
+Clearly pkey 15 has not been used in combination with UBSAN yet.
+
+Noticed by code inspection only.  I can't actually provoke the
+compiler into generating incorrect logic as far as this shift is
+concerned.
+
+[
+  dhansen: add stable@ tag, plus minor changelog massaging,
+
+           For anyone doing backports, these #defines were in
+	   arch/x86/include/asm/pgtable.h before 784a46618f6.
+]
+
+Fixes: 33a709b25a76 ("mm/gup, x86/mm/pkeys: Check VMAs and PTEs for protection keys")
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
 Cc: stable@vger.kernel.org
-Message-Id: <20211217154410.1228673-1-cascardo@canonical.com>
-Signed-off-by: Corey Minyard <cminyard@mvista.com>
+Link: https://lkml.kernel.org/r/20211216000856.4480-1-andrew.cooper3@citrix.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/ipmi/ipmi_msghandler.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/pgtable.h |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/char/ipmi/ipmi_msghandler.c
-+++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -5156,7 +5156,9 @@ static int ipmi_init_msghandler(void)
- 	if (initialized)
- 		goto out;
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -1360,8 +1360,8 @@ static inline pmd_t pmd_swp_clear_uffd_w
+ }
+ #endif /* CONFIG_HAVE_ARCH_USERFAULTFD_WP */
  
--	init_srcu_struct(&ipmi_interfaces_srcu);
-+	rv = init_srcu_struct(&ipmi_interfaces_srcu);
-+	if (rv)
-+		goto out;
+-#define PKRU_AD_BIT 0x1
+-#define PKRU_WD_BIT 0x2
++#define PKRU_AD_BIT 0x1u
++#define PKRU_WD_BIT 0x2u
+ #define PKRU_BITS_PER_PKEY 2
  
- 	timer_setup(&ipmi_timer, ipmi_timeout, 0);
- 	mod_timer(&ipmi_timer, jiffies + IPMI_TIMEOUT_JIFFIES);
+ #ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
 
 

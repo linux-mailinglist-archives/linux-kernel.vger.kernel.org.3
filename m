@@ -2,87 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 620DD480338
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 19:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4229748033E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 19:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbhL0STf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 13:19:35 -0500
-Received: from mga18.intel.com ([134.134.136.126]:36858 "EHLO mga18.intel.com"
+        id S231593AbhL0SYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 13:24:37 -0500
+Received: from mga09.intel.com ([134.134.136.24]:17765 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229563AbhL0STe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 13:19:34 -0500
+        id S229499AbhL0SYe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 13:24:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640629174; x=1672165174;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=d/eJhUm09+92HzmeMWK3AjH3oC0HS5KLgho6HA8cbaA=;
-  b=BBuojz8inRiQiOuVPiw11+BUgFUZKzjvccEJo/oHpyEqspjIJn97IiLz
-   yptuo1s74DKBUOJoD8isgbE7Vi4SCEpCRNCJTnHufwxrus06mFZROBpJr
-   wFVNIrfqv9dGoJIBqTzFxy2O9bOC4Jx2h25Juw9nATJOQ207z4OFQ1gPN
-   xQMT3qQatwmhoCJ3++OvvIDoEpDKri4orzGtTZVvHZ/fwdrYoN/02iU40
-   Mlgf/Eyi0pk2Xr/kga68kF7RfgJt3hOtmVgZzwwCSo9lIhKMu6oxzGtIL
-   8QaefQ4K4RPyHF9L5J+AYlU0WHF6NCIGpV5J108IJg1xpNKM5vQz6C8A5
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="228085345"
+  t=1640629474; x=1672165474;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=C+oHdzLPkEGQP3y/+XFIUPLmI6lwlv3Q34bwmNyrap0=;
+  b=Bti2dIM159+jnGedGs39yvdLHWV85qLfm6BV69C9e7Nw8ryFL4VhHSUT
+   YmN0Ncq73CHMQpxBJretjFurRm6V49Asw3FDfv8pCLWb/Dm1e3z5w44W6
+   lcE+oeftX/HDXNd47XN8G9pEqXKA8bnwYQokKSziNIWCXYwCCHFriQPL0
+   HJMCnYNp4HKrs540WWiNRPjCyLmd9r2RsKGUv1S/MqeBO2xNqQVuqbg0C
+   LtmAgW6p391IKgasn2/rMmycvI+ZTRRfXnF9f2ikcH/SPqa9PYey0tuGp
+   3ZgpzbAL3dahxA74x9wd5RqMFimNk0sQiAPiniS9r0iBRRDZcoFt+zdm7
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="241058128"
 X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
-   d="scan'208";a="228085345"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 10:19:33 -0800
+   d="scan'208";a="241058128"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 10:24:34 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
-   d="scan'208";a="553874472"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 27 Dec 2021 10:19:32 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n1uaq-0006gF-70; Mon, 27 Dec 2021 18:19:32 +0000
-Date:   Tue, 28 Dec 2021 02:18:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc:     kbuild-all@lists.01.org, zx2c4@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [crng-random:master 8/9] mips-linux-ld: blake2s.c:undefined
- reference to `blake2s_compress'
-Message-ID: <202112280222.KpoFVWEB-lkp@intel.com>
+   d="scan'208";a="609115399"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Dec 2021 10:24:25 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BRIONTP032398;
+        Mon, 27 Dec 2021 18:24:23 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH v9 01/15] modpost: fix removing numeric suffixes
+Date:   Mon, 27 Dec 2021 19:22:46 +0100
+Message-Id: <20211227182246.1447062-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <YcShenJgaOeOdbIj@zn.tnic>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-2-alexandr.lobakin@intel.com> <YcShenJgaOeOdbIj@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git master
-head:   1e82f9dc0ff8aec645cb0bcbd003c7989db05036
-commit: 94385fa60862094ce641b628c5fd7fd8307d6c39 [8/9] lib/crypto: blake2s: include as built-in
-config: mips-jmr3927_defconfig (https://download.01.org/0day-ci/archive/20211228/202112280222.KpoFVWEB-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=94385fa60862094ce641b628c5fd7fd8307d6c39
-        git remote add crng-random git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
-        git fetch --no-tags crng-random master
-        git checkout 94385fa60862094ce641b628c5fd7fd8307d6c39
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+From: Borislav Petkov <bp@alien8.de>
+Date: Thu, 23 Dec 2021 17:19:06 +0100
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> On Thu, Dec 23, 2021 at 01:21:55AM +0100, Alexander Lobakin wrote:
+> > For now, that condition from remove_dot():
+> > 
+> > if (m && (s[n + m] == '.' || s[n + m] == 0))
+> > 
+> > which was designed to test if it's a dot or a \0 after the suffix
+> > is never satisfied.
+> > This is due to that s[n + m] always points to the last digit of a
+> > numeric suffix, not on the symbol next to it:
+> > 
+> > param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
+> > 
+> > So it's off by one and was like that since 2014.
+> 
+> What's the relevance of this? Looking at
+> 
+>   7d02b490e93c ("Kbuild, lto: Drop .number postfixes in modpost")
+> 
+> what you're fixing here is something LTO-related. How do you trigger
+> this?
 
-All errors (new ones prefixed by >>):
+It's just a couple lines below. I trigger this using `-z uniq-symbol`
+which uses numeric suffixes for globals as well.
 
-   mips-linux-ld: lib/crypto/blake2s.o: in function `blake2s_update':
-   blake2s.c:(.text+0xb0): undefined reference to `blake2s_compress'
->> mips-linux-ld: blake2s.c:(.text+0xe0): undefined reference to `blake2s_compress'
-   mips-linux-ld: lib/crypto/blake2s.o: in function `blake2s_final':
-   blake2s.c:(.text+0x148): undefined reference to `blake2s_compress'
-   mips-linux-ld: lib/crypto/blake2s.o: in function `blake2s256_hmac':
-   blake2s.c:(.text+0x2bc): undefined reference to `blake2s_compress'
-   mips-linux-ld: blake2s.c:(.text+0x588): undefined reference to `blake2s_compress'
-   mips-linux-ld: lib/crypto/blake2s.o:blake2s.c:(.text+0x5c0): more undefined references to `blake2s_compress' follow
+> 
+> For a Cc:stable patch, I'm missing a lot of context.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+It fixes a commit dated 2014, thus Cc:stable. Although the
+remove_dot() might've been introduced for neverlanded GCC LTO, but
+in fact numeric suffixes are used a lot by the toolchains in regular
+builds as well. Just not for globals, that's why it's "well hidden".
+
+> 
+> > `-z uniq-symbol` linker flag which we are planning to use to
+> 				     ^^
+> 
+> Who's "we"?
+
+I thought it's a common saying in commit messages, isn't it?
+
+> 
+> > simplify livepatching brings numeric suffixes back, fix this.
+> > Otherwise:
+> > 
+> > ERROR: modpost: "param_set_uint.0" [vmlinux] is a static EXPORT_SYMBOL
+> > 
+> > Fixes: fcd38ed0ff26 ("scripts: modpost: fix compilation warning")
+> > Cc: stable@vger.kernel.org # 3.17+
+> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> 
+> ...
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
+
+Thanks,
+Al

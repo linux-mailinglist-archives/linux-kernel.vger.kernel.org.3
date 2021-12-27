@@ -2,99 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 725414804E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 22:23:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6F54804E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 22:26:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233502AbhL0VXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 16:23:40 -0500
-Received: from mga12.intel.com ([192.55.52.136]:22225 "EHLO mga12.intel.com"
+        id S233537AbhL0V0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 16:26:06 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:51518 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229728AbhL0VXj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 16:23:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640640219; x=1672176219;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IVYymYxM9fZnyNSLXRb2FO9QLm87mN74CTshC/jzBeo=;
-  b=PQIbnWQM/oTEkuLvRge658U1ewsXNAugeqKf/oQpNA3Y9kGfRjTAUFfT
-   YDFYgu7JsrjOKlWIeU11NrlLO4U0uEg0Ihm1D4hwG8TxT3NAVLMM6pFcJ
-   yZqsipSHn4ok8I+2ftD97Rz1bKUP1uWh15XQsivWw69Qk0R409SybgdNT
-   RHqnBpA5FDMXEbJ/EYNXEwTqqjROs3T3rV6feazXIly+yRjmTHpWPaItq
-   XxNNTDmGDW/UQom5gV1Ot8kMBn7HifeZu4rF84kECOWrZmDXFSmJLFiOJ
-   cazsshap34odOhpgWxOayD0TJwKmwrou2YPH3yEWNAGD6JWC9CfOMRk0S
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="221270888"
-X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
-   d="scan'208";a="221270888"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 13:23:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
-   d="scan'208";a="509971991"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 27 Dec 2021 13:23:38 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n1xSz-0006sH-CN; Mon, 27 Dec 2021 21:23:37 +0000
-Date:   Tue, 28 Dec 2021 05:23:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:kprobe/multi 6/13] kernel/trace/bpf_trace.c:1032:22:
- error: implicit declaration of function 'kprobe_ftrace_multi_addr'; did you
- mean 'kprobe_ftrace_multi'?
-Message-ID: <202112280519.3qcLUyCw-lkp@intel.com>
+        id S229728AbhL0V0F (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 16:26:05 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A8EAD1EC0136;
+        Mon, 27 Dec 2021 22:25:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640640359;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=3Cy1PdT8ee7b18BUpAQeCkPJPidVgoTXUgpiQywVRN4=;
+        b=m6LiU/XltNjPORveRWWGZ/X44V1K+ujkDgCpPAWQMC9V+qzDBp+9Bn0nbrALtQ/VwgFbm3
+        IbJ0tL4dk5QJKecJUiN2UQuD5Fgac8/LCQbbXD+eVIXLd3gF3AkY750J3xp8zJf4uhz59o
+        ti+zSCpcL9CI9POJ+ZDF+aTNsMTb5WE=
+Date:   Mon, 27 Dec 2021 22:26:02 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH v9 01/15] modpost: fix removing numeric suffixes
+Message-ID: <YcovajZkEd0WY8p4@zn.tnic>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+ <20211223002209.1092165-2-alexandr.lobakin@intel.com>
+ <YcShenJgaOeOdbIj@zn.tnic>
+ <20211227182246.1447062-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211227182246.1447062-1-alexandr.lobakin@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git kprobe/multi
-head:   bc59262730d5cfc95d6cae84f247d2e8690a309b
-commit: a1974e6769e507428f52729967e6670a1548c239 [6/13] kprobe: Allow to get traced function address for multi ftrace kprobes
-config: i386-randconfig-a016-20211227 (https://download.01.org/0day-ci/archive/20211228/202112280519.3qcLUyCw-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=a1974e6769e507428f52729967e6670a1548c239
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf kprobe/multi
-        git checkout a1974e6769e507428f52729967e6670a1548c239
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Mon, Dec 27, 2021 at 07:22:46PM +0100, Alexander Lobakin wrote:
+> It's just a couple lines below. I trigger this using `-z uniq-symbol`
+> which uses numeric suffixes for globals as well.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Aha, so that's for the fgkaslr purposes now.
 
-All errors (new ones prefixed by >>):
+> It fixes a commit dated 2014, thus Cc:stable. Although the
+> remove_dot() might've been introduced for neverlanded GCC LTO, but
+> in fact numeric suffixes are used a lot by the toolchains in regular
+> builds as well. Just not for globals, that's why it's "well hidden".
 
-   kernel/trace/bpf_trace.c: In function '____bpf_get_func_ip_kprobe':
->> kernel/trace/bpf_trace.c:1032:22: error: implicit declaration of function 'kprobe_ftrace_multi_addr'; did you mean 'kprobe_ftrace_multi'? [-Werror=implicit-function-declaration]
-    1032 |   return (uintptr_t) kprobe_ftrace_multi_addr();
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~
-         |                      kprobe_ftrace_multi
-   cc1: some warnings being treated as errors
+Does "well hidden" warrant a stable backport then? Because if no
+toolchain is using numeric suffixes for globals, then no need for the
+stable tag, I'd say.
 
+> I thought it's a common saying in commit messages, isn't it?
 
-vim +1032 kernel/trace/bpf_trace.c
+Lemme give you my canned and a lot more eloquent explanation for that:
 
-  1024	
-  1025	BPF_CALL_1(bpf_get_func_ip_kprobe, struct pt_regs *, regs)
-  1026	{
-  1027		struct kprobe *kp = kprobe_running();
-  1028	
-  1029		if (!kp)
-  1030			return 0;
-  1031		if (kprobe_ftrace_multi(kp))
-> 1032			return (uintptr_t) kprobe_ftrace_multi_addr();
-  1033		else
-  1034			return (uintptr_t) kp->func_addr;
-  1035	}
-  1036	
+"Please use passive voice in your commit message: no "we" or "I", etc,
+and describe your changes in imperative mood.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Also, pls read section "2) Describe your changes" in
+Documentation/process/submitting-patches.rst for more details.
+
+Also, see section "Changelog" in
+Documentation/process/maintainer-tip.rst
+
+Bottom line is: personal pronouns are ambiguous in text, especially with
+so many parties/companies/etc developing the kernel so let's avoid them
+please."
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

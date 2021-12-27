@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F59D48009F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:47:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB03B47FF4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:37:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238813AbhL0Prj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:47:39 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43358 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238724AbhL0Po3 (ORCPT
+        id S237661AbhL0Pgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:36:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238510AbhL0PgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:44:29 -0500
+        Mon, 27 Dec 2021 10:36:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FEFC06137E;
+        Mon, 27 Dec 2021 07:35:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B8836112A;
-        Mon, 27 Dec 2021 15:44:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42FEAC36AEA;
-        Mon, 27 Dec 2021 15:44:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DBEF5610A2;
+        Mon, 27 Dec 2021 15:35:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4AF8C36AEA;
+        Mon, 27 Dec 2021 15:35:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619867;
-        bh=Fo/Ywu8F/a+GU+VCJZaUijx4EfbModFwVrgE5okpuZY=;
+        s=korg; t=1640619341;
+        bh=t4jF6f4pwDtncnt8dOYqf1JCg2PCk199oTUJyuwiLXQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I/lvczuzJopoVY0nD+5AiXKBtXCw1kL6y2AEgNSmSmCKo26CFZdLH3+HDBVtcMBtk
-         2Q2AE3OLpcCTipD+GdAJIvnTvvB5b+OoisnjKezPDdDSX4AVZPC9RydULIxv9/RQXu
-         5hudLW0V5ebAop94K5YhU5i+JubPDHTaa1+kGla8=
+        b=omu9/pMpMLq5bGVgND6trUDnMW3feJIIGeqMw7puH7OZn2n0RkuF9sfhAN10ROhht
+         3jOjfd7OFR+KDJd+8OpXYHH8xcMUKFU5l+Ai6LxGnN/0eTahdcp3tU6/omV8hkkxEd
+         0s+NIbiEqcP2gOs231/fZTo67CFMLULUrdFFd9o8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Namjae Jeon <linkinjeon@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.15 098/128] ksmbd: fix error code in ndr_read_int32()
+        stable@vger.kernel.org, Marian Postevca <posteuca@mutex.one>
+Subject: [PATCH 5.4 37/47] usb: gadget: u_ether: fix race in setting MAC address in setup phase
 Date:   Mon, 27 Dec 2021 16:31:13 +0100
-Message-Id: <20211227151334.796091388@linuxfoundation.org>
+Message-Id: <20211227151322.074079140@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
+References: <20211227151320.801714429@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,33 +47,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Marian Postevca <posteuca@mutex.one>
 
-commit ef399469d9ceb9f2171cdd79863f9434b9fa3edc upstream.
+commit 890d5b40908bfd1a79be018d2d297cf9df60f4ee upstream.
 
-This is a failure path and it should return -EINVAL instead of success.
-Otherwise it could result in the caller using uninitialized memory.
+When listening for notifications through netlink of a new interface being
+registered, sporadically, it is possible for the MAC to be read as zero.
+The zero MAC address lasts a short period of time and then switches to a
+valid random MAC address.
 
-Fixes: 303fff2b8c77 ("ksmbd: add validation for ndr read/write functions")
-Cc: stable@vger.kernel.org # v5.15
-Acked-by: Namjae Jeon <linkinjeon@kernel.org>
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+This causes problems for netd in Android, which assumes that the interface
+is malfunctioning and will not use it.
+
+In the good case we get this log:
+InterfaceController::getCfg() ifName usb0
+ hwAddr 92:a8:f0:73:79:5b ipv4Addr 0.0.0.0 flags 0x1002
+
+In the error case we get these logs:
+InterfaceController::getCfg() ifName usb0
+ hwAddr 00:00:00:00:00:00 ipv4Addr 0.0.0.0 flags 0x1002
+
+netd : interfaceGetCfg("usb0")
+netd : interfaceSetCfg() -> ServiceSpecificException
+ (99, "[Cannot assign requested address] : ioctl() failed")
+
+The reason for the issue is the order in which the interface is setup,
+it is first registered through register_netdev() and after the MAC
+address is set.
+
+Fixed by first setting the MAC address of the net_device and after that
+calling register_netdev().
+
+Fixes: bcd4a1c40bee885e ("usb: gadget: u_ether: construct with default values and add setters/getters")
+Cc: stable@vger.kernel.org
+Signed-off-by: Marian Postevca <posteuca@mutex.one>
+Link: https://lore.kernel.org/r/20211204214912.17627-1-posteuca@mutex.one
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ksmbd/ndr.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/gadget/function/u_ether.c |   15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
---- a/fs/ksmbd/ndr.c
-+++ b/fs/ksmbd/ndr.c
-@@ -148,7 +148,7 @@ static int ndr_read_int16(struct ndr *n,
- static int ndr_read_int32(struct ndr *n, __u32 *value)
+--- a/drivers/usb/gadget/function/u_ether.c
++++ b/drivers/usb/gadget/function/u_ether.c
+@@ -860,19 +860,23 @@ int gether_register_netdev(struct net_de
  {
- 	if (n->offset + sizeof(__u32) > n->length)
--		return 0;
-+		return -EINVAL;
+ 	struct eth_dev *dev;
+ 	struct usb_gadget *g;
+-	struct sockaddr sa;
+ 	int status;
  
- 	if (value)
- 		*value = le32_to_cpu(*(__le32 *)ndr_get_field(n));
+ 	if (!net->dev.parent)
+ 		return -EINVAL;
+ 	dev = netdev_priv(net);
+ 	g = dev->gadget;
++
++	memcpy(net->dev_addr, dev->dev_mac, ETH_ALEN);
++	net->addr_assign_type = NET_ADDR_RANDOM;
++
+ 	status = register_netdev(net);
+ 	if (status < 0) {
+ 		dev_dbg(&g->dev, "register_netdev failed, %d\n", status);
+ 		return status;
+ 	} else {
+ 		INFO(dev, "HOST MAC %pM\n", dev->host_mac);
++		INFO(dev, "MAC %pM\n", dev->dev_mac);
+ 
+ 		/* two kinds of host-initiated state changes:
+ 		 *  - iff DATA transfer is active, carrier is "on"
+@@ -880,15 +884,6 @@ int gether_register_netdev(struct net_de
+ 		 */
+ 		netif_carrier_off(net);
+ 	}
+-	sa.sa_family = net->type;
+-	memcpy(sa.sa_data, dev->dev_mac, ETH_ALEN);
+-	rtnl_lock();
+-	status = dev_set_mac_address(net, &sa, NULL);
+-	rtnl_unlock();
+-	if (status)
+-		pr_warn("cannot set self ethernet address: %d\n", status);
+-	else
+-		INFO(dev, "MAC %pM\n", dev->dev_mac);
+ 
+ 	return status;
+ }
 
 

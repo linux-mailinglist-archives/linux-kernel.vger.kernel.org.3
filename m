@@ -2,127 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5881947FDE2
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 15:50:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3B747FE07
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237204AbhL0Otu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 09:49:50 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:30180 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237181AbhL0Otq (ORCPT
+        id S237307AbhL0PAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:00:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56342 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233056AbhL0PAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 09:49:46 -0500
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JN0r63gHfz8w6s;
-        Mon, 27 Dec 2021 22:47:18 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 27 Dec 2021 22:49:44 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 27 Dec 2021 22:49:43 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <x86@kernel.org>, <linux-arm-kernel@lists.infradead.org>
-CC:     Nicholas Piggin <npiggin@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Matthew Wilcox <willy@infradead.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v2 3/3] x86: Support huge vmalloc mappings
-Date:   Mon, 27 Dec 2021 22:59:03 +0800
-Message-ID: <20211227145903.187152-4-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20211227145903.187152-1-wangkefeng.wang@huawei.com>
-References: <20211227145903.187152-1-wangkefeng.wang@huawei.com>
+        Mon, 27 Dec 2021 10:00:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339B5C06173E;
+        Mon, 27 Dec 2021 07:00:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EFBCCB810B0;
+        Mon, 27 Dec 2021 15:00:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A803AC36AF1;
+        Mon, 27 Dec 2021 15:00:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640617210;
+        bh=teF+V/qO2zEUo6M5IfSj7IUpU9fwyRaIGCGADtiDON8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=UktYwPiUqjPDd7S9UNBWp33f1jRRQJJqlb7SoBi/hH3w4bt4lH+DusGnY94w0MO04
+         WkD2L7dCvPTre5uLJ1JOwjg6gnXkm2MPoORLznhIV9nEvzd70M9AhafmAsgrWNPx9H
+         OWpSYalmLrd1YQIAp+nbDHUOOSmhiZiEvI5KI2otSJYYnKNSG+xuhrSOTaRzfGZeeU
+         5bj3cA0Rn8X1Q/x++9y1W0dFMpeNUT09LEWK8YFrmMbFShQKpK6uWG2iX6JIEwFzyr
+         P1j6+EHpAhLgRuZKtW7VlxW5Ji6r85z4Y7dzmGCskSIuBwQQJ6mZrOmDxztjt84+T/
+         o/D5SaaUky0Qg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 93072C395DD;
+        Mon, 27 Dec 2021 15:00:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net:Remove initialization of static variables to 0
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164061721059.30887.14818874179399068995.git-patchwork-notify@kernel.org>
+Date:   Mon, 27 Dec 2021 15:00:10 +0000
+References: <20211227082201.186613-1-wenzhiwei@kylinos.cn>
+In-Reply-To: <20211227082201.186613-1-wenzhiwei@kylinos.cn>
+To:     Wen Zhiwei <wenzhiwei@kylinos.cn>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch select HAVE_ARCH_HUGE_VMALLOC to let X86_64 and X86_PAE
-support huge vmalloc mappings.
+Hello:
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
- Documentation/admin-guide/kernel-parameters.txt | 4 ++--
- arch/x86/Kconfig                                | 1 +
- arch/x86/kernel/module.c                        | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index e3f9fd7ec106..ffce6591ae64 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -1639,7 +1639,7 @@
- 			precedence over memory_hotplug.memmap_on_memory.
- 
- 
--	hugevmalloc=	[KNL,PPC,ARM64] Reguires CONFIG_HAVE_ARCH_HUGE_VMALLOC
-+	hugevmalloc=	[KNL,PPC,ARM64,X86] Reguires CONFIG_HAVE_ARCH_HUGE_VMALLOC
- 			Format: { on | off }
- 			Default set by CONFIG_HUGE_VMALLOC_DEFAULT_ENABLED.
- 
-@@ -3424,7 +3424,7 @@
- 
- 	nohugeiomap	[KNL,X86,PPC,ARM64] Disable kernel huge I/O mappings.
- 
--	nohugevmalloc	[KNL,PPC,ARM64] Disable kernel huge vmalloc mappings.
-+	nohugevmalloc	[KNL,PPC,ARM64,X86] Disable kernel huge vmalloc mappings.
- 
- 	nosmt		[KNL,S390] Disable symmetric multithreading (SMT).
- 			Equivalent to smt=1.
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index ebe8fc76949a..f6bf6675bbe7 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -157,6 +157,7 @@ config X86
- 	select HAVE_ACPI_APEI_NMI		if ACPI
- 	select HAVE_ALIGNED_STRUCT_PAGE		if SLUB
- 	select HAVE_ARCH_AUDITSYSCALL
-+	select HAVE_ARCH_HUGE_VMALLOC		if HAVE_ARCH_HUGE_VMAP
- 	select HAVE_ARCH_HUGE_VMAP		if X86_64 || X86_PAE
- 	select HAVE_ARCH_JUMP_LABEL
- 	select HAVE_ARCH_JUMP_LABEL_RELATIVE
-diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-index 95fa745e310a..6bf5cb7d876a 100644
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -75,8 +75,8 @@ void *module_alloc(unsigned long size)
- 
- 	p = __vmalloc_node_range(size, MODULE_ALIGN,
- 				    MODULES_VADDR + get_module_load_offset(),
--				    MODULES_END, gfp_mask,
--				    PAGE_KERNEL, VM_DEFER_KMEMLEAK, NUMA_NO_NODE,
-+				    MODULES_END, gfp_mask, PAGE_KERNEL,
-+				    VM_DEFER_KMEMLEAK | VM_NO_HUGE_VMAP, NUMA_NO_NODE,
- 				    __builtin_return_address(0));
- 	if (p && (kasan_module_alloc(p, size, gfp_mask) < 0)) {
- 		vfree(p);
+On Mon, 27 Dec 2021 16:22:01 +0800 you wrote:
+> Delete the initialization of three static variables
+> because it is meaningless.
+> 
+> Signed-off-by: Wen Zhiwei <wenzhiwei@kylinos.cn>
+> ---
+>  drivers/net/fddi/skfp/hwmtm.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+
+Here is the summary with links:
+  - net:Remove initialization of static variables to 0
+    https://git.kernel.org/netdev/net-next/c/b4aadd207322
+
+You are awesome, thank you!
 -- 
-2.26.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

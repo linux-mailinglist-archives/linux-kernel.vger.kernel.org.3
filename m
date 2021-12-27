@@ -2,117 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B51004802A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 18:15:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3704802AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 18:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbhL0RPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 12:15:31 -0500
-Received: from mail-qt1-f180.google.com ([209.85.160.180]:44964 "EHLO
-        mail-qt1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbhL0RPa (ORCPT
+        id S230103AbhL0RRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 12:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229508AbhL0RRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 12:15:30 -0500
-Received: by mail-qt1-f180.google.com with SMTP id a1so13981276qtx.11;
-        Mon, 27 Dec 2021 09:15:30 -0800 (PST)
+        Mon, 27 Dec 2021 12:17:42 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07907C06173E;
+        Mon, 27 Dec 2021 09:17:42 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id w16so64043891edc.11;
+        Mon, 27 Dec 2021 09:17:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ra0ohVAty7IbgPGWjyDg8crVa8d6l8wg1PZczvY5vYI=;
+        b=nxnhGPi9KfzyxU0RIODHbSGyYDNHt9dHMDCMyn8p2fqevaB6nLVb4tw6lH/VNLS0N4
+         xuvmFXc8/X8Opwlf36KksvPEAaVxC0e5AGMUIzCA5E59U10lfv+BxvGBOQmZvyekU71f
+         WvYPfAC1DSyJsAcORtN5I2RXxiNA9mImGRjWweL0FIUSH3ORWrTnYWGrnXWHzrhwa2gV
+         pV64em7OZHdFyDSsSYbve1KuBowH3r9RKwMKJ3r5oXu4bd3+MymgBGHQ6cDwAlyX90X1
+         0u7FNU7Se4mvkH8TFdwRm60jd6s7C3iZ3boFjhbWZ764w1mL6PXAHb9VMAG0P61g0KhO
+         dY5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mtgQp7E+XHWylh821kSXZHujAj5pCd79Pzv+DDY2bEU=;
-        b=cTY0I7ab+1YISy9GG7AM0ilwNNMJBKFARIkEJMRtYhsDFgFnL/tcKssbx1+ecnu5SD
-         rh631Zo4pOHjxCpN1zzW58PlNyOkLlooE2Lr0XV1muAXrkesa+FsXmGOaJw4Mjst3n/Y
-         DzcUcyfm0EMJKN7C+yTq7P0uu4Z6NEAyYYvDz7g2baIgN0CnsTGeYYuzJjh11Aik1AGm
-         tvsm421MD6PLXW0vIA6M/cVd8/0L6KAi5YcE9hBYbIo2jxmUbvUDEmaJzkk3xHVN79Eu
-         e/251c0VmRV9ldJ+mWkutdk3xaDcZeUrsTxc9n+t/zvjs068QNJ7cCDl3UAsQhd61Qln
-         KQDg==
-X-Gm-Message-State: AOAM533bPlXENnL5u0QrxTyisqS66b+/NrUVy2Ntd36Gga6DSc7mJRES
-        QP/o95xMdjI0tqoi90wyy07JHgCZnmipUDW7ULI=
-X-Google-Smtp-Source: ABdhPJzA0UGsW2BMjYh4XhxHxtQu5xuUJBsEKsGOHY8rU94CjJKL3IsMfTI+JhA0Q5Zt69+rfrdTsyx47n0p+gK10nc=
-X-Received: by 2002:ac8:46cc:: with SMTP id h12mr15513581qto.417.1640625329642;
- Mon, 27 Dec 2021 09:15:29 -0800 (PST)
+        bh=Ra0ohVAty7IbgPGWjyDg8crVa8d6l8wg1PZczvY5vYI=;
+        b=6Jhi/2m8TgavOrEKWigHS4pCenKV9jm4nvHG2aoLFrgC7sgJZXMAA+XSbAH6hBH6Ao
+         JZQtt5+XjrlgyIqaiXaoiHg321G3KIU8wQVDAAVN0DneusL6RoQ9yVk19+LWAJGueyBd
+         iGe6IuZXQr339IEjQd1DxglTJygumL9giGw+oAhdyvk0WxHg+Kv6YFuDfCe1upsyeGuS
+         I1WYzjfro4JGH7XA3jHd3Uu0z07sJWTy4Ah7nFCyUlKOvOBEj5I1RpX8AQ4z5usCXm+O
+         xe/rlYuKQNYzVfjqoXTdjbqUe+Ei4Fh2srHJYFxMqUf3EhwtoLBmaHWCrUD5UogFbLWW
+         RE2g==
+X-Gm-Message-State: AOAM530gOLnwp5CfgCbRwcob6sxnGsMy12REjNK55ORDq5liLv4Yr+2P
+        W9EsegWjl/c+c6A6ZIg8FHXlWtXdLgjFieX94Wo=
+X-Google-Smtp-Source: ABdhPJyW4nZqhM2+q9hd5SYLXuvlH0XYqSjrZfdwtaAvTwexMQZJMeFU2khkvdT+1sJS2lo1pd+H5+Bo3VSzn6b55NA=
+X-Received: by 2002:a17:907:76d4:: with SMTP id kf20mr14393121ejc.44.1640625460436;
+ Mon, 27 Dec 2021 09:17:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
- <20211227164317.4146918-4-schnelle@linux.ibm.com> <CAJZ5v0iBJ8NtQautnWnp_pXMfLy_rxys8j4+ugSTbNBb=wzy6A@mail.gmail.com>
- <f9f698b44173c6906e49e17aa33a98e12da7f60b.camel@linux.ibm.com> <CAJZ5v0iG=wqVtJULiTFsffMWqihA0Rk+abMzmfTcH+J9d5G+YA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iG=wqVtJULiTFsffMWqihA0Rk+abMzmfTcH+J9d5G+YA@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Dec 2021 18:15:18 +0100
-Message-ID: <CAJZ5v0htSMwM5SgSAaS-UB3G=99DC8ytQ5P4BfjDhdAoQ7pFdg@mail.gmail.com>
-Subject: Re: [RFC 03/32] ACPI: Kconfig: add HAS_IOPORT dependencies
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Len Brown <lenb@kernel.org>,
+References: <20211222162041.64625-1-andriy.shevchenko@linux.intel.com> <57ef9519-23d5-25f0-9385-7646aba52316@amd.com>
+In-Reply-To: <57ef9519-23d5-25f0-9385-7646aba52316@amd.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 27 Dec 2021 19:17:04 +0200
+Message-ID: <CAHp75Vd3DoxWrVqfHzMtjAi8P2E2xgww35ASCt5vBnkvWvwuyw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] i2c: Introduce common module to instantiate CCGx UCSI
+To:     "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Ajay Gupta <ajayg@nvidia.com>, sanket.goswami@amd.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 6:12 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Mon, Dec 27, 2021 at 6:02 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
-> >
-> > On Mon, 2021-12-27 at 17:47 +0100, Rafael J. Wysocki wrote:
-> > > On Mon, Dec 27, 2021 at 5:44 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
-> > > > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> > > > not being declared. As ACPI always uses I/O port access
-> > >
-> > > The ARM64 people may not agree with this.
-> >
-> > Maybe my wording is bad. This is my rewording of what Arnd had in his
-> > original mail: "The ACPI subsystem needs access to I/O ports, so that
-> > also gets a dependency."(
-> > https://lore.kernel.org/lkml/CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com/
-> > ).
->
-> And my point is that on ARM64 the ACPI subsystem does not need to
-> access IO ports.
->
-> It may not even need to access them on x86, but that depends on the
-> platform firmware in use.
->
-> If arm64 is going to set HAS_IOPORT, then fine, but is it (and this
-> applies to ia64 too)?
->
-> > >
-> > > > we depend on HAS_IOPORT unconditionally.
-> > > >
-> > > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> > > > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> > > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> > > > ---
-> > > >  drivers/acpi/Kconfig | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > >
-> > > > diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
-> > > > index cdbdf68bd98f..b57f15817ede 100644
-> > > > --- a/drivers/acpi/Kconfig
-> > > > +++ b/drivers/acpi/Kconfig
-> > > > @@ -9,6 +9,7 @@ config ARCH_SUPPORTS_ACPI
-> > > >  menuconfig ACPI
-> > > >         bool "ACPI (Advanced Configuration and Power Interface) Support"
-> > > >         depends on ARCH_SUPPORTS_ACPI
+On Mon, Dec 27, 2021 at 6:45 PM Shah, Nehal-bakulchandra
+<nehal-bakulchandra.shah@amd.com> wrote:
+> Thanks for the this patch series.
+> On 12/22/2021 9:50 PM, Andy Shevchenko wrote:
 
-Besides, I'm not sure why ARCH_SUPPORTS_ACPI cannot cover this new dependency.
+...
 
-> > > > +       depends on HAS_IOPORT
-> > > >         select PNP
-> > > >         select NLS
-> > > >         default y if X86
-> > > > --
-> > > > 2.32.0
-> > > >
-> >
+> > +EXPORT_SYMBOL_GPL(i2c_new_ccgx_ucsi);c
+>   it needs MODULE_LICENSE("GPL"); else if driver is built as module it
+> fails to probe. However after adding this we validated and it is working
+> fine.
+
+Thanks!
+Dunno if i need to resend or Wolfram can add it when applying.
+
+...
+
+> > +struct i2c_client *i2c_new_ccgx_ucsi(struct i2c_adapter *adapter, int irq,
+> > +                                  const struct software_node *swnode);
+
+> Here, One more suggestion if can be incorporated , instead of passing
+> only irq we should pass irq number and irq type. For example in our next
+> generation platform , CCGX driver is using IRQF_TRIGGER_FALLING type
+> where is default hard coded is IRQF_TRIGGER_HIGH. So in CCGX driver in
+> request_threaded_irq function along with passing irq number , irq type
+> also can be passed.
+
+We don't add dead code in the kernel, so when you have patches ready
+just create another one as a prerequisite that adds that.
+
+-- 
+With Best Regards,
+Andy Shevchenko

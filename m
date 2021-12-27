@@ -2,49 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4581347FF77
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:38:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D25BA47FFF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238867AbhL0Phq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:37:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238579AbhL0PgO (ORCPT
+        id S239331AbhL0PmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:42:13 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38996 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231445AbhL0PjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:36:14 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B88DC061B38;
-        Mon, 27 Dec 2021 07:35:50 -0800 (PST)
+        Mon, 27 Dec 2021 10:39:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9D5E4CE10D9;
-        Mon, 27 Dec 2021 15:35:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65E1CC36AEB;
-        Mon, 27 Dec 2021 15:35:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF95A61073;
+        Mon, 27 Dec 2021 15:39:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5EC2C36AEA;
+        Mon, 27 Dec 2021 15:39:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619346;
-        bh=L3jzjkZJuoA19T9M7XeHKugIqeJMbTHiY4W+mhtIqfo=;
+        s=korg; t=1640619543;
+        bh=3gcA1T0O0rdmtgGZDQxAQst7neVDkIer1VEvh5NVzYc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nLJ/qNzQPPFbJj3Sr6/O9O2RGgJ9d0KECYSzmQ5QCPa9DwWGM1+4Ar3Nu7AQhT13x
-         sudom1Es/UUHSRRqyTPJ6vP36UImVjtDKh1q02YZiXwEldhk4VMy1qQRyNZLqVCmAC
-         /hljAt7nUalaAQs6lLyBLdx6HC3kcMDp2jOAqk9U=
+        b=HxS3OZ3kV+ArMedBuy/dcNpZpBJ6ST4pWHThrRiALGvDHtaxw0Hte5C5CJh5N7HIh
+         /uwjp+y66siFTT014CAfTXrmVaLkjyuJFRlDs1mSa9NnU3i/KWaC/rBBakLxonpk+h
+         AbjjMwLEK/bf+NK9rVUHB6s379+YcoFUHKK2io5s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrey Ryabinin <arbn@yandex-team.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        David Rientjes <rientjes@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.4 39/47] mm: mempolicy: fix THP allocations escaping mempolicy restrictions
+        stable@vger.kernel.org, Wenqing Liu <wenqingliu0120@gmail.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5.10 60/76] f2fs: fix to do sanity check on last xattr entry in __f2fs_setxattr()
 Date:   Mon, 27 Dec 2021 16:31:15 +0100
-Message-Id: <20211227151322.146610498@linuxfoundation.org>
+Message-Id: <20211227151326.779679392@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
-References: <20211227151320.801714429@linuxfoundation.org>
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+References: <20211227151324.694661623@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,122 +45,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Ryabinin <arbn@yandex-team.com>
+From: Chao Yu <chao@kernel.org>
 
-commit 338635340669d5b317c7e8dcf4fff4a0f3651d87 upstream.
+commit 5598b24efaf4892741c798b425d543e4bed357a1 upstream.
 
-alloc_pages_vma() may try to allocate THP page on the local NUMA node
-first:
+As Wenqing Liu reported in bugzilla:
 
-	page = __alloc_pages_node(hpage_node,
-		gfp | __GFP_THISNODE | __GFP_NORETRY, order);
+https://bugzilla.kernel.org/show_bug.cgi?id=215235
 
-And if the allocation fails it retries allowing remote memory:
+- Overview
+page fault in f2fs_setxattr() when mount and operate on corrupted image
 
-	if (!page && (gfp & __GFP_DIRECT_RECLAIM))
-    		page = __alloc_pages_node(hpage_node,
-					gfp, order);
+- Reproduce
+tested on kernel 5.16-rc3, 5.15.X under root
 
-However, this retry allocation completely ignores memory policy nodemask
-allowing allocation to escape restrictions.
+1. unzip tmp7.zip
+2. ./single.sh f2fs 7
 
-The first appearance of this bug seems to be the commit ac5b2c18911f
-("mm: thp: relax __GFP_THISNODE for MADV_HUGEPAGE mappings").
+Sometimes need to run the script several times
 
-The bug disappeared later in the commit 89c83fb539f9 ("mm, thp:
-consolidate THP gfp handling into alloc_hugepage_direct_gfpmask") and
-reappeared again in slightly different form in the commit 76e654cc91bb
-("mm, page_alloc: allow hugepage fallback to remote nodes when
-madvised")
+- Kernel dump
+loop0: detected capacity change from 0 to 131072
+F2FS-fs (loop0): Found nat_bits in checkpoint
+F2FS-fs (loop0): Mounted with checkpoint version = 7548c2ee
+BUG: unable to handle page fault for address: ffffe47bc7123f48
+RIP: 0010:kfree+0x66/0x320
+Call Trace:
+ __f2fs_setxattr+0x2aa/0xc00 [f2fs]
+ f2fs_setxattr+0xfa/0x480 [f2fs]
+ __f2fs_set_acl+0x19b/0x330 [f2fs]
+ __vfs_removexattr+0x52/0x70
+ __vfs_removexattr_locked+0xb1/0x140
+ vfs_removexattr+0x56/0x100
+ removexattr+0x57/0x80
+ path_removexattr+0xa3/0xc0
+ __x64_sys_removexattr+0x17/0x20
+ do_syscall_64+0x37/0xb0
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Fix this by passing correct nodemask to the __alloc_pages() call.
+The root cause is in __f2fs_setxattr(), we missed to do sanity check on
+last xattr entry, result in out-of-bound memory access during updating
+inconsistent xattr data of target inode.
 
-The demonstration/reproducer of the problem:
+After the fix, it can detect such xattr inconsistency as below:
 
-    $ mount -oremount,size=4G,huge=always /dev/shm/
-    $ echo always > /sys/kernel/mm/transparent_hugepage/defrag
-    $ cat mbind_thp.c
-    #include <unistd.h>
-    #include <sys/mman.h>
-    #include <sys/stat.h>
-    #include <fcntl.h>
-    #include <assert.h>
-    #include <stdlib.h>
-    #include <stdio.h>
-    #include <numaif.h>
+F2FS-fs (loop11): inode (7) has invalid last xattr entry, entry_size: 60676
+F2FS-fs (loop11): inode (8) has corrupted xattr
+F2FS-fs (loop11): inode (8) has corrupted xattr
+F2FS-fs (loop11): inode (8) has invalid last xattr entry, entry_size: 47736
 
-    #define SIZE 2ULL << 30
-    int main(int argc, char **argv)
-    {
-        int fd;
-        unsigned long long i;
-        char *addr;
-        pid_t pid;
-        char buf[100];
-        unsigned long nodemask = 1;
-
-        fd = open("/dev/shm/test", O_RDWR|O_CREAT);
-        assert(fd > 0);
-        assert(ftruncate(fd, SIZE) == 0);
-
-        addr = mmap(NULL, SIZE, PROT_READ|PROT_WRITE,
-                           MAP_SHARED, fd, 0);
-
-        assert(mbind(addr, SIZE, MPOL_BIND, &nodemask, 2, MPOL_MF_STRICT|MPOL_MF_MOVE)==0);
-        for (i = 0; i < SIZE; i+=4096) {
-          addr[i] = 1;
-        }
-        pid = getpid();
-        snprintf(buf, sizeof(buf), "grep shm /proc/%d/numa_maps", pid);
-        system(buf);
-        sleep(10000);
-
-        return 0;
-    }
-    $ gcc mbind_thp.c -o mbind_thp -lnuma
-    $ numactl -H
-    available: 2 nodes (0-1)
-    node 0 cpus: 0 2
-    node 0 size: 1918 MB
-    node 0 free: 1595 MB
-    node 1 cpus: 1 3
-    node 1 size: 2014 MB
-    node 1 free: 1731 MB
-    node distances:
-    node   0   1
-      0:  10  20
-      1:  20  10
-    $ rm -f /dev/shm/test; taskset -c 0 ./mbind_thp
-    7fd970a00000 bind:0 file=/dev/shm/test dirty=524288 active=0 N0=396800 N1=127488 kernelpagesize_kB=4
-
-Link: https://lkml.kernel.org/r/20211208165343.22349-1-arbn@yandex-team.com
-Fixes: ac5b2c18911f ("mm: thp: relax __GFP_THISNODE for MADV_HUGEPAGE mappings")
-Signed-off-by: Andrey Ryabinin <arbn@yandex-team.com>
-Acked-by: Michal Hocko <mhocko@suse.com>
-Acked-by: Mel Gorman <mgorman@techsingularity.net>
-Acked-by: David Rientjes <rientjes@google.com>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: stable@vger.kernel.org
+Reported-by: Wenqing Liu <wenqingliu0120@gmail.com>
+Signed-off-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/mempolicy.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ fs/f2fs/xattr.c |   11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -2143,8 +2143,9 @@ alloc_pages_vma(gfp_t gfp, int order, st
- 			 * memory as well.
- 			 */
- 			if (!page && (gfp & __GFP_DIRECT_RECLAIM))
--				page = __alloc_pages_node(hpage_node,
--						gfp | __GFP_NORETRY, order);
-+				page = __alloc_pages_nodemask(gfp | __GFP_NORETRY,
-+							order, hpage_node,
-+							nmask);
+--- a/fs/f2fs/xattr.c
++++ b/fs/f2fs/xattr.c
+@@ -680,8 +680,17 @@ static int __f2fs_setxattr(struct inode
+ 	}
  
- 			goto out;
- 		}
+ 	last = here;
+-	while (!IS_XATTR_LAST_ENTRY(last))
++	while (!IS_XATTR_LAST_ENTRY(last)) {
++		if ((void *)(last) + sizeof(__u32) > last_base_addr ||
++			(void *)XATTR_NEXT_ENTRY(last) > last_base_addr) {
++			f2fs_err(F2FS_I_SB(inode), "inode (%lu) has invalid last xattr entry, entry_size: %zu",
++					inode->i_ino, ENTRY_SIZE(last));
++			set_sbi_flag(F2FS_I_SB(inode), SBI_NEED_FSCK);
++			error = -EFSCORRUPTED;
++			goto exit;
++		}
+ 		last = XATTR_NEXT_ENTRY(last);
++	}
+ 
+ 	newsize = XATTR_ALIGN(sizeof(struct f2fs_xattr_entry) + len + size);
+ 
 
 

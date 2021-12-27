@@ -2,95 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 182F9480378
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 19:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D034E480382
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 20:03:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbhL0Sul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 13:50:41 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34216 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbhL0Suk (ORCPT
+        id S231229AbhL0TDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 14:03:34 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40756 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229603AbhL0TDd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 13:50:40 -0500
+        Mon, 27 Dec 2021 14:03:33 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D80BF61121
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 18:50:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08374C36AEA;
-        Mon, 27 Dec 2021 18:50:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C985AB810BA;
+        Mon, 27 Dec 2021 19:03:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4389EC36AE7;
+        Mon, 27 Dec 2021 19:03:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640631039;
-        bh=EYsKbt3rUVkRJqrJ9Nsgsi3ljZJ98du0Nz+EkljC4PE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BILYG4+KeLnegaOxz62reQc5hSXTrYt5D6fq3p0j+EWdJTuGM54KvsuKEYwDQirlH
-         pCI/C4ZgVS2CmY1kcW9vGkcEtZrUEYG2U5aDLzPZQOfpwCZTA7R9nzhqZuoSJ2Tg1H
-         45gB01E8WMfypWTdBG7/fk4AzigB9Z3A/KehS1pY5VRf0vBClH49zKrFFn7tXEs/+P
-         TBKo1M3Nk6ADZ4sIeqYZ/taXUfV1p4+8MQlMobM8GE4xhrZqAYRrwnKS8eCYJZMehh
-         r7XaDvDPmAcZo5aZ71xXAS1vEmOIBIJmngh2DvcwG7rFQ11uBKsT+p87lXctfgJGFt
-         uxvmBZ/y1kpRg==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Brian Cain <bcain@codeaurora.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Guo Ren <guoren@kernel.org>, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 3/3] csky: Fix function name in csky_alignment() and die()
-Date:   Mon, 27 Dec 2021 11:48:51 -0700
-Message-Id: <20211227184851.2297759-4-nathan@kernel.org>
+        s=k20201202; t=1640631810;
+        bh=WY7/IBQQ7PCl+D+qAmJBhE5XKqIk0FCvNlIT9/7d9Q8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=J8ngXBKahixF83dT0V7W8ipBzgGEeJq1b4oLb5mMznhSNIN3eNAE9cDvz4dD6JeL6
+         wUMRktxHO1It/46XEeSqPxxVoqaQdvdkWjbYR0crKXvDyL5LUPM2sLxAv0l0z/Ev5p
+         JMERrwTyG6dtGVmL26T5n1oEj32qgGyteu2oiZPTdoKoLD9RqmUFhjzrtDRDuv2Jxr
+         nwO8Zk+KzR3l3gVsg8LkHd8P9RdcsPn8eSLPuZSSv4SnI0NgrNY03VsSEi1vMpwazK
+         owAqZvrT4hBo3O5xBWQpjnjTt4iZujWubLrMvreaQMtkjsnD+Csjpw/m/gdvHEAXyM
+         cnKvL/JYMTYBg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Guodong Liu <guodong.liu@mediatek.corp-partner.google.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sasha Levin <sashal@kernel.org>, sean.wang@kernel.org,
+        matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.15 01/26] pinctrl: mediatek: fix global-out-of-bounds issue
+Date:   Mon, 27 Dec 2021 14:03:02 -0500
+Message-Id: <20211227190327.1042326-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227184851.2297759-1-nathan@kernel.org>
-References: <20211227184851.2297759-1-nathan@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building ARCH=csky defconfig:
+From: Guodong Liu <guodong.liu@mediatek.corp-partner.google.com>
 
-arch/csky/kernel/traps.c: In function 'die':
-arch/csky/kernel/traps.c:112:17: error: implicit declaration of function
-'make_dead_task' [-Werror=implicit-function-declaration]
-  112 |                 make_dead_task(SIGSEGV);
-      |                 ^~~~~~~~~~~~~~
+[ Upstream commit 2d5446da5acecf9c67db1c9d55ae2c3e5de01f8d ]
 
-The function's name is make_task_dead(), change it so there is no more
-build error.
+When eint virtual eint number is greater than gpio number,
+it maybe produce 'desc[eint_n]' size globle-out-of-bounds issue.
 
-Fixes: 0e25498f8cd4 ("exit: Add and use make_task_dead.")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Guodong Liu <guodong.liu@mediatek.corp-partner.google.com>
+Signed-off-by: Zhiyong Tao <zhiyong.tao@mediatek.com>
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Link: https://lore.kernel.org/r/20211110071900.4490-2-zhiyong.tao@mediatek.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/csky/abiv1/alignment.c | 2 +-
- arch/csky/kernel/traps.c    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/arch/csky/abiv1/alignment.c b/arch/csky/abiv1/alignment.c
-index 5e2fb45d605c..2df115d0e210 100644
---- a/arch/csky/abiv1/alignment.c
-+++ b/arch/csky/abiv1/alignment.c
-@@ -294,7 +294,7 @@ void csky_alignment(struct pt_regs *regs)
- 				__func__, opcode, rz, rx, imm, addr);
- 		show_regs(regs);
- 		bust_spinlocks(0);
--		make_dead_task(SIGKILL);
-+		make_task_dead(SIGKILL);
- 	}
+diff --git a/drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c b/drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c
+index 45ebdeba985ae..12163d3c4bcb0 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c
++++ b/drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c
+@@ -285,8 +285,12 @@ static int mtk_xt_get_gpio_n(void *data, unsigned long eint_n,
+ 	desc = (const struct mtk_pin_desc *)hw->soc->pins;
+ 	*gpio_chip = &hw->chip;
  
- 	force_sig_fault(SIGBUS, BUS_ADRALN, (void __user *)addr);
-diff --git a/arch/csky/kernel/traps.c b/arch/csky/kernel/traps.c
-index 88a47035b925..50481d12d236 100644
---- a/arch/csky/kernel/traps.c
-+++ b/arch/csky/kernel/traps.c
-@@ -109,7 +109,7 @@ void die(struct pt_regs *regs, const char *str)
- 	if (panic_on_oops)
- 		panic("Fatal exception");
- 	if (ret != NOTIFY_STOP)
--		make_dead_task(SIGSEGV);
-+		make_task_dead(SIGSEGV);
- }
- 
- void do_trap(struct pt_regs *regs, int signo, int code, unsigned long addr)
+-	/* Be greedy to guess first gpio_n is equal to eint_n */
+-	if (desc[eint_n].eint.eint_n == eint_n)
++	/*
++	 * Be greedy to guess first gpio_n is equal to eint_n.
++	 * Only eint virtual eint number is greater than gpio number.
++	 */
++	if (hw->soc->npins > eint_n &&
++	    desc[eint_n].eint.eint_n == eint_n)
+ 		*gpio_n = eint_n;
+ 	else
+ 		*gpio_n = mtk_xt_find_eint_num(hw, eint_n);
 -- 
 2.34.1
 

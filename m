@@ -2,83 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F01B47FA16
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 05:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABAD247FA1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 05:39:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235200AbhL0ESJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 23:18:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235190AbhL0ESI (ORCPT
+        id S235210AbhL0EjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 23:39:25 -0500
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:53023 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232532AbhL0EjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 23:18:08 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF334C061757
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 20:18:07 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id l10so12626841pgm.7
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 20:18:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=hBwHcbOLbODluezLkfU899o5k+HtfijYIO+0bx3J3EA=;
-        b=wO63sFsISf2zVMzmS2HzyM2Xf1Ao8xLtpBWfuR6oqkHeMlDibp35OIhrVZX7VJL/C4
-         Yij7TZczAIxGmR62A1ZTUCaaCtHr20KwpKBRAQJIQQ1O3KNOXs+dzv59SHNPeDhcaBJ8
-         hG8A+6wdHbVKPTRx+OWGiwWbA3DWYBsABEEVWBARkjieFAHPEy78wYRFDciazuqsqYGi
-         buT7KNQXgE/O/WFJdRMt3CBSzGaiFYdDzlqihmkYHbUG4Xvka4Hvcl0HhzMWk+xuQ0rm
-         i9e/1BQMMhqLB75CGfwS0wqOLoBuqR6UP7avtUQjd1WaI/ZOE1w2XBjq3i0KUARKOKyC
-         6qyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hBwHcbOLbODluezLkfU899o5k+HtfijYIO+0bx3J3EA=;
-        b=5Pzhq2b0ZoanKetut5QYdOwDYeoMYY7WqgGdb+RoQx5+4Q8q3+FSOJ0O6XDO6c0u/D
-         K+omHgV5qMNmi6KpWCbsZuqvfEHAFIcBi/3NQFah4ZYou9P4KVg3YbHvDvmrONlGi/Oq
-         GrbFcpO0Itqa8mr5rotauIFbJzCIg1MIjKnsO98kewGbTLknrSaYxFX9+Lky4t3+vvPX
-         SJn7FIgqXXZGfMgfTfxAETMEoDDYItKRDHP0qNQMfvEFQBCjUhAM7dqQnNdRwHx7L79d
-         73TzWeAZmWlabMbutvCusqAAD8w+jNoLKO8bbEVObCPdctB15G27XIUsKurQ19Z2drZE
-         18MA==
-X-Gm-Message-State: AOAM530g6pjY7H+/AE0FBpcjKG0+ImeHOJkCVgS2PvR3I7f1oK/DeOuv
-        v6sKtinBIEJRgiaB1GV9lzaSXA==
-X-Google-Smtp-Source: ABdhPJwzdvVbN3OacQ1pmlJ8L62kW98FhV72kJKnoUS3A5ZCROz0j1Fbum4pCtSepUiKK9joOPhWUg==
-X-Received: by 2002:a63:6f4d:: with SMTP id k74mr5645320pgc.208.1640578687348;
-        Sun, 26 Dec 2021 20:18:07 -0800 (PST)
-Received: from localhost ([106.201.42.111])
-        by smtp.gmail.com with ESMTPSA id f20sm16446187pfe.166.2021.12.26.20.18.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Dec 2021 20:18:06 -0800 (PST)
-Date:   Mon, 27 Dec 2021 09:48:05 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Tang Yizhou <tangyizhou@huawei.com>
-Cc:     rafael.j.wysocki@intel.com, rafael@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, zhengbin13@huawei.com
-Subject: Re: [PATCH] Documentation: power: Update outdated contents in opp.rst
-Message-ID: <20211227041805.47cquwvyfaqco7bm@vireshk-i7>
-References: <20211226081839.13948-1-tangyizhou@huawei.com>
+        Sun, 26 Dec 2021 23:39:22 -0500
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 1BR4d5kI029959
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 26 Dec 2021 23:39:06 -0500
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 64FC215C33A3; Sun, 26 Dec 2021 23:39:05 -0500 (EST)
+Date:   Sun, 26 Dec 2021 23:39:05 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Jia-Ju Bai <baijiaju1990@gmail.com>, viro@zeniv.linux.org.uk,
+        Jens Axboe <axboe@kernel.dk>, hch@infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [BUG] fs: super: possible ABBA deadlocks in
+ do_thaw_all_callback() and freeze_bdev()
+Message-ID: <YclDafAwrN0TkhCi@mit.edu>
+References: <e3de0d83-1170-05c8-672c-4428e781b988@gmail.com>
+ <YckgOocIWOrOoRvf@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20211226081839.13948-1-tangyizhou@huawei.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YckgOocIWOrOoRvf@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26-12-21, 16:18, Tang Yizhou wrote:
-> Three problems have been revised:
-> 1. CONFIG_PM_OPP no longer depends on CONFIG_PM.
-> 2. opp_find_freq_{ceil, floor} is renamed as dev_pm_opp_find_freq_{ceil,
->    floor}.
-> 3. Make it clear that the 'opp' struct is actually dev_pm_opp.
+On Mon, Dec 27, 2021 at 02:08:58AM +0000, Matthew Wilcox wrote:
+> On Mon, Dec 27, 2021 at 10:03:35AM +0800, Jia-Ju Bai wrote:
+> > My static analysis tool reports several possible ABBA deadlocks in Linux
+> > 5.10:
+> > 
+> > do_thaw_all_callback()
+> >   down_write(&sb->s_umount); --> Line 1028 (Lock A)
+> >   emergency_thaw_bdev()
+> >     thaw_bdev()
+> >       mutex_lock(&bdev->bd_fsfreeze_mutex); --> Line 602 (Lock B)
+> > 
+> > freeze_bdev()
+> >   mutex_lock(&bdev->bd_fsfreeze_mutex); --> Line 556 (Lock B)
+> >   freeze_super()
+> >     down_write(&sb->s_umount); --> Line 1716 (Lock A)
+> >     down_write(&sb->s_umount); --> Line 1738 (Lock A)
+> >   deactivate_super()
+> >     down_write(&s->s_umount); --> Line 365 (Lock A)
+> > 
+> > When do_thaw_all_callback() and freeze_bdev() are concurrently executed, the
+> > deadlocks can occur.
+> > 
+> > I am not quite sure whether these possible deadlocks are real and how to fix
+> > them if them are real.
+> > Any feedback would be appreciated, thanks :)
 > 
-> Signed-off-by: Tang Yizhou <tangyizhou@huawei.com>
-> ---
->  Documentation/power/opp.rst | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
+> As a rule, ABBA deadlocks that can actually occur are already found by
+> lockdep.    Tools that think they've found something are generally wrong.
+> I'm not inclined to look in detail to find out why this tool is wrong
+> because lockdep is so effective.
 
-Applied. Thanks.
+Well, to be fair, lockdep will only find problems if both code paths
+are actually executed during a boot session where lockdep is active.
 
--- 
-viresh
+In this particular case, "do_thaw_all_callback()" is called only from
+emergency_thaw_all(), which is executed via a magic-sysrq.  (Sysrq-j).
+In practice, this sysrq is almost never used except to work around
+userspace bugs where a particular block device is frozen via the
+FIFREEZE ioctl, and never thawed via the FITHAW ioctl.
+
+So unless we had, say, an xfstest which tried to simulate triggering
+sysrq-j (e.g., via "echo j > /proc/sysrq-trigger"), lockdep would
+never find it.  Of course, how likely is it that a user would try to
+trigger sysrq-j, because the user was trying to debug a buggy program
+that froze a block device and then, say, crashed before it had a
+chance to thaw it?  It's probably pretty darned unlikely.
+
+So as to whether or not it's real, I'm sure we could probably trigger
+the deadlock using an artificial workload if you had one process
+constantly calling FIFREEZE and FITHAW on a block device, and other
+process constantly triggering "echo j > /proc/sysrq-trigger".  So it
+*technically* could happen.  Is it *likely* to happen under any kind
+of normal workload?  Not hardly....
+
+This makes it fall in the category of, "patch to fix something that
+never happens in real life, and would require root privs to trigger,
+and root can screw over the system in enough other ways anyway so it's
+kind of pointless", versus "let's try to shut up the static checker so
+we can find real bugs".
+
+And there I'd agree with Willy; I run xfstests with lockdep enabled,
+and given that the code coverage of xfstests is pretty good, I'm
+confident that any ABBA deadlocks that are *likely* to happen in real
+life tend to be found quickly, and fixed.
+
+If someone wanted to rewrite the emergency_thaw codepath to fix the
+locking order, in my opinion it's *technically* a bug fix.  But it's
+the sort of thing which gets categorized as a P2 bug, and after a
+year, gets dropped down to P3, and a year after that, dropped down to
+P4 and ignored, since for most engineering organizations, resources
+are finite, and while this is a real bug, for most companies it's not
+worth fixing.
+
+Cheers,
+
+					- Ted
+

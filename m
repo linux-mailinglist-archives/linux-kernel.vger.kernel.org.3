@@ -2,108 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2819247FA08
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 05:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3111747FA0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 05:06:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235131AbhL0EEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 23:04:35 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:30178 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235082AbhL0EEd (ORCPT
+        id S235151AbhL0EFx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 26 Dec 2021 23:05:53 -0500
+Received: from mail-lf1-f98.google.com ([209.85.167.98]:38589 "EHLO
+        mail-lf1-f98.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235135AbhL0EFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 23:04:33 -0500
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JMkWf0xGZz8w3F;
-        Mon, 27 Dec 2021 12:02:06 +0800 (CST)
-Received: from [10.174.179.215] (10.174.179.215) by
- canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 27 Dec 2021 12:04:30 +0800
-Subject: Re: [PATCH -next] scsi: storvsc: Fix unsigned comparison to zero
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Long Li <longli@microsoft.com>
-CC:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20211224120216.35896-1-yuehaibing@huawei.com>
- <MWHPR21MB15936A0B092F7467CC18B3C1D7419@MWHPR21MB1593.namprd21.prod.outlook.com>
-From:   YueHaibing <yuehaibing@huawei.com>
-Message-ID: <eae60bf8-98b0-254c-8191-553f68850f2f@huawei.com>
-Date:   Mon, 27 Dec 2021 12:04:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        Sun, 26 Dec 2021 23:05:52 -0500
+Received: by mail-lf1-f98.google.com with SMTP id x21so32288305lfa.5
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 20:05:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:content-description:subject:to:from:date
+         :reply-to;
+        bh=TPPWK3AEJz2BpcFnhUaAzlB0mKAMI/i0SVxqCOEE3R0=;
+        b=VIN82ZQ1Frs1gzXRKLEbNvojIlk8TI2cwQagWpaXyhidDuX5v9EdoA3mhXVUJZje74
+         jIgurVKo4bxN9/lbILNFeb9RAshYIZ4DgrMqDS0sWhKooxkU3FbQ5BYjL73DLeZTS9cv
+         Z/woMQSTSftrpU6BYHB54w0HIXdoXUjz1hTokBtd9z595dFJX8C7I0SdA9bhymuFHu56
+         PFvkXLxrddTYf84yZQMcOutaMLrEuxqvcrm2QQk2+IQxQu/t4b081F7QWi122pEqajqa
+         HE08WBHpJKL33sujdvSwrD6VsLyPt8mEZ2prlyfYvqnbc/E7T9BSKRmTt26dn+thuFqO
+         QU5w==
+X-Gm-Message-State: AOAM532IPFflk2klF/tdhpCuIGR4DhYZouDxwtH1iYBvhJ3nXE6oK7Xi
+        ckI5YyllDVFK3npyTsXbo8kCox1AOli6y7QaRxLY1Eqf4m+aKQ==
+X-Google-Smtp-Source: ABdhPJwul77dBrKJWdIjdajfqgZREcAtUm14lCwtKJOV0BpuMtDEASTBRaUrdBHakKJEyAuCgSLATMYHc24a
+X-Received: by 2002:a05:6512:ad1:: with SMTP id n17mr7561634lfu.53.1640577951160;
+        Sun, 26 Dec 2021 20:05:51 -0800 (PST)
+Received: from [192.168.0.107] ([164.160.92.174])
+        by smtp-relay.gmail.com with ESMTPS id j4sm61788lji.24.2021.12.26.20.05.38
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Sun, 26 Dec 2021 20:05:51 -0800 (PST)
+X-Relaying-Domain: rewalopiste.com
+Message-ID: <61c93b9f.1c69fb81.a15a6.d029SMTPIN_ADDED_MISSING@mx.google.com>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <MWHPR21MB15936A0B092F7467CC18B3C1D7419@MWHPR21MB1593.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Business proposal
+To:     Recipients <suzaira@smartglove.com.my>
+From:   "Mrs Amina Medjahed" <suzaira@smartglove.com.my>
+Date:   Sun, 26 Dec 2021 20:05:25 -0800
+Reply-To: AM17591981@hotmail.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/27 3:49, Michael Kelley (LINUX) wrote:
-> From: YueHaibing <yuehaibing@huawei.com> Sent: Friday, December 24, 2021 4:02 AM
->>
->> The unsigned variable sg_count is being assigned a return value
->> from the call to scsi_dma_map() that can return -ENOMEM.
->>
->> Fixes: 743b237c3a7b ("scsi: storvsc: Add Isolation VM support for storvsc driver")
->> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> 
-> Good catch!  But I wonder if a simpler fix is to just remove the "unsigned"
-> from the declaration of sg_count.  Then we don't need to add the
-> sg_cnt local variable.  A little less complexity is almost always better. :-)
-
-Ok， will respine
-> 
-> Michael
-> 
->> ---
->>  drivers/scsi/storvsc_drv.c | 8 ++++----
->>  1 file changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
->> index ae293600d799..072c752a8c36 100644
->> --- a/drivers/scsi/storvsc_drv.c
->> +++ b/drivers/scsi/storvsc_drv.c
->> @@ -1837,7 +1837,7 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
->>  		unsigned int hvpg_count = HVPFN_UP(offset_in_hvpg + length);
->>  		struct scatterlist *sg;
->>  		unsigned long hvpfn, hvpfns_to_add;
->> -		int j, i = 0;
->> +		int sg_cnt, j, i = 0;
->>
->>  		if (hvpg_count > MAX_PAGE_BUFFER_COUNT) {
->>
->> @@ -1851,11 +1851,11 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
->>  		payload->range.len = length;
->>  		payload->range.offset = offset_in_hvpg;
->>
->> -		sg_count = scsi_dma_map(scmnd);
->> -		if (sg_count < 0)
->> +		sg_cnt = scsi_dma_map(scmnd);
->> +		if (sg_cnt < 0)
->>  			return SCSI_MLQUEUE_DEVICE_BUSY;
->>
->> -		for_each_sg(sgl, sg, sg_count, j) {
->> +		for_each_sg(sgl, sg, sg_cnt, j) {
->>  			/*
->>  			 * Init values for the current sgl entry. hvpfns_to_add
->>  			 * is in units of Hyper-V size pages. Handling the
->> --
->> 2.17.1
-> 
-> .
-> 
+Good day,
+Please i have a business proposal that will benefit both of us. Please respond if you are interested.
+Thanks and God bless.

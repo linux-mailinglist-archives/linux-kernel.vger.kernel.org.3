@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F9E4800E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 951C947FFE7
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236352AbhL0Pv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:51:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
+        id S238980AbhL0Plm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:41:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240420AbhL0Prc (ORCPT
+        with ESMTP id S238677AbhL0PjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:47:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CD9C08EAE0;
-        Mon, 27 Dec 2021 07:43:21 -0800 (PST)
+        Mon, 27 Dec 2021 10:39:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1217C07E5EB;
+        Mon, 27 Dec 2021 07:37:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9543AB80E5A;
-        Mon, 27 Dec 2021 15:43:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB5E9C36AEB;
-        Mon, 27 Dec 2021 15:43:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51AC8610A5;
+        Mon, 27 Dec 2021 15:37:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B627C36AF9;
+        Mon, 27 Dec 2021 15:37:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619799;
-        bh=tNInkdAZZkaXO3IhqaXhNQSRyo0RbBYlB7OgWOC5Cqs=;
+        s=korg; t=1640619468;
+        bh=5jjV2tqpH2LNmY1mKjvSx8G9Dg1QUZh7Xuprz6j5A0Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SzRA3tmKZdI5f8j71TtXW5d2cNwfNeB9WYU+7yqgSmAA91sp93MwY/umiYbVHHu5E
-         Zprr3HGg/ufIfuws3uxUzq8cAASw69s8jbiX1q01y7HsonQnVfyPxACVOMNnOx0T8t
-         plo5fsYNSjH/BMa3gye5NnY0/h4XVYGW9OBatfMg=
+        b=ac/sp0P6BrX4hl7FdF7gl7goFD7b5Y+XqtPpqBLkwNaH4le01Y9cAZlsoow8bRoKg
+         frO1OKhlXFHArOT/f5cPzGXGyLj0TIknl0qP2c62KdvM+H/kYQtea4NRarxS7Ke1BH
+         MDbbFcNyfGSE/ZE59Swt5qWaOGzM6YiOJtglaJJQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Geraldo Nascimento <geraldogabriel@gmail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 073/128] ASoC: meson: aiu: Move AIU_I2S_MISC hold setting to aiu-fifo-i2s
+        stable@vger.kernel.org, Josh Lehan <krellan@google.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 33/76] hwmon: (lm90) Drop critical attribute support for MAX6654
 Date:   Mon, 27 Dec 2021 16:30:48 +0100
-Message-Id: <20211227151333.932214963@linuxfoundation.org>
+Message-Id: <20211227151325.845412021@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+References: <20211227151324.694661623@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,144 +49,224 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+From: Guenter Roeck <linux@roeck-us.net>
 
-commit ee907afb0c39a41ee74b862882cfe12820c74b98 upstream.
+[ Upstream commit 16ba51b5dcd3f6dde2e51d5ccc86313119dcf889 ]
 
-The out-of-tree vendor driver uses the following approach to set the
-AIU_I2S_MISC register:
-1) write AIU_MEM_I2S_START_PTR and AIU_MEM_I2S_RD_PTR
-2) configure AIU_I2S_MUTE_SWAP[15:0]
-3) write AIU_MEM_I2S_END_PTR
-4) set AIU_I2S_MISC[2] to 1 (documented as: "put I2S interface in hold
-   mode")
-5) set AIU_I2S_MISC[4] to 1 (depending on the driver revision it always
-   stays at 1 while for older drivers this bit is unset in step 4)
-6) set AIU_I2S_MISC[2] to 0
-7) write AIU_MEM_I2S_MASKS
-8) toggle AIU_MEM_I2S_CONTROL[0]
-9) toggle AIU_MEM_I2S_BUF_CNTL[0]
+Tests with a real chip and a closer look into the datasheet show that
+MAX6654 does not support CRIT/THERM/OVERTEMP limits, so drop support
+of the respective attributes for this chip.
 
-Move setting the AIU_I2S_MISC[2] bit to aiu_fifo_i2s_hw_params() so it
-resembles the flow in the vendor kernel more closely. While here also
-configure AIU_I2S_MISC[4] (documented as: "force each audio data to
-left or right according to the bit attached with the audio data")
-similar to how the vendor driver does this. This fixes the infamous and
-long-standing "machine gun noise" issue (a buffer underrun issue).
+Introduce LM90_HAVE_CRIT flag and use it to instantiate critical limit
+attributes to solve the problem.
 
-Fixes: 6ae9ca9ce986bf ("ASoC: meson: aiu: add i2s and spdif support")
-Reported-by: Christian Hewitt <christianshewitt@gmail.com>
-Reported-by: Geraldo Nascimento <geraldogabriel@gmail.com>
-Tested-by: Christian Hewitt <christianshewitt@gmail.com>
-Tested-by: Geraldo Nascimento <geraldogabriel@gmail.com>
-Acked-by: Jerome Brunet <jbrunet@baylibre.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Link: https://lore.kernel.org/r/20211206210804.2512999-3-martin.blumenstingl@googlemail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Josh Lehan <krellan@google.com>
+Fixes: 229d495d8189 ("hwmon: (lm90) Add max6654 support to lm90 driver")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/meson/aiu-encoder-i2s.c |   33 ---------------------------------
- sound/soc/meson/aiu-fifo-i2s.c    |   19 +++++++++++++++++++
- 2 files changed, 19 insertions(+), 33 deletions(-)
+ drivers/hwmon/lm90.c | 86 +++++++++++++++++++++++++-------------------
+ 1 file changed, 49 insertions(+), 37 deletions(-)
 
---- a/sound/soc/meson/aiu-encoder-i2s.c
-+++ b/sound/soc/meson/aiu-encoder-i2s.c
-@@ -18,7 +18,6 @@
- #define AIU_RST_SOFT_I2S_FAST		BIT(0)
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index 2961e992faa85..97e0332f46790 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -35,13 +35,14 @@
+  * explicitly as max6659, or if its address is not 0x4c.
+  * These chips lack the remote temperature offset feature.
+  *
+- * This driver also supports the MAX6654 chip made by Maxim. This chip can
+- * be at 9 different addresses, similar to MAX6680/MAX6681. The MAX6654 is
+- * otherwise similar to MAX6657/MAX6658/MAX6659. Extended range is available
+- * by setting the configuration register accordingly, and is done during
+- * initialization. Extended precision is only available at conversion rates
+- * of 1 Hz and slower. Note that extended precision is not enabled by
+- * default, as this driver initializes all chips to 2 Hz by design.
++ * This driver also supports the MAX6654 chip made by Maxim. This chip can be
++ * at 9 different addresses, similar to MAX6680/MAX6681. The MAX6654 is similar
++ * to MAX6657/MAX6658/MAX6659, but does not support critical temperature
++ * limits. Extended range is available by setting the configuration register
++ * accordingly, and is done during initialization. Extended precision is only
++ * available at conversion rates of 1 Hz and slower. Note that extended
++ * precision is not enabled by default, as this driver initializes all chips
++ * to 2 Hz by design.
+  *
+  * This driver also supports the MAX6646, MAX6647, MAX6648, MAX6649 and
+  * MAX6692 chips made by Maxim.  These are again similar to the LM86,
+@@ -188,6 +189,7 @@ enum chips { lm90, adm1032, lm99, lm86, max6657, max6659, adt7461, max6680,
+ #define LM90_HAVE_BROKEN_ALERT	(1 << 7) /* Broken alert		*/
+ #define LM90_HAVE_EXTENDED_TEMP	(1 << 8) /* extended temperature support*/
+ #define LM90_PAUSE_FOR_CONFIG	(1 << 9) /* Pause conversion for config	*/
++#define LM90_HAVE_CRIT		(1 << 10)/* Chip supports CRIT/OVERT register	*/
  
- #define AIU_I2S_DAC_CFG_MSB_FIRST	BIT(2)
--#define AIU_I2S_MISC_HOLD_EN		BIT(2)
- #define AIU_CLK_CTRL_I2S_DIV_EN		BIT(0)
- #define AIU_CLK_CTRL_I2S_DIV		GENMASK(3, 2)
- #define AIU_CLK_CTRL_AOCLK_INVERT	BIT(6)
-@@ -36,37 +35,6 @@ static void aiu_encoder_i2s_divider_enab
- 				      enable ? AIU_CLK_CTRL_I2S_DIV_EN : 0);
- }
+ /* LM90 status */
+ #define LM90_STATUS_LTHRM	(1 << 0) /* local THERM limit tripped */
+@@ -354,38 +356,43 @@ struct lm90_params {
+ static const struct lm90_params lm90_params[] = {
+ 	[adm1032] = {
+ 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
+-		  | LM90_HAVE_BROKEN_ALERT,
++		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_CRIT,
+ 		.alert_alarms = 0x7c,
+ 		.max_convrate = 10,
+ 	},
+ 	[adt7461] = {
+ 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
+-		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_EXTENDED_TEMP,
++		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_EXTENDED_TEMP
++		  | LM90_HAVE_CRIT,
+ 		.alert_alarms = 0x7c,
+ 		.max_convrate = 10,
+ 	},
+ 	[g781] = {
+ 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
+-		  | LM90_HAVE_BROKEN_ALERT,
++		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_CRIT,
+ 		.alert_alarms = 0x7c,
+ 		.max_convrate = 8,
+ 	},
+ 	[lm86] = {
+-		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT,
++		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
++		  | LM90_HAVE_CRIT,
+ 		.alert_alarms = 0x7b,
+ 		.max_convrate = 9,
+ 	},
+ 	[lm90] = {
+-		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT,
++		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
++		  | LM90_HAVE_CRIT,
+ 		.alert_alarms = 0x7b,
+ 		.max_convrate = 9,
+ 	},
+ 	[lm99] = {
+-		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT,
++		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
++		  | LM90_HAVE_CRIT,
+ 		.alert_alarms = 0x7b,
+ 		.max_convrate = 9,
+ 	},
+ 	[max6646] = {
++		.flags = LM90_HAVE_CRIT,
+ 		.alert_alarms = 0x7c,
+ 		.max_convrate = 6,
+ 		.reg_local_ext = MAX6657_REG_R_LOCAL_TEMPL,
+@@ -396,50 +403,50 @@ static const struct lm90_params lm90_params[] = {
+ 		.reg_local_ext = MAX6657_REG_R_LOCAL_TEMPL,
+ 	},
+ 	[max6657] = {
+-		.flags = LM90_PAUSE_FOR_CONFIG,
++		.flags = LM90_PAUSE_FOR_CONFIG | LM90_HAVE_CRIT,
+ 		.alert_alarms = 0x7c,
+ 		.max_convrate = 8,
+ 		.reg_local_ext = MAX6657_REG_R_LOCAL_TEMPL,
+ 	},
+ 	[max6659] = {
+-		.flags = LM90_HAVE_EMERGENCY,
++		.flags = LM90_HAVE_EMERGENCY | LM90_HAVE_CRIT,
+ 		.alert_alarms = 0x7c,
+ 		.max_convrate = 8,
+ 		.reg_local_ext = MAX6657_REG_R_LOCAL_TEMPL,
+ 	},
+ 	[max6680] = {
+-		.flags = LM90_HAVE_OFFSET,
++		.flags = LM90_HAVE_OFFSET | LM90_HAVE_CRIT,
+ 		.alert_alarms = 0x7c,
+ 		.max_convrate = 7,
+ 	},
+ 	[max6696] = {
+ 		.flags = LM90_HAVE_EMERGENCY
+-		  | LM90_HAVE_EMERGENCY_ALARM | LM90_HAVE_TEMP3,
++		  | LM90_HAVE_EMERGENCY_ALARM | LM90_HAVE_TEMP3 | LM90_HAVE_CRIT,
+ 		.alert_alarms = 0x1c7c,
+ 		.max_convrate = 6,
+ 		.reg_local_ext = MAX6657_REG_R_LOCAL_TEMPL,
+ 	},
+ 	[w83l771] = {
+-		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT,
++		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT | LM90_HAVE_CRIT,
+ 		.alert_alarms = 0x7c,
+ 		.max_convrate = 8,
+ 	},
+ 	[sa56004] = {
+-		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT,
++		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT | LM90_HAVE_CRIT,
+ 		.alert_alarms = 0x7b,
+ 		.max_convrate = 9,
+ 		.reg_local_ext = SA56004_REG_R_LOCAL_TEMPL,
+ 	},
+ 	[tmp451] = {
+ 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
+-		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_EXTENDED_TEMP,
++		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_EXTENDED_TEMP | LM90_HAVE_CRIT,
+ 		.alert_alarms = 0x7c,
+ 		.max_convrate = 9,
+ 		.reg_local_ext = TMP451_REG_R_LOCAL_TEMPL,
+ 	},
+ 	[tmp461] = {
+ 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
+-		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_EXTENDED_TEMP,
++		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_EXTENDED_TEMP | LM90_HAVE_CRIT,
+ 		.alert_alarms = 0x7c,
+ 		.max_convrate = 9,
+ 		.reg_local_ext = TMP451_REG_R_LOCAL_TEMPL,
+@@ -667,20 +674,22 @@ static int lm90_update_limits(struct device *dev)
+ 	struct i2c_client *client = data->client;
+ 	int val;
  
--static void aiu_encoder_i2s_hold(struct snd_soc_component *component,
--				 bool enable)
--{
--	snd_soc_component_update_bits(component, AIU_I2S_MISC,
--				      AIU_I2S_MISC_HOLD_EN,
--				      enable ? AIU_I2S_MISC_HOLD_EN : 0);
--}
--
--static int aiu_encoder_i2s_trigger(struct snd_pcm_substream *substream, int cmd,
--				   struct snd_soc_dai *dai)
--{
--	struct snd_soc_component *component = dai->component;
--
--	switch (cmd) {
--	case SNDRV_PCM_TRIGGER_START:
--	case SNDRV_PCM_TRIGGER_RESUME:
--	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
--		aiu_encoder_i2s_hold(component, false);
--		return 0;
--
--	case SNDRV_PCM_TRIGGER_STOP:
--	case SNDRV_PCM_TRIGGER_SUSPEND:
--	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
--		aiu_encoder_i2s_hold(component, true);
--		return 0;
--
--	default:
--		return -EINVAL;
--	}
--}
--
- static int aiu_encoder_i2s_setup_desc(struct snd_soc_component *component,
- 				      struct snd_pcm_hw_params *params)
- {
-@@ -353,7 +321,6 @@ static void aiu_encoder_i2s_shutdown(str
- }
+-	val = lm90_read_reg(client, LM90_REG_R_LOCAL_CRIT);
+-	if (val < 0)
+-		return val;
+-	data->temp8[LOCAL_CRIT] = val;
++	if (data->flags & LM90_HAVE_CRIT) {
++		val = lm90_read_reg(client, LM90_REG_R_LOCAL_CRIT);
++		if (val < 0)
++			return val;
++		data->temp8[LOCAL_CRIT] = val;
  
- const struct snd_soc_dai_ops aiu_encoder_i2s_dai_ops = {
--	.trigger	= aiu_encoder_i2s_trigger,
- 	.hw_params	= aiu_encoder_i2s_hw_params,
- 	.hw_free	= aiu_encoder_i2s_hw_free,
- 	.set_fmt	= aiu_encoder_i2s_set_fmt,
---- a/sound/soc/meson/aiu-fifo-i2s.c
-+++ b/sound/soc/meson/aiu-fifo-i2s.c
-@@ -20,6 +20,8 @@
- #define AIU_MEM_I2S_CONTROL_MODE_16BIT	BIT(6)
- #define AIU_MEM_I2S_BUF_CNTL_INIT	BIT(0)
- #define AIU_RST_SOFT_I2S_FAST		BIT(0)
-+#define AIU_I2S_MISC_HOLD_EN		BIT(2)
-+#define AIU_I2S_MISC_FORCE_LEFT_RIGHT	BIT(4)
+-	val = lm90_read_reg(client, LM90_REG_R_REMOTE_CRIT);
+-	if (val < 0)
+-		return val;
+-	data->temp8[REMOTE_CRIT] = val;
++		val = lm90_read_reg(client, LM90_REG_R_REMOTE_CRIT);
++		if (val < 0)
++			return val;
++		data->temp8[REMOTE_CRIT] = val;
  
- #define AIU_FIFO_I2S_BLOCK		256
+-	val = lm90_read_reg(client, LM90_REG_R_TCRIT_HYST);
+-	if (val < 0)
+-		return val;
+-	data->temp_hyst = val;
++		val = lm90_read_reg(client, LM90_REG_R_TCRIT_HYST);
++		if (val < 0)
++			return val;
++		data->temp_hyst = val;
++	}
  
-@@ -90,6 +92,10 @@ static int aiu_fifo_i2s_hw_params(struct
- 	unsigned int val;
- 	int ret;
+ 	val = lm90_read_reg(client, LM90_REG_R_REMOTE_LOWH);
+ 	if (val < 0)
+@@ -1866,11 +1875,14 @@ static int lm90_probe(struct i2c_client *client)
+ 	info->config = data->channel_config;
  
-+	snd_soc_component_update_bits(component, AIU_I2S_MISC,
-+				      AIU_I2S_MISC_HOLD_EN,
-+				      AIU_I2S_MISC_HOLD_EN);
+ 	data->channel_config[0] = HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
+-		HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_MIN_ALARM |
+-		HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM;
++		HWMON_T_MIN_ALARM | HWMON_T_MAX_ALARM;
+ 	data->channel_config[1] = HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
+-		HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_MIN_ALARM |
+-		HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM | HWMON_T_FAULT;
++		HWMON_T_MIN_ALARM | HWMON_T_MAX_ALARM | HWMON_T_FAULT;
 +
- 	ret = aiu_fifo_hw_params(substream, params, dai);
- 	if (ret)
- 		return ret;
-@@ -117,6 +123,19 @@ static int aiu_fifo_i2s_hw_params(struct
- 	snd_soc_component_update_bits(component, AIU_MEM_I2S_MASKS,
- 				      AIU_MEM_I2S_MASKS_IRQ_BLOCK, val);
++	if (data->flags & LM90_HAVE_CRIT) {
++		data->channel_config[0] |= HWMON_T_CRIT | HWMON_T_CRIT_ALARM | HWMON_T_CRIT_HYST;
++		data->channel_config[1] |= HWMON_T_CRIT | HWMON_T_CRIT_ALARM | HWMON_T_CRIT_HYST;
++	}
  
-+	/*
-+	 * Most (all?) supported SoCs have this bit set by default. The vendor
-+	 * driver however sets it manually (depending on the version either
-+	 * while un-setting AIU_I2S_MISC_HOLD_EN or right before that). Follow
-+	 * the same approach for consistency with the vendor driver.
-+	 */
-+	snd_soc_component_update_bits(component, AIU_I2S_MISC,
-+				      AIU_I2S_MISC_FORCE_LEFT_RIGHT,
-+				      AIU_I2S_MISC_FORCE_LEFT_RIGHT);
-+
-+	snd_soc_component_update_bits(component, AIU_I2S_MISC,
-+				      AIU_I2S_MISC_HOLD_EN, 0);
-+
- 	return 0;
- }
- 
+ 	if (data->flags & LM90_HAVE_OFFSET)
+ 		data->channel_config[1] |= HWMON_T_OFFSET;
+-- 
+2.34.1
+
 
 

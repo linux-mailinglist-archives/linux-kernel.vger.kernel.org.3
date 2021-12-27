@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F577480091
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:47:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53ADF47FF84
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:38:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240147AbhL0PrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:47:11 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44854 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238238AbhL0Pnx (ORCPT
+        id S239026AbhL0PiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:38:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36568 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238340AbhL0Pgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:43:53 -0500
+        Mon, 27 Dec 2021 10:36:50 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA567C061191;
+        Mon, 27 Dec 2021 07:36:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4FD1B810AA;
-        Mon, 27 Dec 2021 15:43:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17E14C36AE7;
-        Mon, 27 Dec 2021 15:43:49 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 374B6CE10AF;
+        Mon, 27 Dec 2021 15:36:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04490C36AEB;
+        Mon, 27 Dec 2021 15:36:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619830;
-        bh=z5P4om6iudnX5CABZ7U1BI9o3x/jh4038ygeSt1X76M=;
+        s=korg; t=1640619404;
+        bh=NSjagi4mv30O0PfDmyO0bnq1YXyg1+4ahuxbXLRmq5Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mOWhEPuoMqbs0atYxGk4FQqGy8NZTmrmuseFhfESqq1O7yHkKyW39Ev4P+/F8rjuL
-         5b1hGvV5WAazmViEXP1HjZyCFAWQ8WD5r19LZV+bE/afcqEOxgyQBBdLGLcq1O9IbC
-         o2ox0aOQpfwPl38Cq1KBlHRbwCrXUe9GEVeJ5JJs=
+        b=X8RfrEtfVKRwBYZSiRpQWwCa91tvC2soHny2IfKfzqTLMOsa13IGH6yjDRPcbuh7W
+         koDXMg+c0wRZzhEptwBstiQJBxVQZdr+bD4Y/IpOeMQpiwO8qgBD2ehCetJMQGshR3
+         yUfkjguIdiuTopu0El75t4HjaQEwVsjB5o5dPMxg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Phil Elwell <phil@raspberrypi.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 052/128] pinctrl: bcm2835: Change init order for gpio hogs
+Subject: [PATCH 5.10 12/76] IB/qib: Fix memory leak in qib_user_sdma_queue_pkts()
 Date:   Mon, 27 Dec 2021 16:30:27 +0100
-Message-Id: <20211227151333.248532258@linuxfoundation.org>
+Message-Id: <20211227151325.127791941@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+References: <20211227151324.694661623@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,92 +51,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Phil Elwell <phil@raspberrypi.com>
+From: José Expósito <jose.exposito89@gmail.com>
 
-[ Upstream commit 266423e60ea1b953fcc0cd97f3dad85857e434d1 ]
+[ Upstream commit bee90911e0138c76ee67458ac0d58b38a3190f65 ]
 
-...and gpio-ranges
+The wrong goto label was used for the error case and missed cleanup of the
+pkt allocation.
 
-pinctrl-bcm2835 is a combined pinctrl/gpio driver. Currently the gpio
-side is registered first, but this breaks gpio hogs (which are
-configured during gpiochip_add_data). Part of the hog initialisation
-is a call to pinctrl_gpio_request, and since the pinctrl driver hasn't
-yet been registered this results in an -EPROBE_DEFER from which it can
-never recover.
-
-Change the initialisation sequence to register the pinctrl driver
-first.
-
-This also solves a similar problem with the gpio-ranges property, which
-is required in order for released pins to be returned to inputs.
-
-Fixes: 73345a18d464b ("pinctrl: bcm2835: Pass irqchip when adding gpiochip")
-Signed-off-by: Phil Elwell <phil@raspberrypi.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20211206092237.4105895-2-phil@raspberrypi.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Fixes: d39bf40e55e6 ("IB/qib: Protect from buffer overflow in struct qib_user_sdma_pkt fields")
+Link: https://lore.kernel.org/r/20211208175238.29983-1-jose.exposito89@gmail.com
+Addresses-Coverity-ID: 1493352 ("Resource leak")
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+Acked-by: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/bcm/pinctrl-bcm2835.c | 29 +++++++++++++++------------
- 1 file changed, 16 insertions(+), 13 deletions(-)
+ drivers/infiniband/hw/qib/qib_user_sdma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/bcm/pinctrl-bcm2835.c b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
-index 6e6fefeb21ead..cc39c0e18b474 100644
---- a/drivers/pinctrl/bcm/pinctrl-bcm2835.c
-+++ b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
-@@ -1243,6 +1243,18 @@ static int bcm2835_pinctrl_probe(struct platform_device *pdev)
- 		raw_spin_lock_init(&pc->irq_lock[i]);
- 	}
- 
-+	pc->pctl_desc = *pdata->pctl_desc;
-+	pc->pctl_dev = devm_pinctrl_register(dev, &pc->pctl_desc, pc);
-+	if (IS_ERR(pc->pctl_dev)) {
-+		gpiochip_remove(&pc->gpio_chip);
-+		return PTR_ERR(pc->pctl_dev);
-+	}
-+
-+	pc->gpio_range = *pdata->gpio_range;
-+	pc->gpio_range.base = pc->gpio_chip.base;
-+	pc->gpio_range.gc = &pc->gpio_chip;
-+	pinctrl_add_gpio_range(pc->pctl_dev, &pc->gpio_range);
-+
- 	girq = &pc->gpio_chip.irq;
- 	girq->chip = &bcm2835_gpio_irq_chip;
- 	girq->parent_handler = bcm2835_gpio_irq_handler;
-@@ -1250,8 +1262,10 @@ static int bcm2835_pinctrl_probe(struct platform_device *pdev)
- 	girq->parents = devm_kcalloc(dev, BCM2835_NUM_IRQS,
- 				     sizeof(*girq->parents),
- 				     GFP_KERNEL);
--	if (!girq->parents)
-+	if (!girq->parents) {
-+		pinctrl_remove_gpio_range(pc->pctl_dev, &pc->gpio_range);
- 		return -ENOMEM;
-+	}
- 
- 	if (is_7211) {
- 		pc->wake_irq = devm_kcalloc(dev, BCM2835_NUM_IRQS,
-@@ -1306,21 +1320,10 @@ static int bcm2835_pinctrl_probe(struct platform_device *pdev)
- 	err = gpiochip_add_data(&pc->gpio_chip, pc);
- 	if (err) {
- 		dev_err(dev, "could not add GPIO chip\n");
-+		pinctrl_remove_gpio_range(pc->pctl_dev, &pc->gpio_range);
- 		return err;
- 	}
- 
--	pc->pctl_desc = *pdata->pctl_desc;
--	pc->pctl_dev = devm_pinctrl_register(dev, &pc->pctl_desc, pc);
--	if (IS_ERR(pc->pctl_dev)) {
--		gpiochip_remove(&pc->gpio_chip);
--		return PTR_ERR(pc->pctl_dev);
--	}
--
--	pc->gpio_range = *pdata->gpio_range;
--	pc->gpio_range.base = pc->gpio_chip.base;
--	pc->gpio_range.gc = &pc->gpio_chip;
--	pinctrl_add_gpio_range(pc->pctl_dev, &pc->gpio_range);
--
- 	return 0;
- }
+diff --git a/drivers/infiniband/hw/qib/qib_user_sdma.c b/drivers/infiniband/hw/qib/qib_user_sdma.c
+index ac11943a5ddb0..bf2f30d67949d 100644
+--- a/drivers/infiniband/hw/qib/qib_user_sdma.c
++++ b/drivers/infiniband/hw/qib/qib_user_sdma.c
+@@ -941,7 +941,7 @@ static int qib_user_sdma_queue_pkts(const struct qib_devdata *dd,
+ 					       &addrlimit) ||
+ 			    addrlimit > type_max(typeof(pkt->addrlimit))) {
+ 				ret = -EINVAL;
+-				goto free_pbc;
++				goto free_pkt;
+ 			}
+ 			pkt->addrlimit = addrlimit;
  
 -- 
 2.34.1

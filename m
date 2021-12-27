@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 989D14800C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 777FC4800FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:52:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239051AbhL0Pta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:49:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38000 "EHLO
+        id S234001AbhL0Pv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:51:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240664AbhL0Ppa (ORCPT
+        with ESMTP id S239480AbhL0PqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:45:30 -0500
+        Mon, 27 Dec 2021 10:46:14 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2672C08EA37;
-        Mon, 27 Dec 2021 07:42:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49A9C08EA4C;
+        Mon, 27 Dec 2021 07:42:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C3FAB810C5;
-        Mon, 27 Dec 2021 15:42:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA8C6C36AE7;
-        Mon, 27 Dec 2021 15:42:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B26CB810C5;
+        Mon, 27 Dec 2021 15:42:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE0F8C36AE7;
+        Mon, 27 Dec 2021 15:42:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619759;
-        bh=5Q/hHZCeTD17+mmxxLZ4p7yInX3ens9vN2u4mq/6DTk=;
+        s=korg; t=1640619762;
+        bh=cVfAfSLgK6M3EURbUJL2kW+nkLRnypqpLgfywTZKuYc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=soyFvyLlSiIAiPSRSp4Q5wy2ee89cooXKJsH4cR/qNjCaYmJAxCTU9PMov7zVHOYi
-         eOgiB2iUaOUH12XNp70qkFF5+gIGP4ZXvL/hc7YmISePwuvafuFvSOR8V0VZvMX56k
-         B6ZHsn9pbMA+bchUpk93rtnrsa2xDQEJ++8xdHlI=
+        b=oUk8ht7Ev2hwQKsHGRmaQzFyit5JGxkOGMLU26uOl/WnfQQmcqN+B0TkC++Dt0uWY
+         c3OdgpF+8lhfrwFFZddATPFHo6MSj5JUzBYfKRn2Hu2hgsiBbg7pM7bLaZGLV1UgeA
+         CEzMUzO2LBW1sgGSEgydMRZnxp9hkAlzuxpKV+TI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Miroslav Benes <mbenes@suse.cz>,
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 060/128] compiler.h: Fix annotation macro misplacement with Clang
-Date:   Mon, 27 Dec 2021 16:30:35 +0100
-Message-Id: <20211227151333.508277236@linuxfoundation.org>
+Subject: [PATCH 5.15 061/128] platform/x86/intel: Remove X86_PLATFORM_DRIVERS_INTEL
+Date:   Mon, 27 Dec 2021 16:30:36 +0100
+Message-Id: <20211227151333.540420703@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
 References: <20211227151331.502501367@linuxfoundation.org>
@@ -52,80 +49,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josh Poimboeuf <jpoimboe@redhat.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-[ Upstream commit dcce50e6cc4d86a63dc0a9a6ee7d4f948ccd53a1 ]
+[ Upstream commit 4f6c131c3c31b9f68470ebd01320d5403d8719bb ]
 
-When building with Clang and CONFIG_TRACE_BRANCH_PROFILING, there are a
-lot of unreachable warnings, like:
+While introduction of this menu brings a nice view in the configuration tools,
+it brought more issues than solves, i.e. it prevents to locate files in the
+intel/ subfolder without touching non-related Kconfig dependencies elsewhere.
+Drop X86_PLATFORM_DRIVERS_INTEL altogether.
 
-  arch/x86/kernel/traps.o: warning: objtool: handle_xfd_event()+0x134: unreachable instruction
+Note, on x86 it's enabled by default and it's quite unlikely anybody wants to
+disable all of the modules in this submenu.
 
-Without an input to the inline asm, 'volatile' is ignored for some
-reason and Clang feels free to move the reachable() annotation away from
-its intended location.
-
-Fix that by re-adding the counter value to the inputs.
-
-Fixes: f1069a8756b9 ("compiler.h: Avoid using inline asm operand modifiers")
-Fixes: c199f64ff93c ("instrumentation.h: Avoid using inline asm operand modifiers")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/0417e96909b97a406323409210de7bf13df0b170.1636410380.git.jpoimboe@redhat.com
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: x86@kernel.org
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Miroslav Benes <mbenes@suse.cz>
+Fixes: 8bd836feb6ca ("platform/x86: intel_skl_int3472: Move to intel/ subfolder")
+Suggested-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Link: https://lore.kernel.org/r/20211222194941.76054-1-andriy.shevchenko@linux.intel.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/compiler.h        | 4 ++--
- include/linux/instrumentation.h | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/platform/x86/Makefile      |  2 +-
+ drivers/platform/x86/intel/Kconfig | 15 ---------------
+ 2 files changed, 1 insertion(+), 16 deletions(-)
 
-diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-index 3d5af56337bdb..429dcebe2b992 100644
---- a/include/linux/compiler.h
-+++ b/include/linux/compiler.h
-@@ -121,7 +121,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
- 	asm volatile(__stringify_label(c) ":\n\t"			\
- 		     ".pushsection .discard.reachable\n\t"		\
- 		     ".long " __stringify_label(c) "b - .\n\t"		\
--		     ".popsection\n\t");				\
-+		     ".popsection\n\t" : : "i" (c));			\
- })
- #define annotate_reachable() __annotate_reachable(__COUNTER__)
+diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+index 69690e26bb6d4..2734a771d1f00 100644
+--- a/drivers/platform/x86/Makefile
++++ b/drivers/platform/x86/Makefile
+@@ -67,7 +67,7 @@ obj-$(CONFIG_THINKPAD_ACPI)	+= thinkpad_acpi.o
+ obj-$(CONFIG_THINKPAD_LMI)	+= think-lmi.o
  
-@@ -129,7 +129,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
- 	asm volatile(__stringify_label(c) ":\n\t"			\
- 		     ".pushsection .discard.unreachable\n\t"		\
- 		     ".long " __stringify_label(c) "b - .\n\t"		\
--		     ".popsection\n\t");				\
-+		     ".popsection\n\t" : : "i" (c));			\
- })
- #define annotate_unreachable() __annotate_unreachable(__COUNTER__)
+ # Intel
+-obj-$(CONFIG_X86_PLATFORM_DRIVERS_INTEL)		+= intel/
++obj-y				+= intel/
  
-diff --git a/include/linux/instrumentation.h b/include/linux/instrumentation.h
-index fa2cd8c63dcc9..24359b4a96053 100644
---- a/include/linux/instrumentation.h
-+++ b/include/linux/instrumentation.h
-@@ -11,7 +11,7 @@
- 	asm volatile(__stringify(c) ": nop\n\t"				\
- 		     ".pushsection .discard.instr_begin\n\t"		\
- 		     ".long " __stringify(c) "b - .\n\t"		\
--		     ".popsection\n\t");				\
-+		     ".popsection\n\t" : : "i" (c));			\
- })
- #define instrumentation_begin() __instrumentation_begin(__COUNTER__)
+ # MSI
+ obj-$(CONFIG_MSI_LAPTOP)	+= msi-laptop.o
+diff --git a/drivers/platform/x86/intel/Kconfig b/drivers/platform/x86/intel/Kconfig
+index 0b21468e1bd01..02e4481b384e4 100644
+--- a/drivers/platform/x86/intel/Kconfig
++++ b/drivers/platform/x86/intel/Kconfig
+@@ -3,19 +3,6 @@
+ # Intel x86 Platform Specific Drivers
+ #
  
-@@ -50,7 +50,7 @@
- 	asm volatile(__stringify(c) ": nop\n\t"				\
- 		     ".pushsection .discard.instr_end\n\t"		\
- 		     ".long " __stringify(c) "b - .\n\t"		\
--		     ".popsection\n\t");				\
-+		     ".popsection\n\t" : : "i" (c));			\
- })
- #define instrumentation_end() __instrumentation_end(__COUNTER__)
- #else
+-menuconfig X86_PLATFORM_DRIVERS_INTEL
+-	bool "Intel x86 Platform Specific Device Drivers"
+-	default y
+-	help
+-	  Say Y here to get to see options for device drivers for
+-	  various Intel x86 platforms, including vendor-specific
+-	  drivers. This option alone does not add any kernel code.
+-
+-	  If you say N, all options in this submenu will be skipped
+-	  and disabled.
+-
+-if X86_PLATFORM_DRIVERS_INTEL
+-
+ source "drivers/platform/x86/intel/atomisp2/Kconfig"
+ source "drivers/platform/x86/intel/int1092/Kconfig"
+ source "drivers/platform/x86/intel/int33fe/Kconfig"
+@@ -167,5 +154,3 @@ config INTEL_UNCORE_FREQ_CONTROL
+ 
+ 	  To compile this driver as a module, choose M here: the module
+ 	  will be called intel-uncore-frequency.
+-
+-endif # X86_PLATFORM_DRIVERS_INTEL
 -- 
 2.34.1
 

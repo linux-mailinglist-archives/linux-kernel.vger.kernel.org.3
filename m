@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD48480128
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:54:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF08C47FEFF
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240718AbhL0Pxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:53:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
+        id S237984AbhL0PeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:34:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240772AbhL0Ptl (ORCPT
+        with ESMTP id S238099AbhL0Pds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:49:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36C5C061D7E;
-        Mon, 27 Dec 2021 07:44:25 -0800 (PST)
+        Mon, 27 Dec 2021 10:33:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46D4C06139A;
+        Mon, 27 Dec 2021 07:33:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62A9561118;
-        Mon, 27 Dec 2021 15:44:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47422C36AF8;
-        Mon, 27 Dec 2021 15:44:24 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 28108CE10D9;
+        Mon, 27 Dec 2021 15:33:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E83BBC36AE7;
+        Mon, 27 Dec 2021 15:33:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619864;
-        bh=FoNcfYbQFsmv2PNWSMqv5DERIrX1+BCAKI/nMr30vzw=;
+        s=korg; t=1640619224;
+        bh=Vz8vVtXcbEHvRmf7CfHIDvEoOvMdq+KaI3CLJ0RSZik=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UUkq2EKZo6QN7wqNOBsJ9xYWdWsAcO4MlF2l0yQyssXT1xt/OFh2gB8ukprOAqf5C
-         xDt9yDIKSzR8/kOmtGFTJgSX2rgtZqoFM1t/IhCpLGGV4ZBM21Qe+XOsRnDi0b3KKl
-         P6g00J2r9i9YJeTL/F8ysf1eVmsqgJ6SYoTbr6eM=
+        b=2RRGzpSjh9ziK6KIoRnI3PpC6dCmquOSr6H+aYVRywNmP1fnW1YNYYVK64blPGrJr
+         3HgaeOeCCO6y/UiE0U/4z4KdoXo4Vu2uHWvs7agNgc3ObaE+n3hgL//znLcRZHWNkN
+         eQ+kJaOXMv+qPOsaiSV3KqG8WfqUxZ83TMtE+UzQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [PATCH 5.15 097/128] ARM: 9169/1: entry: fix Thumb2 bug in iWMMXt exception handling
+        stable@vger.kernel.org, Hanjie Wu <nagi@zju.edu.cn>,
+        Lin Ma <linma@zju.edu.cn>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.19 35/38] ax25: NPD bug when detaching AX25 device
 Date:   Mon, 27 Dec 2021 16:31:12 +0100
-Message-Id: <20211227151334.760987593@linuxfoundation.org>
+Message-Id: <20211227151320.557943151@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
+References: <20211227151319.379265346@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,51 +49,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ard Biesheuvel <ardb@kernel.org>
+From: Lin Ma <linma@zju.edu.cn>
 
-commit 8536a5ef886005bc443c2da9b842d69fd3d7647f upstream.
+commit 1ade48d0c27d5da1ccf4b583d8c5fc8b534a3ac8 upstream.
 
-The Thumb2 version of the FP exception handling entry code treats the
-register holding the CP number (R8) differently, resulting in the iWMMXT
-CP number check to be incorrect.
+The existing cleanup routine implementation is not well synchronized
+with the syscall routine. When a device is detaching, below race could
+occur.
 
-Fix this by unifying the ARM and Thumb2 code paths, and switch the
-order of the additions of the TI_USED_CP offset and the shifted CP
-index.
+static int ax25_sendmsg(...) {
+  ...
+  lock_sock()
+  ax25 = sk_to_ax25(sk);
+  if (ax25->ax25_dev == NULL) // CHECK
+  ...
+  ax25_queue_xmit(skb, ax25->ax25_dev->dev); // USE
+  ...
+}
 
-Cc: <stable@vger.kernel.org>
-Fixes: b86040a59feb ("Thumb-2: Implementation of the unified start-up and exceptions code")
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+static void ax25_kill_by_device(...) {
+  ...
+  if (s->ax25_dev == ax25_dev) {
+    s->ax25_dev = NULL;
+    ...
+}
+
+Other syscall functions like ax25_getsockopt, ax25_getname,
+ax25_info_show also suffer from similar races. To fix them, this patch
+introduce lock_sock() into ax25_kill_by_device in order to guarantee
+that the nullify action in cleanup routine cannot proceed when another
+socket request is pending.
+
+Signed-off-by: Hanjie Wu <nagi@zju.edu.cn>
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/kernel/entry-armv.S |    8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ net/ax25/af_ax25.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/arch/arm/kernel/entry-armv.S
-+++ b/arch/arm/kernel/entry-armv.S
-@@ -597,11 +597,9 @@ call_fpe:
- 	tstne	r0, #0x04000000			@ bit 26 set on both ARM and Thumb-2
- 	reteq	lr
- 	and	r8, r0, #0x00000f00		@ mask out CP number
-- THUMB(	lsr	r8, r8, #8		)
- 	mov	r7, #1
--	add	r6, r10, #TI_USED_CP
-- ARM(	strb	r7, [r6, r8, lsr #8]	)	@ set appropriate used_cp[]
-- THUMB(	strb	r7, [r6, r8]		)	@ set appropriate used_cp[]
-+	add	r6, r10, r8, lsr #8		@ add used_cp[] array offset first
-+	strb	r7, [r6, #TI_USED_CP]		@ set appropriate used_cp[]
- #ifdef CONFIG_IWMMXT
- 	@ Test if we need to give access to iWMMXt coprocessors
- 	ldr	r5, [r10, #TI_FLAGS]
-@@ -610,7 +608,7 @@ call_fpe:
- 	bcs	iwmmxt_task_enable
- #endif
-  ARM(	add	pc, pc, r8, lsr #6	)
-- THUMB(	lsl	r8, r8, #2		)
-+ THUMB(	lsr	r8, r8, #6		)
-  THUMB(	add	pc, r8			)
- 	nop
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -88,8 +88,10 @@ static void ax25_kill_by_device(struct n
+ again:
+ 	ax25_for_each(s, &ax25_list) {
+ 		if (s->ax25_dev == ax25_dev) {
+-			s->ax25_dev = NULL;
+ 			spin_unlock_bh(&ax25_list_lock);
++			lock_sock(s->sk);
++			s->ax25_dev = NULL;
++			release_sock(s->sk);
+ 			ax25_disconnect(s, ENETUNREACH);
+ 			spin_lock_bh(&ax25_list_lock);
  
 
 

@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CAB04800F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B4347FFFF
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239664AbhL0Pvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:51:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239975AbhL0PsF (ORCPT
+        id S239453AbhL0PmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:42:25 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:41372 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239330AbhL0Pjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:48:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3803EC0613B1;
-        Mon, 27 Dec 2021 07:43:43 -0800 (PST)
+        Mon, 27 Dec 2021 10:39:43 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA78460C9F;
-        Mon, 27 Dec 2021 15:43:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD5D1C36AE7;
-        Mon, 27 Dec 2021 15:43:41 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 08BF1CE10CF;
+        Mon, 27 Dec 2021 15:39:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A6EBC36AEA;
+        Mon, 27 Dec 2021 15:39:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619822;
-        bh=V2qw+lTL3q3d7YefE0rr8zmZwROjgfEPR1SGAe3lDMc=;
+        s=korg; t=1640619580;
+        bh=R6X6f9BtUSXYzXny8n1zSSvcfdAXP2snD/ytpjl6WIU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ckn9qvobwuaVuEujLZEeVJsCarWJciSU0lCd5RJ+KveXAdCgjrCcOYqutpf6vcEMA
-         GLIcH3Gue8DntxPIAra0gt6xE4xRftxBVlSmLt2tuErW5L9V+mqWc9fiEa22QVoiSt
-         xtjk5tQ54s3N38GdAUGXEbKxY+DFjC+X8P0wyOUA=
+        b=omtmpuRW7qyMtaOsd9bwJ1INVqg2sKkZIHQf/8JhOBT8kxWSKFcJvY8XCFblnmbzW
+         dKd7Ggu7f/De3k/t8ufSFEnZZ6dQPfDeHOSpyJBcO4T4R0fhYPs05I5Qw2bb6Pxvvf
+         L0SpLZx6o3I8AAoaUEIAyeNiWPSBeUXZihjlTn5M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John David Anglin <dave.anglin@bell.net>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 5.15 080/128] parisc: Correct completer in lws start
-Date:   Mon, 27 Dec 2021 16:30:55 +0100
-Message-Id: <20211227151334.172500092@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Corey Minyard <cminyard@mvista.com>
+Subject: [PATCH 5.10 41/76] ipmi: bail out if init_srcu_struct fails
+Date:   Mon, 27 Dec 2021 16:30:56 +0100
+Message-Id: <20211227151326.133899777@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+References: <20211227151324.694661623@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,37 +46,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John David Anglin <dave.anglin@bell.net>
+From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-commit 8f66fce0f46560b9e910787ff7ad0974441c4f9c upstream.
+commit 2b5160b12091285c5aca45980f100a9294af7b04 upstream.
 
-The completer in the "or,ev %r1,%r30,%r30" instruction is reversed, so we are
-not clipping the LWS number when we are called from a 32-bit process (W=0).
-We need to nulify the following depdi instruction when the least-significant
-bit of %r30 is 1.
+In case, init_srcu_struct fails (because of memory allocation failure), we
+might proceed with the driver initialization despite srcu_struct not being
+entirely initialized.
 
-If the %r20 register is not clipped, a user process could perform a LWS call
-that would branch to an undefined location in the kernel and potentially crash
-the machine.
-
-Signed-off-by: John David Anglin <dave.anglin@bell.net>
-Cc: stable@vger.kernel.org # 4.19+
-Signed-off-by: Helge Deller <deller@gmx.de>
+Fixes: 913a89f009d9 ("ipmi: Don't initialize anything in the core until something uses it")
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Cc: Corey Minyard <cminyard@mvista.com>
+Cc: stable@vger.kernel.org
+Message-Id: <20211217154410.1228673-1-cascardo@canonical.com>
+Signed-off-by: Corey Minyard <cminyard@mvista.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/parisc/kernel/syscall.S |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/ipmi/ipmi_msghandler.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/arch/parisc/kernel/syscall.S
-+++ b/arch/parisc/kernel/syscall.S
-@@ -478,7 +478,7 @@ lws_start:
- 	extrd,u	%r1,PSW_W_BIT,1,%r1
- 	/* sp must be aligned on 4, so deposit the W bit setting into
- 	 * the bottom of sp temporarily */
--	or,ev	%r1,%r30,%r30
-+	or,od	%r1,%r30,%r30
+--- a/drivers/char/ipmi/ipmi_msghandler.c
++++ b/drivers/char/ipmi/ipmi_msghandler.c
+@@ -5161,7 +5161,9 @@ static int ipmi_init_msghandler(void)
+ 	if (initialized)
+ 		goto out;
  
- 	/* Clip LWS number to a 32-bit value for 32-bit processes */
- 	depdi	0, 31, 32, %r20
+-	init_srcu_struct(&ipmi_interfaces_srcu);
++	rv = init_srcu_struct(&ipmi_interfaces_srcu);
++	if (rv)
++		goto out;
+ 
+ 	timer_setup(&ipmi_timer, ipmi_timeout, 0);
+ 	mod_timer(&ipmi_timer, jiffies + IPMI_TIMEOUT_JIFFIES);
 
 

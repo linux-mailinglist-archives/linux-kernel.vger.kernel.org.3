@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C138D47FEFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A60848001D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:43:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238219AbhL0PeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:34:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
+        id S238670AbhL0PnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:43:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237409AbhL0Pd3 (ORCPT
+        with ESMTP id S239659AbhL0PkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:33:29 -0500
+        Mon, 27 Dec 2021 10:40:23 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0943C061395;
-        Mon, 27 Dec 2021 07:33:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511C4C08E844;
+        Mon, 27 Dec 2021 07:38:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D69B610B1;
-        Mon, 27 Dec 2021 15:33:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10A9AC36AEA;
-        Mon, 27 Dec 2021 15:33:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE075610A6;
+        Mon, 27 Dec 2021 15:38:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9157BC36AEA;
+        Mon, 27 Dec 2021 15:38:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619207;
-        bh=TYv54ABICqyMaUhihBpGvRdfRiczI5DeUZfqcQ38I1U=;
+        s=korg; t=1640619520;
+        bh=sQTTMRchETzKPT0AIJEtLkclSn1NWGJW/KZGsFuLLl0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=neSUzgc7ZyCkhKRTQOxaFq6ZHpH6aFNqbOk6B2ziqcjvzSRiExZNrTwljFsFB8VzX
-         ZId1QqNpiEuzmfnzgASWTUPO/ZWBBtRnEubR+ao1cS3oBd9iRhenONlFmuxOlZYii/
-         mtD2kbCMqLk6zgKy5GHh8BlkX6WNBOV6BhBdXHWc=
+        b=ZXm9RjQce71oJqH6PYD9zynNZfxCSulNbahT//1uSmuTXp7HJMBGu9XYPd1Mpt9Db
+         7WkcqWLWeEO9ocMy/4cbJKm2QbffVokg1ERhJGLprc799+MEc6nscYY5eMmOy80FZE
+         GDWE0dGrDtiMeI2jp3oLGnuWQAbrWhlBy8CaT3Xg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wenqing Liu <wenqingliu0120@gmail.com>,
-        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH 4.19 30/38] f2fs: fix to do sanity check on last xattr entry in __f2fs_setxattr()
-Date:   Mon, 27 Dec 2021 16:31:07 +0100
-Message-Id: <20211227151320.383972525@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.10 53/76] mmc: meson-mx-sdhc: Set MANUAL_STOP for multi-block SDIO commands
+Date:   Mon, 27 Dec 2021 16:31:08 +0100
+Message-Id: <20211227151326.539105353@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
-References: <20211227151319.379265346@linuxfoundation.org>
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+References: <20211227151324.694661623@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,83 +49,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao@kernel.org>
+From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-commit 5598b24efaf4892741c798b425d543e4bed357a1 upstream.
+commit f89b548ca66be7500dcd92ee8e61590f7d08ac91 upstream.
 
-As Wenqing Liu reported in bugzilla:
+The vendor driver implements special handling for multi-block
+SD_IO_RW_EXTENDED (and SD_IO_RW_DIRECT) commands which have data
+attached to them. It sets the MANUAL_STOP bit in the MESON_SDHC_MISC
+register for these commands. In all other cases this bit is cleared.
+Here we omit SD_IO_RW_DIRECT since that command never has any data
+attached to it.
 
-https://bugzilla.kernel.org/show_bug.cgi?id=215235
+This fixes SDIO wifi using the brcmfmac driver which reported the
+following error without this change on a Netxeon S82 board using a
+Meson8 (S802) SoC:
+  brcmf_fw_alloc_request: using brcm/brcmfmac43362-sdio for chip
+                          BCM43362/1
+  brcmf_sdiod_ramrw: membytes transfer failed
+  brcmf_sdio_download_code_file: error -110 on writing 219557 membytes
+                                 at 0x00000000
+  brcmf_sdio_download_firmware: dongle image file download failed
 
-- Overview
-page fault in f2fs_setxattr() when mount and operate on corrupted image
+And with this change:
+  brcmf_fw_alloc_request: using brcm/brcmfmac43362-sdio for chip
+                          BCM43362/1
+  brcmf_c_process_clm_blob: no clm_blob available (err=-2), device may
+                            have limited channels available
+  brcmf_c_preinit_dcmds: Firmware: BCM43362/1 wl0: Apr 22 2013 14:50:00
+                         version 5.90.195.89.6 FWID 01-b30a427d
 
-- Reproduce
-tested on kernel 5.16-rc3, 5.15.X under root
-
-1. unzip tmp7.zip
-2. ./single.sh f2fs 7
-
-Sometimes need to run the script several times
-
-- Kernel dump
-loop0: detected capacity change from 0 to 131072
-F2FS-fs (loop0): Found nat_bits in checkpoint
-F2FS-fs (loop0): Mounted with checkpoint version = 7548c2ee
-BUG: unable to handle page fault for address: ffffe47bc7123f48
-RIP: 0010:kfree+0x66/0x320
-Call Trace:
- __f2fs_setxattr+0x2aa/0xc00 [f2fs]
- f2fs_setxattr+0xfa/0x480 [f2fs]
- __f2fs_set_acl+0x19b/0x330 [f2fs]
- __vfs_removexattr+0x52/0x70
- __vfs_removexattr_locked+0xb1/0x140
- vfs_removexattr+0x56/0x100
- removexattr+0x57/0x80
- path_removexattr+0xa3/0xc0
- __x64_sys_removexattr+0x17/0x20
- do_syscall_64+0x37/0xb0
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The root cause is in __f2fs_setxattr(), we missed to do sanity check on
-last xattr entry, result in out-of-bound memory access during updating
-inconsistent xattr data of target inode.
-
-After the fix, it can detect such xattr inconsistency as below:
-
-F2FS-fs (loop11): inode (7) has invalid last xattr entry, entry_size: 60676
-F2FS-fs (loop11): inode (8) has corrupted xattr
-F2FS-fs (loop11): inode (8) has corrupted xattr
-F2FS-fs (loop11): inode (8) has invalid last xattr entry, entry_size: 47736
-
+Fixes: e4bf1b0970ef96 ("mmc: host: meson-mx-sdhc: new driver for the Amlogic Meson SDHC host")
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 Cc: stable@vger.kernel.org
-Reported-by: Wenqing Liu <wenqingliu0120@gmail.com>
-Signed-off-by: Chao Yu <chao@kernel.org>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-[delete f2fs_err() call as it's not in older kernels - gregkh]
+Link: https://lore.kernel.org/r/20211219153442.463863-2-martin.blumenstingl@googlemail.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/f2fs/xattr.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/mmc/host/meson-mx-sdhc-mmc.c |   16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
---- a/fs/f2fs/xattr.c
-+++ b/fs/f2fs/xattr.c
-@@ -658,8 +658,15 @@ static int __f2fs_setxattr(struct inode
+--- a/drivers/mmc/host/meson-mx-sdhc-mmc.c
++++ b/drivers/mmc/host/meson-mx-sdhc-mmc.c
+@@ -135,6 +135,7 @@ static void meson_mx_sdhc_start_cmd(stru
+ 				    struct mmc_command *cmd)
+ {
+ 	struct meson_mx_sdhc_host *host = mmc_priv(mmc);
++	bool manual_stop = false;
+ 	u32 ictl, send;
+ 	int pack_len;
+ 
+@@ -172,12 +173,27 @@ static void meson_mx_sdhc_start_cmd(stru
+ 		else
+ 			/* software flush: */
+ 			ictl |= MESON_SDHC_ICTL_DATA_XFER_OK;
++
++		/*
++		 * Mimic the logic from the vendor driver where (only)
++		 * SD_IO_RW_EXTENDED commands with more than one block set the
++		 * MESON_SDHC_MISC_MANUAL_STOP bit. This fixes the firmware
++		 * download in the brcmfmac driver for a BCM43362/1 card.
++		 * Without this sdio_memcpy_toio() (with a size of 219557
++		 * bytes) times out if MESON_SDHC_MISC_MANUAL_STOP is not set.
++		 */
++		manual_stop = cmd->data->blocks > 1 &&
++			      cmd->opcode == SD_IO_RW_EXTENDED;
+ 	} else {
+ 		pack_len = 0;
+ 
+ 		ictl |= MESON_SDHC_ICTL_RESP_OK;
  	}
  
- 	last = here;
--	while (!IS_XATTR_LAST_ENTRY(last))
-+	while (!IS_XATTR_LAST_ENTRY(last)) {
-+		if ((void *)(last) + sizeof(__u32) > last_base_addr ||
-+			(void *)XATTR_NEXT_ENTRY(last) > last_base_addr) {
-+			set_sbi_flag(F2FS_I_SB(inode), SBI_NEED_FSCK);
-+			error = -EFSCORRUPTED;
-+			goto exit;
-+		}
- 		last = XATTR_NEXT_ENTRY(last);
-+	}
- 
- 	newsize = XATTR_ALIGN(sizeof(struct f2fs_xattr_entry) + len + size);
++	regmap_update_bits(host->regmap, MESON_SDHC_MISC,
++			   MESON_SDHC_MISC_MANUAL_STOP,
++			   manual_stop ? MESON_SDHC_MISC_MANUAL_STOP : 0);
++
+ 	if (cmd->opcode == MMC_STOP_TRANSMISSION)
+ 		send |= MESON_SDHC_SEND_DATA_STOP;
  
 
 

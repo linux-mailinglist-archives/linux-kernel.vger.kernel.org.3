@@ -2,131 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D755E480323
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 19:00:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF4B480325
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 19:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbhL0SAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 13:00:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42408 "EHLO
+        id S231449AbhL0SCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 13:02:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbhL0SAo (ORCPT
+        with ESMTP id S229728AbhL0SCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 13:00:44 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7000EC061401;
-        Mon, 27 Dec 2021 10:00:44 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id i22so33604293wrb.13;
-        Mon, 27 Dec 2021 10:00:44 -0800 (PST)
+        Mon, 27 Dec 2021 13:02:34 -0500
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AC3C06173E;
+        Mon, 27 Dec 2021 10:02:34 -0800 (PST)
+Received: by mail-vk1-xa2e.google.com with SMTP id s1so9009516vks.9;
+        Mon, 27 Dec 2021 10:02:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VZQ7gHCQAZlakeETbiUb1MioVO2i5AohZAAATv78NYM=;
-        b=PrHCsm0XE/g7kyILFqCoEKld6mssfEEGh0AbSwxZTlaIoxDoa+FussVbhdXziv5TC6
-         LbG7qxPRXgniX84SeExqUEjNrJUdx5+5YTdXyUqLg9LbqF0v1YirchKYBlpFhZPOekn+
-         sdL1DXEcBtSx1fXhz1OmGscxqU+siP1MxziUBVB4Ls/+kfBbCerm4ifjfn1gvMavchnj
-         Jl1tzVl4qHkWXYNgDvUwDMkmN/d8/weUS/91uMArs6OFQhbOcAXIeGcei/MwJACs08zy
-         galWcRcRBJdMHVs3yJv5/9d1vW7Yql4x32NvlKMV3yOQBB3GUufGc/PJK2ZjprQvSaF4
-         z4xA==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=Y2C/xe3k3sk7ZQaWg63VZ7wIrzoxBxKM7tnsM261u4Q=;
+        b=Q9v6trgPuZwjd4z3p61NONzxFWLbYZzxXU+VxnCKbDAFMzrBffT/37G+uAcJtOEDYn
+         fsVty1RY0TfESHULgD19Ps+wneiDa0utHNOrYijZYGTrQgdxqpFP75n5EfkK7XwjAc9l
+         iCJxd6FeBmFyYZJoZXXNPgc4WkpwXV1ughISWCE/AZhN3AfCc+krSX4hiRNmw1NfgYBV
+         ZT11mhE+dacKz5javEJPczfiocoaAQXwT/1DUTl+7D9AYq3H2fND+2s7euyZINOoCAcT
+         DJh9FFm/hlzTYj5w0SiKG9czGv9szVrxRt4VSinq0HS2W7341Qg4Ut/ZwoshcAC5UIFg
+         tqew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VZQ7gHCQAZlakeETbiUb1MioVO2i5AohZAAATv78NYM=;
-        b=h9dobSyxbosop1ObhxUIhDqe/V9zdrNRDAe96xKb7Hs0OwKCRTJu0yqiIqfj4Ry8Zz
-         j3s/vwPFZISara27RcYLHKDpr6rQJnvDJVAJLkedsO8vCDKPyq5yzPrBhOhcQj1ML/bY
-         Xl8ZfiNda9McTjQI8jmDRyX94l670XraEDa7zT6OGQmCi3NO833j0k0zNqOAPsFAGKsT
-         CPb5Ck1LAyvC0+0pFISNeXUOz2LPHRNSYUvHuKPPDeuqAfOGr/IUJqauOM/NxAxkqn7T
-         Uw6g2HhhcG+vS8Z/UQN+dYTYjGHNKQ40wonDCq9gl6pnmAC/HRMy9DdOJZlHqYVUQc7D
-         izQw==
-X-Gm-Message-State: AOAM531v8likNITS9x17ZuD1jU7+XsSNF1ro8r0/jqQOUxu1XEZySujW
-        T12uxC2vuK4kTynXwjCip2r0BmB94Hw=
-X-Google-Smtp-Source: ABdhPJwztOIQ+ohCI+e9b0xdHnsHB1yXoWTIDrywhAAv1mi1cNk/1YC13UuJgxs0uHI+hDja1E5MwQ==
-X-Received: by 2002:adf:dc92:: with SMTP id r18mr13285103wrj.584.1640628042921;
-        Mon, 27 Dec 2021 10:00:42 -0800 (PST)
-Received: from localhost.localdomain (dynamic-2a01-0c23-c4b2-f800-f22f-74ff-fe21-0725.c23.pool.telefonica.de. [2a01:c23:c4b2:f800:f22f:74ff:fe21:725])
-        by smtp.googlemail.com with ESMTPSA id o11sm18572946wmq.15.2021.12.27.10.00.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Dec 2021 10:00:42 -0800 (PST)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     linux-amlogic@lists.infradead.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH 3/3] ARM: dts: meson8b: Fix the UART device-tree schema validation
-Date:   Mon, 27 Dec 2021 19:00:26 +0100
-Message-Id: <20211227180026.4068352-4-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227180026.4068352-1-martin.blumenstingl@googlemail.com>
-References: <20211227180026.4068352-1-martin.blumenstingl@googlemail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=Y2C/xe3k3sk7ZQaWg63VZ7wIrzoxBxKM7tnsM261u4Q=;
+        b=BiJdW+z/Aig94WC3RUum+tYBkV9W9Tmfzw3GEbTBZCLiqHPAckosAcudFYrwoE3IQN
+         rkbXkdAV6ICVYlqT0BoZZWFibwHP2LTjL8Ms8EmIDjKenht0AuiloxJCr5IYYaCpacCf
+         VApDlJjKjKd455TcLNzcrAsNkj092c77AShdwQX8aVqdmG4gsQ8KJ2Si4hrFI4R0V5YB
+         GYUh+Fh+EXawlXfCTo2r0zT93sc8RAQ7KFcCFM/oyKyfd+TwLJYXfNl60d91IA8jcM/D
+         uAXqGzOtEKSp93uiw00wIpPLiC4hMLROOU7jZC5FYJYYFujJbei5DG+5ZrElQJDLIzk5
+         p06Q==
+X-Gm-Message-State: AOAM5300JoEsPzpoPtLHyySP5VlzDvwok5WGlDln1K/LBeB4QozokuZQ
+        MN7IG8+LdWMdhxkXV/hy+B4=
+X-Google-Smtp-Source: ABdhPJzSqm6nnVOXDxooqQkMk2unVs6RmGdm4zu4XAutaafW0kBYlfvpenQvm+DC7cTbfPmWDGjy9g==
+X-Received: by 2002:a05:6122:513:: with SMTP id x19mr181296vko.40.1640628153124;
+        Mon, 27 Dec 2021 10:02:33 -0800 (PST)
+Received: from [10.230.29.137] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id s17sm3140149vke.7.2021.12.27.10.02.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Dec 2021 10:02:32 -0800 (PST)
+Message-ID: <f6b17214-f8b5-ad87-c36e-2e3f374b7fbb@gmail.com>
+Date:   Mon, 27 Dec 2021 10:02:29 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH 5.10 00/76] 5.10.89-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        stable@vger.kernel.org
+References: <20211227151324.694661623@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dt-bindings for the UART controller only allow the following values
-for Meson8 SoCs:
-- "amlogic,meson8b-uart", "amlogic,meson-ao-uart"
-- "amlogic,meson8b-uart"
 
-Use the correct fallback compatible string "amlogic,meson-ao-uart" for
-AO UART. Drop the "amlogic,meson-uart" compatible string from the EE
-domain UART controllers.
 
-Also update the order of the clocks to match the order defined in the
-yaml bindings.
+On 12/27/2021 7:30 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.89 release.
+> There are 76 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 29 Dec 2021 15:13:09 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.89-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Fixes: b02d6e73f5fc96 ("ARM: dts: meson8b: use stable UART bindings with correct gate clock")
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
- arch/arm/boot/dts/meson8b.dtsi | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-diff --git a/arch/arm/boot/dts/meson8b.dtsi b/arch/arm/boot/dts/meson8b.dtsi
-index b49b7cbaed4e..94f1c03decce 100644
---- a/arch/arm/boot/dts/meson8b.dtsi
-+++ b/arch/arm/boot/dts/meson8b.dtsi
-@@ -724,27 +724,27 @@ &timer_abcde {
- };
- 
- &uart_AO {
--	compatible = "amlogic,meson8b-uart", "amlogic,meson-uart";
--	clocks = <&clkc CLKID_CLK81>, <&xtal>, <&clkc CLKID_CLK81>;
--	clock-names = "baud", "xtal", "pclk";
-+	compatible = "amlogic,meson8b-uart", "amlogic,meson-ao-uart";
-+	clocks = <&xtal>, <&clkc CLKID_CLK81>, <&clkc CLKID_CLK81>;
-+	clock-names = "xtal", "pclk", "baud";
- };
- 
- &uart_A {
--	compatible = "amlogic,meson8b-uart", "amlogic,meson-uart";
--	clocks = <&clkc CLKID_CLK81>, <&xtal>, <&clkc CLKID_UART0>;
--	clock-names = "baud", "xtal", "pclk";
-+	compatible = "amlogic,meson8b-uart";
-+	clocks = <&xtal>, <&clkc CLKID_UART0>, <&clkc CLKID_CLK81>;
-+	clock-names = "xtal", "pclk", "baud";
- };
- 
- &uart_B {
--	compatible = "amlogic,meson8b-uart", "amlogic,meson-uart";
--	clocks = <&clkc CLKID_CLK81>, <&xtal>, <&clkc CLKID_UART1>;
--	clock-names = "baud", "xtal", "pclk";
-+	compatible = "amlogic,meson8b-uart";
-+	clocks = <&xtal>, <&clkc CLKID_UART0>, <&clkc CLKID_CLK81>;
-+	clock-names = "xtal", "pclk", "baud";
- };
- 
- &uart_C {
--	compatible = "amlogic,meson8b-uart", "amlogic,meson-uart";
--	clocks = <&clkc CLKID_CLK81>, <&xtal>, <&clkc CLKID_UART2>;
--	clock-names = "baud", "xtal", "pclk";
-+	compatible = "amlogic,meson8b-uart";
-+	clocks = <&xtal>, <&clkc CLKID_UART0>, <&clkc CLKID_CLK81>;
-+	clock-names = "xtal", "pclk", "baud";
- };
- 
- &usb0 {
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.34.1
+Florian
 

@@ -2,117 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC644480533
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 23:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05359480541
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 00:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233921AbhL0W4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 17:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
+        id S234036AbhL0Xuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 18:50:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbhL0W4g (ORCPT
+        with ESMTP id S233993AbhL0Xus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 17:56:36 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90487C06173E;
-        Mon, 27 Dec 2021 14:56:35 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id v11so34802412wrw.10;
-        Mon, 27 Dec 2021 14:56:35 -0800 (PST)
+        Mon, 27 Dec 2021 18:50:48 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4ECCC06173E;
+        Mon, 27 Dec 2021 15:50:47 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id g2so14555604pgo.9;
+        Mon, 27 Dec 2021 15:50:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=URhz0YsteZlx1hDMRx5/texcvutOxraW5DqUGA1+YcI=;
-        b=oUrTIqoWBLZ/jYR9iGh+rFnFzFlLYOlxA7gGIO12p7G84l2MnjgS7drovNOFpLwxd1
-         slxtGrXIYbybDRlfktTlefHq/B1ycFhYOeRqe52/f9gU5MJ4+1eDIzfRGeM3w3jTQ8oQ
-         haaQx+WRkjmiI6Phr8rARLI2/dA8Y4ZdxARIVgmxY/g0sUA5+qU7DKic20QhHVV8wPGL
-         uGCeToOoO2UxwmE4m825z9EQ/3dnhJPWBnil7itdAXWTyGklqucCsuc2YkxVG7szDaEI
-         qxs9sRQENdDYCk68Ah5eMgqS9sYw5KVyT7QflJyIjjaykqE05pes+ZvHJDUyD4ukU007
-         I/cA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jMDYAAEzWKf+ZWKv9FVeegcQUYl4xuyCtWob58cAQWw=;
+        b=Mn7hUoT2uvnAFbeYWRxfKqSyou/4u6IWp5Ab9qGalAnlr7CngmbOyRZZC+s5asEIUW
+         D9pKUg8BUKSlcrGHpuRE0eVQ4R7/edscU9ohcmHdtsmKqr+Boz5j3tg6LOO5/I88JJv4
+         TZK7o2ygufhlP3LYfuzuoWG7p9becxKvBXHa41Cizd2XQ8ivuEkcaWMZ99iHFwZnjN1i
+         KeMwOIR2V0jav1n+UfooUNeR5uBznQwTmB2E267YriDa4fRhYLSFBc3Uf4oK+pSoJTaC
+         K1JaaZzvNioZAMKg1NKVaFFaQ2xG0686bGDyixKpHfpRm1UO6iFaJuVD9qoCX9mzH8P7
+         OoSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=URhz0YsteZlx1hDMRx5/texcvutOxraW5DqUGA1+YcI=;
-        b=UThKUGNMlGAXSzN0cZ525cgd6voH0gtCYXCOUzAht6w70rICrbsJBtheR45lum31QO
-         4VzxlA/n402YaXeNjp20KvZiKLl1y574SLXCVUVyl8zVtvT77kI44PkRAKpI02i7z7X7
-         +ZJQFOd9qA3Ag2IOmpxFb4+/ScGVdLKhaEsEFI25hUs/MpfeorFxh8L1TKIvGXmcUmIl
-         4vXHLa+lybqed+S11GwxImFeFD4gYm+n7QHIkBRtZOQzgMYJXsCQzImYR6ZzbtVAIBZD
-         j7WMF9VZULLErJKmBr9yg1VscguW6AMwovWPJNOjaE0Tuc7H4zw5VEhV90xWdXEGskW5
-         AP0g==
-X-Gm-Message-State: AOAM532s+hhhl/93yTm/+jEQxx34W+l1z8KP1UpNt6XHwR95DzmDX+Vw
-        aAShceobAdJV3tZDYDt0hDg=
-X-Google-Smtp-Source: ABdhPJxLoJhhXfJSvF2baLGQq2xFCFNF57ccLafHmsZporC0gskHyW2nEL2jZjnZKAP7ZEXf18pd2g==
-X-Received: by 2002:adf:ec85:: with SMTP id z5mr14013781wrn.568.1640645793730;
-        Mon, 27 Dec 2021 14:56:33 -0800 (PST)
-Received: from [192.168.0.209] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id u12sm16244849wrf.60.2021.12.27.14.56.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Dec 2021 14:56:33 -0800 (PST)
-Message-ID: <c27a4f9b-e468-93a2-c14d-20f45a5a103b@gmail.com>
-Date:   Mon, 27 Dec 2021 22:56:32 +0000
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jMDYAAEzWKf+ZWKv9FVeegcQUYl4xuyCtWob58cAQWw=;
+        b=ipoPxSmj4yk7e5sCGclQPtw21XY/kUbGuvicZHjDtKAiFkaIWKTbfHRzSip1uH7Wmn
+         YnPmmAdIQg5k6ZAP2qz7F0+yUaU08NzwiOZz6X6RIC7Ke0TsGFEjVoYP93tOuTMApnmM
+         MRr07zYVuWPfck5V1kHJlTmS6u1sifycPfRUbJLJhh0KUKvqheOHya7I9MKYKo2AEazv
+         lD6/kwFw5Fsv0fbPTYp16pjrbZZttltdLVPT8H+uvJZKCFJdDvz5HOm3soxuNSOWUGkR
+         ZI2lgJc1fPYlG8bI6LmPyrqeV7gP8YkbO4NOk+8ZkG+RuIjTiGxYt9deA8KWmsnZv/lw
+         Ljvw==
+X-Gm-Message-State: AOAM533nUHlu+h0BRza8iDp1m8CLLOLSAo90qg/5bprG8+eSvW46luQL
+        Q/5VNwcpCyu4slvh/ZPke7o=
+X-Google-Smtp-Source: ABdhPJyliKjaqPaj3bkR5OEDX+2h8UmXBD78mFpsM4oAqOKbEenA5uObRsI4rm3mReETZDeq4yKueA==
+X-Received: by 2002:a62:158f:0:b0:4ba:b456:24b9 with SMTP id 137-20020a62158f000000b004bab45624b9mr19854677pfv.86.1640649047357;
+        Mon, 27 Dec 2021 15:50:47 -0800 (PST)
+Received: from localhost (176.222.229.35.bc.googleusercontent.com. [35.229.222.176])
+        by smtp.gmail.com with ESMTPSA id 10sm18533824pfm.56.2021.12.27.15.50.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Dec 2021 15:50:46 -0800 (PST)
+Date:   Tue, 28 Dec 2021 07:50:42 +0800
+From:   Yao Yuan <yaoyuan0329os@gmail.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com
+Subject: Re: [PATCH v3 kvm/queue 05/16] KVM: Maintain ofs_tree for fast
+ memslot lookup by file offset
+Message-ID: <20211227235042.rmnwzcqy6ujj75zp@sapienza>
+References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
+ <20211223123011.41044-6-chao.p.peng@linux.intel.com>
+ <YcS5uStTallwRs0G@google.com>
+ <20211224035418.GA43608@chaop.bj.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-US
-To:     Xiang Chen <chenxiang66@hisilicon.com>
-Cc:     John Garry <john.garry@huawei.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-Subject: re: scsi: hisi_sas: Fix some issues related to,
- asd_sas_port->phy_list
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211224035418.GA43608@chaop.bj.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Dec 24, 2021 at 11:54:18AM +0800, Chao Peng wrote:
+> On Thu, Dec 23, 2021 at 06:02:33PM +0000, Sean Christopherson wrote:
+> > On Thu, Dec 23, 2021, Chao Peng wrote:
+> > > Similar to hva_tree for hva range, maintain interval tree ofs_tree for
+> > > offset range of a fd-based memslot so the lookup by offset range can be
+> > > faster when memslot count is high.
+> >
+> > This won't work.  The hva_tree relies on there being exactly one virtual address
+> > space, whereas with private memory, userspace can map multiple files into the
+> > guest at different gfns, but with overlapping offsets.
+>
+> OK, that's the point.
+>
+> >
+> > I also dislike hijacking __kvm_handle_hva_range() in patch 07.
+> >
+> > KVM also needs to disallow mapping the same file+offset into multiple gfns, which
+> > I don't see anywhere in this series.
+>
+> This can be checked against file+offset overlapping with existing slots
+> when register a new one.
+>
+> >
+> > In other words, there needs to be a 1:1 gfn:file+offset mapping.  Since userspace
+> > likely wants to allocate a single file for guest private memory and map it into
+> > multiple discontiguous slots, e.g. to skip the PCI hole, the best idea off the top
+> > of my head would be to register the notifier on a per-slot basis, not a per-VM
+> > basis.  It would require a 'struct kvm *' in 'struct kvm_memory_slot', but that's
+> > not a huge deal.
+> >
+> > That way, KVM's notifier callback already knows the memslot and can compute overlap
+> > between the memslot and the range by reversing the math done by kvm_memfd_get_pfn().
+> > Then, armed with the gfn and slot, invalidation is just a matter of constructing
+> > a struct kvm_gfn_range and invoking kvm_unmap_gfn_range().
+>
+> KVM is easy but the kernel bits would be difficulty, it has to maintain
+> fd+offset to memslot mapping because one fd can have multiple memslots,
+> it need decide which memslot needs to be notified.
 
-Static analysis with clang-scan has found a dereference of an 
-uninitialized pointer in drivers/scsi/hisi_sas/hisi_sas_main.c 
-introduced by the following recent commit:
+How about pass "context" of fd (e.g. the gfn/hva start point) when register
+the invalidation notifier to fd, then in callback kvm can convert the
+offset to absolute hva/gfn with such "context", then do memslot invalidation.
 
-commit 29e2bac87421c613782ccb510c76c5efbecac0cf
-Author: Xiang Chen <chenxiang66@hisilicon.com>
-Date:   Mon Dec 20 19:21:28 2021 +0800
-
-     scsi: hisi_sas: Fix some issues related to asd_sas_port->phy_list
-
-The issue is as follows:
-
-static void hisi_sas_send_ata_reset_each_phy(struct hisi_hba *hisi_hba,
-                                              struct asd_sas_port *sas_port,
-                                              struct domain_device *device)
-{
-         struct hisi_sas_tmf_task tmf_task = { .force_phy = 1 };
-         struct ata_port *ap = device->sata_dev.ap;
-         struct device *dev = hisi_hba->dev;
-         int s = sizeof(struct host_to_dev_fis);
-         int rc = TMF_RESP_FUNC_FAILED;
-         struct asd_sas_phy *sas_phy;
-
-sas_phy is not initialized ^
-
-         struct ata_link *link;
-         u8 fis[20] = {0};
-         u32 state;
-         int i;
-
-         state = hisi_hba->hw->get_phys_state(hisi_hba);
-         for (i = 0; i < hisi_hba->n_phy; i++) {
-                 if (!(state & BIT(sas_phy->id)))
-                         continue;
-
-sas_phy is being dereferenced
-
-The commit referenced above removed the statement:
-
-    list_for_each_entry(sas_phy, &sas_port->phy_list, port_phy_el)
-
-
-..that set sas_phy. Now we don't have this, so sas_phy is not initialized.
-
-Colin
+>
+> Thanks,
+> Chao

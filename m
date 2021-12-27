@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1653947FBA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 10:47:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 114DF47FBA9
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 10:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236069AbhL0JrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 04:47:04 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:37928 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235943AbhL0Jqj (ORCPT
+        id S231883AbhL0Jwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 04:52:36 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:33490 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229734AbhL0Jwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 04:46:39 -0500
-X-UUID: dc751a024c3740ce9ade90befab2b52b-20211227
-X-UUID: dc751a024c3740ce9ade90befab2b52b-20211227
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        Mon, 27 Dec 2021 04:52:31 -0500
+X-UUID: 53ceb6ad87f34912abfaa703bb702963-20211227
+X-UUID: 53ceb6ad87f34912abfaa703bb702963-20211227
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
         (envelope-from <guangming.cao@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1420548967; Mon, 27 Dec 2021 17:46:35 +0800
+        with ESMTP id 1006601904; Mon, 27 Dec 2021 17:52:29 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 27 Dec 2021 17:46:34 +0800
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 27 Dec 2021 17:52:27 +0800
 Received: from mszswglt01.gcn.mediatek.inc (10.16.20.20) by
  mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Mon, 27 Dec 2021 17:46:33 +0800
+ 15.0.1497.2 via Frontend Transport; Mon, 27 Dec 2021 17:52:27 +0800
 From:   <guangming.cao@mediatek.com>
 To:     Sumit Semwal <sumit.semwal@linaro.org>,
         Benjamin Gaignard <benjamin.gaignard@linaro.org>,
@@ -49,9 +49,11 @@ CC:     Bo Song <bo.song@mediatek.com>, Libo Kang <libo.kang@mediatek.com>,
         Yunfei Wang <yf.wang@mediatek.com>,
         <wsd_upstream@mediatek.com>, Guangming <Guangming.Cao@mediatek.com>
 Subject: [PATCH v2] dma-buf: dma-heap: Add a size check for allocation
-Date:   Mon, 27 Dec 2021 17:47:16 +0800
-Message-ID: <20211227094716.5870-1-guangming.cao@mediatek.com>
+Date:   Mon, 27 Dec 2021 17:51:02 +0800
+Message-ID: <20211227095102.6054-1-guangming.cao@mediatek.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211217094104.24977-1-guangming.cao@mediatek.com>
+References: <20211217094104.24977-1-guangming.cao@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N

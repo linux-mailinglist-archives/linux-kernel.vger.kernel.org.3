@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F4748006C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:46:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF3C47FF9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:39:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236512AbhL0PqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:46:14 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39958 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238597AbhL0PmA (ORCPT
+        id S239198AbhL0PjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:39:00 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:40940 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238630AbhL0PhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:42:00 -0500
+        Mon, 27 Dec 2021 10:37:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09BDE61117;
-        Mon, 27 Dec 2021 15:42:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1E58C36AE7;
-        Mon, 27 Dec 2021 15:41:58 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 06DE2CE10D3;
+        Mon, 27 Dec 2021 15:37:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15F9FC36AEB;
+        Mon, 27 Dec 2021 15:37:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619719;
-        bh=HpIB+Qqk7zYfhKImprC5Q3zJu5RW2bnDE03EC4+3BOQ=;
+        s=korg; t=1640619432;
+        bh=/RnSXltjgfDG25XBoA2i8ZjQRkx15wrfB10z8BlYKDU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wsz+0p9zi/QwoQ43WzECvRaf1DqZUxM8P1wV0CLJJaaoDVccTyEu3u00+NwxeYkXb
-         Wkxeuh38WuUKBXNc4RLwj0CKQrwWNHRaSBmllEAx5BGYAGeG4Re0b+VyztzbUreD5s
-         E20AxyGHFJlPVDlasJU0+w99uXoyt5qQtL1GgyJU=
+        b=2WK6wbEH8JeOQxx8BydlITawqWYWMs3QLoV3yiu3EpunVU2eIvhfrwKcLjDXOCYmF
+         l6LYD3DHlaYzetwMfSAYZwNQWxka5vr7+gJwXBlh1AMWPzqsIlNyvSZ7n0pdd2Oxec
+         Yt5u9r9Bih3rDHTD2CqxtaxGOjzK9kg3+Equ6h/U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Samuel Williams <samuel.williams@oriontransfer.co.nz>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 044/128] io_uring: zero iocb->ki_pos for stream file types
+        stable@vger.kernel.org, Zhang Yi <yi.zhang@huawei.com>,
+        Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 5.10 04/76] ext4: prevent partial update of the extent blocks
 Date:   Mon, 27 Dec 2021 16:30:19 +0100
-Message-Id: <20211227151332.988615420@linuxfoundation.org>
+Message-Id: <20211227151324.859320280@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+References: <20211227151324.694661623@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,51 +45,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Zhang Yi <yi.zhang@huawei.com>
 
-[ Upstream commit 7b9762a5e8837b92a027d58d396a9d27f6440c36 ]
+commit 0f2f87d51aebcf71a709b52f661d681594c7dffa upstream.
 
-io_uring supports using offset == -1 for using the current file position,
-and we read that in as part of read/write command setup. For the non-iter
-read/write types we pass in NULL for the position pointer, but for the
-iter types we should not be passing any anything but 0 for the position
-for a stream.
+In the most error path of current extents updating operations are not
+roll back partial updates properly when some bad things happens(.e.g in
+ext4_ext_insert_extent()). So we may get an inconsistent extents tree
+if journal has been aborted due to IO error, which may probability lead
+to BUGON later when we accessing these extent entries in errors=continue
+mode. This patch drop extent buffer's verify flag before updatng the
+contents in ext4_ext_get_access(), and reset it after updating in
+__ext4_ext_dirty(). After this patch we could force to check the extent
+buffer if extents tree updating was break off, make sure the extents are
+consistent.
 
-Clear kiocb->ki_pos if the file is a stream, don't leave it as -1. If we
-do, then the request will error with -ESPIPE.
+Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
+Reviewed-by: Theodore Ts'o <tytso@mit.edu>
+Link: https://lore.kernel.org/r/20210908120850.4012324-4-yi.zhang@huawei.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Fixes: ba04291eb66e ("io_uring: allow use of offset == -1 to mean file position")
-Link: https://github.com/axboe/liburing/discussions/501
-Reported-by: Samuel Williams <samuel.williams@oriontransfer.co.nz>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/io_uring.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ fs/ext4/extents.c |   17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index e9b06e339c4b0..0006fc7479ca3 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -2879,9 +2879,13 @@ static int io_prep_rw(struct io_kiocb *req, const struct io_uring_sqe *sqe,
- 		req->flags |= REQ_F_ISREG;
- 
- 	kiocb->ki_pos = READ_ONCE(sqe->off);
--	if (kiocb->ki_pos == -1 && !(file->f_mode & FMODE_STREAM)) {
--		req->flags |= REQ_F_CUR_POS;
--		kiocb->ki_pos = file->f_pos;
-+	if (kiocb->ki_pos == -1) {
-+		if (!(file->f_mode & FMODE_STREAM)) {
-+			req->flags |= REQ_F_CUR_POS;
-+			kiocb->ki_pos = file->f_pos;
-+		} else {
-+			kiocb->ki_pos = 0;
-+		}
+--- a/fs/ext4/extents.c
++++ b/fs/ext4/extents.c
+@@ -136,14 +136,24 @@ int ext4_datasem_ensure_credits(handle_t
+ static int ext4_ext_get_access(handle_t *handle, struct inode *inode,
+ 				struct ext4_ext_path *path)
+ {
++	int err = 0;
++
+ 	if (path->p_bh) {
+ 		/* path points to block */
+ 		BUFFER_TRACE(path->p_bh, "get_write_access");
+-		return ext4_journal_get_write_access(handle, path->p_bh);
++		err = ext4_journal_get_write_access(handle, path->p_bh);
++		/*
++		 * The extent buffer's verified bit will be set again in
++		 * __ext4_ext_dirty(). We could leave an inconsistent
++		 * buffer if the extents updating procudure break off du
++		 * to some error happens, force to check it again.
++		 */
++		if (!err)
++			clear_buffer_verified(path->p_bh);
  	}
- 	kiocb->ki_hint = ki_hint_validate(file_write_hint(kiocb->ki_filp));
- 	kiocb->ki_flags = iocb_flags(kiocb->ki_filp);
--- 
-2.34.1
-
+ 	/* path points to leaf/index in inode body */
+ 	/* we use in-core data, no need to protect them */
+-	return 0;
++	return err;
+ }
+ 
+ /*
+@@ -164,6 +174,9 @@ static int __ext4_ext_dirty(const char *
+ 		/* path points to block */
+ 		err = __ext4_handle_dirty_metadata(where, line, handle,
+ 						   inode, path->p_bh);
++		/* Extents updating done, re-set verified flag */
++		if (!err)
++			set_buffer_verified(path->p_bh);
+ 	} else {
+ 		/* path points to leaf/index in inode body */
+ 		err = ext4_mark_inode_dirty(handle, inode);
 
 

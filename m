@@ -2,125 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DEE747FDBB
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 14:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 267EE47FDBD
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 15:00:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236945AbhL0NyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 08:54:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42054 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232865AbhL0NyU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 08:54:20 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159BEC06173E;
-        Mon, 27 Dec 2021 05:54:20 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id v22so13500165qtx.8;
-        Mon, 27 Dec 2021 05:54:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=g4y3DBv8I9/0Er3TE7fJ214VmxYgDZBGADuJ1pOAYnU=;
-        b=BxivrrOfzULF2mVtGM2hK0E9oESuSo6z279/7yvKG3e0Eh2Mm8fIjK+z3mgIT61OJh
-         UPDxmXRnjN6Y3A49p/I59LMNtPt0mTBdbzfWs7WFFp9nAy6955T5Exhj3OHQ8eW1RrQ6
-         osj2tIrQrdC6eVn+naHOTDEw6dDbOFXtpLl0mh0Vd/WJreaE/yVZqD5DE/TYLKmfibVv
-         2km9qtbzlmXL62tl6+7mit7gZpaTQItuGmJ9huSfM2YQPoOZk1Hjun1zGrRfMevpfm/m
-         hdoUIU7zB0koHkq2d2Fl6c1pgQYDFKagVLad/p4ubf0rJTearttmHLrGDxYZyDXLxODf
-         I59A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=g4y3DBv8I9/0Er3TE7fJ214VmxYgDZBGADuJ1pOAYnU=;
-        b=46M581VJgoXQLGJaJADJ8d12q9MXB1tE+XtuWDBztnqr+vGNrPPSh2X3FGGRARFBL+
-         GNtpheGO+sxxIvNe30BSFuKQvsQ9Yf3IrGh6iYzSODxJiBUeLcmzKBjIIoC9H/H8k0Kc
-         ECyqBWq0Z5iaab9IUeUCs+wSkplRdgGBvrVbm4uqWWrGdVXYdfr9vbStyeGT9ume/DhE
-         osc8ItpJvNRMcHsTclIFtI+amfLuBaVO3Sx/l9y7r5c8BT++M7l+hfZFJ6J7CGYVLG1O
-         7pdlOdv2wl+oq0jrf53gshn4iD+8LGWJ9fZfLdTaTo+EZCwNWOjhqo1isAYRhPzeQXZ+
-         BKGg==
-X-Gm-Message-State: AOAM5302QuOblI4xa09//kTLTP1ov70FRFywPdAsdHzx1xJEyp8tiwn8
-        PioeRc9k4uuBYIivf6zcl96pRWEa+q6+xOMd
-X-Google-Smtp-Source: ABdhPJwHbKxrwsNQiSO6jlHZFlPW9xCob2KiJg27u3ACtMEOsJoM0kgyNYnr8TaFUkh61qYSfHwwzA==
-X-Received: by 2002:a05:622a:193:: with SMTP id s19mr12068795qtw.266.1640613259204;
-        Mon, 27 Dec 2021 05:54:19 -0800 (PST)
-Received: from b-10-27-92-143.dynapool.vpn.nyu.edu (vpnrasb-10wp-pat-01.natpool.nyu.edu. [216.165.95.86])
-        by smtp.gmail.com with ESMTPSA id y5sm12766210qkp.103.2021.12.27.05.54.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Dec 2021 05:54:18 -0800 (PST)
-Date:   Mon, 27 Dec 2021 08:54:16 -0500
-From:   Zekun Shen <bruceshenzk@gmail.com>
-To:     bruceshenzk@gmail.com
-Cc:     Amitkumar Karwar <amitkarwar@gmail.com>,
-        Siva Rebbagondla <siva8118@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, brendandg@nyu.edu
-Subject: [PATCH] rsi: fix oob in rsi_prepare_skb
-Message-ID: <YcnFiGzk67p0PSgd@b-10-27-92-143.dynapool.vpn.nyu.edu>
+        id S237008AbhL0OAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 09:00:24 -0500
+Received: from mga01.intel.com ([192.55.52.88]:38980 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236955AbhL0OAX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 09:00:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640613623; x=1672149623;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fI+vasy/JcocGCw2WSA/p27qt8qZEyylmM6e3KRu2yA=;
+  b=n+J1RWKRnNcRqPDNlUP3bD2nOlC5TqDJD2eZGNRpV8pqM8rv1rQ2gR5/
+   3F6cG4Sk1e7F7TECfjkXgpKv3dK9oei/NpM5BGvcc8YTtwF/SpMKTx3VR
+   Ti5kc4vUrWe4aW4pqG4GKODgQlUsvy5bMLn+0TRQFvIfbPiaZ60CuskXx
+   y7ayVz69FsWRVvnuaoy8QUIJgPKa+Xtjr46d2AFVQGyPdc7LN7iQxdeDW
+   O7MluAfhXzOX5Flo8YBvoKs3V/jTi0p1NGE3Hayqr2ZP25YMc1WgvFt5T
+   v9D7+2fuxa/TI8ib8+ot+creY5pGfKeUppPV0e2PUOB/lDNgtIx+nHxhu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="265433722"
+X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; 
+   d="scan'208";a="265433722"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 06:00:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; 
+   d="scan'208";a="572045895"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 27 Dec 2021 06:00:21 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n1qY0-0006Jq-FC; Mon, 27 Dec 2021 14:00:20 +0000
+Date:   Mon, 27 Dec 2021 22:00:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Laurent Vivier <laurent@vivier.eu>, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, Laurent Vivier <laurent@vivier.eu>
+Subject: Re: [PATCH v2 1/1] m68k: introduce a virtual m68k machine
+Message-ID: <202112272147.UoQokuQR-lkp@intel.com>
+References: <20211227093931.480329-2-laurent@vivier.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20211227093931.480329-2-laurent@vivier.eu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We found this bug while fuzzing the rsi_usb driver.
-rsi_prepare_skb does not check for OOB memcpy. We
-add the check in the caller to fix.
+Hi Laurent,
 
-Although rsi_prepare_skb checks if length is larger
-than (4 * RSI_RCV_BUFFER_LEN), it really can't because
-length is 0xfff maximum. So the check in patch is sufficient.
+Thank you for the patch! Perhaps something to improve:
 
-This patch is created upon ath-next branch. It is
-NOT tested with real device, but with QEMU emulator.
+[auto build test WARNING on geert-m68k/for-next]
+[also build test WARNING on linux/master linus/master v5.16-rc7 next-20211224]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Following is the bug report
+url:    https://github.com/0day-ci/linux/commits/Laurent-Vivier/m68k-Add-Virtual-M68k-Machine/20211227-174054
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/linux-m68k.git for-next
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20211227/202112272147.UoQokuQR-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/02e0dceb9e3bfcc8ef254308394ddb2a6a4cac2f
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Laurent-Vivier/m68k-Add-Virtual-M68k-Machine/20211227-174054
+        git checkout 02e0dceb9e3bfcc8ef254308394ddb2a6a4cac2f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/virt/
 
-BUG: KASAN: use-after-free in rsi_read_pkt
-(/linux/drivers/net/wireless/rsi/rsi_91x_main.c:206) rsi_91x
-Read of size 3815 at addr ffff888031da736d by task RX-Thread/204
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-CPU: 0 PID: 204 Comm: RX-Thread Not tainted 5.6.0 #5
-Call Trace:
-dump_stack (/linux/lib/dump_stack.c:120)
- ? rsi_read_pkt (/linux/drivers/net/wireless/rsi/rsi_91x_main.c:206) rsi_91x
- print_address_description.constprop.6 (/linux/mm/kasan/report.c:377)
- ? rsi_read_pkt (/linux/drivers/net/wireless/rsi/rsi_91x_main.c:206) rsi_91x
- ? rsi_read_pkt (/linux/drivers/net/wireless/rsi/rsi_91x_main.c:206) rsi_91x
- __kasan_report.cold.9 (/linux/mm/kasan/report.c:510)
- ? syscall_return_via_sysret (/linux/arch/x86/entry/entry_64.S:253)
- ? rsi_read_pkt (/linux/drivers/net/wireless/rsi/rsi_91x_main.c:206) rsi_91x
- kasan_report (/linux/arch/x86/include/asm/smap.h:69 /linux/mm/kasan/common.c:644)
- check_memory_region (/linux/mm/kasan/generic.c:186 /linux/mm/kasan/generic.c:192)
- memcpy (/linux/mm/kasan/common.c:130)
- rsi_read_pkt (/linux/drivers/net/wireless/rsi/rsi_91x_main.c:206) rsi_91x
- ? skb_dequeue (/linux/net/core/skbuff.c:3042)
- rsi_usb_rx_thread (/linux/drivers/net/wireless/rsi/rsi_91x_usb_ops.c:47) rsi_usb
+All warnings (new ones prefixed by >>):
 
-Reported-by: Brendan Dolan-Gavitt <brendandg@nyu.edu>
-Signed-off-by: Zekun Shen <bruceshenzk@gmail.com>
+>> arch/m68k/virt/config.c:56:12: warning: no previous prototype for 'virt_parse_bootinfo' [-Wmissing-prototypes]
+      56 | int __init virt_parse_bootinfo(const struct bi_record *record)
+         |            ^~~~~~~~~~~~~~~~~~~
+>> arch/m68k/virt/config.c:97:13: warning: no previous prototype for 'config_virt' [-Wmissing-prototypes]
+      97 | void __init config_virt(void)
+         |             ^~~~~~~~~~~
+--
+>> arch/m68k/virt/ints.c:48:13: warning: no previous prototype for 'virt_nmi_handler' [-Wmissing-prototypes]
+      48 | irqreturn_t virt_nmi_handler(int irq, void *dev_id)
+         |             ^~~~~~~~~~~~~~~~
+
+
+vim +/virt_parse_bootinfo +56 arch/m68k/virt/config.c
+
+    51	
+    52	/*
+    53	 * Parse a virtual-m68k-specific record in the bootinfo
+    54	 */
+    55	
+  > 56	int __init virt_parse_bootinfo(const struct bi_record *record)
+    57	{
+    58		int unknown = 0;
+    59		const void *data = record->data;
+    60	
+    61		switch (be16_to_cpu(record->tag)) {
+    62		case BI_VIRT_QEMU_VERSION:
+    63			virt_bi_data.qemu_version = be32_to_cpup(data);
+    64			break;
+    65		case BI_VIRT_GF_PIC_BASE:
+    66			virt_bi_data.pic.mmio = be32_to_cpup(data);
+    67			data += 4;
+    68			virt_bi_data.pic.irq = be32_to_cpup(data);
+    69			break;
+    70		case BI_VIRT_GF_RTC_BASE:
+    71			virt_bi_data.rtc.mmio = be32_to_cpup(data);
+    72			data += 4;
+    73			virt_bi_data.rtc.irq = be32_to_cpup(data);
+    74			break;
+    75		case BI_VIRT_GF_TTY_BASE:
+    76			virt_bi_data.tty.mmio = be32_to_cpup(data);
+    77			data += 4;
+    78			virt_bi_data.tty.irq = be32_to_cpup(data);
+    79			break;
+    80		case BI_VIRT_CTRL_BASE:
+    81			virt_bi_data.ctrl.mmio = be32_to_cpup(data);
+    82			data += 4;
+    83			virt_bi_data.ctrl.irq = be32_to_cpup(data);
+    84			break;
+    85		case BI_VIRT_VIRTIO_BASE:
+    86			virt_bi_data.virtio.mmio = be32_to_cpup(data);
+    87			data += 4;
+    88			virt_bi_data.virtio.irq = be32_to_cpup(data);
+    89			break;
+    90		default:
+    91			unknown = 1;
+    92			break;
+    93		}
+    94		return unknown;
+    95	}
+    96	
+  > 97	void __init config_virt(void)
+
 ---
- drivers/net/wireless/rsi/rsi_91x_main.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/net/wireless/rsi/rsi_91x_main.c b/drivers/net/wireless/rsi/rsi_91x_main.c
-index 5d1490fc3..41d3c12e0 100644
---- a/drivers/net/wireless/rsi/rsi_91x_main.c
-+++ b/drivers/net/wireless/rsi/rsi_91x_main.c
-@@ -193,6 +193,10 @@ int rsi_read_pkt(struct rsi_common *common, u8 *rx_pkt, s32 rcv_pkt_len)
- 			break;
- 
- 		case RSI_WIFI_DATA_Q:
-+			if (!rcv_pkt_len && offset + length >
-+				RSI_MAX_RX_USB_PKT_SIZE)
-+				goto fail;
-+
- 			skb = rsi_prepare_skb(common,
- 					      (frame_desc + offset),
- 					      length,
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

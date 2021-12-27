@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FB0A47FECF
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:33:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F9547FF6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237873AbhL0Pcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:32:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
+        id S238634AbhL0PhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:37:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237840AbhL0Pcd (ORCPT
+        with ESMTP id S238512AbhL0Pex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:32:33 -0500
+        Mon, 27 Dec 2021 10:34:53 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3578C061401;
-        Mon, 27 Dec 2021 07:32:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D719C06173E;
+        Mon, 27 Dec 2021 07:34:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3BF1ACE10AF;
-        Mon, 27 Dec 2021 15:32:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A6D5C36AEA;
-        Mon, 27 Dec 2021 15:32:27 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id F3FB6CE10B6;
+        Mon, 27 Dec 2021 15:34:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4690C36AE7;
+        Mon, 27 Dec 2021 15:34:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619148;
-        bh=0vCxH51SL2o7c6Im2KSW6TSOIs3koantU0r3bqK+2SY=;
+        s=korg; t=1640619289;
+        bh=R1yRbgb1ohXYbiyTaF07AoAH8FIFPm57uUU7irPMYtI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EjCadb80msFg1d60F+gNeR2pIvNb7s7ArPiUr4owYHY49UJZMfSZnycZNuGkli9/Y
-         OpUk1cF5WvFItD6l1PR8FCYYWLrXxA/gf2RtvX+kf5svAkkdlOcoWX/e/boZXRfM6W
-         pxCIB2EHGemUKz3KRMmIerFPiN6JCIVZt7cTKevU=
+        b=V0DvNwpMykLUN+hQ4Ka7y9SYWEgbp27q2NJW611B5GJfh+EAtQhPL20nHe9AvFnV7
+         fhTPM/9Tf7AVshq3VLqDi9or9mBWjoiQng/vBI0QKoAB04eoOeD3V7SReNTmHWKSzQ
+         rvZOmsJGct/SUqgT5ClE8tM1uTBMvSR/8jaAWNE0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Ignacy=20Gaw=C4=99dzki?= 
-        <ignacy.gawedzki@green-communications.fr>,
-        Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Fernando Fernandez Mancera <ffmancera@riseup.net>,
+        Jay Vosburgh <jay.vosburgh@canonical.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 11/38] netfilter: fix regression in looped (broad|multi)casts MAC handling
+Subject: [PATCH 5.4 12/47] bonding: fix ad_actor_system option setting to default
 Date:   Mon, 27 Dec 2021 16:30:48 +0100
-Message-Id: <20211227151319.748127293@linuxfoundation.org>
+Message-Id: <20211227151321.215501199@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
-References: <20211227151319.379265346@linuxfoundation.org>
+In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
+References: <20211227151320.801714429@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,64 +51,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ignacy Gawędzki <ignacy.gawedzki@green-communications.fr>
+From: Fernando Fernandez Mancera <ffmancera@riseup.net>
 
-[ Upstream commit ebb966d3bdfed581ecccbb4a7432341baf7619b4 ]
+[ Upstream commit 1c15b05baea71a5ff98235783e3e4ad227760876 ]
 
-In commit 5648b5e1169f ("netfilter: nfnetlink_queue: fix OOB when mac
-header was cleared"), the test for non-empty MAC header introduced in
-commit 2c38de4c1f8da7 ("netfilter: fix looped (broad|multi)cast's MAC
-handling") has been replaced with a test for a set MAC header.
+When 802.3ad bond mode is configured the ad_actor_system option is set to
+"00:00:00:00:00:00". But when trying to set the all-zeroes MAC as actors'
+system address it was failing with EINVAL.
 
-This breaks the case when the MAC header has been reset (using
-skb_reset_mac_header), as is the case with looped-back multicast
-packets.  As a result, the packets ending up in NFQUEUE get a bogus
-hwaddr interpreted from the first bytes of the IP header.
+An all-zeroes ethernet address is valid, only multicast addresses are not
+valid values.
 
-This patch adds a test for a non-empty MAC header in addition to the
-test for a set MAC header.  The same two tests are also implemented in
-nfnetlink_log.c, where the initial code of commit 2c38de4c1f8da7
-("netfilter: fix looped (broad|multi)cast's MAC handling") has not been
-touched, but where supposedly the same situation may happen.
-
-Fixes: 5648b5e1169f ("netfilter: nfnetlink_queue: fix OOB when mac header was cleared")
-Signed-off-by: Ignacy Gawędzki <ignacy.gawedzki@green-communications.fr>
-Reviewed-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: 171a42c38c6e ("bonding: add netlink support for sys prio, actor sys mac, and port key")
+Signed-off-by: Fernando Fernandez Mancera <ffmancera@riseup.net>
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+Link: https://lore.kernel.org/r/20211221111345.2462-1-ffmancera@riseup.net
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nfnetlink_log.c   | 3 ++-
- net/netfilter/nfnetlink_queue.c | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ Documentation/networking/bonding.txt | 11 ++++++-----
+ drivers/net/bonding/bond_options.c   |  2 +-
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/net/netfilter/nfnetlink_log.c b/net/netfilter/nfnetlink_log.c
-index 25298b3eb8546..17ca9a681d47b 100644
---- a/net/netfilter/nfnetlink_log.c
-+++ b/net/netfilter/nfnetlink_log.c
-@@ -509,7 +509,8 @@ __build_packet_message(struct nfnl_log_net *log,
- 		goto nla_put_failure;
+diff --git a/Documentation/networking/bonding.txt b/Documentation/networking/bonding.txt
+index e3abfbd32f71e..b020e6ce6dd49 100644
+--- a/Documentation/networking/bonding.txt
++++ b/Documentation/networking/bonding.txt
+@@ -191,11 +191,12 @@ ad_actor_sys_prio
+ ad_actor_system
  
- 	if (indev && skb->dev &&
--	    skb->mac_header != skb->network_header) {
-+	    skb_mac_header_was_set(skb) &&
-+	    skb_mac_header_len(skb) != 0) {
- 		struct nfulnl_msg_packet_hw phw;
- 		int len;
+ 	In an AD system, this specifies the mac-address for the actor in
+-	protocol packet exchanges (LACPDUs). The value cannot be NULL or
+-	multicast. It is preferred to have the local-admin bit set for this
+-	mac but driver does not enforce it. If the value is not given then
+-	system defaults to using the masters' mac address as actors' system
+-	address.
++	protocol packet exchanges (LACPDUs). The value cannot be a multicast
++	address. If the all-zeroes MAC is specified, bonding will internally
++	use the MAC of the bond itself. It is preferred to have the
++	local-admin bit set for this mac but driver does not enforce it. If
++	the value is not given then system defaults to using the masters'
++	mac address as actors' system address.
  
-diff --git a/net/netfilter/nfnetlink_queue.c b/net/netfilter/nfnetlink_queue.c
-index eb5a052d3b252..8955431f2ab26 100644
---- a/net/netfilter/nfnetlink_queue.c
-+++ b/net/netfilter/nfnetlink_queue.c
-@@ -566,7 +566,8 @@ nfqnl_build_packet_message(struct net *net, struct nfqnl_instance *queue,
- 		goto nla_put_failure;
+ 	This parameter has effect only in 802.3ad mode and is available through
+ 	SysFs interface.
+diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bond_options.c
+index 215c109232893..933087d85549a 100644
+--- a/drivers/net/bonding/bond_options.c
++++ b/drivers/net/bonding/bond_options.c
+@@ -1452,7 +1452,7 @@ static int bond_option_ad_actor_system_set(struct bonding *bond,
+ 		mac = (u8 *)&newval->value;
+ 	}
  
- 	if (indev && entskb->dev &&
--	    skb_mac_header_was_set(entskb)) {
-+	    skb_mac_header_was_set(entskb) &&
-+	    skb_mac_header_len(entskb) != 0) {
- 		struct nfqnl_msg_packet_hw phw;
- 		int len;
+-	if (!is_valid_ether_addr(mac))
++	if (is_multicast_ether_addr(mac))
+ 		goto err;
  
+ 	netdev_dbg(bond->dev, "Setting ad_actor_system to %pM\n", mac);
 -- 
 2.34.1
 

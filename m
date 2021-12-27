@@ -2,47 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 662E74800AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:50:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D49C47FFAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239761AbhL0Pr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:47:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240160AbhL0Pos (ORCPT
+        id S238153AbhL0Pkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:40:47 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38092 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238363AbhL0PiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:44:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B321EC08E85B;
-        Mon, 27 Dec 2021 07:42:04 -0800 (PST)
+        Mon, 27 Dec 2021 10:38:01 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64199B810C3;
-        Mon, 27 Dec 2021 15:42:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA80BC36AE7;
-        Mon, 27 Dec 2021 15:42:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7F73610A4;
+        Mon, 27 Dec 2021 15:38:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4360C36AEA;
+        Mon, 27 Dec 2021 15:37:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619722;
-        bh=h6iyZW7D1YN8A39vEr+zP4+h4vEQF/FvgHMztDXlwCo=;
+        s=korg; t=1640619480;
+        bh=0NvWazYmIgOLIHbUMzTwbU0H4vA0/JZQWIiIFUkmdMI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N4OuDPadZ0xTfkCLY0wJ8AHzkeeA2u3MRXUhMz2HGTqeq4HdVnQaDNZf6O14TEvnT
-         +9DHrWjUoaMFvZEGHMqbinXARfXm64K53nWlaaLy0D341l4vaEhmOGim0qwptYCral
-         iC0/JSnqZ8DJKK8ox8KsNhkT3wl9e0B+mLJ4qHaU=
+        b=Cf5nR8CrsRVBKI97CjAXoNkIeBfE5gy2NKbkUMYyZ3c4wCzgdG692QvA30jFFGYlY
+         sR+K6urQ0Sjf/QS8TIz2FqukfmOsBRWAneUrrRTd0W23SONXzZGXPn2h6DtCaftkLA
+         Rptd6Zqt/rrGbMhDltUUSQjUM9QNQp7jrkzN4PNM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ignat Korchagin <ignat@cloudflare.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 045/128] veth: ensure skb entering GRO are not cloned.
-Date:   Mon, 27 Dec 2021 16:30:20 +0100
-Message-Id: <20211227151333.021469159@linuxfoundation.org>
+        stable@vger.kernel.org, Zhang Yi <yi.zhang@huawei.com>,
+        Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 5.10 06/76] ext4: check for inconsistent extents between index and leaf block
+Date:   Mon, 27 Dec 2021 16:30:21 +0100
+Message-Id: <20211227151324.936249530@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+References: <20211227151324.694661623@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,101 +45,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+From: Zhang Yi <yi.zhang@huawei.com>
 
-[ Upstream commit 9695b7de5b4760ed22132aca919570c0190cb0ce ]
+commit 9c6e071913792d80894cd0be98cc3c4b770e26d3 upstream.
 
-After commit d3256efd8e8b ("veth: allow enabling NAPI even without XDP"),
-if GRO is enabled on a veth device and TSO is disabled on the peer
-device, TCP skbs will go through the NAPI callback. If there is no XDP
-program attached, the veth code does not perform any share check, and
-shared/cloned skbs could enter the GRO engine.
+Now that we can check out overlapping extents in leaf block and
+out-of-order index extents in index block. But the .ee_block in the
+first extent of one leaf block should equal to the .ei_block in it's
+parent index extent entry. This patch add a check to verify such
+inconsistent between the index and leaf block.
 
-Ignat reported a BUG triggered later-on due to the above condition:
-
-[   53.970529][    C1] kernel BUG at net/core/skbuff.c:3574!
-[   53.981755][    C1] invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-[   53.982634][    C1] CPU: 1 PID: 19 Comm: ksoftirqd/1 Not tainted 5.16.0-rc5+ #25
-[   53.982634][    C1] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
-[   53.982634][    C1] RIP: 0010:skb_shift+0x13ef/0x23b0
-[   53.982634][    C1] Code: ea 03 0f b6 04 02 48 89 fa 83 e2 07 38 d0
-7f 08 84 c0 0f 85 41 0c 00 00 41 80 7f 02 00 4d 8d b5 d0 00 00 00 0f
-85 74 f5 ff ff <0f> 0b 4d 8d 77 20 be 04 00 00 00 4c 89 44 24 78 4c 89
-f7 4c 89 8c
-[   53.982634][    C1] RSP: 0018:ffff8881008f7008 EFLAGS: 00010246
-[   53.982634][    C1] RAX: 0000000000000000 RBX: ffff8881180b4c80 RCX: 0000000000000000
-[   53.982634][    C1] RDX: 0000000000000002 RSI: ffff8881180b4d3c RDI: ffff88810bc9cac2
-[   53.982634][    C1] RBP: ffff8881008f70b8 R08: ffff8881180b4cf4 R09: ffff8881180b4cf0
-[   53.982634][    C1] R10: ffffed1022999e5c R11: 0000000000000002 R12: 0000000000000590
-[   53.982634][    C1] R13: ffff88810f940c80 R14: ffff88810f940d50 R15: ffff88810bc9cac0
-[   53.982634][    C1] FS:  0000000000000000(0000) GS:ffff888235880000(0000) knlGS:0000000000000000
-[   53.982634][    C1] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   53.982634][    C1] CR2: 00007ff5f9b86680 CR3: 0000000108ce8004 CR4: 0000000000170ee0
-[   53.982634][    C1] Call Trace:
-[   53.982634][    C1]  <TASK>
-[   53.982634][    C1]  tcp_sacktag_walk+0xaba/0x18e0
-[   53.982634][    C1]  tcp_sacktag_write_queue+0xe7b/0x3460
-[   53.982634][    C1]  tcp_ack+0x2666/0x54b0
-[   53.982634][    C1]  tcp_rcv_established+0x4d9/0x20f0
-[   53.982634][    C1]  tcp_v4_do_rcv+0x551/0x810
-[   53.982634][    C1]  tcp_v4_rcv+0x22ed/0x2ed0
-[   53.982634][    C1]  ip_protocol_deliver_rcu+0x96/0xaf0
-[   53.982634][    C1]  ip_local_deliver_finish+0x1e0/0x2f0
-[   53.982634][    C1]  ip_sublist_rcv_finish+0x211/0x440
-[   53.982634][    C1]  ip_list_rcv_finish.constprop.0+0x424/0x660
-[   53.982634][    C1]  ip_list_rcv+0x2c8/0x410
-[   53.982634][    C1]  __netif_receive_skb_list_core+0x65c/0x910
-[   53.982634][    C1]  netif_receive_skb_list_internal+0x5f9/0xcb0
-[   53.982634][    C1]  napi_complete_done+0x188/0x6e0
-[   53.982634][    C1]  gro_cell_poll+0x10c/0x1d0
-[   53.982634][    C1]  __napi_poll+0xa1/0x530
-[   53.982634][    C1]  net_rx_action+0x567/0x1270
-[   53.982634][    C1]  __do_softirq+0x28a/0x9ba
-[   53.982634][    C1]  run_ksoftirqd+0x32/0x60
-[   53.982634][    C1]  smpboot_thread_fn+0x559/0x8c0
-[   53.982634][    C1]  kthread+0x3b9/0x490
-[   53.982634][    C1]  ret_from_fork+0x22/0x30
-[   53.982634][    C1]  </TASK>
-
-Address the issue by skipping the GRO stage for shared or cloned skbs.
-To reduce the chance of OoO, try to unclone the skbs before giving up.
-
-v1 -> v2:
- - use avoid skb_copy and fallback to netif_receive_skb  - Eric
-
-Reported-by: Ignat Korchagin <ignat@cloudflare.com>
-Fixes: d3256efd8e8b ("veth: allow enabling NAPI even without XDP")
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Tested-by: Ignat Korchagin <ignat@cloudflare.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/r/b5f61c5602aab01bac8d711d8d1bfab0a4817db7.1640197544.git.pabeni@redhat.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
+Link: https://lore.kernel.org/r/20210908120850.4012324-3-yi.zhang@huawei.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/veth.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ fs/ext4/extents.c |   59 ++++++++++++++++++++++++++++++++----------------------
+ 1 file changed, 36 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 50eb43e5bf459..2acdb8ad6c713 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -879,8 +879,12 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+--- a/fs/ext4/extents.c
++++ b/fs/ext4/extents.c
+@@ -366,7 +366,8 @@ static int ext4_valid_extent_idx(struct
  
- 			stats->xdp_bytes += skb->len;
- 			skb = veth_xdp_rcv_skb(rq, skb, bq, stats);
--			if (skb)
--				napi_gro_receive(&rq->xdp_napi, skb);
-+			if (skb) {
-+				if (skb_shared(skb) || skb_unclone(skb, GFP_ATOMIC))
-+					netif_receive_skb(skb);
-+				else
-+					napi_gro_receive(&rq->xdp_napi, skb);
-+			}
+ static int ext4_valid_extent_entries(struct inode *inode,
+ 				     struct ext4_extent_header *eh,
+-				     ext4_fsblk_t *pblk, int depth)
++				     ext4_lblk_t lblk, ext4_fsblk_t *pblk,
++				     int depth)
+ {
+ 	unsigned short entries;
+ 	ext4_lblk_t lblock = 0;
+@@ -380,6 +381,14 @@ static int ext4_valid_extent_entries(str
+ 	if (depth == 0) {
+ 		/* leaf entries */
+ 		struct ext4_extent *ext = EXT_FIRST_EXTENT(eh);
++
++		/*
++		 * The logical block in the first entry should equal to
++		 * the number in the index block.
++		 */
++		if (depth != ext_depth(inode) &&
++		    lblk != le32_to_cpu(ext->ee_block))
++			return 0;
+ 		while (entries) {
+ 			if (!ext4_valid_extent(inode, ext))
+ 				return 0;
+@@ -396,6 +405,14 @@ static int ext4_valid_extent_entries(str
  		}
- 		done++;
+ 	} else {
+ 		struct ext4_extent_idx *ext_idx = EXT_FIRST_INDEX(eh);
++
++		/*
++		 * The logical block in the first entry should equal to
++		 * the number in the parent index block.
++		 */
++		if (depth != ext_depth(inode) &&
++		    lblk != le32_to_cpu(ext_idx->ei_block))
++			return 0;
+ 		while (entries) {
+ 			if (!ext4_valid_extent_idx(inode, ext_idx))
+ 				return 0;
+@@ -416,7 +433,7 @@ static int ext4_valid_extent_entries(str
+ 
+ static int __ext4_ext_check(const char *function, unsigned int line,
+ 			    struct inode *inode, struct ext4_extent_header *eh,
+-			    int depth, ext4_fsblk_t pblk)
++			    int depth, ext4_fsblk_t pblk, ext4_lblk_t lblk)
+ {
+ 	const char *error_msg;
+ 	int max = 0, err = -EFSCORRUPTED;
+@@ -442,7 +459,7 @@ static int __ext4_ext_check(const char *
+ 		error_msg = "invalid eh_entries";
+ 		goto corrupted;
  	}
--- 
-2.34.1
-
+-	if (!ext4_valid_extent_entries(inode, eh, &pblk, depth)) {
++	if (!ext4_valid_extent_entries(inode, eh, lblk, &pblk, depth)) {
+ 		error_msg = "invalid extent entries";
+ 		goto corrupted;
+ 	}
+@@ -472,7 +489,7 @@ corrupted:
+ }
+ 
+ #define ext4_ext_check(inode, eh, depth, pblk)			\
+-	__ext4_ext_check(__func__, __LINE__, (inode), (eh), (depth), (pblk))
++	__ext4_ext_check(__func__, __LINE__, (inode), (eh), (depth), (pblk), 0)
+ 
+ int ext4_ext_check_inode(struct inode *inode)
+ {
+@@ -505,16 +522,18 @@ static void ext4_cache_extents(struct in
+ 
+ static struct buffer_head *
+ __read_extent_tree_block(const char *function, unsigned int line,
+-			 struct inode *inode, ext4_fsblk_t pblk, int depth,
+-			 int flags)
++			 struct inode *inode, struct ext4_extent_idx *idx,
++			 int depth, int flags)
+ {
+ 	struct buffer_head		*bh;
+ 	int				err;
+ 	gfp_t				gfp_flags = __GFP_MOVABLE | GFP_NOFS;
++	ext4_fsblk_t			pblk;
+ 
+ 	if (flags & EXT4_EX_NOFAIL)
+ 		gfp_flags |= __GFP_NOFAIL;
+ 
++	pblk = ext4_idx_pblock(idx);
+ 	bh = sb_getblk_gfp(inode->i_sb, pblk, gfp_flags);
+ 	if (unlikely(!bh))
+ 		return ERR_PTR(-ENOMEM);
+@@ -527,8 +546,8 @@ __read_extent_tree_block(const char *fun
+ 	}
+ 	if (buffer_verified(bh) && !(flags & EXT4_EX_FORCE_CACHE))
+ 		return bh;
+-	err = __ext4_ext_check(function, line, inode,
+-			       ext_block_hdr(bh), depth, pblk);
++	err = __ext4_ext_check(function, line, inode, ext_block_hdr(bh),
++			       depth, pblk, le32_to_cpu(idx->ei_block));
+ 	if (err)
+ 		goto errout;
+ 	set_buffer_verified(bh);
+@@ -546,8 +565,8 @@ errout:
+ 
+ }
+ 
+-#define read_extent_tree_block(inode, pblk, depth, flags)		\
+-	__read_extent_tree_block(__func__, __LINE__, (inode), (pblk),   \
++#define read_extent_tree_block(inode, idx, depth, flags)		\
++	__read_extent_tree_block(__func__, __LINE__, (inode), (idx),	\
+ 				 (depth), (flags))
+ 
+ /*
+@@ -597,8 +616,7 @@ int ext4_ext_precache(struct inode *inod
+ 			i--;
+ 			continue;
+ 		}
+-		bh = read_extent_tree_block(inode,
+-					    ext4_idx_pblock(path[i].p_idx++),
++		bh = read_extent_tree_block(inode, path[i].p_idx++,
+ 					    depth - i - 1,
+ 					    EXT4_EX_FORCE_CACHE);
+ 		if (IS_ERR(bh)) {
+@@ -903,8 +921,7 @@ ext4_find_extent(struct inode *inode, ex
+ 		path[ppos].p_depth = i;
+ 		path[ppos].p_ext = NULL;
+ 
+-		bh = read_extent_tree_block(inode, path[ppos].p_block, --i,
+-					    flags);
++		bh = read_extent_tree_block(inode, path[ppos].p_idx, --i, flags);
+ 		if (IS_ERR(bh)) {
+ 			ret = PTR_ERR(bh);
+ 			goto err;
+@@ -1509,7 +1526,6 @@ static int ext4_ext_search_right(struct
+ 	struct ext4_extent_header *eh;
+ 	struct ext4_extent_idx *ix;
+ 	struct ext4_extent *ex;
+-	ext4_fsblk_t block;
+ 	int depth;	/* Note, NOT eh_depth; depth from top of tree */
+ 	int ee_len;
+ 
+@@ -1576,20 +1592,17 @@ got_index:
+ 	 * follow it and find the closest allocated
+ 	 * block to the right */
+ 	ix++;
+-	block = ext4_idx_pblock(ix);
+ 	while (++depth < path->p_depth) {
+ 		/* subtract from p_depth to get proper eh_depth */
+-		bh = read_extent_tree_block(inode, block,
+-					    path->p_depth - depth, 0);
++		bh = read_extent_tree_block(inode, ix, path->p_depth - depth, 0);
+ 		if (IS_ERR(bh))
+ 			return PTR_ERR(bh);
+ 		eh = ext_block_hdr(bh);
+ 		ix = EXT_FIRST_INDEX(eh);
+-		block = ext4_idx_pblock(ix);
+ 		put_bh(bh);
+ 	}
+ 
+-	bh = read_extent_tree_block(inode, block, path->p_depth - depth, 0);
++	bh = read_extent_tree_block(inode, ix, path->p_depth - depth, 0);
+ 	if (IS_ERR(bh))
+ 		return PTR_ERR(bh);
+ 	eh = ext_block_hdr(bh);
+@@ -2968,9 +2981,9 @@ again:
+ 			ext_debug(inode, "move to level %d (block %llu)\n",
+ 				  i + 1, ext4_idx_pblock(path[i].p_idx));
+ 			memset(path + i + 1, 0, sizeof(*path));
+-			bh = read_extent_tree_block(inode,
+-				ext4_idx_pblock(path[i].p_idx), depth - i - 1,
+-				EXT4_EX_NOCACHE);
++			bh = read_extent_tree_block(inode, path[i].p_idx,
++						    depth - i - 1,
++						    EXT4_EX_NOCACHE);
+ 			if (IS_ERR(bh)) {
+ 				/* should we reset i_size? */
+ 				err = PTR_ERR(bh);
 
 

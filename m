@@ -2,93 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D41E2480134
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:55:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA6B0480135
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:55:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241242AbhL0Pyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:54:39 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:37976 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S240427AbhL0PwV (ORCPT
+        id S241270AbhL0Pzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:55:42 -0500
+Received: from mail-qk1-f171.google.com ([209.85.222.171]:37602 "EHLO
+        mail-qk1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239809AbhL0PxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:52:21 -0500
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 1BRFqHSM026768
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Dec 2021 10:52:17 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 28C7C15C33A3; Mon, 27 Dec 2021 10:52:17 -0500 (EST)
-Date:   Mon, 27 Dec 2021 10:52:17 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-Subject: Re: [PATCH v2 2/2] random: use BLAKE2s instead of SHA1 in extraction
-Message-ID: <YcnhMS4Pgetififz@mit.edu>
-References: <20211223141113.1240679-1-Jason@zx2c4.com>
- <20211223141113.1240679-2-Jason@zx2c4.com>
+        Mon, 27 Dec 2021 10:53:08 -0500
+Received: by mail-qk1-f171.google.com with SMTP id t66so3283205qkb.4;
+        Mon, 27 Dec 2021 07:53:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kFKpJ6n3LoVE/fmz9n2YS1AqKNWObFYFkYe9I6ztYm8=;
+        b=UHr/hbAMU2WJ7jwHgqewe7DhEjRKT5Xun9KouJXFjFIjp1jhi96NJ3BfxZB6iw+vFd
+         OoG9A2so7IPM0dUnfFzo2Ue0JIAIVn8uJiqnp8d9wos9/rRcuk4uQK6yhNuCLGU8J7Fz
+         TjcWdmSuA0w6O+jLs3nM3ohQkQjBhj5SDgE0vmfA3pmwFZ+LOqH00UiQdgGQXHlwADEg
+         iTjWRduqzMX5vU3BJgW+b+VKzwz4nlEQFt7ljuhkJKQnV628u2c+46s6WtQ3KBbqC3oC
+         dMr1GDN3Qod4HRyYIJ74XqH0nrAVzwcaNbkBS/wJFygrtTGhZKun8rRFKm7EjO+7KAnV
+         swxg==
+X-Gm-Message-State: AOAM531rWpuukUFvLs7nHK4/UaEIeuphNiZGcWXHjDNVPA+KPHpQiImv
+        wEVA0EMxo511nfNgFBSG6gqUzqml1Vmoq2yXWKETKv2P
+X-Google-Smtp-Source: ABdhPJzH5+5YaWCdYqXzpxbwlEUwnWFSavWOurnfrdLoz1d0PynSuRGYUYaUiH8A019SPVWejlJ17fq4vMPcDllLXzA=
+X-Received: by 2002:a05:620a:40d1:: with SMTP id g17mr12693132qko.621.1640620387203;
+ Mon, 27 Dec 2021 07:53:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211223141113.1240679-2-Jason@zx2c4.com>
+References: <ffbefd9a-5dff-5c3d-8a24-2d42b3aa42ca@linaro.org>
+In-Reply-To: <ffbefd9a-5dff-5c3d-8a24-2d42b3aa42ca@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 27 Dec 2021 16:52:49 +0100
+Message-ID: <CAJZ5v0isp2Gyj0t3bDLP329fqOEPpj22DsG7WWnEv3Rht7_qcg@mail.gmail.com>
+Subject: Re: [GIT PULL] dtpm for v5.17
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 03:11:13PM +0100, Jason A. Donenfeld wrote:
-> This commit addresses one of the lower hanging fruits of the RNG: its
-> usage of SHA1.
-> 
-> BLAKE2s is generally faster, and certainly more secure, than SHA1, which
-> has [1] been [2] really [3] very [4] broken [5]. Additionally, the
-> current construction in the RNG doesn't use the full SHA1 function, as
-> specified, and allows overwriting the IV with RDRAND output in an
-> undocumented way, even in the case when RDRAND isn't set to "trusted",
-> which means potential malicious IV choices. And its short length means
-> that keeping only half of it secret when feeding back into the mixer
-> gives us only 2^80 bits of forward secrecy. In other words, not only is
-> the choice of hash function dated, but the use of it isn't really great
-> either.
-> 
-> This commit aims to fix both of these issues while also keeping the
-> general structure and semantics as close to the original as possible.
-> Specifically:
-> 
->    a) Rather than overwriting the hash IV with RDRAND, we put it into
->       BLAKE2's documented "salt" and "personal" fields, which were
->       specifically created for this type of usage.
->    b) Since this function feeds the full hash result back into the
->       entropy collector, we only return from it half the length of the
->       hash, just as it was done before. This increases the
->       construction's forward secrecy from 2^80 to a much more
->       comfortable 2^128.
->    c) Rather than using the raw "sha1_transform" function alone, we
->       instead use the full proper BLAKE2s function, with finalization.
-> 
-> This also has the advantage of supplying 16 bytes at a time rather than
-> SHA1's 10 bytes, which, in addition to having a faster compression
-> function to begin with, means faster extraction in general. On an Intel
-> i7-11850H, this commit makes initial seeding around 131% faster.
-> 
-> BLAKE2s itself has the nice property of internally being based on the
-> ChaCha permutation, which the RNG is already using for expansion, so
-> there shouldn't be any issue with newness, funkiness, or surprising CPU
-> behavior, since it's based on something already in use.
-> 
-> [1] https://eprint.iacr.org/2005/010.pdf
-> [2] https://www.iacr.org/archive/crypto2005/36210017/36210017.pdf
-> [3] https://eprint.iacr.org/2015/967.pdf
-> [4] https://shattered.io/static/shattered.pdf
-> [5] https://www.usenix.org/system/files/sec20-leurent.pdf
-> 
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Reviewed-by: Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+On Thu, Dec 23, 2021 at 5:02 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi Rafael,
+>
+> please consider pulling this little changes for DTPM
+>
+> Thanks
+>
+>   -- Daniel
+>
+> The following changes since commit a7904a538933c525096ca2ccde1e60d0ee62c08e:
+>
+>   Linux 5.16-rc6 (2021-12-19 14:14:33 -0800)
+>
+> are available in the Git repository at:
+>
+>   https://git.linaro.org/people/daniel.lezcano/linux.git tags/dtpm-v5.17
+>
+> for you to fetch changes up to c1af85e442278fe120974358cf71c41bc48e0580:
+>
+>   powercap/drivers/dtpm: Reduce trace verbosity (2021-12-23 16:57:36 +0100)
+>
+> ----------------------------------------------------------------
+> - Cleanup and reduce trace verbosity (Daniel Lezcano)
+>
+> ----------------------------------------------------------------
+> Daniel Lezcano (2):
+>       powercap/drivers/dtpm: Remove unused function definition
+>       powercap/drivers/dtpm: Reduce trace verbosity
+>
+>  drivers/powercap/dtpm.c | 6 +++---
+>  include/linux/dtpm.h    | 2 --
+>  2 files changed, 3 insertions(+), 5 deletions(-)
 
-Looks good, thanks for the work!
-
-Reviewed-by: Theodore Ts'o <tytso@mit.edu>
-
-						- Ted
+Pulled, thanks!

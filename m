@@ -2,126 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B11480463
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 20:20:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA913480470
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 20:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbhL0TUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 14:20:36 -0500
-Received: from mga14.intel.com ([192.55.52.115]:3079 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229581AbhL0TUf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 14:20:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640632835; x=1672168835;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5qPmzy9sn+NRM9Zgy3Od0b1mCgeekHEPWxTmGO+1g28=;
-  b=bu8QlL5bWX4Znxt38uwSr8E0C3CypFLXc0HyRC1RjjnywDOLt63G/Uye
-   G3WwCZexHpPdiUfj6NE/ZO0UlG+9TsRFKWOa+4xmoGBcY1l5ZIAXnqduG
-   /E+O+VYYpLUpXd6QJq4tFcpUugwck4OJgrkE9RMLL7BLofGdFUNlqj6Tj
-   UwFS3nquKpNiKaQPGT353Erw/inxpaF6Q9xG6O45mckw4IFoi9UxWmSqg
-   7e06H6v5loVDWN4zyEcc8z3KVliAvqVTGQY1Tip2xMgyFWrhRm2ZIix4u
-   PwGj5fAAUdk+JpyI2FcvCNJ0JI0ld1Ylz13uJp12mOuBKph4IhYrVuVmy
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="241475617"
-X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
-   d="scan'208";a="241475617"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 11:20:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
-   d="scan'208";a="686375600"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 27 Dec 2021 11:20:33 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n1vXt-0006ir-8b; Mon, 27 Dec 2021 19:20:33 +0000
-Date:   Tue, 28 Dec 2021 03:19:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Atish Patra <Atish.Patra@wdc.com>, linux-kernel@vger.kernel.org
-Subject: [atishp04:isa_ext_support 3/4] arch/riscv/kernel/cpufeature.c:82:24:
- warning: address of array 'edata->dtprop' will always evaluate to 'true'
-Message-ID: <202112280309.fgjGevFd-lkp@intel.com>
+        id S232467AbhL0TsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 14:48:25 -0500
+Received: from mxout01.lancloud.ru ([45.84.86.81]:49628 "EHLO
+        mxout01.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232426AbhL0TsX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 14:48:23 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru 0F2AC209BFA3
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH v3 03/10] ata: pata_of_platform: Use
+ platform_get_irq_optional() to get the interrupt
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+CC:     Rob Herring <robh+dt@kernel.org>, <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        <linux-ide@vger.kernel.org>
+References: <20211224131300.18198-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211224131300.18198-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <320dfb50-e086-7d72-2a11-465e8e7444dd@omp.ru>
+Date:   Mon, 27 Dec 2021 22:48:17 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211224131300.18198-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/atishp04/linux isa_ext_support
-head:   cf2f3fa532aa7c672f681ca0685046c738bfb45f
-commit: ae97a995345b68c472f3a904fc8fbefaa97ae26a [3/4] RISC-V: Provide a framework for parsing multi-letter ISA extensions
-config: riscv-randconfig-c006-20211226 (https://download.01.org/0day-ci/archive/20211228/202112280309.fgjGevFd-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 0c553cc1af2e4c14100df6cf4a6fc91987e778e6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/atishp04/linux/commit/ae97a995345b68c472f3a904fc8fbefaa97ae26a
-        git remote add atishp04 https://github.com/atishp04/linux
-        git fetch --no-tags atishp04 isa_ext_support
-        git checkout ae97a995345b68c472f3a904fc8fbefaa97ae26a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+Hello!
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 12/24/21 4:12 PM, Lad Prabhakar wrote:
 
-All warnings (new ones prefixed by >>):
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
+> 
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq_optional().
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v2-->v3
+> * New patch
+> ---
+>  drivers/ata/pata_of_platform.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/ata/pata_of_platform.c b/drivers/ata/pata_of_platform.c
+> index 35aa158fc976..2e2ec7d77726 100644
+> --- a/drivers/ata/pata_of_platform.c
+> +++ b/drivers/ata/pata_of_platform.c
+> @@ -25,11 +25,12 @@ static int pata_of_platform_probe(struct platform_device *ofdev)
+>  	struct device_node *dn = ofdev->dev.of_node;
+>  	struct resource io_res;
+>  	struct resource ctl_res;
+> -	struct resource *irq_res;
+> +	struct resource irq_res;
+>  	unsigned int reg_shift = 0;
+>  	int pio_mode = 0;
+>  	int pio_mask;
+>  	bool use16bit;
+> +	int irq;
+>  
+>  	ret = of_address_to_resource(dn, 0, &io_res);
+>  	if (ret) {
+> @@ -45,7 +46,14 @@ static int pata_of_platform_probe(struct platform_device *ofdev)
+>  		return -EINVAL;
+>  	}
+>  
+> -	irq_res = platform_get_resource(ofdev, IORESOURCE_IRQ, 0);
+> +	irq = platform_get_irq_optional(ofdev, 0);
+> +	if (irq < 0 && irq != -ENXIO)
+> +		return irq;
+> +
+> +	if (irq > 0) {
+> +		memset(&irq_res, 0x0, sizeof(struct resource));
+> +		irq_res.start = irq;
 
->> arch/riscv/kernel/cpufeature.c:82:24: warning: address of array 'edata->dtprop' will always evaluate to 'true' [-Wpointer-bool-conversion]
-           if (!edata || !edata->dtprop)
-                         ~~~~~~~~^~~~~~
-   1 warning generated.
+   Is that really enough? Doesn't __pata_platform_probe() use irq_res->flags?
 
+[...]
 
-vim +82 arch/riscv/kernel/cpufeature.c
-
-    76	
-    77	int riscv_isa_ext_list_add(struct riscv_isa_ext_data *edata)
-    78	{
-    79		struct device_node *node, *enode;
-    80		int eid;
-    81	
-  > 82		if (!edata || !edata->dtprop)
-    83			return -EINVAL;
-    84	
-    85		node = of_find_node_by_path("/cpus");
-    86		if (!node) {
-    87			pr_err("No CPU information found in DT\n");
-    88			return -ENOENT;
-    89		}
-    90	
-    91		enode = of_get_child_by_name(node, "riscv,isa-ext");
-    92		if (!enode) {
-    93			pr_err("No riscv-isa-ext found in DT\n");
-    94			return -ENOENT;
-    95		}
-    96	
-    97		eid = edata->isa_ext_id;
-    98		if (eid < RISCV_ISA_EXT_BASE || eid >= RISCV_ISA_EXT_MAX)
-    99			return -EINVAL;
-   100	
-   101		if (!of_property_read_bool(enode, edata->dtprop)) {
-   102			pr_err("The ISA extension %s is not present in DT\n", edata->dtprop);
-   103			return -ENODEV;
-   104		}
-   105	
-   106		/* Enable the extension id in the riscv_isa for easier probing */
-   107		riscv_isa[0] |= 1 << eid;
-   108		list_add(&edata->node, &riscv_isa_ext_list);
-   109		pr_info("RISC-V ISA extension '%s' available\n", edata->uprop);
-   110	
-   111		return 0;
-   112	}
-   113	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+MBR, Sergey

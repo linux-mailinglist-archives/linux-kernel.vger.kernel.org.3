@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 544274800D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CA147FF62
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:37:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240192AbhL0PvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:51:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
+        id S237990AbhL0PhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:37:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240115AbhL0PrJ (ORCPT
+        with ESMTP id S238410AbhL0Pem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:47:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A65AC061799;
-        Mon, 27 Dec 2021 07:43:06 -0800 (PST)
+        Mon, 27 Dec 2021 10:34:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C36C06175B;
+        Mon, 27 Dec 2021 07:34:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 41F29B810AA;
-        Mon, 27 Dec 2021 15:43:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 896A5C36AEA;
-        Mon, 27 Dec 2021 15:43:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8D2C6104C;
+        Mon, 27 Dec 2021 15:34:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B22C0C36AE7;
+        Mon, 27 Dec 2021 15:34:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619785;
-        bh=Is5ajmjBZ3pPB360/05m2xzCA3wiVN8ciGCE2IAx1jk=;
+        s=korg; t=1640619281;
+        bh=Q800pA2ijMpWrEzTsGFf1zltMLsWTysoy+gaAGZ/moI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i9ARz3xkmDpIZGdwOJjctMloHu3DD9kDW+WaMpwtuM932pv8jd0KB+zdH+YYscc9E
-         JnKmvrT9Pcbt7IHjPwCHVN5G43CcvAAU7bKnPyJegEHx0q5Mi6a6o1RwMUwQpMQhOU
-         s5yZZMldu0F6rEFaKwLAjFJYbslucvKbEvVVAtBc=
+        b=wWj2bjANrRNqcqUgeTGBEwnhVQkimP7LZLJVacXEmSCNt1IB0NdtVZH0E5iFT/Ona
+         +1S8cmsofYiwArvSjPzveK4GcIQwu57dbRYeg/hkaPr+MzZ48uCDF/SU5gt4eH77Dm
+         TH80KBOWoWbOaiSZyzUaPVCoGJO07jLnE9K4yVyI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Harsha Priya <harshapriya.n@intel.com>,
-        Emmanuel Jillela <emmanuel.jillela@intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>
-Subject: [PATCH 5.15 068/128] ALSA: hda/hdmi: Disable silent stream on GLK
-Date:   Mon, 27 Dec 2021 16:30:43 +0100
-Message-Id: <20211227151333.763895602@linuxfoundation.org>
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 08/47] qlcnic: potential dereference null pointer of rx_queue->page_ring
+Date:   Mon, 27 Dec 2021 16:30:44 +0100
+Message-Id: <20211227151321.068728382@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
+References: <20211227151320.801714429@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,97 +49,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ville Syrjälä <ville.syrjala@linux.intel.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-commit b6fd77472dea76b7a2bad3a338ade920152972b8 upstream.
+[ Upstream commit 60ec7fcfe76892a1479afab51ff17a4281923156 ]
 
-The silent stream stuff recurses back into i915 audio
-component .get_power() from the .pin_eld_notify() hook.
-On GLK this will deadlock as i915 may already be holding
-the relevant modeset locks during .pin_eld_notify() and
-the GLK audio vs. CDCLK workaround will try to grab the
-same locks from .get_power().
+The return value of kcalloc() needs to be checked.
+To avoid dereference of null pointer in case of the failure of alloc.
+Therefore, it might be better to change the return type of
+qlcnic_sriov_alloc_vlans() and return -ENOMEM when alloc fails and
+return 0 the others.
+Also, qlcnic_sriov_set_guest_vlan_mode() and __qlcnic_pci_sriov_enable()
+should deal with the return value of qlcnic_sriov_alloc_vlans().
 
-Until someone comes up with a better fix just disable the
-silent stream support on GLK.
-
-Cc: stable@vger.kernel.org
-Cc: Harsha Priya <harshapriya.n@intel.com>
-Cc: Emmanuel Jillela <emmanuel.jillela@intel.com>
-Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Cc: Takashi Iwai <tiwai@suse.de>
-Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/2623
-Fixes: 951894cf30f4 ("ALSA: hda/hdmi: Add Intel silent stream support")
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Link: https://lore.kernel.org/r/20211222145350.24342-1-ville.syrjala@linux.intel.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 154d0c810c53 ("qlcnic: VLAN enhancement for 84XX adapters")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_hdmi.c |   21 +++++++++++++++------
- 1 file changed, 15 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h    |  2 +-
+ .../net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c | 12 +++++++++---
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c |  4 +++-
+ 3 files changed, 13 insertions(+), 5 deletions(-)
 
---- a/sound/pci/hda/patch_hdmi.c
-+++ b/sound/pci/hda/patch_hdmi.c
-@@ -2947,7 +2947,8 @@ static int parse_intel_hdmi(struct hda_c
- 
- /* Intel Haswell and onwards; audio component with eld notifier */
- static int intel_hsw_common_init(struct hda_codec *codec, hda_nid_t vendor_nid,
--				 const int *port_map, int port_num, int dev_num)
-+				 const int *port_map, int port_num, int dev_num,
-+				 bool send_silent_stream)
+diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h
+index 5f327659efa7a..85b688f60b876 100644
+--- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h
++++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h
+@@ -202,7 +202,7 @@ int qlcnic_sriov_get_vf_vport_info(struct qlcnic_adapter *,
+ 				   struct qlcnic_info *, u16);
+ int qlcnic_sriov_cfg_vf_guest_vlan(struct qlcnic_adapter *, u16, u8);
+ void qlcnic_sriov_free_vlans(struct qlcnic_adapter *);
+-void qlcnic_sriov_alloc_vlans(struct qlcnic_adapter *);
++int qlcnic_sriov_alloc_vlans(struct qlcnic_adapter *);
+ bool qlcnic_sriov_check_any_vlan(struct qlcnic_vf_info *);
+ void qlcnic_sriov_del_vlan_id(struct qlcnic_sriov *,
+ 			      struct qlcnic_vf_info *, u16);
+diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c
+index f7c2f32237cb0..400bc2c3f222e 100644
+--- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c
++++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c
+@@ -433,7 +433,7 @@ static int qlcnic_sriov_set_guest_vlan_mode(struct qlcnic_adapter *adapter,
+ 					    struct qlcnic_cmd_args *cmd)
  {
- 	struct hdmi_spec *spec;
- 	int err;
-@@ -2980,7 +2981,7 @@ static int intel_hsw_common_init(struct
- 	 * Enable silent stream feature, if it is enabled via
- 	 * module param or Kconfig option
- 	 */
--	if (enable_silent_stream)
-+	if (send_silent_stream)
- 		spec->send_silent_stream = true;
+ 	struct qlcnic_sriov *sriov = adapter->ahw->sriov;
+-	int i, num_vlans;
++	int i, num_vlans, ret;
+ 	u16 *vlans;
  
- 	return parse_intel_hdmi(codec);
-@@ -2988,12 +2989,18 @@ static int intel_hsw_common_init(struct
+ 	if (sriov->allowed_vlans)
+@@ -444,7 +444,9 @@ static int qlcnic_sriov_set_guest_vlan_mode(struct qlcnic_adapter *adapter,
+ 	dev_info(&adapter->pdev->dev, "Number of allowed Guest VLANs = %d\n",
+ 		 sriov->num_allowed_vlans);
  
- static int patch_i915_hsw_hdmi(struct hda_codec *codec)
- {
--	return intel_hsw_common_init(codec, 0x08, NULL, 0, 3);
-+	return intel_hsw_common_init(codec, 0x08, NULL, 0, 3,
-+				     enable_silent_stream);
+-	qlcnic_sriov_alloc_vlans(adapter);
++	ret = qlcnic_sriov_alloc_vlans(adapter);
++	if (ret)
++		return ret;
+ 
+ 	if (!sriov->any_vlan)
+ 		return 0;
+@@ -2160,7 +2162,7 @@ static int qlcnic_sriov_vf_resume(struct qlcnic_adapter *adapter)
+ 	return err;
  }
  
- static int patch_i915_glk_hdmi(struct hda_codec *codec)
+-void qlcnic_sriov_alloc_vlans(struct qlcnic_adapter *adapter)
++int qlcnic_sriov_alloc_vlans(struct qlcnic_adapter *adapter)
  {
--	return intel_hsw_common_init(codec, 0x0b, NULL, 0, 3);
-+	/*
-+	 * Silent stream calls audio component .get_power() from
-+	 * .pin_eld_notify(). On GLK this will deadlock in i915 due
-+	 * to the audio vs. CDCLK workaround.
-+	 */
-+	return intel_hsw_common_init(codec, 0x0b, NULL, 0, 3, false);
+ 	struct qlcnic_sriov *sriov = adapter->ahw->sriov;
+ 	struct qlcnic_vf_info *vf;
+@@ -2170,7 +2172,11 @@ void qlcnic_sriov_alloc_vlans(struct qlcnic_adapter *adapter)
+ 		vf = &sriov->vf_info[i];
+ 		vf->sriov_vlans = kcalloc(sriov->num_allowed_vlans,
+ 					  sizeof(*vf->sriov_vlans), GFP_KERNEL);
++		if (!vf->sriov_vlans)
++			return -ENOMEM;
+ 	}
++
++	return 0;
  }
  
- static int patch_i915_icl_hdmi(struct hda_codec *codec)
-@@ -3004,7 +3011,8 @@ static int patch_i915_icl_hdmi(struct hd
- 	 */
- 	static const int map[] = {0x0, 0x4, 0x6, 0x8, 0xa, 0xb};
+ void qlcnic_sriov_free_vlans(struct qlcnic_adapter *adapter)
+diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c
+index 5632da05145a5..ed218ed2f466d 100644
+--- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c
++++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c
+@@ -598,7 +598,9 @@ static int __qlcnic_pci_sriov_enable(struct qlcnic_adapter *adapter,
+ 	if (err)
+ 		goto del_flr_queue;
  
--	return intel_hsw_common_init(codec, 0x02, map, ARRAY_SIZE(map), 3);
-+	return intel_hsw_common_init(codec, 0x02, map, ARRAY_SIZE(map), 3,
-+				     enable_silent_stream);
- }
+-	qlcnic_sriov_alloc_vlans(adapter);
++	err = qlcnic_sriov_alloc_vlans(adapter);
++	if (err)
++		goto del_flr_queue;
  
- static int patch_i915_tgl_hdmi(struct hda_codec *codec)
-@@ -3016,7 +3024,8 @@ static int patch_i915_tgl_hdmi(struct hd
- 	static const int map[] = {0x4, 0x6, 0x8, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf};
- 	int ret;
+ 	return err;
  
--	ret = intel_hsw_common_init(codec, 0x02, map, ARRAY_SIZE(map), 4);
-+	ret = intel_hsw_common_init(codec, 0x02, map, ARRAY_SIZE(map), 4,
-+				    enable_silent_stream);
- 	if (!ret) {
- 		struct hdmi_spec *spec = codec->spec;
- 
+-- 
+2.34.1
+
 
 

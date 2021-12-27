@@ -2,146 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20EE648023E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 17:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F1D4801BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 17:43:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbhL0QpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 11:45:20 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:12206 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230322AbhL0QoS (ORCPT
+        id S229892AbhL0Qni convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Dec 2021 11:43:38 -0500
+Received: from mail-qk1-f180.google.com ([209.85.222.180]:45654 "EHLO
+        mail-qk1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229755AbhL0Qnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 11:44:18 -0500
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BRG73AR007043;
-        Mon, 27 Dec 2021 16:43:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pp1; bh=4Jnk05RgASwVHmw9tYbdNZNUcH5ZrQXFxo2Y0FOFXUk=;
- b=S5CJavFjj97sO446NiElAzLm1KEonJNQnAuwrDGnhNhDDFmmN2gTCqCn3S4A7ySbGgQ7
- zknKXH0Urt0LvPQvr+Dd8HxjXU3lkj/oZVbZP5yuqXlHgpJ6FOsl+rU+GjpvcLAB5fGL
- cJ9dVi4m9o4oX29/eK2bxB2E9E6+iDfMaUzNpBSlSk90GYA0wMSbQeiYQgIzUf/zEUOt
- dHbFE34w2fzqVKQs2riLKCYAeZ4L/juQpci2ZwSdjFom08ge23sV37b8OgZoFrEitade
- GAmUbRK7dxmGgL/VnxeHJY52yASfZB7Ez+Ho78XceU0WiqI8Bf76m+IFGBQUzfti6VMN eA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d7fwqh884-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Dec 2021 16:43:59 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BRGhwrA031854;
-        Mon, 27 Dec 2021 16:43:58 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d7fwqh87p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Dec 2021 16:43:58 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BRGgtcR003120;
-        Mon, 27 Dec 2021 16:43:56 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03ams.nl.ibm.com with ESMTP id 3d5tx9bf5f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Dec 2021 16:43:56 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BRGhsOZ43319656
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Dec 2021 16:43:54 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 40782A4060;
-        Mon, 27 Dec 2021 16:43:54 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C22E2A4054;
-        Mon, 27 Dec 2021 16:43:53 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 27 Dec 2021 16:43:53 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org
-Subject: [RFC 32/32] asm-generic/io.h: drop inb() etc for HAS_IOPORT=n
-Date:   Mon, 27 Dec 2021 17:43:17 +0100
-Message-Id: <20211227164317.4146918-33-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211227164317.4146918-1-schnelle@linux.ibm.com>
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Z-__i_BTuFSa6HSmecGdOYJZi9pH0hp7
-X-Proofpoint-ORIG-GUID: K3NMce_ojCI3PBBmGLnsdW2pBtHawboP
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 27 Dec 2021 11:43:37 -0500
+Received: by mail-qk1-f180.google.com with SMTP id e25so9156508qkl.12
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 08:43:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Z618xW/xNjD1hkdspuzNH0zcUq1DRVeBeuFzHi6A8hc=;
+        b=Ou+S9uaV+WHQGfl+dFkwiU76/PSaD0kGw6mNZI3IiE2NspAJtWvCFd9LgxIaWY+DR5
+         1mdqR0N66NahRDOPxXnIe97kDCUGmRpJX4TAQUQnQxWb7+IJc3YRSuqiN3eXfFNV0oBJ
+         6k7mE+Ek/aEKtRtRhs4kkuAi+VeN9GRGW1KA0KO2ElMJSHAMuinkWNCEU3vJfW2mWIkn
+         2y+qCMcx/ghGqjeAYa88pgq/GzoVUDBwQnWK+gUtHPxbZSQ9IxE5ZUXJtS6xVraZwxQT
+         nbLylnWzZqWxmaW9WxY8Vm+SFTTO8/wGUhjvBPpYw3FzORutkRKOUxNc3fnsjgw6cU0+
+         M1cw==
+X-Gm-Message-State: AOAM531D9GIBdsyFDah9QTtfS5u7SfYip8WAyflbYALr/+2e/hL7mZMZ
+        YS4VjBk2lR32+nP6n54z7tYUVIb5ELN5+2Oi14U=
+X-Google-Smtp-Source: ABdhPJy01akyIYq4QxSP5auwlXKGjnjo+Ywuusisbe+VJa91yM8VQ7cXa1u7CJeAOc4lGLV4SrEuORDpxOPvNN1x0Sk=
+X-Received: by 2002:a05:620a:40d1:: with SMTP id g17mr12868994qko.621.1640623416725;
+ Mon, 27 Dec 2021 08:43:36 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-27_08,2021-12-24_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- adultscore=0 priorityscore=1501 mlxlogscore=999 impostorscore=0
- spamscore=0 lowpriorityscore=0 malwarescore=0 clxscore=1015 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112270080
+References: <20211227163924.3970661-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20211227163924.3970661-1-gregkh@linuxfoundation.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 27 Dec 2021 17:43:25 +0100
+Message-ID: <CAJZ5v0gq1YtjUW9geiokSU16Td99kPykM8FgBVt5SH47ExUQfQ@mail.gmail.com>
+Subject: Re: [PATCH] kobject: remove kset from struct kset_uevent_ops callbacks
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With all subsystems and drivers either declaring their dependence on
-HAS_IOPORT or ifdeffing I/O port specific code sections we can finally
-make inb()/outb() and friends compile-time dependent on HAS_IOPORT as
-suggested by Linus in the linked mail. The main benefit of this is that
-on platforms such as s390 which have no meaningful way of implementing
-inb()/outb() their use without the proper HAS_IOPORT dependency will
-result in easy to catch and fix compile-time errors instead of compiling
-code that can never work.
+On Mon, Dec 27, 2021 at 5:39 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> There is no need to pass the pointer to the kset in the struct
+> kset_uevent_ops callbacks as no one uses it, so just remove that pointer
+> entirely.
+>
+> Cc: Rafael J. Wysocki <rafael@kernel.org>
+> Cc: Wedson Almeida Filho <wedsonaf@google.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Link: https://lore.kernel.org/lkml/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
- include/asm-generic/io.h | 5 +++++
- 1 file changed, 5 insertions(+)
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index 7ce93aaf69f8..b2572b2eab07 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -448,6 +448,7 @@ static inline void writesq(volatile void __iomem *addr, const void *buffer,
- #define IO_SPACE_LIMIT 0xffff
- #endif
- 
-+#ifdef CONFIG_HAS_IOPORT
- /*
-  * {in,out}{b,w,l}() access little endian I/O. {in,out}{b,w,l}_p() can be
-  * implemented on hardware that needs an additional delay for I/O accesses to
-@@ -522,9 +523,12 @@ static inline void _outl(u32 value, unsigned long addr)
- 	__io_paw();
- }
- #endif
-+#endif /* CONFIG_HAS_IOPORT */
- 
- #include <linux/logic_pio.h>
- 
-+#ifdef CONFIG_HAS_IOPORT
-+
- #ifndef inb
- #define inb _inb
- #endif
-@@ -703,6 +707,7 @@ static inline void outsl_p(unsigned long addr, const void *buffer,
- 	outsl(addr, buffer, count);
- }
- #endif
-+#endif /* CONFIG_HAS_IOPORT */
- 
- #ifndef CONFIG_GENERIC_IOMAP
- #ifndef ioread8
--- 
-2.32.0
-
+> ---
+>  Documentation/core-api/kobject.rst                    |  7 +++----
+>  Documentation/translations/zh_CN/core-api/kobject.rst |  7 +++----
+>  drivers/base/bus.c                                    |  2 +-
+>  drivers/base/core.c                                   | 11 +++++------
+>  drivers/dma-buf/dma-buf-sysfs-stats.c                 |  2 +-
+>  fs/dlm/lockspace.c                                    |  3 +--
+>  fs/gfs2/sys.c                                         |  3 +--
+>  include/linux/kobject.h                               |  7 +++----
+>  kernel/params.c                                       |  2 +-
+>  lib/kobject_uevent.c                                  |  6 +++---
+>  10 files changed, 22 insertions(+), 28 deletions(-)
+>
+> diff --git a/Documentation/core-api/kobject.rst b/Documentation/core-api/kobject.rst
+> index d3b5bf9f643a..3d6e3107315d 100644
+> --- a/Documentation/core-api/kobject.rst
+> +++ b/Documentation/core-api/kobject.rst
+> @@ -373,10 +373,9 @@ If a kset wishes to control the uevent operations of the kobjects
+>  associated with it, it can use the struct kset_uevent_ops to handle it::
+>
+>    struct kset_uevent_ops {
+> -          int (* const filter)(struct kset *kset, struct kobject *kobj);
+> -          const char *(* const name)(struct kset *kset, struct kobject *kobj);
+> -          int (* const uevent)(struct kset *kset, struct kobject *kobj,
+> -                        struct kobj_uevent_env *env);
+> +          int (* const filter)(struct kobject *kobj);
+> +          const char *(* const name)(struct kobject *kobj);
+> +          int (* const uevent)(struct kobject *kobj, struct kobj_uevent_env *env);
+>    };
+>
+>
+> diff --git a/Documentation/translations/zh_CN/core-api/kobject.rst b/Documentation/translations/zh_CN/core-api/kobject.rst
+> index b7c37794cc7f..95634083dca0 100644
+> --- a/Documentation/translations/zh_CN/core-api/kobject.rst
+> +++ b/Documentation/translations/zh_CN/core-api/kobject.rst
+> @@ -325,10 +325,9 @@ ksets
+>  结构体kset_uevent_ops来处理它::
+>
+>    struct kset_uevent_ops {
+> -          int (* const filter)(struct kset *kset, struct kobject *kobj);
+> -          const char *(* const name)(struct kset *kset, struct kobject *kobj);
+> -          int (* const uevent)(struct kset *kset, struct kobject *kobj,
+> -                        struct kobj_uevent_env *env);
+> +          int (* const filter)(struct kobject *kobj);
+> +          const char *(* const name)(struct kobject *kobj);
+> +          int (* const uevent)(struct kobject *kobj, struct kobj_uevent_env *env);
+>    };
+>
+>
+> diff --git a/drivers/base/bus.c b/drivers/base/bus.c
+> index a64454f5f8c0..97936ec49bde 100644
+> --- a/drivers/base/bus.c
+> +++ b/drivers/base/bus.c
+> @@ -163,7 +163,7 @@ static struct kobj_type bus_ktype = {
+>         .release        = bus_release,
+>  };
+>
+> -static int bus_uevent_filter(struct kset *kset, struct kobject *kobj)
+> +static int bus_uevent_filter(struct kobject *kobj)
+>  {
+>         const struct kobj_type *ktype = get_ktype(kobj);
+>
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index d712ea11066b..60d703ebd123 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -2261,7 +2261,7 @@ static struct kobj_type device_ktype = {
+>  };
+>
+>
+> -static int dev_uevent_filter(struct kset *kset, struct kobject *kobj)
+> +static int dev_uevent_filter(struct kobject *kobj)
+>  {
+>         const struct kobj_type *ktype = get_ktype(kobj);
+>
+> @@ -2275,7 +2275,7 @@ static int dev_uevent_filter(struct kset *kset, struct kobject *kobj)
+>         return 0;
+>  }
+>
+> -static const char *dev_uevent_name(struct kset *kset, struct kobject *kobj)
+> +static const char *dev_uevent_name(struct kobject *kobj)
+>  {
+>         struct device *dev = kobj_to_dev(kobj);
+>
+> @@ -2286,8 +2286,7 @@ static const char *dev_uevent_name(struct kset *kset, struct kobject *kobj)
+>         return NULL;
+>  }
+>
+> -static int dev_uevent(struct kset *kset, struct kobject *kobj,
+> -                     struct kobj_uevent_env *env)
+> +static int dev_uevent(struct kobject *kobj, struct kobj_uevent_env *env)
+>  {
+>         struct device *dev = kobj_to_dev(kobj);
+>         int retval = 0;
+> @@ -2382,7 +2381,7 @@ static ssize_t uevent_show(struct device *dev, struct device_attribute *attr,
+>
+>         /* respect filter */
+>         if (kset->uevent_ops && kset->uevent_ops->filter)
+> -               if (!kset->uevent_ops->filter(kset, &dev->kobj))
+> +               if (!kset->uevent_ops->filter(&dev->kobj))
+>                         goto out;
+>
+>         env = kzalloc(sizeof(struct kobj_uevent_env), GFP_KERNEL);
+> @@ -2390,7 +2389,7 @@ static ssize_t uevent_show(struct device *dev, struct device_attribute *attr,
+>                 return -ENOMEM;
+>
+>         /* let the kset specific function add its keys */
+> -       retval = kset->uevent_ops->uevent(kset, &dev->kobj, env);
+> +       retval = kset->uevent_ops->uevent(&dev->kobj, env);
+>         if (retval)
+>                 goto out;
+>
+> diff --git a/drivers/dma-buf/dma-buf-sysfs-stats.c b/drivers/dma-buf/dma-buf-sysfs-stats.c
+> index 053baadcada9..2bba0babcb62 100644
+> --- a/drivers/dma-buf/dma-buf-sysfs-stats.c
+> +++ b/drivers/dma-buf/dma-buf-sysfs-stats.c
+> @@ -132,7 +132,7 @@ void dma_buf_stats_teardown(struct dma_buf *dmabuf)
+>
+>
+>  /* Statistics files do not need to send uevents. */
+> -static int dmabuf_sysfs_uevent_filter(struct kset *kset, struct kobject *kobj)
+> +static int dmabuf_sysfs_uevent_filter(struct kobject *kobj)
+>  {
+>         return 0;
+>  }
+> diff --git a/fs/dlm/lockspace.c b/fs/dlm/lockspace.c
+> index 10eddfa6c3d7..0bbb346cb892 100644
+> --- a/fs/dlm/lockspace.c
+> +++ b/fs/dlm/lockspace.c
+> @@ -216,8 +216,7 @@ static int do_uevent(struct dlm_ls *ls, int in)
+>         return ls->ls_uevent_result;
+>  }
+>
+> -static int dlm_uevent(struct kset *kset, struct kobject *kobj,
+> -                     struct kobj_uevent_env *env)
+> +static int dlm_uevent(struct kobject *kobj, struct kobj_uevent_env *env)
+>  {
+>         struct dlm_ls *ls = container_of(kobj, struct dlm_ls, ls_kobj);
+>
+> diff --git a/fs/gfs2/sys.c b/fs/gfs2/sys.c
+> index c0a34d9ddee4..a6002b2d146d 100644
+> --- a/fs/gfs2/sys.c
+> +++ b/fs/gfs2/sys.c
+> @@ -767,8 +767,7 @@ void gfs2_sys_fs_del(struct gfs2_sbd *sdp)
+>         wait_for_completion(&sdp->sd_kobj_unregister);
+>  }
+>
+> -static int gfs2_uevent(struct kset *kset, struct kobject *kobj,
+> -                      struct kobj_uevent_env *env)
+> +static int gfs2_uevent(struct kobject *kobj, struct kobj_uevent_env *env)
+>  {
+>         struct gfs2_sbd *sdp = container_of(kobj, struct gfs2_sbd, sd_kobj);
+>         struct super_block *s = sdp->sd_vfs;
+> diff --git a/include/linux/kobject.h b/include/linux/kobject.h
+> index 683172b2e094..ad90b49824dc 100644
+> --- a/include/linux/kobject.h
+> +++ b/include/linux/kobject.h
+> @@ -153,10 +153,9 @@ struct kobj_uevent_env {
+>  };
+>
+>  struct kset_uevent_ops {
+> -       int (* const filter)(struct kset *kset, struct kobject *kobj);
+> -       const char *(* const name)(struct kset *kset, struct kobject *kobj);
+> -       int (* const uevent)(struct kset *kset, struct kobject *kobj,
+> -                     struct kobj_uevent_env *env);
+> +       int (* const filter)(struct kobject *kobj);
+> +       const char *(* const name)(struct kobject *kobj);
+> +       int (* const uevent)(struct kobject *kobj, struct kobj_uevent_env *env);
+>  };
+>
+>  struct kobj_attribute {
+> diff --git a/kernel/params.c b/kernel/params.c
+> index 9b90e3c4d3c0..5b92310425c5 100644
+> --- a/kernel/params.c
+> +++ b/kernel/params.c
+> @@ -926,7 +926,7 @@ static const struct sysfs_ops module_sysfs_ops = {
+>         .store = module_attr_store,
+>  };
+>
+> -static int uevent_filter(struct kset *kset, struct kobject *kobj)
+> +static int uevent_filter(struct kobject *kobj)
+>  {
+>         const struct kobj_type *ktype = get_ktype(kobj);
+>
+> diff --git a/lib/kobject_uevent.c b/lib/kobject_uevent.c
+> index c87d5b6a8a55..7c44b7ae4c5c 100644
+> --- a/lib/kobject_uevent.c
+> +++ b/lib/kobject_uevent.c
+> @@ -501,7 +501,7 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
+>         }
+>         /* skip the event, if the filter returns zero. */
+>         if (uevent_ops && uevent_ops->filter)
+> -               if (!uevent_ops->filter(kset, kobj)) {
+> +               if (!uevent_ops->filter(kobj)) {
+>                         pr_debug("kobject: '%s' (%p): %s: filter function "
+>                                  "caused the event to drop!\n",
+>                                  kobject_name(kobj), kobj, __func__);
+> @@ -510,7 +510,7 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
+>
+>         /* originating subsystem */
+>         if (uevent_ops && uevent_ops->name)
+> -               subsystem = uevent_ops->name(kset, kobj);
+> +               subsystem = uevent_ops->name(kobj);
+>         else
+>                 subsystem = kobject_name(&kset->kobj);
+>         if (!subsystem) {
+> @@ -554,7 +554,7 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
+>
+>         /* let the kset specific function add its stuff */
+>         if (uevent_ops && uevent_ops->uevent) {
+> -               retval = uevent_ops->uevent(kset, kobj, env);
+> +               retval = uevent_ops->uevent(kobj, env);
+>                 if (retval) {
+>                         pr_debug("kobject: '%s' (%p): %s: uevent() returned "
+>                                  "%d\n", kobject_name(kobj), kobj,
+> --
+> 2.34.1
+>

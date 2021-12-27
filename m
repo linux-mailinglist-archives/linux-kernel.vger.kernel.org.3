@@ -2,78 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 399D747FCB0
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 13:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D1947FCC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 13:50:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236721AbhL0MkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 07:40:13 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33368 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233722AbhL0MkM (ORCPT
+        id S236749AbhL0MuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 07:50:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233867AbhL0MuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 07:40:12 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0A44AB8102E;
-        Mon, 27 Dec 2021 12:40:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8EC81C36AEB;
-        Mon, 27 Dec 2021 12:40:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640608809;
-        bh=/NK8+LkGhicZgiX/HgeQA3rLcix8TFZ17hv+wILvgKY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=qgKLSjNkeM5+8xOVP2S/ZUzAVttCObwil0/5LZziLctPXqN9PLO0V9AG5Xk1aFK6+
-         t/5TqdhGhfUug1/0UG6EopDJzCyx74R53L2+1aInBimtexChVkOogl7IMMWzYY8hCd
-         WcY7RohF0HAVLWMcpynBkr1kiVvEuiubQqG/NmewJjeHZwNUC/jtZ2xvTJEgA+YEER
-         iXDO7dCjJtE/3CABa0m6Tg7n4MU8Nf3ziDofJSm51pQLlqi/vQ6QuugXe0uTHiT/NH
-         CLGWtNF/avPtQT6fs0ns3H7ocy3DwRSnjanXPmLGE4VFFbFi3vNfkrSEl9mPzlLkar
-         R1zuBTTYFiLQA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7B6A6C395E6;
-        Mon, 27 Dec 2021 12:40:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 27 Dec 2021 07:50:12 -0500
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B2BC06173E
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 04:50:12 -0800 (PST)
+Received: by mail-yb1-xb42.google.com with SMTP id g80so649649ybf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 04:50:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Vj7cua5OEdtw2ToZDYKvCRwQBS28MZJv7XgODvwzOcI=;
+        b=dhjOsuTH8DpE2U8Aay5qzIuTRWubezsGjM3PPL6QF8dlTOhd8l61wPU+othrJfIJ26
+         vHo0hwI65jh9O/KEFER+NVUW16h/vqpnDiBhqSXMlF7wSXAqXHYoUAgevkk6WqHWT5sN
+         puxn7Vvy9w5KlnyiBd9aBxHnH7nNoCCzDOrdj5CxzaRpbDrIuQ5SolxbLrNz86sYJks0
+         B740ruzIYS5n8+Uf/OxHCGrDVQw6aE/fTblQdtR9n5mWPKKX6nXK3J1skKrQLwjBYdnJ
+         JOWWoacg749aQYmAcCHiiZdNP0iL+ybhGRx58MJdoCKBHXV+LA+Er+WsKiSkR6u2uSrq
+         sI1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Vj7cua5OEdtw2ToZDYKvCRwQBS28MZJv7XgODvwzOcI=;
+        b=xNvuPRPsAtbhC7qAMARsq42ltCJdnSi7GhwAci31bWAcxHZPFN+UOYaAAjVOfYcihS
+         L286r3Oeef9QLeonb6K+5/bc+sIFUTEbQ2qcSVNnmVh1vjuWYVJ9VDkrMyUHE28/gNzV
+         9vRNxPC2dBZNzFRpIoC42eedMaYkNrcCXT34VA7hSj7fKwZB5Yt0q90Kn7S/xLHh8xn9
+         /UcBWLYO/SrfW9dsNrLm6gfmP23pJR2MVrQBlY1dYnH5P9bsW5mxtjVK7ytkgOkmfKlh
+         cqSk8dxJUSvrYqKcyDkjEF4FZCTB7stz9fqB+EQS/hJcWB70KM8DbMOgiB+SRFPsXyJ5
+         padw==
+X-Gm-Message-State: AOAM531pzXTQa6NLBsyiQGRJdqTxfx5MgeSGGq2OVRQGcr6waWAfNtN3
+        KwafsuQ3Z0PaLCUXWVw5bHOqb4/EaH2DR+PiJb8=
+X-Google-Smtp-Source: ABdhPJwu/mEK81ysFeDrijkemQctNZEH/58rJAwEZIX6CaL44ocLBALzJVpJccr5TyQDBK30z+Pesu3fneHIE1irS4E=
+X-Received: by 2002:a25:2e4c:: with SMTP id b12mr6033168ybn.569.1640609411418;
+ Mon, 27 Dec 2021 04:50:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: bridge: Get SIOCGIFBR/SIOCSIFBR ioctl working
- in compat mode
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164060880950.2123.6082560093716021616.git-patchwork-notify@kernel.org>
-Date:   Mon, 27 Dec 2021 12:40:09 +0000
-References: <20211224114640.29679-1-repk@triplefau.lt>
-In-Reply-To: <20211224114640.29679-1-repk@triplefau.lt>
-To:     Remi Pommarel <repk@triplefau.lt>
-Cc:     netdev@vger.kernel.org, roopa@nvidia.com, nikolay@nvidia.com,
-        arnd@arndb.de, davem@davemloft.net, kuba@kernel.org,
-        bridge@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+References: <20211227090917.35838-1-hbh25y@gmail.com> <87h7aus8v0.fsf@igel.home>
+ <CAOo-nLJG71QqqD0-cJDyH0rY2VTx1eO9nHVQ5MCe8J0iiME_vw@mail.gmail.com> <87bl12s1ky.fsf@igel.home>
+In-Reply-To: <87bl12s1ky.fsf@igel.home>
+From:   Hangyu Hua <hbh25y@gmail.com>
+Date:   Mon, 27 Dec 2021 20:50:04 +0800
+Message-ID: <CAOo-nLLSsKd3BFEN=2spk2QZJ-_aCkBzU2kjShxibXqKGx+7Qw@mail.gmail.com>
+Subject: Re: [PATCH] m68k/kernel: array out of bound access in process_uboot_commandline
+To:     Andreas Schwab <schwab@linux-m68k.org>
+Cc:     geert@linux-m68k.org, linux-m68k@lists.linux-m68k.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+You are right. I will resubmit the patch later.
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+Thanks.
 
-On Fri, 24 Dec 2021 12:46:40 +0100 you wrote:
-> In compat mode SIOC{G,S}IFBR ioctls were only supporting
-> BRCTL_GET_VERSION returning an artificially version to spur userland
-> tool to use SIOCDEVPRIVATE instead. But some userland tools ignore that
-> and use SIOC{G,S}IFBR unconditionally as seen with busybox's brctl.
-> 
-> Example of non working 32-bit brctl with CONFIG_COMPAT=y:
-> $ brctl show
-> brctl: SIOCGIFBR: Invalid argument
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next] net: bridge: Get SIOCGIFBR/SIOCSIFBR ioctl working in compat mode
-    https://git.kernel.org/netdev/net-next/c/fd3a45900055
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Andreas Schwab <schwab@linux-m68k.org> =E4=BA=8E2021=E5=B9=B412=E6=9C=8827=
+=E6=97=A5=E5=91=A8=E4=B8=80 19:56=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Dez 27 2021, Hangyu Hua wrote:
+>
+> > If we don't use
+> > commandp[0]=3D0 in len =3D=3D 0,
+> > than commandp will not have a zero-terminated.
+>
+> That doesn't make sense.  There is no room for the zero.
+>
+> --
+> Andreas Schwab, schwab@linux-m68k.org
+> GPG Key fingerprint =3D 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC=
+1
+> "And now for something completely different."

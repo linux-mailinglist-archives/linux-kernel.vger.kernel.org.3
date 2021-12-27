@@ -2,698 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E24AF47FB1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 09:38:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C2047FB2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 09:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232664AbhL0IiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 03:38:24 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:43440 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbhL0IiX (ORCPT
+        id S233072AbhL0Ixm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 03:53:42 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:44736 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233014AbhL0Ixk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 03:38:23 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1BR8W6vx050991;
-        Mon, 27 Dec 2021 16:32:06 +0800 (GMT-8)
-        (envelope-from kuohsiang_chou@aspeedtech.com)
-Received: from localhost.localdomain.com (192.168.2.180) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 27 Dec
- 2021 16:37:48 +0800
-From:   KuoHsiang Chou <kuohsiang_chou@aspeedtech.com>
-To:     <tzimmermann@suse.de>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <airlied@redhat.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <jenmin_yuan@aspeedtech.com>, <kuohsiang_chou@aspeedtech.com>,
-        <arc_sung@aspeedtech.com>, <tommy_huang@aspeedtech.com>,
-        <brandon_chen@aspeedtech.com>, <hungju_huang@aspeedtech.com>,
-        <luke_chen@aspeedtech.com>
-Subject: [PATCH v2] drm/ast: Create the driver for ASPEED proprietory Display-Port
-Date:   Mon, 27 Dec 2021 16:37:39 +0800
-Message-ID: <20211227083739.57605-1-kuohsiang_chou@aspeedtech.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <d27ea1d9-3bf4-8149-1842-869f6a78823b@suse.de>
-References: <d27ea1d9-3bf4-8149-1842-869f6a78823b@suse.de>
+        Mon, 27 Dec 2021 03:53:40 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BR7c7Al031189;
+        Mon, 27 Dec 2021 08:53:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=BBMz5NVKQZoTZlCMryuP+HM5bfRARlR4Vc5ME0Y57vM=;
+ b=nXF8CgLQgI7+JaJHGKS5X8GYgNxhsU/3BXWWSotHXz6e8bYS3GJt+IWkgjk4cKUIhuOL
+ rVmSOXrAA77cH1grgWuArzA0cBv+OUmL0oyqDjdVI8P9lLx2Lfwe3Nt7Ww5iOPMJZ707
+ 2HcgQ27UUwxc6pBraQ6KdBIG2mVbjp7r+4ojy4KcD9LIdOMGjt09v+YK8eDvYBUVsthy
+ FaTjPdXTZ7Tp86zcrP3ricB7OK9CPaIxuBkuNSwJvtxxl9kdOZ+aNTcGZZLAjcK9UJNo
+ QpRV69OsqXxXBN6kCJJMKN5E9ElSQhpQMBpigdyTU5aSuSTsP4ZFPtcKLT8UtNn8KZms cg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d75tamett-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Dec 2021 08:53:38 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BR8iXSJ016594;
+        Mon, 27 Dec 2021 08:53:38 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d75tametc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Dec 2021 08:53:38 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BR8n5gG007532;
+        Mon, 27 Dec 2021 08:53:36 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3d5tjj8xq5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Dec 2021 08:53:35 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BR8rW2940042964
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Dec 2021 08:53:32 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 097534C04E;
+        Mon, 27 Dec 2021 08:53:32 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 44FF54C04A;
+        Mon, 27 Dec 2021 08:53:31 +0000 (GMT)
+Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.90.67])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Mon, 27 Dec 2021 08:53:31 +0000 (GMT)
+Date:   Mon, 27 Dec 2021 09:53:01 +0100
+From:   Halil Pasic <pasic@linux.ibm.com>
+To:     Tony Krowiak <akrowiak@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, jjherne@linux.ibm.com, freude@linux.ibm.com,
+        borntraeger@de.ibm.com, cohuck@redhat.com, mjrosato@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com, Halil Pasic <pasic@linux.ibm.com>
+Subject: Re: [PATCH v17 06/15] s390/vfio-ap: refresh guest's APCB by
+ filtering APQNs assigned to mdev
+Message-ID: <20211227095301.34a91ca4.pasic@linux.ibm.com>
+In-Reply-To: <20211021152332.70455-7-akrowiak@linux.ibm.com>
+References: <20211021152332.70455-1-akrowiak@linux.ibm.com>
+        <20211021152332.70455-7-akrowiak@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.2.180]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1BR8W6vx050991
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: rpwm1l4QYHWeK-z9DTh8Ozb4ECHTZLyG
+X-Proofpoint-GUID: vYwBtzo5mbh-tMK_dYLYrX6WfzfWgEiR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-27_02,2021-12-24_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ malwarescore=0 clxscore=1015 lowpriorityscore=0 phishscore=0
+ suspectscore=0 spamscore=0 bulkscore=0 impostorscore=0 adultscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112270042
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-V1:
-1. The MCU FW controling ASPEED DP is loaded by BMC boot loader.
-2. Driver starts after CR[3:1] == 111b that indicates Tx is ASTDP,
-   and CRD1[5] has been asserted by BMVC boot loader.
-3. EDID is prioritized by DP monitor.
-4. DP's EDID has high priority to decide resolution supporting.
+On Thu, 21 Oct 2021 11:23:23 -0400
+Tony Krowiak <akrowiak@linux.ibm.com> wrote:
 
-V2:
-Modules description:
-1. ASTDP (ASPEED DisplayPort) is controlled by dedicated
-   AST-MCU (ASPEED propriatary MCU).
-2. MCU is looping in charged of HPD, Read EDID, Link Training with
-   DP sink.
-3. ASTDP and AST-MUC reside in BMC (Baseboard Management controller)
-   addressing-space.
-4. ASPEED DRM driver requests MCU to get HPD and EDID by CR-scratched
-   register.
+> Refresh the guest's APCB by filtering the APQNs assigned to the matrix mdev
+> that do not reference an AP queue device bound to the vfio_ap device
+> driver. The mdev's APQNs will be filtered according to the following rules:
+> 
+> * The APID of each adapter and the APQI of each domain that is not in the
+> host's AP configuration is filtered out.
+> 
+> * The APID of each adapter comprising an APQN that does not reference a
+> queue device bound to the vfio_ap device driver is filtered. The APQNs
+> are derived from the Cartesian product of the APID of each adapter and
+> APQI of each domain assigned to the mdev.
+> 
+> The control domains that are not assigned to the host's AP configuration
+> will also be filtered before assigning them to the guest's APCB.
 
-Booting sequence:
-1. Check if TX is ASTDP					// ast_dp_launch()
-2. Check if DP-MCU FW has loaded					// ast_dp_launch()
-3. Read EDID					// ast_dp_read_edid()
-4. Resolution switch					// ast_dp_SetOutput()
+The v16 version used to filer on queue removal from vfio_ap, which makes
+a ton of sense.
 
-Signed-off-by: KuoHsiang Chou <kuohsiang_chou@aspeedtech.com>
----
- drivers/gpu/drm/ast/Makefile   |   2 +-
- drivers/gpu/drm/ast/ast_dp.c   | 292 +++++++++++++++++++++++++++++++++
- drivers/gpu/drm/ast/ast_drv.h  | 127 ++++++++++++++
- drivers/gpu/drm/ast/ast_main.c |   5 +-
- drivers/gpu/drm/ast/ast_mode.c |  46 +++++-
- drivers/gpu/drm/ast/ast_post.c |   4 +-
- 6 files changed, 468 insertions(+), 8 deletions(-)
- create mode 100644 drivers/gpu/drm/ast/ast_dp.c
+This version will "filter back" the queues once these become bound, but
+if a queue is removed form vfio_ap, we don't seem to care to filter. Is
+this intentional?
 
-diff --git a/drivers/gpu/drm/ast/Makefile b/drivers/gpu/drm/ast/Makefile
-index 21f71160b..5a53ce51f 100644
---- a/drivers/gpu/drm/ast/Makefile
-+++ b/drivers/gpu/drm/ast/Makefile
-@@ -3,6 +3,6 @@
- # Makefile for the drm device driver.  This driver provides support for the
- # Direct Rendering Infrastructure (DRI) in XFree86 4.1.0 and higher.
+Also we could probably do the filtering incrementally. In a sense that
+at a time only so much changes, and we know that the invariant was
+preserved without that change. But that would probably end up trading
+complexity for cycles. I will trust your judgment and your tests on this
+matter.
 
--ast-y := ast_drv.o ast_i2c.o ast_main.o ast_mm.o ast_mode.o ast_post.o ast_dp501.o
-+ast-y := ast_drv.o ast_i2c.o ast_main.o ast_mm.o ast_mode.o ast_post.o ast_dp501.o ast_dp.o
-
- obj-$(CONFIG_DRM_AST) := ast.o
-diff --git a/drivers/gpu/drm/ast/ast_dp.c b/drivers/gpu/drm/ast/ast_dp.c
-new file mode 100644
-index 000000000..4ac719ab0
---- /dev/null
-+++ b/drivers/gpu/drm/ast/ast_dp.c
-@@ -0,0 +1,292 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2021, ASPEED Technology Inc.
-+// Authors: KuoHsiang Chou <kuohsiang_chou@aspeedtech.com>
-+
-+#include <linux/firmware.h>
-+#include <linux/delay.h>
-+#include <drm/drm_print.h>
-+#include "ast_drv.h"
-+
-+bool ast_dp_read_edid(struct drm_device *dev, u8 *ediddata)
-+{
-+	struct ast_private *ast = to_ast_private(dev);
-+	u8 i = 0, j = 0;
-+
-+#ifdef DPControlPower
-+	u8 bDPState_Change = false;
-+
-+	// Check DP power off or not.
-+	if (ast->ASTDP_State & AST_DP_PHY_SLEEP) {
-+		// DP power on
-+		ast_dp_PowerOnOff(dev, AST_DP_POWER_ON);
-+		bDPState_Change = true;
-+	}
-+#endif
-+
-+	/*
-+	 * CRD1[b5]: DP MCU FW is executing
-+	 * CRDC[b0]: DP link success
-+	 * CRDF[b0]: DP HPD
-+	 * CRE5[b0]: Host reading EDID process is done
-+	 */
-+	if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, ASTDP_MCU_FW_EXECUTING) &&
-+		ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDC, ASTDP_LINK_SUCCESS) &&
-+		ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDF, ASTDP_HPD) &&
-+		ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5,
-+								ASTDP_HOST_EDID_READ_DONE_MASK))) {
-+#ifdef DPControlPower
-+		// Set back power off
-+		if (bDPState_Change)
-+			ast_dp_PowerOnOff(dev, AST_DP_POWER_OFF);
-+#endif
-+		return false;
-+	}
-+
-+	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5, (u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
-+							0x00);
-+
-+	for (i = 0; i < 32; i++) {
-+		/*
-+		 * CRE4[7:0]: Read-Pointer for EDID (Unit: 4bytes); valid range: 0~64
-+		 */
-+		ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE4,
-+					(u8) ~ASTDP_EDID_READ_POINTER_MASK, (u8) i);
-+		j = 0;
-+
-+		/*
-+		 * CRD7[b0]: valid flag for EDID
-+		 * CRD6[b0]: mirror read pointer for EDID
-+		 */
-+		while ((ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD7,
-+				ASTDP_EDID_VALID_FLAG_MASK) != 0x01) ||
-+			(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD6,
-+						ASTDP_EDID_READ_POINTER_MASK) != i)) {
-+			mdelay(j+1);
-+
-+			if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1,
-+							ASTDP_MCU_FW_EXECUTING) &&
-+				ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDC,
-+							ASTDP_LINK_SUCCESS) &&
-+				ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDF, ASTDP_HPD))) {
-+				ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5,
-+							(u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
-+							ASTDP_HOST_EDID_READ_DONE);
-+				return false;
-+			}
-+
-+			j++;
-+			if (j > 200) {
-+				ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5,
-+							(u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
-+							ASTDP_HOST_EDID_READ_DONE);
-+				return false;
-+			}
-+		}
-+
-+		*(ediddata) = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT,
-+							0xD8, ASTDP_EDID_READ_DATA_MASK);
-+		*(ediddata + 1) = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD9,
-+								ASTDP_EDID_READ_DATA_MASK);
-+		*(ediddata + 2) = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDA,
-+								ASTDP_EDID_READ_DATA_MASK);
-+		*(ediddata + 3) = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDB,
-+								ASTDP_EDID_READ_DATA_MASK);
-+
-+		if (i == 31) {
-+			/*
-+			 * For 128-bytes EDID_1.3,
-+			 * 1. Add the value of Bytes-126 to Bytes-127.
-+			 *		The Bytes-127 is Checksum. Sum of all 128bytes should
-+			 *		equal 0	(mod 256).
-+			 * 2. Modify Bytes-126 to be 0.
-+			 *		The Bytes-126 indicates the Number of extensions to
-+			 *		follow. 0 represents noextensions.
-+			 */
-+			*(ediddata + 3) = *(ediddata + 3) + *(ediddata + 2);
-+			*(ediddata + 2) = 0;
-+		}
-+
-+		ediddata += 4;
-+	}
-+
-+	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5, (u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
-+							ASTDP_HOST_EDID_READ_DONE);
-+
-+#ifdef DPControlPower
-+	// Set back power off
-+	if (bDPState_Change)
-+		ast_dp_PowerOnOff(dev, AST_DP_POWER_OFF);
-+#endif
-+
-+	return true;
-+}
-+
-+/*
-+ * Launch Aspeed DP
-+ */
-+bool ast_dp_launch(struct drm_device *dev, u8 bPower)
-+{
-+	u32 i = 0, j = 0, WaitCount = 1;
-+	u8 bDPTX = 0;
-+	u8 bDPExecute = 1;
-+
-+	struct ast_private *ast = to_ast_private(dev);
-+	// S3 come back, need more time to wait BMC ready.
-+	if (bPower)
-+		WaitCount = 300;
-+
-+	// Fill
-+	ast->tx_chip_type = AST_TX_NONE;
-+
-+	// Wait total count by different condition.
-+	// This is a temp solution for DP check
-+	for (j = 0; j < WaitCount; j++) {
-+		bDPTX = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, TX_TYPE_MASK);
-+
-+		if (bDPTX)
-+			break;
-+
-+		msleep(100);
-+	}
-+
-+	// 0xE : ASTDP with DPMCU FW handling
-+	if (bDPTX == ASTDP_DPMCU_TX) {
-+		// Wait one second then timeout.
-+		i = 0;
-+
-+		while (ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, COPROCESSOR_LAUNCH) !=
-+			COPROCESSOR_LAUNCH) {
-+			i++;
-+			// wait 100 ms
-+			msleep(100);
-+
-+			if (i >= 10) {
-+				// DP would not be ready.
-+				bDPExecute = 0;
-+				break;
-+			}
-+		};
-+
-+		if (bDPExecute)
-+			ast->tx_chip_type = AST_TX_ASTDP;
-+	}
-+
-+	return true;
-+}
-+
-+#ifdef DPControlPower
-+
-+void ast_dp_PowerOnOff(struct drm_device *dev, u8 Mode)
-+{
-+	struct ast_private *ast = to_ast_private(dev);
-+	// Read and Turn off DP PHY sleep
-+	u8 bE3 = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE3, AST_DP_VIDEO_ENABLE);
-+
-+	// Turn on DP PHY sleep
-+	if (!Mode)
-+		bE3 |= AST_DP_PHY_SLEEP;
-+
-+	// DP Power on/off
-+	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE3, (u8) ~AST_DP_PHY_SLEEP, bE3);
-+
-+	// Save ASTDP power state
-+	ast->ASTDP_State = bE3;
-+}
-+
-+#endif
-+
-+void ast_dp_SetOnOff(struct drm_device *dev, u8 Mode)
-+{
-+	struct ast_private *ast = to_ast_private(dev);
-+
-+	// Video On/Off
-+	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE3, (u8) ~AST_DP_VIDEO_ENABLE, Mode);
-+
-+	// Save ASTDP power state
-+	ast->ASTDP_State = Mode;
-+
-+	// If DP plug in and link successful then check video on / off status
-+	if (ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDC, ASTDP_LINK_SUCCESS) &&
-+		ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDF, ASTDP_HPD)) {
-+		Mode <<= 4;
-+		while (ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDF,
-+						ASTDP_MIRROR_VIDEO_ENABLE) != Mode) {
-+			// wait 1 ms
-+			mdelay(1);
-+		}
-+	}
-+}
-+
-+void ast_dp_SetOutput(struct drm_crtc *crtc, struct ast_vbios_mode_info *vbios_mode)
-+{
-+	struct ast_private *ast = to_ast_private(crtc->dev);
-+
-+	u32 ulRefreshRateIndex;
-+	u8 ModeIdx;
-+
-+	ulRefreshRateIndex = vbios_mode->enh_table->refresh_rate_index - 1;
-+
-+	switch (crtc->mode.crtc_hdisplay) {
-+	case 320:
-+		ModeIdx = ASTDP_320x240_60;
-+		break;
-+	case 400:
-+		ModeIdx = ASTDP_400x300_60;
-+		break;
-+	case 512:
-+		ModeIdx = ASTDP_512x384_60;
-+		break;
-+	case 640:
-+		ModeIdx = (ASTDP_640x480_60 + (u8) ulRefreshRateIndex);
-+		break;
-+	case 800:
-+		ModeIdx = (ASTDP_800x600_56 + (u8) ulRefreshRateIndex);
-+		break;
-+	case 1024:
-+		ModeIdx = (ASTDP_1024x768_60 + (u8) ulRefreshRateIndex);
-+		break;
-+	case 1152:
-+		ModeIdx = ASTDP_1152x864_75;
-+		break;
-+	case 1280:
-+		if (crtc->mode.crtc_vdisplay == 800)
-+			ModeIdx = (ASTDP_1280x800_60_RB - (u8) ulRefreshRateIndex);
-+		else		// 1024
-+			ModeIdx = (ASTDP_1280x1024_60 + (u8) ulRefreshRateIndex);
-+		break;
-+	case 1360:
-+	case 1366:
-+		ModeIdx = ASTDP_1366x768_60;
-+		break;
-+	case 1440:
-+		ModeIdx = (ASTDP_1440x900_60_RB - (u8) ulRefreshRateIndex);
-+		break;
-+	case 1600:
-+		if (crtc->mode.crtc_vdisplay == 900)
-+			ModeIdx = (ASTDP_1600x900_60_RB - (u8) ulRefreshRateIndex);
-+		else		//1200
-+			ModeIdx = ASTDP_1600x1200_60;
-+		break;
-+	case 1680:
-+		ModeIdx = (ASTDP_1680x1050_60_RB - (u8) ulRefreshRateIndex);
-+		break;
-+	case 1920:
-+		if (crtc->mode.crtc_vdisplay == 1080)
-+			ModeIdx = ASTDP_1920x1080_60;
-+		else		//1200
-+			ModeIdx = ASTDP_1920x1200_60;
-+		break;
-+	default:
-+		return;
-+	}
-+
-+	/*
-+	 * CRE0[7:0]: MISC0 ((0x00: 18-bpp) or (0x20: 24-bpp)
-+	 * CRE1[7:0]: MISC1 (default: 0x00)
-+	 * CRE2[7:0]: video format index (0x00 ~ 0x20 or 0x40 ~ 0x50)
-+	 */
-+	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE0, (u8) ~ASTDP_CLEAR_MASK,
-+				ASTDP_MISC0_24bpp);
-+	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE1, (u8) ~ASTDP_CLEAR_MASK, ASTDP_MISC1);
-+	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE2, (u8) ~ASTDP_CLEAR_MASK, ModeIdx);
-+}
-diff --git a/drivers/gpu/drm/ast/ast_drv.h b/drivers/gpu/drm/ast/ast_drv.h
-index 00bfa41ff..799828503 100644
---- a/drivers/gpu/drm/ast/ast_drv.h
-+++ b/drivers/gpu/drm/ast/ast_drv.h
-@@ -71,6 +71,7 @@ enum ast_tx_chip {
- 	AST_TX_SIL164,
- 	AST_TX_ITE66121,
- 	AST_TX_DP501,
-+	AST_TX_ASTDP,
- };
-
- #define AST_DRAM_512Mx16 0
-@@ -175,6 +176,9 @@ struct ast_private {
- 	u8 dp501_maxclk;
- 	u8 *dp501_fw_addr;
- 	const struct firmware *dp501_fw;	/* dp501 fw */
-+
-+    // ASTDP
-+	u8 ASTDP_State;
- };
-
- static inline struct ast_private *to_ast_private(struct drm_device *dev)
-@@ -336,10 +340,123 @@ int ast_mode_config_init(struct ast_private *ast);
- #define AST_DP501_EDID_DATA	0xf020
-
- /* Define for Soc scratched reg */
-+#define COPROCESSOR_LAUNCH			BIT(5)
-+
-+#define TX_TYPE_MASK				GENMASK(3, 1)
-+#define NO_TX						(0 << 1)
-+#define ITE66121_VBIOS_TX			(1 << 1)
-+#define SI164_VBIOS_TX				(2 << 1)
-+#define CH7003_VBIOS_TX			(3 << 1)
-+#define DP501_VBIOS_TX				(4 << 1)
-+#define ANX9807_VBIOS_TX			(5 << 1)
-+#define TX_FW_EMBEDDED_FW_TX		(6 << 1)
-+#define ASTDP_DPMCU_TX				(7 << 1)
-+
- #define AST_VRAM_INIT_STATUS_MASK	GENMASK(7, 6)
- //#define AST_VRAM_INIT_BY_BMC		BIT(7)
- //#define AST_VRAM_INIT_READY		BIT(6)
-
-+/* Define for Soc scratched reg used on ASTDP */
-+#define AST_DP_PHY_SLEEP			BIT(4)
-+#define AST_DP_VIDEO_ENABLE		BIT(0)
-+
-+#define AST_DP_POWER_ON			true
-+#define AST_DP_POWER_OFF			false
-+
-+/*
-+ * CRD1[b5]: DP MCU FW is executing
-+ * CRDC[b0]: DP link success
-+ * CRDF[b0]: DP HPD
-+ * CRE5[b0]: Host reading EDID process is done
-+ */
-+#define ASTDP_MCU_FW_EXECUTING			BIT(5)
-+#define ASTDP_LINK_SUCCESS				BIT(0)
-+#define ASTDP_HPD						BIT(0)
-+#define ASTDP_HOST_EDID_READ_DONE		BIT(0)
-+#define ASTDP_HOST_EDID_READ_DONE_MASK	GENMASK(0, 0)
-+
-+/*
-+ * CRB8[b1]: Enable VSYNC off
-+ * CRB8[b0]: Enable HSYNC off
-+ */
-+#define AST_DPMS_VSYNC_OFF				BIT(1)
-+#define AST_DPMS_HSYNC_OFF				BIT(0)
-+
-+/*
-+ * CRDF[b4]: Mirror of AST_DP_VIDEO_ENABLE
-+ * Precondition:	A. ~AST_DP_PHY_SLEEP  &&
-+ *			B. DP_HPD &&
-+ *			C. DP_LINK_SUCCESS
-+ */
-+#define ASTDP_MIRROR_VIDEO_ENABLE		BIT(4)
-+
-+#define ASTDP_EDID_READ_POINTER_MASK	GENMASK(7, 0)
-+#define ASTDP_EDID_VALID_FLAG_MASK		GENMASK(0, 0)
-+#define ASTDP_EDID_READ_DATA_MASK		GENMASK(7, 0)
-+
-+/*
-+ * Display Transmittor Type:
-+ */
-+#define TX_TYPE_MASK				GENMASK(3, 1)
-+#define NO_TX						(0 << 1)
-+#define ITE66121_VBIOS_TX			(1 << 1)
-+#define SI164_VBIOS_TX				(2 << 1)
-+#define CH7003_VBIOS_TX			(3 << 1)
-+#define DP501_VBIOS_TX				(4 << 1)
-+#define ANX9807_VBIOS_TX			(5 << 1)
-+#define TX_FW_EMBEDDED_FW_TX		(6 << 1)
-+#define ASTDP_DPMCU_TX				(7 << 1)
-+
-+/*
-+ * ASTDP setmode registers:
-+ * CRE0[7:0]: MISC0 ((0x00: 18-bpp) or (0x20: 24-bpp)
-+ * CRE1[7:0]: MISC1 (default: 0x00)
-+ * CRE2[7:0]: video format index (0x00 ~ 0x20 or 0x40 ~ 0x50)
-+ */
-+#define ASTDP_MISC0_24bpp			BIT(5)
-+#define ASTDP_MISC1				0
-+#define ASTDP_CLEAR_MASK			GENMASK(7, 0)
-+
-+/*
-+ * ASTDP resoultion table:
-+ * EX:	ASTDP_A_B_C:
-+ *		A: Resolution
-+ *		B: Refresh Rate
-+ *		C: Misc information, such as CVT, Reduce Blanked
-+ */
-+#define ASTDP_640x480_60		0x00
-+#define ASTDP_640x480_72		0x01
-+#define ASTDP_640x480_75		0x02
-+#define ASTDP_640x480_85		0x03
-+#define ASTDP_800x600_56		0x04
-+#define ASTDP_800x600_60		0x05
-+#define ASTDP_800x600_72		0x06
-+#define ASTDP_800x600_75		0x07
-+#define ASTDP_800x600_85		0x08
-+#define ASTDP_1024x768_60		0x09
-+#define ASTDP_1024x768_70		0x0A
-+#define ASTDP_1024x768_75		0x0B
-+#define ASTDP_1024x768_85		0x0C
-+#define ASTDP_1280x1024_60		0x0D
-+#define ASTDP_1280x1024_75		0x0E
-+#define ASTDP_1280x1024_85		0x0F
-+#define ASTDP_1600x1200_60		0x10
-+#define ASTDP_320x240_60		0x11
-+#define ASTDP_400x300_60		0x12
-+#define ASTDP_512x384_60		0x13
-+#define ASTDP_1920x1200_60		0x14
-+#define ASTDP_1920x1080_60		0x15
-+#define ASTDP_1280x800_60		0x16
-+#define ASTDP_1280x800_60_RB	0x17
-+#define ASTDP_1440x900_60		0x18
-+#define ASTDP_1440x900_60_RB	0x19
-+#define ASTDP_1680x1050_60		0x1A
-+#define ASTDP_1680x1050_60_RB	0x1B
-+#define ASTDP_1600x900_60		0x1C
-+#define ASTDP_1600x900_60_RB	0x1D
-+#define ASTDP_1366x768_60		0x1E
-+#define ASTDP_1152x864_75		0x1F
-+
- int ast_mm_init(struct ast_private *ast);
-
- /* ast post */
-@@ -360,4 +477,14 @@ void ast_init_3rdtx(struct drm_device *dev);
- /* ast_i2c.c */
- struct ast_i2c_chan *ast_i2c_create(struct drm_device *dev);
-
-+/* aspeed DP */
-+#define DPControlPower
-+bool ast_dp_read_edid(struct drm_device *dev, u8 *ediddata);
-+bool ast_dp_launch(struct drm_device *dev, u8 bPower);
-+#ifdef DPControlPower
-+void ast_dp_PowerOnOff(struct drm_device *dev, u8 Mode);
-+#endif
-+void ast_dp_SetOnOff(struct drm_device *dev, u8 Mode);
-+void ast_dp_SetOutput(struct drm_crtc *crtc, struct ast_vbios_mode_info *vbios_mode);
-+
- #endif
-diff --git a/drivers/gpu/drm/ast/ast_main.c b/drivers/gpu/drm/ast/ast_main.c
-index 79a361867..9f25fa2c8 100644
---- a/drivers/gpu/drm/ast/ast_main.c
-+++ b/drivers/gpu/drm/ast/ast_main.c
-@@ -230,7 +230,7 @@ static int ast_detect_chip(struct drm_device *dev, bool *need_post)
- 			ast->tx_chip_type = AST_TX_SIL164;
- 	}
-
--	if ((ast->chip == AST2300) || (ast->chip == AST2400)) {
-+	if ((ast->chip == AST2300) || (ast->chip == AST2400) || (ast->chip == AST2500)) {
- 		/*
- 		 * On AST2300 and 2400, look the configuration set by the SoC in
- 		 * the SOC scratch register #1 bits 11:8 (interestingly marked
-@@ -254,7 +254,8 @@ static int ast_detect_chip(struct drm_device *dev, bool *need_post)
- 		case 0x0c:
- 			ast->tx_chip_type = AST_TX_DP501;
- 		}
--	}
-+	} else if (ast->chip == AST2600)
-+		ast_dp_launch(&ast->base, 0);
-
- 	/* Print stuff for diagnostic purposes */
- 	switch(ast->tx_chip_type) {
-diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
-index 44c2aafcb..1c7a57a03 100644
---- a/drivers/gpu/drm/ast/ast_mode.c
-+++ b/drivers/gpu/drm/ast/ast_mode.c
-@@ -984,21 +984,45 @@ static int ast_cursor_plane_init(struct ast_private *ast)
- static void ast_crtc_dpms(struct drm_crtc *crtc, int mode)
- {
- 	struct ast_private *ast = to_ast_private(crtc->dev);
-+	u8 ch = AST_DPMS_VSYNC_OFF | AST_DPMS_HSYNC_OFF;
-
- 	/* TODO: Maybe control display signal generation with
- 	 *       Sync Enable (bit CR17.7).
- 	 */
- 	switch (mode) {
- 	case DRM_MODE_DPMS_ON:
--	case DRM_MODE_DPMS_STANDBY:
--	case DRM_MODE_DPMS_SUSPEND:
-+		ast_set_index_reg_mask(ast, AST_IO_SEQ_PORT,  0x01, 0xdf, 0);
-+		ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xb6, 0xfc, 0);
- 		if (ast->tx_chip_type == AST_TX_DP501)
- 			ast_set_dp501_video_output(crtc->dev, 1);
-+
-+		if (ast->tx_chip_type == AST_TX_ASTDP) {
-+#ifdef DPControlPower
-+			ast_dp_PowerOnOff(crtc->dev, AST_DP_POWER_ON);
-+#endif
-+			ast_wait_for_vretrace(ast);
-+			ast_dp_SetOnOff(crtc->dev, 1);
-+		}
-+
-+		ast_crtc_load_lut(ast, crtc);
- 		break;
-+	case DRM_MODE_DPMS_STANDBY:
-+	case DRM_MODE_DPMS_SUSPEND:
- 	case DRM_MODE_DPMS_OFF:
-+		ch = mode;
- 		if (ast->tx_chip_type == AST_TX_DP501)
- 			ast_set_dp501_video_output(crtc->dev, 0);
- 		break;
-+
-+		if (ast->tx_chip_type == AST_TX_ASTDP) {
-+			ast_dp_SetOnOff(crtc->dev, 0);
-+#ifdef DPControlPower
-+			ast_dp_PowerOnOff(crtc->dev, AST_DP_POWER_OFF);
-+#endif
-+		}
-+
-+		ast_set_index_reg_mask(ast, AST_IO_SEQ_PORT,  0x01, 0xdf, 0x20);
-+		ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xb6, 0xfc, ch);
- 	}
- }
-
-@@ -1041,6 +1065,7 @@ ast_crtc_helper_atomic_flush(struct drm_crtc *crtc,
- 	struct ast_private *ast = to_ast_private(crtc->dev);
- 	struct ast_crtc_state *ast_crtc_state = to_ast_crtc_state(crtc_state);
- 	struct ast_crtc_state *old_ast_crtc_state = to_ast_crtc_state(old_crtc_state);
-+	struct ast_vbios_mode_info *vbios_mode_info = &ast_crtc_state->vbios_mode_info;
-
- 	/*
- 	 * The gamma LUT has to be reloaded after changing the primary
-@@ -1048,6 +1073,10 @@ ast_crtc_helper_atomic_flush(struct drm_crtc *crtc,
- 	 */
- 	if (old_ast_crtc_state->format != ast_crtc_state->format)
- 		ast_crtc_load_lut(ast, crtc);
-+
-+	//Set Aspeed Display-Port
-+	if (ast->tx_chip_type == AST_TX_ASTDP)
-+		ast_dp_SetOutput(crtc, vbios_mode_info);
- }
-
- static void
-@@ -1222,6 +1251,14 @@ static int ast_get_modes(struct drm_connector *connector)
- 			ast->dp501_maxclk = ast_get_dp501_max_clk(connector->dev);
- 		else
- 			kfree(edid);
-+	} else if (ast->tx_chip_type == AST_TX_ASTDP) {
-+		edid = kmalloc(128, GFP_KERNEL);
-+		if (!edid)
-+			return -ENOMEM;
-+
-+		flags = ast_dp_read_edid(connector->dev, (u8 *)edid);
-+		if (!flags)
-+			kfree(edid);
- 	}
- 	if (!flags && ast_connector->i2c)
- 		edid = drm_get_edid(connector, &ast_connector->i2c->adapter);
-@@ -1256,7 +1293,7 @@ static enum drm_mode_status ast_mode_valid(struct drm_connector *connector,
-
- 		if ((ast->chip == AST2100) || (ast->chip == AST2200) ||
- 		    (ast->chip == AST2300) || (ast->chip == AST2400) ||
--		    (ast->chip == AST2500)) {
-+		    (ast->chip == AST2500) || (ast->chip == AST2600)) {
- 			if ((mode->hdisplay == 1920) && (mode->vdisplay == 1080))
- 				return MODE_OK;
-
-@@ -1378,7 +1415,8 @@ int ast_mode_config_init(struct ast_private *ast)
- 	    ast->chip == AST2200 ||
- 	    ast->chip == AST2300 ||
- 	    ast->chip == AST2400 ||
--	    ast->chip == AST2500) {
-+	    ast->chip == AST2500 ||
-+	    ast->chip == AST2600) {
- 		dev->mode_config.max_width = 1920;
- 		dev->mode_config.max_height = 2048;
- 	} else {
-diff --git a/drivers/gpu/drm/ast/ast_post.c b/drivers/gpu/drm/ast/ast_post.c
-index b5d92f652..0aa9cf0fb 100644
---- a/drivers/gpu/drm/ast/ast_post.c
-+++ b/drivers/gpu/drm/ast/ast_post.c
-@@ -379,7 +379,9 @@ void ast_post_gpu(struct drm_device *dev)
- 	ast_enable_mmio(dev);
- 	ast_set_def_ext_reg(dev);
-
--	if (ast->config_mode == ast_use_p2a) {
-+	if (ast->chip == AST2600) {
-+		ast_dp_launch(dev, 1);
-+	} else if (ast->config_mode == ast_use_p2a) {
- 		if (ast->chip == AST2500)
- 			ast_post_chip_2500(dev);
- 		else if (ast->chip == AST2300 || ast->chip == AST2400)
---
-2.27.0
+> 
+> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
+> ---
+>  drivers/s390/crypto/vfio_ap_ops.c | 66 ++++++++++++++++++++++++++++++-
+>  1 file changed, 64 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/s390/crypto/vfio_ap_ops.c b/drivers/s390/crypto/vfio_ap_ops.c
+> index 4305177029bf..46c179363aca 100644
+> --- a/drivers/s390/crypto/vfio_ap_ops.c
+> +++ b/drivers/s390/crypto/vfio_ap_ops.c
+> @@ -314,6 +314,62 @@ static void vfio_ap_matrix_init(struct ap_config_info *info,
+>  	matrix->adm_max = info->apxa ? info->Nd : 15;
+>  }
+>  
+> +static void vfio_ap_mdev_filter_cdoms(struct ap_matrix_mdev *matrix_mdev)
+> +{
+> +	bitmap_and(matrix_mdev->shadow_apcb.adm, matrix_mdev->matrix.adm,
+> +		   (unsigned long *)matrix_dev->info.adm, AP_DOMAINS);
+> +}
+> +
+> +/*
+> + * vfio_ap_mdev_filter_matrix - copy the mdev's AP configuration to the KVM
+> + *				guest's APCB then filter the APIDs that do not
+> + *				comprise at least one APQN that references a
+> + *				queue device bound to the vfio_ap device driver.
+> + *
+> + * @matrix_mdev: the mdev whose AP configuration is to be filtered.
+> + */
+> +static void vfio_ap_mdev_filter_matrix(struct ap_matrix_mdev *matrix_mdev)
+> +{
+> +	int ret;
+> +	unsigned long apid, apqi, apqn;
+> +
+> +	ret = ap_qci(&matrix_dev->info);
+> +	if (ret)
+> +		return;
+> +
+> +	vfio_ap_matrix_init(&matrix_dev->info, &matrix_mdev->shadow_apcb);
+> +
+> +	/*
+> +	 * Copy the adapters, domains and control domains to the shadow_apcb
+> +	 * from the matrix mdev, but only those that are assigned to the host's
+> +	 * AP configuration.
+> +	 */
+> +	bitmap_and(matrix_mdev->shadow_apcb.apm, matrix_mdev->matrix.apm,
+> +		   (unsigned long *)matrix_dev->info.apm, AP_DEVICES);
+> +	bitmap_and(matrix_mdev->shadow_apcb.aqm, matrix_mdev->matrix.aqm,
+> +		   (unsigned long *)matrix_dev->info.aqm, AP_DOMAINS);
+> +
+> +	for_each_set_bit_inv(apid, matrix_mdev->shadow_apcb.apm, AP_DEVICES) {
+> +		for_each_set_bit_inv(apqi, matrix_mdev->shadow_apcb.aqm,
+> +				     AP_DOMAINS) {
+> +			/*
+> +			 * If the APQN is not bound to the vfio_ap device
+> +			 * driver, then we can't assign it to the guest's
+> +			 * AP configuration. The AP architecture won't
+> +			 * allow filtering of a single APQN, so if we're
+> +			 * filtering APIDs, then filter the APID; otherwise,
+> +			 * filter the APQI.
+> +			 */
+> +			apqn = AP_MKQID(apid, apqi);
+> +			if (!vfio_ap_mdev_get_queue(matrix_mdev, apqn)) {
+> +				clear_bit_inv(apid,
+> +					      matrix_mdev->shadow_apcb.apm);
+> +				break;
+> +			}
+> +		}
+> +	}
+> +}
+> +
+>  static int vfio_ap_mdev_probe(struct mdev_device *mdev)
+>  {
+>  	struct ap_matrix_mdev *matrix_mdev;
+> @@ -703,6 +759,7 @@ static ssize_t assign_adapter_store(struct device *dev,
+>  		goto share_err;
+>  
+>  	vfio_ap_mdev_link_adapter(matrix_mdev, apid);
+> +	vfio_ap_mdev_filter_matrix(matrix_mdev);
+>  	ret = count;
+>  	goto done;
+>  
+> @@ -771,6 +828,7 @@ static ssize_t unassign_adapter_store(struct device *dev,
+>  
+>  	clear_bit_inv((unsigned long)apid, matrix_mdev->matrix.apm);
+>  	vfio_ap_mdev_unlink_adapter(matrix_mdev, apid);
+> +	vfio_ap_mdev_filter_matrix(matrix_mdev);
+>  	ret = count;
+>  done:
+>  	mutex_unlock(&matrix_dev->lock);
+> @@ -874,6 +932,7 @@ static ssize_t assign_domain_store(struct device *dev,
+>  		goto share_err;
+>  
+>  	vfio_ap_mdev_link_domain(matrix_mdev, apqi);
+> +	vfio_ap_mdev_filter_matrix(matrix_mdev);
+>  	ret = count;
+>  	goto done;
+>  
+> @@ -942,6 +1001,7 @@ static ssize_t unassign_domain_store(struct device *dev,
+>  
+>  	clear_bit_inv((unsigned long)apqi, matrix_mdev->matrix.aqm);
+>  	vfio_ap_mdev_unlink_domain(matrix_mdev, apqi);
+> +	vfio_ap_mdev_filter_matrix(matrix_mdev);
+>  	ret = count;
+>  
+>  done:
+> @@ -995,6 +1055,7 @@ static ssize_t assign_control_domain_store(struct device *dev,
+>  	 * number of control domains that can be assigned.
+>  	 */
+>  	set_bit_inv(id, matrix_mdev->matrix.adm);
+> +	vfio_ap_mdev_filter_cdoms(matrix_mdev);
+>  	ret = count;
+>  done:
+>  	mutex_unlock(&matrix_dev->lock);
+> @@ -1042,6 +1103,7 @@ static ssize_t unassign_control_domain_store(struct device *dev,
+>  	}
+>  
+>  	clear_bit_inv(domid, matrix_mdev->matrix.adm);
+> +	clear_bit_inv(domid, matrix_mdev->shadow_apcb.adm);
+>  	ret = count;
+>  done:
+>  	mutex_unlock(&matrix_dev->lock);
+> @@ -1179,8 +1241,6 @@ static int vfio_ap_mdev_set_kvm(struct ap_matrix_mdev *matrix_mdev,
+>  		kvm_get_kvm(kvm);
+>  		matrix_mdev->kvm = kvm;
+>  		kvm->arch.crypto.data = matrix_mdev;
+> -		memcpy(&matrix_mdev->shadow_apcb, &matrix_mdev->matrix,
+> -		       sizeof(struct ap_matrix));
+>  		kvm_arch_crypto_set_masks(kvm, matrix_mdev->shadow_apcb.apm,
+>  					  matrix_mdev->shadow_apcb.aqm,
+>  					  matrix_mdev->shadow_apcb.adm);
+> @@ -1536,6 +1596,8 @@ int vfio_ap_mdev_probe_queue(struct ap_device *apdev)
+>  	q->apqn = to_ap_queue(&apdev->device)->qid;
+>  	q->saved_isc = VFIO_AP_ISC_INVALID;
+>  	vfio_ap_queue_link_mdev(q);
+> +	if (q->matrix_mdev)
+> +		vfio_ap_mdev_filter_matrix(q->matrix_mdev);
+>  	dev_set_drvdata(&apdev->device, q);
+>  	mutex_unlock(&matrix_dev->lock);
+>  
 

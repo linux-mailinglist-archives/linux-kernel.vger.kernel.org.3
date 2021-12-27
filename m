@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A73147FF19
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:35:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C99CE47FFC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:41:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233065AbhL0PfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:35:20 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:39544 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238437AbhL0Peq (ORCPT
+        id S239174AbhL0PlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:41:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238559AbhL0Pic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:34:46 -0500
+        Mon, 27 Dec 2021 10:38:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D998C07E5E1;
+        Mon, 27 Dec 2021 07:37:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9495CCE10AF;
-        Mon, 27 Dec 2021 15:34:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80332C36AEA;
-        Mon, 27 Dec 2021 15:34:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E12A61119;
+        Mon, 27 Dec 2021 15:37:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00A11C36AE7;
+        Mon, 27 Dec 2021 15:37:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619284;
-        bh=H7qLFCRVe/WtExWYZe1pbucg24PKnnInhWdglyJUEO8=;
+        s=korg; t=1640619457;
+        bh=6hS58f7R7ZEEHxmFlRA5AfRtmnvy02N0fZplQ/UklTI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WAL5IryKdfSjfiAYrjFUSjhGGZTMqJYHF4egVUCYW8Qbhn3VyR9K3HniLxLXM61hG
-         SzFpc3sjTBPUdSjKEpo8SYpUajdDZEG5VKXyWu6mK82Jvx6Gs5HLX9nFKeaOQ44Aut
-         igLJN0gwh19PY90mgUVepLNNytKHIS0+gTyRSOTM=
+        b=1rO3U4IebAJgG2ZGRZxejdGVhoquUJirzikGX3mHWPR6g4Jsjq8rGw/9uDXcVIlZL
+         p7sw7yIACx4Ji2mgvlkO3fyXa/3Oeh3EaWuE1poaojgGsYOzRXwnrLbayUVJyMuXiX
+         lUichAKJQy7Yt8KxkEAFSF50fgfgDlB7jFdOgkcA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrew Melnichenko <andrew@daynix.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 09/47] net: accept UFOv6 packages in virtio_net_hdr_to_skb
+Subject: [PATCH 5.10 30/76] hwmon: (lm90) Fix usage of CONFIG2 register in detect function
 Date:   Mon, 27 Dec 2021 16:30:45 +0100
-Message-Id: <20211227151321.099657892@linuxfoundation.org>
+Message-Id: <20211227151325.734500476@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
-References: <20211227151320.801714429@linuxfoundation.org>
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+References: <20211227151324.694661623@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,73 +48,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Willem de Bruijn <willemb@google.com>
+From: Guenter Roeck <linux@roeck-us.net>
 
-[ Upstream commit 7e5cced9ca84df52d874aca6b632f930b3dc5bc6 ]
+[ Upstream commit fce15c45d3fbd9fc1feaaf3210d8e3f8b33dfd3a ]
 
-Skb with skb->protocol 0 at the time of virtio_net_hdr_to_skb may have
-a protocol inferred from virtio_net_hdr with virtio_net_hdr_set_proto.
+The detect function had a comment "Make compiler happy" when id did not
+read the second configuration register. As it turns out, the code was
+checking the contents of this register for manufacturer ID 0xA1 (NXP
+Semiconductor/Philips), but never actually read the register. So it
+wasn't surprising that the compiler complained, and it indeed had a point.
+Fix the code to read the register contents for manufacturer ID 0xa1.
 
-Unlike TCP, UDP does not have separate types for IPv4 and IPv6. Type
-VIRTIO_NET_HDR_GSO_UDP is guessed to be IPv4/UDP. As of the below
-commit, UFOv6 packets are dropped due to not matching the protocol as
-obtained from dev_parse_header_protocol.
+At the same time, the code was reading the register for manufacturer ID
+0x41 (Analog Devices), but it was not using the results. In effect it was
+just checking if reading the register returned an error. That doesn't
+really add much if any value, so stop doing that.
 
-Invert the test to take that L2 protocol field as starting point and
-pass both UFOv4 and UFOv6 for VIRTIO_NET_HDR_GSO_UDP.
-
-Fixes: 924a9bc362a5 ("net: check if protocol extracted by virtio_net_hdr_set_proto is correct")
-Link: https://lore.kernel.org/netdev/CABcq3pG9GRCYqFDBAJ48H1vpnnX=41u+MhQnayF1ztLH4WX0Fw@mail.gmail.com/
-Reported-by: Andrew Melnichenko <andrew@daynix.com>
-Signed-off-by: Willem de Bruijn <willemb@google.com>
-Link: https://lore.kernel.org/r/20211220144901.2784030-1-willemdebruijn.kernel@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: f90be42fb383 ("hwmon: (lm90) Refactor reading of config2 register")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/virtio_net.h | 22 ++++++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
+ drivers/hwmon/lm90.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/virtio_net.h b/include/linux/virtio_net.h
-index 04e87f4b9417c..22dd48c825600 100644
---- a/include/linux/virtio_net.h
-+++ b/include/linux/virtio_net.h
-@@ -7,6 +7,21 @@
- #include <uapi/linux/udp.h>
- #include <uapi/linux/virtio_net.h>
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index ebbfd5f352c06..ef55a1486099f 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -1438,12 +1438,11 @@ static int lm90_detect(struct i2c_client *client,
+ 	if (man_id < 0 || chip_id < 0 || config1 < 0 || convrate < 0)
+ 		return -ENODEV;
  
-+static inline bool virtio_net_hdr_match_proto(__be16 protocol, __u8 gso_type)
-+{
-+	switch (gso_type & ~VIRTIO_NET_HDR_GSO_ECN) {
-+	case VIRTIO_NET_HDR_GSO_TCPV4:
-+		return protocol == cpu_to_be16(ETH_P_IP);
-+	case VIRTIO_NET_HDR_GSO_TCPV6:
-+		return protocol == cpu_to_be16(ETH_P_IPV6);
-+	case VIRTIO_NET_HDR_GSO_UDP:
-+		return protocol == cpu_to_be16(ETH_P_IP) ||
-+		       protocol == cpu_to_be16(ETH_P_IPV6);
-+	default:
-+		return false;
+-	if (man_id == 0x01 || man_id == 0x5C || man_id == 0x41) {
++	if (man_id == 0x01 || man_id == 0x5C || man_id == 0xA1) {
+ 		config2 = i2c_smbus_read_byte_data(client, LM90_REG_R_CONFIG2);
+ 		if (config2 < 0)
+ 			return -ENODEV;
+-	} else
+-		config2 = 0;		/* Make compiler happy */
 +	}
-+}
-+
- static inline int virtio_net_hdr_set_proto(struct sk_buff *skb,
- 					   const struct virtio_net_hdr *hdr)
- {
-@@ -88,9 +103,12 @@ static inline int virtio_net_hdr_to_skb(struct sk_buff *skb,
- 			if (!skb->protocol) {
- 				__be16 protocol = dev_parse_header_protocol(skb);
  
--				virtio_net_hdr_set_proto(skb, hdr);
--				if (protocol && protocol != skb->protocol)
-+				if (!protocol)
-+					virtio_net_hdr_set_proto(skb, hdr);
-+				else if (!virtio_net_hdr_match_proto(protocol, hdr->gso_type))
- 					return -EINVAL;
-+				else
-+					skb->protocol = protocol;
- 			}
- retry:
- 			if (!skb_flow_dissect_flow_keys_basic(NULL, skb, &keys,
+ 	if ((address == 0x4C || address == 0x4D)
+ 	 && man_id == 0x01) { /* National Semiconductor */
 -- 
 2.34.1
 

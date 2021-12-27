@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A985348011B
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D50480037
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:43:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240129AbhL0PxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:53:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38936 "EHLO
+        id S238849AbhL0Pnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:43:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240846AbhL0Ptx (ORCPT
+        with ESMTP id S238522AbhL0Pkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:49:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACAA2C0617A2;
-        Mon, 27 Dec 2021 07:44:55 -0800 (PST)
+        Mon, 27 Dec 2021 10:40:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289AAC06175A;
+        Mon, 27 Dec 2021 07:39:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74404B810C6;
-        Mon, 27 Dec 2021 15:44:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A33CC36AEA;
-        Mon, 27 Dec 2021 15:44:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE598610A2;
+        Mon, 27 Dec 2021 15:39:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C2CC36AEA;
+        Mon, 27 Dec 2021 15:39:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619893;
-        bh=JgwP6soaSUk6CkDscb2WJFVFnzQ8SjXk+5Pme/NMhgM=;
+        s=korg; t=1640619566;
+        bh=NevZnyb3Kyik+cQknpTUHX++8xoetuHZuVFFkb38/XU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kYKS/P/xOIXxro9yoOR5YFAjUK4GdEP2OyN2Gb/kWSBsJqJSHFn3q97rTkAfnE2Hr
-         yFYUl8MUzN+W/r9MtBIHvcB7r7FaEwCDvRsBDCIFSohKg/8+GefEIR2eRxpv+NASiQ
-         HSPvNAVVZZay3p9C5rCEK88UVi80LPdzY9DnBg4o=
+        b=JoWafdSYBMNWbWRzGxQqsJWvtsQGW3HfxtlzbfKjpdLQ5rO3C+2hxTwroX3i+N5mF
+         UByFOrsPiS7jGV3SFR+GR0r5BqqcADtTzouS/ukry8QG4q3ildrwpKUjgUp+ufg+uh
+         01DoPfH9iFMVB+t84xRIuYkQvm2P638aHM77Pm8U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Patrik Lantz <patrik.lantz@axis.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>
-Subject: [PATCH 5.15 106/128] tee: optee: Fix incorrect page free bug
-Date:   Mon, 27 Dec 2021 16:31:21 +0100
-Message-Id: <20211227151335.064570719@linuxfoundation.org>
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH 5.10 67/76] Input: goodix - add id->model mapping for the "9111" model
+Date:   Mon, 27 Dec 2021 16:31:22 +0100
+Message-Id: <20211227151327.006241080@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+References: <20211227151324.694661623@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,40 +48,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sumit Garg <sumit.garg@linaro.org>
+From: Hans de Goede <hdegoede@redhat.com>
 
-commit 18549bf4b21c739a9def39f27dcac53e27286ab5 upstream.
+commit 81e818869be522bc8fa6f7df1b92d7e76537926c upstream.
 
-Pointer to the allocated pages (struct page *page) has already
-progressed towards the end of allocation. It is incorrect to perform
-__free_pages(page, order) using this pointer as we would free any
-arbitrary pages. Fix this by stop modifying the page pointer.
+Add d->model mapping for the "9111" model, this fixes uses using
+a wrong config_len of 240 bytes while the "9111" model uses
+only 186 bytes of config.
 
-Fixes: ec185dd3ab25 ("optee: Fix memory leak when failing to register shm pages")
-Cc: stable@vger.kernel.org
-Reported-by: Patrik Lantz <patrik.lantz@axis.com>
-Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/r/20211206164747.197309-2-hdegoede@redhat.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tee/optee/shm_pool.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/input/touchscreen/goodix.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/tee/optee/shm_pool.c
-+++ b/drivers/tee/optee/shm_pool.c
-@@ -41,10 +41,8 @@ static int pool_op_alloc(struct tee_shm_
- 			goto err;
- 		}
+--- a/drivers/input/touchscreen/goodix.c
++++ b/drivers/input/touchscreen/goodix.c
+@@ -162,6 +162,7 @@ static const struct goodix_chip_id goodi
+ 	{ .id = "911", .data = &gt911_chip_data },
+ 	{ .id = "9271", .data = &gt911_chip_data },
+ 	{ .id = "9110", .data = &gt911_chip_data },
++	{ .id = "9111", .data = &gt911_chip_data },
+ 	{ .id = "927", .data = &gt911_chip_data },
+ 	{ .id = "928", .data = &gt911_chip_data },
  
--		for (i = 0; i < nr_pages; i++) {
--			pages[i] = page;
--			page++;
--		}
-+		for (i = 0; i < nr_pages; i++)
-+			pages[i] = page + i;
- 
- 		shm->flags |= TEE_SHM_REGISTER;
- 		rc = optee_shm_register(shm->ctx, shm, pages, nr_pages,
 
 

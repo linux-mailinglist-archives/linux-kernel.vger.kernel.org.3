@@ -2,97 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 018D54800E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8222548012E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:54:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239821AbhL0PvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:51:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39276 "EHLO
+        id S240994AbhL0PyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238923AbhL0Pra (ORCPT
+        with ESMTP id S240224AbhL0PvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:47:30 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C45C08EAD4;
-        Mon, 27 Dec 2021 07:43:16 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id t19so25900542oij.1;
-        Mon, 27 Dec 2021 07:43:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=K80NjHp56E36SKpf0s6kBuH2VUARIQ8AlvzdshnRP+M=;
-        b=k3BllzEKu9NR9NnQPmP8cstw65s6K/mANRiMydmRPxgF2XJXsomlUL9+QV91F0m8u6
-         BDpgr+YUlypEo7FRw38KZqclCuDDpv24qYe+XQ/X2d1zqrG3x3NEZEr7xiBxkGrhr+gh
-         8lhQOenlMN0WgZlyXUJ1I80oktH+hmSYft+PNqNyhBBzCTzqmfwr3wX3UvCP4C+E2PqY
-         WAqu9L21aOdn4xH0KiMY/Qc7QpAJAql/lH6OvA2ijtCasaZ9BIs2Y2rNPpCvct5C76Xx
-         OO7VCuk3LbdXiq5S3SF5Zd8CUKyrIEu2FWS2JzDcxR7ZAkV6ZUmff874Rka4lHIfVjGX
-         7V2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=K80NjHp56E36SKpf0s6kBuH2VUARIQ8AlvzdshnRP+M=;
-        b=h0TqTZh7CqHebqFeoq/45e2fjVcwGr5trVlh5kbfp6qB+xBJcx6c1jYZcphVPyjsfL
-         KIYzzX9aSxMKgoqn88L/pR28BPxizsbKq+cVkkrIekzhYDG2UNNqITuiuH2eyvqxVfSz
-         mFvT9jbyOyk9MBAqIGZ7whMNzNuROtsb2wUPHMTq8vmBPhqlT47lLjP0OiaFrr2TNQrq
-         NIuko+PqBR7rU43yQ9L7106VN5bAIhnmdrGhJ9VYMEEmXF5gbEUB0+T/r6PR48pZF2Y1
-         6rkmP4pn3gW6QLckXh7yGwsWaXI/a51bwsgoy9/wdg/Nf6KRH3aO7EbDx/AEVDTwtTnz
-         B3UA==
-X-Gm-Message-State: AOAM533zjmf3JD/Z72RsNPifnPuY3FQz8Vs6gS26uX7XRvgmgUDeUANe
-        Ix3sxSPXQYnVsG46A/TZagk=
-X-Google-Smtp-Source: ABdhPJzohQ58C+ddu+5BLYfOU4pD+3GOGf+9sxhLaw1DhB9zf+MK2FSWkf3Uqr78G2erxJ3rAFSKiQ==
-X-Received: by 2002:a05:6808:1305:: with SMTP id y5mr13285886oiv.83.1640619795719;
-        Mon, 27 Dec 2021 07:43:15 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k1sm2891169otj.61.2021.12.27.07.43.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Dec 2021 07:43:14 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] hwmon: Use min() instead of doing it manually
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        mezin.alexander@gmail.com
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20211227113632.90672-1-jiapeng.chong@linux.alibaba.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <e689de7b-033b-0ada-5135-faf7fdb1e26b@roeck-us.net>
-Date:   Mon, 27 Dec 2021 07:43:12 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 27 Dec 2021 10:51:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D69C08EB28;
+        Mon, 27 Dec 2021 07:46:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5FF34B810CC;
+        Mon, 27 Dec 2021 15:46:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15B53C36AF9;
+        Mon, 27 Dec 2021 15:46:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640619966;
+        bh=QwJfSm+dlg50xDEsydpdzN4VFxUQiYUIsoIRz08YMpg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UpNtBCf/OSSo+OjXWy5CHI0rUBlJiHe9NYOvMIYd+2s3K8a8aiZnK/5e6E/1btRE7
+         K2tOD668hW2a61Ji8ieOavw2g5+KEbNOkyd4m5amAMN4RnkyW7oVEiaT1gWPuPLUM7
+         gm8hqWqxUmeRNAXHYOfQ7HHphkcJ/IZrYdy12C9ETB2K2r81F1A9hCC5xZwruhIK1q
+         TtgnxcEROb3vn4onjDE9iFof2sX/CkaQqneni5PdXBOFLQ4TEWXievaRFkCKqu0mUp
+         bt0D8ddTYSeAXLoxxKfDfyBAZ4wfiLk4jM3vdlCRf9TuqUU3hhnw9m6LZxEeI0PjHO
+         zqa+1d8/B0OfQ==
+Received: by mail-ed1-f49.google.com with SMTP id q14so55430983edi.3;
+        Mon, 27 Dec 2021 07:46:05 -0800 (PST)
+X-Gm-Message-State: AOAM532tHl5UtikWtiLWoY8T0WZL2I69ahmM8oxAxE/le01VV3OqAbV5
+        7V2ki0sYBvCcRTjX/RcqzPkHezZBUvi6XxlHtw==
+X-Google-Smtp-Source: ABdhPJwMStdwgjE2OH4uiH+Ziep31Wwjs0Ml2x3toG+q5+RE5DPVmHHn5GkiKuZKENGJU9ACKddmGxQdY+Y8EOr4ubk=
+X-Received: by 2002:a05:6402:1691:: with SMTP id a17mr17057660edv.109.1640619964379;
+ Mon, 27 Dec 2021 07:46:04 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211227113632.90672-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211221182826.2141789-1-jaschultzMS@gmail.com>
+ <20211221182826.2141789-2-jaschultzMS@gmail.com> <YcJiBk5f071eJ5+n@robh.at.kernel.org>
+ <DM6PR21MB13230483733ECB77304EC416A5429@DM6PR21MB1323.namprd21.prod.outlook.com>
+In-Reply-To: <DM6PR21MB13230483733ECB77304EC416A5429@DM6PR21MB1323.namprd21.prod.outlook.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 27 Dec 2021 11:45:51 -0400
+X-Gmail-Original-Message-ID: <CAL_JsqLuwvxkxeOmZQVOpMX_aA83LzEc4Tg+bkcFp3mUZYiTKw@mail.gmail.com>
+Message-ID: <CAL_JsqLuwvxkxeOmZQVOpMX_aA83LzEc4Tg+bkcFp3mUZYiTKw@mail.gmail.com>
+Subject: Re: [EXTERNAL] Re: [PATCH RESEND v4 1/4] dt-bindings: platform:
+ microsoft: Document surface xbl
+To:     Jarrett Schultz <jaschultz@microsoft.com>
+Cc:     Jarrett Schultz <jaschultzms@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/27/21 3:36 AM, Jiapeng Chong wrote:
-> Eliminate following coccicheck warning:
-> 
-> ./drivers/hwmon/nzxt-smart2.c:461:12-13: WARNING opportunity for min().
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->   drivers/hwmon/nzxt-smart2.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-> index 534d39b8908e..b30de7441fbb 100644
-> --- a/drivers/hwmon/nzxt-smart2.c
-> +++ b/drivers/hwmon/nzxt-smart2.c
-> @@ -458,7 +458,7 @@ static int send_output_report(struct drvdata *drvdata, const void *data,
->   
->   	ret = hid_hw_output_report(drvdata->hid, drvdata->output_buffer,
->   				   sizeof(drvdata->output_buffer));
-> -	return ret < 0 ? ret : 0;
-> +	return min(ret, 0);
+On Mon, Dec 27, 2021 at 10:54 AM Jarrett Schultz
+<jaschultz@microsoft.com> wrote:
+>
+>
+>
+> > -----Original Message-----
+> > From: Rob Herring <robh@kernel.org>
+> > Sent: Tuesday, December 21, 2021 5:24 PM
+> > To: Jarrett Schultz <jaschultzms@gmail.com>
+> > Cc: Andy Gross <agross@kernel.org>; bjorn.andersson@linaro.org; Hans de
+> > Goede <hdegoede@redhat.com>; Mark Gross <markgross@kernel.org>;
+> > Maximilian Luz <luzmaximilian@gmail.com>; Felipe Balbi
+> > <balbi@kernel.org>; linux-arm-msm@vger.kernel.org; platform-driver-
+> > x86@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > devicetree@vger.kernel.org; Jarrett Schultz <jaschultz@microsoft.com>
+> > Subject: [EXTERNAL] Re: [PATCH RESEND v4 1/4] dt-bindings: platform:
+> > microsoft: Document surface xbl
+> >
+> > On Tue, Dec 21, 2021 at 10:28:23AM -0800, Jarrett Schultz wrote:
+> > > From: Jarrett Schultz <jaschultz@microsoft.com>
+> > >
+> > > Introduce yaml for surface xbl driver.
+> > >
+> > > Signed-off-by: Jarrett Schultz <jaschultz@microsoft.com>
+> > >
+> > > ---
+> > >
+> > > Changes in v4:
+> > >  - Addressed small formatting changes
+> > >  - Removed unnecessary lines
+> > >
+> > > ---
+> > >
+> > > Changes in v3:
+> > >  - Updated description to only pertain to the hardware
+> > >  - Updated the required field to properly reflect the binding
+> > >  - Removed the first example
+> > >  - Fixed the size of the reg field in the second example
+> > >
+> > > ---
+> > >
+> > > Changes in v2:
+> > >  - Removed json-schema dependence
+> > >  - Elaborated on description of driver
+> > >  - Updated example
+> > > ---
+> > >  .../platform/microsoft/surface-xbl.yaml       | 64 +++++++++++++++++++
+> > >  MAINTAINERS                                   |  7 ++
+> > >  2 files changed, 71 insertions(+)
+> > >  create mode 100644
+> > > Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml
+> > >
+> > > diff --git
+> > > a/Documentation/devicetree/bindings/platform/microsoft/surface-
+> > xbl.yam
+> > > l
+> > > b/Documentation/devicetree/bindings/platform/microsoft/surface-
+> > xbl.yam
+> > > l
+> > > new file mode 100644
+> > > index 000000000000..df5a87a016f4
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/platform/microsoft/surface-xbl
+> > > +++ .yaml
+> > > @@ -0,0 +1,64 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
+> > > +---
+> > > +$id:
+> > >
+> > +https://nam06.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevi
+> > > +cetree.org%2Fschemas%2Fplatform%2Fmicrosoft%2Fsurface-
+> > xbl.yaml%23&amp
+> > >
+> > +;data=04%7C01%7Cjaschultz%40microsoft.com%7C77abe729b69a40624472
+> > 08d9c
+> > >
+> > +4d8f44e%7C72f988bf86f141af91ab2d7cd011db47%7C0%7C0%7C637757258
+> > 3887312
+> > >
+> > +05%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luM
+> > zIiLCJBTi
+> > >
+> > +I6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=jG0qubz122GG2s8%2B
+> > 1ZuMCcPIa
+> > > +33KWwPoO2VNlDySmvs%3D&amp;reserved=0
+> > > +$schema:
+> > >
+> > +https://nam06.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevi
+> > > +cetree.org%2Fmeta-
+> > schemas%2Fcore.yaml%23&amp;data=04%7C01%7Cjaschultz
+> > >
+> > +%40microsoft.com%7C77abe729b69a4062447208d9c4d8f44e%7C72f988bf8
+> > 6f141a
+> > >
+> > +f91ab2d7cd011db47%7C0%7C0%7C637757258388731205%7CUnknown%7C
+> > TWFpbGZsb3
+> > >
+> > +d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0
+> > %3D%
+> > >
+> > +7C3000&amp;sdata=FxKNLPok9eW%2FBPmuGzU6x7dPwpnev0Ngr8epO4NA
+> > UzA%3D&amp
+> > > +;reserved=0
+> > > +
+> > > +title: Surface Extensible Bootloader for Microsoft Surface Duo
+> > > +
+> > > +maintainers:
+> > > +  - Jarrett Schultz <jaschultz@microsoft.com>
+> > > +
+> > > +description: |
+> > > +  Defined to expose information that is used during production when
+> > > +  device is in manufacturing mode. Some of the information included
+> > > +  in this imem section is -
+> >
+> > If this is onchip sram, we have a binding for that. That's not an MFD.
+> >
+> > > +    * board_id
+> > > +    * battery_present
+> > > +    * hw_init_retries
+> > > +    * is_customer_mode
+> > > +    * is_act_mode
+> > > +    * pmic_reset_reason
+> > > +    * touch_fw_version
+> > > +    * ocp_error_location
+> >
+> > nvmem binding doesn't work for describing these fields?
+> >
+> > > +  See sysfs documentation for more information.
+> >
+> > sysfs? Not relevant to the binding.
+> >
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: simple-mfd
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +additionalProperties: false
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +  - reg
+> > > +  - ranges
+> > > +  - address-cells
+> > > +  - size-cells
+> > > +
+> > > +examples:
+> > > +  - |
+> > > +    / {
+> > > +        compatible = "foo";
+> > > +        model = "foo";
+> >
+> > No need to make this the root node with a fake compatible.
+>
+> I included this root node in order to make #address-cells = #size-cells = 2,
+> since this example raises errors otherwise.
 
-Nack, that is just confusing. ret is an error if < 0, and min obfuscates
-that we want to return an error or 0.
+Why does your example require 2 cells? You only have 4KB of address space.
 
-Guenter
+Though you can do:
+
+bus {
+  #address-cells = <2>;
+  #size-cells = <2>;
+  ...
+};
+
+Rob

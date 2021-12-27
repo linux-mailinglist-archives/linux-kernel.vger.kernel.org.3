@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF08C47FEFF
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F59D48009F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:47:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237984AbhL0PeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:34:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238099AbhL0Pds (ORCPT
+        id S238813AbhL0Prj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:47:39 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43358 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238724AbhL0Po3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:33:48 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46D4C06139A;
-        Mon, 27 Dec 2021 07:33:47 -0800 (PST)
+        Mon, 27 Dec 2021 10:44:29 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 28108CE10D9;
-        Mon, 27 Dec 2021 15:33:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E83BBC36AE7;
-        Mon, 27 Dec 2021 15:33:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B8836112A;
+        Mon, 27 Dec 2021 15:44:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42FEAC36AEA;
+        Mon, 27 Dec 2021 15:44:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619224;
-        bh=Vz8vVtXcbEHvRmf7CfHIDvEoOvMdq+KaI3CLJ0RSZik=;
+        s=korg; t=1640619867;
+        bh=Fo/Ywu8F/a+GU+VCJZaUijx4EfbModFwVrgE5okpuZY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2RRGzpSjh9ziK6KIoRnI3PpC6dCmquOSr6H+aYVRywNmP1fnW1YNYYVK64blPGrJr
-         3HgaeOeCCO6y/UiE0U/4z4KdoXo4Vu2uHWvs7agNgc3ObaE+n3hgL//znLcRZHWNkN
-         eQ+kJaOXMv+qPOsaiSV3KqG8WfqUxZ83TMtE+UzQ=
+        b=I/lvczuzJopoVY0nD+5AiXKBtXCw1kL6y2AEgNSmSmCKo26CFZdLH3+HDBVtcMBtk
+         2Q2AE3OLpcCTipD+GdAJIvnTvvB5b+OoisnjKezPDdDSX4AVZPC9RydULIxv9/RQXu
+         5hudLW0V5ebAop94K5YhU5i+JubPDHTaa1+kGla8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hanjie Wu <nagi@zju.edu.cn>,
-        Lin Ma <linma@zju.edu.cn>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 35/38] ax25: NPD bug when detaching AX25 device
-Date:   Mon, 27 Dec 2021 16:31:12 +0100
-Message-Id: <20211227151320.557943151@linuxfoundation.org>
+        stable@vger.kernel.org, Namjae Jeon <linkinjeon@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH 5.15 098/128] ksmbd: fix error code in ndr_read_int32()
+Date:   Mon, 27 Dec 2021 16:31:13 +0100
+Message-Id: <20211227151334.796091388@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
-References: <20211227151319.379265346@linuxfoundation.org>
+In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
+References: <20211227151331.502501367@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,58 +46,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lin Ma <linma@zju.edu.cn>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 1ade48d0c27d5da1ccf4b583d8c5fc8b534a3ac8 upstream.
+commit ef399469d9ceb9f2171cdd79863f9434b9fa3edc upstream.
 
-The existing cleanup routine implementation is not well synchronized
-with the syscall routine. When a device is detaching, below race could
-occur.
+This is a failure path and it should return -EINVAL instead of success.
+Otherwise it could result in the caller using uninitialized memory.
 
-static int ax25_sendmsg(...) {
-  ...
-  lock_sock()
-  ax25 = sk_to_ax25(sk);
-  if (ax25->ax25_dev == NULL) // CHECK
-  ...
-  ax25_queue_xmit(skb, ax25->ax25_dev->dev); // USE
-  ...
-}
-
-static void ax25_kill_by_device(...) {
-  ...
-  if (s->ax25_dev == ax25_dev) {
-    s->ax25_dev = NULL;
-    ...
-}
-
-Other syscall functions like ax25_getsockopt, ax25_getname,
-ax25_info_show also suffer from similar races. To fix them, this patch
-introduce lock_sock() into ax25_kill_by_device in order to guarantee
-that the nullify action in cleanup routine cannot proceed when another
-socket request is pending.
-
-Signed-off-by: Hanjie Wu <nagi@zju.edu.cn>
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 303fff2b8c77 ("ksmbd: add validation for ndr read/write functions")
+Cc: stable@vger.kernel.org # v5.15
+Acked-by: Namjae Jeon <linkinjeon@kernel.org>
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ax25/af_ax25.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ fs/ksmbd/ndr.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/ax25/af_ax25.c
-+++ b/net/ax25/af_ax25.c
-@@ -88,8 +88,10 @@ static void ax25_kill_by_device(struct n
- again:
- 	ax25_for_each(s, &ax25_list) {
- 		if (s->ax25_dev == ax25_dev) {
--			s->ax25_dev = NULL;
- 			spin_unlock_bh(&ax25_list_lock);
-+			lock_sock(s->sk);
-+			s->ax25_dev = NULL;
-+			release_sock(s->sk);
- 			ax25_disconnect(s, ENETUNREACH);
- 			spin_lock_bh(&ax25_list_lock);
+--- a/fs/ksmbd/ndr.c
++++ b/fs/ksmbd/ndr.c
+@@ -148,7 +148,7 @@ static int ndr_read_int16(struct ndr *n,
+ static int ndr_read_int32(struct ndr *n, __u32 *value)
+ {
+ 	if (n->offset + sizeof(__u32) > n->length)
+-		return 0;
++		return -EINVAL;
  
+ 	if (value)
+ 		*value = le32_to_cpu(*(__le32 *)ndr_get_field(n));
 
 

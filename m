@@ -2,116 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9BF480105
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A8548013D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:56:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240588AbhL0Pwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:52:31 -0500
-Received: from mail-qv1-f47.google.com ([209.85.219.47]:44622 "EHLO
-        mail-qv1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238809AbhL0Prl (ORCPT
+        id S238992AbhL0P4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:56:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41146 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241680AbhL0PzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:47:41 -0500
-Received: by mail-qv1-f47.google.com with SMTP id kd9so14025427qvb.11;
-        Mon, 27 Dec 2021 07:47:40 -0800 (PST)
+        Mon, 27 Dec 2021 10:55:10 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A2CC08EA73
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 07:48:42 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id j6so63057793edw.12
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 07:48:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ruYVqDjSzvKE9ESDPOstmLOwEK7+kWJthKgCsoXnHVY=;
+        b=gncD0yuRaX+MOn2Kq0j/LeVUg8abEo1ACRTxQ6aLtpDnN9/a2GUIwaLmSNy7xfXDmH
+         +5ecYsxj+WJ49A1B1MAWUBY667WuJ/xk18ROqTqZcFB/xiSeYrZybosg5tTWvSWnePOF
+         /MaNtMrJ/QFkLpQLSOB57zKZYNQZtRs1pQAM25x1sPo/ZXzF9/Xr575HQO8zUpKBPzXc
+         Pim6X6E8EiYFsdO+XelUg0gDZHgxUbq9waD8Ep37ER/fVO3qbepfA3LDtBU231R0PJNa
+         4Ib7NkZ6AejM255yP3a17tRZgAtUx1gB/6OAxqZ6pyAszJclgSw356QQMsQ8Z4ZTH4oN
+         W/sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=bUWEP8j8McKJKL6aAva3y2o4pzUd6CPp6n4sGa/ihoE=;
-        b=Raa9XNMeRWq7P7+aPCkJ507cMIUPGZ4dFJ0z7WGPf3pq6jK1Utm073orBgfJM3Z67b
-         UosYpDjr0p1QBd5X4fzuekm/nJnQzWv3LQK8tO6LiGfXQaGR1fCbNW2HKAv0n/5gOIH8
-         nuejKk/22Fi9Aog+Ec56fyuM62OK0FAOMQmTX8cSrEeRqnoLe8qjgKF5mgJP0Pam7Lqg
-         Wu4fDOo/LhXARfkC//Aj3npLZOlRkJkoc3XdfPCoISqnN14YiMo2PeGbZmcFR72aTXOu
-         Z0YHQ7Ub/BE40k84wbgd8Cc0zn2FBmPUgI9mMUgkBdHtRFud7s6Y3WuuOTf05AUE1Qjl
-         ymLA==
-X-Gm-Message-State: AOAM533xoKh3JqPC0FVZtRV9fNtxNNBlQvKt1dP7XHkU4QuiaVm6j2qh
-        XtZNR6yQUbaTId387WVLBjt391fiKEx0Cov5lis=
-X-Google-Smtp-Source: ABdhPJzqa1f581bitu9IVaU5JkVD7hVKy0yE1mMS4Gm3R1cit0B53dB9m96MbfJznlwF4d8ioCP2VmO0Im3Nsx4wqLI=
-X-Received: by 2002:a05:6214:1c06:: with SMTP id u6mr15558528qvc.35.1640620060437;
- Mon, 27 Dec 2021 07:47:40 -0800 (PST)
+        bh=ruYVqDjSzvKE9ESDPOstmLOwEK7+kWJthKgCsoXnHVY=;
+        b=Ebw5z1kOrr4FyaTfXz12WjviP93AQ24qwid7MFl5EjduBC6RjDXFMwb2+ykcvvDY/T
+         3t0KypN5VHS1MVh9unbr3ssvuId0RqYzD01Kq0nTgYzvyx9oHHsbO6p17mPfQ6wueh0j
+         A1FGyNW1seJ6QziKtcF2rUot+LWF0EZR2kWJDDIZBRQ4gXdbeNhEvDGSEqGdWaFuq9v0
+         i+FgpIYnQADwiXglcweAdeGT8e017qd81i343BZMYNmXsHiV2FbNEVgPVbvj2UqOj1nk
+         sT7Gfbk0u6sdPekg9ro9lxQFQsFqfg0ortk7y2TaNmTW87LfI4TZRydjeyXxra6Byewe
+         mlYg==
+X-Gm-Message-State: AOAM532/M8uEE5wG1SUEmfc7fcYZr6CdDbJXpCbgCNFT4I8zE5rjJJ89
+        942E5/FbIa/Nsqswiii99WowTOv/ssfcUJ28l4bF
+X-Google-Smtp-Source: ABdhPJykLSQBHob3XG4bD0UAP8+YA6SVKSYWEEW+4XpOd3xphqx/nenjfXqcIvc7dsZdFgHEfd0gNvauJ5cgfEAh/qE=
+X-Received: by 2002:a17:906:7304:: with SMTP id di4mr14134518ejc.327.1640620121150;
+ Mon, 27 Dec 2021 07:48:41 -0800 (PST)
 MIME-Version: 1.0
-References: <d393e7d8-b192-ff15-65f1-35f11e1a06bc@linaro.org>
-In-Reply-To: <d393e7d8-b192-ff15-65f1-35f11e1a06bc@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Dec 2021 16:47:22 +0100
-Message-ID: <CAJZ5v0g86TxN1vp4aWexFHqVzWM6ZGzABvufrusOeAcM5ur+_g@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal for v5.17
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Paul Gerber <Paul.Gerber@tq-group.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
+References: <20211224150739.3278019-1-trix@redhat.com>
+In-Reply-To: <20211224150739.3278019-1-trix@redhat.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 27 Dec 2021 10:48:30 -0500
+Message-ID: <CAHC9VhR+ou3fx_b0dKgu12L6janT8_7DEHQ54QY-QYsZcUDEag@mail.gmail.com>
+Subject: Re: [PATCH] selinux: initialize proto variable in selinux_ip_postroute_compat()
+To:     trix@redhat.com
+Cc:     stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        nathan@kernel.org, ndesaulniers@google.com,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 4:54 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Fri, Dec 24, 2021 at 10:07 AM <trix@redhat.com> wrote:
 >
+> From: Tom Rix <trix@redhat.com>
 >
-> Hi Rafael,
+> Clang static analysis reports this warning
 >
+> hooks.c:5765:6: warning: 4th function call argument is an uninitialized value
+>         if (selinux_xfrm_postroute_last(sksec->sid, skb, &ad, proto))
+>             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 >
-> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+> selinux_parse_skb() can return ok without setting proto.  The later call
+> to selinux_xfrm_postroute_last() does an early check of proto and can
+> return ok is the garbage proto value matches.  So initialize proto.
 >
->   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
->
-> are available in the Git repository at:
->
->   https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> tags/thermal-v5.17-rc1
->
-> for you to fetch changes up to 8ee1c0f6526ce942b7595951c7bb0165010051c2:
->
->   thermal/drivers/rz2gl: Add error check for reset_control_deassert()
-> (2021-12-09 15:58:09 +0100)
->
-> ----------------------------------------------------------------
-> - Fix PM issue on the iMX driver when suspend/resume is happening by
->   implementing PM runtime support (Oleksij Rempel)
->
-> - Add 'const' annotation to the thermal_cooling_ops in the Intel
->   powerclamp driver (Rikard Falkeborn)
->
-> - Add TSU driver and bindings for the RZ/G2L platform (Biju Das)
->
-> - Fix the missing ADC bit set on iMX8MP to enable the sensor (Paul
->   Gerber)
->
-> - Fix missing check when calling reset_control_deassert() (Biju Das)
->
-> ----------------------------------------------------------------
-> Biju Das (3):
->       dt-bindings: thermal: Document Renesas RZ/G2L TSU
->       thermal/drivers: Add TSU driver for RZ/G2L
->       thermal/drivers/rz2gl: Add error check for reset_control_deassert()
->
-> Oleksij Rempel (1):
->       thermal/drivers/imx: Implement runtime PM support
->
-> Paul Gerber (1):
->       thermal/drivers/imx8mm: Enable ADC when enabling monitor
->
-> Rikard Falkeborn (1):
->       thermal/drivers/intel_powerclamp: Constify static
-> thermal_cooling_device_ops
->
->  .../devicetree/bindings/thermal/rzg2l-thermal.yaml |  76 +++++++
->  drivers/thermal/Kconfig                            |   9 +
->  drivers/thermal/Makefile                           |   1 +
->  drivers/thermal/imx8mm_thermal.c                   |   3 +
->  drivers/thermal/imx_thermal.c                      | 145 +++++++-----
->  drivers/thermal/intel/intel_powerclamp.c           |   2 +-
->  drivers/thermal/rzg2l_thermal.c                    | 242
-> +++++++++++++++++++++
->  7 files changed, 423 insertions(+), 55 deletions(-)
->  create mode 100644
-> Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml
->  create mode 100644 drivers/thermal/rzg2l_thermal.c
+> Fixes: eef9b41622f2 ("selinux: cleanup selinux_xfrm_sock_rcv_skb() and selinux_xfrm_postroute_last()")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  security/selinux/hooks.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Pulled and pushed out, thanks!
+Thanks Tom.  I don't think this is something that could be easily
+triggered on a normal system, even if the compatibility mode was
+enabled, but this is something that we should fix regardless.  I've
+merged this into selinux/stable-5.16 and will send this up to Linus as
+soon as it clears the normal automated testing.
+
+-- 
+paul moore
+www.paul-moore.com

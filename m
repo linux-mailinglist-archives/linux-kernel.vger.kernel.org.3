@@ -2,42 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AD7480121
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:54:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C7744800BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240540AbhL0Pxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:53:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240877AbhL0Pt5 (ORCPT
+        id S239045AbhL0PtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:49:09 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45710 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235348AbhL0PpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:49:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB876C0698D8;
-        Mon, 27 Dec 2021 07:45:16 -0800 (PST)
+        Mon, 27 Dec 2021 10:45:21 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C993610B1;
-        Mon, 27 Dec 2021 15:45:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73742C36AEA;
-        Mon, 27 Dec 2021 15:45:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26D7EB81063;
+        Mon, 27 Dec 2021 15:45:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 436D9C36AE7;
+        Mon, 27 Dec 2021 15:45:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619916;
-        bh=UC9dyZeW0pIaPKgUTdOG7YJ6guH7hCZP2YNrDU+0v6M=;
+        s=korg; t=1640619918;
+        bh=gkHoxJSNOHi2heCyfucZ/6UjRFFszcFiPP4kZVSPNMo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PIFQxve5cNKAwwtiWAyAX0nMsjQAhrE/3ECU2LJ9AuHOI9aX0Q9m0sqTiltVvnWYT
-         98G2IAwQbzmSbmmbnzuFbWHuYmeWLum5zchwbpbi4D4loxorBGOJZGyjoT5D8VRDW4
-         UUtkCxkOgFD4bVZb1aJLAMR3pmouRFwvS0kei0bg=
+        b=tH+s+F33xH0VMNFG0QgFJtCWhIKFkq/t7d4ovtQB+nI8y1LEZYgP2H/oik6D/Rq/m
+         vOReKY5sAFvGn5KBXhVTeEZgyooxueNYi+YFxjVs2kOMV3iMpsHscfWchGMj5N65PH
+         ZipRsmklGBNiQDvFwIT3Bf7y+v2EaltJ/tWcjebc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Johnny Chuang <johnny.chuang.emc@gmail.com>,
+        =?UTF-8?q?Samuel=20=C4=8Cavoj?= <samuel@cavoj.net>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: [PATCH 5.15 113/128] Input: elants_i2c - do not check Remark ID on eKTH3900/eKTH5312
-Date:   Mon, 27 Dec 2021 16:31:28 +0100
-Message-Id: <20211227151335.288748362@linuxfoundation.org>
+Subject: [PATCH 5.15 114/128] Input: i8042 - enable deferred probe quirk for ASUS UM325UA
+Date:   Mon, 27 Dec 2021 16:31:29 +0100
+Message-Id: <20211227151335.325998991@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
 References: <20211227151331.502501367@linuxfoundation.org>
@@ -49,90 +46,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johnny Chuang <johnny.chuang.emc@gmail.com>
+From: Samuel Čavoj <samuel@cavoj.net>
 
-commit 4ebfee2bbc1a9c343dd50565ba5ae249fac32267 upstream.
+commit 44ee250aeeabb28b52a10397ac17ffb8bfe94839 upstream.
 
-The eKTH3900/eKTH5312 series do not support the firmware update rules of
-Remark ID. Exclude these two series from checking it when updating the
-firmware in touch controllers.
+The ASUS UM325UA suffers from the same issue as the ASUS UX425UA, which
+is a very similar laptop. The i8042 device is not usable immediately
+after boot and fails to initialize, requiring a deferred retry.
 
-Signed-off-by: Johnny Chuang <johnny.chuang.emc@gmail.com>
-Link: https://lore.kernel.org/r/1639619603-20616-1-git-send-email-johnny.chuang.emc@gmail.com
+Enable the deferred probe quirk for the UM325UA.
+
+BugLink: https://bugzilla.suse.com/show_bug.cgi?id=1190256
+Signed-off-by: Samuel Čavoj <samuel@cavoj.net>
+Link: https://lore.kernel.org/r/20211204015615.232948-1-samuel@cavoj.net
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/input/touchscreen/elants_i2c.c |   46 ++++++++++++++++++++++++++++++++-
- 1 file changed, 45 insertions(+), 1 deletion(-)
+ drivers/input/serio/i8042-x86ia64io.h |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/drivers/input/touchscreen/elants_i2c.c
-+++ b/drivers/input/touchscreen/elants_i2c.c
-@@ -117,6 +117,19 @@
- #define ELAN_POWERON_DELAY_USEC	500
- #define ELAN_RESET_DELAY_MSEC	20
+--- a/drivers/input/serio/i8042-x86ia64io.h
++++ b/drivers/input/serio/i8042-x86ia64io.h
+@@ -992,6 +992,13 @@ static const struct dmi_system_id __init
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "C504"),
+ 		},
+ 	},
++	{
++		/* ASUS ZenBook UM325UA */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
++		},
++	},
+ 	{ }
+ };
  
-+/* FW boot code version */
-+#define BC_VER_H_BYTE_FOR_EKTH3900x1_I2C        0x72
-+#define BC_VER_H_BYTE_FOR_EKTH3900x2_I2C        0x82
-+#define BC_VER_H_BYTE_FOR_EKTH3900x3_I2C        0x92
-+#define BC_VER_H_BYTE_FOR_EKTH5312x1_I2C        0x6D
-+#define BC_VER_H_BYTE_FOR_EKTH5312x2_I2C        0x6E
-+#define BC_VER_H_BYTE_FOR_EKTH5312cx1_I2C       0x77
-+#define BC_VER_H_BYTE_FOR_EKTH5312cx2_I2C       0x78
-+#define BC_VER_H_BYTE_FOR_EKTH5312x1_I2C_USB    0x67
-+#define BC_VER_H_BYTE_FOR_EKTH5312x2_I2C_USB    0x68
-+#define BC_VER_H_BYTE_FOR_EKTH5312cx1_I2C_USB   0x74
-+#define BC_VER_H_BYTE_FOR_EKTH5312cx2_I2C_USB   0x75
-+
- enum elants_chip_id {
- 	EKTH3500,
- 	EKTF3624,
-@@ -736,6 +749,37 @@ static int elants_i2c_validate_remark_id
- 	return 0;
- }
- 
-+static bool elants_i2c_should_check_remark_id(struct elants_data *ts)
-+{
-+	struct i2c_client *client = ts->client;
-+	const u8 bootcode_version = ts->iap_version;
-+	bool check;
-+
-+	/* I2C eKTH3900 and eKTH5312 are NOT support Remark ID */
-+	if ((bootcode_version == BC_VER_H_BYTE_FOR_EKTH3900x1_I2C) ||
-+	    (bootcode_version == BC_VER_H_BYTE_FOR_EKTH3900x2_I2C) ||
-+	    (bootcode_version == BC_VER_H_BYTE_FOR_EKTH3900x3_I2C) ||
-+	    (bootcode_version == BC_VER_H_BYTE_FOR_EKTH5312x1_I2C) ||
-+	    (bootcode_version == BC_VER_H_BYTE_FOR_EKTH5312x2_I2C) ||
-+	    (bootcode_version == BC_VER_H_BYTE_FOR_EKTH5312cx1_I2C) ||
-+	    (bootcode_version == BC_VER_H_BYTE_FOR_EKTH5312cx2_I2C) ||
-+	    (bootcode_version == BC_VER_H_BYTE_FOR_EKTH5312x1_I2C_USB) ||
-+	    (bootcode_version == BC_VER_H_BYTE_FOR_EKTH5312x2_I2C_USB) ||
-+	    (bootcode_version == BC_VER_H_BYTE_FOR_EKTH5312cx1_I2C_USB) ||
-+	    (bootcode_version == BC_VER_H_BYTE_FOR_EKTH5312cx2_I2C_USB)) {
-+		dev_dbg(&client->dev,
-+			"eKTH3900/eKTH5312(0x%02x) are not support remark id\n",
-+			bootcode_version);
-+		check = false;
-+	} else if (bootcode_version >= 0x60) {
-+		check = true;
-+	} else {
-+		check = false;
-+	}
-+
-+	return check;
-+}
-+
- static int elants_i2c_do_update_firmware(struct i2c_client *client,
- 					 const struct firmware *fw,
- 					 bool force)
-@@ -749,7 +793,7 @@ static int elants_i2c_do_update_firmware
- 	u16 send_id;
- 	int page, n_fw_pages;
- 	int error;
--	bool check_remark_id = ts->iap_version >= 0x60;
-+	bool check_remark_id = elants_i2c_should_check_remark_id(ts);
- 
- 	/* Recovery mode detection! */
- 	if (force) {
 
 

@@ -2,279 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F1D4801BA
+	by mail.lfdr.de (Postfix) with ESMTP id 969074801BC
 	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 17:43:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbhL0Qni convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Dec 2021 11:43:38 -0500
-Received: from mail-qk1-f180.google.com ([209.85.222.180]:45654 "EHLO
-        mail-qk1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbhL0Qnh (ORCPT
+        id S229921AbhL0Qnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 11:43:41 -0500
+Received: from mail-qk1-f170.google.com ([209.85.222.170]:45649 "EHLO
+        mail-qk1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229899AbhL0Qnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 11:43:37 -0500
-Received: by mail-qk1-f180.google.com with SMTP id e25so9156508qkl.12
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 08:43:37 -0800 (PST)
+        Mon, 27 Dec 2021 11:43:40 -0500
+Received: by mail-qk1-f170.google.com with SMTP id e25so9156606qkl.12;
+        Mon, 27 Dec 2021 08:43:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Z618xW/xNjD1hkdspuzNH0zcUq1DRVeBeuFzHi6A8hc=;
-        b=Ou+S9uaV+WHQGfl+dFkwiU76/PSaD0kGw6mNZI3IiE2NspAJtWvCFd9LgxIaWY+DR5
-         1mdqR0N66NahRDOPxXnIe97kDCUGmRpJX4TAQUQnQxWb7+IJc3YRSuqiN3eXfFNV0oBJ
-         6k7mE+Ek/aEKtRtRhs4kkuAi+VeN9GRGW1KA0KO2ElMJSHAMuinkWNCEU3vJfW2mWIkn
-         2y+qCMcx/ghGqjeAYa88pgq/GzoVUDBwQnWK+gUtHPxbZSQ9IxE5ZUXJtS6xVraZwxQT
-         nbLylnWzZqWxmaW9WxY8Vm+SFTTO8/wGUhjvBPpYw3FzORutkRKOUxNc3fnsjgw6cU0+
-         M1cw==
-X-Gm-Message-State: AOAM531D9GIBdsyFDah9QTtfS5u7SfYip8WAyflbYALr/+2e/hL7mZMZ
-        YS4VjBk2lR32+nP6n54z7tYUVIb5ELN5+2Oi14U=
-X-Google-Smtp-Source: ABdhPJy01akyIYq4QxSP5auwlXKGjnjo+Ywuusisbe+VJa91yM8VQ7cXa1u7CJeAOc4lGLV4SrEuORDpxOPvNN1x0Sk=
-X-Received: by 2002:a05:620a:40d1:: with SMTP id g17mr12868994qko.621.1640623416725;
- Mon, 27 Dec 2021 08:43:36 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jMdv9xd9PoSHjcMmTulIP1O3UGaGGGFNdoHfOX3Pq64=;
+        b=NxPSbLCqxoqXk1GNe5oPI57GbJbl12NXr6VEqhF+udFe2GN5J7Tlee3cJLIQEfYPpl
+         58OVhd35Y32cZOeRTufFc8pa9cm7IcsOYYA6FzbqzaYnwlPBsRr3z+nXR8r/H+Y+KU8x
+         vMvTfViollPXprSlOdNWg2wXd1rIbStuMOKTYfSLZvTe9eUrTp+4ceLO2XwvX4yijVDm
+         re0blqpER24wfI3synqy9h5JCILPWbqjs08owoR6+k1SUckv48+uAeyJOWDHSneHIDs7
+         TfRJN2ZQkN3W2C//cRLiH22Xt24YgwY/V1pfWoxLMOy6HdBQCsIK8xvMuMGYORTO2XnQ
+         3tDw==
+X-Gm-Message-State: AOAM531OmHrcrgglCw0ok73P1Imq7/VtwbQZIAJVJ/qY/CyG9/aG7Jpz
+        sYLVYrZEg5gL15cRLNJUOw==
+X-Google-Smtp-Source: ABdhPJxMQh8LnbwbTtqBVlk0XLUYP7bjASwZRhN7o9JN5O3G0NMtglZO6GHrRdEklfXZke5t26TDqg==
+X-Received: by 2002:a05:620a:b47:: with SMTP id x7mr12386678qkg.749.1640623419748;
+        Mon, 27 Dec 2021 08:43:39 -0800 (PST)
+Received: from robh.at.kernel.org ([24.55.105.145])
+        by smtp.gmail.com with ESMTPSA id d17sm13373495qtx.96.2021.12.27.08.43.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Dec 2021 08:43:38 -0800 (PST)
+Received: (nullmailer pid 631653 invoked by uid 1000);
+        Mon, 27 Dec 2021 16:43:37 -0000
+Date:   Mon, 27 Dec 2021 12:43:37 -0400
+From:   Rob Herring <robh@kernel.org>
+To:     Tony Huang <tonyhuang.sunplus@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, tony.huang@sunplus.com,
+        wells.lu@sunplus.com
+Subject: Re: [PATCH v5 1/2] dt-binding: misc: Add iop yaml file for Sunplus
+ SP7021
+Message-ID: <YcntOas63oWyZ1sq@robh.at.kernel.org>
+References: <cover.1640332430.git.tonyhuang.sunplus@gmail.com>
+ <edc63b968d7903cc6e96151c7e51cd6446835b70.1640332430.git.tonyhuang.sunplus@gmail.com>
 MIME-Version: 1.0
-References: <20211227163924.3970661-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20211227163924.3970661-1-gregkh@linuxfoundation.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Dec 2021 17:43:25 +0100
-Message-ID: <CAJZ5v0gq1YtjUW9geiokSU16Td99kPykM8FgBVt5SH47ExUQfQ@mail.gmail.com>
-Subject: Re: [PATCH] kobject: remove kset from struct kset_uevent_ops callbacks
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <edc63b968d7903cc6e96151c7e51cd6446835b70.1640332430.git.tonyhuang.sunplus@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 5:39 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> There is no need to pass the pointer to the kset in the struct
-> kset_uevent_ops callbacks as no one uses it, so just remove that pointer
-> entirely.
->
-> Cc: Rafael J. Wysocki <rafael@kernel.org>
-> Cc: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
+On Fri, Dec 24, 2021 at 04:35:55PM +0800, Tony Huang wrote:
+> Add iop yaml file for Sunplus SP7021
+> 
+> Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
 > ---
->  Documentation/core-api/kobject.rst                    |  7 +++----
->  Documentation/translations/zh_CN/core-api/kobject.rst |  7 +++----
->  drivers/base/bus.c                                    |  2 +-
->  drivers/base/core.c                                   | 11 +++++------
->  drivers/dma-buf/dma-buf-sysfs-stats.c                 |  2 +-
->  fs/dlm/lockspace.c                                    |  3 +--
->  fs/gfs2/sys.c                                         |  3 +--
->  include/linux/kobject.h                               |  7 +++----
->  kernel/params.c                                       |  2 +-
->  lib/kobject_uevent.c                                  |  6 +++---
->  10 files changed, 22 insertions(+), 28 deletions(-)
->
-> diff --git a/Documentation/core-api/kobject.rst b/Documentation/core-api/kobject.rst
-> index d3b5bf9f643a..3d6e3107315d 100644
-> --- a/Documentation/core-api/kobject.rst
-> +++ b/Documentation/core-api/kobject.rst
-> @@ -373,10 +373,9 @@ If a kset wishes to control the uevent operations of the kobjects
->  associated with it, it can use the struct kset_uevent_ops to handle it::
->
->    struct kset_uevent_ops {
-> -          int (* const filter)(struct kset *kset, struct kobject *kobj);
-> -          const char *(* const name)(struct kset *kset, struct kobject *kobj);
-> -          int (* const uevent)(struct kset *kset, struct kobject *kobj,
-> -                        struct kobj_uevent_env *env);
-> +          int (* const filter)(struct kobject *kobj);
-> +          const char *(* const name)(struct kobject *kobj);
-> +          int (* const uevent)(struct kobject *kobj, struct kobj_uevent_env *env);
->    };
->
->
-> diff --git a/Documentation/translations/zh_CN/core-api/kobject.rst b/Documentation/translations/zh_CN/core-api/kobject.rst
-> index b7c37794cc7f..95634083dca0 100644
-> --- a/Documentation/translations/zh_CN/core-api/kobject.rst
-> +++ b/Documentation/translations/zh_CN/core-api/kobject.rst
-> @@ -325,10 +325,9 @@ ksets
->  结构体kset_uevent_ops来处理它::
->
->    struct kset_uevent_ops {
-> -          int (* const filter)(struct kset *kset, struct kobject *kobj);
-> -          const char *(* const name)(struct kset *kset, struct kobject *kobj);
-> -          int (* const uevent)(struct kset *kset, struct kobject *kobj,
-> -                        struct kobj_uevent_env *env);
-> +          int (* const filter)(struct kobject *kobj);
-> +          const char *(* const name)(struct kobject *kobj);
-> +          int (* const uevent)(struct kobject *kobj, struct kobj_uevent_env *env);
->    };
->
->
-> diff --git a/drivers/base/bus.c b/drivers/base/bus.c
-> index a64454f5f8c0..97936ec49bde 100644
-> --- a/drivers/base/bus.c
-> +++ b/drivers/base/bus.c
-> @@ -163,7 +163,7 @@ static struct kobj_type bus_ktype = {
->         .release        = bus_release,
->  };
->
-> -static int bus_uevent_filter(struct kset *kset, struct kobject *kobj)
-> +static int bus_uevent_filter(struct kobject *kobj)
->  {
->         const struct kobj_type *ktype = get_ktype(kobj);
->
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index d712ea11066b..60d703ebd123 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -2261,7 +2261,7 @@ static struct kobj_type device_ktype = {
->  };
->
->
-> -static int dev_uevent_filter(struct kset *kset, struct kobject *kobj)
-> +static int dev_uevent_filter(struct kobject *kobj)
->  {
->         const struct kobj_type *ktype = get_ktype(kobj);
->
-> @@ -2275,7 +2275,7 @@ static int dev_uevent_filter(struct kset *kset, struct kobject *kobj)
->         return 0;
->  }
->
-> -static const char *dev_uevent_name(struct kset *kset, struct kobject *kobj)
-> +static const char *dev_uevent_name(struct kobject *kobj)
->  {
->         struct device *dev = kobj_to_dev(kobj);
->
-> @@ -2286,8 +2286,7 @@ static const char *dev_uevent_name(struct kset *kset, struct kobject *kobj)
->         return NULL;
->  }
->
-> -static int dev_uevent(struct kset *kset, struct kobject *kobj,
-> -                     struct kobj_uevent_env *env)
-> +static int dev_uevent(struct kobject *kobj, struct kobj_uevent_env *env)
->  {
->         struct device *dev = kobj_to_dev(kobj);
->         int retval = 0;
-> @@ -2382,7 +2381,7 @@ static ssize_t uevent_show(struct device *dev, struct device_attribute *attr,
->
->         /* respect filter */
->         if (kset->uevent_ops && kset->uevent_ops->filter)
-> -               if (!kset->uevent_ops->filter(kset, &dev->kobj))
-> +               if (!kset->uevent_ops->filter(&dev->kobj))
->                         goto out;
->
->         env = kzalloc(sizeof(struct kobj_uevent_env), GFP_KERNEL);
-> @@ -2390,7 +2389,7 @@ static ssize_t uevent_show(struct device *dev, struct device_attribute *attr,
->                 return -ENOMEM;
->
->         /* let the kset specific function add its keys */
-> -       retval = kset->uevent_ops->uevent(kset, &dev->kobj, env);
-> +       retval = kset->uevent_ops->uevent(&dev->kobj, env);
->         if (retval)
->                 goto out;
->
-> diff --git a/drivers/dma-buf/dma-buf-sysfs-stats.c b/drivers/dma-buf/dma-buf-sysfs-stats.c
-> index 053baadcada9..2bba0babcb62 100644
-> --- a/drivers/dma-buf/dma-buf-sysfs-stats.c
-> +++ b/drivers/dma-buf/dma-buf-sysfs-stats.c
-> @@ -132,7 +132,7 @@ void dma_buf_stats_teardown(struct dma_buf *dmabuf)
->
->
->  /* Statistics files do not need to send uevents. */
-> -static int dmabuf_sysfs_uevent_filter(struct kset *kset, struct kobject *kobj)
-> +static int dmabuf_sysfs_uevent_filter(struct kobject *kobj)
->  {
->         return 0;
->  }
-> diff --git a/fs/dlm/lockspace.c b/fs/dlm/lockspace.c
-> index 10eddfa6c3d7..0bbb346cb892 100644
-> --- a/fs/dlm/lockspace.c
-> +++ b/fs/dlm/lockspace.c
-> @@ -216,8 +216,7 @@ static int do_uevent(struct dlm_ls *ls, int in)
->         return ls->ls_uevent_result;
->  }
->
-> -static int dlm_uevent(struct kset *kset, struct kobject *kobj,
-> -                     struct kobj_uevent_env *env)
-> +static int dlm_uevent(struct kobject *kobj, struct kobj_uevent_env *env)
->  {
->         struct dlm_ls *ls = container_of(kobj, struct dlm_ls, ls_kobj);
->
-> diff --git a/fs/gfs2/sys.c b/fs/gfs2/sys.c
-> index c0a34d9ddee4..a6002b2d146d 100644
-> --- a/fs/gfs2/sys.c
-> +++ b/fs/gfs2/sys.c
-> @@ -767,8 +767,7 @@ void gfs2_sys_fs_del(struct gfs2_sbd *sdp)
->         wait_for_completion(&sdp->sd_kobj_unregister);
->  }
->
-> -static int gfs2_uevent(struct kset *kset, struct kobject *kobj,
-> -                      struct kobj_uevent_env *env)
-> +static int gfs2_uevent(struct kobject *kobj, struct kobj_uevent_env *env)
->  {
->         struct gfs2_sbd *sdp = container_of(kobj, struct gfs2_sbd, sd_kobj);
->         struct super_block *s = sdp->sd_vfs;
-> diff --git a/include/linux/kobject.h b/include/linux/kobject.h
-> index 683172b2e094..ad90b49824dc 100644
-> --- a/include/linux/kobject.h
-> +++ b/include/linux/kobject.h
-> @@ -153,10 +153,9 @@ struct kobj_uevent_env {
->  };
->
->  struct kset_uevent_ops {
-> -       int (* const filter)(struct kset *kset, struct kobject *kobj);
-> -       const char *(* const name)(struct kset *kset, struct kobject *kobj);
-> -       int (* const uevent)(struct kset *kset, struct kobject *kobj,
-> -                     struct kobj_uevent_env *env);
-> +       int (* const filter)(struct kobject *kobj);
-> +       const char *(* const name)(struct kobject *kobj);
-> +       int (* const uevent)(struct kobject *kobj, struct kobj_uevent_env *env);
->  };
->
->  struct kobj_attribute {
-> diff --git a/kernel/params.c b/kernel/params.c
-> index 9b90e3c4d3c0..5b92310425c5 100644
-> --- a/kernel/params.c
-> +++ b/kernel/params.c
-> @@ -926,7 +926,7 @@ static const struct sysfs_ops module_sysfs_ops = {
->         .store = module_attr_store,
->  };
->
-> -static int uevent_filter(struct kset *kset, struct kobject *kobj)
-> +static int uevent_filter(struct kobject *kobj)
->  {
->         const struct kobj_type *ktype = get_ktype(kobj);
->
-> diff --git a/lib/kobject_uevent.c b/lib/kobject_uevent.c
-> index c87d5b6a8a55..7c44b7ae4c5c 100644
-> --- a/lib/kobject_uevent.c
-> +++ b/lib/kobject_uevent.c
-> @@ -501,7 +501,7 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
->         }
->         /* skip the event, if the filter returns zero. */
->         if (uevent_ops && uevent_ops->filter)
-> -               if (!uevent_ops->filter(kset, kobj)) {
-> +               if (!uevent_ops->filter(kobj)) {
->                         pr_debug("kobject: '%s' (%p): %s: filter function "
->                                  "caused the event to drop!\n",
->                                  kobject_name(kobj), kobj, __func__);
-> @@ -510,7 +510,7 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
->
->         /* originating subsystem */
->         if (uevent_ops && uevent_ops->name)
-> -               subsystem = uevent_ops->name(kset, kobj);
-> +               subsystem = uevent_ops->name(kobj);
->         else
->                 subsystem = kobject_name(&kset->kobj);
->         if (!subsystem) {
-> @@ -554,7 +554,7 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
->
->         /* let the kset specific function add its stuff */
->         if (uevent_ops && uevent_ops->uevent) {
-> -               retval = uevent_ops->uevent(kset, kobj, env);
-> +               retval = uevent_ops->uevent(kobj, env);
->                 if (retval) {
->                         pr_debug("kobject: '%s' (%p): %s: uevent() returned "
->                                  "%d\n", kobject_name(kobj), kobj,
-> --
-> 2.34.1
->
+> Changes in v5:
+> -Add iop-wakeup pin for 8051 to wake up the Linux kernel in shutdown mode.
+> 
+>  .../devicetree/bindings/misc/sunplus-iop.yaml      | 72 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  5 ++
+>  2 files changed, 77 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/misc/sunplus-iop.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/misc/sunplus-iop.yaml b/Documentation/devicetree/bindings/misc/sunplus-iop.yaml
+> new file mode 100644
+> index 0000000..fad0f50
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/misc/sunplus-iop.yaml
+> @@ -0,0 +1,72 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) Sunplus Ltd. Co. 2021
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/misc/sunplus-iop.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sunplus IOP(8051) controller
+> +
+> +maintainers:
+> +  - Tony Huang <tonyhuang.sunplus@gmail.com>
+> +
+> +description: |
+> +  Processor for I/O control, RTC wake-up procedure management,
+> +  and cooperation with CPU&PMC in power management.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - sunplus,sp7021-iop
+> +
+> +  reg:
+> +    items:
+> +      - description: IOP registers regions
+> +      - description: PMC registers regions
+> +      - description: MOON0 registers regions
+> +
+> +  reg-names:
+> +    items:
+> +      - const: iop
+> +      - const: iop_pmc
+> +      - const: moon0
+> +
+> +  interrupts:
+> +    items:
+> +      - description: IOP_INT0. IOP to system Interrupt 0.
+> +                     Sent by IOP to system RISC.
+> +      - description: IOP_INT1. IOP to System Interrupt 1.
+> +                     Sent by IOP to system RISC.
+> +
+> +  memory-region:
+> +    maxItems: 1
+> +
+> +  iop-wakeup:
+> +    description: Notify 8051 to wake up the Linux kernel.
+
+What does that mean? What's the type? Does the standard 'wakeup-source' 
+property not work here?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - interrupts
+> +  - memory-region
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    iop: iop@9c000400 {
+> +        compatible = "sunplus,sp7021-iop";
+> +        reg = <0x9c000400 0x80>, <0x9c003100 0x80>, <0x9c000000 0x80>;
+> +        reg-names = "iop", "iop_pmc", "moon0";
+> +        interrupt-parent = <&intc>;
+> +        interrupts = <41 IRQ_TYPE_LEVEL_HIGH>, <42 IRQ_TYPE_LEVEL_HIGH>;
+> +        memory-region = <&iop_reserve>;
+> +        pinctrl-names = "default";
+> +        pinctrl-0 = <&iop_pins>;
+> +        iop-wakeup = <&pctl 1 GPIO_ACTIVE_HIGH>;
+
+That's not how the GPIO binding works.
+
+> +    };
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 3b79fd4..071b5e6 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17945,6 +17945,11 @@ L:	netdev@vger.kernel.org
+>  S:	Maintained
+>  F:	drivers/net/ethernet/dlink/sundance.c
+>  
+> +SUNPLUS IOP DRIVER
+> +M:	Tony Huang <tonyhuang.sunplus@gmail.com>
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/misc/sunplu-iop.yaml
+> +
+>  SUPERH
+>  M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+>  M:	Rich Felker <dalias@libc.org>
+> -- 
+> 2.7.4
+> 
+> 

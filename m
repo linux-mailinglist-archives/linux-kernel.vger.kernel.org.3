@@ -2,106 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C50CF480371
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 19:35:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C3348036D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 19:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbhL0SfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 13:35:04 -0500
-Received: from mga06.intel.com ([134.134.136.31]:24128 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229652AbhL0SfC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 13:35:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640630102; x=1672166102;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=y8OxMzk4LmZIvd9hWJt6fgsujXh98jLKyXLBMPu5pD0=;
-  b=YeUkk1+5JFIXFWkCYQVWynwUBIa4NLuUavxnn2KULuahYWO/Eckq6Fox
-   qB2xbUMXe3UdDQ9UwlMX6pZKRxbR+g4NUQxlSyzlS+u0tL1AnzEKNxM6z
-   X3aJgZ+9Pe1NXZ3pVjZhi7I44IR7KxFaqLUMqLBPmG7yS+Tk07MUPMeRM
-   JH+lA03hk/Z20Tsvqn9yo1JO8kEY4f6R6glywGzHA1PTGUGjdGXDg0yGE
-   fB+SAmuBGkQ9kdf8Ftig49NSzgPliKFi4x8/EDhMtXlGrA1JBtjVJZfYm
-   6cbf+hH+KabKFy0RP2tlnXMjz0GUuwkTBlDGg4+f+BkbP8TVHETLAKvRA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="302010952"
-X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
-   d="scan'208";a="302010952"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 10:35:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
-   d="scan'208";a="615417656"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga002.fm.intel.com with ESMTP; 27 Dec 2021 10:34:53 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BRIYpRQ004547;
-        Mon, 27 Dec 2021 18:34:51 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v9 00/15] Function Granular KASLR
-Date:   Mon, 27 Dec 2021 19:33:18 +0100
-Message-Id: <20211227183318.1447690-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <YcVq1pMHWvPFHH5g@infradead.org>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <YcVq1pMHWvPFHH5g@infradead.org>
+        id S230136AbhL0Sdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 13:33:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229914AbhL0Sdv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 13:33:51 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB71C061401
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 10:33:50 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id j3-20020a056830014300b0058f4f1ef3c2so17641772otp.13
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 10:33:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/ZPLneOgWxjVFWk6RqPAOGbtxrpi2B383af81OM9nLo=;
+        b=RYzqvVinREjuZKy26MOcu562md6FSDWkNifEyTHSlfRlOSW+YZQWp6ocrJkU+5L6UO
+         C3KKFrD6tNRm10043La7q1MPjC1Fh+6OD//554BZQxTuchlP+nztI03TvHhxl71qLXcl
+         vMGfTTGZ27q3vZipVQ2WNDcy9R8guMlHSXa7VzGu2HJNyjhgrI1RDBFYFlKhy8ALDwBM
+         i9SRI9GAisOAQ9kQMlZM9iK/cOKAhV0jvrPPZEtLo2RRT7N0bnx0xVQCSBpNXICaxZ6H
+         fl6MeZMiS51f6GNdwqG00e1NoibDtllKGLB+EXV0DovGY58keI/KuYeYTb+NRYvU15t4
+         L5NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/ZPLneOgWxjVFWk6RqPAOGbtxrpi2B383af81OM9nLo=;
+        b=Yc6RM62PdHqMqMOM2+Kw+uthO8b9abAZvHT64HUWY1u9R+0QxFavfmQ4OoQ3101GKk
+         T5+yvefowyx16xxwIdmDLu/Aetm8BLnorz6g/jkRMVB5nkM4VDa7Bie/oBR2AzX2pmhs
+         QAjYQehzZdQPuYrkIh/CG5AgyrgKWt495BYpokCJe2n9ajxQWlkT3if2Yrst0brzR6H+
+         Y67AxhPCuojNRYPh+aV2agDhHnJ6n+kU7cZhIXcftPZXkg5/YCcDXDFqXQTR2EBskmgk
+         vvf69JQmuwc8uUTyXrDCT58WgyRHenrfUOIK96FPEOH6Uist/6ejX27Ref5PlwgRSjC5
+         uNzw==
+X-Gm-Message-State: AOAM533syfBT8F0vOLnEnqapNgxHYdnTBwpHJWfbH5XFv35zujeXZ762
+        Ya3pFDFJI/9VZ1OthHUlCjCUhvhG5lm/KwaB/F/MuQ==
+X-Google-Smtp-Source: ABdhPJy/ONpip27iGSTlu2tXnpVqVrh2Czqg+M0eFyEx+CHyq8coylSbUJjwzVNmOf03K97F2ID1GXvpAYpp0Kxevq8=
+X-Received: by 2002:a05:6830:4a9:: with SMTP id l9mr10308821otd.75.1640630029610;
+ Mon, 27 Dec 2021 10:33:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211222133428.59977-1-likexu@tencent.com>
+In-Reply-To: <20211222133428.59977-1-likexu@tencent.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Mon, 27 Dec 2021 10:33:38 -0800
+Message-ID: <CALMp9eRNsKMB6onhc-nhW-aMb14gK1PCtQ_CxOoyZ5RvLHfvEQ@mail.gmail.com>
+Subject: Re: [PATCH v2] KVM: X86: Emulate APERF/MPERF to report actual vCPU frequency
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Like Xu <likexu@tencent.com>,
+        Dongli Cao <caodongli@kingsoft.com>,
+        Li RongQing <lirongqing@baidu.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@infradead.org>
-Date: Thu, 23 Dec 2021 22:38:14 -0800
+On Wed, Dec 22, 2021 at 5:34 AM Like Xu <like.xu.linux@gmail.com> wrote:
+>
+> From: Like Xu <likexu@tencent.com>
+>
+> The aperf/mperf are used to report current CPU frequency after 7d5905dc14a.
+> But guest kernel always reports a fixed vCPU frequency in the /proc/cpuinfo,
+> which may confuse users especially when turbo is enabled on the host or
+> when the vCPU has a noisy high power consumption neighbour task.
+>
+> Most guests such as Linux will only read accesses to AMPERF msrs, where
+> we can passthrough registers to the vcpu as the fast-path (a performance win)
+> and once any write accesses are trapped, the emulation will be switched to
+> slow-path, which emulates guest APERF/MPERF values based on host values.
+> In emulation mode, the returned MPERF msr value will be scaled according
+> to the TSCRatio value.
+>
+> As a minimum effort, KVM exposes the AMPERF feature when the host TSC
+> has CONSTANT and NONSTOP features, to avoid the need for more code
+> to cover various coner cases coming from host power throttling transitions.
+>
+> The slow path code reveals an opportunity to refactor update_vcpu_amperf()
+> and get_host_amperf() to be more flexible and generic, to cover more
+> power-related msrs.
+>
+> Requested-by: Dongli Cao <caodongli@kingsoft.com>
+> Requested-by: Li RongQing <lirongqing@baidu.com>
+> Signed-off-by: Like Xu <likexu@tencent.com>
 
-> On Thu, Dec 23, 2021 at 01:21:54AM +0100, Alexander Lobakin wrote:
-> > This is a massive rework and a respin of Kristen Accardi's marvellous
-> > FG-KASLR series (v5).
-> 
-> Here would be the place to explain what this series actually does and
-> why it is marvellous.
-
-As I took this project over from another developer/team, I decided
-to preserve the original cover letter and append it to the end of
-mine, as well as to keep most of the original code in the separate
-commits from mine.
-For sure I could redo this if needed, is it really so?
-
-Thanks,
-Al
+I am not sure that it is necessary for kvm to get involved in the
+virtualization of APERF and MPERF at all, and I am highly skeptical of
+the need for passing through the hardware MSRs to a guest. Due to
+concerns over potential side-channel exploits a la Platypus
+(https://platypusattack.com/), we are planning to provide only low
+fidelity APERF/MPERF virtualization from userspace, using the
+userspace MSR exiting mechanism. Of course, we should be able to do
+that whether or not this change goes in, but I was wondering if you
+could provide some more details regarding your use case(s).

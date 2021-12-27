@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61BC847FF2F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C750347FEFA
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238619AbhL0Pf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:35:59 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35860 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbhL0Pfd (ORCPT
+        id S238186AbhL0PeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:34:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238071AbhL0Pdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:35:33 -0500
+        Mon, 27 Dec 2021 10:33:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48DFC06175B;
+        Mon, 27 Dec 2021 07:33:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4066161113;
-        Mon, 27 Dec 2021 15:35:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21DFAC36AEA;
-        Mon, 27 Dec 2021 15:35:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85EC76104C;
+        Mon, 27 Dec 2021 15:33:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AEE6C36AE7;
+        Mon, 27 Dec 2021 15:33:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619332;
-        bh=LD3VFktw92lT0Tpu4re+2GY/O4oQpkGgBRd2ZhLcbBo=;
+        s=korg; t=1640619216;
+        bh=JRLEknULjTL2TIusauV1Ss/yCzoJcLXfpCqo9qBgZac=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ueQqQ2VFdyCCZSqVmsZu5RqfKjpjWNAYTKWIbzKS71w8NT7uG1flH1dV6hs6IrKyF
-         pbysUdP8CMA2CbhazTZPYeZAR2AFV1wYdef0p/5vwqGRwYR3GGJEyhLrN0PPn6Smzo
-         eb3OEVZMn3zcggPZaHbBaokRO5pQQ4GlYLx6ZEck=
+        b=U7Od4yLl0DabNr7NfRNFy9xG2nlxSOufaXMqJq7iiicDWFmc/abg071zxlaWvIhB6
+         wXhN7hyK+u2SRCxj2OXF9JWQJb/1eEYDqIyWbaGtSVcCzkNWVPpdgQ/lSX3b8jd3EE
+         i2qclPSqzP0lNkWfM1QzPmQw9gKBvozqzMIzMfT0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [PATCH 5.4 34/47] ARM: 9169/1: entry: fix Thumb2 bug in iWMMXt exception handling
+        stable@vger.kernel.org,
+        =?UTF-8?q?Samuel=20=C4=8Cavoj?= <samuel@cavoj.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH 4.19 33/38] Input: i8042 - enable deferred probe quirk for ASUS UM325UA
 Date:   Mon, 27 Dec 2021 16:31:10 +0100
-Message-Id: <20211227151321.968276848@linuxfoundation.org>
+Message-Id: <20211227151320.486601011@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
-References: <20211227151320.801714429@linuxfoundation.org>
+In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
+References: <20211227151319.379265346@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,51 +49,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ard Biesheuvel <ardb@kernel.org>
+From: Samuel Čavoj <samuel@cavoj.net>
 
-commit 8536a5ef886005bc443c2da9b842d69fd3d7647f upstream.
+commit 44ee250aeeabb28b52a10397ac17ffb8bfe94839 upstream.
 
-The Thumb2 version of the FP exception handling entry code treats the
-register holding the CP number (R8) differently, resulting in the iWMMXT
-CP number check to be incorrect.
+The ASUS UM325UA suffers from the same issue as the ASUS UX425UA, which
+is a very similar laptop. The i8042 device is not usable immediately
+after boot and fails to initialize, requiring a deferred retry.
 
-Fix this by unifying the ARM and Thumb2 code paths, and switch the
-order of the additions of the TI_USED_CP offset and the shifted CP
-index.
+Enable the deferred probe quirk for the UM325UA.
 
-Cc: <stable@vger.kernel.org>
-Fixes: b86040a59feb ("Thumb-2: Implementation of the unified start-up and exceptions code")
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+BugLink: https://bugzilla.suse.com/show_bug.cgi?id=1190256
+Signed-off-by: Samuel Čavoj <samuel@cavoj.net>
+Link: https://lore.kernel.org/r/20211204015615.232948-1-samuel@cavoj.net
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/kernel/entry-armv.S |    8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/input/serio/i8042-x86ia64io.h |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/arch/arm/kernel/entry-armv.S
-+++ b/arch/arm/kernel/entry-armv.S
-@@ -596,11 +596,9 @@ call_fpe:
- 	tstne	r0, #0x04000000			@ bit 26 set on both ARM and Thumb-2
- 	reteq	lr
- 	and	r8, r0, #0x00000f00		@ mask out CP number
-- THUMB(	lsr	r8, r8, #8		)
- 	mov	r7, #1
--	add	r6, r10, #TI_USED_CP
-- ARM(	strb	r7, [r6, r8, lsr #8]	)	@ set appropriate used_cp[]
-- THUMB(	strb	r7, [r6, r8]		)	@ set appropriate used_cp[]
-+	add	r6, r10, r8, lsr #8		@ add used_cp[] array offset first
-+	strb	r7, [r6, #TI_USED_CP]		@ set appropriate used_cp[]
- #ifdef CONFIG_IWMMXT
- 	@ Test if we need to give access to iWMMXt coprocessors
- 	ldr	r5, [r10, #TI_FLAGS]
-@@ -609,7 +607,7 @@ call_fpe:
- 	bcs	iwmmxt_task_enable
- #endif
-  ARM(	add	pc, pc, r8, lsr #6	)
-- THUMB(	lsl	r8, r8, #2		)
-+ THUMB(	lsr	r8, r8, #6		)
-  THUMB(	add	pc, r8			)
- 	nop
+--- a/drivers/input/serio/i8042-x86ia64io.h
++++ b/drivers/input/serio/i8042-x86ia64io.h
+@@ -996,6 +996,13 @@ static const struct dmi_system_id __init
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "C504"),
+ 		},
+ 	},
++	{
++		/* ASUS ZenBook UM325UA */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
++		},
++	},
+ 	{ }
+ };
  
 
 

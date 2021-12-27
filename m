@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B3847FF05
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB904800A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238300AbhL0Pe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:34:28 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34766 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237983AbhL0Pdy (ORCPT
+        id S239046AbhL0Prr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:47:47 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45354 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240069AbhL0Pog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:33:54 -0500
+        Mon, 27 Dec 2021 10:44:36 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61F18610A2;
-        Mon, 27 Dec 2021 15:33:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46107C36AE7;
-        Mon, 27 Dec 2021 15:33:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84F74B810A3;
+        Mon, 27 Dec 2021 15:44:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBA8BC36AE7;
+        Mon, 27 Dec 2021 15:44:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619232;
-        bh=bUfs0Gedj1gdrIRjzY4iKOkNhyUcxve9C18EUAQv898=;
+        s=korg; t=1640619873;
+        bh=VIB4/gmxwIe7z+SckKN0JcsGrt9Nypt9uKJfKrj1j90=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qnt7dItiYbndVA9ipiakdZ/ug3UtH8/6prrNd6BZ2/5BRCVLjMQ/rCgP9e0MJkf1q
-         /+qms/726zGCCmOr+w06YIxqfLxK/fEwePjHuvbLv0DBD1ALs/itWKG3nQk2uZFMeg
-         pNWyUbP9aXRVAfk7lg4enpk1INmvyvQ+WAHYAZr8=
+        b=GPL0eqY9jwhzVY8TTEWvgI3OmTdBAjE746/BTYVFIkkncViAb7YDZLFreEeG6crrk
+         yoGLQKsDeBsaw/KsmBQGc2nFrpzpy0ScOmFS9gIOwhGPq8nyA0zLFcQGbHBas/tyTR
+         whvkP27PFpVRLeZ0jM9gdTHa7K3FhtgYUySz5pd4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+2dc91e7fc3dea88b1e8a@syzkaller.appspotmail.com,
-        =?UTF-8?q?R=C3=A9mi=20Denis-Courmont?= <remi@remlab.net>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 38/38] phonet/pep: refuse to enable an unbound pipe
+        stable@vger.kernel.org, Namjae Jeon <linkinjeon@kernel.org>,
+        Marcos Del Sol Vives <marcos@orca.pet>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH 5.15 100/128] ksmbd: disable SMB2_GLOBAL_CAP_ENCRYPTION for SMB 3.1.1
 Date:   Mon, 27 Dec 2021 16:31:15 +0100
-Message-Id: <20211227151320.658744769@linuxfoundation.org>
+Message-Id: <20211227151334.860662780@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
-References: <20211227151319.379265346@linuxfoundation.org>
+In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
+References: <20211227151331.502501367@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,36 +46,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rémi Denis-Courmont <remi@remlab.net>
+From: Marcos Del Sol Vives <marcos@orca.pet>
 
-commit 75a2f31520095600f650597c0ac41f48b5ba0068 upstream.
+commit 83912d6d55be10d65b5268d1871168b9ebe1ec4b upstream.
 
-This ioctl() implicitly assumed that the socket was already bound to
-a valid local socket name, i.e. Phonet object. If the socket was not
-bound, two separate problems would occur:
+According to the official Microsoft MS-SMB2 document section 3.3.5.4, this
+flag should be used only for 3.0 and 3.0.2 dialects. Setting it for 3.1.1
+is a violation of the specification.
 
-1) We'd send an pipe enablement request with an invalid source object.
-2) Later socket calls could BUG on the socket unexpectedly being
-   connected yet not bound to a valid object.
+This causes my Windows 10 client to detect an anomaly in the negotiation,
+and disable encryption entirely despite being explicitly enabled in ksmbd,
+causing all data transfers to go in plain text.
 
-Reported-by: syzbot+2dc91e7fc3dea88b1e8a@syzkaller.appspotmail.com
-Signed-off-by: Rémi Denis-Courmont <remi@remlab.net>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: e2f34481b24d ("cifsd: add server-side procedures for SMB3")
+Cc: stable@vger.kernel.org # v5.15
+Acked-by: Namjae Jeon <linkinjeon@kernel.org>
+Signed-off-by: Marcos Del Sol Vives <marcos@orca.pet>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/phonet/pep.c |    2 ++
- 1 file changed, 2 insertions(+)
+ fs/ksmbd/smb2ops.c |    3 ---
+ fs/ksmbd/smb2pdu.c |   25 +++++++++++++++++++++----
+ 2 files changed, 21 insertions(+), 7 deletions(-)
 
---- a/net/phonet/pep.c
-+++ b/net/phonet/pep.c
-@@ -959,6 +959,8 @@ static int pep_ioctl(struct sock *sk, in
- 			ret =  -EBUSY;
- 		else if (sk->sk_state == TCP_ESTABLISHED)
- 			ret = -EISCONN;
-+		else if (!pn->pn_sk.sobject)
-+			ret = -EADDRNOTAVAIL;
- 		else
- 			ret = pep_sock_enable(sk, NULL, 0);
- 		release_sock(sk);
+--- a/fs/ksmbd/smb2ops.c
++++ b/fs/ksmbd/smb2ops.c
+@@ -272,9 +272,6 @@ int init_smb3_11_server(struct ksmbd_con
+ 	if (server_conf.flags & KSMBD_GLOBAL_FLAG_SMB2_LEASES)
+ 		conn->vals->capabilities |= SMB2_GLOBAL_CAP_LEASING;
+ 
+-	if (conn->cipher_type)
+-		conn->vals->capabilities |= SMB2_GLOBAL_CAP_ENCRYPTION;
+-
+ 	if (server_conf.flags & KSMBD_GLOBAL_FLAG_SMB3_MULTICHANNEL)
+ 		conn->vals->capabilities |= SMB2_GLOBAL_CAP_MULTI_CHANNEL;
+ 
+--- a/fs/ksmbd/smb2pdu.c
++++ b/fs/ksmbd/smb2pdu.c
+@@ -917,6 +917,25 @@ static void decode_encrypt_ctxt(struct k
+ 	}
+ }
+ 
++/**
++ * smb3_encryption_negotiated() - checks if server and client agreed on enabling encryption
++ * @conn:	smb connection
++ *
++ * Return:	true if connection should be encrypted, else false
++ */
++static bool smb3_encryption_negotiated(struct ksmbd_conn *conn)
++{
++	if (!conn->ops->generate_encryptionkey)
++		return false;
++
++	/*
++	 * SMB 3.0 and 3.0.2 dialects use the SMB2_GLOBAL_CAP_ENCRYPTION flag.
++	 * SMB 3.1.1 uses the cipher_type field.
++	 */
++	return (conn->vals->capabilities & SMB2_GLOBAL_CAP_ENCRYPTION) ||
++	    conn->cipher_type;
++}
++
+ static void decode_compress_ctxt(struct ksmbd_conn *conn,
+ 				 struct smb2_compression_ctx *pneg_ctxt)
+ {
+@@ -1471,8 +1490,7 @@ static int ntlm_authenticate(struct ksmb
+ 		    (req->SecurityMode & SMB2_NEGOTIATE_SIGNING_REQUIRED))
+ 			sess->sign = true;
+ 
+-		if (conn->vals->capabilities & SMB2_GLOBAL_CAP_ENCRYPTION &&
+-		    conn->ops->generate_encryptionkey &&
++		if (smb3_encryption_negotiated(conn) &&
+ 		    !(req->Flags & SMB2_SESSION_REQ_FLAG_BINDING)) {
+ 			rc = conn->ops->generate_encryptionkey(sess);
+ 			if (rc) {
+@@ -1562,8 +1580,7 @@ static int krb5_authenticate(struct ksmb
+ 	    (req->SecurityMode & SMB2_NEGOTIATE_SIGNING_REQUIRED))
+ 		sess->sign = true;
+ 
+-	if ((conn->vals->capabilities & SMB2_GLOBAL_CAP_ENCRYPTION) &&
+-	    conn->ops->generate_encryptionkey) {
++	if (smb3_encryption_negotiated(conn)) {
+ 		retval = conn->ops->generate_encryptionkey(sess);
+ 		if (retval) {
+ 			ksmbd_debug(SMB,
 
 

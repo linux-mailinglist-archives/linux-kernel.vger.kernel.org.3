@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFB64800B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BC847FF2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233926AbhL0Psu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:48:50 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41434 "EHLO
+        id S238619AbhL0Pf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:35:59 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35860 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239123AbhL0PoU (ORCPT
+        with ESMTP id S229508AbhL0Pfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:44:20 -0500
+        Mon, 27 Dec 2021 10:35:33 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1D306104C;
-        Mon, 27 Dec 2021 15:44:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9265C36AEA;
-        Mon, 27 Dec 2021 15:44:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4066161113;
+        Mon, 27 Dec 2021 15:35:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21DFAC36AEA;
+        Mon, 27 Dec 2021 15:35:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619859;
-        bh=Ofu/XQQOyJ06tK50IojYHrS1Xvx009LPK949+6DFdFk=;
+        s=korg; t=1640619332;
+        bh=LD3VFktw92lT0Tpu4re+2GY/O4oQpkGgBRd2ZhLcbBo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=btMWth5musVjXHa7sh7IECVYQZbm722+AWAP6zsvBLSHxrOJdJO5jdE/xHQmvSXhr
-         MosSURY7gqxOUzb668UXqBfpM6trR0f8TT2DHNDdjhT4D7zjhHwEnRQTrxFwUYXq7S
-         iElGXtUCEWwPy63gDkdpTcwd1XjadLxZdMA9vyaw=
+        b=ueQqQ2VFdyCCZSqVmsZu5RqfKjpjWNAYTKWIbzKS71w8NT7uG1flH1dV6hs6IrKyF
+         pbysUdP8CMA2CbhazTZPYeZAR2AFV1wYdef0p/5vwqGRwYR3GGJEyhLrN0PPn6Smzo
+         eb3OEVZMn3zcggPZaHbBaokRO5pQQ4GlYLx6ZEck=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Cooper <alcooperx@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 5.15 095/128] mmc: core: Disable card detect during shutdown
+        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: [PATCH 5.4 34/47] ARM: 9169/1: entry: fix Thumb2 bug in iWMMXt exception handling
 Date:   Mon, 27 Dec 2021 16:31:10 +0100
-Message-Id: <20211227151334.695440073@linuxfoundation.org>
+Message-Id: <20211227151321.968276848@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
+References: <20211227151320.801714429@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,83 +45,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ulf Hansson <ulf.hansson@linaro.org>
+From: Ard Biesheuvel <ardb@kernel.org>
 
-commit 66c915d09b942fb3b2b0cb2f56562180901fba17 upstream.
+commit 8536a5ef886005bc443c2da9b842d69fd3d7647f upstream.
 
-It's seems prone to problems by allowing card detect and its corresponding
-mmc_rescan() work to run, during platform shutdown. For example, we may end
-up turning off the power while initializing a card, which potentially could
-damage it.
+The Thumb2 version of the FP exception handling entry code treats the
+register holding the CP number (R8) differently, resulting in the iWMMXT
+CP number check to be incorrect.
 
-To avoid this scenario, let's add ->shutdown_pre() callback for the mmc host
-class device and then turn of the card detect from there.
+Fix this by unifying the ARM and Thumb2 code paths, and switch the
+order of the additions of the TI_USED_CP offset and the shifted CP
+index.
 
-Reported-by: Al Cooper <alcooperx@gmail.com>
-Suggested-by: Adrian Hunter <adrian.hunter@intel.com>
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20211203141555.105351-1-ulf.hansson@linaro.org
+Cc: <stable@vger.kernel.org>
+Fixes: b86040a59feb ("Thumb-2: Implementation of the unified start-up and exceptions code")
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/core/core.c |    7 ++++++-
- drivers/mmc/core/core.h |    1 +
- drivers/mmc/core/host.c |    9 +++++++++
- 3 files changed, 16 insertions(+), 1 deletion(-)
+ arch/arm/kernel/entry-armv.S |    8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
---- a/drivers/mmc/core/core.c
-+++ b/drivers/mmc/core/core.c
-@@ -2264,7 +2264,7 @@ void mmc_start_host(struct mmc_host *hos
- 	_mmc_detect_change(host, 0, false);
- }
- 
--void mmc_stop_host(struct mmc_host *host)
-+void __mmc_stop_host(struct mmc_host *host)
- {
- 	if (host->slot.cd_irq >= 0) {
- 		mmc_gpio_set_cd_wake(host, false);
-@@ -2273,6 +2273,11 @@ void mmc_stop_host(struct mmc_host *host
- 
- 	host->rescan_disable = 1;
- 	cancel_delayed_work_sync(&host->detect);
-+}
-+
-+void mmc_stop_host(struct mmc_host *host)
-+{
-+	__mmc_stop_host(host);
- 
- 	/* clear pm flags now and let card drivers set them as needed */
- 	host->pm_flags = 0;
---- a/drivers/mmc/core/core.h
-+++ b/drivers/mmc/core/core.h
-@@ -70,6 +70,7 @@ static inline void mmc_delay(unsigned in
- 
- void mmc_rescan(struct work_struct *work);
- void mmc_start_host(struct mmc_host *host);
-+void __mmc_stop_host(struct mmc_host *host);
- void mmc_stop_host(struct mmc_host *host);
- 
- void _mmc_detect_change(struct mmc_host *host, unsigned long delay,
---- a/drivers/mmc/core/host.c
-+++ b/drivers/mmc/core/host.c
-@@ -80,9 +80,18 @@ static void mmc_host_classdev_release(st
- 	kfree(host);
- }
- 
-+static int mmc_host_classdev_shutdown(struct device *dev)
-+{
-+	struct mmc_host *host = cls_dev_to_mmc_host(dev);
-+
-+	__mmc_stop_host(host);
-+	return 0;
-+}
-+
- static struct class mmc_host_class = {
- 	.name		= "mmc_host",
- 	.dev_release	= mmc_host_classdev_release,
-+	.shutdown_pre	= mmc_host_classdev_shutdown,
- 	.pm		= MMC_HOST_CLASS_DEV_PM_OPS,
- };
+--- a/arch/arm/kernel/entry-armv.S
++++ b/arch/arm/kernel/entry-armv.S
+@@ -596,11 +596,9 @@ call_fpe:
+ 	tstne	r0, #0x04000000			@ bit 26 set on both ARM and Thumb-2
+ 	reteq	lr
+ 	and	r8, r0, #0x00000f00		@ mask out CP number
+- THUMB(	lsr	r8, r8, #8		)
+ 	mov	r7, #1
+-	add	r6, r10, #TI_USED_CP
+- ARM(	strb	r7, [r6, r8, lsr #8]	)	@ set appropriate used_cp[]
+- THUMB(	strb	r7, [r6, r8]		)	@ set appropriate used_cp[]
++	add	r6, r10, r8, lsr #8		@ add used_cp[] array offset first
++	strb	r7, [r6, #TI_USED_CP]		@ set appropriate used_cp[]
+ #ifdef CONFIG_IWMMXT
+ 	@ Test if we need to give access to iWMMXt coprocessors
+ 	ldr	r5, [r10, #TI_FLAGS]
+@@ -609,7 +607,7 @@ call_fpe:
+ 	bcs	iwmmxt_task_enable
+ #endif
+  ARM(	add	pc, pc, r8, lsr #6	)
+- THUMB(	lsl	r8, r8, #2		)
++ THUMB(	lsr	r8, r8, #6		)
+  THUMB(	add	pc, r8			)
+ 	nop
  
 
 

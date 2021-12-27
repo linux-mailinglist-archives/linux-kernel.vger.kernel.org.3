@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF90347FE56
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2F947FE5C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233134AbhL0P2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:28:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34214 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237488AbhL0P2D (ORCPT
+        id S237587AbhL0P2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:28:33 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59064 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237534AbhL0P2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:28:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AB3C061763;
-        Mon, 27 Dec 2021 07:28:03 -0800 (PST)
+        Mon, 27 Dec 2021 10:28:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 07BC0B810C5;
-        Mon, 27 Dec 2021 15:28:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B2A7C36AE7;
-        Mon, 27 Dec 2021 15:28:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 992D3610AB;
+        Mon, 27 Dec 2021 15:28:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BCDEC36AEE;
+        Mon, 27 Dec 2021 15:28:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640618880;
-        bh=hdeJkat0FxT8WtqRxftLDRJxVjnS3MQEf/hrPFEJfkk=;
+        s=korg; t=1640618892;
+        bh=z135L9I0iIlNN3VgVsVfHNspfHKgVItWm1MKAYRSiw8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PvyNQBjIXb2nY15O5W66M88O5HB1HaIqp6htf5Y+4o775VxrDCJxTc3tQW+s1YyY3
-         W4JAVkMBJIZq/jHm/+Ne3swoyZl+2TZjaw3z69dClYEryneQA41UqvQfENmEzSuDwM
-         3jl68AXuzWDtEh9JrToU/wL8mrE7qHAf4IT66xUA=
+        b=w2HTgts3qnvq8AjqpjJxi2NXF6Sv6c1YRrMJK1AeFoEIMc2mjAkZuDamv5WLzEofH
+         aWkHSXG5TIwjJgeAugfgiYGNkNuURK8E9cbfGnEIuPfOT4l59jc61bbIYaSEx9jlx3
+         b4YPFZve39VncTbj0fc8ZNvRudeUQruP8dzPcdGo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 07/17] drivers: net: smc911x: Check for error irq
-Date:   Mon, 27 Dec 2021 16:27:02 +0100
-Message-Id: <20211227151316.197140352@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Greg Jesionowski <jesionowskigreg@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.9 01/19] net: usb: lan78xx: add Allied Telesis AT29M2-AF
+Date:   Mon, 27 Dec 2021 16:27:03 +0100
+Message-Id: <20211227151316.605646435@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151315.962187770@linuxfoundation.org>
-References: <20211227151315.962187770@linuxfoundation.org>
+In-Reply-To: <20211227151316.558965545@linuxfoundation.org>
+References: <20211227151316.558965545@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -49,40 +48,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Greg Jesionowski <jesionowskigreg@gmail.com>
 
-[ Upstream commit cb93b3e11d405f20a405a07482d01147ef4934a3 ]
+commit ef8a0f6eab1ca5d1a75c242c5c7b9d386735fa0a upstream.
 
-Because platform_get_irq() could fail and return error irq.
-Therefore, it might be better to check it if order to avoid the use of
-error irq.
+This adds the vendor and product IDs for the AT29M2-AF which is a
+lan7801-based device.
 
-Fixes: ae150435b59e ("smsc: Move the SMC (SMSC) drivers")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Jesionowski <jesionowskigreg@gmail.com>
+Link: https://lore.kernel.org/r/20211214221027.305784-1-jesionowskigreg@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/smsc/smc911x.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/usb/lan78xx.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/net/ethernet/smsc/smc911x.c b/drivers/net/ethernet/smsc/smc911x.c
-index 0be9c74238fd4..092267d8a86df 100644
---- a/drivers/net/ethernet/smsc/smc911x.c
-+++ b/drivers/net/ethernet/smsc/smc911x.c
-@@ -2057,6 +2057,11 @@ static int smc911x_drv_probe(struct platform_device *pdev)
+--- a/drivers/net/usb/lan78xx.c
++++ b/drivers/net/usb/lan78xx.c
+@@ -67,6 +67,8 @@
+ #define LAN7850_USB_PRODUCT_ID		(0x7850)
+ #define LAN78XX_EEPROM_MAGIC		(0x78A5)
+ #define LAN78XX_OTP_MAGIC		(0x78F3)
++#define AT29M2AF_USB_VENDOR_ID		(0x07C9)
++#define AT29M2AF_USB_PRODUCT_ID	(0x0012)
  
- 	ndev->dma = (unsigned char)-1;
- 	ndev->irq = platform_get_irq(pdev, 0);
-+	if (ndev->irq < 0) {
-+		ret = ndev->irq;
-+		goto release_both;
-+	}
-+
- 	lp = netdev_priv(ndev);
- 	lp->netdev = ndev;
- #ifdef SMC_DYNAMIC_BUS_CONFIG
--- 
-2.34.1
-
+ #define	MII_READ			1
+ #define	MII_WRITE			0
+@@ -3756,6 +3758,10 @@ static const struct usb_device_id produc
+ 	/* LAN7850 USB Gigabit Ethernet Device */
+ 	USB_DEVICE(LAN78XX_USB_VENDOR_ID, LAN7850_USB_PRODUCT_ID),
+ 	},
++	{
++	/* ATM2-AF USB Gigabit Ethernet Device */
++	USB_DEVICE(AT29M2AF_USB_VENDOR_ID, AT29M2AF_USB_PRODUCT_ID),
++	},
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(usb, products);
 
 

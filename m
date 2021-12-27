@@ -2,84 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D869C48044E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 20:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C88480452
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 20:10:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233779AbhL0TIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 14:08:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232891AbhL0THP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 14:07:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7700AC0698DA;
-        Mon, 27 Dec 2021 11:07:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 379C1B81141;
-        Mon, 27 Dec 2021 19:07:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52801C36AEE;
-        Mon, 27 Dec 2021 19:06:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640632019;
-        bh=JSBB6I1iNycnOk23h6lCNT9O5YTlSrtEZ6D1iPq7PJI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XhUKo+Vpx2wJPpJqmBDMdylpKphBB063YLq4DvWB0fAmhk/hklH4UvXUHWesfwGNo
-         YA/qsg397U4HxPEi4fVW39DAQyHp5lC4hGfVJ/LT6sXGbuop47GXEfk7A5iZAcRDCI
-         zSOoWNZ1+JyRIZhZrmIt6dI2JllbGqrZvRy7QwNgqzVEcg2dIWGiM8B4/ssGwQOOGe
-         zeYLsASRrLl9fNRmUkgJj+tHndDVc3BigZOGxXLu2LzlYBAevOhY6/nH94oCezjCSp
-         2nFwvJpC42xY+xDcpIBzHcu2Fx3t3toEpbvl6j0cG3hTlgmqPdLHV+A9R1DAC7JHtH
-         DPFul2gCVAcgA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wang Qing <wangqing@vivo.com>, Hans de Goede <hdegoede@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, markgross@kernel.org,
-        platform-driver-x86@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 3/3] platform/x86: apple-gmux: use resource_size() with res
-Date:   Mon, 27 Dec 2021 14:06:53 -0500
-Message-Id: <20211227190653.1043578-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227190653.1043578-1-sashal@kernel.org>
-References: <20211227190653.1043578-1-sashal@kernel.org>
+        id S230492AbhL0TKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 14:10:36 -0500
+Received: from mga11.intel.com ([192.55.52.93]:58920 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230163AbhL0TKf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 14:10:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640632235; x=1672168235;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Ui8N0jnQ4cmJnKqL/NKx64hV7AbgzBhGCAfh/aWWWCc=;
+  b=IWh9AP9Jl6Dz4MTQ0i9lQeoEqyLUEccwiB1NNNL8wvdKLqgt0puHaA1J
+   xB+wABUii+x7PaQob0fHnLxpmY62xCaFhauJhpHoG+rrJfyT6hF2bgw3i
+   7ulB8k45Af4Z6NWQlyLqM/5RQW0QPsB9JD2VwJkqxbXQ/0CRix3dFQ8Rl
+   nDx5MMCij2ukMckSlvjrd9KCYraWKXUNz/H8Ajb4yoVGXUIn3/oXT4xPm
+   jK72QY0yEPfUeBWBjue3fpr45EA09U8QUPT1Z8i5ywbEDfGVoAACc1XQc
+   we0JBfEjoIGe9lZ/Avw2qSI1H+3KZYpvSdDul29iZM02zY/ZhFJiFkz8X
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="238799587"
+X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
+   d="scan'208";a="238799587"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 11:10:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
+   d="scan'208";a="618534593"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 27 Dec 2021 11:10:33 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n1vOD-0006iQ-2u; Mon, 27 Dec 2021 19:10:33 +0000
+Date:   Tue, 28 Dec 2021 03:09:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc:     kbuild-all@lists.01.org, zx2c4@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [crng-random:master 8/9] s390-linux-ld: blake2s.c:undefined
+ reference to `blake2s_compress'
+Message-ID: <202112280325.lfFyGqBk-lkp@intel.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Qing <wangqing@vivo.com>
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git master
+head:   1e82f9dc0ff8aec645cb0bcbd003c7989db05036
+commit: 94385fa60862094ce641b628c5fd7fd8307d6c39 [8/9] lib/crypto: blake2s: include as built-in
+config: s390-alldefconfig (https://download.01.org/0day-ci/archive/20211228/202112280325.lfFyGqBk-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=94385fa60862094ce641b628c5fd7fd8307d6c39
+        git remote add crng-random git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
+        git fetch --no-tags crng-random master
+        git checkout 94385fa60862094ce641b628c5fd7fd8307d6c39
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
 
-[ Upstream commit eb66fb03a727cde0ab9b1a3858de55c26f3007da ]
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This should be (res->end - res->start + 1) here actually,
-use resource_size() derectly.
+All errors (new ones prefixed by >>):
 
-Signed-off-by: Wang Qing <wangqing@vivo.com>
-Link: https://lore.kernel.org/r/1639484316-75873-1-git-send-email-wangqing@vivo.com
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+   s390-linux-ld: lib/crypto/blake2s.o: in function `blake2s_update':
+   blake2s.c:(.text+0x9c): undefined reference to `blake2s_compress'
+>> s390-linux-ld: blake2s.c:(.text+0xd8): undefined reference to `blake2s_compress'
+   s390-linux-ld: lib/crypto/blake2s.o: in function `blake2s_final':
+   blake2s.c:(.text+0x16e): undefined reference to `blake2s_compress'
+   s390-linux-ld: lib/crypto/blake2s.o: in function `blake2s256_hmac':
+   blake2s.c:(.text+0x282): undefined reference to `blake2s_compress'
+   s390-linux-ld: blake2s.c:(.text+0x388): undefined reference to `blake2s_compress'
+   s390-linux-ld: lib/crypto/blake2s.o:blake2s.c:(.text+0x45a): more undefined references to `blake2s_compress' follow
+
 ---
- drivers/platform/x86/apple-gmux.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/platform/x86/apple-gmux.c b/drivers/platform/x86/apple-gmux.c
-index 976efeb3f2ba3..a0f10ccdca3e4 100644
---- a/drivers/platform/x86/apple-gmux.c
-+++ b/drivers/platform/x86/apple-gmux.c
-@@ -461,7 +461,7 @@ static int gmux_probe(struct pnp_dev *pnp, const struct pnp_device_id *id)
- 	}
- 
- 	gmux_data->iostart = res->start;
--	gmux_data->iolen = res->end - res->start;
-+	gmux_data->iolen = resource_size(res);
- 
- 	if (gmux_data->iolen < GMUX_MIN_IO_LEN) {
- 		pr_err("gmux I/O region too small (%lu < %u)\n",
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

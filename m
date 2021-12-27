@@ -2,82 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E63147FAA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 07:49:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E4747FA9E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 07:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235391AbhL0Gtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 01:49:49 -0500
-Received: from mga01.intel.com ([192.55.52.88]:60364 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229490AbhL0Gtt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 01:49:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640587789; x=1672123789;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DdDGXc2F7CYN9wfJUMRNMmlJCgC3nyXppiE6EdDZFFg=;
-  b=LY2BQGbnizIOFI8gHKpAbCfe1J/1CsPUeahRsUIbHiomOqglLytpmV+S
-   KODwrnXe8Z4Wmdm7LDqn2au81S4aPq2MG3xg7zhI20U84TQmetGeopLt2
-   9fMMU9TPSoiL5KsKKrNOyFwSuQbzJFfHvWedj8dJci+bQnkRF7zrWibqF
-   bo+XixYexi6gUwmI9DEX8UzWfXRnccdkxFODRZHAF151sVCJeOsaHW6UM
-   UOs9uAHPmVxfXYz62l7fCZiSsfwnyRj1HT8giY5lG2FFpSqp94pmnZ3sE
-   3u62N3IhUBKCdbhl8CYOB/FckJhQyy75rQB1ZdSrXXmExqp3N9KXKIa4B
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="265391178"
-X-IronPort-AV: E=Sophos;i="5.88,238,1635231600"; 
-   d="scan'208";a="265391178"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 22:49:48 -0800
-X-IronPort-AV: E=Sophos;i="5.88,238,1635231600"; 
-   d="scan'208";a="469640732"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2021 22:48:41 -0800
-Received: by lahna (sSMTP sendmail emulation); Mon, 27 Dec 2021 08:48:32 +0200
-Date:   Mon, 27 Dec 2021 08:48:32 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
+        id S235383AbhL0GtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 01:49:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32848 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231339AbhL0GtB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 01:49:01 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B88C06173E;
+        Sun, 26 Dec 2021 22:49:01 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id j18so30592597wrd.2;
+        Sun, 26 Dec 2021 22:49:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=9GEBPEvt0VT6L7i9VkLzirlLtpJd9qg2rYhuZ+v5fko=;
+        b=PP49wWfNC2VIjP2+X5A+camYx6y1BopaDn8JtAlID9cJqsY0qSWvd2/udh9hKqRUrs
+         2OMAcc8icoQKZCGm08SJxYPuiLmbKOU5WJhmdThri5iCD9l3/VABOs7FbJHzfzjqP6tp
+         8DBw7rqixTlYCIzV+jMN3hqqLvVEuAbPxkgjEjYeyHDZqih9vmEnNxsixtjQVDRvguBl
+         B4ZnAbF5gVt49P7pRR5iomPLGFlPQ73MoxbhPfpULGKipeHE7hCopl2N/bRfbQHnMCQ2
+         dP/dsnimXy9SWpnd1wFR962TQXTVakzMNx+A49hm9H/zu+hD3t3/xTnDmG1u3kE7m4sc
+         OQ/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=9GEBPEvt0VT6L7i9VkLzirlLtpJd9qg2rYhuZ+v5fko=;
+        b=iE4BzsQaDi5YM+UQvkEf2UfH45tKvGkBplGGIMNJ9iBdwBEcSH427GUdYiiVjMSdCS
+         qZSZqUVd+qCT0CH4JADu1Rwlf9kz5k747iROpQX2DqKk3YJZfezpYi7wqhE7gxWFN8O5
+         KPuDnbRYd14TA/hG8w1yM2hVo0BunW11KjquE1uw96TUz6qRYz58vA9dcC9NFpF6s3T4
+         OA2frQnZxGxyS4HhR0D5CfqY7wU5V2voOaJnYtk/d7U8YJPxG2YKZMuyNXqQoIqCQyIF
+         Z63L4/Qquj6z5cKwXGdlgYRZ6QcUTW8WNGoZt23PohPP1J5ToaFY1wASdEnesVF2abET
+         7ohA==
+X-Gm-Message-State: AOAM531R2qhXmZY+DtJJ3yZ+7BVJqllcVCRzqpe8SLLyoMRgpCuKkw/U
+        3OFwuZACQVlJGYFrjzWHpVY=
+X-Google-Smtp-Source: ABdhPJz/5qkj47PfUrQ6sgv5xpWDdKZEK2ociZuvXLsmLrBYR3wE9bDznsVXxKbbiL0KRdRtFt3ZzQ==
+X-Received: by 2002:a5d:4c4a:: with SMTP id n10mr11967344wrt.100.1640587739524;
+        Sun, 26 Dec 2021 22:48:59 -0800 (PST)
+Received: from felia.fritz.box ([2001:16b8:2694:d700:4c6a:3560:d245:55a0])
+        by smtp.gmail.com with ESMTPSA id z22sm14187358wmi.26.2021.12.26.22.48.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Dec 2021 22:48:59 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
         Lee Jones <lee.jones@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Gross <markgross@kernel.org>,
-        Henning Schild <henning.schild@siemens.com>
-Subject: Re: [PATCH v3 4/8] pinctrl: intel: Check against matching data
- instead of ACPI companion
-Message-ID: <YclhwMldCseidCCh@lahna>
-References: <20211221181526.53798-1-andriy.shevchenko@linux.intel.com>
- <20211221181526.53798-5-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211221181526.53798-5-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] mfd: db8500-prcmu: remove dead code for a non-existing config
+Date:   Mon, 27 Dec 2021 07:48:39 +0100
+Message-Id: <20211227064839.21405-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 08:15:22PM +0200, Andy Shevchenko wrote:
-> In some cases we may get a platform device that has ACPI companion
-> which is different to the pin control described in the ACPI tables.
-> This is primarily happens when device is instantiated by board file.
-> 
-> In order to allow this device being enumerated, refactor
-> intel_pinctrl_get_soc_data() to check the matching data instead of
-> ACPI companion.
-> 
-> Reported-by: Henning Schild <henning.schild@siemens.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+The config DBX500_PRCMU_QOS_POWER was never introduced in the kernel
+repository. So, the ifdef in  ./include/linux/mfd/dbx500-prcmu.h was never
+effective.
 
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Remove these dead function prototypes.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ include/linux/mfd/dbx500-prcmu.h | 18 ------------------
+ 1 file changed, 18 deletions(-)
+
+diff --git a/include/linux/mfd/dbx500-prcmu.h b/include/linux/mfd/dbx500-prcmu.h
+index cbf9d7619493..2a255362b5ac 100644
+--- a/include/linux/mfd/dbx500-prcmu.h
++++ b/include/linux/mfd/dbx500-prcmu.h
+@@ -556,22 +556,6 @@ static inline void prcmu_clear(unsigned int reg, u32 bits)
+ #define PRCMU_QOS_ARM_OPP 3
+ #define PRCMU_QOS_DEFAULT_VALUE -1
+ 
+-#ifdef CONFIG_DBX500_PRCMU_QOS_POWER
+-
+-unsigned long prcmu_qos_get_cpufreq_opp_delay(void);
+-void prcmu_qos_set_cpufreq_opp_delay(unsigned long);
+-void prcmu_qos_force_opp(int, s32);
+-int prcmu_qos_requirement(int pm_qos_class);
+-int prcmu_qos_add_requirement(int pm_qos_class, char *name, s32 value);
+-int prcmu_qos_update_requirement(int pm_qos_class, char *name, s32 new_value);
+-void prcmu_qos_remove_requirement(int pm_qos_class, char *name);
+-int prcmu_qos_add_notifier(int prcmu_qos_class,
+-			   struct notifier_block *notifier);
+-int prcmu_qos_remove_notifier(int prcmu_qos_class,
+-			      struct notifier_block *notifier);
+-
+-#else
+-
+ static inline unsigned long prcmu_qos_get_cpufreq_opp_delay(void)
+ {
+ 	return 0;
+@@ -613,6 +597,4 @@ static inline int prcmu_qos_remove_notifier(int prcmu_qos_class,
+ 	return 0;
+ }
+ 
+-#endif
+-
+ #endif /* __MACH_PRCMU_H */
+-- 
+2.17.1
+

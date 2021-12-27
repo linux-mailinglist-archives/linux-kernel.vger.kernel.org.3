@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6000A4800C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CBE47FEEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240178AbhL0Puu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:50:50 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43264 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240728AbhL0Pph (ORCPT
+        id S234721AbhL0Pdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:33:49 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:38986 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237949AbhL0PdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:45:37 -0500
+        Mon, 27 Dec 2021 10:33:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F53D60C9F;
-        Mon, 27 Dec 2021 15:45:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02075C36AEA;
-        Mon, 27 Dec 2021 15:45:35 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7EF80CE10AF;
+        Mon, 27 Dec 2021 15:33:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EF10C36AE7;
+        Mon, 27 Dec 2021 15:33:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619936;
-        bh=C6Zp6+2bfvVibCrB+uC/baKd/b9bAzS/rmlskemiI7A=;
+        s=korg; t=1640619199;
+        bh=enhJjrgJ+Lv77fh59fYM2r52T7/iqLg6JgTUeoaN2qE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=skaxKrylNmlGpBoutH7G44OrhMKYl2EBMfLHG8wEri87mD+nso/psm4f703Ors9Fe
-         s+sKr4nsk2ZyvQVl+RdfpnDMwRCuctdhf051C8F7ZJxNZecLrPSxcZQH/mSx4qKZ3Q
-         uQeW45oYAtOTqRFVHxF+kG/R7ZlPmof3shrjIpIA=
+        b=VM1wghszaU9ELmGMKt5+7rWY7zgbdai57tU3/r+CPpPmGza9A1OQA8WkOhlnVuFuo
+         4uayM56i/+bR1oBBVQZESWkCTYTVbth0If8XVP78M6HvK7qa/BPt+jrljMUWfGDS7Q
+         qhtUS8bPry/Tij+JzKAmvkjlxn9YEErx1Guadvwo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 089/128] KVM: VMX: Always clear vmx->fail on emulation_required
+        stable@vger.kernel.org, Andrew Cooper <andrew.cooper3@citrix.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH 4.19 27/38] x86/pkey: Fix undefined behaviour with PKRU_WD_BIT
 Date:   Mon, 27 Dec 2021 16:31:04 +0100
-Message-Id: <20211227151334.486201564@linuxfoundation.org>
+Message-Id: <20211227151320.286121403@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
-References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
+References: <20211227151319.379265346@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,85 +46,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Andrew Cooper <andrew.cooper3@citrix.com>
 
-commit a80dfc025924024d2c61a4c1b8ef62b2fce76a04 upstream.
+commit 57690554abe135fee81d6ac33cc94d75a7e224bb upstream.
 
-Revert a relatively recent change that set vmx->fail if the vCPU is in L2
-and emulation_required is true, as that behavior is completely bogus.
-Setting vmx->fail and synthesizing a VM-Exit is contradictory and wrong:
+Both __pkru_allows_write() and arch_set_user_pkey_access() shift
+PKRU_WD_BIT (a signed constant) by up to 30 bits, hitting the
+sign bit.
 
-  (a) it's impossible to have both a VM-Fail and VM-Exit
-  (b) vmcs.EXIT_REASON is not modified on VM-Fail
-  (c) emulation_required refers to guest state and guest state checks are
-      always VM-Exits, not VM-Fails.
+Use unsigned constants instead.
 
-For KVM specifically, emulation_required is handled before nested exits
-in __vmx_handle_exit(), thus setting vmx->fail has no immediate effect,
-i.e. KVM calls into handle_invalid_guest_state() and vmx->fail is ignored.
-Setting vmx->fail can ultimately result in a WARN in nested_vmx_vmexit()
-firing when tearing down the VM as KVM never expects vmx->fail to be set
-when L2 is active, KVM always reflects those errors into L1.
+Clearly pkey 15 has not been used in combination with UBSAN yet.
 
-  ------------[ cut here ]------------
-  WARNING: CPU: 0 PID: 21158 at arch/x86/kvm/vmx/nested.c:4548
-                                nested_vmx_vmexit+0x16bd/0x17e0
-                                arch/x86/kvm/vmx/nested.c:4547
-  Modules linked in:
-  CPU: 0 PID: 21158 Comm: syz-executor.1 Not tainted 5.16.0-rc3-syzkaller #0
-  Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-  RIP: 0010:nested_vmx_vmexit+0x16bd/0x17e0 arch/x86/kvm/vmx/nested.c:4547
-  Code: <0f> 0b e9 2e f8 ff ff e8 57 b3 5d 00 0f 0b e9 00 f1 ff ff 89 e9 80
-  Call Trace:
-   vmx_leave_nested arch/x86/kvm/vmx/nested.c:6220 [inline]
-   nested_vmx_free_vcpu+0x83/0xc0 arch/x86/kvm/vmx/nested.c:330
-   vmx_free_vcpu+0x11f/0x2a0 arch/x86/kvm/vmx/vmx.c:6799
-   kvm_arch_vcpu_destroy+0x6b/0x240 arch/x86/kvm/x86.c:10989
-   kvm_vcpu_destroy+0x29/0x90 arch/x86/kvm/../../../virt/kvm/kvm_main.c:441
-   kvm_free_vcpus arch/x86/kvm/x86.c:11426 [inline]
-   kvm_arch_destroy_vm+0x3ef/0x6b0 arch/x86/kvm/x86.c:11545
-   kvm_destroy_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1189 [inline]
-   kvm_put_kvm+0x751/0xe40 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1220
-   kvm_vcpu_release+0x53/0x60 arch/x86/kvm/../../../virt/kvm/kvm_main.c:3489
-   __fput+0x3fc/0x870 fs/file_table.c:280
-   task_work_run+0x146/0x1c0 kernel/task_work.c:164
-   exit_task_work include/linux/task_work.h:32 [inline]
-   do_exit+0x705/0x24f0 kernel/exit.c:832
-   do_group_exit+0x168/0x2d0 kernel/exit.c:929
-   get_signal+0x1740/0x2120 kernel/signal.c:2852
-   arch_do_signal_or_restart+0x9c/0x730 arch/x86/kernel/signal.c:868
-   handle_signal_work kernel/entry/common.c:148 [inline]
-   exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
-   exit_to_user_mode_prepare+0x191/0x220 kernel/entry/common.c:207
-   __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
-   syscall_exit_to_user_mode+0x2e/0x70 kernel/entry/common.c:300
-   do_syscall_64+0x53/0xd0 arch/x86/entry/common.c:86
-   entry_SYSCALL_64_after_hwframe+0x44/0xae
+Noticed by code inspection only.  I can't actually provoke the
+compiler into generating incorrect logic as far as this shift is
+concerned.
 
-Fixes: c8607e4a086f ("KVM: x86: nVMX: don't fail nested VM entry on invalid guest state if !from_vmentry")
-Reported-by: syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+[
+  dhansen: add stable@ tag, plus minor changelog massaging,
+
+           For anyone doing backports, these #defines were in
+	   arch/x86/include/asm/pgtable.h before 784a46618f6.
+]
+
+Fixes: 33a709b25a76 ("mm/gup, x86/mm/pkeys: Check VMAs and PTEs for protection keys")
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
 Cc: stable@vger.kernel.org
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20211207193006.120997-2-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Link: https://lkml.kernel.org/r/20211216000856.4480-1-andrew.cooper3@citrix.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/vmx/vmx.c |    4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ arch/x86/include/asm/pgtable.h |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -6612,9 +6612,7 @@ static fastpath_t vmx_vcpu_run(struct kv
- 	 * consistency check VM-Exit due to invalid guest state and bail.
- 	 */
- 	if (unlikely(vmx->emulation_required)) {
--
--		/* We don't emulate invalid state of a nested guest */
--		vmx->fail = is_guest_mode(vcpu);
-+		vmx->fail = 0;
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -1356,8 +1356,8 @@ static inline pmd_t pmd_swp_clear_soft_d
+ #endif
+ #endif
  
- 		vmx->exit_reason.full = EXIT_REASON_INVALID_STATE;
- 		vmx->exit_reason.failed_vmentry = 1;
+-#define PKRU_AD_BIT 0x1
+-#define PKRU_WD_BIT 0x2
++#define PKRU_AD_BIT 0x1u
++#define PKRU_WD_BIT 0x2u
+ #define PKRU_BITS_PER_PKEY 2
+ 
+ static inline bool __pkru_allows_read(u32 pkru, u16 pkey)
 
 

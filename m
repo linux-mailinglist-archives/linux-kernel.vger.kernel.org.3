@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 488AD47FFC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B131847FFBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239035AbhL0PlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:41:01 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:41408 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239018AbhL0PiO (ORCPT
+        id S238575AbhL0Pk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:40:58 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38286 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239024AbhL0PiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:38:14 -0500
+        Mon, 27 Dec 2021 10:38:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 27B03CE10D4;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0516361113;
+        Mon, 27 Dec 2021 15:38:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC10CC36AEA;
         Mon, 27 Dec 2021 15:38:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 163A5C36AEB;
-        Mon, 27 Dec 2021 15:38:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619491;
-        bh=2o90BmwRkuNE+o7uki4KS2CtdBoVd+SEuqt9qvk1KeM=;
+        s=korg; t=1640619494;
+        bh=kaF+oe1XhbbEK7HAz2UjiDPZDrtWhBHlPtbVhK7WPgs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xEyti3ZVix6Zf8o7MvrjM7KVAQZ3L/MuRAQ2cZhmG2FAjob32gTH82YE+Db8+YMqK
-         PcvViMNKUfgGm2w/ghRsHNUXBG1V9o+fb5jRfWeAmrwysW2zzsWpsNJG71htaehVJ4
-         Gau0RrojExMA8vdBFM2TZdU78fJfMuBssVB+aQ8g=
+        b=r1u3wBI9j410ybvEd+TY6RUNK+fRdFoBZAmD1V1ppZ/nZvSeasAAD/t/OHm/tGzQ6
+         Htc2l/hkOm97ULksl9KHQfr7vb2iAdlc0O9QkPRB4sRjts3utqUxrZ+sb/S/W4Gvt5
+         44vtaJYCBNiy4RKFn00vGvKXvNAsfDlN2yQ/N9kY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dongliang Mu <mudongliangabcd@gmail.com>,
+        stable@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 10/76] spi: change clk_disable_unprepare to clk_unprepare
-Date:   Mon, 27 Dec 2021 16:30:25 +0100
-Message-Id: <20211227151325.061681799@linuxfoundation.org>
+Subject: [PATCH 5.10 11/76] ASoC: meson: aiu: fifo: Add missing dma_coerce_mask_and_coherent()
+Date:   Mon, 27 Dec 2021 16:30:26 +0100
+Message-Id: <20211227151325.095141791@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
 References: <20211227151324.694661623@linuxfoundation.org>
@@ -46,37 +47,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-[ Upstream commit db6689b643d8653092f5853751ea2cdbc299f8d3 ]
+[ Upstream commit 1bcd326631dc4faa3322d60b4fc45e8b3747993e ]
 
-The corresponding API for clk_prepare is clk_unprepare, other than
-clk_disable_unprepare.
+The FIFO registers which take an DMA-able address are only 32-bit wide
+on AIU. Add dma_coerce_mask_and_coherent() to make the DMA core aware of
+this limitation.
 
-Fix this by changing clk_disable_unprepare to clk_unprepare.
-
-Fixes: 5762ab71eb24 ("spi: Add support for Armada 3700 SPI Controller")
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Link: https://lore.kernel.org/r/20211206101931.2816597-1-mudongliangabcd@gmail.com
+Fixes: 6ae9ca9ce986bf ("ASoC: meson: aiu: add i2s and spdif support")
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Link: https://lore.kernel.org/r/20211206210804.2512999-2-martin.blumenstingl@googlemail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-armada-3700.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/meson/aiu-fifo.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/spi/spi-armada-3700.c b/drivers/spi/spi-armada-3700.c
-index 46feafe4e201c..d8cc4b270644a 100644
---- a/drivers/spi/spi-armada-3700.c
-+++ b/drivers/spi/spi-armada-3700.c
-@@ -901,7 +901,7 @@ static int a3700_spi_probe(struct platform_device *pdev)
- 	return 0;
+diff --git a/sound/soc/meson/aiu-fifo.c b/sound/soc/meson/aiu-fifo.c
+index aa88aae8e517d..3efc3cad0b4ec 100644
+--- a/sound/soc/meson/aiu-fifo.c
++++ b/sound/soc/meson/aiu-fifo.c
+@@ -5,6 +5,7 @@
  
- error_clk:
--	clk_disable_unprepare(spi->clk);
-+	clk_unprepare(spi->clk);
- error:
- 	spi_master_put(master);
- out:
+ #include <linux/bitfield.h>
+ #include <linux/clk.h>
++#include <linux/dma-mapping.h>
+ #include <sound/pcm_params.h>
+ #include <sound/soc.h>
+ #include <sound/soc-dai.h>
+@@ -192,6 +193,11 @@ int aiu_fifo_pcm_new(struct snd_soc_pcm_runtime *rtd,
+ 	struct snd_card *card = rtd->card->snd_card;
+ 	struct aiu_fifo *fifo = dai->playback_dma_data;
+ 	size_t size = fifo->pcm->buffer_bytes_max;
++	int ret;
++
++	ret = dma_coerce_mask_and_coherent(card->dev, DMA_BIT_MASK(32));
++	if (ret)
++		return ret;
+ 
+ 	snd_pcm_lib_preallocate_pages(substream,
+ 				      SNDRV_DMA_TYPE_DEV,
 -- 
 2.34.1
 

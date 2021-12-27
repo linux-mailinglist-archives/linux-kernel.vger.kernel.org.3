@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8FD47F9DD
+	by mail.lfdr.de (Postfix) with ESMTP id D844A47F9DE
 	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 04:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235124AbhL0DMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Dec 2021 22:12:18 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:29293 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235041AbhL0DMI (ORCPT
+        id S235146AbhL0DMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Dec 2021 22:12:21 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:30113 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235049AbhL0DMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Dec 2021 22:12:08 -0500
-Received: from kwepemi100007.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JMjPR3f6LzbjcP;
-        Mon, 27 Dec 2021 11:11:39 +0800 (CST)
+        Sun, 26 Dec 2021 22:12:09 -0500
+Received: from kwepemi100006.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JMjLD2qQcz1DKFk;
+        Mon, 27 Dec 2021 11:08:52 +0800 (CST)
 Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi100007.china.huawei.com (7.221.188.115) with Microsoft SMTP Server
+ kwepemi100006.china.huawei.com (7.221.188.165) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 27 Dec 2021 11:12:06 +0800
+ 15.1.2308.20; Mon, 27 Dec 2021 11:12:07 +0800
 Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
  (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 27 Dec
- 2021 11:12:05 +0800
+ 2021 11:12:06 +0800
 From:   Zhihao Cheng <chengzhihao1@huawei.com>
 To:     <richard@nod.at>, <miquel.raynal@bootlin.com>, <vigneshr@ti.com>,
         <mcoquelin.stm32@gmail.com>, <kirill.shutemov@linux.intel.com>,
         <s.hauer@pengutronix.de>
 CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 06/15] ubifs: Fix 'ui->dirty' race between do_tmpfile() and writeback work
-Date:   Mon, 27 Dec 2021 11:22:37 +0800
-Message-ID: <20211227032246.2886878-7-chengzhihao1@huawei.com>
+Subject: [PATCH v6 07/15] ubifs: Rectify space amount budget for mkdir/tmpfile operations
+Date:   Mon, 27 Dec 2021 11:22:38 +0800
+Message-ID: <20211227032246.2886878-8-chengzhihao1@huawei.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211227032246.2886878-1-chengzhihao1@huawei.com>
 References: <20211227032246.2886878-1-chengzhihao1@huawei.com>
@@ -45,154 +45,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'ui->dirty' is not protected by 'ui_mutex' in function do_tmpfile() which
-may race with ubifs_write_inode[wb_workfn] to access/update 'ui->dirty',
-finally dirty space is released twice.
+UBIFS should make sure the flash has enough space to store dirty (Data
+that is newer than disk) data (in memory), space budget is exactly
+designed to do that. If space budget calculates less data than we need,
+'make_reservation()' will do more work(return -ENOSPC if no free space
+lelf, sometimes we can see "cannot reserve xxx bytes in jhead xxx, error
+-28" in ubifs error messages) with ubifs inodes locked, which may effect
+other syscalls.
 
-	open(O_TMPFILE)                wb_workfn
-do_tmpfile
-  ubifs_budget_space(ino_req = { .dirtied_ino = 1})
-  d_tmpfile // mark inode(tmpfile) dirty
-  ubifs_jnl_update // without holding tmpfile's ui_mutex
-    mark_inode_clean(ui)
-      if (ui->dirty)
-        ubifs_release_dirty_inode_budget(ui)  // release first time
-                                   ubifs_write_inode
-				     mutex_lock(&ui->ui_mutex)
-                                     ubifs_release_dirty_inode_budget(ui)
-				     // release second time
-				     mutex_unlock(&ui->ui_mutex)
-      ui->dirty = 0
+A simple way to decide how much space do we need when make a budget:
+See how much space is needed by 'make_reservation()' in ubifs_jnl_xxx()
+function according to corresponding operation.
 
-Run generic/476 can reproduce following message easily
-(See reproducer in [Link]):
-
-  UBIFS error (ubi0:0 pid 2578): ubifs_assert_failed [ubifs]: UBIFS assert
-  failed: c->bi.dd_growth >= 0, in fs/ubifs/budget.c:554
-  UBIFS warning (ubi0:0 pid 2578): ubifs_ro_mode [ubifs]: switched to
-  read-only mode, error -22
-  Workqueue: writeback wb_workfn (flush-ubifs_0_0)
-  Call Trace:
-    ubifs_ro_mode+0x54/0x60 [ubifs]
-    ubifs_assert_failed+0x4b/0x80 [ubifs]
-    ubifs_release_budget+0x468/0x5a0 [ubifs]
-    ubifs_release_dirty_inode_budget+0x53/0x80 [ubifs]
-    ubifs_write_inode+0x121/0x1f0 [ubifs]
-    ...
-    wb_workfn+0x283/0x7b0
-
-Fix it by holding tmpfile ubifs inode lock during ubifs_jnl_update().
-Similar problem exists in whiteout renaming, but previous fix("ubifs:
-Rename whiteout atomically") has solved the problem.
+It's better to report ENOSPC in ubifs_budget_space(), as early as we can.
 
 Fixes: 474b93704f32163 ("ubifs: Implement O_TMPFILE")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=214765
+Fixes: 1e51764a3c2ac05 ("UBIFS: add new flash file system")
 Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
 ---
- fs/ubifs/dir.c | 60 +++++++++++++++++++++++++-------------------------
- 1 file changed, 30 insertions(+), 30 deletions(-)
+ fs/ubifs/dir.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/fs/ubifs/dir.c b/fs/ubifs/dir.c
-index deaf2d5dba5b..ebdc9aa04cbb 100644
+index ebdc9aa04cbb..7ae48f273feb 100644
 --- a/fs/ubifs/dir.c
 +++ b/fs/ubifs/dir.c
-@@ -397,6 +397,32 @@ static struct inode *create_whiteout(struct inode *dir, struct dentry *dentry)
- 	return ERR_PTR(err);
- }
- 
-+/**
-+ * lock_2_inodes - a wrapper for locking two UBIFS inodes.
-+ * @inode1: first inode
-+ * @inode2: second inode
-+ *
-+ * We do not implement any tricks to guarantee strict lock ordering, because
-+ * VFS has already done it for us on the @i_mutex. So this is just a simple
-+ * wrapper function.
-+ */
-+static void lock_2_inodes(struct inode *inode1, struct inode *inode2)
-+{
-+	mutex_lock_nested(&ubifs_inode(inode1)->ui_mutex, WB_MUTEX_1);
-+	mutex_lock_nested(&ubifs_inode(inode2)->ui_mutex, WB_MUTEX_2);
-+}
-+
-+/**
-+ * unlock_2_inodes - a wrapper for unlocking two UBIFS inodes.
-+ * @inode1: first inode
-+ * @inode2: second inode
-+ */
-+static void unlock_2_inodes(struct inode *inode1, struct inode *inode2)
-+{
-+	mutex_unlock(&ubifs_inode(inode2)->ui_mutex);
-+	mutex_unlock(&ubifs_inode(inode1)->ui_mutex);
-+}
-+
- static int ubifs_tmpfile(struct user_namespace *mnt_userns, struct inode *dir,
- 			 struct dentry *dentry, umode_t mode)
+@@ -428,15 +428,18 @@ static int ubifs_tmpfile(struct user_namespace *mnt_userns, struct inode *dir,
  {
-@@ -404,7 +430,7 @@ static int ubifs_tmpfile(struct user_namespace *mnt_userns, struct inode *dir,
+ 	struct inode *inode;
  	struct ubifs_info *c = dir->i_sb->s_fs_info;
- 	struct ubifs_budget_req req = { .new_ino = 1, .new_dent = 1};
+-	struct ubifs_budget_req req = { .new_ino = 1, .new_dent = 1};
++	struct ubifs_budget_req req = { .new_ino = 1, .new_dent = 1,
++					.dirtied_ino = 1};
  	struct ubifs_budget_req ino_req = { .dirtied_ino = 1 };
--	struct ubifs_inode *ui, *dir_ui = ubifs_inode(dir);
-+	struct ubifs_inode *ui;
+ 	struct ubifs_inode *ui;
  	int err, instantiated = 0;
  	struct fscrypt_name nm;
  
-@@ -452,18 +478,18 @@ static int ubifs_tmpfile(struct user_namespace *mnt_userns, struct inode *dir,
- 	instantiated = 1;
- 	mutex_unlock(&ui->ui_mutex);
+ 	/*
+-	 * Budget request settings: new dirty inode, new direntry,
+-	 * budget for dirtied inode will be released via writeback.
++	 * Budget request settings: new inode, new direntry, changing the
++	 * parent directory inode.
++	 * Allocate budget separately for new dirtied inode, the budget will
++	 * be released via writeback.
+ 	 */
  
--	mutex_lock(&dir_ui->ui_mutex);
-+	lock_2_inodes(dir, inode);
- 	err = ubifs_jnl_update(c, dir, &nm, inode, 1, 0);
- 	if (err)
- 		goto out_cancel;
--	mutex_unlock(&dir_ui->ui_mutex);
-+	unlock_2_inodes(dir, inode);
+ 	dbg_gen("dent '%pd', mode %#hx in dir ino %lu",
+@@ -979,7 +982,8 @@ static int ubifs_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
+ 	struct ubifs_inode *dir_ui = ubifs_inode(dir);
+ 	struct ubifs_info *c = dir->i_sb->s_fs_info;
+ 	int err, sz_change;
+-	struct ubifs_budget_req req = { .new_ino = 1, .new_dent = 1 };
++	struct ubifs_budget_req req = { .new_ino = 1, .new_dent = 1,
++					.dirtied_ino = 1};
+ 	struct fscrypt_name nm;
  
- 	ubifs_release_budget(c, &req);
- 
- 	return 0;
- 
- out_cancel:
--	mutex_unlock(&dir_ui->ui_mutex);
-+	unlock_2_inodes(dir, inode);
- out_inode:
- 	make_bad_inode(inode);
- 	if (!instantiated)
-@@ -690,32 +716,6 @@ static int ubifs_dir_release(struct inode *dir, struct file *file)
- 	return 0;
- }
- 
--/**
-- * lock_2_inodes - a wrapper for locking two UBIFS inodes.
-- * @inode1: first inode
-- * @inode2: second inode
-- *
-- * We do not implement any tricks to guarantee strict lock ordering, because
-- * VFS has already done it for us on the @i_mutex. So this is just a simple
-- * wrapper function.
-- */
--static void lock_2_inodes(struct inode *inode1, struct inode *inode2)
--{
--	mutex_lock_nested(&ubifs_inode(inode1)->ui_mutex, WB_MUTEX_1);
--	mutex_lock_nested(&ubifs_inode(inode2)->ui_mutex, WB_MUTEX_2);
--}
--
--/**
-- * unlock_2_inodes - a wrapper for unlocking two UBIFS inodes.
-- * @inode1: first inode
-- * @inode2: second inode
-- */
--static void unlock_2_inodes(struct inode *inode1, struct inode *inode2)
--{
--	mutex_unlock(&ubifs_inode(inode2)->ui_mutex);
--	mutex_unlock(&ubifs_inode(inode1)->ui_mutex);
--}
--
- static int ubifs_link(struct dentry *old_dentry, struct inode *dir,
- 		      struct dentry *dentry)
- {
+ 	/*
 -- 
 2.31.1
 

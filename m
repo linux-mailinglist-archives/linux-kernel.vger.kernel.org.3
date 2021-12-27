@@ -2,99 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D604B4802C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 18:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F17BE4802C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 18:28:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbhL0R0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 12:26:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
+        id S230212AbhL0R2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 12:28:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbhL0R0o (ORCPT
+        with ESMTP id S229508AbhL0R2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 12:26:44 -0500
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4482EC06173E;
-        Mon, 27 Dec 2021 09:26:44 -0800 (PST)
-Received: by mail-ua1-x92c.google.com with SMTP id p2so27757993uad.11;
-        Mon, 27 Dec 2021 09:26:44 -0800 (PST)
+        Mon, 27 Dec 2021 12:28:31 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5F4C06173E;
+        Mon, 27 Dec 2021 09:28:31 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id w16so64148171edc.11;
+        Mon, 27 Dec 2021 09:28:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=BTNObzR7wa6fFqfDjRZRUmFN+jzNO+k7X/yYBbYXPlc=;
-        b=gMjabIH9P5mCtzTVy/8PIJO5FBN2hkYTOUKKMd7nbBqWg1QVuhBu58N0kEkUZQ9aRx
-         cGeNBNVKywvWrfxEBAUpPqsKSQYKQ4KaDwkbS3kD02nNI4CWrXLrB6/bPg2HyJQUadTw
-         8P8O0AWgYY8ZtE5eHJW71EzKsGf8WKHrUkKuzwvPMvooiMhRawClJ32ZoKef/M09OMfi
-         3PIQRIhbknhdCLjupdqmflB1zflIrmpIQtZfOYCi7jrGHBbhcOhE2079HFD+1sS1oxPG
-         l1fAI+AdqHaNxhs8LoGq2qaY5TYnrO/ZWc8KANuBWNRJCi1yce7oI+X4TfFS2CW0S5Zb
-         DGIQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fvswGQErb/IXWp0Ujxv53FZ/wcn6vDPizJMswGWYt8k=;
+        b=aEMf3nbv9x24qgp4OFEQiFZrAXHzGkp7M3MCwIk4+HnvH3pFPlLBWPibXCATBAB7DP
+         vdfVC5yi2yOPNyV8uSN4FQXnET0HHVlXNmBzYMsz5celB929zqcc+wq/DWXuLSiIo8XI
+         kn4uMfielj16oEo/6WczySrmt6COrDTwJyzXPqll3HP4tfqvwi+0I34rMInWidzeFqPK
+         EuWZRDPEJr6Un5PnLSlZSEF5pdYuUNfaH+kmOVtcAzGJ7pqh+XkJ3uLpC867HRXqX3Xe
+         oKSzX0mgDL4QlclhTiPS6tC08q6usMTM/aQCNgUrJnRNOTqkZ6R6HdJcgNeG5mSz2UE4
+         3XPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=BTNObzR7wa6fFqfDjRZRUmFN+jzNO+k7X/yYBbYXPlc=;
-        b=MfEHobztKb5DidK/jqgUfoy1SpbXkhrZLJRyQUcVcxjmSbSlLBwA+PLMPgjLMLCnIn
-         EG5l/D6C49eLKJGefnND0RU7JvQRQ4A06fm0OsSM8B1kvKwYvpfr09MBiO8pwjDcu8Zi
-         2LLGHMxAqnC4m7HQVNBR1neY9hadsIHvxE2gc+YuRg5nISpZBTKDTywGmZtaBOxUluV8
-         TWtZ179zQ3ojPRitHLESaANnoTyyqNMl1Lsq3/RvgINY6b/jgbr0mfIfXhmzooMAziXo
-         4zkkGh3C5AuyrE15BWHJ7cFMrCTHuLlxDI11puqiorVm+6CMPQ5mm+SD0tk9BrCnIXCk
-         VmYw==
-X-Gm-Message-State: AOAM531YINPrOPxo9KszRJLbMflnQNv+VYHL+XbFX9QREgV7IgWgWDQu
-        7fYM6oR0VAYwjLl2qjYjFUw0zFRy7Zc=
-X-Google-Smtp-Source: ABdhPJw51TgiBdDGQLKYJFS81bZE5MKpY8jYAeUBjQR9XJyM8Yqo0/h2YSrdEH42jGI0oyqjaNNltw==
-X-Received: by 2002:a05:6102:509e:: with SMTP id bl30mr4556535vsb.43.1640626003307;
-        Mon, 27 Dec 2021 09:26:43 -0800 (PST)
-Received: from [10.230.29.137] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 63sm3192031uak.17.2021.12.27.09.26.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Dec 2021 09:26:42 -0800 (PST)
-Message-ID: <9495a9a6-fd17-dd6d-97b1-08d5a8b822ec@gmail.com>
-Date:   Mon, 27 Dec 2021 09:26:39 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fvswGQErb/IXWp0Ujxv53FZ/wcn6vDPizJMswGWYt8k=;
+        b=MKdg5jsLh2jP7gee67uxQecmMLDqgTUId8tACahXFMkwy3W+PIQYJqnSG6XGPXE7vt
+         MTm8Y3qgLjacoS2sDwm/8E3S6jV//twmsf+/NawlIC9g5UcGLxcGnra6rELKibOxulIf
+         KG59MHLjVWbDty+307gsEgMPTuhUHvkLQ33O7AMXna+2c5R5m4b4hpxm/hENixwWb+Dn
+         ex/XaUfgYCti1Sj6jRCKljexDwZLafOIZyYfgUJ3y1GG1gtyt0Lvdj009xZHIwuQqjC3
+         X/aqWnlphQhjab1y5p5ekbhdnItb5kWd2yh79EFDNPn5OTeLvPev7kQbCGsMhaT1GA9P
+         w4Pw==
+X-Gm-Message-State: AOAM531FmcHoWr6hby63XS+C/vwuAjbb5XonhNpF7218YjJtPiJbNB4n
+        UKmSp58JViLwz+PiGv2x586Dw5/2y6/mGicWHNc=
+X-Google-Smtp-Source: ABdhPJwMGxE07ANpk+vQAh+chlk8FEfyr4VtcPtxTYO2uTEqvp91J9JDPq3tRLAak0uFSD/dsB9drtwjBOUh92a1XeY=
+X-Received: by 2002:a05:6402:2ce:: with SMTP id b14mr17294314edx.122.1640626110012;
+ Mon, 27 Dec 2021 09:28:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH 4.9 00/19] 4.9.295-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        stable@vger.kernel.org
-References: <20211227151316.558965545@linuxfoundation.org>
-Content-Language: en-US
-In-Reply-To: <20211227151316.558965545@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211227083641.12538-1-axe.yang@mediatek.com> <20211227083641.12538-4-axe.yang@mediatek.com>
+In-Reply-To: <20211227083641.12538-4-axe.yang@mediatek.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 27 Dec 2021 19:27:53 +0200
+Message-ID: <CAHp75VcVx4Yf69TEoSy8GL-he9ZAW+yvoH8-DXAotQ3Mwx7n2A@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] mmc: mediatek: add support for SDIO eint irq
+To:     Axe Yang <axe.yang@mediatek.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lucas Stach <dev@lynxeye.de>,
+        Eric Biggers <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 27, 2021 at 6:46 PM Axe Yang <axe.yang@mediatek.com> wrote:
+
+...
+
+> +       if (mmc->card && !mmc->card->cccr.enable_async_int) {
+> +               if (enb)
+
+Spell it fully, i.e. enable.
 
 
-On 12/27/2021 7:27 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.295 release.
-> There are 19 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 29 Dec 2021 15:13:09 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.295-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> +                       pm_runtime_get_noresume(host->dev);
+> +               else
+> +                       pm_runtime_put_noidle(host->dev);
+> +       }
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+...
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+> +       int ret = 0;
+
+Redundant assignment, see below.
+
+...
+
+> +       desc = devm_gpiod_get_index(host->dev, "eint", 0, GPIOD_IN);
+
+Why _index variant? By default devm_gpiod_get() uses 0 for index.
+
+> +       if (IS_ERR(desc))
+> +               return PTR_ERR(desc);
+
+...
+
+> +       irq = gpiod_to_irq(desc);
+
+ret = ...
+if (ret < 0)
+  ...handle error...
+
+> +       if (irq >= 0) {
+
+(for the record, 0 is never returned by gpiod_to_irq() according to
+all its versions).
+
+> +               irq_set_status_flags(irq, IRQ_NOAUTOEN);
+
+Use corresponding flag:
+https://elixir.bootlin.com/linux/latest/source/include/linux/interrupt.h#L83
+
+> +               ret = devm_request_threaded_irq(host->dev, irq, NULL, msdc_sdio_eint_irq,
+> +                                               IRQF_TRIGGER_LOW | IRQF_ONESHOT,
+> +                                               "sdio-eint", host);
+> +       } else {
+> +               ret = irq;
+> +       }
+> +
+> +       host->eint_irq = irq;
+
+Is it okay if you assign garbage here in case of error?
+
+> +       return ret;
+
+...
+
+> +       host->pins_eint = pinctrl_lookup_state(host->pinctrl, "state_eint");
+> +       if (IS_ERR(host->pins_eint)) {
+> +               dev_dbg(&pdev->dev, "Cannot find pinctrl eint!\n");
+> +       } else {
+> +               host->pins_dat1 = pinctrl_lookup_state(host->pinctrl, "state_dat1");
+> +               if (IS_ERR(host->pins_dat1)) {
+
+> +                       ret = PTR_ERR(host->pins_dat1);
+> +                       dev_err(&pdev->dev, "Cannot find pinctrl dat1!\n");
+
+ret = dev_err_probe(...); ?
+
+> +                       goto host_free;
+> +               }
+> +       }
+
+...
+
+> +       if (!IS_ERR(host->pins_eint)) {
+
+I'm wondering if you can use a pattern "error check first"?
+
+> +               disable_irq(host->irq);
+> +               pinctrl_select_state(host->pinctrl, host->pins_eint);
+> +               spin_lock_irqsave(&host->lock, flags);
+> +               if (host->sdio_irq_cnt == 0) {
+> +                       enable_irq(host->eint_irq);
+> +                       enable_irq_wake(host->eint_irq);
+> +                       host->sdio_irq_cnt++;
+> +               }
+> +               sdr_clr_bits(host->base + SDC_CFG, SDC_CFG_SDIOIDE);
+> +               spin_unlock_irqrestore(&host->lock, flags);
+> +       }
+
 -- 
-Florian
-
+With Best Regards,
+Andy Shevchenko

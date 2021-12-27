@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D45304800C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D226C4800D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239554AbhL0PtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:49:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37598 "EHLO
+        id S237168AbhL0PvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:51:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240615AbhL0Pp1 (ORCPT
+        with ESMTP id S236541AbhL0PrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:45:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B837CC08E8AE;
-        Mon, 27 Dec 2021 07:42:31 -0800 (PST)
+        Mon, 27 Dec 2021 10:47:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1E1C061785;
+        Mon, 27 Dec 2021 07:43:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 563EB61123;
-        Mon, 27 Dec 2021 15:42:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B0EEC36AE7;
-        Mon, 27 Dec 2021 15:42:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78BECB810CC;
+        Mon, 27 Dec 2021 15:43:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDA7BC36AEA;
+        Mon, 27 Dec 2021 15:43:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619750;
-        bh=mTOBn3GTcsadfbZatSuZTGvpy/t7xXshmI2tB4l7F/E=;
+        s=korg; t=1640619782;
+        bh=AzjYiV6KVWJ7DaCiw9CNUEJKIYrg7SBxHWE5S844QuA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jTpNuvSxv12lFwjaCwmQ/UnT4LnYFekURm1IW0jOqiyAR5bIBCcTHAhzu1aw5QOoF
-         G3lDkDnIc3ecA9YQeUtAeA0PtXXAh6hFzFnsIlrcQ2NpRzpgGV+u/Cvn6F1JBbeq+Q
-         aoDYDU//0782cRevFh50i61dgILRDMMALbLUE8mc=
+        b=1vyYapadyHnrPnagVXhfsSuTARJOkm2CtpgJNQ0/kg5/BU665eGoFVq8MTeFtimU4
+         s/Vl1M+u4Lt/Nom2UQ8cWipVbgQqPL+0c69B+5l5mvBwhfoBVLdYR7QB8WpsJT92po
+         mr1dBvpN3e7x+9sRXauLXY7tPAC1SN90LO8psxyg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hayes Wang <hayeswang@realtek.com>,
+        stable@vger.kernel.org,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 049/128] r8152: fix the force speed doesnt work for RTL8156
-Date:   Mon, 27 Dec 2021 16:30:24 +0100
-Message-Id: <20211227151333.152523601@linuxfoundation.org>
+Subject: [PATCH 5.15 050/128] net: stmmac: dwmac-visconti: Fix value of ETHER_CLK_SEL_FREQ_SEL_2P5M
+Date:   Mon, 27 Dec 2021 16:30:25 +0100
+Message-Id: <20211227151333.183853017@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
 References: <20211227151331.502501367@linuxfoundation.org>
@@ -49,63 +51,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hayes Wang <hayeswang@realtek.com>
+From: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
 
-[ Upstream commit 45bf944e6703d43fe5e285808312acd8a34c1a24 ]
+[ Upstream commit 391e5975c0208ce3739587b33eba08be3e473d79 ]
 
-It needs to set mdio force mode. Otherwise, link off always occurs when
-setting force speed.
+ETHER_CLK_SEL_FREQ_SEL_2P5M is not 0 bit of the register. This is a
+value, which is 0. Fix from BIT(0) to 0.
 
-Fixes: 195aae321c82 ("r8152: support new chips")
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+Reported-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+Fixes: b38dd98ff8d0 ("net: stmmac: Add Toshiba Visconti SoCs glue driver")
+Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Link: https://lore.kernel.org/r/20211223073633.101306-1-nobuhiro1.iwamatsu@toshiba.co.jp
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/r8152.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index d3da350777a4d..3364e54c177ff 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -6584,6 +6584,21 @@ static bool rtl8153_in_nway(struct r8152 *tp)
- 		return true;
- }
- 
-+static void r8156_mdio_force_mode(struct r8152 *tp)
-+{
-+	u16 data;
-+
-+	/* Select force mode through 0xa5b4 bit 15
-+	 * 0: MDIO force mode
-+	 * 1: MMD force mode
-+	 */
-+	data = ocp_reg_read(tp, 0xa5b4);
-+	if (data & BIT(15)) {
-+		data &= ~BIT(15);
-+		ocp_reg_write(tp, 0xa5b4, data);
-+	}
-+}
-+
- static void set_carrier(struct r8152 *tp)
- {
- 	struct net_device *netdev = tp->netdev;
-@@ -8016,6 +8031,7 @@ static void r8156_init(struct r8152 *tp)
- 	ocp_data |= ACT_ODMA;
- 	ocp_write_byte(tp, MCU_TYPE_USB, USB_BMU_CONFIG, ocp_data);
- 
-+	r8156_mdio_force_mode(tp);
- 	rtl_tally_reset(tp);
- 
- 	tp->coalesce = 15000;	/* 15 us */
-@@ -8145,6 +8161,7 @@ static void r8156b_init(struct r8152 *tp)
- 	ocp_data &= ~(RX_AGG_DISABLE | RX_ZERO_EN);
- 	ocp_write_word(tp, MCU_TYPE_USB, USB_USB_CTRL, ocp_data);
- 
-+	r8156_mdio_force_mode(tp);
- 	rtl_tally_reset(tp);
- 
- 	tp->coalesce = 15000;	/* 15 us */
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
+index d046e33b8a297..fac788718c045 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
+@@ -26,7 +26,7 @@
+ #define ETHER_CLK_SEL_FREQ_SEL_125M	(BIT(9) | BIT(8))
+ #define ETHER_CLK_SEL_FREQ_SEL_50M	BIT(9)
+ #define ETHER_CLK_SEL_FREQ_SEL_25M	BIT(8)
+-#define ETHER_CLK_SEL_FREQ_SEL_2P5M	BIT(0)
++#define ETHER_CLK_SEL_FREQ_SEL_2P5M	0
+ #define ETHER_CLK_SEL_TX_CLK_EXT_SEL_IN BIT(0)
+ #define ETHER_CLK_SEL_TX_CLK_EXT_SEL_TXC BIT(10)
+ #define ETHER_CLK_SEL_TX_CLK_EXT_SEL_DIV BIT(11)
 -- 
 2.34.1
 

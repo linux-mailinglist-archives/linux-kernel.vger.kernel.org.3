@@ -2,184 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0CB480151
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52747480158
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 17:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239682AbhL0P6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:58:48 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:38179 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238799AbhL0P56 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:57:58 -0500
-Received: from handsomejack.molgen.mpg.de (handsomejack.molgen.mpg.de [141.14.17.248])
-        by mx.molgen.mpg.de (Postfix) with ESMTP id 0F22A61EA1924;
-        Mon, 27 Dec 2021 16:57:57 +0100 (CET)
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] ahci: AMD A85 FCH (Hudson D4): Skip 200 ms debounce delay in `sata_link_resume()`
-Date:   Mon, 27 Dec 2021 16:57:35 +0100
-Message-Id: <20211227155735.10519-3-pmenzel@molgen.mpg.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211227155735.10519-1-pmenzel@molgen.mpg.de>
-References: <20211227155735.10519-1-pmenzel@molgen.mpg.de>
+        id S233833AbhL0QAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 11:00:43 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56756 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240972AbhL0QAK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 11:00:10 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D04A6B810A2;
+        Mon, 27 Dec 2021 16:00:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04168C36AE7;
+        Mon, 27 Dec 2021 16:00:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640620807;
+        bh=UdTvWBp2jSaVvzn2O786rHh31sYKBsj4gE4jncRH6xw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sWCdQNfyoWoKZV8TezoQ5KGht71o8g5OYe6aMea6CyxyKIVTdB/bP2Q2rsu50tIlm
+         kpT5E2XNWWm7I45SP+qrnkbT7ovRneoxDljJDYk1ASPHnJYroTmHbgm3wvpicP1/uI
+         lO2fLTxhg7HKgIfB3aNKIEl+lpr2Mrh/hWCU1X98=
+Date:   Mon, 27 Dec 2021 17:00:04 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: Re: [PATCH 5.15 114/128] Input: i8042 - enable deferred probe quirk
+ for ASUS UM325UA
+Message-ID: <YcnjBHKy64XU7Plr@kroah.com>
+References: <20211227151331.502501367@linuxfoundation.org>
+ <20211227151335.325998991@linuxfoundation.org>
+ <a0258f0acbe50d4ea3c73724eafd4ed1@cavoj.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <a0258f0acbe50d4ea3c73724eafd4ed1@cavoj.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the first commit 1da177e4c3 (Linux-2.6.12-rc2) in the Linux git
-repository, `sata_link_resume()` contains a 200 ms delay with the comment
-below.
+On Mon, Dec 27, 2021 at 04:53:38PM +0100, Samuel Čavoj wrote:
+> Hi Greg,
+> 
+> it seems this patch is misapplied -- please see the context in the original
+> diff. The quirk in question itself was only added in a recent patch which
+> is not present in stable:
+> commit 9222ba68c3f406 --
+> https://lore.kernel.org/all/20211117063757.11380-1-tiwai@suse.de/
+> 
+> This seems to be the case for all stable branches.
 
->    /*
->     * Some PHYs react badly if SStatus is pounded
->     * immediately after resuming.  Delay 200ms before
->     * debouncing.
->     */
+Ah, good catch, now dropped from all stable branches, thanks!
 
-A lot of PHYs do not have that problem though, so delaying 200 ms increases
-the boot time by 30 percent unnecessarily for a lot of systems, making
-“instant booting” quite hard.
-
-As it’s unknown for what PHY the delay was added, create a new board
-`board_ahci_nodbdelay` with the link flag `ATA_LFLAG_NO_DB_DELAY,`, and,
-for now, configure the AMD A85 FCH (Hudson D4) to use it.
-
-On the ASUS F2A85-M PRO it reduces the Linux kernel boot time by the
-expected 200 ms from 787 ms to 585 ms.
-
-Tested on ASUS F2A85-M PRO:
-
-Without patch, i. e., with 200 ms debounce delay:
-
-    […]
-    [    0.000000] DMI: ASUS F2A85-M_PRO/F2A85-M_PRO, BIOS 4.15-671-g7b043ef855 12/27/2021
-    […]
-    [    0.404885] ahci 0000:00:11.0: version 3.0
-    [    0.405466] ahci 0000:00:11.0: AHCI 0001.0300 32 slots 8 ports 6 Gbps 0x40 impl SATA mode
-    [    0.405470] ahci 0000:00:11.0: flags: 64bit ncq sntf ilck led clo pio
-    [    0.408036] scsi host0: ahci
-    [    0.408537] scsi host1: ahci
-    [    0.408932] scsi host2: ahci
-    [    0.409444] scsi host3: ahci
-    [    0.409841] scsi host4: ahci
-    [    0.410266] scsi host5: ahci
-    [    0.410661] scsi host6: ahci
-    [    0.411052] scsi host7: ahci
-    [    0.411284] ata1: DUMMY
-    [    0.411286] ata2: DUMMY
-    [    0.411286] ata3: DUMMY
-    [    0.411287] ata4: DUMMY
-    [    0.411288] ata5: DUMMY
-    [    0.411289] ata6: DUMMY
-    [    0.411291] ata7: SATA max UDMA/133 abar m2048@0xf01cc000 port 0xf01cc400 irq 19
-    [    0.411292] ata8: DUMMY
-    […]
-    [    0.422362] Key type encrypted registered
-    [    0.424903] PM:   Magic number: 1:28:636
-    [    0.723979] ata7: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-    [    0.724268] ata7.00: ATA-9: SanDisk SDSSDP064G, 2.0.0, max UDMA/133
-    [    0.724271] ata7.00: 125045424 sectors, multi 1: LBA48 NCQ (depth 32)
-    [    0.725537] ata7.00: configured for UDMA/133
-    [    0.725898] scsi 6:0:0:0: Direct-Access     ATA      SanDisk SDSSDP06 0    PQ: 0 ANSI: 5
-    [    0.726428] sd 6:0:0:0: [sda] 125045424 512-byte logical blocks: (64.0 GB/59.6 GiB)
-    [    0.726442] sd 6:0:0:0: [sda] Write Protect is off
-    [    0.726446] sd 6:0:0:0: [sda] Mode Sense: 00 3a 00 00
-    [    0.726464] sd 6:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
-    [    0.727985]  sda: sda1 sda2 sda3
-    [    0.728588] sd 6:0:0:0: [sda] Attached SCSI disk
-    [    0.738495] EXT4-fs (sda3): mounted filesystem with ordered data mode. Opts: (null). Quota mode: none.
-    […]
-    [    0.786812] Run /sbin/init as init process
-
-With patch, i. e., skipping the debounce delay saves 200 ms from the boot
-as expected.
-
-    […]
-    [    0.000000] DMI: ASUS F2A85-M_PRO/F2A85-M_PRO, BIOS 4.15-671-g7b043ef855 12/27/2021
-    […]
-    [    0.407372] ahci 0000:00:11.0: version 3.0
-    [    0.407909] ahci 0000:00:11.0: AHCI 0001.0300 32 slots 8 ports 6 Gbps 0x40 impl SATA mode
-    [    0.407913] ahci 0000:00:11.0: flags: 64bit ncq sntf ilck led clo pio
-    [    0.410520] scsi host0: ahci
-    [    0.411017] scsi host1: ahci
-    [    0.411418] scsi host2: ahci
-    [    0.411810] scsi host3: ahci
-    [    0.412225] scsi host4: ahci
-    [    0.412614] scsi host5: ahci
-    [    0.413005] scsi host6: ahci
-    [    0.413488] scsi host7: ahci
-    [    0.413713] ata1: DUMMY
-    [    0.413715] ata2: DUMMY
-    [    0.413716] ata3: DUMMY
-    [    0.413716] ata4: DUMMY
-    [    0.413717] ata5: DUMMY
-    [    0.413718] ata6: DUMMY
-    [    0.413720] ata7: SATA max UDMA/133 abar m2048@0xf01cc000 port 0xf01cc400 irq 19
-    [    0.413722] ata8: DUMMY
-    […]
-    [    0.425414] Key type encrypted registered
-    [    0.427873] PM:   Magic number: 1:234:838
-    [    0.522131] ata7: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-    [    0.522415] ata7.00: ATA-9: SanDisk SDSSDP064G, 2.0.0, max UDMA/133
-    [    0.522418] ata7.00: 125045424 sectors, multi 1: LBA48 NCQ (depth 32)
-    [    0.523636] ata7.00: configured for UDMA/133
-    [    0.523993] scsi 6:0:0:0: Direct-Access     ATA      SanDisk SDSSDP06 0    PQ: 0 ANSI: 5
-    [    0.524497] sd 6:0:0:0: [sda] 125045424 512-byte logical blocks: (64.0 GB/59.6 GiB)
-    [    0.524511] sd 6:0:0:0: [sda] Write Protect is off
-    [    0.524515] sd 6:0:0:0: [sda] Mode Sense: 00 3a 00 00
-    [    0.524534] sd 6:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
-    [    0.525953]  sda: sda1 sda2 sda3
-    [    0.526541] sd 6:0:0:0: [sda] Attached SCSI disk
-    [    0.536245] EXT4-fs (sda3): mounted filesystem with ordered data mode. Opts: (null). Quota mode: none.
-    […]
-    [    0.585327] Run /sbin/init as init process
-
-Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Guenter Roeck <groeck@chromium.org>
-
----
-
-Add the two Chromium OS developers Dmitry and Guenter to Cc, as to my
-knowledge Chromium/Chrome OS also tries to boot very fast, and the Chromium
-project has some CI infrastructure.
----
- drivers/ata/ahci.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
-index 6a2432e4adda..c79cc810888c 100644
---- a/drivers/ata/ahci.c
-+++ b/drivers/ata/ahci.c
-@@ -141,6 +141,13 @@ static const struct ata_port_info ahci_port_info[] = {
- 		.udma_mask	= ATA_UDMA6,
- 		.port_ops	= &ahci_ops,
- 	},
-+	[board_ahci_nodbdelay] = {
-+		.flags		= AHCI_FLAG_COMMON,
-+		.link_flags	= ATA_LFLAG_NO_DB_DELAY,
-+		.pio_mask	= ATA_PIO4,
-+		.udma_mask	= ATA_UDMA6,
-+		.port_ops	= &ahci_ops,
-+	},
- 	[board_ahci_nomsi] = {
- 		AHCI_HFLAGS	(AHCI_HFLAG_NO_MSI),
- 		.flags		= AHCI_FLAG_COMMON,
-@@ -437,6 +444,7 @@ static const struct pci_device_id ahci_pci_tbl[] = {
- 		board_ahci_al },
- 	/* AMD */
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_HUDSON2_SATA_IDE), board_ahci },
-+	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_HUDSON2_SATA_AHCI), board_ahci_nodbdelay },
- 	{ PCI_VDEVICE(AMD, 0x7900), board_ahci }, /* AMD CZ */
- 	{ PCI_VDEVICE(AMD, 0x7901), board_ahci_mobile }, /* AMD Green Sardine */
- 	/* AMD is using RAID class only for ahci controllers */
--- 
-2.30.2
-
+greg k-h

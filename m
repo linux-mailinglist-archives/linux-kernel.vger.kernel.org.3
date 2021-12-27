@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1195C47FFA6
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 852694800AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238915AbhL0Pj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:39:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238911AbhL0Phw (ORCPT
+        id S239479AbhL0PsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:48:21 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44010 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238996AbhL0Pmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:37:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D430C079797;
-        Mon, 27 Dec 2021 07:37:16 -0800 (PST)
+        Mon, 27 Dec 2021 10:42:47 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C099C610A3;
-        Mon, 27 Dec 2021 15:37:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9BA9C36AE7;
-        Mon, 27 Dec 2021 15:37:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B5C5B810C3;
+        Mon, 27 Dec 2021 15:42:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A084EC36AE7;
+        Mon, 27 Dec 2021 15:42:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619435;
-        bh=keQiBDN4Hp1nG4z2R8uXcR71qX1KoXT5yfzhee+i3ro=;
+        s=korg; t=1640619765;
+        bh=UXSAzmMYGQlIpw2x+mclLRj0aAcTHaXe2OLhCbvBWAE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZeDAMiV0nbBUAI7gyyNyxClbxs0Rl7ZaSFBxfHEYYSq+qVWeoU62rMtX8yv7KR2Ev
-         zpKdCFMz1ynuuBTYCUsmxuxFylFeV6ppV9mgZ7jnJmBj+XvwQ18kJnxtua9p5UjYdB
-         G1GUzFJPLEtmr1s/parRwT9tUcj6M2glFDdQp2Xo=
+        b=IXAEhb/G2k1oNz0ilkbKZS1SbzXQALdK56xEgefaEhph7mCeHfQdVHZBLtXTsxIGd
+         AKSxl6w55TP+lzt4E+MRINR2s5VLdWLq6F5TlDmKERV47nYjlhQ/gjjI7SSQCFfXJv
+         1sHqZIY1eQhiM2zkGGCRDx8HaD33STglqVrxKzKo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Fernando Fernandez Mancera <ffmancera@riseup.net>,
-        Jay Vosburgh <jay.vosburgh@canonical.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Philipp Rudo <prudo@redhat.com>,
+        Baoquan He <bhe@redhat.com>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 22/76] bonding: fix ad_actor_system option setting to default
+Subject: [PATCH 5.15 062/128] kernel/crash_core: suppress unknown crashkernel parameter warning
 Date:   Mon, 27 Dec 2021 16:30:37 +0100
-Message-Id: <20211227151325.460376158@linuxfoundation.org>
+Message-Id: <20211227151333.571070318@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
-References: <20211227151324.694661623@linuxfoundation.org>
+In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
+References: <20211227151331.502501367@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,63 +49,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fernando Fernandez Mancera <ffmancera@riseup.net>
+From: Philipp Rudo <prudo@redhat.com>
 
-[ Upstream commit 1c15b05baea71a5ff98235783e3e4ad227760876 ]
+[ Upstream commit 71d2bcec2d4d69ff109c497e6611d6c53c8926d4 ]
 
-When 802.3ad bond mode is configured the ad_actor_system option is set to
-"00:00:00:00:00:00". But when trying to set the all-zeroes MAC as actors'
-system address it was failing with EINVAL.
+When booting with crashkernel= on the kernel command line a warning
+similar to
 
-An all-zeroes ethernet address is valid, only multicast addresses are not
-valid values.
+    Kernel command line: ro console=ttyS0 crashkernel=256M
+    Unknown kernel command line parameters "crashkernel=256M", will be passed to user space.
 
-Fixes: 171a42c38c6e ("bonding: add netlink support for sys prio, actor sys mac, and port key")
-Signed-off-by: Fernando Fernandez Mancera <ffmancera@riseup.net>
-Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
-Link: https://lore.kernel.org/r/20211221111345.2462-1-ffmancera@riseup.net
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+is printed.
+
+This comes from crashkernel= being parsed independent from the kernel
+parameter handling mechanism.  So the code in init/main.c doesn't know
+that crashkernel= is a valid kernel parameter and prints this incorrect
+warning.
+
+Suppress the warning by adding a dummy early_param handler for
+crashkernel=.
+
+Link: https://lkml.kernel.org/r/20211208133443.6867-1-prudo@redhat.com
+Fixes: 86d1919a4fb0 ("init: print out unknown kernel parameters")
+Signed-off-by: Philipp Rudo <prudo@redhat.com>
+Acked-by: Baoquan He <bhe@redhat.com>
+Cc: Andrew Halaney <ahalaney@redhat.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/networking/bonding.rst | 11 ++++++-----
- drivers/net/bonding/bond_options.c   |  2 +-
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ kernel/crash_core.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/Documentation/networking/bonding.rst b/Documentation/networking/bonding.rst
-index adc314639085b..413dca513e1db 100644
---- a/Documentation/networking/bonding.rst
-+++ b/Documentation/networking/bonding.rst
-@@ -196,11 +196,12 @@ ad_actor_sys_prio
- ad_actor_system
+diff --git a/kernel/crash_core.c b/kernel/crash_core.c
+index eb53f5ec62c90..256cf6db573cd 100644
+--- a/kernel/crash_core.c
++++ b/kernel/crash_core.c
+@@ -6,6 +6,7 @@
  
- 	In an AD system, this specifies the mac-address for the actor in
--	protocol packet exchanges (LACPDUs). The value cannot be NULL or
--	multicast. It is preferred to have the local-admin bit set for this
--	mac but driver does not enforce it. If the value is not given then
--	system defaults to using the masters' mac address as actors' system
--	address.
-+	protocol packet exchanges (LACPDUs). The value cannot be a multicast
-+	address. If the all-zeroes MAC is specified, bonding will internally
-+	use the MAC of the bond itself. It is preferred to have the
-+	local-admin bit set for this mac but driver does not enforce it. If
-+	the value is not given then system defaults to using the masters'
-+	mac address as actors' system address.
+ #include <linux/buildid.h>
+ #include <linux/crash_core.h>
++#include <linux/init.h>
+ #include <linux/utsname.h>
+ #include <linux/vmalloc.h>
  
- 	This parameter has effect only in 802.3ad mode and is available through
- 	SysFs interface.
-diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bond_options.c
-index a4e4e15f574df..fe55c81608daa 100644
---- a/drivers/net/bonding/bond_options.c
-+++ b/drivers/net/bonding/bond_options.c
-@@ -1466,7 +1466,7 @@ static int bond_option_ad_actor_system_set(struct bonding *bond,
- 		mac = (u8 *)&newval->value;
- 	}
+@@ -295,6 +296,16 @@ int __init parse_crashkernel_low(char *cmdline,
+ 				"crashkernel=", suffix_tbl[SUFFIX_LOW]);
+ }
  
--	if (!is_valid_ether_addr(mac))
-+	if (is_multicast_ether_addr(mac))
- 		goto err;
- 
- 	netdev_dbg(bond->dev, "Setting ad_actor_system to %pM\n", mac);
++/*
++ * Add a dummy early_param handler to mark crashkernel= as a known command line
++ * parameter and suppress incorrect warnings in init/main.c.
++ */
++static int __init parse_crashkernel_dummy(char *arg)
++{
++	return 0;
++}
++early_param("crashkernel", parse_crashkernel_dummy);
++
+ Elf_Word *append_elf_note(Elf_Word *buf, char *name, unsigned int type,
+ 			  void *data, size_t data_len)
+ {
 -- 
 2.34.1
 

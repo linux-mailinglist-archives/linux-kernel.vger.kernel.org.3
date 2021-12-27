@@ -2,187 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D879E47FF99
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:39:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D5247FEDF
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239183AbhL0Pi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:38:59 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:40900 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238535AbhL0PhN (ORCPT
+        id S237756AbhL0PdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:33:20 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34156 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237817AbhL0PdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:37:13 -0500
+        Mon, 27 Dec 2021 10:33:05 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5738BCE10D2;
-        Mon, 27 Dec 2021 15:37:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16383C36AEA;
-        Mon, 27 Dec 2021 15:37:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39439610AA;
+        Mon, 27 Dec 2021 15:33:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1B9BC36AE7;
+        Mon, 27 Dec 2021 15:33:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619429;
-        bh=4KCna9C8mC+FvcbcT1kttdc2NS9gKQ4mSk4IfMo2J2k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=umiwvConyhX1YygUbr5AUUkP5pLOZPexJxY47ZqZ1LKxRpzpB1TmQCrU8+JlqIU4z
-         welcpUx3z2nDw95ONubCFOh32QQv/fzELN5HciREZW75EeiMDQU7sGPfWwvYP2UJMc
-         sRxzPIVwdIWYISl4ViWPT5gAwbcfGRsK6t9T+Gu0=
+        s=korg; t=1640619184;
+        bh=IsE24FpmPUazOHG27INMdUQZzGEJwPyOubWRJisB4PY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DGVpoJv3dt3P2hmRZ0//tzTDfP9W4Cd6rvt8toLn0FlrlRUyy5l9iZwcMh/Knb0mx
+         ony6JhzuoghfF7zpkBJhWc+jDlhsNsljJjvMQI7n9JQ1el5CgAMkDdfr2KfQYiOgzN
+         ItLKwhx0/fL9hZmWAtSdT0hSxSqgkfkvM+rdLb3M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wu Bo <wubo40@huawei.com>,
-        Corey Minyard <cminyard@mvista.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 21/76] ipmi: Fix UAF when uninstall ipmi_si and ipmi_msghandler module
-Date:   Mon, 27 Dec 2021 16:30:36 +0100
-Message-Id: <20211227151325.419125615@linuxfoundation.org>
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: [PATCH 4.19 00/38] 4.19.223-rc1 review
+Date:   Mon, 27 Dec 2021 16:30:37 +0100
+Message-Id: <20211227151319.379265346@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
-References: <20211227151324.694661623@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.223-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-4.19.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 4.19.223-rc1
+X-KernelTest-Deadline: 2021-12-29T15:13+00:00
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wu Bo <wubo40@huawei.com>
+This is the start of the stable review cycle for the 4.19.223 release.
+There are 38 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-[ Upstream commit ffb76a86f8096a8206be03b14adda6092e18e275 ]
+Responses should be made by Wed, 29 Dec 2021 15:13:09 +0000.
+Anything received after that time might be too late.
 
-Hi,
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.223-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+and the diffstat can be found below.
 
-When testing install and uninstall of ipmi_si.ko and ipmi_msghandler.ko,
-the system crashed.
+thanks,
 
-The log as follows:
-[  141.087026] BUG: unable to handle kernel paging request at ffffffffc09b3a5a
-[  141.087241] PGD 8fe4c0d067 P4D 8fe4c0d067 PUD 8fe4c0f067 PMD 103ad89067 PTE 0
-[  141.087464] Oops: 0010 [#1] SMP NOPTI
-[  141.087580] CPU: 67 PID: 668 Comm: kworker/67:1 Kdump: loaded Not tainted 4.18.0.x86_64 #47
-[  141.088009] Workqueue: events 0xffffffffc09b3a40
-[  141.088009] RIP: 0010:0xffffffffc09b3a5a
-[  141.088009] Code: Bad RIP value.
-[  141.088009] RSP: 0018:ffffb9094e2c3e88 EFLAGS: 00010246
-[  141.088009] RAX: 0000000000000000 RBX: ffff9abfdb1f04a0 RCX: 0000000000000000
-[  141.088009] RDX: 0000000000000000 RSI: 0000000000000246 RDI: 0000000000000246
-[  141.088009] RBP: 0000000000000000 R08: ffff9abfffee3cb8 R09: 00000000000002e1
-[  141.088009] R10: ffffb9094cb73d90 R11: 00000000000f4240 R12: ffff9abfffee8700
-[  141.088009] R13: 0000000000000000 R14: ffff9abfdb1f04a0 R15: ffff9abfdb1f04a8
-[  141.088009] FS:  0000000000000000(0000) GS:ffff9abfffec0000(0000) knlGS:0000000000000000
-[  141.088009] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  141.088009] CR2: ffffffffc09b3a30 CR3: 0000008fe4c0a001 CR4: 00000000007606e0
-[  141.088009] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[  141.088009] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[  141.088009] PKRU: 55555554
-[  141.088009] Call Trace:
-[  141.088009]  ? process_one_work+0x195/0x390
-[  141.088009]  ? worker_thread+0x30/0x390
-[  141.088009]  ? process_one_work+0x390/0x390
-[  141.088009]  ? kthread+0x10d/0x130
-[  141.088009]  ? kthread_flush_work_fn+0x10/0x10
-[  141.088009]  ? ret_from_fork+0x35/0x40] BUG: unable to handle kernel paging request at ffffffffc0b28a5a
-[  200.223240] PGD 97fe00d067 P4D 97fe00d067 PUD 97fe00f067 PMD a580cbf067 PTE 0
-[  200.223464] Oops: 0010 [#1] SMP NOPTI
-[  200.223579] CPU: 63 PID: 664 Comm: kworker/63:1 Kdump: loaded Not tainted 4.18.0.x86_64 #46
-[  200.224008] Workqueue: events 0xffffffffc0b28a40
-[  200.224008] RIP: 0010:0xffffffffc0b28a5a
-[  200.224008] Code: Bad RIP value.
-[  200.224008] RSP: 0018:ffffbf3c8e2a3e88 EFLAGS: 00010246
-[  200.224008] RAX: 0000000000000000 RBX: ffffa0799ad6bca0 RCX: 0000000000000000
-[  200.224008] RDX: 0000000000000000 RSI: 0000000000000246 RDI: 0000000000000246
-[  200.224008] RBP: 0000000000000000 R08: ffff9fe43fde3cb8 R09: 00000000000000d5
-[  200.224008] R10: ffffbf3c8cb53d90 R11: 00000000000f4240 R12: ffff9fe43fde8700
-[  200.224008] R13: 0000000000000000 R14: ffffa0799ad6bca0 R15: ffffa0799ad6bca8
-[  200.224008] FS:  0000000000000000(0000) GS:ffff9fe43fdc0000(0000) knlGS:0000000000000000
-[  200.224008] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  200.224008] CR2: ffffffffc0b28a30 CR3: 00000097fe00a002 CR4: 00000000007606e0
-[  200.224008] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[  200.224008] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[  200.224008] PKRU: 55555554
-[  200.224008] Call Trace:
-[  200.224008]  ? process_one_work+0x195/0x390
-[  200.224008]  ? worker_thread+0x30/0x390
-[  200.224008]  ? process_one_work+0x390/0x390
-[  200.224008]  ? kthread+0x10d/0x130
-[  200.224008]  ? kthread_flush_work_fn+0x10/0x10
-[  200.224008]  ? ret_from_fork+0x35/0x40
-[  200.224008] kernel fault(0x1) notification starting on CPU 63
-[  200.224008] kernel fault(0x1) notification finished on CPU 63
-[  200.224008] CR2: ffffffffc0b28a5a
-[  200.224008] ---[ end trace c82a412d93f57412 ]---
+greg k-h
 
-The reason is as follows:
-T1: rmmod ipmi_si.
-    ->ipmi_unregister_smi()
-        -> ipmi_bmc_unregister()
-            -> __ipmi_bmc_unregister()
-                -> kref_put(&bmc->usecount, cleanup_bmc_device);
-                    -> schedule_work(&bmc->remove_work);
+-------------
+Pseudo-Shortlog of commits:
 
-T2: rmmod ipmi_msghandler.
-    ipmi_msghander module uninstalled, and the module space
-    will be freed.
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 4.19.223-rc1
 
-T3: bmc->remove_work doing cleanup the bmc resource.
-    -> cleanup_bmc_work()
-        -> platform_device_unregister(&bmc->pdev);
-            -> platform_device_del(pdev);
-                -> device_del(&pdev->dev);
-                    -> kobject_uevent(&dev->kobj, KOBJ_REMOVE);
-                        -> kobject_uevent_env()
-                            -> dev_uevent()
-                                -> if (dev->type && dev->type->name)
+Rémi Denis-Courmont <remi@remlab.net>
+    phonet/pep: refuse to enable an unbound pipe
 
-   'dev->type'(bmc_device_type) pointer space has freed when uninstall
-    ipmi_msghander module, 'dev->type->name' cause the system crash.
+Lin Ma <linma@zju.edu.cn>
+    hamradio: improve the incomplete fix to avoid NPD
 
-drivers/char/ipmi/ipmi_msghandler.c:
-2820 static const struct device_type bmc_device_type = {
-2821         .groups         = bmc_dev_attr_groups,
-2822 };
+Lin Ma <linma@zju.edu.cn>
+    hamradio: defer ax25 kfree after unregister_netdev
 
-Steps to reproduce:
-Add a time delay in cleanup_bmc_work() function,
-and uninstall ipmi_si and ipmi_msghandler module.
+Lin Ma <linma@zju.edu.cn>
+    ax25: NPD bug when detaching AX25 device
 
-2910 static void cleanup_bmc_work(struct work_struct *work)
-2911 {
-2912         struct bmc_device *bmc = container_of(work, struct bmc_device,
-2913                                               remove_work);
-2914         int id = bmc->pdev.id; /* Unregister overwrites id */
-2915
-2916         msleep(3000);   <---
-2917         platform_device_unregister(&bmc->pdev);
-2918         ida_simple_remove(&ipmi_bmc_ida, id);
-2919 }
+Guenter Roeck <linux@roeck-us.net>
+    hwmon: (lm90) Do not report 'busy' status bit as alarm
 
-Use 'remove_work_wq' instead of 'system_wq' to solve this issues.
+Samuel Čavoj <samuel@cavoj.net>
+    Input: i8042 - enable deferred probe quirk for ASUS UM325UA
 
-Fixes: b2cfd8ab4add ("ipmi: Rework device id and guid handling to catch changing BMCs")
-Signed-off-by: Wu Bo <wubo40@huawei.com>
-Message-Id: <1640070034-56671-1-git-send-email-wubo40@huawei.com>
-Signed-off-by: Corey Minyard <cminyard@mvista.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/char/ipmi/ipmi_msghandler.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Sean Christopherson <seanjc@google.com>
+    KVM: VMX: Fix stale docs for kvm-intel.emulate_invalid_guest_state
 
-diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
-index 38b545bef05a3..fc6445ed7c377 100644
---- a/drivers/char/ipmi/ipmi_msghandler.c
-+++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -2945,7 +2945,7 @@ cleanup_bmc_device(struct kref *ref)
- 	 * with removing the device attributes while reading a device
- 	 * attribute.
- 	 */
--	schedule_work(&bmc->remove_work);
-+	queue_work(remove_work_wq, &bmc->remove_work);
- }
- 
- /*
--- 
-2.34.1
+Marian Postevca <posteuca@mutex.one>
+    usb: gadget: u_ether: fix race in setting MAC address in setup phase
 
+Chao Yu <chao@kernel.org>
+    f2fs: fix to do sanity check on last xattr entry in __f2fs_setxattr()
+
+Ard Biesheuvel <ardb@kernel.org>
+    ARM: 9169/1: entry: fix Thumb2 bug in iWMMXt exception handling
+
+Fabien Dessenne <fabien.dessenne@foss.st.com>
+    pinctrl: stm32: consider the GPIO offset to expose all the GPIO lines
+
+Andrew Cooper <andrew.cooper3@citrix.com>
+    x86/pkey: Fix undefined behaviour with PKRU_WD_BIT
+
+John David Anglin <dave.anglin@bell.net>
+    parisc: Correct completer in lws start
+
+Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+    ipmi: fix initialization when workqueue allocation fails
+
+Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+    ipmi: bail out if init_srcu_struct fails
+
+José Expósito <jose.exposito89@gmail.com>
+    Input: atmel_mxt_ts - fix double free in mxt_read_info_block
+
+Colin Ian King <colin.i.king@gmail.com>
+    ALSA: drivers: opl3: Fix incorrect use of vp->state
+
+Xiaoke Wang <xkernel.wang@foxmail.com>
+    ALSA: jack: Check the return value of kstrdup()
+
+Guenter Roeck <linux@roeck-us.net>
+    hwmon: (lm90) Fix usage of CONFIG2 register in detect function
+
+Jiasheng Jiang <jiasheng@iscas.ac.cn>
+    sfc: falcon: Check null pointer of rx_queue->page_ring
+
+Jiasheng Jiang <jiasheng@iscas.ac.cn>
+    drivers: net: smc911x: Check for error irq
+
+Jiasheng Jiang <jiasheng@iscas.ac.cn>
+    fjes: Check for error irq
+
+Fernando Fernandez Mancera <ffmancera@riseup.net>
+    bonding: fix ad_actor_system option setting to default
+
+Wu Bo <wubo40@huawei.com>
+    ipmi: Fix UAF when uninstall ipmi_si and ipmi_msghandler module
+
+Willem de Bruijn <willemb@google.com>
+    net: skip virtio_net_hdr_set_proto if protocol already set
+
+Willem de Bruijn <willemb@google.com>
+    net: accept UFOv6 packages in virtio_net_hdr_to_skb
+
+Jiasheng Jiang <jiasheng@iscas.ac.cn>
+    qlcnic: potential dereference null pointer of rx_queue->page_ring
+
+Ignacy Gawędzki <ignacy.gawedzki@green-communications.fr>
+    netfilter: fix regression in looped (broad|multi)cast's MAC handling
+
+José Expósito <jose.exposito89@gmail.com>
+    IB/qib: Fix memory leak in qib_user_sdma_queue_pkts()
+
+Dongliang Mu <mudongliangabcd@gmail.com>
+    spi: change clk_disable_unprepare to clk_unprepare
+
+Robert Marko <robert.marko@sartura.hr>
+    arm64: dts: allwinner: orangepi-zero-plus: fix PHY mode
+
+Benjamin Tissoires <benjamin.tissoires@redhat.com>
+    HID: holtek: fix mouse probing
+
+Paolo Valente <paolo.valente@linaro.org>
+    block, bfq: fix use after free in bfq_bfqq_expire
+
+Paolo Valente <paolo.valente@linaro.org>
+    block, bfq: fix queue removal from weights tree
+
+Paolo Valente <paolo.valente@linaro.org>
+    block, bfq: fix decrement of num_active_groups
+
+Federico Motta <federico@willer.it>
+    block, bfq: fix asymmetric scenarios detection
+
+Federico Motta <federico@willer.it>
+    block, bfq: improve asymmetric scenarios detection
+
+Greg Jesionowski <jesionowskigreg@gmail.com>
+    net: usb: lan78xx: add Allied Telesis AT29M2-AF
+
+
+-------------
+
+Diffstat:
+
+ Documentation/admin-guide/kernel-parameters.txt    |   8 +-
+ Documentation/networking/bonding.txt               |  11 +-
+ Makefile                                           |   4 +-
+ arch/arm/kernel/entry-armv.S                       |   8 +-
+ .../dts/allwinner/sun50i-h5-orangepi-zero-plus.dts |   2 +-
+ arch/parisc/kernel/syscall.S                       |   2 +-
+ arch/x86/include/asm/pgtable.h                     |   4 +-
+ block/bfq-iosched.c                                | 287 +++++++++++++--------
+ block/bfq-iosched.h                                |  76 ++++--
+ block/bfq-wf2q.c                                   |  56 ++--
+ drivers/char/ipmi/ipmi_msghandler.c                |  21 +-
+ drivers/hid/hid-holtek-mouse.c                     |  15 ++
+ drivers/hwmon/lm90.c                               |   8 +-
+ drivers/infiniband/hw/qib/qib_user_sdma.c          |   2 +-
+ drivers/input/serio/i8042-x86ia64io.h              |   7 +
+ drivers/input/touchscreen/atmel_mxt_ts.c           |   2 +-
+ drivers/net/bonding/bond_options.c                 |   2 +-
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h  |   2 +-
+ .../ethernet/qlogic/qlcnic/qlcnic_sriov_common.c   |  12 +-
+ .../net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c   |   4 +-
+ drivers/net/ethernet/sfc/falcon/rx.c               |   5 +-
+ drivers/net/ethernet/smsc/smc911x.c                |   5 +
+ drivers/net/fjes/fjes_main.c                       |   5 +
+ drivers/net/hamradio/mkiss.c                       |   5 +-
+ drivers/net/usb/lan78xx.c                          |   6 +
+ drivers/pinctrl/stm32/pinctrl-stm32.c              |   8 +-
+ drivers/spi/spi-armada-3700.c                      |   2 +-
+ drivers/usb/gadget/function/u_ether.c              |  15 +-
+ fs/f2fs/xattr.c                                    |   9 +-
+ include/linux/virtio_net.h                         |  25 +-
+ net/ax25/af_ax25.c                                 |   4 +-
+ net/netfilter/nfnetlink_log.c                      |   3 +-
+ net/netfilter/nfnetlink_queue.c                    |   3 +-
+ net/phonet/pep.c                                   |   2 +
+ sound/core/jack.c                                  |   4 +
+ sound/drivers/opl3/opl3_midi.c                     |   2 +-
+ 36 files changed, 424 insertions(+), 212 deletions(-)
 
 

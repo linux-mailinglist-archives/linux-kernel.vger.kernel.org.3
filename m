@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6212347FECC
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE0647FF28
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234808AbhL0Pcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:32:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35496 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234700AbhL0Pcf (ORCPT
+        id S231197AbhL0Pfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:35:48 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35760 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238413AbhL0PfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:32:35 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E32C06173E;
-        Mon, 27 Dec 2021 07:32:34 -0800 (PST)
+        Mon, 27 Dec 2021 10:35:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DEB54CE10C4;
-        Mon, 27 Dec 2021 15:32:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD84CC36AE7;
-        Mon, 27 Dec 2021 15:32:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A68F461073;
+        Mon, 27 Dec 2021 15:35:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87CFDC36AE7;
+        Mon, 27 Dec 2021 15:35:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619151;
-        bh=DcKRh/QnE1wO+jJhNAAgKNSWeTZiaeqeZaG4IvNfv6s=;
+        s=korg; t=1640619321;
+        bh=H1HvhdcE93w5BDYDd+qW8IVbU/oz9Ntu3rENlLw5jYM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VxFXQ6noptoVin8zgyOrHe9CjgRvTAvwKVGskFMujzONBInmJ4/M9bnzhP7RftDim
-         YeL8b6u5q9SYgfgVcZnV9Wg6p+ELJIXauDSB+1rSOC1YN9Ei+fRgGbzo7ri7wcXWcq
-         QpYkck8TPlLka3oaX9ARw4H6PgzRblgdzWVDB4Wg=
+        b=oSF7Pof1PD7ZiNtjPWhyhTtav//IVbXJmaimOWnkA3Qt8tZKukS7zCWLN2Zl/XDWd
+         jW5PHQhb+mJfI8jLh2dBdRADANXk9IZ/zUEzHv7cb8qEtxA1kipti/oPXGo+yZARDl
+         QhzFy5Nkm7j81+5ihU2IbBsKqi0sfMP2GJcOUkJs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 12/38] qlcnic: potential dereference null pointer of rx_queue->page_ring
+Subject: [PATCH 5.4 13/47] fjes: Check for error irq
 Date:   Mon, 27 Dec 2021 16:30:49 +0100
-Message-Id: <20211227151319.778446399@linuxfoundation.org>
+Message-Id: <20211227151321.253950903@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
-References: <20211227151319.379265346@linuxfoundation.org>
+In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
+References: <20211227151320.801714429@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,99 +48,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 60ec7fcfe76892a1479afab51ff17a4281923156 ]
+[ Upstream commit db6d6afe382de5a65d6ccf51253ab48b8e8336c3 ]
 
-The return value of kcalloc() needs to be checked.
-To avoid dereference of null pointer in case of the failure of alloc.
-Therefore, it might be better to change the return type of
-qlcnic_sriov_alloc_vlans() and return -ENOMEM when alloc fails and
-return 0 the others.
-Also, qlcnic_sriov_set_guest_vlan_mode() and __qlcnic_pci_sriov_enable()
-should deal with the return value of qlcnic_sriov_alloc_vlans().
+I find that platform_get_irq() will not always succeed.
+It will return error irq in case of the failure.
+Therefore, it might be better to check it if order to avoid the use of
+error irq.
 
-Fixes: 154d0c810c53 ("qlcnic: VLAN enhancement for 84XX adapters")
+Fixes: 658d439b2292 ("fjes: Introduce FUJITSU Extended Socket Network Device driver")
 Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h    |  2 +-
- .../net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c | 12 +++++++++---
- drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c |  4 +++-
- 3 files changed, 13 insertions(+), 5 deletions(-)
+ drivers/net/fjes/fjes_main.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h
-index 5f327659efa7a..85b688f60b876 100644
---- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h
-+++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h
-@@ -202,7 +202,7 @@ int qlcnic_sriov_get_vf_vport_info(struct qlcnic_adapter *,
- 				   struct qlcnic_info *, u16);
- int qlcnic_sriov_cfg_vf_guest_vlan(struct qlcnic_adapter *, u16, u8);
- void qlcnic_sriov_free_vlans(struct qlcnic_adapter *);
--void qlcnic_sriov_alloc_vlans(struct qlcnic_adapter *);
-+int qlcnic_sriov_alloc_vlans(struct qlcnic_adapter *);
- bool qlcnic_sriov_check_any_vlan(struct qlcnic_vf_info *);
- void qlcnic_sriov_del_vlan_id(struct qlcnic_sriov *,
- 			      struct qlcnic_vf_info *, u16);
-diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c
-index 77e386ebff09c..98275f18a87b0 100644
---- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c
-+++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c
-@@ -433,7 +433,7 @@ static int qlcnic_sriov_set_guest_vlan_mode(struct qlcnic_adapter *adapter,
- 					    struct qlcnic_cmd_args *cmd)
- {
- 	struct qlcnic_sriov *sriov = adapter->ahw->sriov;
--	int i, num_vlans;
-+	int i, num_vlans, ret;
- 	u16 *vlans;
- 
- 	if (sriov->allowed_vlans)
-@@ -444,7 +444,9 @@ static int qlcnic_sriov_set_guest_vlan_mode(struct qlcnic_adapter *adapter,
- 	dev_info(&adapter->pdev->dev, "Number of allowed Guest VLANs = %d\n",
- 		 sriov->num_allowed_vlans);
- 
--	qlcnic_sriov_alloc_vlans(adapter);
-+	ret = qlcnic_sriov_alloc_vlans(adapter);
-+	if (ret)
-+		return ret;
- 
- 	if (!sriov->any_vlan)
- 		return 0;
-@@ -2164,7 +2166,7 @@ static int qlcnic_sriov_vf_resume(struct qlcnic_adapter *adapter)
- 	return err;
- }
- 
--void qlcnic_sriov_alloc_vlans(struct qlcnic_adapter *adapter)
-+int qlcnic_sriov_alloc_vlans(struct qlcnic_adapter *adapter)
- {
- 	struct qlcnic_sriov *sriov = adapter->ahw->sriov;
- 	struct qlcnic_vf_info *vf;
-@@ -2174,7 +2176,11 @@ void qlcnic_sriov_alloc_vlans(struct qlcnic_adapter *adapter)
- 		vf = &sriov->vf_info[i];
- 		vf->sriov_vlans = kcalloc(sriov->num_allowed_vlans,
- 					  sizeof(*vf->sriov_vlans), GFP_KERNEL);
-+		if (!vf->sriov_vlans)
-+			return -ENOMEM;
- 	}
+diff --git a/drivers/net/fjes/fjes_main.c b/drivers/net/fjes/fjes_main.c
+index b89b4a3800a4d..bef0133696c31 100644
+--- a/drivers/net/fjes/fjes_main.c
++++ b/drivers/net/fjes/fjes_main.c
+@@ -1269,6 +1269,11 @@ static int fjes_probe(struct platform_device *plat_dev)
+ 	hw->hw_res.start = res->start;
+ 	hw->hw_res.size = resource_size(res);
+ 	hw->hw_res.irq = platform_get_irq(plat_dev, 0);
++	if (hw->hw_res.irq < 0) {
++		err = hw->hw_res.irq;
++		goto err_free_control_wq;
++	}
 +
-+	return 0;
- }
- 
- void qlcnic_sriov_free_vlans(struct qlcnic_adapter *adapter)
-diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c
-index 50eaafa3eaba3..c9f2cd2462230 100644
---- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c
-+++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c
-@@ -598,7 +598,9 @@ static int __qlcnic_pci_sriov_enable(struct qlcnic_adapter *adapter,
+ 	err = fjes_hw_init(&adapter->hw);
  	if (err)
- 		goto del_flr_queue;
- 
--	qlcnic_sriov_alloc_vlans(adapter);
-+	err = qlcnic_sriov_alloc_vlans(adapter);
-+	if (err)
-+		goto del_flr_queue;
- 
- 	return err;
- 
+ 		goto err_free_control_wq;
 -- 
 2.34.1
 

@@ -2,113 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA46480157
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 17:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37132480149
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:57:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238108AbhL0QAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 11:00:41 -0500
-Received: from mga14.intel.com ([192.55.52.115]:52627 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240030AbhL0P7y (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:59:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640620794; x=1672156794;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=Qopi0GCbZb8D3tqnGHATwO1hv9M0cdIa+FRZv6opEto=;
-  b=CU7xhaTCZMByetb9EFG7yF6dptQXGhV3L0pWaETGBguZOWK8W7RDHPEZ
-   zvQts/HJU9I/awVwlb0/hKps6dvPMUaUbEpsH52qDvMIgMmUOZqCqoTno
-   PCk/ho5pdC1eIHfTira04eIFe+0AMkkccWr5VUFdn40oSdfiH6SvxRPVl
-   Fzfbh1jlKEmmYWCEU3T2j7G9jKIeCd5DqwOlicD3KJ5BJJu4pjL9PoXp0
-   oS8YUPjIwET4qHaK/aB73DrpW2qqflM26pVMJQfce6UjIAxOrcluUN3MQ
-   ZxRtcM8Iiq1ZJeqNJWQ4oVmP7NfOtk6UkV/iL+7pBNcjkSzdXnPGtMPx9
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="241441778"
-X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; 
-   d="scan'208";a="241441778"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 07:56:17 -0800
-X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; 
-   d="scan'208";a="486053937"
-Received: from dannysua-mobl2.amr.corp.intel.com (HELO [10.212.232.47]) ([10.212.232.47])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 07:56:16 -0800
-Subject: Re: [PATCH v2 3/3] x86: Support huge vmalloc mappings
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20211227145903.187152-1-wangkefeng.wang@huawei.com>
- <20211227145903.187152-4-wangkefeng.wang@huawei.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Message-ID: <70ff58bc-3a92-55c2-2da8-c5877af72e44@intel.com>
-Date:   Mon, 27 Dec 2021 07:56:14 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S240850AbhL0P5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:57:40 -0500
+Received: from mail-qk1-f176.google.com ([209.85.222.176]:33575 "EHLO
+        mail-qk1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240105AbhL0P5D (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 10:57:03 -0500
+Received: by mail-qk1-f176.google.com with SMTP id de30so14812339qkb.0;
+        Mon, 27 Dec 2021 07:57:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MMjwqvI3oPgoDtspnzeQqaAzAEUbhEHL+9feOV2faXI=;
+        b=CO1cRJS9OozbvaXjJw8k0q9aqu7S8HsOCLvDrMQfpZftVtlVx8P/AHcb8FhiyEQ+Ox
+         5Qce8EQPG1a31/L0d6Vmsbq5Ebm4do1Gvs7TkBp4PHqXx0bSDC2fm+Vttox2HXYz2Fz9
+         ZNit73hJ0R98PIOlBZlJH3PJzf5+nF9Xd4/O+gm3q2uEyq842gjya3tCkTDJghkyHtaW
+         c1ICrm0cEpKfBw7oZ8qDKYuCEo+gf9g+nk04irS5b4X4ajDIA3RH9qSiw/4Im6yIV3fM
+         Jk5vAjQ0MDblCqDxEJcl8W6j1qJP1WY+eCeJPdxGqM11mHpIB7ixnYTpIt8iF7m78uH2
+         I71g==
+X-Gm-Message-State: AOAM530Vi0WruoJiW/X/oGjKrFBmq//R3qN8YpXs8O1TI607sHYwbobD
+        AZD8iTqJ+Zb/1Uaq6aegBOubaYRvehKeT98w8dQ=
+X-Google-Smtp-Source: ABdhPJxUqbylvZ+oSGOC4Njq/NWVZT7SvUWo6lTrvSnVw3y6ewrloKmIJu9NgzhyU9EVzo13J/S3Xpz0hnGgOhHNJAs=
+X-Received: by 2002:a05:620a:2001:: with SMTP id c1mr12237712qka.374.1640620623008;
+ Mon, 27 Dec 2021 07:57:03 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211227145903.187152-4-wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <CGME20211224064428epcas1p40282064859748cd6735279bb7274a753@epcas1p4.samsung.com>
+ <09ff8415-0ebb-c8f2-026b-65af27f58f44@samsung.com>
+In-Reply-To: <09ff8415-0ebb-c8f2-026b-65af27f58f44@samsung.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 27 Dec 2021 16:56:44 +0100
+Message-ID: <CAJZ5v0jQ_JyEAYK73ZNvyM_rwKPvR-Mk6UG5nPe+BQki42yjaw@mail.gmail.com>
+Subject: Re: [GIT PULL] devfreq next for v5.17
+To:     Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     "Rafael J. Wysocki <rjw@rjwysocki.net>" <rjw@rjwysocki.net>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Chanwoo Choi (chanwoo@kernel.org)" <chanwoo@kernel.org>,
+        =?UTF-8?B?7ZWo66qF7KO8?= <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/27/21 6:59 AM, Kefeng Wang wrote:
-> This patch select HAVE_ARCH_HUGE_VMALLOC to let X86_64 and X86_PAE
-> support huge vmalloc mappings.
+On Fri, Dec 24, 2021 at 7:45 AM Chanwoo Choi <cw00.choi@samsung.com> wrote:
+>
+> Dear Rafael,
+>
+> This is devfreq-next pull request for v5.17-rc1. I add detailed description of
+> this pull request on the following tag. Please pull devfreq with following updates.
+>
+> Best Regards,
+> Chanwoo Choi
+>
+>
+> The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
+>
+>   Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-5.17
+>
+> for you to fetch changes up to 4667431419e93b63b4edfe7abdfc96cefcbcc051:
+>
+>   PM / devfreq: Reduce log severity for informative message (2021-12-16 11:29:54 +0900)
+>
+> ----------------------------------------------------------------
+> Update devfreq next for v5.17
+>
+> Detailed description for this pull request:
+> 1. Add new DRAM controller driver for sunXi SoCs
+> - Add DRAM frequency controller devfreq driver for Allwinner sunXi SoCs
+> in order to support dynamic frequency scaling of DRAM frequency. It
+> calculates the supported frequency list from source clock in the range
+> of full speed to quarter speed instead of devicetree.
+>
+> - Add COMMON_CLK dependency to fix build error
+>
+> 2. Reduce log severity for informative message about frequency transition fail
+> ----------------------------------------------------------------
+>
+> Arnd Bergmann (1):
+>       PM / devfreq: sun8i: addd COMMON_CLK dependency
+>
+> Samuel Holland (1):
+>       PM / devfreq: Add a driver for the sun8i/sun50i MBUS
+>
+> Tzung-Bi Shih (1):
+>       PM / devfreq: Reduce log severity for informative message
+>
+>  drivers/devfreq/Kconfig          |   9 +
+>  drivers/devfreq/Makefile         |   1 +
+>  drivers/devfreq/devfreq.c        |   4 +-
+>  drivers/devfreq/sun8i-a33-mbus.c | 511 +++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 523 insertions(+), 2 deletions(-)
+>  create mode 100644 drivers/devfreq/sun8i-a33-mbus.c
 
-In general, this seems interesting and the diff is simple.  But, I don't
-see _any_ x86-specific data.  I think the bare minimum here would be a
-few kernel compiles and some 'perf stat' data for some TLB events.
-
-> diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-> index 95fa745e310a..6bf5cb7d876a 100644
-> --- a/arch/x86/kernel/module.c
-> +++ b/arch/x86/kernel/module.c
-> @@ -75,8 +75,8 @@ void *module_alloc(unsigned long size)
->  
->  	p = __vmalloc_node_range(size, MODULE_ALIGN,
->  				    MODULES_VADDR + get_module_load_offset(),
-> -				    MODULES_END, gfp_mask,
-> -				    PAGE_KERNEL, VM_DEFER_KMEMLEAK, NUMA_NO_NODE,
-> +				    MODULES_END, gfp_mask, PAGE_KERNEL,
-> +				    VM_DEFER_KMEMLEAK | VM_NO_HUGE_VMAP, NUMA_NO_NODE,
->  				    __builtin_return_address(0));
->  	if (p && (kasan_module_alloc(p, size, gfp_mask) < 0)) {
->  		vfree(p);
-
-To figure out what's going on in this hunk, I had to look at the cover
-letter (which I wasn't cc'd on).  That's not great and it means that
-somebody who stumbles upon this in the code is going to have a really
-hard time figuring out what is going on.  Cover letters don't make it
-into git history.
-
-This desperately needs a comment and some changelog material in *this*
-patch.
-
-But, even the description from the cover letter is sparse:
-
-> There are some disadvantages about this feature[2], one of the main
-> concerns is the possible memory fragmentation/waste in some scenarios,
-> also archs must ensure that any arch specific vmalloc allocations that
-> require PAGE_SIZE mappings(eg, module alloc with STRICT_MODULE_RWX)
-> use the VM_NO_HUGE_VMAP flag to inhibit larger mappings.
-
-That just says that x86 *needs* PAGE_SIZE allocations.  But, what
-happens if VM_NO_HUGE_VMAP is not passed (like it was in v1)?  Will the
-subsequent permission changes just fragment the 2M mapping?
+Pulled, thanks!

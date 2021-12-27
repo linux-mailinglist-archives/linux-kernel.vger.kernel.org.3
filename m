@@ -2,43 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA6C4800F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:51:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F577480091
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:47:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240493AbhL0Pvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:51:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239825AbhL0Pr7 (ORCPT
+        id S240147AbhL0PrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:47:11 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44854 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238238AbhL0Pnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:47:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB9AC08EAED;
-        Mon, 27 Dec 2021 07:43:34 -0800 (PST)
+        Mon, 27 Dec 2021 10:43:53 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C3AA60C9F;
-        Mon, 27 Dec 2021 15:43:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0761EC36AEA;
-        Mon, 27 Dec 2021 15:43:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C4FD1B810AA;
+        Mon, 27 Dec 2021 15:43:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17E14C36AE7;
+        Mon, 27 Dec 2021 15:43:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619813;
-        bh=PeAKVRam5EMCGY3x5XJ/FuLzHev4BQCZI4EG6SrC6FA=;
+        s=korg; t=1640619830;
+        bh=z5P4om6iudnX5CABZ7U1BI9o3x/jh4038ygeSt1X76M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nN6TIUr1klqQ20cTY+6lur30raMkjw45UIIkB+fQf9N1r16HhewX7x88LG7YeNx+W
-         umvE+rUok2zaTaOTfx8bIxO3Zf2lvwbZONR8pQwWYnzZSEfNiD8OuwEjjNfKCDkVHA
-         3ceJSf98RurmRP32Rne0wE780ieIBIuX74SMsC4w=
+        b=mOWhEPuoMqbs0atYxGk4FQqGy8NZTmrmuseFhfESqq1O7yHkKyW39Ev4P+/F8rjuL
+         5b1hGvV5WAazmViEXP1HjZyCFAWQ8WD5r19LZV+bE/afcqEOxgyQBBdLGLcq1O9IbC
+         o2ox0aOQpfwPl38Cq1KBlHRbwCrXUe9GEVeJ5JJs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrea Righi <andrea.righi@canonical.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        stable@vger.kernel.org, Phil Elwell <phil@raspberrypi.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 051/128] Input: elantech - fix stack out of bound access in elantech_change_report_id()
-Date:   Mon, 27 Dec 2021 16:30:26 +0100
-Message-Id: <20211227151333.216198263@linuxfoundation.org>
+Subject: [PATCH 5.15 052/128] pinctrl: bcm2835: Change init order for gpio hogs
+Date:   Mon, 27 Dec 2021 16:30:27 +0100
+Message-Id: <20211227151333.248532258@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
 References: <20211227151331.502501367@linuxfoundation.org>
@@ -50,136 +47,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrea Righi <andrea.righi@canonical.com>
+From: Phil Elwell <phil@raspberrypi.com>
 
-[ Upstream commit 1d72d9f960ccf1052a0630a68c3d358791dbdaaa ]
+[ Upstream commit 266423e60ea1b953fcc0cd97f3dad85857e434d1 ]
 
-The array param[] in elantech_change_report_id() must be at least 3
-bytes, because elantech_read_reg_params() is calling ps2_command() with
-PSMOUSE_CMD_GETINFO, that is going to access 3 bytes from param[], but
-it's defined in the stack as an array of 2 bytes, therefore we have a
-potential stack out-of-bounds access here, also confirmed by KASAN:
+...and gpio-ranges
 
-[    6.512374] BUG: KASAN: stack-out-of-bounds in __ps2_command+0x372/0x7e0
-[    6.512397] Read of size 1 at addr ffff8881024d77c2 by task kworker/2:1/118
+pinctrl-bcm2835 is a combined pinctrl/gpio driver. Currently the gpio
+side is registered first, but this breaks gpio hogs (which are
+configured during gpiochip_add_data). Part of the hog initialisation
+is a call to pinctrl_gpio_request, and since the pinctrl driver hasn't
+yet been registered this results in an -EPROBE_DEFER from which it can
+never recover.
 
-[    6.512416] CPU: 2 PID: 118 Comm: kworker/2:1 Not tainted 5.13.0-22-generic #22+arighi20211110
-[    6.512428] Hardware name: LENOVO 20T8000QGE/20T8000QGE, BIOS R1AET32W (1.08 ) 08/14/2020
-[    6.512436] Workqueue: events_long serio_handle_event
-[    6.512453] Call Trace:
-[    6.512462]  show_stack+0x52/0x58
-[    6.512474]  dump_stack+0xa1/0xd3
-[    6.512487]  print_address_description.constprop.0+0x1d/0x140
-[    6.512502]  ? __ps2_command+0x372/0x7e0
-[    6.512516]  __kasan_report.cold+0x7d/0x112
-[    6.512527]  ? _raw_write_lock_irq+0x20/0xd0
-[    6.512539]  ? __ps2_command+0x372/0x7e0
-[    6.512552]  kasan_report+0x3c/0x50
-[    6.512564]  __asan_load1+0x6a/0x70
-[    6.512575]  __ps2_command+0x372/0x7e0
-[    6.512589]  ? ps2_drain+0x240/0x240
-[    6.512601]  ? dev_printk_emit+0xa2/0xd3
-[    6.512612]  ? dev_vprintk_emit+0xc5/0xc5
-[    6.512621]  ? __kasan_check_write+0x14/0x20
-[    6.512634]  ? mutex_lock+0x8f/0xe0
-[    6.512643]  ? __mutex_lock_slowpath+0x20/0x20
-[    6.512655]  ps2_command+0x52/0x90
-[    6.512670]  elantech_ps2_command+0x4f/0xc0 [psmouse]
-[    6.512734]  elantech_change_report_id+0x1e6/0x256 [psmouse]
-[    6.512799]  ? elantech_report_trackpoint.constprop.0.cold+0xd/0xd [psmouse]
-[    6.512863]  ? ps2_command+0x7f/0x90
-[    6.512877]  elantech_query_info.cold+0x6bd/0x9ed [psmouse]
-[    6.512943]  ? elantech_setup_ps2+0x460/0x460 [psmouse]
-[    6.513005]  ? psmouse_reset+0x69/0xb0 [psmouse]
-[    6.513064]  ? psmouse_attr_set_helper+0x2a0/0x2a0 [psmouse]
-[    6.513122]  ? phys_pmd_init+0x30e/0x521
-[    6.513137]  elantech_init+0x8a/0x200 [psmouse]
-[    6.513200]  ? elantech_init_ps2+0xf0/0xf0 [psmouse]
-[    6.513249]  ? elantech_query_info+0x440/0x440 [psmouse]
-[    6.513296]  ? synaptics_send_cmd+0x60/0x60 [psmouse]
-[    6.513342]  ? elantech_query_info+0x440/0x440 [psmouse]
-[    6.513388]  ? psmouse_try_protocol+0x11e/0x170 [psmouse]
-[    6.513432]  psmouse_extensions+0x65d/0x6e0 [psmouse]
-[    6.513476]  ? psmouse_try_protocol+0x170/0x170 [psmouse]
-[    6.513519]  ? mutex_unlock+0x22/0x40
-[    6.513526]  ? ps2_command+0x7f/0x90
-[    6.513536]  ? psmouse_probe+0xa3/0xf0 [psmouse]
-[    6.513580]  psmouse_switch_protocol+0x27d/0x2e0 [psmouse]
-[    6.513624]  psmouse_connect+0x272/0x530 [psmouse]
-[    6.513669]  serio_driver_probe+0x55/0x70
-[    6.513679]  really_probe+0x190/0x720
-[    6.513689]  driver_probe_device+0x160/0x1f0
-[    6.513697]  device_driver_attach+0x119/0x130
-[    6.513705]  ? device_driver_attach+0x130/0x130
-[    6.513713]  __driver_attach+0xe7/0x1a0
-[    6.513720]  ? device_driver_attach+0x130/0x130
-[    6.513728]  bus_for_each_dev+0xfb/0x150
-[    6.513738]  ? subsys_dev_iter_exit+0x10/0x10
-[    6.513748]  ? _raw_write_unlock_bh+0x30/0x30
-[    6.513757]  driver_attach+0x2d/0x40
-[    6.513764]  serio_handle_event+0x199/0x3d0
-[    6.513775]  process_one_work+0x471/0x740
-[    6.513785]  worker_thread+0x2d2/0x790
-[    6.513794]  ? process_one_work+0x740/0x740
-[    6.513802]  kthread+0x1b4/0x1e0
-[    6.513809]  ? set_kthread_struct+0x80/0x80
-[    6.513816]  ret_from_fork+0x22/0x30
+Change the initialisation sequence to register the pinctrl driver
+first.
 
-[    6.513832] The buggy address belongs to the page:
-[    6.513838] page:00000000bc35e189 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1024d7
-[    6.513847] flags: 0x17ffffc0000000(node=0|zone=2|lastcpupid=0x1fffff)
-[    6.513860] raw: 0017ffffc0000000 dead000000000100 dead000000000122 0000000000000000
-[    6.513867] raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
-[    6.513872] page dumped because: kasan: bad access detected
+This also solves a similar problem with the gpio-ranges property, which
+is required in order for released pins to be returned to inputs.
 
-[    6.513879] addr ffff8881024d77c2 is located in stack of task kworker/2:1/118 at offset 34 in frame:
-[    6.513887]  elantech_change_report_id+0x0/0x256 [psmouse]
-
-[    6.513941] this frame has 1 object:
-[    6.513947]  [32, 34) 'param'
-
-[    6.513956] Memory state around the buggy address:
-[    6.513962]  ffff8881024d7680: f2 f2 f2 f2 f2 00 00 f3 f3 00 00 00 00 00 00 00
-[    6.513969]  ffff8881024d7700: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[    6.513976] >ffff8881024d7780: 00 00 00 00 f1 f1 f1 f1 02 f3 f3 f3 00 00 00 00
-[    6.513982]                                            ^
-[    6.513988]  ffff8881024d7800: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[    6.513995]  ffff8881024d7880: 00 f1 f1 f1 f1 03 f2 03 f2 03 f3 f3 f3 00 00 00
-[    6.514000] ==================================================================
-
-Define param[] in elantech_change_report_id() as an array of 3 bytes to
-prevent the out-of-bounds access in the stack.
-
-Fixes: e4c9062717fe ("Input: elantech - fix protocol errors for some trackpoints in SMBus mode")
-BugLink: https://bugs.launchpad.net/bugs/1945590
-Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
-Reviewed-by: Wolfram Sang <wsa@kernel.org>
-Link: https://lore.kernel.org/r/20211116095559.24395-1-andrea.righi@canonical.com
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Fixes: 73345a18d464b ("pinctrl: bcm2835: Pass irqchip when adding gpiochip")
+Signed-off-by: Phil Elwell <phil@raspberrypi.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20211206092237.4105895-2-phil@raspberrypi.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/input/mouse/elantech.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/pinctrl/bcm/pinctrl-bcm2835.c | 29 +++++++++++++++------------
+ 1 file changed, 16 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/input/mouse/elantech.c b/drivers/input/mouse/elantech.c
-index 956d9cd347964..ece97f8c6a3e3 100644
---- a/drivers/input/mouse/elantech.c
-+++ b/drivers/input/mouse/elantech.c
-@@ -1588,7 +1588,13 @@ static const struct dmi_system_id no_hw_res_dmi_table[] = {
-  */
- static int elantech_change_report_id(struct psmouse *psmouse)
- {
--	unsigned char param[2] = { 0x10, 0x03 };
-+	/*
-+	 * NOTE: the code is expecting to receive param[] as an array of 3
-+	 * items (see __ps2_command()), even if in this case only 2 are
-+	 * actually needed. Make sure the array size is 3 to avoid potential
-+	 * stack out-of-bound accesses.
-+	 */
-+	unsigned char param[3] = { 0x10, 0x03 };
+diff --git a/drivers/pinctrl/bcm/pinctrl-bcm2835.c b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
+index 6e6fefeb21ead..cc39c0e18b474 100644
+--- a/drivers/pinctrl/bcm/pinctrl-bcm2835.c
++++ b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
+@@ -1243,6 +1243,18 @@ static int bcm2835_pinctrl_probe(struct platform_device *pdev)
+ 		raw_spin_lock_init(&pc->irq_lock[i]);
+ 	}
  
- 	if (elantech_write_reg_params(psmouse, 0x7, param) ||
- 	    elantech_read_reg_params(psmouse, 0x7, param) ||
++	pc->pctl_desc = *pdata->pctl_desc;
++	pc->pctl_dev = devm_pinctrl_register(dev, &pc->pctl_desc, pc);
++	if (IS_ERR(pc->pctl_dev)) {
++		gpiochip_remove(&pc->gpio_chip);
++		return PTR_ERR(pc->pctl_dev);
++	}
++
++	pc->gpio_range = *pdata->gpio_range;
++	pc->gpio_range.base = pc->gpio_chip.base;
++	pc->gpio_range.gc = &pc->gpio_chip;
++	pinctrl_add_gpio_range(pc->pctl_dev, &pc->gpio_range);
++
+ 	girq = &pc->gpio_chip.irq;
+ 	girq->chip = &bcm2835_gpio_irq_chip;
+ 	girq->parent_handler = bcm2835_gpio_irq_handler;
+@@ -1250,8 +1262,10 @@ static int bcm2835_pinctrl_probe(struct platform_device *pdev)
+ 	girq->parents = devm_kcalloc(dev, BCM2835_NUM_IRQS,
+ 				     sizeof(*girq->parents),
+ 				     GFP_KERNEL);
+-	if (!girq->parents)
++	if (!girq->parents) {
++		pinctrl_remove_gpio_range(pc->pctl_dev, &pc->gpio_range);
+ 		return -ENOMEM;
++	}
+ 
+ 	if (is_7211) {
+ 		pc->wake_irq = devm_kcalloc(dev, BCM2835_NUM_IRQS,
+@@ -1306,21 +1320,10 @@ static int bcm2835_pinctrl_probe(struct platform_device *pdev)
+ 	err = gpiochip_add_data(&pc->gpio_chip, pc);
+ 	if (err) {
+ 		dev_err(dev, "could not add GPIO chip\n");
++		pinctrl_remove_gpio_range(pc->pctl_dev, &pc->gpio_range);
+ 		return err;
+ 	}
+ 
+-	pc->pctl_desc = *pdata->pctl_desc;
+-	pc->pctl_dev = devm_pinctrl_register(dev, &pc->pctl_desc, pc);
+-	if (IS_ERR(pc->pctl_dev)) {
+-		gpiochip_remove(&pc->gpio_chip);
+-		return PTR_ERR(pc->pctl_dev);
+-	}
+-
+-	pc->gpio_range = *pdata->gpio_range;
+-	pc->gpio_range.base = pc->gpio_chip.base;
+-	pc->gpio_range.gc = &pc->gpio_chip;
+-	pinctrl_add_gpio_range(pc->pctl_dev, &pc->gpio_range);
+-
+ 	return 0;
+ }
+ 
 -- 
 2.34.1
 

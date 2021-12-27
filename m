@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 725A947FE42
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:27:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A70647FE6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:29:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237366AbhL0P1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:27:39 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33176 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237355AbhL0P1e (ORCPT
+        id S237541AbhL0P2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:28:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237584AbhL0P2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:27:34 -0500
+        Mon, 27 Dec 2021 10:28:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B82C061784;
+        Mon, 27 Dec 2021 07:28:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5A7AB810A3;
-        Mon, 27 Dec 2021 15:27:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D496CC36AEA;
-        Mon, 27 Dec 2021 15:27:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6209F610A6;
+        Mon, 27 Dec 2021 15:28:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49D18C36AEB;
+        Mon, 27 Dec 2021 15:28:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640618852;
-        bh=l2ifCmZoGS4NZlmlQo+CvDkin/Bq48uyPKwmNDM8yhI=;
+        s=korg; t=1640618911;
+        bh=sCy5UTroEtnCKCLVeZa/SB2DDo6SeX8Am/dW5N+AiEg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mz5VVB9nyuefsgkGFvLnY5hl2v+D/h7IRvj8Ccy1KHFcUBLheFbs/7dyC0SGEf5n7
-         Smpq2gxO/i0P6zP74jV5FvpvfmMTxWr1B/3rL0h0io58TkPLp7vpr3SvPw1PyvNwr7
-         7Q8tgL6QO34s72CVjFF/KjJF094M17I5Y1iHlI8E=
+        b=l+ghzO74HmelLyf2nTVRpKBXMf68ZLDpDJsssZcjblcc/G3pvvrS97tRvjXCZxud9
+         D6jkjMItOmxi/YYd5+2N0TeysyjJAyRfT+n2r7nxVc0DqMHdQ2SS4edEkXxHMWxfOJ
+         UGAX1Gr4TuzECV5Nzea1rl0G6MPGxMujU//JUQ2s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Samuel=20=C4=8Cavoj?= <samuel@cavoj.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: [PATCH 4.4 13/17] Input: i8042 - enable deferred probe quirk for ASUS UM325UA
-Date:   Mon, 27 Dec 2021 16:27:08 +0100
-Message-Id: <20211227151316.380867257@linuxfoundation.org>
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 07/19] fjes: Check for error irq
+Date:   Mon, 27 Dec 2021 16:27:09 +0100
+Message-Id: <20211227151316.792398775@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151315.962187770@linuxfoundation.org>
-References: <20211227151315.962187770@linuxfoundation.org>
+In-Reply-To: <20211227151316.558965545@linuxfoundation.org>
+References: <20211227151316.558965545@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,40 +49,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Čavoj <samuel@cavoj.net>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-commit 44ee250aeeabb28b52a10397ac17ffb8bfe94839 upstream.
+[ Upstream commit db6d6afe382de5a65d6ccf51253ab48b8e8336c3 ]
 
-The ASUS UM325UA suffers from the same issue as the ASUS UX425UA, which
-is a very similar laptop. The i8042 device is not usable immediately
-after boot and fails to initialize, requiring a deferred retry.
+I find that platform_get_irq() will not always succeed.
+It will return error irq in case of the failure.
+Therefore, it might be better to check it if order to avoid the use of
+error irq.
 
-Enable the deferred probe quirk for the UM325UA.
-
-BugLink: https://bugzilla.suse.com/show_bug.cgi?id=1190256
-Signed-off-by: Samuel Čavoj <samuel@cavoj.net>
-Link: https://lore.kernel.org/r/20211204015615.232948-1-samuel@cavoj.net
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 658d439b2292 ("fjes: Introduce FUJITSU Extended Socket Network Device driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/input/serio/i8042-x86ia64io.h |    7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/net/fjes/fjes_main.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/drivers/input/serio/i8042-x86ia64io.h
-+++ b/drivers/input/serio/i8042-x86ia64io.h
-@@ -1025,6 +1025,13 @@ static const struct dmi_system_id __init
- 			DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 4280"),
- 		},
- 	},
-+	{
-+		/* ASUS ZenBook UM325UA */
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
-+		},
-+	},
- 	{ }
- };
- 
+diff --git a/drivers/net/fjes/fjes_main.c b/drivers/net/fjes/fjes_main.c
+index 440047a239f57..26bb43a675131 100644
+--- a/drivers/net/fjes/fjes_main.c
++++ b/drivers/net/fjes/fjes_main.c
+@@ -1219,6 +1219,11 @@ static int fjes_probe(struct platform_device *plat_dev)
+ 	hw->hw_res.start = res->start;
+ 	hw->hw_res.size = resource_size(res);
+ 	hw->hw_res.irq = platform_get_irq(plat_dev, 0);
++	if (hw->hw_res.irq < 0) {
++		err = hw->hw_res.irq;
++		goto err_free_control_wq;
++	}
++
+ 	err = fjes_hw_init(&adapter->hw);
+ 	if (err)
+ 		goto err_free_control_wq;
+-- 
+2.34.1
+
 
 

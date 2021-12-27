@@ -2,453 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF8C47FABD
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 08:26:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F9147FAC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 08:34:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235461AbhL0H0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 02:26:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40914 "EHLO
+        id S235469AbhL0HeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 02:34:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbhL0H0Q (ORCPT
+        with ESMTP id S229550AbhL0HeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 02:26:16 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3967BC06173E
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 23:26:16 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id q3so8708530pfs.7
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 23:26:16 -0800 (PST)
+        Mon, 27 Dec 2021 02:34:01 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1FAC06173E
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 23:34:01 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id j11so31330949lfg.3
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 23:34:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=He34Scs0tQk+7pfdt5xEcQPNHIESpcBZBXRXZghBQ2k=;
-        b=myLiTVDAtT+DslZlTdpn7lOcfecbAofIjIrvmZcYS7MBsqR6YPBNd9XT0uI+lLh8tF
-         C9FUgDn5MsPOJpSZJlaunfNPZue+aopJse5vGd620bo4pdUnoktSsXbKdvgWCzdERLje
-         3CZpgKwAhv9QJuY8zOeNPu02/C7CrZKoQkNRJyAjLPYFirOGw/CB0F4Hs3fk+C/65nR/
-         khqBcpLJXvs6yQTfa9xHA+oJQ31HTU5snfOtXc1bvXW+HfIw991VRq1IJklYo58h6RCC
-         IcshwgQ6+aVhldYKSbIawrtIdbhUfTc16+ykzKtyr4uT8spaRpLnHg3VlK3LdeF0aObD
-         X1uA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IphlBiJuwkvTWlaGouUePkoncfLLkrJz0XZEERgcR1A=;
+        b=dh8+DTclQmyh7s+EcvCf2hb6WKEugyNKN35hHVMS7W2IhaMMhBDE2eTNN7ljhCdqWl
+         nVlqa/HZb8mFP+hbkB6K+htLaYpA4H08Hq6SNx43HLVAmXp4Duz3aov7sRt1jqK8fplL
+         Yhl4sZsFZbRbE4QD7FOSbDeIBbUdzm2KLRfv0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=He34Scs0tQk+7pfdt5xEcQPNHIESpcBZBXRXZghBQ2k=;
-        b=rT1juNXAijC4OicJREsmOgeWid9pHxKUVZM7kEys5dRjMWqn1mpBbZa1bhSD6WP4Ea
-         6pIMYl82p57abYDad1T+6G/94yqvmCh3llj1g/2U7V4Gx2OgnoEwI9c2+rNkodWp5a5z
-         L7iTqQoM9fKjb8KwVcgmJ1Bbj0LlRSgb7wZazJvc/Dm7+WqwDDmximQUcb/Lh3ymGGyf
-         RtJAfPtdJLroDMosIfOaflFsdk+oepWc/wvv/3z/gg33F6q2Z1/7qPeCLwJlELIHWz5a
-         ppR8A0y0YKhdNJk+tTVfU1iAyw+lqbb07gwBZETkB5sQyB/xVgYriYrMPXUT4MQ3x9Rs
-         xbBQ==
-X-Gm-Message-State: AOAM530RHjrY8BXxeTgLt6lbFZibBq2tvbzMoP+K9yStYQVve608Kulv
-        zLsOCo02ad4cCPxofwDh/cP0UjzQVNA=
-X-Google-Smtp-Source: ABdhPJx1+2KDv7UaVWyrFlFnbhxL1oLrf8vDNCiiy/OydR2Ui9vQtuEpCK1YKnIun/gWkMWY42tcOA==
-X-Received: by 2002:a63:3d0e:: with SMTP id k14mr4808997pga.484.1640589975515;
-        Sun, 26 Dec 2021 23:26:15 -0800 (PST)
-Received: from localhost ([103.220.76.197])
-        by smtp.gmail.com with ESMTPSA id h8sm3153698pfi.205.2021.12.26.23.26.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 26 Dec 2021 23:26:15 -0800 (PST)
-Date:   Mon, 27 Dec 2021 15:23:26 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
-        Yue Hu <huyue2@yulong.com>,
-        LKML <linux-kernel@vger.kernel.org>, geshifei@coolpad.com,
-        zhangwen@coolpad.com, shaojunjun@coolpad.com
-Subject: Re: [PATCH v3 5/5] erofs: add on-disk compressed tail-packing
- inline support
-Message-ID: <20211227152326.0000486b.zbestahu@gmail.com>
-In-Reply-To: <20211225070626.74080-6-hsiangkao@linux.alibaba.com>
-References: <20211225070626.74080-1-hsiangkao@linux.alibaba.com>
-        <20211225070626.74080-6-hsiangkao@linux.alibaba.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IphlBiJuwkvTWlaGouUePkoncfLLkrJz0XZEERgcR1A=;
+        b=BbpADCuL/IQICUPKlq7hQeeN7AG4/rVm5lPh3q7lXuuIPMQq7YbfGUUsp10aJolJhy
+         lPnr5chd6SN0lT99jtN4hYWKdPWqX2BlY2KSmTbKYG+0jXykQWzcSeubh0z07+e3w7+r
+         w0+y8+jbTxYHkl0HwUwUQUgSS52Qscn19ymDqzPlwFanLkyOKYDwaO3Emn/q4dl2wEFt
+         7lQM+kPRakpW61XnXOn7o9QP+o5zpHvqsqnX1L2tYRnvTH+tTVuagXKjwRfq+kz11k7S
+         /ct5kavClfp8iOFdqtHFblZWbmjvoQc1tSTAGX0atrF9ws7OiNNoKGLpmD+OS8Jl3ShU
+         ZH9A==
+X-Gm-Message-State: AOAM530DbYkpC5liu1Z39RpM/2jpe0ZR4tLCa+QUCvqM2sO1Xdf02Bp+
+        a1tYT/uvH1glUG0B+23phUfviapsfe60f2eE/8HEVxVdbrs=
+X-Google-Smtp-Source: ABdhPJwPi8ZEN4x6LJlIvtEv1S+Z2YOWAU1DTIc3KIzqBQAYjs6CY0YqUD8gntWVlxa80Y2Z49i7iuku7gad5jNfulE=
+X-Received: by 2002:a05:6512:202f:: with SMTP id s15mr15224264lfs.501.1640590439292;
+ Sun, 26 Dec 2021 23:33:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20211224084248.3070568-1-wenst@chromium.org> <20211224084248.3070568-6-wenst@chromium.org>
+ <YciZZ2hA4uMveN2l@eze-laptop>
+In-Reply-To: <YciZZ2hA4uMveN2l@eze-laptop>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 27 Dec 2021 15:33:48 +0800
+Message-ID: <CAGXv+5GJzZE1xDxxOqzV3Bq2XfuG2-aFuu-6hNxJ9S2YXFM_og@mail.gmail.com>
+Subject: Re: [PATCH RFT 5/7] media: hantro: jpeg: Add COM segment to JPEG
+ header to align image scan
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tomasz Figa <tfiga@chromium.org>, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiang,
+On Mon, Dec 27, 2021 at 12:33 AM Ezequiel Garcia
+<ezequiel@vanguardiasur.com.ar> wrote:
+>
+> Hi,
+>
+> On Fri, Dec 24, 2021 at 04:42:46PM +0800, Chen-Yu Tsai wrote:
+> > The JPEG header size is not 64-bit aligned. This makes the driver
+> > require a bounce buffer for the encoded JPEG image scan output.
+> >
+> > Add a COM (comment) segment to the JPEG header so that the header size
+> > is a multiple of 64 bits. This will then allow dropping the use of the
+> > bounce buffer, and instead have the hardware write out to the capture
+> > buffer directly.
+> >
+> > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> > ---
+> >  drivers/staging/media/hantro/hantro_jpeg.c | 3 +++
+> >  drivers/staging/media/hantro/hantro_jpeg.h | 2 +-
+> >  2 files changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/staging/media/hantro/hantro_jpeg.c b/drivers/staging/media/hantro/hantro_jpeg.c
+> > index 7d4018bd6876..51e67e5cf86f 100644
+> > --- a/drivers/staging/media/hantro/hantro_jpeg.c
+> > +++ b/drivers/staging/media/hantro/hantro_jpeg.c
+> > @@ -247,6 +247,9 @@ static const unsigned char hantro_jpeg_header[JPEG_HEADER_SIZE] = {
+> >       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+> >       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+> >
+> > +     /* COM */
+> > +     0xff, 0xfe, 0x00, 0x03, 0x00,
+> > +
+> >       /* SOS */
+> >       0xff, 0xda, 0x00, 0x0c, 0x03, 0x01, 0x00, 0x02,
+> >       0x11, 0x03, 0x11, 0x00, 0x3f, 0x00,
+> > diff --git a/drivers/staging/media/hantro/hantro_jpeg.h b/drivers/staging/media/hantro/hantro_jpeg.h
+> > index f33c492134e4..0b49d0b82caa 100644
+> > --- a/drivers/staging/media/hantro/hantro_jpeg.h
+> > +++ b/drivers/staging/media/hantro/hantro_jpeg.h
+> > @@ -1,6 +1,6 @@
+> >  /* SPDX-License-Identifier: GPL-2.0+ */
+> >
+> > -#define JPEG_HEADER_SIZE     619
+> > +#define JPEG_HEADER_SIZE     624
+>
+> Can we add some compile-time check for the 8-byte alignment,
+> so this is always enforced?
 
-On Sat, 25 Dec 2021 15:06:26 +0800
-Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+Ack.
 
-> From: Yue Hu <huyue2@yulong.com>
-> 
-> Introduces erofs compressed tail-packing inline support.
-> 
-> This approach adds a new field called `h_idata_size' in the
-> per-file compression header to indicate the encoded size of
-> each tail-packing pcluster.
-> 
-> At runtime, it will find the start logical offset of the tail
-> pcluster when initializing per-inode zmap and record such
-> extent (headlcn, idataoff) information to the in-memory inode.
-> Therefore, follow-on requests can directly recognize if one
-> pcluster is a tail-packing inline pcluster or not.
-> 
-> Signed-off-by: Yue Hu <huyue2@yulong.com>
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-> ---
->  fs/erofs/erofs_fs.h |  10 +++-
->  fs/erofs/internal.h |   6 +++
->  fs/erofs/super.c    |   3 ++
->  fs/erofs/sysfs.c    |   2 +
->  fs/erofs/zmap.c     | 116 ++++++++++++++++++++++++++++++++------------
->  5 files changed, 105 insertions(+), 32 deletions(-)
-> 
-> diff --git a/fs/erofs/erofs_fs.h b/fs/erofs/erofs_fs.h
-> index dda79afb901d..3ea62c6fb00a 100644
-> --- a/fs/erofs/erofs_fs.h
-> +++ b/fs/erofs/erofs_fs.h
-> @@ -23,13 +23,15 @@
->  #define EROFS_FEATURE_INCOMPAT_CHUNKED_FILE	0x00000004
->  #define EROFS_FEATURE_INCOMPAT_DEVICE_TABLE	0x00000008
->  #define EROFS_FEATURE_INCOMPAT_COMPR_HEAD2	0x00000008
-> +#define EROFS_FEATURE_INCOMPAT_ZTAILPACKING	0x00000010
->  #define EROFS_ALL_FEATURE_INCOMPAT		\
->  	(EROFS_FEATURE_INCOMPAT_ZERO_PADDING | \
->  	 EROFS_FEATURE_INCOMPAT_COMPR_CFGS | \
->  	 EROFS_FEATURE_INCOMPAT_BIG_PCLUSTER | \
->  	 EROFS_FEATURE_INCOMPAT_CHUNKED_FILE | \
->  	 EROFS_FEATURE_INCOMPAT_DEVICE_TABLE | \
-> -	 EROFS_FEATURE_INCOMPAT_COMPR_HEAD2)
-> +	 EROFS_FEATURE_INCOMPAT_COMPR_HEAD2 | \
-> +	 EROFS_FEATURE_INCOMPAT_ZTAILPACKING)
->  
->  #define EROFS_SB_EXTSLOT_SIZE	16
->  
-> @@ -292,13 +294,17 @@ struct z_erofs_lzma_cfgs {
->   *                                  (4B) + 2B + (4B) if compacted 2B is on.
->   * bit 1 : HEAD1 big pcluster (0 - off; 1 - on)
->   * bit 2 : HEAD2 big pcluster (0 - off; 1 - on)
-> + * bit 3 : tailpacking inline pcluster (0 - off; 1 - on)
+> Perhaps getting rid of the JPEG_HEADER_SIZE macro,
+> something like this....
+
+I don't think that's doable. The other parts of the driver need to know
+how large the header is, and we can't use "sizeof(hantro_jpeg_header)"
+in those places unless the size is predetermined in the header declaration,
+or we move the definition into the header file. Otherwise we need to
+keep the macro and have another static assertion to check that
+JPEG_HEADER_SIZE == sizeof(hantro_jpeg_header).
+
+> @@ -140,7 +140,7 @@ static const unsigned char chroma_ac_table[] = {
+>   * and we'll use fixed offsets to change the width, height
+>   * quantization tables, etc.
 >   */
->  #define Z_EROFS_ADVISE_COMPACTED_2B		0x0001
->  #define Z_EROFS_ADVISE_BIG_PCLUSTER_1		0x0002
->  #define Z_EROFS_ADVISE_BIG_PCLUSTER_2		0x0004
-> +#define Z_EROFS_ADVISE_INLINE_PCLUSTER		0x0008
->  
->  struct z_erofs_map_header {
-> -	__le32	h_reserved1;
-> +	__le16	h_reserved1;
-> +	/* indicates the encoded size of tailpacking data */
-> +	__le16  h_idata_size;
->  	__le16	h_advise;
->  	/*
->  	 * bit 0-3 : algorithm type of head 1 (logical cluster type 01);
-> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-> index 8e70435629e5..ebb9ffa08dd2 100644
-> --- a/fs/erofs/internal.h
-> +++ b/fs/erofs/internal.h
-> @@ -274,6 +274,7 @@ EROFS_FEATURE_FUNCS(big_pcluster, incompat, INCOMPAT_BIG_PCLUSTER)
->  EROFS_FEATURE_FUNCS(chunked_file, incompat, INCOMPAT_CHUNKED_FILE)
->  EROFS_FEATURE_FUNCS(device_table, incompat, INCOMPAT_DEVICE_TABLE)
->  EROFS_FEATURE_FUNCS(compr_head2, incompat, INCOMPAT_COMPR_HEAD2)
-> +EROFS_FEATURE_FUNCS(ztailpacking, incompat, INCOMPAT_ZTAILPACKING)
->  EROFS_FEATURE_FUNCS(sb_chksum, compat, COMPAT_SB_CHKSUM)
->  
->  /* atomic flag definitions */
-> @@ -308,6 +309,9 @@ struct erofs_inode {
->  			unsigned short z_advise;
->  			unsigned char  z_algorithmtype[2];
->  			unsigned char  z_logical_clusterbits;
-> +			unsigned long  z_idata_headlcn;
-> +			unsigned int  z_idataoff;
-
-need a space?
-
-> +			unsigned short z_idata_size;
->  		};
->  #endif	/* CONFIG_EROFS_FS_ZIP */
->  	};
-> @@ -421,6 +425,8 @@ struct erofs_map_blocks {
->  #define EROFS_GET_BLOCKS_FIEMAP	0x0002
->  /* Used to map the whole extent if non-negligible data is requested for LZMA */
->  #define EROFS_GET_BLOCKS_READMORE	0x0004
-> +/* Used to map tail extent for tailpacking inline pcluster */
-> +#define EROFS_GET_BLOCKS_FINDTAIL	0x0008
->  
->  enum {
->  	Z_EROFS_COMPRESSION_SHIFTED = Z_EROFS_COMPRESSION_MAX,
-> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-> index 58f381f80205..0724ad5fd6cf 100644
-> --- a/fs/erofs/super.c
-> +++ b/fs/erofs/super.c
-> @@ -411,6 +411,9 @@ static int erofs_read_superblock(struct super_block *sb)
->  
->  	/* handle multiple devices */
->  	ret = erofs_init_devices(sb, dsb);
-> +
-> +	if (erofs_sb_has_ztailpacking(sbi))
-> +		erofs_info(sb, "EXPERIMENTAL compressed inline data feature in use. Use at your own risk!");
->  out:
->  	kunmap(page);
->  	put_page(page);
-> diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
-> index 666693432107..dac252bc9228 100644
-> --- a/fs/erofs/sysfs.c
-> +++ b/fs/erofs/sysfs.c
-> @@ -75,6 +75,7 @@ EROFS_ATTR_FEATURE(chunked_file);
->  EROFS_ATTR_FEATURE(device_table);
->  EROFS_ATTR_FEATURE(compr_head2);
->  EROFS_ATTR_FEATURE(sb_chksum);
-> +EROFS_ATTR_FEATURE(ztailpacking);
->  
->  static struct attribute *erofs_feat_attrs[] = {
->  	ATTR_LIST(zero_padding),
-> @@ -84,6 +85,7 @@ static struct attribute *erofs_feat_attrs[] = {
->  	ATTR_LIST(device_table),
->  	ATTR_LIST(compr_head2),
->  	ATTR_LIST(sb_chksum),
-> +	ATTR_LIST(ztailpacking),
->  	NULL,
->  };
->  ATTRIBUTE_GROUPS(erofs_feat);
-> diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
-> index 660489a7fb64..52b5369f9b42 100644
-> --- a/fs/erofs/zmap.c
-> +++ b/fs/erofs/zmap.c
-> @@ -7,12 +7,17 @@
->  #include <asm/unaligned.h>
->  #include <trace/events/erofs.h>
->  
-> +static int z_erofs_do_map_blocks(struct inode *inode,
-> +				 struct erofs_map_blocks *map,
-> +				 int flags);
-> +
->  int z_erofs_fill_inode(struct inode *inode)
+> -static const unsigned char hantro_jpeg_header[JPEG_HEADER_SIZE] = {
+> +static const unsigned char hantro_jpeg_header[] = {
+>         /* SOI */
+>         0xff, 0xd8,
+>
+> @@ -304,8 +304,13 @@ void hantro_jpeg_header_assemble(struct hantro_jpeg_ctx *ctx)
 >  {
->  	struct erofs_inode *const vi = EROFS_I(inode);
->  	struct erofs_sb_info *sbi = EROFS_SB(inode->i_sb);
->  
->  	if (!erofs_sb_has_big_pcluster(sbi) &&
-> +	    !erofs_sb_has_ztailpacking(sbi) &&
->  	    vi->datalayout == EROFS_INODE_FLAT_COMPRESSION_LEGACY) {
->  		vi->z_advise = 0;
->  		vi->z_algorithmtype[0] = 0;
-> @@ -51,6 +56,7 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
->  		goto out_unlock;
->  
->  	DBG_BUGON(!erofs_sb_has_big_pcluster(EROFS_SB(sb)) &&
-> +		  !erofs_sb_has_ztailpacking(EROFS_SB(sb)) &&
->  		  vi->datalayout == EROFS_INODE_FLAT_COMPRESSION_LEGACY);
->  
->  	pos = ALIGN(iloc(EROFS_SB(sb), vi->nid) + vi->inode_isize +
-> @@ -65,6 +71,7 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
->  
->  	h = kaddr + erofs_blkoff(pos);
->  	vi->z_advise = le16_to_cpu(h->h_advise);
-> +	vi->z_idata_size = le16_to_cpu(h->h_idata_size);
+>         char *buf = ctx->buffer;
+>
+> -       memcpy(buf, hantro_jpeg_header,
+> -              sizeof(hantro_jpeg_header));
+> +       /*
+> +        * THE JPEG buffer is prepended with the JPEG header,
+> +        * so 64-bit alignment is needed for DMA.
+> +        */
+> +       BUILD_BUG_ON(!IS_ALIGNED(sizeof(hantro_jpeg_header), 8));
 
-duplicated code?
+Probably bikeshedding, but I was thinking more of a static assert just
+beneath hantro_jpeg_header[], along with some comments.
 
->  	vi->z_algorithmtype[0] = h->h_algorithmtype & 15;
->  	vi->z_algorithmtype[1] = h->h_algorithmtype >> 4;
->  
-> @@ -94,13 +101,34 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
->  		err = -EFSCORRUPTED;
->  		goto unmap_done;
->  	}
-> -	/* paired with smp_mb() at the beginning of the function */
-> -	smp_mb();
-> -	set_bit(EROFS_I_Z_INITED_BIT, &vi->flags);
->  unmap_done:
->  	kunmap_atomic(kaddr);
->  	unlock_page(page);
->  	put_page(page);
-> +	if (err)
-> +		goto out_unlock;
-> +
-> +	if (vi->z_advise & Z_EROFS_ADVISE_INLINE_PCLUSTER) {
-> +		struct erofs_map_blocks map = { .mpage = NULL };
-> +
-> +		vi->z_idata_size = le16_to_cpu(h->h_idata_size);
-> +		err = z_erofs_do_map_blocks(inode, &map,
-> +					    EROFS_GET_BLOCKS_FINDTAIL);
-> +		if (map.mpage)
-> +			put_page(map.mpage);
-> +
-> +		if (!map.m_plen ||
-> +		    erofs_blkoff(map.m_pa) + map.m_plen > EROFS_BLKSIZ) {
-> +			erofs_err(sb, "invalid tail-packing pclustersize %llu",
-> +				  map.m_plen);
-> +			err = -EFSCORRUPTED;
-> +		}
-> +		if (err < 0)
-> +			goto out_unlock;
-> +	}
-> +	/* paired with smp_mb() at the beginning of the function */
-> +	smp_mb();
-> +	set_bit(EROFS_I_Z_INITED_BIT, &vi->flags);
->  out_unlock:
->  	clear_and_wake_up_bit(EROFS_I_BL_Z_BIT, &vi->flags);
->  	return err;
-> @@ -117,6 +145,7 @@ struct z_erofs_maprecorder {
->  	u16 clusterofs;
->  	u16 delta[2];
->  	erofs_blk_t pblk, compressedlcs;
-> +	erofs_off_t nextpackoff;
->  };
->  
->  static int z_erofs_reload_indexes(struct z_erofs_maprecorder *m,
-> @@ -169,6 +198,7 @@ static int legacy_load_cluster_from_disk(struct z_erofs_maprecorder *m,
->  	if (err)
->  		return err;
->  
-> +	m->nextpackoff = pos + sizeof(struct z_erofs_vle_decompressed_index);
->  	m->lcn = lcn;
->  	di = m->kaddr + erofs_blkoff(pos);
->  
-> @@ -243,12 +273,12 @@ static int get_compacted_la_distance(unsigned int lclusterbits,
->  
->  static int unpack_compacted_index(struct z_erofs_maprecorder *m,
->  				  unsigned int amortizedshift,
-> -				  unsigned int eofs, bool lookahead)
-> +				  erofs_off_t pos, bool lookahead)
->  {
->  	struct erofs_inode *const vi = EROFS_I(m->inode);
->  	const unsigned int lclusterbits = vi->z_logical_clusterbits;
->  	const unsigned int lomask = (1 << lclusterbits) - 1;
-> -	unsigned int vcnt, base, lo, encodebits, nblk;
-> +	unsigned int vcnt, base, lo, encodebits, nblk, eofs;
->  	int i;
->  	u8 *in, type;
->  	bool big_pcluster;
-> @@ -260,8 +290,12 @@ static int unpack_compacted_index(struct z_erofs_maprecorder *m,
->  	else
->  		return -EOPNOTSUPP;
->  
-> +	/* it doesn't equal to roundup(..) */
-> +	m->nextpackoff = rounddown(pos, vcnt << amortizedshift) +
-> +			 (vcnt << amortizedshift);
->  	big_pcluster = vi->z_advise & Z_EROFS_ADVISE_BIG_PCLUSTER_1;
->  	encodebits = ((vcnt << amortizedshift) - sizeof(__le32)) * 8 / vcnt;
-> +	eofs = erofs_blkoff(pos);
->  	base = round_down(eofs, vcnt << amortizedshift);
->  	in = m->kaddr + base;
->  
-> @@ -399,8 +433,7 @@ static int compacted_load_cluster_from_disk(struct z_erofs_maprecorder *m,
->  	err = z_erofs_reload_indexes(m, erofs_blknr(pos));
->  	if (err)
->  		return err;
-> -	return unpack_compacted_index(m, amortizedshift, erofs_blkoff(pos),
-> -				      lookahead);
-> +	return unpack_compacted_index(m, amortizedshift, pos, lookahead);
->  }
->  
->  static int z_erofs_load_cluster_from_disk(struct z_erofs_maprecorder *m,
-> @@ -583,11 +616,12 @@ static int z_erofs_get_extent_decompressedlen(struct z_erofs_maprecorder *m)
->  	return 0;
->  }
->  
-> -int z_erofs_map_blocks_iter(struct inode *inode,
-> -			    struct erofs_map_blocks *map,
-> -			    int flags)
-> +static int z_erofs_do_map_blocks(struct inode *inode,
-> +				 struct erofs_map_blocks *map,
-> +				 int flags)
->  {
->  	struct erofs_inode *const vi = EROFS_I(inode);
-> +	bool ztailpacking = vi->z_advise & Z_EROFS_ADVISE_INLINE_PCLUSTER;
->  	struct z_erofs_maprecorder m = {
->  		.inode = inode,
->  		.map = map,
-> @@ -597,22 +631,8 @@ int z_erofs_map_blocks_iter(struct inode *inode,
->  	unsigned long initial_lcn;
->  	unsigned long long ofs, end;
->  
-> -	trace_z_erofs_map_blocks_iter_enter(inode, map, flags);
-> -
-> -	/* when trying to read beyond EOF, leave it unmapped */
-> -	if (map->m_la >= inode->i_size) {
-> -		map->m_llen = map->m_la + 1 - inode->i_size;
-> -		map->m_la = inode->i_size;
-> -		map->m_flags = 0;
-> -		goto out;
-> -	}
-> -
-> -	err = z_erofs_fill_inode_lazy(inode);
-> -	if (err)
-> -		goto out;
-> -
->  	lclusterbits = vi->z_logical_clusterbits;
-> -	ofs = map->m_la;
-> +	ofs = flags & EROFS_GET_BLOCKS_FINDTAIL ? inode->i_size - 1 : map->m_la;
->  	initial_lcn = ofs >> lclusterbits;
->  	endoff = ofs & ((1 << lclusterbits) - 1);
->  
-> @@ -620,6 +640,9 @@ int z_erofs_map_blocks_iter(struct inode *inode,
->  	if (err)
->  		goto unmap_out;
->  
-> +	if (ztailpacking && (flags & EROFS_GET_BLOCKS_FINDTAIL))
-> +		vi->z_idataoff = m.nextpackoff;
-> +
->  	map->m_flags = EROFS_MAP_MAPPED | EROFS_MAP_ENCODED;
->  	end = (m.lcn + 1ULL) << lclusterbits;
->  
-> @@ -658,12 +681,20 @@ int z_erofs_map_blocks_iter(struct inode *inode,
->  		goto unmap_out;
->  	}
->  
-> -	map->m_llen = end - map->m_la;
-> -	map->m_pa = blknr_to_addr(m.pblk);
-> +	if (flags & EROFS_GET_BLOCKS_FINDTAIL)
-> +		vi->z_idata_headlcn = m.lcn;
 
-The name of "z_idata_headlcn" includes "idata" which looks like ztailpacking related?
-If it is, add ztailpacking check here? If not, update it such as "z_tailextent_headlcn"?
+ChenYu
 
->  
-> -	err = z_erofs_get_extent_compressedlen(&m, initial_lcn);
-> -	if (err)
-> -		goto out;
-> +	map->m_llen = end - map->m_la;
-> +	if (ztailpacking && m.lcn == vi->z_idata_headlcn) {
-> +		map->m_flags |= EROFS_MAP_META;
-> +		map->m_pa = vi->z_idataoff;
-> +		map->m_plen = vi->z_idata_size;
-> +	} else {
-> +		map->m_pa = blknr_to_addr(m.pblk);
-> +		err = z_erofs_get_extent_compressedlen(&m, initial_lcn);
-> +		if (err)
-> +			goto out;
-> +	}
->  
->  	if (m.headtype == Z_EROFS_VLE_CLUSTER_TYPE_PLAIN)
->  		map->m_algorithmformat = Z_EROFS_COMPRESSION_SHIFTED;
-> @@ -689,6 +720,31 @@ int z_erofs_map_blocks_iter(struct inode *inode,
->  		  __func__, map->m_la, map->m_pa,
->  		  map->m_llen, map->m_plen, map->m_flags);
->  
-> +	return err;
-> +}
 > +
-> +int z_erofs_map_blocks_iter(struct inode *inode,
-> +			    struct erofs_map_blocks *map,
-> +			    int flags)
-> +{
-> +	int err = 0;
-> +
-> +	trace_z_erofs_map_blocks_iter_enter(inode, map, flags);
-> +
-> +	/* when trying to read beyond EOF, leave it unmapped */
-> +	if (map->m_la >= inode->i_size) {
-> +		map->m_llen = map->m_la + 1 - inode->i_size;
-> +		map->m_la = inode->i_size;
-> +		map->m_flags = 0;
-> +		goto out;
-> +	}
-> +
-> +	err = z_erofs_fill_inode_lazy(inode);
-> +	if (err)
-> +		goto out;
-> +
-> +	err = z_erofs_do_map_blocks(inode, map, flags);
-> +out:
->  	trace_z_erofs_map_blocks_iter_exit(inode, map, flags, err);
->  
->  	/* aggressively BUG_ON iff CONFIG_EROFS_FS_DEBUG is on */
-
+> +       memcpy(buf, hantro_jpeg_header, sizeof(hantro_jpeg_header));
+>
+> Thanks,
+> Ezequiel

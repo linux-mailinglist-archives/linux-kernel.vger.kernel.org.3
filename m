@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A496047FAAF
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 08:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2576647FAB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 08:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235415AbhL0HGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 02:06:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
+        id S229490AbhL0HGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 02:06:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbhL0HGX (ORCPT
+        with ESMTP id S235421AbhL0HG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 02:06:23 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E529C06173E
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 23:06:23 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id az37so4606008uab.12
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 23:06:23 -0800 (PST)
+        Mon, 27 Dec 2021 02:06:29 -0500
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AEAC06173E
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 23:06:29 -0800 (PST)
+Received: by mail-ua1-x933.google.com with SMTP id p1so3454356uap.9
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 23:06:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=TGt9h2A85gxYft0rVPguvrwyauB5J7ujBUnVmtY0QIE=;
-        b=UuGM08JNoPIZGbdzJTwhkqWus0Mk3UZF1YuJDDNqK7d7b23yzMmxkLcwqVZXdOyILw
-         CrjCTshqvCB0YGZhAGrU7b8HOQdNB8O7LZTFwiwyTPBTu4ZaUKtm6DEUbPRcuzc41YB9
-         ANpYlwsZO6IQtKii+/rd5T1GdsBy0+cUSSvlg=
+         :cc;
+        bh=4FLR5aRa6nhcAgyU88oGHnr22kyfHCN3jOQK5fS/Kkc=;
+        b=M0PfZbMlw980hwdVk9JbyWaetJDLPWLwxYeBHJdEl2uuiJ8GnjnEPfcxX0K8CQR/n4
+         V4QK4xZ5M1mZXcLBSs7h6N1U4dRbPnw31gHEJs57N/bhAM6moXrSxwLfv2P+yF3k81zp
+         9BTuY0mt3jxwVqUh25JSB2TvEHEtVAxQXrOAY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=TGt9h2A85gxYft0rVPguvrwyauB5J7ujBUnVmtY0QIE=;
-        b=QWYEsWRiWdDmusT4E0KhHI5FRqo8Hlty4OEIBjTFurPPBHKwazqe8amnVtRfP6UWB5
-         iq2c6RaqOJhAlEIzsSy+jt5vjW6u3zaTg8xuUO1u96tKuoOXBmOIs30QFhQyN06COERP
-         s6tVMGRYjQnBMtYHg6OSx2qTSKiTJLqqxNSj8RqxW2kG/CXaAUuMhRlsXgEUliVrIqSt
-         gHKHb6fFJI98lIio1GumiPLsK78SDHxp25pHNYbz0y6nVzJG07jej8MbA4i68AhRjBc8
-         /mCkMH/9uh53n+std691W30PVr6RH3hfX2P4ECM+zry+wj/+QYF3qJjdWCr2WKV9m1B/
-         fYGA==
-X-Gm-Message-State: AOAM530dr/ZUNmwRw6rmgTwr0JtYs0zcuoqZB35eux1omCNrLUlXqQVy
-        4cZGixoWcxWoofbhjtk1dOD8/QOmUbyEjA==
-X-Google-Smtp-Source: ABdhPJzBqvshUL41Fmz8pCBW81A9vaOAhKhF6t9BmIaLSg9K2l7cISIN1UBNmQjYj2i6AcSQUdSl8w==
-X-Received: by 2002:ab0:3e8:: with SMTP id 95mr4162283uau.26.1640588781864;
-        Sun, 26 Dec 2021 23:06:21 -0800 (PST)
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
-        by smtp.gmail.com with ESMTPSA id m62sm62292uam.0.2021.12.26.23.06.21
+         :message-id:subject:to:cc;
+        bh=4FLR5aRa6nhcAgyU88oGHnr22kyfHCN3jOQK5fS/Kkc=;
+        b=0d0mlPbmehoQlG0EWEATugd8QAXQHS6RIIcmyHYku5uXuaU0VeVQCGsIKXA5ClRnLi
+         LP165b3G3Q8kR2RLnsOSFfwSdocupNP08zav1eHjrJemhEAhlGuE1rB1saha7Zhk1HbP
+         EDV8GpRMQ9w25KQshRRhBOiHdZj43x+BvwenOIHwC9tIp/3mWsBRM4s0yBBhyLZsVIPf
+         AJbv4ISJx3XbzmA0nCndSsqeCSGfNawxr9kjrlsWWpmHr3Aj+gDBzbQDSCLO8MlK0vtj
+         SJCHP584O9ZRYa/mJmT20ih0vpO1FPiqJO0JAkU0S3EbEp9wZ7+ULzA6/US40ZvSf4rR
+         dloA==
+X-Gm-Message-State: AOAM531Aq5AQdr7MOAf7B9S+ct74PSGn4a2afqm3/ykc5YuqRLl96exG
+        ECEF1sbF6j36QWkSz0BX+KUKNdAIxn977A==
+X-Google-Smtp-Source: ABdhPJyPU3/OV3jHdPMa86/E1JUjyQZJQYk4+iQEFR6gRYVsUPLpNX/cNgJWaXt5+Y3cRL1I5+WGxw==
+X-Received: by 2002:a05:6102:2f9:: with SMTP id j25mr139750vsj.86.1640588788558;
+        Sun, 26 Dec 2021 23:06:28 -0800 (PST)
+Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
+        by smtp.gmail.com with ESMTPSA id 126sm2840236vku.25.2021.12.26.23.06.27
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Dec 2021 23:06:21 -0800 (PST)
-Received: by mail-ua1-f48.google.com with SMTP id o1so25554674uap.4
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 23:06:21 -0800 (PST)
-X-Received: by 2002:a05:6102:85:: with SMTP id t5mr3972571vsp.25.1640588780620;
- Sun, 26 Dec 2021 23:06:20 -0800 (PST)
+        Sun, 26 Dec 2021 23:06:28 -0800 (PST)
+Received: by mail-ua1-f45.google.com with SMTP id v14so7902190uau.2
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 23:06:27 -0800 (PST)
+X-Received: by 2002:a05:6102:3218:: with SMTP id r24mr4753042vsf.74.1640588787493;
+ Sun, 26 Dec 2021 23:06:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20211117130635.11633-1-dafna.hirschfeld@collabora.com> <20211117130635.11633-3-dafna.hirschfeld@collabora.com>
-In-Reply-To: <20211117130635.11633-3-dafna.hirschfeld@collabora.com>
+References: <20211117130635.11633-1-dafna.hirschfeld@collabora.com> <20211117130635.11633-6-dafna.hirschfeld@collabora.com>
+In-Reply-To: <20211117130635.11633-6-dafna.hirschfeld@collabora.com>
 From:   Alexandre Courbot <acourbot@chromium.org>
-Date:   Mon, 27 Dec 2021 16:06:09 +0900
-X-Gmail-Original-Message-ID: <CAPBb6MVeohz94O5bXrBLmQkPddMTD9sj0ZMsOjG652_r7OyHSg@mail.gmail.com>
-Message-ID: <CAPBb6MVeohz94O5bXrBLmQkPddMTD9sj0ZMsOjG652_r7OyHSg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] media: mtk-vcodec: call v4l2_m2m_ctx_release first
- when file is released
+Date:   Mon, 27 Dec 2021 16:06:16 +0900
+X-Gmail-Original-Message-ID: <CAPBb6MXyV7K3NuSLCWApC_TNjhFW=+3Eb_7d2028Nyno7fnkMA@mail.gmail.com>
+Message-ID: <CAPBb6MXyV7K3NuSLCWApC_TNjhFW=+3Eb_7d2028Nyno7fnkMA@mail.gmail.com>
+Subject: Re: [PATCH v2 5/7] media: mtk-vcodec: replace func vidioc_try_fmt
+ with two funcs for out/cap
 To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
         kernel@collabora.com, Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
@@ -77,113 +77,227 @@ Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
         minghsiu.tsai@mediatek.com, Tomasz Figa <tfiga@chromium.org>,
         Tiffany Lin <tiffany.lin@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 17, 2021 at 10:06 PM Dafna Hirschfeld
+On Wed, Nov 17, 2021 at 10:07 PM Dafna Hirschfeld
 <dafna.hirschfeld@collabora.com> wrote:
 >
-> The func v4l2_m2m_ctx_release waits for currently running jobs
-> to finish and then stop streaming both queues and frees the buffers.
-> All this should be done before the call to mtk_vcodec_enc_release
-> which frees the encoder handler. This fixes null-pointer dereference bug:
+> The function vidioc_try_fmt has a big 'if-else' for
+> the capture and output cases. There is hardly any code
+> outside of that condition. It is therefore better to split
+> that functions into two different functions, one for each case.
 >
-> [gst-master] root@debian:~/gst-build# [  638.019193] Unable to handle ker=
-nel NULL pointer dereference at virtual address 00000000000001a0
-> [  638.028076] Mem abort info:
-> [  638.030932]   ESR =3D 0x96000004
-> [  638.033978]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
-> [  638.039293]   SET =3D 0, FnV =3D 0
-> [  638.042338]   EA =3D 0, S1PTW =3D 0
-> [  638.045474]   FSC =3D 0x04: level 0 translation fault
-> [  638.050349] Data abort info:
-> [  638.053224]   ISV =3D 0, ISS =3D 0x00000004
-> [  638.057055]   CM =3D 0, WnR =3D 0
-> [  638.060018] user pgtable: 4k pages, 48-bit VAs, pgdp=3D000000012b6db00=
-0
-> [  638.066485] [00000000000001a0] pgd=3D0000000000000000, p4d=3D000000000=
-0000000
-> [  638.073277] Internal error: Oops: 96000004 [#1] SMP
-> [  638.078145] Modules linked in: rfkill mtk_vcodec_dec mtk_vcodec_enc uv=
-cvideo mtk_mdp mtk_vcodec_common videobuf2_dma_contig v4l2_h264 cdc_ether v=
-4l2_mem2mem videobuf2_vmalloc usbnet videobuf2_memops videobuf2_v4l2 r8152 =
-videobuf2_common videodev cros_ec_sensors cros_ec_sensors_core industrialio=
-_triggered_buffer kfifo_buf elan_i2c elants_i2c sbs_battery mc cros_usbpd_c=
-harger cros_ec_chardev cros_usbpd_logger crct10dif_ce mtk_vpu fuse ip_table=
-s x_tables ipv6
-> [  638.118583] CPU: 0 PID: 212 Comm: kworker/u8:5 Not tainted 5.15.0-0642=
-7-g58a1d4dcfc74-dirty #109
-> [  638.127357] Hardware name: Google Elm (DT)
-> [  638.131444] Workqueue: mtk-vcodec-enc mtk_venc_worker [mtk_vcodec_enc]
-> [  638.137974] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYP=
-E=3D--)
-> [  638.144925] pc : vp8_enc_encode+0x34/0x2b0 [mtk_vcodec_enc]
-> [  638.150493] lr : venc_if_encode+0xac/0x1b0 [mtk_vcodec_enc]
-> [  638.156060] sp : ffff8000124d3c40
-> [  638.159364] x29: ffff8000124d3c40 x28: 0000000000000000 x27: 000000000=
-0000000
-> [  638.166493] x26: 0000000000000000 x25: ffff0000e7f252d0 x24: ffff80001=
-24d3d58
-> [  638.173621] x23: ffff8000124d3d58 x22: ffff8000124d3d60 x21: 000000000=
-0000001
-> [  638.180750] x20: ffff80001137e000 x19: 0000000000000000 x18: 000000000=
-0000001
-> [  638.187878] x17: 000000040044ffff x16: 00400032b5503510 x15: 000000000=
-0000000
-> [  638.195006] x14: ffff8000118536c0 x13: ffff8000ee1da000 x12: 000000003=
-0d4d91d
-> [  638.202134] x11: 0000000000000000 x10: 0000000000000980 x9 : ffff80001=
-24d3b20
-> [  638.209262] x8 : ffff0000c18d4ea0 x7 : ffff0000c18d44c0 x6 : ffff0000c=
-18d44c0
-> [  638.216391] x5 : ffff80000904a3b0 x4 : ffff8000124d3d58 x3 : ffff80001=
-24d3d60
-> [  638.223519] x2 : ffff8000124d3d78 x1 : 0000000000000001 x0 : ffff80001=
-137efb8
-> [  638.230648] Call trace:
-> [  638.233084]  vp8_enc_encode+0x34/0x2b0 [mtk_vcodec_enc]
-> [  638.238304]  venc_if_encode+0xac/0x1b0 [mtk_vcodec_enc]
-> [  638.243525]  mtk_venc_worker+0x110/0x250 [mtk_vcodec_enc]
-> [  638.248918]  process_one_work+0x1f8/0x498
-> [  638.252923]  worker_thread+0x140/0x538
-> [  638.256664]  kthread+0x148/0x158
-> [  638.259884]  ret_from_fork+0x10/0x20
-> [  638.263455] Code: f90023f9 2a0103f5 aa0303f6 aa0403f8 (f940d277)
-> [  638.269538] ---[ end trace e374fc10f8e181f5 ]---
->
-> Fixes: 4e855a6efa547 ("[media] vcodec: mediatek: Add Mediatek V4L2 Video =
-Encoder Driver")
 > Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 
-The order looks indeed safer this way.
+Makes much more sense that way, thanks!
 
 Reviewed-by: Alexandre Courbot <acourbot@chromium.org>
 
 
 > ---
->  drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../platform/mtk-vcodec/mtk_vcodec_enc.c      | 149 +++++++++---------
+>  1 file changed, 72 insertions(+), 77 deletions(-)
 >
-> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c b/dri=
-vers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-> index eed67394cf46..f898226fc53e 100644
-> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-> @@ -214,11 +214,11 @@ static int fops_vcodec_release(struct file *file)
->         mtk_v4l2_debug(1, "[%d] encoder", ctx->id);
->         mutex_lock(&dev->dev_mutex);
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+> index fb3cf804c96a..be28f2401839 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+> @@ -263,87 +263,82 @@ static struct mtk_q_data *mtk_venc_get_q_data(struct mtk_vcodec_ctx *ctx,
+>         return &ctx->q_data[MTK_Q_DATA_DST];
+>  }
 >
-> +       v4l2_m2m_ctx_release(ctx->m2m_ctx);
->         mtk_vcodec_enc_release(ctx);
->         v4l2_fh_del(&ctx->fh);
->         v4l2_fh_exit(&ctx->fh);
->         v4l2_ctrl_handler_free(&ctx->ctrl_hdl);
-> -       v4l2_m2m_ctx_release(ctx->m2m_ctx);
+> +static void vidioc_try_fmt_cap(struct v4l2_format *f)
+> +{
+> +       f->fmt.pix_mp.field = V4L2_FIELD_NONE;
+> +       f->fmt.pix_mp.num_planes = 1;
+> +       f->fmt.pix_mp.plane_fmt[0].bytesperline = 0;
+> +       f->fmt.pix_mp.flags = 0;
+> +}
+> +
+>  /* V4L2 specification suggests the driver corrects the format struct if any of
+>   * the dimensions is unsupported
+>   */
+> -static int vidioc_try_fmt(struct mtk_vcodec_ctx *ctx, struct v4l2_format *f,
+> -                         const struct mtk_video_fmt *fmt)
+> +static int vidioc_try_fmt_out(struct mtk_vcodec_ctx *ctx, struct v4l2_format *f,
+> +                             const struct mtk_video_fmt *fmt)
+>  {
+>         struct v4l2_pix_format_mplane *pix_fmt_mp = &f->fmt.pix_mp;
+> +       int tmp_w, tmp_h;
+> +       unsigned int max_width, max_height;
 >
->         list_del_init(&ctx->list);
->         kfree(ctx);
+>         pix_fmt_mp->field = V4L2_FIELD_NONE;
+>
+> -       if (f->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
+> -               pix_fmt_mp->num_planes = 1;
+> -               pix_fmt_mp->plane_fmt[0].bytesperline = 0;
+> -       } else if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
+> -               int tmp_w, tmp_h;
+> -               unsigned int max_width, max_height;
+> -
+> -               if (ctx->dev->enc_capability & MTK_VENC_4K_CAPABILITY_ENABLE) {
+> -                       max_width = MTK_VENC_4K_MAX_W;
+> -                       max_height = MTK_VENC_4K_MAX_H;
+> -               } else {
+> -                       max_width = MTK_VENC_HD_MAX_W;
+> -                       max_height = MTK_VENC_HD_MAX_H;
+> -               }
+> +       if (ctx->dev->enc_capability & MTK_VENC_4K_CAPABILITY_ENABLE) {
+> +               max_width = MTK_VENC_4K_MAX_W;
+> +               max_height = MTK_VENC_4K_MAX_H;
+> +       } else {
+> +               max_width = MTK_VENC_HD_MAX_W;
+> +               max_height = MTK_VENC_HD_MAX_H;
+> +       }
+>
+> -               pix_fmt_mp->height = clamp(pix_fmt_mp->height,
+> -                                       MTK_VENC_MIN_H,
+> -                                       max_height);
+> -               pix_fmt_mp->width = clamp(pix_fmt_mp->width,
+> -                                       MTK_VENC_MIN_W,
+> -                                       max_width);
+> +       pix_fmt_mp->height = clamp(pix_fmt_mp->height, MTK_VENC_MIN_H, max_height);
+> +       pix_fmt_mp->width = clamp(pix_fmt_mp->width, MTK_VENC_MIN_W, max_width);
+>
+> -               /* find next closer width align 16, heign align 32, size align
+> -                * 64 rectangle
+> -                */
+> -               tmp_w = pix_fmt_mp->width;
+> -               tmp_h = pix_fmt_mp->height;
+> -               v4l_bound_align_image(&pix_fmt_mp->width,
+> -                                       MTK_VENC_MIN_W,
+> -                                       max_width, 4,
+> -                                       &pix_fmt_mp->height,
+> -                                       MTK_VENC_MIN_H,
+> -                                       max_height, 5, 6);
+> -
+> -               if (pix_fmt_mp->width < tmp_w &&
+> -                       (pix_fmt_mp->width + 16) <= max_width)
+> -                       pix_fmt_mp->width += 16;
+> -               if (pix_fmt_mp->height < tmp_h &&
+> -                       (pix_fmt_mp->height + 32) <= max_height)
+> -                       pix_fmt_mp->height += 32;
+> -
+> -               mtk_v4l2_debug(0,
+> -                       "before resize width=%d, height=%d, after resize width=%d, height=%d, sizeimage=%d %d",
+> -                       tmp_w, tmp_h, pix_fmt_mp->width,
+> -                       pix_fmt_mp->height,
+> -                       pix_fmt_mp->plane_fmt[0].sizeimage,
+> -                       pix_fmt_mp->plane_fmt[1].sizeimage);
+> -
+> -               pix_fmt_mp->num_planes = fmt->num_planes;
+> -               pix_fmt_mp->plane_fmt[0].sizeimage =
+> -                               pix_fmt_mp->width * pix_fmt_mp->height +
+> -                               ((ALIGN(pix_fmt_mp->width, 16) * 2) * 16);
+> -               pix_fmt_mp->plane_fmt[0].bytesperline = pix_fmt_mp->width;
+> -
+> -               if (pix_fmt_mp->num_planes == 2) {
+> -                       pix_fmt_mp->plane_fmt[1].sizeimage =
+> -                               (pix_fmt_mp->width * pix_fmt_mp->height) / 2 +
+> -                               (ALIGN(pix_fmt_mp->width, 16) * 16);
+> -                       pix_fmt_mp->plane_fmt[2].sizeimage = 0;
+> -                       pix_fmt_mp->plane_fmt[1].bytesperline =
+> -                                                       pix_fmt_mp->width;
+> -                       pix_fmt_mp->plane_fmt[2].bytesperline = 0;
+> -               } else if (pix_fmt_mp->num_planes == 3) {
+> -                       pix_fmt_mp->plane_fmt[1].sizeimage =
+> -                       pix_fmt_mp->plane_fmt[2].sizeimage =
+> -                               (pix_fmt_mp->width * pix_fmt_mp->height) / 4 +
+> -                               ((ALIGN(pix_fmt_mp->width, 16) / 2) * 16);
+> -                       pix_fmt_mp->plane_fmt[1].bytesperline =
+> -                               pix_fmt_mp->plane_fmt[2].bytesperline =
+> -                               pix_fmt_mp->width / 2;
+> -               }
+> +       /* find next closer width align 16, heign align 32, size align
+> +        * 64 rectangle
+> +        */
+> +       tmp_w = pix_fmt_mp->width;
+> +       tmp_h = pix_fmt_mp->height;
+> +       v4l_bound_align_image(&pix_fmt_mp->width,
+> +                             MTK_VENC_MIN_W,
+> +                             max_width, 4,
+> +                             &pix_fmt_mp->height,
+> +                             MTK_VENC_MIN_H,
+> +                             max_height, 5, 6);
+> +
+> +       if (pix_fmt_mp->width < tmp_w && (pix_fmt_mp->width + 16) <= max_width)
+> +               pix_fmt_mp->width += 16;
+> +       if (pix_fmt_mp->height < tmp_h && (pix_fmt_mp->height + 32) <= max_height)
+> +               pix_fmt_mp->height += 32;
+> +
+> +       mtk_v4l2_debug(0, "before resize w=%d, h=%d, after resize w=%d, h=%d, sizeimage=%d %d",
+> +                      tmp_w, tmp_h, pix_fmt_mp->width,
+> +                      pix_fmt_mp->height,
+> +                      pix_fmt_mp->plane_fmt[0].sizeimage,
+> +                      pix_fmt_mp->plane_fmt[1].sizeimage);
+> +
+> +       pix_fmt_mp->num_planes = fmt->num_planes;
+> +       pix_fmt_mp->plane_fmt[0].sizeimage =
+> +                       pix_fmt_mp->width * pix_fmt_mp->height +
+> +                       ((ALIGN(pix_fmt_mp->width, 16) * 2) * 16);
+> +       pix_fmt_mp->plane_fmt[0].bytesperline = pix_fmt_mp->width;
+> +
+> +       if (pix_fmt_mp->num_planes == 2) {
+> +               pix_fmt_mp->plane_fmt[1].sizeimage =
+> +                       (pix_fmt_mp->width * pix_fmt_mp->height) / 2 +
+> +                       (ALIGN(pix_fmt_mp->width, 16) * 16);
+> +               pix_fmt_mp->plane_fmt[2].sizeimage = 0;
+> +               pix_fmt_mp->plane_fmt[1].bytesperline =
+> +                                               pix_fmt_mp->width;
+> +               pix_fmt_mp->plane_fmt[2].bytesperline = 0;
+> +       } else if (pix_fmt_mp->num_planes == 3) {
+> +               pix_fmt_mp->plane_fmt[1].sizeimage =
+> +               pix_fmt_mp->plane_fmt[2].sizeimage =
+> +                       (pix_fmt_mp->width * pix_fmt_mp->height) / 4 +
+> +                       ((ALIGN(pix_fmt_mp->width, 16) / 2) * 16);
+> +               pix_fmt_mp->plane_fmt[1].bytesperline =
+> +                       pix_fmt_mp->plane_fmt[2].bytesperline =
+> +                       pix_fmt_mp->width / 2;
+>         }
+>
+>         pix_fmt_mp->flags = 0;
+> @@ -432,9 +427,7 @@ static int vidioc_venc_s_fmt_cap(struct file *file, void *priv,
+>         }
+>
+>         q_data->fmt = fmt;
+> -       ret = vidioc_try_fmt(ctx, f, q_data->fmt);
+> -       if (ret)
+> -               return ret;
+> +       vidioc_try_fmt_cap(f);
+>
+>         q_data->coded_width = f->fmt.pix_mp.width;
+>         q_data->coded_height = f->fmt.pix_mp.height;
+> @@ -494,7 +487,7 @@ static int vidioc_venc_s_fmt_out(struct file *file, void *priv,
+>                 f->fmt.pix.pixelformat = fmt->fourcc;
+>         }
+>
+> -       ret = vidioc_try_fmt(ctx, f, fmt);
+> +       ret = vidioc_try_fmt_out(ctx, f, fmt);
+>         if (ret)
+>                 return ret;
+>
+> @@ -572,7 +565,9 @@ static int vidioc_try_fmt_vid_cap_mplane(struct file *file, void *priv,
+>         f->fmt.pix_mp.quantization = ctx->quantization;
+>         f->fmt.pix_mp.xfer_func = ctx->xfer_func;
+>
+> -       return vidioc_try_fmt(ctx, f, fmt);
+> +       vidioc_try_fmt_cap(f);
+> +
+> +       return 0;
+>  }
+>
+>  static int vidioc_try_fmt_vid_out_mplane(struct file *file, void *priv,
+> @@ -594,7 +589,7 @@ static int vidioc_try_fmt_vid_out_mplane(struct file *file, void *priv,
+>                 f->fmt.pix_mp.xfer_func = V4L2_XFER_FUNC_DEFAULT;
+>         }
+>
+> -       return vidioc_try_fmt(ctx, f, fmt);
+> +       return vidioc_try_fmt_out(ctx, f, fmt);
+>  }
+>
+>  static int vidioc_venc_g_selection(struct file *file, void *priv,
 > --
 > 2.17.1
 >

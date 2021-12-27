@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E745947FF71
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2448847FFDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238237AbhL0Ph3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:37:29 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:40468 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238189AbhL0PgW (ORCPT
+        id S239349AbhL0PlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:41:25 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38854 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239157AbhL0Piw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:36:22 -0500
+        Mon, 27 Dec 2021 10:38:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AEE30CE10CC;
-        Mon, 27 Dec 2021 15:36:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A224C36AEA;
-        Mon, 27 Dec 2021 15:36:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CAA06110F;
+        Mon, 27 Dec 2021 15:38:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7088DC36AEA;
+        Mon, 27 Dec 2021 15:38:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619379;
-        bh=qWlq/4RXBxpB1L0u62b6ubbd1OpywQGXIpzD2an/ksY=;
+        s=korg; t=1640619532;
+        bh=tNInkdAZZkaXO3IhqaXhNQSRyo0RbBYlB7OgWOC5Cqs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b3sWp7UivXQGdFuL7B+kn4Qp6o965PgaEMaG3OAJI7GVitXaSacAIMWeYk8vcqZwl
-         AMgPb3xgtQlHZtFuZxjZmWRYkb8mmSrTPZyrzcCxYZP1BGaXAOMhbRTb4XtaQNf0RL
-         GGliwCRx0QD3aDCJoCOekGGEJXzdBF9BltDGskxY=
+        b=Qw/iOO7PS8E37kHbJiZyWRqfDz9AFWkTJlfTh6HpA8i/4RAH7fAdyGfAdcd0W07UC
+         0Exn+CVsF2GIWg20gPhXdW8qKBXVyDBVqrcLLIEEX1erZHhGWRSzmg3KwYIiVbAC9A
+         +tBuFXlXsTVfYMJ0GEL9TBa4+L67MmZAAukDVSm8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josh Lehan <krellan@google.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 18/47] hwmon: (lm90) Add max6654 support to lm90 driver
+        stable@vger.kernel.org,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Geraldo Nascimento <geraldogabriel@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.10 39/76] ASoC: meson: aiu: Move AIU_I2S_MISC hold setting to aiu-fifo-i2s
 Date:   Mon, 27 Dec 2021 16:30:54 +0100
-Message-Id: <20211227151321.419466557@linuxfoundation.org>
+Message-Id: <20211227151326.064690030@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
-References: <20211227151320.801714429@linuxfoundation.org>
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+References: <20211227151324.694661623@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,209 +49,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josh Lehan <krellan@google.com>
+From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-[ Upstream commit 229d495d8189ae785dacee72e5633a58edc25ddf ]
+commit ee907afb0c39a41ee74b862882cfe12820c74b98 upstream.
 
-Add support for the Maxim MAX6654 to the lm90 driver.
+The out-of-tree vendor driver uses the following approach to set the
+AIU_I2S_MISC register:
+1) write AIU_MEM_I2S_START_PTR and AIU_MEM_I2S_RD_PTR
+2) configure AIU_I2S_MUTE_SWAP[15:0]
+3) write AIU_MEM_I2S_END_PTR
+4) set AIU_I2S_MISC[2] to 1 (documented as: "put I2S interface in hold
+   mode")
+5) set AIU_I2S_MISC[4] to 1 (depending on the driver revision it always
+   stays at 1 while for older drivers this bit is unset in step 4)
+6) set AIU_I2S_MISC[2] to 0
+7) write AIU_MEM_I2S_MASKS
+8) toggle AIU_MEM_I2S_CONTROL[0]
+9) toggle AIU_MEM_I2S_BUF_CNTL[0]
 
-The MAX6654 is a temperature sensor, similar to the others,
-but with some differences regarding the configuration
-register, and the sampling rate at which extended resolution
-becomes possible.
+Move setting the AIU_I2S_MISC[2] bit to aiu_fifo_i2s_hw_params() so it
+resembles the flow in the vendor kernel more closely. While here also
+configure AIU_I2S_MISC[4] (documented as: "force each audio data to
+left or right according to the bit attached with the audio data")
+similar to how the vendor driver does this. This fixes the infamous and
+long-standing "machine gun noise" issue (a buffer underrun issue).
 
-Signed-off-by: Josh Lehan <krellan@google.com>
-Link: https://lore.kernel.org/r/20200513184248.145765-1-krellan@google.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 6ae9ca9ce986bf ("ASoC: meson: aiu: add i2s and spdif support")
+Reported-by: Christian Hewitt <christianshewitt@gmail.com>
+Reported-by: Geraldo Nascimento <geraldogabriel@gmail.com>
+Tested-by: Christian Hewitt <christianshewitt@gmail.com>
+Tested-by: Geraldo Nascimento <geraldogabriel@gmail.com>
+Acked-by: Jerome Brunet <jbrunet@baylibre.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Link: https://lore.kernel.org/r/20211206210804.2512999-3-martin.blumenstingl@googlemail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/hwmon/lm90.rst | 23 ++++++++++++++++--
- drivers/hwmon/Kconfig        |  9 ++++----
- drivers/hwmon/lm90.c         | 45 ++++++++++++++++++++++++++++++++----
- 3 files changed, 67 insertions(+), 10 deletions(-)
+ sound/soc/meson/aiu-encoder-i2s.c |   33 ---------------------------------
+ sound/soc/meson/aiu-fifo-i2s.c    |   19 +++++++++++++++++++
+ 2 files changed, 19 insertions(+), 33 deletions(-)
 
-diff --git a/Documentation/hwmon/lm90.rst b/Documentation/hwmon/lm90.rst
-index 953315987c06e..78dfc01b47a23 100644
---- a/Documentation/hwmon/lm90.rst
-+++ b/Documentation/hwmon/lm90.rst
-@@ -123,6 +123,18 @@ Supported chips:
+--- a/sound/soc/meson/aiu-encoder-i2s.c
++++ b/sound/soc/meson/aiu-encoder-i2s.c
+@@ -18,7 +18,6 @@
+ #define AIU_RST_SOFT_I2S_FAST		BIT(0)
  
- 	       http://www.maxim-ic.com/quick_view2.cfm/qv_pk/3497
+ #define AIU_I2S_DAC_CFG_MSB_FIRST	BIT(2)
+-#define AIU_I2S_MISC_HOLD_EN		BIT(2)
+ #define AIU_CLK_CTRL_I2S_DIV_EN		BIT(0)
+ #define AIU_CLK_CTRL_I2S_DIV		GENMASK(3, 2)
+ #define AIU_CLK_CTRL_AOCLK_INVERT	BIT(6)
+@@ -36,37 +35,6 @@ static void aiu_encoder_i2s_divider_enab
+ 				      enable ? AIU_CLK_CTRL_I2S_DIV_EN : 0);
+ }
  
-+  * Maxim MAX6654
+-static void aiu_encoder_i2s_hold(struct snd_soc_component *component,
+-				 bool enable)
+-{
+-	snd_soc_component_update_bits(component, AIU_I2S_MISC,
+-				      AIU_I2S_MISC_HOLD_EN,
+-				      enable ? AIU_I2S_MISC_HOLD_EN : 0);
+-}
+-
+-static int aiu_encoder_i2s_trigger(struct snd_pcm_substream *substream, int cmd,
+-				   struct snd_soc_dai *dai)
+-{
+-	struct snd_soc_component *component = dai->component;
+-
+-	switch (cmd) {
+-	case SNDRV_PCM_TRIGGER_START:
+-	case SNDRV_PCM_TRIGGER_RESUME:
+-	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+-		aiu_encoder_i2s_hold(component, false);
+-		return 0;
+-
+-	case SNDRV_PCM_TRIGGER_STOP:
+-	case SNDRV_PCM_TRIGGER_SUSPEND:
+-	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+-		aiu_encoder_i2s_hold(component, true);
+-		return 0;
+-
+-	default:
+-		return -EINVAL;
+-	}
+-}
+-
+ static int aiu_encoder_i2s_setup_desc(struct snd_soc_component *component,
+ 				      struct snd_pcm_hw_params *params)
+ {
+@@ -353,7 +321,6 @@ static void aiu_encoder_i2s_shutdown(str
+ }
+ 
+ const struct snd_soc_dai_ops aiu_encoder_i2s_dai_ops = {
+-	.trigger	= aiu_encoder_i2s_trigger,
+ 	.hw_params	= aiu_encoder_i2s_hw_params,
+ 	.hw_free	= aiu_encoder_i2s_hw_free,
+ 	.set_fmt	= aiu_encoder_i2s_set_fmt,
+--- a/sound/soc/meson/aiu-fifo-i2s.c
++++ b/sound/soc/meson/aiu-fifo-i2s.c
+@@ -20,6 +20,8 @@
+ #define AIU_MEM_I2S_CONTROL_MODE_16BIT	BIT(6)
+ #define AIU_MEM_I2S_BUF_CNTL_INIT	BIT(0)
+ #define AIU_RST_SOFT_I2S_FAST		BIT(0)
++#define AIU_I2S_MISC_HOLD_EN		BIT(2)
++#define AIU_I2S_MISC_FORCE_LEFT_RIGHT	BIT(4)
+ 
+ #define AIU_FIFO_I2S_BLOCK		256
+ 
+@@ -90,6 +92,10 @@ static int aiu_fifo_i2s_hw_params(struct
+ 	unsigned int val;
+ 	int ret;
+ 
++	snd_soc_component_update_bits(component, AIU_I2S_MISC,
++				      AIU_I2S_MISC_HOLD_EN,
++				      AIU_I2S_MISC_HOLD_EN);
 +
-+    Prefix: 'max6654'
-+
-+    Addresses scanned: I2C 0x18, 0x19, 0x1a, 0x29, 0x2a, 0x2b,
-+
-+			   0x4c, 0x4d and 0x4e
-+
-+    Datasheet: Publicly available at the Maxim website
-+
-+	       https://www.maximintegrated.com/en/products/sensors/MAX6654.html
-+
-   * Maxim MAX6657
- 
-     Prefix: 'max6657'
-@@ -301,6 +313,13 @@ ADT7461, ADT7461A, NCT1008:
-   * Extended temperature range (breaks compatibility)
-   * Lower resolution for remote temperature
- 
-+MAX6654:
-+  * Better local resolution
-+  * Selectable address
-+  * Remote sensor type selection
-+  * Extended temperature range
-+  * Extended resolution only available when conversion rate <= 1 Hz
-+
- MAX6657 and MAX6658:
-   * Better local resolution
-   * Remote sensor type selection
-@@ -336,8 +355,8 @@ SA56004X:
- 
- All temperature values are given in degrees Celsius. Resolution
- is 1.0 degree for the local temperature, 0.125 degree for the remote
--temperature, except for the MAX6657, MAX6658 and MAX6659 which have a
--resolution of 0.125 degree for both temperatures.
-+temperature, except for the MAX6654, MAX6657, MAX6658 and MAX6659 which have
-+a resolution of 0.125 degree for both temperatures.
- 
- Each sensor has its own high and low limits, plus a critical limit.
- Additionally, there is a relative hysteresis value common to both critical
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 13a6b4afb4b36..fdf8fab7eb396 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1132,10 +1132,11 @@ config SENSORS_LM90
- 	help
- 	  If you say yes here you get support for National Semiconductor LM90,
- 	  LM86, LM89 and LM99, Analog Devices ADM1032, ADT7461, and ADT7461A,
--	  Maxim MAX6646, MAX6647, MAX6648, MAX6649, MAX6657, MAX6658, MAX6659,
--	  MAX6680, MAX6681, MAX6692, MAX6695, MAX6696, ON Semiconductor NCT1008,
--	  Winbond/Nuvoton W83L771W/G/AWG/ASG, Philips SA56004, GMT G781, and
--	  Texas Instruments TMP451 sensor chips.
-+	  Maxim MAX6646, MAX6647, MAX6648, MAX6649, MAX6654, MAX6657, MAX6658,
-+	  MAX6659, MAX6680, MAX6681, MAX6692, MAX6695, MAX6696,
-+	  ON Semiconductor NCT1008, Winbond/Nuvoton W83L771W/G/AWG/ASG,
-+	  Philips SA56004, GMT G781, and Texas Instruments TMP451
-+	  sensor chips.
- 
- 	  This driver can also be built as a module. If so, the module
- 	  will be called lm90.
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index 6d6f543baea68..9d48a7405932f 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -35,6 +35,14 @@
-  * explicitly as max6659, or if its address is not 0x4c.
-  * These chips lack the remote temperature offset feature.
-  *
-+ * This driver also supports the MAX6654 chip made by Maxim. This chip can
-+ * be at 9 different addresses, similar to MAX6680/MAX6681. The MAX6654 is
-+ * otherwise similar to MAX6657/MAX6658/MAX6659. Extended range is available
-+ * by setting the configuration register accordingly, and is done during
-+ * initialization. Extended precision is only available at conversion rates
-+ * of 1 Hz and slower. Note that extended precision is not enabled by
-+ * default, as this driver initializes all chips to 2 Hz by design.
-+ *
-  * This driver also supports the MAX6646, MAX6647, MAX6648, MAX6649 and
-  * MAX6692 chips made by Maxim.  These are again similar to the LM86,
-  * but they use unsigned temperature values and can report temperatures
-@@ -94,8 +102,8 @@
-  * have address 0x4d.
-  * MAX6647 has address 0x4e.
-  * MAX6659 can have address 0x4c, 0x4d or 0x4e.
-- * MAX6680 and MAX6681 can have address 0x18, 0x19, 0x1a, 0x29, 0x2a, 0x2b,
-- * 0x4c, 0x4d or 0x4e.
-+ * MAX6654, MAX6680, and MAX6681 can have address 0x18, 0x19, 0x1a, 0x29,
-+ * 0x2a, 0x2b, 0x4c, 0x4d or 0x4e.
-  * SA56004 can have address 0x48 through 0x4F.
-  */
- 
-@@ -104,7 +112,7 @@ static const unsigned short normal_i2c[] = {
- 	0x4d, 0x4e, 0x4f, I2C_CLIENT_END };
- 
- enum chips { lm90, adm1032, lm99, lm86, max6657, max6659, adt7461, max6680,
--	max6646, w83l771, max6696, sa56004, g781, tmp451 };
-+	max6646, w83l771, max6696, sa56004, g781, tmp451, max6654 };
- 
- /*
-  * The LM90 registers
-@@ -145,7 +153,7 @@ enum chips { lm90, adm1032, lm99, lm86, max6657, max6659, adt7461, max6680,
- #define LM90_REG_R_TCRIT_HYST		0x21
- #define LM90_REG_W_TCRIT_HYST		0x21
- 
--/* MAX6646/6647/6649/6657/6658/6659/6695/6696 registers */
-+/* MAX6646/6647/6649/6654/6657/6658/6659/6695/6696 registers */
- 
- #define MAX6657_REG_R_LOCAL_TEMPL	0x11
- #define MAX6696_REG_R_STATUS2		0x12
-@@ -209,6 +217,7 @@ static const struct i2c_device_id lm90_id[] = {
- 	{ "max6646", max6646 },
- 	{ "max6647", max6646 },
- 	{ "max6649", max6646 },
-+	{ "max6654", max6654 },
- 	{ "max6657", max6657 },
- 	{ "max6658", max6657 },
- 	{ "max6659", max6659 },
-@@ -269,6 +278,10 @@ static const struct of_device_id __maybe_unused lm90_of_match[] = {
- 		.compatible = "dallas,max6649",
- 		.data = (void *)max6646
- 	},
-+	{
-+		.compatible = "dallas,max6654",
-+		.data = (void *)max6654
-+	},
- 	{
- 		.compatible = "dallas,max6657",
- 		.data = (void *)max6657
-@@ -367,6 +380,11 @@ static const struct lm90_params lm90_params[] = {
- 		.max_convrate = 6,
- 		.reg_local_ext = MAX6657_REG_R_LOCAL_TEMPL,
- 	},
-+	[max6654] = {
-+		.alert_alarms = 0x7c,
-+		.max_convrate = 7,
-+		.reg_local_ext = MAX6657_REG_R_LOCAL_TEMPL,
-+	},
- 	[max6657] = {
- 		.flags = LM90_PAUSE_FOR_CONFIG,
- 		.alert_alarms = 0x7c,
-@@ -1556,6 +1574,16 @@ static int lm90_detect(struct i2c_client *client,
- 		 && (config1 & 0x3f) == 0x00
- 		 && convrate <= 0x07) {
- 			name = "max6646";
-+		} else
-+		/*
-+		 * The chip_id of the MAX6654 holds the revision of the chip.
-+		 * The lowest 3 bits of the config1 register are unused and
-+		 * should return zero when read.
-+		 */
-+		if (chip_id == 0x08
-+		 && (config1 & 0x07) == 0x00
-+		 && convrate <= 0x07) {
-+			name = "max6654";
- 		}
- 	} else
- 	if (address == 0x4C
-@@ -1659,6 +1687,15 @@ static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
- 	if (data->kind == max6680)
- 		config |= 0x18;
+ 	ret = aiu_fifo_hw_params(substream, params, dai);
+ 	if (ret)
+ 		return ret;
+@@ -117,6 +123,19 @@ static int aiu_fifo_i2s_hw_params(struct
+ 	snd_soc_component_update_bits(component, AIU_MEM_I2S_MASKS,
+ 				      AIU_MEM_I2S_MASKS_IRQ_BLOCK, val);
  
 +	/*
-+	 * Put MAX6654 into extended range (0x20, extend minimum range from
-+	 * 0 degrees to -64 degrees). Note that extended resolution is not
-+	 * possible on the MAX6654 unless conversion rate is set to 1 Hz or
-+	 * slower, which is intentionally not done by default.
++	 * Most (all?) supported SoCs have this bit set by default. The vendor
++	 * driver however sets it manually (depending on the version either
++	 * while un-setting AIU_I2S_MISC_HOLD_EN or right before that). Follow
++	 * the same approach for consistency with the vendor driver.
 +	 */
-+	if (data->kind == max6654)
-+		config |= 0x20;
++	snd_soc_component_update_bits(component, AIU_I2S_MISC,
++				      AIU_I2S_MISC_FORCE_LEFT_RIGHT,
++				      AIU_I2S_MISC_FORCE_LEFT_RIGHT);
 +
- 	/*
- 	 * Select external channel 0 for max6695/96
- 	 */
--- 
-2.34.1
-
++	snd_soc_component_update_bits(component, AIU_I2S_MISC,
++				      AIU_I2S_MISC_HOLD_EN, 0);
++
+ 	return 0;
+ }
+ 
 
 

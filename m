@@ -2,261 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C2047FB2A
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 09:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D7F47FBA5
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 10:47:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233072AbhL0Ixm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 03:53:42 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:44736 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233014AbhL0Ixk (ORCPT
+        id S236027AbhL0Jr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 04:47:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235925AbhL0JrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 03:53:40 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BR7c7Al031189;
-        Mon, 27 Dec 2021 08:53:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=BBMz5NVKQZoTZlCMryuP+HM5bfRARlR4Vc5ME0Y57vM=;
- b=nXF8CgLQgI7+JaJHGKS5X8GYgNxhsU/3BXWWSotHXz6e8bYS3GJt+IWkgjk4cKUIhuOL
- rVmSOXrAA77cH1grgWuArzA0cBv+OUmL0oyqDjdVI8P9lLx2Lfwe3Nt7Ww5iOPMJZ707
- 2HcgQ27UUwxc6pBraQ6KdBIG2mVbjp7r+4ojy4KcD9LIdOMGjt09v+YK8eDvYBUVsthy
- FaTjPdXTZ7Tp86zcrP3ricB7OK9CPaIxuBkuNSwJvtxxl9kdOZ+aNTcGZZLAjcK9UJNo
- QpRV69OsqXxXBN6kCJJMKN5E9ElSQhpQMBpigdyTU5aSuSTsP4ZFPtcKLT8UtNn8KZms cg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d75tamett-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Dec 2021 08:53:38 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BR8iXSJ016594;
-        Mon, 27 Dec 2021 08:53:38 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d75tametc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Dec 2021 08:53:38 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BR8n5gG007532;
-        Mon, 27 Dec 2021 08:53:36 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 3d5tjj8xq5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Dec 2021 08:53:35 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BR8rW2940042964
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Dec 2021 08:53:32 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 097534C04E;
-        Mon, 27 Dec 2021 08:53:32 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 44FF54C04A;
-        Mon, 27 Dec 2021 08:53:31 +0000 (GMT)
-Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.90.67])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Mon, 27 Dec 2021 08:53:31 +0000 (GMT)
-Date:   Mon, 27 Dec 2021 09:53:01 +0100
-From:   Halil Pasic <pasic@linux.ibm.com>
-To:     Tony Krowiak <akrowiak@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, jjherne@linux.ibm.com, freude@linux.ibm.com,
-        borntraeger@de.ibm.com, cohuck@redhat.com, mjrosato@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com, Halil Pasic <pasic@linux.ibm.com>
-Subject: Re: [PATCH v17 06/15] s390/vfio-ap: refresh guest's APCB by
- filtering APQNs assigned to mdev
-Message-ID: <20211227095301.34a91ca4.pasic@linux.ibm.com>
-In-Reply-To: <20211021152332.70455-7-akrowiak@linux.ibm.com>
-References: <20211021152332.70455-1-akrowiak@linux.ibm.com>
-        <20211021152332.70455-7-akrowiak@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        Mon, 27 Dec 2021 04:47:19 -0500
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B48FC06175A
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 01:47:19 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:dd7:48a2:4f21:80d4])
+        by andre.telenet-ops.be with bizsmtp
+        id bMnH2600H0THM2Z01MnHTy; Mon, 27 Dec 2021 10:47:17 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1n1mb7-00771q-6c
+        for linux-kernel@vger.kernel.org; Mon, 27 Dec 2021 10:47:17 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1n1lPi-004q2F-Og
+        for linux-kernel@vger.kernel.org; Mon, 27 Dec 2021 09:31:26 +0100
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-kernel@vger.kernel.org
+Subject: Build regressions/improvements in v5.16-rc7
+Date:   Mon, 27 Dec 2021 09:31:26 +0100
+Message-Id: <20211227083126.1153239-1-geert@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: rpwm1l4QYHWeK-z9DTh8Ozb4ECHTZLyG
-X-Proofpoint-GUID: vYwBtzo5mbh-tMK_dYLYrX6WfzfWgEiR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-27_02,2021-12-24_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- malwarescore=0 clxscore=1015 lowpriorityscore=0 phishscore=0
- suspectscore=0 spamscore=0 bulkscore=0 impostorscore=0 adultscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112270042
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Oct 2021 11:23:23 -0400
-Tony Krowiak <akrowiak@linux.ibm.com> wrote:
+Below is the list of build error/warning regressions/improvements in
+v5.16-rc7[1] compared to v5.15[2].
 
-> Refresh the guest's APCB by filtering the APQNs assigned to the matrix mdev
-> that do not reference an AP queue device bound to the vfio_ap device
-> driver. The mdev's APQNs will be filtered according to the following rules:
-> 
-> * The APID of each adapter and the APQI of each domain that is not in the
-> host's AP configuration is filtered out.
-> 
-> * The APID of each adapter comprising an APQN that does not reference a
-> queue device bound to the vfio_ap device driver is filtered. The APQNs
-> are derived from the Cartesian product of the APID of each adapter and
-> APQI of each domain assigned to the mdev.
-> 
-> The control domains that are not assigned to the host's AP configuration
-> will also be filtered before assigning them to the guest's APCB.
+Summarized:
+  - build errors: +7/-13
+  - build warnings: +39/-29
 
-The v16 version used to filer on queue removal from vfio_ap, which makes
-a ton of sense.
+JFYI, when comparing v5.16-rc7[1] to v5.16-rc6[3], the summaries are:
+  - build errors: +2/-1
+  - build warnings: +23/-0
 
-This version will "filter back" the queues once these become bound, but
-if a queue is removed form vfio_ap, we don't seem to care to filter. Is
-this intentional?
+Note that there may be false regressions, as some logs are incomplete.
+Still, they're build errors/warnings.
 
-Also we could probably do the filtering incrementally. In a sense that
-at a time only so much changes, and we know that the invariant was
-preserved without that change. But that would probably end up trading
-complexity for cycles. I will trust your judgment and your tests on this
-matter.
+Happy fixing! ;-)
 
-> 
-> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
-> ---
->  drivers/s390/crypto/vfio_ap_ops.c | 66 ++++++++++++++++++++++++++++++-
->  1 file changed, 64 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/s390/crypto/vfio_ap_ops.c b/drivers/s390/crypto/vfio_ap_ops.c
-> index 4305177029bf..46c179363aca 100644
-> --- a/drivers/s390/crypto/vfio_ap_ops.c
-> +++ b/drivers/s390/crypto/vfio_ap_ops.c
-> @@ -314,6 +314,62 @@ static void vfio_ap_matrix_init(struct ap_config_info *info,
->  	matrix->adm_max = info->apxa ? info->Nd : 15;
->  }
->  
-> +static void vfio_ap_mdev_filter_cdoms(struct ap_matrix_mdev *matrix_mdev)
-> +{
-> +	bitmap_and(matrix_mdev->shadow_apcb.adm, matrix_mdev->matrix.adm,
-> +		   (unsigned long *)matrix_dev->info.adm, AP_DOMAINS);
-> +}
-> +
-> +/*
-> + * vfio_ap_mdev_filter_matrix - copy the mdev's AP configuration to the KVM
-> + *				guest's APCB then filter the APIDs that do not
-> + *				comprise at least one APQN that references a
-> + *				queue device bound to the vfio_ap device driver.
-> + *
-> + * @matrix_mdev: the mdev whose AP configuration is to be filtered.
-> + */
-> +static void vfio_ap_mdev_filter_matrix(struct ap_matrix_mdev *matrix_mdev)
-> +{
-> +	int ret;
-> +	unsigned long apid, apqi, apqn;
-> +
-> +	ret = ap_qci(&matrix_dev->info);
-> +	if (ret)
-> +		return;
-> +
-> +	vfio_ap_matrix_init(&matrix_dev->info, &matrix_mdev->shadow_apcb);
-> +
-> +	/*
-> +	 * Copy the adapters, domains and control domains to the shadow_apcb
-> +	 * from the matrix mdev, but only those that are assigned to the host's
-> +	 * AP configuration.
-> +	 */
-> +	bitmap_and(matrix_mdev->shadow_apcb.apm, matrix_mdev->matrix.apm,
-> +		   (unsigned long *)matrix_dev->info.apm, AP_DEVICES);
-> +	bitmap_and(matrix_mdev->shadow_apcb.aqm, matrix_mdev->matrix.aqm,
-> +		   (unsigned long *)matrix_dev->info.aqm, AP_DOMAINS);
-> +
-> +	for_each_set_bit_inv(apid, matrix_mdev->shadow_apcb.apm, AP_DEVICES) {
-> +		for_each_set_bit_inv(apqi, matrix_mdev->shadow_apcb.aqm,
-> +				     AP_DOMAINS) {
-> +			/*
-> +			 * If the APQN is not bound to the vfio_ap device
-> +			 * driver, then we can't assign it to the guest's
-> +			 * AP configuration. The AP architecture won't
-> +			 * allow filtering of a single APQN, so if we're
-> +			 * filtering APIDs, then filter the APID; otherwise,
-> +			 * filter the APQI.
-> +			 */
-> +			apqn = AP_MKQID(apid, apqi);
-> +			if (!vfio_ap_mdev_get_queue(matrix_mdev, apqn)) {
-> +				clear_bit_inv(apid,
-> +					      matrix_mdev->shadow_apcb.apm);
-> +				break;
-> +			}
-> +		}
-> +	}
-> +}
-> +
->  static int vfio_ap_mdev_probe(struct mdev_device *mdev)
->  {
->  	struct ap_matrix_mdev *matrix_mdev;
-> @@ -703,6 +759,7 @@ static ssize_t assign_adapter_store(struct device *dev,
->  		goto share_err;
->  
->  	vfio_ap_mdev_link_adapter(matrix_mdev, apid);
-> +	vfio_ap_mdev_filter_matrix(matrix_mdev);
->  	ret = count;
->  	goto done;
->  
-> @@ -771,6 +828,7 @@ static ssize_t unassign_adapter_store(struct device *dev,
->  
->  	clear_bit_inv((unsigned long)apid, matrix_mdev->matrix.apm);
->  	vfio_ap_mdev_unlink_adapter(matrix_mdev, apid);
-> +	vfio_ap_mdev_filter_matrix(matrix_mdev);
->  	ret = count;
->  done:
->  	mutex_unlock(&matrix_dev->lock);
-> @@ -874,6 +932,7 @@ static ssize_t assign_domain_store(struct device *dev,
->  		goto share_err;
->  
->  	vfio_ap_mdev_link_domain(matrix_mdev, apqi);
-> +	vfio_ap_mdev_filter_matrix(matrix_mdev);
->  	ret = count;
->  	goto done;
->  
-> @@ -942,6 +1001,7 @@ static ssize_t unassign_domain_store(struct device *dev,
->  
->  	clear_bit_inv((unsigned long)apqi, matrix_mdev->matrix.aqm);
->  	vfio_ap_mdev_unlink_domain(matrix_mdev, apqi);
-> +	vfio_ap_mdev_filter_matrix(matrix_mdev);
->  	ret = count;
->  
->  done:
-> @@ -995,6 +1055,7 @@ static ssize_t assign_control_domain_store(struct device *dev,
->  	 * number of control domains that can be assigned.
->  	 */
->  	set_bit_inv(id, matrix_mdev->matrix.adm);
-> +	vfio_ap_mdev_filter_cdoms(matrix_mdev);
->  	ret = count;
->  done:
->  	mutex_unlock(&matrix_dev->lock);
-> @@ -1042,6 +1103,7 @@ static ssize_t unassign_control_domain_store(struct device *dev,
->  	}
->  
->  	clear_bit_inv(domid, matrix_mdev->matrix.adm);
-> +	clear_bit_inv(domid, matrix_mdev->shadow_apcb.adm);
->  	ret = count;
->  done:
->  	mutex_unlock(&matrix_dev->lock);
-> @@ -1179,8 +1241,6 @@ static int vfio_ap_mdev_set_kvm(struct ap_matrix_mdev *matrix_mdev,
->  		kvm_get_kvm(kvm);
->  		matrix_mdev->kvm = kvm;
->  		kvm->arch.crypto.data = matrix_mdev;
-> -		memcpy(&matrix_mdev->shadow_apcb, &matrix_mdev->matrix,
-> -		       sizeof(struct ap_matrix));
->  		kvm_arch_crypto_set_masks(kvm, matrix_mdev->shadow_apcb.apm,
->  					  matrix_mdev->shadow_apcb.aqm,
->  					  matrix_mdev->shadow_apcb.adm);
-> @@ -1536,6 +1596,8 @@ int vfio_ap_mdev_probe_queue(struct ap_device *apdev)
->  	q->apqn = to_ap_queue(&apdev->device)->qid;
->  	q->saved_isc = VFIO_AP_ISC_INVALID;
->  	vfio_ap_queue_link_mdev(q);
-> +	if (q->matrix_mdev)
-> +		vfio_ap_mdev_filter_matrix(q->matrix_mdev);
->  	dev_set_drvdata(&apdev->device, q);
->  	mutex_unlock(&matrix_dev->lock);
->  
+Thanks to the linux-next team for providing the build service.
 
+[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/fc74e0a40e4f9fd0468e34045b0c45bba11dcbb2/ (all 99 configs)
+[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/8bb7eca972ad531c9b149c0a51ab43a417385813/ (90 out of 99 configs)
+[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/a7904a538933c525096ca2ccde1e60d0ee62c08e/ (90 out of 99 configs)
+
+
+*** ERRORS ***
+
+7 error regressions:
+  + /kisskb/src/crypto/blake2b_generic.c: error: the frame size of 2288 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 109:1
+  + /kisskb/src/drivers/mtd/nand/raw/mpc5121_nfc.c: error: unused variable 'mtd' [-Werror=unused-variable]:  => 294:19
+  + /kisskb/src/drivers/video/fbdev/nvidia/nvidia.c: error: passing argument 1 of 'iounmap' discards 'volatile' qualifier from pointer target type [-Werror=discarded-qualifiers]:  => 1439:10, 1414:10
+  + error: arch/sparc/kernel/head_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.init.text':  => (.head.text+0x5040), (.head.text+0x5100)
+  + error: arch/sparc/kernel/head_32.o: relocation truncated to fit: R_SPARC_WDISP22 against symbol `leon_smp_cpu_startup' defined in .text section in arch/sparc/kernel/trampoline_32.o:  => (.init.text+0xa4)
+  + error: arch/sparc/kernel/process_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.text':  => (.fixup+0x4), (.fixup+0xc)
+  + error: arch/sparc/kernel/signal_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.text':  => (.fixup+0x4), (.fixup+0x34), (.fixup+0x1c), (.fixup+0x10), (.fixup+0x28)
+
+13 error improvements:
+  - /kisskb/src/drivers/pci/controller/vmd.c: error: 'X86_MSI_BASE_ADDRESS_HIGH' undeclared (first use in this function): 151:20 => 
+  - /kisskb/src/drivers/pci/controller/vmd.c: error: 'X86_MSI_BASE_ADDRESS_LOW' undeclared (first use in this function): 152:35 => 
+  - /kisskb/src/drivers/pci/controller/vmd.c: error: 'arch_msi_msg_addr_lo_t {aka struct arch_msi_msg_addr_lo}' has no member named 'base_address': 152:19 => 
+  - /kisskb/src/drivers/pci/controller/vmd.c: error: 'arch_msi_msg_addr_lo_t {aka struct arch_msi_msg_addr_lo}' has no member named 'destid_0_7': 153:19 => 
+  - /kisskb/src/drivers/pci/controller/vmd.c: error: control reaches end of non-void function [-Werror=return-type]: 128:1 => 
+  - /kisskb/src/drivers/pci/controller/vmd.c: error: dereferencing pointer to incomplete type 'struct pci_sysdata': 751:4 => 
+  - /kisskb/src/drivers/pci/controller/vmd.c: error: field 'sysdata' has incomplete type: 117:21 => 
+  - /kisskb/src/drivers/tty/serial/cpm_uart/cpm_uart_core.c: error: 'udbg_cpm_getc' defined but not used [-Werror=unused-function]: 1109:12 => 
+  - /kisskb/src/drivers/tty/serial/cpm_uart/cpm_uart_core.c: error: 'udbg_cpm_putc' defined but not used [-Werror=unused-function]: 1095:13 => 
+  - /kisskb/src/drivers/tty/serial/sunzilog.c: error: 'sunzilog_putchar' defined but not used [-Werror=unused-function]: 1128:13 => 
+  - /kisskb/src/drivers/usb/gadget/udc/fsl_qe_udc.c: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]: 970:41, 970:13, 842:41, 842:13, 1496:12, 1496:33 => 
+  - /kisskb/src/drivers/usb/gadget/udc/fsl_qe_udc.c: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]: 1497:48, 1497:27, 971:28, 843:56, 843:28, 971:56 => 
+  - /kisskb/src/lib/xxhash.c: error: the frame size of 1624 bytes is larger than 1536 bytes [-Werror=frame-larger-than=]: 236:1 => 
+
+
+*** WARNINGS ***
+
+39 warning regressions:
+  + arch/m68k/configs/multi_defconfig: warning: symbol value 'm' invalid for MCTP:  => 322
+  + arch/m68k/configs/sun3_defconfig: warning: symbol value 'm' invalid for MCTP:  => 295
+  + modpost: WARNING: modpost: EXPORT symbol "___rw_read_enter" [vmlinux] version ...:  => N/A
+  + modpost: WARNING: modpost: EXPORT symbol "___rw_read_exit" [vmlinux] version ...:  => N/A
+  + modpost: WARNING: modpost: EXPORT symbol "___rw_read_try" [vmlinux] version ...:  => N/A
+  + modpost: WARNING: modpost: EXPORT symbol "___rw_write_enter" [vmlinux] version ...:  => N/A
+  + modpost: WARNING: modpost: EXPORT symbol "__ashldi3" [vmlinux] version ...:  => N/A
+  + modpost: WARNING: modpost: EXPORT symbol "__ashrdi3" [vmlinux] version ...:  => N/A
+  + modpost: WARNING: modpost: EXPORT symbol "__copy_1page" [vmlinux] version ...:  => N/A
+  + modpost: WARNING: modpost: EXPORT symbol "__divdi3" [vmlinux] version ...:  => N/A
+  + modpost: WARNING: modpost: EXPORT symbol "__lshrdi3" [vmlinux] version ...:  => N/A
+  + modpost: WARNING: modpost: EXPORT symbol "__muldi3" [vmlinux] version ...:  => N/A
+  + modpost: WARNING: modpost: EXPORT symbol "__ndelay" [vmlinux] version ...:  => N/A
+  + modpost: WARNING: modpost: EXPORT symbol "__udelay" [vmlinux] version ...:  => N/A
+  + modpost: WARNING: modpost: EXPORT symbol "bzero_1page" [vmlinux] version ...:  => N/A
+  + modpost: WARNING: modpost: EXPORT symbol "empty_zero_page" [vmlinux] version ...:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x136d0): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x136e8): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13700): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13718): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13730): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13748): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13760): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x137b0): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x137c8): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x137e0): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x137f8): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13810): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13828): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13840): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13858): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4610): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4628): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4640): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4658): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4670): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4688): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x46a0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: vmlinux.o(.text.unlikely+0x45e4): Section mismatch in reference from the function __trace_event_discard_commit() to the variable .init.data:initcall_level_names:  => N/A
+
+29 warning improvements:
+  - /kisskb/src/arch/m68k/include/asm/string.h: warning: '__builtin_memcpy' reading 6 bytes from a region of size 0 [-Wstringop-overread]: 72:25 => 
+  - /kisskb/src/block/genhd.c: warning: the frame size of 1640 bytes is larger than 1536 bytes [-Wframe-larger-than=]: 1194:1 => 
+  - /kisskb/src/block/genhd.c: warning: the frame size of 1672 bytes is larger than 1536 bytes [-Wframe-larger-than=]: 1194:1 => 
+  - /kisskb/src/lib/xxhash.c: warning: the frame size of 1616 bytes is larger than 1536 bytes [-Wframe-larger-than=]: 236:1 => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3570): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3588): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x35a0): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x35b8): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x35d0): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x35e8): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3600): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3618): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3630): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3648): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3660): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3678): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3690): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x36a8): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x36c0): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x36d8): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x108): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x120): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x138): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x150): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x168): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x180): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x198): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: lib/find_bit_benchmark.o(.text.unlikely+0x0): Section mismatch in reference from the (unknown reference) (unknown) to the variable .init.data:bitmap2: N/A => 
+  - modpost: WARNING: modpost: lib/test_bitmap.o(.text.unlikely+0x58): Section mismatch in reference from the function bitmap_equal() to the variable .init.rodata:test_print: N/A => 
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds

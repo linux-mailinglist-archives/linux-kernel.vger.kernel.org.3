@@ -2,91 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 562D84804B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 21:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 296D34804B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 21:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233284AbhL0Uze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 15:55:34 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:39704 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233256AbhL0Uzc (ORCPT
+        id S233266AbhL0Uzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 15:55:54 -0500
+Received: from mxout01.lancloud.ru ([45.84.86.81]:50944 "EHLO
+        mxout01.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229837AbhL0Uzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 15:55:32 -0500
-Received: from machine.home (lfbn-lyo-1-1484-111.w86-207.abo.wanadoo.fr [86.207.51.111])
-        by linux.microsoft.com (Postfix) with ESMTPSA id CE8B820B717B;
-        Mon, 27 Dec 2021 12:55:30 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CE8B820B717B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1640638531;
-        bh=21h2IU25StSfVm+H1A8EsuYeCqu3xLP7bthO+pzdaTY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qsJz99IQ/EXnSMrp16cwYHGOIA2dxtNP2AHykh430Bt9XMgRjW0XO6XbPSXPZNnaU
-         vDVnSaReMRlfZhrcoMCc3ylenXDa2O0wpfDK8ZUHpFNIcfOPSFSZRmN+d5/hyCS++L
-         HtF1OjJ8qPyVzJSCFCIbrkQvOIk8duD7ug+u6EeQ=
-From:   Francis Laniel <flaniel@linux.microsoft.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Serge Hallyn <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org,
-        Francis Laniel <flaniel@linux.microsoft.com>
-Subject: [RFC PATCH v1 2/2] kernel/ksysfs.c: Add capabilities attribute.
-Date:   Mon, 27 Dec 2021 21:55:00 +0100
-Message-Id: <20211227205500.214777-3-flaniel@linux.microsoft.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211227205500.214777-1-flaniel@linux.microsoft.com>
-References: <20211227205500.214777-1-flaniel@linux.microsoft.com>
+        Mon, 27 Dec 2021 15:55:53 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru DEEC0209F8C5
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH v3 07/10] ata: pata_platform: Merge pata_of_platform into
+ pata_platform
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+CC:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        <linux-ide@vger.kernel.org>
+References: <20211224131300.18198-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211224131300.18198-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAHp75VcgknapFkZx5YhNhUgaHKGHBXdeTZ+pBcP_G9wnwfFSnw@mail.gmail.com>
+ <a0f90ec0-b49a-de0d-b8f5-0443cb904847@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <73042c85-c194-e1c8-296c-6d9322624d83@omp.ru>
+Date:   Mon, 27 Dec 2021 23:55:50 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <a0f90ec0-b49a-de0d-b8f5-0443cb904847@omp.ru>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This new read-only attribute prints the capabilities values with their names:
-0       CAP_CHOWN
-1       CAP_DAC_OVERRIDE
-...
-39      CAP_BPF
+On 12/27/21 11:54 PM, Sergey Shtylyov wrote:
 
-Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
----
- kernel/ksysfs.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+[...]
+>> ...
+>>
+>>> +       if ((pdev->num_resources != 3) && (pdev->num_resources != 2)) {
+>>> +               dev_err(&pdev->dev, "invalid number of resources\n");
+>>> +               return -EINVAL;
+>>
+>> return dev_err_probe(); ?
+>>
+>>> +       }
+>>
+>> ...
+>>
+>>> +       if (!dev_of_node(&pdev->dev))
+>>> +               ret = pata_platform_get_pdata(pdev, priv);
+>>> +       else
+>>> +               ret = pata_of_platform_get_pdata(pdev, priv);
+>>
+>> What the difference between them?
+> 
+>    One parses DT props into the private structure, the other inits this structure without DT...
+> 
+>> Can't you unify them and leave only
+>> DT related part separately?
+> 
+>    He can't -- grep *defconfig for PATA_PLATFORM=, please.
 
-diff --git a/kernel/ksysfs.c b/kernel/ksysfs.c
-index 35859da8bd4f..7d39794a55bc 100644
---- a/kernel/ksysfs.c
-+++ b/kernel/ksysfs.c
-@@ -182,6 +182,23 @@ static ssize_t rcu_normal_store(struct kobject *kobj,
- KERNEL_ATTR_RW(rcu_normal);
- #endif /* #ifndef CONFIG_TINY_RCU */
- 
-+static ssize_t capabilities_show(struct kobject *unused0,
-+				struct kobj_attribute *unused1, char *buf)
-+{
-+	int at = 0;
-+	int i;
-+
-+	for (i = 0; i < CAP_LAST_CAP; i++) {
-+		if (at >= PAGE_SIZE)
-+			return at;
-+
-+		at += sysfs_emit_at(buf, at, "%d\t%s\n", i, cap_strings[i]);
-+	}
-+
-+	return at;
-+}
-+KERNEL_ATTR_RO(capabilities);
-+
- /*
-  * Make /sys/kernel/notes give the raw contents of our kernel .notes section.
-  */
-@@ -229,6 +246,7 @@ static struct attribute * kernel_attrs[] = {
- 	&rcu_expedited_attr.attr,
- 	&rcu_normal_attr.attr,
- #endif
-+	&capabilities_attr.attr,
- 	NULL
- };
- 
--- 
-2.30.2
+   I take it back -- I think I misunderstood. :-)
 
+> [...]
+
+MBR, Sergey

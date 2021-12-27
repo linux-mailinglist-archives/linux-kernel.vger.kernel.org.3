@@ -2,236 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8413547FBFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4537547FC02
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 11:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236194AbhL0KxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 05:53:07 -0500
-Received: from vmicros1.altlinux.org ([194.107.17.57]:35186 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232508AbhL0KxG (ORCPT
+        id S236231AbhL0K4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 05:56:13 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:50644 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233408AbhL0K4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 05:53:06 -0500
-Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 388A472C8B0;
-        Mon, 27 Dec 2021 13:53:04 +0300 (MSK)
-Received: by mua.local.altlinux.org (Postfix, from userid 508)
-        id 1F4F87CCA1A; Mon, 27 Dec 2021 13:53:04 +0300 (MSK)
-Date:   Mon, 27 Dec 2021 13:53:04 +0300
-From:   "Dmitry V. Levin" <ldv@altlinux.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] uapi: fix asm/shmbuf.h userspace compilation errors
-Message-ID: <20211227105303.GA25101@altlinux.org>
+        Mon, 27 Dec 2021 05:56:11 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BRAtoWf054700;
+        Mon, 27 Dec 2021 04:55:50 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1640602550;
+        bh=pDGeltek1WQaDMMmseYWv9CYCbGSEC5eBTDw5UBcrLo=;
+        h=From:To:CC:Subject:Date;
+        b=JyVkO0e43sKKpIPkbUryTrVIN3jLU59roB60H4vwcVGhKMbCQB+txyVwg+e3JGE1N
+         A8T0r439Pky4x65hqIQtgun7BU2sc+2fE6wOWmMrrRei59+4AZW3AgU4wPdqLXSdkL
+         8prGmKZLl5bFut1Ymwuu+nvfP5iUinYjGzOs50Kc=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BRAto6K103344
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 27 Dec 2021 04:55:50 -0600
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 27
+ Dec 2021 04:55:50 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 27 Dec 2021 04:55:50 -0600
+Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BRAtkVL029188;
+        Mon, 27 Dec 2021 04:55:47 -0600
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Vinod Koul <vkoul@kernel.org>
+CC:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>
+Subject: [PATCH v7 0/4] Rx mode support for Cadence DPHY
+Date:   Mon, 27 Dec 2021 16:25:41 +0530
+Message-ID: <20211227105545.4852-1-p.yadav@ti.com>
+X-Mailer: git-send-email 2.33.1.835.ge9e5ba39a7
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a1=-Q=gVRyk+PwqxTeTPXa4yrmqWKG7SyZng2d7bcbG=g@mail.gmail.com>
- <CAK8P3a1_QLguZ6XEGC9TdGUmF0R3bKaU2EiJ6m+Gf=KpYnmqqw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Userspace cannot compile <asm/shmbuf.h> due to some missing type
-definitions.  For example, compiling it for x86_64 fails with the
-following diagnostics:
+Hi,
 
-  HDRTEST usr/include/asm/shmbuf.h
-In file included from ./usr/include/asm/shmbuf.h:6,
-                 from <command-line>:
-./usr/include/asm-generic/shmbuf.h:26:33: error: field 'shm_perm' has incomplete type
-   26 |         struct ipc64_perm       shm_perm;       /* operation perms */
-      |                                 ^~~~~~~~
-./usr/include/asm-generic/shmbuf.h:27:9: error: unknown type name 'size_t'
-   27 |         size_t                  shm_segsz;      /* size of segment (bytes) */
-      |         ^~~~~~
-./usr/include/asm-generic/shmbuf.h:40:9: error: unknown type name '__kernel_pid_t'
-   40 |         __kernel_pid_t          shm_cpid;       /* pid of creator */
-      |         ^~~~~~~~~~~~~~
-./usr/include/asm-generic/shmbuf.h:41:9: error: unknown type name '__kernel_pid_t'
-   41 |         __kernel_pid_t          shm_lpid;       /* pid of last operator */
-      |         ^~~~~~~~~~~~~~
+This series adds support for Cadence DPHY Rx driver. It has been split
+off from [0] to facilitate easier merging. I have still kept the version
+number to maintain continuity with the previous patches. The earlier
+version used the same binding for Tx and Rx DPHY. With the separate
+driver, I have added a separate binding. But I am still keeping the old
+conversion patch in this series since I have already done the work in
+converting the binding to yaml, might as well get it merged.
 
-Replace size_t with __kernel_size_t and include <asm/ipcbuf.h> to make
-asm/shmbuf.h self-contained, also add it to the compile-test coverage.
+Tested on TI's J721E with OV5640 sensor.
 
-Signed-off-by: Dmitry V. Levin <ldv@altlinux.org>
----
+[0] https://patchwork.linuxtv.org/project/linux-media/list/?series=5526&state=%2A&archive=both
 
-This was submitted almost 5 years ago [1] and acked by Arnd, so I was
-under impression that it was applied among others of this kind, but,
-apparently, it's still relevant.
+Changes in v7:
+- Add spaces after { and before } in the bands table.
+- Drop the wrapping around the for loop on cdns_dphy_rx_get_band_ctrl().
+- Make cdns_dphy_rx_wait_for_bit() inline.
+- Print an error message if registering PHY provider fails.
 
-v2: squash two patches into a single patch, update commit message,
-remove usr/include/Makefile exception for asm/shmbuf.h.
+Changes in v6:
+- Add a new binding for DPHY Rx.
+- Move the DPHY Rx part to a separate driver.
+- Drop Rx specific changes from the cdns,dphy.yaml binding. Keep those
+  in cdns,dphy-rx.yaml
 
-[1] https://lore.kernel.org/lkml/20170302004607.GE27132@altlinux.org/T/#u
+Changes in v5:
+- Use the new cdns_dphy_info to specify PHY ops.
+- Re-order include in alphabetical order.
+- Make bands const.
+- Drop num_bands.
+- Make i, lanes unsigned.
+- Drop the maximum check in cdns_dphy_rx_get_band_ctrl(). Let the loop
+  complete and return -EOPNOTSUPP when we reach the end.
+- Drop the "rate < bands[i].min_rate" check since the bands are in
+  ascending order.
+- Move data_lane_ctrl to start of function and make it static const.
 
- arch/mips/include/uapi/asm/shmbuf.h    | 6 ++++--
- arch/parisc/include/uapi/asm/shmbuf.h  | 1 +
- arch/powerpc/include/uapi/asm/shmbuf.h | 4 +++-
- arch/sparc/include/uapi/asm/shmbuf.h   | 4 +++-
- arch/x86/include/uapi/asm/shmbuf.h     | 4 +++-
- arch/xtensa/include/uapi/asm/shmbuf.h  | 4 +++-
- include/uapi/asm-generic/shmbuf.h      | 3 ++-
- usr/include/Makefile                   | 1 -
- 8 files changed, 19 insertions(+), 8 deletions(-)
+Changes in v4:
+- Drop the submode parts. Use a different compatible for the Rx ops.
+- Make bands and num_bands static.
+- Drop the submode patches. Use a different compatible for Rx mode DPHY
+instead.
 
-diff --git a/arch/mips/include/uapi/asm/shmbuf.h b/arch/mips/include/uapi/asm/shmbuf.h
-index 680bb95b2240..cfddd497e6a8 100644
---- a/arch/mips/include/uapi/asm/shmbuf.h
-+++ b/arch/mips/include/uapi/asm/shmbuf.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_SHMBUF_H
- #define _ASM_SHMBUF_H
- 
-+#include <asm/ipcbuf.h>
-+
- /*
-  * The shmid64_ds structure for the MIPS architecture.
-  * Note extra padding because this structure is passed back and forth
-@@ -16,7 +18,7 @@
- #ifdef __mips64
- struct shmid64_ds {
- 	struct ipc64_perm	shm_perm;	/* operation perms */
--	size_t			shm_segsz;	/* size of segment (bytes) */
-+	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
- 	long			shm_atime;	/* last attach time */
- 	long			shm_dtime;	/* last detach time */
- 	long			shm_ctime;	/* last change time */
-@@ -29,7 +31,7 @@ struct shmid64_ds {
- #else
- struct shmid64_ds {
- 	struct ipc64_perm	shm_perm;	/* operation perms */
--	size_t			shm_segsz;	/* size of segment (bytes) */
-+	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
- 	unsigned long		shm_atime;	/* last attach time */
- 	unsigned long		shm_dtime;	/* last detach time */
- 	unsigned long		shm_ctime;	/* last change time */
-diff --git a/arch/parisc/include/uapi/asm/shmbuf.h b/arch/parisc/include/uapi/asm/shmbuf.h
-index 5da3089be65e..4b1d6c0b1216 100644
---- a/arch/parisc/include/uapi/asm/shmbuf.h
-+++ b/arch/parisc/include/uapi/asm/shmbuf.h
-@@ -3,6 +3,7 @@
- #define _PARISC_SHMBUF_H
- 
- #include <asm/bitsperlong.h>
-+#include <asm/ipcbuf.h>
- 
- /* 
-  * The shmid64_ds structure for parisc architecture.
-diff --git a/arch/powerpc/include/uapi/asm/shmbuf.h b/arch/powerpc/include/uapi/asm/shmbuf.h
-index 00422b2f3c63..8a274dbf7b20 100644
---- a/arch/powerpc/include/uapi/asm/shmbuf.h
-+++ b/arch/powerpc/include/uapi/asm/shmbuf.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_POWERPC_SHMBUF_H
- #define _ASM_POWERPC_SHMBUF_H
- 
-+#include <asm/ipcbuf.h>
-+
- /*
-  * This program is free software; you can redistribute it and/or
-  * modify it under the terms of the GNU General Public License
-@@ -34,7 +36,7 @@ struct shmid64_ds {
- 	unsigned long		shm_ctime;	/* last change time */
- 	unsigned long		__unused4;
- #endif
--	size_t			shm_segsz;	/* size of segment (bytes) */
-+	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
- 	__kernel_pid_t		shm_cpid;	/* pid of creator */
- 	__kernel_pid_t		shm_lpid;	/* pid of last operator */
- 	unsigned long		shm_nattch;	/* no. of current attaches */
-diff --git a/arch/sparc/include/uapi/asm/shmbuf.h b/arch/sparc/include/uapi/asm/shmbuf.h
-index a5d7d8d681c4..1b10b3c91d1b 100644
---- a/arch/sparc/include/uapi/asm/shmbuf.h
-+++ b/arch/sparc/include/uapi/asm/shmbuf.h
-@@ -2,6 +2,8 @@
- #ifndef _SPARC_SHMBUF_H
- #define _SPARC_SHMBUF_H
- 
-+#include <asm/ipcbuf.h>
-+
- /* 
-  * The shmid64_ds structure for sparc architecture.
-  * Note extra padding because this structure is passed back and forth
-@@ -25,7 +27,7 @@ struct shmid64_ds {
- 	unsigned long		shm_ctime_high;
- 	unsigned long		shm_ctime;	/* last change time */
- #endif
--	size_t			shm_segsz;	/* size of segment (bytes) */
-+	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
- 	__kernel_pid_t		shm_cpid;	/* pid of creator */
- 	__kernel_pid_t		shm_lpid;	/* pid of last operator */
- 	unsigned long		shm_nattch;	/* no. of current attaches */
-diff --git a/arch/x86/include/uapi/asm/shmbuf.h b/arch/x86/include/uapi/asm/shmbuf.h
-index fce18eaa070c..3e61a65d8512 100644
---- a/arch/x86/include/uapi/asm/shmbuf.h
-+++ b/arch/x86/include/uapi/asm/shmbuf.h
-@@ -13,9 +13,11 @@
-  * from other 32-bit architectures.
-  */
- 
-+#include <asm/ipcbuf.h>
-+
- struct shmid64_ds {
- 	struct ipc64_perm	shm_perm;	/* operation perms */
--	size_t			shm_segsz;	/* size of segment (bytes) */
-+	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
- 	__kernel_long_t		shm_atime;	/* last attach time */
- 	__kernel_long_t		shm_dtime;	/* last detach time */
- 	__kernel_long_t		shm_ctime;	/* last change time */
-diff --git a/arch/xtensa/include/uapi/asm/shmbuf.h b/arch/xtensa/include/uapi/asm/shmbuf.h
-index 554a57a6a90f..a54411e1ec2a 100644
---- a/arch/xtensa/include/uapi/asm/shmbuf.h
-+++ b/arch/xtensa/include/uapi/asm/shmbuf.h
-@@ -20,9 +20,11 @@
- #ifndef _XTENSA_SHMBUF_H
- #define _XTENSA_SHMBUF_H
- 
-+#include <asm/ipcbuf.h>
-+
- struct shmid64_ds {
- 	struct ipc64_perm	shm_perm;	/* operation perms */
--	size_t			shm_segsz;	/* size of segment (bytes) */
-+	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
- 	unsigned long		shm_atime;	/* last attach time */
- 	unsigned long		shm_atime_high;
- 	unsigned long		shm_dtime;	/* last detach time */
-diff --git a/include/uapi/asm-generic/shmbuf.h b/include/uapi/asm-generic/shmbuf.h
-index 2bab955e0fed..dc16f82be778 100644
---- a/include/uapi/asm-generic/shmbuf.h
-+++ b/include/uapi/asm-generic/shmbuf.h
-@@ -3,6 +3,7 @@
- #define __ASM_GENERIC_SHMBUF_H
- 
- #include <asm/bitsperlong.h>
-+#include <asm/ipcbuf.h>
- 
- /*
-  * The shmid64_ds structure for x86 architecture.
-@@ -24,7 +25,7 @@
- 
- struct shmid64_ds {
- 	struct ipc64_perm	shm_perm;	/* operation perms */
--	size_t			shm_segsz;	/* size of segment (bytes) */
-+	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
- #if __BITS_PER_LONG == 64
- 	long			shm_atime;	/* last attach time */
- 	long			shm_dtime;	/* last detach time */
-diff --git a/usr/include/Makefile b/usr/include/Makefile
-index 1c2ae1368079..129d13e71691 100644
---- a/usr/include/Makefile
-+++ b/usr/include/Makefile
-@@ -20,7 +20,6 @@ override c_flags = $(UAPI_CFLAGS) -Wp,-MMD,$(depfile) -I$(objtree)/usr/include
- # Please consider to fix the header first.
- #
- # Sorted alphabetically.
--no-header-test += asm/shmbuf.h
- no-header-test += asm/signal.h
- no-header-test += asm/ucontext.h
- no-header-test += drm/vmwgfx_drm.h
+Changes in v3:
+- Use a table to select the band.
+- Use a table to poll the data lane ready bits.
+- Multiply the DPHY HS clock rate by 2 to get the bit rate since the
+  clock is DDR.
+- Add Rob's R-by.
+
+Changes in v2:
+- Drop reg description.
+- Add a description for each DPHY clock.
+- Rename dphy@... to phy@... in example.
+- Add Laurent's R-by.
+- Re-order subject prefixes.
+- Add power-domain to the example.
+- Add Laurent's R-by.
+- Re-order subject prefixes.
+
+Pratyush Yadav (4):
+  phy: cadence: Add Cadence D-PHY Rx driver
+  phy: dt-bindings: Convert Cadence DPHY binding to YAML
+  phy: dt-bindings: cdns,dphy: add power-domains property
+  phy: dt-bindings: Add Cadence D-PHY Rx bindings
+
+ .../devicetree/bindings/phy/cdns,dphy-rx.yaml |  42 +++
+ .../devicetree/bindings/phy/cdns,dphy.txt     |  20 --
+ .../devicetree/bindings/phy/cdns,dphy.yaml    |  56 ++++
+ drivers/phy/cadence/Kconfig                   |   8 +
+ drivers/phy/cadence/Makefile                  |   1 +
+ drivers/phy/cadence/cdns-dphy-rx.c            | 255 ++++++++++++++++++
+ 6 files changed, 362 insertions(+), 20 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
+ delete mode 100644 Documentation/devicetree/bindings/phy/cdns,dphy.txt
+ create mode 100644 Documentation/devicetree/bindings/phy/cdns,dphy.yaml
+ create mode 100644 drivers/phy/cadence/cdns-dphy-rx.c
 
 -- 
-ldv
+2.33.1.835.ge9e5ba39a7
+

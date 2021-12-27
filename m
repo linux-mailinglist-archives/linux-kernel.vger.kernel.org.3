@@ -2,167 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D123447FAC5
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 08:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2780647FAC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 08:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235492AbhL0Hmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 02:42:52 -0500
-Received: from mail-eopbgr40136.outbound.protection.outlook.com ([40.107.4.136]:11638
+        id S235507AbhL0HtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 02:49:21 -0500
+Received: from mail-eopbgr40082.outbound.protection.outlook.com ([40.107.4.82]:37505
         "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235468AbhL0Hmv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 02:42:51 -0500
+        id S230400AbhL0HtU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 02:49:20 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HNgaazOLLS1DkohRo9RCQcCVT6po/rPKMyFAfucp95u16vYb3yZLaXWmlQ4s2sYt9DDDIXWawm1FSKFZRaDIpHAPlYN2cukZECmqGo1cDL9CmbcOkt3uje6tCmkInyvqiYH5C907QPeuGaINufBJea90p0K4uJAp6eh0tHP3TpY2PY6Cl4T52f7ihWHviNZoaYrrzKUz0c8rx7kLA8/F1cN1N1Bia1pgM+WzEPohA/G45fZjf4rAmVRnUb1jaUH6fyNMlFZGTeZAthVUbWJa2pTVjHO305e4C5MY9ZFbK02LryO7biSBnG6cSX3+VPCrQ7hFdRYeQGld4l8AdP0IIg==
+ b=gxMd74zYLjLQs1ulb2mq/c+TZP9X+rq+LoKA2xOCS8ukPPMgH3GVGKTNN0/59UR7A+Tmt6tLjR3HLfOXxn0o8ncTTiLMMeDDiZxnpEWolS3IYo9xP0iuYc0XcFSh1Vl1oCUWKiTA8LHkhj9tU73fNJVRjS27kattn3+5UWqQtfgxq4kwlOjwNcka6FkoMJYtgeS4BIHTLLTyX/UWn5JuO2pmDV+XCSsWtvrz2i8IxU32Wv2G85/8AdQqQXCb53UiKF2xSeFLgJcqugO5wWGtCO7vEX4FTgBebFEDox6SMEn5bFJrAC0Njgi9scJ72Bpms4EJ0SzQuJvzjdPn4yviFQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kecR/ln4wleXkwNOmCxK6PniUsBTHjbweItCaUdE7GU=;
- b=TjfsIzqtft0TP9wtI4YwtYnpEDhf8JyjpGqrwyj20KXhOcpGXUdPzQFRsm0/qGT4LYfjHwyJs82eL+WJ4rygD5Qp28FB3Qf4wh+CV+7R7uOAk15godmWcnT0kNjbeefleHA3vf/V4kyVBf0zEXCNV/mxaZJXsR/rHMvJrP2QZ2o5MOS4YJ47uPuah7Zz7SBRUyzkXLHZHbI+7x7A5TC/3bApCdo3HkGMqxiDVMSmxNA8yFz4dl0Ypv9BTDqrQTE6OY2ejNyGokcM5HCoSeQauHReUwGJHLpMK77utDPgGRTA4iO6gasISsxqxufo8pVa2b9RwQQV4jtYMj89RNE/Zw==
+ bh=J32djnAkcBaFnl1UrLcoFW6j140iw5HNKlNl98bbiWE=;
+ b=Wt9vWwAfRhfVuZ/7fkZGmBQdQowtNFqnXmJti6SpX637ZIqiML8Ar7be6Vkh3bnPs5P64+97RoC5wXWkUYTfFk+mXPZ4ozJtToh1mFRO+4sINzbnmAH4JmIygxQbrAKZ57dCgHqpDjq2GRB2oKqfldOxgFSFUmwcwnNy2r5Bv3dQSBZjCADxmmozA8AOP+0f56FQZwF/lrupnhQfT01IZo2G8eF9t6ZG3ttC2Enl6+teF1PJ9BhLCzso7pbG2ACjTUaBM8REIthYyQqH+CKa1fyc7IPimyIAx8BUWxvv8Nb444sOMmOKFD3K/8TB3/0OH0MsvT0e9QVca4467/oecg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
- header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
- s=selector2;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kecR/ln4wleXkwNOmCxK6PniUsBTHjbweItCaUdE7GU=;
- b=OcxkeJ6C0Cvz1CD2PptTAhPzpm4usiNJqbFKUfXFeiZWoJSV1AZWu1BzbDDWBlH9Tj3KO+guI7ZbCOuWrheLLhD6J+gGs4mrjLax5e5BxE1oiPVXY2RyFkcOZivjl6ylBNBzVMDU2CGffdK9W68bwcy0GwGEke2MJ2ZdJZMl7Is=
+ bh=J32djnAkcBaFnl1UrLcoFW6j140iw5HNKlNl98bbiWE=;
+ b=XNkQ/OWQP8ELgm8CqyZArZdLLpeFEglkfX2Ptg20Nm1Nr51s9GQN8FE2TcTLAeYoWcEJqCJnKu74zs83Io5Fqv2iCH51+3qJKh9NRFPri/FAdBEQQG526nyPuFEurLGo9qA9T11Peojv1zA4WGYJ80VlzAgMqeJiTIsyUy13Pys=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=virtuozzo.com;
-Received: from AM9PR08MB6241.eurprd08.prod.outlook.com (2603:10a6:20b:281::21)
- by AM4PR08MB2836.eurprd08.prod.outlook.com (2603:10a6:205:d::30) with
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5631.eurprd04.prod.outlook.com (2603:10a6:803:dd::27)
+ by VI1PR04MB5629.eurprd04.prod.outlook.com (2603:10a6:803:de::30) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.19; Mon, 27 Dec
- 2021 07:42:49 +0000
-Received: from AM9PR08MB6241.eurprd08.prod.outlook.com
- ([fe80::f9ca:fe00:10da:a62f]) by AM9PR08MB6241.eurprd08.prod.outlook.com
- ([fe80::f9ca:fe00:10da:a62f%5]) with mapi id 15.20.4823.022; Mon, 27 Dec 2021
- 07:42:49 +0000
-Subject: Re: [PATCH] v9fs: handle async processing of F_SETLK with FL_SLEEP
- flag
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>, kernel@openvz.org,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        "J. Bruce Fields" <bfields@fieldses.org>
-References: <YcXfm6U/6+Xmv7be@codewreck.org>
-From:   Vasily Averin <vvs@virtuozzo.com>
-Message-ID: <5ec8d1c6-e410-e297-0d3a-037c7de30b6b@virtuozzo.com>
-Date:   Mon, 27 Dec 2021 10:42:48 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <YcXfm6U/6+Xmv7be@codewreck.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM6P194CA0060.EURP194.PROD.OUTLOOK.COM
- (2603:10a6:209:84::37) To AM9PR08MB6241.eurprd08.prod.outlook.com
- (2603:10a6:20b:281::21)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.18; Mon, 27 Dec
+ 2021 07:49:17 +0000
+Received: from VI1PR04MB5631.eurprd04.prod.outlook.com
+ ([fe80::90fe:b60a:94b5:c748]) by VI1PR04MB5631.eurprd04.prod.outlook.com
+ ([fe80::90fe:b60a:94b5:c748%5]) with mapi id 15.20.4823.022; Mon, 27 Dec 2021
+ 07:49:17 +0000
+From:   Clark Wang <xiaoning.wang@nxp.com>
+To:     miquel.raynal@bootlin.com
+Cc:     conor.culhane@silvaco.com, alexandre.belloni@bootlin.com,
+        linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V5 0/8] i3c: master: svc: some bug fixes and add runtime pm support
+Date:   Mon, 27 Dec 2021 15:45:21 +0800
+Message-Id: <20211227074529.1660398-1-xiaoning.wang@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR01CA0132.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:40::36) To VI1PR04MB5631.eurprd04.prod.outlook.com
+ (2603:10a6:803:dd::27)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d965b5df-14fc-49ef-1366-08d9c90c7b3f
-X-MS-TrafficTypeDiagnostic: AM4PR08MB2836:EE_
-X-Microsoft-Antispam-PRVS: <AM4PR08MB283614B27AFBDB2FDF578510AA429@AM4PR08MB2836.eurprd08.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Office365-Filtering-Correlation-Id: 701085f0-ce3a-45d2-33d2-08d9c90d6230
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5629:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR04MB562980B54ED718AB19198260F3429@VI1PR04MB5629.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aGF0Ias+JD2Gm1dWFA083DCeM1ZoSaXYZyoqAGC02yHeW2tJcOaHnmziVth+W2aDvlWAEy3NRdKGvYrpYHnt11UYDsGjif/Hv96qi4fIOV5DC5SMd8cbH9FI9FAMyVx1vrYU7IpQMLIbdE3ediCBFFsDmU8tgTeJI2u1k8sIEF/4GCMw4HMQI5UAQSM7wlRuK9OIWipvpv4/GZVnXi9odG/tT/lHvmyTD9UqH1TmxapEb0QFypIOgQ35e1pY6OWgLEanzPyJCogopMXO0pSVnirJXpr3Gt4dFGeQSeRITWqNUbDYoqJr4LwINTg+/Uxkmy99H5mNVVgismCwdfqMYKrMLEozdBOnQDx9+PS55rnjCArLJ9Xk1j00QtN24XxOVOu8Hrx6JucNR+gRIFbJghpntw6K2ruAo7UyhRlUnB5jjE6Ad99wQfAxdu9XSvYMCFdvW85X0ewlNXgFCcuvw4YhhMTrne5y5v4Y1AZuEiZ5y27Y+le9GzA4UXCr25Ebmo7i64a0ryPrPXJUjOFoddJpu9sLKzavt5OV2pZMnk+jfIkv/r78eoKwH5lZMi2ze4MI6RJQUQLAzJKWg6WAlzBjrkz7d8ja8jij+zBt/W68JEoZq/KEajF0fO7SsIRlg+pRvSBszILhQpGAGQBB8hy8Jq6CIbrt9OCZQtbMXCjNlEwiMqaISigfSoY3KOAbdqK1Px2iZk77DZ5vgTbrUVyEfmelllmpSVsWRdjFpwkrjwWTAQwlwzjtREEp2QrQ0rWR9FRz9SQWGdVcjeDDLA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR08MB6241.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(26005)(316002)(52116002)(186003)(31686004)(54906003)(6916009)(38350700002)(5660300002)(86362001)(8936002)(2616005)(6506007)(31696002)(66556008)(53546011)(8676002)(66946007)(508600001)(6512007)(66476007)(38100700002)(6486002)(83380400001)(36756003)(2906002)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: 97ckg7cJtC/JYgY3fVatmhBufpOCSBPh+6tYtrNqIs0n0y4OfBORjnkbYdEYdArBsWqYDH4eqpn5+YkhFCIG/ewE3TOeOWhhmFoKKz0RfZBMZTBgn1asIrOHgFmIbhYggXUmz3C4d7nZ0P1mXIfi+yTiaeC2v0P8YjI4mzWAP4wZ9H/NLAA9moCl757l3C7eZ5CUXea5NkzipCraET4WRpWAuclyiY9BDw0/VeoT+40moGM1Byvxek8YrCEpT5R6WkZ+Hm9PPz7V86SqLHD4pECMGoPggwymoKPEI1sFt7EDiBpVNtBCW8t9pcXXSI3aZMG7gYhXlmw3J5ZCWztC1Q4UX2p680lYgE89eSC5AUTtK3E7Sz5KvvDq0lPNRFt8HKoumVmbkCPKFNErtXuBSCQ1/Ll6bzKvfalmOsYuBsylohWu9EL21cCveaDk5JFHxVHb+zDRMk5dwvj6f9iFmFdRebJl8jXKno/ZyDY8GMuzOnKm3NdKpAkOGfTcU2p+4pitQeLr/5pm3GqT1d4U1IAmL18Rr1KJp/2fK6Kts4++xZcHYfr/9LMcJ7Qn4gzmjkOfcbFh8Fq+RwemMP3seg015n0cqb2IeGAnaY5XH+kXfddBK7eavonEWMg5NVPNNr+0omtTAIAxV9nT/aaTaSHxavaBC+Om3x9y6VyCSi11/PpQu27yM4NKAhhwgaV4Y7jXu1KlRSnz36mOzU4L/Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5631.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6506007)(26005)(2906002)(6916009)(83380400001)(86362001)(36756003)(66556008)(6486002)(66476007)(66946007)(8936002)(52116002)(4326008)(38350700002)(38100700002)(2616005)(186003)(508600001)(6666004)(8676002)(6512007)(1076003)(5660300002)(316002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eWlZMlorMXQxOEgydHN2ZFdNN1hGNTNyMXpDWlU3T2J5dHdpRWhNMkxGVmJD?=
- =?utf-8?B?elVDOEY1YXdmNmJESklCZGFlZ0M5YXJpT3ZMMW9wNGRYT1MrQ3pyNmNFZWU3?=
- =?utf-8?B?TDhpTW5OMXpoL01nKzViV3BNL0VvUzdDenZkZjEvM2x6dURPNi81ekxRNWVa?=
- =?utf-8?B?TTQ5amlYMzZXTUozL2xZbkVtTzRVdXJMYy9SaWFSRWJ5U3RiNGFudWh3NGla?=
- =?utf-8?B?L0dMeGNsVDF3LzVad2FQcEJxK1ArRU9TWmpzMDFDR2tERUNuTnVMSUVIWTAy?=
- =?utf-8?B?eWptcElXeGNqczRob1lFSktHSDVWL1Q2VVpmZEQ1K3gxYVVjWTUwRFh3Ky80?=
- =?utf-8?B?NUVIZFV0SkJHbGxSRHZGMDRRblFtV3VuMi9zVlAwWFRnaVNEenlPenFzUGJ1?=
- =?utf-8?B?bTVRdFhncWh6MkJPWThnU2U1ZFo2U1pOZjVCWm44dEh4Qm5uakpmYVFZMzE2?=
- =?utf-8?B?SGlYVndVYUh3UHU5cVk2MmxONjFHRWZ1YzVsL0pOM0RjVnpSaW1wMTNObVJp?=
- =?utf-8?B?TmU3U1JhU3ZGREwwRUNEV0pJL0xQQ2lCc0g4Q1VTUHpnTkFnRmVkZGxMY0xp?=
- =?utf-8?B?U0RZVjFrSmY4TE1tay9wSWhNblJZT2ViMVdBdnNtQlpQVzQ2YS9yNG5VTlVs?=
- =?utf-8?B?TXJWT2RpYUlzK29MV0lzSGd1TjNtbGVSSkc3cW5zT2JpYjFCQURRbm5pdWkv?=
- =?utf-8?B?SmJUQVhlYzVzTHI1UldCTUtUTWJub1puM2hFUng5Y3N1VFZQVHQvL2pLQWQ2?=
- =?utf-8?B?MEZWRmt3QkQxQzRLak1JTm84QzlkaXpPejFMSEh0eU1MelhnNnc1M0tBWkNX?=
- =?utf-8?B?UG9peXJlODh5UmluL2NxbmVkSXphdFJkMHh3WG9XV3VpL1pEdEhZREZyT1JZ?=
- =?utf-8?B?RnhGbXVWTEp6VTB4K0lQeFBuR0NRVWVuWTExWlFpWVNGRy82WmRPSTJVeExL?=
- =?utf-8?B?cXJ0VzhwRWNRYUoxYWNXQ3EraCtjVGhNMEN5cksxc0drODJzNTg1ZGcvanhm?=
- =?utf-8?B?R0NDZEk0TkJTL2UvVWt0MjA2Uys1UUQzcE40YWg2SXFLaVhVdmVMUGZ0S2RV?=
- =?utf-8?B?cnhZaWlsSDVYeVlNK3BGanVXYjFid3JZQWMrSU41L0V3Vzg5RkpuODVKbGlX?=
- =?utf-8?B?YzRCN2IvdGpZQ2RGL1hHemRrTjNDZ1kwSmxBL01Tdlg2WDVVWnE4eXdtS2Qx?=
- =?utf-8?B?b1VyeUszdUJya0U0ZlhSUHZrZHZaSVJvekJZaExWRk4vYWdZQ2RyNlJ5cHpC?=
- =?utf-8?B?KzBTL2ZGdU1CQVY1cVhmMytOR2FxMmRQMWJhSlFyenN4blBadC9UT3htYUZC?=
- =?utf-8?B?S3RyZEZ6UzZXZWppSzhWS2QxUzNOSktOT1hpVkgyT2tqYTEvS0kreFE1dHJ2?=
- =?utf-8?B?RGIzTlVleDhjRUhpWlBBOXc0Sk9kWjU3ZXIvQ0t0eHo4V0s0U3FOTE12ZkxM?=
- =?utf-8?B?T0ZOT1BxVmR2ZnVJTEJVMnJyQmk2ODROb2psT25PYy9DUm5NUm5Kb0JJS213?=
- =?utf-8?B?UW9NdXhtWFp4cDVwR3pVSDQweGpNSnFkcW02dWk5UHU4ZnBLQy90SDg5TGRk?=
- =?utf-8?B?MGl4UXhJUWVnRWVhVjB1OUh0NEZ1ZkM2QnVGRmtHM1czM3JwUGNVZGJldE9C?=
- =?utf-8?B?RXdEcm83RjVBRHQ4QkoyMHk3dG00dk9yZ0hGdzl3ckxKdWg0TW05M3JlMk1W?=
- =?utf-8?B?cWprT3pIVmZyRzFVMEZrZ2gzZG9KQk9CT01HNGg3RHZXK1BTSjdEUkJqNk5R?=
- =?utf-8?B?QXhCMCt1WnR5Q1FRTk5DUFBIZjNSUnlZaVgxc0hpbjVBUkNzYXZibndrN3lw?=
- =?utf-8?B?UEhtbWkrUWQrWXc4ZEhvb2huUVBwajZCU1QxUVRDd2MvRmM3YkFuSmNWbFlF?=
- =?utf-8?B?THdWZzllSFVOTTdNa2NFbEZHaXc1TlVISTA2WkgxN1J0Mlk4VmxFZXFxeXFm?=
- =?utf-8?B?enJQekZKUDBYQmhjM3hJNGl3eElQdjREQTRGS2Npb20vanNvYy84dnhyTHFu?=
- =?utf-8?B?czRCMlpyQ3FCSjVHZkt1dlBJWWRGMFREblRSR09FOVhxSC80MWROc1IyWFRY?=
- =?utf-8?B?aThOTVFYWEVtQmVESWhPOTFSeDhZcDFsWi9uckNKTFFSVjVFNkFJRndnU0NH?=
- =?utf-8?B?YkVoUEFoTnhHaUxIWldjSklRRHR4UUlwWCtGV24yTFdlUU5wR0kwMVViZTdM?=
- =?utf-8?Q?5vEzAyBFx3NVOeeCeV1crqM=3D?=
-X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d965b5df-14fc-49ef-1366-08d9c90c7b3f
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR08MB6241.eurprd08.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?W1Dt6LiweQ5mxJM4drIXsIlFglGoHKXe7jTKfV6B3PM9aun+Ff25Qr2PHrRg?=
+ =?us-ascii?Q?jjB/wu4E28EIzryMtR3tJK0QX8gbScqFmt5lN3EtwMosiaz8SfutuuMZJ7wO?=
+ =?us-ascii?Q?whkrr9UUfztLLLpDmTgBFbTe7yGrTiwZv7y5xwjtnBYsmiivru/e910TNmHs?=
+ =?us-ascii?Q?y+K3OQUEIzL39453GBP1IXxo4K/Ir+fj8yeSCeBNmPoWDLna9do4cIU5RvlJ?=
+ =?us-ascii?Q?uj741Sle8l4JHQ7EY9LpI7xK+848Q5kuu+DdeIiCTr/REvYQHUvXG5QR8xQF?=
+ =?us-ascii?Q?5GshgKhQk2TkzcDgazQPTqPm+Po2C0leqeIHwnYDsuEdrDZa8qypMrnYtgnQ?=
+ =?us-ascii?Q?rIBdX3sGDKBCbzm/hNknvwHhqtofExBdUzdJUyfFouc+M6+5VPkHPUeOgeDA?=
+ =?us-ascii?Q?wnilDg6s2LFv7BMGlNaupQgHR6A4fQxndsYys2NG8bdrfXIjAoVtTqFSxCac?=
+ =?us-ascii?Q?yP9lVQ7hIlkD3UFICy48J0S0WcoKHQV9FpS/mNURfvJtXucmBGPtenvsLxy5?=
+ =?us-ascii?Q?V53Uxevok6vNndPLXk38/qD46z1N+s5xXeHLsTqCJh/v/XW/Vw86pwHW/hqz?=
+ =?us-ascii?Q?JsK41u32pYf/V80qZCyaP5K+MVpZWSdMzOSuNQijrXW+e2s1Mgg2YPzRbQm3?=
+ =?us-ascii?Q?pwpGOJRkXCqpTmu69gmJB5Cvwpoe5JH2nGqMBV3kx011nG1YDf5WR5oRg18e?=
+ =?us-ascii?Q?eVESwTtBPAx4ehpMyGbrXdDv3idj8cYjs/yhrKCO1v+5n8XbH7o0Ds4xvIOy?=
+ =?us-ascii?Q?/nzwl5nATjzdQtns4N9kZGfD7qe/tLVT111T3jVN56m5HOZqRCwaY6KCEu0w?=
+ =?us-ascii?Q?upLwpbMPSasBA8QRAinkz78q427VWaVmPU0mhK4GzFPwEs98kdgn++6hL43C?=
+ =?us-ascii?Q?p+ddC5CKhhwvda6O3SL7PY7lI6oPfYxqEb680nojhuKPSe9vxRNTyQSP7yYY?=
+ =?us-ascii?Q?Lm73H+1b2X55iR8Z6HswGUTt9XZca/jFrTOrX2ZAAB6B+zSZ7WBFdo/DYH1O?=
+ =?us-ascii?Q?gPxY7P9ieotuWJVR/KQ5FcnmHb9qI7AeUavOZ3eAG9s+tiSvnt9BGzXhkFVB?=
+ =?us-ascii?Q?1qHD+M/DwJvZ8yPlxwqvCdFTnmPCsMZGFuHdMt/qg/QmzQSvA0oLthCL7z9b?=
+ =?us-ascii?Q?a8EzVU6kkC09E45vBj2f29jHcPMK80SRJE73lr0HxYIFQMPqAP8EziG2MjZY?=
+ =?us-ascii?Q?X1pfNFGSQaZ7GT3Z31t7M4z+ikBhjkpDoJ3IWMNagQ0wpcG5mxDeLGeb2gRD?=
+ =?us-ascii?Q?KJXsFEw2CzzhSvS7uRp/fW9hTRQ2KwpHq/csUbNB3R+aSL4PIDtgE6mwtGih?=
+ =?us-ascii?Q?LhAVEKLckzztlXheSW5LZisorSqLk3IcPdLqEwTeVRdOcnEHCdmOJFM8/CyB?=
+ =?us-ascii?Q?Ny57X5NCi7MOa6EwLdLZpZc8kQka1gi7YaT16Cd75NXEfDN7CUS90PLyuJBp?=
+ =?us-ascii?Q?WtYUhzuQLQ6KuaAfVz6xz0JzSKwboj4cnxyn+n4iDF7LUXiCXpDaBpe+DioJ?=
+ =?us-ascii?Q?jkwzlCgwR/N86pVrZ1VOKetYtDFKtCWX27PuC/4pKeSvka+YncMRWhoagxe0?=
+ =?us-ascii?Q?SzTMxwQJ62876gTJvc8/FNeCHyZSSvSkhOq9yHpEZzydpQK7qFezb+/p2vIz?=
+ =?us-ascii?Q?n27sjZ1tsEDXbW+CJJTGw8E=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 701085f0-ce3a-45d2-33d2-08d9c90d6230
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5631.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Dec 2021 07:42:49.5575
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Dec 2021 07:49:17.0568
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Z0n0dQwCEo2cpHoW4FdspzAuBiazhFnRQMrHhxCOoq8+4PivfIXPpnebKKJBukZI/IRtzKp3sTXVjWUt0KwBeg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM4PR08MB2836
+X-MS-Exchange-CrossTenant-UserPrincipalName: H25xkZXxmWCk3ezfaV2/0sdLzNaWWi5Crwp9H5CGZ7GM7jicMgQWAPo25pLNukwSOkXJoBG+BjHtwRftEePW3Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5629
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.12.2021 17:56, Dominique Martinet wrote:
-> Vasily Averin wrote on Fri, Dec 24, 2021 at 01:18:54PM +0300:
+Hi Miquel,
 
->> diff --git a/fs/9p/vfs_file.c b/fs/9p/vfs_file.c
->> index 612e297f3763..27ede4a4a6f4 100644
->> --- a/fs/9p/vfs_file.c
->> +++ b/fs/9p/vfs_file.c
->> @@ -142,10 +142,15 @@ static int v9fs_file_do_lock(struct file *filp, int cmd, struct file_lock *fl)
->>  	if ((fl->fl_flags & FL_POSIX) != FL_POSIX)
->>  		BUG();
->>  
->> -	res = locks_lock_file_wait(filp, fl);
->> -	if (res < 0)
->> -		goto out;
->> -
->> +	if ((fl->fl_flags & FL_SLEEP) && IS_SETLK(cmd)) {
->> +		res = posix_lock_file(filp, fl, NULL);
-> 
-> Should we also check fl->fl_flags & (FL_POSIX|FL_FLOCK) like
-> locks_lock_file_wait does, to call either posix_lock_file or ... there
-> doesn't seem to be an exported flock_lock_file equivalent in the other
-> case, so back to wait variant there?
-> (or rephrasing the question, what happens if the lock is a FL_FLOCK lock
-> and we call posix_lock_file on it? Or are we guaranted that if FL_SLEEP
-> is set we're about posix locks?)
+Currently, only the fourth patch needs to be reviewed, and the rest have been
+added with your review tag.
 
-SETLK with FL_SLEEP flag can be set by kernel export threads for posix locks only.
+Thank you very much for your comments! :)
 
-> Vasily Averin wrote on Fri, Dec 24, 2021 at 03:07:38PM +0300:
->  > On 24.12.2021 10:31, Dominique Martinet wrote:
->> It isn't necessary to make request asynchronous,
->> it's enough to avoid blocking locks.
-> 
-> Well, it depends on what you have in mind with blocking.
-> A synchronous RPC to some server which might never reply if it doesn't
-> feel like it (bug or whatever) is very much blocking in my opinion.
+V5 changes:
+ - i3c: master: svc: add support for slave to stop returning data
+   - remove <%s> in logs
+   - add some spaces
+   - !SVC_I3C_MSTATUS_STATE(reg) -> SVC_I3C_MSTATUS_STATE_IDLE(reg)
+ - i3c: master: svc: add runtime pm support
+   - create svc_i3c_master_prepare_clks() and svc_i3c_master_unprepare_clks()
 
-The main goal is to avoid deadlock of server threads.
-It is acceptable to sleep or process such a request for a very long time,
-however it is unacceptable to wait for another command to remove our lock,
-because there can be no available working threads to process this command:
-all of them can be busy by processing of blocking locks. 
-Thank you,
-	Vasily Averin
+V4 changes:
+ - New patches:
+   - i3c: master: svc: separate err, fifo and disable interrupt of reset function
+   - i3c: master: svc: add the missing module device table
+   - i3c: master: svc: enable the interrupt in the enable ibi function
+ - i3c: master: svc: add support for slave to stop returning data
+   - Only use COMPLETE flag in the read function.
+   - Add a reset before each transfer.
+ - i3c: master: svc: add runtime pm support
+    - error path emit_stop only used in svc_i3c_master_do_daa() for one time, so
+      remove it. Or it needs another goto command at the end of the function to
+      skip it and to go to rpm_out.
+
+V3 changes:
+ - i3c: master: svc: add runtime pm support:
+   - restore the error path of probe function
+   - enable runtime pm just before i3c module reset
+
+V2 changes:
+ - align the parameters of the function in the second patch
+ - add a new patch to support runtime PM.
+
+Clark Wang (8):
+  i3c: master: svc: move module reset behind clk enable
+  i3c: master: svc: fix atomic issue
+  i3c: master: svc: separate err, fifo and disable interrupt of reset
+    function
+  i3c: master: svc: add support for slave to stop returning data
+  i3c: master: svc: set ODSTOP to let I2C device see the STOP signal
+  i3c: master: svc: add runtime pm support
+  i3c: master: svc: add the missing module device table
+  i3c: master: svc: enable the interrupt in the enable ibi function
+
+ drivers/i3c/master/svc-i3c-master.c | 341 ++++++++++++++++++++--------
+ 1 file changed, 250 insertions(+), 91 deletions(-)
+
+-- 
+2.25.1
+

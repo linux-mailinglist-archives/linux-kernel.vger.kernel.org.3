@@ -2,158 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 941DD47FC15
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 12:05:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E93047FC19
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 12:08:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236285AbhL0LE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 06:04:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233404AbhL0LE6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 06:04:58 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5936C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 03:04:57 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id o6so60349715edc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 03:04:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WeVLsHIeyiCkAHjd50OJHxjaaYn5T1qPGOcuMQi9uAs=;
-        b=CK/JN3fhTDNY1Srt3qYHUD9q5zbJw5JAaWWOCnQVvCX838xLP6ZHjgv9SZs/SAW4z0
-         ohhG6f99oyzbAgzNqIGSVY22q39V95CRpcTarjxQu1aLXuVN9v/VZqSMUi8hETGFGo7y
-         mdpj0hPImAtroBYbrb5lmqdWEzEyn8/evEjseKkK6+x7dXer1ABpsalzX3llc5TWZWMk
-         /u0GtMNo1sCdHhtVgPW99Rbr4swrnnKZ8+BwlVYDFyESJP43ioEpouwMLO/Skfh8tlSf
-         K48U03608rhMnpEBsS+J4d+VbwQPqlxa9XFM3yiRk78H82gKEjF1hgML9sBggNFNsH5T
-         VElQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WeVLsHIeyiCkAHjd50OJHxjaaYn5T1qPGOcuMQi9uAs=;
-        b=m0VSwW1QJxMtclNJO8qOcR49C0OER0x8qAPHawF9g6lzESdn3StMV6wq6fDG4DSXf0
-         D9lhaJoejN6I9V1coN4NBDePuwmDz/s3jr/MgbXjS4EjgfVX/V8X9vVo7U4Iffq744cT
-         zTrLAVdYdfc5k9tRzj/WWLcR1dNGtZYkJFjK6jUudpfPngdigdODRbNrol7cJxdv6cuD
-         /gNgI07Na2n8QIt/Ji3CAQ3K//mSJiOlr2l6y1vzgrcAFsrZ4Caib9HL67rXkCBX131e
-         mdxLPlxWFrOWThL+0KwsV2jCluY8MlVp9CW5r1bWRjv98wwOTBidE4+JfnXXJ2K45+nT
-         iAEQ==
-X-Gm-Message-State: AOAM532tgKy6ywhLFSWN3cRMdrHsVEEJQ4rrmzP5PgldhCJUv4yb/Yg0
-        HZMkyrK7+NecA0ryI0mUuhA+trwu2zkAlbdhHWh7dggseqc=
-X-Google-Smtp-Source: ABdhPJxBYl2uYY0dezYVqt0J/J7L+OL1U6OFJ0fy8PBhde+pA1utUKztjXwn3pS5UUDTMp15KOpMgNajpRLQ9YuU8mU=
-X-Received: by 2002:a17:906:a3c6:: with SMTP id ca6mr13282432ejb.639.1640603095574;
- Mon, 27 Dec 2021 03:04:55 -0800 (PST)
+        id S236301AbhL0LI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 06:08:27 -0500
+Received: from mga01.intel.com ([192.55.52.88]:65147 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233404AbhL0LIV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 06:08:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640603301; x=1672139301;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gxnIc0tAa2HWujgj0x4BJKdc+d6piJgI/wGTTn9O4Kk=;
+  b=QRv4hIiX34s7uPvr2E1ixFKAA+fyfUZVqnIOsWntTq2ZowAQpKrTIsEz
+   H4KN6j3WbTBS61L57dZi9k1Vnk4tTZUuETiN+rb7E65xEUdJMu8aaTOyl
+   xGYp95ijPIQj2rzROG6NdsFs6kMYu9m8fWQFH7QEa6FkjdB1JyO4o83D0
+   F+x+NnZSDE2iy0Lh3yyjysvJEikrVNqjKFhUNMQJgq0bJ/zwmQ9ublxnr
+   6leNYv3E5weqy9RAs1Rm4k/4nRZLtYN8b1Ga5WVPvCsMeqA1X1s4hNlC+
+   yfgq+r+DWHH9AVfXYcwTNNur9ZadMDiCoDkQ5b2jGmCiZFw4vLI+b10Cl
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="265417416"
+X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; 
+   d="scan'208";a="265417416"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 03:08:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; 
+   d="scan'208";a="509826213"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 27 Dec 2021 03:08:18 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n1nrW-0006Eb-4K; Mon, 27 Dec 2021 11:08:18 +0000
+Date:   Mon, 27 Dec 2021 19:07:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Liu Yi L <yi.l.liu@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [luxis1999-iommufd:iommufd-v5.16-rc3 24/26]
+ include/linux/iommufd.h:30:1: error: expected identifier or '(' before '{'
+ token
+Message-ID: <202112271912.pdwOvXhh-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211215234946.6494-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAHp75VfGwQ7G2b39GO4tN=sxQoiahO2uudy25ALxEkrNcP9eVw@mail.gmail.com>
- <CA+V-a8t1myOt0rhJExem_T2tJUM3PLL9KuXn0=_LtucJPHLkbA@mail.gmail.com>
- <CAHp75VdXKVAZMKqC=0RbkAKKxFsdcxBc0M3N6OQMivHj-w+DHw@mail.gmail.com>
- <CA+V-a8vbsy94MvRpqWQQuRqfEGiX_ZZTTt+dr0r6qnnJAPaEmA@mail.gmail.com>
- <CAHp75VfvOOzwcTBjYg3OzbbdhcpWfaPWZ0h7HZRFOPEQAQMT=A@mail.gmail.com>
- <CAMuHMdWSAOEAvqvr1UqKKmVDMzY3Tb8Y_4XowFPBN6L3TESqYA@mail.gmail.com>
- <CAHp75Vc2puj45n_wMY50OnDemNmFFu-yepCC9_L+DWp1HAzxPw@mail.gmail.com>
- <CAMuHMdUDts8LWYrftYp0VSxDX8kaP1a9N5YGZDNCAuAsr84EAw@mail.gmail.com>
- <CAHp75VeitNg_fU22UkNGSYpAhtQaba1Scd3CPO0QmRpjkqmSMA@mail.gmail.com>
- <CAMuHMdXpynBNC994vTo8tUc4bcD3HVzb3voNPJS1L8A0MRnyHQ@mail.gmail.com>
- <CAHp75Vc-QKy=po6WT7Cbx43dDmwaRcdhEfgzMSmMSn3kNQiG7g@mail.gmail.com> <CAMuHMdUMDLf+HaH8OYCCvbBwiX28wy8VW-ROWWJQBzE1orCEHQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdUMDLf+HaH8OYCCvbBwiX28wy8VW-ROWWJQBzE1orCEHQ@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 27 Dec 2021 13:04:19 +0200
-Message-ID: <CAHp75Vc+FP8Rahieu+oTZwTGPm=h1Sws89zG5z8C-C69T6=XZQ@mail.gmail.com>
-Subject: Re: [PATCH] irqchip/renesas-irqc: Use platform_get_irq_optional() to
- get the interrupt
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 12:58 PM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
-> On Mon, Dec 27, 2021 at 11:49 AM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Mon, Dec 27, 2021 at 12:24 PM Geert Uytterhoeven
-> > <geert@linux-m68k.org> wrote:
-> > > On Mon, Dec 27, 2021 at 11:10 AM Andy Shevchenko
-> > > <andy.shevchenko@gmail.com> wrote:
-> > > > On Mon, Dec 27, 2021 at 12:02 PM Geert Uytterhoeven
-> > > > <geert@linux-m68k.org> wrote:
-> > > > > On Mon, Dec 27, 2021 at 10:57 AM Andy Shevchenko
-> > > > > <andy.shevchenko@gmail.com> wrote:
-> > > > > > On Mon, Dec 27, 2021 at 11:45 AM Geert Uytterhoeven
-> > > > > > <geert@linux-m68k.org> wrote:
-> > > > > > > On Sun, Dec 26, 2021 at 9:49 AM Andy Shevchenko
-> > > > > > > <andy.shevchenko@gmail.com> wrote:
-> > > > > > > > On Sun, Dec 26, 2021 at 1:59 AM Lad, Prabhakar
-> > > > > > > > <prabhakar.csengg@gmail.com> wrote:
-> > > > > > > > > When will this patch be merged for the new api, so that I can base my
-> > > > > > > > > patches on top of it to avoid more changes?
-> > > > > > > >
-> > > > > > > > You can simply imply that, I dunno when it gets merged (from my point
-> > > > > > > > of view the users should be fixed first, and since you are adding
-> > > > > > > > users, the burden is increasing).
-> > > > > > >
-> > > > > > > Not only users (drivers), but also providers (architecture-specific code).
-> > > > > > > IRQ zero is still valid on some architectures, e.g. on SH[1].
-> > > > > >
-> > > > > > Are we talking about vIRQ?
-> > > > > > And users are fine with a big warning?
-> > > > >
-> > > > > The warning is only seen when a driver uses platorm_get_irq{,_optional}().
-> > > > > There are several other ways to obtain interrupts, avoiding the
-> > > > > big warning.
-> > > >
-> > > > Forgot to comment on this, then why is it a problem to allow
-> > > > platfiorm_get_irq_optional() use 0 for no IRQ?
-> > > > So, it seems you gave me a good justification for my way :-)
-> > >
-> > > In se that is not a problem, assumed by now everybody should have
-> > > seen the warning, right?  Unfortunately that assumption is probably
-> > > not true, as people may not upgrade their kernel, cfr. my SH Ethernet
-> > > example.
-> > >
-> > > Apart from that, any new conversion to platfiorm_get_irq_optional()
-> > > might cause a regression on an obscure platform still using IRQ0.
-> >
-> > What architectures?
-> > Are there any examples besides ethernet drivers on SH?
->
-> Sorry, I don't know.
->
-> > Let's start  a list:
-> > SH: only few cases related to smc911 Ethernet driver
->
-> Time to get rid of SH ;-)
->
-> > x86: Legacy APIC 1:1 mapping, where 0 is used by timer which doesn't
-> > involve platform API
->
-> Time to get rid of x86 ;-)
+tree:   https://github.com/luxis1999/iommufd iommufd-v5.16-rc3
+head:   9194d1d84235002ef9e0ae8666bc205840e3be74
+commit: e4e0ed3d842fc0ce3952d33315f3d4a56b6f91a4 [24/26] vfio/pci: Add VFIO_DEVICE_ATTACH_IOASPT
+config: alpha-randconfig-r016-20211227 (https://download.01.org/0day-ci/archive/20211227/202112271912.pdwOvXhh-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/luxis1999/iommufd/commit/e4e0ed3d842fc0ce3952d33315f3d4a56b6f91a4
+        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
+        git fetch --no-tags luxis1999-iommufd iommufd-v5.16-rc3
+        git checkout e4e0ed3d842fc0ce3952d33315f3d4a56b6f91a4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/vfio/
 
-Why (in both cases)? I have mentioned that x86 doesn't use vIRQ0 via
-platform APIs, SH can be fixed, if you are interested in fixing, of
-course, by switching to IRQ domains.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > ...???...
-> >
-> > And what about "getting IRQ without big warning"? What did you have in
-> > mind when you put it?
->
-> If the driver uses platform_get_resource(..., IORESOURCE_IRQ, ...) to
-> get the IRQ number, the warning in platform_get_irq_optional()
-> doesn't trigger, as the latter is not called?
+All errors (new ones prefixed by >>):
 
-So, again, let's put the comment to those drivers then and avoid
-obfuscation of the rest of the kernel, would it be feasible?
+   In file included from drivers/vfio/vfio.c:35:
+>> include/linux/iommufd.h:30:1: error: expected identifier or '(' before '{' token
+      30 | {
+         | ^
+   include/linux/iommufd.h:29:1: warning: 'iommufd_bind_pci_device' declared 'static' but never defined [-Wunused-function]
+      29 | iommufd_bind_pci_device(int fd, struct pci_dev *pdev, u32 *id, u64 dev_cookie);
+         | ^~~~~~~~~~~~~~~~~~~~~~~
 
--- 
-With Best Regards,
-Andy Shevchenko
+
+vim +30 include/linux/iommufd.h
+
+b72430a4d634e3 Jason Gunthorpe 2021-11-11  26  
+b72430a4d634e3 Jason Gunthorpe 2021-11-11  27  #else /* !CONFIG_IOMMUFD */
+b72430a4d634e3 Jason Gunthorpe 2021-11-11  28  static inline struct iommufd_device *
+b72430a4d634e3 Jason Gunthorpe 2021-11-11  29  iommufd_bind_pci_device(int fd, struct pci_dev *pdev, u32 *id, u64 dev_cookie);
+b72430a4d634e3 Jason Gunthorpe 2021-11-11 @30  {
+b72430a4d634e3 Jason Gunthorpe 2021-11-11  31  	return ERR_PTR(-EOPNOTSUPP);
+b72430a4d634e3 Jason Gunthorpe 2021-11-11  32  }
+b72430a4d634e3 Jason Gunthorpe 2021-11-11  33  
+
+:::::: The code at line 30 was first introduced by commit
+:::::: b72430a4d634e343ee1bb83e3a9e6bd020f09252 iommufd: Add kAPI toward external drivers
+
+:::::: TO: Jason Gunthorpe <jgg@nvidia.com>
+:::::: CC: Jason Gunthorpe <jgg@nvidia.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

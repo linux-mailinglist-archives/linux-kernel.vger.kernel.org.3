@@ -2,40 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2593E47FF31
+	by mail.lfdr.de (Postfix) with ESMTP id C09F247FF33
 	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:36:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233110AbhL0PgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:36:04 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:40070 "EHLO
+        id S238500AbhL0PgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:36:07 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:40082 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238288AbhL0Pfi (ORCPT
+        with ESMTP id S238372AbhL0Pfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:35:38 -0500
+        Mon, 27 Dec 2021 10:35:41 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 233C4CE10B6;
+        by sin.source.kernel.org (Postfix) with ESMTPS id E24E9CE10CB;
+        Mon, 27 Dec 2021 15:35:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1297C36AE7;
         Mon, 27 Dec 2021 15:35:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E21DAC36AEB;
-        Mon, 27 Dec 2021 15:35:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619335;
-        bh=JgwP6soaSUk6CkDscb2WJFVFnzQ8SjXk+5Pme/NMhgM=;
+        s=korg; t=1640619338;
+        bh=aApO13Xik7KTbQ04rZL9wk3SljIcafJyKPeR/8kSVhU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gsC+sHoDd5O4n4zvUSSLLF1woB5JSoZq7GHzGxopwwy3QO7eji9obJ4YyzJKtAT7c
-         oSY28ZPbUYv9TyjrNQZU0AlPr1niR5YCffNQlI5Iv3DNqskki2Oh9L8Ah/GdO0HpIQ
-         ikVzroRXPoNNgMfDgSQgrzEo3CB6JECF2qspfCDE=
+        b=PglczHWBH2u0uQLQx9weFUCMftR51jUv5V2giji4/1Vm11uAt11EqqqRuHR0gVa/a
+         jxBCLQhspXQpuUQmFuk8Q+EljJVsxLNldMHdX/uS6VTskw70DVEHosOTRcvEOwwz3R
+         cklZMDHuqJEXs4GzRKImusPHeFiI/RPNn4VBSMrg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Patrik Lantz <patrik.lantz@axis.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>
-Subject: [PATCH 5.4 35/47] tee: optee: Fix incorrect page free bug
-Date:   Mon, 27 Dec 2021 16:31:11 +0100
-Message-Id: <20211227151322.004889674@linuxfoundation.org>
+        stable@vger.kernel.org, Wenqing Liu <wenqingliu0120@gmail.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5.4 36/47] f2fs: fix to do sanity check on last xattr entry in __f2fs_setxattr()
+Date:   Mon, 27 Dec 2021 16:31:12 +0100
+Message-Id: <20211227151322.035439127@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
 References: <20211227151320.801714429@linuxfoundation.org>
@@ -47,40 +45,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sumit Garg <sumit.garg@linaro.org>
+From: Chao Yu <chao@kernel.org>
 
-commit 18549bf4b21c739a9def39f27dcac53e27286ab5 upstream.
+commit 5598b24efaf4892741c798b425d543e4bed357a1 upstream.
 
-Pointer to the allocated pages (struct page *page) has already
-progressed towards the end of allocation. It is incorrect to perform
-__free_pages(page, order) using this pointer as we would free any
-arbitrary pages. Fix this by stop modifying the page pointer.
+As Wenqing Liu reported in bugzilla:
 
-Fixes: ec185dd3ab25 ("optee: Fix memory leak when failing to register shm pages")
+https://bugzilla.kernel.org/show_bug.cgi?id=215235
+
+- Overview
+page fault in f2fs_setxattr() when mount and operate on corrupted image
+
+- Reproduce
+tested on kernel 5.16-rc3, 5.15.X under root
+
+1. unzip tmp7.zip
+2. ./single.sh f2fs 7
+
+Sometimes need to run the script several times
+
+- Kernel dump
+loop0: detected capacity change from 0 to 131072
+F2FS-fs (loop0): Found nat_bits in checkpoint
+F2FS-fs (loop0): Mounted with checkpoint version = 7548c2ee
+BUG: unable to handle page fault for address: ffffe47bc7123f48
+RIP: 0010:kfree+0x66/0x320
+Call Trace:
+ __f2fs_setxattr+0x2aa/0xc00 [f2fs]
+ f2fs_setxattr+0xfa/0x480 [f2fs]
+ __f2fs_set_acl+0x19b/0x330 [f2fs]
+ __vfs_removexattr+0x52/0x70
+ __vfs_removexattr_locked+0xb1/0x140
+ vfs_removexattr+0x56/0x100
+ removexattr+0x57/0x80
+ path_removexattr+0xa3/0xc0
+ __x64_sys_removexattr+0x17/0x20
+ do_syscall_64+0x37/0xb0
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+The root cause is in __f2fs_setxattr(), we missed to do sanity check on
+last xattr entry, result in out-of-bound memory access during updating
+inconsistent xattr data of target inode.
+
+After the fix, it can detect such xattr inconsistency as below:
+
+F2FS-fs (loop11): inode (7) has invalid last xattr entry, entry_size: 60676
+F2FS-fs (loop11): inode (8) has corrupted xattr
+F2FS-fs (loop11): inode (8) has corrupted xattr
+F2FS-fs (loop11): inode (8) has invalid last xattr entry, entry_size: 47736
+
 Cc: stable@vger.kernel.org
-Reported-by: Patrik Lantz <patrik.lantz@axis.com>
-Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+Reported-by: Wenqing Liu <wenqingliu0120@gmail.com>
+Signed-off-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tee/optee/shm_pool.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ fs/f2fs/xattr.c |   11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
---- a/drivers/tee/optee/shm_pool.c
-+++ b/drivers/tee/optee/shm_pool.c
-@@ -41,10 +41,8 @@ static int pool_op_alloc(struct tee_shm_
- 			goto err;
- 		}
+--- a/fs/f2fs/xattr.c
++++ b/fs/f2fs/xattr.c
+@@ -661,8 +661,17 @@ static int __f2fs_setxattr(struct inode
+ 	}
  
--		for (i = 0; i < nr_pages; i++) {
--			pages[i] = page;
--			page++;
--		}
-+		for (i = 0; i < nr_pages; i++)
-+			pages[i] = page + i;
+ 	last = here;
+-	while (!IS_XATTR_LAST_ENTRY(last))
++	while (!IS_XATTR_LAST_ENTRY(last)) {
++		if ((void *)(last) + sizeof(__u32) > last_base_addr ||
++			(void *)XATTR_NEXT_ENTRY(last) > last_base_addr) {
++			f2fs_err(F2FS_I_SB(inode), "inode (%lu) has invalid last xattr entry, entry_size: %zu",
++					inode->i_ino, ENTRY_SIZE(last));
++			set_sbi_flag(F2FS_I_SB(inode), SBI_NEED_FSCK);
++			error = -EFSCORRUPTED;
++			goto exit;
++		}
+ 		last = XATTR_NEXT_ENTRY(last);
++	}
  
- 		shm->flags |= TEE_SHM_REGISTER;
- 		rc = optee_shm_register(shm->ctx, shm, pages, nr_pages,
+ 	newsize = XATTR_ALIGN(sizeof(struct f2fs_xattr_entry) + len + size);
+ 
 
 

@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D10DB48000D
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3113047FF6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238971AbhL0Pmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:42:46 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:42026 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239463AbhL0Pjv (ORCPT
+        id S237864AbhL0Ph0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:37:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238527AbhL0PfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:39:51 -0500
+        Mon, 27 Dec 2021 10:35:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B38C061757;
+        Mon, 27 Dec 2021 07:34:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 45D4BCE10B6;
-        Mon, 27 Dec 2021 15:39:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 108DCC36AEA;
-        Mon, 27 Dec 2021 15:39:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB00661073;
+        Mon, 27 Dec 2021 15:34:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1593C36AE7;
+        Mon, 27 Dec 2021 15:34:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619588;
-        bh=V2qw+lTL3q3d7YefE0rr8zmZwROjgfEPR1SGAe3lDMc=;
+        s=korg; t=1640619298;
+        bh=bxMXxTsP4QZnm5DqeVDtGpopBGYS3gjgNr99FkLBd8Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0EEyX3hartwaKVH+ty1S7JaateLG80XGMT9lLczQd6Ie2y5BoQhIbiS41E0YwX6uf
-         /O/VyFZbahczDVuhYnsffUgrg/xjKz/rZ9IJaoL/p4z+Hmf7z1s4Y5cVZ1Zdxern6r
-         U3/p5wvskUkZIf2OjKL1krJ11sb0N3Ib/J2kqs8Y=
+        b=OJLMBKEOZ9+NkGdN9E6an669x89kVnBYBt6J7P55gvhKxnBWUV0/Pm3V+QdKUzEKA
+         x7jLzaDS1nm2JNvTWSOKYVMzGtKvloG62xTpKdzknHIRlOtksusrLqyPeOWaOe1tjK
+         rF7SWBHZrYJFu7v+QshQopUyNbRF9fiiaZGiOehw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John David Anglin <dave.anglin@bell.net>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 5.10 44/76] parisc: Correct completer in lws start
+        stable@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.4 23/47] ALSA: drivers: opl3: Fix incorrect use of vp->state
 Date:   Mon, 27 Dec 2021 16:30:59 +0100
-Message-Id: <20211227151326.227776264@linuxfoundation.org>
+Message-Id: <20211227151321.592529386@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
-References: <20211227151324.694661623@linuxfoundation.org>
+In-Reply-To: <20211227151320.801714429@linuxfoundation.org>
+References: <20211227151320.801714429@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,37 +48,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John David Anglin <dave.anglin@bell.net>
+From: Colin Ian King <colin.i.king@gmail.com>
 
-commit 8f66fce0f46560b9e910787ff7ad0974441c4f9c upstream.
+commit 2dee54b289fbc810669a1b2b8a0887fa1c9a14d7 upstream.
 
-The completer in the "or,ev %r1,%r30,%r30" instruction is reversed, so we are
-not clipping the LWS number when we are called from a 32-bit process (W=0).
-We need to nulify the following depdi instruction when the least-significant
-bit of %r30 is 1.
+Static analysis with scan-build has found an assignment to vp2 that is
+never used. It seems that the check on vp->state > 0 should be actually
+on vp2->state instead. Fix this.
 
-If the %r20 register is not clipped, a user process could perform a LWS call
-that would branch to an undefined location in the kernel and potentially crash
-the machine.
+This dates back to 2002, I found the offending commit from the git
+history git://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git,
+commit 91e39521bbf6 ("[PATCH] ALSA patch for 2.5.4")
 
-Signed-off-by: John David Anglin <dave.anglin@bell.net>
-Cc: stable@vger.kernel.org # 4.19+
-Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20211212172025.470367-1-colin.i.king@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/parisc/kernel/syscall.S |    2 +-
+ sound/drivers/opl3/opl3_midi.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/parisc/kernel/syscall.S
-+++ b/arch/parisc/kernel/syscall.S
-@@ -478,7 +478,7 @@ lws_start:
- 	extrd,u	%r1,PSW_W_BIT,1,%r1
- 	/* sp must be aligned on 4, so deposit the W bit setting into
- 	 * the bottom of sp temporarily */
--	or,ev	%r1,%r30,%r30
-+	or,od	%r1,%r30,%r30
- 
- 	/* Clip LWS number to a 32-bit value for 32-bit processes */
- 	depdi	0, 31, 32, %r20
+--- a/sound/drivers/opl3/opl3_midi.c
++++ b/sound/drivers/opl3/opl3_midi.c
+@@ -398,7 +398,7 @@ void snd_opl3_note_on(void *p, int note,
+ 	}
+ 	if (instr_4op) {
+ 		vp2 = &opl3->voices[voice + 3];
+-		if (vp->state > 0) {
++		if (vp2->state > 0) {
+ 			opl3_reg = reg_side | (OPL3_REG_KEYON_BLOCK +
+ 					       voice_offset + 3);
+ 			reg_val = vp->keyon_reg & ~OPL3_KEYON_BIT;
 
 

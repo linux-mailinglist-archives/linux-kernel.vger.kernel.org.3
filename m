@@ -2,66 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03FD448018F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 17:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08793480194
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 17:23:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbhL0QWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 11:22:24 -0500
-Received: from mx4.wp.pl ([212.77.101.11]:33050 "EHLO mx4.wp.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229612AbhL0QWW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 11:22:22 -0500
-Received: (wp-smtpd smtp.wp.pl 7641 invoked from network); 27 Dec 2021 17:22:17 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1640622137; bh=5NuwZcnvSPWI2DMukdv3htJgjFsVJtdgRHVOPS0OXvs=;
-          h=From:To:Cc:Subject;
-          b=DnqfchjM5ziZqTxnJPg2/y4Cv4jN24PmMN6tXZlLUkd/P/6AO+qC3LUv87wUB7YpP
-           leQtQJv4ZRFyu+mkrJLYDotD3Zk34+UZx4cPlvG+xV8rdTAfNMSAxpoY7Ev4SPBGz7
-           jjUJEUKqeI1QZrnwrNppUhY6L5uW9cjnsJVkvgoo=
-Received: from riviera.nat.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.1])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <hauke@hauke-m.de>; 27 Dec 2021 17:22:17 +0100
-From:   Aleksander Jan Bajkowski <olek2@wp.pl>
-To:     hauke@hauke-m.de, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Aleksander Jan Bajkowski <olek2@wp.pl>
-Subject: [PATCH net] net: lantiq_xrx200: fix statistics of received bytes
-Date:   Mon, 27 Dec 2021 17:22:03 +0100
-Message-Id: <20211227162203.5378-1-olek2@wp.pl>
-X-Mailer: git-send-email 2.30.2
+        id S230387AbhL0QX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 11:23:57 -0500
+Received: from mail-qt1-f182.google.com ([209.85.160.182]:33322 "EHLO
+        mail-qt1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229515AbhL0QX4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 11:23:56 -0500
+Received: by mail-qt1-f182.google.com with SMTP id v4so11260324qtk.0;
+        Mon, 27 Dec 2021 08:23:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0XPBoj1RaXnBN6RcH30LUhnTxAq4JnLCnWsVVEr/+qA=;
+        b=6J9yZdP1bdioOREh/h7cbqBsjzHPOyroRzDlANaYvwyFs1l6YaR4hV/7I0S8to2SZG
+         qUyx+qeT25VSshWz1MmPJBGNLzi9rJEHQjpmMB3VXUkHwosXMk0RHvNvhaJok4HiWfwn
+         bwMEcB4E1jfisU0EGB2HH60xZY0cE+yh7WMwymp0WytwPO2Bhwg+QJzEEf0EdlM3bt89
+         2fvwlp53QgxlKEjUNSW8cukCbuGGkelcEHL+UJURePBb6hEwtC3ydrNxUZ7P9fm6Uf9j
+         GKXA0/jBP4OZQh78ZnXgOiZOHV0a/fo8nGe3EejCuEQTBYJPrXlumb8G1qIFN/HMmG3l
+         IA9A==
+X-Gm-Message-State: AOAM533hirBpvcF79GQse0X471kZDmHye4xnxvYah3lTkIX0i6MndbuQ
+        ToZDO1Nu3TOTDhtnE71MKkDMhZZnehQV
+X-Google-Smtp-Source: ABdhPJwCZb25uvlMGox7fAPHeiDPIqvL8fhksDBu1he8tlL0dc2XpgOiDwVw1brYa02u5opgCnSTkA==
+X-Received: by 2002:ac8:4a87:: with SMTP id l7mr15207527qtq.310.1640622235112;
+        Mon, 27 Dec 2021 08:23:55 -0800 (PST)
+Received: from robh.at.kernel.org ([24.55.105.145])
+        by smtp.gmail.com with ESMTPSA id q21sm13046882qkl.52.2021.12.27.08.23.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Dec 2021 08:23:54 -0800 (PST)
+Received: (nullmailer pid 598138 invoked by uid 1000);
+        Mon, 27 Dec 2021 16:23:52 -0000
+Date:   Mon, 27 Dec 2021 12:23:52 -0400
+From:   Rob Herring <robh@kernel.org>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: timer: convert MSM timer to yaml
+Message-ID: <YcnomHO8isHkxVIQ@robh.at.kernel.org>
+References: <20211224234607.109049-1-david@ixit.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-WP-DKIM-Status: good (id: wp.pl)                                      
-X-WP-MailID: 4fd73e0ec542d1bfd5039fe03b4f7b1f
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [geN0]                               
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211224234607.109049-1-david@ixit.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Received frames have FCS truncated. There is no need
-to subtract FCS length from the statistics.
+On Sat, Dec 25, 2021 at 12:46:06AM +0100, David Heidelberg wrote:
+> Convert Qualcomm MSM Timer to yaml format.
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> 
+> ---
+> It has currently issue, that it fights with watchdog/qcom-wdt.yaml
+> Both bindings and drivers use similar sets of compatibles and qcom-wdt
+> isn't very strictly defined.
 
-Fixes: fe1a56420cf2 ("net: lantiq: Add Lantiq / Intel VRX200 Ethernet driver")
-Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
----
- drivers/net/ethernet/lantiq_xrx200.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+What a mess... They should be merged most likely.
 
-diff --git a/drivers/net/ethernet/lantiq_xrx200.c b/drivers/net/ethernet/lantiq_xrx200.c
-index 96bd6f2b21ed..80bfaf2fec92 100644
---- a/drivers/net/ethernet/lantiq_xrx200.c
-+++ b/drivers/net/ethernet/lantiq_xrx200.c
-@@ -224,7 +224,7 @@ static int xrx200_hw_receive(struct xrx200_chan *ch)
- 	skb->protocol = eth_type_trans(skb, net_dev);
- 	netif_receive_skb(skb);
- 	net_dev->stats.rx_packets++;
--	net_dev->stats.rx_bytes += len - ETH_FCS_LEN;
-+	net_dev->stats.rx_bytes += len;
- 
- 	return 0;
- }
--- 
-2.30.2
+> 
+>  .../bindings/timer/qcom,msm-timer.txt         | 47 -----------
+>  .../bindings/timer/qcom,msm-timer.yaml        | 78 +++++++++++++++++++
+>  2 files changed, 78 insertions(+), 47 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
+>  create mode 100644 Documentation/devicetree/bindings/timer/qcom,msm-timer.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/timer/qcom,msm-timer.txt b/Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
+> deleted file mode 100644
+> index 5e10c345548f..000000000000
+> --- a/Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
+> +++ /dev/null
+> @@ -1,47 +0,0 @@
+> -* MSM Timer
+> -
+> -Properties:
+> -
+> -- compatible : Should at least contain "qcom,msm-timer". More specific
+> -               properties specify which subsystem the timers are paired with.
+> -
+> -               "qcom,kpss-timer" - krait subsystem
+> -               "qcom,scss-timer" - scorpion subsystem
+> -
+> -- interrupts : Interrupts for the debug timer, the first general purpose
+> -               timer, and optionally a second general purpose timer, and
+> -               optionally as well, 2 watchdog interrupts, in that order.
+> -
+> -- reg : Specifies the base address of the timer registers.
+> -
+> -- clocks: Reference to the parent clocks, one per output clock. The parents
+> -          must appear in the same order as the clock names.
+> -
+> -- clock-names: The name of the clocks as free-form strings. They should be in
+> -               the same order as the clocks.
+> -
+> -- clock-frequency : The frequency of the debug timer and the general purpose
+> -                    timer(s) in Hz in that order.
+> -
+> -Optional:
+> -
+> -- cpu-offset : per-cpu offset used when the timer is accessed without the
+> -               CPU remapping facilities. The offset is
+> -               cpu-offset + (0x10000 * cpu-nr).
+> -
+> -Example:
+> -
+> -       timer@200a000 {
+> -               compatible = "qcom,scss-timer", "qcom,msm-timer";
+> -               interrupts = <1 1 0x301>,
+> -                            <1 2 0x301>,
+> -                            <1 3 0x301>,
+> -                            <1 4 0x301>,
+> -                            <1 5 0x301>;
+> -               reg = <0x0200a000 0x100>;
+> -               clock-frequency = <19200000>,
+> -                                 <32768>;
+> -               clocks = <&sleep_clk>;
+> -               clock-names = "sleep";
+> -               cpu-offset = <0x40000>;
+> -       };
+> diff --git a/Documentation/devicetree/bindings/timer/qcom,msm-timer.yaml b/Documentation/devicetree/bindings/timer/qcom,msm-timer.yaml
+> new file mode 100644
+> index 000000000000..238eb985d0fb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/timer/qcom,msm-timer.yaml
+> @@ -0,0 +1,78 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/timer/qcom,msm-timer.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm MSM Timer
+> +
+> +maintainers:
+> +  - Rob Herring <robh@kernel.org>
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: '^timer@[a-f0-9]+$'
+> +
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: qcom,kpss-timer
+> +          - enum:
+> +              - qcom,kpss-wdt-apq8064
+> +              - qcom,kpss-wdt-ipq8064
+> +              - qcom,kpss-wdt-msm8960
 
+Wrong order here. qcom,kpss-timer should be after these as it is less 
+specific.
+> +          - const: qcom,msm-timer
+
+Drop this compatible string. It is unused and pointless.
+
+> +      - items:
+> +          - enum:
+> +              - qcom,kpss-timer  # Krait subsystem
+> +              - qcom,scss-timer  # Scorpion subsystem
+> +          - const: qcom,msm-timer
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    items:
+> +      - description: 1st purpose timer
+> +      - description: 2nd general purpose timer
+> +      - description: 1st watchdog interrupt
+> +      - description: 2nd watchdog interrupt
+> +      - description: 3nd watchdog interrupt
+> +
+> +  clocks: true
+
+You must define how many.
+
+> +
+> +  clock-names: true
+> +
+> +  clock-frequency: true
+> +
+> +  cpu-offset:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: >
+> +      Per-cpu offset used when the timer is accessed without the
+> +      CPU remapping facilities. The offset is cpu-offset + (0x10000 * cpu-nr).
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clock-frequency
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    timer@200a000 {
+> +        compatible = "qcom,scss-timer", "qcom,msm-timer";
+> +        interrupts = <1 1 0x301>,
+> +                     <1 2 0x301>,
+> +                     <1 3 0x301>,
+> +                     <1 4 0x301>,
+> +                     <1 5 0x301>;
+> +        reg = <0x0200a000 0x100>;
+> +        clock-frequency = <19200000>,
+> +                          <32768>;
+> +        clocks = <&sleep_clk>;
+> +        clock-names = "sleep";
+> +        cpu-offset = <0x40000>;
+> +    };
+> -- 
+> 2.34.1
+> 
+> 

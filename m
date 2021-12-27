@@ -2,84 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA6B0480135
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:55:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C64F548013F
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241270AbhL0Pzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:55:42 -0500
-Received: from mail-qk1-f171.google.com ([209.85.222.171]:37602 "EHLO
-        mail-qk1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239809AbhL0PxI (ORCPT
+        id S239677AbhL0P4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:56:35 -0500
+Received: from lithium.sammserver.com ([168.119.122.30]:43564 "EHLO
+        lithium.sammserver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240555AbhL0Pxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:53:08 -0500
-Received: by mail-qk1-f171.google.com with SMTP id t66so3283205qkb.4;
-        Mon, 27 Dec 2021 07:53:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kFKpJ6n3LoVE/fmz9n2YS1AqKNWObFYFkYe9I6ztYm8=;
-        b=UHr/hbAMU2WJ7jwHgqewe7DhEjRKT5Xun9KouJXFjFIjp1jhi96NJ3BfxZB6iw+vFd
-         OoG9A2so7IPM0dUnfFzo2Ue0JIAIVn8uJiqnp8d9wos9/rRcuk4uQK6yhNuCLGU8J7Fz
-         TjcWdmSuA0w6O+jLs3nM3ohQkQjBhj5SDgE0vmfA3pmwFZ+LOqH00UiQdgGQXHlwADEg
-         iTjWRduqzMX5vU3BJgW+b+VKzwz4nlEQFt7ljuhkJKQnV628u2c+46s6WtQ3KBbqC3oC
-         dMr1GDN3Qod4HRyYIJ74XqH0nrAVzwcaNbkBS/wJFygrtTGhZKun8rRFKm7EjO+7KAnV
-         swxg==
-X-Gm-Message-State: AOAM531rWpuukUFvLs7nHK4/UaEIeuphNiZGcWXHjDNVPA+KPHpQiImv
-        wEVA0EMxo511nfNgFBSG6gqUzqml1Vmoq2yXWKETKv2P
-X-Google-Smtp-Source: ABdhPJzH5+5YaWCdYqXzpxbwlEUwnWFSavWOurnfrdLoz1d0PynSuRGYUYaUiH8A019SPVWejlJ17fq4vMPcDllLXzA=
-X-Received: by 2002:a05:620a:40d1:: with SMTP id g17mr12693132qko.621.1640620387203;
- Mon, 27 Dec 2021 07:53:07 -0800 (PST)
+        Mon, 27 Dec 2021 10:53:41 -0500
+Received: from mail.sammserver.com (sammserver.wg [10.32.40.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by lithium.sammserver.com (Postfix) with ESMTPS id 0244331181C2;
+        Mon, 27 Dec 2021 16:53:38 +0100 (CET)
+Received: from mail.sammserver.com (localhost.localdomain [127.0.0.1])
+        by mail.sammserver.com (Postfix) with ESMTP id A9A7C38E94;
+        Mon, 27 Dec 2021 16:53:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cavoj.net; s=email;
+        t=1640620418; bh=ZHCOAfzGIR740kz8id/jXF6SGoFuUAS+EQvfXYXa4Xw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cKUpt0UaAKoaDYjGB08kTArZCBLceomiKaakxt9amx6aKSkmMWrmun2MR6+fJkPcD
+         yGpzj3lQcAsMp+R9U5UEtS8FPs4M4iM2Tyri0iWDEwhDrg3tCuaMQQ+NHNjQZydNI8
+         VDFQWKWiAHsQGWl4TO7ndRljsijjOSzAEmDHhdNI=
 MIME-Version: 1.0
-References: <ffbefd9a-5dff-5c3d-8a24-2d42b3aa42ca@linaro.org>
-In-Reply-To: <ffbefd9a-5dff-5c3d-8a24-2d42b3aa42ca@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Dec 2021 16:52:49 +0100
-Message-ID: <CAJZ5v0isp2Gyj0t3bDLP329fqOEPpj22DsG7WWnEv3Rht7_qcg@mail.gmail.com>
-Subject: Re: [GIT PULL] dtpm for v5.17
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Date:   Mon, 27 Dec 2021 16:53:38 +0100
+From:   =?UTF-8?Q?Samuel_=C4=8Cavoj?= <samuel@cavoj.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: Re: [PATCH 5.15 114/128] Input: i8042 - enable deferred probe quirk
+ for ASUS UM325UA
+In-Reply-To: <20211227151335.325998991@linuxfoundation.org>
+References: <20211227151331.502501367@linuxfoundation.org>
+ <20211227151335.325998991@linuxfoundation.org>
+User-Agent: Roundcube Webmail/1.4.11
+Message-ID: <a0258f0acbe50d4ea3c73724eafd4ed1@cavoj.net>
+X-Sender: samuel@cavoj.net
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 5:02 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Rafael,
->
-> please consider pulling this little changes for DTPM
->
-> Thanks
->
->   -- Daniel
->
-> The following changes since commit a7904a538933c525096ca2ccde1e60d0ee62c08e:
->
->   Linux 5.16-rc6 (2021-12-19 14:14:33 -0800)
->
-> are available in the Git repository at:
->
->   https://git.linaro.org/people/daniel.lezcano/linux.git tags/dtpm-v5.17
->
-> for you to fetch changes up to c1af85e442278fe120974358cf71c41bc48e0580:
->
->   powercap/drivers/dtpm: Reduce trace verbosity (2021-12-23 16:57:36 +0100)
->
-> ----------------------------------------------------------------
-> - Cleanup and reduce trace verbosity (Daniel Lezcano)
->
-> ----------------------------------------------------------------
-> Daniel Lezcano (2):
->       powercap/drivers/dtpm: Remove unused function definition
->       powercap/drivers/dtpm: Reduce trace verbosity
->
->  drivers/powercap/dtpm.c | 6 +++---
->  include/linux/dtpm.h    | 2 --
->  2 files changed, 3 insertions(+), 5 deletions(-)
+Hi Greg,
 
-Pulled, thanks!
+it seems this patch is misapplied -- please see the context in the 
+original
+diff. The quirk in question itself was only added in a recent patch 
+which
+is not present in stable:
+commit 9222ba68c3f406 -- 
+https://lore.kernel.org/all/20211117063757.11380-1-tiwai@suse.de/
+
+This seems to be the case for all stable branches.
+
+Thanks
+
+On 2021-12-27 16:31, Greg Kroah-Hartman wrote:
+> From: Samuel Čavoj <samuel@cavoj.net>
+> 
+> commit 44ee250aeeabb28b52a10397ac17ffb8bfe94839 upstream.
+> 
+> The ASUS UM325UA suffers from the same issue as the ASUS UX425UA, which
+> is a very similar laptop. The i8042 device is not usable immediately
+> after boot and fails to initialize, requiring a deferred retry.
+> 
+> Enable the deferred probe quirk for the UM325UA.
+> 
+> BugLink: https://bugzilla.suse.com/show_bug.cgi?id=1190256
+> Signed-off-by: Samuel Čavoj <samuel@cavoj.net>
+> Link: 
+> https://lore.kernel.org/r/20211204015615.232948-1-samuel@cavoj.net
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  drivers/input/serio/i8042-x86ia64io.h |    7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> --- a/drivers/input/serio/i8042-x86ia64io.h
+> +++ b/drivers/input/serio/i8042-x86ia64io.h
+> @@ -992,6 +992,13 @@ static const struct dmi_system_id __init
+>  			DMI_MATCH(DMI_PRODUCT_NAME, "C504"),
+It doesn't match here.
+
+>  		},
+>  	},
+> +	{
+> +		/* ASUS ZenBook UM325UA */
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
+> +		},
+> +	},
+>  	{ }
+>  };
+
+Regards,
+Samuel

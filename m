@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFC9480010
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8A347FEE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239007AbhL0Pmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:42:49 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39608 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239503AbhL0Pjz (ORCPT
+        id S237952AbhL0Pdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:33:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237901AbhL0PdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:39:55 -0500
+        Mon, 27 Dec 2021 10:33:15 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6906C061757;
+        Mon, 27 Dec 2021 07:33:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C359B61113;
-        Mon, 27 Dec 2021 15:39:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3157C36AEB;
-        Mon, 27 Dec 2021 15:39:53 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2F7B1CE10B3;
+        Mon, 27 Dec 2021 15:33:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0C9CC36AE7;
+        Mon, 27 Dec 2021 15:33:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619594;
-        bh=CzYVcCyDXLHaPO3RImJKkKseWinTqxGGGVRNwFR/KbM=;
+        s=korg; t=1640619190;
+        bh=QkzhC6Icb7/WIy2hXS8ubvoAF7wsKOqrZYnR63waB2I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2VhetPYN7D1XAmozkfmXYe/lGjKJW2Ii9XAoijCRhtvmPTBc6l8hjXRTwHZ+7RZ3H
-         AvZt6ivR1A4wAF0T5DCjgxtVOZFQfdTc94P8vN7YmOYGXKGuOFOPX/ghlMiZL+vBkL
-         KgAQbTKOn0WvZX34SRabApX1Of81nwxImXgezWPg=
+        b=mHEfTNm3jbywLEZT6/PokUKnX3hCmUZkwjZeFLF+Lj2WI+Qu5dPB2V0D8HzJ4UJV1
+         2AvrMzuzq/KvwRJqcsTREN8JfYP54kjMnCLKU5rSERkbiAMLVwtMdxih9YgLpaQobB
+         Uph3uPfeq2zbGzQQpPl2DlPYUKB9HmXQtn9iIBR0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lars Persson <larper@axis.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Patrik Lantz <patrik.lantz@axis.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>
-Subject: [PATCH 5.10 46/76] tee: handle lookup of shm with reference count 0
+        stable@vger.kernel.org,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Corey Minyard <cminyard@mvista.com>
+Subject: [PATCH 4.19 24/38] ipmi: bail out if init_srcu_struct fails
 Date:   Mon, 27 Dec 2021 16:31:01 +0100
-Message-Id: <20211227151326.304001183@linuxfoundation.org>
+Message-Id: <20211227151320.191475656@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
-References: <20211227151324.694661623@linuxfoundation.org>
+In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
+References: <20211227151319.379265346@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,336 +49,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Wiklander <jens.wiklander@linaro.org>
+From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-commit dfd0743f1d9ea76931510ed150334d571fbab49d upstream.
+commit 2b5160b12091285c5aca45980f100a9294af7b04 upstream.
 
-Since the tee subsystem does not keep a strong reference to its idle
-shared memory buffers, it races with other threads that try to destroy a
-shared memory through a close of its dma-buf fd or by unmapping the
-memory.
+In case, init_srcu_struct fails (because of memory allocation failure), we
+might proceed with the driver initialization despite srcu_struct not being
+entirely initialized.
 
-In tee_shm_get_from_id() when a lookup in teedev->idr has been
-successful, it is possible that the tee_shm is in the dma-buf teardown
-path, but that path is blocked by the teedev mutex. Since we don't have
-an API to tell if the tee_shm is in the dma-buf teardown path or not we
-must find another way of detecting this condition.
-
-Fix this by doing the reference counting directly on the tee_shm using a
-new refcount_t refcount field. dma-buf is replaced by using
-anon_inode_getfd() instead, this separates the life-cycle of the
-underlying file from the tee_shm. tee_shm_put() is updated to hold the
-mutex when decreasing the refcount to 0 and then remove the tee_shm from
-teedev->idr before releasing the mutex. This means that the tee_shm can
-never be found unless it has a refcount larger than 0.
-
-Fixes: 967c9cca2cc5 ("tee: generic TEE subsystem")
+Fixes: 913a89f009d9 ("ipmi: Don't initialize anything in the core until something uses it")
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Cc: Corey Minyard <cminyard@mvista.com>
 Cc: stable@vger.kernel.org
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Lars Persson <larper@axis.com>
-Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
-Reported-by: Patrik Lantz <patrik.lantz@axis.com>
-Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+Message-Id: <20211217154410.1228673-1-cascardo@canonical.com>
+Signed-off-by: Corey Minyard <cminyard@mvista.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tee/tee_shm.c   |  171 ++++++++++++++++++------------------------------
- include/linux/tee_drv.h |    4 -
- 2 files changed, 68 insertions(+), 107 deletions(-)
+ drivers/char/ipmi/ipmi_msghandler.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/tee/tee_shm.c
-+++ b/drivers/tee/tee_shm.c
-@@ -1,11 +1,11 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (c) 2015-2016, Linaro Limited
-+ * Copyright (c) 2015-2017, 2019-2021 Linaro Limited
-  */
-+#include <linux/anon_inodes.h>
- #include <linux/device.h>
--#include <linux/dma-buf.h>
--#include <linux/fdtable.h>
- #include <linux/idr.h>
-+#include <linux/mm.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
- #include <linux/tee_drv.h>
-@@ -28,16 +28,8 @@ static void release_registered_pages(str
- 	}
- }
+--- a/drivers/char/ipmi/ipmi_msghandler.c
++++ b/drivers/char/ipmi/ipmi_msghandler.c
+@@ -5085,7 +5085,9 @@ static int ipmi_init_msghandler(void)
+ 	if (initialized)
+ 		goto out;
  
--static void tee_shm_release(struct tee_shm *shm)
-+static void tee_shm_release(struct tee_device *teedev, struct tee_shm *shm)
- {
--	struct tee_device *teedev = shm->ctx->teedev;
--
--	if (shm->flags & TEE_SHM_DMA_BUF) {
--		mutex_lock(&teedev->mutex);
--		idr_remove(&teedev->idr, shm->id);
--		mutex_unlock(&teedev->mutex);
--	}
--
- 	if (shm->flags & TEE_SHM_POOL) {
- 		struct tee_shm_pool_mgr *poolm;
+-	init_srcu_struct(&ipmi_interfaces_srcu);
++	rv = init_srcu_struct(&ipmi_interfaces_srcu);
++	if (rv)
++		goto out;
  
-@@ -64,45 +56,6 @@ static void tee_shm_release(struct tee_s
- 	tee_device_put(teedev);
- }
- 
--static struct sg_table *tee_shm_op_map_dma_buf(struct dma_buf_attachment
--			*attach, enum dma_data_direction dir)
--{
--	return NULL;
--}
--
--static void tee_shm_op_unmap_dma_buf(struct dma_buf_attachment *attach,
--				     struct sg_table *table,
--				     enum dma_data_direction dir)
--{
--}
--
--static void tee_shm_op_release(struct dma_buf *dmabuf)
--{
--	struct tee_shm *shm = dmabuf->priv;
--
--	tee_shm_release(shm);
--}
--
--static int tee_shm_op_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
--{
--	struct tee_shm *shm = dmabuf->priv;
--	size_t size = vma->vm_end - vma->vm_start;
--
--	/* Refuse sharing shared memory provided by application */
--	if (shm->flags & TEE_SHM_USER_MAPPED)
--		return -EINVAL;
--
--	return remap_pfn_range(vma, vma->vm_start, shm->paddr >> PAGE_SHIFT,
--			       size, vma->vm_page_prot);
--}
--
--static const struct dma_buf_ops tee_shm_dma_buf_ops = {
--	.map_dma_buf = tee_shm_op_map_dma_buf,
--	.unmap_dma_buf = tee_shm_op_unmap_dma_buf,
--	.release = tee_shm_op_release,
--	.mmap = tee_shm_op_mmap,
--};
--
- struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
- {
- 	struct tee_device *teedev = ctx->teedev;
-@@ -137,6 +90,7 @@ struct tee_shm *tee_shm_alloc(struct tee
- 		goto err_dev_put;
- 	}
- 
-+	refcount_set(&shm->refcount, 1);
- 	shm->flags = flags | TEE_SHM_POOL;
- 	shm->ctx = ctx;
- 	if (flags & TEE_SHM_DMA_BUF)
-@@ -150,10 +104,7 @@ struct tee_shm *tee_shm_alloc(struct tee
- 		goto err_kfree;
- 	}
- 
--
- 	if (flags & TEE_SHM_DMA_BUF) {
--		DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
--
- 		mutex_lock(&teedev->mutex);
- 		shm->id = idr_alloc(&teedev->idr, shm, 1, 0, GFP_KERNEL);
- 		mutex_unlock(&teedev->mutex);
-@@ -161,28 +112,11 @@ struct tee_shm *tee_shm_alloc(struct tee
- 			ret = ERR_PTR(shm->id);
- 			goto err_pool_free;
- 		}
--
--		exp_info.ops = &tee_shm_dma_buf_ops;
--		exp_info.size = shm->size;
--		exp_info.flags = O_RDWR;
--		exp_info.priv = shm;
--
--		shm->dmabuf = dma_buf_export(&exp_info);
--		if (IS_ERR(shm->dmabuf)) {
--			ret = ERR_CAST(shm->dmabuf);
--			goto err_rem;
--		}
- 	}
- 
- 	teedev_ctx_get(ctx);
- 
- 	return shm;
--err_rem:
--	if (flags & TEE_SHM_DMA_BUF) {
--		mutex_lock(&teedev->mutex);
--		idr_remove(&teedev->idr, shm->id);
--		mutex_unlock(&teedev->mutex);
--	}
- err_pool_free:
- 	poolm->ops->free(poolm, shm);
- err_kfree:
-@@ -243,6 +177,7 @@ struct tee_shm *tee_shm_register(struct
- 		goto err;
- 	}
- 
-+	refcount_set(&shm->refcount, 1);
- 	shm->flags = flags | TEE_SHM_REGISTER;
- 	shm->ctx = ctx;
- 	shm->id = -1;
-@@ -303,22 +238,6 @@ struct tee_shm *tee_shm_register(struct
- 		goto err;
- 	}
- 
--	if (flags & TEE_SHM_DMA_BUF) {
--		DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
--
--		exp_info.ops = &tee_shm_dma_buf_ops;
--		exp_info.size = shm->size;
--		exp_info.flags = O_RDWR;
--		exp_info.priv = shm;
--
--		shm->dmabuf = dma_buf_export(&exp_info);
--		if (IS_ERR(shm->dmabuf)) {
--			ret = ERR_CAST(shm->dmabuf);
--			teedev->desc->ops->shm_unregister(ctx, shm);
--			goto err;
--		}
--	}
--
- 	return shm;
- err:
- 	if (shm) {
-@@ -336,6 +255,35 @@ err:
- }
- EXPORT_SYMBOL_GPL(tee_shm_register);
- 
-+static int tee_shm_fop_release(struct inode *inode, struct file *filp)
-+{
-+	tee_shm_put(filp->private_data);
-+	return 0;
-+}
-+
-+static int tee_shm_fop_mmap(struct file *filp, struct vm_area_struct *vma)
-+{
-+	struct tee_shm *shm = filp->private_data;
-+	size_t size = vma->vm_end - vma->vm_start;
-+
-+	/* Refuse sharing shared memory provided by application */
-+	if (shm->flags & TEE_SHM_USER_MAPPED)
-+		return -EINVAL;
-+
-+	/* check for overflowing the buffer's size */
-+	if (vma->vm_pgoff + vma_pages(vma) > shm->size >> PAGE_SHIFT)
-+		return -EINVAL;
-+
-+	return remap_pfn_range(vma, vma->vm_start, shm->paddr >> PAGE_SHIFT,
-+			       size, vma->vm_page_prot);
-+}
-+
-+static const struct file_operations tee_shm_fops = {
-+	.owner = THIS_MODULE,
-+	.release = tee_shm_fop_release,
-+	.mmap = tee_shm_fop_mmap,
-+};
-+
- /**
-  * tee_shm_get_fd() - Increase reference count and return file descriptor
-  * @shm:	Shared memory handle
-@@ -348,10 +296,11 @@ int tee_shm_get_fd(struct tee_shm *shm)
- 	if (!(shm->flags & TEE_SHM_DMA_BUF))
- 		return -EINVAL;
- 
--	get_dma_buf(shm->dmabuf);
--	fd = dma_buf_fd(shm->dmabuf, O_CLOEXEC);
-+	/* matched by tee_shm_put() in tee_shm_op_release() */
-+	refcount_inc(&shm->refcount);
-+	fd = anon_inode_getfd("tee_shm", &tee_shm_fops, shm, O_RDWR);
- 	if (fd < 0)
--		dma_buf_put(shm->dmabuf);
-+		tee_shm_put(shm);
- 	return fd;
- }
- 
-@@ -361,17 +310,7 @@ int tee_shm_get_fd(struct tee_shm *shm)
-  */
- void tee_shm_free(struct tee_shm *shm)
- {
--	/*
--	 * dma_buf_put() decreases the dmabuf reference counter and will
--	 * call tee_shm_release() when the last reference is gone.
--	 *
--	 * In the case of driver private memory we call tee_shm_release
--	 * directly instead as it doesn't have a reference counter.
--	 */
--	if (shm->flags & TEE_SHM_DMA_BUF)
--		dma_buf_put(shm->dmabuf);
--	else
--		tee_shm_release(shm);
-+	tee_shm_put(shm);
- }
- EXPORT_SYMBOL_GPL(tee_shm_free);
- 
-@@ -478,10 +417,15 @@ struct tee_shm *tee_shm_get_from_id(stru
- 	teedev = ctx->teedev;
- 	mutex_lock(&teedev->mutex);
- 	shm = idr_find(&teedev->idr, id);
-+	/*
-+	 * If the tee_shm was found in the IDR it must have a refcount
-+	 * larger than 0 due to the guarantee in tee_shm_put() below. So
-+	 * it's safe to use refcount_inc().
-+	 */
- 	if (!shm || shm->ctx != ctx)
- 		shm = ERR_PTR(-EINVAL);
--	else if (shm->flags & TEE_SHM_DMA_BUF)
--		get_dma_buf(shm->dmabuf);
-+	else
-+		refcount_inc(&shm->refcount);
- 	mutex_unlock(&teedev->mutex);
- 	return shm;
- }
-@@ -493,7 +437,24 @@ EXPORT_SYMBOL_GPL(tee_shm_get_from_id);
-  */
- void tee_shm_put(struct tee_shm *shm)
- {
--	if (shm->flags & TEE_SHM_DMA_BUF)
--		dma_buf_put(shm->dmabuf);
-+	struct tee_device *teedev = shm->ctx->teedev;
-+	bool do_release = false;
-+
-+	mutex_lock(&teedev->mutex);
-+	if (refcount_dec_and_test(&shm->refcount)) {
-+		/*
-+		 * refcount has reached 0, we must now remove it from the
-+		 * IDR before releasing the mutex. This will guarantee that
-+		 * the refcount_inc() in tee_shm_get_from_id() never starts
-+		 * from 0.
-+		 */
-+		if (shm->flags & TEE_SHM_DMA_BUF)
-+			idr_remove(&teedev->idr, shm->id);
-+		do_release = true;
-+	}
-+	mutex_unlock(&teedev->mutex);
-+
-+	if (do_release)
-+		tee_shm_release(teedev, shm);
- }
- EXPORT_SYMBOL_GPL(tee_shm_put);
---- a/include/linux/tee_drv.h
-+++ b/include/linux/tee_drv.h
-@@ -195,7 +195,7 @@ int tee_session_calc_client_uuid(uuid_t
-  * @offset:	offset of buffer in user space
-  * @pages:	locked pages from userspace
-  * @num_pages:	number of locked pages
-- * @dmabuf:	dmabuf used to for exporting to user space
-+ * @refcount:	reference counter
-  * @flags:	defined by TEE_SHM_* in tee_drv.h
-  * @id:		unique id of a shared memory object on this device
-  *
-@@ -210,7 +210,7 @@ struct tee_shm {
- 	unsigned int offset;
- 	struct page **pages;
- 	size_t num_pages;
--	struct dma_buf *dmabuf;
-+	refcount_t refcount;
- 	u32 flags;
- 	int id;
- };
+ 	timer_setup(&ipmi_timer, ipmi_timeout, 0);
+ 	mod_timer(&ipmi_timer, jiffies + IPMI_TIMEOUT_JIFFIES);
 
 

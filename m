@@ -2,113 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCBFA48051B
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 23:33:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF1D48051D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 23:35:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233801AbhL0Wdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 17:33:52 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57282 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231671AbhL0Wdv (ORCPT
+        id S233826AbhL0Wfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 17:35:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32760 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233812AbhL0Wfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 17:33:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 27 Dec 2021 17:35:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640644546;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MeAqxoDyAu0k3JgYhjZ/GYTFQaU0aqY5mvafrqCsxO4=;
+        b=Vz12GEtD7DCD4vpKZ/e65bC3pougELnCbC9KOb+FUMA3ISrsqzmCTENLWv/WNfHJqck3xJ
+        vjf1qO28drqWIFhdKDNsOPN7UxZ905/hSykTYhzQzX8gyx9fSZ5Q+/ivAuZ13nkPdJyEmg
+        Nz3cKsmTG+Z+pN3yRhxfv6Va7dxfRBs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-426-OtrHm1l_PYGRmMP__QO19w-1; Mon, 27 Dec 2021 17:35:43 -0500
+X-MC-Unique: OtrHm1l_PYGRmMP__QO19w-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 333A86117B;
-        Mon, 27 Dec 2021 22:33:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B58DC36AE7;
-        Mon, 27 Dec 2021 22:33:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640644430;
-        bh=/sJY7Kisz1PSOFfZV+hFs5yhBktmtLqFb2f5YxJeypg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=qwgGSPvatgMe1CpNXXSX+vv/ERMiU7z545ZfOCpO+f1+4P8hhpXjl+Wdgtyyc9ufd
-         eD7w2TB3tYdV6BYtgGkzURzDTm/j3KniZsvqSyNieblnbr1y6Nx1wyJe+l3GqeKXv3
-         o+6TyuA9rfBpIzNRhulx//qhQDoQlej1bluDv9OUWVVb/EYOyMeAESrlR2uFi9Bmqo
-         fLjgW5tmyq6w3LTfgb8n0DPvlOp2bmTBChMh9OmDnr7ipigWHnLCauzsvWBjlhMiTt
-         nJ5NRRTogGH5opz9tvGIIdHy6e6Eux9NyWRjGhXlzV0GuBtCCUx4oP0SdLRUjCsiIO
-         /L9526LATEFLQ==
-Date:   Mon, 27 Dec 2021 16:33:48 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org
-Subject: Re: [RFC 28/32] PCI: make quirk using inw() depend on HAS_IOPORT
-Message-ID: <20211227223348.GA1545446@bhelgaas>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 82C8F104ECE6;
+        Mon, 27 Dec 2021 22:35:40 +0000 (UTC)
+Received: from wcosta.com (ovpn-116-95.gru2.redhat.com [10.97.116.95])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E36ED78DA0;
+        Mon, 27 Dec 2021 22:34:56 +0000 (UTC)
+From:   Wander Lairson Costa <wander@redhat.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Laurent Vivier <laurent@vivier.eu>,
+        YunQiang Su <ysu@wavecomp.com>, Helge Deller <deller@gmx.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Rafael Aquini <aquini@redhat.com>,
+        Phil Auld <pauld@redhat.com>, Rolf Eike Beer <eb@emlix.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        linux-fsdevel@vger.kernel.org (open list:FILESYSTEMS (VFS and
+        infrastructure)), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH RFC 0/4] coredump: mitigate privilege escalation of process coredump
+Date:   Mon, 27 Dec 2021 19:34:31 -0300
+Message-Id: <20211227223436.317091-1-wander@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227164317.4146918-29-schnelle@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 05:43:13PM +0100, Niklas Schnelle wrote:
-> In the future inw()/outw() and friends will not be compiled on
-> architectures without I/O port support.
+A set-uid executable might be a vector to privilege escalation if the
+system configures the coredump file name pattern as a relative
+directory destiny. The full description of the vulnerability and
+a demonstration of how we can exploit it can be found at [1].
 
-This commit log actually doesn't say what the patch does.
+This patch series adds a PF_SUID flag to the process in execve if it is
+set-[ug]id binary and elevates the new image's privileges.
 
-I'm pretty sure this particular quirk is x86 specific and could
-probably be moved to arch/x86/pci/fixup.c, where the #ifdef probably
-wouldn't be needed.
+In the do_coredump function, we check if:
 
-If we keep it in drivers/pci, please update the subject line to make
-it more specific and match the convention, e.g.,
+1) We have the SUID_FLAG set
+2) We have CAP_SYS_ADMIN (the process might have decreased its
+   privileges)
+3) The current directory is owned by root (the current code already
+   checks for core_pattern being a relative path).
+4) non-privileged users don't have permission to write to the current
+   directory.
 
-  PCI: Compile quirk_tigerpoint_bm_sts() only when HAS_IOPORT set
+If all four conditions match, we set the need_suid_safe flag.
 
-BTW, git complains about some whitespace errors in other patches:
+An alternative implementation (and more elegant IMO) would be saving
+the fsuid and fsgid of the process in the task_struct before loading the
+new image to the memory. But this approach would add eight bytes to all
+task_struct instances where only a tiny fraction of the processes need
+it and under a configuration that not all (most?) distributions don't
+adopt by default.
 
-  Applying: char: impi, tpm: depend on HAS_IOPORT
-  .git/rebase-apply/patch:92: trailing whitespace.
-	    If you have a TPM security chip from Atmel say Yes and it
-  .git/rebase-apply/patch:93: trailing whitespace.
-	    will be accessible from within Linux.  To compile this driver
-  warning: 2 lines add whitespace errors.
-  Applying: video: handle HAS_IOPORT dependencies
-  .git/rebase-apply/patch:23: trailing whitespace.
+Wander Lairson Costa (4):
+  exec: add a flag indicating if an exec file is a suid/sgid
+  process: add the PF_SUID flag
+  coredump: mitigate privilege escalation of process coredump
+  exec: only set the suid flag if the current proc isn't root
 
-  warning: 1 line adds whitespace errors.
+ fs/coredump.c           | 15 +++++++++++++++
+ fs/exec.c               | 10 ++++++++++
+ include/linux/binfmts.h |  6 +++++-
+ include/linux/sched.h   |  1 +
+ kernel/fork.c           |  2 ++
+ 5 files changed, 33 insertions(+), 1 deletion(-)
 
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
->  drivers/pci/quirks.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index 003950c738d2..8624c98c57b2 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -265,6 +265,7 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_1,	quirk_isa_d
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_2,	quirk_isa_dma_hangs);
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_3,	quirk_isa_dma_hangs);
->  
-> +#ifdef CONFIG_HAS_IOPORT
->  /*
->   * Intel NM10 "TigerPoint" LPC PM1a_STS.BM_STS must be clear
->   * for some HT machines to use C4 w/o hanging.
-> @@ -284,6 +285,7 @@ static void quirk_tigerpoint_bm_sts(struct pci_dev *dev)
->  	}
->  }
->  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TGP_LPC, quirk_tigerpoint_bm_sts);
-> +#endif
->  
->  /* Chipsets where PCI->PCI transfers vanish or hang */
->  static void quirk_nopcipci(struct pci_dev *dev)
-> -- 
-> 2.32.0
-> 
+-- 
+2.27.0
+

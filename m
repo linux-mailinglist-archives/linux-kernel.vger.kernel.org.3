@@ -2,121 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF91D47FA7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 07:20:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4BBF47FA82
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 07:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235302AbhL0GUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 01:20:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
+        id S235315AbhL0GWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 01:22:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbhL0GUn (ORCPT
+        with ESMTP id S230050AbhL0GWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 01:20:43 -0500
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB3FC06173E;
-        Sun, 26 Dec 2021 22:20:42 -0800 (PST)
-Received: by mail-pj1-x1044.google.com with SMTP id r16-20020a17090a0ad000b001b276aa3aabso4367995pje.0;
-        Sun, 26 Dec 2021 22:20:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q3qnlUPyv7j+2lJxGhadY9VPUX1fm9lkgG1YxnakR3w=;
-        b=fG4YEC8gkL+8kyTxVDpZWworuNLYPFs1uw5jTPZheRMvFcPLozXaaH9gmzbVfF4ZcL
-         Q5bKSdqyx6qQMm8Rw2ewDyAE5/7BMNcOhf+vVhdE8g/x9cE6LM0z4n/sdmQNxlWn9Ka1
-         aXRCT/hFL4BYE4PYDddefck5uLzsiqoHeYEzFqflzp5BdJOWJimBoE+EtrHAV2yU15Hu
-         3JSErgkUIl5wqrnZHJgYDkAhPILbUSO8OBkxavI+HiL7qrVuDEH0Xk5tAtpceSMW3QUU
-         Wt8fVlm+i+hLjFa6/ccGcQghsmbeaghyhVj5QdQoEDSroC7ocpJAmhdnCD/EqovR2nIj
-         4IZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q3qnlUPyv7j+2lJxGhadY9VPUX1fm9lkgG1YxnakR3w=;
-        b=Paq6nxulpbp6P/RbEMMnxSEqqCVfaKdJQgamM5ChZ+pAP5VLhGWH1m0QhIVgz51nx9
-         P4wZylybr/k0KLW5WuGgwiVbtNIDndBvkVFkBvsRIrTXK8l1lJtbgxVDZv9crjD+CymS
-         g716SQKU+/8qlU5VqmTgH4adwI5HXdm4uHt6dbn8ulZHVu1JvBU76RrSJu0JdF4IZTYs
-         Bzh4YNEw6Wwt3d+KHt3TWPAyV60eJ6u2F9GLt3Ds6x69oAoJzVHSCTFhUdPT0eor1tHJ
-         oVU3FNLO4rbPXhwGG7EOJ11jL3y5iIHZVP4E2ZQuFOomqM6rEHrEZj9GoZRt7hr160/e
-         56mQ==
-X-Gm-Message-State: AOAM531U4U6fxm7QO+5AAAsVErqtLvR1Z7tIQdqogDnQxQ4ROF7P8qno
-        X/e+6JhqgvUfiXlXkPvlvlg=
-X-Google-Smtp-Source: ABdhPJw1GG9gLyD2Ok10MtSX9QuV/UAuAGC+v80GKFDIGZ3WICJnHGXVaPUt+9vLkXa3ttaaqj/cdw==
-X-Received: by 2002:a17:90b:3803:: with SMTP id mq3mr16071698pjb.46.1640586042554;
-        Sun, 26 Dec 2021 22:20:42 -0800 (PST)
-Received: from localhost.localdomain ([43.132.141.9])
-        by smtp.gmail.com with ESMTPSA id j23sm13143890pga.59.2021.12.26.22.20.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Dec 2021 22:20:42 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     kuba@kernel.org
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
-Subject: [PATCH] net: bpf: handle return value of BPF_CGROUP_RUN_PROG_INET4_POST_BIND()
-Date:   Mon, 27 Dec 2021 14:20:35 +0800
-Message-Id: <20211227062035.3224982-1-imagedong@tencent.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 27 Dec 2021 01:22:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6722C06173E
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Dec 2021 22:22:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE76CB80E41
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 06:22:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DB49C36AE9;
+        Mon, 27 Dec 2021 06:22:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640586154;
+        bh=x0C0vb8ishT2V5+rf2VVWHRrHwoEM9zfj/BD07nqD3U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oRGzizb4t67HqTkAWQvWWt+7o2Xk9gqpIjG5wIbw/ieC7810lMfyQNRPwy93xVIOs
+         LQDmoQLjGl0wD9P372VolX4TjECFwVC1DskJP1RiuCNTS6d4ZfRbg7RX7h7HnU6P3J
+         CDS6MiqOOrFRckEL8vV/Usv1YqDjxg/vG/twaKlg=
+Date:   Mon, 27 Dec 2021 07:22:31 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Gautam Menghani <gautammenghani14@gmail.com>
+Cc:     nsaenz@kernel.org, stefan.wahren@i2se.com, gascoar@gmail.com,
+        ojaswin98@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Remove repeated word in vchiq log warning
+Message-ID: <Yclbp0ZBkT8dxgbu@kroah.com>
+References: <20211226164632.48952-1-gautammenghani14@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211226164632.48952-1-gautammenghani14@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+On Sun, Dec 26, 2021 at 10:16:32PM +0530, Gautam Menghani wrote:
+> Signed-off-by: Gautam Menghani <gautammenghani14@gmail.com>
+> ---
+>  drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> index c650a32bcedf..6759a6261500 100644
+> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> @@ -1661,7 +1661,7 @@ vchiq_dump_service_use_state(struct vchiq_state *state)
+>  				  service_data[i].clientid, service_data[i].use_count,
+>  				  service_data[i].use_count ? nz : "");
+>  	}
+> -	vchiq_log_warning(vchiq_susp_log_level, "----- VCHIQ use count count %d", peer_count);
+> +	vchiq_log_warning(vchiq_susp_log_level, "----- VCHIQ use count %d", peer_count);
+>  	vchiq_log_warning(vchiq_susp_log_level, "--- Overall vchiq instance use count %d",
+>  			  vc_use_count);
+>  
+> -- 
+> 2.25.1
+> 
+> 
 
-The return value of BPF_CGROUP_RUN_PROG_INET4_POST_BIND() in
-__inet_bind() is not handled properly. While the return value
-is non-zero, it will set inet_saddr and inet_rcv_saddr to 0 and
-exit:
+Hi,
 
-	err = BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk);
-	if (err) {
-		inet->inet_saddr = inet->inet_rcv_saddr = 0;
-		goto out_release_sock;
-	}
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Let's take UDP for example and see what will happen. For UDP
-socket, it will be added to 'udp_prot.h.udp_table->hash' and
-'udp_prot.h.udp_table->hash2' after the sk->sk_prot->get_port()
-called success. If 'inet->inet_rcv_saddr' is specified here,
-then 'sk' will be in the 'hslot2' of 'hash2' that it don't belong
-to (because inet_saddr is changed to 0), and UDP packet received
-will not be passed to this sock. If 'inet->inet_rcv_saddr' is not
-specified here, the sock will work fine, as it can receive packet
-properly, which is wired, as the 'bind()' is already failed.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-I'm not sure what should do here, maybe we should unhash the sock
-for UDP? Therefor, user can try to bind another port?
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what is needed in order to
+  properly describe the change.
 
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
- net/ipv4/af_inet.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what a proper Subject: line should
+  look like.
 
-diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-index 04067b249bf3..9e5710f40a39 100644
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -530,7 +530,14 @@ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
- 		if (!(flags & BIND_FROM_BPF)) {
- 			err = BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk);
- 			if (err) {
-+				if (sk->sk_prot == &udp_prot)
-+					sk->sk_prot->unhash(sk);
-+				else if (sk->sk_prot == &tcp_prot)
-+					inet_put_port(sk);
-+
- 				inet->inet_saddr = inet->inet_rcv_saddr = 0;
-+				err = -EPERM;
-+
- 				goto out_release_sock;
- 			}
- 		}
--- 
-2.30.2
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
+thanks,
+
+greg k-h's patch email bot

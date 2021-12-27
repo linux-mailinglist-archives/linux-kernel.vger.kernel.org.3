@@ -2,44 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A45AC48003E
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:44:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51DB7480007
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:42:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238753AbhL0PoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:44:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239009AbhL0PlB (ORCPT
+        id S239595AbhL0Pmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:42:36 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:39410 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239264AbhL0Pji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:41:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839F4C08E88C;
-        Mon, 27 Dec 2021 07:39:35 -0800 (PST)
+        Mon, 27 Dec 2021 10:39:38 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2142261118;
-        Mon, 27 Dec 2021 15:39:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06300C36AEA;
-        Mon, 27 Dec 2021 15:39:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1F6361052;
+        Mon, 27 Dec 2021 15:39:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C71F5C36AEA;
+        Mon, 27 Dec 2021 15:39:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640619574;
-        bh=+VzOVk8c3+Tnef8ZiGHALGqqL3DECjSAnu6MER17gyo=;
+        s=korg; t=1640619577;
+        bh=6Z1hCqGBYBETvydbz0RrpXobRIUMWe19rZrAm7M0c1o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CLK+8IeujIV0u70sZ3KqEiNoeMMVGl0vpGN6AjzybCWsBMZr68wOlWqzujQz2Eb0W
-         gP6G+Mu4R8f+fmXY24BlWXJ8M1Gree2sA0FpsfFHmpRxSAZN9YLq2hsnsen7ngIzFJ
-         4M32JpP2ADgT2x+l3YWyQQl0U5vlIVUE6WUMiDl8=
+        b=c5KXeXdbca7+m+qHABTP45uLLTP20k6c4dFQmPOMWACGUhN+ZdBkZ4icBDlAHwjRu
+         1lTLU31vuuTGWWDjLlpWp3pln2pGmd7+bj1Yi6Pykda6xGCEH8n8tAVOy5Aki02fkK
+         xLmK5gOVit/xNrY37QV2LIgNWd7C27rExsWqeNCg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Guodong Liu <guodong.liu@mediatek.corp-partner.google.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 5.10 70/76] pinctrl: mediatek: fix global-out-of-bounds issue
-Date:   Mon, 27 Dec 2021 16:31:25 +0100
-Message-Id: <20211227151327.116415333@linuxfoundation.org>
+        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 5.10 71/76] hwmom: (lm90) Fix citical alarm status for MAX6680/MAX6681
+Date:   Mon, 27 Dec 2021 16:31:26 +0100
+Message-Id: <20211227151327.148014516@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
 References: <20211227151324.694661623@linuxfoundation.org>
@@ -51,39 +44,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guodong Liu <guodong.liu@mediatek.corp-partner.google.com>
+From: Guenter Roeck <linux@roeck-us.net>
 
-commit 2d5446da5acecf9c67db1c9d55ae2c3e5de01f8d upstream.
+commit da7dc0568491104c7acb632e9d41ddce9aaabbb1 upstream.
 
-When eint virtual eint number is greater than gpio number,
-it maybe produce 'desc[eint_n]' size globle-out-of-bounds issue.
+Tests with a real chip and a closer look into the datasheet reveals
+that the local and remote critical alarm status bits are swapped for
+MAX6680/MAX6681.
 
-Signed-off-by: Guodong Liu <guodong.liu@mediatek.corp-partner.google.com>
-Signed-off-by: Zhiyong Tao <zhiyong.tao@mediatek.com>
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-Link: https://lore.kernel.org/r/20211110071900.4490-2-zhiyong.tao@mediatek.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/hwmon/lm90.c |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
---- a/drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c
-@@ -280,8 +280,12 @@ static int mtk_xt_get_gpio_n(void *data,
- 	desc = (const struct mtk_pin_desc *)hw->soc->pins;
- 	*gpio_chip = &hw->chip;
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -190,6 +190,7 @@ enum chips { lm90, adm1032, lm99, lm86,
+ #define LM90_HAVE_EXTENDED_TEMP	(1 << 8) /* extended temperature support*/
+ #define LM90_PAUSE_FOR_CONFIG	(1 << 9) /* Pause conversion for config	*/
+ #define LM90_HAVE_CRIT		(1 << 10)/* Chip supports CRIT/OVERT register	*/
++#define LM90_HAVE_CRIT_ALRM_SWP	(1 << 11)/* critical alarm bits swapped	*/
  
--	/* Be greedy to guess first gpio_n is equal to eint_n */
--	if (desc[eint_n].eint.eint_n == eint_n)
-+	/*
-+	 * Be greedy to guess first gpio_n is equal to eint_n.
-+	 * Only eint virtual eint number is greater than gpio number.
-+	 */
-+	if (hw->soc->npins > eint_n &&
-+	    desc[eint_n].eint.eint_n == eint_n)
- 		*gpio_n = eint_n;
- 	else
- 		*gpio_n = mtk_xt_find_eint_num(hw, eint_n);
+ /* LM90 status */
+ #define LM90_STATUS_LTHRM	(1 << 0) /* local THERM limit tripped */
+@@ -415,7 +416,8 @@ static const struct lm90_params lm90_par
+ 		.reg_local_ext = MAX6657_REG_R_LOCAL_TEMPL,
+ 	},
+ 	[max6680] = {
+-		.flags = LM90_HAVE_OFFSET | LM90_HAVE_CRIT,
++		.flags = LM90_HAVE_OFFSET | LM90_HAVE_CRIT
++		  | LM90_HAVE_CRIT_ALRM_SWP,
+ 		.alert_alarms = 0x7c,
+ 		.max_convrate = 7,
+ 	},
+@@ -1191,6 +1193,7 @@ static const u8 lm90_temp_emerg_index[3]
+ static const u8 lm90_min_alarm_bits[3] = { 5, 3, 11 };
+ static const u8 lm90_max_alarm_bits[3] = { 6, 4, 12 };
+ static const u8 lm90_crit_alarm_bits[3] = { 0, 1, 9 };
++static const u8 lm90_crit_alarm_bits_swapped[3] = { 1, 0, 9 };
+ static const u8 lm90_emergency_alarm_bits[3] = { 15, 13, 14 };
+ static const u8 lm90_fault_bits[3] = { 0, 2, 10 };
+ 
+@@ -1216,7 +1219,10 @@ static int lm90_temp_read(struct device
+ 		*val = (data->alarms >> lm90_max_alarm_bits[channel]) & 1;
+ 		break;
+ 	case hwmon_temp_crit_alarm:
+-		*val = (data->alarms >> lm90_crit_alarm_bits[channel]) & 1;
++		if (data->flags & LM90_HAVE_CRIT_ALRM_SWP)
++			*val = (data->alarms >> lm90_crit_alarm_bits_swapped[channel]) & 1;
++		else
++			*val = (data->alarms >> lm90_crit_alarm_bits[channel]) & 1;
+ 		break;
+ 	case hwmon_temp_emergency_alarm:
+ 		*val = (data->alarms >> lm90_emergency_alarm_bits[channel]) & 1;
 
 

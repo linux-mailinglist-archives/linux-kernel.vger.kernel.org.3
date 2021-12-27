@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A68247FE4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A50347FE87
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 16:30:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237429AbhL0P1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 10:27:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237382AbhL0P1m (ORCPT
+        id S237647AbhL0P3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 10:29:54 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34440 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237739AbhL0P3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 10:27:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5168C06175F;
-        Mon, 27 Dec 2021 07:27:41 -0800 (PST)
+        Mon, 27 Dec 2021 10:29:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84A56610A7;
-        Mon, 27 Dec 2021 15:27:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52E0AC36AE7;
-        Mon, 27 Dec 2021 15:27:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9962B810A3;
+        Mon, 27 Dec 2021 15:29:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB8F4C36AEA;
+        Mon, 27 Dec 2021 15:29:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640618860;
-        bh=asfYmqaiXY7RYN1v5stNBAhjj5bzCu1/M33g/7Og6SU=;
+        s=korg; t=1640618951;
+        bh=6hiFfT3Okr3x7F8HApRm7/RqZrcZQ/0xTZVyytzHz5k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xkz1up/yVOg6ZhHyOnMlrg3uaqlAHBaoS8ojzB88+RZroYSK7CP5Ut+iZyRms1bg2
-         Lko5qiCUxvonsdQWic5SQFWheEvGAZIHlgRocwajgcAjt4yN2EIfMjC/24wmJQJ33H
-         EA5TiXgTGPRnrT/NMbVQ12IF5AcmgBOpecd7IwSQ=
+        b=W0GDJuOsQQqeCMIFKRsdOyVBHJ0SnE+zvKggmXDfigS6LQPY9J634rir6TSWk7RMK
+         uc7BGuO28UK0DaUqFl2qTWkhR30AvqdVZeSkxNFkd9bBuW1NOSqV/Btni4NDtWS6zM
+         eOBgwGIM5SiN20gZDM8f5EqfbI6gsh+8muMHRUKg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lin Ma <linma@zju.edu.cn>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.4 16/17] hamradio: improve the incomplete fix to avoid NPD
-Date:   Mon, 27 Dec 2021 16:27:11 +0100
-Message-Id: <20211227151316.473350347@linuxfoundation.org>
+        stable@vger.kernel.org, Jimmy Assarsson <extja@kvaser.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 4.14 02/29] can: kvaser_usb: get CAN clock frequency from device
+Date:   Mon, 27 Dec 2021 16:27:12 +0100
+Message-Id: <20211227151318.556710875@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211227151315.962187770@linuxfoundation.org>
-References: <20211227151315.962187770@linuxfoundation.org>
+In-Reply-To: <20211227151318.475251079@linuxfoundation.org>
+References: <20211227151318.475251079@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,74 +45,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lin Ma <linma@zju.edu.cn>
+From: Jimmy Assarsson <extja@kvaser.com>
 
-commit b2f37aead1b82a770c48b5d583f35ec22aabb61e upstream.
+commit fb12797ab1fef480ad8a32a30984844444eeb00d upstream.
 
-The previous commit 3e0588c291d6 ("hamradio: defer ax25 kfree after
-unregister_netdev") reorder the kfree operations and unregister_netdev
-operation to prevent UAF.
+The CAN clock frequency is used when calculating the CAN bittiming
+parameters. When wrong clock frequency is used, the device may end up
+with wrong bittiming parameters, depending on user requested bittiming
+parameters.
 
-This commit improves the previous one by also deferring the nullify of
-the ax->tty pointer. Otherwise, a NULL pointer dereference bug occurs.
-Partial of the stack trace is shown below.
+To avoid this, get the CAN clock frequency from the device. Various
+existing Kvaser Leaf products use different CAN clocks.
 
-BUG: kernel NULL pointer dereference, address: 0000000000000538
-RIP: 0010:ax_xmit+0x1f9/0x400
-...
-Call Trace:
- dev_hard_start_xmit+0xec/0x320
- sch_direct_xmit+0xea/0x240
- __qdisc_run+0x166/0x5c0
- __dev_queue_xmit+0x2c7/0xaf0
- ax25_std_establish_data_link+0x59/0x60
- ax25_connect+0x3a0/0x500
- ? security_socket_connect+0x2b/0x40
- __sys_connect+0x96/0xc0
- ? __hrtimer_init+0xc0/0xc0
- ? common_nsleep+0x2e/0x50
- ? switch_fpu_return+0x139/0x1a0
- __x64_sys_connect+0x11/0x20
- do_syscall_64+0x33/0x40
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-The crash point is shown as below
-
-static void ax_encaps(...) {
-  ...
-  set_bit(TTY_DO_WRITE_WAKEUP, &ax->tty->flags); // ax->tty = NULL!
-  ...
-}
-
-By placing the nullify action after the unregister_netdev, the ax->tty
-pointer won't be assigned as NULL net_device framework layer is well
-synchronized.
-
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 080f40a6fa28 ("can: kvaser_usb: Add support for Kvaser CAN/USB devices")
+Link: https://lore.kernel.org/all/20211208152122.250852-2-extja@kvaser.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/hamradio/mkiss.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/can/usb/kvaser_usb.c |   41 ++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 36 insertions(+), 5 deletions(-)
 
---- a/drivers/net/hamradio/mkiss.c
-+++ b/drivers/net/hamradio/mkiss.c
-@@ -803,14 +803,14 @@ static void mkiss_close(struct tty_struc
- 	 */
- 	netif_stop_queue(ax->dev);
+--- a/drivers/net/can/usb/kvaser_usb.c
++++ b/drivers/net/can/usb/kvaser_usb.c
+@@ -31,7 +31,10 @@
+ #define USB_SEND_TIMEOUT		1000 /* msecs */
+ #define USB_RECV_TIMEOUT		1000 /* msecs */
+ #define RX_BUFFER_SIZE			3072
+-#define CAN_USB_CLOCK			8000000
++#define KVASER_USB_CAN_CLOCK_8MHZ	8000000
++#define KVASER_USB_CAN_CLOCK_16MHZ	16000000
++#define KVASER_USB_CAN_CLOCK_24MHZ	24000000
++#define KVASER_USB_CAN_CLOCK_32MHZ	32000000
+ #define MAX_NET_DEVICES			3
+ #define MAX_USBCAN_NET_DEVICES		2
  
--	ax->tty = NULL;
--
- 	unregister_netdev(ax->dev);
+@@ -142,6 +145,12 @@ static inline bool kvaser_is_usbcan(cons
+ #define CMD_LEAF_USB_THROTTLE		77
+ #define CMD_LEAF_LOG_MESSAGE		106
  
- 	/* Free all AX25 frame buffers after unreg. */
- 	kfree(ax->rbuff);
- 	kfree(ax->xbuff);
- 
-+	ax->tty = NULL;
++/* Leaf frequency options */
++#define KVASER_USB_LEAF_SWOPTION_FREQ_MASK 0x60
++#define KVASER_USB_LEAF_SWOPTION_FREQ_16_MHZ_CLK 0
++#define KVASER_USB_LEAF_SWOPTION_FREQ_32_MHZ_CLK BIT(5)
++#define KVASER_USB_LEAF_SWOPTION_FREQ_24_MHZ_CLK BIT(6)
 +
- 	free_netdev(ax->dev);
+ /* error factors */
+ #define M16C_EF_ACKE			BIT(0)
+ #define M16C_EF_CRCE			BIT(1)
+@@ -472,6 +481,8 @@ struct kvaser_usb {
+ 	bool rxinitdone;
+ 	void *rxbuf[MAX_RX_URBS];
+ 	dma_addr_t rxbuf_dma[MAX_RX_URBS];
++
++	struct can_clock clock;
+ };
+ 
+ struct kvaser_usb_net_priv {
+@@ -652,6 +663,27 @@ static int kvaser_usb_send_simple_msg(co
+ 	return rc;
  }
  
++static void kvaser_usb_get_software_info_leaf(struct kvaser_usb *dev,
++					      const struct leaf_msg_softinfo *softinfo)
++{
++	u32 sw_options = le32_to_cpu(softinfo->sw_options);
++
++	dev->fw_version = le32_to_cpu(softinfo->fw_version);
++	dev->max_tx_urbs = le16_to_cpu(softinfo->max_outstanding_tx);
++
++	switch (sw_options & KVASER_USB_LEAF_SWOPTION_FREQ_MASK) {
++	case KVASER_USB_LEAF_SWOPTION_FREQ_16_MHZ_CLK:
++		dev->clock.freq = KVASER_USB_CAN_CLOCK_16MHZ;
++		break;
++	case KVASER_USB_LEAF_SWOPTION_FREQ_24_MHZ_CLK:
++		dev->clock.freq = KVASER_USB_CAN_CLOCK_24MHZ;
++		break;
++	case KVASER_USB_LEAF_SWOPTION_FREQ_32_MHZ_CLK:
++		dev->clock.freq = KVASER_USB_CAN_CLOCK_32MHZ;
++		break;
++	}
++}
++
+ static int kvaser_usb_get_software_info(struct kvaser_usb *dev)
+ {
+ 	struct kvaser_msg msg;
+@@ -667,14 +699,13 @@ static int kvaser_usb_get_software_info(
+ 
+ 	switch (dev->family) {
+ 	case KVASER_LEAF:
+-		dev->fw_version = le32_to_cpu(msg.u.leaf.softinfo.fw_version);
+-		dev->max_tx_urbs =
+-			le16_to_cpu(msg.u.leaf.softinfo.max_outstanding_tx);
++		kvaser_usb_get_software_info_leaf(dev, &msg.u.leaf.softinfo);
+ 		break;
+ 	case KVASER_USBCAN:
+ 		dev->fw_version = le32_to_cpu(msg.u.usbcan.softinfo.fw_version);
+ 		dev->max_tx_urbs =
+ 			le16_to_cpu(msg.u.usbcan.softinfo.max_outstanding_tx);
++		dev->clock.freq = KVASER_USB_CAN_CLOCK_8MHZ;
+ 		break;
+ 	}
+ 
+@@ -1926,7 +1957,7 @@ static int kvaser_usb_init_one(struct us
+ 	kvaser_usb_reset_tx_urb_contexts(priv);
+ 
+ 	priv->can.state = CAN_STATE_STOPPED;
+-	priv->can.clock.freq = CAN_USB_CLOCK;
++	priv->can.clock.freq = dev->clock.freq;
+ 	priv->can.bittiming_const = &kvaser_usb_bittiming_const;
+ 	priv->can.do_set_bittiming = kvaser_usb_set_bittiming;
+ 	priv->can.do_set_mode = kvaser_usb_set_mode;
 
 

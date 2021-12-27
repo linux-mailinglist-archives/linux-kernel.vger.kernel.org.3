@@ -2,73 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C81CA47FD4C
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 14:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B30D47FD6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 14:32:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233890AbhL0NUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 08:20:49 -0500
-Received: from mx.socionext.com ([202.248.49.38]:32176 "EHLO mx.socionext.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230090AbhL0NUs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 08:20:48 -0500
-Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 27 Dec 2021 22:20:48 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id F097420584CE;
-        Mon, 27 Dec 2021 22:20:47 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Mon, 27 Dec 2021 22:20:47 +0900
-Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id BFA12B568B;
-        Mon, 27 Dec 2021 22:20:47 +0900 (JST)
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH] genirq/msi: Fix a duplicate issue for interrupt sysfs
-Date:   Mon, 27 Dec 2021 22:20:43 +0900
-Message-Id: <1640611243-29116-1-git-send-email-hayashi.kunihiko@socionext.com>
-X-Mailer: git-send-email 2.7.4
+        id S236770AbhL0Nce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 08:32:34 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:35196 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234252AbhL0Nca (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 08:32:30 -0500
+X-UUID: f8a1a67419d24370806767d290e5d387-20211227
+X-UUID: f8a1a67419d24370806767d290e5d387-20211227
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <qizhong.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 858993418; Mon, 27 Dec 2021 21:32:26 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 27 Dec 2021 21:32:25 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 27 Dec
+ 2021 21:32:24 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 27 Dec 2021 21:32:23 +0800
+From:   qizhong cheng <qizhong.cheng@mediatek.com>
+To:     Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+CC:     <linux-pci@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <qizhong.cheng@mediatek.com>, <chuanjia.liu@mediatek.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+Subject: [PATCH v3] PCI: mediatek: Assert PERST# for 100ms for power and clock to stabilize
+Date:   Mon, 27 Dec 2021 21:31:10 +0800
+Message-ID: <20211227133110.14500-1-qizhong.cheng@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function msi_sysfs_populate_desc() has a for-loop with the number of
-interrupts, and it is called inside a for-loop with the same interrupts
-in __msi_domain_alloc_irqs().
+Described in PCIe CEM specification sections 2.2 (PERST# Signal) and
+2.2.1 (Initial Power-Up (G3 to S0)). The deassertion of PERST# should
+be delayed 100ms (TPVPERL) for the power and clock to become stable.
 
-So, msi_sysfs_populate_desc() is called multiple times for the same
-descriptor, and a duplicate error for sysfs will occur. It should be
-called out of the for-loop.
-
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Fixes: bf5e758f02fc ("genirq/msi: Simplify sysfs handling")
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Signed-off-by: qizhong cheng <qizhong.cheng@mediatek.com>
+Acked-by: Pali Rohár <pali@kernel.org>
 ---
- kernel/irq/msi.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
-index 173bc04f9fe5..2f1c4ff8c683 100644
---- a/kernel/irq/msi.c
-+++ b/kernel/irq/msi.c
-@@ -887,12 +887,12 @@ int __msi_domain_alloc_irqs(struct irq_domain *domain, struct device *dev,
- 			ret = msi_init_virq(domain, virq + i, vflags);
- 			if (ret)
- 				return ret;
-+		}
+v3:
+ - Change subject.
+
+v2:
+ - Typo fix.
+ - Rewrap into one paragraph.
+
+ drivers/pci/controller/pcie-mediatek.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
+index 2f3f974977a3..b18935e8da89 100644
+--- a/drivers/pci/controller/pcie-mediatek.c
++++ b/drivers/pci/controller/pcie-mediatek.c
+@@ -702,6 +702,13 @@ static int mtk_pcie_startup_port_v2(struct mtk_pcie_port *port)
+ 	 */
+ 	writel(PCIE_LINKDOWN_RST_EN, port->base + PCIE_RST_CTRL);
  
--			if (info->flags & MSI_FLAG_DEV_SYSFS) {
--				ret = msi_sysfs_populate_desc(dev, desc);
--				if (ret)
--					return ret;
--			}
-+		if (info->flags & MSI_FLAG_DEV_SYSFS) {
-+			ret = msi_sysfs_populate_desc(dev, desc);
-+			if (ret)
-+				return ret;
- 		}
- 		allocated++;
- 	}
++	/*
++	 * Described in PCIe CEM specification sections 2.2 (PERST# Signal) and
++	 * 2.2.1 (Initial Power-Up (G3 to S0)). The deassertion of PERST# should
++	 * be delayed 100ms (TPVPERL) for the power and clock to become stable.
++	 */
++	msleep(100);
++
+ 	/* De-assert PHY, PE, PIPE, MAC and configuration reset	*/
+ 	val = readl(port->base + PCIE_RST_CTRL);
+ 	val |= PCIE_PHY_RSTB | PCIE_PERSTB | PCIE_PIPE_SRSTB |
 -- 
-2.7.4
+2.25.1
 

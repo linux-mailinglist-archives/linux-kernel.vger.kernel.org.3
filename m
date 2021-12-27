@@ -2,92 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2778647FC13
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 12:02:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941DD47FC15
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Dec 2021 12:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236270AbhL0LCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 06:02:20 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36338 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233404AbhL0LCT (ORCPT
+        id S236285AbhL0LE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 06:04:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233404AbhL0LE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 06:02:19 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16F69B80E71;
-        Mon, 27 Dec 2021 11:02:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6293EC36AEA;
-        Mon, 27 Dec 2021 11:02:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640602936;
-        bh=WnYxvRQc11JuND77MpzMHcuBOMDaLj0Ue1gg2X1vU5E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h3v34jpnQKG5Coyk+iTcemjQgAmMCHECdQaYFuqHA7SI95QSU8jFEK7Ace6nkcBWt
-         Yqp80VHOHgzBYif2De4wl1XxtzD1FMzoRRdqwsF40i/9hCFibMn1bcN3EJLtPG5GXv
-         rZPwWfuOQITIMf0gWWfD7nZogexjWS47gj1hY3gI=
-Date:   Mon, 27 Dec 2021 12:02:14 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>, kernel@pengutronix.de,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 04/23] counter: Provide a wrapper to access device
- private data
-Message-ID: <YcmdNr8Y1jcMCwQQ@kroah.com>
-References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
- <20211227094526.698714-5-u.kleine-koenig@pengutronix.de>
+        Mon, 27 Dec 2021 06:04:58 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5936C06173E
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 03:04:57 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id o6so60349715edc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 03:04:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WeVLsHIeyiCkAHjd50OJHxjaaYn5T1qPGOcuMQi9uAs=;
+        b=CK/JN3fhTDNY1Srt3qYHUD9q5zbJw5JAaWWOCnQVvCX838xLP6ZHjgv9SZs/SAW4z0
+         ohhG6f99oyzbAgzNqIGSVY22q39V95CRpcTarjxQu1aLXuVN9v/VZqSMUi8hETGFGo7y
+         mdpj0hPImAtroBYbrb5lmqdWEzEyn8/evEjseKkK6+x7dXer1ABpsalzX3llc5TWZWMk
+         /u0GtMNo1sCdHhtVgPW99Rbr4swrnnKZ8+BwlVYDFyESJP43ioEpouwMLO/Skfh8tlSf
+         K48U03608rhMnpEBsS+J4d+VbwQPqlxa9XFM3yiRk78H82gKEjF1hgML9sBggNFNsH5T
+         VElQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WeVLsHIeyiCkAHjd50OJHxjaaYn5T1qPGOcuMQi9uAs=;
+        b=m0VSwW1QJxMtclNJO8qOcR49C0OER0x8qAPHawF9g6lzESdn3StMV6wq6fDG4DSXf0
+         D9lhaJoejN6I9V1coN4NBDePuwmDz/s3jr/MgbXjS4EjgfVX/V8X9vVo7U4Iffq744cT
+         zTrLAVdYdfc5k9tRzj/WWLcR1dNGtZYkJFjK6jUudpfPngdigdODRbNrol7cJxdv6cuD
+         /gNgI07Na2n8QIt/Ji3CAQ3K//mSJiOlr2l6y1vzgrcAFsrZ4Caib9HL67rXkCBX131e
+         mdxLPlxWFrOWThL+0KwsV2jCluY8MlVp9CW5r1bWRjv98wwOTBidE4+JfnXXJ2K45+nT
+         iAEQ==
+X-Gm-Message-State: AOAM532tgKy6ywhLFSWN3cRMdrHsVEEJQ4rrmzP5PgldhCJUv4yb/Yg0
+        HZMkyrK7+NecA0ryI0mUuhA+trwu2zkAlbdhHWh7dggseqc=
+X-Google-Smtp-Source: ABdhPJxBYl2uYY0dezYVqt0J/J7L+OL1U6OFJ0fy8PBhde+pA1utUKztjXwn3pS5UUDTMp15KOpMgNajpRLQ9YuU8mU=
+X-Received: by 2002:a17:906:a3c6:: with SMTP id ca6mr13282432ejb.639.1640603095574;
+ Mon, 27 Dec 2021 03:04:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211227094526.698714-5-u.kleine-koenig@pengutronix.de>
+References: <20211215234946.6494-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAHp75VfGwQ7G2b39GO4tN=sxQoiahO2uudy25ALxEkrNcP9eVw@mail.gmail.com>
+ <CA+V-a8t1myOt0rhJExem_T2tJUM3PLL9KuXn0=_LtucJPHLkbA@mail.gmail.com>
+ <CAHp75VdXKVAZMKqC=0RbkAKKxFsdcxBc0M3N6OQMivHj-w+DHw@mail.gmail.com>
+ <CA+V-a8vbsy94MvRpqWQQuRqfEGiX_ZZTTt+dr0r6qnnJAPaEmA@mail.gmail.com>
+ <CAHp75VfvOOzwcTBjYg3OzbbdhcpWfaPWZ0h7HZRFOPEQAQMT=A@mail.gmail.com>
+ <CAMuHMdWSAOEAvqvr1UqKKmVDMzY3Tb8Y_4XowFPBN6L3TESqYA@mail.gmail.com>
+ <CAHp75Vc2puj45n_wMY50OnDemNmFFu-yepCC9_L+DWp1HAzxPw@mail.gmail.com>
+ <CAMuHMdUDts8LWYrftYp0VSxDX8kaP1a9N5YGZDNCAuAsr84EAw@mail.gmail.com>
+ <CAHp75VeitNg_fU22UkNGSYpAhtQaba1Scd3CPO0QmRpjkqmSMA@mail.gmail.com>
+ <CAMuHMdXpynBNC994vTo8tUc4bcD3HVzb3voNPJS1L8A0MRnyHQ@mail.gmail.com>
+ <CAHp75Vc-QKy=po6WT7Cbx43dDmwaRcdhEfgzMSmMSn3kNQiG7g@mail.gmail.com> <CAMuHMdUMDLf+HaH8OYCCvbBwiX28wy8VW-ROWWJQBzE1orCEHQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdUMDLf+HaH8OYCCvbBwiX28wy8VW-ROWWJQBzE1orCEHQ@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 27 Dec 2021 13:04:19 +0200
+Message-ID: <CAHp75Vc+FP8Rahieu+oTZwTGPm=h1Sws89zG5z8C-C69T6=XZQ@mail.gmail.com>
+Subject: Re: [PATCH] irqchip/renesas-irqc: Use platform_get_irq_optional() to
+ get the interrupt
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 10:45:07AM +0100, Uwe Kleine-König wrote:
-> For now this just wraps accessing struct counter_device::priv. However
-> this is about to change and converting drivers to this helper
-> individually makes fixing device lifetime issues result in easier to
-> review patches.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/counter/counter-core.c | 12 ++++++++++++
->  include/linux/counter.h        |  2 ++
->  2 files changed, 14 insertions(+)
-> 
-> diff --git a/drivers/counter/counter-core.c b/drivers/counter/counter-core.c
-> index f053a43c6c04..00c41f28c101 100644
-> --- a/drivers/counter/counter-core.c
-> +++ b/drivers/counter/counter-core.c
-> @@ -45,6 +45,18 @@ static struct bus_type counter_bus_type = {
->  
->  static dev_t counter_devt;
->  
-> +/**
-> + * counter_priv - access counter device private data
-> + * @counter: counter device
-> + *
-> + * Get the counter device private data
-> + */
-> +void *counter_priv(const struct counter_device *const counter)
-> +{
-> +	return counter->priv;
-> +}
-> +EXPORT_SYMBOL_GPL(counter_priv);
+On Mon, Dec 27, 2021 at 12:58 PM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+> On Mon, Dec 27, 2021 at 11:49 AM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> > On Mon, Dec 27, 2021 at 12:24 PM Geert Uytterhoeven
+> > <geert@linux-m68k.org> wrote:
+> > > On Mon, Dec 27, 2021 at 11:10 AM Andy Shevchenko
+> > > <andy.shevchenko@gmail.com> wrote:
+> > > > On Mon, Dec 27, 2021 at 12:02 PM Geert Uytterhoeven
+> > > > <geert@linux-m68k.org> wrote:
+> > > > > On Mon, Dec 27, 2021 at 10:57 AM Andy Shevchenko
+> > > > > <andy.shevchenko@gmail.com> wrote:
+> > > > > > On Mon, Dec 27, 2021 at 11:45 AM Geert Uytterhoeven
+> > > > > > <geert@linux-m68k.org> wrote:
+> > > > > > > On Sun, Dec 26, 2021 at 9:49 AM Andy Shevchenko
+> > > > > > > <andy.shevchenko@gmail.com> wrote:
+> > > > > > > > On Sun, Dec 26, 2021 at 1:59 AM Lad, Prabhakar
+> > > > > > > > <prabhakar.csengg@gmail.com> wrote:
+> > > > > > > > > When will this patch be merged for the new api, so that I can base my
+> > > > > > > > > patches on top of it to avoid more changes?
+> > > > > > > >
+> > > > > > > > You can simply imply that, I dunno when it gets merged (from my point
+> > > > > > > > of view the users should be fixed first, and since you are adding
+> > > > > > > > users, the burden is increasing).
+> > > > > > >
+> > > > > > > Not only users (drivers), but also providers (architecture-specific code).
+> > > > > > > IRQ zero is still valid on some architectures, e.g. on SH[1].
+> > > > > >
+> > > > > > Are we talking about vIRQ?
+> > > > > > And users are fine with a big warning?
+> > > > >
+> > > > > The warning is only seen when a driver uses platorm_get_irq{,_optional}().
+> > > > > There are several other ways to obtain interrupts, avoiding the
+> > > > > big warning.
+> > > >
+> > > > Forgot to comment on this, then why is it a problem to allow
+> > > > platfiorm_get_irq_optional() use 0 for no IRQ?
+> > > > So, it seems you gave me a good justification for my way :-)
+> > >
+> > > In se that is not a problem, assumed by now everybody should have
+> > > seen the warning, right?  Unfortunately that assumption is probably
+> > > not true, as people may not upgrade their kernel, cfr. my SH Ethernet
+> > > example.
+> > >
+> > > Apart from that, any new conversion to platfiorm_get_irq_optional()
+> > > might cause a regression on an obscure platform still using IRQ0.
+> >
+> > What architectures?
+> > Are there any examples besides ethernet drivers on SH?
+>
+> Sorry, I don't know.
+>
+> > Let's start  a list:
+> > SH: only few cases related to smc911 Ethernet driver
+>
+> Time to get rid of SH ;-)
+>
+> > x86: Legacy APIC 1:1 mapping, where 0 is used by timer which doesn't
+> > involve platform API
+>
+> Time to get rid of x86 ;-)
 
-Shouldn't this be usin gdev_get_drvdata() and using the private data
-pointer that is already on the struct device structure itself?  The void
-*priv; should be dropped from struct counter_device entirely.
+Why (in both cases)? I have mentioned that x86 doesn't use vIRQ0 via
+platform APIs, SH can be fixed, if you are interested in fixing, of
+course, by switching to IRQ domains.
 
-Oh ick, I just now looked at 'struct counter_device', there are other
-reference counting issues in there (hint, struct cdev has a reference
-count...)  But that's independent of this patch series...
+> > ...???...
+> >
+> > And what about "getting IRQ without big warning"? What did you have in
+> > mind when you put it?
+>
+> If the driver uses platform_get_resource(..., IORESOURCE_IRQ, ...) to
+> get the IRQ number, the warning in platform_get_irq_optional()
+> doesn't trigger, as the latter is not called?
 
-thanks,
+So, again, let's put the comment to those drivers then and avoid
+obfuscation of the rest of the kernel, would it be feasible?
 
-greg k-h
+-- 
+With Best Regards,
+Andy Shevchenko

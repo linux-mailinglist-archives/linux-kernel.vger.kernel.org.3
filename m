@@ -2,167 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C9E480CAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 19:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4248A480CB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 20:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237122AbhL1S4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 13:56:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59502 "EHLO
+        id S237127AbhL1TDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 14:03:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232575AbhL1S4K (ORCPT
+        with ESMTP id S232575AbhL1TD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 13:56:10 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87608C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 10:56:09 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id u22so32034433lju.7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 10:56:09 -0800 (PST)
+        Tue, 28 Dec 2021 14:03:27 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F83C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 11:03:27 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id i11so19678012ljm.13
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 11:03:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OxdfxLuiSeWnXlU6gfhg71wxiE+vMrvatpHVdz5QN7g=;
-        b=Ras2/40KS2Q64dMJMWOqT02xLehnyD9+zE9s4u71NAFP7NawCp4DUYULihV9fus3RP
-         ALyQKuaOOAH0lWSb453txIGSfhV+pIOaoLS9cxI/lfw3q59NXIp5yCSK+NIhCS9HsqNy
-         FzweukWxgmcCnSqkf28bmkySDucRpjSaGZubd87qkka5xdiBdZ4YaSX6NpRFasCAt3pc
-         DLcfmQIxWW3ff+h1y5KQhbPc6dI1454ukl6B5pQVXRxp8Eq6jqGzUZdJP42V6+ujDHFH
-         KXznw2J0FudkddglGUcHE0hoXGEmbM82vK1bp5a8ekWIc5bdUiaBFhoHOgwfQaFRG0pr
-         ApBQ==
+        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=kGZrv9UpYltVRc8QB5252cW36uUUIgY+7pGeLvcC0zA=;
+        b=vJNftmK7/XaU63ZQWUX5nrqi2BpDNhP6J89YulwgvPDzjAOa7tsKDbE9VH8T1oBpDA
+         WUgV3O9yZl+nQEFUETy7yHehAN4YLapFo7xqC1lOmd5Lg2ekR34WtH5nUNd3EoLyA0iN
+         AE3x2v6fQrxoNvqtOi22OBqAYsI3BwtAU72FuvCypnFKvpwUjsa2CakN3BnwHwnGC6Oy
+         zzOEw4Fxu3hdmmTW6qSj2VAlTk6Mz6lrv4FZYibkBmi7BLYS48UBFVxd6g0PNx9THxwc
+         TuZBhDLscyq/lma1r/LP80aN4WtiI0YBflBdcPeHEFkM/28pyoMJqUbE8sjb7FCoqh3B
+         nPGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OxdfxLuiSeWnXlU6gfhg71wxiE+vMrvatpHVdz5QN7g=;
-        b=frFQSS9raKLf5QVLTlW24wz89mMrxNJHJ8hp70J6h4FZdlKxznZjbgcAtriMpPKQlk
-         DOtkc3R+cu1PFk0SZvJzrv3z9bHGGPof75qLlBYVFnwaneiIG/ev7cuKagjKS7+Owrqm
-         ZDokDQUwyNFg7Jaz+yhEaY4nHiwyCDGyCNP+CaCjCTp0uGvnO52lJMFN1ujM7OH/t4bZ
-         W6lgI/rwGVQ0sSgyFGY1ZAUHEk/Dcjj9oqQ195n95KivtpVkHtJ0Ckqe3SQ7DXUznVQu
-         l+m01Tza5bFd3SaDh9+MiP8O22LRXwpLqjJLdLXLpPXDfFOG+eV5vkYQ2ehK0G3PaAUy
-         qWLA==
-X-Gm-Message-State: AOAM530bD3Uhw5C85a1Rn8cFjlc/4glAYn1W9/4TdTB3EqfJoF+z3Y5R
-        ssN3zPDCxhebroh37QeKKL68lfR7cRal0VO82efZ7A==
-X-Google-Smtp-Source: ABdhPJxSHEH7S9BL9eRVIvEVwtJoh0q7t8Ea+aoQCnO5P1krfwZ0pAqTW/eFTemIqU9uH8bmc+kunDU8qLoyC8UA3jk=
-X-Received: by 2002:a2e:141c:: with SMTP id u28mr19256751ljd.338.1640717767195;
- Tue, 28 Dec 2021 10:56:07 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=kGZrv9UpYltVRc8QB5252cW36uUUIgY+7pGeLvcC0zA=;
+        b=smy4x29jKPN0DQifV6oLGA3VUw0HM6DouxXS8SKShjKo8dqiVmoaXVF8BdR/z55wVR
+         8aPigPxHRFRs14LI0e3u2RFNcIDdHsAuwFuy0SR1aWQsRQkSVDon3Tz5oOtfX34VvWjJ
+         MIN7nEPfH5fo7QsulQp2vh351yF+yfPomrf19JWCVcF7AZOyHdalVUw0Gxfwtg5yo34I
+         tC/wzdB6kTWKSEnAnKEcjDoYYcCDWgWxcTyEkybf3mg2moVFQ5z23VOgTxzfllS09LiL
+         BZxxVJjp1L7tY6OyjssAeh9KfunaLbKGM+0T69gEwnCD8X7zo1078yWeglDyCypu+LpM
+         iWZg==
+X-Gm-Message-State: AOAM5316HIu+Qzf4kMtmOCudoqfXIqQA7IS6tIkmelyA41I06vmoOYfX
+        Da9mL+up82sHDx3lZOR1I66S2DmWTKr2b+Ca
+X-Google-Smtp-Source: ABdhPJyploqg3aoSaHG23ApAopJcmJj5mxJB8lJgwe4SS3UI0gZp73YPAuu/sWLbhcsNMmfoZjuF+A==
+X-Received: by 2002:a2e:93c6:: with SMTP id p6mr19231103ljh.476.1640718204781;
+        Tue, 28 Dec 2021 11:03:24 -0800 (PST)
+Received: from [192.168.112.17] (nikaet.starlink.ru. [94.141.168.29])
+        by smtp.gmail.com with ESMTPSA id i4sm1324109lfu.51.2021.12.28.11.03.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Dec 2021 11:03:24 -0800 (PST)
+Subject: Re: [PATCH/RFC] drivers/irqchip: add irq-inverter
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211228165642.2514766-1-nikita.yoush@cogentembedded.com>
+ <87h7aszj70.wl-maz@kernel.org>
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Message-ID: <b5e0ff57-885a-051b-4c4c-a02b005fa1f1@cogentembedded.com>
+Date:   Tue, 28 Dec 2021 22:03:23 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211223162848.3243702-1-trix@redhat.com> <CAKwvOd=dLjMAim_FRNyWegzEjy0_1vF2xVW1hNPQ55=32qO4Wg@mail.gmail.com>
- <b3ef8d23-7c77-7c83-0bc8-2054b7ac1d8b@redhat.com>
-In-Reply-To: <b3ef8d23-7c77-7c83-0bc8-2054b7ac1d8b@redhat.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 28 Dec 2021 10:55:55 -0800
-Message-ID: <CAKwvOdkUQARWd7qG_hkUJYuVcvObMYTif_HDSEmJ5mSXP6y1=A@mail.gmail.com>
-Subject: Re: [PATCH] mac80211: initialize variable have_higher_than_11mbit
-To:     Tom Rix <trix@redhat.com>
-Cc:     johannes@sipsolutions.net, davem@davemloft.net, kuba@kernel.org,
-        nathan@kernel.org, linville@tuxdriver.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <87h7aszj70.wl-maz@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 24, 2021 at 6:01 AM Tom Rix <trix@redhat.com> wrote:
->
->
-> On 12/23/21 12:30 PM, Nick Desaulniers wrote:
-> > On Thu, Dec 23, 2021 at 8:29 AM <trix@redhat.com> wrote:
-> >> From: Tom Rix <trix@redhat.com>
-> >>
-> >> Clang static analysis reports this warnings
-> >>
-> >> mlme.c:5332:7: warning: Branch condition evaluates to a
-> >>    garbage value
-> >>      have_higher_than_11mbit)
-> >>      ^~~~~~~~~~~~~~~~~~~~~~~
-> >>
-> >> have_higher_than_11mbit is only set to true some of the time in
-> >> ieee80211_get_rates() but is checked all of the time.  So
-> >> have_higher_than_11mbit needs to be initialized to false.
-> > LGTM. There's only one caller of ieee80211_get_rates() today; if there
-> > were others, they could make a similar mistake in the future. An
-> > alternate approach: ieee80211_get_rates() could unconditionally write
-> > false before the loop that could later write true. Then call sites
-> > don't need to worry about this conditional assignment. Perhaps that
-> > would be preferable? If not:
->
-> The have_higher_than_11mbit variable had previously be initialized to false.
->
-> The commit 5d6a1b069b7f moved the variable without initializing.
+Hi
 
-I'm not disagreeing with that.
+>> Interrupt trigger type is typically used to configure interrupt
+>> controller to properly interpret interrupt signal sent from a device.
+>>
+>> However, some devices have configureable interrupt outputs, and drivers
+>> tend to use interrupt trigger type also to configure device interrupt
+>> output.
+>>
+>> This works well when device interrupt output is connected directly to
+>> interrupt controller input. However, this is not always the case.
+>> Sometimes the interrupt signal gets inverted between the device
+>> producing it and the controller consuming it. Combined with both sides
+>> using the same interrupt trigger type to configure the signal, this
+>> results into non-working setup regardless of what interrupt trigger type
+>> is configured.
+> 
+> Regardless? Surely there is a canonical, working configuration.
 
-My point is that these sometimes uninitialized warnings you're
-finding+fixing with clang static analyzer are demonstrating a
-recurring pattern with code.
+It is working as long as either hardware delivers interrupt signal without inversion, or only one side 
+(producer or consumer) is configured while the other side stays constant.
 
-When _not_ using the static analyzer, -Wuninitialized and
--Wsometimes-uninitialized work in Clang by building a control flow
-graph, but they only analyze a function locally.
+It does not work when hardware inverts singnal and both producer and consumer are configured.
 
-For example, consider the following code:
-```
-_Bool is_thursday(void);
-void hello(int);
+>> Usage example, for Kingfisher extension board for Renesas Gen-3 Soc,
+>> that has WiFi interrupt delivered over inverting level-shifter:
+>>
+>> / {
+>> 	wlcore_interrupt: inverter {
+>> 		compatible = "linux,irq-inverter";
+>> 		interrupts-extended = <&gpio1 25 IRQ_TYPE_EDGE_RISING>;
+>> 		interrupt-controller;
+>> 		#interrupt-cells = <0>;
+>> 	};
+>> };
+>>
+>> &wlcore {
+>> 	interrupts-extended = <&wlcore_interrupt>;
+>> };
+> 
+> So you don't describe the trigger at the endpoint level, but at the
+> pseudo-interrupt controller level? /me feels mildly sick.
 
-void init (int* x) {
-  if (is_thursday())
-    *x = 1;
-}
+Could you please explain how this could be done?
 
-void foo (void) {
-  int x;
-  init(&x);
-  hello(x);
-}
-```
-(Clang+GCC today will warn on the above; x is considered to "escape"
-the scope of foo as init could write the address of x to a global.
-Instead clang's static analyzer will take the additional time to
-analyze the callee.  But here's a spooky question: what happens when
-init is in another translation unit? IIRC, the static analyzer doesn't
-do cross TU analysis; I could be wrong though, I haven't run it in a
-while.)
+Regardless of what is configured at endpoint side, interrupt controller driver will use that to set up 
+interrupt controller, and wl18xxx driver (in the case) will use that to configure wl18xx. That results 
+into SAME settings at producer and consumer sides, and hardware requires OPPOSITE sittings at producer 
+and consumer sides.
 
-My point is that you're sending patches initializing x, when I think
-it might be nicer to instead have functions like init always write a
-value (unconditionally, rather than conditionally).  That way other
-callers of init don't have to worry about sometimes initialized
-variables.
+It is not a problem in interrupt controller driver - that driver does it's job correctly, setting up the 
+interrupt type that is requested.
 
->
-> Tom
->
-> >
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> >
-> >> Fixes: 5d6a1b069b7f ("mac80211: set basic rates earlier")
-> >> Signed-off-by: Tom Rix <trix@redhat.com>
-> >> ---
-> >>   net/mac80211/mlme.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/net/mac80211/mlme.c b/net/mac80211/mlme.c
-> >> index 51f55c4ee3c6e..766cbbc9c3a72 100644
-> >> --- a/net/mac80211/mlme.c
-> >> +++ b/net/mac80211/mlme.c
-> >> @@ -5279,7 +5279,7 @@ static int ieee80211_prep_connection(struct ieee80211_sub_if_data *sdata,
-> >>           */
-> >>          if (new_sta) {
-> >>                  u32 rates = 0, basic_rates = 0;
-> >> -               bool have_higher_than_11mbit;
-> >> +               bool have_higher_than_11mbit = false;
-> >>                  int min_rate = INT_MAX, min_rate_index = -1;
-> >>                  const struct cfg80211_bss_ies *ies;
-> >>                  int shift = ieee80211_vif_get_shift(&sdata->vif);
-> >> --
-> >> 2.26.3
-> >>
-> >
->
+It is likely not a problem in interrupt source (i.e. wl18xx) driver - that driver tries to set up it's 
+irq in the way that will work with any interrupt controller. Perhaps it can be possible to update wl18xx 
+driver to allow fixed setup of interrupt polarity, but that looks like addressing problem at wrong 
+location. It is not an issue with wl18xx. There are quite a few drivers in the tree that setup interrupt 
+polarity for their devices based on what irq_get_trigger_type() returns.
 
+The root cause if the issue is the board itself, that inverts the signal. Thus it looks correct to tie 
+the fix to the board. And a device node describing the interconnect looks like an elegant solution for this.
 
--- 
+> And by the way: "An interrupt specifier is one or more cells of data
+> (as specified by #interrupt-cells) ...". Ergo, #interrupt-cells cannot
+> be 0 when the interrupt controller can be an interrupt-parent.
+
+Code works with #interrupt-cells=0 correctly, as long as interrupts-extended property is used at 
+producer side.
+
+>> Then, wl18xx driver gets IRQ_TYPE_EDGE_FALLING return from
+>> irq_get_trigger_type() call, and configures interrupt output for that.
+>> Then the signal is delivered inverted to the GPIO module, and handled
+>> correctly, because GPIO is configured for IRQ_TYPE_EDGE_RISING.
+> 
+> So this is only to avoid writing the correct device tree?
+
+No. It is an attempt to describe a case that seems to be not currently describable.
+
+Vendor BSPs solve this by commenting out irq polarity setup in drivers. Thus obviously breaking use 
+cases other than these BSPs are for. I'm trying to suggest a portable alternative instead.
+
+>> - why not using hierarchial irq_domain?
+>> - because with hierarchial irq_domain, same interrupt gets the same virq
+>>    number at all levels, and trigger type is tied to virq number, so need
+>>    different virq numbers for reporting different trigger types
+> 
+> Why would you have different interrupt numbers? A given line has one
+> configuration at any given point, and only one.
+
+The goal is - make irq_get_trigger_type() returning different values for producer and consumer of the 
+interrupt. Because, that matches the hardware behavior.
+
+While irq_get_trigger_type() is used for that, returning different values for producer and consumer is 
+obviously impossible.
+
+Originally, I was considering to add a different API to use by interrupt producer instead of 
+irq_get_trigger_type(), to deliver information configured by additional flag in DT node for interrupt 
+producer. I.e.
+     interrupts = <25 IRQ_TYPE_EDGE_RISING | IRQ_INVERTED_ROUTE>
+
+But, inverted route is not a feature of interrupt, it is a feature of connection. I.e. nothing stops 
+from having several sources routed to the same interrupt, and having only one of these sources inverted. 
+This means, the IRQ_INVERTED_ROUTE flag is not interrupt's flag but connection's flag. And, a virtual 
+irqchip looked like a good abstraction to describe connection.
+
+The fact that this make the entire solution much smaller, was just a pleasant side-effect ;).
+
+>> - why using request_irq() for parent irq, instead of setting up chained
+>>    interrupt in irqchips?
+>> - because this way code is much simpler, and shall work for all cases
+>>    (such as normal/threaded parent irq, normal/threaded child irq,
+>>    different parent interrupt chips, etc)
+> 
+> And that's a NAK for deliberately violating the irqchip API.
+
+I've learned the idea of calling generic_handle_irq() from interrupt handler from 
+Documentation/driver-api/gpio/driver.rst
+
+It looked as an elegant solution to avoid complexity (such as: a chained interrupt is activated at 
+registration time, assuming there is a piece of hardware [chained controller] that will avoid interrupt 
+firing until a chained source fires...  but for pure-software chained interrupt, must keep parent 
+disabled up to when a handler for child is installed)
+
+But, I definitely don't insist on this approach.
+
+>> - why just not introducing separate API for consumer-side and
+>>    produced-side trigger type?
+>> - because with the chosen approach, no changes are needed to any cases
+>>    that don't suffer from inverted interrupt routing
+> 
+> The right way to do it is to use the existing API by exposing the
+> inverter (there are existing examples in the tree, using the
+> hierarchical model). It isn't rocket science, and not much more code
+> than the pile of hacks^W^W^Wcreative approach you have.
+
+Could you please point me to such examples? I could not find any.
+
 Thanks,
-~Nick Desaulniers
+
+Nikita

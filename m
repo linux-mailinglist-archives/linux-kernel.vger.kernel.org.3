@@ -2,148 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5517F4809B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 14:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22EF848098D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 14:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233842AbhL1N3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 08:29:50 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:29305 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233387AbhL1N3K (ORCPT
+        id S232627AbhL1N1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 08:27:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231948AbhL1N1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 08:29:10 -0500
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JNb2w0S3jzbjlD;
-        Tue, 28 Dec 2021 21:28:40 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 28 Dec 2021 21:29:08 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 28 Dec 2021 21:29:07 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        "John Donnelly" <John.p.donnelly@oracle.com>
-Subject: [PATCH v19 13/13] kdump: update Documentation about crashkernel
-Date:   Tue, 28 Dec 2021 21:26:12 +0800
-Message-ID: <20211228132612.1860-14-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
-In-Reply-To: <20211228132612.1860-1-thunder.leizhen@huawei.com>
-References: <20211228132612.1860-1-thunder.leizhen@huawei.com>
+        Tue, 28 Dec 2021 08:27:53 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53397C06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 05:27:53 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id v16so15965873pjn.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 05:27:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rajagiritech-edu-in.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=Gk9FWtuyNYuvWJUQpOrkgSFfOKOr2DlUz3fKN6vSpSA=;
+        b=i7TR62PGp8keW84EIsX4LeMipOhUxlwOcd0XO3h1LXaEVMbQlXEnmPFvZRqTFB1mxu
+         EHZi0qAr7Q3ce4RxicfOQhjbfpCWAPIgIyceEhvlcOKzYoK5F84CQ1X1OnRhfL8sMSyG
+         kTDw/aZvnCImyRAoVF0KcDp8HHajOqfxe02GA84xq+KgcpG2LxsPJ1NEEDW6yye7ay1K
+         vxJPOQvCM6x74rSTAszsnb3zf2yd8MPydJU/qCc02HXdNDJVaI6jHbYoY2F5ywmUWUaN
+         u+E1Xd4xwuGhiRohF0yN+TAcbb71sDsRFT9YTT6l2kjzl30hUthk9gIM3e0HYBDisLyQ
+         8QJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=Gk9FWtuyNYuvWJUQpOrkgSFfOKOr2DlUz3fKN6vSpSA=;
+        b=HuV2HNSpeonBmyruFP3Oj6vQGGXHEeFyYH186yoUj2mUTFSYtXj9DTTEzB6hfntVru
+         OiSV/qI7370OkbPO3jJhepKQ3gpeJAsKErf9WWhyeXcosYXNauhK7j0loVQWZk5v3eRJ
+         R1xSFvIJPfxxZ3SlgAzClz/hDYDbAxh8FG3wBdU9RdpjKmLlqdIHs00CMnl9nCw8ed/U
+         LsOL+nhzumCctwniD0mvM3BVuNl+AU67d0nZiMuNCVbcmKjAmBgZUs+OtCmBAqO4/k29
+         RVb+Z3PKGG+aZWTi5sbwFz+ljexAVSmPr+MFCu7wXQvZXo2Jo3ShH+ApjULinI2TyrWZ
+         +f4Q==
+X-Gm-Message-State: AOAM532LT1jqrmSJVKQ0CzzRx8O0aYdN8PIn+n9lGM2w3TeH1Lgzyvdm
+        InLhvjfqQSK7eU/oiWEnLz0ILg==
+X-Google-Smtp-Source: ABdhPJy6W4mQXQOtpEeo7p/zZpw+kr1zvE+7qasQ31P02hYukS2EN2q2RNA3CJ8xHkbkqJICI3YkxA==
+X-Received: by 2002:a17:902:e805:b0:149:95a:1983 with SMTP id u5-20020a170902e80500b00149095a1983mr21956401plg.9.1640698072887;
+        Tue, 28 Dec 2021 05:27:52 -0800 (PST)
+Received: from [192.168.1.32] ([122.164.22.119])
+        by smtp.gmail.com with ESMTPSA id m3sm16977120pgj.25.2021.12.28.05.27.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Dec 2021 05:27:52 -0800 (PST)
+Message-ID: <e48ec1bedf1e02e3b3230f47d8b8a3361cdad992.camel@rajagiritech.edu.in>
+Subject: Re: [PATCH 5.15 000/128] 5.15.12-rc1 review
+From:   Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+Date:   Tue, 28 Dec 2021 18:57:46 +0530
+In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
+References: <20211227151331.502501367@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.1-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen Zhou <chenzhou10@huawei.com>
+On Mon, 2021-12-27 at 16:29 +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.12 release.
+> There are 128 patches in this series, all will be posted as a
+> response
+> to this one.  If anyone has any issues with these being applied,
+> please
+> let me know.
+> 
+> Responses should be made by Wed, 29 Dec 2021 15:13:09 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+>         
+> https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.12-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-
+> stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
 
-For arm64, the behavior of crashkernel=X has been changed, which
-tries low allocation in DMA zone and fall back to high allocation
-if it fails.
+> greg k-h
 
-We can also use "crashkernel=X,high" to select a high region above
-DMA zone, which also tries to allocate at least 256M low memory in
-DMA zone automatically and "crashkernel=Y,low" can be used to allocate
-specified size low memory.
+hello ,
 
-So update the Documentation.
+Compiled and booted  5.15.12-rc1. No errors  from dmesg -l err
 
-Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- Documentation/admin-guide/kdump/kdump.rst       | 11 +++++++++--
- Documentation/admin-guide/kernel-parameters.txt | 11 +++++++++--
- 2 files changed, 18 insertions(+), 4 deletions(-)
+Tested by: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
 
-diff --git a/Documentation/admin-guide/kdump/kdump.rst b/Documentation/admin-guide/kdump/kdump.rst
-index cb30ca3df27c9b2..d4c287044be0c70 100644
---- a/Documentation/admin-guide/kdump/kdump.rst
-+++ b/Documentation/admin-guide/kdump/kdump.rst
-@@ -361,8 +361,15 @@ Boot into System Kernel
-    kernel will automatically locate the crash kernel image within the
-    first 512MB of RAM if X is not given.
- 
--   On arm64, use "crashkernel=Y[@X]".  Note that the start address of
--   the kernel, X if explicitly specified, must be aligned to 2MiB (0x200000).
-+   On arm64, use "crashkernel=X" to try low allocation in DMA zone and
-+   fall back to high allocation if it fails.
-+   We can also use "crashkernel=X,high" to select a high region above
-+   DMA zone, which also tries to allocate at least 256M low memory in
-+   DMA zone automatically.
-+   "crashkernel=Y,low" can be used to allocate specified size low memory.
-+   Use "crashkernel=Y@X" if you really have to reserve memory from
-+   specified start address X. Note that the start address of the kernel,
-+   X if explicitly specified, must be aligned to 2MiB (0x200000).
- 
- Load the Dump-capture Kernel
- ============================
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index fc34332c8d9a6df..5fafeea70f8f14d 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -783,6 +783,9 @@
- 			[KNL, X86-64] Select a region under 4G first, and
- 			fall back to reserve region above 4G when '@offset'
- 			hasn't been specified.
-+			[KNL, ARM64] Try low allocation in DMA zone and fall back
-+			to high allocation if it fails when '@offset' hasn't been
-+			specified.
- 			See Documentation/admin-guide/kdump/kdump.rst for further details.
- 
- 	crashkernel=range1:size1[,range2:size2,...][@offset]
-@@ -799,6 +802,8 @@
- 			Otherwise memory region will be allocated below 4G, if
- 			available.
- 			It will be ignored if crashkernel=X is specified.
-+			[KNL, ARM64] range in high memory.
-+			Allow kernel to allocate physical memory region from top.
- 	crashkernel=size[KMG],low
- 			[KNL, X86-64] range under 4G. When crashkernel=X,high
- 			is passed, kernel could allocate physical memory region
-@@ -807,13 +812,15 @@
- 			requires at least 64M+32K low memory, also enough extra
- 			low memory is needed to make sure DMA buffers for 32-bit
- 			devices won't run out. Kernel would try to allocate at
--			at least 256M below 4G automatically.
-+			least 256M below 4G automatically.
- 			This one let user to specify own low range under 4G
- 			for second kernel instead.
- 			0: to disable low allocation.
- 			It will be ignored when crashkernel=X,high is not used
- 			or memory reserved is below 4G.
--
-+			[KNL, ARM64] range in low memory.
-+			This one let user to specify a low range in DMA zone for
-+			crash dump kernel.
- 	cryptomgr.notests
- 			[KNL] Disable crypto self-tests
- 
 -- 
-2.25.1
-
+software engineer
+rajagiri school of engineering and technology - autonomous

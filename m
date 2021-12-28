@@ -2,73 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95DF6480766
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 09:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1539B480771
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 09:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235662AbhL1IbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 03:31:14 -0500
-Received: from mga17.intel.com ([192.55.52.151]:55153 "EHLO mga17.intel.com"
+        id S235693AbhL1Iew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 03:34:52 -0500
+Received: from mengyan1223.wang ([89.208.246.23]:39554 "EHLO mengyan1223.wang"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231670AbhL1IbM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 03:31:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640680272; x=1672216272;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8Ssk9PkU1lCaW+X3QfKqSrqg8kbgcpFLOWTB2Ryx3Rk=;
-  b=AVDJhQiDnQed0H13sM4PVb9nWVToFGd61SnWg4dYabaXTl2GXj46RUrc
-   KalqfmNWENyK/IKxdFsGW2Q9y7e0PSirpUmz/KAkITjNhMbZ7Qe8fFTmR
-   YE0Lily1uFuzkr61c/mPaPxu5pB5B1OopGF/NyywJxdk6IGg1ELhmV7E3
-   BgaCNpmTi1A7h5dOk0mmAWrnkCDYm28jgFnGFQx7MJMMP83psBjnMawXi
-   O5lqCyu/TxeT+zd2+cdEevgpvp+AogSXAqmx+UAEySNfGuGauqsgbHfL9
-   7cWsQiXZf3TCQ+v8WcfRS/dExc/st1CTheWKNt5UcKd5ATm+4qOtQMMPX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="222007271"
-X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
-   d="scan'208";a="222007271"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 00:31:12 -0800
-X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
-   d="scan'208";a="510113012"
-Received: from krausnex-mobl.ger.corp.intel.com (HELO [10.13.8.81]) ([10.13.8.81])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 00:31:06 -0800
-Message-ID: <b9fdc714-ce83-23fc-cde4-b53e02565ae3@linux.intel.com>
-Date:   Tue, 28 Dec 2021 10:31:03 +0200
+        id S231670AbhL1Iev (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 03:34:51 -0500
+Received: from [IPv6:240e:358:1148:6f00:dc73:854d:832e:4] (unknown [IPv6:240e:358:1148:6f00:dc73:854d:832e:4])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@mengyan1223.wang)
+        by mengyan1223.wang (Postfix) with ESMTPSA id AB33766215;
+        Tue, 28 Dec 2021 03:34:41 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mengyan1223.wang;
+        s=mail; t=1640680490;
+        bh=E5j+9tgFVq0+iQWcyDX7IvHFLuER19sgJwHZHiTOdJg=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=swfzuJLgiG9rKodcOUC7hK1Q9iGiLZByj83y7Dhnb+0+DfJExwXnD/wj4QfHuhdo7
+         ZsRum9/Q2KJQQzu7AJDbOOPIkp8r2gTZxoOAl7f5e8plvK7Cn4JskrjMOdpJtKbnLj
+         g5LqzaKlQQSMjbX4xtn8iR8S4Wnmd2wAIEd2HpNxCMa6PQNLYLMIsAapFYZFZ2KHE5
+         gixFHUCr+M5UaD/mmiyEj0ySHw7y4OGS2IMMM6SSGyt7quW1fF2EWbvpbw7J9vGSqp
+         jzLuY2LN1LS1Rb4Hy4xZV1DBO2yUH6iQ6D0exmU5/Av1G4Cdo5bjaN2TgT1/JVaGqk
+         Hf12T/vgAjttg==
+Message-ID: <587ab54d77af2fb4cdbe0530cdd5e550c3e968db.camel@mengyan1223.wang>
+Subject: Re: [PATCH V5 00/22] arch: Add basic LoongArch support
+From:   Xi Ruoyao <xry111@mengyan1223.wang>
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Date:   Tue, 28 Dec 2021 16:34:33 +0800
+In-Reply-To: <CAAhV-H40oWqkD+tQ3=XA8ijQGukkeG5O1M1JL3v5i402dFLK+Q@mail.gmail.com>
+References: <20211013063656.3084555-1-chenhuacai@loongson.cn>
+         <722477bcc461238f96c3b038b2e3379ee49efdac.camel@mengyan1223.wang>
+         <CAAhV-H40oWqkD+tQ3=XA8ijQGukkeG5O1M1JL3v5i402dFLK+Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [Intel-wired-lan] [PATCH net v3] igc: Fix TX timestamp support
- for non-MSI-X platforms
-Content-Language: en-US
-To:     James McLaughlin <james.mclaughlin@qsc.com>, davem@davemloft.net,
-        kuba@kernel.org, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com
-Cc:     netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-kernel@vger.kernel.org
-References: <20211217234933.740942-1-james.mclaughlin@qsc.com>
-From:   "Kraus, NechamaX" <nechamax.kraus@linux.intel.com>
-In-Reply-To: <20211217234933.740942-1-james.mclaughlin@qsc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/18/2021 01:49, James McLaughlin wrote:
-> Time synchronization was not properly enabled on non-MSI-X platforms.
-> 
-> Fixes: 2c344ae24501 ("igc: Add support for TX timestamping")
-> 
-> Signed-off-by: James McLaughlin <james.mclaughlin@qsc.com>
-> Reviewed-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
-> ---
-> 
-> Still same work email client issues.  Apologies, mis-titled it again.
-> v2->v3 fixed title
-> 
->   drivers/net/ethernet/intel/igc/igc_main.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-Tested-by: Nechama Kraus <nechamax.kraus@linux.intel.com>
+On Tue, 2021-12-21 at 15:53 +0800, Huacai Chen wrote:
 
+> On Mon, Dec 20, 2021 at 5:04 PM Xi Ruoyao <xry111@mengyan1223.wang>
+> wrote:
+> > 
+> > The snapshot panics on my system under high pressure (building and
+> > testing GCC).  The panic message is pasted, but it's kind of broken up
+> > likely because multiple CPU cores were outputing to the serial console
+> > simutaniously.
+> > 
+> > The config is attached.  I'm not sure the reason of the panic (bug in
+> > the patches or bug in mainline kernel?) Do you have some pointers to
+> > diagnostic and fix the issue?
+> > 
+> > [ 5391.004745] CPU 1 Unable to handle kernel paging request at virtual address 000000000040007e, era == 90000000003aa07c, ra == 90000000003aa84c
+
+/* snip */
+
+> We also found that the latest github kernel has some stable issues,
+> and we are investigating.
+
+I rebased the patches onto 438645193e59e91761ccb3fa55f6ce70b615ff93 and
+the problem *seems* gone.  Not sure if it's something fixed in the
+mainline or some more strange thing.
+-- 
+Xi Ruoyao <xry111@mengyan1223.wang>
+School of Aerospace Science and Technology, Xidian University

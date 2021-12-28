@@ -2,34 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9A2480A98
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 15:55:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B29480A99
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 15:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234836AbhL1Ozx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 09:55:53 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40094 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbhL1Ozw (ORCPT
+        id S234786AbhL1O4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 09:56:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34228 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229480AbhL1O43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 09:55:52 -0500
+        Tue, 28 Dec 2021 09:56:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F336CC061574;
+        Tue, 28 Dec 2021 06:56:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D07E61233;
-        Tue, 28 Dec 2021 14:55:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D17F8C36AE7;
-        Tue, 28 Dec 2021 14:55:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE8CBB8121D;
+        Tue, 28 Dec 2021 14:56:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E57EFC36AE7;
+        Tue, 28 Dec 2021 14:56:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640703351;
-        bh=Cji7SzNJh4009FJyVX9GTWH/NZeXoeot9/2R77gPY+0=;
+        s=k20201202; t=1640703386;
+        bh=68SW6igvPac0oGZ2kyZiUl7boukGMKxOfU08sgJpOQI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i6FEn9WgfXuuQRGaxrtt5F/yywCGDmqZEP8AAo3bIlUvv3I/MtrFsR8Ju0tMUDlDe
-         iTPb7wfQLt/sRNwonr0sfUnKa1rIkUHQl3F6IgK8jpsz0lYqPJTRdb7cXmIyDJHXur
-         2Am7yYB+Gr89FHn4XqJ2um1BibpH266Zef067baPe61qDy4zkHHlVh8ITY5MEV8wEP
-         8hH5vY7AxpEIg34aynStPadTaAOIrzHc8jU06/wdj9f+AhbghXyp5J6dSu+lH8zMOC
-         iv716n90EAz3lDg0/cvG6LBAdCihpBpxVe/yL700ZOuF2fn0J8g3OVYX9TVRpI4oUd
-         TAe/Xx0QxfDtg==
-Date:   Tue, 28 Dec 2021 16:55:53 +0200
+        b=AbHPsAh6D52WeCzvedsBFfmcDF5zt7Odg2SjiB/N7nfqsnchElooP6egi2VdNnq91
+         cRgCa3zz+B0PhorGfyqoj9lzaR1RFLqTxwyG0bDO/m6o1ZEA01lKeNbTEZZ/wGAoWK
+         KrlMmWeXtaU2F8CPU/9+hscyrFJOG8fsdu2+/jka5ilKO06s8lkkAfj2Vfk/5fU9Rg
+         8puTNw3H/PjQ8JHE2TmqX+jvFKypfObpGDIC8mArNnT1W8sSWBlPOcKY62+SOh/uYT
+         K5jr54Snu7U+4Hd5bUOLkSpnj/1WyAsjLRPmELETHtduLnGENpGRhUE7Arwo3lGo5h
+         eQirB661zq8nw==
+Date:   Tue, 28 Dec 2021 16:56:29 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Reinette Chatre <reinette.chatre@intel.com>
 Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
@@ -38,53 +41,102 @@ Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
         cathy.zhang@intel.com, cedric.xing@intel.com,
         haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 07/25] x86/sgx: Move PTE zap code to separate function
-Message-ID: <YcsleU6ExUbpN51r@iki.fi>
+Subject: Re: [PATCH 10/25] x86/sgx: Support enclave page permission changes
+Message-ID: <YcslnVA0lU0G0oYm@iki.fi>
 References: <cover.1638381245.git.reinette.chatre@intel.com>
- <bd228c90c139437bb4fcc4b7b99063bfd3eb1439.1638381245.git.reinette.chatre@intel.com>
- <Yavy5JTYAkdZjnK2@iki.fi>
- <66151f3a-0e32-fc57-cb54-5b714588389b@intel.com>
- <917c53ff755d9a20e1f4bcb48c70add8364d1065.camel@kernel.org>
- <192e252a-653f-2221-73dd-99894c134a37@intel.com>
+ <44fe170cfd855760857660b9f56cae8c4747cc15.1638381245.git.reinette.chatre@intel.com>
+ <Yav0/3jeJsuT3yEq@iki.fi>
+ <fff63bde-94a4-6c0c-3333-4cf392bee50b@intel.com>
+ <407c12ed28b105a055c6ab6152c0458a31052963.camel@kernel.org>
+ <8fc271bf-548f-969d-96db-ca78b21578f4@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <192e252a-653f-2221-73dd-99894c134a37@intel.com>
+In-Reply-To: <8fc271bf-548f-969d-96db-ca78b21578f4@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 02:11:26PM -0800, Reinette Chatre wrote:
+On Mon, Dec 13, 2021 at 02:12:44PM -0800, Reinette Chatre wrote:
 > Hi Jarkko,
 > 
-> On 12/10/2021 11:52 PM, Jarkko Sakkinen wrote:
-> > On Mon, 2021-12-06 at 13:30 -0800, Reinette Chatre wrote:
+> On 12/10/2021 11:57 PM, Jarkko Sakkinen wrote:
+> > On Mon, 2021-12-06 at 13:42 -0800, Reinette Chatre wrote:
 > > > Hi Jarkko,
 > > > 
-> > > On 12/4/2021 2:59 PM, Jarkko Sakkinen wrote:
-> > > > On Wed, Dec 01, 2021 at 11:23:05AM -0800, Reinette Chatre wrote:
-> > > > > The SGX reclaimer removes page table entries pointing to pages that are
-> > > > > moved to swap. SGX2 enables changes to pages belonging to an initialized
-> > > > > enclave, for example changing page permissions. Supporting SGX2 requires
-> > > > > this ability to remove page table entries that is available in the
-> > > > > SGX reclaimer code.
+> > > On 12/4/2021 3:08 PM, Jarkko Sakkinen wrote:
+> > > > On Wed, Dec 01, 2021 at 11:23:08AM -0800, Reinette Chatre wrote:
+> > > > > In the initial (SGX1) version of SGX, pages in an enclave need to be
+> > > > > created with permissions that support all usages of the pages, from the
+> > > > > time the enclave is initialized until it is unloaded. For example,
+> > > > > pages used by a JIT compiler or when code needs to otherwise be
+> > > > > relocated need to always have RWX permissions.
+> > > > > 
+> > > > > SGX2 includes two functions that can be used to modify the enclave page
+> > > > > permissions of regular enclave pages within an initialized enclave.
+> > > > > ENCLS[EMODPR] is run from the OS and used to restrict enclave page
+> > > > > permissions while ENCLU[EMODPE] is run from within the enclave to
+> > > > > extend enclave page permissions.
+> > > > > 
+> > > > > Enclave page permission changes need to be approached with care and
+> > > > > for this reason this initial support is to allow enclave page
+> > > > > permission changes _only_ if the new permissions are the same or
+> > > > > more restrictive that the permissions originally vetted at the time the
+> > > > > pages were added to the enclave. Support for extending enclave page
+> > > > > permissions beyond what was originally vetted is deferred.
 > > > > 
-> > > > Missing: why SGX2 requirest this?
+> > > > This paragraph is out-of-scope for a commit message. You could have
+> > > > this in the cover letter but not here. I would just remove it.
 > > > 
-> > > The above paragraph states that SGX2 needs to remove page table entries
-> > > because it modifies page permissions. Could you please elaborate what is
-> > > missing?
+> > > I think this is essential information that is mentioned in the cover
+> > > letter _and_ in this changelog. I will follow Dave's guidance and avoid
+> > > "deferred" by just removing that last sentence.
+> > > 
+> > > > 
+> > > > > Whether enclave page permissions are restricted or extended it
+> > > > > is necessary to ensure that the page table entries and enclave page
+> > > > > permissions are in sync. Introduce a new ioctl, SGX_IOC_PAGE_MODP, to
+> > > > 
+> > > > SGX_IOC_PAGE_MODP does not match the naming convetion of these:
+> > > > 
+> > > > * SGX_IOC_ENCLAVE_CREATE
+> > > > * SGX_IOC_ENCLAVE_ADD_PAGES
+> > > > * SGX_IOC_ENCLAVE_INIT
+> > > 
+> > > ah - my understanding was that the SGX_IOC_ENCLAVE prefix related to
+> > > operations related to the entire enclave and thus I introduced the
+> > > prefix SGX_IOC_PAGE to relate to operations on pages within an enclave.
 > > 
-> > It does not say why SGX2 requires an ability to remove page table entries.
+> > SGX_IOC_ENCLAVE_ADD_PAGES is also operation working on pages within an
+> > enclave.
+> > 
+> > Also, to be aligned with SGX_IOC_ENCLAVE_ADD_PAGES, the new operations
+> > should also take secinfo as input.
 > 
-> Are you saying that modification of EPCM page permissions is not a reason to
-> remove page table entries pointing to those pages?
+> ok, will do.
+> 
+> > 
+> > > 
+> > > > 
+> > > > A better name would be SGX_IOC_ENCLAVE_MOD_PROTECTIONS. It doesn't
+> > > > do harm to be a more verbose.
+> > > 
+> > > Will do. I see later you propose SGX_IOC_ENCLAVE_MODIFY_TYPE - would you
+> > > like them to be consistent wrt MOD/MODIFY?
+> > 
+> > I would considering introducing just one new ioctl:
+> > 
+> >    SGX_IOC_ENCLAVE_MODIFY_PAGES
+> > 
+> > and choose either operations based on e.g. a flag
+> > (see flags field SGX_IOC_ENCLAVE_ADD_PAGES).
+> > 
+> 
+> There seems to be different opinion about the single ioctl() as per:https://lore.kernel.org/lkml/0fb14185-5cc3-a963-253d-2e119b4a52bb@intel.com/
+> 
+> I thus plan to proceed with the two ioctls, both taking secinfo as input.
+> Would that be ok with you?
 
-So you have:
-
-"Supporting SGX2 requires this ability to remove page table entries that is
-available in the SGX reclaimer code"
-
-Just write down where you need this ability (briefly).
+Yeah, let's continue with two ioctls for now, I agree.
 
 /Jarkko

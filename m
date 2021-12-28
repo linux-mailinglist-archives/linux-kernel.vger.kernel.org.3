@@ -2,55 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 004DE480922
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 13:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D756480927
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 13:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbhL1Mee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 07:34:34 -0500
-Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:36465 "EHLO
-        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231292AbhL1Med (ORCPT
+        id S231451AbhL1MkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 07:40:20 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:30120 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231418AbhL1MkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 07:34:33 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R861e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0V06peAr_1640694869;
-Received: from 30.225.24.30(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V06peAr_1640694869)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 28 Dec 2021 20:34:30 +0800
-Message-ID: <de5dfac5-9c33-a4e2-e5f1-39547a409fd0@linux.alibaba.com>
-Date:   Tue, 28 Dec 2021 20:34:29 +0800
+        Tue, 28 Dec 2021 07:40:20 -0500
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JNYvK6rwjz1DKHx;
+        Tue, 28 Dec 2021 20:37:01 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 28 Dec 2021 20:40:18 +0800
+Subject: Re: [PATCH -next V3] ubi: fix race condition between ctrl_cdev_ioctl
+ and ubi_cdev_ioctl
+To:     Richard Weinberger <richard@nod.at>
+CC:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        <yukuai3@huawei.com>, Hulk Robot <hulkci@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>
+References: <20211105093022.1360601-1-libaokun1@huawei.com>
+ <7e00eda5-3b35-6d3c-29fb-664b12cca6dd@huawei.com>
+ <509065063.197038.1640293568550.JavaMail.zimbra@nod.at>
+From:   "libaokun (A)" <libaokun1@huawei.com>
+Message-ID: <e36106b0-2f7d-c618-4915-476168d7fa7a@huawei.com>
+Date:   Tue, 28 Dec 2021 20:40:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH v1 01/23] cachefiles: add cachefiles_demand devnode
-Content-Language: en-US
-To:     Joseph Qi <joseph.qi@linux.alibaba.com>, dhowells@redhat.com,
-        linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
-        linux-erofs@lists.ozlabs.org
-Cc:     linux-fsdevel@vger.kernel.org, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org
-References: <20211227125444.21187-1-jefflexu@linux.alibaba.com>
- <20211227125444.21187-2-jefflexu@linux.alibaba.com>
- <d066131d-1bcb-e64d-a10b-b3dbb4506b96@linux.alibaba.com>
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-In-Reply-To: <d066131d-1bcb-e64d-a10b-b3dbb4506b96@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <509065063.197038.1640293568550.JavaMail.zimbra@nod.at>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500020.china.huawei.com (7.185.36.88)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+在 2021/12/24 5:06, Richard Weinberger 写道:
+> ----- Ursprüngliche Mail -----
+>> Von: "libaokun (A)" <libaokun1@huawei.com>
+>> 在 2021/11/5 17:30, Baokun Li 写道:
+>>
+>> ping
+> Thanks for your patience.
+>   
+>>> Hulk Robot reported a KASAN report about use-after-free:
+> [...]
+>
+>>> The cause of this problem is that commit 714fb87e8bc0 make device
+>>> "available" before it becomes accessible via sysfs. Therefore, we
+>>> roll back the modification. We will fix the race condition between
+>>> ubi device creation and udev by removing ubi_get_device in
+>>> vol_attribute_show and dev_attribute_show.This avoids accessing
+>>> uninitialized ubi_devices[ubi_num].
+>>>
+>>> ubi_get_device is used to prevent devices from being deleted during
+>>> sysfs execution. However, now kernfs ensures that devices will not
+>>> be deleted before all reference counting are released.
+>>> The key process is shown in the following stack.
+> ubi_get_device() in dev_attribute_show() is used to detect whether
+> the ubi device got detached while the sysfs file is open.
+>
+> Hmm. I thought for sysfs this is not the case since sysfs does not implement
+> a release() method. So kernfs_drain_open_files() will return early.
+> But there is a good chance that I don't got all kernfs/sysfs details.
+>
+> Thanks,
+> //richard
+> .
 
-
-On 12/28/21 10:47 AM, Joseph Qi wrote:
-
-> 
-> Better to prepare the on-demand read() and poll() first, and then add
-> the on-demand cachefiles dev.
-> 
-
-Regards. Thanks.
+Thank you for your review!
 
 -- 
-Thanks,
-Jeffle
+With Best Regards,
+Baokun Li
+

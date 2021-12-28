@@ -2,100 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9BDB480604
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 05:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B7E480629
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 05:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234772AbhL1EvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 23:51:07 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15984 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234750AbhL1EvG (ORCPT
+        id S232373AbhL1E6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 23:58:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231156AbhL1E6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 23:51:06 -0500
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JNMTv63dHzZdtB;
-        Tue, 28 Dec 2021 12:47:47 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 28 Dec 2021 12:51:04 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.20; Tue, 28 Dec 2021 12:51:03 +0800
-Message-ID: <4ca5a8e4-8edc-3ea4-34f0-26d6ff7c5db4@huawei.com>
-Date:   Tue, 28 Dec 2021 12:51:03 +0800
+        Mon, 27 Dec 2021 23:58:35 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061F2C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 20:58:34 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id s73so28338338oie.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 20:58:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=98szpQBZjtZvNYlpyX/l6mXnydiaf9Cz3PXEMmMi7WI=;
+        b=RkAse5a++wcvwXouZbSPgrz1WAGLQRgomwBlTuBF+n11/dsDnSAFBiJ5IZO71tXwWQ
+         oG3FDo764vE2UDNwyhMV8XKQTjJ2EVfvXYrhWV84Nz2dPQRNRJGhvSbzCQ6Kvi9wletK
+         IyNqaEnQOApQTc2sh/uEynNLXrOozmRDI3YVa8JTHsf6CQfPaoW2BqoLiBD6q7HpYBym
+         GGI4CQXhGZAhFOrBfxmUFmGYOMxRPQbYcKDIqFbWJ6LsKOZRGv7c4YGCan52dlHN0SIX
+         HnKaSdR0XXsFutjqissD5fp8Rsn/LZoyqDuI87U5H+YAlIFzeZaPKnRGVzD1+U4SDi1I
+         OfrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=98szpQBZjtZvNYlpyX/l6mXnydiaf9Cz3PXEMmMi7WI=;
+        b=wP9bYn/qnNzLHYMU8m6VUUWv/dGt/69KSEC9Vm9CS4e9qwKTWLgQhcbnOWA/juYYOG
+         loRTHXFH116Qm64fN56FlvMp3Oar7L/4pHj17yNN0ah+4mlD1e9D6gyB9YRSspqio/tb
+         fLOICgiblkdNht+ZonL+HxyMSxeaSoHmuDpnWfQXPteKk4Y6Dj/Xm01HUwv3eOE7j2OL
+         j8mpmqlAgnBWf4pmS4sVtNbabQiCSUDsJO+SGOVtJXXnODSImwK+pBJgQ8LuesANWO6W
+         2rcAsKFqw59GAdbyjCJrZhstQx3G0ECyP5oBTZSib8T0dPOIjdeYEAHIrFwUtto83Ls3
+         PSIw==
+X-Gm-Message-State: AOAM530ywL6n51lyCgMULBgertznII5fPDJk1lsqZaLXqP5DgbcS7Qx6
+        EW6MqDHLFEY8uEQTzzMvzsUPaQ==
+X-Google-Smtp-Source: ABdhPJw0LCJVxHQQ9QCWqtmjXSIikXnypZw3Qfu/0FsEFSTp1ESZgDOl8PKo+a6h8HMAc8zWhQBM9g==
+X-Received: by 2002:a05:6808:aa7:: with SMTP id r7mr15681459oij.120.1640667514163;
+        Mon, 27 Dec 2021 20:58:34 -0800 (PST)
+Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id n18sm3004786ooj.30.2021.12.27.20.58.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Dec 2021 20:58:33 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/msm/dp: Add DisplayPort controller for SM8350
+Date:   Mon, 27 Dec 2021 20:59:34 -0800
+Message-Id: <20211228045934.1524865-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 2/2] mm: usercopy: Warn vmalloc/module address in
- check_heap_object()
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Kees Cook <keescook@chromium.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-CC:     Nicholas Piggin <npiggin@gmail.com>
-References: <20211225120621.13908-1-wangkefeng.wang@huawei.com>
- <20211225120621.13908-3-wangkefeng.wang@huawei.com>
- <fadd9754-ab85-63ec-4d6a-c6490adb5d94@csgroup.eu>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <fadd9754-ab85-63ec-4d6a-c6490adb5d94@csgroup.eu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggeme707-chm.china.huawei.com (10.1.199.103) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The Qualcomm SM8350 platform comes with a single DisplayPort controller,
+add support for this in the DisplayPort driver.
 
-On 2021/12/27 1:33, Christophe Leroy wrote:
->
-> Le 25/12/2021 à 13:06, Kefeng Wang a écrit :
->> virt_addr_valid() could be insufficient to validate the virt addr
->> on some architecture, which could lead to potential BUG which has
->> been found on arm64/powerpc64.
->>
->> Let's add WARN_ON to check if the virt addr is passed virt_addr_valid()
->> but is a vmalloc/module address.
-> I think that's the responsibility of the architecture and doesn't
-> deserve a WARN_ON() in generic code.
->
-> The generic code cannot check all what architectures do wrong.
->
-> Eventually you can do some testing at startup, maybe with
-> CONFIG_DEBUG_VM_PGTABLE, but I don't think we should have such
-> verification in functions like check_heap_object()
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ .../devicetree/bindings/display/msm/dp-controller.yaml    | 1 +
+ drivers/gpu/drm/msm/dp/dp_display.c                       | 8 ++++++++
+ 2 files changed, 9 insertions(+)
 
-Ok, we could find other better place to add a virt_to_valid() check
+diff --git a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
+index 5457612ab136..cd05cfd76536 100644
+--- a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
+@@ -21,6 +21,7 @@ properties:
+       - qcom,sc7280-edp
+       - qcom,sc8180x-dp
+       - qcom,sc8180x-edp
++      - qcom,sm8350-dp
+ 
+   reg:
+     items:
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index 8d9c19dbf33e..fd0fd03f8fed 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -143,10 +143,18 @@ static const struct msm_dp_config sc7280_dp_cfg = {
+ 	.num_descs = 2,
+ };
+ 
++static const struct msm_dp_config sm8350_dp_cfg = {
++	.descs = (const struct msm_dp_desc[]) {
++		[MSM_DP_CONTROLLER_0] = { .io_start = 0x0ae90000, .connector_type = DRM_MODE_CONNECTOR_DisplayPort },
++	},
++	.num_descs = 1,
++};
++
+ static const struct of_device_id dp_dt_match[] = {
+ 	{ .compatible = "qcom,sc7180-dp", .data = &sc7180_dp_cfg },
+ 	{ .compatible = "qcom,sc7280-dp", .data = &sc7280_dp_cfg },
+ 	{ .compatible = "qcom,sc7280-edp", .data = &sc7280_dp_cfg },
++	{ .compatible = "qcom,sm8350-dp", .data = &sm8350_dp_cfg },
+ 	{}
+ };
+ 
+-- 
+2.33.1
 
-instead of this one.
-
->> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
->> ---
->>    mm/usercopy.c | 2 ++
->>    1 file changed, 2 insertions(+)
->>
->> diff --git a/mm/usercopy.c b/mm/usercopy.c
->> index b3de3c4eefba..ce83e0b137dd 100644
->> --- a/mm/usercopy.c
->> +++ b/mm/usercopy.c
->> @@ -228,6 +228,8 @@ static inline void check_heap_object(const void *ptr, unsigned long n,
->>    	if (!virt_addr_valid(ptr))
->>    		return;
->>    
->> +	WARN_ON_ONCE(is_vmalloc_or_module_addr(ptr));
->> +
->>    	/*
->>    	 * When CONFIG_HIGHMEM=y, kmap_to_page() will give either the
->>    	 * highmem page or fallback to virt_to_page(). The following

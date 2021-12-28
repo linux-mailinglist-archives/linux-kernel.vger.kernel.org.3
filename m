@@ -2,96 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3E4480D61
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 22:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9005E480D65
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 22:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237348AbhL1VaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 16:30:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36562 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237358AbhL1VaN (ORCPT
+        id S237464AbhL1Vaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 16:30:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30497 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236380AbhL1Vap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 16:30:13 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E03AC06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 13:30:13 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id y16so15185546ilq.8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 13:30:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=sJpLTpP4QDI6cfN8o3Q88KiR7SnhcBIGx0jwnSt1In4=;
-        b=hmLRZsM3ffY25FkK7SAmoUymwLcavpa3tgE8X+u6r4mUgSjdffrxxYxvs7ksPthgB7
-         o/45yeKvjQbsiqU03JZW7r17TCwdjdAWFXJNjLmcn0FWt7JX8GQmHcxYjwPk43QF+Cu7
-         ta8vgSrnO+aag1PCVNEw+rVB9vNSaCpJpjGpQ=
+        Tue, 28 Dec 2021 16:30:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640727044;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TmPHzOmiJGVn1hY9fDWt3sR60NPPlr53zTWB5QI+n2c=;
+        b=Y3Q2r4p6ZzFSkaqfBcYHQdlDLU3Q+mBIyvnbsJUrj2+S6tQ0GKh1/qaNF+mmnDr09u0/zw
+        dcDgP1A3pv6P4JyD+LU346QZXtO1GRs4vBapVbdThHi9CDzEjxy424rFMvpkxoiWNfP/eC
+        yaP4179bPEqfcG/yo1hOuVjxCjgYBW4=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-124-75lisT4lPN6RmfKcEVXKcA-1; Tue, 28 Dec 2021 16:30:43 -0500
+X-MC-Unique: 75lisT4lPN6RmfKcEVXKcA-1
+Received: by mail-wr1-f72.google.com with SMTP id k4-20020adfc704000000b001a32d86a772so808908wrg.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 13:30:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=sJpLTpP4QDI6cfN8o3Q88KiR7SnhcBIGx0jwnSt1In4=;
-        b=tvg0jZN6bvUkD54x14Jmb4JFvhoPG2GeYuvAG5hv/u1i+lcluHHf/XajTfHL0zHODT
-         9liO4uwOR4AF/SlFgvV7iu/dKRXRBjsFu+rjEIgmjuYWxZ5cwzvdCEgeI1DSKO3TAzxI
-         8H7Njb6LpRMheTxNv9GY5t4l06RgEUFq60lS7REr5dDP/c3QFvlmkRWHmGKf/syx3H6S
-         tVk0Mu6leTryxDfgXAZOg4zPiDjndfBHhacvgh8Pz/j7eTcNYPc3+1nuoZujeGUGrbsO
-         NJTEB9gsKuAM9HrlZnHMd34zKjfPaN2hPyNsW3Z8+UvQsdDpL2S3/8b8Y4Wyu4SxzKJV
-         Pe5Q==
-X-Gm-Message-State: AOAM530GRq1lc17TNCiPSUI9/skKas4bp4VQzSQxdCmli2oe4zG6gro5
-        05r1Qm570lqnEn9Ks7xr2FzKRtjKlHxwvg==
-X-Google-Smtp-Source: ABdhPJz/tzUsDxpl0TvrnLEgzd8CH7dMUYnFUxxnA37lA6qqUmAUPJZL98jW0rAdTdnw/bIKg2m9tg==
-X-Received: by 2002:a05:6e02:1d86:: with SMTP id h6mr10395171ila.265.1640727012777;
-        Tue, 28 Dec 2021 13:30:12 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id y15sm6606908ill.15.2021.12.28.13.30.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Dec 2021 13:30:12 -0800 (PST)
-Subject: Re: [PATCH 4.9 00/19] 4.9.295-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, stable@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211227151316.558965545@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <5bd74040-d49b-c428-712f-f1371e96907b@linuxfoundation.org>
-Date:   Tue, 28 Dec 2021 14:30:11 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=TmPHzOmiJGVn1hY9fDWt3sR60NPPlr53zTWB5QI+n2c=;
+        b=v3C1lVb+OPisjEqbSXsx91va3WvhkkokrS1yuVnjNlA3XqgJ/ozN7HFn2VyyXJHXDY
+         XRTPtHH3w3EWfc7SleNBknoL7QyrZj/kqiT4DHbczcL42NDPs/YTcGc3iK+mMK1MMuNp
+         NnR8bzBXDP/1HmQ61jg2zDCtfGkuSh46AVtUB0fCKD1RcHzMbPGhllyS/hjrKURzI7l7
+         OUr4vPrup7pSVPRwAJbXbKmEGNh39t5omKT0yp8lWs/vC8k/uj+m0BSxE/QUNLL7+FUF
+         lwAs2VGCVbkI1QdFZNDTeCINxERS5kI6YrsqvBowboaLCvAmtS1M9vlPyXBtGlXx6DZt
+         CVNw==
+X-Gm-Message-State: AOAM533J5B3BUcd1qU6seXWp5qP7iOHwCq4dnoy2D9ksozADFuwNiysj
+        q01unx/ftxet9DkBiIKFvtXOCCTzS+DhxB6niDp81NhDvI2wIZORrdFO8N6DcTZgxq+vWmU3KYp
+        vFwPCylICBc47IiG8Qk0bliE=
+X-Received: by 2002:a05:600c:1c9f:: with SMTP id k31mr18947011wms.159.1640727042284;
+        Tue, 28 Dec 2021 13:30:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx/sBfzQCmEJF1DFkeaNfOzI/ZDHKguyW+zTfeINumJYsB9/PKw21OUwgIAYdhdX64aJ8zwuA==
+X-Received: by 2002:a05:600c:1c9f:: with SMTP id k31mr18947000wms.159.1640727042133;
+        Tue, 28 Dec 2021 13:30:42 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id az15sm18319172wmb.47.2021.12.28.13.30.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Dec 2021 13:30:41 -0800 (PST)
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     mcgrof@kernel.org
+Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
+        akpm@linux-foundation.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        atomlin@atomlin.com, ghalat@redhat.com
+Subject: [RFC PATCH 00/12] module: core code clean up
+Date:   Tue, 28 Dec 2021 21:30:29 +0000
+Message-Id: <20211228213041.1356334-1-atomlin@redhat.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <YbKUUJUtjBk/n913@bombadil.infradead.org>
+References: <YbKUUJUtjBk/n913@bombadil.infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <20211227151316.558965545@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/27/21 8:27 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.295 release.
-> There are 19 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 29 Dec 2021 15:13:09 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.295-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Hi Luis, Allen,
 
-Compiled and booted on my test system. No dmesg regressions.
+I had some free time so decided to make a quick start.
+There is more outstanding; albeit, I wanted to share what
+was accomplished thus far. Unfortunately, nothing has been
+thoroughly tested yet. Please let me know your thoughts.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-thanks,
--- Shuah
+Aaron Tomlin (12):
+  module: Move all into module/
+  module: Simple refactor in preparation for split
+  module: Move livepatch support to a separate file
+  module: Move latched RB-tree support to a separate file
+  module: Move arch strict rwx support to a separate file
+  module: Move strict rwx support to a separate file
+  module: Move extra signature support out of core code
+  module: Move kmemleak support to a separate file
+  module: Move kallsyms support into a separate file
+  module: Move procfs support into a separate file
+  module: Move sysfs support into a separate file
+  module: Move kdb_modules list out of core code
+
+ include/linux/module.h                        |   76 +-
+ kernel/Makefile                               |    4 +-
+ kernel/debug/kdb/kdb_main.c                   |    5 +
+ kernel/module-internal.h                      |   31 -
+ kernel/module/Makefile                        |   16 +
+ kernel/module/arch_strict_rwx.c               |   44 +
+ kernel/module/debug_kmemleak.c                |   30 +
+ kernel/module/internal.h                      |  121 ++
+ kernel/module/kallsyms.c                      |  506 ++++++
+ kernel/module/livepatch.c                     |   75 +
+ kernel/{module.c => module/main.c}            | 1616 +----------------
+ kernel/module/procfs.c                        |  111 ++
+ .../signature.c}                              |    0
+ kernel/module/signing.c                       |  120 ++
+ kernel/module/strict_rwx.c                    |   83 +
+ kernel/module/sysfs.c                         |  426 +++++
+ kernel/module/tree_lookup.c                   |  108 ++
+ kernel/module_signing.c                       |   45 -
+ 18 files changed, 1751 insertions(+), 1666 deletions(-)
+ delete mode 100644 kernel/module-internal.h
+ create mode 100644 kernel/module/Makefile
+ create mode 100644 kernel/module/arch_strict_rwx.c
+ create mode 100644 kernel/module/debug_kmemleak.c
+ create mode 100644 kernel/module/internal.h
+ create mode 100644 kernel/module/kallsyms.c
+ create mode 100644 kernel/module/livepatch.c
+ rename kernel/{module.c => module/main.c} (66%)
+ create mode 100644 kernel/module/procfs.c
+ rename kernel/{module_signature.c => module/signature.c} (100%)
+ create mode 100644 kernel/module/signing.c
+ create mode 100644 kernel/module/strict_rwx.c
+ create mode 100644 kernel/module/sysfs.c
+ create mode 100644 kernel/module/tree_lookup.c
+ delete mode 100644 kernel/module_signing.c
+
+-- 
+2.31.1
+

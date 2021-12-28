@@ -2,143 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 179D8480913
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 13:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A01FA480917
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 13:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbhL1MUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 07:20:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59540 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231158AbhL1MUQ (ORCPT
+        id S231217AbhL1MXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 07:23:20 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33498 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230290AbhL1MXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 07:20:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640694015;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5VvjubQBgQXusD/qnqAa/6+So3MqJfcWXAtQ7MU1qeU=;
-        b=WC1ZZZ6hKJHgh0LP91eQ86qFLDCBX+7j5fVdH1HZZj7CgApjg7Fqrq1CdsWTKlk4V7/vxm
-        8zfCJT5hMYpeA6gAxO1eRLDenpZbdc3u5qcTEGX0Mg7gMzbK/Ee4fIjJeUd20+lJqWeLQ2
-        xRCGWwYLGuTdlvUaHBLjxoll7sImbgI=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-645-BDHb78oeMIyhVjDu9NPrDg-1; Tue, 28 Dec 2021 07:20:13 -0500
-X-MC-Unique: BDHb78oeMIyhVjDu9NPrDg-1
-Received: by mail-ed1-f72.google.com with SMTP id i5-20020a05640242c500b003f84839a8c3so13025103edc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 04:20:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5VvjubQBgQXusD/qnqAa/6+So3MqJfcWXAtQ7MU1qeU=;
-        b=DAlxcAWJn3JA/DozlqEMV0+wL32cQ+tXm6SqI+w1L3SxeE33miheLied84WI8Lp4pC
-         oMqh0L+mOrLGDDeSpFa7W22XmKay1b03QbuKBEz53Ei8pOy6Ht3hWsjJODeZcY6Lrf/H
-         GWwtXy/y56Sw8bmCDY6fhBG7NUkvN0KBpFzqAcOPDWu29lN+R9fC3yd7MpAIOPSt2Cg4
-         pZhEuXyoee7RPssrx1K+S5tGp1Qxga549CVbPfUAwp44dMJ6HtT8KoPiWgtmLDenXhOc
-         R9Ny16hOA0gxW/f5Qhz5aKwl4LzsUkHBKYXpAWjTcwobFfTmm+xdI6E09Hxl6TF/igPo
-         NxsA==
-X-Gm-Message-State: AOAM532HmasyYEwrbFiJ/2hUnfKbRcgTsN+ID8RFP/+paKw7unontWtp
-        bSeplL6kcAiXWdzOLUSMBrJnW+lArz3F8Ze3O4pRBDNyW7B7ConT/zXFf6LTCUUcvStbvnRq8IG
-        8SRO2LCx/SecQdjdsXLIzPnO1
-X-Received: by 2002:a17:907:60d6:: with SMTP id hv22mr17260603ejc.478.1640694012554;
-        Tue, 28 Dec 2021 04:20:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx5XdEog79sJL19FCO0DE7mMk8OhXWL3OTKf+yaTjbtWynbAlqQXyYdTwnhqf6+6U8AWbL0Hg==
-X-Received: by 2002:a17:907:60d6:: with SMTP id hv22mr17260594ejc.478.1640694012382;
-        Tue, 28 Dec 2021 04:20:12 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id 14sm6007390ejk.215.2021.12.28.04.20.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Dec 2021 04:20:11 -0800 (PST)
-Message-ID: <279c7bd8-c0bb-e58c-1149-d124102bf8b8@redhat.com>
-Date:   Tue, 28 Dec 2021 13:20:10 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 0/8] typec: mux: Introduce support for multiple TypeC
- muxes
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20211228052116.1748443-1-bjorn.andersson@linaro.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20211228052116.1748443-1-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Tue, 28 Dec 2021 07:23:18 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADFBFB811BD;
+        Tue, 28 Dec 2021 12:23:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CA1EC36AE8;
+        Tue, 28 Dec 2021 12:23:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640694195;
+        bh=ctzCAJML9qMvzhn8zf3X+uHDG/LU7mhRfvDCv/DU5+c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Hsfy1FCV6/kLsTWdRLKKONenuyoAGROPdbP4BiXY3md0f0fAHSml4MZyk5eeTiZAH
+         WtM62Xt0aIc5SnGUDyv62QwtCMFhCfuWKfqLHvudKSV4SvnuVx9gAMXPew7+UQxoVX
+         E+6Uh/qqqgW+1OgG8lfrfv2VvTOc/dhSOSjmTP5L9OuJLS4TnlKuWmZi+lOGny4QGf
+         97iyywzeeW9wr1YxBLaOHMd1djkQOSE43hWX9kEsXt7QFt4qN7iyyfBB2j5+GEDIZL
+         6ct1aQ0h5FMRqsCC8OC0w3PNlgWmc6oZ7gKO2c7PttC6f7QByamDpT5LGxHMfK6Gl1
+         JuvHHWcyM/BbQ==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n2BVZ-00EiPi-8y; Tue, 28 Dec 2021 12:23:13 +0000
+Date:   Tue, 28 Dec 2021 12:23:12 +0000
+Message-ID: <87ilv8zznz.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Sunil Muthuswamy <sunilmut@linux.microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Sunil Muthuswamy <sunilmut@microsoft.com>
+Subject: Re: [PATCH v7 2/2] PCI: hv: Add arm64 Hyper-V vPCI support
+In-Reply-To: <MWHPR21MB1593272A454D568311C3B254D7429@MWHPR21MB1593.namprd21.prod.outlook.com>
+References: <1639767121-22007-1-git-send-email-sunilmut@linux.microsoft.com>
+        <1639767121-22007-3-git-send-email-sunilmut@linux.microsoft.com>
+        <MWHPR21MB1593272A454D568311C3B254D7429@MWHPR21MB1593.namprd21.prod.outlook.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: mikelley@microsoft.com, sunilmut@linux.microsoft.com, kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com, lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de, x86@kernel.org, linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org, linux-arch@vger.kernel.org, sunilmut@microsoft.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
-
-On 12/28/21 06:21, Bjorn Andersson wrote:
-> This series introduces a level of indirection between the controller's view of
-> a typec_mux/switch and the implementation and then expands that to support
-> multiple drivers.
+On Mon, 27 Dec 2021 17:38:07 +0000,
+"Michael Kelley (LINUX)" <mikelley@microsoft.com> wrote:
 > 
-> This is needed in order to support devices such as the Qualcomm Snapdragon 888
-> HDK, which does muxing and orientation handling in the QMP (USB+DP) PHY and SBU
-> muxing in the external FSA4480 chip.
+> From: Sunil Muthuswamy <sunilmut@linux.microsoft.com> Sent: Friday, December 17, 2021 10:52 AM
+> > 
+> > Add arm64 Hyper-V vPCI support by implementing the arch specific
+> > interfaces. Introduce an IRQ domain and chip specific to Hyper-v vPCI that
+> > is based on SPIs. The IRQ domain parents itself to the arch GIC IRQ domain
+> > for basic vector management.
+> > 
+> > Signed-off-by: Sunil Muthuswamy <sunilmut@microsoft.com>
+> > ---
+> > In v2, v3, v4, v5, v6 & v7:
+> >  Changes are described in the cover letter.
+> > 
+> >  arch/arm64/include/asm/hyperv-tlfs.h |   9 +
+> >  drivers/pci/Kconfig                  |   2 +-
+> >  drivers/pci/controller/Kconfig       |   2 +-
+> >  drivers/pci/controller/pci-hyperv.c  | 241 ++++++++++++++++++++++++++-
+> >  4 files changed, 251 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/arm64/include/asm/hyperv-tlfs.h b/arch/arm64/include/asm/hyperv-tlfs.h
+> > index 4d964a7f02ee..bc6c7ac934a1 100644
+> > --- a/arch/arm64/include/asm/hyperv-tlfs.h
+> > +++ b/arch/arm64/include/asm/hyperv-tlfs.h
+> > @@ -64,6 +64,15 @@
+> >  #define HV_REGISTER_STIMER0_CONFIG	0x000B0000
+> >  #define HV_REGISTER_STIMER0_COUNT	0x000B0001
+> > 
+> > +union hv_msi_entry {
+> > +	u64 as_uint64[2];
+> > +	struct {
+> > +		u64 address;
+> > +		u32 data;
+> > +		u32 reserved;
+> > +	} __packed;
+> > +};
+> > +
+> >  #include <asm-generic/hyperv-tlfs.h>
+> > 
+> >  #endif
+> > diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
+> > index 43e615aa12ff..d98fafdd0f99 100644
+> > --- a/drivers/pci/Kconfig
+> > +++ b/drivers/pci/Kconfig
+> > @@ -184,7 +184,7 @@ config PCI_LABEL
+> > 
+> >  config PCI_HYPERV
+> >  	tristate "Hyper-V PCI Frontend"
+> > -	depends on X86_64 && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN && SYSFS
+> > +	depends on ((X86 && X86_64) || ARM64) && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN && SYSFS
+> >  	select PCI_HYPERV_INTERFACE
+> >  	help
+> >  	  The PCI device frontend driver allows the kernel to import arbitrary
+> > diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
+> > index 93b141110537..2536abcc045a 100644
+> > --- a/drivers/pci/controller/Kconfig
+> > +++ b/drivers/pci/controller/Kconfig
+> > @@ -281,7 +281,7 @@ config PCIE_BRCMSTB
+> > 
+> >  config PCI_HYPERV_INTERFACE
+> >  	tristate "Hyper-V PCI Interface"
+> > -	depends on X86 && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN && X86_64
+> > +	depends on ((X86 && X86_64) || ARM64) && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN
+> >  	help
+> >  	  The Hyper-V PCI Interface is a helper driver allows other drivers to
+> >  	  have a common interface with the Hyper-V PCI frontend driver.
+> > diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> > index ead7d6cb6bf1..02ba2e7e2618 100644
+> > --- a/drivers/pci/controller/pci-hyperv.c
+> > +++ b/drivers/pci/controller/pci-hyperv.c
+> > @@ -47,6 +47,8 @@
+> >  #include <linux/msi.h>
+> >  #include <linux/hyperv.h>
+> >  #include <linux/refcount.h>
+> > +#include <linux/irqdomain.h>
+> > +#include <linux/acpi.h>
+> >  #include <asm/mshyperv.h>
+> > 
+> >  /*
+> > @@ -614,7 +616,236 @@ static int hv_msi_prepare(struct irq_domain *domain, struct device *dev,
+> >  {
+> >  	return pci_msi_prepare(domain, dev, nvec, info);
+> >  }
+> > -#endif /* CONFIG_X86 */
+> > +#elif defined(CONFIG_ARM64)
+> > +/*
+> > + * SPI vectors to use for vPCI; arch SPIs range is [32, 1019], but leaving a bit
+> > + * of room at the start to allow for SPIs to be specified through ACPI and
+> > + * starting with a power of two to satisfy power of 2 multi-MSI requirement.
+> > + */
+> > +#define HV_PCI_MSI_SPI_START	64
+> > +#define HV_PCI_MSI_SPI_NR	(1020 - HV_PCI_MSI_SPI_START)
+> > +#define DELIVERY_MODE		0
+> > +#define FLOW_HANDLER		NULL
+> > +#define FLOW_NAME		NULL
+> > +#define hv_msi_prepare		NULL
+> > +
+> > +struct hv_pci_chip_data {
+> > +	DECLARE_BITMAP(spi_map, HV_PCI_MSI_SPI_NR);
+> > +	struct mutex	map_lock;
+> > +};
+> > +
+> > +/* Hyper-V vPCI MSI GIC IRQ domain */
+> > +static struct irq_domain *hv_msi_gic_irq_domain;
+> > +
+> > +/* Hyper-V PCI MSI IRQ chip */
+> > +static struct irq_chip hv_arm64_msi_irq_chip = {
+> > +	.name = "MSI",
+> > +	.irq_set_affinity = irq_chip_set_affinity_parent,
+> > +	.irq_eoi = irq_chip_eoi_parent,
+> > +	.irq_mask = irq_chip_mask_parent,
+> > +	.irq_unmask = irq_chip_unmask_parent
+> > +};
+> > +
+> > +static unsigned int hv_msi_get_int_vector(struct irq_data *irqd)
+> > +{
+> > +	return irqd->parent_data->hwirq;
+> > +}
+> > +
+> > +static void hv_set_msi_entry_from_desc(union hv_msi_entry *msi_entry,
+> > +				       struct msi_desc *msi_desc)
+> > +{
+> > +	msi_entry->address = ((u64)msi_desc->msg.address_hi << 32) |
+> > +			      msi_desc->msg.address_lo;
+> > +	msi_entry->data = msi_desc->msg.data;
+> > +}
+> > +
+> > +/*
+> > + * @nr_bm_irqs:		Indicates the number of IRQs that were allocated from
+> > + *			the bitmap.
+> > + * @nr_dom_irqs:	Indicates the number of IRQs that were allocated from
+> > + *			the parent domain.
+> > + */
+> > +static void hv_pci_vec_irq_free(struct irq_domain *domain,
+> > +				unsigned int virq,
+> > +				unsigned int nr_bm_irqs,
+> > +				unsigned int nr_dom_irqs)
+> > +{
+> > +	struct hv_pci_chip_data *chip_data = domain->host_data;
+> > +	struct irq_data *d = irq_domain_get_irq_data(domain, virq);
 > 
-> Additionally integration of typec mux and switch in the QMP PHY is included in
-> the series, as is the new FSA4480 driver. This is done to deal with the
-> renaming of the driver-side typec_mux -> typec_mux_dev.
-> 
-> Bjorn Andersson (8):
->   dt-bindings: phy: qcom,qmp-usb3-dp: Add altmode/switch properties
->   phy: qcom-qmp: Register typec mux and orientation switch
->   device property: Helper to match multiple connections
->   device property: Use multi-connection matchers for single case
->   typec: mux: Introduce indirection
->   typec: mux: Allow multiple mux_devs per mux
->   dt-bindings: usb: Add binding for fcs,fsa4480
->   usb: typec: mux: Add On Semi fsa4480 driver
+> FWIW, irq_domain_get_irq_data() can return NULL.   Maybe that's an
+> error in the "should never happen" category.   Throughout kernel code,
+> some callers check for a NULL result, but a lot do not.
 
-Thank you for your series, I will leave commenting on the
-dt-bindings and typec-mux changes to others.
+irq_domain_get_irq_data() returns NULL when there is no mapping. If
+this happens here, then the allocation tracking has gone horribly
+wrong, and I certainly want to see the resulting Oops rather than
+papering over it.
 
-But what I can do is test this on an x86 device using
-a pi3usb30532 mux for USB super-speed and DP-alt-mode
-muxing / orientation switching.
+	M.
 
-I'm going to wait a bit with doing that till this has had
-some reviews and possibly also some newer versions because
-of those reviews. If you haven't received a Tested-by from me
-when this looks like it is ready for merging please ping me.
-
-Regards,
-
-Hans
-
-
-> 
->  .../bindings/phy/qcom,qmp-usb3-dp-phy.yaml    |  14 +
->  .../devicetree/bindings/usb/fcs,fsa4480.yaml  |  72 +++++
->  drivers/base/property.c                       |  83 ++++--
->  drivers/phy/qualcomm/phy-qcom-qmp.c           | 176 ++++++++++--
->  drivers/usb/typec/bus.c                       |   2 +-
->  drivers/usb/typec/mux.c                       | 257 +++++++++++++-----
->  drivers/usb/typec/mux.h                       |  12 +-
->  drivers/usb/typec/mux/Kconfig                 |   9 +
->  drivers/usb/typec/mux/Makefile                |   1 +
->  drivers/usb/typec/mux/fsa4480.c               | 220 +++++++++++++++
->  drivers/usb/typec/mux/intel_pmc_mux.c         |   8 +-
->  drivers/usb/typec/mux/pi3usb30532.c           |   8 +-
->  include/linux/property.h                      |   5 +
->  include/linux/usb/typec_mux.h                 |  22 +-
->  14 files changed, 762 insertions(+), 127 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
->  create mode 100644 drivers/usb/typec/mux/fsa4480.c
-> 
-
+-- 
+Without deviation from the norm, progress is not possible.

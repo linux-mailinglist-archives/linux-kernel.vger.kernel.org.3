@@ -2,107 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B632D480B1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 17:13:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8938D480B21
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 17:14:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235657AbhL1QNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 11:13:11 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:48190 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235511AbhL1QNK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 11:13:10 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        id S235665AbhL1QOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 11:14:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235159AbhL1QOH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 11:14:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B32C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 08:14:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5B0001EC03C9;
-        Tue, 28 Dec 2021 17:13:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640707984;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=WXiQ34aw3BVND/Em7tvSPxlLMgOR1j97eSJLIoe4hEo=;
-        b=Wxfh2AfVkOPehtchcQkGOoQ0oGIuT8TcGQj16+fz/HtvWax3OrT7PDYc6oNz8WRzjBQVGz
-        Y5x48biGa9AeRsmxuPHUMmhPc/e5BbRXINa6EOML0ucxMIFvD84s6QGJryKawaDfVG69Fh
-        DDSVwawRqdPXycOFmaGv7WJE5dupzC8=
-Date:   Tue, 28 Dec 2021 17:13:06 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>
-Subject: Re: [PATCH v19 02/13] x86/setup: Use parse_crashkernel_high_low() to
- simplify code
-Message-ID: <Ycs3kpZD/vpoo1AX@zn.tnic>
-References: <20211228132612.1860-1-thunder.leizhen@huawei.com>
- <20211228132612.1860-3-thunder.leizhen@huawei.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29F26B8125D
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 16:14:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FCC0C36AE7;
+        Tue, 28 Dec 2021 16:14:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640708044;
+        bh=8pgeOPA8EqGCFEfOIbMvaFwgkk4HKoIO5on3e+sDTLQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NGI3XRUg8Sh6IVWeqZh/8rjtALG/l8Iozdk1pklnZwAHIcF1G5xTM7MOsk3AEItn0
+         ziNIduXLMrjqRHmJAE+Z6J8rAWXiiVP8Gr6FnuXvYdp1K889k193XKEfcsKKNtmuwx
+         k7dLlnyiKwAblrSVf5b0mBdEYHacPGDRm8QdbYPM=
+Date:   Tue, 28 Dec 2021 17:14:02 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Martin Kaiser <martin@kaiser.cx>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/10] staging: r8188eu: clean up private ioctls
+Message-ID: <Ycs3yiJMSWSeehJS@kroah.com>
+References: <20211226212535.197989-1-martin@kaiser.cx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211228132612.1860-3-thunder.leizhen@huawei.com>
+In-Reply-To: <20211226212535.197989-1-martin@kaiser.cx>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 09:26:01PM +0800, Zhen Lei wrote:
-> Use parse_crashkernel_high_low() to bring the parsing of
-> "crashkernel=X,high" and the parsing of "crashkernel=Y,low" together, they
-> are strongly dependent, make code logic clear and more readable.
-> 
-> Suggested-by: Borislav Petkov <bp@alien8.de>
+On Sun, Dec 26, 2021 at 10:25:25PM +0100, Martin Kaiser wrote:
+> Clean up the definitions of private ioctls.
+> (Maybe it would make more sense to remove them completely?)
 
-Yeah, doesn't look like something I suggested...
+If none of them are really "standard", then yes, they should be removed.
 
-> @@ -474,10 +472,9 @@ static void __init reserve_crashkernel(void)
->  	/* crashkernel=XM */
->  	ret = parse_crashkernel(boot_command_line, total_mem, &crash_size, &crash_base);
->  	if (ret != 0 || crash_size <= 0) {
-> -		/* crashkernel=X,high */
-> -		ret = parse_crashkernel_high(boot_command_line, total_mem,
-> -					     &crash_size, &crash_base);
-> -		if (ret != 0 || crash_size <= 0)
-> +		/* crashkernel=X,high and possible crashkernel=Y,low */
-> +		ret = parse_crashkernel_high_low(boot_command_line, &crash_size, &low_size);
+At the very least, the correct macros should be used for the remaining
+ones.
 
-So this calls parse_crashkernel() and when that one fails, it calls this
-new weird parse high/low helper you added.
+I'll go queue this up now, thanks!
 
-But then all three end up in the same __parse_crashkernel() worker
-function which seems to do the actual parsing.
-
-What I suggested and what would be real clean is if the arches would
-simply call a *single* 
-
-	parse_crashkernel()
-
-function and when that one returns, *all* crashkernel= options would
-have been parsed properly, low, high, middle crashkernel, whatever...
-and the caller would know what crash kernel needs to be allocated.
-
-Then each arch can do its memory allocations and checks based on that
-parsed data and decide to allocate or bail.
-
-So it is getting there but it needs more surgery...
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+greg k-h

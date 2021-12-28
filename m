@@ -2,236 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D255C4808BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 12:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD514808C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 12:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236451AbhL1LTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 06:19:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
+        id S236461AbhL1LWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 06:22:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233952AbhL1LTj (ORCPT
+        with ESMTP id S233952AbhL1LWs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 06:19:39 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24CFC06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 03:19:38 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id p15so2642188ybk.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 03:19:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=V3v9cF6xHQZX39nYu8ym/1C1zcFj73ZTgDK4RjL32ms=;
-        b=gnl36jDJR9soGWjIofVVra+AwEO0DbUyq2sf8gv5WVRGOft2Jn+fQPXax0RKXDDekb
-         R575e8/Ps0nawi/CjHnuPG5MTZ5/BPSNynwsEsZl+QjBGx4mNBjD1m60y9Vo4ZExKcdx
-         oV3mL9stk5vodNV5vdeQjbrESjIwCF0ZDnCTQ3rKZ+B/t77OtxIOPPNMOaz7FaQ4f+cG
-         AxM8A7uqYF1fwLnTIT1Ab2N4cbe1OlD9Bpl7IlFXwoYcHjeVjjR0AFcBR1xnoMP/YjOx
-         E5rbSJKDCrOraUDrxwrNk2oDuA0YvRa+pfdouE4Fl304uP8PSHdK5DqdykUZPuylec3c
-         M5PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=V3v9cF6xHQZX39nYu8ym/1C1zcFj73ZTgDK4RjL32ms=;
-        b=Nz+lESpCzATMQdmBWojdzDY9m5zbZc4mX4uTEMk5hBxzr7piSIKh6gudekb3JfkWcT
-         nx16MVD75J3YUR8TrxbXbONjumPnfg79UgNBQO4FDAFWVnmnZq4tYrNKuJgdPzIuMKsL
-         UNHbpf0LkntTZMP59J4qSJ2R5ccgXY4NY25gFVd0QEcDV0F83c2/9q4P/uh5OdRfGSeo
-         bvzZVazZpYvtlBD8nERqmGd7LwioUsY8Zj44qZct/wZtK5QvNw83YGYS/wus+VchExjF
-         hKRVj6ZmepXtpZpoLwAuiTH5b2+iG3zcbuo63cmCKpVwZVsBlSal3nTw3vvCLYEYk+gg
-         6mbw==
-X-Gm-Message-State: AOAM532jwJJ+7yO4WLhMkCr/rIt0vUgY9vjbcTyc0nDiFYDo21mOQsre
-        MrEjwr8Qi0Qd8XkEbIhN8fkPQSsfnaNuROt8PIXtoA==
-X-Google-Smtp-Source: ABdhPJz+b7fJHueVaZA5rcxp8xzv5wy9X9DBv+Vy2D9Cer/VGWidIbYCrcCeAbU16InT8KuffmzrvLugRbzgydWDzz4=
-X-Received: by 2002:a25:ae85:: with SMTP id b5mr14098587ybj.200.1640690377571;
- Tue, 28 Dec 2021 03:19:37 -0800 (PST)
+        Tue, 28 Dec 2021 06:22:48 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC22C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 03:22:47 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n2AZ0-0002Aq-Sh; Tue, 28 Dec 2021 12:22:42 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n2AYz-0076Xf-SB; Tue, 28 Dec 2021 12:22:41 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n2AYy-000344-AD; Tue, 28 Dec 2021 12:22:40 +0100
+Date:   Tue, 28 Dec 2021 12:22:37 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Lars-Peter Clausen <lars@metafoo.de>
+Cc:     William Breathitt Gray <vilhelm.gray@gmail.com>,
+        linux-iio@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v2 13/23] counter: Provide alternative counter
+ registration functions
+Message-ID: <20211228112237.5tinwznxtaufl2eb@pengutronix.de>
+References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
+ <20211227094526.698714-14-u.kleine-koenig@pengutronix.de>
+ <2053a9ea-a647-89f4-497c-1141ac3e0fa7@metafoo.de>
 MIME-Version: 1.0
-References: <20211227151319.379265346@linuxfoundation.org>
-In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 28 Dec 2021 16:49:26 +0530
-Message-ID: <CA+G9fYuMGvFR4hq6KLJrj4tA-6R+H2xfUybAJuDOCnXg7eKX7w@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/38] 4.19.223-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        f.fainelli@gmail.com, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux@roeck-us.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2ka5odb7mipqo6zs"
+Content-Disposition: inline
+In-Reply-To: <2053a9ea-a647-89f4-497c-1141ac3e0fa7@metafoo.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Dec 2021 at 21:03, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.223 release.
-> There are 38 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 29 Dec 2021 15:13:09 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.223-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
+--2ka5odb7mipqo6zs
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Hello,
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+On Mon, Dec 27, 2021 at 01:16:56PM +0100, Lars-Peter Clausen wrote:
+> On 12/27/21 10:45 AM, Uwe Kleine-K=F6nig wrote:
+> > The current implementation gets device lifetime tracking wrong. The
+> > problem is that allocation of struct counter_device is controlled by the
+> > individual drivers but this structure contains a struct device that
+> > might have to live longer than a driver is bound. As a result a command
+> > sequence like:
+> >=20
+> > 	{ sleep 5; echo bang; } > /dev/counter0 &
+> > 	sleep 1;
+> > 	echo 40000000.timer:counter > /sys/bus/platform/drivers/stm32-timer-co=
+unter/unbind
+> >=20
+> > can keep a reference to the struct device and unbinding results in
+> > freeing the memory occupied by this device resulting in an oops.
+> >=20
+> > This commit provides two new functions (plus some helpers):
+> >   - counter_alloc() to allocate a struct counter_device that is
+> >     automatically freed once the embedded struct device is released
+> >   - counter_add() to register such a device.
+> >=20
+> > Note that this commit doesn't fix any issues, all drivers have to be
+> > converted to these new functions to correct the lifetime problems.
+> Nice work!
 
-## Build
-* kernel: 4.19.223-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.19.y
-* git commit: c3b6f5a58bb324123904facb3806b3bcc00bdccb
-* git describe: v4.19.222-39-gc3b6f5a58bb3
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.222-39-gc3b6f5a58bb3
+\o/
 
-## No Test Regressions (compared to v4.19.222)
+> > [...]
+> > @@ -24,6 +25,11 @@
+> >   /* Provides a unique ID for each counter device */
+> >   static DEFINE_IDA(counter_ida);
+> > +struct counter_device_allochelper {
+> > +	struct counter_device counter;
+> > +	unsigned long privdata[];
+>=20
+> The normal k*alloc functions guarantee that the allocation is cacheline
+> aligned. Without that for example the ____cacheline_aligned attribute will
+> not work correctly. And while it is unlikely that a counter driver will n=
+eed
+> for example DMA memory I think it is still good practice to guarantee this
+> here to avoid bad surprises. There are two ways of doing this.
 
-## No Test Fixes (compared to v4.19.222)
+Yeah, I thought to add more alignment once the need arises. My
+preference would be to got for the ____cacheline_aligned approach.
 
-## Test result summary
-total: 84075, pass: 68731, fail: 620, skip: 12910, xfail: 1814
+> > [...]
+> > +struct counter_device *counter_alloc(size_t sizeof_priv)
+> I'd add a parent parameter here since with the devm_ variant we have to p=
+ass
+> it anyway and this allows to slightly reduce the boilerplate code in the
+> driver where the parent field of the counter has to be initialized.
 
-## Build Summary
-* arm: 254 total, 246 passed, 8 failed
-* arm64: 35 total, 35 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 26 total, 26 passed, 0 failed
-* powerpc: 52 total, 48 passed, 4 failed
-* s390: 12 total, 12 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 34 total, 34 passed, 0 failed
+I don't feel strong here, can do that.
 
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
+> > +{
+> > +	struct counter_device_allochelper *ch;
+> > +	struct counter_device *counter;
+> > +	struct device *dev;
+> > +	int id, err;
+> > +
+> > +	ch =3D kzalloc(sizeof(*ch) + sizeof_priv, GFP_KERNEL);
+> > +	if (!ch) {
+> > +		err =3D -ENOMEM;
+> > +		goto err_alloc_ch;
+> > +	}
+> > +
+> > +	counter =3D &ch->counter;
+> > +	dev =3D &counter->dev;
+> > +
+> > +	/* Acquire unique ID */
+> > +	err =3D ida_alloc(&counter_ida, GFP_KERNEL);
+> > +	if (err < 0) {
+> > +		goto err_ida_alloc;
+> > +	}
+> There is a inconsistency whether braces are used for single statement `if=
+`s
+> in this patch.
 
---
-Linaro LKFT
-https://lkft.linaro.org
+Oh, indeed.
+
+> > +	dev->id =3D err;
+> > +
+> > +	err =3D counter_chrdev_add(counter);
+> > +	if (err < 0)
+> > +		goto err_chrdev_add;
+> > +
+> > +	device_initialize(dev);
+> > +	/* Configure device structure for Counter */
+> > +	dev->type =3D &counter_device_type;
+> > +	dev->bus =3D &counter_bus_type;
+> > +	dev->devt =3D MKDEV(MAJOR(counter_devt), id);
+> > +
+> > +	mutex_init(&counter->ops_exist_lock);
+> > +
+> > +	return counter;
+> > +
+> > +err_chrdev_add:
+> > +
+> > +	ida_free(&counter_ida, dev->id);
+> > +err_ida_alloc:
+> > +
+> > +	kfree(ch);
+> > +err_alloc_ch:
+> > +
+> > +	return ERR_PTR(err);
+> > +}
+> > +EXPORT_SYMBOL_GPL(counter_alloc);
+> > +
+> > +void counter_put(struct counter_device *counter)
+> > +{
+> > +	put_device(&counter->dev);
+> > +}
+> > +
+> > +/**
+> > + * counter_add - complete registration of a counter
+> > + * @counter: the counter to add
+> > + *
+> > + * This is part two of counter registration.
+> > + *
+> > + * If this succeeds, call counter_unregister() to get rid of the count=
+er_device again.
+> > + */
+> > +int counter_add(struct counter_device *counter)
+> > +{
+> > +	int err;
+> > +	struct device *dev =3D &counter->dev;
+> > +
+> > +	get_device(&counter->dev);
+>=20
+> This get_device() is not needed. device_add() will also add a reference, =
+so
+> you increment the reference count by 2 when calling counter_add().
+>=20
+> It is only needed to balance the put_device() in counter_unregister(). I'd
+> add a `counter->legacy_device` around that put_device() and then remove it
+> in the last patch.
+
+Ah indeed. I added that to balance the call of put_device() by devm_counter=
+_alloc()'s
+release function (devm_counter_put()). But on a quick check you're
+right. I will think about it a bit more and test.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--2ka5odb7mipqo6zs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHK83oACgkQwfwUeK3K
+7AkcGwf/ZcK6TYGqTAecs3h7cl04VmVZMhveDpedmVU+887CKf14x+C6753sRjme
+klRIrow4C9CYJznnYfnkXc0Uuf21WT6glrBM/3zoc2Mwzyu7phrveudtQCTvzU27
+qIgE5iMAeKrAmzynaSCMPRDrGOsuwQ3cK0v4RQdQOXd1B1Y+PRjZHHZOEdKwebfp
+pErqItG1fXM1qdSkOJLJaDyyiXPNF6nnRUui1fUPyrqat55e1PSM80QOC3N5CUc/
+j36YVELUHgIWHHfZkR1DKCaW02r8X4suHtOm+7AW3T1GWXH+Z+tJk9pDLOI7OFIU
+I2UEB25bm3RpbFqFYUi2FgJaFDDBqg==
+=ERGt
+-----END PGP SIGNATURE-----
+
+--2ka5odb7mipqo6zs--

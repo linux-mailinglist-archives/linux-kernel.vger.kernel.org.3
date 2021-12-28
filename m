@@ -2,85 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 314D44806A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 07:03:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ACF14806A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 07:03:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235017AbhL1GDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 01:03:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58150 "EHLO
+        id S235030AbhL1GDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 01:03:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235007AbhL1GDS (ORCPT
+        with ESMTP id S235007AbhL1GDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 01:03:18 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDF5C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 22:03:18 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id s83-20020a255e56000000b0060c46cc1890so11244824ybb.16
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 22:03:18 -0800 (PST)
+        Tue, 28 Dec 2021 01:03:49 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25974C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 22:03:49 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id l10so15166686pgm.7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 22:03:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Zn+A9HVWRK5K/dRlJI4tJZLeYf7dlCPThs0O3iIpY8w=;
-        b=UmnDHa76s6CWzJhDp5zeaRcHprWSXl+xXWXeqXjsEiZSVZieeUVf62Bmr/s/XbA47t
-         SxB8S+q589IyfEmUEyGyOnjv7IITchgd/Rc+lRQmgDfn5hw1tNkWFkXIFRG4RxL1nR8H
-         Y79vnFyNFvxiCsdhqHgD5lp6oh132+fKqZU8EImDXRfmTTvpw9UwPTHYQdURW8MbMPyr
-         ZXbWgJdhiPxAOMIVYsFoOzuSnRuRUFrqGsZ/iZEQ5wlgCeiORcTz2RqP2KMX4RHORT3s
-         J4BIpkTk807jg6m+Q6lC81E3m0xYDKkNWOpmLno3VtX8T0SxOPz6+wt4UX10qHBfLQ2T
-         P8tw==
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=T2D4rWggqTyeWT+dUh9vWilvt18O57K5Zn6xbRnbIOfqf9L4+fSNqU6amy4pxS2VDT
+         KXvjbU+o93MYIjWgUXNc/0ZhEUqM+C8F6S+suVu9ZCJ8GGDHWLbHugxp1ea0tn3H3H5l
+         gWFOHL2KCxBPf4BViP7RbX4lWTncO1Rnqm8B081xe93CpdRcHjfDHIbDyeaKp9E/1CKl
+         h9MQYzXxfkqT02Ag8sc8Ck8f9hfP6IB08lH+EVGicsrLrXc2EE44uz3+qVQcQ0erQETt
+         jxh3Ik5oCy6nMDPhoTMUUK7tt84CL4mMUmLQJomcf3p0xLqXyJZPJioGXFAYSk7qaKxI
+         JJ6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Zn+A9HVWRK5K/dRlJI4tJZLeYf7dlCPThs0O3iIpY8w=;
-        b=Zi387ujG2bk2e3oNcoSWcukRaNU6Fz1UmI5dzTAQyf8b4Ng/lBd/ajPAFZhCEatlVv
-         KtlhVgszKhtp6p1pJgQSA7cj3JznWbn2IjV24tQ+BOLUA2+/wov9SIT8UnAsxeaEDsfc
-         dQ3NY/8vPExdP3JGFKOWNaVCRMeaibPc3qeqsJFRVN/wGKx6temjjFbfginHZiHbp5hF
-         CJSrv6632nafyTrk8plJZhdqVzJFrrcvYHmsWjw/6rOeW5ZFGOqI7UWIGIDpfKOlqyWR
-         5zyJY8SNeJ9koxXNYJYggeVkY0qIf7OXtRgQKphPu8tk9tfA3nWGzXOS55G1MRLdavjS
-         /GKg==
-X-Gm-Message-State: AOAM531YZSa0fpVT2loFYMK0Q5y+MHRDw3Qa1cVMVUrBwFjZ4TvyeKV3
-        F66EuIFJ/2feMJ7H6gIhoJ7SL7ExZk2x
-X-Google-Smtp-Source: ABdhPJzbFuNpZudtTehw+vFnQNlHwReEVcccW/za68v0MmgNCYp2o46qLtj5skHRAIB9CbPBXzAneTwV0x7l
-X-Received: from pumahsu.ntc.corp.google.com ([2401:fa00:fc:202:2dc0:d0af:9576:e31])
- (user=pumahsu job=sendgmr) by 2002:a25:8547:: with SMTP id
- f7mr1217274ybn.659.1640671397304; Mon, 27 Dec 2021 22:03:17 -0800 (PST)
-Date:   Tue, 28 Dec 2021 14:02:46 +0800
-Message-Id: <20211228060246.2958070-1-pumahsu@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
-Subject: [PATCH] xhci: re-initialize the HC during resume if HCE was set
-From:   Puma Hsu <pumahsu@google.com>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc:     albertccwang@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Puma Hsu <pumahsu@google.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=E0KsxHm/MVBA+hi/nUCYkHdMYLaPXpjpCUzzGo8B4u6fV62hnYZwzQxMqnd1XPjSuc
+         7k4TXEaVEuGd2hMwFrvtjFs600U/lYXkjqfcV7X4MX/PoE13VWFdpLrjpKr69BGnram5
+         QD1VwpFAGlN5wf3tl6whcvYeFjL0x2BXKlIVrt8lAIcV9yC6TbGylq0DaTHDZotVBILe
+         6BpA5PxY6U/VX8PwRv8NntweTdYTGlPsM/APcypvqFRGKUw49D7Ogx/pWgMpXoBNdyG1
+         RmeOxAF+miZ5ondJM2wku1hIc1cEKBVlf14bly2s+cywM1KncM/ZfCGCsIlbV8Hvu8zC
+         6MUw==
+X-Gm-Message-State: AOAM530LuUhXPElAnWBH6gmDeCluxW1w2LAOdR3018YIehgwVV0CTp/i
+        7GkllgY7nHlNWLQ2KTKashAn0cem5JU6Easr1iY=
+X-Google-Smtp-Source: ABdhPJwXrECuSmIxeOidGXdsuqPgHgSml9MfBCEkXpNs0LbEOdfg+ufigYisPbXCAZCxm2dxtHkNp+XEpqmoumNxqHI=
+X-Received: by 2002:a63:954d:: with SMTP id t13mr14790508pgn.2.1640671428639;
+ Mon, 27 Dec 2021 22:03:48 -0800 (PST)
+MIME-Version: 1.0
+From:   Ben lussy <benlusy1988@gmail.com>
+Date:   Tue, 28 Dec 2021 06:03:34 +0000
+Message-ID: <CAP79b0ExfOXPBPVBnftXC_NM2bRW=aB0-+Emy9DnFU31v6TZZw@mail.gmail.com>
+Subject: Dear Sir , I am still waiting for your Email response,did you receive
+ my first email to you,Please With all due respect Can i trust you ? Yours
+ Sincerely, Mr Ben LusyDear Sir , I am still waiting for your Email
+ response,did you receive my first email to you,Please With all due respect
+ Can i trust you ? Yours Sincerely, Mr Ben Lusy
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When HCE(Host Controller Error) is set, it means an internal
-error condition has been detected. It needs to re-initialize
-the HC too.
-
-Signed-off-by: Puma Hsu <pumahsu@google.com>
----
- drivers/usb/host/xhci.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index dc357cabb265..c546d9533410 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1146,8 +1146,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
- 		temp = readl(&xhci->op_regs->status);
- 	}
- 
--	/* If restore operation fails, re-initialize the HC during resume */
--	if ((temp & STS_SRE) || hibernated) {
-+	/* If restore operation fails or HC error is detected, re-initialize the HC during resume */
-+	if ((temp & STS_SRE) || (temp & STS_HCE) || hibernated) {
- 
- 		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
- 				!(xhci_all_ports_seen_u0(xhci))) {
--- 
-2.34.1.448.ga2b2bfdf31-goog
 

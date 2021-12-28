@@ -2,201 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0DE48093B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 13:52:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E26648093F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 13:54:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbhL1Mw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 07:52:29 -0500
-Received: from mail-il1-f197.google.com ([209.85.166.197]:53820 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231695AbhL1Mw2 (ORCPT
+        id S231775AbhL1MyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 07:54:07 -0500
+Received: from mail-qv1-f49.google.com ([209.85.219.49]:34529 "EHLO
+        mail-qv1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231695AbhL1MyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 07:52:28 -0500
-Received: by mail-il1-f197.google.com with SMTP id x8-20020a92dc48000000b002b2abc6e1cbso11365308ilq.20
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 04:52:28 -0800 (PST)
+        Tue, 28 Dec 2021 07:54:05 -0500
+Received: by mail-qv1-f49.google.com with SMTP id ke6so16331205qvb.1;
+        Tue, 28 Dec 2021 04:54:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=11nooCWDtmvUpI55+wRB4ob0xvfeRFlvs5fIqAgkHbo=;
-        b=jDCH7PuEoVdrRmTBRZLUzFvlCxs8REAcCt23bhtWRJGV2lIXJ8msd4w3aYALY1xdkx
-         33wjZmWuLqg6Nmv5OEWzwywnD3eI5sljfRMUHYi/tUKlf1HYBQfY/DEwL+urj37by/5T
-         JIwt6KbYl7hAux+QULZ9jQXyDriozJSY+qIXlqzz65D09VKkqeqNz/4F0FWf/g+ErIua
-         8j5L/5Lv5Yn2+0QXuRxFe+bu29ejRgV/SNdpENuK4vIcMNUP7q5V2w2rJ+Rckammm2Th
-         YGMijndvcLz2VRm8f8cD2P6SMsgCW5gmC+yDa6fHK2zjfPEOYLZdXm9SDzeM21W0ovwy
-         tUqQ==
-X-Gm-Message-State: AOAM533JFQgXeGsOHdjPB7rOUeDGXBrfVM1bf7tUWZS6VWrTi9Btiyun
-        vMpJq7VZYpDOiPd+yXq0f8ctcobb7ER/dfkQ0e/iOZmJe2A+
-X-Google-Smtp-Source: ABdhPJwRk6mBOOEdLxiEKFf3BqHUTu280FpyfIsQH09g1gDlmrAgp6AI4OHM7M08bYcLPyFcmZfaZIUdc0Z5gKEmMG1Ipv0jZXTJ
-MIME-Version: 1.0
-X-Received: by 2002:a05:6602:204d:: with SMTP id z13mr7002170iod.13.1640695947684;
- Tue, 28 Dec 2021 04:52:27 -0800 (PST)
-Date:   Tue, 28 Dec 2021 04:52:27 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000256dc405d4344bce@google.com>
-Subject: [syzbot] INFO: rcu detected stall in tx (2)
-From:   syzbot <syzbot+da7323ba082560434f17@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, jhs@mojatatu.com, jiri@resnulli.us,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        xiyou.wangcong@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=ZJRShB4R17XUyA+Lmky9Eq7KbI1a01Ayw4czD8PmLMk=;
+        b=x/OLxIKeT5ykWdAefUBcJfl7l9cr9FWRu7ZE92sBwrejQbUMjpebLtJrrO5yKO/NNA
+         0J+bRqEfDSAGzihN14uzSexE4MOinYTOHB4imWZD4rXFSnxL2XXiXryBaU1DcrEEPOmT
+         G5cT5FwJTWBxtLjvdjuoE2AhF8DQa6fatDGjjyNUqWQ09tu28lTZHP6LqbSvzuDo8FZy
+         lB7xtuvbe6hklYmh7xE/DYjS87kvZvDi4HhLcT1POW+Sg9uPz5QKhlaF3PBsVlEI0W7K
+         noYpxIxQ731D4dDvGL7yHfIUWX4qNkjdzFW4q3Oncbo/qvVUJQqq4JuRN9XyGcmhu4Qi
+         0b1g==
+X-Gm-Message-State: AOAM531RWV6x4RyDVBkiu98KRy7xeV16OPJfCEXNDDHuBzQ4Ems+HsPN
+        WfH6z3LrmoCLsNGpLGaCLQ==
+X-Google-Smtp-Source: ABdhPJy/fzYGUO6kMogbqR18MjovZaSQSfYizR9m/aisbNPZJViok+Nkn+4LdRkBGt95ydX9TJxItg==
+X-Received: by 2002:a05:6214:500a:: with SMTP id jo10mr18668993qvb.17.1640696044298;
+        Tue, 28 Dec 2021 04:54:04 -0800 (PST)
+Received: from robh.at.kernel.org ([24.55.105.145])
+        by smtp.gmail.com with ESMTPSA id j16sm15759721qtx.92.2021.12.28.04.54.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Dec 2021 04:54:03 -0800 (PST)
+Received: (nullmailer pid 685117 invoked by uid 1000);
+        Tue, 28 Dec 2021 12:54:00 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Tony Lindgren <tony@atomide.com>, linux-kernel@vger.kernel.org,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Matt Mackall <mpm@selenic.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Nishanth Menon <nm@ti.com>,
+        Patrick Venture <venture@google.com>, openbmc@lists.ozlabs.org,
+        =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        linux-crypto@vger.kernel.org,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Tali Perry <tali.perry1@gmail.com>, devicetree@vger.kernel.org,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nancy Yuen <yuenn@google.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Nicolas Ferre <nicolas.ferre@microchip.com>
+In-Reply-To: <20211227183251.132525-2-krzysztof.kozlowski@canonical.com>
+References: <20211227183251.132525-1-krzysztof.kozlowski@canonical.com> <20211227183251.132525-2-krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH 2/8] dt-bindings: rng: atmel,at91-trng: convert Atmel TRNG to dtschema
+Date:   Tue, 28 Dec 2021 08:54:00 -0400
+Message-Id: <1640696040.235226.685116.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, 27 Dec 2021 19:32:45 +0100, Krzysztof Kozlowski wrote:
+> Convert the Atmel TRNG bindings to DT schema.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  .../bindings/rng/atmel,at91-trng.yaml         | 46 +++++++++++++++++++
+>  .../devicetree/bindings/rng/atmel-trng.txt    | 16 -------
+>  2 files changed, 46 insertions(+), 16 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/rng/atmel-trng.txt
+> 
 
-syzbot found the following issue on:
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-HEAD commit:    a8ad9a2434dc Merge tag 'efi-urgent-for-v5.16-2' of git://g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1342610db00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1a86c22260afac2f
-dashboard link: https://syzkaller.appspot.com/bug?extid=da7323ba082560434f17
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+da7323ba082560434f17@syzkaller.appspotmail.com
-
-rcu: INFO: rcu_preempt self-detected stall on CPU
-rcu: 	0-...!: (1 GPs behind) idle=cb1/1/0x4000000000000000 softirq=63991/63995 fqs=2539 
-	(t=10502 jiffies g=99869 q=2637)
-rcu: rcu_preempt kthread starved for 5423 jiffies! g99869 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=1
-rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
-rcu: RCU grace-period kthread stack dump:
-task:rcu_preempt     state:R  running task     stack:28680 pid:   14 ppid:     2 flags:0x00004000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- __schedule+0xa9a/0x4900 kernel/sched/core.c:6253
- schedule+0xd2/0x260 kernel/sched/core.c:6326
- schedule_timeout+0x14a/0x2a0 kernel/time/timer.c:1881
- rcu_gp_fqs_loop+0x186/0x810 kernel/rcu/tree.c:1955
- rcu_gp_kthread+0x1de/0x320 kernel/rcu/tree.c:2128
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-rcu: Stack dump where RCU GP kthread last ran:
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 PID: 11226 Comm: kworker/1:3 Not tainted 5.16.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events ser_release
-RIP: 0010:pv_wait_head_or_lock kernel/locking/qspinlock_paravirt.h:434 [inline]
-RIP: 0010:__pv_queued_spin_lock_slowpath+0x3ba/0xb40 kernel/locking/qspinlock.c:508
-Code: eb c6 45 01 01 41 bc 00 80 00 00 48 c1 e9 03 83 e3 07 41 be 01 00 00 00 48 b8 00 00 00 00 00 fc ff df 4c 8d 2c 01 eb 0c f3 90 <41> 83 ec 01 0f 84 72 04 00 00 41 0f b6 45 00 38 d8 7f 08 84 c0 0f
-RSP: 0018:ffffc900036278c0 EFLAGS: 00000206
-RAX: 0000000000000003 RBX: 0000000000000000 RCX: 1ffff1100fcb8d10
-RDX: 0000000000000001 RSI: 0000000000000202 RDI: 0000000000000000
-RBP: ffff88807e5c6880 R08: 0000000000000001 R09: ffffffff8ff76b6f
-R10: 0000000000000001 R11: 000000000000000f R12: 0000000000006327
-R13: ffffed100fcb8d10 R14: 0000000000000001 R15: ffff8880b9d3a880
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000561790f9c9e8 CR3: 000000000b88e000 CR4: 0000000000350ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000600
-Call Trace:
- <TASK>
- pv_queued_spin_lock_slowpath arch/x86/include/asm/paravirt.h:591 [inline]
- queued_spin_lock_slowpath arch/x86/include/asm/qspinlock.h:51 [inline]
- queued_spin_lock include/asm-generic/qspinlock.h:85 [inline]
- do_raw_spin_lock+0x200/0x2b0 kernel/locking/spinlock_debug.c:115
- spin_lock include/linux/spinlock.h:349 [inline]
- __netif_tx_lock include/linux/netdevice.h:4406 [inline]
- netif_tx_lock include/linux/netdevice.h:4491 [inline]
- netif_tx_lock_bh include/linux/netdevice.h:4500 [inline]
- dev_watchdog_down net/sched/sch_generic.c:511 [inline]
- dev_deactivate_many+0x277/0xc60 net/sched/sch_generic.c:1278
- __dev_close_many+0x133/0x2e0 net/core/dev.c:1561
- dev_close_many+0x22c/0x620 net/core/dev.c:1599
- dev_close net/core/dev.c:1625 [inline]
- dev_close+0x16d/0x210 net/core/dev.c:1619
- ser_release+0x162/0x270 drivers/net/caif/caif_serial.c:309
- process_one_work+0x9b2/0x1660 kernel/workqueue.c:2298
- worker_thread+0x65d/0x1130 kernel/workqueue.c:2445
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-NMI backtrace for cpu 0
-CPU: 0 PID: 1224 Comm: aoe_tx0 Not tainted 5.16.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111
- nmi_trigger_cpumask_backtrace+0x1b3/0x230 lib/nmi_backtrace.c:62
- trigger_single_cpu_backtrace include/linux/nmi.h:164 [inline]
- rcu_dump_cpu_stacks+0x25e/0x3f0 kernel/rcu/tree_stall.h:343
- print_cpu_stall kernel/rcu/tree_stall.h:627 [inline]
- check_cpu_stall kernel/rcu/tree_stall.h:711 [inline]
- rcu_pending kernel/rcu/tree.c:3878 [inline]
- rcu_sched_clock_irq.cold+0x5c/0x759 kernel/rcu/tree.c:2597
- update_process_times+0x16d/0x200 kernel/time/timer.c:1785
- tick_sched_handle+0x9b/0x180 kernel/time/tick-sched.c:226
- tick_sched_timer+0x1b0/0x2d0 kernel/time/tick-sched.c:1428
- __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
- __hrtimer_run_queues+0x1c0/0xe50 kernel/time/hrtimer.c:1749
- hrtimer_interrupt+0x31c/0x790 kernel/time/hrtimer.c:1811
- local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1086 [inline]
- __sysvec_apic_timer_interrupt+0x146/0x530 arch/x86/kernel/apic/apic.c:1103
- sysvec_apic_timer_interrupt+0x8e/0xc0 arch/x86/kernel/apic/apic.c:1097
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:638
-RIP: 0010:__raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:152 [inline]
-RIP: 0010:_raw_spin_unlock_irqrestore+0x38/0x70 kernel/locking/spinlock.c:194
-Code: 74 24 10 e8 fa db 15 f8 48 89 ef e8 b2 51 16 f8 81 e3 00 02 00 00 75 25 9c 58 f6 c4 02 75 2d 48 85 db 74 01 fb bf 01 00 00 00 <e8> f3 1b 09 f8 65 8b 05 0c a1 bb 76 85 c0 74 0a 5b 5d c3 e8 20 03
-RSP: 0018:ffffc9000537fab8 EFLAGS: 00000206
-RAX: 0000000000000002 RBX: 0000000000000200 RCX: 1ffffffff1fffe6e
-RDX: 0000000000000000 RSI: 0000000000000202 RDI: 0000000000000001
-RBP: ffffffff90790558 R08: 0000000000000001 R09: ffffffff8ff76b6f
-R10: 0000000000000001 R11: 0000000000000001 R12: 00000000ffffffff
-R13: ffff8880281b8001 R14: 0000000000000020 R15: 0000000000000020
- spin_unlock_irqrestore include/linux/spinlock.h:404 [inline]
- uart_write_room+0x174/0x2f0 drivers/tty/serial/serial_core.c:611
- tty_write_room+0x61/0x80 drivers/tty/tty_ioctl.c:79
- handle_tx+0x159/0x610 drivers/net/caif/caif_serial.c:226
- __netdev_start_xmit include/linux/netdevice.h:4994 [inline]
- netdev_start_xmit include/linux/netdevice.h:5008 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0x1eb/0x920 net/core/dev.c:3606
- __dev_queue_xmit+0x299a/0x3650 net/core/dev.c:4229
- tx+0x68/0xb0 drivers/block/aoe/aoenet.c:63
- kthread+0x1e7/0x3b0 drivers/block/aoe/aoecmd.c:1230
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	eb c6                	jmp    0xffffffc8
-   2:	45 01 01             	add    %r8d,(%r9)
-   5:	41 bc 00 80 00 00    	mov    $0x8000,%r12d
-   b:	48 c1 e9 03          	shr    $0x3,%rcx
-   f:	83 e3 07             	and    $0x7,%ebx
-  12:	41 be 01 00 00 00    	mov    $0x1,%r14d
-  18:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  1f:	fc ff df
-  22:	4c 8d 2c 01          	lea    (%rcx,%rax,1),%r13
-  26:	eb 0c                	jmp    0x34
-  28:	f3 90                	pause
-* 2a:	41 83 ec 01          	sub    $0x1,%r12d <-- trapping instruction
-  2e:	0f 84 72 04 00 00    	je     0x4a6
-  34:	41 0f b6 45 00       	movzbl 0x0(%r13),%eax
-  39:	38 d8                	cmp    %bl,%al
-  3b:	7f 08                	jg     0x45
-  3d:	84 c0                	test   %al,%al
-  3f:	0f                   	.byte 0xf
+Full log is available here: https://patchwork.ozlabs.org/patch/1573492
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+rng@e2010000: compatible:0: 'microchip,sama7g5-trng' is not one of ['atmel,at91sam9g45-trng', 'microchip,sam9x60-trng']
+	arch/arm/boot/dts/at91-sama7g5ek.dt.yaml
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+rng@e2010000: compatible: Additional items are not allowed ('atmel,at91sam9g45-trng' was unexpected)
+	arch/arm/boot/dts/at91-sama7g5ek.dt.yaml
+
+rng@e2010000: compatible: ['microchip,sama7g5-trng', 'atmel,at91sam9g45-trng'] is too long
+	arch/arm/boot/dts/at91-sama7g5ek.dt.yaml
+

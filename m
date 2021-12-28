@@ -2,143 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E136B480D19
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 21:54:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D53480D17
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 21:52:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237234AbhL1Uxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 15:53:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
+        id S237331AbhL1Uwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 15:52:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234275AbhL1Uxy (ORCPT
+        with ESMTP id S234296AbhL1Uw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 15:53:54 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7969DC06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 12:53:53 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id gj24so16845906pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 12:53:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rtheOD954UZ4UHCXkqeufnOIwdZjJ8l/GyWaTKzepqc=;
-        b=qvmQZgDTRL+6+kkvT7+kghe6lbOhac4fIgFJ6G46s2mFi0mCaLcxV+UXEt/SIoXnY3
-         iMaBz/GroXquQardt3zE0P900z5vDxOqZw5XMGPYvGr4xFBJ4MatgCeaOBDoHlJ446rb
-         1FINfb8XUdz2lgTviBBoHs7XdAfQjZVKtofuus/AGm5NAqMX+AMoA9vNp0wAlv5TyiL/
-         u+a60xuUsovfoEnOAVHOE15CAV6pCwRP/o7LC6f7UXB7MBgmBHMcssvq0tWl4QXuKzx+
-         lXHTNeNeORoWceKX9PmwZo0fYzCDG7DlnV8A8dCmS+RM7Raqzovk6oo9QuhEgnr8UmRx
-         dyew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rtheOD954UZ4UHCXkqeufnOIwdZjJ8l/GyWaTKzepqc=;
-        b=jopYkUb+lfhZDmbCyH2Wm5za+i/buo4FhVXUGo6T8XtqQFIVwQe4n+I6QQKgLiodLa
-         4YTJ3RA3a03IaGcrj14EtNXAepXWBtJ1YqBqFTEOCwONJamypBLaw80xOMYuy/TLsHIE
-         kKOibkLPVzCW7nwgoDFRNNMZtgVzKadX64YpfC0cJWmxNYBt/hVbM8/hObF6jfSjQvVo
-         q2kTlzHH16D3Ue0YfLmkAX3CE/XqapE1lk4zym1thx6H7HkJ+8TA13T3mIAoLtf64XgN
-         B7meJWH62zStYCKnnyXSZILz4ToXTr7IgdD9oiecid+I/CbvPNVZWpXJTZ6Oao66qv4q
-         toag==
-X-Gm-Message-State: AOAM532FiSlLtCQ4qtSjG/7+8JXdv+KbcqWFi9ttgwMLGNid2DDXkwto
-        Q9hPnXi1aYfkj3hom8QEbu7rvA==
-X-Google-Smtp-Source: ABdhPJwGZ2GNhrhQf0tiTMu3HKqGnEQOlhG373uOM20jR2RCWsJnMAFQRcUm5imzOzNgpgsmVghZsA==
-X-Received: by 2002:a17:903:191:b0:148:b9fc:c42b with SMTP id z17-20020a170903019100b00148b9fcc42bmr23367215plg.63.1640724832747;
-        Tue, 28 Dec 2021 12:53:52 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id j23sm17908259pgn.40.2021.12.28.12.53.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 12:53:52 -0800 (PST)
-Date:   Tue, 28 Dec 2021 20:53:49 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     syzbot <syzbot+82112403ace4cbd780d8@syzkaller.appspotmail.com>
-Cc:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        pbonzini@redhat.com, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org
-Subject: Re: [syzbot] WARNING in vmx_queue_exception
-Message-ID: <Yct5XTxo/E10r5hW@google.com>
-References: <0000000000008a5baf05d3fb593e@google.com>
+        Tue, 28 Dec 2021 15:52:29 -0500
+Received: from haggis.mythic-beasts.com (haggis.mythic-beasts.com [IPv6:2a00:1098:0:86:1000:0:2:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABA7C061574;
+        Tue, 28 Dec 2021 12:52:28 -0800 (PST)
+Received: from [81.101.6.87] (port=39592 helo=jic23-huawei)
+        by haggis.mythic-beasts.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <jic23@jic23.retrosnub.co.uk>)
+        id 1n2JSI-0003Tt-F6; Tue, 28 Dec 2021 20:52:23 +0000
+Date:   Tue, 28 Dec 2021 20:58:05 +0000
+From:   Jonathan Cameron <jic23@jic23.retrosnub.co.uk>
+To:     "Tanislav, Cosmin" <Cosmin.Tanislav@analog.com>
+Cc:     Cosmin Tanislav <demonsingur@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] iio: accel: add ADXL367 driver
+Message-ID: <20211228205757.7654cb66@jic23-huawei>
+In-Reply-To: <edb634a17ba04f4cb5e77fa3b5c69358@analog.com>
+References: <20211217114548.1659721-1-cosmin.tanislav@analog.com>
+        <20211217114548.1659721-3-cosmin.tanislav@analog.com>
+        <20211223130100.059231d6@jic23-huawei>
+        <edb634a17ba04f4cb5e77fa3b5c69358@analog.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000008a5baf05d3fb593e@google.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-BlackCat-Spam-Score: 19
+X-Spam-Status: No, score=1.9
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 25, 2021, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    6e0567b73052 Merge tag 'for-linus' of git://git.kernel.org..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=128c1adbb00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=6104739ac5f067ea
-> dashboard link: https://syzkaller.appspot.com/bug?extid=82112403ace4cbd780d8
-> compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+82112403ace4cbd780d8@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 28019 at arch/x86/kvm/vmx/vmx.c:1616 vmx_queue_exception+0x2f2/0x440 arch/x86/kvm/vmx/vmx.c:1616
-> Modules linked in:
-> CPU: 1 PID: 28019 Comm: syz-executor.5 Not tainted 5.16.0-rc6-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> RIP: 0010:vmx_queue_exception+0x2f2/0x440 arch/x86/kvm/vmx/vmx.c:1616
-> Code: 41 5e 41 5f 5d e9 de b3 fd ff e8 79 22 60 00 eb 05 e8 72 22 60 00 48 83 c4 18 5b 41 5c 41 5d 41 5e 41 5f 5d c3 e8 5e 22 60 00 <0f> 0b e9 78 fe ff ff 89 f9 80 e1 07 38 c1 0f 8c 35 fd ff ff e8 15
-> RSP: 0018:ffffc90010587450 EFLAGS: 00010287
-> RAX: ffffffff812469b2 RBX: 0000000000000001 RCX: 0000000000040000
-> RDX: ffffc900051ea000 RSI: 0000000000001923 RDI: 0000000000001924
-> RBP: 0000000000000000 R08: ffffffff81246824 R09: ffffed100645904d
-> R10: ffffed100645904d R11: 0000000000000000 R12: ffff8880322c8000
-> R13: dffffc0000000000 R14: 0000000000000006 R15: 0000000080000006
-> FS:  00007fe6788f8700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f4f4bcd8058 CR3: 0000000087d66000 CR4: 00000000003526f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  kvm_inject_exception arch/x86/kvm/x86.c:9071 [inline]
->  inject_pending_event arch/x86/kvm/x86.c:9145 [inline]
->  vcpu_enter_guest+0x19aa/0x9df0 arch/x86/kvm/x86.c:9801
->  vcpu_run+0x4d3/0xe50 arch/x86/kvm/x86.c:10055
->  kvm_arch_vcpu_ioctl_run+0x494/0xb20 arch/x86/kvm/x86.c:10250
->  kvm_vcpu_ioctl+0x894/0xe20 arch/x86/kvm/../../../virt/kvm/kvm_main.c:3727
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:874 [inline]
->  __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:860
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
+Hi Cosmin,
 
-This is all but guaranteed to be "fixed" by commit cd0e615c49e5 ("KVM: nVMX:
-Synthesize TRIPLE_FAULT for L2 if emulation is required").  The GCE instance has
-unrestricted guest enabled, which means the only way for emulation_required to be
-set is by disabling it in vmcs12.  That's also supported by the fact that this
-just recently showed up, as commit c8607e4a086f ("KVM: x86: nVMX: don't fail
-nested VM entry on invalid guest state if !from_vmentry") likely allowed syzkaller
-to get emulation_required set while L2 is active.
+Happy New year for a few day's time.
 
-But, "fixed" is in quotes because is that only covers the nested case, there are
-a multitude of ways that userspace can trigger the WARN when running non-nested
-with kvm_intel.unrestricted_guest=0.  The easiest "fix" would be to simply delete
-the WARN.  The downside is that instead of getting a WARN or explicit error, the
-vCPU will go into the weeds if userspace or KVM screws up.
+> > ...
+> >   
+> > > +
+> > > +static bool adxl367_push_event(struct iio_dev *indio_dev, u8 status)
+> > > +{
+> > > +	unsigned int ev_dir;
+> > > +
+> > > +	if (FIELD_GET(ADXL367_STATUS_ACT_MASK, status))
+> > > +		ev_dir = IIO_EV_DIR_RISING;
+> > > +	else if (FIELD_GET(ADXL367_STATUS_INACT_MASK, status))
+> > > +		ev_dir = IIO_EV_DIR_FALLING;
+> > > +	else
+> > > +		return false;
+> > > +
+> > > +	iio_push_event(indio_dev,
+> > > +		       IIO_MOD_EVENT_CODE(IIO_ACCEL, 0,  
+> > IIO_MOD_X_OR_Y_OR_Z,  
+> > > +					  IIO_EV_TYPE_THRESH, ev_dir),  
+> > This is unusual for event detection as it's a simple or of separately
+> > applied thresholds on X, Y and Z axes.  Given the effect of gravity that
+> > means you have to set the thresholds very wide.
+> > 
+> > Also, I'd expect these to be magnitudes, not THRESH - no data sheet that
+> > I can find though so can't be sure.
+> >   
+> 
+> Actually, the chip has a referenced, and an absolute mode. We use reference mode
+> in this driver, as configured in write_event_config.
+> The motion detection details are about the same as ADXL362 (page 14).
+> https://www.analog.com/media/en/technical-documentation/data-sheets/ADXL362.pdf
 
-The alternative is to add a pre-check in KVM_RUN to detect userspace abuse/bugs,
-which would allow KVM to keep the WARN to detect KVM bugs.  A check in KVM_RUN is
-necessary because KVM can't force specific ordering between KVM_SET_VCPU_EVENTS
-and KVM_SET_SREGS, e.g. clearing exception.pending in KVM_SET_SREGS doesn't prevent
-userspace from setting it in KVM_SET_VCPU_EVENTS, and disallowing KVM_SET_VCPU_EVENTS
-with emulation_required would prevent userspace from queuing an exception and then
-stuffing sregs.
+Interesting.  We should figure out some way to make that clear to userspace
+given right now it has no way of knowing that and might set inappropriate limits
+without that information.
 
-I'll send a patch and test for the clean fix, it's not really gross, just annoying
-that unrestricted_guest=0 requires so much dedicated handling :-/
+It's kind of similar to some of the adaptive thresholds, just that it uses
+the value at a particular moment.
+
+Worth noting that for the adxl362 at least the maths is
+ABS(Acceleration - reference) > Threshold which is a magnitude not a threshold
+unless you want to represent it as a pair of thresholds (above and below) which
+gets fiddly as I assume there is only one control
+
+> 
+> 
+> > > +		       iio_get_time_ns(indio_dev));
+> > > +
+> > > +	return true;
+> > > +}
+
+...
+
+> > > +static int adxl367_write_event_config(struct iio_dev *indio_dev,
+> > > +				      const struct iio_chan_spec *chan,
+> > > +				      enum iio_event_type type,
+> > > +				      enum iio_event_direction dir,
+> > > +				      int state)
+> > > +{
+> > > +	struct adxl367_state *st = iio_priv(indio_dev);
+> > > +	enum adxl367_activity_type act;
+> > > +	int ret;
+> > > +
+> > > +	switch (dir) {
+> > > +	case IIO_EV_DIR_RISING:
+> > > +		act = ADXL367_ACTIVITY;
+> > > +		break;
+> > > +	case IIO_EV_DIR_FALLING:
+> > > +		act = ADXL367_INACTIVITY;
+> > > +		break;
+> > > +	default:
+> > > +		return -EINVAL;
+> > > +	}
+> > > +
+> > > +	ret = iio_device_claim_direct_mode(indio_dev);  
+> > 
+> > It's unusual (though not unheard of) to have events that cannot be enabled
+> > at the same time as a fifo.  If that's true here, please add some comments
+> > to explain why.  Or is this just about the impact of having to disable
+> > the measurement to turn it on and the resulting interruption of data
+> > capture?
+> > 
+> > If so that needs more thought as we have a situation where you can (I think)
+> > have events as long as you enable them before the fifo based capture is
+> > started,
+> > but cannot enable them after.
+> >   
+> 
+> That is indeed the case. You mentioned in a previous patchset that various
+> attributes could toggle measurement mode while the FIFO capture was running,
+> so I checked all the possible places where that could happen and added claim
+> direct mode. Not too nice, but it's the nature of the chip...
+
+Hmm. I'm not sure what the right thing to do here is. Maybe we need a docs update
+to explicitly call out that this might happen for the event enables?  Calling
+it out for all devices is fine because all we are doing is saying userspace would
+ideally cope with this situation and make the decision to disable the buffered
+mode if it wants to enable events then reenable it afterwards if that is what
+is desired.
+
+Jonathan
+
+

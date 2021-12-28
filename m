@@ -2,67 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B89448070C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 08:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D610F48070A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 08:47:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235369AbhL1HrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 02:47:25 -0500
-Received: from mga12.intel.com ([192.55.52.136]:24848 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235307AbhL1HrY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 02:47:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640677644; x=1672213644;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=VyO5iu68EBwzTW6R2FWft5RvC5TKuO++AyyVXExQUa8=;
-  b=XuRH90C6e5vWHI79/18rvlxV/XK7IO5D1q8/o+QFHKrZChkhnshBSHmr
-   m4d8lKHmgmQG1JSQj6sP9JNo2lJXUF9FXPOESLcrb46Wk9FvwaL+z7Sxx
-   oICyU45j8KbYEjuccYrmgw+2xnSIfWMgVA700BJhaE393kaDcbBtl02zO
-   J6BENnUVf5hFz2KISa5bvLvXXRxyPzxuK5G0RMsVt1xYRTT/w4i/q+aYm
-   7XETZ2h8PMnxSYgvwXkIA6AQQJGnL8ILOIPq4+bw8oi6PAhAMeY6cLhLT
-   P8K9dZP2VtqZi0/YmsjqADaKSE3G+KGqlNo0FNOgEp16+yxfgjdRPRsaN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="221327252"
-X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
-   d="scan'208";a="221327252"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 23:47:24 -0800
-X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
-   d="scan'208";a="510103421"
-Received: from krausnex-mobl.ger.corp.intel.com (HELO [10.13.8.81]) ([10.13.8.81])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 23:47:22 -0800
-Message-ID: <d7d50687-2bee-c540-a7c1-46a6952c0d32@linux.intel.com>
-Date:   Tue, 28 Dec 2021 09:47:13 +0200
+        id S235357AbhL1HrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 02:47:20 -0500
+Received: from smtp05.smtpout.orange.fr ([80.12.242.127]:51899 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235307AbhL1HrR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 02:47:17 -0500
+Received: from [192.168.1.18] ([86.243.171.122])
+        by smtp.orange.fr with ESMTPA
+        id 27CVnS4XgOvR027CVnKjjk; Tue, 28 Dec 2021 08:47:16 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Tue, 28 Dec 2021 08:47:16 +0100
+X-ME-IP: 86.243.171.122
+Content-Type: multipart/mixed; boundary="------------lI2ea0rdpfitzqaLBQKSpkWW"
+Message-ID: <f78b974a-e36b-6d23-6977-fdf50c05600b@wanadoo.fr>
+Date:   Tue, 28 Dec 2021 08:47:15 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [Intel-wired-lan] [PATCH] igc: updated TX timestamp support for
- non-MSI-X platforms
-Content-Language: en-US
-To:     James McLaughlin <james.mclaughlin@qsc.com>, davem@davemloft.net,
-        kuba@kernel.org, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com
-Cc:     netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-kernel@vger.kernel.org
-References: <20211217205209.723782-1-james.mclaughlin@qsc.com>
-From:   "Kraus, NechamaX" <nechamax.kraus@linux.intel.com>
-In-Reply-To: <20211217205209.723782-1-james.mclaughlin@qsc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+To:     syzbot+e7d46eb426883fb97efd@syzkaller.appspotmail.com
+Cc:     glider@google.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
+        usb-storage@lists.one-eyed-alien.net,
+        Kernel Janitors <kernel-janitors@vger.kernel.org>
+References: <0000000000007d25ff059457342d@google.com>
+Subject: Re: KMSAN: uninit-value in alauda_check_media
+Content-Language: fr
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <0000000000007d25ff059457342d@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/17/2021 22:52, James McLaughlin wrote:
-> Time synchronization was not properly enabled on non-MSI-X platforms.
-> 
-> Signed-off-by: James McLaughlin <james.mclaughlin@qsc.com>
-> Reviewed-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
-> ---
->   drivers/net/ethernet/intel/igc/igc_main.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-Tested-by: Nechama Kraus <nechamax.kraus@linux.intel.com>
+This is a multi-part message in MIME format.
+--------------lI2ea0rdpfitzqaLBQKSpkWW
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Hi,
+
+(2nd try - text only format - sorry for the noise)
+
+
+first try to use syzbot. I hope I do it right.
+Discussion about the syz report can be found at 
+https://lore.kernel.org/linux-kernel/0000000000007d25ff059457342d@google.com/
+
+This patch only test if alauda_get_media_status() (and its embedded 
+usb_stor_ctrl_transfer()) before using the data.
+In case of error, it returns USB_STOR_TRANSPORT_ERROR as done elsewhere.
+
+#syz test: 
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+
+CJ
+
+
+--------------lI2ea0rdpfitzqaLBQKSpkWW
+Content-Type: text/x-csrc; charset=UTF-8; name="patch_alauda.c"
+Content-Disposition: attachment; filename="patch_alauda.c"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL3N0b3JhZ2UvYWxhdWRhLmMgYi9kcml2ZXJzL3Vz
+Yi9zdG9yYWdlL2FsYXVkYS5jCmluZGV4IDIwYjg1N2U5N2U2MC4uNmM0ODZkOTY0OTExIDEw
+MDY0NAotLS0gYS9kcml2ZXJzL3VzYi9zdG9yYWdlL2FsYXVkYS5jCisrKyBiL2RyaXZlcnMv
+dXNiL3N0b3JhZ2UvYWxhdWRhLmMKQEAgLTMxOCw3ICszMTgsOCBAQCBzdGF0aWMgaW50IGFs
+YXVkYV9nZXRfbWVkaWFfc3RhdHVzKHN0cnVjdCB1c19kYXRhICp1cywgdW5zaWduZWQgY2hh
+ciAqZGF0YSkKIAlyYyA9IHVzYl9zdG9yX2N0cmxfdHJhbnNmZXIodXMsIHVzLT5yZWN2X2N0
+cmxfcGlwZSwKIAkJY29tbWFuZCwgMHhjMCwgMCwgMSwgZGF0YSwgMik7CiAKLQl1c2Jfc3Rv
+cl9kYmcodXMsICJNZWRpYSBzdGF0dXMgJTAyWCAlMDJYXG4iLCBkYXRhWzBdLCBkYXRhWzFd
+KTsKKwlpZiAocmMgPT0gVVNCX1NUT1JfWEZFUl9HT09EKQorCQl1c2Jfc3Rvcl9kYmcodXMs
+ICJNZWRpYSBzdGF0dXMgJTAyWCAlMDJYXG4iLCBkYXRhWzBdLCBkYXRhWzFdKTsKIAogCXJl
+dHVybiByYzsKIH0KQEAgLTQ1Myw4ICs0NTQsMTEgQEAgc3RhdGljIGludCBhbGF1ZGFfY2hl
+Y2tfbWVkaWEoc3RydWN0IHVzX2RhdGEgKnVzKQogewogCXN0cnVjdCBhbGF1ZGFfaW5mbyAq
+aW5mbyA9IChzdHJ1Y3QgYWxhdWRhX2luZm8gKikgdXMtPmV4dHJhOwogCXVuc2lnbmVkIGNo
+YXIgc3RhdHVzWzJdOworCWludCByYzsKIAotCWFsYXVkYV9nZXRfbWVkaWFfc3RhdHVzKHVz
+LCBzdGF0dXMpOworCXJjID0gYWxhdWRhX2dldF9tZWRpYV9zdGF0dXModXMsIHN0YXR1cyk7
+CisJaWYgKHJjICE9IFVTQl9TVE9SX1RSQU5TUE9SVF9HT09EKQorCQlyZXR1cm4gVVNCX1NU
+T1JfVFJBTlNQT1JUX0VSUk9SOwogCiAJLyogQ2hlY2sgZm9yIG5vIG1lZGlhIG9yIGRvb3Ig
+b3BlbiAqLwogCWlmICgoc3RhdHVzWzBdICYgMHg4MCkgfHwgKChzdGF0dXNbMF0gJiAweDFG
+KSA9PSAweDEwKQo=
+--------------lI2ea0rdpfitzqaLBQKSpkWW--
 

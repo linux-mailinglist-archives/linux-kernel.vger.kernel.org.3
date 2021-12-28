@@ -2,60 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38CE1480DE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 00:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB9A480DE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 00:24:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237746AbhL1XOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 18:14:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60132 "EHLO
+        id S237758AbhL1XYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 18:24:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237737AbhL1XOG (ORCPT
+        with ESMTP id S237737AbhL1XYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 18:14:06 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C336C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 15:14:06 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id w24so14557564ply.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 15:14:06 -0800 (PST)
+        Tue, 28 Dec 2021 18:24:41 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB49C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 15:24:41 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id t1-20020a6564c1000000b002e7f31cf59fso10068728pgv.14
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 15:24:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Av10FJHZ16PNlaWBwLeHhLYMKvHi/4lm87heoggNDKA=;
-        b=avDmmO87bgVuaUHYWdo0zielDmJi9VhHpZprIAY34IQtOhjT0OM25fmEYhLSesc6a3
-         R3uToAqwmnIktJoW5nG8z9fF1pV8ODb8yqSRJSyB0mdR0fMYufSLxjzOs1O+uhwXvP6d
-         wOWphjHCqJ/IUAf6LxBpIJmsMi0EtHR/t7BFxfZY94Un/e1PPO6Y+WwmjPBUuJozDYr3
-         UwDCu6srkV22k1wenTjOkHmCuwRAmzUMdl+d9PljEIbNt/W19dq+JjQn5CUQwEuv85Gh
-         zRk1kiJrF2sKrZ4m2Lpl484Bqqcnt5efEF4TMi+9itcc5O7ojtUfC3Vtb1o5ZTbhV2to
-         lnJw==
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=VCUbiUfxRQgO1C3fIu9TBCkG8k6G/qD2BOcSRTbuD1c=;
+        b=lB59nZUv8KWJ5mLd88XkrXrrAgAQ6si3Sg1nBEAgELcKOmTCvXm44WSrvCJLWidktY
+         4ldpdJUkkLqwAtYCIm7aixOmQ/mHsI5qEDn1XlOJ1Mun5XP0Qml/697U181sepfza350
+         wjtDbCnHecuHUTFurFEw3CPXDr5PLs16oTKZM3Rgqn6ESeMAE5XBsi05rHElabyPJNKI
+         KLsJ+uYTZlaHW0iYvhM/ZkXagRhmN2fbLwzb2oVIMbAxwERg7UcUEQaLp4MOG1BU/uOS
+         FpHfHw4VxJZRmvpyHhxOlC8rNr/Hs9xmocB4pC0vIo49B+ounp4WZdXt6RstW3W6hiQU
+         a5Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Av10FJHZ16PNlaWBwLeHhLYMKvHi/4lm87heoggNDKA=;
-        b=Wh3711B3iyHQpOoJ3FF9DXVBUgqTd+ep5zne0ZM47gpbRjTLJWAtW1WZ//i0UFioBw
-         40YGajl81kwGSWL0/jsJ7AZhzHV5jTX0/am5xWZK4XzhpYoihBSv+3gfJpYjLVmO9ucg
-         tBOqYx73I9sFfS3ygSS+WVebzh2IRUwf95nrVpRYO7m9yqUj/uTcCnvDnJyfCImO45/x
-         /mMk3qWey2lfxwE09+Y2Zon5YvPlW8JkB5X3Q1dHHb981FGAocZ5ts2Jxbcw71RgfFex
-         f4ca/2EN6fq/M8tDSlnXzd4bOmOxchsU9GF+6nlyRd22g4nX/5t7olIvLKv0WG/S+ygA
-         tSMQ==
-X-Gm-Message-State: AOAM530nKWMPTGI5v7EE5Ivc/4Ocs+j3ZeK+odaaeyNZ+dTbs/JBDxni
-        kFV8Y8OHcM0taZYny81PVL3UqUJII2rmzzId9hg=
-X-Google-Smtp-Source: ABdhPJx0PxZC4pfnoCykSsgCfdLouZOQ/HjotNgmmsipgC9guYQQGIY3KwxceTe3bPQEpRBHd5IyJnRqaBj1t1N3ePc=
-X-Received: by 2002:a17:90a:f293:: with SMTP id fs19mr2522261pjb.25.1640733245608;
- Tue, 28 Dec 2021 15:14:05 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a05:6a11:390:0:0:0:0 with HTTP; Tue, 28 Dec 2021 15:14:05
- -0800 (PST)
-Reply-To: fionahill.usa@hotmail.com
-From:   Fiona Hill <tonyelumelu67@gmail.com>
-Date:   Tue, 28 Dec 2021 15:14:05 -0800
-Message-ID: <CAAVnhxL3vu9xVYMAqQWxFsSwA8UTqz5rUm9rxu-L4zf0BEq5wQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=VCUbiUfxRQgO1C3fIu9TBCkG8k6G/qD2BOcSRTbuD1c=;
+        b=UluZc/AzF/ti4rmpPsVLQy8eLgSULUG2tB2/jTKcX7x2g3C5TLJdKM2Rv0UAyR3zPN
+         0eo/RP98SKosbiR2AhnWZZ8ytYkiXh+bMUILFg0UcdAoIpOqxcAZKS6mLL2mqLTPcH7f
+         RBhqvy5uVnG1n1goxsxytJ30EDq5fOiFOuZwWJplGRlmGDTxPTJayq9CR15c9VoojLk6
+         aXcORtWrwRkwQJ9tIozzqzloIANPG59JAGuVQPW6MY4OfLslPTXJL+DPz09FMxfJKnsl
+         +S81gnmTlcGwCQvXVOU4o3hz64QYfolUkCOfgdvTm6Od/Qy2RHRgQI7EMSsuH/FupZ5b
+         I+aw==
+X-Gm-Message-State: AOAM533vceBPVsar5Jnh3JPSui/oC3t61lKt2yaYs6YCrsnyhmmg8k96
+        oLFybfOswH770Z04fEybLSTYJZpHbo0=
+X-Google-Smtp-Source: ABdhPJzPjPTQbztBMp2uTNDFtTsH69aLQHjp2cS0Tw9ZlDzLurVhqCX/7moCfZkIjtfq+1Hqy+N1RtO0QOU=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:aa7:9298:0:b0:4ba:7d3a:1742 with SMTP id
+ j24-20020aa79298000000b004ba7d3a1742mr24182188pfa.62.1640733881004; Tue, 28
+ Dec 2021 15:24:41 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Tue, 28 Dec 2021 23:24:35 +0000
+Message-Id: <20211228232437.1875318-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
+Subject: [PATCH 0/2] KVM: VMX: Fix and test for emulation + exception
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+82112403ace4cbd780d8@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fix an issue that allows userspace to trigger a WARN by rejecting KVM_RUN
+if userspace attempts to run a vCPU that require emulation in KVM and has
+a pending exception, which is not supported in KVM.
+
+No small part of me thinks this is a waste of code and that we'd be better
+off just deleting the WARN.  But it's also not hard to fix and there are
+still folks out there that run on Core2...
+
+Intentionally didn't tag for stable.  I highly doubt this actually fixes
+anything for anyone, the goal is purely to prevent userspace from triggering
+the WARN.
+
+Sean Christopherson (2):
+  KVM: VMX: Reject KVM_RUN if emulation is required with pending
+    exception
+  KVM: selftests: Add a test to force emulation with a pending exception
+
+ arch/x86/include/asm/kvm-x86-ops.h            |   1 +
+ arch/x86/include/asm/kvm_host.h               |   1 +
+ arch/x86/kvm/svm/svm.c                        |   6 +
+ arch/x86/kvm/vmx/vmx.c                        |  22 ++-
+ arch/x86/kvm/x86.c                            |  12 +-
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../vmx_exception_with_invalid_guest_state.c  | 139 ++++++++++++++++++
+ 8 files changed, 178 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c
+
 -- 
-Hi, did you receive my message  i send to you?
+2.34.1.448.ga2b2bfdf31-goog
+

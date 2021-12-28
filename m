@@ -2,86 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4054A480BDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 18:08:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3761480BD8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 18:07:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236619AbhL1RIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 12:08:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35620 "EHLO
+        id S236609AbhL1RHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 12:07:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236599AbhL1RH7 (ORCPT
+        with ESMTP id S236599AbhL1RHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 12:07:59 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79AFC061574;
-        Tue, 28 Dec 2021 09:07:58 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id w19-20020a056830061300b0058f1dd48932so24613761oti.11;
-        Tue, 28 Dec 2021 09:07:58 -0800 (PST)
+        Tue, 28 Dec 2021 12:07:48 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91E2C06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 09:07:47 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id x10so26030423oix.6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 09:07:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=ybZPWyYt00abn3G1CpfroXfVp6h4A3rtqsrtum8vIao=;
-        b=Gi8W0EpxHp6cVp2F+XEc/YVoWm9Yf6/u+jHSj7tr1MvoM79c3GZ2lWcc6U7+c1E2Ow
-         2PNoG/2hNppGirVZCBBJcMhSPdw11P4xmyoDJEfu7fzX3hpoVKOqLLr0dBsVON81m+Mh
-         21NdiU73q+HygJdDcb7t+7+KcYKtG/rOdVaXjAeFfoLMFLq+12/mcZCmy1xkWqWOd2nC
-         P/PH+JiA0ayakMKBS8JYgDxjXWmuH5jvM7oTaTiNzjpTsRlwxfQcTKyawZBKtQomrcaH
-         xke+lnmTm9KXH9fSf0r40E8Fo4f1xI9ERSCYRLTfptLRZastzBx5EayWheARtAqdZaDk
-         sqHg==
+        bh=oZ/3RWIICayqeX8NGvH8uNdXpYzICfkoNEUUnjvFbK4=;
+        b=hckZEzqYtQUUAo14ly2MATzBb/IMI0LNK7RZEiElcwzKKQHQCCBr93t8BP+tq/LUgx
+         5rdGiFVWk7zgQxobsXoBTEVyiA3C075pIhxeIJo2euGcznekXBRmTDZjxipRIjXMvY5C
+         qL4w9ZUTXi49MbM7ujw5WJ+5K/+SlnAhc6KAsNLO5vMCMkwXMjCP9/BRkptxE3e4Y1YK
+         BY8NZGzMsPAJEaYxCxK3xVMFeOT3/ngFYMeQl8TYqPFe7ZQ/W2q9tsqVpIqdKkgCdAL2
+         hJa7Bw0qaA7AwHQXyYAY7ZhlBObeo+DZMzsL2FSzk+dAJXByaA5mXZRuD4IHyN5pyRYc
+         VAOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=ybZPWyYt00abn3G1CpfroXfVp6h4A3rtqsrtum8vIao=;
-        b=pHuhIr3ytBgnrHpemg2PAxMdfGDzErCdKyfbfpGg4t7b3slmgmI5EM4LQ204XmV8aU
-         G+4gqsWRiNIaaT+gs1ns3PCcsZBvy1rX/3+gsAT1Y2BOy4aavNFJZ5JGOAEIUDOJ5iYb
-         pYpQBHHbUXNmGW78LKzy9NzyPtkxlTA7mCbhQsOT1gQB5AQ7NOYJD/C/0Wpx+GzY5dTM
-         OTJOX2sijgoY86oJgEMYCPUETWBjl5qJpFGIyv8AtPB5U+a1LONtmW5974mL+3wuH/VY
-         02yzsNOmftCkYU0EX1MhPV/XEd6LLIHA+h0uU7AmvXtR4jZFaN0IgcqwA3ld7Iv+AgAV
-         xPVQ==
-X-Gm-Message-State: AOAM530yqyamMW315SWZTDUtuMB8/9gULkg0rjzbZKiQFBqVylH0Ab4t
-        fpXrfwYXDIq1x+PqOt7Lw00=
-X-Google-Smtp-Source: ABdhPJylE5buyRJZD3X230xZsT0g4iRxqBzsfi40Loyk4KqIZyL1RDa3JVaByt4uX+7twRev/FrojQ==
-X-Received: by 2002:a9d:6058:: with SMTP id v24mr16002606otj.296.1640711278374;
-        Tue, 28 Dec 2021 09:07:58 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a28sm3956243oiy.4.2021.12.28.09.07.57
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oZ/3RWIICayqeX8NGvH8uNdXpYzICfkoNEUUnjvFbK4=;
+        b=CxKrmiYhiLyd/mdclPsVK1ojjH+QlO+EeCnuUTx0N5M+b/AZtQbRasn7SsfT0ZZ+Gs
+         6rN35Jk+8S77HyZtSHyuU3e994QsIhAI6ydmN34xDAOIm95RgsLkV0CK1qj86F2jSVBd
+         84t5nXYEIEbPgDa2fN7k81m2wxCrJjiMROKCkYmzT83DM9qaVbcEPA7CDctvdO9RaHC6
+         ecUWoevNNOuxM3pFiECFSQ4jrg/XzQpeOzagpOiER/Bw6J40X/f0SZNNMicviyjXxIzp
+         M9CfeUVLr+if8Jsx4EvLt0+4T14/teS4/0ofJBse3IZDaBAu5uCJ1+J87oUlCM3L4pa6
+         2kJA==
+X-Gm-Message-State: AOAM530R30G49JgmHT15njeZyp9WoQkzjQP7HI3IoJtUCKCRgaDbK30s
+        V3az7pSbemUeJAbH8b9l3ScppA==
+X-Google-Smtp-Source: ABdhPJxyp73sBikZUK9fV7aQkyVfeNKeBZfLBnmheicO2np5Qje9WMaB1cRxtpdfGlTKH4B7tIbvOw==
+X-Received: by 2002:a05:6808:2111:: with SMTP id r17mr17314232oiw.118.1640711267219;
+        Tue, 28 Dec 2021 09:07:47 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id w4sm2875922oiv.47.2021.12.28.09.07.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 09:07:58 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 28 Dec 2021 09:07:55 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.15 000/128] 5.15.12-rc1 review
-Message-ID: <20211228170755.GG1225572@roeck-us.net>
-References: <20211227151331.502501367@linuxfoundation.org>
+        Tue, 28 Dec 2021 09:07:46 -0800 (PST)
+Date:   Tue, 28 Dec 2021 09:08:46 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/8] typec: mux: Introduce support for multiple TypeC
+ muxes
+Message-ID: <YctEnnH8FvS6zRPb@ripper>
+References: <20211228052116.1748443-1-bjorn.andersson@linaro.org>
+ <279c7bd8-c0bb-e58c-1149-d124102bf8b8@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <279c7bd8-c0bb-e58c-1149-d124102bf8b8@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 04:29:35PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.12 release.
-> There are 128 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue 28 Dec 04:20 PST 2021, Hans de Goede wrote:
+
+> Hi Bjorn,
 > 
-> Responses should be made by Wed, 29 Dec 2021 15:13:09 +0000.
-> Anything received after that time might be too late.
+> On 12/28/21 06:21, Bjorn Andersson wrote:
+> > This series introduces a level of indirection between the controller's view of
+> > a typec_mux/switch and the implementation and then expands that to support
+> > multiple drivers.
+> > 
+> > This is needed in order to support devices such as the Qualcomm Snapdragon 888
+> > HDK, which does muxing and orientation handling in the QMP (USB+DP) PHY and SBU
+> > muxing in the external FSA4480 chip.
+> > 
+> > Additionally integration of typec mux and switch in the QMP PHY is included in
+> > the series, as is the new FSA4480 driver. This is done to deal with the
+> > renaming of the driver-side typec_mux -> typec_mux_dev.
+> > 
+> > Bjorn Andersson (8):
+> >   dt-bindings: phy: qcom,qmp-usb3-dp: Add altmode/switch properties
+> >   phy: qcom-qmp: Register typec mux and orientation switch
+> >   device property: Helper to match multiple connections
+> >   device property: Use multi-connection matchers for single case
+> >   typec: mux: Introduce indirection
+> >   typec: mux: Allow multiple mux_devs per mux
+> >   dt-bindings: usb: Add binding for fcs,fsa4480
+> >   usb: typec: mux: Add On Semi fsa4480 driver
+> 
+> Thank you for your series, I will leave commenting on the
+> dt-bindings and typec-mux changes to others.
+> 
+> But what I can do is test this on an x86 device using
+> a pi3usb30532 mux for USB super-speed and DP-alt-mode
+> muxing / orientation switching.
 > 
 
-Build results:
-	total: 154 pass: 154 fail: 0
-Qemu test results:
-	total: 480 pass: 480 fail: 0
+Thanks Hans, that would be much appreciated. I realize that I failed to
+mention that I don't have this hardware, so I've not been able to test
+it myself.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+> I'm going to wait a bit with doing that till this has had
+> some reviews and possibly also some newer versions because
+> of those reviews. If you haven't received a Tested-by from me
+> when this looks like it is ready for merging please ping me.
+> 
 
-Guenter
+Will ping you when appropriate.
+
+Thanks,
+Bjorn
+
+> Regards,
+> 
+> Hans
+> 
+> 
+> > 
+> >  .../bindings/phy/qcom,qmp-usb3-dp-phy.yaml    |  14 +
+> >  .../devicetree/bindings/usb/fcs,fsa4480.yaml  |  72 +++++
+> >  drivers/base/property.c                       |  83 ++++--
+> >  drivers/phy/qualcomm/phy-qcom-qmp.c           | 176 ++++++++++--
+> >  drivers/usb/typec/bus.c                       |   2 +-
+> >  drivers/usb/typec/mux.c                       | 257 +++++++++++++-----
+> >  drivers/usb/typec/mux.h                       |  12 +-
+> >  drivers/usb/typec/mux/Kconfig                 |   9 +
+> >  drivers/usb/typec/mux/Makefile                |   1 +
+> >  drivers/usb/typec/mux/fsa4480.c               | 220 +++++++++++++++
+> >  drivers/usb/typec/mux/intel_pmc_mux.c         |   8 +-
+> >  drivers/usb/typec/mux/pi3usb30532.c           |   8 +-
+> >  include/linux/property.h                      |   5 +
+> >  include/linux/usb/typec_mux.h                 |  22 +-
+> >  14 files changed, 762 insertions(+), 127 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+> >  create mode 100644 drivers/usb/typec/mux/fsa4480.c
+> > 
+> 

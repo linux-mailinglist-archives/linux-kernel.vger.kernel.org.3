@@ -2,86 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D84C7480587
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 02:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EF7A480584
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 02:39:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234431AbhL1BnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 20:43:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58686 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232933AbhL1BnG (ORCPT
+        id S234418AbhL1Bjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 20:39:31 -0500
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:32305 "EHLO
+        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232933AbhL1Bja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 20:43:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25F8C06173E;
-        Mon, 27 Dec 2021 17:43:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 167186117D;
-        Tue, 28 Dec 2021 01:43:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F37C36AE7;
-        Tue, 28 Dec 2021 01:43:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640655784;
-        bh=tm2ezZym6nmRnMFof2gET1bE3Gm3gtZFjJBuqcI1dVs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GpwoqgL3hN+CpF+au5xOM7La9VTu0aFYJ3Ys6SPZYna4fXuZJiSrx2hlzUiMqW9c+
-         JjDISMTXh+N0JUjt2CTJ+uX9MsYyafmITaM6ijFMO7moC+6OW1JhU/LlNtmaBtdf/P
-         N7kgyybkEsviIrx5FWdOEBKWlqj8bNmiJiPd67v6qlSVScJ1wGjD90SVhl8VBlG9lQ
-         t/hlsUx496uH1Fd/+U9TPnULK74z/+6TLLdaRIPHSoyJukiY3/H3EODB78L9MGcFuT
-         8WNs6Qk5eY6BI/4MvrHrKf/W5xPWLUKsxDkFVswdJEGrFziUTFMXP+tNN3uY1wYfV5
-         pteFO/mhw5u4w==
-Date:   Mon, 27 Dec 2021 17:43:02 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v7 0/2] net: ethernet: mtk_soc_eth: implement Clause 45
- MDIO access
-Message-ID: <20211227174302.79379151@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <Ycpj/cEdjb0BMrny@makrotopia.org>
-References: <YcnoAscVe+2YILT8@shell.armlinux.org.uk>
-        <YcpVmlb1jFavCBpS@makrotopia.org>
-        <YcpVtjykiS7mgtT5@makrotopia.org>
-        <Ycpj/cEdjb0BMrny@makrotopia.org>
+        Mon, 27 Dec 2021 20:39:30 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3A+67MA6MQyhPLZznvrR05lcFynXyQoLVcMsFnjC/?=
+ =?us-ascii?q?WdVO+3Toh3zwOmzNLW2nSaKyMNzHwLYslb43io04G7ZfXm99gGjLY11k3ESsS9?=
+ =?us-ascii?q?pCt6fd1j6vIF3rLaJWFFSqL1u1GAjX7BJ1yHi+0SiuFaOC79CAmj/HQH9IQNca?=
+ =?us-ascii?q?fUsxPbV49IMseoUI78wIJqtYAbemRW2thi/uryyHsEAPNNwpPD44hw/nrRCWDE?=
+ =?us-ascii?q?xjFkGhwUlQWPZintbJF/pUfJMp3yaqZdxMUTmTId9NWSdovzJnhlo/Y1xwrTN2?=
+ =?us-ascii?q?4kLfnaVBMSbnXVeSMoiMOHfH83V4Z/Wpvuko4HKN0hUN/jzSbn9FzydxLnZKtS?=
+ =?us-ascii?q?wY1JbCKk+MYO/VdO3gnbPMcpuSXfhBTtuTWlSUqaUDE2e1jBVstOosY4utfDmR?=
+ =?us-ascii?q?H9PheIzcIBjiRluCk0bDhErE0rssmJcjveogYvxlI3DjfD+sgB4LDXo3O5NlFz?=
+ =?us-ascii?q?HE8i94mNfTRaOIfdztjbR2GaBpKUn8TCZQjjKKri2P5fjlwtl2Yv+w07nLVwQg?=
+ =?us-ascii?q?316LiWPLRe9qXVYBPkkORjnzJ8n6/ARwAMtGbjz2f/RqEhODAtTH6VZofUraxn?=
+ =?us-ascii?q?sOGKnX7Knc7UUVQDAXk56LizBPWZj6WEGRMkgJGkET43BXDogHBYiCF?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3ArUOV6K+sPtGT5ha5jXVuk+DkI+orL9Y04lQ7?=
+ =?us-ascii?q?vn2ZKCYlFvBw8vrCoB1173HJYUkqMk3I9ergBEDiewK4yXcW2/hzAV7KZmCP11?=
+ =?us-ascii?q?dAR7sSj7cKrQeBJwTOssZZ1YpFN5N1EcDMCzFB5vrS0U2VFMkBzbC8nJyVuQ?=
+ =?us-ascii?q?=3D=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,241,1635177600"; 
+   d="scan'208";a="119626387"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 28 Dec 2021 09:39:28 +0800
+Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
+        by cn.fujitsu.com (Postfix) with ESMTP id ACCD34D11981;
+        Tue, 28 Dec 2021 09:39:25 +0800 (CST)
+Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
+ G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Tue, 28 Dec 2021 09:39:23 +0800
+Received: from localhost.localdomain (10.167.225.141) by
+ G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Tue, 28 Dec 2021 09:39:23 +0800
+From:   Li Zhijian <lizhijian@cn.fujitsu.com>
+To:     <zyjzyj2000@gmail.com>, <jgg@ziepe.ca>
+CC:     <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yanjun.zhu@linux.dev>, <rpearsonhpe@gmail.com>,
+        Li Zhijian <lizhijian@cn.fujitsu.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH v2] RDMA/rxe: Prevent from double freeing rxe_map_set
+Date:   Tue, 28 Dec 2021 09:44:06 +0800
+Message-ID: <20211228014406.1033444-1-lizhijian@cn.fujitsu.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-yoursite-MailScanner-ID: ACCD34D11981.AD0F5
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: lizhijian@fujitsu.com
+X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Dec 2021 01:10:21 +0000 Daniel Golle wrote:
-> As it turned out some clean-up would be needed, first address return
-> value and type of mdio read and write functions in mtk_eth_soc and
-> generally clean up and unify both functions.
-> Then add support to access Clause 45 phy registers.
-> 
-> Both commits are tested on the Bananapi BPi-R64 board having MediaTek
-> MT7531BE DSA gigE switch using clause 22 MDIO and Ubiquiti UniFi 6 LR
-> access point having Aquantia AQR112C PHY using clause 45 MDIO.
-> 
-> v7: remove unneeded variables and order OR-ed call parameters
-> v6: further clean up functions and more cleanly separate patches
-> v5: fix wrong variable name in first patch covered by follow-up patch
-> v4: clean-up return values and types, split into two commits
-> v3: return -1 instead of 0xffff on error in _mtk_mdio_write
-> v2: use MII_DEVADDR_C45_SHIFT and MII_REGADDR_C45_MASK to extract
->     device id and register address. Unify read and write functions to
->     have identical types and parameter names where possible as we are
->     anyway already replacing both function bodies.
+a same rxe_map_set could be freed twice:
+rxe_reg_user_mr()
+  -> rxe_mr_init_user()
+    -> rxe_mr_free_map_set() # 1st
+  -> rxe_drop_ref()
+   ...
+    -> rxe_mr_cleanup()
+      -> rxe_mr_free_map_set() # 2nd
 
-Please stop reposting this series (1) so often; (2) as a flat response
-to an old version. You are completely confusing patch series detection,
-at least in patchwork.
+By convention, we should cleanup/free resources in the error path in the
+same function where the resources are alloted in. So rxe_mr_init_user()
+doesn't need to free the map_set directly.
 
-Try git send-email and please allow at least 12 hours between postings
-for reviewers to comment.
+In addition, we have to reset map_set to NULL inside rxe_mr_alloc() if needed
+to prevent from map_set being double freed in rxe_mr_cleanup().
+
+CC: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+---
+V2: Fix it by a simpler way by following suggestion from Bob,
+---
+ drivers/infiniband/sw/rxe/rxe_mr.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c b/drivers/infiniband/sw/rxe/rxe_mr.c
+index 25c78aade822..7c4cd19a9db2 100644
+--- a/drivers/infiniband/sw/rxe/rxe_mr.c
++++ b/drivers/infiniband/sw/rxe/rxe_mr.c
+@@ -141,6 +141,7 @@ static int rxe_mr_alloc(struct rxe_mr *mr, int num_buf, int both)
+ 		ret = rxe_mr_alloc_map_set(num_map, &mr->next_map_set);
+ 		if (ret) {
+ 			rxe_mr_free_map_set(mr->num_map, mr->cur_map_set);
++			mr->cur_map_set = NULL;
+ 			goto err_out;
+ 		}
+ 	}
+@@ -214,7 +215,7 @@ int rxe_mr_init_user(struct rxe_pd *pd, u64 start, u64 length, u64 iova,
+ 				pr_warn("%s: Unable to get virtual address\n",
+ 						__func__);
+ 				err = -ENOMEM;
+-				goto err_cleanup_map;
++				goto err_release_umem;
+ 			}
+ 
+ 			buf->addr = (uintptr_t)vaddr;
+@@ -237,8 +238,6 @@ int rxe_mr_init_user(struct rxe_pd *pd, u64 start, u64 length, u64 iova,
+ 
+ 	return 0;
+ 
+-err_cleanup_map:
+-	rxe_mr_free_map_set(mr->num_map, mr->cur_map_set);
+ err_release_umem:
+ 	ib_umem_release(umem);
+ err_out:
+-- 
+2.31.1
+
+
+

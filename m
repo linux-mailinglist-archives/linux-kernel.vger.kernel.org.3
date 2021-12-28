@@ -2,42 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B864807CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 10:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF504807CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 10:27:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235930AbhL1JZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 04:25:36 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:49778 "EHLO
+        id S235943AbhL1J1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 04:27:14 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:52776 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231414AbhL1JZf (ORCPT
+        with ESMTP id S229617AbhL1J1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 04:25:35 -0500
-X-UUID: 9c23fad9d08a4a279e792dba60973575-20211228
-X-UUID: 9c23fad9d08a4a279e792dba60973575-20211228
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 791067865; Tue, 28 Dec 2021 17:25:30 +0800
+        Tue, 28 Dec 2021 04:27:13 -0500
+X-UUID: c683a1efdd1d4df1857fcdcb731043b0-20211228
+X-UUID: c683a1efdd1d4df1857fcdcb731043b0-20211228
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <mark-pk.tsai@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 160455497; Tue, 28 Dec 2021 17:27:11 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
  mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 28 Dec 2021 17:25:29 +0800
+ 15.0.1497.2; Tue, 28 Dec 2021 17:27:09 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 28 Dec 2021 17:25:29 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Miles Chen <miles.chen@mediatek.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
+ Transport; Tue, 28 Dec 2021 17:27:09 +0800
+From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+To:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>
+CC:     <matthias.bgg@gmail.com>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/mediatek: Fix unused-but-set variable warning
-Date:   Tue, 28 Dec 2021 17:25:27 +0800
-Message-ID: <20211228092527.29894-1-miles.chen@mediatek.com>
+        <linux-mediatek@lists.infradead.org>, <mark-pk.tsai@mediatek.com>,
+        <yj.chiang@mediatek.com>
+Subject: [PATCH] driver core: Simplify async probe test code by using ktime_ms_delta()
+Date:   Tue, 28 Dec 2021 17:27:07 +0800
+Message-ID: <20211228092707.29987-1-mark-pk.tsai@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -46,27 +41,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix unused-but-set variable warning:
-drivers/gpu/drm/mediatek/mtk_cec.c:85:6: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
+Simplify async probe test code by using ktime_ms_delta().
 
-Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
 ---
- drivers/gpu/drm/mediatek/mtk_cec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/base/test/test_async_driver_probe.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_cec.c b/drivers/gpu/drm/mediatek/mtk_cec.c
-index e9cef5c0c8f7..cdfa648910b2 100644
---- a/drivers/gpu/drm/mediatek/mtk_cec.c
-+++ b/drivers/gpu/drm/mediatek/mtk_cec.c
-@@ -85,7 +85,7 @@ static void mtk_cec_mask(struct mtk_cec *cec, unsigned int offset,
- 	u32 tmp = readl(cec->regs + offset) & ~mask;
+diff --git a/drivers/base/test/test_async_driver_probe.c b/drivers/base/test/test_async_driver_probe.c
+index 3bb7beb127a9..4d1976ca5072 100644
+--- a/drivers/base/test/test_async_driver_probe.c
++++ b/drivers/base/test/test_async_driver_probe.c
+@@ -104,7 +104,7 @@ static int __init test_async_probe_init(void)
+ 	struct platform_device **pdev = NULL;
+ 	int async_id = 0, sync_id = 0;
+ 	unsigned long long duration;
+-	ktime_t calltime, delta;
++	ktime_t calltime;
+ 	int err, nid, cpu;
  
- 	tmp |= val & mask;
--	writel(val, cec->regs + offset);
-+	writel(tmp, cec->regs + offset);
- }
+ 	pr_info("registering first set of asynchronous devices...\n");
+@@ -133,8 +133,7 @@ static int __init test_async_probe_init(void)
+ 		goto err_unregister_async_devs;
+ 	}
  
- void mtk_cec_set_hpd_event(struct device *dev,
+-	delta = ktime_sub(ktime_get(), calltime);
+-	duration = (unsigned long long) ktime_to_ms(delta);
++	duration = (unsigned long long)ktime_ms_delta(ktime_get(), calltime);
+ 	pr_info("registration took %lld msecs\n", duration);
+ 	if (duration > TEST_PROBE_THRESHOLD) {
+ 		pr_err("test failed: probe took too long\n");
+@@ -161,8 +160,7 @@ static int __init test_async_probe_init(void)
+ 		async_id++;
+ 	}
+ 
+-	delta = ktime_sub(ktime_get(), calltime);
+-	duration = (unsigned long long) ktime_to_ms(delta);
++	duration = (unsigned long long)ktime_ms_delta(ktime_get(), calltime);
+ 	dev_info(&(*pdev)->dev,
+ 		 "registration took %lld msecs\n", duration);
+ 	if (duration > TEST_PROBE_THRESHOLD) {
+@@ -197,8 +195,7 @@ static int __init test_async_probe_init(void)
+ 		goto err_unregister_sync_devs;
+ 	}
+ 
+-	delta = ktime_sub(ktime_get(), calltime);
+-	duration = (unsigned long long) ktime_to_ms(delta);
++	duration = (unsigned long long)ktime_ms_delta(ktime_get(), calltime);
+ 	pr_info("registration took %lld msecs\n", duration);
+ 	if (duration < TEST_PROBE_THRESHOLD) {
+ 		dev_err(&(*pdev)->dev,
+@@ -223,8 +220,7 @@ static int __init test_async_probe_init(void)
+ 
+ 	sync_id++;
+ 
+-	delta = ktime_sub(ktime_get(), calltime);
+-	duration = (unsigned long long) ktime_to_ms(delta);
++	duration = (unsigned long long)ktime_ms_delta(ktime_get(), calltime);
+ 	dev_info(&(*pdev)->dev,
+ 		 "registration took %lld msecs\n", duration);
+ 	if (duration < TEST_PROBE_THRESHOLD) {
 -- 
 2.18.0
 

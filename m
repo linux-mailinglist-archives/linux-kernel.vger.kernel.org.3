@@ -2,74 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E09480BA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 17:58:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43141480BA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 17:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236487AbhL1Q6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 11:58:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
+        id S236505AbhL1Q6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 11:58:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236479AbhL1Q6i (ORCPT
+        with ESMTP id S236492AbhL1Q6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 11:58:38 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AC7C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 08:58:38 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id bq20so42619277lfb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 08:58:38 -0800 (PST)
+        Tue, 28 Dec 2021 11:58:41 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694D5C061746
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 08:58:41 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id j11so40853085lfg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 08:58:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=0D9r3mLul2ar0LgSD8/IOjG0KAPGEOa0MFXsHroSmNg=;
-        b=ZCuITCD/gPzPwsyI3gqJYzgJY61ybSgT4GMKhF9nwtrktez1pRqLMyRdS+i/wdIFZ6
-         9CLvaDzynrc7uCuAS/jtlZTMfEYYKwo6lAsJFhJaqsNmPdC9H20LyEU+WjOyNSLJ0Rjj
-         6FNl3MGSIIOnMjjyp3+Y4r54wCmTVVg/HrA5uRdkcdhpM1P4ZepwnYbpGGdk6G5SkYUk
-         123sEaRm6t7ZJIkOW/KtDc3GSQKnqRXsxrDSkAND71dthGiybUnSv1wPXkeldJxtWpl+
-         EL/Dp5Rv4LvjLhwGDBXsguoVfWFsPERcdBf8R2S74OFLQ1H2Sdx2xf42dd1EaNClEp30
-         P8eQ==
+        bh=zrQnwrOYo44Zy15SHr8SgN0Chy99tnjGBiLMnJFezuA=;
+        b=BmyOQ+n+2q8EtIH/+W2DQ5gXaSxydrZiDK9gQHpDFhjnKjR6A8ZiGKOFENrAsf6Kup
+         7ZLAlzKRdwHSiPXOZhv7qImo9MVw0HrNTvk8cWiatYdoPJkjmx19D6e3+Zjwof54ELdh
+         rDzOQJb8fwd8ex27GBGO4UTLQ3rCOBUXN8Wmi9bmDLnUWhoMgbZtH7yelbeYBB1sYK1c
+         VQs6bRoXLKz/h0t+7Z5LMKBkLauP9PBtroxAEcn01Smq8JU0Mp2DOcS1CXKKyGSTke8I
+         K6dya80J5nEoQmQ8hMXysyICDX3mgBxEhYMCysmu24r1wSPnKD+Zf1P384FKCozPUIS/
+         2HNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0D9r3mLul2ar0LgSD8/IOjG0KAPGEOa0MFXsHroSmNg=;
-        b=qbPL/cmfywCs70zaLgsagCeOG69+QyAWZqNv/nWAWgGg/PX46SdlSlrajxlzUrYwYb
-         7H2iz+1mYYUx/JsUuvcGP8Zggot8ijQF1zRrbr5jWvMlWoloMa+UcQ2su0XgD5Va+e/N
-         VV2gr0UWe9Jv++dNI1mDZXqfXukWNdn6ZPbg/CJqMnUp+Eq+5BfSRvidigumpM7Z7+4Z
-         rWtvrQG64bES60pM+hxKx85DdGx9oqBZXygD74uem0bgN5UUdgt11OBs8AbYleLjDLsQ
-         mmvRtaqsifUzNoarEJ5eOJJmFDo7rfmfvjH07phclDNq1zGomQ24M8W3o9bkQHttEKYU
-         ytWw==
-X-Gm-Message-State: AOAM531XHt+6feTM4l01ODGTwRHgQD6r7PtW97r9c1QfnRhuDNK6TPis
-        fxFQZF2qyKWXN3wYKGQkJ2Wsf8Nvcw3UTrBkVPri1XxOI4hVJg==
-X-Google-Smtp-Source: ABdhPJz1q7mhZOF0eI6zsQx2UPYqrGGdD1ruEZcsQYjkxHS54Vi4X7QfPeXJ6Ch5D9b2peWld4azn+1VGmysoAoKHGg=
-X-Received: by 2002:a05:6512:3bb:: with SMTP id v27mr19505255lfp.71.1640710716727;
- Tue, 28 Dec 2021 08:58:36 -0800 (PST)
+        bh=zrQnwrOYo44Zy15SHr8SgN0Chy99tnjGBiLMnJFezuA=;
+        b=fh9S2Wi1IBadKbySlp5mpXfpnl4rSFcFJoUts8jMi2Wskc+fDrWW/BQInSlXj/u7co
+         iLUU/RY9gXk92OM3rZxxDT+UQooRAnvKZpkV+1asNKS45B3BmLpLAmp8MepWMKSS5WBr
+         Eqnr8qFk0qwY1YnpxwL6VC+9sMLqF9oFbmOe+sc7J9agjyF5PSNYNuk4JBU2kWu7Pe+9
+         kCH9erpt/S//Rt0+xNxasV5hFsTgI9VMHRY3nTQ9fFFWvTOpZ3IztKe6+6qdd67kYRc5
+         LwxP7A867ZHWjXrxueRjiHk4JW67tZYtLNWIcgoT60++DZUXL1fBm3ecpOu1KwPbU3+K
+         QzXQ==
+X-Gm-Message-State: AOAM530KOxQxkDzXIqN0qXnGf4nNFR2lZGfDP0R1VnbhUX3oX1Prc0tT
+        g3MQ+r/eINZqm7/ordnHbRANQxGx0t7OLTj2/x0+ig==
+X-Google-Smtp-Source: ABdhPJx4JoO51qdE7YskaABs81LWtu6BBrmrra8NDnH7XzKiBYGjPn+QvguCjJ0yBPPCmHp7CTk73mpMwcHQOOasimo=
+X-Received: by 2002:ac2:4c46:: with SMTP id o6mr20144159lfk.373.1640710719665;
+ Tue, 28 Dec 2021 08:58:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20211224192545.74528-1-david@ixit.cz>
-In-Reply-To: <20211224192545.74528-1-david@ixit.cz>
+References: <07a8e48db446888bd77f16b88568e80904f52103.1640528089.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <07a8e48db446888bd77f16b88568e80904f52103.1640528089.git.christophe.jaillet@wanadoo.fr>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 28 Dec 2021 17:58:00 +0100
-Message-ID: <CAPDyKFqrZ349O+vNSExaU7QUTeCjf_Hfu_ia4T7AujCMiOZ1ow@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: mmc: PL18x stop relying on order of dma-names
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Thierry Reding <treding@nvidia.com>,
-        ~okias/devicetree@lists.sr.ht, Rob Herring <robh@kernel.org>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Date:   Tue, 28 Dec 2021 17:58:03 +0100
+Message-ID: <CAPDyKFpeiPcbvB2gV3P5z2bGpo_--gpFT_zUaMKA1kX8HT0uEA@mail.gmail.com>
+Subject: Re: [PATCH] mmc: pwrseq: Use bitmap_free() to free bitmap
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Dec 2021 at 20:25, David Heidelberg <david@ixit.cz> wrote:
+On Sun, 26 Dec 2021 at 15:15, Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
 >
-> We don't care in which order are "rx" and "tx" DMA names supplied.
+> kfree() and bitmap_free() are the same. But using the later is more
+> consistent when freeing memory allocated with bitmap_alloc().
 >
-> Fixes: 4df297aaeb9c ("dt-bindings: mmc: Add missing properties used in examples")
->
-> Signed-off-by: David Heidelberg <david@ixit.cz>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
 Applied for next, thanks!
 
@@ -78,30 +74,22 @@ Uffe
 
 
 > ---
->  Documentation/devicetree/bindings/mmc/arm,pl18x.yaml | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
+>  drivers/mmc/core/pwrseq_simple.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
-> index f0a44b2cfa79..a4f74bec68a3 100644
-> --- a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
-> @@ -70,9 +70,13 @@ properties:
->      maxItems: 2
+> diff --git a/drivers/mmc/core/pwrseq_simple.c b/drivers/mmc/core/pwrseq_simple.c
+> index ea4d3670560e..988467fbb621 100644
+> --- a/drivers/mmc/core/pwrseq_simple.c
+> +++ b/drivers/mmc/core/pwrseq_simple.c
+> @@ -54,7 +54,7 @@ static void mmc_pwrseq_simple_set_gpios_value(struct mmc_pwrseq_simple *pwrseq,
+>                 gpiod_set_array_value_cansleep(nvalues, reset_gpios->desc,
+>                                                reset_gpios->info, values);
 >
->    dma-names:
-> -    items:
-> -      - const: rx
-> -      - const: tx
-> +    oneOf:
-> +      - items:
-> +          - const: tx
-> +          - const: rx
-> +      - items:
-> +          - const: rx
-> +          - const: tx
->
->    power-domains: true
+> -               kfree(values);
+> +               bitmap_free(values);
+>         }
+>  }
 >
 > --
-> 2.34.1
+> 2.32.0
 >

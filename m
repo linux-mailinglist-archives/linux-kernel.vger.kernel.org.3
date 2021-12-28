@@ -2,70 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8D7480A93
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 15:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D33480A95
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 15:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234798AbhL1Owo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 09:52:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
+        id S234811AbhL1Ox7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 09:53:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbhL1Own (ORCPT
+        with ESMTP id S229480AbhL1Ox6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 09:52:43 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD674C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 06:52:42 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id 45-20020a9d0a30000000b0058f1a6df088so24755675otg.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 06:52:42 -0800 (PST)
+        Tue, 28 Dec 2021 09:53:58 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11942C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 06:53:58 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id r17so38874625wrc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 06:53:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=bJOWOUOD2GNI/L2WfI6zDQAH0JJ4fURbmjTsxtxR7wA=;
-        b=TgisLj02ixO+KoQidk+zFikX1/SdEh7GjdIa6HZx9HmHyR5vBixVnXCu79VbZNfYYQ
-         5RbYTgsNY+EVcmL/wg+Vduib7yRxbAaMJg5F4XP+ldOlw4VhOcNq5Vka5enAJAU/NCsO
-         CjjofgStQam4nEmqQv734/N0gpI0JY7v94COe5JvTm6kjUL9YJBdeeSV4/DvEwpamgNt
-         fZf7Ep0e6m0ZsJIMnZ3VY7LZiN6/ohO4VCvKXGQZynYviH1lb0eKoarwywEXk1Pxw7Wh
-         g+oW2k3dfsDC/okPLRgmNHSRKStI2mcr/hNDZJeTCQO5R9zUASl8g6RJhtQNP7BcnaJM
-         Lz6Q==
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=25qf0XUnbGHEj5vg+5G4WLH5F89cbHHWYGCIQ9dS1uY=;
+        b=fxY3OcVQeu1QknWvAhC07wCcatiSI0pUUHId/HZzZ1pm8Mvt+9c4IniVsMFxvEQWXZ
+         69nDOtXhTUKrYlXCEvKDPf6UkxV5L2F1r6iizH10fmZpGm00D91SHR+Iavb2yl20VAdx
+         6ZhhNFYOfTirbi07w3gQPem7NLp22mSxtTthStSG6PsFBUdyJEAt7qOQFAMkH4LgQ5zc
+         59UfcheyQdr3QXZmHe02a2JCtfL2nh8UO74GwrP3+f0JjuBXJLjY4yCv1Sei605sEvEF
+         NhyAjzsLvaUai8dj6ugFs4kzoSCSMD5niHAM/vs8jnK2mbUKAob3VisluT05aI9KdOOz
+         WCGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=bJOWOUOD2GNI/L2WfI6zDQAH0JJ4fURbmjTsxtxR7wA=;
-        b=xosbWinYtMGSJj0k9t8u9EgLhG+MRb3fHaeXyRrm6kSpHfvJ6zVxDNYpWp541JT3Ol
-         n6taOPQkjGQSnftUnKm6oqpPBy9aqGNAUjpWqYjUZl/8gVjR6bwIYCvtqWK3jDrdIL8q
-         z4bkdbdPEyHyVBDKHnpEC5BgijNZGjfgTQmM3AK1dBUvZTbbC78rHrFqsmePL2rb7b0W
-         uAjrzZy/0YgwFl03xrAFX3OvUah2Gq21D0bToLsCJjss+4zrhIkYB9b8siRiDnsoYSoh
-         tVCRaQochuuqxF9PJFWu1+bTkFUZHnXVhoGf9JxKHzJVDLROualCx90sykvopVCBMDG6
-         YitQ==
-X-Gm-Message-State: AOAM531NIfH0K3J7/mJzNujekeChplx2h7WBLT+wxWTgT8T2F6JyrlUl
-        769NFZO7MFp8gnUQ6MxmNh3CbbLK8gvtAtmY8EU=
-X-Google-Smtp-Source: ABdhPJyO43AfqGYie7QLy54hBcOJsgZuOS+714UG5NTYSxM+7NJUCyl0HENfegN9E90l9r+YGP7B/yfoV0eAdJAC56g=
-X-Received: by 2002:a9d:433:: with SMTP id 48mr15664425otc.360.1640703161030;
- Tue, 28 Dec 2021 06:52:41 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=25qf0XUnbGHEj5vg+5G4WLH5F89cbHHWYGCIQ9dS1uY=;
+        b=o4aAsqJqPu9dC0n3qtDaAgwyaIoDi1fL/iSrWchn8DwiqYRrPJB7NnM2BJPh4nsL2+
+         7Tu9Fb64AmfWoyn0r7Ox0+XYf0umYV4ME5DEEKvTNbfnUukU3sWBYggxLA/4/UsprnS2
+         jkCdkQXAgqxK/iC4liXmqPv4n0Lb3S42IeFJ6U7ME0qFvezFzHIxrfbilzS5sqP7KGuJ
+         JM/M+dLhvChIgbt5EAeey6IWwOJPIc+6wYyluYnAxyiFfrH/9Xr36f9nasSC4SIw6nyW
+         AvjSaWmX0zngWg+dmWLtCotxtP1vXKotQPCQ8xN1KbY7Zcz3Lzql6UvhGXQPnOjmSgEJ
+         OfWA==
+X-Gm-Message-State: AOAM531bg9bWXaKiVfJKWPd2I9Ma/M6rk+JiQ5k37sMxu4ntRLhmIPtH
+        EedX+CI41PtuLu1MViTuKaFb3H5ny/tXrQ==
+X-Google-Smtp-Source: ABdhPJxHVFXemI/84jypP87JEPzJM3v8K0/yYjNa6T2mSJs3rhe4xR1SVFGvstCb2ymf1aisIUBVcw==
+X-Received: by 2002:adf:f390:: with SMTP id m16mr16261571wro.589.1640703236599;
+        Tue, 28 Dec 2021 06:53:56 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.161.251])
+        by smtp.gmail.com with ESMTPSA id l26sm18003618wme.36.2021.12.28.06.53.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Dec 2021 06:53:56 -0800 (PST)
+Message-ID: <fcaccc97-e920-08eb-ec3f-4c4b11ea8925@gmail.com>
+Date:   Tue, 28 Dec 2021 15:53:55 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:6838:2f98:0:0:0:0 with HTTP; Tue, 28 Dec 2021 06:52:40
- -0800 (PST)
-Reply-To: salemchantal@mail.ee
-From:   MRS Salem Chantal Lawrence <angeladrchantal@gmail.com>
-Date:   Tue, 28 Dec 2021 06:52:40 -0800
-Message-ID: <CAL_oVZG3bJYQZPdxmNCr2Pe4WU4L4hqvcxp+rU0O8Bj5CuOnZQ@mail.gmail.com>
-Subject: ATM VISA DAPARTCARD
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-US
+To:     Miles Chen <miles.chen@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20211228092527.29894-1-miles.chen@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH] drm/mediatek: Fix unused-but-set variable warning
+In-Reply-To: <20211228092527.29894-1-miles.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Attention
 
 
-You have Been Compensated with the sum of 4.6 million dollars in this
-United Nation the payment will be issue into Atm Visa Card and send to you
+On 28/12/2021 10:25, Miles Chen wrote:
+> Fix unused-but-set variable warning:
+> drivers/gpu/drm/mediatek/mtk_cec.c:85:6: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
+> 
 
-from the Santander Bank of Spain we need your address, Passport and your
-whatsapp number.
+Actually we ignore the value passed to mtk_cec_mask. In case of
+mtk_cec_mask(cec, CEC_CKGEN, 0 | CEC_32K_PDN, PDN | CEC_32K_PDN);
 
 
-THANKS
-MRS Salem Chantal Lawrence
+We are not setting CEC_32K_PDN. I wonder which side effect will it have to set 
+that bit.
+
+Anyway, if it's the right thing to do, we should add:
+
+Fixes: 8f83f26891e1 ("drm/mediatek: Add HDMI support")
+
+
+Regards,
+Matthias
+
+> Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+> ---
+>   drivers/gpu/drm/mediatek/mtk_cec.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_cec.c b/drivers/gpu/drm/mediatek/mtk_cec.c
+> index e9cef5c0c8f7..cdfa648910b2 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_cec.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_cec.c
+> @@ -85,7 +85,7 @@ static void mtk_cec_mask(struct mtk_cec *cec, unsigned int offset,
+>   	u32 tmp = readl(cec->regs + offset) & ~mask;
+>   
+>   	tmp |= val & mask;
+> -	writel(val, cec->regs + offset);
+> +	writel(tmp, cec->regs + offset);
+>   }
+>   
+>   void mtk_cec_set_hpd_event(struct device *dev,
+> 

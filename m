@@ -2,95 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DA5480C57
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 19:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E852D480C68
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 19:16:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236902AbhL1SGn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Dec 2021 13:06:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48614 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbhL1SGm (ORCPT
+        id S236966AbhL1SOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 13:14:34 -0500
+Received: from mail-qk1-f177.google.com ([209.85.222.177]:39611 "EHLO
+        mail-qk1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233411AbhL1SOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 13:06:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3011EC061574;
-        Tue, 28 Dec 2021 10:06:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A63C0612FA;
-        Tue, 28 Dec 2021 18:06:41 +0000 (UTC)
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp.kernel.org (Postfix) with ESMTPSA id 89844C36AE9;
-        Tue, 28 Dec 2021 18:06:37 +0000 (UTC)
-Date:   Tue, 28 Dec 2021 18:12:22 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>, kernel@pengutronix.de,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 14/23] counter: Update documentation for new counter
- registration functions
-Message-ID: <20211228181222.72ab998c@jic23-huawei>
-In-Reply-To: <20211227094526.698714-15-u.kleine-koenig@pengutronix.de>
-References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
-        <20211227094526.698714-15-u.kleine-koenig@pengutronix.de>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Tue, 28 Dec 2021 13:14:33 -0500
+Received: by mail-qk1-f177.google.com with SMTP id 69so17849577qkd.6;
+        Tue, 28 Dec 2021 10:14:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EJ8aYnmOQRS5NqukNYSjs8nzRFdW5gCywT1c2u9vx3s=;
+        b=IzAcjFH6UE1bIfFAGsqJmkVDCYuivWqmymmXx6kgbr5Y76M06mpdRp5RR2pH20wLJi
+         nLL4kac2hFSHIClvNn/s3MzLCkoFjra9SlKvblVZVAyYHBUZsf9bqZdmJLW+hf5xuP9l
+         Eqmblp651dDipU7zuWhw6IYloDQu1GoEZsZNHuYxZnZOjk9GqTk/c3aARpTEpMA8ufM1
+         2qmIVYf9opwyiqyTafZEpcLHlbB1BBGalst8u1edYP2gJxLs4o4s9TlQe35WUFtzpIYu
+         3qy6LDdn0ifOgku6orQoeS93GSY+YWWZtE02aJSBvRtoMHYqOOFh/+kLajTqNGTv3+4D
+         Uf5g==
+X-Gm-Message-State: AOAM533jlB4hlvRQYnBZPfJTT4bG9Pdv5MkhPfOfeb3WZFLVKBQv4BKJ
+        v9f7dat1mJlFWRrI9LWXSvD1YJUQmx6SZEwlRTTBesTE
+X-Google-Smtp-Source: ABdhPJzJgODOGj4mxAKBm0Dvn2T/fQlJABCF8qKzEAqAlsIEDnZ8Pm2+Bdajm698UVXnHFSwdcL4bQzdgdaLr3ZphYg=
+X-Received: by 2002:a37:b702:: with SMTP id h2mr16333360qkf.135.1640715272805;
+ Tue, 28 Dec 2021 10:14:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+References: <20211228131912.260899-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20211228131912.260899-1-gregkh@linuxfoundation.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 28 Dec 2021 19:14:22 +0100
+Message-ID: <CAJZ5v0gj4-ZOGPLzksvzB9Ed85P0qz=tC47Ntxnuc5G_C9GGVQ@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: use default_groups in kobj_type
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Dec 2021 10:45:17 +0100
-Uwe Kleine-König         <u.kleine-koenig@pengutronix.de> wrote:
+On Tue, Dec 28, 2021 at 2:19 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> There are currently 2 ways to create a set of sysfs files for a
+> kobj_type, through the default_attrs field, and the default_groups
+> field.  Move the cpufreq code to use default_groups field which has been
+> the preferred way since aa30f47cf666 ("kobject: Add support for default
+> attribute groups to kobj_type") so that we can soon get rid of the
+> obsolete default_attrs field.
+>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Cc: linux-pm@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-> In order to replace the counter registration API also update the
-> documentation to the new way.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Fine either way, but a suggestion below.
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Applied as 5.17 material, thanks!
 
 > ---
->  Documentation/driver-api/generic-counter.rst | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/driver-api/generic-counter.rst b/Documentation/driver-api/generic-counter.rst
-> index 1b487a331467..991b180c7b47 100644
-> --- a/Documentation/driver-api/generic-counter.rst
-> +++ b/Documentation/driver-api/generic-counter.rst
-> @@ -262,11 +262,11 @@ order to communicate with the device: to read and write various Signals
->  and Counts, and to set and get the "action mode" and "function mode" for
->  various Synapses and Counts respectively.
->  
-> -A defined counter_device structure may be registered to the system by
-> -passing it to the counter_register function, and unregistered by passing
-> -it to the counter_unregister function. Similarly, the
-> -devm_counter_register function may be used if device memory-managed
-> -registration is desired.
-> +A counter_device structure is supposed to be allocated using counter_alloc()
-> +and may be registered to the system by passing it to the counter_add()
-> +function, and unregistered by passing it to the counter_unregister function.
-
-I'd avoid the supposed to and the odd vague use of structure in the origin
-text and just go with
-
-A struct counter_device is allocated using counter_alloc()...
-
-
-> +There are device managed variants of these functions: devm_counter_alloc() and
-> +devm_counter_add().
->  
->  The struct counter_comp structure is used to define counter extensions
->  for Signals, Synapses, and Counts.
-
+>  drivers/cpufreq/cpufreq.c              | 5 +++--
+>  drivers/cpufreq/cpufreq_conservative.c | 5 +++--
+>  drivers/cpufreq/cpufreq_ondemand.c     | 5 +++--
+>  3 files changed, 9 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index e338d2f010fe..09d676d5237e 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -924,7 +924,7 @@ cpufreq_freq_attr_rw(scaling_max_freq);
+>  cpufreq_freq_attr_rw(scaling_governor);
+>  cpufreq_freq_attr_rw(scaling_setspeed);
+>
+> -static struct attribute *default_attrs[] = {
+> +static struct attribute *cpufreq_attrs[] = {
+>         &cpuinfo_min_freq.attr,
+>         &cpuinfo_max_freq.attr,
+>         &cpuinfo_transition_latency.attr,
+> @@ -938,6 +938,7 @@ static struct attribute *default_attrs[] = {
+>         &scaling_setspeed.attr,
+>         NULL
+>  };
+> +ATTRIBUTE_GROUPS(cpufreq);
+>
+>  #define to_policy(k) container_of(k, struct cpufreq_policy, kobj)
+>  #define to_attr(a) container_of(a, struct freq_attr, attr)
+> @@ -1000,7 +1001,7 @@ static const struct sysfs_ops sysfs_ops = {
+>
+>  static struct kobj_type ktype_cpufreq = {
+>         .sysfs_ops      = &sysfs_ops,
+> -       .default_attrs  = default_attrs,
+> +       .default_groups = cpufreq_groups,
+>         .release        = cpufreq_sysfs_release,
+>  };
+>
+> diff --git a/drivers/cpufreq/cpufreq_conservative.c b/drivers/cpufreq/cpufreq_conservative.c
+> index 0879ec3c170c..08515f7e515f 100644
+> --- a/drivers/cpufreq/cpufreq_conservative.c
+> +++ b/drivers/cpufreq/cpufreq_conservative.c
+> @@ -257,7 +257,7 @@ gov_attr_rw(ignore_nice_load);
+>  gov_attr_rw(down_threshold);
+>  gov_attr_rw(freq_step);
+>
+> -static struct attribute *cs_attributes[] = {
+> +static struct attribute *cs_attrs[] = {
+>         &sampling_rate.attr,
+>         &sampling_down_factor.attr,
+>         &up_threshold.attr,
+> @@ -266,6 +266,7 @@ static struct attribute *cs_attributes[] = {
+>         &freq_step.attr,
+>         NULL
+>  };
+> +ATTRIBUTE_GROUPS(cs);
+>
+>  /************************** sysfs end ************************/
+>
+> @@ -315,7 +316,7 @@ static void cs_start(struct cpufreq_policy *policy)
+>
+>  static struct dbs_governor cs_governor = {
+>         .gov = CPUFREQ_DBS_GOVERNOR_INITIALIZER("conservative"),
+> -       .kobj_type = { .default_attrs = cs_attributes },
+> +       .kobj_type = { .default_groups = cs_groups },
+>         .gov_dbs_update = cs_dbs_update,
+>         .alloc = cs_alloc,
+>         .free = cs_free,
+> diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
+> index 3b8f924771b4..6a41ea4729b8 100644
+> --- a/drivers/cpufreq/cpufreq_ondemand.c
+> +++ b/drivers/cpufreq/cpufreq_ondemand.c
+> @@ -328,7 +328,7 @@ gov_attr_rw(sampling_down_factor);
+>  gov_attr_rw(ignore_nice_load);
+>  gov_attr_rw(powersave_bias);
+>
+> -static struct attribute *od_attributes[] = {
+> +static struct attribute *od_attrs[] = {
+>         &sampling_rate.attr,
+>         &up_threshold.attr,
+>         &sampling_down_factor.attr,
+> @@ -337,6 +337,7 @@ static struct attribute *od_attributes[] = {
+>         &io_is_busy.attr,
+>         NULL
+>  };
+> +ATTRIBUTE_GROUPS(od);
+>
+>  /************************** sysfs end ************************/
+>
+> @@ -401,7 +402,7 @@ static struct od_ops od_ops = {
+>
+>  static struct dbs_governor od_dbs_gov = {
+>         .gov = CPUFREQ_DBS_GOVERNOR_INITIALIZER("ondemand"),
+> -       .kobj_type = { .default_attrs = od_attributes },
+> +       .kobj_type = { .default_groups = od_groups },
+>         .gov_dbs_update = od_dbs_update,
+>         .alloc = od_alloc,
+>         .free = od_free,
+> --
+> 2.34.1
+>

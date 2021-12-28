@@ -2,152 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23455480D8B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 22:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 575DB480D8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 22:49:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbhL1VsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 16:48:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbhL1VsN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 16:48:13 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190F2C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 13:48:13 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id c2so17180938pfc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 13:48:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AINbZEGCl8z/7FJgJFS1bW6C73bLWpVUK2DVW0sKcL8=;
-        b=i8BDfu3Cbnb3Viigeb90+/RoyFCsdY4zmmhG67xy1/xKkRGBvV7zYsDSfUujxRz1M6
-         WKWW+hF3hWcTBahPXxiAE2dd5TzfFfyW+kaCuL37DnTaDADymu2gDTSIFocZkVOxl6Bm
-         CXzjV9xx6eCJ5Fw/xZYWhUhKQdZf9vwKMKPt6PajLZqspTsivs90pzHPbq5ZOF4iu0Al
-         EogQs7/Dz0D2oeqbOHpA93p/WmGqQRboZHG7tge27x0qsYapE32/3MTkgYVB/z5hT7Oh
-         xGGAYApGd3to+yh2r1kf72CjhAP/3e8BbkQgzoMOcENXvMEuD5Cz7S0TaFuhwptpdVII
-         KgIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AINbZEGCl8z/7FJgJFS1bW6C73bLWpVUK2DVW0sKcL8=;
-        b=Q13hjTjHnUMkw4vxTUf8a0MhFoXvxeYVgcjSU7O48fxLVrJGLrEH1w4E3m7x+vGxi4
-         AUSkyIiDXDOduJlP8SlLZ0lhUGj9vY1alhaKqS/lQB5LByWoWKADDY2+Q0cvRQMYysOU
-         lN4EwfZDxMj1ZDzH8BXvapPokRXCV13WgrJZy4Gt/+TdTRfYyVsJDvMWwFHQ5hoLTYeU
-         aE9AZCcvJQOKwW23Q20ZF3a388ogNDyH48cinZnXsouvdJcAxQMvpY38Oxad0WMcBlp5
-         U/DNbfbuKWxT4x2TBeDwpc5hrYF+2v+qO0cNJ7Z+SwUXJWujOD9IHQuWdiqO0MP1+L7h
-         d6Pg==
-X-Gm-Message-State: AOAM532kCu3HMpGwmAxLaVXEvAweACE/+LNixjMJIYAJwI9G4S+JD+nB
-        M0VpYB7QENr/pXGFjqg1jfroxw==
-X-Google-Smtp-Source: ABdhPJyKE3UVODPS1fshDuKNztoIqtf+jVLcm9grjNtuxnSRjURqBYuIllKdU8KU2kEC55IFpKtL1g==
-X-Received: by 2002:a63:711a:: with SMTP id m26mr3052221pgc.49.1640728092301;
-        Tue, 28 Dec 2021 13:48:12 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id t8sm113511pfj.114.2021.12.28.13.48.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 13:48:11 -0800 (PST)
-Date:   Tue, 28 Dec 2021 21:48:08 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com
-Subject: Re: [PATCH v3 kvm/queue 05/16] KVM: Maintain ofs_tree for fast
- memslot lookup by file offset
-Message-ID: <YcuGGCo5pR31GkZE@google.com>
-References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
- <20211223123011.41044-6-chao.p.peng@linux.intel.com>
- <YcS5uStTallwRs0G@google.com>
- <20211224035418.GA43608@chaop.bj.intel.com>
+        id S231233AbhL1VtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 16:49:16 -0500
+Received: from mx3.wp.pl ([212.77.101.10]:31037 "EHLO mx3.wp.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230327AbhL1VtQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 16:49:16 -0500
+Received: (wp-smtpd smtp.wp.pl 14769 invoked from network); 28 Dec 2021 22:49:12 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1640728152; bh=cGB/2VqJaRDRtG4vk9Wb9lKSDzjlmhIKmM1dSRfHveo=;
+          h=From:To:Subject;
+          b=GOftwwGsEBvtOhRgyTsgxuXZVNiD0//QLlbREn/USRMYZusq0U/wvjJWa5Iqb2Y6E
+           pX3bosqXXT0myF9OEX7Aha8ENz+ofLolJlaSPFt3grloHWuCHsMGTOY5b4y4HWUx06
+           zr5qWaPU00/G5hIVeDKDSSB+9bEXTclWcpLo0Cfw=
+Received: from riviera.nat.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.1])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <davem@davemloft.net>; 28 Dec 2021 22:49:12 +0100
+From:   Aleksander Jan Bajkowski <olek2@wp.pl>
+To:     davem@davemloft.net, kuba@kernel.org, olek2@wp.pl,
+        rdunlap@infradead.org, jgg@ziepe.ca, arnd@arndb.de,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] net: lantiq_etop: add missing comment for wmb()
+Date:   Tue, 28 Dec 2021 22:49:10 +0100
+Message-Id: <20211228214910.70810-1-olek2@wp.pl>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211224035418.GA43608@chaop.bj.intel.com>
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: cd61b76c7adb5819e277648f2fee5896
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000000 [AUMk]                               
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 24, 2021, Chao Peng wrote:
-> On Thu, Dec 23, 2021 at 06:02:33PM +0000, Sean Christopherson wrote:
-> > On Thu, Dec 23, 2021, Chao Peng wrote:
-> > > Similar to hva_tree for hva range, maintain interval tree ofs_tree for
-> > > offset range of a fd-based memslot so the lookup by offset range can be
-> > > faster when memslot count is high.
-> > 
-> > This won't work.  The hva_tree relies on there being exactly one virtual address
-> > space, whereas with private memory, userspace can map multiple files into the
-> > guest at different gfns, but with overlapping offsets.
-> 
-> OK, that's the point.
-> 
-> > 
-> > I also dislike hijacking __kvm_handle_hva_range() in patch 07.
-> > 
-> > KVM also needs to disallow mapping the same file+offset into multiple gfns, which
-> > I don't see anywhere in this series.
-> 
-> This can be checked against file+offset overlapping with existing slots
-> when register a new one.
-> 
-> > 
-> > In other words, there needs to be a 1:1 gfn:file+offset mapping.  Since userspace
-> > likely wants to allocate a single file for guest private memory and map it into
-> > multiple discontiguous slots, e.g. to skip the PCI hole, the best idea off the top
-> > of my head would be to register the notifier on a per-slot basis, not a per-VM
-> > basis.  It would require a 'struct kvm *' in 'struct kvm_memory_slot', but that's
-> > not a huge deal.
-> > 
-> > That way, KVM's notifier callback already knows the memslot and can compute overlap
-> > between the memslot and the range by reversing the math done by kvm_memfd_get_pfn().
-> > Then, armed with the gfn and slot, invalidation is just a matter of constructing
-> > a struct kvm_gfn_range and invoking kvm_unmap_gfn_range().
-> 
-> KVM is easy but the kernel bits would be difficulty, it has to maintain
-> fd+offset to memslot mapping because one fd can have multiple memslots,
-> it need decide which memslot needs to be notified.
+This patch adds the missing code comment for memory barrier
+call and fixes checkpatch warning:
 
-No, the kernel side maintains an opaque pointer like it does today, KVM handles
-reverse engineering the memslot to get the offset and whatever else it needs.
-notify_fallocate() and other callbacks are unchanged, though they probably can
-drop the inode.
+WARNING: memory barrier without comment
++	wmb();
 
-E.g. likely with bad math and handwaving on the overlap detection:
+Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+---
+ drivers/net/ethernet/lantiq_etop.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-int kvm_private_fd_fallocate_range(void *owner, pgoff_t start, pgoff_t end)
-{
-	struct kvm_memory_slot *slot = owner;
-	struct kvm_gfn_range gfn_range = {
-		.slot	   = slot,
-		.start	   = (start - slot->private_offset) >> PAGE_SHIFT,
-		.end	   = (end - slot->private_offset) >> PAGE_SHIFT,
-		.may_block = true,
-	};
-
-	if (!has_overlap(slot, start, end))
-		return 0;
-
-	gfn_range.end = min(gfn_range.end, slot->base_gfn + slot->npages);
-
-	kvm_unmap_gfn_range(slot->kvm, &gfn_range);
-	return 0;
-}
+diff --git a/drivers/net/ethernet/lantiq_etop.c b/drivers/net/ethernet/lantiq_etop.c
+index 072391c494ce..5d90cc147950 100644
+--- a/drivers/net/ethernet/lantiq_etop.c
++++ b/drivers/net/ethernet/lantiq_etop.c
+@@ -498,6 +498,7 @@ ltq_etop_tx(struct sk_buff *skb, struct net_device *dev)
+ 	spin_lock_irqsave(&priv->lock, flags);
+ 	desc->addr = ((unsigned int) dma_map_single(&priv->pdev->dev, skb->data, len,
+ 						DMA_TO_DEVICE)) - byte_offset;
++	/* Make sure the address is written before we give it to HW */
+ 	wmb();
+ 	desc->ctl = LTQ_DMA_OWN | LTQ_DMA_SOP | LTQ_DMA_EOP |
+ 		LTQ_DMA_TX_OFFSET(byte_offset) | (len & LTQ_DMA_SIZE_MASK);
+-- 
+2.30.2
 

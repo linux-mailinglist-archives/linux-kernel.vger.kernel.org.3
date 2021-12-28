@@ -2,454 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 220A3480B71
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 17:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC3A480B5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 17:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236199AbhL1Qjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 11:39:49 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:49294
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236201AbhL1Qjn (ORCPT
+        id S235945AbhL1QjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 11:39:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235407AbhL1QjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 11:39:43 -0500
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id DBD6C3F1A5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 16:39:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1640709581;
-        bh=/nd1b9Jae+geOuYRS/fP3HNJ5JqXGFVL3LmeNMmkpPM=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=thqg59fEzO9YJop7YhFr+9cTdo84lBUEX7sI0bTOSEQ5vrTR7eyhuPNqjwoqiSRek
-         Obxwv5g7cirN9OZAGky4lKQLKD8iWK6lokb8FRMyvBPyFNf2m7Z5yaJzGhIVWzkf9L
-         yX9NUyzXnqJBx69EVTxi6oTjoQwqcYI16fZhOzmJba3wFWwiTe7hv+ApaiIjtqkUG8
-         HlzUhY3TuaOM75MnLkgCmdChvjP+QLdacWTJHlDvrmJAV/88RSyiNN3/FJEQGSEARq
-         fu68mT9U2krrIGUGEZV2Urm9IDg3PgqR9/qgRAdQw+U2Cg0knP644pEmlcY7GCCgq+
-         N7CChkyzqa4pA==
-Received: by mail-lf1-f71.google.com with SMTP id g2-20020a19e042000000b00425cfac0e67so4232120lfj.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 08:39:41 -0800 (PST)
+        Tue, 28 Dec 2021 11:39:04 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4919C06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 08:39:03 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id s73so30823605oie.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 08:39:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZIpboUz/xGiGm0M2bXxED5rkbHQBbAAf8QHnqv08958=;
+        b=AFobbcTiuaEItSulj0GbplCZ6nJLKEzZbS81I/vjDL5fHMv8umDxbEl+tLsi3MxQBY
+         46vmWs1PJkhy9r0z2ovi/LIaVLnG53l16NTAaut38zEBwHhpnVj2rEPyLbJfveeGg0Bj
+         DSwuFfeEPNUP1qlM6JObzKhKwW+qoQoOUVXoRCBCvgiOgBiCLGhEOnebkh8jrpyBPcOM
+         rFW3mMUh/v4bjiRSYbMb+K9WImT2Va7UIXo4yc0PDwufsUYc34QhbvMVpNajXfg1QOiC
+         1Gq7DSneEuXJk7uff1K3YoVpM3Atz6KsNLgUYKNHy7yDQ0tN0VeZHhjUpSFIH/9TQYGw
+         6eGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/nd1b9Jae+geOuYRS/fP3HNJ5JqXGFVL3LmeNMmkpPM=;
-        b=nZHXFqf8IF5KJU6vJQGY1I0NEJtIdOQBzpMOz1EDAtnFaIzAmG/u/fkD6JoW3AwXcT
-         g77SZY0RudaEG406oZD95dXw/xpsiGq8LY8RQLzScB/93ZoWoD6UxP7K4BVen8i93dQy
-         pdlB/jM2Qi3bfFb7m0iv2wXJI63KyBYzNNDB+WoD9T4rHm9n1dy5XpjRAIFcQ+biNolk
-         8Fr6Amahcr2vPnqi9ezYFFCxMEvPvmfxWtTALxskptEIbhsT/VrGjiL6BvckMtTG2L6g
-         blBXS5LjNfgnQXBwTuq74/4jZpGX3oSzwxqxkZsXC96uI/S5DHS781g5PvOYu9OytKXS
-         4/bA==
-X-Gm-Message-State: AOAM5320cWz/4w3AGyUbhW4X5XeOrn0hVChBFxhZ+i6teCklQF8PmkcQ
-        uZxE0HWFgG/0GvRu0He8CK+MUMlAggGXfSI19X7e2eTPrKyWHQ8bczVeu1RkIEDUtS+VDdxXfvb
-        foXV8fubTWrXCyxJHJ8gKejG7rlVDLP+zLXYmBhpB7Q==
-X-Received: by 2002:a2e:f1a:: with SMTP id 26mr19003594ljp.480.1640709581116;
-        Tue, 28 Dec 2021 08:39:41 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxwxNFto0SNwbMZEahleTnhZaXIfwwshjO3MvnBn4RSsv/mZhmGKYo00nnozjxHNwUD3q90nw==
-X-Received: by 2002:a2e:f1a:: with SMTP id 26mr19003567ljp.480.1640709580801;
-        Tue, 28 Dec 2021 08:39:40 -0800 (PST)
-Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id d3sm1972876lfs.204.2021.12.28.08.39.39
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZIpboUz/xGiGm0M2bXxED5rkbHQBbAAf8QHnqv08958=;
+        b=3YiFudYRuq7qXnzxBroa+XUxANhymvV/qsrLXaaseY3DBfLapEH9VonVv04lZi7ljo
+         GtvF4gt3ottN0VsiiPlUvBPbuXpeEzotZdoLcdf9z7p9I8uhXn+zBH7DMqiEfJBaj7nb
+         0pmuscv0QuqDsaQXIY14NTz9S6dPTZ6eRVyOoSKfM7XG9oHVnD13GsdUEzznHs+uWgol
+         X3Ts2MMNGEDI2z0tGFg37G6daAXw7TylaEVyrgE/fg7+HB0oMQdBX+/duQQ0VEPpNWYC
+         MfDk3FpXdxBVuUyEvBTC/inpxvfrbarkXt1QkMbWeYADMuAxrErBOfRgUJy/5WSCGSwp
+         0OMQ==
+X-Gm-Message-State: AOAM531cuAXj53vHxNp0WgF3Ab+HzYalC3y5RPBN9E0I0dJ5XY14zckO
+        Qh5BSZ1/aCtzMN/VMyn+FuVx3g==
+X-Google-Smtp-Source: ABdhPJzOODy4nmc8nUHSmsbMH/o2ue92pmv2LHEXCJDGBzRWhqAPOozIKUl/ymCjnUMkyifprhlvtA==
+X-Received: by 2002:a05:6808:682:: with SMTP id k2mr18106337oig.63.1640709541365;
+        Tue, 28 Dec 2021 08:39:01 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id o11sm3993423oiv.10.2021.12.28.08.39.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 08:39:40 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH 4/4] dt-bindings: mfd: maxim,max77693: convert to dtschema
-Date:   Tue, 28 Dec 2021 17:39:30 +0100
-Message-Id: <20211228163930.35524-5-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211228163930.35524-1-krzysztof.kozlowski@canonical.com>
-References: <20211228163930.35524-1-krzysztof.kozlowski@canonical.com>
+        Tue, 28 Dec 2021 08:39:00 -0800 (PST)
+Date:   Tue, 28 Dec 2021 08:40:01 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 6/8] typec: mux: Allow multiple mux_devs per mux
+Message-ID: <Ycs94b+Uh42KQKui@ripper>
+References: <20211228052116.1748443-1-bjorn.andersson@linaro.org>
+ <20211228052116.1748443-7-bjorn.andersson@linaro.org>
+ <42ef1ff8-1c60-c601-3e97-7b9ffb3cab07@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <42ef1ff8-1c60-c601-3e97-7b9ffb3cab07@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the MFD part of Maxim MAX77693 MUIC to DT schema format.  The
-example DTS was copied from existing DTS (exynos4412-midas.dtsi), so
-keep the license as GPL-2.0-only.
+On Tue 28 Dec 08:04 PST 2021, Dmitry Baryshkov wrote:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- .../devicetree/bindings/mfd/max77693.txt      | 194 ------------------
- .../bindings/mfd/maxim,max77693.yaml          | 139 +++++++++++++
- MAINTAINERS                                   |   2 +-
- 3 files changed, 140 insertions(+), 195 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/mfd/max77693.txt
- create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
+> On 28/12/2021 08:21, Bjorn Andersson wrote:
+> > In the Qualcomm platforms the USB/DP PHY handles muxing and orientation
+> > switching of the SuperSpeed lines, but the SBU lines needs to be
+> > connected and switched by external (to the SoC) hardware.
+> > 
+> > It's therefor necessary to be able to have the TypeC controller operate
+> > multiple TypeC muxes and switches. Use the newly introduced indirection
+> > object to handle this, to avoid having to taint the TypeC controllers
+> > with knowledge about the downstream hardware configuration.
+> > 
+> > The max number of devs per indirection is set to 3, based on the number
+> > of ports defined in the usb-c-connector binding.
+> 
+> If we had the 'count' ability, we wouldn't have to put limits here.
+> The limit 3 is a bit artificial if you consider the redriver chips.
+> 
 
-diff --git a/Documentation/devicetree/bindings/mfd/max77693.txt b/Documentation/devicetree/bindings/mfd/max77693.txt
-deleted file mode 100644
-index 1032df14498b..000000000000
---- a/Documentation/devicetree/bindings/mfd/max77693.txt
-+++ /dev/null
-@@ -1,194 +0,0 @@
--Maxim MAX77693 multi-function device
--
--MAX77693 is a Multifunction device with the following submodules:
--- PMIC,
--- CHARGER,
--- LED,
--- MUIC,
--- HAPTIC
--
--It is interfaced to host controller using i2c.
--This document describes the bindings for the mfd device.
--
--Required properties:
--- compatible : Must be "maxim,max77693".
--- reg : Specifies the i2c slave address of PMIC block.
--- interrupts : This i2c device has an IRQ line connected to the main SoC.
--
--Optional properties:
--- regulators : The regulators of max77693 have to be instantiated under subnode
--  named "regulators" using the following format.
--
--	regulators {
--		regulator-compatible = ESAFEOUT1/ESAFEOUT2/CHARGER
--		standard regulator constraints[*].
--	};
--
--	[*] refer Documentation/devicetree/bindings/regulator/regulator.txt
--
--- haptic : The MAX77693 haptic device utilises a PWM controlled motor to provide
--  users with tactile feedback. PWM period and duty-cycle are varied in
--  order to provide the appropriate level of feedback.
--
-- Required properties:
--	- compatible : Must be "maxim,max77693-haptic"
--	- haptic-supply : power supply for the haptic motor
--	[*] refer Documentation/devicetree/bindings/regulator/regulator.txt
--	- pwms : phandle to the physical PWM(Pulse Width Modulation) device.
--	 PWM properties should be named "pwms". And number of cell is different
--	 for each pwm device.
--	 To get more information, please refer to documentation.
--	[*] refer Documentation/devicetree/bindings/pwm/pwm.txt
--
--- charger : Node configuring the charger driver.
--  If present, required properties:
--  - compatible : Must be "maxim,max77693-charger".
--
--  Optional properties (if not set, defaults will be used):
--  - maxim,constant-microvolt : Battery constant voltage in uV. The charger
--    will operate in fast charge constant current mode till battery voltage
--    reaches this level. Then the charger will switch to fast charge constant
--    voltage mode. Also vsys (system voltage) will be set to this value when
--    DC power is supplied but charger is not enabled.
--    Valid values: 3650000 - 4400000, step by 25000 (rounded down)
--    Default: 4200000
--
--  - maxim,min-system-microvolt : Minimal system voltage in uV.
--    Valid values: 3000000 - 3700000, step by 100000 (rounded down)
--    Default: 3600000
--
--  - maxim,thermal-regulation-celsius : Temperature in Celsius for entering
--    high temperature charging mode. If die temperature exceeds this value
--    the charging current will be reduced by 105 mA/Celsius.
--    Valid values: 70, 85, 100, 115
--    Default: 100
--
--  - maxim,battery-overcurrent-microamp : Overcurrent protection threshold
--    in uA (current from battery to system).
--    Valid values: 2000000 - 3500000, step by 250000 (rounded down)
--    Default: 3500000
--
--  - maxim,charge-input-threshold-microvolt : Threshold voltage in uV for
--    triggering input voltage regulation loop. If input voltage decreases
--    below this value, the input current will be reduced to reach the
--    threshold voltage.
--    Valid values: 4300000, 4700000, 4800000, 4900000
--    Default: 4300000
--
--- led : the LED submodule device node
--
--There are two LED outputs available - FLED1 and FLED2. Each of them can
--control a separate LED or they can be connected together to double
--the maximum current for a single connected LED. One LED is represented
--by one child node.
--
--Required properties:
--- compatible : Must be "maxim,max77693-led".
--
--Optional properties:
--- maxim,boost-mode :
--	In boost mode the device can produce up to 1.2A of total current
--	on both outputs. The maximum current on each output is reduced
--	to 625mA then. If not enabled explicitly, boost setting defaults to
--	LEDS_BOOST_FIXED in case both current sources are used.
--	Possible values:
--		LEDS_BOOST_OFF (0) - no boost,
--		LEDS_BOOST_ADAPTIVE (1) - adaptive mode,
--		LEDS_BOOST_FIXED (2) - fixed mode.
--- maxim,boost-mvout : Output voltage of the boost module in millivolts.
--	Valid values: 3300 - 5500, step by 25 (rounded down)
--	Default: 3300
--- maxim,mvsys-min : Low input voltage level in millivolts. Flash is not fired
--	if chip estimates that system voltage could drop below this level due
--	to flash power consumption.
--	Valid values: 2400 - 3400, step by 33 (rounded down)
--	Default: 2400
--
--Required properties for the LED child node:
--- led-sources : see Documentation/devicetree/bindings/leds/common.txt;
--		device current output identifiers: 0 - FLED1, 1 - FLED2
--- led-max-microamp : see Documentation/devicetree/bindings/leds/common.txt
--	Valid values for a LED connected to one FLED output:
--		15625 - 250000, step by 15625 (rounded down)
--	Valid values for a LED connected to both FLED outputs:
--		15625 - 500000, step by 15625 (rounded down)
--- flash-max-microamp : see Documentation/devicetree/bindings/leds/common.txt
--	Valid values for a single LED connected to one FLED output
--	(boost mode must be turned off):
--		15625 - 1000000, step by 15625 (rounded down)
--	Valid values for a single LED connected to both FLED outputs:
--		15625 - 1250000, step by 15625 (rounded down)
--	Valid values for two LEDs case:
--		15625 - 625000, step by 15625 (rounded down)
--- flash-max-timeout-us : see Documentation/devicetree/bindings/leds/common.txt
--	Valid values: 62500 - 1000000, step by 62500 (rounded down)
--
--Optional properties for the LED child node:
--- label : see Documentation/devicetree/bindings/leds/common.txt
--
--Optional nodes:
--- max77693-muic :
--	Node used only by extcon consumers.
--	Required properties:
--		- compatible : "maxim,max77693-muic"
--
--Example:
--#include <dt-bindings/leds/common.h>
--
--	max77693@66 {
--		compatible = "maxim,max77693";
--		reg = <0x66>;
--		interrupt-parent = <&gpx1>;
--		interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
--
--		regulators {
--			esafeout@1 {
--				regulator-compatible = "ESAFEOUT1";
--				regulator-name = "ESAFEOUT1";
--				regulator-boot-on;
--			};
--			esafeout@2 {
--				regulator-compatible = "ESAFEOUT2";
--				regulator-name = "ESAFEOUT2";
--				};
--			charger@0 {
--				regulator-compatible = "CHARGER";
--				regulator-name = "CHARGER";
--				regulator-min-microamp = <60000>;
--				regulator-max-microamp = <2580000>;
--					regulator-boot-on;
--			};
--		};
--
--		haptic {
--			compatible = "maxim,max77693-haptic";
--			haptic-supply = <&haptic_supply>;
--			pwms = <&pwm 0 40000 0>;
--			pwm-names = "haptic";
--		};
--
--		charger {
--			compatible = "maxim,max77693-charger";
--
--			maxim,constant-microvolt = <4200000>;
--			maxim,min-system-microvolt = <3600000>;
--			maxim,thermal-regulation-celsius = <75>;
--			maxim,battery-overcurrent-microamp = <3000000>;
--			maxim,charge-input-threshold-microvolt = <4300000>;
--		};
--
--		led {
--			compatible = "maxim,max77693-led";
--			maxim,boost-mode = <LEDS_BOOST_FIXED>;
--			maxim,boost-mvout = <5000>;
--			maxim,mvsys-min = <2400>;
--
--			camera_flash: flash-led {
--				label = "max77693-flash";
--				led-sources = <0>, <1>;
--				led-max-microamp = <500000>;
--				flash-max-microamp = <1250000>;
--				flash-max-timeout-us = <1000000>;
--			};
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77693.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
-new file mode 100644
-index 000000000000..bc9c90bd4ff9
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
-@@ -0,0 +1,139 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/maxim,max77693.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Maxim MAX77693 MicroUSB and Companion Power Management IC
-+
-+maintainers:
-+  - Chanwoo Choi <cw00.choi@samsung.com>
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+
-+description: |
-+  This is a part of device tree bindings for Maxim MAX77693 MicroUSB
-+  Integrated Circuit (MUIC).
-+
-+  The Maxim MAX77693 is a MicroUSB and Companion Power Management IC which
-+  includes voltage current regulators, charger, LED/flash, haptic motor driver
-+  and MicroUSB management IC.
-+
-+properties:
-+  compatible:
-+    const: maxim,max77693
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+  charger:
-+    $ref: ../power/supply/maxim,max77693.yaml
-+
-+  led:
-+    $ref: ../leds/maxim,max77693.yaml
-+
-+  max77693-muic:
-+    type: object
-+    properties:
-+      compatible:
-+        const: maxim,max77693-muic
-+
-+    required:
-+      - compatible
-+
-+  motor-driver:
-+    type: object
-+    properties:
-+      compatible:
-+        const: maxim,max77693-haptic
-+
-+      haptic-supply:
-+        description: Power supply to the haptic motor
-+
-+      pwms:
-+        maxItems: 1
-+
-+    required:
-+      - compatible
-+      - haptic-supply
-+      - pwms
-+
-+  regulators:
-+    $ref: ../regulator/maxim,max77693.yaml
-+    description:
-+      List of child nodes that specify the regulators.
-+
-+required:
-+  - compatible
-+  - interrupts
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/leds/common.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        pmic@66 {
-+            compatible = "maxim,max77693";
-+            reg = <0x66>;
-+            interrupt-parent = <&gpx1>;
-+            interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
-+
-+            regulators {
-+                ESAFEOUT1 {
-+                    regulator-name = "ESAFEOUT1";
-+                };
-+
-+                ESAFEOUT2 {
-+                    regulator-name = "ESAFEOUT2";
-+                };
-+
-+                CHARGER {
-+                    regulator-name = "CHARGER";
-+                    regulator-min-microamp = <60000>;
-+                    regulator-max-microamp = <2580000>;
-+                };
-+            };
-+
-+            motor-driver {
-+                compatible = "maxim,max77693-haptic";
-+                haptic-supply = <&ldo26_reg>;
-+                pwms = <&pwm 0 38022 0>;
-+            };
-+
-+            charger {
-+                compatible = "maxim,max77693-charger";
-+
-+                maxim,constant-microvolt = <4350000>;
-+                maxim,min-system-microvolt = <3600000>;
-+                maxim,thermal-regulation-celsius = <100>;
-+                maxim,battery-overcurrent-microamp = <3500000>;
-+                maxim,charge-input-threshold-microvolt = <4300000>;
-+            };
-+
-+            led {
-+                compatible = "maxim,max77693-led";
-+                maxim,boost-mode = <LEDS_BOOST_FIXED>;
-+                maxim,boost-mvout = <5000>;
-+                maxim,mvsys-min = <2400>;
-+
-+                flash-led {
-+                    label = "max77693-flash";
-+                    function = LED_FUNCTION_FLASH;
-+                    color = <LED_COLOR_ID_WHITE>;
-+                    led-sources = <0>, <1>;
-+                    led-max-microamp = <500000>;
-+                    flash-max-microamp = <1250000>;
-+                    flash-max-timeout-us = <1000000>;
-+                };
-+            };
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ead08768fb78..e5f2758531bc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11692,9 +11692,9 @@ M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
- L:	linux-kernel@vger.kernel.org
- S:	Supported
- F:	Documentation/devicetree/bindings/*/maxim,max77686.yaml
-+F:	Documentation/devicetree/bindings/*/maxim,max77693.yaml
- F:	Documentation/devicetree/bindings/clock/maxim,max77686.txt
- F:	Documentation/devicetree/bindings/mfd/max14577.txt
--F:	Documentation/devicetree/bindings/mfd/max77693.txt
- F:	drivers/*/max14577*.c
- F:	drivers/*/max77686*.c
- F:	drivers/*/max77693*.c
--- 
-2.32.0
+I don't know if it's worth making it more dynamic at this point in time.
+I definitely don't think it's worth taking two passes here, because
+typec_switch_match will allocate objects that needs to be freed after
+the "count" pass. I.e.  taking two passes is expensive (and ugly).
 
+Also in it's current state we're wasting 16 bytes per USB connector at
+worst and in the case of us having QMP muxing SuperSpeed signals and an
+external redriver we have 2.
+
+
+Given that we're just dealing with pointers the waste isn't that big,
+but we could put say 8 (16?) entries on the stack and then dynamically
+allocate the typec_switch and typec_mux arrays based on the actual
+number of items returned.
+
+Regards,
+Bjorn
+
+> > 
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > ---
+> >   drivers/usb/typec/mux.c | 124 +++++++++++++++++++++++++++++++---------
+> >   1 file changed, 98 insertions(+), 26 deletions(-)
+> > 
+> > diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
+> > index d0b42c297aca..adf3681cf22d 100644
+> > --- a/drivers/usb/typec/mux.c
+> > +++ b/drivers/usb/typec/mux.c
+> > @@ -17,8 +17,11 @@
+> >   #include "class.h"
+> >   #include "mux.h"
+> > +#define TYPEC_MUX_MAX_DEVS	3
+> > +
+> >   struct typec_switch {
+> > -	struct typec_switch_dev *sw_dev;
+> > +	struct typec_switch_dev *sw_devs[TYPEC_MUX_MAX_DEVS];
+> > +	unsigned int num_sw_devs;
+> >   };
+> >   static int switch_fwnode_match(struct device *dev, const void *fwnode)
+> > @@ -67,25 +70,48 @@ static void *typec_switch_match(struct fwnode_handle *fwnode, const char *id,
+> >    */
+> >   struct typec_switch *fwnode_typec_switch_get(struct fwnode_handle *fwnode)
+> >   {
+> > -	struct typec_switch_dev *sw_dev;
+> > +	struct typec_switch_dev *sw_devs[TYPEC_MUX_MAX_DEVS];
+> >   	struct typec_switch *sw;
+> > +	int count;
+> > +	int err;
+> > +	int i;
+> >   	sw = kzalloc(sizeof(*sw), GFP_KERNEL);
+> >   	if (!sw)
+> >   		return ERR_PTR(-ENOMEM);
+> > -	sw_dev = fwnode_connection_find_match(fwnode, "orientation-switch", NULL,
+> > -					      typec_switch_match);
+> > -	if (IS_ERR_OR_NULL(sw_dev)) {
+> > +	count = fwnode_connection_find_matches(fwnode, "orientation-switch", NULL,
+> > +					       typec_switch_match,
+> > +					       (void **)sw_devs,
+> > +					       ARRAY_SIZE(sw_devs));
+> > +	if (count <= 0) {
+> >   		kfree(sw);
+> > -		return ERR_CAST(sw_dev);
+> > +		return NULL;
+> >   	}
+> > -	WARN_ON(!try_module_get(sw_dev->dev.parent->driver->owner));
+> > +	for (i = 0; i < count; i++) {
+> > +		if (IS_ERR(sw_devs[i])) {
+> > +			err = PTR_ERR(sw_devs[i]);
+> > +			goto put_sw_devs;
+> > +		}
+> > +	}
+> > +
+> > +	for (i = 0; i < count; i++) {
+> > +		WARN_ON(!try_module_get(sw_devs[i]->dev.parent->driver->owner));
+> > +		sw->sw_devs[i] = sw_devs[i];
+> > +	}
+> > -	sw->sw_dev = sw_dev;
+> > +	sw->num_sw_devs = count;
+> >   	return sw;
+> > +
+> > +put_sw_devs:
+> > +	for (i = 0; i < count; i++) {
+> > +		if (!IS_ERR(sw_devs[i]))
+> > +			put_device(&sw_devs[i]->dev);
+> > +	}
+> > +
+> > +	return ERR_PTR(err);
+> >   }
+> >   EXPORT_SYMBOL_GPL(fwnode_typec_switch_get);
+> > @@ -98,14 +124,17 @@ EXPORT_SYMBOL_GPL(fwnode_typec_switch_get);
+> >   void typec_switch_put(struct typec_switch *sw)
+> >   {
+> >   	struct typec_switch_dev *sw_dev;
+> > +	unsigned int i;
+> >   	if (IS_ERR_OR_NULL(sw))
+> >   		return;
+> > -	sw_dev = sw->sw_dev;
+> > +	for (i = 0; i < sw->num_sw_devs; i++) {
+> > +		sw_dev = sw->sw_devs[i];
+> > -	module_put(sw_dev->dev.parent->driver->owner);
+> > -	put_device(&sw_dev->dev);
+> > +		module_put(sw_dev->dev.parent->driver->owner);
+> > +		put_device(&sw_dev->dev);
+> > +	}
+> >   	kfree(sw);
+> >   }
+> >   EXPORT_SYMBOL_GPL(typec_switch_put);
+> > @@ -170,13 +199,21 @@ int typec_switch_set(struct typec_switch *sw,
+> >   		     enum typec_orientation orientation)
+> >   {
+> >   	struct typec_switch_dev *sw_dev;
+> > +	unsigned int i;
+> > +	int ret;
+> >   	if (IS_ERR_OR_NULL(sw))
+> >   		return 0;
+> > -	sw_dev = sw->sw_dev;
+> > +	for (i = 0; i < sw->num_sw_devs; i++) {
+> > +		sw_dev = sw->sw_devs[i];
+> > +
+> > +		ret = sw_dev->set(sw_dev, orientation);
+> > +		if (ret)
+> > +			return ret;
+> > +	}
+> > -	return sw_dev->set(sw_dev, orientation);
+> > +	return 0;
+> >   }
+> >   EXPORT_SYMBOL_GPL(typec_switch_set);
+> > @@ -208,7 +245,8 @@ EXPORT_SYMBOL_GPL(typec_switch_get_drvdata);
+> >   /* ------------------------------------------------------------------------- */
+> >   struct typec_mux {
+> > -	struct typec_mux_dev *mux_dev;
+> > +	struct typec_mux_dev *mux_devs[TYPEC_MUX_MAX_DEVS];
+> > +	unsigned int num_mux_devs;
+> >   };
+> >   static int mux_fwnode_match(struct device *dev, const void *fwnode)
+> > @@ -291,25 +329,48 @@ static void *typec_mux_match(struct fwnode_handle *fwnode, const char *id,
+> >   struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
+> >   				       const struct typec_altmode_desc *desc)
+> >   {
+> > -	struct typec_mux_dev *mux_dev;
+> > +	struct typec_mux_dev *mux_devs[TYPEC_MUX_MAX_DEVS];
+> >   	struct typec_mux *mux;
+> > +	int count;
+> > +	int err;
+> > +	int i;
+> >   	mux = kzalloc(sizeof(*mux), GFP_KERNEL);
+> >   	if (!mux)
+> >   		return ERR_PTR(-ENOMEM);
+> > -	mux_dev = fwnode_connection_find_match(fwnode, "mode-switch", (void *)desc,
+> > -					       typec_mux_match);
+> > -	if (IS_ERR_OR_NULL(mux_dev)) {
+> > +	count = fwnode_connection_find_matches(fwnode, "mode-switch",
+> > +					       (void *)desc, typec_mux_match,
+> > +					       (void **)mux_devs,
+> > +					       ARRAY_SIZE(mux_devs));
+> > +	if (count <= 0) {
+> >   		kfree(mux);
+> > -		return ERR_CAST(mux_dev);
+> > +		return NULL;
+> >   	}
+> > -	WARN_ON(!try_module_get(mux_dev->dev.parent->driver->owner));
+> > +	for (i = 0; i < count; i++) {
+> > +		if (IS_ERR(mux_devs[i])) {
+> > +			err = PTR_ERR(mux_devs[i]);
+> > +			goto put_mux_devs;
+> > +		}
+> > +	}
+> > +
+> > +	for (i = 0; i < count; i++) {
+> > +		WARN_ON(!try_module_get(mux_devs[i]->dev.parent->driver->owner));
+> > +		mux->mux_devs[i] = mux_devs[i];
+> > +	}
+> > -	mux->mux_dev = mux_dev;
+> > +	mux->num_mux_devs = count;
+> >   	return mux;
+> > +
+> > +put_mux_devs:
+> > +	for (i = 0; i < count; i++) {
+> > +		if (!IS_ERR(mux_devs[i]))
+> > +			put_device(&mux_devs[i]->dev);
+> > +	}
+> > +
+> > +	return ERR_PTR(err);
+> >   }
+> >   EXPORT_SYMBOL_GPL(fwnode_typec_mux_get);
+> > @@ -322,13 +383,16 @@ EXPORT_SYMBOL_GPL(fwnode_typec_mux_get);
+> >   void typec_mux_put(struct typec_mux *mux)
+> >   {
+> >   	struct typec_mux_dev *mux_dev;
+> > +	unsigned int i;
+> >   	if (IS_ERR_OR_NULL(mux))
+> >   		return;
+> > -	mux_dev = mux->mux_dev;
+> > -	module_put(mux_dev->dev.parent->driver->owner);
+> > -	put_device(&mux_dev->dev);
+> > +	for (i = 0; i < mux->num_mux_devs; i++) {
+> > +		mux_dev = mux->mux_devs[i];
+> > +		module_put(mux_dev->dev.parent->driver->owner);
+> > +		put_device(&mux_dev->dev);
+> > +	}
+> >   	kfree(mux);
+> >   }
+> >   EXPORT_SYMBOL_GPL(typec_mux_put);
+> > @@ -336,13 +400,21 @@ EXPORT_SYMBOL_GPL(typec_mux_put);
+> >   int typec_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
+> >   {
+> >   	struct typec_mux_dev *mux_dev;
+> > +	unsigned int i;
+> > +	int ret;
+> >   	if (IS_ERR_OR_NULL(mux))
+> >   		return 0;
+> > -	mux_dev = mux->mux_dev;
+> > +	for (i = 0; i < mux->num_mux_devs; i++) {
+> > +		mux_dev = mux->mux_devs[i];
+> > +
+> > +		ret = mux_dev->set(mux_dev, state);
+> > +		if (ret)
+> > +			return ret;
+> > +	}
+> > -	return mux_dev->set(mux_dev, state);
+> > +	return 0;
+> >   }
+> >   EXPORT_SYMBOL_GPL(typec_mux_set);
+> 
+> 
+> -- 
+> With best wishes
+> Dmitry

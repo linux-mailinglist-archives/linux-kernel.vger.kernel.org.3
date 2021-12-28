@@ -2,96 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FAD48097D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 14:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CFA848097F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 14:19:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232362AbhL1NTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 08:19:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231948AbhL1NTD (ORCPT
+        id S232396AbhL1NTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 08:19:20 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54514 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231948AbhL1NTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 08:19:03 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F234CC061574;
-        Tue, 28 Dec 2021 05:19:02 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id b186-20020a1c1bc3000000b00345734afe78so10070108wmb.0;
-        Tue, 28 Dec 2021 05:19:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bDb0kJmueK3fnTgDSSIcWoJthheJr9w8Abj9HHv7swQ=;
-        b=FTDuvcxdYNW7UadnMddK9oxiBXuuJ5PAmhjpyNfoLFMkbI0SGHcwDTYOZtPh3P4LNu
-         SlYeakemUlH4lk+KGt+vVxFkQYR8zQcxx0kPmuUcojedlmoByThe+5n+IMgh9ZBJJeBY
-         URxkq+NtoiKXY1IwlSNP1tr7GYSVeHTQfPa6DclUWL0VWMWUGRPs8/QgmEneQS97ujMP
-         JSt0+lDCMpoHIwNZR0cYAzI6d4ASWZnnMlFqYRNxmHjCP7fFyqw2vc8aGZaAp358U1QX
-         pMWoAUaK47/c450dEoRm8UV9QPn7mZDKsAq7WCIQPgH/1zvsE3ZPVTx/zzRt/2kpbmp4
-         GLcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bDb0kJmueK3fnTgDSSIcWoJthheJr9w8Abj9HHv7swQ=;
-        b=ie/a4zqRPG6km8WfAB29DNsJC2E864WbDhC51+fPl6OjHUIXviZnY2uXxyiuSsxkQE
-         zOODjxid7HxDZ5YlZxOQBdtDPLOQHOM2ozTxAAZZQtKAejyinX7M5WYCsHNVOr5QyDQM
-         5HqSZ7WDwu7ZnWuTV7x+h2+eMACQPHlqE5TXcFg80hkPtC4wBYbp8bzbkBzs6FkDPj7y
-         ouwjlrZKUcTGPRt5o9Q8LFEbardoRADOhwakUrggRE1l5TxQqrDDG342sLBbmuX9/2YK
-         ukJTOos2qOOvPSsviaNqRktdU8qOr0VbZ24A+SlkDpJGY4zdMAZt/ffW3fXFB2muSx8L
-         JUBw==
-X-Gm-Message-State: AOAM530WY9DAOqNatu1/oDWXeowquP8UMkViiPnjPciY7GHdMOJrlTLa
-        r5hySA2AQv7zembXQjSIwnkh0VJV5Q4=
-X-Google-Smtp-Source: ABdhPJyiX3X/0tZB+xVwJu3lM6W4EPCt7X5IbOrgwu3OHuV9wg/6pVAniTNqzXAgKA26gOlS8FLLYw==
-X-Received: by 2002:a1c:9897:: with SMTP id a145mr17134708wme.194.1640697541584;
-        Tue, 28 Dec 2021 05:19:01 -0800 (PST)
-Received: from debian (host-2-98-43-34.as13285.net. [2.98.43.34])
-        by smtp.gmail.com with ESMTPSA id a3sm20208694wri.98.2021.12.28.05.19.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 05:19:01 -0800 (PST)
-Date:   Tue, 28 Dec 2021 13:18:59 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 4.19 00/38] 4.19.223-rc1 review
-Message-ID: <YcsOw/qt1OAp754K@debian>
-References: <20211227151319.379265346@linuxfoundation.org>
+        Tue, 28 Dec 2021 08:19:19 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95EF2B811F6;
+        Tue, 28 Dec 2021 13:19:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9A9CC36AE7;
+        Tue, 28 Dec 2021 13:19:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640697556;
+        bh=kO/fFn2P+NnNbeUNRt7ndHbtmklWlYmiN7ryiQUJY2g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kZuHZYOZ5gQR1jQ/9YghTls/H6baz+RTZ5zgYcyQzfIcpTE2zXANqRO45mqKBi7t1
+         Dx0b4c2yhILi41BcXi+MyfDF39Z0G4dnzthNFTayKIhYDq6I+Z72O9ZosKgnfwa+7R
+         pwFChv6/cpo79gTUFDhcIvBKKJ9yE5iPbLs7FgNY=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] cpufreq: use default_groups in kobj_type
+Date:   Tue, 28 Dec 2021 14:19:12 +0100
+Message-Id: <20211228131912.260899-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3915; h=from:subject; bh=kO/fFn2P+NnNbeUNRt7ndHbtmklWlYmiN7ryiQUJY2g=; b=owGbwMvMwCRo6H6F97bub03G02pJDImn+S5c+rp/j5Luzh/XDk2+Pd/A6q9y1dqjr+Y/Xbns9xXl nhNKFzpiWRgEmRhkxRRZvmzjObq/4pCil6HtaZg5rEwgQxi4OAVgItPWMMyv9XwfHXbVpFOLU1WFRy +czXBp8h2gqEzs13w9obSq/oAcy5NBpcvC9rcAAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+There are currently 2 ways to create a set of sysfs files for a
+kobj_type, through the default_attrs field, and the default_groups
+field.  Move the cpufreq code to use default_groups field which has been
+the preferred way since aa30f47cf666 ("kobject: Add support for default
+attribute groups to kobj_type") so that we can soon get rid of the
+obsolete default_attrs field.
 
-On Mon, Dec 27, 2021 at 04:30:37PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.223 release.
-> There are 38 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 29 Dec 2021 15:13:09 +0000.
-> Anything received after that time might be too late.
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: linux-pm@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/cpufreq/cpufreq.c              | 5 +++--
+ drivers/cpufreq/cpufreq_conservative.c | 5 +++--
+ drivers/cpufreq/cpufreq_ondemand.c     | 5 +++--
+ 3 files changed, 9 insertions(+), 6 deletions(-)
 
-Build test:
-mips (gcc version 11.2.1 20211214): 63 configs -> no failure
-arm (gcc version 11.2.1 20211214): 116 configs -> no new failure
-arm64 (gcc version 11.2.1 20211214): 2 configs -> no failure
-x86_64 (gcc version 11.2.1 20211214): 4 configs -> no failure
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index e338d2f010fe..09d676d5237e 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -924,7 +924,7 @@ cpufreq_freq_attr_rw(scaling_max_freq);
+ cpufreq_freq_attr_rw(scaling_governor);
+ cpufreq_freq_attr_rw(scaling_setspeed);
+ 
+-static struct attribute *default_attrs[] = {
++static struct attribute *cpufreq_attrs[] = {
+ 	&cpuinfo_min_freq.attr,
+ 	&cpuinfo_max_freq.attr,
+ 	&cpuinfo_transition_latency.attr,
+@@ -938,6 +938,7 @@ static struct attribute *default_attrs[] = {
+ 	&scaling_setspeed.attr,
+ 	NULL
+ };
++ATTRIBUTE_GROUPS(cpufreq);
+ 
+ #define to_policy(k) container_of(k, struct cpufreq_policy, kobj)
+ #define to_attr(a) container_of(a, struct freq_attr, attr)
+@@ -1000,7 +1001,7 @@ static const struct sysfs_ops sysfs_ops = {
+ 
+ static struct kobj_type ktype_cpufreq = {
+ 	.sysfs_ops	= &sysfs_ops,
+-	.default_attrs	= default_attrs,
++	.default_groups	= cpufreq_groups,
+ 	.release	= cpufreq_sysfs_release,
+ };
+ 
+diff --git a/drivers/cpufreq/cpufreq_conservative.c b/drivers/cpufreq/cpufreq_conservative.c
+index 0879ec3c170c..08515f7e515f 100644
+--- a/drivers/cpufreq/cpufreq_conservative.c
++++ b/drivers/cpufreq/cpufreq_conservative.c
+@@ -257,7 +257,7 @@ gov_attr_rw(ignore_nice_load);
+ gov_attr_rw(down_threshold);
+ gov_attr_rw(freq_step);
+ 
+-static struct attribute *cs_attributes[] = {
++static struct attribute *cs_attrs[] = {
+ 	&sampling_rate.attr,
+ 	&sampling_down_factor.attr,
+ 	&up_threshold.attr,
+@@ -266,6 +266,7 @@ static struct attribute *cs_attributes[] = {
+ 	&freq_step.attr,
+ 	NULL
+ };
++ATTRIBUTE_GROUPS(cs);
+ 
+ /************************** sysfs end ************************/
+ 
+@@ -315,7 +316,7 @@ static void cs_start(struct cpufreq_policy *policy)
+ 
+ static struct dbs_governor cs_governor = {
+ 	.gov = CPUFREQ_DBS_GOVERNOR_INITIALIZER("conservative"),
+-	.kobj_type = { .default_attrs = cs_attributes },
++	.kobj_type = { .default_groups = cs_groups },
+ 	.gov_dbs_update = cs_dbs_update,
+ 	.alloc = cs_alloc,
+ 	.free = cs_free,
+diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
+index 3b8f924771b4..6a41ea4729b8 100644
+--- a/drivers/cpufreq/cpufreq_ondemand.c
++++ b/drivers/cpufreq/cpufreq_ondemand.c
+@@ -328,7 +328,7 @@ gov_attr_rw(sampling_down_factor);
+ gov_attr_rw(ignore_nice_load);
+ gov_attr_rw(powersave_bias);
+ 
+-static struct attribute *od_attributes[] = {
++static struct attribute *od_attrs[] = {
+ 	&sampling_rate.attr,
+ 	&up_threshold.attr,
+ 	&sampling_down_factor.attr,
+@@ -337,6 +337,7 @@ static struct attribute *od_attributes[] = {
+ 	&io_is_busy.attr,
+ 	NULL
+ };
++ATTRIBUTE_GROUPS(od);
+ 
+ /************************** sysfs end ************************/
+ 
+@@ -401,7 +402,7 @@ static struct od_ops od_ops = {
+ 
+ static struct dbs_governor od_dbs_gov = {
+ 	.gov = CPUFREQ_DBS_GOVERNOR_INITIALIZER("ondemand"),
+-	.kobj_type = { .default_attrs = od_attributes },
++	.kobj_type = { .default_groups = od_groups },
+ 	.gov_dbs_update = od_dbs_update,
+ 	.alloc = od_alloc,
+ 	.free = od_free,
+-- 
+2.34.1
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/554
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip

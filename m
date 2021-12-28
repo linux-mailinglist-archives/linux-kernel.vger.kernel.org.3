@@ -2,111 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 643054806A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 07:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 314D44806A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 07:03:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235005AbhL1GCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 01:02:05 -0500
-Received: from mga05.intel.com ([192.55.52.43]:48782 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234974AbhL1GCF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 01:02:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640671325; x=1672207325;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Eq5xKh+1C+iNFI+0PwCle38sDWZVf8PAkyabY5jLFno=;
-  b=AuhonQu1/3ME+eZqL8NrB/JHCojEwnGWY8MxPUbFPeLkWmcQp/7SC6nS
-   hS2C9KGfuKddYAcCPwLmxiWUUR6ENyKiT1b0rxO/z13fxJ2jwW72Vkrz8
-   3RfLaf6CM9tknr/F2Jl1Ru/VaDqMd14uc6bE8PZd0drBS0blGHESJ3t1r
-   kdu2ryNsCZD8vOIpAlYGgVrcQii/k6/Dnc4BpNylwxe1jsmQ5hwOVbzFY
-   jmiCrfYjRoVrLMR9/3/zXlmjCeYDz50B8w5W+qgwS1dx+vwjeZ6csHilc
-   d63qGjY/FKLUevvOqhGTOF05XUXh8aIrkjVRZtBOMMatveY+pGdvg1umW
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="327643103"
-X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
-   d="scan'208";a="327643103"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 22:01:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
-   d="scan'208";a="554075225"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 27 Dec 2021 22:01:52 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n25YW-0007IV-1N; Tue, 28 Dec 2021 06:01:52 +0000
-Date:   Tue, 28 Dec 2021 14:01:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: drivers/scsi/ufs/ufs-exynos.c:1268:34: warning: unused variable
- 'exynos_ufs_of_match'
-Message-ID: <202112281324.w3VTX6oh-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S235017AbhL1GDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 01:03:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235007AbhL1GDS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 01:03:18 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDF5C06173E
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 22:03:18 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id s83-20020a255e56000000b0060c46cc1890so11244824ybb.16
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 22:03:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Zn+A9HVWRK5K/dRlJI4tJZLeYf7dlCPThs0O3iIpY8w=;
+        b=UmnDHa76s6CWzJhDp5zeaRcHprWSXl+xXWXeqXjsEiZSVZieeUVf62Bmr/s/XbA47t
+         SxB8S+q589IyfEmUEyGyOnjv7IITchgd/Rc+lRQmgDfn5hw1tNkWFkXIFRG4RxL1nR8H
+         Y79vnFyNFvxiCsdhqHgD5lp6oh132+fKqZU8EImDXRfmTTvpw9UwPTHYQdURW8MbMPyr
+         ZXbWgJdhiPxAOMIVYsFoOzuSnRuRUFrqGsZ/iZEQ5wlgCeiORcTz2RqP2KMX4RHORT3s
+         J4BIpkTk807jg6m+Q6lC81E3m0xYDKkNWOpmLno3VtX8T0SxOPz6+wt4UX10qHBfLQ2T
+         P8tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Zn+A9HVWRK5K/dRlJI4tJZLeYf7dlCPThs0O3iIpY8w=;
+        b=Zi387ujG2bk2e3oNcoSWcukRaNU6Fz1UmI5dzTAQyf8b4Ng/lBd/ajPAFZhCEatlVv
+         KtlhVgszKhtp6p1pJgQSA7cj3JznWbn2IjV24tQ+BOLUA2+/wov9SIT8UnAsxeaEDsfc
+         dQ3NY/8vPExdP3JGFKOWNaVCRMeaibPc3qeqsJFRVN/wGKx6temjjFbfginHZiHbp5hF
+         CJSrv6632nafyTrk8plJZhdqVzJFrrcvYHmsWjw/6rOeW5ZFGOqI7UWIGIDpfKOlqyWR
+         5zyJY8SNeJ9koxXNYJYggeVkY0qIf7OXtRgQKphPu8tk9tfA3nWGzXOS55G1MRLdavjS
+         /GKg==
+X-Gm-Message-State: AOAM531YZSa0fpVT2loFYMK0Q5y+MHRDw3Qa1cVMVUrBwFjZ4TvyeKV3
+        F66EuIFJ/2feMJ7H6gIhoJ7SL7ExZk2x
+X-Google-Smtp-Source: ABdhPJzbFuNpZudtTehw+vFnQNlHwReEVcccW/za68v0MmgNCYp2o46qLtj5skHRAIB9CbPBXzAneTwV0x7l
+X-Received: from pumahsu.ntc.corp.google.com ([2401:fa00:fc:202:2dc0:d0af:9576:e31])
+ (user=pumahsu job=sendgmr) by 2002:a25:8547:: with SMTP id
+ f7mr1217274ybn.659.1640671397304; Mon, 27 Dec 2021 22:03:17 -0800 (PST)
+Date:   Tue, 28 Dec 2021 14:02:46 +0800
+Message-Id: <20211228060246.2958070-1-pumahsu@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
+Subject: [PATCH] xhci: re-initialize the HC during resume if HCE was set
+From:   Puma Hsu <pumahsu@google.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     albertccwang@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Puma Hsu <pumahsu@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alim,
+When HCE(Host Controller Error) is set, it means an internal
+error condition has been detected. It needs to re-initialize
+the HC too.
 
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a8ad9a2434dc7967ab285437f443cae633b6fc1c
-commit: d31503fe395d1d7e17b85eb7b291cc1a4bff2671 scsi: ufs: Allow exynos ufs driver to build as module
-date:   1 year, 6 months ago
-config: hexagon-randconfig-r032-20211228 (https://download.01.org/0day-ci/archive/20211228/202112281324.w3VTX6oh-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7171af744543433ac75b232eb7dfdaef7efd4d7a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d31503fe395d1d7e17b85eb7b291cc1a4bff2671
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d31503fe395d1d7e17b85eb7b291cc1a4bff2671
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/scsi/ufs/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/scsi/ufs/ufs-exynos.c:1268:34: warning: unused variable 'exynos_ufs_of_match' [-Wunused-const-variable]
-   static const struct of_device_id exynos_ufs_of_match[] = {
-                                    ^
-   1 warning generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for FRAME_POINTER
-   Depends on DEBUG_KERNEL && (M68K || UML || SUPERH) || ARCH_WANT_FRAME_POINTERS
-   Selected by
-   - LOCKDEP && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT && !MIPS && !PPC && !ARM && !S390 && !MICROBLAZE && !ARC && !X86
-
-
-vim +/exynos_ufs_of_match +1268 drivers/scsi/ufs/ufs-exynos.c
-
-55f4b1f73631a0 Alim Akhtar 2020-05-28  1267  
-55f4b1f73631a0 Alim Akhtar 2020-05-28 @1268  static const struct of_device_id exynos_ufs_of_match[] = {
-55f4b1f73631a0 Alim Akhtar 2020-05-28  1269  	{ .compatible = "samsung,exynos7-ufs",
-55f4b1f73631a0 Alim Akhtar 2020-05-28  1270  	  .data	      = &exynos_ufs_drvs },
-55f4b1f73631a0 Alim Akhtar 2020-05-28  1271  	{},
-55f4b1f73631a0 Alim Akhtar 2020-05-28  1272  };
-55f4b1f73631a0 Alim Akhtar 2020-05-28  1273  
-
-:::::: The code at line 1268 was first introduced by commit
-:::::: 55f4b1f73631a0817717fe6e98517de51b4c3527 scsi: ufs: ufs-exynos: Add UFS host support for Exynos SoCs
-
-:::::: TO: Alim Akhtar <alim.akhtar@samsung.com>
-:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
-
+Signed-off-by: Puma Hsu <pumahsu@google.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/usb/host/xhci.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index dc357cabb265..c546d9533410 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1146,8 +1146,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+ 		temp = readl(&xhci->op_regs->status);
+ 	}
+ 
+-	/* If restore operation fails, re-initialize the HC during resume */
+-	if ((temp & STS_SRE) || hibernated) {
++	/* If restore operation fails or HC error is detected, re-initialize the HC during resume */
++	if ((temp & STS_SRE) || (temp & STS_HCE) || hibernated) {
+ 
+ 		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
+ 				!(xhci_all_ports_seen_u0(xhci))) {
+-- 
+2.34.1.448.ga2b2bfdf31-goog
+

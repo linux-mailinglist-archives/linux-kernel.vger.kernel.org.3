@@ -2,94 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2095480575
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 02:06:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB305480577
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 02:10:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234313AbhL1BGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 20:06:15 -0500
-Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:39094 "EHLO
-        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234281AbhL1BGO (ORCPT
+        id S231898AbhL1BKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 20:10:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51706 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231768AbhL1BKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 20:06:14 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V0.tzGd_1640653565;
-Received: from localhost(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V0.tzGd_1640653565)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 28 Dec 2021 09:06:11 +0800
-From:   Dan Li <ashimida@linux.alibaba.com>
-To:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
-        samitolvanen@google.com, maz@kernel.org, joey.gouly@arm.com,
-        pcc@google.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Dan Li <ashimida@linux.alibaba.com>
-Subject: [PATCH] [RFC] aarch64: scs: reload shadow call stack in user exception entry
-Date:   Mon, 27 Dec 2021 17:06:04 -0800
-Message-Id: <20211228010604.109572-1-ashimida@linux.alibaba.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 27 Dec 2021 20:10:37 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B37C06173E;
+        Mon, 27 Dec 2021 17:10:36 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.94.2)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1n210X-0001SP-9a; Tue, 28 Dec 2021 02:10:29 +0100
+Date:   Tue, 28 Dec 2021 01:10:21 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: [PATCH v7 0/2] net: ethernet: mtk_soc_eth: implement Clause 45 MDIO
+ access
+Message-ID: <Ycpj/cEdjb0BMrny@makrotopia.org>
+References: <YcnoAscVe+2YILT8@shell.armlinux.org.uk>
+ <YcpVmlb1jFavCBpS@makrotopia.org>
+ <YcpVtjykiS7mgtT5@makrotopia.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YcnoAscVe+2YILT8@shell.armlinux.org.uk>
+ <YcpVmlb1jFavCBpS@makrotopia.org>
+ <YcpVtjykiS7mgtT5@makrotopia.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When el0 exception occurs, kernel_entry/exit will load/save tsk->scs_sp
-to ensure scs working properly. AFAIK, the SCS offset should always be
-0 at this time.
+As it turned out some clean-up would be needed, first address return
+value and type of mdio read and write functions in mtk_eth_soc and
+generally clean up and unify both functions.
+Then add support to access Clause 45 phy registers.
 
-Is it reasonable to reload x18 to scs_base directly in kernel_entry
-here, or am I missing something?
+Both commits are tested on the Bananapi BPi-R64 board having MediaTek
+MT7531BE DSA gigE switch using clause 22 MDIO and Ubiquiti UniFi 6 LR
+access point having Aquantia AQR112C PHY using clause 45 MDIO.
 
-Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
----
- arch/arm64/include/asm/scs.h | 7 +++++++
- arch/arm64/kernel/entry.S    | 3 +--
- 2 files changed, 8 insertions(+), 2 deletions(-)
+v7: remove unneeded variables and order OR-ed call parameters
+v6: further clean up functions and more cleanly separate patches
+v5: fix wrong variable name in first patch covered by follow-up patch
+v4: clean-up return values and types, split into two commits
+v3: return -1 instead of 0xffff on error in _mtk_mdio_write
+v2: use MII_DEVADDR_C45_SHIFT and MII_REGADDR_C45_MASK to extract
+    device id and register address. Unify read and write functions to
+    have identical types and parameter names where possible as we are
+    anyway already replacing both function bodies.
 
-diff --git a/arch/arm64/include/asm/scs.h b/arch/arm64/include/asm/scs.h
-index 8297bccf0784..2bc0d0575e75 100644
---- a/arch/arm64/include/asm/scs.h
-+++ b/arch/arm64/include/asm/scs.h
-@@ -9,6 +9,10 @@
- #ifdef CONFIG_SHADOW_CALL_STACK
- 	scs_sp	.req	x18
- 
-+	.macro scs_reload tsk
-+	ldr	scs_sp, [\tsk, #TSK_TI_SCS_BASE]
-+	.endm
-+
- 	.macro scs_load tsk
- 	ldr	scs_sp, [\tsk, #TSK_TI_SCS_SP]
- 	.endm
-@@ -17,6 +21,9 @@
- 	str	scs_sp, [\tsk, #TSK_TI_SCS_SP]
- 	.endm
- #else
-+	.macro scs_reload tsk
-+	.endm
-+
- 	.macro scs_load tsk
- 	.endm
- 
-diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-index bc6d5a970a13..57547a3e4f7c 100644
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -265,7 +265,7 @@ alternative_if ARM64_HAS_ADDRESS_AUTH
- alternative_else_nop_endif
- 1:
- 
--	scs_load tsk
-+	scs_reload tsk
- 	.else
- 	add	x21, sp, #PT_REGS_SIZE
- 	get_current_task tsk
-@@ -365,7 +365,6 @@ alternative_if ARM64_WORKAROUND_845719
- alternative_else_nop_endif
- #endif
- 3:
--	scs_save tsk
- 
- 	/* Ignore asynchronous tag check faults in the uaccess routines */
- 	ldr	x0, [tsk, THREAD_SCTLR_USER]
+Daniel Golle (2):
+  net: ethernet: mtk_eth_soc: fix return value of MDIO ops
+  net: ethernet: mtk_eth_soc: implement Clause 45 MDIO access
+
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c | 75 +++++++++++++++------
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h |  3 +
+ 2 files changed, 58 insertions(+), 20 deletions(-)
+
 -- 
-2.17.1
+2.34.1
 

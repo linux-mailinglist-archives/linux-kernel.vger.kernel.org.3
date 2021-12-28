@@ -2,60 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 399ED480DF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 00:47:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E949F480DF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 00:48:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237856AbhL1Xrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 18:47:49 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56638 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbhL1Xrs (ORCPT
+        id S237772AbhL1XsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 18:48:24 -0500
+Received: from mail-lf1-f45.google.com ([209.85.167.45]:38568 "EHLO
+        mail-lf1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231682AbhL1XsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 18:47:48 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CF516133B;
-        Tue, 28 Dec 2021 23:47:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58377C36AE9;
-        Tue, 28 Dec 2021 23:47:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640735267;
-        bh=LHIXNAdfwq97zcaRsOz+4HTvnLDnN9j47uVZHM7bfHs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lYbplg1jixQsb4MoZdHkhPfOnr+aavZbT9IWG7G9fL5YbYRHIKxf01IVR0UboSihV
-         PG9eAXVldwe3DWe+rm55VmewM25i/vpIXpfUj7wliwlsicKzns8TVZxWYKaBEpLdtJ
-         6P7iRL/RrQGqWZrRXBleUMWtZRzcEaL/CKaJyXUq+8ppTzkIijxPZymo8e7bZQ0yxc
-         jsubL6LJJMKijW8Aa2obvcsTHSepxnqnWuGTwDndgszbJ88I4F4+KExIJjNd1hgyOF
-         Keqg4aQDLN2kG+S0z1sBbuKNIVI65dlhwPRF99YcmaZeVKoQTlTMEJLFDBptaichyA
-         /hvs1MMYAvRDQ==
-Date:   Wed, 29 Dec 2021 01:47:45 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Tadeusz Struk <tstruk@gmail.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] tpm: Fix error handling in async work
-Message-ID: <YcuiIdorMLEjhJn6@iki.fi>
-References: <20211220211700.5772-1-tstruk@gmail.com>
+        Tue, 28 Dec 2021 18:48:22 -0500
+Received: by mail-lf1-f45.google.com with SMTP id x21so44399542lfa.5;
+        Tue, 28 Dec 2021 15:48:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=43RunENc9BGgUTy24GSL/O+U7jxvlHOGKJ/isDXkZcY=;
+        b=bSsctSbok+AR/lieV93EniDu3PelUAZg4u1qgAkeW5XGc830HCh2aHvZOYA8maWIhu
+         B6aJX/uzhOeIu+lSRIpBMGn7kXify0n0Yq8sgPhL3jJ9mvN0ykhYKSuUA5nrVsZfwEIs
+         /NS1HhdU0BJTpm+4KG4yz8Es4rp0+DAy/2YDxuKizbZ6cIrAV45vbS8gm4lowC6+UdbX
+         y/EMMFz+b9gK3tEolI0DfIcoP+YN8F0lIJqcc7+idNIroQkOR17M9hl09+3qvudUxcO5
+         vL/HzFt/KH9P5rjOjmEtELdUxNnxdQec46mcN+tAB9y+0x3XHB7sXK5nAfAi2JJYkFiU
+         JhMA==
+X-Gm-Message-State: AOAM5320kuqJmEen6SZb61xQrZIkw1FWxoWLfmF2AkOBaVWt5rSXheEP
+        6KooO9EcKgBQ964T7Lo5kr8u52EwNxtjKtTmczI=
+X-Google-Smtp-Source: ABdhPJwoibq9jpmkzRcCRwexFVs7p98pjuahrASVfI9ZwKiJdXNKZHZCJTbxHkq4sU3L57ahFbfSr/Ltc8ZyxsZJAUg=
+X-Received: by 2002:a05:6512:3d21:: with SMTP id d33mr21678706lfv.481.1640735301239;
+ Tue, 28 Dec 2021 15:48:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220211700.5772-1-tstruk@gmail.com>
+References: <20211223074541.3318938-1-irogers@google.com> <20211223074541.3318938-21-irogers@google.com>
+In-Reply-To: <20211223074541.3318938-21-irogers@google.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 28 Dec 2021 15:48:10 -0800
+Message-ID: <CAM9d7chcAXiqWTSUxniPrdYM5hdbwPV1oyxUVvg6B-JfL89vNw@mail.gmail.com>
+Subject: Re: [PATCH v2 20/48] perf cpumap: Move 'has' function to libperf
+To:     Ian Rogers <irogers@google.com>
+Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
+        John Garry <john.garry@huawei.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Vineet Singh <vineet.singh@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 01:16:59PM -0800, Tadeusz Struk wrote:
-> When an invalid (non exitsinting) handle is used in a tpm command,
-> that uses the resource manager interface (/dev/tpmrm0) the resource
-> manager tries to load it from its internal cache, but fails and
-> returns an -EINVAL error to the caller. The existing async handler
-> doesn't handle these error cases currently and the condition in the
-> poll handler never returns mask with EPOLLIN set causing the userspace
-> code to get stack. Make sure that error conditions also contribute
-> to the poll mask so that a correct error code could passed back
-> to the caller.
+Hi Ian,
 
-Can you instead describe a failure scenario? This is very cryptic.
+On Wed, Dec 22, 2021 at 11:47 PM Ian Rogers <irogers@google.com> wrote:
+>
+> Make the cpu map argument const for consistency with the rest of the
+> API. Modify cpu_map__idx accordingly.
+>
+> Reviewed-by: James Clark <james.clark@arm.com>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/lib/perf/cpumap.c                  |  7 ++++++-
+>  tools/lib/perf/include/internal/cpumap.h |  2 +-
+>  tools/lib/perf/include/perf/cpumap.h     |  1 +
 
-/Jarkko
+You need to update tools/lib/perf/libperf.map to have
+the new API.
+
+Thanks,
+Namhyung
+
+
+>  tools/perf/arch/arm/util/cs-etm.c        | 16 ++++++++--------
+>  tools/perf/builtin-sched.c               |  6 +++---
+>  tools/perf/tests/topology.c              |  2 +-
+>  tools/perf/util/cpumap.c                 |  5 -----
+>  tools/perf/util/cpumap.h                 |  2 --
+>  tools/perf/util/cputopo.c                |  2 +-
+>  9 files changed, 21 insertions(+), 22 deletions(-)
+>

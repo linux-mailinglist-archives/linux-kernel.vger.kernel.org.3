@@ -2,279 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E89DC480828
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 11:04:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06623480837
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 11:08:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233232AbhL1KE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 05:04:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbhL1KE2 (ORCPT
+        id S233608AbhL1KIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 05:08:34 -0500
+Received: from mail-pj1-f50.google.com ([209.85.216.50]:46909 "EHLO
+        mail-pj1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231577AbhL1KI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 05:04:28 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2A0C061574;
-        Tue, 28 Dec 2021 02:04:28 -0800 (PST)
-Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1n29L9-0002M2-F7; Tue, 28 Dec 2021 11:04:19 +0100
-Message-ID: <caf247ab-f6fe-a3b9-c4b5-7ce17d1d5e43@leemhuis.info>
-Date:   Tue, 28 Dec 2021 11:04:18 +0100
+        Tue, 28 Dec 2021 05:08:29 -0500
+Received: by mail-pj1-f50.google.com with SMTP id rj2-20020a17090b3e8200b001b1944bad25so16624366pjb.5;
+        Tue, 28 Dec 2021 02:08:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1LdjVJCupkO66VZRPSdtPXWlxTkxQlblL8anKkt6w1Y=;
+        b=ZxAXFS8epFPw09ZN0+5hygHuHtiZD15wSaBV6dxyVVAvNOnLiTLcLSpVzMBp3GRSKs
+         lHONSdKRFsYbvSS2nNdc9qIlUsl6URjcppunLPl7poQwyhsAq54aQFG1T5efkgB0WTpj
+         jszpoUuVcDSpiNtyCF/Iuv+E019pAkaqLrKm408xBzxLPCiT59hf7wA+OVGSqW1PuNBS
+         IqNSrixAy/47uuKqQSMp71+oq4JVQ+fqDdr+cgWwUC+3FyMTTUmoEZUTFjwdwPeTFdkk
+         2G9f/TmP0nFeemKqPiUCLCJcTYa9EtgokgorLJG3SqwEPSIAJjU+qr//95aOIB9Wm4dU
+         Qcww==
+X-Gm-Message-State: AOAM531kJlRu9ZXA2MVpfjDqV+WLIS9VCO+uQj4cWaFiXbaxO/6LYPJK
+        cz0WDB9ZfFOUiA17tbzDs4KXNIakGRV9DA==
+X-Google-Smtp-Source: ABdhPJwtJyt0BgB9nbPsBRAQG20xhRS7PITFUS4MEI44HL4ksxJALw2U9DOV/Yv9U25TYDqf80Z5gg==
+X-Received: by 2002:a17:90b:1e07:: with SMTP id pg7mr25529252pjb.228.1640686108603;
+        Tue, 28 Dec 2021 02:08:28 -0800 (PST)
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com. [209.85.216.52])
+        by smtp.gmail.com with ESMTPSA id rm3sm15580381pjb.8.2021.12.28.02.08.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Dec 2021 02:08:28 -0800 (PST)
+Received: by mail-pj1-f52.google.com with SMTP id rj2-20020a17090b3e8200b001b1944bad25so16624295pjb.5;
+        Tue, 28 Dec 2021 02:08:27 -0800 (PST)
+X-Received: by 2002:a05:6122:21a6:: with SMTP id j38mr6293010vkd.39.1640686096258;
+ Tue, 28 Dec 2021 02:08:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v4 1/1] mm: vmscan: Reduce throttling due to a failure to
- make progress
-Content-Language: en-BS
-To:     Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Michal Hocko <mhocko@suse.com>, Vlastimil Babka <vbabka@suse.cz>,
-        Alexey Avramov <hakavlad@inbox.lv>,
-        Rik van Riel <riel@surriel.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
-        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20211202150614.22440-1-mgorman@techsingularity.net>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <20211202150614.22440-1-mgorman@techsingularity.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1640685868;b59603a4;
-X-HE-SMSGID: 1n29L9-0002M2-F7
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com> <20211227164317.4146918-3-schnelle@linux.ibm.com>
+In-Reply-To: <20211227164317.4146918-3-schnelle@linux.ibm.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 28 Dec 2021 11:08:05 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXk6VcDryekkMJ3aGFnw4LLWOWMi8M2PwjT81PsOsOBMQ@mail.gmail.com>
+Message-ID: <CAMuHMdXk6VcDryekkMJ3aGFnw4LLWOWMi8M2PwjT81PsOsOBMQ@mail.gmail.com>
+Subject: Re: [RFC 02/32] Kconfig: introduce HAS_IOPORT option and select it as necessary
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Brian Cain <bcain@codeaurora.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, openrisc@lists.librecores.org,
+        linux-s390@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Greg Ungerer <gerg@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker speaking.
+Hi Niklas,
 
-On 02.12.21 16:06, Mel Gorman wrote:
-> Mike Galbraith, Alexey Avramov and Darrick Wong all reported similar
-> problems due to reclaim throttling for excessive lengths of time.
-> In Alexey's case, a memory hog that should go OOM quickly stalls for
-> several minutes before stalling. In Mike and Darrick's cases, a small
-> memcg environment stalled excessively even though the system had enough
-> memory overall.
+On Mon, Dec 27, 2021 at 5:44 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+> We introduce a new HAS_IOPORT Kconfig option to gate support for
+> I/O port access. In a future patch HAS_IOPORT=n will disable compilation
+> of the I/O accessor functions inb()/outb() and friends on architectures
+> which can not meaningfully support legacy I/O spaces. On these platforms
+> inb()/outb() etc are currently just stubs in asm-generic/io.h which when
+> called will cause a NULL pointer access which some compilers actually
+> detect and warn about.
+>
+> The dependencies on HAS_IOPORT in drivers as well as ifdefs for
+> HAS_IOPORT specific sections will be added in subsequent patches on
+> a per subsystem basis. Then a final patch will ifdef the I/O access
+> functions on HAS_IOPORT thus turning any use not gated by HAS_IOPORT
+> into a compile-time warning.
+>
+> Link: https://lore.kernel.org/lkml/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-Just wondering: this patch afaics is now in -mm and  Linux next for
-nearly two weeks. Is that intentional? I had expected it to be mainlined
-with the batch of patches Andrew mailed to Linus last week, but it
-wasn't among them.
+Thanks for your patch!
 
-Or am I missing something?
+> --- a/arch/m68k/Kconfig
+> +++ b/arch/m68k/Kconfig
+> @@ -16,6 +16,7 @@ config M68K
+>         select GENERIC_CPU_DEVICES
+>         select GENERIC_IOMAP
+>         select GENERIC_IRQ_SHOW
+> +       select HAS_IOPORT
+>         select HAVE_AOUT if MMU
+>         select HAVE_ASM_MODVERSIONS
+>         select HAVE_DEBUG_BUGVERBOSE
 
-Ciao, Thorsten (wearing his 'Linux kernel regression tracker' hat)
+This looks way too broad to me: most m68k platform do not have I/O
+port access support.
 
-P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
-on my table. I can only look briefly into most of them. Unfortunately
-therefore I sometimes will get things wrong or miss something important.
-I hope that's not the case here; if you think it is, don't hesitate to
-tell me about it in a public reply, that's in everyone's interest.
+My gut feeling says:
 
-BTW, I have no personal interest in this issue, which is tracked using
-regzbot, my Linux kernel regression tracking bot
-(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
-this mail to get things rolling again and hence don't need to be CC on
-all further activities wrt to this regression.
+    select HAS_IOPORT if PCI || ISA
 
+but that might miss some intricate details...
 
-> Commit 69392a403f49 ("mm/vmscan: throttle reclaim when no progress is being
-> made") introduced the problem although commit a19594ca4a8b ("mm/vmscan:
-> increase the timeout if page reclaim is not making progress") made it
-> worse. Systems at or near an OOM state that cannot be recovered must
-> reach OOM quickly and memcg should kill tasks if a memcg is near OOM.
-> 
-> To address this, only stall for the first zone in the zonelist, reduce
-> the timeout to 1 tick for VMSCAN_THROTTLE_NOPROGRESS and only stall if
-> the scan control nr_reclaimed is 0, kswapd is still active and there were
-> excessive pages pending for writeback. If kswapd has stopped reclaiming due
-> to excessive failures, do not stall at all so that OOM triggers relatively
-> quickly. Similarly, if an LRU is simply congested, only lightly throttle
-> similar to NOPROGRESS.
-> 
-> Alexey's original case was the most straight forward
-> 
-> 	for i in {1..3}; do tail /dev/zero; done
-> 
-> On vanilla 5.16-rc1, this test stalled heavily, after the patch the test
-> completes in a few seconds similar to 5.15.
-> 
-> Alexey's second test case added watching a youtube video while tail runs
-> 10 times. On 5.15, playback only jitters slightly, 5.16-rc1 stalls a lot
-> with lots of frames missing and numerous audio glitches. With this patch
-> applies, the video plays similarly to 5.15.
-> 
-> Link: https://lore.kernel.org/r/99e779783d6c7fce96448a3402061b9dc1b3b602.camel@gmx.de
-> Link: https://lore.kernel.org/r/20211124011954.7cab9bb4@mail.inbox.lv
-> Link: https://lore.kernel.org/r/20211022144651.19914-1-mgorman@techsingularity.net
-> 
-> [lkp@intel.com: Fix W=1 build warning]
-> Reported-and-tested-by: Alexey Avramov <hakavlad@inbox.lv>
-> Reported-and-tested-by: Mike Galbraith <efault@gmx.de>
-> Reported-and-tested-by: Darrick J. Wong <djwong@kernel.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Fixes: 69392a403f49 ("mm/vmscan: throttle reclaim when no progress is being made")
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> ---
->  include/linux/mmzone.h        |  1 +
->  include/trace/events/vmscan.h |  4 ++-
->  mm/vmscan.c                   | 64 ++++++++++++++++++++++++++++++-----
->  3 files changed, 59 insertions(+), 10 deletions(-)
-> 
-> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> index 58e744b78c2c..936dc0b6c226 100644
-> --- a/include/linux/mmzone.h
-> +++ b/include/linux/mmzone.h
-> @@ -277,6 +277,7 @@ enum vmscan_throttle_state {
->  	VMSCAN_THROTTLE_WRITEBACK,
->  	VMSCAN_THROTTLE_ISOLATED,
->  	VMSCAN_THROTTLE_NOPROGRESS,
-> +	VMSCAN_THROTTLE_CONGESTED,
->  	NR_VMSCAN_THROTTLE,
->  };
->  
-> diff --git a/include/trace/events/vmscan.h b/include/trace/events/vmscan.h
-> index f25a6149d3ba..ca2e9009a651 100644
-> --- a/include/trace/events/vmscan.h
-> +++ b/include/trace/events/vmscan.h
-> @@ -30,12 +30,14 @@
->  #define _VMSCAN_THROTTLE_WRITEBACK	(1 << VMSCAN_THROTTLE_WRITEBACK)
->  #define _VMSCAN_THROTTLE_ISOLATED	(1 << VMSCAN_THROTTLE_ISOLATED)
->  #define _VMSCAN_THROTTLE_NOPROGRESS	(1 << VMSCAN_THROTTLE_NOPROGRESS)
-> +#define _VMSCAN_THROTTLE_CONGESTED	(1 << VMSCAN_THROTTLE_CONGESTED)
->  
->  #define show_throttle_flags(flags)						\
->  	(flags) ? __print_flags(flags, "|",					\
->  		{_VMSCAN_THROTTLE_WRITEBACK,	"VMSCAN_THROTTLE_WRITEBACK"},	\
->  		{_VMSCAN_THROTTLE_ISOLATED,	"VMSCAN_THROTTLE_ISOLATED"},	\
-> -		{_VMSCAN_THROTTLE_NOPROGRESS,	"VMSCAN_THROTTLE_NOPROGRESS"}	\
-> +		{_VMSCAN_THROTTLE_NOPROGRESS,	"VMSCAN_THROTTLE_NOPROGRESS"},	\
-> +		{_VMSCAN_THROTTLE_CONGESTED,	"VMSCAN_THROTTLE_CONGESTED"}	\
->  		) : "VMSCAN_THROTTLE_NONE"
->  
->  
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index fb9584641ac7..4c4d5f6cd8a3 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -1021,6 +1021,39 @@ static void handle_write_error(struct address_space *mapping,
->  	unlock_page(page);
->  }
->  
-> +static bool skip_throttle_noprogress(pg_data_t *pgdat)
-> +{
-> +	int reclaimable = 0, write_pending = 0;
-> +	int i;
-> +
-> +	/*
-> +	 * If kswapd is disabled, reschedule if necessary but do not
-> +	 * throttle as the system is likely near OOM.
-> +	 */
-> +	if (pgdat->kswapd_failures >= MAX_RECLAIM_RETRIES)
-> +		return true;
-> +
-> +	/*
-> +	 * If there are a lot of dirty/writeback pages then do not
-> +	 * throttle as throttling will occur when the pages cycle
-> +	 * towards the end of the LRU if still under writeback.
-> +	 */
-> +	for (i = 0; i < MAX_NR_ZONES; i++) {
-> +		struct zone *zone = pgdat->node_zones + i;
-> +
-> +		if (!populated_zone(zone))
-> +			continue;
-> +
-> +		reclaimable += zone_reclaimable_pages(zone);
-> +		write_pending += zone_page_state_snapshot(zone,
-> +						  NR_ZONE_WRITE_PENDING);
-> +	}
-> +	if (2 * write_pending <= reclaimable)
-> +		return true;
-> +
-> +	return false;
-> +}
-> +
->  void reclaim_throttle(pg_data_t *pgdat, enum vmscan_throttle_state reason)
->  {
->  	wait_queue_head_t *wqh = &pgdat->reclaim_wait[reason];
-> @@ -1056,8 +1089,16 @@ void reclaim_throttle(pg_data_t *pgdat, enum vmscan_throttle_state reason)
->  		}
->  
->  		break;
-> +	case VMSCAN_THROTTLE_CONGESTED:
-> +		fallthrough;
->  	case VMSCAN_THROTTLE_NOPROGRESS:
-> -		timeout = HZ/2;
-> +		if (skip_throttle_noprogress(pgdat)) {
-> +			cond_resched();
-> +			return;
-> +		}
-> +
-> +		timeout = 1;
-> +
->  		break;
->  	case VMSCAN_THROTTLE_ISOLATED:
->  		timeout = HZ/50;
-> @@ -3321,7 +3362,7 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
->  	if (!current_is_kswapd() && current_may_throttle() &&
->  	    !sc->hibernation_mode &&
->  	    test_bit(LRUVEC_CONGESTED, &target_lruvec->flags))
-> -		reclaim_throttle(pgdat, VMSCAN_THROTTLE_WRITEBACK);
-> +		reclaim_throttle(pgdat, VMSCAN_THROTTLE_CONGESTED);
->  
->  	if (should_continue_reclaim(pgdat, sc->nr_reclaimed - nr_reclaimed,
->  				    sc))
-> @@ -3386,16 +3427,16 @@ static void consider_reclaim_throttle(pg_data_t *pgdat, struct scan_control *sc)
->  	}
->  
->  	/*
-> -	 * Do not throttle kswapd on NOPROGRESS as it will throttle on
-> -	 * VMSCAN_THROTTLE_WRITEBACK if there are too many pages under
-> -	 * writeback and marked for immediate reclaim at the tail of
-> -	 * the LRU.
-> +	 * Do not throttle kswapd or cgroup reclaim on NOPROGRESS as it will
-> +	 * throttle on VMSCAN_THROTTLE_WRITEBACK if there are too many pages
-> +	 * under writeback and marked for immediate reclaim at the tail of the
-> +	 * LRU.
->  	 */
-> -	if (current_is_kswapd())
-> +	if (current_is_kswapd() || cgroup_reclaim(sc))
->  		return;
->  
->  	/* Throttle if making no progress at high prioities. */
-> -	if (sc->priority < DEF_PRIORITY - 2)
-> +	if (sc->priority == 1 && !sc->nr_reclaimed)
->  		reclaim_throttle(pgdat, VMSCAN_THROTTLE_NOPROGRESS);
->  }
->  
-> @@ -3415,6 +3456,7 @@ static void shrink_zones(struct zonelist *zonelist, struct scan_control *sc)
->  	unsigned long nr_soft_scanned;
->  	gfp_t orig_mask;
->  	pg_data_t *last_pgdat = NULL;
-> +	pg_data_t *first_pgdat = NULL;
->  
->  	/*
->  	 * If the number of buffer_heads in the machine exceeds the maximum
-> @@ -3478,14 +3520,18 @@ static void shrink_zones(struct zonelist *zonelist, struct scan_control *sc)
->  			/* need some check for avoid more shrink_zone() */
->  		}
->  
-> +		if (!first_pgdat)
-> +			first_pgdat = zone->zone_pgdat;
-> +
->  		/* See comment about same check for global reclaim above */
->  		if (zone->zone_pgdat == last_pgdat)
->  			continue;
->  		last_pgdat = zone->zone_pgdat;
->  		shrink_node(zone->zone_pgdat, sc);
-> -		consider_reclaim_throttle(zone->zone_pgdat, sc);
->  	}
->  
-> +	consider_reclaim_throttle(first_pgdat, sc);
-> +
->  	/*
->  	 * Restore to original mask to avoid the impact on the caller if we
->  	 * promoted it to __GFP_HIGHMEM.
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

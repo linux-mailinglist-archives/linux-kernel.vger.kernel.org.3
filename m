@@ -2,92 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8896480721
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 08:54:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7323480723
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 09:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235448AbhL1Hx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 02:53:59 -0500
-Received: from mga11.intel.com ([192.55.52.93]:37395 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235425AbhL1Hx6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 02:53:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640678038; x=1672214038;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UxcA8j3rYSenTgfQcP67Ebal40ladU1yoHzj3kmyLoo=;
-  b=nuLbR8aRhAPPw1BRGkyTs6DhO0+txaIWlSiomJReeA3n7hKOXG/MGq6r
-   XJrYCyyDc8wGkfpyWKw7Dt6POaJ9NU9xC/HVQdMVV0zujgstbQmoogXAk
-   HiZhnpJJxaUn1ZVNO4HHtmEbY403gKBV53j5rwSyRDFFNAcEVc6k6XCvg
-   X2dVKR/itp/mQYp2hgZ5dsQLUhQA3saw3xXL+gF4d3sV53nR8uI54a9MF
-   hEUFxq4/RvjXJMeWxjyCvd5IxXEG162gh1ExoMviUgL945gwLrTiKvjxO
-   HmG+JxqdcqgVboNR24nH08kDpTKzaVfl5oS96xMIw6ebflwu1saaKtG1E
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="238872524"
-X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
-   d="scan'208";a="238872524"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 23:53:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
-   d="scan'208";a="618680234"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 27 Dec 2021 23:53:57 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n27Iy-0007OE-B8; Tue, 28 Dec 2021 07:53:56 +0000
-Date:   Tue, 28 Dec 2021 15:53:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [sbates130272-p2pmem:p2pdma_user_cmb_v5 21/23]
- drivers/pci/p2pdma.c:108:38: sparse: sparse: dereference of noderef
- expression
-Message-ID: <202112281530.kK94gKnk-lkp@intel.com>
+        id S235456AbhL1IBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 03:01:07 -0500
+Received: from smtp05.smtpout.orange.fr ([80.12.242.127]:60836 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229955AbhL1IBF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 03:01:05 -0500
+Received: from [192.168.1.18] ([86.243.171.122])
+        by smtp.orange.fr with ESMTPA
+        id 27PrnSAOfOvR027PrnKlv2; Tue, 28 Dec 2021 09:01:03 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Tue, 28 Dec 2021 09:01:03 +0100
+X-ME-IP: 86.243.171.122
+Content-Type: multipart/mixed; boundary="------------8QGKN0DMtEJg3SQKJpxQwPda"
+Message-ID: <f1164c41-c262-0413-dd2f-cded7510b8b6@wanadoo.fr>
+Date:   Tue, 28 Dec 2021 09:01:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+To:     syzbot+e7d46eb426883fb97efd@syzkaller.appspotmail.com
+Cc:     linux-kernel@vger.kernel.org
+References: <0000000000007d25ff059457342d@google.com>
+Subject: Re: KMSAN: uninit-value in alauda_check_media
+Content-Language: fr
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <0000000000007d25ff059457342d@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/sbates130272/linux-p2pmem.git p2pdma_user_cmb_v5
-head:   407e0b007d670af84abbb624d9bbd4057b31a7d9
-commit: 987aec4824931d2be618b29001359e633aa96988 [21/23] mm: use custom page_free for P2PDMA pages
-config: x86_64-randconfig-s021-20211228 (https://download.01.org/0day-ci/archive/20211228/202112281530.kK94gKnk-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/sbates130272/linux-p2pmem/commit/987aec4824931d2be618b29001359e633aa96988
-        git remote add sbates130272-p2pmem https://github.com/sbates130272/linux-p2pmem.git
-        git fetch --no-tags sbates130272-p2pmem p2pdma_user_cmb_v5
-        git checkout 987aec4824931d2be618b29001359e633aa96988
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/pci/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This is a multi-part message in MIME format.
+--------------8QGKN0DMtEJg3SQKJpxQwPda
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/pci/p2pdma.c:108:38: sparse: sparse: dereference of noderef expression
->> drivers/pci/p2pdma.c:108:38: sparse: sparse: dereference of noderef expression
 
-vim +108 drivers/pci/p2pdma.c
+Hi,
 
-   103	
-   104	static void p2pdma_page_free(struct page *page)
-   105	{
-   106		struct pci_p2pdma_pagemap *pgmap = to_p2p_pgmap(page->pgmap);
-   107	
- > 108		gen_pool_free(pgmap->provider->p2pdma->pool,
-   109			      (uintptr_t)page_to_virt(page), PAGE_SIZE);
-   110	}
-   111	
+(3rd try - text only format, other git repo to please syzbot - sorry for 
+the noise)
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+first try (ok, 3rd...) to use syzbot. I hope I do it right.
+Discussion about the syz report can be found at 
+https://lore.kernel.org/linux-kernel/0000000000007d25ff059457342d-hpIqsD4AKlfQT0dZR+AlfA@public.gmane.org/
+
+This patch only test if alauda_get_media_status() (and its embedded 
+usb_stor_ctrl_transfer()) before using the data.
+In case of error, it returns USB_STOR_TRANSPORT_ERROR as done elsewhere.
+
+#syz test: https://github.com/google/kmsan.git master
+
+CJ
+
+
+--------------8QGKN0DMtEJg3SQKJpxQwPda
+Content-Type: text/x-csrc; charset=UTF-8; name="patch_alauda.c"
+Content-Disposition: attachment; filename="patch_alauda.c"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL3N0b3JhZ2UvYWxhdWRhLmMgYi9kcml2ZXJzL3Vz
+Yi9zdG9yYWdlL2FsYXVkYS5jCmluZGV4IDIwYjg1N2U5N2U2MC4uNmM0ODZkOTY0OTExIDEw
+MDY0NAotLS0gYS9kcml2ZXJzL3VzYi9zdG9yYWdlL2FsYXVkYS5jCisrKyBiL2RyaXZlcnMv
+dXNiL3N0b3JhZ2UvYWxhdWRhLmMKQEAgLTMxOCw3ICszMTgsOCBAQCBzdGF0aWMgaW50IGFs
+YXVkYV9nZXRfbWVkaWFfc3RhdHVzKHN0cnVjdCB1c19kYXRhICp1cywgdW5zaWduZWQgY2hh
+ciAqZGF0YSkKIAlyYyA9IHVzYl9zdG9yX2N0cmxfdHJhbnNmZXIodXMsIHVzLT5yZWN2X2N0
+cmxfcGlwZSwKIAkJY29tbWFuZCwgMHhjMCwgMCwgMSwgZGF0YSwgMik7CiAKLQl1c2Jfc3Rv
+cl9kYmcodXMsICJNZWRpYSBzdGF0dXMgJTAyWCAlMDJYXG4iLCBkYXRhWzBdLCBkYXRhWzFd
+KTsKKwlpZiAocmMgPT0gVVNCX1NUT1JfWEZFUl9HT09EKQorCQl1c2Jfc3Rvcl9kYmcodXMs
+ICJNZWRpYSBzdGF0dXMgJTAyWCAlMDJYXG4iLCBkYXRhWzBdLCBkYXRhWzFdKTsKIAogCXJl
+dHVybiByYzsKIH0KQEAgLTQ1Myw4ICs0NTQsMTEgQEAgc3RhdGljIGludCBhbGF1ZGFfY2hl
+Y2tfbWVkaWEoc3RydWN0IHVzX2RhdGEgKnVzKQogewogCXN0cnVjdCBhbGF1ZGFfaW5mbyAq
+aW5mbyA9IChzdHJ1Y3QgYWxhdWRhX2luZm8gKikgdXMtPmV4dHJhOwogCXVuc2lnbmVkIGNo
+YXIgc3RhdHVzWzJdOworCWludCByYzsKIAotCWFsYXVkYV9nZXRfbWVkaWFfc3RhdHVzKHVz
+LCBzdGF0dXMpOworCXJjID0gYWxhdWRhX2dldF9tZWRpYV9zdGF0dXModXMsIHN0YXR1cyk7
+CisJaWYgKHJjICE9IFVTQl9TVE9SX1RSQU5TUE9SVF9HT09EKQorCQlyZXR1cm4gVVNCX1NU
+T1JfVFJBTlNQT1JUX0VSUk9SOwogCiAJLyogQ2hlY2sgZm9yIG5vIG1lZGlhIG9yIGRvb3Ig
+b3BlbiAqLwogCWlmICgoc3RhdHVzWzBdICYgMHg4MCkgfHwgKChzdGF0dXNbMF0gJiAweDFG
+KSA9PSAweDEwKQo=
+--------------8QGKN0DMtEJg3SQKJpxQwPda--
+

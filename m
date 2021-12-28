@@ -2,141 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64FD1480BBB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 18:02:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7E2480BC5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 18:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236518AbhL1RCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 12:02:24 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:53108 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235957AbhL1RCX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 12:02:23 -0500
-Received: by mail-io1-f71.google.com with SMTP id k12-20020a0566022a4c00b005ebe737d989so8411979iov.19
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 09:02:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=Elz8FkYtiNR+oWGYVYY+4bZsQT+pCjbnV2l/cLFCBOI=;
-        b=uR/e6kPG+HFZ048W0m1us6OVvHK1VFjslRI45+d0+ehRp7LQBCsH4Ln2CliedgePB1
-         iyW/lFPWKHm8+Awi2JGRH8YwzEN2GUft498DU4jg3FEvh4pTVcMPvFicm7sTpYJNNiI7
-         /QhkomATPcNgr5L2ltdyOoQUvvqYKkElNxsSTVVfjt2GbLnRQwrnsRk7AXn5yFpTH0jO
-         BZplfdh6aipM9DWjspomS8m/aw+nqTi49B6Vf2izNZvgqrjKllOLQ0vsx0HM/zGZC454
-         7wyMmd79pCijIDiSbe8URSRaW90p9pkR7vdVrdnHmhg6flYjC+75ICkSfvmyvwoz5h8S
-         0SKg==
-X-Gm-Message-State: AOAM5330hXi0jA57HyL7kqMOIxE6568FrTGFgWzG5CxliXF2F4Mjr7Bz
-        ptj+/i5VNm0TXQMnmLZ+5+JQZZbm/OqY1aHb5z4HqwcmQGA0
-X-Google-Smtp-Source: ABdhPJzeywTUU05+9GxB2u6Yr/SzFJoLeNd5prGngvOMMrmG+u33GhwzB0Q5KCUECZV1QxDHQvNndWXRbhWA5PgamPw2TU3ClDH1
+        id S236542AbhL1RFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 12:05:07 -0500
+Received: from mga09.intel.com ([134.134.136.24]:23840 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233280AbhL1RFF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 12:05:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640711105; x=1672247105;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=KHhXdEfIwTp7IIrrW70KmlJrU5+AcMwf8sgzb0u1BTQ=;
+  b=BQDV12zufIn3y7kViZ5Jpt3ulVBzf1xgHYmdvpui4sYL++yBRhMLLgZl
+   +In54oVBpemChMdhPSSao9SBGGuQnw129cutz7Qf/nNUzRCAFu7YWz9R2
+   GxD3zZn3E64NTF62bjny9/LAO6irwQAZcUtaMYwEa2FUmSNP83yXJQxHU
+   0Z9wgDM+bnvLBFseQ3FQ4ne1jZh4VKaDmMBeEuEKGlgQCkglp0egUZOAw
+   Uc7z7Dlj7IfP9sX+k+2BvvismjYilXtXFrvVgBSma1hHoodEN3fhtyl1j
+   cgprRmSQTooX90qS62YE/hsf/m7imZoI75H3rmwRsPJBt8R2BRSmon1qS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="241195850"
+X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
+   d="scan'208";a="241195850"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 09:05:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
+   d="scan'208";a="572369723"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Dec 2021 09:04:56 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BSH4sNa000463;
+        Tue, 28 Dec 2021 17:04:54 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH v9 01/15] modpost: fix removing numeric suffixes
+Date:   Tue, 28 Dec 2021 18:03:08 +0100
+Message-Id: <20211228170308.1454063-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <YcovajZkEd0WY8p4@zn.tnic>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-2-alexandr.lobakin@intel.com> <YcShenJgaOeOdbIj@zn.tnic> <20211227182246.1447062-1-alexandr.lobakin@intel.com> <YcovajZkEd0WY8p4@zn.tnic>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1989:: with SMTP id g9mr9710032ilf.88.1640710942975;
- Tue, 28 Dec 2021 09:02:22 -0800 (PST)
-Date:   Tue, 28 Dec 2021 09:02:22 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ef6c6c05d437c830@google.com>
-Subject: [syzbot] WARNING in kvm_mmu_notifier_invalidate_range_start
-From:   syzbot <syzbot+4e697fe80a31aa7efe21@syzkaller.appspotmail.com>
-To:     changbin.du@intel.com, christian.brauner@ubuntu.com,
-        daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com,
-        hkallweit1@gmail.com, kuba@kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pbonzini@redhat.com, syzkaller-bugs@googlegroups.com,
-        yajun.deng@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Borislav Petkov <bp@alien8.de>
+Date: Mon, 27 Dec 2021 22:26:02 +0100
 
-syzbot found the following issue on:
+> On Mon, Dec 27, 2021 at 07:22:46PM +0100, Alexander Lobakin wrote:
+> > It's just a couple lines below. I trigger this using `-z uniq-symbol`
+> > which uses numeric suffixes for globals as well.
+> 
+> Aha, so that's for the fgkaslr purposes now.
 
-HEAD commit:    ea586a076e8a Add linux-next specific files for 20211224
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=12418ea5b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a9c4e3dde2c568fb
-dashboard link: https://syzkaller.appspot.com/bug?extid=4e697fe80a31aa7efe21
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15724985b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12d1aedbb00000
+Well, linking using unique names is meant to be used always
+when available and livepatching is enabled, at least I hope so.
 
-The issue was bisected to:
+> 
+> > It fixes a commit dated 2014, thus Cc:stable. Although the
+> > remove_dot() might've been introduced for neverlanded GCC LTO, but
+> > in fact numeric suffixes are used a lot by the toolchains in regular
+> > builds as well. Just not for globals, that's why it's "well hidden".
+> 
+> Does "well hidden" warrant a stable backport then? Because if no
+> toolchain is using numeric suffixes for globals, then no need for the
+> stable tag, I'd say.
 
-commit e4b8954074f6d0db01c8c97d338a67f9389c042f
-Author: Eric Dumazet <edumazet@google.com>
-Date:   Tue Dec 7 01:30:37 2021 +0000
+Hmm, makes sense. The fact that I haven't seen any similar reports
+or issues (even on LTO builds) sorta says there are no benefits from
+backporting this.
+Ok, I'll drop the tag. It's never too late anyway to port this in
+case someone will face it.
 
-    netlink: add net device refcount tracker to struct ethnl_req_info
+> 
+> > I thought it's a common saying in commit messages, isn't it?
+> 
+> Lemme give you my canned and a lot more eloquent explanation for that:
+> 
+> "Please use passive voice in your commit message: no "we" or "I", etc,
+> and describe your changes in imperative mood.
+> 
+> Also, pls read section "2) Describe your changes" in
+> Documentation/process/submitting-patches.rst for more details.
+> 
+> Also, see section "Changelog" in
+> Documentation/process/maintainer-tip.rst
+> 
+> Bottom line is: personal pronouns are ambiguous in text, especially with
+> so many parties/companies/etc developing the kernel so let's avoid them
+> please."
+> 
+> Thx.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1640902db00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1540902db00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1140902db00000
+Ah, you're right. "Common used" doesn't mean "correct". I'll fix it
+in the next spin being published after accumulating a bunch more
+comments.
+Thanks!
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4e697fe80a31aa7efe21@syzkaller.appspotmail.com
-Fixes: e4b8954074f6 ("netlink: add net device refcount tracker to struct ethnl_req_info")
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
 
-L1TF CPU bug present and SMT on, data leak possible. See CVE-2018-3646 and https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/l1tf.html for details.
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3605 at arch/x86/kvm/../../../virt/kvm/kvm_main.c:532 __kvm_handle_hva_range arch/x86/kvm/../../../virt/kvm/kvm_main.c:532 [inline]
-WARNING: CPU: 0 PID: 3605 at arch/x86/kvm/../../../virt/kvm/kvm_main.c:532 kvm_mmu_notifier_invalidate_range_start+0x91b/0xa80 arch/x86/kvm/../../../virt/kvm/kvm_main.c:714
-Modules linked in:
-CPU: 0 PID: 3605 Comm: syz-executor402 Not tainted 5.16.0-rc6-next-20211224-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:__kvm_handle_hva_range arch/x86/kvm/../../../virt/kvm/kvm_main.c:532 [inline]
-RIP: 0010:kvm_mmu_notifier_invalidate_range_start+0x91b/0xa80 arch/x86/kvm/../../../virt/kvm/kvm_main.c:714
-Code: 00 48 c7 c2 20 08 a2 89 be b9 01 00 00 48 c7 c7 c0 0b a2 89 c6 05 4c 4e 75 0c 01 e8 f3 22 09 08 e9 76 ff ff ff e8 25 e0 6e 00 <0f> 0b e9 8f fc ff ff e8 19 e0 6e 00 0f 0b e9 5f fc ff ff e8 0d e0
-RSP: 0018:ffffc900028bf5a0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000020800000 RCX: 0000000000000000
-RDX: ffff88801ccc3a80 RSI: ffffffff8109245b RDI: 0000000000000003
-RBP: ffffc900029e0290 R08: 0000000020800000 R09: ffffc900029e0293
-R10: ffffffff81091d04 R11: 0000000000000001 R12: ffffc900029e9168
-R13: ffffc900029df000 R14: ffffc900028bf868 R15: 0000000020800000
-FS:  0000555555953300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fd0eb9e48d0 CR3: 00000000749c0000 CR4: 00000000003526e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- mn_hlist_invalidate_range_start mm/mmu_notifier.c:493 [inline]
- __mmu_notifier_invalidate_range_start+0x2ff/0x800 mm/mmu_notifier.c:548
- mmu_notifier_invalidate_range_start include/linux/mmu_notifier.h:459 [inline]
- __unmap_hugepage_range+0xdd3/0x1170 mm/hugetlb.c:4961
- unmap_hugepage_range+0xa8/0x100 mm/hugetlb.c:5072
- hugetlb_vmdelete_list+0x134/0x190 fs/hugetlbfs/inode.c:439
- hugetlbfs_punch_hole fs/hugetlbfs/inode.c:616 [inline]
- hugetlbfs_fallocate+0xf31/0x1550 fs/hugetlbfs/inode.c:646
- vfs_fallocate+0x48d/0xe10 fs/open.c:308
- madvise_remove mm/madvise.c:959 [inline]
- madvise_vma_behavior+0x9ca/0x1fa0 mm/madvise.c:982
- madvise_walk_vmas mm/madvise.c:1207 [inline]
- do_madvise mm/madvise.c:1385 [inline]
- do_madvise+0x3d6/0x660 mm/madvise.c:1343
- __do_sys_madvise mm/madvise.c:1398 [inline]
- __se_sys_madvise mm/madvise.c:1396 [inline]
- __x64_sys_madvise+0xa6/0x110 mm/madvise.c:1396
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f64377bd039
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff39388f08 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f64377bd039
-RDX: 0000000000000009 RSI: 0000000000800000 RDI: 0000000020000000
-RBP: 00007f6437781020 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f64377810b0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Al

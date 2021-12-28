@@ -2,122 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 349B5480978
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 14:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12FAD48097D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 14:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbhL1NOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 08:14:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39604 "EHLO
+        id S232362AbhL1NTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 08:19:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231948AbhL1NOf (ORCPT
+        with ESMTP id S231948AbhL1NTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 08:14:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15863C061574;
-        Tue, 28 Dec 2021 05:14:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C668EB811EF;
-        Tue, 28 Dec 2021 13:14:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05F1DC36AE8;
-        Tue, 28 Dec 2021 13:14:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640697272;
-        bh=8jpFq1AYq4RbTwegXdsNwRM8niXpio96faqJOItKqDU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fqkHnQqQu//4HxNkavBwcqWzCiCf8SAtsZw8sdCQDPSAyJ8TfceUyiGM38gPqMq7y
-         TLtotPhaGhKykMKK0wMa+K1gv27xsM0pdZ6lpxzJMvhSnOf7QBOR/HogHX73bZKnia
-         DpU0CkqiDbx+1JDz6fFULUI7aT+TQy2JyZ1yrQZw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
-Subject: [PATCH] ACPI: sysfs: use default_groups in kobj_type
-Date:   Tue, 28 Dec 2021 14:14:23 +0100
-Message-Id: <20211228131423.249752-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 28 Dec 2021 08:19:03 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F234CC061574;
+        Tue, 28 Dec 2021 05:19:02 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id b186-20020a1c1bc3000000b00345734afe78so10070108wmb.0;
+        Tue, 28 Dec 2021 05:19:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bDb0kJmueK3fnTgDSSIcWoJthheJr9w8Abj9HHv7swQ=;
+        b=FTDuvcxdYNW7UadnMddK9oxiBXuuJ5PAmhjpyNfoLFMkbI0SGHcwDTYOZtPh3P4LNu
+         SlYeakemUlH4lk+KGt+vVxFkQYR8zQcxx0kPmuUcojedlmoByThe+5n+IMgh9ZBJJeBY
+         URxkq+NtoiKXY1IwlSNP1tr7GYSVeHTQfPa6DclUWL0VWMWUGRPs8/QgmEneQS97ujMP
+         JSt0+lDCMpoHIwNZR0cYAzI6d4ASWZnnMlFqYRNxmHjCP7fFyqw2vc8aGZaAp358U1QX
+         pMWoAUaK47/c450dEoRm8UV9QPn7mZDKsAq7WCIQPgH/1zvsE3ZPVTx/zzRt/2kpbmp4
+         GLcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bDb0kJmueK3fnTgDSSIcWoJthheJr9w8Abj9HHv7swQ=;
+        b=ie/a4zqRPG6km8WfAB29DNsJC2E864WbDhC51+fPl6OjHUIXviZnY2uXxyiuSsxkQE
+         zOODjxid7HxDZ5YlZxOQBdtDPLOQHOM2ozTxAAZZQtKAejyinX7M5WYCsHNVOr5QyDQM
+         5HqSZ7WDwu7ZnWuTV7x+h2+eMACQPHlqE5TXcFg80hkPtC4wBYbp8bzbkBzs6FkDPj7y
+         ouwjlrZKUcTGPRt5o9Q8LFEbardoRADOhwakUrggRE1l5TxQqrDDG342sLBbmuX9/2YK
+         ukJTOos2qOOvPSsviaNqRktdU8qOr0VbZ24A+SlkDpJGY4zdMAZt/ffW3fXFB2muSx8L
+         JUBw==
+X-Gm-Message-State: AOAM530WY9DAOqNatu1/oDWXeowquP8UMkViiPnjPciY7GHdMOJrlTLa
+        r5hySA2AQv7zembXQjSIwnkh0VJV5Q4=
+X-Google-Smtp-Source: ABdhPJyiX3X/0tZB+xVwJu3lM6W4EPCt7X5IbOrgwu3OHuV9wg/6pVAniTNqzXAgKA26gOlS8FLLYw==
+X-Received: by 2002:a1c:9897:: with SMTP id a145mr17134708wme.194.1640697541584;
+        Tue, 28 Dec 2021 05:19:01 -0800 (PST)
+Received: from debian (host-2-98-43-34.as13285.net. [2.98.43.34])
+        by smtp.gmail.com with ESMTPSA id a3sm20208694wri.98.2021.12.28.05.19.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Dec 2021 05:19:01 -0800 (PST)
+Date:   Tue, 28 Dec 2021 13:18:59 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 4.19 00/38] 4.19.223-rc1 review
+Message-ID: <YcsOw/qt1OAp754K@debian>
+References: <20211227151319.379265346@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2639; h=from:subject; bh=8jpFq1AYq4RbTwegXdsNwRM8niXpio96faqJOItKqDU=; b=owGbwMvMwCRo6H6F97bub03G02pJDImnedcfMPgyZdv/vVpdtRvW8Jvt0GNKUpo+lfPZ2osbnqaV /zws3BHLwiDIxCArpsjyZRvP0f0VhxS9DG1Pw8xhZQIZwsDFKQATqUxhmCs/z2/ZTI7F+4Vs/vEUar 2u3CW2q41hvvPqFk2/kJCZIqWhqs0/z0/4PenWUQA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are currently 2 ways to create a set of sysfs files for a
-kobj_type, through the default_attrs field, and the default_groups
-field.  Move the ACPI sysfs code to use default_groups field which has
-been the preferred way since aa30f47cf666 ("kobject: Add support for
-default attribute groups to kobj_type") so that we can soon get rid of
-the obsolete default_attrs field.
+Hi Greg,
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <lenb@kernel.org>
-Cc: linux-acpi@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/acpi/cppc_acpi.c    | 3 ++-
- drivers/acpi/device_sysfs.c | 3 ++-
- drivers/acpi/sysfs.c        | 3 ++-
- 3 files changed, 6 insertions(+), 3 deletions(-)
+On Mon, Dec 27, 2021 at 04:30:37PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.223 release.
+> There are 38 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 29 Dec 2021 15:13:09 +0000.
+> Anything received after that time might be too late.
 
-diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-index a85c351589be..d251b2a1cd15 100644
---- a/drivers/acpi/cppc_acpi.c
-+++ b/drivers/acpi/cppc_acpi.c
-@@ -179,10 +179,11 @@ static struct attribute *cppc_attrs[] = {
- 	&lowest_freq.attr,
- 	NULL
- };
-+ATTRIBUTE_GROUPS(cppc);
- 
- static struct kobj_type cppc_ktype = {
- 	.sysfs_ops = &kobj_sysfs_ops,
--	.default_attrs = cppc_attrs,
-+	.default_groups = cppc_groups,
- };
- 
- static int check_pcc_chan(int pcc_ss_id, bool chk_err_bit)
-diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
-index 61271e61c307..d5d6403ba07b 100644
---- a/drivers/acpi/device_sysfs.c
-+++ b/drivers/acpi/device_sysfs.c
-@@ -53,6 +53,7 @@ static struct attribute *acpi_data_node_default_attrs[] = {
- 	&data_node_path.attr,
- 	NULL
- };
-+ATTRIBUTE_GROUPS(acpi_data_node_default);
- 
- #define to_data_node(k) container_of(k, struct acpi_data_node, kobj)
- #define to_attr(a) container_of(a, struct acpi_data_node_attr, attr)
-@@ -79,7 +80,7 @@ static void acpi_data_node_release(struct kobject *kobj)
- 
- static struct kobj_type acpi_data_node_ktype = {
- 	.sysfs_ops = &acpi_data_node_sysfs_ops,
--	.default_attrs = acpi_data_node_default_attrs,
-+	.default_groups = acpi_data_node_default_groups,
- 	.release = acpi_data_node_release,
- };
- 
-diff --git a/drivers/acpi/sysfs.c b/drivers/acpi/sysfs.c
-index 00c0ebaab29f..a4b638bea6f1 100644
---- a/drivers/acpi/sysfs.c
-+++ b/drivers/acpi/sysfs.c
-@@ -939,10 +939,11 @@ static struct attribute *hotplug_profile_attrs[] = {
- 	&hotplug_enabled_attr.attr,
- 	NULL
- };
-+ATTRIBUTE_GROUPS(hotplug_profile);
- 
- static struct kobj_type acpi_hotplug_profile_ktype = {
- 	.sysfs_ops = &kobj_sysfs_ops,
--	.default_attrs = hotplug_profile_attrs,
-+	.default_groups = hotplug_profile_groups,
- };
- 
- void acpi_sysfs_add_hotplug_profile(struct acpi_hotplug_profile *hotplug,
--- 
-2.34.1
+Build test:
+mips (gcc version 11.2.1 20211214): 63 configs -> no failure
+arm (gcc version 11.2.1 20211214): 116 configs -> no new failure
+arm64 (gcc version 11.2.1 20211214): 2 configs -> no failure
+x86_64 (gcc version 11.2.1 20211214): 4 configs -> no failure
 
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/554
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip

@@ -2,95 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BA14807DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 10:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5400648080D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 10:42:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235969AbhL1JeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 04:34:14 -0500
-Received: from out162-62-57-137.mail.qq.com ([162.62.57.137]:40143 "EHLO
-        out162-62-57-137.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229617AbhL1JeN (ORCPT
+        id S236162AbhL1JmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 04:42:17 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:49922 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S236015AbhL1JmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 04:34:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1640684047;
-        bh=td5/7s5euCyyDx5GzCAltI7Bvj9Xn81rXHm7OL7+L1k=;
-        h=From:To:Cc:Subject:Date;
-        b=hdv0R/WCvX1XyqRB62gihcOwfAtsY44L0V3WPGyKIY9BV00JVF3Rq6dpyCNfRTlhx
-         A1fjqQBEuwcfy5yFH8gejvXUjyLqK5N/MANGsZAORWPXpI298NFuMCXu/dSiXH4TRR
-         PhIIgp5fJv9m4pd1U7E0rU451Irq8FUSlqXUAT48=
-Received: from localhost.localdomain ([159.226.95.43])
-        by newxmesmtplogicsvrszc9.qq.com (NewEsmtp) with SMTP
-        id 884242EC; Tue, 28 Dec 2021 17:34:04 +0800
-X-QQ-mid: xmsmtpt1640684044t22y91cjd
-Message-ID: <tencent_205AA371C910BBA2CF01B311811ABDF2560A@qq.com>
-X-QQ-XMAILINFO: MpO6L0LObisWsPgxOAqbPeEgIgw8ezvtNWIYx+zAuIeMFZIBAcIEZ69PI2YTNa
-         yTXJGxZBICZE/eYhonB0yv0gk9Tamb7BmBz8kv972KSvdU5EpFk9oMNvCSEwYbZUxzoIZPxgPSJh
-         lAkuwbWNIJma2Zoak+lWp+bKgM7e/OGb1OK99IdA64gtmGLRbLvtn04S7ECDc8kZ+TEcyhinadUH
-         dNukIOcqvPlR/i9xj1jk0xK/szstuPCSJcujtqNc0wcj1EnDLMopmfK5ghiKlEkrWa6gTJ9n4eKS
-         iJ1b4a+Iv9NtHB/ylKDqNWh1Tr27kfILPkwiNQ1PnpmHe4rA4ImL6qXlNP4K+gZyTsfSvQKONnY9
-         VM6HNY2IbzxlxmMwuAZqMPEP+t0hREwo/ydj/wTzygAIJ8KYfaxPoyaGRUJDFy5mHRlRP3bqg7+F
-         ibNAKFDRCuPwx+sZiST1tiOR+WPv4/CGLViJqDxA3+sXA2Tec1MDHgFqBJfFNhj/zWkZxol7m+ob
-         eL1MAXDCuYwbGA5vhCjqkAwYtC24HJKX4aF/QeCxrKziG8BSzwLsj1DjYL1EaZInnCM7eGfS7VqU
-         NB8BDGodRyb1nJ0dhnNbxRnwnSbm16uFknATUlWKOqKYECiDpAKUINigyqowVk3l9Fb5sfEeEgu0
-         LaqHRuWfm+cW2GsbQWI5abFfM6GR24l0g4Z3fQgEpSCszpm+RDTxIWXlZ11umKUd4I5Lf4ZMXDmQ
-         46z6UtwUlxMDUgs2Dv8BmGSQTPCoiLxZm4C3FFaMl+4rWENFBIsFSU20+N4ShJrnBg9UhJeK+t2b
-         keDwUTwjM/hf5PAhakT0ZUiN5+vin3D8T6UGyVYdLOgRTOE9+JbOGWb8c8fk5pGfcfPsEOQ6u0ET
-         4zg3fcgHiH
-From:   Peiwei Hu <jlu.hpw@foxmail.com>
-To:     stas.yakovlev@gmail.com, kvalo@codeaurora.org, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, trivial@kernel.org,
-        Peiwei Hu <jlu.hpw@foxmail.com>
-Subject: [PATCH] ipw2100: inproper error handling of ipw2100_pci_init_one
-Date:   Tue, 28 Dec 2021 17:34:00 +0800
-X-OQ-MSGID: <20211228093400.3061632-1-jlu.hpw@foxmail.com>
+        Tue, 28 Dec 2021 04:42:02 -0500
+X-UUID: ade9b90949654ee09d75cbd4951798f7-20211228
+X-UUID: ade9b90949654ee09d75cbd4951798f7-20211228
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1939391826; Tue, 28 Dec 2021 17:41:50 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 28 Dec 2021 17:41:49 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 28 Dec 2021 17:41:47 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v2, 00/12] media: mtk-vcodec: support for MT8192 decoder
+Date:   Tue, 28 Dec 2021 17:41:34 +0800
+Message-ID: <20211228094146.20505-1-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-goto fail instead of returning directly in error exiting
+This series adds support for mt8192 h264 decoder. Firstly, need to refactor
+power/clock/interrupt interfaces for mt8192 is lat and core architecture.
 
-Signed-off-by: Peiwei Hu <jlu.hpw@foxmail.com>
+Secondly, add new functions to get frame buffer size and resolution according
+to decoder capability from scp side. Then add callback function to get/put
+capture buffer in order to enable lat and core decoder in parallel. 
+
+Then add to support MT21C compressed mode and fix v4l2-compliance fail.
+
+Lastly, extract H264 request api driver to let mt8183 and mt8192 use the same
+code, and adds mt8192 frame based h264 driver for stateless decoder.
+
+Patches 1 refactor power/clock/interrupt interface.
+Patches 2~4 get frame buffer size and resolution according to decoder capability.
+Patches 5~6 enable lat and core decode in parallel.
+Patch 7~10 Add to support MT21C compressed mode and fix v4l2-compliance fail.
+Patch 11~12 extract h264 driver and add mt8192 frame based driver for h264 decoder.
+----
+Dependents on "Support multi hardware decode using of_platform_populate"[1].
+
+This patches are the second part used to add mt8192 h264 decoder. And the base part is [1].
+
+[1]https://patchwork.linuxtv.org/project/linux-media/cover/20211215061552.8523-1-yunfei.dong@mediatek.com/
 ---
- drivers/net/wireless/intel/ipw2x00/ipw2100.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+changes compared with v1:
+- rewrite commit message for patch 12.
+- rewrite cover-letter message.
+---
+Yunfei Dong (12):
+  media: mtk-vcodec: Add vdec enable/disable hardware helpers
+  media: mtk-vcodec: Using firmware type to separate different firmware
+    architecture
+  media: mtk-vcodec: get capture queue buffer size from scp
+  media: mtk-vcodec: Read max resolution from dec_capability
+  media: mtk-vcodec: Call v4l2_m2m_set_dst_buffered() set capture buffer
+    buffered
+  media: mtk-vcodec: Refactor get and put capture buffer flow
+  media: mtk-vcodec: Refactor supported vdec formats and framesizes
+  media: mtk-vcodec: Add format to support MT21C
+  media: mtk-vcodec: disable vp8 4K capability
+  media: mtk-vcodec: Fix v4l2-compliance fail
+  media: mtk-vcodec: Extract H264 common code
+  media: mtk-vcodec: Add h264 decoder driver for mt8192
 
-diff --git a/drivers/net/wireless/intel/ipw2x00/ipw2100.c b/drivers/net/wireless/intel/ipw2x00/ipw2100.c
-index 2ace2b27ecad..de043edc0521 100644
---- a/drivers/net/wireless/intel/ipw2x00/ipw2100.c
-+++ b/drivers/net/wireless/intel/ipw2x00/ipw2100.c
-@@ -6183,7 +6183,7 @@ static int ipw2100_pci_init_one(struct pci_dev *pci_dev,
- 	if (err) {
- 		printk(KERN_WARNING DRV_NAME
- 		       "Error calling pci_enable_device.\n");
--		return err;
-+		goto fail;
- 	}
- 
- 	priv = libipw_priv(dev);
-@@ -6196,7 +6196,7 @@ static int ipw2100_pci_init_one(struct pci_dev *pci_dev,
- 		printk(KERN_WARNING DRV_NAME
- 		       "Error calling pci_set_dma_mask.\n");
- 		pci_disable_device(pci_dev);
--		return err;
-+		goto fail;
- 	}
- 
- 	err = pci_request_regions(pci_dev, DRV_NAME);
-@@ -6204,7 +6204,7 @@ static int ipw2100_pci_init_one(struct pci_dev *pci_dev,
- 		printk(KERN_WARNING DRV_NAME
- 		       "Error calling pci_request_regions.\n");
- 		pci_disable_device(pci_dev);
--		return err;
-+		goto fail;
- 	}
- 
- 	/* We disable the RETRY_TIMEOUT register (0x41) to keep
+ drivers/media/platform/mtk-vcodec/Makefile    |   2 +
+ .../platform/mtk-vcodec/mtk_vcodec_dec.c      |  49 +-
+ .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  |   5 -
+ .../platform/mtk-vcodec/mtk_vcodec_dec_pm.c   | 168 +++--
+ .../platform/mtk-vcodec/mtk_vcodec_dec_pm.h   |   6 +-
+ .../mtk-vcodec/mtk_vcodec_dec_stateful.c      |  14 +-
+ .../mtk-vcodec/mtk_vcodec_dec_stateless.c     | 246 +++++--
+ .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  27 +-
+ .../media/platform/mtk-vcodec/mtk_vcodec_fw.c |   6 +
+ .../media/platform/mtk-vcodec/mtk_vcodec_fw.h |   1 +
+ .../mtk-vcodec/vdec/vdec_h264_req_common.c    | 303 +++++++++
+ .../mtk-vcodec/vdec/vdec_h264_req_common.h    | 247 +++++++
+ .../mtk-vcodec/vdec/vdec_h264_req_if.c        | 402 +-----------
+ .../mtk-vcodec/vdec/vdec_h264_req_lat_if.c    | 620 ++++++++++++++++++
+ .../media/platform/mtk-vcodec/vdec_drv_if.c   |  28 +-
+ .../media/platform/mtk-vcodec/vdec_drv_if.h   |   1 +
+ .../media/platform/mtk-vcodec/vdec_ipi_msg.h  |  36 +
+ .../platform/mtk-vcodec/vdec_msg_queue.c      |   2 +
+ .../media/platform/mtk-vcodec/vdec_vpu_if.c   |  55 +-
+ .../media/platform/mtk-vcodec/vdec_vpu_if.h   |  15 +
+ include/linux/remoteproc/mtk_scp.h            |   2 +
+ 21 files changed, 1680 insertions(+), 555 deletions(-)
+ create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_common.c
+ create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_common.h
+ create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_lat_if.c
+
 -- 
 2.25.1
 

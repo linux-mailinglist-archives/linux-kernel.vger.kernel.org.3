@@ -2,170 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07FF9480BAD
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 17:58:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7EB480BA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 17:58:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236496AbhL1Q6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 11:58:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236513AbhL1Q6q (ORCPT
+        id S236461AbhL1Q62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 11:58:28 -0500
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:3847 "EHLO
+        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236452AbhL1Q61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 11:58:46 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD9DC06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 08:58:45 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id k21so42685449lfu.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 08:58:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aLS767KJTZfvw5/Pb90qAf4lv/UgXzjgnY65+gUmz1k=;
-        b=h6kLOAeWGL2CluUxbLepQ1y9HSLKlXZKkho5A1VDDVF8paOZSSAvw1dxROD6rkd/ba
-         TpGyRyKjcTEPQMbqCwjOLj8+ug9uyO6U+S3HdAMwDkbb19hMEkUmMZ0Nd0SjMJFF+6qt
-         +glPqyCTX8XHD3nnyqlp35igsacDq+ZiXXeMUOl/8fNegh+cBM5tje8bm4AFKMD4t8tB
-         EDefaYRtlfL8+fgied+f4uvIkkAlOStidiIJqerM9aEtUz2O17lVFf9uqy8zNsgOSgPR
-         TnEMpJIaXxGzN7NQZAgt0ZA6HNd3oIY2vwbralUqxBrlpJSUqY3OTdhs7+RahR5Jz9oB
-         eeqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aLS767KJTZfvw5/Pb90qAf4lv/UgXzjgnY65+gUmz1k=;
-        b=C+U4KdN6QHvBXSlT1we9VOQ25OeFIBwkgyW4FneeHLcWyEl3fSh8vbbcar0276MxpL
-         5qjyIHbCLLLLjtBIYBcKOXnFETrm93IreriHMx5OJ5XRWXH2QN7ig0WLVGF7tzsiKwTC
-         UENqA8+FBugfalLiar0IoDClclLgS9oQbC2qa1RUJLn+8wMFarw82+YvluBwDanao5/1
-         BVpEiTES9IyGWpxEhL5nkSkM/yoFabnRpPqX7HwNTekt7lx/uFGazuDB4TT9buJeI+Z4
-         6hRks4bLwXCMMjD5aEgUWflutZxRdlV75Eu0Scjtm1Yf6UFda/cWO0mp6xzLjsTWSkuu
-         Wtzg==
-X-Gm-Message-State: AOAM533Ymixmcgpd2iPge5COBfMkIyUxH7mfb/0RpuDtNzOcY2rSluBE
-        hQCItF8t1A8Wm5Gu+8LPFROFFWMjWdFaohesLCbKsw==
-X-Google-Smtp-Source: ABdhPJwyZ9JvkIK3ExHySh5L90wxtJYKduqCDHyqNMikqWtjWEpQBb5jtvqNjjZwpSDQQ5znW/Iu2simawK1NooQXJc=
-X-Received: by 2002:a05:6512:3d9e:: with SMTP id k30mr20014933lfv.184.1640710722641;
- Tue, 28 Dec 2021 08:58:42 -0800 (PST)
+        Tue, 28 Dec 2021 11:58:27 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3Agmw6+akjfG0tLtdH22WVwfHo5gyQJ0RdPkR7XQ2?=
+ =?us-ascii?q?eYbTBsI5bpzMDm2JMW2yFa/2NNmbyKt5yao6y9RhSscfUndIxQARt+CA2RRqmi?=
+ =?us-ascii?q?+KVXIXDdh+Y0wC6d5CYEho/t63yUjRxRSwNZie0SiyFb/6x/RGQ6YnSHuClUbS?=
+ =?us-ascii?q?eangrLeNZYHxJZSxLyrdRbrFA0YDR7zOl4bsekuWHULOX82Yc3lE8t8pvnChSU?=
+ =?us-ascii?q?MHa41v0iLCRicdj5zcyn1FNZH4WyDrYw3HQGuG4FcbiLwrPIS3Qw4/Xw/stIov?=
+ =?us-ascii?q?NfrfTckQGWL/fO2BiiFIGBu780l4b/HV0i/lgXBYfQR4/ZzGhnc11ydwLsZWvQ?=
+ =?us-ascii?q?AMtFqzKguUUFRdCe817FfQcqOSdfSDv2SCU5wicG5f2+N1lEVssOo8V4OtlKXt?=
+ =?us-ascii?q?P7vEFMHYLYwzrr/i/zru2TsFvi94lIc2tO5kQ0ll71zDfDOgvWtbbSqPG/8JG1?=
+ =?us-ascii?q?Ts5rsRPG+vOIcsfdTdrKh/HZnVnPloRAro9kf2ui325dCdXwHqLpLA6+GiVzxF?=
+ =?us-ascii?q?02aLFNNvTc8aNA8JPkS6womPA4nS8GhQyKtOS03yG/2iqi+uJmjn0MKoWFbul5?=
+ =?us-ascii?q?rtpjUeVy2g7FhIbTx24rOO/h0r4XMhQQ2QR+ywhqoAo+UCrR8W7VBq9yFacswI?=
+ =?us-ascii?q?RQch4Eus08giBx6PYpQGDCQAsTCNbaZoiucsyRBQw21OJls+vDjtq2JWLSHSW+?=
+ =?us-ascii?q?7GI6zyvODQJKnMqYS4CRBECpd75r+kOYrjnJjp4OPfq1ZusQ2i2nWDM/HV4nbg?=
+ =?us-ascii?q?Ny9UFzeO98Eyvvt5lnbCRJiZd2+kddjvNAttFWbOY?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A/ULs8aBoCty/i7vlHemr55DYdb4zR+YMi2TD?=
+ =?us-ascii?q?tnoBLSC9HfbyqynDpp4mPFrP6Qr5O0tQ/OxoWpPhfZq0z/cc3WBSB8bAYOCMgg?=
+ =?us-ascii?q?WVxe9ZgbcKjweQeRHWx6ptkZ1tdKVzE7TLYGRSh8yS2maFL+o=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,242,1635199200"; 
+   d="scan'208";a="12832408"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 17:58:24 +0100
+Date:   Tue, 28 Dec 2021 17:58:24 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Francisco Jerez <currojerez@riseup.net>
+cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
+In-Reply-To: <878rwdse9o.fsf@riseup.net>
+Message-ID: <alpine.DEB.2.22.394.2112281745240.24929@hadrien>
+References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com> <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net> <alpine.DEB.2.22.394.2112172258480.2968@hadrien>
+ <87fsqqu6by.fsf@riseup.net> <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net> <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net> <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net>
+ <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com> <878rwdse9o.fsf@riseup.net>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-References: <20211227133131.134369-1-krzysztof.kozlowski@canonical.com> <20211227133558.135185-3-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211227133558.135185-3-krzysztof.kozlowski@canonical.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 28 Dec 2021 17:58:06 +0100
-Message-ID: <CAPDyKFqJYMkxS01dQCGhtwGtFdf98XnvEJOoeYu9=pnnRUhJhA@mail.gmail.com>
-Subject: Re: [PATCH 09/19] dt-bindings: mmc: synopsys-dw-mshc: integrate
- Altera and Imagination
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-mmc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Dec 2021 at 14:36, Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> The bindings for Altera and Imagination extensions are the same as for
-> the original Synopsys Designware Mobile Storage Host Controller.
-> Integrate them into Synopsys bindings to have dtschema coverage.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+I looked a bit more into why pstate 20 is always using the least energy. I
+have just one thread spinning for 10 seconds, I use a fixed value for the
+pstate, and I measure the energy usage with turbostat. I tried this on a
+2-socket Intel 6130 and a 4-socket Intel 6130.  The experiment runs 40
+times.
 
-Applied for next, thanks!
+There seem to be only two levels of CPU energy usage.  On the 2-socket
+machine the energy usage is around 600J up to pstate 20 and around 1000J
+after that.  On the 4-socket machine it is twice that.
 
-Kind regards
-Uffe
+The change in RAM energy usage is similar, eg around 320J for the 2-socket
+machine up to pstate 20, and around 460J for higher pstates.
 
+On the 6130, pstate 21 is 2.1GHz, which is the nominal frequency of the
+machine.  So it seems that the most efficient thing is to be just below
+that.  The reduced execution time with pstate 20 as compared to pstate 10
+greatly outweighs any small increase in the energy usage due to changing
+the frequency.
 
-> ---
->  .../devicetree/bindings/mmc/img-dw-mshc.txt   | 28 -------------------
->  .../bindings/mmc/socfpga-dw-mshc.txt          | 23 ---------------
->  .../bindings/mmc/synopsys-dw-mshc.yaml        |  5 +++-
->  3 files changed, 4 insertions(+), 52 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mmc/img-dw-mshc.txt
->  delete mode 100644 Documentation/devicetree/bindings/mmc/socfpga-dw-mshc.txt
->
-> diff --git a/Documentation/devicetree/bindings/mmc/img-dw-mshc.txt b/Documentation/devicetree/bindings/mmc/img-dw-mshc.txt
-> deleted file mode 100644
-> index c54e577eea07..000000000000
-> --- a/Documentation/devicetree/bindings/mmc/img-dw-mshc.txt
-> +++ /dev/null
-> @@ -1,28 +0,0 @@
-> -* Imagination specific extensions to the Synopsys Designware Mobile Storage
-> -  Host Controller
-> -
-> -The Synopsys designware mobile storage host controller is used to interface
-> -a SoC with storage medium such as eMMC or SD/MMC cards. This file documents
-> -differences between the core Synopsys dw mshc controller properties described
-> -by synopsys-dw-mshc.txt and the properties used by the Imagination specific
-> -extensions to the Synopsys Designware Mobile Storage Host Controller.
-> -
-> -Required Properties:
-> -
-> -* compatible: should be
-> -       - "img,pistachio-dw-mshc": for Pistachio SoCs
-> -
-> -Example:
-> -
-> -       mmc@18142000 {
-> -               compatible = "img,pistachio-dw-mshc";
-> -               reg = <0x18142000 0x400>;
-> -               interrupts = <GIC_SHARED 39 IRQ_TYPE_LEVEL_HIGH>;
-> -
-> -               clocks = <&system_clk>, <&sdhost_clk>;
-> -               clock-names = "biu", "ciu";
-> -
-> -               fifo-depth = <0x20>;
-> -               bus-width = <4>;
-> -               disable-wp;
-> -       };
-> diff --git a/Documentation/devicetree/bindings/mmc/socfpga-dw-mshc.txt b/Documentation/devicetree/bindings/mmc/socfpga-dw-mshc.txt
-> deleted file mode 100644
-> index 4897bea7e3f8..000000000000
-> --- a/Documentation/devicetree/bindings/mmc/socfpga-dw-mshc.txt
-> +++ /dev/null
-> @@ -1,23 +0,0 @@
-> -* Altera SOCFPGA specific extensions to the Synopsys Designware Mobile
-> -  Storage Host Controller
-> -
-> -The Synopsys designware mobile storage host controller is used to interface
-> -a SoC with storage medium such as eMMC or SD/MMC cards. This file documents
-> -differences between the core Synopsys dw mshc controller properties described
-> -by synopsys-dw-mshc.txt and the properties used by the Altera SOCFPGA specific
-> -extensions to the Synopsys Designware Mobile Storage Host Controller.
-> -
-> -Required Properties:
-> -
-> -* compatible: should be
-> -       - "altr,socfpga-dw-mshc": for Altera's SOCFPGA platform
-> -
-> -Example:
-> -
-> -       mmc: dwmmc0@ff704000 {
-> -               compatible = "altr,socfpga-dw-mshc";
-> -               reg = <0xff704000 0x1000>;
-> -               interrupts = <0 129 4>;
-> -               #address-cells = <1>;
-> -               #size-cells = <0>;
-> -       };
-> diff --git a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
-> index 240abb6f102c..ae6d6fca79e2 100644
-> --- a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
-> @@ -15,7 +15,10 @@ maintainers:
->  # Everything else is described in the common file
->  properties:
->    compatible:
-> -    const: snps,dw-mshc
-> +    enum:
-> +      - altr,socfpga-dw-mshc
-> +      - img,pistachio-dw-mshc
-> +      - snps,dw-mshc
->
->    reg:
->      maxItems: 1
-> --
-> 2.32.0
->
+Perhaps there is something abnormal in how the machines are configured?
+
+julia

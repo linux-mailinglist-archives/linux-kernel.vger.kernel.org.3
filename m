@@ -2,224 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E823F480BE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 18:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A72D4480BED
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 18:13:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236678AbhL1RMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 12:12:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36630 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233056AbhL1RMS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 12:12:18 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98C3C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 09:12:17 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id i3so41261917ybh.11
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 09:12:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=WgqjyI/J3ILOaJ13M0HGU79CiTkoeJiqtgDqGj4/gPU=;
-        b=GfCRjEqSLDxyPzWFddn1Qd6Rq9Lry7K3RD+x2HKInpPEpBhXTMedfmUK44iY0jXoQy
-         SBJNyksPMhdv0MAmI2MZKgLuP9hehAmybpVnY5tZfs+6vyOMW/C0cC37Z7gIMWM2QopS
-         TZGM4lkGXFQwBm+bVwfO7OBvCQ/BOr1FCj8takjqes7EUn+T2Xrm6L8paGamuR8/B6X7
-         lnCSIo79ZDTFkjWnOsQ7srKSFNYQKM/peJefypE6wu+fwmIJIagYa/Eww+wnICQAY3IX
-         JK3KAF36bWEyqO9pspwbCyjpI9gITAT4kLYfd8YGPX7v8AuBBi9iMnkiQpNgm+VOhroN
-         YSTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=WgqjyI/J3ILOaJ13M0HGU79CiTkoeJiqtgDqGj4/gPU=;
-        b=nGhEW/uegUD11xqaiGno2G2AW/APG4zjF6iTXk0bogKHCzRazrFX01Oex8qQgta+GB
-         wjmW5SNWYoVXSp2iKIQ6/vdEjykQsuwmA11Go20XjlCIbmrTFmAvQ1tfucdmanJAg45W
-         Ap8qOnDPEUUU+zgsQ2KemnTX4XyPFjSGFtr03ChewyE9O89jCcbWRfib1dKURcZmQtKR
-         OpazGcA57Ti1gq9ypbT7RMeG/9nOWj1zHoDbBZzj6MIMW1730VCmmOEB3z11ESQoUmeg
-         4DcnK6+LtHGY5vMw7INtvq4R0EtqcFXAMANqqqR/Yzlev5F3Dtss8qSNseNNjoSofn9t
-         XKQw==
-X-Gm-Message-State: AOAM532R/YVJ+AlFtVu3UOcOu9k0+T5qWrdF/wCHp4nLjiiAgTfPwom0
-        WTOvqwOI8GswoX9zbLtPw3cLb9q13Lbn5FibzyyBTA==
-X-Google-Smtp-Source: ABdhPJy8SX4rDSjRpIn6DXWb2AU6MuZPMtJvT3tcZ+ypTeDwhOvbrPOa27qNaw9DjQBGTM5GQkDrMNMUlBdMCpStXaI=
-X-Received: by 2002:a25:d57:: with SMTP id 84mr11909368ybn.684.1640711535629;
- Tue, 28 Dec 2021 09:12:15 -0800 (PST)
+        id S236699AbhL1RM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 12:12:59 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:56040 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233056AbhL1RM6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 12:12:58 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 074D61EC036C;
+        Tue, 28 Dec 2021 18:12:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640711573;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=j59Irj+zUTsu0KOhDxbKX2aummrAw6VOEX6q3YpZiqg=;
+        b=g8+TSrLPCJtjVdfwuFY5E9iiMpD4J0KgXyTNFBUFlHWwU8LN0JdpCj5Z9tcoUpFQ9rtFJO
+        YRzR/7B8kH0OP/Ha6Szkar2EupvbhkfOfcMkotMEwfvozis3CIZbEYeJJMNrd0fgV4p1z5
+        vmy1heYEgzAthQGaM2PL5wa2Ev2OvLo=
+Date:   Tue, 28 Dec 2021 18:12:54 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        rric@kernel.org, ardb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
+Subject: Re: [PATCH v2 1/3] ghes_edac: unify memory error report format with
+ cper
+Message-ID: <YctFli9oMBYTlf7h@zn.tnic>
+References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
+ <20211210134019.28536-2-xueshuai@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20211227151316.558965545@linuxfoundation.org>
-In-Reply-To: <20211227151316.558965545@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 28 Dec 2021 22:42:04 +0530
-Message-ID: <CA+G9fYtSFOqCT00Or6mPr0fuxu8yAiWgpJfn4hJ4iqbcrZ5Btw@mail.gmail.com>
-Subject: Re: [PATCH 4.9 00/19] 4.9.295-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        f.fainelli@gmail.com, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux@roeck-us.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211210134019.28536-2-xueshuai@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Dec 2021 at 20:59, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.9.295 release.
-> There are 19 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 29 Dec 2021 15:13:09 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.9.295-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.9.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Fri, Dec 10, 2021 at 09:40:17PM +0800, Shuai Xue wrote:
+> Subject: Re: [PATCH v2 1/3] ghes_edac: unify memory error report format with
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+"EDAC/ghes: Unify..."
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+is the format we use in the EDAC tree.
 
-## Build
-* kernel: 4.9.295-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.9.y
-* git commit: 73c20036320022109af2aa90d0f199c06f5cabee
-* git describe: v4.9.294-20-g73c200363200
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.2=
-94-20-g73c200363200
+> The changes are to:
+> 
+> - add device info into ghes_edac
+> - change bit_pos to bit_position, col to column, requestorID to
+>   requestor_id, etc in ghes_edac
+> - move requestor_id, responder_id, target_id and chip_id into memory error
+>   location in ghes_edac
+> - add "DIMM location: not present." for DIMM location in ghes_edac
+> - remove the 'space' delimiter after the colon in ghes_edac and cper
 
-## No Test Regressions (compared to v4.9.294)
+This commit message is useless: it should not talk about what your patch
+does - that should hopefully be visible in the diff itself. Rather, it
+should talk about *why* you're doing what you're doing.
 
-## No Test Fixes (compared to v4.9.294)
+Also, your patch does a bunch of things at once.
 
-## Test result summary
-total: 75882, pass: 60437, fail: 509, skip: 12713, xfail: 2223
+From: Documentation/process/submitting-patches.rst
 
-## Build Summary
-* arm: 254 total, 226 passed, 28 failed
-* arm64: 32 total, 32 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 31 total, 31 passed, 0 failed
+"Solve only one problem per patch.  If your description starts to get
+long, that's a sign that you probably need to split up your patch.
+See :ref:`split_changes`."
 
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* ssuite
-* v4l2-compliance
+You should have a look at that file.
 
---
-Linaro LKFT
-https://lkft.linaro.org
+Also, avoid having "This patch" or "This commit" in the commit message.
+It is tautologically useless.
+
+Also, do
+
+$ git grep 'This patch' Documentation/process
+
+for more details.
+
+> The original EDAC and cper error log are as follows (all Validation Bits
+> are enabled):
+> 
+> [31940.060454] EDAC MC0: 1 CE Single-symbol ChipKill ECC on unknown memory (node:0 card:0 module:0 rank:0 bank:257 bank_group:1 bank_address:1 row:75492 col:8 bit_pos:0 DIMM DMI handle: 0x0000 chipID: 0 page:0x93724c offset:0x20 grain:1 syndrome:0x0 - APEI location: node:0 card:0 module:0 rank:0 bank:257 bank_group:1 bank_address:1 row:75492 col:8 bit_pos:0 DIMM DMI handle: 0x0000 chipID: 0 status(0x0000000000000000): reserved requestorID: 0x0000000000000000 responderID: 0x0000000000000000 targetID: 0x0000000000000000)
+> [31940.060459] {3}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 2
+> [31940.060460] {3}[Hardware Error]: It has been corrected by h/w and requires no further action
+> [31940.060462] {3}[Hardware Error]: event severity: corrected
+> [31940.060463] {3}[Hardware Error]:  Error 0, type: corrected
+> [31940.060464] {3}[Hardware Error]:   section_type: memory error
+> [31940.060465] {3}[Hardware Error]:   error_status: 0x0000000000000000
+> [31940.060466] {3}[Hardware Error]:   physical_address: 0x000000093724c020
+> [31940.060466] {3}[Hardware Error]:   physical_address_mask: 0x0000000000000000
+> [31940.060469] {3}[Hardware Error]:   node: 0 card: 0 module: 0 rank: 0 bank: 257 bank_group: 1 bank_address: 1 device: 0 row: 75492 column: 8 bit_position: 0 requestor_id: 0x0000000000000000 responder_id: 0x0000000000000000
+> [31940.060470] {3}[Hardware Error]:   error_type: 4, single-symbol chipkill ECC
+> [31940.060471] {3}[Hardware Error]:   DIMM location: not present. DMI handle: 0x0000
+> 
+> Now, the EDAC and cper error log are properly reporting the error as
+> follows (all Validation Bits are enabled):
+> 
+> [ 117.973657] EDAC MC0: 1 CE Single-symbol ChipKill ECC on 0x0000
+
+What does "ECC on 0x0000" mean?
+
+> (node:0 card:0 module:0 rank:0 bank:1026 bank_group:4
+> bank_address:2 device:0 row:6749 column:8 bit_position:0
+
+> requestor_id:0x0000000000000000
+> responder_id:0x0000000000000000
+> target_id:0x0000000000000000
+
+those look useless to me too. Probably invalid/unpopulated by BIOS...
+
+> chip_id:0 DIMM location:not present. DIMM
+> DMI handle:0x0000 page:0x8d2ef4 offset:0x20 grain:1 syndrome:0x0 -
+> APEI location: node:0 card:0 module:0 rank:0 bank:1026 bank_group:4
+> bank_address:2 device:0 row:6749 column:8 bit_position:0
+> requestor_id:0x0000000000000000 responder_id:0x0000000000000000
+> target_id:0x0000000000000000 chip_id:0 DIMM location:not present. DIMM
+> DMI handle:0x0000 status(0x0000000000000000):reserved)
+
+Sorry but I fail to see how this changed error record is an improvement.
+
+> [  117.973663] {2}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 2
+> [  117.973664] {2}[Hardware Error]: It has been corrected by h/w and requires no further action
+> [  117.973665] {2}[Hardware Error]: event severity: corrected
+> [  117.973666] {2}[Hardware Error]:  Error 0, type: corrected
+> [  117.973667] {2}[Hardware Error]:   section_type: memory error
+> [  117.973668] {2}[Hardware Error]:   error_status: 0x0000000000000000
+> [  117.973669] {2}[Hardware Error]:   physical_address: 0x00000008d2ef4020
+> [  117.973670] {2}[Hardware Error]:   physical_address_mask: 0x0000000000000000
+> [  117.973672] {2}[Hardware Error]:   node:0 card:0 module:0 rank:0 bank:1026 bank_group:4 bank_address:2 device:0 row:6749 column:8 bit_position:0 requestor_id:0x0000000000000000 responder_id:0x0000000000000000 target_id:0x0000000000000000 chip_id:0
+> [  117.973673] {2}[Hardware Error]:   error_type: 4, single-symbol chipkill ECC
+> [  117.973674] {2}[Hardware Error]:   DIMM location: not present. DMI handle:0x0000
+> 
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> ---
+>  drivers/edac/ghes_edac.c    | 35 +++++++++++++++++++----------------
+>  drivers/firmware/efi/cper.c | 34 +++++++++++++++++-----------------
+>  2 files changed, 36 insertions(+), 33 deletions(-)
+> 
+> diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+> index 6d1ddecbf0da..526a28cbb19b 100644
+> --- a/drivers/edac/ghes_edac.c
+> +++ b/drivers/edac/ghes_edac.c
+> @@ -378,6 +378,8 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
+>  	if (mem_err->validation_bits & CPER_MEM_VALID_BANK_ADDRESS)
+>  		p += sprintf(p, "bank_address:%d ",
+>  			     mem_err->bank & CPER_MEM_BANK_ADDRESS_MASK);
+> +	if (mem_err->validation_bits & CPER_MEM_VALID_DEVICE)
+> +		p += sprintf(p, "device:%d ", mem_err->device);
+>  	if (mem_err->validation_bits & (CPER_MEM_VALID_ROW | CPER_MEM_VALID_ROW_EXT)) {
+>  		u32 row = mem_err->row;
+>  
+> @@ -385,9 +387,21 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
+>  		p += sprintf(p, "row:%d ", row);
+>  	}
+>  	if (mem_err->validation_bits & CPER_MEM_VALID_COLUMN)
+> -		p += sprintf(p, "col:%d ", mem_err->column);
+> +		p += sprintf(p, "column:%d ", mem_err->column);
+>  	if (mem_err->validation_bits & CPER_MEM_VALID_BIT_POSITION)
+> -		p += sprintf(p, "bit_pos:%d ", mem_err->bit_pos);
+> +		p += sprintf(p, "bit_position:%d ", mem_err->bit_pos);
+
+What for?
+
+> +	if (mem_err->validation_bits & CPER_MEM_VALID_REQUESTOR_ID)
+> +		p += sprintf(p, "requestor_id:0x%016llx ",
+> +			     (long long)mem_err->requestor_id);
+> +	if (mem_err->validation_bits & CPER_MEM_VALID_RESPONDER_ID)
+> +		p += sprintf(p, "responder_id:0x%016llx ",
+> +			     (long long)mem_err->responder_id);
+					^^^^^^^^^^^^^^^^^^^^^^
+
+> +	if (mem_err->validation_bits & CPER_MEM_VALID_TARGET_ID)
+> +		p += sprintf(p, "target_id:0x%016llx ",
+> +			     (long long)mem_err->responder_id);
+					^^^^^^^^^^^^^^^^^^^^^^
+
+mem_err->responder_id for both responder and target?!
+
+> +	if (mem_err->validation_bits & CPER_MEM_VALID_CHIP_ID)
+> +		p += sprintf(p, "chip_id:%d ",
+> +			     mem_err->extended >> CPER_MEM_CHIP_ID_SHIFT);
+
+I don't know if some dumb BIOS simply sets those valid bits regardless
+of whether those fields are populated or not... It looks like it...
+
+Right, so first this needs to explain *why* you're doing what you're
+doing. And then with each reason why, you should do a patch, one by one,
+explaining the rationale.
+
+/me goes and looks at the next patches.
+
+Aha, and you add all that crap here just to remove it in patch 2. But
+this is all useless churn.
+
+If you want to use cper_mem_err_location(), why don't you simply use it
+directly?
+
+And so on and so on...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,105 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B431E480B3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 17:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C8D480B3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 17:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235945AbhL1QUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 11:20:17 -0500
-Received: from mout.gmx.net ([212.227.15.15]:41431 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235803AbhL1QUJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 11:20:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1640708389;
-        bh=kPS5EfnGgwXkGrSWtnVSZACxfMp0WTeu7Ps3qWfybCs=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=KjO8J3gyn85/IPnMHQHgBXcgzeIH7+dhbTvo9UQ/PcMhDrNv6azFlgnXTBJ5prYGE
-         +Y2y+30bKRUx3FjXpi9aDuS64q9qAQ+qD9FwTb33V1d9kYI4sRQChXpWUaLupM73NI
-         d2gHOtMVFer7j5qZPAY0U3aX/nF3mKmN6+hFCD70=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1M7Jza-1n5WSf0DC0-007oiM; Tue, 28 Dec 2021 17:19:49 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     pali@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
-        linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] Documentation: ABI: Add ABI file for legacy /proc/i8k interface
-Date:   Tue, 28 Dec 2021 17:19:24 +0100
-Message-Id: <20211228161924.26167-4-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211228161924.26167-1-W_Armin@gmx.de>
-References: <20211228161924.26167-1-W_Armin@gmx.de>
+        id S235858AbhL1QVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 11:21:11 -0500
+Received: from polaris.svanheule.net ([84.16.241.116]:33614 "EHLO
+        polaris.svanheule.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233363AbhL1QVJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 11:21:09 -0500
+Received: from [IPv6:2a02:a03f:eafe:c901:b7e1:d25f:71b8:19e7] (unknown [IPv6:2a02:a03f:eafe:c901:b7e1:d25f:71b8:19e7])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 4CE4528904D;
+        Tue, 28 Dec 2021 17:21:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1640708468;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vaiKPsvgL29Gfgz/PTuixbM+UnphhcnKiyaBMMq0bz0=;
+        b=O6MO9m3Y0AGGSX4DaNMj0YX+ulzqJEq+pZt+KzRTBMfbzS7DHIdzWHlprCiEx1yOpX+HUM
+        FgW40vPwSNkqjFjj2gRwj39PcJa+szLSaLCeDhGdkXdsQSh0EvjJONAivT5yHBJRMezyW0
+        4uxj1syUETJutAKCD1tWJO1XMU+x44eGbz5mFSBC6Vy73/Xe1YPdD97Cl5R20FMpbe3lXW
+        wM2ex4TAHPm5U4X6kbRyX451+tkbVmtmxD/9uXytklohley64A2vmbPP3vMi3pGuVy4sT0
+        D0io3Z4u5Ibl5nSGue96s0Iot8Cyqw1gT4jB70CmfHzCaj+nj1yX9pLqns5j9Q==
+Message-ID: <9c15877604b5fc39d0d1fe23f59afeb78f6f63dd.camel@svanheule.net>
+Subject: Re: [RFC PATCH v2 2/5] irqchip/realtek-rtl: fix off-by-one in
+ routing
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Bert Vermeulen <bert@biot.com>,
+        John Crispin <john@phrozen.org>, linux-kernel@vger.kernel.org
+Date:   Tue, 28 Dec 2021 17:21:06 +0100
+In-Reply-To: <87k0fpyozt.wl-maz@kernel.org>
+References: <cover.1640548009.git.sander@svanheule.net>
+         <2235a7748b8f7689a96b1e0f91461e36a946a4ef.1640548009.git.sander@svanheule.net>
+         <87tueuz732.wl-maz@kernel.org>
+         <48164a669fee54e2dc58cdbbde25c600d88d93f9.camel@svanheule.net>
+         <87k0fpyozt.wl-maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:f9Z2/X5hS/8XTReAsPXTXFV03fzmOEo5uZS/2z9Br+JK5/WlNOP
- GAdysDz8LRXj1qpdbqIPzDeFgXydkK01U+xlLPjq7BSqqWSznTfocX7BJ4rsL3vpal09gnV
- Ph+pgxJb31TxeoB5e7IOSJMFONq0SfrcSFPDAf3dwgNvuoBAzaPn6P+NR/gCrwH7x0f+WPt
- taqgrjc78NGXD7JsbTHrA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:KUoe4dz13rE=:z+COSuDiB91j4aMNysrgms
- MMVWUoGnTNx8loWGd1YGMk1wGHrLPtvlsSe9i9IIqBBxa7RcpyJlIr11rUIjq3jevfBiKcEpf
- JJJ/W4yul7LbD2Xw4pbdffTq52tz35CYAHaJJoxuNaeCu7T9Oe4YAoTYNsMZC0cX+vo+CFoUV
- qG99lCDjP/QGDHDwEsbahJQr89WJtHiZPtPSeQKIfbQZPabMogsnWlxRKxFppVW7XppyCjcJc
- MB+W9XuNv46INsdB5eJ6kVU8j7SLl/vVzbJPM8m2Ga00M26n9hoswPDInqleQhgIsDK1+g2Xp
- fcNFoEklPddaJ/5EMzFZ0Ef8+weXpO2DkgPkYho9RFp3ao/o9ndH1W2U6zFsMsZLi67f4L5BX
- W2omHzKi0bMFoRIELcKmvVEXOJq7oWPs6v4AbjmrZ1ThxyJHONOpYcRikuIdDYwukrVunypxt
- 7wsTUpwQ0G+AHU+vNV8zJz2JpVsRQsd7GANqZVPC93Iw9MsE0H06K0PrIZZXKJxVdoxIjZSIS
- 9ubFGFywP7ZhQI9YxWpQsmQR77lio5YLX3ixXzWjBR13hJ7HVcCpKGiD2rLv1FiYdr+wn9NTz
- c4ZfHk6jeA1GKmRp5fpa0oKUE4rmKKiCYXYv+1N8dZn4G/ke5fONebyu8VJq99YaDnqABZTnC
- ne7u+34/yNSYTje7DSz5W+l40cPeKb0Uxa1Eg00Fse66vUPrDgYO0k5GhknpSpUxWaNUY19o9
- zri98bn1lrKyQ5uiJ0xX2CKz6YE0n06kJGQH8FlbpYymUgOw8fM0cuaDMaaV0KBW6YgP8mE8z
- v9s7EpVk1Txe/Epom0CiYsyOWsq3UOmv5d4QYnw8MJ0PGoVGLecXgJ5MAA+15j9ZMOaF2CSfB
- HbFuHcyM01TcLecxz2OJQBoHiKH87FXw+rPAzXJdsjObuMnX9vC4jdrPWWhBvErWK1B5OxPQq
- D/FRYAbX2ldUqG8nE605uuFj8C4slB8oCzdridq2RbNkKMyaXShCQe7qXGA1kQHw8fem01F4/
- xryLVYdn+bG5OWyP6J1ayGe/+Y5zoUT5gHIk6h3+gwRBLq3L+PswrXUWTSJ6JqnwApukrW5Rm
- 1AQbiIFuSE+/IA=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add ABI file for informing remaining users of the
-deprecation of the legacy /proc/i8k interface.
+On Tue, 2021-12-28 at 10:59 +0000, Marc Zyngier wrote:
+> On Tue, 28 Dec 2021 10:13:26 +0000,
+> Sander Vanheule <sander@svanheule.net> wrote:
+> > 
+> > Hi Marc,
+> > 
+> > On Mon, 2021-12-27 at 10:16 +0000, Marc Zyngier wrote:
+> > > On Sun, 26 Dec 2021 19:59:25 +0000,
+> > > Sander Vanheule <sander@svanheule.net> wrote:
+> > > > 
+> > > > There is an offset between routing values (1..6) and the connected MIPS
+> > > > CPU interrupts (2..7), but no distinction was made between these two
+> > > > values.
+> > > > 
+> > > > This issue was previously hidden during testing, because an interrupt
+> > > > mapping was used where for each required interrupt another (unused)
+> > > > routing was configured, with an offset of +1.
+> > > 
+> > > Where does this 'other routing' come from?
+> > 
+> > When I reported the interrupt-map issue with this binding/driver, I
+> > tried to reduce the mapping/routing to something as small as
+> > possible, but I couldn't get away with anything less than the
+> > following:
+> > 
+> >         interrupt-map =
+> >                 <31 &cpuintc 2>, /* UART0 */
+> >                 <20 &cpuintc 3>, /* SWCORE */
+> >                 <19 &cpuintc 4>, /* WDT IP1 */
+> >                 <18 &cpuintc 5>; /* WDT IP2 */
+> > 
+> > The UART0 and WDT_IP1 mappings were required. These would cause the
+> > driver to assign chained handlers to <&cpuint 2> and <&cpuint 4>,
+> > and also write values "2" and "4" to the respective routing
+> > registers.
+> > 
+> > The SWCORE mapping was not required for any configured features, but
+> > it was required to get the console to work. This is because a
+> > routing register value of "2", actually causes that interrupt input
+> > to be (electrically) cascaded into to <&cpuintc 3>. But <&cpuintc 3>
+> > would only be assigned a chained handler because of the SWCORE
+> > mapping.
+> > 
+> > By then assigning the same handler to all parent interrupts, and not
+> > caring about which parent interrupt caused the handler to be called,
+> > this ended up actually working.
+> 
+> Urgh... Pure luck, then.
+> 
+> > 
+> > > > 
+> > > > Offset the CPU IRQ numbers by -1 to retrieve the correct routing value.
+> > > > 
+> > > > Fixes: 9f3a0f34b84a ("irqchip: Add support for Realtek RTL838x/RTL839x interrupt
+> > > > controller")
+> > > > Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> > > > ---
+> > > >  drivers/irqchip/irq-realtek-rtl.c | 8 +++++---
+> > > >  1 file changed, 5 insertions(+), 3 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/irqchip/irq-realtek-rtl.c b/drivers/irqchip/irq-realtek-rtl.c
+> > > > index d6788dd93c7b..568614edd88f 100644
+> > > > --- a/drivers/irqchip/irq-realtek-rtl.c
+> > > > +++ b/drivers/irqchip/irq-realtek-rtl.c
+> > > > @@ -95,7 +95,8 @@ static void realtek_irq_dispatch(struct irq_desc *desc)
+> > > >   * SoC interrupts are cascaded to MIPS CPU interrupts according to the
+> > > >   * interrupt-map in the device tree. Each SoC interrupt gets 4 bits for
+> > > >   * the CPU interrupt in an Interrupt Routing Register. Max 32 SoC interrupts
+> > > > - * thus go into 4 IRRs.
+> > > > + * thus go into 4 IRRs. A routing value of '0' means the interrupt is left
+> > > > + * disconnected. Routing values {1..15} connect to output lines {0..14}.
+> > > >   */
+> > > >  static int __init map_interrupts(struct device_node *node, struct irq_domain
+> > > > *domain)
+> > > >  {
+> > > > @@ -134,7 +135,7 @@ static int __init map_interrupts(struct device_node *node,
+> > > > struct
+> > > > irq_domain *do
+> > > >                 of_node_put(cpu_ictl);
+> > > >  
+> > > >                 cpu_int = be32_to_cpup(imap + 2);
+> > > > -               if (cpu_int > 7)
+> > > > +               if (cpu_int > 7 || cpu_int < 2)
+> > > 
+> > > How many output lines do you have? The comment above says something
+> > > about having 15 output lines, but you limit it to 7...
+> > 
+> > The SoCs we are using with this interrupt controller, connect their
+> > output lines to CPU IRQ 2..7. If "interrupt-map" specifies parent HW
+> > IRQ numbers, the driver needs to verify those numbers are valid. If
+> > they are, it can derive the routing register values from that.
+> > 
+> > On the other hand, routing register values have four bits. "0"
+> > appears to disconnect an input interrupt, so that leaves 15
+> > potential interrupt outputs (in theory, we don't have actual
+> > hardware descriptions). Only 6 outputs are used here, but that could
+> > be an implementation detail for these SoCs, rather than a limitation
+> > of the interrupt router.
+> 
+> It would be good to find out if there are more CPU interrupts that can
+> be targeted. My impression is that this is a copy/paste effect from
+> the original BSP, and that nobody actually checked. But maybe that's
+> the wrong impression.
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- Documentation/ABI/obsolete/procfs-i8k | 10 ++++++++++
- MAINTAINERS                           |  1 +
- 2 files changed, 11 insertions(+)
- create mode 100644 Documentation/ABI/obsolete/procfs-i8k
+The BSP doesn't seems to refer to anything but the 6 CPU HW IRQs, so it appears to be a
+standard mti,cpu-interrupt-controller. Those only have 6 HW (2-7) and 2 SW (0-1) IRQs.
 
-diff --git a/Documentation/ABI/obsolete/procfs-i8k b/Documentation/ABI/obs=
-olete/procfs-i8k
-new file mode 100644
-index 000000000000..32df4d5bdd15
-=2D-- /dev/null
-+++ b/Documentation/ABI/obsolete/procfs-i8k
-@@ -0,0 +1,10 @@
-+What:		/proc/i8k
-+Date:		November 2001
-+KernelVersion:	2.4.14
-+Contact:	Pali Roh=C3=A1r <pali@kernel.org>
-+Description:	Legacy interface for getting/setting sensor information like
-+		fan speed, temperature, serial number, hotkey status etc
-+		on Dell Laptops.
-+		Since the driver is now using the standard hwmon sysfs interface,
-+		the procfs interface is deprecated.
-+Users:		https://github.com/vitorafsr/i8kutils
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e7e40563498f..468ee16ee778 100644
-=2D-- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5365,6 +5365,7 @@ F:	drivers/platform/x86/dell/dell-rbtn.*
- DELL LAPTOP SMM DRIVER
- M:	Pali Roh=C3=A1r <pali@kernel.org>
- S:	Maintained
-+F:	Documentation/ABI/obsolete/procfs-i8k
- F:	drivers/hwmon/dell-smm-hwmon.c
- F:	include/uapi/linux/i8k.h
+> > 
+> > > >                         return -EINVAL;
+> > > >  
+> > > >                 if (!(mips_irqs_set & BIT(cpu_int))) {
+> > > > @@ -143,7 +144,8 @@ static int __init map_interrupts(struct device_node *node,
+> > > > struct
+> > > > irq_domain *do
+> > > >                         mips_irqs_set |= BIT(cpu_int);
+> > > >                 }
+> > > >  
+> > > > -               regs[(soc_int * 4) / 32] |= cpu_int << (soc_int * 4) % 32;
+> > > > +               /* Use routing values (1..6) for CPU interrupts (2..7) */
+> > > > +               regs[(soc_int * 4) / 32] |= (cpu_int - 1) << (soc_int * 4) % 32;
+> > > >                 imap += 3;
+> > > >         }
+> > > >  
+> > > 
+> > > What I don't understand is how this worked so far if all mappings were
+> > > off my one. Or the mapping really doesn't matter, because this is all
+> > > under SW control?
+> > 
+> > The reason this worked, was due to a number of issues compensating
+> > for each other, like I tried to explain above.
+> > 
+> > The mapping is indeed arbitrary, and not designed into the
+> > hardware. So it could (should?)  just be put in the driver, instead
+> > of the devicetree.
+> 
+> Indeed. Which is what I was advocating for the first place. What I
+> understand from the HW is that it is able to freely route any input to
+> any output (muxing them as required), and to map each output to any
+> CPU interrupt line.
 
-=2D-
-2.30.2
+Indeed input-to-output is runtime configurable, but output-to-parent is hard-wired AFAICT.
+If the output-to-parent mapping is known, an input-to-parent mapping can be used (i.e.
+"interrupt-map") to select the outputs.
 
+> If my understanding is correct, the only thing you need from the DT is
+> a description of which input an endpoint is targeting (the interrupt
+> specifier), and a list of CPU interrupt lines. Everything else can be
+> decided at runtime.
+
+I think this hardware is similar to 'fsl,imx-intmux' (irq-imx-intmux.c). See also my
+comments on the bindings patch.
+
+
+> Anyway, I'll probably end-up queuing the first two patches for 5.17,
+> and a Cc: to stable. The rest we can discuss ad-nauseam.
+
+Would you like me to submit the first two separately or will you take them as they are
+from this series?
+
+Best,
+Sander

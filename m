@@ -2,48 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5505480789
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 09:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEAEE48073C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 09:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233022AbhL1I7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 03:59:31 -0500
-Received: from out162-62-57-137.mail.qq.com ([162.62.57.137]:36951 "EHLO
-        out162-62-57-137.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229843AbhL1I7b (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 03:59:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1640681967;
-        bh=+689YS5oM8/gTYb5QJQcojo4pLXNJ21HNXCsd40T7Rc=;
-        h=From:To:Cc:Subject:Date;
-        b=KljtKW3mEfYpPaPEF8YGX0p6VZtFEiu0Oj22IfjSHjakj3i6WYgV5WIsaceo069Om
-         amBT/Oly1Ufoj9s2tJn+2MMggJFTaXpv7PhJPzioBdVMHf1N6lN9XiQNw738EqlWAn
-         qPPWCRdusrChhOKjmGmsd8Ye6p+09bwg709mm0/c=
-Received: from localhost.localdomain ([159.226.95.43])
-        by newxmesmtplogicsvrszc9.qq.com (NewEsmtp) with SMTP
-        id ED8116A4; Tue, 28 Dec 2021 16:59:24 +0800
-X-QQ-mid: xmsmtpt1640681964ty2qopx5s
-Message-ID: <tencent_C851C0324431466CBC22D60C5C6AC4A8E808@qq.com>
-X-QQ-XMAILINFO: N0opbxSOYLeWlVkPhlVUM3ptA5o5FhAyD9gUiw/Kkkk7/zd5wVHwOXTs3ttKOX
-         lCQz67LWONT/NzSTJGKrNfLscqRyqdg1oMdBa3H9gYHKyiShdYtUf1tYoCXV7RQnQCzRFLfOYXFd
-         A0ofxdjsW9kZ+GN90Y9abx8q1HBA8x3QWcQfeA50dk1paDb6FlvNf3EWLm3/DtXsYQTHuKc/hBch
-         qQ8MGao13Rw3HAIVHKGDH5vruoABOSyhl7jcZiFWnIjGktoXz1vXbzHMj0ppeTJVmvwptnaDJGbP
-         k2nlId5a4gz1VHAzFH2cYtjE466B7PjnabkdsMMU1Uff4puks9bEGtMqr0WXVbeHEtlnANwPoGIh
-         wUug4Bp6wMcmDqANzEugfb/6mRdotnqyQIkZtE2PeSixCQMQ+MNxOvMk5Y5BkpRxOKiXp2XtpV3+
-         LQipUtBsWITE1ihQAV/CvhqNnWG0FZCleuXrZeYMFmog22aMjtCi1mPo932rN6wEbDtF4xGuJMNO
-         C15+KuYHOMBQbDdFy53JG39ohqHMbjTR2WVvwCbESmG7hza6wFuwgQ220B6UK9J8Ct8/xMrLivqo
-         xrNfoHVK+uhFI22ve9SshIzL/AbaO7e3YPvfafoklTjftaeKRkChWPoWoQ6Krqmdhy+uK7QNIZBw
-         jztsphWfTPnoqRMBaT8davnnlyCsSjIl1kxPWLUCOV1Tnk/K5PyXeIetRzXtPnOIUi/G1vCcEev7
-         dm+K31DZGS2/qVzctYrdTyuH1loFVM+IF6LHGtQ4bN61m3ND8MEq/3+zFz8LDS2VLOJgSXUFEfld
-         bDJHBpjWq8UiZLajI5axX+Ptxtm0Hq1r2jljhZ2Ikl6MhCNZU3GACI4QvY5OoBF0R799Hs714Yog
-         ==
-From:   Peiwei Hu <jlu.hpw@foxmail.com>
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        trivial@kernel.org, Peiwei Hu <jlu.hpw@foxmail.com>
-Subject: [PATCH] hwmon: add free before exiting xgene_hwmon_probe
-Date:   Tue, 28 Dec 2021 16:59:10 +0800
-X-OQ-MSGID: <20211228085910.3293192-1-jlu.hpw@foxmail.com>
+        id S232110AbhL1IFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 03:05:03 -0500
+Received: from mga02.intel.com ([134.134.136.20]:21737 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230489AbhL1IFB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 03:05:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640678701; x=1672214701;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VXX/GSUjwDrw6yMUS3z5rSKLlRpeGlqj+gglNGqtlnI=;
+  b=QMMC7qqI0ZyjW+L36i4vj63y5OlqOL7V0vzmQWeok8OHdVf/P+T/MpXk
+   GOkZk3tYkgs5SMBgsp69EwFvKqHlXsW/INXM3kRn/2JN37mUCr0JpxvtU
+   DPoi88IlH2zNZSgb40h8hWP/LEGESaYrWczenYnLKW4jbYIGM7fMNQrCL
+   gOxXGT0hhNiExlXDMnoFTFn3ZdkwWZSkt7Hs/kByuCZLeg34fbIy7yqT8
+   vBCNg6PwpdbBN69JV5Vo964OqsGE4QmjPEGaIWS8uz0d4uT5d7xYIXMbF
+   AruuIw8LunBn9F8FyAofGlLkIK0frPYPBAGPwcGnQkgRmPEPd7qmlpJ0R
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="228634844"
+X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
+   d="scan'208";a="228634844"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 00:05:01 -0800
+X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
+   d="scan'208";a="686525921"
+Received: from unknown (HELO zq-OptiPlex-7090.bj.intel.com) ([10.238.156.125])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 00:04:59 -0800
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     paulmck@kernel.org, frederic@kernel.org
+Cc:     linux-kernel@vger.kernel.org, qiang1.zhang@intel.com
+Subject: [PATCH] rcu: per-cpu rcuc kthread are created only when rcutree.use_softirq=0
+Date:   Wed, 29 Dec 2021 00:05:10 +0800
+Message-Id: <20211228160510.2893362-1-qiang1.zhang@intel.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -51,31 +46,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-do kfifo_free(&ctx->async_msg_fifo) before error exiting
-instead of returning directly.
+In non-RT kernel, if the RCU_BOOST is enabled, the per-cpu rcuc
+kthread will be created, however under the rcutree.use_softirq=1,
+the RCU core processing only in softirq context, the rcuc kthread
+doesn't do anything, so remove RCU_BOOST interference.
 
-Signed-off-by: Peiwei Hu <jlu.hpw@foxmail.com>
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 ---
- drivers/hwmon/xgene-hwmon.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ kernel/rcu/tree.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
-index 30aae8642069..5cde837bfd09 100644
---- a/drivers/hwmon/xgene-hwmon.c
-+++ b/drivers/hwmon/xgene-hwmon.c
-@@ -659,8 +659,10 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 9b58bae0527a..ed64b4fcb8a0 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -2902,7 +2902,7 @@ static int __init rcu_spawn_core_kthreads(void)
  
- 		acpi_id = acpi_match_device(pdev->dev.driver->acpi_match_table,
- 					    &pdev->dev);
--		if (!acpi_id)
--			return -EINVAL;
-+		if (!acpi_id) {
-+			rc = -EINVAL;
-+			goto out_mbox_free;
-+		}
- 
- 		version = (int)acpi_id->driver_data;
- 
+ 	for_each_possible_cpu(cpu)
+ 		per_cpu(rcu_data.rcu_cpu_has_work, cpu) = 0;
+-	if (!IS_ENABLED(CONFIG_RCU_BOOST) && use_softirq)
++	if (use_softirq)
+ 		return 0;
+ 	WARN_ONCE(smpboot_register_percpu_thread(&rcu_cpu_thread_spec),
+ 		  "%s: Could not start rcuc kthread, OOM is now expected behavior\n", __func__);
 -- 
 2.25.1
 

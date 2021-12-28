@@ -2,169 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74F55480D2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 22:06:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7227A480D2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 22:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237383AbhL1VGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 16:06:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237385AbhL1VGE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 16:06:04 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFF5C06173E;
-        Tue, 28 Dec 2021 13:06:04 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.94.2)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1n2JfV-0004Ju-Vb; Tue, 28 Dec 2021 22:06:02 +0100
-Date:   Tue, 28 Dec 2021 21:05:54 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>, Michael Lee <igvtee@gmail.com>
-Subject: [PATCH v8 3/3] net: ethernet: mtk_eth_soc: implement Clause 45 MDIO
- access
-Message-ID: <Yct8MnI/J9Yqd2Zx@makrotopia.org>
-References: <Ycr5Cna76eg2B0An@shell.armlinux.org.uk>
+        id S237394AbhL1VHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 16:07:12 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:56552 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236284AbhL1VHK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 16:07:10 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DF01B1EC0104;
+        Tue, 28 Dec 2021 22:07:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640725625;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8SSoecSeOBeLEcRndhcE8vKfS9mB7fcaK7jiuRgl3J4=;
+        b=HYnaBOm1sqQuVjw/VDzSpSDDg6Cd0lLkRJnSm8gWzoNFNFc0b/5NqcbklPJiZZsnl7H6AH
+        Wwat+tylgWk8MTkZiWzdsGLK5LnTRVRyu4PmXeoubybXTv1tRGHAQ7zTQgdAOzRv6lNnA9
+        oyIso3w3VRo11H5bKq+keyp8xKYvoZQ=
+Date:   Tue, 28 Dec 2021 22:07:07 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH -next 1/2] x86: Use rdmsrl instead of rdmsr
+Message-ID: <Yct8e5Z4M6YzAdCU@zn.tnic>
+References: <20211210032208.28240-1-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Ycr5Cna76eg2B0An@shell.armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211210032208.28240-1-yang.lee@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement read and write access to IEEE 802.3 Clause 45 Ethernet
-phy registers while making use of new mdiobus_c45_regad and
-mdiobus_c45_devad helpers.
-Improve readability by using bitfield helper macros which makes the
-register definitions in the header file resemble the exact values
-stated in the Reference Manual.
+On Fri, Dec 10, 2021 at 11:22:07AM +0800, Yang Li wrote:
+> From: Li Yang <yang.lee@linux.alibaba.com>
+> 
+> In the current scenario, variable 'hi' set but not used,
+> rdmsrl() does not change the function, but it is more concise.
+> 
+> Eliminate the following clang warnings:
+> arch/x86/kernel/process.c:889:10: warning: variable 'hi' set but not
+> used [-Wunused-but-set-variable]
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Li Yang <yang.lee@linux.alibaba.com>
+> ---
+>  arch/x86/kernel/process.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+> index 5d481038fe0b..b415f30278d1 100644
+> --- a/arch/x86/kernel/process.c
+> +++ b/arch/x86/kernel/process.c
+> @@ -886,7 +886,7 @@ void amd_e400_c1e_apic_setup(void)
+>  
+>  void __init arch_post_acpi_subsys_init(void)
+>  {
+> -	u32 lo, hi;
+> +	u32 lo;
+>  
+>  	if (!boot_cpu_has_bug(X86_BUG_AMD_E400))
+>  		return;
+> @@ -896,7 +896,7 @@ void __init arch_post_acpi_subsys_init(void)
+>  	 * the machine is affected K8_INTP_C1E_ACTIVE_MASK bits are set in
+>  	 * MSR_K8_INT_PENDING_MSG.
+>  	 */
+> -	rdmsr(MSR_K8_INT_PENDING_MSG, lo, hi);
+> +	rdmsrl(MSR_K8_INT_PENDING_MSG, lo);
+>  	if (!(lo & K8_INTP_C1E_ACTIVE_MASK))
+>  		return;
+>  
+> -- 
 
-Tested on the Ubiquiti UniFi 6 LR access point featuring
-MediaTek MT7622BV WiSoC with Aquantia AQR112C.
+I believe you folks have been warned a bunch of times to think first
+before acting upon a warning your silly bot catches.
 
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
-v8: switch to bitfield helper macros, incl. newly introduced ones
-v7: remove unneeded variables and order OR-ed call parameters
-v6: further clean up functions and more cleanly separate patches
-v5: fix wrong variable name in first patch covered by follow-up patch
-v4: clean-up return values and types, split into two commits
-v3: return -1 instead of 0xffff on error in _mtk_mdio_write
-v2: use MII_DEVADDR_C45_SHIFT and MII_REGADDR_C45_MASK to extract
-    device id and register address. Unify read and write functions to
-    have identical types and parameter names where possible as we are
-    anyway already replacing both function bodies.
+Because your "fix" shows that you didn't even look at rdmsrl()'s
+definition and what the second variable width is.
 
- drivers/net/ethernet/mediatek/mtk_eth_soc.c | 52 +++++++++++++++++----
- drivers/net/ethernet/mediatek/mtk_eth_soc.h |  3 ++
- 2 files changed, 46 insertions(+), 9 deletions(-)
+gcc explains it this way:
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index e3d0a617df196..2ce142352616c 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -100,11 +100,28 @@ static int _mtk_mdio_write(struct mtk_eth *eth, u32 phy_addr, u32 phy_reg,
- 	if (mtk_mdio_busy_wait(eth))
- 		return -EBUSY;
- 
--	mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START_C22 | PHY_IAC_CMD_WRITE |
--		PHY_IAC_REG(phy_reg) |
--		PHY_IAC_ADDR(phy_addr) |
--		PHY_IAC_DATA(write_data),
--		MTK_PHY_IAC);
-+	if (phy_reg & MII_ADDR_C45) {
-+		mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START_C45 | PHY_IAC_CMD_C45_ADDR |
-+			PHY_IAC_REG(mdiobus_c45_devad(phy_reg)) |
-+			PHY_IAC_ADDR(phy_addr) |
-+			PHY_IAC_DATA(mdiobus_c45_regad(phy_reg)),
-+			MTK_PHY_IAC);
-+
-+		if (mtk_mdio_busy_wait(eth))
-+			return -EBUSY;
-+
-+		mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START_C45 | PHY_IAC_CMD_WRITE |
-+			PHY_IAC_REG(mdiobus_c45_devad(phy_reg)) |
-+			PHY_IAC_ADDR(phy_addr) |
-+			PHY_IAC_DATA(write_data),
-+			MTK_PHY_IAC);
-+	} else {
-+		mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START_C22 | PHY_IAC_CMD_WRITE |
-+			PHY_IAC_REG(phy_reg) |
-+			PHY_IAC_ADDR(phy_addr) |
-+			PHY_IAC_DATA(write_data),
-+			MTK_PHY_IAC);
-+	}
- 
- 	if (mtk_mdio_busy_wait(eth))
- 		return -EBUSY;
-@@ -117,10 +134,26 @@ static int _mtk_mdio_read(struct mtk_eth *eth, u32 phy_addr, u32 phy_reg)
- 	if (mtk_mdio_busy_wait(eth))
- 		return -EBUSY;
- 
--	mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START_C22 | PHY_IAC_CMD_C22_READ |
--		PHY_IAC_REG(phy_reg) |
--		PHY_IAC_ADDR(phy_addr),
--		MTK_PHY_IAC);
-+	if (phy_reg & MII_ADDR_C45) {
-+		mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START_C45 | PHY_IAC_CMD_C45_ADDR |
-+			PHY_IAC_REG(mdiobus_c45_devad(phy_reg)) |
-+			PHY_IAC_ADDR(phy_addr) |
-+			PHY_IAC_DATA(mdiobus_c45_regad(phy_reg)),
-+			MTK_PHY_IAC);
-+
-+		if (mtk_mdio_busy_wait(eth))
-+			return -EBUSY;
-+
-+		mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START_C45 | PHY_IAC_CMD_C45_READ |
-+			PHY_IAC_REG(mdiobus_c45_devad(phy_reg)) |
-+			PHY_IAC_ADDR(phy_addr),
-+			MTK_PHY_IAC);
-+	} else {
-+		mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START_C22 | PHY_IAC_CMD_C22_READ |
-+			PHY_IAC_REG(phy_reg) |
-+			PHY_IAC_ADDR(phy_addr),
-+			MTK_PHY_IAC);
-+	}
- 
- 	if (mtk_mdio_busy_wait(eth))
- 		return -EBUSY;
-@@ -492,6 +525,7 @@ static int mtk_mdio_init(struct mtk_eth *eth)
- 	eth->mii_bus->name = "mdio";
- 	eth->mii_bus->read = mtk_mdio_read;
- 	eth->mii_bus->write = mtk_mdio_write;
-+	eth->mii_bus->probe_capabilities = MDIOBUS_C22_C45;
- 	eth->mii_bus->priv = eth;
- 	eth->mii_bus->parent = eth->dev;
- 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-index f2d90639d7ed1..c9d42be314b5a 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-@@ -346,9 +346,12 @@
- #define PHY_IAC_ADDR_MASK	GENMASK(24, 20)
- #define PHY_IAC_ADDR(x)		FIELD_PREP(PHY_IAC_ADDR_MASK, (x))
- #define PHY_IAC_CMD_MASK	GENMASK(19, 18)
-+#define PHY_IAC_CMD_C45_ADDR	FIELD_PREP(PHY_IAC_CMD_MASK, 0)
- #define PHY_IAC_CMD_WRITE	FIELD_PREP(PHY_IAC_CMD_MASK, 1)
- #define PHY_IAC_CMD_C22_READ	FIELD_PREP(PHY_IAC_CMD_MASK, 2)
-+#define PHY_IAC_CMD_C45_READ	FIELD_PREP(PHY_IAC_CMD_MASK, 3)
- #define PHY_IAC_START_MASK	GENMASK(17, 16)
-+#define PHY_IAC_START_C45	FIELD_PREP(PHY_IAC_START_MASK, 0)
- #define PHY_IAC_START_C22	FIELD_PREP(PHY_IAC_START_MASK, 1)
- #define PHY_IAC_DATA_MASK	GENMASK(15, 0)
- #define PHY_IAC_DATA(x)		FIELD_PREP(PHY_IAC_DATA_MASK, (x))
+arch/x86/kernel/process.c: In function ‘arch_post_acpi_subsys_init’:
+./arch/x86/include/asm/msr.h:277:11: warning: conversion from ‘long long unsigned int’ to ‘u32’ {aka ‘unsigned int’} may change value [-Wconversion]
+  277 |  ((val) = native_read_msr((msr)))
+      |           ^~~~~~~~~~~~~~~
+arch/x86/kernel/process.c:899:2: note: in expansion of macro ‘rdmsrl’
+  899 |  rdmsrl(MSR_K8_INT_PENDING_MSG, lo);
+      |  ^~~~~~
+
+so I'm ignoring all submissions from you from now on.
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

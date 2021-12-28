@@ -2,245 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F3B480B3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 17:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7596480B4A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 17:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235732AbhL1QVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 11:21:12 -0500
-Received: from polaris.svanheule.net ([84.16.241.116]:33634 "EHLO
-        polaris.svanheule.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235734AbhL1QVL (ORCPT
+        id S235611AbhL1QcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 11:32:08 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:13866 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233260AbhL1QcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 11:21:11 -0500
-Received: from [IPv6:2a02:a03f:eafe:c901:b7e1:d25f:71b8:19e7] (unknown [IPv6:2a02:a03f:eafe:c901:b7e1:d25f:71b8:19e7])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id AD92F28904E;
-        Tue, 28 Dec 2021 17:21:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1640708469;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IGLNztGri+9mG1S6FgJzUGogTHYsNY78pLWclCAM/2A=;
-        b=apgs+1+UOd3qXinvNB11HreTiDBCNhe3R4ZVDN+eId9YY/TJfpUCLxDHDdpyNqm+rx7EGy
-        NUhVH1J/Td+QR2F4Iim04uTC/9Sl4KK2BAfuC6E+fvgOgH1R6AwoRJaetXoqB3sAcMuK9d
-        2P5N9kXIpzqQ67f6JtS6m7qdroaQRxESyo2jbAJPyRosFMXV6/bNSRyn9YsIuvSXtkBrPW
-        4/bSZB27ukZtFsWjQLoCBpmj5XCv/VtsAR9PoKIr2IhHPJUJZD/2bYNXE0hQ6aRv7HxWO8
-        vA1YqqtMOUCXhbdhcewHMRL6fs71p5Yk5JdW+y3ez1qciZElKvLT8gQbhcDvNw==
-Message-ID: <7a02b3af9b68adeba787418eb042cd262ee335b7.camel@svanheule.net>
-Subject: Re: [RFC PATCH v2 4/5] dt-bindings: interrupt-controller:
- realtek,rtl-intc: map output lines
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Birger Koblitz <mail@birger-koblitz.de>,
-        Bert Vermeulen <bert@biot.com>,
-        John Crispin <john@phrozen.org>, linux-kernel@vger.kernel.org
-Date:   Tue, 28 Dec 2021 17:21:08 +0100
-In-Reply-To: <87r19yz47t.wl-maz@kernel.org>
-References: <cover.1640548009.git.sander@svanheule.net>
-         <0a91967d40d486bb8cccd0dcf5a817df11317cf0.1640548009.git.sander@svanheule.net>
-         <87r19yz47t.wl-maz@kernel.org>
+        Tue, 28 Dec 2021 11:32:07 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BSFgBtE031500;
+        Tue, 28 Dec 2021 16:31:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=zKO8gN/AaO+13AvkZHtNTkiwvUjnuScjRHnHOBSxakg=;
+ b=kajm3cg02D+QrYkTd1rFQeszrS70//WnelcdH8mx9bN7eAI+LQoPfPH4TChL3OTieJKC
+ jQha43PoSE/H6Jvogk6VhBYKX5ZxT6193UjtJ0wRteHe8gapBh9FmswOEg0O5D07TDyx
+ 5vulaotDseivrekycCEibTZjta+QGTdkP+sC5cTP4AZcHBFQQt7grdleP6PiDVyZU627
+ oy/FG4WPgg0SIjkmK6G9+qf2Qq2a/fv6GE0K8loGOb1bBmZXx0528FWxIbpKfmwoHHj0
+ stHsV4LzQVNgrsma+5GmFUSkYINVy+Gj+HvvtuViTL179bFpYdBXvMyaQFmgPyFAyKTl cA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d85ew8w7k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Dec 2021 16:31:32 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BSGR9gu014759;
+        Tue, 28 Dec 2021 16:31:32 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d85ew8w6v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Dec 2021 16:31:31 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BSGSU8I007577;
+        Tue, 28 Dec 2021 16:31:30 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3d5tx9gq21-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Dec 2021 16:31:29 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BSGVRLA46793182
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Dec 2021 16:31:27 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 58513A405D;
+        Tue, 28 Dec 2021 16:31:27 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 04861A4040;
+        Tue, 28 Dec 2021 16:31:26 +0000 (GMT)
+Received: from sig-9-145-12-118.uk.ibm.com (unknown [9.145.12.118])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 28 Dec 2021 16:31:25 +0000 (GMT)
+Message-ID: <e6405f7f91fffdefe504b238bb0aebf653561fbb.camel@linux.ibm.com>
+Subject: Re: [RFC 03/32] ACPI: Kconfig: add HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Date:   Tue, 28 Dec 2021 17:31:25 +0100
+In-Reply-To: <CAJZ5v0idJXf0dBctmCVxyp4rWsMp_MvnryibZa8hqvmjtKV5TQ@mail.gmail.com>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+         <20211227164317.4146918-4-schnelle@linux.ibm.com>
+         <CAJZ5v0iBJ8NtQautnWnp_pXMfLy_rxys8j4+ugSTbNBb=wzy6A@mail.gmail.com>
+         <f9f698b44173c6906e49e17aa33a98e12da7f60b.camel@linux.ibm.com>
+         <CAJZ5v0iG=wqVtJULiTFsffMWqihA0Rk+abMzmfTcH+J9d5G+YA@mail.gmail.com>
+         <CAJZ5v0htSMwM5SgSAaS-UB3G=99DC8ytQ5P4BfjDhdAoQ7pFdg@mail.gmail.com>
+         <d1daba9437783ffca746ab7329fe4fbdd04d247f.camel@linux.ibm.com>
+         <CAJZ5v0idJXf0dBctmCVxyp4rWsMp_MvnryibZa8hqvmjtKV5TQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: dIaz2ojdubVtE2rkHIDRqNNbdpc-XHHC
+X-Proofpoint-ORIG-GUID: Z2uY6ABdqmuHrBTq9VCwjgsec3OZVpaL
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-28_08,2021-12-28_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=999 lowpriorityscore=0 phishscore=0 bulkscore=0 clxscore=1015
+ suspectscore=0 spamscore=0 impostorscore=0 mlxscore=0 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112280075
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2021-12-27 at 11:17 +0000, Marc Zyngier wrote:
-> On Sun, 26 Dec 2021 19:59:27 +0000,
-> Sander Vanheule <sander@svanheule.net> wrote:
+On Tue, 2021-12-28 at 16:20 +0100, Rafael J. Wysocki wrote:
+> On Mon, Dec 27, 2021 at 6:43 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+> > On Mon, 2021-12-27 at 18:15 +0100, Rafael J. Wysocki wrote:
+> > > On Mon, Dec 27, 2021 at 6:12 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > > On Mon, Dec 27, 2021 at 6:02 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+> > > > > On Mon, 2021-12-27 at 17:47 +0100, Rafael J. Wysocki wrote:
+> > > > > > On Mon, Dec 27, 2021 at 5:44 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+> > > > > > > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> > > > > > > not being declared. As ACPI always uses I/O port access
+> > > > > > 
+> > > > > > The ARM64 people may not agree with this.
+> > > > > 
+> > > > > Maybe my wording is bad. This is my rewording of what Arnd had in his
+> > > > > original mail: "The ACPI subsystem needs access to I/O ports, so that
+> > > > > also gets a dependency."(
+> > > > > https://lore.kernel.org/lkml/CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com/
+> > > > > ).
+> > > > 
+> > > > And my point is that on ARM64 the ACPI subsystem does not need to
+> > > > access IO ports.
+> > > > 
+> > > > It may not even need to access them on x86, but that depends on the
+> > > > platform firmware in use.
 > > 
-> > Amend the binding to also require a list of parent interrupts, and an
-> > optional mask to specify which parent is mapped to which output.
+> > Well at least it does compile code calling outb() in
+> > drivers/acpi/ec.c:acpi_ec_write_cmd().
+> 
+> That's the EC driver which is not used on arm64 AFAICS and that driver
+> itself can be made depend on HAS_IOPORT.
+
+Ah ok good to know.
+
+Looking further there is also an inb_p() in
+drivers/acpi/processor_idle.c:acpi_idle_bm_check(). That does look x86
+specific though. There are a few more in the same file in
+acpi_idle_do_entry() and acpi_idle_play_dead() they both look like
+alternative mechanisms though interestingly one of the sites checks for
+ACPI_CSTATE_SYSTEMIO while the other doesn't. Also it seems to me that
+processor_idle.c is compiled when ACPI_PROCESSOR_IDLE is set which is
+selected by ACPI_PROCESSOR which gets set for ARM64 as well.
+
+Then there is a few more calls in drivers/acpi/osl.c which currently
+gets compiled on all architectures as well.
+
+I think we could ifdef all of these as it seems there are always
+alternative paths. But I'm not sure if that makes sense if ACPI only
+works on platforms with HAS_IOPORT anyway. From a cursory look it seems
+even the not yet merged LoongArch would set HAS_IOPORT.
+
+What do you think?
+
+> 
+> > Not sure if there is an
+> > alternative path at runtime if there is then we might want to instead
+> > use ifdefs to always use the non I/O port path if HAS_IOPORT is
+> > undefined.
 > > 
-> > Without this information, any driver would have to make an assumption on
-> > which parent interrupt is connected to which output.
-> 
-> Why should an endpoint driver care at all?
-
-Interrupt inputs to interrupt outputs are SW configurable, but outputs to parent
-interrupts are hard-wired and cannot be modified. "interrupt-map" defines an input to
-parent interrupt mapping, so it seems a piece of information is missing. This is currently
-provided as an assumption in the driver ("CPU IRQs (2..7) are connected to outputs
-(1..6)").
-
-Input-to-output is SW configurable, so that can be put in the driver. Output-to-parent is
-hardware configuration, 
-
-
+> > > > If arm64 is going to set HAS_IOPORT, then fine, but is it (and this
+> > > > applies to ia64 too)?
 > > 
-> > Additionally, extend (or add) the relevant descriptions to more clearly
-> > describe the inputs and outputs of this router.
+> > Yes x86, arm64 and ia64 that is all arches that set ACH_SUPPORTS_ACPI
+> > all select HAS_IOPORT too. See patch 02 or the summary in the cover
+> > letter which notes that only s390, nds32, um, h8300, nios2, openrisc,
+> > hexagon, csky, and xtensa do not select it.
+> 
+> If that is the case, there should be no need to add the extra
+> dependency to CONFIG_ACPI.
+> 
+> > > > > > > we depend on HAS_IOPORT unconditionally.
+> > > > > > > 
+> > > > > > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > > > > > > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> > > > > > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > > > > > > ---
+> > > > > > >  drivers/acpi/Kconfig | 1 +
+> > > > > > >  1 file changed, 1 insertion(+)
+> > > > > > > 
+> > > > > > > diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+> > > > > > > index cdbdf68bd98f..b57f15817ede 100644
+> > > > > > > --- a/drivers/acpi/Kconfig
+> > > > > > > +++ b/drivers/acpi/Kconfig
+> > > > > > > @@ -9,6 +9,7 @@ config ARCH_SUPPORTS_ACPI
+> > > > > > >  menuconfig ACPI
+> > > > > > >         bool "ACPI (Advanced Configuration and Power Interface) Support"
+> > > > > > >         depends on ARCH_SUPPORTS_ACPI
+> > > 
+> > > Besides, I'm not sure why ARCH_SUPPORTS_ACPI cannot cover this new dependency.
 > > 
-> > Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> > ---
-> > Since it does not properly describe the hardware, I would still really
-> > rather get rid of "interrupt-map", even though that would mean breaking
-> > ABI for this binding. As we've argued before [1], that is our prefered
-> > solution, and would enable us to not carry more (hacky) code because of
-> > a mistake with the initial submission.
+> > If you prefer to have the dependency there that should work too yes.
 > 
-> Again, this is too late. Broken bindings live forever.
+> I would prefer that.
 > 
-> > 
-> > Vendors don't ship independent DT blobs for devices with this hardware,
-> > so the independent devicetree/kernel upgrades issue is really rather
-> > theoretical here. Realtek isn't driving the development of the bindings
-> > and associated drivers for this platform. They have their SDK and seem
-> > to care very little about proper kernel integration.
-> 
-> Any vendor can do whatever they want. You can do the same thing if you
-> really want to.
-> 
-> > 
-> > Furthermore, there are currently no device descriptions in the kernel
-> > using this binding. There are in OpenWrt, but OpenWrt firmware images
-> > for this platform always contain both the kernel and the appended DTB,
-> > so there's also no breakage to worry about.
-> 
-> That's just one use case. Who knows who is using this stuff in a
-> different context? Nobody can tell.
-> 
-> > 
-> > [1] https://lore.kernel.org/all/9c169aad-3c7b-2ffb-90a2-1ca791a3f411@phrozen.org/
-> > 
-> > Differences with v1:
-> > - Don't drop the "interrupt-map" property
-> > - Add the "realtek,output-valid-mask" property
-> > ---
-> >  .../realtek,rtl-intc.yaml                     | 38 ++++++++++++++++---
-> >  1 file changed, 33 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-
-> > intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-
-> > intc.yaml
-> > index 9e76fff20323..29014673c34e 100644
-> > --- a/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
-> > +++ b/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
-> > @@ -6,6 +6,10 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
-> >  
-> >  title: Realtek RTL SoC interrupt controller devicetree bindings
-> >  
-> > +description:
-> > +  Interrupt router for Realtek MIPS SoCs, allowing up to 32 SoC interrupts to
-> > +  be routed to one of up to 15 parent interrupts, or left disconnected.
-> > +
-> >  maintainers:
-> >    - Birger Koblitz <mail@birger-koblitz.de>
-> >    - Bert Vermeulen <bert@biot.com>
-> > @@ -22,7 +26,11 @@ properties:
-> >      maxItems: 1
-> >  
-> >    interrupts:
-> > -    maxItems: 1
-> > +    minItems: 1
-> > +    maxItems: 15
-> > +    description:
-> > +      List of parent interrupts, in the order that they are connected to this
-> > +      interrupt router's outputs.
-> 
-> Is that to support multiple SoCs? I'd expect a given SoC to have a
-> fixed number of output interrupts.
+> IMO, if ARCH_SUPPORTS_ACPI is set, all of the requisite dependencies
+> should be met.
 
-It is, and they do AFAICT. But all values from 1 to 15 can be written to the routing
-registers, so I wanted this definition to be as broad as possible.
+I personally think it makes sense to have an explicit HAS_IOPORT
+dependency even if it's already selected by all architectures setting
+ARCH_SUPPORTS_ACPI adding it there as a dependency at the very least
+documents its, currently unconditional, compile-time dependency.
 
-The SoCs I'm working with only connect to the six CPU HW interrupts, but I don't know what
-the actual limit of this interrupt hardware is, or if the outputs always connect to the
-MIPS CPU HW interrupts.
-
-> >  
-> >    interrupt-controller: true
-> >  
-> > @@ -30,7 +38,21 @@ properties:
-> >      const: 0
-> >  
-> >    interrupt-map:
-> > -    description: Describes mapping from SoC interrupts to CPU interrupts
-> > +    description:
-> > +      List of <soc_int parent_phandle parent_args ...> tuples, where "soc_int"
-> > +      is the interrupt input line number as provided by this controller.
-> > +      "parent_phandle" and "parent_args" specify which parent interrupt this
-> > +      line should be routed to. Note that interrupt specifiers should be
-> > +      identical to the parents specified in the "interrupts" property.
-> > +
-> > +  realtek,output-valid-mask:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    description:
-> > +      Optional bit mask indicating which outputs are connected to the parent
-> > +      interrupts. The lowest set bit indicates which output line the first
-> > +      interrupt from "interrupts" is connected to, the second lowest set bit
-> > +      for the second interrupt, etc. If not provided, parent interrupts will be
-> > +      assigned sequentially to the outputs.
-> >  
-> >  required:
-> >    - compatible
-> > @@ -39,6 +61,7 @@ required:
-> >    - interrupt-controller
-> >    - "#address-cells"
-> >    - interrupt-map
-> > +  - interrupts
-> > 
-> >  additionalProperties: false
-> >  
-> > @@ -49,9 +72,14 @@ examples:
-> >        #interrupt-cells = <1>;
-> >        interrupt-controller;
-> >        reg = <0x3000 0x20>;
-> > +
-> > +      interrupt-parent = <&cpuintc>;
-> > +      interrupts = <1>, <2>, <5>;
-> > +      realtek,output-valid-mask = <0x13>;
-> 
-> What additional information does this bring? From the description
-> above, this is all SW configurable, so why should this be described in
-> the DT?
-
-The hardware I currently have, has a single contiguous range of outputs hard-wired to
-parent interrupts, starting at the first output.
-
-I wanted to provide maximum flexibility for output connections, which I think should
-support sparse output connections. However, since this would be an optional property, and
-is currently not needed for any hardware, I suppose it could be added later when needed.
-
-Adding "interrupts" as a required property is also a no-go, I assume, since that would
-invalidate currently-valid DT-s.
-
-> > +
-> >        #address-cells = <0>;
-> >        interrupt-map =
-> > -              <31 &cpuintc 2>,
-> > -              <30 &cpuintc 1>,
-> > -              <29 &cpuintc 5>;
-> > +              <31 &cpuintc 2>, /* connect to cpuintc 2 via output 1 */
-> > +              <30 &cpuintc 1>, /* connect to cpuintc 1 via output 0 */
-> > +              <29 &cpuintc 5>; /* connect to cpuintc 5 via output 4 */
-> >      };
-> 
-> My conclusion here is that, as I stated in my initial review of this
-> series, you could completely ignore the 3rd field of the map, and let
-> the driver decide on the mapping without any extra information.
-> 
-> We already have plenty of crossbar-type drivers in the tree that can
-> mux a number of input to a number of outputs and route them
-> accordingly to a set of parent interrupts. None of this requires to be
-> described in DT.
-
-I had another look and "fsl,imx-intmux" looks like what I had in mind.
-
-If I understand correctly, changing "#interrupt-cells" (to add the routing info) and the
-required properties (to add "interrupts"), would require a new set of compatibles, in
-addition to some fall-back behaviour if only the original compatible is provided.
-
-Let me give this another spin, see what I can come up with.
-
-Best,
-Sander

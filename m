@@ -2,259 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CC7480AAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 16:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C911480AB6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 16:11:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234861AbhL1PIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 10:08:13 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:56620 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233240AbhL1PIL (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 10:08:11 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BSECJcm008197;
-        Tue, 28 Dec 2021 15:06:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=kv/9MsxzrAL1HOwlhXTckibLYzdBhACAK/Lo6rhPS2g=;
- b=PEd05NFKBSQTMV+eMuNK5qNKFOQLlVaOGS0uOgw+PkR79Ycv8KvCBupVjjeuhIj+6iJb
- B4MH8Jl/byKU9XowseLvavfqkbEDmBTwi5YSyt9pg6Ss/fcnfnlfhMtsh8vcROBZn0C8
- oxYwtUNOwqfMNCRDsaE41ahvdUk6Oi++JPslOWelyO89X4O2kgqhdwRJvJ1YN/eyjMDi
- KEEFu48kqVxId1kYYRT6Pz2iK0+g9iXiKBY24iESH4osAWFpuPqGqYJA8yz+xDVi8A4v
- P/h3j8r9CMTkzsTl30kkqUJge08IU4ZgCocxxF/Xyg/E4HcMQ7wvAUO7gGDt++kqqgyO wQ== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3d844q101h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Dec 2021 15:06:53 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BSF2Mqm006196;
-        Tue, 28 Dec 2021 15:06:51 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3d5tjjh632-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Dec 2021 15:06:51 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BSF6nFq31130018
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Dec 2021 15:06:49 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D0EE8A404D;
-        Tue, 28 Dec 2021 15:06:48 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C5F37A4040;
-        Tue, 28 Dec 2021 15:06:44 +0000 (GMT)
-Received: from sig-9-145-12-118.uk.ibm.com (unknown [9.145.12.118])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 28 Dec 2021 15:06:44 +0000 (GMT)
-Message-ID: <4b630b7b87bd983291f628c42a1394fc0d2d86bd.camel@linux.ibm.com>
-Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Ian Abbott <abbotti@mev.co.uk>,
-        H Hartley Sweeten <hsweeten@visionengravers.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        Mark Brown <broonie@kernel.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Teddy Wang <teddy.wang@siliconmotion.com>,
-        Forest Bond <forest@alittletooquiet.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, netdev@vger.kernel.org,
-        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-wireless@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
-        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Date:   Tue, 28 Dec 2021 16:06:44 +0100
-In-Reply-To: <20211228135425.0a69168c@coco.lan>
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
-         <20211227164317.4146918-2-schnelle@linux.ibm.com>
-         <YcrJAwsKIxxX18pW@kroah.com> <20211228101435.3a55b983@coco.lan>
-         <b1475f6aecb752a858941f44a957b2183cd68405.camel@linux.ibm.com>
-         <20211228135425.0a69168c@coco.lan>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: aDtjwJ0yJYgJhEo1m1A3tQqPr1E90Ptg
-X-Proofpoint-ORIG-GUID: aDtjwJ0yJYgJhEo1m1A3tQqPr1E90Ptg
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S234956AbhL1PLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 10:11:11 -0500
+Received: from mga03.intel.com ([134.134.136.65]:34951 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233240AbhL1PLK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 10:11:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640704270; x=1672240270;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kJLmrfBtllj1iXpfMziscYsmcUQmauHSa9TjTuMCSs0=;
+  b=l2ORn8gE5J7rF6HIWNTvZmWM0cpMRko2US5tVZnxenKvdnoE51tGDxGZ
+   Ndj5mHgQH/ulXVm1ch+kpjZ2YCAcHEOhxsLorZnXs4cIpJBDEavxPbRhX
+   k0is/rTrRiwwX25MAGQRmrBtszniKFLNk/KXSN97qgqx/1CfEAoEcTfCm
+   XW787kpmcJrcGuj5DXzaut2M7AtC31hDGz2/JXM13uqWlCGqQTdjWNdFm
+   kq1ACblEJvCeVZW6ExTmxKM48Hzl8K6NUOwpsUI6ssKKHEOfcvQ6lsu2q
+   qoxyJ5mwYUobDEnfXOQUKu8xNGVl9o0r1urhDSUKKlgQI45Vi2ukPT87I
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="241330602"
+X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
+   d="scan'208";a="241330602"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 07:11:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
+   d="scan'208";a="686607693"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 28 Dec 2021 07:11:07 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n2E82-0007fi-Th; Tue, 28 Dec 2021 15:11:06 +0000
+Date:   Tue, 28 Dec 2021 23:10:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: drivers/char/tpm/tpm_ibmvtpm.c:366:30: sparse: sparse: incorrect
+ type in argument 1 (different address spaces)
+Message-ID: <202112282355.7mLEOz0w-lkp@intel.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-28_08,2021-12-28_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
- suspectscore=0 impostorscore=0 malwarescore=0 adultscore=0
- priorityscore=1501 lowpriorityscore=0 mlxscore=0 mlxlogscore=999
- bulkscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112280069
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-12-28 at 13:54 +0100, Mauro Carvalho Chehab wrote:
->
----8<---
->   
-> > > > All you really care about is the "legacy" I/O spaces here, this isn't
-> > > > tied to PCI specifically at all, right?
-> > > > 
-> > > > So why not just have a OLD_STYLE_IO config option or something like
-> > > > that, to show that it's the i/o functions we care about here, not PCI at
-> > > > all?
-> > > > 
-> > > > And maybe not call it "old" or "legacy" as time constantly goes forward,
-> > > > just describe it as it is, "DIRECT_IO"?  
-> > > 
-> > > Agreed. HAVE_PCI_DIRECT_IO (or something similar) seems a more appropriate
-> > > name for it.
-> > > 
-> > > Thanks,
-> > > Mauro  
-> > 
-> > Hmm, I might be missing something here but that sounds a lot like the
-> > HAS_IOPORT option added in patch 02.
-> > 
-> > We add both LEGACY_PCI and HAS_IOPORT to differentiate between two
-> > cases. HAS_IOPORT is for PC-style devices that are not on a PCI card
-> > while LEGACY_PCI is for PCI drivers that require port I/O. 
-> 
-> I didn't look at the other patches on this series, but why it is needed
-> to deal with them on a separate way? Won't "PCI" and "HAS_IOPORT" be enough? 
-> 
-> I mean, are there any architecture where HAVE_PCI=y and HAS_IOPORT=y
-> where LEGACY_PCI shall be "n"?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a8ad9a2434dc7967ab285437f443cae633b6fc1c
+commit: 72d67229f522e3331d1eabd9f58d36ae080eb228 slab: clean up function prototypes
+date:   7 weeks ago
+config: powerpc64-randconfig-s032-20211228 (https://download.01.org/0day-ci/archive/20211228/202112282355.7mLEOz0w-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=72d67229f522e3331d1eabd9f58d36ae080eb228
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 72d67229f522e3331d1eabd9f58d36ae080eb228
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/char/tpm/
 
-In the current patch set LEGACY_PCI is not currently selected by
-architectures, though of course it could be if we know that an
-architecture requires it. We should probably also set it in any
-defconfig that has devices depending on it so as not to break these.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Other than that it would be set during kernel configuration if one
-wants/needs support for legacy PCI devices. For testing I ran with
-HAVE_PCI=y, HAS_IOPORT=y and LEGACY_PCI=n on both my local Ryzen 3990X
-based workstation and Raspberry Pi 4 (DT). I guess at the moment it
-would make most sense for special configs such as those tailored for
-vitualization guets but in the end that would be something for
-distributions to decide.
 
-Arnd described the options here:
-https://lore.kernel.org/lkml/CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com/
+sparse warnings: (new ones prefixed by >>)
+   drivers/char/tpm/tpm_ibmvtpm.c:125:30: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/char/tpm/tpm_ibmvtpm.c:126:23: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *rtce_buf @@
+   drivers/char/tpm/tpm_ibmvtpm.c:126:23: sparse:     expected void *
+   drivers/char/tpm/tpm_ibmvtpm.c:126:23: sparse:     got void [noderef] __iomem *rtce_buf
+   drivers/char/tpm/tpm_ibmvtpm.c:229:17: sparse: sparse: cast removes address space '__iomem' of expression
+>> drivers/char/tpm/tpm_ibmvtpm.c:366:30: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *objp @@     got void [noderef] __iomem *rtce_buf @@
+   drivers/char/tpm/tpm_ibmvtpm.c:366:30: sparse:     expected void const *objp
+   drivers/char/tpm/tpm_ibmvtpm.c:366:30: sparse:     got void [noderef] __iomem *rtce_buf
+   drivers/char/tpm/tpm_ibmvtpm.c:525:43: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem *rtce_buf @@     got void * @@
+   drivers/char/tpm/tpm_ibmvtpm.c:525:43: sparse:     expected void [noderef] __iomem *rtce_buf
+   drivers/char/tpm/tpm_ibmvtpm.c:525:43: sparse:     got void *
+   drivers/char/tpm/tpm_ibmvtpm.c:532:52: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void *ptr @@     got void [noderef] __iomem *rtce_buf @@
+   drivers/char/tpm/tpm_ibmvtpm.c:532:52: sparse:     expected void *ptr
+   drivers/char/tpm/tpm_ibmvtpm.c:532:52: sparse:     got void [noderef] __iomem *rtce_buf
+   drivers/char/tpm/tpm_ibmvtpm.c:538:46: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *objp @@     got void [noderef] __iomem *rtce_buf @@
+   drivers/char/tpm/tpm_ibmvtpm.c:538:46: sparse:     expected void const *objp
+   drivers/char/tpm/tpm_ibmvtpm.c:538:46: sparse:     got void [noderef] __iomem *rtce_buf
 
-> 
-> > This
-> > includes pre-PCIe devices as well as PCIe devices which require
-> > features like I/O spaces. The "legacy" naming is comes from the PCIe
-> > spec which in section 2.1.1.2 says "PCI Express supports I/O Space for
-> > compatibility with legacy devices which require their use. Future
-> > revisions of this specification may deprecate the use of I/O Space."
-> 
-> I would still avoid calling it LEGACY_PCI, as this sounds too generic.
-> 
-> I didn't read the PCI/PCIe specs, but I suspect that are a lot more
-> features that were/will be deprecated on PCI specs as time goes by.
-> 
-> So, I would, instead, use something like PCI_LEGACY_IO_SPACE or 
-> HAVE_PCI_LEGACY_IO_SPACE, in order to let it clear what "legacy"
-> means.
+vim +366 drivers/char/tpm/tpm_ibmvtpm.c
 
-Hmm, I'd like to hear Bjorn's opinion on this. Personally I feel like
-LEGACY_PCI is pretty clear since most devices are either pre-PCIe
-devices or a compatibility feature allowing drivers for a pre-PCIe
-device to work with a PCIe device.
+132f7629474424 Ashley Lai             2012-08-22  336  
+132f7629474424 Ashley Lai             2012-08-22  337  /**
+132f7629474424 Ashley Lai             2012-08-22  338   * tpm_ibmvtpm_remove - ibm vtpm remove entry point
+132f7629474424 Ashley Lai             2012-08-22  339   * @vdev:	vio device struct
+132f7629474424 Ashley Lai             2012-08-22  340   *
+93c12f293f8798 Winkler, Tomas         2016-11-23  341   * Return: Always 0.
+132f7629474424 Ashley Lai             2012-08-22  342   */
+386a966f5ce71a Uwe Kleine-König       2021-02-25  343  static void tpm_ibmvtpm_remove(struct vio_dev *vdev)
+132f7629474424 Ashley Lai             2012-08-22  344  {
+9e0d39d8a6a0a8 Christophe Ricard      2016-03-31  345  	struct tpm_chip *chip = dev_get_drvdata(&vdev->dev);
+9e0d39d8a6a0a8 Christophe Ricard      2016-03-31  346  	struct ibmvtpm_dev *ibmvtpm = dev_get_drvdata(&chip->dev);
+132f7629474424 Ashley Lai             2012-08-22  347  	int rc = 0;
+132f7629474424 Ashley Lai             2012-08-22  348  
+afb5abc262e962 Jarkko Sakkinen        2014-12-12  349  	tpm_chip_unregister(chip);
+afb5abc262e962 Jarkko Sakkinen        2014-12-12  350  
+132f7629474424 Ashley Lai             2012-08-22  351  	free_irq(vdev->irq, ibmvtpm);
+132f7629474424 Ashley Lai             2012-08-22  352  
+132f7629474424 Ashley Lai             2012-08-22  353  	do {
+132f7629474424 Ashley Lai             2012-08-22  354  		if (rc)
+132f7629474424 Ashley Lai             2012-08-22  355  			msleep(100);
+132f7629474424 Ashley Lai             2012-08-22  356  		rc = plpar_hcall_norets(H_FREE_CRQ, vdev->unit_address);
+132f7629474424 Ashley Lai             2012-08-22  357  	} while (rc == H_BUSY || H_IS_LONG_BUSY(rc));
+132f7629474424 Ashley Lai             2012-08-22  358  
+132f7629474424 Ashley Lai             2012-08-22  359  	dma_unmap_single(ibmvtpm->dev, ibmvtpm->crq_dma_handle,
+132f7629474424 Ashley Lai             2012-08-22  360  			 CRQ_RES_BUF_SIZE, DMA_BIDIRECTIONAL);
+132f7629474424 Ashley Lai             2012-08-22  361  	free_page((unsigned long)ibmvtpm->crq_queue.crq_addr);
+132f7629474424 Ashley Lai             2012-08-22  362  
+132f7629474424 Ashley Lai             2012-08-22  363  	if (ibmvtpm->rtce_buf) {
+132f7629474424 Ashley Lai             2012-08-22  364  		dma_unmap_single(ibmvtpm->dev, ibmvtpm->rtce_dma_handle,
+132f7629474424 Ashley Lai             2012-08-22  365  				 ibmvtpm->rtce_size, DMA_BIDIRECTIONAL);
+132f7629474424 Ashley Lai             2012-08-22 @366  		kfree(ibmvtpm->rtce_buf);
+132f7629474424 Ashley Lai             2012-08-22  367  	}
+132f7629474424 Ashley Lai             2012-08-22  368  
+132f7629474424 Ashley Lai             2012-08-22  369  	kfree(ibmvtpm);
+31574d321c70f6 Hon Ching \(Vicky\  Lo 2017-03-15  370) 	/* For tpm_ibmvtpm_get_desired_dma */
+31574d321c70f6 Hon Ching \(Vicky\  Lo 2017-03-15  371) 	dev_set_drvdata(&vdev->dev, NULL);
+132f7629474424 Ashley Lai             2012-08-22  372  }
+132f7629474424 Ashley Lai             2012-08-22  373  
 
-> 
-> > These two separate config options allow us to compile without support
-> > for these legacy PCI devices even on a system where inb()/outb() and
-> > friends are required for some PC style devices and for example ACPI.
-> 
-> Hmm... why this patch make SND_BT87X dependent on LEGACY_PCI?
-> 
-> > @@ -172,6 +177,7 @@ config SND_AZT3328
-> >  
-> >  config SND_BT87X
-> >  	tristate "Bt87x Audio Capture"
-> > +	depends on LEGACY_PCI
-> >  	select SND_PCM
-> >  	help
-> >  	  If you want to record audio from TV cards based on
-> 
-> I couldn't find any usage of inb/outb & friends on it:
-> 
-> 	$ grep -E '(inb|outb|inw|outw|inl|outl)\b' ./sound/pci/bt87x.c
-> 
-> It uses, instead, readl/writel:
-> 
-> 	static inline u32 snd_bt87x_readl(struct snd_bt87x *chip, u32 reg)
-> 	{
-> 	        return readl(chip->mmio + reg);
-> 	}
-> 
-> 	static inline void snd_bt87x_writel(struct snd_bt87x *chip, u32 reg, u32 value)
-> 	{
-> 	        writel(value, chip->mmio + reg);
-> 	}
-> 
-> I failed to see what makes it different from VIDEO_BT848 and
-> DVB_BT8XX drivers. They all support exactly the same chipset:
-> Brooktree/Conexant BT8xx. On those devices, depending on the exact
-> model, up to three separate interfaces are provided, each one with
-> its own Kconfig var:
-> 
-> 	- audio I/O (SND_BT87X);
-> 	- video I/O (VIDEO_BT848);
-> 	- MPEG-TS I/O (DVB_BT8XX).
-> 
-> Thanks,
-> Mauro
+:::::: The code at line 366 was first introduced by commit
+:::::: 132f7629474424418a5cdd666796ad3cfa4dc0c5 drivers/char/tpm: Add new device driver to support IBM vTPM
 
-You're right, that makes no sense this doesn't seem to require
-LEGACY_PCI. Maybe this was added by Arnd because it lacks a "depends on
-PCI" which could have caused issues with HAVE_PCI=n rand configs.
+:::::: TO: Ashley Lai <adlai@linux.vnet.ibm.com>
+:::::: CC: Kent Yoder <key@linux.vnet.ibm.com>
 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

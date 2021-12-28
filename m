@@ -2,101 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD6A480D55
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 22:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FEA3480D59
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 22:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234078AbhL1VRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 16:17:30 -0500
-Received: from mga03.intel.com ([134.134.136.65]:30739 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229528AbhL1VR2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 16:17:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640726248; x=1672262248;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kow9FGm/Pl0JbZ8Tse+3zfcjTwFgeAuVwtdnDZCds2Q=;
-  b=lqsX/GssNfMJ6GxjiuSve4X3F7KdmAkHKpedyHkLxSEgc5NBgIT5ygbd
-   P6dVBxOEzLmeZ9NmudDjBT1RyFC2hDZQafaQ4VO0LfMAYqxCcvFEuVFiJ
-   wFsq9aVzoCfhMTd3A5vroaQw7JdpFkHNqnaYWfd70l8oe8hrnAAv/LzMH
-   7MLQTrZMQpR9EnATfTrZWHH6nfsL9PFNQj+WQRiTrGHVuyR/2mMR7rJgL
-   Aiz0QEFi82c3XiEzlQv97hIIUGi8JWMjMZK9G7Xwm0vTGicp4tG7/Ivd7
-   jds6NSnti44HPWf8mTjACIacT+veX/0GNZ6UnRRkx1QZdybkYUtROKEBE
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="241375851"
-X-IronPort-AV: E=Sophos;i="5.88,243,1635231600"; 
-   d="scan'208";a="241375851"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 13:17:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,243,1635231600"; 
-   d="scan'208";a="510286699"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 28 Dec 2021 13:17:26 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n2JqY-00083p-80; Tue, 28 Dec 2021 21:17:26 +0000
-Date:   Wed, 29 Dec 2021 05:17:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        id S234078AbhL1V0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 16:26:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35786 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229823AbhL1V0r (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 16:26:47 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71F4C06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 13:26:46 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id b1so15202828ilj.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 13:26:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=8TvEHADrYpunnbEiMmuvsDShsFF6nO9+iyYquSrp8ho=;
+        b=EiXE4D784kZi6Rby4mfeU23jOF1SO9g+VThI9febJfgb4mPZMs3kiUbre8/3mrwLG8
+         YBuV/Aif1qgfYc8sUXhtKCYfwdV7Re/bVgOk0ZIG/g4Df+vh4zIk8YCtbldgUCgeg6KR
+         bQQtN+H95EgPFbK/e7lodCppUdmRmULsDQhww=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=8TvEHADrYpunnbEiMmuvsDShsFF6nO9+iyYquSrp8ho=;
+        b=mCS9N30NpQ6bF0Z4FX3Su5OLlEmTkMCmccLugz0BHIIraCypJN9qmRDISj/APR/1FZ
+         vjc/dXKOFKl1x4x28P8wOb/zAayIVUNqHPxXemANszIOSNIc+5L//ArR56N4vfdnWbLh
+         ePBPRtO+R0568VpXqBTOpS4OvbKVxQ3nCEO2h3NExR0UIFn8J9xB3TZV2oTEchXx5E9t
+         DDev0ZNx92vo5SiQg9vPPLpChtc4vxwXY1Mil+pzBkNN7Ft+7peIoTjFucxcswSQYYZQ
+         zUJTRl5dG6N6jf9uwFYLDe23GJU7CA+hYKZX83hm2LOEQVaLDj5l+ysA7Z53x4MW1Frd
+         Vsww==
+X-Gm-Message-State: AOAM532fCfJy3fDceO/0vYvazYokRd4zDmCWVVcYePA/Joow1UVRTEx+
+        ncc1iODB7Kz4Mjn0IW98ZoHNpg==
+X-Google-Smtp-Source: ABdhPJyrN92wesVNSdiLKRTG9JmJdL6a7KG51/9qIax+UzL8v9x8SdFCxpkAHF+Rtu86USdskx4XZQ==
+X-Received: by 2002:a92:d091:: with SMTP id h17mr9674349ilh.102.1640726806203;
+        Tue, 28 Dec 2021 13:26:46 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id i12sm5391119ilu.84.2021.12.28.13.26.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Dec 2021 13:26:45 -0800 (PST)
+Subject: Re: [PATCH 5.15 000/128] 5.15.12-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Subject: [andersson:wip/sm8350-next-20211215 37/44]
- drivers/gpu/drm/i915/display/intel_dp.c:4796:85: error: expected ')'
-Message-ID: <202112290511.XYGimJZZ-lkp@intel.com>
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20211227151331.502501367@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <548fc71d-1eec-b350-38d3-b4740c22dbeb@linuxfoundation.org>
+Date:   Tue, 28 Dec 2021 14:26:44 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/andersson/kernel wip/sm8350-next-20211215
-head:   12c44709c1bb0b1aba90680327bcdcf9b93a8d2f
-commit: 1da0d241cb3c3d9deab1fe98a96d3dfab53fb268 [37/44] drm: Add hpd state to drm_connector_oob_hotplug_event()
-config: i386-randconfig-a016-20211228 (https://download.01.org/0day-ci/archive/20211229/202112290511.XYGimJZZ-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7171af744543433ac75b232eb7dfdaef7efd4d7a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/andersson/kernel/commit/1da0d241cb3c3d9deab1fe98a96d3dfab53fb268
-        git remote add andersson https://github.com/andersson/kernel
-        git fetch --no-tags andersson wip/sm8350-next-20211215
-        git checkout 1da0d241cb3c3d9deab1fe98a96d3dfab53fb268
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+On 12/27/21 8:29 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.12 release.
+> There are 128 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 29 Dec 2021 15:13:09 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.12-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Compiled and booted on my test system. No dmesg regressions.
 
-All errors (new ones prefixed by >>):
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
->> drivers/gpu/drm/i915/display/intel_dp.c:4796:85: error: expected ')'
-   static void intel_dp_oob_hotplug_event(struct drm_connector *connector, unsigned in num_lanes)
-                                                                                       ^
-   drivers/gpu/drm/i915/display/intel_dp.c:4796:39: note: to match this '('
-   static void intel_dp_oob_hotplug_event(struct drm_connector *connector, unsigned in num_lanes)
-                                         ^
-   1 error generated.
-
-
-vim +4796 drivers/gpu/drm/i915/display/intel_dp.c
-
-  4795	
-> 4796	static void intel_dp_oob_hotplug_event(struct drm_connector *connector, unsigned in num_lanes)
-  4797	{
-  4798		struct intel_encoder *encoder = intel_attached_encoder(to_intel_connector(connector));
-  4799		struct drm_i915_private *i915 = to_i915(connector->dev);
-  4800	
-  4801		spin_lock_irq(&i915->irq_lock);
-  4802		i915->hotplug.event_bits |= BIT(encoder->hpd_pin);
-  4803		spin_unlock_irq(&i915->irq_lock);
-  4804		queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
-  4805	}
-  4806	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+thanks,
+-- Shuah

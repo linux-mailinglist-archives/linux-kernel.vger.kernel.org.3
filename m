@@ -2,90 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2352E480740
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 09:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D7A480742
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 09:12:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232797AbhL1ILR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 03:11:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
+        id S233369AbhL1IM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 03:12:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbhL1ILQ (ORCPT
+        with ESMTP id S229581AbhL1IM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 03:11:16 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366F3C061574;
-        Tue, 28 Dec 2021 00:11:16 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id i3so37213409ybh.11;
-        Tue, 28 Dec 2021 00:11:16 -0800 (PST)
+        Tue, 28 Dec 2021 03:12:27 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CB7C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 00:12:27 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id w184so31874056ybg.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 00:12:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=s9OnzWfOxtr0nn687lLrh8Ahc8zvomjVWssCtaDeyTw=;
-        b=Lfpu9/BT5AYtS2pXE7LFVLEzluSq2XOJ8RBVaMN0mFulwFbRVaXRwSIeckZEZURsfo
-         1806rAOJbXUz/eHXx5wJtL8ncNkLgytegjTFB4oORAJVcwpyCh62hVZmqPNU5k3hMzes
-         FeRtfy6dMzx27yr6VW09SMcS+uvIcUWkpf7+T3td/E8gNo4EaxtpaSw2gBzbsGUGNtDc
-         F60y3ZDfiMGhcfrV+BqjB3yuALNpEQiWCnmqJNkCG6pKMdePlW2lWmjMGIt1tKhb//zA
-         ATR9SCLiY6hru/OgLa0xU8RlzaHR8Hmv5dFiBhHAKcl5qxtzWHqaDOIerE0MDXE8mamn
-         K7dg==
+         :cc:content-transfer-encoding;
+        bh=tXtzcFyMaHPATlLxLSMta1PDXKmuXlpZVJiyLRTiMpk=;
+        b=MATEnt/jbkP19I5DH70G8wFzOk9QXcO1oiW+miUSssRqZpE83dltIXPCJ9vMEd0G2N
+         Mu4Hwvr83GyFjcmxoU/sj+4d3ID6xemyXRBj2FD23BAU0E0yR/mfosLNKPZa4kYk5Wd8
+         zKCpHtU3ijuUr75arAc1pCSHG9S+puQWGCVT2pO0ec6Np7T5r1lFJ4hYFSajYRH/wyit
+         tD2TadRGtDocFcvj3VvyEhD5rfqU/mSXLDKSYW4qHIiLUlCvFU8Kh3gCQXKhml3XOFk1
+         qrM1MlveozGrJ21ihV75MIxh4dzLJDUQS5UFFQBlqnrbEgxvK63dueu1+V1hD1XzQzJB
+         UtKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s9OnzWfOxtr0nn687lLrh8Ahc8zvomjVWssCtaDeyTw=;
-        b=W9f5wARsaFZuNgxVJct4IjN7GNk+yyMqqSM8dNHfQWRiqdSP5lBka7Bk35q1+cFdbW
-         On9uTHd+KJaa/2SZ9PSnpx3doyYx4F8mkTBoI8QiphWjvUiNsRnFPaL8ntkVYGEJMv2Q
-         cFV3392biODGELxQcU54ZG9RyAdinJ5in1qn+C9rUELgkVFRhubZGI9x3Q8L357GaLXM
-         tD6WYcTGh7p9N3jJaXoXwz+Nq0lu9l6YURWRaGYe+LgY9nOXuOXdTnlQ8pUZp0lw81Gr
-         EWsSOSOHo8hJpdAuvl5pHcD2CmyfaKt/RLJQEvXTifE6AZKnqCpqm7NyVZzd/cfG9mYx
-         SM3Q==
-X-Gm-Message-State: AOAM530o9KmPCXjiYgHm2Y2lY4KUrClWVi0MfBkFJ8bBK/qmtHE+83Iq
-        wxDyy+6NdEZ8ORzhUqGM91rFGAExI81Evu4kxxyG6tdM
-X-Google-Smtp-Source: ABdhPJwZ1fIeb5IyXipxUDoGxzNopK3HD6DBvor7L6/Gpw+boBvFuI5yhjkwo3mId2//GRkVAW0xKRfz5mLPH7yfuYI=
-X-Received: by 2002:a25:2cd0:: with SMTP id s199mr10972416ybs.234.1640679074872;
- Tue, 28 Dec 2021 00:11:14 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=tXtzcFyMaHPATlLxLSMta1PDXKmuXlpZVJiyLRTiMpk=;
+        b=DKj89an+x1XPUk3F7ZoeZdwRxRm7+HKA4i8/7a5WcIGZ2Sur+kOxBK0p1Fak5sLrML
+         vlvLsKTqTOPDZpE6WpaWC5bx42mJFR+PViWYkKBm0b3dS/n0wPYMbgp59X1zVort/lJU
+         bzYCWX9w+eQMBbzpgOEVrrElIhJoy44kz7jtScJgD1OCCTp5xo3v4MJ8oq/Q1dOZk4j1
+         0DbhVkk1b3J1vex8uJjZGhcvmsBjmMwcDqcvzQBga198wccHFFmRLlZSTpBNFUSckm5t
+         cX18KQGpYfi0daUnoHo5DTTO99Gb0/894h4PWFoJdEAKQgMRL43/to82zU/gEJVFIM5q
+         VqWQ==
+X-Gm-Message-State: AOAM532hbmOncrx6+raK8jyeeh0o9vkd1GAyQY1jiGBXZxn+j5orKNOb
+        LaKYZkpM3PnJdK7flxkXJeiEGGuxL5XUxN8wKAigjA==
+X-Google-Smtp-Source: ABdhPJz7m8EZ+QorDO//n4w5Ona6jVHugFGB+rn9uz2ilMqA/H2mrOmWjQuOmziQR4rPSp431cQQrEkG2J9ggYtwCJY=
+X-Received: by 2002:a25:84c3:: with SMTP id x3mr7191644ybm.553.1640679146858;
+ Tue, 28 Dec 2021 00:12:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20211227064839.21405-1-lukas.bulwahn@gmail.com> <CACRpkdbFf3cNk6AKoahGsvY_RU+F0hnM6NWv0vcfjJO6RsQa+g@mail.gmail.com>
-In-Reply-To: <CACRpkdbFf3cNk6AKoahGsvY_RU+F0hnM6NWv0vcfjJO6RsQa+g@mail.gmail.com>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Tue, 28 Dec 2021 09:11:04 +0100
-Message-ID: <CAKXUXMyq-M7Cc-1mN=Xp=Vov9qfE=+vix97kBZWMqEOjL_mjGw@mail.gmail.com>
-Subject: Re: [PATCH] mfd: db8500-prcmu: remove dead code for a non-existing config
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211227151324.694661623@linuxfoundation.org>
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 28 Dec 2021 13:42:15 +0530
+Message-ID: <CA+G9fYvKUeOQ7WCg7xMB2y9DuG5VOFAnAD6+GUsUiKvxVvpyyg@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/76] 5.10.89-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
+        f.fainelli@gmail.com, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux@roeck-us.net
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 1:48 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+On Mon, 27 Dec 2021 at 21:09, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> On Mon, Dec 27, 2021 at 7:50 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+> This is the start of the stable review cycle for the 5.10.89 release.
+> There are 76 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> > The config DBX500_PRCMU_QOS_POWER was never introduced in the kernel
-> > repository. So, the ifdef in  ./include/linux/mfd/dbx500-prcmu.h was never
-> > effective.
-> >
-> > Remove these dead function prototypes.
-> >
-> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> Responses should be made by Wed, 29 Dec 2021 15:13:09 +0000.
+> Anything received after that time might be too late.
 >
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.89-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
 >
-> BTW: Lukas are you using this platform or just general winter cleaning?
+> thanks,
 >
+> greg k-h
 
-I am not using this platform, but just doing some janitorial work with
-the checkkconfigsymbols.py script, which Randy Dunlap has pointed out
-to me. This "general winter cleaning" really started as a "summer
-break clean-up" and just took longer... I am also writing a blog post
-summarizing the results of these whole kernel clean-up activities and
-I will share it with you once it is published.
 
-Lukas
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> Yours,
-> Linus Walleij
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.10.89-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.10.y
+* git commit: 44b3abecd41b48c75aab8337849358703fa5d58d
+* git describe: v5.10.88-77-g44b3abecd41b
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.88-77-g44b3abecd41b
+
+## No Test Regressions (compared to v5.10.88-65-ga809519bc1d9)
+
+## No Test Fixes (compared to v5.10.88-65-ga809519bc1d9)
+
+
+## Test result summary
+total: 98599, pass: 84552, fail: 547, skip: 12501, xfail: 999
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 259 total, 255 passed, 4 failed
+* arm64: 37 total, 37 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 36 total, 36 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 34 total, 30 passed, 4 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 52 total, 46 passed, 6 failed
+* riscv: 24 total, 16 passed, 8 failed
+* s390: 18 total, 18 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 37 total, 37 passed, 0 failed
+
+## Test suites summary
+* build/gcc-11-https://github.com/raspberrypi/linux/raw/rpi-5.10.y/arch/arm=
+/configs
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

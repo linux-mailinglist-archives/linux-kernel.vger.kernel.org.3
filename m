@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CAEB480844
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 11:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07541480846
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 11:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236022AbhL1KMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 05:12:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55946 "EHLO
+        id S233708AbhL1KMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 05:12:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233771AbhL1KLv (ORCPT
+        with ESMTP id S233835AbhL1KLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 05:11:51 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF74FC06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 02:11:50 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id q16so37389616wrg.7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 02:11:50 -0800 (PST)
+        Tue, 28 Dec 2021 05:11:52 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A6CC06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 02:11:51 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id s1so37457961wrg.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 02:11:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NHOLXaWQQuVn3Qf7fYQiZFpLvUeZKWbm7r3R3sqCc7Y=;
-        b=EfNEhmYPDYfRJMzTVmnUk+4T+4YdcsHb6j4U8R1A5SLZ5iZcKWvYVTJrbwjdY0CPBW
-         7Djwf7VOnDTVdF2wfhn+m9PQUG/cKPBYGSwiotAPF+ClRD1d7YhAPsfm9nG2TyQ9odZ7
-         Og2ot7eDSXx9GVd/QTqXCRkjSkbSfF4fC3jAtXUpRAiBLpWGinMWSeqR7eTvPg9DhGFc
-         mB1bG85/gvxBAF5/5ma5UFMASofHiVWf4F4f65cknpje5XuCmg99A86TC6n2Tp7a6EZo
-         p3uwwhs8VtolJ1PfbvAVW90EKYje6my6/2JPM9RYQjM8CNLbsHlTXJZB2lkMVuOeQcTV
-         BTVQ==
+        bh=oY9hSfkqZTFPqAFtoGBpdMUae0krMzwYjwLMqlw8+0I=;
+        b=JHfloE24oleodZ3g+wWzd3v/hSXxLN6jmrsVGqZ/iN4MQYQsax2gGyFoQDuOrFUfyc
+         Ft99f3nus0fTrbAguzYnQvwxtOluL5tSq3Hj+LRYnDQfk/ocIj+AO8z6hQ0KwLNQAtWA
+         v7u38tHMUdHUHj2p8v1BbVBA5jkgsJnJ1tFYGJLfevlvQhkl2D7qi23VLPuXOouqYPaP
+         Hf6LPMQL3kcQ3H/wA60+mrwaE84eIUS7XTZYY/C5SQSuPGM2xDk3PMXDI2rWKApidx9w
+         MwXH47DYQoXWpzqNuN1hXSgw3JYWIGy9LkbMsqrtdTXaoyPx6S+gMvGL+mJra0aW3tyK
+         ZsNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NHOLXaWQQuVn3Qf7fYQiZFpLvUeZKWbm7r3R3sqCc7Y=;
-        b=z1E9mml37MTD5TkGkDBNhBOf6ygBIMpofqs5CoLYrsukibVWIeUZFfsCFfCus3MsVZ
-         kzTBrDiqJ/uaXd+1U+QmB62iXOpBCbOPPvTsC+O0flQVMizBZ1dYaOpdegT49hdvKYJd
-         z0dzxQt4h3a83Z5IOVGjWDT5YxZ58TQsWt28q8y2QjEn0NvwRfleX9jwZomXUJw4iFEm
-         sKsyX4PkfRkWf5yYwSjBx8QY8RrLBp7NPU51YuT3BLWsHmUgO5LcAFXBkgUep0Kk8j79
-         sVwXEk5YT2VXxJyRFwqS7uAHoYVy34/ggUlzV7x9RDkFA2FPzp1KGL3XU9KvcYyhAyD4
-         ITiw==
-X-Gm-Message-State: AOAM530ciN1tq9SakM61P6K4sU/iI8TknLpeDAxq9ohv4kideIR1tj10
-        /9WEVX3f1XulkrBCHrhWXQ0=
-X-Google-Smtp-Source: ABdhPJwZ+lqpBiYIB5ZFvjbQJtjep5ZCDkTFZ4edGi4ROMKQ8uo2QERUWbYH2HHO14o+Axo/hHJ85Q==
-X-Received: by 2002:a5d:69c8:: with SMTP id s8mr15755165wrw.220.1640686309622;
-        Tue, 28 Dec 2021 02:11:49 -0800 (PST)
+        bh=oY9hSfkqZTFPqAFtoGBpdMUae0krMzwYjwLMqlw8+0I=;
+        b=qliI3rt1EaqEy5xQ3wAX3z8fNd48aCNwWPq7838V24mCXp1t6A5EKbmriIxkO3k7zG
+         I/6Ccd1Scqn+fM/afC8hBqQ/eVfkylYKXChf/DJ/N+YHSQa+8lYX4B160AtsiTz3L3Vi
+         F7CWSURM5oDrRSyScoqPfpR1zQcxgHA07II+AzGPX7RsiSJlBuxqY9vo47g7qcAPPWGL
+         JVgEBWaHg1G5I9YzBryBsRt1fzgdTCVBTxahCCTpR3aGKZvkwM7s0Kg7IFEoj2WpxOrT
+         znZblGOeskSQzdIQp2ou87f2Idzch6i+Yxaj+sNn0vv50KVRhQwBc7E0Ls6OWBRXp6R+
+         BH3A==
+X-Gm-Message-State: AOAM530yuj56K4fgHsZWfGZoBWzxNhngdIyzrdXKlVJx1e3d0fUrKtX2
+        DhR993pRimNESmprEUve+Ts5UH3YWwI=
+X-Google-Smtp-Source: ABdhPJzNxtaG7srAogqMjSOtL5UgMh5WTzO8tfE7aTZKkZe08FODYcEuoKfzyHp5COgFsW/IaSs14Q==
+X-Received: by 2002:a05:6000:2a9:: with SMTP id l9mr15786747wry.185.1640686310321;
+        Tue, 28 Dec 2021 02:11:50 -0800 (PST)
 Received: from localhost.localdomain ([2a02:8108:96c0:3b88::6619])
-        by smtp.gmail.com with ESMTPSA id d62sm21160984wmd.3.2021.12.28.02.11.48
+        by smtp.gmail.com with ESMTPSA id d62sm21160984wmd.3.2021.12.28.02.11.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 02:11:49 -0800 (PST)
+        Tue, 28 Dec 2021 02:11:50 -0800 (PST)
 From:   Michael Straube <straube.linux@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 09/10] staging: r8188eu: RSSI_test is always false
-Date:   Tue, 28 Dec 2021 11:11:19 +0100
-Message-Id: <20211228101120.9120-10-straube.linux@gmail.com>
+Subject: [PATCH 10/10] staging: r8188eu: merge _ReadLEDSetting() into ReadAdapterInfo8188EU()
+Date:   Tue, 28 Dec 2021 11:11:20 +0100
+Message-Id: <20211228101120.9120-11-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211228101120.9120-1-straube.linux@gmail.com>
 References: <20211228101120.9120-1-straube.linux@gmail.com>
@@ -65,45 +65,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The field RSSI_test of struct odm_dm_struct is never set. It stays
-at the default value 0. Remove it and remove a related if test that
-is always true.
+Function _ReadLEDSetting() sets only a single variable and the only
+user is ReadAdapterInfo8188EU(). Remove _ReadLEDSetting() and set the
+variable in ReadAdapterInfo8188EU() directly.
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- drivers/staging/r8188eu/hal/odm_HWConfig.c | 6 ++----
- drivers/staging/r8188eu/include/odm.h      | 1 -
- 2 files changed, 2 insertions(+), 5 deletions(-)
+ drivers/staging/r8188eu/hal/usb_halinit.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/hal/odm_HWConfig.c b/drivers/staging/r8188eu/hal/odm_HWConfig.c
-index 9de16383cb2d..7509e3c3f418 100644
---- a/drivers/staging/r8188eu/hal/odm_HWConfig.c
-+++ b/drivers/staging/r8188eu/hal/odm_HWConfig.c
-@@ -358,10 +358,8 @@ void ODM_PhyStatusQuery(struct odm_dm_struct *dm_odm,
- 			struct odm_per_pkt_info *pPktinfo,
- 			struct adapter *adapt)
+diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
+index 9edde72aebb2..b362c622ea8a 100644
+--- a/drivers/staging/r8188eu/hal/usb_halinit.c
++++ b/drivers/staging/r8188eu/hal/usb_halinit.c
+@@ -914,12 +914,6 @@ unsigned int rtl8188eu_inirp_init(struct adapter *Adapter)
+ /*	EEPROM/EFUSE Content Parsing */
+ /*  */
+ /*  */
+-static void _ReadLEDSetting(struct adapter *Adapter, u8 *PROMContent, bool AutoloadFail)
+-{
+-	struct led_priv *pledpriv = &Adapter->ledpriv;
+-
+-	pledpriv->bRegUseLed = true;
+-}
+ 
+ static void Hal_EfuseParseMACAddr_8188EU(struct adapter *adapt, u8 *hwinfo, bool AutoLoadFail)
  {
--	odm_RxPhyStatus92CSeries_Parsing(dm_odm, pPhyInfo, pPhyStatus,
--					 pPktinfo, adapt);
--	if (!dm_odm->RSSI_test)
--		odm_Process_RSSIForDM(dm_odm, pPhyInfo, pPktinfo);
-+	odm_RxPhyStatus92CSeries_Parsing(dm_odm, pPhyInfo, pPhyStatus, pPktinfo, adapt);
-+	odm_Process_RSSIForDM(dm_odm, pPhyInfo, pPktinfo);
+@@ -939,6 +933,7 @@ static void Hal_EfuseParseMACAddr_8188EU(struct adapter *adapt, u8 *hwinfo, bool
+ void ReadAdapterInfo8188EU(struct adapter *Adapter)
+ {
+ 	struct eeprom_priv *eeprom = &Adapter->eeprompriv;
++	struct led_priv *ledpriv = &Adapter->ledpriv;
+ 	u8 eeValue;
+ 
+ 	/*  Read EEPROM size before call any EEPROM function */
+@@ -966,7 +961,7 @@ void ReadAdapterInfo8188EU(struct adapter *Adapter)
+ 	Hal_ReadAntennaDiversity88E(Adapter, eeprom->efuse_eeprom_data, eeprom->bautoload_fail_flag);
+ 	Hal_ReadThermalMeter_88E(Adapter, eeprom->efuse_eeprom_data, eeprom->bautoload_fail_flag);
+ 
+-	_ReadLEDSetting(Adapter, eeprom->efuse_eeprom_data, eeprom->bautoload_fail_flag);
++	ledpriv->bRegUseLed = true;
  }
  
- enum HAL_STATUS ODM_ConfigRFWithHeaderFile(struct odm_dm_struct *dm_odm,
-diff --git a/drivers/staging/r8188eu/include/odm.h b/drivers/staging/r8188eu/include/odm.h
-index a037d7b863fb..c07dbf763903 100644
---- a/drivers/staging/r8188eu/include/odm.h
-+++ b/drivers/staging/r8188eu/include/odm.h
-@@ -468,7 +468,6 @@ struct odm_dm_struct {
- 	struct rtl_ps	DM_PSTable;
- 	struct false_alarm_stats FalseAlmCnt;
- 	struct sw_ant_switch DM_SWAT_Table;
--	bool		RSSI_test;
- 
- 	struct edca_turbo DM_EDCA_Table;
- 
+ static void ResumeTxBeacon(struct adapter *adapt)
 -- 
 2.34.1
 

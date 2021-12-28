@@ -2,110 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBDB3480DA2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 23:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB96B480DA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 23:20:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237469AbhL1WOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 17:14:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
+        id S237500AbhL1WUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 17:20:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbhL1WOq (ORCPT
+        with ESMTP id S234078AbhL1WT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 17:14:46 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D6BC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 14:14:46 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id p14so14513209plf.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 14:14:46 -0800 (PST)
+        Tue, 28 Dec 2021 17:19:59 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D89C06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 14:19:59 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id x15so14520109plg.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 14:19:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4kbldenRRljiKR1Jt8lmO+A9SOM5gsjtEfI6iQUXR9o=;
-        b=MNwTLMoEjto6Tw6TfXVbYxRNk4Y/L11GzPwaCuLWqyWzjZ2pcEiwjFaSREd3CUy2fC
-         MiMYyR8Cfk1wKwmCHbKOnQ+t6IQzl9Sw5a16HNSmWYqEpHHgEPKkuCKouItq6Q1Z1hFc
-         MWTqs9iGTa5rvoxswEX5nU0xHrhOfCFbpvB3rYanRhKMz+DP1PdTiuKuvi2a2YEOySZN
-         6CFhKlk2BnfSTBv/hCv7vLBIZepm6QGteoEDmTMfxwUFRX2DO4G2RWbTWc3RavQ+f0NQ
-         pfTJMLA/uOnVIYf0YqAPnhCgUAusvK7b8nikHrV9n4IDIo1Keq98ObiEwq6iLXgYmejs
-         jbcw==
+        d=pensando.io; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Lf/S2LPQ9iI7bcBTT4neE6R0mg+6glQTGFFuCfpCfPU=;
+        b=H27QTjm7//8xn5TkIeh4DbZhOQBBWPJMp9HmbhnsxgcUzz+QDTgPo5g1YVW2POQEXt
+         7JH1x52wN7F2GPOv0WZxGqsKvO3KhlsZDC8nTS9UwNez14WdJ/VBnMSHf4KRvpqTBY2Z
+         LsGJV+yTGEjBRGlfzNYKE9QE8PGX4SrP5IISidTwx35seExtzdFznI8Rw+NdQTuJJzdP
+         bmX5FqpJhUqYiruuLiDFV1DVhWAhhnkf1fQKq1r1z52pq7G0iFNhzQIRQbT1cX8AErAr
+         I2B8Kvmwk8nA4HNd5zSI77YHvMNse1hmJ5C8XEfu3GZ6onwwsD6/grrGKDZNCEIGCPxe
+         Pfig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4kbldenRRljiKR1Jt8lmO+A9SOM5gsjtEfI6iQUXR9o=;
-        b=zvBe14XQu2sbRD586PNt+VzzV0J0X1mpG79cbjZezYb/3bGogZ/U1QsM1Iy8sntzbk
-         m+mioWuwuFRVgUr58qFpWTQaLQnYgbVo/8zs6mIti2MkEkgbKihxar5Is16u+M6scvT+
-         e2v/ibw5UH37vLbZGJrHcOzSaTz0s3aUduOaXSvLdfKhh/3DvpWgSIk7qMNBsYOgr0tk
-         bBImlIyl8KjEk9HgPBpk8RuQc3bKtyPrCtjVjJNzMC/TKXlTohTj2Xrai6jDxScWp2Qc
-         mcfG8NjWytcLTraMM4Uk1wCvCCaBEax0z9g6zsUrythHr1bVM2y/VTYFyhv8vvMcJjIH
-         Qecg==
-X-Gm-Message-State: AOAM532SxUu2vDIVycbgtJIh6/ZsFdbVn85DlVvfiytpUwk9GIr7EXi4
-        oIxMI01IqfyWgg/Wr8vgy1OT1w==
-X-Google-Smtp-Source: ABdhPJzfJNaMPXkNIFnIwBuKP0GW8ia1wKbbn8Tjarn7+ME8Xqk/IQFh/+e6Aq1yAU5kMGgNptVopg==
-X-Received: by 2002:a17:90a:bc46:: with SMTP id t6mr29119866pjv.78.1640729685623;
-        Tue, 28 Dec 2021 14:14:45 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id a4sm23854157pjw.30.2021.12.28.14.14.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 14:14:45 -0800 (PST)
-Date:   Tue, 28 Dec 2021 22:14:41 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, qemu-devel@nongnu.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com
-Subject: Re: [PATCH v3 kvm/queue 06/16] KVM: Implement fd-based memory using
- MEMFD_OPS interfaces
-Message-ID: <YcuMUemyBXFYyxCC@google.com>
-References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
- <20211223123011.41044-7-chao.p.peng@linux.intel.com>
- <YcTBLpVlETdI8JHi@google.com>
- <e3fe04eb-1a01-bea4-f1ea-cb9ee98ee216@redhat.com>
- <20211224042554.GD44042@chaop.bj.intel.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Lf/S2LPQ9iI7bcBTT4neE6R0mg+6glQTGFFuCfpCfPU=;
+        b=FkXntaGC1/2vr82rVg9AH6ThUaDtCp25Dd/X5alMQgIr1dvOBcwloIlZ/p+EFOk+MD
+         sBzCuMJZ1vfvu6rzxxkTxVnX+D+3mF2vbatEqZauvE1wF6kmIq+1woo9tHLhRzBt3thb
+         /JXj/nT7bRsKLN4NB3KRmD1oPsSwSoOKH/WGZg1uJG0kLmHditpa+0fUzdwi2hlJkJrt
+         4sb6IhH48pY9rMvqw6ooQFsTsYwGH0QOQEyr9lEqzgoOzgUJG2Km47AgX7Vi9Xr3IOl4
+         PCJhQBJgEKzviwedBgFGHBf9Xq7tUXy+OUHno0jU4p1fqZw4WQ/an3EXYK5itba1aU4U
+         lrhA==
+X-Gm-Message-State: AOAM530CibndJ026Fw6JW4bMcRmj4e5ctyK6V8W+5P8GWyNEDQ9CZv0r
+        6kHDcinCShr//HG8Cfvn7BlZEA==
+X-Google-Smtp-Source: ABdhPJxbJ0Ghxhf4j2KXJuAZGS3rqzQ0STdUeiLcJPn08C8tH2xoq1KqTCRw10/cERp7eAdhkUvK+w==
+X-Received: by 2002:a17:90b:4b0e:: with SMTP id lx14mr28606702pjb.132.1640729998902;
+        Tue, 28 Dec 2021 14:19:58 -0800 (PST)
+Received: from [192.168.0.2] ([50.53.47.17])
+        by smtp.gmail.com with ESMTPSA id u33sm23597804pfg.4.2021.12.28.14.19.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Dec 2021 14:19:58 -0800 (PST)
+Message-ID: <ffe00c2d-f2a6-1d64-e6d4-ba3063856879@pensando.io>
+Date:   Tue, 28 Dec 2021 14:21:32 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211224042554.GD44042@chaop.bj.intel.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH] ionic: Initialize the 'lif->dbid_inuse' bitmap
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        drivers@pensando.io, davem@davemloft.net, kuba@kernel.org,
+        allenbh@pensando.io
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <6a478eae0b5e6c63774e1f0ddb1a3f8c38fa8ade.1640527506.git.christophe.jaillet@wanadoo.fr>
+From:   Shannon Nelson <snelson@pensando.io>
+In-Reply-To: <6a478eae0b5e6c63774e1f0ddb1a3f8c38fa8ade.1640527506.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 24, 2021, Chao Peng wrote:
-> On Fri, Dec 24, 2021 at 12:09:47AM +0100, Paolo Bonzini wrote:
-> > On 12/23/21 19:34, Sean Christopherson wrote:
-> > > >   	select HAVE_KVM_PM_NOTIFIER if PM
-> > > > +	select MEMFD_OPS
-> > > MEMFD_OPS is a weird Kconfig name given that it's not just memfd() that can
-> > > implement the ops.
-> > > 
-> > 
-> > Or, it's kvm that implements them to talk to memfd?
-> 
-> The only thing is VFIO may also use the same set of callbacks, as
-> discussed in the v2. But I think that's fine.
+On 12/26/21 6:06 AM, Christophe JAILLET wrote:
+> When allocated, this bitmap is not initialized. Only the first bit is set a
+> few lines below.
+>
+> Use bitmap_zalloc() to make sure that it is cleared before being used.
+>
+> Fixes: 6461b446f2a0 ("ionic: Add interrupts and doorbells")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-I'm objecting to assuming that KVM is talking to memfd.  KVM shouldn't know or
-care what is sitting behind the fd, KVM only cares whether or not the backing store
-provides the necessary APIs.
+Signed-off-by: Shannon Nelson <snelson@pensando.io>
 
-I also think that the API as whole should be abstracted from memfd.  It's mostly
-cosmectic, e.g. tweak the struct and Kconfig name.  I don't really care if it's
-initially dependent on MEMFD_CREATE, I just don't want to end up with an API and
-KVM implementation that implies there's something fundamentally special about memfd.
+> ---
+> The 'dbid_inuse' bitmap seems to be unused.
+> So it is certainly better to remove it completely instead of "fixing" it.
+>
+> Let me know if it is the way to go or if it is there for future use.
+>
+> If it should be left in place, the corresponding kfree() should also be
+> replaces by some bitmap_free() to keep consistency.
+
+This looks like one of those small bits that creeps in from the 
+out-of-tree incarnation, is expected to used Real Soon Now, but is not 
+really useful yet.  Yes, this probably should come out until actually 
+useful.  When we get back from the holiday vacations we'll take a closer 
+look at it and make sure we're not causing any unforeseen issues by 
+pulling it out for now.
+
+Thanks,
+sln
+
+> ---
+>   drivers/net/ethernet/pensando/ionic/ionic_lif.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/ethernet/pensando/ionic/ionic_lif.c b/drivers/net/ethernet/pensando/ionic/ionic_lif.c
+> index 63f8a8163b5f..2ff7be17e5af 100644
+> --- a/drivers/net/ethernet/pensando/ionic/ionic_lif.c
+> +++ b/drivers/net/ethernet/pensando/ionic/ionic_lif.c
+> @@ -3135,7 +3135,7 @@ int ionic_lif_init(struct ionic_lif *lif)
+>   		return -EINVAL;
+>   	}
+>   
+> -	lif->dbid_inuse = bitmap_alloc(lif->dbid_count, GFP_KERNEL);
+> +	lif->dbid_inuse = bitmap_zalloc(lif->dbid_count, GFP_KERNEL);
+>   	if (!lif->dbid_inuse) {
+>   		dev_err(dev, "Failed alloc doorbell id bitmap, aborting\n");
+>   		return -ENOMEM;
+

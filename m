@@ -2,79 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5132F480A00
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 15:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C0C480A04
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 15:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234323AbhL1O0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 09:26:34 -0500
-Received: from ssl.serverraum.org ([176.9.125.105]:49879 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233826AbhL1O0W (ORCPT
+        id S232524AbhL1OeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 09:34:12 -0500
+Received: from mxout04.lancloud.ru ([45.84.86.114]:51404 "EHLO
+        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230051AbhL1OeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 09:26:22 -0500
-Received: from mwalle01.kontron.local. (unknown [IPv6:2a02:810b:4340:43bf:fa59:71ff:fe9b:b851])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 98B4222438;
-        Tue, 28 Dec 2021 15:26:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1640701581;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z7Jp/9TSBr/YXtTUKHXXv5W5V0V0BzH9Fdgy4wsGzuM=;
-        b=i27Za8Xxp66QNN2GAetc5+ufS54wRS8I3TG4LOZ7r/64y4vaq4SuALrGDc7+bWJ8W6dGPa
-        i6A/Vk+pnzFBMXYfh4c5bF4tGI4oE1zimVTC50EJDE0smC+5+DK/fmeYOJ+Nshn1NVBf9o
-        o4lFfflbRswrsrd9bTZbhl1ZC7KTep0=
-From:   Michael Walle <michael@walle.cc>
-To:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, Michael Walle <michael@walle.cc>
-Subject: [PATCH 8/8] arm64: defconfig: enable NVMEM transformations
-Date:   Tue, 28 Dec 2021 15:25:49 +0100
-Message-Id: <20211228142549.1275412-9-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211228142549.1275412-1-michael@walle.cc>
-References: <20211228142549.1275412-1-michael@walle.cc>
+        Tue, 28 Dec 2021 09:34:11 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru 9B78820991E5
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH] xhci: re-initialize the HC during resume if HCE was set
+To:     Puma Hsu <pumahsu@google.com>, <mathias.nyman@intel.com>,
+        <gregkh@linuxfoundation.org>
+CC:     <albertccwang@google.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211228060246.2958070-1-pumahsu@google.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <a8377a4a-9a90-5c99-88b8-4541ff5b1ad9@omp.ru>
+Date:   Tue, 28 Dec 2021 17:34:05 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211228060246.2958070-1-pumahsu@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Kontron sl28 needs the transformation to get the correct ethernet
-addresses for its onboard NICs.
+Hello!
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+On 12/28/21 9:02 AM, Puma Hsu wrote:
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index ee4bd7710a0d..117423e81d15 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1178,6 +1178,7 @@ CONFIG_FSL_IMX8_DDR_PMU=m
- CONFIG_HISI_PMU=y
- CONFIG_QCOM_L2_PMU=y
- CONFIG_QCOM_L3_PMU=y
-+CONFIG_NVMEM_TRANSFORMATIONS=y
- CONFIG_NVMEM_IMX_OCOTP=y
- CONFIG_NVMEM_IMX_OCOTP_SCU=y
- CONFIG_QCOM_QFPROM=y
--- 
-2.30.2
+> When HCE(Host Controller Error) is set, it means an internal
+> error condition has been detected. It needs to re-initialize
+> the HC too.
+> 
+> Signed-off-by: Puma Hsu <pumahsu@google.com>
+> ---
+>  drivers/usb/host/xhci.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index dc357cabb265..c546d9533410 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -1146,8 +1146,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+>  		temp = readl(&xhci->op_regs->status);
+>  	}
+>  
+> -	/* If restore operation fails, re-initialize the HC during resume */
+> -	if ((temp & STS_SRE) || hibernated) {
+> +	/* If restore operation fails or HC error is detected, re-initialize the HC during resume */
+> +	if ((temp & STS_SRE) || (temp & STS_HCE) || hibernated) {
 
+	if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
+
+[...]
+
+MBR, Sergey

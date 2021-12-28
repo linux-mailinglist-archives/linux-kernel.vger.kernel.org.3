@@ -2,90 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFDE480AE4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 16:37:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5333F480AE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 16:37:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235228AbhL1Phr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 10:37:47 -0500
-Received: from mout.gmx.net ([212.227.17.20]:45653 "EHLO mout.gmx.net"
+        id S235238AbhL1Phv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 10:37:51 -0500
+Received: from mout.gmx.net ([212.227.17.20]:36631 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233403AbhL1Phq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S235190AbhL1Phq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Dec 2021 10:37:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1640705844;
-        bh=qPVHr1Cdm7utmJPJfaeNrE6YdKsoKYUI7BwWZ99ZbhQ=;
+        s=badeba3b8450; t=1640705846;
+        bh=bbZNZv7YVts0BSTg8axBu0FBaaXWxw40oFL6h3oO4kU=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Tie8b68Xkq+iIQPAjdQae+u7yKEvlhGT1riRgk6dqH2dISgwCW5p5ekSO/NV22yJc
-         ZgEQT+p0rtDxjkgK54e0TWH2sRlvU/v9kkKOwbJVY+31313pVXRtbu9kF7/GhqlzT5
-         pOYmgkDkCAUCggVQX5ML5zNLchOm9B3X+cZhxVkQ=
+        b=Xbh8vcA/6H941OgB6NpZwZzzYOWVFOvdoIZFlWu7FmY6DMd2uArFnWqbdetXuL3UE
+         H9dKFVS7AtjzGdCA2WnEayVhQv7xXYbiGSc8csg/oXAU1DeTo/nKlTrKUG3KbF2CoA
+         g3R7DTK0SgkHgYys0JrfvJCaRtQwT0WyzC57SVWI=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
  (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1Mdvqg-1mTiXC2gas-00b3kM; Tue, 28 Dec 2021 16:37:24 +0100
+ 1Mr9G2-1mgtnv49Vm-00oJPa; Tue, 28 Dec 2021 16:37:26 +0100
 From:   Armin Wolf <W_Armin@gmx.de>
 To:     pali@kernel.org
 Cc:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
         linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] Documentation: admin-guide: Add Documentation for undocumented dell_smm_hwmon parameters
-Date:   Tue, 28 Dec 2021 16:37:07 +0100
-Message-Id: <20211228153709.18317-2-W_Armin@gmx.de>
+Subject: [PATCH 3/4] docs: hwmon: dell-smm-hwmon.rst: Replace ascii table with flat-table
+Date:   Tue, 28 Dec 2021 16:37:08 +0100
+Message-Id: <20211228153709.18317-3-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211228153709.18317-1-W_Armin@gmx.de>
 References: <20211228153709.18317-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:t0q09+dJktMIkYLEje79XHgVMPeSpXRoIe1bj/Eaq6zjWVLdwYS
- bg6gPAgifd40jlQ0MUzxUxUgGAeO34jIzr6tOhZvaryrWdxkJdGb0JT9ugl0Moh+IVV0lyM
- 2rRhS4f+Q1qVU1Rrh5U1+RRw096UGCtC3NsYpHhRQpx6NA5q26ekePX4yo+MI/lZckC5kd+
- 03qyYfidrb97bRBDWCJ7g==
+X-Provags-ID: V03:K1:j5hjnXhSrC44tdrl13+vXX48u5DgbMhMBCCsXS9YoxDMGO5t6Bp
+ jjm0uej3cbZxKF0ala+xK8Ohytuyb92Pz+AOHLYVKevJRWVCs76fVAabbQidHdCDAAeqdpw
+ U5BXEldKwY0Gh91o7ZvrLsWTFmYfjnooKm+VqMQpFovo5MFDlYmIf1P2sNRzqugT5EXoRj5
+ LQmrwH97Aq02J4l3N4pIw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2AsbUAUm/qo=:BNB+dH9GnMisPdEs7E+Gc8
- ocrP6Myio9Z726EQ7K3FzwaIzxZsLtENRAh06PXv9I+SFPQKPo0EJZ6TuPZnCqRhR9MixxHOl
- x4TrU+/p7YOnl2YhZ2ws742ow6y8dOnZrY6c+DZHsN55dhLNhoeHzoWUPkgT8u6v/heAbO5og
- DKtawjuBhfwFKyZ8q3OKlm1O8Y3jjz8IvsYFaJ4q++1bYdnpq1bHbhJXZaXe5USfE4e86CCNH
- c2SrHEjaaXzEG+tpxDbsEbIutim3vcBXJxOJjU3G6VsJonlBkJxayHKbtkLpd22RbT74XeUcY
- qUOzhjxt5w09NE9vC0A1ba+TRGmUdWV6EsdFEeY78/q3dYO3remAzueyJblHC8buWJYGoxbXb
- 8V7XM//OXI6bi5ZBArZhrqa9pCIjdIb8izvII/grFnCCH9IxNeSZinpFA256Gr3ty7zEl5g4B
- gYE/kceSR42GD1ali1WYezSqTRuOxoJmlz4Gh3aX1CI8vL/h3saqC3ZsPC0vrRkvsnPzRG0zp
- sfpOPabODErJO9esDBGL9012OZCjXy9W70jDyObxT5cGO1B3C/ajyhhbANR5wUxk3xcWJga8i
- i0B1rbFH6MCaN77GUha81StlPwWiy1yOjnUwyOlAA23wEHruOq5ffQn1hEnek07vF75nbmlWz
- B70MV7LivgoJu0B02C/9B3LWBCNR3t14cJM42j7GdIIG7OsJ6tDuqIostIz9znk5VNqbXfQLB
- WDAphBHqE1n0ido8INEaM4zvS5fp+B64RunS8NOgqNDSyNaCDU/S7gwOO3Zz28QGaC9dinoSa
- 8uRzTpbzkybf+BIQe7+BsnefudKcxwc0A98kJJA7jvGJdMeC5r9mBpFaLjOv9V5xGrWec9qLy
- NiOeWGYSVDqxm0t+ryfZkImRC/Nv8pAAhzA7SCiw3deAtxf8Xdu0lHQ6iDR7Mgj43gc2ddwWe
- +/hhcaL74NmfD5p5lxU4BZpcLcgAq2GOJ3iOWDJbyFvoXvi7a+wFr6jVBefy1MlHNGBBfO4Yd
- AefL2vTUc2zKFoFXNyE2qA80yfXZ7vUSM9LcjSnr4vfZVWLJqjjFA07wxyKdiw06s+CXuekvz
- IH9mzpbz7b/GhQ=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:us7u+7OxAkE=:j5psBhkjZbE9nSvP4qRHwE
+ WYbPk2d+VyJLYAK/pSAsfF0SBDOcEfBd6syEwaSRh0bgEfYhsE2kfAwOqku+N7/ObSjkErAcM
+ 4Up4co6iBiguVLlOLwhCL0fqEPhwwoFl0gTLnXir35AJePfDtPj8Bk+expdyH5eiHiw22u8KC
+ ToJPefx5MQcZFeZuRTb4rKD/QSdoUSPZve8WHO5ogQ975x938gt9MyUovEeDQeZcZMffuEEot
+ lDypFTCQ2Np3Ipm0rKh3DeDl6E/GRJslQoifMtbm1bme0hcUwUYK91LtmfWt60Dcdw6XYg5cG
+ EKnL/DqBQeWSJ2otWexEddOwoqR0B9j5Gi6/kw7qTwBcIPvsn2epT//ANZur0BJ7DXvtR2ZWo
+ G1cfQbpeBEPY9+PLI+J9hDZcYiOqX2R25zQl8yhbxqNUCZ/oeIjAU4tAZjab6BDH6O1Z7yvOJ
+ rbtKOe/HYZUwuARBTkG7/Qf8ZqmXIrSgn0Ak1Yy6XaAKJTz3932BTNgQlSiVtogjPQyQBa6HU
+ ux8pLzl3AAFMc6CSl1+ySJip7pTjYd4xbTNDoHwufPUpeQlrT1NfrgrhR/TkMn/X5dsfEw0Gi
+ u6bBKO2eGbh27Hr3DHUBPaVmyXJzG6b7h1yuNwzM91HkSJWq3dOcTu9yUWYOdXnOHTO4WKCKz
+ /pPh4aCVUbNd1tMCaFqBGUhphKwnaj4PIngE9rC+xBiDlnPYRGdDdLRfqaCDh/KHJg/pvQkSo
+ 3Z3sXaZujxXCdDTtt86/7HLK4VR79y0Z/5pI3RnDTuTfWmXWS4AGA/8KI/9L6zBUu8a8IxbIY
+ vMId8kI+zC7tIEyAFnJtw2U4vH3SgyNp+2Ml2onvROlFON7xvCdRM7Nx2+1pNz4p7Vap+SwvP
+ pVuvlNSxwhpttIF71Rd9PlQHpJF742A7KS5dbR0DaIiPMUj1dJnY7qvySGmMronyYlBqKQREd
+ O2nZoe09GVD10qbDf7ZN97lNxmWfiPXlZO/RnELDQG6jDo4sOxHXUzz5OPyeQsQeu9akyidFR
+ LdhSRW2XPsrkQxhiQYTemYqf+c4WqQPfwSTmiBua+CfIHbnI1bqBqwN6D/7rOpbsfZkDBvd9I
+ jYL91pIm5Ml7fA=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for fan_mult and fan_max.
+flat-table is recommended over ascii art tables.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- Documentation/admin-guide/kernel-parameters.txt | 6 ++++++
- 1 file changed, 6 insertions(+)
+ Documentation/hwmon/dell-smm-hwmon.rst | 60 +++++++++++++++++++-------
+ 1 file changed, 44 insertions(+), 16 deletions(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentati=
-on/admin-guide/kernel-parameters.txt
-index cb1331f85444..8dd07ca80934 100644
-=2D-- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -953,6 +953,12 @@
- 			[HW] Allow controlling fans only if SYS_ADMIN
-                         capability is set.
+diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/=
+dell-smm-hwmon.rst
+index beec88491171..f1e185e8a3f7 100644
+=2D-- a/Documentation/hwmon/dell-smm-hwmon.rst
++++ b/Documentation/hwmon/dell-smm-hwmon.rst
+@@ -29,22 +29,50 @@ Temperature sensors and fans can be queried and set vi=
+a the standard
+ ``X`` such that ``/sys/class/hwmon/hwmonX/name`` has content
+ ``dell_smm``). A number of other attributes can be read or written:
 
-+	dell_smm_hwmon.fan_mult=3D
-+			[HW] Factor to multiply fan speed with.
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+-Name				Perm	Description
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+-fan[1-3]_input                  RO      Fan speed in RPM.
+-fan[1-3]_label                  RO      Fan label.
+-fan[1-3]_min                    RO      Minimal Fan speed in RPM
+-fan[1-3]_max                    RO      Maximal Fan speed in RPM
+-fan[1-3]_target                 RO      Expected Fan speed in RPM
+-pwm[1-3]                        RW      Control the fan PWM duty-cycle.
+-pwm1_enable                     WO      Enable or disable automatic BIOS =
+fan
+-                                        control (not supported on all lap=
+tops,
+-                                        see below for details).
+-temp[1-10]_input                RO      Temperature reading in milli-degr=
+ees
+-                                        Celsius.
+-temp[1-10]_label                RO      Temperature sensor label.
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
++.. flat-table::
++   :header-rows: 1
++   :widths: 4 1 5
 +
-+	dell_smm_hwmon.fan_max=3D
-+			[HW] Maximum configurable fan speed.
++   * - Name
++     - Perm
++     - Description
 +
- 	dfltcc=3D		[HW,S390]
- 			Format: { on | off | def_only | inf_only | always }
- 			on:       s390 zlib hardware support for compression on
++   * - fan[1-3]_input
++     - RO
++     - Fan speed in RPM
++
++   * - fan[1-3]_label
++     - RO
++     - Fan label
++
++   * - fan[1-3]_min
++     - RO
++     - Minimal Fan speed in RPM
++
++   * - fan[1-3]_max
++     - RO
++     - Maximal Fan speed in RPM
++
++   * - fan[1-3]_target
++     - RO
++     - Expected Fan speed in RPM
++
++   * - pwm[1-3]
++     - RW
++     - Control the fan PWM duty-cycle
++
++   * - pwm1_enable
++     - WO
++     - Enable or disable automatic BIOS fan control (not supported
++       on all laptops, see below for details)
++
++   * - temp[1-10]_input
++     - RO
++     - Temperature reading in milli-degrees Celsius
++
++   * - temp[1-10]_label
++     - RO
++     - Temperature sensor label
+
+ Disabling automatic BIOS fan control
+ ------------------------------------
 =2D-
 2.30.2
 

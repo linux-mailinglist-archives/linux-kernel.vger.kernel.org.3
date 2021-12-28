@@ -2,242 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D604B480970
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 14:09:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8BB480972
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 14:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbhL1NJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 08:09:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
+        id S232204AbhL1NKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 08:10:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbhL1NJg (ORCPT
+        with ESMTP id S232128AbhL1NKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 08:09:36 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4EAC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 05:09:35 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id h15so17221332ljh.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 05:09:35 -0800 (PST)
+        Tue, 28 Dec 2021 08:10:33 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3446AC061574;
+        Tue, 28 Dec 2021 05:10:33 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id s1so14456163pga.5;
+        Tue, 28 Dec 2021 05:10:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=raZYs6hq+w01uYhTxQ4dt0lfSN7FKbl65aoYpDo2wa8=;
-        b=bMBBF+IboANSYzFd+cuwV6TxaR/XwMgsJdhl2WQWVGCrLoBSnuGjU6HrTmQPUJQdW2
-         TowygMK2oeduJTG6NfRDCaTRPFHyDtjjB9k69Qcd/AOgWIHTWGM+evA7Z3l875/yRj62
-         emg3etkFgXmlp3CTAtlNivL8U9phUDiCJYG+cdZPqX1/wquNyF7gy0wnsVzLSao2FrlH
-         QXCaMI9tmRHOsM40kjeNYNBYwufh6UaKWljTwQd2iVkKI6veZiRuyGKEGCZe26b3FiF7
-         7GDhsnKYByg6wcAo/pQkA4fYwy4HFGxZNDl9qt+TGOL7MzAjvx6khhouGxwTg9+NWim8
-         HBYg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AaV3U4Q/YoY3GBRDKrb7mtceSC4KeM61/N6BjB4XkOM=;
+        b=WCnV7riryFUCC8EyXq6wGlThahzfdlZn9gcTEcnphg57+EEz12W3qWsjq1fkIdCi+E
+         pqXwPgs41MWob46EPMnm6ZalHdCkTNw+C258iV5PU9OelrVzIFWiPYjm3H9+8sBwebLQ
+         DtWuC4Gnp8TE7SWQA4ZFs9H54135/WV+9nPSJtOFgdSBsHz3FFm0l8t81PWsOiwLZ7Ph
+         6M/N4yTOehI1KRMdF+6u+CGSEPpNrhn4H5ryCH+n8KG7s9uie10L/6bL7G4VPl6pmJOo
+         P+pLLr4vVXCb96uoRTMsTLCOpvb21XpgEIKZ/QaW9rvd50gI7aoKSmclDiqYO5ekrGjG
+         CioA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=raZYs6hq+w01uYhTxQ4dt0lfSN7FKbl65aoYpDo2wa8=;
-        b=KmtXXqcfboeAkzGqI8Tt0b9Sb9cyBq5yPx44qwp/ayVAYVyvZlLg0gte7CyclGPlrQ
-         oJ9A3o+BVmT9NGEzLTt/hQiiyu5oWcRThI9AWy76QugwcNgu6apoy1fSU021Opo+s6By
-         /pZb4zuA9hz3I+fE328jtLA/V+JJ5ip383E/0UC7gvCF/rqeaB/wPI4jMx7Jv8cqOKy9
-         a79pwBy/8W+iYfQz6VIYC8AVIoRlhyejzso3dYPVgKWDpo+GjnFPv2B6hHBz4WPmK4A7
-         8WytkIxc73WB4n98Vd+w8l2R3EkooIKJj9t9XThEMkKB0zJVpV3t0EODTlHk6XajeM+V
-         orag==
-X-Gm-Message-State: AOAM531f9WMqR9DTL/00PV0HHCyDGCqgw/d6str9wqLk4Yv6XSifVzw0
-        uH9Yo2CBqpPRVVYXMwg4fCjUxw==
-X-Google-Smtp-Source: ABdhPJx6u+jzmEuwoiD+u5NjUBn0UWuE/FLrFW8oSRkmquZSTQh17QJmENKS/N2RyuHXxjKT9tpjEw==
-X-Received: by 2002:a05:651c:1993:: with SMTP id bx19mr2085421ljb.472.1640696973673;
-        Tue, 28 Dec 2021 05:09:33 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id u3sm908644ljo.95.2021.12.28.05.09.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Dec 2021 05:09:33 -0800 (PST)
-Message-ID: <78491489-6b31-c741-8c69-8d52fb614a6c@linaro.org>
-Date:   Tue, 28 Dec 2021 16:09:32 +0300
+        bh=AaV3U4Q/YoY3GBRDKrb7mtceSC4KeM61/N6BjB4XkOM=;
+        b=ZRGqGL4ifBscK8oza4dNGGvgs1g0Aey2Y1w2ljig+fDPWBO7G7gOoa50/7AbIoVWyV
+         JpkpOhzHJpsy4K9hWKS0d0dKLDypJnhvtuutXF2uGlVOzSoTfRvhdJz0QWvIVup3ILcS
+         TMP8Q3JLRpQRGdSW1jRLJjxAjvSjedvHOij9p6jyFoo94lfJXMHd6HA9guTjIGDQDfL9
+         A+K47OJdYXkuzPl8iBkwyeTB5T9UsV6H4hc5az3XP/zRnYpummh6dVWxDQceCkH5xHdc
+         iiGG9Dae+OYGxFkcKd1SHy/C8pNSFtpVCBUI6fEsf5IcOvXSF2vufxfsN/O66vXjjIQu
+         ZS4Q==
+X-Gm-Message-State: AOAM530/2zaEnf+GMLd+v5f8o1YPPZtqTf/AK+r6Bd7ETaacePJBDKiF
+        fm0BuncZ0oLkVEek87+nAVg=
+X-Google-Smtp-Source: ABdhPJzvP5bNSxfiXDIWQbXdmBTcpzQthLPZHQaONqRgeUch0HAQkHQf6eE56pcFkU9sRoBYl80crQ==
+X-Received: by 2002:a05:6a00:1a03:b0:4ba:c23e:df67 with SMTP id g3-20020a056a001a0300b004bac23edf67mr22021603pfv.63.1640697032658;
+        Tue, 28 Dec 2021 05:10:32 -0800 (PST)
+Received: from gagan ([45.116.106.186])
+        by smtp.gmail.com with ESMTPSA id mw8sm18813610pjb.42.2021.12.28.05.10.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Dec 2021 05:10:32 -0800 (PST)
+From:   Gagan Kumar <gagan1kumar.cs@gmail.com>
+To:     jk@codeconstruct.com.au, matt@codeconstruct.com.au,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Gagan Kumar <gagan1kumar.cs@gmail.com>
+Subject: [PATCH] mctp: Remove only static neighbour on RTM_DELNEIGH
+Date:   Tue, 28 Dec 2021 18:39:56 +0530
+Message-Id: <20211228130956.8553-1-gagan1kumar.cs@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 3/8] device property: Helper to match multiple connections
-Content-Language: en-GB
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20211228052116.1748443-1-bjorn.andersson@linaro.org>
- <20211228052116.1748443-4-bjorn.andersson@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20211228052116.1748443-4-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/12/2021 08:21, Bjorn Andersson wrote:
-> In some cases multiple connections with the same connection id
-> needs to be resolved from a fwnode graph.
-> 
-> One such example is when separate hardware is used for performing muxing and/or
-> orientation switching of the SuperSpeed and SBU lines in a USB-C
-> connector. In this case the connector needs to belong to a graph with
-> multiple matching remote endpoints, and the TypeC controller needs to be
-> able to resolve them both.
-> 
-> Add a new API that allows this kind of lookup.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->   drivers/base/property.c  | 94 ++++++++++++++++++++++++++++++++++++++++
->   include/linux/property.h |  5 +++
->   2 files changed, 99 insertions(+)
-> 
-> diff --git a/drivers/base/property.c b/drivers/base/property.c
-> index cbe4fa298413..0aa0296fd991 100644
-> --- a/drivers/base/property.c
-> +++ b/drivers/base/property.c
-> @@ -1180,6 +1180,36 @@ fwnode_graph_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
->   	return NULL;
->   }
->   
-> +static unsigned int fwnode_graph_devcon_matches(struct fwnode_handle *fwnode,
-> +						const char *con_id, void *data,
-> +						devcon_match_fn_t match,
-> +						void **matches,
-> +						unsigned int matches_len)
-> +{
-> +	struct fwnode_handle *node;
-> +	struct fwnode_handle *ep;
-> +	unsigned int count = 0;
-> +	void *ret;
-> +
-> +	fwnode_graph_for_each_endpoint(fwnode, ep) {
-> +		if (count >= matches_len) {
-> +			fwnode_handle_put(ep);
-> +			return count;
-> +		}
-> +
-> +		node = fwnode_graph_get_remote_port_parent(ep);
-> +		if (!fwnode_device_is_available(node))
-> +			continue;
-> +
-> +		ret = match(node, con_id, data);
-> +		fwnode_handle_put(node);
-> +
-> +		if (ret)
-> +			matches[count++] = ret;
-> +	}
-> +	return count;
-> +}
+Add neighbour source flag in mctp_neigh_remove(...) to allow removal of
+only static neighbours.
 
-This API doesn't let it's user know if there are more matches found in 
-the device tree or not. I'd suggest to add 'count' mode that would 
-return the amount of found matches if (matches == NULL) && (matches_len 
-== 0).
+Signed-off-by: Gagan Kumar <gagan1kumar.cs@gmail.com>
+---
+ net/mctp/neigh.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> +
->   static void *
->   fwnode_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
->   		    void *data, devcon_match_fn_t match)
-> @@ -1202,6 +1232,35 @@ fwnode_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
->   	return NULL;
->   }
->   
-> +static unsigned int fwnode_devcon_matches(struct fwnode_handle *fwnode,
-> +					  const char *con_id, void *data,
-> +					  devcon_match_fn_t match,
-> +					  void **matches,
-> +					  unsigned int matches_len)
-> +{
-> +	struct fwnode_handle *node;
-> +	unsigned int count = 0;
-> +	void *ret;
-> +	int i;
-> +
-> +	for (i = 0; ; i++) {
-> +		if (count >= matches_len)
-> +			return count;
-> +
-> +		node = fwnode_find_reference(fwnode, con_id, i);
-> +		if (IS_ERR(node))
-> +			break;
-> +
-> +		ret = match(node, NULL, data);
-> +		fwnode_handle_put(node);
-> +
-> +		if (ret)
-> +			matches[count++] = ret;
-> +	}
-> +
-> +	return count;
-> +}
-> +
-
-Same comment applies.
-
->   /**
->    * fwnode_connection_find_match - Find connection from a device node
->    * @fwnode: Device node with the connection
-> @@ -1229,3 +1288,38 @@ void *fwnode_connection_find_match(struct fwnode_handle *fwnode,
->   	return fwnode_devcon_match(fwnode, con_id, data, match);
->   }
->   EXPORT_SYMBOL_GPL(fwnode_connection_find_match);
-> +
-> +/**
-> + * fwnode_connection_find_matches - Find connections from a device node
-> + * @fwnode: Device node with the connection
-> + * @con_id: Identifier for the connection
-> + * @data: Data for the match function
-> + * @match: Function to check and convert the connection description
-> + * @matches: Array of pointers to fill with matches
-> + * @matches_len: Length of @matches
-> + *
-> + * Find up to @matches_len connections with unique identifier @con_id between
-> + * @fwnode and other device nodes. @match will be used to convert the
-> + * connection description to data the caller is expecting to be returned
-> + * through the @matches array.
-> + *
-> + * Return: Number of matches resolved, of negative errno.
-> + */
-> +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
-> +				   const char *con_id, void *data,
-> +				   devcon_match_fn_t match,
-> +				   void **matches, unsigned int matches_len)
-> +{
-> +	unsigned int count;
-> +
-> +	if (!fwnode || !match || !matches)
-> +		return -EINVAL;
-> +
-> +	count = fwnode_graph_devcon_matches(fwnode, con_id, data, match,
-> +					    matches, matches_len);
-> +
-> +	return count + fwnode_devcon_matches(fwnode, con_id, data, match,
-> +					     matches + count,
-> +					     matches_len - count);
-> +}
-> +EXPORT_SYMBOL_GPL(fwnode_connection_find_matches);
-> diff --git a/include/linux/property.h b/include/linux/property.h
-> index 16f736c698a2..59484ccb260e 100644
-> --- a/include/linux/property.h
-> +++ b/include/linux/property.h
-> @@ -444,6 +444,11 @@ static inline void *device_connection_find_match(struct device *dev,
->   	return fwnode_connection_find_match(dev_fwnode(dev), con_id, data, match);
->   }
->   
-> +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
-> +				   const char *con_id, void *data,
-> +				   devcon_match_fn_t match,
-> +				   void **matches, unsigned int matches_len);
-> +
->   /* -------------------------------------------------------------------------- */
->   /* Software fwnode support - when HW description is incomplete or missing */
->   
-
-
+diff --git a/net/mctp/neigh.c b/net/mctp/neigh.c
+index 5cc042121493..a90723ae66d7 100644
+--- a/net/mctp/neigh.c
++++ b/net/mctp/neigh.c
+@@ -85,8 +85,8 @@ void mctp_neigh_remove_dev(struct mctp_dev *mdev)
+ 	mutex_unlock(&net->mctp.neigh_lock);
+ }
+ 
+-// TODO: add a "source" flag so netlink can only delete static neighbours?
+-static int mctp_neigh_remove(struct mctp_dev *mdev, mctp_eid_t eid)
++static int mctp_neigh_remove(struct mctp_dev *mdev, mctp_eid_t eid,
++			     enum mctp_neigh_source source)
+ {
+ 	struct net *net = dev_net(mdev->dev);
+ 	struct mctp_neigh *neigh, *tmp;
+@@ -94,7 +94,7 @@ static int mctp_neigh_remove(struct mctp_dev *mdev, mctp_eid_t eid)
+ 
+ 	mutex_lock(&net->mctp.neigh_lock);
+ 	list_for_each_entry_safe(neigh, tmp, &net->mctp.neighbours, list) {
+-		if (neigh->dev == mdev && neigh->eid == eid) {
++		if (neigh->dev == mdev && neigh->eid == eid && neigh->source == source) {
+ 			list_del_rcu(&neigh->list);
+ 			/* TODO: immediate RTM_DELNEIGH */
+ 			call_rcu(&neigh->rcu, __mctp_neigh_free);
+@@ -202,7 +202,7 @@ static int mctp_rtm_delneigh(struct sk_buff *skb, struct nlmsghdr *nlh,
+ 	if (!mdev)
+ 		return -ENODEV;
+ 
+-	return mctp_neigh_remove(mdev, eid);
++	return mctp_neigh_remove(mdev, eid, MCTP_NEIGH_STATIC);
+ }
+ 
+ static int mctp_fill_neigh(struct sk_buff *skb, u32 portid, u32 seq, int event,
 -- 
-With best wishes
-Dmitry
+2.32.0
+

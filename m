@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D67D74806CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 07:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2904806D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 07:48:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235190AbhL1GsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 01:48:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
+        id S235186AbhL1GsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 01:48:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235157AbhL1GsK (ORCPT
+        with ESMTP id S235157AbhL1GsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 01:48:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5645EC061574;
-        Mon, 27 Dec 2021 22:48:10 -0800 (PST)
+        Tue, 28 Dec 2021 01:48:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA1CC06173E;
+        Mon, 27 Dec 2021 22:48:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE1F660AB8;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B7E7B8111B;
+        Tue, 28 Dec 2021 06:48:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F14BCC36AEC;
         Tue, 28 Dec 2021 06:48:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E30EC36AE7;
-        Tue, 28 Dec 2021 06:48:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640674089;
-        bh=+GnMS/OPoYG7iR/KsEwNlbZjf29CM2NqgjFZvoobNBE=;
+        s=k20201202; t=1640674095;
+        bh=16Xsifca9wkKUTK9OpCC6J6+WJoRfyl6c8OE6ELYn1M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iZJdIjCPIfEdOY3H6eDHZ64LATvocPbarXuzVAnDl8T0QYyhPYUknYTdU5yEB/5wH
-         NyafdEETUQ4Nar9C/HYFZYzLmZ7Y2JRLXOmmp3iDp/rOOSOXK9P5Z4+qFAe4Lgxno6
-         IJ1EdExYBCP61Trn/pi6UNaWiAA1P08h9oz/t0z/fIKGVn77QO1smVyMJQGR2uW+Gg
-         ipF0UHM0iDJvkfyPFL06LFlHdDtFwbmQOzxsY/hnE+yJPAsTgJyjvh2zZpnHXNxol5
-         QSWBr4hM3EeOGMJCIwVGxLMiMISxsH4Q+FRA6S5egJHIjQGy3+7nNGcWA+t9P5Gu5N
-         gU1XAx3pRx2kA==
+        b=L0E07KS19qkH/0CCH5Z8kDC5HG2hLHXJ18r+ghFJA6w/xWOXVCuE6NWt3soxf+5vD
+         DDKIXKXo16qlV8VF6keVcb5Bqtx0iRFpFa5NnSmr1+Or7NFatWIV+110jsZ4KMJZas
+         TNLMO3O4o+jS97FOYgboHWDkbFzSDT0mt18CQk2+e3wa4TDVrd97JPB5sJiDxH34fR
+         w6aB6sluGKhydx76A+3AEQjd5THrEKQIGLTPke3CdByKbG7s+4Wkd0YMeZc0darcto
+         sCRTIhL9v660gGK5IPsu+sLR4NHJpG9q5ArXxeVsu1VFPexDOcllHxTFyVKJozjfOn
+         NOizjMG6O+zjA==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, will@kernel.org, tglx@linutronix.de,
         benh@kernel.crashing.org, arnd@arndb.de, mingo@redhat.com,
@@ -42,9 +42,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         linuxppc-dev@lists.ozlabs.org, inux-parisc@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         x86@kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V3 5/8] sched: s390: Remove unused TASK_SIZE_OF
-Date:   Tue, 28 Dec 2021 14:47:26 +0800
-Message-Id: <20211228064730.2882351-6-guoren@kernel.org>
+Subject: [PATCH V3 6/8] sched: parisc: Remove unused TASK_SIZE_OF
+Date:   Tue, 28 Dec 2021 14:47:27 +0800
+Message-Id: <20211228064730.2882351-7-guoren@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211228064730.2882351-1-guoren@kernel.org>
 References: <20211228064730.2882351-1-guoren@kernel.org>
@@ -63,26 +63,23 @@ Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/s390/include/asm/processor.h | 3 +--
+ arch/parisc/include/asm/processor.h | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/s390/include/asm/processor.h b/arch/s390/include/asm/processor.h
-index f54c152bf2bf..5581b64a4236 100644
---- a/arch/s390/include/asm/processor.h
-+++ b/arch/s390/include/asm/processor.h
-@@ -88,11 +88,10 @@ extern void __bpon(void);
-  * User space process size: 2GB for 31 bit, 4TB or 8PT for 64 bit.
-  */
+diff --git a/arch/parisc/include/asm/processor.h b/arch/parisc/include/asm/processor.h
+index b669f4b9040b..d9c8dc76ee6a 100644
+--- a/arch/parisc/include/asm/processor.h
++++ b/arch/parisc/include/asm/processor.h
+@@ -23,8 +23,7 @@
  
--#define TASK_SIZE_OF(tsk)	(test_tsk_thread_flag(tsk, TIF_31BIT) ? \
-+#define TASK_SIZE		(test_thread_flag(TIF_31BIT) ? \
- 					_REGION3_SIZE : TASK_SIZE_MAX)
- #define TASK_UNMAPPED_BASE	(test_thread_flag(TIF_31BIT) ? \
- 					(_REGION3_SIZE >> 1) : (_REGION2_SIZE >> 1))
--#define TASK_SIZE		TASK_SIZE_OF(current)
- #define TASK_SIZE_MAX		(-PAGE_SIZE)
+ #define HAVE_ARCH_PICK_MMAP_LAYOUT
  
- #define STACK_TOP		(test_thread_flag(TIF_31BIT) ? \
+-#define TASK_SIZE_OF(tsk)       ((tsk)->thread.task_size)
+-#define TASK_SIZE	        TASK_SIZE_OF(current)
++#define TASK_SIZE               (current->thread.task_size)
+ #define TASK_UNMAPPED_BASE      (current->thread.map_base)
+ 
+ #define DEFAULT_TASK_SIZE32	(0xFFF00000UL)
 -- 
 2.25.1
 

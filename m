@@ -2,118 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71AAB480773
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 09:37:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C05DF480774
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 09:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235708AbhL1IhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 03:37:23 -0500
-Received: from mail-ua1-f46.google.com ([209.85.222.46]:34673 "EHLO
-        mail-ua1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbhL1IhW (ORCPT
+        id S235721AbhL1IkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 03:40:02 -0500
+Received: from mail-ua1-f52.google.com ([209.85.222.52]:40796 "EHLO
+        mail-ua1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231670AbhL1IkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 03:37:22 -0500
-Received: by mail-ua1-f46.google.com with SMTP id t18so23359238uaj.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 00:37:22 -0800 (PST)
+        Tue, 28 Dec 2021 03:40:01 -0500
+Received: by mail-ua1-f52.google.com with SMTP id v12so19027176uar.7
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 00:40:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tQlFNR8cZsfmJYOadbGaTb/yUlOB1dRG6fgInli2WVA=;
-        b=8Caj/iiz8364qYEN0d1OWoJMy50J5PU0LwnZMdd13qL8RSoiMKQptB2NmNVXMvvjYa
-         l0Y+Fyk2Sb/OtUSvMWS3Z0FWgQlK4J7sySODqMW3w7FAFez+jXt5QALfyieVWMSX6iL+
-         SmltHJ21kjMweIWpusyRhSz9gxot34VYouu+hx4yPQyhT602FXWhhZjNeiMLjYbQxfLP
-         Y2ooueSlleZJk/ruLUGmdv1Kg0hbBNQzC+1CbLtc0pHlnzRubt30rt1gyRY8L7VAgWEu
-         3eguZSv9h4pWMxLZzxT/wc60TD9wHHnytYfCk5C/EO73yKR7JuyMDNti8qT5IkLw3d/8
-         5X7w==
-X-Gm-Message-State: AOAM531SYOJrnPxWC3ohbV/t/k9WdIrQcapUh1qr6Rc56YBgrUpw70bO
-        1r6fW4e6VZs/AlR8j20uDZYAuz3oC2F4Sw==
-X-Google-Smtp-Source: ABdhPJykBdAIdHUv9qyxuL85qxDXwaGYG7A8UC6jvK6f0yrNcWDNJlUccSlSHamG9yuBIpZV4IrRxQ==
-X-Received: by 2002:a67:e351:: with SMTP id s17mr4876205vsm.63.1640680641535;
-        Tue, 28 Dec 2021 00:37:21 -0800 (PST)
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com. [209.85.222.54])
-        by smtp.gmail.com with ESMTPSA id d25sm3688370vsk.15.2021.12.28.00.37.21
+        bh=1U54aUmdlVWzoRRCzQXLay8GEZgnNLlNR+vRREgVBq4=;
+        b=WusEt1ZcSiF4joxFLf860YS5hKIyD2IFIzjtmRbHLKrqcYQZdwc8vpvOvBi2aG79nl
+         6zDsnBPVjqv6CYaVVArxDlWWi0ugCobFFTveGqp7tuedsPz64s3qtVlKyt0vTW/I7CNU
+         2Um4tQ0M3AGrutfZ6MoxiteguM+5CQkRg2epiykt9P7BLPjz+fAhFFlxQ5oSmbaT5lBA
+         /h0OjbEWhm/Gil1BvXBO+orYYwnasUXpMie3CIBNopCjTgN4V9nO4C/aWrmIQmWoJrmn
+         zl8M/Ayc2PWrfNPEhFr2JNh0+iJJsmPrWjsaolKKm4unuuGoS0jIsa9LpvOHhu2qy0J1
+         00MQ==
+X-Gm-Message-State: AOAM531Tz+/3fiPna4MJw50sDmZ12234SxtBQL/rjF9ESFontC6rfl9Z
+        MaNlKN+a9zrX5GLk5DyyizGUo6uJ4ytuBg==
+X-Google-Smtp-Source: ABdhPJy79XaPw5IQgAf2vK1NCihK5TPkqWs5hn9wkZkCeyiQF9+tPtURm+pGsUmz4hFtdMeDwVp1Dw==
+X-Received: by 2002:a05:6102:c46:: with SMTP id y6mr6104769vss.82.1640680800947;
+        Tue, 28 Dec 2021 00:40:00 -0800 (PST)
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com. [209.85.221.180])
+        by smtp.gmail.com with ESMTPSA id t20sm2038318vsj.11.2021.12.28.00.40.00
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Dec 2021 00:37:21 -0800 (PST)
-Received: by mail-ua1-f54.google.com with SMTP id v12so19018312uar.7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 00:37:21 -0800 (PST)
-X-Received: by 2002:ab0:15a1:: with SMTP id i30mr6096810uae.122.1640680640883;
- Tue, 28 Dec 2021 00:37:20 -0800 (PST)
+        Tue, 28 Dec 2021 00:40:00 -0800 (PST)
+Received: by mail-vk1-f180.google.com with SMTP id b77so9927162vka.11
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 00:40:00 -0800 (PST)
+X-Received: by 2002:a1f:4641:: with SMTP id t62mr6304684vka.0.1640680800305;
+ Tue, 28 Dec 2021 00:40:00 -0800 (PST)
 MIME-Version: 1.0
-References: <202112280309.fgjGevFd-lkp@intel.com>
-In-Reply-To: <202112280309.fgjGevFd-lkp@intel.com>
+References: <20211228020611.6582-1-hbh25y@gmail.com>
+In-Reply-To: <20211228020611.6582-1-hbh25y@gmail.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 28 Dec 2021 09:37:09 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVdXMqUDjeXsvFbSNk8hKcDAms-Z5JK+pGAcYvykyCzwg@mail.gmail.com>
-Message-ID: <CAMuHMdVdXMqUDjeXsvFbSNk8hKcDAms-Z5JK+pGAcYvykyCzwg@mail.gmail.com>
-Subject: Re: [atishp04:isa_ext_support 3/4] arch/riscv/kernel/cpufeature.c:82:24:
- warning: address of array 'edata->dtprop' will always evaluate to 'true'
-To:     kernel test robot <lkp@intel.com>
-Cc:     Atish Patra <atishp@rivosinc.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, Atish Patra <Atish.Patra@wdc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Tue, 28 Dec 2021 09:39:49 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXYuH6kgWCPjQhmd6Xi2N=oiyCSoE8U4NMg3tOrJ9bwDw@mail.gmail.com>
+Message-ID: <CAMuHMdXYuH6kgWCPjQhmd6Xi2N=oiyCSoE8U4NMg3tOrJ9bwDw@mail.gmail.com>
+Subject: Re: [PATCH v2] m68k/kernel: array out of bound access in process_uboot_commandline
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 9:21 AM kernel test robot <lkp@intel.com> wrote:
-> tree:   https://github.com/atishp04/linux isa_ext_support
-> head:   cf2f3fa532aa7c672f681ca0685046c738bfb45f
-> commit: ae97a995345b68c472f3a904fc8fbefaa97ae26a [3/4] RISC-V: Provide a framework for parsing multi-letter ISA extensions
-> config: riscv-randconfig-c006-20211226 (https://download.01.org/0day-ci/archive/20211228/202112280309.fgjGevFd-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 0c553cc1af2e4c14100df6cf4a6fc91987e778e6)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install riscv cross compiling tool for clang build
->         # apt-get install binutils-riscv64-linux-gnu
->         # https://github.com/atishp04/linux/commit/ae97a995345b68c472f3a904fc8fbefaa97ae26a
->         git remote add atishp04 https://github.com/atishp04/linux
->         git fetch --no-tags atishp04 isa_ext_support
->         git checkout ae97a995345b68c472f3a904fc8fbefaa97ae26a
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> arch/riscv/kernel/cpufeature.c:82:24: warning: address of array 'edata->dtprop' will always evaluate to 'true' [-Wpointer-bool-conversion]
->            if (!edata || !edata->dtprop)
->                          ~~~~~~~~^~~~~~
->    1 warning generated.
->
->
-> vim +82 arch/riscv/kernel/cpufeature.c
->
->     76
->     77  int riscv_isa_ext_list_add(struct riscv_isa_ext_data *edata)
->     78  {
->     79          struct device_node *node, *enode;
->     80          int eid;
->     81
->   > 82          if (!edata || !edata->dtprop)
+CC greg
 
-if (!edata || !edata->dtprop[0])
-
->     83                  return -EINVAL;
->     84
->     85          node = of_find_node_by_path("/cpus");
->     86          if (!node) {
->     87                  pr_err("No CPU information found in DT\n");
->     88                  return -ENOENT;
->     89          }
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+On Tue, Dec 28, 2021 at 3:06 AM Hangyu Hua <hbh25y@gmail.com> wrote:
+>
+> When the size of commandp >= size, array out of bound write occurs because
+> len == 0.
+>
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> ---
+>  arch/m68k/kernel/uboot.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/m68k/kernel/uboot.c b/arch/m68k/kernel/uboot.c
+> index 928dbd33fc4a..63eaf3c3ddcd 100644
+> --- a/arch/m68k/kernel/uboot.c
+> +++ b/arch/m68k/kernel/uboot.c
+> @@ -101,5 +101,6 @@ __init void process_uboot_commandline(char *commandp, int size)
+>         }
+>
+>         parse_uboot_commandline(commandp, len);
+> -       commandp[len - 1] = 0;
+> +       if (len > 0)
+> +               commandp[len - 1] = 0;
+>  }
+> --
+> 2.25.1

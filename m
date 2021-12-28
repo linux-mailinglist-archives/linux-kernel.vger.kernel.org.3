@@ -2,212 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A72D4480BED
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 18:13:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30052480BFB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 18:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236699AbhL1RM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 12:12:59 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:56040 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233056AbhL1RM6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 12:12:58 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        id S236721AbhL1RNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 12:13:23 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55424 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233056AbhL1RNU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 12:13:20 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 074D61EC036C;
-        Tue, 28 Dec 2021 18:12:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640711573;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=j59Irj+zUTsu0KOhDxbKX2aummrAw6VOEX6q3YpZiqg=;
-        b=g8+TSrLPCJtjVdfwuFY5E9iiMpD4J0KgXyTNFBUFlHWwU8LN0JdpCj5Z9tcoUpFQ9rtFJO
-        YRzR/7B8kH0OP/Ha6Szkar2EupvbhkfOfcMkotMEwfvozis3CIZbEYeJJMNrd0fgV4p1z5
-        vmy1heYEgzAthQGaM2PL5wa2Ev2OvLo=
-Date:   Tue, 28 Dec 2021 18:12:54 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Shuai Xue <xueshuai@linux.alibaba.com>
-Cc:     mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rric@kernel.org, ardb@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
-Subject: Re: [PATCH v2 1/3] ghes_edac: unify memory error report format with
- cper
-Message-ID: <YctFli9oMBYTlf7h@zn.tnic>
-References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
- <20211210134019.28536-2-xueshuai@linux.alibaba.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B9F3B8168C;
+        Tue, 28 Dec 2021 17:13:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EC36C36AF0;
+        Tue, 28 Dec 2021 17:13:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640711595;
+        bh=T3HUEllg1Pw7vYBFjSPgjWTc0i5UwlDCIB5VYMi9zQk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aC2AgnEYsVn8ajMr8WXjrdgvYdxaICxzBEIqsQvRNJDdSNTmgYKxxE13ldY57jvt6
+         wtSnEDHwfFeP7WPa1v2BXHsL164j0gjjc1waprQ7FxnadoJwpFcS8YPlJ1fRUUEgNG
+         1n8B6ybs2qiYbmmANluzHzAR+HA2JhBdfnB5r0OInhaGxnhy9LnnhUQ0kSAmYqyjvt
+         U8WA12Q8XWC6B4+2O+Uw+3c+bVIkQEInrB+E4lsE9bM/HIbStWglKd4TfiZn9oNjTC
+         71qzDaDkiqAQz8JEolGNowQ5U8m10M955+gDpfmp1KuoHVnN/ysNieqn8T0FB5YrhX
+         IQJmZwEC33MlQ==
+Date:   Tue, 28 Dec 2021 18:12:58 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ettore Chimenti <ek5.chimenti@gmail.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Mark Brown <broonie@kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Teddy Wang <teddy.wang@siliconmotion.com>,
+        Forest Bond <forest@alittletooquiet.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, netdev@vger.kernel.org,
+        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-wireless@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
+        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
+Message-ID: <20211228181107.2d476028@coco.lan>
+In-Reply-To: <4b630b7b87bd983291f628c42a1394fc0d2d86bd.camel@linux.ibm.com>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+        <20211227164317.4146918-2-schnelle@linux.ibm.com>
+        <YcrJAwsKIxxX18pW@kroah.com>
+        <20211228101435.3a55b983@coco.lan>
+        <b1475f6aecb752a858941f44a957b2183cd68405.camel@linux.ibm.com>
+        <20211228135425.0a69168c@coco.lan>
+        <4b630b7b87bd983291f628c42a1394fc0d2d86bd.camel@linux.ibm.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211210134019.28536-2-xueshuai@linux.alibaba.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 09:40:17PM +0800, Shuai Xue wrote:
-> Subject: Re: [PATCH v2 1/3] ghes_edac: unify memory error report format with
+Em Tue, 28 Dec 2021 16:06:44 +0100
+Niklas Schnelle <schnelle@linux.ibm.com> escreveu:
 
-"EDAC/ghes: Unify..."
+(on a side note: the c/c list of this patch is too long. I would try to
+avoid using a too long list, as otherwise this e-mail may end being rejected
+by mail servers)
 
-is the format we use in the EDAC tree.
-
-> The changes are to:
+> On Tue, 2021-12-28 at 13:54 +0100, Mauro Carvalho Chehab wrote:
+> >  
+> ---8<---
+> >     
+> > > > > All you really care about is the "legacy" I/O spaces here, this isn't
+> > > > > tied to PCI specifically at all, right?
+> > > > > 
+> > > > > So why not just have a OLD_STYLE_IO config option or something like
+> > > > > that, to show that it's the i/o functions we care about here, not PCI at
+> > > > > all?
+> > > > > 
+> > > > > And maybe not call it "old" or "legacy" as time constantly goes forward,
+> > > > > just describe it as it is, "DIRECT_IO"?    
+> > > > 
+> > > > Agreed. HAVE_PCI_DIRECT_IO (or something similar) seems a more appropriate
+> > > > name for it.
+> > > > 
+> > > > Thanks,
+> > > > Mauro    
+> > > 
+> > > Hmm, I might be missing something here but that sounds a lot like the
+> > > HAS_IOPORT option added in patch 02.
+> > > 
+> > > We add both LEGACY_PCI and HAS_IOPORT to differentiate between two
+> > > cases. HAS_IOPORT is for PC-style devices that are not on a PCI card
+> > > while LEGACY_PCI is for PCI drivers that require port I/O.   
+> > 
+> > I didn't look at the other patches on this series, but why it is needed
+> > to deal with them on a separate way? Won't "PCI" and "HAS_IOPORT" be enough? 
+> > 
+> > I mean, are there any architecture where HAVE_PCI=y and HAS_IOPORT=y
+> > where LEGACY_PCI shall be "n"?  
 > 
-> - add device info into ghes_edac
-> - change bit_pos to bit_position, col to column, requestorID to
->   requestor_id, etc in ghes_edac
-> - move requestor_id, responder_id, target_id and chip_id into memory error
->   location in ghes_edac
-> - add "DIMM location: not present." for DIMM location in ghes_edac
-> - remove the 'space' delimiter after the colon in ghes_edac and cper
-
-This commit message is useless: it should not talk about what your patch
-does - that should hopefully be visible in the diff itself. Rather, it
-should talk about *why* you're doing what you're doing.
-
-Also, your patch does a bunch of things at once.
-
-From: Documentation/process/submitting-patches.rst
-
-"Solve only one problem per patch.  If your description starts to get
-long, that's a sign that you probably need to split up your patch.
-See :ref:`split_changes`."
-
-You should have a look at that file.
-
-Also, avoid having "This patch" or "This commit" in the commit message.
-It is tautologically useless.
-
-Also, do
-
-$ git grep 'This patch' Documentation/process
-
-for more details.
-
-> The original EDAC and cper error log are as follows (all Validation Bits
-> are enabled):
+> In the current patch set LEGACY_PCI is not currently selected by
+> architectures, though of course it could be if we know that an
+> architecture requires it. We should probably also set it in any
+> defconfig that has devices depending on it so as not to break these.
 > 
-> [31940.060454] EDAC MC0: 1 CE Single-symbol ChipKill ECC on unknown memory (node:0 card:0 module:0 rank:0 bank:257 bank_group:1 bank_address:1 row:75492 col:8 bit_pos:0 DIMM DMI handle: 0x0000 chipID: 0 page:0x93724c offset:0x20 grain:1 syndrome:0x0 - APEI location: node:0 card:0 module:0 rank:0 bank:257 bank_group:1 bank_address:1 row:75492 col:8 bit_pos:0 DIMM DMI handle: 0x0000 chipID: 0 status(0x0000000000000000): reserved requestorID: 0x0000000000000000 responderID: 0x0000000000000000 targetID: 0x0000000000000000)
-> [31940.060459] {3}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 2
-> [31940.060460] {3}[Hardware Error]: It has been corrected by h/w and requires no further action
-> [31940.060462] {3}[Hardware Error]: event severity: corrected
-> [31940.060463] {3}[Hardware Error]:  Error 0, type: corrected
-> [31940.060464] {3}[Hardware Error]:   section_type: memory error
-> [31940.060465] {3}[Hardware Error]:   error_status: 0x0000000000000000
-> [31940.060466] {3}[Hardware Error]:   physical_address: 0x000000093724c020
-> [31940.060466] {3}[Hardware Error]:   physical_address_mask: 0x0000000000000000
-> [31940.060469] {3}[Hardware Error]:   node: 0 card: 0 module: 0 rank: 0 bank: 257 bank_group: 1 bank_address: 1 device: 0 row: 75492 column: 8 bit_position: 0 requestor_id: 0x0000000000000000 responder_id: 0x0000000000000000
-> [31940.060470] {3}[Hardware Error]:   error_type: 4, single-symbol chipkill ECC
-> [31940.060471] {3}[Hardware Error]:   DIMM location: not present. DMI handle: 0x0000
+> Other than that it would be set during kernel configuration if one
+> wants/needs support for legacy PCI devices. For testing I ran with
+> HAVE_PCI=y, HAS_IOPORT=y and LEGACY_PCI=n on both my local Ryzen 3990X
+> based workstation and Raspberry Pi 4 (DT). I guess at the moment it
+> would make most sense for special configs such as those tailored for
+> vitualization guets but in the end that would be something for
+> distributions to decide.
+
+IMO, it makes sense to have a "default y" there, as on systems that
+support I/O space, disabling it will just randomly disable some drivers
+that could be required by some hardware. I won't doubt that some of 
+those could be ported from using inb/outb to use, instead, readb/writeb.
+
 > 
-> Now, the EDAC and cper error log are properly reporting the error as
-> follows (all Validation Bits are enabled):
+> Arnd described the options here:
+> https://lore.kernel.org/lkml/CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com/
+
+Based on Arnd's description, LEGACY_PCI should depend on HAS_IOPORT.
+This is missing on patch 1. You should probably reorder your patch
+series to first create HAS_IOPORT and then add LEGACY_PCI with
+depends on, as otherwise it may cause randconfig build issues
+at robots and/or git bisect.
+
+I would also suggest to first introduce such change and then send
+a per-subsystem LEGACY_PCI patch, as it would be a lot easier for
+maintainers to review.
+
 > 
-> [ 117.973657] EDAC MC0: 1 CE Single-symbol ChipKill ECC on 0x0000
-
-What does "ECC on 0x0000" mean?
-
-> (node:0 card:0 module:0 rank:0 bank:1026 bank_group:4
-> bank_address:2 device:0 row:6749 column:8 bit_position:0
-
-> requestor_id:0x0000000000000000
-> responder_id:0x0000000000000000
-> target_id:0x0000000000000000
-
-those look useless to me too. Probably invalid/unpopulated by BIOS...
-
-> chip_id:0 DIMM location:not present. DIMM
-> DMI handle:0x0000 page:0x8d2ef4 offset:0x20 grain:1 syndrome:0x0 -
-> APEI location: node:0 card:0 module:0 rank:0 bank:1026 bank_group:4
-> bank_address:2 device:0 row:6749 column:8 bit_position:0
-> requestor_id:0x0000000000000000 responder_id:0x0000000000000000
-> target_id:0x0000000000000000 chip_id:0 DIMM location:not present. DIMM
-> DMI handle:0x0000 status(0x0000000000000000):reserved)
-
-Sorry but I fail to see how this changed error record is an improvement.
-
-> [  117.973663] {2}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 2
-> [  117.973664] {2}[Hardware Error]: It has been corrected by h/w and requires no further action
-> [  117.973665] {2}[Hardware Error]: event severity: corrected
-> [  117.973666] {2}[Hardware Error]:  Error 0, type: corrected
-> [  117.973667] {2}[Hardware Error]:   section_type: memory error
-> [  117.973668] {2}[Hardware Error]:   error_status: 0x0000000000000000
-> [  117.973669] {2}[Hardware Error]:   physical_address: 0x00000008d2ef4020
-> [  117.973670] {2}[Hardware Error]:   physical_address_mask: 0x0000000000000000
-> [  117.973672] {2}[Hardware Error]:   node:0 card:0 module:0 rank:0 bank:1026 bank_group:4 bank_address:2 device:0 row:6749 column:8 bit_position:0 requestor_id:0x0000000000000000 responder_id:0x0000000000000000 target_id:0x0000000000000000 chip_id:0
-> [  117.973673] {2}[Hardware Error]:   error_type: 4, single-symbol chipkill ECC
-> [  117.973674] {2}[Hardware Error]:   DIMM location: not present. DMI handle:0x0000
+> >   
+> > > This
+> > > includes pre-PCIe devices as well as PCIe devices which require
+> > > features like I/O spaces. The "legacy" naming is comes from the PCIe
+> > > spec which in section 2.1.1.2 says "PCI Express supports I/O Space for
+> > > compatibility with legacy devices which require their use. Future
+> > > revisions of this specification may deprecate the use of I/O Space."  
+> > 
+> > I would still avoid calling it LEGACY_PCI, as this sounds too generic.
+> > 
+> > I didn't read the PCI/PCIe specs, but I suspect that are a lot more
+> > features that were/will be deprecated on PCI specs as time goes by.
+> > 
+> > So, I would, instead, use something like PCI_LEGACY_IO_SPACE or 
+> > HAVE_PCI_LEGACY_IO_SPACE, in order to let it clear what "legacy"
+> > means.  
 > 
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> ---
->  drivers/edac/ghes_edac.c    | 35 +++++++++++++++++++----------------
->  drivers/firmware/efi/cper.c | 34 +++++++++++++++++-----------------
->  2 files changed, 36 insertions(+), 33 deletions(-)
-> 
-> diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-> index 6d1ddecbf0da..526a28cbb19b 100644
-> --- a/drivers/edac/ghes_edac.c
-> +++ b/drivers/edac/ghes_edac.c
-> @@ -378,6 +378,8 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
->  	if (mem_err->validation_bits & CPER_MEM_VALID_BANK_ADDRESS)
->  		p += sprintf(p, "bank_address:%d ",
->  			     mem_err->bank & CPER_MEM_BANK_ADDRESS_MASK);
-> +	if (mem_err->validation_bits & CPER_MEM_VALID_DEVICE)
-> +		p += sprintf(p, "device:%d ", mem_err->device);
->  	if (mem_err->validation_bits & (CPER_MEM_VALID_ROW | CPER_MEM_VALID_ROW_EXT)) {
->  		u32 row = mem_err->row;
->  
-> @@ -385,9 +387,21 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
->  		p += sprintf(p, "row:%d ", row);
->  	}
->  	if (mem_err->validation_bits & CPER_MEM_VALID_COLUMN)
-> -		p += sprintf(p, "col:%d ", mem_err->column);
-> +		p += sprintf(p, "column:%d ", mem_err->column);
->  	if (mem_err->validation_bits & CPER_MEM_VALID_BIT_POSITION)
-> -		p += sprintf(p, "bit_pos:%d ", mem_err->bit_pos);
-> +		p += sprintf(p, "bit_position:%d ", mem_err->bit_pos);
+> Hmm, I'd like to hear Bjorn's opinion on this. Personally I feel like
+> LEGACY_PCI is pretty clear since most devices are either pre-PCIe
+> devices or a compatibility feature allowing drivers for a pre-PCIe
+> device to work with a PCIe device.
 
-What for?
+That's the main point: it is *not* disabling pre-PCIe devices or
+even legacy PCI drivers. It just disables a random set of drivers just
+because they use inb/outb instead of readb/writeb. It keeps several pure 
+PCI drivers selected, and disables some PCIe for no real reason.
 
-> +	if (mem_err->validation_bits & CPER_MEM_VALID_REQUESTOR_ID)
-> +		p += sprintf(p, "requestor_id:0x%016llx ",
-> +			     (long long)mem_err->requestor_id);
-> +	if (mem_err->validation_bits & CPER_MEM_VALID_RESPONDER_ID)
-> +		p += sprintf(p, "responder_id:0x%016llx ",
-> +			     (long long)mem_err->responder_id);
-					^^^^^^^^^^^^^^^^^^^^^^
+Just to give one example, this symbol:
 
-> +	if (mem_err->validation_bits & CPER_MEM_VALID_TARGET_ID)
-> +		p += sprintf(p, "target_id:0x%016llx ",
-> +			     (long long)mem_err->responder_id);
-					^^^^^^^^^^^^^^^^^^^^^^
+> diff --git a/drivers/media/cec/platform/Kconfig b/drivers/media/cec/platform/Kconfig
+> index b672d3142eb7..5e92ece5b104 100644
+> --- a/drivers/media/cec/platform/Kconfig
+> +++ b/drivers/media/cec/platform/Kconfig
+> @@ -100,7 +100,7 @@ config CEC_TEGRA
+>  config CEC_SECO
+>  	tristate "SECO Boards HDMI CEC driver"
+>  	depends on (X86 || IA64) || COMPILE_TEST
+> -	depends on PCI && DMI
+> +	depends on LEGACY_PCI && DMI
+>  	select CEC_CORE
+>  	select CEC_NOTIFIER
+>  	help
 
-mem_err->responder_id for both responder and target?!
+Disables HDMI CEC support on some Intel motherboards.
+Any distro meant to run on generic hardware should keep it selected.
 
-> +	if (mem_err->validation_bits & CPER_MEM_VALID_CHIP_ID)
-> +		p += sprintf(p, "chip_id:%d ",
-> +			     mem_err->extended >> CPER_MEM_CHIP_ID_SHIFT);
+I can see some value of a "PCI_LEGACY" option to disable all
+non-PCIe drivers, but this is not the case here.
 
-I don't know if some dumb BIOS simply sets those valid bits regardless
-of whether those fields are populated or not... It looks like it...
-
-Right, so first this needs to explain *why* you're doing what you're
-doing. And then with each reason why, you should do a patch, one by one,
-explaining the rationale.
-
-/me goes and looks at the next patches.
-
-Aha, and you add all that crap here just to remove it in patch 2. But
-this is all useless churn.
-
-If you want to use cper_mem_err_location(), why don't you simply use it
-directly?
-
-And so on and so on...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Mauro

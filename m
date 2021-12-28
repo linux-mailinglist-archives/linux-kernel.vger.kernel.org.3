@@ -2,149 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3761480BD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 18:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F26480BE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 18:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236609AbhL1RHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 12:07:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236599AbhL1RHs (ORCPT
+        id S236652AbhL1RKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 12:10:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43736 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236641AbhL1RKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 12:07:48 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91E2C06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 09:07:47 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id x10so26030423oix.6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 09:07:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oZ/3RWIICayqeX8NGvH8uNdXpYzICfkoNEUUnjvFbK4=;
-        b=hckZEzqYtQUUAo14ly2MATzBb/IMI0LNK7RZEiElcwzKKQHQCCBr93t8BP+tq/LUgx
-         5rdGiFVWk7zgQxobsXoBTEVyiA3C075pIhxeIJo2euGcznekXBRmTDZjxipRIjXMvY5C
-         qL4w9ZUTXi49MbM7ujw5WJ+5K/+SlnAhc6KAsNLO5vMCMkwXMjCP9/BRkptxE3e4Y1YK
-         BY8NZGzMsPAJEaYxCxK3xVMFeOT3/ngFYMeQl8TYqPFe7ZQ/W2q9tsqVpIqdKkgCdAL2
-         hJa7Bw0qaA7AwHQXyYAY7ZhlBObeo+DZMzsL2FSzk+dAJXByaA5mXZRuD4IHyN5pyRYc
-         VAOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oZ/3RWIICayqeX8NGvH8uNdXpYzICfkoNEUUnjvFbK4=;
-        b=CxKrmiYhiLyd/mdclPsVK1ojjH+QlO+EeCnuUTx0N5M+b/AZtQbRasn7SsfT0ZZ+Gs
-         6rN35Jk+8S77HyZtSHyuU3e994QsIhAI6ydmN34xDAOIm95RgsLkV0CK1qj86F2jSVBd
-         84t5nXYEIEbPgDa2fN7k81m2wxCrJjiMROKCkYmzT83DM9qaVbcEPA7CDctvdO9RaHC6
-         ecUWoevNNOuxM3pFiECFSQ4jrg/XzQpeOzagpOiER/Bw6J40X/f0SZNNMicviyjXxIzp
-         M9CfeUVLr+if8Jsx4EvLt0+4T14/teS4/0ofJBse3IZDaBAu5uCJ1+J87oUlCM3L4pa6
-         2kJA==
-X-Gm-Message-State: AOAM530R30G49JgmHT15njeZyp9WoQkzjQP7HI3IoJtUCKCRgaDbK30s
-        V3az7pSbemUeJAbH8b9l3ScppA==
-X-Google-Smtp-Source: ABdhPJxyp73sBikZUK9fV7aQkyVfeNKeBZfLBnmheicO2np5Qje9WMaB1cRxtpdfGlTKH4B7tIbvOw==
-X-Received: by 2002:a05:6808:2111:: with SMTP id r17mr17314232oiw.118.1640711267219;
-        Tue, 28 Dec 2021 09:07:47 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id w4sm2875922oiv.47.2021.12.28.09.07.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 09:07:46 -0800 (PST)
-Date:   Tue, 28 Dec 2021 09:08:46 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/8] typec: mux: Introduce support for multiple TypeC
- muxes
-Message-ID: <YctEnnH8FvS6zRPb@ripper>
-References: <20211228052116.1748443-1-bjorn.andersson@linaro.org>
- <279c7bd8-c0bb-e58c-1149-d124102bf8b8@redhat.com>
+        Tue, 28 Dec 2021 12:10:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640711405;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zcyx31DoFdfPdC5vlZBLQMcpObsl0QbQgiHxbQ2ymUE=;
+        b=U8LxtFjCAOKgoo9CCCaTc1WD8CVB0zKfApa8cyyXC6mrfOxuFRdKjoL55/TEE8+wB7od33
+        iFYVC5L/AwxtWs8eqO5TsDsPeVdcKemBUeb6b0Qhb4QDxdnqdpVopwbh/u5fdUJSVuq8or
+        lAFSZIVdGt4P158gWFQFpSFcM4gxbDA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-85-bXRy1wkWMIqgm9lBuGByyQ-1; Tue, 28 Dec 2021 12:10:01 -0500
+X-MC-Unique: bXRy1wkWMIqgm9lBuGByyQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 16CC2102CB2A;
+        Tue, 28 Dec 2021 17:09:58 +0000 (UTC)
+Received: from wcosta.com (ovpn-116-95.gru2.redhat.com [10.97.116.95])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D689377449;
+        Tue, 28 Dec 2021 17:09:32 +0000 (UTC)
+From:   Wander Lairson Costa <wander@redhat.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Laurent Vivier <laurent@vivier.eu>,
+        Wander Lairson Costa <wander@redhat.com>,
+        YunQiang Su <ysu@wavecomp.com>, Helge Deller <deller@gmx.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alexey Gladkov <legion@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Rolf Eike Beer <eb@emlix.com>,
+        linux-fsdevel@vger.kernel.org (open list:FILESYSTEMS (VFS and
+        infrastructure)), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH RFC v2 0/4] coredump: mitigate privilege escalation of process coredump
+Date:   Tue, 28 Dec 2021 14:09:04 -0300
+Message-Id: <20211228170910.623156-1-wander@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <279c7bd8-c0bb-e58c-1149-d124102bf8b8@redhat.com>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 28 Dec 04:20 PST 2021, Hans de Goede wrote:
+v2
+==
 
-> Hi Bjorn,
-> 
-> On 12/28/21 06:21, Bjorn Andersson wrote:
-> > This series introduces a level of indirection between the controller's view of
-> > a typec_mux/switch and the implementation and then expands that to support
-> > multiple drivers.
-> > 
-> > This is needed in order to support devices such as the Qualcomm Snapdragon 888
-> > HDK, which does muxing and orientation handling in the QMP (USB+DP) PHY and SBU
-> > muxing in the external FSA4480 chip.
-> > 
-> > Additionally integration of typec mux and switch in the QMP PHY is included in
-> > the series, as is the new FSA4480 driver. This is done to deal with the
-> > renaming of the driver-side typec_mux -> typec_mux_dev.
-> > 
-> > Bjorn Andersson (8):
-> >   dt-bindings: phy: qcom,qmp-usb3-dp: Add altmode/switch properties
-> >   phy: qcom-qmp: Register typec mux and orientation switch
-> >   device property: Helper to match multiple connections
-> >   device property: Use multi-connection matchers for single case
-> >   typec: mux: Introduce indirection
-> >   typec: mux: Allow multiple mux_devs per mux
-> >   dt-bindings: usb: Add binding for fcs,fsa4480
-> >   usb: typec: mux: Add On Semi fsa4480 driver
-> 
-> Thank you for your series, I will leave commenting on the
-> dt-bindings and typec-mux changes to others.
-> 
-> But what I can do is test this on an x86 device using
-> a pi3usb30532 mux for USB super-speed and DP-alt-mode
-> muxing / orientation switching.
-> 
+Patch 02 conflicted with commit 92307383082d("coredump:  Don't perform
+any cleanups before dumping core") which I didn't have in my tree. V2
+just changes the hunk
 
-Thanks Hans, that would be much appreciated. I realize that I failed to
-mention that I don't have this hardware, so I've not been able to test
-it myself.
++#define PF_SUID   0x00000008
 
-> I'm going to wait a bit with doing that till this has had
-> some reviews and possibly also some newer versions because
-> of those reviews. If you haven't received a Tested-by from me
-> when this looks like it is ready for merging please ping me.
-> 
+To
 
-Will ping you when appropriate.
++#define PF_SUID   0x01000000
 
-Thanks,
-Bjorn
+To merge cleanly. Other than that, it is the same patch as v1.
 
-> Regards,
-> 
-> Hans
-> 
-> 
-> > 
-> >  .../bindings/phy/qcom,qmp-usb3-dp-phy.yaml    |  14 +
-> >  .../devicetree/bindings/usb/fcs,fsa4480.yaml  |  72 +++++
-> >  drivers/base/property.c                       |  83 ++++--
-> >  drivers/phy/qualcomm/phy-qcom-qmp.c           | 176 ++++++++++--
-> >  drivers/usb/typec/bus.c                       |   2 +-
-> >  drivers/usb/typec/mux.c                       | 257 +++++++++++++-----
-> >  drivers/usb/typec/mux.h                       |  12 +-
-> >  drivers/usb/typec/mux/Kconfig                 |   9 +
-> >  drivers/usb/typec/mux/Makefile                |   1 +
-> >  drivers/usb/typec/mux/fsa4480.c               | 220 +++++++++++++++
-> >  drivers/usb/typec/mux/intel_pmc_mux.c         |   8 +-
-> >  drivers/usb/typec/mux/pi3usb30532.c           |   8 +-
-> >  include/linux/property.h                      |   5 +
-> >  include/linux/usb/typec_mux.h                 |  22 +-
-> >  14 files changed, 762 insertions(+), 127 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
-> >  create mode 100644 drivers/usb/typec/mux/fsa4480.c
-> > 
-> 
+v1
+==
+
+A set-uid executable might be a vector to privilege escalation if the
+system configures the coredump file name pattern as a relative
+directory destiny. The full description of the vulnerability and
+a demonstration of how we can exploit it can be found at [1].
+
+This patch series adds a PF_SUID flag to the process in execve if it is
+set-[ug]id binary and elevates the new image's privileges.
+
+In the do_coredump function, we check if:
+
+1) We have the SUID_FLAG set
+2) We have CAP_SYS_ADMIN (the process might have decreased its
+   privileges)
+3) The current directory is owned by root (the current code already
+   checks for core_pattern being a relative path).
+4) non-privileged users don't have permission to write to the current
+   directory.
+
+If all four conditions match, we set the need_suid_safe flag.
+
+An alternative implementation (and more elegant IMO) would be saving
+the fsuid and fsgid of the process in the task_struct before loading the
+new image to the memory. But this approach would add eight bytes to all
+task_struct instances where only a tiny fraction of the processes need
+it and under a configuration that not all (most?) distributions don't
+adopt by default.
+
+Wander Lairson Costa (4):
+  exec: add a flag indicating if an exec file is a suid/sgid
+  process: add the PF_SUID flag
+  coredump: mitigate privilege escalation of process coredump
+  exec: only set the suid flag if the current proc isn't root
+
+ fs/coredump.c           | 15 +++++++++++++++
+ fs/exec.c               | 10 ++++++++++
+ include/linux/binfmts.h |  6 +++++-
+ include/linux/sched.h   |  1 +
+ kernel/fork.c           |  2 ++
+ 5 files changed, 33 insertions(+), 1 deletion(-)
+
+-- 
+2.27.0
+

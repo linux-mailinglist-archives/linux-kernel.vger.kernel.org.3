@@ -2,127 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD944806A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 06:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 643054806A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 07:03:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234990AbhL1FyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 00:54:07 -0500
-Received: from mail-0201.mail-europe.com ([51.77.79.158]:41610 "EHLO
-        mail-0201.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234867AbhL1FyG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 00:54:06 -0500
-Date:   Tue, 28 Dec 2021 05:53:59 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail2; t=1640670843;
-        bh=b0v3NT4fQxh1NjGM+5rW44xiyu7ufiazlHOFGQAISL0=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc;
-        b=XOh1i2V38nQHJyR+spqWmeBNkYQowJv15SeI+nVk1sF+UCHhi3IYcjDj/NehoEEdW
-         L8utrSe9FmwD5E/hcfRzJwOk/QFxiCz1jmaFV1QauZH0CwiY9soFWcei98q+iX87xi
-         ZoWpuqQtwMiAOTru0JQbeXIigBqmLQX6HzWQCl8F9LNYoaedbll+wclUFbTYmS1iCx
-         Ler/J9MYKYLvNOAnEamFiNo+wv9cbjQnieXZ3/jezWaXMu/P9450YVkoDef1M3HNJP
-         7gvJXtTWGAyYMANOTnIwjrc/De1svWqdP48itnJARsriERd8rcaCSh8rfd3C7SCB5p
-         4ziDfuFMyvNKQ==
-To:     Aditya Garg <gargaditya08@live.com>
-From:   Orlando Chamberlain <redecorating@protonmail.com>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@intel.com>,
-        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "admin@kodeit.net" <admin@kodeit.net>
-Reply-To: Orlando Chamberlain <redecorating@protonmail.com>
-Subject: Re: [BUG] Slow bluetooth speed on Apple MacBook Pro 16,1
-Message-ID: <20211228055353.1b4c09e9@localhost>
-In-Reply-To: <3352A23E-EA42-4366-BBAA-459CEAE6F51B@live.com>
-References: <3352A23E-EA42-4366-BBAA-459CEAE6F51B@live.com>
+        id S235005AbhL1GCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 01:02:05 -0500
+Received: from mga05.intel.com ([192.55.52.43]:48782 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234974AbhL1GCF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 01:02:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640671325; x=1672207325;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Eq5xKh+1C+iNFI+0PwCle38sDWZVf8PAkyabY5jLFno=;
+  b=AuhonQu1/3ME+eZqL8NrB/JHCojEwnGWY8MxPUbFPeLkWmcQp/7SC6nS
+   hS2C9KGfuKddYAcCPwLmxiWUUR6ENyKiT1b0rxO/z13fxJ2jwW72Vkrz8
+   3RfLaf6CM9tknr/F2Jl1Ru/VaDqMd14uc6bE8PZd0drBS0blGHESJ3t1r
+   kdu2ryNsCZD8vOIpAlYGgVrcQii/k6/Dnc4BpNylwxe1jsmQ5hwOVbzFY
+   jmiCrfYjRoVrLMR9/3/zXlmjCeYDz50B8w5W+qgwS1dx+vwjeZ6csHilc
+   d63qGjY/FKLUevvOqhGTOF05XUXh8aIrkjVRZtBOMMatveY+pGdvg1umW
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="327643103"
+X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
+   d="scan'208";a="327643103"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 22:01:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
+   d="scan'208";a="554075225"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 27 Dec 2021 22:01:52 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n25YW-0007IV-1N; Tue, 28 Dec 2021 06:01:52 +0000
+Date:   Tue, 28 Dec 2021 14:01:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: drivers/scsi/ufs/ufs-exynos.c:1268:34: warning: unused variable
+ 'exynos_ufs_of_match'
+Message-ID: <202112281324.w3VTX6oh-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Dec 2021 14:24:09 +1100
-"Aditya Garg" <gargaditya08@live.com> wrote:
+Hi Alim,
 
-> The file transfer speed on MacBook Pro 16,1 from an Android device to
-> Mac is too slow even if I transfer a file of a few Kbs. In case of a
-> transfer from Mac to my Android device, it simply fails.
->=20
-> Some logs that might be helpful :-
->=20
-> -- Logs begin at Fri 2021-11-26 21:34:04 IST, end at Tue 2021-12-28 08:38=
-:16 IST. --
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: Core ver 2.22
-> Dec 28 08:28:29 MacBook kernel: NET: Registered PF_BLUETOOTH protocol fam=
-ily
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI device and connection mana=
-ger initialized
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI socket layer initialized
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: L2CAP socket layer initialized
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: SCO socket layer initialized
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART driver ver 2.3
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol H4 registere=
-d
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol BCSP registe=
-red
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol LL registere=
-d
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol ATH3K regist=
-ered
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol Three-wire (=
-H5) registered
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol Intel regist=
-ered
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol Broadcom reg=
-istered
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol QCA register=
-ed
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol AG6XX regist=
-ered
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol Marvell regi=
-stered
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: hci0: BCM: failed to write upd=
-ate baudrate (-16)
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: hci0: Failed to set baudrate
+First bad commit (maybe != root cause):
 
-When it fails to set baud rate, btmon has the following:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a8ad9a2434dc7967ab285437f443cae633b6fc1c
+commit: d31503fe395d1d7e17b85eb7b291cc1a4bff2671 scsi: ufs: Allow exynos ufs driver to build as module
+date:   1 year, 6 months ago
+config: hexagon-randconfig-r032-20211228 (https://download.01.org/0day-ci/archive/20211228/202112281324.w3VTX6oh-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7171af744543433ac75b232eb7dfdaef7efd4d7a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d31503fe395d1d7e17b85eb7b291cc1a4bff2671
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d31503fe395d1d7e17b85eb7b291cc1a4bff2671
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/scsi/ufs/
 
-< HCI Command: Broadcom Update UART Baud Rate (0x3f|0x0018) plen 6=20
-        Encoded baud rate: Not used (0x0000)
-        Explicit baud rate: 3000000 Mbps
-> HCI Event: Command Complete (0x0e) plen 4                       =20
-      Broadcom Update UART Baud Rate (0x3f|0x0018) ncmd 1
-        Status: Command Disallowed (0x0c)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Not sure if this means the command is unsupported by this chip, or if an "E=
-ncoded
-baud rate" needs to be specified.
+All warnings (new ones prefixed by >>):
 
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: hci0: BCM: chip id 150
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: hci0: BCM: features 0x07
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: hci0: BCM4364B3 Trinidad Olymp=
-ic GEN (MFG)
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: hci0: BCM (001.016.075) build =
-0099
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: hci0: BCM: firmware Patch file=
- not found, tried:
-> Dec 28 08:28:29 MacBook kernel: Bluetooth: hci0: BCM: 'brcm/BCM.hcd'
-> Dec 28 08:28:40 MacBook kernel: Bluetooth: BNEP (Ethernet Emulation) ver =
-1.3
-> Dec 28 08:28:40 MacBook kernel: Bluetooth: BNEP filters: protocol multica=
-st
-> Dec 28 08:28:40 MacBook kernel: Bluetooth: BNEP socket layer initialized
-> Dec 28 08:35:02 MacBook kernel: Bluetooth: RFCOMM TTY layer initialized
-> Dec 28 08:35:02 MacBook kernel: Bluetooth: RFCOMM socket layer initialize=
-d
-> Dec 28 08:35:02 MacBook kernel: Bluetooth: RFCOMM ver 1.11
+>> drivers/scsi/ufs/ufs-exynos.c:1268:34: warning: unused variable 'exynos_ufs_of_match' [-Wunused-const-variable]
+   static const struct of_device_id exynos_ufs_of_match[] = {
+                                    ^
+   1 warning generated.
 
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for FRAME_POINTER
+   Depends on DEBUG_KERNEL && (M68K || UML || SUPERH) || ARCH_WANT_FRAME_POINTERS
+   Selected by
+   - LOCKDEP && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT && !MIPS && !PPC && !ARM && !S390 && !MICROBLAZE && !ARC && !X86
+
+
+vim +/exynos_ufs_of_match +1268 drivers/scsi/ufs/ufs-exynos.c
+
+55f4b1f73631a0 Alim Akhtar 2020-05-28  1267  
+55f4b1f73631a0 Alim Akhtar 2020-05-28 @1268  static const struct of_device_id exynos_ufs_of_match[] = {
+55f4b1f73631a0 Alim Akhtar 2020-05-28  1269  	{ .compatible = "samsung,exynos7-ufs",
+55f4b1f73631a0 Alim Akhtar 2020-05-28  1270  	  .data	      = &exynos_ufs_drvs },
+55f4b1f73631a0 Alim Akhtar 2020-05-28  1271  	{},
+55f4b1f73631a0 Alim Akhtar 2020-05-28  1272  };
+55f4b1f73631a0 Alim Akhtar 2020-05-28  1273  
+
+:::::: The code at line 1268 was first introduced by commit
+:::::: 55f4b1f73631a0817717fe6e98517de51b4c3527 scsi: ufs: ufs-exynos: Add UFS host support for Exynos SoCs
+
+:::::: TO: Alim Akhtar <alim.akhtar@samsung.com>
+:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

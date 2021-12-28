@@ -2,120 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FB164808F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 13:01:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0344808FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 13:08:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbhL1MBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 07:01:45 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54384 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbhL1MBn (ORCPT
+        id S230246AbhL1MIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 07:08:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230080AbhL1MID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 07:01:43 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A787611A1;
-        Tue, 28 Dec 2021 12:01:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6C83C36AE8;
-        Tue, 28 Dec 2021 12:01:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640692902;
-        bh=dpf3i7sjhIXaDkn8SthFB0jsZoBRTSFg7eTP6aY/SC8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cN4QD1KP8rQOfSZWJcUJF6kjhcWMfJ7bsZb/f5oUmzKHLL7psqPmCS6g0Qkj/K564
-         7/rlEQ+Pe342cAd267FpeISixTvHGRK0P9C0wYDjAD6ufccb9veUMjKH50WqUkS/jg
-         kHgfqD+MN2N2OGriHTomtwS+h+y4P/Fk7pKEHkJ8=
-Date:   Tue, 28 Dec 2021 13:01:38 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Ian Abbott <abbotti@mev.co.uk>,
-        H Hartley Sweeten <hsweeten@visionengravers.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        Mark Brown <broonie@kernel.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Teddy Wang <teddy.wang@siliconmotion.com>,
-        Forest Bond <forest@alittletooquiet.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, netdev@vger.kernel.org,
-        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-wireless@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
-        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
-Message-ID: <Ycr8ooFX+w9RGu1M@kroah.com>
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
- <20211227164317.4146918-2-schnelle@linux.ibm.com>
- <YcrJAwsKIxxX18pW@kroah.com>
- <20211228101435.3a55b983@coco.lan>
- <b1475f6aecb752a858941f44a957b2183cd68405.camel@linux.ibm.com>
+        Tue, 28 Dec 2021 07:08:03 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69162C061574;
+        Tue, 28 Dec 2021 04:08:03 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id o6so73008589edc.4;
+        Tue, 28 Dec 2021 04:08:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=shBrQLOvlvGM8s87Is6erSp89kAhjElOM3ByEm8H9Sw=;
+        b=GatQEtLEWzlVYpRap1EdimbXE4NmVhdDJilB6yXhm4+rhoqwuJVfK1lNarv0BLo4TT
+         4Tx5N9/fR8DOF8LH8YX9Tl7h3nmj4l0NM7ORHOyGC+78hIY+TVRjKokXoj3WGbLoNotB
+         7NRCHoad5DrNhkgpmuk9cPQJ0bPmntiGIVdx6J9UJIZeT9u80qUu/PfcQ6NHSW/MvDvm
+         FpRsIwO1XzAGm4OOghWi7oFxWUOCMLdD9Uxfzg9gim+8c5LMinOXOtFMXh1B4ZX9eHR8
+         C79JszSQ/+wdKA/NLl/V0L04/BxqFXjc1ZjaBGJz9EURaDyUp1tj16RJeGPu1V+aDomt
+         9b3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=shBrQLOvlvGM8s87Is6erSp89kAhjElOM3ByEm8H9Sw=;
+        b=G7uzUkoJp4CEVIDOmM1dknW69wrMIniBBYS1tXHoTA1rPbaemjz1jgu3VuYiS4b3fs
+         G5zZqkyOI2TQNhql9ynCkyMdy5tCbRIb6yO+mbquYIAaAExL8bSyWZf8g91gaJY7FKHg
+         vmb/Tm4KO36HIFd0oexDLBsw5vzcNWooc4i5zgLvep5y4HP1ps0NE3J7aBhmbi29IcUU
+         gUqGaSUgjysBid4PbGr3BRTU49Zj2/+SLV7fJUZQk04jv8kfrokwHF7g5D7s1/KNsNwo
+         /qPa3wr2gu0DMWiZNDxODB8caLVsOXbNe5OqsHoObliBT6FGqJqmMOF3PdPbPp1RmZ+N
+         DWSA==
+X-Gm-Message-State: AOAM530g/lGkglbr9IVdyC38KpN+gJsRE4rS7H1e8RiPOhP9JVFSJbVw
+        9wAnEQ4QScye9B7dbDxjdMZcQQ86dRSIzA==
+X-Google-Smtp-Source: ABdhPJyRsGWIlw4+PkSGRchYiWx5CIhsqycvCoWYUKkfIwWrrUJ2z/BGz72NUiT0cZFa9nwJ7d6FtA==
+X-Received: by 2002:a05:6402:254e:: with SMTP id l14mr20520394edb.241.1640693281897;
+        Tue, 28 Dec 2021 04:08:01 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id h13sm1807814edt.61.2021.12.28.04.08.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Dec 2021 04:08:01 -0800 (PST)
+Subject: Re: [RFC PATCH v6 1/4] dt-bindings: mfd: syscon: add naneng multi phy
+ register compatible
+From:   Johan Jonker <jbx6244@gmail.com>
+To:     heiko@sntech.de
+Cc:     robh+dt@kernel.org, kishon@ti.com, vkoul@kernel.org,
+        p.zabel@pengutronix.de, lee.jones@linaro.org,
+        yifeng.zhao@rock-chips.com, kever.yang@rock-chips.com,
+        cl@rock-chips.com, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211222213032.7678-1-jbx6244@gmail.com>
+ <20211222213032.7678-2-jbx6244@gmail.com>
+Message-ID: <50f49afa-6042-03f2-a8ed-cfffd317aa15@gmail.com>
+Date:   Tue, 28 Dec 2021 13:08:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b1475f6aecb752a858941f44a957b2183cd68405.camel@linux.ibm.com>
+In-Reply-To: <20211222213032.7678-2-jbx6244@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 11:58:55AM +0100, Niklas Schnelle wrote:
-> We add both LEGACY_PCI and HAS_IOPORT to differentiate between two
-> cases. HAS_IOPORT is for PC-style devices that are not on a PCI card
-> while LEGACY_PCI is for PCI drivers that require port I/O. This
-> includes pre-PCIe devices as well as PCIe devices which require
-> features like I/O spaces. The "legacy" naming is comes from the PCIe
-> spec which in section 2.1.1.2 says "PCI Express supports I/O Space for
-> compatibility with legacy devices which require their use. Future
-> revisions of this specification may deprecate the use of I/O Space."
+Hi Heiko,
 
-Ah, then mention the reason why this is called LEGACY_PCI is that it is
-because that is what the PCI spec calls it.  It was not obvious here at
-all that this is where the name came from.
+The file grf.yaml is already pretty full with legacy stuff.
+Now rockchip,rk3568-usb2phy-grf is added, would you like these two
+compatible strings also there?
+Could you give advice to Yifeng?
 
-thanks,
+Kind regards,
 
-greg k-h
+Johan Jonker
+
+
+On 12/22/21 10:30 PM, Johan Jonker wrote:
+> Add Naneng multi phy register compatible.
+> 
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/mfd/syscon.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> index 5de16388a..9f0c8aa81 100644
+> --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> @@ -52,6 +52,8 @@ properties:
+>                - rockchip,rk3288-qos
+>                - rockchip,rk3368-qos
+>                - rockchip,rk3399-qos
+> +              - rockchip,rk3568-pipe-grf
+> +              - rockchip,rk3568-pipe-phy-grf
+>                - rockchip,rk3568-qos
+>                - samsung,exynos3-sysreg
+>                - samsung,exynos4-sysreg
+> 

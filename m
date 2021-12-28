@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C83480C64
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 19:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9AB480C6F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 19:17:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236941AbhL1SOa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Dec 2021 13:14:30 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55740 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233411AbhL1SO3 (ORCPT
+        id S236972AbhL1SRz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Dec 2021 13:17:55 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50868 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233411AbhL1SRy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 13:14:29 -0500
+        Tue, 28 Dec 2021 13:17:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32EB2612B1;
-        Tue, 28 Dec 2021 18:14:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D2CBB8168C;
+        Tue, 28 Dec 2021 18:17:53 +0000 (UTC)
 Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp.kernel.org (Postfix) with ESMTPSA id AD404C36AEC;
-        Tue, 28 Dec 2021 18:14:24 +0000 (UTC)
-Date:   Tue, 28 Dec 2021 18:20:09 +0000
+        by smtp.kernel.org (Postfix) with ESMTPSA id A8AF9C36AE9;
+        Tue, 28 Dec 2021 18:17:48 +0000 (UTC)
+Date:   Tue, 28 Dec 2021 18:23:32 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
         <u.kleine-koenig@pengutronix.de>
@@ -32,15 +32,14 @@ Cc:     William Breathitt Gray <vilhelm.gray@gmail.com>,
         linux-iio@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        "Felipe Balbi (Intel)" <balbi@kernel.org>,
-        Raymond Tan <raymond.tan@intel.com>
-Subject: Re: [PATCH v2 17/23] counter: intel-qep: Convert to new counter
+        Syed Nayyar Waris <syednwaris@gmail.com>,
+        Patrick Havelange <patrick.havelange@essensium.com>
+Subject: Re: [PATCH v2 18/23] counter: ftm-quaddec: Convert to new counter
  registration
-Message-ID: <20211228182009.5e2841ab@jic23-huawei>
-In-Reply-To: <20211227094526.698714-18-u.kleine-koenig@pengutronix.de>
+Message-ID: <20211228182332.7a96041e@jic23-huawei>
+In-Reply-To: <20211227094526.698714-19-u.kleine-koenig@pengutronix.de>
 References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
-        <20211227094526.698714-18-u.kleine-koenig@pengutronix.de>
+        <20211227094526.698714-19-u.kleine-koenig@pengutronix.de>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,84 +48,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Dec 2021 10:45:20 +0100
+On Mon, 27 Dec 2021 10:45:21 +0100
 Uwe Kleine-König         <u.kleine-koenig@pengutronix.de> wrote:
 
 > This fixes device lifetime issues where it was possible to free a live
 > struct device.
 > 
-> Fixes: b711f687a1c1 ("counter: Add support for Intel Quadrature Encoder Peripheral")
+> Fixes: a3b9a99980d9 ("counter: add FlexTimer Module Quadrature decoder counter driver")
 > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-FWIW given these are all more or less the same...
-
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
+Assuming you move the 104-quad-8 stuff to the earlier patch.
+
+
 > ---
->  drivers/counter/intel-qep.c | 28 ++++++++++++++++------------
->  1 file changed, 16 insertions(+), 12 deletions(-)
+>  drivers/counter/104-quad-8.c  |  7 ++++---
+>  drivers/counter/ftm-quaddec.c | 27 +++++++++++++--------------
+>  2 files changed, 17 insertions(+), 17 deletions(-)
 > 
-> diff --git a/drivers/counter/intel-qep.c b/drivers/counter/intel-qep.c
-> index 8f84a48508ac..47a6a9dfc9e8 100644
-> --- a/drivers/counter/intel-qep.c
-> +++ b/drivers/counter/intel-qep.c
-> @@ -63,7 +63,6 @@
->  #define INTEL_QEP_CLK_PERIOD_NS		10
+> diff --git a/drivers/counter/104-quad-8.c b/drivers/counter/104-quad-8.c
+> index 4315b14f239e..680c7ba943a4 100644
+> --- a/drivers/counter/104-quad-8.c
+> +++ b/drivers/counter/104-quad-8.c
+
+Block in wrong patch. I'll assume you'll fix that and ignore it beyond saying
+this change is fine so keep my RB on the earlier patch once you've added this block.
+
+> @@ -1084,7 +1084,8 @@ static struct counter_count quad8_counts[] = {
 >  
->  struct intel_qep {
+>  static irqreturn_t quad8_irq_handler(int irq, void *private)
+>  {
+> -	struct quad8 *const priv = private;
+> +	struct counter_device *counter = private;
+> +	struct quad8 *const priv = counter_priv(counter);
+>  	const unsigned long base = priv->base;
+>  	unsigned long irq_status;
+>  	unsigned long channel;
+> @@ -1115,7 +1116,7 @@ static irqreturn_t quad8_irq_handler(int irq, void *private)
+>  			continue;
+>  		}
+>  
+> -		counter_push_event(&priv->counter, event, channel);
+> +		counter_push_event(counter, event, channel);
+>  	}
+>  
+>  	/* Clear pending interrupts on device */
+> @@ -1192,7 +1193,7 @@ static int quad8_probe(struct device *dev, unsigned int id)
+>  	outb(QUAD8_CHAN_OP_ENABLE_INTERRUPT_FUNC, base[id] + QUAD8_REG_CHAN_OP);
+>  
+>  	err = devm_request_irq(dev, irq[id], quad8_irq_handler, IRQF_SHARED,
+> -			       counter->name, priv);
+> +			       counter->name, counter);
+>  	if (err)
+>  		return err;
+>  
+> diff --git a/drivers/counter/ftm-quaddec.c b/drivers/counter/ftm-quaddec.c
+> index f5d92df6a611..c636183b1337 100644
+> --- a/drivers/counter/ftm-quaddec.c
+> +++ b/drivers/counter/ftm-quaddec.c
+> @@ -26,7 +26,6 @@
+>  	})
+>  
+>  struct ftm_quaddec {
 > -	struct counter_device counter;
->  	struct mutex lock;
->  	struct device *dev;
->  	void __iomem *regs;
-> @@ -392,14 +391,16 @@ static struct counter_count intel_qep_counter_count[] = {
+>  	struct platform_device *pdev;
+>  	void __iomem *ftm_base;
+>  	bool big_endian;
+> @@ -259,15 +258,16 @@ static struct counter_count ftm_quaddec_counts = {
 >  
->  static int intel_qep_probe(struct pci_dev *pci, const struct pci_device_id *id)
+>  static int ftm_quaddec_probe(struct platform_device *pdev)
 >  {
 > +	struct counter_device *counter;
->  	struct intel_qep *qep;
->  	struct device *dev = &pci->dev;
->  	void __iomem *regs;
+>  	struct ftm_quaddec *ftm;
+> -
+
+Try to avoid white space changes in a patch like these even if they seem
+trivial.  The 'noise' adds up.
+
+>  	struct device_node *node = pdev->dev.of_node;
+>  	struct resource *io;
 >  	int ret;
 >  
-> -	qep = devm_kzalloc(dev, sizeof(*qep), GFP_KERNEL);
-> -	if (!qep)
-> +	counter = devm_counter_alloc(dev, sizeof(*qep));
+> -	ftm = devm_kzalloc(&pdev->dev, sizeof(*ftm), GFP_KERNEL);
+> -	if (!ftm)
+> +	counter = devm_counter_alloc(&pdev->dev, sizeof(*ftm));
 > +	if (!counter)
 >  		return -ENOMEM;
-> +	qep = counter_priv(counter);
+> +	ftm = counter_priv(counter);
 >  
->  	ret = pcim_enable_device(pci);
+>  	io = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>  	if (!io) {
+> @@ -283,14 +283,13 @@ static int ftm_quaddec_probe(struct platform_device *pdev)
+>  		dev_err(&pdev->dev, "Failed to map memory region\n");
+>  		return -EINVAL;
+>  	}
+> -	ftm->counter.name = dev_name(&pdev->dev);
+> -	ftm->counter.parent = &pdev->dev;
+> -	ftm->counter.ops = &ftm_quaddec_cnt_ops;
+> -	ftm->counter.counts = &ftm_quaddec_counts;
+> -	ftm->counter.num_counts = 1;
+> -	ftm->counter.signals = ftm_quaddec_signals;
+> -	ftm->counter.num_signals = ARRAY_SIZE(ftm_quaddec_signals);
+> -	ftm->counter.priv = ftm;
+> +	counter->name = dev_name(&pdev->dev);
+> +	counter->parent = &pdev->dev;
+> +	counter->ops = &ftm_quaddec_cnt_ops;
+> +	counter->counts = &ftm_quaddec_counts;
+> +	counter->num_counts = 1;
+> +	counter->signals = ftm_quaddec_signals;
+> +	counter->num_signals = ARRAY_SIZE(ftm_quaddec_signals);
+>  
+>  	mutex_init(&ftm->ftm_quaddec_mutex);
+>  
+> @@ -300,9 +299,9 @@ static int ftm_quaddec_probe(struct platform_device *pdev)
 >  	if (ret)
-> @@ -422,20 +423,23 @@ static int intel_qep_probe(struct pci_dev *pci, const struct pci_device_id *id)
->  	intel_qep_init(qep);
->  	pci_set_drvdata(pci, qep);
+>  		return ret;
 >  
-> -	qep->counter.name = pci_name(pci);
-> -	qep->counter.parent = dev;
-> -	qep->counter.ops = &intel_qep_counter_ops;
-> -	qep->counter.counts = intel_qep_counter_count;
-> -	qep->counter.num_counts = ARRAY_SIZE(intel_qep_counter_count);
-> -	qep->counter.signals = intel_qep_signals;
-> -	qep->counter.num_signals = ARRAY_SIZE(intel_qep_signals);
-> -	qep->counter.priv = qep;
-> +	counter->name = pci_name(pci);
-> +	counter->parent = dev;
-> +	counter->ops = &intel_qep_counter_ops;
-> +	counter->counts = intel_qep_counter_count;
-> +	counter->num_counts = ARRAY_SIZE(intel_qep_counter_count);
-> +	counter->signals = intel_qep_signals;
-> +	counter->num_signals = ARRAY_SIZE(intel_qep_signals);
->  	qep->enabled = false;
+> -	ret = devm_counter_register(&pdev->dev, &ftm->counter);
+> +	ret = devm_counter_add(&pdev->dev, counter);
+>  	if (ret)
+> -		return ret;
+> +		return dev_err_probe(&pdev->dev, ret, "Failed to add counter\n");
 >  
->  	pm_runtime_put(dev);
->  	pm_runtime_allow(dev);
->  
-> -	return devm_counter_register(&pci->dev, &qep->counter);
-> +	ret = devm_counter_add(&pci->dev, counter);
-> +	if (ret < 0)
-> +		return dev_err_probe(&pci->dev, ret, "Failed to add counter\n");
-> +
-> +	return 0;
+>  	return 0;
 >  }
->  
->  static void intel_qep_remove(struct pci_dev *pci)
 

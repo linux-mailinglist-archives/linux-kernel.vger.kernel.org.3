@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B825B4806AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 07:20:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C11064806B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 07:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235054AbhL1GU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 01:20:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
+        id S235061AbhL1GU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 01:20:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235042AbhL1GU1 (ORCPT
+        with ESMTP id S235060AbhL1GUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 01:20:27 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4B0C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 22:20:27 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id o30so8438102wms.4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 22:20:27 -0800 (PST)
+        Tue, 28 Dec 2021 01:20:50 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8ABC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 22:20:49 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id v7so36249183wrv.12
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 22:20:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=brainfault-org.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=O5m6I1+e/fTravXWaM/DR1a+IZkwqzGyxUYHprrFJVo=;
-        b=bnLjTnAxvgWOVF84U5Yxqqzb7N8OpgqFseDIG18DsC2weLGdpYeiorRfvLme+3H3Wj
-         e9z4Uph6f+N+cbnzqXE6ZU87HGt5QGpfcIRaMGKpUWTm7EQVOzEL6R/P11zFFmFGFlNY
-         KRj+nMBRPsd/qw3NAET7uXBMsQggbAhusGYeUEekhMIN5jUmR1AdJY/1SkHlxNn3pD07
-         7GJC9WMCyBwenw3fpzAglpT8U7ceZENxBx1hpoosIJnnCUcusNkimv8wRDVrAqrsB41p
-         bvbvOibSS1DHL0SqeWZGbBkxK/sKTfqmAukEjBHp/jrShKjZvwbPJf5m5YulHz6hzEcJ
-         CSyg==
+        bh=yxMuslxDg2S3RmGiAouREuoen21s3vRjxpPLCKGYDOs=;
+        b=U5bV+uGyfh50ndVDYNS4v8SIYAIV7TP4jb4JRs/qKkRb363U8GOEwqMIaXYWHnWQHY
+         hzgYFZYX1N5JjkSd/rNXhDJIZhcBE13FCjLdQjkLfjljxYubVQ0PcOKltArbh4Qn8kjy
+         DV1nNXhwAsVtLducS7lQBaXgVBJiAYLhM9oWbhofkvbQBGM076NOf5sRcvVlaQ5xidkk
+         zn1JXUg13XN4J2WyZlFBXJ1U7LuaD8n56DfQz3Wlj0LYreGacNOrBoZ5VGLIQorNTZsm
+         ps3iYeyLMvSPCSZQPVP3b2e4aGZwvAB/Jh5/optZ+eMaFXydOlP9qV3RWN5QT7aK5I8f
+         cXiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=O5m6I1+e/fTravXWaM/DR1a+IZkwqzGyxUYHprrFJVo=;
-        b=TcUMpwv2uX172M5/YNlmpf9UmmsOJWc+brS3Vblao2ceKIg6Gb7v+M141lYGty2KrW
-         /S9zBQRHPNxqqK8O9F+KkyURFErKsSt3BTbbvec34tp+ADKvZJMDQuX9dpIrcCeafZeg
-         WJgMExwqVLLToJj3z//3VQRYXdk+irDPnoWjwTJ5+gxbwfqekwAB/PuS3nLvZdNaZOin
-         kvbP7/4MdT4LKNq10k0lmU0mAVxCrO6wUIk2cLO7S0va1+ufQmuMBdFeoCg+sWlsMcvV
-         YVf88uK3TZ7aTQJyxCe/cXvoUXlYOYJz9XDhvOWkvKwF2VGw4bXHau+2iEZ1aKXbjf3k
-         4RGQ==
-X-Gm-Message-State: AOAM531FShiL8YvN8/QFjiJlBNzr2IhxAKv2a9XAul/9kJd/Z27dwTmX
-        Q1J2hR/qyZ6uG4fM0tBOPdkhJS01rPQ0L3ptp2xobw==
-X-Google-Smtp-Source: ABdhPJxShEPXSHMDLpX+ZXACyVmaSjYjAuKiTpyen4bSDSjamxzNsqKq6fBZdoR4fZD7LmMdF4bKoMIrXSZydRh8fKs=
-X-Received: by 2002:a7b:c243:: with SMTP id b3mr15737850wmj.61.1640672425557;
- Mon, 27 Dec 2021 22:20:25 -0800 (PST)
+        bh=yxMuslxDg2S3RmGiAouREuoen21s3vRjxpPLCKGYDOs=;
+        b=f1mf2sGndPznKPZJKnmbmtcCr7xkrkE2ja/Trfa9hJvvkLvu/ZP5fGb0sLNFmzQt8X
+         azS1FJrFNPINE+XeSTGM/srvGkuXgRnmE3B1Ekf7w3Yx6Wr1cXFqd5sRW4ftLu7Un44N
+         UiTSzY1eXR0g+XBtPdoZHx4j1Ofv5ieYSXBzK0zB+PzVESiJTfETr9A+fyaKKWpquGO1
+         xaMlJVUMP9DRdz7vZtyX4fOnePLSBRkYZ+LoULrslgIq9eEYTPqvBDZpMwJOVobdjwoQ
+         cOi9zKehguKXSHf0rlCPZQCdIWVAcV3Sf+o/J67L7rM9+sjccXrXUC/sBhFlgqqsP0AG
+         9GtQ==
+X-Gm-Message-State: AOAM531frMpYiiZ0d035RAX/1iYkOqXukq7yoClC8vEYBi36bnFKUgdv
+        06atbuGi3LT8uy2H/nal+jnnUXLLkym7To8rWUI6Sg==
+X-Google-Smtp-Source: ABdhPJxPxIuKiLfECI1gIGeabM+airz3qfDP8dU5RAgK/IaKfx4bJkcGaOV3uUbgjVxC8g8TAdk41Ao3iLE07aQeNos=
+X-Received: by 2002:adf:d1e2:: with SMTP id g2mr14860743wrd.346.1640672447584;
+ Mon, 27 Dec 2021 22:20:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20211224073604.1085464-1-anup.patel@wdc.com> <20211224073604.1085464-2-anup.patel@wdc.com>
-In-Reply-To: <20211224073604.1085464-2-anup.patel@wdc.com>
+References: <20211224073604.1085464-1-anup.patel@wdc.com> <20211224073604.1085464-3-anup.patel@wdc.com>
+In-Reply-To: <20211224073604.1085464-3-anup.patel@wdc.com>
 From:   Anup Patel <anup@brainfault.org>
-Date:   Tue, 28 Dec 2021 11:50:12 +0530
-Message-ID: <CAAhSdy2MGEhn+Mbg=rKZO9nkHcV28Fro-sL3YH_9+S-ZCzXgqA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/4] RISC-V: KVM: Forward SBI experimental and vendor extensions
+Date:   Tue, 28 Dec 2021 11:50:35 +0530
+Message-ID: <CAAhSdy1NE1LhwpU=TE8LnES6c7AQiq04zNJkSv2nLk=BOnYLsQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/4] RISC-V: KVM: Add VM capability to allow userspace
+ get GPA bits
 To:     Anup Patel <anup.patel@wdc.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
         Atish Patra <atishp@atishpatra.org>,
@@ -70,10 +71,13 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Fri, Dec 24, 2021 at 1:06 PM Anup Patel <anup.patel@wdc.com> wrote:
 >
-> The SBI experimental extension space is for temporary (or experimental)
-> stuff whereas SBI vendor extension space is for hardware vendor specific
-> stuff. Both these SBI extension spaces won't be standardized by the SBI
-> specification so let's blindly forward such SBI calls to the userspace.
+> The number of GPA bits supported for a RISC-V Guest/VM is based on the
+> MMU mode used by the G-stage translation. The KVM RISC-V will detect and
+> use the best possible MMU mode for the G-stage in kvm_arch_init().
+>
+> We add a generic VM capability KVM_CAP_VM_GPA_BITS which can be used by
+> the KVM userspace to get the number of GPA (guest physical address) bits
+> supported for a Guest/VM.
 >
 > Signed-off-by: Anup Patel <anup.patel@wdc.com>
 > Reviewed-and-tested-by: Atish Patra <atishp@rivosinc.com>
@@ -84,67 +88,63 @@ Thanks,
 Anup
 
 > ---
->  arch/riscv/kvm/vcpu_sbi.c      |  4 ++++
->  arch/riscv/kvm/vcpu_sbi_base.c | 27 +++++++++++++++++++++++++++
->  2 files changed, 31 insertions(+)
+>  arch/riscv/include/asm/kvm_host.h | 1 +
+>  arch/riscv/kvm/mmu.c              | 5 +++++
+>  arch/riscv/kvm/vm.c               | 3 +++
+>  include/uapi/linux/kvm.h          | 1 +
+>  4 files changed, 10 insertions(+)
 >
-> diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
-> index f62d25bc9733..78aa3db76225 100644
-> --- a/arch/riscv/kvm/vcpu_sbi.c
-> +++ b/arch/riscv/kvm/vcpu_sbi.c
-> @@ -46,6 +46,8 @@ extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_time;
->  extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_ipi;
->  extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_rfence;
->  extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_hsm;
-> +extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental;
-> +extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor;
+> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
+> index 247b761c72fd..ac38696abedf 100644
+> --- a/arch/riscv/include/asm/kvm_host.h
+> +++ b/arch/riscv/include/asm/kvm_host.h
+> @@ -219,6 +219,7 @@ void kvm_riscv_stage2_free_pgd(struct kvm *kvm);
+>  void kvm_riscv_stage2_update_hgatp(struct kvm_vcpu *vcpu);
+>  void kvm_riscv_stage2_mode_detect(void);
+>  unsigned long kvm_riscv_stage2_mode(void);
+> +int kvm_riscv_stage2_gpa_bits(void);
 >
->  static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
->         &vcpu_sbi_ext_v01,
-> @@ -54,6 +56,8 @@ static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
->         &vcpu_sbi_ext_ipi,
->         &vcpu_sbi_ext_rfence,
->         &vcpu_sbi_ext_hsm,
-> +       &vcpu_sbi_ext_experimental,
-> +       &vcpu_sbi_ext_vendor,
->  };
->
->  void kvm_riscv_vcpu_sbi_forward(struct kvm_vcpu *vcpu, struct kvm_run *run)
-> diff --git a/arch/riscv/kvm/vcpu_sbi_base.c b/arch/riscv/kvm/vcpu_sbi_base.c
-> index d1ec08fe7289..4ecf377f483b 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_base.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_base.c
-> @@ -70,3 +70,30 @@ const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_base = {
->         .extid_end = SBI_EXT_BASE,
->         .handler = kvm_sbi_ext_base_handler,
->  };
+>  void kvm_riscv_stage2_vmid_detect(void);
+>  unsigned long kvm_riscv_stage2_vmid_bits(void);
+> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+> index d0efdc2259dc..58a47c93e5f9 100644
+> --- a/arch/riscv/kvm/mmu.c
+> +++ b/arch/riscv/kvm/mmu.c
+> @@ -766,3 +766,8 @@ unsigned long kvm_riscv_stage2_mode(void)
+>  {
+>         return stage2_mode >> HGATP_MODE_SHIFT;
+>  }
 > +
-> +static int kvm_sbi_ext_forward_handler(struct kvm_vcpu *vcpu,
-> +                                       struct kvm_run *run,
-> +                                       unsigned long *out_val,
-> +                                       struct kvm_cpu_trap *utrap,
-> +                                       bool *exit)
+> +int kvm_riscv_stage2_gpa_bits(void)
 > +{
-> +       /*
-> +        * Both SBI experimental and vendor extensions are
-> +        * unconditionally forwarded to userspace.
-> +        */
-> +       kvm_riscv_vcpu_sbi_forward(vcpu, run);
-> +       *exit = true;
-> +       return 0;
+> +       return stage2_gpa_bits;
 > +}
-> +
-> +const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental = {
-> +       .extid_start = SBI_EXT_EXPERIMENTAL_START,
-> +       .extid_end = SBI_EXT_EXPERIMENTAL_END,
-> +       .handler = kvm_sbi_ext_forward_handler,
-> +};
-> +
-> +const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor = {
-> +       .extid_start = SBI_EXT_VENDOR_START,
-> +       .extid_end = SBI_EXT_VENDOR_END,
-> +       .handler = kvm_sbi_ext_forward_handler,
-> +};
+> diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
+> index fb18af34a4b5..1e12c19a7c6a 100644
+> --- a/arch/riscv/kvm/vm.c
+> +++ b/arch/riscv/kvm/vm.c
+> @@ -82,6 +82,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>         case KVM_CAP_NR_MEMSLOTS:
+>                 r = KVM_USER_MEM_SLOTS;
+>                 break;
+> +       case KVM_CAP_VM_GPA_BITS:
+> +               r = kvm_riscv_stage2_gpa_bits();
+> +               break;
+>         default:
+>                 r = 0;
+>                 break;
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 1daa45268de2..469f05d69c8d 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -1131,6 +1131,7 @@ struct kvm_ppc_resize_hpt {
+>  #define KVM_CAP_EXIT_ON_EMULATION_FAILURE 204
+>  #define KVM_CAP_ARM_MTE 205
+>  #define KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM 206
+> +#define KVM_CAP_VM_GPA_BITS 207
+>
+>  #ifdef KVM_CAP_IRQ_ROUTING
+>
 > --
 > 2.25.1
 >

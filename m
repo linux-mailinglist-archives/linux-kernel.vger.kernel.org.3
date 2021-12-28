@@ -2,88 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C5C4808BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 12:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D255C4808BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 12:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236437AbhL1LNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 06:13:45 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:17306 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbhL1LNp (ORCPT
+        id S236451AbhL1LTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 06:19:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233952AbhL1LTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 06:13:45 -0500
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JNX276M6vz9rvf;
-        Tue, 28 Dec 2021 19:12:47 +0800 (CST)
-Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 28 Dec 2021 19:13:43 +0800
-Received: from linux-suspe12sp5.huawei.com (10.67.133.38) by
- dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 28 Dec 2021 19:13:43 +0800
-From:   Zechuan Chen <chenzechuan1@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@redhat.com>, <namhyung@kernel.org>, <mhiramat@kernel.org>,
-        <Jianlin.Lv@arm.com>, <chenzechuan1@huawei.com>,
-        <ravi.bangoria@linux.ibm.com>, <yao.jin@linux.intel.com>,
-        <yangjihong1@huawei.com>, <mpe@ellerman.id.au>,
-        <naveen.n.rao@linux.vnet.ibm.com>
-CC:     <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] powerpc/perf: fix ppc64 perf probe add events failed
-Date:   Tue, 28 Dec 2021 19:13:38 +0800
-Message-ID: <20211228111338.218602-1-chenzechuan1@huawei.com>
-X-Mailer: git-send-email 2.12.3
+        Tue, 28 Dec 2021 06:19:39 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24CFC06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 03:19:38 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id p15so2642188ybk.10
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 03:19:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=V3v9cF6xHQZX39nYu8ym/1C1zcFj73ZTgDK4RjL32ms=;
+        b=gnl36jDJR9soGWjIofVVra+AwEO0DbUyq2sf8gv5WVRGOft2Jn+fQPXax0RKXDDekb
+         R575e8/Ps0nawi/CjHnuPG5MTZ5/BPSNynwsEsZl+QjBGx4mNBjD1m60y9Vo4ZExKcdx
+         oV3mL9stk5vodNV5vdeQjbrESjIwCF0ZDnCTQ3rKZ+B/t77OtxIOPPNMOaz7FaQ4f+cG
+         AxM8A7uqYF1fwLnTIT1Ab2N4cbe1OlD9Bpl7IlFXwoYcHjeVjjR0AFcBR1xnoMP/YjOx
+         E5rbSJKDCrOraUDrxwrNk2oDuA0YvRa+pfdouE4Fl304uP8PSHdK5DqdykUZPuylec3c
+         M5PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=V3v9cF6xHQZX39nYu8ym/1C1zcFj73ZTgDK4RjL32ms=;
+        b=Nz+lESpCzATMQdmBWojdzDY9m5zbZc4mX4uTEMk5hBxzr7piSIKh6gudekb3JfkWcT
+         nx16MVD75J3YUR8TrxbXbONjumPnfg79UgNBQO4FDAFWVnmnZq4tYrNKuJgdPzIuMKsL
+         UNHbpf0LkntTZMP59J4qSJ2R5ccgXY4NY25gFVd0QEcDV0F83c2/9q4P/uh5OdRfGSeo
+         bvzZVazZpYvtlBD8nERqmGd7LwioUsY8Zj44qZct/wZtK5QvNw83YGYS/wus+VchExjF
+         hKRVj6ZmepXtpZpoLwAuiTH5b2+iG3zcbuo63cmCKpVwZVsBlSal3nTw3vvCLYEYk+gg
+         6mbw==
+X-Gm-Message-State: AOAM532jwJJ+7yO4WLhMkCr/rIt0vUgY9vjbcTyc0nDiFYDo21mOQsre
+        MrEjwr8Qi0Qd8XkEbIhN8fkPQSsfnaNuROt8PIXtoA==
+X-Google-Smtp-Source: ABdhPJz+b7fJHueVaZA5rcxp8xzv5wy9X9DBv+Vy2D9Cer/VGWidIbYCrcCeAbU16InT8KuffmzrvLugRbzgydWDzz4=
+X-Received: by 2002:a25:ae85:: with SMTP id b5mr14098587ybj.200.1640690377571;
+ Tue, 28 Dec 2021 03:19:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.133.38]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500017.china.huawei.com (7.185.36.178)
-X-CFilter-Loop: Reflected
+References: <20211227151319.379265346@linuxfoundation.org>
+In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 28 Dec 2021 16:49:26 +0530
+Message-ID: <CA+G9fYuMGvFR4hq6KLJrj4tA-6R+H2xfUybAJuDOCnXg7eKX7w@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/38] 4.19.223-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
+        f.fainelli@gmail.com, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux@roeck-us.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because of commit bf794bf52a80 ("powerpc/kprobes: Fix kallsyms lookup
-across powerpc ABIv1 and ABIv2"), in ppc64 ABIv1, our perf command
-eliminates the need to use the prefix "." at the symbol name. But when
-the command "perf probe -a schedule" is executed on ppc64 ABIv1, it
-obtains two symbol address information through /proc/kallsyms, for example:
+On Mon, 27 Dec 2021 at 21:03, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.223 release.
+> There are 38 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 29 Dec 2021 15:13:09 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.19.223-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-cat /proc/kallsyms | grep -w schedule
-c000000000657020 T .schedule
-c000000000d4fdb8 D schedule
 
-The symbol "D schedule" is not a function symbol, and perf will print:
-"p:probe/schedule _text+13958584"Failed to write event: Invalid argument
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Therefore, when searching symbols from map and adding probe point for
-them, a symbol type check is added. If the type of symbol is not a
-function, skip it.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Fixes: bf794bf52a80 ("powerpc/kprobes: Fix kallsyms lookup across powerpc ABIv1 and ABIv2")
+## Build
+* kernel: 4.19.223-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-4.19.y
+* git commit: c3b6f5a58bb324123904facb3806b3bcc00bdccb
+* git describe: v4.19.222-39-gc3b6f5a58bb3
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
+.222-39-gc3b6f5a58bb3
 
-Signed-off-by: Zechuan Chen <chenzechuan1@huawei.com>
----
- tools/perf/util/probe-event.c | 3 +++
- 1 file changed, 3 insertions(+)
+## No Test Regressions (compared to v4.19.222)
 
-diff --git a/tools/perf/util/probe-event.c b/tools/perf/util/probe-event.c
-index b2a02c9ab8ea..a834918a0a0d 100644
---- a/tools/perf/util/probe-event.c
-+++ b/tools/perf/util/probe-event.c
-@@ -3083,6 +3083,9 @@ static int find_probe_trace_events_from_map(struct perf_probe_event *pev,
- 	for (j = 0; j < num_matched_functions; j++) {
- 		sym = syms[j];
- 
-+		if (sym->type != STT_FUNC)
-+			continue;
-+
- 		/* There can be duplicated symbols in the map */
- 		for (i = 0; i < j; i++)
- 			if (sym->start == syms[i]->start) {
--- 
-2.12.3
+## No Test Fixes (compared to v4.19.222)
 
+## Test result summary
+total: 84075, pass: 68731, fail: 620, skip: 12910, xfail: 1814
+
+## Build Summary
+* arm: 254 total, 246 passed, 8 failed
+* arm64: 35 total, 35 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 26 total, 26 passed, 0 failed
+* powerpc: 52 total, 48 passed, 4 failed
+* s390: 12 total, 12 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 34 total, 34 passed, 0 failed
+
+## Test suites summary
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

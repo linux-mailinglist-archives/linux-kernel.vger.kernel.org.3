@@ -2,102 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3548480861
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 11:24:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17AC9480868
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 11:26:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236040AbhL1KYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 05:24:08 -0500
-Received: from mail-ua1-f49.google.com ([209.85.222.49]:44994 "EHLO
-        mail-ua1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbhL1KYH (ORCPT
+        id S236165AbhL1K0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 05:26:45 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:34852 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230112AbhL1K0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 05:24:07 -0500
-Received: by mail-ua1-f49.google.com with SMTP id p2so31041240uad.11;
-        Tue, 28 Dec 2021 02:24:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oBBZo0qKjA88eh+fXv3guzm1j2BWXycw5/mkSY/OQtw=;
-        b=Gq4t7ylNq8H4PI2LDeax/+t4fsr1a6M169Hb9IkRUGX0976oVWqlcookBLJtoH2O1R
-         eMvbtP14zqMyiqXHNXiFE6IedApj50Hh/KmpKFHhdKvwfkjr9sKqxzC2TnZ90d04FB0f
-         ZOMcFXC6JFB0s5eWREjE1rFqpr0DQk8IfqOouz16XJ9X9qsVygGMi2/DXNOEvsZQIWNA
-         CUMTMhbF4BHsDjqnMo6tphL1DuVgnxDO+gPVb53+JV5emUdKwIkvxaHne577E3/y3ufw
-         oqDlXJ7HMRKJry9kBA64bLwsDRJwdjvtZX9gTYaecllnziaUW/RJTy1N553SUrQSWNWa
-         ALbA==
-X-Gm-Message-State: AOAM530USRwSZygDhs8kTtahMKmEkfsuDHGNaVFyzZVkU0v+Zxq6exPh
-        0UEn9pw1bKqW8oep0+lQDbuthtqGILEcVQ==
-X-Google-Smtp-Source: ABdhPJxoWkaAiDanm1UYsFZ8bs7fkBkgwKVj7TqNAvzXy3ud/T98SZK+nIOTANWJv7rYBMkZ7MmyYg==
-X-Received: by 2002:a67:e0de:: with SMTP id m30mr5965381vsl.19.1640687045990;
-        Tue, 28 Dec 2021 02:24:05 -0800 (PST)
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
-        by smtp.gmail.com with ESMTPSA id w22sm1165221vsk.33.2021.12.28.02.24.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Dec 2021 02:24:05 -0800 (PST)
-Received: by mail-ua1-f48.google.com with SMTP id p37so31036874uae.8;
-        Tue, 28 Dec 2021 02:24:05 -0800 (PST)
-X-Received: by 2002:a05:6102:2155:: with SMTP id h21mr5686268vsg.68.1640687044914;
- Tue, 28 Dec 2021 02:24:04 -0800 (PST)
+        Tue, 28 Dec 2021 05:26:42 -0500
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JNW0P01swzccD4;
+        Tue, 28 Dec 2021 18:26:13 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 28 Dec 2021 18:26:40 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2308.20; Tue, 28 Dec 2021 18:26:39 +0800
+Message-ID: <3858de1f-cdbc-ff52-2890-4254d0f48b0a@huawei.com>
+Date:   Tue, 28 Dec 2021 18:26:39 +0800
 MIME-Version: 1.0
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com> <20211227164317.4146918-12-schnelle@linux.ibm.com>
-In-Reply-To: <20211227164317.4146918-12-schnelle@linux.ibm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 28 Dec 2021 11:23:53 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXMLSbahgG6BzTmv0GYM82bWPaHR2B9BfziTMqbauqiZA@mail.gmail.com>
-Message-ID: <CAMuHMdXMLSbahgG6BzTmv0GYM82bWPaHR2B9BfziTMqbauqiZA@mail.gmail.com>
-Subject: Re: [RFC 11/32] Input: Kconfig: add HAS_IOPORT dependencies
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-input <linux-input@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH v2 3/3] x86: Support huge vmalloc mappings
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <x86@kernel.org>, <linux-arm-kernel@lists.infradead.org>
+CC:     Nicholas Piggin <npiggin@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Matthew Wilcox <willy@infradead.org>
+References: <20211227145903.187152-1-wangkefeng.wang@huawei.com>
+ <20211227145903.187152-4-wangkefeng.wang@huawei.com>
+ <70ff58bc-3a92-55c2-2da8-c5877af72e44@intel.com>
+Content-Language: en-US
+In-Reply-To: <70ff58bc-3a92-55c2-2da8-c5877af72e44@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggeme702-chm.china.huawei.com (10.1.199.98) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Niklas,
 
-On Mon, Dec 27, 2021 at 5:50 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them.
+On 2021/12/27 23:56, Dave Hansen wrote:
+> On 12/27/21 6:59 AM, Kefeng Wang wrote:
+>> This patch select HAVE_ARCH_HUGE_VMALLOC to let X86_64 and X86_PAE
+>> support huge vmalloc mappings.
+> In general, this seems interesting and the diff is simple.  But, I don't
+> see _any_ x86-specific data.  I think the bare minimum here would be a
+> few kernel compiles and some 'perf stat' data for some TLB events.
+
+When the feature supported on ppc,
+
+commit 8abddd968a303db75e4debe77a3df484164f1f33
+Author: Nicholas Piggin <npiggin@gmail.com>
+Date:   Mon May 3 19:17:55 2021 +1000
+
+     powerpc/64s/radix: Enable huge vmalloc mappings
+
+     This reduces TLB misses by nearly 30x on a `git diff` workload on a
+     2-node POWER9 (59,800 -> 2,100) and reduces CPU cycles by 0.54%, due
+     to vfs hashes being allocated with 2MB pages.
+
+But the data could be different on different machine/arch.
+
+>> diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
+>> index 95fa745e310a..6bf5cb7d876a 100644
+>> --- a/arch/x86/kernel/module.c
+>> +++ b/arch/x86/kernel/module.c
+>> @@ -75,8 +75,8 @@ void *module_alloc(unsigned long size)
+>>   
+>>   	p = __vmalloc_node_range(size, MODULE_ALIGN,
+>>   				    MODULES_VADDR + get_module_load_offset(),
+>> -				    MODULES_END, gfp_mask,
+>> -				    PAGE_KERNEL, VM_DEFER_KMEMLEAK, NUMA_NO_NODE,
+>> +				    MODULES_END, gfp_mask, PAGE_KERNEL,
+>> +				    VM_DEFER_KMEMLEAK | VM_NO_HUGE_VMAP, NUMA_NO_NODE,
+>>   				    __builtin_return_address(0));
+>>   	if (p && (kasan_module_alloc(p, size, gfp_mask) < 0)) {
+>>   		vfree(p);
+> To figure out what's going on in this hunk, I had to look at the cover
+> letter (which I wasn't cc'd on).  That's not great and it means that
+> somebody who stumbles upon this in the code is going to have a really
+> hard time figuring out what is going on.  Cover letters don't make it
+> into git history.
+Sorry for that, will add more into arch's patch changelog.
+> This desperately needs a comment and some changelog material in *this*
+> patch.
 >
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> But, even the description from the cover letter is sparse:
+>
+>> There are some disadvantages about this feature[2], one of the main
+>> concerns is the possible memory fragmentation/waste in some scenarios,
+>> also archs must ensure that any arch specific vmalloc allocations that
+>> require PAGE_SIZE mappings(eg, module alloc with STRICT_MODULE_RWX)
+>> use the VM_NO_HUGE_VMAP flag to inhibit larger mappings.
+> That just says that x86 *needs* PAGE_SIZE allocations.  But, what
+> happens if VM_NO_HUGE_VMAP is not passed (like it was in v1)?  Will the
+> subsequent permission changes just fragment the 2M mapping?
+> .
 
-Thanks for your patch!
+Yes, without VM_NO_HUGE_VMAP, it could fragment the 2M mapping.
 
-> --- a/drivers/input/serio/Kconfig
-> +++ b/drivers/input/serio/Kconfig
-> @@ -75,6 +75,7 @@ config SERIO_Q40KBD
->  config SERIO_PARKBD
->         tristate "Parallel port keyboard adapter"
->         depends on PARPORT
-> +       depends on HAS_IOPORT
+When module alloc with STRICT_MODULE_RWX on x86, it calls 
+__change_page_attr()
 
-Same as PRINTER: shouldn't this work with all parport drivers?
+from set_memory_ro/rw/nx which will split large page, so there is no 
+need to make
 
-Gr{oetje,eeting}s,
+module alloc with HUGE_VMALLOC.
 
-                        Geert
+>                                   
+>
+>      
+>      
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

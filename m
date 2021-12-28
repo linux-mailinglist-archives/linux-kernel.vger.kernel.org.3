@@ -2,125 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C836F480796
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 10:09:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC4C480798
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 10:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235811AbhL1JJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 04:09:42 -0500
-Received: from mail-vk1-f180.google.com ([209.85.221.180]:44798 "EHLO
-        mail-vk1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233041AbhL1JJl (ORCPT
+        id S235826AbhL1JLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 04:11:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233041AbhL1JLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 04:09:41 -0500
-Received: by mail-vk1-f180.google.com with SMTP id b77so9958983vka.11;
-        Tue, 28 Dec 2021 01:09:41 -0800 (PST)
+        Tue, 28 Dec 2021 04:11:13 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE3CC061574;
+        Tue, 28 Dec 2021 01:11:12 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id bp20so40117162lfb.6;
+        Tue, 28 Dec 2021 01:11:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2Esb4RQCmzV19Vk4jQHTbkcEgZYhQS+PRME2DZcUrRQ=;
+        b=YgkD6YYxlWXxi/6frdyqKvgMRfxPAcPGjfXUwZxsPGMMRFWuBZoRw3FGch6pONMCy/
+         1WNvVwcGxsdWIw7OQTO/0g9jMWHlxDDqioSBoblmdfwT08UtqAlgR8gz05bmyNivWvC0
+         zwJjFrX8Mgit6b15OMI3I+wiUvl51yb3bD06AnAsw61vWKlUIMu+RSuKOVdf0PmhxLJy
+         JPA8iSQVXBSwjp7H6LOKL9f+8oqgqB6Wdp/dl0/RNNgdEKRGy9waCCmJ44l8pJn+EaBa
+         yK4uD3MEHndMkxl03kKlaTzatXrnZFjeKwpNzoULjPKmC2jxH06+RPrJh+HVawLMbt2D
+         Ph9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=C2L/mIkOhGH5Un7mufox+a5rve6lVrG/dmfdaGHBhKs=;
-        b=lZKHxm4nCkl2WI6gLo/tHnd9f4Ii1n71q9nPHgwttdi+5kMSPoaLIxW6nNi6zdyZri
-         uzNZliqh7l1pSTM8mcMplxxyNvbYVnpVitCLt/1+rrvXcuX0dBeJNiGBZcc8ypJC0hGk
-         yw8oX7l5KqoMSgL8jF1HerYQll5aZA5i4qWooZC0hBX73sOnbL3HuIAjMpHrrATfr8MZ
-         d6P68KVdxUYPgbEAqk2fLdM7lr3pWb5UqNQ21QjddBxpH5Rxq3xeWqwTe5GMOA5a905u
-         0fQKruFakAk0kR9RUKSZ/ivtQVybHlqEddxzP4fDLJZu7D7LUawsWG6euMcsSE404rLS
-         AAMQ==
-X-Gm-Message-State: AOAM530qh4gxgbmhzmdVpnOyxxpYFngRzwmYnBuuxq6Bf/M6DE2XJ48p
-        PypCHABs8SduNbj0LulhuZ1BvxX1JQxxdw==
-X-Google-Smtp-Source: ABdhPJwl5xABcsAZHJLdoiOpNYFGptDSMwBnxedcJ0OF3HGydxFU3rK+sF6Orat0Rnk5zAvn7xb0/g==
-X-Received: by 2002:a05:6122:16a7:: with SMTP id 39mr6236243vkl.13.1640682580467;
-        Tue, 28 Dec 2021 01:09:40 -0800 (PST)
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
-        by smtp.gmail.com with ESMTPSA id o19sm3356463vsl.12.2021.12.28.01.09.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Dec 2021 01:09:40 -0800 (PST)
-Received: by mail-ua1-f53.google.com with SMTP id o63so31013772uao.5;
-        Tue, 28 Dec 2021 01:09:40 -0800 (PST)
-X-Received: by 2002:a05:6102:2155:: with SMTP id h21mr5620772vsg.68.1640682579829;
- Tue, 28 Dec 2021 01:09:39 -0800 (PST)
+        bh=2Esb4RQCmzV19Vk4jQHTbkcEgZYhQS+PRME2DZcUrRQ=;
+        b=k9dV/Gq3utDOgtnrU4l22I7YVzl8ynsbp2NCDYmccJVNBar0G0noDNwm1GfGDw+Enh
+         5jfw0L1nMwqdCoqy552jpcQlVE0UbXq9f03ndNcOUQ0xyhPP8QjrHVTO0TJwyT9YwoLz
+         hBoXPK13OwzRG/5SKPHxI4DyC4YeF0rjyiNd/KSWrokDAzCbDVEAO5nciGJ7trpb1jyD
+         J7cAXING62PbJwsDBGFMOzUttm3QxZw6w+8zhqRMOgQvorzpUmUJ+LcJwa4so3yH7OrH
+         wDPH8CKU4oz6cEUZ9FmFeTKawz8E6ZZgUGQ07UpK5fEiAEIojR87V53f0vlR/yj9ueCl
+         /Zqg==
+X-Gm-Message-State: AOAM532UBaPBRDsbdH1b3GD/f0jYpWbdYMKEhqNtO3TIjt/3xiW8xx8/
+        LKTsAy8lwOndGK8ASCDstMjGjCQVm2zF+PQwM+GcB8dN
+X-Google-Smtp-Source: ABdhPJyby7vWCGjMAalqCs/cTkBqD4jw9g81mlTxfgOYM/2xqjJSAiixawtilRZV+VmDPcbm2b2t01MehVM3TWsREPQ=
+X-Received: by 2002:a05:6512:b0d:: with SMTP id w13mr19082553lfu.266.1640682670952;
+ Tue, 28 Dec 2021 01:11:10 -0800 (PST)
 MIME-Version: 1.0
-References: <20211214172437.1552740-1-broonie@kernel.org>
-In-Reply-To: <20211214172437.1552740-1-broonie@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 28 Dec 2021 10:09:28 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUQjKOp6B7_-pG8t8OzrH=H+dYjn65YMHHy7CLaw6OU1g@mail.gmail.com>
-Message-ID: <CAMuHMdUQjKOp6B7_-pG8t8OzrH=H+dYjn65YMHHy7CLaw6OU1g@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the dmaengine tree with the
- dmaengine-fixes tree
-To:     Dave Jiang <dave.jiang@intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Brown <broonie@kernel.org>
+References: <20211228014406.1033444-1-lizhijian@cn.fujitsu.com>
+In-Reply-To: <20211228014406.1033444-1-lizhijian@cn.fujitsu.com>
+From:   Zhu Yanjun <zyjzyj2000@gmail.com>
+Date:   Tue, 28 Dec 2021 17:10:59 +0800
+Message-ID: <CAD=hENfpbsOW6R7o1TnVVSarBefPVWJpXDXP58Wh32cmnpo5Mg@mail.gmail.com>
+Subject: Re: [PATCH v2] RDMA/rxe: Prevent from double freeing rxe_map_set
+To:     Li Zhijian <lizhijian@cn.fujitsu.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        RDMA mailing list <linux-rdma@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, yanjun.zhu@linux.dev,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 10:53 AM <broonie@kernel.org> wrote:
-> Today's linux-next merge of the dmaengine tree got a conflict in:
+On Tue, Dec 28, 2021 at 9:39 AM Li Zhijian <lizhijian@cn.fujitsu.com> wrote:
 >
->   drivers/dma/idxd/submit.c
+> a same rxe_map_set could be freed twice:
+> rxe_reg_user_mr()
+>   -> rxe_mr_init_user()
+>     -> rxe_mr_free_map_set() # 1st
+>   -> rxe_drop_ref()
+>    ...
+>     -> rxe_mr_cleanup()
+>       -> rxe_mr_free_map_set() # 2nd
 >
-> between commit:
+> By convention, we should cleanup/free resources in the error path in the
+> same function where the resources are alloted in. So rxe_mr_init_user()
+> doesn't need to free the map_set directly.
 >
->   8affd8a4b5ce3 ("dmaengine: idxd: fix missed completion on abort path")
+> In addition, we have to reset map_set to NULL inside rxe_mr_alloc() if needed
+> to prevent from map_set being double freed in rxe_mr_cleanup().
 >
-> from the dmaengine-fixes tree and commit:
->
->   5d78abb6fbc97 ("dmaengine: idxd: rework descriptor free path on failure")
->
-> from the dmaengine tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->
-> diff --cc drivers/dma/idxd/submit.c
-> index 83452fbbb168b,569815a84e95b..0000000000000
-> --- a/drivers/dma/idxd/submit.c
-> +++ b/drivers/dma/idxd/submit.c
-> @@@ -134,20 -120,32 +125,43 @@@ static void llist_abort_desc(struct idx
->         spin_unlock(&ie->list_lock);
->
->         if (found)
-> -               complete_desc(found, IDXD_COMPLETE_ABORT);
-> +               idxd_dma_complete_txd(found, IDXD_COMPLETE_ABORT, false);
->  +
->  +      /*
-> -        * complete_desc() will return desc to allocator and the desc can be
-> -        * acquired by a different process and the desc->list can be modified.
-> -        * Delete desc from list so the list trasversing does not get corrupted
-> -        * by the other process.
-> ++       * completing the descriptor will return desc to allocator and
-> ++       * the desc can be acquired by a different process and the
-> ++       * desc->list can be modified.  Delete desc from list so the
-> ++       * list trasversing does not get corrupted by the other process.
+> CC: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
 
-traversing
+Thanks.
 
->  +       */
->  +      list_for_each_entry_safe(d, t, &flist, list) {
->  +              list_del_init(&d->list);
-> -               complete_desc(d, IDXD_COMPLETE_NORMAL);
-> ++              idxd_dma_complete_txd(d, IDXD_COMPLETE_NORMAL, false);
+Acked-by: Zhu Yanjun <zyjzyj2000@gmail.com>
 
-Is "false" correct here?
-
->  +      }
->   }
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Zhu Yanjun
+> ---
+> V2: Fix it by a simpler way by following suggestion from Bob,
+> ---
+>  drivers/infiniband/sw/rxe/rxe_mr.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c b/drivers/infiniband/sw/rxe/rxe_mr.c
+> index 25c78aade822..7c4cd19a9db2 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_mr.c
+> +++ b/drivers/infiniband/sw/rxe/rxe_mr.c
+> @@ -141,6 +141,7 @@ static int rxe_mr_alloc(struct rxe_mr *mr, int num_buf, int both)
+>                 ret = rxe_mr_alloc_map_set(num_map, &mr->next_map_set);
+>                 if (ret) {
+>                         rxe_mr_free_map_set(mr->num_map, mr->cur_map_set);
+> +                       mr->cur_map_set = NULL;
+>                         goto err_out;
+>                 }
+>         }
+> @@ -214,7 +215,7 @@ int rxe_mr_init_user(struct rxe_pd *pd, u64 start, u64 length, u64 iova,
+>                                 pr_warn("%s: Unable to get virtual address\n",
+>                                                 __func__);
+>                                 err = -ENOMEM;
+> -                               goto err_cleanup_map;
+> +                               goto err_release_umem;
+>                         }
+>
+>                         buf->addr = (uintptr_t)vaddr;
+> @@ -237,8 +238,6 @@ int rxe_mr_init_user(struct rxe_pd *pd, u64 start, u64 length, u64 iova,
+>
+>         return 0;
+>
+> -err_cleanup_map:
+> -       rxe_mr_free_map_set(mr->num_map, mr->cur_map_set);
+>  err_release_umem:
+>         ib_umem_release(umem);
+>  err_out:
+> --
+> 2.31.1
+>
+>
+>

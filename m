@@ -2,120 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51EFA480AE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 16:37:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCFDE480AE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 16:37:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235259AbhL1Pht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 10:37:49 -0500
-Received: from mout.gmx.net ([212.227.17.20]:48187 "EHLO mout.gmx.net"
+        id S235228AbhL1Phr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 10:37:47 -0500
+Received: from mout.gmx.net ([212.227.17.20]:45653 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235184AbhL1Phq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S233403AbhL1Phq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Dec 2021 10:37:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1640705843;
-        bh=c91afZdekR7n/9J8hO61bQWbB88jCJyRcF24lRYg36g=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=LrtQSWfUHsH2DhJR0+CtP8RuiTvKnbcI1eWt5Z/ltQLdgoQVgR0OG1wc2ug1wg4kK
-         1LuTI8DaKPmPgFF7jZLvm4Vo3BglyF2RVAeWo4713UgItWnG3dYkpkEt3LMB5JggxB
-         4waQltqioA2x4/ek+u3AIM/p+RRVepmifoN+xF4M=
+        s=badeba3b8450; t=1640705844;
+        bh=qPVHr1Cdm7utmJPJfaeNrE6YdKsoKYUI7BwWZ99ZbhQ=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Tie8b68Xkq+iIQPAjdQae+u7yKEvlhGT1riRgk6dqH2dISgwCW5p5ekSO/NV22yJc
+         ZgEQT+p0rtDxjkgK54e0TWH2sRlvU/v9kkKOwbJVY+31313pVXRtbu9kF7/GhqlzT5
+         pOYmgkDkCAUCggVQX5ML5zNLchOm9B3X+cZhxVkQ=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
  (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MXXuB-1mvwcO0lNn-00Yzgc; Tue, 28 Dec 2021 16:37:23 +0100
+ 1Mdvqg-1mTiXC2gas-00b3kM; Tue, 28 Dec 2021 16:37:24 +0100
 From:   Armin Wolf <W_Armin@gmx.de>
 To:     pali@kernel.org
 Cc:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
         linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/4] Documentation: admin-guide: Update i8k driver name
-Date:   Tue, 28 Dec 2021 16:37:06 +0100
-Message-Id: <20211228153709.18317-1-W_Armin@gmx.de>
+Subject: [PATCH 2/4] Documentation: admin-guide: Add Documentation for undocumented dell_smm_hwmon parameters
+Date:   Tue, 28 Dec 2021 16:37:07 +0100
+Message-Id: <20211228153709.18317-2-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211228153709.18317-1-W_Armin@gmx.de>
+References: <20211228153709.18317-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:R3wtB5k5QB/vaq/gRyG5oDuyqO61cUrzJV+LeYSfaGOguXdVrYf
- eZF4Q+STyuyrBPQmwWT5vtkEWd6mTKW3Dgzu29nGS5pX97jUKPHIQ8wT5QgzBna5bPQy1WH
- qGehtHnHCsDFXJP4lduxcpHrpKNhnrJQfz6XqRWlDiZoTkTN/q8bSj3uLhmlPb6ZoTbNIj1
- RFkMNp7CwL/fBtTbWZrbw==
+X-Provags-ID: V03:K1:t0q09+dJktMIkYLEje79XHgVMPeSpXRoIe1bj/Eaq6zjWVLdwYS
+ bg6gPAgifd40jlQ0MUzxUxUgGAeO34jIzr6tOhZvaryrWdxkJdGb0JT9ugl0Moh+IVV0lyM
+ 2rRhS4f+Q1qVU1Rrh5U1+RRw096UGCtC3NsYpHhRQpx6NA5q26ekePX4yo+MI/lZckC5kd+
+ 03qyYfidrb97bRBDWCJ7g==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:TwV7UsymRnk=:9sCgrwSn1LtprEkzrFaemo
- h9kbE43KVK2xRMnEyb7epcxXTgmKYlb7tYk9m5LXLpikw9Sr5W/NnE4GDjJXWiBj5qMF6YSrI
- wDrBTPXiS3DOI2zgW+FD5adodeYA43onUp2NOEE+OyZ+lAwxt/m0sJ0NAmIhXDJXjXgTwvzvt
- L9ZFZzOL92bMAOpaQNCDxUG/eLchuoVxgbFVfMaui4cNNHoizjHhGRs2GrpoFuG/RAZ4szU0r
- 0ITgX664dT0aOi0Ho6uerS+Mr2h4T+1aO2ZZTwR3HnQYCJCSht11sAKVvnDaTSa8l+DE8jrsK
- deIuo/4OimlyVPNNFTuz/YN2qdR0tefEBUZdtIVKpSp1r6Rn21JW6XXnRqbtZQr5BOtkDVjGc
- ZwCvjDDekGiUM8fB6m5RSGesv1AnO3wTxltF4w+zNN2zMVP8gAzkjb0e0fpQW4k+/kITAb5rT
- eae7os+KB5kP0WZYfPsaCNTC1zK3nqtAvubv8hzmLTuzy4blrl2niAsXbVo2bDVoe1fKGmeZc
- aBXMKKc1amecmi4ENOAqR+zCKFz6RwC+Mk7jCOrLpc4KvyWvdyuY25aAwMErwlHCTrEHJBvyV
- UKiDNIkpQTgHaQdIdejsrPB0KjR+24YsAfo2mzvp3u4UrkTm6yytfIn+c4rujKoOCrF6gxVXI
- ZiF4dNR4lHulvRcEMTE2yCy3mDLT0RWduL4V/ypb4qGVIocw98DmAP2o3xR65OnUNnjtRU9rU
- 93m2Rw3WtMQ/dD7ga8rAnZ+0lqtWaxyMTc+HmzaBxJWMFlEleWmWeqmJigZAwSlwK9T4BbgwZ
- dklDtCENdoFbbBlNT464aTa7oAUPzEPnnDf+e2eGkU2aLHPGj03+N3BpUn+aBTSq0BKEoRBRv
- TgZpxMEpOlKs7ETKfmeCY15MATajiPYVdJNeYS4DcrOCIwfNxqAUfYAR96K2XN4b34xqRYMBi
- NfA5mv+dPkwNiCqV0rgQlx+mjLFZ/2QHQrd2BLFdycFfz+zrkYo/x/wYB+6SHgZ5OuOGwoS1z
- FKdUzbHPSBNQb72ZdR68o5eMH2g553egYr+2N/MHlUpawm/I0g6qTvHFRQtGnGmAq90c15XmF
- 9Ad4NCG07qfyuU=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2AsbUAUm/qo=:BNB+dH9GnMisPdEs7E+Gc8
+ ocrP6Myio9Z726EQ7K3FzwaIzxZsLtENRAh06PXv9I+SFPQKPo0EJZ6TuPZnCqRhR9MixxHOl
+ x4TrU+/p7YOnl2YhZ2ws742ow6y8dOnZrY6c+DZHsN55dhLNhoeHzoWUPkgT8u6v/heAbO5og
+ DKtawjuBhfwFKyZ8q3OKlm1O8Y3jjz8IvsYFaJ4q++1bYdnpq1bHbhJXZaXe5USfE4e86CCNH
+ c2SrHEjaaXzEG+tpxDbsEbIutim3vcBXJxOJjU3G6VsJonlBkJxayHKbtkLpd22RbT74XeUcY
+ qUOzhjxt5w09NE9vC0A1ba+TRGmUdWV6EsdFEeY78/q3dYO3remAzueyJblHC8buWJYGoxbXb
+ 8V7XM//OXI6bi5ZBArZhrqa9pCIjdIb8izvII/grFnCCH9IxNeSZinpFA256Gr3ty7zEl5g4B
+ gYE/kceSR42GD1ali1WYezSqTRuOxoJmlz4Gh3aX1CI8vL/h3saqC3ZsPC0vrRkvsnPzRG0zp
+ sfpOPabODErJO9esDBGL9012OZCjXy9W70jDyObxT5cGO1B3C/ajyhhbANR5wUxk3xcWJga8i
+ i0B1rbFH6MCaN77GUha81StlPwWiy1yOjnUwyOlAA23wEHruOq5ffQn1hEnek07vF75nbmlWz
+ B70MV7LivgoJu0B02C/9B3LWBCNR3t14cJM42j7GdIIG7OsJ6tDuqIostIz9znk5VNqbXfQLB
+ WDAphBHqE1n0ido8INEaM4zvS5fp+B64RunS8NOgqNDSyNaCDU/S7gwOO3Zz28QGaC9dinoSa
+ 8uRzTpbzkybf+BIQe7+BsnefudKcxwc0A98kJJA7jvGJdMeC5r9mBpFaLjOv9V5xGrWec9qLy
+ NiOeWGYSVDqxm0t+ryfZkImRC/Nv8pAAhzA7SCiw3deAtxf8Xdu0lHQ6iDR7Mgj43gc2ddwWe
+ +/hhcaL74NmfD5p5lxU4BZpcLcgAq2GOJ3iOWDJbyFvoXvi7a+wFr6jVBefy1MlHNGBBfO4Yd
+ AefL2vTUc2zKFoFXNyE2qA80yfXZ7vUSM9LcjSnr4vfZVWLJqjjFA07wxyKdiw06s+CXuekvz
+ IH9mzpbz7b/GhQ=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver should be called dell_smm_hwmon, i8k is only
-an alias now.
+Add documentation for fan_mult and fan_max.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- .../admin-guide/kernel-parameters.txt         | 29 ++++++++++++-------
- 1 file changed, 18 insertions(+), 11 deletions(-)
+ Documentation/admin-guide/kernel-parameters.txt | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentati=
 on/admin-guide/kernel-parameters.txt
-index 2fba82431efb..cb1331f85444 100644
+index cb1331f85444..8dd07ca80934 100644
 =2D-- a/Documentation/admin-guide/kernel-parameters.txt
 +++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -935,6 +935,24 @@
- 			dump out devices still on the deferred probe list after
- 			retrying.
+@@ -953,6 +953,12 @@
+ 			[HW] Allow controlling fans only if SYS_ADMIN
+                         capability is set.
 
-+	dell_smm_hwmon.ignore_dmi=3D
-+			[HW] Continue probing hardware even if DMI data
-+                        indicates that the driver is running on unsupport=
-ed
-+                        hardware.
++	dell_smm_hwmon.fan_mult=3D
++			[HW] Factor to multiply fan speed with.
 +
-+        dell_smm_hwmon.force=3D
-+			[HW] Activate driver even if SMM BIOS signature does
-+			not match list of supported models and enable otherwise
-+			blacklisted features.
-+
-+        dell_smm_hwmon.power_status=3D
-+                        [HW] Report power status in /proc/i8k
-+                        (disabled by default).
-+
-+        dell_smm_hwmon.restricted=3D
-+			[HW] Allow controlling fans only if SYS_ADMIN
-+                        capability is set.
++	dell_smm_hwmon.fan_max=3D
++			[HW] Maximum configurable fan speed.
 +
  	dfltcc=3D		[HW,S390]
  			Format: { on | off | def_only | inf_only | always }
  			on:       s390 zlib hardware support for compression on
-@@ -1694,17 +1712,6 @@
-
- 	i810=3D		[HW,DRM]
-
--	i8k.ignore_dmi	[HW] Continue probing hardware even if DMI data
--			indicates that the driver is running on unsupported
--			hardware.
--	i8k.force	[HW] Activate i8k driver even if SMM BIOS signature
--			does not match list of supported models.
--	i8k.power_status
--			[HW] Report power status in /proc/i8k
--			(disabled by default)
--	i8k.restricted	[HW] Allow controlling fans only if SYS_ADMIN
--			capability is set.
--
- 	i915.invert_brightness=3D
- 			[DRM] Invert the sense of the variable that is used to
- 			set the brightness of the panel backlight. Normally a
 =2D-
 2.30.2
 

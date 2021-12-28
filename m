@@ -2,89 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7323480723
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 09:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B929480725
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 09:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235456AbhL1IBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 03:01:07 -0500
-Received: from smtp05.smtpout.orange.fr ([80.12.242.127]:60836 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbhL1IBF (ORCPT
+        id S235472AbhL1IBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 03:01:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235464AbhL1IBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 03:01:05 -0500
-Received: from [192.168.1.18] ([86.243.171.122])
-        by smtp.orange.fr with ESMTPA
-        id 27PrnSAOfOvR027PrnKlv2; Tue, 28 Dec 2021 09:01:03 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Tue, 28 Dec 2021 09:01:03 +0100
-X-ME-IP: 86.243.171.122
-Content-Type: multipart/mixed; boundary="------------8QGKN0DMtEJg3SQKJpxQwPda"
-Message-ID: <f1164c41-c262-0413-dd2f-cded7510b8b6@wanadoo.fr>
-Date:   Tue, 28 Dec 2021 09:01:03 +0100
+        Tue, 28 Dec 2021 03:01:18 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A21C06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 00:01:18 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id j83so32861226ybg.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 00:01:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=gZ4aLMuzlbsmFJFAnMFETb98tvXZJk1H+3t3xDTrxUw=;
+        b=WIGfMXuzMqEj2uVIiyN4O4GCmsiO+m6RJrgWJBrmE436D3Rqchk/QY6CaqUf12ZDET
+         I1B1TvqzRJ1FtgbaxlA08aQe+KXyV7/ZBzCsD0lEA0xbLs1qJ7HNJNU5eh6y25p17PVt
+         4fnusCYjd8Nptltl1JtLNI2OO2tXuso/+FERMG5U9jWvgM1iaJAx0O+eUgx1b4D54PoP
+         LCIt6iERW3J99o71eINGrcfAP2P3vSdf39Sa8EEplT5Wey6pGGngnXq3kakiwmcbBSOw
+         QLxpKcdIwwep2bwU0QoBTIVi4jookgjV7d3y48BSBdEDoLfNWvQDeVUqtN4Q+ak1dgsp
+         65UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=gZ4aLMuzlbsmFJFAnMFETb98tvXZJk1H+3t3xDTrxUw=;
+        b=ZL87053vJ2qGIiAFKmlVourShAiOhdIADHzLWAJftWR2CX1XawwG5cPdKG8hQy67Sr
+         EJWnZTW4jaABI0GRzpTn/ji0+OhSR+au1ew2LwyRVS474ED3GUx3KAO9SAJg3JwPuk8a
+         7sNtGSFiVC+9i0OZClTmL1lYslZyuwR9kv8a0Rw6O9GYzO8n+jPPsvXZO9JSia2bynFU
+         MoH4S6cFfJVhEkJpD6rBTFR0ynuiIt6CGq2+tcJcD0B1JSAYItAqLJK/YV05mBdzsqgQ
+         pm/w1atI3KVPprAZfqpPMlPe7eJBZH4uRvIZpfpqgcn9UMUbhXckI/KADUdp0i7o56Jw
+         E/ZA==
+X-Gm-Message-State: AOAM530SCcJ0d3ESTNeSnrKzuQNQWLj76JZ/FsRq193T5tPCV/VXAw1q
+        rQeRQUYKn/A1HJ4q6wFxogZ6CvlNkNX7MVALQPG3SB6GQa5GYA==
+X-Google-Smtp-Source: ABdhPJw1Q1LZWsSfUdg5KJ++AaDEJOt+yQX9WRATp2fq+leGoZzx2wtIdDgZhUSu1MyvAvJ1CUytU372D/fL0AuLDDs=
+X-Received: by 2002:a25:ae85:: with SMTP id b5mr13395777ybj.200.1640678477728;
+ Tue, 28 Dec 2021 00:01:17 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-To:     syzbot+e7d46eb426883fb97efd@syzkaller.appspotmail.com
-Cc:     linux-kernel@vger.kernel.org
-References: <0000000000007d25ff059457342d@google.com>
-Subject: Re: KMSAN: uninit-value in alauda_check_media
-Content-Language: fr
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <0000000000007d25ff059457342d@google.com>
+References: <20211227151331.502501367@linuxfoundation.org>
+In-Reply-To: <20211227151331.502501367@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 28 Dec 2021 13:31:06 +0530
+Message-ID: <CA+G9fYt4MoT0N7o1YJ2ZK=cUPKrGq2RtgsGJsJzACZgYvJs6tQ@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/128] 5.15.12-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
+        f.fainelli@gmail.com, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux@roeck-us.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------8QGKN0DMtEJg3SQKJpxQwPda
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Mon, 27 Dec 2021 at 21:11, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.12 release.
+> There are 128 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 29 Dec 2021 15:13:09 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.12-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Hi,
+## Build
+* kernel: 5.15.12-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.15.y
+* git commit: 47b0c287880218282c014bf268884d9aad05e3d3
+* git describe: v5.15.11-129-g47b0c2878802
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.11-129-g47b0c2878802
 
-(3rd try - text only format, other git repo to please syzbot - sorry for 
-the noise)
+## No Test Regressions (compared to v5.15.11)
 
+## No Test Fixes (compared to v5.15.11)
 
-first try (ok, 3rd...) to use syzbot. I hope I do it right.
-Discussion about the syz report can be found at 
-https://lore.kernel.org/linux-kernel/0000000000007d25ff059457342d-hpIqsD4AKlfQT0dZR+AlfA@public.gmane.org/
+## Test result summary
+total: 103326, pass: 88452, fail: 826, skip: 13195, xfail: 853
 
-This patch only test if alauda_get_media_status() (and its embedded 
-usb_stor_ctrl_transfer()) before using the data.
-In case of error, it returns USB_STOR_TRANSPORT_ERROR as done elsewhere.
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 263 total, 257 passed, 6 failed
+* arm64: 42 total, 40 passed, 2 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 40 total, 37 passed, 3 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 31 passed, 6 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 56 total, 50 passed, 6 failed
+* riscv: 28 total, 19 passed, 9 failed
+* s390: 22 total, 20 passed, 2 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 42 total, 40 passed, 2 failed
 
-#syz test: https://github.com/google/kmsan.git master
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-secco[
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
 
-CJ
-
-
---------------8QGKN0DMtEJg3SQKJpxQwPda
-Content-Type: text/x-csrc; charset=UTF-8; name="patch_alauda.c"
-Content-Disposition: attachment; filename="patch_alauda.c"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL3N0b3JhZ2UvYWxhdWRhLmMgYi9kcml2ZXJzL3Vz
-Yi9zdG9yYWdlL2FsYXVkYS5jCmluZGV4IDIwYjg1N2U5N2U2MC4uNmM0ODZkOTY0OTExIDEw
-MDY0NAotLS0gYS9kcml2ZXJzL3VzYi9zdG9yYWdlL2FsYXVkYS5jCisrKyBiL2RyaXZlcnMv
-dXNiL3N0b3JhZ2UvYWxhdWRhLmMKQEAgLTMxOCw3ICszMTgsOCBAQCBzdGF0aWMgaW50IGFs
-YXVkYV9nZXRfbWVkaWFfc3RhdHVzKHN0cnVjdCB1c19kYXRhICp1cywgdW5zaWduZWQgY2hh
-ciAqZGF0YSkKIAlyYyA9IHVzYl9zdG9yX2N0cmxfdHJhbnNmZXIodXMsIHVzLT5yZWN2X2N0
-cmxfcGlwZSwKIAkJY29tbWFuZCwgMHhjMCwgMCwgMSwgZGF0YSwgMik7CiAKLQl1c2Jfc3Rv
-cl9kYmcodXMsICJNZWRpYSBzdGF0dXMgJTAyWCAlMDJYXG4iLCBkYXRhWzBdLCBkYXRhWzFd
-KTsKKwlpZiAocmMgPT0gVVNCX1NUT1JfWEZFUl9HT09EKQorCQl1c2Jfc3Rvcl9kYmcodXMs
-ICJNZWRpYSBzdGF0dXMgJTAyWCAlMDJYXG4iLCBkYXRhWzBdLCBkYXRhWzFdKTsKIAogCXJl
-dHVybiByYzsKIH0KQEAgLTQ1Myw4ICs0NTQsMTEgQEAgc3RhdGljIGludCBhbGF1ZGFfY2hl
-Y2tfbWVkaWEoc3RydWN0IHVzX2RhdGEgKnVzKQogewogCXN0cnVjdCBhbGF1ZGFfaW5mbyAq
-aW5mbyA9IChzdHJ1Y3QgYWxhdWRhX2luZm8gKikgdXMtPmV4dHJhOwogCXVuc2lnbmVkIGNo
-YXIgc3RhdHVzWzJdOworCWludCByYzsKIAotCWFsYXVkYV9nZXRfbWVkaWFfc3RhdHVzKHVz
-LCBzdGF0dXMpOworCXJjID0gYWxhdWRhX2dldF9tZWRpYV9zdGF0dXModXMsIHN0YXR1cyk7
-CisJaWYgKHJjICE9IFVTQl9TVE9SX1RSQU5TUE9SVF9HT09EKQorCQlyZXR1cm4gVVNCX1NU
-T1JfVFJBTlNQT1JUX0VSUk9SOwogCiAJLyogQ2hlY2sgZm9yIG5vIG1lZGlhIG9yIGRvb3Ig
-b3BlbiAqLwogCWlmICgoc3RhdHVzWzBdICYgMHg4MCkgfHwgKChzdGF0dXNbMF0gJiAweDFG
-KSA9PSAweDEwKQo=
---------------8QGKN0DMtEJg3SQKJpxQwPda--
-
+--
+Linaro LKFT
+https://lkft.linaro.org

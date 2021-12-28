@@ -2,122 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5600F480824
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 11:00:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1D4480825
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 11:01:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbhL1J7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 04:59:33 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:16894 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229570AbhL1J7a (ORCPT
+        id S231748AbhL1KBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 05:01:23 -0500
+Received: from out162-62-57-49.mail.qq.com ([162.62.57.49]:46477 "EHLO
+        out162-62-57-49.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229570AbhL1KBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 04:59:30 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BS9DcTl026451;
-        Tue, 28 Dec 2021 09:58:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=sKVBHM9+zhXqlfVwt0CIDBzoVhsZDCDhdTs733T50sg=;
- b=G94GTadN2YXf/B7P/XT81RwKnG8ei23z0sCIqHU0IQ0Yl8oTHnfB/jURITJ3N5dzUrZ8
- KIiH0iscA1Z5rIcQZuvcZjY0P562vkqzHkOSmNBoO/KAQF2LDTwpMEgBy/2JpEB/8jOE
- TiAD1Aa05kLmMX/nPuqqnk8hDB+0Gc0Em9Mvz74UnmTXh3BDMHGe1GN3rIzKtmr1d3sf
- Ceiln14InsLLkQwm05lYtkHsqEKPn3RkjO/BXLUiWtKkZJ3FBpbyGPDDS4NTUKo05kgM
- AvvM715RQQ/vE6XTIzNRNN7H2/RjD4qoKNfozk30sBNnXlfYDjlNUlPfgy9cfXDkheI2 zg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d7vne4mpg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Dec 2021 09:58:38 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BS9lo2X006329;
-        Tue, 28 Dec 2021 09:58:38 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d7vne4mnx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Dec 2021 09:58:37 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BS9spZV021432;
-        Tue, 28 Dec 2021 09:58:35 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06fra.de.ibm.com with ESMTP id 3d5tjjekns-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Dec 2021 09:58:35 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BS9o4VS47120732
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Dec 2021 09:50:04 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C1C53AE057;
-        Tue, 28 Dec 2021 09:58:32 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B7111AE053;
-        Tue, 28 Dec 2021 09:58:31 +0000 (GMT)
-Received: from sig-9-145-12-118.uk.ibm.com (unknown [9.145.12.118])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 28 Dec 2021 09:58:31 +0000 (GMT)
-Message-ID: <66cae9eb4fdd0b02a1fe228454f75aecb45802ed.camel@linux.ibm.com>
-Subject: Re: [RFC 25/32] watchdog: Kconfig: add HAS_IOPORT dependencies
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-watchdog@vger.kernel.org
-Date:   Tue, 28 Dec 2021 10:58:31 +0100
-In-Reply-To: <280c0490-3a68-5498-5751-d53162203b5b@roeck-us.net>
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
-         <20211227164317.4146918-26-schnelle@linux.ibm.com>
-         <280c0490-3a68-5498-5751-d53162203b5b@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Mt3pHicQhi-XEZzgmX54WvuFYqP1dl7u
-X-Proofpoint-GUID: g-fRcGlJyumU_mihzPpxiXNrxmATN5LG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-28_05,2021-12-24_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999
- priorityscore=1501 adultscore=0 bulkscore=0 spamscore=0 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112280043
+        Tue, 28 Dec 2021 05:01:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1640685679;
+        bh=TBSpQyItBAykZu7oiGhVSiruwh3KbwDIPl6+G+LvL1o=;
+        h=From:To:Cc:Subject:Date;
+        b=BIANpbU+ELEkYtbob1jdBxi/w0zgw3gfUeKK2wYngOG2OyE5bijIYFfv/Uw4MnWf8
+         jaHRi/uKQqNicr/yoY8urWrybByjteuPLHuLmvvzmXQFOpmjozZC7L1yqhps2PwOLp
+         NI4NGnxJJTkswWLjZcZxyciu+y6ecAVjCrGN/IMw=
+Received: from localhost.localdomain ([159.226.95.43])
+        by newxmesmtplogicsvrsza7.qq.com (NewEsmtp) with SMTP
+        id 503B810; Tue, 28 Dec 2021 18:01:16 +0800
+X-QQ-mid: xmsmtpt1640685676t83c8or6d
+Message-ID: <tencent_0D5124AF8235001703711A7A09703F918806@qq.com>
+X-QQ-XMAILINFO: N4WhQbLQyIqSczlML5IdqYvfl80+xZFFmWJ7+4YTFc2XUxh3kXEHxPxRmAo2VG
+         x3Kj/9JGUAudqz4wJEcPlvB8d1qUYPpNKb979EYsSC45dSV2pHUDq2Ox7z841nppA6pHQtRbg3RM
+         XOSYhmIB19e7iWQdaSHtJPz3nrMgsOveDvYIgkNqzMO4KHx/o4KLgzgg5AyDsJ3T8avJrJOxKKuy
+         0Pexj+ZEK9DT2jvPxszpA7nWX40LKzrhCgCdT2aY/JMqsUPE6O5jNwdPt/i4EHmigCsMHeILU5DB
+         zt+2u5SSI0OWBgv6QzAT74toFxon6FEJ+qSQ18OeNXSqSMt6bR+QHNujxZokJWr4lOrRibAyyX5z
+         A08zDTwyMHxFPqntW2j6Sd6lUqXwApsDi7+ozPMY2b9kI80ODWEkLpqIdOqjL08HFuFLvQViAtpf
+         r5jhf3Era0xTkoUtyOa05+zvj78U4/eqHYo9V7SGaWKpKbmcCmX1MJoXVoaLiAPQLEKiaeIuJlbJ
+         xV+aC3NG95gF83L/86rPz3TWLM2QViwP1T80+oEzB7p5iDEDwA+So4VlUfGU/9r1WIF61FklvTTa
+         12jOxvR2mrAycCQuEl7tBDBXfHT+wmbWgG5rlpO5E7t4163WL/4lbB5JKXGXJ74LAhGnWQEohA4p
+         4BIjhfS7CM39HgOzsd3oCz4Ro8UuPRa5VDgUdWY0f+5uSmZL9M/Sfsjk2qq+0ORaFpiH2ebUMvLy
+         89RmpeydA+JiebKU/o6ppITHgj8WTaqApxH1DZSQxf9IcK+TKtP2Qt4XwS51TPPCqC/ilRdspXMz
+         5AbE895MXdpYnZ6FW3R5qXBmLiGkEuha4UVVK3LKpuZrpXzPpq1kcU1vC8Yoh2L+RzkvLQiAiM5+
+         UlfWSLggYB
+From:   Peiwei Hu <jlu.hpw@foxmail.com>
+To:     nm@ti.com, kristo@kernel.org, ssantosh@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peiwei Hu <jlu.hpw@foxmail.com>
+Subject: [PATCH] firmware: ti_sci: inproper error handling of ti_sci_probe
+Date:   Tue, 28 Dec 2021 18:01:03 +0800
+X-OQ-MSGID: <20211228100103.1355913-1-jlu.hpw@foxmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2021-12-27 at 10:03 -0800, Guenter Roeck wrote:
-> On 12/27/21 8:43 AM, Niklas Schnelle wrote:
-> > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> > not being declared. We thus need to add HAS_IOPORT as dependency for
-> > those drivers using them.
-> > 
-> 
-> How is the need for HAS_IOPORT determined, when exactly is it needed,
-> and when not ?
+goto out instead of returning directly in error exiting
 
-I mostly used "make allyesconfig" on s390 with the accessors ifdeffed
-out (i.e. patch 32) to find where the I/O port accesses were compiled
-in. This means that it doesn't find drivers which pull in a HAS_IOPORT
-dependency transitively e.g. by depending on x86 or ACPI. It should get
-those that use e.g. "|| COMPILE_TEST" though. This might not be ideal
-but on the other hand it should catch all those drivers that currently
-built with known broken code.
+Signed-off-by: Peiwei Hu <jlu.hpw@foxmail.com>
+---
+ drivers/firmware/ti_sci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> $ git grep -E "inb|inw" drivers/watchdog/ | cut -f1 -d: | sort -u
-> drivers/watchdog/acquirewdt.c
-> drivers/watchdog/advantechwdt.c
-> 
----8<---
+diff --git a/drivers/firmware/ti_sci.c b/drivers/firmware/ti_sci.c
+index 235c7e7869aa..4500456a9a27 100644
+--- a/drivers/firmware/ti_sci.c
++++ b/drivers/firmware/ti_sci.c
+@@ -3412,7 +3412,7 @@ static int ti_sci_probe(struct platform_device *pdev)
+ 		ret = register_restart_handler(&info->nb);
+ 		if (ret) {
+ 			dev_err(dev, "reboot registration fail(%d)\n", ret);
+-			return ret;
++			goto out;
+ 		}
+ 	}
+ 
+-- 
+2.25.1
 

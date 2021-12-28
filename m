@@ -2,218 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 289E44808A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 12:00:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 359CA480899
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 11:59:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236398AbhL1LAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 06:00:35 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:56866 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236349AbhL1LAb (ORCPT
+        id S236362AbhL1K7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 05:59:08 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33430 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236349AbhL1K7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 06:00:31 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BSA7EKX001769;
-        Tue, 28 Dec 2021 10:59:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=+zyW5i6OI8A0c4K6evToxyfQjjczj9uw2pn4yk+SR7k=;
- b=pcw/uW8v/HV23WBgD8ZjRm9IrGz2p+VZ7eZ+u7riAv1sjlkh+h/fLfwWDBmcM8Bo5Fmd
- vn06o8uNPnUykpdvcIzJGCUcxbVusEFVGbGJCxOI2w3cVP8BgXdd+7rXgMWhLHd9tk4B
- qaX3iPy47QzD/AksgaeEKLCOm5B0Od2H3vZiYm4Da/wXXuKa0wHf6VtFo3jZJ9tHo9bz
- 4QM0w3Rfhwmg0FxtU5PvhecdlEqtQChCQN16voLmPq6XcU13mmExhXEotMvedJkJF+Ec
- BhezmLDMTIJnFjaOZoFLVJ8+zBpMGhyEygXU3bI3M2yzXFyCgrPaoeiU4DHSP2gn+gHY /Q== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d7xdu3bv3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Dec 2021 10:59:05 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BSAw4e4032318;
-        Tue, 28 Dec 2021 10:59:02 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04fra.de.ibm.com with ESMTP id 3d5tx9xvnf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Dec 2021 10:59:02 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BSAwxP843974984
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Dec 2021 10:58:59 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 907CC42041;
-        Tue, 28 Dec 2021 10:58:59 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A8FF542042;
-        Tue, 28 Dec 2021 10:58:55 +0000 (GMT)
-Received: from sig-9-145-12-118.uk.ibm.com (unknown [9.145.12.118])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 28 Dec 2021 10:58:55 +0000 (GMT)
-Message-ID: <b1475f6aecb752a858941f44a957b2183cd68405.camel@linux.ibm.com>
-Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Ian Abbott <abbotti@mev.co.uk>,
-        H Hartley Sweeten <hsweeten@visionengravers.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        Mark Brown <broonie@kernel.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Teddy Wang <teddy.wang@siliconmotion.com>,
-        Forest Bond <forest@alittletooquiet.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, netdev@vger.kernel.org,
-        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-wireless@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
-        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Date:   Tue, 28 Dec 2021 11:58:55 +0100
-In-Reply-To: <20211228101435.3a55b983@coco.lan>
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
-         <20211227164317.4146918-2-schnelle@linux.ibm.com>
-         <YcrJAwsKIxxX18pW@kroah.com> <20211228101435.3a55b983@coco.lan>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: HQH4aOLZAlr26uyO-kejW0wN9QQ_LAGG
-X-Proofpoint-ORIG-GUID: HQH4aOLZAlr26uyO-kejW0wN9QQ_LAGG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-28_06,2021-12-28_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
- lowpriorityscore=0 impostorscore=0 mlxscore=0 suspectscore=0
- mlxlogscore=999 spamscore=0 bulkscore=0 clxscore=1015 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112280048
+        Tue, 28 Dec 2021 05:59:07 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 21AE0B8118C;
+        Tue, 28 Dec 2021 10:59:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC71AC36AE8;
+        Tue, 28 Dec 2021 10:59:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640689144;
+        bh=V9gtOTQ9445ykm/NMczA4Mr/BILDuVO31HC/GfD9qj4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nuA2QKPKNigHlcx/dv2SK0WsgBYv9gX+KHt5xkm9KxYOoutma2YKkG6iwLOT42DZx
+         oQGPA9cetP6hRjR0mpq/rG4zJ+2PafYPkgOWT6a66vCClXQBQ3WlvY8n8Vv4x13ikm
+         1won/ZIMMBYDEMdS8d/QJ0uRhG+z1/6ZMNx6uC+zYJULp4+ebVGfAu8tGNTJoMI+iJ
+         luFVKBpH9ZL4LoREFCSAAw3SrNmW14W2gvbjgF/nOGQTV6kp9ZP7vmSyZQcWywGrn1
+         bTyPeMGAJbZ0tj0gvjv4kCobxuOENVufGWu6HsouWbTPJ0Iyt5DAf3G8aMyYEZCP0E
+         lv8nuXapXYXcw==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n2AC6-00Ehow-PW; Tue, 28 Dec 2021 10:59:02 +0000
+Date:   Tue, 28 Dec 2021 10:59:02 +0000
+Message-ID: <87k0fpyozt.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Bert Vermeulen <bert@biot.com>,
+        John Crispin <john@phrozen.org>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 2/5] irqchip/realtek-rtl: fix off-by-one in routing
+In-Reply-To: <48164a669fee54e2dc58cdbbde25c600d88d93f9.camel@svanheule.net>
+References: <cover.1640548009.git.sander@svanheule.net>
+        <2235a7748b8f7689a96b1e0f91461e36a946a4ef.1640548009.git.sander@svanheule.net>
+        <87tueuz732.wl-maz@kernel.org>
+        <48164a669fee54e2dc58cdbbde25c600d88d93f9.camel@svanheule.net>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sander@svanheule.net, tglx@linutronix.de, robh+dt@kernel.org, devicetree@vger.kernel.org, mail@birger-koblitz.de, bert@biot.com, john@phrozen.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-12-28 at 10:15 +0100, Mauro Carvalho Chehab wrote:
-> Em Tue, 28 Dec 2021 09:21:23 +0100
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org> escreveu:
-> 
-> > On Mon, Dec 27, 2021 at 05:42:46PM +0100, Niklas Schnelle wrote:
-> > > --- a/drivers/pci/Kconfig
-> > > +++ b/drivers/pci/Kconfig
-> > > @@ -23,6 +23,17 @@ menuconfig PCI
-> > >  
-> > >  if PCI
-> > >  
-> > > +config LEGACY_PCI
-> > > +	bool "Enable support for legacy PCI devices"
-> > > +	depends on HAVE_PCI
-> > > +	help
-> > > +	   This option enables support for legacy PCI devices. This includes
-> > > +	   PCI devices attached directly or via a bridge on a PCI Express bus.
-> > > +	   It also includes compatibility features on PCI Express devices which
-> > > +	   make use of legacy I/O spaces.  
-> 
-> This Kconfig doesn't seem what it is needed there, as this should be an 
-> arch-dependent feature, and not something that the poor user should be
-> aware if a given architecture supports it or not. Also, the above will keep
-> causing warnings or errors with randconfigs.
-> 
-> Also, the "depends on HAVE_CPI" is bogus, as PCI already depends on 
-> HAVE_PCI:
+On Tue, 28 Dec 2021 10:13:26 +0000,
+Sander Vanheule <sander@svanheule.net> wrote:
+>=20
+> Hi Marc,
+>=20
+> On Mon, 2021-12-27 at 10:16 +0000, Marc Zyngier wrote:
+> > On Sun, 26 Dec 2021 19:59:25 +0000,
+> > Sander Vanheule <sander@svanheule.net> wrote:
+> > >=20
+> > > There is an offset between routing values (1..6) and the connected MI=
+PS
+> > > CPU interrupts (2..7), but no distinction was made between these two
+> > > values.
+> > >=20
+> > > This issue was previously hidden during testing, because an interrupt
+> > > mapping was used where for each required interrupt another (unused)
+> > > routing was configured, with an offset of +1.
+> >=20
+> > Where does this 'other routing' come from?
+>=20
+> When I reported the interrupt-map issue with this binding/driver, I
+> tried to reduce the mapping/routing to something as small as
+> possible, but I couldn't get away with anything less than the
+> following:
+>=20
+> 	interrupt-map =3D
+> 		<31 &cpuintc 2>, /* UART0 */
+> 		<20 &cpuintc 3>, /* SWCORE */
+> 		<19 &cpuintc 4>, /* WDT IP1 */
+> 		<18 &cpuintc 5>; /* WDT IP2 */
+>=20
+> The UART0 and WDT_IP1 mappings were required. These would cause the
+> driver to assign chained handlers to <&cpuint 2> and <&cpuint 4>,
+> and also write values "2" and "4" to the respective routing
+> registers.
+>=20
+> The SWCORE mapping was not required for any configured features, but
+> it was required to get the console to work. This is because a
+> routing register value of "2", actually causes that interrupt input
+> to be (electrically) cascaded into to <&cpuintc 3>. But <&cpuintc 3>
+> would only be assigned a chained handler because of the SWCORE
+> mapping.
+>=20
+> By then assigning the same handler to all parent interrupts, and not
+> caring about which parent interrupt caused the handler to be called,
+> this ended up actually working.
 
-Ah yes you're right.
+Urgh... Pure luck, then.
 
-> 
-> 	menuconfig PCI
-> 	bool "PCI support"
-> 	depends on HAVE_PCI
-> 	help
-> 	  This option enables support for the PCI local bus, including
-> 	  support for PCI-X and the foundations for PCI Express support.
-> 	  Say 'Y' here unless you know what you are doing.
-> 
-> So, instead, I would expect that a new HAVE_xxx option would be
-> added at arch/*/Kconfig, like:
-> 
-> 	config X86
-> 		...
-> 		select HAVE_PCI_DIRECT_IO
-> 
-> It would also make sense to document it at Documentation/features/.
+>=20
+> > >=20
+> > > Offset the CPU IRQ numbers by -1 to retrieve the correct routing valu=
+e.
+> > >=20
+> > > Fixes: 9f3a0f34b84a ("irqchip: Add support for Realtek RTL838x/RTL839=
+x interrupt
+> > > controller")
+> > > Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> > > ---
+> > > =C2=A0drivers/irqchip/irq-realtek-rtl.c | 8 +++++---
+> > > =C2=A01 file changed, 5 insertions(+), 3 deletions(-)
+> > >=20
+> > > diff --git a/drivers/irqchip/irq-realtek-rtl.c b/drivers/irqchip/irq-=
+realtek-rtl.c
+> > > index d6788dd93c7b..568614edd88f 100644
+> > > --- a/drivers/irqchip/irq-realtek-rtl.c
+> > > +++ b/drivers/irqchip/irq-realtek-rtl.c
+> > > @@ -95,7 +95,8 @@ static void realtek_irq_dispatch(struct irq_desc *d=
+esc)
+> > > =C2=A0 * SoC interrupts are cascaded to MIPS CPU interrupts according=
+ to the
+> > > =C2=A0 * interrupt-map in the device tree. Each SoC interrupt gets 4 =
+bits for
+> > > =C2=A0 * the CPU interrupt in an Interrupt Routing Register. Max 32 S=
+oC interrupts
+> > > - * thus go into 4 IRRs.
+> > > + * thus go into 4 IRRs. A routing value of '0' means the interrupt i=
+s left
+> > > + * disconnected. Routing values {1..15} connect to output lines {0..=
+14}.
+> > > =C2=A0 */
+> > > =C2=A0static int __init map_interrupts(struct device_node *node, stru=
+ct irq_domain *domain)
+> > > =C2=A0{
+> > > @@ -134,7 +135,7 @@ static int __init map_interrupts(struct device_no=
+de *node, struct
+> > > irq_domain *do
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0of_node_put(cpu_ictl);
+> > > =C2=A0
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0cpu_int =3D be32_to_cpup(imap + 2);
+> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0if (cpu_int > 7)
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0if (cpu_int > 7 || cpu_int < 2)
+> >=20
+> > How many output lines do you have? The comment above says something
+> > about having 15 output lines, but you limit it to 7...
+>=20
+> The SoCs we are using with this interrupt controller, connect their
+> output lines to CPU IRQ 2..7. If "interrupt-map" specifies parent HW
+> IRQ numbers, the driver needs to verify those numbers are valid. If
+> they are, it can derive the routing register values from that.
+>=20
+> On the other hand, routing register values have four bits. "0"
+> appears to disconnect an input interrupt, so that leaves 15
+> potential interrupt outputs (in theory, we don't have actual
+> hardware descriptions). Only 6 outputs are used here, but that could
+> be an implementation detail for these SoCs, rather than a limitation
+> of the interrupt router.
 
-I'll look into that, thanks.
+It would be good to find out if there are more CPU interrupts that can
+be targeted. My impression is that this is a copy/paste effect from
+the original BSP, and that nobody actually checked. But maybe that's
+the wrong impression.
 
-> 
-> > All you really care about is the "legacy" I/O spaces here, this isn't
-> > tied to PCI specifically at all, right?
-> > 
-> > So why not just have a OLD_STYLE_IO config option or something like
-> > that, to show that it's the i/o functions we care about here, not PCI at
-> > all?
-> > 
-> > And maybe not call it "old" or "legacy" as time constantly goes forward,
-> > just describe it as it is, "DIRECT_IO"?
-> 
-> Agreed. HAVE_PCI_DIRECT_IO (or something similar) seems a more appropriate
-> name for it.
-> 
-> Thanks,
-> Mauro
+>=20
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+return -EINVAL;
+> > > =C2=A0
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!(mips_irqs_set & BIT(cpu_int))) {
+> > > @@ -143,7 +144,8 @@ static int __init map_interrupts(struct device_no=
+de *node, struct
+> > > irq_domain *do
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+mips_irqs_set |=3D BIT(cpu_int);
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > > =C2=A0
+> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0regs[(soc_int * 4) / 32] |=3D cpu_int << (soc_int *=
+ 4) % 32;
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0/* Use routing values (1..6) for CPU interrupts (2.=
+.7) */
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0regs[(soc_int * 4) / 32] |=3D (cpu_int - 1) << (soc=
+_int * 4) % 32;
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0imap +=3D 3;
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > > =C2=A0
+> >=20
+> > What I don't understand is how this worked so far if all mappings were
+> > off my one. Or the mapping really doesn't matter, because this is all
+> > under SW control?
+>=20
+> The reason this worked, was due to a number of issues compensating
+> for each other, like I tried to explain above.
+>=20
+> The mapping is indeed arbitrary, and not designed into the
+> hardware. So it could (should?)  just be put in the driver, instead
+> of the devicetree.
 
-Hmm, I might be missing something here but that sounds a lot like the
-HAS_IOPORT option added in patch 02.
+Indeed. Which is what I was advocating for the first place. What I
+understand from the HW is that it is able to freely route any input to
+any output (muxing them as required), and to map each output to any
+CPU interrupt line.
 
-We add both LEGACY_PCI and HAS_IOPORT to differentiate between two
-cases. HAS_IOPORT is for PC-style devices that are not on a PCI card
-while LEGACY_PCI is for PCI drivers that require port I/O. This
-includes pre-PCIe devices as well as PCIe devices which require
-features like I/O spaces. The "legacy" naming is comes from the PCIe
-spec which in section 2.1.1.2 says "PCI Express supports I/O Space for
-compatibility with legacy devices which require their use. Future
-revisions of this specification may deprecate the use of I/O Space."
+If my understanding is correct, the only thing you need from the DT is
+a description of which input an endpoint is targeting (the interrupt
+specifier), and a list of CPU interrupt lines. Everything else can be
+decided at runtime.
 
-These two separate config options allow us to compile without support
-for these legacy PCI devices even on a system where inb()/outb() and
-friends are required for some PC style devices and for example ACPI.
+Anyway, I'll probably end-up queuing the first two patches for 5.17,
+and a Cc: to stable. The rest we can discuss ad-nauseam.
 
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.

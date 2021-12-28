@@ -2,106 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F4A48084E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 11:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E309B48084F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 11:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233746AbhL1KOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 05:14:21 -0500
-Received: from mail-vk1-f175.google.com ([209.85.221.175]:34371 "EHLO
-        mail-vk1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233619AbhL1KOU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 05:14:20 -0500
-Received: by mail-vk1-f175.google.com with SMTP id h67so10049983vkh.1;
-        Tue, 28 Dec 2021 02:14:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W24YzS7gvKwvztwIMu0FSg1RWOYoxzVo3HaBbi+k4Wo=;
-        b=nOFMSXbm01ddbE396exefqk3FZB4s2dDhAssINXA5+u6A/aJAz+BU69zkN8MBqQPC+
-         AQKIokl4/e4Te6qgGHgvwz3E+IziTUFOrZS7bhu1KWCJTtFycBu4sWG8waD8coank5rS
-         PfJbpxLSiMNgWe8vBWtIn3S5ix5L26PsnNhDm25qtLR7Pl1pYb5Ris7AKZ9xNAou87YM
-         e4QWnrqxuzMjyyhXfsDZ+Aam8lFhHvRX+OmqGnT7p7/QsJBnAuVZ1xoPxcxfVd+V3Caz
-         tEY9tFkILBq7OVJjKZ+L4r66DajRGU+/DD2cNfn8oRmQnOWAsvje0zV65HXV2bqLKykS
-         4Rpw==
-X-Gm-Message-State: AOAM530mFtZZyajSTmdWwemps/mDsuawiYNUD+z7ya3PuUG6QdOcjTk6
-        7sa6Fex2H/xPl/ClMiyASiBOse6yGTsy/w==
-X-Google-Smtp-Source: ABdhPJxzE+erAcnry/fMrmjYh38ppvAj1LQCEuQxjX8rALN3cIPvWQGnrZzLNwSysz3O+EvcfbD7BA==
-X-Received: by 2002:a05:6122:e12:: with SMTP id bk18mr6645433vkb.40.1640686459203;
-        Tue, 28 Dec 2021 02:14:19 -0800 (PST)
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com. [209.85.221.175])
-        by smtp.gmail.com with ESMTPSA id m25sm3513077vsl.34.2021.12.28.02.14.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Dec 2021 02:14:18 -0800 (PST)
-Received: by mail-vk1-f175.google.com with SMTP id c10so9871312vkn.2;
-        Tue, 28 Dec 2021 02:14:18 -0800 (PST)
-X-Received: by 2002:a1f:4641:: with SMTP id t62mr6390863vka.0.1640686458447;
- Tue, 28 Dec 2021 02:14:18 -0800 (PST)
+        id S233857AbhL1KQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 05:16:02 -0500
+Received: from mga02.intel.com ([134.134.136.20]:32396 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230099AbhL1KQB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 05:16:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640686561; x=1672222561;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5r60XSQuJMjWFGTZHNRaKFro/hYRDAXK45F4ZCGAlc4=;
+  b=DGdEizzLgYyuZh4tG/z9/POjRy4TZpt663K5wMPgFz00aqXVZXwWLeke
+   bgQJkNhJ2wHR+/M5LFptVu+ECRTGeRrrh0zCsD9jdxm8tmLbupgM1zkJ5
+   2f5/4XCUMSllloCuNikFeczSRU34nwb8tMhOwC4rgSDugDhNQ/Jk4DMKC
+   g+Qc65lRhO6KhgIDXKJvSMRn1QLOipuZhVVec9e+aGI/YtHeFOe44E70/
+   I1ao45h0pAjYUG2U7lJl6EHIZNCTr0uissXf8ED7QFn62r3yF2EEiNi1z
+   5m3CP7PuevoqDFGEnfK8/I2kZYLFDxeNCTvAvqeZnl9xoQYs9h0i6/XTS
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="228651049"
+X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
+   d="scan'208";a="228651049"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 02:16:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
+   d="scan'208";a="686553081"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 28 Dec 2021 02:15:59 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n29WQ-0007Td-S2; Tue, 28 Dec 2021 10:15:58 +0000
+Date:   Tue, 28 Dec 2021 18:14:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guo Ren <guoren@linux.alibaba.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [csky-linux:riscv_compat_v2 2/17] error:
+ include/uapi/asm-generic/fcntl.h: leak CONFIG_COMPAT to user-space
+Message-ID: <202112281817.hJFO6Vw8-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com> <20211227164317.4146918-5-schnelle@linux.ibm.com>
-In-Reply-To: <20211227164317.4146918-5-schnelle@linux.ibm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 28 Dec 2021 11:14:07 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVBXBXSE8bQFNqxkbCASZKq25evHGXHjC6u7f3ktW4dpQ@mail.gmail.com>
-Message-ID: <CAMuHMdVBXBXSE8bQFNqxkbCASZKq25evHGXHjC6u7f3ktW4dpQ@mail.gmail.com>
-Subject: Re: [RFC 04/32] parport: PC style parport depends on HAS_IOPORT
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Niklas,
+tree:   https://github.com/c-sky/csky-linux riscv_compat_v2
+head:   ea94b57a9abaf61f0d0fb41516fab3df16c62c9e
+commit: da4662b00ccfe39feabcfef759497af3c071d8ad [2/17] asm-generic: fcntl: compat: Remove duplicate definitions
+config: csky-buildonly-randconfig-r001-20211228 (https://download.01.org/0day-ci/archive/20211228/202112281817.hJFO6Vw8-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/c-sky/csky-linux/commit/da4662b00ccfe39feabcfef759497af3c071d8ad
+        git remote add csky-linux https://github.com/c-sky/csky-linux
+        git fetch --no-tags csky-linux riscv_compat_v2
+        git checkout da4662b00ccfe39feabcfef759497af3c071d8ad
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky prepare
 
-On Mon, Dec 27, 2021 at 5:48 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. As PC style parport uses these functions we need to
-> handle this dependency for HAS_IOPORT.
->
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks for your patch!
+All errors (new ones prefixed by >>):
 
-> --- a/drivers/parport/Kconfig
-> +++ b/drivers/parport/Kconfig
-> @@ -14,7 +14,6 @@ config ARCH_MIGHT_HAVE_PC_PARPORT
->
->  menuconfig PARPORT
->         tristate "Parallel port support"
-> -       depends on HAS_IOMEM
+>> error: include/uapi/asm-generic/fcntl.h: leak CONFIG_COMPAT to user-space
+   make[2]: *** [scripts/Makefile.headersinst:63: usr/include/asm-generic/fcntl.h] Error 1
+   make[2]: Target '__headers' not remade because of errors.
+   make[1]: *** [Makefile:1283: headers] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-Why drop this?
-Don't all other parport drivers depend on it?
-
->         help
->           If you want to use devices connected to your machine's parallel port
->           (the connector at the computer with 25 holes), e.g. printer, ZIP
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

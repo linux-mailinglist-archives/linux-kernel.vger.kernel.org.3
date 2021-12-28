@@ -2,178 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64010480778
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 09:44:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6667F48077C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 09:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235753AbhL1Ioi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 03:44:38 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44920 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbhL1Ioh (ORCPT
+        id S235768AbhL1IpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 03:45:24 -0500
+Received: from mswedge2.sunplus.com ([60.248.182.106]:37402 "EHLO
+        mg.sunplus.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231670AbhL1IpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 03:44:37 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE3F8B81181
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 08:44:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EA5DC36AE7;
-        Tue, 28 Dec 2021 08:44:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640681075;
-        bh=yekQAkh2xITDx+Oe8Q7EYnq7vXJq6HIg6G1hA+4O4iA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=Ykw/I55NA+ANAzQBDraPR4H3+1h/FuCEYA1l6yFjQYgd9tdqQG8ud81603UALeI8Q
-         ntKwpoj3l5rghC7p+gfpnuSfPxcGKq5l41MsSmte+YCd+vC4DXKlx2VnNUE7TM6SLB
-         PfwNmirpwxiwdOKcnHfHaQW2zc/GkKpoHkTjcaHK/OGJzQpF/cDLHBuPBns4aQQehf
-         kHtMb5v4ewmQAwJFYZ13nZwBnuckLhvZWq6Xcm01HSiqlVg8KQq79oNy8Xe8SxNd80
-         PqEZ2q0Bv9BeeCYzHt7sJKj0j1h081MBoY8puBXD0VKqu+h3sOvT+RFrtGptvv4DVR
-         pZIcIMjkl/U+A==
-From:   SeongJae Park <sj@kernel.org>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     SeongJae Park <sj@kernel.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org, dave.hansen@linux.intel.com,
-        ziy@nvidia.com, shy828301@gmail.com,
-        zhongjiang-ali@linux.alibaba.com, xlpang@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Minchan Kim <minchan@kernel.org>
-Subject: Re: [PATCH v2 0/2] Add a new scheme to support demotion on tiered memory system
-Date:   Tue, 28 Dec 2021 08:44:32 +0000
-Message-Id: <20211228084432.2337-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <87o8527ngb.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Tue, 28 Dec 2021 03:45:23 -0500
+X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
+        ,3)
+Received: from 172.17.9.202
+        by mg02.sunplus.com with MailGates ESMTP Server V5.0(49508:0:AUTH_RELAY)
+        (envelope-from <edwin.chiu@sunplus.com>); Tue, 28 Dec 2021 16:45:27 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.26; Tue, 28 Dec 2021 16:45:21 +0800
+Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
+ sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
+ 15.00.1497.026; Tue, 28 Dec 2021 16:45:21 +0800
+From:   =?big5?B?RWR3aW4gQ2hpdSCq9KurrnA=?= <edwin.chiu@sunplus.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Edwin Chiu <edwinchiu0505tw@gmail.com>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: RE: [PATCH v2 2/2] cpuidle:sunplus:create cpuidle driver for sunplus
+ sp7021
+Thread-Topic: [PATCH v2 2/2] cpuidle:sunplus:create cpuidle driver for sunplus
+ sp7021
+Thread-Index: AQHX9WEUrNii4YTVCkGIbW8MVVMb3Kw6xGIAgAzaWSA=
+Date:   Tue, 28 Dec 2021 08:45:21 +0000
+Message-ID: <0812c44f777d4026b79df2e3698294be@sphcmbx02.sunplus.com.tw>
+References: <cover.1639971376.git.edwinchiu0505tw@gmail.com>
+ <6092f5f372851e2d6bf12b4b23209558038b9fda.1639971376.git.edwinchiu0505tw@gmail.com>
+ <20211220121050.rnd3o7d5cksqbqnk@bogus>
+In-Reply-To: <20211220121050.rnd3o7d5cksqbqnk@bogus>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.40]
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Mon, 27 Dec 2021 11:09:56 +0800 "Huang, Ying" <ying.huang@intel.com> wrote:
-
-> Hi, SeongJae,
-> 
-> SeongJae Park <sj@kernel.org> writes:
-> 
-> > Hi,
-> >
-> > On Thu, 23 Dec 2021 15:51:18 +0800 "Huang, Ying" <ying.huang@intel.com> wrote:
-> 
-> [snip]
-> 
-> >> It's good to avoid to change the source code of an application to apply
-> >> some memory management optimization (for example, use DAMON +
-> >> madvise()).  But it's much easier to run a user space daemon to optimize
-> >> for the application.  (for example, use DAMON + other information +
-> >> process_madvise()).
-> >> 
-> >> And this kind of per-application optimization is kind of application
-> >> specific policy.  This kind of policy may be too complex and flexible to
-> >> be put in the kernel directly.  For example, in addition to DAMON, some
-> >> other application specific or system knowledge may be helpful too, so we
-> >> have process_madvise() for that before DAMON.  Some more complex
-> >> algorithm may be needed for some applications.
-> >> 
-> >> And this kind of application specific policy usually need complex
-> >> configuration.  It's hard to export all these policy parameters to the
-> >> user space as the kernel ABI.  Now, DAMON schemes parameters are
-> >> exported in debugfs so they are not considered ABI.  So they may be
-> >> changed at any time.  But applications need some stable and
-> >> well-maintained ABI.
-> >> 
-> >> All in all, IMHO, what we need is a user space per-application policy
-> >> daemon with the information from DAMON and other sources.
-> >
-> > I basically agree to Ying, as I also noted in the coverletter of DAMOS
-> > patchset[1]:
-> >
-> >     DAMON[1] can be used as a primitive for data access aware memory
-> >     management optimizations.  For that, users who want such optimizations
-> >     should run DAMON, read the monitoring results, analyze it, plan a new
-> >     memory management scheme, and apply the new scheme by themselves.  Such
-> >     efforts will be inevitable for some complicated optimizations.
-> >
-> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fda504fade7f124858d7022341dc46ff35b45274
-> >
-> > That is, I believe some programs and big companies would definitely have their
-> > own information and want such kind of complicated optimizations.  But, such
-> > optimizations would depend on characteristics of each program and require
-> > investment of some amount of resources.  Some other programs and users wouldn't
-> > have such special information, and/or resource to invest for such
-> > optimizations.  For them, some amount of benefit would be helpful enough even
-> > though its sub-optimal.
-> >
-> > I think we should help both groups, and DAMOS could be useful for the second
-> > group.  And I don't think DAMOS is useless for the first group.  They could use
-> > their information-based policy in prallel to DAMOS in some cases.  E.g., if
-> > they have a way to predict the data access pattern of specific memory region
-> > even without help from DAMON, they can use their own policy for the region but
-> > DAMOS for other regions.
-> >
-> > Someone could ask why not implement a user-space implementation for the second
-> > group, then.  First of all, DAMOS is not only for the user-space driven virtual
-> > memory management optimization, but also for kernel-space programs and any
-> > DAMOS-supportable address spaces including the physical address space.  And,
-> > another important goal of DAMOS for user space driven use case in addition to
-> > reducing the redundant code is minimizing the user-kernel context switch
-> > overhead for passing the monitoring results information and memory management
-> > action requests.
-> >
-> > In summary, I agree the user space per-application policy daemon will be useful
-> > for the specialized ultimate optimizations, but we also need DAMOS for another
-> > common group of cases.
-> >
-> > If I'm missing something, please feel free to let me know.
-> 
-> I guess that most end-users and quite some system administrators of
-> small companies have no enough capability to take advantage of the
-> per-application optimizations.  How do they know the appropriate region
-> number and proactive reclaim threshold?
-> 
-> So per my understanding, Linux kernel
-> need provide,
-> 
-> 1. An in-kernel general policy that is obviously correct and benefits
->    almost all users and applications, at least no regression.  No
->    complex configuration or deep knowledge is needed to take advantage
->    of it.
-> 
-> 2. Some way to inspect and control system and application behavior, so
->    that some advanced and customized user space policy daemons can be
->    built to satisfy some advanced users who have the enough knowledge
->    for the applications and systems, for example, oomd.
-
-Agreed, and I think that's the approach that DAMON is currently taking.  In
-specific, we provide DAMON debugfs interface for users who want to inspect and
-control their system and application behavior.  Using it, we also made a PoC
-level user space policy daemon[1].
-
-For the in-kernel policies, we are developing DAMON-based kernel components one
-by one, for specific usages.  DAMON-based proactive reclamation module
-(DAMON_RECLAIM) is one such example.  Such DAMON-based components will remove
-complex tunables that necessary for the general inspection and control of the
-system but unnecessary for their specific purpose (e.g., proactive reclamation)
-to allow users use it in a simple manner.  Also, those will use conservative
-default configs to not incur visible regression.  For example, DAMON_RECLAIM
-uses only up to 1% of single CPU time for the reclamation by default.
-
-In short, I think we're on the same page, and adding DEMOTION scheme action
-could be helpful for the users who want to efficiently inspect and control the
-system/application behavior for their tiered memory systems.  It's unclear how
-much benefit this could give to users, though.  I assume Baolin would come back
-with some sort of numbers in the next spin.  Nevertheless, I personally don't
-think that's a critical blocker, as this patch is essentially just adding a way
-for using the pre-existing primitive, namely move_pages(), in a little bit more
-efficient manner, for the access pattern-based use cases. 
-
-If I'm missing something, please feel free to let me know.
-
-[1] https://github.com/awslabs/damoos
-
-
-Thanks,
-SJ
-
-> 
-> Best Regards,
-> Huang, Ying
+SGkgU3VkZWVwIGFuZCBEYW5pZWw6DQoNClRoYW5rcyB5b3VyIHJlc3BvbnNlLg0KTXkgQ1BVIGlz
+IGFybSBDQTcgdGhhdCBpcyAzMmJpdHMgY3B1Lg0KSWYgSSBkaXJlY3RseSB1c2VkIGNwdWlkbGUt
+YXJtLmMgZnVuY3Rpb24gd2l0aCBlbmFibGUgIkdlbmVyaWMgQVJNL0FSTTY0IENQVSBpZGxlIERy
+aXZlciIsDQp0aGUgY3B1aWRsZSBkcml2ZXIgbW91bnQgZmFpbCB3aXRoICJ1bnN1cHBvcnRlZCBl
+bmFibGUtbWV0aG9kIHByb3BlcnR5Ii4NCg0KVGhpcyBpcyBkdWUgdG8gbGludXgga2VybmVsIG5v
+IGludm9rZSBDUFVJRExFX01FVEhPRF9PRl9ERUNMQVJFIGZvciBhcm0gMzJiaXRzIGNwdS4NClRo
+ZXJlIGhhdmUgbm8gZGVmaW5lIGNwdWlkbGVfb3BzLmluaXQgYW5kIGNwdWlkbGVfb3BzLnN1c3Bl
+bmQgZnVuY3Rpb24gZm9yIGFybSAzMmJpdHMgY3B1IHRvby4NCg0KU28gSSBjcmVhdGUgY3B1aWRs
+ZS1zdW5wbHVzLmMgdG8gZXhlY3V0ZSBteSBjcHVpZGxlIGZ1bmN0aW9uLg0KUGxlYXNlIGNvcnJl
+Y3QgbWUgaWYgSSBnb3QgbWlzdGFrZS4NCg0KDQqq9KurrnAgRWR3aW5DaGl1DQq0vK/guUK64rFN
+rtcNClQ6ICs4ODYtMy01Nzg2MDA1IGV4dC4yNTkwDQplZHdpbi5jaGl1QHN1bnBsdXMuY29tDQoz
+MDAgt3Omy6zsvse26bDPs9C3c6RAuPQxObi5DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0t
+LS0NCj4gRnJvbTogU3VkZWVwIEhvbGxhIDxzdWRlZXAuaG9sbGFAYXJtLmNvbT4NCj4gU2VudDog
+TW9uZGF5LCBEZWNlbWJlciAyMCwgMjAyMSA4OjExIFBNDQo+IFRvOiBFZHdpbiBDaGl1IDxlZHdp
+bmNoaXUwNTA1dHdAZ21haWwuY29tPg0KPiBDYzogcm9iaCtkdEBrZXJuZWwub3JnOyBFZHdpbiBD
+aGl1IKr0q6uucCA8ZWR3aW4uY2hpdUBzdW5wbHVzLmNvbT47IGRldmljZXRyZWVAdmdlci5rZXJu
+ZWwub3JnOw0KPiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyByYWZhZWxAa2VybmVsLm9y
+ZzsgU3VkZWVwIEhvbGxhIDxzdWRlZXAuaG9sbGFAYXJtLmNvbT47DQo+IGRhbmllbC5sZXpjYW5v
+QGxpbmFyby5vcmc7IGxpbnV4LXBtQHZnZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogW1BB
+VENIIHYyIDIvMl0gY3B1aWRsZTpzdW5wbHVzOmNyZWF0ZSBjcHVpZGxlIGRyaXZlciBmb3Igc3Vu
+cGx1cyBzcDcwMjENCj4gDQo+IE9uIE1vbiwgRGVjIDIwLCAyMDIxIGF0IDAxOjM3OjMyUE0gKzA4
+MDAsIEVkd2luIENoaXUgd3JvdGU6DQo+ID4gQ3JlYXRlIGNwdWlkbGUgZHJpdmVyIGZvciBzdW5w
+bHVzIHNwNzAyMSBjaGlwDQo+ID4NCj4gDQo+IEJhc2VkIG9uIHRoZSBkcml2ZXIgaGVyZSwgSSBj
+b3VsZG4ndCB1bmRlcnN0YW5kIHdoeSB5b3UgY2FuJ3QgbWFrZSB1c2Ugb2YgZXhpc3RpbmcgY3B1
+aWRsZS1hcm0uYyBkcml2ZXINCj4gDQo+IC0tDQo+IFJlZ2FyZHMsDQo+IFN1ZGVlcA0K

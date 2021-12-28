@@ -2,90 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C2C480581
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 02:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D84C7480587
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 02:43:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234406AbhL1BhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 20:37:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57434 "EHLO
+        id S234431AbhL1BnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 20:43:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232933AbhL1BhW (ORCPT
+        with ESMTP id S232933AbhL1BnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 20:37:22 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F33C06173E;
-        Mon, 27 Dec 2021 17:37:21 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id d198-20020a1c1dcf000000b0034569cdd2a2so9194928wmd.5;
-        Mon, 27 Dec 2021 17:37:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gz2aWCWCCEe1u6rggzLlG69EStj3M0dnJRBR5Ximccw=;
-        b=fJzZNkNM4erOMQpEfC6XXJ1Ys0wicByRHCuoxx+SNzf9DJu5WrVeDeqVpTlETcHtkd
-         I0xEfW/fAapdGn0UyN7laeO9T1asr+s16RhMD3kSJjqP55OTAWrYuXHUbx4ZvflZakze
-         GdQYZafOf6u+FvZdyYt3uFNS2TaKcsoOXDLIQkIO8TmUzfFqDyPyJD4cXcPh3VFdPCWS
-         +Uf+3g9nJdhV5UCyHswFIpGLHqmuF4suXQyRmwlQKF+VYGpYlpQGZTFb0GOOAGHwb28Q
-         BtOKrY9KtE24jcNvbWzLfCYHK1DlgaBcOaB7iXTPmVwauLKPzJzVGvYnxK4lAMJfjkBV
-         lkDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gz2aWCWCCEe1u6rggzLlG69EStj3M0dnJRBR5Ximccw=;
-        b=YQ33d9WeRw1FPi9p8tilM8WzfN1zmjSilawxOpwulmqGUTQb+DYFGE+3ztTschqH8L
-         INq4XR2W9jOcO9IlcZ86LfRFx0zw5fLF+tcjO/UZgc2Kwv11oY7AHMQ2e2Q5+nTh360u
-         7UPz0RNfNtm6uubOtexJYdoB8Nx6JrFGY2xPFolf9r08ick2ryUMBc3AMMOhkZk5Av3z
-         eaGoUpfOcHu61xKNl/XjYXWjy4y/hIym2tmuYL9Nh7LtlVqm2kbHeJd8Oe7q0qdsDZ6w
-         7w42zUlbKxm/X1Gk6E09hZeCBVbhIgDwUqUawzu5LWVWTvpbcvJDrdqmnuoP5j+cAM1a
-         bqvQ==
-X-Gm-Message-State: AOAM5333SALTHGXhcMXtp8m5hHKoFrnPs5TQR7sPeVPgPpkLrD391FSO
-        YJHoIhEHRAXz8UKB0oUBowY=
-X-Google-Smtp-Source: ABdhPJwt3E5e6JEYid1bQ9uErzNt9j2HwKXRmQtTVQlaN1HB2xhvYgvpPGTPCMc/Ha93d7PP1/+HSQ==
-X-Received: by 2002:a05:600c:384c:: with SMTP id s12mr15396846wmr.108.1640655440417;
-        Mon, 27 Dec 2021 17:37:20 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id o2sm16179695wru.109.2021.12.27.17.37.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Dec 2021 17:37:19 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        ocfs2-devel@oss.oracle.com
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ocfs2: remove redundant assignment to pointer root_bh
-Date:   Tue, 28 Dec 2021 01:37:19 +0000
-Message-Id: <20211228013719.620923-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Mon, 27 Dec 2021 20:43:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25F8C06173E;
+        Mon, 27 Dec 2021 17:43:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 167186117D;
+        Tue, 28 Dec 2021 01:43:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F37C36AE7;
+        Tue, 28 Dec 2021 01:43:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640655784;
+        bh=tm2ezZym6nmRnMFof2gET1bE3Gm3gtZFjJBuqcI1dVs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GpwoqgL3hN+CpF+au5xOM7La9VTu0aFYJ3Ys6SPZYna4fXuZJiSrx2hlzUiMqW9c+
+         JjDISMTXh+N0JUjt2CTJ+uX9MsYyafmITaM6ijFMO7moC+6OW1JhU/LlNtmaBtdf/P
+         N7kgyybkEsviIrx5FWdOEBKWlqj8bNmiJiPd67v6qlSVScJ1wGjD90SVhl8VBlG9lQ
+         t/hlsUx496uH1Fd/+U9TPnULK74z/+6TLLdaRIPHSoyJukiY3/H3EODB78L9MGcFuT
+         8WNs6Qk5eY6BI/4MvrHrKf/W5xPWLUKsxDkFVswdJEGrFziUTFMXP+tNN3uY1wYfV5
+         pteFO/mhw5u4w==
+Date:   Mon, 27 Dec 2021 17:43:02 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v7 0/2] net: ethernet: mtk_soc_eth: implement Clause 45
+ MDIO access
+Message-ID: <20211227174302.79379151@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <Ycpj/cEdjb0BMrny@makrotopia.org>
+References: <YcnoAscVe+2YILT8@shell.armlinux.org.uk>
+        <YcpVmlb1jFavCBpS@makrotopia.org>
+        <YcpVtjykiS7mgtT5@makrotopia.org>
+        <Ycpj/cEdjb0BMrny@makrotopia.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pointer root_bh is being initialized with a value that is not read,
-it is being re-assigned later on closer to its use. The early
-initialization is redundant and can be removed.
+On Tue, 28 Dec 2021 01:10:21 +0000 Daniel Golle wrote:
+> As it turned out some clean-up would be needed, first address return
+> value and type of mdio read and write functions in mtk_eth_soc and
+> generally clean up and unify both functions.
+> Then add support to access Clause 45 phy registers.
+> 
+> Both commits are tested on the Bananapi BPi-R64 board having MediaTek
+> MT7531BE DSA gigE switch using clause 22 MDIO and Ubiquiti UniFi 6 LR
+> access point having Aquantia AQR112C PHY using clause 45 MDIO.
+> 
+> v7: remove unneeded variables and order OR-ed call parameters
+> v6: further clean up functions and more cleanly separate patches
+> v5: fix wrong variable name in first patch covered by follow-up patch
+> v4: clean-up return values and types, split into two commits
+> v3: return -1 instead of 0xffff on error in _mtk_mdio_write
+> v2: use MII_DEVADDR_C45_SHIFT and MII_REGADDR_C45_MASK to extract
+>     device id and register address. Unify read and write functions to
+>     have identical types and parameter names where possible as we are
+>     anyway already replacing both function bodies.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- fs/ocfs2/alloc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please stop reposting this series (1) so often; (2) as a flat response
+to an old version. You are completely confusing patch series detection,
+at least in patchwork.
 
-diff --git a/fs/ocfs2/alloc.c b/fs/ocfs2/alloc.c
-index bb247bc349e4..bf9357123bc5 100644
---- a/fs/ocfs2/alloc.c
-+++ b/fs/ocfs2/alloc.c
-@@ -2040,7 +2040,7 @@ static void ocfs2_complete_edge_insert(handle_t *handle,
- 	int i, idx;
- 	struct ocfs2_extent_list *el, *left_el, *right_el;
- 	struct ocfs2_extent_rec *left_rec, *right_rec;
--	struct buffer_head *root_bh = left_path->p_node[subtree_index].bh;
-+	struct buffer_head *root_bh;
- 
- 	/*
- 	 * Update the counts and position values within all the
--- 
-2.33.1
-
+Try git send-email and please allow at least 12 hours between postings
+for reviewers to comment.

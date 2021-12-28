@@ -2,87 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9CC480AFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 16:40:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C45DE480AFB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 16:45:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235415AbhL1PkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 10:40:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
+        id S235159AbhL1Ppt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 10:45:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235309AbhL1PkL (ORCPT
+        with ESMTP id S230489AbhL1Pps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 10:40:11 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE05C061574;
-        Tue, 28 Dec 2021 07:40:10 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        Tue, 28 Dec 2021 10:45:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC228C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 07:45:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 16FF91EC036C;
-        Tue, 28 Dec 2021 16:40:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640706005;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=B7UfmnaY67PCbDypMjoTczk3TheN2aQoIjxT4IQaXhE=;
-        b=G1sBfYxv+hyhqjeu8CJCoJT07O4arDxG4uNnYRA4240tVWXAlxe6zFKmsLDSPrACxiX//g
-        jVwKGvp8xVW3SCZYOoTexKgwgh2qiZ/u7Wca7K5XQx+EmQDKGjnicUo14Z02pghkbPM3IR
-        J+eKgWkuyW8Ne4riY4cVCxzRubd5Rcc=
-Date:   Tue, 28 Dec 2021 16:40:07 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v8 14/40] x86/kernel: Validate rom memory before
- accessing when SEV-SNP is active
-Message-ID: <Ycsv1wVWNS1MWx94@zn.tnic>
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-15-brijesh.singh@amd.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9F8D9B8121D
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 15:45:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 235D7C36AE8;
+        Tue, 28 Dec 2021 15:45:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640706345;
+        bh=61VjJm5PfCJyV3kQn8StWdf+zqdRjqOr4bdI80mKVXI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=IWwwmmisD3USEZPaJACXojKWUO5BbeZTA4kjZM1esZbjguZekooMTH1Ck86BuGPlc
+         zhdYRd5XMFY2Vh41zi06Dpm1RVPtHf5rBUaW048A2XDqK0tUf7eLp2oVS43rKOy/k4
+         NlAWKEGdybOHRtn6dBLgHiiJzU0iY0FYVWC1juGPf3C/nrPNVZBDUre5fAZ4wZAkvp
+         t4QSmbEEWPbAHBfU++U6pY/PJbGmzyJOfDUAe96lC7BfkoEu0FlNOVKb45SJZd23US
+         yJliN4cDYDNb3XrwqnlqhvOCR9vuIAgbgpVbUiuQPCEArMTW17BC9XOLaw1jqT1STp
+         FAeVrMkJFOb5w==
+Date:   Tue, 28 Dec 2021 16:45:16 +0100
+From:   Miguel Ojeda <ojeda@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Luiz Sampaio <sampaio.ime@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] auxdisplay for v5.16
+Message-ID: <20211228154449.GA14032@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211210154332.11526-15-brijesh.singh@amd.com>
+User-Agent: elm/2
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 09:43:06AM -0600, Brijesh Singh wrote:
+Hi Linus,
 
-> Subject: Re: [PATCH v8 14/40] x86/kernel: Validate rom memory before accessing when SEV-SNP is active
+Please pull a couple small changes for v5.16 or v5.17.
 
-s/rom/ROM/
+Cheers,
+Miguel
 
-> The probe_roms() access the memory range (0xc0000 - 0x10000) to probe
+The following changes since commit 136057256686de39cc3a07c2e39ef6bc43003ff6:
 
-"probe_roms() accesses... "
+  Linux 5.16-rc2 (2021-11-21 13:47:39 -0800)
 
--- 
-Regards/Gruss,
-    Boris.
+are available in the Git repository at:
 
-https://people.kernel.org/tglx/notes-about-netiquette
+  https://github.com/ojeda/linux.git tags/auxdisplay-for-linus-v5.16
+
+for you to fetch changes up to 4daa9ff89ef27be43c15995412d6aee393a78200:
+
+  auxdisplay: charlcd: checking for pointer reference before dereferencing (2021-11-24 11:46:52 +0100)
+
+----------------------------------------------------------------
+A couple improvements for auxdisplay:
+
+  - charlcd: checking for pointer reference before dereferencing.
+
+  - charlcd: fixing coding style issue.
+
+----------------------------------------------------------------
+Luiz Sampaio (2):
+      auxdisplay: charlcd: fixing coding style issue
+      auxdisplay: charlcd: checking for pointer reference before dereferencing
+
+ drivers/auxdisplay/charlcd.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)

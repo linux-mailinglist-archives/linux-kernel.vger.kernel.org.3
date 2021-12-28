@@ -2,95 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B06480973
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 14:12:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 678F5480974
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 14:13:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232249AbhL1NMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 08:12:45 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:45482
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232128AbhL1NMo (ORCPT
+        id S232273AbhL1NNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 08:13:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39344 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232128AbhL1NN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 08:12:44 -0500
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 28 Dec 2021 08:13:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E4CC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 05:13:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D3B5B3F044
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 13:12:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1640697163;
-        bh=PHoxW3qi5dqUGPM3GtNEF3gB6+cmt8tlvVRU3SmK+uQ=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=iqUw/HgIeeASox6ZlQmsssd35WIbzE7etR6wBqpqRMO766Txx/5dWxC5862lVea5x
-         J3NSResRz4OCYARMykVaOFgvP0YP9y+8mozH48+u7SBlep/Vqz43ZMOYMm8QEfHsaV
-         bBc0a+Gcb0gy3RC6adwIia4OLy/OPUB/FpyJU18B+xIfqHN27TkfnQ7NUh057UCMKL
-         yJogGz1NlOqkeDrJuPBkiFqNqakT1RWhpCmAXqrLGK46fF5JQ/kE9cLnqiqYXfxYO9
-         syVS3/0CyvzVV4r1cEzMHHAhTb561UblCBvjxem+Q6Tffo4L4GX/8TrJM7PIskgDLs
-         nuo97lhGkkbYA==
-Received: by mail-lj1-f199.google.com with SMTP id bd7-20020a05651c168700b0022d71e1839bso5993332ljb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 05:12:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PHoxW3qi5dqUGPM3GtNEF3gB6+cmt8tlvVRU3SmK+uQ=;
-        b=ZfJZdDNVnDEtl5RoJynjHCn7xTSkwaCqYGC9oPxbJm+46FD9/rXjOuH8F3SltQr7xB
-         jTWtvIt5GCXeWPapYoorwrUK+lYnqY3r2C+GkVE7mL2YGrNdE0T0X9TP8UyQs56fLBYZ
-         Lww49HZiyS6b7ajdwIZIsWomjZ6FjJPCz3qgc+UE1DvwBeXFsgfZd8cfumSnU9znI53h
-         eH/duVwN9vfgwt/SyEgZHthHvLS8Vx5evzU6mWSVC52eIFcy1Syy4ZZL3JmiJDdjTYh5
-         gEDt56ShT66Pa7MnDvlmXJOmbXrFL4/zpERvSpaR4W2PWmPYcAz5cQ8inDDZ9j/BEj2y
-         rtwQ==
-X-Gm-Message-State: AOAM5321SSf3LfXdur6Q3Czuk0gvFurYcUUXLQGZplsK7s4XavEr/WGO
-        +zi3nVKpieiEEsrZgdEy+rOz9XybQy6LldRra5qsxuWgwiHjQ/2AfRtbi/RnJyKSm/s3l2F83F/
-        fH79p4JgjPeSyVqdLgaTfdWTapPIZMKJmow9/1K4Y0Q==
-X-Received: by 2002:ac2:46d4:: with SMTP id p20mr19141640lfo.653.1640697162839;
-        Tue, 28 Dec 2021 05:12:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyoavReARFXLadW++33qI3Nh2nMVHqNtx8xt4u7Le2xVMY4oTna4zrRBpafVgDfdAK51erwxw==
-X-Received: by 2002:ac2:46d4:: with SMTP id p20mr19141604lfo.653.1640697162249;
-        Tue, 28 Dec 2021 05:12:42 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id r11sm115506ljp.18.2021.12.28.05.12.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Dec 2021 05:12:40 -0800 (PST)
-Message-ID: <5e799c7f-573b-d254-80e6-85404ef536b6@canonical.com>
-Date:   Tue, 28 Dec 2021 14:12:39 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D491B61193
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 13:13:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A34B1C36AE8;
+        Tue, 28 Dec 2021 13:13:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640697208;
+        bh=IY1JSY+ns2iXA1O9Jn1pf+rlk1MoRrQelWyTgIJQcKs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=xEptiuoBRrGHiJ6bC9EXO3r/UUL/rHZsDi4iTq9m0PXV3Vw2zNKB+VWscjigOKjwo
+         gu/xBJagh2jVRcuFjrbNAwt9EDuTDt/L/ZHh6v3vArIc1ghbjCIRAfydSsHIvF5TZI
+         Da+jaPxZr0bRBCB7b1u4VbHP84JOVSZWfWMPeS8A=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] UIO: use default_groups in kobj_type
+Date:   Tue, 28 Dec 2021 14:13:19 +0100
+Message-Id: <20211228131319.249324-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH] ASoC: samsung: idma: Check of ioremap return value
-Content-Language: en-US
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, s.nawrocki@samsung.com,
-        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-References: <20211228034026.1659385-1-jiasheng@iscas.ac.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211228034026.1659385-1-jiasheng@iscas.ac.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1962; h=from:subject; bh=IY1JSY+ns2iXA1O9Jn1pf+rlk1MoRrQelWyTgIJQcKs=; b=owGbwMvMwCRo6H6F97bub03G02pJDImneXPv2mSHxh/yOxP1eJ/08Reb/q6ZyrUkhEHsr7yfdsg2 nksCHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjARCwmGeVo2X74Ypb5Zb+N9XfwCR/ u+xdY1NQzzbDZe26FrdXGVffkz9Uxp26oIJ95MAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/12/2021 04:40, Jiasheng Jiang wrote:
-> Because of the potential failure of the ioremap(), the buf->area could
-> be NULL.
-> Therefore, we need to check it and return -ENOMEM in order to transfer
-> the error.
-> 
-> Fixes: f09aecd50f39 ("ASoC: SAMSUNG: Add I2S0 internal dma driver")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  sound/soc/samsung/idma.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+There are currently 2 ways to create a set of sysfs files for a
+kobj_type, through the default_attrs field, and the default_groups
+field.  Move the UIO code to use default_groups field which has been the
+preferred way since aa30f47cf666 ("kobject: Add support for default
+attribute groups to kobj_type") so that we can soon get rid of the
+obsolete default_attrs field.
 
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/uio/uio.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+diff --git a/drivers/uio/uio.c b/drivers/uio/uio.c
+index ea96e319c8a0..43afbb7c5ab9 100644
+--- a/drivers/uio/uio.c
++++ b/drivers/uio/uio.c
+@@ -83,13 +83,14 @@ static struct map_sysfs_entry size_attribute =
+ static struct map_sysfs_entry offset_attribute =
+ 	__ATTR(offset, S_IRUGO, map_offset_show, NULL);
+ 
+-static struct attribute *attrs[] = {
++static struct attribute *map_attrs[] = {
+ 	&name_attribute.attr,
+ 	&addr_attribute.attr,
+ 	&size_attribute.attr,
+ 	&offset_attribute.attr,
+ 	NULL,	/* need to NULL terminate the list of attributes */
+ };
++ATTRIBUTE_GROUPS(map);
+ 
+ static void map_release(struct kobject *kobj)
+ {
+@@ -119,7 +120,7 @@ static const struct sysfs_ops map_sysfs_ops = {
+ static struct kobj_type map_attr_type = {
+ 	.release	= map_release,
+ 	.sysfs_ops	= &map_sysfs_ops,
+-	.default_attrs	= attrs,
++	.default_groups	= map_groups,
+ };
+ 
+ struct uio_portio {
+@@ -178,6 +179,7 @@ static struct attribute *portio_attrs[] = {
+ 	&portio_porttype_attribute.attr,
+ 	NULL,
+ };
++ATTRIBUTE_GROUPS(portio);
+ 
+ static void portio_release(struct kobject *kobj)
+ {
+@@ -207,7 +209,7 @@ static const struct sysfs_ops portio_sysfs_ops = {
+ static struct kobj_type portio_attr_type = {
+ 	.release	= portio_release,
+ 	.sysfs_ops	= &portio_sysfs_ops,
+-	.default_attrs	= portio_attrs,
++	.default_groups	= portio_groups,
+ };
+ 
+ static ssize_t name_show(struct device *dev,
+-- 
+2.34.1
 
-
-Best regards,
-Krzysztof

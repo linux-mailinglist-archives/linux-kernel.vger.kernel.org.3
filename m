@@ -2,141 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C42480CA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 19:45:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E39F480CA4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 19:49:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237101AbhL1SpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 13:45:24 -0500
-Received: from mga04.intel.com ([192.55.52.120]:65053 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231658AbhL1SpY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 13:45:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640717124; x=1672253124;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fGYv5mgtvdW9kjOwwWT2K4cBBnwt6DpPEhDNG75IPw0=;
-  b=ae2S2F50Ei+UH3v03wu0tSb8mB+Zw32/NuwpsQD5x0F2dDjm5ke4EXao
-   OpvpMHKpLPo0SbuYFVFyI8HkqjLqvNw36hbsy720SoK5uoajhMq2pvCXC
-   1zNkmVvvHrKCipdgpNPyQ8SRYEYWIvs6YySNU3crYkAostUMkP2KFKyZr
-   2e7CpQNRcmuxsMUMNa40DeEkh8W/RGU9bwRl7DOAaX3KhR1QdcEBfKnCy
-   EtV7nl4/CWbKdepaMLhjxwCau3GEU8XsMc8E3hGteXbDcrrjx+zinIfe3
-   S9PhAs+lAA1qB5LAk6gvCPtGEPVOrD2a3+OoRdLN8dRWAUFlQTCykLDGg
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="240189104"
-X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
-   d="scan'208";a="240189104"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 10:45:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
-   d="scan'208";a="468202030"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 28 Dec 2021 10:45:22 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n2HTN-0007wY-Cb; Tue, 28 Dec 2021 18:45:21 +0000
-Date:   Wed, 29 Dec 2021 02:45:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guo Ren <guoren@linux.alibaba.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        id S237117AbhL1Stp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 13:49:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237107AbhL1Stn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 13:49:43 -0500
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B61AC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 10:49:43 -0800 (PST)
+Received: by mail-oo1-xc2f.google.com with SMTP id v30-20020a4a315e000000b002c52d555875so6298959oog.12
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 10:49:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eXhwfFLm6xuRXH07dJ43yJ+pTlr8xJ8+NlyVlndnfCM=;
+        b=tsMCTyQL8yJvHEdjhTZNmLbJ57UAa8DmU4t+AJIjvr371gGhUD4TpfUfYQ+wQ74Imv
+         GaoTxx0a03liOrWDFTeLIJCz1QWWvFJ0G6VIj7rkBgnwyPISmapj8NcRCURqS5IQ7I/b
+         h8pLQWqR15McqilHIGRd9jtVaklDqDJRvrIC5hueGCx4lw0QBN/tFoe4Hbp9z4QxCkb5
+         C1seEJxP7fvY6+cfZh4ZxgXtihTJjJP5yHQfR3pcueda7gQu0CypJ/kHPJVXWCsbN7hB
+         iOezJZgrSR1fEP5Y+xvs8FkNRG0xJcHg6n8H/elrrOeVVr+F83OilwPLezSr1XU7Kha4
+         t8Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eXhwfFLm6xuRXH07dJ43yJ+pTlr8xJ8+NlyVlndnfCM=;
+        b=W2zdAPuSNhpaEArxuJNam0KFJkK97alBWDMtHAj9gPmADp+T568Q2RkEAnuO+hviQa
+         O2Qa00Lqr7rfztV0jKoLNKxzvld2NayAPQ+vUf+3kKJKI2U1MdE10MCpXBTwL7msEV/7
+         JbbSDUf/aDfoTjJ6/wCLQh4FhH7YsAqZM+nNVC8nb9X/wJeoN6FAPeSh8Ra2KWZMpjFm
+         pmMf6IT/WYKyEpM9EeGiL2doLbzmtfmVWcbGrwjNjRx+mzBRfga+JyB7X9xBlYjKFSLA
+         Dvz8AjSL9xF4djJv1CBfIzFw6ZMv4lP9TpONJSN+dDzSgWLefitTJDNU9olzF/+9EHfl
+         EG7Q==
+X-Gm-Message-State: AOAM533HMBioC2S/hOThtzppHuCzTVwTSiMM6Iu9LouQTAhpO/78/q9X
+        o+WGGhFueU1FxSa1jsWxdEfozw==
+X-Google-Smtp-Source: ABdhPJxFcz2lm2/hfGgOO3cwto/v7M4ze2hWUHK5rd5mQN6CYOKVEj4fK2UGpbvGa7fyTR5s1kvLFA==
+X-Received: by 2002:a4a:a4c9:: with SMTP id c9mr14129371oom.21.1640717382428;
+        Tue, 28 Dec 2021 10:49:42 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id 90sm3133883otn.59.2021.12.28.10.49.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Dec 2021 10:49:42 -0800 (PST)
+Date:   Tue, 28 Dec 2021 10:50:42 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, dmitry.baryshkov@linaro.org,
+        quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [csky-linux:riscv_compat_v2 17/17]
- arch/riscv/kernel/compat_signal.c:199:5: warning: no previous prototype for
- function 'compat_setup_rt_frame'
-Message-ID: <202112290250.xtdytZe1-lkp@intel.com>
+Subject: Re: [PATCH] drm/msm/dp: populate connector of struct  dp_panel
+Message-ID: <Yctcgslq283lZXW/@ripper>
+References: <1640713908-7453-1-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1640713908-7453-1-git-send-email-quic_khsieh@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guo,
+On Tue 28 Dec 09:51 PST 2021, Kuogee Hsieh wrote:
 
-First bad commit (maybe != root cause):
+> There is kernel crashed happen due to unable to handle kernel NULL
 
-tree:   https://github.com/c-sky/csky-linux riscv_compat_v2
-head:   750f87086bdd630f80b9bc3581bc3f329ef20f53
-commit: 750f87086bdd630f80b9bc3581bc3f329ef20f53 [17/17] riscv: compat: Add COMPAT Kbuild skeletal support
-config: riscv-buildonly-randconfig-r002-20211228 (https://download.01.org/0day-ci/archive/20211229/202112290250.xtdytZe1-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7171af744543433ac75b232eb7dfdaef7efd4d7a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/c-sky/csky-linux/commit/750f87086bdd630f80b9bc3581bc3f329ef20f53
-        git remote add csky-linux https://github.com/c-sky/csky-linux
-        git fetch --no-tags csky-linux riscv_compat_v2
-        git checkout 750f87086bdd630f80b9bc3581bc3f329ef20f53
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+It would be wonderful, for my understanding today, as well as people in
+the coming months to be able to search for the callstack etc on the
+mailing list, if you could provide some details about the crash.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+E.g. a callstack or description of when it happens.
 
-All warnings (new ones prefixed by >>):
+> pointer dereference  of dp_panel->connector while running DP link
+> layer compliance test case 4.2.2.6 (EDIDCorruption Detection).
+> This patch will fixed the problem by populating connector of dp_panel.
+> 
+> Fixes: 7948fe12d47 ("drm/msm/dp: return correct edid checksum after corrupted edid checksum read")
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/dp/dp_panel.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
+> index 71db10c..6a938a2 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_panel.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_panel.c
+> @@ -197,6 +197,8 @@ int dp_panel_read_sink_caps(struct dp_panel *dp_panel,
+>  	kfree(dp_panel->edid);
+>  	dp_panel->edid = NULL;
+>  
+> +	dp_panel->connector = connector;
 
->> arch/riscv/kernel/compat_signal.c:199:5: warning: no previous prototype for function 'compat_setup_rt_frame' [-Wmissing-prototypes]
-   int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
-       ^
-   arch/riscv/kernel/compat_signal.c:199:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
-   ^
-   static 
-   1 warning generated.
+So you have a dp_display_private object with a panel and a connector
+allocated, but before you manage to associate the two you get a HPD
+event and call this function, so you decide to stitch the two together
+just here in some piece of code unrelated to the initialization of your
+objects?
 
+It sounds like we're lacking synchronization between the initialization
+and the HPD interrupts and this would not be the correct solution.
 
-vim +/compat_setup_rt_frame +199 arch/riscv/kernel/compat_signal.c
+Regards,
+Bjorn
 
-520279d27c28fd Guo Ren 2021-12-13  198  
-520279d27c28fd Guo Ren 2021-12-13 @199  int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
-520279d27c28fd Guo Ren 2021-12-13  200  	struct pt_regs *regs)
-520279d27c28fd Guo Ren 2021-12-13  201  {
-520279d27c28fd Guo Ren 2021-12-13  202  	struct compat_rt_sigframe __user *frame;
-520279d27c28fd Guo Ren 2021-12-13  203  	long err = 0;
-520279d27c28fd Guo Ren 2021-12-13  204  
-520279d27c28fd Guo Ren 2021-12-13  205  	frame = compat_get_sigframe(ksig, regs, sizeof(*frame));
-520279d27c28fd Guo Ren 2021-12-13  206  	if (!access_ok(frame, sizeof(*frame)))
-520279d27c28fd Guo Ren 2021-12-13  207  		return -EFAULT;
-520279d27c28fd Guo Ren 2021-12-13  208  
-520279d27c28fd Guo Ren 2021-12-13  209  	err |= copy_siginfo_to_user32(&frame->info, &ksig->info);
-520279d27c28fd Guo Ren 2021-12-13  210  
-520279d27c28fd Guo Ren 2021-12-13  211  	/* Create the ucontext. */
-520279d27c28fd Guo Ren 2021-12-13  212  	err |= __put_user(0, &frame->uc.uc_flags);
-520279d27c28fd Guo Ren 2021-12-13  213  	err |= __put_user(NULL, &frame->uc.uc_link);
-520279d27c28fd Guo Ren 2021-12-13  214  	err |= __compat_save_altstack(&frame->uc.uc_stack, regs->sp);
-520279d27c28fd Guo Ren 2021-12-13  215  	err |= compat_setup_sigcontext(frame, regs);
-520279d27c28fd Guo Ren 2021-12-13  216  	err |= __copy_to_user(&frame->uc.uc_sigmask, set, sizeof(*set));
-520279d27c28fd Guo Ren 2021-12-13  217  	if (err)
-520279d27c28fd Guo Ren 2021-12-13  218  		return -EFAULT;
-520279d27c28fd Guo Ren 2021-12-13  219  
-520279d27c28fd Guo Ren 2021-12-13  220  	regs->ra = (unsigned long)COMPAT_VDSO_SYMBOL(
-520279d27c28fd Guo Ren 2021-12-13  221  			current->mm->context.vdso, rt_sigreturn);
-520279d27c28fd Guo Ren 2021-12-13  222  
-520279d27c28fd Guo Ren 2021-12-13  223  	/*
-520279d27c28fd Guo Ren 2021-12-13  224  	 * Set up registers for signal handler.
-520279d27c28fd Guo Ren 2021-12-13  225  	 * Registers that we don't modify keep the value they had from
-520279d27c28fd Guo Ren 2021-12-13  226  	 * user-space at the time we took the signal.
-520279d27c28fd Guo Ren 2021-12-13  227  	 * We always pass siginfo and mcontext, regardless of SA_SIGINFO,
-520279d27c28fd Guo Ren 2021-12-13  228  	 * since some things rely on this (e.g. glibc's debug/segfault.c).
-520279d27c28fd Guo Ren 2021-12-13  229  	 */
-520279d27c28fd Guo Ren 2021-12-13  230  	regs->epc = (unsigned long)ksig->ka.sa.sa_handler;
-520279d27c28fd Guo Ren 2021-12-13  231  	regs->sp = (unsigned long)frame;
-520279d27c28fd Guo Ren 2021-12-13  232  	regs->a0 = ksig->sig;                     /* a0: signal number */
-520279d27c28fd Guo Ren 2021-12-13  233  	regs->a1 = (unsigned long)(&frame->info); /* a1: siginfo pointer */
-520279d27c28fd Guo Ren 2021-12-13  234  	regs->a2 = (unsigned long)(&frame->uc);   /* a2: ucontext pointer */
-520279d27c28fd Guo Ren 2021-12-13  235  
-
-:::::: The code at line 199 was first introduced by commit
-:::::: 520279d27c28fd0bcabaef85d9c71cb592da21c2 riscv: compat: signal: Add rt_frame implementation
-
-:::::: TO: Guo Ren <guoren@linux.alibaba.com>
-:::::: CC: Guo Ren <guoren@linux.alibaba.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> +
+>  	dp_panel->edid = drm_get_edid(connector,
+>  					      &panel->aux->ddc);
+>  	if (!dp_panel->edid) {
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 

@@ -2,259 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 008AF480B02
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 16:54:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4636F480B04
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 16:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235448AbhL1Pyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 10:54:32 -0500
-Received: from vmicros1.altlinux.org ([194.107.17.57]:57512 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235314AbhL1Pyb (ORCPT
+        id S235469AbhL1P4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 10:56:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235287AbhL1P4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 10:54:31 -0500
-Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 3E40872C8B0;
-        Tue, 28 Dec 2021 18:54:30 +0300 (MSK)
-Received: by mua.local.altlinux.org (Postfix, from userid 508)
-        id 287C57CCA1F; Tue, 28 Dec 2021 18:54:30 +0300 (MSK)
-Date:   Tue, 28 Dec 2021 18:54:30 +0300
-From:   "Dmitry V. Levin" <ldv@altlinux.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] uapi: fix asm/signal.h userspace compilation errors
-Message-ID: <20211228155429.GA11957@altlinux.org>
+        Tue, 28 Dec 2021 10:56:15 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86D5C061574;
+        Tue, 28 Dec 2021 07:56:14 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id g7-20020a7bc4c7000000b00345c4bb365aso10258888wmk.4;
+        Tue, 28 Dec 2021 07:56:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=t1MDQ1CuJ+CtxV/k/TCo6Po1qrBja12Cye53X+2hxAw=;
+        b=o00dZLBKTdEgFVqOhz+3M4aTH+3GOsY6yRQov1N60Io3DQ0tYv672K+Ia/kb0s2Uma
+         FG5vmY1zQ0BgRwgTdNKyniFugn2+4+UFg4IPcRT/XBqTgWyRME2SkYuaXbpCRn8S8Ytp
+         SyREk40Ngrepjvm9sywWazRQcUAUc/FzIQB1SkSrJtHjBo0L/aX9UKBqB4Zvyp92HIJt
+         itgYdg4PZW6Z+7mihWiszGF809uT++Jmw0qi+4f/22DxTIvNevnRK9qUstmAB1sADf/9
+         BkceYfdugySDWoWxBVo5fSg0s8bdkd7VcXr6lOvdgDQKB2WvLAOiZFtzeF7JH88Uf5q2
+         QEEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=t1MDQ1CuJ+CtxV/k/TCo6Po1qrBja12Cye53X+2hxAw=;
+        b=lxoVx/nvPTfODgNkrfuAcnaV2Bt52NoIjoGKQcCVg7iOpXi4T1KLM+HOlEs8WIgeHE
+         dvVsv5/ffBu/pUoDUuzy9lmI41SkAWTKuuGuTwajmFKYj3ShVobgd8ElabPjZYiitrBr
+         5MjiUmjKGLO31keUym128FJJJLZFoRufeFA6Qe9YUSHNWyOe27oRArQSnmAGY/N1ba1Q
+         NkZ7HnOvlUp7Duw91Ck+UERYrDFQeQhA1JG/scXqIOzrNC9eu0HUTFdh/7idAaw/pgsF
+         pmQtnj+wSxYE3Yw+GFY5wlG4uzxNFDERcu4zxxPAWPhiITTUwk0sjBK9SDaTMJcwuGRB
+         MtlQ==
+X-Gm-Message-State: AOAM532UtCfJfjqwqztfc2XyMHjgfgriC9foqlkQCJIlKx0j6IctkfNh
+        6RIcfnYjmVMLFcFcTooMW8U=
+X-Google-Smtp-Source: ABdhPJwTVaMHMH2jZEptpNnvfazLDgeUnQ/pvqXSObPuy3N5yE62W28JeUWULMTu8bgsKg/0uhBGbQ==
+X-Received: by 2002:a1c:23d2:: with SMTP id j201mr18135068wmj.76.1640706973311;
+        Tue, 28 Dec 2021 07:56:13 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.161.251])
+        by smtp.gmail.com with ESMTPSA id a204sm21834509wmd.39.2021.12.28.07.56.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Dec 2021 07:56:12 -0800 (PST)
+Message-ID: <331e5b78-2ac7-bca6-061d-85cf25a6bd95@gmail.com>
+Date:   Tue, 28 Dec 2021 16:56:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20170302001853.GA27097@altlinux.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, Maxim Kutnij <gtk3@inbox.ru>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211219183134.3849-1-gtk3@inbox.ru>
+ <20211219183134.3849-3-gtk3@inbox.ru> <YcNhMdN6rzh9yRG1@robh.at.kernel.org>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH 3/3] This adds a DT binding documentation for the MT6582
+ SoC
+In-Reply-To: <YcNhMdN6rzh9yRG1@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Userspace cannot compile <asm/signal.h> due to missing type definitions.
-For example, compiling it for x86_64 fails with the following diagnostics
-when the exception for asm/signal.h is removed from usr/include/Makefile:
-
-$ make usr CONFIG_HEADERS_INSTALL=y CONFIG_UAPI_HEADER_TEST=y
-...
-  HDRTEST usr/include/asm/signal.h
-In file included from <command-line>:
-./usr/include/asm/signal.h:103:9: error: unknown type name 'size_t'
-  103 |         size_t ss_size;
-      |         ^~~~~~
-
-Replace size_t with __kernel_size_t to make asm/signal.h self-contained,
-also add it to the compile-test coverage.
-
-Signed-off-by: Dmitry V. Levin <ldv@altlinux.org>
----
-
-This was submitted almost 5 years ago, so I was under impression that
-it was applied among others of this kind, but, apparently, it's still
-relevant.
-
-v3: update commit message, remove usr/include/Makefile exception for
-asm/signal.h.
-
- arch/alpha/include/uapi/asm/signal.h   | 2 +-
- arch/arm/include/uapi/asm/signal.h     | 2 +-
- arch/h8300/include/uapi/asm/signal.h   | 2 +-
- arch/ia64/include/uapi/asm/signal.h    | 2 +-
- arch/m68k/include/uapi/asm/signal.h    | 2 +-
- arch/mips/include/uapi/asm/signal.h    | 2 +-
- arch/parisc/include/uapi/asm/signal.h  | 2 +-
- arch/powerpc/include/uapi/asm/signal.h | 2 +-
- arch/s390/include/uapi/asm/signal.h    | 2 +-
- arch/sparc/include/uapi/asm/signal.h   | 2 +-
- arch/x86/include/uapi/asm/signal.h     | 2 +-
- arch/xtensa/include/uapi/asm/signal.h  | 2 +-
- include/uapi/asm-generic/signal.h      | 2 +-
- usr/include/Makefile                   | 1 -
- 14 files changed, 13 insertions(+), 14 deletions(-)
-
-diff --git a/arch/alpha/include/uapi/asm/signal.h b/arch/alpha/include/uapi/asm/signal.h
-index a69dd8d080a8..1413075f7616 100644
---- a/arch/alpha/include/uapi/asm/signal.h
-+++ b/arch/alpha/include/uapi/asm/signal.h
-@@ -100,7 +100,7 @@ struct sigaction {
- typedef struct sigaltstack {
- 	void __user *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
- 
- /* sigstack(2) is deprecated, and will be withdrawn in a future version
-diff --git a/arch/arm/include/uapi/asm/signal.h b/arch/arm/include/uapi/asm/signal.h
-index c9a3ea1d8d41..9e2178420db2 100644
---- a/arch/arm/include/uapi/asm/signal.h
-+++ b/arch/arm/include/uapi/asm/signal.h
-@@ -93,7 +93,7 @@ struct sigaction {
- typedef struct sigaltstack {
- 	void __user *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
- 
- 
-diff --git a/arch/h8300/include/uapi/asm/signal.h b/arch/h8300/include/uapi/asm/signal.h
-index 2cd0dce2b6a6..1165481f80f6 100644
---- a/arch/h8300/include/uapi/asm/signal.h
-+++ b/arch/h8300/include/uapi/asm/signal.h
-@@ -85,7 +85,7 @@ struct sigaction {
- typedef struct sigaltstack {
- 	void *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
- 
- 
-diff --git a/arch/ia64/include/uapi/asm/signal.h b/arch/ia64/include/uapi/asm/signal.h
-index 38166a88e4c9..63d574e802a2 100644
---- a/arch/ia64/include/uapi/asm/signal.h
-+++ b/arch/ia64/include/uapi/asm/signal.h
-@@ -90,7 +90,7 @@ struct siginfo;
- typedef struct sigaltstack {
- 	void __user *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
- 
- 
-diff --git a/arch/m68k/include/uapi/asm/signal.h b/arch/m68k/include/uapi/asm/signal.h
-index 4619291df601..80f520b9b10b 100644
---- a/arch/m68k/include/uapi/asm/signal.h
-+++ b/arch/m68k/include/uapi/asm/signal.h
-@@ -83,7 +83,7 @@ struct sigaction {
- typedef struct sigaltstack {
- 	void __user *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
- 
- #endif /* _UAPI_M68K_SIGNAL_H */
-diff --git a/arch/mips/include/uapi/asm/signal.h b/arch/mips/include/uapi/asm/signal.h
-index e6c78a15cb2f..94a00f82e373 100644
---- a/arch/mips/include/uapi/asm/signal.h
-+++ b/arch/mips/include/uapi/asm/signal.h
-@@ -100,7 +100,7 @@ struct sigaction {
- /* IRIX compatible stack_t  */
- typedef struct sigaltstack {
- 	void __user *ss_sp;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- 	int ss_flags;
- } stack_t;
- 
-diff --git a/arch/parisc/include/uapi/asm/signal.h b/arch/parisc/include/uapi/asm/signal.h
-index e5a2657477ac..8e4895c5ea5d 100644
---- a/arch/parisc/include/uapi/asm/signal.h
-+++ b/arch/parisc/include/uapi/asm/signal.h
-@@ -67,7 +67,7 @@ struct siginfo;
- typedef struct sigaltstack {
- 	void __user *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
- 
- #endif /* !__ASSEMBLY */
-diff --git a/arch/powerpc/include/uapi/asm/signal.h b/arch/powerpc/include/uapi/asm/signal.h
-index 04873dd311c2..37d41d87c45b 100644
---- a/arch/powerpc/include/uapi/asm/signal.h
-+++ b/arch/powerpc/include/uapi/asm/signal.h
-@@ -86,7 +86,7 @@ struct sigaction {
- typedef struct sigaltstack {
- 	void __user *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
- 
- 
-diff --git a/arch/s390/include/uapi/asm/signal.h b/arch/s390/include/uapi/asm/signal.h
-index 0189f326aac5..5c776e1f2cbd 100644
---- a/arch/s390/include/uapi/asm/signal.h
-+++ b/arch/s390/include/uapi/asm/signal.h
-@@ -108,7 +108,7 @@ struct sigaction {
- typedef struct sigaltstack {
-         void __user *ss_sp;
-         int ss_flags;
--        size_t ss_size;
-+        __kernel_size_t ss_size;
- } stack_t;
- 
- 
-diff --git a/arch/sparc/include/uapi/asm/signal.h b/arch/sparc/include/uapi/asm/signal.h
-index 53758d53ac0e..d3faa3bfce3d 100644
---- a/arch/sparc/include/uapi/asm/signal.h
-+++ b/arch/sparc/include/uapi/asm/signal.h
-@@ -171,7 +171,7 @@ struct __old_sigaction {
- typedef struct sigaltstack {
- 	void			__user *ss_sp;
- 	int			ss_flags;
--	size_t			ss_size;
-+	__kernel_size_t			ss_size;
- } stack_t;
- 
- 
-diff --git a/arch/x86/include/uapi/asm/signal.h b/arch/x86/include/uapi/asm/signal.h
-index 164a22a72984..777c3a0f4e23 100644
---- a/arch/x86/include/uapi/asm/signal.h
-+++ b/arch/x86/include/uapi/asm/signal.h
-@@ -104,7 +104,7 @@ struct sigaction {
- typedef struct sigaltstack {
- 	void __user *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
- 
- #endif /* __ASSEMBLY__ */
-diff --git a/arch/xtensa/include/uapi/asm/signal.h b/arch/xtensa/include/uapi/asm/signal.h
-index 79ddabaa4e5d..b8c824dd4b74 100644
---- a/arch/xtensa/include/uapi/asm/signal.h
-+++ b/arch/xtensa/include/uapi/asm/signal.h
-@@ -103,7 +103,7 @@ struct sigaction {
- typedef struct sigaltstack {
- 	void *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
- 
- #endif	/* __ASSEMBLY__ */
-diff --git a/include/uapi/asm-generic/signal.h b/include/uapi/asm-generic/signal.h
-index f634822906e4..0eb69dc8e572 100644
---- a/include/uapi/asm-generic/signal.h
-+++ b/include/uapi/asm-generic/signal.h
-@@ -85,7 +85,7 @@ struct sigaction {
- typedef struct sigaltstack {
- 	void __user *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
- 
- #endif /* __ASSEMBLY__ */
-diff --git a/usr/include/Makefile b/usr/include/Makefile
-index 129d13e71691..8ac2c33a59e7 100644
---- a/usr/include/Makefile
-+++ b/usr/include/Makefile
-@@ -20,7 +20,6 @@ override c_flags = $(UAPI_CFLAGS) -Wp,-MMD,$(depfile) -I$(objtree)/usr/include
- # Please consider to fix the header first.
- #
- # Sorted alphabetically.
--no-header-test += asm/signal.h
- no-header-test += asm/ucontext.h
- no-header-test += drm/vmwgfx_drm.h
- no-header-test += linux/am437x-vpfe.h
 
 
--- 
-ldv
+On 22/12/2021 18:32, Rob Herring wrote:
+> On Sun, Dec 19, 2021 at 11:31:34PM +0500, Maxim Kutnij wrote:
+>> This adds a DT binding documentation for the MT6582 SoC.
+> 
+> Please follow the convention used for other commits of these files in
+> the subject:
+> 
+> dt-bindings: mediatek: ...
+> 
+> (That's true for all commits in the kernel)
+> 
+
+I fixed that for you. I also fixed the order of the timer and SoC compatible.
+
+All three patches are now pushed to v5.17-tmp/dts32 [1]
+This branch will be renamed to v5.17-next/dts32 after v5.17-rc1 is released.
+
+Hope to see more patches from you to enable other drivers of the SoC.
+
+Thanks!
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/
+
+>>
+>> Signed-off-by: Maxim Kutnij <gtk3@inbox.ru>
+>> ---
+>>   Documentation/devicetree/bindings/arm/mediatek.yaml           | 4 ++++
+>>   .../devicetree/bindings/timer/mediatek,mtk-timer.txt          | 1 +
+>>   Documentation/devicetree/bindings/watchdog/mtk-wdt.txt        | 1 +
+>>   3 files changed, 6 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
+>> index 0fa55497b96..fedce0d0f3f 100644
+>> --- a/Documentation/devicetree/bindings/arm/mediatek.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
+>> @@ -26,6 +26,10 @@ properties:
+>>             - enum:
+>>                 - mediatek,mt2712-evb
+>>             - const: mediatek,mt2712
+>> +      - items:
+>> +          - enum:
+>> +              - prestigio,pmt5008-3g
+>> +          - const: mediatek,mt6582
+>>         - items:
+>>             - enum:
+>>                 - mediatek,mt6580-evbp1
+>> diff --git a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
+>> index e5c57d6e018..62acdb11aff 100644
+>> --- a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
+>> +++ b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
+>> @@ -11,6 +11,7 @@ Required properties:
+>>   - compatible should contain:
+>>   	For those SoCs that use GPT
+>>   	* "mediatek,mt2701-timer" for MT2701 compatible timers (GPT)
+>> +	* "mediatek,mt6582-timer" for MT6582 compatible timers (GPT)
+>>   	* "mediatek,mt6580-timer" for MT6580 compatible timers (GPT)
+>>   	* "mediatek,mt6589-timer" for MT6589 compatible timers (GPT)
+>>   	* "mediatek,mt7623-timer" for MT7623 compatible timers (GPT)
+>> diff --git a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+>> index 0114871f887..a97418c74f6 100644
+>> --- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+>> +++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+>> @@ -8,6 +8,7 @@ Required properties:
+>>   - compatible should contain:
+>>   	"mediatek,mt2701-wdt", "mediatek,mt6589-wdt": for MT2701
+>>   	"mediatek,mt2712-wdt": for MT2712
+>> +	"mediatek,mt6582-wdt", "mediatek,mt6589-wdt": for MT6582
+>>   	"mediatek,mt6589-wdt": for MT6589
+>>   	"mediatek,mt6797-wdt", "mediatek,mt6589-wdt": for MT6797
+>>   	"mediatek,mt7622-wdt", "mediatek,mt6589-wdt": for MT7622
+>> -- 
+>> 2.34.1
+>>
+>>

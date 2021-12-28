@@ -2,189 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9706E4805BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 03:31:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A73654805BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 03:31:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232700AbhL1Ca7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 21:30:59 -0500
-Received: from mga06.intel.com ([134.134.136.31]:18827 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230372AbhL1Ca6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 21:30:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640658658; x=1672194658;
-  h=message-id:date:subject:to:references:from:in-reply-to:
-   content-transfer-encoding:mime-version;
-  bh=51+Gxzl2eIYvWYwWseMGRHPdO25r3Y9FGCoM81QVbFQ=;
-  b=lNcSe3h71s/2CuMPA9YVUi+BRkFmNtGIKKjzYAgsNvnIh4B8qrqYTqEm
-   ZdiaQQ9UNMfKXB1R8RPhketCtvf5nRK+lcIH7HPCupx+ovrX0VoFecTOt
-   WzXrL8gaJc9/mwEscWUvQ1dOWkPEkjAPqPuewF60fBm2egFwq3+pnfhK6
-   PrjsHCWq7fsLyXj2sSeAE2kaK4pDBtXAAZsyC1CCO4rstxOSEHTZPw7Qz
-   ORBl2EjIO+zPevD8Ahc1C2tQWqdFIBtnlFZ0Jb0Ik2sTqbPcgOd1JiNBM
-   d0pMbICb5CAVVmmg9IsUakuo3DouCRFTUcMyaZSymBBdsGYAgVxep6tcJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="302053217"
-X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
-   d="scan'208";a="302053217"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 18:30:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
-   d="scan'208";a="572196650"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Dec 2021 18:30:56 -0800
-Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 27 Dec 2021 18:30:56 -0800
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 27 Dec 2021 18:30:56 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Mon, 27 Dec 2021 18:30:56 -0800
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.43) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Mon, 27 Dec 2021 18:30:55 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cM27imHVltddvDFWno1y4GBOqnoFvGdYFkAZsnUN3LBW1JtIQk/xhA67hsh2+PKmlRYFptleZEWeYGaTBnKdIv8OJ06yTBzodF68Vsxjnk+eEWmhK+JCFVwpCy2nWBLD8Apa5/hp0F62qoFncyLXR+i59NiCGBjRIga4LZe09SNA8dEULr2Rggx4/P/lgzRK/8PGuS9wzNX6ajTAp1s2AQ7OP1cfXmVyrDho4z+ym6IJ80J5WNmpBH4HU4yVZ3eutanGsQbgCLIziT7kXu1avQNPnFb/Tt/9c7VUKW+elKomtwVq8V1u8vcd1ccSlyMPEH4QSDSc3EmI36p3nmqulA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hPt3TZguxDMfGuUcx+2U64iuXIkuKDRRqiJw1iN1RXg=;
- b=gp6IZIN+pJb36jNNLp7a9vPBIFPeo/LJjEzTtydN8ygxQuwaXYpt97X854Cm7UQ2VgTOb7W7EBXnvLjfaO31kbORw8ijAZTlGeb6rBNdcgkT/Sj79XdJKHl142O1xFOInY4Bac2wjflTyeyh1dfzPE21IBT/pColBqjr376pTK/85xIO085uTR1mAjwFO+2HuRYVTsI/7vYjVANnV/SIxeTXBTQj292YuVRymbyBt1brjGFet1BMt/CgP8YWtYoxz3TuFoNmgrE1JFBpjFhXogv9BzihWabdlNB08TxMEWAltSqfByzfoCWTAxY3kiEmZMDJEVjnKC9Zywivp0G3KA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CO1PR11MB4820.namprd11.prod.outlook.com (2603:10b6:303:6f::8)
- by CO1PR11MB5123.namprd11.prod.outlook.com (2603:10b6:303:94::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.18; Tue, 28 Dec
- 2021 02:30:53 +0000
-Received: from CO1PR11MB4820.namprd11.prod.outlook.com
- ([fe80::99e7:e9ce:ff26:49cb]) by CO1PR11MB4820.namprd11.prod.outlook.com
- ([fe80::99e7:e9ce:ff26:49cb%7]) with mapi id 15.20.4823.023; Tue, 28 Dec 2021
- 02:30:53 +0000
-Message-ID: <27973649-193d-a485-1ca7-983a53c7cf78@intel.com>
-Date:   Tue, 28 Dec 2021 10:30:43 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.4.1
-Subject: Re: RE: very low IOPS due to "block: reduce
- kblockd_mod_delayed_work_on() CPU consumption"
-Content-Language: en-US
-To:     Dexuan Cui <decui@microsoft.com>, Jens Axboe <axboe@kernel.dk>,
-        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "ming.lei@redhat.com" <ming.lei@redhat.com>,
-        "hch@lst.de" <hch@lst.de>, Long Li <longli@microsoft.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sang, Oliver" <oliver.sang@intel.com>,
-        "Li, Philip" <philip.li@intel.com>
-References: <1639853092.524jxfaem2.none.ref@localhost>
- <1639853092.524jxfaem2.none@localhost>
- <7d1e4bb8-1a73-9529-3191-66df4ff2d5fe@kernel.dk>
- <12f43a71-713b-a74f-a169-b6ac3d804e50@kernel.dk>
- <237bd7d8-9e75-01b5-ebe7-8b1eb747474b@kernel.dk>
- <BYAPR21MB127067C16809209C019BC83BBF7B9@BYAPR21MB1270.namprd21.prod.outlook.com>
-From:   Yin Fengwei <fengwei.yin@intel.com>
-In-Reply-To: <BYAPR21MB127067C16809209C019BC83BBF7B9@BYAPR21MB1270.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR04CA0189.apcprd04.prod.outlook.com
- (2603:1096:4:14::27) To CO1PR11MB4820.namprd11.prod.outlook.com
- (2603:10b6:303:6f::8)
+        id S234601AbhL1Cbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 21:31:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230372AbhL1Cbb (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 21:31:31 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47895C06173E;
+        Mon, 27 Dec 2021 18:31:31 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id w20so26506585wra.9;
+        Mon, 27 Dec 2021 18:31:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=Wz8zeI20HalqtebnxY/VQRKKWH6al7/r6x+JqAjZOIQ=;
+        b=ltGaoEU7RlUuoNcgFbFyC0ca+4UlT0ZzN1mgLyNTk5sFT654E5beEaP0rSeaHIXdA9
+         5PXoeqSUENPjrbxIyDmIT7jwhCF56sOHLehaqCsbgAReCCpCUw0XkeHOs9sJ2MEMr6pR
+         AiodT1flUpJxQpsIsSnv4TfOyq+wgkqrIYUgTx60OZFsAIvvofJ6tZAMqqZmUKM+wC7r
+         Y4jtaEmj8KSq/OADSRE1ufT6nZ0AzBYTUAViHg+caKf8R53gOwPgk0w4Uv+JcuBllEpy
+         cpmmvMYAvUqgBd7DAz9TrlF/tTGdcJDHk5ouAI1q0tYCAFCybNUP14JreL1zFEWD5BIJ
+         8hBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=Wz8zeI20HalqtebnxY/VQRKKWH6al7/r6x+JqAjZOIQ=;
+        b=UPkNfHBfcoMKg+si1puJEpTrwX8Z+yhWOISEtCNIfaQ2LKcgni0W58fXEgXaVx8hDa
+         XYY4DHN4uYLTSVX55wnXQegJc/Dph9h/egQwGoHmu4euP0KpZv5fMMZ9abDyxFqKgEVE
+         CxnBr57JNsjWaypqqcvqEeKdOPznLlwALdULGdg/y+23qxRUM4qVokWWM3mGn84Gm2Up
+         RQkG4yuo8Zhpj7mqDFa74iyIdlcgO0WEbYfN4LrUKURzQDvWcfrgmxG6b3U1dcsOeaXj
+         m3B5Xup4es4A/LPvFXiKmec8Y3gHROcF7ihE+pHpGiC8oloHOb2Bn3QqcWJn8Xg5LczR
+         32eg==
+X-Gm-Message-State: AOAM530bUZGmyUekQlT3DBydmxJqkHT2+Vow6cmOUCLDVhm5DtevwSbF
+        Qa4S2IXA8F1VvAY0KuySRMD11w9iCrw=
+X-Google-Smtp-Source: ABdhPJxOEtL3danJ29EvFL9hT/KByy7zQsSmh3yq5taCtscXFQY0ZTEiEyrT7TiLrIAt8ZrUPe/g4w==
+X-Received: by 2002:a5d:4486:: with SMTP id j6mr13857030wrq.160.1640658689674;
+        Mon, 27 Dec 2021 18:31:29 -0800 (PST)
+Received: from [10.101.0.6] ([85.203.46.195])
+        by smtp.gmail.com with ESMTPSA id h14sm12912601wmq.16.2021.12.27.18.31.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Dec 2021 18:31:29 -0800 (PST)
+Subject: Re: [BUG] fs: super: possible ABBA deadlocks in
+ do_thaw_all_callback() and freeze_bdev()
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Matthew Wilcox <willy@infradead.org>, viro@zeniv.linux.org.uk,
+        Jens Axboe <axboe@kernel.dk>, hch@infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <e3de0d83-1170-05c8-672c-4428e781b988@gmail.com>
+ <YckgOocIWOrOoRvf@casper.infradead.org> <YclDafAwrN0TkhCi@mit.edu>
+ <a9dde5cc-b919-9c82-a185-851c2eab5442@gmail.com> <YcnC85Vc95OTBJSV@mit.edu>
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+Message-ID: <c6d8e729-6537-1a6a-43ff-255e8fbcec7d@gmail.com>
+Date:   Tue, 28 Dec 2021 10:31:26 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0e054199-d152-4c39-c48e-08d9c9aa120f
-X-MS-TrafficTypeDiagnostic: CO1PR11MB5123:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <CO1PR11MB512354DEC6F26520B8490B74EE439@CO1PR11MB5123.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /q+P7B0FfnXHxz719f4GKXgSDufi7tpg4uWrp4fwFaujAyEdG/3VYDFRsAFJ1e9Kvdk1g4f3qZxKDOH1Cm/xmd0WGl2I25jHhRvsrZzXXkKo8Nm4HxBdsfYtVA3B1KdlxdH2+du1FQ6399Qxr9CLa0rzgyCbLJwJX0DIr5qk9DIBvfwnJGXpcNfUzAnXOXTlytR031260Jaj3zMmOTsNFSTCHITluv8gKeAhSfi9PSsfNgih60Q1HutVkuXObQRWeodC08ul6XZPoH1cJIj5nur2ONFfwJz/TxEYBgb1ZG6RajGRyLAjIM5pRF7AD4V8SrZ5X9ZU5/eX8zadxv7I+SRuoL4yt2bjGoEayK16XoecfOlnI2/33UsV9UG/Lv3ABR6sTMWLyvVCp3boxM2zlPJOVU7wGJTHq+QvIS1X3ad6wnW5XnYY9SyWJw4izGRBGdpyh0sdYaSjSPK7CnAjbyPSTL/y1LT7xJ6WvZLjfu9C7xZugPKAukAklJEwiYjHwXa9izYPr68qhkcQg1wqO91BAlAVVueJFpLiWu+4xLsXYdXK3eS5k0v4KIB0hqjSU1GpIB/ahAXqTCcZD0iVSaI0bwPFgBMkYesg00rK0K9rmFs8cyqD6QTSOsP7ZGAs2VwC7YnsZ84fLtoBxQL0r53kdLdCuRASfyhNI4+Nhoi7idwAmqlqCgsrD7BAQCvKL5CBQ8a9BaWScQmg2xZ5Bywu8FAfo7SyDLyjEQWoQ+1qm8qdgSAvs+Cbk1IYYNnI
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4820.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(31686004)(6636002)(6486002)(38100700002)(110136005)(186003)(8936002)(36756003)(316002)(53546011)(2906002)(26005)(66946007)(82960400001)(66556008)(6666004)(6506007)(83380400001)(8676002)(921005)(5660300002)(66476007)(4744005)(508600001)(31696002)(6512007)(2616005)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UUtmZ3YzTk5TdlI2dXVaNVUwTFNjK3RYdDFvRkkzMnFTYi9meGFCaUg0alBO?=
- =?utf-8?B?RXVLN2N6Q0ZpRlZZQVRKUEZNZjkzOWczV25yS3RNblI4L1dRUk5hT2p3anVU?=
- =?utf-8?B?T3pOUGN0VUp2VWtRcjhaMXc1Z1V4Um9vZVBYVHpvOFZpTUo1V2prOXhESEVr?=
- =?utf-8?B?bjNaM3JpV1pZUkF1M0t4cDg0ZU1mbzlQRmZnL3VnWmhEbGI3YWpja2ljQ1Vw?=
- =?utf-8?B?d0FHOGhKZkZ5ZllxZ1VnSHVid3owVXZnS3RjKysyU0tELzhQQmpublJIdE00?=
- =?utf-8?B?U3ZRL1dQakJTTmg2WGp2WUppMlJSeVdpWDhCOGFFaWN2Sm05WDdEQ2lOcm9w?=
- =?utf-8?B?bkhiaVZsZWdXZXVkYkV4QktWVGZyTUw4OGx3TVdjUytmcXlOMHF5TEVXb1Zm?=
- =?utf-8?B?Z2JrWkROb2NJUFU2SHV6N2pIMXhOMXhhT3k0UUxnTGxjMDl5SEVGa2NGQU93?=
- =?utf-8?B?WVdJdVVhRnlTWmxVQTZwVFJLQ0Z4NTNhZXNuY0I2ME5jWkRzdENRSlR2a3By?=
- =?utf-8?B?NEk4b0p5d0g4QWxzNTN4THQ4RXpxQUxoRlY2YzRWc3hiWXEvT0IxeS9SUHBa?=
- =?utf-8?B?ay9MbjFSTVVZR0lDS1B5RkxrRnAxTFg5VUdaVEh6bEUwNUZWTlVGSnJ5ejRs?=
- =?utf-8?B?SkE3RXpXQ3dHNDQwMytja3VGbk9ndVp1d0J3OWdwSUlnM0lRdFMvVTRJcnFJ?=
- =?utf-8?B?dFBnU2p1L1ZpM2JuZVZSMFdrRDRlUGtwQnU0d3pYRGh0dmdoVFpmQnhPWUli?=
- =?utf-8?B?bmRIWmNHTDZhQUhWUUttakk2QlRnUkxiT01ybklJdlVWSnk2NnFFYUVtZ0lU?=
- =?utf-8?B?UnM2VU50eVlxakZLQlNTNE5vV0FGMXNkaFBmMDZ5WUNvU3ZSbnpuNzFOMENv?=
- =?utf-8?B?eVBUQ3F3WWJsa0c0NW1VZWpRRitOcUc5M1NBMW5OaWg2VzhEbkFuaFFSaEQy?=
- =?utf-8?B?VWZ1K2R5bU0yRHFsSm13NjB0VnE4QUROQWJ5dVJ6RzE0bnZYY3lnQnIxQ1B0?=
- =?utf-8?B?dkJweHB4OWo1Vnh6NzhIYjJlNEdQSkNmeXBXcjA5eFdrdlRpYksveDVBS0pR?=
- =?utf-8?B?RkJSUTZNcVZ3MW5CTWdFald6eGVRNzI5OVM5OS9BMU1iZkpxYlJ1NWZwTXNC?=
- =?utf-8?B?NlJ3WHNESE9vdVNBTk9DelV3eFNRR2NobVlGREN6MlREZDBGMEM5YldsR05i?=
- =?utf-8?B?aEUxZFhuSWp5ZDVyYXNXQ1QvbXEyaHRWSUR4cnpnay80TTFPWEY3R0ZZenIv?=
- =?utf-8?B?SEN6RVZhMmZXdXRGSkxzV294UEJJcEpIL0hVeFdTQldPVFhXRVRVRk5SeFZJ?=
- =?utf-8?B?c0c5bVNabExNVFhTVTNMYVpBb2ZGMXFTa01GbWttU1ZIRlFRWDhCdTdqeUpz?=
- =?utf-8?B?RTNkSk5tZWtiUEJaaE1uNlN6QlY0RTh5RmpKaXZZL1o3UHFtSWlMM2YxNTd0?=
- =?utf-8?B?Uy9jNTFORUdINm9KQndBeHVKNWhrak9CN2NWL1NEY1VtL2Y5MVZMUi9XY05l?=
- =?utf-8?B?bFNzSTNEbm9FRmcyRmd1L082N3R6djNaeUNCKzY1Q1F5b2VySFUrQk5sVlB0?=
- =?utf-8?B?QnVYRjQwZXYzTVRwdUJIekpENDRTdFJJbGtrTkRsZE4zalgyNisrZXgreGUr?=
- =?utf-8?B?OVQvanNveUZzSExzVGw3bU81c2xoNktsRTNDbWVXU3o1K1d1cnhEd1FRUkxn?=
- =?utf-8?B?Ykh1dGF3eExYWGpUTzZzd0dFS3k5ckx3NE1wd2g5U2lNUmJZZVI2cHE1c0c4?=
- =?utf-8?B?bGZjRWhvRVdJalJxcjB2M1NsZ2praGVGaDBWYzQzM2V1czZvUkJmbEVheDlQ?=
- =?utf-8?B?SVhBbFlwTDZQMERZdGptYkEvd1lNWkNvcVRKRWhxWXVSQlgrRmR2V3lUTlFn?=
- =?utf-8?B?ZUZGd24wNGtvM1JUV1Npdk5QUWhvQ2UxVm9SenJxRHRUb29iaGRERFhKNndJ?=
- =?utf-8?B?Mkp0S0J0MGVaREE0MmE0NHVVR1ZBY3JQZ0dGNi94bm14akpaT3pPaDVTM011?=
- =?utf-8?B?aUtvNlVZWGxaNFdJejA1Y3UrZkZDMDN6REc1VjlWYXJDQWYxVFhXYmdMMGlN?=
- =?utf-8?B?b3B3NERHTVd5T29IMGJDRnprOExoQ055bEhHeXFTTGpSS2dZaFpvQmhjWTVh?=
- =?utf-8?B?K3I3N0lWV2JRc2xYVS9vdU5pZTFRbWNhTkFZVnJjQ2lJRnZZQVRVRU1FY21Y?=
- =?utf-8?Q?rnMID3FOrt0OTtaD7uimLuo=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0e054199-d152-4c39-c48e-08d9c9aa120f
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4820.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Dec 2021 02:30:53.7251
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 10V+u5FKMlqfYX49aT5d5aQl0ltbwRmAiR8fBgMUpn8+Rc8KjoY13lgyZwu9l+6zoFxIKtNb+5tSJR46hCf/tw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5123
-X-OriginatorOrg: intel.com
+In-Reply-To: <YcnC85Vc95OTBJSV@mit.edu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jens, Dexuan,
-
-On 12/20/2021 1:15 PM, Dexuan Cui wrote:
->> From: Jens Axboe <axboe@kernel.dk>
->> Sent: Sunday, December 19, 2021 7:28 AM
->>> ...
->>> Dexuan, can you test this for your test case too? I'm going to queue
->>> up a revert for -rc6 just in case.
->>
->> This one should be better...
->> ...
->> Jens Axboe
-> 
-> Hi Jens, sorry -- unluckily I lost the test environment.. :-(
-> I pinged the user to set up the test environment again, but he's
-> on vacation till the beginning of January.
-
-We hit this issue in our testing env also and will help to verify
-your fixing patch. Thanks.
 
 
-Regards
-Yin, Fengwei
+On 2021/12/27 21:43, Theodore Ts'o wrote:
+> On Mon, Dec 27, 2021 at 05:32:09PM +0800, Jia-Ju Bai wrote:
+>> Thanks for your reply and suggestions.
+>> I will try to trigger this possible deadlock by enabling lockdep and using
+>> the workloads that you suggested.
+>> In my opinion, static analysis can conveniently cover some code that is hard
+>> to be covered at runtime, and thus it is useful to detecting some
+>> infrequently-triggered bugs.
+>> However, it is true that static analysis sometimes has many false positives,
+>> which is unsatisfactory :(
+>> I am trying some works to relieve this problem in kernel-code analysis.
+>> I can understand that the related code is not frequently executed, but I
+>> think that finding and fixing bugs should be always useful in practice :)
+> The thing about the sysrq commands is that they are almost always used
+> in emergency situations when the system administrator with physical
+> access to the console sends a sysrq command (e.g., by sending a BREAK
+> to the serial console).  This is usually done when the system has
+> *already* locked up for some reason, such as getting livelocked due to
+> an out of memory condition, or maybe even a deadlock.  So if sysrq-j
+> could potentially cause a deadlock, so what?  Sysrq-j would only be
+> used when the system was in a really bad state due to a bug in any
+> case.  In over 10 years of kernel development, I can't remember a
+> single time when I've needed to use sysrq-j.
+>
+> So it might be that the better way to handle this would be to make
+> sure all of the emergency sysrq code in fs/super.c is under the
+> CONFIG_MAGIC_SYSRQ #ifdef --- and then do the static analysis without
+> CONFIG_MAGIC_SYSRQ defined.
+
+Thanks for the explanation.
+In fact, I did not know the sysrq commands, before finding this bug and 
+seeing your explanation.
+
+>
+> As I said, I agree it's a bug, and if I had infinite resources, I'd
+> certainly ask an engineer to completely rework the emergency sysrq-j
+> code path to address the potential ABBA deadlock.  The problem is I do
+> *not* have infinite resources, which means I have to prioritize which
+> bugs get attention, and how much time engineers on my team spend
+> working on new features or performance enhacements that can justify
+> their salaries and ensure that they get good performance ratings ---
+> since leadership, technical difficulty and business impact is how
+> engineers get judged at my company.
+
+I can understand the priority of bug fixing, with the consideration of 
+resources and time.
+My static analysis tool just provides a small message that there is a 
+possible bug :)
+
+>
+> Unfortunately, judging business impact is one of those things that is
+> unfair to expect a static analyzer to do.
+
+Thanks for your understanding :)
+Before seeing your explanation, I have no idea of business impact.
+But it is indeed practical to consider business impact and resource 
+assignment in kernel development.
+
+>   And after all, if we have
+> infinite resources, why should an OS bother with a VM?  We can just
+> pin all process text/data segments in memory, if money (and DRAM
+> availability in the supply chain) is no object.  :-)
+
+Haha, interesting idea :)
+
+
+Thanks a lot,
+Jia-Ju Bai

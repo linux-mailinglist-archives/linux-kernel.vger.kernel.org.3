@@ -2,84 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FF74805D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 04:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 666F14805D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 04:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234658AbhL1DDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 22:03:55 -0500
-Received: from mailgw.kylinos.cn ([123.150.8.42]:41483 "EHLO nksmu.kylinos.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234588AbhL1DDy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 22:03:54 -0500
-X-UUID: 8dc7fd443744488e88793d9421bfb8fe-20211228
-X-CPASD-INFO: 9af1861e893444019b80aa99608abe28@grGgUWVoX5VkWXWAg3d7a1mTaGCRjVm
-        IeGpYkZCVXliVhH5xTWJsXVKBfG5QZWNdYVN_eGpQYl9gZFB5i3-XblBgXoZgUZB3iKOgUWhkYQ==
-X-CPASD-FEATURE: 0.0
-X-CLOUD-ID: 9af1861e893444019b80aa99608abe28
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,EXT:0.0,OB:0.0,URL:-5,T
-        VAL:173.0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:147.0,IP:-2.0,MAL:0.0,ATTNUM:0
-        .0,PHF:-5.0,PHC:-5.0,SPF:4.0,EDMS:-3,IPLABEL:4488.0,FROMTO:0,AD:0,FFOB:0.0,CF
-        OB:0.0,SPC:0.0,SIG:-5,AUF:102,DUF:28286,ACD:146,DCD:248,SL:0,AG:0,CFC:0.483,C
-        FSR:0.052,UAT:0,RAF:0,VERSION:2.3.4
-X-CPASD-ID: 8dc7fd443744488e88793d9421bfb8fe-20211228
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1, 1
-X-UUID: 8dc7fd443744488e88793d9421bfb8fe-20211228
-X-User: yinxiujiang@kylinos.cn
-Received: from localhost.localdomain [(118.26.139.139)] by nksmu.kylinos.cn
-        (envelope-from <yinxiujiang@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1729494983; Tue, 28 Dec 2021 11:16:21 +0800
-From:   Yin Xiujiang <yinxiujiang@kylinos.cn>
-To:     skashyap@marvell.com, jhasan@marvell.com,
-        GR-QLogic-Storage-Upstream@marvell.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, yinxiujiang@kylinos.cn
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: bnx2fc: fix double free of skb in bnx2fc_rcv
-Date:   Tue, 28 Dec 2021 11:03:35 +0800
-Message-Id: <20211228030335.1330070-1-yinxiujiang@kylinos.cn>
-X-Mailer: git-send-email 2.30.0
+        id S234669AbhL1DHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 22:07:51 -0500
+Received: from mga06.intel.com ([134.134.136.31]:16984 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234588AbhL1DHu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 22:07:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640660870; x=1672196870;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IKGyivILWUkPi+oFLWA34xmU0l3xFxIwYMD78Wz0EY4=;
+  b=XQ2eOi/6bruQAR6vEJXiVMbneoPonr39BRy2YrS0fR7NHqGs8S85vojY
+   +tb31o0nrechhVXVupU1l7MSBae5RfbTX9NHj1gq/tGPU9irwTxU+rHZp
+   KiZmsolXQDuJBbEcDBYk5FQ0OGo3rSrclk9QfkTyagwGTqJ595v/KvMiK
+   oEo5vc8pclFpcrP2BmrBdMuw0uVqhahX9JvqutLhyO3LIkXMd5f4CtPLv
+   BLAwKWswAEiY+zSHJjOzCwY4iuzBxkkZ43Hzio1AVBbpdMe/WQbLQXYi+
+   Zd1K04jb1n4I/fKI4FJsQiqt4JJ71xOWAih/GuM3K9qCO4HA/8weIaVuH
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="302056337"
+X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
+   d="scan'208";a="302056337"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 19:07:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
+   d="scan'208";a="469898288"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 27 Dec 2021 19:07:48 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n22q3-0007Ay-KN; Tue, 28 Dec 2021 03:07:47 +0000
+Date:   Tue, 28 Dec 2021 11:07:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:queue/5.15 1116/2170] ERROR: modpost:
+ "clk_set_parent" [sound/soc/jz4740/snd-soc-jz4740-i2s.ko] undefined!
+Message-ID: <202112281034.8zUmU0BW-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In `bnx2fc_rcv`,if skb_share_check() return NULL,
-the variable skb would be freed but not set to NULL,
-then it would be freed  in `goto err` again.
+Hi Randy,
 
-Signed-off-by: Yin Xiujiang <yinxiujiang@kylinos.cn>
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.15
+head:   f0c9869ba6f4a1f5c9e19917c891befce3a0e025
+commit: 3d0f4ae1ad757ab4ee6ac31a7fd49eea2835c787 [1116/2170] mips: lantiq: add support for clk_get_parent()
+config: mips-randconfig-r023-20211228 (https://download.01.org/0day-ci/archive/20211228/202112281034.8zUmU0BW-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=3d0f4ae1ad757ab4ee6ac31a7fd49eea2835c787
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.15
+        git checkout 3d0f4ae1ad757ab4ee6ac31a7fd49eea2835c787
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "clk_set_parent" [sound/soc/jz4740/snd-soc-jz4740-i2s.ko] undefined!
+>> ERROR: modpost: "clk_set_parent" [sound/soc/atmel/snd-soc-atmel-i2s.ko] undefined!
+
 ---
- drivers/scsi/bnx2fc/bnx2fc_fcoe.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-index 71fa62bd3083..07a91b1f05a2 100644
---- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-+++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-@@ -432,7 +432,6 @@ static int bnx2fc_rcv(struct sk_buff *skb, struct net_device *dev,
- 	struct fcoe_ctlr *ctlr;
- 	struct fcoe_rcv_info *fr;
- 	struct fcoe_percpu_s *bg;
--	struct sk_buff *tmp_skb;
- 
- 	interface = container_of(ptype, struct bnx2fc_interface,
- 				 fcoe_packet_type);
-@@ -444,11 +443,10 @@ static int bnx2fc_rcv(struct sk_buff *skb, struct net_device *dev,
- 		goto err;
- 	}
- 
--	tmp_skb = skb_share_check(skb, GFP_ATOMIC);
--	if (!tmp_skb)
-+	skb = skb_share_check(skb, GFP_ATOMIC);
-+	if (unlikely(!skb))
- 		goto err;
- 
--	skb = tmp_skb;
- 
- 	if (unlikely(eth_hdr(skb)->h_proto != htons(ETH_P_FCOE))) {
- 		printk(KERN_ERR PFX "bnx2fc_rcv: Wrong FC type frame\n");
--- 
-2.30.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

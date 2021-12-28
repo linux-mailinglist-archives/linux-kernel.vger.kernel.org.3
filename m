@@ -2,63 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F1B4807D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 10:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75BA14807DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 10:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235953AbhL1JdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 04:33:24 -0500
-Received: from mxout03.lancloud.ru ([45.84.86.113]:45716 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbhL1JdW (ORCPT
+        id S235969AbhL1JeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 04:34:14 -0500
+Received: from out162-62-57-137.mail.qq.com ([162.62.57.137]:40143 "EHLO
+        out162-62-57-137.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229617AbhL1JeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 04:33:22 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 7FF2B20EBC84
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Message-ID: <a582a93f-0176-1500-5113-2330948cda39@omp.ru>
-Date:   Tue, 28 Dec 2021 12:33:13 +0300
+        Tue, 28 Dec 2021 04:34:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1640684047;
+        bh=td5/7s5euCyyDx5GzCAltI7Bvj9Xn81rXHm7OL7+L1k=;
+        h=From:To:Cc:Subject:Date;
+        b=hdv0R/WCvX1XyqRB62gihcOwfAtsY44L0V3WPGyKIY9BV00JVF3Rq6dpyCNfRTlhx
+         A1fjqQBEuwcfy5yFH8gejvXUjyLqK5N/MANGsZAORWPXpI298NFuMCXu/dSiXH4TRR
+         PhIIgp5fJv9m4pd1U7E0rU451Irq8FUSlqXUAT48=
+Received: from localhost.localdomain ([159.226.95.43])
+        by newxmesmtplogicsvrszc9.qq.com (NewEsmtp) with SMTP
+        id 884242EC; Tue, 28 Dec 2021 17:34:04 +0800
+X-QQ-mid: xmsmtpt1640684044t22y91cjd
+Message-ID: <tencent_205AA371C910BBA2CF01B311811ABDF2560A@qq.com>
+X-QQ-XMAILINFO: MpO6L0LObisWsPgxOAqbPeEgIgw8ezvtNWIYx+zAuIeMFZIBAcIEZ69PI2YTNa
+         yTXJGxZBICZE/eYhonB0yv0gk9Tamb7BmBz8kv972KSvdU5EpFk9oMNvCSEwYbZUxzoIZPxgPSJh
+         lAkuwbWNIJma2Zoak+lWp+bKgM7e/OGb1OK99IdA64gtmGLRbLvtn04S7ECDc8kZ+TEcyhinadUH
+         dNukIOcqvPlR/i9xj1jk0xK/szstuPCSJcujtqNc0wcj1EnDLMopmfK5ghiKlEkrWa6gTJ9n4eKS
+         iJ1b4a+Iv9NtHB/ylKDqNWh1Tr27kfILPkwiNQ1PnpmHe4rA4ImL6qXlNP4K+gZyTsfSvQKONnY9
+         VM6HNY2IbzxlxmMwuAZqMPEP+t0hREwo/ydj/wTzygAIJ8KYfaxPoyaGRUJDFy5mHRlRP3bqg7+F
+         ibNAKFDRCuPwx+sZiST1tiOR+WPv4/CGLViJqDxA3+sXA2Tec1MDHgFqBJfFNhj/zWkZxol7m+ob
+         eL1MAXDCuYwbGA5vhCjqkAwYtC24HJKX4aF/QeCxrKziG8BSzwLsj1DjYL1EaZInnCM7eGfS7VqU
+         NB8BDGodRyb1nJ0dhnNbxRnwnSbm16uFknATUlWKOqKYECiDpAKUINigyqowVk3l9Fb5sfEeEgu0
+         LaqHRuWfm+cW2GsbQWI5abFfM6GR24l0g4Z3fQgEpSCszpm+RDTxIWXlZ11umKUd4I5Lf4ZMXDmQ
+         46z6UtwUlxMDUgs2Dv8BmGSQTPCoiLxZm4C3FFaMl+4rWENFBIsFSU20+N4ShJrnBg9UhJeK+t2b
+         keDwUTwjM/hf5PAhakT0ZUiN5+vin3D8T6UGyVYdLOgRTOE9+JbOGWb8c8fk5pGfcfPsEOQ6u0ET
+         4zg3fcgHiH
+From:   Peiwei Hu <jlu.hpw@foxmail.com>
+To:     stas.yakovlev@gmail.com, kvalo@codeaurora.org, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, trivial@kernel.org,
+        Peiwei Hu <jlu.hpw@foxmail.com>
+Subject: [PATCH] ipw2100: inproper error handling of ipw2100_pci_init_one
+Date:   Tue, 28 Dec 2021 17:34:00 +0800
+X-OQ-MSGID: <20211228093400.3061632-1-jlu.hpw@foxmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v3 04/10] ata: pata_platform: Use
- platform_get_irq_optional() to get the interrupt
-Content-Language: en-US
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-CC:     Rob Herring <robh+dt@kernel.org>, <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        <linux-ide@vger.kernel.org>
-References: <20211224131300.18198-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211224131300.18198-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <25bf8893-7369-954e-bd5b-f3d592af5b09@omp.ru>
-Organization: Open Mobile Platform
-In-Reply-To: <25bf8893-7369-954e-bd5b-f3d592af5b09@omp.ru>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.12.2021 22:58, Sergey Shtylyov wrote:
+goto fail instead of returning directly in error exiting
 
->> To be consistent with pata_of_platform driver use
->> platform_get_irq_optional() instead of
->> platform_get_resource(pdev, IORESOURCE_IRQ, 0).
-> 
->     But why can't we be consistent with the unpatched pata_of_platfrom(), and then
+Signed-off-by: Peiwei Hu <jlu.hpw@foxmail.com>
+---
+ drivers/net/wireless/intel/ipw2x00/ipw2100.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-    Sorry, pata_of_platform.
+diff --git a/drivers/net/wireless/intel/ipw2x00/ipw2100.c b/drivers/net/wireless/intel/ipw2x00/ipw2100.c
+index 2ace2b27ecad..de043edc0521 100644
+--- a/drivers/net/wireless/intel/ipw2x00/ipw2100.c
++++ b/drivers/net/wireless/intel/ipw2x00/ipw2100.c
+@@ -6183,7 +6183,7 @@ static int ipw2100_pci_init_one(struct pci_dev *pci_dev,
+ 	if (err) {
+ 		printk(KERN_WARNING DRV_NAME
+ 		       "Error calling pci_enable_device.\n");
+-		return err;
++		goto fail;
+ 	}
+ 
+ 	priv = libipw_priv(dev);
+@@ -6196,7 +6196,7 @@ static int ipw2100_pci_init_one(struct pci_dev *pci_dev,
+ 		printk(KERN_WARNING DRV_NAME
+ 		       "Error calling pci_set_dma_mask.\n");
+ 		pci_disable_device(pci_dev);
+-		return err;
++		goto fail;
+ 	}
+ 
+ 	err = pci_request_regions(pci_dev, DRV_NAME);
+@@ -6204,7 +6204,7 @@ static int ipw2100_pci_init_one(struct pci_dev *pci_dev,
+ 		printk(KERN_WARNING DRV_NAME
+ 		       "Error calling pci_request_regions.\n");
+ 		pci_disable_device(pci_dev);
+-		return err;
++		goto fail;
+ 	}
+ 
+ 	/* We disable the RETRY_TIMEOUT register (0x41) to keep
+-- 
+2.25.1
 
-> convert to platform_get_irq_optional() after merging both drivers?
->     I'd like to avoid patching the driver to be gone if possible...
-> 
->> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> [...]
-
-MBR, Sergey

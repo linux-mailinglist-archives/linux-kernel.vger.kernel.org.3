@@ -2,106 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2138E480A9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 15:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AF4480AA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 16:01:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234861AbhL1O6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 09:58:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234713AbhL1O6a (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 09:58:30 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A440AC061574;
-        Tue, 28 Dec 2021 06:58:29 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id v7so38779362wrv.12;
-        Tue, 28 Dec 2021 06:58:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0EKkFOMfBMhnj4gE/wIselffM6hh1xaDY0vBPskTeK8=;
-        b=eXsUiD+XAMAE366M0Wq6CbF2W26uA1pXycMjbBq7X+U66zEEo+SoA+P4y3ntdUVGlr
-         jm6UekdgB/CgC66w/KPa1+ShM4A812w9EoG0xqo2lop2qbE9muOduFLnj5JlsUygP/06
-         OKZMxLeR2K1JnmrChdxuhbdi3XvKkjidwaC5bUHQUFiyFaTYYtAOLgRlZxSu0gCPmdPf
-         lGmgbBBICPdCOQIYEV4rjGh6VOwjYOWaYd+fiZFeZhoz33zPlONZuHoGRyw3EaiAwEQe
-         Zhs4b20PfFnA8NVZ8wKS/E/9u33C3jG8PlTq0mDip2v+djyFuDcmJUFMgV8ZxFOE8G84
-         jxCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0EKkFOMfBMhnj4gE/wIselffM6hh1xaDY0vBPskTeK8=;
-        b=sicjMGVFbNAEOjevQqnuWjSCGbIns8GFQaw9HsRMQEXDVcJbO4++tmxvPtljCFmrXE
-         Wfy8fjm+C9A2IZAtcXA1jrM6R3eK/uLamfx+6P3XXCiKIrOdAuE8VvUgnRjWIPycO0OU
-         ZVecRBFK0cdMoU91vedOO1RWzsuxEQScMRFxGJff9HBy11DPN20MeGSI9tE+iRymszE4
-         vv18sP6EZrNPsqr9lyoW3bbNHq/0ROsLkgHoJU2eDrmiq7Ia+3dJp0pQ7a9CFOO5dSrT
-         eI1hUxfL0yaSMqyFZ7pp4wKU2lX+0bWfVLd4V7Gq9frHNd0J+DHMIzl3Hft78tKlKLnk
-         8Z0A==
-X-Gm-Message-State: AOAM533che01zJHSXEIYPJounFfLvSBx/2gGBQzdMlad4QegUmDtisgM
-        vu5JGkoncAKgc3cqAiTRmRg=
-X-Google-Smtp-Source: ABdhPJzKqa0L9wwBoXeKIwPS6rl8ONnmr/bs6OUl8sS5RxFlF7/bBldlKueEtJCsTu+6NI81czaDiw==
-X-Received: by 2002:a05:6000:18a2:: with SMTP id b2mr17239895wri.277.1640703507827;
-        Tue, 28 Dec 2021 06:58:27 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.161.251])
-        by smtp.gmail.com with ESMTPSA id b6sm16320534wri.56.2021.12.28.06.58.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Dec 2021 06:58:27 -0800 (PST)
-Message-ID: <0eab31b6-2b8a-b9e1-a738-232cc8f86379@gmail.com>
-Date:   Tue, 28 Dec 2021 15:58:26 +0100
+        id S234882AbhL1PBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 10:01:11 -0500
+Received: from mga11.intel.com ([192.55.52.93]:21728 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232601AbhL1PBK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 10:01:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640703670; x=1672239670;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rcNpKB1llm2B0gb8gi5xUfCyAetOvaC5FJnKSR6tyRM=;
+  b=Ym5fLwGP6YTtt8vyjNCSkj3JsGeyBgDh/Rscgiw5upYWgaFC4RIbzW3m
+   rf8gf2BXJ9EXsxhoMsQnIb1zLPbxALuxCqXL+HwNFGUj+uIouf6bMxF9N
+   vQsViuVnNkTeieqSuP3xRWUl1X4vu73Qv8pYsOvejqL0ROCv+NIlXURo+
+   BcYxlU9QAICrZ90mF7nzCLwJk4I/5pC+q0KS5MuWS2FJGMcrrAuzz0u5E
+   d4z8dmCGI/TeZJHcc3uQ/oxkWH2Hi2Fspt0Vdzf5CJmJqPcPhca0enxZu
+   dbjTzZ7gDhLWEjuybn8e9sh5XWcHQGS/I3WGdgedTT5uGmQpuUkIynePu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="238920236"
+X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
+   d="scan'208";a="238920236"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 07:01:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
+   d="scan'208";a="554233377"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 28 Dec 2021 07:01:07 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n2DyM-0007f6-Mb; Tue, 28 Dec 2021 15:01:06 +0000
+Date:   Tue, 28 Dec 2021 23:00:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Mosberger-Tang <davidm@egauge.net>,
+        Ajay Singh <ajay.kathat@microchip.com>
+Cc:     kbuild-all@lists.01.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        David Mosberger-Tang <davidm@egauge.net>
+Subject: Re: [PATCH v2 37/50] wilc1000: introduce set_header() function
+Message-ID: <202112282213.rH4qGL7z-lkp@intel.com>
+References: <20211223011358.4031459-38-davidm@egauge.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2] mailbox: fix gce_num of mt8192 driver data
-Content-Language: en-US
-To:     "jason-jh.lin" <jason-jh.lin@mediatek.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>, tzungbi@google.com,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, nancy.lin@mediatek.com,
-        singo.chang@mediatek.com
-References: <20211223145155.25704-1-jason-jh.lin@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20211223145155.25704-1-jason-jh.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211223011358.4031459-38-davidm@egauge.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi David,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on kvalo-wireless-drivers-next/master]
+[also build test WARNING on kvalo-wireless-drivers/master v5.16-rc7 next-20211224]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/David-Mosberger-Tang/wilc1000-rework-tx-path-to-use-sk_buffs-throughout/20211223-091915
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/wireless-drivers-next.git master
+config: sparc-randconfig-s031-20211228 (https://download.01.org/0day-ci/archive/20211228/202112282213.rH4qGL7z-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/65a4186b405c72cc6e1a405db7ed0145a28a372f
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review David-Mosberger-Tang/wilc1000-rework-tx-path-to-use-sk_buffs-throughout/20211223-091915
+        git checkout 65a4186b405c72cc6e1a405db7ed0145a28a372f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc SHELL=/bin/bash drivers/net/wireless/microchip/wilc1000/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-On 23/12/2021 15:51, jason-jh.lin wrote:
-> Because mt8192 only have 1 gce, the gce_num should be 1.
-> 
-> Fixes: 85dfdbfc13ea ("mailbox: cmdq: add multi-gce clocks support for mt8195")
-> Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
+sparse warnings: (new ones prefixed by >>)
+   drivers/net/wireless/microchip/wilc1000/wlan.c:640:16: sparse: sparse: incorrect type in return expression (different base types) @@     expected unsigned int @@     got restricted __le32 [usertype] @@
+   drivers/net/wireless/microchip/wilc1000/wlan.c:640:16: sparse:     expected unsigned int
+   drivers/net/wireless/microchip/wilc1000/wlan.c:640:16: sparse:     got restricted __le32 [usertype]
+>> drivers/net/wireless/microchip/wilc1000/wlan.c:660:17: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] vmm_hdr @@     got restricted __le32 [usertype] @@
+   drivers/net/wireless/microchip/wilc1000/wlan.c:660:17: sparse:     expected unsigned int [usertype] vmm_hdr
+   drivers/net/wireless/microchip/wilc1000/wlan.c:660:17: sparse:     got restricted __le32 [usertype]
+>> drivers/net/wireless/microchip/wilc1000/wlan.c:668:22: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] prio @@     got restricted __le32 [usertype] @@
+   drivers/net/wireless/microchip/wilc1000/wlan.c:668:22: sparse:     expected unsigned int [usertype] prio
+   drivers/net/wireless/microchip/wilc1000/wlan.c:668:22: sparse:     got restricted __le32 [usertype]
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+vim +660 drivers/net/wireless/microchip/wilc1000/wlan.c
 
-> ---
-> Change in v2:
-> - fix tilte tag from cmdq to mailbox
-> - rebase on kernel-5.16
-> ---
->   drivers/mailbox/mtk-cmdq-mailbox.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
-> index 1faf35e8aff0..2895484f8349 100644
-> --- a/drivers/mailbox/mtk-cmdq-mailbox.c
-> +++ b/drivers/mailbox/mtk-cmdq-mailbox.c
-> @@ -650,7 +650,7 @@ static const struct gce_plat gce_plat_v5 = {
->   	.thread_nr = 24,
->   	.shift = 3,
->   	.control_by_sw = true,
-> -	.gce_num = 2
-> +	.gce_num = 1
->   };
->   
->   static const struct gce_plat gce_plat_v6 = {
-> 
+   642	
+   643	/**
+   644	 * set_header() - set WILC-specific header
+   645	 * @wilc: Pointer to the wilc structure.
+   646	 * @tqe: The packet to add to the chip queue.
+   647	 * @vmm_sz: The final size of the packet, including VMM header and padding.
+   648	 * @hdr: Pointer to the header to set
+   649	 */
+   650	static void set_header(struct wilc *wilc, struct sk_buff *tqe,
+   651			       u32 vmm_sz, void *hdr)
+   652	{
+   653		struct wilc_skb_tx_cb *tx_cb = WILC_SKB_TX_CB(tqe);
+   654		u32 mgmt_pkt = 0, vmm_hdr, prio, data_len = tqe->len;
+   655		struct wilc_vif *vif;
+   656	
+   657		/* add the VMM header word: */
+   658		if (tx_cb->type == WILC_MGMT_PKT)
+   659			mgmt_pkt = FIELD_PREP(WILC_VMM_HDR_MGMT_FIELD, 1);
+ > 660		vmm_hdr = cpu_to_le32(mgmt_pkt |
+   661				      FIELD_PREP(WILC_VMM_HDR_TYPE, tx_cb->type) |
+   662				      FIELD_PREP(WILC_VMM_HDR_PKT_SIZE, data_len) |
+   663				      FIELD_PREP(WILC_VMM_HDR_BUFF_SIZE, vmm_sz));
+   664		memcpy(hdr, &vmm_hdr, 4);
+   665	
+   666		if (tx_cb->type == WILC_NET_PKT) {
+   667			vif = netdev_priv(tqe->dev);
+ > 668			prio = cpu_to_le32(tx_cb->q_num);
+   669			memcpy(hdr + 4, &prio, sizeof(prio));
+   670			memcpy(hdr + 8, vif->bssid, ETH_ALEN);
+   671		}
+   672	}
+   673	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,86 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AEAA480CE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 21:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8F3480CEE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 21:04:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237225AbhL1UAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 15:00:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45092 "EHLO
+        id S237234AbhL1UEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 15:04:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237216AbhL1UAO (ORCPT
+        with ESMTP id S237227AbhL1UEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 15:00:14 -0500
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6DEC06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 12:00:14 -0800 (PST)
-Received: by mail-lf1-x143.google.com with SMTP id p13so7190488lfh.13
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 12:00:13 -0800 (PST)
+        Tue, 28 Dec 2021 15:04:21 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CA9C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 12:04:20 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id s1so40354116wrg.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 12:04:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=z6EHwMp5AZI+iYeqZZ9y+EtZ5393CdE1f8m14Zm+iNk=;
-        b=rUTGf9yHxZRJ3iMQyLTHgFI6xiG0jbj3qxcYJo1dQXuxFkKYWmh4KgV5kO+pN1MHZW
-         iG1IdXcrpfCjfyzpMgqsqrFApG3Ft45M2DMV8PqAVxo1oG72Cj8y9yGaGVQ1ljE09YEm
-         av+98OHr8ea2kSLP7zFVYFcxgyFqL+ssNq7WWVgQ4NJOqspEvfKfzHT5IrIWZ6lJrpBh
-         q4UEOZA0SMZoemcRwVnKERN2bej9asQfwAj9WcPN3l9RmfBTvmLzeeilqKYXSFvJivQj
-         K3EcTMeVMN1izLI0boiXibiZiBBp/sPSFcQ09VJr6u9kCG88ZOYcfjpJC9AK7LBkWfht
-         evGA==
+        d=colorfullife-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=goEETpOG9lfFevQHaur9PF5zaafWC9JdHro5XcDyM3s=;
+        b=BZL8TKVxZBTtWhHhRnFHkYQw4mr94k7ePLKn6WIBSrOqTeipYFKW7BnRWSvQbvQYKc
+         qanpY3Tu6TN6CaeWQ5rLt+SYXVKHpXjKHR1PAQgrSFA+FYgJiXFUyJ3WlHnd5L9/wNeE
+         MURgsEKGnoZhMt6u9du4beR0EWgThKhNloCUzKlTT4tqdCX3msJumjBrmOXYm4kxcW9L
+         U8I+zpsfS+Iap32r3gjcUkJXyZkKSJXeeVNMUsB/qusvwNZKWn+mDwjc+YKeUrtMLE9M
+         LgIPTWJoBi7d8EiSh7dtZeu7sE3O7zv+WsVdCo1EKO23JJcg8ChK2ysPpFkthd3UKysK
+         BkAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=z6EHwMp5AZI+iYeqZZ9y+EtZ5393CdE1f8m14Zm+iNk=;
-        b=x+Kx6Wo6vmOlAi9O0qkrRMqqxg8ZTe6awBQEzWs/4NlFdofbF2kjOT05BJkLQ8T29n
-         O78QBRWx5wI646RAq5gOYvSp1WlO5kOV4UWDuf4LLZilb1qxjxKN/P1sBMSxVq8zXvJc
-         +MycyoYJXJQ3q8JGFYJQoljS4Uk1Q8T6d6JMzb/c+fGE4ZzcHaniLSqq8r/Ti8p8ReWa
-         TQDEN5QOGoNTN5LehMdXIKRu5WoTERQjPra7oe2Wv7t9Rn+WOcuYHIYRY2p/8h83KPNI
-         VeDXZWKywQIagW//nNxYJuynpHKjBDSJSMAlY8Ub+QATsRXmlG4flGx1mpRVLPWZwivp
-         psLA==
-X-Gm-Message-State: AOAM530bI3a+EGJMYpEuf4Hv613wDWvaAXAA2viQ3ViuHBKxO7xEGXSa
-        C8mAM6cPG8KMAhKrz2fE2mM0og==
-X-Google-Smtp-Source: ABdhPJz07lQuwwoVt07rxWnw5KLDQ/CmcgGzmyxu7smKkkMe74ylFzjEaAEYQS63RWd1sFDo1J82Qw==
-X-Received: by 2002:a19:f806:: with SMTP id a6mr19910155lff.642.1640721609118;
-        Tue, 28 Dec 2021 12:00:09 -0800 (PST)
-Received: from [192.168.112.17] (nikaet.starlink.ru. [94.141.168.29])
-        by smtp.gmail.com with ESMTPSA id a23sm403945ljk.8.2021.12.28.12.00.08
+        bh=goEETpOG9lfFevQHaur9PF5zaafWC9JdHro5XcDyM3s=;
+        b=YMUIomOfAw1icKF82mPu2zgsJ5kNTpgMGjlU/meV5PP9l0VSJ36ptWeKkRtuADPT+8
+         wQfel49DhdIM41FxCFwZyK0KuBBy5dlqGrsM3U71zBmCmjlA3GLXAEEeYoUucw7HjuFu
+         EDNdRlOPlcTGEZnHhVyNNTSHg7aMEmOju32ZBYTrhHekfQV3lM5cBOEPaeJqj3RKd72L
+         fdI4R0f7aPofYv/+yej5Nxczg7KV3AuutYJxU7P77gMAYMQEKrb41HRK6WJBarZfxmiQ
+         TrJnSczQ446pSasrqnW1N3C2ObBXxuL1slvPWA6vgTZBPnGzbGok74FwydR1ruQ9f+IK
+         c3XA==
+X-Gm-Message-State: AOAM530E5zgztfRXGsBlXGxFwLdY7xaJcJA9MjJOOVLkCZH3HLA7TB3b
+        G8tTDIi6dJ151v3UYs2/plctFg==
+X-Google-Smtp-Source: ABdhPJzENjmDSLB7a5xJOEU+owmw+05dK3GBXnyzbbvMdDMN+9jwRyPqZ3c1x7m35sU3sZGX/Ty7KQ==
+X-Received: by 2002:a5d:58c5:: with SMTP id o5mr17226605wrf.15.1640721859327;
+        Tue, 28 Dec 2021 12:04:19 -0800 (PST)
+Received: from ?IPV6:2003:d9:970a:4f00:9d27:bf8:b765:305? (p200300d9970a4f009d270bf8b7650305.dip0.t-ipconnect.de. [2003:d9:970a:4f00:9d27:bf8:b765:305])
+        by smtp.googlemail.com with ESMTPSA id a198sm19125636wmd.42.2021.12.28.12.04.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Dec 2021 12:00:08 -0800 (PST)
-Subject: Re: [PATCH/RFC] drivers/irqchip: add irq-inverter
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>
-References: <20211228165642.2514766-1-nikita.yoush@cogentembedded.com>
- <CAMuHMdWbqi_ac2wVUooO_mukG++y=ZjOwSir87fu+NLXYEKUqg@mail.gmail.com>
-From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Message-ID: <71643b48-b1ab-0768-32a2-a25815e31827@cogentembedded.com>
-Date:   Tue, 28 Dec 2021 23:00:07 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 28 Dec 2021 12:04:18 -0800 (PST)
+Message-ID: <18b6afe8-43b1-4159-0ddd-eca08f175f0a@colorfullife.com>
+Date:   Tue, 28 Dec 2021 21:04:17 +0100
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdWbqi_ac2wVUooO_mukG++y=ZjOwSir87fu+NLXYEKUqg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] mm/util.c: Make kvfree() safe for calling while holding
+ spinlocks
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vvs@virtuozzo.com>, cgel.zte@gmail.com,
+        shakeelb@google.com, rdunlap@infradead.org, dbueso@suse.de,
+        unixbhaskar@gmail.com, chi.minghao@zte.com.cn, arnd@arndb.de,
+        Zeal Robot <zealci@zte.com.cn>, linux-mm@kvack.org,
+        1vier1@web.de, stable@vger.kernel.org
+References: <20211222194828.15320-1-manfred@colorfullife.com>
+ <Ycdo1PHC9KDD8eGD@pc638.lan> <YceiFXyoGcgPaLeJ@casper.infradead.org>
+ <Ycis/J1U2DB6Zx7j@pc638.lan> <YctpUurav74Ir5YS@pc638.lan>
+From:   Manfred Spraul <manfred@colorfullife.com>
+In-Reply-To: <YctpUurav74Ir5YS@pc638.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Hello Vlad,
 
-> FTR, here's a link to the previous discussion about this topic:
-> https://lore.kernel.org/all/20190607172958.20745-1-erosca@de.adit-jv.com/
+On 12/28/21 20:45, Uladzislau Rezki wrote:
+> [...]
+> Manfred, could you please have a look and if you have a time test it?
+> I mean if it solves your issue. You can take over this patch and resend
+> it, otherwise i can send it myself later if we all agree with it.
 
-Thanks for the link.
-AFAICS, there was no solution found that time?
+I think we mix tasks: We have a bug in ipc/sem.c, thus we need a 
+solution suitable for stable.
 
-I was able to make it at least working...  and I'm ready to apply any reasonable changes to make this, 
-or any other, solution for the issue acceptable for mainline.
+Fixes: fc37a3b8b438 ("[PATCH] ipc sem: use kvmalloc for sem_undo 
+allocation")
+Cc: stable@vger.kernel.org
 
-Nikita
+I think for stable, there are only two options:
+
+- change ipc/sem.c, call kvfree() after dropping the spinlock
+
+- change kvfree() to use vfree_atomic().
+
+ From my point of view, both approaches are fine.
+
+I.e. I'm waiting for feedback from an mm maintainer.
+
+As soon as it is agreed, I will retest the chosen solution.
+
+
+Now you propose to redesign vfree(), so that vfree() is safe to be 
+called while holding spinlocks:
+
+> <snip>
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index d2a00ad4e1dd..b82db44fea60 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -1717,17 +1717,10 @@ static bool __purge_vmap_area_lazy(unsigned long start, unsigned long end)
+>   	return true;
+>   }
+>   
+> -/*
+> - * Kick off a purge of the outstanding lazy areas. Don't bother if somebody
+> - * is already purging.
+> - */
+> -static void try_purge_vmap_area_lazy(void)
+> -{
+> -	if (mutex_trylock(&vmap_purge_lock)) {
+> -		__purge_vmap_area_lazy(ULONG_MAX, 0);
+> -		mutex_unlock(&vmap_purge_lock);
+> -	}
+> -}
+> +static void purge_vmap_area_lazy(void);
+> +static void drain_vmap_area(struct work_struct *work);
+> +static DECLARE_WORK(drain_vmap_area_work, drain_vmap_area);
+> +static atomic_t drain_vmap_area_work_in_progress;
+>   
+>   /*
+>    * Kick off a purge of the outstanding lazy areas.
+> @@ -1740,6 +1733,22 @@ static void purge_vmap_area_lazy(void)
+>   	mutex_unlock(&vmap_purge_lock);
+>   }
+>   
+> +static void drain_vmap_area(struct work_struct *work)
+> +{
+> +	mutex_lock(&vmap_purge_lock);
+> +	__purge_vmap_area_lazy(ULONG_MAX, 0);
+> +	mutex_unlock(&vmap_purge_lock);
+> +
+> +	/*
+> +	 * Check if rearming is still required. If not, we are
+> +	 * done and can let a next caller to initiate a new drain.
+> +	 */
+> +	if (atomic_long_read(&vmap_lazy_nr) > lazy_max_pages())
+> +		schedule_work(&drain_vmap_area_work);
+> +	else
+> +		atomic_set(&drain_vmap_area_work_in_progress, 0);
+> +}
+> +
+>   /*
+>    * Free a vmap area, caller ensuring that the area has been unmapped
+>    * and flush_cache_vunmap had been called for the correct range
+> @@ -1766,7 +1775,8 @@ static void free_vmap_area_noflush(struct vmap_area *va)
+>   
+>   	/* After this point, we may free va at any time */
+>   	if (unlikely(nr_lazy > lazy_max_pages()))
+> -		try_purge_vmap_area_lazy();
+> +		if (!atomic_xchg(&drain_vmap_area_work_in_progress, 1))
+> +			schedule_work(&drain_vmap_area_work);
+>   }
+>   
+>   /*
+> <snip>
+I do now know the mm code well enough to understand the side effects of 
+the change. And doubt that it is suitable for stable, i.e. we need the 
+simple patch first.
+
+--
+
+     Manfred
+

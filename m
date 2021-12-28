@@ -2,87 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0646F480C1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 18:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D11480C19
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 18:32:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236791AbhL1Rgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 12:36:36 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:33289 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231489AbhL1Rgf (ORCPT
+        id S236765AbhL1Rbc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Dec 2021 12:31:32 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:32850 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231489AbhL1Rbb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 12:36:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1640712995; x=1672248995;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4OYDghXVhKB7oG2GEWMd9vQDKAFwA7xtNF7C6sQ+okg=;
-  b=B+chGsuIiRDLL1Vl8SI9NmtHgyCa4nw+o3NUjHKSCNpoupbiWjVNeLU3
-   7RhQM2WMkNnzb7VVePFD9xXvfaW6T7fMIQuZzFSVZbzVsSHOURvlzNFaO
-   y1mK+eLyaRtnD0NucQaJNmz8Ca6EGWJcHlUhSVWYcLXEVeYRgQYzzmu9C
-   Q=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Dec 2021 09:36:35 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 09:36:34 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 28 Dec 2021 09:36:34 -0800
-Received: from [10.110.91.229] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 28 Dec
- 2021 09:36:33 -0800
-Message-ID: <1a8dc2f2-b058-7243-f3dd-2defbca50e3d@quicinc.com>
-Date:   Tue, 28 Dec 2021 09:36:32 -0800
+        Tue, 28 Dec 2021 12:31:31 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39626B8125E;
+        Tue, 28 Dec 2021 17:31:30 +0000 (UTC)
+Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp.kernel.org (Postfix) with ESMTPSA id 1A1BDC36AE8;
+        Tue, 28 Dec 2021 17:31:24 +0000 (UTC)
+Date:   Tue, 28 Dec 2021 17:37:09 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>, kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Patrick Havelange <patrick.havelange@essensium.com>,
+        Syed Nayyar Waris <syednwaris@gmail.com>
+Subject: Re: [PATCH v2 02/23] counter: ftm-quaddec: Drop unused
+ platform_set_drvdata()
+Message-ID: <20211228173709.326b3a2a@jic23-huawei>
+In-Reply-To: <20211227094526.698714-3-u.kleine-koenig@pengutronix.de>
+References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
+        <20211227094526.698714-3-u.kleine-koenig@pengutronix.de>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] drm/msm/dp: Fix a potential double free in an error
- handling path
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        <robdclark@gmail.com>, <sean@poorly.run>,
-        <quic_abhinavk@quicinc.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <bjorn.andersson@linaro.org>, <swboyd@chromium.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>
-References: <6fd20c8779d6b03a5b54509af25b478049482087.1640531508.git.christophe.jaillet@wanadoo.fr>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <6fd20c8779d6b03a5b54509af25b478049482087.1640531508.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 27 Dec 2021 10:45:05 +0100
+Uwe Kleine-König         <u.kleine-koenig@pengutronix.de> wrote:
 
-On 12/26/2021 7:14 AM, Christophe JAILLET wrote:
-> 'dp_bridge' is devm_alloc'ed, so there is no need to free it explicitly or
-> there will be a double free().
->
-> Fixes: 8a3b4c17f863 ("drm/msm/dp: employ bridge mechanism for display enable and disable")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Reviewed-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> The driver doesn't ever use platform_get_drvdata, so drop this unused
+> call.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
 > ---
->   drivers/gpu/drm/msm/dp/dp_drm.c | 1 -
->   1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
-> index 188e77c59885..d4d360d19eba 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_drm.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_drm.c
-> @@ -243,7 +243,6 @@ struct drm_bridge *msm_dp_bridge_init(struct msm_dp *dp_display, struct drm_devi
->   	rc = drm_bridge_attach(encoder, bridge, NULL, DRM_BRIDGE_ATTACH_NO_CONNECTOR);
->   	if (rc) {
->   		DRM_ERROR("failed to attach bridge, rc=%d\n", rc);
-> -		kfree(dp_bridge);
->   		return ERR_PTR(rc);
->   	}
->   
+>  drivers/counter/ftm-quaddec.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/counter/ftm-quaddec.c b/drivers/counter/ftm-quaddec.c
+> index 5ef0478709cd..9272f7b58beb 100644
+> --- a/drivers/counter/ftm-quaddec.c
+> +++ b/drivers/counter/ftm-quaddec.c
+> @@ -269,8 +269,6 @@ static int ftm_quaddec_probe(struct platform_device *pdev)
+>  	if (!ftm)
+>  		return -ENOMEM;
+>  
+> -	platform_set_drvdata(pdev, ftm);
+> -
+>  	io = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>  	if (!io) {
+>  		dev_err(&pdev->dev, "Failed to get memory region\n");
+

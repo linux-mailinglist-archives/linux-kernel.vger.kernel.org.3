@@ -2,142 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0074048092A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 13:43:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9ECC480929
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 13:43:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbhL1MnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 07:43:07 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:34855 "EHLO
+        id S231492AbhL1MnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 07:43:06 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:34854 "EHLO
         szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbhL1MnF (ORCPT
+        with ESMTP id S231460AbhL1MnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Dec 2021 07:43:05 -0500
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JNZ1m1fKVzccG2;
-        Tue, 28 Dec 2021 20:42:36 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500020.china.huawei.com
- (7.185.36.88) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 28 Dec
- 2021 20:43:03 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <richard@nod.at>, <dwmw2@infradead.org>,
-        <christian.brauner@ubuntu.com>, <linux-mtd@lists.infradead.org>,
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JNZ1l5kpWzccFv;
+        Tue, 28 Dec 2021 20:42:35 +0800 (CST)
+Received: from localhost.localdomain (10.175.102.38) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 28 Dec 2021 20:43:03 +0800
+From:   Wei Yongjun <weiyongjun1@huawei.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stefan Roese <sr@denx.de>, Ming Lei <ming.lei@canonical.com>,
+        Grant Likely <grant.likely@secretlab.ca>,
         <linux-kernel@vger.kernel.org>
-CC:     <libaokun1@huawei.com>, <yukuai3@huawei.com>,
-        <stable@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH -next] jffs2: fix use-after-free in jffs2_clear_xattr_subsystem
-Date:   Tue, 28 Dec 2021 20:54:30 +0800
-Message-ID: <20211228125430.1880252-1-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+CC:     Wei Yongjun <weiyongjun1@huawei.com>,
+        Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH] misc: lattice-ecp3-config: Fix task hung when firmware load failed
+Date:   Tue, 28 Dec 2021 12:55:22 +0000
+Message-ID: <20211228125522.3122284-1-weiyongjun1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500020.china.huawei.com (7.185.36.88)
+X-Originating-IP: [10.175.102.38]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500009.china.huawei.com (7.192.105.203)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we mount a jffs2 image, assume that the first few blocks of
-the image are normal and contain at least one xattr-related inode,
-but the next block is abnormal. As a result, an error is returned
-in jffs2_scan_eraseblock(). jffs2_clear_xattr_subsystem() is then
-called in jffs2_build_filesystem() and then again in
-jffs2_do_fill_super().
+When firmware load failed, kernel report task hung as follows:
 
-Finally we can observe the following report:
- ==================================================================
- BUG: KASAN: use-after-free in jffs2_clear_xattr_subsystem+0x95/0x6ac
- Read of size 8 at addr ffff8881243384e0 by task mount/719
+INFO: task xrun:5191 blocked for more than 147 seconds.
+      Tainted: G        W         5.16.0-rc5-next-20211220+ #11
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:xrun            state:D stack:    0 pid: 5191 ppid:   270 flags:0x00000004
+Call Trace:
+ __schedule+0xc12/0x4b50 kernel/sched/core.c:4986
+ schedule+0xd7/0x260 kernel/sched/core.c:6369 (discriminator 1)
+ schedule_timeout+0x7aa/0xa80 kernel/time/timer.c:1857
+ wait_for_completion+0x181/0x290 kernel/sched/completion.c:85
+ lattice_ecp3_remove+0x32/0x40 drivers/misc/lattice-ecp3-config.c:221
+ spi_remove+0x72/0xb0 drivers/spi/spi.c:409
 
- Call Trace:
-  dump_stack+0x115/0x16b
-  jffs2_clear_xattr_subsystem+0x95/0x6ac
-  jffs2_do_fill_super+0x84f/0xc30
-  jffs2_fill_super+0x2ea/0x4c0
-  mtd_get_sb+0x254/0x400
-  mtd_get_sb_by_nr+0x4f/0xd0
-  get_tree_mtd+0x498/0x840
-  jffs2_get_tree+0x25/0x30
-  vfs_get_tree+0x8d/0x2e0
-  path_mount+0x50f/0x1e50
-  do_mount+0x107/0x130
-  __se_sys_mount+0x1c5/0x2f0
-  __x64_sys_mount+0xc7/0x160
-  do_syscall_64+0x45/0x70
-  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+lattice_ecp3_remove() wait for signals from firmware loading, but when
+load failed, firmware_load() does not send this signal. This cause
+device remove hung. Fix it by sending signal even if load failed.
 
- Allocated by task 719:
-  kasan_save_stack+0x23/0x60
-  __kasan_kmalloc.constprop.0+0x10b/0x120
-  kasan_slab_alloc+0x12/0x20
-  kmem_cache_alloc+0x1c0/0x870
-  jffs2_alloc_xattr_ref+0x2f/0xa0
-  jffs2_scan_medium.cold+0x3713/0x4794
-  jffs2_do_mount_fs.cold+0xa7/0x2253
-  jffs2_do_fill_super+0x383/0xc30
-  jffs2_fill_super+0x2ea/0x4c0
- [...]
-
- Freed by task 719:
-  kmem_cache_free+0xcc/0x7b0
-  jffs2_free_xattr_ref+0x78/0x98
-  jffs2_clear_xattr_subsystem+0xa1/0x6ac
-  jffs2_do_mount_fs.cold+0x5e6/0x2253
-  jffs2_do_fill_super+0x383/0xc30
-  jffs2_fill_super+0x2ea/0x4c0
- [...]
-
- The buggy address belongs to the object at ffff8881243384b8
-  which belongs to the cache jffs2_xattr_ref of size 48
- The buggy address is located 40 bytes inside of
-  48-byte region [ffff8881243384b8, ffff8881243384e8)
- [...]
- ==================================================================
-
-The triggering of the BUG is shown in the following stack:
------------------------------------------------------------
-jffs2_fill_super
-  jffs2_do_fill_super
-    jffs2_do_mount_fs
-      jffs2_build_filesystem
-        jffs2_scan_medium
-          jffs2_scan_eraseblock        <--- ERROR
-        jffs2_clear_xattr_subsystem    <--- free
-    jffs2_clear_xattr_subsystem        <--- free again
------------------------------------------------------------
-
-An error is returned in jffs2_do_mount_fs(). If the error is returned
-by jffs2_sum_init(), the jffs2_clear_xattr_subsystem() does not need to
-be executed. If the error is returned by jffs2_build_filesystem(), the
-jffs2_clear_xattr_subsystem() also does not need to be executed again.
-So move jffs2_clear_xattr_subsystem() from 'out_inohash' to 'out_root'
-to fix this UAF problem.
-
-Fixes: aa98d7cf59b5 ("[JFFS2][XATTR] XATTR support on JFFS2 (version. 5)")
-Cc: stable@vger.kernel.org
+Fixes: 781551df57c7 ("misc: Add Lattice ECP3 FPGA configuration via SPI")
 Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
----
- fs/jffs2/fs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
 
-diff --git a/fs/jffs2/fs.c b/fs/jffs2/fs.c
-index 2ac410477c4f..71f03a5d36ed 100644
---- a/fs/jffs2/fs.c
-+++ b/fs/jffs2/fs.c
-@@ -603,8 +603,8 @@ int jffs2_do_fill_super(struct super_block *sb, struct fs_context *fc)
- 	jffs2_free_ino_caches(c);
- 	jffs2_free_raw_node_refs(c);
- 	kvfree(c->blocks);
-- out_inohash:
- 	jffs2_clear_xattr_subsystem(c);
-+ out_inohash:
- 	kfree(c->inocache_list);
-  out_wbuf:
- 	jffs2_flash_cleanup(c);
+diff --git a/drivers/misc/lattice-ecp3-config.c b/drivers/misc/lattice-ecp3-config.c
+index 0f54730c7ed5..98828030b5a4 100644
+--- a/drivers/misc/lattice-ecp3-config.c
++++ b/drivers/misc/lattice-ecp3-config.c
+@@ -76,12 +76,12 @@ static void firmware_load(const struct firmware *fw, void *context)
+ 
+ 	if (fw == NULL) {
+ 		dev_err(&spi->dev, "Cannot load firmware, aborting\n");
+-		return;
++		goto out;
+ 	}
+ 
+ 	if (fw->size == 0) {
+ 		dev_err(&spi->dev, "Error: Firmware size is 0!\n");
+-		return;
++		goto out;
+ 	}
+ 
+ 	/* Fill dummy data (24 stuffing bits for commands) */
+@@ -103,7 +103,7 @@ static void firmware_load(const struct firmware *fw, void *context)
+ 		dev_err(&spi->dev,
+ 			"Error: No supported FPGA detected (JEDEC_ID=%08x)!\n",
+ 			jedec_id);
+-		return;
++		goto out;
+ 	}
+ 
+ 	dev_info(&spi->dev, "FPGA %s detected\n", ecp3_dev[i].name);
+@@ -116,7 +116,7 @@ static void firmware_load(const struct firmware *fw, void *context)
+ 	buffer = kzalloc(fw->size + 8, GFP_KERNEL);
+ 	if (!buffer) {
+ 		dev_err(&spi->dev, "Error: Can't allocate memory!\n");
+-		return;
++		goto out;
+ 	}
+ 
+ 	/*
+@@ -155,7 +155,7 @@ static void firmware_load(const struct firmware *fw, void *context)
+ 			"Error: Timeout waiting for FPGA to clear (status=%08x)!\n",
+ 			status);
+ 		kfree(buffer);
+-		return;
++		goto out;
+ 	}
+ 
+ 	dev_info(&spi->dev, "Configuring the FPGA...\n");
+@@ -181,7 +181,7 @@ static void firmware_load(const struct firmware *fw, void *context)
+ 	release_firmware(fw);
+ 
+ 	kfree(buffer);
+-
++out:
+ 	complete(&data->fw_loaded);
+ }
+ 
 -- 
-2.31.1
+2.25.1
 

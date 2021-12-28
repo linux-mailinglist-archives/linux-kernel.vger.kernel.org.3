@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB81480D67
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 22:30:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6BD480D6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 22:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237484AbhL1Var (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 16:30:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:28438 "EHLO
+        id S237522AbhL1Vau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 16:30:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31957 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237447AbhL1Vaq (ORCPT
+        by vger.kernel.org with ESMTP id S237471AbhL1Var (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 16:30:46 -0500
+        Tue, 28 Dec 2021 16:30:47 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640727045;
+        s=mimecast20190719; t=1640727046;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=oyE/rafatlrcvSG+3VXfXdUjnRRYymu/M4FMEAKWVLk=;
-        b=O1dlcc3++/rp553RyHIRWE39RYIylHb35sQNr2x1Q+sbaeL3Wnx1V2VQyZg9O+i1xWDRR7
-        G5NkwmGbWzcrIgKx3Z7y9O3VvcafefTVgM2tb7ehHRFJiOsCIuwrr0A6QXyqg1zSPKUDD1
-        +fqrFdm2Bn106xQe1Zn2yoHkI86jyEg=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=7kJi6QbhQe0UKqaYog/4fs8E9UhX+TpYHbtJQ2kzdak=;
+        b=hbop5jSnE+BTiFCVm2J6DwAT81q49tG8+2dEA+nW2m5/lBeCqdGSoQ1jb9eXmeSR/AaY84
+        zbhX6gv6Olp2wt1jKCwS7jyZWJmRuYCSs87rkz1a7PTCGVCbAvWPrYPNhm1r5Iw7C7VtnB
+        EGOx7Qxb2bvI4017Xy4eXDewu+HIE8Y=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-619-kwq-Dd8tOkWyqc-HhHxh2w-1; Tue, 28 Dec 2021 16:30:44 -0500
-X-MC-Unique: kwq-Dd8tOkWyqc-HhHxh2w-1
-Received: by mail-wm1-f72.google.com with SMTP id r10-20020a1c440a000000b003456b2594e0so6554215wma.8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 13:30:44 -0800 (PST)
+ us-mta-280-RC0eyZifPoO0S_EjMd7g7A-1; Tue, 28 Dec 2021 16:30:45 -0500
+X-MC-Unique: RC0eyZifPoO0S_EjMd7g7A-1
+Received: by mail-wr1-f70.google.com with SMTP id t30-20020adfa2de000000b001a24004e1fbso4297446wra.10
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 13:30:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oyE/rafatlrcvSG+3VXfXdUjnRRYymu/M4FMEAKWVLk=;
-        b=MgQsRpOBVCpJS3sdblFNX0VTs20sdyr0Z+yaWAC8O7UT/v9Fm11O5nmrGykegMxol8
-         dC91zBe1G4UE+BETygECWzs0KZbBqcs9cRBA5ePnoCbWIuiRcv8rn0HfPzNVgxNFGAPb
-         CNQ4Py7oU6s8HOJO7W29hg57qNXwqp+KV2tda8wAQUfzAC3uQHynkkXGIYIarqQQE4UG
-         yCFrADEMwF1viOsUh1a/4AogtBj6upREvwum989u9FuKurfogdBeLRAqKuVrrg5yKsR3
-         qsDbIBFM4154vODmxkpQdNyLobT9IPysf3ajcALzGxDbP9fPkgTDmT8rCHwcfpLwuJHu
-         cTzQ==
-X-Gm-Message-State: AOAM530MnDgqtpksxAtKz3dmqI4ooBUBZ6vNFZYc3GzKZWMfdX6lD+4Y
-        1BMpRAiAV50zjipQynhaTjC49UcFmFaO3k8nGOCcumhjLGt/lqG91bia81RwVzbfLWzAKkBHbRK
-        wojKZd4S9UjyfRsqAReuuz/8=
-X-Received: by 2002:a05:600c:2188:: with SMTP id e8mr19105568wme.55.1640727043361;
-        Tue, 28 Dec 2021 13:30:43 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzZHfJMfcZLPD5yQXbfVt8K3bzE/CJ+msCts6gqaz5PrvaaUDNxWD20Dv2Qb6qrcJDLH2vLww==
-X-Received: by 2002:a05:600c:2188:: with SMTP id e8mr19105557wme.55.1640727043182;
-        Tue, 28 Dec 2021 13:30:43 -0800 (PST)
+        bh=7kJi6QbhQe0UKqaYog/4fs8E9UhX+TpYHbtJQ2kzdak=;
+        b=Ks3I+eFEaCxAhGTgltNs6q0O3Gdhsh5RMPGwkgzkaknTwQxhbj7ELGmTG0N5FLC5CX
+         86ppyOSIw1tPgK0AvglXJX5ykYy8rTh3iRZvtAS0h0L90RwRLxUEzxXpmkg0c2ozwjr1
+         AlsNYTi4cSyiHlqDUPF17cBBtLGuH3xju5x2XihRmcyba40qw85pb5ixFRY0hP1j/xfn
+         M+h/vQXtPUVB6Ljr/UZN1+DJh54h/bUVfutZPKxHMLvtdjZwf1B9aTU5vnfkZby7ATAy
+         Z/AoJOIMTIn0cnSWzr5etDvolNi67SXXFqxQDfSHOYvhEEst2aYqKfR8DNtq+fnnKh/N
+         0Caw==
+X-Gm-Message-State: AOAM5333Ua+E+sZdPE8kEY6fYjXBlHgDOIhj6lsjWsHWvBcvvBCIixG7
+        ehUymDRnj+6aJMTa6sVcX5Rs5ZTopaKi+g4JV1UtPYBfjp15GweF5nhqTuPUSDZWy/RBfr8nvL0
+        oZ2aHQwWJLBU+Im/6eUK6cAI=
+X-Received: by 2002:adf:f40b:: with SMTP id g11mr17714784wro.645.1640727044320;
+        Tue, 28 Dec 2021 13:30:44 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwbqBZEjYGOyh2QSHDIyFzBjjvk3ujK70INOECBs15JXNRoREc+6f2quKphIDOOu8dbecImnQ==
+X-Received: by 2002:adf:f40b:: with SMTP id g11mr17714769wro.645.1640727044176;
+        Tue, 28 Dec 2021 13:30:44 -0800 (PST)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id l13sm21118900wrs.73.2021.12.28.13.30.42
+        by smtp.gmail.com with ESMTPSA id h3sm19232220wrt.94.2021.12.28.13.30.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 13:30:42 -0800 (PST)
+        Tue, 28 Dec 2021 13:30:43 -0800 (PST)
 From:   Aaron Tomlin <atomlin@redhat.com>
 To:     mcgrof@kernel.org
 Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
         akpm@linux-foundation.org, jeyu@kernel.org,
         linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
         atomlin@atomlin.com, ghalat@redhat.com
-Subject: [RFC PATCH 01/12] module: Move all into module/
-Date:   Tue, 28 Dec 2021 21:30:30 +0000
-Message-Id: <20211228213041.1356334-2-atomlin@redhat.com>
+Subject: [RFC PATCH 02/12] module: Simple refactor in preparation for split
+Date:   Tue, 28 Dec 2021 21:30:31 +0000
+Message-Id: <20211228213041.1356334-3-atomlin@redhat.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211228213041.1356334-1-atomlin@redhat.com>
 References: <YbKUUJUtjBk/n913@bombadil.infradead.org>
@@ -71,103 +71,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No functional changes.
+No functional change.
 
-This patch moves all module related code into a separate directory,
-modifies each file name and creates a new Makefile. Note: this effort
-is in preparation to refactor core module code.
+This patch makes it possible to move non-essential code
+out of core module code.
 
 Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
- kernel/Makefile                                   | 4 +---
- kernel/module/Makefile                            | 8 ++++++++
- kernel/{module-internal.h => module/internal.h}   | 0
- kernel/{module.c => module/main.c}                | 2 +-
- kernel/{module_signature.c => module/signature.c} | 0
- kernel/{module_signing.c => module/signing.c}     | 2 +-
- 6 files changed, 11 insertions(+), 5 deletions(-)
- create mode 100644 kernel/module/Makefile
- rename kernel/{module-internal.h => module/internal.h} (100%)
- rename kernel/{module.c => module/main.c} (99%)
- rename kernel/{module_signature.c => module/signature.c} (100%)
- rename kernel/{module_signing.c => module/signing.c} (97%)
+ kernel/module/internal.h | 22 ++++++++++++++++++++++
+ kernel/module/main.c     | 23 ++---------------------
+ 2 files changed, 24 insertions(+), 21 deletions(-)
 
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 4df609be42d0..466477d4dafe 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -53,6 +53,7 @@ obj-y += rcu/
- obj-y += livepatch/
- obj-y += dma/
- obj-y += entry/
-+obj-y += module/
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index 33783abc377b..ffc50df010a7 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -7,6 +7,28 @@
  
- obj-$(CONFIG_KCMP) += kcmp.o
- obj-$(CONFIG_FREEZER) += freezer.o
-@@ -66,9 +67,6 @@ ifneq ($(CONFIG_SMP),y)
- obj-y += up.o
- endif
- obj-$(CONFIG_UID16) += uid16.o
--obj-$(CONFIG_MODULES) += module.o
--obj-$(CONFIG_MODULE_SIG) += module_signing.o
--obj-$(CONFIG_MODULE_SIG_FORMAT) += module_signature.o
- obj-$(CONFIG_KALLSYMS) += kallsyms.o
- obj-$(CONFIG_BSD_PROCESS_ACCT) += acct.o
- obj-$(CONFIG_CRASH_CORE) += crash_core.o
-diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-new file mode 100644
-index 000000000000..a9cf6e822075
---- /dev/null
-+++ b/kernel/module/Makefile
-@@ -0,0 +1,8 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Makefile for linux kernel module support
-+#
+ #include <linux/elf.h>
+ #include <asm/module.h>
++#include <linux/mutex.h>
 +
-+obj-$(CONFIG_MODULES) += main.o
-+obj-$(CONFIG_MODULE_SIG) += signing.o
-+obj-$(CONFIG_MODULE_SIG_FORMAT) += signature.o
-diff --git a/kernel/module-internal.h b/kernel/module/internal.h
-similarity index 100%
-rename from kernel/module-internal.h
-rename to kernel/module/internal.h
-diff --git a/kernel/module.c b/kernel/module/main.c
-similarity index 99%
-rename from kernel/module.c
-rename to kernel/module/main.c
-index ed13917ea5f3..bc997c3e2c95 100644
---- a/kernel/module.c
-+++ b/kernel/module/main.c
-@@ -58,7 +58,7 @@
- #include <linux/dynamic_debug.h>
- #include <linux/audit.h>
- #include <uapi/linux/module.h>
--#include "module-internal.h"
-+#include "internal.h"
++#ifndef ARCH_SHF_SMALL
++#define ARCH_SHF_SMALL 0
++#endif
++
++/* If this is set, the section belongs in the init part of the module */
++#define INIT_OFFSET_MASK (1UL << (BITS_PER_LONG-1))
++/* Maximum number of characters written by module_flags() */
++#define MODULE_FLAGS_BUF_SIZE (TAINT_FLAGS_COUNT + 4)
++#define MODULE_SECT_READ_SIZE (3 /* "0x", "\n" */ + (BITS_PER_LONG / 4))
++
++extern struct mutex module_mutex;
++extern struct list_head modules;
++
++/* Provided by the linker */
++extern const struct kernel_symbol __start___ksymtab[];
++extern const struct kernel_symbol __stop___ksymtab[];
++extern const struct kernel_symbol __start___ksymtab_gpl[];
++extern const struct kernel_symbol __stop___ksymtab_gpl[];
++extern const s32 __start___kcrctab[];
++extern const s32 __start___kcrctab_gpl[];
  
+ struct load_info {
+ 	const char *name;
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index bc997c3e2c95..2a6b859716c0 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -63,10 +63,6 @@
  #define CREATE_TRACE_POINTS
  #include <trace/events/module.h>
-diff --git a/kernel/module_signature.c b/kernel/module/signature.c
-similarity index 100%
-rename from kernel/module_signature.c
-rename to kernel/module/signature.c
-diff --git a/kernel/module_signing.c b/kernel/module/signing.c
-similarity index 97%
-rename from kernel/module_signing.c
-rename to kernel/module/signing.c
-index 8723ae70ea1f..8aeb6d2ee94b 100644
---- a/kernel/module_signing.c
-+++ b/kernel/module/signing.c
-@@ -12,7 +12,7 @@
- #include <linux/string.h>
- #include <linux/verification.h>
- #include <crypto/public_key.h>
--#include "module-internal.h"
-+#include "internal.h"
  
+-#ifndef ARCH_SHF_SMALL
+-#define ARCH_SHF_SMALL 0
+-#endif
+-
  /*
-  * Verify the signature on a module.
+  * Modules' sections will be aligned on page boundaries
+  * to ensure complete separation of code and data, but
+@@ -78,9 +74,6 @@
+ # define debug_align(X) (X)
+ #endif
+ 
+-/* If this is set, the section belongs in the init part of the module */
+-#define INIT_OFFSET_MASK (1UL << (BITS_PER_LONG-1))
+-
+ /*
+  * Mutex protects:
+  * 1) List of modules (also safely readable with preempt_disable),
+@@ -88,8 +81,8 @@
+  * 3) module_addr_min/module_addr_max.
+  * (delete and add uses RCU list operations).
+  */
+-static DEFINE_MUTEX(module_mutex);
+-static LIST_HEAD(modules);
++DEFINE_MUTEX(module_mutex);
++LIST_HEAD(modules);
+ 
+ /* Work queue for freeing init sections in success case */
+ static void do_free_init(struct work_struct *w);
+@@ -408,14 +401,6 @@ static __maybe_unused void *any_section_objs(const struct load_info *info,
+ 	return (void *)info->sechdrs[sec].sh_addr;
+ }
+ 
+-/* Provided by the linker */
+-extern const struct kernel_symbol __start___ksymtab[];
+-extern const struct kernel_symbol __stop___ksymtab[];
+-extern const struct kernel_symbol __start___ksymtab_gpl[];
+-extern const struct kernel_symbol __stop___ksymtab_gpl[];
+-extern const s32 __start___kcrctab[];
+-extern const s32 __start___kcrctab_gpl[];
+-
+ #ifndef CONFIG_MODVERSIONS
+ #define symversion(base, idx) NULL
+ #else
+@@ -1491,7 +1476,6 @@ struct module_sect_attrs {
+ 	struct module_sect_attr attrs[];
+ };
+ 
+-#define MODULE_SECT_READ_SIZE (3 /* "0x", "\n" */ + (BITS_PER_LONG / 4))
+ static ssize_t module_sect_read(struct file *file, struct kobject *kobj,
+ 				struct bin_attribute *battr,
+ 				char *buf, loff_t pos, size_t count)
+@@ -4498,9 +4482,6 @@ static void cfi_cleanup(struct module *mod)
+ #endif
+ }
+ 
+-/* Maximum number of characters written by module_flags() */
+-#define MODULE_FLAGS_BUF_SIZE (TAINT_FLAGS_COUNT + 4)
+-
+ /* Keep in sync with MODULE_FLAGS_BUF_SIZE !!! */
+ static char *module_flags(struct module *mod, char *buf)
+ {
 -- 
 2.31.1
 

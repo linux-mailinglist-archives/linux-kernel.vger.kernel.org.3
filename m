@@ -2,153 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E29E3480B9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 17:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAAA3480BB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 18:01:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235867AbhL1Q4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 11:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32832 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231370AbhL1Q4f (ORCPT
+        id S235844AbhL1RBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 12:01:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51560 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229617AbhL1RBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 11:56:35 -0500
-Received: from haggis.mythic-beasts.com (haggis.mythic-beasts.com [IPv6:2a00:1098:0:86:1000:0:2:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01215C061574;
-        Tue, 28 Dec 2021 08:56:34 -0800 (PST)
-Received: from [81.101.6.87] (port=39590 helo=jic23-huawei)
-        by haggis.mythic-beasts.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <jic23@jic23.retrosnub.co.uk>)
-        id 1n2FlV-0004u6-5t; Tue, 28 Dec 2021 16:55:57 +0000
-Date:   Tue, 28 Dec 2021 17:01:25 +0000
-From:   Jonathan Cameron <jic23@jic23.retrosnub.co.uk>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org, linux-iio@vger.kernel.org,
-        Michael Hennerich <Michael.Hennerich@analog.com>
-Subject: Re: [RFC 12/32] iio: adc: Kconfig: add HAS_IOPORT dependencies
-Message-ID: <20211228170031.12dac755@jic23-huawei>
-In-Reply-To: <b21410ee32857b4913e4ba4595f9e8da299c501f.camel@linux.ibm.com>
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
-        <20211227164317.4146918-13-schnelle@linux.ibm.com>
-        <CAMuHMdXDL6XXfohzJFTTV6tR=gg=bcCQq935eKUbNaNLHp9xiw@mail.gmail.com>
-        <b21410ee32857b4913e4ba4595f9e8da299c501f.camel@linux.ibm.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Tue, 28 Dec 2021 12:01:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640710912;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=DXxOzHc1iZa7oGJsbF87BKuQf7WqJlWqhVP8T26PBQY=;
+        b=aPFEDsdYmuYpQ9bqWNmz7Y/GQu9dE66oXRHY4XVETlY/NfSOTOtXT9DioSDOiygl1mcHjD
+        1wF9JPbW/tJB2G6wpm7VAsuNV2pKTQqEhHJ1ITiivu+h5Mc9hcHRGdXg8jM1eD+6GLAze/
+        qP0oBTLaz7i395T2jfffLx23vT/8fQg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-563-P4HRWQqlNqOylcsl4-AbjA-1; Tue, 28 Dec 2021 12:01:50 -0500
+X-MC-Unique: P4HRWQqlNqOylcsl4-AbjA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0680A180FD79;
+        Tue, 28 Dec 2021 17:01:49 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.39.192.28])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 823857ED94;
+        Tue, 28 Dec 2021 17:01:47 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] extcon: int3496: Make the driver a bit less verbose
+Date:   Tue, 28 Dec 2021 18:01:38 +0100
+Message-Id: <20211228170141.520902-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-BlackCat-Spam-Score: 19
-X-Spam-Status: No, score=1.9
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Dec 2021 13:50:20 +0100
-Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+On all devices which I have with an INT3496 ACPI device,
+there is only an ID pin defined.
 
-> On Tue, 2021-12-28 at 11:32 +0100, Geert Uytterhoeven wrote:
-> > Hi Niklas,
-> > 
-> > On Mon, Dec 27, 2021 at 5:53 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:  
-> > > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> > > not being declared. We thus need to add HAS_IOPORT as dependency for
-> > > those drivers using them.
-> > > 
-> > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> > > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>  
+Change the log-messages about not being able to get GPIOs for
+"VBUS EN" and "USB MUX" to use dev_dbg().
 
-As a side note, whilst it doesn't always happen and I regularly forget
-to fix it up whilst applying, it's really helpful to make sure the driver
-name is somewhere in the patch title.
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/extcon/extcon-intel-int3496.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-e.g. iio: adc: ad7606: add HAS_IOPORT dependencies.
-
-> > 
-> > Thanks for your patch!
-> >   
-> > > --- a/drivers/iio/adc/Kconfig
-> > > +++ b/drivers/iio/adc/Kconfig
-> > > @@ -119,7 +119,7 @@ config AD7606
-> > > 
-> > >  config AD7606_IFACE_PARALLEL
-> > >         tristate "Analog Devices AD7606 ADC driver with parallel interface support"
-> > > -       depends on HAS_IOMEM
-> > > +       depends on HAS_IOPORT  
-> > 
-> > While this driver uses ins[bw](), this seems unrelated to legacy
-> > I/O space, as the driver maps a MMIO region.  Probably different
-> > accessors should be used instead.  
-> 
-> You're right on first glance it looks like a misuse of the ins[bw]()
-> accessors. I do wonder how that even works, if PCI_IOBASE is 0 it would
-> result in readsw()/readsb() with presumably the correct address but no
-> idea how this interacts witth x86's special I/O instructions.
-> 
-> > 
-> > Note that this driver has no in-tree users. Same for the SPI variant,
-> > but at least that one has modern json-schema DT bindings ;-)  
-> 
-> Can't find any mention in the MAINTAINERS file either.
-
-It falls under the Analog devices catch all.
-We don't list them all individually because there are a lot of them and
-it would just be noise in many case.
-
-Added Michael to CC. You already have Lars.
-
-ANALOG DEVICES INC IIO DRIVERS
-M:	Lars-Peter Clausen <lars@metafoo.de>
-M:	Michael Hennerich <Michael.Hennerich@analog.com>
-S:	Supported
-W:	http://wiki.analog.com/
-W:	http://ez.analog.com/community/linux-device-drivers
-F:	Documentation/ABI/testing/sysfs-bus-iio-frequency-ad9523
-F:	Documentation/ABI/testing/sysfs-bus-iio-frequency-adf4350
-F:	Documentation/devicetree/bindings/iio/*/adi,*
-F:	Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml
-F:	drivers/iio/*/ad*
-F:	drivers/iio/adc/ltc249*
-F:	drivers/iio/amplifiers/hmc425a.c
-F:	drivers/staging/iio/*/ad*
-X:	drivers/iio/*/adjd*
-
-https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/ad7606
-includes some details.
-
-I'll leave it to the Lars or Michael to confirm what is going on here.
-
-Jonathan
-
-> 
-> >   
-> > >         select AD7606
-> > >         help
-> > >           Say yes here to build parallel interface support for Analog Devices:  
-> > 
-> > Gr{oetje,eeting}s,
-> > 
-> >                         Geert
-> > 
-> > --
-> > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> > 
-> > In personal conversations with technical people, I call myself a hacker. But
-> > when I'm talking to journalists I just say "programmer" or something like that.
-> >                                 -- Linus Torvalds  
-> 
+diff --git a/drivers/extcon/extcon-intel-int3496.c b/drivers/extcon/extcon-intel-int3496.c
+index fb527c23639e..df6ab4ef46f5 100644
+--- a/drivers/extcon/extcon-intel-int3496.c
++++ b/drivers/extcon/extcon-intel-int3496.c
+@@ -121,11 +121,11 @@ static int int3496_probe(struct platform_device *pdev)
+ 
+ 	data->gpio_vbus_en = devm_gpiod_get(dev, "vbus", GPIOD_ASIS);
+ 	if (IS_ERR(data->gpio_vbus_en))
+-		dev_info(dev, "can't request VBUS EN GPIO\n");
++		dev_dbg(dev, "can't request VBUS EN GPIO\n");
+ 
+ 	data->gpio_usb_mux = devm_gpiod_get(dev, "mux", GPIOD_ASIS);
+ 	if (IS_ERR(data->gpio_usb_mux))
+-		dev_info(dev, "can't request USB MUX GPIO\n");
++		dev_dbg(dev, "can't request USB MUX GPIO\n");
+ 
+ 	/* register extcon device */
+ 	data->edev = devm_extcon_dev_allocate(dev, int3496_cable);
+-- 
+2.33.1
 

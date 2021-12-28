@@ -2,164 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E852D480C68
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 19:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A31480C6C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 19:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236966AbhL1SOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 13:14:34 -0500
-Received: from mail-qk1-f177.google.com ([209.85.222.177]:39611 "EHLO
-        mail-qk1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233411AbhL1SOd (ORCPT
+        id S236981AbhL1SQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 13:16:56 -0500
+Received: from mail-qt1-f173.google.com ([209.85.160.173]:33654 "EHLO
+        mail-qt1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233411AbhL1SQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 13:14:33 -0500
-Received: by mail-qk1-f177.google.com with SMTP id 69so17849577qkd.6;
-        Tue, 28 Dec 2021 10:14:33 -0800 (PST)
+        Tue, 28 Dec 2021 13:16:51 -0500
+Received: by mail-qt1-f173.google.com with SMTP id v4so14262363qtk.0;
+        Tue, 28 Dec 2021 10:16:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=EJ8aYnmOQRS5NqukNYSjs8nzRFdW5gCywT1c2u9vx3s=;
-        b=IzAcjFH6UE1bIfFAGsqJmkVDCYuivWqmymmXx6kgbr5Y76M06mpdRp5RR2pH20wLJi
-         nLL4kac2hFSHIClvNn/s3MzLCkoFjra9SlKvblVZVAyYHBUZsf9bqZdmJLW+hf5xuP9l
-         Eqmblp651dDipU7zuWhw6IYloDQu1GoEZsZNHuYxZnZOjk9GqTk/c3aARpTEpMA8ufM1
-         2qmIVYf9opwyiqyTafZEpcLHlbB1BBGalst8u1edYP2gJxLs4o4s9TlQe35WUFtzpIYu
-         3qy6LDdn0ifOgku6orQoeS93GSY+YWWZtE02aJSBvRtoMHYqOOFh/+kLajTqNGTv3+4D
-         Uf5g==
-X-Gm-Message-State: AOAM533jlB4hlvRQYnBZPfJTT4bG9Pdv5MkhPfOfeb3WZFLVKBQv4BKJ
-        v9f7dat1mJlFWRrI9LWXSvD1YJUQmx6SZEwlRTTBesTE
-X-Google-Smtp-Source: ABdhPJzJgODOGj4mxAKBm0Dvn2T/fQlJABCF8qKzEAqAlsIEDnZ8Pm2+Bdajm698UVXnHFSwdcL4bQzdgdaLr3ZphYg=
-X-Received: by 2002:a37:b702:: with SMTP id h2mr16333360qkf.135.1640715272805;
- Tue, 28 Dec 2021 10:14:32 -0800 (PST)
+        bh=9hPyQaAtpdsCwtq9cD65/s5Z3KHHM6Rn5LsO9cVRzow=;
+        b=mnFJ+BdH61WUAb36B0GP92zv8CSOP5Gq9Rgt4wX78jf9IYLmqaXxtFR9spX9q8YaFy
+         LEpfo0arxsxHzwPFUXQScctDPUrbJp9plSu8Ujy016bZ4Hog7/sfEFTPIfeqIwWhD6/K
+         PE2MDPXZ9TmVUFgVdZuRYTsrovgGCMLs0TUtDqqiEX4KYZq6lhxFBLuReKrokHUycPBi
+         G9z/9GPe4DC//B1WjM87Y4RpILrqM71ga8foajSwe7hdVhFqyLohT8+0xXHx2S00ZyAo
+         LWm2/Hpb0e88KYfHrv76Q49YivX/NqBuZN1XmKbLFoTmLrufHBwHPCrf2C26u8iSJdqJ
+         NseQ==
+X-Gm-Message-State: AOAM532I6Ob1qiZI9B+iyVFy/VQMButYEHyygkx9NmeBsJwLYs7lglWe
+        our0qlfLMyuSxc31tLsKPsLEdz2FEmzQaKq4ESUrwoTi
+X-Google-Smtp-Source: ABdhPJy0FQvrGDJagrmzJ0UpRfk/9sKYxxSpvUc6QZgwVhbcCzrxB30RickELfWkkghjclbA12JNzMbCyzTwEDfzI+g=
+X-Received: by 2002:ac8:5c91:: with SMTP id r17mr20319911qta.18.1640715410911;
+ Tue, 28 Dec 2021 10:16:50 -0800 (PST)
 MIME-Version: 1.0
-References: <20211228131912.260899-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20211228131912.260899-1-gregkh@linuxfoundation.org>
+References: <20211228131423.249752-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20211228131423.249752-1-gregkh@linuxfoundation.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 28 Dec 2021 19:14:22 +0100
-Message-ID: <CAJZ5v0gj4-ZOGPLzksvzB9Ed85P0qz=tC47Ntxnuc5G_C9GGVQ@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: use default_groups in kobj_type
+Date:   Tue, 28 Dec 2021 19:16:40 +0100
+Message-ID: <CAJZ5v0jyuVjMeM4t+M28e6R9MYxh=nVU7i2tgvGWF3Y7PrB+rQ@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: sysfs: use default_groups in kobj_type
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 2:19 PM Greg Kroah-Hartman
+On Tue, Dec 28, 2021 at 2:14 PM Greg Kroah-Hartman
 <gregkh@linuxfoundation.org> wrote:
 >
 > There are currently 2 ways to create a set of sysfs files for a
 > kobj_type, through the default_attrs field, and the default_groups
-> field.  Move the cpufreq code to use default_groups field which has been
-> the preferred way since aa30f47cf666 ("kobject: Add support for default
-> attribute groups to kobj_type") so that we can soon get rid of the
-> obsolete default_attrs field.
+> field.  Move the ACPI sysfs code to use default_groups field which has
+> been the preferred way since aa30f47cf666 ("kobject: Add support for
+> default attribute groups to kobj_type") so that we can soon get rid of
+> the obsolete default_attrs field.
 >
 > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: linux-pm@vger.kernel.org
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: linux-acpi@vger.kernel.org
 > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 Applied as 5.17 material, thanks!
 
 > ---
->  drivers/cpufreq/cpufreq.c              | 5 +++--
->  drivers/cpufreq/cpufreq_conservative.c | 5 +++--
->  drivers/cpufreq/cpufreq_ondemand.c     | 5 +++--
->  3 files changed, 9 insertions(+), 6 deletions(-)
+>  drivers/acpi/cppc_acpi.c    | 3 ++-
+>  drivers/acpi/device_sysfs.c | 3 ++-
+>  drivers/acpi/sysfs.c        | 3 ++-
+>  3 files changed, 6 insertions(+), 3 deletions(-)
 >
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index e338d2f010fe..09d676d5237e 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -924,7 +924,7 @@ cpufreq_freq_attr_rw(scaling_max_freq);
->  cpufreq_freq_attr_rw(scaling_governor);
->  cpufreq_freq_attr_rw(scaling_setspeed);
->
-> -static struct attribute *default_attrs[] = {
-> +static struct attribute *cpufreq_attrs[] = {
->         &cpuinfo_min_freq.attr,
->         &cpuinfo_max_freq.attr,
->         &cpuinfo_transition_latency.attr,
-> @@ -938,6 +938,7 @@ static struct attribute *default_attrs[] = {
->         &scaling_setspeed.attr,
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> index a85c351589be..d251b2a1cd15 100644
+> --- a/drivers/acpi/cppc_acpi.c
+> +++ b/drivers/acpi/cppc_acpi.c
+> @@ -179,10 +179,11 @@ static struct attribute *cppc_attrs[] = {
+>         &lowest_freq.attr,
 >         NULL
 >  };
-> +ATTRIBUTE_GROUPS(cpufreq);
+> +ATTRIBUTE_GROUPS(cppc);
 >
->  #define to_policy(k) container_of(k, struct cpufreq_policy, kobj)
->  #define to_attr(a) container_of(a, struct freq_attr, attr)
-> @@ -1000,7 +1001,7 @@ static const struct sysfs_ops sysfs_ops = {
->
->  static struct kobj_type ktype_cpufreq = {
->         .sysfs_ops      = &sysfs_ops,
-> -       .default_attrs  = default_attrs,
-> +       .default_groups = cpufreq_groups,
->         .release        = cpufreq_sysfs_release,
+>  static struct kobj_type cppc_ktype = {
+>         .sysfs_ops = &kobj_sysfs_ops,
+> -       .default_attrs = cppc_attrs,
+> +       .default_groups = cppc_groups,
 >  };
 >
-> diff --git a/drivers/cpufreq/cpufreq_conservative.c b/drivers/cpufreq/cpufreq_conservative.c
-> index 0879ec3c170c..08515f7e515f 100644
-> --- a/drivers/cpufreq/cpufreq_conservative.c
-> +++ b/drivers/cpufreq/cpufreq_conservative.c
-> @@ -257,7 +257,7 @@ gov_attr_rw(ignore_nice_load);
->  gov_attr_rw(down_threshold);
->  gov_attr_rw(freq_step);
->
-> -static struct attribute *cs_attributes[] = {
-> +static struct attribute *cs_attrs[] = {
->         &sampling_rate.attr,
->         &sampling_down_factor.attr,
->         &up_threshold.attr,
-> @@ -266,6 +266,7 @@ static struct attribute *cs_attributes[] = {
->         &freq_step.attr,
+>  static int check_pcc_chan(int pcc_ss_id, bool chk_err_bit)
+> diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
+> index 61271e61c307..d5d6403ba07b 100644
+> --- a/drivers/acpi/device_sysfs.c
+> +++ b/drivers/acpi/device_sysfs.c
+> @@ -53,6 +53,7 @@ static struct attribute *acpi_data_node_default_attrs[] = {
+>         &data_node_path.attr,
 >         NULL
 >  };
-> +ATTRIBUTE_GROUPS(cs);
+> +ATTRIBUTE_GROUPS(acpi_data_node_default);
 >
->  /************************** sysfs end ************************/
+>  #define to_data_node(k) container_of(k, struct acpi_data_node, kobj)
+>  #define to_attr(a) container_of(a, struct acpi_data_node_attr, attr)
+> @@ -79,7 +80,7 @@ static void acpi_data_node_release(struct kobject *kobj)
 >
-> @@ -315,7 +316,7 @@ static void cs_start(struct cpufreq_policy *policy)
+>  static struct kobj_type acpi_data_node_ktype = {
+>         .sysfs_ops = &acpi_data_node_sysfs_ops,
+> -       .default_attrs = acpi_data_node_default_attrs,
+> +       .default_groups = acpi_data_node_default_groups,
+>         .release = acpi_data_node_release,
+>  };
 >
->  static struct dbs_governor cs_governor = {
->         .gov = CPUFREQ_DBS_GOVERNOR_INITIALIZER("conservative"),
-> -       .kobj_type = { .default_attrs = cs_attributes },
-> +       .kobj_type = { .default_groups = cs_groups },
->         .gov_dbs_update = cs_dbs_update,
->         .alloc = cs_alloc,
->         .free = cs_free,
-> diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
-> index 3b8f924771b4..6a41ea4729b8 100644
-> --- a/drivers/cpufreq/cpufreq_ondemand.c
-> +++ b/drivers/cpufreq/cpufreq_ondemand.c
-> @@ -328,7 +328,7 @@ gov_attr_rw(sampling_down_factor);
->  gov_attr_rw(ignore_nice_load);
->  gov_attr_rw(powersave_bias);
->
-> -static struct attribute *od_attributes[] = {
-> +static struct attribute *od_attrs[] = {
->         &sampling_rate.attr,
->         &up_threshold.attr,
->         &sampling_down_factor.attr,
-> @@ -337,6 +337,7 @@ static struct attribute *od_attributes[] = {
->         &io_is_busy.attr,
+> diff --git a/drivers/acpi/sysfs.c b/drivers/acpi/sysfs.c
+> index 00c0ebaab29f..a4b638bea6f1 100644
+> --- a/drivers/acpi/sysfs.c
+> +++ b/drivers/acpi/sysfs.c
+> @@ -939,10 +939,11 @@ static struct attribute *hotplug_profile_attrs[] = {
+>         &hotplug_enabled_attr.attr,
 >         NULL
 >  };
-> +ATTRIBUTE_GROUPS(od);
+> +ATTRIBUTE_GROUPS(hotplug_profile);
 >
->  /************************** sysfs end ************************/
+>  static struct kobj_type acpi_hotplug_profile_ktype = {
+>         .sysfs_ops = &kobj_sysfs_ops,
+> -       .default_attrs = hotplug_profile_attrs,
+> +       .default_groups = hotplug_profile_groups,
+>  };
 >
-> @@ -401,7 +402,7 @@ static struct od_ops od_ops = {
->
->  static struct dbs_governor od_dbs_gov = {
->         .gov = CPUFREQ_DBS_GOVERNOR_INITIALIZER("ondemand"),
-> -       .kobj_type = { .default_attrs = od_attributes },
-> +       .kobj_type = { .default_groups = od_groups },
->         .gov_dbs_update = od_dbs_update,
->         .alloc = od_alloc,
->         .free = od_free,
+>  void acpi_sysfs_add_hotplug_profile(struct acpi_hotplug_profile *hotplug,
 > --
 > 2.34.1
 >

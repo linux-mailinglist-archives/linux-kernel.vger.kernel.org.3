@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B66D4806C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 07:48:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0454806C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 07:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235172AbhL1Gr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 01:47:57 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57534 "EHLO
+        id S235168AbhL1GsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 01:48:00 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57590 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232444AbhL1Grw (ORCPT
+        with ESMTP id S235140AbhL1Gr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 01:47:52 -0500
+        Tue, 28 Dec 2021 01:47:58 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7271660AB8;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5248F61179;
+        Tue, 28 Dec 2021 06:47:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B461C36AE8;
         Tue, 28 Dec 2021 06:47:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95101C36AEE;
-        Tue, 28 Dec 2021 06:47:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640674071;
-        bh=uPB7J7h9eg9SMZZo4XkkjoKoeN0EchgiiAHbdDTiKAM=;
+        s=k20201202; t=1640674077;
+        bh=/VO3mwMyYHdNKGu6mJrX7t4r1f7trz6vaxvlX8LEffY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HMbdfyeU0s5yO/32w9ESSYret/UcZzPh4hb3s7i0EvJif93cUDh6t1WMXYTYLTotY
-         wXcJC16VrXNPW9iWapcm7ief8sawblI0e4v3ru+HV3g/HCGSXttTFcdy79J6I83UYd
-         z6/+Zd+Gp+RwduQBFlSIdZHMw71nWu2diezGkoiU2xQgBPc7Ksd4hqGtwjeAYdbP+n
-         NXbKUNb5JgENHMSeXdnchCUcInvZNY+XNsHL1753qgrYhGjUJRShN4pcHnWc0zxvQR
-         58HOaocTHFa1udEdnNkzarjo3mwCKjaFZvkkvN569+TTw1A2vsGKIf5q62Bp4eU09K
-         iQl7xaSyiCPTg==
+        b=u0Z+gaFu9yOEolHHZSFm2vC77NNXpU8xjLgXD6b4FJiGxM1Z3F8p4yIfmKGhcMK91
+         c8PLQD9tvX4Vg+Amr6L5JmafWBZWsCg/tgGBq5Op/3c/UhiGsQbIs2QaMzQvfYLX4v
+         f5NpaviTdxFF6h7lhOG6eaGArgZdxhtLG3IXNKVtLZbEgU5hMamvgYTSTUFpA9Ufm9
+         cQK/Zh7Iqs61G1h8A0y2sfFQ9bIX9cluLqoPFbvwvY03VxQWX7bPXQFQJaiNg2PWzV
+         90Vguy4HU3WZiTkU7cvBWYm9D/8VbW12bd3v6dzjd4YkZOSr5o/2Ocs/0GQiEr6X4S
+         oQEyvHOuTZb5g==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, will@kernel.org, tglx@linutronix.de,
         benh@kernel.crashing.org, arnd@arndb.de, mingo@redhat.com,
@@ -39,9 +39,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         linuxppc-dev@lists.ozlabs.org, inux-parisc@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         x86@kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V3 2/8] sched: x86: Remove unused TASK_SIZE_OF
-Date:   Tue, 28 Dec 2021 14:47:23 +0800
-Message-Id: <20211228064730.2882351-3-guoren@kernel.org>
+Subject: [PATCH V3 3/8] sched: sparc: Remove unused TASK_SIZE_OF
+Date:   Tue, 28 Dec 2021 14:47:24 +0800
+Message-Id: <20211228064730.2882351-4-guoren@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211228064730.2882351-1-guoren@kernel.org>
 References: <20211228064730.2882351-1-guoren@kernel.org>
@@ -60,22 +60,23 @@ Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/x86/include/asm/page_64_types.h | 2 --
- 1 file changed, 2 deletions(-)
+ arch/sparc/include/asm/processor_64.h | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/arch/x86/include/asm/page_64_types.h b/arch/x86/include/asm/page_64_types.h
-index e9e2c3ba5923..6191cf417c31 100644
---- a/arch/x86/include/asm/page_64_types.h
-+++ b/arch/x86/include/asm/page_64_types.h
-@@ -74,8 +74,6 @@
- 					IA32_PAGE_OFFSET : DEFAULT_MAP_WINDOW)
- #define TASK_SIZE		(test_thread_flag(TIF_ADDR32) ? \
- 					IA32_PAGE_OFFSET : TASK_SIZE_MAX)
--#define TASK_SIZE_OF(child)	((test_tsk_thread_flag(child, TIF_ADDR32)) ? \
--					IA32_PAGE_OFFSET : TASK_SIZE_MAX)
+diff --git a/arch/sparc/include/asm/processor_64.h b/arch/sparc/include/asm/processor_64.h
+index ae851e8fce4c..628349fc4cdd 100644
+--- a/arch/sparc/include/asm/processor_64.h
++++ b/arch/sparc/include/asm/processor_64.h
+@@ -27,9 +27,6 @@
+ #define VPTE_SIZE	(1 << (VA_BITS - PAGE_SHIFT + 3))
+ #endif
  
- #define STACK_TOP		TASK_SIZE_LOW
- #define STACK_TOP_MAX		TASK_SIZE_MAX
+-#define TASK_SIZE_OF(tsk) \
+-	(test_tsk_thread_flag(tsk,TIF_32BIT) ? \
+-	 (1UL << 32UL) : ((unsigned long)-VPTE_SIZE))
+ #define TASK_SIZE \
+ 	(test_thread_flag(TIF_32BIT) ? \
+ 	 (1UL << 32UL) : ((unsigned long)-VPTE_SIZE))
 -- 
 2.25.1
 

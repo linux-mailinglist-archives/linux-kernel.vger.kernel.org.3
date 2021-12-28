@@ -2,243 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 111924805C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 03:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A85444805CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 04:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234635AbhL1Cug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 21:50:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45000 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234611AbhL1Cug (ORCPT
+        id S234647AbhL1DBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 22:01:47 -0500
+Received: from prt-mail.chinatelecom.cn ([42.123.76.228]:36026 "EHLO
+        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234588AbhL1DBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 21:50:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5ACFC06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 18:50:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18BC361153
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 02:50:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67CB7C36AEA
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 02:50:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640659834;
-        bh=XjGr33UTG2BSlHqCtBvJDxwAgnOIkVWbXtNf1nLYs0g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=X75SlgFLxYaWQDU7ZdtepNbbgqMD0Gne70gvo2x73xmCykmRfybSswI8Db+qAA6/C
-         QXTJngKMk+SE9H9IjJzy8g/5P3pbbnVTLL3CICXHfjViaQpb1LIJghqiQmBren8tLj
-         n04gmVioZOoayyHI9GTaWBG3xHeXmpgjHUrQ3DddXLH5ctRy+ApL8pC3svPTUrqj/5
-         w2odVfjAL3k2GxxxZl9RUAy7ejiALpWJjPqIsV1JMbyNIRKILs3rc5/c9ABj7MVi0H
-         N5ctSuh59fxAZFmGNL98HJKL+5xVeKBUgF41NVB+vXhkx7EBykJ6vlhYNMINjGrhNo
-         tYwPdQAK+dGGQ==
-Received: by mail-vk1-f180.google.com with SMTP id u198so9582009vkb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 18:50:34 -0800 (PST)
-X-Gm-Message-State: AOAM532AdNJmK7HI1XQTI924zNWKcfLr/SlN+AlXuqBlcEjlxrR/dX1q
-        1ozqGweqHP53p/Xvx/wS9H6d2XQU/wx84FwRp0Y=
-X-Google-Smtp-Source: ABdhPJzvDqhQZx/p+ZI7zhCogaKYr2yrupJ8fXeRF/T5xQWwbyCq0/Pf0bL726umzqGnJjUm/4FSEsdZiPeVHUsEPss=
-X-Received: by 2002:a1f:a4c5:: with SMTP id n188mr5539818vke.35.1640659833369;
- Mon, 27 Dec 2021 18:50:33 -0800 (PST)
+        Mon, 27 Dec 2021 22:01:46 -0500
+HMM_SOURCE_IP: 172.18.0.48:59792.1533738434
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-10.133.11.244 (unknown [172.18.0.48])
+        by chinatelecom.cn (HERMES) with SMTP id BED78280171;
+        Tue, 28 Dec 2021 11:01:40 +0800 (CST)
+X-189-SAVE-TO-SEND: sunshouxin@chinatelecom.cn
+Received: from  ([172.18.0.48])
+        by app0024 with ESMTP id 57ab016d9e394e85be204bc8764b9ba3 for jay.vosburgh@canonical.com;
+        Tue, 28 Dec 2021 11:01:42 CST
+X-Transaction-ID: 57ab016d9e394e85be204bc8764b9ba3
+X-Real-From: sunshouxin@chinatelecom.cn
+X-Receive-IP: 172.18.0.48
+X-MEDUSA-Status: 0
+Sender: sunshouxin@chinatelecom.cn
+Message-ID: <db66dccf-0c84-d22d-fb2f-f99d3ce2371d@chinatelecom.cn>
+Date:   Tue, 28 Dec 2021 11:01:39 +0800
 MIME-Version: 1.0
-References: <20211227184851.2297759-1-nathan@kernel.org> <20211227184851.2297759-4-nathan@kernel.org>
- <CAJF2gTSB8rT=g_v=NAE1YmM_qNWAVj=H5mrnty-zPVXOKYCARg@mail.gmail.com>
- <CAJF2gTQJ1JoYm5P15jWOou8yDayERUuNj_caWxdcFQ=vDm30KA@mail.gmail.com>
- <CAJF2gTQdk4ZfTnNsXX4m8KoSTgJ+0-CEJ9AKD4R=8oNvs=espA@mail.gmail.com>
- <CAJF2gTTcYTn_SDkG7cDVbsOTLeF03Kt-xLzgxd8Z7PwHYmmZRg@mail.gmail.com> <Ycp0DsB68GWQ1eD6@archlinux-ax161>
-In-Reply-To: <Ycp0DsB68GWQ1eD6@archlinux-ax161>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 28 Dec 2021 10:50:22 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSK4sKbU1XkPN-kJvT=cFkBNr=HpVd-zMmRO78ZQGThuQ@mail.gmail.com>
-Message-ID: <CAJF2gTSK4sKbU1XkPN-kJvT=cFkBNr=HpVd-zMmRO78ZQGThuQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] csky: Fix function name in csky_alignment() and die()
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Brian Cain <bcain@codeaurora.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v5] net: bonding: Add support for IPV6 ns/na to
+ balance-alb/balance-tlb mode
+To:     Jay Vosburgh <jay.vosburgh@canonical.com>
+Cc:     vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn
+References: <20211224142512.44182-1-sunshouxin@chinatelecom.cn>
+ <24897.1640637370@famine>
+From:   =?UTF-8?B?5a2Z5a6I6ZGr?= <sunshouxin@chinatelecom.cn>
+In-Reply-To: <24897.1640637370@famine>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 10:19 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi Guo,
->
-> On Tue, Dec 28, 2021 at 10:01:11AM +0800, Guo Ren wrote:
-> > Hi Nathan & Eric,
-> >
-> > Seems Eric's patch is not in Linus tree, right? Abandoned?
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0e25498f8cd43c1b5aa327f373dd094e9a006da7
->
-> Correct, Eric's patch is not in Linus' tree. It is in his
-> signal-for-v5.17 branch, which is currently flowing into -next:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git/log/?h=signal-for-v5.17
->
-> Apologies for not spelling this out in the cover letter. Aside from a
-> review/ack/test, there should not be anything else that you need to do.
-Good
 
+在 2021/12/28 4:36, Jay Vosburgh 写道:
+> Sun Shouxin <sunshouxin@chinatelecom.cn> wrote:
 >
-> Cheers,
-> Nathan
->
-> > On Tue, Dec 28, 2021 at 9:53 AM Guo Ren <guoren@kernel.org> wrote:
-> > >
-> > > I would pick up csky's & make pull-request immediately.
-> > >
-> > > On Tue, Dec 28, 2021 at 9:47 AM Guo Ren <guoren@kernel.org> wrote:
-> > > >
-> > > > Sorry mm/fault.c is okay.
-> > > >
-> > > > Reviewed-by: Guo Ren <guoren@kernel.org>
-> > > >
-> > > > On Tue, Dec 28, 2021 at 9:46 AM Guo Ren <guoren@kernel.org> wrote:
-> > > > >
-> > > > > Hi Nathan,
-> > > > >
-> > > > > Three wrong parts in csky! you forgot mm/fault.c.
-> > > > >
-> > > > > Eric's patch seems not to cc me? Why arm64 is correct, csky is wrong. -_*!
-> > > > >
-> > > > > here is the wrong patch part:
-> > > > > diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-> > > > > index 9ae24e3b72be1..11a28cace2d25 100644
-> > > > > --- a/arch/arm64/mm/fault.c
-> > > > > +++ b/arch/arm64/mm/fault.c
-> > > > > @@ -302,7 +302,7 @@ static void die_kernel_fault(const char *msg,
-> > > > > unsigned long addr,
-> > > > > show_pte(addr);
-> > > > > die("Oops", regs, esr);
-> > > > > bust_spinlocks(0);
-> > > > > - do_exit(SIGKILL);
-> > > > > + make_task_dead(SIGKILL);
-> > > > > }
-> > > > > #ifdef CONFIG_KASAN_HW_TAGS
-> > > > > diff --git a/arch/csky/abiv1/alignment.c b/arch/csky/abiv1/alignment.c
-> > > > > index cb2a0d94a144d..5e2fb45d605cf 100644
-> > > > > --- a/arch/csky/abiv1/alignment.c
-> > > > > +++ b/arch/csky/abiv1/alignment.c
-> > > > > @@ -294,7 +294,7 @@ bad_area:
-> > > > > __func__, opcode, rz, rx, imm, addr);
-> > > > > show_regs(regs);
-> > > > > bust_spinlocks(0);
-> > > > > - do_exit(SIGKILL);
-> > > > > + make_dead_task(SIGKILL);
-> > > > > }
-> > > > > force_sig_fault(SIGBUS, BUS_ADRALN, (void __user *)addr);
-> > > > > diff --git a/arch/csky/kernel/traps.c b/arch/csky/kernel/traps.c
-> > > > > index e5fbf8653a215..88a47035b9256 100644
-> > > > > --- a/arch/csky/kernel/traps.c
-> > > > > +++ b/arch/csky/kernel/traps.c
-> > > > > @@ -109,7 +109,7 @@ void die(struct pt_regs *regs, const char *str)
-> > > > > if (panic_on_oops)
-> > > > > panic("Fatal exception");
-> > > > > if (ret != NOTIFY_STOP)
-> > > > > - do_exit(SIGSEGV);
-> > > > > + make_dead_task(SIGSEGV);
-> > > > > }
-> > > > > void do_trap(struct pt_regs *regs, int signo, int code, unsigned long addr)
-> > > > > diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
-> > > > > index 466ad949818a6..7215a46b6b8eb 100644
-> > > > > --- a/arch/csky/mm/fault.c
-> > > > > +++ b/arch/csky/mm/fault.c
-> > > > > @@ -67,7 +67,7 @@ static inline void no_context(struct pt_regs *regs,
-> > > > > unsigned long addr)
-> > > > > pr_alert("Unable to handle kernel paging request at virtual "
-> > > > > "addr 0x%08lx, pc: 0x%08lx\n", addr, regs->pc);
-> > > > > die(regs, "Oops");
-> > > > > - do_exit(SIGKILL);
-> > > > > + make_task_dead(SIGKILL);
-> > > > > }
-> > > > >
-> > > > > On Tue, Dec 28, 2021 at 2:50 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > > > >
-> > > > > > When building ARCH=csky defconfig:
-> > > > > >
-> > > > > > arch/csky/kernel/traps.c: In function 'die':
-> > > > > > arch/csky/kernel/traps.c:112:17: error: implicit declaration of function
-> > > > > > 'make_dead_task' [-Werror=implicit-function-declaration]
-> > > > > >   112 |                 make_dead_task(SIGSEGV);
-> > > > > >       |                 ^~~~~~~~~~~~~~
-> > > > > >
-> > > > > > The function's name is make_task_dead(), change it so there is no more
-> > > > > > build error.
-> > > > > >
-> > > > > > Fixes: 0e25498f8cd4 ("exit: Add and use make_task_dead.")
-> > > > > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > > > > ---
-> > > > > >  arch/csky/abiv1/alignment.c | 2 +-
-> > > > > >  arch/csky/kernel/traps.c    | 2 +-
-> > > > > >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > > > > >
-> > > > > > diff --git a/arch/csky/abiv1/alignment.c b/arch/csky/abiv1/alignment.c
-> > > > > > index 5e2fb45d605c..2df115d0e210 100644
-> > > > > > --- a/arch/csky/abiv1/alignment.c
-> > > > > > +++ b/arch/csky/abiv1/alignment.c
-> > > > > > @@ -294,7 +294,7 @@ void csky_alignment(struct pt_regs *regs)
-> > > > > >                                 __func__, opcode, rz, rx, imm, addr);
-> > > > > >                 show_regs(regs);
-> > > > > >                 bust_spinlocks(0);
-> > > > > > -               make_dead_task(SIGKILL);
-> > > > > > +               make_task_dead(SIGKILL);
-> > > > > >         }
-> > > > > >
-> > > > > >         force_sig_fault(SIGBUS, BUS_ADRALN, (void __user *)addr);
-> > > > > > diff --git a/arch/csky/kernel/traps.c b/arch/csky/kernel/traps.c
-> > > > > > index 88a47035b925..50481d12d236 100644
-> > > > > > --- a/arch/csky/kernel/traps.c
-> > > > > > +++ b/arch/csky/kernel/traps.c
-> > > > > > @@ -109,7 +109,7 @@ void die(struct pt_regs *regs, const char *str)
-> > > > > >         if (panic_on_oops)
-> > > > > >                 panic("Fatal exception");
-> > > > > >         if (ret != NOTIFY_STOP)
-> > > > > > -               make_dead_task(SIGSEGV);
-> > > > > > +               make_task_dead(SIGSEGV);
-> > > > > >  }
-> > > > > >
-> > > > > >  void do_trap(struct pt_regs *regs, int signo, int code, unsigned long addr)
-> > > > > > --
-> > > > > > 2.34.1
-> > > > > >
-> > > > >
-> > > > >
-> > > > > --
-> > > > > Best Regards
-> > > > >  Guo Ren
-> > > > >
-> > > > > ML: https://lore.kernel.org/linux-csky/
-> > > >
-> > > >
-> > > >
-> > > > --
-> > > > Best Regards
-> > > >  Guo Ren
-> > > >
-> > > > ML: https://lore.kernel.org/linux-csky/
-> > >
-> > >
-> > >
-> > > --
-> > > Best Regards
-> > >  Guo Ren
-> > >
-> > > ML: https://lore.kernel.org/linux-csky/
-> >
-> >
-> >
-> > --
-> > Best Regards
-> >  Guo Ren
-> >
-> > ML: https://lore.kernel.org/linux-csky/
+>> Since ipv6 neighbor solicitation and advertisement messages
+>> isn't handled gracefully in bonding6 driver, we can see packet
+>> drop due to inconsistency bewteen mac address in the option
+>> message and source MAC .
+>>
+>> Another examples is ipv6 neighbor solicitation and advertisement
+>> messages from VM via tap attached to host brighe, the src mac
+>> mighe be changed through balance-alb mode, but it is not synced
+>> with Link-layer address in the option message.
+>>
+>> The patch implements bond6's tx handle for ipv6 neighbor
+>> solicitation and advertisement messages.
+> 	I'm not sure what you've changed here for v5 as there's no
+> changelog, but I believe the observed problems to be a transmit side
+> effect (i.e., it is induced by the balance-tlb mode balancing of
+> outgoing traffic).  As such, the tlb side will rebalance all of the
+> traffic every ten seconds, so any MAC ND_OPT_*_LL_ADDR option
+> assignments in the outgoing NS/NA datagrams will only be valid for that
+> length of time, correct?
 
 
+Yes,  MAC ND_OPT_*_LL_ADDR option assignments in the outgoing NS/NA
+datagrams will only be valid for that length of time ,and then,
+it will be inconsistensy in the next ten seconds.
 
--- 
-Best Regards
- Guo Ren
 
-ML: https://lore.kernel.org/linux-csky/
+> 	The topology diagram and example that you've removed from the
+> commit log with v5 said, in part, that the issue arose because the
+> LL_ADDR option MAC didn't match the actual source MAC.  Since tlb mode
+> can reshuffle the flows every ten seconds, how did the proposed solution
+> work reliably?
+
+
+In function alb_set_nd_option, we will change the LL_ADDR option Mac
+to the source Mac. This could work in this conditon.
+
+
+>
+> 	In any event, my real question is whether simply disabling tlb
+> balancing for NS/NA datagrams will resolve the observed issues (i.e.,
+> have bond_xmit_tlb_slave_get return NULL for IPv6 NS/NA datagrams).
+> Doing so will cause all NS/NA traffic to egress through the active
+> interface.  There's already a test in your logic to check for the
+> tx_slave != bond->curr_active_slave, so presumably everything works
+> correctly if the NS/NA goes out on the curr_active_slave.  If the "edit
+> NS/NA datagrams" solution works even in the face of rebalance of
+> traffic, then would simply assigning all NS/NA traffic to the
+> curr_active_slave eliminate the problem?
+
+
+Yes, assigning all Ns/Na traffic to the curr_active_slave can resolve the
+difference between mac in the Ns/Na options with the source mac.
+But this makes the rlb doesn't work in the alb mode,
+one interface with bond6 will not receive any ingress packets.
+It is mismatch Bond6 specification.
+
+
+>
+> 	-J
+>
+>> Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
+>> ---
+>> drivers/net/bonding/bond_alb.c | 149 +++++++++++++++++++++++++++++++++
+>> 1 file changed, 149 insertions(+)
+>>
+>> diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
+>> index 533e476988f2..485e4863a365 100644
+>> --- a/drivers/net/bonding/bond_alb.c
+>> +++ b/drivers/net/bonding/bond_alb.c
+>> @@ -22,6 +22,8 @@
+>> #include <asm/byteorder.h>
+>> #include <net/bonding.h>
+>> #include <net/bond_alb.h>
+>> +#include <net/ndisc.h>
+>> +#include <net/ip6_checksum.h>
+>>
+>> static const u8 mac_v6_allmcast[ETH_ALEN + 2] __long_aligned = {
+>> 	0x33, 0x33, 0x00, 0x00, 0x00, 0x01
+>> @@ -1269,6 +1271,137 @@ static int alb_set_mac_address(struct bonding *bond, void *addr)
+>> 	return res;
+>> }
+>>
+>> +/*determine if the packet is NA or NS*/
+>> +static bool __alb_determine_nd(struct icmp6hdr *hdr)
+>> +{
+>> +	if (hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
+>> +	    hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
+>> +		return true;
+>> +	}
+>> +
+>> +	return false;
+>> +}
+>> +
+>> +static void alb_change_nd_option(struct sk_buff *skb, void *data)
+>> +{
+>> +	struct nd_msg *msg = (struct nd_msg *)skb_transport_header(skb);
+>> +	struct nd_opt_hdr *nd_opt = (struct nd_opt_hdr *)msg->opt;
+>> +	struct net_device *dev = skb->dev;
+>> +	struct icmp6hdr *icmp6h = icmp6_hdr(skb);
+>> +	struct ipv6hdr *ip6hdr = ipv6_hdr(skb);
+>> +	u8 *lladdr = NULL;
+>> +	u32 ndoptlen = skb_tail_pointer(skb) - (skb_transport_header(skb) +
+>> +				offsetof(struct nd_msg, opt));
+>> +
+>> +	while (ndoptlen) {
+>> +		int l;
+>> +
+>> +		switch (nd_opt->nd_opt_type) {
+>> +		case ND_OPT_SOURCE_LL_ADDR:
+>> +		case ND_OPT_TARGET_LL_ADDR:
+>> +			lladdr = ndisc_opt_addr_data(nd_opt, dev);
+>> +			break;
+>> +
+>> +		default:
+>> +			lladdr = NULL;
+>> +			break;
+>> +		}
+>> +
+>> +		l = nd_opt->nd_opt_len << 3;
+>> +
+>> +		if (ndoptlen < l || l == 0)
+>> +			return;
+>> +
+>> +		if (lladdr) {
+>> +			memcpy(lladdr, data, dev->addr_len);
+>> +			icmp6h->icmp6_cksum = 0;
+>> +
+>> +			icmp6h->icmp6_cksum = csum_ipv6_magic(&ip6hdr->saddr,
+>> +							      &ip6hdr->daddr,
+>> +						ntohs(ip6hdr->payload_len),
+>> +						IPPROTO_ICMPV6,
+>> +						csum_partial(icmp6h,
+>> +							     ntohs(ip6hdr->payload_len), 0));
+>> +			return;
+>> +		}
+>> +		ndoptlen -= l;
+>> +		nd_opt = ((void *)nd_opt) + l;
+>> +	}
+>> +}
+>> +
+>> +static u8 *alb_get_lladdr(struct sk_buff *skb)
+>> +{
+>> +	struct nd_msg *msg = (struct nd_msg *)skb_transport_header(skb);
+>> +	struct nd_opt_hdr *nd_opt = (struct nd_opt_hdr *)msg->opt;
+>> +	struct net_device *dev = skb->dev;
+>> +	u8 *lladdr = NULL;
+>> +	u32 ndoptlen = skb_tail_pointer(skb) - (skb_transport_header(skb) +
+>> +				offsetof(struct nd_msg, opt));
+>> +
+>> +	while (ndoptlen) {
+>> +		int l;
+>> +
+>> +		switch (nd_opt->nd_opt_type) {
+>> +		case ND_OPT_SOURCE_LL_ADDR:
+>> +		case ND_OPT_TARGET_LL_ADDR:
+>> +			lladdr = ndisc_opt_addr_data(nd_opt, dev);
+>> +			break;
+>> +
+>> +		default:
+>> +			break;
+>> +		}
+>> +
+>> +		l = nd_opt->nd_opt_len << 3;
+>> +
+>> +		if (ndoptlen < l || l == 0)
+>> +			return NULL;
+>> +
+>> +		if (lladdr)
+>> +			return lladdr;
+>> +
+>> +		ndoptlen -= l;
+>> +		nd_opt = ((void *)nd_opt) + l;
+>> +	}
+>> +
+>> +	return lladdr;
+>> +}
+>> +
+>> +static void alb_set_nd_option(struct sk_buff *skb, struct bonding *bond,
+>> +			      struct slave *tx_slave)
+>> +{
+>> +	struct ipv6hdr *ip6hdr;
+>> +	struct icmp6hdr *hdr;
+>> +
+>> +	if (skb->protocol == htons(ETH_P_IPV6)) {
+>> +		if (tx_slave && tx_slave !=
+>> +		    rcu_access_pointer(bond->curr_active_slave)) {
+>> +			ip6hdr = ipv6_hdr(skb);
+>> +			if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
+>> +				hdr = icmp6_hdr(skb);
+>> +				if (__alb_determine_nd(hdr))
+>> +					alb_change_nd_option(skb, tx_slave->dev->dev_addr);
+>> +			}
+>> +		}
+>> +	}
+>> +}
+>> +
+>> +static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
+>> +{
+>> +	struct ipv6hdr *ip6hdr;
+>> +	struct icmp6hdr *hdr;
+>> +
+>> +	if (skb->protocol == htons(ETH_P_IPV6)) {
+>> +		ip6hdr = ipv6_hdr(skb);
+>> +		if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
+>> +			hdr = icmp6_hdr(skb);
+>> +			if (__alb_determine_nd(hdr))
+>> +				return true;
+>> +		}
+>> +	}
+>> +
+>> +	return false;
+>> +}
+>> +
+>> /************************ exported alb functions ************************/
+>>
+>> int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
+>> @@ -1350,6 +1483,9 @@ struct slave *bond_xmit_tlb_slave_get(struct bonding *bond,
+>> 		switch (skb->protocol) {
+>> 		case htons(ETH_P_IP):
+>> 		case htons(ETH_P_IPV6):
+>> +			if (alb_determine_nd(skb, bond))
+>> +				break;
+>> +
+>> 			hash_index = bond_xmit_hash(bond, skb);
+>> 			if (bond->params.tlb_dynamic_lb) {
+>> 				tx_slave = tlb_choose_channel(bond,
+>> @@ -1446,6 +1582,18 @@ struct slave *bond_xmit_alb_slave_get(struct bonding *bond,
+>> 			break;
+>> 		}
+>>
+>> +		if (alb_determine_nd(skb, bond)) {
+>> +			u8 *lladdr;
+>> +
+>> +			lladdr = alb_get_lladdr(skb);
+>> +			if (lladdr) {
+>> +				if (!bond_slave_has_mac_rx(bond, lladdr)) {
+>> +					do_tx_balance = false;
+>> +					break;
+>> +				}
+>> +			}
+>> +		}
+>> +
+>> 		hash_start = (char *)&ip6hdr->daddr;
+>> 		hash_size = sizeof(ip6hdr->daddr);
+>> 		break;
+>> @@ -1489,6 +1637,7 @@ netdev_tx_t bond_alb_xmit(struct sk_buff *skb, struct net_device *bond_dev)
+>> 	struct slave *tx_slave = NULL;
+>>
+>> 	tx_slave = bond_xmit_alb_slave_get(bond, skb);
+>> +	alb_set_nd_option(skb, bond, tx_slave);
+>> 	return bond_do_alb_xmit(skb, bond, tx_slave);
+>> }
+>>
+>>
+>> base-commit: 7a29b11da9651ef6a970e2f6bfd276f053aeb06a
+>> -- 
+>> 2.27.0
+>>
+> ---
+> 	-Jay Vosburgh, jay.vosburgh@canonical.com

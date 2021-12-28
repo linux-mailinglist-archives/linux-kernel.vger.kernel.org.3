@@ -2,160 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC1E4806EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 08:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8D24806EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 08:12:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235085AbhL1HLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 02:11:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
+        id S235227AbhL1HMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 02:12:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233209AbhL1HLE (ORCPT
+        with ESMTP id S233209AbhL1HMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 02:11:04 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D82C061574;
-        Mon, 27 Dec 2021 23:11:04 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id l16so879831plg.10;
-        Mon, 27 Dec 2021 23:11:04 -0800 (PST)
+        Tue, 28 Dec 2021 02:12:20 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CD5C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 23:12:20 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id r16-20020a17090a0ad000b001b276aa3aabso7400153pje.0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Dec 2021 23:12:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:organization:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=+IdFBI5qMMSAm1kwvXkktu8DMOSEDcrS5FdpQLP9xxg=;
-        b=kykFD60dLbUyZJfF4krhjUbaf0G1oEBzEnXk75UQUfB/VUz0Wmifsr/UQi86XfV/bj
-         lgn/aYkC/aYbqb3nNH7NbplZwOG8BR2xyPH9QtLRYDl7RmERBvTY++CIwVMWQ4T6L8zS
-         LdhbOSGI5FbrqUxNvxTy2Au9qPRaVp5QLgxL5SVNqbevds+lQvl/3UQDXLmOudp8FIRn
-         pG9ZenMLfgs7Oqf5+TpkvVagx2kRYDVLJNQFSppIl0DPZywEdS9aMu3XLA+nzuTGWh8Z
-         33KCbwBhgYEi6B9dTTRHGVclmNbRtvM5IhnRVv5mDGGPsUbq7qExSh6JP5MgR80ik4Qh
-         /pkQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NXYVCRlkl1arj3e8WvF9NDZ27UwRswxMzQ9HSWmcWkI=;
+        b=skfkrXnoE6gcXNsZO24JsoWju8VO7ddjO/I2mgv+T/TCep2bZbtmSO1O6ccPFzd5sD
+         eFevQpVM1RXH/UkCEKzds05KO+5Kw14kClxop8CYk0tOqi8JG1EZboFb1FRhnmZ46gSx
+         njV/5Nc+WWANbyAfOxa0uNzAy4a2qQ93p9JCAUyFVV4Sm/YCLhmuw2UFMPOq/YYslhzn
+         lVDGd2co3ae6ImuSAbr8bUHlNJ58xtdeMLBRNgy7xL/ecBfYwcqD53//q2/QyMlWRmQK
+         hkYw8wmshBE/+X1bq37jhosbWYqdBFPviHqGqAOqSzvrzYm9T9jQQOT92N7BVJam27Eo
+         JvRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=+IdFBI5qMMSAm1kwvXkktu8DMOSEDcrS5FdpQLP9xxg=;
-        b=Mbsi1L9o8T+KnufH3jUAJ61BcImk+j52v0ZG9Kon80dRiI8Oo40M+74yV/hUvwozfz
-         i7WYYbNJ5K0i0sbSF7DOvMhV21g7fhFTSsu0gZn1lAHrv33I2OW0ij/a/vMkZvQR12QH
-         xsYQ0g+NQC/FRjUIgGbSoHX4CqDeKsNUmIxKvkBuJ684gx0bqFVLspw8YpM8fjsKECUv
-         uJH0oOvlmSBJePNT5MfHGf7GINeIT9YHX5qwI1ZHvAxoFnyXl4T7rOCGcjT5Adl7mNmd
-         g1kveTYOKgP2sQWkilPFtxui9YdHe7soFwWCbinGVtvEEAgpG/DO7V4MugG0v9xv2kRT
-         u05g==
-X-Gm-Message-State: AOAM531eiArNhwSC0yWX6wZiNJ2oMmsJjZKHqb/Jh26MR3xFSr/WkSQp
-        5vFtyTpCx4i2sYgHtvIxI/0=
-X-Google-Smtp-Source: ABdhPJxEzFT9zRZhA9NXfiSp5ExlhdDYVHRxmp8dICXlmV8w7mKmlnkaBybjahzKqQmoDiKCv5C8ng==
-X-Received: by 2002:a17:90b:1c8d:: with SMTP id oo13mr24723375pjb.239.1640675464248;
-        Mon, 27 Dec 2021 23:11:04 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id 27sm14039365pgx.81.2021.12.27.23.11.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Dec 2021 23:11:03 -0800 (PST)
-Message-ID: <d80f6161-e327-f374-4caf-016de1a77cc3@gmail.com>
-Date:   Tue, 28 Dec 2021 15:10:52 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NXYVCRlkl1arj3e8WvF9NDZ27UwRswxMzQ9HSWmcWkI=;
+        b=uqK2YJz3nGSlNflefnSgW+7CpQUtiI/zd1Wl8SqPzaCcMoDkWXHt9cYtqe9S3tRs7q
+         5/Lm+LQRkLF06aoBtbqfxwU6c+G9azd34EgQ+G8jPJmKssKecRwlTLrjjk0Fo/XPSEv6
+         J9vEHqz+JJOGZnVgKcGqofbVQA4LK5LTT0Vi5kgT3wOGJQYZ2e+AScr7KHq6wNRcxxiS
+         UFwhHif1x2LR8A2P2EhCTGavnwFf71sJD9EGXksQbq1Vv0WuouLXxRrHxOK1S0+vo4HH
+         vQwQ1un0tBVeWySs7ybGbLuVw0UTI8pCwF9esEO5BptMWaV2M+oW6rlhoncgN2Jg8TSB
+         199A==
+X-Gm-Message-State: AOAM531FyJIspkWxxTrZu4MzC4yk5GnfBya+VgEsy8w9tUonhioEtR4L
+        39QXhTnuHz2ZX+y+KDwQD+ThjUervvWoXQ==
+X-Google-Smtp-Source: ABdhPJxgKDjojCITnOzByiXyEFe4d2LD2wr+DhASX8KwbIQB+3HttKHl2m/2SwjrTuCWYzRRF+QSYA==
+X-Received: by 2002:a17:90a:5d13:: with SMTP id s19mr25373225pji.117.1640675540049;
+        Mon, 27 Dec 2021 23:12:20 -0800 (PST)
+Received: from google.com ([2401:fa00:1:10:a817:45ab:1beb:f01a])
+        by smtp.gmail.com with ESMTPSA id a4sm21708498pjw.30.2021.12.27.23.12.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Dec 2021 23:12:19 -0800 (PST)
+Date:   Tue, 28 Dec 2021 15:12:16 +0800
+From:   Tzung-Bi Shih <tzungbi@google.com>
+To:     Trevor Wu <trevor.wu@mediatek.com>
+Cc:     broonie@kernel.org, tiwai@suse.com, robh+dt@kernel.org,
+        matthias.bgg@gmail.com, alsa-devel@alsa-project.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, jiaxin.yu@mediatek.com,
+        shumingf@realtek.com
+Subject: Re: [PATCH v2] ASoC: mediatek: mt8195: update control for RT5682
+ series
+Message-ID: <Ycq40KwY8SxUslXC@google.com>
+References: <20211228064821.27865-1-trevor.wu@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Like Xu <likexu@tencent.com>,
-        Dongli Cao <caodongli@kingsoft.com>,
-        Li RongQing <lirongqing@baidu.com>
-References: <20211222133428.59977-1-likexu@tencent.com>
- <CALMp9eRNsKMB6onhc-nhW-aMb14gK1PCtQ_CxOoyZ5RvLHfvEQ@mail.gmail.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-Organization: Tencent
-Subject: Re: [PATCH v2] KVM: X86: Emulate APERF/MPERF to report actual vCPU
- frequency
-In-Reply-To: <CALMp9eRNsKMB6onhc-nhW-aMb14gK1PCtQ_CxOoyZ5RvLHfvEQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211228064821.27865-1-trevor.wu@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jim,
-
-On 28/12/2021 2:33 am, Jim Mattson wrote:
-> On Wed, Dec 22, 2021 at 5:34 AM Like Xu <like.xu.linux@gmail.com> wrote:
->>
->> From: Like Xu <likexu@tencent.com>
->>
->> The aperf/mperf are used to report current CPU frequency after 7d5905dc14a.
->> But guest kernel always reports a fixed vCPU frequency in the /proc/cpuinfo,
->> which may confuse users especially when turbo is enabled on the host or
->> when the vCPU has a noisy high power consumption neighbour task.
->>
->> Most guests such as Linux will only read accesses to AMPERF msrs, where
->> we can passthrough registers to the vcpu as the fast-path (a performance win)
->> and once any write accesses are trapped, the emulation will be switched to
->> slow-path, which emulates guest APERF/MPERF values based on host values.
->> In emulation mode, the returned MPERF msr value will be scaled according
->> to the TSCRatio value.
->>
->> As a minimum effort, KVM exposes the AMPERF feature when the host TSC
->> has CONSTANT and NONSTOP features, to avoid the need for more code
->> to cover various coner cases coming from host power throttling transitions.
->>
->> The slow path code reveals an opportunity to refactor update_vcpu_amperf()
->> and get_host_amperf() to be more flexible and generic, to cover more
->> power-related msrs.
->>
->> Requested-by: Dongli Cao <caodongli@kingsoft.com>
->> Requested-by: Li RongQing <lirongqing@baidu.com>
->> Signed-off-by: Like Xu <likexu@tencent.com>
+On Tue, Dec 28, 2021 at 02:48:21PM +0800, Trevor Wu wrote:
+> Playback pop is observed and the root cause is the reference clock
+> provided by MT8195 is diabled before RT5682 finishes the control flow.
 > 
-> I am not sure that it is necessary for kvm to get involved in the
-> virtualization of APERF and MPERF at all, and I am highly skeptical of
-> the need for passing through the hardware MSRs to a guest. Due to
+> To ensure the reference clock supplied to RT5682 is disabled after RT5682
+> finishes all register controls. We replace BCLK with MCLK for RT5682
+> reference clock, and makes use of set_bias_level_post to handle MCLK
+> which guarantees MCLK is off after all RT5682 register access.
+> 
+> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
 
-The AMPERF is pass-through for read-only guest use cases.
-
-> concerns over potential side-channel exploits a la Platypus
-
-I agree that the enabling of AMPERF features increases the attack surface,
-like any other upstreamed features (SGX), and they're not design flaw, are they?
-
-As we know, KVM doesn't expose sufficient RAPL interface for Platypus. At least
-the vendors has patched Platypus while the cat and mouse game will not end.
-
-User space needs to choose whether to enable features based on the
-guest's level of trust, rather than trying to prevent it from enablement.
-
-> (https://platypusattack.com/), we are planning to provide only low
-> fidelity APERF/MPERF virtualization from userspace, using the
-> userspace MSR exiting mechanism. Of course, we should be able to do
-
-It works for other non time-sensitive MSRs.
-
-We have a long delay to walk the userspace MSR exiting mechanism
-for both APERF msr and MPERF msr, which is almost intolerable for
-frequent access guest reads. IMO, the low fidelity is not what the guest
-user wants and it defeats the motivation for introducing amperf on host.
-
-> that whether or not this change goes in, but I was wondering if you
-> could provide some more details regarding your use case(s).
-
-In addition to the advantages amperf brings in the kernel context
-(e.g. smarter scheduler policies based on different power conditions),
-
-Guest workload analysts are often curious about anomalous benchmark
-scores under predictive CPU isolation guaranteed by service providers,
-and they ask to look at actual vCPU frequencies to determine if the source
-of performance noise is coming from neighboring hardware threads
-particularly AVX or future AMX or other high power consumption neighbors.
-
-This AMPERF data helps the customers to decide whether the back-end pCPU
-is to be multiplexed or exclusive shared, or to upgrade to a faster HW model,
-without being tricked by the guest CPUID.
-
-IMO, this feature will be of value to most performance users. Any other comments?
-
-Thanks,
-Like Xu
+Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>

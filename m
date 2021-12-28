@@ -2,149 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB664805D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 04:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C86AC4805DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 04:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234699AbhL1DOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 22:14:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47086 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234588AbhL1DOa (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 22:14:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640661269;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NeCbNOBji4rPFI3COQOy5BBccZaCYqmF8SDZH/7UsfI=;
-        b=Dsll23iaYG7AlJTM/Xv7R5CsFhjm3p4EswMN9tp1LPAKMYbY4AV5EsvGPa5aP2nvipxtOC
-        jADq58Lzc9p9rmT4r7oFGOxggw569VsXepcvSfL8MtxB8jUIGRZkYDhlHzPsBOK4wldRRP
-        JmwO+j+LGOa64mobd7YYG5KKhDoZNjk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-186-N8BJkEcKNRq3D_bfoL7Slw-1; Mon, 27 Dec 2021 22:14:25 -0500
-X-MC-Unique: N8BJkEcKNRq3D_bfoL7Slw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7FAB11802508;
-        Tue, 28 Dec 2021 03:14:24 +0000 (UTC)
-Received: from [10.22.8.97] (unknown [10.22.8.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AA7B2E2EC;
-        Tue, 28 Dec 2021 03:14:23 +0000 (UTC)
-Message-ID: <6396f046-b292-1a73-8339-d32b611d9b7f@redhat.com>
-Date:   Mon, 27 Dec 2021 22:14:23 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [syzbot] INFO: rcu detected stall in ext4_file_write_iter (4)
+        id S234713AbhL1DYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 22:24:17 -0500
+Received: from mail-ma1ind01olkn0151.outbound.protection.outlook.com ([104.47.100.151]:30374
+        "EHLO IND01-MA1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234705AbhL1DYQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 22:24:16 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LAa65ydpFwBy/XXWPoF/GX3Uq5Gz7zgbc/yNGn0iYuCome6kBhvaGI/ws5mbYdLWvQTWf830658ZMxLKWg0dOJjTszh3mdSoA3JDaQSERQTazGjbQLHme5xJg82fwivlDuadl2uj4uTKHe3g71fXkh3428TG/GoLZldlHLv5k52VtyiAldIi58DQRh70gFYAYUYUtBctSnZMzN2q+NvFR889r8JDKlqMAFOD7DaySK6os9OgHKggJqR0r8FQ+YRvqUgMh3BltD+cvWaCY9Rsin44W7udt/xWduS56Ox4cnidNTs56aqSuVe6r7ZoDrMJGbWO0T9GiPfCw1zGe3w5mQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vguOGEfCm1abJgodbY2boe3EBE0Nh27WtShRl6UF/KY=;
+ b=Zv1flu5ydlO+gnA52OGgUiIgkHeIAmNHDySpCUOCPEIjlhAcoNefkhZ5Vpp2+r9DQerKj1W6wXYpcQBxhcxqf4G5nmAJYjGuC4WU3hNONPEvN62ZZCRfK3f+WDdWtwKKVGZ5bVps6NPREgXnfBEkgoeQ3xoGtYmc7+VAr44yhpyI4KjbrdPcHGB9LGyiiJd77LWzKH2Hjd8/QHzmCYGQF6mvnJD3YNKFM4ObuRxSGLH6Y+ndlY8Bp6zd3HIk0eVPa55adWVoauhxg6AY54JXLgMR9AZG8Qg6yYFgQ+1qid1KsrfAAv9ThHv67LB+2gK5dNf7MPjz6hQxWTVUQlGvwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vguOGEfCm1abJgodbY2boe3EBE0Nh27WtShRl6UF/KY=;
+ b=BrbfxSHjGWk+LZsUqBsXssgD97Wt8P5KPsCOQcars/v1BmYn1IcX7kpWLT6KRYF4MIaE1mkhFS3PB/HLUCfVy5tz14f4q8eIWW3LwNJ20mrvugTTuESOvS1Mek53VK/ZaMtmXQ9Kzf7prXFteRFbMffUwqO0P6I8J8c40JzFwjhrXNmPWdj66floebJlWnGU0rylOiFlATNRZiI4iQpaECaWErL3qoX3CYXGMHTYpw/QB2tpW6L684FwYMrjTib8YfIosSoYhruLVH0ActvqlzEJwCqL2g3dCNXQYBqOZHMzaxe/HO41Ikyr9CmgPh8q6evNLNqKWYqnuGq/8YYUJw==
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
+ by PN3PR01MB5686.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:7a::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.18; Tue, 28 Dec
+ 2021 03:24:09 +0000
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7%8]) with mapi id 15.20.4823.023; Tue, 28 Dec 2021
+ 03:24:09 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@intel.com>,
+        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+CC:     Orlando Chamberlain <redecorating@protonmail.com>,
+        "admin@kodeit.net" <admin@kodeit.net>
+Subject: [BUG] Slow bluetooth speed on Apple MacBook Pro 16,1
+Thread-Topic: [BUG] Slow bluetooth speed on Apple MacBook Pro 16,1
+Thread-Index: AQHX+5pgFv0y9sw7IUOZHdhR1j78nw==
+Date:   Tue, 28 Dec 2021 03:24:09 +0000
+Message-ID: <3352A23E-EA42-4366-BBAA-459CEAE6F51B@live.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Hillf Danton <hdanton@sina.com>,
-        syzbot <syzbot+03464269af631f4a4bdf@syzkaller.appspotmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        syzkaller-bugs@googlegroups.com
-References: <000000000000ef8cbb05d3bf84cd@google.com>
- <20211225005253.1962-1-hdanton@sina.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20211225005253.1962-1-hdanton@sina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [pr3XU+NsIMrzGmkzWQwUDYJEkbGp1SPpR6+SzczFW7+MZqp2Kr34VY/jL//mmIVc]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 61a43775-94a5-4e5a-84cb-08d9c9b18303
+x-ms-traffictypediagnostic: PN3PR01MB5686:EE_
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KbAWuFc+fU8ebEnkRV3LsZKGZ4RTNLvr0qOPwq99TmZYoCo9iosZdT18f+O+G3dWthfGyq/uLwUwt4+0mmtXdiD+3UuyodYhHnfsedrWcVaZmFfPuiop8ABzdE/jYc53ZilUYNp4+/pxZyyE8eIykuDXFsmtz6k3/dIFgnyt+dYk1/QimDBuc65c4spbC5KLGKap6Y96+AuWuIf+fE66MzhwyNF1XgprQqIrkzLnh6oi9ufawjs0HLjQWY+yYWLt1hGSgFSZBqklBdJVfNS+Yl8eurV7eM/AVg3Q/1naj0UuXiOUj/pXNnfzGnBYi13FBGlQzQImsfm+6u+e6zb6oT2JSvYWBMGFchjhMwTs4fblVpsHDAxxJOieAi2nOvbHcBA5I1uWU6ARPyaOKnaQiRKXgZc3MCQITGkeRjaf4Ps1GTWMPgS2iUXADVbeTn5uvC8XKUqQBb7KzrgWDYbW73bld2vYz3KdxC4Vs8a2luASB+zuOadvLywbkO2P4XuGmM7u8iLMKuqWxVUzquIQfqVQiz6a1+ng0IjwOG3pd/Z6ExS82JG3ZqVnr3+KCrK+400qDIhweM6XOC2sNHnGCw==
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ZGtPFomNyHDqf1qiZjg3RNi1UnPMqyCzSbdDnp/dRD0DjBXq1yw92ZNvPLR7?=
+ =?us-ascii?Q?z6fkUQzAVVXRK1LB5c/ZSJKUcEQnZI3yAfjw9Gz3Qp2W2k/q2bvURY9Gj3av?=
+ =?us-ascii?Q?qGQYOSqsRYSwJX0KTbryOQwoReo1KkaFL7NDyozMbUNRoPHbdiDNhU+xv8R9?=
+ =?us-ascii?Q?CFR7Pmwy85TKMPdrCv/5O8vv5qSJa9HutyCe+xCkInHraYoZ52aaoy8YyvmW?=
+ =?us-ascii?Q?tl7/DC2Huk+88uptmdXmomZ4bwWqKE82QJutM3Qw7kvzopQ/b8AVKv/fENhx?=
+ =?us-ascii?Q?HBWq9iWNmLtf6P1avf2Mdugkyh2zoWUgDWUfTE7FmerNpY1oZIo7kn+HiCkw?=
+ =?us-ascii?Q?sHjea+xv2Pyk+9OmLyhIHrEUaDdyIAaII+lxpgq4a98+sz/jXqb99JIVsErd?=
+ =?us-ascii?Q?PNuu+ewKLeQ/mCmtL41eUIx3geEk9VFRFe4vQPGwV0i+0WsaPgKF51Gr0B7R?=
+ =?us-ascii?Q?djjui5gbgbj/Fil9uLeZBNi5LUqr7CGR0mfdSv+7u/eNMYabjUdqNqzDlISx?=
+ =?us-ascii?Q?hQ0ZJlQTLxUMRF71uJmfE43TyHE5GRfGJqceAA6vjIUxyOJOfxXwwPSpTJJA?=
+ =?us-ascii?Q?YedDtRhdlAWxudJR8xWxOyUY7B+TNPv3Mc/tQ0pBhEA08GBeqDMqYUXi4t3k?=
+ =?us-ascii?Q?msSUDqdo+YNWZuTmpdHWap7yqV81bCCBir2LA9tzkdB23CQy9O1FgIGPDAOV?=
+ =?us-ascii?Q?2ehsDvj4dNYaRvhjpPUepH8X/X280b/uX69PlytVGeroWrhFs+333MNrLUJk?=
+ =?us-ascii?Q?KuWLLVCiESNgQ2Xw9Nwyij52+ED273YoCA299XxnLlgejmXRX3mshI9eKf4s?=
+ =?us-ascii?Q?dNq6IssDmTcnnzKaOeYJ/fIcHGPZtMUe7Ot0+EKVWoQCNqVU3p17ty7xclmM?=
+ =?us-ascii?Q?2GmT7yqdCWMyF66W3cw2MM8iQADGK2Iz+V4iMTDv7qsVMP9MyBqAKlYz+oEW?=
+ =?us-ascii?Q?3vtbvJPPVZus/dndQXRfTzqDptPUyFq3HSWlv+wp4FC12XScpCYT1wlwYFH9?=
+ =?us-ascii?Q?iiDRkeiEDxjESJY2FEsfALpt2A=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1EECD95F5CC4A244A2E632A6A0B762BB@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61a43775-94a5-4e5a-84cb-08d9c9b18303
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Dec 2021 03:24:09.3628
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN3PR01MB5686
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The file transfer speed on MacBook Pro 16,1 from an Android device to Mac i=
+s too slow even if I transfer a file of a few Kbs. In case of a transfer fr=
+om Mac to my Android device, it simply fails.
 
-On 12/24/21 19:52, Hillf Danton wrote:
-> On Wed, 22 Dec 2021 09:33:26 -0800
->> syzbot found the following issue on:
->>
->> HEAD commit:    9eaa88c7036e Merge tag 'libata-5.16-rc6' of git://git.kern..
->> git tree:       upstream
->> console output: https://syzkaller.appspot.com/x/log.txt?x=142d4143b00000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=e3bdfd29b408d1b6
->> dashboard link: https://syzkaller.appspot.com/bug?extid=03464269af631f4a4bdf
->> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11b1537db00000
->> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=125de549b00000
->>
->> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->> Reported-by: syzbot+03464269af631f4a4bdf@syzkaller.appspotmail.com
->>
->> rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
->> 	(detected by 0, t=10502 jiffies, g=5509, q=170)
->> rcu: All QSes seen, last rcu_preempt kthread activity 8642 (4295000735-4294992093), jiffies_till_next_fqs=1, root ->qsmask 0x0
->> rcu: rcu_preempt kthread starved for 8643 jiffies! g5509 f0x2 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=0
->> rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
->> rcu: RCU grace-period kthread stack dump:
->> task:rcu_preempt     state:R  running task     stack:28208 pid:   14 ppid:     2 flags:0x00004000
->> Call Trace:
->>   <TASK>
->>   context_switch kernel/sched/core.c:4972 [inline]
->>   context_switch kernel/sched/core.c:4972 [inline] kernel/sched/core.c:6253
->>   __schedule+0xa9a/0x4940 kernel/sched/core.c:6253 kernel/sched/core.c:6253
->>   schedule+0xd2/0x260 kernel/sched/core.c:6326 kernel/sched/core.c:6326
->>   schedule_timeout+0x14a/0x2a0 kernel/time/timer.c:1881 kernel/time/timer.c:1881
->>   rcu_gp_fqs_loop+0x186/0x810 kernel/rcu/tree.c:1955 kernel/rcu/tree.c:1955
->>   rcu_gp_kthread+0x1de/0x320 kernel/rcu/tree.c:2128 kernel/rcu/tree.c:2128
->>   kthread+0x405/0x4f0 kernel/kthread.c:327 kernel/kthread.c:327
->>   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295 arch/x86/entry/entry_64.S:295
->>   </TASK>
->> rcu: Stack dump where RCU GP kthread last ran:
->> NMI backtrace for cpu 0
->> CPU: 0 PID: 3672 Comm: syz-executor549 Not tainted 5.16.0-rc5-syzkaller #0
->> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
->> Call Trace:
->>   <IRQ>
->>   __dump_stack lib/dump_stack.c:88 [inline]
->>   __dump_stack lib/dump_stack.c:88 [inline] lib/dump_stack.c:106
->>   dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106 lib/dump_stack.c:106
->>   nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111 lib/nmi_backtrace.c:111
->>   nmi_trigger_cpumask_backtrace+0x1b3/0x230 lib/nmi_backtrace.c:62 lib/nmi_backtrace.c:62
->>   trigger_single_cpu_backtrace include/linux/nmi.h:164 [inline]
->>   trigger_single_cpu_backtrace include/linux/nmi.h:164 [inline] kernel/rcu/tree_stall.h:481
->>   rcu_check_gp_kthread_starvation.cold+0x1fb/0x200 kernel/rcu/tree_stall.h:481 kernel/rcu/tree_stall.h:481
->>   print_other_cpu_stall kernel/rcu/tree_stall.h:586 [inline]
->>   check_cpu_stall kernel/rcu/tree_stall.h:729 [inline]
->>   rcu_pending kernel/rcu/tree.c:3878 [inline]
->>   print_other_cpu_stall kernel/rcu/tree_stall.h:586 [inline] kernel/rcu/tree.c:2597
->>   check_cpu_stall kernel/rcu/tree_stall.h:729 [inline] kernel/rcu/tree.c:2597
->>   rcu_pending kernel/rcu/tree.c:3878 [inline] kernel/rcu/tree.c:2597
->>   rcu_sched_clock_irq+0x2125/0x2200 kernel/rcu/tree.c:2597 kernel/rcu/tree.c:2597
->>   update_process_times+0x16d/0x200 kernel/time/timer.c:1785 kernel/time/timer.c:1785
->>   tick_sched_handle+0x9b/0x180 kernel/time/tick-sched.c:226 kernel/time/tick-sched.c:226
->>   tick_sched_timer+0x1b0/0x2d0 kernel/time/tick-sched.c:1428 kernel/time/tick-sched.c:1428
->>   __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
->>   __run_hrtimer kernel/time/hrtimer.c:1685 [inline] kernel/time/hrtimer.c:1749
->>   __hrtimer_run_queues+0x1c0/0xe50 kernel/time/hrtimer.c:1749 kernel/time/hrtimer.c:1749
->>   hrtimer_interrupt+0x31c/0x790 kernel/time/hrtimer.c:1811 kernel/time/hrtimer.c:1811
->>   local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1086 [inline]
->>   local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1086 [inline] arch/x86/kernel/apic/apic.c:1103
->>   __sysvec_apic_timer_interrupt+0x146/0x530 arch/x86/kernel/apic/apic.c:1103 arch/x86/kernel/apic/apic.c:1103
->>   sysvec_apic_timer_interrupt+0x8e/0xc0 arch/x86/kernel/apic/apic.c:1097 arch/x86/kernel/apic/apic.c:1097
->>   </IRQ>
->>   <TASK>
->>   asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:638 arch/x86/include/asm/idtentry.h:638
->> RIP: 0010:owner_on_cpu kernel/locking/rwsem.c:667 [inline]
-> The lock acquirer was spinning long enough to make RCU stall, and the
-> question is, if this is not reproducible, how was the report triggered?
-> Anything that syzbot is special in this case?
->
-> Thanks
-> 		Hillf
+Some logs that might be helpful :-
 
-The test was running on a CONFIG_PREEMPT kernel. So if the syzkaller 
-kthread is running at a higher priority than the rcu_preempt kthread, it 
-is possible for the rcu_preempt kthread to be starved of cpu time. The 
-rwsem optimistic spinning code will relinquish the cpu if there is a 
-higher priority thread running. Since rcu_preempt kthread did not seem 
-to be able to get the cpu, I suspect that it is probably caused by the 
-syzkaller thread having a higher priority.
-
-Cheers,
-Longman
-
+-- Logs begin at Fri 2021-11-26 21:34:04 IST, end at Tue 2021-12-28 08:38:1=
+6 IST. --
+Dec 28 08:28:29 MacBook kernel: Bluetooth: Core ver 2.22
+Dec 28 08:28:29 MacBook kernel: NET: Registered PF_BLUETOOTH protocol famil=
+y
+Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI device and connection manage=
+r initialized
+Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI socket layer initialized
+Dec 28 08:28:29 MacBook kernel: Bluetooth: L2CAP socket layer initialized
+Dec 28 08:28:29 MacBook kernel: Bluetooth: SCO socket layer initialized
+Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART driver ver 2.3
+Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol H4 registered
+Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol BCSP registere=
+d
+Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol LL registered
+Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol ATH3K register=
+ed
+Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol Three-wire (H5=
+) registered
+Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol Intel register=
+ed
+Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol Broadcom regis=
+tered
+Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol QCA registered
+Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol AG6XX register=
+ed
+Dec 28 08:28:29 MacBook kernel: Bluetooth: HCI UART protocol Marvell regist=
+ered
+Dec 28 08:28:29 MacBook kernel: Bluetooth: hci0: BCM: failed to write updat=
+e baudrate (-16)
+Dec 28 08:28:29 MacBook kernel: Bluetooth: hci0: Failed to set baudrate
+Dec 28 08:28:29 MacBook kernel: Bluetooth: hci0: BCM: chip id 150
+Dec 28 08:28:29 MacBook kernel: Bluetooth: hci0: BCM: features 0x07
+Dec 28 08:28:29 MacBook kernel: Bluetooth: hci0: BCM4364B3 Trinidad Olympic=
+ GEN (MFG)
+Dec 28 08:28:29 MacBook kernel: Bluetooth: hci0: BCM (001.016.075) build 00=
+99
+Dec 28 08:28:29 MacBook kernel: Bluetooth: hci0: BCM: firmware Patch file n=
+ot found, tried:
+Dec 28 08:28:29 MacBook kernel: Bluetooth: hci0: BCM: 'brcm/BCM.hcd'
+Dec 28 08:28:40 MacBook kernel: Bluetooth: BNEP (Ethernet Emulation) ver 1.=
+3
+Dec 28 08:28:40 MacBook kernel: Bluetooth: BNEP filters: protocol multicast
+Dec 28 08:28:40 MacBook kernel: Bluetooth: BNEP socket layer initialized
+Dec 28 08:35:02 MacBook kernel: Bluetooth: RFCOMM TTY layer initialized
+Dec 28 08:35:02 MacBook kernel: Bluetooth: RFCOMM socket layer initialized
+Dec 28 08:35:02 MacBook kernel: Bluetooth: RFCOMM ver 1.11=

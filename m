@@ -2,30 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 097E3480C7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 19:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF33480C88
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 19:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237012AbhL1SXv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Dec 2021 13:23:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52390 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231811AbhL1SXv (ORCPT
+        id S237045AbhL1S0C convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Dec 2021 13:26:02 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60508 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236081AbhL1S0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 13:23:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B12C061574;
-        Tue, 28 Dec 2021 10:23:50 -0800 (PST)
+        Tue, 28 Dec 2021 13:26:01 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35262B81259;
-        Tue, 28 Dec 2021 18:23:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F56D6130D;
+        Tue, 28 Dec 2021 18:26:01 +0000 (UTC)
 Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp.kernel.org (Postfix) with ESMTPSA id D50D7C36AEC;
-        Tue, 28 Dec 2021 18:23:44 +0000 (UTC)
-Date:   Tue, 28 Dec 2021 18:29:28 +0000
+        by smtp.kernel.org (Postfix) with ESMTPSA id 71D48C36AE9;
+        Tue, 28 Dec 2021 18:25:57 +0000 (UTC)
+Date:   Tue, 28 Dec 2021 18:31:42 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
         <u.kleine-koenig@pengutronix.de>
@@ -34,13 +31,13 @@ Cc:     William Breathitt Gray <vilhelm.gray@gmail.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         linux-iio@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, David Lechner <david@lechnology.com>
-Subject: Re: [PATCH v2 22/23] counter: ti-eqep: Convert to new counter
- registration
-Message-ID: <20211228182928.72517f26@jic23-huawei>
-In-Reply-To: <20211227094526.698714-23-u.kleine-koenig@pengutronix.de>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 23/23] counter: remove old and now unused
+ registration API
+Message-ID: <20211228183142.7600fa76@jic23-huawei>
+In-Reply-To: <20211227094526.698714-24-u.kleine-koenig@pengutronix.de>
 References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
-        <20211227094526.698714-23-u.kleine-koenig@pengutronix.de>
+        <20211227094526.698714-24-u.kleine-koenig@pengutronix.de>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,89 +46,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Dec 2021 10:45:25 +0100
+On Mon, 27 Dec 2021 10:45:26 +0100
 Uwe Kleine-König         <u.kleine-koenig@pengutronix.de> wrote:
 
-> This fixes device lifetime issues where it was possible to free a live
-> struct device.
+> Usage of counter_register() yields issues in device lifetime tracking. All
+> drivers were converted to the new API, so the old one can go away.
 > 
-> Fixes: f213729f6796 ("counter: new TI eQEP driver")
 > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-It's nice that all these drivers are so similar...
+LGTM and nice patch set in general.  Just those few things in the
+patch introducing the new interfaces that need tidying up as far as I am
+concerned.
+
+Thanks,
 
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
 > ---
->  drivers/counter/ti-eqep.c | 29 +++++++++++++++--------------
->  1 file changed, 15 insertions(+), 14 deletions(-)
+>  drivers/counter/counter-core.c | 97 ++--------------------------------
+>  include/linux/counter.h        | 12 -----
+>  2 files changed, 4 insertions(+), 105 deletions(-)
 > 
-> diff --git a/drivers/counter/ti-eqep.c b/drivers/counter/ti-eqep.c
-> index abeda966e7be..3b49b492d182 100644
-> --- a/drivers/counter/ti-eqep.c
-> +++ b/drivers/counter/ti-eqep.c
-> @@ -368,13 +368,15 @@ static const struct regmap_config ti_eqep_regmap16_config = {
->  static int ti_eqep_probe(struct platform_device *pdev)
+> diff --git a/drivers/counter/counter-core.c b/drivers/counter/counter-core.c
+> index 8261567b6272..3f7dc5718423 100644
+> --- a/drivers/counter/counter-core.c
+> +++ b/drivers/counter/counter-core.c
+> @@ -38,8 +38,7 @@ static void counter_device_release(struct device *dev)
+>  	counter_chrdev_remove(counter);
+>  	ida_free(&counter_ida, dev->id);
+>  
+> -	if (!counter->legacy_device)
+> -		kfree(container_of(counter, struct counter_device_allochelper, counter));
+> +	kfree(container_of(counter, struct counter_device_allochelper, counter));
+>  }
+>  
+>  static struct device_type counter_device_type = {
+> @@ -62,76 +61,13 @@ static dev_t counter_devt;
+>   */
+>  void *counter_priv(const struct counter_device *const counter)
 >  {
->  	struct device *dev = &pdev->dev;
-> +	struct counter_device *counter;
->  	struct ti_eqep_cnt *priv;
->  	void __iomem *base;
->  	int err;
+> -	if (counter->legacy_device) {
+> -		return counter->priv;
+> -	} else {
+> -		struct counter_device_allochelper *ch =
+> -			container_of(counter, struct counter_device_allochelper, counter);
+> +	struct counter_device_allochelper *ch =
+> +		container_of(counter, struct counter_device_allochelper, counter);
 >  
-> -	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> -	if (!priv)
-> +	counter = devm_counter_alloc(dev, sizeof(*priv));
-> +	if (!counter)
->  		return -ENOMEM;
-> +	priv = counter_priv(counter);
+> -		return &ch->privdata;
+> -	}
+> +	return &ch->privdata;
+>  }
+>  EXPORT_SYMBOL_GPL(counter_priv);
 >  
->  	base = devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(base))
-> @@ -390,16 +392,15 @@ static int ti_eqep_probe(struct platform_device *pdev)
->  	if (IS_ERR(priv->regmap16))
->  		return PTR_ERR(priv->regmap16);
+> -/**
+> - * counter_register - register Counter to the system
+> - * @counter:	pointer to Counter to register
+> - *
+> - * This function registers a Counter to the system. A sysfs "counter" directory
+> - * will be created and populated with sysfs attributes correlating with the
+> - * Counter Signals, Synapses, and Counts respectively.
+> - *
+> - * RETURNS:
+> - * 0 on success, negative error number on failure.
+> - */
+> -int counter_register(struct counter_device *const counter)
+> -{
+> -	struct device *const dev = &counter->dev;
+> -	int id;
+> -	int err;
+> -
+> -	counter->legacy_device = true;
+> -
+> -	/* Acquire unique ID */
+> -	id = ida_alloc(&counter_ida, GFP_KERNEL);
+> -	if (id < 0)
+> -		return id;
+> -
+> -	mutex_init(&counter->ops_exist_lock);
+> -
+> -	/* Configure device structure for Counter */
+> -	dev->id = id;
+> -	dev->type = &counter_device_type;
+> -	dev->bus = &counter_bus_type;
+> -	dev->devt = MKDEV(MAJOR(counter_devt), id);
+> -	if (counter->parent) {
+> -		dev->parent = counter->parent;
+> -		dev->of_node = counter->parent->of_node;
+> -	}
+> -	device_initialize(dev);
+> -
+> -	err = counter_sysfs_add(counter);
+> -	if (err < 0)
+> -		goto err_free_id;
+> -
+> -	err = counter_chrdev_add(counter);
+> -	if (err < 0)
+> -		goto err_free_id;
+> -
+> -	err = cdev_device_add(&counter->chrdev, dev);
+> -	if (err < 0)
+> -		goto err_remove_chrdev;
+> -
+> -	return 0;
+> -
+> -err_remove_chrdev:
+> -	counter_chrdev_remove(counter);
+> -err_free_id:
+> -	put_device(dev);
+> -	return err;
+> -}
+> -EXPORT_SYMBOL_GPL(counter_register);
+> -
+>  /**
+>   * counter_alloc - allocate a counter_device
+>   * @sizeof_priv: size of the driver private data
+> @@ -255,31 +191,6 @@ static void devm_counter_release(void *counter)
+>  	counter_unregister(counter);
+>  }
 >  
-> -	priv->counter.name = dev_name(dev);
-> -	priv->counter.parent = dev;
-> -	priv->counter.ops = &ti_eqep_counter_ops;
-> -	priv->counter.counts = ti_eqep_counts;
-> -	priv->counter.num_counts = ARRAY_SIZE(ti_eqep_counts);
-> -	priv->counter.signals = ti_eqep_signals;
-> -	priv->counter.num_signals = ARRAY_SIZE(ti_eqep_signals);
-> -	priv->counter.priv = priv;
-> +	counter->name = dev_name(dev);
-> +	counter->parent = dev;
-> +	counter->ops = &ti_eqep_counter_ops;
-> +	counter->counts = ti_eqep_counts;
-> +	counter->num_counts = ARRAY_SIZE(ti_eqep_counts);
-> +	counter->signals = ti_eqep_signals;
-> +	counter->num_signals = ARRAY_SIZE(ti_eqep_signals);
->  
-> -	platform_set_drvdata(pdev, priv);
-> +	platform_set_drvdata(pdev, counter);
->  
->  	/*
->  	 * Need to make sure power is turned on. On AM33xx, this comes from the
-> @@ -409,7 +410,7 @@ static int ti_eqep_probe(struct platform_device *pdev)
->  	pm_runtime_enable(dev);
->  	pm_runtime_get_sync(dev);
->  
-> -	err = counter_register(&priv->counter);
-> +	err = counter_add(counter);
->  	if (err < 0) {
->  		pm_runtime_put_sync(dev);
->  		pm_runtime_disable(dev);
-> @@ -421,10 +422,10 @@ static int ti_eqep_probe(struct platform_device *pdev)
->  
->  static int ti_eqep_remove(struct platform_device *pdev)
+> -/**
+> - * devm_counter_register - Resource-managed counter_register
+> - * @dev:	device to allocate counter_device for
+> - * @counter:	pointer to Counter to register
+> - *
+> - * Managed counter_register. The Counter registered with this function is
+> - * automatically unregistered on driver detach. This function calls
+> - * counter_register internally. Refer to that function for more information.
+> - *
+> - * RETURNS:
+> - * 0 on success, negative error number on failure.
+> - */
+> -int devm_counter_register(struct device *dev,
+> -			  struct counter_device *const counter)
+> -{
+> -	int err;
+> -
+> -	err = counter_register(counter);
+> -	if (err < 0)
+> -		return err;
+> -
+> -	return devm_add_action_or_reset(dev, devm_counter_release, counter);
+> -}
+> -EXPORT_SYMBOL_GPL(devm_counter_register);
+> -
+>  static void devm_counter_put(void *counter)
 >  {
-> -	struct ti_eqep_cnt *priv = platform_get_drvdata(pdev);
-> +	struct counter_device *counter = platform_get_drvdata(pdev);
->  	struct device *dev = &pdev->dev;
+>  	counter_put(counter);
+> diff --git a/include/linux/counter.h b/include/linux/counter.h
+> index f1350a43cd48..9afa0f1e9cea 100644
+> --- a/include/linux/counter.h
+> +++ b/include/linux/counter.h
+> @@ -314,8 +314,6 @@ struct counter_device {
+>  	struct counter_comp *ext;
+>  	size_t num_ext;
 >  
-> -	counter_unregister(&priv->counter);
-> +	counter_unregister(counter);
->  	pm_runtime_put_sync(dev);
->  	pm_runtime_disable(dev);
+> -	void *priv;
+> -
+>  	struct device dev;
+>  	struct cdev chrdev;
+>  	struct list_head events_list;
+> @@ -327,25 +325,15 @@ struct counter_device {
+>  	spinlock_t events_in_lock;
+>  	struct mutex events_out_lock;
+>  	struct mutex ops_exist_lock;
+> -
+> -	/*
+> -	 * This can go away once all drivers are converted to
+> -	 * counter_alloc()/counter_add().
+> -	 */
+> -	bool legacy_device;
+>  };
 >  
+>  void *counter_priv(const struct counter_device *const counter);
+>  
+> -int counter_register(struct counter_device *const counter);
+> -
+>  struct counter_device *counter_alloc(size_t sizeof_priv);
+>  void counter_put(struct counter_device *const counter);
+>  int counter_add(struct counter_device *const counter);
+>  
+>  void counter_unregister(struct counter_device *const counter);
+> -int devm_counter_register(struct device *dev,
+> -			  struct counter_device *const counter);
+>  struct counter_device *devm_counter_alloc(struct device *dev,
+>  					  size_t sizeof_priv);
+>  int devm_counter_add(struct device *dev,
 

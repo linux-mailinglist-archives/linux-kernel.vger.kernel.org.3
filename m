@@ -2,96 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53318480852
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 11:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6470E480866
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 11:25:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233897AbhL1KRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 05:17:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbhL1KRw (ORCPT
+        id S236087AbhL1KZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 05:25:30 -0500
+Received: from mail-ua1-f44.google.com ([209.85.222.44]:39711 "EHLO
+        mail-ua1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230112AbhL1KZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 05:17:52 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F72C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 02:17:52 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id y16-20020a17090a6c9000b001b13ffaa625so21038230pjj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 02:17:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p/VayS/BsqiSiN6ukY1nlzS20RWmSqXpiNahjHrdYfs=;
-        b=mqJ+zuSLjx9zZFj3oo94UbK16dt1vE8SMoRs/PTFjMm2aX9CfHxzezaOoGbQIN5dJH
-         WjbuuCtbmOT90pqr6edA/FFjQIDcc5XhwtGHQg3nIaPTKksiWfwEz/JLDrvsuo0xGuRo
-         +89fP6UocmvfqAA2HEguqblCZ7FlS8g0n1hrSv4i9Lzt5GwODQHzlzdP3jvy+J74t19C
-         ThpoqXwqTKQqre/JyArMxgl9e2YxqjtstwPnNE3X6qiVt30AzAbvXKhk8/i+c7kW5HVo
-         Z7il6hZpddGc7KDSupj8VfH6YmcZLyyUxd1e6r8Gd2plutgGU6Z38ttxnAjB03k5g/qO
-         Cenw==
+        Tue, 28 Dec 2021 05:25:29 -0500
+Received: by mail-ua1-f44.google.com with SMTP id i6so31019339uae.6;
+        Tue, 28 Dec 2021 02:25:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p/VayS/BsqiSiN6ukY1nlzS20RWmSqXpiNahjHrdYfs=;
-        b=YWvTRpoIbhWBWLD6cMsRd2zIvUUOnTp2s532YSlAr57jTACcVSuLeC3h7pXgjQ5oOT
-         ZIPm4VeOqBrszYS5AcARFdwXvKbJ29jq+hXeiso0aq3kVq72vcvb10gkLlbK/MM6YPJu
-         R+wehWo9Mn1CjC1trgEmso1RUzdFok7CxslTk7Qvbe6vhiNDC+jakLfT1NCc/ZVx5FJK
-         JSoPxxCFPGKOYsy6wBOe82IIX6dEeIzl9BfNBiTbwKZxwZAk5RWg9gQInYqGfQTTgBYx
-         8nR0Zb9I5iAFj64/XNrnlwAkNdqGjXCNpWg0iCLeHy9w6f2nv2qzuN7lytgXeEacdjxM
-         9xmA==
-X-Gm-Message-State: AOAM5324W0/majU3dcpFy8OzP8Nbq1eGSzxkuefDJSa/Vl43EOPXepr8
-        CDs1mRoIrNO/toCi/5caWRw=
-X-Google-Smtp-Source: ABdhPJzMgkPnEDB3/JPDkBk1kIfG7elVB019OKw2Fkhr8+SouvbJ3YYsUFUWtQgjNV++iOu2zF4/Cg==
-X-Received: by 2002:a17:90b:384f:: with SMTP id nl15mr14747235pjb.91.1640686671744;
-        Tue, 28 Dec 2021 02:17:51 -0800 (PST)
-Received: from localhost.localdomain ([103.230.148.190])
-        by smtp.gmail.com with ESMTPSA id f7sm18795938pfe.71.2021.12.28.02.17.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 02:17:51 -0800 (PST)
-From:   Gautam Menghani <gautammenghani14@gmail.com>
-To:     nsaenz@kernel.org, gregkh@linuxfoundation.org,
-        stefan.wahren@i2se.com, gascoar@gmail.com, ojaswin98@gmail.com
-Cc:     Gautam Menghani <gautammenghani14@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] Drivers : vc04_services : Remove repeated word in vchiq log warning 
-Date:   Tue, 28 Dec 2021 15:46:15 +0530
-Message-Id: <20211228101615.5073-1-gautammenghani14@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=USyrHlhnUayu2FiWb0UtOnf6CbNGk+7whrqJXcO7yr8=;
+        b=Ils9S06OrixKYHfOaHMUXCN8wCwirLVGPw2/V8+G2C3heR21AdyUkQQOwN/92fZaiT
+         2KcV4moYMMYWUwGsTwCWOjWtjePgiA/v+DuNFq55qaRgOzCItSLXDNrppzic+rPXd7qb
+         36sCsrqjrkSSAPqVmzSw05a0hRB0IBxf6vvQxQH2X5OWruB/aP4Esn+E3cpX4q/I8i7L
+         SptrVc24zAqK4Brz0lmQD53UPjst1LG9aznT1VswGzsqI4gObozhu8j34Sd1ll3D/EhB
+         EAqZsmbrQPHNZU0Za3KmkDC2m6GBrFuUATn4AOZwUsSQCkKE3F5rxMjFxruTTVA/oEDH
+         5AxA==
+X-Gm-Message-State: AOAM532RTCqpswLCWwOYb93+eM9hAfwfyPLjGWWmq1ZKk6BTxQJ8uGHc
+        pAyp6zfvwlcvbB60xzFmBJ7AIEXUZy98Gg==
+X-Google-Smtp-Source: ABdhPJzQu1Z3UjOvm1F6NFqwJ/I7ez0bP7KXkdoWi0G8CnlWSU3cH3Ly4WimzcZxvY489SfFYLyexQ==
+X-Received: by 2002:a67:b142:: with SMTP id z2mr5778912vsl.39.1640687128313;
+        Tue, 28 Dec 2021 02:25:28 -0800 (PST)
+Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
+        by smtp.gmail.com with ESMTPSA id r9sm434173vke.20.2021.12.28.02.25.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Dec 2021 02:25:28 -0800 (PST)
+Received: by mail-ua1-f45.google.com with SMTP id o1so31276234uap.4;
+        Tue, 28 Dec 2021 02:25:28 -0800 (PST)
+X-Received: by 2002:a1f:9f04:: with SMTP id i4mr6011121vke.33.1640686631832;
+ Tue, 28 Dec 2021 02:17:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com> <20211227164317.4146918-6-schnelle@linux.ibm.com>
+In-Reply-To: <20211227164317.4146918-6-schnelle@linux.ibm.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 28 Dec 2021 11:17:00 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdW2qsZZqE_hAchoD7_41ak8btTZb0UZE6DsXDehhT63fg@mail.gmail.com>
+Message-ID: <CAMuHMdW2qsZZqE_hAchoD7_41ak8btTZb0UZE6DsXDehhT63fg@mail.gmail.com>
+Subject: Re: [RFC 05/32] char: impi, tpm: depend on HAS_IOPORT
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Corey Minyard <minyard@acm.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-integrity <linux-integrity@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a log warning in vhciq code, the word 'count' is repeated twice. 
-Remove repeated word 'count' from vhciq log warning.
-This change has been suggested by checkpatch.pl
+Hi Niklas,
 
-Signed-off-by: Gautam Menghani <gautammenghani14@gmail.com>
----
-Changes in v2:
-- Specify a description of why the patch is needed
-- Write a more descriptive subject
+Thanks for your patch!
 
- drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, Dec 27, 2021 at 5:51 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add this dependency and ifdef
+> sections of code using inb()/outb() as alternative access methods.
+>
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+>  drivers/char/Kconfig             |  3 ++-
 
-diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-index c650a32bcedf..6759a6261500 100644
---- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-+++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-@@ -1661,7 +1661,7 @@ vchiq_dump_service_use_state(struct vchiq_state *state)
- 				  service_data[i].clientid, service_data[i].use_count,
- 				  service_data[i].use_count ? nz : "");
- 	}
--	vchiq_log_warning(vchiq_susp_log_level, "----- VCHIQ use count count %d", peer_count);
-+	vchiq_log_warning(vchiq_susp_log_level, "----- VCHIQ use count %d", peer_count);
- 	vchiq_log_warning(vchiq_susp_log_level, "--- Overall vchiq instance use count %d",
- 			  vc_use_count);
- 
--- 
-2.25.1
+Your oneline-summary doesn't cover this file.
 
+>  drivers/char/ipmi/Makefile       | 11 ++++-------
+>  drivers/char/ipmi/ipmi_si_intf.c |  3 ++-
+>  drivers/char/ipmi/ipmi_si_pci.c  |  3 +++
+>  drivers/char/tpm/Kconfig         |  1 +
+>  drivers/char/tpm/tpm_infineon.c  | 14 ++++++++++----
+>  drivers/char/tpm/tpm_tis_core.c  | 19 ++++++++-----------
+>  7 files changed, 30 insertions(+), 24 deletions(-)
+>
+> diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
+> index 740811893c57..3d046e364e53 100644
+> --- a/drivers/char/Kconfig
+> +++ b/drivers/char/Kconfig
+> @@ -33,6 +33,7 @@ config TTY_PRINTK_LEVEL
+>  config PRINTER
+>         tristate "Parallel printer support"
+>         depends on PARPORT
+> +       depends on HAS_IOPORT
+
+Why? drivers/char/lp.c doesn't use I/O accessors, and should work with
+all parport drivers.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

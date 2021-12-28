@@ -2,106 +2,1369 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89ED04808B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 12:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E775A4808B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 12:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236423AbhL1LHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 06:07:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbhL1LHl (ORCPT
+        id S236435AbhL1LKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 06:10:09 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:52861 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231721AbhL1LKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 06:07:41 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D539FC061574;
-        Tue, 28 Dec 2021 03:07:40 -0800 (PST)
-Date:   Tue, 28 Dec 2021 11:07:36 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1640689657;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=WG1XEyBl3EM/S+6dLGtTge8B/XvWO4KRht4pjAI5fbo=;
-        b=SqF1R/SO7dZtk7Gg2lF47XxXB6yMyGGki/0wOONHCgHZGI9Vl/WnWCEe5qyrTLjzcFWg5R
-        QuOYuLxNA/XJAuN/l+9dRSdCwuvUPVQDGmKB+9pU3YwTWqM7E0RnJ0dIGyoEvv/2NZYDgp
-        TRFsWU9fB2gz/W0dg3sn+8Gc8USFgYHxhsCV7FakeGhUVfAMSoNzLODNgzelRdJgsDNRN6
-        tIif8YH4j3yJLcp9iUa0hlA2Awp7tkGt26ILbuxIKCHucJyLta4LrAOoKFtxUacIvdldbD
-        t+0i5c7ZNJBSJWvbYiT7CcEgYEnFtPZAYOgrGc28691qUvJeZqaWkkHLf3y1HA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1640689657;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=WG1XEyBl3EM/S+6dLGtTge8B/XvWO4KRht4pjAI5fbo=;
-        b=5e3US/GWHvrBsa8jDnWVc2Dwwi6NFg50GgAWC/gptgOD8Rjja4onze3EoavB4Sh+Jjub27
-        pBOQvcUgy0/iSnAQ==
-From:   "tip-bot2 for Zhang Zixun" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: ras/core] x86/mce/inject: Avoid out-of-bounds write when setting flags
-Cc:     Zhang Zixun <zhang133010@icloud.com>, Borislav Petkov <bp@suse.de>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
+        Tue, 28 Dec 2021 06:10:06 -0500
+Received: by mail-io1-f69.google.com with SMTP id k12-20020a0566022a4c00b005ebe737d989so7986437iov.19
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 03:10:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=JqI0B5z7CbQsl0vWIdhJmDHFtjL+iTSIPaZY9OyI7hg=;
+        b=kodILBmjDH9OJkrhccZn0+wiHXZgLoLhH1dL9kXkwHdFzp60rDdgTUYngzRptWtejj
+         HiR2DhW80GUUzzqHzh13Oy1Z/oCAN8kfDidldLsZPQTcdJBZZtjjOtvIb+0lmI6Na8P9
+         DNOYr3vcSvQWgmXDaRI5xU3VBhsgEtMfrMl9y9mlFmxCBCjw4TvjA9vsAetAdaISfZOe
+         JF87+ohFr7tI3MXlW19WAOdbk9HFvxnnL1MiEeNte6Qof2V6KXpQELM1rxKFeoupBIDE
+         MeV90kzfpbdaThMkgjCpp4S2XgzWNn+Q8L8BGzdYbB8taiFzWkA0azx7HBvfd5n98Lhk
+         3ZNw==
+X-Gm-Message-State: AOAM533oC4NBLaMAvi+wcicyRMCPfQUFOJcBTNe5AflP2GCeT6k0y0dk
+        syOsXjw7gAFvz/qk5x+adLKeDPnZYYlcvNDfbLa+dlxjA6nl
+X-Google-Smtp-Source: ABdhPJxnl+P/DjVvnxaJeg8m0DEocNyS94SbqAjAh7WblX5GSOzwuIgBN9YjbymhwGTi5IZts/zZB0La3bxR7WIoLgoG1+v93TiJ
 MIME-Version: 1.0
-Message-ID: <164068965610.16921.13613259509987305525.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6e02:12c2:: with SMTP id i2mr6753813ilm.95.1640689805979;
+ Tue, 28 Dec 2021 03:10:05 -0800 (PST)
+Date:   Tue, 28 Dec 2021 03:10:05 -0800
+In-Reply-To: <f1164c41-c262-0413-dd2f-cded7510b8b6@wanadoo.fr>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000012758405d432dd36@google.com>
+Subject: Re: [syzbot] KMSAN: uninit-value in alauda_check_media
+From:   syzbot <syzbot+e7d46eb426883fb97efd@syzkaller.appspotmail.com>
+To:     christophe.jaillet@wanadoo.fr, glider@google.com,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the ras/core branch of tip:
+Hello,
 
-Commit-ID:     de768416b203ac84e02a757b782a32efb388476f
-Gitweb:        https://git.kernel.org/tip/de768416b203ac84e02a757b782a32efb388476f
-Author:        Zhang Zixun <zhang133010@icloud.com>
-AuthorDate:    Mon, 27 Dec 2021 22:02:49 +01:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Tue, 28 Dec 2021 11:45:36 +01:00
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+KMSAN: uninit-value in scsi_mode_sense
 
-x86/mce/inject: Avoid out-of-bounds write when setting flags
+sd 2:0:0:0: [sdd] 0 512-byte logical blocks: (0 B/0 B)
+sd 2:0:0:0: [sdd] 0-byte physical blocks
+=====================================================
+BUG: KMSAN: uninit-value in scsi_mode_sense+0x1046/0x16d0 drivers/scsi/scsi_lib.c:2200
+ scsi_mode_sense+0x1046/0x16d0 drivers/scsi/scsi_lib.c:2200
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
 
-A contrived zero-length write, for example, by using write(2):
+Uninit was stored to memory at:
+ memcpy_from_page include/linux/highmem.h:346 [inline]
+ memcpy_from_bvec include/linux/bvec.h:207 [inline]
+ bio_copy_kern_endio_read+0x4a3/0x620 block/blk-map.c:403
+ bio_endio+0xa7f/0xac0 block/bio.c:1491
+ req_bio_endio block/blk-mq.c:674 [inline]
+ blk_update_request+0x1129/0x22d0 block/blk-mq.c:742
+ blk_mq_end_request block/blk-mq.c:821 [inline]
+ blk_mq_dispatch_rq_list+0x16f8/0x3f50 block/blk-mq.c:1685
+ __blk_mq_sched_dispatch_requests+0x58b/0x8d0 block/blk-mq-sched.c:325
+ blk_mq_sched_dispatch_requests+0x1b9/0x380 block/blk-mq-sched.c:358
+ __blk_mq_run_hw_queue+0x201/0x350 block/blk-mq.c:1785
+ __blk_mq_delay_run_hw_queue+0x21d/0x970 block/blk-mq.c:1862
+ blk_mq_run_hw_queue+0x57c/0x7b0 block/blk-mq.c:1915
+ blk_mq_sched_insert_request+0x3b8/0x790 block/blk-mq-sched.c:477
+ blk_execute_rq_nowait block/blk-exec.c:62 [inline]
+ blk_execute_rq+0x406/0x7c0 block/blk-exec.c:102
+ __scsi_execute+0x84d/0xe30 drivers/scsi/scsi_lib.c:244
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
 
-  ...
-  ret = write(fd, str, 0);
-  ...
+Uninit was created at:
+ __alloc_pages+0xbbf/0x1090 mm/page_alloc.c:5409
+ alloc_pages+0x8a5/0xb80
+ bio_copy_kern block/blk-map.c:449 [inline]
+ blk_rq_map_kern+0x813/0x1400 block/blk-map.c:640
+ __scsi_execute+0x4bd/0xe30 drivers/scsi/scsi_lib.c:229
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
 
-to the "flags" file causes:
+CPU: 0 PID: 51 Comm: kworker/u4:2 Not tainted 5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_unbound async_run_entry_fn
+=====================================================
+=====================================================
+BUG: KMSAN: uninit-value in set_disk_ro+0x2ab/0x310 block/genhd.c:1413
+ set_disk_ro+0x2ab/0x310 block/genhd.c:1413
+ sd_read_write_protect_flag drivers/scsi/sd.c:2712 [inline]
+ sd_revalidate_disk+0x5697/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
 
-  BUG: KASAN: stack-out-of-bounds in flags_write
-  Write of size 1 at addr ffff888019be7ddf by task writefile/3787
+Uninit was stored to memory at:
+ scsi_mode_sense+0x1656/0x16d0
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
 
-  CPU: 4 PID: 3787 Comm: writefile Not tainted 5.16.0-rc7+ #12
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+Uninit was stored to memory at:
+ memcpy_from_page include/linux/highmem.h:346 [inline]
+ memcpy_from_bvec include/linux/bvec.h:207 [inline]
+ bio_copy_kern_endio_read+0x4a3/0x620 block/blk-map.c:403
+ bio_endio+0xa7f/0xac0 block/bio.c:1491
+ req_bio_endio block/blk-mq.c:674 [inline]
+ blk_update_request+0x1129/0x22d0 block/blk-mq.c:742
+ blk_mq_end_request block/blk-mq.c:821 [inline]
+ blk_mq_dispatch_rq_list+0x16f8/0x3f50 block/blk-mq.c:1685
+ __blk_mq_sched_dispatch_requests+0x58b/0x8d0 block/blk-mq-sched.c:325
+ blk_mq_sched_dispatch_requests+0x1b9/0x380 block/blk-mq-sched.c:358
+ __blk_mq_run_hw_queue+0x201/0x350 block/blk-mq.c:1785
+ __blk_mq_delay_run_hw_queue+0x21d/0x970 block/blk-mq.c:1862
+ blk_mq_run_hw_queue+0x57c/0x7b0 block/blk-mq.c:1915
+ blk_mq_sched_insert_request+0x3b8/0x790 block/blk-mq-sched.c:477
+ blk_execute_rq_nowait block/blk-exec.c:62 [inline]
+ blk_execute_rq+0x406/0x7c0 block/blk-exec.c:102
+ __scsi_execute+0x84d/0xe30 drivers/scsi/scsi_lib.c:244
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
 
-due to accessing buf one char before its start.
+Uninit was created at:
+ __alloc_pages+0xbbf/0x1090 mm/page_alloc.c:5409
+ alloc_pages+0x8a5/0xb80
+ bio_copy_kern block/blk-map.c:449 [inline]
+ blk_rq_map_kern+0x813/0x1400 block/blk-map.c:640
+ __scsi_execute+0x4bd/0xe30 drivers/scsi/scsi_lib.c:229
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
 
-Prevent such out-of-bounds access.
+CPU: 0 PID: 51 Comm: kworker/u4:2 Tainted: G    B             5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_unbound async_run_entry_fn
+=====================================================
+=====================================================
+BUG: KMSAN: uninit-value in string_nocheck lib/vsprintf.c:638 [inline]
+BUG: KMSAN: uninit-value in string+0x4ec/0x6f0 lib/vsprintf.c:720
+ string_nocheck lib/vsprintf.c:638 [inline]
+ string+0x4ec/0x6f0 lib/vsprintf.c:720
+ vsnprintf+0x2222/0x3650 lib/vsprintf.c:2805
+ vscnprintf+0xbe/0x1c0 lib/vsprintf.c:2908
+ sdev_prefix_printk+0x4b9/0x5a0 drivers/scsi/scsi_logging.c:73
+ sd_read_write_protect_flag drivers/scsi/sd.c:2714 [inline]
+ sd_revalidate_disk+0x597c/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
 
-  [ bp: Productize into a proper patch. Link below is the next best
-    thing because the original mail didn't get archived on lore. ]
+Uninit was stored to memory at:
+ sd_read_write_protect_flag drivers/scsi/sd.c:2711 [inline]
+ sd_revalidate_disk+0x5b19/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
 
-Fixes: 0451d14d0561 ("EDAC, mce_amd_inj: Modify flags attribute to use string arguments")
-Signed-off-by: Zhang Zixun <zhang133010@icloud.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/linux-edac/YcnePfF1OOqoQwrX@zn.tnic/
----
- arch/x86/kernel/cpu/mce/inject.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Uninit was stored to memory at:
+ scsi_mode_sense+0x1656/0x16d0
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
 
-diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index 6eac840..5fbd7ff 100644
---- a/arch/x86/kernel/cpu/mce/inject.c
-+++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -363,7 +363,7 @@ static ssize_t flags_write(struct file *filp, const char __user *ubuf,
- 	char buf[MAX_FLAG_OPT_SIZE], *__buf;
- 	int err;
- 
--	if (cnt > MAX_FLAG_OPT_SIZE)
-+	if (!cnt || cnt > MAX_FLAG_OPT_SIZE)
- 		return -EINVAL;
- 
- 	if (copy_from_user(&buf, ubuf, cnt))
+Uninit was stored to memory at:
+ memcpy_from_page include/linux/highmem.h:346 [inline]
+ memcpy_from_bvec include/linux/bvec.h:207 [inline]
+ bio_copy_kern_endio_read+0x4a3/0x620 block/blk-map.c:403
+ bio_endio+0xa7f/0xac0 block/bio.c:1491
+ req_bio_endio block/blk-mq.c:674 [inline]
+ blk_update_request+0x1129/0x22d0 block/blk-mq.c:742
+ blk_mq_end_request block/blk-mq.c:821 [inline]
+ blk_mq_dispatch_rq_list+0x16f8/0x3f50 block/blk-mq.c:1685
+ __blk_mq_sched_dispatch_requests+0x58b/0x8d0 block/blk-mq-sched.c:325
+ blk_mq_sched_dispatch_requests+0x1b9/0x380 block/blk-mq-sched.c:358
+ __blk_mq_run_hw_queue+0x201/0x350 block/blk-mq.c:1785
+ __blk_mq_delay_run_hw_queue+0x21d/0x970 block/blk-mq.c:1862
+ blk_mq_run_hw_queue+0x57c/0x7b0 block/blk-mq.c:1915
+ blk_mq_sched_insert_request+0x3b8/0x790 block/blk-mq-sched.c:477
+ blk_execute_rq_nowait block/blk-exec.c:62 [inline]
+ blk_execute_rq+0x406/0x7c0 block/blk-exec.c:102
+ __scsi_execute+0x84d/0xe30 drivers/scsi/scsi_lib.c:244
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was created at:
+ __alloc_pages+0xbbf/0x1090 mm/page_alloc.c:5409
+ alloc_pages+0x8a5/0xb80
+ bio_copy_kern block/blk-map.c:449 [inline]
+ blk_rq_map_kern+0x813/0x1400 block/blk-map.c:640
+ __scsi_execute+0x4bd/0xe30 drivers/scsi/scsi_lib.c:229
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+CPU: 0 PID: 51 Comm: kworker/u4:2 Tainted: G    B             5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_unbound async_run_entry_fn
+=====================================================
+=====================================================
+BUG: KMSAN: uninit-value in string_nocheck lib/vsprintf.c:638 [inline]
+BUG: KMSAN: uninit-value in string+0x4ec/0x6f0 lib/vsprintf.c:720
+ string_nocheck lib/vsprintf.c:638 [inline]
+ string+0x4ec/0x6f0 lib/vsprintf.c:720
+ vsnprintf+0x2222/0x3650 lib/vsprintf.c:2805
+ vscnprintf+0xbe/0x1c0 lib/vsprintf.c:2908
+ sdev_prefix_printk+0x4b9/0x5a0 drivers/scsi/scsi_logging.c:73
+ sd_read_write_protect_flag drivers/scsi/sd.c:2714 [inline]
+ sd_revalidate_disk+0x597c/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ sd_read_write_protect_flag drivers/scsi/sd.c:2711 [inline]
+ sd_revalidate_disk+0x5b19/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ scsi_mode_sense+0x1656/0x16d0
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ memcpy_from_page include/linux/highmem.h:346 [inline]
+ memcpy_from_bvec include/linux/bvec.h:207 [inline]
+ bio_copy_kern_endio_read+0x4a3/0x620 block/blk-map.c:403
+ bio_endio+0xa7f/0xac0 block/bio.c:1491
+ req_bio_endio block/blk-mq.c:674 [inline]
+ blk_update_request+0x1129/0x22d0 block/blk-mq.c:742
+ blk_mq_end_request block/blk-mq.c:821 [inline]
+ blk_mq_dispatch_rq_list+0x16f8/0x3f50 block/blk-mq.c:1685
+ __blk_mq_sched_dispatch_requests+0x58b/0x8d0 block/blk-mq-sched.c:325
+ blk_mq_sched_dispatch_requests+0x1b9/0x380 block/blk-mq-sched.c:358
+ __blk_mq_run_hw_queue+0x201/0x350 block/blk-mq.c:1785
+ __blk_mq_delay_run_hw_queue+0x21d/0x970 block/blk-mq.c:1862
+ blk_mq_run_hw_queue+0x57c/0x7b0 block/blk-mq.c:1915
+ blk_mq_sched_insert_request+0x3b8/0x790 block/blk-mq-sched.c:477
+ blk_execute_rq_nowait block/blk-exec.c:62 [inline]
+ blk_execute_rq+0x406/0x7c0 block/blk-exec.c:102
+ __scsi_execute+0x84d/0xe30 drivers/scsi/scsi_lib.c:244
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was created at:
+ __alloc_pages+0xbbf/0x1090 mm/page_alloc.c:5409
+ alloc_pages+0x8a5/0xb80
+ bio_copy_kern block/blk-map.c:449 [inline]
+ blk_rq_map_kern+0x813/0x1400 block/blk-map.c:640
+ __scsi_execute+0x4bd/0xe30 drivers/scsi/scsi_lib.c:229
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+CPU: 0 PID: 51 Comm: kworker/u4:2 Tainted: G    B             5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_unbound async_run_entry_fn
+=====================================================
+=====================================================
+BUG: KMSAN: uninit-value in string_nocheck lib/vsprintf.c:638 [inline]
+BUG: KMSAN: uninit-value in string+0x4ec/0x6f0 lib/vsprintf.c:720
+ string_nocheck lib/vsprintf.c:638 [inline]
+ string+0x4ec/0x6f0 lib/vsprintf.c:720
+ vsnprintf+0x2222/0x3650 lib/vsprintf.c:2805
+ vscnprintf+0xbe/0x1c0 lib/vsprintf.c:2908
+ sdev_prefix_printk+0x4b9/0x5a0 drivers/scsi/scsi_logging.c:73
+ sd_read_write_protect_flag drivers/scsi/sd.c:2714 [inline]
+ sd_revalidate_disk+0x597c/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ sd_read_write_protect_flag drivers/scsi/sd.c:2711 [inline]
+ sd_revalidate_disk+0x5b19/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ scsi_mode_sense+0x1656/0x16d0
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ memcpy_from_page include/linux/highmem.h:346 [inline]
+ memcpy_from_bvec include/linux/bvec.h:207 [inline]
+ bio_copy_kern_endio_read+0x4a3/0x620 block/blk-map.c:403
+ bio_endio+0xa7f/0xac0 block/bio.c:1491
+ req_bio_endio block/blk-mq.c:674 [inline]
+ blk_update_request+0x1129/0x22d0 block/blk-mq.c:742
+ blk_mq_end_request block/blk-mq.c:821 [inline]
+ blk_mq_dispatch_rq_list+0x16f8/0x3f50 block/blk-mq.c:1685
+ __blk_mq_sched_dispatch_requests+0x58b/0x8d0 block/blk-mq-sched.c:325
+ blk_mq_sched_dispatch_requests+0x1b9/0x380 block/blk-mq-sched.c:358
+ __blk_mq_run_hw_queue+0x201/0x350 block/blk-mq.c:1785
+ __blk_mq_delay_run_hw_queue+0x21d/0x970 block/blk-mq.c:1862
+ blk_mq_run_hw_queue+0x57c/0x7b0 block/blk-mq.c:1915
+ blk_mq_sched_insert_request+0x3b8/0x790 block/blk-mq-sched.c:477
+ blk_execute_rq_nowait block/blk-exec.c:62 [inline]
+ blk_execute_rq+0x406/0x7c0 block/blk-exec.c:102
+ __scsi_execute+0x84d/0xe30 drivers/scsi/scsi_lib.c:244
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was created at:
+ __alloc_pages+0xbbf/0x1090 mm/page_alloc.c:5409
+ alloc_pages+0x8a5/0xb80
+ bio_copy_kern block/blk-map.c:449 [inline]
+ blk_rq_map_kern+0x813/0x1400 block/blk-map.c:640
+ __scsi_execute+0x4bd/0xe30 drivers/scsi/scsi_lib.c:229
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+CPU: 0 PID: 51 Comm: kworker/u4:2 Tainted: G    B             5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_unbound async_run_entry_fn
+=====================================================
+=====================================================
+BUG: KMSAN: uninit-value in string_nocheck lib/vsprintf.c:638 [inline]
+BUG: KMSAN: uninit-value in string+0x4ec/0x6f0 lib/vsprintf.c:720
+ string_nocheck lib/vsprintf.c:638 [inline]
+ string+0x4ec/0x6f0 lib/vsprintf.c:720
+ vsnprintf+0x2222/0x3650 lib/vsprintf.c:2805
+ vscnprintf+0xbe/0x1c0 lib/vsprintf.c:2908
+ sdev_prefix_printk+0x4b9/0x5a0 drivers/scsi/scsi_logging.c:73
+ sd_read_write_protect_flag drivers/scsi/sd.c:2714 [inline]
+ sd_revalidate_disk+0x597c/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ sd_read_write_protect_flag drivers/scsi/sd.c:2711 [inline]
+ sd_revalidate_disk+0x5b19/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ scsi_mode_sense+0x1656/0x16d0
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ memcpy_from_page include/linux/highmem.h:346 [inline]
+ memcpy_from_bvec include/linux/bvec.h:207 [inline]
+ bio_copy_kern_endio_read+0x4a3/0x620 block/blk-map.c:403
+ bio_endio+0xa7f/0xac0 block/bio.c:1491
+ req_bio_endio block/blk-mq.c:674 [inline]
+ blk_update_request+0x1129/0x22d0 block/blk-mq.c:742
+ blk_mq_end_request block/blk-mq.c:821 [inline]
+ blk_mq_dispatch_rq_list+0x16f8/0x3f50 block/blk-mq.c:1685
+ __blk_mq_sched_dispatch_requests+0x58b/0x8d0 block/blk-mq-sched.c:325
+ blk_mq_sched_dispatch_requests+0x1b9/0x380 block/blk-mq-sched.c:358
+ __blk_mq_run_hw_queue+0x201/0x350 block/blk-mq.c:1785
+ __blk_mq_delay_run_hw_queue+0x21d/0x970 block/blk-mq.c:1862
+ blk_mq_run_hw_queue+0x57c/0x7b0 block/blk-mq.c:1915
+ blk_mq_sched_insert_request+0x3b8/0x790 block/blk-mq-sched.c:477
+ blk_execute_rq_nowait block/blk-exec.c:62 [inline]
+ blk_execute_rq+0x406/0x7c0 block/blk-exec.c:102
+ __scsi_execute+0x84d/0xe30 drivers/scsi/scsi_lib.c:244
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was created at:
+ __alloc_pages+0xbbf/0x1090 mm/page_alloc.c:5409
+ alloc_pages+0x8a5/0xb80
+ bio_copy_kern block/blk-map.c:449 [inline]
+ blk_rq_map_kern+0x813/0x1400 block/blk-map.c:640
+ __scsi_execute+0x4bd/0xe30 drivers/scsi/scsi_lib.c:229
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+CPU: 0 PID: 51 Comm: kworker/u4:2 Tainted: G    B             5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_unbound async_run_entry_fn
+=====================================================
+sd 2:0:0:0: [sdd] Write Protect is off
+=====================================================
+BUG: KMSAN: uninit-value in hex_string+0x92b/0xa40 lib/vsprintf.c:1179
+ hex_string+0x92b/0xa40 lib/vsprintf.c:1179
+ pointer+0x3ae/0x2060 lib/vsprintf.c:2407
+ vsnprintf+0x1a9b/0x3650 lib/vsprintf.c:2809
+ vscnprintf+0xbe/0x1c0 lib/vsprintf.c:2908
+ sdev_prefix_printk+0x4b9/0x5a0 drivers/scsi/scsi_logging.c:73
+ sd_read_write_protect_flag drivers/scsi/sd.c:2716 [inline]
+ sd_revalidate_disk+0x5afc/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ memcpy_from_page include/linux/highmem.h:346 [inline]
+ memcpy_from_bvec include/linux/bvec.h:207 [inline]
+ bio_copy_kern_endio_read+0x4a3/0x620 block/blk-map.c:403
+ bio_endio+0xa7f/0xac0 block/bio.c:1491
+ req_bio_endio block/blk-mq.c:674 [inline]
+ blk_update_request+0x1129/0x22d0 block/blk-mq.c:742
+ blk_mq_end_request block/blk-mq.c:821 [inline]
+ blk_mq_dispatch_rq_list+0x16f8/0x3f50 block/blk-mq.c:1685
+ __blk_mq_sched_dispatch_requests+0x58b/0x8d0 block/blk-mq-sched.c:325
+ blk_mq_sched_dispatch_requests+0x1b9/0x380 block/blk-mq-sched.c:358
+ __blk_mq_run_hw_queue+0x201/0x350 block/blk-mq.c:1785
+ __blk_mq_delay_run_hw_queue+0x21d/0x970 block/blk-mq.c:1862
+ blk_mq_run_hw_queue+0x57c/0x7b0 block/blk-mq.c:1915
+ blk_mq_sched_insert_request+0x3b8/0x790 block/blk-mq-sched.c:477
+ blk_execute_rq_nowait block/blk-exec.c:62 [inline]
+ blk_execute_rq+0x406/0x7c0 block/blk-exec.c:102
+ __scsi_execute+0x84d/0xe30 drivers/scsi/scsi_lib.c:244
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was created at:
+ __alloc_pages+0xbbf/0x1090 mm/page_alloc.c:5409
+ alloc_pages+0x8a5/0xb80
+ bio_copy_kern block/blk-map.c:449 [inline]
+ blk_rq_map_kern+0x813/0x1400 block/blk-map.c:640
+ __scsi_execute+0x4bd/0xe30 drivers/scsi/scsi_lib.c:229
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+CPU: 0 PID: 51 Comm: kworker/u4:2 Tainted: G    B             5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_unbound async_run_entry_fn
+=====================================================
+=====================================================
+BUG: KMSAN: uninit-value in hex_string+0x962/0xa40 lib/vsprintf.c:1182
+ hex_string+0x962/0xa40 lib/vsprintf.c:1182
+ pointer+0x3ae/0x2060 lib/vsprintf.c:2407
+ vsnprintf+0x1a9b/0x3650 lib/vsprintf.c:2809
+ vscnprintf+0xbe/0x1c0 lib/vsprintf.c:2908
+ sdev_prefix_printk+0x4b9/0x5a0 drivers/scsi/scsi_logging.c:73
+ sd_read_write_protect_flag drivers/scsi/sd.c:2716 [inline]
+ sd_revalidate_disk+0x5afc/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ memcpy_from_page include/linux/highmem.h:346 [inline]
+ memcpy_from_bvec include/linux/bvec.h:207 [inline]
+ bio_copy_kern_endio_read+0x4a3/0x620 block/blk-map.c:403
+ bio_endio+0xa7f/0xac0 block/bio.c:1491
+ req_bio_endio block/blk-mq.c:674 [inline]
+ blk_update_request+0x1129/0x22d0 block/blk-mq.c:742
+ blk_mq_end_request block/blk-mq.c:821 [inline]
+ blk_mq_dispatch_rq_list+0x16f8/0x3f50 block/blk-mq.c:1685
+ __blk_mq_sched_dispatch_requests+0x58b/0x8d0 block/blk-mq-sched.c:325
+ blk_mq_sched_dispatch_requests+0x1b9/0x380 block/blk-mq-sched.c:358
+ __blk_mq_run_hw_queue+0x201/0x350 block/blk-mq.c:1785
+ __blk_mq_delay_run_hw_queue+0x21d/0x970 block/blk-mq.c:1862
+ blk_mq_run_hw_queue+0x57c/0x7b0 block/blk-mq.c:1915
+ blk_mq_sched_insert_request+0x3b8/0x790 block/blk-mq-sched.c:477
+ blk_execute_rq_nowait block/blk-exec.c:62 [inline]
+ blk_execute_rq+0x406/0x7c0 block/blk-exec.c:102
+ __scsi_execute+0x84d/0xe30 drivers/scsi/scsi_lib.c:244
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was created at:
+ __alloc_pages+0xbbf/0x1090 mm/page_alloc.c:5409
+ alloc_pages+0x8a5/0xb80
+ bio_copy_kern block/blk-map.c:449 [inline]
+ blk_rq_map_kern+0x813/0x1400 block/blk-map.c:640
+ __scsi_execute+0x4bd/0xe30 drivers/scsi/scsi_lib.c:229
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+CPU: 0 PID: 51 Comm: kworker/u4:2 Tainted: G    B             5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_unbound async_run_entry_fn
+=====================================================
+=====================================================
+BUG: KMSAN: uninit-value in hex_string+0x92b/0xa40 lib/vsprintf.c:1179
+ hex_string+0x92b/0xa40 lib/vsprintf.c:1179
+ pointer+0x3ae/0x2060 lib/vsprintf.c:2407
+ vsnprintf+0x1a9b/0x3650 lib/vsprintf.c:2809
+ vscnprintf+0xbe/0x1c0 lib/vsprintf.c:2908
+ sdev_prefix_printk+0x4b9/0x5a0 drivers/scsi/scsi_logging.c:73
+ sd_read_write_protect_flag drivers/scsi/sd.c:2716 [inline]
+ sd_revalidate_disk+0x5afc/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ memcpy_from_page include/linux/highmem.h:346 [inline]
+ memcpy_from_bvec include/linux/bvec.h:207 [inline]
+ bio_copy_kern_endio_read+0x4a3/0x620 block/blk-map.c:403
+ bio_endio+0xa7f/0xac0 block/bio.c:1491
+ req_bio_endio block/blk-mq.c:674 [inline]
+ blk_update_request+0x1129/0x22d0 block/blk-mq.c:742
+ blk_mq_end_request block/blk-mq.c:821 [inline]
+ blk_mq_dispatch_rq_list+0x16f8/0x3f50 block/blk-mq.c:1685
+ __blk_mq_sched_dispatch_requests+0x58b/0x8d0 block/blk-mq-sched.c:325
+ blk_mq_sched_dispatch_requests+0x1b9/0x380 block/blk-mq-sched.c:358
+ __blk_mq_run_hw_queue+0x201/0x350 block/blk-mq.c:1785
+ __blk_mq_delay_run_hw_queue+0x21d/0x970 block/blk-mq.c:1862
+ blk_mq_run_hw_queue+0x57c/0x7b0 block/blk-mq.c:1915
+ blk_mq_sched_insert_request+0x3b8/0x790 block/blk-mq-sched.c:477
+ blk_execute_rq_nowait block/blk-exec.c:62 [inline]
+ blk_execute_rq+0x406/0x7c0 block/blk-exec.c:102
+ __scsi_execute+0x84d/0xe30 drivers/scsi/scsi_lib.c:244
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was created at:
+ __alloc_pages+0xbbf/0x1090 mm/page_alloc.c:5409
+ alloc_pages+0x8a5/0xb80
+ bio_copy_kern block/blk-map.c:449 [inline]
+ blk_rq_map_kern+0x813/0x1400 block/blk-map.c:640
+ __scsi_execute+0x4bd/0xe30 drivers/scsi/scsi_lib.c:229
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+CPU: 0 PID: 51 Comm: kworker/u4:2 Tainted: G    B             5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_unbound async_run_entry_fn
+=====================================================
+=====================================================
+BUG: KMSAN: uninit-value in hex_string+0x962/0xa40 lib/vsprintf.c:1182
+ hex_string+0x962/0xa40 lib/vsprintf.c:1182
+ pointer+0x3ae/0x2060 lib/vsprintf.c:2407
+ vsnprintf+0x1a9b/0x3650 lib/vsprintf.c:2809
+ vscnprintf+0xbe/0x1c0 lib/vsprintf.c:2908
+ sdev_prefix_printk+0x4b9/0x5a0 drivers/scsi/scsi_logging.c:73
+ sd_read_write_protect_flag drivers/scsi/sd.c:2716 [inline]
+ sd_revalidate_disk+0x5afc/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ memcpy_from_page include/linux/highmem.h:346 [inline]
+ memcpy_from_bvec include/linux/bvec.h:207 [inline]
+ bio_copy_kern_endio_read+0x4a3/0x620 block/blk-map.c:403
+ bio_endio+0xa7f/0xac0 block/bio.c:1491
+ req_bio_endio block/blk-mq.c:674 [inline]
+ blk_update_request+0x1129/0x22d0 block/blk-mq.c:742
+ blk_mq_end_request block/blk-mq.c:821 [inline]
+ blk_mq_dispatch_rq_list+0x16f8/0x3f50 block/blk-mq.c:1685
+ __blk_mq_sched_dispatch_requests+0x58b/0x8d0 block/blk-mq-sched.c:325
+ blk_mq_sched_dispatch_requests+0x1b9/0x380 block/blk-mq-sched.c:358
+ __blk_mq_run_hw_queue+0x201/0x350 block/blk-mq.c:1785
+ __blk_mq_delay_run_hw_queue+0x21d/0x970 block/blk-mq.c:1862
+ blk_mq_run_hw_queue+0x57c/0x7b0 block/blk-mq.c:1915
+ blk_mq_sched_insert_request+0x3b8/0x790 block/blk-mq-sched.c:477
+ blk_execute_rq_nowait block/blk-exec.c:62 [inline]
+ blk_execute_rq+0x406/0x7c0 block/blk-exec.c:102
+ __scsi_execute+0x84d/0xe30 drivers/scsi/scsi_lib.c:244
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was created at:
+ __alloc_pages+0xbbf/0x1090 mm/page_alloc.c:5409
+ alloc_pages+0x8a5/0xb80
+ bio_copy_kern block/blk-map.c:449 [inline]
+ blk_rq_map_kern+0x813/0x1400 block/blk-map.c:640
+ __scsi_execute+0x4bd/0xe30 drivers/scsi/scsi_lib.c:229
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+CPU: 0 PID: 51 Comm: kworker/u4:2 Tainted: G    B             5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_unbound async_run_entry_fn
+=====================================================
+=====================================================
+BUG: KMSAN: uninit-value in hex_string+0x92b/0xa40 lib/vsprintf.c:1179
+ hex_string+0x92b/0xa40 lib/vsprintf.c:1179
+ pointer+0x3ae/0x2060 lib/vsprintf.c:2407
+ vsnprintf+0x1a9b/0x3650 lib/vsprintf.c:2809
+ vscnprintf+0xbe/0x1c0 lib/vsprintf.c:2908
+ sdev_prefix_printk+0x4b9/0x5a0 drivers/scsi/scsi_logging.c:73
+ sd_read_write_protect_flag drivers/scsi/sd.c:2716 [inline]
+ sd_revalidate_disk+0x5afc/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ memcpy_from_page include/linux/highmem.h:346 [inline]
+ memcpy_from_bvec include/linux/bvec.h:207 [inline]
+ bio_copy_kern_endio_read+0x4a3/0x620 block/blk-map.c:403
+ bio_endio+0xa7f/0xac0 block/bio.c:1491
+ req_bio_endio block/blk-mq.c:674 [inline]
+ blk_update_request+0x1129/0x22d0 block/blk-mq.c:742
+ blk_mq_end_request block/blk-mq.c:821 [inline]
+ blk_mq_dispatch_rq_list+0x16f8/0x3f50 block/blk-mq.c:1685
+ __blk_mq_sched_dispatch_requests+0x58b/0x8d0 block/blk-mq-sched.c:325
+ blk_mq_sched_dispatch_requests+0x1b9/0x380 block/blk-mq-sched.c:358
+ __blk_mq_run_hw_queue+0x201/0x350 block/blk-mq.c:1785
+ __blk_mq_delay_run_hw_queue+0x21d/0x970 block/blk-mq.c:1862
+ blk_mq_run_hw_queue+0x57c/0x7b0 block/blk-mq.c:1915
+ blk_mq_sched_insert_request+0x3b8/0x790 block/blk-mq-sched.c:477
+ blk_execute_rq_nowait block/blk-exec.c:62 [inline]
+ blk_execute_rq+0x406/0x7c0 block/blk-exec.c:102
+ __scsi_execute+0x84d/0xe30 drivers/scsi/scsi_lib.c:244
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was created at:
+ __alloc_pages+0xbbf/0x1090 mm/page_alloc.c:5409
+ alloc_pages+0x8a5/0xb80
+ bio_copy_kern block/blk-map.c:449 [inline]
+ blk_rq_map_kern+0x813/0x1400 block/blk-map.c:640
+ __scsi_execute+0x4bd/0xe30 drivers/scsi/scsi_lib.c:229
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+CPU: 0 PID: 51 Comm: kworker/u4:2 Tainted: G    B             5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_unbound async_run_entry_fn
+=====================================================
+=====================================================
+BUG: KMSAN: uninit-value in hex_string+0x962/0xa40 lib/vsprintf.c:1182
+ hex_string+0x962/0xa40 lib/vsprintf.c:1182
+ pointer+0x3ae/0x2060 lib/vsprintf.c:2407
+ vsnprintf+0x1a9b/0x3650 lib/vsprintf.c:2809
+ vscnprintf+0xbe/0x1c0 lib/vsprintf.c:2908
+ sdev_prefix_printk+0x4b9/0x5a0 drivers/scsi/scsi_logging.c:73
+ sd_read_write_protect_flag drivers/scsi/sd.c:2716 [inline]
+ sd_revalidate_disk+0x5afc/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ memcpy_from_page include/linux/highmem.h:346 [inline]
+ memcpy_from_bvec include/linux/bvec.h:207 [inline]
+ bio_copy_kern_endio_read+0x4a3/0x620 block/blk-map.c:403
+ bio_endio+0xa7f/0xac0 block/bio.c:1491
+ req_bio_endio block/blk-mq.c:674 [inline]
+ blk_update_request+0x1129/0x22d0 block/blk-mq.c:742
+ blk_mq_end_request block/blk-mq.c:821 [inline]
+ blk_mq_dispatch_rq_list+0x16f8/0x3f50 block/blk-mq.c:1685
+ __blk_mq_sched_dispatch_requests+0x58b/0x8d0 block/blk-mq-sched.c:325
+ blk_mq_sched_dispatch_requests+0x1b9/0x380 block/blk-mq-sched.c:358
+ __blk_mq_run_hw_queue+0x201/0x350 block/blk-mq.c:1785
+ __blk_mq_delay_run_hw_queue+0x21d/0x970 block/blk-mq.c:1862
+ blk_mq_run_hw_queue+0x57c/0x7b0 block/blk-mq.c:1915
+ blk_mq_sched_insert_request+0x3b8/0x790 block/blk-mq-sched.c:477
+ blk_execute_rq_nowait block/blk-exec.c:62 [inline]
+ blk_execute_rq+0x406/0x7c0 block/blk-exec.c:102
+ __scsi_execute+0x84d/0xe30 drivers/scsi/scsi_lib.c:244
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was created at:
+ __alloc_pages+0xbbf/0x1090 mm/page_alloc.c:5409
+ alloc_pages+0x8a5/0xb80
+ bio_copy_kern block/blk-map.c:449 [inline]
+ blk_rq_map_kern+0x813/0x1400 block/blk-map.c:640
+ __scsi_execute+0x4bd/0xe30 drivers/scsi/scsi_lib.c:229
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+CPU: 0 PID: 51 Comm: kworker/u4:2 Tainted: G    B             5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_unbound async_run_entry_fn
+=====================================================
+=====================================================
+BUG: KMSAN: uninit-value in hex_string+0x92b/0xa40 lib/vsprintf.c:1179
+ hex_string+0x92b/0xa40 lib/vsprintf.c:1179
+ pointer+0x3ae/0x2060 lib/vsprintf.c:2407
+ vsnprintf+0x1a9b/0x3650 lib/vsprintf.c:2809
+ vscnprintf+0xbe/0x1c0 lib/vsprintf.c:2908
+ sdev_prefix_printk+0x4b9/0x5a0 drivers/scsi/scsi_logging.c:73
+ sd_read_write_protect_flag drivers/scsi/sd.c:2716 [inline]
+ sd_revalidate_disk+0x5afc/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ memcpy_from_page include/linux/highmem.h:346 [inline]
+ memcpy_from_bvec include/linux/bvec.h:207 [inline]
+ bio_copy_kern_endio_read+0x4a3/0x620 block/blk-map.c:403
+ bio_endio+0xa7f/0xac0 block/bio.c:1491
+ req_bio_endio block/blk-mq.c:674 [inline]
+ blk_update_request+0x1129/0x22d0 block/blk-mq.c:742
+ blk_mq_end_request block/blk-mq.c:821 [inline]
+ blk_mq_dispatch_rq_list+0x16f8/0x3f50 block/blk-mq.c:1685
+ __blk_mq_sched_dispatch_requests+0x58b/0x8d0 block/blk-mq-sched.c:325
+ blk_mq_sched_dispatch_requests+0x1b9/0x380 block/blk-mq-sched.c:358
+ __blk_mq_run_hw_queue+0x201/0x350 block/blk-mq.c:1785
+ __blk_mq_delay_run_hw_queue+0x21d/0x970 block/blk-mq.c:1862
+ blk_mq_run_hw_queue+0x57c/0x7b0 block/blk-mq.c:1915
+ blk_mq_sched_insert_request+0x3b8/0x790 block/blk-mq-sched.c:477
+ blk_execute_rq_nowait block/blk-exec.c:62 [inline]
+ blk_execute_rq+0x406/0x7c0 block/blk-exec.c:102
+ __scsi_execute+0x84d/0xe30 drivers/scsi/scsi_lib.c:244
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was created at:
+ __alloc_pages+0xbbf/0x1090 mm/page_alloc.c:5409
+ alloc_pages+0x8a5/0xb80
+ bio_copy_kern block/blk-map.c:449 [inline]
+ blk_rq_map_kern+0x813/0x1400 block/blk-map.c:640
+ __scsi_execute+0x4bd/0xe30 drivers/scsi/scsi_lib.c:229
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+CPU: 0 PID: 51 Comm: kworker/u4:2 Tainted: G    B             5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_unbound async_run_entry_fn
+=====================================================
+=====================================================
+BUG: KMSAN: uninit-value in hex_string+0x962/0xa40 lib/vsprintf.c:1182
+ hex_string+0x962/0xa40 lib/vsprintf.c:1182
+ pointer+0x3ae/0x2060 lib/vsprintf.c:2407
+ vsnprintf+0x1a9b/0x3650 lib/vsprintf.c:2809
+ vscnprintf+0xbe/0x1c0 lib/vsprintf.c:2908
+ sdev_prefix_printk+0x4b9/0x5a0 drivers/scsi/scsi_logging.c:73
+ sd_read_write_protect_flag drivers/scsi/sd.c:2716 [inline]
+ sd_revalidate_disk+0x5afc/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was stored to memory at:
+ memcpy_from_page include/linux/highmem.h:346 [inline]
+ memcpy_from_bvec include/linux/bvec.h:207 [inline]
+ bio_copy_kern_endio_read+0x4a3/0x620 block/blk-map.c:403
+ bio_endio+0xa7f/0xac0 block/bio.c:1491
+ req_bio_endio block/blk-mq.c:674 [inline]
+ blk_update_request+0x1129/0x22d0 block/blk-mq.c:742
+ blk_mq_end_request block/blk-mq.c:821 [inline]
+ blk_mq_dispatch_rq_list+0x16f8/0x3f50 block/blk-mq.c:1685
+ __blk_mq_sched_dispatch_requests+0x58b/0x8d0 block/blk-mq-sched.c:325
+ blk_mq_sched_dispatch_requests+0x1b9/0x380 block/blk-mq-sched.c:358
+ __blk_mq_run_hw_queue+0x201/0x350 block/blk-mq.c:1785
+ __blk_mq_delay_run_hw_queue+0x21d/0x970 block/blk-mq.c:1862
+ blk_mq_run_hw_queue+0x57c/0x7b0 block/blk-mq.c:1915
+ blk_mq_sched_insert_request+0x3b8/0x790 block/blk-mq-sched.c:477
+ blk_execute_rq_nowait block/blk-exec.c:62 [inline]
+ blk_execute_rq+0x406/0x7c0 block/blk-exec.c:102
+ __scsi_execute+0x84d/0xe30 drivers/scsi/scsi_lib.c:244
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Uninit was created at:
+ __alloc_pages+0xbbf/0x1090 mm/page_alloc.c:5409
+ alloc_pages+0x8a5/0xb80
+ bio_copy_kern block/blk-map.c:449 [inline]
+ blk_rq_map_kern+0x813/0x1400 block/blk-map.c:640
+ __scsi_execute+0x4bd/0xe30 drivers/scsi/scsi_lib.c:229
+ scsi_execute_req include/scsi/scsi_device.h:470 [inline]
+ scsi_mode_sense+0x737/0x16d0 drivers/scsi/scsi_lib.c:2163
+ sd_revalidate_disk+0x5206/0xdfd0 drivers/scsi/sd.c:3328
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+CPU: 0 PID: 51 Comm: kworker/u4:2 Tainted: G    B             5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_unbound async_run_entry_fn
+=====================================================
+=====================================================
+BUG: KMSAN: uninit-value in scsi_mode_sense+0x1046/0x16d0 drivers/scsi/scsi_lib.c:2200
+ scsi_mode_sense+0x1046/0x16d0 drivers/scsi/scsi_lib.c:2200
+ sd_do_mode_sense drivers/scsi/sd.c:2657 [inline]
+ sd_read_cache_type drivers/scsi/sd.c:2765 [inline]
+ sd_revalidate_disk+0x6225/0xdfd0 drivers/scsi/sd.c:3329
+ sd_probe+0x10a7/0x1970 drivers/scsi/sd.c:3567
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach_async_helper+0x314/0x3e0 drivers/base/dd.c:927
+ async_run_entry_fn+0xd2/0x630 kernel/async.c:127
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthre
+
+Tested on:
+
+commit:         81c325bb kmsan: hooks: do not check memory in kmsan_in..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=1736b3dbb00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1e3911d4873b88c8
+dashboard link: https://syzkaller.appspot.com/bug?extid=e7d46eb426883fb97efd
+compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1436c22db00000
+

@@ -2,66 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45248480562
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 01:48:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EC6480568
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 01:55:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234215AbhL1Ash (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 19:48:37 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:35058 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230257AbhL1Asg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 19:48:36 -0500
-Received: from p57b77d8b.dip0.t-ipconnect.de ([87.183.125.139] helo=phil.fritz.box)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1n20fE-0001p0-SA; Tue, 28 Dec 2021 01:48:28 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Johan Jonker <jbx6244@gmail.com>,
-        Ondrej Jirman <megous@megous.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-rockchip@lists.infradead.org, Rob Herring <robh@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v3 0/8] phy-rockchip-inno-usb2: support rk356x usb2phy
-Date:   Tue, 28 Dec 2021 01:48:27 +0100
-Message-Id: <164065249086.1985132.4031278620113773485.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211215210252.120923-1-pgwipeout@gmail.com>
-References: <20211215210252.120923-1-pgwipeout@gmail.com>
+        id S234245AbhL1Azg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 19:55:36 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:30118 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234219AbhL1Aze (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Dec 2021 19:55:34 -0500
+Received: from kwepemi100005.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JNGG82Ks4z1DK26;
+        Tue, 28 Dec 2021 08:52:16 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi100005.china.huawei.com (7.221.188.155) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 28 Dec 2021 08:55:32 +0800
+Received: from [10.174.178.208] (10.174.178.208) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 28 Dec 2021 08:55:31 +0800
+Subject: Re: [PATCH 4.19 00/38] 4.19.223-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
+        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <stable@vger.kernel.org>
+References: <20211227151319.379265346@linuxfoundation.org>
+From:   Samuel Zou <zou_wei@huawei.com>
+Message-ID: <2903cc61-c4a9-32c1-f33c-2f3902162843@huawei.com>
+Date:   Tue, 28 Dec 2021 08:55:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211227151319.379265346@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.208]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Dec 2021 16:02:44 -0500, Peter Geis wrote:
-> Good Afternoon,
+
+
+On 2021/12/27 23:30, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.223 release.
+> There are 38 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> This is my series to support the usb2 phy devices on the rk356x.
-> The rk356x phy has a single muxed interrupt and has moved the usb2phy
-> nodes out of the grf and into their own nodes.
-> The phy needs to tie back into the grf for register control, similar to
-> the rv1108.
-> By moving the phys into their own nodes, they now have full
-> #address_cells = 2 register addresses, but they still reside below the 32bit
-> mmio range.
+> Responses should be made by Wed, 29 Dec 2021 15:13:09 +0000.
+> Anything received after that time might be too late.
 > 
-> [...]
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.223-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Applied, thanks!
+Tested on arm64 and x86 for 4.19.223-rc1,
 
-[1/8] dt-bindings: soc: rockchip: add rk3568-usb2phy-grf
-      commit: 0c8662341dfdda1e0a59692e4d78ecb087f09da1
-[7/8] arm64: dts: rockchip: add usb2 nodes to rk3568 device tree
-      commit: cca4da59db28cdd284d34835be9f109f37bf0803
-[8/8] arm64: dts: rockchip: add Quartz64-A usb2 support
-      commit: 80d44c01e56943fcf9d0b5267ccfaa9487ac8067
+Kernel repo:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+Branch: linux-4.19.y
+Version: 4.19.223-rc1
+Commit: 788fd8cb07c5bb4ad111f5c437f0ebc12eac9ba1
+Compiler: gcc version 7.3.0 (GCC)
 
-Best regards,
--- 
-Heiko Stuebner <heiko@sntech.de>
+arm64:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 8942
+passed: 8942
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+x86:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 8942
+passed: 8942
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+Tested-by: Hulk Robot <hulkrobot@huawei.com>

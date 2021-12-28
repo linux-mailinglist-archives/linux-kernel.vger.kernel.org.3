@@ -2,170 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D463248057B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 02:12:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD47648057F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 02:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234367AbhL1BMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Dec 2021 20:12:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbhL1BMH (ORCPT
+        id S234394AbhL1Bg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Dec 2021 20:36:57 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:17303 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232933AbhL1Bg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Dec 2021 20:12:07 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE8FC06173E;
-        Mon, 27 Dec 2021 17:12:06 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.94.2)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1n2124-0001Tt-Fl; Tue, 28 Dec 2021 02:12:04 +0100
-Date:   Tue, 28 Dec 2021 01:11:57 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: [PATCH v7 2/2] net: ethernet: mtk_eth_soc: implement Clause 45 MDIO
- access
-Message-ID: <YcpkXclZRXLC3XfM@makrotopia.org>
-References: <YcnoAscVe+2YILT8@shell.armlinux.org.uk>
- <YcpVmlb1jFavCBpS@makrotopia.org>
- <YcpVtjykiS7mgtT5@makrotopia.org>
+        Mon, 27 Dec 2021 20:36:56 -0500
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JNHDb4YjGz91ys;
+        Tue, 28 Dec 2021 09:35:59 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 28 Dec 2021 09:36:54 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2308.20; Tue, 28 Dec 2021 09:36:53 +0800
+Message-ID: <8f30057e-da61-55b4-adf7-e35d91798806@huawei.com>
+Date:   Tue, 28 Dec 2021 09:36:53 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YcnoAscVe+2YILT8@shell.armlinux.org.uk>
- <YcpVmlb1jFavCBpS@makrotopia.org>
- <YcpVtjykiS7mgtT5@makrotopia.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: (No subject)
+Content-Language: en-US
+To:     William Kucharski <william.kucharski@oracle.com>
+CC:     Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Matthew Wilcox" <willy@infradead.org>
+References: <20211227145903.187152-3-wangkefeng.wang@huawei.com>
+ <E2C9DE8E-F5D9-46E9-9298-B632A202B080@oracle.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <E2C9DE8E-F5D9-46E9-9298-B632A202B080@oracle.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggeme702-chm.china.huawei.com (10.1.199.98) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement read and write access to IEEE 802.3 Clause 45 Ethernet
-phy registers.
-Tested on the Ubiquiti UniFi 6 LR access point featuring
-MediaTek MT7622BV WiSoC with Aquantia AQR112C.
 
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-v7: remove unneeded variables and order OR-ed call parameters
-v6: further clean up functions and more cleanly separate patches
-v5: fix wrong variable name in first patch covered by follow-up patch
-v4: clean-up return values and types, split into two commits
-v3: return -1 instead of 0xffff on error in _mtk_mdio_write
-v2: use MII_DEVADDR_C45_SHIFT and MII_REGADDR_C45_MASK to extract
-    device id and register address. Unify read and write functions to
-    have identical types and parameter names where possible as we are
-    anyway already replacing both function bodies.
-
----
- drivers/net/ethernet/mediatek/mtk_eth_soc.c | 55 ++++++++++++++++++---
- drivers/net/ethernet/mediatek/mtk_eth_soc.h |  3 ++
- 2 files changed, 50 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index 72b3ae7b5ff8d..ed1820ba9e6ea 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -102,10 +102,30 @@ static int _mtk_mdio_write(struct mtk_eth *eth, u32 phy_addr, u32 phy_reg,
- 
- 	write_data &= 0xffff;
- 
--	mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START | PHY_IAC_WRITE |
--		(phy_reg << PHY_IAC_REG_SHIFT) |
--		(phy_addr << PHY_IAC_ADDR_SHIFT) | write_data,
--		MTK_PHY_IAC);
-+	if (phy_reg & MII_ADDR_C45) {
-+		u8 dev_num = (phy_reg >> MII_DEVADDR_C45_SHIFT) & GENMASK(4, 0);
-+
-+		mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START_C45 | PHY_IAC_SET_ADDR |
-+			(dev_num << PHY_IAC_REG_SHIFT) |
-+			(phy_addr << PHY_IAC_ADDR_SHIFT) |
-+			(phy_reg & MII_REGADDR_C45_MASK),
-+			MTK_PHY_IAC);
-+
-+		if (mtk_mdio_busy_wait(eth))
-+			return -EBUSY;
-+
-+		mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START_C45 | PHY_IAC_WRITE |
-+			(dev_num << PHY_IAC_REG_SHIFT) |
-+			(phy_addr << PHY_IAC_ADDR_SHIFT) |
-+			write_data,
-+			MTK_PHY_IAC);
-+	} else {
-+		mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START | PHY_IAC_WRITE |
-+			(phy_reg << PHY_IAC_REG_SHIFT) |
-+			(phy_addr << PHY_IAC_ADDR_SHIFT) |
-+			write_data,
-+			MTK_PHY_IAC);
-+	}
- 
- 	if (mtk_mdio_busy_wait(eth))
- 		return -EBUSY;
-@@ -118,10 +138,28 @@ static int _mtk_mdio_read(struct mtk_eth *eth, u32 phy_addr, u32 phy_reg)
- 	if (mtk_mdio_busy_wait(eth))
- 		return -EBUSY;
- 
--	mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START | PHY_IAC_READ |
--		(phy_reg << PHY_IAC_REG_SHIFT) |
--		(phy_addr << PHY_IAC_ADDR_SHIFT),
--		MTK_PHY_IAC);
-+	if (phy_reg & MII_ADDR_C45) {
-+		u8 dev_num = (phy_reg >> MII_DEVADDR_C45_SHIFT) & GENMASK(4, 0);
-+
-+		mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START_C45 | PHY_IAC_SET_ADDR |
-+			(dev_num << PHY_IAC_REG_SHIFT) |
-+			(phy_addr << PHY_IAC_ADDR_SHIFT) |
-+			(phy_reg & MII_REGADDR_C45_MASK),
-+			MTK_PHY_IAC);
-+
-+		if (mtk_mdio_busy_wait(eth))
-+			return -EBUSY;
-+
-+		mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START_C45 | PHY_IAC_READ_C45 |
-+			(dev_num << PHY_IAC_REG_SHIFT) |
-+			(phy_addr << PHY_IAC_ADDR_SHIFT),
-+			MTK_PHY_IAC);
-+	} else {
-+		mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START | PHY_IAC_READ |
-+			(phy_reg << PHY_IAC_REG_SHIFT) |
-+			(phy_addr << PHY_IAC_ADDR_SHIFT),
-+			MTK_PHY_IAC);
-+	}
- 
- 	if (mtk_mdio_busy_wait(eth))
- 		return -EBUSY;
-@@ -493,6 +531,7 @@ static int mtk_mdio_init(struct mtk_eth *eth)
- 	eth->mii_bus->name = "mdio";
- 	eth->mii_bus->read = mtk_mdio_read;
- 	eth->mii_bus->write = mtk_mdio_write;
-+	eth->mii_bus->probe_capabilities = MDIOBUS_C22_C45;
- 	eth->mii_bus->priv = eth;
- 	eth->mii_bus->parent = eth->dev;
- 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-index 5ef70dd8b49c6..b73d8adc9d24c 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-@@ -341,9 +341,12 @@
- /* PHY Indirect Access Control registers */
- #define MTK_PHY_IAC		0x10004
- #define PHY_IAC_ACCESS		BIT(31)
-+#define PHY_IAC_SET_ADDR	0
- #define PHY_IAC_READ		BIT(19)
-+#define PHY_IAC_READ_C45	(BIT(18) | BIT(19))
- #define PHY_IAC_WRITE		BIT(18)
- #define PHY_IAC_START		BIT(16)
-+#define PHY_IAC_START_C45	0
- #define PHY_IAC_ADDR_SHIFT	20
- #define PHY_IAC_REG_SHIFT	25
- #define PHY_IAC_TIMEOUT		HZ
--- 
-2.34.1
-
+On 2021/12/28 1:35, William Kucharski wrote:
+> You should also fix the existing typo in the documentation (inline):
+>
+>> On Dec 27, 2021, at 07:49, Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+>>
+>> ﻿This patch select HAVE_ARCH_HUGE_VMALLOC to let arm64 support huge
+>> vmalloc mappings.
+>>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will@kernel.org>
+>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+>> ---
+>> Documentation/admin-guide/kernel-parameters.txt | 4 ++--
+>> arch/arm64/Kconfig                              | 1 +
+>> arch/arm64/kernel/module.c                      | 5 +++--
+>> 3 files changed, 6 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>> index 7b2f900fd243..e3f9fd7ec106 100644
+>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>> @@ -1639,7 +1639,7 @@
+>>             precedence over memory_hotplug.memmap_on_memory.
+>>
+>>
+>> -    hugevmalloc=    [PPC] Reguires CONFIG_HAVE_ARCH_HUGE_VMALLOC
+>> +    hugevmalloc=    [KNL,PPC,ARM64] Reguires CONFIG_HAVE_ARCH_HUGE_VMALLOC
+>>             Format: { on | off }
+>>             Default set by CONFIG_HUGE_VMALLOC_DEFAULT_ENABLED.
+> "Reguires" should be "Requires."
+Will fix, thanks.
+>
+>> @@ -3424,7 +3424,7 @@
+>>
+>>     nohugeiomap    [KNL,X86,PPC,ARM64] Disable kernel huge I/O mappings.
+>>
+>> -    nohugevmalloc    [PPC] Disable kernel huge vmalloc mappings.
+>> +    nohugevmalloc    [KNL,PPC,ARM64] Disable kernel huge vmalloc mappings.
+>>
+>>     nosmt        [KNL,S390] Disable symmetric multithreading (SMT).
+>>             Equivalent to smt=1.
+>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>> index 3bb0b67292b5..c34bbb4482b0 100644
+>> --- a/arch/arm64/Kconfig
+>> +++ b/arch/arm64/Kconfig
+>> @@ -142,6 +142,7 @@ config ARM64
+>>     select HAVE_ARCH_AUDITSYSCALL
+>>     select HAVE_ARCH_BITREVERSE
+>>     select HAVE_ARCH_COMPILER_H
+>> +    select HAVE_ARCH_HUGE_VMALLOC
+>>     select HAVE_ARCH_HUGE_VMAP
+>>     select HAVE_ARCH_JUMP_LABEL
+>>     select HAVE_ARCH_JUMP_LABEL_RELATIVE
+>> diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
+>> index 309a27553c87..af7b4cbace2b 100644
+>> --- a/arch/arm64/kernel/module.c
+>> +++ b/arch/arm64/kernel/module.c
+>> @@ -36,7 +36,8 @@ void *module_alloc(unsigned long size)
+>>         module_alloc_end = MODULES_END;
+>>
+>>     p = __vmalloc_node_range(size, MODULE_ALIGN, module_alloc_base,
+>> -                module_alloc_end, gfp_mask, PAGE_KERNEL, VM_DEFER_KMEMLEAK,
+>> +                module_alloc_end, gfp_mask, PAGE_KERNEL,
+>> +                VM_DEFER_KMEMLEAK | VM_NO_HUGE_VMAP,
+>>                 NUMA_NO_NODE, __builtin_return_address(0));
+>>
+>>     if (!p && IS_ENABLED(CONFIG_ARM64_MODULE_PLTS) &&
+>> @@ -55,7 +56,7 @@ void *module_alloc(unsigned long size)
+>>          */
+>>         p = __vmalloc_node_range(size, MODULE_ALIGN, module_alloc_base,
+>>                 module_alloc_base + SZ_2G, GFP_KERNEL,
+>> -                PAGE_KERNEL, 0, NUMA_NO_NODE,
+>> +                PAGE_KERNEL, VM_NO_HUGE_VMAP, NUMA_NO_NODE,
+>>                 __builtin_return_address(0));
+>>
+>>     if (p && (kasan_module_alloc(p, size, gfp_mask) < 0)) {
+>> -- 
+>> 2.26.2
+>>
+>>

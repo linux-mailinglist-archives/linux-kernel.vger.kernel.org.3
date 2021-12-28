@@ -2,121 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF14480C6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 19:16:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB26480C5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Dec 2021 19:11:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236912AbhL1SQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 13:16:48 -0500
-Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:5093 "EHLO
-        mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233411AbhL1SQr (ORCPT
+        id S236916AbhL1SL5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Dec 2021 13:11:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231502AbhL1SL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 13:16:47 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3Acj7Gb6vwEd1xHaExr0iN7Qd8zufnVEBfMUV32f8?=
- =?us-ascii?q?akzHdYEJGY0x3zmQWUT2COPuOMGLyKIxyaN/k/B4CucTSyNNgTwdpq3hgHilAw?=
- =?us-ascii?q?SbnLYTAfx2oZ0t+DeWaERk5t51GAjX4wXFdokb0/n9BCZC86yksvU20buCkUre?=
- =?us-ascii?q?dYHohHVUMpBoJ0nqPpcZo2+aEvvDpW2thifuqyyHuEAfNNwxcagr42IrfwP9bh?=
- =?us-ascii?q?8kejRtD1rAIiV+ni3eF/5UdJMp3yahctBIUSKEMdgKxb76rIL1UYgrkExkR5tO?=
- =?us-ascii?q?Nyt4Xc2UKS7LIPAWI4pZUc/j/xEYS4HVoi+Bia6F0hUR/0l1lm/hz1dFMvNq0Q?=
- =?us-ascii?q?BggOqnkmeIHUhAeHTsW0ahuoeaZeSji6qR/yGWDKRMA2c5GFkg4NIAc0uV6G2d?=
- =?us-ascii?q?D8bofMj9lRhuenfixwr+hR/tEnMU4IdTzeoUSphlI1ivYC/c4SIuFW6zM6cVFw?=
- =?us-ascii?q?j48j+hKHPDDd4wYbyZiaFLLZBgnElMaDpgWn+qygHT7NTpCpzq9u6st7nPTig9?=
- =?us-ascii?q?s1bH3GN7UfNWQQoNShEnwjmbH+XnpRwkfHMKQxCDD8X+2gOLL2yThV+o6ELy+6?=
- =?us-ascii?q?+4vg1CJwGEXIAMZWEH9ovSjjEO6HdVFJCQ8/ysooq8a7kGnTtDhGRa/pRasphM?=
- =?us-ascii?q?AVsBCO+w85huExqfd70CeHGdsZjxcct1gsMIyQT0CzFKFn9r1QzdotdW9V3Ob/?=
- =?us-ascii?q?bqSsXW9JCkJMWgeTSsFSwIf5J/kuo5bs/5lZr6PC4bs0YazQGuphW7a6nhjwa8?=
- =?us-ascii?q?ek4gQ2b/9+13b6w9Ab6PhFmYdjjg7lEr8hu+hWLOYWg=3D=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AnQxveKgw7+GlvNqN6dnA+fVHmXBQXt0ji2hC?=
- =?us-ascii?q?6mlwRA09TyX4rbHLoB1173TJYVoqMk3I3OrgBEDiewK4yXcW2+ks1N6ZNWHbUS?=
- =?us-ascii?q?mTXeJfBODZrQEIdReTygcQ79YDT4FOTOy1N1R8gMrgiTPUL/8ryrC8n5yVuQ?=
- =?us-ascii?q?=3D=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,242,1635199200"; 
-   d="scan'208";a="1160853"
-Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 19:16:46 +0100
-Date:   Tue, 28 Dec 2021 19:16:45 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-cc:     Francisco Jerez <currojerez@riseup.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-In-Reply-To: <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2112281909170.24929@hadrien>
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com> <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net> <alpine.DEB.2.22.394.2112172258480.2968@hadrien>
- <87fsqqu6by.fsf@riseup.net> <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net> <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net> <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net>
- <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com> <878rwdse9o.fsf@riseup.net> <alpine.DEB.2.22.394.2112281745240.24929@hadrien> <CAJZ5v0i4xnesG=vfx7Y-wyeaGvjDeGcsaOVqhRLnV8YXk-m2gA@mail.gmail.com> <alpine.DEB.2.22.394.2112281845180.24929@hadrien>
- <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Tue, 28 Dec 2021 13:11:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D471FC061574;
+        Tue, 28 Dec 2021 10:11:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F392B612DF;
+        Tue, 28 Dec 2021 18:11:54 +0000 (UTC)
+Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp.kernel.org (Postfix) with ESMTPSA id 1A19EC36AEC;
+        Tue, 28 Dec 2021 18:11:50 +0000 (UTC)
+Date:   Tue, 28 Dec 2021 18:17:35 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>, kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Syed Nayyar Waris <syednwaris@gmail.com>
+Subject: Re: [PATCH v2 15/23] counter: 104-quad-8: Convert to new counter
+ registration
+Message-ID: <20211228181735.7d0c32b7@jic23-huawei>
+In-Reply-To: <20211227094526.698714-16-u.kleine-koenig@pengutronix.de>
+References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
+        <20211227094526.698714-16-u.kleine-koenig@pengutronix.de>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 27 Dec 2021 10:45:18 +0100
+Uwe Kleine-König         <u.kleine-koenig@pengutronix.de> wrote:
 
+> This fixes device lifetime issues where it was possible to free a live
+> struct device.
+> 
+> Fixes: f1d8a071d45b ("counter: 104-quad-8: Add Generic Counter interface support")
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+LGTM
 
-On Tue, 28 Dec 2021, Rafael J. Wysocki wrote:
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
+>  drivers/counter/104-quad-8.c | 30 +++++++++++++++++-------------
+>  1 file changed, 17 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/counter/104-quad-8.c b/drivers/counter/104-quad-8.c
+> index 6e5286cd1d4e..4315b14f239e 100644
+> --- a/drivers/counter/104-quad-8.c
+> +++ b/drivers/counter/104-quad-8.c
+> @@ -52,7 +52,6 @@ MODULE_PARM_DESC(irq, "ACCES 104-QUAD-8 interrupt line numbers");
+>   */
+>  struct quad8 {
+>  	spinlock_t lock;
+> -	struct counter_device counter;
+>  	unsigned int fck_prescaler[QUAD8_NUM_COUNTERS];
+>  	unsigned int preset[QUAD8_NUM_COUNTERS];
+>  	unsigned int count_mode[QUAD8_NUM_COUNTERS];
+> @@ -1127,6 +1126,7 @@ static irqreturn_t quad8_irq_handler(int irq, void *private)
+>  
+>  static int quad8_probe(struct device *dev, unsigned int id)
+>  {
+> +	struct counter_device *counter;
+>  	struct quad8 *priv;
+>  	int i, j;
+>  	unsigned int base_offset;
+> @@ -1138,19 +1138,19 @@ static int quad8_probe(struct device *dev, unsigned int id)
+>  		return -EBUSY;
+>  	}
+>  
+> -	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> -	if (!priv)
+> +	counter = devm_counter_alloc(dev, sizeof(*priv));
+> +	if (!counter)
+>  		return -ENOMEM;
+> +	priv = counter_priv(counter);
+>  
+>  	/* Initialize Counter device and driver data */
+> -	priv->counter.name = dev_name(dev);
+> -	priv->counter.parent = dev;
+> -	priv->counter.ops = &quad8_ops;
+> -	priv->counter.counts = quad8_counts;
+> -	priv->counter.num_counts = ARRAY_SIZE(quad8_counts);
+> -	priv->counter.signals = quad8_signals;
+> -	priv->counter.num_signals = ARRAY_SIZE(quad8_signals);
+> -	priv->counter.priv = priv;
+> +	counter->name = dev_name(dev);
+> +	counter->parent = dev;
+> +	counter->ops = &quad8_ops;
+> +	counter->counts = quad8_counts;
+> +	counter->num_counts = ARRAY_SIZE(quad8_counts);
+> +	counter->signals = quad8_signals;
+> +	counter->num_signals = ARRAY_SIZE(quad8_signals);
+>  	priv->base = base[id];
+>  
+>  	spin_lock_init(&priv->lock);
+> @@ -1192,11 +1192,15 @@ static int quad8_probe(struct device *dev, unsigned int id)
+>  	outb(QUAD8_CHAN_OP_ENABLE_INTERRUPT_FUNC, base[id] + QUAD8_REG_CHAN_OP);
+>  
+>  	err = devm_request_irq(dev, irq[id], quad8_irq_handler, IRQF_SHARED,
+> -			       priv->counter.name, priv);
+> +			       counter->name, priv);
+>  	if (err)
+>  		return err;
+>  
+> -	return devm_counter_register(dev, &priv->counter);
+> +	err = devm_counter_add(dev, counter);
+> +	if (err < 0)
+> +		return dev_err_probe(dev, err, "Failed to add counter\n");
+> +
+> +	return 0;
+>  }
+>  
+>  static struct isa_driver quad8_driver = {
 
-> On Tue, Dec 28, 2021 at 6:46 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> >
-> >
-> >
-> > On Tue, 28 Dec 2021, Rafael J. Wysocki wrote:
-> >
-> > > On Tue, Dec 28, 2021 at 5:58 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> > > >
-> > > > I looked a bit more into why pstate 20 is always using the least energy. I
-> > > > have just one thread spinning for 10 seconds, I use a fixed value for the
-> > > > pstate, and I measure the energy usage with turbostat.
-> > >
-> > > How exactly do you fix the pstate?
-> >
-> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > index e7af18857371..19440b15454c 100644
-> > --- a/kernel/sched/cpufreq_schedutil.c
-> > +++ b/kernel/sched/cpufreq_schedutil.c
-> > @@ -400,7 +402,7 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
-> >                 sg_cpu->util = prev_util;
-> >
-> >         cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
-> > -                                  map_util_perf(sg_cpu->util), sg_cpu->max);
-> > +                                  sysctl_sched_fixedfreq, sg_cpu->max);
->
-> This is just changing the "target" hint given to the processor which
-> may very well ignore it, though.
-
-It doesn't seem to ignore it.  I also print the current frequency on every
-clock tick, and it is as it should be.  This is done in the function
-arch_scale_freq_tick in arch/x86/kernel/smpboot.c, where I added:
-
-        trace_printk("freq %lld\n", div64_u64((cpu_khz * acnt), mcnt));
-
-
->
-> >
-> >         sg_cpu->sg_policy->last_freq_update_time = time;
-> >  }
-> >
-> > ------------------------------
-> >
-> > sysctl_sched_fixedfreq is a variable that I added to sysfs.
->
-> If I were trying to fix a pstate, I would set scaling_max_freq and
-> scaling_min_freq in sysfs for all CPUs to the same value.
->
-> That would cause intel_pstate to set HWP min and max to the same value
-> which should really cause the pstate to be fixed, at least outside the
-> turbo range of pstates.
-
-OK, I can try that, thanks.
-
-julia

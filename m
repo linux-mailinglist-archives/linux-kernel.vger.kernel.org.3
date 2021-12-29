@@ -2,372 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8884810AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 08:30:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F330C4810B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 08:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239066AbhL2HaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 02:30:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
+        id S239140AbhL2Hen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 02:34:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239244AbhL2H3p (ORCPT
+        with ESMTP id S234740AbhL2Hel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 02:29:45 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94045C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 23:29:44 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id g11so46363683lfu.2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 23:29:44 -0800 (PST)
+        Wed, 29 Dec 2021 02:34:41 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D28CC061574;
+        Tue, 28 Dec 2021 23:34:40 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id a23so17877682pgm.4;
+        Tue, 28 Dec 2021 23:34:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TgBTf5plP79VIndWD6ZWEfv0rRM/la1tNQapTNXhPKo=;
-        b=cnnvo1RqsljWunkdDBG68I94j1wpuCMp58WtZLGI2Nnr93XkLwB2JJMFzjC5A8Z7aP
-         Ief7ceVlKYmKayk75coXmuAObTHHNL7nR4ZIBYH2/+Tqi6AM8laUNSmUjqXWn0/2zUWN
-         ct+pc6Qf3Z2cd4AQxGXmBmqFCzQHz312vReIQNBwsITsOKh22Mc0KPWURRLcyzNxjDfZ
-         LK3vIitV/ntL8k6NqrWs7sQysfuln53TiAoux/cadnFTtaGJ3Cua6KAOyzcLj5TLbqXZ
-         pnTosOYGLMF6NSYHWNXpRa6wl4qrMyjWGKi9GzEIeTV7jCR5q61HP2jf3+yHCsoM/1vf
-         rs1Q==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=68RvNb1tApDf1C2ho2mosouwlMJ1fEXlmW9sPJhGLoM=;
+        b=SjcaA/dQMd3wOOBtcoC9LntyVWAq0wLeeKZd/2xnh7/q0Y+6CmS47dEtpZ0isse4tw
+         xoNSS0XIrH0C6IJBJ3NKH49bTNmyns/O4nJUtaMX9ENUkiU1wyioeaKypBw3RONQSADV
+         QQQh70ItN5/iTENM8m8Mjhmu+zbSXOXw5SGjVJOKfHySglYxmoCG5pMN0SeEvjDkjETd
+         e+JQ5H15HM1II3pvBWa9AIq12GTIAflSF62+pSTOv+v06ZBGjh3kolt/qR5BpsGKT8Jr
+         wfBv1+K0jav+57D//bwz7j38axKewaHtRuTKdeD1GgZ1OkNkgrc6jvRUfUw3Q0AxVW+E
+         yKJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TgBTf5plP79VIndWD6ZWEfv0rRM/la1tNQapTNXhPKo=;
-        b=GRKJFFKOU3HhLapHu29x8jX2KgsuP2EZHs6op/0hOPDxVS7cKbJLSSRnzFWoXUoym7
-         8zatDb3FHjb5cnPUsgee+HUhDrFaTciqrop/XoBh6syBNQ+RmlcX8Y8W7Ho4hp9LNbUr
-         wt1krOprlxrKnQLkpxeYyXT9qKkgM4aoeZon3PoEyGxbT5yvLK2WI8yXmwbCdgzh63M5
-         h44T1JQKVd5YCW2vxYy1oa7cyRzdfv9llQYJpQxtNiF+Y4Zy6urmh7zexTfr9shikBpA
-         64uyqGQf3WS/D/shhyo+7jsTDB90TPf5L2l2g9U0sehAbMlh2dhMW6RF7l9OmIC9xVJN
-         lOIg==
-X-Gm-Message-State: AOAM532R+RBQ5oLQ6P3IQf7vXuMgCHff2JmO6pydxqCua6UUpdtAv0w1
-        xN4xh2P8BzHrpzPcvEWjW74RAg==
-X-Google-Smtp-Source: ABdhPJxos3ulsfoxDrm8ESaxuI0eJO9PA2/9aHYB3gvdGvT30+VZ6o0Q2H/qQquzhHehRmFsM2rRLg==
-X-Received: by 2002:a05:6512:1590:: with SMTP id bp16mr21848763lfb.407.1640762982294;
-        Tue, 28 Dec 2021 23:29:42 -0800 (PST)
-Received: from cobook.home (nikaet.starlink.ru. [94.141.168.29])
-        by smtp.gmail.com with ESMTPSA id p12sm1530218ljc.139.2021.12.28.23.29.41
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=68RvNb1tApDf1C2ho2mosouwlMJ1fEXlmW9sPJhGLoM=;
+        b=eYQUOAUMvKUQ+zDuLZ+QVytuuZJPEYLzznhg4T/ISiNk+TYgFxN9kp+Ki7l1EUM4gW
+         S2U7R16n+M3bJt+jCHHSqUfYFh3ORLmHHGs1KcdIqeru75Th32cn8R0co67m4hObX/Ad
+         VtSp+8rIPJ/r/QEkuZH6vvzYD9ToT29mI5DMf/8Vd3IRYs7E/5MrUM4TDrt+B0/E5/l9
+         eHLzn/lLmri7VkyEm0lz10wBB2NVauPiVXcquoW9hhEKi1RF0nrJHAAMclHXL+j3xmgS
+         GCj52V9GblZLhjKqRAZ5kTRyLlKSoegdj3NhdmRph3R7yCosv+81cnop4iPuAwpnDevb
+         oH4w==
+X-Gm-Message-State: AOAM533XBDYsqXqBBtgLWRye3FrrxYYYVqz7EofMxzS81poccswaMaeV
+        ruPqlGp6hcie8YghqPe++n8=
+X-Google-Smtp-Source: ABdhPJxpxs8B9ihQnwp/B1h36KtbVTV71JsymzroYDuqMGISUOYR21kY2vjfmpZTeKLbVptlbgSAHA==
+X-Received: by 2002:a63:d6:: with SMTP id 205mr3482848pga.516.1640763280135;
+        Tue, 28 Dec 2021 23:34:40 -0800 (PST)
+Received: from shinobu (113x37x72x24.ap113.ftth.ucom.ne.jp. [113.37.72.24])
+        by smtp.gmail.com with ESMTPSA id ev3sm23932818pjb.48.2021.12.28.23.34.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 23:29:41 -0800 (PST)
-From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        Cai Huoqing <caihuoqing@baidu.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Subject: [PATCH] iio: stm: don't always auto-enable I2C and SPI interface drivers
-Date:   Wed, 29 Dec 2021 10:29:16 +0300
-Message-Id: <20211229072916.2567155-1-nikita.yoush@cogentembedded.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 28 Dec 2021 23:34:39 -0800 (PST)
+Date:   Wed, 29 Dec 2021 16:34:22 +0900
+From:   William Breathitt Gray <vilhelm.gray@gmail.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: Re: [PATCH v2 06/23] counter: interrupt-cnt: Convert to
+ counter_priv() wrapper
+Message-ID: <YcwPfuM+Uv2/z9cp@shinobu>
+References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
+ <20211227094526.698714-7-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7FtwvdsWJlTSGidV"
+Content-Disposition: inline
+In-Reply-To: <20211227094526.698714-7-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch makes I2C and SPI interface drivers for STMicroelectronics
-sensor chips individually selectable via Kconfig.
 
-The default is kept unchanged - I2C and SPI interface drivers are still
-selected by default if the corresponding bus support is available.
+--7FtwvdsWJlTSGidV
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-However, the patch makes it is possible to explicitly disable drivers
-that are not needed for particular target.
+On Mon, Dec 27, 2021 at 10:45:09AM +0100, Uwe Kleine-K=C3=B6nig wrote:
+> This is a straight forward conversion to the new counter_priv() wrapper.
+>=20
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
----
- drivers/iio/accel/Kconfig             | 35 ++++++++++++++-----------
- drivers/iio/common/st_sensors/Kconfig |  2 --
- drivers/iio/gyro/Kconfig              | 37 ++++++++++++++++-----------
- drivers/iio/imu/st_lsm9ds0/Kconfig    | 28 +++++++++++++++-----
- drivers/iio/magnetometer/Kconfig      | 35 ++++++++++++++-----------
- drivers/iio/pressure/Kconfig          | 35 ++++++++++++++-----------
- 6 files changed, 104 insertions(+), 68 deletions(-)
+Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
 
-diff --git a/drivers/iio/accel/Kconfig b/drivers/iio/accel/Kconfig
-index 49587c992a6d..fee33dda4ee4 100644
---- a/drivers/iio/accel/Kconfig
-+++ b/drivers/iio/accel/Kconfig
-@@ -349,8 +349,6 @@ config IIO_ST_ACCEL_3AXIS
- 	depends on !SENSORS_LIS3_I2C
- 	depends on !SENSORS_LIS3_SPI
- 	select IIO_ST_SENSORS_CORE
--	select IIO_ST_ACCEL_I2C_3AXIS if (I2C)
--	select IIO_ST_ACCEL_SPI_3AXIS if (SPI_MASTER)
- 	select IIO_TRIGGERED_BUFFER if (IIO_BUFFER)
- 	help
- 	  Say yes here to build support for STMicroelectronics accelerometers:
-@@ -358,23 +356,30 @@ config IIO_ST_ACCEL_3AXIS
- 	  LIS331DLH, LSM303DL, LSM303DLM, LSM330, LIS2DH12, H3LIS331DL,
- 	  LNG2DM, LIS3DE, LIS2DE12, LIS2HH12
- 
--	  This driver can also be built as a module. If so, these modules
--	  will be created:
--	  - st_accel (core functions for the driver [it is mandatory]);
--	  - st_accel_i2c (necessary for the I2C devices [optional*]);
--	  - st_accel_spi (necessary for the SPI devices [optional*]);
--
--	  (*) one of these is necessary to do something.
-+	  Also need to enable at least one of I2C and SPI interface drivers
-+	  below.
- 
- config IIO_ST_ACCEL_I2C_3AXIS
--	tristate
--	depends on IIO_ST_ACCEL_3AXIS
--	depends on IIO_ST_SENSORS_I2C
-+	tristate "STMicroelectronics accelerometers 3-Axis I2C Interface"
-+	depends on (I2C && IIO_ST_ACCEL_3AXIS)
-+	default y if (I2C && IIO_ST_ACCEL_3AXIS)
-+	select IIO_ST_SENSORS_I2C
-+	help
-+	  Build support for STMicroelectronics accelerometers I2C interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_accel_i2c.
- 
- config IIO_ST_ACCEL_SPI_3AXIS
--	tristate
--	depends on IIO_ST_ACCEL_3AXIS
--	depends on IIO_ST_SENSORS_SPI
-+	tristate "STMicroelectronics accelerometers 3-Axis SPI Interface"
-+	depends on (SPI_MASTER && IIO_ST_ACCEL_3AXIS)
-+	default y if (SPI_MASTER && IIO_ST_ACCEL_3AXIS)
-+	select IIO_ST_SENSORS_SPI
-+	help
-+	  Build support for STMicroelectronics accelerometers SPI interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_accel_spi.
- 
- config KXSD9
- 	tristate "Kionix KXSD9 Accelerometer Driver"
-diff --git a/drivers/iio/common/st_sensors/Kconfig b/drivers/iio/common/st_sensors/Kconfig
-index 9364ec7a811f..eda8f347fda5 100644
---- a/drivers/iio/common/st_sensors/Kconfig
-+++ b/drivers/iio/common/st_sensors/Kconfig
-@@ -13,5 +13,3 @@ config IIO_ST_SENSORS_SPI
- 
- config IIO_ST_SENSORS_CORE
- 	tristate
--	select IIO_ST_SENSORS_I2C if I2C
--	select IIO_ST_SENSORS_SPI if SPI_MASTER
-diff --git a/drivers/iio/gyro/Kconfig b/drivers/iio/gyro/Kconfig
-index a672f7d12bbb..9af15bed7550 100644
---- a/drivers/iio/gyro/Kconfig
-+++ b/drivers/iio/gyro/Kconfig
-@@ -139,30 +139,37 @@ config IIO_ST_GYRO_3AXIS
- 	tristate "STMicroelectronics gyroscopes 3-Axis Driver"
- 	depends on (I2C || SPI_MASTER) && SYSFS
- 	select IIO_ST_SENSORS_CORE
--	select IIO_ST_GYRO_I2C_3AXIS if (I2C)
--	select IIO_ST_GYRO_SPI_3AXIS if (SPI_MASTER)
- 	select IIO_TRIGGERED_BUFFER if (IIO_BUFFER)
- 	help
- 	  Say yes here to build support for STMicroelectronics gyroscopes:
- 	  L3G4200D, LSM330DL, L3GD20, LSM330DLC, L3G4IS, LSM330, LSM9DS0.
- 
--	  This driver can also be built as a module. If so, these modules
--	  will be created:
--	  - st_gyro (core functions for the driver [it is mandatory]);
--	  - st_gyro_i2c (necessary for the I2C devices [optional*]);
--	  - st_gyro_spi (necessary for the SPI devices [optional*]);
--
--	  (*) one of these is necessary to do something.
-+	  Also need to enable at least one of I2C and SPI interface drivers
-+	  below.
- 
- config IIO_ST_GYRO_I2C_3AXIS
--	tristate
--	depends on IIO_ST_GYRO_3AXIS
--	depends on IIO_ST_SENSORS_I2C
-+	tristate "STMicroelectronics gyroscopes 3-Axis I2C Interface"
-+	depends on (I2C && IIO_ST_GYRO_3AXIS)
-+	default y if (I2C && IIO_ST_GYRO_3AXIS)
-+	select IIO_ST_SENSORS_I2C
-+	help
-+	  Build support for STMicroelectronics gyroscopes I2C interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_gyro_i2c.
-+
- 
- config IIO_ST_GYRO_SPI_3AXIS
--	tristate
--	depends on IIO_ST_GYRO_3AXIS
--	depends on IIO_ST_SENSORS_SPI
-+	tristate "STMicroelectronics gyroscopes 3-Axis SPI Interface"
-+	depends on (SPI_MASTER && IIO_ST_GYRO_3AXIS)
-+	default y if (SPI_MASTER && IIO_ST_GYRO_3AXIS)
-+	select IIO_ST_SENSORS_SPI
-+	help
-+	  Build support for STMicroelectronics gyroscopes SPI interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_gyro_spi.
-+
- 
- config ITG3200
- 	tristate "InvenSense ITG3200 Digital 3-Axis Gyroscope I2C driver"
-diff --git a/drivers/iio/imu/st_lsm9ds0/Kconfig b/drivers/iio/imu/st_lsm9ds0/Kconfig
-index 53b7017014f8..1f6e7365048a 100644
---- a/drivers/iio/imu/st_lsm9ds0/Kconfig
-+++ b/drivers/iio/imu/st_lsm9ds0/Kconfig
-@@ -5,8 +5,6 @@ config IIO_ST_LSM9DS0
- 	depends on (I2C || SPI_MASTER) && SYSFS
- 	depends on !SENSORS_LIS3_I2C
- 	depends on !SENSORS_LIS3_SPI
--	select IIO_ST_LSM9DS0_I2C if I2C
--	select IIO_ST_LSM9DS0_SPI if SPI_MASTER
- 	select IIO_ST_ACCEL_3AXIS
- 	select IIO_ST_MAGN_3AXIS
- 
-@@ -17,12 +15,30 @@ config IIO_ST_LSM9DS0
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called st_lsm9ds0.
- 
-+	  Also need to enable at least one of I2C and SPI interface drivers
-+
- config IIO_ST_LSM9DS0_I2C
--	tristate
--	depends on IIO_ST_LSM9DS0
-+	tristate "STMicroelectronics LSM9DS0 IMU I2C interface"
-+	depends on (I2C && IIO_ST_LSM9DS0)
-+	default y if (I2C && IIO_ST_LSM9DS0)
-+	select IIO_ST_ACCEL_I2C_3AXIS
-+	select IIO_ST_MAGN_I2C_3AXIS
- 	select REGMAP_I2C
-+	help
-+	  Build support for STMicroelectronics LSM9DS0 IMU I2C interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_lsm9ds0_i2c.
- 
- config IIO_ST_LSM9DS0_SPI
--	tristate
--	depends on IIO_ST_LSM9DS0
-+	tristate "STMicroelectronics LSM9DS0 IMU SPI interface"
-+	depends on (SPI_MASTER && IIO_ST_LSM9DS0)
-+	default y if (SPI_MASTER && IIO_ST_LSM9DS0)
-+	select IIO_ST_ACCEL_SPI_3AXIS
-+	select IIO_ST_MAGN_SPI_3AXIS
- 	select REGMAP_SPI
-+	help
-+	  Build support for STMicroelectronics LSM9DS0 IMU I2C interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_lsm9ds0_spi.
-diff --git a/drivers/iio/magnetometer/Kconfig b/drivers/iio/magnetometer/Kconfig
-index 565ee41ccb3a..caec46b93564 100644
---- a/drivers/iio/magnetometer/Kconfig
-+++ b/drivers/iio/magnetometer/Kconfig
-@@ -117,30 +117,35 @@ config IIO_ST_MAGN_3AXIS
- 	tristate "STMicroelectronics magnetometers 3-Axis Driver"
- 	depends on (I2C || SPI_MASTER) && SYSFS
- 	select IIO_ST_SENSORS_CORE
--	select IIO_ST_MAGN_I2C_3AXIS if (I2C)
--	select IIO_ST_MAGN_SPI_3AXIS if (SPI_MASTER)
- 	select IIO_TRIGGERED_BUFFER if (IIO_BUFFER)
- 	help
- 	  Say yes here to build support for STMicroelectronics magnetometers:
- 	  LSM303DLHC, LSM303DLM, LIS3MDL.
- 
--	  This driver can also be built as a module. If so, these modules
--	  will be created:
--	  - st_magn (core functions for the driver [it is mandatory]);
--	  - st_magn_i2c (necessary for the I2C devices [optional*]);
--	  - st_magn_spi (necessary for the SPI devices [optional*]);
--
--	  (*) one of these is necessary to do something.
-+	  Also need to enable at least one of I2C and SPI interface drivers
-+	  below.
- 
- config IIO_ST_MAGN_I2C_3AXIS
--	tristate
--	depends on IIO_ST_MAGN_3AXIS
--	depends on IIO_ST_SENSORS_I2C
-+	tristate "STMicroelectronics magnetometers 3-Axis I2C Interface"
-+	depends on (I2C && IIO_ST_MAGN_3AXIS)
-+	default y if (I2C && IIO_ST_MAGN_3AXIS)
-+	select IIO_ST_SENSORS_I2C
-+	help
-+	  Build support for STMicroelectronics magnetometers I2C interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_magn_i2c.
- 
- config IIO_ST_MAGN_SPI_3AXIS
--	tristate
--	depends on IIO_ST_MAGN_3AXIS
--	depends on IIO_ST_SENSORS_SPI
-+	tristate "STMicroelectronics magnetometers 3-Axis SPI Interface"
-+	depends on (SPI_MASTER && IIO_ST_MAGN_3AXIS)
-+	default y if (SPI_MASTER && IIO_ST_MAGN_3AXIS)
-+	select IIO_ST_SENSORS_SPI
-+	help
-+	  Build support for STMicroelectronics magnetometers SPI interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_magn_spi.
- 
- config SENSORS_HMC5843
- 	tristate
-diff --git a/drivers/iio/pressure/Kconfig b/drivers/iio/pressure/Kconfig
-index fc0d3cfca418..962e45e29142 100644
---- a/drivers/iio/pressure/Kconfig
-+++ b/drivers/iio/pressure/Kconfig
-@@ -194,30 +194,35 @@ config IIO_ST_PRESS
- 	tristate "STMicroelectronics pressure sensor Driver"
- 	depends on (I2C || SPI_MASTER) && SYSFS
- 	select IIO_ST_SENSORS_CORE
--	select IIO_ST_PRESS_I2C if (I2C)
--	select IIO_ST_PRESS_SPI if (SPI_MASTER)
- 	select IIO_TRIGGERED_BUFFER if (IIO_BUFFER)
- 	help
- 	  Say yes here to build support for STMicroelectronics pressure
- 	  sensors: LPS001WP, LPS25H, LPS331AP, LPS22HB, LPS22HH.
- 
--	  This driver can also be built as a module. If so, these modules
--	  will be created:
--	  - st_pressure (core functions for the driver [it is mandatory]);
--	  - st_pressure_i2c (necessary for the I2C devices [optional*]);
--	  - st_pressure_spi (necessary for the SPI devices [optional*]);
--
--	  (*) one of these is necessary to do something.
-+	  Also need to enable at least one of I2C and SPI interface drivers
-+	  below.
- 
- config IIO_ST_PRESS_I2C
--	tristate
--	depends on IIO_ST_PRESS
--	depends on IIO_ST_SENSORS_I2C
-+	tristate "STMicroelectronics pressure sensor I2C Interface"
-+	depends on (I2C && IIO_ST_PRESS)
-+	default y if (I2C && IIO_ST_PRESS)
-+	select IIO_ST_SENSORS_I2C
-+	help
-+	  Build support for STMicroelectronics pressure sensor I2C interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_pressure_i2c.
- 
- config IIO_ST_PRESS_SPI
--	tristate
--	depends on IIO_ST_PRESS
--	depends on IIO_ST_SENSORS_SPI
-+	tristate "STMicroelectronics pressure sensor SPI Interface"
-+	depends on (SPI_MASTER && IIO_ST_PRESS)
-+	default y if (SPI_MASTER && IIO_ST_PRESS)
-+	select IIO_ST_SENSORS_SPI
-+	help
-+	  Build support for STMicroelectronics pressure sensor SPI interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_pressure_spi.
- 
- config T5403
- 	tristate "EPCOS T5403 digital barometric pressure sensor driver"
--- 
-2.30.2
+> ---
+>  drivers/counter/interrupt-cnt.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/counter/interrupt-cnt.c b/drivers/counter/interrupt-=
+cnt.c
+> index 8514a87fcbee..4bf706ef46e2 100644
+> --- a/drivers/counter/interrupt-cnt.c
+> +++ b/drivers/counter/interrupt-cnt.c
+> @@ -37,7 +37,7 @@ static irqreturn_t interrupt_cnt_isr(int irq, void *dev=
+_id)
+>  static int interrupt_cnt_enable_read(struct counter_device *counter,
+>  				     struct counter_count *count, u8 *enable)
+>  {
+> -	struct interrupt_cnt_priv *priv =3D counter->priv;
+> +	struct interrupt_cnt_priv *priv =3D counter_priv(counter);
+> =20
+>  	*enable =3D priv->enabled;
+> =20
+> @@ -47,7 +47,7 @@ static int interrupt_cnt_enable_read(struct counter_dev=
+ice *counter,
+>  static int interrupt_cnt_enable_write(struct counter_device *counter,
+>  				      struct counter_count *count, u8 enable)
+>  {
+> -	struct interrupt_cnt_priv *priv =3D counter->priv;
+> +	struct interrupt_cnt_priv *priv =3D counter_priv(counter);
+> =20
+>  	if (priv->enabled =3D=3D enable)
+>  		return 0;
+> @@ -85,7 +85,7 @@ static int interrupt_cnt_action_read(struct counter_dev=
+ice *counter,
+>  static int interrupt_cnt_read(struct counter_device *counter,
+>  			      struct counter_count *count, u64 *val)
+>  {
+> -	struct interrupt_cnt_priv *priv =3D counter->priv;
+> +	struct interrupt_cnt_priv *priv =3D counter_priv(counter);
+> =20
+>  	*val =3D atomic_read(&priv->count);
+> =20
+> @@ -95,7 +95,7 @@ static int interrupt_cnt_read(struct counter_device *co=
+unter,
+>  static int interrupt_cnt_write(struct counter_device *counter,
+>  			       struct counter_count *count, const u64 val)
+>  {
+> -	struct interrupt_cnt_priv *priv =3D counter->priv;
+> +	struct interrupt_cnt_priv *priv =3D counter_priv(counter);
+> =20
+>  	if (val !=3D (typeof(priv->count.counter))val)
+>  		return -ERANGE;
+> @@ -122,7 +122,7 @@ static int interrupt_cnt_signal_read(struct counter_d=
+evice *counter,
+>  				     struct counter_signal *signal,
+>  				     enum counter_signal_level *level)
+>  {
+> -	struct interrupt_cnt_priv *priv =3D counter->priv;
+> +	struct interrupt_cnt_priv *priv =3D counter_priv(counter);
+>  	int ret;
+> =20
+>  	if (!priv->gpio)
+> --=20
+> 2.33.0
+>=20
 
+--7FtwvdsWJlTSGidV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAmHMD34ACgkQhvpINdm7
+VJLxIRAAkO2xsvPBCG6P16hAV2I0cXpet2bFbbGP9byViFgp4Tut6geRqPvf8JmI
+OblZg/YHtFUZgdRG2epijU0oWMQByCY9jPX2H0pZkWbV+no7FFaSxFTskZ5lOEQ+
+HGT7NKm53L9c0VG8zpN+xuwJVqUdCKJY4mmlcC6svFSRbzS2H0gARiA3n6LlQP46
++Ife+tI0xlvKvjPhshRYPxBhuf5BqvS8P5CZO4/FZnGdIHyDvx09N15i262/a7co
+WP/3hfQb+dgkQGBge1PJGVQYXHgGapHasC6FicsYJ9lFBHNB15kwk68g9vHS+kXA
+mFQCL1kqF5kOKzsZs4zDAtjp6wmZxowGvpJBs6QL+quewy0F+yRREhPwyBe9Yx3z
+3I9bsRP7+JYPzCKQUOnLQKLznhANyhaF9i0O1/9fe8YkB2oaTyxJVO9A0byIQ5CL
+IABCofSpeO/pl94yHY1Q2tH5TltfUKLdJEbC8ZFJzc2EmszpVgXIJAmIIRxaoiN1
+yy1FC1zmvWMG6FJO7qNnVy/jNvl76WQCCmVLkVPL0BUQVWCAxOxAWI89u/RFECOP
+a/5EBSP1CaV6vhOR7DIhcrOWDusjy9jGVhSYa4dPJSCUNRuKgst528dU/TDuqSYa
+rvXDoiX64gsfLby/edH+BXyh+NetZnI63yiVj7l01SB/7UvPBq8=
+=pxsM
+-----END PGP SIGNATURE-----
+
+--7FtwvdsWJlTSGidV--

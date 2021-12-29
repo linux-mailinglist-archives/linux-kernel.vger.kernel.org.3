@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72AA6480E43
+	by mail.lfdr.de (Postfix) with ESMTP id DC526480E44
 	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 01:37:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237856AbhL2Ahs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 19:37:48 -0500
+        id S238028AbhL2Aht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 19:37:49 -0500
 Received: from mail-mw2nam10on2118.outbound.protection.outlook.com ([40.107.94.118]:8991
         "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231808AbhL2Ahq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S234136AbhL2Ahq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Dec 2021 19:37:46 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XcbGO2j96C0N5OrxNl8eQ1gGbfUd1h3a0jgHUCeoOlQbc5q99aUGPW73Q2vPo+RPvji9OWRMzyIVd9Xxk3Hezj+oIvNXQto+V8JABsSVyyhC//fJ0NY0EKGSwNjh4BQH8NWtY1dlhrLNt5KhysU35+lIwfRhThRc3Fvu54IpPZc8XYuWbznNTQy/wKXgfdr8qkUYqxE1iSrcpKBFQE/PWdEaiYgkTC9cJPPjr89KAoml1MhmbMTu9+UQcQN/HUo1LpSju8t9wyuRPneoX/X9tvAoCWZX1dX85d6YaL+qtLo95BQFEUvt+vTYMCIedVDqjYbnQDHA//yL9YFVnzWwnA==
+ b=bxnHKRWhe8f3jtORyvNGc0kTAiHA1HIIh/iwbxSKM8Lqes+EKXXZ6zhI2ujpfnc5rZI4Z2fLryh7DxljN7MsISYibFS4dVYPZxBpThkduSNNXDiW6EKLuBgR/8M2QmN18RYzkI2tN2bZFOIMmRIDQuH61TSItUz+5qrMYaI0Kj0JFUM3HeGeJoPI41bebFLiJ6woWSQnCOGKlG2oAKtUFAeVIZhWtIkMRtXPsI23FZG9tH+WzdxTxg8PUGlWU7s7rMkpHtFCAoetHr6REtHAO4YmVX8DwNKf0cLwaCSTH13MRSYiU0a/Hw98VFGsYJ1sGFlwZqHXqINNWHIupdjkKQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vIhZ/5zmYK4Q0FWsAZjQxzMjsmGWXaXqN42mopO9C4s=;
- b=lO3gPOm3M2soDeiJilop3p82l3sTE7k+CUXq/jen3ToJLGaYAMpoRawTMslDu/RRxhangaffh20iOy3iW9a1a4xJFUwbvw47w1+A9Xfp0RWNQKvQLN6WHqLRrWlIGl3BccfhQ6/LrPox26EIEJ/YG1AkH6Xbqcqrldf7HTooigk2GG08J9J7TVskATdFoCYxj6IXOhrmQODCST+sOvww05rc8M9eY3GXHEc6Ecq/6N1C7ePdYov3HOXMmBkEC66VN2bq5SwvD4zNjAbQ6Dw382hNGBXdPLAz9A6fEUv42BfdPkGKmGvdVdF3qYNWIqemowaTAxqt/qHQIMEC6GfOwQ==
+ bh=z1pIl7S3A9QKhyV2Tb5uhGibnAzkoHPXQjsumWu55+o=;
+ b=lpNd9Z5vljPpODmipGfjIxJ2vDVtjr5rcl6U/Qz3/HYNzqhQvloOGTh8Cz7tWh1VXXS80IAawc+PBXff6Cu1jmFivMoiw+fHXmb5oTlYohv1bMJT0JQqJ9l8Fpqh0Rhd58fUceXZYn59dTz8MKQ02ZoDmg+/uxWx8VYGapTEJnxySmWpQDenjcEG97KVqNegJgWeX+lC03j2nXE0gyUuqWJPdNhOf7rP1UpC4inHjToojxdofQF2sA9t/WpX7rsQW9F4D5vx0LFA0wpdm+FeZ3kObBWOdH72X4O/XM0Alfsj09XWoGb8pD7J1rxcsGchQnTSH9O3kIdpPLICY/oTaw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=in-advantage.com; dmarc=pass action=none
  header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vIhZ/5zmYK4Q0FWsAZjQxzMjsmGWXaXqN42mopO9C4s=;
- b=QGEW870tn02BR4LeFMysKJEz8EewKeyXp6NuE1nAL8OV5Qi3FTz7IwUXymrcb4NJeEoy5r/IdHEIeX+7dZxucibYp/ToDi9PxxhKy0UUyj0r1DMXRfg5pumYC80HM+VNEOVzA+xHEhRmGvIlhRVpBn+XUPwOqidrXAHzJRzxm2E=
+ bh=z1pIl7S3A9QKhyV2Tb5uhGibnAzkoHPXQjsumWu55+o=;
+ b=s8LunFd0Gh29tL9ODwYljktnGOzxXSWfYd2ePaz66wvfIEmHY8ve+UUt+yHgZzvBc28qlcWP2fNsu+Soz01WVwg6WvhRVxElmEOJnMoRi/U2H+ixw+Hhv4ZOUZjTDxy/S/Riloo8ZQBfXRPDbyxoCg2ImUGyKiTAUApioPPz4l4=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=in-advantage.com;
 Received: from MWHPR1001MB2351.namprd10.prod.outlook.com (10.174.170.165) by
  CO1PR10MB4612.namprd10.prod.outlook.com (20.182.138.214) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4823.17; Wed, 29 Dec 2021 00:37:44 +0000
+ 15.20.4823.17; Wed, 29 Dec 2021 00:37:45 +0000
 Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
  ([fe80::2d52:2a96:7e6c:460f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
  ([fe80::2d52:2a96:7e6c:460f%4]) with mapi id 15.20.4823.023; Wed, 29 Dec 2021
- 00:37:44 +0000
+ 00:37:45 +0000
 From:   Colin Foster <colin.foster@in-advantage.com>
 To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
@@ -44,10 +44,12 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         UNGLinuxDriver@microchip.com,
         Steen Hegelund <Steen.Hegelund@microchip.com>,
         Lars Povlsen <lars.povlsen@microchip.com>
-Subject: [PATCH v1 pinctrl-next 0/1] add blink and activity functions to SGPIO
-Date:   Tue, 28 Dec 2021 16:37:28 -0800
-Message-Id: <20211229003729.618079-1-colin.foster@in-advantage.com>
+Subject: [PATCH v1 pinctrl-next 1/1] pinctrl: microchip-sgpio: add activity and blink functionality
+Date:   Tue, 28 Dec 2021 16:37:29 -0800
+Message-Id: <20211229003729.618079-2-colin.foster@in-advantage.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211229003729.618079-1-colin.foster@in-advantage.com>
+References: <20211229003729.618079-1-colin.foster@in-advantage.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: CO1PR15CA0085.namprd15.prod.outlook.com
@@ -55,92 +57,321 @@ X-ClientProxiedBy: CO1PR15CA0085.namprd15.prod.outlook.com
  (2603:10b6:301:35::37)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d8d1953c-82a9-40f5-3cbb-08d9ca636d9b
+X-MS-Office365-Filtering-Correlation-Id: dfb5939e-0318-4e8c-34da-08d9ca636e17
 X-MS-TrafficTypeDiagnostic: CO1PR10MB4612:EE_
-X-Microsoft-Antispam-PRVS: <CO1PR10MB461219714BCC95163D119AB4A4449@CO1PR10MB4612.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-Microsoft-Antispam-PRVS: <CO1PR10MB461267BB226B563E0444111DA4449@CO1PR10MB4612.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: a+5O69QIYefJkCyWN6SZw6KoEFZWHs2wnDPMt/r7hLYlIB2pZ+ymx4gNbwnoK5JPdfeOX/VcZOaPNKRJ6J5w1Ztx2D1peFe8WvyssAFTmd273sIi2fEGMMxPIe1HzDjYMnaP6kXpN1uQ8FSPWfdLfE91ulb2YdTWMmO6MrPJ5MREkupPXFYU9KtihgPYJ9JiIkH9iKI+j67naTI0YFbqOKuWQzajQBi+oetO6b/vd06PB8+mrskEQ6QOeuDQauIgEYA6Viz2pjLiVu39mDdtbbP/VqZhAT/dQFhRdPC5j18NcGAwUlPtdY4ExAm1nhVcXkpiYLVsUKtjXoiCYvi3e8j59SoJ5zv49VMBxHzFohwlVcHlcTHBCOS5QbJD5qZdHh3yS0s+rdF72Am6wX06jlVhVRjm3/i75Lyz4x6Kx4zQsWSXrYmsvmzC+xML7iwNhGH3G/dSOclM+5CymfQT/+lmzMn9tYepe48LGmpNRtjKyv+fwc4pwGQTwq18NSXZfJMR74YHukQti3iRxa3rXa8yKnSEZXyYy22g/LNGIDuroShI/mYRVhQuX9AaOOJ7LPCsBFXuHErk+4uXcGFbQKz0lxVPOMJdMyqfl9NkrqD1euM1MGfCfUWzrpTTYh0bfBMjLAAUuDTLWs3fLtcoOSbAAd5/rA3RASlkfQbneg/Zbq1EefgvJntuDEkCCVjG
+X-Microsoft-Antispam-Message-Info: 8apr4PnUmB2Q7FHfiqXZ87RNlhOqMWjw9kmIo2Oc3T1gssiNStP36PeixD+GgiDKC3HOwOwa94tlmdf84/AKwDpur/H14mAyvI+7ipm8AaX1HB3lnL5w48WQRJirLtM1kKw8mCt1lHdaWmuQkyTz5aRVsZyWGIerAWhF5zB7cOwjEyT44J+P26Ip6sN1V3fd7NILjnL/k5Mfag4TwAmiEf3BMO9hjNcmbMMfC0mU0vsb2okJmlThkb6ML2mB92MdCCeA1sECP+RV8zAkO9fFHs8M32gKMVD2MHXuqJubivkgXPFVHvkyDwARywFNHIrWh1c2QhWw8wmkRtag9bB3iLY5aqjiaN4HrV+1nHMQFIPzWQy1L8AOe5qccyhPluNppWAic2X7XF07DjR6osWMCmiOJKtquCaP0cA0AdQ5Uc8mEktdlt1HChIiYWXMsJohl59lKI5lEBEXbIDrdek0Qni9IkSg72XfT9LjXumHkkzPBdalYgW8MXsfgaoDQElMZEaxZvcMwSsvuDsbF4KtiOIIgfBTedxNlE0RgCMsnYMwvkXuLspOPQB9HeQliRv03JkKT+ggi2tPKoZK7mgBIUyEoETaKhYMYBmOfPGZEHQbfq8Mw7UxhmasBzzjyX/pmrvUUnOhZmvS8cW+siq32jKU4znU9XUGDAfskjuLJbA7a2dgI0ShvGwoNn401K1AZGFJFO8JTM8YFoA0QoWcMQ==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(376002)(39830400003)(366004)(42606007)(136003)(346002)(66946007)(8936002)(2616005)(5660300002)(1076003)(8676002)(186003)(38350700002)(26005)(316002)(6486002)(38100700002)(6512007)(508600001)(54906003)(2906002)(86362001)(66556008)(6666004)(83380400001)(66476007)(36756003)(4326008)(52116002)(6506007)(44832011);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bC+RsQvXfBuQR3Azc1Ev7T74dOm55j673lvS5VhyOTqkESfWPqcjwU5EyWZX?=
- =?us-ascii?Q?oLBzJG9bjWAXgIfDCStVX7Oa/jiKIoUEh1VKed9JJ+1jPoW9IkcRhbXqzLZ2?=
- =?us-ascii?Q?jFc4Sp86lDRarSqIE1+yniGDHoio5JqV4KZAph69pV1GCLA5xXZ8r+Q1FUPT?=
- =?us-ascii?Q?XE3qXXmbGdNPbRrWYAIKaVcm824ZZ+d5WqeGbIxCkhMkFH/8CgM2wMUIUJZy?=
- =?us-ascii?Q?/oZK6oDW6YSMVGmWdkOqF22c4P++CLTsFHqAo0hqPqtwHpx9drXrmgo9ZTkX?=
- =?us-ascii?Q?71XS/mUYLnjOd9/XAzisUJ9fnWOtiRofmpmLzD8RbXdJdeEzyudr7A7tBS7N?=
- =?us-ascii?Q?uiFRIPECDq5dijeXWhLIirH2QzpCyNFGWOCmvoX9Ym7WJOUMpG7trZckZClj?=
- =?us-ascii?Q?IImYS77tpQEkCrvh9YBHArp6wil1jvX48eTef30DhwlS+KJHHNz656E/iJ0t?=
- =?us-ascii?Q?uw63NHjEyYhvEr3GOI8FifRPeHP/rYqq3KbLsJg2DlSC/wWw+S44l5xY4vL8?=
- =?us-ascii?Q?AtW5nxv2BUTpyoRvrIhnLRTAwBiX7qsvaKfc4Nc3U5po7rCyzDi4fXtSmpWI?=
- =?us-ascii?Q?bO4ltpKsxrBy7ZTq538v7yCm/7NJyrh/BfJGL5IMX8MoegpDjnfjXqJqXt1z?=
- =?us-ascii?Q?gygO4hb0ngSIjD9/inOFH80vMkr8FticcWx660wyMNqvSz3SEw3uXsaG/P+7?=
- =?us-ascii?Q?QFtE1aGvfUYIssW/oC7LyDMJRlbTG+02ezhnMqkejlpiSm5h8I1Z2n+eEwQ1?=
- =?us-ascii?Q?OfZf6hJA/8t5+/oL1E+e7l+iEr7ALNXxiwMJlfMj/Nuh4GjjbbtK3EBA6C14?=
- =?us-ascii?Q?q30K5zxOusUjwopcH2f2m6Lf7Cx/VraWcIJzpHkBUwCg+Jkl2flVch418QY1?=
- =?us-ascii?Q?35h6Po4RbdRCg95ZSJIghLve0Pt5c1vu+BzSQC7Bewt/041Ilb/qIV/M8ZGL?=
- =?us-ascii?Q?AdAoT1Kbq7MKIX8PCUXqOF23cx6/a/1znSU7q504nO1736b9HA8I8Wgy7pi0?=
- =?us-ascii?Q?+OGH+Q2eYhRt6KYpa58wFa+yxybE5CFAcn8MMbvGanrSizI5DIaY3ECXdGCY?=
- =?us-ascii?Q?t471+e5kZbrSQ/6rVNQ3RdbAQO26eZPxch+gR6W0/GHjuAppUBLxJQU/J3nN?=
- =?us-ascii?Q?iwFCQCw19fvyO2wX5uufz3nvinsSGMdwFZuPN+h/YRULPm83chTSSgjpt0T7?=
- =?us-ascii?Q?PsFsiJM6Cjj5eO7SS3f+CORs5iok1KeJsPV1yrCpnFsu4HBUAKoksssI2U6N?=
- =?us-ascii?Q?jcR6945CvIQSaO2Swkk960SDq7jJS4tK4KYNJ+hHffnCHPl4QYUCVNhKjYPp?=
- =?us-ascii?Q?ESe7rcxP2r70GYmIVyFcOI8Y3sIHuJ61xEzVTLOCmuEZjxEgYPyY1fHbzOzv?=
- =?us-ascii?Q?OnRSOOTACZblU6p11GzUEEs5sWa7TY9+r8OPk2uIOE/S5O2vvcxQfAYEqGo1?=
- =?us-ascii?Q?iyIQL5wN2fi1wJ0hWxmy+epD8AZ3m0cJ2FdNQD1o30r8o9gsncNzYDri3Mbq?=
- =?us-ascii?Q?C88zhgbddTZpMA2WSYu5xlpbm8vbsg+hP6WSEZm2yejSUyAgylPIVeNlA1yl?=
- =?us-ascii?Q?N3nT642S5+BbXTVGe6Ex5+sO0ye5uz+C5V1sTC0/AcaGwUA9FwWT08wQht8J?=
- =?us-ascii?Q?TJXddTiexsSMSCBDaQL2xwViWFWObWRFb03BqyYKTA/eEsMowpoa58Nv453j?=
- =?us-ascii?Q?tHx5BA=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tsrTXiBn740irIEx/6HL+dXov/4IXe5FOvVcJ4qmvu23Ax2mLXd34rpz460k?=
+ =?us-ascii?Q?Jxlkp0+zftHCre4rlRrCNb0SfkBGJkR2KIqdrpjpnE0uiQAC/FqMtWKqNHIW?=
+ =?us-ascii?Q?Yj/p4of5HboyoasF/bdNjw3SjbJsxgAicWOMQujFp0SFmxcPrBgyBT78OTTW?=
+ =?us-ascii?Q?5bC26If2ChPPR5rMI/4WngN/6VpDVRoVmdGraKDKtJ+KMuUf8YJPH4ARC9Wj?=
+ =?us-ascii?Q?HrO6qyznsYWlJ/VrdebzEyevuVcA5/5AD2M3d1yCTPj8gdZd30lkVevWE4oY?=
+ =?us-ascii?Q?XdXpAmyZzy33roMCfNlpiCLOQYBuSMzi+ncqeJ0SCWaYvR5zUPaVjbdBUc8q?=
+ =?us-ascii?Q?hZSctUeO45AXxCIMPy/dkN9rnb83MeIzwrw787ERiMd+QEjdt4wn4Zy4an4Z?=
+ =?us-ascii?Q?S9gH+TA6OGDE4bSiuXuya/pakhF8qqKb41J/xBkWh3pDto8RrF6/63d6nkek?=
+ =?us-ascii?Q?hv3RrnfTSpqvMAvsUEu9vnILLmE37QedzebYx53SlTGfuk2IMGV2OihKQqr4?=
+ =?us-ascii?Q?v0Zr6A1xiJ8oTWmEjFBFVnoGnd+sNi6f0uIaXOdJIdlkIxNIv17k80tm4hRn?=
+ =?us-ascii?Q?vTSu6bfhQ0IZkuLodGQsOB2CyhbEMppS//hBMvB1rFe63pXuOFL9IciE66YC?=
+ =?us-ascii?Q?r2/92Pwx2//mwU4cdHexR4GM5h7PBY4paZqRMjZTGCUgRRkKWLLGtpnro5g6?=
+ =?us-ascii?Q?uSCRhUE7Yc/ln2Z6Lvnuu2jKjBAOvPRP7OSxvMVx73wgHRfBEjg2x2ccnudy?=
+ =?us-ascii?Q?Z80qKtMdGy3hfQF7YnQky6GFp01HBQmDkdD43bpFM6Qggh2zos3rmRX4KCWL?=
+ =?us-ascii?Q?+xOugidQA1rqv3y2id6Yu7SXco9PFQAHqWmaDXu6CPWbPAcqq+re/WDLFSe4?=
+ =?us-ascii?Q?UhTyGsdCPy87XrgfXfsSzTh5NDyoLnvOx6NvWz+Ai5Q1lwUvfaa1M68U6ZMy?=
+ =?us-ascii?Q?CcwZve5U9ivpww2iFANeI6UdwzpzZBiV6neK87n3fHSPkHETYUW9VAA76sjw?=
+ =?us-ascii?Q?u/HwSd6ZlPkfe5FevZ4bNE9HnliRh910XXnRTPP741J1S4Ex1Mw9HbcNdJLh?=
+ =?us-ascii?Q?+eFuhJ4Pmq/6Df5Tp/qI0r2tvpY7uU5ZEMqyBho1Ip5v8KWbKXibN5RAW3WM?=
+ =?us-ascii?Q?a2qJH4Zw2Pknlg/gtT8KQgbMwXgKa+BuZXcXmkBsXiTSkqeBNhH9AVDnFU4i?=
+ =?us-ascii?Q?KEPGszDw17tamqM00z7gDeGWfsxiYYBRKJTvZi7n9RpnQixDU06paMMUESLx?=
+ =?us-ascii?Q?vK9LSQdSQEbDbJjxuDyBqAjAlftossOVxn44sLuWAu3VXYmFNVCm/iHM1xI+?=
+ =?us-ascii?Q?chJIU/aQRfmvXoIIPpXfR5YSZmabQF5+gxz6HvWb7T3LilTqCkQK234ZUuLU?=
+ =?us-ascii?Q?ZICjnGByG/J1mDZY246vEdqyXxi2J2LrO++u+7FprRiJFMALZJq7j3nRGmOW?=
+ =?us-ascii?Q?Uq9kZ+yzlsQ5CWlU+u7++/9rSSoZQD3h2cTzqw6uPtSTpwKTNguNpgvtlanQ?=
+ =?us-ascii?Q?8IFTpaDizVpaKOZJHRJNsURJW8cK7+AOaz+lg4XTSDK54JtjoJJcFpN6xR2b?=
+ =?us-ascii?Q?0peTpWocAL/pQJpqjKNhXyWrtcaeZ5gWJdv23pzolImu3RfmwLm6nDCpbuOF?=
+ =?us-ascii?Q?kxsaOvULrRPD1mD4/1TpQ1QZOaPiaSUXtWpCk5vG85nYrfyug4v9SWCQ/M0G?=
+ =?us-ascii?Q?kaRD7g=3D=3D?=
 X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d8d1953c-82a9-40f5-3cbb-08d9ca636d9b
+X-MS-Exchange-CrossTenant-Network-Message-Id: dfb5939e-0318-4e8c-34da-08d9ca636e17
 X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Dec 2021 00:37:44.2692
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Dec 2021 00:37:44.8942
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3ed563Kuyzzk2I5iPkPegx7+XKknCzopAIhJe2p2mwORRYK2r72xmpipl5xwcQowlQWeOq4NGDPiafwWknJgTYYBkenq08D+HsJDZx8UccU=
+X-MS-Exchange-CrossTenant-UserPrincipalName: lrjbq3xWDfON8KJyHMXOx21kXHzvofbw+paOi2ifOqM4NG8hbH/7w0KYcLd9hpFH1teoPKvzMeLouIiSwLYqj+yEU7DO2BecE12u6nqqPAY=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4612
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Expose a debugfs / devicetree interface for Microsemi SGPIO controllers.
-By writing values of 2-5, the SGPIO pins can be configured for either
-automatic blinking or activity.
+Add additional functions - two blink and two activity, for each SGPIO
+output.
 
-The implementation is modeled after the code in
-/drivers/pinctrl/pinctrl-ocelot.c.
-
-I have only tested this with currently out-of-tree patches for the
-VSC7512 that I hope to get in soon. They are not needed for VSC7513 /
-VSC7514, SPARX5, or LUTON - but I don't have any hardware to test.
-
-Of note: the 7512 chip has a discrepancy between the datasheet and the
-registers. The datahseet claims 20Hz blink default frequency, the
-registers claim 5 Hz default frequency for BMODE_0. I override the
-OCELOT registers to correct for this. I don't know if that is needed for
-LUTON or SPARX, but having two blink modes at the same frequency isn't
-beneficial. As such, I make the blink modes match the 5Hz / 20Hz for the
-two modes.
-
-Tested with VSC7512 by way of:
-echo SGPIO_O_p1b0 {blink0,blink1,activity0,activity1} > 
-/sys/kernel/debug/pinctrl/pinctrl-sgpio-pinctrl-sgpio-output/pinmux-select
-
-LEDs blink!
-
-
-Colin Foster (1):
-  pinctrl: microchip-sgpio: add activity and blink functionality
-
+Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+---
  drivers/pinctrl/pinctrl-microchip-sgpio.c | 135 +++++++++++++++++++++-
  1 file changed, 130 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/pinctrl/pinctrl-microchip-sgpio.c b/drivers/pinctrl/pinctrl-microchip-sgpio.c
+index 8e081c90bdb2..e3230e5dedc0 100644
+--- a/drivers/pinctrl/pinctrl-microchip-sgpio.c
++++ b/drivers/pinctrl/pinctrl-microchip-sgpio.c
+@@ -51,6 +51,15 @@ enum {
+ 	SGPIO_FLAGS_HAS_IRQ	= BIT(0),
+ };
+ 
++enum {
++	FUNC_GPIO,
++	FUNC_BLINK0,
++	FUNC_BLINK1,
++	FUNC_ACTIVITY0,
++	FUNC_ACTIVITY1,
++	FUNC_MAX,
++};
++
+ struct sgpio_properties {
+ 	int arch;
+ 	int flags;
+@@ -60,16 +69,22 @@ struct sgpio_properties {
+ #define SGPIO_LUTON_AUTO_REPEAT  BIT(5)
+ #define SGPIO_LUTON_PORT_WIDTH   GENMASK(3, 2)
+ #define SGPIO_LUTON_CLK_FREQ     GENMASK(11, 0)
++#define SGPIO_LUTON_SIO_BMODE_0	 GENMASK(21, 20)
++#define SGPIO_LUTON_SIO_BMODE_1	 GENMASK(19, 18)
+ #define SGPIO_LUTON_BIT_SOURCE   GENMASK(11, 0)
+ 
+ #define SGPIO_OCELOT_AUTO_REPEAT BIT(10)
+ #define SGPIO_OCELOT_PORT_WIDTH  GENMASK(8, 7)
+ #define SGPIO_OCELOT_CLK_FREQ    GENMASK(19, 8)
++#define SGPIO_OCELOT_SIO_BMODE_0 GENMASK(20, 19)
++#define SGPIO_OCELOT_SIO_BMODE_1 GENMASK(22, 21)
+ #define SGPIO_OCELOT_BIT_SOURCE  GENMASK(23, 12)
+ 
+ #define SGPIO_SPARX5_AUTO_REPEAT BIT(6)
+ #define SGPIO_SPARX5_PORT_WIDTH  GENMASK(4, 3)
+ #define SGPIO_SPARX5_CLK_FREQ    GENMASK(19, 8)
++#define SGPIO_SPARX5_SIO_BMODE_0 GENMASK(16, 15)
++#define SGPIO_SPARX5_SIO_BMODE_1 GENMASK(18, 17)
+ #define SGPIO_SPARX5_BIT_SOURCE  GENMASK(23, 12)
+ 
+ #define SGPIO_MASTER_INTR_ENA    BIT(0)
+@@ -98,22 +113,46 @@ static const struct sgpio_properties properties_sparx5 = {
+ 	.regoff = { 0x00, 0x06, 0x26, 0x04, 0x05, 0x2a, 0x32, 0x3a, 0x3e, 0x42 },
+ };
+ 
+-static const char * const functions[] = { "gpio" };
++static const char * const function_names[] = {
++	[FUNC_GPIO] = "gpio",
++	[FUNC_BLINK0] = "blink0",
++	[FUNC_BLINK1] = "blink1",
++	[FUNC_ACTIVITY0] = "activity0",
++	[FUNC_ACTIVITY1] = "activity1",
++};
++
++static const int function_values[] = {
++	[FUNC_GPIO] = 0,
++	[FUNC_BLINK0] = 2,
++	[FUNC_BLINK1] = 3,
++	[FUNC_ACTIVITY0] = 4,
++	[FUNC_ACTIVITY1] = 5,
++};
++
++struct sgpio_pmx_func {
++	const char **groups;
++	unsigned int ngroups;
++};
+ 
+ struct sgpio_bank {
+ 	struct sgpio_priv *priv;
+ 	bool is_input;
+ 	struct gpio_chip gpio;
+ 	struct pinctrl_desc pctl_desc;
++	struct sgpio_pmx_func func[FUNC_MAX];
++	struct pinctrl_pin_desc *pins;
+ };
+ 
+ struct sgpio_priv {
+ 	struct device *dev;
+ 	struct sgpio_bank in;
+ 	struct sgpio_bank out;
++	int ngpios;
+ 	u32 bitcount;
+ 	u32 ports;
+ 	u32 clock;
++	u32 bmode0;
++	u32 bmode1;
+ 	struct regmap *regs;
+ 	const struct sgpio_properties *properties;
+ };
+@@ -223,6 +262,32 @@ static inline void sgpio_configure_clock(struct sgpio_priv *priv, u32 clkfrq)
+ 	sgpio_clrsetbits(priv, REG_SIO_CLOCK, 0, clr, set);
+ }
+ 
++static inline void sgpio_configure_blink_modes(struct sgpio_priv *priv)
++{
++	u32 clr, set;
++
++	switch (priv->properties->arch) {
++	case SGPIO_ARCH_LUTON:
++		clr = SGPIO_LUTON_SIO_BMODE_0 | SGPIO_LUTON_SIO_BMODE_1;
++		set = FIELD_PREP(SGPIO_LUTON_SIO_BMODE_0, priv->bmode0) |
++		      FIELD_PREP(SGPIO_LUTON_SIO_BMODE_1, priv->bmode1);
++		break;
++	case SGPIO_ARCH_OCELOT:
++		clr = SGPIO_OCELOT_SIO_BMODE_0 | SGPIO_OCELOT_SIO_BMODE_1;
++		set = FIELD_PREP(SGPIO_OCELOT_SIO_BMODE_0, priv->bmode0) |
++		      FIELD_PREP(SGPIO_OCELOT_SIO_BMODE_1, priv->bmode1);
++		break;
++	case SGPIO_ARCH_SPARX5:
++		clr = SGPIO_SPARX5_SIO_BMODE_0 | SGPIO_SPARX5_SIO_BMODE_1;
++		set = FIELD_PREP(SGPIO_SPARX5_SIO_BMODE_0, priv->bmode0) |
++		      FIELD_PREP(SGPIO_SPARX5_SIO_BMODE_1, priv->bmode1);
++		break;
++	default:
++		return;
++	}
++	sgpio_clrsetbits(priv, REG_SIO_CONFIG, 0, clr, set);
++}
++
+ static void sgpio_output_set(struct sgpio_priv *priv,
+ 			     struct sgpio_port_addr *addr,
+ 			     int value)
+@@ -352,13 +417,18 @@ static const struct pinconf_ops sgpio_confops = {
+ 
+ static int sgpio_get_functions_count(struct pinctrl_dev *pctldev)
+ {
+-	return 1;
++	struct sgpio_bank *bank = pinctrl_dev_get_drvdata(pctldev);
++
++	if (bank->is_input)
++		return 1;
++	else
++		return ARRAY_SIZE(function_names);
+ }
+ 
+ static const char *sgpio_get_function_name(struct pinctrl_dev *pctldev,
+ 					   unsigned int function)
+ {
+-	return functions[0];
++	return function_names[function];
+ }
+ 
+ static int sgpio_get_function_groups(struct pinctrl_dev *pctldev,
+@@ -366,8 +436,10 @@ static int sgpio_get_function_groups(struct pinctrl_dev *pctldev,
+ 				     const char *const **groups,
+ 				     unsigned *const num_groups)
+ {
+-	*groups  = functions;
+-	*num_groups = ARRAY_SIZE(functions);
++	struct sgpio_bank *bank = pinctrl_dev_get_drvdata(pctldev);
++
++	*groups  = bank->func[function].groups;
++	*num_groups = bank->func[function].ngroups;
+ 
+ 	return 0;
+ }
+@@ -375,6 +447,15 @@ static int sgpio_get_function_groups(struct pinctrl_dev *pctldev,
+ static int sgpio_pinmux_set_mux(struct pinctrl_dev *pctldev,
+ 				unsigned int selector, unsigned int group)
+ {
++	struct sgpio_bank *bank = pinctrl_dev_get_drvdata(pctldev);
++	struct sgpio_priv *priv = bank->priv;
++	struct sgpio_port_addr addr;
++	int f;
++
++	f = function_values[selector];
++	sgpio_pin_to_addr(priv, group, &addr);
++	sgpio_output_set(priv, &addr, f);
++
+ 	return 0;
+ }
+ 
+@@ -693,6 +774,30 @@ static void sgpio_irq_handler(struct irq_desc *desc)
+ 	}
+ }
+ 
++static int sgpio_create_group_func_map(struct device *dev,
++				       struct sgpio_bank *bank)
++{
++	struct sgpio_priv *priv = bank->priv;
++	int f, i;
++
++	if (bank->is_input)
++		return 0;
++
++	for (f = 0; f < FUNC_MAX; f++) {
++		bank->func[f].ngroups = priv->ngpios;
++		bank->func[f].groups = devm_kcalloc(dev, priv->ngpios,
++						    sizeof(char *), GFP_KERNEL);
++
++		if (!bank->func[f].groups)
++			return -ENOMEM;
++
++		for (i = 0; i < priv->ngpios; i++)
++			bank->func[f].groups[i] = bank->pins[i].name;
++	}
++
++	return 0;
++}
++
+ static int microchip_sgpio_register_bank(struct device *dev,
+ 					 struct sgpio_priv *priv,
+ 					 struct fwnode_handle *fwnode,
+@@ -716,6 +821,7 @@ static int microchip_sgpio_register_bank(struct device *dev,
+ 		ngpios = 64;
+ 	}
+ 
++	priv->ngpios = ngpios;
+ 	priv->bitcount = ngpios / SGPIO_BITS_PER_WORD;
+ 	if (priv->bitcount > SGPIO_MAX_BITS) {
+ 		dev_err(dev, "Bit width exceeds maximum (%d)\n",
+@@ -738,6 +844,7 @@ static int microchip_sgpio_register_bank(struct device *dev,
+ 
+ 	pctl_desc->npins = ngpios;
+ 	pctl_desc->pins = pins;
++	bank->pins = pins;
+ 
+ 	for (i = 0; i < ngpios; i++) {
+ 		struct sgpio_port_addr addr;
+@@ -753,6 +860,12 @@ static int microchip_sgpio_register_bank(struct device *dev,
+ 			return -ENOMEM;
+ 	}
+ 
++	ret = sgpio_create_group_func_map(dev, bank);
++	if (ret) {
++		dev_err(dev, "Unable to create group func map.\n");
++		return ret;
++	}
++
+ 	pctldev = devm_pinctrl_register(dev, pctl_desc, bank);
+ 	if (IS_ERR(pctldev))
+ 		return dev_err_probe(dev, PTR_ERR(pctldev), "Failed to register pinctrl\n");
+@@ -895,6 +1008,18 @@ static int microchip_sgpio_probe(struct platform_device *pdev)
+ 		sgpio_writel(priv, 0, REG_PORT_CONFIG, port);
+ 	sgpio_writel(priv, priv->ports, REG_PORT_ENABLE, 0);
+ 
++	/*
++	 * The datasheet and register definitions contradict themselves, at
++	 * least for the VSC7512. The Datasheet Revision 4.2 describes both
++	 * default blink modes as 20 Hz, but the registers show the default
++	 * blink mode 0 as 5 Hz. Two identical blink modes aren't very useful,
++	 * so override BMODE_0 here to match the 5Hz "default" described in the
++	 * register map.
++	 */
++	if (priv->properties->arch == SGPIO_ARCH_OCELOT)
++		priv->bmode0 = 2;
++	sgpio_configure_blink_modes(priv);
++
+ 	return 0;
+ }
+ 
 -- 
 2.25.1
 

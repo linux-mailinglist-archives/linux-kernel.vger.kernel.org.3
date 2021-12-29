@@ -2,193 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7BC480E48
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 01:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D492B480E4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 01:47:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238042AbhL2Aij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 19:38:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238030AbhL2Aih (ORCPT
+        id S238052AbhL2Ar0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 19:47:26 -0500
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:22768 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238046AbhL2ArZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 19:38:37 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D562C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 16:38:37 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so18464649pjp.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 16:38:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hjUAN9+iAYchoekHcAxgltTkGjYeMuzObvv9td4+9a4=;
-        b=C+GxiYcVqyCWYFi9nIBdcAjF5+71YdP+ddRsA4ncIdJ+2un/4sai3g+KS2Qs93clRx
-         941Bg8yzaXMHrVBE/brgwXy6fKRjpKWHD9oomOCPvmO278PTUViUIQc6Uq5EPSz6JFVA
-         4umrBnTGni6cHaybpagiMTbiL/aWQ3/zpc9a50p+wJuBWV7UA+zVxENyCdTtNuE+lYCt
-         t8FUkDx3+VlDJfPw5CoppaOsA6vOjg6SEdh60X6+P4/zcex0fwf57eTLymwRRhWFGBlU
-         rTkfWrMHXAAYgoJMQKy3vujnOjDQwJXqV8jWYi8smuvhhKDvdG72dcInT4J5lUIfAPYQ
-         c+QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hjUAN9+iAYchoekHcAxgltTkGjYeMuzObvv9td4+9a4=;
-        b=uI3OdPyzFqNAmxyzESN2s966fgQ7DZfbh7O74/ceFjYRrLHhBW4/BGPFMwNeO1p5H7
-         QOdDkV97KJUD09uz+zzOcn0bFIsBvUVgd9Mde1UiWKcqzA9m8jctfu94Xc+bAoc/b91r
-         Rc6Y/cVnPsXbOzrdtDeVTA8AerbcK1SH+z371Y3a7CK/6LV6gq92LKlMPq2p92SkL7/C
-         2rotq4C6VsuGTSVFpGVkm80qt61ZrS3b5YtJAdsNSkBl2hVq6PKhasu+KwLe/TZzc5YU
-         anfP8xqmBBvdrXKs6qrrP4ULvimjg0gT/ajfUmiY6NJr7KxhCf6AEm1oW/YVMrzyz9ja
-         73sQ==
-X-Gm-Message-State: AOAM530i4agmcra/NmXbYDKLPkTW/fkxgXllszIkk6q0+vmBs8qCMR+n
-        6HPErboTe4bA37dV0KyJBfIyYpQxJOcyCQ==
-X-Google-Smtp-Source: ABdhPJzyxzL1SmeyMHBKiG3Hok/7s0LwyPr5oMw7ZZmLDNjluQeMElELTXAK75NFNqjmZtHM6KzE6w==
-X-Received: by 2002:a17:903:41c5:b0:148:a658:8d33 with SMTP id u5-20020a17090341c500b00148a6588d33mr24150162ple.153.1640738316228;
-        Tue, 28 Dec 2021 16:38:36 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id p1sm13586433pgj.46.2021.12.28.16.38.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 16:38:35 -0800 (PST)
-Date:   Wed, 29 Dec 2021 00:38:32 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jing Liu <jing2.liu@intel.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, pbonzini@redhat.com, corbet@lwn.net,
-        shuah@kernel.org, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, guang.zeng@intel.com,
-        wei.w.wang@intel.com, yang.zhong@intel.com
-Subject: Re: [PATCH v3 19/22] kvm: x86: Get/set expanded xstate buffer
-Message-ID: <YcuuCMCQryzUFoAZ@google.com>
-References: <20211222124052.644626-1-jing2.liu@intel.com>
- <20211222124052.644626-20-jing2.liu@intel.com>
+        Tue, 28 Dec 2021 19:47:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1640738844; x=1672274844;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=wP3H4SA7VvXxziK/A2hUAsABBjyVMyttXyCPdeD5U/s=;
+  b=ZU+I8H4YqQKC1/ikFJAf0yeY/MNUR0tfhX0eANBvX3BXr2TE6PRtTHcw
+   w25d5Roj738pDSth0+qus+RCbX5/LuXz+Rm1plWNJlKre6hfOWCqaGRGf
+   vioG7U9Nm7H6F08/qcQfxgETDec1NyFxLYpVR+UOHEWAS3npg2xgZoxUa
+   zwBU12dp+IEvshQxfcKoO97XNtU44JN/cDxulAHop54sKRrSjnECTTVd8
+   +cMQYN/o0ZXL3TE3dVSMGmHfjAJsrBPvWkm5Gn/Ds82cfuwRjG3VgBCbr
+   iLeUrs0bipGN57iwTWfNCoN/JxPXCX/LvuCdk47oJcsg0Md9CnhVDATNA
+   w==;
+X-IronPort-AV: E=Sophos;i="5.88,243,1635177600"; 
+   d="scan'208";a="188246451"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 29 Dec 2021 08:47:24 +0800
+IronPort-SDR: 3F5mQpREmMVHbdYDajgBKV9Kt/KV3w/VQLMxzfuFogyCpGZDMrDgttCF/Ks5sopUJoGGuVXj8Z
+ iFJ3WDqnenwR4YumQorAvsBxfqzGGgUfpX016Sht8Y7hFKyaUmif1MQdcB2dNgaUaSpAf3ciab
+ WyA7LKgb9CmtuREC0CdQLsfmp3HXcIWWxOy0JGgF+M8CfMz/zevwSr8Hcr+S3GtqQdEafm9ynV
+ xuFPmMVpEUmh7X5xk7v7ViEj3Di+Ti8/0G6WANznhrJ0v6nfARfYVdC4X4emLiUHEA9VbAsx29
+ CtIuK0vtAGybO99qIuqzEJh3
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 16:20:03 -0800
+IronPort-SDR: 33nrQXPSErU01lae9yi7fdrco7bh5TYIAnifmPZtZ3BzUgDkWR2gwK3bGjHuEXTV6Nv3dQENQF
+ sVD0JIF55NjQy00N9c6XYM/Bs4WaQ0r6Q9uI1itigIkovY2+H8BBcjzpOnp6/X66E0ox/bi+fr
+ eGshJjk0X1p8t83VxjKsf6HTEH4gL+i6xUEtKA3OdWDbqngHbWCRUxnjqSUj2aLWcHuVIUZfNn
+ LhX2NBwHFQYm5MrrAwz7n/z9X/RniO7FnKOFIhOrPiu2pkqaMNr8k0LypoNiia5FzuKfLNq0io
+ oeU=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 16:47:25 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JNt636ShLz1RvTg
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 16:47:23 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1640738843; x=1643330844; bh=wP3H4SA7VvXxziK/A2hUAsABBjyVMyttXyC
+        PdeD5U/s=; b=C+BJZQleyy0zXRskBkT1Tbu2s7z8gTb6mkxe2i9YLhYjA1tLWVc
+        cMh1SNQfgW8ZnHz46BlHmIisBd3Ky8PLPrKfxYHBtYLIqOlLydaDqdYDiF3+H7nX
+        nd9y/LxBrh8GjadLdQUo+7sId+/yQcQtCousN6B6tgpcljDa32qAJbZT2JMUI44w
+        e/EaZXjTAsNdSb5y7tXwSYm7rIdzTw+U5yCRGRKyuLHRMoQw+nA+HK7G65H62XMT
+        EVmLF7ONeazZOJFRPIwVgmcW7tGhA5Jh5vHdgv934p0qEkAZZ4VetKORec930FSK
+        OiIPXt6Gb4IkavZs4W+j9W41ZsmvSI7rqQg==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 9ydEHt19dH5E for <linux-kernel@vger.kernel.org>;
+        Tue, 28 Dec 2021 16:47:23 -0800 (PST)
+Received: from [10.225.163.41] (unknown [10.225.163.41])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JNt624NRTz1RtVG;
+        Tue, 28 Dec 2021 16:47:22 -0800 (PST)
+Message-ID: <7aebe7bc-37b0-836e-6d5b-ecf7f17906ac@opensource.wdc.com>
+Date:   Wed, 29 Dec 2021 09:47:20 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211222124052.644626-20-jing2.liu@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 2/3] ahci: Use macro PCI_DEVICE_ID_AMD_HUDSON2_SATA_IDE
+Content-Language: en-US
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211227155735.10519-1-pmenzel@molgen.mpg.de>
+ <20211227155735.10519-2-pmenzel@molgen.mpg.de>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20211227155735.10519-2-pmenzel@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shortlog needs to have a verb somewhere.
-
-On Wed, Dec 22, 2021, Jing Liu wrote:
-> From: Guang Zeng <guang.zeng@intel.com>
+On 12/28/21 00:57, Paul Menzel wrote:
+> Use the defined macro from `include/linux/pci_ids.h`.
 > 
-> When AMX is enabled it requires a larger xstate buffer than
-> the legacy hardcoded 4KB one. Exising kvm ioctls
-
-Existing
-
-> (KVM_[G|S]ET_XSAVE under KVM_CAP_XSAVE) are not suitable for
-> this purpose.
-
-...
-
-> Reuse KVM_SET_XSAVE for both old/new formats by reimplementing it to
-> do properly-sized memdup_user() based on the guest fpu container.
-
-I'm confused, the first sentence says KVM_SET_XSAVE isn't suitable, the second
-says it can be reused with minimal effort.
-
-> Also, update the api doc with the new KVM_GET_XSAVE2 ioctl.
-
-...
-
-> @@ -5367,7 +5382,9 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
->  		break;
->  	}
->  	case KVM_SET_XSAVE: {
-> -		u.xsave = memdup_user(argp, sizeof(*u.xsave));
-> +		int size = vcpu->arch.guest_fpu.uabi_size;
-
-IIUC, reusing KVM_SET_XSAVE works by requiring that userspace use KVM_GET_XSAVE2
-if userspace has expanded the guest FPU size by exposing relevant features to
-the guest via guest CPUID.  If so, then that needs to be enforced in KVM_GET_XSAVE,
-otherwise userspace will get subtle corruption by invoking the wrong ioctl, e.g.
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 2c9606380bca..5d2acbd52df5 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -5386,6 +5386,10 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
-                break;
-        }
-        case KVM_GET_XSAVE: {
-+               r -EINVAL;
-+               if (vcpu->arch.guest_fpu.uabi_size > sizeof(struct kvm_xsave))
-+                       break;
-+
-                u.xsave = kzalloc(sizeof(struct kvm_xsave), GFP_KERNEL_ACCOUNT);
-                r = -ENOMEM;
-                if (!u.xsave)
-
-> +
-> +		u.xsave = memdup_user(argp, size);
->  		if (IS_ERR(u.xsave)) {
->  			r = PTR_ERR(u.xsave);
->  			goto out_nofree;
-> @@ -5376,6 +5393,26 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
->  		r = kvm_vcpu_ioctl_x86_set_xsave(vcpu, u.xsave);
->  		break;
->  	}
-> +
-> +	case KVM_GET_XSAVE2: {
-> +		int size = vcpu->arch.guest_fpu.uabi_size;
-> +
-> +		u.xsave = kzalloc(size, GFP_KERNEL_ACCOUNT);
-> +		if (!u.xsave) {
-> +			r = -ENOMEM;
-
-I hate the odd patterns in this code as much as anyone, but for better or worse
-the style throughout is:
-
-		r = -ENOMEM;
-		u.xsave = kzalloc(size, GFP_KERNEL_ACCOUNT);
-		if (u.xsave)
-			break;
-
-> +			break;
-> +		}
-> +
-> +		kvm_vcpu_ioctl_x86_get_xsave2(vcpu, u.buffer, size);
-> +
-> +		if (copy_to_user(argp, u.xsave, size)) {
-> +			r = -EFAULT;
-> +			break;
-
-Same style thing here.
-
-> +		}
-> +		r = 0;
-> +		break;
-> +	}
-> +
->  	case KVM_GET_XCRS: {
->  		u.xcrs = kzalloc(sizeof(struct kvm_xcrs), GFP_KERNEL_ACCOUNT);
->  		r = -ENOMEM;
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 1daa45268de2..9d1c01669560 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -1131,6 +1131,7 @@ struct kvm_ppc_resize_hpt {
->  #define KVM_CAP_EXIT_ON_EMULATION_FAILURE 204
->  #define KVM_CAP_ARM_MTE 205
->  #define KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM 206
-> +#define KVM_CAP_XSAVE2 207
->  
->  #ifdef KVM_CAP_IRQ_ROUTING
->  
-> @@ -1610,6 +1611,9 @@ struct kvm_enc_region {
->  #define KVM_S390_NORMAL_RESET	_IO(KVMIO,   0xc3)
->  #define KVM_S390_CLEAR_RESET	_IO(KVMIO,   0xc4)
->  
-> +/* Available with KVM_CAP_XSAVE2 */
-> +#define KVM_GET_XSAVE2		  _IOR(KVMIO,  0xcf, struct kvm_xsave)
-> +
->  struct kvm_s390_pv_sec_parm {
->  	__u64 origin;
->  	__u64 length;
-> -- 
-> 2.27.0
+> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> ---
+>  drivers/ata/ahci.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
+> diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
+> index 1e1167e725a4..6a2432e4adda 100644
+> --- a/drivers/ata/ahci.c
+> +++ b/drivers/ata/ahci.c
+> @@ -436,7 +436,7 @@ static const struct pci_device_id ahci_pci_tbl[] = {
+>  		.class_mask = 0xffffff,
+>  		board_ahci_al },
+>  	/* AMD */
+> -	{ PCI_VDEVICE(AMD, 0x7800), board_ahci }, /* AMD Hudson-2 */
+> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_HUDSON2_SATA_IDE), board_ahci },
+>  	{ PCI_VDEVICE(AMD, 0x7900), board_ahci }, /* AMD CZ */
+>  	{ PCI_VDEVICE(AMD, 0x7901), board_ahci_mobile }, /* AMD Green Sardine */
+>  	/* AMD is using RAID class only for ahci controllers */
+
+Missing patch 1/3 for this series. Not in my inbox. If it is not related
+to ata, then please split the series.
+
+-- 
+Damien Le Moal
+Western Digital Research

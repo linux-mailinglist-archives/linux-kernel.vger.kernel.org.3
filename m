@@ -2,79 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F008481145
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 10:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7D0481147
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 10:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239532AbhL2J1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 04:27:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235060AbhL2J1E (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 04:27:04 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EE0C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 01:27:04 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id l5so49261909edj.13
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 01:27:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=KKO/2Cu/Gm4swY711SfunN+lpYq4pDDjlm630jPuIOI=;
-        b=DyPUG2V/V0P5NQGrZvmgFqvA0ijzBl6suMGTX6DLABG9hizy6DVp20uh3VxIHROo7w
-         ci5JZ8JnLOnulDToH/feKjVRNljMSOrsIdu7B0PgBPxAH1p+8FknI3eU7RyHXf2W+Tux
-         uKmDD1M4CSq8mnqbdJkTDfKB2mnjT0w/pjzjGvf5/dyj9N9qEk1E9W6I+vScsoj4Sgix
-         VvxbH0b+Z8IyZjVs0jWP33UGdnuBFrTpAv8jBQIDvsSTSlHoo31VtXaosFigQKV9/U/q
-         oFJ4OWCjJw/YwOYTzBprcDCL+I6vkmiKyCKv0xs80XH5DAv1Bl1f1cF6IMvTVgh3KXuT
-         mrpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=KKO/2Cu/Gm4swY711SfunN+lpYq4pDDjlm630jPuIOI=;
-        b=ewrxQjodfNK5sV2Vvpc/JJjsRc/e0rSv+yy5dSLjUUIkN/Rxsezsvl56RUcVz5p4/A
-         PCkPCiMO9L7wKn7uxtF+JZk8SXpqcOypmBK3S6Nx+r86qNH3+ekpte17FwBf782aUtjP
-         vME4r+Om99kacCKGkBCcPgQAJ11TwaIH2n6+d8+/sgM6nJPZiMDEZae/E02OdTtyUFzK
-         33wXaEx7BVeP3EcxUkoXXVxU92XtH12I3w4dXCtjHKYX2xHDkH6NeXDozZfqA4E+gNAm
-         Xv5EsLKYnFol2Offu9oSRmZvCIpkQNy236ssoXlf9FqhkveExxoRZz301xSfaboUReug
-         2V7g==
-X-Gm-Message-State: AOAM530GkC9XRqR9OlKg2RLbtxyC+Jiqh6dbr1iQAwyusYhmHS1PtojL
-        6wzbCKvc1Pkb118+kvYI91rGs9+qNPY8Vnn7c1E=
-X-Google-Smtp-Source: ABdhPJzH5YP3W6Fs4VqH+NMk0W+FU1gZKjJBqCsGd5RdNaxeVlSnWvKC+egM1m8iiGjnqOLz+/4KlKy3st3YNo+lOLs=
-X-Received: by 2002:a05:6402:5cf:: with SMTP id n15mr23764958edx.6.1640770022802;
- Wed, 29 Dec 2021 01:27:02 -0800 (PST)
+        id S235144AbhL2Ja6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 04:30:58 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:44190 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232237AbhL2Ja5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 04:30:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=OmEP0vlBess7yf0G2D2gupKNnfHYjQqlkRVEW2GfamA=; b=wtKGvYFlIeFSNFKxxz/r3pTMw+
+        cLH5t0E+MY8zwJRaluOoLMzSgsSLiEWtgtZ3z/kUawUjqTFo8sdJ6a6ZI6uQbI7a1tCdk1SoyJ16e
+        BLQ7R28Xmg3dOZ22vWQSG2umq9lGI0Y/aioCuGSlWO2QTIAxzHxy8qfboDqjFa5VPBsE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1n2VIM-0005sX-3W; Wed, 29 Dec 2021 10:30:54 +0100
+Date:   Wed, 29 Dec 2021 10:30:54 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>
+Subject: Re: [PATCH v1 pinctrl-next 0/1] add blink and activity functions to
+ SGPIO
+Message-ID: <YcwqznBTLZgNcU7o@lunn.ch>
+References: <20211229003729.618079-1-colin.foster@in-advantage.com>
 MIME-Version: 1.0
-Reply-To: fre0707lo@gmail.com
-Sender: fattahyounes64036@gmail.com
-Received: by 2002:a17:907:6d1c:0:0:0:0 with HTTP; Wed, 29 Dec 2021 01:27:02
- -0800 (PST)
-From:   "Ms. Lori" <udom4395@gmail.com>
-Date:   Wed, 29 Dec 2021 10:27:02 +0100
-X-Google-Sender-Auth: aXQzH0r26BmE_rxjQvUmE3ozWow
-Message-ID: <CACAdjVaaf4y6wn7NzhiB15MgOvKJ5HP9fsKzkZbGYt30965arg@mail.gmail.com>
-Subject: Let's work together
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211229003729.618079-1-colin.foster@in-advantage.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Dec 28, 2021 at 04:37:28PM -0800, Colin Foster wrote:
+> Expose a debugfs / devicetree interface for Microsemi SGPIO controllers.
+> By writing values of 2-5, the SGPIO pins can be configured for either
+> automatic blinking or activity.
+> 
+> The implementation is modeled after the code in
+> /drivers/pinctrl/pinctrl-ocelot.c.
+> 
+> I have only tested this with currently out-of-tree patches for the
+> VSC7512 that I hope to get in soon. They are not needed for VSC7513 /
+> VSC7514, SPARX5, or LUTON - but I don't have any hardware to test.
+> 
+> Of note: the 7512 chip has a discrepancy between the datasheet and the
+> registers. The datahseet claims 20Hz blink default frequency, the
+> registers claim 5 Hz default frequency for BMODE_0. I override the
+> OCELOT registers to correct for this. I don't know if that is needed for
+> LUTON or SPARX, but having two blink modes at the same frequency isn't
+> beneficial. As such, I make the blink modes match the 5Hz / 20Hz for the
+> two modes.
+> 
+> Tested with VSC7512 by way of:
+> echo SGPIO_O_p1b0 {blink0,blink1,activity0,activity1} > 
+> /sys/kernel/debug/pinctrl/pinctrl-sgpio-pinctrl-sgpio-output/pinmux-select
 
-My name is Ms. Lori from Washington, USA. I work as a Foreign
-Operations Manager at a reputable bank. I am the account manager for
-one of our deceased clients, an oil and gas contractor who died of a
-heart attack in 2012. He had a fixed deposit account with our bank
-worth $6.3 million. And he didn't specify a next heir when he opened
-the account. He died without any closest registered relative as he had
-been divorced for a long time and had no children. I decided to
-contact you for our mutual benefit, knowing that you have the same
-last name as my deceased client.
+Hi Colin
 
-I am very pleased to see your name and I look forward to your
-cooperation in presenting you to the bank as the next of kin and I
-guarantee that this will be done under a legitimate arrangement that
-will protect us from any breach of the law. And for your participation
-in this deal, you will receive 50% of the total amount after the money
-is transferred to you, and I will receive 50%. If you are interested,
-please contact me for more procedures.
+Since this is an LED, you should be using the Linux LED interface in
+/sys/class/leds. See Documentation/leds/leds-class.rst. It includes a
+way to make an LED blink, using hardware.
+
+Activity is another story. I assume you mean Ethernet frame Rx and Tx?
+For that you should wait until the Ethernet LED offload code
+eventually lands.
+
+	   Andrew

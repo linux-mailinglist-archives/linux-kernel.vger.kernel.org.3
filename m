@@ -2,110 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1F9348118E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 11:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12ED84811AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 11:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239690AbhL2KQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 05:16:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235499AbhL2KQs (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 05:16:48 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9B1C061401
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 02:16:48 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id w20so34468035wra.9
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 02:16:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=b+zE01u0JpXpyPFug8aJeTgsvJdxFWBY5Ed+UEXJSbA=;
-        b=nFApkzhsRA48nGUu+5m10zgx/O8dTMBvvVv1kZzQwiqMHrMxHsItuQb0vBSLa7PUz0
-         H5wJ9THDs0vtzxZRwJMcrBdgc05TslxDqhMj0PLv5Rl5bvj0mjFHBxn4Rv768Oj9gyAX
-         OO63YnO6HU7LFncpBZ9CNKqug1Ps4gJRdVgHkSqt1rcMUtwoqpWiVS2I8zw0DKquhvmq
-         DUBOUyj7NmEMqPSqH8kKTbjsCVw3cJy06PWUmLM5SrVJFDr5XinFywfp1IfAIOX3EnD6
-         hYwt1IgD0ZTXATvchXACobxPOQh9Ib2lra6iAMhic7D2RvBRaF2UU0NU8HVzXJeTSvQq
-         o6Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=b+zE01u0JpXpyPFug8aJeTgsvJdxFWBY5Ed+UEXJSbA=;
-        b=1vKX2L5i+DWaK9uWKrrE5pMnzm3+3K0t4J6KIz00xhI08F5J/iJC69PH/P4/cwthdf
-         S3vWHEaJZzp7/AxWGQeYsBiPvTm198tjsNg2AHEzYzSbR4/UEsjD0LaRcsgqD1mk0fgU
-         F0cUpDm7DateKBhalthogkdbXF/wXfUvcwLXLKByi5Hg5pGVbXI1qmxYVum1R7Jr+28D
-         YsIX6su7PTfrQXgi94LfmlJKOdOgpslezrLsI/fM4jvduLkG32lFuunUZ5hq+/+khR/D
-         q0heLBO2gKxawP0IpMHCpQs/3kWoyfVVXabHmqAiPrw9qo8a5QDlCX9CXeb7sekNvTh1
-         Uvng==
-X-Gm-Message-State: AOAM531n4VCNHN2Haz6bi5/WMX4iiNWxpyqm0j6R59EwOAVxPwfS+HPN
-        1HwtSn0CSBxQuk0MKfMSq6/grg==
-X-Google-Smtp-Source: ABdhPJx0iWeXqxZaRi6Rm3ozmbJecqRY7o7RGp5qWfmkkNU1k7L7xFc8xl0Wrcp57XJhzm0SxQHnJw==
-X-Received: by 2002:a5d:56c2:: with SMTP id m2mr20111241wrw.313.1640773006492;
-        Wed, 29 Dec 2021 02:16:46 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id o5sm3040713wmc.39.2021.12.29.02.16.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 02:16:46 -0800 (PST)
-Date:   Wed, 29 Dec 2021 10:16:44 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v6 6/9] misc: smpro-errmon: Add Ampere's SMpro error
- monitor driver
-Message-ID: <Ycw1jNNGlkaj3QnI@google.com>
-References: <20211224041352.29405-1-quan@os.amperecomputing.com>
- <20211224041352.29405-7-quan@os.amperecomputing.com>
+        id S239736AbhL2K2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 05:28:21 -0500
+Received: from a.mx.secunet.com ([62.96.220.36]:51380 "EHLO a.mx.secunet.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231732AbhL2K2U (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 05:28:20 -0500
+X-Greylist: delayed 604 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 Dec 2021 05:28:20 EST
+Received: from localhost (localhost [127.0.0.1])
+        by a.mx.secunet.com (Postfix) with ESMTP id E7123205A4;
+        Wed, 29 Dec 2021 11:18:15 +0100 (CET)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Qm-DTGhXXo2j; Wed, 29 Dec 2021 11:18:15 +0100 (CET)
+Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by a.mx.secunet.com (Postfix) with ESMTPS id 77A94205E3;
+        Wed, 29 Dec 2021 11:18:15 +0100 (CET)
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+        by mailout2.secunet.com (Postfix) with ESMTP id 71DF180004A;
+        Wed, 29 Dec 2021 11:18:15 +0100 (CET)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 29 Dec 2021 11:18:15 +0100
+Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
+ (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Wed, 29 Dec
+ 2021 11:18:15 +0100
+Received: by gauss2.secunet.de (Postfix, from userid 1000)
+        id DD9C03182F8D; Wed, 29 Dec 2021 11:18:12 +0100 (CET)
+Date:   Wed, 29 Dec 2021 11:18:12 +0100
+From:   Steffen Klassert <steffen.klassert@secunet.com>
+To:     Xu Jia <xujia39@huawei.com>
+CC:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+Subject: Re: [PATCH net-next 0/2] xfrm: Add support for SM3 and SM4
+Message-ID: <20211229101812.GP3272477@gauss3.secunet.de>
+References: <1640164019-42341-1-git-send-email-xujia39@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211224041352.29405-7-quan@os.amperecomputing.com>
+In-Reply-To: <1640164019-42341-1-git-send-email-xujia39@huawei.com>
+X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
+ mbx-essen-01.secunet.de (10.53.40.197)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Dec 2021, Quan Nguyen wrote:
-
-> This commit adds Ampere's SMpro error monitor driver for monitoring
-> and reporting RAS-related errors as reported by SMpro co-processor
-> found on Ampere's Altra processor family.
+On Wed, Dec 22, 2021 at 05:06:57PM +0800, Xu Jia wrote:
+> These patches add xfrm support for SM3 and SM4 algorithms which are
+> cryptographic standards published by China State Cryptography 
+> Administration.
 > 
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-> ---
-> Change in v6:
->   + First introduced in v6 [Quan]
+> SM3 secure hash (OSCCA GM/T 0004-2012 SM3) is based on Merkle-Damgard 
+> with a thuncation of 256 bits. It could be used for authentication 
+> and random number generation.
 > 
->  drivers/mfd/smpro-mfd.c     |   1 +
+> SM4 symmetric ciper algorithm (OSCCA GB/T 32097-2016) has at least 128
+> bits packet length which is similar to AES ciper algorithm. It is 
+> suitable for the use of block ciphers in cryptographic applications.
+> 
+> As SM3 and SM4 have already been supported by Linux kernel,
+> after these patches, we can use them with "ip xfrm" tools easily.
+> 
+> 
+> Xu Jia (2):
+>   xfrm: Add support for SM3 secure hash
+>   xfrm: Add support for SM4 symmetric cipher algorithm
+> 
+>  include/uapi/linux/pfkeyv2.h |  2 ++
+>  net/xfrm/xfrm_algo.c         | 41 +++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 43 insertions(+)
 
-Separate patch please.
-
->  drivers/misc/Kconfig        |   7 +
->  drivers/misc/Makefile       |   1 +
->  drivers/misc/smpro-errmon.c | 571 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 580 insertions(+)
->  create mode 100644 drivers/misc/smpro-errmon.c
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Series applied to ipsec-next, thanks a lot!

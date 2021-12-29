@@ -2,112 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CE2481639
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 20:18:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C48A481642
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 20:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbhL2TSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 14:18:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42012 "EHLO
+        id S230319AbhL2TZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 14:25:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbhL2TSv (ORCPT
+        with ESMTP id S229627AbhL2TZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 14:18:51 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58487C061574;
-        Wed, 29 Dec 2021 11:18:51 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id k18so9489765wrg.11;
-        Wed, 29 Dec 2021 11:18:51 -0800 (PST)
+        Wed, 29 Dec 2021 14:25:16 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15563C061574;
+        Wed, 29 Dec 2021 11:25:16 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id l4so14248372wmq.3;
+        Wed, 29 Dec 2021 11:25:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id;
-        bh=L5NLQD0x2q9pNvl7pWa1l5kU/PhkAbfmQ6zLA61SgcE=;
-        b=TGBAy6Vxhkp/k9hrXUbwdM6MEYMLPNhHz7BIlnBr1DafXAvxlfIN+A/Gtp4XspGMm2
-         TOvigkr9UBJrFGQ2W7GWOyLK7MA2QuU1ku6eEoOApGXvJfldW2JoN/E1Mkpak/ULAPFf
-         6xgPD+mN6xSWMdVz3Vxg/LhLpzgcKUNoANsDzc+KaqqY90sHxXFZt9wLALXnfcKcht+H
-         4knGZvRt7flrnU2Uv4VjvCWF7xHj+bbXas7Ad3HEhXr/tQBy2K7VRd5xwsjlOMJ+APfH
-         Jbsr8ztYN0sOATt1GwmUZRTZvouhUiwRM7V1JD4GLIo87B7mQgHe/BqWGBcouZYhHd6C
-         JzYw==
+        bh=XWy6zb7VrjyL61C3FIcwxfgOsxnDVpBJZr50LV8zoyg=;
+        b=QdY3E+T6Nzxt8AzFFX7vO6vHUytofG/1cq6XPJi6ZvdL/utBcmvgfhMEdZC2rItpKw
+         IN477Yjkd9SjAsCbmXtfjHCmWYwXHm+QNFWikdr/82q1Q3wutxL0k8gtgacLmfFbFF4D
+         V+ucUKfaCZiDXsAvJL4cg9bme6RRiKN8AzvprAWEuGO5K1lciBEe0WZoxGHoUZZ0pWfi
+         1JPqwkMkfsNjl18sem3tgWyVVLG9NhZAaz8xueMUT4lKr3ALMlCTMakept5zGpZmGWoa
+         WuM1JTXAegrU2yiXOfm6t8rKNPVR+pSKcuSPtMPcPxW4ElBmDxvsgE2RSECbHUCIsxwM
+         izwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=L5NLQD0x2q9pNvl7pWa1l5kU/PhkAbfmQ6zLA61SgcE=;
-        b=yR2Or6OQHkoaETah0rZrZTwEI5U6rthrR0vIQ/BblE9WeMO4WVrcuIhGsUNgncBpoF
-         ObKjiXeSG6Qv4r0nyL1c1K9ynh7g3QokLIOs726ZX1rlT8UXPoSivw1T31QbrpPNNmOJ
-         fHGFqXRRQKxePfDyyUYUDRYJ6GfNtn5ft+23JPEM4zCqnWkSpsKsWTMgDy+R621b1FuJ
-         TIUSNvKKNyf1TR0znzqU5BSe1JHxu6ScBXW4+TdqNnFgacuYazD5uTn+Q+3yJJfJjjtK
-         /pMZMjuUzd2UFro5x3P+YbRqyYxHeYH/B96kffTs69T0wdpULr7D3ddbCv1V4sfZu5yr
-         QNhw==
-X-Gm-Message-State: AOAM532+jeHBUUviOVbb+KN/5OgZ68/V8+0fgFcDkk0kjBoqjMn8RXP2
-        80G8yRkxAkm953BxL36ig1Y=
-X-Google-Smtp-Source: ABdhPJyJ9UBQefJ6fLsRdjgd69qjWLBA9ZP5MMkNVO6jNJdk5Pz0SlOWrhrobRPJSKOVkVpJL4MjgA==
-X-Received: by 2002:adf:f741:: with SMTP id z1mr22229447wrp.54.1640805529911;
-        Wed, 29 Dec 2021 11:18:49 -0800 (PST)
+        bh=XWy6zb7VrjyL61C3FIcwxfgOsxnDVpBJZr50LV8zoyg=;
+        b=BkPu193E6azRsKQB3sMaZghXf6mOJ3rKY6p/mepB2Vk7di+KlHgp/MgrYxREmKGt4A
+         GPcxO0HSI+ZoFJ0Gdt9aK7FpY8rnlz+viB3rmdRyG6LbJFcw8C+JaZ1LeHY0SKYV//1A
+         hLdRdYajJ21hlXoBC+HMGTKGj8Hfr026oQU20zSRaSqv6GCSTYR2t0kg8ey8GgJpzwLB
+         uij6+ffSxEbQCt6A9I6yM+6zMkFLsnEzhE7guwQGyCOZIPXkLmOwWZFfujB8NHFJXn3m
+         Le3eATGlaMbyyoeG6Jo4L64a0GPXArgdSjTYNowTdjNGXP4vb4/wFYonmoOy4bHJmP0b
+         /zSw==
+X-Gm-Message-State: AOAM532rJAft7aW553HUk7mUVh13+jT1hECkoJypChTV51gltroXLkZk
+        InlxK/VM1ELSmLnymNxwH+g=
+X-Google-Smtp-Source: ABdhPJxr0N9dwcDiO5BtWfsoSvknY2HG3QX/qXQ9wJPFG5mOIlJi1trxt+7YS2NOS0sgUWu8J1oquA==
+X-Received: by 2002:a7b:c341:: with SMTP id l1mr23876084wmj.60.1640805914522;
+        Wed, 29 Dec 2021 11:25:14 -0800 (PST)
 Received: from felia.fritz.box ([2001:16b8:2626:5600:5f5:a4cc:1dcf:a62])
-        by smtp.gmail.com with ESMTPSA id y11sm25523441wry.70.2021.12.29.11.18.47
+        by smtp.gmail.com with ESMTPSA id g18sm21892379wrv.42.2021.12.29.11.25.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 11:18:49 -0800 (PST)
+        Wed, 29 Dec 2021 11:25:14 -0800 (PST)
 From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Russell King <linux@armlinux.org.uk>,
-        Tomas Cech <sleep_walker@suse.com>,
-        linux-arm-kernel@lists.infradead.org
+To:     Damien Le Moal <damien.lemoal@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [RFC PATCH] MAINTAINERS: mark ARM/PALM TREO SUPPORT orphan
-Date:   Wed, 29 Dec 2021 20:18:28 +0100
-Message-Id: <20211229191828.21317-1-lukas.bulwahn@gmail.com>
+Subject: [PATCH] riscv: canaan: remove useless select of non-existing config SYSCON
+Date:   Wed, 29 Dec 2021 20:24:58 +0100
+Message-Id: <20211229192458.25138-1-lukas.bulwahn@gmail.com>
 X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The email address sleep_walker@suse.com and the url http://hackndev.com/,
-provided in the ARM/PALM TREO SUPPORT section, are not reachable anymore.
+The config SYSCON never existed in the kernel repository; so, the select of
+that config in ./drivers/soc/canaan/Kconfig has no effect.
 
-Make this machine support orphan, and give somebody the chance to step up.
-Move the maintainer into CREDITS to keep the attribution to his work.
+Presumably, this was just some mistake, assuming some symmetry in handling
+and naming of configs that simply does not exist.
+
+Remove this useless select of a non-existing config.
 
 Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
-If anyone knows if Tomas Cech is still around, please respond.
+ drivers/soc/canaan/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
- CREDITS     | 4 ++++
- MAINTAINERS | 4 +---
- 2 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/CREDITS b/CREDITS
-index b97256d5bc24..e870e61aec38 100644
---- a/CREDITS
-+++ b/CREDITS
-@@ -627,6 +627,10 @@ S: 48287 Sawleaf
- S: Fremont, California 94539
- S: USA
- 
-+N: Tomas Cech
-+E: sleep_walker@suse.com
-+D: arm/palm treo support
-+
- N: Florent Chabaud
- E: florent.chabaud@polytechnique.org
- D: software suspend
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c87a3f5e302a..fca8c0a9bd25 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2402,10 +2402,8 @@ F:	drivers/power/reset/oxnas-restart.c
- N:	oxnas
- 
- ARM/PALM TREO SUPPORT
--M:	Tomas Cech <sleep_walker@suse.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
--S:	Maintained
--W:	http://hackndev.com
-+S:	Orphan
- F:	arch/arm/mach-pxa/palmtreo.*
- 
- ARM/PALMTX,PALMT5,PALMLD,PALMTE2,PALMTC SUPPORT
+diff --git a/drivers/soc/canaan/Kconfig b/drivers/soc/canaan/Kconfig
+index 853096b7e84c..2527cf5757ec 100644
+--- a/drivers/soc/canaan/Kconfig
++++ b/drivers/soc/canaan/Kconfig
+@@ -5,7 +5,6 @@ config SOC_K210_SYSCTL
+ 	depends on RISCV && SOC_CANAAN && OF
+ 	default SOC_CANAAN
+         select PM
+-        select SYSCON
+         select MFD_SYSCON
+ 	help
+ 	  Canaan Kendryte K210 SoC system controller driver.
 -- 
 2.17.1
 

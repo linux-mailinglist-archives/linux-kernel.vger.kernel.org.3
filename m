@@ -2,272 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3DDF480F84
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 05:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 265C5480F90
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 05:15:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238676AbhL2EO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 23:14:26 -0500
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:40428 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238665AbhL2EOW (ORCPT
+        id S238698AbhL2EPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 23:15:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234127AbhL2EPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 23:14:22 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V0Bi34J_1640751246;
-Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V0Bi34J_1640751246)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 29 Dec 2021 12:14:20 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
-        Liu Bo <bo.liu@linux.alibaba.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>
-Subject: [PATCH 5/5] erofs: use meta buffers for zmap operations
-Date:   Wed, 29 Dec 2021 12:14:05 +0800
-Message-Id: <20211229041405.45921-6-hsiangkao@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.4
-In-Reply-To: <20211229041405.45921-1-hsiangkao@linux.alibaba.com>
-References: <20211229041405.45921-1-hsiangkao@linux.alibaba.com>
+        Tue, 28 Dec 2021 23:15:51 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C94C061574;
+        Tue, 28 Dec 2021 20:15:50 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id y16-20020a17090a6c9000b001b13ffaa625so23422714pjj.2;
+        Tue, 28 Dec 2021 20:15:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=oo7gGMOkpKZtsifyQrF9uAkP4p/YBx2m/GIQa4Tq0YE=;
+        b=SgUGGN6VhsGuSJ4+x7BV8WmUFGnq6AU/S3MGIbRuvgcmK5iemLDPInHX4HtGqsDBOP
+         X+ShdKiY6WGvZxZzGll6Lp9gXc9Iofh3zmxzNCmw3Dn3KgxWg++og+5/hcFLsP9lz2Xr
+         2GF2kpRya+BTKsokuDFYluzgdLN+9R6oDmfEeq5seHlKkuDQoWmHZpB5lsfFQJLsHHhA
+         J+6fOy7KSqTSf4RHl5+/z/3kvG8PPaQjjUrbxIO/1twWStmOPd1O5hfeFSFRI+7/1KDQ
+         V6duyLcOszOYryU8sc+sZAK9TuMnZyNEumxgE9K0xpEM2ht/1sy9t9bhV6U0QsHIl9qG
+         4r0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=oo7gGMOkpKZtsifyQrF9uAkP4p/YBx2m/GIQa4Tq0YE=;
+        b=KBzGL3s6jpYh+zXFhoNlooew1/s2GIKYj5wfouCPH52rXnr7OLq4aIlM9+vyDkDQCd
+         IpiAzfROzeAL+RaHmxRt4fQg0ufpGoqkoc+B7E1ztllRb0oZRIn0Fuqwikmg5sTDz7UX
+         auuBwKPJy1Zw7LwGNj/yBVs1wB0NX7XhKCpQ/+3PZjfpx1qjNThDu6bb9jBB17m+E4OD
+         J+IX+YHJSHEZ3odqwLIYkjOr1a9rduBLYr2MDq9pv/a8dboDTFxQo0tYvmlWi56MKCLB
+         r84H/bcbmM29qT19TbQ1N72096xP2NTeXQbo3fWS48Zk44qUqT7Ar/nYZsdw97ZbOd9g
+         aKEA==
+X-Gm-Message-State: AOAM531I4wokCnYgtKI2zEtEXZOhBV7RmIehnSoVPQ5d3n7itvOZeaVa
+        X8yVj//7LWOtrWR33DZPFyg=
+X-Google-Smtp-Source: ABdhPJyjCqGNhQip5lk1bKe/Q9ifrO91rL0XFrD4WiMDGXXaVLZjRe+Yr2Tq1lIfNgSSQkzYLSFwkQ==
+X-Received: by 2002:a17:902:d48a:b0:148:a8ae:7ab7 with SMTP id c10-20020a170902d48a00b00148a8ae7ab7mr24900237plg.171.1640751350387;
+        Tue, 28 Dec 2021 20:15:50 -0800 (PST)
+Received: from [10.1.1.24] (222-155-5-102-adsl.sparkbb.co.nz. [222.155.5.102])
+        by smtp.gmail.com with ESMTPSA id k9sm13406563pgr.47.2021.12.28.20.15.25
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 28 Dec 2021 20:15:49 -0800 (PST)
+Subject: Re: [RFC 02/32] Kconfig: introduce HAS_IOPORT option and select it as
+ necessary
+To:     Arnd Bergmann <arnd@kernel.org>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+ <20211227164317.4146918-3-schnelle@linux.ibm.com>
+ <CAMuHMdXk6VcDryekkMJ3aGFnw4LLWOWMi8M2PwjT81PsOsOBMQ@mail.gmail.com>
+ <d406b93a-0f76-d056-3380-65d459d05ea9@gmail.com>
+ <CAK8P3a2j-OFUUp+haHoV4PyL-On4EASZ9+59SDqNqmL8Gv_k7Q@mail.gmail.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Brian Cain <bcain@codeaurora.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, openrisc@lists.librecores.org,
+        linux-s390@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        Greg Ungerer <gerg@linux-m68k.org>
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <1f90f145-219e-1cad-6162-9959d43a27ad@gmail.com>
+Date:   Wed, 29 Dec 2021 17:15:23 +1300
+User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
+ Icedove/45.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK8P3a2j-OFUUp+haHoV4PyL-On4EASZ9+59SDqNqmL8Gv_k7Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Get rid of old erofs_get_meta_page() within zmap operations by
-using on-stack meta buffers in order to prepare subpage and folio
-features.
+Hi Arnd,
 
-Finally, erofs_get_meta_page() is useless. Get rid of it!
+Am 29.12.2021 um 16:41 schrieb Arnd Bergmann:
+> On Tue, Dec 28, 2021 at 8:20 PM Michael Schmitz <schmitzmic@gmail.com> wrote:
+>> Am 28.12.2021 um 23:08 schrieb Geert Uytterhoeven:
+>>> On Mon, Dec 27, 2021 at 5:44 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+>>>> We introduce a new HAS_IOPORT Kconfig option to gate support for
+>>>> I/O port access. In a future patch HAS_IOPORT=n will disable compilation
+>>>> of the I/O accessor functions inb()/outb() and friends on architectures
+>>>> which can not meaningfully support legacy I/O spaces. On these platforms
+>>>> inb()/outb() etc are currently just stubs in asm-generic/io.h which when
+>>>> called will cause a NULL pointer access which some compilers actually
+>>>> detect and warn about.
+>>>>
+>>>> The dependencies on HAS_IOPORT in drivers as well as ifdefs for
+>>>> HAS_IOPORT specific sections will be added in subsequent patches on
+>>>> a per subsystem basis. Then a final patch will ifdef the I/O access
+>>>> functions on HAS_IOPORT thus turning any use not gated by HAS_IOPORT
+>>>> into a compile-time warning.
+>>>>
+>>>> Link: https://lore.kernel.org/lkml/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
+>>>> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+>>>> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+>>>> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+>>>
+>>> Thanks for your patch!
+>>>
+>>>> --- a/arch/m68k/Kconfig
+>>>> +++ b/arch/m68k/Kconfig
+>>>> @@ -16,6 +16,7 @@ config M68K
+>>>>         select GENERIC_CPU_DEVICES
+>>>>         select GENERIC_IOMAP
+>>>>         select GENERIC_IRQ_SHOW
+>>>> +       select HAS_IOPORT
+>>>>         select HAVE_AOUT if MMU
+>>>>         select HAVE_ASM_MODVERSIONS
+>>>>         select HAVE_DEBUG_BUGVERBOSE
+>>>
+>>> This looks way too broad to me: most m68k platform do not have I/O
+>>> port access support.
+>>>
+>>> My gut feeling says:
+>>>
+>>>     select HAS_IOPORT if PCI || ISA
+>>>
+>>> but that might miss some intricate details...
+>>
+>> In particular, this misses the Atari ROM port ISA adapter case -
+>>
+>>         select HAS_IOPORT if PCI || ISA || ATARI_ROM_ISA
+>>
+>> might do instead.
+>
+> Right, makes sense. I had suggested to go the easy way and assume that
+> each architecture would select HAS_IOPORT if any configuration supports
+> it, but it looks like for m68k there is a clearly defined set of platforms that
+> do.
+>
+> Note that for the platforms that don't set any of the three symbols, the
+> fallback makes inb() an alias for readb() with a different argument type,
+> so there may be m68k specific drivers that rely on this, but those would
+> already be broken if ATARI_ROM_ISA is set.
 
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
----
- fs/erofs/data.c     | 13 -----------
- fs/erofs/internal.h |  6 ++---
- fs/erofs/zdata.c    | 23 ++++++++-----------
- fs/erofs/zmap.c     | 56 +++++++++++++--------------------------------
- 4 files changed, 28 insertions(+), 70 deletions(-)
+I'd hope not - we spent some effort to make sure setting ATARI_ROM_ISA 
+does not affect other m68k platforms when e.g. building multiplatform 
+kernels.
 
-diff --git a/fs/erofs/data.c b/fs/erofs/data.c
-index 6495e16a50a9..187f19f8a9a1 100644
---- a/fs/erofs/data.c
-+++ b/fs/erofs/data.c
-@@ -9,19 +9,6 @@
- #include <linux/dax.h>
- #include <trace/events/erofs.h>
- 
--struct page *erofs_get_meta_page(struct super_block *sb, erofs_blk_t blkaddr)
--{
--	struct address_space *const mapping = sb->s_bdev->bd_inode->i_mapping;
--	struct page *page;
--
--	page = read_cache_page_gfp(mapping, blkaddr,
--				   mapping_gfp_constraint(mapping, ~__GFP_FS));
--	/* should already be PageUptodate */
--	if (!IS_ERR(page))
--		lock_page(page);
--	return page;
--}
--
- void erofs_unmap_metabuf(struct erofs_buf *buf)
- {
- 	if (buf->kmap_type == EROFS_KMAP)
-diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-index f1e4eb3025f6..3db494a398b2 100644
---- a/fs/erofs/internal.h
-+++ b/fs/erofs/internal.h
-@@ -419,14 +419,14 @@ enum {
- #define EROFS_MAP_FULL_MAPPED	(1 << BH_FullMapped)
- 
- struct erofs_map_blocks {
-+	struct erofs_buf buf;
-+
- 	erofs_off_t m_pa, m_la;
- 	u64 m_plen, m_llen;
- 
- 	unsigned short m_deviceid;
- 	char m_algorithmformat;
- 	unsigned int m_flags;
--
--	struct page *mpage;
- };
- 
- /* Flags used by erofs_map_blocks_flatmode() */
-@@ -474,7 +474,7 @@ struct erofs_map_dev {
- 
- /* data.c */
- extern const struct file_operations erofs_file_fops;
--struct page *erofs_get_meta_page(struct super_block *sb, erofs_blk_t blkaddr);
-+void erofs_unmap_metabuf(struct erofs_buf *buf);
- void erofs_put_metabuf(struct erofs_buf *buf);
- void *erofs_read_metabuf(struct erofs_buf *buf, struct super_block *sb,
- 			 erofs_blk_t blkaddr, enum erofs_kmap_type type);
-diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-index 49da3931b2e3..498b7666efe8 100644
---- a/fs/erofs/zdata.c
-+++ b/fs/erofs/zdata.c
-@@ -698,20 +698,18 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
- 		goto err_out;
- 
- 	if (z_erofs_is_inline_pcluster(clt->pcl)) {
--		struct page *mpage;
-+		void *mp;
- 
--		mpage = erofs_get_meta_page(inode->i_sb,
--					    erofs_blknr(map->m_pa));
--		if (IS_ERR(mpage)) {
--			err = PTR_ERR(mpage);
-+		mp = erofs_read_metabuf(&fe->map.buf, inode->i_sb,
-+					erofs_blknr(map->m_pa), EROFS_NO_KMAP);
-+		if (IS_ERR(mp)) {
-+			err = PTR_ERR(mp);
- 			erofs_err(inode->i_sb,
- 				  "failed to get inline page, err %d", err);
- 			goto err_out;
- 		}
--		/* TODO: new subpage feature will get rid of it */
--		unlock_page(mpage);
--
--		WRITE_ONCE(clt->pcl->compressed_pages[0], mpage);
-+		get_page(fe->map.buf.page);
-+		WRITE_ONCE(clt->pcl->compressed_pages[0], fe->map.buf.page);
- 		clt->mode = COLLECT_PRIMARY_FOLLOWED_NOINPLACE;
- 	} else {
- 		/* preload all compressed pages (can change mode if needed) */
-@@ -1529,9 +1527,7 @@ static int z_erofs_readpage(struct file *file, struct page *page)
- 	if (err)
- 		erofs_err(inode->i_sb, "failed to read, err [%d]", err);
- 
--	if (f.map.mpage)
--		put_page(f.map.mpage);
--
-+	erofs_put_metabuf(&f.map.buf);
- 	erofs_release_pages(&pagepool);
- 	return err;
- }
-@@ -1576,8 +1572,7 @@ static void z_erofs_readahead(struct readahead_control *rac)
- 
- 	z_erofs_runqueue(inode->i_sb, &f, &pagepool,
- 			 z_erofs_get_sync_decompress_policy(sbi, nr_pages));
--	if (f.map.mpage)
--		put_page(f.map.mpage);
-+	erofs_put_metabuf(&f.map.buf);
- 	erofs_release_pages(&pagepool);
- }
- 
-diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
-index 1037ac17b7a6..18d7fd1a5064 100644
---- a/fs/erofs/zmap.c
-+++ b/fs/erofs/zmap.c
-@@ -35,7 +35,7 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
- 	struct super_block *const sb = inode->i_sb;
- 	int err, headnr;
- 	erofs_off_t pos;
--	struct page *page;
-+	struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
- 	void *kaddr;
- 	struct z_erofs_map_header *h;
- 
-@@ -61,14 +61,13 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
- 
- 	pos = ALIGN(iloc(EROFS_SB(sb), vi->nid) + vi->inode_isize +
- 		    vi->xattr_isize, 8);
--	page = erofs_get_meta_page(sb, erofs_blknr(pos));
--	if (IS_ERR(page)) {
--		err = PTR_ERR(page);
-+	kaddr = erofs_read_metabuf(&buf, sb, erofs_blknr(pos),
-+				   EROFS_KMAP_ATOMIC);
-+	if (IS_ERR(kaddr)) {
-+		err = PTR_ERR(kaddr);
- 		goto out_unlock;
- 	}
- 
--	kaddr = kmap_atomic(page);
--
- 	h = kaddr + erofs_blkoff(pos);
- 	vi->z_advise = le16_to_cpu(h->h_advise);
- 	vi->z_algorithmtype[0] = h->h_algorithmtype & 15;
-@@ -101,20 +100,19 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
- 		goto unmap_done;
- 	}
- unmap_done:
--	kunmap_atomic(kaddr);
--	unlock_page(page);
--	put_page(page);
-+	erofs_put_metabuf(&buf);
- 	if (err)
- 		goto out_unlock;
- 
- 	if (vi->z_advise & Z_EROFS_ADVISE_INLINE_PCLUSTER) {
--		struct erofs_map_blocks map = { .mpage = NULL };
-+		struct erofs_map_blocks map = {
-+			.buf = __EROFS_BUF_INITIALIZER
-+		};
- 
- 		vi->z_idata_size = le16_to_cpu(h->h_idata_size);
- 		err = z_erofs_do_map_blocks(inode, &map,
- 					    EROFS_GET_BLOCKS_FINDTAIL);
--		if (map.mpage)
--			put_page(map.mpage);
-+		erofs_put_metabuf(&map.buf);
- 
- 		if (!map.m_plen ||
- 		    erofs_blkoff(map.m_pa) + map.m_plen > EROFS_BLKSIZ) {
-@@ -151,31 +149,11 @@ static int z_erofs_reload_indexes(struct z_erofs_maprecorder *m,
- 				  erofs_blk_t eblk)
- {
- 	struct super_block *const sb = m->inode->i_sb;
--	struct erofs_map_blocks *const map = m->map;
--	struct page *mpage = map->mpage;
--
--	if (mpage) {
--		if (mpage->index == eblk) {
--			if (!m->kaddr)
--				m->kaddr = kmap_atomic(mpage);
--			return 0;
--		}
- 
--		if (m->kaddr) {
--			kunmap_atomic(m->kaddr);
--			m->kaddr = NULL;
--		}
--		put_page(mpage);
--	}
--
--	mpage = erofs_get_meta_page(sb, eblk);
--	if (IS_ERR(mpage)) {
--		map->mpage = NULL;
--		return PTR_ERR(mpage);
--	}
--	m->kaddr = kmap_atomic(mpage);
--	unlock_page(mpage);
--	map->mpage = mpage;
-+	m->kaddr = erofs_read_metabuf(&m->map->buf, sb, eblk,
-+				      EROFS_KMAP_ATOMIC);
-+	if (IS_ERR(m->kaddr))
-+		return PTR_ERR(m->kaddr);
- 	return 0;
- }
- 
-@@ -711,8 +689,7 @@ static int z_erofs_do_map_blocks(struct inode *inode,
- 			map->m_flags |= EROFS_MAP_FULL_MAPPED;
- 	}
- unmap_out:
--	if (m.kaddr)
--		kunmap_atomic(m.kaddr);
-+	erofs_unmap_metabuf(&m.map->buf);
- 
- out:
- 	erofs_dbg("%s, m_la %llu m_pa %llu m_llen %llu m_plen %llu m_flags 0%o",
-@@ -759,8 +736,7 @@ static int z_erofs_iomap_begin_report(struct inode *inode, loff_t offset,
- 	struct erofs_map_blocks map = { .m_la = offset };
- 
- 	ret = z_erofs_map_blocks_iter(inode, &map, EROFS_GET_BLOCKS_FIEMAP);
--	if (map.mpage)
--		put_page(map.mpage);
-+	erofs_put_metabuf(&map.buf);
- 	if (ret < 0)
- 		return ret;
- 
--- 
-2.24.4
+Replacing inb() by readb() without any address translation won't do much 
+good for m68k though - addresses in the traditional ISA I/O port range 
+would hit the (unmapped) zero page.
 
+Cheers,
+
+	Michael
+
+>
+>           Arnd
+>

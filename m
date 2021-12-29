@@ -2,313 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3907481008
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 06:28:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3910F481009
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 06:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234383AbhL2FWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 00:22:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55602 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbhL2FWd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 00:22:33 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE305C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 21:22:32 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id w24so15070435ply.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 21:22:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=B4C/ZfoHso9zU9dv9Ot9SBewHCwTKutD8VZUD2f8hOE=;
-        b=fvjTzUkNpkTBhj7EHepSnt/5sJ17B94RRrFcAsWeL4z8mxa4J5QbTX2V6hmGrMauAG
-         cbuDLKhXgq+rVdioPLSPYZ/7DAT+c3DNp+TDMwmzX2XqVAvNwG3CxaHX2ML+dpPkEi5o
-         yOH0mxsjSKw/2zIFjMeRVV0hCmcrZY90uozhE9J4yUYcSgqlSecIRC0RY8HRaJ6TIYe8
-         yzL3ZsX1h5nH6R83v276ph9TKnxOQ3JboP8EsLhJAAtscepKLNqikyGMx4tLA1haLElD
-         Q38nZcTwnjVN/GTZWwfyJ7kdF/Ml35wMW5c4gylKvbuwn7XsIlJiEms4wSd9URsF7EPQ
-         7laQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=B4C/ZfoHso9zU9dv9Ot9SBewHCwTKutD8VZUD2f8hOE=;
-        b=5fteA//PtaEMCmrTI0Vb+1CpgIe5KipYei9s1e57VTHSaT+p6e4sPVf+cdTuZ6ZJ3D
-         LJQugcLhx6BXw61N3V4LJvPExlCiJE17dMFVvw2bUOfLtObC07t5e690dG5NHI3uhHe4
-         hHNSNL7TpGXjPr/Jh7sarR+aWbcBuQe7ep/amASz5fRdlni5uai9Ns6A5tD7MxfWxVgg
-         pOipH73aB06xgve+Ce/cDabcJ/6/3RWaGsEqBiSKON6BOfsthjlaa5x0HR3I41KUHieF
-         xhi4DO18yT2niojUcav6z/xfD3yuFehMtN6G7SvV2XGeutJDsoxvUTRQ+/3u7YajwIB8
-         yeyA==
-X-Gm-Message-State: AOAM532tQuk6x7AaWYYeHWSfOY5ONwMeCpyqHa1luxFZmbf9OJziZSOh
-        rs25tk0LlvAaL0Aqm5Q4gtd0OdpZTcw=
-X-Google-Smtp-Source: ABdhPJz4+gFiblWfiQXuvJkek3yUXw9MAUr1r6IySB+Cm6ZkFaV62EUgNYzAKvk8m8tawtEtefMgIA==
-X-Received: by 2002:a17:902:d2d1:b0:149:7d85:745f with SMTP id n17-20020a170902d2d100b001497d85745fmr13126018plc.55.1640755352174;
-        Tue, 28 Dec 2021 21:22:32 -0800 (PST)
-Received: from localhost ([103.220.76.197])
-        by smtp.gmail.com with ESMTPSA id g5sm23899849pfj.143.2021.12.28.21.22.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 28 Dec 2021 21:22:31 -0800 (PST)
-Date:   Wed, 29 Dec 2021 13:19:46 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
-        Liu Bo <bo.liu@linux.alibaba.com>,
-        LKML <linux-kernel@vger.kernel.org>, geshifei@coolpad.com,
-        zhangwen@coolpad.com, shaojunjun@coolpad.com
-Subject: Re: [PATCH 5/5] erofs: use meta buffers for zmap operations
-Message-ID: <20211229131946.000043c5.zbestahu@gmail.com>
-In-Reply-To: <20211229041405.45921-6-hsiangkao@linux.alibaba.com>
-References: <20211229041405.45921-1-hsiangkao@linux.alibaba.com>
-        <20211229041405.45921-6-hsiangkao@linux.alibaba.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        id S234431AbhL2F0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 00:26:52 -0500
+Received: from mga01.intel.com ([192.55.52.88]:4375 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229774AbhL2F0w (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 00:26:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640755612; x=1672291612;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=geEu2Mq/T8QLUvIdcz0mqWzDhnB6h9uFaEGt4RnRpVE=;
+  b=CCIeqwdAJTBE/PleodCR9sqDHHVs7RP8GOroPV/ivp8JM5GU5+d6rxKL
+   2vaOHorVqemaSAtUXovmGFoTZgz5QuagmtJQePATccrPRx91UIFrsp570
+   aCPIdG7fw45rUony5AeaHXTkdEeMklLA9AOemHmamfIXmI6R/m5AxU1nQ
+   eGNQ75nwB32TkGWUL5ZUyC5T7byIBbHFsinqMEkVL+pBFoSkgaw5+q5Gq
+   jUtIWPv2PaEJ5rAVRaJKf3RCr/7NN461uGOu8y7j/+4+Ml7tkRXURzMCN
+   vC0SoFWfNDPgA19VZo1B5IDcpp20aauKSArnmtTZ3fkwacfe8XfHppwVy
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="265699434"
+X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
+   d="scan'208";a="265699434"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 21:26:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
+   d="scan'208";a="510389759"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 28 Dec 2021 21:26:47 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n2RU6-0008Zi-Ll; Wed, 29 Dec 2021 05:26:46 +0000
+Date:   Wed, 29 Dec 2021 13:25:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-kernel@vger.kernel.org
+Subject: [djwong-xfs:vectorized-scrub 100/326] fs/xfs/scrub/trace.c:48:31:
+ error: invalid use of undefined type 'struct xfbtree'
+Message-ID: <202112291340.SZbi6GKb-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Dec 2021 12:14:05 +0800
-Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
+head:   f736db09eb704761df6d6534ed9730f38bf136d1
+commit: 9bcb3cf01fbbfe96671d56248b516b0a68c5c022 [100/326] xfs: connect in-memory btrees to xfiles
+config: alpha-randconfig-r015-20211228 (https://download.01.org/0day-ci/archive/20211229/202112291340.SZbi6GKb-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=9bcb3cf01fbbfe96671d56248b516b0a68c5c022
+        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
+        git fetch --no-tags djwong-xfs vectorized-scrub
+        git checkout 9bcb3cf01fbbfe96671d56248b516b0a68c5c022
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash fs/xfs/
 
-> Get rid of old erofs_get_meta_page() within zmap operations by
-> using on-stack meta buffers in order to prepare subpage and folio
-> features.
-> 
-> Finally, erofs_get_meta_page() is useless. Get rid of it!
-> 
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-> ---
->  fs/erofs/data.c     | 13 -----------
->  fs/erofs/internal.h |  6 ++---
->  fs/erofs/zdata.c    | 23 ++++++++-----------
->  fs/erofs/zmap.c     | 56 +++++++++++++--------------------------------
->  4 files changed, 28 insertions(+), 70 deletions(-)
-> 
-> diff --git a/fs/erofs/data.c b/fs/erofs/data.c
-> index 6495e16a50a9..187f19f8a9a1 100644
-> --- a/fs/erofs/data.c
-> +++ b/fs/erofs/data.c
-> @@ -9,19 +9,6 @@
->  #include <linux/dax.h>
->  #include <trace/events/erofs.h>
->  
-> -struct page *erofs_get_meta_page(struct super_block *sb, erofs_blk_t blkaddr)
-> -{
-> -	struct address_space *const mapping = sb->s_bdev->bd_inode->i_mapping;
-> -	struct page *page;
-> -
-> -	page = read_cache_page_gfp(mapping, blkaddr,
-> -				   mapping_gfp_constraint(mapping, ~__GFP_FS));
-> -	/* should already be PageUptodate */
-> -	if (!IS_ERR(page))
-> -		lock_page(page);
-> -	return page;
-> -}
-> -
->  void erofs_unmap_metabuf(struct erofs_buf *buf)
->  {
->  	if (buf->kmap_type == EROFS_KMAP)
-> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-> index f1e4eb3025f6..3db494a398b2 100644
-> --- a/fs/erofs/internal.h
-> +++ b/fs/erofs/internal.h
-> @@ -419,14 +419,14 @@ enum {
->  #define EROFS_MAP_FULL_MAPPED	(1 << BH_FullMapped)
->  
->  struct erofs_map_blocks {
-> +	struct erofs_buf buf;
-> +
->  	erofs_off_t m_pa, m_la;
->  	u64 m_plen, m_llen;
->  
->  	unsigned short m_deviceid;
->  	char m_algorithmformat;
->  	unsigned int m_flags;
-> -
-> -	struct page *mpage;
->  };
->  
->  /* Flags used by erofs_map_blocks_flatmode() */
-> @@ -474,7 +474,7 @@ struct erofs_map_dev {
->  
->  /* data.c */
->  extern const struct file_operations erofs_file_fops;
-> -struct page *erofs_get_meta_page(struct super_block *sb, erofs_blk_t blkaddr);
-> +void erofs_unmap_metabuf(struct erofs_buf *buf);
->  void erofs_put_metabuf(struct erofs_buf *buf);
->  void *erofs_read_metabuf(struct erofs_buf *buf, struct super_block *sb,
->  			 erofs_blk_t blkaddr, enum erofs_kmap_type type);
-> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-> index 49da3931b2e3..498b7666efe8 100644
-> --- a/fs/erofs/zdata.c
-> +++ b/fs/erofs/zdata.c
-> @@ -698,20 +698,18 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
->  		goto err_out;
->  
->  	if (z_erofs_is_inline_pcluster(clt->pcl)) {
-> -		struct page *mpage;
-> +		void *mp;
->  
-> -		mpage = erofs_get_meta_page(inode->i_sb,
-> -					    erofs_blknr(map->m_pa));
-> -		if (IS_ERR(mpage)) {
-> -			err = PTR_ERR(mpage);
-> +		mp = erofs_read_metabuf(&fe->map.buf, inode->i_sb,
-> +					erofs_blknr(map->m_pa), EROFS_NO_KMAP);
-> +		if (IS_ERR(mp)) {
-> +			err = PTR_ERR(mp);
->  			erofs_err(inode->i_sb,
->  				  "failed to get inline page, err %d", err);
->  			goto err_out;
->  		}
-> -		/* TODO: new subpage feature will get rid of it */
-> -		unlock_page(mpage);
-> -
-> -		WRITE_ONCE(clt->pcl->compressed_pages[0], mpage);
-> +		get_page(fe->map.buf.page);
-> +		WRITE_ONCE(clt->pcl->compressed_pages[0], fe->map.buf.page);
->  		clt->mode = COLLECT_PRIMARY_FOLLOWED_NOINPLACE;
->  	} else {
->  		/* preload all compressed pages (can change mode if needed) */
-> @@ -1529,9 +1527,7 @@ static int z_erofs_readpage(struct file *file, struct page *page)
->  	if (err)
->  		erofs_err(inode->i_sb, "failed to read, err [%d]", err);
->  
-> -	if (f.map.mpage)
-> -		put_page(f.map.mpage);
-> -
-> +	erofs_put_metabuf(&f.map.buf);
->  	erofs_release_pages(&pagepool);
->  	return err;
->  }
-> @@ -1576,8 +1572,7 @@ static void z_erofs_readahead(struct readahead_control *rac)
->  
->  	z_erofs_runqueue(inode->i_sb, &f, &pagepool,
->  			 z_erofs_get_sync_decompress_policy(sbi, nr_pages));
-> -	if (f.map.mpage)
-> -		put_page(f.map.mpage);
-> +	erofs_put_metabuf(&f.map.buf);
->  	erofs_release_pages(&pagepool);
->  }
->  
-> diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
-> index 1037ac17b7a6..18d7fd1a5064 100644
-> --- a/fs/erofs/zmap.c
-> +++ b/fs/erofs/zmap.c
-> @@ -35,7 +35,7 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
->  	struct super_block *const sb = inode->i_sb;
->  	int err, headnr;
->  	erofs_off_t pos;
-> -	struct page *page;
-> +	struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
->  	void *kaddr;
->  	struct z_erofs_map_header *h;
->  
-> @@ -61,14 +61,13 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
->  
->  	pos = ALIGN(iloc(EROFS_SB(sb), vi->nid) + vi->inode_isize +
->  		    vi->xattr_isize, 8);
-> -	page = erofs_get_meta_page(sb, erofs_blknr(pos));
-> -	if (IS_ERR(page)) {
-> -		err = PTR_ERR(page);
-> +	kaddr = erofs_read_metabuf(&buf, sb, erofs_blknr(pos),
-> +				   EROFS_KMAP_ATOMIC);
-> +	if (IS_ERR(kaddr)) {
-> +		err = PTR_ERR(kaddr);
->  		goto out_unlock;
->  	}
->  
-> -	kaddr = kmap_atomic(page);
-> -
->  	h = kaddr + erofs_blkoff(pos);
->  	vi->z_advise = le16_to_cpu(h->h_advise);
->  	vi->z_algorithmtype[0] = h->h_algorithmtype & 15;
-> @@ -101,20 +100,19 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
->  		goto unmap_done;
->  	}
->  unmap_done:
-> -	kunmap_atomic(kaddr);
-> -	unlock_page(page);
-> -	put_page(page);
-> +	erofs_put_metabuf(&buf);
->  	if (err)
->  		goto out_unlock;
->  
->  	if (vi->z_advise & Z_EROFS_ADVISE_INLINE_PCLUSTER) {
-> -		struct erofs_map_blocks map = { .mpage = NULL };
-> +		struct erofs_map_blocks map = {
-> +			.buf = __EROFS_BUF_INITIALIZER
-> +		};
->  
->  		vi->z_idata_size = le16_to_cpu(h->h_idata_size);
->  		err = z_erofs_do_map_blocks(inode, &map,
->  					    EROFS_GET_BLOCKS_FINDTAIL);
-> -		if (map.mpage)
-> -			put_page(map.mpage);
-> +		erofs_put_metabuf(&map.buf);
->  
->  		if (!map.m_plen ||
->  		    erofs_blkoff(map.m_pa) + map.m_plen > EROFS_BLKSIZ) {
-> @@ -151,31 +149,11 @@ static int z_erofs_reload_indexes(struct z_erofs_maprecorder *m,
->  				  erofs_blk_t eblk)
->  {
->  	struct super_block *const sb = m->inode->i_sb;
-> -	struct erofs_map_blocks *const map = m->map;
-> -	struct page *mpage = map->mpage;
-> -
-> -	if (mpage) {
-> -		if (mpage->index == eblk) {
-> -			if (!m->kaddr)
-> -				m->kaddr = kmap_atomic(mpage);
-> -			return 0;
-> -		}
->  
-> -		if (m->kaddr) {
-> -			kunmap_atomic(m->kaddr);
-> -			m->kaddr = NULL;
-> -		}
-> -		put_page(mpage);
-> -	}
-> -
-> -	mpage = erofs_get_meta_page(sb, eblk);
-> -	if (IS_ERR(mpage)) {
-> -		map->mpage = NULL;
-> -		return PTR_ERR(mpage);
-> -	}
-> -	m->kaddr = kmap_atomic(mpage);
-> -	unlock_page(mpage);
-> -	map->mpage = mpage;
-> +	m->kaddr = erofs_read_metabuf(&m->map->buf, sb, eblk,
-> +				      EROFS_KMAP_ATOMIC);
-> +	if (IS_ERR(m->kaddr))
-> +		return PTR_ERR(m->kaddr);
->  	return 0;
->  }
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-remove z_erofs_reload_indexes() and use erofs_read_metabuf() directly in caller?
+All errors (new ones prefixed by >>):
 
->  
-> @@ -711,8 +689,7 @@ static int z_erofs_do_map_blocks(struct inode *inode,
->  			map->m_flags |= EROFS_MAP_FULL_MAPPED;
->  	}
->  unmap_out:
-> -	if (m.kaddr)
-> -		kunmap_atomic(m.kaddr);
-> +	erofs_unmap_metabuf(&m.map->buf);
->  
->  out:
->  	erofs_dbg("%s, m_la %llu m_pa %llu m_llen %llu m_plen %llu m_flags 0%o",
-> @@ -759,8 +736,7 @@ static int z_erofs_iomap_begin_report(struct inode *inode, loff_t offset,
->  	struct erofs_map_blocks map = { .m_la = offset };
->  
->  	ret = z_erofs_map_blocks_iter(inode, &map, EROFS_GET_BLOCKS_FIEMAP);
-> -	if (map.mpage)
-> -		put_page(map.mpage);
-> +	erofs_put_metabuf(&map.buf);
->  	if (ret < 0)
->  		return ret;
->  
+   fs/xfs/scrub/trace.c: In function 'xfbtree_ino':
+>> fs/xfs/scrub/trace.c:48:31: error: invalid use of undefined type 'struct xfbtree'
+      48 |         return file_inode(xfbt->target->bt_xfile->file)->i_ino;
+         |                               ^~
 
-Reviewed-by: Yue Hu <huyue2@yulong.com>
 
+vim +48 fs/xfs/scrub/trace.c
+
+    43	
+    44	static inline unsigned long
+    45	xfbtree_ino(
+    46		struct xfbtree		*xfbt)
+    47	{
+  > 48		return file_inode(xfbt->target->bt_xfile->file)->i_ino;
+    49	}
+    50	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

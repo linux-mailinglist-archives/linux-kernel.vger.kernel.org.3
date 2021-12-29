@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7752F4814E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 17:10:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94EFA4814EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 17:10:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237511AbhL2QKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 11:10:46 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51678 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbhL2QKp (ORCPT
+        id S237613AbhL2QK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 11:10:57 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57450 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240551AbhL2QKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 11:10:45 -0500
+        Wed, 29 Dec 2021 11:10:55 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87385B8184F;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79A886151F;
+        Wed, 29 Dec 2021 16:10:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64F49C36AE7;
         Wed, 29 Dec 2021 16:10:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7FAEC36AEC;
-        Wed, 29 Dec 2021 16:10:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640794242;
-        bh=a4p7i+M3B0mX5lOuDxu5vbuMPAdTfD4pboT6oM4zW2I=;
+        s=k20201202; t=1640794253;
+        bh=UZhiJB9/G49I9AGaCL6l/479CzUET5sAUUx3UrhgHPk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lXmDnhlIhhtZfrdcLmEels1ScTSsokNhMDZH3Wljs/CXn9B/LcH4ZDbVdLbqDHRL1
-         S4JQciPJoRTRBRYY4fIWWDYAqgia3obhKfg8aWQJU5kSDbI1Up1qb+09f8LVmj5TuD
-         L21DN+voVXpVYmsI41DcbwqsJJVqOigmqXdbHlFD9VtGg+qzTIxKAX/B7ZKpLSbQxE
-         sbjN7mv1+kdBC+yqJPt7LqSUTgte7s1mb1yngyP1QcufKMa+YCdkHHOarbk6SOizOO
-         ZXahWIWkbPwEcSG5RHPphDjq2m/TsIsT1fkrNc7AeI7/s/NhRwADAEwTFnwkkQhXyP
-         fyaPDTlhr6T9w==
+        b=RSpby1M8C89DIpSDiqpd87X+AOY0f/T4nrLbJvd7Ca5rOhr1dZclCzPbtzqfzpoZQ
+         SDN7BRyATq3Ozu7UaOmrJ3AmvIbFBtQ13BjlauQyL62q9nIaqHurJ+CIx9il1VtyKo
+         0G1crojHu1IzOCIitR4GoLEvDsKQHWFWQ2u1NTIVip6lq4OexWBVRBulSQtMC25akX
+         1wnshl5qoJK0CiI3IYwOf0eZ4qAWaBZ1yahTp1S8w+etLevkkYKsstFkW6qxODArm2
+         8BsYyQXv4kOOj4tSk1nERR25R1j+pKnR23PeExXKtzaQFSvFXUBjEVd4u+enfm5rdH
+         uJXmnp/egSRkw==
 From:   Jisheng Zhang <jszhang@kernel.org>
 To:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -44,9 +44,9 @@ To:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
 Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-tegra@vger.kernel.org
-Subject: [PATCH 1/7] ARM: dts: ls1021a: remove unused num-viewport from pcie nodes
-Date:   Thu, 30 Dec 2021 00:02:39 +0800
-Message-Id: <20211229160245.1338-2-jszhang@kernel.org>
+Subject: [PATCH 2/7] arm64: dts: visconti: Remove unused num-viewport from pcie node
+Date:   Thu, 30 Dec 2021 00:02:40 +0800
+Message-Id: <20211229160245.1338-3-jszhang@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211229160245.1338-1-jszhang@kernel.org>
 References: <20211229160245.1338-1-jszhang@kernel.org>
@@ -63,29 +63,21 @@ unused num-viewport from pcie nodes.
 
 Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 ---
- arch/arm/boot/dts/ls1021a.dtsi | 2 --
- 1 file changed, 2 deletions(-)
+ arch/arm64/boot/dts/toshiba/tmpv7708.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/ls1021a.dtsi b/arch/arm/boot/dts/ls1021a.dtsi
-index 2e69d6eab4d1..1adc1771b454 100644
---- a/arch/arm/boot/dts/ls1021a.dtsi
-+++ b/arch/arm/boot/dts/ls1021a.dtsi
-@@ -814,7 +814,6 @@ pcie@3400000 {
+diff --git a/arch/arm64/boot/dts/toshiba/tmpv7708.dtsi b/arch/arm64/boot/dts/toshiba/tmpv7708.dtsi
+index 01d7ee61ad25..7ecbfedc02b7 100644
+--- a/arch/arm64/boot/dts/toshiba/tmpv7708.dtsi
++++ b/arch/arm64/boot/dts/toshiba/tmpv7708.dtsi
+@@ -481,7 +481,6 @@ pcie: pcie@28400000 {
+ 			device_type = "pci";
+ 			bus-range = <0x00 0xff>;
+ 			num-lanes = <2>;
+-			num-viewport = <8>;
+ 
  			#address-cells = <3>;
  			#size-cells = <2>;
- 			device_type = "pci";
--			num-viewport = <6>;
- 			bus-range = <0x0 0xff>;
- 			ranges = <0x81000000 0x0 0x00000000 0x40 0x00010000 0x0 0x00010000>, /* downstream I/O */
- 				 <0x82000000 0x0 0x40000000 0x40 0x40000000 0x0 0x40000000>; /* non-prefetchable memory */
-@@ -838,7 +837,6 @@ pcie@3500000 {
- 			#address-cells = <3>;
- 			#size-cells = <2>;
- 			device_type = "pci";
--			num-viewport = <6>;
- 			bus-range = <0x0 0xff>;
- 			ranges = <0x81000000 0x0 0x00000000 0x48 0x00010000 0x0 0x00010000>, /* downstream I/O */
- 				 <0x82000000 0x0 0x40000000 0x48 0x40000000 0x0 0x40000000>; /* non-prefetchable memory */
 -- 
 2.34.1
 

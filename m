@@ -2,192 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C1B4814FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 17:11:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4836248150C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 17:14:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240775AbhL2QLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 11:11:35 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:38055 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S240754AbhL2QLd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 11:11:33 -0500
-Received: from handsomejack.molgen.mpg.de (handsomejack.molgen.mpg.de [141.14.17.248])
-        by mx.molgen.mpg.de (Postfix) with ESMTP id 0BCFB61E6478B;
-        Wed, 29 Dec 2021 17:11:32 +0100 (CET)
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>, linux-ide@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] ahci: AMD A85 FCH (Hudson D4): Skip 200 ms debounce delay in `sata_link_resume()`
-Date:   Wed, 29 Dec 2021 17:11:18 +0100
-Message-Id: <20211229161119.1006-3-pmenzel@molgen.mpg.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211229161119.1006-1-pmenzel@molgen.mpg.de>
-References: <20211229161119.1006-1-pmenzel@molgen.mpg.de>
+        id S234873AbhL2QOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 11:14:07 -0500
+Received: from mga11.intel.com ([192.55.52.93]:58523 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229608AbhL2QOG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 11:14:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640794446; x=1672330446;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=hrk8G4LY+4sUVgeSpaXbbLaEcZw8QNcJq7EvOouNRY8=;
+  b=JkPMpJk010U3M8I30bYoWInznOKRSAlAnH5aPCIWu4GrHyqBoxC8B+Y6
+   2g/GROnBRgBpyxw/o4Z8N0INoTP7ZEvOdjdTVd02ZeADlZnFO5MhkPO9Q
+   H3AjNCuUu4LMvtxglxRV8JUttj8Egr16eS3jyroN4ebUXGXZib+qeVHXl
+   4ud71YHGmWeS6X5tpnlnaAZXOSIAm7rFnSRiWdL9Aoiwvr1xEhMXkhGzw
+   1dbCwKBJe1G3wyKrGa8W7i/9mlvCMiR4codN4Vtm//sy+yjUUkmjPc665
+   tEd1c593mJwb0uppoI9VJFRCEXvfiWcVMayhRIUxbWuQECcD9GZHJrbLx
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="239081146"
+X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
+   d="scan'208";a="239081146"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 08:14:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
+   d="scan'208";a="666311687"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga001.fm.intel.com with ESMTP; 29 Dec 2021 08:14:00 -0800
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 29 Dec 2021 08:13:59 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Wed, 29 Dec 2021 08:13:59 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.170)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Wed, 29 Dec 2021 08:13:59 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mgNZcBN6BLfTRZEGUrJZb4IzxgpycpAPJ3JBFqP3l3DHjsNgD6tm35/SBu3Ginm6ftSzztvqYVjfj18oQNoNuEA2sjPuGLx5baOWRfEyRsDwjZjjhFY0RzV+r2mx/z/VHeW1uH+G5sIiE0TDIyQ9ID+wI0AG/my0mVFkPRtVSW/8dkJ8e+YHItTpJQs8FbPCyyuJ/nIW7l56gwC0yL7iNJfx9zSzSAw/FJpRlD7AirbOViYYm/hEJm1SOeKTGg28ONFYOmf4JnwTCiFA9GYd2wASPL8NC0hSmwHrgI6rpFK8DD515RchQ7MG508c0DBicdcgdEWYpVzZW/lNUSB1gg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AxGZB1ITYU0E7BI+BKJcHMhtKGgww5yy4hVvOsEKKRs=;
+ b=aOn/ylPkENrz6E+xd7zDaRsa1Mia/cNv0Iir8ICFE6QEmt7yUIDb9BZO+0ntOYCG+lTQqINFrggO7led9Lbu5kVlAFiRbxHyCfkD2t+72JQeBZ1cnuf33XH+gmmASp/jkU2D/6//xa2B2/w3cJoOqp3ntzGMcl70A6mBK2WbPdPP9kBfJV1moVd2DB8XR4GJde+erJBDFJiALnUKPWa1eL/prOdIZeJ9z/ZZ7fxSXlB5mv0GHV4aOOU6ZM4azX0us2+M8NUCXDlYqdvkhKCf6ayImxhcB2jW/K08aKKEiNWfXJTl4u17N8alReP5tw74iyNvJU/KOykhf5nk7s31mg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CO1PR11MB4835.namprd11.prod.outlook.com (2603:10b6:303:9e::22)
+ by MWHPR11MB0064.namprd11.prod.outlook.com (2603:10b6:301:64::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.19; Wed, 29 Dec
+ 2021 16:13:56 +0000
+Received: from CO1PR11MB4835.namprd11.prod.outlook.com
+ ([fe80::9920:c2e:ef83:d62b]) by CO1PR11MB4835.namprd11.prod.outlook.com
+ ([fe80::9920:c2e:ef83:d62b%6]) with mapi id 15.20.4844.014; Wed, 29 Dec 2021
+ 16:13:56 +0000
+From:   "Khandelwal, Rajat" <rajat.khandelwal@intel.com>
+To:     "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "Westerberg, Mika" <mika.westerberg@intel.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>
+Subject: RE: [PATCH] Keep polling IPC status if it reads IPC_STATUS_BUSY or
+ IPC_STATUS_ERR until timeout expires
+Thread-Topic: [PATCH] Keep polling IPC status if it reads IPC_STATUS_BUSY or
+ IPC_STATUS_ERR until timeout expires
+Thread-Index: AQHX/LjrrHoyodxf402g1xww8njLyqxJpH9g
+Date:   Wed, 29 Dec 2021 16:13:56 +0000
+Message-ID: <CO1PR11MB4835D217B78F17BA6AD79F0096449@CO1PR11MB4835.namprd11.prod.outlook.com>
+References: <20211229132948.4738-1-rajat.khandelwal@intel.com>
+In-Reply-To: <20211229132948.4738-1-rajat.khandelwal@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-Mentions: mika.westerberg@intel.com
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-version: 11.6.200.16
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 754d96de-116a-4b8a-c2c5-08d9cae6374c
+x-ms-traffictypediagnostic: MWHPR11MB0064:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <MWHPR11MB006480B2A975BBF88786ABEF96449@MWHPR11MB0064.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HD+apG5czsFTiMAA32kjokdmyulQzobUut4089HTkIWSuvJ3WUg1y46ZO1NrOTpizUtR5xyCwqa9Wh7l9aR5DHCOjScdWXMLb9psAB1q6Xx97FwIYfYh8YoX3+Ts+4Cu+q9K5CImBRWYRzyRzXvPR6YgriBrFlGtESuBP25s8qAdn4XZpGjIvdsH1iXSZte8prvp4VMh6NHGnVUOFNvpEL0XBw7WcM6K2W3qhcRQpKllBD2rcDGFvZ8NQe0G6GewkrfBf7YM/HSvIEfASovIYs0Ed11p3sti7hP2qN3R48jBXw5ERa70g7Nf9m9sg3IOt+SG9IVmatMw7qwY6dGzDog0JDPudJ1IxXUMPnQ4Y7S6N8mUrTdkrRKy9mmxWtNhQz7KPc5VBH+5pSL2aQdwD0Y1v9tmbIpeCgvWRBFaSCXNEd36iVHa63UwKa0Cj8uaE1zIoC6P1OLlGe5kCQSkctPpynTE5HcHhi1ElcYA/9HN9YuSZZYBk042nZhQTB6FPXNFe/pngI5BnzQxb0hCde3pL5Aw0TUJx3x6i0ZFNP0AQebNUhsr/Jh6eTkbpyK14xBS+Q5QPyc0WXVRAx36xG0o+Ten2YInuUYiRG+x7VjbTl+TBlY1ZVW4Rj3yFeiT05cxIIKSyT3kO3x29ayfGCCMpZ0jAMcX7fxskDNrRE+reDcKLAmJBZR9gVHMvZ1wp8tUKK+J8KPd+Vf+NzKuNw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4835.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(4326008)(52536014)(55016003)(71200400001)(86362001)(5660300002)(6506007)(53546011)(8676002)(64756008)(38070700005)(55236004)(54906003)(316002)(122000001)(38100700002)(110136005)(8936002)(26005)(186003)(7696005)(6636002)(82960400001)(83380400001)(66946007)(2906002)(66476007)(508600001)(76116006)(66446008)(66556008)(33656002)(9686003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?SnBtdBmfINNY7pnCP+Sq51avA0ZyNYDeN3MFXHRjOfn/OUi1Y0FA52eRpEtl?=
+ =?us-ascii?Q?+j1xBia68HNcWdXQJjWdf0zUaaG951e88UgOnYx6WKTEGdtQvCfhZKCwueOQ?=
+ =?us-ascii?Q?0R0T3qyqvSVxafGte7sicFUgfW0zq35TOFGKTmeuzVvoRIb9RMu1ahby5AdS?=
+ =?us-ascii?Q?YDpZabj99XYj+G4PtfL73w7jEDh5nPXMBWQJ6i8UtATzQ6Uc51gy3H+fBCf4?=
+ =?us-ascii?Q?sUU/v52+UN/6RDNWf3lG6HbWxYzxnZOovm15qwSTzt+0/jaM4Cv+FXrQDz4+?=
+ =?us-ascii?Q?L0Nt0olIQbKHsgTir5mLcODj2elWfxVf8snEpcZrfUKCRSZA3ujZoiUF2NkX?=
+ =?us-ascii?Q?TzxN+MjughnK3D7uwyqJ4ZemN8M8XlreWU+DRmifzUJliqOq6EEb+oPxNewO?=
+ =?us-ascii?Q?7g7aTXuBlG3K6yu63jXVIC73nExo+enQtR8qjVB2qVXG97tzqpvWMz2bR2L8?=
+ =?us-ascii?Q?0K3fT0OMdujRFkLBkgYO18elUrzKnRuG8JbusX74/8JA2G0MCltSyCZbClMm?=
+ =?us-ascii?Q?2ZqY2niC7JlpfyFlXh7TxaRaD0Zcv1Xe1cMchu/D3DwpdDCNAk7im7YU4jMT?=
+ =?us-ascii?Q?RNVEOznpCx14wmBRv8hfapcddpFK0qzCdAWjBDYQSTmlevr44hAdRvXn48Ep?=
+ =?us-ascii?Q?l8Q1rdO5nmW+82VxxTpuhOP0W1jhymmItVHob71oKZqFr+p2uTOXi0cyWtQG?=
+ =?us-ascii?Q?9WwdKGBmolmrXEJoe+fO7LrnB0avqZOrcy4iqaKR3eoA8L1dil1SHrhI+J51?=
+ =?us-ascii?Q?CiLfIUkdml49sVjepIEDQEVwrZ/9Wvpq/tJkVpQUQtQ8SjJ4UDZml5OQY6uh?=
+ =?us-ascii?Q?0hh4C8zPHhVXU2ZtRvspNxfpHghCfhtlbV3JMQ1M9UpDxMMPT77YtynI/tIN?=
+ =?us-ascii?Q?zA3FphCLe+gWpAhZKkmXR+Yyqdm5510i6/8uT1Hz29tiQl620bflPeeVOQUZ?=
+ =?us-ascii?Q?vj5xBVHGs5/N4DnD0kRroz8L2bUjqrWHitdj80qL/BDFc5dALQ80mro4fQDS?=
+ =?us-ascii?Q?at6hD/bbAWj26QU6OZDeLb4+6Qm0EkyWSvEJjzQNfoU2cdl/+4nQV9QNPaxb?=
+ =?us-ascii?Q?zn+GThI/MoMDP9p/JuaizsvcqtVwgjXVyrHDm6lnBV82rdyWO3ZpRrebO5SY?=
+ =?us-ascii?Q?Hws1yBriZRDzdybvx1/+jGqAeGysa+/eQ4g165ldTA2VNsVhx0nTPkMO3o5c?=
+ =?us-ascii?Q?Jkyf5PQXMUUniroHOhwJhsZdmoJIMW40ygb9ltcPmNMKdQTCoa9tNg+AJupI?=
+ =?us-ascii?Q?6p6i0iSK0bXYI31akuhRupB8AY47spaZP/ZcdM9vf/CAGL1zubHfVpBdpnmj?=
+ =?us-ascii?Q?0RuqKMn2KWiJvmM2BRR3NcpWci7A+8pf5cvfX4swXUHI7kRnhO1yaK3WN/mQ?=
+ =?us-ascii?Q?OXkQ+YHkULJpYcZTv5PdKaURt6Fk4m7HoX3s2n6rRjhE3zFdF26cPAuXEzvH?=
+ =?us-ascii?Q?Zfb8WRfDg/cBGrLVtC9rqg5ZAGziX8Y9ECERpGETZIkxBwbUVXakiNOVarsj?=
+ =?us-ascii?Q?ateWeK+5iGXVZX4svSkXWQyremI+EtZUH3bGXiM2llexnfgmp+CPLx2nXUee?=
+ =?us-ascii?Q?3WKFKDk4FkATGoVDGxP1Pldrv0ix2B8G6DTaCqTzP5FRWhjdp2Krz5lw+BY8?=
+ =?us-ascii?Q?zlkk+v5PZmxrmC3ZjO1QIurM9gsU5K6eS8zorEsE+kBk+2fPwb4RyvmGPJur?=
+ =?us-ascii?Q?fuZRiA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4835.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 754d96de-116a-4b8a-c2c5-08d9cae6374c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Dec 2021 16:13:56.7608
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: a6dWsnTCUYr4ro3LfVpjy9XYmQ9iA31V8uTfWEXzVjBu84IelSwpe8d4c45H2OoQQo5zH0onVT+xg7SoS6vM64+bmomPv6TOdUUR4McAoLU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB0064
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the first commit 1da177e4c3 (Linux-2.6.12-rc2) in the Linux git
-repository, `sata_link_resume()` contains a 200 ms delay with the comment
-below.
+Hi @Westerberg, Mika
+This was the original message!
 
->    /*
->     * Some PHYs react badly if SStatus is pounded
->     * immediately after resuming.  Delay 200ms before
->     * debouncing.
->     */
+-----Original Message-----
+From: Khandelwal, Rajat <rajat.khandelwal@intel.com>=20
+Sent: Wednesday, December 29, 2021 7:00 PM
+To: mika.westerberg@linux.intel.com
+Cc: Khandelwal, Rajat <rajat.khandelwal@intel.com>; linux-kernel@vger.kerne=
+l.org; platform-driver-x86@vger.kernel.org
+Subject: [PATCH] Keep polling IPC status if it reads IPC_STATUS_BUSY or IPC=
+_STATUS_ERR until timeout expires
 
-A lot of PHYs do not have that problem though, so delaying 200 ms increases
-the boot time by 30 percent unnecessarily for a lot of systems, making
-“instant booting” quite hard.
+The current implementation returns -EIO if and when IPC_STATUS_ERR is retur=
+ned and returns -ETIMEDOUT even if the status is busy.
+This patch polls the IPC status even if IPC_STATUS_ERR is returned until ti=
+meout expires and returns -EBUSY if the status shows busy.
+Observed in multiple scenarios, trying to fetch the status of IPC after it =
+shows ERR sometimes eradicates the ERR status.
 
-As it’s unknown for what PHY the delay was added, create a new board
-`board_ahci_nodbdelay` with the link flag `ATA_LFLAG_NO_DB_DELAY,`, and,
-for now, configure the AMD A85 FCH (Hudson D4) to use it.
-
-On the ASUS F2A85-M PRO it reduces the Linux kernel boot time by the
-expected 200 ms from 787 ms to 585 ms.
-
-Tested on ASUS F2A85-M PRO:
-
-Without patch, i. e., with 200 ms debounce delay:
-
-    […]
-    [    0.000000] DMI: ASUS F2A85-M_PRO/F2A85-M_PRO, BIOS 4.15-671-g7b043ef855 12/27/2021
-    […]
-    [    0.404885] ahci 0000:00:11.0: version 3.0
-    [    0.405466] ahci 0000:00:11.0: AHCI 0001.0300 32 slots 8 ports 6 Gbps 0x40 impl SATA mode
-    [    0.405470] ahci 0000:00:11.0: flags: 64bit ncq sntf ilck led clo pio
-    [    0.408036] scsi host0: ahci
-    [    0.408537] scsi host1: ahci
-    [    0.408932] scsi host2: ahci
-    [    0.409444] scsi host3: ahci
-    [    0.409841] scsi host4: ahci
-    [    0.410266] scsi host5: ahci
-    [    0.410661] scsi host6: ahci
-    [    0.411052] scsi host7: ahci
-    [    0.411284] ata1: DUMMY
-    [    0.411286] ata2: DUMMY
-    [    0.411286] ata3: DUMMY
-    [    0.411287] ata4: DUMMY
-    [    0.411288] ata5: DUMMY
-    [    0.411289] ata6: DUMMY
-    [    0.411291] ata7: SATA max UDMA/133 abar m2048@0xf01cc000 port 0xf01cc400 irq 19
-    [    0.411292] ata8: DUMMY
-    […]
-    [    0.422362] Key type encrypted registered
-    [    0.424903] PM:   Magic number: 1:28:636
-    [    0.723979] ata7: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-    [    0.724268] ata7.00: ATA-9: SanDisk SDSSDP064G, 2.0.0, max UDMA/133
-    [    0.724271] ata7.00: 125045424 sectors, multi 1: LBA48 NCQ (depth 32)
-    [    0.725537] ata7.00: configured for UDMA/133
-    [    0.725898] scsi 6:0:0:0: Direct-Access     ATA      SanDisk SDSSDP06 0    PQ: 0 ANSI: 5
-    [    0.726428] sd 6:0:0:0: [sda] 125045424 512-byte logical blocks: (64.0 GB/59.6 GiB)
-    [    0.726442] sd 6:0:0:0: [sda] Write Protect is off
-    [    0.726446] sd 6:0:0:0: [sda] Mode Sense: 00 3a 00 00
-    [    0.726464] sd 6:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
-    [    0.727985]  sda: sda1 sda2 sda3
-    [    0.728588] sd 6:0:0:0: [sda] Attached SCSI disk
-    [    0.738495] EXT4-fs (sda3): mounted filesystem with ordered data mode. Opts: (null). Quota mode: none.
-    […]
-    [    0.786812] Run /sbin/init as init process
-
-With patch, i. e., skipping the debounce delay saves 200 ms from the boot
-as expected.
-
-    […]
-    [    0.000000] DMI: ASUS F2A85-M_PRO/F2A85-M_PRO, BIOS 4.15-671-g7b043ef855 12/27/2021
-    […]
-    [    0.407372] ahci 0000:00:11.0: version 3.0
-    [    0.407909] ahci 0000:00:11.0: AHCI 0001.0300 32 slots 8 ports 6 Gbps 0x40 impl SATA mode
-    [    0.407913] ahci 0000:00:11.0: flags: 64bit ncq sntf ilck led clo pio
-    [    0.410520] scsi host0: ahci
-    [    0.411017] scsi host1: ahci
-    [    0.411418] scsi host2: ahci
-    [    0.411810] scsi host3: ahci
-    [    0.412225] scsi host4: ahci
-    [    0.412614] scsi host5: ahci
-    [    0.413005] scsi host6: ahci
-    [    0.413488] scsi host7: ahci
-    [    0.413713] ata1: DUMMY
-    [    0.413715] ata2: DUMMY
-    [    0.413716] ata3: DUMMY
-    [    0.413716] ata4: DUMMY
-    [    0.413717] ata5: DUMMY
-    [    0.413718] ata6: DUMMY
-    [    0.413720] ata7: SATA max UDMA/133 abar m2048@0xf01cc000 port 0xf01cc400 irq 19
-    [    0.413722] ata8: DUMMY
-    […]
-    [    0.425414] Key type encrypted registered
-    [    0.427873] PM:   Magic number: 1:234:838
-    [    0.522131] ata7: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-    [    0.522415] ata7.00: ATA-9: SanDisk SDSSDP064G, 2.0.0, max UDMA/133
-    [    0.522418] ata7.00: 125045424 sectors, multi 1: LBA48 NCQ (depth 32)
-    [    0.523636] ata7.00: configured for UDMA/133
-    [    0.523993] scsi 6:0:0:0: Direct-Access     ATA      SanDisk SDSSDP06 0    PQ: 0 ANSI: 5
-    [    0.524497] sd 6:0:0:0: [sda] 125045424 512-byte logical blocks: (64.0 GB/59.6 GiB)
-    [    0.524511] sd 6:0:0:0: [sda] Write Protect is off
-    [    0.524515] sd 6:0:0:0: [sda] Mode Sense: 00 3a 00 00
-    [    0.524534] sd 6:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
-    [    0.525953]  sda: sda1 sda2 sda3
-    [    0.526541] sd 6:0:0:0: [sda] Attached SCSI disk
-    [    0.536245] EXT4-fs (sda3): mounted filesystem with ordered data mode. Opts: (null). Quota mode: none.
-    […]
-    [    0.585327] Run /sbin/init as init process
-
-Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Guenter Roeck <groeck@chromium.org>
-
+Signed-off-by: Rajat-Khandelwal <rajat.khandelwal@intel.com>
 ---
+ drivers/platform/x86/intel_scu_ipc.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Add the two Chromium OS developers Dmitry and Guenter to Cc, as to my
-knowledge Chromium/Chrome OS also tries to boot very fast, and the Chromium
-project has some CI infrastructure.
----
- drivers/ata/ahci.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
-index 6a2432e4adda..4f3e0603864d 100644
---- a/drivers/ata/ahci.c
-+++ b/drivers/ata/ahci.c
-@@ -51,6 +51,7 @@ enum board_ids {
- 	board_ahci,
- 	board_ahci_ign_iferr,
- 	board_ahci_mobile,
-+	board_ahci_nodbdelay,
- 	board_ahci_nomsi,
- 	board_ahci_noncq,
- 	board_ahci_nosntf,
-@@ -141,6 +142,13 @@ static const struct ata_port_info ahci_port_info[] = {
- 		.udma_mask	= ATA_UDMA6,
- 		.port_ops	= &ahci_ops,
- 	},
-+	[board_ahci_nodbdelay] = {
-+		.flags		= AHCI_FLAG_COMMON,
-+		.link_flags	= ATA_LFLAG_NO_DB_DELAY,
-+		.pio_mask	= ATA_PIO4,
-+		.udma_mask	= ATA_UDMA6,
-+		.port_ops	= &ahci_ops,
-+	},
- 	[board_ahci_nomsi] = {
- 		AHCI_HFLAGS	(AHCI_HFLAG_NO_MSI),
- 		.flags		= AHCI_FLAG_COMMON,
-@@ -437,6 +445,7 @@ static const struct pci_device_id ahci_pci_tbl[] = {
- 		board_ahci_al },
- 	/* AMD */
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_HUDSON2_SATA_IDE), board_ahci },
-+	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_HUDSON2_SATA_AHCI), board_ahci_nodbdelay },
- 	{ PCI_VDEVICE(AMD, 0x7900), board_ahci }, /* AMD CZ */
- 	{ PCI_VDEVICE(AMD, 0x7901), board_ahci_mobile }, /* AMD Green Sardine */
- 	/* AMD is using RAID class only for ahci controllers */
--- 
-2.30.2
+diff --git a/drivers/platform/x86/intel_scu_ipc.c b/drivers/platform/x86/in=
+tel_scu_ipc.c
+index 7cc9089d1e14..91f716e84474 100644
+--- a/drivers/platform/x86/intel_scu_ipc.c
++++ b/drivers/platform/x86/intel_scu_ipc.c
+@@ -233,17 +233,19 @@ static inline u32 ipc_data_readl(struct intel_scu_ipc=
+_dev *scu, u32 offset)  static inline int busy_loop(struct intel_scu_ipc_de=
+v *scu)  {
+ 	unsigned long end =3D jiffies + IPC_TIMEOUT;
++	u32 status;
+=20
+ 	do {
+-		u32 status;
+-
+ 		status =3D ipc_read_status(scu);
+ 		if (!(status & IPC_STATUS_BUSY)) {
+-			return (status & IPC_STATUS_ERR) ? -EIO : 0;
++			if (!(status & IPC_STATUS_ERR))
++				return 0;
++		}
+=20
+ 		usleep_range(50, 100);
+ 	} while (time_before(jiffies, end));
+=20
++	if (status & IPC_STATUS_BUSY)
++		return -EBUSY;
++	if (status & IPC_STATUS_ERR)
++		return -EIO;
++
+ 	return -ETIMEDOUT;
+ }
+=20
+--
+2.17.1
 

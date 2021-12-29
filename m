@@ -2,134 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E4748101F
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 06:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26FB1481021
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 06:41:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238819AbhL2Fk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 00:40:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45330 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231688AbhL2FkZ (ORCPT
+        id S238826AbhL2Fl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 00:41:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59732 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231688AbhL2Fl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 00:40:25 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06301B81163;
-        Wed, 29 Dec 2021 05:40:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC1BDC36AEA;
-        Wed, 29 Dec 2021 05:40:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640756422;
-        bh=ZDSJxCw+26nf7CRKQUd/wtLZMwsu5luoF5sZD/yoX0U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uDFpmUBjvXGojvo/pLAX9ZBtkf0m6VU8AMZGNec6POpOKHNIOfofjmAeWHpWJhUR7
-         Jj1zgzXzqnWhX7UESn4AuQ7eesScH28AArX34RnN0xZMNZ/WCdQQQBiFAP4oo5c8Uq
-         OEjjultnSWc1pdv2zOi1JCgDoiIP4N3yPWe6xeFE9jZyLi5Dwb04aokFDN+OOOD08p
-         SymZ7lnmaEUJA4MLwAP074qvLea1DShU5WVB0YmAAa2hUWgmDBOfGRXbnydglaeEwk
-         qkK+I7Z88ryhElZVRGcr8lLa9G7f0ZeRs+EmJSoH2yrH+YTV0VjtZL6IUrbRuvcFG1
-         cgtQDr/1XQuVw==
-Date:   Wed, 29 Dec 2021 11:10:18 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 3/8] device property: Helper to match multiple connections
-Message-ID: <Ycv0wtDSyLhS1LWZ@matsya>
-References: <20211228052116.1748443-1-bjorn.andersson@linaro.org>
- <20211228052116.1748443-4-bjorn.andersson@linaro.org>
- <78491489-6b31-c741-8c69-8d52fb614a6c@linaro.org>
- <YctDgaHV8dsR109L@ripper>
+        Wed, 29 Dec 2021 00:41:27 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D80C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 21:41:27 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id j3-20020a056830014300b0058f4f1ef3c2so23169429otp.13
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 21:41:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to;
+        bh=RQJ9Z7U78l7RlTESwOz0f8iotYMnV6+H622tZ3ZpcB0=;
+        b=VY0ZPsavgmjZAqHD1Qmelq2rhCy45HgpUO550sIzC2/R+axkgD5HhY648G+/jFVL1K
+         O/UYL0EYWC1BnlqI/sZMO4npOvpFCbxTyHEAnbeJR38a5pIf5hUnIQviBZoF+nYsMsuc
+         EVC+f/4R3lpExIHPSz85mwFBjwcwacpS9VtQ8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to;
+        bh=RQJ9Z7U78l7RlTESwOz0f8iotYMnV6+H622tZ3ZpcB0=;
+        b=zYMc2O/RZmVBhYwS1gnUZef1CJiWQprrelKqDFxUePPvky+YolU2oY4nYMTf+6UFNo
+         SXHj83+Hej8CnNeHJjquz15DtMheKxX3eKWzjKYQjgL7eQT96zQSqGgUzrGCHNDJocX2
+         sckwloN7J+9If9/z1kllzhijxgRWWFRcU4NBZENSvW0nbADMuncXPoBuP6p4lv1Cq9Th
+         0DYQhmF8zrXPUT/blfGUrNCGwszIOH4NKI4CYNlwYXMe+wmr2CFX5BeVwEGj/piM/Gu1
+         gu/T+7OM34q4yeowpCn67V4y99VgXb2+EFIEZKKyp1EVcfIz7NT0mFtIWjeGyMPQ0Wtl
+         f21A==
+X-Gm-Message-State: AOAM530I3MKb0odEFzWXmxEVbfqc/WxkWBK66F7o5mmCbFDQzZj+ySco
+        clNiQSa42wCyuDRJfP1+Dohm+/a4GmAzQI8k/LmBUg==
+X-Google-Smtp-Source: ABdhPJzwplygFU01bLuJdOe/B/+d23LGng2feNHVIUOGf2lYk7CrK+WWD6iaU/XwUC+ZVg2QyqYm8XxBTkYXELNr4II=
+X-Received: by 2002:a9d:70ce:: with SMTP id w14mr17845869otj.77.1640756478088;
+ Tue, 28 Dec 2021 21:41:18 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 28 Dec 2021 21:41:17 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YctDgaHV8dsR109L@ripper>
+In-Reply-To: <00000000000058a5c505d43dd91c@google.com>
+References: <00000000000058a5c505d43dd91c@google.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Tue, 28 Dec 2021 21:41:17 -0800
+Message-ID: <CAE-0n52SNiv=GzDjM0nrvZzjLyttSjoNGAkz=Dvmt3R665mzug@mail.gmail.com>
+Subject: Re: [syzbot] WARNING: ODEBUG bug in corrupted (2)
+To:     hdanton@sina.com, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, miaoqinglang@huawei.com,
+        qiang.zhang@windriver.com,
+        syzbot <syzbot+a437546ec71b04dfb5ac@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28-12-21, 09:04, Bjorn Andersson wrote:
-> On Tue 28 Dec 05:09 PST 2021, Dmitry Baryshkov wrote:
-> 
-> > On 28/12/2021 08:21, Bjorn Andersson wrote:
-> > > In some cases multiple connections with the same connection id
-> > > needs to be resolved from a fwnode graph.
-> > > 
-> > > One such example is when separate hardware is used for performing muxing and/or
-> > > orientation switching of the SuperSpeed and SBU lines in a USB-C
-> > > connector. In this case the connector needs to belong to a graph with
-> > > multiple matching remote endpoints, and the TypeC controller needs to be
-> > > able to resolve them both.
-> > > 
-> > > Add a new API that allows this kind of lookup.
-> > > 
-> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > ---
-> > >   drivers/base/property.c  | 94 ++++++++++++++++++++++++++++++++++++++++
-> > >   include/linux/property.h |  5 +++
-> > >   2 files changed, 99 insertions(+)
-> > > 
-> > > diff --git a/drivers/base/property.c b/drivers/base/property.c
-> > > index cbe4fa298413..0aa0296fd991 100644
-> > > --- a/drivers/base/property.c
-> > > +++ b/drivers/base/property.c
-> > > @@ -1180,6 +1180,36 @@ fwnode_graph_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
-> > >   	return NULL;
-> > >   }
-> > > +static unsigned int fwnode_graph_devcon_matches(struct fwnode_handle *fwnode,
-> > > +						const char *con_id, void *data,
-> > > +						devcon_match_fn_t match,
-> > > +						void **matches,
-> > > +						unsigned int matches_len)
-> > > +{
-> > > +	struct fwnode_handle *node;
-> > > +	struct fwnode_handle *ep;
-> > > +	unsigned int count = 0;
-> > > +	void *ret;
-> > > +
-> > > +	fwnode_graph_for_each_endpoint(fwnode, ep) {
-> > > +		if (count >= matches_len) {
-> > > +			fwnode_handle_put(ep);
-> > > +			return count;
-> > > +		}
-> > > +
-> > > +		node = fwnode_graph_get_remote_port_parent(ep);
-> > > +		if (!fwnode_device_is_available(node))
-> > > +			continue;
-> > > +
-> > > +		ret = match(node, con_id, data);
-> > > +		fwnode_handle_put(node);
-> > > +
-> > > +		if (ret)
-> > > +			matches[count++] = ret;
-> > > +	}
-> > > +	return count;
-> > > +}
-> > 
-> > This API doesn't let it's user know if there are more matches found in the
-> > device tree or not. I'd suggest to add 'count' mode that would return the
-> > amount of found matches if (matches == NULL) && (matches_len == 0).
+Quoting syzbot (2021-12-28 16:16:28)
+> syzbot has found a reproducer for the following issue on:
+>
+> HEAD commit:    ea586a076e8a Add linux-next specific files for 20211224
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=12bb71a5b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=a9c4e3dde2c568fb
+> dashboard link: https://syzkaller.appspot.com/bug?extid=a437546ec71b04dfb5ac
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1246b50db00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=124c902db00000
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+a437546ec71b04dfb5ac@syzkaller.appspotmail.com
 
-But the API does call each match
-> 
-> Unfortunately in this code path we don't know how to "free" the objects
-> returned by match(), e.g. see how typec_switch_match() returns wrapper
-> of a refcounted device.
-> 
-> So we must return all the match results to the caller to it can free
-> things up based on its knowledge of what matches[] actually contains..
+I see a fix has been sent[1] already. Here it is inline.
 
-ACPI walk has similar APIs, I can think of acpi_walk_namespace() which I
-have used in past and does similar walk in namespace but for devices and
-calls the match()
+---8<---
+diff --git a/drivers/hid/hid-magicmouse.c b/drivers/hid/hid-magicmouse.c
+index eba1e8087bfd..b8b08f0a8c54 100644
+--- a/drivers/hid/hid-magicmouse.c
++++ b/drivers/hid/hid-magicmouse.c
+@@ -873,6 +873,7 @@ static int magicmouse_probe(struct hid_device *hdev,
 
--- 
-~Vinod
+ 	return 0;
+ err_stop_hw:
++	del_timer_sync(&msc->battery_timer);
+ 	hid_hw_stop(hdev);
+ 	return ret;
+ }
+
+>
+> magicmouse 0003:05AC:0265.0001: hidraw0: USB HID v0.00 Device [HID 05ac:0265] on usb-dummy_hcd.0-1/input0
+> magicmouse 0003:05AC:0265.0001: magicmouse input not registered
+> magicmouse: probe of 0003:05AC:0265.0001 failed with error -12
+> ------------[ cut here ]------------
+> ODEBUG: free active (active state 0) object type: timer_list hint: magicmouse_battery_timer_tick+0x0/0x360 include/linux/device.h:693
+> WARNING: CPU: 1 PID: 25 at lib/debugobjects.c:505 debug_print_object+0x16e/0x250 lib/debugobjects.c:505
+> Modules linked in:
+> CPU: 1 PID: 25 Comm: kworker/1:1 Not tainted 5.16.0-rc6-next-20211224-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Workqueue: usb_hub_wq hub_event
+> RIP: 0010:debug_print_object+0x16e/0x250 lib/debugobjects.c:505
+> Code: ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 af 00 00 00 48 8b 14 dd 80 c1 05 8a 4c 89 ee 48 c7 c7 80 b5 05 8a e8 1e 28 25 05 <0f> 0b 83 05 35 9d a6 09 01 48 83 c4 18 5b 5d 41 5c 41 5d 41 5e c3
+> RSP: 0018:ffffc90000dfeb10 EFLAGS: 00010286
+> RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+> RDX: ffff8880157d3a80 RSI: ffffffff815f4208 RDI: fffff520001bfd54
+> RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000000001
+> R10: ffffffff815edf6e R11: 0000000000000000 R12: ffffffff89adf420
+> R13: ffffffff8a05bbc0 R14: ffffffff81666980 R15: dffffc0000000000
+> FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fff4e854bf0 CR3: 000000000b88e000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>
+
+[1] https://lore.kernel.org/r/b0777c29fb4c59f27a726f62680b4c7f04c5c76e.1640725695.git.christophe.jaillet@wanadoo.fr

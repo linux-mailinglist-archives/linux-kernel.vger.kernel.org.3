@@ -2,78 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5F6481446
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 15:57:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C63648144C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 16:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240454AbhL2O5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 09:57:09 -0500
-Received: from mga02.intel.com ([134.134.136.20]:50682 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233681AbhL2O5H (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 09:57:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640789827; x=1672325827;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6ugdZcGIneaCYhIVRdRjyCv5QCbeHqw4trm5u9986oo=;
-  b=XLEotPncHBtPIFYHjntK2VxBygvk8m28zyM1H34r1C+sVgNrxitIWPWI
-   5RrGFidAtKAyFa5Rmc8CKcSKWRkpIwRsPITVL82zXV3/dcxHe9ejVD3aC
-   7Swg96mSwdS7JOUGYFwzg30PvJweCF+3XwsMBCa1LniCefo4dsZ7NkaYR
-   yiDu9NmNeTpeA2htVmIGuls2fWWCyUgx9gSYUSIzbDroIgsg49allyTtT
-   3qrlwKbhFhmdRfFUuiq/tyG04ykVQ/IDg9Cw+dvSJg3rCbq9+MB6BzHv4
-   EpY5LG8bDpD2smLDfn/1GMVOJ+JDlMWbTi+22Uc0xLw+1sibY+gtL4uv7
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="228834219"
-X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
-   d="scan'208";a="228834219"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 06:57:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
-   d="scan'208";a="619056640"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 29 Dec 2021 06:57:04 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n2aO0-000939-AK; Wed, 29 Dec 2021 14:57:04 +0000
-Date:   Wed, 29 Dec 2021 22:56:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Cong Wang <xiyou.wangcong@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [congwang:sch_bpf 3/3] ERROR: modpost: "qdisc_lookup_rcu"
- [net/sched/sch_bpf.ko] undefined!
-Message-ID: <202112292229.XxqsKDIS-lkp@intel.com>
+        id S240460AbhL2PEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 10:04:38 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:29308 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233681AbhL2PEh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 10:04:37 -0500
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JPF6X5gPxzbjgW;
+        Wed, 29 Dec 2021 23:04:04 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 29 Dec 2021 23:04:33 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 29 Dec 2021 23:04:32 +0800
+Subject: Re: [PATCH v19 02/13] x86/setup: Use parse_crashkernel_high_low() to
+ simplify code
+To:     Dave Young <dyoung@redhat.com>, Borislav Petkov <bp@alien8.de>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Chen Zhou" <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>
+References: <20211228132612.1860-1-thunder.leizhen@huawei.com>
+ <20211228132612.1860-3-thunder.leizhen@huawei.com> <Ycs3kpZD/vpoo1AX@zn.tnic>
+ <b017a8ea-989b-c251-f5c8-a8a7940877cf@huawei.com>
+ <YcwN9Mfwsh/lPbbd@dhcp-128-65.nay.redhat.com> <YcwyZRDJUMniSaY9@zn.tnic>
+ <Ycw8n2BvJzH9wJKG@dhcp-128-65.nay.redhat.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <21736ba2-883d-1037-dbe8-299e40f7ad13@huawei.com>
+Date:   Wed, 29 Dec 2021 23:04:21 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <Ycw8n2BvJzH9wJKG@dhcp-128-65.nay.redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/congwang/linux.git sch_bpf
-head:   5fb0da1e47e0c68da0323a3e0399b2628a13e999
-commit: 5fb0da1e47e0c68da0323a3e0399b2628a13e999 [3/3] net_sched: introduce eBPF based Qdisc
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20211229/202112292229.XxqsKDIS-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/congwang/linux/commit/5fb0da1e47e0c68da0323a3e0399b2628a13e999
-        git remote add congwang https://github.com/congwang/linux.git
-        git fetch --no-tags congwang sch_bpf
-        git checkout 5fb0da1e47e0c68da0323a3e0399b2628a13e999
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+On 2021/12/29 18:46, Dave Young wrote:
+> On 12/29/21 at 11:03am, Borislav Petkov wrote:
+>> On Wed, Dec 29, 2021 at 03:27:48PM +0800, Dave Young wrote:
+>>> So I think you can unify the parse_crashkernel* in x86 first with just
+>>> one function.  And leave the further improvements to later work. But
+>>> let's see how Boris think about this.
+>>
+>> Well, I think this all unnecessary work. Why?
+>>
+>> If the goal is to support crashkernel...high,low on arm64, then you
+>> should simply *copy* the functionality on arm64 and be done with it.
+>>
+>> Unification is done by looking at code which is duplicated across
+>> architectures and which has been untouched for a while now, i.e., no
+>> new or arch-specific changes are going to it so a unification can be
+>> as simple as trivially switching the architectures to call a generic
+>> function.
+>>
+>> What this does is carve out the "generic" parts and then try not to
+>> break existing usage.
+>>
+>> Which is a total waste of energy and resources. And it is casting that
+>> functionality in stone so that when x86 wants to change something there,
+>> it should do it in a way not to break arm64. And I fail to see the
+>> advantage of all that. Code sharing ain't it.
 
->> ERROR: modpost: "qdisc_lookup_rcu" [net/sched/sch_bpf.ko] undefined!
+It's just a worry, there's uncertainty about whether it's going to be. I think
+the only thing that might change is the default value of "low_size". Of course,
+the alignment size and start address may also change, but most of them can be
+controlled by macros.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Chen Zhou and I tried to share the code because of a suggestion. After so many
+attempts, it doesn't seem to fit to make generic. Or maybe I haven't figured
+out a good solution yet.
+
+
+>>
+>> So what it should do is simply copy the necessary code to arm64.
+>> Unifications can always be done later, when the dust settles.
+> 
+> I think I agree with you about the better way is to doing some
+> improvements so that arches can logically doing things better.  I can
+> leave with the way I suggested although it is not the best.  But I think
+> Leizhen needs a clear direction about how to do it. It is very clear
+> now.  See how he will handle this. 
+
+Surviving, then pursuing ideals.
+
+I will put the patches that make arm64 support crashkernel...high,low to
+the front, then the parse_crashkernel() unification patches. Even if the
+second half of the patches is not ready for v5.18, the first half of the
+patches is ready.
+
+> 
+>>
+>> IMNSVHO.
+>>
+>> -- 
+>> Regards/Gruss,
+>>     Boris.
+>>
+>> https://people.kernel.org/tglx/notes-about-netiquette
+>>
+> 
+> .
+> 
+
+-- 
+Regards,
+  Zhen Lei

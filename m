@@ -2,157 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 181C4481520
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 17:38:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57AA6481525
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 17:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240805AbhL2QiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 11:38:13 -0500
-Received: from mga07.intel.com ([134.134.136.100]:1641 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240794AbhL2QiM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 11:38:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640795892; x=1672331892;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lp2LunFintpzxpvq6k+vcg4Yxil9Vg0kewdsPyRPqkQ=;
-  b=gvNzImYtOZUheEMzRJvduVEJsPPxEHvZ/Im//Ukil5WWjwrDFPbHVCm5
-   0Ak2BWmymIISMWg6SeNIWFKIr60IzAKDdntAFSQZkOdRiW2SnLVj4/X3p
-   u1V3zWvzMRThm2bBwdAFsI2yJdoNkj8xQwvoFSfLVm9gG080iKgTooRnQ
-   QF8cqqJflYEA4TeH0dw53ymu9Aj3H4wYuwtqkzQ2oo7gSoV3PHfLuFb6i
-   9Mcz7W1q6uKcAX9BHhVAZ3icImgGJFDgQloqfjvZY81hE3teFM9EuUf9C
-   xN2jQFo14o5x6IWLUxrNsNQd9Aq7jDSz6fqLu/EaCr4T00i7gg4p1Ntx8
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="304899339"
-X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
-   d="scan'208";a="304899339"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 08:38:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
-   d="scan'208";a="470389271"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 29 Dec 2021 08:38:11 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n2bxq-0009DB-HO; Wed, 29 Dec 2021 16:38:10 +0000
-Date:   Thu, 30 Dec 2021 00:37:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [nbd168-wireless:mt76 61/62]
- drivers/net/wireless/mediatek/mt76/mt7615/main.c:408:35: warning: implicit
- conversion from 'enum mcu_cipher_type' to 'enum mt76_cipher_type'
-Message-ID: <202112300039.Vl9TunbG-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S240825AbhL2Qiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 11:38:55 -0500
+Received: from sibelius.xs4all.nl ([83.163.83.176]:50849 "EHLO
+        sibelius.xs4all.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240794AbhL2Qiy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 11:38:54 -0500
+Received: from localhost (bloch.sibelius.xs4all.nl [local])
+        by bloch.sibelius.xs4all.nl (OpenSMTPD) with ESMTPA id 7e0a267d;
+        Wed, 29 Dec 2021 17:38:51 +0100 (CET)
+Date:   Wed, 29 Dec 2021 17:38:51 +0100 (CET)
+From:   Mark Kettenis <mark.kettenis@xs4all.nl>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     robh@kernel.org, kvalo@codeaurora.org, davem@davemloft.net,
+        kuba@kernel.org, rafael@kernel.org, lenb@kernel.org,
+        aspriel@gmail.com, franky.lin@broadcom.com,
+        hante.meuleman@broadcom.com, chi-hsien.lin@infineon.com,
+        wright.feng@infineon.com, sven@svenpeter.dev, alyssa@rosenzweig.io,
+        kettenis@openbsd.org, zajec5@gmail.com,
+        pieter-paul.giesberts@broadcom.com, linus.walleij@linaro.org,
+        hdegoede@redhat.com, linville@tuxdriver.com,
+        sandals@crustytoothpaste.net, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+In-Reply-To: <1e5e88a1-5457-2211-dc08-fe98415ae21b@marcan.st> (message from
+        Hector Martin on Tue, 28 Dec 2021 02:23:02 +0900)
+Subject: Re: [PATCH 01/34] dt-bindings: net: bcm4329-fmac: Add Apple
+ properties & chips
+References: <20211226153624.162281-1-marcan@marcan.st>
+ <20211226153624.162281-2-marcan@marcan.st>
+ <YcnrjySZ9mPbkidZ@robh.at.kernel.org> <1e5e88a1-5457-2211-dc08-fe98415ae21b@marcan.st>
+Message-ID: <d3cb7aff430324ca@bloch.sibelius.xs4all.nl>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/nbd168/wireless mt76
-head:   b18073c341fd3b4143cd034decb0ad8544b51bdf
-commit: ef1e7305c000792e704ba70d34ad653224d56d24 [61/62] mt76: mt7615: update bss_info with cipher after setting the group key
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20211230/202112300039.Vl9TunbG-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/nbd168/wireless/commit/ef1e7305c000792e704ba70d34ad653224d56d24
-        git remote add nbd168-wireless https://github.com/nbd168/wireless
-        git fetch --no-tags nbd168-wireless mt76
-        git checkout ef1e7305c000792e704ba70d34ad653224d56d24
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/net/wireless/mediatek/mt76/mt7615/ drivers/net/wireless/mediatek/mt76/mt7915/
+> From: Hector Martin <marcan@marcan.st>
+> Date: Tue, 28 Dec 2021 02:23:02 +0900
+> 
+> On 28/12/2021 01.36, Rob Herring wrote:
+> > On Mon, Dec 27, 2021 at 12:35:51AM +0900, Hector Martin wrote:
+> >> +  brcm,cal-blob:
+> >> +    $ref: /schemas/types.yaml#/definitions/uint8-array
+> >> +    description: A per-device calibration blob for the Wi-Fi radio. This
+> >> +      should be filled in by the bootloader from platform configuration
+> >> +      data, if necessary, and will be uploaded to the device if present.
+> >> +
+> >> +  apple,module-instance:
+> >> +    $ref: /schemas/types.yaml#/definitions/string
+> >> +    description: Module codename used to identify a specific board on
+> >> +      Apple platforms. This is used to build the firmware filenames, to allow
+> >> +      different platforms to have different firmware and/or NVRAM config.
+> >> +
+> >> +  apple,antenna-sku:
+> >> +    $def: /schemas/types.yaml#/definitions/string
+> >> +    description: Antenna SKU used to identify a specific antenna configuration
+> >> +      on Apple platforms. This is use to build firmware filenames, to allow
+> >> +      platforms with different antenna configs to have different firmware and/or
+> >> +      NVRAM. This would normally be filled in by the bootloader from platform
+> >> +      configuration data.
+> > 
+> > Is there a known set of strings that can be defined?
+> 
+> For apple,module-instance there is, though it will grow with every new
+> machine. If you're happy with me pushing updates to this through
+> asahi-soc I can keep it maintained as we add DTs and compatibles there.
+> 
+> I'm curious whether you prefer this approach or something like
+> brcm,board-name instead. Right now we do:
+> 
+> apple,module-instance = "honshu"
+> 
+> That gets converted to board_name="apple,honshu" in the code, which is
+> what the firmwares are named after (plus extra info later appended, if
+> the rest of the Apple data is available).
+> 
+> But we could also do:
+> 
+> brcm,board-name = "apple,honshu"
+> 
+> The latter would be more generically useful for other platforms, since
+> it would allow e.g. having DTs for different boards that use the same
+> WiFi module/subsystem and thus a compatible NVRAM fw file alias to the
+> same file name (right now this is done with symlinks in /lib/firmware,
+> one for each equivalent board). For non-Apple platforms (i.e. if
+> antenna-sku and/or the OTP aren't available to do the funky Apple
+> firmware selection), this just ends up replacing what would normally be
+> the OF root node compatible in the firmware filename.
+> 
+> E.g. right now we have:
+> 
+> brcmfmac43430-sdio.AP6212.txt
+> brcmfmac43430-sdio.raspberrypi,3-model-b.txt
+> brcmfmac43430-sdio.raspberrypi,model-zero-w.txt -> brcmfmac43430-sdio.raspberrypi,3-model-b.txt
+> brcmfmac43430-sdio.sinovoip,bpi-m2-plus.txt -> brcmfmac43430-sdio.AP6212.txt
+> brcmfmac43430-sdio.sinovoip,bpi-m2-ultra.txt -> brcmfmac43430-sdio.AP6212.txt
+> brcmfmac43430-sdio.sinovoip,bpi-m2-zero.txt -> brcmfmac43430-sdio.AP6212.txt
+> brcmfmac43430-sdio.sinovoip,bpi-m3.txt -> brcmfmac43430-sdio.AP6212.txt
+> 
+> And this could allow the sinovoip.* DTs to say:
+> 	brcm,board-name = "AP6212";
+> 
+> And the rPi zero one:
+> 	brcm,board-name = "raspberrypi,3-model-b";
+> 
+> And avoid the symlinks.
+> 
+> The antenna-sku thing is specific to the Apple firmware selection
+> process and doesn't make sense as a more generic property.
+> 
+> antenna-sku right now always seems to be one of "ID", "X0", "X2", "X3",
+> though that could presumably change in the future. I can add this to the
+> binding if you want, though since this will be filled in by the
+> bootloader from platform data we wouldn't be validating it anyway. Not
+> sure if it's worth it.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Actually what Apple does here makes quite a bit of sense.  Typically
+WiFi chips are integrated with some analog components into a shielded
+module.  The AP6212 mentioned above is an example of such a module.  I
+suspect that the module defines some of the characteristics encoded in
+the "nvmram" files, but certainly not all because the connected
+antenna will also affect how the thing behaves.  Of course many SBCs
+come without an antenna so the actual antenna depends on whatever the
+user connects to the board.  So using a module-specific "nvram" file
+is probably the best one can do here.  So I think if you want to have
+a generic module name property, it should be called "brcm,module-name"
+instead of "brcm,board-name".  However...
 
-All warnings (new ones prefixed by >>):
+> > There's also the somewhat standard 'firmware-name' property that
+> > serves similar purpose, but if there's multiple files, then I guess
+> > this approach is fine.
+> 
+> Yeah, and the firmware name is constructed using non-DT information too
+> (and we have several attempted filenames times several firmware types),
+> so it wouldn't be complete.
 
-   drivers/net/wireless/mediatek/mt76/mt7615/main.c: In function 'mt7615_set_key':
->> drivers/net/wireless/mediatek/mt76/mt7615/main.c:408:35: warning: implicit conversion from 'enum mcu_cipher_type' to 'enum mt76_cipher_type' [-Wenum-conversion]
-     408 |                 mvif->mt76.cipher = mt76_connac_mcu_get_cipher(key->cipher);
-         |                                   ^
-
-
-vim +408 drivers/net/wireless/mediatek/mt76/mt7615/main.c
-
-   362	
-   363	static int mt7615_set_key(struct ieee80211_hw *hw, enum set_key_cmd cmd,
-   364				  struct ieee80211_vif *vif, struct ieee80211_sta *sta,
-   365				  struct ieee80211_key_conf *key)
-   366	{
-   367		struct mt7615_dev *dev = mt7615_hw_dev(hw);
-   368		struct mt7615_phy *phy = mt7615_hw_phy(hw);
-   369		struct mt7615_vif *mvif = (struct mt7615_vif *)vif->drv_priv;
-   370		struct mt7615_sta *msta = sta ? (struct mt7615_sta *)sta->drv_priv :
-   371					  &mvif->sta;
-   372		struct mt76_wcid *wcid = &msta->wcid;
-   373		int idx = key->keyidx, err = 0;
-   374		u8 *wcid_keyidx = &wcid->hw_key_idx;
-   375	
-   376		/* The hardware does not support per-STA RX GTK, fallback
-   377		 * to software mode for these.
-   378		 */
-   379		if ((vif->type == NL80211_IFTYPE_ADHOC ||
-   380		     vif->type == NL80211_IFTYPE_MESH_POINT) &&
-   381		    (key->cipher == WLAN_CIPHER_SUITE_TKIP ||
-   382		     key->cipher == WLAN_CIPHER_SUITE_CCMP) &&
-   383		    !(key->flags & IEEE80211_KEY_FLAG_PAIRWISE))
-   384			return -EOPNOTSUPP;
-   385	
-   386		/* fall back to sw encryption for unsupported ciphers */
-   387		switch (key->cipher) {
-   388		case WLAN_CIPHER_SUITE_AES_CMAC:
-   389			wcid_keyidx = &wcid->hw_key_idx2;
-   390			key->flags |= IEEE80211_KEY_FLAG_GENERATE_MMIE;
-   391			break;
-   392		case WLAN_CIPHER_SUITE_TKIP:
-   393		case WLAN_CIPHER_SUITE_CCMP:
-   394		case WLAN_CIPHER_SUITE_CCMP_256:
-   395		case WLAN_CIPHER_SUITE_GCMP:
-   396		case WLAN_CIPHER_SUITE_GCMP_256:
-   397		case WLAN_CIPHER_SUITE_SMS4:
-   398			break;
-   399		case WLAN_CIPHER_SUITE_WEP40:
-   400		case WLAN_CIPHER_SUITE_WEP104:
-   401		default:
-   402			return -EOPNOTSUPP;
-   403		}
-   404	
-   405		mt7615_mutex_acquire(dev);
-   406	
-   407		if (cmd == SET_KEY && !sta && !mvif->mt76.cipher) {
- > 408			mvif->mt76.cipher = mt76_connac_mcu_get_cipher(key->cipher);
-   409			mt7615_mcu_add_bss_info(phy, vif, NULL, true);
-   410		}
-   411	
-   412		if (cmd == SET_KEY)
-   413			*wcid_keyidx = idx;
-   414		else if (idx == *wcid_keyidx)
-   415			*wcid_keyidx = -1;
-   416		else
-   417			goto out;
-   418	
-   419		mt76_wcid_key_setup(&dev->mt76, wcid,
-   420				    cmd == SET_KEY ? key : NULL);
-   421	
-   422		if (mt76_is_mmio(&dev->mt76))
-   423			err = mt7615_mac_wtbl_set_key(dev, wcid, key, cmd);
-   424		else
-   425			err = __mt7615_mac_wtbl_set_key(dev, wcid, key, cmd);
-   426	
-   427	out:
-   428		mt7615_mutex_release(dev);
-   429	
-   430		return err;
-   431	}
-   432	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+...if the way the firmware name is constructed remains Apple-specific
+because of this non-DT information, keeping the "apple,xxx" properties
+has the benefit of signalling that firmware names constructed this way
+are desired.  Or rather, their absence can signal that the
+Apple-specific code in the driver should be skipped.

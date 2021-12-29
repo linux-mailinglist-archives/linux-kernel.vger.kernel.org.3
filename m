@@ -2,132 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E65084811D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 12:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C76E6481157
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 10:41:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239822AbhL2LBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 06:01:23 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:17311 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239798AbhL2LBW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 06:01:22 -0500
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JP7jM6zDdz9rvr;
-        Wed, 29 Dec 2021 19:00:23 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 29 Dec 2021 19:01:20 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.20; Wed, 29 Dec 2021 19:01:19 +0800
-Message-ID: <6cd5deb3-b71d-1058-f992-1c2f93c16ea4@huawei.com>
-Date:   Wed, 29 Dec 2021 19:01:18 +0800
+        id S239573AbhL2JlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 04:41:13 -0500
+Received: from mailgw.kylinos.cn ([123.150.8.42]:48075 "EHLO nksmu.kylinos.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235116AbhL2JlM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 04:41:12 -0500
+X-UUID: 89a522aa61814586b5a8a5a2cfb8b7dd-20211229
+X-CPASD-INFO: 1cea0e763c304cf6a9061f90561160c4@erOfgV2XZWZfg3V8g6axcIFqYGZhkll
+        _d3BRYmRgj1SVhH5xTWJsXVKBfG5QZWNdYVN_eGpQYl9gZFB5i3-XblBhXoZgUZB3gKWfgWGTZw==
+X-CPASD-FEATURE: 0.0
+X-CLOUD-ID: 1cea0e763c304cf6a9061f90561160c4
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,EXT:0.0,OB:1.0,URL:-5,T
+        VAL:198.0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:113.0,IP:-2.0,MAL:0.0,ATTNUM:0
+        .0,PHF:-5.0,PHC:-5.0,SPF:4.0,EDMS:-3,IPLABEL:-2.0,FROMTO:0,AD:0,FFOB:1.0,CFOB
+        :1.0,SPC:0.0,SIG:-5,AUF:70,DUF:28551,ACD:148,DCD:250,SL:0,AG:0,CFC:0.765,CFSR
+        :0.057,UAT:0,RAF:0,VERSION:2.3.4
+X-CPASD-ID: 89a522aa61814586b5a8a5a2cfb8b7dd-20211229
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1, 1
+X-UUID: 89a522aa61814586b5a8a5a2cfb8b7dd-20211229
+X-User: shenzijun@kylinos.cn
+Received: from localhost.localdomain.localdomain [(172.17.127.14)] by nksmu.kylinos.cn
+        (envelope-from <shenzijun@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1016694055; Wed, 29 Dec 2021 17:53:36 +0800
+From:   shenzijun <shenzijun@kylinos.cn>
+To:     robert.moore@intel.com, rafael.j.wysocki@intel.com, lenb@kernel.org
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-kernel@vger.kernel.org, jinzi120021@sina.com
+Subject: [PATCH] ACPICA: DEBUGGER: Add return value check to acpi_db_walk_for_fields()
+Date:   Thu, 30 Dec 2021 01:40:58 +0800
+Message-Id: <20211229174058.11350-1-shenzijun@kylinos.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 3/3] x86: Support huge vmalloc mappings
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <x86@kernel.org>, <linux-arm-kernel@lists.infradead.org>
-CC:     Nicholas Piggin <npiggin@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20211227145903.187152-1-wangkefeng.wang@huawei.com>
- <20211227145903.187152-4-wangkefeng.wang@huawei.com>
- <70ff58bc-3a92-55c2-2da8-c5877af72e44@intel.com>
- <3858de1f-cdbc-ff52-2890-4254d0f48b0a@huawei.com>
- <31a75f95-6e6e-b640-2d95-08a95ea8cf51@intel.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <31a75f95-6e6e-b640-2d95-08a95ea8cf51@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggeme702-chm.china.huawei.com (10.1.199.98) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Zijun Shen <shenzijun@kylinos.cn>
 
-On 2021/12/29 0:14, Dave Hansen wrote:
-> On 12/28/21 2:26 AM, Kefeng Wang wrote:
->>>> There are some disadvantages about this feature[2], one of the main
->>>> concerns is the possible memory fragmentation/waste in some scenarios,
->>>> also archs must ensure that any arch specific vmalloc allocations that
->>>> require PAGE_SIZE mappings(eg, module alloc with STRICT_MODULE_RWX)
->>>> use the VM_NO_HUGE_VMAP flag to inhibit larger mappings.
->>> That just says that x86 *needs* PAGE_SIZE allocations.  But, what
->>> happens if VM_NO_HUGE_VMAP is not passed (like it was in v1)?  Will the
->>> subsequent permission changes just fragment the 2M mapping?
->> Yes, without VM_NO_HUGE_VMAP, it could fragment the 2M mapping.
->>
->> When module alloc with STRICT_MODULE_RWX on x86, it calls
->> __change_page_attr()
->>
->> from set_memory_ro/rw/nx which will split large page, so there is no
->> need to make
->>
->> module alloc with HUGE_VMALLOC.
-> This all sounds very fragile to me.  Every time a new architecture would
-> get added for huge vmalloc() support, the developer needs to know to go
-> find that architecture's module_alloc() and add this flag.  They next
-> guy is going to forget, just like you did.
->
-> Considering that this is not a hot path, a weak function would be a nice
-> choice:
->
-> /* vmalloc() flags used for all module allocations. */
-> unsigned long __weak arch_module_vm_flags()
-> {
-> 	/*
-> 	 * Modules use a single, large vmalloc().  Different
-> 	 * permissions are applied later and will fragment
-> 	 * huge mappings.  Avoid using huge pages for modules.
-> 	 */
-> 	return VM_NO_HUGE_VMAP;
+The function acpi_db_walk_for_fields frees buffer.pointer by the
+first ACPI_FREE. And then uses the second ACPI_FREE to free
+buffer.pointer which may assigns again in acpi_evaluate_object.
+It's necessary to make sure that buffer.pointer get a block of
+memory in acpi_evaluate_object and acpi_evaluate_object return 0.
 
-For x86, it only fragment, but for arm64, due to apply_to_page_range() in
+Signed-off-by: Zijun Shen <shenzijun@kylinos.cn>
+---
+ drivers/acpi/acpica/dbnames.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-set_memory_*, without this flag maybe crash. Whatever, we need this
+diff --git a/drivers/acpi/acpica/dbnames.c b/drivers/acpi/acpica/dbnames.c
+index 3615e1a6efd8..7a2d980cb2b8 100644
+--- a/drivers/acpi/acpica/dbnames.c
++++ b/drivers/acpi/acpica/dbnames.c
+@@ -550,7 +550,10 @@ acpi_db_walk_for_fields(acpi_handle obj_handle,
+ 	ACPI_FREE(buffer.pointer);
+ 
+ 	buffer.length = ACPI_ALLOCATE_LOCAL_BUFFER;
+-	acpi_evaluate_object(obj_handle, NULL, NULL, &buffer);
++	status = acpi_evaluate_object(obj_handle, NULL, NULL, &buffer);
++	if (ACPI_FAILURE(status)) {
++		return (AE_OK);
++	}
+ 
+ 	/*
+ 	 * Since this is a field unit, surround the output in braces
+-- 
+2.31.1
 
-flag for module.
-
-> }
->
-> Stick that in some the common module code, next to:
->
->> void * __weak module_alloc(unsigned long size)
->> {
->>          return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
-> ...
->
-> Then, put arch_module_vm_flags() in *all* of the module_alloc()
-> implementations, including the generic one.  That way (even with a new
-> architecture) whoever copies-and-pastes their module_alloc()
-> implementation is likely to get it right.  The next guy who just does a
-> "select HAVE_ARCH_HUGE_VMALLOC" will hopefully just work.
-
-OK， Let me check the VM_FLUSH_RESET_PERMS and try about this way.
-
-Thanks.
-
->
-> VM_FLUSH_RESET_PERMS could probably be dealt with in the same way.
-> .

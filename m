@@ -2,157 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6464813DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 15:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1974813E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 15:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240119AbhL2ON1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 09:13:27 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15990 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236061AbhL2ON0 (ORCPT
+        id S240140AbhL2ONj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 09:13:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59502 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240124AbhL2ONi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 09:13:26 -0500
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JPCwF5HSczVhMD;
-        Wed, 29 Dec 2021 22:10:05 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 29 Dec 2021 22:13:24 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 29 Dec 2021 22:13:22 +0800
-Subject: Re: [PATCH v19 02/13] x86/setup: Use parse_crashkernel_high_low() to
- simplify code
-To:     Dave Young <dyoung@redhat.com>, Borislav Petkov <bp@alien8.de>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Chen Zhou" <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>
-References: <20211228132612.1860-1-thunder.leizhen@huawei.com>
- <20211228132612.1860-3-thunder.leizhen@huawei.com> <Ycs3kpZD/vpoo1AX@zn.tnic>
- <b017a8ea-989b-c251-f5c8-a8a7940877cf@huawei.com>
- <YcwN9Mfwsh/lPbbd@dhcp-128-65.nay.redhat.com>
- <YcwSCAuEgO10DFDT@dhcp-128-65.nay.redhat.com> <Ycw0V1CmBPCPqexn@zn.tnic>
- <Ycw6s6DwZuHjckXL@dhcp-128-65.nay.redhat.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <050a33f3-7a87-62ce-00bb-92b5d30915d1@huawei.com>
-Date:   Wed, 29 Dec 2021 22:13:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Wed, 29 Dec 2021 09:13:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC5EC061574;
+        Wed, 29 Dec 2021 06:13:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B9DB614AF;
+        Wed, 29 Dec 2021 14:13:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EDB6C36AE9;
+        Wed, 29 Dec 2021 14:13:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640787217;
+        bh=crdfs2TcubasYQDmy/rvRISSaBoRTG5lde8cjXxvosU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=1+Es1wx9cEU/Sa1e2l8AyJP94Qnj61zi9vrA0XXBq8w1QNlKRw+msXT15DmAkEO+O
+         /EBhDM6R3HC2Yfz+OCgTbpqz1ed7QAOTfyseJG4Tk9lxwit5kOqR8xwzYKPfjC3j2n
+         9J7kqYk82GK+p0SuFNrnUXdRYEE9UZZfREjJF5s4=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Justin Ernst <justin.ernst@hpe.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org
+Subject: [PATCH] x86/platform/uv: use default_groups in kobj_type
+Date:   Wed, 29 Dec 2021 15:13:32 +0100
+Message-Id: <20211229141332.2552428-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <Ycw6s6DwZuHjckXL@dhcp-128-65.nay.redhat.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1899; h=from:subject; bh=crdfs2TcubasYQDmy/rvRISSaBoRTG5lde8cjXxvosU=; b=owGbwMvMwCRo6H6F97bub03G02pJDIlncnle+WRwrjdvEGUwdVyWEjnnkkHmzd/ccqGuOw67fVqi +uh4RywLgyATg6yYIsuXbTxH91ccUvQytD0NM4eVCWQIAxenAEzkmj3Dgvkd3gVnylfUB95Oe8ZjuM /72JltrQwLZqV4tqXeqbl/f3GRQ+qTX/lls/9MBQA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There are currently 2 ways to create a set of sysfs files for a
+kobj_type, through the default_attrs field, and the default_groups
+field.  Move the uv sysfs code to use default_groups field which has
+been the preferred way since aa30f47cf666 ("kobject: Add support for
+default attribute groups to kobj_type") so that we can soon get rid of
+the obsolete default_attrs field.
 
+Cc: Justin Ernst <justin.ernst@hpe.com>
+Cc: Hans de Goede <hdegoede@redhat.com>
+Cc: Mark Gross <markgross@kernel.org>
+Cc: platform-driver-x86@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/platform/x86/uv_sysfs.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-On 2021/12/29 18:38, Dave Young wrote:
-> On 12/29/21 at 11:11am, Borislav Petkov wrote:
->> On Wed, Dec 29, 2021 at 03:45:12PM +0800, Dave Young wrote:
->>> BTW, I would suggest to wait for reviewers to response (eg. one week at
->>> least, or more due to the holidays) before updating another version
->>>
->>> Do not worry to miss the 5.17.  I would say take it easy if it will
->>> miss then let's just leave with it and continue to work on the future
->>> improvements.  I think one reason this issue takes too long time is that it was
->>> discussed some time but no followup and later people need to warm up
->>> again.  Just keep it warm and continue to engage in the improvements, do
->>> not hurry for the specific mainline release.
->>
->> Can you tell this to *all* patch submitters please?
-> 
-> I appreciate you further explanation below to describe the situation.  I do not
-> see how can I tell this to *all* submitters,  but I am and I will try to do this
-> as far as I can.  Maintainers and patch submitters, it would help for both
-> parties show sympathy with each other, some soft reminders will help
-> people to understand each other, especially for new comers.
-> 
->>
->> I can't count the times where people simply hurry to send the new
->> revision just to get it in the next kernel, and make silly mistakes
->> while doing so. Or not think things straight and misdesign it all.
->>
->> And what this causes is the opposite of what they wanna achieve - pissed
->> maintainers and ignored threads.
-
-I just hope the first 4 patches can be merged into v5.17. It seems to me
-that it is quite clear. Although the goal of the final stage is to modify
-function parse_crashkernel() according to the current opinion. But that's not a
-lightweight change after all. The final parse_crashkernel() change may take
-one version or two. In this process, it maybe OK to do a part of cleanup first.
-
-It's like someone who wants to buy a luxury car to commute to work six months
-later. He buys a cheap used car and sells it six months later. It sounds right
-to me, don't you think?
-
->>
->> And they all *know* that the next kernel is around the corner. So why
->> the hell does it even matter when?
-
-Because all programmers should have confidence in the code they write. I have
-a new idea, and I'm free these days, so I updated v19. I can't rely on people
-telling me to take a step forward, then take a step forward. Otherwise, stand
-still.
-
->>
->> What most submitters fail to realize is, the moment your code hits
->> upstream, it becomes the maintainers' problem and submitters can relax.
-
-Sorry, I'll make sure all the comments are collected and then send the next
-edition.
-
->>
->> But maintainers get to deal with this code forever. So after a while
->> maintainers learn that they either accept ready code and it all just
->> works or they make the mistake to take half-baked crap in and then they
->> themselves get to clean it up and fix it.
->>
->> So maintainers learn quickly to push back.
->>
->> But it is annoying and it would help immensely if submitters would
->> consider this and stop hurrying the code in but try to do a *good* job
->> first, design-wise and code-wise by thinking hard about what they're
->> trying to do.
->>
->> Yeah, things could be a lot simpler and easier - it only takes a little
->> bit of effort...
->>
->> -- 
->> Regards/Gruss,
->>     Boris.
->>
->> https://people.kernel.org/tglx/notes-about-netiquette
->>
-> 
-> Thanks
-> Dave
-> 
-> .
-> 
-
+diff --git a/drivers/platform/x86/uv_sysfs.c b/drivers/platform/x86/uv_sysfs.c
+index 956a354b57c1..625b0b79d185 100644
+--- a/drivers/platform/x86/uv_sysfs.c
++++ b/drivers/platform/x86/uv_sysfs.c
+@@ -175,6 +175,7 @@ static struct attribute *uv_hub_attrs[] = {
+ 	&cnode_attribute.attr,
+ 	NULL,
+ };
++ATTRIBUTE_GROUPS(uv_hub);
+ 
+ static void hub_release(struct kobject *kobj)
+ {
+@@ -205,7 +206,7 @@ static const struct sysfs_ops hub_sysfs_ops = {
+ static struct kobj_type hub_attr_type = {
+ 	.release	= hub_release,
+ 	.sysfs_ops	= &hub_sysfs_ops,
+-	.default_attrs	= uv_hub_attrs,
++	.default_groups	= uv_hub_groups,
+ };
+ 
+ static int uv_hubs_init(void)
+@@ -327,6 +328,7 @@ static struct attribute *uv_port_attrs[] = {
+ 	&uv_port_conn_port_attribute.attr,
+ 	NULL,
+ };
++ATTRIBUTE_GROUPS(uv_port);
+ 
+ static void uv_port_release(struct kobject *kobj)
+ {
+@@ -357,7 +359,7 @@ static const struct sysfs_ops uv_port_sysfs_ops = {
+ static struct kobj_type uv_port_attr_type = {
+ 	.release	= uv_port_release,
+ 	.sysfs_ops	= &uv_port_sysfs_ops,
+-	.default_attrs	= uv_port_attrs,
++	.default_groups	= uv_port_groups,
+ };
+ 
+ static int uv_ports_init(void)
 -- 
-Regards,
-  Zhen Lei
+2.34.1
+

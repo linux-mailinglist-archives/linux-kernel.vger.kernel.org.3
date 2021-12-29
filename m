@@ -2,135 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34981480FCC
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 06:05:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 265FF480FCF
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 06:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238752AbhL2FFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 00:05:46 -0500
-Received: from mga14.intel.com ([192.55.52.115]:51762 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229514AbhL2FFp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 00:05:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640754345; x=1672290345;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NgPYfu7zoHGGFuSzTnIDWRnK89anlYMMDyrAAufhfxo=;
-  b=ABkb5epUTaVT0EgYDucx+pQeSbQ9OCjT3CI5MUEjcu8QLlH/pp5O8K8R
-   liNfDns7mWbMJkDqS/OyPm4ztl8TW36rJOXjxw3oFfQkifqXqA/Jdr6yS
-   LjejHU2zQPUsanSFLQGmzKJKOiUdr2IbDC+qFJkIdBi/Sp0zAmfg4N8n5
-   PT/bDWqVWdloStyIuNefwZocud9jRU8v5MbqBdCPbCfM+3YW/SS31r7rV
-   NgP+/j8sylNxdOjs2sLH1NLFl5ND/B+lZ1WimLSidR+9VnPl7MKSTnmpi
-   2dhhy5vFljIM8DzrlP4YJnjNg0THpru3RYGxyc7912qPEhdQiNfLogtzx
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="241676228"
-X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
-   d="scan'208";a="241676228"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 21:05:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
-   d="scan'208";a="618936152"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 28 Dec 2021 21:05:44 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n2R9j-0008XS-Da; Wed, 29 Dec 2021 05:05:43 +0000
-Date:   Wed, 29 Dec 2021 13:05:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:kprobe/multi 7/13]
- samples/kprobes/kprobe_example.c:124:5: error: 'struct kprobe' has no member
- named 'multi'
-Message-ID: <202112291203.QEXXBIxn-lkp@intel.com>
+        id S238761AbhL2FH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 00:07:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229514AbhL2FH1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 00:07:27 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB34C061574;
+        Tue, 28 Dec 2021 21:07:27 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id w24so15045728ply.12;
+        Tue, 28 Dec 2021 21:07:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y6D6kbQh7Cm8wpKn4BMX0UeN0YW2Jh8hSVkReFZ+rr0=;
+        b=AnBHZiOUD8KsAoY3K1MG71EP84nDDtl4vM6ADKBTqCbqMPspmtkokR/HH2W64G/Iea
+         rnLcZPFJdi4wKhjvqiJJNVvg7afGzvIvxYcKBQLI8bfKo9/Z1sVUu1+FnQshcyoRkwdL
+         3jvoxuuDXsy0+JrBqLu/Ppjoo9BrXpDZ5T/zUTZv7V8KC8/DvMPR4+C9ugsLTeqlKERP
+         aJcJJ4jOUduAzWlCMifNHlE97fZVFQ1JaYxinYRhThrZiUDBWfmzU6SQClmvECJBNoIs
+         y2cSFiJxID9b80EHl1eBBHw3F8jPliTe+8DXM39HPkU/geUN4oKxbE0TDdEJC5X3GYLt
+         /W4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y6D6kbQh7Cm8wpKn4BMX0UeN0YW2Jh8hSVkReFZ+rr0=;
+        b=2XfOfQJTNBSuSv/qQE1z4TrDwxZc70CDFyLy1KciuZnghzqUpwTukMxKYOzTMIf6p+
+         zBRLVvPyHAvYNbfs166bOiurQBLYU1dU5i9jO9bnim1DrvYcHMFzFsaie6dC1PKVcS1A
+         xUhsuNOS0gABbCEh+tpKafZQNEDtw6ZbnvA+DYzKZUT13QRPYdQfG3cNEAlb3O2VrYPq
+         sDK/8TxzTTWpGoo1e+OU2KSDbLikU4fUXmjpAbDf+Tc8tLkX0sknsgNGFlzGNbqw/Fss
+         jaZk2ZvpOU0KpkKr9pjn/U3VN/ZAeu8Dq9/LSOkbl2ysDMcLW7QN2LJTfKTWpx9ZUFYS
+         M9sQ==
+X-Gm-Message-State: AOAM532gFSVXJ1E3XdCma/GrNt2zUcyNn0x7xLjw6aVo67bhRUQGKjba
+        0HjeyyWbul90Tn6wfZUzHDw=
+X-Google-Smtp-Source: ABdhPJzk6oL9KXcJyWhxTR58cu+5MprY7TsEK+11sG9oXbwJInMenmBHGbzMASUI3wr1ajZUWg/Nkg==
+X-Received: by 2002:a17:90b:1b43:: with SMTP id nv3mr18247490pjb.136.1640754447119;
+        Tue, 28 Dec 2021 21:07:27 -0800 (PST)
+Received: from localhost.localdomain ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id w9sm18484274pge.18.2021.12.28.21.07.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Dec 2021 21:07:26 -0800 (PST)
+From:   Tadeusz Struk <tstruk@gmail.com>
+To:     jarkko@kernel.org
+Cc:     Tadeusz Struk <tstruk@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] tpm: Fix error handling in async work
+Date:   Tue, 28 Dec 2021 21:06:54 -0800
+Message-Id: <20211229050655.2030-1-tstruk@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git kprobe/multi
-head:   774280c9bc95e4e50cda3cd09324bd03fec50b52
-commit: 2bf53e58ccdc41fb37bc2768bfa17ed9f822bf1e [7/13] samples/kprobes: Add support for multi kprobe interface
-config: x86_64-randconfig-c022-20211228 (https://download.01.org/0day-ci/archive/20211229/202112291203.QEXXBIxn-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=2bf53e58ccdc41fb37bc2768bfa17ed9f822bf1e
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf kprobe/multi
-        git checkout 2bf53e58ccdc41fb37bc2768bfa17ed9f822bf1e
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+When an invalid (non existing) handle is used in a tpm command,
+that uses the resource manager interface (/dev/tpmrm0) the resource
+manager tries to load it from its internal cache, but fails and
+returns an -EINVAL error to the caller. The async handler doesn't
+handle these error cases currently and the condition in the poll
+handler never returns mask with EPOLLIN set.
+The result is that the poll call blocks and the application gets stuck
+until the user_read_timer wakes it up after 120 sec.
+Make sure that error conditions also contribute to the poll mask
+so that a correct error code could passed back to the caller.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   samples/kprobes/kprobe_example.c: In function 'kprobe_init':
->> samples/kprobes/kprobe_example.c:124:5: error: 'struct kprobe' has no member named 'multi'
-     124 |   kp.multi.symbols = (const char **) symbols;
-         |     ^
-   samples/kprobes/kprobe_example.c:125:5: error: 'struct kprobe' has no member named 'multi'
-     125 |   kp.multi.cnt = cnt;
-         |     ^
-
-
-vim +124 samples/kprobes/kprobe_example.c
-
-    98	
-    99	static int __init kprobe_init(void)
-   100	{
-   101		char *p, *tmp, **symbols = NULL;
-   102		int cnt, ret;
-   103	
-   104		kp.pre_handler = handler_pre;
-   105		kp.post_handler = handler_post;
-   106	
-   107		if (strchr(symbol, ',')) {
-   108			tmp = kstrdup(symbol, GFP_KERNEL);
-   109			if (!tmp)
-   110				return -ENOMEM;
-   111	
-   112			p = strchr(tmp, ',');
-   113			while (p) {
-   114				*p = ' ';
-   115				p = strchr(p + 1, ',');
-   116			}
-   117	
-   118			symbols = argv_split(GFP_KERNEL, tmp, &cnt);
-   119			if (!symbols) {
-   120				ret = -ENOMEM;
-   121				goto out;
-   122			}
-   123	
- > 124			kp.multi.symbols = (const char **) symbols;
-   125			kp.multi.cnt = cnt;
-   126		}
-   127	
-   128		ret = register_kprobe(&kp);
-   129		if (ret < 0) {
-   130			pr_err("register_kprobe failed, returned %d\n", ret);
-   131			goto out;
-   132		}
-   133	
-   134		if (symbols)
-   135			pr_info("Planted multi kprobe to %s\n", symbol);
-   136		else
-   137			pr_info("Planted kprobe at %p\n", kp.addr);
-   138	
-   139	out:
-   140		kfree(tmp);
-   141		if (symbols)
-   142			argv_free(symbols);
-   143		return ret;
-   144	}
-   145	
-
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: <linux-integrity@vger.kernel.org>
+Cc: <stable@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>
+Fixes: 9e1b74a63f77 ("tpm: add support for nonblocking operation")
+Signed-off-by: Tadeusz Struk <tstruk@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Changes in v2:
+- Updated commit message with better problem description.
+- Fixed typeos.
+---
+ drivers/char/tpm/tpm-dev-common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+index c08cbb306636..fe2679f84cb6 100644
+--- a/drivers/char/tpm/tpm-dev-common.c
++++ b/drivers/char/tpm/tpm-dev-common.c
+@@ -69,7 +69,7 @@ static void tpm_dev_async_work(struct work_struct *work)
+ 	ret = tpm_dev_transmit(priv->chip, priv->space, priv->data_buffer,
+ 			       sizeof(priv->data_buffer));
+ 	tpm_put_ops(priv->chip);
+-	if (ret > 0) {
++	if (ret != 0) {
+ 		priv->response_length = ret;
+ 		mod_timer(&priv->user_read_timer, jiffies + (120 * HZ));
+ 	}
+-- 
+2.30.2
+

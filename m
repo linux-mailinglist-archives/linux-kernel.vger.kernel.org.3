@@ -2,122 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7040448172D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 23:04:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C500B481737
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 23:19:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbhL2WE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 17:04:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
+        id S231892AbhL2WTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 17:19:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbhL2WE4 (ORCPT
+        with ESMTP id S231259AbhL2WTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 17:04:56 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAC5C061574;
-        Wed, 29 Dec 2021 14:04:55 -0800 (PST)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id D429422205;
-        Wed, 29 Dec 2021 23:04:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1640815492;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LYOShGFxoVvCBZJANWhGET2Z8pVxxIxQelAYck+8IJQ=;
-        b=hp3onYbMLbayQHCVAXMsE4+S7mkL9fFWlL2pR/By8GaPLYaFz83ffCgQxsZpQOVXvVjAqG
-        7yyc/GJlLyHzmYMWnk2CPDDIlZCc41F6JtBy5SMDp2prm8lx8xQWkE0RJtZlpD/Xwd+zGw
-        S9Z6ddLHMxsQ9+Kgufvct5TqkHLk1SM=
+        Wed, 29 Dec 2021 17:19:37 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99DFC061574;
+        Wed, 29 Dec 2021 14:19:36 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2DA0433F;
+        Wed, 29 Dec 2021 23:19:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1640816374;
+        bh=NmBuSa0Tm1XDHSFWplYPZ+GeRMcg0ZC1lIjZHsY3g84=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EaozM4GcjGJY8sUUXytB4f01VixzjPgwX8wzHBFuZrsIbY382Y+h7S59oBwZ2ywXI
+         Zc3hGQ7m/bL50H0HrQaefS+/d8zClr35IM6Q7ofrR2XTf8AXWPGIt3X7HjU0PW889C
+         l4Tl+NywrkwKt5PjiDkG7vNktYMsqmu1guxjlGAM=
+Date:   Thu, 30 Dec 2021 00:19:31 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] arm64: dts: renesas: r8a77961: Add lvds0 device node
+Message-ID: <Ycze8wzD3Qi8YVAa@pendragon.ideasonboard.com>
+References: <20211224052309.1997096-1-nikita.yoush@cogentembedded.com>
+ <20211224052309.1997096-3-nikita.yoush@cogentembedded.com>
+ <YcyTV4fJqMHIeyYB@pendragon.ideasonboard.com>
+ <87626d61-ada0-c220-bea5-5330f5256629@cogentembedded.com>
+ <YcyXQxW3kRqQ2Yv0@pendragon.ideasonboard.com>
+ <39f70781-831e-c86a-ec5f-68f2b4bd3d62@cogentembedded.com>
+ <Ycy4AMAT53Uzf+K7@pendragon.ideasonboard.com>
+ <bb6ef732-7cd2-5ba9-0eef-caf2fbfbf829@cogentembedded.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Wed, 29 Dec 2021 23:04:51 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     zajec5@gmail.com, andrew@lunn.ch, davem@davemloft.net,
-        devicetree@vger.kernel.org, hkallweit1@gmail.com,
-        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
-        netdev@vger.kernel.org, rafal@milecki.pl, robh+dt@kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH] of: net: support NVMEM cells with MAC in text format
-In-Reply-To: <20211229101822.7a740aed@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-References: <20211223122747.30448-1-zajec5@gmail.com>
- <20211229124047.1286965-1-michael@walle.cc>
- <20211229101822.7a740aed@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <4cbd5c7160b3c55205315f937eba94f6@walle.cc>
-X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <bb6ef732-7cd2-5ba9-0eef-caf2fbfbf829@cogentembedded.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2021-12-29 19:18, schrieb Jakub Kicinski:
-> On Wed, 29 Dec 2021 13:40:47 +0100 Michael Walle wrote:
->> > Some NVMEM devices have text based cells. In such cases MAC is stored in
->> > a XX:XX:XX:XX:XX:XX format. Use mac_pton() to parse such data and
->> > support those NVMEM cells. This is required to support e.g. a very
->> > popular U-Boot and its environment variables.
->> >
->> > Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
->> > ---
->> > Please let me know if checking NVMEM cell length (6 B vs. 17 B) can be
->> > considered a good enough solution. Alternatively we could use some DT
->> > property to make it explicity, e.g. something like:
->> >
->> > ethernet@18024000 {
->> > 	compatible = "brcm,amac";
->> > 	reg = <0x18024000 0x800>;
->> >
->> > 	nvmem-cells = <&mac_addr>;
->> > 	nvmem-cell-names = "mac-address";
->> > 	nvmem-mac-format = "text";
->> > };
->> 
->> Please note, that there is also this proposal, which had such a 
->> conversion
->> in mind:
->> https://lore.kernel.org/linux-devicetree/20211228142549.1275412-1-michael@walle.cc/
->> 
->> With this patch, there are now two different places where a mac 
->> address
->> format is converted. In of_get_mac_addr_nvmem() and in the imx otp 
->> driver.
->> And both have their shortcomings and aren't really flexible. Eg. this 
->> one
->> magically detects the format by comparing the length, but can't be 
->> used for
->> to swap bytes (because the length is also ETH_ALEN), which apparently 
->> is a
->> use case in the imx otp driver. And having the conversion in an nvmem
->> provider device driver is still a bad thing IMHO.
->> 
->> I'd really like to see all these kind of transformations in one place.
-> 
-> FWIW offsetting from a common base address is relatively common, that's
-> why we have:
-> 
-> /**
->  * eth_hw_addr_gen - Generate and assign Ethernet address to a port
->  * @dev: pointer to port's net_device structure
->  * @base_addr: base Ethernet address
->  * @id: offset to add to the base address
->  *
->  * Generate a MAC address using a base address and an offset and assign 
-> it
->  * to a net_device. Commonly used by switch drivers which need to 
-> compute
->  * addresses for all their ports. addr_assign_type is not changed.
->  */
-> static inline void eth_hw_addr_gen(struct net_device *dev, const u8 
-> *base_addr,
-> 				   unsigned int id)
+Hi Nikito,
 
-I didn't know that. But it doesn't help me that much because it mostly
-used for switches, but in my case, I also have up to four network
-cards (enetc) on the SoC; besides a network switch (felix). But
-only one source for the base mac address.
+On Thu, Dec 30, 2021 at 12:12:04AM +0300, Nikita Yushchenko wrote:
+>   Endpoints are meant to model a link between two ports, so an endpoint
+> > shouldn't exist in isolation. The issue with creating named endpoints in
+> > SoC files is that you can't tell there what remote devices may exist, so
+> > the endpoint may or may not match the actual hardware design of a board.
+> > I think it's better to create endpoints on both sides together in
+> > overlays.
+> > 
+> > https://lore.kernel.org/linux-renesas-soc/20211229193135.28767-2-laurent.pinchart+renesas@ideasonboard.com/T/#t
+> 
+> What I don't like here is: details of particular SoC (such as "panel gets video from port@1 of &lvds1) 
+> leak into per-panel DT fragment.
+> 
+> This limits possibilities to share DT fragments between different use cases. In the patch pointed by the 
+> above URL, you have to reference both board and panel in the dts file name.
+>
+> I'd prefer to make each DT fragment to use only either entities defined in that fragment itself, or 
+> defined "interface entities" between this and "neighbor" DT fragment.
+> 
+> Such as:
+> - SoC's DT fragment defines a named port/endpoint to export video stream at
+> - board's DT fragment defines a named panel node corresponding to panel plugged into board's physical 
+> connector, and connects endpoints with SoC's video export,
+> - panel's DT fragment extends the panel node from board with video mode information for this particular 
+> panel.
+> 
+> And similar for backlight, power, and whatever else exposed on the physical panel connector.
+> 
+> So for the board's physical connector there is a set of board-DT-provided entities for use by DT 
+> fragment of whatever component plugged to the connector, without direct references to final SoC 
+> interfaces. And possibility to reuse DT fragments between boards, and probably have a library of DT 
+> fragments for hardware currently available in the market, usable with different boards where that 
+> hardware can be connected.
 
--michael
+I agree it's annoying, but we'll have a similar problem, just the other
+way around, with an endpoint defined in the SoC dtsi. Many R-Car SoCs
+have two LVDS encoders, and you can attach a panel to either of them.
+Some boards use LVDS0, some boards use LVDS1, and some boards could even
+use both.
+
+A real solution for this problem will require a new concept. The "DT
+connector" proposal is related to this problem space. There's also a
+proprietary implementation in the Rapsberry Pi boot loader of a
+mechanism to support parametrized overlays ([2] and [3], or [4] for an
+example of how a panel reset or backlight GPIO can be parametrized).
+
+[1] https://lwn.net/Articles/689783/
+[2] https://www.raspberrypi.com/documentation/computers/configuration.html#part3
+[3] https://github.com/raspberrypi/firmware/blob/master/boot/overlays/README#L122
+[4] https://github.com/raspberrypi/firmware/blob/master/boot/overlays/README#L312
+
+-- 
+Regards,
+
+Laurent Pinchart

@@ -2,94 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5079A480E14
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 01:09:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF1D5480E1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 01:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237913AbhL2AJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 19:09:03 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40368 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237903AbhL2AJC (ORCPT
+        id S237940AbhL2AJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 19:09:58 -0500
+Received: from mail-lj1-f171.google.com ([209.85.208.171]:46625 "EHLO
+        mail-lj1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237929AbhL2AJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 19:09:02 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C78C61354;
-        Wed, 29 Dec 2021 00:09:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25358C36AE7;
-        Wed, 29 Dec 2021 00:09:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640736541;
-        bh=zCqpS+H+9hfgX11sHtjTme9mvuOnPzkxY1baQY/gFnA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=edohT3EE8K1pXMrPy4zALbyiEZeSsGoFYxHNqCRNyQUcAkmWpqU2QnM+pU+ot2/cm
-         MsCmNFo9v2QVmiGgjyiq/yVSECR1DMQNU785uDbWqjsAOzORiSf3jIQgqvugEd7K9O
-         vyRzzfGXNNywPUMLo2RxvRGi8B+bo6GEYismNkxt5vb1Q2XvKTLAK1pcLs44S1kddf
-         gxmOKQfdmi5lNZTYhfo+Uq87SSNS8wsuWLCmV9hl3Zy+FDYDD13AkEf7lqka0MNEhS
-         LCB3JkFQrCxTtpHVh3emxOvZ7wHp6SNt5Z1xJWElTP0gWxUM276vj4d92K12ayr0Cg
-         5yBG9oRtgzRGw==
-Date:   Wed, 29 Dec 2021 02:08:59 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     jejb@linux.ibm.com, zohar@linux.ibm.com, dhowells@redhat.com,
-        jmorris@namei.org, serge@hallyn.com,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] security:trusted_tpm2: Fix memory leak in
- tpm2_key_encode()
-Message-ID: <YcunG4iFQ5s7uJsc@iki.fi>
-References: <20211221085404.6769-1-niejianglei2021@163.com>
+        Tue, 28 Dec 2021 19:09:53 -0500
+Received: by mail-lj1-f171.google.com with SMTP id i11so20635398ljm.13;
+        Tue, 28 Dec 2021 16:09:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qhPtGQCbuVQkw1vfSzoffiZi105yJTqb5AccIrEq0nc=;
+        b=J09iCKfSqrtilGVIuyAgKHweMSvlO6UBQaCd94fIxJDZczZjS5hSYjxiB3BrnKvwfT
+         +z9npznzUmAZswuGu3InoNozuYqAv6dQKxnhSyBE2Oaign6ta1EaXbwPkRo2lBkAMaX1
+         V4q06RguVPM2tdriZ/f7FH2ULz3/Hd0leUMdV9LJy3vV09iQYj8kqaZZGxwz18evVfnR
+         1nWR/31aR7C9xSe+fbQEsfUYUKFnpbF9sGjA+eVWHsmsFxTl60ZKQ8yhfVGylm3r3rPy
+         1pewBpFjXilqzlcY9kUOZpNpW1Jv6Vfwr50YE+K3Cw2LxWSUpBJwKwZAC/4U/9QVi/nL
+         NC6w==
+X-Gm-Message-State: AOAM5328ezyt2qPKuEdMfH9Ije4B/wcygGFq8xzzMPmW5kjp8vpzR66w
+        wB/dqReVdnuKfcKYJU72BTdcsjEPy4X7iJZUFXw=
+X-Google-Smtp-Source: ABdhPJwLVBfe1pRfb4ha0ZnAi+w0xSRU9mPt7YB2Yuf6o0Vu9WIk0GleEiqoKewt9wUYbjknWADSIq5/CLJJpkusk/4=
+X-Received: by 2002:a2e:8854:: with SMTP id z20mr13459873ljj.202.1640736592213;
+ Tue, 28 Dec 2021 16:09:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211221085404.6769-1-niejianglei2021@163.com>
+References: <20211223074541.3318938-1-irogers@google.com> <20211223074541.3318938-26-irogers@google.com>
+In-Reply-To: <20211223074541.3318938-26-irogers@google.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 28 Dec 2021 16:09:41 -0800
+Message-ID: <CAM9d7cgCoEc5UXCWm9Cstt0_QMNu4jMK1WH3WEjSBxvCnESfYg@mail.gmail.com>
+Subject: Re: [PATCH v2 25/48] perf stat-display: Avoid use of core for CPU.
+To:     Ian Rogers <irogers@google.com>
+Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
+        John Garry <john.garry@huawei.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Vineet Singh <vineet.singh@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KEYS: trusted: Fix memory leak in tpm2_key_encode()
+On Wed, Dec 22, 2021 at 11:47 PM Ian Rogers <irogers@google.com> wrote:
+>
+> Correct use of cpumap index in print_no_aggr_metric.
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+[SNIP]
+> @@ -924,29 +921,32 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
+>                                  struct evlist *evlist,
+>                                  char *prefix)
+>  {
+> -       int cpu;
+> -       int nrcpus = 0;
+> -       struct evsel *counter;
+> -       u64 ena, run, val;
+> -       double uval;
+> -       struct aggr_cpu_id id;
+> +       int cpu, nrcpus;
+>
+>         nrcpus = evlist->core.cpus->nr;
+>         for (cpu = 0; cpu < nrcpus; cpu++) {
+> +               struct evsel *counter;
+>                 bool first = true;
+>
+>                 if (prefix)
+>                         fputs(prefix, config->output);
+>                 evlist__for_each_entry(evlist, counter) {
+> -                       id = aggr_cpu_id__empty();
+> -                       id.core = cpu;
+> +                       u64 ena, run, val;
+> +                       double uval;
+> +                       struct aggr_cpu_id id;
+> +                       int idx = perf_cpu_map__idx(evsel__cpus(counter), cpu);
 
-On Tue, Dec 21, 2021 at 04:54:04PM +0800, Jianglei Nie wrote:
-> Line 36 (#1) allocates a memory chunk for scratch by kmalloc(), but
-> it is never freed through the function, which will lead to a memory
-> leak.
-> 
-> We should kfree() scratch before the function returns (#2, #3 and #4).
-> 
-> 31 static int tpm2_key_encode(struct trusted_key_payload *payload,
-> 32			   struct trusted_key_options *options,
-> 33			   u8 *src, u32 len)
-> 34 {
-> 36	u8 *scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
->       	// #1: kmalloc space
-> 50	if (!scratch)
-> 51		return -ENOMEM;
-> 
-> 56	if (options->blobauth_len == 0) {
-> 60		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
-> 61			return PTR_ERR(w); // #2: missing kfree
-> 63	}
-> 
-> 71	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
-> 72		 "BUG: scratch buffer is too small"))
-> 73		return -EINVAL; // #3: missing kfree
-> 
->   	// #4: missing kfree: scratch is never used afterwards.
-> 82	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
-> 83		return PTR_ERR(work1);
-> 
-> 85	return work1 - payload->blob;
-> 86 }
-> 
-> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+Not sure about this.  Here the 'cpu' is an index for the
+evlist->core.cpus, not a CPU number.  But the
+perf_cpu_map__idx() requires a CPU number, right?
 
-Please write a proper commit message and not just dump tool output. You
-are completely lacking analysis of what the heck you are doing.
+Thanks,
+Namhyung
 
-E.g. you could just:
 
-"The internal buffer in tpm2_key_encode() is not freed, which leads to a
-memory leak. Handle those cases with kfree()."
-
-/Jarkko
+> +
+> +                       if (idx < 0)
+> +                               continue;
+> +
+> +                       id = aggr_cpu_id__cpu(cpu, /*data=*/NULL);
+>                         if (first) {
+>                                 aggr_printout(config, counter, id, 0);
+>                                 first = false;
+>                         }
+> -                       val = perf_counts(counter->counts, cpu, 0)->val;
+> -                       ena = perf_counts(counter->counts, cpu, 0)->ena;
+> -                       run = perf_counts(counter->counts, cpu, 0)->run;
+> +                       val = perf_counts(counter->counts, idx, 0)->val;
+> +                       ena = perf_counts(counter->counts, idx, 0)->ena;
+> +                       run = perf_counts(counter->counts, idx, 0)->run;
+>
+>                         uval = val * counter->scale;
+>                         printout(config, id, 0, counter, uval, prefix,
+> --
+> 2.34.1.307.g9b7440fafd-goog
+>

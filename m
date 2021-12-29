@@ -2,95 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FAAD48152C
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 17:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98852481531
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 17:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240850AbhL2Ql6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 11:41:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234322AbhL2Ql4 (ORCPT
+        id S240867AbhL2QmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 11:42:21 -0500
+Received: from sibelius.xs4all.nl ([83.163.83.176]:50403 "EHLO
+        sibelius.xs4all.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234322AbhL2QmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 11:41:56 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EDEC061574;
-        Wed, 29 Dec 2021 08:41:56 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id v13-20020a17090a088d00b001b0e3a74cf7so14889512pjc.1;
-        Wed, 29 Dec 2021 08:41:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=O2pbmS818arXigvBH3gLZ+98cJUFjjjLwuoZwBCC54M=;
-        b=N7L/omppPMV1C0ehMzFhzNPNeqZA3VP/LFeXG2fzUnpA7oT+fQ5eHCVLFYLxB4kx4G
-         5SidwXOxubPiDh7BsEHiytCsZfgbPBCrNIHVbBmvCyLlYeQVhSFz68wOiIKs95zmNMWK
-         4ckShIPdJiKLQURmfcPITh+FoBrcGvGd0ItAscVNTuNG6KJf1ca+mNIZ8ngGG9wc6HQ0
-         bXa5qVLrCeKWjle5tMbigdgU04SL9vczQA3sXr8FcSASgZUaIEBLx2TZ+KjfokX/vO3G
-         ymzBwUYDi1NmlNiXUrQbUqnLWDwxmazyJD8sRKQyQTb+FXy5nu1AQfVE0FUvihzEMuNU
-         XSbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=O2pbmS818arXigvBH3gLZ+98cJUFjjjLwuoZwBCC54M=;
-        b=cLPc2QcjV+sD1PxgKzmSXFdZTrT6X3hPQkcVM7kEsFO+ZeTdyOwj8MHeYpLvVTwrB9
-         RM1Yo8GaLHOo68AS8T8VPqSsXZTN3PRa/L0ltCBdH97P+mwq+G0euiXxlkQa31/6Jxll
-         jCCMKAA/VnHICkhSuZjl4uDIo/IdIHvEdX0Ir4XYxFlqvE9N22LFpQas19Ey+iLADo9O
-         KP779uBcdBvOVd+PxsFBpIcs0Vd306EllgVo0u1Lec7MvvqS7i0OsZVUxZfJoYkwz2lb
-         0SDPqoDpLSuyzLPJAqNcl8OjBXSnLCpx3++m+OCZRQsUCg/c6UfY/CKNgs3rg0UAAp8E
-         OV1Q==
-X-Gm-Message-State: AOAM532Rys6JlaWgVLHxyS5IYDjJ/6uFTfB3T3/d/uvBGLCsFJ2uYxHw
-        Rs057G5tgonjWsWtCsMYtcs=
-X-Google-Smtp-Source: ABdhPJzR4LfeXTTm9rQzzjk9apUOFDuZ8ZDYkGLT2rBEW4l51w8K06POiEJOQ3cgVmgta0tUZxVizg==
-X-Received: by 2002:a17:902:a408:b0:149:9055:98b1 with SMTP id p8-20020a170902a40800b00149905598b1mr9422261plq.2.1640796116250;
-        Wed, 29 Dec 2021 08:41:56 -0800 (PST)
-Received: from [10.230.2.158] ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id 145sm20757066pgd.0.2021.12.29.08.41.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Dec 2021 08:41:55 -0800 (PST)
-Message-ID: <abefdc9b-bf5f-3ec9-4d14-172f525d962f@gmail.com>
-Date:   Wed, 29 Dec 2021 08:41:54 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] mips: bcm63xx: add support for clk_set_parent()
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        bcm-kernel-feedback-list@broadcom.com, alsa-devel@alsa-project.org
-References: <20211229000553.32240-1-rdunlap@infradead.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20211229000553.32240-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Wed, 29 Dec 2021 11:42:20 -0500
+Received: from localhost (bloch.sibelius.xs4all.nl [local])
+        by bloch.sibelius.xs4all.nl (OpenSMTPD) with ESMTPA id 079f839a;
+        Wed, 29 Dec 2021 17:42:17 +0100 (CET)
+Date:   Wed, 29 Dec 2021 17:42:17 +0100 (CET)
+From:   Mark Kettenis <mark.kettenis@xs4all.nl>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     kvalo@codeaurora.org, davem@davemloft.net, kuba@kernel.org,
+        robh+dt@kernel.org, rafael@kernel.org, lenb@kernel.org,
+        aspriel@gmail.com, franky.lin@broadcom.com,
+        hante.meuleman@broadcom.com, chi-hsien.lin@infineon.com,
+        wright.feng@infineon.com, chung-hsien.hsu@infineon.com,
+        marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
+        kettenis@openbsd.org, zajec5@gmail.com,
+        pieter-paul.giesberts@broadcom.com, linus.walleij@linaro.org,
+        hdegoede@redhat.com, linville@tuxdriver.com, dekim@broadcom.com,
+        sandals@crustytoothpaste.net, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+In-Reply-To: <20211226153624.162281-2-marcan@marcan.st> (message from Hector
+        Martin on Mon, 27 Dec 2021 00:35:51 +0900)
+Subject: Re: [PATCH 01/34] dt-bindings: net: bcm4329-fmac: Add Apple properties & chips
+References: <20211226153624.162281-1-marcan@marcan.st> <20211226153624.162281-2-marcan@marcan.st>
+MIME-version: 1.0
+Content-type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Message-ID: <d3cb7b3782b16029@bloch.sibelius.xs4all.nl>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/28/2021 4:05 PM, Randy Dunlap wrote:
-> The MIPS BMC63XX subarch does not provide/support clk_set_parent().
-> This causes build errors in a few drivers, so add a simple implementation
-> of that function so that callers of it will build without errors.
+> From: Hector Martin <marcan@marcan.st>
+> Cc: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+>         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+>         Mark Kettenis <kettenis@openbsd.org>,
+>         Rafał Miłecki <zajec5@gmail.com>,
+>         Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+>         Linus Walleij <linus.walleij@linaro.org>,
+>         Hans de Goede <hdegoede@redhat.com>,
+>         "John W. Linville" <linville@tuxdriver.com>,
+>         "Daniel (Deognyoun) Kim" <dekim@broadcom.com>,
+>         "brian m. carlson" <sandals@crustytoothpaste.net>,
+>         linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+>         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+>         linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+>         SHA-cyfmac-dev-list@infineon.com
+> Date: Mon, 27 Dec 2021 00:35:51 +0900
 > 
-> Fixes these build errors:
+> This binding is currently used for SDIO devices, but these chips are
+> also used as PCIe devices on DT platforms and may be represented in the
+> DT. Re-use the existing binding and add chip compatibles used by Apple
+> T2 and M1 platforms (the T2 ones are not known to be used in DT
+> platforms, but we might as well document them).
 > 
-> ERROR: modpost: "clk_set_parent" [sound/soc/jz4740/snd-soc-jz4740-i2s.ko] undefined!
-> ERROR: modpost: "clk_set_parent" [sound/soc/atmel/snd-soc-atmel-i2s.ko] undefined!
+> Then, add properties required for firmware selection and calibration on
+> M1 machines.
 > 
-> Fixes: e7300d04bd08 ("MIPS: BCM63xx: Add support for the Broadcom BCM63xx family of SOCs." )
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  .../net/wireless/brcm,bcm4329-fmac.yaml       | 32 +++++++++++++++++--
+>  1 file changed, 29 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/wireless/brcm,bcm4329-fmac.yaml b/Documentation/devicetree/bindings/net/wireless/brcm,bcm4329-fmac.yaml
+> index c11f23b20c4c..2530ff3e7b90 100644
+> --- a/Documentation/devicetree/bindings/net/wireless/brcm,bcm4329-fmac.yaml
+> +++ b/Documentation/devicetree/bindings/net/wireless/brcm,bcm4329-fmac.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/net/wireless/brcm,bcm4329-fmac.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Broadcom BCM4329 family fullmac wireless SDIO devices
+> +title: Broadcom BCM4329 family fullmac wireless SDIO/PCIE devices
+>  
+>  maintainers:
+>    - Arend van Spriel <arend@broadcom.com>
+> @@ -36,16 +36,22 @@ properties:
+>                - brcm,bcm43455-fmac
+>                - brcm,bcm43456-fmac
+>                - brcm,bcm4354-fmac
+> +              - brcm,bcm4355c1-fmac
+>                - brcm,bcm4356-fmac
+>                - brcm,bcm4359-fmac
+> +              - brcm,bcm4364b2-fmac
+> +              - brcm,bcm4364b3-fmac
+> +              - brcm,bcm4377b3-fmac
+> +              - brcm,bcm4378b1-fmac
+> +              - brcm,bcm4387c2-fmac
+>                - cypress,cyw4373-fmac
+>                - cypress,cyw43012-fmac
+>            - const: brcm,bcm4329-fmac
+>        - const: brcm,bcm4329-fmac
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+I suppose this helps with validation of device trees.  However, nodes
+for PCI devices are not supposed to have a "compatible" property as
+the PCI vendor and device IDs are supposed to be used to identify a
+device.
 
-Thanks!
--- 
-Florian
+That does raise the question how a schema for additional properties
+for PCI device nodes is supposed to be defined...
+
+>    reg:
+> -    description: SDIO function number for the device, for most cases
+> -      this will be 1.
+> +    description: SDIO function number for the device (for most cases
+> +      this will be 1) or PCI device identifier.
+>  
+>    interrupts:
+>      maxItems: 1
+> @@ -75,6 +81,26 @@ properties:
+>      items:
+>        pattern: '^[A-Z][A-Z]-[A-Z][0-9A-Z]-[0-9]+$'
+>  
+> +  brcm,cal-blob:
+> +    $ref: /schemas/types.yaml#/definitions/uint8-array
+> +    description: A per-device calibration blob for the Wi-Fi radio. This
+> +      should be filled in by the bootloader from platform configuration
+> +      data, if necessary, and will be uploaded to the device if present.
+> +
+> +  apple,module-instance:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description: Module codename used to identify a specific board on
+> +      Apple platforms. This is used to build the firmware filenames, to allow
+> +      different platforms to have different firmware and/or NVRAM config.
+> +
+> +  apple,antenna-sku:
+> +    $def: /schemas/types.yaml#/definitions/string
+> +    description: Antenna SKU used to identify a specific antenna configuration
+> +      on Apple platforms. This is use to build firmware filenames, to allow
+> +      platforms with different antenna configs to have different firmware and/or
+> +      NVRAM. This would normally be filled in by the bootloader from platform
+> +      configuration data.
+> +
+>  required:
+>    - compatible
+>    - reg
+> -- 
+> 2.33.0
+> 
+> 

@@ -2,159 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C2A24810BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 08:36:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 808F54810BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 08:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239161AbhL2Hg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 02:36:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239157AbhL2Hgz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 02:36:55 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE45FC06173E;
-        Tue, 28 Dec 2021 23:36:55 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id i6so9291703pla.0;
-        Tue, 28 Dec 2021 23:36:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Zs/GVRqeKa79+ZvaYojti+jCFFp4hFnSa7ptWWiB0sc=;
-        b=Y3hF0TBVV3GohHneQ5WAI/Fu4ZIF3i6HW3e7423kPc1Ldo3z2WvMzmacnzLoYfsYFn
-         UQufyIQxehf5juWwrmNDSXY1AH4kFvpfCFxR7axLi9Ap+A9y7JqADpo90DSRq+fxWg0u
-         h6gyWMnZ7qQzucTGmDYI4QklBQAzg4Z0+JFodvVIKPYY19ojRzJPVHTRnlBgXEh39Svt
-         zjYglnVGCIUfGi1nR3mclvEwasJ+fXXjnuZfn29lTFqx82UiEzmYnBen2N9G4cf8o5Hd
-         Y+q+UWeeBz6LHy0hA98r+eWTR6poK+M34nZZ+tKHReq0fS0QgPJ2fFgRgjtCA3c6VW+B
-         kyQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Zs/GVRqeKa79+ZvaYojti+jCFFp4hFnSa7ptWWiB0sc=;
-        b=EZm4kq3v+1rXdmicMk8FHi+ZCHjkY0ihvQUXwThWGkwUzNBjATSzi63NbF7O0biaAP
-         YGj+OrkaqZxI5LXqSiGNSI8K+itZcYsUcYv49mo1g9KmZsuzcZSdu84oIDODzafZ6eVt
-         pvpbg2UjL+BLC3VJPh9YeVqKwlp0NAMrWSZ9TlHTtc40dYtxCoYPnCjLwoFXRiYtUQbm
-         oA9eGVTwe32TGaUztzn0ANZT99iVQfUlD+k1wNduTtGQwMALQwd7ujai5IRvQQdqLzHz
-         nx/heynVs6gNH1rAI/MIAN4uZyvo+qRaBDaafzt5vEiOXqzwDDzCieSQAFym/FyPWTD6
-         KrqQ==
-X-Gm-Message-State: AOAM532dfxLNUzRUT00BjHbLlWW3DYljcxCHnbYnLsZf17IatUC9KKwb
-        fSW9KBF+oA1ztIx5fp7z+AU=
-X-Google-Smtp-Source: ABdhPJwGR8DxjUqzkQlMRpvpApTn7tiAWCjTqUVCdvt3xK6KzhpjEmj7CJaJBFoNlaDiC87SsmeRtA==
-X-Received: by 2002:a17:903:2306:b0:149:296:c9e1 with SMTP id d6-20020a170903230600b001490296c9e1mr25101371plh.10.1640763415419;
-        Tue, 28 Dec 2021 23:36:55 -0800 (PST)
-Received: from shinobu (113x37x72x24.ap113.ftth.ucom.ne.jp. [113.37.72.24])
-        by smtp.gmail.com with ESMTPSA id f16sm24571958pfj.6.2021.12.28.23.36.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 23:36:54 -0800 (PST)
-Date:   Wed, 29 Dec 2021 16:36:38 +0900
-From:   William Breathitt Gray <vilhelm.gray@gmail.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>, kernel@pengutronix.de,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Patrick Havelange <patrick.havelange@essensium.com>,
-        Syed Nayyar Waris <syednwaris@gmail.com>
-Subject: Re: [PATCH v2 09/23] counter: ftm-quaddec: Convert to counter_priv()
- wrapper
-Message-ID: <YcwQBjD4e9qVKL+2@shinobu>
-References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
- <20211227094526.698714-10-u.kleine-koenig@pengutronix.de>
+        id S239176AbhL2HhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 02:37:22 -0500
+Received: from mga11.intel.com ([192.55.52.93]:5092 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239157AbhL2HhV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 02:37:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640763441; x=1672299441;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=XZNULpDl3FI4ANfWortXMiExehF2akNU5tXbX7P9h9k=;
+  b=lv6V2/+T/wYRNaZHs+mWXEMOrQKeRB0EcNTDVvst2w2bn0HSUa8BwAha
+   J9WQjAy0LCjqcjaqpjXoSeWidIcl71GItQXCSlaAWJVxwdBVh9WnPTNAy
+   oPQmJCb5L49yh5AgnswoIem4IrQCVC4qHVb7aaZlN9xn69CGJQ4ghGdMw
+   ST3aOwl3vxCC2dZ5SX+7gLwWa1kRq0A/4NzoxE/eQsscZWfAtvMo62fdM
+   nlZOPXXNPox1FaLVLxt+/psmiDnf07/cjkMDuHZxroSzg68XjCOWlpRe1
+   HoSLSjjlANO9Ihut22Q3uAY2T9XHQ22zx8Bi5uAPKbL8arCdWYb6cX3kx
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="239023629"
+X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
+   d="scan'208";a="239023629"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 23:37:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
+   d="scan'208";a="468403509"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga003.jf.intel.com with ESMTP; 28 Dec 2021 23:37:20 -0800
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 28 Dec 2021 23:37:20 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Tue, 28 Dec 2021 23:37:20 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.104)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Tue, 28 Dec 2021 23:37:18 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GDpGp2HPNCRksauwJOS2ixRJf6PmoB/wld01PhWpBoJruuOZuS7z2sRVQYWWZd6aenDLNizjM4gGZdHKMmNefMZsYgwj0BPKEyhpglIJ3axN9XPKIaZ01cjfNxVenX25OF0SIUJKRmUnJZhbYeWVoJdbYuwD5RYSR3BcHwd6pdkqsZ0yHm4bA03q6NXr4ho+uCMNXnf6NYLrrLH9k57ft3EHi9CRb3S0qSjeXr8zWAn03h3kJRils0ntTA6y5oHjizdyVP/7KNZloThnvXocgemq78kspJDbs1BYVkgMqNVe/jSa07hF3KH+F8m8guQ00tXUdehdcwAIBKvJ4KlnfA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6SKz0SKJhmzIvGzTsgiHd5kAJxhnhYNcn5kfsnF0FsQ=;
+ b=l9NRegdKGxvuKWvE+1Rt4rQqWLkWt53FtLaNUuleN8n2vOfqTXpf6wQ3ryszEZeQKrRr1HZUVzACv7TOPN5yN70fYsqfY9xkbNt8IhlAdNCTH5QBq1pOZvYJ55kaECh6nGIn4hnRRuuDk+2yLviT/f3q5Qd5PGwxSNsxwFE4/48OF1B5WdrWolMLm/Rt5/EaVTX9abuiTJ0HHo3IbB4QmF1aa72TJ0pYu0ir8fZlXqDXUGOS8QC43Ct7pZleoI5Tqh8nk+IraZyRT1AAkqkTxTmX3LQIsIODs1N1+r5tVf8qgXJ+Yd6bW/0HDshfL7b2NZqqQuoRTpQoPz6Q+Jb0cw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by BN6PR11MB1683.namprd11.prod.outlook.com (2603:10b6:404:3f::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.21; Wed, 29 Dec
+ 2021 07:37:14 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::5c8a:9266:d416:3e04]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::5c8a:9266:d416:3e04%2]) with mapi id 15.20.4844.014; Wed, 29 Dec 2021
+ 07:37:14 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     "Christopherson,, Sean" <seanjc@google.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
+        "Zeng, Guang" <guang.zeng@intel.com>,
+        "Wang, Wei W" <wei.w.wang@intel.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>
+Subject: RE: [PATCH v3 22/22] kvm: x86: Disable interception for IA32_XFD on
+ demand
+Thread-Topic: [PATCH v3 22/22] kvm: x86: Disable interception for IA32_XFD on
+ demand
+Thread-Index: AQHX9zE4gQJMQm2XFEKlfvGX4m1Fn6xIsbuAgABrvfA=
+Date:   Wed, 29 Dec 2021 07:37:14 +0000
+Message-ID: <BN9PR11MB5276B64A8F28FF23A71C949A8C449@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20211222124052.644626-1-jing2.liu@intel.com>
+ <20211222124052.644626-23-jing2.liu@intel.com> <Ycu0KVq9PfuygKKx@google.com>
+In-Reply-To: <Ycu0KVq9PfuygKKx@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 12506385-5f39-4e09-bddf-08d9ca9e087d
+x-ms-traffictypediagnostic: BN6PR11MB1683:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <BN6PR11MB16832F240349D85E3F2F4A8A8C449@BN6PR11MB1683.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: czs9cjGKqxK/VsKk+n3RRWjIv+tbOyCNXFbnERr9jjQrGEaigzcs4tgnoYedDgRxyzVaT8ZmP1YxrhWUzKkfvFShj+cQA9EqsbnqORpcdBMOJnLwhso9hgOnoebkD2MO86TYk8+V60T20SptGsvo6rpjtL6Xm7kv6jxu6NTvIdWCGUaRf2YBWjmy5m5aRVcrhaxRXmftgHSOCugMED89p9/uDlSErPa9byN/2LGZZXVpppLiF8ucTlcx0AtwXwFSHv41pcyVHcynE0PdxZeH35yrOahN0uU2NiKWTlTyhfTsUpVRh59CFvxhfrSIWggXE3/j++DX9Mm1bPzjAEgC25gaRQ6azYPxB4XJJLgynWcmZqj43o/snL+I2nZH+Rg3IdSDXKBCvz+hGwmeHeXL673yP+yTBSiQRbrSeuFJdqQsRaQMUrO0iNzW1L23nFH4Jv+JspQMquTVODmd56J8tEGqidBE+YZU6zQ5shfziBGMuRddhcch0bypOistLBo9R6bnIXSn7AH/Ijld10gS+ITQScE/GGK8OEO71WYsrdQEzcMI2Bhh/50Irzyjqmrj9SpQGFoMGkCYJ7NmAderPe21VLyMbbIN3YBX0l2hn+3zGwDZ5QT+7+zi2GhuYMFVRduMcbJDDIaiDzm3Ib38jQ5gzjZxiHMH4rmpH+elBc108OGNVfhG2uAQaejIotlyx6opUkuX0Ltc2twpXFnKyQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(4744005)(82960400001)(508600001)(2906002)(52536014)(71200400001)(5660300002)(8936002)(316002)(55016003)(110136005)(54906003)(38100700002)(8676002)(4326008)(9686003)(64756008)(66476007)(186003)(76116006)(66556008)(122000001)(26005)(7696005)(66946007)(6636002)(38070700005)(7416002)(6506007)(86362001)(33656002)(66446008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?YmSyqy8z0QpKoWQHFhQKXMsUDGgCNmvgSew1fnUeZRU6P/+rXAotyIZVbWTL?=
+ =?us-ascii?Q?wvavuhzKftzE3GmyrVv4efYYLYHjgzcMfSzA1FwvEtBLkV1RFp69ff4VAJPd?=
+ =?us-ascii?Q?1cK2Xap7CAK6VikvtczCUTzFrlcDDa1zmnNG4vgAjFC2TmTZl4xnXOH9qVdO?=
+ =?us-ascii?Q?nx3CXBq7uGoDYR6GujSE4Eg0O4TxAnH5vJKoXx4/AYDdNb0kwwWqCHhrt7VF?=
+ =?us-ascii?Q?L76rwiBerl2KVMl8B+JzzYZug7XFVIWNJxmgb7XfT6furps0dwJ+KOSXnuys?=
+ =?us-ascii?Q?NwTPIKBUNU8+CRQt1xuHiZ/WAotSkOUETAmwv/kcNJ6YpC6ieI+SUqSRJNtP?=
+ =?us-ascii?Q?VZqiZcr1/syxnGuUsCMbHYSqrNBas7UDtxk3hfzKda8+ZRwo8wr43ALcEsvn?=
+ =?us-ascii?Q?3R7p56rhHQcsqcEzVeaCLkRJL/AyRgNrnzEvBLudaPyiOsFLR7kw6XQS0bhX?=
+ =?us-ascii?Q?EB+u+7kztDqhTFQ958WjqUulnhbwOmuPHjwSPI9f/JahI5fF33ExqD8V4avE?=
+ =?us-ascii?Q?claKNRavw0fvkrEQ36Y31FuXtK95jTolwFmxMN2cUeh30t4XGVWEr1s758OA?=
+ =?us-ascii?Q?E0jMPbbBiaHt8Sdle+JZ8B/BCbQMq4oEZee7TCToRgi1kafO8U8WbXPpii5P?=
+ =?us-ascii?Q?8NEJ5mH1KDorpWSu2NU+IhYC/hzfxqFajAbGOpjfJspgZCeEzkv44PH9L2F3?=
+ =?us-ascii?Q?ZxYEgIxg8UdhQDSBj1NZaAph91ytE94Cp9HUhXYdCw9H8i2GotmkFHfapKBA?=
+ =?us-ascii?Q?PCo0gKuHI/IqCm+F0FNj8p6BPVtsJwItJlno/vx2AuidHpZUERnipeYWwRro?=
+ =?us-ascii?Q?OJo+2P2DpWJVD//NGyBo7gTUZf1TjoHrTobps6B9OFY/Gjyo65OGls36K4Mv?=
+ =?us-ascii?Q?K9dXbrS0mo5tqD1hFDBOA3Rm2eAQMSzNhhGsN+VehSVpLSoMWa1bwOtq78+G?=
+ =?us-ascii?Q?OFdT6E+7U3j2N2m5lOjIcOXYf//pE/zNb20DLcC13gXSmibgBriVrCwziFEf?=
+ =?us-ascii?Q?JQpgisUsflrZYWe/TFR5G9T98gouNSRRYmnxwItjFYp/JVToRzOO8JvULUXh?=
+ =?us-ascii?Q?XKwnBfuK7D2azBcIcD6dyMPelmC8PnEMxvrg14r768IHJ24Iq9Zb63A8OyUV?=
+ =?us-ascii?Q?9pdztR3mI4nEKC4yidbn1dioGRUOXXsQSBUCqBq6eYOfcatMUoaFG5VpzFeh?=
+ =?us-ascii?Q?QbmhWqG4uNVpI074KQVb+5TaEHaAE+keuPY3Eq5dxKVB0aPehWwr/BgpAAJp?=
+ =?us-ascii?Q?no8dhptOZ4g6Sen3RG2fO10eB/eeIxF+EsVrnirId4mxqKWS//5qM9ki/u1I?=
+ =?us-ascii?Q?z63tahIxTisAlGEqrJmTgDrHn8GTPozRDLy3awS4UEDI45XBUCEXxrDbZ/gG?=
+ =?us-ascii?Q?lsw0jPZruEbi1HI48nswaRC7vGqc1uj7SAhDSebH5oC4xOk3rCqkw48bKM0E?=
+ =?us-ascii?Q?KM+8JoqnIO4oDNqGc3gavoV/1D1bupnD/LFJ7SCgqW9B2XP4VDo+SRICsejs?=
+ =?us-ascii?Q?QHGo1fRHU/Pa9E/FBH2o++NkUXFS2UJALdxkMsnTnk5iJzOrqQB4Nhn3oSN6?=
+ =?us-ascii?Q?bkC8mneWCsOCN0azO62JkZnizlnmalBWc4HOiAnjXyEoDUT0vdwlR7Qk3y8W?=
+ =?us-ascii?Q?pL5puOQ0isemsIb2GXaDOiw=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5GfMtX2wQyLOwk+v"
-Content-Disposition: inline
-In-Reply-To: <20211227094526.698714-10-u.kleine-koenig@pengutronix.de>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12506385-5f39-4e09-bddf-08d9ca9e087d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Dec 2021 07:37:14.4861
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HbxOW6FZBquMfYRZJoeBsGD3jFH88HHF0gR1qX5wgbI8y4D0cLvSxJGgaZ7FzEeQklyR/mH0myUxmnnRRVUidQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1683
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---5GfMtX2wQyLOwk+v
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Dec 27, 2021 at 10:45:12AM +0100, Uwe Kleine-K=C3=B6nig wrote:
-> This is a straight forward conversion to the new counter_priv() wrapper.
+> From: Sean Christopherson <seanjc@google.com>
+> Sent: Wednesday, December 29, 2021 9:05 AM
+> > +	if (vcpu->arch.xfd_out_of_sync)
 >=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-
-Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
-
-> ---
->  drivers/counter/ftm-quaddec.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+> Rather than adding a flag that tracks whether or not the MSR can be writt=
+en
+> by
+> the guest, can't this be:
 >=20
-> diff --git a/drivers/counter/ftm-quaddec.c b/drivers/counter/ftm-quaddec.c
-> index 9272f7b58beb..f5d92df6a611 100644
-> --- a/drivers/counter/ftm-quaddec.c
-> +++ b/drivers/counter/ftm-quaddec.c
-> @@ -118,7 +118,7 @@ static void ftm_quaddec_disable(void *ftm)
->  static int ftm_quaddec_get_prescaler(struct counter_device *counter,
->  				     struct counter_count *count, u32 *cnt_mode)
->  {
-> -	struct ftm_quaddec *ftm =3D counter->priv;
-> +	struct ftm_quaddec *ftm =3D counter_priv(counter);
->  	uint32_t scflags;
-> =20
->  	ftm_read(ftm, FTM_SC, &scflags);
-> @@ -131,7 +131,7 @@ static int ftm_quaddec_get_prescaler(struct counter_d=
-evice *counter,
->  static int ftm_quaddec_set_prescaler(struct counter_device *counter,
->  				     struct counter_count *count, u32 cnt_mode)
->  {
-> -	struct ftm_quaddec *ftm =3D counter->priv;
-> +	struct ftm_quaddec *ftm =3D counter_priv(counter);
-> =20
->  	mutex_lock(&ftm->ftm_quaddec_mutex);
-> =20
-> @@ -162,7 +162,7 @@ static int ftm_quaddec_count_read(struct counter_devi=
-ce *counter,
->  				  struct counter_count *count,
->  				  u64 *val)
->  {
-> -	struct ftm_quaddec *const ftm =3D counter->priv;
-> +	struct ftm_quaddec *const ftm =3D counter_priv(counter);
->  	uint32_t cntval;
-> =20
->  	ftm_read(ftm, FTM_CNT, &cntval);
-> @@ -176,7 +176,7 @@ static int ftm_quaddec_count_write(struct counter_dev=
-ice *counter,
->  				   struct counter_count *count,
->  				   const u64 val)
->  {
-> -	struct ftm_quaddec *const ftm =3D counter->priv;
-> +	struct ftm_quaddec *const ftm =3D counter_priv(counter);
-> =20
->  	if (val !=3D 0) {
->  		dev_warn(&ftm->pdev->dev, "Can only accept '0' as new counter value\n"=
-);
-> --=20
-> 2.33.0
+> 	if (!vmx_test_msr_bitmap_write(vcpu->loaded_vmcs->msr_bitmap))
+> 		fpu_sync_guest_vmexit_xfd_state();
 >=20
 
---5GfMtX2wQyLOwk+v
-Content-Type: application/pgp-signature; name="signature.asc"
+and forgot to mention a change different from above. It's in x86
+common exit path but above is vmx specific check. I'm not sure
+whether it's worthy of introducing another kvm_x86_ops callback
+just for this minor usage.
 
------BEGIN PGP SIGNATURE-----
+Introducing an extra flag (e.g. vcpu->arch.xfd_disable_interception)
+sounds simpler here.
 
-iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAmHMEAYACgkQhvpINdm7
-VJLorhAAueGE1YkCbKcBJ0GkQ+ziTvzAXz3WH+zh1GtwVCa5OmKLbrnSGlk8f+6P
-Z7i1tBXu+MUEfAbD6ThQ73EjtHEGzsdjRYvKjVJ1Iuzp5k8SYZFWvuoif2NHi4iV
-xGQJ5WJbfGWW0E4Hs16DAuTpkchVudBLtlO7WZtMrQNI4xlXFbrh1M80WsGM6KvC
-suyDju2tAJjSlTqpF1kEhFwccG1dkyAkL+je8KNe7QBVS1Q28/arPXC+YfY6TS69
-I3/Tf0uwougtSNAGSxJJtbPIcF6n8CQKUqQUw1C7jfsh7F8T51NHoVkF2VHw80QZ
-5jJoRO/gXdrO3xqa9pFFLNW4apDJk8BJn3yxhHRA69ihxpUIOIFwmFL5MhgMCe9e
-+cidCTsTqcyja5f/choSbanq1YhxEkvsm2xm3rbhiefo+sK1DHtrNNdHhi1BeLE6
-HciAs6lSqPNKI/JKhZKZunHTNuboCnE2nAAkYorZjCP0nOKsv6lbfH/eQ0L7BJkA
-9yYrYHqMZWOAvdGnAVRT3XP+aKpXk4oO0PrLIeE3/TRE5Zz5gFf5nDunvkaimOgx
-3FkRGK7sHw8ILzKTvrhaUgD4fxRLT98MgxoipdboHVS/C6QKqTfDM5JjfapmAJ3T
-FvY/mY9t0lUJcoS8inAiPCoD81jTNlsQMBJ9HPCvTanImuqTx94=
-=S9bS
------END PGP SIGNATURE-----
+Thanks
+Kevin
 
---5GfMtX2wQyLOwk+v--

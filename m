@@ -2,108 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 155794812F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 13:56:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D77D24812F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 13:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236629AbhL2M4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 07:56:51 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:12640 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236046AbhL2M4u (ORCPT
+        id S238590AbhL2M5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 07:57:07 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:37196 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236046AbhL2M5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 07:56:50 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BT9SviV022000;
-        Wed, 29 Dec 2021 12:56:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=YVFKm15BQvdtZr8hDamtmtwX6AvBKFv4rDtcubPJ7Eo=;
- b=dGiIPSLg3nOs20YdViBdW/plhFxXIyCFJXOg1nL51mJMoOgZcJ9xF56rRyc6hbQGw4jK
- 67C4IjlPjAYhCpXtUwysaG/2/5pNuo4biGiKoJjnqU+kn7kqha1mThLW23Vz0u4xII0y
- YOdizTlTMyz+Kx6Z/dMXeFIrJ22768hveR+cBawDKWuf/km8oRHwE5Ro8trVsXNFzjWV
- XNmxKj4RCFa3C+HUI3OmhIoSD/oraV20DAiOkZPPAaT8+wELD+BcWTWX2ZB4oP84jfwT
- Iz+E0WDtdFJl+s8y7ZwzNeD/K91sB77gggt4K4Q1Rf1DC7K1UnYgt/C7MeT51t5vV0kL +w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d838gpnma-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Dec 2021 12:56:48 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BTCumUF026064;
-        Wed, 29 Dec 2021 12:56:48 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d838gpnkq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Dec 2021 12:56:48 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BTCqKTi018385;
-        Wed, 29 Dec 2021 12:56:45 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04ams.nl.ibm.com with ESMTP id 3d5txaxkew-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Dec 2021 12:56:45 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BTCuhJk36897258
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 29 Dec 2021 12:56:43 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 168064C04E;
-        Wed, 29 Dec 2021 12:56:43 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A32724C046;
-        Wed, 29 Dec 2021 12:56:42 +0000 (GMT)
-Received: from [9.145.32.240] (unknown [9.145.32.240])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 29 Dec 2021 12:56:42 +0000 (GMT)
-Message-ID: <4ec6e460-96d1-fedc-96ff-79a98fd38de8@linux.ibm.com>
-Date:   Wed, 29 Dec 2021 13:56:42 +0100
+        Wed, 29 Dec 2021 07:57:06 -0500
+Date:   Wed, 29 Dec 2021 12:57:03 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1640782625;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1HeKjxypRjQVj0YfMTfvkq5lcRc9uJj9O16NmBzUCGg=;
+        b=s7z+fj+9eFiBZvSiEpQFpcFPwytNdR1bQcuGDajysk//27dgIrKDqWfkUHsCULzS9JGbZk
+        zwv0NsSyEHrrpBgdB/c35qGzB7VvGAAoj5Sv4ZzugKtZnjMEsEj3SrCXuLzCVOy2lQwUIQ
+        66V3PxSZeT1AiQpH4rkUPPsQhtjgd8QdVC5DB0/IXxvIGMOQUwDFrhrLr0nXgZ2/SBwCtF
+        sNmsDMorRHx6xzmowyPhEe1oT09/qemu2ZOjxMCIyvGxcgi0JnDe4fstkclgkoonJYboxv
+        TLfWm7vsMKXaJkGzM36l8qKfFnMMBbrmQpKO1/R9s3iZgmLZbv1KEiJxs6CjgA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1640782625;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1HeKjxypRjQVj0YfMTfvkq5lcRc9uJj9O16NmBzUCGg=;
+        b=eAhGA7YtuuqR3M24bRvbDfqP6WaQubVw2NSMphY/yahuNXVbX9R4s8YB4xVgdHzTD9Qljp
+        dOGvE8LboB14EqBA==
+From:   "tip-bot2 for Tony Luck" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cpu] x86/lib: Add fast-short-rep-movs check to
+ copy_user_enhanced_fast_string()
+Cc:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@suse.de>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20211216172431.1396371-1-tony.luck@intel.com>
+References: <20211216172431.1396371-1-tony.luck@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [RFC PATCH net v2 1/2] net/smc: Resolve the race between link
- group access and termination
-Content-Language: en-US
-To:     Wen Gu <guwen@linux.alibaba.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dust.li@linux.alibaba.com,
-        tonylu@linux.alibaba.com
-References: <1640704432-76825-1-git-send-email-guwen@linux.alibaba.com>
- <1640704432-76825-2-git-send-email-guwen@linux.alibaba.com>
-From:   Karsten Graul <kgraul@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <1640704432-76825-2-git-send-email-guwen@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
+Message-ID: <164078262396.16921.15044282056397514448.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ZCcrk0ilgLcIPPpw1Or4tnA7Rl5J3VEl
-X-Proofpoint-ORIG-GUID: Ohcc_jjJJyu_qyPIPqYWPm3aMSSzwt4F
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-29_04,2021-12-29_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
- impostorscore=0 priorityscore=1501 malwarescore=0 spamscore=0 bulkscore=0
- adultscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112290068
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/12/2021 16:13, Wen Gu wrote:
-> We encountered some crashes caused by the race between the access
-> and the termination of link groups.
+The following commit has been merged into the x86/cpu branch of tip:
 
-While I agree with the problems you found I am not sure if the solution is the right one.
-At the moment conn->lgr is checked all over the code as indication if a connection
-still has a valid link group. When you change this semantic by leaving conn->lgr set
-after the connection was unregistered from its link group then I expect various new problems
-to happen.
+Commit-ID:     244122b4d2e5221e6abd6e21d6a58170104db781
+Gitweb:        https://git.kernel.org/tip/244122b4d2e5221e6abd6e21d6a58170104db781
+Author:        Tony Luck <tony.luck@intel.com>
+AuthorDate:    Thu, 16 Dec 2021 09:24:31 -08:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Wed, 29 Dec 2021 13:46:02 +01:00
 
-For me the right solution would be to use correct locking  before conn->lgr is checked and used.
+x86/lib: Add fast-short-rep-movs check to copy_user_enhanced_fast_string()
 
-In smc_lgr_unregister_conn() the lgr->conns_lock is used when conn->lgr is unset (note that
-it is better to have that "conn->lgr = NULL;" line INSIDE the lock in this function).
+Commit
 
-And on any places in the code where conn->lgr is used you get the read_lock while lgr is accessed.
-This could solve the problem, using existing mechanisms, right? Opinions?
+  f444a5ff95dc ("x86/cpufeatures: Add support for fast short REP; MOVSB")
+
+fixed memmove() with an ALTERNATIVE that will use REP MOVSB for all
+string lengths.
+
+copy_user_enhanced_fast_string() has a similar run time check to avoid
+using REP MOVSB for copies less that 64 bytes.
+
+Add an ALTERNATIVE to patch out the short length check and always use
+REP MOVSB on X86_FEATURE_FSRM CPUs.
+
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20211216172431.1396371-1-tony.luck@intel.com
+---
+ arch/x86/lib/copy_user_64.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/lib/copy_user_64.S b/arch/x86/lib/copy_user_64.S
+index 2797e63..1c429f0 100644
+--- a/arch/x86/lib/copy_user_64.S
++++ b/arch/x86/lib/copy_user_64.S
+@@ -200,8 +200,8 @@ EXPORT_SYMBOL(copy_user_generic_string)
+  */
+ SYM_FUNC_START(copy_user_enhanced_fast_string)
+ 	ASM_STAC
+-	cmpl $64,%edx
+-	jb .L_copy_short_string	/* less then 64 bytes, avoid the costly 'rep' */
++	/* CPUs without FSRM should avoid rep movsb for short copies */
++	ALTERNATIVE "cmpl $64, %edx; jb .L_copy_short_string", "", X86_FEATURE_FSRM
+ 	movl %edx,%ecx
+ 1:	rep
+ 	movsb

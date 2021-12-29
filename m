@@ -2,79 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D29BC480E05
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 01:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7394A480E08
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 01:05:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237870AbhL2ADv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 19:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
+        id S237885AbhL2AF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 19:05:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbhL2ADu (ORCPT
+        with ESMTP id S230170AbhL2AF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 19:03:50 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89440C061574;
-        Tue, 28 Dec 2021 16:03:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=IVYHkITLQr3nGzfQ9BFyA8syiSU4wobqmDj3DPwcXk4=; b=p+RQPexClJebUkrQMSJaByEtT/
-        D+iIffDom7L8JlusDZiFdwP1MJ7sA4Tuu5HqYc1HSczRzrANSPRuV/2BjIpSwTys/eLz8ZHBfPX+f
-        50PdHaL8hgACC498S9uCNzzzCHmQ2dE5Hc7rKz422lW11RIHDFeqqo2cJFUTakZPHYCL6imrzaJKl
-        ucPq8ab6RmeO1MSHY9AA0tHs0FXW9R07qll2K5O0Z++bcOXvj/w/nnSaB1GjgdOCB0TbD9o8ZYMkN
-        BRzCy2jy1frxsN1TW0sfbHzRqWsp/eCbEhJ+uFzG54c4P/WQKwsI8R1rQjCUnnwMs+ZOvsRW667U6
-        CNnsESyA==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n2MRX-001zfg-5C; Wed, 29 Dec 2021 00:03:47 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     John Crispin <john@phrozen.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        alsa-devel@alsa-project.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] mips: lantiq: add support for clk_set_parent()
-Date:   Tue, 28 Dec 2021 16:03:45 -0800
-Message-Id: <20211229000345.24199-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        Tue, 28 Dec 2021 19:05:29 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F64C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 16:05:28 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id t204so26336941oie.7
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 16:05:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=32Wtn2BBTzP1usnosTui06khYl1Qc21PEMfBrdcRzyk=;
+        b=dk+9D/MZ0F3L58c3D7sl5G0TDcKk2kyODgSQE6Qvd88/pdkSSMRIsWek7Mdm9nYF4A
+         ZXwPfOALKh5/RFYFij2MObePiya0oSEuaPos+VCe1y+EI8rw5DF9Njfmw8WROqSwXTnK
+         ehicUSFk2c8C+PGrRARTKfGTkPHt4DWVX+LB4HdbHxjUpya9sDW0PTT9q0WDrP+w6538
+         nctKAC2T7X1CWIsnJquobR+xJ+YMF/MA4hsm/nV8eHe8Ym7NOvpryp+Wey04+nb69CQr
+         U77OTK8git8kumIg04Rwa8sSt6bCnvB0n87wt4MIrK8uLScEL0LOYPLkXbgjuSJGxQzt
+         vLvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=32Wtn2BBTzP1usnosTui06khYl1Qc21PEMfBrdcRzyk=;
+        b=7gJpVb0cywnOER+higiyG8CD+ddfCHDQ3Xf859p72tStrTNs/LZlVE+mApPz/Ra1F9
+         yklgN6UyaC4CUxVFTh1cJyGMIDku2G2x/2OvBPm3WgeGppEHiBia4AW2e0mvqkRomO3k
+         73scEhfJZ/rWMmMWuoh5KAwI6WZHSANQ23iwE20G9C/vzWd3V3t8MBDdn1fvd1y4nUCP
+         /LmLA3/8wo0qcIXmad5T3Oen+RrpVeGhOrH+DaHrx6Ytn7lzXg7UjTniz9eCPn8b6WZ4
+         xeuztbYK6YTmkm70kKxCEU+zvMJ9efUUKvXVvLFYb7W5qy1MvprEM1FPQMYZ0vv3mH14
+         8u6A==
+X-Gm-Message-State: AOAM533n4yYCGJrYTwg08IsTr2RW4uGOm/tkpOMTw9YWuIAleURi3Cwq
+        DUH+Fo6Y/o1+V5AMghOLVz8XzsbUrCUdC8exmErBAQ==
+X-Google-Smtp-Source: ABdhPJzymNPJ55EvbPXBgesiSVDvllFDNyFrBK40MXAcllMHAML9lzUsz95whgyN4iy6OpD3Pca21Tj1hbra9rOI8+k=
+X-Received: by 2002:a54:4819:: with SMTP id j25mr18392614oij.66.1640736327959;
+ Tue, 28 Dec 2021 16:05:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211222133428.59977-1-likexu@tencent.com> <CALMp9eRNsKMB6onhc-nhW-aMb14gK1PCtQ_CxOoyZ5RvLHfvEQ@mail.gmail.com>
+ <d80f6161-e327-f374-4caf-016de1a77cc3@gmail.com>
+In-Reply-To: <d80f6161-e327-f374-4caf-016de1a77cc3@gmail.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Tue, 28 Dec 2021 16:05:17 -0800
+Message-ID: <CALMp9eTy-8CgoV1TJBQ=RON=k8bQ8SYR7xj00qipUEetR4Xofg@mail.gmail.com>
+Subject: Re: [PATCH v2] KVM: X86: Emulate APERF/MPERF to report actual vCPU frequency
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Like Xu <likexu@tencent.com>,
+        Dongli Cao <caodongli@kingsoft.com>,
+        Li RongQing <lirongqing@baidu.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide a simple implementation of clk_set_parent() in the lantiq
-subarch so that callers of it will build without errors.
+On Mon, Dec 27, 2021 at 11:11 PM Like Xu <like.xu.linux@gmail.com> wrote:
+>
+> Hi Jim,
+>
+> On 28/12/2021 2:33 am, Jim Mattson wrote:
+> > On Wed, Dec 22, 2021 at 5:34 AM Like Xu <like.xu.linux@gmail.com> wrote:
+> >>
+> >> From: Like Xu <likexu@tencent.com>
+> >>
+> >> The aperf/mperf are used to report current CPU frequency after 7d5905dc14a.
+> >> But guest kernel always reports a fixed vCPU frequency in the /proc/cpuinfo,
+> >> which may confuse users especially when turbo is enabled on the host or
+> >> when the vCPU has a noisy high power consumption neighbour task.
+> >>
+> >> Most guests such as Linux will only read accesses to AMPERF msrs, where
+> >> we can passthrough registers to the vcpu as the fast-path (a performance win)
+> >> and once any write accesses are trapped, the emulation will be switched to
+> >> slow-path, which emulates guest APERF/MPERF values based on host values.
+> >> In emulation mode, the returned MPERF msr value will be scaled according
+> >> to the TSCRatio value.
+> >>
+> >> As a minimum effort, KVM exposes the AMPERF feature when the host TSC
+> >> has CONSTANT and NONSTOP features, to avoid the need for more code
+> >> to cover various coner cases coming from host power throttling transitions.
+> >>
+> >> The slow path code reveals an opportunity to refactor update_vcpu_amperf()
+> >> and get_host_amperf() to be more flexible and generic, to cover more
+> >> power-related msrs.
+> >>
+> >> Requested-by: Dongli Cao <caodongli@kingsoft.com>
+> >> Requested-by: Li RongQing <lirongqing@baidu.com>
+> >> Signed-off-by: Like Xu <likexu@tencent.com>
+> >
+> > I am not sure that it is necessary for kvm to get involved in the
+> > virtualization of APERF and MPERF at all, and I am highly skeptical of
+> > the need for passing through the hardware MSRs to a guest. Due to
+>
+> The AMPERF is pass-through for read-only guest use cases.
+>
+> > concerns over potential side-channel exploits a la Platypus
+>
+> I agree that the enabling of AMPERF features increases the attack surface,
+> like any other upstreamed features (SGX), and they're not design flaw, are they?
+>
+> As we know, KVM doesn't expose sufficient RAPL interface for Platypus. At least
+> the vendors has patched Platypus while the cat and mouse game will not end.
+>
+> User space needs to choose whether to enable features based on the
+> guest's level of trust, rather than trying to prevent it from enablement.
+>
+> > (https://platypusattack.com/), we are planning to provide only low
+> > fidelity APERF/MPERF virtualization from userspace, using the
+> > userspace MSR exiting mechanism. Of course, we should be able to do
+>
+> It works for other non time-sensitive MSRs.
+>
+> We have a long delay to walk the userspace MSR exiting mechanism
+> for both APERF msr and MPERF msr, which is almost intolerable for
+> frequent access guest reads. IMO, the low fidelity is not what the guest
+> user wants and it defeats the motivation for introducing amperf on host.
+>
+> > that whether or not this change goes in, but I was wondering if you
+> > could provide some more details regarding your use case(s).
+>
+> In addition to the advantages amperf brings in the kernel context
+> (e.g. smarter scheduler policies based on different power conditions),
+>
+> Guest workload analysts are often curious about anomalous benchmark
+> scores under predictive CPU isolation guaranteed by service providers,
+> and they ask to look at actual vCPU frequencies to determine if the source
+> of performance noise is coming from neighboring hardware threads
+> particularly AVX or future AMX or other high power consumption neighbors.
+>
+> This AMPERF data helps the customers to decide whether the back-end pCPU
+> is to be multiplexed or exclusive shared, or to upgrade to a faster HW model,
+> without being tricked by the guest CPUID.
+>
+> IMO, this feature will be of value to most performance users. Any other comments?
 
-Fixes these build errors:
+If it's worth doing, it's worth doing well.
 
-ERROR: modpost: "clk_set_parent" [sound/soc/jz4740/snd-soc-jz4740-i2s.ko] undefined!
-ERROR: modpost: "clk_set_parent" [sound/soc/atmel/snd-soc-atmel-i2s.ko] undefined!
+Let me go back and look in detail at the code, now that the question
+of whether or not this is worth doing has been answered.
 
-Fixes: 171bb2f19ed6 ("MIPS: Lantiq: Add initial support for Lantiq SoCs")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
---to=linux-mips@vger.kernel.org --cc="John Crispin <john@phrozen.org>" --cc="Jonathan Cameron <jic23@kernel.org>" --cc="Russell King <linux@armlinux.org.uk>" --cc="Andy Shevchenko <andy.shevchenko@gmail.com>" --cc=alsa-devel@alsa-project.org --to="Thomas Bogendoerfer <tsbogend@alpha.franken.de>"
----
- arch/mips/lantiq/clk.c |    6 ++++++
- 1 file changed, 6 insertions(+)
-
---- linux-next-20211224.orig/arch/mips/lantiq/clk.c
-+++ linux-next-20211224/arch/mips/lantiq/clk.c
-@@ -164,6 +164,12 @@ struct clk *clk_get_parent(struct clk *c
- }
- EXPORT_SYMBOL(clk_get_parent);
- 
-+int clk_set_parent(struct clk *clk, struct clk *parent)
-+{
-+	return 0;
-+}
-+EXPORT_SYMBOL(clk_set_parent);
-+
- static inline u32 get_counter_resolution(void)
- {
- 	u32 res;
+> Thanks,
+> Like Xu

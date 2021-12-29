@@ -2,78 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF48481682
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 21:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BE3481687
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 21:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231660AbhL2UAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 15:00:18 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52092 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbhL2UAQ (ORCPT
+        id S231675AbhL2UDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 15:03:18 -0500
+Received: from polaris.svanheule.net ([84.16.241.116]:37880 "EHLO
+        polaris.svanheule.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231663AbhL2UDR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 15:00:16 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 29 Dec 2021 15:03:17 -0500
+Received: from [IPv6:2a02:a03f:eafe:c901:bb38:31d0:45d2:689b] (unknown [IPv6:2a02:a03f:eafe:c901:bb38:31d0:45d2:689b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7CB31B81A02;
-        Wed, 29 Dec 2021 20:00:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF052C36AEA;
-        Wed, 29 Dec 2021 20:00:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640808014;
-        bh=wqhMfCvA9zj0zXkZZQhJ9lSi8r+UeURgf/ajHSematg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=OeanErZL1YBoL2iej/Q6v/kFInv0fHpYLmYObk2wxWdBt2h+8GWvSP+rl1859P83K
-         wg8idnGLOOKehP0qVfyIuQrYZ4e0xpOXgjdVC29cC7NeSExLhqUdkgGACryaQpS9RR
-         qs1b9cOYEF6kxgPW7IbRDo02BPEV+aQDMknx1fMdvDc0Aqjc1kiGPhfF3laP1Tmrpt
-         4i2hkZ8qbfhmhfhFg2dYtD0zlagIzF3NURvCUPM3ogKoktKR8DcOryJYVE0+NAMurD
-         IkEd5jhKOsI0a9P0qo0LeMgzLqFML2VVI9IM6HidIsRnT8+S/79s453MxRdWLdbhxj
-         ZipaUu/2rHZeQ==
-Date:   Wed, 29 Dec 2021 14:00:12 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] PCI: Add device code for AMD FCH SATA Controller
- in AHCI mode
-Message-ID: <20211229200012.GA1698594@bhelgaas>
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 0E96628997C;
+        Wed, 29 Dec 2021 21:03:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1640808196;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9r89ta2jJHkQ/ecMndRJFDOX7vYNBNPWMZRvoAUYTlI=;
+        b=L+3KiH4ccDiwjYwMd/c3ibu39FGLpfIe1YELBJlLtkptw1xpDhWEUAjml4QK5BJtkm4Vw5
+        bLELIB2gIusPWywywzkd85Co2Vx3+AkLkBidqxPFCJS1pKhzkXUDxJLWm+t6Vj+o3cSxs3
+        kb5xZxLFOXh4s3x1vYjkvgzJUExHR+Y3bv4JRSiaChTvTwHij2Rfd1lOgmR5px7iPI9LgA
+        SghBX40wfy1ycHPavkSelvXgWaGbLiMRpaRHqjrtZJX4owUkJ6jCEBkECsif+/0YrIX4PU
+        tnIezaoCA4mnw1CrMMMuyrrHW23GmPJOI2ljNn76vA4jkse/4udOAm8MGof2FA==
+Message-ID: <f5e752abc5929cfc8fffd55f5991ab48f141c200.camel@svanheule.net>
+Subject: Re: [RFC PATCH v2 0/5] Rework realtek-rtl IRQ driver
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Birger Koblitz <mail@birger-koblitz.de>
+Cc:     linux-kernel@vger.kernel.org, bert@biot.com, john@phrozen.org,
+        tglx@linutronix.de, maz@kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org
+Date:   Wed, 29 Dec 2021 21:03:15 +0100
+In-Reply-To: <0086fb07-c5d3-9600-4b62-d7497b192461@birger-koblitz.de>
+References: <cover.1640548009.git.sander@svanheule.net>
+         <90a3ce57-875f-d34a-0714-f815acae12d4@birger-koblitz.de>
+         <bvv98e.r4rs9b.2rw3hx-qmf@polaris.svanheule.net>
+         <0086fb07-c5d3-9600-4b62-d7497b192461@birger-koblitz.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227162658.11314-1-pmenzel@molgen.mpg.de>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 05:26:56PM +0100, Paul Menzel wrote:
-> The ASUS F2A85-M PRO with the fusion controller hub (FCH) AMD A85
-> (Hudson D4) has the SATA controller below.
-> 
->     $ lspci -s 00:11.0
->     00:11.0 SATA controller [0106]: Advanced Micro Devices, Inc. [AMD] FCH SATA Controller [AHCI mode] [1022:7801] (rev 40)
-> 
-> Add the ID for it, when in AHCI mode.
-> 
-> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Hi Birger,
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+On Tue, 2021-12-28 at 09:09 +0100, Birger Koblitz wrote:
+> Hi Sander,
+> > I haven't tested this with VSMP, because it is out of scope for this series. For the
+> > binding, I expect that would only require N register ranges instead of one; one per
+> > CPU. I think the driver should then be able to perform the IRQ balancing based on that
+> > information alone, given that the parent IRQs are available at each CPU.
+> 
+> whether this is out of the scope of this series is not the point. In my experience you
+> only see issues with locking and race conditions with the IRQ driver if you test with
+> VSMP enabled,
+> because only with VSMP you can be in the IRQ code multiple times at the same time. Since
+> you want to change routing logic and hierarchies I would believe it to be a very good
+> idea
+> to test that. The present code passes that test.
 
-> ---
->  include/linux/pci_ids.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index 011f2f1ea5bb..fe944b44858a 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -602,6 +602,7 @@
->  #define PCI_DEVICE_ID_AMD_LX_VIDEO  0x2081
->  #define PCI_DEVICE_ID_AMD_LX_AES    0x2082
->  #define PCI_DEVICE_ID_AMD_HUDSON2_SATA_IDE	0x7800
-> +#define PCI_DEVICE_ID_AMD_HUDSON2_SATA_AHCI	0x7801
->  #define PCI_DEVICE_ID_AMD_HUDSON2_SMBUS		0x780b
->  #define PCI_DEVICE_ID_AMD_HUDSON2_IDE		0x780c
->  #define PCI_DEVICE_ID_AMD_KERNCZ_SMBUS  0x790b
-> -- 
-> 2.30.2
-> 
+Implementing CPU affinity is a separate issue for after these patches IMHO. The current
+problems have to be fixed anyway. Otherwise you're just compounding (potential) issues,
+only making further development harder.
+
+FWIW, the driver with these (reworked) patches runs fine on my RTL839x (Zyxel GS1900-48)
+with SMP enabled. That's without implementing CPU affinity support on this driver, so all
+SoC interrupts just go to CPU0. If any issues with lock-ups show up later, we can fix them
+when they appear.
+
+Best,
+Sander

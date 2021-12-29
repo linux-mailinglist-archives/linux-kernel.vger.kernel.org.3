@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F88481235
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 12:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 925FD481249
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 12:48:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240016AbhL2LrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 06:47:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
+        id S236180AbhL2LsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 06:48:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236301AbhL2LrB (ORCPT
+        with ESMTP id S233095AbhL2LsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 06:47:01 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F05AC06173E;
-        Wed, 29 Dec 2021 03:47:01 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id z9-20020a17090a7b8900b001b13558eadaso24405769pjc.4;
-        Wed, 29 Dec 2021 03:47:01 -0800 (PST)
+        Wed, 29 Dec 2021 06:48:00 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72150C061574;
+        Wed, 29 Dec 2021 03:48:00 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id h1so12495152pls.11;
+        Wed, 29 Dec 2021 03:48:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=OzcY25P6gwHWgmIgj+/MN+t2PU0tJSyh02aHhqly8XE=;
-        b=GioKWfj4eu2kuZYA1ZeC7b21mAfOvkko6ZqQbzA3T+ffgXFxLjaU/kP+kORd6GR+PZ
-         m/rCWX2aBx3mjbORfB20HmpW4gjYN4JuvlBgoowAculsv4oSwVX8706r0RpY/jCtSIDt
-         7bUQ6ydLWQ5limsUdCzhSd6rVTH+ycFji2a01CBx/SFIgFF1EBrY7ZOc7f9TKjwoH4vf
-         OcEUCQgNeltZg4WZAX3AzysrA67tARN1rouSqD3rPRjxr++TmoXaXX8Qip0Ie5bpvHGQ
-         aoEjRuWDF4JbAlTS3rPZLy9ZWg6Heel3zejb/Pf4mUxWLqM6ArryJNL8hdO6+JtQHHFC
-         R3pA==
+        bh=VS8dZScsobOHgg+VVvoCG/RijOVYncvgh5RyiPUBnwc=;
+        b=VxteG+e/Gz2n6+V+42PZ3AULJQARAm4X6hnKAJHrUjpPVqZb3lv+X2bGbnziMEVbG6
+         vpH6k/fbAeaiydf+WElEAChIWmgFyalO6Zk2NQXJIoOrW8rmvXnruFx1agbAEjvyU4uw
+         g77o7g3UEPX8JLbQncZMrmE2oE3lv2iPKVVby6QxZ/DtpCaJv0lGSOHcnqk3tJpqoBBB
+         MFtawarA0zJn5y9is0YGmaVEZvRUpLtpZH4qyWSsQy+rkIu0oxMyOfsC2D6wjvIA05eX
+         BhF67480JfFVP9ehFomy2mI0FWGrFlegB9xbdmIzr4ERZtZqeyY4pVjJzDJ2oVtxeFEg
+         Xu/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=OzcY25P6gwHWgmIgj+/MN+t2PU0tJSyh02aHhqly8XE=;
-        b=fS3mc7dnndw97NmEybgIcDTXabRpDuAdbQ2IZNRngEK70j6Wucso6mfw+TEnCyy3zI
-         QOsH8wcimzouKuW/6WWguiFd+7sGVU2tzfi93cDRloDhB1PiCKvTZDr3+D6ogVNs+JoP
-         NBwsfQjsvEZazLSmwUY8MEEDPrTuDT1b8031yyXdJzjKb4q4t2gnu3VoWoaD2byDs+y6
-         Ydi+8lLyYz03HTIkOsvLWMVUGJWZz4zZKPTiPFJEKN+HaZKf63MKnxbMsJ3+iIkr4bui
-         SfiVRDnNuINCBE2hb1t6nBWi3ENKGqd59krn16RUBF5jqU7F6TvMRGdrH3/a2lSZsEgG
-         faYg==
-X-Gm-Message-State: AOAM531YKv92X9maRlMZ0HpnHNUFoSRnc+fvgr1oXk/bLjP8dqswezuD
-        Gkq8lsO3H63CFp6NZ0a1Hvo=
-X-Google-Smtp-Source: ABdhPJzt3VGzawatZBcXvqq/zdpiX8hmBA4yyXnoIUXv63ZmnjVmILrK5zFdntGilmRZuz1O+A+vHg==
-X-Received: by 2002:a17:902:70cc:b0:148:aa3a:8c65 with SMTP id l12-20020a17090270cc00b00148aa3a8c65mr25782026plt.114.1640778420922;
-        Wed, 29 Dec 2021 03:47:00 -0800 (PST)
+        bh=VS8dZScsobOHgg+VVvoCG/RijOVYncvgh5RyiPUBnwc=;
+        b=PHqq8QsPzgT7gapj4Si+L54InUTKdrrPgWGQpVDZ/A2pI5q5B3go1LVnfUCv53VM3K
+         rx3IGBNH5c0zSqvF9vFSelEgOrIyrCHtJeBo55DIKoiGiM07fH0e+jr3XNvYFoXtE1Ht
+         bqaN5zhXj17UVtOYUsb5jM5kTnyKblZwkixjDt9tZcJ3ucThZp8KC+SUMo5eLkoxr7bN
+         vp+PhlvTV+CrUnEjaKX8uj2jYGNqcDpKiLgMnZC/sTzDYUNa5XCj63KwVM9MXu8ebair
+         XUswD7nqhiD/Vg9oVETj7Ecn6wKHfNzLYPhmDp/Lv6ne8/DJL8/JmjulS13bpDkdnJ1W
+         +jfg==
+X-Gm-Message-State: AOAM532qDqSGsn/qm9B6rp9bFN2f1H+uBMXXb4shOn/Zfq75rQX8hTNP
+        TREKYIFoynmlbyyXxqXk/Tg=
+X-Google-Smtp-Source: ABdhPJzY9X0XG2MXEAW681YpBuCyzd7YZIBQeNAu92YexU37mb1iV/w3LeB16of0mbg4RNb0Ly6AZA==
+X-Received: by 2002:a17:90a:fa6:: with SMTP id 35mr31075010pjz.165.1640778480046;
+        Wed, 29 Dec 2021 03:48:00 -0800 (PST)
 Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id v1sm23333344pfg.169.2021.12.29.03.46.59
+        by smtp.gmail.com with ESMTPSA id b22sm26713297pfv.107.2021.12.29.03.47.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Dec 2021 03:47:00 -0800 (PST)
-Subject: [PATCH v2 3/4] docs: sphinx/kfigure.py: Use inkscape(1) for SVG ->
- PDF conversion
+        Wed, 29 Dec 2021 03:47:59 -0800 (PST)
+Subject: [PATCH v2 4/4] docs: sphinx/kfigure.py: Delegate inkscape msg to
+ kernellog.verbose
 To:     Jonathan Corbet <corbet@lwn.net>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
 References: <e01fe9f9-f600-c2fc-c6b3-ef6395655ffe@gmail.com>
 From:   Akira Yokosawa <akiyks@gmail.com>
-Message-ID: <3eea2a8d-c52d-ee07-cf7b-83784c6f6e4b@gmail.com>
-Date:   Wed, 29 Dec 2021 20:46:58 +0900
+Message-ID: <e26a7b53-9155-8394-4a31-6006379b65a5@gmail.com>
+Date:   Wed, 29 Dec 2021 20:47:56 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
@@ -70,162 +70,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using convert(1) of ImageMagick for SVG -> PDF conversion results in
-PDFs containing raster (bitmap) images which sometimes look blurry.
+Subject: [PATCH v2 4/4] docs: sphinx/kfigure.py: Delegate inkscape msg to kernellog.verbose
 
-Ideally speaking, SVG to PDF conversion should retain vector graphics
-in SVG.
+Depending on its version, distro config, and system-setup type,
+inkscape(1) emits various warning messages which are harmless in
+command-line uses.
 
-rsvg-convert(1) can do such conversions with regard to SVG files
-generated by dot(1).
+List of such warning messages (incomplete, long ones wrapped):
 
-Unfortunately, rsvg-convert(1) does not cover some of SVG features
-specific to Inkscape.
-inkscape(1) of Inkscape naturally covers such SVG features.
+  - Gtk-Message: hh:mm:ss.nnn: Failed to load module "canberra-gtk-module"
+  - Unable to init server: Could not connect: Connection refused
+  - Failed to get connection
+  - ** (inkscape:xxx): CRITICAL **: hh:mm:ss.nnn: dbus_g_proxy_new_for_name:
+    assertion 'connection != NULL' failed
+  - ** (inkscape:xxx): CRITICAL **: hh:mm:ss.nnn: dbus_g_proxy_call:
+    assertion 'DBUS_IS_G_PROXY (proxy)' failed
+  - ** (inkscape:xxx): CRITICAL **: hh:mm:ss.nnn: dbus_g_connection_register_g_object:
+    assertion 'connection != NULL' failed
+  - ** (inkscape:xxx): WARNING **: hh:mm:ss.nnn:
+    Fonts dir '/usr/share/inkscape/fonts' does not exist and will be ignored.
 
-So add a route in svg2pdf() so that inkscape(1) is used when it is
-available.
-
-Note:
-    After this change, if you have Inkscape installed, ImageMagick nor
-    librsvg are not required.
+To avoid unnecessary anxiety, capture the message and output it via
+kernellog.verbose or kernellog.warn depending on the exit code.
 
 Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Randy Dunlap <rdunlap@infradead.org>
 ---
- Documentation/sphinx/kfigure.py | 68 +++++++++++++++++++++++----------
- 1 file changed, 48 insertions(+), 20 deletions(-)
+ Documentation/sphinx/kfigure.py | 22 +++++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
 
 diff --git a/Documentation/sphinx/kfigure.py b/Documentation/sphinx/kfigure.py
-index 77b0d15dba31..e616e49669eb 100644
+index e616e49669eb..24d2b2addcce 100644
 --- a/Documentation/sphinx/kfigure.py
 +++ b/Documentation/sphinx/kfigure.py
-@@ -37,6 +37,7 @@ u"""
-     * SVG to PDF: To generate PDF, you need at least one of this tools:
- 
-       - ``convert(1)``: ImageMagick (https://www.imagemagick.org)
-+      - ``inkscape(1)``: Inkscape (https://inkscape.org/)
- 
-     List of customizations:
- 
-@@ -121,6 +122,11 @@ convert_cmd = None
- # librsvg's rsvg-convert(1) support
- rsvg_convert_cmd = None
- 
-+# Inkscape's inkscape(1) support
-+inkscape_cmd = None
-+# Inkscape prior to 1.0 uses different command options
-+inkscape_ver_one = False
-+
- 
- def setup(app):
-     # check toolchain first
-@@ -169,11 +175,13 @@ def setupTools(app):
-     This function is called once, when the builder is initiated.
-     """
-     global dot_cmd, dot_Tpdf, convert_cmd, rsvg_convert_cmd   # pylint: disable=W0603
-+    global inkscape_cmd, inkscape_ver_one  # pylint: disable=W0603
-     kernellog.verbose(app, "kfigure: check installed tools ...")
- 
-     dot_cmd = which('dot')
-     convert_cmd = which('convert')
-     rsvg_convert_cmd = which('rsvg-convert')
-+    inkscape_cmd = which('inkscape')
- 
-     if dot_cmd:
-         kernellog.verbose(app, "use dot(1) from: " + dot_cmd)
-@@ -190,25 +198,37 @@ def setupTools(app):
-     else:
-         kernellog.warn(app, "dot(1) not found, for better output quality install "
+@@ -200,7 +200,8 @@ def setupTools(app):
                         "graphviz from https://www.graphviz.org")
--    if convert_cmd:
--        kernellog.verbose(app, "use convert(1) from: " + convert_cmd)
--    else:
--        kernellog.warn(app,
--            "convert(1) not found, for SVG to PDF conversion install "
--            "ImageMagick (https://www.imagemagick.org)")
--    if rsvg_convert_cmd:
--        kernellog.verbose(app, "use rsvg-convert(1) from: " + rsvg_convert_cmd)
--        kernellog.verbose(app, "use 'dot -Tsvg' and rsvg-convert(1) for DOT -> PDF conversion")
-+    if inkscape_cmd:
-+        kernellog.verbose(app, "use inkscape(1) from: " + inkscape_cmd)
-+        inkscape_ver = subprocess.check_output([inkscape_cmd, '--version'])
-+        ver_one_ptn = b'Inkscape 1'
-+        inkscape_ver_one = re.search(ver_one_ptn, inkscape_ver)
-+        convert_cmd = None
-+        rsvg_convert_cmd = None
-         dot_Tpdf = False
-+
-     else:
--        kernellog.verbose(app,
--            "rsvg-convert(1) not found.\n"
--            "  SVG -> PDF conversion by convert() can be poor quality.\n"
--            "  Install librsvg (https://gitlab.gnome.org/GNOME/librsvg)")
--        if dot_Tpdf:
--            kernellog.verbose(app, "use 'dot -Tpdf' for DOT -> PDF conversion")
-+        if convert_cmd:
-+            kernellog.verbose(app, "use convert(1) from: " + convert_cmd)
-+        else:
-+            kernellog.warn(app,
-+                "Neither inkscape(1) nor convert(1) found.\n"
-+                "For SVG to PDF conversion, "
-+                "install either Inkscape (https://inkscape.org/) (preferred) or\n"
-+                "ImageMagick (https://www.imagemagick.org)")
-+
-+        if rsvg_convert_cmd:
-+            kernellog.verbose(app, "use rsvg-convert(1) from: " + rsvg_convert_cmd)
-+            kernellog.verbose(app, "use 'dot -Tsvg' and rsvg-convert(1) for DOT -> PDF conversion")
-+            dot_Tpdf = False
-         else:
--            kernellog.verbose(app, "use 'dot -Tsvg' and convert(1) for DOT -> PDF conversion")
-+            kernellog.verbose(app,
-+                "rsvg-convert(1) not found.\n"
-+                "  SVG rendering of convert(1) is done by ImageMagick-native renderer.")
-+            if dot_Tpdf:
-+                kernellog.verbose(app, "use 'dot -Tpdf' for DOT -> PDF conversion")
-+            else:
-+                kernellog.verbose(app, "use 'dot -Tsvg' and convert(1) for DOT -> PDF conversion")
- 
- 
- # integrate conversion tools
-@@ -274,7 +294,7 @@ def convert_image(img_node, translator, src_fname=None):
-     elif in_ext == '.svg':
- 
-         if translator.builder.format == 'latex':
--            if convert_cmd is None:
-+            if not inkscape_cmd and convert_cmd is None:
-                 kernellog.verbose(app,
-                                   "no SVG to PDF conversion available / include SVG raw.")
-                 img_node.replace_self(file2literal(src_fname))
-@@ -342,16 +362,24 @@ def dot2format(app, dot_fname, out_fname):
-     return bool(exit_code == 0)
- 
- def svg2pdf(app, svg_fname, pdf_fname):
--    """Converts SVG to PDF with ``convert(1)`` command.
-+    """Converts SVG to PDF with ``inkscape(1)`` or ``convert(1)`` command.
- 
--    Uses ``convert(1)`` from ImageMagick (https://www.imagemagick.org) for
--    conversion.  Returns ``True`` on success and ``False`` if an error occurred.
-+    Uses ``inkscape(1)`` from Inkscape (https://inkscape.org/) or ``convert(1)``
-+    from ImageMagick (https://www.imagemagick.org) for conversion.
-+    Returns ``True`` on success and ``False`` if an error occurred.
- 
-     * ``svg_fname`` pathname of the input SVG file with extension (``.svg``)
-     * ``pdf_name``  pathname of the output PDF file with extension (``.pdf``)
+     if inkscape_cmd:
+         kernellog.verbose(app, "use inkscape(1) from: " + inkscape_cmd)
+-        inkscape_ver = subprocess.check_output([inkscape_cmd, '--version'])
++        inkscape_ver = subprocess.check_output([inkscape_cmd, '--version'],
++                                               stderr=subprocess.DEVNULL)
+         ver_one_ptn = b'Inkscape 1'
+         inkscape_ver_one = re.search(ver_one_ptn, inkscape_ver)
+         convert_cmd = None
+@@ -373,17 +374,32 @@ def svg2pdf(app, svg_fname, pdf_fname):
  
      """
      cmd = [convert_cmd, svg_fname, pdf_fname]
++    cmd_name = 'convert(1)'
+ 
+     if inkscape_cmd:
++        cmd_name = 'inkscape(1)'
+         if inkscape_ver_one:
+             cmd = [inkscape_cmd, '-o', pdf_fname, svg_fname]
+         else:
+             cmd = [inkscape_cmd, '-z', '--export-pdf=%s' % pdf_fname, svg_fname]
+ 
+-    # use stdout and stderr from parent
+-    exit_code = subprocess.call(cmd)
++    try:
++        warning_msg = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
++        exit_code = 0
++    except subprocess.CalledProcessError as err:
++        warning_msg = err.output
++        exit_code = err.returncode
++        pass
 +
-+    if inkscape_cmd:
-+        if inkscape_ver_one:
-+            cmd = [inkscape_cmd, '-o', pdf_fname, svg_fname]
-+        else:
-+            cmd = [inkscape_cmd, '-z', '--export-pdf=%s' % pdf_fname, svg_fname]
-+
-     # use stdout and stderr from parent
-     exit_code = subprocess.call(cmd)
      if exit_code != 0:
+         kernellog.warn(app, "Error #%d when calling: %s" % (exit_code, " ".join(cmd)))
++        if warning_msg:
++            kernellog.warn(app, "Warning msg from %s: %s"
++                           % (cmd_name, str(warning_msg, 'utf-8')))
++    elif warning_msg:
++        kernellog.verbose(app, "Warning msg from %s (likely harmless):\n%s"
++                          % (cmd_name, str(warning_msg, 'utf-8')))
++
+     return bool(exit_code == 0)
+ 
+ def svg2pdf_by_rsvg(app, svg_fname, pdf_fname):
 -- 
 2.17.1
 

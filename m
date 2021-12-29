@@ -2,116 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1379D48165F
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 20:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9456481663
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 20:36:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbhL2Tev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 14:34:51 -0500
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:49523 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbhL2Teu (ORCPT
+        id S231162AbhL2TgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 14:36:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230494AbhL2TgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 14:34:50 -0500
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 182BC20002;
-        Wed, 29 Dec 2021 19:34:44 +0000 (UTC)
-Date:   Wed, 29 Dec 2021 20:34:44 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Colin Foster <colin.foster@in-advantage.com>,
-        linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        clement.leger@bootlin.com
-Subject: Re: [RFC v5 net-next 02/13] mfd: ocelot: offer an interface for MFD
- children to get regmaps
-Message-ID: <Ycy4VPy+XVgYmfeg@piout.net>
-References: <20211218214954.109755-1-colin.foster@in-advantage.com>
- <20211218214954.109755-3-colin.foster@in-advantage.com>
- <Ycx9j3bflcTGsb7b@google.com>
+        Wed, 29 Dec 2021 14:36:14 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7899C061574;
+        Wed, 29 Dec 2021 11:36:13 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2152A1EC04EC;
+        Wed, 29 Dec 2021 20:36:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640806568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=zjGGgf4vZZGBZVnZreISFoCZqG7IYDBjGCqaWzTVoMk=;
+        b=GhgVNrNqF4r5fxtQbTMOSG5ybd6nCwCXz3ahY5zMQC18G1WGI0IoxD8ZS2Pi28SoVUrO0W
+        FBZN/PZ9+ONMHjcs+5GhiGYKXucq8lMtVHZFcCuiUBDZkBYD1yxglEOd2JCGw7m1Uft1XF
+        xOljKyIknJ7Ydnlv5xanBSiMBlPS9Dw=
+Date:   Wed, 29 Dec 2021 20:36:11 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86/build: use the proper name CONFIG_FW_LOADER
+Message-ID: <Ycy4q2OhwTdLl+2S@zn.tnic>
+References: <20211229111553.5846-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ycx9j3bflcTGsb7b@google.com>
+In-Reply-To: <20211229111553.5846-1-lukas.bulwahn@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Lee,
-
-On 29/12/2021 15:23:59+0000, Lee Jones wrote:
-> On Sat, 18 Dec 2021, Colin Foster wrote:
+On Wed, Dec 29, 2021 at 12:15:53PM +0100, Lukas Bulwahn wrote:
+> Commit c8dcf655ec81 ("x86/build: Tuck away built-in firmware under
+> FW_LOADER") intends to add the expression regex only when FW_LOADER is
+> built-in, not a module or disabled.
 > 
-> > Child devices need to get a regmap from a resource struct, specifically
-> > from the MFD parent. The MFD parent has the interface to the hardware
-> > layer, which could be I2C, SPI, PCIe, etc.
-> > 
-> > This is somewhat a hack... ideally child devices would interface with the
-> > struct device* directly, by way of a function like
-> > devm_get_regmap_from_resource which would be akin to
-> > devm_get_and_ioremap_resource. A less ideal option would be to interface
-> > directly with MFD to get a regmap from the parent.
-> > 
-> > This solution is even less ideal than both of the two suggestions, so is
-> > intentionally left in a separate commit after the initial MFD addition.
-> > 
-> > Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> > ---
-> >  drivers/mfd/ocelot-core.c |  9 +++++++++
-> >  include/soc/mscc/ocelot.h | 12 ++++++++++++
-> >  2 files changed, 21 insertions(+)
-> > 
-> > diff --git a/drivers/mfd/ocelot-core.c b/drivers/mfd/ocelot-core.c
-> > index a65619a8190b..09132ea52760 100644
-> > --- a/drivers/mfd/ocelot-core.c
-> > +++ b/drivers/mfd/ocelot-core.c
-> > @@ -94,6 +94,15 @@ static struct regmap *ocelot_mfd_regmap_init(struct ocelot_mfd_core *core,
-> >  	return regmap;
-> >  }
-> >  
-> > +struct regmap *ocelot_mfd_get_regmap_from_resource(struct device *dev,
-> > +						   const struct resource *res)
-> > +{
-> > +	struct ocelot_mfd_core *core = dev_get_drvdata(dev);
-> > +
-> > +	return ocelot_mfd_regmap_init(core, res);
-> > +}
-> > +EXPORT_SYMBOL(ocelot_mfd_get_regmap_from_resource);
-> 
-> This is almost certainly not the right way to do whatever it is you're
-> trying to do!
-> 
-> Please don't try to upstream "somewhat a hack"s into the Mainline
-> kernel.
-> 
+> The config is called CONFIG_FW_LOADER when it is built-in; and
+> CONFIG_FW_LOADER_MODULE when it is a module.
 
-Please elaborate on the correct way to do that. What we have here is a
-SoC (vsc7514) that has MMIO devices. This SoC has a MIPS CPU and
-everything is fine when using it. However, the CPU can be disabled and
-the SoC connected to another CPU using SPI or PCIe. What Colin is doing
-here is using this SoC over SPI. Don't tell me this is not an MFD
-because this is exactly what this is, a single chip with a collection of
-devices that are also available separately.
+$ git grep FW_LOADER_MODULE
+include/linux/firmware.h:37:#if defined(CONFIG_FW_LOADER) || (defined(CONFIG_FW_LOADER_MODULE) && defined(MODULE))
 
-The various drivers for the VSC7514 have been written using regmap
-exactly for this use case. The missing piece is probing the devices over
-SPI instead of MMIO.
+So either I'm not grepping right or that FW_LOADER_MODULE thing belongs
+to the past...
 
-Notice that all of that gets worse when using PCIe on architectures that
-don't have device tree support and Clément will submit multiple series
-trying to fix that.
+Greg, Luis, what's up?
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,129 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC11481139
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 10:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED83A48113D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 10:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239503AbhL2JQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 04:16:26 -0500
-Received: from smtp06.smtpout.orange.fr ([80.12.242.128]:50578 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239492AbhL2JQZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 04:16:25 -0500
-Received: from [192.168.1.18] ([86.243.171.122])
-        by smtp.orange.fr with ESMTPA
-        id 2V4InTzq1MxZu2V4InMidO; Wed, 29 Dec 2021 10:16:24 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Wed, 29 Dec 2021 10:16:24 +0100
-X-ME-IP: 86.243.171.122
-Message-ID: <156fb7f1-cf12-e6cb-63c0-5c0413ce2b2e@wanadoo.fr>
-Date:   Wed, 29 Dec 2021 10:16:22 +0100
+        id S239512AbhL2JUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 04:20:00 -0500
+Received: from mga01.intel.com ([192.55.52.88]:38265 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239492AbhL2JT7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 04:19:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640769599; x=1672305599;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xfBpU6Cm32hjsD3C5o5DGAh0+kH3ryrXLawMBBhUqao=;
+  b=LumEnJ3OnD5raVTq+xGZz0F9Gi9cNAEMxkGCnSkJjoIFM0425YCXK2Y+
+   7AunNa7uPdb8o+PurqLMMM+uX34j9KAudhvo5/Ib9cA2V99wqKIgRktn1
+   8O8HAs+GDIFwxzy08xSiqFJ5Fah9J84mhzD0yJ6CWp8R9jHD3ic0wQYLu
+   0KB65ROo8dYo0FkSMOqp3sdZgOeRR04yHONEU1NTz6bATp6MnJHskWoI8
+   UIwioov8yMny1xCAzDKn+LqofZSS7y0XVbP4nRBwm9yxOfopLZYKWZPbK
+   KlZJh25c6XbwZ6pGhmd3zLmR3i8a4WEkWiBDKRwZm1oRFqIafNhWA1qAl
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="265726841"
+X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
+   d="scan'208";a="265726841"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 01:19:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
+   d="scan'208";a="554472070"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 29 Dec 2021 01:19:57 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n2V7k-0008mp-PK; Wed, 29 Dec 2021 09:19:56 +0000
+Date:   Wed, 29 Dec 2021 17:18:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Conley Lee <conleylee@foxmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>
+Subject: drivers/net/ethernet/allwinner/sun4i-emac.c:940:60: warning: format
+ '%x' expects argument of type 'unsigned int', but argument 3 has type
+ 'resource_size_t' {aka 'long long unsigned int'}
+Message-ID: <202112291759.0LDxIUcf-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: KMSAN: uninit-value in alauda_check_media
-Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     glider@google.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        usb-storage@lists.one-eyed-alien.net,
-        Kernel Janitors <kernel-janitors@vger.kernel.org>
-References: <0000000000007d25ff059457342d@google.com>
- <f78b974a-e36b-6d23-6977-fdf50c05600b@wanadoo.fr>
- <YcuUX6BVo+HA1TcI@rowland.harvard.edu>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <YcuUX6BVo+HA1TcI@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 28/12/2021 à 23:49, Alan Stern a écrit :
-> On Tue, Dec 28, 2021 at 08:47:15AM +0100, Christophe JAILLET wrote:
->> Hi,
->>
->> (2nd try - text only format - sorry for the noise)
->>
->>
->> first try to use syzbot. I hope I do it right.
->> Discussion about the syz report can be found at
->> https://lore.kernel.org/linux-kernel/0000000000007d25ff059457342d@google.com/
->>
->> This patch only test if alauda_get_media_status() (and its embedded
->> usb_stor_ctrl_transfer()) before using the data.
->> In case of error, it returns USB_STOR_TRANSPORT_ERROR as done elsewhere.
->>
->> #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->> master
->>
->> CJ
->>
-> 
->> diff --git a/drivers/usb/storage/alauda.c b/drivers/usb/storage/alauda.c
->> index 20b857e97e60..6c486d964911 100644
->> --- a/drivers/usb/storage/alauda.c
->> +++ b/drivers/usb/storage/alauda.c
->> @@ -318,7 +318,8 @@ static int alauda_get_media_status(struct us_data *us, unsigned char *data)
->>   	rc = usb_stor_ctrl_transfer(us, us->recv_ctrl_pipe,
->>   		command, 0xc0, 0, 1, data, 2);
->>   
->> -	usb_stor_dbg(us, "Media status %02X %02X\n", data[0], data[1]);
->> +	if (rc == USB_STOR_XFER_GOOD)
->> +		usb_stor_dbg(us, "Media status %02X %02X\n", data[0], data[1]);
-> 
-> Instead of adding this test, you could initialize data[0] and data[1]
-> to zero before the call to usb_stor_ctrl_transfer.
+tree:   https://github.com/0day-ci/linux/commits/UPDATE-20211229-095330/conleylee-foxmail-com/sun4i-emac-c-add-dma-support/20211224-225057
+head:   c1054aa82226f85551abd3193d686b3e263e75d2
+commit: c1054aa82226f85551abd3193d686b3e263e75d2 sun4i-emac.c: add dma support
+date:   7 hours ago
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20211229/202112291759.0LDxIUcf-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/c1054aa82226f85551abd3193d686b3e263e75d2
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review UPDATE-20211229-095330/conleylee-foxmail-com/sun4i-emac-c-add-dma-support/20211224-225057
+        git checkout c1054aa82226f85551abd3193d686b3e263e75d2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/ethernet/allwinner/
 
-Well, having the test is cleaner, IMHO.
-If usb_stor_ctrl_transfer() fails, a message explaining the reason is 
-already generated by the same usb_stor_dbg(). Having an error message 
-followed by another one stating that the Media Status is 0x00 0x00 could 
-be confusing I think.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Let me know if you have a real preference for a memset(data, 0, 2).
-If so, I'll add it.
+All warnings (new ones prefixed by >>):
 
-> 
->>   
->>   	return rc;
->>   }
->> @@ -453,8 +454,11 @@ static int alauda_check_media(struct us_data *us)
->>   {
->>   	struct alauda_info *info = (struct alauda_info *) us->extra;
->>   	unsigned char status[2];
->> +	int rc;
->>   
->> -	alauda_get_media_status(us, status);
->> +	rc = alauda_get_media_status(us, status);
->> +	if (rc != USB_STOR_TRANSPORT_GOOD)
->> +		return USB_STOR_TRANSPORT_ERROR;
->>   
->>   	/* Check for no media or door open */
->>   	if ((status[0] & 0x80) || ((status[0] & 0x1F) == 0x10)
-> 
-> In general this looks fine.  Let us know when you are ready to submit
-> the patch.
-
-I was unsure that this patch would get any interest because the driver 
-looks old. That's why I first tried to play with syzbot :)
-
-In the syzbot history, you also mentioned that 'unsigned char status[2]' 
-should be 'unsigned char *status = us->iobuf;'
-
-This is more a blind fix for me, but it looks consistent with other 
-places that call alauda_get_media_status().
-
-So, once you confirm if you prefer my 'if' or a 'memset', I'll resend a 
-small serie for fixing both issues.
-
-CJ
+   drivers/net/ethernet/allwinner/sun4i-emac.c: In function 'emac_configure_dma':
+>> drivers/net/ethernet/allwinner/sun4i-emac.c:940:60: warning: format '%x' expects argument of type 'unsigned int', but argument 3 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
+     940 |         netdev_info(ndev, "get io resource from device: 0x%x, size = %u\n",
+         |                                                           ~^
+         |                                                            |
+         |                                                            unsigned int
+         |                                                           %llx
+     941 |                     regs->start, resource_size(regs));
+         |                     ~~~~~~~~~~~                             
+         |                         |
+         |                         resource_size_t {aka long long unsigned int}
+>> drivers/net/ethernet/allwinner/sun4i-emac.c:940:71: warning: format '%u' expects argument of type 'unsigned int', but argument 4 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
+     940 |         netdev_info(ndev, "get io resource from device: 0x%x, size = %u\n",
+         |                                                                      ~^
+         |                                                                       |
+         |                                                                       unsigned int
+         |                                                                      %llu
+     941 |                     regs->start, resource_size(regs));
+         |                                  ~~~~~~~~~~~~~~~~~~~                   
+         |                                  |
+         |                                  resource_size_t {aka long long unsigned int}
 
 
-> 
-> Alan Stern
-> 
+vim +940 drivers/net/ethernet/allwinner/sun4i-emac.c
 
+   924	
+   925	static int emac_configure_dma(struct emac_board_info *db)
+   926	{
+   927		struct platform_device *pdev = db->pdev;
+   928		struct net_device *ndev = db->ndev;
+   929		struct dma_slave_config conf = {};
+   930		struct resource *regs;
+   931		int err = 0;
+   932	
+   933		regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+   934		if (!regs) {
+   935			netdev_err(ndev, "get io resource from device failed.\n");
+   936			err = -ENOMEM;
+   937			goto out_clear_chan;
+   938		}
+   939	
+ > 940		netdev_info(ndev, "get io resource from device: 0x%x, size = %u\n",
+   941			    regs->start, resource_size(regs));
+   942		db->emac_rx_fifo = regs->start + EMAC_RX_IO_DATA_REG;
+   943	
+   944		db->rx_chan = dma_request_chan(&pdev->dev, "rx");
+   945		if (IS_ERR(db->rx_chan)) {
+   946			netdev_err(ndev,
+   947				   "failed to request dma channel. dma is disabled\n");
+   948			err = PTR_ERR(db->rx_chan);
+   949			goto out_clear_chan;
+   950		}
+   951	
+   952		conf.direction = DMA_DEV_TO_MEM;
+   953		conf.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
+   954		conf.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
+   955		conf.src_addr = db->emac_rx_fifo;
+   956		conf.dst_maxburst = 4;
+   957		conf.src_maxburst = 4;
+   958		conf.device_fc = false;
+   959	
+   960		err = dmaengine_slave_config(db->rx_chan, &conf);
+   961		if (err) {
+   962			netdev_err(ndev, "config dma slave failed\n");
+   963			err = -EINVAL;
+   964			goto out_slave_configure_err;
+   965		}
+   966	
+   967		return err;
+   968	
+   969	out_slave_configure_err:
+   970		dma_release_channel(db->rx_chan);
+   971	
+   972	out_clear_chan:
+   973		db->rx_chan = NULL;
+   974		return err;
+   975	}
+   976	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

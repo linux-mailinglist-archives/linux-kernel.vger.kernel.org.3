@@ -2,92 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F474812BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 13:40:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E33C84812C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 13:41:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238268AbhL2Mki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 07:40:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234936AbhL2Mkd (ORCPT
+        id S238351AbhL2MlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 07:41:12 -0500
+Received: from ssl.serverraum.org ([176.9.125.105]:46161 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234936AbhL2MlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 07:40:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBB9C061574;
-        Wed, 29 Dec 2021 04:40:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 29 Dec 2021 07:41:11 -0500
+Received: from mwalle01.kontron.local. (unknown [IPv6:2a02:810b:4340:43bf:fa59:71ff:fe9b:b851])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55A40614B0;
-        Wed, 29 Dec 2021 12:40:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AEF0C36AE7;
-        Wed, 29 Dec 2021 12:40:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640781632;
-        bh=JNtJWhL8T6Yw6jb+V2HcqwNvBrLooLiUovJs7iJkiJE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fm86xMaC9MeOy4RjPSKTCxE3SgGMcOoQNmpgxjPMOXctMo8C2UfsN4uSB1Zlc7TE4
-         m6V3OeyWA3p2n2IleCTbSQKsX4v8sURjbDFpqUqaaOzmis/yZyhZFG6TMBq7/bPHWa
-         s4siX7GZL43RcGB+N02rVzQ3DkyIMP6XCdjx8yVMwHiKWVc/f2uqxxGzelXrfyMhS+
-         sPiel3BGwnrEqxNMNxbY8yPOvO1o59gRuQyv1fD2bM9yvn4s6SOoc2I/Tjhulr9Lgy
-         r+s27M3t/SfBtfnkcpE+W+PQ0ZVi3bosNScBPLJayH1xFXFLS4x5RSFYUkPEHcPTbs
-         5yqfpardqsr7w==
-From:   SeongJae Park <sj@kernel.org>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        SeongJae Park <sj@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH] mm/damon/dbgfs: Fix 'struct pid' leaks in 'dbgfs_target_ids_write()'
-Date:   Wed, 29 Dec 2021 12:40:29 +0000
-Message-Id: <20211229124029.23348-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 6309A22205;
+        Wed, 29 Dec 2021 13:41:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1640781669;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZBdQ60/rUyG27LO09Ctkjdzy3ER36+khvbalnFF3uTA=;
+        b=jOBy2Hv43KswJJdSySlryR812hnc/o8N5CB9IlzPZv6EgyB0Ab7p2WFEcJIUqA6Gv0Q8wf
+        pYvFx77O+4sOKkbvnaYHCJRiNptwUpDmyu1vvwzE7yPbIs/y/wYuwxBHF5iiUJUAtSQfMB
+        f7aPufNRV9qloO1jklM/Ot/hcvn4pNU=
+From:   Michael Walle <michael@walle.cc>
+To:     zajec5@gmail.com
+Cc:     andrew@lunn.ch, davem@davemloft.net, devicetree@vger.kernel.org,
+        hkallweit1@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
+        netdev@vger.kernel.org, rafal@milecki.pl, robh+dt@kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH] of: net: support NVMEM cells with MAC in text format
+Date:   Wed, 29 Dec 2021 13:40:47 +0100
+Message-Id: <20211229124047.1286965-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211223122747.30448-1-zajec5@gmail.com>
+References: <20211223122747.30448-1-zajec5@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DAMON debugfs interface increases the reference counts of 'struct pid's
-for targets from the 'target_ids' file write callback
-('dbgfs_target_ids_write()'), but decreases the counts only in DAMON
-monitoring termination callback ('dbgfs_before_terminate()').
-Therefore, when 'target_ids' file is repeatedly written without DAMON
-monitoring start/termination, the reference count is not decreased and
-therefore memory for the 'struct pid' cannot be freed.  This commit
-fixes this issue by decreasing the reference counts when 'target_ids' is
-written.
+Hi,
 
-Fixes: 4bc05954d007 ("mm/damon: implement a debugfs-based user space interface")
-Signed-off-by: SeongJae Park <sj@kernel.org>
-Cc: <stable@vger.kernel.org> # 5.15.x
----
- mm/damon/dbgfs.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+> Some NVMEM devices have text based cells. In such cases MAC is stored in
+> a XX:XX:XX:XX:XX:XX format. Use mac_pton() to parse such data and
+> support those NVMEM cells. This is required to support e.g. a very
+> popular U-Boot and its environment variables.
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
+> Please let me know if checking NVMEM cell length (6 B vs. 17 B) can be
+> considered a good enough solution. Alternatively we could use some DT
+> property to make it explicity, e.g. something like:
+> 
+> ethernet@18024000 {
+> 	compatible = "brcm,amac";
+> 	reg = <0x18024000 0x800>;
+> 
+> 	nvmem-cells = <&mac_addr>;
+> 	nvmem-cell-names = "mac-address";
+> 	nvmem-mac-format = "text";
+> };
 
-diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
-index 489be9c830c4..751c7b835684 100644
---- a/mm/damon/dbgfs.c
-+++ b/mm/damon/dbgfs.c
-@@ -362,6 +362,7 @@ static ssize_t dbgfs_target_ids_write(struct file *file,
- 		const char __user *buf, size_t count, loff_t *ppos)
- {
- 	struct damon_ctx *ctx = file->private_data;
-+	struct damon_target *t, *next_t;
- 	bool id_is_pid = true;
- 	char *kbuf, *nrs;
- 	unsigned long *targets;
-@@ -406,8 +407,12 @@ static ssize_t dbgfs_target_ids_write(struct file *file,
- 		goto unlock_out;
- 	}
- 
--	/* remove targets with previously-set primitive */
--	damon_set_targets(ctx, NULL, 0);
-+	/* remove previously set targets */
-+	damon_for_each_target_safe(t, next_t, ctx) {
-+		if (targetid_is_pid(ctx))
-+			put_pid((struct pid *)t->id);
-+		damon_destroy_target(t);
-+	}
- 
- 	/* Configure the context for the address space type */
- 	if (id_is_pid)
--- 
-2.17.1
+Please note, that there is also this proposal, which had such a conversion
+in mind:
+https://lore.kernel.org/linux-devicetree/20211228142549.1275412-1-michael@walle.cc/
 
+With this patch, there are now two different places where a mac address
+format is converted. In of_get_mac_addr_nvmem() and in the imx otp driver.
+And both have their shortcomings and aren't really flexible. Eg. this one
+magically detects the format by comparing the length, but can't be used for
+to swap bytes (because the length is also ETH_ALEN), which apparently is a
+use case in the imx otp driver. And having the conversion in an nvmem
+provider device driver is still a bad thing IMHO.
+
+I'd really like to see all these kind of transformations in one place.
+
+-michael

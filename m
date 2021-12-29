@@ -2,193 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61AC94810A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 08:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5204810A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 08:27:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239085AbhL2HSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 02:18:32 -0500
-Received: from mga17.intel.com ([192.55.52.151]:37843 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231551AbhL2HSa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 02:18:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640762310; x=1672298310;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=gB/YuEQ5ossjy6hrRVBTTAvzwBVbSNlEhkjl+wZ/R0w=;
-  b=lEAy0gWY1XnHrwIVPRVd1uYqWp17hxUn2ZaxH9t5XN4vILEBObFTJfKk
-   E592WBMi4gQvn4A7Dm8ge0+H59RiXlutnl5Zi1z6MDPxkGxpnEc6ToBQ5
-   JEkpXvDIsMkqYnFAUP5sFaCExc5Fd6ChASksii1W33BsgD9+cVch8mJP/
-   qmPd9AEFM7BzMrpqXXR4ALNhXcOJQSAd9UnmftoqjAuYcv9iV4j5IU0AP
-   Ad2nG9kpotr8Ts1C0d8nHJcKPVTyzipxP+eThCy2LFHs4o/h8LpfltmfB
-   lIXvLe54wHq+4OnDjrYzKYaSsj4Afj5/kLtU90FVjjheVnN0YBCaTAwea
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="222149782"
-X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
-   d="scan'208";a="222149782"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 23:16:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
-   d="scan'208";a="486542345"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by orsmga002.jf.intel.com with ESMTP; 28 Dec 2021 23:16:20 -0800
-Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 28 Dec 2021 23:16:20 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 28 Dec 2021 23:16:19 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Tue, 28 Dec 2021 23:16:19 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.101)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Tue, 28 Dec 2021 23:16:17 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U2eCVEIQ18/TeqY0x39xvLVUni/0RPxcy8ct8LhkptGRjkutW7Vms5X3utQUYqwI6YUFzvZSHQNzcf8N6w3tezpf+RbbVv+VORwuC9/Z7WkH6WVhh4Yd1aK2RI5eTfkzj9gRPCcI86gPf1IxOGo4CM/J+KTxxF/1cBapO2/zIUnZFCwyn/X9OOqn+UOdFL/09j0xzfyPv6YxkHPbB1zDyED9KR+v8qM8487OvTTGkOlpZNQVjQ/74p2OAgdyhAcrhq+bJYAQAXCir/u0ABDTtcrtH8+84Qyolt6GsckW2mVHXp/hBE8WTI88eduYBSTIffuZo3UYew38a03VjDLIWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gB/YuEQ5ossjy6hrRVBTTAvzwBVbSNlEhkjl+wZ/R0w=;
- b=cNuwHGrkvPLOYB+WGUZs0fYUlTyeTiDTeY3fKdZES+TaM1vC/sNpulegqCfGlcAzSr01szPk9GRgqeWBy/zSqNeTxLL4LXsK4ST6zbGA4hbo0/jQI+E7/D1jjAFpkmgOylTDz3T2aQnfPGDjOJAcjORdANj4m/ezoHR1Gwo8CFdjTh8694mL4GjuRhcvp4+5H1MMZD7Pd4FaQ7BNZH8CPPfWraAeUQaW46fVkGfcWRBdfftmQF0jtuCmj8rsq7yfs1C3WuPjk/T9WlTa3dC0CEZBTCjoI9dRUNDIz1MQKb/QMPAZo7ElJcCNZ1SmeiCcOQC3tVZq9/R4oCIZgMb2ZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by BN6PR11MB1748.namprd11.prod.outlook.com (2603:10b6:404:101::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.13; Wed, 29 Dec
- 2021 07:16:11 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::5c8a:9266:d416:3e04]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::5c8a:9266:d416:3e04%2]) with mapi id 15.20.4844.014; Wed, 29 Dec 2021
- 07:16:11 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     "Christopherson,, Sean" <seanjc@google.com>,
-        "Liu, Jing2" <jing2.liu@intel.com>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
-        "Zeng, Guang" <guang.zeng@intel.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>
-Subject: RE: [PATCH v3 22/22] kvm: x86: Disable interception for IA32_XFD on
- demand
-Thread-Topic: [PATCH v3 22/22] kvm: x86: Disable interception for IA32_XFD on
- demand
-Thread-Index: AQHX9zE4gQJMQm2XFEKlfvGX4m1Fn6xIsbuAgAAjG3CAAD2qsA==
-Date:   Wed, 29 Dec 2021 07:16:10 +0000
-Message-ID: <BN9PR11MB5276CE5635898CE13BFC57FC8C449@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20211222124052.644626-1-jing2.liu@intel.com>
- <20211222124052.644626-23-jing2.liu@intel.com> <Ycu0KVq9PfuygKKx@google.com> 
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8019ab44-f02e-4b39-fb80-08d9ca9b1765
-x-ms-traffictypediagnostic: BN6PR11MB1748:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <BN6PR11MB174878CDEB5B683AEFCDEBC18C449@BN6PR11MB1748.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: dfAWBntZS+VuZdHtdYev+2Uzg/lWMVqiS43sS31wVyIdLLsE2/5ujHHU8UqwVqzAg3iceviFPQxS1JUQjcLM/hDLLzAwGj2KYcYbym0NJ1x4jmfCDDmTAiSqXVG53AyUYPhs0RFKVJfN6opv2GeVpcpdIU5BB6TLQMNK9R4igjYtiOK2P8+HJrXR3W73Y33wiQQZJGjdJKgBzw1vs8pqhlk4dBVvffWzij3xyWV2xsbSAV4ZcDGQSADGf64PGH6QGri1JaehlR1/wNxQ6s/WiohbbEoaLeulaTPgWsmdmktwVD16NDwyxfi9MmxgzynxPrMIfp/kW29H1uoUZO0wtCvFVSiZ3LLxAYeNubpiJqSfe8/24mM/SXopmwmtJU/G84C0D6qd7dkqL8SSFeQ0shMfN5DRVkWCx3xLgLQahckq/r26pIt42RmYNI28pxxPhsYMVrcwjnm6A4Mjs3E7Xzk22M6y3iSN6UxxQqJaPvOwMY2sEoHCDBcCiwSS85JYidQZ1qwK+vdPqVXHJm5KvpdxVhKjFSPoYycyopK7sTU9KmL0+4zQZAgRdvG8tF0lSmxzuWptZAzRSPIWk1lDjWpc+66sYWqClokE9IG+bp57iYKS4cULGMxaSQikor58SbyrGOxkBqg7WdLYt7fY49wtaBe8U5B+HZ+ZJ8n49p7pt7Z+F0PdkJ4fIkozJ2D4MCE5+Dtmn6586QMBZGlV7Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(71200400001)(9686003)(33656002)(508600001)(2906002)(55016003)(4326008)(38100700002)(86362001)(122000001)(5660300002)(7696005)(83380400001)(316002)(38070700005)(82960400001)(6636002)(54906003)(8936002)(8676002)(110136005)(6506007)(66476007)(66446008)(66556008)(66946007)(64756008)(76116006)(7416002)(52536014)(26005)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Y0JlMUt5Y0ZuUlltN2EwelA0U2RGRHQ1bTNkR1B2bUpZNkgrclA3UUdmQzhD?=
- =?utf-8?B?bUpVbEhtZlJtUHZzSXZ1YXBSU3RiWGhMZEovUERRWjdRS0NEMEhLcHBYZXZi?=
- =?utf-8?B?TXYrU1NQc0YwbGcwZHVFcE1DQTVzNENwQW5KenNaaW9uemN0MFBYWTVPVDBu?=
- =?utf-8?B?Q0R2bXhNcCtCbjQ1NWYydHVXMTU5cHB0YlhkVitXeWRKZTh0WGEvODNueG9M?=
- =?utf-8?B?UWxDbXBEbk80T3BLN0s1SGpXVnBvOG4zZHFVTWhJNkxIM3pUeHpzK0FZVkJR?=
- =?utf-8?B?a2xGb25lMUlWbEloMUI1MXJBY1dtQ0oxVnlxMXdDMWFhOC8vcUZ4NE04RjdW?=
- =?utf-8?B?ZVFhZW03SHNkVlFra25SM1FGVTVNTEpudXI2RHFYWVNubE54WkpxYkIvc0Nh?=
- =?utf-8?B?ZUdMWm42VXNlMlVNOGtoWkVnVFFUejE2ZlZJNW5jcE9kM0RIUndWczUyQm1R?=
- =?utf-8?B?Z3VaRnR0WW5aQ0tXcXBwcEtTZ2g4WmV6QjgvVm5iSkt5TDdhVmVlaGxLcTBX?=
- =?utf-8?B?enJjNGhBQS9PNGNacGlEYXJIQXFxUyswWEJZQy92ZXhTZGR1UEc2OU1XeGJE?=
- =?utf-8?B?VHZPU0h2cVJLbGNZOHJZRjdEM290MnZmYjhZa2VTeExwWFdyM2dJdVdLMW51?=
- =?utf-8?B?MDNRY2JScFQxaVdOcjU1R0g4MDZZalprd3ZsZEhEL3gzdm54V1BlTGI5UG1a?=
- =?utf-8?B?MzlzV2tOTGl4dTNpYUw1WitrNHhIVzlyeDJqV1BCTmg1YUJKSHlmcDJWYk1V?=
- =?utf-8?B?RU50bkpSVkg1NS9IM2lXZG16cG1VNU5ETEJxakFsMUVxOVA5M3Q1RVE1NU13?=
- =?utf-8?B?bjFtNWFJVzFjN0RDekN4WWQrRUo1OWlwc2FSUzI1cHF3OU5SRnliZ3JRWEdv?=
- =?utf-8?B?dUJuK0xSNDNOdERLUDAvL252WUo1WnBIcytQanhaTjBWcGRSQWEwY0oxcmtn?=
- =?utf-8?B?bzVmNXAvbTcwcDNNQm5Fc2oveCtaTW10Zm43Vk9rRll4ZEV4VytGKzUySnlR?=
- =?utf-8?B?NkRuQ2E5azFZN1p5a0NIbGd1dmhGNCszMVVOYXhzcG45QVJGK0p1S0NJaU5T?=
- =?utf-8?B?Tm9BMlU2a214bk1MM2hDNEZCNUwzbFlvSTBDc1RoUHdVb0ltLzliV3RraDF5?=
- =?utf-8?B?blE0NmxVN0xIMURueVpyWDlMUGE3RGYvRDlGT242Mnh2VEZUc0c1YTNFZ2ly?=
- =?utf-8?B?VlJ4aGVHSGc0dEJDWXR0dXp5ZWQ3UkdnaXlZSysxRW9RcUJFRU1oTUpyUkEr?=
- =?utf-8?B?bXpRdUIwTDBzMmVVdGdTMm5hYVBVSnZMcW9kMC9BeFBaeDJwMytiOWNXTWxU?=
- =?utf-8?B?ZVZudi9UZTZROG1CdWZrQjE3Qlc0MGRxUVZXVEhXanBmQklJSHpIQXFIQnVO?=
- =?utf-8?B?Zm5kREh1c3RuRnpRRlIvL1Zvc1BVTC9QemR4ZkZrL1ZvbWhQTW5BRFBMZjVx?=
- =?utf-8?B?T1pNNXJybTFYOTViVmNkcGh2MkRxaUhSNjhOSTJGVitLbWJ1MUNSM1dvazRY?=
- =?utf-8?B?NDJNeWJSR0kwd1RqV0t4dEZRcktrdWQzN0EvSFJBcVJtRjhpRlg2eEV2bDI2?=
- =?utf-8?B?Wlp3eGFqcDFvTSs2SHNLck5lMFRyRSs2SnU5V29yNzZ6Q3NlWDFqSlAzb1lG?=
- =?utf-8?B?bUdLbk1RVU9kTG1ZWGxIU2RkdFU4REhKc3dGdGs3Y0gvU1pqc0NjR1RzcWpN?=
- =?utf-8?B?WW91am0zWTFlaUtOT3ZZNit2eW1wSmdmN3YvMnl3eEU1ZXB6MDBkOTMxMzZt?=
- =?utf-8?B?S21mT0N3U3lLaHNxYXlOaExvWkZrMnN5bHhZNjJ4NUNNZUxQdk1TT0dxZlFm?=
- =?utf-8?B?eUJWdjMwQjZIQlcvcG5jU0M2SUxjektud1hScWlGTEFCYVlNTzdkRFZaVlVx?=
- =?utf-8?B?Vm95b3Evc3dUTm9sSTVnOVlVMzE0K2VGZG1UQVdiemxVUUFvbkxMZGxvQ3E0?=
- =?utf-8?B?STg5dUN3SkVEeXB3a2RHOU1CcTBYU2JodUVNRTJ5VTEwL29jMFNVZFdoTk1R?=
- =?utf-8?B?RnVUd2ozcEVzblZRenFFSHo3NUdLcm13bEZIOG1yS3Y3b200VzRzaFVpbjJW?=
- =?utf-8?B?NFVkbURUb2NDeUoxTXdFSkpFNEZyT1h5K0tVR2VNWXhOMmxnNUdSVzJCelpp?=
- =?utf-8?B?akp4cTFOZHovejU2TUNDZlJIWXU4ZG01Vld5Zm9MbXJKUFBJVG9CdENBc2NG?=
- =?utf-8?Q?rya8JyHJ5N6GANLRLpF6/7U=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S239103AbhL2H1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 02:27:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239094AbhL2H1Y (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 02:27:24 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE10DC06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 23:27:23 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id f18-20020a17090aa79200b001ad9cb23022so19171956pjq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 23:27:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eZSNki/251fDYLWVkOPn8gWn57CxzUzo65fAsecZzSY=;
+        b=C2b0u1tClTPmdQioW+rxkZ+V7pqKZXRaISlUmt8iCW927RhgQrOFUcbd6meMPzDYNJ
+         vx/XLkZIkznWTkZgvAJ0ypkuBP40ipDUo3JMy4vf3JbUxpYhuOGGxI3JuXXye7pCnNXn
+         OHFvXOdT2LXYXBGWmxRgIZgz0RV/Sdkl5FYD5J82qNlhU2jZNlaB03hEd6b34lmLCcpQ
+         YED6khoDbdY0+qbd/rqXiy3pREdcFpr0WizTcRnrPvPmpwUgw5+wkuXI7xO9d6X8xnTE
+         021Ucv5pypqtaIcTorUmLe52PUYDNHSXbPkhRRZ6tIZ/1Yr4jRcacTFc0vZ6xiGpSehi
+         KHCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eZSNki/251fDYLWVkOPn8gWn57CxzUzo65fAsecZzSY=;
+        b=kWA+hjJ3ZEGOM0S0hArCFM6w7XLhrHGcCEl0Sg4tabbD8l9dYqcIB8/KvImc1lytou
+         Qwwm6YSU/KUplr7rlm7bcpGQyP7RGHYeZDRHLhsrH4iLk/g+e4nZrKRU+l0qF6ZCOuKc
+         uKP6myQ7uUCakXDt2aHpTUJ0JZIXtQxzIdOpDg26ckTSiH8U4+MYwl79gcB1/bq+i+9v
+         a2hXtAGSznffGuywPvN6VkIhbHTll+DitJMUZau0jRHBcUJjP6gcCOvJKvEPRGq6XjrL
+         avZNVLJv87MjUB69c6WS61pDHJVCtQem2TLXl5E43xdeA4PajDfNASHJQwcmyqKWRPca
+         wSSg==
+X-Gm-Message-State: AOAM5316LY99qAv5e/2v/DHugc9xAgH3U44qt4lIkxtGfrSRV6PYmkFZ
+        zPqdqh2YoZXqSUfEklkYgIsKkKornk8WusXVQPRIWg==
+X-Google-Smtp-Source: ABdhPJwdorV9rKsCXwNUTFsMyMCJcCadilIxzOqhyG+k64txb8IQphCdPdY79KAgaFh5MoE1tQRj+5vGer2dfAH87+8=
+X-Received: by 2002:a17:902:b591:b0:149:66d6:7589 with SMTP id
+ a17-20020a170902b59100b0014966d67589mr19576058pls.24.1640762843190; Tue, 28
+ Dec 2021 23:27:23 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8019ab44-f02e-4b39-fb80-08d9ca9b1765
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Dec 2021 07:16:10.9612
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hZWZwjVsdAU4hZ+6UTb2Trc2sDNm8cZqFyMcsA6ocrswTevSoQGifJlkQOKonu6EO9jP5L5AkFdHAiAsUUaZJQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1748
-X-OriginatorOrg: intel.com
+References: <20211228094146.20505-1-yunfei.dong@mediatek.com>
+ <20211228094146.20505-4-yunfei.dong@mediatek.com> <Ycvz4UrmbngVzIv2@google.com>
+ <8102ba18b3fdcc19e6b9f53c7a635ffc084c825b.camel@mediatek.com>
+In-Reply-To: <8102ba18b3fdcc19e6b9f53c7a635ffc084c825b.camel@mediatek.com>
+From:   Tzung-Bi Shih <tzungbi@google.com>
+Date:   Wed, 29 Dec 2021 15:27:11 +0800
+Message-ID: <CA+Px+wU2aU_t2F2XOsjf5vRUikQPaftRa9062CCCNwRJK-WA3w@mail.gmail.com>
+Subject: Re: [PATCH v2, 03/12] media: mtk-vcodec: get capture queue buffer
+ size from scp
+To:     "yunfei.dong@mediatek.com" <Yunfei.Dong@mediatek.com>
+Cc:     Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBUaWFuLCBLZXZpbg0KPiBTZW50OiBXZWRuZXNkYXksIERlY2VtYmVyIDI5LCAyMDIx
-IDExOjM1IEFNDQo+ID4NCj4gPiBTcGVha2luZyBvZiBuZXN0ZWQsIGludGVyY2VwdGlvbiBvZiAj
-Tk0gaW4NCj4gdm14X3VwZGF0ZV9leGNlcHRpb25fYml0bWFwKCkNCj4gPiBpcyB3cm9uZw0KPiA+
-IHdpdGggcmVzcGVjdCB0byBuZXN0ZWQgZ3Vlc3RzLiAgVW50aWwgWEZEIGlzIHN1cHBvcnRlZCBm
-b3IgTDIsIHdoaWNoIEkgZGlkbid0DQo+ID4gc2VlDQo+ID4gaW4gdGhpcyBzZXJpZXMsICNOTSBz
-aG91bGQgbm90IGJlIGludGVyY2VwdGVkIHdoaWxlIEwyIGlzIHJ1bm5pbmcuDQo+IA0KPiBDYW4g
-eW91IHJlbWluZCB3aGF0IGFkZGl0aW9uYWwgdGhpbmcgaXMgcmVxdWlyZWQgdG8gc3VwcG9ydCBY
-RkQgZm9yIEwyPw0KDQpvaywgYXQgbGVhc3Qgd2UgcmVxdWlyZSBhZGRpdGlvbmFsIHdvcmsgb24g
-d2hlbiB0byBkaXNhYmxlIHdyaXRlIGludGVyY2VwdGlvbi4NCkl0IGNhbiBiZSBkb25lIG9ubHkg
-d2hlbiBib3RoIEwwIGFuZCBMMSBtYWtlIHRoZSBzYW1lIGRlY2lzaW9uLCBqdXN0IGxpa2UgDQp3
-aGF0IHdlIGRpZCBmb3IgbWFueSBvdGhlciBWTUNTIHNldHRpbmdzLi4uDQoNCj4gSWYgb25seSBh
-Ym91dCBwZXJmb3JtYW5jZSBJIHByZWZlciB0byB0aGUgY3VycmVudCBjb25zZXJ2YXRpdmUgYXBw
-cm9hY2gNCj4gYXMgdGhlIGZpcnN0IHN0ZXAuIEFzIGV4cGxhaW5lZCBlYXJsaWVyLCAjTk0gc2hv
-dWxkIGJlIHJhcmUgaWYgdGhlIGd1ZXN0DQo+IGRvZXNuJ3QgcnVuIEFNWCBhcHBsaWNhdGlvbnMg
-YXQgYWxsLiBBZGRpbmcgbmVzdGVkIGludG8gdGhpcyBwaWN0dXJlIGRvZXNuJ3QNCj4gbWFrZSB0
-aGluZ3MgYSBsb3Qgd29yc2VyLg0KDQpBbGwgeW91ciBjb21tZW50cyBpbmNvcnBvcmF0ZWQgZXhj
-ZXB0IHRoaXMgb25lLiBBcyBzYWlkIGFsd2F5cyB0cmFwcGluZw0KI05NIGZvciBMMiBpcyBub3Qg
-YSBiaWcgcHJvYmxlbSwgYXMgbG9uZyBhcyBpdCdzIHJhcmUgYW5kIGRvbid0IGJyZWFrIGZ1bmN0
-aW9uLg0KVXN1YWxseSBhIHJlbGF0aXZlbHkgc3RhdGljIHNjaGVtZSBpcyBzYWZlciB0aGFuIGEg
-ZHluYW1pYyBvbmUgaW4gY2FzZSBvZg0KYW55dGhpbmcgb3Zlcmxvb2tlZCBmb3IgdGhlIGluaXRp
-YWwgaW1wbGVtZW50YXRpb24uIPCfmIoNCg0KVGhhbmtzDQpLZXZpbg0K
+On Wed, Dec 29, 2021 at 2:52 PM yunfei.dong@mediatek.com
+<yunfei.dong@mediatek.com> wrote:
+> On Wed, 2021-12-29 at 13:36 +0800, Tzung-Bi Shih wrote:
+> > On Tue, Dec 28, 2021 at 05:41:37PM +0800, Yunfei Dong wrote:
+> > > From: Yunfei Dong <yunfei.dong@mediatek.corp-partner.google.com>
+> >
+> > [...]
+> > > diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+> > > b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+> > > index 130ecef2e766..87891ebd7246 100644
+> > > --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+> > > +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+> > > @@ -466,6 +466,8 @@ static int vidioc_vdec_s_fmt(struct file *file,
+> > > void *priv,
+> > >                     }
+> > >                     ctx->state = MTK_STATE_INIT;
+> > >             }
+> > > +   } else {
+> > > +           ctx->capture_fourcc = fmt->fourcc;
+> > >     }
+> > >
+> > >     /*
+> > > diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> > > b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> > > index a23a7646437c..95e07cf2cd3e 100644
+> > > --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> > > +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> > > @@ -277,6 +277,7 @@ struct vdec_pic_info {
+> > >   *              to be used with encoder and stateful decoder.
+> > >   * @is_flushing: set to true if flushing is in progress.
+> > >   * @current_codec: current set input codec, in V4L2 pixel format
+> > > + * @capture_fourcc: capture queue type in V4L2 pixel format
+> > >   *
+> > >   * @colorspace: enum v4l2_colorspace; supplemental to pixelformat
+> > >   * @ycbcr_enc: enum v4l2_ycbcr_encoding, Y'CbCr encoding
+> > > @@ -322,6 +323,7 @@ struct mtk_vcodec_ctx {
+> > >     bool is_flushing;
+> > >
+> > >     u32 current_codec;
+> > > +   u32 capture_fourcc;
+> >
+> > What is the purpose of capture_fourcc?  It is not used.
+> >
+> Need to calculate each plane size according to capture fourcc type from
+> scp. The plane size of MM21 is different with MT21C. And the capture
+> fourcc type of different codec maybe different.
+
+Purpose of capture_fourcc in the context is not obvious and looks
+irrelevant to the patch.  Could it move to somewhere patch that makes
+more sense?
+
+> > > +/**
+> > > + * struct vdec_ap_ipi_get_param - for AP_IPIMSG_SET_PARAM
+> > > + * @msg_id : AP_IPIMSG_DEC_START
+> > > + * @inst_id     : instance ID. Used if the ABI version >= 2.
+> > > + * @data   : picture information
+> > > + * @param_type     : get param type
+> > > + * @codec_type     : Codec fourcc
+> > > + */
+> > > +struct vdec_ap_ipi_get_param {
+> > > +   uint32_t msg_id;
+> > > +   uint32_t inst_id;
+> > > +   uint32_t data[4];
+> > > +   uint32_t param_type;
+> > > +   uint32_t codec_type;
+> > > +};
+> >
+> > Are AP_IPIMSG_SET_PARAM and AP_IPIMSG_DEC_START typos?
+> >
+> It's getting message from scp side. It's looks much better to add one
+> new path from ap to scp.
+
+Pardon me, I failed to understand it.  I thought the struct could be
+for AP_IPIMSG_DEC_GET_PARAM.
+
+> > > +/**
+> > > + * struct vdec_vpu_ipi_init_ack - for VPU_IPIMSG_DEC_INIT_ACK
+> > > + * @msg_id : VPU_IPIMSG_DEC_INIT_ACK
+> > > + * @status : VPU exeuction result
+> > > + * @ap_inst_addr   : AP vcodec_vpu_inst instance address
+> > > + * @data     : picture information from SCP.
+> > > + * @param_type     : get param type
+> > > + */
+> > > +struct vdec_vpu_ipi_get_param_ack {
+> > > +   uint32_t msg_id;
+> > > +   int32_t status;
+> > > +   uint64_t ap_inst_addr;
+> > > +   uint32_t data[4];
+> > > +   uint32_t param_type;
+> > > +   uint32_t reserved;
+> > > +};
+> >
+> > Same here: is VPU_IPIMSG_DEC_INIT_ACK a typo?
+> >
+> It's getting message from scp side. It's looks much better to add one new path from ap to scp.
+
+Same here: I thought it was for VPU_IPIMSG_DEC_GET_PARAM_ACK.
+
+> > > diff --git a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
+> > > b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
+> > > index 4cb3c7f5a3ad..963f8d4877b7 100644
+> > > --- a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
+> > > +++ b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
+> > > @@ -28,6 +28,8 @@ struct mtk_vcodec_ctx;
+> > >   * @wq          : wait queue to wait VPU message ack
+> > >   * @handler     : ipi handler for each decoder
+> > >   * @codec_type     : use codec type to separate different codecs
+> > > + * @capture_type    : used capture type to separate different
+> > > capture format
+> > > + * @fb_sz  : frame buffer size of each plane
+> > >   */
+> > >  struct vdec_vpu_inst {
+> > >     int id;
+> > > @@ -42,6 +44,8 @@ struct vdec_vpu_inst {
+> > >     wait_queue_head_t wq;
+> > >     mtk_vcodec_ipi_handler handler;
+> > >     unsigned int codec_type;
+> > > +   unsigned int capture_type;
+> > > +   unsigned int fb_sz[2];
+> > >  };
+> >
+> > capture_type is not used in the patch.
+> >
+> Capture type will be used in scp to get capture plane size according to
+> capture buffer type.
+
+Pardon me, I failed to understand it.  I may misunderstand, however,
+it doesn't look like a shared memory structure between AP and SCP.
+
+At least to me, capture_type is not used in the patch.  It could be
+better to move it to somewhere patch that makes more sense.
+
+> > Does fb_sz take effect in later patches?
+>
+> Don't have effect to later patches.
+
+Is the fb_sz used somewhere "later"?  The patch gets fb_sz from SCP,
+however, fb_sz is never used in some control or configuration paths.

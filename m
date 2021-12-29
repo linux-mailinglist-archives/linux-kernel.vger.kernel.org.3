@@ -2,115 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AA14814BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 16:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C51A54814C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 16:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237272AbhL2PrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 10:47:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234004AbhL2PrS (ORCPT
+        id S234175AbhL2PxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 10:53:06 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:40574 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229528AbhL2PxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 10:47:18 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E98C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 07:47:18 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n2bAV-0008LJ-G1; Wed, 29 Dec 2021 16:47:11 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n2bAV-007KIk-2W; Wed, 29 Dec 2021 16:47:10 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n2bAU-0001EE-67; Wed, 29 Dec 2021 16:47:10 +0100
-Date:   Wed, 29 Dec 2021 16:47:07 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v2 13/23] counter: Provide alternative counter
- registration functions
-Message-ID: <20211229154707.hlmf5azc63hzdfd5@pengutronix.de>
-References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
- <20211227094526.698714-14-u.kleine-koenig@pengutronix.de>
- <20211228180017.37c2703d@jic23-huawei>
- <1d3c1df9-42b8-e451-f622-32d8c1e6d1b5@linux.intel.com>
+        Wed, 29 Dec 2021 10:53:05 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 0499D1F37F;
+        Wed, 29 Dec 2021 15:53:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1640793184; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=Q9bH3xpYfiMnv3bMUqyetJzt0d9Hx0SwUfvkjDcfmNc=;
+        b=qOHeBhZN6xB1pBkw8jOzkxpoYHnwyp4nMwFMo2TeSM/5r09+qm1Sm+UYu2ciQKYAW+GIsT
+        y4lP9k+0ADgm3sfOf7w6X1dTUXcV9T621JmuBkorn/CAUqFPh6UYAxgNbP5D2tPeiLCzDv
+        Ca+8guhPimc+iureuztEQFD9mcbU40Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1640793184;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=Q9bH3xpYfiMnv3bMUqyetJzt0d9Hx0SwUfvkjDcfmNc=;
+        b=zk4xbQP3+RHdhuIpTvHVtWx65SOqJBA2FxW5AeNNVKnwTIbxik1SSOxbK/0NVnbpWKQl4j
+        HHhRoUIs3JT9P5AQ==
+Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
+        by relay2.suse.de (Postfix) with ESMTP id 00E7DA3B85;
+        Wed, 29 Dec 2021 15:53:04 +0000 (UTC)
+Received: by adalid.arch.suse.de (Postfix, from userid 17828)
+        id E79405192579; Wed, 29 Dec 2021 16:53:03 +0100 (CET)
+From:   Daniel Wagner <dwagner@suse.de>
+To:     linux-nvme@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, Daniel Wagner <dwagner@suse.de>
+Subject: [PATCH] nvmet: add support reading with offset from ANA log
+Date:   Wed, 29 Dec 2021 16:53:02 +0100
+Message-Id: <20211229155302.16789-1-dwagner@suse.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dw7yj4rm5wxybk7e"
-Content-Disposition: inline
-In-Reply-To: <1d3c1df9-42b8-e451-f622-32d8c1e6d1b5@linux.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add support to read with offsets from ANA log buffer.
 
---dw7yj4rm5wxybk7e
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The controller claims to support extended data for the Get Log Page
+command (including extended Number of Dwords and Log Page Offset 2
+fields):
 
-On Wed, Dec 29, 2021 at 03:49:29PM +0200, Jarkko Nikula wrote:
-> On 12/28/21 20:00, Jonathan Cameron wrote:
-> > On Mon, 27 Dec 2021 10:45:16 +0100
-> > Uwe Kleine-K=F6nig         <u.kleine-koenig@pengutronix.de> wrote:
-> > > +	if (err < 0)
-> > > +		goto err_chrdev_add;
-> > > +
-> > > +	device_initialize(dev);
-> > > +	/* Configure device structure for Counter */
-> > > +	dev->type =3D &counter_device_type;
-> > > +	dev->bus =3D &counter_bus_type;
-> > > +	dev->devt =3D MKDEV(MAJOR(counter_devt), id);
-> >=20
-> > As 0-day pointed out id not initialized.
-> >=20
-> This was the reason why second counter instance initialization failed for=
- me
-> when testing the patch 17. I fixed it locally by changing the line a few
-> rows above the MKDEV():
->=20
-> -	dev->id =3D err;
-> +	dev->id =3D id =3D err;
+lpa     : 0x7
+  [2:2] : 0x1   Extended data for Get Log Page Supported
+  [1:1] : 0x1   Command Effects Log Page Supported
+  [0:0] : 0x1   SMART/Health Log Page per NS Supported
 
-Instead I dropped id for v3. I failed to check this mailthread again
-before sending it out. So I missed your feedback. I will go through it
-again and comment later.
+Signed-off-by: Daniel Wagner <dwagner@suse.de>
+---
+ drivers/nvme/target/admin-cmd.c | 37 +++++++++++++++++++--------------
+ 1 file changed, 21 insertions(+), 16 deletions(-)
 
-Best regards
-Uwe
+diff --git a/drivers/nvme/target/admin-cmd.c b/drivers/nvme/target/admin-cmd.c
+index 6fb24746de06..7c8806f477e2 100644
+--- a/drivers/nvme/target/admin-cmd.c
++++ b/drivers/nvme/target/admin-cmd.c
+@@ -263,35 +263,40 @@ static u32 nvmet_format_ana_group(struct nvmet_req *req, u32 grpid,
+ 	desc->nnsids = cpu_to_le32(count);
+ 	desc->chgcnt = cpu_to_le64(nvmet_ana_chgcnt);
+ 	desc->state = req->port->ana_state[grpid];
+-	memset(desc->rsvd17, 0, sizeof(desc->rsvd17));
+ 	return struct_size(desc, nsids, count);
+ }
+ 
+ static void nvmet_execute_get_log_page_ana(struct nvmet_req *req)
+ {
+-	struct nvme_ana_rsp_hdr hdr = { 0, };
++	struct nvme_ana_rsp_hdr *hdr;
+ 	struct nvme_ana_group_desc *desc;
+-	size_t offset = sizeof(struct nvme_ana_rsp_hdr); /* start beyond hdr */
++	u64 offset = nvmet_get_log_page_offset(req->cmd);
+ 	size_t len;
++	void *buffer;
+ 	u32 grpid;
+ 	u16 ngrps = 0;
+ 	u16 status;
+ 
++	if (offset & 0x3) {
++		req->error_loc =
++			offsetof(struct nvme_get_log_page_command, lpo);
++		status = NVME_SC_INVALID_FIELD | NVME_SC_DNR;
++		goto out;
++	}
++
+ 	status = NVME_SC_INTERNAL;
+-	desc = kmalloc(struct_size(desc, nsids, NVMET_MAX_NAMESPACES),
+-		       GFP_KERNEL);
+-	if (!desc)
++	len = sizeof(*hdr) + struct_size(desc, nsids, NVMET_MAX_NAMESPACES);
++	buffer = kzalloc(len, GFP_KERNEL);
++	if (!buffer)
+ 		goto out;
++	hdr = buffer;
++	desc = buffer + sizeof(*hdr);
+ 
+ 	down_read(&nvmet_ana_sem);
+ 	for (grpid = 1; grpid <= NVMET_MAX_ANAGRPS; grpid++) {
+ 		if (!nvmet_ana_group_enabled[grpid])
+ 			continue;
+-		len = nvmet_format_ana_group(req, grpid, desc);
+-		status = nvmet_copy_to_sgl(req, offset, desc, len);
+-		if (status)
+-			break;
+-		offset += len;
++		nvmet_format_ana_group(req, grpid, desc);
+ 		ngrps++;
+ 	}
+ 	for ( ; grpid <= NVMET_MAX_ANAGRPS; grpid++) {
+@@ -299,15 +304,15 @@ static void nvmet_execute_get_log_page_ana(struct nvmet_req *req)
+ 			ngrps++;
+ 	}
+ 
+-	hdr.chgcnt = cpu_to_le64(nvmet_ana_chgcnt);
+-	hdr.ngrps = cpu_to_le16(ngrps);
++	hdr->chgcnt = cpu_to_le64(nvmet_ana_chgcnt);
++	hdr->ngrps = cpu_to_le16(ngrps);
+ 	nvmet_clear_aen_bit(req, NVME_AEN_BIT_ANA_CHANGE);
+ 	up_read(&nvmet_ana_sem);
+ 
+-	kfree(desc);
++	status = nvmet_copy_to_sgl(req, 0, buffer + offset,
++				   nvmet_get_log_page_len(req->cmd));
+ 
+-	/* copy the header last once we know the number of groups */
+-	status = nvmet_copy_to_sgl(req, 0, &hdr, sizeof(hdr));
++	kfree(buffer);
+ out:
+ 	nvmet_req_complete(req, status);
+ }
+-- 
+2.29.2
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---dw7yj4rm5wxybk7e
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHMgvgACgkQwfwUeK3K
-7AmXCAf+KnF1zl1IJybEDHcaQ1jKTFYZELGukiDDi+3mWsaTLzTa4AMXocctcg1b
-SgvDXuniLp/ZBqutfZbYvceNVxJs+fg+qjcf2ZkM/3EceCkl7IZA+5SC6FZHeN48
-ODUHyJMVfv+hByDhYwIYlYbBnroZNCCsS7lNicWn48VNcj2asUgbxO9c8Sfl2MmO
-71dotVhYwc2KYyz+gMAbuLA8hLgBIcW6QXXw5PpCjJx0cP1VjotgGyEamp01IMDu
-FFOhDKFG31oI3dSoXBNsH+OtBo0OxyYJLgVLqt9JLcoT7dZguDzpAwYqoq1U8YQB
-BJ9Z8b1bwGGrJQV2SJwkbBFfZvK9Qg==
-=koAV
------END PGP SIGNATURE-----
-
---dw7yj4rm5wxybk7e--

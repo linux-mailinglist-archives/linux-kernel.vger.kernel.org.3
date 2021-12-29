@@ -2,67 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E912480F7F
+	by mail.lfdr.de (Postfix) with ESMTP id 918E6480F80
 	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 05:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238644AbhL2EOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 23:14:18 -0500
-Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:39861 "EHLO
-        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232404AbhL2EOQ (ORCPT
+        id S238653AbhL2EOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 23:14:19 -0500
+Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:38932 "EHLO
+        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238641AbhL2EOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 23:14:16 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R591e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V0Bi34J_1640751246;
+        Tue, 28 Dec 2021 23:14:18 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V0Bi34J_1640751246;
 Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V0Bi34J_1640751246)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 29 Dec 2021 12:14:14 +0800
+          Wed, 29 Dec 2021 12:14:16 +0800
 From:   Gao Xiang <hsiangkao@linux.alibaba.com>
 To:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
         Liu Bo <bo.liu@linux.alibaba.com>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Gao Xiang <hsiangkao@linux.alibaba.com>
-Subject: [PATCH 0/5] erofs: get rid of erofs_get_meta_page()
-Date:   Wed, 29 Dec 2021 12:14:00 +0800
-Message-Id: <20211229041405.45921-1-hsiangkao@linux.alibaba.com>
+Subject: [PATCH 1/5] erofs: introduce meta buffer operations
+Date:   Wed, 29 Dec 2021 12:14:01 +0800
+Message-Id: <20211229041405.45921-2-hsiangkao@linux.alibaba.com>
 X-Mailer: git-send-email 2.24.4
+In-Reply-To: <20211229041405.45921-1-hsiangkao@linux.alibaba.com>
+References: <20211229041405.45921-1-hsiangkao@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi folks,
+In order to support subpage and folio for all uncompressed files,
+introduce meta buffer descriptors, which can be effectively stored
+on stack, in place of meta page operations.
 
-erofs_get_meta_page() is actually inflexible since it's too
-close to the page itself.
+This converts the uncompressed data path to meta buffers.
 
-In order to prepare for folio and subpage features, introduce
-on-stack meta buffer descriptor instead and convert all
-erofs_get_meta_page() users to use it.
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+---
+ fs/erofs/data.c     | 97 +++++++++++++++++++++++++++++++++++----------
+ fs/erofs/internal.h | 13 ++++++
+ 2 files changed, 89 insertions(+), 21 deletions(-)
 
-It can also be used for new potential backends such as fscache or mtd.
-
-Patches are trivial.
-
-Thanks,
-Gao Xiang
-
-Gao Xiang (5):
-  erofs: introduce meta buffer operations
-  erofs: use meta buffers for inode operations
-  erofs: use meta buffers for super operations
-  erofs: use meta buffers for xattr operations
-  erofs: use meta buffers for zmap operations
-
- fs/erofs/data.c     | 102 +++++++++++++++++++++++++-----------
- fs/erofs/inode.c    |  68 ++++++++++++------------
- fs/erofs/internal.h |  22 ++++++--
- fs/erofs/super.c    | 105 ++++++++++---------------------------
- fs/erofs/xattr.c    | 123 +++++++++++++-------------------------------
- fs/erofs/zdata.c    |  23 ++++-----
- fs/erofs/zmap.c     |  56 ++++++--------------
- 7 files changed, 211 insertions(+), 288 deletions(-)
-
+diff --git a/fs/erofs/data.c b/fs/erofs/data.c
+index 4f98c76ec043..6495e16a50a9 100644
+--- a/fs/erofs/data.c
++++ b/fs/erofs/data.c
+@@ -22,6 +22,56 @@ struct page *erofs_get_meta_page(struct super_block *sb, erofs_blk_t blkaddr)
+ 	return page;
+ }
+ 
++void erofs_unmap_metabuf(struct erofs_buf *buf)
++{
++	if (buf->kmap_type == EROFS_KMAP)
++		kunmap(buf->page);
++	else if (buf->kmap_type == EROFS_KMAP_ATOMIC)
++		kunmap_atomic(buf->base);
++	buf->kmap_type = EROFS_NO_KMAP;
++}
++
++void erofs_put_metabuf(struct erofs_buf *buf)
++{
++	if (!buf->page)
++		return;
++	erofs_unmap_metabuf(buf);
++	put_page(buf->page);
++	buf->page = NULL;
++}
++
++void *erofs_read_metabuf(struct erofs_buf *buf, struct super_block *sb,
++			erofs_blk_t blkaddr, enum erofs_kmap_type type)
++{
++	struct address_space *const mapping = sb->s_bdev->bd_inode->i_mapping;
++	erofs_off_t offset = blknr_to_addr(blkaddr);
++	pgoff_t index = offset >> PAGE_SHIFT;
++	struct page *page = buf->page;
++
++	if (!page || page->index != index) {
++		erofs_put_metabuf(buf);
++		page = read_cache_page_gfp(mapping, index,
++				mapping_gfp_constraint(mapping, ~__GFP_FS));
++		if (IS_ERR(page))
++			return page;
++		/* should already be PageUptodate, no need to lock page */
++		buf->page = page;
++	}
++	if (buf->kmap_type == EROFS_NO_KMAP) {
++		if (type == EROFS_KMAP)
++			buf->base = kmap(page);
++		else if (type == EROFS_KMAP_ATOMIC)
++			buf->base = kmap_atomic(page);
++		buf->kmap_type = type;
++	} else if (buf->kmap_type != type) {
++		DBG_BUGON(1);
++		return ERR_PTR(-EFAULT);
++	}
++	if (type == EROFS_NO_KMAP)
++		return NULL;
++	return buf->base + (offset & ~PAGE_MASK);
++}
++
+ static int erofs_map_blocks_flatmode(struct inode *inode,
+ 				     struct erofs_map_blocks *map,
+ 				     int flags)
+@@ -31,7 +81,7 @@ static int erofs_map_blocks_flatmode(struct inode *inode,
+ 	struct erofs_inode *vi = EROFS_I(inode);
+ 	bool tailendpacking = (vi->datalayout == EROFS_INODE_FLAT_INLINE);
+ 
+-	nblocks = DIV_ROUND_UP(inode->i_size, PAGE_SIZE);
++	nblocks = DIV_ROUND_UP(inode->i_size, EROFS_BLKSIZ);
+ 	lastblk = nblocks - tailendpacking;
+ 
+ 	/* there is no hole in flatmode */
+@@ -72,10 +122,11 @@ static int erofs_map_blocks(struct inode *inode,
+ 	struct super_block *sb = inode->i_sb;
+ 	struct erofs_inode *vi = EROFS_I(inode);
+ 	struct erofs_inode_chunk_index *idx;
+-	struct page *page;
++	struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
+ 	u64 chunknr;
+ 	unsigned int unit;
+ 	erofs_off_t pos;
++	void *kaddr;
+ 	int err = 0;
+ 
+ 	trace_erofs_map_blocks_enter(inode, map, flags);
+@@ -101,9 +152,9 @@ static int erofs_map_blocks(struct inode *inode,
+ 	pos = ALIGN(iloc(EROFS_SB(sb), vi->nid) + vi->inode_isize +
+ 		    vi->xattr_isize, unit) + unit * chunknr;
+ 
+-	page = erofs_get_meta_page(inode->i_sb, erofs_blknr(pos));
+-	if (IS_ERR(page)) {
+-		err = PTR_ERR(page);
++	kaddr = erofs_read_metabuf(&buf, sb, erofs_blknr(pos), EROFS_KMAP);
++	if (IS_ERR(kaddr)) {
++		err = PTR_ERR(kaddr);
+ 		goto out;
+ 	}
+ 	map->m_la = chunknr << vi->chunkbits;
+@@ -112,7 +163,7 @@ static int erofs_map_blocks(struct inode *inode,
+ 
+ 	/* handle block map */
+ 	if (!(vi->chunkformat & EROFS_CHUNK_FORMAT_INDEXES)) {
+-		__le32 *blkaddr = page_address(page) + erofs_blkoff(pos);
++		__le32 *blkaddr = kaddr + erofs_blkoff(pos);
+ 
+ 		if (le32_to_cpu(*blkaddr) == EROFS_NULL_ADDR) {
+ 			map->m_flags = 0;
+@@ -123,7 +174,7 @@ static int erofs_map_blocks(struct inode *inode,
+ 		goto out_unlock;
+ 	}
+ 	/* parse chunk indexes */
+-	idx = page_address(page) + erofs_blkoff(pos);
++	idx = kaddr + erofs_blkoff(pos);
+ 	switch (le32_to_cpu(idx->blkaddr)) {
+ 	case EROFS_NULL_ADDR:
+ 		map->m_flags = 0;
+@@ -136,8 +187,7 @@ static int erofs_map_blocks(struct inode *inode,
+ 		break;
+ 	}
+ out_unlock:
+-	unlock_page(page);
+-	put_page(page);
++	erofs_put_metabuf(&buf);
+ out:
+ 	if (!err)
+ 		map->m_llen = map->m_plen;
+@@ -226,16 +276,16 @@ static int erofs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
+ 	}
+ 
+ 	if (map.m_flags & EROFS_MAP_META) {
+-		struct page *ipage;
++		void *ptr;
++		struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
+ 
+ 		iomap->type = IOMAP_INLINE;
+-		ipage = erofs_get_meta_page(inode->i_sb,
+-					    erofs_blknr(mdev.m_pa));
+-		if (IS_ERR(ipage))
+-			return PTR_ERR(ipage);
+-		iomap->inline_data = page_address(ipage) +
+-					erofs_blkoff(mdev.m_pa);
+-		iomap->private = ipage;
++		ptr = erofs_read_metabuf(&buf, inode->i_sb,
++					 erofs_blknr(mdev.m_pa), EROFS_KMAP);
++		if (IS_ERR(ptr))
++			return PTR_ERR(ptr);
++		iomap->inline_data = ptr + erofs_blkoff(mdev.m_pa);
++		iomap->private = buf.base;
+ 	} else {
+ 		iomap->type = IOMAP_MAPPED;
+ 		iomap->addr = mdev.m_pa;
+@@ -246,12 +296,17 @@ static int erofs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
+ static int erofs_iomap_end(struct inode *inode, loff_t pos, loff_t length,
+ 		ssize_t written, unsigned int flags, struct iomap *iomap)
+ {
+-	struct page *ipage = iomap->private;
++	void *ptr = iomap->private;
++
++	if (ptr) {
++		struct erofs_buf buf = {
++			.page = kmap_to_page(ptr),
++			.base = ptr,
++			.kmap_type = EROFS_KMAP,
++		};
+ 
+-	if (ipage) {
+ 		DBG_BUGON(iomap->type != IOMAP_INLINE);
+-		unlock_page(ipage);
+-		put_page(ipage);
++		erofs_put_metabuf(&buf);
+ 	} else {
+ 		DBG_BUGON(iomap->type == IOMAP_INLINE);
+ 	}
+diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+index fca3747d97be..7053f1c4171d 100644
+--- a/fs/erofs/internal.h
++++ b/fs/erofs/internal.h
+@@ -251,6 +251,19 @@ static inline int erofs_wait_on_workgroup_freezed(struct erofs_workgroup *grp)
+ #error erofs cannot be used in this platform
+ #endif
+ 
++enum erofs_kmap_type {
++	EROFS_NO_KMAP,		/* don't map the buffer */
++	EROFS_KMAP,		/* use kmap() to map the buffer */
++	EROFS_KMAP_ATOMIC,	/* use kmap_atomic() to map the buffer */
++};
++
++struct erofs_buf {
++	struct page *page;
++	void *base;
++	enum erofs_kmap_type kmap_type;
++};
++#define __EROFS_BUF_INITIALIZER	((struct erofs_buf){ .page = NULL })
++
+ #define ROOT_NID(sb)		((sb)->root_nid)
+ 
+ #define erofs_blknr(addr)       ((addr) / EROFS_BLKSIZ)
 -- 
 2.24.4
 

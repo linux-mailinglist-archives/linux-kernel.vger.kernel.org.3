@@ -2,63 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1F24817D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 00:53:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0DB4817D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 00:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233448AbhL2XwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 18:52:11 -0500
-Received: from mx4.wp.pl ([212.77.101.12]:10699 "EHLO mx4.wp.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231881AbhL2XwK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 18:52:10 -0500
-Received: (wp-smtpd smtp.wp.pl 40934 invoked from network); 30 Dec 2021 00:52:08 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1640821928; bh=RKZz1uRLzH3qeU7mLbqveXex0uLjiw2FNeWAHJeYmLI=;
-          h=From:To:Subject;
-          b=M7mgtuRBOx2DnVxswc7P906kfSD4wCfoQixkL7Db07Z93dCaEY9Vc+dgwHbGUTVNn
-           ZkqQnZG0hs1pHouMKczDCpBRrgqM1/GORvM+lLxyKWbUJEX5hG6smfnG5QcFq4M4ov
-           iYnkYPPs5+FQR7SvE3opLpSMp1eFuc0TxFUDOx8M=
-Received: from riviera.nat.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.1])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <davem@davemloft.net>; 30 Dec 2021 00:52:08 +0100
-From:   Aleksander Jan Bajkowski <olek2@wp.pl>
-To:     davem@davemloft.net, kuba@kernel.org, olek2@wp.pl, jgg@ziepe.ca,
-        rdunlap@infradead.org, arnd@arndb.de, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2] net: lantiq_etop:  remove unnecessary space in cast
-Date:   Thu, 30 Dec 2021 00:52:06 +0100
-Message-Id: <20211229235206.6045-1-olek2@wp.pl>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: b91917f18e785162825f4e61f981bca2
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [caOk]                               
+        id S233485AbhL2XxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 18:53:09 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57784 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231881AbhL2XxI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 18:53:08 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB3C0B819C4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 23:53:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D812CC36AEA;
+        Wed, 29 Dec 2021 23:53:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1640821986;
+        bh=Va1wahRPO8vBMlP2UabmSRApv7q4Gzh6J6565PyyoAU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=0Q0sEk4WN67trJ2hf1/NT/kCV37G5Y/Cu3IyZ6/dTQ56fm0xGj1+4a+e6rj6qXPUe
+         AncqRnyinYMk+r6N6vtvNBZDp6iM7HyoQ1AZvRmKcjCzio6FxJxQM1g8E7dCAGTfHN
+         UnFK/5pY9+X5UkhqQr98fle4JsiubxMJh9mC7ooY=
+Date:   Wed, 29 Dec 2021 15:53:05 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Calvin Liao <calvin.liao@gmail.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alexey Gladkov <legion@kernel.org>,
+        Mike Christie <michael.christie@oracle.com>,
+        "David Hildenbrand" <david@redhat.com>,
+        Rolf Eike Beer <eb@emlix.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        wsd_upstream <wsd_upstream@mediatek.com>,
+        "calvin.liao" <calvin.liao@mediatek.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: Re: [PATCH 1/1] seccomp: release seccomp after killing terminate
+ clone/fork
+Message-Id: <20211229155305.eb4e3cf76fc9e811bb2b3bfc@linux-foundation.org>
+In-Reply-To: <20211228053421.26825-1-calvin.liao@gmail.com>
+References: <20211228053421.26825-1-calvin.liao@gmail.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As reported by checkpatch.pl, no space is necessary after a cast.
+On Tue, 28 Dec 2021 13:34:21 +0800 Calvin Liao <calvin.liao@gmail.com> wrote:
 
-Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
----
- drivers/net/ethernet/lantiq_etop.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> From: "calvin.liao" <calvin.liao@mediatek.com>
+> 
+> Add to release seccomp after killing terminate clone/fork to avoid
+> memory leak when enabling CONFIG_SECCOMP.
+> 
 
-diff --git a/drivers/net/ethernet/lantiq_etop.c b/drivers/net/ethernet/lantiq_etop.c
-index 1f6808b3ad12..35d22b769f27 100644
---- a/drivers/net/ethernet/lantiq_etop.c
-+++ b/drivers/net/ethernet/lantiq_etop.c
-@@ -497,7 +497,7 @@ ltq_etop_tx(struct sk_buff *skb, struct net_device *dev)
- 	netif_trans_update(dev);
- 
- 	spin_lock_irqsave(&priv->lock, flags);
--	desc->addr = ((unsigned int) dma_map_single(&priv->pdev->dev, skb->data, len,
-+	desc->addr = ((unsigned int)dma_map_single(&priv->pdev->dev, skb->data, len,
- 						DMA_TO_DEVICE)) - byte_offset;
- 	/* Make sure the address is written before we give it to HW */
- 	wmb();
--- 
-2.30.2
+Help us out here - where was this filter allocated?  Please describe
+the code flow which led to this leak.  Rather than simply saying "there
+is a leak".
+
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -1698,6 +1698,13 @@ static void copy_seccomp(struct task_struct *p)
+>  #endif
+>  }
+>  
+> +static void release_seccomp(struct task_struct *p)
+> +{
+> +#ifdef CONFIG_SECCOMP
+> +	seccomp_filter_release(p);
+> +#endif
+
+ifdefs aren't needed?
+
+> +}
+> +
+>  SYSCALL_DEFINE1(set_tid_address, int __user *, tidptr)
+>  {
+>  	current->clear_child_tid = tidptr;
+> @@ -2405,6 +2412,7 @@ static __latent_entropy struct task_struct *copy_process(
+>  	return p;
+>  
+>  bad_fork_cancel_cgroup:
+> +	release_seccomp(p);
+
+Why not simply call seccomp_filter_release() here, without ifdefs?
+
+>  	sched_core_free(p);
+>  	spin_unlock(&current->sighand->siglock);
+>  	write_unlock_irq(&tasklist_lock);
 

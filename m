@@ -2,76 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 455844813A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 14:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE77F4813A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 14:50:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236893AbhL2Nl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 08:41:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236788AbhL2Nl4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 08:41:56 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBE4C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 05:41:56 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id m25so18875025qtq.13
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 05:41:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=hQ5DbP4MITHgtHViXOya0lanhcMqZ8b4WidUu29kIn4=;
-        b=iI6yWXvORnvCU82JGYR/sd1knKENSQI8qHa1dQD+PmirOXpdFU63SoCKqA17EMGFxD
-         h0R0I4fSRY2oTGI2ByOuRrdMneEevgEK1aaKZfxeNv9PuSrVvIZC+b3ntII2KmYV6UUB
-         8s84+2Iu7Q/zBN0CUg7Sg26o9El07/6q1xYOVagEAx2PJR1AUVVVHRrGCIiWBS9/sf6d
-         KmYmdKs8ZC+zMarIwqCVN+az0ABpJrLJ6Lo6MuB4oSIZAaGiuGKklrQEcvEP/WKQhMPn
-         Q/EUppG17gBsEMUiJtfnuhZ/kuEfjPeYcB0xY15RH0U6qfZi7kK07aWr0JeUkhUekI6p
-         HXhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=hQ5DbP4MITHgtHViXOya0lanhcMqZ8b4WidUu29kIn4=;
-        b=glOdm9bR+UaLHHuyAnYDZidc1AdaJFIpA+AR9BTbMGaVWGgW04y0OooMA9Q+bo+vHr
-         mntr5rOOlw6cTdH+TPLrRuQTwBIsnFYiBjejutAo6t5O3ypXtXABSko/RCNDo4fK7R09
-         Zd1U+tq38WRrkb4GEIsX7jiL3hIYkqzOVK4zUsGCuCINIccaKmKYQbXRVpx7PQQz2+Us
-         +44K0R8BSiH0Zj5XAVpLdqnM/md5khCFka47L+tvRITlDR/l+sKVfMpFumgcHfx2+U/q
-         XoD4Bs+VEKpx+sfDgbM49zA9XJ2FwLSNwBOt02PZfDpatdz3ZqrSu1xP51C3kqmw7Y92
-         LkmQ==
-X-Gm-Message-State: AOAM533zRMBUaXJaAOkgBGe0BzvlgIMszrn0K+UNqOqwOsnPKtIqkH0v
-        30CoM/gbSdWjh0BgXuTFDnBoQN4imukkgXTN0n0=
-X-Google-Smtp-Source: ABdhPJyoO78ZCt5hvgZhKMrilJeVLi2KaEjj5r2BeAV8aXA3dqoOewPwOgNa3vD/LsopBwaPX2kaYZ6VZqS8oXyckQ8=
-X-Received: by 2002:ac8:7d95:: with SMTP id c21mr22490155qtd.433.1640785315120;
- Wed, 29 Dec 2021 05:41:55 -0800 (PST)
+        id S236885AbhL2Nte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 08:49:34 -0500
+Received: from mga12.intel.com ([192.55.52.136]:5537 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229554AbhL2Ntd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 08:49:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640785773; x=1672321773;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=anZN01Crx5ZF6OUj2MH0zGoUy0Or8FI4/GF+5LBVEBc=;
+  b=ElGIgVGeRtL+SGmKcM+6KpUFRCFia7CEk2j+idiZz4wPwFyh+N9vQf0p
+   pwgqywSEfEDI3KIv9q8v8n+XbbcKS8sPIuskCAJeTuI23mfVpCThYqtwq
+   +oRdHHKsvYIYYVdzRPY4V7MGVGrlo6QIR6mXNtaU4C0gTCzo0BRqXXI+M
+   89hDccxL2euPcq7VPYJhpUrnMyciqySJxsVR9nT80XHMgznuAje2fJVCr
+   jlS+SzXbdYH3/TPxQWpsJ+wVGsUzv41SZEfO0lzSlUgjKXYxlbUZNNVmf
+   Avk6rzPFSjh3zhb67tYjsvlWqTAZag6ueKrul3Zch1sr8OA1QGIsRFM1b
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="221516560"
+X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
+   d="scan'208";a="221516560"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 05:49:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
+   d="scan'208";a="524821653"
+Received: from mylly.fi.intel.com (HELO [10.237.72.50]) ([10.237.72.50])
+  by fmsmga007.fm.intel.com with ESMTP; 29 Dec 2021 05:49:30 -0800
+Message-ID: <1d3c1df9-42b8-e451-f622-32d8c1e6d1b5@linux.intel.com>
+Date:   Wed, 29 Dec 2021 15:49:29 +0200
 MIME-Version: 1.0
-Received: by 2002:a05:6214:c2f:0:0:0:0 with HTTP; Wed, 29 Dec 2021 05:41:54
- -0800 (PST)
-Reply-To: mrsaishag45@gmail.com
-From:   Mrs Aisha Al-Qaddafi <mrsaishagaddafi344@gmail.com>
-Date:   Wed, 29 Dec 2021 05:41:54 -0800
-Message-ID: <CADgtnONpdNKrf9VEOcvvaYLcFQq-JnGuuoKQ0mnw1iz0rbPW1A@mail.gmail.com>
-Subject: Dear Friend,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.4.1
+Subject: Re: [PATCH v2 13/23] counter: Provide alternative counter
+ registration functions
+Content-Language: en-US
+To:     Jonathan Cameron <jic23@kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>, kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
+ <20211227094526.698714-14-u.kleine-koenig@pengutronix.de>
+ <20211228180017.37c2703d@jic23-huawei>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20211228180017.37c2703d@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Friend,
+On 12/28/21 20:00, Jonathan Cameron wrote:
+> On Mon, 27 Dec 2021 10:45:16 +0100
+> Uwe Kleine-König         <u.kleine-koenig@pengutronix.de> wrote:
+>> +	if (err < 0)
+>> +		goto err_chrdev_add;
+>> +
+>> +	device_initialize(dev);
+>> +	/* Configure device structure for Counter */
+>> +	dev->type = &counter_device_type;
+>> +	dev->bus = &counter_bus_type;
+>> +	dev->devt = MKDEV(MAJOR(counter_devt), id);
+> 
+> As 0-day pointed out id not initialized.
+> 
+This was the reason why second counter instance initialization failed 
+for me when testing the patch 17. I fixed it locally by changing the 
+line a few rows above the MKDEV():
 
-I came across your e-mail contact prior a private search while in need
-of your assistance. My name is Aisha Gaddafi a single Mother and a
-Widow with three Children. I am the only biological Daughter of late
-Libyan President (Late Colonel Muammar Gaddafi).
-
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country, may be from there, we can build business relationship in
-the nearest future.
-
-I am willing to negotiate investment/business profit sharing ratio
-with you base on the future investment earning profits.
-Best Regards
-Mrs Aisha Gaddafi
+-	dev->id = err;
++	dev->id = id = err;

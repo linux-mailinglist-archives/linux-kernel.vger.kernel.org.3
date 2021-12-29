@@ -2,121 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18A5948137D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 14:27:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7E7481393
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 14:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236119AbhL2N1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 08:27:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49180 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbhL2N1P (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 08:27:15 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CF4C061574;
-        Wed, 29 Dec 2021 05:27:14 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id o1so37346301uap.4;
-        Wed, 29 Dec 2021 05:27:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=plwfn4HhkfSwAkDA5+Rxr/qc89l/R2Q9DQJ1rySeql0=;
-        b=qSW/MLu5sL3pEjuOO0+udEqY7mYB2Evl01/KaQhZHYJdyfFHTOJjrfhqSzEiUksnil
-         OwWSOjI7nMMBbXUgyV5EelPtb03+g2RWjcrV12puToJazk9jBw3h9aurSyTi6ZQ0VCbF
-         g2Woe7hg19CPX3IEaQ0dmJiDoZ5AHNAiHE5n3C5Ug9LbYS/xWvQP68BbxC2FY5JaQTg3
-         VJrznu27/yu8cUqTtGdmPb4dyKoHOeGi4WmZX8gFF8KdPlum9/OS+IEVBqU17V6LyCWx
-         FDjbLaqFwDFQGqqOkljzNeH2VQp8lrXyrQb6MlhcAdK93+4cv+FhYprlEdvVuFU+VLLf
-         o+bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=plwfn4HhkfSwAkDA5+Rxr/qc89l/R2Q9DQJ1rySeql0=;
-        b=INNl2vfJBz7mXPX/bYOCO4eYklNXR5x5gsL4tF8zTafpFwQxsN2LEf+w6lrhiH4FdA
-         M6K7L5p9Eo25ZgZaeuAPa4Wkdv8VaquJU7OisHE8s1SX/WMdWI/FdlFyDerFtpO9xdi6
-         ouaSG1FY9ChsoU/x/YfVV1apayTNYecBGfSDukSMZGi2746QPrKcrgnP2arCyxQXustq
-         Xo5u5dDAc5Bsbs949nqnrdV69no0e3Coij5gN9j93IaMztjBFIT2TCO3J8nqyzEEirY5
-         d/DC494J7R+3z/Fxii2ouAz23vBBFOyJesUFqKO2RUC8Yk6b8VGaMuOV3bne6I2AWg6U
-         F91Q==
-X-Gm-Message-State: AOAM532sx1/vNvP+IiYeGxVKNT70Q13cIcEy2pMKAsYrH1xgxJYVkPd9
-        STZ/3eid/mkNO21/5qPhyBwUu9d5Z9AGQznVwhVGxIQm4b/qCQ==
-X-Google-Smtp-Source: ABdhPJzj18eeNH9o9aBSuGhvghPzH57Q+tegpFCEIDaFZ4uk54yphI7ZmE7XaOvxwB6yl5tGYvrJpK0uZV6ZLqfriEM=
-X-Received: by 2002:a05:6102:5113:: with SMTP id bm19mr7924637vsb.10.1640784434072;
- Wed, 29 Dec 2021 05:27:14 -0800 (PST)
+        id S236706AbhL2Nf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 08:35:26 -0500
+Received: from ofcsgdbm.dwd.de ([141.38.3.245]:40387 "EHLO ofcsgdbm.dwd.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229554AbhL2NfZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 08:35:25 -0500
+X-Greylist: delayed 446 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 Dec 2021 08:35:25 EST
+Received: from localhost (localhost [127.0.0.1])
+        by ofcsg2dn4.dwd.de (Postfix) with ESMTP id 4JPBzf5pHjz3xgm
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 13:27:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dwd.de; h=
+        content-type:content-type:mime-version:message-id:subject
+        :subject:from:from:date:date:received:received:received:received
+        :received:received:received:received; s=dwd-csg20210107; t=
+        1640784478; x=1641994079; bh=3lQyP9gEuAL2BkggA1WaTo0iKwmbWDEBUd/
+        b6mww0Y4=; b=sAIvqIvunM01xMJsz6Vmxr7LICYiztxDyzRUUlCTUUNaAqmW44d
+        kXcbRgKH9yNnC3/4Dm0Y730psVp712sfNdjfeYIEHgGVlEKX9ETC7Hbx4L046TOX
+        26xbparZNpsgNMPy7aqCRd+OhbZUX/Ettd7CHYxSiaDBOf0g1nVgKd86jMwrC9wI
+        DyCIgshqPbrAB1NtZQNCsmMLxQc71mZtpOZcqhcXCVBXsH8KBR6A+0OoFwY9dwmi
+        SrYm3JwqnKQqTQliN7tTqFA0/D8nZuJBJ79cJm9aXohSyAEAia2ExyQbj2Q7RZQx
+        nteOC59m5ASghAmezBvDYaOJGiOs1KjzWBw==
+X-Virus-Scanned: by amavisd-new at csg.dwd.de
+Received: from ofcsg2cteh1.dwd.de ([172.30.232.65])
+        by localhost (ofcsg2dn4.dwd.de [172.30.232.27]) (amavisd-new, port 10024)
+        with ESMTP id HXJeyvNEnXx9 for <linux-kernel@vger.kernel.org>;
+        Wed, 29 Dec 2021 13:27:58 +0000 (UTC)
+Received: from ofcsg2cteh1.dwd.de (unknown [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 8A344C9014AE
+        for <root@ofcsg2dn4.dwd.de>; Wed, 29 Dec 2021 13:27:58 +0000 (UTC)
+Received: from ofcsg2cteh1.dwd.de (unknown [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 7EFDDC9014A8
+        for <root@ofcsg2dn4.dwd.de>; Wed, 29 Dec 2021 13:27:58 +0000 (UTC)
+X-DDEI-TLS-USAGE: Unused
+Received: from ofcsgdbm.dwd.de (unknown [172.30.232.27])
+        by ofcsg2cteh1.dwd.de (Postfix) with ESMTP
+        for <root@ofcsg2dn4.dwd.de>; Wed, 29 Dec 2021 13:27:58 +0000 (UTC)
+Received: from ofcsgdbm.dwd.de by localhost (Postfix XFORWARD proxy);
+ Wed, 29 Dec 2021 13:27:58 -0000
+Received: from ofcsg2dvf2.dwd.de (ofcsg2dvf2.dwd.de [172.30.232.11])
+        by ofcsg2dn4.dwd.de (Postfix) with ESMTPS id 4JPBzf3HvYz3xgm
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 13:27:58 +0000 (UTC)
+Received: from ofmailhub.dwd.de (ofmailhub.dwd.de [141.38.39.196])
+        by ofcsg2dvf2.dwd.de  with ESMTP id 1BTDRwa3003085-1BTDRwa4003085;
+        Wed, 29 Dec 2021 13:27:58 GMT
+Received: from diagnostix.dwd.de (diagnostix.dwd.de [141.38.44.45])
+        by ofmailhub.dwd.de (Postfix) with ESMTP id 4EBE7E2BEB;
+        Wed, 29 Dec 2021 13:27:58 +0000 (UTC)
+Date:   Wed, 29 Dec 2021 13:27:58 +0000 (GMT)
+From:   Holger Kiehl <Holger.Kiehl@dwd.de>
+To:     linux-kernel <linux-kernel@vger.kernel.org>
+cc:     Christoph Hellwig <hch@lst.de>
+Subject: bpfilter: write fail messages with 5.15.x and centos 7.9.2009
+Message-ID: <71e27b99-ef9c-4563-833d-e6eab5419cdb@diagnostix.dwd.de>
 MIME-Version: 1.0
-References: <20211229125730.6779-1-sys.arch.adam@gmail.com> <YcxfJjpTBm6Gbiwb@kroah.com>
-In-Reply-To: <YcxfJjpTBm6Gbiwb@kroah.com>
-From:   Adam Kandur <sys.arch.adam@gmail.com>
-Date:   Wed, 29 Dec 2021 16:27:03 +0300
-Message-ID: <CAE28pkNsuEEPt5B-a7iqhcQftxRH15P-GKJfAEZUbEcYYMWWZQ@mail.gmail.com>
-Subject: Re: [PATCH] net/usb: remove goto in ax88772_reset()
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; format=flowed; charset=US-ASCII
+X-FE-Policy-ID: 2:2:1:SYSTEM
+X-TMASE-Version: DDEI-5.1-8.6.1018-26620.007
+X-TMASE-Result: 10--1.680000-10.000000
+X-TMASE-MatchedRID: JIoVbvEI+CWCrAvdroZEJm1rAlJKwOBJ3WFaxVW7M2iO7zF9OdXqVTAI
+        p5pTdcgudPVq34ohx1YjGJq9K65f6a4PSwdLs3CEngIgpj8eDcDYr6U3ZlQkdsRB0bsfrpPIcSq
+        bxBgG0w5ARGa+8rI13GpVk2R+DxMYddCG7Yv8ov+256cnZoV+5YrbCj3qWi1ZOItzQfqqJ9aVbI
+        BWGCvRsmDM9vAi/GQVS9KA1c/c0wEJ6EK9GiR53NHoD3/vk9U/2HWzpDxX3d0GwuNnqUs/PQ==
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-DDEI-PROCESSED-RESULT: Safe
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings.
-I thought, there is no reason to have out label. Because it has only
-one return statement and there is return 0 before. So it seemed to me
-that "goto out;" could be replaced with the "return ret;" line. Which
-seems more readable to me.
+Hello,
 
-thanks,
+I just upgraded the kernel from 5.10.x to 5.15.12 on an old Centos
+7.9.2009 server. The kernel is build on a new fedora 35 system
+via 'make binrpm-pkg'. With this I see the following errors:
 
-adam k.
+    [  232.140766] bpfilter: Loaded bpfilter_umh pid 6327
+    [  232.152144] bpfilter: write fail -32
+    [  232.187175] bpfilter: Loaded bpfilter_umh pid 6330
+    [  232.198540] bpfilter: write fail -32
+    [  232.234604] bpfilter: Loaded bpfilter_umh pid 6332
+    [  232.245916] bpfilter: write fail -32
+    [  232.281883] bpfilter: Loaded bpfilter_umh pid 6337
+    [  232.293222] bpfilter: write fail -32
+    [  232.335798] bpfilter: Loaded bpfilter_umh pid 6380
+    [  232.347157] bpfilter: write fail -32
+    [  244.411821] bpfilter: Loaded bpfilter_umh pid 6712
+    [  244.423216] bpfilter: write fail -32
 
-On Wed, Dec 29, 2021 at 4:14 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Dec 29, 2021 at 03:57:30PM +0300, Adam Kandur wrote:
-> > goto statements in ax88772_reset() in net/usb/asix_devices.c are used
-> > to return ret variable. As function by default returns 0 if ret
-> > variable >= 0 and "out:" only returns ret, I assume goto might be
-> > removed.
-> >
-> > Signed-off-by: Adam Kandur <sys.arch.adam@gmail.com>
-> >
-> > ---
-> >  drivers/net/usb/asix_devices.c | 9 +++------
-> >  1 file changed, 3 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-> > index 4514d35ef..9de5fc53f 100644
-> > --- a/drivers/net/usb/asix_devices.c
-> > +++ b/drivers/net/usb/asix_devices.c
-> > @@ -332,23 +332,20 @@ static int ax88772_reset(struct usbnet *dev)
-> >       ret = asix_write_cmd(dev, AX_CMD_WRITE_NODE_ID, 0, 0,
-> >                            ETH_ALEN, data->mac_addr, 0);
-> >       if (ret < 0)
-> > -             goto out;
-> > +             return ret;
-> >
-> >       /* Set RX_CTL to default values with 2k buffer, and enable cactus */
-> >       ret = asix_write_rx_ctl(dev, AX_DEFAULT_RX_CTL, 0);
-> >       if (ret < 0)
-> > -             goto out;
-> > +             return ret;
-> >
-> >       ret = asix_write_medium_mode(dev, AX88772_MEDIUM_DEFAULT, 0);
-> >       if (ret < 0)
-> > -             goto out;
-> > +             return ret;
-> >
-> >       phy_start(priv->phydev);
-> >
-> >       return 0;
-> > -
-> > -out:
-> > -     return ret;
-> >  }
->
-> There is nothing wrong with the goto here, it's the common error path
-> style for the kernel.  Why should it be removed?  What is the benefit
-> here?
->
-> thanks,
->
-> greg k-h
+These appear as soon as something is done via iptables (setting
+something or just viewing). Is this something I need to worry
+about? Under 5.10.81 I did not see these messages.
+
+In Jul 2020 I see a similar report 'bpfilter logging write errors in
+dmesg', but could not find a solution.
+
+Any hint what I can do to fix this?
+
+Thanks,
+Holger

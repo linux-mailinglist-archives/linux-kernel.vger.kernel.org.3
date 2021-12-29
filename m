@@ -2,129 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2BB848143B
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 15:48:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B57B6481440
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 15:53:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240422AbhL2OsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 09:48:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236856AbhL2OsR (ORCPT
+        id S240437AbhL2Oxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 09:53:39 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:34978 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233850AbhL2Oxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 09:48:17 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E8DC061574;
-        Wed, 29 Dec 2021 06:48:16 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id j18so44910729wrd.2;
-        Wed, 29 Dec 2021 06:48:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OMlLUALYJKdFe/JZOoIbTwKW7ZzuyEQvczxSC+L2fy4=;
-        b=gV5diQtKpyLmmu7MzK3MftjSDVmr/TNKs7RNreXjQ40dRcKDEhSERRqvVZS5aJpptu
-         h3PZs7f/OILYzS23AA7Gnj7dcv0JxUvq9tYR76ymZHZveWRJ/yCYwPGoQGyReDQlqN5p
-         2bbBOcLc+WooNqMT/AVLEeiw4wciVXqnVNx33k1pbHY313hpvYkdzN2xkdkvhS4YZV58
-         feodJ/f2+iSdFhNQ+S5O+B1dbFVuOFOepzIoziV64fsujG75Ul4Hx3Z96uXxrnkmitcq
-         VBWsMxPU893TcKYHdQ07KCR0IQi95uAP9OHFccCdLmNYTGelBoBm/K0q3JdclzCXPbW4
-         Ov/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OMlLUALYJKdFe/JZOoIbTwKW7ZzuyEQvczxSC+L2fy4=;
-        b=1mHqbyps5dwasvGLfypg/5rnTpVQzoNID3R0ySUkJSD6+6IxLwFF6A8tGHyjxC3wN9
-         YxPByqUPebnJgIC5sFydkXcZ/MntOfCUs++QcQXPrcw7c/HOUbvY2OfknEsmivLEez0F
-         Er7pku7GCGMaA81DnOrucXBUyrKXfnOV5ixE/zcIXwtlREXEkxX0NkeTwcJTubocgIxU
-         pT5RAwsLOiDy43UCb0VrA/vgh65aF5gqUa38q2D27DKDtL/OnzpM2rVcaTcTlSxPj/RT
-         ggtf/osATdn40OJ06k3LlixgHUSuefWfKPVry1Z9DxUQbFasu0N+x369hM9jhPGvj+lB
-         SPKA==
-X-Gm-Message-State: AOAM532K2uWBRHxueDTsG5aEMMg8gOzIqifa3QupFngQJqOFkFYYFLBa
-        gLPr0jNHLDuWef0yCT3B49U=
-X-Google-Smtp-Source: ABdhPJy+nTFpxhAiApnXGMcT2sANzUH6lS6azCYKQd7r4UcTWbghoRh8SdR196X/CImptF1IkNaZ2A==
-X-Received: by 2002:adf:db04:: with SMTP id s4mr21643636wri.467.1640789295268;
-        Wed, 29 Dec 2021 06:48:15 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.161.251])
-        by smtp.gmail.com with ESMTPSA id y11sm24767746wry.70.2021.12.29.06.48.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Dec 2021 06:48:14 -0800 (PST)
-Message-ID: <a96ff42c-d8e0-3c26-633e-dad4db18a71a@gmail.com>
-Date:   Wed, 29 Dec 2021 15:48:14 +0100
+        Wed, 29 Dec 2021 09:53:38 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DB4E621109;
+        Wed, 29 Dec 2021 14:53:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1640789617; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AGrhUF/lzKRcwDX1Q/od0fjVGpbS2+6A5chATdaD0Xo=;
+        b=V69ogZWOz8qlnop+B5C7pygFjg9p230q9LePR7BjnqgBQoWImLvLHyz5wm5ThBxIF8i3BF
+        3qRlGONc3wzikXEl0LybXycYe3ok4cVYzOBwEOvD0onu89Dg3AYyei7k7FfYoG/Ra4bNJg
+        2cskwNXiv5bkgefJCANWs6wcjDzi1AI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1640789617;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AGrhUF/lzKRcwDX1Q/od0fjVGpbS2+6A5chATdaD0Xo=;
+        b=nkrUSUjVX8YXSQXjtNesPIMxwQuMYxjZ11AVzoJj/pxorvpdb6wM+oTtbcn9TVw3pq38Py
+        RtVLYH4c+3r8WYBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6927413BC1;
+        Wed, 29 Dec 2021 14:53:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id qaVvFnF2zGH6WwAAMHmgww
+        (envelope-from <osalvador@suse.de>); Wed, 29 Dec 2021 14:53:37 +0000
+Date:   Wed, 29 Dec 2021 15:53:35 +0100
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Chen Wandun <chenwandun@huawei.com>
+Cc:     akpm@linux-foundation.org, vbabka@suse.cz, iamjoonsoo.kim@lge.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        wangkefeng.wang@huawei.com
+Subject: Re: [PATCH] mm/page_isolation: unset migratetype directly for non
+ Buddy page
+Message-ID: <Ycx2b8yla4VzeWWs@localhost.localdomain>
+References: <20211229033649.2760586-1-chenwandun@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v8 02/14] dt-bindings: arm: airoha: Add binding for EN7523
- SoC and EVB
-Content-Language: en-US
-To:     Felix Fietkau <nbd@nbd.name>, linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        John Crispin <john@phrozen.org>
-Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211220211854.89452-1-nbd@nbd.name>
- <20211220211854.89452-3-nbd@nbd.name>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20211220211854.89452-3-nbd@nbd.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211229033649.2760586-1-chenwandun@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 29, 2021 at 11:36:49AM +0800, Chen Wandun wrote:
+> There is no need to try to move_freepages_block for pages that is not
+> in buddy in function unset_migratetype_isolate, it can directly set
+> migrate type.
 
+The above could benefit from some rephrasing, someting along these lines
+maybe?
 
-On 20/12/2021 22:18, Felix Fietkau wrote:
-> From: John Crispin <john@phrozen.org>
+"In unset_migratetype_isolate(), we can bypass the call to
+move_freepages_block() for non-buddy pages"
+
 > 
-> Add devicetree binding for Airoha EN7523 SoC and evaluation board.
+> It will save a few cpu cycles for some situations such as cma and
+> hugetlb when allocating continue pages, in these situation function
+> alloc_contig_pages will be called.
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: John Crispin <john@phrozen.org>
-> Signed-off-by: Bert Vermeulen <bert@biot.com>
-> Signed-off-by: Felix Fietkau <nbd@nbd.name>
-
-Now part of v5.17-tmp/dts32
-
-Thanks.
-
-> ---
->   .../devicetree/bindings/arm/airoha.yaml       | 28 +++++++++++++++++++
->   1 file changed, 28 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/arm/airoha.yaml
+> alloc_contig_pages
+> 	__alloc_contig_migrate_range
+> 	isolate_freepages_range ==> pages has been remove from buddy
+> 	undo_isolate_page_range
+> 		unset_migratetype_isolate ==> can directly set migratetype
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/airoha.yaml b/Documentation/devicetree/bindings/arm/airoha.yaml
-> new file mode 100644
-> index 000000000000..fc19b1a6f37b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/airoha.yaml
-> @@ -0,0 +1,28 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/arm/airoha.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Airoha SoC based Platforms Device Tree Bindings
-> +
-> +maintainers:
-> +  - Felix Fietkau <nbd@nbd.name>
-> +  - John Crispin <john@phrozen.org>
-> +
-> +description:
-> +  Boards with an Airoha SoC shall have the following properties.
-> +
-> +properties:
-> +  $nodename:
-> +    const: '/'
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - airoha,en7523-evb
-> +          - const: airoha,en7523
-> +
-> +additionalProperties: true
-> +
-> +...
-> 
+> Fixes: 3c605096d315 ("mm/page_alloc: restrict max order of merging on isolated pageblock")
+> Signed-off-by: Chen Wandun <chenwandun@huawei.com>
+
+I am ok with the "fix", but I don't think this deserves a Fixes tag.
+Sure, it can spare some cpu cycles, but besides that, there is no harm
+in the actual code unless I missed something.
+
+Others might feel stronger about that.
+
+Reviewed-by: Oscar Salvador <osalvador@suse.de>
+
+
+-- 
+Oscar Salvador
+SUSE Labs

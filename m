@@ -2,100 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B57B6481440
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 15:53:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5F6481446
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 15:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240437AbhL2Oxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 09:53:39 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:34978 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233850AbhL2Oxi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 09:53:38 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DB4E621109;
-        Wed, 29 Dec 2021 14:53:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1640789617; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AGrhUF/lzKRcwDX1Q/od0fjVGpbS2+6A5chATdaD0Xo=;
-        b=V69ogZWOz8qlnop+B5C7pygFjg9p230q9LePR7BjnqgBQoWImLvLHyz5wm5ThBxIF8i3BF
-        3qRlGONc3wzikXEl0LybXycYe3ok4cVYzOBwEOvD0onu89Dg3AYyei7k7FfYoG/Ra4bNJg
-        2cskwNXiv5bkgefJCANWs6wcjDzi1AI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1640789617;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AGrhUF/lzKRcwDX1Q/od0fjVGpbS2+6A5chATdaD0Xo=;
-        b=nkrUSUjVX8YXSQXjtNesPIMxwQuMYxjZ11AVzoJj/pxorvpdb6wM+oTtbcn9TVw3pq38Py
-        RtVLYH4c+3r8WYBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6927413BC1;
-        Wed, 29 Dec 2021 14:53:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id qaVvFnF2zGH6WwAAMHmgww
-        (envelope-from <osalvador@suse.de>); Wed, 29 Dec 2021 14:53:37 +0000
-Date:   Wed, 29 Dec 2021 15:53:35 +0100
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Chen Wandun <chenwandun@huawei.com>
-Cc:     akpm@linux-foundation.org, vbabka@suse.cz, iamjoonsoo.kim@lge.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        wangkefeng.wang@huawei.com
-Subject: Re: [PATCH] mm/page_isolation: unset migratetype directly for non
- Buddy page
-Message-ID: <Ycx2b8yla4VzeWWs@localhost.localdomain>
-References: <20211229033649.2760586-1-chenwandun@huawei.com>
+        id S240454AbhL2O5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 09:57:09 -0500
+Received: from mga02.intel.com ([134.134.136.20]:50682 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233681AbhL2O5H (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 09:57:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640789827; x=1672325827;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6ugdZcGIneaCYhIVRdRjyCv5QCbeHqw4trm5u9986oo=;
+  b=XLEotPncHBtPIFYHjntK2VxBygvk8m28zyM1H34r1C+sVgNrxitIWPWI
+   5RrGFidAtKAyFa5Rmc8CKcSKWRkpIwRsPITVL82zXV3/dcxHe9ejVD3aC
+   7Swg96mSwdS7JOUGYFwzg30PvJweCF+3XwsMBCa1LniCefo4dsZ7NkaYR
+   yiDu9NmNeTpeA2htVmIGuls2fWWCyUgx9gSYUSIzbDroIgsg49allyTtT
+   3qrlwKbhFhmdRfFUuiq/tyG04ykVQ/IDg9Cw+dvSJg3rCbq9+MB6BzHv4
+   EpY5LG8bDpD2smLDfn/1GMVOJ+JDlMWbTi+22Uc0xLw+1sibY+gtL4uv7
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="228834219"
+X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
+   d="scan'208";a="228834219"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 06:57:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
+   d="scan'208";a="619056640"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 29 Dec 2021 06:57:04 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n2aO0-000939-AK; Wed, 29 Dec 2021 14:57:04 +0000
+Date:   Wed, 29 Dec 2021 22:56:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Cong Wang <xiyou.wangcong@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [congwang:sch_bpf 3/3] ERROR: modpost: "qdisc_lookup_rcu"
+ [net/sched/sch_bpf.ko] undefined!
+Message-ID: <202112292229.XxqsKDIS-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211229033649.2760586-1-chenwandun@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 11:36:49AM +0800, Chen Wandun wrote:
-> There is no need to try to move_freepages_block for pages that is not
-> in buddy in function unset_migratetype_isolate, it can directly set
-> migrate type.
+tree:   https://github.com/congwang/linux.git sch_bpf
+head:   5fb0da1e47e0c68da0323a3e0399b2628a13e999
+commit: 5fb0da1e47e0c68da0323a3e0399b2628a13e999 [3/3] net_sched: introduce eBPF based Qdisc
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20211229/202112292229.XxqsKDIS-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/congwang/linux/commit/5fb0da1e47e0c68da0323a3e0399b2628a13e999
+        git remote add congwang https://github.com/congwang/linux.git
+        git fetch --no-tags congwang sch_bpf
+        git checkout 5fb0da1e47e0c68da0323a3e0399b2628a13e999
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash
 
-The above could benefit from some rephrasing, someting along these lines
-maybe?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-"In unset_migratetype_isolate(), we can bypass the call to
-move_freepages_block() for non-buddy pages"
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-> 
-> It will save a few cpu cycles for some situations such as cma and
-> hugetlb when allocating continue pages, in these situation function
-> alloc_contig_pages will be called.
-> 
-> alloc_contig_pages
-> 	__alloc_contig_migrate_range
-> 	isolate_freepages_range ==> pages has been remove from buddy
-> 	undo_isolate_page_range
-> 		unset_migratetype_isolate ==> can directly set migratetype
-> 
-> Fixes: 3c605096d315 ("mm/page_alloc: restrict max order of merging on isolated pageblock")
-> Signed-off-by: Chen Wandun <chenwandun@huawei.com>
+>> ERROR: modpost: "qdisc_lookup_rcu" [net/sched/sch_bpf.ko] undefined!
 
-I am ok with the "fix", but I don't think this deserves a Fixes tag.
-Sure, it can spare some cpu cycles, but besides that, there is no harm
-in the actual code unless I missed something.
-
-Others might feel stronger about that.
-
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
-
-
--- 
-Oscar Salvador
-SUSE Labs
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

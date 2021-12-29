@@ -2,223 +2,413 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB5204810A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 08:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D8E4810A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 08:27:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239103AbhL2H1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 02:27:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
+        id S239111AbhL2H1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 02:27:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239094AbhL2H1Y (ORCPT
+        with ESMTP id S239095AbhL2H1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 02:27:24 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE10DC06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 23:27:23 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id f18-20020a17090aa79200b001ad9cb23022so19171956pjq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 23:27:23 -0800 (PST)
+        Wed, 29 Dec 2021 02:27:46 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD85C061574;
+        Tue, 28 Dec 2021 23:27:46 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id a11-20020a17090a854b00b001b11aae38d6so19194410pjw.2;
+        Tue, 28 Dec 2021 23:27:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eZSNki/251fDYLWVkOPn8gWn57CxzUzo65fAsecZzSY=;
-        b=C2b0u1tClTPmdQioW+rxkZ+V7pqKZXRaISlUmt8iCW927RhgQrOFUcbd6meMPzDYNJ
-         vx/XLkZIkznWTkZgvAJ0ypkuBP40ipDUo3JMy4vf3JbUxpYhuOGGxI3JuXXye7pCnNXn
-         OHFvXOdT2LXYXBGWmxRgIZgz0RV/Sdkl5FYD5J82qNlhU2jZNlaB03hEd6b34lmLCcpQ
-         YED6khoDbdY0+qbd/rqXiy3pREdcFpr0WizTcRnrPvPmpwUgw5+wkuXI7xO9d6X8xnTE
-         021Ucv5pypqtaIcTorUmLe52PUYDNHSXbPkhRRZ6tIZ/1Yr4jRcacTFc0vZ6xiGpSehi
-         KHCg==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pfBf+mjxOblstT2YDIb8V2e3fmSWylUHns8bL17IC00=;
+        b=b5KZcAny+xSwIy0THUcaGOOHTQxnGwojlUlOwt3uD6zNwFMg4y28E7n/3NHt79BRYf
+         Rtx9jMnBscStnPvNVCaPenl7VuzsDrZkgcZgUttTxdRjUJbJ3ZGSOyTFM5PmHqZ8KTWt
+         PUIJ+BCWndySF10Ttx1cIaBhLr4CF9QRrawiRGrGDLBIARsK6W18OEt9eUDij/s8wgQx
+         926s10jg78rx9Fes1dY6sVVqyl+hDQq9ZhPgkUg25nyxuRmoIz+gnanWu/TeysytNEze
+         nrab1nWVIN8r6jHaR1qTKY/NfRh2y7MIPKRoXKfD6mo4ufBQFBCj2OFFcIEbhvo2syHO
+         ybFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eZSNki/251fDYLWVkOPn8gWn57CxzUzo65fAsecZzSY=;
-        b=kWA+hjJ3ZEGOM0S0hArCFM6w7XLhrHGcCEl0Sg4tabbD8l9dYqcIB8/KvImc1lytou
-         Qwwm6YSU/KUplr7rlm7bcpGQyP7RGHYeZDRHLhsrH4iLk/g+e4nZrKRU+l0qF6ZCOuKc
-         uKP6myQ7uUCakXDt2aHpTUJ0JZIXtQxzIdOpDg26ckTSiH8U4+MYwl79gcB1/bq+i+9v
-         a2hXtAGSznffGuywPvN6VkIhbHTll+DitJMUZau0jRHBcUJjP6gcCOvJKvEPRGq6XjrL
-         avZNVLJv87MjUB69c6WS61pDHJVCtQem2TLXl5E43xdeA4PajDfNASHJQwcmyqKWRPca
-         wSSg==
-X-Gm-Message-State: AOAM5316LY99qAv5e/2v/DHugc9xAgH3U44qt4lIkxtGfrSRV6PYmkFZ
-        zPqdqh2YoZXqSUfEklkYgIsKkKornk8WusXVQPRIWg==
-X-Google-Smtp-Source: ABdhPJwdorV9rKsCXwNUTFsMyMCJcCadilIxzOqhyG+k64txb8IQphCdPdY79KAgaFh5MoE1tQRj+5vGer2dfAH87+8=
-X-Received: by 2002:a17:902:b591:b0:149:66d6:7589 with SMTP id
- a17-20020a170902b59100b0014966d67589mr19576058pls.24.1640762843190; Tue, 28
- Dec 2021 23:27:23 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pfBf+mjxOblstT2YDIb8V2e3fmSWylUHns8bL17IC00=;
+        b=6O6D3qYEseq/3Qk1C+5yPsg65WH3zDlY1H3bxThDxcFjPBL0+cic9DUCdC+4AidbMo
+         JhF3to73+lqInSJmLauGjlQEZM+4lkI6BmcjV6O5rtIcmG/GaMxOJqsXBCx5poXZSAzg
+         FVLS1D4jUSEuEZNaTu8B0wD3wd0xuHWukYcH/XkXgH7LuqQjuJu1JJrUGspp6lL4G4ub
+         emrDJU/apK+GqylK5keDePDmwBLnebVyS+4H51dOU9S160CAMFWAwSPF9w7ZXUHMKRVv
+         ZXAyWg/8lYchX9irTYY1pHYVbz1jZmOI7g6+nUR5imIzLmF4zscC0Kd6WK4kAvG0OMIP
+         Q+Jg==
+X-Gm-Message-State: AOAM532BBkTpT+v+NorjbN7nPFgypOjBw4+GqwoJi7ARI7GOMnvNTi3i
+        BRo/Jbv2rUTmio0GMX5LMFs=
+X-Google-Smtp-Source: ABdhPJykrXpuFtgpYnoFTothOw3+sFl3t0vcuC1+pdXTBlR6r0Fh3fghhsmtDw3796Uz5Ao4dvd3aA==
+X-Received: by 2002:a17:90b:38c7:: with SMTP id nn7mr30321022pjb.135.1640762866050;
+        Tue, 28 Dec 2021 23:27:46 -0800 (PST)
+Received: from shinobu (113x37x72x24.ap113.ftth.ucom.ne.jp. [113.37.72.24])
+        by smtp.gmail.com with ESMTPSA id ot6sm23409193pjb.32.2021.12.28.23.27.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Dec 2021 23:27:45 -0800 (PST)
+Date:   Wed, 29 Dec 2021 16:27:33 +0900
+From:   William Breathitt Gray <vilhelm.gray@gmail.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Syed Nayyar Waris <syednwaris@gmail.com>
+Subject: Re: [PATCH v2 05/23] counter: 104-quad-8: Convert to counter_priv()
+ wrapper
+Message-ID: <YcwN5e7zjNLANT6d@shinobu>
+References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
+ <20211227094526.698714-6-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-References: <20211228094146.20505-1-yunfei.dong@mediatek.com>
- <20211228094146.20505-4-yunfei.dong@mediatek.com> <Ycvz4UrmbngVzIv2@google.com>
- <8102ba18b3fdcc19e6b9f53c7a635ffc084c825b.camel@mediatek.com>
-In-Reply-To: <8102ba18b3fdcc19e6b9f53c7a635ffc084c825b.camel@mediatek.com>
-From:   Tzung-Bi Shih <tzungbi@google.com>
-Date:   Wed, 29 Dec 2021 15:27:11 +0800
-Message-ID: <CA+Px+wU2aU_t2F2XOsjf5vRUikQPaftRa9062CCCNwRJK-WA3w@mail.gmail.com>
-Subject: Re: [PATCH v2, 03/12] media: mtk-vcodec: get capture queue buffer
- size from scp
-To:     "yunfei.dong@mediatek.com" <Yunfei.Dong@mediatek.com>
-Cc:     Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5JDDowHSaG6hAjzN"
+Content-Disposition: inline
+In-Reply-To: <20211227094526.698714-6-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 2:52 PM yunfei.dong@mediatek.com
-<yunfei.dong@mediatek.com> wrote:
-> On Wed, 2021-12-29 at 13:36 +0800, Tzung-Bi Shih wrote:
-> > On Tue, Dec 28, 2021 at 05:41:37PM +0800, Yunfei Dong wrote:
-> > > From: Yunfei Dong <yunfei.dong@mediatek.corp-partner.google.com>
-> >
-> > [...]
-> > > diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> > > b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> > > index 130ecef2e766..87891ebd7246 100644
-> > > --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> > > +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> > > @@ -466,6 +466,8 @@ static int vidioc_vdec_s_fmt(struct file *file,
-> > > void *priv,
-> > >                     }
-> > >                     ctx->state = MTK_STATE_INIT;
-> > >             }
-> > > +   } else {
-> > > +           ctx->capture_fourcc = fmt->fourcc;
-> > >     }
-> > >
-> > >     /*
-> > > diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> > > b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> > > index a23a7646437c..95e07cf2cd3e 100644
-> > > --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> > > +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> > > @@ -277,6 +277,7 @@ struct vdec_pic_info {
-> > >   *              to be used with encoder and stateful decoder.
-> > >   * @is_flushing: set to true if flushing is in progress.
-> > >   * @current_codec: current set input codec, in V4L2 pixel format
-> > > + * @capture_fourcc: capture queue type in V4L2 pixel format
-> > >   *
-> > >   * @colorspace: enum v4l2_colorspace; supplemental to pixelformat
-> > >   * @ycbcr_enc: enum v4l2_ycbcr_encoding, Y'CbCr encoding
-> > > @@ -322,6 +323,7 @@ struct mtk_vcodec_ctx {
-> > >     bool is_flushing;
-> > >
-> > >     u32 current_codec;
-> > > +   u32 capture_fourcc;
-> >
-> > What is the purpose of capture_fourcc?  It is not used.
-> >
-> Need to calculate each plane size according to capture fourcc type from
-> scp. The plane size of MM21 is different with MT21C. And the capture
-> fourcc type of different codec maybe different.
 
-Purpose of capture_fourcc in the context is not obvious and looks
-irrelevant to the patch.  Could it move to somewhere patch that makes
-more sense?
+--5JDDowHSaG6hAjzN
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > +/**
-> > > + * struct vdec_ap_ipi_get_param - for AP_IPIMSG_SET_PARAM
-> > > + * @msg_id : AP_IPIMSG_DEC_START
-> > > + * @inst_id     : instance ID. Used if the ABI version >= 2.
-> > > + * @data   : picture information
-> > > + * @param_type     : get param type
-> > > + * @codec_type     : Codec fourcc
-> > > + */
-> > > +struct vdec_ap_ipi_get_param {
-> > > +   uint32_t msg_id;
-> > > +   uint32_t inst_id;
-> > > +   uint32_t data[4];
-> > > +   uint32_t param_type;
-> > > +   uint32_t codec_type;
-> > > +};
-> >
-> > Are AP_IPIMSG_SET_PARAM and AP_IPIMSG_DEC_START typos?
-> >
-> It's getting message from scp side. It's looks much better to add one
-> new path from ap to scp.
+On Mon, Dec 27, 2021 at 10:45:08AM +0100, Uwe Kleine-K=C3=B6nig wrote:
+> This is a straight forward conversion to the new counter_priv() wrapper.
+>=20
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-Pardon me, I failed to understand it.  I thought the struct could be
-for AP_IPIMSG_DEC_GET_PARAM.
+This patch results in a minor merge conflict with commit c95cc0d95702
+("counter: 104-quad-8: Fix persistent enabled events bug") in linux-next
+due to context changes in quad8_events_configure() and
+quad8_watch_validate(). Fixing this after a rebase is trivial so I'll
+give my Ack here.
 
-> > > +/**
-> > > + * struct vdec_vpu_ipi_init_ack - for VPU_IPIMSG_DEC_INIT_ACK
-> > > + * @msg_id : VPU_IPIMSG_DEC_INIT_ACK
-> > > + * @status : VPU exeuction result
-> > > + * @ap_inst_addr   : AP vcodec_vpu_inst instance address
-> > > + * @data     : picture information from SCP.
-> > > + * @param_type     : get param type
-> > > + */
-> > > +struct vdec_vpu_ipi_get_param_ack {
-> > > +   uint32_t msg_id;
-> > > +   int32_t status;
-> > > +   uint64_t ap_inst_addr;
-> > > +   uint32_t data[4];
-> > > +   uint32_t param_type;
-> > > +   uint32_t reserved;
-> > > +};
-> >
-> > Same here: is VPU_IPIMSG_DEC_INIT_ACK a typo?
-> >
-> It's getting message from scp side. It's looks much better to add one new path from ap to scp.
+Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
 
-Same here: I thought it was for VPU_IPIMSG_DEC_GET_PARAM_ACK.
+> ---
+>  drivers/counter/104-quad-8.c | 58 ++++++++++++++++++------------------
+>  1 file changed, 29 insertions(+), 29 deletions(-)
+>=20
+> diff --git a/drivers/counter/104-quad-8.c b/drivers/counter/104-quad-8.c
+> index 1cbd60aaed69..6e5286cd1d4e 100644
+> --- a/drivers/counter/104-quad-8.c
+> +++ b/drivers/counter/104-quad-8.c
+> @@ -113,7 +113,7 @@ static int quad8_signal_read(struct counter_device *c=
+ounter,
+>  			     struct counter_signal *signal,
+>  			     enum counter_signal_level *level)
+>  {
+> -	const struct quad8 *const priv =3D counter->priv;
+> +	const struct quad8 *const priv =3D counter_priv(counter);
+>  	unsigned int state;
+> =20
+>  	/* Only Index signal levels can be read */
+> @@ -131,7 +131,7 @@ static int quad8_signal_read(struct counter_device *c=
+ounter,
+>  static int quad8_count_read(struct counter_device *counter,
+>  			    struct counter_count *count, u64 *val)
+>  {
+> -	struct quad8 *const priv =3D counter->priv;
+> +	struct quad8 *const priv =3D counter_priv(counter);
+>  	const int base_offset =3D priv->base + 2 * count->id;
+>  	unsigned int flags;
+>  	unsigned int borrow;
+> @@ -163,7 +163,7 @@ static int quad8_count_read(struct counter_device *co=
+unter,
+>  static int quad8_count_write(struct counter_device *counter,
+>  			     struct counter_count *count, u64 val)
+>  {
+> -	struct quad8 *const priv =3D counter->priv;
+> +	struct quad8 *const priv =3D counter_priv(counter);
+>  	const int base_offset =3D priv->base + 2 * count->id;
+>  	unsigned long irqflags;
+>  	int i;
+> @@ -213,7 +213,7 @@ static int quad8_function_read(struct counter_device =
+*counter,
+>  			       struct counter_count *count,
+>  			       enum counter_function *function)
+>  {
+> -	struct quad8 *const priv =3D counter->priv;
+> +	struct quad8 *const priv =3D counter_priv(counter);
+>  	const int id =3D count->id;
+>  	unsigned long irqflags;
+> =20
+> @@ -243,7 +243,7 @@ static int quad8_function_write(struct counter_device=
+ *counter,
+>  				struct counter_count *count,
+>  				enum counter_function function)
+>  {
+> -	struct quad8 *const priv =3D counter->priv;
+> +	struct quad8 *const priv =3D counter_priv(counter);
+>  	const int id =3D count->id;
+>  	unsigned int *const quadrature_mode =3D priv->quadrature_mode + id;
+>  	unsigned int *const scale =3D priv->quadrature_scale + id;
+> @@ -305,7 +305,7 @@ static int quad8_direction_read(struct counter_device=
+ *counter,
+>  				struct counter_count *count,
+>  				enum counter_count_direction *direction)
+>  {
+> -	const struct quad8 *const priv =3D counter->priv;
+> +	const struct quad8 *const priv =3D counter_priv(counter);
+>  	unsigned int ud_flag;
+>  	const unsigned int flag_addr =3D priv->base + 2 * count->id + 1;
+> =20
+> @@ -335,7 +335,7 @@ static int quad8_action_read(struct counter_device *c=
+ounter,
+>  			     struct counter_synapse *synapse,
+>  			     enum counter_synapse_action *action)
+>  {
+> -	struct quad8 *const priv =3D counter->priv;
+> +	struct quad8 *const priv =3D counter_priv(counter);
+>  	int err;
+>  	enum counter_function function;
+>  	const size_t signal_a_id =3D count->synapses[0].signal->id;
+> @@ -399,7 +399,7 @@ enum {
+> =20
+>  static int quad8_events_configure(struct counter_device *counter)
+>  {
+> -	struct quad8 *const priv =3D counter->priv;
+> +	struct quad8 *const priv =3D counter_priv(counter);
+>  	unsigned long irq_enabled =3D 0;
+>  	unsigned long irqflags;
+>  	size_t channel;
+> @@ -442,7 +442,7 @@ static int quad8_events_configure(struct counter_devi=
+ce *counter)
+>  static int quad8_watch_validate(struct counter_device *counter,
+>  				const struct counter_watch *watch)
+>  {
+> -	struct quad8 *const priv =3D counter->priv;
+> +	struct quad8 *const priv =3D counter_priv(counter);
+> =20
+>  	if (watch->channel > QUAD8_NUM_COUNTERS - 1)
+>  		return -EINVAL;
+> @@ -497,7 +497,7 @@ static int quad8_index_polarity_get(struct counter_de=
+vice *counter,
+>  				    struct counter_signal *signal,
+>  				    u32 *index_polarity)
+>  {
+> -	const struct quad8 *const priv =3D counter->priv;
+> +	const struct quad8 *const priv =3D counter_priv(counter);
+>  	const size_t channel_id =3D signal->id - 16;
+> =20
+>  	*index_polarity =3D priv->index_polarity[channel_id];
+> @@ -509,7 +509,7 @@ static int quad8_index_polarity_set(struct counter_de=
+vice *counter,
+>  				    struct counter_signal *signal,
+>  				    u32 index_polarity)
+>  {
+> -	struct quad8 *const priv =3D counter->priv;
+> +	struct quad8 *const priv =3D counter_priv(counter);
+>  	const size_t channel_id =3D signal->id - 16;
+>  	const int base_offset =3D priv->base + 2 * channel_id + 1;
+>  	unsigned long irqflags;
+> @@ -538,7 +538,7 @@ static int quad8_synchronous_mode_get(struct counter_=
+device *counter,
+>  				      struct counter_signal *signal,
+>  				      u32 *synchronous_mode)
+>  {
+> -	const struct quad8 *const priv =3D counter->priv;
+> +	const struct quad8 *const priv =3D counter_priv(counter);
+>  	const size_t channel_id =3D signal->id - 16;
+> =20
+>  	*synchronous_mode =3D priv->synchronous_mode[channel_id];
+> @@ -550,7 +550,7 @@ static int quad8_synchronous_mode_set(struct counter_=
+device *counter,
+>  				      struct counter_signal *signal,
+>  				      u32 synchronous_mode)
+>  {
+> -	struct quad8 *const priv =3D counter->priv;
+> +	struct quad8 *const priv =3D counter_priv(counter);
+>  	const size_t channel_id =3D signal->id - 16;
+>  	const int base_offset =3D priv->base + 2 * channel_id + 1;
+>  	unsigned long irqflags;
+> @@ -589,7 +589,7 @@ static int quad8_count_mode_read(struct counter_devic=
+e *counter,
+>  				 struct counter_count *count,
+>  				 enum counter_count_mode *cnt_mode)
+>  {
+> -	const struct quad8 *const priv =3D counter->priv;
+> +	const struct quad8 *const priv =3D counter_priv(counter);
+> =20
+>  	/* Map 104-QUAD-8 count mode to Generic Counter count mode */
+>  	switch (priv->count_mode[count->id]) {
+> @@ -614,7 +614,7 @@ static int quad8_count_mode_write(struct counter_devi=
+ce *counter,
+>  				  struct counter_count *count,
+>  				  enum counter_count_mode cnt_mode)
+>  {
+> -	struct quad8 *const priv =3D counter->priv;
+> +	struct quad8 *const priv =3D counter_priv(counter);
+>  	unsigned int count_mode;
+>  	unsigned int mode_cfg;
+>  	const int base_offset =3D priv->base + 2 * count->id + 1;
+> @@ -661,7 +661,7 @@ static int quad8_count_mode_write(struct counter_devi=
+ce *counter,
+>  static int quad8_count_enable_read(struct counter_device *counter,
+>  				   struct counter_count *count, u8 *enable)
+>  {
+> -	const struct quad8 *const priv =3D counter->priv;
+> +	const struct quad8 *const priv =3D counter_priv(counter);
+> =20
+>  	*enable =3D priv->ab_enable[count->id];
+> =20
+> @@ -671,7 +671,7 @@ static int quad8_count_enable_read(struct counter_dev=
+ice *counter,
+>  static int quad8_count_enable_write(struct counter_device *counter,
+>  				    struct counter_count *count, u8 enable)
+>  {
+> -	struct quad8 *const priv =3D counter->priv;
+> +	struct quad8 *const priv =3D counter_priv(counter);
+>  	const int base_offset =3D priv->base + 2 * count->id;
+>  	unsigned long irqflags;
+>  	unsigned int ior_cfg;
+> @@ -699,7 +699,7 @@ static const char *const quad8_noise_error_states[] =
+=3D {
+>  static int quad8_error_noise_get(struct counter_device *counter,
+>  				 struct counter_count *count, u32 *noise_error)
+>  {
+> -	const struct quad8 *const priv =3D counter->priv;
+> +	const struct quad8 *const priv =3D counter_priv(counter);
+>  	const int base_offset =3D priv->base + 2 * count->id + 1;
+> =20
+>  	*noise_error =3D !!(inb(base_offset) & QUAD8_FLAG_E);
+> @@ -710,7 +710,7 @@ static int quad8_error_noise_get(struct counter_devic=
+e *counter,
+>  static int quad8_count_preset_read(struct counter_device *counter,
+>  				   struct counter_count *count, u64 *preset)
+>  {
+> -	const struct quad8 *const priv =3D counter->priv;
+> +	const struct quad8 *const priv =3D counter_priv(counter);
+> =20
+>  	*preset =3D priv->preset[count->id];
+> =20
+> @@ -736,7 +736,7 @@ static void quad8_preset_register_set(struct quad8 *c=
+onst priv, const int id,
+>  static int quad8_count_preset_write(struct counter_device *counter,
+>  				    struct counter_count *count, u64 preset)
+>  {
+> -	struct quad8 *const priv =3D counter->priv;
+> +	struct quad8 *const priv =3D counter_priv(counter);
+>  	unsigned long irqflags;
+> =20
+>  	/* Only 24-bit values are supported */
+> @@ -755,7 +755,7 @@ static int quad8_count_preset_write(struct counter_de=
+vice *counter,
+>  static int quad8_count_ceiling_read(struct counter_device *counter,
+>  				    struct counter_count *count, u64 *ceiling)
+>  {
+> -	struct quad8 *const priv =3D counter->priv;
+> +	struct quad8 *const priv =3D counter_priv(counter);
+>  	unsigned long irqflags;
+> =20
+>  	spin_lock_irqsave(&priv->lock, irqflags);
+> @@ -780,7 +780,7 @@ static int quad8_count_ceiling_read(struct counter_de=
+vice *counter,
+>  static int quad8_count_ceiling_write(struct counter_device *counter,
+>  				     struct counter_count *count, u64 ceiling)
+>  {
+> -	struct quad8 *const priv =3D counter->priv;
+> +	struct quad8 *const priv =3D counter_priv(counter);
+>  	unsigned long irqflags;
+> =20
+>  	/* Only 24-bit values are supported */
+> @@ -807,7 +807,7 @@ static int quad8_count_preset_enable_read(struct coun=
+ter_device *counter,
+>  					  struct counter_count *count,
+>  					  u8 *preset_enable)
+>  {
+> -	const struct quad8 *const priv =3D counter->priv;
+> +	const struct quad8 *const priv =3D counter_priv(counter);
+> =20
+>  	*preset_enable =3D !priv->preset_enable[count->id];
+> =20
+> @@ -818,7 +818,7 @@ static int quad8_count_preset_enable_write(struct cou=
+nter_device *counter,
+>  					   struct counter_count *count,
+>  					   u8 preset_enable)
+>  {
+> -	struct quad8 *const priv =3D counter->priv;
+> +	struct quad8 *const priv =3D counter_priv(counter);
+>  	const int base_offset =3D priv->base + 2 * count->id + 1;
+>  	unsigned long irqflags;
+>  	unsigned int ior_cfg;
+> @@ -845,7 +845,7 @@ static int quad8_signal_cable_fault_read(struct count=
+er_device *counter,
+>  					 struct counter_signal *signal,
+>  					 u8 *cable_fault)
+>  {
+> -	struct quad8 *const priv =3D counter->priv;
+> +	struct quad8 *const priv =3D counter_priv(counter);
+>  	const size_t channel_id =3D signal->id / 2;
+>  	unsigned long irqflags;
+>  	bool disabled;
+> @@ -875,7 +875,7 @@ static int quad8_signal_cable_fault_enable_read(struc=
+t counter_device *counter,
+>  						struct counter_signal *signal,
+>  						u8 *enable)
+>  {
+> -	const struct quad8 *const priv =3D counter->priv;
+> +	const struct quad8 *const priv =3D counter_priv(counter);
+>  	const size_t channel_id =3D signal->id / 2;
+> =20
+>  	*enable =3D !!(priv->cable_fault_enable & BIT(channel_id));
+> @@ -887,7 +887,7 @@ static int quad8_signal_cable_fault_enable_write(stru=
+ct counter_device *counter,
+>  						 struct counter_signal *signal,
+>  						 u8 enable)
+>  {
+> -	struct quad8 *const priv =3D counter->priv;
+> +	struct quad8 *const priv =3D counter_priv(counter);
+>  	const size_t channel_id =3D signal->id / 2;
+>  	unsigned long irqflags;
+>  	unsigned int cable_fault_enable;
+> @@ -913,7 +913,7 @@ static int quad8_signal_fck_prescaler_read(struct cou=
+nter_device *counter,
+>  					   struct counter_signal *signal,
+>  					   u8 *prescaler)
+>  {
+> -	const struct quad8 *const priv =3D counter->priv;
+> +	const struct quad8 *const priv =3D counter_priv(counter);
+> =20
+>  	*prescaler =3D priv->fck_prescaler[signal->id / 2];
+> =20
+> @@ -924,7 +924,7 @@ static int quad8_signal_fck_prescaler_write(struct co=
+unter_device *counter,
+>  					    struct counter_signal *signal,
+>  					    u8 prescaler)
+>  {
+> -	struct quad8 *const priv =3D counter->priv;
+> +	struct quad8 *const priv =3D counter_priv(counter);
+>  	const size_t channel_id =3D signal->id / 2;
+>  	const int base_offset =3D priv->base + 2 * channel_id;
+>  	unsigned long irqflags;
+> --=20
+> 2.33.0
+>=20
 
-> > > diff --git a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
-> > > b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
-> > > index 4cb3c7f5a3ad..963f8d4877b7 100644
-> > > --- a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
-> > > +++ b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
-> > > @@ -28,6 +28,8 @@ struct mtk_vcodec_ctx;
-> > >   * @wq          : wait queue to wait VPU message ack
-> > >   * @handler     : ipi handler for each decoder
-> > >   * @codec_type     : use codec type to separate different codecs
-> > > + * @capture_type    : used capture type to separate different
-> > > capture format
-> > > + * @fb_sz  : frame buffer size of each plane
-> > >   */
-> > >  struct vdec_vpu_inst {
-> > >     int id;
-> > > @@ -42,6 +44,8 @@ struct vdec_vpu_inst {
-> > >     wait_queue_head_t wq;
-> > >     mtk_vcodec_ipi_handler handler;
-> > >     unsigned int codec_type;
-> > > +   unsigned int capture_type;
-> > > +   unsigned int fb_sz[2];
-> > >  };
-> >
-> > capture_type is not used in the patch.
-> >
-> Capture type will be used in scp to get capture plane size according to
-> capture buffer type.
+--5JDDowHSaG6hAjzN
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Pardon me, I failed to understand it.  I may misunderstand, however,
-it doesn't look like a shared memory structure between AP and SCP.
+-----BEGIN PGP SIGNATURE-----
 
-At least to me, capture_type is not used in the patch.  It could be
-better to move it to somewhere patch that makes more sense.
+iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAmHMDdoACgkQhvpINdm7
+VJIiYxAAvikM2hzuC/EFRYEX/SJ9uYs8rTGWuGJeo6auTea8ZejLWH6PfQ1qpmb/
+Qbi4LIy541W4n6vmeb+plOyNizyhiI/NX+9g2MyRCFpMsQiQIfuX5ELsjC0LjisI
+SdXAJsAh0i7ELWf2xLw1ZnwuGqfGVApMP5SiCUvOc38K0osrnF20M9HPS/nlCgur
+yMhsYMaj0K7EdwgBB6orE3XLQXrDMkraDd5i9SEPhYA2cmoxGHxLrsn8mtFYty2w
+sPycIerHj+NGSiv+Y/9M+fazZysbhpg0pIHmJkTC2+1nFhBbluHy6BSNu43kQ2p9
+DClq3awQas8hspW+EdnFBLdKDsoEaP+LSnR4G8y2cNcxVVoSfnv0OcugZIfAAcRF
+8spcjArSZNuzXt9Cv6CpJFT1mMmUYX/GRUPUFgLx2vu2WR6fAf03k8upwkjkdh3J
+Cm8zTp6RUwGZ6MXqJYuXHcGJ8sNDl7LhApY8lZLMPtBJ6/oJjUuhRUxpwlhW91OK
+Al3GtAFf+cjyjeD2gN12ieRQMxLfzO7rWNJQDJdzYcLfuFcOKjNwx++hY/hyXr9E
+/KC21VPZlv3k3TAJNtLlLf79/GpAFakch5Jkjt5l1kG1+VOSxA4036E7EXo2J2Um
+Ig2Oe87OkTrYjSDutL2ZtxHHuUl8fLw6Xa+CjN5oeiiRX5VOLlY=
+=AiB1
+-----END PGP SIGNATURE-----
 
-> > Does fb_sz take effect in later patches?
->
-> Don't have effect to later patches.
-
-Is the fb_sz used somewhere "later"?  The patch gets fb_sz from SCP,
-however, fb_sz is never used in some control or configuration paths.
+--5JDDowHSaG6hAjzN--

@@ -2,107 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C174A4816E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 22:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0581D481700
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 22:14:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232027AbhL2VJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 16:09:31 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53878 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbhL2VJa (ORCPT
+        id S232396AbhL2VN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 16:13:58 -0500
+Received: from isilmar-4.linta.de ([136.243.71.142]:33322 "EHLO
+        isilmar-4.linta.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231322AbhL2VNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 16:09:30 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FE0061567;
-        Wed, 29 Dec 2021 21:09:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB7DDC36AE9;
-        Wed, 29 Dec 2021 21:09:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640812169;
-        bh=AIGpPhwH3JZgx1thcZbcwXSN5e+TOgmtxsYzXXEN3I0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jSSHj+9JSVkK5ybHU1Mv3/RFUW9UIj8I/lAdzRC7TG7ibyZC9TX4xy1NXnMzhbZgr
-         QWuTzQWfIKy6ek8p66JC9S313Jve9TUD6i05FlC3HhQks6JZ7ljnxh/zZWePd4u77b
-         YIuMyUQ8+6QVrt4oXXlhkixdsMOsO2fsoPIBMLx+A4E624r8FZtgljdl12mU+I7sN9
-         n+LllRNBDr0+HLrErTGAkJc5ga6Rqk+U5jthQNydH+/Jx3ZGs1SF/O0pH0NDUr05H+
-         nVp8wfGj6M1HqYzu9zG0D8u0hXhGYcBHm+F23wlJ/0sHfP/cJ+FrU+3FYnDG7Os5lc
-         D90jTGeoa9wvw==
-Date:   Wed, 29 Dec 2021 13:09:27 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     menglong8.dong@gmail.com
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Menglong Dong <imagedong@tencent.com>,
-        Andrey Ignatov <rdna@fb.com>
-Subject: Re: [PATCH] net: bpf: handle return value of
- BPF_CGROUP_RUN_PROG_INET4_POST_BIND()
-Message-ID: <20211229130927.2370f098@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20211227062035.3224982-1-imagedong@tencent.com>
-References: <20211227062035.3224982-1-imagedong@tencent.com>
+        Wed, 29 Dec 2021 16:13:51 -0500
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
+        by isilmar-4.linta.de (Postfix) with ESMTPSA id 419CC20135F;
+        Wed, 29 Dec 2021 21:13:48 +0000 (UTC)
+Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
+        id 793BE808EC; Wed, 29 Dec 2021 22:10:15 +0100 (CET)
+From:   Dominik Brodowski <linux@dominikbrodowski.net>
+To:     "Jason A . Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        "Ivan T . Ivanov" <iivanov@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
+        linux@dominikbrodowski.net, stable@vger.kernel.org
+Subject: [PATCH v8 1/7] random: fix crash on multiple early calls to add_bootloader_randomness()
+Date:   Wed, 29 Dec 2021 22:10:03 +0100
+Message-Id: <20211229211009.108091-1-linux@dominikbrodowski.net>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211228153826.448805-1-Jason@zx2c4.com>
+References: <20211228153826.448805-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Dec 2021 14:20:35 +0800 menglong8.dong@gmail.com wrote:
-> From: Menglong Dong <imagedong@tencent.com>
-> 
-> The return value of BPF_CGROUP_RUN_PROG_INET4_POST_BIND() in
-> __inet_bind() is not handled properly. While the return value
-> is non-zero, it will set inet_saddr and inet_rcv_saddr to 0 and
-> exit:
-> 
-> 	err = BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk);
-> 	if (err) {
-> 		inet->inet_saddr = inet->inet_rcv_saddr = 0;
-> 		goto out_release_sock;
-> 	}
-> 
-> Let's take UDP for example and see what will happen. For UDP
-> socket, it will be added to 'udp_prot.h.udp_table->hash' and
-> 'udp_prot.h.udp_table->hash2' after the sk->sk_prot->get_port()
-> called success. If 'inet->inet_rcv_saddr' is specified here,
-> then 'sk' will be in the 'hslot2' of 'hash2' that it don't belong
-> to (because inet_saddr is changed to 0), and UDP packet received
-> will not be passed to this sock. If 'inet->inet_rcv_saddr' is not
-> specified here, the sock will work fine, as it can receive packet
-> properly, which is wired, as the 'bind()' is already failed.
-> 
-> I'm not sure what should do here, maybe we should unhash the sock
-> for UDP? Therefor, user can try to bind another port?
+Currently, if CONFIG_RANDOM_TRUST_BOOTLOADER is enabled, multiple calls
+to add_bootloader_randomness() are broken and can cause a NULL pointer
+dereference, as noted by Ivan T. Ivanov. This is not only a hypothetical
+problem, as qemu on arm64 may provide bootloader entropy via EFI and via
+devicetree.
 
-Enumarating the L4 unwind paths in L3 code seems like a fairly clear
-layering violation. A new callback to undo ->sk_prot->get_port() may
-be better.
+On the first call to add_hwgenerator_randomness(), crng_fast_load() is
+executed, and if the seed is long enough, crng_init will be set to 1.
+On subsequent calls to add_bootloader_randomness() and then to
+add_hwgenerator_randomness(), crng_fast_load() will be skipped. Instead,
+wait_event_interruptible() and then credit_entropy_bits() will be called.
+If the entropy count for that second seed is large enough, that proceeds
+to crng_reseed().
 
-Does IPv6 no need as similar change?
+However, both wait_event_interruptible() and crng_reseed() depends
+(at least in numa_crng_init()) on workqueues. Therefore, test whether
+system_wq is already initialized, which is a sufficient indicator that
+workqueue_init_early() has progressed far enough.
 
-You need to provide a selftest to validate the expected behavior.
+If we wind up hitting the !system_wq case, we later want to do what
+would have been done there when wqs are up, so set a flag, and do that
+work later from the rand_initialize() call.
 
-> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-> index 04067b249bf3..9e5710f40a39 100644
-> --- a/net/ipv4/af_inet.c
-> +++ b/net/ipv4/af_inet.c
-> @@ -530,7 +530,14 @@ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
->  		if (!(flags & BIND_FROM_BPF)) {
->  			err = BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk);
->  			if (err) {
-> +				if (sk->sk_prot == &udp_prot)
-> +					sk->sk_prot->unhash(sk);
-> +				else if (sk->sk_prot == &tcp_prot)
-> +					inet_put_port(sk);
-> +
->  				inet->inet_saddr = inet->inet_rcv_saddr = 0;
-> +				err = -EPERM;
-> +
->  				goto out_release_sock;
->  			}
->  		}
+Reported-by: Ivan T. Ivanov <iivanov@suse.de>
+Fixes: 18b915ac6b0a ("efi/random: Treat EFI_RNG_PROTOCOL output as bootloader randomness")
+Cc: stable@vger.kernel.org
+Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
+[Jason: added crng_need_done state and related logic.]
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c | 56 +++++++++++++++++++++++++++----------------
+ 1 file changed, 36 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 82db125aaed7..144e8841bff4 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -468,6 +468,7 @@ static struct crng_state primary_crng = {
+  * its value (from 0->1->2).
+  */
+ static int crng_init = 0;
++static bool crng_need_final_init = false;
+ #define crng_ready() (likely(crng_init > 1))
+ static int crng_init_cnt = 0;
+ static unsigned long crng_global_init_time = 0;
+@@ -835,6 +836,36 @@ static void __init crng_initialize_primary(struct crng_state *crng)
+ 	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
+ }
+ 
++static void crng_finalize_init(struct crng_state *crng)
++{
++	if (crng != &primary_crng || crng_init >= 2)
++		return;
++	if (!system_wq) {
++		/* We can't call numa_crng_init until we have workqueues,
++		 * so mark this for processing later. */
++		crng_need_final_init = true;
++		return;
++	}
++
++	invalidate_batched_entropy();
++	numa_crng_init();
++	crng_init = 2;
++	process_random_ready_list();
++	wake_up_interruptible(&crng_init_wait);
++	kill_fasync(&fasync, SIGIO, POLL_IN);
++	pr_notice("crng init done\n");
++	if (unseeded_warning.missed) {
++		pr_notice("%d get_random_xx warning(s) missed due to ratelimiting\n",
++			  unseeded_warning.missed);
++		unseeded_warning.missed = 0;
++	}
++	if (urandom_warning.missed) {
++		pr_notice("%d urandom warning(s) missed due to ratelimiting\n",
++			  urandom_warning.missed);
++		urandom_warning.missed = 0;
++	}
++}
++
+ #ifdef CONFIG_NUMA
+ static void do_numa_crng_init(struct work_struct *work)
+ {
+@@ -989,25 +1020,7 @@ static void crng_reseed(struct crng_state *crng, struct entropy_store *r)
+ 	memzero_explicit(&buf, sizeof(buf));
+ 	WRITE_ONCE(crng->init_time, jiffies);
+ 	spin_unlock_irqrestore(&crng->lock, flags);
+-	if (crng == &primary_crng && crng_init < 2) {
+-		invalidate_batched_entropy();
+-		numa_crng_init();
+-		crng_init = 2;
+-		process_random_ready_list();
+-		wake_up_interruptible(&crng_init_wait);
+-		kill_fasync(&fasync, SIGIO, POLL_IN);
+-		pr_notice("crng init done\n");
+-		if (unseeded_warning.missed) {
+-			pr_notice("%d get_random_xx warning(s) missed due to ratelimiting\n",
+-				  unseeded_warning.missed);
+-			unseeded_warning.missed = 0;
+-		}
+-		if (urandom_warning.missed) {
+-			pr_notice("%d urandom warning(s) missed due to ratelimiting\n",
+-				  urandom_warning.missed);
+-			urandom_warning.missed = 0;
+-		}
+-	}
++	crng_finalize_init(crng);
+ }
+ 
+ static void _extract_crng(struct crng_state *crng,
+@@ -1780,6 +1793,8 @@ static void __init init_std_data(struct entropy_store *r)
+ int __init rand_initialize(void)
+ {
+ 	init_std_data(&input_pool);
++	if (crng_need_final_init)
++		crng_finalize_init(&primary_crng);
+ 	crng_initialize_primary(&primary_crng);
+ 	crng_global_init_time = jiffies;
+ 	if (ratelimit_disable) {
+@@ -2288,7 +2303,8 @@ void add_hwgenerator_randomness(const char *buffer, size_t count,
+ 	 * We'll be woken up again once below random_write_wakeup_thresh,
+ 	 * or when the calling thread is about to terminate.
+ 	 */
+-	wait_event_interruptible(random_write_wait, kthread_should_stop() ||
++	wait_event_interruptible(random_write_wait,
++			!system_wq || kthread_should_stop() ||
+ 			ENTROPY_BITS(&input_pool) <= random_write_wakeup_bits);
+ 	mix_pool_bytes(poolp, buffer, count);
+ 	credit_entropy_bits(poolp, entropy);
+-- 
+2.34.1
 

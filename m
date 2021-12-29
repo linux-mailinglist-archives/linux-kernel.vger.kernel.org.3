@@ -2,89 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 467C148103D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 07:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C1048103B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 07:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238885AbhL2GBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 01:01:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35790 "EHLO
+        id S238874AbhL2GAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 01:00:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234592AbhL2GBI (ORCPT
+        with ESMTP id S234592AbhL2GAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 01:01:08 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C08AC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 22:01:08 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id p1-20020a17090a680100b001b1ea621b81so13456207pjj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 22:01:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=tQelzoARs5ra+pSWLPhaNJDMAtSK+jHnIMtEXaTxZ84=;
-        b=tajqY5NjUcaY8lTtNNrIXtWpibx6s8oiWhvC2kChhIjnWlk1XI3SQsXycdIeyHksBY
-         LsgZElbl3ds+8TZIm3ct/Annr7d5xGx2SqmuTAtYMVNhveCYw353U7ekdnryBjQ+4lTm
-         jE/BxHwrpNYddsK5R0L2eP779/ZoNdqqq6iE8i1F8Wv8ymuay/EVXxCjPYoIJskd7FTt
-         dJmVMAgfvmFbRgkXBy7GmBY5yCO2zsIqf4gIzEoNkZ1aiVgfOzDzaPcCixW41nTDHMhh
-         8OkR1hGn+5rIHVldVuhPpIe4PLQF6ftruhOyMFlPxcFLl1i2XCYxdeAE1g0T8mPjG5my
-         ai+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=tQelzoARs5ra+pSWLPhaNJDMAtSK+jHnIMtEXaTxZ84=;
-        b=PkYpplggRMQfv3YjFY2qrHEiWc2Ak3BjQ6HtYeWFAXuM0sy7Er5DVkc3DwvjA78juK
-         oUyoNlz2OpgMprPkh1GysckzAwdrW2AW5WQDJYRKZO2G1zVOYcg0gykovDEfM9VsVJRL
-         MWUViVDrypj58DLQ8WvCkhlBgTeJc922QJTgGLJS81yT2/UyknkMLJ9Povefu9CB39Fd
-         MyoZCk22tYJwSDyOEPY/xG+HlQCd9e6sW6ywFtlIwQpVDtcBacSZ9MC9Qok6D9OHlVwZ
-         oOuzgmqxPRuzuZWERmJKNf2qrVS/mLTGHNhali0RWloM5/E7g8NTV/1OkBarEVft312d
-         DCyw==
-X-Gm-Message-State: AOAM532jWjlancHFO4SKDgXhlKZtgw18GEQKUFtcIBYoQKQV6grsvsig
-        jiJCdic+6kyfMfJuxWl704+RsbqhKZ2B
-X-Google-Smtp-Source: ABdhPJxRvmN18eh1dLSwUNAh64RdQLY2KNOiIVk1dse7p0r77U6eYtX15Qg6TCJuwcaaS1n5DRMDntNTDq+r
-X-Received: from pumahsu.ntc.corp.google.com ([2401:fa00:fc:202:51fc:cf30:243:df6e])
- (user=pumahsu job=sendgmr) by 2002:a05:6a00:10cf:b0:4a3:124d:bb81 with SMTP
- id d15-20020a056a0010cf00b004a3124dbb81mr25771116pfu.75.1640757667499; Tue,
- 28 Dec 2021 22:01:07 -0800 (PST)
-Date:   Wed, 29 Dec 2021 14:00:14 +0800
-Message-Id: <20211229060013.3366166-1-pumahsu@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
-Subject: [PATCH v2] xhci: re-initialize the HC during resume if HCE was set
-From:   Puma Hsu <pumahsu@google.com>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc:     s.shtylyov@omp.ru, albertccwang@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Puma Hsu <pumahsu@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 29 Dec 2021 01:00:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0046BC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 22:00:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90DAFB81258
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 06:00:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66625C36AE7;
+        Wed, 29 Dec 2021 06:00:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640757639;
+        bh=OrbrodgAYSjiQzNjHIQlniQevCVLb6lJHzjWobUG6zQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Sg8B51SpKPJDdqa1AVldira9Nh6lciLITTvy60O9L3ouVHB/CTU9BxlOtkwKQCoYH
+         rjEFUUxo35dXqTwlXnPqZeZC89oRJt1G+uKK15tHovWH7nwAqJMxrhcsnOgJ+hv71S
+         ME5z+F5WRY/ZAJf1GDzOGu4vuEWjDDG+5LcLhEiPjooDGWQF54csAmnC9VNtBY0b0F
+         gWsTTZ7YBUCpPDJGym/Pdl4QkNRYEpWz1iJz3/2k1/yKLoBeXUIpg9uiA3iRJuwUIR
+         83kZKTKTXMF66TeiGq2bvy/EvmfQsEUDBXRL+LVCpv0ctXjUAA/dKwNmvoqsKaUZAP
+         756kH05sJkW5A==
+Date:   Wed, 29 Dec 2021 11:30:34 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Guillaume Ranquet <granquet@baylibre.com>
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v7 6/8] phy: phy-mtk-dp: Add driver for DP phy
+Message-ID: <Ycv5gnWDtosJhwjc@matsya>
+References: <20211217150854.2081-1-granquet@baylibre.com>
+ <20211217150854.2081-7-granquet@baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211217150854.2081-7-granquet@baylibre.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When HCE(Host Controller Error) is set, it means an internal
-error condition has been detected. It needs to re-initialize
-the HC too.
 
-Signed-off-by: Puma Hsu <pumahsu@google.com>
----
-v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
+On 17-12-21, 16:08, Guillaume Ranquet wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
 
- drivers/usb/host/xhci.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Pls cc relevant folks on cover so that they know what is going on in the
+series... Is this dependent on rest? It should not and can be sent and
+reviewed separately!
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index dc357cabb265..ab440ce8420f 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1146,8 +1146,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
- 		temp = readl(&xhci->op_regs->status);
- 	}
- 
--	/* If restore operation fails, re-initialize the HC during resume */
--	if ((temp & STS_SRE) || hibernated) {
-+	/* If restore operation fails or HC error is detected, re-initialize the HC during resume */
-+	if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
- 
- 		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
- 				!(xhci_all_ports_seen_u0(xhci))) {
+> This is a new driver that supports the integrated DisplayPort phy for
+> mediatek SoCs, especially the mt8195. The phy is integrated into the
+> DisplayPort controller and will be created by the mtk-dp driver. This
+> driver expects a struct regmap to be able to work on the same registers
+> as the DisplayPort controller. It sets the device data to be the struct
+> phy so that the DisplayPort controller can easily work with it.
+> 
+> The driver does not have any devicetree bindings because the datasheet
+> does not list the controller and the phy as distinct units.
+> 
+> The interaction with the controller can be covered by the configure
+> callback of the phy framework and its displayport parameters.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> ---
+>  MAINTAINERS                       |   1 +
+>  drivers/phy/mediatek/Kconfig      |   8 ++
+>  drivers/phy/mediatek/Makefile     |   1 +
+>  drivers/phy/mediatek/phy-mtk-dp.c | 219 ++++++++++++++++++++++++++++++
+>  4 files changed, 229 insertions(+)
+>  create mode 100644 drivers/phy/mediatek/phy-mtk-dp.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 8b7a98daf8e05..c44829d8a74df 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6394,6 +6394,7 @@ L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
+>  S:	Supported
+>  F:	Documentation/devicetree/bindings/display/mediatek/
+>  F:	drivers/gpu/drm/mediatek/
+> +F:	drivers/phy/mediatek/phy-mtk-dp.c
+>  F:	drivers/phy/mediatek/phy-mtk-hdmi*
+>  F:	drivers/phy/mediatek/phy-mtk-mipi*
+>  
+> diff --git a/drivers/phy/mediatek/Kconfig b/drivers/phy/mediatek/Kconfig
+> index 55f8e6c048ab3..f7ec860590492 100644
+> --- a/drivers/phy/mediatek/Kconfig
+> +++ b/drivers/phy/mediatek/Kconfig
+> @@ -55,3 +55,11 @@ config PHY_MTK_MIPI_DSI
+>  	select GENERIC_PHY
+>  	help
+>  	  Support MIPI DSI for Mediatek SoCs.
+> +
+> +config PHY_MTK_DP
+> +	tristate "MediaTek DP-PHY Driver"
+> +	depends on ARCH_MEDIATEK || COMPILE_TEST
+> +	depends on OF
+> +	select GENERIC_PHY
+> +	help
+> +	  Support DisplayPort PHY for Mediatek SoCs.
+> diff --git a/drivers/phy/mediatek/Makefile b/drivers/phy/mediatek/Makefile
+> index ace660fbed3a1..4ba1e06504346 100644
+> --- a/drivers/phy/mediatek/Makefile
+> +++ b/drivers/phy/mediatek/Makefile
+> @@ -3,6 +3,7 @@
+>  # Makefile for the phy drivers.
+>  #
+>  
+> +obj-$(CONFIG_PHY_MTK_DP)		+= phy-mtk-dp.o
+>  obj-$(CONFIG_PHY_MTK_TPHY)		+= phy-mtk-tphy.o
+>  obj-$(CONFIG_PHY_MTK_UFS)		+= phy-mtk-ufs.o
+>  obj-$(CONFIG_PHY_MTK_XSPHY)		+= phy-mtk-xsphy.o
+> diff --git a/drivers/phy/mediatek/phy-mtk-dp.c b/drivers/phy/mediatek/phy-mtk-dp.c
+> new file mode 100644
+> index 0000000000000..e0de2a367e788
+> --- /dev/null
+> +++ b/drivers/phy/mediatek/phy-mtk-dp.c
+> @@ -0,0 +1,219 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2021 BayLibre
+> + * Author: Markus Schneider-Pargmann <msp@baylibre.com>
+> + */
+> +
+> +#include <linux/delay.h>
+> +#include <linux/io.h>
+> +#include <linux/of.h>
+> +#include <linux/phy/phy.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +
+> +#define PHY_OFFSET 0x1000
+> +
+> +#define MTK_DP_PHY_DIG_PLL_CTL_1		(PHY_OFFSET + 0x014)
+> +# define TPLL_SSC_EN				BIT(3)
+> +
+> +#define MTK_DP_PHY_DIG_BIT_RATE			(PHY_OFFSET + 0x03C)
+> +# define BIT_RATE_RBR				0
+> +# define BIT_RATE_HBR				1
+> +# define BIT_RATE_HBR2				2
+> +# define BIT_RATE_HBR3				3
+> +
+> +#define MTK_DP_PHY_DIG_SW_RST			(PHY_OFFSET + 0x038)
+> +# define DP_GLB_SW_RST_PHYD			BIT(0)
+> +
+> +#define MTK_DP_LANE0_DRIVING_PARAM_3		(PHY_OFFSET + 0x138)
+> +#define MTK_DP_LANE1_DRIVING_PARAM_3		(PHY_OFFSET + 0x238)
+> +#define MTK_DP_LANE2_DRIVING_PARAM_3		(PHY_OFFSET + 0x338)
+> +#define MTK_DP_LANE3_DRIVING_PARAM_3		(PHY_OFFSET + 0x438)
+> +# define XTP_LN_TX_LCTXC0_SW0_PRE0_DEFAULT	0x10
+> +# define XTP_LN_TX_LCTXC0_SW0_PRE1_DEFAULT	(0x14 << 8)
+> +# define XTP_LN_TX_LCTXC0_SW0_PRE2_DEFAULT	(0x18 << 16)
+> +# define XTP_LN_TX_LCTXC0_SW0_PRE3_DEFAULT	(0x20 << 24)
+
+how about defining constants and using FEILD_PREP() to set the value.
+Here and few other places!
+
+> +static int mtk_dp_phy_configure(struct phy *phy, union phy_configure_opts *opts)
+> +{
+> +	struct mtk_dp_phy *dp_phy = phy_get_drvdata(phy);
+> +	u32 val;
+> +
+> +	if (opts->dp.set_rate) {
+> +		switch (opts->dp.link_rate) {
+> +		default:
+> +			dev_err(&phy->dev,
+> +				"Implementation error, unknown linkrate %x\n",
+> +				opts->dp.link_rate);
+> +			return -EINVAL;
+> +		case 1620:
+> +			val = BIT_RATE_RBR;
+> +			break;
+> +		case 2700:
+> +			val = BIT_RATE_HBR;
+> +			break;
+> +		case 5400:
+> +			val = BIT_RATE_HBR2;
+> +			break;
+> +		case 8100:
+> +			val = BIT_RATE_HBR3;
+> +			break;
+> +		}
+> +		regmap_write(dp_phy->regs, MTK_DP_PHY_DIG_BIT_RATE, val);
+
+interesting use of default :) which is correct!
+
+But why keep the regmap_write inside switch, you are anyway returning in
+default, so this write could be outside as well
 -- 
-2.34.1.448.ga2b2bfdf31-goog
-
+~Vinod

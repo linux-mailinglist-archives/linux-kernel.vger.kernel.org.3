@@ -2,161 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7AF4817C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 00:40:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4034817CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 00:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233369AbhL2Xj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 18:39:56 -0500
-Received: from mx3.wp.pl ([212.77.101.9]:29133 "EHLO mx3.wp.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232732AbhL2Xjz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 18:39:55 -0500
-Received: (wp-smtpd smtp.wp.pl 30252 invoked from network); 30 Dec 2021 00:39:53 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1640821193; bh=3TKmTssEFcXQLi2NfFNyqUS1vQ8T+LNOuugB7ZaG+lQ=;
-          h=From:To:Subject;
-          b=e9qXKEysuJkX4xccV5tai0nBcSb+/zf8ia9NMueklQheKKrh2GPs7iDmseBRhJIBb
-           SDlA7SjDGy6oqkGZOnh/Go2AzCKvFVZmcZsKg7Kw6pMoae985abuU8XmX+jG5QNO2y
-           ahWOxyoEQpq7ozINRsVFL82Tjspaj8pBMo9iSHB0=
-Received: from riviera.nat.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.1])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <davem@davemloft.net>; 30 Dec 2021 00:39:53 +0100
-From:   Aleksander Jan Bajkowski <olek2@wp.pl>
-To:     davem@davemloft.net, kuba@kernel.org, olek2@wp.pl, jgg@ziepe.ca,
-        rdunlap@infradead.org, arnd@arndb.de, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] net: lantiq_etop: make alignment match open parenthesis
-Date:   Thu, 30 Dec 2021 00:39:52 +0100
-Message-Id: <20211229233952.5306-1-olek2@wp.pl>
-X-Mailer: git-send-email 2.30.2
+        id S233389AbhL2Xof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 18:44:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232732AbhL2Xoe (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 18:44:34 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8836C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 15:44:33 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0D4FE2A5;
+        Thu, 30 Dec 2021 00:44:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1640821472;
+        bh=EKJWcHIEQZewdbTOk+cU/n4oiB8qgEvXbZQWRa+u7oY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qduy1Zno1qWlzopoqpJQFfNnK1KAvx80kEjmRacHOZyI7MlAjMuNjJQoNF/7BMZAf
+         LMrENXvs+3VF+pj3zMm0Vv27RfPPu2/xnOm4ClwnNVT/umlbrtagEEsQwRGOJPIGga
+         5i/LCNq6hS7pJ4UR2RCExD3PASGUUswmFpKCnlZE=
+Date:   Thu, 30 Dec 2021 01:44:29 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/bridge_connector: enable HPD by default if supported
+Message-ID: <Yczy3UYpU2UMFQ6N@pendragon.ideasonboard.com>
+References: <20211225063151.2110878-1-nikita.yoush@cogentembedded.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: 527b53d1255902ae8a56fe2c810ebea6
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [AUPU]                               
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211225063151.2110878-1-nikita.yoush@cogentembedded.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-checkpatch.pl complains as the following:
+Hi Nikita,
 
-Alignment should match open parenthesis
+Thank you for the patch.
 
-Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
----
- drivers/net/ethernet/lantiq_etop.c | 34 +++++++++++++++---------------
- 1 file changed, 17 insertions(+), 17 deletions(-)
+On Sat, Dec 25, 2021 at 09:31:51AM +0300, Nikita Yushchenko wrote:
+> Hotplug events reported by bridge drivers over drm_bridge_hpd_notify()
+> get ignored unless somebody calls drm_bridge_hpd_enable(). When the
+> connector for the bridge is bridge_connector, such a call is done from
+> drm_bridge_connector_enable_hpd().
+> 
+> However drm_bridge_connector_enable_hpd() is never called on init paths,
+> documentation suggests that it is intended for suspend/resume paths.
 
-diff --git a/drivers/net/ethernet/lantiq_etop.c b/drivers/net/ethernet/lantiq_etop.c
-index 072391c494ce..f0fbce3eb45b 100644
---- a/drivers/net/ethernet/lantiq_etop.c
-+++ b/drivers/net/ethernet/lantiq_etop.c
-@@ -111,9 +111,9 @@ ltq_etop_alloc_skb(struct ltq_etop_chan *ch)
- 	ch->skb[ch->dma.desc] = netdev_alloc_skb(ch->netdev, MAX_DMA_DATA_LEN);
- 	if (!ch->skb[ch->dma.desc])
- 		return -ENOMEM;
--	ch->dma.desc_base[ch->dma.desc].addr = dma_map_single(&priv->pdev->dev,
--		ch->skb[ch->dma.desc]->data, MAX_DMA_DATA_LEN,
--		DMA_FROM_DEVICE);
-+	ch->dma.desc_base[ch->dma.desc].addr =
-+		dma_map_single(&priv->pdev->dev, ch->skb[ch->dma.desc]->data,
-+			       MAX_DMA_DATA_LEN, DMA_FROM_DEVICE);
- 	ch->dma.desc_base[ch->dma.desc].addr =
- 		CPHYSADDR(ch->skb[ch->dma.desc]->data);
- 	ch->dma.desc_base[ch->dma.desc].ctl =
-@@ -135,7 +135,7 @@ ltq_etop_hw_receive(struct ltq_etop_chan *ch)
- 	spin_lock_irqsave(&priv->lock, flags);
- 	if (ltq_etop_alloc_skb(ch)) {
- 		netdev_err(ch->netdev,
--			"failed to allocate new rx buffer, stopping DMA\n");
-+			   "failed to allocate new rx buffer, stopping DMA\n");
- 		ltq_dma_close(&ch->dma);
- 	}
- 	ch->dma.desc++;
-@@ -185,7 +185,7 @@ ltq_etop_poll_tx(struct napi_struct *napi, int budget)
- 		dev_kfree_skb_any(ch->skb[ch->tx_free]);
- 		ch->skb[ch->tx_free] = NULL;
- 		memset(&ch->dma.desc_base[ch->tx_free], 0,
--			sizeof(struct ltq_dma_desc));
-+		       sizeof(struct ltq_dma_desc));
- 		ch->tx_free++;
- 		ch->tx_free %= LTQ_DESC_NUM;
- 	}
-@@ -246,18 +246,18 @@ ltq_etop_hw_init(struct net_device *dev)
- 
- 	switch (priv->pldata->mii_mode) {
- 	case PHY_INTERFACE_MODE_RMII:
--		ltq_etop_w32_mask(ETOP_MII_MASK,
--			ETOP_MII_REVERSE, LTQ_ETOP_CFG);
-+		ltq_etop_w32_mask(ETOP_MII_MASK, ETOP_MII_REVERSE,
-+				  LTQ_ETOP_CFG);
- 		break;
- 
- 	case PHY_INTERFACE_MODE_MII:
--		ltq_etop_w32_mask(ETOP_MII_MASK,
--			ETOP_MII_NORMAL, LTQ_ETOP_CFG);
-+		ltq_etop_w32_mask(ETOP_MII_MASK, ETOP_MII_NORMAL,
-+				  LTQ_ETOP_CFG);
- 		break;
- 
- 	default:
- 		netdev_err(dev, "unknown mii mode %d\n",
--			priv->pldata->mii_mode);
-+			   priv->pldata->mii_mode);
- 		return -ENOTSUPP;
- 	}
- 
-@@ -399,7 +399,7 @@ ltq_etop_mdio_init(struct net_device *dev)
- 	priv->mii_bus->write = ltq_etop_mdio_wr;
- 	priv->mii_bus->name = "ltq_mii";
- 	snprintf(priv->mii_bus->id, MII_BUS_ID_SIZE, "%s-%x",
--		priv->pdev->name, priv->pdev->id);
-+		 priv->pdev->name, priv->pdev->id);
- 	if (mdiobus_register(priv->mii_bus)) {
- 		err = -ENXIO;
- 		goto err_out_free_mdiobus;
-@@ -539,7 +539,7 @@ ltq_etop_set_mac_address(struct net_device *dev, void *p)
- 		spin_lock_irqsave(&priv->lock, flags);
- 		ltq_etop_w32(*((u32 *)dev->dev_addr), LTQ_ETOP_MAC_DA0);
- 		ltq_etop_w32(*((u16 *)&dev->dev_addr[4]) << 16,
--			LTQ_ETOP_MAC_DA1);
-+			     LTQ_ETOP_MAC_DA1);
- 		spin_unlock_irqrestore(&priv->lock, flags);
- 	}
- 	return ret;
-@@ -652,15 +652,15 @@ ltq_etop_probe(struct platform_device *pdev)
- 	}
- 
- 	res = devm_request_mem_region(&pdev->dev, res->start,
--		resource_size(res), dev_name(&pdev->dev));
-+				      resource_size(res), dev_name(&pdev->dev));
- 	if (!res) {
- 		dev_err(&pdev->dev, "failed to request etop resource\n");
- 		err = -EBUSY;
- 		goto err_out;
- 	}
- 
--	ltq_etop_membase = devm_ioremap(&pdev->dev,
--		res->start, resource_size(res));
-+	ltq_etop_membase = devm_ioremap(&pdev->dev, res->start,
-+					resource_size(res));
- 	if (!ltq_etop_membase) {
- 		dev_err(&pdev->dev, "failed to remap etop engine %d\n",
- 			pdev->id);
-@@ -699,10 +699,10 @@ ltq_etop_probe(struct platform_device *pdev)
- 	for (i = 0; i < MAX_DMA_CHAN; i++) {
- 		if (IS_TX(i))
- 			netif_napi_add(dev, &priv->ch[i].napi,
--				ltq_etop_poll_tx, 8);
-+				       ltq_etop_poll_tx, 8);
- 		else if (IS_RX(i))
- 			netif_napi_add(dev, &priv->ch[i].napi,
--				ltq_etop_poll_rx, 32);
-+				       ltq_etop_poll_rx, 32);
- 		priv->ch[i].netdev = dev;
- 	}
- 
+Hmmmm... I'm in two minds about this. The problem description is
+correct, but I wonder if HPD should be enabled unconditionally here, or
+if this should be left to display drivers to control.
+drivers/gpu/drm/imx/dcss/dcss-kms.c enables HPD manually at init time,
+other drivers don't.
+
+It feels like this should be under control of the display controller
+driver, but I can't think of a use case for not enabling HPD at init
+time. Any second opinion from anyone ?
+
+> In result, once encoders are switched to bridge_connector,
+> bridge-detected HPD stops working.
+> 
+> This patch adds a call to that API on init path.
+> 
+> This fixes HDMI HPD with rcar-du + adv7513 case when adv7513 reports HPD
+> events via interrupts.
+> 
+> Fixes: c24110a8fd09 ("drm: rcar-du: Use drm_bridge_connector_init() helper")
+> Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+> ---
+>  drivers/gpu/drm/drm_bridge_connector.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_bridge_connector.c b/drivers/gpu/drm/drm_bridge_connector.c
+> index 791379816837..4f20137ef21d 100644
+> --- a/drivers/gpu/drm/drm_bridge_connector.c
+> +++ b/drivers/gpu/drm/drm_bridge_connector.c
+> @@ -369,8 +369,10 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
+>  				    connector_type, ddc);
+>  	drm_connector_helper_add(connector, &drm_bridge_connector_helper_funcs);
+>  
+> -	if (bridge_connector->bridge_hpd)
+> +	if (bridge_connector->bridge_hpd) {
+>  		connector->polled = DRM_CONNECTOR_POLL_HPD;
+> +		drm_bridge_connector_enable_hpd(connector);
+> +	}
+>  	else if (bridge_connector->bridge_detect)
+>  		connector->polled = DRM_CONNECTOR_POLL_CONNECT
+>  				  | DRM_CONNECTOR_POLL_DISCONNECT;
+
 -- 
-2.30.2
+Regards,
 
+Laurent Pinchart

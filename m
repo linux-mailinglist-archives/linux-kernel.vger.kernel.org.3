@@ -2,118 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 995FA48147E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 16:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE4648147D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 16:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240580AbhL2Pdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 10:33:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
+        id S240571AbhL2PdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 10:33:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240574AbhL2Pdr (ORCPT
+        with ESMTP id S240564AbhL2PdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 10:33:47 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95D2C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 07:33:46 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id v7so45051171wrv.12
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 07:33:46 -0800 (PST)
+        Wed, 29 Dec 2021 10:33:03 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3EAC06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 07:33:03 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id w19-20020a056830061300b0058f1dd48932so28264994oti.11
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 07:33:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=yaFPtv68FbWYXGv8VLXk7KGh6SEfuXe5S0bPe1jKtfY=;
-        b=jk3C/jHTfzsqW+Hy0loflhYtDDtvEBT1DbQxyp9C1LBXQ035oUqiFLlEDD4T2wYXZT
-         SCmD1VlLZyOj3aL5xF81F0v5KDmA36PJYj/2Jfm4rTSNCk7TeHtcFgmDWzzgoWdsJwdU
-         xLumxBO11BthYZoeqFrA/+gSaY6UvZLmDY2joWg6jKogL6Y12sdkYp2LgxIke7u52ros
-         ZpvOZlPvJFIVdJtzWPn1xDZNkBjnsbIDkhaKj+AcXwwQpi6ydMp1lBfFd6YI3oRtasCl
-         B+B0kCbfyDflM7pC9gDTWfisOc0AvXuRcCMWGv6Ljq3z8hC4ricTVwoQ+Zv+JhrlPf+a
-         ZT0g==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bEVREXqmH89MbzmWrN4QA+dq6opc4nWIdeFIogoG25s=;
+        b=RTFfsdB2uHBYB6NExwweLLpzosyKhW44qS26y7DFowJZzwMDzXBlFLOYojA2LkuTIN
+         EceuNyl22Trg1sHmMGE3IHbMM6/MVvXgD3oVBSPCcN6nzf/uAg17aEOyGQTYCRALPt/u
+         aM0ClQSaFnUhFy8Dn/Tml4jDWiQnxOXACQxWt2JsjdfoPN96zGlG60/CPdWcLP2xLOz0
+         gQUDQd600NHbXxaihims1Dfmwec9qVhYCtq1SlkYoV1gGq7alR4H4BBMRhUlUVBOssML
+         x/3ZqEDPP/zCL8eL0/NKyOxLva4I1gWkrAO5flxh3zg1zQ0fCEzmu4Vc+E0XXhs24Saw
+         CzXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=yaFPtv68FbWYXGv8VLXk7KGh6SEfuXe5S0bPe1jKtfY=;
-        b=v5Ap7Gh0ZeEILrOxzfIDBKlqExpYERfqBir75LOIFnzY5cLy7L5NJqn9l3ATV8kBDk
-         FQMfKpT9yMWRGWKK08Xlfmrcb8DtG2a79tvkFm7D+3IgXULoExGWQl+WS/Trh3lD4Iib
-         0ssqHdb8gszm6z4wNo03on6yynSIkX8DMxiffK9Oa7bV//npRKgRkeB3KIqbbyW8zIUx
-         pnvu2lcDW8UWe2DYb6gDmo23piO2tCpZITwsrY4WOaA5gr4jEv6L8uZiKLRryTRVadv4
-         UcDmg9JXFSDgzgP+y5xr+jMqGCpII0LuDNCyVERSISxHMtsEbHU49AfWl5m38XecSuOY
-         Lw2g==
-X-Gm-Message-State: AOAM53220L3wRs9H/kGwO07WuDUvsGElvhmuUKnLuuCMBswcyo8IqTYG
-        64EhLdPP251FVVyFKKVYwiwci3DFVwswO9Cw
-X-Google-Smtp-Source: ABdhPJxHX/R+GnbR8HnzoKbDUijAmc3zIEpe+luqaDUulZ5jxVlaVvrMbn4pLGtC37tYfdBm/4Y1Tg==
-X-Received: by 2002:adf:e8cd:: with SMTP id k13mr21643961wrn.10.1640792025183;
-        Wed, 29 Dec 2021 07:33:45 -0800 (PST)
-Received: from pswork.fritz.box (i5E86B42B.versanet.de. [94.134.180.43])
-        by smtp.gmail.com with ESMTPSA id l10sm6801522wmq.7.2021.12.29.07.33.44
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bEVREXqmH89MbzmWrN4QA+dq6opc4nWIdeFIogoG25s=;
+        b=OrRrTLBy6YCeOYGAGZhPh6qGTMlHAtBIsL0Yv9N51ecV4tOPDXD7tZDec+52IFzJdk
+         vgSvQsCuTfc2kG/2/+qd87d7s4RcRqfWslWxoTW8/aIrmWYfuSHJZ2vwGmBd81ruXy1A
+         mjPV0+hDSqs1H8vh/qQ2NCr0Gqeoy5mEhhpDQo1l113GTuOHTjzyx6/xZpvUi2GlJP/w
+         x2KPVHBkv4f3NXi/yDlcY0MqEDsMzGbXV90e2PGIww3wU2ai4Apg3cmoCW2W0xLLHrR3
+         3kEY774e2992ihjTlU6k9qIJDVnuYbgKu4c62W+//31oNwngsxkYCzIy+ojanJAiza0G
+         AFmA==
+X-Gm-Message-State: AOAM533cTmnIMD1QaD084cjWZc/QKAOkpUjNgpl8hpdiBFvNb1aopaHu
+        Gm3DLjj/XDQhuSSKyB9jaFoGvA==
+X-Google-Smtp-Source: ABdhPJz7bIQYwCUhTRuh/qTGG0rfJw4FKVSoZoVnl9SZrPB35j1RqA4/G6fChoJwqmI09cwCo+YPbg==
+X-Received: by 2002:a9d:6a56:: with SMTP id h22mr19063881otn.135.1640791982466;
+        Wed, 29 Dec 2021 07:33:02 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id r5sm3408543ote.53.2021.12.29.07.33.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 07:33:44 -0800 (PST)
-From:   Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
-To:     linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, nsaenz@kernel.org,
-        treasure4paddy@gmail.com, Stefan Wahren <stefan.wahren@i2se.com>,
-        Gaston Gonzalez <gascoar@gmail.com>,
-        Ojaswin Mujoo <ojaswin98@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com
-Subject: [PATCH] staging: vc04_services: Fix RCU dereference check
-Date:   Wed, 29 Dec 2021 16:32:40 +0100
-Message-Id: <20211229153243.6064-1-treasure4paddy@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 29 Dec 2021 07:33:02 -0800 (PST)
+Date:   Wed, 29 Dec 2021 07:34:02 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Andy Gross <agross@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: phy: convert Qualcomm USB HS phy to yaml
+Message-ID: <Ycx/6gXhd6hnYJqP@ripper>
+References: <20211224170242.57816-1-david@ixit.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211224170242.57816-1-david@ixit.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In service_callback path RCU dereference done without
-rcu_read_[lock/unlock] pair, fixing same by using them.
+On Fri 24 Dec 09:02 PST 2021, David Heidelberg wrote:
 
-[   32.201659] =============================
-[   32.201664] WARNING: suspicious RCU usage
-[   32.201670] 5.15.11-rt24-v8+ #3 Not tainted
-[   32.201680] -----------------------------
-[   32.201685] drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.h:529 suspicious rcu_dereference_check() usage!
-[   32.201695]
-[   32.201695] other info that might help us debug this:
-[   32.201695]
-[   32.201700]
-[   32.201700] rcu_scheduler_active = 2, debug_locks = 1
-[   32.201708] no locks held by vchiq-slot/0/98.
-[   32.201715]
-[   32.201715] stack backtrace:
-[   32.201723] CPU: 1 PID: 98 Comm: vchiq-slot/0 Not tainted 5.15.11-rt24-v8+ #3
-[   32.201733] Hardware name: Raspberry Pi 4 Model B Rev 1.4 (DT)
-[   32.201739] Call trace:
-[   32.201742]  dump_backtrace+0x0/0x1b8
-[   32.201772]  show_stack+0x20/0x30
-[   32.201784]  dump_stack_lvl+0x8c/0xb8
-[   32.201799]  dump_stack+0x18/0x34
-[   32.201808]  lockdep_rcu_suspicious+0xe4/0xf8
-[   32.201817]  service_callback+0x124/0x400
-[   32.201830]  slot_handler_func+0xf60/0x1e20
-[   32.201839]  kthread+0x19c/0x1a8
-[   32.201849]  ret_from_fork+0x10/0x20
+> Conversion of Qualcomm USB HS phy documentation to yaml.
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
 
-Signed-off-by: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
----
- drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c | 3 +++
- 1 file changed, 3 insertions(+)
+Very nice to see your efforts in this area David!
 
-diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-index 6759a6261500..ee1b48db9681 100644
---- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-+++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-@@ -1058,7 +1058,10 @@ service_callback(enum vchiq_reason reason, struct vchiq_header *header,
- 
- 	DEBUG_TRACE(SERVICE_CALLBACK_LINE);
- 
-+	rcu_read_lock();
- 	service = handle_to_service(handle);
-+	rcu_read_unlock();
-+
- 	if (WARN_ON(!service))
- 		return VCHIQ_SUCCESS;
- 
--- 
-2.17.1
+Just some minor nits below.
 
+[..]
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
+> new file mode 100644
+> index 000000000000..202c42754188
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
+> @@ -0,0 +1,86 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/qcom,usb-hs-phy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm's USB HS PHY binding description
+> +
+> +maintainers:
+> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - qcom,usb-hs-phy-apq8064
+> +          - qcom,usb-hs-phy-msm8916
+> +          - qcom,usb-hs-phy-msm8974
+> +      - const: qcom,usb-hs-phy
+> +
+> +  clocks: true
+> +
+> +  clock-names:
+> +    oneOf:
+> +      - items:
+> +          - const: ref
+> +          - const: sleep
+> +      - items:
+> +          - const: sleep
+> +          - const: ref
+
+Can't we just pick one of them?
+
+> +
+> +  resets: true
+> +
+> +  reset-names:
+> +    oneOf:
+> +      - items:
+> +          - const: por
+> +      - items:
+> +          - const: phy
+> +          - const: por
+
+How about doing the:
+
+items:
+  - const: por
+  - const: phy
+minItems: 1
+
+> +
+> +  v1p8-supply: true
+> +
+> +  v3p3-supply: true
+> +
+> +  extcon: true
+> +
+> +  "#phy-cells":
+> +    const: 0
+> +
+> +  qcom,init-seq:
+> +    $ref: /schemas/types.yaml#/definitions/uint8-array
+
+It's better to use the uint8-matrix, as that allows you to describe the
+value pairs as well. See e.g. st,adc-diff-channels in
+iio/adc/st,stm32-adc.yaml as an example.
+
+> +    description: |
+
+I think you can omit the '|'.
+
+Regards,
+Bjorn
+
+> +      Should contain a sequence of ULPI address and value pairs to
+> +      program into the ULPI_EXT_VENDOR_SPECIFIC area. This is related
+> +      to Device Mode Eye Diagram test. The addresses are offsets
+> +      from the ULPI_EXT_VENDOR_SPECIFIC address, for example,
+> +      <0x1 0x53> would mean "write the value 0x53 to address 0x81".
+> +
+> +required:
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +  - reset-names
+> +  - "#phy-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    otg: usb-controller {
+> +      ulpi {
+> +        phy {
+> +          compatible = "qcom,usb-hs-phy-msm8974", "qcom,usb-hs-phy";
+> +          #phy-cells = <0>;
+> +          clocks = <&clk 0>, <&clk 258>;
+> +          clock-names = "ref", "sleep";
+> +          resets = <&gcc 10>, <&otg 0>;
+> +          reset-names = "phy", "por";
+> +          v3p3-supply = <&pm8941_l24>;
+> +          v1p8-supply = <&pm8941_l6>;
+> +          extcon = <&smbb>;
+> +          qcom,init-seq = /bits/ 8 <0x1 0x63>;
+> +        };
+> +      };
+> +    };
+> -- 
+> 2.34.1
+> 

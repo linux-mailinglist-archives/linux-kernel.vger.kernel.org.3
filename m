@@ -2,133 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6651348115C
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 10:41:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 096B5481163
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 10:47:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239578AbhL2Jlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 04:41:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55620 "EHLO
+        id S239580AbhL2JrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 04:47:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235282AbhL2Jlm (ORCPT
+        with ESMTP id S235249AbhL2JrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 04:41:42 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7F1C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 01:41:41 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id bm14so84079206edb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 01:41:41 -0800 (PST)
+        Wed, 29 Dec 2021 04:47:20 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D1FC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 01:47:20 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id jw3so18094140pjb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 01:47:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=mime-version:content-transfer-encoding:date:message-id:to:cc
-         :subject:from:references:in-reply-to;
-        bh=Aj1rRnkJlX5PZQvEeQVYGZh36fhTEeGXkhksn4s+SG8=;
-        b=MwnCUL4SXzrP2ok/wDjVbdrnxnxNl40koBQLfsXjI08fNv68pUtxYokxTEiJx4TFFv
-         MeiwFaggUyMBssrfjMwYXr1AIrj07Ynm+8hkGrmyn1iYGrBECnrcEyXwTgnD3mw4Aw/g
-         W1KHfOnm6KL2dnbhXi/7JN2HfDkSs6jW26SZu0RBW8WbhDG7Bg8WlIeB13zDVrHxdsXZ
-         LhBFaeXN8FodYAmR1vJmwXhMFsIlEVGHLujz3AaOTdlvrIxwzABJtTNLsrQrjGOKEZbN
-         pRXDL/fMHdKH1QZ8QFPh0k94o/+ZJp8aL11MChzE5krsj1IWemrEIEeU5NtO0xS2y74N
-         ikRg==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=SZt+PdB0ksyIlIomXjnYYgxpDLtpRJk7mrjUXL3/SSc=;
+        b=Bk2zDX9ojYrZN7oWsfacN1JWYmi3ylxb7LAqzopN4ngSoqNyqYkoC5yFSp/2GE+S2l
+         ZsvJ2gaWnOUZQoYqYLh/OaQOuwm0US2gEAecPBGnDSFiVendAdZjNG+y3w3ex+og3Tpz
+         4bBFKgIoqtsz6ejXfdCL+/JZ904vDk03+o9Vf5AbMV3WBGTbh5JFcAIn+gTCnXsm3Hwn
+         wBZ1pEWeyR5qej9DHL632ycz09P10O5jS4MtPR+7Q/lyr2vI1Wd/uecPBfbje2Giogqq
+         37Y7uTQVhWfJq6dYJ2LKg1YeAB8MX46CKaQntrm42aeSKzx5RRIyWGomVdCRj+GSbovy
+         Pe6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:content-transfer-encoding:date
-         :message-id:to:cc:subject:from:references:in-reply-to;
-        bh=Aj1rRnkJlX5PZQvEeQVYGZh36fhTEeGXkhksn4s+SG8=;
-        b=fSakAYM9u44ybXhSc6IP+EKs3ApuCyuwKK85CybFONhLNMMB1c5UQ+V+EGEI5LXrRb
-         UDuu4wnlm6F0rnEaD0t+v3kM+yb4Yv8YeA2B12AL2dy1m+jWzOmFMqCc5TuiVAl0BEL0
-         i56FNXP0OZTfXurIqZXd1O6YP+vCXKLDpy+8LIwUMpvwxmrc4zVJXd2SNRZzSJb8lfPZ
-         YjzGAlYWG7ElvWiv3JJo3IGkfopurr+wmkVMnoBuv9FVEByvhE8rzeJfE6kjCDMdDYIu
-         hkTydAynn0pzOfsh640jDqTDyfPInnauD2TCxqqBTgrlwQ9YWyg0YOR+EE7ZyxrWHv9I
-         keKA==
-X-Gm-Message-State: AOAM532OLHEPFTAYyo2PW8pXUJaDUs5AOtttsoEz4ozIimMzXTeeS3C2
-        P/u3hktjLzi5gNR1sz8PeB0W1A==
-X-Google-Smtp-Source: ABdhPJw2ocBJCOx8c6i9/xnIlMjzPZLb/IdcMok1vKAb0FPnSUTIVUnVfGAdO4x1RdPenCA75eaq3Q==
-X-Received: by 2002:a05:6402:424f:: with SMTP id g15mr25216964edb.316.1640770900560;
-        Wed, 29 Dec 2021 01:41:40 -0800 (PST)
-Received: from localhost ([2a02:a210:20c5:8c80:7d0a:cd68:c339:f426])
-        by smtp.gmail.com with ESMTPSA id z10sm767768edb.45.2021.12.29.01.41.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Dec 2021 01:41:40 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 29 Dec 2021 10:41:39 +0100
-Message-Id: <CGROQPIOKGRH.2UVREF2IWAOIC@otso>
-To:     "Maulik Shah" <quic_mkshah@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>
-Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Marc Zyngier" <maz@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH] dt-bindings: qcom,pdc: convert to YAML
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-References: <20211213152208.290923-1-luca.weiss@fairphone.com>
- <39d259cf-5663-5073-f16b-71a21f0e62e3@quicinc.com>
-In-Reply-To: <39d259cf-5663-5073-f16b-71a21f0e62e3@quicinc.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=SZt+PdB0ksyIlIomXjnYYgxpDLtpRJk7mrjUXL3/SSc=;
+        b=mnFJjZouvwUbBgWcrp06qkxyf9UjKkcCWSSeL92VVILlBXuVVeAbqbPRUXkCDOd9P5
+         s3rB/Sb55oasiaslL0+L7AnidNzv006WD/g87fOBRUCBMs5eE/sJYsYdOLckIP1xmMwE
+         iX2FVeIkvYLjIIgzH/NB4lbYCY3CFGfPH0MweeIPpiGudV1BeIyR8T2ltrr/u5HX3jZ4
+         P/LxUK27ieVPeogvXzw8Hayw2RpOnlmgkZPYFJV2agI5AkPlPDdE55T7g8l2mvNi0Cgz
+         r4cN+jxxTUC4YdtapA/UMPfznpi+IswtC95IBp3QfOJGxIZc7p3ZWlrJdJmQB+0u0ioB
+         Mlsg==
+X-Gm-Message-State: AOAM533IormvlktjnzDR/MEy+AqpN56vQtJZkbqe1JXairf6E9J3Wdfl
+        uR6cDCpp+lL4PRHBrU35rBY=
+X-Google-Smtp-Source: ABdhPJz6/T+KLZzxfQ2wy0I4wTo+QS0cfasrrZF/tfBUmYiwfzfmVH0b2eZ5IQebxE7cVPNioFHCQw==
+X-Received: by 2002:a17:902:c401:b0:149:7451:2200 with SMTP id k1-20020a170902c40100b0014974512200mr17245850plk.14.1640771239605;
+        Wed, 29 Dec 2021 01:47:19 -0800 (PST)
+Received: from localhost.localdomain (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
+        by smtp.gmail.com with ESMTPSA id v3sm4940247pgl.64.2021.12.29.01.47.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 01:47:19 -0800 (PST)
+Date:   Wed, 29 Dec 2021 22:47:13 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: pi433: add docs to packet_format and
+ tx_start_condition enum
+Message-ID: <20211229094713.GA28795@localhost.localdomain>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maulik,
+While pi433 driver deals with the nuances of the different possible
+config combinations, it's hard (at first) to understand the rationale
+for some of the tx/rx-related source code unless you're fairly familiar
+with the rf69's inner workings.
 
-On Mon Dec 20, 2021 at 1:24 PM CET, Maulik Shah wrote:
-> Hi Luca,
->
-> On 12/13/2021 8:52 PM, Luca Weiss wrote:
-> > Convert the PDC interrupt controller bindings to YAML.
-> >
-> > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> > ---
-> > This patch depends on the following patch, which fixed sm8250 & sm8350
-> > compatibles and adds sm6350.
-> > https://lore.kernel.org/linux-arm-msm/20211213082614.22651-4-luca.weiss=
-@fairphone.com/
-> >
-> > Also, if somebody has a better suggestion for the register names,
-> > the second one is pulled from downstream commit message which calls it
-> > both "SPI config registers" and "interface registers":
-> > https://source.codeaurora.org/quic/la/kernel/msm-4.19/commit/?id=3Dcdef=
-b63745e051a5bcf69663ac9d084d7da1eeec
->
-> Thanks for the patch. Please use "apss-shared-spi-cfg" name for the
-> second reg.
->
-> It was intended in [1] to remove it since there are no user in upstream
-> for second reg. but it should be fine to convert existing to yaml first
-> and then look to fix that.
->
+This patch documents the expected behaviour and limits of both
+packet_format and tx_start_condition enum fields.
 
-Do you have a full-text version of that? I'd use it instead of this in
-the binding.
+Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+---
+ drivers/staging/pi433/rf69_enum.h | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-  - description: PDC interface register region
-
-"apss-shared-spi-cfg" sounds more appropriate for reg-names property
-that I don't plan on adding.
-
-Regards
-Luca
-
-> [1]
-> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=3D449725&=
-state=3D%2A&archive=3Dboth
->
-> [2]
-> https://patchwork.kernel.org/project/linux-arm-msm/patch/1616409015-27682=
--1-git-send-email-mkshah@codeaurora.org/
->
-> Thanks,
-> Maulik
-> >
-> >   .../interrupt-controller/qcom,pdc.txt         | 77 -----------------
-> >   .../interrupt-controller/qcom,pdc.yaml        | 86 ++++++++++++++++++=
-+
-> >   2 files changed, 86 insertions(+), 77 deletions(-)
-> >   delete mode 100644 Documentation/devicetree/bindings/interrupt-contro=
-ller/qcom,pdc.txt
-> >   create mode 100644 Documentation/devicetree/bindings/interrupt-contro=
-ller/qcom,pdc.yaml
-> >
+diff --git a/drivers/staging/pi433/rf69_enum.h b/drivers/staging/pi433/rf69_enum.h
+index fbf56fcf5fe8..c902916a063d 100644
+--- a/drivers/staging/pi433/rf69_enum.h
++++ b/drivers/staging/pi433/rf69_enum.h
+@@ -109,13 +109,32 @@ enum fifo_fill_condition {
+ 	always
+ };
+ 
++/*
++ * Defines the packet format used.
++ *
++ * In both modes the length of the payload is limited to 255 bytes if AES
++ * is not enabled or 64 bytes otherwise.
++ */
+ enum packet_format {
++    /*
++     * Used when the size of payload is fixed in advance. This mode of
++     * operation may be of interest to minimize RF overhead by 1 byte as
++     * no length byte field is required
++     */
+ 	packet_length_fix,
++    /*
++     * Used when the size of payload isn't known in advance. It requires the
++     * transmitter to send the length byte in each packet so the receiver
++     * would know how to operate properly
++     */
+ 	packet_length_var
+ };
+ 
++/* Defines the condition to start packet transmission */
+ enum tx_start_condition {
++    /* the number of bytes in the FIFO exceeds FIFO_THRESHOLD */
+ 	fifo_level,
++    /* at least one byte in the FIFO */
+ 	fifo_not_empty
+ };
+ 
+-- 
+2.25.4
 

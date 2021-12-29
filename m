@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B39480E2E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 01:20:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D890480E33
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 01:20:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237990AbhL2AUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 19:20:11 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46252 "EHLO
+        id S238002AbhL2AUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 19:20:15 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:46294 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbhL2AUK (ORCPT
+        with ESMTP id S237995AbhL2AUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 19:20:10 -0500
+        Tue, 28 Dec 2021 19:20:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07BE861370;
-        Wed, 29 Dec 2021 00:20:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6FEE2C36AED;
-        Wed, 29 Dec 2021 00:20:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AAF7961376;
+        Wed, 29 Dec 2021 00:20:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 18EFAC36AF5;
+        Wed, 29 Dec 2021 00:20:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640737209;
-        bh=8vWVsDn0KFyPwhRmyaqZKrj1RcwWs7YSNpi5QgEC6wc=;
+        s=k20201202; t=1640737212;
+        bh=7wbgcliWguWksjYh0PfvkdzdzT766t2s2U3DRDONARI=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ol2e58+CXgHdjGoKBTQTHzn6Bd+HJvyIcQt8+Fmi7DTk0Q3LDGGyaxEWxAfQgTioG
-         cDCre2+g2Wljfdif1YtTI13c9BE+NuwBG7eo+rIkg3XDAUKgJXXxTH+eulJx6dDAEp
-         3vSN1hG2hpx6kKUwjONkSKKyGE5h5QESrx186u1VsI/Q+BktERdmeG2ZZ0JiwGi7yh
-         O0PBFjwy8UDnniSttdfNDWK7hxBhXb1fwWZQSkN9gmfeHddZR9cVVcUoHWX/g3awA+
-         7Z8UPPhlcNgr9LpfAULeoO4LtOg0dAWFqkNZiqc3RVKce41Xe1eHkjtbPAVqDNZmnk
-         N+ppqkQRR4ASg==
+        b=KGGxrfjM5WDYcXUgjVEbvJOqjLmx0aUSZwIe9ZMKM9lMpQv/6Yb0Yy58DWDo1LVCo
+         lieUQonA/KNbtYut+ehaOdViKhe67M0IFcXOqHopRPi8TpS6m5OEC2qgdReEDgcsPR
+         5G3tHiDpmKZ9QAtOQjSzn5qmdkWzc8tBA+Vdm/GdFJJrvMbdFv7tD8lHIg3s5/sqfT
+         BR5+9ArJeHyoM5B/Jff+KNruyczMvhgVaE7HiFmT4M4l2Fegaq0npl7cc1QlgpWPl9
+         K0f/efHdhyLf7vUrUZnnawtKDsQD8BfF4YB+e85acb5Vr7bUn1HF1REuGaNU+o+4dC
+         Zw3F9FSV73eEw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 49744C395E8;
-        Wed, 29 Dec 2021 00:20:09 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ED210C395EA;
+        Wed, 29 Dec 2021 00:20:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ionic: Initialize the 'lif->dbid_inuse' bitmap
+Subject: Re: [PATCH net-next] net: lantiq_etop: add missing comment for wmb()
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164073720929.15020.13473393631637951212.git-patchwork-notify@kernel.org>
-Date:   Wed, 29 Dec 2021 00:20:09 +0000
-References: <6a478eae0b5e6c63774e1f0ddb1a3f8c38fa8ade.1640527506.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <6a478eae0b5e6c63774e1f0ddb1a3f8c38fa8ade.1640527506.git.christophe.jaillet@wanadoo.fr>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     snelson@pensando.io, drivers@pensando.io, davem@davemloft.net,
-        kuba@kernel.org, allenbh@pensando.io, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Message-Id: <164073721196.15020.13716536575815220472.git-patchwork-notify@kernel.org>
+Date:   Wed, 29 Dec 2021 00:20:11 +0000
+References: <20211228214910.70810-1-olek2@wp.pl>
+In-Reply-To: <20211228214910.70810-1-olek2@wp.pl>
+To:     Aleksander Jan Bajkowski <olek2@wp.pl>
+Cc:     davem@davemloft.net, kuba@kernel.org, rdunlap@infradead.org,
+        jgg@ziepe.ca, arnd@arndb.de, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net.git (master)
+This patch was applied to netdev/net-next.git (master)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Sun, 26 Dec 2021 15:06:17 +0100 you wrote:
-> When allocated, this bitmap is not initialized. Only the first bit is set a
-> few lines below.
+On Tue, 28 Dec 2021 22:49:10 +0100 you wrote:
+> This patch adds the missing code comment for memory barrier
+> call and fixes checkpatch warning:
 > 
-> Use bitmap_zalloc() to make sure that it is cleared before being used.
+> WARNING: memory barrier without comment
+> +	wmb();
 > 
-> Fixes: 6461b446f2a0 ("ionic: Add interrupts and doorbells")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
 > 
 > [...]
 
 Here is the summary with links:
-  - ionic: Initialize the 'lif->dbid_inuse' bitmap
-    https://git.kernel.org/netdev/net/c/140c7bc7d119
+  - [net-next] net: lantiq_etop: add missing comment for wmb()
+    https://git.kernel.org/netdev/net-next/c/723955913e77
 
 You are awesome, thank you!
 -- 

@@ -2,80 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E57E4817CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 00:46:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1F24817D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 00:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233413AbhL2Xp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 18:45:59 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:50912 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbhL2Xp5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 18:45:57 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EDE49CE1A2D;
-        Wed, 29 Dec 2021 23:45:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C5F5C36AEA;
-        Wed, 29 Dec 2021 23:45:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1640821554;
-        bh=dY5gYi5AkIP2+p4HXO+O9a3TyRp3lgzPpmtlA7gCn8o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pA/X3yUYAg2zrhiisVScrdIBKB37ZcdHsuCigc9sx9hMzrxvQSUKWM1/KgXTi9LpZ
-         NvmZxusSmCLsXPFG9RGozBP1glGiIZKfYnSuQBYWad2HSgOA8LHaHys6kxns/RBzh4
-         DCP+l+e3E5gRstnJ6HseDvWVJggpmcBxXKz9H0HM=
-Date:   Wed, 29 Dec 2021 15:45:53 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Mel Gorman <mgorman@techsingularity.net>,
-        Mark Brown <broonie@kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Alexey Avramov <hakavlad@inbox.lv>,
-        Rik van Riel <riel@surriel.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
-        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 1/1] mm: vmscan: Reduce throttling due to a failure
- to make progress
-Message-Id: <20211229154553.09dd5bb657bc19d45c3de8dd@linux-foundation.org>
-In-Reply-To: <caf247ab-f6fe-a3b9-c4b5-7ce17d1d5e43@leemhuis.info>
-References: <20211202150614.22440-1-mgorman@techsingularity.net>
-        <caf247ab-f6fe-a3b9-c4b5-7ce17d1d5e43@leemhuis.info>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S233448AbhL2XwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 18:52:11 -0500
+Received: from mx4.wp.pl ([212.77.101.12]:10699 "EHLO mx4.wp.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231881AbhL2XwK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 18:52:10 -0500
+Received: (wp-smtpd smtp.wp.pl 40934 invoked from network); 30 Dec 2021 00:52:08 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1640821928; bh=RKZz1uRLzH3qeU7mLbqveXex0uLjiw2FNeWAHJeYmLI=;
+          h=From:To:Subject;
+          b=M7mgtuRBOx2DnVxswc7P906kfSD4wCfoQixkL7Db07Z93dCaEY9Vc+dgwHbGUTVNn
+           ZkqQnZG0hs1pHouMKczDCpBRrgqM1/GORvM+lLxyKWbUJEX5hG6smfnG5QcFq4M4ov
+           iYnkYPPs5+FQR7SvE3opLpSMp1eFuc0TxFUDOx8M=
+Received: from riviera.nat.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.1])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <davem@davemloft.net>; 30 Dec 2021 00:52:08 +0100
+From:   Aleksander Jan Bajkowski <olek2@wp.pl>
+To:     davem@davemloft.net, kuba@kernel.org, olek2@wp.pl, jgg@ziepe.ca,
+        rdunlap@infradead.org, arnd@arndb.de, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2] net: lantiq_etop:  remove unnecessary space in cast
+Date:   Thu, 30 Dec 2021 00:52:06 +0100
+Message-Id: <20211229235206.6045-1-olek2@wp.pl>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: b91917f18e785162825f4e61f981bca2
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000000 [caOk]                               
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Dec 2021 11:04:18 +0100 Thorsten Leemhuis <regressions@leemhuis.info> wrote:
+As reported by checkpatch.pl, no space is necessary after a cast.
 
-> Hi, this is your Linux kernel regression tracker speaking.
-> 
-> On 02.12.21 16:06, Mel Gorman wrote:
-> > Mike Galbraith, Alexey Avramov and Darrick Wong all reported similar
-> > problems due to reclaim throttling for excessive lengths of time.
-> > In Alexey's case, a memory hog that should go OOM quickly stalls for
-> > several minutes before stalling. In Mike and Darrick's cases, a small
-> > memcg environment stalled excessively even though the system had enough
-> > memory overall.
-> 
-> Just wondering: this patch afaics is now in -mm and  Linux next for
-> nearly two weeks. Is that intentional? I had expected it to be mainlined
-> with the batch of patches Andrew mailed to Linus last week, but it
-> wasn't among them.
+Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+---
+ drivers/net/ethernet/lantiq_etop.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I have it queued for 5.17-rc1.
+diff --git a/drivers/net/ethernet/lantiq_etop.c b/drivers/net/ethernet/lantiq_etop.c
+index 1f6808b3ad12..35d22b769f27 100644
+--- a/drivers/net/ethernet/lantiq_etop.c
++++ b/drivers/net/ethernet/lantiq_etop.c
+@@ -497,7 +497,7 @@ ltq_etop_tx(struct sk_buff *skb, struct net_device *dev)
+ 	netif_trans_update(dev);
+ 
+ 	spin_lock_irqsave(&priv->lock, flags);
+-	desc->addr = ((unsigned int) dma_map_single(&priv->pdev->dev, skb->data, len,
++	desc->addr = ((unsigned int)dma_map_single(&priv->pdev->dev, skb->data, len,
+ 						DMA_TO_DEVICE)) - byte_offset;
+ 	/* Make sure the address is written before we give it to HW */
+ 	wmb();
+-- 
+2.30.2
 
-There is still time to squeeze it into 5.16, just, with a cc:stable. 
-
-Alternatively we could merge it into 5.17-rc1 with a cc:stable, so it
-will trickle back with less risk to the 5.17 release.
-
-What do people think?

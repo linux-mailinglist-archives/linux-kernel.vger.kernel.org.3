@@ -2,99 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A844D4810D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 08:50:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6DC4810D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 09:10:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239210AbhL2Huc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 02:50:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232037AbhL2Hub (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 02:50:31 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64426C061574;
-        Tue, 28 Dec 2021 23:50:31 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id j18so42853747wrd.2;
-        Tue, 28 Dec 2021 23:50:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=XnKm5iuVU2e6uGgjYmWwpTUlJuwhsXcjYMMwXOTiJAc=;
-        b=mPAzfc8iTMOgBZuDKPUR3qN762DnmY6izecRYGcP4c1TuiUKHvz+sbnMRC1WSdToCG
-         BCcP3HvehUaHKSvowWaS0PmUg5PpBDsVB/ZqXEphUeU9VGdk5ChRR9jWAZVyUm8lJhds
-         k0l1p07JD5q1HWMO2pXwvacxZ4nPEo4cwdlRqmfga0Ox3+R4IQZ5EnRYIU/iODiNBiaS
-         f8a/089Mxsvl7VUUW1rpChfcY+XomEGUjEMlS9pbIdJ3etqzC3B4+UbGHHRZMsb7XoGB
-         ej2838dsFMu5KpG2COuH9vbMfwMZSYOlcglnCudP8uWqzPGxWN/cs7GCBgVayntRolZ4
-         vtvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=XnKm5iuVU2e6uGgjYmWwpTUlJuwhsXcjYMMwXOTiJAc=;
-        b=SVFrdCYRtZM64wEmodMvieWdYhGx3oN4xYlWdFeRwf5a5/cw5iUm8F+jJe7iZG9Udq
-         v04tojOfgHUIn51B8ifOaKCc/yny1oE3Mz/ApjOrZgHhUYH8DPB/FFHCNj+AyQJDTjHL
-         rSMo38Uwt8Xh4Aaq990ZkLSRZ0/WyXadS2IgpjKlRPivxPwHgTNo3morYPTABe+UzHY7
-         5VDTF3ULejdoh1+Yxa47aD9/VTN4/2H/wNMQQpEkHSZ492KfO9BUvXnpOkFMBGS7FATx
-         Nos+IbN8LbXkBLbKuByEkUpDldIkMMINfhAUd5gbh8Lt3rAwkUm+dqmQQJHdKqXKFIA3
-         yZKA==
-X-Gm-Message-State: AOAM531u0QJSLpqBZAUhQFcuWKl7G/yxsEOj2wlBpj9b6/hYIPbJhOHe
-        +DF+4DnFT4tIPBS4ljy5Mpw=
-X-Google-Smtp-Source: ABdhPJyjt4dO2ATROdW4g4BGo5zkRsyTtC9HUgtiuGXKtxw8RwSS/edOth5TZtiYz1w5vLpgot0UaA==
-X-Received: by 2002:adf:f310:: with SMTP id i16mr9256503wro.8.1640764229960;
-        Tue, 28 Dec 2021 23:50:29 -0800 (PST)
-Received: from elementary ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id h27sm24292839wmc.43.2021.12.28.23.50.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 23:50:29 -0800 (PST)
-Date:   Wed, 29 Dec 2021 08:50:25 +0100
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] HID: magicmouse: Fix an error handling path in
- magicmouse_probe()
-Message-ID: <20211229075025.GA11488@elementary>
-References: <b0777c29fb4c59f27a726f62680b4c7f04c5c76e.1640725695.git.christophe.jaillet@wanadoo.fr>
+        id S239222AbhL2II7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 03:08:59 -0500
+Received: from mga12.intel.com ([192.55.52.136]:17615 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239205AbhL2II6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 03:08:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640765338; x=1672301338;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xGmYqA/f4tDgPN8N9XZ2BWj0sPKSg6mpQzE9WWHvPGg=;
+  b=FS8rzSSQ7j5c98t28/LyLk85vgN6XYCwQh54WAZoACF9cgCTTRy4ZHO2
+   CwluOT1rHC2eXbBuYhXymYRm/9uO5G3+ciE+4++cdTzr31Rqoo3Xyw9w0
+   VtvJsrnLTiUKl36o/1FWkP2RVeSzziOcRtm9RTru8A48b3JX8oMN8HXMp
+   NwiGmscUCDDSP5tI7xkLgzWa6QEJYZjQInyXJqhCTR91qfU4z1F4Lqas+
+   XhoZmli4FaAFHRSQGj1uYtcILmJOHhhfNLiJFP0RKCYmYEUFVKOd8Djtu
+   TjBG/nZuaTpFJZHMS+jnHuiiShdNjybKO69WsmLB7+RYM6BNXomNNqTTp
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="221479726"
+X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
+   d="scan'208";a="221479726"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 00:08:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
+   d="scan'208";a="618971234"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 29 Dec 2021 00:08:56 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n2U11-0008jK-Cd; Wed, 29 Dec 2021 08:08:55 +0000
+Date:   Wed, 29 Dec 2021 16:08:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [csky-linux:riscv_compat_v2_sv48_v3_xtpbmt 18/32]
+ arch/riscv/include/asm/page.h:40:35: error: 'PTRS_PER_PGD' undeclared; did
+ you mean 'PTRS_PER_PMD'?
+Message-ID: <202112291625.LuMtmcux-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b0777c29fb4c59f27a726f62680b4c7f04c5c76e.1640725695.git.christophe.jaillet@wanadoo.fr>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 10:09:17PM +0100, Christophe JAILLET wrote:
-> If the timer introduced by the commit below is started, then it must be
-> deleted in the error handling of the probe. Otherwise it would trigger
-> once the driver is no more.
-> 
-> Fixes: 0b91b4e4dae6 ("HID: magicmouse: Report battery level over USB")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/hid/hid-magicmouse.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/hid/hid-magicmouse.c b/drivers/hid/hid-magicmouse.c
-> index eba1e8087bfd..b8b08f0a8c54 100644
-> --- a/drivers/hid/hid-magicmouse.c
-> +++ b/drivers/hid/hid-magicmouse.c
-> @@ -873,6 +873,7 @@ static int magicmouse_probe(struct hid_device *hdev,
->  
->  	return 0;
->  err_stop_hw:
-> +	del_timer_sync(&msc->battery_timer);
->  	hid_hw_stop(hdev);
->  	return ret;
->  }
-> -- 
-> 2.32.0
-> 
+tree:   https://github.com/c-sky/csky-linux riscv_compat_v2_sv48_v3_xtpbmt
+head:   29a08e898f4e552bc0d5117b437ac3073e6ebb81
+commit: 0ede6d3975bb0435d097cdfb2b45ee74e778ab4b [18/32] riscv: Move KASAN mapping next to the kernel mapping
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20211229/202112291625.LuMtmcux-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/c-sky/csky-linux/commit/0ede6d3975bb0435d097cdfb2b45ee74e778ab4b
+        git remote add csky-linux https://github.com/c-sky/csky-linux
+        git fetch --no-tags csky-linux riscv_compat_v2_sv48_v3_xtpbmt
+        git checkout 0ede6d3975bb0435d097cdfb2b45ee74e778ab4b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv prepare
 
-My bad, thanks for catching it!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: José Expósito <jose.exposito89@gmail.com>
+All errors (new ones prefixed by >>):
+
+   error: include/uapi/asm-generic/fcntl.h: leak CONFIG_COMPAT to user-space
+   make[2]: *** [scripts/Makefile.headersinst:63: usr/include/asm-generic/fcntl.h] Error 1
+   make[2]: Target '__headers' not remade because of errors.
+   make[1]: *** [Makefile:1283: headers] Error 2
+   In file included from arch/riscv/include/asm/thread_info.h:11,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:10,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   arch/riscv/include/asm/pgtable-64.h: In function 'pud_page':
+>> arch/riscv/include/asm/page.h:40:35: error: 'PTRS_PER_PGD' undeclared (first use in this function); did you mean 'PTRS_PER_PMD'?
+      40 | #define KERN_VIRT_SIZE          ((PTRS_PER_PGD / 2 * PGDIR_SIZE) / 2)
+         |                                   ^~~~~~~~~~~~
+   arch/riscv/include/asm/pgtable.h:27:27: note: in expansion of macro 'KERN_VIRT_SIZE'
+      27 | #define VMALLOC_SIZE     (KERN_VIRT_SIZE >> 1)
+         |                           ^~~~~~~~~~~~~~
+   arch/riscv/include/asm/pgtable.h:29:41: note: in expansion of macro 'VMALLOC_SIZE'
+      29 | #define VMALLOC_START    (PAGE_OFFSET - VMALLOC_SIZE)
+         |                                         ^~~~~~~~~~~~
+   arch/riscv/include/asm/pgtable.h:57:26: note: in expansion of macro 'VMALLOC_START'
+      57 | #define VMEMMAP_START   (VMALLOC_START - VMEMMAP_SIZE)
+         |                          ^~~~~~~~~~~~~
+   arch/riscv/include/asm/pgtable.h:63:41: note: in expansion of macro 'VMEMMAP_START'
+      63 | #define vmemmap         ((struct page *)VMEMMAP_START)
+         |                                         ^~~~~~~~~~~~~
+   include/asm-generic/memory_model.h:25:34: note: in expansion of macro 'vmemmap'
+      25 | #define __pfn_to_page(pfn)      (vmemmap + (pfn))
+         |                                  ^~~~~~~
+   include/asm-generic/memory_model.h:53:21: note: in expansion of macro '__pfn_to_page'
+      53 | #define pfn_to_page __pfn_to_page
+         |                     ^~~~~~~~~~~~~
+   arch/riscv/include/asm/pgtable-64.h:69:16: note: in expansion of macro 'pfn_to_page'
+      69 |         return pfn_to_page(pud_val(pud) >> _PAGE_PFN_SHIFT);
+         |                ^~~~~~~~~~~
+   arch/riscv/include/asm/page.h:40:35: note: each undeclared identifier is reported only once for each function it appears in
+      40 | #define KERN_VIRT_SIZE          ((PTRS_PER_PGD / 2 * PGDIR_SIZE) / 2)
+         |                                   ^~~~~~~~~~~~
+   arch/riscv/include/asm/pgtable.h:27:27: note: in expansion of macro 'KERN_VIRT_SIZE'
+      27 | #define VMALLOC_SIZE     (KERN_VIRT_SIZE >> 1)
+         |                           ^~~~~~~~~~~~~~
+   arch/riscv/include/asm/pgtable.h:29:41: note: in expansion of macro 'VMALLOC_SIZE'
+      29 | #define VMALLOC_START    (PAGE_OFFSET - VMALLOC_SIZE)
+         |                                         ^~~~~~~~~~~~
+   arch/riscv/include/asm/pgtable.h:57:26: note: in expansion of macro 'VMALLOC_START'
+      57 | #define VMEMMAP_START   (VMALLOC_START - VMEMMAP_SIZE)
+         |                          ^~~~~~~~~~~~~
+   arch/riscv/include/asm/pgtable.h:63:41: note: in expansion of macro 'VMEMMAP_START'
+      63 | #define vmemmap         ((struct page *)VMEMMAP_START)
+         |                                         ^~~~~~~~~~~~~
+   include/asm-generic/memory_model.h:25:34: note: in expansion of macro 'vmemmap'
+      25 | #define __pfn_to_page(pfn)      (vmemmap + (pfn))
+         |                                  ^~~~~~~
+   include/asm-generic/memory_model.h:53:21: note: in expansion of macro '__pfn_to_page'
+      53 | #define pfn_to_page __pfn_to_page
+         |                     ^~~~~~~~~~~~~
+   arch/riscv/include/asm/pgtable-64.h:69:16: note: in expansion of macro 'pfn_to_page'
+      69 |         return pfn_to_page(pud_val(pud) >> _PAGE_PFN_SHIFT);
+         |                ^~~~~~~~~~~
+   make[2]: *** [scripts/Makefile.build:121: arch/riscv/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1197: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +40 arch/riscv/include/asm/page.h
+
+    35	
+    36	/*
+    37	 * Half of the kernel address space (half of the entries of the page global
+    38	 * directory) is for the direct mapping.
+    39	 */
+  > 40	#define KERN_VIRT_SIZE		((PTRS_PER_PGD / 2 * PGDIR_SIZE) / 2)
+    41	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

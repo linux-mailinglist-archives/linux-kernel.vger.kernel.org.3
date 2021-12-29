@@ -2,93 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E2648116D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 10:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8350D481170
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 10:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239607AbhL2Jvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 04:51:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234237AbhL2Jvb (ORCPT
+        id S239620AbhL2JzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 04:55:07 -0500
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:7208 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S239614AbhL2JzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 04:51:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEBCC061574;
-        Wed, 29 Dec 2021 01:51:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4301BB817F4;
-        Wed, 29 Dec 2021 09:51:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BF0CC36AE7;
-        Wed, 29 Dec 2021 09:51:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640771488;
-        bh=hphMVfMYRqhRPSkobu+poUkqO2K8AgzckF9mfF41/cQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Aw9ILdrVg3BB9XhDdYaSMWzWHNhKkaPsL/jSNFa8lb0uWKnwDvjzxa+2DxV9FlphU
-         bundsmuA+6sYxWcYi7uMS0Bu6ZmZu3da2u0URKWu6UTW9Xtr6cXIPiXnRuUNFkxHhx
-         HcFtSC9ah874CdrHzJJdW1/lnLJsWjwczqhW2U+8=
-Date:   Wed, 29 Dec 2021 10:51:23 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Puma Hsu <pumahsu@google.com>
-Cc:     mathias.nyman@intel.com, Albert Wang <albertccwang@google.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] xhci: re-initialize the HC during resume if HCE was set
-Message-ID: <Ycwvm5rdqVW4E27y@kroah.com>
-References: <20211228060246.2958070-1-pumahsu@google.com>
- <YcrKNP4TRXB6nsCI@kroah.com>
- <CAGCq0Lb8ZoGpbkLNhXG=OyWgvz_Qn3ABmq_uvMPJdyEKygMH+Q@mail.gmail.com>
- <YcwclrVzEXRxgUFa@kroah.com>
- <CAGCq0LbfWt2xTmRczhdZUXrwFTJdaMH3Zd-y4quqWi7kyaso6Q@mail.gmail.com>
+        Wed, 29 Dec 2021 04:55:06 -0500
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BT6Ueaw008025;
+        Wed, 29 Dec 2021 03:53:48 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=s5779NgSmZdidPeKYZafjjJtfgHumjhVoJekxPIdq7E=;
+ b=DCdrYRyeVjgKSWN/snbvXK2mzwd3bEqoT1HJgQEiWOA0s5yoLOIe9NDwx+a1lW0iOOI3
+ MyjHygKXlkdKg7/yXH4Uzmn3xiESfil5ogTyiTh3+pjvKKg8UE36bmrJjP4WK1zx9dN8
+ +xqvibk6GD5uXhmFn9wgpVWqrSUJrdf/tdDOqkUp7DIYhbHAcdzWAZ5qrTPE6nxHd3+I
+ 9zggUTapT/Q+Xto8ocS5MA/VrQF6W9lzLDgtehqjfWLvmmKa3wjwoBPuxxIpZzVKzbtb
+ 7Q+s/6SQIDDPJrsDj6SRKijhk3dE8zx34MTKALo1HcLA0Gjn/pJkSMTxDpAhblEAzUqU Sw== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3d7ksg9hm9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 29 Dec 2021 03:53:48 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Wed, 29 Dec
+ 2021 09:53:46 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Wed, 29 Dec 2021 09:53:46 +0000
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D68FB46C;
+        Wed, 29 Dec 2021 09:53:45 +0000 (UTC)
+Date:   Wed, 29 Dec 2021 09:53:45 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <linux-kernel@vger.kernel.org>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: Re: [PATCH v1 1/1] ASoC: madera: Replace kernel.h with the necessary
+ inclusions
+Message-ID: <20211229095345.GX18506@ediswmail.ad.cirrus.com>
+References: <20211222164534.67636-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <CAGCq0LbfWt2xTmRczhdZUXrwFTJdaMH3Zd-y4quqWi7kyaso6Q@mail.gmail.com>
+In-Reply-To: <20211222164534.67636-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: Ay8phJ6Y0cBy97KnS6b_yyWSsb3gnbEK
+X-Proofpoint-ORIG-GUID: Ay8phJ6Y0cBy97KnS6b_yyWSsb3gnbEK
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 05:11:47PM +0800, Puma Hsu wrote:
-> On Wed, Dec 29, 2021 at 4:30 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > A: http://en.wikipedia.org/wiki/Top_post
-> > Q: Were do I find info about this thing called top-posting?
-> > A: Because it messes up the order in which people normally read text.
-> > Q: Why is top-posting such a bad thing?
-> > A: Top-posting.
-> > Q: What is the most annoying thing in e-mail?
-> >
-> > A: No.
-> > Q: Should I include quotations after my reply?
-> >
-> > http://daringfireball.net/2007/07/on_top
-> >
-> > On Wed, Dec 29, 2021 at 01:53:04PM +0800, Puma Hsu wrote:
-> > > This commit is not used to fix a specific commit. We find a condition
-> > > that when XHCI runs the resume process but the HCE flag is set, then
-> > > the Run/Stop bit of USBCMD cannot be set so that HC would not be
-> > > enabled. In fact, HC may already meet a problem at this moment.
-> > > Besides, in xHCI requirements specification revision 1.2, Table 5-21
-> > > BIT(12) claims that Software should re-initialize the xHC when HCE is
-> > > set. Therefore, I think this commit could be the error handling for
-> > > HCE.
-> >
-> > So this does not actually fix an issue that you have seen in any device
-> > or testing?  So it is not relevant for older kernels but just "nice to
-> > have"?
-> >
-> > How did you test this if you can not duplicate the problem?
-> >
+On Wed, Dec 22, 2021 at 06:45:34PM +0200, Andy Shevchenko wrote:
+> When kernel.h is used in the headers it adds a lot into dependency hell,
+> especially when there are circular dependencies are involved.
 > 
-> Yes, we actually see that the HCE may be detected while running xhci_resume
-> on our product platform, so I'm able to verify this commit can fix
-> such a condition.
+> Replace kernel.h inclusion with the list of what is really being used.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
 
-Given that your product platform is an older kernel version than 5.17, I
-think that you also want this in the older kernel releases, so please
-mark it for stable backporting.
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-thanks,
-
-greg k-h
+Thanks,
+Charles

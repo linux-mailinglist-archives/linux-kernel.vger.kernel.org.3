@@ -2,87 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 450ED48175A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 23:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F39481765
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 23:56:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbhL2WpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 17:45:23 -0500
-Received: from mga04.intel.com ([192.55.52.120]:31871 "EHLO mga04.intel.com"
+        id S232571AbhL2W41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 17:56:27 -0500
+Received: from vern.gendns.com ([98.142.107.122]:41936 "EHLO vern.gendns.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230243AbhL2WpW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 17:45:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640817922; x=1672353922;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FKbK56FF3G/2tJxeta3wOoQtH42eSRbpX4oLUSR2B1w=;
-  b=FPv2OSO4IEovN/z6BYlxO2Zy1ILxeUE9q5ROPxlS0PNEROTlr6JjZpGL
-   WUdx9R2NtAdNAuPhM2Dn80fGYp3I3J5V2oIAi9S4tnxateLXSNPG0Zk43
-   t1Tt1oIvRS8vOUmKxU2cErvyxVmlNVADBcEbLA5Qn0/uuluzR8ZCpJliE
-   3q8slkgzpUeB8266TjnxyB3dHKQQaDmKUqbSeEHs1+z6luzb7agg1UrT8
-   rwue+zK9ubORul6SyG5AP3jM7kBFy/89wHUPdEX2GaQ7TfPVmsl/tTKfl
-   R9h8jr53LUA9UmCamzuySVh4pKT3xj/j2A1J+j+rClT/GzC9sWXcAicbw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="240363948"
-X-IronPort-AV: E=Sophos;i="5.88,246,1635231600"; 
-   d="scan'208";a="240363948"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 14:45:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,246,1635231600"; 
-   d="scan'208";a="470469780"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 29 Dec 2021 14:45:20 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n2hh9-0009Tb-Q0; Wed, 29 Dec 2021 22:45:19 +0000
-Date:   Thu, 30 Dec 2021 06:45:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guo Ren <guoren@linux.alibaba.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Liu Shaohua <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>
-Subject: [csky-linux:riscv_compat_v2_sv48_v3_xtpbmt 32/32] errata.c:undefined
- reference to `protection_map'
-Message-ID: <202112300625.f6BEYh5d-lkp@intel.com>
+        id S230243AbhL2W40 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 17:56:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=747RlGTGEaJosLze/FDMrypuI+B9jB981gse+D0gXs8=; b=xLL9Y1ZGkhSUWdurmWpRARDdIh
+        bD8sy6dw8jwcjxGHWtF9Uno2bJV1HJXAiLzdlApUMDyPOj9xqJAIKoSKSnqwfQQ93/y1hix5CDhPR
+        aE1fDhj4O1KY6UzM97SEQcAFuUO5R1novXHg5YibMPm34VYgpwhi8AYXAMv0MQ5GBRI8Oy68mXpXL
+        3eVggxnI44IS/klKQz8c/JWUy8iHxQoIjpTEeHVsX6XiHYG3ZdxckoqRmGxE+P3BtTeSSYNEy2z4g
+        UJnzAYV1i+WriJWj6zO3Mzh95jJumce6HEWtQsymiS0sdOrB+EL7vjHJ8P4tef8FCO3mf66bdc33o
+        3svlj3Tw==;
+Received: from [2600:1700:4830:1658::fb2] (port=56232)
+        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <david@lechnology.com>)
+        id 1n2hri-0007Av-II; Wed, 29 Dec 2021 17:56:23 -0500
+Subject: Re: [PATCH v3 22/23] counter: ti-eqep: Convert to new counter
+ registration
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>
+Cc:     linux-iio@vger.kernel.org, kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+References: <20211229154441.38045-1-u.kleine-koenig@pengutronix.de>
+ <20211229154441.38045-23-u.kleine-koenig@pengutronix.de>
+From:   David Lechner <david@lechnology.com>
+Message-ID: <926c6589-93c2-9115-6098-80926417ca57@lechnology.com>
+Date:   Wed, 29 Dec 2021 16:56:21 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211229154441.38045-23-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - vern.gendns.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lechnology.com
+X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/c-sky/csky-linux riscv_compat_v2_sv48_v3_xtpbmt
-head:   ff10a70d2ed4fbef7238b315145d1aa0d137f80f
-commit: ff10a70d2ed4fbef7238b315145d1aa0d137f80f [32/32] riscv: errata: pgtable: Add custom Svpbmt supported for Allwinner D1
-config: riscv-nommu_k210_defconfig (https://download.01.org/0day-ci/archive/20211230/202112300625.f6BEYh5d-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/c-sky/csky-linux/commit/ff10a70d2ed4fbef7238b315145d1aa0d137f80f
-        git remote add csky-linux https://github.com/c-sky/csky-linux
-        git fetch --no-tags csky-linux riscv_compat_v2_sv48_v3_xtpbmt
-        git checkout ff10a70d2ed4fbef7238b315145d1aa0d137f80f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
+On 12/29/21 9:44 AM, Uwe Kleine-König wrote:
+> This fixes device lifetime issues where it was possible to free a live
+> struct device.
+> 
+> Fixes: f213729f6796 ("counter: new TI eQEP driver")
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Acked-by: David Lechner <david@lechnology.com>
 
-All errors (new ones prefixed by >>):
-
-   riscv64-linux-ld: arch/riscv/errata/thead/errata.o: in function `.L0 ':
->> errata.c:(.init.text+0x22): undefined reference to `protection_map'
->> riscv64-linux-ld: errata.c:(.init.text+0x2a): undefined reference to `protection_map'
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for SERIAL_8250_DW
-   Depends on TTY && HAS_IOMEM && SERIAL_8250
-   Selected by
-   - ERRATA_THEAD && RISCV_ERRATA_ALTERNATIVE
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

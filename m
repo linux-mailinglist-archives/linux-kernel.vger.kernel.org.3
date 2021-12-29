@@ -2,115 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 273854816F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 22:12:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42134481706
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 22:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232366AbhL2VMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 16:12:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
+        id S232375AbhL2VQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 16:16:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbhL2VMI (ORCPT
+        with ESMTP id S231322AbhL2VQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 16:12:08 -0500
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4678C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 13:12:07 -0800 (PST)
-Received: by mail-lj1-x243.google.com with SMTP id r22so37525138ljk.11
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 13:12:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vjBtWdrmAlpHjYLO6yg6l3ARS7/1BBcb9/UFVxhf8Vc=;
-        b=7Q8Yw9ADq2f6kLVocaZI9d1PCSVV/0J2PMI1H/vtOXZ1eYpu8+eFz42LLt9By15vcG
-         oqQ6gFT1dLBlF7OhxCyrXw7rAmgduoWDyZ7E5sfg6bxp8lkRq4Pqtw/3rOLa6TJA59Dz
-         Q3RqBpEaAtyhMhvsA6pTHqIreSuO25sWCBqb9j/dLszXUtSdtyT+xak+0/SS8moMmQ1H
-         CMIwWiRsrZC9zLG65gT27kU9zetOUzgTjeOvtSZ7Zx8nFzTBBtx1+TVdAOk4tMjbXvJv
-         Mpj6grLM78CDfuQJM1BapkjHQTNePlA/rtogzmeA6oely/vcGKlP2KZHHK2nxhZ7VeT4
-         o6HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vjBtWdrmAlpHjYLO6yg6l3ARS7/1BBcb9/UFVxhf8Vc=;
-        b=HGLf/UXozd4uEjTiOx14/Hm/VFImc2RxJZX9ceiO7UX6HpZEIT4J69Nmfc5D4OQLRn
-         IOQFeecrImVpZTTzzVCTmghwkQtzU+/s6l/3XNL2LdxW5xKew6PDxsK6A+pJCWbjOjL6
-         7c7uAIYXTzccpjra6c0CxRVFN3Nn8FLIlLf4sBpfRu6c587pX5IlerRaF4xGcRO05Hwa
-         HMHbUhJUnz7Zo4NJ9IGzPKwMXyp6n+W4qZ/VSld+4CSSwIk5u8c7X8Z0moNUyy66pHME
-         54Wlo5t0CnwXXpjCAXdDNIHtvdnjqqRZpLuT4uWSBduVp7p6QJfpNp6FfXgH9NFrCZom
-         +FOg==
-X-Gm-Message-State: AOAM533wNcIIPUJ9ax6gZ2ZHZDOdLUQUZeELmXB3xMNckGKZooziL2MP
-        92Pt6xJs7u87EqAQFE0t6BXVs3uCj8PsfOFu
-X-Google-Smtp-Source: ABdhPJzNSZouXDGO7X5hs9MlNi3MGSek5vs3WsO6ApXEIyAxpTgsbCnmTebH3VbGA66lL6gaSiXHEQ==
-X-Received: by 2002:a2e:8781:: with SMTP id n1mr3037502lji.96.1640812325657;
-        Wed, 29 Dec 2021 13:12:05 -0800 (PST)
-Received: from [192.168.112.17] (nikaet.starlink.ru. [94.141.168.29])
-        by smtp.gmail.com with ESMTPSA id m28sm2305722lfo.76.2021.12.29.13.12.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Dec 2021 13:12:05 -0800 (PST)
-Subject: Re: [PATCH 2/3] arm64: dts: renesas: r8a77961: Add lvds0 device node
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Wed, 29 Dec 2021 16:16:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6DBC061574;
+        Wed, 29 Dec 2021 13:16:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E73FCB81A10;
+        Wed, 29 Dec 2021 21:16:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AEF2C36AE9;
+        Wed, 29 Dec 2021 21:16:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640812587;
+        bh=cjyr8peC0EwKteN+JSIctBlIqiolVktDfzhMSIQZ+DE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Vgjmo1GhUSsmFHn1ckCJL8DqIveMa8+rBwPsRn5zv8bVRjfHGKxuXoTqGU7lkBDcH
+         VxbG80fnd8XvvOHDQrOfcxku0d0kA7WCKHxhu1xWCJV3N9TBgcT3niy8ikUAbvm99R
+         eU1BQX2u8bfnOCGnANyuGPryT4/Ewh7P1kCLMoOo6OFhb0wMNPbN9iDsVGi8QZfMUG
+         hraBTiBhEB0ReFcNZfltH+Eja2O+oRLVWJbrBgx43iW7ZKkft1V1bNo/JfvCAY8gwb
+         0vX25amhqPnnn/8AI2Ngh6pUNxjlpbo75eFj5F1tK9Tnbv86AFwdGy+NarfhfhNkw9
+         wJOJpc9lzNytA==
+Date:   Wed, 29 Dec 2021 15:16:26 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211224052309.1997096-1-nikita.yoush@cogentembedded.com>
- <20211224052309.1997096-3-nikita.yoush@cogentembedded.com>
- <YcyTV4fJqMHIeyYB@pendragon.ideasonboard.com>
- <87626d61-ada0-c220-bea5-5330f5256629@cogentembedded.com>
- <YcyXQxW3kRqQ2Yv0@pendragon.ideasonboard.com>
- <39f70781-831e-c86a-ec5f-68f2b4bd3d62@cogentembedded.com>
- <Ycy4AMAT53Uzf+K7@pendragon.ideasonboard.com>
-From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Message-ID: <bb6ef732-7cd2-5ba9-0eef-caf2fbfbf829@cogentembedded.com>
-Date:   Thu, 30 Dec 2021 00:12:04 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 04/13] PCI: portdrv: Suppress kernel DMA ownership
+ auto-claiming
+Message-ID: <20211229211626.GA1701512@bhelgaas>
 MIME-Version: 1.0
-In-Reply-To: <Ycy4AMAT53Uzf+K7@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211217063708.1740334-5-baolu.lu@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  Endpoints are meant to model a link between two ports, so an endpoint
-> shouldn't exist in isolation. The issue with creating named endpoints in
-> SoC files is that you can't tell there what remote devices may exist, so
-> the endpoint may or may not match the actual hardware design of a board.
-> I think it's better to create endpoints on both sides together in
-> overlays.
+On Fri, Dec 17, 2021 at 02:36:59PM +0800, Lu Baolu wrote:
+> IOMMU grouping on PCI necessitates that if we lack isolation on a bridge
+> then all of the downstream devices will be part of the same IOMMU group
+> as the bridge. The existing vfio framework allows the portdrv driver to
+> be bound to the bridge while its downstream devices are assigned to user
+> space. The pci_dma_configure() marks the iommu_group as containing only
+> devices with kernel drivers that manage DMA. Avoid this default behavior
+> for the portdrv driver in order for compatibility with the current vfio
+> policy.
+
+A word about the isolation would be useful.  I think you're referring
+to some specific ACS controls, probably P2P Request Redirect?
+
+I guess this is just a wording issue, but I think it's actually the
+*lack* of some ACS controls that forces us to put several devices in
+the same IOMMU group, isn't it?  It's not that we start with "IOMMU
+grouping" and that necessitates something else.
+
+Maybe something like this?
+
+  If a switch lacks ACS P2P Request Redirect (and possibly other
+  controls?), a device below the switch can bypass the IOMMU and DMA
+  directly to other devices below the switch, so all the downstream
+  devices must be in the same IOMMU group as the switch itself.
+
+> The commit 5f096b14d421b ("vfio: Whitelist PCI bridges") extended above
+> policy to all kernel drivers of bridge class. This is not always safe.
+> For example, The shpchp_core driver relies on the PCI MMIO access for the
+> controller functionality. With its downstream devices assigned to the
+> userspace, the MMIO might be changed through user initiated P2P accesses
+> without any notification. This might break the kernel driver integrity
+> and lead to some unpredictable consequences.
 > 
-> https://lore.kernel.org/linux-renesas-soc/20211229193135.28767-2-laurent.pinchart+renesas@ideasonboard.com/T/#t
+> For any bridge driver, in order to avoiding default kernel DMA ownership
+> claiming, we should consider:
+> 
+>  1) Does the bridge driver use DMA? Calling pci_set_master() or
+>     a dma_map_* API is a sure indicate the driver is doing DMA
+> 
+>  2) If the bridge driver uses MMIO, is it tolerant to hostile
+>     userspace also touching the same MMIO registers via P2P DMA
+>     attacks?
+> 
+> Conservatively if the driver maps an MMIO region at all, we can say that
+> it fails the test.
 
-What I don't like here is: details of particular SoC (such as "panel gets video from port@1 of &lvds1) 
-leak into per-panel DT fragment.
+I'm not sure what all this explanation is telling me.  It says
+something done by 5f096b14d421 is not always safe, but this patch
+doesn't fix any of those unsafe things.
 
-This limits possibilities to share DT fragments between different use cases. In the patch pointed by the 
-above URL, you have to reference both board and panel in the dts file name.
+If it doesn't explain why we need this patch or how this patch works,
+I don't think we need it in the commit log.
 
-I'd prefer to make each DT fragment to use only either entities defined in that fragment itself, or 
-defined "interface entities" between this and "neighbor" DT fragment.
+Maybe this is an explanation for why you didn't set
+.suppress_auto_claim_dma_owner for shpc_driver?
 
-Such as:
-- SoC's DT fragment defines a named port/endpoint to export video stream at
-- board's DT fragment defines a named panel node corresponding to panel plugged into board's physical 
-connector, and connects endpoints with SoC's video export,
-- panel's DT fragment extends the panel node from board with video mode information for this particular 
-panel.
+Minor typos above:
+  s/in order to avoiding default/before avoiding default/
+  s/relies on the PCI MMIO access/relies on PCI MMIO access/
+  s/For example, The/For example, the/
+  s/is a sure indicate the/is a sure indication the/
 
-And similar for backlight, power, and whatever else exposed on the physical panel connector.
-
-So for the board's physical connector there is a set of board-DT-provided entities for use by DT 
-fragment of whatever component plugged to the connector, without direct references to final SoC 
-interfaces. And possibility to reuse DT fragments between boards, and probably have a library of DT 
-fragments for hardware currently available in the market, usable with different boards where that 
-hardware can be connected.
-
-Nikita
+> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+> Suggested-by: Kevin Tian <kevin.tian@intel.com>
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ---
+>  drivers/pci/pcie/portdrv_pci.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/pcie/portdrv_pci.c b/drivers/pci/pcie/portdrv_pci.c
+> index 35eca6277a96..c48a8734f9c4 100644
+> --- a/drivers/pci/pcie/portdrv_pci.c
+> +++ b/drivers/pci/pcie/portdrv_pci.c
+> @@ -202,7 +202,10 @@ static struct pci_driver pcie_portdriver = {
+>  
+>  	.err_handler	= &pcie_portdrv_err_handler,
+>  
+> -	.driver.pm	= PCIE_PORTDRV_PM_OPS,
+> +	.driver		= {
+> +		.pm = PCIE_PORTDRV_PM_OPS,
+> +		.suppress_auto_claim_dma_owner = true,
+> +	},
+>  };
+>  
+>  static int __init dmi_pcie_pme_disable_msi(const struct dmi_system_id *d)
+> -- 
+> 2.25.1
+> 

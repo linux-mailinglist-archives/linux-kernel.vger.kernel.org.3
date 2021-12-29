@@ -2,86 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4428048139C
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 14:41:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 455844813A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 14:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236837AbhL2Nll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 08:41:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
+        id S236893AbhL2Nl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 08:41:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236824AbhL2Nlk (ORCPT
+        with ESMTP id S236788AbhL2Nl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 08:41:40 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A88EC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 05:41:40 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id k66-20020a1ca145000000b00345fa984108so6058871wme.2
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 05:41:40 -0800 (PST)
+        Wed, 29 Dec 2021 08:41:56 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBE4C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 05:41:56 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id m25so18875025qtq.13
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 05:41:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=0sGuVmkqcH8hqgemqd7PHlIrPM8GyFTLiClr4fPPrQs=;
-        b=eVXzUs+9uKQllccSC9k7JblZyT8q+/GfLSVoTSqb8IbL2xYLKpWAW8eTzcIoRXsI87
-         PMjWiyeroKcHyui79FBzYnF+uytpQ6+x9FO6tOiT71LsXFt9mfR83daQOzJv5gMuPO/V
-         eBf7OKpH/jcY3PgjH7bYXnrCuc8lJDH97pC6L9Bq3Y9i9iSHxHr9n8PU2M5L+MBm37om
-         WbF8j91czjEugRsXOzBRi5oX6d3Xa0yhwKJ0+tL+M0SCGth/j1yHTMX4sAfLFPr4HuuZ
-         9FVKIZZSymjF1w5L55B7687oMN+dV4t2WrE8tQvkzZoEPMmC8d49XiZSoE9EL0tAO1gf
-         GqVw==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=hQ5DbP4MITHgtHViXOya0lanhcMqZ8b4WidUu29kIn4=;
+        b=iI6yWXvORnvCU82JGYR/sd1knKENSQI8qHa1dQD+PmirOXpdFU63SoCKqA17EMGFxD
+         h0R0I4fSRY2oTGI2ByOuRrdMneEevgEK1aaKZfxeNv9PuSrVvIZC+b3ntII2KmYV6UUB
+         8s84+2Iu7Q/zBN0CUg7Sg26o9El07/6q1xYOVagEAx2PJR1AUVVVHRrGCIiWBS9/sf6d
+         KmYmdKs8ZC+zMarIwqCVN+az0ABpJrLJ6Lo6MuB4oSIZAaGiuGKklrQEcvEP/WKQhMPn
+         Q/EUppG17gBsEMUiJtfnuhZ/kuEfjPeYcB0xY15RH0U6qfZi7kK07aWr0JeUkhUekI6p
+         HXhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=0sGuVmkqcH8hqgemqd7PHlIrPM8GyFTLiClr4fPPrQs=;
-        b=WLKdUdVoS1rsWlJbj7PwvVIQDNdwO8yLvZllNdolZA9W2g2T9mpwYNlMASIdHYrlTr
-         Ct+IhTDgRLjD1v/jeZiCEXi+8YcgH7efoNLAyca9StyNyWgAsfbRpRsJfTwzVLWRUCwF
-         OXCufjTxK+vFoZ/jQm1xtsifaXY5jSrewcIZY+f6DTZLmOj/RBRwv98dTwCJsji4i29S
-         sUwZVWGDokLmS7bDjn1dzorELuAA5hgvLPeIZ9opr/asvhgkar8k6PcjSdgA3824DjO9
-         5wPwqCBCdhXr9XYJtYUmOReHvl/Ybko4MwJA+2Fp90XlFlOawX5D5cadWR9RgRwBnxY9
-         iyag==
-X-Gm-Message-State: AOAM533FrSVeu5J0Dpyjlj0fH8EJ1FxbUwCW3Q0geVhtT31dcj7U2ubb
-        tH2c8n1UEs3kaivRTU/XR56WcA==
-X-Google-Smtp-Source: ABdhPJweRhmciXELIK/wZnyvBXVLSw7bJ70rfv0efmo6XGQY9yuoxpMJiRSU34SZwo3wFc6oHuX5XA==
-X-Received: by 2002:a05:600c:214:: with SMTP id 20mr21832175wmi.84.1640785298900;
-        Wed, 29 Dec 2021 05:41:38 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id f6sm26112107wmq.6.2021.12.29.05.41.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 05:41:38 -0800 (PST)
-Date:   Wed, 29 Dec 2021 13:41:36 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] mfd: ntxec: Change return type of ntxec_reg8 from __be16
- to u16
-Message-ID: <YcxlkGwonpypwRtW@google.com>
-References: <20211218152553.744615-1-j.neuschaefer@gmx.net>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=hQ5DbP4MITHgtHViXOya0lanhcMqZ8b4WidUu29kIn4=;
+        b=glOdm9bR+UaLHHuyAnYDZidc1AdaJFIpA+AR9BTbMGaVWGgW04y0OooMA9Q+bo+vHr
+         mntr5rOOlw6cTdH+TPLrRuQTwBIsnFYiBjejutAo6t5O3ypXtXABSko/RCNDo4fK7R09
+         Zd1U+tq38WRrkb4GEIsX7jiL3hIYkqzOVK4zUsGCuCINIccaKmKYQbXRVpx7PQQz2+Us
+         +44K0R8BSiH0Zj5XAVpLdqnM/md5khCFka47L+tvRITlDR/l+sKVfMpFumgcHfx2+U/q
+         XoD4Bs+VEKpx+sfDgbM49zA9XJ2FwLSNwBOt02PZfDpatdz3ZqrSu1xP51C3kqmw7Y92
+         LkmQ==
+X-Gm-Message-State: AOAM533zRMBUaXJaAOkgBGe0BzvlgIMszrn0K+UNqOqwOsnPKtIqkH0v
+        30CoM/gbSdWjh0BgXuTFDnBoQN4imukkgXTN0n0=
+X-Google-Smtp-Source: ABdhPJyoO78ZCt5hvgZhKMrilJeVLi2KaEjj5r2BeAV8aXA3dqoOewPwOgNa3vD/LsopBwaPX2kaYZ6VZqS8oXyckQ8=
+X-Received: by 2002:ac8:7d95:: with SMTP id c21mr22490155qtd.433.1640785315120;
+ Wed, 29 Dec 2021 05:41:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211218152553.744615-1-j.neuschaefer@gmx.net>
+Received: by 2002:a05:6214:c2f:0:0:0:0 with HTTP; Wed, 29 Dec 2021 05:41:54
+ -0800 (PST)
+Reply-To: mrsaishag45@gmail.com
+From:   Mrs Aisha Al-Qaddafi <mrsaishagaddafi344@gmail.com>
+Date:   Wed, 29 Dec 2021 05:41:54 -0800
+Message-ID: <CADgtnONpdNKrf9VEOcvvaYLcFQq-JnGuuoKQ0mnw1iz0rbPW1A@mail.gmail.com>
+Subject: Dear Friend,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 18 Dec 2021, Jonathan Neuschäfer wrote:
+Dear Friend,
 
-> Register values in NTXEC are big-endian on the I2C bus, but the regmap
-> subsystem handles the conversion between CPU-endian and big-endian data
-> internally. ntxec_reg8 should thus return u16, not __be16.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-> ---
->  include/linux/mfd/ntxec.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+I came across your e-mail contact prior a private search while in need
+of your assistance. My name is Aisha Gaddafi a single Mother and a
+Widow with three Children. I am the only biological Daughter of late
+Libyan President (Late Colonel Muammar Gaddafi).
 
-Applied, thanks.
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
+investment Manager/Partner because of my current refugee status,
+however, I am interested in you for investment project assistance in
+your country, may be from there, we can build business relationship in
+the nearest future.
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+I am willing to negotiate investment/business profit sharing ratio
+with you base on the future investment earning profits.
+Best Regards
+Mrs Aisha Gaddafi

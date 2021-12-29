@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 405184816C7
+	by mail.lfdr.de (Postfix) with ESMTP id 895184816C8
 	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 21:54:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232440AbhL2Uv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 15:51:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33970 "EHLO
+        id S232533AbhL2Uv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 15:51:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232140AbhL2Uvg (ORCPT
+        with ESMTP id S232139AbhL2Uvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 15:51:36 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D7CC061757
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 12:51:36 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id v11so46592871wrw.10
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 12:51:36 -0800 (PST)
+        Wed, 29 Dec 2021 15:51:37 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CCEC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 12:51:37 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id f134-20020a1c1f8c000000b00345c05bc12dso12313405wmf.3
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 12:51:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3ew7F1lxhIS5r8KK5lw0J3RaoujT9aqfKyhZYEfOCx4=;
-        b=o4AGJuLWx9w2v21x6J8BAv3mEbi3IazkRVq3VQJZiFT16p4jsw5TvPHWReTmVOa8E9
-         6QsD8KDmbvb2Q8geHamQCNXymMoUd234OT5hZFCVvM818cSA+nTOcJJ09lA1oYOJ0OZJ
-         JEC/Tj6I8f37zNop8zW3nogSOz7he+4l8sjedxJZ0izCOyej9FApP4DS8lqgj4Enh4VC
-         Oxzuwe+vZzv5Fv8pF5eTDTyaHEqGOEaLFA4QquoWL+evmxmDvlMQB/gfpX7+Cux0Six9
-         wmmPD/IH5aaoYNfPeMzd/czTWGjSVF+7O5de5tft28yVe8Xz9FEmSmLPdMlUeTQQUN9a
-         D40A==
+        bh=wOhkadV2itJwAv/GvEQUKWrwh58wZeAOeButqgCJq9Y=;
+        b=c49B6FA8VAaPILfJ8AynON0+ZbjnNhMHkQwrHOFum9aCyp6lBmOLjsjrQmyqMFV+t2
+         5cGAlcEghP0gZlGFzs90SbxJcCiLuxgZac7kp0KC5xGmKwG+sA6eNumelSXHdSSC9/rM
+         m3WwoqG5WHBm5a8mo4crPKNMnXh9+6RvK6l2xjfzAfGMvvOl/CcJ3Pk/z6/9/QuD4FRA
+         xZuxz955Q9Nb37O59cKT5Feovm4ESgPG5796oe+Ot2DqlSYhRZOTcElNwCNlL6xCxFow
+         e/oSkQbvXeUUodWaJKYqSTUsf1XgMwBbF+rxNHoSMwLkuUjCYj9ICOhyOcjtiDzr90SF
+         9dvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3ew7F1lxhIS5r8KK5lw0J3RaoujT9aqfKyhZYEfOCx4=;
-        b=khybQvX9btvvQazVTzetjSEt9HB52VEiXCIYbk4+8TXA90IEjSHALwoZg4959D82ZX
-         8AP+cBbMiI9DEkN2EzGEfrbBCgIzKe9YpwxfqDFeEV/zsI4zEtP43ZZ36yR++I7bY11g
-         pW4EHr1L2f/vQUOYoiY+z/tIGI9GGcuzWeaCQeNoudd7Gxw7kS5kUsrRJqg7nKHBURQR
-         PxA0adzqFSIuvjQ8w6UdRhHUhmtS2FKpa6YlVYivVQFP8FkNi8+AC/IRca6o/AKnXOHE
-         Gr70+Iy+cSweLDIG77C9na9E5nbzVVWPcMEVr9Y0mI0vdchCuj51T9s0HpGC2qf61Iaa
-         exkA==
-X-Gm-Message-State: AOAM530SCfvAmjNrjuSNhRgmps9/Toh8ux3dIadrR65JeT5P/v4zTKg1
-        qMp8N6mrcBE7x8Wym7pg3Ao=
-X-Google-Smtp-Source: ABdhPJwYOkerewv7gWD1pfel4pVnEesKUvd0eCbMymilZ39ogjmeuQDaj0uwlKjbp+7caUtkTtjtjA==
-X-Received: by 2002:adf:efd0:: with SMTP id i16mr22452714wrp.86.1640811095013;
+        bh=wOhkadV2itJwAv/GvEQUKWrwh58wZeAOeButqgCJq9Y=;
+        b=GmtbtQ7gcO3oudcOo5UsUfN+k4vX4X4V4RIBEbqln6DCYyevDkqVrdvy+da4Y6SCCP
+         af8MFhkm+BEnSMNVhW8o/bhU6V6x4Ph5EodZgzeOklabaOi3Z8pH+s9swtsWCDE9xuuJ
+         lWKPCNXeYf1Fm9x+SaQCsFi/xYx2Qwjl1TE0BwIPrQbFPSTToCOly9JVSwYxil+7oIBM
+         GaMXmXrRHh7xlS2k47VtwPqQg5/USJdA1tS1MBlLByzg/RMaPNKaGzcup/N9xfQ1JA8V
+         2qq0rG2CnXrIDQhI7OH8E6gjXIDTCcpsYCF5lDqzbpmMDLdFERTi3R2/cPWs7g3lF47Y
+         6mfQ==
+X-Gm-Message-State: AOAM5317qRCn6lKsT8/I4SDzJjaV7Qbvznm0rytBeCyaX98H+r0srG13
+        LQAx7GOv8EEp8aU+GEGIjwo=
+X-Google-Smtp-Source: ABdhPJxt+fgvQCT/26rtHFS8bWw32/PoNWSnjBgMOF7+QXZND6MlMKkARfKgDfQy/emWLHr04koofQ==
+X-Received: by 2002:a05:600c:4e11:: with SMTP id b17mr22973958wmq.66.1640811095717;
         Wed, 29 Dec 2021 12:51:35 -0800 (PST)
 Received: from localhost.localdomain ([2a02:8108:96c0:3b88::6619])
-        by smtp.gmail.com with ESMTPSA id l12sm27421989wmq.2.2021.12.29.12.51.34
+        by smtp.gmail.com with ESMTPSA id l12sm27421989wmq.2.2021.12.29.12.51.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 12:51:34 -0800 (PST)
+        Wed, 29 Dec 2021 12:51:35 -0800 (PST)
 From:   Michael Straube <straube.linux@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 12/32] staging: r8188eu: remove odm_interface
-Date:   Wed, 29 Dec 2021 21:50:48 +0100
-Message-Id: <20211229205108.26373-13-straube.linux@gmail.com>
+Subject: [PATCH 13/32] staging: r8188eu: make odm_ConfigRFReg_8188E() static
+Date:   Wed, 29 Dec 2021 21:50:49 +0100
+Message-Id: <20211229205108.26373-14-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211229205108.26373-1-straube.linux@gmail.com>
 References: <20211229205108.26373-1-straube.linux@gmail.com>
@@ -65,78 +65,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After previous cleanups the file odm_interface.c is emtpy now
-and the header odm_interface.h just contains an unused typedef.
-Remove both files.
+Function odm_ConfigRFReg_8188E() is only used in odm_RegConfig8188E.c.
+Make it static.
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- drivers/staging/r8188eu/Makefile                |  1 -
- drivers/staging/r8188eu/hal/odm_interface.c     |  6 ------
- drivers/staging/r8188eu/include/odm_interface.h | 15 ---------------
- drivers/staging/r8188eu/include/odm_precomp.h   |  2 --
- 4 files changed, 24 deletions(-)
- delete mode 100644 drivers/staging/r8188eu/hal/odm_interface.c
- delete mode 100644 drivers/staging/r8188eu/include/odm_interface.h
+ drivers/staging/r8188eu/hal/odm_RegConfig8188E.c     | 6 +++---
+ drivers/staging/r8188eu/include/odm_RegConfig8188E.h | 3 ---
+ 2 files changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/Makefile b/drivers/staging/r8188eu/Makefile
-index 5e1649491ef4..a7a486cc16dd 100644
---- a/drivers/staging/r8188eu/Makefile
-+++ b/drivers/staging/r8188eu/Makefile
-@@ -11,7 +11,6 @@ r8188eu-y = \
- 		hal/hal_com.o \
- 		hal/odm.o \
- 		hal/odm_debug.o \
--		hal/odm_interface.o \
- 		hal/odm_HWConfig.o \
- 		hal/odm_RegConfig8188E.o \
- 		hal/odm_RTL8188E.o \
-diff --git a/drivers/staging/r8188eu/hal/odm_interface.c b/drivers/staging/r8188eu/hal/odm_interface.c
-deleted file mode 100644
-index a70fda30a24f..000000000000
---- a/drivers/staging/r8188eu/hal/odm_interface.c
-+++ /dev/null
-@@ -1,6 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/* Copyright(c) 2007 - 2011 Realtek Corporation. */
--
--#include "../include/odm_precomp.h"
--/*  ODM IO Relative API. */
--
-diff --git a/drivers/staging/r8188eu/include/odm_interface.h b/drivers/staging/r8188eu/include/odm_interface.h
-deleted file mode 100644
-index ef96d577cfa5..000000000000
---- a/drivers/staging/r8188eu/include/odm_interface.h
-+++ /dev/null
-@@ -1,15 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
--/* Copyright(c) 2007 - 2011 Realtek Corporation. */
--
--#ifndef	__ODM_INTERFACE_H__
--#define __ODM_INTERFACE_H__
--
--/*  2012/02/17 MH For non-MP compile pass only. Linux does not support workitem. */
--/*  Suggest HW team to use thread instead of workitem. Windows also support the feature. */
--typedef void (*RT_WORKITEM_CALL_BACK)(void *pContext);
--
--/*  =========== Extern Variable ??? It should be forbidden. */
--
--/*  =========== EXtern Function Prototype */
--
--#endif	/*  __ODM_INTERFACE_H__ */
-diff --git a/drivers/staging/r8188eu/include/odm_precomp.h b/drivers/staging/r8188eu/include/odm_precomp.h
-index 22299f167af8..a0d5e870c11a 100644
---- a/drivers/staging/r8188eu/include/odm_precomp.h
-+++ b/drivers/staging/r8188eu/include/odm_precomp.h
-@@ -24,8 +24,6 @@
- #include "Hal8188ERateAdaptive.h"/* for  RA,Power training */
- #include "rtl8188e_hal.h"
+diff --git a/drivers/staging/r8188eu/hal/odm_RegConfig8188E.c b/drivers/staging/r8188eu/hal/odm_RegConfig8188E.c
+index 3f1e30eb1a15..a74c05cd97b0 100644
+--- a/drivers/staging/r8188eu/hal/odm_RegConfig8188E.c
++++ b/drivers/staging/r8188eu/hal/odm_RegConfig8188E.c
+@@ -3,9 +3,9 @@
  
--#include "odm_interface.h"
+ #include "../include/odm_precomp.h"
+ 
+-void odm_ConfigRFReg_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr,
+-			   u32 Data, enum rf_radio_path RF_PATH,
+-			   u32 RegAddr)
++static void odm_ConfigRFReg_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr,
++				  u32 Data, enum rf_radio_path RF_PATH,
++				  u32 RegAddr)
+ {
+ 	if (Addr == 0xffe) {
+ 		msleep(50);
+diff --git a/drivers/staging/r8188eu/include/odm_RegConfig8188E.h b/drivers/staging/r8188eu/include/odm_RegConfig8188E.h
+index 634454bffdb6..683fa4a07956 100644
+--- a/drivers/staging/r8188eu/include/odm_RegConfig8188E.h
++++ b/drivers/staging/r8188eu/include/odm_RegConfig8188E.h
+@@ -4,9 +4,6 @@
+ #ifndef __INC_ODM_REGCONFIG_H_8188E
+ #define __INC_ODM_REGCONFIG_H_8188E
+ 
+-void odm_ConfigRFReg_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr, u32 Data,
+-			   enum rf_radio_path  RF_PATH, u32 RegAddr);
 -
- #include "HalHWImg8188E_MAC.h"
- #include "HalHWImg8188E_RF.h"
- #include "HalHWImg8188E_BB.h"
+ void odm_ConfigRF_RadioA_8188E(struct odm_dm_struct *pDM_Odm,
+ 			       u32 Addr, u32 Data);
+ 
 -- 
 2.34.1
 

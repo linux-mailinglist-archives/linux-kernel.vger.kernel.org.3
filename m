@@ -2,128 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8676948126A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 13:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76ED548126E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 13:07:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240080AbhL2MEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 07:04:05 -0500
-Received: from mga01.intel.com ([192.55.52.88]:49656 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236297AbhL2MEE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 07:04:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640779444; x=1672315444;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hQaJLp8uFm1ljNZnHsRrYMj7qZnqJQjNTYeg7eToGPw=;
-  b=R+MuQAPLpZFpC47Y1Fguno+OpP3uNKG3sZETe9egLKk6Nx9qNYTr6lzP
-   eBHHoH4RkOA0ci8Tb0JgAQYd7MGdG8oOc+foxwgDV6n2a5jpdkGjYtqDv
-   s9wxrVOKuWjLHrVQ/E+fRtCcU/3S/BkAwWPV1j7NMUPK3RLTGSg77utde
-   VbPJF7J4pwzKqr/2PwELBWAUDmTsIDN5/K4t6FuSsmrDSIKpIL35iL7GA
-   qS/o3jky5gDuXw55B21BJ4ZBIDJK64UlvFaSxUQ2EiuNyp7JTpl+VvQNb
-   KTBnMdfBQeh0DKyXELePJFK5zV1wPoud+w2nkjwMrg9WwDG1d5+ygF4zd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="265745657"
-X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
-   d="scan'208";a="265745657"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 04:04:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
-   d="scan'208";a="470327422"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 29 Dec 2021 04:04:00 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n2XgW-0008sw-3D; Wed, 29 Dec 2021 12:04:00 +0000
-Date:   Wed, 29 Dec 2021 20:03:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Helge Deller <deller@gmx.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [deller-parisc:5.16-vdso-4 1/1]
- arch/parisc/kernel/vdso32/restart_syscall.S:28: Error: no such instruction:
- `ble 0x100(%sr2,%r0)'
-Message-ID: <202112291925.2s8Los6m-lkp@intel.com>
+        id S240091AbhL2MHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 07:07:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59494 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240082AbhL2MHg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 07:07:36 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65CDAC06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 04:07:36 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n2Xjt-0000Lq-6h; Wed, 29 Dec 2021 13:07:29 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n2Xjr-007ISc-4i; Wed, 29 Dec 2021 13:07:26 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n2Xjq-00064p-8Z; Wed, 29 Dec 2021 13:07:26 +0100
+Date:   Wed, 29 Dec 2021 13:07:23 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, linux-iio@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v2 13/23] counter: Provide alternative counter
+ registration functions
+Message-ID: <20211229120723.y5dlbmbvmg4ogq26@pengutronix.de>
+References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
+ <20211227094526.698714-14-u.kleine-koenig@pengutronix.de>
+ <20211228180017.37c2703d@jic23-huawei>
+ <20211229112732.23aefj6hcv7ymija@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5w552i7ktf2x4f4g"
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211229112732.23aefj6hcv7ymija@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git 5.16-vdso-4
-head:   e3fcbe26abfbb6cc1a99ebbdbeb5673f17141e7b
-commit: e3fcbe26abfbb6cc1a99ebbdbeb5673f17141e7b [1/1] add testing vDSO support
-config: parisc-generic-64bit_defconfig (https://download.01.org/0day-ci/archive/20211229/202112291925.2s8Los6m-lkp@intel.com/config)
-compiler: hppa64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git/commit/?id=e3fcbe26abfbb6cc1a99ebbdbeb5673f17141e7b
-        git remote add deller-parisc https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git
-        git fetch --no-tags deller-parisc 5.16-vdso-4
-        git checkout e3fcbe26abfbb6cc1a99ebbdbeb5673f17141e7b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc prepare
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+--5w552i7ktf2x4f4g
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-All errors (new ones prefixed by >>):
+Hello,
 
-   arch/parisc/kernel/vdso64/Makefile:30: FORCE prerequisite is missing
-   gcc: error: unrecognized command-line option '-mno-space-regs'
-   gcc: error: unrecognized command-line option '-mdisable-fpregs'
-   arch/parisc/kernel/vdso32/restart_syscall.S: Assembler messages:
-   arch/parisc/kernel/vdso32/restart_syscall.S:15: Error: bad or irreducible absolute expression
-   arch/parisc/kernel/vdso32/restart_syscall.S:15: Error: junk at end of line, first unrecognized character is `:'
-   arch/parisc/kernel/vdso32/restart_syscall.S:25: Error: no such instruction: `ldw 0(%sp),%r31'
->> arch/parisc/kernel/vdso32/restart_syscall.S:28: Error: no such instruction: `ble 0x100(%sr2,%r0)'
-   arch/parisc/kernel/vdso32/restart_syscall.S:29: Error: no such instruction: `ldi 0,%r20'
-   arch/parisc/kernel/vdso32/restart_syscall.S:31: Error: .cfi_endproc without corresponding .cfi_startproc
-   gcc: error: unrecognized command-line option '-mschedule=8000'
-   make[2]: *** [arch/parisc/kernel/vdso32/Makefile:36: arch/parisc/kernel/vdso32/restart_syscall.o] Error 1
-   arch/parisc/kernel/vdso32/datapage.S: Assembler messages:
-   arch/parisc/kernel/vdso32/datapage.S:18: Error: bad or irreducible absolute expression
-   arch/parisc/kernel/vdso32/datapage.S:18: Error: junk at end of line, first unrecognized character is `:'
-   arch/parisc/kernel/vdso32/datapage.S:23: Error: no such instruction: `bl 1f,%r1'
-   arch/parisc/kernel/vdso32/datapage.S:24: Error: no such instruction: `depi 0,31,12,%r1'
-   arch/parisc/kernel/vdso32/datapage.S:25: Error: no such instruction: `bv %r0(%r2)'
-   arch/parisc/kernel/vdso32/datapage.S:26: Error: no such instruction: `ldw 0(%r1),%r28'
-   arch/parisc/kernel/vdso32/datapage.S:28: Error: .cfi_endproc without corresponding .cfi_startproc
-   make[2]: *** [arch/parisc/kernel/vdso32/Makefile:36: arch/parisc/kernel/vdso32/datapage.o] Error 1
-   gcc: error: unrecognized command-line option '-mno-fast-indirect-calls'; did you mean '-mno-force-indirect-call'?
-   arch/parisc/kernel/vdso32/sigtramp.S: Assembler messages:
-   arch/parisc/kernel/vdso32/sigtramp.S:13: Error: bad or irreducible absolute expression
-   arch/parisc/kernel/vdso32/sigtramp.S:13: Error: junk at end of line, first unrecognized character is `:'
-   arch/parisc/kernel/vdso32/sigtramp.S:15: Error: no such instruction: `ldi 0,%r25'
->> arch/parisc/kernel/vdso32/sigtramp.S:16: Error: no such instruction: `ble 0x100(%sr2,%r0)'
-   arch/parisc/kernel/vdso32/sigtramp.S:17: Error: no such instruction: `ldi 173,%r20'
-   arch/parisc/kernel/vdso32/sigtramp.S:19: Error: no such instruction: `ldi 1,%r25'
-   arch/parisc/kernel/vdso32/sigtramp.S:20: Error: no such instruction: `ble 0x100(%sr2,%r0)'
-   arch/parisc/kernel/vdso32/sigtramp.S:21: Error: no such instruction: `ldi 173,%r20'
-   arch/parisc/kernel/vdso32/sigtramp.S:23: Error: .cfi_endproc without corresponding .cfi_startproc
-   gcc: error: unrecognized command-line option '-mno-long-calls'
-   make[2]: *** [arch/parisc/kernel/vdso32/Makefile:36: arch/parisc/kernel/vdso32/sigtramp.o] Error 1
-   gcc: error: unrecognized command-line option '-mlong-calls'
-   gcc: error: unrecognized command-line option '-mno-fast-indirect-calls'; did you mean '-mno-force-indirect-call'?
-   make[2]: *** [arch/parisc/kernel/vdso32/Makefile:39: arch/parisc/kernel/vdso32/vdso32_generic.o] Error 1
-   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
-   make[1]: *** [arch/parisc/Makefile:186: vdso_prepare] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+On Wed, Dec 29, 2021 at 12:27:32PM +0100, Uwe Kleine-K=F6nig wrote:
+> > Personal inclination here would be to keep the elements in here
+> > in the same order as in counter_register() where it doesn't matter
+> > in the interests of slightly easier comparison of the code.
+>=20
+> I reordered a bit because counter_register fails to undo ida_alloc() in
+> the error path. However I might have missed that some initialisation has
+> to be done before calling counter_chrdev_add().
 
+Another issue in counter_register() is: If counter_sysfs_add() fails,
+put_device() is called which eventually calls counter_device_release()
+-> counter_chrdev_remove() -> kfifo_free(). I think it's not a real
+problem, but it's ugly because because counter_chrdev_add()
+-> kfifo_alloc() wasn't called yet.
 
-vim +28 arch/parisc/kernel/vdso32/restart_syscall.S
+Best regards
+Uwe
 
-    27	
-  > 28		ble	0x100(%sr2, %r0)
-    29		ldi	__NR_restart_syscall, %r20
-    30	
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--5w552i7ktf2x4f4g
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHMT3gACgkQwfwUeK3K
+7AkvxQf+NQEyz2nLrMETgnBViWuwOhqLb643u36Y1JbzUczPWJkBeiy7k2wKXfjL
+cIdvNq7zcSEvqWtjI+U2xaf5LDBWF5S9fFu1XyanTISj1wNao1MVSciQ0FCafSsq
+/BtyYrasVbAfJdkqgoOMR071yfzkuck7bgl13m7ZaixOtagWjGn086bVIfTwKuSo
+eMZJ7ORej4gDX2DjvIHp2Xqw/YSL0B3kFhpwrT2P/HMMJPNDEMCB9gmKRptD0Vtr
+Vf1Mjt1p8Z8xkHNxAowwT44TCC8kJ0TDwRhQSrAqcud7TlBRvJe0x0K0CViB3+YB
+HJDT21XMEf8a+OzyxbzZaA4gNVJpMQ==
+=Vedz
+-----END PGP SIGNATURE-----
+
+--5w552i7ktf2x4f4g--

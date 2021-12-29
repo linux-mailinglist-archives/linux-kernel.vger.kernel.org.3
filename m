@@ -2,96 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 122664811E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 12:11:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A404811E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 12:11:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239850AbhL2LLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 06:11:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
+        id S235862AbhL2LLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 06:11:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235680AbhL2LLI (ORCPT
+        with ESMTP id S235925AbhL2LLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 06:11:08 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7CB4C061574;
-        Wed, 29 Dec 2021 03:11:07 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 353C21EC04D1;
-        Wed, 29 Dec 2021 12:11:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640776262;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=airGDjUxCcJh80Hcyr6jOEHci9owmSN8F2s+Qye6gdM=;
-        b=c2QDGOra6/ICP03WygoMMs45fqwYs76gnmhzZFO1o8a/GIjZFIMKcfFNMOMZ/5i/1fjjbm
-        1dn6X3mj4JuMeATbim9WfyPoSa4jEfgb5y+/O+dRajblTM+qB9fAkipmcxfwTloaEwh7Jz
-        /P2uHhOyf3iudq2ma2SuFjcnt0MIwyg=
-Date:   Wed, 29 Dec 2021 12:11:09 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dave Young <dyoung@redhat.com>
-Cc:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>
-Subject: Re: [PATCH v19 02/13] x86/setup: Use parse_crashkernel_high_low() to
- simplify code
-Message-ID: <YcxCTTGu/Ut7bU+W@zn.tnic>
-References: <20211228132612.1860-1-thunder.leizhen@huawei.com>
- <20211228132612.1860-3-thunder.leizhen@huawei.com>
- <Ycs3kpZD/vpoo1AX@zn.tnic>
- <b017a8ea-989b-c251-f5c8-a8a7940877cf@huawei.com>
- <YcwN9Mfwsh/lPbbd@dhcp-128-65.nay.redhat.com>
- <YcwSCAuEgO10DFDT@dhcp-128-65.nay.redhat.com>
- <Ycw0V1CmBPCPqexn@zn.tnic>
- <Ycw6s6DwZuHjckXL@dhcp-128-65.nay.redhat.com>
+        Wed, 29 Dec 2021 06:11:36 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF3CC06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 03:11:36 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n2Wri-0005Ii-PF; Wed, 29 Dec 2021 12:11:30 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n2Wrh-007Hzp-Qv; Wed, 29 Dec 2021 12:11:29 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n2Wrg-0003Hm-Qg; Wed, 29 Dec 2021 12:11:28 +0100
+Date:   Wed, 29 Dec 2021 12:11:25 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, linux-iio@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Syed Nayyar Waris <syednwaris@gmail.com>
+Subject: Re: [PATCH v2 05/23] counter: 104-quad-8: Convert to counter_priv()
+ wrapper
+Message-ID: <20211229111125.y64fajggly2g46qr@pengutronix.de>
+References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
+ <20211227094526.698714-6-u.kleine-koenig@pengutronix.de>
+ <20211228180224.1d214eae@jic23-huawei>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qchpnmmbl3n7edna"
 Content-Disposition: inline
-In-Reply-To: <Ycw6s6DwZuHjckXL@dhcp-128-65.nay.redhat.com>
+In-Reply-To: <20211228180224.1d214eae@jic23-huawei>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 06:38:43PM +0800, Dave Young wrote:
-> I appreciate you further explanation below to describe the situation.
-> I do not see how can I tell this to *all* submitters,
 
-You don't have to - that was hypothetical. :-)
+--qchpnmmbl3n7edna
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'm typing this on a public mailing list with the hope that people will
-see it.
+On Tue, Dec 28, 2021 at 06:02:24PM +0000, Jonathan Cameron wrote:
+> On Mon, 27 Dec 2021 10:45:08 +0100
+> Uwe Kleine-K=F6nig         <u.kleine-koenig@pengutronix.de> wrote:
+>=20
+> > This is a straight forward conversion to the new counter_priv() wrapper.
+> >=20
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> Looks sane and I'll assume you didn't miss any!
 
-> but I am and I will try to do this as far as I can.
+I assume so, too. At least it still compiles after I dropped priv from
+struct counter_device :-)
 
-Much appreciated.
+Best regards
+Uwe
 
-> Maintainers and patch submitters, it would help for both
-> parties show sympathy with each other, some soft reminders will help
-> people to understand each other, especially for new comers.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-Yap, that's why we keep repeating it.
+--qchpnmmbl3n7edna
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thx.
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Regards/Gruss,
-    Boris.
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHMQloACgkQwfwUeK3K
+7AlDpAf/dPCrjfmQtWSlb96uh4ZuEnh6E4SqZmfR2lpMZTF9C4WR4vkvs82pC5f8
+XgpI0LHsC3TZQD9DMbRFS7SsuG1492U9+wUMbQG1C/E975PbHit+JeBEZiXu1LJc
+bN9h4rWHqrU/G1iI/fZpbmNiG5Qpwhi3QfuYVeWibQJzOTycfkYc0Y0DgCgQnTIP
+AaOXA+Qj5LcWZjPxPkWYMOMB82f0BSOQFDnLZTpvJE0Ls/Pr0M2SX2RJ9Daqi7/P
+vvL1/1wkFeDZQcvViunejj3q9nSz+ufe0GvP6Lbb6dta+w9M6l9g+BqxogzPvCou
+UlpRf8r5XOvAKAVL6YueCo+evY7Geg==
+=p8zs
+-----END PGP SIGNATURE-----
 
-https://people.kernel.org/tglx/notes-about-netiquette
+--qchpnmmbl3n7edna--

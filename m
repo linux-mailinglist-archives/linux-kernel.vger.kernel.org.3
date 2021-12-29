@@ -2,81 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BE3481687
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 21:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F365C481690
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 21:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231675AbhL2UDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 15:03:18 -0500
-Received: from polaris.svanheule.net ([84.16.241.116]:37880 "EHLO
-        polaris.svanheule.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231663AbhL2UDR (ORCPT
+        id S231749AbhL2UMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 15:12:33 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60692 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231701AbhL2UMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 15:03:17 -0500
-Received: from [IPv6:2a02:a03f:eafe:c901:bb38:31d0:45d2:689b] (unknown [IPv6:2a02:a03f:eafe:c901:bb38:31d0:45d2:689b])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
+        Wed, 29 Dec 2021 15:12:32 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 0E96628997C;
-        Wed, 29 Dec 2021 21:03:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1640808196;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9r89ta2jJHkQ/ecMndRJFDOX7vYNBNPWMZRvoAUYTlI=;
-        b=L+3KiH4ccDiwjYwMd/c3ibu39FGLpfIe1YELBJlLtkptw1xpDhWEUAjml4QK5BJtkm4Vw5
-        bLELIB2gIusPWywywzkd85Co2Vx3+AkLkBidqxPFCJS1pKhzkXUDxJLWm+t6Vj+o3cSxs3
-        kb5xZxLFOXh4s3x1vYjkvgzJUExHR+Y3bv4JRSiaChTvTwHij2Rfd1lOgmR5px7iPI9LgA
-        SghBX40wfy1ycHPavkSelvXgWaGbLiMRpaRHqjrtZJX4owUkJ6jCEBkECsif+/0YrIX4PU
-        tnIezaoCA4mnw1CrMMMuyrrHW23GmPJOI2ljNn76vA4jkse/4udOAm8MGof2FA==
-Message-ID: <f5e752abc5929cfc8fffd55f5991ab48f141c200.camel@svanheule.net>
-Subject: Re: [RFC PATCH v2 0/5] Rework realtek-rtl IRQ driver
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Birger Koblitz <mail@birger-koblitz.de>
-Cc:     linux-kernel@vger.kernel.org, bert@biot.com, john@phrozen.org,
-        tglx@linutronix.de, maz@kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org
-Date:   Wed, 29 Dec 2021 21:03:15 +0100
-In-Reply-To: <0086fb07-c5d3-9600-4b62-d7497b192461@birger-koblitz.de>
-References: <cover.1640548009.git.sander@svanheule.net>
-         <90a3ce57-875f-d34a-0714-f815acae12d4@birger-koblitz.de>
-         <bvv98e.r4rs9b.2rw3hx-qmf@polaris.svanheule.net>
-         <0086fb07-c5d3-9600-4b62-d7497b192461@birger-koblitz.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C294614B3;
+        Wed, 29 Dec 2021 20:12:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41703C36AE9;
+        Wed, 29 Dec 2021 20:12:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640808751;
+        bh=vWtanjbewujinnsoAkIMuVPTzg/CYmtOfG32HMGoOIM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=ri2QRYB/7J/7LVZ8rfiwgnIizpgwLsLMSsLF3cm4tBjkhVFJrtTto93EM18va0Yqr
+         FYhWUXtXuIcM5kYowDEonIa23f+MV8wNNdNhi9rHljv2F64NfNznxlJP5uuPmNlxN3
+         we4bma2po+ck6Pxx3nWUGOX/bl5iZ9kbKO+I3mXRKGGsoqNBYEE3+9mpXYmfRvkSmb
+         MfKwkkCRLPNJZ8WvnSrldTdF07hOG1th8BRnvWCOm5BW7Y2d41ctz6KoEjpnWDCJEo
+         NznV53lorTyejhVUqJgmARWf/NOxYjP1+bea/FKfvni2Hr302VZXjHejIp1Vx/FSdd
+         JMKiG/5vDQgag==
+Date:   Wed, 29 Dec 2021 14:12:29 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     m.chetan.kumar@intel.com, linuxwwan@intel.com,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: Re: [PATCH 1/2] net: wwan: iosm: Let PCI core handle PCI power
+ transition
+Message-ID: <20211229201229.GA1698801@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211224081914.345292-1-kai.heng.feng@canonical.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Birger,
+[+cc Rafael, in case you have insight about the PCI_D0 question below;
+Vaibhav, since this is related to your generic PM conversions]
 
-On Tue, 2021-12-28 at 09:09 +0100, Birger Koblitz wrote:
-> Hi Sander,
-> > I haven't tested this with VSMP, because it is out of scope for this series. For the
-> > binding, I expect that would only require N register ranges instead of one; one per
-> > CPU. I think the driver should then be able to perform the IRQ balancing based on that
-> > information alone, given that the parent IRQs are available at each CPU.
+On Fri, Dec 24, 2021 at 04:19:13PM +0800, Kai-Heng Feng wrote:
+> pci_pm_suspend_noirq() and pci_pm_resume_noirq() already handle power
+> transition for system-wide suspend and resume, so it's not necessary to
+> do it in the driver.
+
+I see DaveM has already applied this, but it looks good to me, thanks
+for doing this!
+
+One minor question below...
+
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+>  drivers/net/wwan/iosm/iosm_ipc_pcie.c | 49 ++-------------------------
+>  1 file changed, 2 insertions(+), 47 deletions(-)
 > 
-> whether this is out of the scope of this series is not the point. In my experience you
-> only see issues with locking and race conditions with the IRQ driver if you test with
-> VSMP enabled,
-> because only with VSMP you can be in the IRQ code multiple times at the same time. Since
-> you want to change routing logic and hierarchies I would believe it to be a very good
-> idea
-> to test that. The present code passes that test.
+> diff --git a/drivers/net/wwan/iosm/iosm_ipc_pcie.c b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+> index 2fe88b8be3481..d73894e2a84ed 100644
+> --- a/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+> +++ b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+> @@ -363,67 +363,22 @@ static int __maybe_unused ipc_pcie_resume_s2idle(struct iosm_pcie *ipc_pcie)
+>  
+>  int __maybe_unused ipc_pcie_suspend(struct iosm_pcie *ipc_pcie)
+>  {
+> -	struct pci_dev *pdev;
+> -	int ret;
+> -
+> -	pdev = ipc_pcie->pci;
+> -
+> -	/* Execute D3 one time. */
+> -	if (pdev->current_state != PCI_D0) {
+> -		dev_dbg(ipc_pcie->dev, "done for PM=%d", pdev->current_state);
+> -		return 0;
+> -	}
 
-Implementing CPU affinity is a separate issue for after these patches IMHO. The current
-problems have to be fixed anyway. Otherwise you're just compounding (potential) issues,
-only making further development harder.
+I don't understand the intent of this early exit, and it's not obvious
+to me that pci_pm_suspend_noirq() bails out early when
+(pdev->current_state != PCI_D0).
 
-FWIW, the driver with these (reworked) patches runs fine on my RTL839x (Zyxel GS1900-48)
-with SMP enabled. That's without implementing CPU affinity support on this driver, so all
-SoC interrupts just go to CPU0. If any issues with lock-ups show up later, we can fix them
-when they appear.
-
-Best,
-Sander
+>  	/* The HAL shall ask the shared memory layer whether D3 is allowed. */
+>  	ipc_imem_pm_suspend(ipc_pcie->imem);
+>  
+> -	/* Save the PCI configuration space of a device before suspending. */
+> -	ret = pci_save_state(pdev);
+> -
+> -	if (ret) {
+> -		dev_err(ipc_pcie->dev, "pci_save_state error=%d", ret);
+> -		return ret;
+> -	}
+> -
+> -	/* Set the power state of a PCI device.
+> -	 * Transition a device to a new power state, using the device's PCI PM
+> -	 * registers.
+> -	 */
+> -	ret = pci_set_power_state(pdev, PCI_D3cold);
+> -
+> -	if (ret) {
+> -		dev_err(ipc_pcie->dev, "pci_set_power_state error=%d", ret);
+> -		return ret;
+> -	}
+> -
+>  	dev_dbg(ipc_pcie->dev, "SUSPEND done");
+> -	return ret;
+> +	return 0;
+>  }
+>  
+>  int __maybe_unused ipc_pcie_resume(struct iosm_pcie *ipc_pcie)
+>  {
+> -	int ret;
+> -
+> -	/* Set the power state of a PCI device.
+> -	 * Transition a device to a new power state, using the device's PCI PM
+> -	 * registers.
+> -	 */
+> -	ret = pci_set_power_state(ipc_pcie->pci, PCI_D0);
+> -
+> -	if (ret) {
+> -		dev_err(ipc_pcie->dev, "pci_set_power_state error=%d", ret);
+> -		return ret;
+> -	}
+> -
+> -	pci_restore_state(ipc_pcie->pci);
+> -
+>  	/* The HAL shall inform the shared memory layer that the device is
+>  	 * active.
+>  	 */
+>  	ipc_imem_pm_resume(ipc_pcie->imem);
+>  
+>  	dev_dbg(ipc_pcie->dev, "RESUME done");
+> -	return ret;
+> +	return 0;
+>  }
+>  
+>  static int __maybe_unused ipc_pcie_suspend_cb(struct device *dev)
+> -- 
+> 2.33.1
+> 

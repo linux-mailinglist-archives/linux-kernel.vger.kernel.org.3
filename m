@@ -2,164 +2,372 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 348AC4810AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 08:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8884810AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 08:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239122AbhL2H2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 02:28:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49692 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239116AbhL2H2T (ORCPT
+        id S239066AbhL2HaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 02:30:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239244AbhL2H3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 02:28:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640762898;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XRWyNzE7/nzTYc6gOl/SNhYJNJt2Wa56SBzieY+UgOg=;
-        b=bHuInvh5XdoB5FxOgajVRHDdNQIurX2zmik8d6YWL9BXb0Y1+3BZEsOPJvLCfETR6POO2l
-        IGbzm32d3tPxAPMo+AKO+/c5WQ/G6LktmESD/5dhxPPqdpqik+fd5cEW/2AgCHPxhLm9xD
-        G76+kjHzGy90h0gpvXePX6WVgJBbqrA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-148-EbCi6JunMdmnedIg4a3Ohg-1; Wed, 29 Dec 2021 02:28:15 -0500
-X-MC-Unique: EbCi6JunMdmnedIg4a3Ohg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 76A258042E1;
-        Wed, 29 Dec 2021 07:28:12 +0000 (UTC)
-Received: from dhcp-128-65.nay.redhat.com (ovpn-12-131.pek2.redhat.com [10.72.12.131])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E50185ED31;
-        Wed, 29 Dec 2021 07:27:51 +0000 (UTC)
-Date:   Wed, 29 Dec 2021 15:27:48 +0800
-From:   Dave Young <dyoung@redhat.com>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>
-Subject: Re: [PATCH v19 02/13] x86/setup: Use parse_crashkernel_high_low() to
- simplify code
-Message-ID: <YcwN9Mfwsh/lPbbd@dhcp-128-65.nay.redhat.com>
-References: <20211228132612.1860-1-thunder.leizhen@huawei.com>
- <20211228132612.1860-3-thunder.leizhen@huawei.com>
- <Ycs3kpZD/vpoo1AX@zn.tnic>
- <b017a8ea-989b-c251-f5c8-a8a7940877cf@huawei.com>
+        Wed, 29 Dec 2021 02:29:45 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94045C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 23:29:44 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id g11so46363683lfu.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 23:29:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TgBTf5plP79VIndWD6ZWEfv0rRM/la1tNQapTNXhPKo=;
+        b=cnnvo1RqsljWunkdDBG68I94j1wpuCMp58WtZLGI2Nnr93XkLwB2JJMFzjC5A8Z7aP
+         Ief7ceVlKYmKayk75coXmuAObTHHNL7nR4ZIBYH2/+Tqi6AM8laUNSmUjqXWn0/2zUWN
+         ct+pc6Qf3Z2cd4AQxGXmBmqFCzQHz312vReIQNBwsITsOKh22Mc0KPWURRLcyzNxjDfZ
+         LK3vIitV/ntL8k6NqrWs7sQysfuln53TiAoux/cadnFTtaGJ3Cua6KAOyzcLj5TLbqXZ
+         pnTosOYGLMF6NSYHWNXpRa6wl4qrMyjWGKi9GzEIeTV7jCR5q61HP2jf3+yHCsoM/1vf
+         rs1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TgBTf5plP79VIndWD6ZWEfv0rRM/la1tNQapTNXhPKo=;
+        b=GRKJFFKOU3HhLapHu29x8jX2KgsuP2EZHs6op/0hOPDxVS7cKbJLSSRnzFWoXUoym7
+         8zatDb3FHjb5cnPUsgee+HUhDrFaTciqrop/XoBh6syBNQ+RmlcX8Y8W7Ho4hp9LNbUr
+         wt1krOprlxrKnQLkpxeYyXT9qKkgM4aoeZon3PoEyGxbT5yvLK2WI8yXmwbCdgzh63M5
+         h44T1JQKVd5YCW2vxYy1oa7cyRzdfv9llQYJpQxtNiF+Y4Zy6urmh7zexTfr9shikBpA
+         64uyqGQf3WS/D/shhyo+7jsTDB90TPf5L2l2g9U0sehAbMlh2dhMW6RF7l9OmIC9xVJN
+         lOIg==
+X-Gm-Message-State: AOAM532R+RBQ5oLQ6P3IQf7vXuMgCHff2JmO6pydxqCua6UUpdtAv0w1
+        xN4xh2P8BzHrpzPcvEWjW74RAg==
+X-Google-Smtp-Source: ABdhPJxos3ulsfoxDrm8ESaxuI0eJO9PA2/9aHYB3gvdGvT30+VZ6o0Q2H/qQquzhHehRmFsM2rRLg==
+X-Received: by 2002:a05:6512:1590:: with SMTP id bp16mr21848763lfb.407.1640762982294;
+        Tue, 28 Dec 2021 23:29:42 -0800 (PST)
+Received: from cobook.home (nikaet.starlink.ru. [94.141.168.29])
+        by smtp.gmail.com with ESMTPSA id p12sm1530218ljc.139.2021.12.28.23.29.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Dec 2021 23:29:41 -0800 (PST)
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        Cai Huoqing <caihuoqing@baidu.com>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Subject: [PATCH] iio: stm: don't always auto-enable I2C and SPI interface drivers
+Date:   Wed, 29 Dec 2021 10:29:16 +0300
+Message-Id: <20211229072916.2567155-1-nikita.yoush@cogentembedded.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b017a8ea-989b-c251-f5c8-a8a7940877cf@huawei.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/29/21 at 10:27am, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2021/12/29 0:13, Borislav Petkov wrote:
-> > On Tue, Dec 28, 2021 at 09:26:01PM +0800, Zhen Lei wrote:
-> >> Use parse_crashkernel_high_low() to bring the parsing of
-> >> "crashkernel=X,high" and the parsing of "crashkernel=Y,low" together, they
-> >> are strongly dependent, make code logic clear and more readable.
-> >>
-> >> Suggested-by: Borislav Petkov <bp@alien8.de>
-> > 
-> > Yeah, doesn't look like something I suggested...
-> > 
-> >> @@ -474,10 +472,9 @@ static void __init reserve_crashkernel(void)
-> >>  	/* crashkernel=XM */
-> >>  	ret = parse_crashkernel(boot_command_line, total_mem, &crash_size, &crash_base);
-> >>  	if (ret != 0 || crash_size <= 0) {
-> >> -		/* crashkernel=X,high */
-> >> -		ret = parse_crashkernel_high(boot_command_line, total_mem,
-> >> -					     &crash_size, &crash_base);
-> >> -		if (ret != 0 || crash_size <= 0)
-> >> +		/* crashkernel=X,high and possible crashkernel=Y,low */
-> >> +		ret = parse_crashkernel_high_low(boot_command_line, &crash_size, &low_size);
-> > 
-> > So this calls parse_crashkernel() and when that one fails, it calls this
-> > new weird parse high/low helper you added.
-> > 
-> > But then all three end up in the same __parse_crashkernel() worker
-> > function which seems to do the actual parsing.
-> > 
-> > What I suggested and what would be real clean is if the arches would
-> > simply call a *single* 
-> > 
-> > 	parse_crashkernel()
-> > 
-> > function and when that one returns, *all* crashkernel= options would
-> > have been parsed properly, low, high, middle crashkernel, whatever...
-> > and the caller would know what crash kernel needs to be allocated.
-> > 
-> > Then each arch can do its memory allocations and checks based on that
-> > parsed data and decide to allocate or bail.
-> 
-> However, only x86 currently supports "crashkernel=X,high" and "crashkernel=Y,low", and arm64
-> will also support it. It is not supported on other architectures. So changing parse_crashkernel()
-> is not appropriate unless a new function is introduced. But naming this new function isn't easy,
-> and the name parse_crashkernel_in_order() that I've named before doesn't seem to be good.
-> Of course, we can also consider changing parse_crashkernel() to another name, then use
-> parse_crashkernel() to parse all possible "crashkernel=" options in order, but this will cause
-> other architectures to change as well.
+This patch makes I2C and SPI interface drivers for STMicroelectronics
+sensor chips individually selectable via Kconfig.
 
-Hi, I did not follow up all discussions, but if the only difference is
-about the low -> high fallback, I think you can add another argument in
-parse_crashkernel(..., *fallback_high),  and doing some changes in
-__parse_crashkernel() before it returns.  But since there are two
-many arguments, you could need a wrapper struct for crashkernel_param if
-needed.
+The default is kept unchanged - I2C and SPI interface drivers are still
+selected by default if the corresponding bus support is available.
 
-If you do not want to touch other arches, another function maybe
-something like parse_crashkernel_fallback() for x86 and arm64 to use.
+However, the patch makes it is possible to explicitly disable drivers
+that are not needed for particular target.
 
-But I may not get all the context, please ignore if this is not the
-case.  I agree that calling parse_crash_kernel* in the
-reserve_crashkernel funtions looks not good though. 
+Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+---
+ drivers/iio/accel/Kconfig             | 35 ++++++++++++++-----------
+ drivers/iio/common/st_sensors/Kconfig |  2 --
+ drivers/iio/gyro/Kconfig              | 37 ++++++++++++++++-----------
+ drivers/iio/imu/st_lsm9ds0/Kconfig    | 28 +++++++++++++++-----
+ drivers/iio/magnetometer/Kconfig      | 35 ++++++++++++++-----------
+ drivers/iio/pressure/Kconfig          | 35 ++++++++++++++-----------
+ 6 files changed, 104 insertions(+), 68 deletions(-)
 
-OTOH there are bunch of other logics in param parsing code,
-eg. determin the final size and offset etc. To split the logic out more
-things need to be done, eg. firstly parsing function just get all the
-inputs from cmdline string eg. an array of struct crashkernel_param with
-mem_range, expected size, expected offset, high, or low, and do not do
-any other things.   Then pass these parsed inputs to another function to
-determine the final crash_size and crash_base, that part can be arch
-specific somehow. 
-
-So I think you can unify the parse_crashkernel* in x86 first with just
-one function.  And leave the further improvements to later work. But
-let's see how Boris think about this.
-
-> 
-> > 
-> > So it is getting there but it needs more surgery...
-> > 
-> > Thx.
-> > 
-> 
-> -- 
-> Regards,
->   Zhen Lei
-> 
-
-Thanks
-Dave
+diff --git a/drivers/iio/accel/Kconfig b/drivers/iio/accel/Kconfig
+index 49587c992a6d..fee33dda4ee4 100644
+--- a/drivers/iio/accel/Kconfig
++++ b/drivers/iio/accel/Kconfig
+@@ -349,8 +349,6 @@ config IIO_ST_ACCEL_3AXIS
+ 	depends on !SENSORS_LIS3_I2C
+ 	depends on !SENSORS_LIS3_SPI
+ 	select IIO_ST_SENSORS_CORE
+-	select IIO_ST_ACCEL_I2C_3AXIS if (I2C)
+-	select IIO_ST_ACCEL_SPI_3AXIS if (SPI_MASTER)
+ 	select IIO_TRIGGERED_BUFFER if (IIO_BUFFER)
+ 	help
+ 	  Say yes here to build support for STMicroelectronics accelerometers:
+@@ -358,23 +356,30 @@ config IIO_ST_ACCEL_3AXIS
+ 	  LIS331DLH, LSM303DL, LSM303DLM, LSM330, LIS2DH12, H3LIS331DL,
+ 	  LNG2DM, LIS3DE, LIS2DE12, LIS2HH12
+ 
+-	  This driver can also be built as a module. If so, these modules
+-	  will be created:
+-	  - st_accel (core functions for the driver [it is mandatory]);
+-	  - st_accel_i2c (necessary for the I2C devices [optional*]);
+-	  - st_accel_spi (necessary for the SPI devices [optional*]);
+-
+-	  (*) one of these is necessary to do something.
++	  Also need to enable at least one of I2C and SPI interface drivers
++	  below.
+ 
+ config IIO_ST_ACCEL_I2C_3AXIS
+-	tristate
+-	depends on IIO_ST_ACCEL_3AXIS
+-	depends on IIO_ST_SENSORS_I2C
++	tristate "STMicroelectronics accelerometers 3-Axis I2C Interface"
++	depends on (I2C && IIO_ST_ACCEL_3AXIS)
++	default y if (I2C && IIO_ST_ACCEL_3AXIS)
++	select IIO_ST_SENSORS_I2C
++	help
++	  Build support for STMicroelectronics accelerometers I2C interface.
++
++	  To compile this driver as a module, choose M here. The module
++	  will be called st_accel_i2c.
+ 
+ config IIO_ST_ACCEL_SPI_3AXIS
+-	tristate
+-	depends on IIO_ST_ACCEL_3AXIS
+-	depends on IIO_ST_SENSORS_SPI
++	tristate "STMicroelectronics accelerometers 3-Axis SPI Interface"
++	depends on (SPI_MASTER && IIO_ST_ACCEL_3AXIS)
++	default y if (SPI_MASTER && IIO_ST_ACCEL_3AXIS)
++	select IIO_ST_SENSORS_SPI
++	help
++	  Build support for STMicroelectronics accelerometers SPI interface.
++
++	  To compile this driver as a module, choose M here. The module
++	  will be called st_accel_spi.
+ 
+ config KXSD9
+ 	tristate "Kionix KXSD9 Accelerometer Driver"
+diff --git a/drivers/iio/common/st_sensors/Kconfig b/drivers/iio/common/st_sensors/Kconfig
+index 9364ec7a811f..eda8f347fda5 100644
+--- a/drivers/iio/common/st_sensors/Kconfig
++++ b/drivers/iio/common/st_sensors/Kconfig
+@@ -13,5 +13,3 @@ config IIO_ST_SENSORS_SPI
+ 
+ config IIO_ST_SENSORS_CORE
+ 	tristate
+-	select IIO_ST_SENSORS_I2C if I2C
+-	select IIO_ST_SENSORS_SPI if SPI_MASTER
+diff --git a/drivers/iio/gyro/Kconfig b/drivers/iio/gyro/Kconfig
+index a672f7d12bbb..9af15bed7550 100644
+--- a/drivers/iio/gyro/Kconfig
++++ b/drivers/iio/gyro/Kconfig
+@@ -139,30 +139,37 @@ config IIO_ST_GYRO_3AXIS
+ 	tristate "STMicroelectronics gyroscopes 3-Axis Driver"
+ 	depends on (I2C || SPI_MASTER) && SYSFS
+ 	select IIO_ST_SENSORS_CORE
+-	select IIO_ST_GYRO_I2C_3AXIS if (I2C)
+-	select IIO_ST_GYRO_SPI_3AXIS if (SPI_MASTER)
+ 	select IIO_TRIGGERED_BUFFER if (IIO_BUFFER)
+ 	help
+ 	  Say yes here to build support for STMicroelectronics gyroscopes:
+ 	  L3G4200D, LSM330DL, L3GD20, LSM330DLC, L3G4IS, LSM330, LSM9DS0.
+ 
+-	  This driver can also be built as a module. If so, these modules
+-	  will be created:
+-	  - st_gyro (core functions for the driver [it is mandatory]);
+-	  - st_gyro_i2c (necessary for the I2C devices [optional*]);
+-	  - st_gyro_spi (necessary for the SPI devices [optional*]);
+-
+-	  (*) one of these is necessary to do something.
++	  Also need to enable at least one of I2C and SPI interface drivers
++	  below.
+ 
+ config IIO_ST_GYRO_I2C_3AXIS
+-	tristate
+-	depends on IIO_ST_GYRO_3AXIS
+-	depends on IIO_ST_SENSORS_I2C
++	tristate "STMicroelectronics gyroscopes 3-Axis I2C Interface"
++	depends on (I2C && IIO_ST_GYRO_3AXIS)
++	default y if (I2C && IIO_ST_GYRO_3AXIS)
++	select IIO_ST_SENSORS_I2C
++	help
++	  Build support for STMicroelectronics gyroscopes I2C interface.
++
++	  To compile this driver as a module, choose M here. The module
++	  will be called st_gyro_i2c.
++
+ 
+ config IIO_ST_GYRO_SPI_3AXIS
+-	tristate
+-	depends on IIO_ST_GYRO_3AXIS
+-	depends on IIO_ST_SENSORS_SPI
++	tristate "STMicroelectronics gyroscopes 3-Axis SPI Interface"
++	depends on (SPI_MASTER && IIO_ST_GYRO_3AXIS)
++	default y if (SPI_MASTER && IIO_ST_GYRO_3AXIS)
++	select IIO_ST_SENSORS_SPI
++	help
++	  Build support for STMicroelectronics gyroscopes SPI interface.
++
++	  To compile this driver as a module, choose M here. The module
++	  will be called st_gyro_spi.
++
+ 
+ config ITG3200
+ 	tristate "InvenSense ITG3200 Digital 3-Axis Gyroscope I2C driver"
+diff --git a/drivers/iio/imu/st_lsm9ds0/Kconfig b/drivers/iio/imu/st_lsm9ds0/Kconfig
+index 53b7017014f8..1f6e7365048a 100644
+--- a/drivers/iio/imu/st_lsm9ds0/Kconfig
++++ b/drivers/iio/imu/st_lsm9ds0/Kconfig
+@@ -5,8 +5,6 @@ config IIO_ST_LSM9DS0
+ 	depends on (I2C || SPI_MASTER) && SYSFS
+ 	depends on !SENSORS_LIS3_I2C
+ 	depends on !SENSORS_LIS3_SPI
+-	select IIO_ST_LSM9DS0_I2C if I2C
+-	select IIO_ST_LSM9DS0_SPI if SPI_MASTER
+ 	select IIO_ST_ACCEL_3AXIS
+ 	select IIO_ST_MAGN_3AXIS
+ 
+@@ -17,12 +15,30 @@ config IIO_ST_LSM9DS0
+ 	  To compile this driver as a module, choose M here: the module
+ 	  will be called st_lsm9ds0.
+ 
++	  Also need to enable at least one of I2C and SPI interface drivers
++
+ config IIO_ST_LSM9DS0_I2C
+-	tristate
+-	depends on IIO_ST_LSM9DS0
++	tristate "STMicroelectronics LSM9DS0 IMU I2C interface"
++	depends on (I2C && IIO_ST_LSM9DS0)
++	default y if (I2C && IIO_ST_LSM9DS0)
++	select IIO_ST_ACCEL_I2C_3AXIS
++	select IIO_ST_MAGN_I2C_3AXIS
+ 	select REGMAP_I2C
++	help
++	  Build support for STMicroelectronics LSM9DS0 IMU I2C interface.
++
++	  To compile this driver as a module, choose M here. The module
++	  will be called st_lsm9ds0_i2c.
+ 
+ config IIO_ST_LSM9DS0_SPI
+-	tristate
+-	depends on IIO_ST_LSM9DS0
++	tristate "STMicroelectronics LSM9DS0 IMU SPI interface"
++	depends on (SPI_MASTER && IIO_ST_LSM9DS0)
++	default y if (SPI_MASTER && IIO_ST_LSM9DS0)
++	select IIO_ST_ACCEL_SPI_3AXIS
++	select IIO_ST_MAGN_SPI_3AXIS
+ 	select REGMAP_SPI
++	help
++	  Build support for STMicroelectronics LSM9DS0 IMU I2C interface.
++
++	  To compile this driver as a module, choose M here. The module
++	  will be called st_lsm9ds0_spi.
+diff --git a/drivers/iio/magnetometer/Kconfig b/drivers/iio/magnetometer/Kconfig
+index 565ee41ccb3a..caec46b93564 100644
+--- a/drivers/iio/magnetometer/Kconfig
++++ b/drivers/iio/magnetometer/Kconfig
+@@ -117,30 +117,35 @@ config IIO_ST_MAGN_3AXIS
+ 	tristate "STMicroelectronics magnetometers 3-Axis Driver"
+ 	depends on (I2C || SPI_MASTER) && SYSFS
+ 	select IIO_ST_SENSORS_CORE
+-	select IIO_ST_MAGN_I2C_3AXIS if (I2C)
+-	select IIO_ST_MAGN_SPI_3AXIS if (SPI_MASTER)
+ 	select IIO_TRIGGERED_BUFFER if (IIO_BUFFER)
+ 	help
+ 	  Say yes here to build support for STMicroelectronics magnetometers:
+ 	  LSM303DLHC, LSM303DLM, LIS3MDL.
+ 
+-	  This driver can also be built as a module. If so, these modules
+-	  will be created:
+-	  - st_magn (core functions for the driver [it is mandatory]);
+-	  - st_magn_i2c (necessary for the I2C devices [optional*]);
+-	  - st_magn_spi (necessary for the SPI devices [optional*]);
+-
+-	  (*) one of these is necessary to do something.
++	  Also need to enable at least one of I2C and SPI interface drivers
++	  below.
+ 
+ config IIO_ST_MAGN_I2C_3AXIS
+-	tristate
+-	depends on IIO_ST_MAGN_3AXIS
+-	depends on IIO_ST_SENSORS_I2C
++	tristate "STMicroelectronics magnetometers 3-Axis I2C Interface"
++	depends on (I2C && IIO_ST_MAGN_3AXIS)
++	default y if (I2C && IIO_ST_MAGN_3AXIS)
++	select IIO_ST_SENSORS_I2C
++	help
++	  Build support for STMicroelectronics magnetometers I2C interface.
++
++	  To compile this driver as a module, choose M here. The module
++	  will be called st_magn_i2c.
+ 
+ config IIO_ST_MAGN_SPI_3AXIS
+-	tristate
+-	depends on IIO_ST_MAGN_3AXIS
+-	depends on IIO_ST_SENSORS_SPI
++	tristate "STMicroelectronics magnetometers 3-Axis SPI Interface"
++	depends on (SPI_MASTER && IIO_ST_MAGN_3AXIS)
++	default y if (SPI_MASTER && IIO_ST_MAGN_3AXIS)
++	select IIO_ST_SENSORS_SPI
++	help
++	  Build support for STMicroelectronics magnetometers SPI interface.
++
++	  To compile this driver as a module, choose M here. The module
++	  will be called st_magn_spi.
+ 
+ config SENSORS_HMC5843
+ 	tristate
+diff --git a/drivers/iio/pressure/Kconfig b/drivers/iio/pressure/Kconfig
+index fc0d3cfca418..962e45e29142 100644
+--- a/drivers/iio/pressure/Kconfig
++++ b/drivers/iio/pressure/Kconfig
+@@ -194,30 +194,35 @@ config IIO_ST_PRESS
+ 	tristate "STMicroelectronics pressure sensor Driver"
+ 	depends on (I2C || SPI_MASTER) && SYSFS
+ 	select IIO_ST_SENSORS_CORE
+-	select IIO_ST_PRESS_I2C if (I2C)
+-	select IIO_ST_PRESS_SPI if (SPI_MASTER)
+ 	select IIO_TRIGGERED_BUFFER if (IIO_BUFFER)
+ 	help
+ 	  Say yes here to build support for STMicroelectronics pressure
+ 	  sensors: LPS001WP, LPS25H, LPS331AP, LPS22HB, LPS22HH.
+ 
+-	  This driver can also be built as a module. If so, these modules
+-	  will be created:
+-	  - st_pressure (core functions for the driver [it is mandatory]);
+-	  - st_pressure_i2c (necessary for the I2C devices [optional*]);
+-	  - st_pressure_spi (necessary for the SPI devices [optional*]);
+-
+-	  (*) one of these is necessary to do something.
++	  Also need to enable at least one of I2C and SPI interface drivers
++	  below.
+ 
+ config IIO_ST_PRESS_I2C
+-	tristate
+-	depends on IIO_ST_PRESS
+-	depends on IIO_ST_SENSORS_I2C
++	tristate "STMicroelectronics pressure sensor I2C Interface"
++	depends on (I2C && IIO_ST_PRESS)
++	default y if (I2C && IIO_ST_PRESS)
++	select IIO_ST_SENSORS_I2C
++	help
++	  Build support for STMicroelectronics pressure sensor I2C interface.
++
++	  To compile this driver as a module, choose M here. The module
++	  will be called st_pressure_i2c.
+ 
+ config IIO_ST_PRESS_SPI
+-	tristate
+-	depends on IIO_ST_PRESS
+-	depends on IIO_ST_SENSORS_SPI
++	tristate "STMicroelectronics pressure sensor SPI Interface"
++	depends on (SPI_MASTER && IIO_ST_PRESS)
++	default y if (SPI_MASTER && IIO_ST_PRESS)
++	select IIO_ST_SENSORS_SPI
++	help
++	  Build support for STMicroelectronics pressure sensor SPI interface.
++
++	  To compile this driver as a module, choose M here. The module
++	  will be called st_pressure_spi.
+ 
+ config T5403
+ 	tristate "EPCOS T5403 digital barometric pressure sensor driver"
+-- 
+2.30.2
 

@@ -2,74 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9006480E75
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 02:19:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A451480E7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 02:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238140AbhL2BTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 20:19:21 -0500
-Received: from out162-62-57-252.mail.qq.com ([162.62.57.252]:52355 "EHLO
-        out162-62-57-252.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235852AbhL2BTU (ORCPT
+        id S238164AbhL2BVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 20:21:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238150AbhL2BVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 20:19:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1640740756;
-        bh=WvxjNp4mxs5JJlFm50v/ht5B/mXkeVyuR1ccnIuBqUg=;
-        h=From:To:Cc:Subject:Date;
-        b=eSA0uDDmjYUaw5J2pSIh3aJmqDxKjYY6kWB1yv9/yIxqbziJn98eDLJllZvsMoOyo
-         IrRanZ7GoRM1jZGopx3I2rZKLpYrMhW6WP6VvSKON9qjpJR/gM+PYFu8uDgPSqx7Ru
-         vtRjjfSRCdLHlwIkSf9aPXD5gd2XZaX3ry/liEGs=
-Received: from localhost.localdomain ([159.226.95.43])
-        by newxmesmtplogicsvrszc7.qq.com (NewEsmtp) with SMTP
-        id 3F08A269; Wed, 29 Dec 2021 09:15:48 +0800
-X-QQ-mid: xmsmtpt1640740548tx6pvlod5
-Message-ID: <tencent_87FD00188928D6688137C8FA9ECB86180505@qq.com>
-X-QQ-XMAILINFO: M3vv73qU6a4uNI9+SWxaWGGCAT51lMsfXjFDT5p3ZY8CFlJYHrlgrUrbYCKEv3
-         49R53m7J6Y1kvl3foq55iGpzls7XvuMKwUMURjNeQBPz/lDkxDuH4L28UrEk3C2GkXuAg1BsgOK3
-         j6tFeHM3ViDWqufj45q4ZrXiiFA3KQzGqsKQQpCFaL3jtEqmVNRmDmMVe5/mebIU5LZmFvGY3Cjw
-         OwC19V5nvIMDzg43MR84f0H+x+f7gs9R/sLtQQXC0VZwzrJGHQnnkcw/hBLPbbhzX4/uuhcURUpk
-         eUIvdulErc8nuXZoHdXvhU7NpQWPg/lUong1xH/ZgwUXqWbzEqfKgeD22naJ9mhjQkf9/+Bx/zGd
-         BQp+Yct7LHpxU4eidkiMcm57OLFA6p8ZqAk7Cbr9WzTIGGErEkXaXCfgDvlD83hyS1rLgd4v+Q6a
-         AhCFXB8VVFXbJB5ttJEySjg9wvExdj6eOndRUEMcXPZM4REOMTVxfmFOXGi67KSndCKMm25OCKoy
-         AINJ7srtAOPZY2kqXJ7d5RqgbqZcIEVdMAOiigv1xwURB1xTdIDWfTw9XIHps1mx9rIkziwochPn
-         udo1SPZz8W7kj1LDrJ4ORULXslAJBTQ8kAqFESNYa7Rf4nesx03MR2K3DG5xS0BQkuvLjEwMKJT4
-         67OL7hLdRFH1nuubfXPf0NZpWfgKY1a6AlA5gPPiSyW9wrxfL69Jkjh6bzNJ09R6zVmnmPGU7mvG
-         bH3KNL6eoDBMdwlsfb8qM2lcYj04Nu1S43Ti+D3BI6+mQIBMiYTyaHJ9fw6ZlkTMuzQcBy6tiVhu
-         DNpx3UH3HNqk6ck4SWLmwPlKtjtkn/dIZ2Gcjk14ddqf1jZkknXu+F
-From:   Peiwei Hu <jlu.hpw@foxmail.com>
-To:     sean@mess.org, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        trivial@kernel.org, Peiwei Hu <jlu.hpw@foxmail.com>
-Subject: [PATCH] media: ir_toy: free before error exiting
-Date:   Wed, 29 Dec 2021 09:15:18 +0800
-X-OQ-MSGID: <20211229011518.2973032-1-jlu.hpw@foxmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 28 Dec 2021 20:21:07 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BA0C061574;
+        Tue, 28 Dec 2021 17:21:07 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id v25so17214069pge.2;
+        Tue, 28 Dec 2021 17:21:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=ce+QRujFh6Z6jXwpwj96Ajoqinq3qkVE1ootEg0tvM4=;
+        b=HR4+5gEvbRK0rU8/dntHoBj1g+0X3qKpLMsP358svmvVe4LU0yAyJLNGs3fCG1IxN5
+         M/QTR8OXVpknffzN/8b3pOWH0ImhkhbIhkjgUWsWwTRZMZ2woqwqIa5115FbA6Nf6xT4
+         TiKsVnkG1OLJDDZ06iwYnbvfkz/MJz2DtOV5zSZDVPVN2jIRsDW3XOaMugqlveDm5gnG
+         bFN6SiWtJfdMPi0YTy0yZg20PhHPIvQQsScpgCUPn8k9cu6v+natJ9ebpk8jSRGpwixK
+         MiRCzMxl519LQW1SjZgL9Y49JFwBww9vU7/YKwkn2coaccmwFAJf32w2Pk2xT9akAsgc
+         lavA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=ce+QRujFh6Z6jXwpwj96Ajoqinq3qkVE1ootEg0tvM4=;
+        b=3cAgaISPe6iDiOddkPv0lqlXrSy3AKpOXh3NtLmjTn9vWZEUcpXuoKnrtWdH+V5FCb
+         lsW1e1fQl809DRHJdBld8g82kq3v6dBN07R5zT2Z4Z4XbvgxfBaE0pXFHLVrLrS76OKe
+         P202ipesU6XjiINC5pJbU+jZCtRlerHK7jePd2cJUVPb6kcyIKESLokmwojC6flYM4k1
+         L8DCrqwVO+nZKnKo1Q9hUI3Pj/csAsubrjbFq3CWHIV6OsG+KDhJgdGaEDY/dPzMcMyZ
+         MIXv05XtEuzhmpz8HO2J8crMVgSIyKK2y+l7QAOuWfXjHTdCALHJ5aykfZeDvUUv0Kne
+         yyZA==
+X-Gm-Message-State: AOAM533De7O8yg0IW11cBjcxIOLGKjA/O+8KdOuc61KFdsYYCDvezfzR
+        AGheKH0nrObwVumEDl0mKWM=
+X-Google-Smtp-Source: ABdhPJx/po46hxln8jdEFq24zHXmQfZv0rMy1a+pao1gS+//RcuuYa1+uO7C36+ZKnR8X7vS6LfebQ==
+X-Received: by 2002:a05:6a00:cca:b0:4ba:f5cc:538c with SMTP id b10-20020a056a000cca00b004baf5cc538cmr24584430pfv.60.1640740867094;
+        Tue, 28 Dec 2021 17:21:07 -0800 (PST)
+Received: from [10.1.1.24] (222-155-5-102-adsl.sparkbb.co.nz. [222.155.5.102])
+        by smtp.gmail.com with ESMTPSA id cm20sm18920963pjb.28.2021.12.28.17.20.41
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 28 Dec 2021 17:21:06 -0800 (PST)
+Subject: Re: [RFC 02/32] Kconfig: introduce HAS_IOPORT option and select it as
+ necessary
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+ <20211227164317.4146918-3-schnelle@linux.ibm.com>
+ <CAMuHMdXk6VcDryekkMJ3aGFnw4LLWOWMi8M2PwjT81PsOsOBMQ@mail.gmail.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Brian Cain <bcain@codeaurora.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, openrisc@lists.librecores.org,
+        linux-s390@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        Greg Ungerer <gerg@linux-m68k.org>
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <d406b93a-0f76-d056-3380-65d459d05ea9@gmail.com>
+Date:   Wed, 29 Dec 2021 14:20:38 +1300
+User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
+ Icedove/45.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdXk6VcDryekkMJ3aGFnw4LLWOWMi8M2PwjT81PsOsOBMQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-use goto for error handling instead of returning directly
+Hi Geert, Niklas,
 
-Signed-off-by: Peiwei Hu <jlu.hpw@foxmail.com>
----
- drivers/media/rc/ir_toy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/rc/ir_toy.c b/drivers/media/rc/ir_toy.c
-index 7e98e7e3aace..196806709259 100644
---- a/drivers/media/rc/ir_toy.c
-+++ b/drivers/media/rc/ir_toy.c
-@@ -458,7 +458,7 @@ static int irtoy_probe(struct usb_interface *intf,
- 	err = usb_submit_urb(irtoy->urb_in, GFP_KERNEL);
- 	if (err != 0) {
- 		dev_err(irtoy->dev, "fail to submit in urb: %d\n", err);
--		return err;
-+		goto free_rcdev;
- 	}
- 
- 	err = irtoy_setup(irtoy);
--- 
-2.25.1
 
+Am 28.12.2021 um 23:08 schrieb Geert Uytterhoeven:
+> Hi Niklas,
+>
+> On Mon, Dec 27, 2021 at 5:44 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+>> We introduce a new HAS_IOPORT Kconfig option to gate support for
+>> I/O port access. In a future patch HAS_IOPORT=n will disable compilation
+>> of the I/O accessor functions inb()/outb() and friends on architectures
+>> which can not meaningfully support legacy I/O spaces. On these platforms
+>> inb()/outb() etc are currently just stubs in asm-generic/io.h which when
+>> called will cause a NULL pointer access which some compilers actually
+>> detect and warn about.
+>>
+>> The dependencies on HAS_IOPORT in drivers as well as ifdefs for
+>> HAS_IOPORT specific sections will be added in subsequent patches on
+>> a per subsystem basis. Then a final patch will ifdef the I/O access
+>> functions on HAS_IOPORT thus turning any use not gated by HAS_IOPORT
+>> into a compile-time warning.
+>>
+>> Link: https://lore.kernel.org/lkml/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
+>> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+>> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+>> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+>
+> Thanks for your patch!
+>
+>> --- a/arch/m68k/Kconfig
+>> +++ b/arch/m68k/Kconfig
+>> @@ -16,6 +16,7 @@ config M68K
+>>         select GENERIC_CPU_DEVICES
+>>         select GENERIC_IOMAP
+>>         select GENERIC_IRQ_SHOW
+>> +       select HAS_IOPORT
+>>         select HAVE_AOUT if MMU
+>>         select HAVE_ASM_MODVERSIONS
+>>         select HAVE_DEBUG_BUGVERBOSE
+>
+> This looks way too broad to me: most m68k platform do not have I/O
+> port access support.
+>
+> My gut feeling says:
+>
+>     select HAS_IOPORT if PCI || ISA
+>
+> but that might miss some intricate details...
+
+In particular, this misses the Atari ROM port ISA adapter case -
+
+	select HAS_IOPORT if PCI || ISA || ATARI_ROM_ISA
+
+might do instead.
+
+Cheers,
+
+	Michael
+
+
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+>

@@ -2,164 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 170AE48102E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 06:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E0C1481032
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 06:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234537AbhL2Fqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 00:46:50 -0500
-Received: from mga04.intel.com ([192.55.52.120]:58759 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234367AbhL2Fqt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 00:46:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640756809; x=1672292809;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BzpfcYpGQ7Fy2FRD7W1rbRF21I0SyxFzQnTKksrCJDY=;
-  b=k4fZWIUzLCL6e04BDbcPrkGLQBY8wHgF1WK9Nkvz5ZK7VhBi0pj9m4Pc
-   t4Ot/jmpC29hxBR6sQb9Ew4LnBqqwshrxYOeLMFbB+G/hAtQhe7srikv3
-   b3b3V1c29jGYIcFujLi7BeC6eDPoK4B5c/MQhYUCddqRA+YuFIAHVQZHH
-   Um35Ad/FerQ9R5xUNaogT6+13i45u4TPiQ3mhX9cRQ92OQ7e1pLTkf8Ow
-   G1/13cmiijp8Zyh5Z1l/BmM6nIeLzBrtJC1gtIN13fsZMXoQQ6DhuORy8
-   dtXne4InbqE5Y80id8ECwmhqnlZB3/GTRS88mViXtfU0iJ1QHOQ+9orB+
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="240252432"
-X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
-   d="scan'208";a="240252432"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 21:46:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
-   d="scan'208";a="470223998"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Dec 2021 21:46:47 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n2RnS-0008aC-Q7; Wed, 29 Dec 2021 05:46:46 +0000
-Date:   Wed, 29 Dec 2021 13:46:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:kprobe/multi 4/13] kernel/kprobes.c:1757:9: error: no
- member named 'multi' in 'struct kprobe'
-Message-ID: <202112291313.NBZhynh0-lkp@intel.com>
+        id S234575AbhL2Fxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 00:53:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234367AbhL2Fxl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 00:53:41 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06086C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 21:53:40 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id y16-20020a17090a6c9000b001b13ffaa625so23619757pjj.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 21:53:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=gPygxIj4M3rVCXjL59zHPUyygCm0APrKFxe3mJwzlR8=;
+        b=g3nP9CRBjfMgDZxnvdQVEO4J7WzUjv2hLeR5hkAYmRsJBrNZfw2qx8XrF/ae0nj3qj
+         F+SCfDvBT5bDZ8xSe806Durg3+KT0c4D8u56CY5HglqlVXHLNiPt+bpBCppSeBKjZpbB
+         0+Zyjfg370zXR1NLjsPQUKzl/m2yNGQxMyiYEkPB3Ho7rKHcsLReXZNfZ3kYGO76r7w+
+         ykD6Fba4/wBNn4Pev7Fx8gBp4EFdjV+Rpsk1BM1qUtFg2efNc0pnyoclKSDThz0qTvrA
+         KTCxvoiDUt7OFbH4RhrRjqAxpWGpc24q2l8MhXj6YHPM4PKKlGCQ/JVraXr/wQeMNkJL
+         FEHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=gPygxIj4M3rVCXjL59zHPUyygCm0APrKFxe3mJwzlR8=;
+        b=dt69GjRwCQAJFSwSUsSyfGEScinPU6UgeS/XCcKwPOM0RqBI+SNs0zksv2YrMKh+5U
+         DaJXgFbHNkTL9cU47uiUrh1fW3Vbep+Pjdr50BFzlLI0lkJqmJeANbRJym0WN0XlqSrr
+         qjzq3NnYOyOkm5EoetqMyf3I4ZPZgSpA7rEqfG1B4p195IDhMOAsWGVbeuCNutP18F/o
+         LV7MBz6WqsrUBeQLcyiHYtdMAK9Yo7a0saHZppTvVcnD5CkXtFnalP8ZjXaZ+K0V8KaF
+         VOTcjRGvBwS0QC8TRjzx+chQhOtITpqT/G2iGuDj3vK24qZjnao+AOMdcfK4zRVXclnJ
+         BaBg==
+X-Gm-Message-State: AOAM532gFc20/F6wxCiTtLZvmQCKq9e2sO8MCfMHfay+SMpYueB9Do9i
+        IKlH5vIu7cxdTapLqnAQ6g8XSzAS7JnwEUIyUoSqwBC618WvyQ==
+X-Google-Smtp-Source: ABdhPJzIgzCurZV5GvCp8MZCKzwjSknX3P+DVfBx7/hRhvGVaS431XJqwU2/TSc5/UZ0pnnAPXbqH9htTobXE5s+XhQ=
+X-Received: by 2002:a17:90b:f91:: with SMTP id ft17mr15060849pjb.95.1640757220049;
+ Tue, 28 Dec 2021 21:53:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211228060246.2958070-1-pumahsu@google.com> <YcrKNP4TRXB6nsCI@kroah.com>
+In-Reply-To: <YcrKNP4TRXB6nsCI@kroah.com>
+From:   Puma Hsu <pumahsu@google.com>
+Date:   Wed, 29 Dec 2021 13:53:04 +0800
+Message-ID: <CAGCq0Lb8ZoGpbkLNhXG=OyWgvz_Qn3ABmq_uvMPJdyEKygMH+Q@mail.gmail.com>
+Subject: Re: [PATCH] xhci: re-initialize the HC during resume if HCE was set
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     mathias.nyman@intel.com, Albert Wang <albertccwang@google.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git kprobe/multi
-head:   774280c9bc95e4e50cda3cd09324bd03fec50b52
-commit: b20ae58e76fd39a4b63168d1b8b97db3a45c5680 [4/13] kprobe: Add support to register multiple ftrace kprobes
-config: riscv-buildonly-randconfig-r006-20211228 (https://download.01.org/0day-ci/archive/20211229/202112291313.NBZhynh0-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7171af744543433ac75b232eb7dfdaef7efd4d7a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=b20ae58e76fd39a4b63168d1b8b97db3a45c5680
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf kprobe/multi
-        git checkout b20ae58e76fd39a4b63168d1b8b97db3a45c5680
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+This commit is not used to fix a specific commit. We find a condition
+that when XHCI runs the resume process but the HCE flag is set, then
+the Run/Stop bit of USBCMD cannot be set so that HC would not be
+enabled. In fact, HC may already meet a problem at this moment.
+Besides, in xHCI requirements specification revision 1.2, Table 5-21
+BIT(12) claims that Software should re-initialize the xHC when HCE is
+set. Therefore, I think this commit could be the error handling for
+HCE.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> kernel/kprobes.c:1757:9: error: no member named 'multi' in 'struct kprobe'
-           if (p->multi.cnt)
-               ~  ^
-   kernel/kprobes.c:1989:12: warning: no previous prototype for function 'kprobe_exceptions_notify' [-Wmissing-prototypes]
-   int __weak kprobe_exceptions_notify(struct notifier_block *self,
-              ^
-   kernel/kprobes.c:1989:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __weak kprobe_exceptions_notify(struct notifier_block *self,
-   ^
-   static 
-   1 warning and 1 error generated.
+Thanks in advance.
 
 
-vim +1757 kernel/kprobes.c
+Thanks in advance.
 
-  1745	
-  1746	int register_kprobe(struct kprobe *p)
-  1747	{
-  1748		struct module *probed_mod = NULL;
-  1749		struct kprobe *old_p;
-  1750		int ret;
-  1751	
-  1752		/* User can pass only KPROBE_FLAG_DISABLED to register_kprobe */
-  1753		p->flags &= KPROBE_FLAG_DISABLED;
-  1754		p->nmissed = 0;
-  1755		INIT_LIST_HEAD(&p->list);
-  1756	
-> 1757		if (p->multi.cnt)
-  1758			ret = check_ftrace_multi(p);
-  1759		else
-  1760			ret = check_addr(p, &probed_mod);
-  1761		if (ret)
-  1762			return ret;
-  1763	
-  1764		mutex_lock(&kprobe_mutex);
-  1765	
-  1766		old_p = get_kprobe(p->addr);
-  1767		if (old_p) {
-  1768			/* Since this may unoptimize 'old_p', locking 'text_mutex'. */
-  1769			ret = register_aggr_kprobe(old_p, p);
-  1770			goto out;
-  1771		}
-  1772	
-  1773		cpus_read_lock();
-  1774		/* Prevent text modification */
-  1775		mutex_lock(&text_mutex);
-  1776		ret = prepare_kprobe(p);
-  1777		mutex_unlock(&text_mutex);
-  1778		cpus_read_unlock();
-  1779		if (ret)
-  1780			goto out;
-  1781	
-  1782		/*
-  1783		 * Multi ftrace kprobes do not have single address,
-  1784		 * so they are not stored in the kprobe_table hash.
-  1785		 */
-  1786		if (kprobe_single(p)) {
-  1787			INIT_HLIST_NODE(&p->hlist);
-  1788			hlist_add_head_rcu(&p->hlist,
-  1789				       &kprobe_table[hash_ptr(p->addr, KPROBE_HASH_BITS)]);
-  1790		}
-  1791	
-  1792		if (!kprobes_all_disarmed && !kprobe_disabled(p)) {
-  1793			ret = arm_kprobe(p);
-  1794			if (ret) {
-  1795				if (kprobe_single(p))
-  1796					hlist_del_rcu(&p->hlist);
-  1797				synchronize_rcu();
-  1798				goto out;
-  1799			}
-  1800		}
-  1801	
-  1802		/* Try to optimize kprobe */
-  1803		try_to_optimize_kprobe(p);
-  1804	out:
-  1805		mutex_unlock(&kprobe_mutex);
-  1806	
-  1807		if (probed_mod)
-  1808			module_put(probed_mod);
-  1809	
-  1810		return ret;
-  1811	}
-  1812	EXPORT_SYMBOL_GPL(register_kprobe);
-  1813	
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+
+  =E2=80=A2  Puma Hsu =E8=A8=B1=E8=AA=8C=E5=AE=8F
+  =E2=80=A2  Software Engineer, Pixel Phone
+  =E2=80=A2  Tel: +886 2 8729 0870
+  =E2=80=A2  pumahsu@google.com
+
+
+
+
+
+On Tue, Dec 28, 2021 at 4:26 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Dec 28, 2021 at 02:02:46PM +0800, Puma Hsu wrote:
+> > When HCE(Host Controller Error) is set, it means an internal
+> > error condition has been detected. It needs to re-initialize
+> > the HC too.
+> >
+> > Signed-off-by: Puma Hsu <pumahsu@google.com>
+> > ---
+> >  drivers/usb/host/xhci.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > index dc357cabb265..c546d9533410 100644
+> > --- a/drivers/usb/host/xhci.c
+> > +++ b/drivers/usb/host/xhci.c
+> > @@ -1146,8 +1146,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hiber=
+nated)
+> >               temp =3D readl(&xhci->op_regs->status);
+> >       }
+> >
+> > -     /* If restore operation fails, re-initialize the HC during resume=
+ */
+> > -     if ((temp & STS_SRE) || hibernated) {
+> > +     /* If restore operation fails or HC error is detected, re-initial=
+ize the HC during resume */
+> > +     if ((temp & STS_SRE) || (temp & STS_HCE) || hibernated) {
+> >
+> >               if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
+> >                               !(xhci_all_ports_seen_u0(xhci))) {
+> > --
+> > 2.34.1.448.ga2b2bfdf31-goog
+> >
+>
+> What commit does this fix?  Does it need to be backported to older
+> kernels as well?
+>
+> thanks,
+>
+> greg k-h

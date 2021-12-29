@@ -2,65 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E77480E8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 02:29:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D78D9480E8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 02:33:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238192AbhL2B3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 20:29:55 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54882 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbhL2B3y (ORCPT
+        id S238200AbhL2Bdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 20:33:36 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:29306 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232378AbhL2Bdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 20:29:54 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4EDB6135A;
-        Wed, 29 Dec 2021 01:29:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B53C9C36AE7;
-        Wed, 29 Dec 2021 01:29:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640741393;
-        bh=ydUgVYXQclY7oFMxL3aKnC9+MuSwNx30h/5qMs9gnOo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P6MQoAV7g6mJik6mNjyFgC2osFmy/WJaZzEPFxd1RLbZBwE7qRKwvJgbOgArm46NM
-         cKD7nISY/GtokKwWCL4o9bVq7SngXRxP9eB8/sM8uznp3YmHWQVeFBUXT4VbXOU248
-         2OUVMDDwEAmYa5vnSTFMx94FdoPfs+d051I0wEK893L9hkOFvD7NUMdRDHLpn2V38D
-         7YBBNQPmcLoTzACWAg3xtOLTn/SjojeWI90rX8qcubaxOIHzpnCYmceGsztEkdr427
-         acFQWKB8gGFsH58ADFwX3XTqPdUXaRbW3pqFw8yGyjW12a2Ki3yxG1ES2mpeb3flLD
-         GbdautlPLkoVg==
-Date:   Wed, 29 Dec 2021 03:29:50 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Nayna Jain <nayna@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        dhowells@redhat.com, zohar@linux.ibm.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
-        seth@forshee.me, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v6 1/3] certs: export load_certificate_list() to be used
- outside certs/
-Message-ID: <Ycu6Dq1Tq2cqq/Lf@iki.fi>
-References: <20211223013919.206273-1-nayna@linux.ibm.com>
- <20211223013919.206273-2-nayna@linux.ibm.com>
+        Tue, 28 Dec 2021 20:33:35 -0500
+Received: from kwepemi500006.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JNv6l6qPHzbjdx;
+        Wed, 29 Dec 2021 09:33:03 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi500006.china.huawei.com (7.221.188.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 29 Dec 2021 09:33:32 +0800
+Received: from [10.174.178.208] (10.174.178.208) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 29 Dec 2021 09:33:31 +0800
+Subject: Re: [PATCH 5.10 00/76] 5.10.89-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
+        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <stable@vger.kernel.org>
+References: <20211227151324.694661623@linuxfoundation.org>
+From:   Samuel Zou <zou_wei@huawei.com>
+Message-ID: <ed8e091f-abcb-bd28-eb26-75c2a0e58e91@huawei.com>
+Date:   Wed, 29 Dec 2021 09:33:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211223013919.206273-2-nayna@linux.ibm.com>
+In-Reply-To: <20211227151324.694661623@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.208]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 08:39:17PM -0500, Nayna Jain wrote:
-> load_certificate_list() parses certificates embedded in the kernel
-> image to load them onto the keyring.
+
+
+On 2021/12/27 23:30, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.89 release.
+> There are 76 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Commit "2565ca7f5ec1 (certs: Move load_system_certificate_list to a common
-> function)" made load_certificate_list() a common function in the certs/
-> directory. Now, export load_certificate_list() outside certs/ to be used
-> by other functions.
+> Responses should be made by Wed, 29 Dec 2021 15:13:09 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.89-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-It is exported to make callable by load_platform_certificate_list(). Making
-anything callable by other functions by itself has no inherit value, and
-does not serve as a stimulus to make such code change.
+Tested on arm64 and x86 for 5.10.89-rc1,
 
-/Jarkko
+Kernel repo:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+Branch: linux-5.10.y
+Version: 5.10.89-rc1
+Commit: 44b3abecd41b48c75aab8337849358703fa5d58d
+Compiler: gcc version 7.3.0 (GCC)
+
+arm64:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9018
+passed: 9018
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+x86:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9018
+passed: 9018
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+Tested-by: Hulk Robot <hulkrobot@huawei.com>

@@ -2,182 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5F2481601
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 19:16:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 423F5481607
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 19:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbhL2SP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 13:15:57 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:42194 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbhL2SP4 (ORCPT
+        id S229639AbhL2SRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 13:17:04 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44254 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229472AbhL2SRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 13:15:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1640801756; x=1672337756;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=nKCGZC1i14SkhxDK6T+Y972E1r0o8n/KfzGBlXfse4M=;
-  b=B4/YC//9o4Zdw7kV8MHrkB+x7aLLg96qmdenP+dZcvb0a1lMl/ui+EIc
-   ymDhCagpHyh+HhTYEzTk1MoK1JVBNPQEj6NDGcKjChOh657BT9oL3KUnQ
-   Rs6/x82sk1iZVtiBiPmmnH9y6SRp833Jfv1fQ81mH3KG8G3BfpuLg9KQB
-   w=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 29 Dec 2021 10:15:54 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 10:15:53 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 29 Dec 2021 10:15:53 -0800
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 29 Dec 2021 10:15:52 -0800
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
-        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Kuogee Hsieh <khsieh@codeaurora.org>
-Subject: [PATCH v2] drm/msm/dp: add support of tps4 (training pattern 4) for HBR3
-Date:   Wed, 29 Dec 2021 10:15:45 -0800
-Message-ID: <1640801745-16234-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+        Wed, 29 Dec 2021 13:17:03 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A52E6154A;
+        Wed, 29 Dec 2021 18:17:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AE042C36AE7;
+        Wed, 29 Dec 2021 18:17:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640801822;
+        bh=Iq/8wAw2A+9RjyxxKXOC4ZrymhDtYJDG6qNqqpHW9nU=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=KWJ0SdAfDCRzf6ZBh0PDL45kXomUXzp6prLyudt5IfuE9slaSOObhFGv1XdCfg8PX
+         nwECYQ+t22mq0j5Ns4zQJWGnvmSxkE99fpBDZ0Z1wG8xddRyPb/G9EJGqzuaURQ+nf
+         yWAGHjWxxchKfElqilZCdTaqmcXO/q/hdc0oLL9Gn4mrq8vU326Zyd2zfq/JNIZNEI
+         Rbi2p2tb/NFnkYNQSlk453XN1dnb87DdkRUTluoCdH/ICQnH8WTRqXQHvnBaO8HMqO
+         VDtxxLJHEYSKJainu5jCRpoc0xqYKe1EHIqxsRINTwPNlbrHeJSip+uacJecalLTpL
+         hjfGr1SYI/VvA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 988A2C32795;
+        Wed, 29 Dec 2021 18:17:02 +0000 (UTC)
+Subject: Re: [GIT PULL] s390 update for 5.16-rc8
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Ycwww97WDmQW9Oqa@osiris>
+References: <Ycwww97WDmQW9Oqa@osiris>
+X-PR-Tracked-List-Id: <linux-s390.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Ycwww97WDmQW9Oqa@osiris>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.16-6
+X-PR-Tracked-Commit-Id: 4eb1782eaa9fa1c224ad1fa0d13a9f09c3ab2d80
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: eec4df26e24e978e49ccf9bcf49ca0f2ccdaeffe
+Message-Id: <164080182261.1560.3598658760089634279.pr-tracker-bot@kernel.org>
+Date:   Wed, 29 Dec 2021 18:17:02 +0000
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Jerome Marchand <jmarchan@redhat.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuogee Hsieh <khsieh@codeaurora.org>
+The pull request you sent on Wed, 29 Dec 2021 10:56:19 +0100:
 
-Some DP sinkers prefer to use tps4 instead of tps3 during training #2.
-This patch will use tps4 to perform link training #2 if sinker's DPCD
-supports it.
+> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.16-6
 
-Changes in V2:
--- replace  dp_catalog_ctrl_set_pattern() with  dp_catalog_ctrl_set_pattern_state_bit()
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/eec4df26e24e978e49ccf9bcf49ca0f2ccdaeffe
 
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_catalog.c | 12 ++++++------
- drivers/gpu/drm/msm/dp/dp_catalog.h |  2 +-
- drivers/gpu/drm/msm/dp/dp_ctrl.c    | 19 ++++++++++++++-----
- 3 files changed, 21 insertions(+), 12 deletions(-)
+Thank you!
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
-index 6ae9b29..64f0b26 100644
---- a/drivers/gpu/drm/msm/dp/dp_catalog.c
-+++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
-@@ -456,19 +456,19 @@ void dp_catalog_ctrl_config_msa(struct dp_catalog *dp_catalog,
- 	dp_write_p0(catalog, MMSS_DP_DSC_DTO, 0x0);
- }
- 
--int dp_catalog_ctrl_set_pattern(struct dp_catalog *dp_catalog,
--					u32 pattern)
-+int dp_catalog_ctrl_set_pattern_state_bit(struct dp_catalog *dp_catalog,
-+					u32 state_bit)
- {
- 	int bit, ret;
- 	u32 data;
- 	struct dp_catalog_private *catalog = container_of(dp_catalog,
- 				struct dp_catalog_private, dp_catalog);
- 
--	bit = BIT(pattern - 1);
--	DRM_DEBUG_DP("hw: bit=%d train=%d\n", bit, pattern);
-+	bit = BIT(state_bit - 1);
-+	DRM_DEBUG_DP("hw: bit=%d train=%d\n", bit, state_bit);
- 	dp_catalog_ctrl_state_ctrl(dp_catalog, bit);
- 
--	bit = BIT(pattern - 1) << DP_MAINLINK_READY_LINK_TRAINING_SHIFT;
-+	bit = BIT(state_bit - 1) << DP_MAINLINK_READY_LINK_TRAINING_SHIFT;
- 
- 	/* Poll for mainlink ready status */
- 	ret = readx_poll_timeout(readl, catalog->io->dp_controller.link.base +
-@@ -476,7 +476,7 @@ int dp_catalog_ctrl_set_pattern(struct dp_catalog *dp_catalog,
- 					data, data & bit,
- 					POLLING_SLEEP_US, POLLING_TIMEOUT_US);
- 	if (ret < 0) {
--		DRM_ERROR("set pattern for link_train=%d failed\n", pattern);
-+		DRM_ERROR("set state_bit for link_train=%d failed\n", state_bit);
- 		return ret;
- 	}
- 	return 0;
-diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.h b/drivers/gpu/drm/msm/dp/dp_catalog.h
-index 6965afa..7dea101 100644
---- a/drivers/gpu/drm/msm/dp/dp_catalog.h
-+++ b/drivers/gpu/drm/msm/dp/dp_catalog.h
-@@ -94,7 +94,7 @@ void dp_catalog_ctrl_mainlink_ctrl(struct dp_catalog *dp_catalog, bool enable);
- void dp_catalog_ctrl_config_misc(struct dp_catalog *dp_catalog, u32 cc, u32 tb);
- void dp_catalog_ctrl_config_msa(struct dp_catalog *dp_catalog, u32 rate,
- 				u32 stream_rate_khz, bool fixed_nvid);
--int dp_catalog_ctrl_set_pattern(struct dp_catalog *dp_catalog, u32 pattern);
-+int dp_catalog_ctrl_set_pattern_state_bit(struct dp_catalog *dp_catalog, u32 pattern);
- void dp_catalog_ctrl_reset(struct dp_catalog *dp_catalog);
- bool dp_catalog_ctrl_mainlink_ready(struct dp_catalog *dp_catalog);
- void dp_catalog_ctrl_enable_irq(struct dp_catalog *dp_catalog, bool enable);
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-index 39558a2..da6c083 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-@@ -1078,12 +1078,13 @@ static int dp_ctrl_link_train_1(struct dp_ctrl_private *ctrl,
- 	int tries, old_v_level, ret = 0;
- 	u8 link_status[DP_LINK_STATUS_SIZE];
- 	int const maximum_retries = 4;
-+	char state_ctrl_bit = 1;
- 
- 	dp_catalog_ctrl_state_ctrl(ctrl->catalog, 0);
- 
- 	*training_step = DP_TRAINING_1;
- 
--	ret = dp_catalog_ctrl_set_pattern(ctrl->catalog, DP_TRAINING_PATTERN_1);
-+	ret = dp_catalog_ctrl_set_pattern_state_bit(ctrl->catalog, state_ctrl_bit);
- 	if (ret)
- 		return ret;
- 	dp_ctrl_train_pattern_set(ctrl, DP_TRAINING_PATTERN_1 |
-@@ -1181,7 +1182,7 @@ static int dp_ctrl_link_train_2(struct dp_ctrl_private *ctrl,
- 			int *training_step)
- {
- 	int tries = 0, ret = 0;
--	char pattern;
-+	char pattern, state_ctrl_bit;
- 	int const maximum_retries = 5;
- 	u8 link_status[DP_LINK_STATUS_SIZE];
- 
-@@ -1189,12 +1190,20 @@ static int dp_ctrl_link_train_2(struct dp_ctrl_private *ctrl,
- 
- 	*training_step = DP_TRAINING_2;
- 
--	if (drm_dp_tps3_supported(ctrl->panel->dpcd))
-+	if (drm_dp_tps4_supported(ctrl->panel->dpcd)) {
-+		pattern = DP_TRAINING_PATTERN_4;
-+		state_ctrl_bit = 4;
-+	}
-+	else if (drm_dp_tps3_supported(ctrl->panel->dpcd)) {
- 		pattern = DP_TRAINING_PATTERN_3;
--	else
-+		state_ctrl_bit = 3;
-+	}
-+	else {
- 		pattern = DP_TRAINING_PATTERN_2;
-+		state_ctrl_bit = 2;
-+	}
- 
--	ret = dp_catalog_ctrl_set_pattern(ctrl->catalog, pattern);
-+	ret = dp_catalog_ctrl_set_pattern_state_bit(ctrl->catalog, state_ctrl_bit);
- 	if (ret)
- 		return ret;
- 
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

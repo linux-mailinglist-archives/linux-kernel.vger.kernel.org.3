@@ -2,155 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 210C2481176
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 10:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AED9481177
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 11:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239635AbhL2J6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 04:58:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235190AbhL2J6u (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 04:58:50 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA14C061574;
-        Wed, 29 Dec 2021 01:58:49 -0800 (PST)
-Date:   Wed, 29 Dec 2021 09:58:45 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1640771927;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lQ2GBaTDKY5phPpCNdXNkIkZnFzaDBEOC0/Hrz+M8Vs=;
-        b=c3jl0tibtSTnkiFmS0hNGAhL+KdF/9YOn+qZK1Rlyv+JtXOHWqU0d3k/nXDP3IQlkTjz/x
-        2NYadCDTZYMmlr93Gxm9lKJrQEsw516VPiTEU0qEnJmN/k/rI5UGyYTpDAJz8g6kWXyefU
-        /dvpCWDU1QLDVYKYN6AoKZXPF2wXWsh2TT1gTLwtddnGzWvXQVFAZRzHl4obbF7a6nXs4a
-        0r4cuDKrZOWnxofT4k1x7fVQvJlEdzZhxFLjr4t/r8T8W1ZqBIRPFMe0xqozPa/fJlVTId
-        B9F7FVCfk3/KMphxhfrJg60D0u3ISLJxeyV4K3F5j1OYcFaYCUlwBMhq8JogJQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1640771927;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lQ2GBaTDKY5phPpCNdXNkIkZnFzaDBEOC0/Hrz+M8Vs=;
-        b=Ix4yXRutdbjsX/roCG5OwSWxxoaLw10Mmi2jnMhJVCRk++Or+psHSQ9suul8BlQFhis03n
-        FasoWNAefVl18lAw==
-From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: core/core] notifier: Return an error when a callback has
- already been registered
-Cc:     Borislav Petkov <bp@suse.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Alan Stern <stern@rowland.harvard.edu>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <YcSWNdUBS8A2ZB3s@zn.tnic>
-References: <YcSWNdUBS8A2ZB3s@zn.tnic>
+        id S239641AbhL2KAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 05:00:01 -0500
+Received: from mga01.intel.com ([192.55.52.88]:33196 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235190AbhL2KAA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 05:00:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640772000; x=1672308000;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0aOEpGbdxdmsCn2xeSNPJQDkRypdPglW65tgSt3fD8M=;
+  b=TnXKioBWI1czldDMAmuwupirYkbumlHgrLZfnKrovg48PCbgBILTb67c
+   K9TmwQ6jmuOPiMP61lsboje/j+uVriFfnO2ounhOrM8SB6+Cy1g/ZFEgl
+   1RELRc/Lw0lUciRGJ2M5W4qVRzT/fv4ylWhyCoJcOQZE5mEUUt67874Ss
+   oIEOObFsndb2jYeHRQeDgv6mg6YGkPqsqNlBmCOVyZ5ZYiJXyoHmh9QMa
+   gLsj2Kcn6UFHvR4Rz/Xfz6uIC+B263ErfQXUWAnH53PTqrjYynC0zN1vu
+   9BiAByHoW2xsGWXVF4NkvqvUfQerI6Nt60kPNv1EAum/XCJtVu2KGlMrW
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="265730770"
+X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
+   d="scan'208";a="265730770"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 02:00:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
+   d="scan'208";a="510470040"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 29 Dec 2021 01:59:58 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n2VkU-0008oW-0s; Wed, 29 Dec 2021 09:59:58 +0000
+Date:   Wed, 29 Dec 2021 17:59:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [csky-linux:riscv_compat_v2_sv48_v3_xtpbmt 20/32]
+ arch/riscv/mm/init.c:588:6: warning: no previous prototype for
+ 'pt_ops_set_early'
+Message-ID: <202112291754.EJomZ5Hs-lkp@intel.com>
 MIME-Version: 1.0
-Message-ID: <164077192559.16921.2913213776082540007.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the core/core branch of tip:
+tree:   https://github.com/c-sky/csky-linux riscv_compat_v2_sv48_v3_xtpbmt
+head:   29a08e898f4e552bc0d5117b437ac3073e6ebb81
+commit: 396e995ffd8ad52873006e1e8f1f6f1cd8242537 [20/32] riscv: Introduce functions to switch pt_ops
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20211229/202112291754.EJomZ5Hs-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/c-sky/csky-linux/commit/396e995ffd8ad52873006e1e8f1f6f1cd8242537
+        git remote add csky-linux https://github.com/c-sky/csky-linux
+        git fetch --no-tags csky-linux riscv_compat_v2_sv48_v3_xtpbmt
+        git checkout 396e995ffd8ad52873006e1e8f1f6f1cd8242537
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
 
-Commit-ID:     5abb065dca7301de90b7c44bbcdc378e49e4d362
-Gitweb:        https://git.kernel.org/tip/5abb065dca7301de90b7c44bbcdc378e49e4d362
-Author:        Borislav Petkov <bp@suse.de>
-AuthorDate:    Wed, 01 Dec 2021 22:28:14 +01:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 29 Dec 2021 10:37:33 +01:00
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-notifier: Return an error when a callback has already been registered
+All warnings (new ones prefixed by >>):
 
-Return -EEXIST when a notifier callback has already been registered on a
-notifier chain.
+>> arch/riscv/mm/init.c:588:6: warning: no previous prototype for 'pt_ops_set_early' [-Wmissing-prototypes]
+     588 | void pt_ops_set_early(void)
+         |      ^~~~~~~~~~~~~~~~
+>> arch/riscv/mm/init.c:606:6: warning: no previous prototype for 'pt_ops_set_fixmap' [-Wmissing-prototypes]
+     606 | void pt_ops_set_fixmap(void)
+         |      ^~~~~~~~~~~~~~~~~
+>> arch/riscv/mm/init.c:620:6: warning: no previous prototype for 'pt_ops_set_late' [-Wmissing-prototypes]
+     620 | void pt_ops_set_late(void)
+         |      ^~~~~~~~~~~~~~~
 
-This should avoid any homegrown registration tracking at the callsite
-like
 
-  https://lore.kernel.org/amd-gfx/20210512013058.6827-1-mukul.joshi@amd.com
+vim +/pt_ops_set_early +588 arch/riscv/mm/init.c
 
-for example.
+   583	
+   584	/*
+   585	 * MMU is not enabled, the page tables are allocated directly using
+   586	 * early_pmd/pud/p4d and the address returned is the physical one.
+   587	 */
+ > 588	void pt_ops_set_early(void)
+   589	{
+   590		pt_ops.alloc_pte = alloc_pte_early;
+   591		pt_ops.get_pte_virt = get_pte_virt_early;
+   592	#ifndef __PAGETABLE_PMD_FOLDED
+   593		pt_ops.alloc_pmd = alloc_pmd_early;
+   594		pt_ops.get_pmd_virt = get_pmd_virt_early;
+   595	#endif
+   596	}
+   597	
+   598	/*
+   599	 * MMU is enabled but page table setup is not complete yet.
+   600	 * fixmap page table alloc functions must be used as a means to temporarily
+   601	 * map the allocated physical pages since the linear mapping does not exist yet.
+   602	 *
+   603	 * Note that this is called with MMU disabled, hence kernel_mapping_pa_to_va,
+   604	 * but it will be used as described above.
+   605	 */
+ > 606	void pt_ops_set_fixmap(void)
+   607	{
+   608		pt_ops.alloc_pte = kernel_mapping_pa_to_va((uintptr_t)alloc_pte_fixmap);
+   609		pt_ops.get_pte_virt = kernel_mapping_pa_to_va((uintptr_t)get_pte_virt_fixmap);
+   610	#ifndef __PAGETABLE_PMD_FOLDED
+   611		pt_ops.alloc_pmd = kernel_mapping_pa_to_va((uintptr_t)alloc_pmd_fixmap);
+   612		pt_ops.get_pmd_virt = kernel_mapping_pa_to_va((uintptr_t)get_pmd_virt_fixmap);
+   613	#endif
+   614	}
+   615	
+   616	/*
+   617	 * MMU is enabled and page table setup is complete, so from now, we can use
+   618	 * generic page allocation functions to setup page table.
+   619	 */
+ > 620	void pt_ops_set_late(void)
+   621	{
+   622		pt_ops.alloc_pte = alloc_pte_late;
+   623		pt_ops.get_pte_virt = get_pte_virt_late;
+   624	#ifndef __PAGETABLE_PMD_FOLDED
+   625		pt_ops.alloc_pmd = alloc_pmd_late;
+   626		pt_ops.get_pmd_virt = get_pmd_virt_late;
+   627	#endif
+   628	}
+   629	
 
-This version is an alternative of
-
-  https://lore.kernel.org/r/20211108101157.15189-1-bp@alien8.de
-
-which needed to touch every caller not checking the registration
-routine's return value.
-
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Link: https://lore.kernel.org/r/YcSWNdUBS8A2ZB3s@zn.tnic
 ---
- kernel/notifier.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
-
-diff --git a/kernel/notifier.c b/kernel/notifier.c
-index b8251dc..ba005eb 100644
---- a/kernel/notifier.c
-+++ b/kernel/notifier.c
-@@ -20,12 +20,13 @@ BLOCKING_NOTIFIER_HEAD(reboot_notifier_list);
-  */
- 
- static int notifier_chain_register(struct notifier_block **nl,
--		struct notifier_block *n)
-+				   struct notifier_block *n)
- {
- 	while ((*nl) != NULL) {
- 		if (unlikely((*nl) == n)) {
--			WARN(1, "double register detected");
--			return 0;
-+			WARN(1, "notifier callback %ps already registered",
-+			     n->notifier_call);
-+			return -EEXIST;
- 		}
- 		if (n->priority > (*nl)->priority)
- 			break;
-@@ -134,7 +135,7 @@ static int notifier_call_chain_robust(struct notifier_block **nl,
-  *
-  *	Adds a notifier to an atomic notifier chain.
-  *
-- *	Currently always returns zero.
-+ *	Returns 0 on success, %-EEXIST on error.
-  */
- int atomic_notifier_chain_register(struct atomic_notifier_head *nh,
- 		struct notifier_block *n)
-@@ -216,7 +217,7 @@ NOKPROBE_SYMBOL(atomic_notifier_call_chain);
-  *	Adds a notifier to a blocking notifier chain.
-  *	Must be called in process context.
-  *
-- *	Currently always returns zero.
-+ *	Returns 0 on success, %-EEXIST on error.
-  */
- int blocking_notifier_chain_register(struct blocking_notifier_head *nh,
- 		struct notifier_block *n)
-@@ -335,7 +336,7 @@ EXPORT_SYMBOL_GPL(blocking_notifier_call_chain);
-  *	Adds a notifier to a raw notifier chain.
-  *	All locking must be provided by the caller.
-  *
-- *	Currently always returns zero.
-+ *	Returns 0 on success, %-EEXIST on error.
-  */
- int raw_notifier_chain_register(struct raw_notifier_head *nh,
- 		struct notifier_block *n)
-@@ -406,7 +407,7 @@ EXPORT_SYMBOL_GPL(raw_notifier_call_chain);
-  *	Adds a notifier to an SRCU notifier chain.
-  *	Must be called in process context.
-  *
-- *	Currently always returns zero.
-+ *	Returns 0 on success, %-EEXIST on error.
-  */
- int srcu_notifier_chain_register(struct srcu_notifier_head *nh,
- 		struct notifier_block *n)
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,228 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C458348101B
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 06:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E4748101F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 06:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238798AbhL2Fgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 00:36:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238799AbhL2Fgj (ORCPT
+        id S238819AbhL2Fk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 00:40:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45330 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231688AbhL2FkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 00:36:39 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F408C06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 21:36:39 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id lr15-20020a17090b4b8f00b001b19671cbebso18971478pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 21:36:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EVZZSsnSEbk7FiSuXX+j6iG5Lve1o+shP8m0TVPd8J8=;
-        b=WsQpdWNkOJElVUBxeh5GzoA4UyY1aiQJlLuHojZ6bQZvDE5LeRnTfE0R4JryGCIPsd
-         kku9tZLNxpWLlYnq01UZs7WKrRgq535q8NHUDrxwxrIIJ5ZcdnDIh6buMSm/wRS7cXaK
-         adC5EF2/u6uO2INPoxF3WWe6G8nMZ/IiHlOxMb5OUDLSa9pQyL8t/n/O1OQhgdTk7KdX
-         iDm5JUkuiQ6WE+1D26dnVcDwvo+JmKB91CN0yN+mBxh4Y1pjNnbKPRWYp8QAY13rKSkx
-         UE6fDAPAzqEXvUwUmNG6sKbKhgE8HrGTHJrujglxxy4ckQUQpWaM3oSM/OAWjPMe9/7N
-         3zqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EVZZSsnSEbk7FiSuXX+j6iG5Lve1o+shP8m0TVPd8J8=;
-        b=hlFNLv24AaiCj3OG2E/j/oqfwztKnXSaWUOIMhN28Kpdh9e17ITGhEL68o0+RVjxk1
-         DGfBIy7RiMD3hBFx7S6+19sS6Zg06nJumNYNP3DyNRYgeeQG99BpnWespZ1nJjm7vW93
-         CxKrYQtCqH1ly92ciPzxF2UqoCS7F3opfczDoiT1wGazQ3X584aKVCo/R2blj5cQWloC
-         joRWMcwjpzO77LCeLooaC9CGPsSGUCa87kNqO1KXlclM3DITocj86dOb5LaKcgaOVpry
-         fXucwBmf6ERUn+0uGbwnrbyWlSfkldPvkfsDej570nwotmYTR1NBx3fnN8LGDXIgsPow
-         9Mbw==
-X-Gm-Message-State: AOAM530IUkNNr08Kpln8Ig6oM3hNmQccFkZBrRJO27Qr7RLa2vL1mWIA
-        nhvBRBrt3AlPH4O1vOT9fulfGg==
-X-Google-Smtp-Source: ABdhPJwEZCf+klU3yVnt1OAgcOs+vsB+j1kqeIrZKK1OcHaKrQKyI3nRkSTVgdzT2hb0Ehi2sQwGTQ==
-X-Received: by 2002:a17:902:be0f:b0:149:5535:287b with SMTP id r15-20020a170902be0f00b001495535287bmr24413705pls.28.1640756198303;
-        Tue, 28 Dec 2021 21:36:38 -0800 (PST)
-Received: from google.com ([2401:fa00:1:10:4dea:2b20:ea89:724b])
-        by smtp.gmail.com with ESMTPSA id h17sm18129074pfv.217.2021.12.28.21.36.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 21:36:38 -0800 (PST)
-Date:   Wed, 29 Dec 2021 13:36:33 +0800
-From:   Tzung-Bi Shih <tzungbi@google.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Wed, 29 Dec 2021 00:40:25 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06301B81163;
+        Wed, 29 Dec 2021 05:40:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC1BDC36AEA;
+        Wed, 29 Dec 2021 05:40:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640756422;
+        bh=ZDSJxCw+26nf7CRKQUd/wtLZMwsu5luoF5sZD/yoX0U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uDFpmUBjvXGojvo/pLAX9ZBtkf0m6VU8AMZGNec6POpOKHNIOfofjmAeWHpWJhUR7
+         Jj1zgzXzqnWhX7UESn4AuQ7eesScH28AArX34RnN0xZMNZ/WCdQQQBiFAP4oo5c8Uq
+         OEjjultnSWc1pdv2zOi1JCgDoiIP4N3yPWe6xeFE9jZyLi5Dwb04aokFDN+OOOD08p
+         SymZ7lnmaEUJA4MLwAP074qvLea1DShU5WVB0YmAAa2hUWgmDBOfGRXbnydglaeEwk
+         qkK+I7Z88ryhElZVRGcr8lLa9G7f0ZeRs+EmJSoH2yrH+YTV0VjtZL6IUrbRuvcFG1
+         cgtQDr/1XQuVw==
+Date:   Wed, 29 Dec 2021 11:10:18 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v2, 03/12] media: mtk-vcodec: get capture queue buffer
- size from scp
-Message-ID: <Ycvz4UrmbngVzIv2@google.com>
-References: <20211228094146.20505-1-yunfei.dong@mediatek.com>
- <20211228094146.20505-4-yunfei.dong@mediatek.com>
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 3/8] device property: Helper to match multiple connections
+Message-ID: <Ycv0wtDSyLhS1LWZ@matsya>
+References: <20211228052116.1748443-1-bjorn.andersson@linaro.org>
+ <20211228052116.1748443-4-bjorn.andersson@linaro.org>
+ <78491489-6b31-c741-8c69-8d52fb614a6c@linaro.org>
+ <YctDgaHV8dsR109L@ripper>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211228094146.20505-4-yunfei.dong@mediatek.com>
+In-Reply-To: <YctDgaHV8dsR109L@ripper>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 05:41:37PM +0800, Yunfei Dong wrote:
-> From: Yunfei Dong <yunfei.dong@mediatek.corp-partner.google.com>
-[...]
-> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> index 130ecef2e766..87891ebd7246 100644
-> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> @@ -466,6 +466,8 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
->  			}
->  			ctx->state = MTK_STATE_INIT;
->  		}
-> +	} else {
-> +		ctx->capture_fourcc = fmt->fourcc;
->  	}
->  
->  	/*
-> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> index a23a7646437c..95e07cf2cd3e 100644
-> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> @@ -277,6 +277,7 @@ struct vdec_pic_info {
->   *		     to be used with encoder and stateful decoder.
->   * @is_flushing: set to true if flushing is in progress.
->   * @current_codec: current set input codec, in V4L2 pixel format
-> + * @capture_fourcc: capture queue type in V4L2 pixel format
->   *
->   * @colorspace: enum v4l2_colorspace; supplemental to pixelformat
->   * @ycbcr_enc: enum v4l2_ycbcr_encoding, Y'CbCr encoding
-> @@ -322,6 +323,7 @@ struct mtk_vcodec_ctx {
->  	bool is_flushing;
->  
->  	u32 current_codec;
-> +	u32 capture_fourcc;
+On 28-12-21, 09:04, Bjorn Andersson wrote:
+> On Tue 28 Dec 05:09 PST 2021, Dmitry Baryshkov wrote:
+> 
+> > On 28/12/2021 08:21, Bjorn Andersson wrote:
+> > > In some cases multiple connections with the same connection id
+> > > needs to be resolved from a fwnode graph.
+> > > 
+> > > One such example is when separate hardware is used for performing muxing and/or
+> > > orientation switching of the SuperSpeed and SBU lines in a USB-C
+> > > connector. In this case the connector needs to belong to a graph with
+> > > multiple matching remote endpoints, and the TypeC controller needs to be
+> > > able to resolve them both.
+> > > 
+> > > Add a new API that allows this kind of lookup.
+> > > 
+> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > > ---
+> > >   drivers/base/property.c  | 94 ++++++++++++++++++++++++++++++++++++++++
+> > >   include/linux/property.h |  5 +++
+> > >   2 files changed, 99 insertions(+)
+> > > 
+> > > diff --git a/drivers/base/property.c b/drivers/base/property.c
+> > > index cbe4fa298413..0aa0296fd991 100644
+> > > --- a/drivers/base/property.c
+> > > +++ b/drivers/base/property.c
+> > > @@ -1180,6 +1180,36 @@ fwnode_graph_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
+> > >   	return NULL;
+> > >   }
+> > > +static unsigned int fwnode_graph_devcon_matches(struct fwnode_handle *fwnode,
+> > > +						const char *con_id, void *data,
+> > > +						devcon_match_fn_t match,
+> > > +						void **matches,
+> > > +						unsigned int matches_len)
+> > > +{
+> > > +	struct fwnode_handle *node;
+> > > +	struct fwnode_handle *ep;
+> > > +	unsigned int count = 0;
+> > > +	void *ret;
+> > > +
+> > > +	fwnode_graph_for_each_endpoint(fwnode, ep) {
+> > > +		if (count >= matches_len) {
+> > > +			fwnode_handle_put(ep);
+> > > +			return count;
+> > > +		}
+> > > +
+> > > +		node = fwnode_graph_get_remote_port_parent(ep);
+> > > +		if (!fwnode_device_is_available(node))
+> > > +			continue;
+> > > +
+> > > +		ret = match(node, con_id, data);
+> > > +		fwnode_handle_put(node);
+> > > +
+> > > +		if (ret)
+> > > +			matches[count++] = ret;
+> > > +	}
+> > > +	return count;
+> > > +}
+> > 
+> > This API doesn't let it's user know if there are more matches found in the
+> > device tree or not. I'd suggest to add 'count' mode that would return the
+> > amount of found matches if (matches == NULL) && (matches_len == 0).
 
-What is the purpose of capture_fourcc?  It is not used.
+But the API does call each match
+> 
+> Unfortunately in this code path we don't know how to "free" the objects
+> returned by match(), e.g. see how typec_switch_match() returns wrapper
+> of a refcounted device.
+> 
+> So we must return all the match results to the caller to it can free
+> things up based on its knowledge of what matches[] actually contains..
 
-> +/**
-> + * struct vdec_ap_ipi_get_param - for AP_IPIMSG_SET_PARAM
-> + * @msg_id	: AP_IPIMSG_DEC_START
-> + * @inst_id     : instance ID. Used if the ABI version >= 2.
-> + * @data	: picture information
-> + * @param_type	: get param type
-> + * @codec_type	: Codec fourcc
-> + */
-> +struct vdec_ap_ipi_get_param {
-> +	uint32_t msg_id;
-> +	uint32_t inst_id;
-> +	uint32_t data[4];
-> +	uint32_t param_type;
-> +	uint32_t codec_type;
-> +};
+ACPI walk has similar APIs, I can think of acpi_walk_namespace() which I
+have used in past and does similar walk in namespace but for devices and
+calls the match()
 
-Are AP_IPIMSG_SET_PARAM and AP_IPIMSG_DEC_START typos?
-
-> +/**
-> + * struct vdec_vpu_ipi_init_ack - for VPU_IPIMSG_DEC_INIT_ACK
-> + * @msg_id	: VPU_IPIMSG_DEC_INIT_ACK
-> + * @status	: VPU exeuction result
-> + * @ap_inst_addr	: AP vcodec_vpu_inst instance address
-> + * @data     : picture information from SCP.
-> + * @param_type	: get param type
-> + */
-> +struct vdec_vpu_ipi_get_param_ack {
-> +	uint32_t msg_id;
-> +	int32_t status;
-> +	uint64_t ap_inst_addr;
-> +	uint32_t data[4];
-> +	uint32_t param_type;
-> +	uint32_t reserved;
-> +};
-
-Same here: is VPU_IPIMSG_DEC_INIT_ACK a typo?
-
-What is the purpose of the "reserved" field?
-
-> diff --git a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
-[...]
-> +static void handle_get_param_msg_ack(
-> +	const struct vdec_vpu_ipi_get_param_ack *msg)
-> +{
-> +	struct vdec_vpu_inst *vpu = (struct vdec_vpu_inst *)
-> +					(unsigned long)msg->ap_inst_addr;
-
-Does it really need to cast twice?
-
-> +
-> +	mtk_vcodec_debug(vpu, "+ ap_inst_addr = 0x%llx", msg->ap_inst_addr);
-> +
-> +	/* param_type is enum vdec_get_param_type */
-> +	switch(msg->param_type) {
-> +	case 2:
-
-What is 2?  Is it GET_PARAM_PIC_INFO?
-
-> +int vpu_dec_get_param(struct vdec_vpu_inst *vpu, uint32_t *data,
-> +	unsigned int len, unsigned int param_type)
-> +{
-> +	struct vdec_ap_ipi_get_param msg;
-> +	int i;
-> +	int err;
-> +
-> +	mtk_vcodec_debug_enter(vpu);
-> +
-> +	if (len > ARRAY_SIZE(msg.data)) {
-> +		mtk_vcodec_err(vpu, "invalid len = %d\n", len);
-> +		return -EINVAL;
-> +	}
-> +
-> +	memset(&msg, 0, sizeof(msg));
-> +	msg.msg_id = AP_IPIMSG_DEC_GET_PARAM;
-> +	msg.inst_id = vpu->inst_id;
-> +	for (i = 0; i < len; i++)
-> +		msg.data[i] = data[i];
-
-Would it be more concise if using memcpy?
-
-> diff --git a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
-> index 4cb3c7f5a3ad..963f8d4877b7 100644
-> --- a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
-> +++ b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
-> @@ -28,6 +28,8 @@ struct mtk_vcodec_ctx;
->   * @wq          : wait queue to wait VPU message ack
->   * @handler     : ipi handler for each decoder
->   * @codec_type     : use codec type to separate different codecs
-> + * @capture_type    : used capture type to separate different capture format
-> + * @fb_sz  : frame buffer size of each plane
->   */
->  struct vdec_vpu_inst {
->  	int id;
-> @@ -42,6 +44,8 @@ struct vdec_vpu_inst {
->  	wait_queue_head_t wq;
->  	mtk_vcodec_ipi_handler handler;
->  	unsigned int codec_type;
-> +	unsigned int capture_type;
-> +	unsigned int fb_sz[2];
->  };
-
-capture_type is not used in the patch.
-
-Does fb_sz take effect in later patches?
+-- 
+~Vinod

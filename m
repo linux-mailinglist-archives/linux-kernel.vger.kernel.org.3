@@ -2,90 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F37A4816F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 22:14:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 050B94816EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 22:11:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231935AbhL2VNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 16:13:52 -0500
-Received: from isilmar-4.linta.de ([136.243.71.142]:33256 "EHLO
-        isilmar-4.linta.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230436AbhL2VNt (ORCPT
+        id S232167AbhL2VLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 16:11:55 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:52309 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S229754AbhL2VLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 16:13:49 -0500
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
-        by isilmar-4.linta.de (Postfix) with ESMTPSA id 21128201218;
-        Wed, 29 Dec 2021 21:13:48 +0000 (UTC)
-Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
-        id AB05A80FAA; Wed, 29 Dec 2021 22:10:20 +0100 (CET)
-From:   Dominik Brodowski <linux@dominikbrodowski.net>
-To:     "Jason A . Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        "Ivan T . Ivanov" <iivanov@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
-        linux@dominikbrodowski.net
-Subject: [PATCH v8 7/7] random: move crng_initialize_secondary to CONFIG_NUMA section
-Date:   Wed, 29 Dec 2021 22:10:09 +0100
-Message-Id: <20211229211009.108091-7-linux@dominikbrodowski.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211229211009.108091-1-linux@dominikbrodowski.net>
-References: <20211228153826.448805-1-Jason@zx2c4.com>
- <20211229211009.108091-1-linux@dominikbrodowski.net>
+        Wed, 29 Dec 2021 16:11:54 -0500
+Received: (qmail 1100361 invoked by uid 1000); 29 Dec 2021 16:11:52 -0500
+Date:   Wed, 29 Dec 2021 16:11:52 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, axboe@kernel.dk,
+        dan.carpenter@oracle.com, jj251510319013@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: use after free in dev_config
+Message-ID: <YczPGL/1Er/vh+X6@rowland.harvard.edu>
+References: <20211228092126.29510-1-hbh25y@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211228092126.29510-1-hbh25y@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By moving crng_initialize_secondary() a few lines lower to the
-CONFIG_NUMA ifdef section, we can remove the __maybe_unused parameter.
+On Tue, Dec 28, 2021 at 05:21:26PM +0800, Hangyu Hua wrote:
+> There are two bugs:
 
-Suggested-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
----
- drivers/char/random.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+You should break this up into two separate patches, one for each bug.
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index a5bf662578cb..64949c43f588 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -819,14 +819,6 @@ static bool __init crng_init_try_arch_early(struct crng_state *crng)
- 	return arch_init;
- }
- 
--static void __maybe_unused crng_initialize_secondary(struct crng_state *crng)
--{
--	chacha_init_consts(crng->state);
--	_get_random_bytes(&crng->state[4], sizeof(__u32) * 12);
--	crng_init_try_arch(crng);
--	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
--}
--
- static void __init crng_initialize_primary(void)
- {
- 	struct crng_state *crng = &primary_crng;
-@@ -871,6 +863,14 @@ static void crng_finalize_init(struct crng_state *crng)
- }
- 
- #ifdef CONFIG_NUMA
-+static void crng_initialize_secondary(struct crng_state *crng)
-+{
-+	chacha_init_consts(crng->state);
-+	_get_random_bytes(&crng->state[4], sizeof(__u32) * 12);
-+	crng_init_try_arch(crng);
-+	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
-+}
-+
- static void do_numa_crng_init(struct work_struct *work)
- {
- 	int i;
--- 
-2.34.1
+> dev->buf does not need to be released if it already exists before
+> executing dev_config.
 
+That's right.  The call to dev_config should fail without changing any 
+of the stored values.
+
+> dev->config and dev->hs_config and dev->dev need to be cleaned if
+> dev_config fails to avoid UAF.
+
+Do they really need to be cleared?  I think if dev_config fails then 
+those pointers never get used, so it doesn't matter what they contain.
+
+Of course, clearing them doesn't hurt, but it would be best to clear 
+all of them in the "fail:" part of the routine.  And then you would 
+want to change the pathway where usb_gadget_probe_driver fails, to make 
+it go to "fail:" also.
+
+Alan Stern

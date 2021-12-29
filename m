@@ -2,132 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A95F048164B
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 20:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7055B481656
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 20:32:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbhL2TbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 14:31:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44620 "EHLO
+        id S230436AbhL2Tcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 14:32:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbhL2TbC (ORCPT
+        with ESMTP id S230305AbhL2Tca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 14:31:02 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81738C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 11:31:01 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id g26so49920870lfv.11
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 11:31:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=1kHntLzhFY+6b33xnFFNKov/UMw0bRniYoNkFNeokK0=;
-        b=VSjxFJl0ahNzSM4KdKAVBXj5nnx2ycIMd7oLJm/8VxX+Pq6pIoD8+pfYySEqs9u56K
-         LZHUP6bC5wDh2ncQuNiEtxqdC3D9djsXFIsf4IhA3WH/TflZOAhhv+/u3u0/rkJcYAYK
-         scuGR2/og7UWys1KX+BarneWj1b5qHACUAEIQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1kHntLzhFY+6b33xnFFNKov/UMw0bRniYoNkFNeokK0=;
-        b=SM5dSZVePE/ocPP/fNPuZ5urdOqUv3eEFMsjQvr+spwSf/OUj3dFnq8kPOUY+xSIMM
-         UXE3Md1EoZSR8pSBRAOE6RPmAT+yTpSEdeXM5sFKofqjSBKPhPmsRzm+k9eEh0A4jian
-         3eg0RH1DdESIMG1cO0kxVi6qHE6fo6QC/XWNhRhilu4nSLU+NpnyDEriClPICI1f/sIS
-         veQjm0Kcn3bbTUX4D7thk0AmBPVRX7QNcoFf+X1BlEbdvDHtY56fmqFPQtfV+qkvp6je
-         nzKc5Sgs/rvak1zxqk5ZhGEzrfaRC3HPlpfKlaIVQdOC2sxp07itNwxk1b+4cfUvew7y
-         0RRg==
-X-Gm-Message-State: AOAM53323XiTlMReuahUMSy4wP6GGxyh6RU4CVr421U2G9Uc+3gavHmy
-        tbsbcaVXwntSo09M3eHE0Rfqvc6jBuFF66l4gLO6oQ==
-X-Google-Smtp-Source: ABdhPJzwWydnD66E+ihuzo5xAOnXhWkKsM56kOjwps/BnPwXqQ5sutKmn1B8gZog1GVGDZslne50Xc8xO2HM/LSJsoU=
-X-Received: by 2002:ac2:4c54:: with SMTP id o20mr25563858lfk.369.1640806259586;
- Wed, 29 Dec 2021 11:30:59 -0800 (PST)
-MIME-Version: 1.0
-References: <20211027162806.2014022-1-markyacoub@chromium.org>
- <20211213160742.744333-1-markyacoub@chromium.org> <CAAOTY_81KaSEWAqTWgzmshDZ9BefO3pNrqQwWbB01E4L0+mqzg@mail.gmail.com>
- <CAJUqKUp_Q39S912_epc3pfT-uc3DN=u4sCSdLm9VetwqdH_Pzw@mail.gmail.com>
-In-Reply-To: <CAJUqKUp_Q39S912_epc3pfT-uc3DN=u4sCSdLm9VetwqdH_Pzw@mail.gmail.com>
-From:   Mark Yacoub <markyacoub@chromium.org>
-Date:   Wed, 29 Dec 2021 14:30:48 -0500
-Message-ID: <CAJUqKUrrr-QRG1L-+rOV=PGR6LozP=H_SMe+u0V+rGF-OPDtcw@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/mediatek: Set the default value of rotation to DRM_MODE_ROTATE_0
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Jason-JH Lin <jason-jh.lin@mediatek.com>, tzungbi@google.com,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        Wed, 29 Dec 2021 14:32:30 -0500
+Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF4FC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 11:32:29 -0800 (PST)
+Received: from [IPv6:2a02:a03f:eafe:c901:bb38:31d0:45d2:689b] (unknown [IPv6:2a02:a03f:eafe:c901:bb38:31d0:45d2:689b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 7C1AD289957;
+        Wed, 29 Dec 2021 20:32:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1640806347;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=A5C3PvcXgTqpf3mcI2kpWNaNMJ5Bkkk4oXWzEV1oR4U=;
+        b=x57+yHPNVcWIO3Xa6Jk7t7wsyvoXUFVr0SyuoKvyO2VqOwDbpdzsEeO0vB6SnBMUz/qfti
+        JHkivbHwzBUW7OkHa5Z0hs2usGh+4YG0T3IfTiEHc6dxiRjD55a/yZdvEfAEZsjYXmA8T2
+        2agSFI93I2Gb78yAp0KoBvYP8HAUHV2GCVLXtmELfrzEHQZAQM3NH0dkDbyL9/+VenD097
+        Rn+5X/+OxqXG9ZELBvOADGKlrs6vqBAQTC0DeE7xqFtIj15swDJKkuw9vNLzs4DrVS84yU
+        L3JRAe2cVn/V2Sc5U0McEZvZXf7J5rm2v2aKRmfppt+mRVi2HE25E9p1+6JA+A==
+Message-ID: <2274d5dea29dc1a1969985e193ce98fe1eeef6ca.camel@svanheule.net>
+Subject: Re: [RFC PATCH v2 4/5] dt-bindings: interrupt-controller:
+ realtek,rtl-intc: map output lines
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Birger Koblitz <mail@birger-koblitz.de>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Bert Vermeulen <bert@biot.com>,
+        John Crispin <john@phrozen.org>, linux-kernel@vger.kernel.org
+Date:   Wed, 29 Dec 2021 20:32:25 +0100
+In-Reply-To: <06c1662a-76ff-2ede-a308-ce87186a2311@birger-koblitz.de>
+References: <cover.1640548009.git.sander@svanheule.net>
+         <0a91967d40d486bb8cccd0dcf5a817df11317cf0.1640548009.git.sander@svanheule.net>
+         <87r19yz47t.wl-maz@kernel.org>
+         <7a02b3af9b68adeba787418eb042cd262ee335b7.camel@svanheule.net>
+         <06c1662a-76ff-2ede-a308-ce87186a2311@birger-koblitz.de>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hey - uploaded v2 that takes care of the panel:
-https://patchwork.kernel.org/project/linux-mediatek/patch/20211229184420.79=
-3234-1-markyacoub@chromium.org/
+Hi Birger,
 
-Thanks!
+On Tue, 2021-12-28 at 17:53 +0100, Birger Koblitz wrote:
+> On 28/12/2021 17:21, Sander Vanheule wrote:
+> > On Mon, 2021-12-27 at 11:17 +0000, Marc Zyngier wrote:
+> > > On Sun, 26 Dec 2021 19:59:27 +0000,
+> > > Sander Vanheule <sander@svanheule.net> wrote:  
+> > > >     interrupts:
+> > > > -    maxItems: 1
+> > > > +    minItems: 1
+> > > > +    maxItems: 15
+> > > > +    description:
+> > > > +      List of parent interrupts, in the order that they are connected to this
+> > > > +      interrupt router's outputs.
+> > > 
+> > > Is that to support multiple SoCs? I'd expect a given SoC to have a
+> > > fixed number of output interrupts.
+> > 
+> > It is, and they do AFAICT. But all values from 1 to 15 can be written to the routing
+> > registers, so I wanted this definition to be as broad as possible.
+> > 
+> > The SoCs I'm working with only connect to the six CPU HW interrupts, but I don't know
+> > what
+> > the actual limit of this interrupt hardware is, or if the outputs always connect to
+> > the
+> > MIPS CPU HW interrupts.
+> > 
+>  From what I know, the IRQ controller is used solely by Realtek in the RTL838x, RTL839x
+> and
+> RTL930x SoC families, all of them MIPS 4KEc or 34Kc with the standard 7 CPU IRQ lines.
+> In their final RTL931x series they abandoned their custom IRQ controller and went for
+> an InterAptiv core with a standard MIPS GIC.
 
-On Tue, Dec 14, 2021 at 10:26 AM Mark Yacoub <markyacoub@chromium.org> wrot=
-e:
->
-> Thank you so much!
->
-> On Mon, Dec 13, 2021 at 6:27 PM Chun-Kuang Hu <chunkuang.hu@kernel.org> w=
-rote:
-> >
-> > Hi, Mark:
-> >
-> > Mark Yacoub <markyacoub@chromium.org> =E6=96=BC 2021=E5=B9=B412=E6=9C=
-=8814=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=8812:08=E5=AF=AB=E9=81=93=
-=EF=BC=9A
-> > >
-> > > At the reset hook, call __drm_atomic_helper_plane_reset which is
-> > > called at the initialization of the plane and sets the default value =
-of
-> > > rotation on all planes to DRM_MODE_ROTATE_0 which is equal to 1.
-> >
-> > Applied to mediatek-drm-next [1], thanks.
-> >
-> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.=
-git/log/?h=3Dmediatek-drm-next
-> >
-> > Regards,
-> > Chun-Kuang.
-> >
-> > >
-> > > Tested on Jacuzzi (MTK).
-> > > Resolves IGT@kms_properties@plane-properties-{legacy,atomic}
-> > >
-> > > Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
-> > > ---
-> > >  drivers/gpu/drm/mediatek/mtk_drm_plane.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/mediatek/mtk_drm_plane.c b/drivers/gpu/d=
-rm/mediatek/mtk_drm_plane.c
-> > > index e6dcb34d30522..accd26481b9fb 100644
-> > > --- a/drivers/gpu/drm/mediatek/mtk_drm_plane.c
-> > > +++ b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
-> > > @@ -44,9 +44,10 @@ static void mtk_plane_reset(struct drm_plane *plan=
-e)
-> > >                 state =3D kzalloc(sizeof(*state), GFP_KERNEL);
-> > >                 if (!state)
-> > >                         return;
-> > > -               plane->state =3D &state->base;
-> > >         }
-> > >
-> > > +       __drm_atomic_helper_plane_reset(plane, &state->base);
-> > > +
-> > >         state->base.plane =3D plane;
-> > >         state->pending.format =3D DRM_FORMAT_RGB565;
-> > >  }
-> > > --
-> > > 2.34.1.173.g76aa8bc2d0-goog
-> > >
+There is some code floating around [1] to support a few Wi-Fi SoCs (RTL8196E, RTL8197D,
+and RTL8197F) which appear to use the same interrupt controller. Not that it's very likely
+these will ever be supported property, because they contain Lexra MIPS cores.
+
+That code claims these cores can have 16 CPU interrupts, althought the non-standard
+interrupts are apparently not implemented in that driver. There is also mention of 64 SoC
+interrupts, but it looks like this can be implemented by just instantiating this driver
+once for each register range (given the code would be modified to get rid of some static
+variables).
+
+Anyway, a mostly theoretical problem. The SoCs we're targetting (RTL8380x, RTL839x, and
+RTL930x) use the /6/ MIPS CPU HW interrupts (the two software interrupts are not used
+AFAICT).
+
+[1]
+https://github.com/ggbruno/openwrt/blob/Realtek/target/linux/realtek/files-4.14/arch/mips/realtek/irq.c
+
+Best,
+Sander
+

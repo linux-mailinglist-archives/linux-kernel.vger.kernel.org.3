@@ -2,106 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5FE4811B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 11:37:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B38FA4811B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 11:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239751AbhL2Kh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 05:37:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbhL2Kh2 (ORCPT
+        id S239764AbhL2KiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 05:38:16 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36576 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231732AbhL2KiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 05:37:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F5DC061574;
-        Wed, 29 Dec 2021 02:37:28 -0800 (PST)
+        Wed, 29 Dec 2021 05:38:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47569B81853;
-        Wed, 29 Dec 2021 10:37:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5778DC36AE7;
-        Wed, 29 Dec 2021 10:37:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8DBF9B817B0;
+        Wed, 29 Dec 2021 10:38:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86DC2C36AE7;
+        Wed, 29 Dec 2021 10:38:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640774246;
-        bh=Saf54E+TsW0X/GrHGniSHEIhZq7hY7EkFszXYncEcnc=;
+        s=korg; t=1640774292;
+        bh=MExT51K+cGJEBXy7Nsv/QpJxU3pTYvrD4E5i8bK9DOk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=olGEBpimCE+KHpaaosSKZXrLonJZ7k1RwflWzsrnk6wWUxpefEWfzR4P5+0eeUFU4
-         XFnD+fNX6ASEy8EmSPyeC5loV5e3vb3fa3G2Hny21L0A6y0wiQtzkVQ+ccSSlf1rzC
-         52P5yfHCd+q3zhCOt7QtfWq2Gpbmq5QCXsjTaGWM=
-Date:   Wed, 29 Dec 2021 11:37:23 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Puma Hsu <pumahsu@google.com>
-Cc:     mathias.nyman@intel.com, Albert Wang <albertccwang@google.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] xhci: re-initialize the HC during resume if HCE was set
-Message-ID: <Ycw6Y8qrLZEat749@kroah.com>
-References: <20211228060246.2958070-1-pumahsu@google.com>
- <YcrKNP4TRXB6nsCI@kroah.com>
- <CAGCq0Lb8ZoGpbkLNhXG=OyWgvz_Qn3ABmq_uvMPJdyEKygMH+Q@mail.gmail.com>
- <YcwclrVzEXRxgUFa@kroah.com>
- <CAGCq0LbfWt2xTmRczhdZUXrwFTJdaMH3Zd-y4quqWi7kyaso6Q@mail.gmail.com>
- <Ycwvm5rdqVW4E27y@kroah.com>
- <CAGCq0LZc9Leh=oEiA2hPrpK9OBO+bnRR6hENr+emgFWGsaB0Yg@mail.gmail.com>
+        b=e9QYlMttgSRarsJgqy6RTpuJPTLqpMOm2PuYI3d9KxksJUGpT47Bq9VIOTAc22POh
+         BWK6a7geSXy8NtvXs0ch5Beu0/OCyOgYTARgWZ6NDq2ND0lfvc224daBqzAcKD2V7f
+         k/ACoPlzyJu83nevIpGgKhTsdTJTseONUAqkts6M=
+Date:   Wed, 29 Dec 2021 11:38:09 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org
+Subject: Re: [RFC 30/32] /dev/port: don't compile file operations without
+ CONFIG_DEVPORT
+Message-ID: <Ycw6kXhd+NV0GMWc@kroah.com>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+ <20211227164317.4146918-31-schnelle@linux.ibm.com>
+ <YcrIHxTDipVNUuCA@kroah.com>
+ <b9d0c0b88ef66f9beb51a880e765177670a76394.camel@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGCq0LZc9Leh=oEiA2hPrpK9OBO+bnRR6hENr+emgFWGsaB0Yg@mail.gmail.com>
+In-Reply-To: <b9d0c0b88ef66f9beb51a880e765177670a76394.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 06:21:05PM +0800, Puma Hsu wrote:
-> On Wed, Dec 29, 2021 at 5:51 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, Dec 29, 2021 at 05:11:47PM +0800, Puma Hsu wrote:
-> > > On Wed, Dec 29, 2021 at 4:30 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > A: http://en.wikipedia.org/wiki/Top_post
-> > > > Q: Were do I find info about this thing called top-posting?
-> > > > A: Because it messes up the order in which people normally read text.
-> > > > Q: Why is top-posting such a bad thing?
-> > > > A: Top-posting.
-> > > > Q: What is the most annoying thing in e-mail?
-> > > >
-> > > > A: No.
-> > > > Q: Should I include quotations after my reply?
-> > > >
-> > > > http://daringfireball.net/2007/07/on_top
-> > > >
-> > > > On Wed, Dec 29, 2021 at 01:53:04PM +0800, Puma Hsu wrote:
-> > > > > This commit is not used to fix a specific commit. We find a condition
-> > > > > that when XHCI runs the resume process but the HCE flag is set, then
-> > > > > the Run/Stop bit of USBCMD cannot be set so that HC would not be
-> > > > > enabled. In fact, HC may already meet a problem at this moment.
-> > > > > Besides, in xHCI requirements specification revision 1.2, Table 5-21
-> > > > > BIT(12) claims that Software should re-initialize the xHC when HCE is
-> > > > > set. Therefore, I think this commit could be the error handling for
-> > > > > HCE.
-> > > >
-> > > > So this does not actually fix an issue that you have seen in any device
-> > > > or testing?  So it is not relevant for older kernels but just "nice to
-> > > > have"?
-> > > >
-> > > > How did you test this if you can not duplicate the problem?
-> > > >
-> > >
-> > > Yes, we actually see that the HCE may be detected while running xhci_resume
-> > > on our product platform, so I'm able to verify this commit can fix
-> > > such a condition.
-> >
-> > Given that your product platform is an older kernel version than 5.17, I
-> > think that you also want this in the older kernel releases, so please
-> > mark it for stable backporting.
-> >
-> Thank you for advising.
-> Could I know how to do this? Just add "Cc: <stable@vger.kernel.org>"
-> to the commit message?
+On Wed, Dec 29, 2021 at 11:25:12AM +0100, Niklas Schnelle wrote:
+> On Tue, 2021-12-28 at 09:17 +0100, Greg Kroah-Hartman wrote:
+> > On Mon, Dec 27, 2021 at 05:43:15PM +0100, Niklas Schnelle wrote:
+> > > In the future inb() and friends will not be available when compiling
+> > > with CONFIG_HAS_IOPORT=n so we must only try to access them here if
+> > > CONFIG_DEVPORT is set which depends on HAS_IOPORT.
+> > > 
+> > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > > ---
+> > >  drivers/char/mem.c | 6 +++++-
+> > >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+> > > index cc296f0823bd..c1373617153f 100644
+> > > --- a/drivers/char/mem.c
+> > > +++ b/drivers/char/mem.c
+> > > @@ -402,6 +402,7 @@ static int mmap_mem(struct file *file, struct vm_area_struct *vma)
+> > >  	return 0;
+> > >  }
+> > >  
+> > > +#ifdef CONFIG_DEVPORT
+> > >  static ssize_t read_port(struct file *file, char __user *buf,
+> > >  			 size_t count, loff_t *ppos)
+> > >  {
+> > > @@ -443,6 +444,7 @@ static ssize_t write_port(struct file *file, const char __user *buf,
+> > >  	*ppos = i;
+> > >  	return tmp-buf;
+> > >  }
+> > > +#endif
+> > >  
+> > >  static ssize_t read_null(struct file *file, char __user *buf,
+> > >  			 size_t count, loff_t *ppos)
+> > > @@ -665,12 +667,14 @@ static const struct file_operations null_fops = {
+> > >  	.splice_write	= splice_write_null,
+> > >  };
+> > >  
+> > > -static const struct file_operations __maybe_unused port_fops = {
+> > > +#ifdef CONFIG_DEVPORT
+> > > +static const struct file_operations port_fops = {
+> > >  	.llseek		= memory_lseek,
+> > >  	.read		= read_port,
+> > >  	.write		= write_port,
+> > >  	.open		= open_port,
+> > >  };
+> > > +#endif
+> > 
+> > Why is this #ifdef needed if it is already __maybe_unused?
+> 
+> Because read_port() calls inb() and write_port() calls outb() they
+> wouldn't compile once these are no longer defined. Then however the
+> read_port/write_port symbols in the struct initialization above
+> couldn't be resolved.
+> 
+> > 
+> > In looking closer, this change could be taken now as the use of this
+> > variable already is behind this same #ifdef statement, right?
+> 
+> Yes
 
-Yes, please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-
-It should describe this well, if not, please let us know.
+Great, feel free to send this individually, not as a RFC patch, and I
+will be glad to queue it up.
 
 thanks,
 

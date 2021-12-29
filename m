@@ -2,128 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1D5480E1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 01:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AABD3480E19
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 01:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237940AbhL2AJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 19:09:58 -0500
-Received: from mail-lj1-f171.google.com ([209.85.208.171]:46625 "EHLO
-        mail-lj1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237929AbhL2AJx (ORCPT
+        id S237926AbhL2AJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 19:09:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232540AbhL2AJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 19:09:53 -0500
-Received: by mail-lj1-f171.google.com with SMTP id i11so20635398ljm.13;
-        Tue, 28 Dec 2021 16:09:52 -0800 (PST)
+        Tue, 28 Dec 2021 19:09:50 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1D5C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 16:09:49 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id v13-20020a17090a088d00b001b0e3a74cf7so13644924pjc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 16:09:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=en4uwBpfxshlbd0J3vDYBdTuG7ndyKaVxa4yk8IJ1nk=;
+        b=Ycu8UcGr3lpr+egvBaijGFacvpu8dnqelsOpJHXYxusoev1aF9czdXGov3CWe6Qy6u
+         VQSb79DxSR/SStHKmtkSwiPhXI8S9fqppp7kQkDF81IxnrtQrXaSsdgImllXWl3npaqk
+         GKTGr1ZZImgD7Imdl6N+V7U8fyRAxt3STOOoEBADh4zAQYN271w02FdQiapCaeLolONo
+         AZrb0Hk9lvZtf9Ca0yq7NITuiVaEuCpIwCdtA54+lZ5c7KaUs5sRgtLq7dGrHOPJjLU/
+         jBOIe1ecnXmtDXNYcrW1AEsIKm7cfwFOr7SxNk0GUPfmy6UlKfbL7oCocZkP3xMD/bCG
+         BkDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qhPtGQCbuVQkw1vfSzoffiZi105yJTqb5AccIrEq0nc=;
-        b=J09iCKfSqrtilGVIuyAgKHweMSvlO6UBQaCd94fIxJDZczZjS5hSYjxiB3BrnKvwfT
-         +z9npznzUmAZswuGu3InoNozuYqAv6dQKxnhSyBE2Oaign6ta1EaXbwPkRo2lBkAMaX1
-         V4q06RguVPM2tdriZ/f7FH2ULz3/Hd0leUMdV9LJy3vV09iQYj8kqaZZGxwz18evVfnR
-         1nWR/31aR7C9xSe+fbQEsfUYUKFnpbF9sGjA+eVWHsmsFxTl60ZKQ8yhfVGylm3r3rPy
-         1pewBpFjXilqzlcY9kUOZpNpW1Jv6Vfwr50YE+K3Cw2LxWSUpBJwKwZAC/4U/9QVi/nL
-         NC6w==
-X-Gm-Message-State: AOAM5328ezyt2qPKuEdMfH9Ije4B/wcygGFq8xzzMPmW5kjp8vpzR66w
-        wB/dqReVdnuKfcKYJU72BTdcsjEPy4X7iJZUFXw=
-X-Google-Smtp-Source: ABdhPJwLVBfe1pRfb4ha0ZnAi+w0xSRU9mPt7YB2Yuf6o0Vu9WIk0GleEiqoKewt9wUYbjknWADSIq5/CLJJpkusk/4=
-X-Received: by 2002:a2e:8854:: with SMTP id z20mr13459873ljj.202.1640736592213;
- Tue, 28 Dec 2021 16:09:52 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=en4uwBpfxshlbd0J3vDYBdTuG7ndyKaVxa4yk8IJ1nk=;
+        b=vH7LsGUXT6fPDxBzUu+spUB0ShfrFaIWVGiNik9isinrVjprddIMBDgJnPDOIVJe4O
+         jeWVRZ1gTJNaEprDof/wWCqEPzyKGxC6obTTeBqdYWMjHq8cQTiXTomPuFBB/4h2KOqV
+         kDAzloxyRQKyJZJmmAlcL1Dg9slN07V7Zuk/mbzk7rF8C1uk+6Tkb5SiNwuXkWvlPuWM
+         vMCoxLZLT+/6/2d2qFzid64SaeH+VnqeyWhlQUNLnl7g8n3hejJ15y6f1CVVzfV6bZju
+         yALXxk+hX6bcF7M2a/jEVtJeZFYcNDRjo2t79uEDdJ5zs0TPgE9XONE0ONWKm47thBd7
+         HYNg==
+X-Gm-Message-State: AOAM5311RjqDdanI+MV9STLUa8lC1eEf+n2Je5qEAx6AXy0SaehE/h8h
+        CEwx+eE1DbxU5Ul9bRds3xj09A==
+X-Google-Smtp-Source: ABdhPJyPCmlYsUh6cyS3BHMVbhiypz9th66jTdJPaMTpIuDmPJELXTPeRa8VRF4guixCsrGzvvXZxA==
+X-Received: by 2002:a17:90a:a786:: with SMTP id f6mr29364098pjq.158.1640736588736;
+        Tue, 28 Dec 2021 16:09:48 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id o11sm22529170pfu.150.2021.12.28.16.09.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Dec 2021 16:09:48 -0800 (PST)
+Date:   Wed, 29 Dec 2021 00:09:45 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jing Liu <jing2.liu@intel.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, pbonzini@redhat.com, corbet@lwn.net,
+        shuah@kernel.org, jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, guang.zeng@intel.com,
+        wei.w.wang@intel.com, yang.zhong@intel.com
+Subject: Re: [PATCH v3 13/22] kvm: x86: Intercept #NM for saving IA32_XFD_ERR
+Message-ID: <YcunSb52LlGKT7dC@google.com>
+References: <20211222124052.644626-1-jing2.liu@intel.com>
+ <20211222124052.644626-14-jing2.liu@intel.com>
 MIME-Version: 1.0
-References: <20211223074541.3318938-1-irogers@google.com> <20211223074541.3318938-26-irogers@google.com>
-In-Reply-To: <20211223074541.3318938-26-irogers@google.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 28 Dec 2021 16:09:41 -0800
-Message-ID: <CAM9d7cgCoEc5UXCWm9Cstt0_QMNu4jMK1WH3WEjSBxvCnESfYg@mail.gmail.com>
-Subject: Re: [PATCH v2 25/48] perf stat-display: Avoid use of core for CPU.
-To:     Ian Rogers <irogers@google.com>
-Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
-        John Garry <john.garry@huawei.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Vineet Singh <vineet.singh@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211222124052.644626-14-jing2.liu@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 11:47 PM Ian Rogers <irogers@google.com> wrote:
->
-> Correct use of cpumap index in print_no_aggr_metric.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
+On Wed, Dec 22, 2021, Jing Liu wrote:
+> Guest IA32_XFD_ERR is generally modified in two places:
+> 
+>   - Set by CPU when #NM is triggered;
+>   - Cleared by guest in its #NM handler;
+> 
+> Intercept #NM for the first case, if guest writes XFD as nonzero for
+> the first time which indicates guest is possible to use XFD generating
+> the exception. #NM is rare if the guest doesn't use dynamic features.
+> Otherwise, there is at most one exception per guest task given a
+> dynamic feature.
+> 
+> Save the current XFD_ERR value to the guest_fpu container in the #NM
+> VM-exit handler. This must be done with interrupt/preemption disabled,
+
+Assuming my below understanding is correct, drop the "preemption" bit, it's
+misleading.
+
+> otherwise the unsaved MSR value may be clobbered by host operations.
+> 
+> Inject a virtual #NM to the guest after saving the MSR value.
+> 
+> Restore the host value (always ZERO outside of the host #NM
+> handler) before enabling preemption.
+
+AIUI, changelog is wrong, code is right.  This must be done before _IRQs_ are
+enabled, same as handling TIF_NEED_FPU_LOAD. 
+
+> Restore the guest value from the guest_fpu container right before
+> entering the guest (with preemption disabled).
+
+Same complaint about preemption.
+
+> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Jing Liu <jing2.liu@intel.com>
 > ---
-[SNIP]
-> @@ -924,29 +921,32 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
->                                  struct evlist *evlist,
->                                  char *prefix)
+>  arch/x86/include/asm/kvm_host.h |  1 +
+>  arch/x86/kvm/vmx/vmcs.h         |  5 +++++
+>  arch/x86/kvm/vmx/vmx.c          | 22 +++++++++++++++++++++-
+>  arch/x86/kvm/x86.c              |  6 ++++++
+>  4 files changed, 33 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 555f4de47ef2..f7a661f35d1a 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -640,6 +640,7 @@ struct kvm_vcpu_arch {
+>  	u64 smi_count;
+>  	bool tpr_access_reporting;
+>  	bool xsaves_enabled;
+> +	bool trap_nm;
+>  	u64 ia32_xss;
+>  	u64 microcode_version;
+>  	u64 arch_capabilities;
+
+...
+
+> @@ -763,6 +764,9 @@ void vmx_update_exception_bitmap(struct kvm_vcpu *vcpu)
+>  		vmcs_write32(PAGE_FAULT_ERROR_CODE_MATCH, match);
+>  	}
+>  
+> +	if (vcpu->arch.trap_nm)
+> +		eb |= (1u << NM_VECTOR);
+> +
+>  	vmcs_write32(EXCEPTION_BITMAP, eb);
+>  }
+>  
+> @@ -1960,6 +1964,13 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  	case MSR_KERNEL_GS_BASE:
+>  		vmx_write_guest_kernel_gs_base(vmx, data);
+>  		break;
+> +	case MSR_IA32_XFD:
+> +		ret = kvm_set_msr_common(vcpu, msr_info);
+> +		if (!ret && data) {
+> +			vcpu->arch.trap_nm = true;
+> +			vmx_update_exception_bitmap(vcpu);
+
+This is wrong, it fails to clear vcpu->arch.trap_nm and update the bitmap if the
+MSR is cleared.
+
+But why even bother with an extra flag?  Can't vmx_update_exception_bitmap() get
+the guest's MSR_IA32_XFD value and intercept #NM accordingly?  Then you could
+even handle this fully in kvm_set_msr_common(), e.g.
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 2c9606380bca..c6c936d2b298 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -3704,6 +3704,8 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+                        return 1;
+
+                fpu_update_guest_xfd(&vcpu->arch.guest_fpu, data);
++               /* Blah blah blah blah */
++               static_call(kvm_x86_update_exception_bitmap)(vcpu);
+                break;
+        case MSR_IA32_XFD_ERR:
+                if (!msr_info->host_initiated &&
+
+> +		}
+> +		break;
+>  #endif
+>  	case MSR_IA32_SYSENTER_CS:
+>  		if (is_guest_mode(vcpu))
+> @@ -4746,7 +4757,7 @@ static int handle_exception_nmi(struct kvm_vcpu *vcpu)
+>  	vect_info = vmx->idt_vectoring_info;
+>  	intr_info = vmx_get_intr_info(vcpu);
+>  
+> -	if (is_machine_check(intr_info) || is_nmi(intr_info))
+> +	if (is_machine_check(intr_info) || is_nmi(intr_info) || is_nm(intr_info))
+>  		return 1; /* handled by handle_exception_nmi_irqoff() */
+>  
+>  	if (is_invalid_opcode(intr_info))
+> @@ -6350,6 +6361,12 @@ static void handle_interrupt_nmi_irqoff(struct kvm_vcpu *vcpu,
+>  	kvm_after_interrupt(vcpu);
+>  }
+>  
+> +static void handle_exception_nm(struct kvm_vcpu *vcpu)
+
+This needs a different name, it's waaaay too close to the base handle_exception_nmi(),
+which runs with IRQs _on_.  And please add "_irqoff" at the end.  Maybe handle_nm_fault_irqoff()?
+
+> +{
+> +	rdmsrl(MSR_IA32_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
+> +	kvm_queue_exception(vcpu, NM_VECTOR);
+> +}
+> +
+>  static void handle_exception_nmi_irqoff(struct vcpu_vmx *vmx)
 >  {
-> -       int cpu;
-> -       int nrcpus = 0;
-> -       struct evsel *counter;
-> -       u64 ena, run, val;
-> -       double uval;
-> -       struct aggr_cpu_id id;
-> +       int cpu, nrcpus;
->
->         nrcpus = evlist->core.cpus->nr;
->         for (cpu = 0; cpu < nrcpus; cpu++) {
-> +               struct evsel *counter;
->                 bool first = true;
->
->                 if (prefix)
->                         fputs(prefix, config->output);
->                 evlist__for_each_entry(evlist, counter) {
-> -                       id = aggr_cpu_id__empty();
-> -                       id.core = cpu;
-> +                       u64 ena, run, val;
-> +                       double uval;
-> +                       struct aggr_cpu_id id;
-> +                       int idx = perf_cpu_map__idx(evsel__cpus(counter), cpu);
+>  	const unsigned long nmi_entry = (unsigned long)asm_exc_nmi_noist;
+> @@ -6358,6 +6375,9 @@ static void handle_exception_nmi_irqoff(struct vcpu_vmx *vmx)
+>  	/* if exit due to PF check for async PF */
+>  	if (is_page_fault(intr_info))
+>  		vmx->vcpu.arch.apf.host_apf_flags = kvm_read_and_reset_apf_flags();
+> +	/* if exit due to NM, handle before preemptions are enabled */
+> +	else if (is_nm(intr_info))
 
-Not sure about this.  Here the 'cpu' is an index for the
-evlist->core.cpus, not a CPU number.  But the
-perf_cpu_map__idx() requires a CPU number, right?
+Same naming complaint about this helper, it looks like an is_nmi() typo.  is_nm_fault()?
 
-Thanks,
-Namhyung
-
-
-> +
-> +                       if (idx < 0)
-> +                               continue;
-> +
-> +                       id = aggr_cpu_id__cpu(cpu, /*data=*/NULL);
->                         if (first) {
->                                 aggr_printout(config, counter, id, 0);
->                                 first = false;
->                         }
-> -                       val = perf_counts(counter->counts, cpu, 0)->val;
-> -                       ena = perf_counts(counter->counts, cpu, 0)->ena;
-> -                       run = perf_counts(counter->counts, cpu, 0)->run;
-> +                       val = perf_counts(counter->counts, idx, 0)->val;
-> +                       ena = perf_counts(counter->counts, idx, 0)->ena;
-> +                       run = perf_counts(counter->counts, idx, 0)->run;
->
->                         uval = val * counter->scale;
->                         printout(config, id, 0, counter, uval, prefix,
-> --
-> 2.34.1.307.g9b7440fafd-goog
->
+> +		handle_exception_nm(&vmx->vcpu);
+>  	/* Handle machine checks before interrupts are enabled */
+>  	else if (is_machine_check(intr_info))
+>  		kvm_machine_check();

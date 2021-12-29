@@ -2,98 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 536904815E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 18:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 439D34815EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 18:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241170AbhL2RmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 12:42:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231784AbhL2RmQ (ORCPT
+        id S241179AbhL2RqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 12:46:09 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58996 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231784AbhL2RqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 12:42:16 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913C6C061574;
-        Wed, 29 Dec 2021 09:42:16 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        Wed, 29 Dec 2021 12:46:09 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 19EFD1EC03AD;
-        Wed, 29 Dec 2021 18:42:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640799731;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=wdG1orpujtasxO//buWEJh/ooLbBOXspasZ4g7ST8e4=;
-        b=ls27hWEHrpqqrthKPBApoifZfX5HWZ6ccqjGP+JDnlShCkPzhGAkojRhaMVr+IjMLRrOse
-        f/U7Oa9GBUlTDrsoWw7wIttUhqN+tQjy9+JG2OEIgtlQgVZWR0Zd8bpNSfJNcfr0Ti7ekt
-        7AHx2vCscDHUMXnBoJ0svCbza7Vlalg=
-Date:   Wed, 29 Dec 2021 18:42:18 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony.luck@intel.com, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH] x86/MCE/AMD: Allow thresholding interface updates after
- init
-Message-ID: <Ycyd+nYgXvJpL19y@zn.tnic>
-References: <20211207193028.9389-1-yazen.ghannam@amd.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0598B818A5;
+        Wed, 29 Dec 2021 17:46:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 590C8C36AE1;
+        Wed, 29 Dec 2021 17:46:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640799966;
+        bh=NmRZzJM7Km/x83/A2i7bH4gxbcS51Gr3Mu4O09ilUmE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=VxZPR6x4B5BGfCvyFp6FfsQghkScX7nlmRkPQukrWbLjhpfHAmlgTRBsfy50ztm3D
+         FS5bfriPXeSt+NS3r0EXvWhPBhA/7a7MIUMzn+YYGVUq6CuuSUA7ZOkwi9iBod13jE
+         FJ0JS24eDMlhYzeQxT7tPSREyEsbfpu5ZB6+wf6KQPB/20RZROtsB6aW+UqgBRqv9u
+         hSbxo0KIfACoRhosssFdhxLLW/edqymvbR4G42i9cw0p7fdWpKmUv3MSmQCWpPRkrS
+         IfqbdYTkLUm8SBfjLilqLxQfVxswBaj3ApBIB35ZkNt2SGOTHb/Ah/DhTZoQL64kEp
+         r06hzLAk2FQWg==
+Date:   Wed, 29 Dec 2021 11:46:05 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     slark_xiao@163.com
+Cc:     bjorn@helgaas.com, linux-pci@vger.kernel.org,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Bug 215433] New: data connection lost on Qualcomm SDX55 PCIe
+ device
+Message-ID: <20211229174605.GA1689297@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211207193028.9389-1-yazen.ghannam@amd.com>
+In-Reply-To: <bug-215433-41252@https.bugzilla.kernel.org/>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 07:30:28PM +0000, Yazen Ghannam wrote:
-> Changes to the AMD Thresholding sysfs code prevents sysfs writes from
-> updating the underlying registers once CPU init is completed, i.e.
-> "threshold_banks" is set.
+[+cc MHI folks]
+
+On Tue, Dec 28, 2021 at 11:26:02AM +0000, bugzilla-daemon@bugzilla.kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=215433
 > 
-> Allow the registers to be updated if the thresholding interface is
-> already initialized or if in the init path. Use the "set_lvt_off" value
-> to indicate if running in the init path, since this value is only set
-> during init.
+>            Summary: data connection lost on Qualcomm SDX55 PCIe device
+>     Kernel Version: 5.13.0,5.15.0
+> ...
+
+> For Qualcomm based modem devices, with PCIE interface, and mhi driver based on
+> kernel 5.13.0, it will lose data connection. Details as below:
 > 
-> Fixes: a037f3ca0ea0 ("x86/mce/amd: Make threshold bank setting hotplug robust")
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-
-We want that in stable, right?
-
-> ---
->  arch/x86/kernel/cpu/mce/amd.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+>     Phenomenon:
+>         1) Can NOT connect to Internet
+>         2) /dev/wwan0p1QCDM, /dev/wwan0p2MBIM, /dev/wwan0p3AT NOT response
 > 
-> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-> index 2eadc7c4c902..408c9546ea0b 100644
-> --- a/arch/x86/kernel/cpu/mce/amd.c
-> +++ b/arch/x86/kernel/cpu/mce/amd.c
-> @@ -400,8 +400,12 @@ static void threshold_restart_bank(void *_tr)
->  	struct thresh_restart *tr = _tr;
->  	u32 hi, lo;
->  
-> -	/* sysfs write might race against an offline operation */
-> -	if (this_cpu_read(threshold_banks))
-> +	/*
-> +	 * sysfs write might race against an offline operation.
-> +	 * Prevent register writes if threshold_banks are not set and this is
-> +	 * not called from the init path as indicated by "set_lvt_off".
-> +	 */
+>     Reproduce steps
+>         1) Connect Internet via cellular
+>         2) Do speedtest(https://www.speedtest.net/) or download a 1GB file
+> (ipv4.download.thinkbroadband.com/1GB.zip)
+> 
+>     Recovery method
+>         Only can be recovered by reboot host
+> 
+>     Others
+>         It can NOT be reproduced in Windows 10/11.
 
-So if you convert this text into code, it would read like:
+Thanks very much for the report.  I'm not familiar with the mhi
+driver, so I added some folks who might be.
 
-	if (!this_cpu_read(threshold_banks) && !tr->set_lvt_off)
+Can you please collect the complete dmesg log and output of
+"sudo lspci -vv" and attach both to the bugzilla?
 
-which is equivalent to:
+Does the network connection work for a while, then stop working?  If
+so, is there anything logged in the dmesg log when it stops working?
 
-> +	if (!(this_cpu_read(threshold_banks) || tr->set_lvt_off))
+Do you know of any Linux versions that do not have this problem?  If
+it used to work but it got broken, that would help narrow things down.
 
-but easier to follow, methinks.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+  Bjorn

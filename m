@@ -2,139 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AED9481177
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 11:00:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2F548117C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 11:03:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239641AbhL2KAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 05:00:01 -0500
-Received: from mga01.intel.com ([192.55.52.88]:33196 "EHLO mga01.intel.com"
+        id S239652AbhL2KDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 05:03:23 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:36986 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235190AbhL2KAA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 05:00:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640772000; x=1672308000;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0aOEpGbdxdmsCn2xeSNPJQDkRypdPglW65tgSt3fD8M=;
-  b=TnXKioBWI1czldDMAmuwupirYkbumlHgrLZfnKrovg48PCbgBILTb67c
-   K9TmwQ6jmuOPiMP61lsboje/j+uVriFfnO2ounhOrM8SB6+Cy1g/ZFEgl
-   1RELRc/Lw0lUciRGJ2M5W4qVRzT/fv4ylWhyCoJcOQZE5mEUUt67874Ss
-   oIEOObFsndb2jYeHRQeDgv6mg6YGkPqsqNlBmCOVyZ5ZYiJXyoHmh9QMa
-   gLsj2Kcn6UFHvR4Rz/Xfz6uIC+B263ErfQXUWAnH53PTqrjYynC0zN1vu
-   9BiAByHoW2xsGWXVF4NkvqvUfQerI6Nt60kPNv1EAum/XCJtVu2KGlMrW
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="265730770"
-X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
-   d="scan'208";a="265730770"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 02:00:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
-   d="scan'208";a="510470040"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 29 Dec 2021 01:59:58 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n2VkU-0008oW-0s; Wed, 29 Dec 2021 09:59:58 +0000
-Date:   Wed, 29 Dec 2021 17:59:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: [csky-linux:riscv_compat_v2_sv48_v3_xtpbmt 20/32]
- arch/riscv/mm/init.c:588:6: warning: no previous prototype for
- 'pt_ops_set_early'
-Message-ID: <202112291754.EJomZ5Hs-lkp@intel.com>
+        id S235190AbhL2KDW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 05:03:22 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ABC701EC03AD;
+        Wed, 29 Dec 2021 11:03:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640772196;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=E7l2Hget7TEfy/D4Kt6JxexeerHjWcOm+gP+OBWenWQ=;
+        b=RcQiLjen9MnTUyP0mwt93CuYK5qID8MRKmaVpcZFZQoHI5gs37RP3GHECR/ijjiVfj9KdU
+        ZGs+Zv41YZg66Hlb7k/rkIiO1GGaACLCXL2ZW6eA6hDXGY/QsoQlj8YrFNeyyN1fGd5EgC
+        zHvCIoGUZ3SwKCTJStrtSnq7mQ6gEpk=
+Date:   Wed, 29 Dec 2021 11:03:17 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dave Young <dyoung@redhat.com>
+Cc:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>
+Subject: Re: [PATCH v19 02/13] x86/setup: Use parse_crashkernel_high_low() to
+ simplify code
+Message-ID: <YcwyZRDJUMniSaY9@zn.tnic>
+References: <20211228132612.1860-1-thunder.leizhen@huawei.com>
+ <20211228132612.1860-3-thunder.leizhen@huawei.com>
+ <Ycs3kpZD/vpoo1AX@zn.tnic>
+ <b017a8ea-989b-c251-f5c8-a8a7940877cf@huawei.com>
+ <YcwN9Mfwsh/lPbbd@dhcp-128-65.nay.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YcwN9Mfwsh/lPbbd@dhcp-128-65.nay.redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/c-sky/csky-linux riscv_compat_v2_sv48_v3_xtpbmt
-head:   29a08e898f4e552bc0d5117b437ac3073e6ebb81
-commit: 396e995ffd8ad52873006e1e8f1f6f1cd8242537 [20/32] riscv: Introduce functions to switch pt_ops
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20211229/202112291754.EJomZ5Hs-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/c-sky/csky-linux/commit/396e995ffd8ad52873006e1e8f1f6f1cd8242537
-        git remote add csky-linux https://github.com/c-sky/csky-linux
-        git fetch --no-tags csky-linux riscv_compat_v2_sv48_v3_xtpbmt
-        git checkout 396e995ffd8ad52873006e1e8f1f6f1cd8242537
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
+On Wed, Dec 29, 2021 at 03:27:48PM +0800, Dave Young wrote:
+> So I think you can unify the parse_crashkernel* in x86 first with just
+> one function.  And leave the further improvements to later work. But
+> let's see how Boris think about this.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Well, I think this all unnecessary work. Why?
 
-All warnings (new ones prefixed by >>):
+If the goal is to support crashkernel...high,low on arm64, then you
+should simply *copy* the functionality on arm64 and be done with it.
 
->> arch/riscv/mm/init.c:588:6: warning: no previous prototype for 'pt_ops_set_early' [-Wmissing-prototypes]
-     588 | void pt_ops_set_early(void)
-         |      ^~~~~~~~~~~~~~~~
->> arch/riscv/mm/init.c:606:6: warning: no previous prototype for 'pt_ops_set_fixmap' [-Wmissing-prototypes]
-     606 | void pt_ops_set_fixmap(void)
-         |      ^~~~~~~~~~~~~~~~~
->> arch/riscv/mm/init.c:620:6: warning: no previous prototype for 'pt_ops_set_late' [-Wmissing-prototypes]
-     620 | void pt_ops_set_late(void)
-         |      ^~~~~~~~~~~~~~~
+Unification is done by looking at code which is duplicated across
+architectures and which has been untouched for a while now, i.e., no
+new or arch-specific changes are going to it so a unification can be
+as simple as trivially switching the architectures to call a generic
+function.
 
+What this does is carve out the "generic" parts and then try not to
+break existing usage.
 
-vim +/pt_ops_set_early +588 arch/riscv/mm/init.c
+Which is a total waste of energy and resources. And it is casting that
+functionality in stone so that when x86 wants to change something there,
+it should do it in a way not to break arm64. And I fail to see the
+advantage of all that. Code sharing ain't it.
 
-   583	
-   584	/*
-   585	 * MMU is not enabled, the page tables are allocated directly using
-   586	 * early_pmd/pud/p4d and the address returned is the physical one.
-   587	 */
- > 588	void pt_ops_set_early(void)
-   589	{
-   590		pt_ops.alloc_pte = alloc_pte_early;
-   591		pt_ops.get_pte_virt = get_pte_virt_early;
-   592	#ifndef __PAGETABLE_PMD_FOLDED
-   593		pt_ops.alloc_pmd = alloc_pmd_early;
-   594		pt_ops.get_pmd_virt = get_pmd_virt_early;
-   595	#endif
-   596	}
-   597	
-   598	/*
-   599	 * MMU is enabled but page table setup is not complete yet.
-   600	 * fixmap page table alloc functions must be used as a means to temporarily
-   601	 * map the allocated physical pages since the linear mapping does not exist yet.
-   602	 *
-   603	 * Note that this is called with MMU disabled, hence kernel_mapping_pa_to_va,
-   604	 * but it will be used as described above.
-   605	 */
- > 606	void pt_ops_set_fixmap(void)
-   607	{
-   608		pt_ops.alloc_pte = kernel_mapping_pa_to_va((uintptr_t)alloc_pte_fixmap);
-   609		pt_ops.get_pte_virt = kernel_mapping_pa_to_va((uintptr_t)get_pte_virt_fixmap);
-   610	#ifndef __PAGETABLE_PMD_FOLDED
-   611		pt_ops.alloc_pmd = kernel_mapping_pa_to_va((uintptr_t)alloc_pmd_fixmap);
-   612		pt_ops.get_pmd_virt = kernel_mapping_pa_to_va((uintptr_t)get_pmd_virt_fixmap);
-   613	#endif
-   614	}
-   615	
-   616	/*
-   617	 * MMU is enabled and page table setup is complete, so from now, we can use
-   618	 * generic page allocation functions to setup page table.
-   619	 */
- > 620	void pt_ops_set_late(void)
-   621	{
-   622		pt_ops.alloc_pte = alloc_pte_late;
-   623		pt_ops.get_pte_virt = get_pte_virt_late;
-   624	#ifndef __PAGETABLE_PMD_FOLDED
-   625		pt_ops.alloc_pmd = alloc_pmd_late;
-   626		pt_ops.get_pmd_virt = get_pmd_virt_late;
-   627	#endif
-   628	}
-   629	
+So what it should do is simply copy the necessary code to arm64.
+Unifications can always be done later, when the dust settles.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+IMNSVHO.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

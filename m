@@ -2,91 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C48A481642
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 20:25:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95581481644
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 20:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbhL2TZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 14:25:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbhL2TZQ (ORCPT
+        id S230355AbhL2T0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 14:26:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27238 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230305AbhL2T0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 14:25:16 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15563C061574;
-        Wed, 29 Dec 2021 11:25:16 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id l4so14248372wmq.3;
-        Wed, 29 Dec 2021 11:25:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=XWy6zb7VrjyL61C3FIcwxfgOsxnDVpBJZr50LV8zoyg=;
-        b=QdY3E+T6Nzxt8AzFFX7vO6vHUytofG/1cq6XPJi6ZvdL/utBcmvgfhMEdZC2rItpKw
-         IN477Yjkd9SjAsCbmXtfjHCmWYwXHm+QNFWikdr/82q1Q3wutxL0k8gtgacLmfFbFF4D
-         V+ucUKfaCZiDXsAvJL4cg9bme6RRiKN8AzvprAWEuGO5K1lciBEe0WZoxGHoUZZ0pWfi
-         1JPqwkMkfsNjl18sem3tgWyVVLG9NhZAaz8xueMUT4lKr3ALMlCTMakept5zGpZmGWoa
-         WuM1JTXAegrU2yiXOfm6t8rKNPVR+pSKcuSPtMPcPxW4ElBmDxvsgE2RSECbHUCIsxwM
-         izwQ==
+        Wed, 29 Dec 2021 14:26:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640805965;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7X92anWu7YA4HMgaOFRPoEtvjubDlUwqFYaCnsFgT4Q=;
+        b=TGhTI2c67L/KOKblpmm7GjfA7peS1ec5ovgmnQ8WCjdh3oxRg/MfUMLbutxZpOZxksgTQB
+        /nRGhSfZuJL8j0kUli6Dk2IkSSZZ0aro8gjqM7ZWQKzFKZOjh2pVb8YtgfS5MuuiyMrG6o
+        Eo6F3kFtf3ZCES8woMpkU/ITBMnNhcs=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-90-eFHRY41WM8-qI5q0Jow1Qg-1; Wed, 29 Dec 2021 14:26:03 -0500
+X-MC-Unique: eFHRY41WM8-qI5q0Jow1Qg-1
+Received: by mail-qv1-f69.google.com with SMTP id jo14-20020a056214500e00b00411de582251so7222224qvb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 11:26:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=XWy6zb7VrjyL61C3FIcwxfgOsxnDVpBJZr50LV8zoyg=;
-        b=BkPu193E6azRsKQB3sMaZghXf6mOJ3rKY6p/mepB2Vk7di+KlHgp/MgrYxREmKGt4A
-         GPcxO0HSI+ZoFJ0Gdt9aK7FpY8rnlz+viB3rmdRyG6LbJFcw8C+JaZ1LeHY0SKYV//1A
-         hLdRdYajJ21hlXoBC+HMGTKGj8Hfr026oQU20zSRaSqv6GCSTYR2t0kg8ey8GgJpzwLB
-         uij6+ffSxEbQCt6A9I6yM+6zMkFLsnEzhE7guwQGyCOZIPXkLmOwWZFfujB8NHFJXn3m
-         Le3eATGlaMbyyoeG6Jo4L64a0GPXArgdSjTYNowTdjNGXP4vb4/wFYonmoOy4bHJmP0b
-         /zSw==
-X-Gm-Message-State: AOAM532rJAft7aW553HUk7mUVh13+jT1hECkoJypChTV51gltroXLkZk
-        InlxK/VM1ELSmLnymNxwH+g=
-X-Google-Smtp-Source: ABdhPJxr0N9dwcDiO5BtWfsoSvknY2HG3QX/qXQ9wJPFG5mOIlJi1trxt+7YS2NOS0sgUWu8J1oquA==
-X-Received: by 2002:a7b:c341:: with SMTP id l1mr23876084wmj.60.1640805914522;
-        Wed, 29 Dec 2021 11:25:14 -0800 (PST)
-Received: from felia.fritz.box ([2001:16b8:2626:5600:5f5:a4cc:1dcf:a62])
-        by smtp.gmail.com with ESMTPSA id g18sm21892379wrv.42.2021.12.29.11.25.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 11:25:14 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Damien Le Moal <damien.lemoal@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] riscv: canaan: remove useless select of non-existing config SYSCON
-Date:   Wed, 29 Dec 2021 20:24:58 +0100
-Message-Id: <20211229192458.25138-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=7X92anWu7YA4HMgaOFRPoEtvjubDlUwqFYaCnsFgT4Q=;
+        b=YOq0Un7rsREuQU4KXj5KNMF+ojWsdiRIXwbDDL6e1nIIOSyLSLL1xytt7NqsSZuQTj
+         jYvIBD6jIc3EG3SaQPspRkiTv5wWmXjOD5HA1MRm3h8DkyOeWs2Rlc6kqan0cNv798OW
+         uw3MaDweWECdBTBqOtfQMX/Cv4blO1ofXmwS4utr6/Y1nQItv7vnjP2fgOLECNEPHFNZ
+         7bgsAnRJkQmanuGS3O7B4EvqtrPCbCqMpK9YVDxqpJEizHrm+/ucNi7lsIXan9/KKH+P
+         rC0EQ2fOeFrVSnvPpdtGChWtiruT6hqhTEXodtSTLphbfh/HJoR8c86B+eZq7LBfp9As
+         i/PQ==
+X-Gm-Message-State: AOAM5321MtDQHqqHmB866L7eozCiZhqVWt7Cq6t8IlgYWrn4VGrg8sJB
+        uTsBuZ4aRiDAqfMQ5+kg0+3BAQNGfTlZn341KueuINGilBapYIpOZad3zeEgZD+5Co4+cD8aoA+
+        mFYMtNATXY0U+GkWfey13J+yh
+X-Received: by 2002:a05:622a:180c:: with SMTP id t12mr24151804qtc.507.1640805963407;
+        Wed, 29 Dec 2021 11:26:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyCMkCBBIEHoU7TQXcXidUDS5rm91MbIisjUvsPSiogTt212anKiDlDRNSIU+0yzvg7HIrUDQ==
+X-Received: by 2002:a05:622a:180c:: with SMTP id t12mr24151786qtc.507.1640805963173;
+        Wed, 29 Dec 2021 11:26:03 -0800 (PST)
+Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id p16sm15294493qtx.19.2021.12.29.11.26.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Dec 2021 11:26:02 -0800 (PST)
+Subject: Re: [PATCH] mac80211: initialize variable have_higher_than_11mbit
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     johannes@sipsolutions.net, davem@davemloft.net, kuba@kernel.org,
+        nathan@kernel.org, linville@tuxdriver.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20211223162848.3243702-1-trix@redhat.com>
+ <CAKwvOd=dLjMAim_FRNyWegzEjy0_1vF2xVW1hNPQ55=32qO4Wg@mail.gmail.com>
+ <b3ef8d23-7c77-7c83-0bc8-2054b7ac1d8b@redhat.com>
+ <CAKwvOdkUQARWd7qG_hkUJYuVcvObMYTif_HDSEmJ5mSXP6y1=A@mail.gmail.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <3db47d49-68fb-c286-b237-bfce1cb0ff08@redhat.com>
+Date:   Wed, 29 Dec 2021 11:26:00 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <CAKwvOdkUQARWd7qG_hkUJYuVcvObMYTif_HDSEmJ5mSXP6y1=A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The config SYSCON never existed in the kernel repository; so, the select of
-that config in ./drivers/soc/canaan/Kconfig has no effect.
 
-Presumably, this was just some mistake, assuming some symmetry in handling
-and naming of configs that simply does not exist.
+On 12/28/21 10:55 AM, Nick Desaulniers wrote:
+> On Fri, Dec 24, 2021 at 6:01 AM Tom Rix <trix@redhat.com> wrote:
+>>
+>> On 12/23/21 12:30 PM, Nick Desaulniers wrote:
+>>> On Thu, Dec 23, 2021 at 8:29 AM <trix@redhat.com> wrote:
+>>>> From: Tom Rix <trix@redhat.com>
+>>>>
+>>>> Clang static analysis reports this warnings
+>>>>
+>>>> mlme.c:5332:7: warning: Branch condition evaluates to a
+>>>>     garbage value
+>>>>       have_higher_than_11mbit)
+>>>>       ^~~~~~~~~~~~~~~~~~~~~~~
+>>>>
+>>>> have_higher_than_11mbit is only set to true some of the time in
+>>>> ieee80211_get_rates() but is checked all of the time.  So
+>>>> have_higher_than_11mbit needs to be initialized to false.
+>>> LGTM. There's only one caller of ieee80211_get_rates() today; if there
+>>> were others, they could make a similar mistake in the future. An
+>>> alternate approach: ieee80211_get_rates() could unconditionally write
+>>> false before the loop that could later write true. Then call sites
+>>> don't need to worry about this conditional assignment. Perhaps that
+>>> would be preferable? If not:
+>> The have_higher_than_11mbit variable had previously be initialized to false.
+>>
+>> The commit 5d6a1b069b7f moved the variable without initializing.
+> I'm not disagreeing with that.
+>
+> My point is that these sometimes uninitialized warnings you're
+> finding+fixing with clang static analyzer are demonstrating a
+> recurring pattern with code.
+>
+> When _not_ using the static analyzer, -Wuninitialized and
+> -Wsometimes-uninitialized work in Clang by building a control flow
+> graph, but they only analyze a function locally.
+>
+> For example, consider the following code:
+> ```
+> _Bool is_thursday(void);
+> void hello(int);
+>
+> void init (int* x) {
+>    if (is_thursday())
+>      *x = 1;
+> }
+>
+> void foo (void) {
+>    int x;
+>    init(&x);
+>    hello(x);
+> }
+> ```
+> (Clang+GCC today will warn on the above; x is considered to "escape"
+> the scope of foo as init could write the address of x to a global.
+> Instead clang's static analyzer will take the additional time to
+> analyze the callee.  But here's a spooky question: what happens when
+> init is in another translation unit? IIRC, the static analyzer doesn't
+> do cross TU analysis; I could be wrong though, I haven't run it in a
+> while.)
+>
+> My point is that you're sending patches initializing x, when I think
+> it might be nicer to instead have functions like init always write a
+> value (unconditionally, rather than conditionally).  That way other
+> callers of init don't have to worry about sometimes initialized
+> variables.
 
-Remove this useless select of a non-existing config.
+The variable is passed to only to the static function ieee80211_get_rates().
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- drivers/soc/canaan/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+Tom
 
-diff --git a/drivers/soc/canaan/Kconfig b/drivers/soc/canaan/Kconfig
-index 853096b7e84c..2527cf5757ec 100644
---- a/drivers/soc/canaan/Kconfig
-+++ b/drivers/soc/canaan/Kconfig
-@@ -5,7 +5,6 @@ config SOC_K210_SYSCTL
- 	depends on RISCV && SOC_CANAAN && OF
- 	default SOC_CANAAN
-         select PM
--        select SYSCON
-         select MFD_SYSCON
- 	help
- 	  Canaan Kendryte K210 SoC system controller driver.
--- 
-2.17.1
+>
+>> Tom
+>>
+>>> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>>>
+>>>> Fixes: 5d6a1b069b7f ("mac80211: set basic rates earlier")
+>>>> Signed-off-by: Tom Rix <trix@redhat.com>
+>>>> ---
+>>>>    net/mac80211/mlme.c | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/net/mac80211/mlme.c b/net/mac80211/mlme.c
+>>>> index 51f55c4ee3c6e..766cbbc9c3a72 100644
+>>>> --- a/net/mac80211/mlme.c
+>>>> +++ b/net/mac80211/mlme.c
+>>>> @@ -5279,7 +5279,7 @@ static int ieee80211_prep_connection(struct ieee80211_sub_if_data *sdata,
+>>>>            */
+>>>>           if (new_sta) {
+>>>>                   u32 rates = 0, basic_rates = 0;
+>>>> -               bool have_higher_than_11mbit;
+>>>> +               bool have_higher_than_11mbit = false;
+>>>>                   int min_rate = INT_MAX, min_rate_index = -1;
+>>>>                   const struct cfg80211_bss_ies *ies;
+>>>>                   int shift = ieee80211_vif_get_shift(&sdata->vif);
+>>>> --
+>>>> 2.26.3
+>>>>
+>
 

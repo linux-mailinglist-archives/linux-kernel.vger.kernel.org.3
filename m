@@ -2,149 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03540480EEB
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 03:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C26BB480EEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 03:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238395AbhL2C30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 21:29:26 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:52402 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229620AbhL2C30 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 21:29:26 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowABnb3_kx8thSpE9BQ--.9864S2;
-        Wed, 29 Dec 2021 10:28:52 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     vaibhav.sr@gmail.com, mgreer@animalcreek.com, johan@kernel.org,
-        elder@kernel.org, gregkh@linuxfoundation.org
-Cc:     greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] staging: greybus: audio: Check null pointer
-Date:   Wed, 29 Dec 2021 10:28:50 +0800
-Message-Id: <20211229022850.1682897-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S238403AbhL2CdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 21:33:25 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34728 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229620AbhL2CdY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 21:33:24 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B5896116D;
+        Wed, 29 Dec 2021 02:33:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 570A6C36AEB;
+        Wed, 29 Dec 2021 02:33:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640745203;
+        bh=27QGy6tcsDryLMWNMkI1zKPKtVGmZ/7l48wgukdkdJY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=r/TnGmlJI+HG2ZMquOTe6zs9zxFNvvM8965htoF+gW6awGAkXV2UbwtJ3x8r2iH50
+         icuh4nWhSIlt5ftHnjH4k87s7hnpIxOEKIb8JrP73HAkLMsBfxA7FgGkDPT+9/3KQl
+         renRv6KTIG3yg0mmQzhT5g1LdTT1H7S6/zI/AU4Wk7NRV9Ls3ObMuRXP5IZuFEdYRC
+         CjbIDLl3RwW1tSTjHeNbDKQ2Q5MKJiLxTSPZDeS+tyOlgNJzSqhnuDIMsY3WmoxNPm
+         rDRRu3d0L6H2nQrHlhqcLu2eUqayVb1qgX+VLxP36BI7cR10rGwUgLaOrLSk1FKwa3
+         42WV5e4rbqQ0w==
+Date:   Wed, 29 Dec 2021 04:33:21 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        keyrings@vger.kernel.org, James Morris <jmorris@namei.org>,
+        David Howells <dhowells@redhat.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Andrew Zaborowski <andrew.zaborowski@intel.com>
+Subject: [GIT PULL] TPM DEVICE DRIVER updates for v5.17
+Message-ID: <YcvI8Uki51C2aMqe@iki.fi>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowABnb3_kx8thSpE9BQ--.9864S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJw13uF13KF45Kr45tr1DKFg_yoWrWry7pF
-        s5KrnxAr4DJasIkFs7Ar4rZ3ZxZ34kGFWUK3y7W3yDZrsIqrW09ay3KFyYvF13uFy8Zw40
-        ya1IvF45X3WqvrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
-        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
-        Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbpwZ7UUUU
-        U==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 10:50:22PM +0800, Alex Elder wrote:
-> But the two places you're returning are in the middle of a loop (in 
-> gbaudio_tplg_create_widget() and gbaudio_tplg_process_kcontrols()).
-> Each is building up a sort of hierarchical data structure, and as
-> you can see, the existing code takes care to de-construct the partially
-> built structure in the event an error occurs before it completes.
->
-> There is a chance that your simple return would "work", but by
-> reading the surrounding code you should recognize that the proper
-> way to handle the error is to jump to the cleanup at the end.
+Hi,
 
-Yes, I agree with your opinion and this time I use "goto error" instead
-of directly return in the two callers.
-The new patch is as follow.
+Other than bug fixes for TPM, includes a patch for asymmetric keys to allow
+to look up and verify with self-signed certificates (keys without so called
+Authority Key Identifier (AKID)) using a new "dn:" prefix in the query.
 
-As the possible alloc failure of devm_kcalloc(), it could return null
-pointer.
-Therefore, 'strings' should be checked and return NULL if alloc fails to
-prevent the dereference of the NULL pointer.
-Also, the caller should also deal with the return value of the
-gb_generate_enum_strings() and return -ENOMEM if returns NULL.
-Moreover, because the memory allocated with devm_kzalloc() will be
-freed automatically when the last reference to the device is dropped,
-the 'gbe' in gbaudio_tplg_create_enum_kctl() and
-gbaudio_tplg_create_enum_ctl() do not need to free manually.
-But the 'control' in gbaudio_tplg_create_widget() and
-gbaudio_tplg_process_kcontrols() has a specially error handle to
-cleanup.
-So it should be better to cleanup 'control' when fails.
+BR,
+Jarkko
 
-Fixes: e65579e335da ("greybus: audio: topology: Enable enumerated control support")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+The following changes since commit e7c124bd04631973a3cc0df19ab881b56d8a2d50:
 
-v1 -> v2
+  Merge tag 'selinux-pr-20211228' of git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux (2021-12-28 13:33:06 -0800)
 
-*Change 1. Add the cleanup process when alloc fails in two callers and
-refine the commit message.
----
- drivers/staging/greybus/audio_topology.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+are available in the Git repository at:
 
-diff --git a/drivers/staging/greybus/audio_topology.c b/drivers/staging/greybus/audio_topology.c
-index 1fc7727ab7be..6bba735d2e5c 100644
---- a/drivers/staging/greybus/audio_topology.c
-+++ b/drivers/staging/greybus/audio_topology.c
-@@ -147,6 +147,9 @@ static const char **gb_generate_enum_strings(struct gbaudio_module_info *gb,
- 
- 	items = le32_to_cpu(gbenum->items);
- 	strings = devm_kcalloc(gb->dev, items, sizeof(char *), GFP_KERNEL);
-+	if (!strings)
-+		return NULL;
-+
- 	data = gbenum->names;
- 
- 	for (i = 0; i < items; i++) {
-@@ -655,6 +658,8 @@ static int gbaudio_tplg_create_enum_kctl(struct gbaudio_module_info *gb,
- 	/* since count=1, and reg is dummy */
- 	gbe->items = le32_to_cpu(gb_enum->items);
- 	gbe->texts = gb_generate_enum_strings(gb, gb_enum);
-+	if (!gbe->texts)
-+		return -ENOMEM;
- 
- 	/* debug enum info */
- 	dev_dbg(gb->dev, "Max:%d, name_length:%d\n", gbe->items,
-@@ -862,6 +867,8 @@ static int gbaudio_tplg_create_enum_ctl(struct gbaudio_module_info *gb,
- 	/* since count=1, and reg is dummy */
- 	gbe->items = le32_to_cpu(gb_enum->items);
- 	gbe->texts = gb_generate_enum_strings(gb, gb_enum);
-+	if (!gbe->texts)
-+		return -ENOMEM;
- 
- 	/* debug enum info */
- 	dev_dbg(gb->dev, "Max:%d, name_length:%d\n", gbe->items,
-@@ -1034,6 +1041,10 @@ static int gbaudio_tplg_create_widget(struct gbaudio_module_info *module,
- 			csize += le16_to_cpu(gbenum->names_length);
- 			control->texts = (const char * const *)
- 				gb_generate_enum_strings(module, gbenum);
-+			if (!control->texts) {
-+				ret = -ENOMEM;
-+				goto error;
-+			}
- 			control->items = le32_to_cpu(gbenum->items);
- 		} else {
- 			csize = sizeof(struct gb_audio_control);
-@@ -1183,6 +1194,10 @@ static int gbaudio_tplg_process_kcontrols(struct gbaudio_module_info *module,
- 			csize += le16_to_cpu(gbenum->names_length);
- 			control->texts = (const char * const *)
- 				gb_generate_enum_strings(module, gbenum);
-+			if (!control->texts) {
-+				ret = -ENOMEM;
-+				goto error;
-+			}
- 			control->items = le32_to_cpu(gbenum->items);
- 		} else {
- 			csize = sizeof(struct gb_audio_control);
--- 
-2.25.1
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v5.17
 
+for you to fetch changes up to 035d19ee9b906f8a6937d44cc1dd1bf065be8641:
+
+  tpm: fix NPE on probe for missing device (2021-12-29 03:44:50 +0200)
+
+----------------------------------------------------------------
+tpmdd updates for Linux v5.17
+
+----------------------------------------------------------------
+Andrew Zaborowski (1):
+      keys: X.509 public key issuer lookup without AKID
+
+AngeloGioacchino Del Regno (1):
+      tpm: tpm_tis_spi_cr50: Add default RNG quality
+
+Chen Jun (1):
+      tpm: add request_locality before write TPM_INT_ENABLE
+
+Christophe Jaillet (1):
+      tpm_tis: Fix an error handling path in 'tpm_tis_core_init()'
+
+Lino Sanfilippo (1):
+      tpm: fix potential NULL pointer access in tpm_del_char_device
+
+Patrick Williams (1):
+      tpm: fix NPE on probe for missing device
+
+Rob Barnes (1):
+      char: tpm: cr50: Set TPM_FIRMWARE_POWER_MANAGED based on device property
+
+Sohaib Mohamed (1):
+      tpm/st33zp24: drop unneeded over-commenting
+
+axelj (1):
+      tpm: Add Upgrade/Reduced mode support for TPM2 modules
+
+ crypto/asymmetric_keys/asymmetric_type.c  |  57 ++++++++++----
+ crypto/asymmetric_keys/pkcs7_trust.c      |   6 +-
+ crypto/asymmetric_keys/restrict.c         |  48 +++++++-----
+ crypto/asymmetric_keys/x509_cert_parser.c |  10 +++
+ crypto/asymmetric_keys/x509_public_key.c  |  10 +++
+ drivers/char/tpm/st33zp24/st33zp24.c      | 122 +++++-------------------------
+ drivers/char/tpm/tpm-chip.c               |  37 ++++++---
+ drivers/char/tpm/tpm-sysfs.c              |   3 +
+ drivers/char/tpm/tpm2-cmd.c               |   6 ++
+ drivers/char/tpm/tpm_tis_core.c           |  14 +++-
+ drivers/char/tpm/tpm_tis_i2c_cr50.c       |  16 +++-
+ drivers/char/tpm/tpm_tis_spi_cr50.c       |  20 ++++-
+ include/crypto/public_key.h               |   2 +-
+ include/keys/asymmetric-type.h            |   3 +-
+ include/linux/tpm.h                       |  10 +++
+ 15 files changed, 205 insertions(+), 159 deletions(-)

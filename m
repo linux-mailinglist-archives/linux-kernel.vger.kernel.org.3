@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B20481767
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 23:56:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F5148176C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 00:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232713AbhL2W4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 17:56:45 -0500
-Received: from vern.gendns.com ([98.142.107.122]:41976 "EHLO vern.gendns.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230243AbhL2W4j (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 17:56:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=L4hri8P0QUAWZFiy0polNEsnd67ZTLv8cfRjkNUPHgY=; b=uUnkmUFqlH2TZq8kvlgaDKbeZ9
-        jzKEt5xAcf7zsJDA5Vc1hRj8N1NFdPic2C1gVSP5SMQ1ufNyivQyS3Wp4X4ndfY3H6AFBvuEJjUav
-        2OcTPXbypiD3QmCC4aU/OTIuKzxB5T6cbfuRXFYVqVVHt8HpmeUsZ40Ws+KDyh/IMISRQ5rCgEi2y
-        v8OPrdAcLAPem7Et2qjdJffB6UTgIPGhSLZdbYGZsRlFwQHscRySR634NT2Mhk4y6pPW3iUyTBi4O
-        Skm83DqMMH+iPVnE58B92+qV85m4pIq5tRlH4Qs2usRy1KObfgTP4C08k6fwKnwfIU5v/9o+Kt6GQ
-        sM7OGsAA==;
-Received: from [2600:1700:4830:1658::fb2] (port=56234)
-        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <david@lechnology.com>)
-        id 1n2hrw-0007yy-KZ; Wed, 29 Dec 2021 17:56:37 -0500
-Subject: Re: [PATCH v3 10/23] counter: ti-eqep: Convert to counter_priv()
- wrapper
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>
-Cc:     linux-iio@vger.kernel.org, kernel@pengutronix.de,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-References: <20211229154441.38045-1-u.kleine-koenig@pengutronix.de>
- <20211229154441.38045-11-u.kleine-koenig@pengutronix.de>
-From:   David Lechner <david@lechnology.com>
-Message-ID: <8ab59b1c-1762-1b55-34c1-97cd61783853@lechnology.com>
-Date:   Wed, 29 Dec 2021 16:56:36 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S232731AbhL2XCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 18:02:47 -0500
+Received: from repostorp.tmes-anz.trendmicro.com ([13.238.202.129]:50015 "EHLO
+        repostorp.tmes-anz.trendmicro.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230243AbhL2XCr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 18:02:47 -0500
+X-Greylist: delayed 1076 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 Dec 2021 18:02:46 EST
+Received: from 20.70.202.25_.trendmicro.com (unknown [172.23.190.116])
+        by repostorp.tmes-anz.trendmicro.com (Postfix) with SMTP id 8AF3A10003FB0
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 22:44:49 +0000 (UTC)
+X-TM-MAIL-RECEIVED-TIME: 1640817886.735000
+X-TM-MAIL-UUID: 5e977bda-62f3-43e3-ad05-e9c6f19adff0
+Received: from az-exch-hybrid.sealink.com.au (unknown [20.70.202.25])
+        by repre01.tmes-anz.trendmicro.com (Trend Micro Email Security) with ESMTPS id B3A84100003A2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 22:44:46 +0000 (UTC)
+Received: from AZ-EX-HYB.sealink.com.au (172.18.0.13) by
+ AZ-EX-HYB.sealink.com.au (172.18.0.13) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 30 Dec 2021 08:09:02 +1030
+Received: from [206.72.197.104] (206.72.197.104) by AZ-EX-HYB.sealink.com.au
+ (172.18.0.13) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+ Transport; Thu, 30 Dec 2021 08:09:02 +1030
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <20211229154441.38045-11-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - vern.gendns.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lechnology.com
-X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Hi
+To:     <linux-kernel@vger.kernel.org>
+From:   Kristina Pia Johansson <trade@sealink.com.au>
+Date:   Wed, 29 Dec 2021 16:39:00 -0500
+Reply-To: <kpjnursing2021@gmail.com>
+Message-ID: <02137bb3-61b1-4a10-974a-3bcdf1b6415e@AZ-EX-HYB.sealink.com.au>
+X-TM-AS-ERS: 20.70.202.25-0.0.0.0
+X-TMASE-Version: StarCloud-1.3-8.8.1001-26622.003
+X-TMASE-Result: 11-5.981200-4.000000
+X-TMASE-MatchedRID: hTjrcX/rt6v0EKmUshll5qzHDCtzZvHZ82SgwNf6SK5XJ/NTgaKQplc8
+        CRD9D7QQr91uSME3X7EvggaN3aBNI5nFDQsuYb5/puJvuu5sA28YNrQ3U4UaoUukRaKcWzqYsRZ
+        Qm+k9RJ3i8zVgXoAlti/khPXe9gfcq2B8D+cmVG+pNwTjBfEiM71anA5c4q+/ZIqu7XKyJiTQLW
+        xBF9DMQcRB0bsfrpPIqxB32o9eGcmtHHdg+5bqcGgr+BR/xHdAYjuNTfkNn+lsPoIpUpGwFRjuY
+        fC32Fod
+X-TMASE-XGENCLOUD: 8b145482-7fa7-458a-b46c-cb12389f5c9f-5-0-200-0
+X-TM-Deliver-Signature: D4957A934814FC6365A5808635BFA3D7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sealink.com.au;
+        s=TM-DKIM-20200703143851; t=1640817889;
+        bh=5+iJiA0J6jviS6/j+q9zQZlf+odb/fFUug6nr0gp3M4=; l=457;
+        h=To:From:Date;
+        b=MB1m0/OVdxR39I9n4yhnR3basaqERG/sRYR0Cgl5H8ksXFmH5ls+U8UUlwaCmO1hd
+         t6j7BFmIAmT7UF0HU4v8PshGfOZIV5YeaM25I9aA/GWZFOpha9WpiCD3+bjSCkdmJa
+         DperLyurmDJgbi9wje/Ytuh/448SZNX2EeqCaXAhGuMwA3J3wabtO6wnGLdeNRyMCa
+         xLHOME7zcnD5vT1DJvu+FSW+ugRMsF5qNH2o5DvUDIHjKSyYmKvz/yMnJgVKyclCWF
+         ysX6FqqESrYoKK8Sx/k23/FzP24eoY5orv8UwpOlsYSAOSsrfBOpKts00iMJWExX1g
+         pvFnnW07Voezw==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/29/21 9:44 AM, Uwe Kleine-König wrote:
-> This is a straight forward conversion to the new counter_priv() wrapper.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
-Acked-by: David Lechner <david@lechnology.com>
+Hi
+
+I hope that you are at your best and doing well. The purpose of this letter=
+ is seeking for a pen pal like friendship and I'd love to and be honored to=
+ be friends with you if you do not mind.. If the Idea sounds OK with you, j=
+ust say yes and we can take it on from there. I look forward to hear hearin=
+g from you.. My name is Kristina From Sweden 36 years , this will mean a lo=
+t to me to hear back from you.
+
+Warm Regards.
+
+Kristina

@@ -2,87 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88FEE481383
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 14:30:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74915481390
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 14:33:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236597AbhL2NaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 08:30:10 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49586 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236182AbhL2N3l (ORCPT
+        id S236164AbhL2NdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 08:33:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229554AbhL2NdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 08:29:41 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 454F4B8190A;
-        Wed, 29 Dec 2021 13:29:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4942C36AE7;
-        Wed, 29 Dec 2021 13:29:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640784579;
-        bh=bk4jM8QLUK3Drk+Pn2dYURwUnfzbNco8xaPEn3dvdCU=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=m9AaPfcgi8aWZin3GD1ksPkBlmIPdqIomyB3jW5OoIpD/gsOcT6zhF5p66aDhNV8S
-         hwuNZGkxqEs/oPTd3q++pI+nP+KEv//q5cDaZM32iwENl54VNBw5fF2gK1uNzyiK6O
-         omj3L4FEMSljFBVkKKw5UsNDC43krAeYAGbvQQDU5uy9C5ZwK1gMp3mcAmhMb6OxO2
-         9vPE/c2tShHhkv8q+qKVl1CzrYrZ+VCTyhRmcMdLQy7kPYOPZG8fz6CqMUwWVk1Nsp
-         Bp6Qb0NCHFlqj66vfkBs9XNqrKyV5FlxZGcuR3Hy8XZWvg74/k301qNSxj0qn1gHh6
-         kSgIek5StfNEA==
-From:   Mark Brown <broonie@kernel.org>
-To:     tiwai@suse.com, matthias.bgg@gmail.com,
-        Trevor Wu <trevor.wu@mediatek.com>, robh+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tzungbi@google.com, jiaxin.yu@mediatek.com, shumingf@realtek.com,
-        alsa-devel@alsa-project.org
-In-Reply-To: <20211228064821.27865-1-trevor.wu@mediatek.com>
-References: <20211228064821.27865-1-trevor.wu@mediatek.com>
-Subject: Re: [PATCH v2] ASoC: mediatek: mt8195: update control for RT5682 series
-Message-Id: <164078457646.1246652.7413539172267193137.b4-ty@kernel.org>
-Date:   Wed, 29 Dec 2021 13:29:36 +0000
+        Wed, 29 Dec 2021 08:33:11 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C385C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 05:33:10 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id b73so13623719wmd.0
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 05:33:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=BKpElLwKNn8FnsVpdZIkqH4EbDV3rPO/O/5EGCSSxtg=;
+        b=G+Z0zGrBu2DV6kfpcKKqbNfCLA0fixv0xdF/IksUEk9nksafn1aCo5n9/1aMY2+Ihk
+         fPXkj/PewhLHlgoUbPMVf/srzSa3AqDKX9Ok9gwf2tqJfnx4V9cm0L/8MP5Xru3FQm2i
+         xiUH0SNzT5wvgbohOSQGPxRCBXQamZ15kfqBuzg9vt3eKkIVZxuqo01HMT7nZ5lfeB87
+         QMVWXNnENpLVliux22djHxBqFUk/QhgPbLkBO8FMexfiSuy7DZn40pK6FtSjDixKjvSr
+         5KcRJJ3LfXpyp1NtNWwyFYLl41UFJzyahh76kFHdOJlDKfu6wfFpEoasDnWFXaL63NC/
+         LBUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=BKpElLwKNn8FnsVpdZIkqH4EbDV3rPO/O/5EGCSSxtg=;
+        b=qaSaZOYauKb0xrpkBj5iwvgIy20mPirZJIe8XtTjL81SsDMGKKakWAlHXB8KDt4q0A
+         oE1KApjxdED39RThdb6BuczI/ooMjlh2RG5+ml0kg0C6pyvnf+31Tn7A7md/d6iomRFQ
+         EU6WW0BSMmZYBfeeY3n2oJ3w+QAxP2dzC8HcyLkkY+Zuln7xda8RZowBvlUsK7cf/xxg
+         rNj3x3eHpzmSm3CF6lQ1UvBLbC4MwzjcoH0DGRSFIBK3dFle5FuVv12YZyx4o7LtgzDM
+         +owFWjXxGnV2AepTE3kIOz/G1Y94hVlzpDO0ZwpwkzPJPLY1Jlg176o2YgG38qUxlNn3
+         as3A==
+X-Gm-Message-State: AOAM532L1UvlCDKJ6osjwvHztf8t2XdBbKxkwcaptrCerV4ICuPL6lwJ
+        ilcTBQPQJg96iLgYggqZ8BmQtw==
+X-Google-Smtp-Source: ABdhPJyYhUHUhiiSFehhjmu9dbKkhuY1TfL5ESNm+Ysq5Tcv6QmDPbNEV+FCzbrkHz7gpVF3XBcPgw==
+X-Received: by 2002:a7b:c00d:: with SMTP id c13mr9743239wmb.99.1640784788889;
+        Wed, 29 Dec 2021 05:33:08 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id k7sm20916996wrg.105.2021.12.29.05.33.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 05:33:08 -0800 (PST)
+Date:   Wed, 29 Dec 2021 13:33:06 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Andy Shevchenko <andy@infradead.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Tsuchiya Yuto <kitakar@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH resend 1/1] mfd: intel_soc_pmic: Use CPU-id check instead
+ of _HRV check to differentiate variants
+Message-ID: <YcxjkhEN0BiicJsv@google.com>
+References: <20211206174806.197772-1-hdegoede@redhat.com>
+ <20211206174806.197772-2-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211206174806.197772-2-hdegoede@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Dec 2021 14:48:21 +0800, Trevor Wu wrote:
-> Playback pop is observed and the root cause is the reference clock
-> provided by MT8195 is diabled before RT5682 finishes the control flow.
+On Mon, 06 Dec 2021, Hans de Goede wrote:
+
+> The Intel Crystal Cove PMIC has 2 different variants, one for use with
+> Bay Trail (BYT) SoCs and one for use with Cherry Trail (CHT) SoCs.
 > 
-> To ensure the reference clock supplied to RT5682 is disabled after RT5682
-> finishes all register controls. We replace BCLK with MCLK for RT5682
-> reference clock, and makes use of set_bias_level_post to handle MCLK
-> which guarantees MCLK is off after all RT5682 register access.
+> So far we have been using an ACPI _HRV check to differentiate between
+> the 2, but at least on the Microsoft Surface 3, which is a CHT device,
+> the wrong _HRV value is reported by ACPI.
 > 
-> [...]
+> So instead switch to a CPU-ID check which avoids us relying on the
+> possibly wrong ACPI _HRV value.
+> 
+> Reported-by: Tsuchiya Yuto <kitakar@gmail.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-Applied to
+I switched these around (same with the other patches).
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> ---
+>  drivers/mfd/intel_soc_pmic_core.c | 28 +++-------------------------
+>  1 file changed, 3 insertions(+), 25 deletions(-)
 
-Thanks!
+Applied, thanks.
 
-[1/1] ASoC: mediatek: mt8195: update control for RT5682 series
-      commit: c5ab93e289ce554a4e0d47330dde120284541aa1
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

@@ -2,183 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F929481583
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 18:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11176481591
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 18:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237481AbhL2RAk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 29 Dec 2021 12:00:40 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42344 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236385AbhL2RAj (ORCPT
+        id S237593AbhL2REe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 12:04:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237577AbhL2REb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 12:00:39 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B3C5B81904;
-        Wed, 29 Dec 2021 17:00:38 +0000 (UTC)
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp.kernel.org (Postfix) with ESMTPSA id 0DEA7C36AE7;
-        Wed, 29 Dec 2021 17:00:33 +0000 (UTC)
-Date:   Wed, 29 Dec 2021 17:06:12 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     William Breathitt Gray <vilhelm.gray@gmail.com>,
-        linux-iio@vger.kernel.org, kernel@pengutronix.de,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 13/23] counter: Provide alternative counter
- registration functions
-Message-ID: <20211229170612.1dffa818@jic23-huawei>
-In-Reply-To: <20211229154441.38045-14-u.kleine-koenig@pengutronix.de>
-References: <20211229154441.38045-1-u.kleine-koenig@pengutronix.de>
-        <20211229154441.38045-14-u.kleine-koenig@pengutronix.de>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Wed, 29 Dec 2021 12:04:31 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C87C061747
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 09:04:31 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id z9so18651903edm.10
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 09:04:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2ieMbS+0D70pohooVgVjI3yQAHsrI5Yv9aY0un0BvWo=;
+        b=xhe6pIARJ6nLxgaxAop08bsGSZx7Kd1UHcvKv5ZPM0idYz9aF0B/bEfVlj/jBvPEtv
+         EL+qyUCy17ZT5uW1wjT7/JjXHAAC22rkvHyo8Q2cuyrY5hEzFKU2LMuuPt/bEIBXMBcZ
+         tsfJiiDsS97+WiMnMJrXiLSA/kDkYo4uhIiyzdEA4TAXXm+x7BPiFOBCbj5/VlAqsAvE
+         2Mltoe9ZvCTgvetpz3GsLVq+0zFxvjuXZA2zLJaeFXQ4D/LPhmRyDvt4ZbQ8WqyNT3Lo
+         IxkocrOxDq6U1n3AjNJu8e61H14NFTitTuJYG3isHVjxir78T+h2tld3qMIe4PnoIXv3
+         MtWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2ieMbS+0D70pohooVgVjI3yQAHsrI5Yv9aY0un0BvWo=;
+        b=1gDuuEosmjOw51w1rgTB4DP12esXoPVdfq9NgslHpdGBKScC0bhOv1Wh/iLvMCsvuX
+         WHZamqLArLIKSTYJlvoLzm8Aa0baTNB6Z6XYrfo8SQBEQeL6NUGuF3bqgmD/oSetmxS7
+         kkepcg3thIIWfQ7EXlIIh3rH4oDG+9V3Tau2WXJr1KTQcSLNU90p1MxbJE8TksiLJNaj
+         SiTrBXJEFRgtRPDOLMGg1Kw3FrWG3tnUHU/7gMHfqK+jdms8DDkNo/8pzKpJDdj9Vv76
+         lbTdz3FrINYyMK6mxFbFIjLRERZdBs6jTXUmHVKxvLDnjBqXANNjGJWQSUGJbvCQSCdl
+         LAZw==
+X-Gm-Message-State: AOAM533BEGUg79Upts73N8LBzcdAArD9z9wtfF1kGxrYhCeemKjJk/wz
+        hrhkflw27MEPz/T/VlZKVGzWJw==
+X-Google-Smtp-Source: ABdhPJxEun8C2Rz5QYSsXiRo78geOqzPnu/l72Y9HBWwUVyyAPVjgqYpYhJYTw9hG0hiFAmsYo+q8Q==
+X-Received: by 2002:aa7:c5ca:: with SMTP id h10mr25978582eds.401.1640797469905;
+        Wed, 29 Dec 2021 09:04:29 -0800 (PST)
+Received: from localhost.localdomain ([2a02:a210:20c5:8c80:7d0a:cd68:c339:f426])
+        by smtp.gmail.com with ESMTPSA id w11sm8546153edv.65.2021.12.29.09.04.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 09:04:29 -0800 (PST)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Kiran Gunda <kgunda@codeaurora.org>,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org
+Subject: [PATCH 0/4] Enable display backlight on Fairphone 4
+Date:   Wed, 29 Dec 2021 18:03:54 +0100
+Message-Id: <20211229170358.2457006-1-luca.weiss@fairphone.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Dec 2021 16:44:31 +0100
-Uwe Kleine-König         <u.kleine-koenig@pengutronix.de> wrote:
+Add and enable PM6150L wled which is used for controlling the display
+backlight on Fairphone 4.
 
-> The current implementation gets device lifetime tracking wrong. The
-> problem is that allocation of struct counter_device is controlled by the
-> individual drivers but this structure contains a struct device that
-> might have to live longer than a driver is bound. As a result a command
-> sequence like:
-> 
-> 	{ sleep 5; echo bang; } > /dev/counter0 &
-> 	sleep 1;
-> 	echo 40000000.timer:counter > /sys/bus/platform/drivers/stm32-timer-counter/unbind
-> 
-> can keep a reference to the struct device and unbinding results in
-> freeing the memory occupied by this device resulting in an oops.
-> 
-> This commit provides two new functions (plus some helpers):
->  - counter_alloc() to allocate a struct counter_device that is
->    automatically freed once the embedded struct device is released
->  - counter_add() to register such a device.
-> 
-> Note that this commit doesn't fix any issues, all drivers have to be
-> converted to these new functions to correct the lifetime problems.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Basically fine - a few trivial comments inline that I'm not that fussed
-about whether you take notice of or not. As such
+This series depends on the recent wled series by Marijn Suijten,
+currently applied in the for-backlight-next branch of
+kernel/git/lee/backlight.git (or linux-next).
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Luca Weiss (4):
+  dt-bindings: backlight: qcom-wled: Add PM6150L compatible
+  backlight: qcom-wled: Add PM6150L compatible
+  arm64: dts: qcom: pm6150l: Add wled node
+  arm64: dts: qcom: sm7225-fairphone-fp4: Configure WLED
 
-> ---
+ .../devicetree/bindings/leds/backlight/qcom-wled.yaml  |  1 +
+ arch/arm64/boot/dts/qcom/pm6150l.dtsi                  | 10 ++++++++++
+ arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts      |  9 +++++++++
+ drivers/video/backlight/qcom-wled.c                    |  1 +
+ 4 files changed, 21 insertions(+)
 
-I'd have liked to have seen a change log here. Quite a few comments on this
-one and not all had 'obvious' resolutions.
-
->  drivers/counter/counter-core.c | 168 ++++++++++++++++++++++++++++++++-
->  include/linux/counter.h        |  15 +++
->  2 files changed, 181 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/counter/counter-core.c b/drivers/counter/counter-core.c
-> index 00c41f28c101..b3fa15bbcbdb 100644
-> --- a/drivers/counter/counter-core.c
-> +++ b/drivers/counter/counter-core.c
-> @@ -15,6 +15,7 @@
->  #include <linux/kdev_t.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
-> +#include <linux/slab.h>
->  #include <linux/types.h>
->  #include <linux/wait.h>
->  
-> @@ -24,6 +25,16 @@
->  /* Provides a unique ID for each counter device */
->  static DEFINE_IDA(counter_ida);
->  
-> +struct counter_device_allochelper {
-> +	struct counter_device counter;
-> +
-> +	/*
-> +	 * This is cache line aligned to ensure private data behaves like if it
-> +	 * were kmalloced separately.
-> +	 */
-> +	unsigned long privdata[] ____cacheline_aligned;
-
-Change log for the patch would have made it easier to see you decided
-to make this change after the discussion in v2.
-
-> +};
-> +
-
-...
-
->  
-> +/**
-> + * counter_alloc - allocate a counter_device
-> + * @sizeof_priv: size of the driver private data
-> + *
-> + * This is part one of counter registration. The structure is allocated
-> + * dynamically to ensure the right lifetime for the embedded struct device.
-> + *
-> + * If this succeeds, call counter_put() to get rid of the counter_device again.
-> + */
-> +struct counter_device *counter_alloc(size_t sizeof_priv)
-> +{
-> +	struct counter_device_allochelper *ch;
-> +	struct counter_device *counter;
-> +	struct device *dev;
-> +	int err;
-> +
-> +	ch = kzalloc(sizeof(*ch) + sizeof_priv, GFP_KERNEL);
-> +	if (!ch) {
-> +		err = -ENOMEM;
-> +		goto err_alloc_ch;
-
-Slight preference for a direct return here even though it means
-replicating the ERR_PTR() statement.  Makes for one less error
-path where a reviewer has to go see what is being done.
-
-> +	}
-> +
-> +	counter = &ch->counter;
-> +	dev = &counter->dev;
-> +
-> +	/* Acquire unique ID */
-> +	err = ida_alloc(&counter_ida, GFP_KERNEL);
-> +	if (err < 0)
-> +		goto err_ida_alloc;
-> +	dev->id = err;
-> +
-> +	mutex_init(&counter->ops_exist_lock);
-> +	dev->type = &counter_device_type;
-> +	dev->bus = &counter_bus_type;
-> +	dev->devt = MKDEV(MAJOR(counter_devt), dev->id);
-> +
-> +	err = counter_chrdev_add(counter);
-> +	if (err < 0)
-> +		goto err_chrdev_add;
-> +
-> +	device_initialize(dev);
-> +
-> +	return counter;
-> +
-> +err_chrdev_add:
-> +
-Nitpick: Unusual spacing (to my eye anyway). I wouldn't expect to see a blank line after a label
-as the label indentation makes a visual separation anyway.
-
-> +	ida_free(&counter_ida, dev->id);
-> +err_ida_alloc:
-> +
-> +	kfree(ch);
-> +err_alloc_ch:
-> +
-> +	return ERR_PTR(err);
-> +}
-> +EXPORT_SYMBOL_GPL(counter_alloc);
+-- 
+2.34.1
 

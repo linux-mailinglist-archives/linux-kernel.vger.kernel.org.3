@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1974813E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 15:13:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC274813E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 15:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240140AbhL2ONj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 09:13:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59502 "EHLO
+        id S240153AbhL2OPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 09:15:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240124AbhL2ONi (ORCPT
+        with ESMTP id S233713AbhL2OPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 09:13:38 -0500
+        Wed, 29 Dec 2021 09:15:00 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC5EC061574;
-        Wed, 29 Dec 2021 06:13:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E01C061574;
+        Wed, 29 Dec 2021 06:15:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B9DB614AF;
-        Wed, 29 Dec 2021 14:13:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EDB6C36AE9;
-        Wed, 29 Dec 2021 14:13:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB342614C9;
+        Wed, 29 Dec 2021 14:14:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB679C36AE9;
+        Wed, 29 Dec 2021 14:14:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640787217;
-        bh=crdfs2TcubasYQDmy/rvRISSaBoRTG5lde8cjXxvosU=;
+        s=korg; t=1640787299;
+        bh=sNviMGkw+EDDvnPrxN650ZZafy3DQSyIckS9RrKIRn0=;
         h=From:To:Cc:Subject:Date:From;
-        b=1+Es1wx9cEU/Sa1e2l8AyJP94Qnj61zi9vrA0XXBq8w1QNlKRw+msXT15DmAkEO+O
-         /EBhDM6R3HC2Yfz+OCgTbpqz1ed7QAOTfyseJG4Tk9lxwit5kOqR8xwzYKPfjC3j2n
-         9J7kqYk82GK+p0SuFNrnUXdRYEE9UZZfREjJF5s4=
+        b=BAlhAikEAqBG3cZCo7LtoNnYdEXdF92qunpi+o0UcBlbzMJ+xMoeqSzEgZkQLgbkx
+         dPnVPUUXQ495pYvu5wXlpV6HyHaYQ48PHWgWxXy8Jrm+xs5V8GEdMOghDg6WcW8HVO
+         s1wb9vaAf66ulv1CVQfgQ7pSB9xLtUrBJ4Xi7Q4w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Justin Ernst <justin.ernst@hpe.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Hans de Goede <hdegoede@redhat.com>,
         Mark Gross <markgross@kernel.org>,
         platform-driver-x86@vger.kernel.org
-Subject: [PATCH] x86/platform/uv: use default_groups in kobj_type
-Date:   Wed, 29 Dec 2021 15:13:32 +0100
-Message-Id: <20211229141332.2552428-1-gregkh@linuxfoundation.org>
+Subject: [PATCH] platform/x86: intel-uncore-frequency: use default_groups in kobj_type
+Date:   Wed, 29 Dec 2021 15:14:54 +0100
+Message-Id: <20211229141454.2552950-1-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1899; h=from:subject; bh=crdfs2TcubasYQDmy/rvRISSaBoRTG5lde8cjXxvosU=; b=owGbwMvMwCRo6H6F97bub03G02pJDIlncnle+WRwrjdvEGUwdVyWEjnnkkHmzd/ccqGuOw67fVqi +uh4RywLgyATg6yYIsuXbTxH91ccUvQytD0NM4eVCWQIAxenAEzkmj3Dgvkd3gVnylfUB95Oe8ZjuM /72JltrQwLZqV4tqXeqbl/f3GRQ+qTX/lls/9MBQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1536; h=from:subject; bh=sNviMGkw+EDDvnPrxN650ZZafy3DQSyIckS9RrKIRn0=; b=owGbwMvMwCRo6H6F97bub03G02pJDIlncuOijUMFZyTdXfdhs0wm9/WPtztM7+0+IxX9+vzJWTE6 h28IdsSyMAgyMciKKbJ82cZzdH/FIUUvQ9vTMHNYmUCGMHBxCsBEpJUZFmzO0dTQErhTYabDqBWrLL ntW1dCF8OCDXl378z/7+0haql4+ubM0GJ3vWNdAA==
 X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -50,58 +50,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 There are currently 2 ways to create a set of sysfs files for a
 kobj_type, through the default_attrs field, and the default_groups
-field.  Move the uv sysfs code to use default_groups field which has
-been the preferred way since aa30f47cf666 ("kobject: Add support for
-default attribute groups to kobj_type") so that we can soon get rid of
-the obsolete default_attrs field.
+field.  Move the uncore-frequency sysfs code to use default_groups field
+which has been the preferred way since aa30f47cf666 ("kobject: Add
+support for default attribute groups to kobj_type") so that we can soon
+get rid of the obsolete default_attrs field.
 
-Cc: Justin Ernst <justin.ernst@hpe.com>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Cc: Hans de Goede <hdegoede@redhat.com>
 Cc: Mark Gross <markgross@kernel.org>
 Cc: platform-driver-x86@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/platform/x86/uv_sysfs.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/platform/x86/intel/uncore-frequency.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/platform/x86/uv_sysfs.c b/drivers/platform/x86/uv_sysfs.c
-index 956a354b57c1..625b0b79d185 100644
---- a/drivers/platform/x86/uv_sysfs.c
-+++ b/drivers/platform/x86/uv_sysfs.c
-@@ -175,6 +175,7 @@ static struct attribute *uv_hub_attrs[] = {
- 	&cnode_attribute.attr,
- 	NULL,
+diff --git a/drivers/platform/x86/intel/uncore-frequency.c b/drivers/platform/x86/intel/uncore-frequency.c
+index 3ee4c5c8a64f..4cd8254f2e40 100644
+--- a/drivers/platform/x86/intel/uncore-frequency.c
++++ b/drivers/platform/x86/intel/uncore-frequency.c
+@@ -225,6 +225,7 @@ static struct attribute *uncore_attrs[] = {
+ 	&min_freq_khz.attr,
+ 	NULL
  };
-+ATTRIBUTE_GROUPS(uv_hub);
++ATTRIBUTE_GROUPS(uncore);
  
- static void hub_release(struct kobject *kobj)
+ static void uncore_sysfs_entry_release(struct kobject *kobj)
  {
-@@ -205,7 +206,7 @@ static const struct sysfs_ops hub_sysfs_ops = {
- static struct kobj_type hub_attr_type = {
- 	.release	= hub_release,
- 	.sysfs_ops	= &hub_sysfs_ops,
--	.default_attrs	= uv_hub_attrs,
-+	.default_groups	= uv_hub_groups,
+@@ -236,7 +237,7 @@ static void uncore_sysfs_entry_release(struct kobject *kobj)
+ static struct kobj_type uncore_ktype = {
+ 	.release = uncore_sysfs_entry_release,
+ 	.sysfs_ops = &kobj_sysfs_ops,
+-	.default_attrs = uncore_attrs,
++	.default_groups = uncore_groups,
  };
  
- static int uv_hubs_init(void)
-@@ -327,6 +328,7 @@ static struct attribute *uv_port_attrs[] = {
- 	&uv_port_conn_port_attribute.attr,
- 	NULL,
- };
-+ATTRIBUTE_GROUPS(uv_port);
- 
- static void uv_port_release(struct kobject *kobj)
- {
-@@ -357,7 +359,7 @@ static const struct sysfs_ops uv_port_sysfs_ops = {
- static struct kobj_type uv_port_attr_type = {
- 	.release	= uv_port_release,
- 	.sysfs_ops	= &uv_port_sysfs_ops,
--	.default_attrs	= uv_port_attrs,
-+	.default_groups	= uv_port_groups,
- };
- 
- static int uv_ports_init(void)
+ /* Caller provides protection */
 -- 
 2.34.1
 

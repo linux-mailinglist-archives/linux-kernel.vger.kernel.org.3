@@ -2,93 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EEEB481616
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 19:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4040481617
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 19:44:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbhL2Smn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 13:42:43 -0500
-Received: from mga18.intel.com ([134.134.136.126]:51990 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229794AbhL2Sml (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 13:42:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640803361; x=1672339361;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=HtUeiy02ABlEF24PLl2F9uXiUeIwk1cDherhU2kTHNg=;
-  b=OV6I3889QDNLEcTOgYdKlInIXN8yMgAZSuOmBxSwa9p1+fcSYA8elvpq
-   AHSIL1VJhG0SH54j26hj+TRLdsZuzpIRnlox8Qqc9GEUyngErt7P8oRVg
-   ORrczwpPa4y/w/i1F5pulG9LH8VbZXRozI1OEHAQoWnSeCujTrm+cxhJp
-   BVive/6pfdRZdaKf/43I7vQ7SWs1i1ZqsxG8b1PAwbbF+2W0h3wmPIDv6
-   Q2SpMWy4TlUS1CIEBb7VPFXFk9u9Jduz/hThBRw8zSaNRt91m1iwXYN/t
-   OHL+HRw98R8oTu+OokcM1zjodpr+vckQDrYaiO4UhyfKTt6TaaJoUTf+e
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="228383747"
-X-IronPort-AV: E=Sophos;i="5.88,246,1635231600"; 
-   d="scan'208";a="228383747"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 10:42:41 -0800
-X-IronPort-AV: E=Sophos;i="5.88,246,1635231600"; 
-   d="scan'208";a="486675554"
-Received: from shahniha-mobl.amr.corp.intel.com (HELO [10.209.54.244]) ([10.209.54.244])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 10:42:40 -0800
-Subject: Re: [PATCH 04/26] x86/traps: Add #VE support for TDX guest
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     tglx@linutronix.de, mingo@redhat.com, luto@kernel.org,
-        peterz@infradead.org, sathyanarayanan.kuppuswamy@linux.intel.com,
-        aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
-        david@redhat.com, hpa@zytor.com, jgross@suse.com,
-        jmattson@google.com, joro@8bytes.org, jpoimboe@redhat.com,
-        knsathya@kernel.org, pbonzini@redhat.com, sdeep@vmware.com,
-        seanjc@google.com, tony.luck@intel.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
- <20211214150304.62613-5-kirill.shutemov@linux.intel.com>
- <YcTR5HnkHi7CjVyx@zn.tnic>
- <20211228233112.cpycmdv55edxhvbv@black.fi.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Message-ID: <2d65ef4f-acc9-4cd1-ca39-c1f57a5cd821@intel.com>
-Date:   Wed, 29 Dec 2021 10:42:38 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S229893AbhL2SoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 13:44:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229794AbhL2SoY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 13:44:24 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE38AC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 10:44:23 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id w27so14564053qkj.7
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 10:44:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Shoj+Q3yMEhM9mNXjLtdxgk5LZJhKA/O7LXTWfiwLQM=;
+        b=jgyyqpkTqrJBnuET9DIU54lJy4W8PO4nKpAL8mj0vtTNJ7L2teQmhIXYbq7PXu/bIP
+         aF0tOBxel+clKcr1H23Y8mUqiVHiNuA3XeSKaES7ORtpX9JVc3Cz1vKhgW0vsIL0s3N1
+         DfXRXFbSgYCEUFCzF5IigkowIGyEPx9Ac7RdE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Shoj+Q3yMEhM9mNXjLtdxgk5LZJhKA/O7LXTWfiwLQM=;
+        b=qnBBOJKl3iql3G5QZ17UVuoYO7+rf7tw2YRDzsI2b2IurqI0EB6+a7TzvUI1KaGDQg
+         PusCQGlnQ7Yx/dTDdD2lERDyjAFo1nL66pF+2KyeLPKmaA2Ahf2VlhZ0fYZEopOWumAI
+         ht80KH0ASC1bM9hUGabfUSlWX7DwVSTLnNhPOuqUhAhTMCxiMlcunM2PtdO4zZDfa3oO
+         aENCjthSPkuqlgko5SBVx07rEPcf+c3m+1jBYnvo+KdN6dngKF3JMERg7e4vnzp3r0k6
+         lKwf0+6uzbJSHJIpHi3A4oXv3hufErjQASAJ2K5O44OutoEYA5B6Kt0SWDZ42LTd2HzC
+         Sg0w==
+X-Gm-Message-State: AOAM5330rOwzlGrdwLbVs23l0qlfqJeboIjwzTeUdH7fe8V7Ugs3l5H/
+        aJGXueNuvudC1kfBceBQe4ltdA==
+X-Google-Smtp-Source: ABdhPJwiO+gX4HKdmMuEU6gcsV2DoE2Pu4VLhKUqPMTz+1itpbMofq19YOFiXpnHdZkSZhR/1fu46w==
+X-Received: by 2002:a37:755:: with SMTP id 82mr19397299qkh.89.1640803463092;
+        Wed, 29 Dec 2021 10:44:23 -0800 (PST)
+Received: from markyacoub.nyc.corp.google.com ([2620:0:1003:314:2258:17ef:b383:8855])
+        by smtp.gmail.com with ESMTPSA id e7sm19130365qtx.72.2021.12.29.10.44.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 10:44:22 -0800 (PST)
+From:   Mark Yacoub <markyacoub@chromium.org>
+To:     linux-mediatek@lists.infradead.org
+Cc:     seanpaul@chromium.org, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, matthias.bgg@gmail.com,
+        jason-jh.lin@mediatek.com, tzungbi@google.com,
+        Mark Yacoub <markyacoub@chromium.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] drm/mediatek: Set default value for Panel Orientation connector prop.
+Date:   Wed, 29 Dec 2021 13:44:18 -0500
+Message-Id: <20211229184420.793234-1-markyacoub@chromium.org>
+X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
+In-Reply-To: <20211022172413.195559-1-markyacoub@chromium.org>
+References: <20211022172413.195559-1-markyacoub@chromium.org>
 MIME-Version: 1.0
-In-Reply-To: <20211228233112.cpycmdv55edxhvbv@black.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/28/21 3:31 PM, Kirill A. Shutemov wrote:
-> On Thu, Dec 23, 2021 at 08:45:40PM +0100, Borislav Petkov wrote:
->> What happens if the NMI handler triggers a #VE after all? Or where is it
->> enforced that TDX guests should set panic_on_oops?
-> Kernel will handle the #VE normally inside NMI handler. (We tested it once
-> again, just in case.)
-> 
-> The critical part is that #VE must not be triggered in NMI entry code,
-> before kernel is ready to handle nested NMIs. 
-> 
-> #VE cannot possibly happen there: no #VE-inducing instructions, code and
-> data are in guest private memory.
-...
-> The situation is similar to NMIs vs. breakpoints.
+[Why]
+Creating the prop uses UNKNOWN as the initial value, which is not a
+supported value if the prop is to be supported.
 
-Or page faults for that matter.
+[How]
+Set the panel orientation default value to NORMAL right after creating
+the prop if no DSI panel exists.
+Panels have their own orientations, and panel orientation can't be
+overriden once initialized to a value.
 
-Page faults are architecturally permitted to occur in the NMI entry
-path.  But, there's no facility to handle them.  The kernel (mostly
-easily) avoids doing things that might cause page faults in the NMI
-entry path.
+v1:
+Set panel orientation only if DSI panel does not exist.
 
-The same goes for #VE's in the same path.  A guest is written to avoid
-#VE in the NMI entry.  If they happen in that path, there's a bug somewhere.
+Tested on Jacuzzi(MTK)
+Fixes IGT@kms_properties@get_properties-sanity-{atomic,non-atomic}
 
-I wouldn't go as far as to say "#VE cannot possibly happen there (NMI
-entry code)".  They *CAN* happen there, but the kernel is doing
-everything it can to avoid them.
+Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
+---
+ drivers/gpu/drm/mediatek/mtk_dsi.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+index 0ad7157660afa..9d33dd93118e0 100644
+--- a/drivers/gpu/drm/mediatek/mtk_dsi.c
++++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+@@ -1040,6 +1040,13 @@ static int mtk_dsi_encoder_init(struct drm_device *drm, struct mtk_dsi *dsi)
+ 		goto err_cleanup_encoder;
+ 	}
+ 
++	/* A drm_panel can have its own orientation. If there is no panel, set the
++	 * orientation to NORMAL. */
++	if (!dsi->panel) {
++		drm_connector_set_panel_orientation(
++			dsi->connector, DRM_MODE_PANEL_ORIENTATION_NORMAL);
++	}
++
+ 	drm_connector_attach_encoder(dsi->connector, &dsi->encoder);
+ 
+ 	return 0;
+-- 
+2.34.1.448.ga2b2bfdf31-goog
+

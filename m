@@ -2,129 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D152E481465
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 16:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D302481483
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 16:41:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240522AbhL2PYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 10:24:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
+        id S240587AbhL2PkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 10:40:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240514AbhL2PYF (ORCPT
+        with ESMTP id S237096AbhL2PkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 10:24:05 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0381C06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 07:24:04 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id r17so45092023wrc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 07:24:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=LZQ2uT+dEDdcfo6GdsvFMg5+lwEKUwPetYi8+iOsNTE=;
-        b=g/BtKfrE39CwIcZaRrFrzcFAcOo2HU9xLitA2rLAs+sZo1JTwMpnrghiftDw6poaLd
-         He50o4JOWuTaTkDV9XN2FmtEOsVK0kLXLsXApfSsmRnpnPiBw8lnJT+o3ooUMkeHOkZ5
-         szGZGGV1dInrwoVLs8qvTc0i9nKXwFzwTJh/1327gNE7Khbd+FV4hUtgnC54VDILcxF9
-         OobNnOF5/Y2nDFeHfWzUTLpoWjyfN7tw0+sSsG/YxzWGcj44dp9NfbUUfn2uiDePHABp
-         N3skC7MAmZfyfYVH1kdfdu1E/SHlULXIHqYprX4r3qC7saf6SFtRJSQfds7+oD501XuI
-         tEMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=LZQ2uT+dEDdcfo6GdsvFMg5+lwEKUwPetYi8+iOsNTE=;
-        b=h60bmRW+Fe4bUIDh9SCNGwxsm6WNEBSL95sZWnsQippGeZ+v8QbcW+g54gt6YwPCqM
-         //jUy0JjaDUDYVHvxukPVqZXF5J94vK570Acl/bcs+Zpdi6RVw2t8lzEFcwfkYgrY7q/
-         PRCPPhoStWvfJxndh9fDsXtTEBWOVc/TOYpz3BJ+yi3UOynXaHzmv1pSn95orvanMKLP
-         AtdjHtfFxnmOISljl98E3PLrVyGWbwMsVtpqPsci+4S3Fg9Kw8/FsqbcW930WYzS1VDo
-         X5wmBbGpBX6LjGHtm9mVAyuakOcgZJ0wtNv0h3uSyGw345KXH4zmNuV+SIG9zJ9k6Oew
-         FMBg==
-X-Gm-Message-State: AOAM5302+Z0EMChhEavN4QAHJsZtHeqhJ3SC/nAIPGwcTxlC1cpk/uEK
-        HSKK/ulN9V58bMlsqQp7w2pqvQ==
-X-Google-Smtp-Source: ABdhPJx27hQZtD1q76IBUMnEd1Xg0f7/2/Jw1Bws56rnUP8BCeQIA9tfDcTTsNw6NPF8VRPLqDpGxQ==
-X-Received: by 2002:a05:6000:1ac6:: with SMTP id i6mr21307251wry.373.1640791443205;
-        Wed, 29 Dec 2021 07:24:03 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id b10sm21383326wrg.19.2021.12.29.07.24.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 07:24:02 -0800 (PST)
-Date:   Wed, 29 Dec 2021 15:23:59 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [RFC v5 net-next 02/13] mfd: ocelot: offer an interface for MFD
- children to get regmaps
-Message-ID: <Ycx9j3bflcTGsb7b@google.com>
-References: <20211218214954.109755-1-colin.foster@in-advantage.com>
- <20211218214954.109755-3-colin.foster@in-advantage.com>
+        Wed, 29 Dec 2021 10:40:14 -0500
+X-Greylist: delayed 538 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 29 Dec 2021 07:40:13 PST
+Received: from magratgarlick.emantor.de (magratgarlick.emantor.de [IPv6:2a01:4f8:c17:c88::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAA8C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 07:40:13 -0800 (PST)
+Received: by magratgarlick.emantor.de (Postfix, from userid 114)
+        id DD8BF9123B; Wed, 29 Dec 2021 16:31:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=czerwinskis.de;
+        s=mail; t=1640791872;
+        bh=3+cxsWJzcxwxvlgm8JC15q9orIzlvp5B33kSIsTPbvA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZbwYQCZCW3LUexeKdnHHLPSarGo4gcKOPqDEbB7c9soqyLHEfdiucq+aFayk2nd+X
+         3bNlF+a85TgNP40vTAVfgUZ+EJxBCN2Qa89yNtkdQkfg96qLruyMf2/LBWRVj+bc5R
+         /9du+AR5ECpgY1BTQxrk594VCjYXAoWJeM84sTmU=
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
+        magratgarlick.emantor.de
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.0 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.2
+Received: from localhost (unknown [IPv6:2001:9e8:2145:1402:c0d3:dbff:fefe:ff70])
+        by magratgarlick.emantor.de (Postfix) with ESMTPSA id 3987C909AC;
+        Wed, 29 Dec 2021 16:31:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=czerwinskis.de;
+        s=mail; t=1640791869;
+        bh=3+cxsWJzcxwxvlgm8JC15q9orIzlvp5B33kSIsTPbvA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=E6h0sbTWvJSGKmYmR3cxSM+AycehfQjSMaqkPlfA42julzHJd45aqbuEPNH7AAFxR
+         2LwBeMecwo5mnVAhLZyCIzGLzZMY3dCyl9T69jTMaC8ohv2jH5p0X8JRlswY3vjqBM
+         SgIjAxMfJhhU0Unxe436eyF1oTAJiR+tGhZhrjCU=
+User-agent: mu4e 1.6.10; emacs 27.2
+From:   Rouven Czerwinski <rouven@czerwinskis.de>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Simeon Simeonoff <sim.simeonoff@gmail.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Colin Ian King <colin.king@intel.com>
+Subject: IOMMU Page Fault with Creative Soundblaster Zx after suspend
+Date:   Wed, 29 Dec 2021 16:24:13 +0100
+Message-ID: <87mtkjqvgj.fsf@czerwinskis.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211218214954.109755-3-colin.foster@in-advantage.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 18 Dec 2021, Colin Foster wrote:
+Hi,
 
-> Child devices need to get a regmap from a resource struct, specifically
-> from the MFD parent. The MFD parent has the interface to the hardware
-> layer, which could be I2C, SPI, PCIe, etc.
-> 
-> This is somewhat a hack... ideally child devices would interface with the
-> struct device* directly, by way of a function like
-> devm_get_regmap_from_resource which would be akin to
-> devm_get_and_ioremap_resource. A less ideal option would be to interface
-> directly with MFD to get a regmap from the parent.
-> 
-> This solution is even less ideal than both of the two suggestions, so is
-> intentionally left in a separate commit after the initial MFD addition.
-> 
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> ---
->  drivers/mfd/ocelot-core.c |  9 +++++++++
->  include/soc/mscc/ocelot.h | 12 ++++++++++++
->  2 files changed, 21 insertions(+)
-> 
-> diff --git a/drivers/mfd/ocelot-core.c b/drivers/mfd/ocelot-core.c
-> index a65619a8190b..09132ea52760 100644
-> --- a/drivers/mfd/ocelot-core.c
-> +++ b/drivers/mfd/ocelot-core.c
-> @@ -94,6 +94,15 @@ static struct regmap *ocelot_mfd_regmap_init(struct ocelot_mfd_core *core,
->  	return regmap;
->  }
->  
-> +struct regmap *ocelot_mfd_get_regmap_from_resource(struct device *dev,
-> +						   const struct resource *res)
-> +{
-> +	struct ocelot_mfd_core *core = dev_get_drvdata(dev);
-> +
-> +	return ocelot_mfd_regmap_init(core, res);
-> +}
-> +EXPORT_SYMBOL(ocelot_mfd_get_regmap_from_resource);
+With current 5.15.11, my soundblaster Zx is not correctly coming back
+from suspend. Dmesg prints:
 
-This is almost certainly not the right way to do whatever it is you're
-trying to do!
+[Mi Dez 29 16:12:14 2021] [drm] UVD and UVD ENC initialized successfully.
+[Mi Dez 29 16:12:14 2021] snd_hda_codec_ca0132 hdaudioC0D1: ca0132 DSP downloaded and running
+[Mi Dez 29 16:12:15 2021] [drm] VCE initialized successfully.
+[Mi Dez 29 16:12:15 2021] usb 1-5: reset full-speed USB device number 2 using xhci_hcd
+[Mi Dez 29 16:12:16 2021] ata1.00: Enabling discard_zeroes_data
+[Mi Dez 29 16:12:16 2021] OOM killer enabled.
+[Mi Dez 29 16:12:16 2021] Restarting tasks ... done.
+[Mi Dez 29 16:12:16 2021] PM: suspend exit
+[Mi Dez 29 16:12:16 2021] snd_hda_intel 0000:06:00.0: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x000f address=0xdf880000 flags=0x0000]
+[Mi Dez 29 16:12:17 2021] igb 0000:08:00.0 enp8s0: igb: enp8s0 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX/TX
 
-Please don't try to upstream "somewhat a hack"s into the Mainline
-kernel.
+Where the IOMMU Page Fault looks suspicious. Unbinding and rebinding the
+driver using sysfs fixes it, thats the current workaround I have
+been using.
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Thanks and happy holidays,
+Rouven Czerwinski

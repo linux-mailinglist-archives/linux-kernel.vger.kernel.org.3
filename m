@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2200D4814EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 17:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2C14814F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 17:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240618AbhL2QLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 11:11:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
+        id S240686AbhL2QLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 11:11:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240591AbhL2QLI (ORCPT
+        with ESMTP id S240669AbhL2QLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 11:11:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDB3C061574;
-        Wed, 29 Dec 2021 08:11:07 -0800 (PST)
+        Wed, 29 Dec 2021 11:11:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA9BC06173E;
+        Wed, 29 Dec 2021 08:11:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F6C1B8184F;
-        Wed, 29 Dec 2021 16:11:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF4A9C36AED;
-        Wed, 29 Dec 2021 16:10:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C77236152F;
+        Wed, 29 Dec 2021 16:11:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D856CC36AE9;
+        Wed, 29 Dec 2021 16:11:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640794265;
-        bh=MCJ1c2G0AvkOxBK7lYQWdzYLDOnQRNszMz4pYucFSEY=;
+        s=k20201202; t=1640794278;
+        bh=S0LERJwyzEMFDpJ3sNkuJ61BavzIBBGkD+j0SrotwVM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OgYDRett4iHtFytcsCIZm8KrqlEcu5/pB+3aLmfJhwnHdZHEDT0CR+XW6/RAnCRoo
-         8IvgvssmHbR9fc5qrD02J/5rxWMXSxhv9Jwn9n27LmKB2uzE3tq9wJGPhJW9mGV5zz
-         EDdv+LuDJsVef0vNTEBfb2DfLuWmvOKZezC6S3gs/+7u26esHu7zEXMBHK7l3fZWXy
-         0U5mKXDZLuV8VwdfznrtSC0hacEIAoYSecCtF0YrWmoCkZW/KSssvjYKyTvd5R2Bue
-         FKiJdLjjTOZLdT9CNEyN8isFncNnhxZhD8FjeYhsUru5xM/VirZlxd0n4iuSzx3JGQ
-         pLhK5hcx9GrYw==
+        b=LFB8v42obF7l8nh+zXxUc+I/Umk0E1v0oHceiGi4OXini+LZiNqBvuHwzVRRt1z04
+         ZJKCVF2mPLVXyp4EldnzaO0O17nilRbFi/sZ33Dvnvm5p7Q2JaQTNJZDOzQxV6H6iE
+         NpRvHQZBxzKBCMuSKr+yx2XVtt5ADqCSKgCr3lVmCjuFmFRl1XNbQf5QViuxjMPcN4
+         NUG3nNQMuBHiw5xqS+EM/grPdV6RMGg09KFdrK5uGv5W7Hv6Pu0ZAqOEgi6kAQlwL6
+         zsBuN7qZJ0hmxXb5J1f8lzPg7rEO5027UUyN0pF5MDgLn2cg7Yegx+S+3cYHbwLn2G
+         QEw3FCgM17Adg==
 From:   Jisheng Zhang <jszhang@kernel.org>
 To:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -47,9 +47,9 @@ To:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
 Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-tegra@vger.kernel.org
-Subject: [PATCH 3/7] arm64: dts: uniphier: Remove unused num-viewport from pcie node
-Date:   Thu, 30 Dec 2021 00:02:41 +0800
-Message-Id: <20211229160245.1338-4-jszhang@kernel.org>
+Subject: [PATCH 4/7] arm64: tegra: Remove unused num-viewport from pcie node
+Date:   Thu, 30 Dec 2021 00:02:42 +0800
+Message-Id: <20211229160245.1338-5-jszhang@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211229160245.1338-1-jszhang@kernel.org>
 References: <20211229160245.1338-1-jszhang@kernel.org>
@@ -66,34 +66,61 @@ unused num-viewport from pcie nodes.
 
 Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 ---
- arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi | 1 -
- arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi | 1 -
- 2 files changed, 2 deletions(-)
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi b/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
-index 8f2c1c1e2c64..cc7a18591921 100644
---- a/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
-+++ b/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
-@@ -905,7 +905,6 @@ pcie: pcie@66000000 {
- 			clocks = <&sys_clk 24>;
- 			resets = <&sys_rst 24>;
- 			num-lanes = <1>;
--			num-viewport = <1>;
- 			bus-range = <0x0 0xff>;
- 			device_type = "pci";
- 			ranges =
-diff --git a/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi b/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-index be97da132258..7646d14d1fa9 100644
---- a/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-+++ b/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-@@ -802,7 +802,6 @@ pcie: pcie@66000000 {
- 			clocks = <&sys_clk 24>;
- 			resets = <&sys_rst 24>;
- 			num-lanes = <1>;
--			num-viewport = <1>;
- 			bus-range = <0x0 0xff>;
- 			device_type = "pci";
- 			ranges =
+diff --git a/arch/arm64/boot/dts/nvidia/tegra194.dtsi b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+index 851e049b3519..e5c7c22b1c05 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra194.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+@@ -2007,7 +2007,6 @@ pcie@14100000 {
+ 		#size-cells = <2>;
+ 		device_type = "pci";
+ 		num-lanes = <1>;
+-		num-viewport = <8>;
+ 		linux,pci-domain = <1>;
+ 
+ 		clocks = <&bpmp TEGRA194_CLK_PEX0_CORE_1>;
+@@ -2061,7 +2060,6 @@ pcie@14120000 {
+ 		#size-cells = <2>;
+ 		device_type = "pci";
+ 		num-lanes = <1>;
+-		num-viewport = <8>;
+ 		linux,pci-domain = <2>;
+ 
+ 		clocks = <&bpmp TEGRA194_CLK_PEX0_CORE_2>;
+@@ -2115,7 +2113,6 @@ pcie@14140000 {
+ 		#size-cells = <2>;
+ 		device_type = "pci";
+ 		num-lanes = <1>;
+-		num-viewport = <8>;
+ 		linux,pci-domain = <3>;
+ 
+ 		clocks = <&bpmp TEGRA194_CLK_PEX0_CORE_3>;
+@@ -2169,7 +2166,6 @@ pcie@14160000 {
+ 		#size-cells = <2>;
+ 		device_type = "pci";
+ 		num-lanes = <4>;
+-		num-viewport = <8>;
+ 		linux,pci-domain = <4>;
+ 
+ 		clocks = <&bpmp TEGRA194_CLK_PEX0_CORE_4>;
+@@ -2223,7 +2219,6 @@ pcie@14180000 {
+ 		#size-cells = <2>;
+ 		device_type = "pci";
+ 		num-lanes = <8>;
+-		num-viewport = <8>;
+ 		linux,pci-domain = <0>;
+ 
+ 		clocks = <&bpmp TEGRA194_CLK_PEX0_CORE_0>;
+@@ -2277,7 +2272,6 @@ pcie@141a0000 {
+ 		#size-cells = <2>;
+ 		device_type = "pci";
+ 		num-lanes = <8>;
+-		num-viewport = <8>;
+ 		linux,pci-domain = <5>;
+ 
+ 		pinctrl-names = "default";
 -- 
 2.34.1
 

@@ -2,85 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24FC7481115
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 09:51:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BFC6481119
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 09:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239399AbhL2Ivn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 03:51:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239382AbhL2Ivn (ORCPT
+        id S239409AbhL2IzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 03:55:23 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:30190 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239391AbhL2IzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 03:51:43 -0500
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCAF4C06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 00:51:42 -0800 (PST)
-Received: by mail-ua1-x92e.google.com with SMTP id i5so21180985uaq.10
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 00:51:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=5p0+WdvJHntrPtTqYOOl5eRIGyKw2vh3yc8Mq6crnNY=;
-        b=UHxLaTKFiiPrCtGx0H81SKCsGL8m37s6sXnTtcSIqA4n1Y1b+2R6v1SwszhzG3aZSM
-         REGmSx1/ZZB4JHDop2pGHkS0NRWtTdm9C9MX/wbe9lIPOJnvb2K3aqYpHH+ePkMGP8FC
-         bSBRi9+JolvWcSEGQanFQUeX8D1hP4s+ux0qhzqqFKc6Mo5K07Tz4y39f1u7PNB1nbph
-         Ol17nDS4/YjC+F3uf3vKwN4b5lD+YvSVTiNqwbWG9zWaJQ8qeU8vGse6jOSh6qeMaz7U
-         BZ5wWUEncUX4qTtC2RWsKDKjkU3USiy9SyNvNSfPhQvCHoUB4rHe8f8DZ0TpV4lrVLZ1
-         xu2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=5p0+WdvJHntrPtTqYOOl5eRIGyKw2vh3yc8Mq6crnNY=;
-        b=HzFaJocRxZ+OAG2qtAj4gaF477x/aoyR4rcEn3TBFACfFWRBfPY5sy2wb5svC2VQ+h
-         mpy7+wl0y7JVlUaAJeNULr9M2YmB4vHMGhNHpCQG3xx8huFZrNtghMaTF9tQC8oFqnoz
-         wBYrNiqGs74UKHlVtiUjkB0spb36LzBwEMeK1/CYPIOqXeZd9cOqb6yJURkI+BXmapq3
-         ya0ngkGRgJO4xai/0iN2NsnaXL+l3q/WgQsmlNlcEfxaOEtdbDC8MeYlI2SZWnPpEWKI
-         D0fInr0XCxSMfu7SOL0vtO6wfacKMRAEpe1MzfFTeVplvb1zQhQab/gAaV7THDJK5m8Y
-         oIvw==
-X-Gm-Message-State: AOAM531jScGxn+ePqNzdacpQoNKaVsbAzq3tnr7NfI2B846+vhTupyFx
-        z+BcN0ZdWLKSPo9Vhx5uVEU2RR/v2W1jxrS/7QU=
-X-Google-Smtp-Source: ABdhPJwTKq4PoV+HBmt2oH3k1r/lGJaTYePN9NeOsC8Q5PWCMjx+iIkjLdPo9T1MeZiQUH/vVFIm/DAjvjoIKHw0SWI=
-X-Received: by 2002:ab0:6813:: with SMTP id z19mr7567512uar.28.1640767901932;
- Wed, 29 Dec 2021 00:51:41 -0800 (PST)
+        Wed, 29 Dec 2021 03:55:22 -0500
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JP4tF0NHmz8w7T;
+        Wed, 29 Dec 2021 16:52:53 +0800 (CST)
+Received: from dggpeml500002.china.huawei.com (7.185.36.158) by
+ dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 29 Dec 2021 16:55:20 +0800
+Received: from [10.174.179.208] (10.174.179.208) by
+ dggpeml500002.china.huawei.com (7.185.36.158) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 29 Dec 2021 16:55:20 +0800
+Message-ID: <a91e3943-7ddc-f5c0-a7f5-360f073c20e6@huawei.com>
+Date:   Wed, 29 Dec 2021 16:55:19 +0800
 MIME-Version: 1.0
-Sender: ifeanyiomaka1@gmail.com
-Received: by 2002:a59:a72c:0:b0:272:b4dc:643c with HTTP; Wed, 29 Dec 2021
- 00:51:35 -0800 (PST)
-From:   Aisha Al-Qaddafi <aishagaddafi1894@gmail.com>
-Date:   Wed, 29 Dec 2021 08:51:35 +0000
-X-Google-Sender-Auth: FamPwTtlg1-jj35BV_xWbD8MPCE
-Message-ID: <CAO-KV1_ci9MtDKq9BS0gtZnpQcFF48pEakqZOQpUMjDqvbrvxA@mail.gmail.com>
-Subject: Investment offer,
-To:     undisclosed-recipients:;
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@redhat.com>, <namhyung@kernel.org>, <yaowenbin1@huawei.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     <hewenliang4@huawei.com>, <wuxu.wu@huawei.com>
+From:   yaowenbin <yaowenbin1@huawei.com>
+Subject: [PATCH] perf top: add concurrent access protection of the SLsmg
+ screen management
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.208]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500002.china.huawei.com (7.185.36.158)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear Friend,.
+When the following command is executed several times, a coredump file is generated.
+	$ timeout -k 9 5 perf top -e task-clock
+	*******
+	*******
+	*******
+	0.01%  [kernel]                  [k] __do_softirq
+	0.01%  libpthread-2.28.so        [.] __pthread_mutex_lock
+	0.01%  [kernel]                  [k] __ll_sc_atomic64_sub_return
+	double free or corruption (!prev) perf top --sort comm,dso
+	timeout: the monitored command dumped core
 
-With due respect to your person and much sincerity of purpose I wish
-to write to you today for our mutual benefit in this investment
-transaction.
-I'm Mrs. Aisha Al-Gaddafi, presently residing herein Oman the
-Southeastern coast of the Arabian Peninsula in Western Asia, I'm a
-single Mother and a widow with three Children. I am the only
-biological Daughter of the late Libyan President (Late Colonel Muammar
-Gaddafi). I have an investment funds worth Twenty Seven Million Five
-Hundred Thousand United State Dollars ($27.500.000.00 ) and i need an
-investment Manager/Partner and because of my Asylum Status I will
-authorize you the ownership of the investment funds, However, I am
-interested in you for investment project assistance in your country,
-may be from there,. we can build a business relationship in the
-nearest future..
+When we terminate "perf top" using sending signal method, SLsmg_reset_smg
+function is called. SLsmg_reset_smg resets the SLsmg screen management routines
+by freeing all memory allocated while it was active. However SLsmg_reinit_smg
+function maybe be called by another thread. SLsmg_reinit_smg function will
+free the same memory accessed by SLsmg_reset_smg functon, thus it results
+in double free. SLsmg_reinit_smg function is called already protected by
+ui__lock, so we fix the problem by adding pthread_mutex_trylock of ui__lock
+when calling SLsmg_reset_smg function.
 
-I am willing to negotiate an investment/business profit sharing ratio
-with you based on the future investment earning profits. If you are
-willing to handle this project kindly reply urgently to enable me to
-provide you more information about the investment funds.
+Signed-off-by: yaowenbin <yaowenbin1@huawei.com>
+Signed-off-by: hewenliang <hewenliang4@huawei.com>
+Signed-off-by: Wenyu Liu <liuwenyu7@huawei.com>
+---
+ tools/perf/ui/tui/setup.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Your urgent reply will be appreciated if only you are interested in
-this investment project.
-Best Regards
-Mrs. Aisha Al-Gaddafi.
+diff --git a/tools/perf/ui/tui/setup.c b/tools/perf/ui/tui/setup.c
+index d4ac41679..1fdf92062 100644
+--- a/tools/perf/ui/tui/setup.c
++++ b/tools/perf/ui/tui/setup.c
+@@ -170,9 +170,11 @@ void ui__exit(bool wait_for_ok)
+ 				    "Press any key...", 0);
+
+ 	SLtt_set_cursor_visibility(1);
+-	SLsmg_refresh();
+-	SLsmg_reset_smg();
++	if (!pthread_mutex_trylock(&ui__lock)) {
++		SLsmg_refresh();
++		SLsmg_reset_smg();
++		pthread_mutex_unlock(&ui__lock);
++	}
+ 	SLang_reset_tty();
+-
+ 	perf_error__unregister(&perf_tui_eops);
+ }
+--
+2.27.0

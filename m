@@ -2,343 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 802E448100D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 06:28:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93C6848100E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 06:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236146AbhL2F2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 00:28:03 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41750 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbhL2F2C (ORCPT
+        id S238771AbhL2F2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 00:28:09 -0500
+Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:59444 "EHLO
+        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229774AbhL2F2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 00:28:02 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0786B8181C;
-        Wed, 29 Dec 2021 05:28:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C3CCC36AE7;
-        Wed, 29 Dec 2021 05:27:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640755679;
-        bh=D8UC/WuYu98B/RLFM1J0yyYy2lUGB7H6vTP5iD9lt3g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oJgPdcOmgQDFD7aS3OhoiGWmIHNBm41eOO0LYC6lmEbWEtpd4U7O6tKkDKDwVx8oJ
-         68eSy/5dbD7PgBlKazPHKDjYTeay6ZSASytXSuhEulFslIad9QJ/9PoxUhurIoiL+w
-         16f1Zctn1v8/YpHZekgAVk+PpSNwlrgWF2cEjJKfhW4+XVzUCr0vLx4BfmjwXetiQd
-         h/OyJmdCRwTF6R6k+gI3pKpf9NR0ekLb0PB5K6jSRJves9gZUty1d7Q5FFk2Xj1jtu
-         6gVdiwupNZpSKcwM1DYXNN/FpPs6RSMj+5l8soouaYL9OvU/myc8vZchbdgDtzC2o3
-         L6Dwkn4rlbX2Q==
-Date:   Wed, 29 Dec 2021 10:57:54 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/8] phy: qcom-qmp: Register typec mux and orientation
- switch
-Message-ID: <Ycvx2qOlPsVIjkHq@matsya>
-References: <20211228052116.1748443-1-bjorn.andersson@linaro.org>
- <20211228052116.1748443-3-bjorn.andersson@linaro.org>
+        Wed, 29 Dec 2021 00:28:08 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R651e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V0BiBqT_1640755682;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V0BiBqT_1640755682)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 29 Dec 2021 13:28:04 +0800
+Date:   Wed, 29 Dec 2021 13:28:02 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Yue Hu <zbestahu@gmail.com>
+Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
+        Liu Bo <bo.liu@linux.alibaba.com>,
+        LKML <linux-kernel@vger.kernel.org>, geshifei@coolpad.com,
+        zhangwen@coolpad.com, shaojunjun@coolpad.com
+Subject: Re: [PATCH 5/5] erofs: use meta buffers for zmap operations
+Message-ID: <Ycvx4ogrZLkO7Q62@B-P7TQMD6M-0146.local>
+References: <20211229041405.45921-1-hsiangkao@linux.alibaba.com>
+ <20211229041405.45921-6-hsiangkao@linux.alibaba.com>
+ <20211229131946.000043c5.zbestahu@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211228052116.1748443-3-bjorn.andersson@linaro.org>
+In-Reply-To: <20211229131946.000043c5.zbestahu@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27-12-21, 21:21, Bjorn Andersson wrote:
-> The QMP PHY handles muxing of USB vs DisplayPort, as well as orientation
-> switching of the SuperSpeed lanes. So register typec handlers for the
-> two types.
+Hi Yue,
+
+On Wed, Dec 29, 2021 at 01:19:46PM +0800, Yue Hu wrote:
+> On Wed, 29 Dec 2021 12:14:05 +0800
+> Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 > 
-> The TypeC mux allows switching between four lanes of DisplayPort and a
-> mixed USB+DP combination. This makes it possible to reach resolutions
-> that requires 4 lanes.
+> > Get rid of old erofs_get_meta_page() within zmap operations by
+> > using on-stack meta buffers in order to prepare subpage and folio
+> > features.
+> > 
+> > Finally, erofs_get_meta_page() is useless. Get rid of it!
+> > 
+> > Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> > ---
+> >  fs/erofs/data.c     | 13 -----------
+> >  fs/erofs/internal.h |  6 ++---
+> >  fs/erofs/zdata.c    | 23 ++++++++-----------
+> >  fs/erofs/zmap.c     | 56 +++++++++++++--------------------------------
+> >  4 files changed, 28 insertions(+), 70 deletions(-)
+> > 
+> > diff --git a/fs/erofs/data.c b/fs/erofs/data.c
+> > index 6495e16a50a9..187f19f8a9a1 100644
+> > --- a/fs/erofs/data.c
+> > +++ b/fs/erofs/data.c
+> > @@ -9,19 +9,6 @@
+> >  #include <linux/dax.h>
+> >  #include <trace/events/erofs.h>
+> >  
+> > -struct page *erofs_get_meta_page(struct super_block *sb, erofs_blk_t blkaddr)
+> > -{
+> > -	struct address_space *const mapping = sb->s_bdev->bd_inode->i_mapping;
+> > -	struct page *page;
+> > -
+> > -	page = read_cache_page_gfp(mapping, blkaddr,
+> > -				   mapping_gfp_constraint(mapping, ~__GFP_FS));
+> > -	/* should already be PageUptodate */
+> > -	if (!IS_ERR(page))
+> > -		lock_page(page);
+> > -	return page;
+> > -}
+> > -
+> >  void erofs_unmap_metabuf(struct erofs_buf *buf)
+> >  {
+> >  	if (buf->kmap_type == EROFS_KMAP)
+> > diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+> > index f1e4eb3025f6..3db494a398b2 100644
+> > --- a/fs/erofs/internal.h
+> > +++ b/fs/erofs/internal.h
+> > @@ -419,14 +419,14 @@ enum {
+> >  #define EROFS_MAP_FULL_MAPPED	(1 << BH_FullMapped)
+> >  
+> >  struct erofs_map_blocks {
+> > +	struct erofs_buf buf;
+> > +
+> >  	erofs_off_t m_pa, m_la;
+> >  	u64 m_plen, m_llen;
+> >  
+> >  	unsigned short m_deviceid;
+> >  	char m_algorithmformat;
+> >  	unsigned int m_flags;
+> > -
+> > -	struct page *mpage;
+> >  };
+> >  
+> >  /* Flags used by erofs_map_blocks_flatmode() */
+> > @@ -474,7 +474,7 @@ struct erofs_map_dev {
+> >  
+> >  /* data.c */
+> >  extern const struct file_operations erofs_file_fops;
+> > -struct page *erofs_get_meta_page(struct super_block *sb, erofs_blk_t blkaddr);
+> > +void erofs_unmap_metabuf(struct erofs_buf *buf);
+> >  void erofs_put_metabuf(struct erofs_buf *buf);
+> >  void *erofs_read_metabuf(struct erofs_buf *buf, struct super_block *sb,
+> >  			 erofs_blk_t blkaddr, enum erofs_kmap_type type);
+> > diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+> > index 49da3931b2e3..498b7666efe8 100644
+> > --- a/fs/erofs/zdata.c
+> > +++ b/fs/erofs/zdata.c
+> > @@ -698,20 +698,18 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
+> >  		goto err_out;
+> >  
+> >  	if (z_erofs_is_inline_pcluster(clt->pcl)) {
+> > -		struct page *mpage;
+> > +		void *mp;
+> >  
+> > -		mpage = erofs_get_meta_page(inode->i_sb,
+> > -					    erofs_blknr(map->m_pa));
+> > -		if (IS_ERR(mpage)) {
+> > -			err = PTR_ERR(mpage);
+> > +		mp = erofs_read_metabuf(&fe->map.buf, inode->i_sb,
+> > +					erofs_blknr(map->m_pa), EROFS_NO_KMAP);
+> > +		if (IS_ERR(mp)) {
+> > +			err = PTR_ERR(mp);
+> >  			erofs_err(inode->i_sb,
+> >  				  "failed to get inline page, err %d", err);
+> >  			goto err_out;
+> >  		}
+> > -		/* TODO: new subpage feature will get rid of it */
+> > -		unlock_page(mpage);
+> > -
+> > -		WRITE_ONCE(clt->pcl->compressed_pages[0], mpage);
+> > +		get_page(fe->map.buf.page);
+> > +		WRITE_ONCE(clt->pcl->compressed_pages[0], fe->map.buf.page);
+> >  		clt->mode = COLLECT_PRIMARY_FOLLOWED_NOINPLACE;
+> >  	} else {
+> >  		/* preload all compressed pages (can change mode if needed) */
+> > @@ -1529,9 +1527,7 @@ static int z_erofs_readpage(struct file *file, struct page *page)
+> >  	if (err)
+> >  		erofs_err(inode->i_sb, "failed to read, err [%d]", err);
+> >  
+> > -	if (f.map.mpage)
+> > -		put_page(f.map.mpage);
+> > -
+> > +	erofs_put_metabuf(&f.map.buf);
+> >  	erofs_release_pages(&pagepool);
+> >  	return err;
+> >  }
+> > @@ -1576,8 +1572,7 @@ static void z_erofs_readahead(struct readahead_control *rac)
+> >  
+> >  	z_erofs_runqueue(inode->i_sb, &f, &pagepool,
+> >  			 z_erofs_get_sync_decompress_policy(sbi, nr_pages));
+> > -	if (f.map.mpage)
+> > -		put_page(f.map.mpage);
+> > +	erofs_put_metabuf(&f.map.buf);
+> >  	erofs_release_pages(&pagepool);
+> >  }
+> >  
+> > diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
+> > index 1037ac17b7a6..18d7fd1a5064 100644
+> > --- a/fs/erofs/zmap.c
+> > +++ b/fs/erofs/zmap.c
+> > @@ -35,7 +35,7 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
+> >  	struct super_block *const sb = inode->i_sb;
+> >  	int err, headnr;
+> >  	erofs_off_t pos;
+> > -	struct page *page;
+> > +	struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
+> >  	void *kaddr;
+> >  	struct z_erofs_map_header *h;
+> >  
+> > @@ -61,14 +61,13 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
+> >  
+> >  	pos = ALIGN(iloc(EROFS_SB(sb), vi->nid) + vi->inode_isize +
+> >  		    vi->xattr_isize, 8);
+> > -	page = erofs_get_meta_page(sb, erofs_blknr(pos));
+> > -	if (IS_ERR(page)) {
+> > -		err = PTR_ERR(page);
+> > +	kaddr = erofs_read_metabuf(&buf, sb, erofs_blknr(pos),
+> > +				   EROFS_KMAP_ATOMIC);
+> > +	if (IS_ERR(kaddr)) {
+> > +		err = PTR_ERR(kaddr);
+> >  		goto out_unlock;
+> >  	}
+> >  
+> > -	kaddr = kmap_atomic(page);
+> > -
+> >  	h = kaddr + erofs_blkoff(pos);
+> >  	vi->z_advise = le16_to_cpu(h->h_advise);
+> >  	vi->z_algorithmtype[0] = h->h_algorithmtype & 15;
+> > @@ -101,20 +100,19 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
+> >  		goto unmap_done;
+> >  	}
+> >  unmap_done:
+> > -	kunmap_atomic(kaddr);
+> > -	unlock_page(page);
+> > -	put_page(page);
+> > +	erofs_put_metabuf(&buf);
+> >  	if (err)
+> >  		goto out_unlock;
+> >  
+> >  	if (vi->z_advise & Z_EROFS_ADVISE_INLINE_PCLUSTER) {
+> > -		struct erofs_map_blocks map = { .mpage = NULL };
+> > +		struct erofs_map_blocks map = {
+> > +			.buf = __EROFS_BUF_INITIALIZER
+> > +		};
+> >  
+> >  		vi->z_idata_size = le16_to_cpu(h->h_idata_size);
+> >  		err = z_erofs_do_map_blocks(inode, &map,
+> >  					    EROFS_GET_BLOCKS_FINDTAIL);
+> > -		if (map.mpage)
+> > -			put_page(map.mpage);
+> > +		erofs_put_metabuf(&map.buf);
+> >  
+> >  		if (!map.m_plen ||
+> >  		    erofs_blkoff(map.m_pa) + map.m_plen > EROFS_BLKSIZ) {
+> > @@ -151,31 +149,11 @@ static int z_erofs_reload_indexes(struct z_erofs_maprecorder *m,
+> >  				  erofs_blk_t eblk)
+> >  {
+> >  	struct super_block *const sb = m->inode->i_sb;
+> > -	struct erofs_map_blocks *const map = m->map;
+> > -	struct page *mpage = map->mpage;
+> > -
+> > -	if (mpage) {
+> > -		if (mpage->index == eblk) {
+> > -			if (!m->kaddr)
+> > -				m->kaddr = kmap_atomic(mpage);
+> > -			return 0;
+> > -		}
+> >  
+> > -		if (m->kaddr) {
+> > -			kunmap_atomic(m->kaddr);
+> > -			m->kaddr = NULL;
+> > -		}
+> > -		put_page(mpage);
+> > -	}
+> > -
+> > -	mpage = erofs_get_meta_page(sb, eblk);
+> > -	if (IS_ERR(mpage)) {
+> > -		map->mpage = NULL;
+> > -		return PTR_ERR(mpage);
+> > -	}
+> > -	m->kaddr = kmap_atomic(mpage);
+> > -	unlock_page(mpage);
+> > -	map->mpage = mpage;
+> > +	m->kaddr = erofs_read_metabuf(&m->map->buf, sb, eblk,
+> > +				      EROFS_KMAP_ATOMIC);
+> > +	if (IS_ERR(m->kaddr))
+> > +		return PTR_ERR(m->kaddr);
+> >  	return 0;
+> >  }
 > 
-> The TypeC switch allows switching the SuperSpeed pins and have been
-> tested with both 2 and 4 lane DisplayPort.
+> remove z_erofs_reload_indexes() and use erofs_read_metabuf() directly in caller?
+
+I'd suggest we do later since liberofs in erofs-utils doesn't
+have erofs_buf for now.
+
+We could get rid of it together with erofs-utils separately.
+and if you have time ;)
+
 > 
-> It's possible that in the USB mode the DP_MODE should be disabled, but
-> this is left untouched.
+> >  
+> > @@ -711,8 +689,7 @@ static int z_erofs_do_map_blocks(struct inode *inode,
+> >  			map->m_flags |= EROFS_MAP_FULL_MAPPED;
+> >  	}
+> >  unmap_out:
+> > -	if (m.kaddr)
+> > -		kunmap_atomic(m.kaddr);
+> > +	erofs_unmap_metabuf(&m.map->buf);
+> >  
+> >  out:
+> >  	erofs_dbg("%s, m_la %llu m_pa %llu m_llen %llu m_plen %llu m_flags 0%o",
+> > @@ -759,8 +736,7 @@ static int z_erofs_iomap_begin_report(struct inode *inode, loff_t offset,
+> >  	struct erofs_map_blocks map = { .m_la = offset };
+> >  
+> >  	ret = z_erofs_map_blocks_iter(inode, &map, EROFS_GET_BLOCKS_FIEMAP);
+> > -	if (map.mpage)
+> > -		put_page(map.mpage);
+> > +	erofs_put_metabuf(&map.buf);
+> >  	if (ret < 0)
+> >  		return ret;
+> >  
 > 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
-> 
-> My suggestion is that if/once this patch is deemed acceptable the PHY
-> maintainers could create a immutable branch/tag which can be merged into the
-> PHY tree as well as the USB tree.
-> 
->  drivers/phy/qualcomm/phy-qcom-qmp.c | 176 +++++++++++++++++++++++++---
->  1 file changed, 158 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-> index 7bea6a60dc54..8d8139df9d8e 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-> @@ -19,6 +19,8 @@
->  #include <linux/regulator/consumer.h>
->  #include <linux/reset.h>
->  #include <linux/slab.h>
-> +#include <linux/usb/typec_dp.h>
-> +#include <linux/usb/typec_mux.h>
->  
->  #include <dt-bindings/phy/phy.h>
->  
-> @@ -3017,6 +3019,9 @@ struct qmp_phy_dp_clks {
->   * @phy_mutex: mutex lock for PHY common block initialization
->   * @init_count: phy common block initialization count
->   * @ufs_reset: optional UFS PHY reset handle
-> + * @sw: typec switch for receiving orientation changes
-> + * @mux: typec mux for DP muxing
-> + * @orientation: carries current CC orientation
->   */
->  struct qcom_qmp {
->  	struct device *dev;
-> @@ -3032,6 +3037,10 @@ struct qcom_qmp {
->  	int init_count;
->  
->  	struct reset_control *ufs_reset;
-> +
-> +	struct typec_switch *sw;
-> +	struct typec_mux *mux;
-> +	enum typec_orientation orientation;
->  };
->  
->  static void qcom_qmp_v3_phy_dp_aux_init(struct qmp_phy *qphy);
-> @@ -4378,30 +4387,23 @@ static void qcom_qmp_v3_phy_configure_dp_tx(struct qmp_phy *qphy)
->  
->  static bool qcom_qmp_phy_configure_dp_mode(struct qmp_phy *qphy)
->  {
-> +	const struct phy_configure_opts_dp *dp_opts = &qphy->dp_opts;
-> +	bool reverse = qphy->qmp->orientation == TYPEC_ORIENTATION_REVERSE;
->  	u32 val;
-> -	bool reverse = false;
->  
->  	val = DP_PHY_PD_CTL_PWRDN | DP_PHY_PD_CTL_AUX_PWRDN |
->  	      DP_PHY_PD_CTL_PLL_PWRDN | DP_PHY_PD_CTL_DP_CLAMP_EN;
->  
-> -	/*
-> -	 * TODO: Assume orientation is CC1 for now and two lanes, need to
-> -	 * use type-c connector to understand orientation and lanes.
-> -	 *
-> -	 * Otherwise val changes to be like below if this code understood
-> -	 * the orientation of the type-c cable.
-> -	 *
-> -	 * if (lane_cnt == 4 || orientation == ORIENTATION_CC2)
-> -	 *	val |= DP_PHY_PD_CTL_LANE_0_1_PWRDN;
-> -	 * if (lane_cnt == 4 || orientation == ORIENTATION_CC1)
-> -	 *	val |= DP_PHY_PD_CTL_LANE_2_3_PWRDN;
-> -	 * if (orientation == ORIENTATION_CC2)
-> -	 *	writel(0x4c, qphy->pcs + QSERDES_V3_DP_PHY_MODE);
-> -	 */
-> -	val |= DP_PHY_PD_CTL_LANE_2_3_PWRDN;
-> +	if (dp_opts->lanes == 4 || reverse)
-> +		val |= DP_PHY_PD_CTL_LANE_0_1_PWRDN;
-> +	if (dp_opts->lanes == 4 || !reverse)
-> +		val |= DP_PHY_PD_CTL_LANE_2_3_PWRDN;
->  	writel(val, qphy->pcs + QSERDES_DP_PHY_PD_CTL);
->  
-> -	writel(0x5c, qphy->pcs + QSERDES_DP_PHY_MODE);
-> +	if (reverse)
-> +		writel(0x4c, qphy->pcs + QSERDES_DP_PHY_MODE);
-> +	else
-> +		writel(0x5c, qphy->pcs + QSERDES_DP_PHY_MODE);
->  
->  	return reverse;
->  }
-> @@ -5809,6 +5811,123 @@ static const struct dev_pm_ops qcom_qmp_phy_pm_ops = {
->  			   qcom_qmp_phy_runtime_resume, NULL)
->  };
->  
-> +#if IS_ENABLED(CONFIG_TYPEC)
-> +static int qcom_qmp_phy_typec_switch_set(struct typec_switch *sw,
-> +		enum typec_orientation orientation)
+> Reviewed-by: Yue Hu <huyue2@yulong.com>
 
-pls align to preceding open brace (here and other places)
+Thanks, if you have time, please also check out the rest patches...
 
-> +{
-> +	struct qcom_qmp *qmp = typec_switch_get_drvdata(sw);
-> +	void __iomem *dp_com = qmp->dp_com;
-> +
-> +	qmp->orientation = orientation;
-> +
-> +	if (orientation == TYPEC_ORIENTATION_REVERSE)
-> +		qphy_setbits(dp_com, QPHY_V3_DP_COM_TYPEC_CTRL, 0x01);
-> +	else
-> +		qphy_clrbits(dp_com, QPHY_V3_DP_COM_TYPEC_CTRL, 0x01);
-> +
-> +	return 0;
-> +}
-> +
-> +static int qcom_qmp_phy_typec_mux_set(struct typec_mux *mux,
-> +				      struct typec_mux_state *state)
-> +{
-> +	struct qcom_qmp *qmp = typec_mux_get_drvdata(mux);
-> +	void __iomem *dp_com = qmp->dp_com;
-> +	bool dp_mode;
-> +	bool usb_mode;
-> +
-> +	switch (state->mode) {
-> +	case TYPEC_STATE_SAFE:
-> +	case TYPEC_STATE_USB:
-> +		/*
-> +		 * TODO: Figure out if we should clear DP_MODE when we enter a
-> +		 * USB-only state.
-> +		 */
-> +		dp_mode = true;
+Thanks,
+Gao Xiang
 
-should this be false for these states?
-
-> +		usb_mode = true;
-> +		break;
-> +	case TYPEC_DP_STATE_A:
-> +	case TYPEC_DP_STATE_C:
-> +	case TYPEC_DP_STATE_E:
-> +		dp_mode = true;
-> +		usb_mode = false;
-> +		break;
-> +	case TYPEC_DP_STATE_B:
-> +	case TYPEC_DP_STATE_D:
-> +	case TYPEC_DP_STATE_F:
-> +		dp_mode = true;
-> +		usb_mode = true;
-> +		break;
-> +	}
-
-looks like dp_mode is true always. And only for DP state A C E, usb_mode
-is false...
-
-> +
-> +	qphy_setbits(dp_com, QPHY_V3_DP_COM_RESET_OVRD_CTRL,
-> +		     SW_DPPHY_RESET_MUX | SW_USB3PHY_RESET_MUX);
-> +	if (dp_mode)
-> +		qphy_setbits(dp_com, QPHY_V3_DP_COM_PHY_MODE_CTRL, DP_MODE);
-> +	else
-> +		qphy_clrbits(dp_com, QPHY_V3_DP_COM_PHY_MODE_CTRL, DP_MODE);
-> +
-> +	if (usb_mode)
-> +		qphy_setbits(dp_com, QPHY_V3_DP_COM_PHY_MODE_CTRL, USB3_MODE);
-> +	else
-> +		qphy_clrbits(dp_com, QPHY_V3_DP_COM_PHY_MODE_CTRL, USB3_MODE);
-> +
-> +	qphy_setbits(dp_com, QPHY_V3_DP_COM_SW_RESET, SW_RESET);
-> +	qphy_clrbits(dp_com, QPHY_V3_DP_COM_SWI_CTRL, 0x03);
-> +	qphy_clrbits(dp_com, QPHY_V3_DP_COM_SW_RESET, SW_RESET);
-> +
-> +	return 0;
-> +}
-> +
-> +static int qcom_qmp_phy_typec_register(struct qcom_qmp *qmp,
-> +				       const struct qmp_phy_cfg *cfg)
-> +{
-> +	struct typec_switch_desc sw_desc = {};
-> +	struct typec_mux_desc mux_desc = {};
-> +	struct device *dev = qmp->dev;
-> +
-> +	if (!cfg->has_phy_dp_com_ctrl)
-> +		return 0;
-> +
-> +	sw_desc.drvdata = qmp;
-> +	sw_desc.fwnode = dev->fwnode;
-> +	sw_desc.set = qcom_qmp_phy_typec_switch_set;
-> +	qmp->sw = typec_switch_register(dev, &sw_desc);
-> +	if (IS_ERR(qmp->sw)) {
-> +		dev_err(dev, "Error registering typec switch: %pe\n", qmp->sw);
-> +		return PTR_ERR(qmp->sw);
-> +	}
-> +
-> +	mux_desc.drvdata = qmp;
-> +	mux_desc.fwnode = dev->fwnode;
-> +	mux_desc.set = qcom_qmp_phy_typec_mux_set;
-> +	qmp->mux = typec_mux_register(dev, &mux_desc);
-> +	if (IS_ERR(qmp->mux)) {
-> +		dev_err(dev, "Error registering typec mux: %pe\n", qmp->mux);
-> +		typec_switch_unregister(qmp->sw);
-> +		return PTR_ERR(qmp->mux);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void qcom_qmp_phy_typec_unregister(struct qcom_qmp *qmp)
-> +{
-> +	typec_mux_unregister(qmp->mux);
-> +	typec_switch_unregister(qmp->sw);
-> +}
-> +#else
-
-empty line here pls
-
-> +static int qcom_qmp_phy_typec_register(struct qcom_qmp *qmp,
-> +				       const struct qmp_phy_cfg *cfg)
-> +{
-> +	return 0;
-> +}
-> +
-> +static void qcom_qmp_phy_typec_unregister(struct qcom_qmp *qmp)
-> +{
-> +}
-> +#endif
-> +
->  static int qcom_qmp_phy_probe(struct platform_device *pdev)
->  {
->  	struct qcom_qmp *qmp;
-> @@ -5891,7 +6010,15 @@ static int qcom_qmp_phy_probe(struct platform_device *pdev)
->  		return ret;
->  	}
->  
-> -	num = of_get_available_child_count(dev->of_node);
-> +	ret = qcom_qmp_phy_typec_register(qmp, cfg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	num = 0;
-> +	for_each_available_child_of_node(dev->of_node, child) {
-> +		if (!of_node_name_eq(child, "port"))
-> +			num++;
-> +	}
->  	/* do we have a rogue child node ? */
->  	if (num > expected_phys)
->  		return -EINVAL;
-> @@ -5918,6 +6045,9 @@ static int qcom_qmp_phy_probe(struct platform_device *pdev)
->  			serdes = usb_serdes;
->  		}
->  
-> +		if (of_node_name_eq(child, "port"))
-> +			continue;
-> +
->  		/* Create per-lane phy */
->  		ret = qcom_qmp_phy_create(dev, child, id, serdes, cfg);
->  		if (ret) {
-> @@ -5962,8 +6092,18 @@ static int qcom_qmp_phy_probe(struct platform_device *pdev)
->  	return ret;
->  }
->  
-> +static int qcom_qmp_phy_remove(struct platform_device *pdev)
-> +{
-> +	struct qcom_qmp *qmp = platform_get_drvdata(pdev);
-> +
-> +	qcom_qmp_phy_typec_unregister(qmp);
-> +
-> +	return 0;
-> +}
-> +
->  static struct platform_driver qcom_qmp_phy_driver = {
->  	.probe		= qcom_qmp_phy_probe,
-> +	.remove		= qcom_qmp_phy_remove,
->  	.driver = {
->  		.name	= "qcom-qmp-phy",
->  		.pm	= &qcom_qmp_phy_pm_ops,
-> -- 
-> 2.33.1
-
--- 
-~Vinod

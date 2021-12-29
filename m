@@ -2,89 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC274813E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 15:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DFD94813ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 15:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240153AbhL2OPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 09:15:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233713AbhL2OPA (ORCPT
+        id S240206AbhL2OPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 09:15:41 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:40996
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233713AbhL2OPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 09:15:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E01C061574;
-        Wed, 29 Dec 2021 06:15:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 29 Dec 2021 09:15:35 -0500
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB342614C9;
-        Wed, 29 Dec 2021 14:14:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB679C36AE9;
-        Wed, 29 Dec 2021 14:14:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640787299;
-        bh=sNviMGkw+EDDvnPrxN650ZZafy3DQSyIckS9RrKIRn0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=BAlhAikEAqBG3cZCo7LtoNnYdEXdF92qunpi+o0UcBlbzMJ+xMoeqSzEgZkQLgbkx
-         dPnVPUUXQ495pYvu5wXlpV6HyHaYQ48PHWgWxXy8Jrm+xs5V8GEdMOghDg6WcW8HVO
-         s1wb9vaAf66ulv1CVQfgQ7pSB9xLtUrBJ4Xi7Q4w=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org
-Subject: [PATCH] platform/x86: intel-uncore-frequency: use default_groups in kobj_type
-Date:   Wed, 29 Dec 2021 15:14:54 +0100
-Message-Id: <20211229141454.2552950-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id DDB7F3F1A5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 14:15:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640787332;
+        bh=UlJjLAfS40qt5leudPWhfuRwJJRufaBrjQlrhE6JqdI=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=Vy+vDGGDzJadxRsS1cmIE92XTYtBDxx8fDGVxztgSEoli/GVGXpDRripHLuwkLlz8
+         AzfRAeoJv+m7a64RorcrfC31M+eZ2VdbG+MsefIgSqtdg6tG4b4Nj2Ra+UIyHbRvTg
+         Fx5tz+0KHWtvmHL3sxHb1a5yZoB6PtuTUMKX460wNyietiaLOfvy6G6sscdBgwUJVE
+         CpTErbOqFyOcTxSUJV/x6/umO/BT1jvIiUi1pY01mxJZ/5CVMyfoUwF4nAIiqG3UGd
+         7FFKlNpuUc2zL2MEyICBiZB5zKu8+SfKlKQopUnxoK4htwrCH+uZxiZ7OlZ/LeL/FZ
+         U63UUtvoR2PEQ==
+Received: by mail-lj1-f199.google.com with SMTP id s11-20020a05651c048b00b0022d8722e7b5so1745676ljc.23
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 06:15:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UlJjLAfS40qt5leudPWhfuRwJJRufaBrjQlrhE6JqdI=;
+        b=obmr7yw/sVizJhx4hYjKj2b3WEXYr1iJ9xm0YXkwzDyghPbPOH/tPygoAQXxHIMyyD
+         AFxQWfs52czS6gLeSe/FikWbXsAbTyDVPAqtk/b2LKQv8e2lCmPDFkhaE5f5sgDlK016
+         EfiprDn95HN2rZdXI7W9H3RiayUnJiar64yYQ/SYaUhdrY36Tow3qTa4eFbXvb8Ej29/
+         BmftknCXJGMXC7bWHiKpzMjwbwlqnL4IzXbdaVUyhBosfjFgw6VCsNBLjVdbEQXvanN3
+         KIImu6EBog3DQx7fcII82Kraow/23iHVbF1OtqzjSwc/AaiEk8bzI2uRRx/wUDeXVpUS
+         ekNQ==
+X-Gm-Message-State: AOAM530J4TAlh0NCFqNNHXag2K4LptbZO63YT81xZpYsN0QDFv//gzUT
+        zzREzf73bUzlVqr3N2o7OqBC1+w9MlvvBH4WMNYziYvARxLSofKDfacvocAzAh8d7woaBvMN26G
+        VH/1lLeYhUVQ5+ZF+0YsBKyNSQcM6A0LmGfKao6dDTw==
+X-Received: by 2002:a05:651c:ba8:: with SMTP id bg40mr18007301ljb.276.1640787332070;
+        Wed, 29 Dec 2021 06:15:32 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz5TtuMxYfpkf1FSMtnQIraHesCWHTbGXlzooBflaELIyumSIPdU/aIFK3/MPK4jIGTN5L8Vw==
+X-Received: by 2002:a05:651c:ba8:: with SMTP id bg40mr18007281ljb.276.1640787331900;
+        Wed, 29 Dec 2021 06:15:31 -0800 (PST)
+Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id a16sm1316164ljm.98.2021.12.29.06.15.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 06:15:31 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH 0/4] mfd/power/regulators: dt-bindings: max14577: convert to dtschema
+Date:   Wed, 29 Dec 2021 15:15:20 +0100
+Message-Id: <20211229141524.34174-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1536; h=from:subject; bh=sNviMGkw+EDDvnPrxN650ZZafy3DQSyIckS9RrKIRn0=; b=owGbwMvMwCRo6H6F97bub03G02pJDIlncuOijUMFZyTdXfdhs0wm9/WPtztM7+0+IxX9+vzJWTE6 h28IdsSyMAgyMciKKbJ82cZzdH/FIUUvQ9vTMHNYmUCGMHBxCsBEpJUZFmzO0dTQErhTYabDqBWrLL ntW1dCF8OCDXl378z/7+0haql4+ubM0GJ3vWNdAA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are currently 2 ways to create a set of sysfs files for a
-kobj_type, through the default_attrs field, and the default_groups
-field.  Move the uncore-frequency sysfs code to use default_groups field
-which has been the preferred way since aa30f47cf666 ("kobject: Add
-support for default attribute groups to kobj_type") so that we can soon
-get rid of the obsolete default_attrs field.
+Hi,
 
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Cc: Mark Gross <markgross@kernel.org>
-Cc: platform-driver-x86@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/platform/x86/intel/uncore-frequency.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Dependencies:
+1. DTS patch 1/4: nothing depends on it, sending here so Rob's automatic
+   checker won't complain about DTS.
+   I will take it via Samsung SoC tree.
 
-diff --git a/drivers/platform/x86/intel/uncore-frequency.c b/drivers/platform/x86/intel/uncore-frequency.c
-index 3ee4c5c8a64f..4cd8254f2e40 100644
---- a/drivers/platform/x86/intel/uncore-frequency.c
-+++ b/drivers/platform/x86/intel/uncore-frequency.c
-@@ -225,6 +225,7 @@ static struct attribute *uncore_attrs[] = {
- 	&min_freq_khz.attr,
- 	NULL
- };
-+ATTRIBUTE_GROUPS(uncore);
- 
- static void uncore_sysfs_entry_release(struct kobject *kobj)
- {
-@@ -236,7 +237,7 @@ static void uncore_sysfs_entry_release(struct kobject *kobj)
- static struct kobj_type uncore_ktype = {
- 	.release = uncore_sysfs_entry_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
--	.default_attrs = uncore_attrs,
-+	.default_groups = uncore_groups,
- };
- 
- /* Caller provides protection */
+2. Final MFD patch (4/4) depends on regulator and power, so the last
+   patches (2+3+4) should go via same tree.
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (4):
+  ARM: dts: exynos: Align MAX77836 nodes with dtschema on Monk and
+    Rinato
+  dt-bindings: power: supply: maxim,max14577: convert to dtschema
+  regulator: dt-bindings: maxim,max14577: convert to dtschema
+  dt-bindings: mfd: maxim,max14577: convert to dtschema
+
+ .../devicetree/bindings/mfd/max14577.txt      | 147 -------------
+ .../bindings/mfd/maxim,max14577.yaml          | 195 ++++++++++++++++++
+ .../bindings/power/supply/maxim,max14577.yaml |  84 ++++++++
+ .../bindings/regulator/maxim,max14577.yaml    |  81 ++++++++
+ MAINTAINERS                                   |   3 +-
+ arch/arm/boot/dts/exynos3250-monk.dts         |   2 +-
+ arch/arm/boot/dts/exynos3250-rinato.dts       |   2 +-
+ 7 files changed, 364 insertions(+), 150 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mfd/max14577.txt
+ create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max14577.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,max14577.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/maxim,max14577.yaml
+
 -- 
-2.34.1
+2.32.0
 

@@ -2,102 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4090B48116A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 10:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E2648116D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 10:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239600AbhL2JtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 04:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
+        id S239607AbhL2Jvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 04:51:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239594AbhL2Js7 (ORCPT
+        with ESMTP id S234237AbhL2Jvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 04:48:59 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9213CC06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 01:48:58 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id b73so13229017wmd.0
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 01:48:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=rnqIJ93SIBVZUCI9X/AetRRmoWOd4XV45kkwiBxzW8w=;
-        b=ib8gT5tuuhPV1gSybVe/tlInOl9+YYFC5ZplG96nqVmFy5mTQR6P6c1hXW8XUWxLWD
-         4To2qEahL1IQm+9/ouJHjN3SLgcUCcA8ADb6RmJ9CwoMnWhoGB1/Qck44u/ENM3g9c+V
-         C6gRMZzf7e92RbkUiKQ0kj326LcMAWnnnBZPuvUX4lX0sJgo2Xbu7jgwGpjWrHLhyhI+
-         D+OcZMONTeFWPRpbE8kRq3RwrdSIlA25EFtBiwgH2U3Mok/qTHpDjsP2SxgJ31E2wCpb
-         eRt+55Ww7ujnKRSkR8g1OgcrKl+WJN+9aLRaBgnWZK6/NbeHNwcDGDwzJGxE70Jia1GW
-         7NqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=rnqIJ93SIBVZUCI9X/AetRRmoWOd4XV45kkwiBxzW8w=;
-        b=GJ5oSS9oVYySHBQiABm91iOgJODMQqsKQ45PqD3HmI0jnNaxgHzFXXUnlshQlDqsVE
-         F8rlxiBHIGaolB2OtGCugDj8T0poachLlxQhXV7xFwnOB6NOyItFcK/G9VLku8E6eWh6
-         60eKhgklrTpkAVOvoOLnYpq8lEpp7bYGzby1r5JHNrQ3PB1xOx09AahuSi6abJgffISV
-         DsrRmEKCbcZPLyU31Z4rPeqkEvW5t1bmtY+NUCR/WD1M0u8lY9jqRTLIJk/xSJp0wLF+
-         DpJoZUvVYuKg86QxwAAJVL8AWdzD00b70ChTt7OAyqPJferItXGb2nz7T7ItebVjt9N3
-         MVzQ==
-X-Gm-Message-State: AOAM532lqDlBq67V9LanGe0G7y/0dK+VEaNLGhNrT2Q25wu7qPl2SIkO
-        8dQqM3jx4w2wHVyvvBiEb11UZA==
-X-Google-Smtp-Source: ABdhPJxEfMhetHrX2yHPjWktWJTBwLeecfxINiXmJgXKm53r1A35ap/9XVsZci1/VoVeSJlSm/ss+g==
-X-Received: by 2002:a1c:9dd4:: with SMTP id g203mr21201962wme.114.1640771337080;
-        Wed, 29 Dec 2021 01:48:57 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id 11sm25917589wrz.63.2021.12.29.01.48.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 01:48:56 -0800 (PST)
-Date:   Wed, 29 Dec 2021 09:48:54 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, ~okias/devicetree@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] dt-bindings: spmi: convert QCOM PMIC SPMI bindings to
- yaml
-Message-ID: <YcwvBj/OeeiPGB8T@google.com>
-References: <20211227170151.73116-1-david@ixit.cz>
+        Wed, 29 Dec 2021 04:51:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEBCC061574;
+        Wed, 29 Dec 2021 01:51:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4301BB817F4;
+        Wed, 29 Dec 2021 09:51:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BF0CC36AE7;
+        Wed, 29 Dec 2021 09:51:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640771488;
+        bh=hphMVfMYRqhRPSkobu+poUkqO2K8AgzckF9mfF41/cQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Aw9ILdrVg3BB9XhDdYaSMWzWHNhKkaPsL/jSNFa8lb0uWKnwDvjzxa+2DxV9FlphU
+         bundsmuA+6sYxWcYi7uMS0Bu6ZmZu3da2u0URKWu6UTW9Xtr6cXIPiXnRuUNFkxHhx
+         HcFtSC9ah874CdrHzJJdW1/lnLJsWjwczqhW2U+8=
+Date:   Wed, 29 Dec 2021 10:51:23 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Puma Hsu <pumahsu@google.com>
+Cc:     mathias.nyman@intel.com, Albert Wang <albertccwang@google.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] xhci: re-initialize the HC during resume if HCE was set
+Message-ID: <Ycwvm5rdqVW4E27y@kroah.com>
+References: <20211228060246.2958070-1-pumahsu@google.com>
+ <YcrKNP4TRXB6nsCI@kroah.com>
+ <CAGCq0Lb8ZoGpbkLNhXG=OyWgvz_Qn3ABmq_uvMPJdyEKygMH+Q@mail.gmail.com>
+ <YcwclrVzEXRxgUFa@kroah.com>
+ <CAGCq0LbfWt2xTmRczhdZUXrwFTJdaMH3Zd-y4quqWi7kyaso6Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211227170151.73116-1-david@ixit.cz>
+In-Reply-To: <CAGCq0LbfWt2xTmRczhdZUXrwFTJdaMH3Zd-y4quqWi7kyaso6Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Dec 2021, David Heidelberg wrote:
-
-> Convert Qualcomm PMIC SPMI binding to yaml format.
+On Wed, Dec 29, 2021 at 05:11:47PM +0800, Puma Hsu wrote:
+> On Wed, Dec 29, 2021 at 4:30 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > A: http://en.wikipedia.org/wiki/Top_post
+> > Q: Were do I find info about this thing called top-posting?
+> > A: Because it messes up the order in which people normally read text.
+> > Q: Why is top-posting such a bad thing?
+> > A: Top-posting.
+> > Q: What is the most annoying thing in e-mail?
+> >
+> > A: No.
+> > Q: Should I include quotations after my reply?
+> >
+> > http://daringfireball.net/2007/07/on_top
+> >
+> > On Wed, Dec 29, 2021 at 01:53:04PM +0800, Puma Hsu wrote:
+> > > This commit is not used to fix a specific commit. We find a condition
+> > > that when XHCI runs the resume process but the HCE flag is set, then
+> > > the Run/Stop bit of USBCMD cannot be set so that HC would not be
+> > > enabled. In fact, HC may already meet a problem at this moment.
+> > > Besides, in xHCI requirements specification revision 1.2, Table 5-21
+> > > BIT(12) claims that Software should re-initialize the xHC when HCE is
+> > > set. Therefore, I think this commit could be the error handling for
+> > > HCE.
+> >
+> > So this does not actually fix an issue that you have seen in any device
+> > or testing?  So it is not relevant for older kernels but just "nice to
+> > have"?
+> >
+> > How did you test this if you can not duplicate the problem?
+> >
 > 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> 
-> ---
-> v2:
->  - add #address and #size-cells
->  - add reg and remove spmi include from example
-> v3:
->  - fix doc reference error (make refcheckdocs)
-> 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->  .../bindings/mfd/qcom,spmi-pmic.txt           |   2 +-
+> Yes, we actually see that the HCE may be detected while running xhci_resume
+> on our product platform, so I'm able to verify this commit can fix
+> such a condition.
 
-Acked-by: Lee Jones <lee.jones@linaro.org>
+Given that your product platform is an older kernel version than 5.17, I
+think that you also want this in the older kernel releases, so please
+mark it for stable backporting.
 
->  .../bindings/spmi/qcom,spmi-pmic-arb.txt      |  65 ----------
->  .../bindings/spmi/qcom,spmi-pmic-arb.yaml     | 120 ++++++++++++++++++
->  3 files changed, 121 insertions(+), 66 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
->  create mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
+thanks,
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+greg k-h

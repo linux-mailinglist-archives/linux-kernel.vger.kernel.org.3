@@ -2,95 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29DB24811F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 12:17:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E024811F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 12:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239891AbhL2LRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 06:17:39 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:40520 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235496AbhL2LRi (ORCPT
+        id S239896AbhL2LTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 06:19:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235496AbhL2LTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 06:17:38 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 5FA3A1C0B9E; Wed, 29 Dec 2021 12:17:31 +0100 (CET)
-Date:   Wed, 29 Dec 2021 12:17:30 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.10 26/76] sfc: Check null pointer of rx_queue->page_ring
-Message-ID: <20211229111730.GB25195@amd>
-References: <20211227151324.694661623@linuxfoundation.org>
- <20211227151325.595242432@linuxfoundation.org>
+        Wed, 29 Dec 2021 06:19:16 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED694C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 03:19:15 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n2Wz5-0005wR-MC; Wed, 29 Dec 2021 12:19:07 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n2Wz4-007I0m-P4; Wed, 29 Dec 2021 12:19:06 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n2Wz2-0003ff-Vl; Wed, 29 Dec 2021 12:19:04 +0100
+Date:   Wed, 29 Dec 2021 12:19:02 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     William Breathitt Gray <vilhelm.gray@gmail.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        David Lechner <david@lechnology.com>,
+        linux-iio@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v2 10/23] counter: ti-eqep: Convert to counter_priv()
+ wrapper
+Message-ID: <20211229111902.b2jnbtxah6mvba2k@pengutronix.de>
+References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
+ <20211227094526.698714-11-u.kleine-koenig@pengutronix.de>
+ <YcwSEX//xHtIUnU1@shinobu>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="CdrF4e02JqNVZeln"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bl7qtiwyuyfjafdn"
 Content-Disposition: inline
-In-Reply-To: <20211227151325.595242432@linuxfoundation.org>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <YcwSEX//xHtIUnU1@shinobu>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---CdrF4e02JqNVZeln
-Content-Type: text/plain; charset=us-ascii
+--bl7qtiwyuyfjafdn
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-hi!
-
-> From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+On Wed, Dec 29, 2021 at 04:45:21PM +0900, William Breathitt Gray wrote:
+> On Mon, Dec 27, 2021 at 10:45:13AM +0100, Uwe Kleine-K=F6nig wrote:
+> > This is a straight forward conversion to the new counter_priv() wrapper.
+> >=20
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 >=20
-> [ Upstream commit bdf1b5c3884f6a0dc91b0dbdb8c3b7d205f449e0 ]
->=20
-> Because of the possible failure of the kcalloc, it should be better to
-> set rx_queue->page_ptr_mask to 0 when it happens in order to maintain
-> the consistency.
+> This patch conflicts with commit 60f07e74f86b ("counter: ti-eqep: Use
+> container_of instead of struct counter_device::priv"). Because that
+> commit has a similar purpose as this patchset, I'm going to skip this
+> patch for now and continue looking over the rest of the patches in this
+> series.
 
-This is confusing/wrong, or at least not a complete fix.
+Ah right. I will base v3 on top of v5.16-rc6 + 60f07e74f86b.=20
 
-> +++ b/drivers/net/ethernet/sfc/rx_common.c
-> @@ -150,7 +150,10 @@ static void efx_init_rx_recycle_ring(struct efx_rx_q=
-ueue *rx_queue)
->  					    efx->rx_bufs_per_page);
->  	rx_queue->page_ring =3D kcalloc(page_ring_size,
->  				      sizeof(*rx_queue->page_ring), GFP_KERNEL);
-> -	rx_queue->page_ptr_mask =3D page_ring_size - 1;
-> +	if (!rx_queue->page_ring)
-> +		rx_queue->page_ptr_mask =3D 0;
-> +	else
-> +		rx_queue->page_ptr_mask =3D page_ring_size - 1;
->  }
-> =20
+Best regards
+Uwe
 
-So we have !rx_queue->page_ring. But in efx_reuse_page, we do
 
-        index =3D rx_queue->page_remove & rx_queue->page_ptr_mask;
-	page =3D rx_queue->page_ring[index];
-
-So index is now zero, but we'll derefernce null pointer anyway.
-
-Best regards,
-								Pavel
 --=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---CdrF4e02JqNVZeln
+--bl7qtiwyuyfjafdn
 Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
 
-iEYEARECAAYFAmHMQ8oACgkQMOfwapXb+vLLxgCePwbsG8eshowzPtNbLnn50H64
-GRoAoMPF3krazvtwdgPuLYX1gXR/qQcl
-=0zyK
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHMRCIACgkQwfwUeK3K
+7AkKOgf/W6+mW7y2b7brUulOPITWZmMdvGG0m4Anjc2Cq0wKLBDUT4oxyGGbSEhX
+EeYT4rcwrnttOJmA2/8Mfr0/mIl5eOwM+4uNnQm0Q4srP1mjw6XDbNSgBdLVS+j2
+fn2KRVReL9WShZjqXGK7GjXOuyjbf6eR+DsLZtQ7VDOUBBc2JLCoon7D53864gvj
+oz1E4gmw7193vtXMYb37Dy40CM3ooXlXHcFX2PvRLZWYS8/ypy/ESGIXIsbb4zV+
+USjfIVvfcP8F2sM6bjl6QLpA3PrtvdZoDfDh95tmLWIV4n06dm36pJEy9isXNhFX
+4Z1q47X7STBdNd36EfiNVhycVsGZ/Q==
+=xu+3
 -----END PGP SIGNATURE-----
 
---CdrF4e02JqNVZeln--
+--bl7qtiwyuyfjafdn--

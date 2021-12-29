@@ -2,114 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7144816B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 21:42:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EFC84816BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 21:54:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231949AbhL2UmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 15:42:07 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42830 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbhL2UmG (ORCPT
+        id S231985AbhL2Uv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 15:51:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33916 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229461AbhL2Uv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 15:42:06 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F28B1B81A0C;
-        Wed, 29 Dec 2021 20:42:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4842CC36AEA;
-        Wed, 29 Dec 2021 20:42:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640810523;
-        bh=Rw2gOb2/8KzlEQNxczhYbxeUYfMz9rcfWKTvcBef+uU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Z8libg51KX2kY+CIF2+bXUsg0EIcNN5yMgxTuiaYdAhsx5bwEoib7kJks3+pCa4tH
-         EpOL6ai2kwnLyrXdG6uD93x+1IaXqDX8sHPxD8RVGF6K9c8qySePI19RLG2NCr9aTU
-         dap8mwqCB1JHL1MXEG4LcXJooB3Jwt0RGlWNIXftfvgABMADN/tSR0Z53Lh1Emo1dj
-         /XgphNYqxVU4RAE8i7+DSqpogbiH3+2+K5WMl3bqkwbtTvPk4wtlayEyvi/0/yuMJj
-         y2FDN1dzMmy++2YtlZDujx+6DwDo8DalV/gJKTydVtRP7aUcTpCIpdJdKMT8XG/i3v
-         o+SRMFCe8Uk2Q==
-Date:   Wed, 29 Dec 2021 14:42:02 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 03/13] PCI: pci_stub: Suppress kernel DMA ownership
- auto-claiming
-Message-ID: <20211229204202.GA1700874@bhelgaas>
+        Wed, 29 Dec 2021 15:51:28 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0DEC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 12:51:28 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id k18so9843099wrg.11
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 12:51:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=U+w/0DPocm9k0GSpXvxdlfmQQFWX62L0w+etSyEbhZE=;
+        b=nLJ/u4Dzj/KRfqnzrBoIlPOgkdUMurbKc+ZciWpeagh5i2dxpr5ESWC3x2J6YBbAdX
+         47ItxCUvm/fLwl/5p4Nej+1oMa8hZsGOBN1o7rjDAmYp+FOnQw2Mry2gr2Ttk14BWFWZ
+         4XsFbl3dVDmVwXRnNQYRjiIhkb3k73ZCwK686J6kZFx9n/AIHOrerwiJgVbGtacepuMx
+         /SibnHi9P43511Oo/4TZQgolJoYgW8TYOLUOEHHNwfiDa9IcVcXrVe0nSldMzQmBamgV
+         DcT8rapfd+JuJao9RlBz/OsnOYoxkRP5CfYpn6p64LYSUQA+RcG4QpcNiGTNZdV/r5kk
+         T/bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=U+w/0DPocm9k0GSpXvxdlfmQQFWX62L0w+etSyEbhZE=;
+        b=FBTdGmKJvwGk/JMih8bMWNtfsT/VZ9m2UCbc+XuxDmD1ljpm5wbjPx9G6cY1jKhjfP
+         1zX7118YNABZmYa7I2KyR/eEO/iBC/CqDVyxwDcDmvm0go/vScIaEBliBpP354l6gJRu
+         /yH+lB6R0wzfn53sQM/kQfpaJStV7Efo9mfrZV8UtnOSgP54OZRhKB9jPbnFPF29RQwe
+         rAhoGiBdEP3/PDkrsbAexYC5zabMXRbM0axG49FRXUybJj5vwNII7PHJ1IscR725vUv6
+         dm60Nka37fSd01CI4D0vwvOhCaZvDAQ6LqH217JmMnWQvRruxEiKk0Mg9Z8KZqvV6p0W
+         zA1A==
+X-Gm-Message-State: AOAM532Z5Yy1edzTC/l9Hj8VY+Lb0hq2cgSfHJoQhb2qI9AqigjQ14B3
+        f++lJP5NuRyHiSsKqq6QHpGPzmEP6jE=
+X-Google-Smtp-Source: ABdhPJx3Ys2u6SmNHo6xV7YUFziwlUJCSW1qIB2Z3C13etTLSKxMHubMlKWWo2qH0/fj1aBnw4FmJw==
+X-Received: by 2002:adf:aa9a:: with SMTP id h26mr21711756wrc.437.1640811086409;
+        Wed, 29 Dec 2021 12:51:26 -0800 (PST)
+Received: from localhost.localdomain ([2a02:8108:96c0:3b88::6619])
+        by smtp.gmail.com with ESMTPSA id l12sm27421989wmq.2.2021.12.29.12.51.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 12:51:26 -0800 (PST)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH 00/32] staging: r8188eu: remove odm_interface and odm_precomp.h
+Date:   Wed, 29 Dec 2021 21:50:36 +0100
+Message-Id: <20211229205108.26373-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211217063708.1740334-4-baolu.lu@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 02:36:58PM +0800, Lu Baolu wrote:
-> The pci_dma_configure() marks the iommu_group as containing only devices
-> with kernel drivers that manage DMA.
+This series removes odm_interface.c, odm_interface.h and
+odm_precomp.h. The motivation for the removals is the ongoing effort
+to get grid of the hal layer.
 
-I'm looking at pci_dma_configure(), and I don't see the connection to
-iommu_groups.
+Patches 1-11 remove all wrappers from odm_interface.c and finally
+remove odm_interface.c and its header file.
 
-> Avoid this default behavior for the
-> pci_stub because it does not program any DMA itself.  This allows the
-> pci_stub still able to be used by the admin to block driver binding after
-> applying the DMA ownership to vfio.
+Patches 12-32 remove prototypes from odm_precomp.h by making the
+functions static and finally remove the header file.
 
-> 
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> ---
->  drivers/pci/pci-stub.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/pci/pci-stub.c b/drivers/pci/pci-stub.c
-> index e408099fea52..6324c68602b4 100644
-> --- a/drivers/pci/pci-stub.c
-> +++ b/drivers/pci/pci-stub.c
-> @@ -36,6 +36,9 @@ static struct pci_driver stub_driver = {
->  	.name		= "pci-stub",
->  	.id_table	= NULL,	/* only dynamic id's */
->  	.probe		= pci_stub_probe,
-> +	.driver		= {
-> +		.suppress_auto_claim_dma_owner = true,
+Tested on x86_64 with Inter-Tech DMG-02.
 
-The new .suppress_auto_claim_dma_owner controls whether we call
-iommu_device_set_dma_owner().  I guess you added
-.suppress_auto_claim_dma_owner because iommu_device_set_dma_owner()
-must be done *before* we call the driver's .probe() method?
+Michael Straube (32):
+  staging: r8188eu: remove ODM_SetMACReg()
+  staging: r8188eu: remove ODM_GetMACReg()
+  staging: r8188eu: remove ODM_GetRFReg()
+  staging: r8188eu: remove ODM_SetRFReg()
+  staging: r8188eu: remove ODM_GetBBReg()
+  staging: r8188eu: remove ODM_SetBBReg()
+  staging: r8188eu: clean up coding style issues
+  staging: r8188eu: remove ODM_sleep_ms()
+  staging: r8188eu: remove ODM_delay_us()
+  staging: r8188eu: remove ODM_delay_ms()
+  staging: r8188eu: remove ODM_CompareMemory()
+  staging: r8188eu: remove odm_interface
+  staging: r8188eu: make odm_ConfigRFReg_8188E() static
+  staging: r8188eu: remove unused prototypes
+  staging: r8188eu: make odm_DIGInit() static
+  staging: r8188eu: make odm_DIG() static
+  staging: r8188eu: make odm_CommonInfoSelfInit() static
+  staging: r8188eu: make odm_CommonInfoSelfUpdate() static
+  staging: r8188eu: make odm_RateAdaptiveMaskInit() static
+  staging: r8188eu: make odm_RefreshRateAdaptiveMask() static
+  staging: r8188eu: make odm_DynamicBBPowerSavingInit() static
+  staging: r8188eu: make odm_FalseAlarmCounterStatistics() static
+  staging: r8188eu: make odm_CCKPacketDetectionThresh() static
+  staging: r8188eu: make odm_RSSIMonitorCheck() static
+  staging: r8188eu: remove odm_TXPowerTrackingInit()
+  staging: r8188eu: make odm_TXPowerTrackingThermalMeterInit() static
+  staging: r8188eu: make odm_InitHybridAntDiv() static
+  staging: r8188eu: make odm_HwAntDiv() static
+  staging: r8188eu: make ODM_EdcaTurboInit() static
+  staging: r8188eu: make odm_EdcaTurboCheck() static
+  staging: r8188eu: remove unnecessary comments
+  staging: r8188eu: remove header odm_precomp.h
 
-Otherwise, we could call some new interface from .probe() instead of
-adding the flag to struct device_driver.
+ drivers/staging/r8188eu/Makefile              |   1 -
+ .../r8188eu/hal/Hal8188ERateAdaptive.c        |  17 +-
+ .../staging/r8188eu/hal/HalHWImg8188E_BB.c    |   1 -
+ .../staging/r8188eu/hal/HalHWImg8188E_MAC.c   |   1 -
+ .../staging/r8188eu/hal/HalHWImg8188E_RF.c    |   1 -
+ drivers/staging/r8188eu/hal/HalPhyRf_8188e.c  | 234 +++--
+ drivers/staging/r8188eu/hal/odm.c             | 890 +++++++++---------
+ drivers/staging/r8188eu/hal/odm_HWConfig.c    |   2 +-
+ drivers/staging/r8188eu/hal/odm_RTL8188E.c    | 118 +--
+ .../staging/r8188eu/hal/odm_RegConfig8188E.c  |  58 +-
+ drivers/staging/r8188eu/hal/odm_debug.c       |   2 +-
+ drivers/staging/r8188eu/hal/odm_interface.c   |  63 --
+ drivers/staging/r8188eu/include/odm.h         |   2 -
+ .../staging/r8188eu/include/odm_RTL8188E.h    |   4 -
+ .../r8188eu/include/odm_RegConfig8188E.h      |   3 -
+ .../staging/r8188eu/include/odm_interface.h   |  42 -
+ drivers/staging/r8188eu/include/odm_precomp.h |  54 --
+ .../staging/r8188eu/include/rtl8188e_hal.h    |  11 +-
+ 18 files changed, 635 insertions(+), 869 deletions(-)
+ delete mode 100644 drivers/staging/r8188eu/hal/odm_interface.c
+ delete mode 100644 drivers/staging/r8188eu/include/odm_interface.h
+ delete mode 100644 drivers/staging/r8188eu/include/odm_precomp.h
 
-> +	},
->  };
->  
->  static int __init pci_stub_init(void)
-> -- 
-> 2.25.1
-> 
+-- 
+2.34.1
+

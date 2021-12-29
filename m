@@ -2,98 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E20F481456
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 16:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 180A848145C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 16:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240489AbhL2PJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 10:09:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43498 "EHLO
+        id S240491AbhL2PWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 10:22:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240478AbhL2PJT (ORCPT
+        with ESMTP id S237012AbhL2PWH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 10:09:19 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022E3C06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 07:09:18 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id az37so16916442uab.12
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 07:09:18 -0800 (PST)
+        Wed, 29 Dec 2021 10:22:07 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E40C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 07:22:07 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id j18so45096622wrd.2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 07:22:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T059ASJ4RtNlK+2+zqkQwGDitt3VLEMv58+0Dyd15tw=;
-        b=k/sZSVfO2n1ewqdP+M5u1L3MSFLlvIBg5huso4GeRPgYVk/13h3TBvjAIbky4yh7oE
-         jywLqi03y5KEO7QCuYfxLH/b70MVzikaIJ8Do4kw6+RYOgK9QZDAFUCGU9Rfkwc/xHpa
-         GHHyjbXswHSkIwHOrDwRgSmEa3V1pPuWcRNARraptp4toJFYWNRrGW9POPNArwXKyOGY
-         vMO2ent+W69IwXGQQleUsR6CSfpQh35jE4dQ8hMyM4trJzg4ToOsZKWB9iXXUZJYDhqt
-         EBPVGpG+ME9qSWV4NTJlB9uoTeaqbclEGC1mAX7GRZkx4wUny7+tjf4r/ChBf8fzRPXL
-         N6Eg==
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=sTlsJk6fgdPgEQy5tYoKBcpGYLJ94wt81Boye+wusEo=;
+        b=f864DTdNmKce0giPakxwtHGURp8fPIziMVJHYwP95w2JcxVM0EExuXgzoBDMjH8RUQ
+         YpufOVjhtOooCC7mnQGjZo2P9/jPqQlInglH99xiXSLaShOt7Z1KLfj8T28FAgqlxJKT
+         DmFtbqrWJsiMdLcgTZ/L/EDoOMX6OAJBV+yPSHJ7k3DzcJPt4fjbgfm2/FmqIMC4oz8z
+         O28FMpbp9KCoXmkPmn+N4taU4oPhGO7Ly2NAo8lbXSv/5o12d8ECoNTia3Id5whYwQOJ
+         YfDIElQIuxmtEsAm2lDi3I/G9vLDc0aKb8CzzSYpIAr3rXPQ4kAXPajtK4oxdSNoXYGN
+         nZmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T059ASJ4RtNlK+2+zqkQwGDitt3VLEMv58+0Dyd15tw=;
-        b=BfygiOTyUa4Se216DBX3+yOmUNgPHGvB3K+QPGWtYkk2BAPnavcxXSTsy3p6x7S3Dq
-         cknVyVexDTOdfJVHiAjJ/AKpmEAFsF/eIipX0nfgVE/lWutdaiTf+IDcwHx5t15B9kUw
-         AiHcarI3413vYGc/c3T/h8IXTuVfdu2Xqm38P3V5g80XmBvUYS38qDpCrZvSv276axuX
-         LxGPNkT7yrUUtKLhLDlgy13doZpz9Z6KgmKyVD0iCuqABUiwnoWAuVn8p7VvsQs+6bnO
-         xcUUWRASAfQ2tN2Hv2XnTcDs1lf7ApTgi6OUWIx3WNZTCLAO8JhnYMjzUhE7WodwA2mp
-         1mDA==
-X-Gm-Message-State: AOAM5336PzdmB0B0+oPAO7afGrGLSQasZwwKIQAa6D/V6b/fLOSZgufr
-        wvEka/3sQX7nGQEmquAjUkky3AnI+Gc=
-X-Google-Smtp-Source: ABdhPJyrOCUbJpEBkCqBlvZ5dswXJ8StBAcesf6GsUx/gWUrpL/le2VDLjEqRuZUXawr8PUbW+qCQA==
-X-Received: by 2002:a67:e1c3:: with SMTP id p3mr7396148vsl.23.1640790557997;
-        Wed, 29 Dec 2021 07:09:17 -0800 (PST)
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com. [209.85.221.178])
-        by smtp.gmail.com with ESMTPSA id u137sm194832vku.42.2021.12.29.07.09.17
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=sTlsJk6fgdPgEQy5tYoKBcpGYLJ94wt81Boye+wusEo=;
+        b=UFy0QT0UX74wZrLskmLCu1s2G3CitQb/5Osnnulhg8IXgvJJbt3AZr7ANzXrlSi+Ye
+         6kpp2Nq2egxx86q151/Kt8eQ9Ou/yZHgLjRhgtxt3OP09oDYodbQKwu1/1L5AsRokohu
+         4TH3CpIk96q919vV3JbEMGxVTfTuzrvQ+HcCo/UUky4EtXFGxriv4JvMzz3Y7EWkSURg
+         612B7lGv+LEpLLM6DdMZ6g3S4bUF3bdva2+BreOhdCYF1oNxQQNPNkYBc1e0wetgUYwY
+         qBKzsZqvOZmIwO2xxGJ6nrMeWByytR9UZFulyai8DTfGvP2DHQHbdZ7xvHsPkTQxN5Xj
+         vilA==
+X-Gm-Message-State: AOAM530P3juUig/bHqCR6fyg1MLY2w+V4OD+yTMMNK9PmRDsma9lKPKr
+        vhS1O9AUdfKircQvHQQsvMY=
+X-Google-Smtp-Source: ABdhPJzDT7+Rp/h+VzuaTTtrAX0MHh/t0UPWuFAwiATQA5boBr3ec55ht8diSgECzfKzwSYNSwcxZA==
+X-Received: by 2002:adf:fa83:: with SMTP id h3mr21479889wrr.434.1640791325584;
+        Wed, 29 Dec 2021 07:22:05 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.161.251])
+        by smtp.gmail.com with ESMTPSA id s1sm23919768wmh.35.2021.12.29.07.22.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Dec 2021 07:09:17 -0800 (PST)
-Received: by mail-vk1-f178.google.com with SMTP id u198so12178098vkb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 07:09:17 -0800 (PST)
-X-Received: by 2002:a05:6122:2086:: with SMTP id i6mr8428405vkd.2.1640790556954;
- Wed, 29 Dec 2021 07:09:16 -0800 (PST)
+        Wed, 29 Dec 2021 07:22:05 -0800 (PST)
+Message-ID: <872b08a5-169e-45da-9e7e-4ece481514c7@gmail.com>
+Date:   Wed, 29 Dec 2021 16:22:04 +0100
 MIME-Version: 1.0
-References: <CAJ-ks9kd6wWi1S8GSCf1f=vJER=_35BGZzLnXwz36xDQPacyRw@mail.gmail.com>
- <CAJ-ks9=41PuzGkXmi0-aZPEWicWJ5s2gW2zL+jSHuDjaJ5Lhsg@mail.gmail.com> <20211228155433.3b1c71e5@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20211228155433.3b1c71e5@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Wed, 29 Dec 2021 10:08:40 -0500
-X-Gmail-Original-Message-ID: <CA+FuTSeDTJxbPvN6hkXFMaBspVHwL+crOxzC2ukWRzxvKma9bA@mail.gmail.com>
-Message-ID: <CA+FuTSeDTJxbPvN6hkXFMaBspVHwL+crOxzC2ukWRzxvKma9bA@mail.gmail.com>
-Subject: Re: [PATCH] net: check passed optlen before reading
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Tamir Duberstein <tamird@gmail.com>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-US
+To:     Felix Fietkau <nbd@nbd.name>, linux-arm-kernel@lists.infradead.org,
+        Russell King <linux@armlinux.org.uk>
+Cc:     john@phrozen.org, linux-kernel@vger.kernel.org
+References: <20211220211854.89452-1-nbd@nbd.name>
+ <20211220211854.89452-5-nbd@nbd.name>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH v8 04/14] ARM: Add basic support for Airoha EN7523 SoC
+In-Reply-To: <20211220211854.89452-5-nbd@nbd.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 6:54 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Tue, 28 Dec 2021 16:02:29 -0500 Tamir Duberstein wrote:
-> > Errant brace in the earlier version.
-> >
-> > From 8586be4d72c6c583b1085d2239076987e1b7c43a Mon Sep 17 00:00:00 2001
-> > From: Tamir Duberstein <tamird@gmail.com>
-> > Date: Tue, 28 Dec 2021 15:09:11 -0500
-> > Subject: [PATCH v2] net: check passed optlen before reading
-> >
-> > Add a check that the user-provided option is at least as long as the
-> > number of bytes we intend to read. Before this patch we would blindly
-> > read sizeof(int) bytes even in cases where the user passed
-> > optlen<sizeof(int), which would potentially read garbage or fault.
-> >
-> > Discovered by new tests in https://github.com/google/gvisor/pull/6957 .
-> >
-> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
->
-> Your patches are corrupted by your email client.
->
-> Can you try sending the latest version with git send-email?
 
-Then perhaps also update the subject line to make it more clear where
-this applies: "ipv6: raw: check passed optlen before reading".
+
+On 20/12/2021 22:18, Felix Fietkau wrote:
+> From: John Crispin <john@phrozen.org>
+> 
+> EN7523 is an armv8 based silicon used inside broadband access type devices
+> such as xPON and xDSL. It shares various silicon blocks with MediaTek
+> silicon such as the MT7622.
+> 
+> Signed-off-by: John Crispin <john@phrozen.org>
+> Signed-off-by: Bert Vermeulen <bert@biot.com>
+> Signed-off-by: Felix Fietkau <nbd@nbd.name>
+> ---
+>   arch/arm/Kconfig | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
+> 
+> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+> index f0f9e8bec83a..8dcd05ef31cc 100644
+> --- a/arch/arm/Kconfig
+> +++ b/arch/arm/Kconfig
+> @@ -573,6 +573,18 @@ config ARCH_VIRT
+>   	select HAVE_ARM_ARCH_TIMER
+>   	select ARCH_SUPPORTS_BIG_ENDIAN
+>   
+> +config ARCH_AIROHA
+> +	bool "Airoha SoC Support"
+> +	depends on ARCH_MULTI_V7
+> +	select ARM_AMBA
+> +	select ARM_GIC
+> +	select ARM_GIC_V3
+> +	select ARM_PSCI
+> +	select HAVE_ARM_ARCH_TIMER
+> +	select COMMON_CLK
+> +	help
+> +	  Support for Airoha EN7523 SoCs
+> +
+
+We should add a new subfolder
+arm/mach-airoha or add the config in arm/mach-mediatek, as it re-uses part of 
+the MediaTek IP.
+
+Please merge this with 3/14
+
+I also wonder if this actually boots. I suspect we need DT_MACHINE_START() macro 
+and the compatibles defined. It's many years ago I did this for MediaTek but I 
+remember that the system won't boot without that. Maybe things have changed over 
+time though.
+
+Regards,
+Matthias
+
+>   #
+>   # This is sorted alphabetically by mach-* pathname.  However, plat-*
+>   # Kconfigs may be included either alphabetically (according to the
+> 

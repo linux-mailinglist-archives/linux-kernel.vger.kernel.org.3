@@ -2,155 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 925FD481249
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 12:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC6648124B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 12:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236180AbhL2LsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 06:48:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55174 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233095AbhL2LsA (ORCPT
+        id S233013AbhL2Ltg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 06:49:36 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44020 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236495AbhL2Ltc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 06:48:00 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72150C061574;
-        Wed, 29 Dec 2021 03:48:00 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id h1so12495152pls.11;
-        Wed, 29 Dec 2021 03:48:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=VS8dZScsobOHgg+VVvoCG/RijOVYncvgh5RyiPUBnwc=;
-        b=VxteG+e/Gz2n6+V+42PZ3AULJQARAm4X6hnKAJHrUjpPVqZb3lv+X2bGbnziMEVbG6
-         vpH6k/fbAeaiydf+WElEAChIWmgFyalO6Zk2NQXJIoOrW8rmvXnruFx1agbAEjvyU4uw
-         g77o7g3UEPX8JLbQncZMrmE2oE3lv2iPKVVby6QxZ/DtpCaJv0lGSOHcnqk3tJpqoBBB
-         MFtawarA0zJn5y9is0YGmaVEZvRUpLtpZH4qyWSsQy+rkIu0oxMyOfsC2D6wjvIA05eX
-         BhF67480JfFVP9ehFomy2mI0FWGrFlegB9xbdmIzr4ERZtZqeyY4pVjJzDJ2oVtxeFEg
-         Xu/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VS8dZScsobOHgg+VVvoCG/RijOVYncvgh5RyiPUBnwc=;
-        b=PHqq8QsPzgT7gapj4Si+L54InUTKdrrPgWGQpVDZ/A2pI5q5B3go1LVnfUCv53VM3K
-         rx3IGBNH5c0zSqvF9vFSelEgOrIyrCHtJeBo55DIKoiGiM07fH0e+jr3XNvYFoXtE1Ht
-         bqaN5zhXj17UVtOYUsb5jM5kTnyKblZwkixjDt9tZcJ3ucThZp8KC+SUMo5eLkoxr7bN
-         vp+PhlvTV+CrUnEjaKX8uj2jYGNqcDpKiLgMnZC/sTzDYUNa5XCj63KwVM9MXu8ebair
-         XUswD7nqhiD/Vg9oVETj7Ecn6wKHfNzLYPhmDp/Lv6ne8/DJL8/JmjulS13bpDkdnJ1W
-         +jfg==
-X-Gm-Message-State: AOAM532qDqSGsn/qm9B6rp9bFN2f1H+uBMXXb4shOn/Zfq75rQX8hTNP
-        TREKYIFoynmlbyyXxqXk/Tg=
-X-Google-Smtp-Source: ABdhPJzY9X0XG2MXEAW681YpBuCyzd7YZIBQeNAu92YexU37mb1iV/w3LeB16of0mbg4RNb0Ly6AZA==
-X-Received: by 2002:a17:90a:fa6:: with SMTP id 35mr31075010pjz.165.1640778480046;
-        Wed, 29 Dec 2021 03:48:00 -0800 (PST)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id b22sm26713297pfv.107.2021.12.29.03.47.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Dec 2021 03:47:59 -0800 (PST)
-Subject: [PATCH v2 4/4] docs: sphinx/kfigure.py: Delegate inkscape msg to
- kernellog.verbose
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
-References: <e01fe9f9-f600-c2fc-c6b3-ef6395655ffe@gmail.com>
-From:   Akira Yokosawa <akiyks@gmail.com>
-Message-ID: <e26a7b53-9155-8394-4a31-6006379b65a5@gmail.com>
-Date:   Wed, 29 Dec 2021 20:47:56 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 29 Dec 2021 06:49:32 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DB2F6147D;
+        Wed, 29 Dec 2021 11:49:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D0DC36AE9;
+        Wed, 29 Dec 2021 11:49:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640778571;
+        bh=b32nEQdduPRlw/2R0sNHW6OgukBqMe43ZpZ8Ptn0ZKI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MrkU1KServT4b93O/RiTprwXI8FgjsLHE2tqjKEIwkOURA/cf8EWXyz7dzqe8yZho
+         tJ8ljaC5YgZ1rJ3bE50N307HPTtwAvCay0Po6iP0W+2lNh32vuUd3L4mqvbF9UV7n/
+         SWe3svu5GGtlTe67Bpd1exMmSzbPCwjm6pPQ9JdM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.19.223
+Date:   Wed, 29 Dec 2021 12:49:28 +0100
+Message-Id: <164077856821921@kroah.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <e01fe9f9-f600-c2fc-c6b3-ef6395655ffe@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Subject: [PATCH v2 4/4] docs: sphinx/kfigure.py: Delegate inkscape msg to kernellog.verbose
+I'm announcing the release of the 4.19.223 kernel.
 
-Depending on its version, distro config, and system-setup type,
-inkscape(1) emits various warning messages which are harmless in
-command-line uses.
+All users of the 4.19 kernel series must upgrade.
 
-List of such warning messages (incomplete, long ones wrapped):
+The updated 4.19.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-  - Gtk-Message: hh:mm:ss.nnn: Failed to load module "canberra-gtk-module"
-  - Unable to init server: Could not connect: Connection refused
-  - Failed to get connection
-  - ** (inkscape:xxx): CRITICAL **: hh:mm:ss.nnn: dbus_g_proxy_new_for_name:
-    assertion 'connection != NULL' failed
-  - ** (inkscape:xxx): CRITICAL **: hh:mm:ss.nnn: dbus_g_proxy_call:
-    assertion 'DBUS_IS_G_PROXY (proxy)' failed
-  - ** (inkscape:xxx): CRITICAL **: hh:mm:ss.nnn: dbus_g_connection_register_g_object:
-    assertion 'connection != NULL' failed
-  - ** (inkscape:xxx): WARNING **: hh:mm:ss.nnn:
-    Fonts dir '/usr/share/inkscape/fonts' does not exist and will be ignored.
+thanks,
 
-To avoid unnecessary anxiety, capture the message and output it via
-kernellog.verbose or kernellog.warn depending on the exit code.
+greg k-h
 
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>
----
- Documentation/sphinx/kfigure.py | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+------------
 
-diff --git a/Documentation/sphinx/kfigure.py b/Documentation/sphinx/kfigure.py
-index e616e49669eb..24d2b2addcce 100644
---- a/Documentation/sphinx/kfigure.py
-+++ b/Documentation/sphinx/kfigure.py
-@@ -200,7 +200,8 @@ def setupTools(app):
-                        "graphviz from https://www.graphviz.org")
-     if inkscape_cmd:
-         kernellog.verbose(app, "use inkscape(1) from: " + inkscape_cmd)
--        inkscape_ver = subprocess.check_output([inkscape_cmd, '--version'])
-+        inkscape_ver = subprocess.check_output([inkscape_cmd, '--version'],
-+                                               stderr=subprocess.DEVNULL)
-         ver_one_ptn = b'Inkscape 1'
-         inkscape_ver_one = re.search(ver_one_ptn, inkscape_ver)
-         convert_cmd = None
-@@ -373,17 +374,32 @@ def svg2pdf(app, svg_fname, pdf_fname):
- 
-     """
-     cmd = [convert_cmd, svg_fname, pdf_fname]
-+    cmd_name = 'convert(1)'
- 
-     if inkscape_cmd:
-+        cmd_name = 'inkscape(1)'
-         if inkscape_ver_one:
-             cmd = [inkscape_cmd, '-o', pdf_fname, svg_fname]
-         else:
-             cmd = [inkscape_cmd, '-z', '--export-pdf=%s' % pdf_fname, svg_fname]
- 
--    # use stdout and stderr from parent
--    exit_code = subprocess.call(cmd)
-+    try:
-+        warning_msg = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
-+        exit_code = 0
-+    except subprocess.CalledProcessError as err:
-+        warning_msg = err.output
-+        exit_code = err.returncode
-+        pass
-+
-     if exit_code != 0:
-         kernellog.warn(app, "Error #%d when calling: %s" % (exit_code, " ".join(cmd)))
-+        if warning_msg:
-+            kernellog.warn(app, "Warning msg from %s: %s"
-+                           % (cmd_name, str(warning_msg, 'utf-8')))
-+    elif warning_msg:
-+        kernellog.verbose(app, "Warning msg from %s (likely harmless):\n%s"
-+                          % (cmd_name, str(warning_msg, 'utf-8')))
-+
-     return bool(exit_code == 0)
- 
- def svg2pdf_by_rsvg(app, svg_fname, pdf_fname):
--- 
-2.17.1
+ Documentation/admin-guide/kernel-parameters.txt                |    8 
+ Documentation/networking/bonding.txt                           |   11 
+ Makefile                                                       |    2 
+ arch/arm/kernel/entry-armv.S                                   |    8 
+ arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus.dts |    2 
+ arch/parisc/kernel/syscall.S                                   |    2 
+ arch/x86/include/asm/pgtable.h                                 |    4 
+ block/bfq-iosched.c                                            |  287 ++++++----
+ block/bfq-iosched.h                                            |   76 ++
+ block/bfq-wf2q.c                                               |   56 +
+ drivers/char/ipmi/ipmi_msghandler.c                            |   21 
+ drivers/hid/hid-holtek-mouse.c                                 |   15 
+ drivers/hwmon/lm90.c                                           |    8 
+ drivers/infiniband/hw/qib/qib_user_sdma.c                      |    2 
+ drivers/input/touchscreen/atmel_mxt_ts.c                       |    2 
+ drivers/net/bonding/bond_options.c                             |    2 
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h              |    2 
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c       |   12 
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c           |    4 
+ drivers/net/ethernet/sfc/falcon/rx.c                           |    5 
+ drivers/net/ethernet/smsc/smc911x.c                            |    5 
+ drivers/net/fjes/fjes_main.c                                   |    5 
+ drivers/net/hamradio/mkiss.c                                   |    5 
+ drivers/net/usb/lan78xx.c                                      |    6 
+ drivers/pinctrl/stm32/pinctrl-stm32.c                          |    8 
+ drivers/spi/spi-armada-3700.c                                  |    2 
+ drivers/usb/gadget/function/u_ether.c                          |   15 
+ fs/f2fs/xattr.c                                                |    9 
+ include/linux/virtio_net.h                                     |   25 
+ net/ax25/af_ax25.c                                             |    4 
+ net/netfilter/nfnetlink_log.c                                  |    3 
+ net/netfilter/nfnetlink_queue.c                                |    3 
+ net/phonet/pep.c                                               |    2 
+ sound/core/jack.c                                              |    4 
+ sound/drivers/opl3/opl3_midi.c                                 |    2 
+ 35 files changed, 416 insertions(+), 211 deletions(-)
 
+Andrew Cooper (1):
+      x86/pkey: Fix undefined behaviour with PKRU_WD_BIT
+
+Ard Biesheuvel (1):
+      ARM: 9169/1: entry: fix Thumb2 bug in iWMMXt exception handling
+
+Benjamin Tissoires (1):
+      HID: holtek: fix mouse probing
+
+Chao Yu (1):
+      f2fs: fix to do sanity check on last xattr entry in __f2fs_setxattr()
+
+Colin Ian King (1):
+      ALSA: drivers: opl3: Fix incorrect use of vp->state
+
+Dongliang Mu (1):
+      spi: change clk_disable_unprepare to clk_unprepare
+
+Fabien Dessenne (1):
+      pinctrl: stm32: consider the GPIO offset to expose all the GPIO lines
+
+Federico Motta (2):
+      block, bfq: improve asymmetric scenarios detection
+      block, bfq: fix asymmetric scenarios detection
+
+Fernando Fernandez Mancera (1):
+      bonding: fix ad_actor_system option setting to default
+
+Greg Jesionowski (1):
+      net: usb: lan78xx: add Allied Telesis AT29M2-AF
+
+Greg Kroah-Hartman (1):
+      Linux 4.19.223
+
+Guenter Roeck (2):
+      hwmon: (lm90) Fix usage of CONFIG2 register in detect function
+      hwmon: (lm90) Do not report 'busy' status bit as alarm
+
+Ignacy Gawędzki (1):
+      netfilter: fix regression in looped (broad|multi)cast's MAC handling
+
+Jiasheng Jiang (4):
+      qlcnic: potential dereference null pointer of rx_queue->page_ring
+      fjes: Check for error irq
+      drivers: net: smc911x: Check for error irq
+      sfc: falcon: Check null pointer of rx_queue->page_ring
+
+John David Anglin (1):
+      parisc: Correct completer in lws start
+
+José Expósito (2):
+      IB/qib: Fix memory leak in qib_user_sdma_queue_pkts()
+      Input: atmel_mxt_ts - fix double free in mxt_read_info_block
+
+Lin Ma (3):
+      ax25: NPD bug when detaching AX25 device
+      hamradio: defer ax25 kfree after unregister_netdev
+      hamradio: improve the incomplete fix to avoid NPD
+
+Marian Postevca (1):
+      usb: gadget: u_ether: fix race in setting MAC address in setup phase
+
+Paolo Valente (3):
+      block, bfq: fix decrement of num_active_groups
+      block, bfq: fix queue removal from weights tree
+      block, bfq: fix use after free in bfq_bfqq_expire
+
+Robert Marko (1):
+      arm64: dts: allwinner: orangepi-zero-plus: fix PHY mode
+
+Rémi Denis-Courmont (1):
+      phonet/pep: refuse to enable an unbound pipe
+
+Sean Christopherson (1):
+      KVM: VMX: Fix stale docs for kvm-intel.emulate_invalid_guest_state
+
+Thadeu Lima de Souza Cascardo (2):
+      ipmi: bail out if init_srcu_struct fails
+      ipmi: fix initialization when workqueue allocation fails
+
+Willem de Bruijn (2):
+      net: accept UFOv6 packages in virtio_net_hdr_to_skb
+      net: skip virtio_net_hdr_set_proto if protocol already set
+
+Wu Bo (1):
+      ipmi: Fix UAF when uninstall ipmi_si and ipmi_msghandler module
+
+Xiaoke Wang (1):
+      ALSA: jack: Check the return value of kstrdup()
 

@@ -2,130 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD63481136
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 10:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC11481139
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 10:16:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239490AbhL2JNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 04:13:07 -0500
-Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:16859
-        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239474AbhL2JNG (ORCPT
+        id S239503AbhL2JQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 04:16:26 -0500
+Received: from smtp06.smtpout.orange.fr ([80.12.242.128]:50578 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239492AbhL2JQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 04:13:06 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3AH65ZeaPQ5yobGJrvrR2zlsFynXyQoLVcMsFnjC/?=
- =?us-ascii?q?WdVTrhmsk1GZVzWUZXGrQOarbYWunKY0kat6+/BsC7cLWm99gGjLY11k9FiMQ8?=
- =?us-ascii?q?ZKt6fexdxqrYXvKdqUvdK/WhiknQoGowPscEzmM9n9BDpC79SMljPvSF+KlYAL?=
- =?us-ascii?q?5EnsZqTFMGX5JZS1Ly7ZRbr5A2bBVMivV0T/Ai5W31GyNh1aYBlkpB5er83uDi?=
- =?us-ascii?q?hhdVAQw5TTSbdgT1LPXeuJ84Jg3fcldJFOgKmVY83LTegrN8F251juxExYFCtq?=
- =?us-ascii?q?piLf2dCXmQJaCYE7Q2jwPAfHk20cZzsAx+v9T2P40a1pTijzPm9luwdFJnZ22U?=
- =?us-ascii?q?wYgeKPW8AgYe0ABQ3AgYfUuFLjvZCLXXdao51fPfXLhx91tAVswMIle/fx4aUl?=
- =?us-ascii?q?F6OYCLzIAdB2Rr/i327+mUq9qi9hLBNLxPYUepHh7iynQC/o8XI7KT6zi4d5ew?=
- =?us-ascii?q?Sd2h8ZSEPKYbM0cARJrYRLKSx5CIFEaDNQ5hujArmf+aTBDqBSWuK8++UDXzQp?=
- =?us-ascii?q?4yr+rN8DaEvSORMNIjgOAo0rY8GnjRBIXLtqSzXyC6H3EruvOmz7rHYEfDru18?=
- =?us-ascii?q?tZ0j1CJgG8eEhsbUR28u/bRoku/Xd1YA1YZ9ionse4580nDZsHwQxCislaFuBA?=
- =?us-ascii?q?GUtZdGuF87xuCooLW/hyYQGwJSjpAQMYruM8/WXoh0Vrht83oAzditqHTRm+c6?=
- =?us-ascii?q?quTsRu2OC4cN2hEYjULJTbpSfGLTJob102UCI85Sejr3pulRHfqzi7MtyYkwbM?=
- =?us-ascii?q?ekaY2O2yA1Qivq1qRSlLhF2bZPjnqY18=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AFZAgBa1vBM7/vU568ycoowqjBKckLtp133Aq?=
- =?us-ascii?q?2lEZdPWaSKylfqGV8cjzuiWbtN98YhodcJW7WZVoP0m3yXcF2+Us1N6ZNWHbUS?=
- =?us-ascii?q?mTXeNfBODZrAEIdReOldK1rZ0QFpRDNA=3D=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,244,1635199200"; 
-   d="scan'208";a="1189640"
-Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 10:13:05 +0100
-Date:   Wed, 29 Dec 2021 10:13:04 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-cc:     Francisco Jerez <currojerez@riseup.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-In-Reply-To: <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2112291012030.24929@hadrien>
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com> <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net> <alpine.DEB.2.22.394.2112172258480.2968@hadrien>
- <87fsqqu6by.fsf@riseup.net> <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net> <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net> <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net>
- <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com> <878rwdse9o.fsf@riseup.net> <alpine.DEB.2.22.394.2112281745240.24929@hadrien> <CAJZ5v0i4xnesG=vfx7Y-wyeaGvjDeGcsaOVqhRLnV8YXk-m2gA@mail.gmail.com> <alpine.DEB.2.22.394.2112281845180.24929@hadrien>
- <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Wed, 29 Dec 2021 04:16:25 -0500
+Received: from [192.168.1.18] ([86.243.171.122])
+        by smtp.orange.fr with ESMTPA
+        id 2V4InTzq1MxZu2V4InMidO; Wed, 29 Dec 2021 10:16:24 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Wed, 29 Dec 2021 10:16:24 +0100
+X-ME-IP: 86.243.171.122
+Message-ID: <156fb7f1-cf12-e6cb-63c0-5c0413ce2b2e@wanadoo.fr>
+Date:   Wed, 29 Dec 2021 10:16:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: KMSAN: uninit-value in alauda_check_media
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     glider@google.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        usb-storage@lists.one-eyed-alien.net,
+        Kernel Janitors <kernel-janitors@vger.kernel.org>
+References: <0000000000007d25ff059457342d@google.com>
+ <f78b974a-e36b-6d23-6977-fdf50c05600b@wanadoo.fr>
+ <YcuUX6BVo+HA1TcI@rowland.harvard.edu>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <YcuUX6BVo+HA1TcI@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le 28/12/2021 à 23:49, Alan Stern a écrit :
+> On Tue, Dec 28, 2021 at 08:47:15AM +0100, Christophe JAILLET wrote:
+>> Hi,
+>>
+>> (2nd try - text only format - sorry for the noise)
+>>
+>>
+>> first try to use syzbot. I hope I do it right.
+>> Discussion about the syz report can be found at
+>> https://lore.kernel.org/linux-kernel/0000000000007d25ff059457342d@google.com/
+>>
+>> This patch only test if alauda_get_media_status() (and its embedded
+>> usb_stor_ctrl_transfer()) before using the data.
+>> In case of error, it returns USB_STOR_TRANSPORT_ERROR as done elsewhere.
+>>
+>> #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>> master
+>>
+>> CJ
+>>
+> 
+>> diff --git a/drivers/usb/storage/alauda.c b/drivers/usb/storage/alauda.c
+>> index 20b857e97e60..6c486d964911 100644
+>> --- a/drivers/usb/storage/alauda.c
+>> +++ b/drivers/usb/storage/alauda.c
+>> @@ -318,7 +318,8 @@ static int alauda_get_media_status(struct us_data *us, unsigned char *data)
+>>   	rc = usb_stor_ctrl_transfer(us, us->recv_ctrl_pipe,
+>>   		command, 0xc0, 0, 1, data, 2);
+>>   
+>> -	usb_stor_dbg(us, "Media status %02X %02X\n", data[0], data[1]);
+>> +	if (rc == USB_STOR_XFER_GOOD)
+>> +		usb_stor_dbg(us, "Media status %02X %02X\n", data[0], data[1]);
+> 
+> Instead of adding this test, you could initialize data[0] and data[1]
+> to zero before the call to usb_stor_ctrl_transfer.
+
+Well, having the test is cleaner, IMHO.
+If usb_stor_ctrl_transfer() fails, a message explaining the reason is 
+already generated by the same usb_stor_dbg(). Having an error message 
+followed by another one stating that the Media Status is 0x00 0x00 could 
+be confusing I think.
+
+Let me know if you have a real preference for a memset(data, 0, 2).
+If so, I'll add it.
+
+> 
+>>   
+>>   	return rc;
+>>   }
+>> @@ -453,8 +454,11 @@ static int alauda_check_media(struct us_data *us)
+>>   {
+>>   	struct alauda_info *info = (struct alauda_info *) us->extra;
+>>   	unsigned char status[2];
+>> +	int rc;
+>>   
+>> -	alauda_get_media_status(us, status);
+>> +	rc = alauda_get_media_status(us, status);
+>> +	if (rc != USB_STOR_TRANSPORT_GOOD)
+>> +		return USB_STOR_TRANSPORT_ERROR;
+>>   
+>>   	/* Check for no media or door open */
+>>   	if ((status[0] & 0x80) || ((status[0] & 0x1F) == 0x10)
+> 
+> In general this looks fine.  Let us know when you are ready to submit
+> the patch.
+
+I was unsure that this patch would get any interest because the driver 
+looks old. That's why I first tried to play with syzbot :)
+
+In the syzbot history, you also mentioned that 'unsigned char status[2]' 
+should be 'unsigned char *status = us->iobuf;'
+
+This is more a blind fix for me, but it looks consistent with other 
+places that call alauda_get_media_status().
+
+So, once you confirm if you prefer my 'if' or a 'memset', I'll resend a 
+small serie for fixing both issues.
+
+CJ
 
 
-On Tue, 28 Dec 2021, Rafael J. Wysocki wrote:
+> 
+> Alan Stern
+> 
 
-> On Tue, Dec 28, 2021 at 6:46 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> >
-> >
-> >
-> > On Tue, 28 Dec 2021, Rafael J. Wysocki wrote:
-> >
-> > > On Tue, Dec 28, 2021 at 5:58 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> > > >
-> > > > I looked a bit more into why pstate 20 is always using the least energy. I
-> > > > have just one thread spinning for 10 seconds, I use a fixed value for the
-> > > > pstate, and I measure the energy usage with turbostat.
-> > >
-> > > How exactly do you fix the pstate?
-> >
-> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > index e7af18857371..19440b15454c 100644
-> > --- a/kernel/sched/cpufreq_schedutil.c
-> > +++ b/kernel/sched/cpufreq_schedutil.c
-> > @@ -400,7 +402,7 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
-> >                 sg_cpu->util = prev_util;
-> >
-> >         cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
-> > -                                  map_util_perf(sg_cpu->util), sg_cpu->max);
-> > +                                  sysctl_sched_fixedfreq, sg_cpu->max);
->
-> This is just changing the "target" hint given to the processor which
-> may very well ignore it, though.
->
-> >
-> >         sg_cpu->sg_policy->last_freq_update_time = time;
-> >  }
-> >
-> > ------------------------------
-> >
-> > sysctl_sched_fixedfreq is a variable that I added to sysfs.
->
-> If I were trying to fix a pstate, I would set scaling_max_freq and
-> scaling_min_freq in sysfs for all CPUs to the same value.
->
-> That would cause intel_pstate to set HWP min and max to the same value
-> which should really cause the pstate to be fixed, at least outside the
-> turbo range of pstates.
-
-The effect is the same.  But that approach is indeed simpler than patching
-the kernel.
-
-julia
-
->
-> > >
-> > > > I tried this on a
-> > > > 2-socket Intel 6130 and a 4-socket Intel 6130.  The experiment runs 40
-> > > > times.
-> > > >
-> > > > There seem to be only two levels of CPU energy usage.  On the 2-socket
-> > > > machine the energy usage is around 600J up to pstate 20 and around 1000J
-> > > > after that.  On the 4-socket machine it is twice that.
-> > >
-> > > These are the package power numbers from turbostat, aren't they?
-> >
-> > Yes.
->
-> OK
->

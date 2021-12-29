@@ -2,186 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A451480E7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 02:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23DFA480E76
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 02:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238164AbhL2BVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 20:21:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238150AbhL2BVH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S238148AbhL2BVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 28 Dec 2021 20:21:07 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BA0C061574;
-        Tue, 28 Dec 2021 17:21:07 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id v25so17214069pge.2;
-        Tue, 28 Dec 2021 17:21:07 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235852AbhL2BVE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 28 Dec 2021 20:21:04 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11A9C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 17:21:03 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id f5so80169705edq.6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 17:21:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:references:cc:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding;
-        bh=ce+QRujFh6Z6jXwpwj96Ajoqinq3qkVE1ootEg0tvM4=;
-        b=HR4+5gEvbRK0rU8/dntHoBj1g+0X3qKpLMsP358svmvVe4LU0yAyJLNGs3fCG1IxN5
-         M/QTR8OXVpknffzN/8b3pOWH0ImhkhbIhkjgUWsWwTRZMZ2woqwqIa5115FbA6Nf6xT4
-         TiKsVnkG1OLJDDZ06iwYnbvfkz/MJz2DtOV5zSZDVPVN2jIRsDW3XOaMugqlveDm5gnG
-         bFN6SiWtJfdMPi0YTy0yZg20PhHPIvQQsScpgCUPn8k9cu6v+natJ9ebpk8jSRGpwixK
-         MiRCzMxl519LQW1SjZgL9Y49JFwBww9vU7/YKwkn2coaccmwFAJf32w2Pk2xT9akAsgc
-         lavA==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fMOzYTe1YGoWwY6ZjMC4n7K9XNPYxFqUqiRsJ6N0R4o=;
+        b=XWoabuYKxbKqKiBFHLd6iU/Va8CodNTjzHwlnmvaABH1TfRUpII5HqNOClV8QDVpia
+         bDkgwg1VCf5BoWwViOsLEfd7DM3StCDA6+MNU9Qb20NvzWy0mB+yG6RfhHlSnMCVGnPG
+         HKXgxsikIY4QMdumYWIgW5hhIWRLJPCGdpBwk8ZA+vTUovHldz+jIIcmaPQ6mav9+wn1
+         y57ejWysj87HxsPD7nybUdXErtnjXhTfFjWydh+mLfHZibvU9lNE+Iqm5gulCup+PMib
+         ZoMjuiUj0bNPPCw3VtO+K9n6WXHBlPXo+K1RGwSrDfsE4SLT2UCES+GPG5VO/9FNZ07B
+         XTQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=ce+QRujFh6Z6jXwpwj96Ajoqinq3qkVE1ootEg0tvM4=;
-        b=3cAgaISPe6iDiOddkPv0lqlXrSy3AKpOXh3NtLmjTn9vWZEUcpXuoKnrtWdH+V5FCb
-         lsW1e1fQl809DRHJdBld8g82kq3v6dBN07R5zT2Z4Z4XbvgxfBaE0pXFHLVrLrS76OKe
-         P202ipesU6XjiINC5pJbU+jZCtRlerHK7jePd2cJUVPb6kcyIKESLokmwojC6flYM4k1
-         L8DCrqwVO+nZKnKo1Q9hUI3Pj/csAsubrjbFq3CWHIV6OsG+KDhJgdGaEDY/dPzMcMyZ
-         MIXv05XtEuzhmpz8HO2J8crMVgSIyKK2y+l7QAOuWfXjHTdCALHJ5aykfZeDvUUv0Kne
-         yyZA==
-X-Gm-Message-State: AOAM533De7O8yg0IW11cBjcxIOLGKjA/O+8KdOuc61KFdsYYCDvezfzR
-        AGheKH0nrObwVumEDl0mKWM=
-X-Google-Smtp-Source: ABdhPJx/po46hxln8jdEFq24zHXmQfZv0rMy1a+pao1gS+//RcuuYa1+uO7C36+ZKnR8X7vS6LfebQ==
-X-Received: by 2002:a05:6a00:cca:b0:4ba:f5cc:538c with SMTP id b10-20020a056a000cca00b004baf5cc538cmr24584430pfv.60.1640740867094;
-        Tue, 28 Dec 2021 17:21:07 -0800 (PST)
-Received: from [10.1.1.24] (222-155-5-102-adsl.sparkbb.co.nz. [222.155.5.102])
-        by smtp.gmail.com with ESMTPSA id cm20sm18920963pjb.28.2021.12.28.17.20.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 Dec 2021 17:21:06 -0800 (PST)
-Subject: Re: [RFC 02/32] Kconfig: introduce HAS_IOPORT option and select it as
- necessary
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
- <20211227164317.4146918-3-schnelle@linux.ibm.com>
- <CAMuHMdXk6VcDryekkMJ3aGFnw4LLWOWMi8M2PwjT81PsOsOBMQ@mail.gmail.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Chris Zankel <chris@zankel.net>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Brian Cain <bcain@codeaurora.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, openrisc@lists.librecores.org,
-        linux-s390@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        Greg Ungerer <gerg@linux-m68k.org>
-From:   Michael Schmitz <schmitzmic@gmail.com>
-Message-ID: <d406b93a-0f76-d056-3380-65d459d05ea9@gmail.com>
-Date:   Wed, 29 Dec 2021 14:20:38 +1300
-User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
- Icedove/45.4.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fMOzYTe1YGoWwY6ZjMC4n7K9XNPYxFqUqiRsJ6N0R4o=;
+        b=IbZq8WteRIkyqCGNFxyWu3xlKlmzgpkwHgLlO1VrrkrktZjvH5vXSr+gipTGDkbAtL
+         fAOCl23Flwh2Gbxv46LSd/7GyrgRIWcZdrgfmB0VXtNCO0RAe2d+WBGwW2sIAFMjLpsx
+         2+HB5U2N2JhJrwoi3s02xFcYOoAxqNZoXaxrwlIhx+TCe0Pj+DzXAu+gM1RDcIR6Zgq/
+         Goq2q83U2WdXh+8YNTfuoC5++KWTec4MUJMcAmiNKNcLDJXbQeh6W+nSQr/KILf/nbaI
+         frYbs4iTyjL0bSPlvwyFJeY9xiLGLq5NUam+BD4ddTYcMvKEpPAWbswb+mDaU/yg9C/4
+         gFqQ==
+X-Gm-Message-State: AOAM533ICXkC/7FIqoSVZHTcFMVxNJT1yftpIkXZ66d4dDCBMcqR2Hdc
+        rcq6C1S3JdyWn9m07d1PYEyuX52C648YkqthbYByrzAcUBfH
+X-Google-Smtp-Source: ABdhPJy0s5XMEi68RzY4w40Epp8sxIDIRNwPmNOj5KA4XEefq/YuhePUbHCZkOFJs9MNpyBrSdL+fBTcxNhJGr/DrqE=
+X-Received: by 2002:a17:906:8241:: with SMTP id f1mr18716095ejx.112.1640740862264;
+ Tue, 28 Dec 2021 17:21:02 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdXk6VcDryekkMJ3aGFnw4LLWOWMi8M2PwjT81PsOsOBMQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211228065023.118744-1-luhuaxin1@huawei.com> <20211228065023.118744-2-luhuaxin1@huawei.com>
+In-Reply-To: <20211228065023.118744-2-luhuaxin1@huawei.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 28 Dec 2021 20:20:51 -0500
+Message-ID: <CAHC9VhR_w6sfKf3uegXkvKg26VNsr7pCJJjxzBoS-C0GmVt-dQ@mail.gmail.com>
+Subject: Re: [PATCH -next 1/1] audit: ignore userspace log when backlog limit
+ exceeded and backlog_wait_time is 0
+To:     luhuaxin <luhuaxin1@huawei.com>
+Cc:     eparis@redhat.com, linux-audit@redhat.com,
+        linux-kernel@vger.kernel.org, fangxiuning@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert, Niklas,
-
-
-
-Am 28.12.2021 um 23:08 schrieb Geert Uytterhoeven:
-> Hi Niklas,
+On Tue, Dec 28, 2021 at 1:50 AM luhuaxin <luhuaxin1@huawei.com> wrote:
 >
-> On Mon, Dec 27, 2021 at 5:44 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
->> We introduce a new HAS_IOPORT Kconfig option to gate support for
->> I/O port access. In a future patch HAS_IOPORT=n will disable compilation
->> of the I/O accessor functions inb()/outb() and friends on architectures
->> which can not meaningfully support legacy I/O spaces. On these platforms
->> inb()/outb() etc are currently just stubs in asm-generic/io.h which when
->> called will cause a NULL pointer access which some compilers actually
->> detect and warn about.
->>
->> The dependencies on HAS_IOPORT in drivers as well as ifdefs for
->> HAS_IOPORT specific sections will be added in subsequent patches on
->> a per subsystem basis. Then a final patch will ifdef the I/O access
->> functions on HAS_IOPORT thus turning any use not gated by HAS_IOPORT
->> into a compile-time warning.
->>
->> Link: https://lore.kernel.org/lkml/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
->> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
->> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
->> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> When the backlog exceed the backlog_limit and backlog_wait_time is set
+> to 0, the process will only sleep for a very short time (jiffies). The
+> backlog may still exceed backlog_limit in extreme cases.
 >
-> Thanks for your patch!
+> The more reasonable way to fix this problem is:
 >
->> --- a/arch/m68k/Kconfig
->> +++ b/arch/m68k/Kconfig
->> @@ -16,6 +16,7 @@ config M68K
->>         select GENERIC_CPU_DEVICES
->>         select GENERIC_IOMAP
->>         select GENERIC_IRQ_SHOW
->> +       select HAS_IOPORT
->>         select HAVE_AOUT if MMU
->>         select HAVE_ASM_MODVERSIONS
->>         select HAVE_DEBUG_BUGVERBOSE
+> 1. If backlog_wait_time is set to zero, ignore the log;
+> 2. If backlog_wait_time is set to non-zero, let process sleep for
+> backlog_wait_time.
 >
-> This looks way too broad to me: most m68k platform do not have I/O
-> port access support.
+> The above log limit logic is also the same as that in the existing
+> audit_log_start function.
 >
-> My gut feeling says:
->
->     select HAS_IOPORT if PCI || ISA
->
-> but that might miss some intricate details...
+> Fixes: 8f110f530635 ("[PATCH] audit: ensure userspace is penalized the
+>   same as the kernel when under pressure")
 
-In particular, this misses the Atari ROM port ISA adapter case -
+One quick comment on the "Fixes" tag above: you shouldn't add the
+"[PATCH]" string to the commit's subject, you should use the commit
+subject that you would see if you typed `git log --oneline`.  It also
+shouldn't be word-wrapped, it should be all on one line in your
+patch/email.
 
-	select HAS_IOPORT if PCI || ISA || ATARI_ROM_ISA
+Regardless of the above, I don't think this is a patch we want to
+merge upstream.  I can understand the desire to improve performance,
+but this doesn't seem appropriate to me; adjusting the
+backlog_wait_time to very low values just so you can drop audit
+records is not an approach we want to advocate, or support, upstream.
 
-might do instead.
-
-Cheers,
-
-	Michael
-
-
+> Signed-off-by: luhuaxin <luhuaxin1@huawei.com>
+> ---
+>  kernel/audit.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
 >
-> Gr{oetje,eeting}s,
+> diff --git a/kernel/audit.c b/kernel/audit.c
+> index 249e11628..70450f70a 100644
+> --- a/kernel/audit.c
+> +++ b/kernel/audit.c
+> @@ -1545,7 +1545,8 @@ static void audit_receive(struct sk_buff  *skb)
 >
->                         Geert
+>         /* can't block with the ctrl lock, so penalize the sender now */
+>         if (audit_backlog_limit &&
+> -           (skb_queue_len(&audit_queue) > audit_backlog_limit)) {
+> +           (skb_queue_len(&audit_queue) > audit_backlog_limit) &&
+> +           audit_backlog_wait_time) {
+>                 DECLARE_WAITQUEUE(wait, current);
 >
+>                 /* wake kauditd to try and flush the queue */
+> @@ -1842,9 +1843,8 @@ struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,
+>          *    while holding the mutex, although we do penalize the sender
+>          *    later in audit_receive() when it is safe to block
+>          */
+> +       long stime = audit_backlog_wait_time;
+>         if (!(auditd_test_task(current) || audit_ctl_owner_current())) {
+> -               long stime = audit_backlog_wait_time;
+> -
+>                 while (audit_backlog_limit &&
+>                        (skb_queue_len(&audit_queue) > audit_backlog_limit)) {
+>                         /* wake kauditd to try and flush the queue */
+> @@ -1872,6 +1872,14 @@ struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,
+>                                 return NULL;
+>                         }
+>                 }
+> +       } else if (!stime && audit_backlog_limit &&
+> +                  (skb_queue_len(&audit_queue) > audit_backlog_limit)) {
+> +               if (audit_rate_check() && printk_ratelimit())
+> +                       pr_warn("audit_backlog=%d > audit_backlog_limit=%d\n",
+> +                               skb_queue_len(&audit_queue),
+> +                               audit_backlog_limit);
+> +               audit_log_lost("backlog limit exceeded");
+> +               return NULL;
+>         }
+>
+>         ab = audit_buffer_alloc(ctx, gfp_mask, type);
 > --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
->
+> 2.23.0
+
+-- 
+paul moore
+www.paul-moore.com

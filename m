@@ -2,77 +2,343 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C76E6481157
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 10:41:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A7554811D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 12:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239573AbhL2JlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 04:41:13 -0500
-Received: from mailgw.kylinos.cn ([123.150.8.42]:48075 "EHLO nksmu.kylinos.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235116AbhL2JlM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 04:41:12 -0500
-X-UUID: 89a522aa61814586b5a8a5a2cfb8b7dd-20211229
-X-CPASD-INFO: 1cea0e763c304cf6a9061f90561160c4@erOfgV2XZWZfg3V8g6axcIFqYGZhkll
-        _d3BRYmRgj1SVhH5xTWJsXVKBfG5QZWNdYVN_eGpQYl9gZFB5i3-XblBhXoZgUZB3gKWfgWGTZw==
-X-CPASD-FEATURE: 0.0
-X-CLOUD-ID: 1cea0e763c304cf6a9061f90561160c4
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,EXT:0.0,OB:1.0,URL:-5,T
-        VAL:198.0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:113.0,IP:-2.0,MAL:0.0,ATTNUM:0
-        .0,PHF:-5.0,PHC:-5.0,SPF:4.0,EDMS:-3,IPLABEL:-2.0,FROMTO:0,AD:0,FFOB:1.0,CFOB
-        :1.0,SPC:0.0,SIG:-5,AUF:70,DUF:28551,ACD:148,DCD:250,SL:0,AG:0,CFC:0.765,CFSR
-        :0.057,UAT:0,RAF:0,VERSION:2.3.4
-X-CPASD-ID: 89a522aa61814586b5a8a5a2cfb8b7dd-20211229
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1, 1
-X-UUID: 89a522aa61814586b5a8a5a2cfb8b7dd-20211229
-X-User: shenzijun@kylinos.cn
-Received: from localhost.localdomain.localdomain [(172.17.127.14)] by nksmu.kylinos.cn
-        (envelope-from <shenzijun@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1016694055; Wed, 29 Dec 2021 17:53:36 +0800
-From:   shenzijun <shenzijun@kylinos.cn>
-To:     robert.moore@intel.com, rafael.j.wysocki@intel.com, lenb@kernel.org
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-kernel@vger.kernel.org, jinzi120021@sina.com
-Subject: [PATCH] ACPICA: DEBUGGER: Add return value check to acpi_db_walk_for_fields()
-Date:   Thu, 30 Dec 2021 01:40:58 +0800
-Message-Id: <20211229174058.11350-1-shenzijun@kylinos.cn>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S239829AbhL2LB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 06:01:58 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45808 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239798AbhL2LBz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 06:01:55 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E466AB8186C;
+        Wed, 29 Dec 2021 11:01:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8830BC36AE9;
+        Wed, 29 Dec 2021 11:01:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640775712;
+        bh=yzYyPhRO2EPmTxIj4Taqwwv9NkyLNWXee8S20z0TLCo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SmELlOKN8HKOFNSGYfxKm2vWEJwwMpclI63f74RuLnhx5Be1EyzFh3XuUrsMMzaFK
+         Dl47LBEVmTqi5/8IIa7ZSPUsEcg3uGyP5AUc33GiqGrDQEvhpOhK+F0V88bfoYaAlD
+         QeoTEBEbtKxPEUzloPu4gfThEr93MOJMx1AEDbK5MAhrtZePTYji4lwGVIl5kFUwKP
+         pc2mp6lB5J7OomTs1nFWE80nRAnyJHvENb4VHSP1TIvaC5fmq4DhwNlpCQzrJfZxw7
+         LOFzcsmKuwQGQbEygnvq3QgeO8874L2rjJmfODiLvzQBnWLg4ghaq4TKTKm8Btwfmd
+         QgOMSEgqmDXzw==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n2WiM-00ErMe-4K; Wed, 29 Dec 2021 11:01:50 +0000
+Date:   Wed, 29 Dec 2021 11:01:49 +0000
+Message-ID: <87fsqbznc2.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH/RFC] drivers/irqchip: add irq-inverter
+In-Reply-To: <b5e0ff57-885a-051b-4c4c-a02b005fa1f1@cogentembedded.com>
+References: <20211228165642.2514766-1-nikita.yoush@cogentembedded.com>
+        <87h7aszj70.wl-maz@kernel.org>
+        <b5e0ff57-885a-051b-4c4c-a02b005fa1f1@cogentembedded.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: nikita.yoush@cogentembedded.com, tglx@linutronix.de, geert+renesas@glider.be, magnus.damm@gmail.com, linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zijun Shen <shenzijun@kylinos.cn>
+On Tue, 28 Dec 2021 19:03:23 +0000,
+Nikita Yushchenko <nikita.yoush@cogentembedded.com> wrote:
+> 
+> Hi
+> 
+> >> Interrupt trigger type is typically used to configure interrupt
+> >> controller to properly interpret interrupt signal sent from a device.
+> >> 
+> >> However, some devices have configureable interrupt outputs, and drivers
+> >> tend to use interrupt trigger type also to configure device interrupt
+> >> output.
+> >> 
+> >> This works well when device interrupt output is connected directly to
+> >> interrupt controller input. However, this is not always the case.
+> >> Sometimes the interrupt signal gets inverted between the device
+> >> producing it and the controller consuming it. Combined with both sides
+> >> using the same interrupt trigger type to configure the signal, this
+> >> results into non-working setup regardless of what interrupt trigger type
+> >> is configured.
+> > 
+> > Regardless? Surely there is a canonical, working configuration.
+> 
+> It is working as long as either hardware delivers interrupt signal
+> without inversion, or only one side (producer or consumer) is
+> configured while the other side stays constant.
+> 
+> It does not work when hardware inverts singnal and both producer and
+> consumer are configured.
 
-The function acpi_db_walk_for_fields frees buffer.pointer by the
-first ACPI_FREE. And then uses the second ACPI_FREE to free
-buffer.pointer which may assigns again in acpi_evaluate_object.
-It's necessary to make sure that buffer.pointer get a block of
-memory in acpi_evaluate_object and acpi_evaluate_object return 0.
+As in *badly* configured.
 
-Signed-off-by: Zijun Shen <shenzijun@kylinos.cn>
----
- drivers/acpi/acpica/dbnames.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> >> Usage example, for Kingfisher extension board for Renesas Gen-3 Soc,
+> >> that has WiFi interrupt delivered over inverting level-shifter:
+> >> 
+> >> / {
+> >> 	wlcore_interrupt: inverter {
+> >> 		compatible = "linux,irq-inverter";
+> >> 		interrupts-extended = <&gpio1 25 IRQ_TYPE_EDGE_RISING>;
+> >> 		interrupt-controller;
+> >> 		#interrupt-cells = <0>;
+> >> 	};
+> >> };
+> >> 
+> >> &wlcore {
+> >> 	interrupts-extended = <&wlcore_interrupt>;
+> >> };
+> > 
+> > So you don't describe the trigger at the endpoint level, but at the
+> > pseudo-interrupt controller level? /me feels mildly sick.
+> 
+> Could you please explain how this could be done?
+> 
+> Regardless of what is configured at endpoint side, interrupt
+> controller driver will use that to set up interrupt controller, and
+> wl18xxx driver (in the case) will use that to configure wl18xx. That
+> results into SAME settings at producer and consumer sides, and
+> hardware requires OPPOSITE sittings at producer and consumer sides.
+> 
+> It is not a problem in interrupt controller driver - that driver does
+> it's job correctly, setting up the interrupt type that is requested.
+> 
+> It is likely not a problem in interrupt source (i.e. wl18xx) driver -
+> that driver tries to set up it's irq in the way that will work with
+> any interrupt controller. Perhaps it can be possible to update wl18xx
+> driver to allow fixed setup of interrupt polarity, but that looks like
+> addressing problem at wrong location. It is not an issue with
+> wl18xx. There are quite a few drivers in the tree that setup interrupt
+> polarity for their devices based on what irq_get_trigger_type()
+> returns.
+>
+> The root cause if the issue is the board itself, that inverts the
+> signal. Thus it looks correct to tie the fix to the board. And a
+> device node describing the interconnect looks like an elegant solution
+> for this.
 
-diff --git a/drivers/acpi/acpica/dbnames.c b/drivers/acpi/acpica/dbnames.c
-index 3615e1a6efd8..7a2d980cb2b8 100644
---- a/drivers/acpi/acpica/dbnames.c
-+++ b/drivers/acpi/acpica/dbnames.c
-@@ -550,7 +550,10 @@ acpi_db_walk_for_fields(acpi_handle obj_handle,
- 	ACPI_FREE(buffer.pointer);
+This is one option. But the way you do that is pretty broken, because
+you place the information at the wrong level in DT, and then violate
+every abstraction in the book in your kernel code.
+
+> 
+> > And by the way: "An interrupt specifier is one or more cells of data
+> > (as specified by #interrupt-cells) ...". Ergo, #interrupt-cells cannot
+> > be 0 when the interrupt controller can be an interrupt-parent.
+> 
+> Code works with #interrupt-cells=0 correctly, as long as
+> interrupts-extended property is used at producer side.
+
+News flash: you are relying on a *BUG* in the Linux code.
+
+> 
+> >> Then, wl18xx driver gets IRQ_TYPE_EDGE_FALLING return from
+> >> irq_get_trigger_type() call, and configures interrupt output for that.
+> >> Then the signal is delivered inverted to the GPIO module, and handled
+> >> correctly, because GPIO is configured for IRQ_TYPE_EDGE_RISING.
+> > 
+> > So this is only to avoid writing the correct device tree?
+> 
+> No. It is an attempt to describe a case that seems to be not
+> currently describable.
+
+commit 5fe3bba3088c4efab32a18649643b5075755b4b3
+Author: Yingjoe Chen <yingjoe.chen@mediatek.com>
+Date:   Tue Nov 25 16:04:20 2014 +0800
+
+    irqchip: mtk-sysirq: Add sysirq interrupt polarity support
+    
+    Mediatek SoCs have interrupt polarity support in sysirq which
+    allows to invert polarity for given interrupt. Add this support
+    using hierarchy irq domain.
+    
+    Signed-off-by: Yingjoe Chen <yingjoe.chen@mediatek.com>
+    Link: https://lkml.kernel.org/r/1416902662-19281-3-git-send-email-yingjoe.chen@mediatek.com
+    Signed-off-by: Jason Cooper <jason@lakedaemon.net>
+
+Not describable? You haven't quite looked hard enough.
+
+> 
+> Vendor BSPs solve this by commenting out irq polarity setup in
+> drivers. Thus obviously breaking use cases other than these BSPs are
+> for. I'm trying to suggest a portable alternative instead.
+> 
+> >> - why not using hierarchial irq_domain?
+> >> - because with hierarchial irq_domain, same interrupt gets the same virq
+> >>    number at all levels, and trigger type is tied to virq number, so need
+> >>    different virq numbers for reporting different trigger types
+> > 
+> > Why would you have different interrupt numbers? A given line has one
+> > configuration at any given point, and only one.
+> 
+> The goal is - make irq_get_trigger_type() returning different values
+> for producer and consumer of the interrupt. Because, that matches the
+> hardware behavior.
+
+And that utterly broken. From the point of view of the *device* there
+is only *one* trigger coming from the DT.
+
+[...]
+
+> > The right way to do it is to use the existing API by exposing the
+> > inverter (there are existing examples in the tree, using the
+> > hierarchical model). It isn't rocket science, and not much more code
+> > than the pile of hacks^W^W^Wcreative approach you have.
+> 
+> Could you please point me to such examples? I could not find any.
+
+I pointed to such an example in the tree above. A much simpler version
+can be written in a few minutes, see below. It is untested, and needs
+to be made to support various intspec formats, but you'll hopefully
+understand how it works and fix it.
+
+	M.
+
+diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
+index c1f611cbfbf8..a5ca92db1d73 100644
+--- a/drivers/irqchip/Makefile
++++ b/drivers/irqchip/Makefile
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+-obj-$(CONFIG_IRQCHIP)			+= irqchip.o
++obj-$(CONFIG_IRQCHIP)			+= irqchip.o irq-dummy-inverter.o
  
- 	buffer.length = ACPI_ALLOCATE_LOCAL_BUFFER;
--	acpi_evaluate_object(obj_handle, NULL, NULL, &buffer);
-+	status = acpi_evaluate_object(obj_handle, NULL, NULL, &buffer);
-+	if (ACPI_FAILURE(status)) {
-+		return (AE_OK);
+ obj-$(CONFIG_AL_FIC)			+= irq-al-fic.o
+ obj-$(CONFIG_ALPINE_MSI)		+= irq-alpine-msi.o
+diff --git a/drivers/irqchip/irq-dummy-inverter.c b/drivers/irqchip/irq-dummy-inverter.c
+new file mode 100644
+index 000000000000..a7e7c13d29ad
+--- /dev/null
++++ b/drivers/irqchip/irq-dummy-inverter.c
+@@ -0,0 +1,109 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * A stupidly dumb "driver" for inverters.
++ *
++ * inverter0: inverter {
++ *	compatible = "dummy,inverter";
++ *	interrupt-controller;
++ *	#interrupt-cells = <3>;	// Matches parent
++ * };
++ *
++ * endpoint-device {
++ *	interrupt-parent = <&inverter0>;
++ *	interrupts = <GIC_SPI 666 IRQ_TYPE_EDGE_RISING>;
++ * };
++ */
++#include <linux/irqchip.h>
++#include <linux/irqdomain.h>
++#include <linux/of_irq.h>
++
++
++static int inverter_set_type(struct irq_data *data, unsigned int type)
++{
++	switch (type) {
++	case IRQ_TYPE_LEVEL_LOW:
++		type = IRQ_TYPE_LEVEL_HIGH;
++		break;
++	case IRQ_TYPE_LEVEL_HIGH:
++		type = IRQ_TYPE_LEVEL_LOW;
++		break;
++	case IRQ_TYPE_EDGE_FALLING:
++		type = IRQ_TYPE_EDGE_RISING;
++		break;
++	case IRQ_TYPE_EDGE_RISING:
++		type = IRQ_TYPE_EDGE_FALLING;
++		break;
 +	}
- 
- 	/*
- 	 * Since this is a field unit, surround the output in braces
--- 
-2.31.1
++
++	data = data->parent_data;
++	return data->chip->irq_set_type(data, type);
++}
++
++static struct irq_chip inverter_chip = {
++	.name			= "Upside Down",
++	.irq_mask		= irq_chip_mask_parent,
++	.irq_unmask		= irq_chip_unmask_parent,
++	.irq_eoi		= irq_chip_eoi_parent,
++	.irq_set_type		= inverter_set_type,
++	.irq_retrigger		= irq_chip_retrigger_hierarchy,
++	.irq_set_affinity	= irq_chip_set_affinity_parent,
++	.irq_set_wake		= irq_chip_set_wake_parent,
++};
++
++static int inverter_domain_translate(struct irq_domain *d,
++				     struct irq_fwspec *fwspec,
++				     unsigned long *hwirq,
++				     unsigned int *type)
++{
++	/* Hardcoded for a 3-cell intspec, to be generalised */
++	*hwirq = fwspec->param[1];
++	*type = fwspec->param[2] & IRQ_TYPE_SENSE_MASK;
++	return 0;
++}
++
++static int inverter_domain_alloc(struct irq_domain *domain, unsigned int virq,
++				 unsigned int nr_irqs, void *arg)
++{
++	struct irq_fwspec *fwspec = arg;
++	struct irq_fwspec parent_fwspec;
++	irq_hw_number_t hwirq;
++
++	/* Only deal with a single interrupt at a time */
++	WARN_ON(nr_irqs != 1);
++
++	parent_fwspec = *fwspec;
++	hwirq = fwspec->param[1];
++
++	irq_domain_set_hwirq_and_chip(domain, virq, hwirq,
++				      &inverter_chip,
++				      domain->host_data);
++
++	parent_fwspec.fwnode = domain->parent->fwnode;
++	return irq_domain_alloc_irqs_parent(domain, virq, 1, &parent_fwspec);
++}
++
++static const struct irq_domain_ops inverter_domain_ops = {
++	.translate	= inverter_domain_translate,
++	.alloc		= inverter_domain_alloc,
++	.free		= irq_domain_free_irqs_common,
++};
++
++static int __init inverter_of_init(struct device_node *node,
++				   struct device_node *parent)
++{
++	struct irq_domain *domain;
++
++	domain = irq_domain_create_hierarchy(irq_find_host(parent), 0, 1,
++					     of_node_to_fwnode(node),
++					     &inverter_domain_ops, NULL);
++	if (!domain)
++		return -ENOMEM;
++
++	return 0;
++}
++
++IRQCHIP_PLATFORM_DRIVER_BEGIN(dummy_inverter)
++IRQCHIP_MATCH("dummy,inverter", inverter_of_init)
++IRQCHIP_PLATFORM_DRIVER_END(dummy_inverter)
++MODULE_DESCRIPTION("The Rise and Fall of Ziggy Stardust and the Spiders from Mars");
++MODULE_LICENSE("GPL v2");
 
+-- 
+Without deviation from the norm, progress is not possible.

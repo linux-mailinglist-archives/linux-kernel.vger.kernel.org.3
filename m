@@ -2,189 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C61D4810EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 09:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A69B4810EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 09:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239306AbhL2IY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 03:24:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38800 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239301AbhL2IY6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S239298AbhL2IY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 29 Dec 2021 03:24:58 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17397C061574;
-        Wed, 29 Dec 2021 00:24:58 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 8so17926631pgc.10;
-        Wed, 29 Dec 2021 00:24:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QpP/fOriBZU5ALSsMR2nG6nas4HRpsPyxC6YF62Vx2c=;
-        b=j9uk9JUnpjUOt7dfQ0yEMwROmUlxswBEgQCdu4WYyUITfpiyc7auX0Pgn5fOV2R7ei
-         9JITfROw17uDqW5qsQ531P6n5elQei7UkzyhNUO84HQy9t7jkiXcjgWFk0d6v7WEk5Vx
-         ZNwRsg2aXzqeqVb9zv8pt66zlbdTHoR0FhYTRHqDXoWtFFnh9LhtDDLNcn+DuipaFqNo
-         2QSMe9G2Lq5e9QWLE4agY1yWk3dRaKZlF46nqOinBn9XwhRs9oFvBNmNxpeUUxUNFMnW
-         jaT70CyirQYjE8TY6a1rAsLhOF07OqKa7HD95qyPAzboke6/2MFzz3xk+mByESK0NHw5
-         DjUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QpP/fOriBZU5ALSsMR2nG6nas4HRpsPyxC6YF62Vx2c=;
-        b=gUhgdyPDt7LpTVs+1UuOzrLZYT7vCrbUiLtXQd+S1xAg7e7LUEB8cWs56fE8EYVMMx
-         GTsUfvq/i3NSHwSMlkV0iRkX2OrEBB3kaR1G/tEL83pu1Co5D1EP1QzKO1s3gahV0XOT
-         QwtXCpQ0x/6PovPhL+/OJBDKwtN7ukfB9WXdlSDOEg5eipAzdaus9D+iEdBNQfUOXs4l
-         Em4IYnhFNP86XSadQiw/hV+1DeYoLAiwRINflzLv0SWBiy+b6ElK5rJ3shFrz18vhGCT
-         TNQ84XI2yQIBIcAA+SUaEPuZG8KvHzJoRHeD/wRBDV+JNSorIqSlE0oiCujzyKsJKPBq
-         Lhlg==
-X-Gm-Message-State: AOAM532sDquvuRo4BW+NLj2qyad8gRVYGA9OE8wgZICWvCNuDmXTTawn
-        xNb9vsZEk+BWLm2jMu9/kQA=
-X-Google-Smtp-Source: ABdhPJwp4Mbfnq7k5Ae139Iz9pgVH9KiPzPlPjR/lvARyi1hXbsvcxB9aoQadOGHCvqwkKAgd57Dhg==
-X-Received: by 2002:a63:4b42:: with SMTP id k2mr22285997pgl.591.1640766297574;
-        Wed, 29 Dec 2021 00:24:57 -0800 (PST)
-Received: from shinobu (113x37x72x24.ap113.ftth.ucom.ne.jp. [113.37.72.24])
-        by smtp.gmail.com with ESMTPSA id h17sm18905710pfv.217.2021.12.29.00.24.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 00:24:56 -0800 (PST)
-Date:   Wed, 29 Dec 2021 17:24:50 +0900
-From:   William Breathitt Gray <vilhelm.gray@gmail.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>, kernel@pengutronix.de,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Syed Nayyar Waris <syednwaris@gmail.com>
-Subject: Re: [PATCH v2 15/23] counter: 104-quad-8: Convert to new counter
- registration
-Message-ID: <YcwbUmZSeyH7rCu8@shinobu>
-References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
- <20211227094526.698714-16-u.kleine-koenig@pengutronix.de>
+Received: from mail-eopbgr50124.outbound.protection.outlook.com ([40.107.5.124]:37187
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239288AbhL2IY4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 03:24:56 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W/oeqWSIe1VtLmxkNF1YSx26nwrLByke0A7myNErp65NELw6tcgo/Ykf9pZFAKI7QAdueCuftjfH+M0x8nszBrbKEoMP5YZWI9dw24i7LLFq7XGqko/Fkx13zBL69r0wzAjUzj9IJWki73SSW1akvhWJ2Ou+KzM9X5+8iAelVxEYN3ojRF9oeQ6/VOw8An1AzlW4V+rGCudgY8eEgJn2uphYG3je7AuuHEESEH0I5A40c28pCdI2iMh3XmHQW6iv7WrQf0Pe0uxjOGxhI3JVUVE7J+IM9EYJ39TpbJ8gooey2Lr8g3oxwnx1XAqUiKOemvPsa0PULeGxwOcfJUHNHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dFtYv61gifHj2eYDE2zO5bD/6CRdCAwwtdrXtaH2uOI=;
+ b=HfwyvuB4dHywF19yKgCvBOhz9g40gQYJ92kHMme2AxHD0pG/ntKzSFnnOCvO4QNdUWQEoSxEduu+41fGO8Klhe5TnTyq2P1VXsl4mBPsdDAOf1o1dfvpfruMUhzk/tYYvP7ZF1Yro3mYOcCWJN0K6rtGtC05pP9A4GNL6wIzBFshB30b5oFBtd5s//Lk2/31GAqqNTpFyDLliWqNZFSibY8FrEa74phoQLElKqVhAIiPtpASLaaOybOfNg1dk1Nt4MH0UFpNMDxLtccJGrlgh3L1pi8H6L/I7i2myb3niR2tqfgpn6oyYMOVtzuHzyTriwpADME2j00ZOz5sdg2G1A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dFtYv61gifHj2eYDE2zO5bD/6CRdCAwwtdrXtaH2uOI=;
+ b=FYff8gJCKHlrI6VqJTiW5cITuxrSvevsSlJSIj2RcntKVmtmhZggaq0Yw8k3Xu/B2Jy5mahYuXD2UBd6/FJiDSymkoA4RwIfABJe3j0vMVlp1lRcOF60Ag3DgtlCiNMOmzYHyl2K3ilSG9bZGO2Va0yaGBuZuSZqKbq3DbGcOwE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from AM9PR08MB6241.eurprd08.prod.outlook.com (2603:10a6:20b:281::21)
+ by AM0PR08MB2964.eurprd08.prod.outlook.com (2603:10a6:208:5d::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.13; Wed, 29 Dec
+ 2021 08:24:54 +0000
+Received: from AM9PR08MB6241.eurprd08.prod.outlook.com
+ ([fe80::f9ca:fe00:10da:a62f]) by AM9PR08MB6241.eurprd08.prod.outlook.com
+ ([fe80::f9ca:fe00:10da:a62f%4]) with mapi id 15.20.4844.014; Wed, 29 Dec 2021
+ 08:24:54 +0000
+From:   Vasily Averin <vvs@virtuozzo.com>
+Subject: [PATCH v3 3/3] nfs v2/3: nlmclnt_lock: handle async processing of
+ F_SETLK with FL_SLEEP
+To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        "J. Bruce Fields" <bfields@fieldses.org>
+Cc:     kernel@openvz.org, linux-nfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>
+References: <1f354cec-d2d6-ddf5-56e0-325c10fe26ee@virtuozzo.com>
+Message-ID: <dc99ce3c-d73f-b21b-b92f-d0b1025c4567@virtuozzo.com>
+Date:   Wed, 29 Dec 2021 11:24:53 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <1f354cec-d2d6-ddf5-56e0-325c10fe26ee@virtuozzo.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS9PR06CA0066.eurprd06.prod.outlook.com
+ (2603:10a6:20b:464::11) To AM9PR08MB6241.eurprd08.prod.outlook.com
+ (2603:10a6:20b:281::21)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="b0Pn/YUYWlXUcX5U"
-Content-Disposition: inline
-In-Reply-To: <20211227094526.698714-16-u.kleine-koenig@pengutronix.de>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4ca2f042-71bf-4f6c-561e-08d9caa4b132
+X-MS-TrafficTypeDiagnostic: AM0PR08MB2964:EE_
+X-Microsoft-Antispam-PRVS: <AM0PR08MB2964C65FD548265EACCEE8ACAA449@AM0PR08MB2964.eurprd08.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1775;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9O9+EkdgNSQfvTZc16ChL8KBeVAKUF3544epYl1d3v3kfszANKYO6C8XKKv5aQNUEszemNCcbGZjfGLUHnlyzWSdML27eddaQyaSfcHKX6xAYWjiPwMetimnJTVKMVDqjsbEcXLP3MY6KPrhWh7lGVVWWucGHulMb2v6SkxAE61kRSVogXZhmykdCbkHC+qRKMR1E16S72up3x8WeUTohNge3EbvnygCZM5wHwRB9x+gcvN3k02OmYx1zv47j6HBsQnTBGiFSckpZjaINmjlZxIBmlxyuZ62bsiV9OAyLC0KH9Qzsa/vnsmrS/OAGY63X2S6dw0RPL7pkdYKiW49mmsmQGdsqPFkB+FjbRD7bzsJrRpwsWAxANdiESVZ6wDAz/U973BqfQUhNwJb6Ae5kAL+RCcR/rJLfu3AyuLrroqjZjP6Perv1rxJ4mL4aCfcnvzRyg3wW02FIlByGexeDq2uWnWQ2UyH0m/E6wg5km264QKagFAzocIZtiBTT34k5U/2188Uzr6mrh6fTezOyndgZ7j+jyL4jEAgz231FCMv8fJyXlN8rhu6yC1VSkQAuZfKPgW90QMNOtmty8YNkTXBQX62U8AkxFpr8xoQ70PILHMvOO+Hfig8bK2bbUik/Xnomt3qgCa95aQ5oyMs1W1wgpXTgQLcYR3nkPf0wcG50ehyin486cEOQZReN6+p/tBKZzgEkVO1UAGOLQhXXaiyYH9qFpnIDhNbT3tZkIirP05+FQS5zMxbARXmZ2kdTZgOW67ea5AaXF/j8sNahQCPmUS+RiZ4ygiwncVeCreZB5kKWe33LVHtuVf+RmThww9nLG5DKF1od+Pzfe8fqyNBy3jU+8auhAfDmh3vqTc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR08MB6241.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38350700002)(38100700002)(2616005)(8936002)(6486002)(31696002)(2906002)(8676002)(6506007)(5660300002)(4326008)(86362001)(110136005)(83380400001)(66476007)(52116002)(66946007)(26005)(508600001)(966005)(66556008)(31686004)(36756003)(316002)(186003)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NVV1YXhqamxmYTF6eUdZTnFrY0VOeXFzejZDaS9vdFRlWEp1OEw4TC9STUpQ?=
+ =?utf-8?B?VkdPTUlUOG81VlFvNEYrUkJZK1RzSnpRWjdUVWNTcm4xbDJoU2lmUkJ1cFFv?=
+ =?utf-8?B?NjdSWTZLQWxwYXNxS0R5eXdZRlRISU5xOTUvWVNDb1Y3S1JuMmNtMC9sTkp5?=
+ =?utf-8?B?b1huQ0gvVDY2WTFyODNpc2txekEyb2pqQTlKRis0cWs0SGdyUW12Q3BXOWkz?=
+ =?utf-8?B?N0hpZHNOQ1AyREpHTXFWTUU0UzJxY3h1SEVnckJXOUEvcDg2clVmQktaU0dK?=
+ =?utf-8?B?NmRveTRaSkh2VEFDVHpyZHZ4QityMEZFM2E5d2VKczRrYXY0VXFwMjJnb0wx?=
+ =?utf-8?B?aUFaYzhyYk8wQWdmZGlyRFhPQ01KdmlNNHN1dzM1NEcyUmdQWnlCa0FOL2du?=
+ =?utf-8?B?SXVlSEMwQmtBMTB6STlEbTJzQ1NicTRDdUc5dWJXL0lKWEppUmg5MTBvN3U4?=
+ =?utf-8?B?Qit5QWp0SGdhc1RrN2p1akdYUjBrMWR1WUM2UHJVc2FERGYrVmdodWo4THJy?=
+ =?utf-8?B?dnRxV3RpY2FxbmM4OFN4ZTJWS1pPY3BPTGJONExnSjZaZFhBN0g2aXJjb29z?=
+ =?utf-8?B?MXlRMEVGay90eXcxNVFnd1RydGVIQTNla05SZUh5T1hNRmFhaWRFblBFc3lU?=
+ =?utf-8?B?YzJxTndkWjZ0K0o3TXo0Y2lEZG0zek9CbUM4bEhMM3JDZWRQMWxYSTRkamRG?=
+ =?utf-8?B?R29xT0hlaHlTOFJUcS9DSkNuMzZVdkVPcmxncFZxMlhjZDFVd2RTODUxNTd3?=
+ =?utf-8?B?M25BZk1tbFFFRWx5QlcyRW5LeE1GZEZGVmd4ekE0d04vbHFqY0FuUjdqTlBO?=
+ =?utf-8?B?N1ZVMG5oeTlVZzE3LzJiU254ZDlnODVIUU1pQVFGTXFvQjZKOHA5YTFlM2kr?=
+ =?utf-8?B?MWlrTmp0Znh1YlgzaVNLV2ZiZnd1MGUrWmQ3enA1dThSMTk2K25YTnpzNE41?=
+ =?utf-8?B?d0R0RDRqNzJ4b0V2MXZOQXNHMU8zdHM0QmNZeXYrRW1SS3JEMzhjWnhaRDg0?=
+ =?utf-8?B?SUxJd2pON3VCQ01tUFpOc1JCZXFnSHBoOFdaU2I3OW1wMDYwc3JnOXdRcU1G?=
+ =?utf-8?B?SHhMdVpJTkEwVUpWR0FDdlN2ZlZkc3h6OFduT0xmUHhYdDFpTU5Wdi9QaE1I?=
+ =?utf-8?B?bWRLenIzMklkV1BvZmlHNUovVTZkVDBycVQ1cWlDTGsybk84SVZJN0NJL3ZK?=
+ =?utf-8?B?NHVhVnViZmFtNjRxRUFhZXo3RHp3eGEvcnVZditqRUZSblVwWWlHYzVOU2Jl?=
+ =?utf-8?B?TElUdjlySHJScVRkaDUyQk5HSWRXOTVJQzRwQk9nVEo3c2VPRjNoNmZ1ZHZG?=
+ =?utf-8?B?SzcvNTVYVklrTG5rMk15Z2F1SjlYZ09RODdYNVEyS0xVTUZQNy9SZ1E3WWdQ?=
+ =?utf-8?B?OXlwZjc5VTRjZFFHNGZGYzI2RnRreUNKdDBpNXpmU09jeGpyK2MxRVpFRkl3?=
+ =?utf-8?B?dFNlNFhpekNGd05OU0MvZUwrYXZBd1Q5STJMK2Y5Q3N5cCtGNGpvNGZVSUJ2?=
+ =?utf-8?B?ajhvTUxlTDVlUTFwVkZCVVdhc3VzSFIycDBPZ3lXK2JBbUZ0TzA2MkJCbURu?=
+ =?utf-8?B?QXJESU03aE9tbC84MmU4d0ZkVG9ySmJDVGNBaVAyWEFNZVYxMWxvQUVZZ0kv?=
+ =?utf-8?B?aFNoQmZPWkJlaGRFWm85b0N0eVJwcnhXNUJheVprM1loa2UxQ1ptSkRBMXI2?=
+ =?utf-8?B?akV4Q3FGRmt3WlVKWSt1K0d1TWhSaEQ4WHpINHNnVFZDQTVEc3FYbDFsWmk0?=
+ =?utf-8?B?cFc5dUtXRk93V250elFielFwTTd2OTBtRk5CeFNSSXdEWVlmWlFHMG5PVXp2?=
+ =?utf-8?B?Qm5tSEp1Ymd3QWd5VGU5eGhCbmF0aGJ1NVZYUTNIZjlQd1dWYVQ5Q0JxOVZr?=
+ =?utf-8?B?R0ErcUZuVXRscTRpNkl0ZEs4THVzWXpVTUs4eDRjSXZ6SEpNNG42N21aOGww?=
+ =?utf-8?B?WVBXeFIzVUhkbDJYSzBYSTA2YzdwYytMd3l6ZjRmRTcyVXMwSEdoYUVqQlB6?=
+ =?utf-8?B?MnVCbmdGY1FNVUh0dHFLTlJxZzZBQysrTkpBaTdPbUNDVEhOdnZ1UnBWa0tw?=
+ =?utf-8?B?K0VMSG94Q00yQnhMOGNrYVhCa3IxM2M2enFmNHZELzBIVFQzRFAvYWd2YVgy?=
+ =?utf-8?B?SnpZVkk5dm1mN3phWDd2Q3NyYjBkNXJZM3dMK1ZwWWp6WHAwSjduMmswUEFy?=
+ =?utf-8?Q?GNOCFjKIET+Dh0zJHAGLJBc=3D?=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ca2f042-71bf-4f6c-561e-08d9caa4b132
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR08MB6241.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Dec 2021 08:24:54.6886
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: prgjBVC0Nv3DG/8oPhkuQPcPQkEUaeGBkA+RuBuEKd8TlaTROeRCbgWxQqMJ5VgaHsoXeybNOtIEE7NX6Xtwyw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR08MB2964
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+nfsd and lockd use F_SETLK cmd with the FL_SLEEP flag set to request
+asynchronous processing of blocking locks.
 
---b0Pn/YUYWlXUcX5U
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Currently nfs v2/3 handles such requests by using nlmclnt_lock() ->
+do_vfs_lock() -> locks_lock_inode_wait() function which is blocked
+if request have FL_SLEEP flag set.
 
-On Mon, Dec 27, 2021 at 10:45:18AM +0100, Uwe Kleine-K=C3=B6nig wrote:
-> This fixes device lifetime issues where it was possible to free a live
-> struct device.
->=20
-> Fixes: f1d8a071d45b ("counter: 104-quad-8: Add Generic Counter interface =
-support")
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+To handle them correctly FL_SLEEP flag should be temporarily reset
+before executing the locks_lock_inode_wait() function.
 
-Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
+Additionally block flag is forced to set, to translate blocking lock to
+remote nfs server, expecting it supports async processing of the blocking
+locks too.
 
-> ---
->  drivers/counter/104-quad-8.c | 30 +++++++++++++++++-------------
->  1 file changed, 17 insertions(+), 13 deletions(-)
->=20
-> diff --git a/drivers/counter/104-quad-8.c b/drivers/counter/104-quad-8.c
-> index 6e5286cd1d4e..4315b14f239e 100644
-> --- a/drivers/counter/104-quad-8.c
-> +++ b/drivers/counter/104-quad-8.c
-> @@ -52,7 +52,6 @@ MODULE_PARM_DESC(irq, "ACCES 104-QUAD-8 interrupt line =
-numbers");
->   */
->  struct quad8 {
->  	spinlock_t lock;
-> -	struct counter_device counter;
->  	unsigned int fck_prescaler[QUAD8_NUM_COUNTERS];
->  	unsigned int preset[QUAD8_NUM_COUNTERS];
->  	unsigned int count_mode[QUAD8_NUM_COUNTERS];
-> @@ -1127,6 +1126,7 @@ static irqreturn_t quad8_irq_handler(int irq, void =
-*private)
-> =20
->  static int quad8_probe(struct device *dev, unsigned int id)
->  {
-> +	struct counter_device *counter;
->  	struct quad8 *priv;
->  	int i, j;
->  	unsigned int base_offset;
-> @@ -1138,19 +1138,19 @@ static int quad8_probe(struct device *dev, unsign=
-ed int id)
->  		return -EBUSY;
->  	}
-> =20
-> -	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> -	if (!priv)
-> +	counter =3D devm_counter_alloc(dev, sizeof(*priv));
-> +	if (!counter)
->  		return -ENOMEM;
-> +	priv =3D counter_priv(counter);
-> =20
->  	/* Initialize Counter device and driver data */
-> -	priv->counter.name =3D dev_name(dev);
-> -	priv->counter.parent =3D dev;
-> -	priv->counter.ops =3D &quad8_ops;
-> -	priv->counter.counts =3D quad8_counts;
-> -	priv->counter.num_counts =3D ARRAY_SIZE(quad8_counts);
-> -	priv->counter.signals =3D quad8_signals;
-> -	priv->counter.num_signals =3D ARRAY_SIZE(quad8_signals);
-> -	priv->counter.priv =3D priv;
-> +	counter->name =3D dev_name(dev);
-> +	counter->parent =3D dev;
-> +	counter->ops =3D &quad8_ops;
-> +	counter->counts =3D quad8_counts;
-> +	counter->num_counts =3D ARRAY_SIZE(quad8_counts);
-> +	counter->signals =3D quad8_signals;
-> +	counter->num_signals =3D ARRAY_SIZE(quad8_signals);
->  	priv->base =3D base[id];
-> =20
->  	spin_lock_init(&priv->lock);
-> @@ -1192,11 +1192,15 @@ static int quad8_probe(struct device *dev, unsign=
-ed int id)
->  	outb(QUAD8_CHAN_OP_ENABLE_INTERRUPT_FUNC, base[id] + QUAD8_REG_CHAN_OP);
-> =20
->  	err =3D devm_request_irq(dev, irq[id], quad8_irq_handler, IRQF_SHARED,
-> -			       priv->counter.name, priv);
-> +			       counter->name, priv);
->  	if (err)
->  		return err;
-> =20
-> -	return devm_counter_register(dev, &priv->counter);
-> +	err =3D devm_counter_add(dev, counter);
-> +	if (err < 0)
-> +		return dev_err_probe(dev, err, "Failed to add counter\n");
-> +
-> +	return 0;
->  }
-> =20
->  static struct isa_driver quad8_driver =3D {
-> --=20
-> 2.33.0
->=20
+https://bugzilla.kernel.org/show_bug.cgi?id=215383
+Signed-off-by: Vasily Averin <vvs@virtuozzo.com>
+---
+ fs/lockd/clntproc.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
---b0Pn/YUYWlXUcX5U
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/fs/lockd/clntproc.c b/fs/lockd/clntproc.c
+index 99fffc9cb958..5941aa7c9cc9 100644
+--- a/fs/lockd/clntproc.c
++++ b/fs/lockd/clntproc.c
+@@ -519,11 +519,18 @@ nlmclnt_lock(struct nlm_rqst *req, struct file_lock *fl)
+ 	unsigned char fl_flags = fl->fl_flags;
+ 	unsigned char fl_type;
+ 	int status = -ENOLCK;
++	bool async = false;
+ 
+ 	if (nsm_monitor(host) < 0)
+ 		goto out;
+ 	req->a_args.state = nsm_local_state;
+ 
++	async = !req->a_args.block &&
++		((fl_flags & FL_SLEEP_POSIX) == FL_SLEEP_POSIX);
++	if (async) {
++		fl->fl_flags &= ~FL_SLEEP;
++		req->a_args.block = 1;
++	}
+ 	fl->fl_flags |= FL_ACCESS;
+ 	status = do_vfs_lock(fl);
+ 	fl->fl_flags = fl_flags;
+@@ -573,8 +580,11 @@ nlmclnt_lock(struct nlm_rqst *req, struct file_lock *fl)
+ 			up_read(&host->h_rwsem);
+ 			goto again;
+ 		}
+-		/* Ensure the resulting lock will get added to granted list */
+-		fl->fl_flags |= FL_SLEEP;
++		if (async)
++			fl->fl_flags &= ~FL_SLEEP;
++		else
++			/* Ensure the resulting lock will get added to granted list */
++			fl->fl_flags |= FL_SLEEP;
+ 		if (do_vfs_lock(fl) < 0)
+ 			printk(KERN_WARNING "%s: VFS is out of sync with lock manager!\n", __func__);
+ 		up_read(&host->h_rwsem);
+-- 
+2.25.1
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAmHMG1IACgkQhvpINdm7
-VJKviA//TFuL86vhMGP/85sfUOR24yFk8nS6XilVQIUQ2914ptmh7slh9ozIkcQd
-xdt2Ji35skjmPDhvoHSb6fj3q69E8gqrD3F9vEpcuKToj61xD1ZxbpIzDV5Hw8xP
-dL3bCH4ol/UMH2Bnz+9iIWpG2o3sTKTnyhDElsNwEHjzsAXoftXlZVqCs8ZudQxc
-zjnVxc3Lnh+OtqRKctedUM3veucgA4Vm11bDypUvLyi/5eT2Hc2IFUbQ0i8mW16H
-21T2GyTb1NVQahMMk3Pl8HB0AZAn/C/Iw1MPZBoUULj0E7fh0eZm514XCKXGLkSj
-+Cw15z+Yj32dXXiOnzY0fyNJjGdFxyi/mtC0dJOky3OWfsUGQZe+Y7LxgZcGP8gg
-ikGIaMMtQHJZt5UY4LHwOy88DIi4pMbPv72CR5XdbrVSxKCJzjzJJ4qNQ+zhk0pj
-CHIoswJ7cdVb++7Hx4BLpjr8YxlKwPt72XVwqIGhdZOTNaUs4/9JrIDLI1y1tyW8
-iW/fCdcgMD9p+ylnnWE3HTLUkttZKLs+bx0VdcZTOE4seDr6HKTBh595r9b4BFNY
-PrOL25inHSplnYqqmcePK5NA0HGGoD+zpAlKKeYDmhY7azEF/sVl0ygqb/yGBN+j
-RIR3mduv+H085Qld5iB6Bz136CG5Tuz6ysAdK8M8iRZkLipTAc4=
-=02za
------END PGP SIGNATURE-----
-
---b0Pn/YUYWlXUcX5U--

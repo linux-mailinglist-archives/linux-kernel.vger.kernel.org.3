@@ -2,106 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4034817CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 00:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E57E4817CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 00:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233389AbhL2Xof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 18:44:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43326 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232732AbhL2Xoe (ORCPT
+        id S233413AbhL2Xp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 18:45:59 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:50912 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231881AbhL2Xp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 18:44:34 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8836C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 15:44:33 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0D4FE2A5;
-        Thu, 30 Dec 2021 00:44:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1640821472;
-        bh=EKJWcHIEQZewdbTOk+cU/n4oiB8qgEvXbZQWRa+u7oY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qduy1Zno1qWlzopoqpJQFfNnK1KAvx80kEjmRacHOZyI7MlAjMuNjJQoNF/7BMZAf
-         LMrENXvs+3VF+pj3zMm0Vv27RfPPu2/xnOm4ClwnNVT/umlbrtagEEsQwRGOJPIGga
-         5i/LCNq6hS7pJ4UR2RCExD3PASGUUswmFpKCnlZE=
-Date:   Thu, 30 Dec 2021 01:44:29 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/bridge_connector: enable HPD by default if supported
-Message-ID: <Yczy3UYpU2UMFQ6N@pendragon.ideasonboard.com>
-References: <20211225063151.2110878-1-nikita.yoush@cogentembedded.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211225063151.2110878-1-nikita.yoush@cogentembedded.com>
+        Wed, 29 Dec 2021 18:45:57 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EDE49CE1A2D;
+        Wed, 29 Dec 2021 23:45:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C5F5C36AEA;
+        Wed, 29 Dec 2021 23:45:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1640821554;
+        bh=dY5gYi5AkIP2+p4HXO+O9a3TyRp3lgzPpmtlA7gCn8o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pA/X3yUYAg2zrhiisVScrdIBKB37ZcdHsuCigc9sx9hMzrxvQSUKWM1/KgXTi9LpZ
+         NvmZxusSmCLsXPFG9RGozBP1glGiIZKfYnSuQBYWad2HSgOA8LHaHys6kxns/RBzh4
+         DCP+l+e3E5gRstnJ6HseDvWVJggpmcBxXKz9H0HM=
+Date:   Wed, 29 Dec 2021 15:45:53 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        Mark Brown <broonie@kernel.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Alexey Avramov <hakavlad@inbox.lv>,
+        Rik van Riel <riel@surriel.com>,
+        Mike Galbraith <efault@gmx.de>,
+        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
+        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 1/1] mm: vmscan: Reduce throttling due to a failure
+ to make progress
+Message-Id: <20211229154553.09dd5bb657bc19d45c3de8dd@linux-foundation.org>
+In-Reply-To: <caf247ab-f6fe-a3b9-c4b5-7ce17d1d5e43@leemhuis.info>
+References: <20211202150614.22440-1-mgorman@techsingularity.net>
+        <caf247ab-f6fe-a3b9-c4b5-7ce17d1d5e43@leemhuis.info>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nikita,
+On Tue, 28 Dec 2021 11:04:18 +0100 Thorsten Leemhuis <regressions@leemhuis.info> wrote:
 
-Thank you for the patch.
-
-On Sat, Dec 25, 2021 at 09:31:51AM +0300, Nikita Yushchenko wrote:
-> Hotplug events reported by bridge drivers over drm_bridge_hpd_notify()
-> get ignored unless somebody calls drm_bridge_hpd_enable(). When the
-> connector for the bridge is bridge_connector, such a call is done from
-> drm_bridge_connector_enable_hpd().
+> Hi, this is your Linux kernel regression tracker speaking.
 > 
-> However drm_bridge_connector_enable_hpd() is never called on init paths,
-> documentation suggests that it is intended for suspend/resume paths.
-
-Hmmmm... I'm in two minds about this. The problem description is
-correct, but I wonder if HPD should be enabled unconditionally here, or
-if this should be left to display drivers to control.
-drivers/gpu/drm/imx/dcss/dcss-kms.c enables HPD manually at init time,
-other drivers don't.
-
-It feels like this should be under control of the display controller
-driver, but I can't think of a use case for not enabling HPD at init
-time. Any second opinion from anyone ?
-
-> In result, once encoders are switched to bridge_connector,
-> bridge-detected HPD stops working.
+> On 02.12.21 16:06, Mel Gorman wrote:
+> > Mike Galbraith, Alexey Avramov and Darrick Wong all reported similar
+> > problems due to reclaim throttling for excessive lengths of time.
+> > In Alexey's case, a memory hog that should go OOM quickly stalls for
+> > several minutes before stalling. In Mike and Darrick's cases, a small
+> > memcg environment stalled excessively even though the system had enough
+> > memory overall.
 > 
-> This patch adds a call to that API on init path.
-> 
-> This fixes HDMI HPD with rcar-du + adv7513 case when adv7513 reports HPD
-> events via interrupts.
-> 
-> Fixes: c24110a8fd09 ("drm: rcar-du: Use drm_bridge_connector_init() helper")
-> Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-> ---
->  drivers/gpu/drm/drm_bridge_connector.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_bridge_connector.c b/drivers/gpu/drm/drm_bridge_connector.c
-> index 791379816837..4f20137ef21d 100644
-> --- a/drivers/gpu/drm/drm_bridge_connector.c
-> +++ b/drivers/gpu/drm/drm_bridge_connector.c
-> @@ -369,8 +369,10 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
->  				    connector_type, ddc);
->  	drm_connector_helper_add(connector, &drm_bridge_connector_helper_funcs);
->  
-> -	if (bridge_connector->bridge_hpd)
-> +	if (bridge_connector->bridge_hpd) {
->  		connector->polled = DRM_CONNECTOR_POLL_HPD;
-> +		drm_bridge_connector_enable_hpd(connector);
-> +	}
->  	else if (bridge_connector->bridge_detect)
->  		connector->polled = DRM_CONNECTOR_POLL_CONNECT
->  				  | DRM_CONNECTOR_POLL_DISCONNECT;
+> Just wondering: this patch afaics is now in -mm and  Linux next for
+> nearly two weeks. Is that intentional? I had expected it to be mainlined
+> with the batch of patches Andrew mailed to Linus last week, but it
+> wasn't among them.
 
--- 
-Regards,
+I have it queued for 5.17-rc1.
 
-Laurent Pinchart
+There is still time to squeeze it into 5.16, just, with a cc:stable. 
+
+Alternatively we could merge it into 5.17-rc1 with a cc:stable, so it
+will trickle back with less risk to the 5.17 release.
+
+What do people think?

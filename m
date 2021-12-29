@@ -2,93 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47AB1481535
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 17:44:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE1448153A
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 17:45:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240876AbhL2QoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 11:44:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234322AbhL2QoU (ORCPT
+        id S240883AbhL2Qp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 11:45:26 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:47221 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S234322AbhL2QpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 11:44:20 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4A3C061574;
-        Wed, 29 Dec 2021 08:44:20 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so19963204pjf.3;
-        Wed, 29 Dec 2021 08:44:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u9SlnkqK38gbFa/5lQSVkRrNE/pyi+RpdtYH3JSS99M=;
-        b=H9TuCnsiq/c74xXRy4eTZ2x8gALL/l3hL3Vr32hYYTnpdTCQ7HDKph6mfL2EVW25KJ
-         nJAlYAdFAMX9n+Umn2FplyKNagbTdaNI3KKNWRIWOYbIlY9A6ZY68S5yaqJeD/qYJmJ8
-         t66cTk1dvDBfD/G8L/Nmf2fvRB12wwAGjzvAr0icqZ4Ff/WuZfuVdqFVmMtB5GtsHFZP
-         mbLIEMPah/zascpsGeWXuj4UVLe7A71LOM+CLt5BXlogswpbKKBt8w2vEyAFG9Jt4x2o
-         +/XI1nfpoTG1AWCerJT9p8w9yM+/G3W/DZDpdiJECFWYsY6wttpCiFteZt8dR3P+Ci+0
-         vt0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u9SlnkqK38gbFa/5lQSVkRrNE/pyi+RpdtYH3JSS99M=;
-        b=Xy2QS0lQM6V1Qk5fwDZDB6Vd31ovNZ3Gn3LhvKlnr6ejVZKEEQsfScVECIeo7V9LgC
-         uXOFV0JRXP2aZTSJmSBk/DThSRXs23h6ol8IkGlpkZehTzth9+NRI5TeJb0i+FWQwckn
-         w0Z6wyoFqH+qYoZhLd4zd1Apl0fiCPdLqOGH1QUMoawYlXMpL2yCm/JZxSZ7sOXeTNqv
-         WgrCFny/0YI+1m+uNxRkHUBH4WB1BpmVlLrkLN8hJRes9qv5h+FWWDg354rl2U9iBSqf
-         tNqARzGpxau18caVt6zVE9Z7T/cL1AzDquJ5cfF8vMRsx/oOcyjpqWaGuA712Og2T4OT
-         wXGQ==
-X-Gm-Message-State: AOAM530arEsXHjgXix7rkAaqGnysPz2EB1OgDygdx2KcsEix8lCLgxRp
-        KmNoHAojY1YQSahS8cQ82Ynq02XU+fQTqJ7ZHVM=
-X-Google-Smtp-Source: ABdhPJwPURyGVwWf33T/6i51jvI8jx135wluxLNbRczUNmaGMT6NYDtgjrFxUSgqWfx/xKnnCtj7b3V5pnY3X8m4oHQ=
-X-Received: by 2002:a17:902:6502:b0:149:1162:f0b5 with SMTP id
- b2-20020a170902650200b001491162f0b5mr26758521plk.126.1640796259801; Wed, 29
- Dec 2021 08:44:19 -0800 (PST)
+        Wed, 29 Dec 2021 11:45:25 -0500
+Received: (qmail 1096430 invoked by uid 1000); 29 Dec 2021 11:45:24 -0500
+Date:   Wed, 29 Dec 2021 11:45:24 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     glider@google.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        usb-storage@lists.one-eyed-alien.net,
+        Kernel Janitors <kernel-janitors@vger.kernel.org>
+Subject: Re: KMSAN: uninit-value in alauda_check_media
+Message-ID: <YcyQpJGJRxsTKesd@rowland.harvard.edu>
+References: <0000000000007d25ff059457342d@google.com>
+ <f78b974a-e36b-6d23-6977-fdf50c05600b@wanadoo.fr>
+ <YcuUX6BVo+HA1TcI@rowland.harvard.edu>
+ <156fb7f1-cf12-e6cb-63c0-5c0413ce2b2e@wanadoo.fr>
 MIME-Version: 1.0
-References: <20211229085547.206008-1-imagedong@tencent.com>
-In-Reply-To: <20211229085547.206008-1-imagedong@tencent.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 29 Dec 2021 08:44:08 -0800
-Message-ID: <CAADnVQLiqRdE0iqSFM7za2g5UVNDE-ZZmS7+pca176_ePKsZvA@mail.gmail.com>
-Subject: Re: [PATCH net-next] net: bpf: hook for inet port bind conflict check
-To:     menglong8.dong@gmail.com
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Menglong Dong <imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <156fb7f1-cf12-e6cb-63c0-5c0413ce2b2e@wanadoo.fr>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 12:56 AM <menglong8.dong@gmail.com> wrote:
->
-> From: Menglong Dong <imagedong@tencent.com>
->
-> This hook of cgroup is called while TCP/UDP local port bind conflict
-> check. This is different from the 'commit aac3fc320d94 ("bpf: Post-hooks
-> for sys_bind")', as it is also called in autobind case.
->
-> For TCP, this hook is called during sys_bind() and autobind. And it
-> is also called during tcp_v4_connect() before hash the sock to ehash,
-> during which src ip, src port, dst ip, and dst port is already
-> allocated, means that we have a chance to determine whether this
-> connect should continue.
->
-> This can be useful when we want some applications not to use some
-> port (include auto bind port). For autobind, the kernel has the chance
-> to choose another port.
+On Wed, Dec 29, 2021 at 10:16:22AM +0100, Christophe JAILLET wrote:
+> Le 28/12/2021 à 23:49, Alan Stern a écrit :
+> > On Tue, Dec 28, 2021 at 08:47:15AM +0100, Christophe JAILLET wrote:
+> > > Hi,
+> > > 
+> > > (2nd try - text only format - sorry for the noise)
+> > > 
+> > > 
+> > > first try to use syzbot. I hope I do it right.
+> > > Discussion about the syz report can be found at
+> > > https://lore.kernel.org/linux-kernel/0000000000007d25ff059457342d@google.com/
+> > > 
+> > > This patch only test if alauda_get_media_status() (and its embedded
+> > > usb_stor_ctrl_transfer()) before using the data.
+> > > In case of error, it returns USB_STOR_TRANSPORT_ERROR as done elsewhere.
+> > > 
+> > > #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> > > master
+> > > 
+> > > CJ
+> > > 
+> > 
+> > > diff --git a/drivers/usb/storage/alauda.c b/drivers/usb/storage/alauda.c
+> > > index 20b857e97e60..6c486d964911 100644
+> > > --- a/drivers/usb/storage/alauda.c
+> > > +++ b/drivers/usb/storage/alauda.c
+> > > @@ -318,7 +318,8 @@ static int alauda_get_media_status(struct us_data *us, unsigned char *data)
+> > >   	rc = usb_stor_ctrl_transfer(us, us->recv_ctrl_pipe,
+> > >   		command, 0xc0, 0, 1, data, 2);
+> > > -	usb_stor_dbg(us, "Media status %02X %02X\n", data[0], data[1]);
+> > > +	if (rc == USB_STOR_XFER_GOOD)
+> > > +		usb_stor_dbg(us, "Media status %02X %02X\n", data[0], data[1]);
+> > 
+> > Instead of adding this test, you could initialize data[0] and data[1]
+> > to zero before the call to usb_stor_ctrl_transfer.
+> 
+> Well, having the test is cleaner, IMHO.
+> If usb_stor_ctrl_transfer() fails, a message explaining the reason is
+> already generated by the same usb_stor_dbg(). Having an error message
+> followed by another one stating that the Media Status is 0x00 0x00 could be
+> confusing I think.
+> 
+> Let me know if you have a real preference for a memset(data, 0, 2).
+> If so, I'll add it.
+> 
+> > 
+> > >   	return rc;
+> > >   }
+> > > @@ -453,8 +454,11 @@ static int alauda_check_media(struct us_data *us)
+> > >   {
+> > >   	struct alauda_info *info = (struct alauda_info *) us->extra;
+> > >   	unsigned char status[2];
+> > > +	int rc;
+> > > -	alauda_get_media_status(us, status);
+> > > +	rc = alauda_get_media_status(us, status);
+> > > +	if (rc != USB_STOR_TRANSPORT_GOOD)
+> > > +		return USB_STOR_TRANSPORT_ERROR;
+> > >   	/* Check for no media or door open */
+> > >   	if ((status[0] & 0x80) || ((status[0] & 0x1F) == 0x10)
+> > 
+> > In general this looks fine.  Let us know when you are ready to submit
+> > the patch.
+> 
+> I was unsure that this patch would get any interest because the driver looks
+> old. That's why I first tried to play with syzbot :)
 
-The use case is too vague to consider adding a new hook.
-Also there are no selftests.
+It is indeed old.  I doubt very many devices of this type are still in 
+use.
+
+> In the syzbot history, you also mentioned that 'unsigned char status[2]'
+> should be 'unsigned char *status = us->iobuf;'
+> 
+> This is more a blind fix for me, but it looks consistent with other places
+> that call alauda_get_media_status().
+> 
+> So, once you confirm if you prefer my 'if' or a 'memset', I'll resend a
+> small serie for fixing both issues.
+
+"if" and "memset" are both acceptable.  You can use either one.
+
+Alan Stern

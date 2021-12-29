@@ -2,165 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 414814810E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 09:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C61D4810EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 09:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239284AbhL2IYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 03:24:48 -0500
-Received: from mail-eopbgr50094.outbound.protection.outlook.com ([40.107.5.94]:28135
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231653AbhL2IYq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 03:24:46 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fxjyDccW6K6Vs8Dbs9n7HOILfThlcgFbUKruZmE6hsCboO4QyNeX7eZsVu5Qt53wt7JPOQv5dEPsynCWjji+ru8sec8EC7Na3C3YeEoczgkZEBisOYQfgweNI/ggIj7+bqRaISMhzMJvDNXiS8QzGDMoa4aoEasrEH/bQinn7xbh+Hal/1REiVgJ+27bNJCwJl9U+M1/GYaT4dg06ouh4Zs+iTs9Fb4XVI5++k2sBRjFh9Yp5n8tRFZA+gK1CEhQ1dh4mnNN71FvABaxW800uA5/06lBLfkLNYTsEMsoTTQze5I1Hd2LA3FTc9mb1MoTQjDcsbfcyOI/szvSJ5IyWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aI9A9SXUZjM2CR3SuatyKczrZlbAmBOJRVxTv4oVq8U=;
- b=SSNQNK1LBBIGubFiASnrm/29M1zNcwIXCiWeJp0GrutWhPjS7r3rcQWem2oJtUamb/fpAdnoZMwxVw2QCCIEtokIq3K3JDoK005qwohzG6SDPKeshKMwE3jV3Q7GFzwMpQZ322a7NHQP7l58U6s8Sk+gPiELlQGNG1v21Gt/SkYQyoz7YdUL657VHAStFW/vNRe8cBSpEgQYarWgLtKoTOAWNJ+eqmD4c1Nivc6WSKkvbBVJ8CHgeEjjN7ffqIzWqbBLo5KT/wrqFdZbZhEk+E2vW0OgYezprPmLfvPBoOkJbCCX/IowVZ9qQfbmdW1A3JAJ/LzYqlk+MRr8ZUIZzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
- header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aI9A9SXUZjM2CR3SuatyKczrZlbAmBOJRVxTv4oVq8U=;
- b=nq2zU+E9RBOVcYWzkgNW/T4Rd9FuMlnBZ97xxrv8afahb0hZrW+fDRsRoYTyhrVgm69lbZKglHTPDYDvvnGHjHMAn3aXaojcYL7rA0vhBCFrlYdRTKAGnwuQWu9IpJq5A5v7O9Hr9HUFSY6xQ3cqAbo6mLwhNFgl4wOQCHPQZLw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=virtuozzo.com;
-Received: from AM9PR08MB6241.eurprd08.prod.outlook.com (2603:10a6:20b:281::21)
- by AM0PR08MB2964.eurprd08.prod.outlook.com (2603:10a6:208:5d::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.13; Wed, 29 Dec
- 2021 08:24:44 +0000
-Received: from AM9PR08MB6241.eurprd08.prod.outlook.com
- ([fe80::f9ca:fe00:10da:a62f]) by AM9PR08MB6241.eurprd08.prod.outlook.com
- ([fe80::f9ca:fe00:10da:a62f%4]) with mapi id 15.20.4844.014; Wed, 29 Dec 2021
- 08:24:44 +0000
-From:   Vasily Averin <vvs@virtuozzo.com>
-Subject: [PATCH v3 2/3] nfs4: handle async processing of F_SETLK with FL_SLEEP
-To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        "J. Bruce Fields" <bfields@fieldses.org>
-Cc:     kernel@openvz.org, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>
-References: <1f354cec-d2d6-ddf5-56e0-325c10fe26ee@virtuozzo.com>
-Message-ID: <00d1e0fa-55dd-82a5-2607-70d4552cc7f4@virtuozzo.com>
-Date:   Wed, 29 Dec 2021 11:24:43 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <1f354cec-d2d6-ddf5-56e0-325c10fe26ee@virtuozzo.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS9PR06CA0077.eurprd06.prod.outlook.com
- (2603:10a6:20b:464::24) To AM9PR08MB6241.eurprd08.prod.outlook.com
- (2603:10a6:20b:281::21)
+        id S239306AbhL2IY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 03:24:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239301AbhL2IY6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 03:24:58 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17397C061574;
+        Wed, 29 Dec 2021 00:24:58 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id 8so17926631pgc.10;
+        Wed, 29 Dec 2021 00:24:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QpP/fOriBZU5ALSsMR2nG6nas4HRpsPyxC6YF62Vx2c=;
+        b=j9uk9JUnpjUOt7dfQ0yEMwROmUlxswBEgQCdu4WYyUITfpiyc7auX0Pgn5fOV2R7ei
+         9JITfROw17uDqW5qsQ531P6n5elQei7UkzyhNUO84HQy9t7jkiXcjgWFk0d6v7WEk5Vx
+         ZNwRsg2aXzqeqVb9zv8pt66zlbdTHoR0FhYTRHqDXoWtFFnh9LhtDDLNcn+DuipaFqNo
+         2QSMe9G2Lq5e9QWLE4agY1yWk3dRaKZlF46nqOinBn9XwhRs9oFvBNmNxpeUUxUNFMnW
+         jaT70CyirQYjE8TY6a1rAsLhOF07OqKa7HD95qyPAzboke6/2MFzz3xk+mByESK0NHw5
+         DjUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QpP/fOriBZU5ALSsMR2nG6nas4HRpsPyxC6YF62Vx2c=;
+        b=gUhgdyPDt7LpTVs+1UuOzrLZYT7vCrbUiLtXQd+S1xAg7e7LUEB8cWs56fE8EYVMMx
+         GTsUfvq/i3NSHwSMlkV0iRkX2OrEBB3kaR1G/tEL83pu1Co5D1EP1QzKO1s3gahV0XOT
+         QwtXCpQ0x/6PovPhL+/OJBDKwtN7ukfB9WXdlSDOEg5eipAzdaus9D+iEdBNQfUOXs4l
+         Em4IYnhFNP86XSadQiw/hV+1DeYoLAiwRINflzLv0SWBiy+b6ElK5rJ3shFrz18vhGCT
+         TNQ84XI2yQIBIcAA+SUaEPuZG8KvHzJoRHeD/wRBDV+JNSorIqSlE0oiCujzyKsJKPBq
+         Lhlg==
+X-Gm-Message-State: AOAM532sDquvuRo4BW+NLj2qyad8gRVYGA9OE8wgZICWvCNuDmXTTawn
+        xNb9vsZEk+BWLm2jMu9/kQA=
+X-Google-Smtp-Source: ABdhPJwp4Mbfnq7k5Ae139Iz9pgVH9KiPzPlPjR/lvARyi1hXbsvcxB9aoQadOGHCvqwkKAgd57Dhg==
+X-Received: by 2002:a63:4b42:: with SMTP id k2mr22285997pgl.591.1640766297574;
+        Wed, 29 Dec 2021 00:24:57 -0800 (PST)
+Received: from shinobu (113x37x72x24.ap113.ftth.ucom.ne.jp. [113.37.72.24])
+        by smtp.gmail.com with ESMTPSA id h17sm18905710pfv.217.2021.12.29.00.24.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 00:24:56 -0800 (PST)
+Date:   Wed, 29 Dec 2021 17:24:50 +0900
+From:   William Breathitt Gray <vilhelm.gray@gmail.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Syed Nayyar Waris <syednwaris@gmail.com>
+Subject: Re: [PATCH v2 15/23] counter: 104-quad-8: Convert to new counter
+ registration
+Message-ID: <YcwbUmZSeyH7rCu8@shinobu>
+References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
+ <20211227094526.698714-16-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 335ad032-8c13-42b0-d944-08d9caa4aaf6
-X-MS-TrafficTypeDiagnostic: AM0PR08MB2964:EE_
-X-Microsoft-Antispam-PRVS: <AM0PR08MB2964F76C1D76EF25940EF075AA449@AM0PR08MB2964.eurprd08.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3276;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 76/Mct/1TfBjbdXovd9dkoSHnc55zExDXe+2juG7LLUdNoVMzBMyyiAD+StrpzFmGFg4D1Kd2YcenDr5zmAgGbyCOX8FunTylrhVx/DILfW2B+C6BiP6/O2akOsq+NrTVbBIaPMoYYtI6Tx/G+ghaFNVvNFD2AmvOkgq9QdoZxJvm1d/XlWIqwX0EO8ob2pqLBV2Md6zaO2ofuyWgQRoIxwVkfxBXW6hRjxnsFAp0HnYBbTtKlx5YSFZa4Ka53f3BdQJL9qjdu79hmLZQb9qXrukmruQhcOhImFSdkByTCVAZWkzyQMwWwl+VgMJzhnwBTF7Iuep1x/rZga6Cjah5WB0pWNHp3aO/AKb2lzWJLvE9isquCjP1JZDkWVaU/8KlLpd4+z5CZOggzUZiDNyyWJgJtSzxLaX1SVelTfRkLufYnMNW6O121xlcOonwa7AIy7dLE3L5AP7V4wjLSx3/b6PXr8MVJNCj/Q+Yp3vt3PaMhhYwgXxZQdQ4aSYZ9Y9bQuW0lGWiC4sP1c7pQ5cEUL059CKpoZJFHEBfgUQ9rAFhS7Jye7EOoFlcV9Dt+B6ykBgQdqRvDKuB2RQ6YUExSiR4fpQT9DDkCG35UKaqRdaKA8zUYxIZfbWI26UARQcMBmInZod1tUK42J391hiJOZZE+9EHxgK48wUfA0H1BwuMqAb3vx0IJhxFi1nReVE9k8Gc6ahghVQXhojsQHPjy/CRQJg4OdMwbaQId5yNkba1mYuhLc5c0C7cIYCUGS1eBRpvZIlvDTukrHOFslXpWaOrY/LYBamyGVc714igPEpFYZB0tk+awxhKJHTn9h+SlH4ExAtuLGMSqSDdnweHxsHCczhzDelwLec6EWxdu8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR08MB6241.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38350700002)(38100700002)(2616005)(8936002)(6486002)(31696002)(2906002)(8676002)(6506007)(5660300002)(4326008)(86362001)(110136005)(83380400001)(66476007)(52116002)(66946007)(26005)(508600001)(966005)(66556008)(31686004)(36756003)(316002)(186003)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Wml2QlI4azNZaVF5d2Z6YUlKcW0yVzRjTzY0TU5CYnhGV2M3UTNZRTRjRTM3?=
- =?utf-8?B?aW55OFE2cy9tVm5iUjNLZVBUdlBsZWtKazB0enRFTlp2WjRnTUxnVUYxZnhr?=
- =?utf-8?B?SXg1U0tvZ2drTnZibjh5THo3bytaVXFQVXZwWkdpUCs0WElYREpQK0gzcVFO?=
- =?utf-8?B?WWVaMWxHVmU0U1RvcWN0dVVWNmIzZDZaekY0TGdFYUIvVmFGN1BaOE9oM0ZM?=
- =?utf-8?B?Z1FTL01ZUHIxbVFCNzI2REhrbXB3RCsrZlRhaXZzSkRLS0NKR2hDNlF3Y1la?=
- =?utf-8?B?Y1Jpa3R2bGtWRHpKNXFJRElDOVhkVGFyNnE3SXhuRzE2VWx1YnUyLzYxSThn?=
- =?utf-8?B?QnNNR1hmODFFWldibmg5R3NEQmdDeHdVVTBRYW1WTnJ5LytaWk9ZeVArYWhG?=
- =?utf-8?B?YXhxNnFJVlNucEpVTGFQU0JlRjR0WklhQm9SNXQrd0pZVlhLOGFkbk5relRM?=
- =?utf-8?B?S3V5TmMrNjFoYXVWR1FQVjRHeHIwTk1aalg0SURCaENMc0Z1S2diYml1OWtD?=
- =?utf-8?B?MDAzWkNreXRvMXNUVmhHdm9KUEcxZ1ZEN2d6dHp6aFYzaU93cEdVbHVEejFn?=
- =?utf-8?B?NlY3OHRHbjFldkY5Y2pDM2dzdTZqbjNWUlpiWE54aW9URFBQcXlJMmpUYmRN?=
- =?utf-8?B?NWhDNy9ES0pnWEV3UjdRb01QcWE1LzlnclNoMzQ3WjVpdHllUGpwd1RzdC9z?=
- =?utf-8?B?dzh0T3VwejJuQW5JYzEzcldOT1FIditmbG00YjBSang5WTBWaE9lWTcwNDdy?=
- =?utf-8?B?ZEdCTWVWRmVML2VUWGpFdlE3SjBjMHJEOXpxQUtWU2J1ckFNcG9sMDd4S3lL?=
- =?utf-8?B?ME9wQjdjeGhQS2J5WTdyeVRRQ0xReTBVOUtXRUsvMVFlZHhIVEZXdm1Sd3Yw?=
- =?utf-8?B?MGRXa0tFYTFkM2N4YVFUVVhDcy8zOUl1K0FiQjVYR1J0Ni9kRFh4STFJS3ov?=
- =?utf-8?B?eHdYSlFvYmdKNmZQT3VKUE9zRU1IYjV5em5JcTdVN2NPNWVvb1pNdTVZY0E2?=
- =?utf-8?B?WUN3WGFlL0lHcWVsc0o0Q2lrUWlLTU8vVmxHMmh4enNZU3gxRm91QUdEOVNi?=
- =?utf-8?B?WnFQeW5GNGhNSEFjcFo0NVJHcDZiRjd1ek82V1FLYWcvUXYwSk9lUHZXSEZY?=
- =?utf-8?B?emVQNjZEOWg2YW94OFAvTkwxejhSdW9SVjdTSWEwcXNEL3QyTGF2ZE1PSmVr?=
- =?utf-8?B?TDJsekZaWXorczBSeUM3eXNWYVhSYW5PdzNWaGdBVzBxdkorZmtlWllLT1Ro?=
- =?utf-8?B?QjFEV3M5QmZJL3RoVm1kRW5RczBYZE1yMnFrbDFYQS90bytpVmZ4S0treDJq?=
- =?utf-8?B?R014YUhQU3ZlcWsyWGV0UGtXSXovR1d0TVpiTm42YmNxUFJyTmVEZ3FhV0Fo?=
- =?utf-8?B?TXNTOGZlZVkxbHdibllyQW9lTnpXVGRlTXBHcjRRUkYzS3JpVVVGa1ZMSkVX?=
- =?utf-8?B?WXZ1WXoxcGg2SlFZUVJjK0thK3hXWFdTUklySWFGUHdxbXBaSlg2Wno2U0Nm?=
- =?utf-8?B?d1dDRGVsOEJnRjJDeTNDdlJKVXdtdVJFbUNnUFdDTXdFOWJvbVAzMU5VVERh?=
- =?utf-8?B?eUpyWXIxSjZjbDl6OUFMdGV2OTVDQXNMRy9ReXpmejVzSGc1RkFvSU55dHQw?=
- =?utf-8?B?elNjMW1Bdy9oY0Z4UUh4aGpDYWMxc25LVFhEdnRUZit1d3hSa2RRQlpDVmNn?=
- =?utf-8?B?TFJyRUp1cGVhekdHOGgxVkpYNjJuS1JPeTBXejNKZklRVnFBaXlZcXUvbEVP?=
- =?utf-8?B?V3JxRUE4QXZqMXNXN1dOZWtjYzFqb2RaMWJhaWs5YVlPdzZlYURPdWYrNXFV?=
- =?utf-8?B?NUlyMXhWeDh3MGpPUzhRaHkvL2J1ZTlQYjJBeUlqSVJENlV0cTJmdy9xZzNu?=
- =?utf-8?B?R0haOE9jdU4wN0lmQWNrcm5ta1RHOGtuay9HYTU2YkpRVHpYNGE1T3dtZk40?=
- =?utf-8?B?RUlCKzlkdGNHemxoZG5iOUVCd0laQlBhMTBTbnh0NVZEalJEVEc1MkgyampL?=
- =?utf-8?B?eEw0bFM4S25PQUgzN3BsSFlRbTNmTzV0RnBPVVpHQ25DdFlDOGpkNUNReDRt?=
- =?utf-8?B?TlJ6by9HemZvc09icU5iVkNwRmZSSkprOGRnT3JZOElQR0xHQ0UxMGFJZ0ZH?=
- =?utf-8?B?aWQxTDliRWo0dFBzTmJ6SnB6NkRTdDExbjl0cHFrSDBleEg3bitPNGNsZXYy?=
- =?utf-8?Q?LzYXm2UzJgOKZrvw22UyeaU=3D?=
-X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 335ad032-8c13-42b0-d944-08d9caa4aaf6
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR08MB6241.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Dec 2021 08:24:44.2480
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Od7vNk/x8AC4qbmW8wVG3tA/RvTYT8LJOtMbyZ5GCZZMdTfLO5d3QVaC2p9cLBNkVxCoVIqWoN6S0hG+tw23ww==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR08MB2964
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="b0Pn/YUYWlXUcX5U"
+Content-Disposition: inline
+In-Reply-To: <20211227094526.698714-16-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-nfsd and lockd use F_SETLK cmd with the FL_SLEEP flag set to request
-asynchronous processing of blocking locks.
 
-Currently nfs4 use locks_lock_inode_wait() function which is blocked
-for such requests. To handle them correctly FL_SLEEP flag should be
-temporarily reset before executing the locks_lock_inode_wait() function.
+--b0Pn/YUYWlXUcX5U
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Additionally block flag is forced to set, to translate blocking lock to
-remote nfs server, expecting it supports async processing of the blocking
-locks too.
+On Mon, Dec 27, 2021 at 10:45:18AM +0100, Uwe Kleine-K=C3=B6nig wrote:
+> This fixes device lifetime issues where it was possible to free a live
+> struct device.
+>=20
+> Fixes: f1d8a071d45b ("counter: 104-quad-8: Add Generic Counter interface =
+support")
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=215383
-Signed-off-by: Vasily Averin <vvs@virtuozzo.com>
----
- fs/nfs/nfs4proc.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
 
-diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
-index ee3bc79f6ca3..9b1380c4223c 100644
---- a/fs/nfs/nfs4proc.c
-+++ b/fs/nfs/nfs4proc.c
-@@ -7094,7 +7094,7 @@ static int _nfs4_do_setlk(struct nfs4_state *state, int cmd, struct file_lock *f
- 			recovery_type == NFS_LOCK_NEW ? GFP_KERNEL : GFP_NOFS);
- 	if (data == NULL)
- 		return -ENOMEM;
--	if (IS_SETLKW(cmd))
-+	if (IS_SETLKW(cmd) || (fl->fl_flags & FL_SLEEP))
- 		data->arg.block = 1;
- 	nfs4_init_sequence(&data->arg.seq_args, &data->res.seq_res, 1,
- 				recovery_type > NFS_LOCK_NEW);
-@@ -7200,6 +7200,9 @@ static int _nfs4_proc_setlk(struct nfs4_state *state, int cmd, struct file_lock
- 	int status;
- 
- 	request->fl_flags |= FL_ACCESS;
-+	if (((fl_flags & FL_SLEEP_POSIX) == FL_SLEEP_POSIX) && IS_SETLK(cmd))
-+		request->fl_flags &= ~FL_SLEEP;
-+
- 	status = locks_lock_inode_wait(state->inode, request);
- 	if (status < 0)
- 		goto out;
--- 
-2.25.1
+> ---
+>  drivers/counter/104-quad-8.c | 30 +++++++++++++++++-------------
+>  1 file changed, 17 insertions(+), 13 deletions(-)
+>=20
+> diff --git a/drivers/counter/104-quad-8.c b/drivers/counter/104-quad-8.c
+> index 6e5286cd1d4e..4315b14f239e 100644
+> --- a/drivers/counter/104-quad-8.c
+> +++ b/drivers/counter/104-quad-8.c
+> @@ -52,7 +52,6 @@ MODULE_PARM_DESC(irq, "ACCES 104-QUAD-8 interrupt line =
+numbers");
+>   */
+>  struct quad8 {
+>  	spinlock_t lock;
+> -	struct counter_device counter;
+>  	unsigned int fck_prescaler[QUAD8_NUM_COUNTERS];
+>  	unsigned int preset[QUAD8_NUM_COUNTERS];
+>  	unsigned int count_mode[QUAD8_NUM_COUNTERS];
+> @@ -1127,6 +1126,7 @@ static irqreturn_t quad8_irq_handler(int irq, void =
+*private)
+> =20
+>  static int quad8_probe(struct device *dev, unsigned int id)
+>  {
+> +	struct counter_device *counter;
+>  	struct quad8 *priv;
+>  	int i, j;
+>  	unsigned int base_offset;
+> @@ -1138,19 +1138,19 @@ static int quad8_probe(struct device *dev, unsign=
+ed int id)
+>  		return -EBUSY;
+>  	}
+> =20
+> -	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> -	if (!priv)
+> +	counter =3D devm_counter_alloc(dev, sizeof(*priv));
+> +	if (!counter)
+>  		return -ENOMEM;
+> +	priv =3D counter_priv(counter);
+> =20
+>  	/* Initialize Counter device and driver data */
+> -	priv->counter.name =3D dev_name(dev);
+> -	priv->counter.parent =3D dev;
+> -	priv->counter.ops =3D &quad8_ops;
+> -	priv->counter.counts =3D quad8_counts;
+> -	priv->counter.num_counts =3D ARRAY_SIZE(quad8_counts);
+> -	priv->counter.signals =3D quad8_signals;
+> -	priv->counter.num_signals =3D ARRAY_SIZE(quad8_signals);
+> -	priv->counter.priv =3D priv;
+> +	counter->name =3D dev_name(dev);
+> +	counter->parent =3D dev;
+> +	counter->ops =3D &quad8_ops;
+> +	counter->counts =3D quad8_counts;
+> +	counter->num_counts =3D ARRAY_SIZE(quad8_counts);
+> +	counter->signals =3D quad8_signals;
+> +	counter->num_signals =3D ARRAY_SIZE(quad8_signals);
+>  	priv->base =3D base[id];
+> =20
+>  	spin_lock_init(&priv->lock);
+> @@ -1192,11 +1192,15 @@ static int quad8_probe(struct device *dev, unsign=
+ed int id)
+>  	outb(QUAD8_CHAN_OP_ENABLE_INTERRUPT_FUNC, base[id] + QUAD8_REG_CHAN_OP);
+> =20
+>  	err =3D devm_request_irq(dev, irq[id], quad8_irq_handler, IRQF_SHARED,
+> -			       priv->counter.name, priv);
+> +			       counter->name, priv);
+>  	if (err)
+>  		return err;
+> =20
+> -	return devm_counter_register(dev, &priv->counter);
+> +	err =3D devm_counter_add(dev, counter);
+> +	if (err < 0)
+> +		return dev_err_probe(dev, err, "Failed to add counter\n");
+> +
+> +	return 0;
+>  }
+> =20
+>  static struct isa_driver quad8_driver =3D {
+> --=20
+> 2.33.0
+>=20
 
+--b0Pn/YUYWlXUcX5U
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAmHMG1IACgkQhvpINdm7
+VJKviA//TFuL86vhMGP/85sfUOR24yFk8nS6XilVQIUQ2914ptmh7slh9ozIkcQd
+xdt2Ji35skjmPDhvoHSb6fj3q69E8gqrD3F9vEpcuKToj61xD1ZxbpIzDV5Hw8xP
+dL3bCH4ol/UMH2Bnz+9iIWpG2o3sTKTnyhDElsNwEHjzsAXoftXlZVqCs8ZudQxc
+zjnVxc3Lnh+OtqRKctedUM3veucgA4Vm11bDypUvLyi/5eT2Hc2IFUbQ0i8mW16H
+21T2GyTb1NVQahMMk3Pl8HB0AZAn/C/Iw1MPZBoUULj0E7fh0eZm514XCKXGLkSj
++Cw15z+Yj32dXXiOnzY0fyNJjGdFxyi/mtC0dJOky3OWfsUGQZe+Y7LxgZcGP8gg
+ikGIaMMtQHJZt5UY4LHwOy88DIi4pMbPv72CR5XdbrVSxKCJzjzJJ4qNQ+zhk0pj
+CHIoswJ7cdVb++7Hx4BLpjr8YxlKwPt72XVwqIGhdZOTNaUs4/9JrIDLI1y1tyW8
+iW/fCdcgMD9p+ylnnWE3HTLUkttZKLs+bx0VdcZTOE4seDr6HKTBh595r9b4BFNY
+PrOL25inHSplnYqqmcePK5NA0HGGoD+zpAlKKeYDmhY7azEF/sVl0ygqb/yGBN+j
+RIR3mduv+H085Qld5iB6Bz136CG5Tuz6ysAdK8M8iRZkLipTAc4=
+=02za
+-----END PGP SIGNATURE-----
+
+--b0Pn/YUYWlXUcX5U--

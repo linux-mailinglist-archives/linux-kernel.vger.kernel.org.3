@@ -2,169 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66533481629
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 20:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C674C48162C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 20:14:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbhL2TIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 14:08:47 -0500
-Received: from mail-bn8nam11on2122.outbound.protection.outlook.com ([40.107.236.122]:26081
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229958AbhL2TIq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 14:08:46 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G1mIWcNx6Z0b685MhfI5L7wTOqmQvBTwYNeZqUHIk7fj/UfG1ZE3MitsrQ7kMiKt2z89KbHPKodulEo2yc/7LCo8bPImq9ryvrGwvU5N5SMiH9cn+sxjjcs/fXIckLpaIYqQMHy1kw6hyBXmG495tCdro9LdO/SK63z6SHRmnlM+3m9z65bacVNLpHDChBBn0JA6JaTakIigrkeoREmlMaZY9Xpbj4IXN2RPR1ioxj6XyPOvq0LnRmlG/bx16M8w3S8zFi8vezhKxjKFEUR3QE9EceDDxCRp9yJYhYZGjUCpQCu5lRlQtwUHb+fNRSBRBlDSSzjg9MLhSkqQxNG/bg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZlJT+FOCSdJOl7cRZLqFeGJSSe3pbbAk1Ftt9L18TWQ=;
- b=f5RUguGykiZIhOy9+SIxXC4+2stVu4D2hzZmj4QkUYLxU2nKb4DcUmWFUiXdHlGqkePjmlktWdVR4sJr6SRq4fYWO5jRhtEpOlZgaXad2O+KK9eRb0DXAWh4SObSRQSHawUiXo/zPCtPSVuWTnbdLwsP/+er361wohcawL4tRqoMstNc3EgKse9iKaDfMcghTaP7VpcbWB3r3841tgGQT4MR1XJ8GViTlNHzIFDtB0DzljP3h8pJlapEMfQX0gAKAkSSWzSkDhU9hvTYPFmokDR/d/LHL/5boSvmxyP8LAmezyeJPMIUVW7kL7kMrP5BVuLF7+mPWG4WuF5FWY/HDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZlJT+FOCSdJOl7cRZLqFeGJSSe3pbbAk1Ftt9L18TWQ=;
- b=aS9IZ/jeRKqmVSLJszy9tqwZtpoCQFwK8PGthTg+yqxm7Vd9uEg8p+2/866htQTrrBTKzvofbWoKk+SArAFfoANgsgnioJnaxsf8+SPTlYOYpIGjSUIh5CX7Qg+H/tYWbPzPF2TWiffOZvf04+vm6PdOZ3ImjlLPesiv0GPAv0k=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by MWHPR10MB1279.namprd10.prod.outlook.com
- (2603:10b6:301:7::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.19; Wed, 29 Dec
- 2021 19:08:43 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::2d52:2a96:7e6c:460f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::2d52:2a96:7e6c:460f%4]) with mapi id 15.20.4844.014; Wed, 29 Dec 2021
- 19:08:42 +0000
-Date:   Wed, 29 Dec 2021 11:08:37 -0800
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        id S230211AbhL2TOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 14:14:09 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:46515 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229958AbhL2TOI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 14:14:08 -0500
+Received: from [192.168.1.107] ([37.4.249.169]) by mrelayeu.kundenserver.de
+ (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1M9nEJ-1n6DAG3gV3-005mU0; Wed, 29 Dec 2021 20:13:41 +0100
+Subject: Re: [PATCH] staging: vc04_services: Fix RCU dereference check
+To:     Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
+        linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>
-Subject: Re: [PATCH v1 pinctrl-next 0/1] add blink and activity functions to
- SGPIO
-Message-ID: <20211229190837.GA1252561@euler>
-References: <20211229003729.618079-1-colin.foster@in-advantage.com>
- <YcwqznBTLZgNcU7o@lunn.ch>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YcwqznBTLZgNcU7o@lunn.ch>
-X-ClientProxiedBy: MW4PR03CA0329.namprd03.prod.outlook.com
- (2603:10b6:303:dd::34) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, nsaenz@kernel.org,
+        Gaston Gonzalez <gascoar@gmail.com>,
+        Ojaswin Mujoo <ojaswin98@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Phil Elwell <phil@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com
+References: <20211229153243.6064-1-treasure4paddy@gmail.com>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+Autocrypt: addr=stefan.wahren@i2se.com; keydata=
+ LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tClZlcnNpb246IEdudVBHIHYy
+ CgptUUlOQkZ0NmdCTUJFQUN1Yi9wQmV2SHhidkplZnlaRzMySklObW4yYnNFUFgyNVY2ZmVq
+ bXlZd21DR0tqRnRMCi9Eb1VNRVZIRHhDSjQ3Qk1YbzM0NGZIVjFDM0FudWRnTjFCZWhMb0J0
+ TEh4bW5lQ3pnSDNLY1B0V1c3cHRqNEcKdEp2OUNRRFp5MjdTS29FUHh5YUk4Q0YweWdSeEpj
+ NzJNOUk5d21zUFo1YlVIc0x1WVdNcVE3SmNSbVBzNkQ4ZwpCa2srOC95bmdFeU5FeHd4SnBS
+ MXlsajVianhXREh5WVF2dUo1THpaS3VPOUxCM2xYVnNjNGJxWEVqYzZWRnVaCkZDQ2svc3lp
+ by9ZaHNlOE4rUXN4N01RYWd6NHdLVWtRUWJmWGcxVnFrVG5BaXZYczQyVm5Ja211NWd6SXcv
+ MHQKUkp2NTBGUmhIaHhweUtBSThCOG5oTjhRdng3TVZrUGM1dkRmZDN1R1lXNDdKUGhWUUJj
+ VXdKd05rLzQ5RjllQQp2ZzJtdE1QRm5GT1JrV1VSdlArRzZGSmZtNitDdk92N1lmUDF1ZXdB
+ aTRsbitKTzFnK2dqVklXbC9XSnB5MG5UCmlwZGZlSDlkSGtnU2lmUXVuWWN1Y2lzTXlvUmJG
+ OTU1dENna0VZOUVNRWRZMXQ4aUdEaUNnWDZzNTBMSGJpM2sKNDUzdWFjcHhmUVhTYUF3UGtz
+ bDhNa0NPc3YyZUVyNElOQ0hZUUR5WmljbEJ1dUNnOEVOYlI2QUdWdFpTUGNRYgplbnpTektS
+ Wm9POUNhcUlEK2ZhdkxpQi9kaHptSEErOWJnSWhtWGZ2WFJMRFp6ZThwbzFkeXQzRTFzaFhp
+ ZGRaClBBOE51SlZ6RUl0MmxtSTZWOHBaRHBuMjIxcmZLaml2UlFpYW9zNTRUZ1pqak1ZSTdu
+ bko3ZTZ4endBUkFRQUIKdENCVGRHVm1ZVzRnVjJGb2NtVnVJRHgzWVdoeVpXNXpkRUJuYlhn
+ dWJtVjBQb2tDTndRVEFRZ0FJUVVDWElkYwo0Z0liQXdVTENRZ0hBZ1lWQ0FrS0N3SUVGZ0lE
+ QVFJZUFRSVhnQUFLQ1JDVWdld1BFWkR5MjFPVEQvOUdpWkxkCnRSWWNteVJKZ2x0aVFRekFp
+ UWRjSUQ3OGxHb1dwL3grci92Y1U2YjZqdVl1ZVR3Z1Iwclc3djdsMklSQnlEN24KSEp4YSt0
+ SVNvUVpCZ2hvbE1JZmI5TXRoR09KTENZNzdrL1FoQWhuMzJOR1prZWp3OXR6a3MvNDBtclpT
+ VVQ4NApaeWJzUVhyTE0vSFI2VElJL0RlUEIwbktEM0ppcHBzMlVIUUQ5cUQySWpFd1NRUGxI
+ akNPckVaaDQ1UFo3bTkrClo5M0x6aVRlc1dabFlRdUxpSndzNHJLcHRIVzFkL3dSZWxzaG1t
+ NlFxY0wybDRDL2U0MGVEQjlncTRkU1poOVgKUEVZbGxpeU5RaDdhMkxTZHVtRTFyK2NTd0lq
+ RS91ZHRSdmRPOWFLb0psT2JVSzVkTmpTUEg3d0tUYndkWGRZRApHUHdEaFhkNThOQXdyK1BY
+ QmxQajB0STFMQ3ErTEJ4ZUt6aFdYK0dWcTlEb2pWanlVREV4Rk5Ga1h1b0M3ZzhtClY5VDB0
+ ZUJpdVpSbm91WEt3VjJGcHRaT0hIN0JVRVd0a0t0aGgxZXRmT1dwaWdCemtVN2JQc2ZJWVQr
+ cnk5dGIKMW9KK3Y0MVBOYXFaRW1QVXBKeHZmek5UN3Ayd01lRDdaajlmMHJ1YlJQdExBSjJR
+ R2pyRkhzdVh3QU9xcHl6ZQoxOEVidHNZazBOMHp1SEVoY2orUEJJQmZoMFlJWWQ1MW9mNkdJ
+ aU95UjlxMFhYdHBsVUo3VDIvSDF1UXFrWGxwCitnVzRWa2lmc2NJckl1eWZueFpXMTJlSXZq
+ NnlicVdMN2FZS0dZbVQ2aUxDUGJIWXlZY2F5bDRFa0ZjckNGN0UKZTBXVC9zY1ZNaE8vNVgv
+ SGFOQTVIQngvcjUycGdMY3Y0aTlNeExRbVUzUmxabUZ1SUZkaGFISmxiaUE4YzNSbApabUZ1
+ TG5kaGFISmxia0JwTW5ObExtTnZiVDZKQWpnRUV3RUNBQ0lGQWx0NmdCTUNHd01HQ3drSUJ3
+ TUNCaFVJCkFna0tDd1FXQWdNQkFoNEJBaGVBQUFvSkVKU0I3QThSa1BMYmpic1AvamdqYVNz
+ NUh0bGtBSXZXUytGcm15N2MKaG5jT0F4TFRWL0Q2UkV3SU95R0poRkt3d29pck55UTJnOXZV
+ YTNZQ1lDZjFmSjh3RWhhS09COWQwTHBNUm5MNApkRVQ4ZDgyMzhFL3BLK0hxTktpSXNKaHM2
+ SnNLOFpnalZRR3JtbWZua0dyWisxdjBIQnV4ZGljZ0duUC9XdHVBClVsOGw2Mi9BTGJheXlq
+ KzYxQ2xyc0V0UklhcU82N0xJWXdQaVBEUkkrWGlNek5pR3pIRi8xUTZHUjAyUkg2YTMKRjg5
+ ejhhUHhjSGkxWnZDdDJ5a3o2VUVjaHpQMHI1Z3FGSisvTC9VcHU4ME1YaVk0djVlSWFCNTJn
+ VlBnaXlNQQpsTDJkRHMxbUladm5yUkxSWTJ0YjNtQVlOa1Y1QjVJRFQzcGtXeTZrS281T0Nn
+ SytZZFlPUjhGTloyb04ydDhPCnJLK1ZudGFLN01NU0tIbG1ZL3NPd3RSbEVoMU9CbXJjQ3dH
+ d21wLzA1R2tSNDZmL0lzaFJWZUZPUmF3K0dBcXQKUDIrQ0ZhMkNOQS9JSG5aTm95aWtsRHpQ
+ UUhVVUdzck5wcERyaFg5Sm1oQm1nMXYyeXdIMU5YdTFpRGZQMUJBdwpLZ29rdDVmNVVhUkY5
+ c0FBNTN2V0V2YlVVTjllZXNGR0x6UFdkSkdRNWhwZC9WSDVJUXk5U0JyaC93SWNla3E1Cm4w
+ a042cGJUSHhHRTUyU2kvTVZJa05UdURaM2FwbjJqbERaNHBPdHBCWEkydlAzYlBPK05pcUJa
+ anNVM3R4TGkKV2R2MkZqeXp6NlhMUndlV1JZVkw1SGE2TER0eG9yMnZ1NlVQMDdwOXh6MXhS
+ WmFPRFczb1lsSEZ6WXBhNFc1ZwpMSGIybEVrSXVVZlNjaWNHYmpqQXRDbFRkR1ZtWVc0Z1Yy
+ Rm9jbVZ1SUR4emRHVm1ZVzR1ZDJGb2NtVnVRR2x1CkxYUmxZMmd1WTI5dFBva0NOd1FUQVFn
+ QUlRVUNYSWRlaHdJYkF3VUxDUWdIQWdZVkNBa0tDd0lFRmdJREFRSWUKQVFJWGdBQUtDUkNV
+ Z2V3UEVaRHkyeUhURC85VUY3UWxEa0d4elE3QWFDSTZOOTVpUWY4LzFvU1VhRE51Mlk2SQpL
+ K0R6UXBiMVRiVE9yM1ZKd3dZOGEzT1d6NU5MU09MTVdlVnh0K29zTW1sUUlHdWJEM09EWko4
+ aXpQbEcvSnJOCnQ1elNkbU41SUE1ZjNlc1dXUVZLdmdoWkFnVERxZHB2K1pIVzJFbXhuQUox
+ dUxGWFhlUWQzVVpjQzVyMy9nL3YKU2FNbzl4ZWszSjVtTnVEbTcxbEVXc0FzL0JBY0ZjK3lu
+ TGh4d0JXQld3c3Z3UjhiSHRKNURPTVd2YUt1RHNrcApJR0ZVZS9LYjJCK2pyYXZRM1RuNnMv
+ SHFKTTBjZXhTSHo1cGUrMHNHdlArdDlKNzIzNEJGUXdlRkV4cmlleThVCkl4T3I0WEFiYWFi
+ U3J5WW5VL3pWSDlVMWkyQUlRWk1XSkFldkN2VmdRL1UrTmVSaFh1ZGU5WVVtRE1EbzJzQjIK
+ VkFGRUFxaUYyUVVIUEEybThhN0VPM3lmTDRyTWswaUh6TElLdmg2L3JIOFFDWThpM1h4VE5M
+ OWlDTHpCV3UvTgpPbkNBYlMremx2TFphaVNNaDVFZnV4VHR2NFBsVmRFamY2MlArWkhJRDE2
+ Z1VEd0VtYXpMQU1yeDY2NmpINWt1ClVDVFZ5bWJMMFR2Qis2TDZBUmw4QU55TTRBRG1rV2tw
+ eU0yMmtDdUlTWUFFZlFSM3VXWFo5WWd4YVBNcWJWK3cKQnJoSmc0SGFONkM2eFRxR3YzcjRC
+ MmFxYjc3L0NWb1JKMVo5Y3BIQ3dpT3pJYUFtdnl6UFU2TXhDRFhaOEZnWQpsVDR2MjNHNWlt
+ SlAyemdYNXMrRjZBQ1VKOVVRUEQwdVRmK0o5RGEycitza2gvc1dPbloreWNvSE5CUXZvY1pF
+ Ck5BSFFmN2tDRFFSYmVvQVRBUkFBMkhkMGZzRFZLNzJSTFNESGJ5ME9oZ0RjRGxWQk0yTSto
+ WVlwTzNmWDFyKysKc2hpcVBLQ0hWQXNRNWJ4ZTdIbUppbUhhNEtLWXMya3YvbWx0L0NhdUNK
+ Ly9wbWN5Y0JNN0d2d25Lem11WHp1QQpHbVZUWkM2V1I1TGtha0ZydEhPelZtc0VHcE52NVJj
+ OWw2SFlGcExrYlNrVmk1U1BRWkp5K0VNZ01DRmdqclpmClZGNnlvdHdFMWFmN0hOdE1oTlBh
+ TEROMW9VS0Y1aitSeVJnNWl3SnVDRGtuSGp3QlFWNHBndzIvNXZTOEE3WlEKdjJNYlcvVExF
+ eXBLWGlmNzhJaGdBelh0RTJYck0xbi9vNlpINzFvUkZGS096NDJsRmR6ZHJTWDBZc3FYZ0hD
+ WAo1Z0l0TGZxemoxcHNNYTlvMWVpTlRFbTFkVlFyVHFueXMwbDE4b2FsUk5zd1lsUW1uWUJ3
+ cHdDa2FUSExNSHdLCmZHQmJvNWRMUEVzaHRWb3dJNm5zZ3FMVHlRSG1xSFlxVVpZSXBpZ21t
+ QzNTd0JXWTFWNmZmVUVta3FwQUFDRW4KTDQvZ1Vnbjd5US81ZDBzZXFuQXEycFNCSE1VVW9D
+ Y1R6RVFVV1ZraUR2M1JrN2hURm1oVHNNcTc4eHYyWFJzWApNUjZ5UWhTVFBGWkNZRFVFeEVs
+ RXNTbzlGV0hXcjZ6SHlZY2M4cURMRnZHOUZQaG1RdVQyczlCbHg2Z0kzMjNHCm5FcTFsd1dQ
+ SlZ6UDRqUWtKS0lBWHdGcHYrVzhDV0xxekRXT3ZkbHJEYVRhVk1zY0ZUZUg1VzZVcHJsNjVq
+ cUYKUUdNcGNSR0NzOEdDVVcxM0gwSXlPdFF0d1dYQTRueStTTDgxcHZpQW1hU1hVOGxhS2FS
+ dTkxVk9WYUY5ZjRzQQpFUUVBQVlrQ0h3UVlBUUlBQ1FVQ1czcUFFd0liREFBS0NSQ1VnZXdQ
+ RVpEeTIrb1hELzljSEhSa0JaT2ZrbVNxCjE0U3Z4MDYyUHRVMEtWNDcwVFNucC9qV29ZSm5L
+ SXczRzBtWElSZ3J0SDJkUHdwSWdWanNZeVJTVk1LbVNwdDUKWnJEZjlOdFRiTldnazhWb0xl
+ WnpZRW8rSjNvUHFGclRNczNhWVl2N2U0K0pLNjk1WW5tUSttT0Q5bmlhOTE1dApyNUFaajk1
+ VWZTVGx5VW15aWMxZDhvdnNmMWZQN1hDVVZSRmNSamZOZkRGMW9ML3BEZ01QNUdaMk93YVRl
+ am15CkN1SGpNOElSMUNpYXZCcFlEbUJuVFlrN1B0aHk2YXRXdllsMGZ5L0NxYWpUS3N4Nytw
+ OXh6aXU4WmZWWCtpS0IKQ2MrSGUrRURFZEdJRGh2TlovSVFIZk9CMlBVWFdHUytzOUZOVHhy
+ L0E2bkxHWG5BOVk2dzkzaVBkWUl3eFM3SwpYTG9LSmVlMTBEamx6c1lzUmZsRk9XMFpPaVNp
+ aElDWGlRVjF1cU02dHpGRzlndFJjaXVzNVVBdGhXYU8xT3dVClNDUW1mQ09tNGZ2TUlKSUE5
+ cnh0b1M2T3FSUWNpRjNjcm1vMHJKQ3ROMmF3WmZnaThYRWlmN2Q2aGp2MEVLTTkKWFpvaUFa
+ WVpEKy9pTG01VGFLV042b0dJdGkwVmpKdjhaWk9aT2ZDYjZ2cUZJa0pXK2FPdTRvclRMRk16
+ MjhhbwpVM1F5V3BOQzhGRm1kWXNWdWE4czZnTjFOSWE2eTNxYS9aQjhiQS9pa3k1OUFFejRp
+ RElScmdVek1FZzhBazdUCmZtMUtpWWVpVHRCRENvMjVCdlhqYnFzeXhrUUQxbmtSbTZGQVZ6
+ RXVPUEllOEp1cVcyeEQ5aXhHWXZqVTVoa1IKZ0pwM2dQNWIrY25HM0xQcXF1UTJFNmdvS1VN
+ TEFia0NEUVJiZmw5REFSQUFzRExjYStMbFAydm5mdEVHaHBjQQpCR1ZOUUVGbkdQckNhdVU2
+ SGhOODA1V3RQVHRtc1JPdUp6cWdVVDBtcHFXSWZacTZzTXd5dkhLOVRzL0tIM0paClVWYlJD
+ M3oyaDNLZmhIL0RhZjk1cGQ2bVBjL2g5dkYvT3kzK2VUV2hnR25QNmNBNWtsUitmTzFXaEc4
+ VnJpWHYKck5lUkcyMHN6emplSG9jblNJY1Q1WHVaUjB1REhPaUd4T2l6MXNNUkZUR3h6R095
+ MTlSOXJ2dTYzdGlJM2Q3dgpnYzc1T0NBZGtlQi9TZUNFbGFSdzBUZjdMWmJQampzRjI2M0JZ
+ bk1mNGtrTkVLdnFXY1UyaWNNcCtxZXpqeW5CCnB2ZXVlMHJDVFFCWUFRbG9GQ1ZUR0hyV1dB
+ NkQ0VzVPMkFmSWRJYzF1MUpDWnAyZjVMV1ZvVUZUVklyUW5RUVUKU0hDaWZyOU1aeExUdFBK
+ ZFU1Mm9TUHczZGs0aExQOGlKSUx1dnYvYXZhakNzUVlIRXR3WXNiZUZaeGl1TGdscApBN1lj
+ Sk5ObXBnQ3BNRDR3VWh2bEN0QUtOQlFXeXIyOTc2OThFUVRuNDZlQmVVNkttMkNpaFhrZ3dD
+ eWY4ZXlLCkxFM3NYZXdhcTVrZ1pXdk5xNml1NXFZSVJCOXl3K2NYYzYwZE9aRE9scTkzWDVT
+ QVJZemFvZXBrSHo0cmtMa1AKUG8rdENIeUhRUHNHblBYYzlXVDgwREM5Tm5KR2R2VWx5NXJk
+ TUk0eHBaeWdlb2tqd293VlFsUFV1Y1M2TXluNwpmOHc4Y2dmQjdDMklBSWNEeDJwUC9IendY
+ dmtDT1FOQTdtVjFsTTA4bitnVmtUcnpweGlwNURicTRDSW9ZeDJNCkpaVDhiR1JINlhqY1VE
+ S2EwOVFoeVpzQUVRRUFBWWtFUkFRWUFRZ0FEd1VDVzM1ZlF3SWJBZ1VKQThKbkFBSXAKQ1JD
+ VWdld1BFWkR5MjhGZElBUVpBUWdBQmdVQ1czNWZRd0FLQ1JCVnhETFBjVk1NamNkc0QvMFJo
+ QXN1UVlPeQpyMTNCbDNOaFhrWUFaR3AyWkZER3VrZTdPU2tWOG9qT09UZFR5ei9jT1JHQ2J5
+ ZEQrRGd2cUZ5VmRuT1hLZ08wCmxKbUd3ckdlTGRnZ0F2aDBpaHJwNU8wWVVKOWJCU1htR01t
+ UVRZSC9BbUxUR2FkYnVqQ1dqNWZGVWtDeXd4aW0KSHV5MFBiMjRwelR2UzUwR1k1WStxSDBG
+ SE5haWdka2tpV04zcnVnN0haRXUvQ3lsUFpqT1h6K0QxUVBNckV4dwo3ZC9NS2FiVis5YU5i
+ UVlabGRJajk4UXd2VUYxS1N6YThqbFVJdnBoUnEyN0FUOGZER1lHUGZERU1nMmNCT2FlCkty
+ N29uUXM0YjdhV082aWZEbHhRVHB6c3pvK0FuODA3Tk1TdFZFRmYrczNBaFZEM2U3bmY4SkJh
+ dmJWckFlMGsKb20yNm96elBubnh6K2xxVlZ0dzZVazRYTUl6dGl4L0h3SFl3dUNuY1VYWndL
+ MEkzeUFKd2pZd29vck9DaEozUwpFVWJKUVB0R3NneFJERXhWQkZlNk5MUC82MnhQOU82dGFj
+ d09kYjBNbVAxYjM5cFJBVEM3YmdkMWxkVUxpNzVaCmxKckowL1NpVkVyb3FOWXk3OXRmbWdB
+ WjJVeFptczlTckV5Nm85UVNmc24xYVh2K01QTDlKYUNHbWtQNnpiTFEKTm5kajBKY2FRbmtD
+ MHZneWRPMUJtNk11OTZQOXVmbEtaY0FTNndtTE01SWRIT3lqTDg4d0h3anVjakFPQnRjdwpw
+ MG9HVG5WT25Sc05ZU084VzhZWi9LZGJ1Nzg1ZGF6TXFKMmlOakFEdUJiZG02TjRqNUVkTW5r
+ TG4wQklmUEpwCmRnbTR2bDJVcExqd1JHci9NM3dtbTVwdnMrNnVCN2hrL0ZKaUQvNGxsRU5Q
+ NGVNMWg3U200aitWcTZOMSt6VEIKSVhKQWViSXFhc0RwNXlaUzdYcnk0STM2bjg1WEVZZkcw
+ MWx0QXlob05WMkRPOFNJUlFwdWkydHErOVJQM1JLMQpKREJ4eEVKWTJFTzVKWjhNeGFQSFEw
+ RFQwNWxSRmpLMkFsaGRFSXRqTGpwSjNmVW05c3FMeE1XeHpQNlV6M2lpCjJ1YTR1bnJ0Nk9D
+ VHFRd2lqRi8zYlRXaXd2VkFBSG5NRlVpb1hzaEhhb2hWRGNWZm5lSU1mVjBiUUNYWWkzTnAK
+ WTB2MFp3Y2lGSCtnU0M3cUQ2WE51aHBWR1NMNElpbGlGeS9TemNhSkV6QUhlTERTaFpQMkNX
+ ZG5DNHZnbDM3dApocHg4aDU1WWhKbjZIU3VVelBnaGFLdFZCMmsrajdaZXlaK1NGeHA3SXVi
+ SEN3TEhsUWhUNzVSd1EzaUF4S242CjBxajUxY1lUbnF4ZFpYVzZmSDNQa3VNellVNUdwcVIv
+ MU9sNWMvd2ZJNmc2QW04eUtXLzBFVUx0K0tuNExGc1MKbTdZM201SDV2MTJVNkpCWXZWK3Ix
+ M2paaW9zNEVFREU5M0Q1c05IMk1JeVJ6Q0RxMXpkZHQ0WHV5S0ZqUEtXMQo5aWJaRGZGVjdL
+ dUNzdnVMMjNzQmMxc0NNb3ArRTFtVC9ReE9JQTZvRFQxTVFzdHdPVnVReURDdi9PdktTZ2Z6
+ CjhGWEdMNkFQY2xqQ3FqOEFKaHhReXN4ZG9pUVA4bS92dStialdHR3Z4dzVzMWxncGlSRFRS
+ VVBnY0pKTmFHWTIKVklEclpRaTROU2lOUTBOSWkrZGp1NGZOTW1DcFFxZzh0YkMzY0FhNnl3
+ bTZvUUIxU0JobURYMmUxMWdSbGx1SQpPblRHUEUwSFRvM2w3MmxoYmc9PQo9cVpNVgotLS0t
+ LUVORCBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCg==
+Message-ID: <a30849fa-dd7c-f661-0b27-a04c6531cfb8@i2se.com>
+Date:   Wed, 29 Dec 2021 20:13:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 085d1df8-dba0-497f-43ad-08d9cafea10d
-X-MS-TrafficTypeDiagnostic: MWHPR10MB1279:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR10MB1279FE01A2CF4FA2D339B277A4449@MWHPR10MB1279.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SpDnoZfPtpJrAJ/tFxMi/JuaVl0nEwCi5e85t216jKY89KVfsyAgUwm6SSAJ6CAhT0lp2L1BuBu62OTqq2fAgw8n0Uqm8zxr0lY3coqSTXuhAzgW2gAwX9wY38CgTfA6tP4Z9obKAiN/IT6UcnchJK686tHPhPjWfjs3Adrh2TNPpu68A0hhk+jdlLXd1xuhs8fgjZibX3G5Erwgkdpwy537n0+6/RGdaqBZgm3G3pzZ+9n69mWTwUV7OJsoljLHuTGI96tNfMA2MdUPRHDFprJuhu7JfyPATz9Ah0ElacUsElc3osAoQkYjtcG5FJPsrtKh0cJJFBWBMZzm1MXS8GCU/F9euXY0sSjq+T0LJCLMW2sc5X0KXmnQc5kp6uM1be3SBQZAWS4wkrq0iVjw+08NdtYKdkQi7FBhl59wbPtBDAzABPsc5kGRhPMqCnDUZKy00f6VKUUToHkbtJNs2ozzUjIolB515EyW5zEmqxy4ZUbLUfLhCmUpD+zhQI7Gs8c5eNzGTu+pf4r+TL62RJufbKyBF62YT8rGC1TJEByHBC5VAFM13OeC4gDCxegD1P8aippd76ayN2S/7IsmarlCTgv37arSl5SelcLYVlCkEqtHj+bZURGlFVvS3cXDFA5sXttP3bE7M8hssNOrKrrlD1w6QZVIwMERqzFanaEDv/Kkh7aFzAxuNoX9ADUe8jre7I7swEN1nE7tEjsr+g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(376002)(346002)(396003)(42606007)(39830400003)(366004)(136003)(1076003)(86362001)(6506007)(9686003)(6666004)(186003)(6512007)(6486002)(6916009)(54906003)(4326008)(26005)(52116002)(5660300002)(38100700002)(2906002)(33656002)(38350700002)(8676002)(83380400001)(66556008)(66476007)(66946007)(44832011)(508600001)(316002)(8936002)(33716001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bwqgdOfhETUGBaaHLfGMsV2IMxsede3TBBccjEQZ82Fn6MAXJ+SAFdddmzwY?=
- =?us-ascii?Q?N/Rymnpx5KX25SjxDsl4sffCx69wvYCyGLQV6F8p7CcQmg8T95buA2Lu9C5V?=
- =?us-ascii?Q?NgkVIX/lJ3AVx+a6WxLh6h+JR2ujaPbC1Bkiepy9xaKC0guKrq+Jtul/byEc?=
- =?us-ascii?Q?Hi8RqWJZlPgW7QWFVuFrKMPUPaFhMj9A2jIuXkGmB8Y02F7iDJ8+3F0OetV8?=
- =?us-ascii?Q?TqkIY18NTXMGhm1ilpYfJQ6mWb0BTlVQ6Ke/xAoISXg7oUg9MCorCTC7TvQz?=
- =?us-ascii?Q?q86seF7ME3RXv6S2uNpZECT3t087/Bl1ANSTEAJLPCZsX0vsbZXqGRa89oc+?=
- =?us-ascii?Q?a7pdLO51UWD+IjDX2LPsOzacf6EW6+dz6QKWKPJiMoHgDkcWYN+tbVgtYasK?=
- =?us-ascii?Q?d3nMqdeAJjZ0QVwsmZEBBhtfJkV6Lk+n3exPcNOJXAdRlGBRDPiE3cix+F12?=
- =?us-ascii?Q?cQjdQJsyuGfhJ6Ntd9OcrQP4Ff7uhIUqhcxdkiH2xw/Ir2khs9iRQz9D30Wr?=
- =?us-ascii?Q?pA4R7tJfTdJPnOlCP8RCmivsGcX0fpvOOdjGQaEfYSnpCT4zGwKnitFWN9Re?=
- =?us-ascii?Q?tcBhe+/npfWpXYgH3gW2GBIYh4kjjG7GhJdX+ITdcYSNwwpYPhn9DNOwKF24?=
- =?us-ascii?Q?Dagx81773OTYmHpEVFepZGg57Hitn+uuoNvKo0aJewIdnlOODWRCO39Bs877?=
- =?us-ascii?Q?eQLRxVJvcLNSs2LAKpAEqSO7xX0daDkGcx7UWCBbZ5he94SIsmT13M61CDvK?=
- =?us-ascii?Q?XTfPLiZdOnDE+IZC0q7wjgP+2A19v82RfW/6TOpL3vPCeIVulK08ymHi9LIV?=
- =?us-ascii?Q?VO/2C4BaKyhO3BCx9PxdAjUpHec9rPdfhOLOoj0ryTmIkTfy09/rrKZG8CBs?=
- =?us-ascii?Q?yOPnHK/RA9JxYlcUWszZRIfyy17cjcPo1f0iYWQBisZumyq6670i/1d8mET1?=
- =?us-ascii?Q?Ka/S4z3m+UUNdVywe/+LUoDBTmZR+FsMY0cqC38rZ6s6Y+am6wPygmjUcA+p?=
- =?us-ascii?Q?SwyhsHmSd8mqJzed2/zVY6zIjqdy8l4SzL8lnMl4Q7b/nkipoRCrrOAVRWEI?=
- =?us-ascii?Q?PkAdIIDEbzwE0MXHjLr30g+JOqEJnG998gq33KiyjFCt3ysMJ7+BbjnmTIat?=
- =?us-ascii?Q?mIMej/ExCaaxctEPwgDVws5tPK1ZcSKSjp5uabpR9/5s1jvOWqn73RI5U57l?=
- =?us-ascii?Q?8fxER4cW2jcSZJEtuYicab1r9Ij1VmICp5ZvH6+r8PjotPxvPEcRae09VIVl?=
- =?us-ascii?Q?EO3AczRhEB3CUBaUaBtFWwHQ7kmcCFgKlzchreoUcbzPkvTkbqfm4zF08hcP?=
- =?us-ascii?Q?91izeDwFhbpzNApdwIOQo+6URByWOybBE6z/dMQVw2L78GgF9Z+GA5p+8qaE?=
- =?us-ascii?Q?dnRf31D1w7rpFGJIspzTPDiwZqPQMdPfNjzee+ivQpEO6/gPayGUfp/19yZS?=
- =?us-ascii?Q?fUg756jBS8kcKSCcKjIK5VwNk8w9uUOVd4HXgIYfmxVRwziZF6ZjP/jFbA9T?=
- =?us-ascii?Q?qqjrNcl0upnRyyxaMTK5be3KEt3L/VW0JScBPnNqjTg6cMYjXuRoA4i9Fq/T?=
- =?us-ascii?Q?AfPet+UA5OuKrJ8WsEJ+MK5YA/mLqTnD2QX7wF1hg6j+uhKA8R3s1Omr17m1?=
- =?us-ascii?Q?6hpdTFOmCte7EKdShM8/f7hiy/FlAspdCP25Dn7ub9gvS/Jo9v3v84u3MU3U?=
- =?us-ascii?Q?x0Dejqkj+bqjnJdSwIOFV8I409w=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 085d1df8-dba0-497f-43ad-08d9cafea10d
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Dec 2021 19:08:42.5890
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +u9zrMr/748/8dM+XP/dimJO+r7JcNffLI1t2Ee7sZ3W5xw1a6PFx1ahelTolZFBoV0FUxQtc+b0l4viwBlFQpPLn0GRi/dB8gKhHXV1fFk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1279
+In-Reply-To: <20211229153243.6064-1-treasure4paddy@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:dJGm1sbhxVkQq1YjuIvU9e4ko7B/0Y4MCQBMfTNs4N1XzuI7V7F
+ GjJ4qK7fuqjy8S4SrwShiCbMapNH/wTRz8ucFN34qy6AAzZmevmpIy9l0R4IjJyLtGz5ER6
+ FWEO6XP/Dg8FQu1yrOn7cKgOtPeslLq2xBjtKX58BYLDdifH/TzLtbuE8KWFEEPbRkimXHJ
+ i6Sf5nPhZ2g9mmIBbG9KQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Dp9gF7CWoJM=:bwPJBLQr7Sa6xxsXHWGZIb
+ DISA11C5Gd8zR/OhqE4j+EwaYWXLO24o7ZIz2vbynKh4SqBnKlC/vsoXuSbEDDMuz4VHitogP
+ ZjSDGX5EpzYZj8loWy+hriTIm0rAGPXspIpAAKTqd1gdR+yoV/Y9sm/dKkNbE2Hab5yH3U0+6
+ J70vQxjPC3g7qSV+vozev6RFZYss8xj8E555WnAW4M0zMD6fp9cJNRGAxYDyCaMhQW1awTu+6
+ nLE6eJ0CDyo54chw+nZrAUD2b8WYVmgkQtTYM5c7/3pp3oGtvYIb+VXwkGAJ5oyYY39vWOhQ1
+ xe+6lSo64t5NTptNjsgz2FdvTbbuv4tb8IIPQVlkt7k8FnvK8+EZQDk+G45NMUvQoy9LOgtQU
+ i8qRwsvW9F3AtKrU3XZynCZuual2oaoMrRPFC8ddP4a4T+VtCuyblJWcWs7nqtg/zTwxLl6Fy
+ khRjtydUyATR7rYcXK4KltNx0thv7Mtd//fcX+6GoPKs7JhCY1+aeuZ4vaxf212ZManoViOVE
+ 1GkOjlSKM4x6QPe9Ffu4wT4qcwsm0WEiNzzGMczhvfeLqDaBn93OVrX0BVV8rbUmZ8o3L1qE6
+ dNiiRFrd7eLZZyaX0gKDIyVULYH1eznpx2Wc63Mi/FJGq3GxIjRG09udiCQGtvdmMMVhFM3Eg
+ r2TDVhcUZQPWBcFYrCTz0Ggc+I8MYziG9E0/zrPsSG9p72wOwsxlcw9hEbYQ8ueRMjDmwjC3B
+ 7HzaPn6FrRfpqusj
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 10:30:54AM +0100, Andrew Lunn wrote:
-> On Tue, Dec 28, 2021 at 04:37:28PM -0800, Colin Foster wrote:
-> > Expose a debugfs / devicetree interface for Microsemi SGPIO controllers.
-> > By writing values of 2-5, the SGPIO pins can be configured for either
-> > automatic blinking or activity.
-> > 
-> > The implementation is modeled after the code in
-> > /drivers/pinctrl/pinctrl-ocelot.c.
-> > 
-> > I have only tested this with currently out-of-tree patches for the
-> > VSC7512 that I hope to get in soon. They are not needed for VSC7513 /
-> > VSC7514, SPARX5, or LUTON - but I don't have any hardware to test.
-> > 
-> > Of note: the 7512 chip has a discrepancy between the datasheet and the
-> > registers. The datahseet claims 20Hz blink default frequency, the
-> > registers claim 5 Hz default frequency for BMODE_0. I override the
-> > OCELOT registers to correct for this. I don't know if that is needed for
-> > LUTON or SPARX, but having two blink modes at the same frequency isn't
-> > beneficial. As such, I make the blink modes match the 5Hz / 20Hz for the
-> > two modes.
-> > 
-> > Tested with VSC7512 by way of:
-> > echo SGPIO_O_p1b0 {blink0,blink1,activity0,activity1} > 
-> > /sys/kernel/debug/pinctrl/pinctrl-sgpio-pinctrl-sgpio-output/pinmux-select
-> 
-> Hi Colin
-> 
-> Since this is an LED, you should be using the Linux LED interface in
-> /sys/class/leds. See Documentation/leds/leds-class.rst. It includes a
-> way to make an LED blink, using hardware.
+Hi Padmanabha,
 
-Hi Andrew,
+Am 29.12.21 um 16:32 schrieb Padmanabha Srinivasaiah:
+> In service_callback path RCU dereference done without
+> rcu_read_[lock/unlock] pair, fixing same by using them.
+>
+> [   32.201659] =============================
+> [   32.201664] WARNING: suspicious RCU usage
+> [   32.201670] 5.15.11-rt24-v8+ #3 Not tainted
+> [   32.201680] -----------------------------
+> [   32.201685] drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.h:529 suspicious rcu_dereference_check() usage!
+> [   32.201695]
+> [   32.201695] other info that might help us debug this:
+> [   32.201695]
+> [   32.201700]
+> [   32.201700] rcu_scheduler_active = 2, debug_locks = 1
+> [   32.201708] no locks held by vchiq-slot/0/98.
+> [   32.201715]
+> [   32.201715] stack backtrace:
+> [   32.201723] CPU: 1 PID: 98 Comm: vchiq-slot/0 Not tainted 5.15.11-rt24-v8+ #3
+> [   32.201733] Hardware name: Raspberry Pi 4 Model B Rev 1.4 (DT)
+> [   32.201739] Call trace:
+> [   32.201742]  dump_backtrace+0x0/0x1b8
+> [   32.201772]  show_stack+0x20/0x30
+> [   32.201784]  dump_stack_lvl+0x8c/0xb8
+> [   32.201799]  dump_stack+0x18/0x34
+> [   32.201808]  lockdep_rcu_suspicious+0xe4/0xf8
+> [   32.201817]  service_callback+0x124/0x400
+> [   32.201830]  slot_handler_func+0xf60/0x1e20
+> [   32.201839]  kthread+0x19c/0x1a8
+> [   32.201849]  ret_from_fork+0x10/0x20
+>
+> Signed-off-by: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
+> ---
+>  drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> index 6759a6261500..ee1b48db9681 100644
+> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> @@ -1058,7 +1058,10 @@ service_callback(enum vchiq_reason reason, struct vchiq_header *header,
+>  
+>  	DEBUG_TRACE(SERVICE_CALLBACK_LINE);
+>  
+> +	rcu_read_lock();
+>  	service = handle_to_service(handle);
+> +	rcu_read_unlock();
+> +
+>  	if (WARN_ON(!service))
+>  		return VCHIQ_SUCCESS;
+>  
 
-With the static LEDs that is exactly how I have them configured. I was
-happy when they all "just worked" when I tied them to the phy activity.
-My thanks to all those who did this hard work before me!
+thanks for reporting this issue.
 
-I have noticed an issue in my setup where using a heartbeat trigger on
-any of the outputs causes a kernel bug "scheduling while atomic." It
-seems to be trying to interrupt spi_sync... Sorry, I'm getting off
-track, and I'll deal with that in time. Luckily it is very reproducable!
+Could you please explain how to reproduce this issue?
 
-> 
-> Activity is another story. I assume you mean Ethernet frame Rx and Tx?
-> For that you should wait until the Ethernet LED offload code
-> eventually lands.
+What makes you sure that your patch fixes the issue and not just hiding
+the warning?
 
-I've been following those threads a little bit. Seemingly a few emails
-between August and November. I suspect it'll require at least some version 
-of this patch, but it is probably best to wait and see where that lands
-first. Thanks!
+Best regards
 
-> 
-> 	   Andrew

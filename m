@@ -2,213 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AABD3480E19
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 01:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72673480E1D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 01:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237926AbhL2AJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 19:09:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
+        id S237941AbhL2AKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 19:10:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232540AbhL2AJu (ORCPT
+        with ESMTP id S232405AbhL2AKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 19:09:50 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1D5C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 16:09:49 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id v13-20020a17090a088d00b001b0e3a74cf7so13644924pjc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 16:09:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=en4uwBpfxshlbd0J3vDYBdTuG7ndyKaVxa4yk8IJ1nk=;
-        b=Ycu8UcGr3lpr+egvBaijGFacvpu8dnqelsOpJHXYxusoev1aF9czdXGov3CWe6Qy6u
-         VQSb79DxSR/SStHKmtkSwiPhXI8S9fqppp7kQkDF81IxnrtQrXaSsdgImllXWl3npaqk
-         GKTGr1ZZImgD7Imdl6N+V7U8fyRAxt3STOOoEBADh4zAQYN271w02FdQiapCaeLolONo
-         AZrb0Hk9lvZtf9Ca0yq7NITuiVaEuCpIwCdtA54+lZ5c7KaUs5sRgtLq7dGrHOPJjLU/
-         jBOIe1ecnXmtDXNYcrW1AEsIKm7cfwFOr7SxNk0GUPfmy6UlKfbL7oCocZkP3xMD/bCG
-         BkDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=en4uwBpfxshlbd0J3vDYBdTuG7ndyKaVxa4yk8IJ1nk=;
-        b=vH7LsGUXT6fPDxBzUu+spUB0ShfrFaIWVGiNik9isinrVjprddIMBDgJnPDOIVJe4O
-         jeWVRZ1gTJNaEprDof/wWCqEPzyKGxC6obTTeBqdYWMjHq8cQTiXTomPuFBB/4h2KOqV
-         kDAzloxyRQKyJZJmmAlcL1Dg9slN07V7Zuk/mbzk7rF8C1uk+6Tkb5SiNwuXkWvlPuWM
-         vMCoxLZLT+/6/2d2qFzid64SaeH+VnqeyWhlQUNLnl7g8n3hejJ15y6f1CVVzfV6bZju
-         yALXxk+hX6bcF7M2a/jEVtJeZFYcNDRjo2t79uEDdJ5zs0TPgE9XONE0ONWKm47thBd7
-         HYNg==
-X-Gm-Message-State: AOAM5311RjqDdanI+MV9STLUa8lC1eEf+n2Je5qEAx6AXy0SaehE/h8h
-        CEwx+eE1DbxU5Ul9bRds3xj09A==
-X-Google-Smtp-Source: ABdhPJyPCmlYsUh6cyS3BHMVbhiypz9th66jTdJPaMTpIuDmPJELXTPeRa8VRF4guixCsrGzvvXZxA==
-X-Received: by 2002:a17:90a:a786:: with SMTP id f6mr29364098pjq.158.1640736588736;
-        Tue, 28 Dec 2021 16:09:48 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id o11sm22529170pfu.150.2021.12.28.16.09.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 16:09:48 -0800 (PST)
-Date:   Wed, 29 Dec 2021 00:09:45 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jing Liu <jing2.liu@intel.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, pbonzini@redhat.com, corbet@lwn.net,
-        shuah@kernel.org, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, guang.zeng@intel.com,
-        wei.w.wang@intel.com, yang.zhong@intel.com
-Subject: Re: [PATCH v3 13/22] kvm: x86: Intercept #NM for saving IA32_XFD_ERR
-Message-ID: <YcunSb52LlGKT7dC@google.com>
-References: <20211222124052.644626-1-jing2.liu@intel.com>
- <20211222124052.644626-14-jing2.liu@intel.com>
+        Tue, 28 Dec 2021 19:10:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353ABC061574;
+        Tue, 28 Dec 2021 16:10:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C90176134F;
+        Wed, 29 Dec 2021 00:10:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFA27C36AEB;
+        Wed, 29 Dec 2021 00:10:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640736633;
+        bh=/Kys4P+ipabSvqg0bzoCo0je/2ZVTpj4063QCgXpfH4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QWt1TcnctMP2I+BPI4uKgwEfH8wrYH7rTIIvRmJEAbPKuQLC6zUGN0RD7nXXugVM7
+         tVArn+PQBUo2TPZcvMp7BRxmHmYaDxFZE0rkr6uXYWpsadJOlTCcpcHmskuoASsxMc
+         e8o0ucS/vOHCHvhJzmvd77iXNjAJp2OOe3uwF4hJzTy9FYVFW8kGxbZyJKWhXieCcC
+         y63cBjl/YxOrKgqMsAOsJHfx320s4fOdDm9IKIjrhDUuB6N5RXt/exH90rjD6n9P+N
+         r2OEx21RQS0CpUfoO085XqUgqnSZe7h4y85Cl1BdoFVwowNVPPArnVjR1UIcc4yu5E
+         yuKkG3Uc0Gd6w==
+Date:   Wed, 29 Dec 2021 02:10:31 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     peterhuewe@gmx.de, linux-integrity@vger.kernel.org, jgg@ziepe.ca,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, pavrampu@in.ibm.com,
+        Korrapati.Likhitha@ibm.com, gcwilson@us.ibm.com
+Subject: Re: [PATCH] tpm: Fix kexec crash due to access to ops NULL pointer
+ (powerpc)
+Message-ID: <Ycund7mDOBkndOKn@iki.fi>
+References: <20211212012804.1555661-1-stefanb@linux.ibm.com>
+ <YcGUoJCtmqfCWER0@iki.fi>
+ <8b0c9683-d29b-38a2-8dfe-8f47db6544f2@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211222124052.644626-14-jing2.liu@intel.com>
+In-Reply-To: <8b0c9683-d29b-38a2-8dfe-8f47db6544f2@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021, Jing Liu wrote:
-> Guest IA32_XFD_ERR is generally modified in two places:
+On Tue, Dec 21, 2021 at 09:01:06AM -0500, Stefan Berger wrote:
 > 
->   - Set by CPU when #NM is triggered;
->   - Cleared by guest in its #NM handler;
+> On 12/21/21 03:47, Jarkko Sakkinen wrote:
+> > On Sat, Dec 11, 2021 at 08:28:04PM -0500, Stefan Berger wrote:
+> > > Fix the following crash on kexec by checking chip->ops for a NULL pointer
+> > > in tpm_chip_start() and returning an error code if this is the case.
+> > > 
+> > > BUG: Kernel NULL pointer dereference on read at 0x00000060
+> > > Faulting instruction address: 0xc00000000099a06c
+> > > Oops: Kernel access of bad area, sig: 11 [#1]
+> > > ...
+> > > NIP [c00000000099a06c] tpm_chip_start+0x2c/0x140
+> > >   LR [c00000000099a808] tpm_chip_unregister+0x108/0x170
+> > > Call Trace:
+> > > [c0000000188bfa00] [c000000002b03930] fw_devlink_strict+0x0/0x8 (unreliable)
+> > > [c0000000188bfa30] [c00000000099a808] tpm_chip_unregister+0x108/0x170
+> > > [c0000000188bfa70] [c0000000009a3874] tpm_ibmvtpm_remove+0x34/0x130
+> > > [c0000000188bfae0] [c000000000110dbc] vio_bus_remove+0x5c/0xb0
+> > > [c0000000188bfb20] [c0000000009bc154] device_shutdown+0x1d4/0x3a8
+> > > [c0000000188bfbc0] [c000000000196e14] kernel_restart_prepare+0x54/0x70
+> > > 
+> > > The referenced patch below introduced a function to shut down the VIO bus.
+> > > The bus shutdown now calls tpm_del_char_device (via tpm_chip_unregister)
+> > > after a call to tpm_class_shutdown, which already set chip->ops to NULL.
+> > > The crash occurrs when tpm_del_char_device calls tpm_chip_start with the
+> > > chip->ops NULL pointer.
+> > > 
+> > > Fixes: 39d0099f9439 ("powerpc/pseries: Add shutdown() to vio_driver and vio_bus")
+> > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > ---
+> > >   drivers/char/tpm/tpm-chip.c | 3 +++
+> > >   1 file changed, 3 insertions(+)
+> > > 
+> > > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> > > index ddaeceb7e109..cca1bde296ee 100644
+> > > --- a/drivers/char/tpm/tpm-chip.c
+> > > +++ b/drivers/char/tpm/tpm-chip.c
+> > > @@ -101,6 +101,9 @@ int tpm_chip_start(struct tpm_chip *chip)
+> > >   {
+> > >   	int ret;
+> > > +	if (!chip->ops)
+> > > +		return -EINVAL;
+> > This triggers to all drivers, not just tpm_ibmvtpm, i.e. the fix has
+> > side-effects.
 > 
-> Intercept #NM for the first case, if guest writes XFD as nonzero for
-> the first time which indicates guest is possible to use XFD generating
-> the exception. #NM is rare if the guest doesn't use dynamic features.
-> Otherwise, there is at most one exception per guest task given a
-> dynamic feature.
-> 
-> Save the current XFD_ERR value to the guest_fpu container in the #NM
-> VM-exit handler. This must be done with interrupt/preemption disabled,
+> What are those side-effects?
 
-Assuming my below understanding is correct, drop the "preemption" bit, it's
-misleading.
+It does change behaviour for all drivers, which is not acceptable for a
+bug fix.
 
-> otherwise the unsaved MSR value may be clobbered by host operations.
-> 
-> Inject a virtual #NM to the guest after saving the MSR value.
-> 
-> Restore the host value (always ZERO outside of the host #NM
-> handler) before enabling preemption.
-
-AIUI, changelog is wrong, code is right.  This must be done before _IRQs_ are
-enabled, same as handling TIF_NEED_FPU_LOAD. 
-
-> Restore the guest value from the guest_fpu container right before
-> entering the guest (with preemption disabled).
-
-Same complaint about preemption.
-
-> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Jing Liu <jing2.liu@intel.com>
-> ---
->  arch/x86/include/asm/kvm_host.h |  1 +
->  arch/x86/kvm/vmx/vmcs.h         |  5 +++++
->  arch/x86/kvm/vmx/vmx.c          | 22 +++++++++++++++++++++-
->  arch/x86/kvm/x86.c              |  6 ++++++
->  4 files changed, 33 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 555f4de47ef2..f7a661f35d1a 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -640,6 +640,7 @@ struct kvm_vcpu_arch {
->  	u64 smi_count;
->  	bool tpr_access_reporting;
->  	bool xsaves_enabled;
-> +	bool trap_nm;
->  	u64 ia32_xss;
->  	u64 microcode_version;
->  	u64 arch_capabilities;
-
-...
-
-> @@ -763,6 +764,9 @@ void vmx_update_exception_bitmap(struct kvm_vcpu *vcpu)
->  		vmcs_write32(PAGE_FAULT_ERROR_CODE_MATCH, match);
->  	}
->  
-> +	if (vcpu->arch.trap_nm)
-> +		eb |= (1u << NM_VECTOR);
-> +
->  	vmcs_write32(EXCEPTION_BITMAP, eb);
->  }
->  
-> @@ -1960,6 +1964,13 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  	case MSR_KERNEL_GS_BASE:
->  		vmx_write_guest_kernel_gs_base(vmx, data);
->  		break;
-> +	case MSR_IA32_XFD:
-> +		ret = kvm_set_msr_common(vcpu, msr_info);
-> +		if (!ret && data) {
-> +			vcpu->arch.trap_nm = true;
-> +			vmx_update_exception_bitmap(vcpu);
-
-This is wrong, it fails to clear vcpu->arch.trap_nm and update the bitmap if the
-MSR is cleared.
-
-But why even bother with an extra flag?  Can't vmx_update_exception_bitmap() get
-the guest's MSR_IA32_XFD value and intercept #NM accordingly?  Then you could
-even handle this fully in kvm_set_msr_common(), e.g.
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 2c9606380bca..c6c936d2b298 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -3704,6 +3704,8 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
-                        return 1;
-
-                fpu_update_guest_xfd(&vcpu->arch.guest_fpu, data);
-+               /* Blah blah blah blah */
-+               static_call(kvm_x86_update_exception_bitmap)(vcpu);
-                break;
-        case MSR_IA32_XFD_ERR:
-                if (!msr_info->host_initiated &&
-
-> +		}
-> +		break;
->  #endif
->  	case MSR_IA32_SYSENTER_CS:
->  		if (is_guest_mode(vcpu))
-> @@ -4746,7 +4757,7 @@ static int handle_exception_nmi(struct kvm_vcpu *vcpu)
->  	vect_info = vmx->idt_vectoring_info;
->  	intr_info = vmx_get_intr_info(vcpu);
->  
-> -	if (is_machine_check(intr_info) || is_nmi(intr_info))
-> +	if (is_machine_check(intr_info) || is_nmi(intr_info) || is_nm(intr_info))
->  		return 1; /* handled by handle_exception_nmi_irqoff() */
->  
->  	if (is_invalid_opcode(intr_info))
-> @@ -6350,6 +6361,12 @@ static void handle_interrupt_nmi_irqoff(struct kvm_vcpu *vcpu,
->  	kvm_after_interrupt(vcpu);
->  }
->  
-> +static void handle_exception_nm(struct kvm_vcpu *vcpu)
-
-This needs a different name, it's waaaay too close to the base handle_exception_nmi(),
-which runs with IRQs _on_.  And please add "_irqoff" at the end.  Maybe handle_nm_fault_irqoff()?
-
-> +{
-> +	rdmsrl(MSR_IA32_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
-> +	kvm_queue_exception(vcpu, NM_VECTOR);
-> +}
-> +
->  static void handle_exception_nmi_irqoff(struct vcpu_vmx *vmx)
->  {
->  	const unsigned long nmi_entry = (unsigned long)asm_exc_nmi_noist;
-> @@ -6358,6 +6375,9 @@ static void handle_exception_nmi_irqoff(struct vcpu_vmx *vmx)
->  	/* if exit due to PF check for async PF */
->  	if (is_page_fault(intr_info))
->  		vmx->vcpu.arch.apf.host_apf_flags = kvm_read_and_reset_apf_flags();
-> +	/* if exit due to NM, handle before preemptions are enabled */
-> +	else if (is_nm(intr_info))
-
-Same naming complaint about this helper, it looks like an is_nmi() typo.  is_nm_fault()?
-
-> +		handle_exception_nm(&vmx->vcpu);
->  	/* Handle machine checks before interrupts are enabled */
->  	else if (is_machine_check(intr_info))
->  		kvm_machine_check();
+/Jarkko

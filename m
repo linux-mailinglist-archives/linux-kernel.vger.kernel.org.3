@@ -2,79 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F7D0481147
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 10:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B5E48114A
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 10:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235144AbhL2Ja6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 04:30:58 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:44190 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232237AbhL2Ja5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 04:30:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=OmEP0vlBess7yf0G2D2gupKNnfHYjQqlkRVEW2GfamA=; b=wtKGvYFlIeFSNFKxxz/r3pTMw+
-        cLH5t0E+MY8zwJRaluOoLMzSgsSLiEWtgtZ3z/kUawUjqTFo8sdJ6a6ZI6uQbI7a1tCdk1SoyJ16e
-        BLQ7R28Xmg3dOZ22vWQSG2umq9lGI0Y/aioCuGSlWO2QTIAxzHxy8qfboDqjFa5VPBsE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1n2VIM-0005sX-3W; Wed, 29 Dec 2021 10:30:54 +0100
-Date:   Wed, 29 Dec 2021 10:30:54 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>
-Subject: Re: [PATCH v1 pinctrl-next 0/1] add blink and activity functions to
- SGPIO
-Message-ID: <YcwqznBTLZgNcU7o@lunn.ch>
-References: <20211229003729.618079-1-colin.foster@in-advantage.com>
+        id S235180AbhL2Jcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 04:32:39 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:54910 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230306AbhL2Jci (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 04:32:38 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowACnr58iK8xhbnV6BQ--.12799S2;
+        Wed, 29 Dec 2021 17:32:18 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     herbert@gondor.apana.org.au, davem@davemloft.net
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] crypto: af_alg - check possible NULL pointer
+Date:   Wed, 29 Dec 2021 17:32:16 +0800
+Message-Id: <20211229093216.1753083-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211229003729.618079-1-colin.foster@in-advantage.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowACnr58iK8xhbnV6BQ--.12799S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZw1fCryxZrWxCw4ftw4DXFb_yoWDAwb_ur
+        WDAr4UuryUX3WfXF1Dtay3KryIga13ury8WF4Fkr43K3WkJasxZ3ZFyrySyFZrCa4xurW3
+        Gw1kKr17uw12gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbckFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUIhFcUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 04:37:28PM -0800, Colin Foster wrote:
-> Expose a debugfs / devicetree interface for Microsemi SGPIO controllers.
-> By writing values of 2-5, the SGPIO pins can be configured for either
-> automatic blinking or activity.
-> 
-> The implementation is modeled after the code in
-> /drivers/pinctrl/pinctrl-ocelot.c.
-> 
-> I have only tested this with currently out-of-tree patches for the
-> VSC7512 that I hope to get in soon. They are not needed for VSC7513 /
-> VSC7514, SPARX5, or LUTON - but I don't have any hardware to test.
-> 
-> Of note: the 7512 chip has a discrepancy between the datasheet and the
-> registers. The datahseet claims 20Hz blink default frequency, the
-> registers claim 5 Hz default frequency for BMODE_0. I override the
-> OCELOT registers to correct for this. I don't know if that is needed for
-> LUTON or SPARX, but having two blink modes at the same frequency isn't
-> beneficial. As such, I make the blink modes match the 5Hz / 20Hz for the
-> two modes.
-> 
-> Tested with VSC7512 by way of:
-> echo SGPIO_O_p1b0 {blink0,blink1,activity0,activity1} > 
-> /sys/kernel/debug/pinctrl/pinctrl-sgpio-pinctrl-sgpio-output/pinmux-select
+Because of the possible alloc failure of the alloc_page(), it could
+return NULL pointer.
+And then it will cause the BUG_ON() in sg_assign_page().
+Therefore, it should be better to check it before to avoid the bug.
 
-Hi Colin
+Fixes: 2d97591ef43d ("crypto: af_alg - consolidation of duplicate code")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ crypto/af_alg.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-Since this is an LED, you should be using the Linux LED interface in
-/sys/class/leds. See Documentation/leds/leds-class.rst. It includes a
-way to make an LED blink, using hardware.
+diff --git a/crypto/af_alg.c b/crypto/af_alg.c
+index 18cc82dc4a42..a1c0118e222d 100644
+--- a/crypto/af_alg.c
++++ b/crypto/af_alg.c
+@@ -931,11 +931,18 @@ int af_alg_sendmsg(struct socket *sock, struct msghdr *msg, size_t size,
+ 			sg_unmark_end(sg + sgl->cur - 1);
+ 
+ 		do {
++			struct page *pg;
+ 			unsigned int i = sgl->cur;
+ 
+ 			plen = min_t(size_t, len, PAGE_SIZE);
+ 
+-			sg_assign_page(sg + i, alloc_page(GFP_KERNEL));
++			pg = alloc_page(GFP_KERNEL);
++			if (!pg) {
++				err = -ENOMEM;
++				goto unlock;
++			}
++
++			sg_assign_page(sg + i, pg);
+ 			if (!sg_page(sg + i)) {
+ 				err = -ENOMEM;
+ 				goto unlock;
+-- 
+2.25.1
 
-Activity is another story. I assume you mean Ethernet frame Rx and Tx?
-For that you should wait until the Ethernet LED offload code
-eventually lands.
-
-	   Andrew

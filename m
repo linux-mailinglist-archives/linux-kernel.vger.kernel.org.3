@@ -2,71 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14DC648142D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 15:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99525481430
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 15:44:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240383AbhL2OoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 09:44:13 -0500
-Received: from fanzine2.igalia.com ([213.97.179.56]:44002 "EHLO
-        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236856AbhL2OoN (ORCPT
+        id S240400AbhL2Oob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 09:44:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236856AbhL2Ooa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 09:44:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:Subject:From:Cc:To:Sender:Reply-To:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=xEhvsXnlkpoIMlNWlhVl6uBETW3daxxgh1OifCL6/Ic=; b=bY5rGx8IUHHNnLVISLoLY+p4+p
-        48DUo77tF4nAHpbOlSNNgz7RAkYTihdO/MiVG7bTRVx4+oKW/xpAdZmUoLnpc/vIpRhDcsM/lT/P8
-        0nn0vOYUVD7fgvj5k34q5ldRiMxqq/xzlq1Qwkav3nPKDgKDbasXm1JIpEMxXYivcxan0HU5mVtx7
-        iT3tKgpqZUEtfCC66bJhK171KSuKgetpvHYaljZz/Iuz6BAjPs40hHUS9LqghiXMTNOfbKYJAGTrs
-        oQeg7Kgdh5lX4rr8nVh+0wReP+F31gFMlAe+y8x4tFRtsm6biUt19vvCT+GRjQ2WVYmZ01MTldcO/
-        l9lN5tEA==;
-Received: from 200-153-146-242.dsl.telesp.net.br ([200.153.146.242] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1n2aBT-0008hr-Mp; Wed, 29 Dec 2021 15:44:07 +0100
-To:     keescook@chromium.org, anton@enomsg.org, ccross@android.com,
-        tony.luck@intel.com
-Cc:     linux-kernel@vger.kernel.org,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        gpiccoli@igalia.com, "Guilherme G. Piccoli" <kernel@gpiccoli.net>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Subject: pstore/ramoops - why only collect a partial dmesg?
-Message-ID: <a21201cf-1e5f-fed1-356d-42c83a66fa57@igalia.com>
-Date:   Wed, 29 Dec 2021 11:43:51 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 29 Dec 2021 09:44:30 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36DEC061574;
+        Wed, 29 Dec 2021 06:44:30 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id g2so18665136pgo.9;
+        Wed, 29 Dec 2021 06:44:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J1BnpWyg6Q8Toki1+JSbzbJgN5C0a+8hlDW35pc8kRM=;
+        b=RDFQkxEr9DsNWyTuoYuBUQD6hnMeCyMKIHJ6tiE8T1PjYFIsEPvgiFsTAZwfL+TV++
+         Y8/QQaf7QOegA1b5Y4jVfZQ+1gGERj/VabomvY/BV3boXk4H6iMdRhPlT+LmN1hVTXk/
+         TITQ0vAJCWiTI0iySFbyHA+z9fIFoH/eYo6DDvfvKEwSxYx4sRpOrEZbp8P522qcDKjC
+         H+TLHrzYSst5//Ke2XifbNxpk1Xc3f4ZwCvtzQ2Q3wpDskT0DEWEEV2MlbxHd0Eb/j+R
+         AT58jgwRlSAhlN9PtkHgUcWEOMOTbaHhdTbBay0jewExeMiGmZyM+9rIza2qy6iNFGqo
+         fyZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J1BnpWyg6Q8Toki1+JSbzbJgN5C0a+8hlDW35pc8kRM=;
+        b=OAotZ1F2qeZ6HIjLb9505kTOyLgBznxKZusN9T4UiT8Us185rIVjS/e13ICAnJZ1tt
+         FIcUJbFNQBRa8153VeMNZ5v5Z24PD4fJ6xdWgiSJvJZ2lBJs3hHTnMnmjnp2TJ6G05fH
+         GMkpMPOeIEn9UxpQO/UjVuU/Fr3f6H/hmA1lFFEEiJktDLy4gwaXpHoaeZnKk7p+VZ+D
+         9mqPtbrPjMSWzQ7UITXpd8m67XKYi98RDB9GpdQKCXF1G0UVlxcUalgbXqFTVeItdIuG
+         LzNoBPp2cBWL2ARbw1pg/DwAG01BpBmDnSobExTFKFVR4BqLCeTonkliUDOjuj9S7erN
+         z3gg==
+X-Gm-Message-State: AOAM530AwDKR9AF4BkB6UGQbI13I3ENLENtxRw0Lk+T2syTbaL2YKfPI
+        TMj01u2Nj4abmqeNYWMiQPTiUjT+Npy+Y8Fg
+X-Google-Smtp-Source: ABdhPJwb1cEy6kw+pSaYjeaEx2SBs13FEoks3awYQilV/yQWu29YXIIA57l26SVykihLBSThbJ+OzA==
+X-Received: by 2002:aa7:88c4:0:b0:4bb:5a48:9801 with SMTP id k4-20020aa788c4000000b004bb5a489801mr27182190pff.67.1640789070160;
+        Wed, 29 Dec 2021 06:44:30 -0800 (PST)
+Received: from localhost.localdomain ([123.58.219.222])
+        by smtp.gmail.com with ESMTPSA id q22sm25596292pfk.27.2021.12.29.06.44.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 06:44:29 -0800 (PST)
+From:   Leon Huayra <hffilwlqm@gmail.com>
+To:     ast@kernel.org
+Cc:     daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Leon Huayra <hffilwlqm@gmail.com>
+Subject: [PATCH] fix a comment typo of bpf lpm_trie
+Date:   Wed, 29 Dec 2021 22:44:22 +0800
+Message-Id: <20211229144422.70339-1-hffilwlqm@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anton / Colin / Kees / Tony, I'd like to understand the rationale
-behind a ramoops behavior, appreciate in advance any information/advice!
+fix a comment typo of trie_update_elem() in kernel/bpf/lpm_trie.c
 
-I've noticed that while using ramoops as a backend for pstore, only the
-first "record_size" bytes of dmesg is collected/saved in sysfs on panic.
-It is the "Part 1" of dmesg - seems this is on purpose [0], so I'm
-curious on why can't we save the full dmesg split in multi-part files,
-like efi-pstore for example?
+Signed-off-by: Leon Huayra <hffilwlqm@gmail.com>
+---
+ kernel/bpf/lpm_trie.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If that's an interesting idea, I'm willing to try implementing that in
-case there are no available patches for it already (maybe somebody
-worked on it for their own usage). My idea would be to have a tuning to
-enable or disable such new behavior, and we could have files like
-"dmesg-ramoops-0.partX" as the partitions of the full "dmesg-ramoops-0".
+diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+index 423549d2c..5763cc7ac 100644
+--- a/kernel/bpf/lpm_trie.c
++++ b/kernel/bpf/lpm_trie.c
+@@ -412,7 +412,7 @@ static int trie_update_elem(struct bpf_map *map,
+ 		rcu_assign_pointer(im_node->child[1], node);
+ 	}
+ 
+-	/* Finally, assign the intermediate node to the determined spot */
++	/* Finally, assign the intermediate node to the determined slot */
+ 	rcu_assign_pointer(*slot, im_node);
+ 
+ out:
+-- 
+2.34.1
 
-Thanks in advance,
-
-
-Guilherme
-
-
-[0]
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/pstore/ram.c#n353

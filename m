@@ -2,77 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEEE848167F
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 20:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF48481682
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 21:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231616AbhL2T5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 14:57:13 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50728 "EHLO
+        id S231660AbhL2UAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 15:00:18 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52092 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbhL2T5N (ORCPT
+        with ESMTP id S231419AbhL2UAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 14:57:13 -0500
+        Wed, 29 Dec 2021 15:00:16 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B09B2B81A02;
-        Wed, 29 Dec 2021 19:57:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29D45C36AE9;
-        Wed, 29 Dec 2021 19:57:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CB31B81A02;
+        Wed, 29 Dec 2021 20:00:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF052C36AEA;
+        Wed, 29 Dec 2021 20:00:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640807830;
-        bh=9iIKxDJ6rdWTzuq1xxra5GTy79QIwPqyaKLFoL4xSOc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gaIkoqwI2RMRrnSlF6O5dzhFeD9W91RPWBojSflrZOHRy1KnqS4Slum49fjD7jfHI
-         nXxMa52nltTN8ve/CODNTD6qGPxt2dIZX1frpHleUeH6XxMuumIGY4IUP0hs/9x1bW
-         e8xTJqXAM9zX0eOw6hgs/uA0kxwVPKgT1Nx19INGoDGTBULYK74/IlkZL6vXQh3WDJ
-         SbA1JLgUnrIjKpSser9HPTYGLRlIKN4zVRPrv66gncS8raz6/3tE+wEFVghnK+zBRc
-         PhsRju6YN9H2LtpZcCvJEQdxsVgeIK7KofwpjtRoKhyEMFk+GT24ORfuKAx995Gy05
-         CZDGtj7GKTt1w==
-Date:   Wed, 29 Dec 2021 11:57:08 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     Tamir Duberstein <tamird@gmail.com>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: check passed optlen before reading
-Message-ID: <20211229115708.53ec5f8e@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <CA+FuTSe0yPhca+2ZdyJD4FZumLPd85sChGhZPpXhu=ADuwtYrQ@mail.gmail.com>
-References: <CAJ-ks9kd6wWi1S8GSCf1f=vJER=_35BGZzLnXwz36xDQPacyRw@mail.gmail.com>
-        <CAJ-ks9=41PuzGkXmi0-aZPEWicWJ5s2gW2zL+jSHuDjaJ5Lhsg@mail.gmail.com>
-        <20211228155433.3b1c71e5@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-        <CA+FuTSeDTJxbPvN6hkXFMaBspVHwL+crOxzC2ukWRzxvKma9bA@mail.gmail.com>
-        <CAJ-ks9=3o+rVJd5ztYbkgpcYiWjV+3qajCgOmM7AfjhoZvuOHw@mail.gmail.com>
-        <CA+FuTSe0yPhca+2ZdyJD4FZumLPd85sChGhZPpXhu=ADuwtYrQ@mail.gmail.com>
+        s=k20201202; t=1640808014;
+        bh=wqhMfCvA9zj0zXkZZQhJ9lSi8r+UeURgf/ajHSematg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=OeanErZL1YBoL2iej/Q6v/kFInv0fHpYLmYObk2wxWdBt2h+8GWvSP+rl1859P83K
+         wg8idnGLOOKehP0qVfyIuQrYZ4e0xpOXgjdVC29cC7NeSExLhqUdkgGACryaQpS9RR
+         qs1b9cOYEF6kxgPW7IbRDo02BPEV+aQDMknx1fMdvDc0Aqjc1kiGPhfF3laP1Tmrpt
+         4i2hkZ8qbfhmhfhFg2dYtD0zlagIzF3NURvCUPM3ogKoktKR8DcOryJYVE0+NAMurD
+         IkEd5jhKOsI0a9P0qo0LeMgzLqFML2VVI9IM6HidIsRnT8+S/79s453MxRdWLdbhxj
+         ZipaUu/2rHZeQ==
+Date:   Wed, 29 Dec 2021 14:00:12 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] PCI: Add device code for AMD FCH SATA Controller
+ in AHCI mode
+Message-ID: <20211229200012.GA1698594@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211227162658.11314-1-pmenzel@molgen.mpg.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Dec 2021 14:53:10 -0500 Willem de Bruijn wrote:
-> On Wed, Dec 29, 2021 at 2:50 PM Tamir Duberstein <tamird@gmail.com> wrote:
-> >
-> > I'm having some trouble sending this using git send-email because of
-> > the firewall I'm behind.
-> >
-> > Please pull from
-> >   git://github.com/tamird/linux raw-check-optlen
-> > to get these changes:
-> >   280c5742aab2 ipv6: raw: check passed optlen before reading
-> >
-> > If this is not acceptable, I'll send the patch again when I'm outside
-> > the firewall. Apologies.  
+On Mon, Dec 27, 2021 at 05:26:56PM +0100, Paul Menzel wrote:
+> The ASUS F2A85-M PRO with the fusion controller hub (FCH) AMD A85
+> (Hudson D4) has the SATA controller below.
 > 
-> I can send it on your behalf, Tamir.
+>     $ lspci -s 00:11.0
+>     00:11.0 SATA controller [0106]: Advanced Micro Devices, Inc. [AMD] FCH SATA Controller [AHCI mode] [1022:7801] (rev 40)
+> 
+> Add the ID for it, when in AHCI mode.
+> 
+> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
 
-Or we can use this opportunity to try out the infra Konstantin had been
-working on:
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 
-https://lore.kernel.org/all/20211217183942.npvkb3ajnx6p5cbp@meerkat.local/
-
-b4 submit --send seems to support sending via some web thing?
-
-Dunno if anyone tried it, yet.
+> ---
+>  include/linux/pci_ids.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> index 011f2f1ea5bb..fe944b44858a 100644
+> --- a/include/linux/pci_ids.h
+> +++ b/include/linux/pci_ids.h
+> @@ -602,6 +602,7 @@
+>  #define PCI_DEVICE_ID_AMD_LX_VIDEO  0x2081
+>  #define PCI_DEVICE_ID_AMD_LX_AES    0x2082
+>  #define PCI_DEVICE_ID_AMD_HUDSON2_SATA_IDE	0x7800
+> +#define PCI_DEVICE_ID_AMD_HUDSON2_SATA_AHCI	0x7801
+>  #define PCI_DEVICE_ID_AMD_HUDSON2_SMBUS		0x780b
+>  #define PCI_DEVICE_ID_AMD_HUDSON2_IDE		0x780c
+>  #define PCI_DEVICE_ID_AMD_KERNCZ_SMBUS  0x790b
+> -- 
+> 2.30.2
+> 

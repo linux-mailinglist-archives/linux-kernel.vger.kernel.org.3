@@ -2,105 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6091C4815ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 18:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5F2481601
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 19:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241147AbhL2RsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 12:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbhL2RsB (ORCPT
+        id S229557AbhL2SP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 13:15:57 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:42194 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229472AbhL2SP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 12:48:01 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2189BC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 09:48:01 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 200so19110937pgg.3
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 09:48:01 -0800 (PST)
+        Wed, 29 Dec 2021 13:15:56 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1rOX0Rhr3pSvZPL3W/XjJ3a02uPzDPkhU1/kY8aPA24=;
-        b=gbyays0vPGWAJDhFBN43d5dOSfa58Gq33Xh3JkxTdZx/tJ9ksBmCGJ2AgNZ1tQy9Jb
-         NTlf3Q7/ZUloPIceWRw1ePuYHtfU9giGSjylq1N1ekvmm/2nk/2vYak9YXqWWuqX4bkP
-         Ckng/EMazsPHi3pmU8PpMbXNjQ+tOtHKIDTnog4qvmF2lgpkE9GZzb15I5tYIFy2uU2N
-         kappAKukTWRaQsGV3LnnRTu99nhPo9oEVbOt3DMTGlNqJN0Vurw0MnZClK8EiIUeBC3Z
-         DTt1pD4atnKAkC0TA4VGFNwu2cgvDFGs2bKRhs2dcwLnpCzxX/7tRU9jV+7VA+tKoIoh
-         4FxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1rOX0Rhr3pSvZPL3W/XjJ3a02uPzDPkhU1/kY8aPA24=;
-        b=SFOrk/b2Kb6sP/wkxJThY+HQSdzXxeXaEFiIrDHrPieTnC7xRRrYdXYk+1cs9825lQ
-         S4eio3K04hisE1kuravHsHqD6z4obnQe3u5GnSOw2NjwEBQwYXPzsemElFBwbhzLNzLv
-         BWz5mrtFpBxpLvwsx9uQOOtzxXmtV/g8hkGyH0mMcZxeXRCEDi03Q6eKtoC/owwi/2a3
-         ik+qm9FkIUbQk44bDyKgrySQUO8WCo2qyMD3Y8zlyexMRW5pcW9gu9AyZf5x6HWXf92a
-         1JYptyENfTTMxjBAErt50z731cby7I55pBCFrsZqDx6iXYeGBq1ZLPkmAW1xxunBNM/B
-         1POQ==
-X-Gm-Message-State: AOAM531dhFt7p5qgrnWgcwaEbjLiaiger2olZ/EmvSCgwvxlWSybraXU
-        d91BA9JiEuSuvhvCcv/dHsveiA==
-X-Google-Smtp-Source: ABdhPJyIcI+xnZVsXy+/c5q/PNdmWkIsGaPlpXAMbDgQ/DiLGIiCHr7ldvjXOVEgFCzkmpaU8/qxcQ==
-X-Received: by 2002:a62:a519:0:b0:4bc:38f0:b1d with SMTP id v25-20020a62a519000000b004bc38f00b1dmr4540640pfm.53.1640800080459;
-        Wed, 29 Dec 2021 09:48:00 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id j4sm26144369pfj.34.2021.12.29.09.47.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 09:48:00 -0800 (PST)
-Date:   Wed, 29 Dec 2021 17:47:56 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, tony.luck@intel.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [PATCH 04/26] x86/traps: Add #VE support for TDX guest
-Message-ID: <YcyfTIPkhxWKxS3B@google.com>
-References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
- <20211214150304.62613-5-kirill.shutemov@linux.intel.com>
- <YcTR5HnkHi7CjVyx@zn.tnic>
- <20211228233112.cpycmdv55edxhvbv@black.fi.intel.com>
- <YcxGrw6Ymqs8NPjY@zn.tnic>
- <YcyV1uwa72vhPXPV@google.com>
- <YcyccW9yzAPoo/rX@zn.tnic>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1640801756; x=1672337756;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=nKCGZC1i14SkhxDK6T+Y972E1r0o8n/KfzGBlXfse4M=;
+  b=B4/YC//9o4Zdw7kV8MHrkB+x7aLLg96qmdenP+dZcvb0a1lMl/ui+EIc
+   ymDhCagpHyh+HhTYEzTk1MoK1JVBNPQEj6NDGcKjChOh657BT9oL3KUnQ
+   Rs6/x82sk1iZVtiBiPmmnH9y6SRp833Jfv1fQ81mH3KG8G3BfpuLg9KQB
+   w=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 29 Dec 2021 10:15:54 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 10:15:53 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 29 Dec 2021 10:15:53 -0800
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 29 Dec 2021 10:15:52 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
+        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Kuogee Hsieh <khsieh@codeaurora.org>
+Subject: [PATCH v2] drm/msm/dp: add support of tps4 (training pattern 4) for HBR3
+Date:   Wed, 29 Dec 2021 10:15:45 -0800
+Message-ID: <1640801745-16234-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YcyccW9yzAPoo/rX@zn.tnic>
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021, Borislav Petkov wrote:
-> On Wed, Dec 29, 2021 at 05:07:34PM +0000, Sean Christopherson wrote:
-> > FWIW, virtual/guest NMIs are blocked by the TDX module until pending #VE info
-> > is retrieved via TDGETVEINFO.  Hardware has nothing to do with that behavior.
-> 
-> The TDX module can block NMIs?!
+From: Kuogee Hsieh <khsieh@codeaurora.org>
 
-It blocks _virtual_ NMIs, which simply means that it doesn't inject an NMI until
-NMIs are unblocked _in the guest_.  Hardware NMIs that arrive in the guest are
-never blocked and will trigger an exit to the host.
+Some DP sinkers prefer to use tps4 instead of tps3 during training #2.
+This patch will use tps4 to perform link training #2 if sinker's DPCD
+supports it.
 
-Any hypervisor can do the same, but it requires a contract between the guest and
-the hypervisor to define when NMIs are unblocked.  TDX extends the historical x86
-contract with the #VE info clause, but again that doesn't help with nested NMIs.
+Changes in V2:
+-- replace  dp_catalog_ctrl_set_pattern() with  dp_catalog_ctrl_set_pattern_state_bit()
 
-> Can we get that functionality exported to baremetal too pls? Then we can get
-> rid of the NMI nesting crap.
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+---
+ drivers/gpu/drm/msm/dp/dp_catalog.c | 12 ++++++------
+ drivers/gpu/drm/msm/dp/dp_catalog.h |  2 +-
+ drivers/gpu/drm/msm/dp/dp_ctrl.c    | 19 ++++++++++++++-----
+ 3 files changed, 21 insertions(+), 12 deletions(-)
 
-I believe that's being addressed with FRED[*].  ERET{S,U} unblock NMIs iff a magic
-bit is set on the stack, and that magic bit is set by hardware only when delivering
-NMIs.  I.e. so long as the NMI handler doesn't deliberately set the bit when
-returning from other faults/events, NMIs will remain blocked until the NMI handler
-returns.
+diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
+index 6ae9b29..64f0b26 100644
+--- a/drivers/gpu/drm/msm/dp/dp_catalog.c
++++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
+@@ -456,19 +456,19 @@ void dp_catalog_ctrl_config_msa(struct dp_catalog *dp_catalog,
+ 	dp_write_p0(catalog, MMSS_DP_DSC_DTO, 0x0);
+ }
+ 
+-int dp_catalog_ctrl_set_pattern(struct dp_catalog *dp_catalog,
+-					u32 pattern)
++int dp_catalog_ctrl_set_pattern_state_bit(struct dp_catalog *dp_catalog,
++					u32 state_bit)
+ {
+ 	int bit, ret;
+ 	u32 data;
+ 	struct dp_catalog_private *catalog = container_of(dp_catalog,
+ 				struct dp_catalog_private, dp_catalog);
+ 
+-	bit = BIT(pattern - 1);
+-	DRM_DEBUG_DP("hw: bit=%d train=%d\n", bit, pattern);
++	bit = BIT(state_bit - 1);
++	DRM_DEBUG_DP("hw: bit=%d train=%d\n", bit, state_bit);
+ 	dp_catalog_ctrl_state_ctrl(dp_catalog, bit);
+ 
+-	bit = BIT(pattern - 1) << DP_MAINLINK_READY_LINK_TRAINING_SHIFT;
++	bit = BIT(state_bit - 1) << DP_MAINLINK_READY_LINK_TRAINING_SHIFT;
+ 
+ 	/* Poll for mainlink ready status */
+ 	ret = readx_poll_timeout(readl, catalog->io->dp_controller.link.base +
+@@ -476,7 +476,7 @@ int dp_catalog_ctrl_set_pattern(struct dp_catalog *dp_catalog,
+ 					data, data & bit,
+ 					POLLING_SLEEP_US, POLLING_TIMEOUT_US);
+ 	if (ret < 0) {
+-		DRM_ERROR("set pattern for link_train=%d failed\n", pattern);
++		DRM_ERROR("set state_bit for link_train=%d failed\n", state_bit);
+ 		return ret;
+ 	}
+ 	return 0;
+diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.h b/drivers/gpu/drm/msm/dp/dp_catalog.h
+index 6965afa..7dea101 100644
+--- a/drivers/gpu/drm/msm/dp/dp_catalog.h
++++ b/drivers/gpu/drm/msm/dp/dp_catalog.h
+@@ -94,7 +94,7 @@ void dp_catalog_ctrl_mainlink_ctrl(struct dp_catalog *dp_catalog, bool enable);
+ void dp_catalog_ctrl_config_misc(struct dp_catalog *dp_catalog, u32 cc, u32 tb);
+ void dp_catalog_ctrl_config_msa(struct dp_catalog *dp_catalog, u32 rate,
+ 				u32 stream_rate_khz, bool fixed_nvid);
+-int dp_catalog_ctrl_set_pattern(struct dp_catalog *dp_catalog, u32 pattern);
++int dp_catalog_ctrl_set_pattern_state_bit(struct dp_catalog *dp_catalog, u32 pattern);
+ void dp_catalog_ctrl_reset(struct dp_catalog *dp_catalog);
+ bool dp_catalog_ctrl_mainlink_ready(struct dp_catalog *dp_catalog);
+ void dp_catalog_ctrl_enable_irq(struct dp_catalog *dp_catalog, bool enable);
+diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+index 39558a2..da6c083 100644
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+@@ -1078,12 +1078,13 @@ static int dp_ctrl_link_train_1(struct dp_ctrl_private *ctrl,
+ 	int tries, old_v_level, ret = 0;
+ 	u8 link_status[DP_LINK_STATUS_SIZE];
+ 	int const maximum_retries = 4;
++	char state_ctrl_bit = 1;
+ 
+ 	dp_catalog_ctrl_state_ctrl(ctrl->catalog, 0);
+ 
+ 	*training_step = DP_TRAINING_1;
+ 
+-	ret = dp_catalog_ctrl_set_pattern(ctrl->catalog, DP_TRAINING_PATTERN_1);
++	ret = dp_catalog_ctrl_set_pattern_state_bit(ctrl->catalog, state_ctrl_bit);
+ 	if (ret)
+ 		return ret;
+ 	dp_ctrl_train_pattern_set(ctrl, DP_TRAINING_PATTERN_1 |
+@@ -1181,7 +1182,7 @@ static int dp_ctrl_link_train_2(struct dp_ctrl_private *ctrl,
+ 			int *training_step)
+ {
+ 	int tries = 0, ret = 0;
+-	char pattern;
++	char pattern, state_ctrl_bit;
+ 	int const maximum_retries = 5;
+ 	u8 link_status[DP_LINK_STATUS_SIZE];
+ 
+@@ -1189,12 +1190,20 @@ static int dp_ctrl_link_train_2(struct dp_ctrl_private *ctrl,
+ 
+ 	*training_step = DP_TRAINING_2;
+ 
+-	if (drm_dp_tps3_supported(ctrl->panel->dpcd))
++	if (drm_dp_tps4_supported(ctrl->panel->dpcd)) {
++		pattern = DP_TRAINING_PATTERN_4;
++		state_ctrl_bit = 4;
++	}
++	else if (drm_dp_tps3_supported(ctrl->panel->dpcd)) {
+ 		pattern = DP_TRAINING_PATTERN_3;
+-	else
++		state_ctrl_bit = 3;
++	}
++	else {
+ 		pattern = DP_TRAINING_PATTERN_2;
++		state_ctrl_bit = 2;
++	}
+ 
+-	ret = dp_catalog_ctrl_set_pattern(ctrl->catalog, pattern);
++	ret = dp_catalog_ctrl_set_pattern_state_bit(ctrl->catalog, state_ctrl_bit);
+ 	if (ret)
+ 		return ret;
+ 
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-[*] https://www.intel.com/content/www/us/en/develop/download/flexible-return-and-event-delivery-specification.html

@@ -2,101 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66800481589
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 18:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3674815A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 18:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237527AbhL2REX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 12:04:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40890 "EHLO
+        id S237559AbhL2RHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 12:07:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237481AbhL2REW (ORCPT
+        with ESMTP id S237399AbhL2RHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 12:04:22 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D81C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 09:04:22 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id u22so36658676lju.7
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 09:04:21 -0800 (PST)
+        Wed, 29 Dec 2021 12:07:38 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCAAC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 09:07:38 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id 2so18968858pgb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 09:07:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=fTrzUJWfhUIkdckLSHMnURIWay1hQkAnOl+6SgL3Qxw=;
-        b=iL/eGYu1HjMm8BVvLrWVPKGJwWFEI9BJY8jfbW9O4spm7Y+Rb/nqCE818TUR22pidR
-         BTR1QIRah9M8TayWD+Zza7+7pWMSikKh/UxZFvJ8uTqLYCLG7sG2obWMSjN4lzN4KSDq
-         JMj4yi+WDUakiXsQfNOA2tjQDQvFGwqUL5N+IvGS+FXtxvM061MQwqPDKLdLtE3mKIGq
-         rglor7Q/lh6D9GPYcYyaY6l0JUF869EmDEX4rtGmMbBhCCX/hgNFO/OnZV1Hf4QZeED1
-         VApBUUYZ0ZiMXzAGIn1cz8mIO29J6fEWmAGW9jkaRCaqdriZLZCdqt4mUvmLNwo6Zt1W
-         qd2g==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MM+VTmjvNCvaEd2zUON97iMhLONZjQup/a76x8g9fYA=;
+        b=pE99oPC9bsIjnylraIU5y4Wv9GhXzczANR62q6VCuVBtxiOb4BcA3eF5Au5xfcETLj
+         l+YuAVevywGu8hRaUBoj03XSEKr2wrstLrKjPAUy9clRVLVr1y0V/s2hNGQ8n6l52njR
+         QsVcNr7vlNkFNB38uLrllpkb37JSysUWCkDTnE7SXcvOtrKRQhvw9cpN0fRVnw5nrXvl
+         Y1zuj6DxLFRegquCertxR48bUky1gMnBySNiYynaSaWJsa0HxqkKCgsByRie37SreuNH
+         r8Z6nfjPneferHpq8s115YF22wqvsEkMp7f0KhBH4huHd9YjH92JGQcxEr1+Ok4lf/eH
+         1kYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fTrzUJWfhUIkdckLSHMnURIWay1hQkAnOl+6SgL3Qxw=;
-        b=4sPnhrils7UoshU9S0Y8fodbyndupQ9u0v/WDHDUpVnCqpudd4P6mcILjG/OH1lj8x
-         LgqhV9ZSFoZvbTIIwf7tcL+ogN/uf16jMrRODkFfl2ShUATkNuUEWDGQBKsuryilm2A5
-         RSWflxKIqAsSlScKhz71OZOjDA637PjgNFknVkyi/6MDGWrwTmKMkNcdewp94vCZWmZe
-         y1CT17sVK+Ew4u4dEWy0WMuy2Ix9svgMXQRak8FUZ6jf7oerPFvybkEaQ8HgVP+/zYfY
-         1egqaZStEKdiqL2cyt0zBMYUav7YNlNuGcSd8pGvHPnBxP79QtJUmaIg/fupQg+oIOlp
-         WFkw==
-X-Gm-Message-State: AOAM530miBD1nEQE9HybDKpEcqfIel2PiVc6VJ1AcDkBqXXeLbWue5W1
-        K1CvTvT7od7ixqWUAecOB7oWZ/ilvKm0OpZCfy8=
-X-Google-Smtp-Source: ABdhPJy9XbWrnBPDstakJxVDB050NScEATy/Wshvr7LpHN1RnyZTAAmnTgZ+Ok5FsU0wgvur/5ydjw==
-X-Received: by 2002:a2e:9cc4:: with SMTP id g4mr20600989ljj.164.1640797459871;
-        Wed, 29 Dec 2021 09:04:19 -0800 (PST)
-Received: from [192.168.112.17] (nikaet.starlink.ru. [94.141.168.29])
-        by smtp.gmail.com with ESMTPSA id b26sm2120463lfo.6.2021.12.29.09.04.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Dec 2021 09:04:19 -0800 (PST)
-Subject: Re: [PATCH 2/3] arm64: dts: renesas: r8a77961: Add lvds0 device node
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211224052309.1997096-1-nikita.yoush@cogentembedded.com>
- <20211224052309.1997096-3-nikita.yoush@cogentembedded.com>
- <YcyTV4fJqMHIeyYB@pendragon.ideasonboard.com>
-From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Message-ID: <87626d61-ada0-c220-bea5-5330f5256629@cogentembedded.com>
-Date:   Wed, 29 Dec 2021 20:04:18 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MM+VTmjvNCvaEd2zUON97iMhLONZjQup/a76x8g9fYA=;
+        b=MfEf9dV+CciR03w54l5OKRwUVtbIgvFhNOVvBy2MnZCMKjRoiBUE2vN/PM9iAFOuvZ
+         AwsN5PFs7/0J24zdgezgFnns+SNY98wJwBZVd5eCoR9oUFkIQS/cuXchVk5++lCAXbx/
+         gwUzVBLx9rY/hlNGKBjzlDdsnayCu7yuQqUAZdG3BF9j6zhn6ATpDuqa18F7oXcsAGcA
+         IPn4BPiBqHXRSxwMYe35WAki6GL7xCRs9jTWs3BdRQK6hpVq01ivHzp5/ORxPOnRTzjx
+         fqsLtHZOZIGVKGYAbTdGK+QGa5uFb7K6tjJ+P0Du8kbAmvj3LBCvLRueTRupWFCxN3WV
+         NBhA==
+X-Gm-Message-State: AOAM532XrShEx2knw00Ue704b3qa7c15w///uKS3mdCvW0GacsPL320S
+        h8Npu89a98lOnFfYGYhPeNmZSA==
+X-Google-Smtp-Source: ABdhPJzjwA7g5w2eAJzAa/udU0ZG01sOc5cIQDHZqN87GN1/Vz3WNs5Yi6fEBe1DzEhiC5ES4ofT+g==
+X-Received: by 2002:a62:88ce:0:b0:4ba:72e1:e2f3 with SMTP id l197-20020a6288ce000000b004ba72e1e2f3mr27577334pfd.13.1640797657786;
+        Wed, 29 Dec 2021 09:07:37 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id f5sm25748691pfc.102.2021.12.29.09.07.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 09:07:37 -0800 (PST)
+Date:   Wed, 29 Dec 2021 17:07:34 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, tony.luck@intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Subject: Re: [PATCH 04/26] x86/traps: Add #VE support for TDX guest
+Message-ID: <YcyV1uwa72vhPXPV@google.com>
+References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
+ <20211214150304.62613-5-kirill.shutemov@linux.intel.com>
+ <YcTR5HnkHi7CjVyx@zn.tnic>
+ <20211228233112.cpycmdv55edxhvbv@black.fi.intel.com>
+ <YcxGrw6Ymqs8NPjY@zn.tnic>
 MIME-Version: 1.0
-In-Reply-To: <YcyTV4fJqMHIeyYB@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YcxGrw6Ymqs8NPjY@zn.tnic>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi.
-
-Thank you for looking at this.
-
->> +				port@1 {
->> +					reg = <1>;
->> +					lvds0_out: endpoint {
->>   					};
+On Wed, Dec 29, 2021, Borislav Petkov wrote:
+> On Wed, Dec 29, 2021 at 02:31:12AM +0300, Kirill A. Shutemov wrote:
+> What I read is:
 > 
-> Endpoints must have a remote-endpoint property. Let's drop the endpoint
-> here and keep the port only, the endpoint can be declared in board
-> files.
-> 
-> If you're fine with this change I can make it when applying the patch.
+> "Interrupts, including NMIs, are blocked by the hardware starting with
+> #VE delivery until TDGETVEINFO is called."
 
-This empty endpoint is currently defined in dtsi files for other r-car gen3 SoCs.  Goal here is to 
-define lvds0_out label that is then used in extension board dtsi files to link to the port.
+FWIW, virtual/guest NMIs are blocked by the TDX module until pending #VE info
+is retrieved via TDGETVEINFO.  Hardware has nothing to do with that behavior.
 
-In this patch I just used the same approach as in files laying nearby.
+> but this simply means that *if* you get a #VE anywhere, NMIs are masked
+> until TDGETVEINFO.
 
-If this approach is not appropriate, then perhaps need to fix it in files for all SoCs, to make it 
-possible for extension board dtsi to be compatible with all of them.
+Yep.
 
-Nikita
+> If you get a #VE during the NMI entry code, then you're toast...
+
+Yes?  The rules would be the same as whatever existing rules we have for taking
+#DBs in NMI, but that's because the subsequent IRET unblocking NMIs, not because
+there's anything special about #VE.  Pending NMIs are blocked by the regular NMI
+status (unblocked by IRET) _and_ by an unread #VE info.
+
+The unread #VE info clause in NMI blocking is purely to prevent an NMI from being
+injected before the guest's #VE handler can do TDGETVEINFO, otherwise a #VE at
+_any_ point in the NMI handler would be fatal due to it clobbering the unread #VE
+info (it'd be a similar problem to SEV-ES's GHCB juggling).

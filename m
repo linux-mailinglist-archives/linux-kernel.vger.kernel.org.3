@@ -2,119 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98FBC481077
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 07:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 850BE481079
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 07:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238961AbhL2GhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 01:37:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
+        id S238986AbhL2Git (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 01:38:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234572AbhL2GhA (ORCPT
+        with ESMTP id S234572AbhL2Gis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 01:37:00 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2747C06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 22:37:00 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id h1so11991820pls.11
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 22:37:00 -0800 (PST)
+        Wed, 29 Dec 2021 01:38:48 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F837C061574;
+        Tue, 28 Dec 2021 22:38:48 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id s1so16250675pga.5;
+        Tue, 28 Dec 2021 22:38:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=p7zVEyegDmuj+6n30KCO1S5If0BRlYsdYfkjtOazVTk=;
-        b=US3E/hqHlmnyPzOy/HskFnqIw6YITYtB3SecYzBz/TvRFRiaQ5DNALRLAG1KPwoX4J
-         sdBQ2c6Fm0s8nGLH1iLRLu6FUqFDXjmD5E5kgs1rUOuHC+aCdtwY5dqh2Ev41kZOMVMb
-         JT/44yXGfpcDJ/kOLKnYQIqs7HAjYlSLDIVP98i5KxF2HWCRbPPlFuiGAGcRbPQoTNpq
-         pKVNacwTs8+fmivZ1QHilorH76JfKWLYlHAR+j1FcZCE4uG8HNOHvJyki9/G9qHZ9doc
-         w3+mIdcw/VCRHpkDbNyJyPBV0iBAIkpoMwfbDuFPZgJmId3BIzA0/bGe1/XouW9QehRg
-         3+uQ==
+        bh=/+dmvARaO0wX79dFiLV+nr8xNseqJI8BiPl8kOY5rlo=;
+        b=ZyuD1RTGlNAJyTqHzXmJg0Fx4jBDo96BKExgRcY16G9oUrkHhTUo2vR8EEL2uMylwu
+         19nUkPPN1Tql/v5S7r7CbA6QexX0DHhV87rUQ24kMZuo36YSLu8uqztsb84DH1Z/Pbgy
+         IZ578+Us8E9xcdAB7bd8nq0qPLAcMJQmD6VXvVtcYXGjut3tMakZuwjP98zulLsLofec
+         A7wUDW0xckU5ThkHp5h7vPX02ANNCtainIEOPvsoT3czBYKUi41zUH29moCJuJb7jD5W
+         tLv/fZN1b+YMX0owg+rMWB4rdIOFV3aHN+7iQ7VOTuDa2O0N6pdaE/LbJcurJXYLmPAT
+         P4HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=p7zVEyegDmuj+6n30KCO1S5If0BRlYsdYfkjtOazVTk=;
-        b=ucgE7GyRBWgj83SwEyo7vjdHjTNgwusW9J3/zb56QyLFSfN+AlmOudyOhVPD5PCwzM
-         0jJQMJ3Zqw6XxRnGAvLzwOKZMcaoB+pGGIs/cS5R4nGAsfQxGmDGnVNxpQtvPCZUumav
-         5sK8HKKe4brjVJM06dyDoOsh2/URZDFSGXXLVtIh7kUlzFA5pi4C9SE9UATiUq4rk2rm
-         w9xv9HI1ZhJfdMEp0FTC0arWMqF1qR8EYE9rnDVBVhulCD76T/LsDhiLrId7UqLnzR8M
-         6KAc7W56H1xmnY04XiHPa7P3LrTGbevYZyfXUynbrNLePX6tgqTfzoBy4EpAlLGs9QBd
-         9Q9g==
-X-Gm-Message-State: AOAM53077SNyhGUL55E4Ccx/VRbMhWJze+O4q3a6ht5AIUamkvFAZy0P
-        V4QB3HQzlD4dB3yUU1ycOoT09A==
-X-Google-Smtp-Source: ABdhPJzbQgs3ZiPyG3g68c9CE72l8nXqFUBGdfo2PobHZ4oRqfWUj1AoQFmLtN/bznm5cjXVREY+kQ==
-X-Received: by 2002:a17:902:6a82:b0:148:a2e7:fb5c with SMTP id n2-20020a1709026a8200b00148a2e7fb5cmr25308794plk.157.1640759819836;
-        Tue, 28 Dec 2021 22:36:59 -0800 (PST)
-Received: from google.com ([2401:fa00:1:10:4dea:2b20:ea89:724b])
-        by smtp.gmail.com with ESMTPSA id p37sm18097039pfh.97.2021.12.28.22.36.56
+        bh=/+dmvARaO0wX79dFiLV+nr8xNseqJI8BiPl8kOY5rlo=;
+        b=4/P91pMNUxawJoyW3aPkieu+QwXgAKNFCHHuL32qV/r1PJoe5IrN389kyjKCuYp+Eb
+         gmv5d3jhOYfz2ugHLE7/1mIG5ICboO/DauHVThtRyLyJyU9JBf3yboIRjkT2lldZ2+1n
+         WWwYwnZ2EifkAU8rRmncMw+gwYbL+AnQSqtvO5zR23zrZZutCdNfPocM5AOpH3n/g2/a
+         V1kqPBErIxi7ul5yps3Wj15t7S3ka+8u5IZQL+VGjkT7y8dW1L5FJlcn4FE/MVnc6k8W
+         93igYgdKeYBXwrDAj95TY7jI4A6VNHzUFYFC4eTlPmU0yYOVSRxyaeuScnoAKHG1msaK
+         adww==
+X-Gm-Message-State: AOAM5329paGhBAQ9sUQ6oG8MCAwFxzsWMWiQ134EQAOgMuGfxSWeVaPl
+        bVHhwlVikIOEWxZjcv1ruOA=
+X-Google-Smtp-Source: ABdhPJwJHz7Xb+VlJFRu6ejPTC7t9pQ9Aa5D16gWyW1uScjSTKNgmdoqEfaXBAz8L3/PrwkpZ+Cw3A==
+X-Received: by 2002:a05:6a00:992:b0:4ba:ca25:ca0f with SMTP id u18-20020a056a00099200b004baca25ca0fmr25486819pfg.44.1640759927896;
+        Tue, 28 Dec 2021 22:38:47 -0800 (PST)
+Received: from shinobu (113x37x72x24.ap113.ftth.ucom.ne.jp. [113.37.72.24])
+        by smtp.gmail.com with ESMTPSA id n71sm22652267pfd.50.2021.12.28.22.38.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 22:36:59 -0800 (PST)
-Date:   Wed, 29 Dec 2021 14:36:54 +0800
-From:   Tzung-Bi Shih <tzungbi@google.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v2, 05/12] media: mtk-vcodec: Call
- v4l2_m2m_set_dst_buffered() set capture buffer buffered
-Message-ID: <YcwCBgw6ZjYwBLFf@google.com>
-References: <20211228094146.20505-1-yunfei.dong@mediatek.com>
- <20211228094146.20505-6-yunfei.dong@mediatek.com>
+        Tue, 28 Dec 2021 22:38:47 -0800 (PST)
+Date:   Wed, 29 Dec 2021 15:38:40 +0900
+From:   William Breathitt Gray <vilhelm.gray@gmail.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 01/23] counter: Use container_of instead of drvdata to
+ track counter_device
+Message-ID: <YcwCcBtdMKAvnCwM@shinobu>
+References: <20211227094526.698714-1-u.kleine-koenig@pengutronix.de>
+ <20211227094526.698714-2-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WTvz+wxjL/4uBLQm"
 Content-Disposition: inline
-In-Reply-To: <20211228094146.20505-6-yunfei.dong@mediatek.com>
+In-Reply-To: <20211227094526.698714-2-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 05:41:39PM +0800, Yunfei Dong wrote:
-> From: Yunfei Dong <yunfei.dong@mediatek.corp-partner.google.com>
 
-Same as 4th patch.  Please fix it.
+--WTvz+wxjL/4uBLQm
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> For lat and core architecture, just need to get output buffer for lat
-> decode. For core hardware need to get lat's message and capture buffer.
-> In order to let lat and core decode in parallel, need to set capture
-> buffer buffered.
+On Mon, Dec 27, 2021 at 10:45:04AM +0100, Uwe Kleine-K=C3=B6nig wrote:
+> The counter core uses drvdata to find a struct counter_device from a
+> struct device. However as the device is a member of struct counter_device,
+> the lookup can be done faster (and a bit type safe) using container_of.
+>=20
+> There are no other users of drvdata, so the call to dev_set_drvdata can
+> go away, too.
+>=20
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-I think the description should be rephrased.
+Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
 
-I may misunderstand but something like the template:
-"""
-OUTPUT -> lat -> core -> CAPTURE.  Lat and core can work in parallel.
+> ---
+>  drivers/counter/counter-core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/counter/counter-core.c b/drivers/counter/counter-cor=
+e.c
+> index 5acc54539623..f053a43c6c04 100644
+> --- a/drivers/counter/counter-core.c
+> +++ b/drivers/counter/counter-core.c
+> @@ -26,7 +26,8 @@ static DEFINE_IDA(counter_ida);
+> =20
+>  static void counter_device_release(struct device *dev)
+>  {
+> -	struct counter_device *const counter =3D dev_get_drvdata(dev);
+> +	struct counter_device *const counter =3D
+> +		container_of(dev, struct counter_device, dev);
+> =20
+>  	counter_chrdev_remove(counter);
+>  	ida_free(&counter_ida, dev->id);
+> @@ -78,7 +79,6 @@ int counter_register(struct counter_device *const count=
+er)
+>  		dev->of_node =3D counter->parent->of_node;
+>  	}
+>  	device_initialize(dev);
+> -	dev_set_drvdata(dev, counter);
+> =20
+>  	err =3D counter_sysfs_add(counter);
+>  	if (err < 0)
+> --=20
+> 2.33.0
+>=20
 
-Sets capture buffer buffered to ...
-"""
+--WTvz+wxjL/4uBLQm
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-> index 5aebf88f997b..23a154c4e321 100644
-> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-> @@ -314,6 +314,9 @@ static void mtk_init_vdec_params(struct mtk_vcodec_ctx *ctx)
->  	src_vq = v4l2_m2m_get_vq(ctx->m2m_ctx,
->  				 V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
->  
-> +	if (ctx->dev->vdec_pdata->hw_arch != MTK_VDEC_PURE_SINGLE_CORE)
-> +		v4l2_m2m_set_dst_buffered(ctx->m2m_ctx, 1);
+-----BEGIN PGP SIGNATURE-----
 
-s/1/true/ helps readability.
+iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAmHMAmQACgkQhvpINdm7
+VJLhoRAA1awIOpM+/ZjFSO9uo2UlhAAS47AmLL8iQsMS3jmHgxts0wXc7lpmEn+G
+vm9OziM32ZjLPkuvAX4oXG8TMLn2tWv1Rzx7JPiPgwL+qZI4QCwkZMQEqNEegaFh
+LabmP/dl0EwjR30qSIbAyCKdMNoPtmk8xwJmMuZ/Fu2xxIGsiekDsOhdK6dSZCkb
+E3youbzkRizKcTGG+udXgDsu8i6G6CsCB7hjgpmRcaKboVPRyxet2PA3XVyElycN
+wsG1FtlpOd4rebqInjqTMB3mnRslr1qAWvfzEA3eW+/KLNHWWcKnrpMb88OWwzWx
+8L92mcQKrGaTYPr778+YkbrSPWFa8Noecn72JfH3E9WMC9XOqgGL6FRAmv5RVDmE
+SPdt7jJ6mQ6X/JWWGKqD0RqhIjj0C2AzxFj5K3uGyvgnf/V8Qt1Fq2E6t6uFKqRI
+1tJ9mxkEu6libBF6hDQrYAG25+neIxHZtYgwwgY/ytAs3Dex8DZm2CYyeavMRPzZ
+Kcog+jmVZd69nweHRdUSsVRFBGJD0s5kfsOsAopT6PmCaZbDqIfLTUZdUxzyDrrJ
+DH9opqkyZZyWPX5S+82u4OICg9j9AcswrZmcEW4Yx8irfyVmZRWTgQdCxRsAzj9f
+4mNnOe05yVi45qCEK7sr6skxU/hsDNE9IhD8CW2Arh57yJrwvs4=
+=7A2O
+-----END PGP SIGNATURE-----
+
+--WTvz+wxjL/4uBLQm--

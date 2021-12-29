@@ -2,96 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8CAE48154A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 17:50:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5F448155C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 17:51:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240926AbhL2Qul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 11:50:41 -0500
-Received: from sibelius.xs4all.nl ([83.163.83.176]:52481 "EHLO
-        sibelius.xs4all.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237478AbhL2Quk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 11:50:40 -0500
-Received: from localhost (bloch.sibelius.xs4all.nl [local])
-        by bloch.sibelius.xs4all.nl (OpenSMTPD) with ESMTPA id 7141976b;
-        Wed, 29 Dec 2021 17:50:38 +0100 (CET)
-Date:   Wed, 29 Dec 2021 17:50:38 +0100 (CET)
-From:   Mark Kettenis <mark.kettenis@xs4all.nl>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     shawnguo@kernel.org, leoyang.li@nxp.com, robh+dt@kernel.org,
-        krzysztof.kozlowski@canonical.com, linux@armlinux.org.uk,
-        andrew@lunn.ch, sebastian.hesselbarth@gmail.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
-        nobuhiro1.iwamatsu@toshiba.co.jp,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-In-Reply-To: <20211229160245.1338-1-jszhang@kernel.org> (message from Jisheng
-        Zhang on Thu, 30 Dec 2021 00:02:38 +0800)
-Subject: Re: [PATCH 0/7] arm/arm64: dts: Remove unused num-viewport from pcie node
-References: <20211229160245.1338-1-jszhang@kernel.org>
-Message-ID: <d3cb7b8439ee3d06@bloch.sibelius.xs4all.nl>
+        id S240941AbhL2Qvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 11:51:38 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:32958 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237478AbhL2Qvc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 11:51:32 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A47CD1EC0118;
+        Wed, 29 Dec 2021 17:51:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640796686;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=E1moKrsQeoHGI1o/N+GTzoLPS3V7jDWAsdtjLlUVI54=;
+        b=jQJok61NrMcuSiMUGed5g9Q7L3P1+UcO1DyxVZTBxrGgT49Z0GVfYJjB/kdcRQqgAYvwbM
+        wzWR9utj5QAAKwhuMvNO78aKXshnZ97N46KhGKs4uUIMGdIqb63QF6QFcr3IPhvZh4hKOy
+        IWAqf2MbW4xsccK8NJwoHPKB1r/GDRE=
+Date:   Wed, 29 Dec 2021 17:51:29 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Dave Young <dyoung@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>
+Subject: Re: [PATCH v19 02/13] x86/setup: Use parse_crashkernel_high_low() to
+ simplify code
+Message-ID: <YcySEdyhXysDSKn/@zn.tnic>
+References: <20211228132612.1860-1-thunder.leizhen@huawei.com>
+ <20211228132612.1860-3-thunder.leizhen@huawei.com>
+ <Ycs3kpZD/vpoo1AX@zn.tnic>
+ <b017a8ea-989b-c251-f5c8-a8a7940877cf@huawei.com>
+ <YcwN9Mfwsh/lPbbd@dhcp-128-65.nay.redhat.com>
+ <YcwyZRDJUMniSaY9@zn.tnic>
+ <Ycw8n2BvJzH9wJKG@dhcp-128-65.nay.redhat.com>
+ <21736ba2-883d-1037-dbe8-299e40f7ad13@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <21736ba2-883d-1037-dbe8-299e40f7ad13@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Jisheng Zhang <jszhang@kernel.org>
-> Date: Thu, 30 Dec 2021 00:02:38 +0800
-> 
-> After commit 281f1f99cf3a("PCI: dwc: Detect number of iATU windows"),
-> the number of iATU windows is detected at runtime, what's more,
-> the 'num-viewport' property parsing has been removed, so remove the
-> unused num-viewport from pcie node(s).
-> 
-> It's too late for linux-5.17-rc1, I will rebase and send out v2 if
-> necessary when 5.17-rc1 is released.
+On Wed, Dec 29, 2021 at 11:04:21PM +0800, Leizhen (ThunderTown) wrote:
+> Chen Zhou and I tried to share the code because of a suggestion. After so many
+> attempts, it doesn't seem to fit to make generic. Or maybe I haven't figured
+> out a good solution yet.
 
-Please no.  This only makes the device trees unnecessarily
-incompatible with older kernels and other OSes that do rely on the
-"num-viewport" property.  It really doesn't hurt to keep this property
-even if future Linux kernels no longer look at it.
+Well, you learned a very important lesson and the many attempts are not
+in vain: code sharing does not make sense in every case.
 
-Thanks,
+> I will put the patches that make arm64 support crashkernel...high,low to
+> the front, then the parse_crashkernel() unification patches. Even if the
+> second half of the patches is not ready for v5.18, the first half of the
+> patches is ready.
 
-Mark
+I think you should concentrate on the arm64 side which is, AFAICT, what
+you're trying to achieve.
 
-> Jisheng Zhang (7):
->   ARM: dts: ls1021a: remove unused num-viewport from pcie nodes
->   arm64: dts: visconti: Remove unused num-viewport from pcie node
->   arm64: dts: uniphier: Remove unused num-viewport from pcie node
->   arm64: tegra: Remove unused num-viewport from pcie node
->   arm64: dts: marvell: Remove unused num-viewport from pcie node
->   arm64: dts: freescale: Remove unused num-viewport from pcie node
->   arm64: dts: exynos: Remove unused num-viewport from pcie node
-> 
->  arch/arm/boot/dts/ls1021a.dtsi                          | 2 --
->  arch/arm64/boot/dts/exynos/exynos5433.dtsi              | 1 -
->  arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi          | 1 -
->  arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi          | 2 --
->  arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi          | 3 ---
->  arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi          | 3 ---
->  arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi          | 3 ---
->  arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi          | 4 ----
->  arch/arm64/boot/dts/marvell/armada-8040-mcbin.dtsi      | 1 -
->  arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dts | 1 -
->  arch/arm64/boot/dts/marvell/cn9130-crb-A.dts            | 1 -
->  arch/arm64/boot/dts/marvell/cn9130-crb-B.dts            | 1 -
->  arch/arm64/boot/dts/marvell/cn9130-db.dtsi              | 1 -
->  arch/arm64/boot/dts/marvell/cn9131-db.dtsi              | 1 -
->  arch/arm64/boot/dts/marvell/cn9132-db.dtsi              | 2 --
->  arch/arm64/boot/dts/nvidia/tegra194.dtsi                | 6 ------
->  arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi        | 1 -
->  arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi        | 1 -
->  arch/arm64/boot/dts/toshiba/tmpv7708.dtsi               | 1 -
->  19 files changed, 36 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
+The "parse_crashkernel() unification" needs more thought because, as I
+said already, that doesn't make a whole lot of sense to me.
+
+If you want to enforce the fact that "low" makes sense only when "high"
+is supplied, parse_crashkernel_high_low() is not the right thing to do.
+You need to have a *single* function which does all the parsing where
+you can decide what to do: "if high, parse low", "if no high supplied,
+ignore low" and so on.
+
+And if those are supported on certain architectures only, you can do
+ifdeffery...
+
+But I think I already stated that I don't like such unifications which
+introduce unnecessary dependencies between architectures. Therefore, I
+won't accept them into x86 unless there's a strong compelling reason.
+Which I don't see ATM.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,93 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F12DD4815CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 18:32:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B374815D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 18:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241121AbhL2RcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 12:32:13 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:42186 "EHLO gloria.sntech.de"
+        id S241124AbhL2RcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 12:32:16 -0500
+Received: from verein.lst.de ([213.95.11.211]:38294 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237519AbhL2RcL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 12:32:11 -0500
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1n2cnp-0001Az-5Q; Wed, 29 Dec 2021 18:31:53 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     robh+dt@kernel.org, kishon@ti.com, vkoul@kernel.org,
-        p.zabel@pengutronix.de, lee.jones@linaro.org,
-        yifeng.zhao@rock-chips.com, kever.yang@rock-chips.com,
-        cl@rock-chips.com, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v6 1/4] dt-bindings: mfd: syscon: add naneng multi phy register compatible
-Date:   Wed, 29 Dec 2021 18:31:52 +0100
-Message-ID: <6181139.AAzF1lipOG@diego>
-In-Reply-To: <50f49afa-6042-03f2-a8ed-cfffd317aa15@gmail.com>
-References: <20211222213032.7678-1-jbx6244@gmail.com> <20211222213032.7678-2-jbx6244@gmail.com> <50f49afa-6042-03f2-a8ed-cfffd317aa15@gmail.com>
+        id S241117AbhL2RcM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 12:32:12 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id ACACB68AFE; Wed, 29 Dec 2021 18:32:09 +0100 (CET)
+Date:   Wed, 29 Dec 2021 18:32:09 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Holger Kiehl <Holger.Kiehl@dwd.de>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: bpfilter: write fail messages with 5.15.x and centos 7.9.2009
+Message-ID: <20211229173209.GA27943@lst.de>
+References: <71e27b99-ef9c-4563-833d-e6eab5419cdb@diagnostix.dwd.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <71e27b99-ef9c-4563-833d-e6eab5419cdb@diagnostix.dwd.de>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Johan, Yifeng,
+-32 is EPIPE.  But it might be a good idea to include the relevant
+maintainers.
 
-Am Dienstag, 28. Dezember 2021, 13:08:00 CET schrieb Johan Jonker:
-> The file grf.yaml is already pretty full with legacy stuff.
-
-I wouldn't call that legacy stuff ;-) .
-The grf as "dumping ground" for more or less unsorted parts will probably
-stay around in future socs as well.
-
-> Now rockchip,rk3568-usb2phy-grf is added, would you like these two
-> compatible strings also there?
-
-I guess that makes sense. The grf.yaml is a better match
-for grf compatible strings I guess.
-
-
-Heiko
-
-
-> Could you give advice to Yifeng?
-> 
-> Kind regards,
-> 
-> Johan Jonker
-> 
-> 
-> On 12/22/21 10:30 PM, Johan Jonker wrote:
-> > Add Naneng multi phy register compatible.
-> > 
-> > Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> > Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
-> > Acked-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  Documentation/devicetree/bindings/mfd/syscon.yaml | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
-> > index 5de16388a..9f0c8aa81 100644
-> > --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
-> > +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
-> > @@ -52,6 +52,8 @@ properties:
-> >                - rockchip,rk3288-qos
-> >                - rockchip,rk3368-qos
-> >                - rockchip,rk3399-qos
-> > +              - rockchip,rk3568-pipe-grf
-> > +              - rockchip,rk3568-pipe-phy-grf
-> >                - rockchip,rk3568-qos
-> >                - samsung,exynos3-sysreg
-> >                - samsung,exynos4-sysreg
-> > 
-> 
-
-
-
-
+On Wed, Dec 29, 2021 at 01:27:58PM +0000, Holger Kiehl wrote:
+> Hello,
+>
+> I just upgraded the kernel from 5.10.x to 5.15.12 on an old Centos
+> 7.9.2009 server. The kernel is build on a new fedora 35 system
+> via 'make binrpm-pkg'. With this I see the following errors:
+>
+>    [  232.140766] bpfilter: Loaded bpfilter_umh pid 6327
+>    [  232.152144] bpfilter: write fail -32
+>    [  232.187175] bpfilter: Loaded bpfilter_umh pid 6330
+>    [  232.198540] bpfilter: write fail -32
+>    [  232.234604] bpfilter: Loaded bpfilter_umh pid 6332
+>    [  232.245916] bpfilter: write fail -32
+>    [  232.281883] bpfilter: Loaded bpfilter_umh pid 6337
+>    [  232.293222] bpfilter: write fail -32
+>    [  232.335798] bpfilter: Loaded bpfilter_umh pid 6380
+>    [  232.347157] bpfilter: write fail -32
+>    [  244.411821] bpfilter: Loaded bpfilter_umh pid 6712
+>    [  244.423216] bpfilter: write fail -32
+>
+> These appear as soon as something is done via iptables (setting
+> something or just viewing). Is this something I need to worry
+> about? Under 5.10.81 I did not see these messages.
+>
+> In Jul 2020 I see a similar report 'bpfilter logging write errors in
+> dmesg', but could not find a solution.
+>
+> Any hint what I can do to fix this?
+>
+> Thanks,
+> Holger
+---end quoted text---

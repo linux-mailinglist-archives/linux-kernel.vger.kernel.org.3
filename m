@@ -2,376 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0ABE480E68
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 02:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF24480E6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 02:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238092AbhL2A7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 19:59:12 -0500
-Received: from mail-lf1-f50.google.com ([209.85.167.50]:38611 "EHLO
-        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238071AbhL2A7K (ORCPT
+        id S238099AbhL2BEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 20:04:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238095AbhL2BEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 19:59:10 -0500
-Received: by mail-lf1-f50.google.com with SMTP id x21so44652164lfa.5;
-        Tue, 28 Dec 2021 16:59:10 -0800 (PST)
+        Tue, 28 Dec 2021 20:04:45 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84442C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 17:04:45 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id v16so17201454pjn.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 17:04:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RLUvpUldajX/uD1hF4CF9MP1nePIdmqOD0SE6y2fK84=;
+        b=ZAJQUiNgwa7h6tf1b5DH8PL5DwiQB1uiDF6VCT2xJ937ktLUHqlZMr1OrGN3yMHHy7
+         zNavcz5GkHXyE+iyX/2f/QlTZJbm+e6knE075WVt+g3fQhfnsQh7evH8DVkMxMZcbGwl
+         zuJuofe1ImCJuz0y0/15qY6DYdvZyYQzlY1ed0INydoLp5SyFkQJ/Rxb2ZodcYeytW2b
+         EDrJb0m8WuxfIJvxsUu2RyPvkfLnw6yaLAqV3jMJ/zKucENjt5XxXV9DqfaD8HGjBw/M
+         4NbLbAiunbr+hKk47MzhyQhe9LU2qw1sjXO4kRPYblqCY/9deHSaLTDmvJaqW225bYAI
+         HSYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hNS82RmN/G6p71wRtkaGNMucODNCY3Fc4PUc32RxirQ=;
-        b=n+jHX3mT7869uCkoAG+7H5a0L2H2BW6fGf7WqSY4kCdduDao7ju+AkaOY1MKQSv4M4
-         UbUlY0eZP+nMZLqiVHJFJECK6loGwGDycgcIcJUdVPyBlU7s9qLafmvf8vb8vUTagudy
-         T7VdU2JXFaoVO03uKICjYINY6rPFEKfIJvFYHjz+47Dq+6Bp7YnDxdztLMkAsLH/x3yg
-         HQHuY3ckTiL2VbUMk3yhuECrR9PQhtZNyadYleZai3Qca+BynNXTacYUE8dEiqxHn84u
-         T4MptU5lQh7eQsKnmS2yHtZS2J2A+Oib8CKd413LMgNZzJEwbQhgSXgH8WkqX18SDYyD
-         rZog==
-X-Gm-Message-State: AOAM5301+Xrd/kAL/Jro1AFUL55Okk33nvfLPvMd3RxU8wT0BHhIWwfx
-        fhsqPkmW0z9n3HSbxI/8e2qrQDPz4KcaXFIBiEk=
-X-Google-Smtp-Source: ABdhPJyVp2KHpj7U95STMtmGWt3VgUgU7DG9BdGcABJEjv4F2fpeztISOuOk+iTUtSrKKg9cV96Dx10cTO3WMfIS/18=
-X-Received: by 2002:a05:6512:16a6:: with SMTP id bu38mr1168532lfb.454.1640739549151;
- Tue, 28 Dec 2021 16:59:09 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RLUvpUldajX/uD1hF4CF9MP1nePIdmqOD0SE6y2fK84=;
+        b=wj3qFbXAnv2tPT4C1nr7JJu2d22GYTefJcVBufEaDmqMjJQALUJkP3qlBe1Heg4kb+
+         fI8/5AdV3NpQsdnhFk7p+o4rbDWe0+9wYuDruId2+N63DdZ/vLN9I/exY6kl5dSXtrN7
+         Ywpk6dieGa7SXddtgx8etO+aXyef+VEvMqTYAD177lFnu0gSilAAZB1gH4SeE/J82fCp
+         4Q4g8Dc+k9cd9c6FV0TmZ+AEFWvkLMSsVtocVSnlQA1WPwpc9mm5bPks/i3nhoin8MSK
+         800p2UdyriJ5EyLQt3TXTBy5K7bkLnVhVJ5VtAPoEnepXEg8SToCzpsj+s8x5948H4Ex
+         s4jQ==
+X-Gm-Message-State: AOAM531yT8SQzwMrC7oKL/Cdhlz4rVaH+VOBPvQRkdCuBtP2wT3fvcuC
+        8mN31s/XlMXFxPQbwv0+04fZWw==
+X-Google-Smtp-Source: ABdhPJxqI/tGgRuoxNXf1qM/sP5Q59qSN4lnMoNghPBa9dHEqeb9RCXuW33Z11sDTzhasWq1HxOiBQ==
+X-Received: by 2002:a17:902:7ed0:b0:149:663a:13d5 with SMTP id p16-20020a1709027ed000b00149663a13d5mr19181930plb.102.1640739884890;
+        Tue, 28 Dec 2021 17:04:44 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id n64sm6454137pfn.49.2021.12.28.17.04.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Dec 2021 17:04:44 -0800 (PST)
+Date:   Wed, 29 Dec 2021 01:04:41 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jing Liu <jing2.liu@intel.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, pbonzini@redhat.com, corbet@lwn.net,
+        shuah@kernel.org, jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, guang.zeng@intel.com,
+        wei.w.wang@intel.com, yang.zhong@intel.com
+Subject: Re: [PATCH v3 22/22] kvm: x86: Disable interception for IA32_XFD on
+ demand
+Message-ID: <Ycu0KVq9PfuygKKx@google.com>
+References: <20211222124052.644626-1-jing2.liu@intel.com>
+ <20211222124052.644626-23-jing2.liu@intel.com>
 MIME-Version: 1.0
-References: <20211223074541.3318938-1-irogers@google.com> <20211223074541.3318938-35-irogers@google.com>
-In-Reply-To: <20211223074541.3318938-35-irogers@google.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 28 Dec 2021 16:58:57 -0800
-Message-ID: <CAM9d7cjRhxtJ3avtVZOd5b1AJTNEp3Vk9w8z2fX8QJjWL27w-A@mail.gmail.com>
-Subject: Re: [PATCH v2 34/48] perf evlist: Refactor evlist__for_each_cpu.
-To:     Ian Rogers <irogers@google.com>
-Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
-        John Garry <john.garry@huawei.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Vineet Singh <vineet.singh@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211222124052.644626-23-jing2.liu@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 11:47 PM Ian Rogers <irogers@google.com> wrote:
->
-> Previously evlist__for_each_cpu needed to iterate over the evlist in an
-> inner loop and call "skip" routines. Refactor this so that the iteratr
-> is smarter and the next function can update both the current CPU and
-> evsel.
->
-> By using a cpu map index, fix apparent off-by-1 in __run_perf_stat's
-> call to perf_evsel__close_cpu.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
-[SNIP]
-> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-> index 5f92319ce258..39d294f6c321 100644
-> --- a/tools/perf/util/evlist.c
-> +++ b/tools/perf/util/evlist.c
-> @@ -342,36 +342,65 @@ static int evlist__nr_threads(struct evlist *evlist, struct evsel *evsel)
->                 return perf_thread_map__nr(evlist->core.threads);
->  }
->
-> -void evlist__cpu_iter_start(struct evlist *evlist)
-> -{
-> -       struct evsel *pos;
-> -
-> -       /*
-> -        * Reset the per evsel cpu_iter. This is needed because
-> -        * each evsel's cpumap may have a different index space,
-> -        * and some operations need the index to modify
-> -        * the FD xyarray (e.g. open, close)
-> -        */
-> -       evlist__for_each_entry(evlist, pos)
-> -               pos->cpu_iter = 0;
-> -}
-> +struct evlist_cpu_iterator evlist__cpu_begin(struct evlist *evlist, struct affinity *affinity)
+On Wed, Dec 22, 2021, Jing Liu wrote:
+> @@ -1968,6 +1969,9 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  	case MSR_IA32_XFD:
+>  		ret = kvm_set_msr_common(vcpu, msr_info);
+>  		if (!ret && data) {
+> +			vmx_disable_intercept_for_msr(vcpu, MSR_IA32_XFD, MSR_TYPE_RW);
+> +			vcpu->arch.xfd_out_of_sync = true;
 
-I think we can rename it to evlist_cpu_iterator__begin().
+xfd_out_of_sync is a poor name, as XFD _may_ be out of sync, or it may not.  It's
+also confusing that it's kept set after XFD is explicitly synchronized in
+vcpu_enter_guest().
 
-
-> +{
-> +       struct evlist_cpu_iterator itr = {
-> +               .container = evlist,
-> +               .evsel = evlist__first(evlist),
-> +               .cpu_map_idx = 0,
-> +               .evlist_cpu_map_idx = 0,
-> +               .evlist_cpu_map_nr = perf_cpu_map__nr(evlist->core.all_cpus),
-> +               .cpu = -1,
-> +               .affinity = affinity,
-> +       };
->
-> -bool evsel__cpu_iter_skip_no_inc(struct evsel *ev, int cpu)
-> -{
-> -       if (ev->cpu_iter >= ev->core.cpus->nr)
-> -               return true;
-> -       if (cpu >= 0 && ev->core.cpus->map[ev->cpu_iter] != cpu)
-> -               return true;
-> -       return false;
-> +       if (itr.affinity) {
-> +               itr.cpu = perf_cpu_map__cpu(evlist->core.all_cpus, 0);
-> +               affinity__set(itr.affinity, itr.cpu);
-> +               itr.cpu_map_idx = perf_cpu_map__idx(itr.evsel->core.cpus, itr.cpu);
-
-This doesn't match to the evlist_cpu_iterator__next() when
-affinity is NULL.  It should set the cpu and cpu_map_idx.
-
-Other than that, I like this! :)
-
-Thanks,
-Namhyung
-
-
-> +               /*
-> +                * If this CPU isn't in the evsel's cpu map then advance through
-> +                * the list.
-> +                */
-> +               if (itr.cpu_map_idx == -1)
-> +                       evlist_cpu_iterator__next(&itr);
-> +       }
-> +       return itr;
-> +}
 > +
-> +void evlist_cpu_iterator__next(struct evlist_cpu_iterator *evlist_cpu_itr)
-> +{
-> +       while (evlist_cpu_itr->evsel != evlist__last(evlist_cpu_itr->container)) {
-> +               evlist_cpu_itr->evsel = evsel__next(evlist_cpu_itr->evsel);
-> +               evlist_cpu_itr->cpu_map_idx =
-> +                       perf_cpu_map__idx(evlist_cpu_itr->evsel->core.cpus,
-> +                                         evlist_cpu_itr->cpu);
-> +               if (evlist_cpu_itr->cpu_map_idx != -1)
-> +                       return;
-> +       }
-> +       evlist_cpu_itr->evlist_cpu_map_idx++;
-> +       if (evlist_cpu_itr->evlist_cpu_map_idx < evlist_cpu_itr->evlist_cpu_map_nr) {
-> +               evlist_cpu_itr->evsel = evlist__first(evlist_cpu_itr->container);
-> +               evlist_cpu_itr->cpu =
-> +                       perf_cpu_map__cpu(evlist_cpu_itr->container->core.all_cpus,
-> +                                         evlist_cpu_itr->evlist_cpu_map_idx);
-> +               if (evlist_cpu_itr->affinity)
-> +                       affinity__set(evlist_cpu_itr->affinity, evlist_cpu_itr->cpu);
-> +               evlist_cpu_itr->cpu_map_idx =
-> +                       perf_cpu_map__idx(evlist_cpu_itr->evsel->core.cpus,
-> +                                         evlist_cpu_itr->cpu);
-> +               /*
-> +                * If this CPU isn't in the evsel's cpu map then advance through
-> +                * the list.
-> +                */
-> +               if (evlist_cpu_itr->cpu_map_idx == -1)
-> +                       evlist_cpu_iterator__next(evlist_cpu_itr);
-> +       }
->  }
->
-> -bool evsel__cpu_iter_skip(struct evsel *ev, int cpu)
-> +bool evlist_cpu_iterator__end(const struct evlist_cpu_iterator *evlist_cpu_itr)
->  {
-> -       if (!evsel__cpu_iter_skip_no_inc(ev, cpu)) {
-> -               ev->cpu_iter++;
-> -               return false;
-> -       }
-> -       return true;
-> +       return evlist_cpu_itr->evlist_cpu_map_idx >= evlist_cpu_itr->evlist_cpu_map_nr;
->  }
->
->  static int evsel__strcmp(struct evsel *pos, char *evsel_name)
-> @@ -400,31 +429,26 @@ static int evlist__is_enabled(struct evlist *evlist)
->  static void __evlist__disable(struct evlist *evlist, char *evsel_name)
->  {
->         struct evsel *pos;
-> +       struct evlist_cpu_iterator evlist_cpu_itr;
->         struct affinity affinity;
-> -       int cpu, i, imm = 0;
->         bool has_imm = false;
->
->         if (affinity__setup(&affinity) < 0)
->                 return;
->
->         /* Disable 'immediate' events last */
-> -       for (imm = 0; imm <= 1; imm++) {
-> -               evlist__for_each_cpu(evlist, i, cpu) {
-> -                       affinity__set(&affinity, cpu);
-> -
-> -                       evlist__for_each_entry(evlist, pos) {
-> -                               if (evsel__strcmp(pos, evsel_name))
-> -                                       continue;
-> -                               if (evsel__cpu_iter_skip(pos, cpu))
-> -                                       continue;
-> -                               if (pos->disabled || !evsel__is_group_leader(pos) || !pos->core.fd)
-> -                                       continue;
-> -                               if (pos->immediate)
-> -                                       has_imm = true;
-> -                               if (pos->immediate != imm)
-> -                                       continue;
-> -                               evsel__disable_cpu(pos, pos->cpu_iter - 1);
-> -                       }
-> +       for (int imm = 0; imm <= 1; imm++) {
-> +               evlist__for_each_cpu(evlist_cpu_itr, evlist, &affinity) {
-> +                       pos = evlist_cpu_itr.evsel;
-> +                       if (evsel__strcmp(pos, evsel_name))
-> +                               continue;
-> +                       if (pos->disabled || !evsel__is_group_leader(pos) || !pos->core.fd)
-> +                               continue;
-> +                       if (pos->immediate)
-> +                               has_imm = true;
-> +                       if (pos->immediate != imm)
-> +                               continue;
-> +                       evsel__disable_cpu(pos, evlist_cpu_itr.cpu_map_idx);
->                 }
->                 if (!has_imm)
->                         break;
-> @@ -462,24 +486,19 @@ void evlist__disable_evsel(struct evlist *evlist, char *evsel_name)
->  static void __evlist__enable(struct evlist *evlist, char *evsel_name)
->  {
->         struct evsel *pos;
-> +       struct evlist_cpu_iterator evlist_cpu_itr;
->         struct affinity affinity;
-> -       int cpu, i;
->
->         if (affinity__setup(&affinity) < 0)
->                 return;
->
-> -       evlist__for_each_cpu(evlist, i, cpu) {
-> -               affinity__set(&affinity, cpu);
-> -
-> -               evlist__for_each_entry(evlist, pos) {
-> -                       if (evsel__strcmp(pos, evsel_name))
-> -                               continue;
-> -                       if (evsel__cpu_iter_skip(pos, cpu))
-> -                               continue;
-> -                       if (!evsel__is_group_leader(pos) || !pos->core.fd)
-> -                               continue;
-> -                       evsel__enable_cpu(pos, pos->cpu_iter - 1);
-> -               }
-> +       evlist__for_each_cpu(evlist_cpu_itr, evlist, &affinity) {
-> +               pos = evlist_cpu_itr.evsel;
-> +               if (evsel__strcmp(pos, evsel_name))
-> +                       continue;
-> +               if (!evsel__is_group_leader(pos) || !pos->core.fd)
-> +                       continue;
-> +               evsel__enable_cpu(pos, evlist_cpu_itr.cpu_map_idx);
->         }
->         affinity__cleanup(&affinity);
->         evlist__for_each_entry(evlist, pos) {
-> @@ -1264,8 +1283,8 @@ void evlist__set_selected(struct evlist *evlist, struct evsel *evsel)
->  void evlist__close(struct evlist *evlist)
->  {
->         struct evsel *evsel;
-> +       struct evlist_cpu_iterator evlist_cpu_itr;
->         struct affinity affinity;
-> -       int cpu, i;
->
->         /*
->          * With perf record core.cpus is usually NULL.
-> @@ -1279,15 +1298,12 @@ void evlist__close(struct evlist *evlist)
->
->         if (affinity__setup(&affinity) < 0)
->                 return;
-> -       evlist__for_each_cpu(evlist, i, cpu) {
-> -               affinity__set(&affinity, cpu);
->
-> -               evlist__for_each_entry_reverse(evlist, evsel) {
-> -                       if (evsel__cpu_iter_skip(evsel, cpu))
-> -                           continue;
-> -                       perf_evsel__close_cpu(&evsel->core, evsel->cpu_iter - 1);
-> -               }
-> +       evlist__for_each_cpu(evlist_cpu_itr, evlist, &affinity) {
-> +               perf_evsel__close_cpu(&evlist_cpu_itr.evsel->core,
-> +                                     evlist_cpu_itr.cpu_map_idx);
->         }
+>  			vcpu->arch.trap_nm = true;
+>  			vmx_update_exception_bitmap(vcpu);
+
+Ah, this is why #NM interception was made sticky many patches ago.  More at the end.
+
+>  		}
+> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+> index bf9d3051cd6c..0a00242a91e7 100644
+> --- a/arch/x86/kvm/vmx/vmx.h
+> +++ b/arch/x86/kvm/vmx/vmx.h
+> @@ -340,7 +340,7 @@ struct vcpu_vmx {
+>  	struct lbr_desc lbr_desc;
+>  
+>  	/* Save desired MSR intercept (read: pass-through) state */
+> -#define MAX_POSSIBLE_PASSTHROUGH_MSRS	14
+> +#define MAX_POSSIBLE_PASSTHROUGH_MSRS	15
+>  	struct {
+>  		DECLARE_BITMAP(read, MAX_POSSIBLE_PASSTHROUGH_MSRS);
+>  		DECLARE_BITMAP(write, MAX_POSSIBLE_PASSTHROUGH_MSRS);
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 3b756ff13103..10a08aa2aa45 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -10024,6 +10024,9 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>  	if (vcpu->arch.guest_fpu.xfd_err)
+>  		wrmsrl(MSR_IA32_XFD_ERR, 0);
+>  
+> +	if (vcpu->arch.xfd_out_of_sync)
+
+Rather than adding a flag that tracks whether or not the MSR can be written by
+the guest, can't this be:
+
+	if (!vmx_test_msr_bitmap_write(vcpu->loaded_vmcs->msr_bitmap))
+		fpu_sync_guest_vmexit_xfd_state();
+
+That might be marginally slower than checking a dedicated flag?  But is has the
+advantage of doing the correct thing for nested guests instead of penalizing them
+with an unnecessary sync on every exit.  If performance of the check is an issue,
+we could add a static key to skip the code unless at least one vCPU has triggered
+the XFD crud, a la kvm_has_noapic_vcpu (which may or may not provide any real
+performance benefits).
+
+Speaking of nested, interception of #NM in vmx_update_exception_bitmap() is wrong
+with respect to nested guests.  Until XFD is supported for L2, which I didn't see
+in this series, #NM should not be intercepted while L2 is running.
+
+For the earlier patch that introduced arch.trap_nm, if it's not too gross and not
+racy, the code could be:
+
+	if (is_guest_mode(vcpu))
+		eb |= get_vmcs12(vcpu)->exception_bitmap;
+        else {
+		...
+
+		if (vcpu->arch.guest_fpu.fpstate.xfd)
+			eb |= (1u << NM_VECTOR);
+	}
+
+Though I'm ok with a semi-temporary flag if that's gross/racy.
+
+Then this patch can change it to:
+
+	if (is_guest_mode(vcpu))
+		eb |= get_vmcs12(vcpu)->exception_bitmap;
+        else {
+		...
+
+		if (!vmx_test_msr_bitmap_write(vcpu->vmcs01.msr_bitmap))
+			eb |= (1u << NM_VECTOR);
+	}
+
+> +		fpu_sync_guest_vmexit_xfd_state();
 > +
->         affinity__cleanup(&affinity);
->         evlist__for_each_entry_reverse(evlist, evsel) {
->                 perf_evsel__free_fd(&evsel->core);
-> diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
-> index 27594900a052..57828ebfcb61 100644
-> --- a/tools/perf/util/evlist.h
-> +++ b/tools/perf/util/evlist.h
-> @@ -327,17 +327,53 @@ void evlist__to_front(struct evlist *evlist, struct evsel *move_evsel);
->  #define evlist__for_each_entry_safe(evlist, tmp, evsel) \
->         __evlist__for_each_entry_safe(&(evlist)->core.entries, tmp, evsel)
->
-> -#define evlist__for_each_cpu(evlist, index, cpu)       \
-> -       evlist__cpu_iter_start(evlist);                 \
-> -       perf_cpu_map__for_each_cpu (cpu, index, (evlist)->core.all_cpus)
-> +/** Iterator state for evlist__for_each_cpu */
-> +struct evlist_cpu_iterator {
-> +       /** The list being iterated through. */
-> +       struct evlist *container;
-> +       /** The current evsel of the iterator. */
-> +       struct evsel *evsel;
-> +       /** The CPU map index corresponding to the evsel->core.cpus for the current CPU. */
-> +       int cpu_map_idx;
-> +       /**
-> +        * The CPU map index corresponding to evlist->core.all_cpus for the
-> +        * current CPU.  Distinct from cpu_map_idx as the evsel's cpu map may
-> +        * contain fewer entries.
-> +        */
-> +       int evlist_cpu_map_idx;
-> +       /** The number of CPU map entries in evlist->core.all_cpus. */
-> +       int evlist_cpu_map_nr;
-> +       /** The current CPU of the iterator. */
-> +       int cpu;
-> +       /** If present, used to set the affinity when switching between CPUs. */
-> +       struct affinity *affinity;
-> +};
-> +
-> +/**
-> + * evlist__for_each_cpu - without affinity, iterate over the evlist. With
-> + *                        affinity, iterate over all CPUs and then the evlist
-> + *                        for each evsel on that CPU. When switching between
-> + *                        CPUs the affinity is set to the CPU to avoid IPIs
-> + *                        during syscalls.
-> + * @evlist_cpu_itr: the iterator instance.
-> + * @evlist: evlist instance to iterate.
-> + * @affinity: NULL or used to set the affinity to the current CPU.
-> + */
-> +#define evlist__for_each_cpu(evlist_cpu_itr, evlist, affinity)         \
-> +       for ((evlist_cpu_itr) = evlist__cpu_begin(evlist, affinity);    \
-> +            !evlist_cpu_iterator__end(&evlist_cpu_itr);                \
-> +            evlist_cpu_iterator__next(&evlist_cpu_itr))
-> +
-> +/** Returns an iterator set to the first CPU/evsel of evlist. */
-> +struct evlist_cpu_iterator evlist__cpu_begin(struct evlist *evlist, struct affinity *affinity);
-> +/** Move to next element in iterator, updating CPU, evsel and the affinity. */
-> +void evlist_cpu_iterator__next(struct evlist_cpu_iterator *evlist_cpu_itr);
-> +/** Returns true when iterator is at the end of the CPUs and evlist. */
-> +bool evlist_cpu_iterator__end(const struct evlist_cpu_iterator *evlist_cpu_itr);
->
->  struct evsel *evlist__get_tracking_event(struct evlist *evlist);
->  void evlist__set_tracking_event(struct evlist *evlist, struct evsel *tracking_evsel);
->
-> -void evlist__cpu_iter_start(struct evlist *evlist);
-> -bool evsel__cpu_iter_skip(struct evsel *ev, int cpu);
-> -bool evsel__cpu_iter_skip_no_inc(struct evsel *ev, int cpu);
-> -
->  struct evsel *evlist__find_evsel_by_str(struct evlist *evlist, const char *str);
->
->  struct evsel *evlist__event2evsel(struct evlist *evlist, union perf_event *event);
-> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-> index 99aa3363def7..7cb7c9c77ab0 100644
-> --- a/tools/perf/util/evsel.h
-> +++ b/tools/perf/util/evsel.h
-> @@ -121,7 +121,6 @@ struct evsel {
->         bool                    errored;
->         struct hashmap          *per_pkg_mask;
->         int                     err;
-> -       int                     cpu_iter;
->         struct {
->                 evsel__sb_cb_t  *cb;
->                 void            *data;
-> --
-> 2.34.1.307.g9b7440fafd-goog
->
+>  	/*
+>  	 * Consume any pending interrupts, including the possible source of
+>  	 * VM-Exit on SVM and any ticks that occur between VM-Exit and now.
+> -- 
+> 2.27.0
+> 

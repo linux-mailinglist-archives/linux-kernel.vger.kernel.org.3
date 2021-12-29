@@ -2,116 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 832474815E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 18:37:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17CC44815E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 18:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241094AbhL2Rh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 12:37:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbhL2Rh0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 12:37:26 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9B4C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 09:37:25 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id l15so1521452pls.7
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 09:37:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Efgx9IHONWruEAQzkI5SLmFWvrJKvgcTDP12usM5mkE=;
-        b=BZgeTpCI1Y3WML+gZXm9/II9O0JpFAF4B+9T6H+TLzK8QmSf/zzpKsHJ+FFns74ye1
-         cgKlOtHQk3hHVsrvoiMfLV5zh00UVUM4CEfPuuduOHgGXS1bZ2hn1H8MrGIDhXQT7CbU
-         6WFRCWcKSRNuNu3H+uacCCCFf2K7uHSKLC+s5+fTlMD8FyntdkyTvDuzxUJi1mNyCjaI
-         WrFulMxvICLLC0jwIlsN/gFsCowLU2fMifWII4pHdcpV43tDHGK7U2yjKeKdocuOHmg5
-         +6enQ2REonsBYJa3/N8XlAh2FkWDRcvZ5q2ZuvjtmJp1NA9cOaNGDYhSOFcTKUhs7QJI
-         JbHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Efgx9IHONWruEAQzkI5SLmFWvrJKvgcTDP12usM5mkE=;
-        b=G5kQZ0AUvnfuimS8fO5EX5KiWMlvoa471cJ533dhsBATY05DwPEkh6l3jUngSFQdNS
-         Y1XrV6atSrGDG95z617aC1svwfOqpemYmmx3Ke/dOKaMw6GFB0C32ltx54LYh8rLlg9q
-         vFtzizPmXzGRPtbZcwXcaeqiL7ItM/+L35HmObH0Ki21e2dql7XU6C8mUyH0mMCx2Ml4
-         PRUltl6+pj2sS/BaQmmZ10ofHg5lfkR1nQokPnXEkzMZ4pKOnIEkNhGBo1erxPZC2VII
-         z9Viy1KrkKfrZo81aKFnmecdNC0cyANOwCVY344ljPYes4nfQVDGsBd6AwRz4JQ4YAwK
-         7xXw==
-X-Gm-Message-State: AOAM531IPbO0h8qo+jn8YIlBWxOV4Lk/wZtKXPncPrrZ7dAzQ6LLy6I9
-        OfvV7H9OS0cOwLDc2uaI64/yrA==
-X-Google-Smtp-Source: ABdhPJzUwBcrBhft0hORYg6zqllwTZT3KaWotq1KPowSS1Lk8h3pPk5HtceknNKHwu7Rq/hQW12b8w==
-X-Received: by 2002:a17:902:bd91:b0:149:999c:35ad with SMTP id q17-20020a170902bd9100b00149999c35admr5503851pls.25.1640799445235;
-        Wed, 29 Dec 2021 09:37:25 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id u8sm25930236pfg.157.2021.12.29.09.37.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 09:37:24 -0800 (PST)
-Date:   Wed, 29 Dec 2021 17:37:21 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     "Liu, Jing2" <jing2.liu@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
-        "Zeng, Guang" <guang.zeng@intel.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>
-Subject: Re: [PATCH v3 13/22] kvm: x86: Intercept #NM for saving IA32_XFD_ERR
-Message-ID: <Ycyc0YE8H8aL//iu@google.com>
-References: <20211222124052.644626-1-jing2.liu@intel.com>
- <20211222124052.644626-14-jing2.liu@intel.com>
- <YcunSb52LlGKT7dC@google.com>
- <BN9PR11MB52760E4417F27BF9CA4F97B08C449@BN9PR11MB5276.namprd11.prod.outlook.com>
+        id S241124AbhL2RjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 12:39:17 -0500
+Received: from mga06.intel.com ([134.134.136.31]:46048 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231217AbhL2RjQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 12:39:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640799556; x=1672335556;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wtFfeiNyTTvOmaiv8HmWk9Y5TPTA7BkoMXdIveUOA8o=;
+  b=PgjOvllex9RsFHmR7qGUTnY2LNQjGPwRbrIHDrcFvcHahPfV7xFaz6N3
+   7JDMaQxrQys46RaChOGtToyXRyPFvPZM8/uvLy7RNimswGEnZtOEiLfCM
+   rMZllTYJUl5ewBODxR0unIggVEHBHUow95G4MQjAGyRgi7vdv/gXk/tyK
+   MKezL0oEjQCuzhWeLW8Zwi49bQJBybpRlgpv5flsCKoNMFxzVNIJbyL8D
+   VEkHm9pjyjVmLUdtMeTDdgFZ2T+b02uXmbur2aQRXTMjx1RtuixOcHL4m
+   9mwFQAwxrVevCn3pC5UOijvrTdf0bZRIZuZft7zd8RH+E136HpDBOUFd3
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="302300878"
+X-IronPort-AV: E=Sophos;i="5.88,246,1635231600"; 
+   d="scan'208";a="302300878"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 09:39:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,246,1635231600"; 
+   d="scan'208";a="524085127"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 29 Dec 2021 09:39:14 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n2cuv-0009HY-R5; Wed, 29 Dec 2021 17:39:13 +0000
+Date:   Thu, 30 Dec 2021 01:38:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [nbd168-wireless:mt76 62/62]
+ drivers/net/wireless/mediatek/mt76/mt7915/main.c:411:35: warning: implicit
+ conversion from 'enum mcu_cipher_type' to 'enum mt76_cipher_type'
+Message-ID: <202112300121.0IhhiGM4-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BN9PR11MB52760E4417F27BF9CA4F97B08C449@BN9PR11MB5276.namprd11.prod.outlook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021, Tian, Kevin wrote:
-> > From: Sean Christopherson <seanjc@google.com>
-> > Sent: Wednesday, December 29, 2021 8:10 AM
-> > 
-> > On Wed, Dec 22, 2021, Jing Liu wrote:
-> > > Guest IA32_XFD_ERR is generally modified in two places:
-> > >
-> > >   - Set by CPU when #NM is triggered;
-> > >   - Cleared by guest in its #NM handler;
-> > >
-> > > Intercept #NM for the first case, if guest writes XFD as nonzero for
-> > > the first time which indicates guest is possible to use XFD generating
-> > > the exception. #NM is rare if the guest doesn't use dynamic features.
-> > > Otherwise, there is at most one exception per guest task given a
-> > > dynamic feature.
-> > >
-> > > Save the current XFD_ERR value to the guest_fpu container in the #NM
-> > > VM-exit handler. This must be done with interrupt/preemption disabled,
-> > 
-> > Assuming my below understanding is correct, drop the "preemption" bit, it's
-> > misleading.
-> 
-> code-wise yes. In concept we just want to highlight that this operation 
-> must be completed when both interrupt and preemption are disabled.
+tree:   https://github.com/nbd168/wireless mt76
+head:   b18073c341fd3b4143cd034decb0ad8544b51bdf
+commit: b18073c341fd3b4143cd034decb0ad8544b51bdf [62/62] mt76: mt7915: update bss_info with cipher after setting the group key
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20211230/202112300121.0IhhiGM4-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/nbd168/wireless/commit/b18073c341fd3b4143cd034decb0ad8544b51bdf
+        git remote add nbd168-wireless https://github.com/nbd168/wireless
+        git fetch --no-tags nbd168-wireless mt76
+        git checkout b18073c341fd3b4143cd034decb0ad8544b51bdf
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/net/wireless/
 
-No no no no no.  Yes, disabling IRQs also disables preemption, but that's not at
-all relevant, e.g. KVM could handle preemption via kvm_sched_{in,out}().  Handling
-this with IRQs disable is 100% mandatory because MSR_IA32_XFD_ERR can be indirectly
-consumed in (soft) IRQ context, end of story.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> But we can also drop preemption if you prefer to, since preemption is
-> certainly disabled  when interrupt is disabled.
+All warnings (new ones prefixed by >>):
+
+   drivers/net/wireless/mediatek/mt76/mt7915/main.c: In function 'mt7915_set_key':
+>> drivers/net/wireless/mediatek/mt76/mt7915/main.c:411:35: warning: implicit conversion from 'enum mcu_cipher_type' to 'enum mt76_cipher_type' [-Wenum-conversion]
+     411 |                 mvif->mt76.cipher = mt76_connac_mcu_get_cipher(key->cipher);
+         |                                   ^
+
+
+vim +411 drivers/net/wireless/mediatek/mt76/mt7915/main.c
+
+   364	
+   365	static int mt7915_set_key(struct ieee80211_hw *hw, enum set_key_cmd cmd,
+   366				  struct ieee80211_vif *vif, struct ieee80211_sta *sta,
+   367				  struct ieee80211_key_conf *key)
+   368	{
+   369		struct mt7915_dev *dev = mt7915_hw_dev(hw);
+   370		struct mt7915_phy *phy = mt7915_hw_phy(hw);
+   371		struct mt7915_vif *mvif = (struct mt7915_vif *)vif->drv_priv;
+   372		struct mt7915_sta *msta = sta ? (struct mt7915_sta *)sta->drv_priv :
+   373					  &mvif->sta;
+   374		struct mt76_wcid *wcid = &msta->wcid;
+   375		u8 *wcid_keyidx = &wcid->hw_key_idx;
+   376		int idx = key->keyidx;
+   377		int err = 0;
+   378	
+   379		/* The hardware does not support per-STA RX GTK, fallback
+   380		 * to software mode for these.
+   381		 */
+   382		if ((vif->type == NL80211_IFTYPE_ADHOC ||
+   383		     vif->type == NL80211_IFTYPE_MESH_POINT) &&
+   384		    (key->cipher == WLAN_CIPHER_SUITE_TKIP ||
+   385		     key->cipher == WLAN_CIPHER_SUITE_CCMP) &&
+   386		    !(key->flags & IEEE80211_KEY_FLAG_PAIRWISE))
+   387			return -EOPNOTSUPP;
+   388	
+   389		/* fall back to sw encryption for unsupported ciphers */
+   390		switch (key->cipher) {
+   391		case WLAN_CIPHER_SUITE_AES_CMAC:
+   392			wcid_keyidx = &wcid->hw_key_idx2;
+   393			key->flags |= IEEE80211_KEY_FLAG_GENERATE_MMIE;
+   394			break;
+   395		case WLAN_CIPHER_SUITE_TKIP:
+   396		case WLAN_CIPHER_SUITE_CCMP:
+   397		case WLAN_CIPHER_SUITE_CCMP_256:
+   398		case WLAN_CIPHER_SUITE_GCMP:
+   399		case WLAN_CIPHER_SUITE_GCMP_256:
+   400		case WLAN_CIPHER_SUITE_SMS4:
+   401			break;
+   402		case WLAN_CIPHER_SUITE_WEP40:
+   403		case WLAN_CIPHER_SUITE_WEP104:
+   404		default:
+   405			return -EOPNOTSUPP;
+   406		}
+   407	
+   408		mutex_lock(&dev->mt76.mutex);
+   409	
+   410		if (cmd == SET_KEY && !sta && !mvif->mt76.cipher) {
+ > 411			mvif->mt76.cipher = mt76_connac_mcu_get_cipher(key->cipher);
+   412			mt7915_mcu_add_bss_info(phy, vif, true);
+   413		}
+   414	
+   415		if (cmd == SET_KEY)
+   416			*wcid_keyidx = idx;
+   417		else if (idx == *wcid_keyidx)
+   418			*wcid_keyidx = -1;
+   419		else
+   420			goto out;
+   421	
+   422		mt76_wcid_key_setup(&dev->mt76, wcid,
+   423				    cmd == SET_KEY ? key : NULL);
+   424	
+   425		err = mt76_connac_mcu_add_key(&dev->mt76, vif, &msta->bip,
+   426					      key, MCU_EXT_CMD(STA_REC_UPDATE),
+   427					      &msta->wcid, cmd);
+   428	out:
+   429		mutex_unlock(&dev->mt76.mutex);
+   430	
+   431		return err;
+   432	}
+   433	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

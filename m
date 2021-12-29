@@ -2,129 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A59480E38
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 01:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9224B480E40
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Dec 2021 01:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234105AbhL2AVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Dec 2021 19:21:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233159AbhL2AVL (ORCPT
+        id S233976AbhL2AhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Dec 2021 19:37:11 -0500
+Received: from mail-lf1-f45.google.com ([209.85.167.45]:45013 "EHLO
+        mail-lf1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231808AbhL2AhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Dec 2021 19:21:11 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BDDC061401
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 16:21:11 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id g22so17131159pgn.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Dec 2021 16:21:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=aD2wzsbm+sT+Pa4K7JTUkCGSHzkUiwnjJcSKkt8ynjg=;
-        b=M3O6/+qXF1dvEZ248mAgk9TWEITaeZ3wSCPJ6C10EMsVO+UnjNVAKJcYJscAQS5AQQ
-         bZusvI0Gu9PJ86nOvionMunXs+5nHy5h1hpnJBUs5YrxLNxarviPh/R8tuh+qGUn7ZFq
-         pdxLhPGzqLeh3FDNtg78Dq2PeHrJUzOiCdUW9wQxWuFm32jUYfGNgOAc/xOCTDCzUbWd
-         1tCIPF1jNObf9fs0DZEbGBhrSxiTpXbmFNPN+AzLi40Zl+YXHbJq0D6YMf4wEV+w7cAy
-         MzfVcfsnzb1lg6EXsq+ljgKNRchsdkuljdwWSuY70TC9rPBaTdtcL+vZqu754xxNOylZ
-         frAA==
+        Tue, 28 Dec 2021 19:37:10 -0500
+Received: by mail-lf1-f45.google.com with SMTP id g26so44491678lfv.11;
+        Tue, 28 Dec 2021 16:37:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aD2wzsbm+sT+Pa4K7JTUkCGSHzkUiwnjJcSKkt8ynjg=;
-        b=Jm4bb1gKKCnAzllKSRSMQmRd8J4x6C4Pk+Tqg5+4iEajfNm05BcTDq9MDO3m0HHDmT
-         0HHJipZSpmwGn/db31kIBYYy2AnPlqFndvjaLweDN2Eu1Yu4IF1IUS1YSkxGTlAIwmE7
-         ZSHjvZmqHzigTNI8Yt1DcRU5sOSsh+E2p9TObPm7Aj1yCkklTBWBZPauVTUB+E8IyfMx
-         FZ9FgH9JaqxNxbkkGKRwUDu9xFwHeIQaKAO5wwrMPQ8ONeHNZgrhuvWMSA3QbSmJlfVL
-         +YxGPZqMJnsGPIL6SZYAbCTkGpjqsBl9/Jt3ds5+APgZG45fY+vgbSe9ujgUPechStb4
-         /o1g==
-X-Gm-Message-State: AOAM5339PrI9Wh9UcC+0XZLUKIEVisodpYnjbvrDS87xNB2YIV44aLf4
-        ndf5DYSNS/XnBzZJ9+GB9gg39Q==
-X-Google-Smtp-Source: ABdhPJzlkjKWY+MvibfWkquu9G315yJkccaVhTBEilXVPiunaBfLgrCsBANyxjYVuAuXX4tcjw7hnw==
-X-Received: by 2002:a62:6dc4:0:b0:4ac:fd66:b746 with SMTP id i187-20020a626dc4000000b004acfd66b746mr24382311pfc.17.1640737270757;
-        Tue, 28 Dec 2021 16:21:10 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id v16sm19267142pjh.57.2021.12.28.16.21.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 16:21:10 -0800 (PST)
-Date:   Wed, 29 Dec 2021 00:21:06 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jing Liu <jing2.liu@intel.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, pbonzini@redhat.com, corbet@lwn.net,
-        shuah@kernel.org, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, guang.zeng@intel.com,
-        wei.w.wang@intel.com, yang.zhong@intel.com
-Subject: Re: [PATCH v3 16/22] kvm: x86: Add XCR0 support for Intel AMX
-Message-ID: <Ycup8opdHrjCIy1V@google.com>
-References: <20211222124052.644626-1-jing2.liu@intel.com>
- <20211222124052.644626-17-jing2.liu@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BOWM3EEvD7fdWp9qIviuq0c9wOogAKxn4lEqLJfiCyg=;
+        b=RIbT7ixQLdZMWcY6L4ZMT9CXM1r3kR/gSniD0ZOGww8hGvrbnKBHGYUPPqOEUAsJrO
+         wjD+k2wmj93WFAJODP/RF+CCUbzJuj4sJHqtl+DdVjPCGRHSxYkIcTa0DOq3FySc5H8u
+         IqqCgKMHer1Bh4u5yfOPxHV2vnWqfqzoQDdp/wI6sw1yf862ahEaMp2vfF1hdwYYs3u4
+         EhOwgxwY8xyAOpF8Yw1xcb1qSXBSFLkdl8bzTEiLxNHoV7kEu8Qj/5lHqs6CkHzMeZkl
+         LPllnLuWkAQHL4JIocxLhvXZwYgT3nH1nArkBdCe/GFrxepGQSR2qJYMK6Ovycc9z76n
+         Zvqg==
+X-Gm-Message-State: AOAM530ql5yv0j/+5AxLRNBbFtbRqUa/o/geXrwxRSv3K0yiHtoL1M0u
+        jOD2a78rS7nH6gnnEwqO8zYgLjs3PlZYh2oXRdA=
+X-Google-Smtp-Source: ABdhPJzAcDXv+BOHRkP0nTH9e4aXMoaw93moV6RNNJeCGL+el0e0ByHxQhEdqL5gUV/HXfI8FLHIIuIJGlg+h9pcVSY=
+X-Received: by 2002:ac2:5e8b:: with SMTP id b11mr22415630lfq.47.1640738228836;
+ Tue, 28 Dec 2021 16:37:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211222124052.644626-17-jing2.liu@intel.com>
+References: <20211223074541.3318938-1-irogers@google.com> <20211223074541.3318938-31-irogers@google.com>
+In-Reply-To: <20211223074541.3318938-31-irogers@google.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 28 Dec 2021 16:36:57 -0800
+Message-ID: <CAM9d7cgdDOhRb9bXar5KgCS52FLfRwyj+CXBtx3J5zSa95vXfA@mail.gmail.com>
+Subject: Re: [PATCH v2 30/48] perf stat: Rename aggr_data cpu to imply it's an index
+To:     Ian Rogers <irogers@google.com>
+Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
+        John Garry <john.garry@huawei.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Vineet Singh <vineet.singh@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021, Jing Liu wrote:
-> Two XCR0 bits are defined for AMX to support XSAVE mechanism. Bit 17
-> is for tilecfg and bit 18 is for tiledata.
-> 
-> The value of XCR0[17:18] is always either 00b or 11b.
-
-Is that an SDM requirement, or an arbitrary Linux/KVM requirement?
-
-> Also, SDM
-> recommends that only 64-bit operating systems enable Intel AMX by
-> setting XCR0[18:17]. If a 32-bit guest tries to set dynamic bits, it
-
-This is wrong.  It has nothing to do with 32-bit guests.  The restriction is on
-32-bit _host kernels_, which I'm guessing never set the tile bits in _host_ XCR0.
-
-> fails to pass vcpu->arch.guest_supported_xcr0 check and gets a #GP.
-> 
-> Signed-off-by: Yang Zhong <yang.zhong@intel.com>
-> Signed-off-by: Jing Liu <jing2.liu@intel.com>
+On Wed, Dec 22, 2021 at 11:47 PM Ian Rogers <irogers@google.com> wrote:
+>
+> Trying to make cpu maps less error prone.
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
 > ---
->  arch/x86/kvm/x86.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index a48a89f73027..c558c098979a 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -210,7 +210,7 @@ static struct kvm_user_return_msrs __percpu *user_return_msrs;
->  #define KVM_SUPPORTED_XCR0     (XFEATURE_MASK_FP | XFEATURE_MASK_SSE \
->  				| XFEATURE_MASK_YMM | XFEATURE_MASK_BNDREGS \
->  				| XFEATURE_MASK_BNDCSR | XFEATURE_MASK_AVX512 \
-> -				| XFEATURE_MASK_PKRU)
-> +				| XFEATURE_MASK_PKRU | XFEATURE_MASK_XTILE)
->  
->  u64 __read_mostly host_efer;
->  EXPORT_SYMBOL_GPL(host_efer);
-> @@ -990,6 +990,12 @@ static int __kvm_set_xcr(struct kvm_vcpu *vcpu, u32 index, u64 xcr)
->  		if ((xcr0 & XFEATURE_MASK_AVX512) != XFEATURE_MASK_AVX512)
->  			return 1;
->  	}
-> +
-> +#ifdef CONFIG_X86_64
+>  tools/perf/util/python.c       |  2 +-
+>  tools/perf/util/stat-display.c | 10 +++++-----
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/tools/perf/util/python.c b/tools/perf/util/python.c
+> index 563a9ba8954f..4b510a1f27d4 100644
+> --- a/tools/perf/util/python.c
+> +++ b/tools/perf/util/python.c
+> @@ -1057,7 +1057,7 @@ static struct mmap *get_md(struct evlist *evlist, int cpu)
+>         for (i = 0; i < evlist->core.nr_mmaps; i++) {
+>                 struct mmap *md = &evlist->mmap[i];
+>
+> -               if (md->core.cpu == cpu)
+> +               if (md->core.cpu_map_idx == cpu)
 
-Drop the #ifdef, it adds no meaningful value and requires the reader to think
-far harder than they should have.  Yes, it's technically dead code for 32-bit KVM,
-but no one cares about performance of 32-bit KVM, and in any case it's extremely
-unlikely this will be anything but noise.
+It doesn't seem to belong to this change..
 
-> +	if ((xcr0 & XFEATURE_MASK_XTILE) &&
-> +	    ((xcr0 & XFEATURE_MASK_XTILE) != XFEATURE_MASK_XTILE))
-> +		return 1;
-> +#endif
->  	vcpu->arch.xcr0 = xcr0;
->  
->  	if ((xcr0 ^ old_xcr0) & XFEATURE_MASK_EXTEND)
-> -- 
-> 2.27.0
-> 
+Thanks,
+Namhyung
+
+
+>                         return md;
+>         }
+>
+> diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+> index 821511ba22cc..4f93591aaa76 100644
+> --- a/tools/perf/util/stat-display.c
+> +++ b/tools/perf/util/stat-display.c
+> @@ -626,7 +626,7 @@ struct aggr_data {
+>         u64 ena, run, val;
+>         struct aggr_cpu_id id;
+>         int nr;
+> -       int cpu;
+> +       int cpu_map_idx;
+>  };
+>
+>  static void aggr_cb(struct perf_stat_config *config,
+> @@ -878,9 +878,9 @@ static void counter_cb(struct perf_stat_config *config __maybe_unused,
+>  {
+>         struct aggr_data *ad = data;
+>
+> -       ad->val += perf_counts(counter->counts, ad->cpu, 0)->val;
+> -       ad->ena += perf_counts(counter->counts, ad->cpu, 0)->ena;
+> -       ad->run += perf_counts(counter->counts, ad->cpu, 0)->run;
+> +       ad->val += perf_counts(counter->counts, ad->cpu_map_idx, 0)->val;
+> +       ad->ena += perf_counts(counter->counts, ad->cpu_map_idx, 0)->ena;
+> +       ad->run += perf_counts(counter->counts, ad->cpu_map_idx, 0)->run;
+>  }
+>
+>  /*
+> @@ -897,7 +897,7 @@ static void print_counter(struct perf_stat_config *config,
+>         struct aggr_cpu_id id;
+>
+>         for (cpu = 0; cpu < evsel__nr_cpus(counter); cpu++) {
+> -               struct aggr_data ad = { .cpu = cpu };
+> +               struct aggr_data ad = { .cpu_map_idx = cpu };
+>
+>                 if (!collect_data(config, counter, counter_cb, &ad))
+>                         return;
+> --
+> 2.34.1.307.g9b7440fafd-goog
+>

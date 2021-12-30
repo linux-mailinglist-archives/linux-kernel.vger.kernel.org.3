@@ -2,100 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF916481AF7
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 10:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC68481AF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 10:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238044AbhL3JA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 04:00:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
+        id S238065AbhL3JFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 04:05:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbhL3JA2 (ORCPT
+        with ESMTP id S229567AbhL3JFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 04:00:28 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BC2C061574;
-        Thu, 30 Dec 2021 01:00:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=vFgwQFGnP1+nZeL5xidq9k2TiaD3WdltS2FPFb0c2qA=; b=hSaUvXVYJLH2XhksKFosQF2YHU
-        dGP5innnv/tBj7GGtJdnhhYyL6mWSDOrz1NIx6rv4mYjbHi7dEyC4CPSPe4JlCgVOyo9rYxQdsD8q
-        EQ8XSLZ5mZRJVuVC5qyz5p9S2SzO0De2a5XnNwxaI0dz1ksfOmZ0YqcwaYGQfKRR1FaxYxnIktniK
-        LSsuBJ9c8O5Bw+3/8Fo5/U5wkfG0lR9oDKlVz9GxIjrQhq2DOKWmaIivzRsc+z3/wCSt2kSTNgWaS
-        SnJjoKqTvyOarGUHx025oaka8eR1wQ0Cxieh8IWOHBM+LfioMEXHdnMqa3mKdC8jNPLJLi0q63zpo
-        LCfE3baA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n2rIM-0046EG-3y; Thu, 30 Dec 2021 09:00:22 +0000
-Date:   Thu, 30 Dec 2021 01:00:22 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v9 00/15] Function Granular KASLR
-Message-ID: <Yc11JrelnWJgV7KX@infradead.org>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
- <YcVq1pMHWvPFHH5g@infradead.org>
- <20211227183318.1447690-1-alexandr.lobakin@intel.com>
+        Thu, 30 Dec 2021 04:05:01 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C1FC061574;
+        Thu, 30 Dec 2021 01:05:00 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id k27so39619796ljc.4;
+        Thu, 30 Dec 2021 01:05:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lmbFZL+w3ae5fA8Ekugn4kVFo17QFX/FP2wMDhmpXOY=;
+        b=fZ3Ev8jtzPAShYqCKYkyXWe3FmPDZnj7vyEXvF+vYDVGRaGPvO77jfdto7S1XqUswj
+         QcBtyL7Odns/FjPcn8i77XfX8uw3nXXOGgdqXjzNk3AGHTFy1eKQrBNNXtXOkeffgeZ1
+         c8W0gijcymflJTG3xsh5uzF7CxXxIttJODsgU9IWH2NtJOEHcEr0ijiCjDxkSp5wXfvh
+         l9qeaNv8Q9RtT2J02jglo9sUQbcmether37dSrKBTif8nLY2wQTPlFpMMKHtQMWtjsUw
+         53J06f4RK0v4LZzNhjOE/Pioen5R87IXCZOqs1saTiC2qdfMz3c3a7odQZAmwjgZFPaB
+         /LtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lmbFZL+w3ae5fA8Ekugn4kVFo17QFX/FP2wMDhmpXOY=;
+        b=rqy2D1tmDqKSMn+uYC/PR4AVlnV7vtlVKXTL5w3ZTN+dGtFz2IlJEHKPh3HuO8Q1Lb
+         rPdJy1Mg9VBr3OpeAjK7DkSSSuCD0FrH+zqSMaRCKSgcAsH5IHLEObLDeIB3TobvtEwJ
+         GsrLhvPEoNRVsEHLn2Cwc41wPQu+wXs2zBeSyCBGynwQdYWyaQ3D9/XB13pvCYPxMzIu
+         Q63+VxcJaNiww7AwDMD1JQ6b8Bdvz96MS6Tjd0EouvUcFM1jNjZso1iM+B2BBlbx/cJ5
+         1kp2NAIofWaMxD0BljzK1TUHVxtX+ttgFeugwIoux7DS8B/HV1C0Vomk12w0iHOhZ4TZ
+         qutQ==
+X-Gm-Message-State: AOAM530GWasw8qE6g/tCYughzRgNEViFRw1GiVYScj8WEYo9z/DLAp22
+        Qocv6FEL3PudKJh/coXublk=
+X-Google-Smtp-Source: ABdhPJwaT7mr00o0HB88uX9XEw8ZrPCDI/+I5R7gN/sb04GsaTBMK3qqUB2tX4Pv9zVp4pLr/qvGMQ==
+X-Received: by 2002:a2e:1602:: with SMTP id w2mr26247986ljd.517.1640855099102;
+        Thu, 30 Dec 2021 01:04:59 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id d5sm2440007lfl.242.2021.12.30.01.04.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Dec 2021 01:04:58 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH V2 1/3] mtd: core: call devm_of_platform_populate() for MTD devices
+Date:   Thu, 30 Dec 2021 10:04:47 +0100
+Message-Id: <20211230090449.11808-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227183318.1447690-1-alexandr.lobakin@intel.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 07:33:18PM +0100, Alexander Lobakin wrote:
-> From: Christoph Hellwig <hch@infradead.org>
-> Date: Thu, 23 Dec 2021 22:38:14 -0800
-> 
-> > On Thu, Dec 23, 2021 at 01:21:54AM +0100, Alexander Lobakin wrote:
-> > > This is a massive rework and a respin of Kristen Accardi's marvellous
-> > > FG-KASLR series (v5).
-> > 
-> > Here would be the place to explain what this series actually does and
-> > why it is marvellous.
-> 
-> As I took this project over from another developer/team, I decided
-> to preserve the original cover letter and append it to the end of
-> mine, as well as to keep most of the original code in the separate
-> commits from mine.
-> For sure I could redo this if needed, is it really so?
+From: Rafał Miłecki <rafal@milecki.pl>
 
-A cover letter needs to explain what you're doing for the reader.
-No one is going to page forever to look for that.
+This adds support for bindings present in MTD devices (applies to
+partitions too) nodes. The purpose of this change is to allow drivers
+handle MTD device (partition) data. Some partitions may contain info
+that requires parsing & processing.
+
+An example can be U-Boot partition that contains block with environment
+variables somehwere in a middle. That block should be described in DT
+and parsed by a specific driver.
+
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ drivers/mtd/mtdcore.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
+index 70f492dce158..07b75e6ca111 100644
+--- a/drivers/mtd/mtdcore.c
++++ b/drivers/mtd/mtdcore.c
+@@ -19,6 +19,7 @@
+ #include <linux/ioctl.h>
+ #include <linux/init.h>
+ #include <linux/of.h>
++#include <linux/of_platform.h>
+ #include <linux/proc_fs.h>
+ #include <linux/idr.h>
+ #include <linux/backing-dev.h>
+@@ -690,6 +691,9 @@ int add_mtd_device(struct mtd_info *mtd)
+ 		not->add(mtd);
+ 
+ 	mutex_unlock(&mtd_table_mutex);
++
++	devm_of_platform_populate(&mtd->dev);
++
+ 	/* We _know_ we aren't being removed, because
+ 	   our caller is still holding us here. So none
+ 	   of this try_ nonsense, and no bitching about it
+-- 
+2.31.1
+

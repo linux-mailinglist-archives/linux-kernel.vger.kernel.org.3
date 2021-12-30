@@ -2,154 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E67434819E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 07:23:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B80AC4819E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 07:24:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236357AbhL3GXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 01:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236346AbhL3GXI (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 01:23:08 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18727C06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 22:23:08 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id y16so18181747ilq.8
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 22:23:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i2TxMwsHZNPtq/d/P+qfXrYHTkaKdkXbSSb+eiNHpsM=;
-        b=ry98a5PuCeXkwPEcdP1EW5U4BjNw1eOrXJfkkFHa0FNjJrHq+bughRPjlOt5IO2r6h
-         Fb3FPAmq7HZtl+CUM+XVVRY2yiDChcB/LfrCTElnfAYDCHNjDo03dz8TxM5QojpaPpzv
-         3FDdGbPEBJKpKpST1obTmTySzZXIZZOYQQeBvRqIMFjKqRxaFR2AO0AoVaRtoQlWOrDH
-         PQZ8YXomA38K4LUIFMOKQuSCyBCSJUM584NQzvgtcwOVykTIPofo9Jgsyb8/TyMjZuhR
-         9Ane+Ll+sJmomoTPPhthbAz5atfcMoJxlViDfD7ONRNyxrzwe1W0VTj+OoxuKP+9tDJJ
-         Kspg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i2TxMwsHZNPtq/d/P+qfXrYHTkaKdkXbSSb+eiNHpsM=;
-        b=6iC8FsOMrOgYQEEckzJUeDk57v8qWJIWij0lLr4YUxrR+BM/hHDKIvdJmo5kuAsRye
-         HkVnXm8OP092ZgDTydtdZ37ioQ+o7y5BpNbxFgvs6oo4q6FT+6XDwWP/tA1LJ5PDyjEb
-         i02z0AyKmvVlDOQRvTJ/e00CC82x40wBESwGJ/Xx6MIf6BBWhPVZSQbxs/CvqW+dwfGW
-         QP6ELCVz67l52ZYtDAY7ssULM9JFATl/g5aQRiU7UoXpugSQYNn8Fk4VJwy/vj2heaxT
-         MjvPAB3qNUe/SL/QOAzlDwlCfP5b6XjV4FRWVFYGcMWnzQnAt5xrJTPDNhxR5hPRNgle
-         1M2Q==
-X-Gm-Message-State: AOAM530xsyJL1XJcXrxAXEwPcLR72tzxYuPJxTqB/mYPCUKPolgtqIa2
-        rXim+I+aDtZMxFRIjqKwABVut2lAwcBoJTZpue+CfA==
-X-Google-Smtp-Source: ABdhPJxURa09a84uJiPmJqds9H+BFMta07IDQnqz2FabsRk3bbIShLmckiC0LD193mlmpZ9pnoKSURuy9u4EHuUBVNI=
-X-Received: by 2002:a92:d8d0:: with SMTP id l16mr13238900ilo.174.1640845387187;
- Wed, 29 Dec 2021 22:23:07 -0800 (PST)
+        id S236374AbhL3GXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 01:23:43 -0500
+Received: from mga05.intel.com ([192.55.52.43]:20917 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236346AbhL3GXm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 01:23:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640845422; x=1672381422;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mFdkGzu2R04RemsC2jcxSWBPpDqoYLYuq/x1Z7YiY1Y=;
+  b=IT5ZOkbUBDWztdYVZ58nI0f1DEPLIJEtVGCbGcSW/AE+Fms2NrA7UcIR
+   sOY6a86qOk0y/hk2VNuUqp9Jlaql1v4uxTa5zkYQm0RatcQul3W7yk0bf
+   1P/il6mw/k3z756SySQDHfNFzYh6J8QWFfc1+64QM8FQQto8nFt00TRLw
+   PFmy42Bxm2d+WMza1MQh3loHWoB9MLhAYCDRyao1r+kt3ucNC6fRskSqT
+   XLE+hf76ZnXbVugkd1pZKHdMDNMLpwvgFeNiAaRDlu9ePsCmxS8UTznVN
+   Y/bI/GD8iI8fjg1GevE2nTF8Z5JWVxDnLSf4DdLp4XYPgpVBCoznucT6u
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="327956748"
+X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
+   d="scan'208";a="327956748"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 22:23:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
+   d="scan'208";a="510787335"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 29 Dec 2021 22:23:41 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n2oqi-0009qG-HA; Thu, 30 Dec 2021 06:23:40 +0000
+Date:   Thu, 30 Dec 2021 14:22:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Goldwyn Rodrigues <rgoldwyn@suse.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [goldwynr:iomap 25/33] fs/btrfs/file.c:1781:24: sparse: sparse:
+ symbol 'btrfs_buffered_iomap_ops' was not declared. Should it be static?
+Message-ID: <202112301434.DN0qgOT0-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211223074541.3318938-1-irogers@google.com> <20211223074541.3318938-26-irogers@google.com>
- <CAM9d7cgCoEc5UXCWm9Cstt0_QMNu4jMK1WH3WEjSBxvCnESfYg@mail.gmail.com>
-In-Reply-To: <CAM9d7cgCoEc5UXCWm9Cstt0_QMNu4jMK1WH3WEjSBxvCnESfYg@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 29 Dec 2021 22:22:54 -0800
-Message-ID: <CAP-5=fWu+H-n57E52JgoEnAdGoJXs_P69-URum4UATx8bfrEOw@mail.gmail.com>
-Subject: Re: [PATCH v2 25/48] perf stat-display: Avoid use of core for CPU.
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
-        John Garry <john.garry@huawei.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Vineet Singh <vineet.singh@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 4:09 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> On Wed, Dec 22, 2021 at 11:47 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > Correct use of cpumap index in print_no_aggr_metric.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> [SNIP]
-> > @@ -924,29 +921,32 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
-> >                                  struct evlist *evlist,
-> >                                  char *prefix)
-> >  {
-> > -       int cpu;
-> > -       int nrcpus = 0;
-> > -       struct evsel *counter;
-> > -       u64 ena, run, val;
-> > -       double uval;
-> > -       struct aggr_cpu_id id;
-> > +       int cpu, nrcpus;
-> >
-> >         nrcpus = evlist->core.cpus->nr;
-> >         for (cpu = 0; cpu < nrcpus; cpu++) {
-> > +               struct evsel *counter;
-> >                 bool first = true;
-> >
-> >                 if (prefix)
-> >                         fputs(prefix, config->output);
-> >                 evlist__for_each_entry(evlist, counter) {
-> > -                       id = aggr_cpu_id__empty();
-> > -                       id.core = cpu;
-> > +                       u64 ena, run, val;
-> > +                       double uval;
-> > +                       struct aggr_cpu_id id;
-> > +                       int idx = perf_cpu_map__idx(evsel__cpus(counter), cpu);
->
-> Not sure about this.  Here the 'cpu' is an index for the
-> evlist->core.cpus, not a CPU number.  But the
-> perf_cpu_map__idx() requires a CPU number, right?
+tree:   https://github.com/goldwynr/linux iomap
+head:   30c74a8c201365178cae26d0d7aefa120c3245ab
+commit: f4ecee4435f363df5a0fc93124ddddae5f79d9d0 [25/33] btrfs: Switch to iomap_file_buffered_write()
+config: i386-randconfig-s001-20211228 (https://download.01.org/0day-ci/archive/20211230/202112301434.DN0qgOT0-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/goldwynr/linux/commit/f4ecee4435f363df5a0fc93124ddddae5f79d9d0
+        git remote add goldwynr https://github.com/goldwynr/linux
+        git fetch --no-tags goldwynr iomap
+        git checkout f4ecee4435f363df5a0fc93124ddddae5f79d9d0
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash fs/btrfs/
 
-Thanks for the reviews! You are right, I think it makes sense two have
-two indices here, evlist and counter. I will change the outer loop to
-use perf_cpu_map__for_each_cpu. v3 will have the other fixes you've
-pointed out too.
-
-Thanks,
-Ian
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-> Thanks,
-> Namhyung
->
->
-> > +
-> > +                       if (idx < 0)
-> > +                               continue;
-> > +
-> > +                       id = aggr_cpu_id__cpu(cpu, /*data=*/NULL);
-> >                         if (first) {
-> >                                 aggr_printout(config, counter, id, 0);
-> >                                 first = false;
-> >                         }
-> > -                       val = perf_counts(counter->counts, cpu, 0)->val;
-> > -                       ena = perf_counts(counter->counts, cpu, 0)->ena;
-> > -                       run = perf_counts(counter->counts, cpu, 0)->run;
-> > +                       val = perf_counts(counter->counts, idx, 0)->val;
-> > +                       ena = perf_counts(counter->counts, idx, 0)->ena;
-> > +                       run = perf_counts(counter->counts, idx, 0)->run;
-> >
-> >                         uval = val * counter->scale;
-> >                         printout(config, id, 0, counter, uval, prefix,
-> > --
-> > 2.34.1.307.g9b7440fafd-goog
-> >
+sparse warnings: (new ones prefixed by >>)
+>> fs/btrfs/file.c:1781:24: sparse: sparse: symbol 'btrfs_buffered_iomap_ops' was not declared. Should it be static?
+
+vim +/btrfs_buffered_iomap_ops +1781 fs/btrfs/file.c
+
+  1780	
+> 1781	const struct iomap_ops btrfs_buffered_iomap_ops = {
+  1782		.iomap_begin = btrfs_buffered_iomap_begin,
+  1783		.iomap_end = btrfs_buffered_iomap_end,
+  1784	};
+  1785	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

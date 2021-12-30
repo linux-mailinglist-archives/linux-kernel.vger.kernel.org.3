@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4477E48188F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:33:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E732F481891
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:33:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234840AbhL3CdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 21:33:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234683AbhL3CdC (ORCPT
+        id S234863AbhL3Cd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 21:33:27 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54466 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234683AbhL3CdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 21:33:02 -0500
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2F0C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 18:33:01 -0800 (PST)
-Received: from localhost.localdomain (83.6.168.106.neoplus.adsl.tpnet.pl [83.6.168.106])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 916BE40268;
-        Thu, 30 Dec 2021 03:32:58 +0100 (CET)
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Wed, 29 Dec 2021 21:33:22 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C8FA615DB;
+        Thu, 30 Dec 2021 02:33:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFAF9C36AE7;
+        Thu, 30 Dec 2021 02:33:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640831601;
+        bh=uvcU7NWQhw7eLa9PH40G7TjraiSheXYdZ13KSXUqqSA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BkQuGnZ4PPyxCSZPMr2zci0kKLBUM0laf2V1o0TSTCNmr2VxqIJN+tMhQVw9vpABJ
+         TAO1y2ypDeSFdUk5gHcHr43X3cu8Y/8xo/GPpphm2v8nUEx/1rAreKrqCAAtdU1CA5
+         MofQ53itdcJb19R6gcYoWbLmOEuYtBaJJk+KbVmh1mprLSttjU/wqssCoHaqsLZGhK
+         lzbRt6N2tVHqaOnhwRuVnb2LOkB73GqZEMyafhYziJ+7oWpaR26yMyTt3fG6JLOhHN
+         yJjV6YmPC605FAZ7RQIZNZyCwlX7mkGxzcr8bMgPTbQP9En1O3ZnoweOmewaBtI/4m
+         ifovYtLd0mVMQ==
+Date:   Wed, 29 Dec 2021 18:33:20 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] rpmsg: qcom_smd: Promote to arch_initcall
-Date:   Thu, 30 Dec 2021 03:32:53 +0100
-Message-Id: <20211230023253.1123142-1-konrad.dybcio@somainline.org>
-X-Mailer: git-send-email 2.34.1
+Subject: Re: [PATCH] fjes: Check possible NULL pointer returned by vzalloc
+Message-ID: <20211229183320.5631b317@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20211229102140.1776466-1-jiasheng@iscas.ac.cn>
+References: <20211229102140.1776466-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-qcom_smd's only child, smd-rpm uses arch_initcall and both have to be up
-before almost anything else to ensure the MSM SoCs will work fine and
-nothing will have to resort to probe defering, as this is the main pillar
-of all things DVFS on these machines. Promote it to arch_initcall to avoid
-such issues.
+On Wed, 29 Dec 2021 18:21:40 +0800 Jiasheng Jiang wrote:
+> As the possible alloc failure of the vzalloc(), the 'hw->hw_info.trace'
+> could be NULL pointer.
+> Therefore it should be better to check it to guarantee the complete
+> success of the initiation.
+> 
+> Fixes: 8cdc3f6c5d22 ("fjes: Hardware initialization routine")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>  drivers/net/fjes/fjes_hw.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/net/fjes/fjes_hw.c b/drivers/net/fjes/fjes_hw.c
+> index 065bb0a40b1d..4c83f637a135 100644
+> --- a/drivers/net/fjes/fjes_hw.c
+> +++ b/drivers/net/fjes/fjes_hw.c
+> @@ -329,6 +329,9 @@ int fjes_hw_init(struct fjes_hw *hw)
+>  	ret = fjes_hw_setup(hw);
+>  
+>  	hw->hw_info.trace = vzalloc(FJES_DEBUG_BUFFER_SIZE);
+> +	if (!hw->hw_info.trace)
+> +		return -ENOMEM;
+> +
+>  	hw->hw_info.trace_size = FJES_DEBUG_BUFFER_SIZE;
+>  
+>  	return ret;
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
- drivers/rpmsg/qcom_smd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The rest of this driver is clearly written expecting that
+hw_info.trace may be NULL. This change is unnecessary at 
+best and may even introduce a regression.
 
-diff --git a/drivers/rpmsg/qcom_smd.c b/drivers/rpmsg/qcom_smd.c
-index 7900cc8feadc..a5fb5c0b8d09 100644
---- a/drivers/rpmsg/qcom_smd.c
-+++ b/drivers/rpmsg/qcom_smd.c
-@@ -1605,7 +1605,7 @@ static int __init qcom_smd_init(void)
- {
- 	return platform_driver_register(&qcom_smd_driver);
- }
--subsys_initcall(qcom_smd_init);
-+arch_initcall(qcom_smd_init);
- 
- static void __exit qcom_smd_exit(void)
- {
--- 
-2.34.1
-
+Please do bare minimum of sanity checking your patches.
+Your submissions are consistently of very low quality.

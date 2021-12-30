@@ -2,15 +2,15 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A88CB481F7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:12:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 581AC481F80
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241810AbhL3TMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 14:12:50 -0500
-Received: from out0.migadu.com ([94.23.1.103]:57566 "EHLO out0.migadu.com"
+        id S241821AbhL3TMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 14:12:54 -0500
+Received: from out0.migadu.com ([94.23.1.103]:57577 "EHLO out0.migadu.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240361AbhL3TMt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 14:12:49 -0500
+        id S240271AbhL3TMu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 14:12:50 -0500
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
         t=1640891568;
@@ -18,10 +18,10 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UPKTOfGemEkoQbDp819rZg49kcfBuqLexV6afOkLkJE=;
-        b=F2kuBLZ2zi7WWrx0OgUEti6HE8AdsbERH0bYEjQdwaV3lHwS8/aWxqsECkUZUBzHrJIf12
-        8avmYHBAETPsv1+WVbqI3sOldeECHHgTmEDKxfs0xyicCZ2WlcFKXGtr7ZEMymTfZWdZBQ
-        G7uHIiYhDLHPjnBa4Q9wZt8LyHByKk4=
+        bh=P44oexPNaHyUsu55BCA7H5CWXGIjtRryCcrTR5E8p3A=;
+        b=EiKTjB9rqTQh0eztRsT78XDqWGBVjYh7Ey/sZq7lSnNV891BTlMCGswqY8HNhV6Wy+UU2v
+        sWH7b7kedPUp+/SeMCelv9zh/Fh1HTpU4bwsNaehj5KFlmajNoqHR4pere5ixGusHDLTJJ
+        EPonKdM60lbT6kGmdEx2cn0/P2fkbiA=
 From:   andrey.konovalov@linux.dev
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
@@ -39,9 +39,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v5 02/39] kasan, page_alloc: move tag_clear_highpage out of kernel_init_free_pages
-Date:   Thu, 30 Dec 2021 20:12:04 +0100
-Message-Id: <3d8f0ec4b71fd639db321781e0862584978162b6.1640891329.git.andreyknvl@google.com>
+Subject: [PATCH mm v5 03/39] kasan, page_alloc: merge kasan_free_pages into free_pages_prepare
+Date:   Thu, 30 Dec 2021 20:12:05 +0100
+Message-Id: <4a4fc0f2c10e3b7fda2ee5e853461b127469dc3f.1640891329.git.andreyknvl@google.com>
 In-Reply-To: <cover.1640891329.git.andreyknvl@google.com>
 References: <cover.1640891329.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -54,20 +54,22 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Currently, kernel_init_free_pages() serves two purposes: it either only
-zeroes memory or zeroes both memory and memory tags via a different
-code path. As this function has only two callers, each using only one
-code path, this behaviour is confusing.
+Currently, the code responsible for initializing and poisoning memory
+in free_pages_prepare() is scattered across two locations:
+kasan_free_pages() for HW_TAGS KASAN and free_pages_prepare() itself.
+This is confusing.
 
-Pull the code that zeroes both memory and tags out of
-kernel_init_free_pages().
+This and a few following patches combine the code from these two
+locations. Along the way, these patches also simplify the performed
+checks to make them easier to follow.
 
-As a result of this change, the code in free_pages_prepare() starts to
-look complicated, but this is improved in the few following patches.
-Those improvements are not integrated into this patch to make diffs
-easier to read.
+Replaces the only caller of kasan_free_pages() with its implementation.
 
-This patch does no functional changes.
+As kasan_has_integrated_init() is only true when CONFIG_KASAN_HW_TAGS
+is enabled, moving the code does no functional changes.
+
+This patch is not useful by itself but makes the simplifications in
+the following patches easier to follow.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 Reviewed-by: Alexander Potapenko <glider@google.com>
@@ -77,61 +79,97 @@ Reviewed-by: Alexander Potapenko <glider@google.com>
 Changes v2->v3:
 - Update patch description.
 ---
- mm/page_alloc.c | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
+ include/linux/kasan.h |  8 --------
+ mm/kasan/common.c     |  2 +-
+ mm/kasan/hw_tags.c    | 11 -----------
+ mm/page_alloc.c       |  6 ++++--
+ 4 files changed, 5 insertions(+), 22 deletions(-)
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 8ecc715a3614..106c427ff8b8 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1282,16 +1282,10 @@ static inline bool should_skip_kasan_poison(struct page *page, fpi_t fpi_flags)
- 	       PageSkipKASanPoison(page);
+diff --git a/include/linux/kasan.h b/include/linux/kasan.h
+index 4a45562d8893..a8bfe9f157c9 100644
+--- a/include/linux/kasan.h
++++ b/include/linux/kasan.h
+@@ -96,7 +96,6 @@ static inline bool kasan_hw_tags_enabled(void)
  }
  
--static void kernel_init_free_pages(struct page *page, int numpages, bool zero_tags)
-+static void kernel_init_free_pages(struct page *page, int numpages)
- {
- 	int i;
+ void kasan_alloc_pages(struct page *page, unsigned int order, gfp_t flags);
+-void kasan_free_pages(struct page *page, unsigned int order);
  
--	if (zero_tags) {
--		for (i = 0; i < numpages; i++)
--			tag_clear_highpage(page + i);
--		return;
--	}
+ #else /* CONFIG_KASAN_HW_TAGS */
+ 
+@@ -117,13 +116,6 @@ static __always_inline void kasan_alloc_pages(struct page *page,
+ 	BUILD_BUG();
+ }
+ 
+-static __always_inline void kasan_free_pages(struct page *page,
+-					     unsigned int order)
+-{
+-	/* Only available for integrated init. */
+-	BUILD_BUG();
+-}
 -
- 	/* s390's use of memset() could override KASAN redzones. */
- 	kasan_disable_current();
- 	for (i = 0; i < numpages; i++) {
-@@ -1387,7 +1381,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
+ #endif /* CONFIG_KASAN_HW_TAGS */
+ 
+ static inline bool kasan_has_integrated_init(void)
+diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+index 92196562687b..a0082fad48b1 100644
+--- a/mm/kasan/common.c
++++ b/mm/kasan/common.c
+@@ -387,7 +387,7 @@ static inline bool ____kasan_kfree_large(void *ptr, unsigned long ip)
+ 	}
+ 
+ 	/*
+-	 * The object will be poisoned by kasan_free_pages() or
++	 * The object will be poisoned by kasan_poison_pages() or
+ 	 * kasan_slab_free_mempool().
+ 	 */
+ 
+diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
+index 7355cb534e4f..0b8225add2e4 100644
+--- a/mm/kasan/hw_tags.c
++++ b/mm/kasan/hw_tags.c
+@@ -213,17 +213,6 @@ void kasan_alloc_pages(struct page *page, unsigned int order, gfp_t flags)
+ 	}
+ }
+ 
+-void kasan_free_pages(struct page *page, unsigned int order)
+-{
+-	/*
+-	 * This condition should match the one in free_pages_prepare() in
+-	 * page_alloc.c.
+-	 */
+-	bool init = want_init_on_free();
+-
+-	kasan_poison_pages(page, order, init);
+-}
+-
+ #if IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
+ 
+ void kasan_enable_tagging_sync(void)
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 106c427ff8b8..01dcb79b3ee1 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -1368,15 +1368,17 @@ static __always_inline bool free_pages_prepare(struct page *page,
+ 
+ 	/*
+ 	 * As memory initialization might be integrated into KASAN,
+-	 * kasan_free_pages and kernel_init_free_pages must be
++	 * KASAN poisoning and memory initialization code must be
+ 	 * kept together to avoid discrepancies in behavior.
+ 	 *
+ 	 * With hardware tag-based KASAN, memory tags must be set before the
+ 	 * page becomes unavailable via debug_pagealloc or arch_free_page.
+ 	 */
+ 	if (kasan_has_integrated_init()) {
++		bool init = want_init_on_free();
++
+ 		if (!skip_kasan_poison)
+-			kasan_free_pages(page, order);
++			kasan_poison_pages(page, order, init);
+ 	} else {
  		bool init = want_init_on_free();
  
- 		if (init)
--			kernel_init_free_pages(page, 1 << order, false);
-+			kernel_init_free_pages(page, 1 << order);
- 		if (!skip_kasan_poison)
- 			kasan_poison_pages(page, order, init);
- 	}
-@@ -2430,9 +2424,17 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
- 		bool init = !want_init_on_free() && want_init_on_alloc(gfp_flags);
- 
- 		kasan_unpoison_pages(page, order, init);
--		if (init)
--			kernel_init_free_pages(page, 1 << order,
--					       gfp_flags & __GFP_ZEROTAGS);
-+
-+		if (init) {
-+			if (gfp_flags & __GFP_ZEROTAGS) {
-+				int i;
-+
-+				for (i = 0; i < 1 << order; i++)
-+					tag_clear_highpage(page + i);
-+			} else {
-+				kernel_init_free_pages(page, 1 << order);
-+			}
-+		}
- 	}
- 
- 	set_page_owner(page, order, gfp_flags);
 -- 
 2.25.1
 

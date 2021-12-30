@@ -2,132 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C614E4818F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 04:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D8094818F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 04:30:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235408AbhL3Dag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 22:30:36 -0500
-Received: from mga12.intel.com ([192.55.52.136]:42672 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231751AbhL3Daf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 22:30:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640835035; x=1672371035;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1Nb1Ngx1/BlbwNr2VlL5TMMKg2T9ajejGZIdtlHbkBE=;
-  b=XCqatkouB8QG60Ou8lrXJjWIfqmiYKH8L2WfF58rNKlOSXBzW91NdMz6
-   oFdS7UoHuLNHPF5GMQaMBU1Yk4ifGnH24HQ4sp9+QrybmMQvADWfr7EnY
-   YM7E77eKLU5bZrxhpX8l3i/nZWwajhyV/Z7UJZnLn6fPDJrarAg/9mV27
-   LZNYUbalTW3YIDYrwpJfoLnExW2lJL+F4EiEfdVVyKEwUHeasvkVyQWHL
-   zDegZ1ki17LfXSNntwYu4hRl8owFRifynzocxxcnrCoYPTi4EdSua4XiW
-   gu4xEsf2swPI5zl9ecK0m7kE2pcjHe9h/oCc1WI0gJCq+4Zu5d4cl21zf
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="221605061"
-X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
-   d="scan'208";a="221605061"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 19:30:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
-   d="scan'208";a="510744448"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 29 Dec 2021 19:30:33 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n2m9A-0009h5-SK; Thu, 30 Dec 2021 03:30:32 +0000
-Date:   Thu, 30 Dec 2021 11:29:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [linux-stable-rc:queue/5.10 4931/9999]
- include/linux/compiler_types.h:315:38: error: call to
- '__compiletime_assert_227' declared with attribute error: BUILD_BUG_ON
- failed: sizeof(_i) > sizeof(long)
-Message-ID: <202112301112.IeXjohsS-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S235370AbhL3DaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 22:30:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231751AbhL3DaY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 22:30:24 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D06C061574;
+        Wed, 29 Dec 2021 19:30:24 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id mj19so20207091pjb.3;
+        Wed, 29 Dec 2021 19:30:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:date:subject:from:to:cc:message-id:thread-topic
+         :mime-version:content-transfer-encoding;
+        bh=Gy0Q5xGwq5Uuhmk1X6IQ/CwspJtjLZrIpG+7QYLBdEE=;
+        b=PKrbPVRw408D6HvLxhV6TfKvibxuPw3M8bmY8GgRScj3HRSVBcPNIGPKc1lIVLO1k9
+         sMZee5dkyOQEZsxjnGxyTIuG92/xrrQHofedlVzrxnxGkGT8SMkHbtijLrezOf5FkP0Z
+         tFcgnFsD+qnPsvpFIEEYTelgdqTsci2TdXA/Geb1Jsti/DNoljuYiL8T24Iy9ylpTfSE
+         lchgWOlsRJiFk7aadoivTAZJWNRLUzknHcuPKuy8HOzSNCaCy11K+yG1MDbUF2D47VtZ
+         r9Z7hXipjsnmdplcVBSyDRJtoJtnm4YQhDZWtkhERv5iWj/O5vSknoMiRnWdgN/ZGle+
+         g19w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:user-agent:date:subject:from:to:cc:message-id
+         :thread-topic:mime-version:content-transfer-encoding;
+        bh=Gy0Q5xGwq5Uuhmk1X6IQ/CwspJtjLZrIpG+7QYLBdEE=;
+        b=X1a+VFjgUndXJ1V6EG9pNVe3WZY5BRAynDAr2Wwn7VDk90+gSjbqyOqGRM/1oLXymg
+         6VSTRXi2OB/4pBqvJR7Hf3Zk4ZqdClpBsebT9V/cKYh6L8bwvnP4FGMsVcw/SzI3OQ7L
+         BpV3P7D1cIIiEvTjQPVLRONxLeuT5GdqPKq1kWvAGhVvp8Vj3jKm93fzuI+KLdM+gTTr
+         Y5S5dokerFD3DFe3v/3SMWJJVTxVvr0uj6QNhY/2xRCX0/8Lqwy2agG0ewxgp2UVL5VS
+         7ubAzi0GELhbnCLbTkoJYwhSmhIe7g7uBcpb/y4i/ROI+60veiVPclHVYPWf9XGOWHjM
+         L9CA==
+X-Gm-Message-State: AOAM530GX/EmZoapdwEc9hfy6HgWCEHVwFiM2Yq2UypbNVUequhwbyeO
+        xC5gyQCqy0916DgAvZlmKMlbCVqqfhtJdemh
+X-Google-Smtp-Source: ABdhPJwgSkhe2FFJrcw/JiUY+JiLYzo6FZb6ff3FH84FdEe4wVDYb0I5AMML8GlSmQ1ETXmncO7TNw==
+X-Received: by 2002:a17:902:82c3:b0:149:9715:21c4 with SMTP id u3-20020a17090282c300b00149971521c4mr8990110plz.157.1640835024214;
+        Wed, 29 Dec 2021 19:30:24 -0800 (PST)
+Received: from [30.135.82.251] ([23.98.35.75])
+        by smtp.gmail.com with ESMTPSA id x31sm26635184pfh.116.2021.12.29.19.30.22
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 29 Dec 2021 19:30:24 -0800 (PST)
+User-Agent: Microsoft-MacOutlook/16.56.21121100
+Date:   Thu, 30 Dec 2021 11:30:21 +0800
+Subject: [Resource Leak] Missing closing files in
+ testing/selftests/timens/procfs.c
+From:   Ryan Cai <ycaibb@gmail.com>
+To:     <shuah@kernel.org>
+CC:     <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Message-ID: <764C5A0D-30D7-4E76-B284-C868754F8A1C@gmail.com>
+Thread-Topic: [Resource Leak] Missing closing files in
+ testing/selftests/timens/procfs.c
+Mime-version: 1.0
+Content-type: text/plain;
+        charset="UTF-8"
+Content-transfer-encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
-head:   eb967e323f7fb073c51401070f7d2cb381a003f7
-commit: 7af299b97734c7e7f465b42a2139ce4d77246975 [4931/9999] kvm: avoid speculation-based attacks from out-of-range memslot accesses
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20211230/202112301112.IeXjohsS-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=7af299b97734c7e7f465b42a2139ce4d77246975
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/5.10
-        git checkout 7af299b97734c7e7f465b42a2139ce4d77246975
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Dear Kernel maintainers,
+              1. In read_proc_uptime, the file opened at Line 75 may not closed when going to Line 84 and 87.
+              Location: https://github.com/torvalds/linux/blob/5bfc75d92efd494db37f5c4c173d3639d4772966/tools/testing/selftests/timens/procfs.c#L75-L87
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+              Can I send I a patch?
 
-Note: the linux-stable-rc/queue/5.10 HEAD eb967e323f7fb073c51401070f7d2cb381a003f7 builds fine.
-      It only hurts bisectability.
-
-All errors (new ones prefixed by >>):
-
-   In file included from <command-line>:
-   In function '__gfn_to_hva_memslot',
-       inlined from 'host_pfn_mapping_level' at arch/x86/kvm/mmu/mmu.c:2767:8,
-       inlined from 'kvm_mmu_hugepage_adjust' at arch/x86/kvm/mmu/mmu.c:2808:10:
->> include/linux/compiler_types.h:315:38: error: call to '__compiletime_assert_227' declared with attribute error: BUILD_BUG_ON failed: sizeof(_i) > sizeof(long)
-     315 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                      ^
-   include/linux/compiler_types.h:296:4: note: in definition of macro '__compiletime_assert'
-     296 |    prefix ## suffix();    \
-         |    ^~~~~~
-   include/linux/compiler_types.h:315:2: note: in expansion of macro '_compiletime_assert'
-     315 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |  ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:2: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |  BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |  ^~~~~~~~~~~~~~~~
-   include/linux/nospec.h:57:2: note: in expansion of macro 'BUILD_BUG_ON'
-      57 |  BUILD_BUG_ON(sizeof(_i) > sizeof(long));   \
-         |  ^~~~~~~~~~~~
-   include/linux/kvm_host.h:1113:25: note: in expansion of macro 'array_index_nospec'
-    1113 |  unsigned long offset = array_index_nospec(gfn - slot->base_gfn,
-         |                         ^~~~~~~~~~~~~~~~~~
+Best,
+Ryan
 
 
-vim +/__compiletime_assert_227 +315 include/linux/compiler_types.h
-
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  301  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  302  #define _compiletime_assert(condition, msg, prefix, suffix) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  303  	__compiletime_assert(condition, msg, prefix, suffix)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  304  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  305  /**
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  306   * compiletime_assert - break build and emit msg if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  307   * @condition: a compile-time constant condition to check
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  308   * @msg:       a message to emit if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  309   *
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  310   * In tradition of POSIX assert, this macro will break the build if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  311   * supplied condition is *false*, emitting the supplied error message if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  312   * compiler has support to do so.
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  313   */
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  314  #define compiletime_assert(condition, msg) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21 @315  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  316  
-
-:::::: The code at line 315 was first introduced by commit
-:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
-
-:::::: TO: Will Deacon <will@kernel.org>
-:::::: CC: Will Deacon <will@kernel.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

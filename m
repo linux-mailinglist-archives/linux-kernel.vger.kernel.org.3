@@ -2,160 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCAE04819C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 06:26:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C73A4819CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 06:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236177AbhL3F0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 00:26:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231228AbhL3F0h (ORCPT
+        id S236213AbhL3F2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 00:28:32 -0500
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:57782
+        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229455AbhL3F2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 00:26:37 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE1DC061574;
-        Wed, 29 Dec 2021 21:26:37 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id i6so11464240pla.0;
-        Wed, 29 Dec 2021 21:26:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uBfKAR7Z0HvFlnOfOE8iZZtu+svlpTiRXVznPLBhBr8=;
-        b=GhsObzuwLok/kU5J0NDWVY7lKhYkMk29B5r7R/wdy5Wmh0Cn4ZSLk9L4gXYmgwK7NA
-         mKha6wFj/o8PDmq5rrLwrwMihj8CGV76ggknZR3Dhk9z14BbAJejWbOdCPqK0gvPZQ94
-         9y/ykl40+9qVFwMcrmMygvlA3JnVn9U8jM40H0CPHicd8gkrO558m5t9b1Iliv7Qf0zO
-         rT2sPpJfQs8/0WOy4/kQEXpDnS+R1HBuAjjV7AX7NrHb+KDUOyHQ4ac0cVvgiEEdZUfL
-         jSmmK3TdddyJXkudkIDgGi4umpviL3go92D9eEH2GCES7eLJ12Af7R+OvmI667y/Xp15
-         8Mbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uBfKAR7Z0HvFlnOfOE8iZZtu+svlpTiRXVznPLBhBr8=;
-        b=xtmTpVnFWtMAKZGmdOZdV0vT2tksoRZGNHFP/K/8kEObbyopMpXo8+YW6jPf6xZ6Ld
-         uR6AjGJ+2RXRIdXT+L19F5Oxb/ZFFYxM/FxQjY7ezv7RJZcGThq43eKubKgb+Fg21iyE
-         gUGItidynzZcozuKUKDO/84v1iytRkC5zfVRm2vdO5T0NfVoUhXN2Qx31fCqRNwyqpmL
-         TAUV2VVHHRsA8fbe9Gm9EgUuysggjtAftwUTx1cDkdiRQqMSa6aF47e+xO6mGRSlcPqU
-         fWK/ZdRAx+E5+SIYTXZonMn/riin5nFWVCCK7AK1u3qsZKBCuupCz5iDmKgYKXT5NqHB
-         XldQ==
-X-Gm-Message-State: AOAM530xJN2KTv5QgBC4zsIewhAVvrxC2fjDzwym9r8W3IrYxeoR8BWt
-        AXSBtjmjX9jvpoLlGtVKFGs=
-X-Google-Smtp-Source: ABdhPJwwWmDpzWto9NXobEcVhGhf7n3vowJC18NLTwe+NGkb7btEndGF1RD6xVHKh8Rpbj/DSYrTyg==
-X-Received: by 2002:a17:902:e5c8:b0:149:14b:f2da with SMTP id u8-20020a170902e5c800b00149014bf2damr29585892plf.110.1640841996605;
-        Wed, 29 Dec 2021 21:26:36 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.gmail.com with ESMTPSA id p10sm25284587pfw.69.2021.12.29.21.26.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 21:26:36 -0800 (PST)
-From:   Zizhuang Deng <sunsetdzz@gmail.com>
-To:     saeedm@nvidia.com, leon@kernel.org, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zizhuang Deng <sunsetdzz@gmail.com>
-Subject: [PATCH] net/mlx5: Add vport return value checks
-Date:   Thu, 30 Dec 2021 13:25:58 +0800
-Message-Id: <20211230052558.959617-1-sunsetdzz@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 30 Dec 2021 00:28:31 -0500
+Received: from localhost.localdomain (1-171-85-107.dynamic-ip.hinet.net [1.171.85.107])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id EC7733FFD7;
+        Thu, 30 Dec 2021 05:28:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640842104;
+        bh=ilWOacWy3+wmYfMNTytyTjyd0g6hoKp0sIxy7P57r1s=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=PgljTcaJPg8iG27azKH0Ur8OZoKxxG+/5JjV4n7LTft8ow2ZhVESN77XK+uYnrTSb
+         3ZEoc5TGmM96ac3bqXJgHhJhFYNaC/7IEQhJhn/VNjAIkEZnOkJDEK2m6nrTxEVR5M
+         O41sDa43n+X3CEz7HqhUx3VoqFTE4IwDM/l6dR3vKnkYquAQi6Zmj3htRQwxtLzdlN
+         teCjeadZSSFn81JdK2qL73Mkff4e5Vui7dWvs8clLudtmBmgKuk0N0XNU+xhyHWFhn
+         sUqpHwYbQvmV8oueE1RYi3SB868AHRslCjanaqLFyFCsyA5EyV0v9+WM2mQP5ZMtad
+         hdpxikTcGTIxg==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     gregkh@linuxfoundation.org
+Cc:     stern@rowland.harvard.edu, mathias.nyman@linux.intel.com,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Bixuan Cui <cuibixuan@huawei.com>,
+        Rajat Jain <rajatja@google.com>, Andrew Lunn <andrew@lunn.ch>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] usb: core: Bail out when port is stuck in reset loop
+Date:   Thu, 30 Dec 2021 13:28:09 +0800
+Message-Id: <20211230052811.650191-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-add missing vport return value checks for recent code, as in [1].
+Unplugging USB device may cause an incorrect warm reset loop and the
+port can no longer be used:
+[  143.039019] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x4202c0
+[  143.039025] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
+[  143.039051] hub 2-0:1.0: state 7 ports 10 chg 0000 evt 0008
+[  143.039058] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x4202c0, return 0x4102c0
+[  143.039092] xhci_hcd 0000:00:14.0: clear port3 connect change, portsc: 0x4002c0
+[  143.039096] usb usb2-port3: link state change
+[  143.039099] xhci_hcd 0000:00:14.0: clear port3 link state change, portsc: 0x2c0
+[  143.039101] usb usb2-port3: do warm reset
+[  143.096736] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2b0, return 0x2b0
+[  143.096751] usb usb2-port3: not warm reset yet, waiting 50ms
+[  143.131500] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link inactive
+[  143.138260] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x2802a0
+[  143.138263] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
+[  143.160756] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2802a0, return 0x3002a0
+[  143.160798] usb usb2-port3: not warm reset yet, waiting 200ms
 
-Ref:
-[1] https://lkml.org/lkml/2020/11/1/315
+The port status is PP=1, CCS=0, PED=0, PLS=Inactive, which is Error
+state per "USB3 Root Hub Port State Machine". It's reasonable to perform
+warm reset several times, but if the port is still not enabled after
+many attempts, consider it's gone and treat it as disconnected.
 
-Signed-off-by: Zizhuang Deng <sunsetdzz@gmail.com>
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 ---
- .../mellanox/mlx5/core/eswitch_offloads.c     | 20 +++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ drivers/usb/core/hub.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c b/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c
-index f4eaa5893886..fda214021738 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c
-@@ -1230,6 +1230,8 @@ static int esw_add_fdb_peer_miss_rules(struct mlx5_eswitch *esw,
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 00070a8a65079..f618d86d526d1 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -2979,7 +2979,8 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
+ 		}
  
- 	if (mlx5_core_is_ecpf_esw_manager(esw->dev)) {
- 		vport = mlx5_eswitch_get_vport(esw, MLX5_VPORT_PF);
-+		if (IS_ERR(vport))
-+			return PTR_ERR(vport);
- 		esw_set_peer_miss_rule_source_port(esw, peer_dev->priv.eswitch,
- 						   spec, MLX5_VPORT_PF);
+ 		/* Check for disconnect or reset */
+-		if (status == 0 || status == -ENOTCONN || status == -ENODEV) {
++		if (status == 0 || status == -ENOTCONN || status == -ENODEV ||
++		    (status == -EBUSY && i == PORT_RESET_TRIES - 1)) {
+ 			usb_clear_port_feature(hub->hdev, port1,
+ 					USB_PORT_FEAT_C_RESET);
  
-@@ -1244,6 +1246,8 @@ static int esw_add_fdb_peer_miss_rules(struct mlx5_eswitch *esw,
- 
- 	if (mlx5_ecpf_vport_exists(esw->dev)) {
- 		vport = mlx5_eswitch_get_vport(esw, MLX5_VPORT_ECPF);
-+		if (IS_ERR(vport))
-+			return PTR_ERR(vport);
- 		MLX5_SET(fte_match_set_misc, misc, source_port, MLX5_VPORT_ECPF);
- 		flow = mlx5_add_flow_rules(esw->fdb_table.offloads.slow_fdb,
- 					   spec, &flow_act, &dest, 1);
-@@ -1281,11 +1285,15 @@ static int esw_add_fdb_peer_miss_rules(struct mlx5_eswitch *esw,
- 	}
- 	if (mlx5_ecpf_vport_exists(esw->dev)) {
- 		vport = mlx5_eswitch_get_vport(esw, MLX5_VPORT_ECPF);
-+		if (IS_ERR(vport))
-+			return PTR_ERR(vport);
- 		mlx5_del_flow_rules(flows[vport->index]);
- 	}
- add_ecpf_flow_err:
- 	if (mlx5_core_is_ecpf_esw_manager(esw->dev)) {
- 		vport = mlx5_eswitch_get_vport(esw, MLX5_VPORT_PF);
-+		if (IS_ERR(vport))
-+			return PTR_ERR(vport);
- 		mlx5_del_flow_rules(flows[vport->index]);
- 	}
- add_pf_flow_err:
-@@ -1309,11 +1317,15 @@ static void esw_del_fdb_peer_miss_rules(struct mlx5_eswitch *esw)
- 
- 	if (mlx5_ecpf_vport_exists(esw->dev)) {
- 		vport = mlx5_eswitch_get_vport(esw, MLX5_VPORT_ECPF);
-+		if (IS_ERR(vport))
-+			return;
- 		mlx5_del_flow_rules(flows[vport->index]);
- 	}
- 
- 	if (mlx5_core_is_ecpf_esw_manager(esw->dev)) {
- 		vport = mlx5_eswitch_get_vport(esw, MLX5_VPORT_PF);
-+		if (IS_ERR(vport))
-+			return;
- 		mlx5_del_flow_rules(flows[vport->index]);
- 	}
- 	kvfree(flows);
-@@ -2385,6 +2397,9 @@ static int esw_set_uplink_slave_ingress_root(struct mlx5_core_dev *master,
- 	if (master) {
- 		esw = master->priv.eswitch;
- 		vport = mlx5_eswitch_get_vport(esw, MLX5_VPORT_UPLINK);
-+		if (IS_ERR(vport))
-+			return PTR_ERR(vport);
-+
- 		MLX5_SET(set_flow_table_root_in, in, table_of_other_vport, 1);
- 		MLX5_SET(set_flow_table_root_in, in, table_vport_number,
- 			 MLX5_VPORT_UPLINK);
-@@ -2405,6 +2420,9 @@ static int esw_set_uplink_slave_ingress_root(struct mlx5_core_dev *master,
- 	} else {
- 		esw = slave->priv.eswitch;
- 		vport = mlx5_eswitch_get_vport(esw, MLX5_VPORT_UPLINK);
-+		if (IS_ERR(vport))
-+			return PTR_ERR(vport);
-+
- 		ns = mlx5_get_flow_vport_acl_namespace(slave,
- 						       MLX5_FLOW_NAMESPACE_ESW_INGRESS,
- 						       vport->index);
-@@ -2590,6 +2608,8 @@ static void esw_unset_master_egress_rule(struct mlx5_core_dev *dev)
- 
- 	vport = mlx5_eswitch_get_vport(dev->priv.eswitch,
- 				       dev->priv.eswitch->manager_vport);
-+	if (IS_ERR(vport))
-+		return;
- 
- 	esw_acl_egress_ofld_cleanup(vport);
- }
 -- 
-2.25.1
+2.33.1
 

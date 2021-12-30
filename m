@@ -2,71 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99484481C66
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 14:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5780481C6C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 14:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239505AbhL3NO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 08:14:29 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37584 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236208AbhL3NO2 (ORCPT
+        id S239401AbhL3NSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 08:18:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51722 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235434AbhL3NSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 08:14:28 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA8F3616D2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 13:14:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7CE6C36AEA;
-        Thu, 30 Dec 2021 13:14:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640870067;
-        bh=c9VoF5J6gtiw/zVyAgJ3CH5TZ9cCVPcFr6L1VqJoasA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AznTNa00q65rmvz227/RbhcsWFtOhaGnXkfiXo9BzpiBVYiM+A0c0irzg7Al5GamJ
-         jE5rbmNv60zx/DALqBU88T6C8mBtXkvryFF0CSVmZix6qy5YEZe/eVSHNRViimAPbu
-         0hf8MX7Am2SKFhnVy1RV+WvmIsraoG9NTlNTumGI=
-Date:   Thu, 30 Dec 2021 14:14:24 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jan Engelhardt <jengelh@inai.de>
-Cc:     tkjos@android.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] android: use "menuconfig" menu entry type for
- CONFIG_ANDROID
-Message-ID: <Yc2wsGmEe7lefB9h@kroah.com>
-References: <20211228200634.18968-1-jengelh@inai.de>
+        Thu, 30 Dec 2021 08:18:05 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E96C061574;
+        Thu, 30 Dec 2021 05:18:05 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id q16so50427207wrg.7;
+        Thu, 30 Dec 2021 05:18:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=vuRsc8wW9XJ+M5W8oEGctVZv5dxejvx5UO2xVo0fpo8=;
+        b=odamaGhRaS2vZVQzGEGWPjhZergHYpE+vRdUAh/AyNJOFPAGghZCOYPny/IuuShyai
+         PTgQzgmlUrTSS92K9efVBozlqpMU4dK+iO+VC1u/bG0A/5QEZUuUgq/ZdH60YBuPbXBH
+         uljVMlp9iko78CgWOfs3AroAiebtnBbmtr4ZPOMpAxI+EJjPMzvQFDQw1uWdudbuyp+j
+         IBXvKVPDta63EeDOCpDF+OWDwtym1B3+0fVflo6WcBU41nLWWtWVJUOp87SphLB0gNQk
+         WKkI+NkauH1i62MUisfc7xan/U3TgyA+SaAYtfM1BMc2GargiEIquO+dZMDaQLiG5OO8
+         mE1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=vuRsc8wW9XJ+M5W8oEGctVZv5dxejvx5UO2xVo0fpo8=;
+        b=cZhUuLPt4cJzu+LgTW/Nt52X3ZmEWbfHcJCFv5ydZzr2uYVtazya9+tLEbnBNl3nDd
+         AR6/fRp2LEa/xyiiqQHzLCZL3ej8F/XH5boYyHpUtM1vyvFyNwiDQa3gFTdNNSP1hXCk
+         1hJWpTCukmKVSJDk/cgoK37u3fyfK1wOjnonuoSWkB/mG7FmsFNngZSD1iZjbFWVYQaL
+         BxJ1CYl37ymLEOHRylR7WopJ27U7F9irVzlmVZ0qlXYCDyrvXtNbxRVqrDRYugmpvkmY
+         +K6WOT9US5RRqMD7+hU+ataA1dpK4Z/z0FKN/1JBS9EpsKjIZY116TF5yGN3PTpKp0i7
+         rj3w==
+X-Gm-Message-State: AOAM531bcDFVQoXRlBxEUDm3CnC6w71QmZdeLq8EjNup5WU64f5ez5NP
+        6qyRKhiu9TuKUlafkoKYKuY=
+X-Google-Smtp-Source: ABdhPJyvTHcr9eexUZO4ohoV+9DtcbakodobY0TzhO4u1LOmOZsK0+qvtXUoI5lBycGiP0hh2zTrZQ==
+X-Received: by 2002:a5d:51c9:: with SMTP id n9mr25116995wrv.694.1640870283425;
+        Thu, 30 Dec 2021 05:18:03 -0800 (PST)
+Received: from [192.168.1.145] ([207.188.161.251])
+        by smtp.gmail.com with ESMTPSA id p18sm4086785wms.16.2021.12.30.05.18.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Dec 2021 05:18:02 -0800 (PST)
+Message-ID: <abd9332b-dace-f75a-33f5-be88fe516784@gmail.com>
+Date:   Thu, 30 Dec 2021 14:18:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211228200634.18968-1-jengelh@inai.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-US
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20210428065440.3704-1-roger.lu@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH v16 0/7] soc: mediatek: SVS: introduce MTK SVS
+In-Reply-To: <20210428065440.3704-1-roger.lu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 09:06:34PM +0100, Jan Engelhardt wrote:
-> Allow disabling the Android driver section from within the Device
-> Drivers submenu, without having to descend into the Android drivers
-> submenu first.
+
+
+On 28/04/2021 08:54, Roger Lu wrote:
+> 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+> 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
+> After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
+> 3. SVS dts refers to reset controller [4] to help reset SVS HW.
 > 
-> Signed-off-by: Jan Engelhardt <jengelh@inai.de>
-> ---
->  drivers/android/Kconfig | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
+> #mt8183 SVS related patches
+> [1] https://patchwork.kernel.org/patch/11193513/
+
+Already mainline, please either refer to the commit, to make it clear it's 
+maineline or drop it.
+
+> [2] https://patchwork.kernel.org/project/linux-mediatek/patch/20201013102358.22588-2-michael.kao@mediatek.com/
+
+Same here.
+
+> [3] https://patchwork.kernel.org/project/linux-mediatek/patch/20200306041345.259332-3-drinkcat@chromium.org/
+
+Same here,
+
 > 
-> diff --git drivers/android/Kconfig drivers/android/Kconfig
-> index 53b22e26266c..dc0a373ab879 100644
-> --- drivers/android/Kconfig
-> +++ drivers/android/Kconfig
+> #mt8192 SVS related patches
+> [1] https://patchwork.kernel.org/patch/11193513/
 
-You made this patch at one level too deep, it should look like:
+Same here, it's actually the same link as [1].
 
---- a/drivers/android/Kconfig
-+++ b/drivers/android/Kconfig
+> [2] https://patchwork.kernel.org/project/linux-mediatek/patch/20201223074944.2061-1-michael.kao@mediatek.com/
+> [3] https://lore.kernel.org/patchwork/patch/1360551/
+> [4] https://patchwork.kernel.org/project/linux-mediatek/patch/20200817030324.5690-5-crystal.guo@mediatek.com/
 
-As-is, this will not apply.
+There are many dependencies for that. Some patches need resubmit, others seem to 
+be stale. I'd advise to concentrate on mt8183 for now and add support for mt8192 
+once dependencies have settled.
 
-A normal git diff will output the correct patch file, as will 'git
-format-patch', how did you create this?
+Regards,
+Matthias
 
-thanks,
-
-greg k-h
+> 
+> changes since v15:
+> - Put (*set_freqs_pct) and (*get_vops) in struct svs_bank because they are part of svs bank's operation
+> - Add define "SVSB_INIT02_RM_DVTFIXED" and "SVSB_MON_VOLT_IGNORE" to make control clearly.
+> - Remove unnecessary parenthesis
+> 
+> Roger Lu (7):
+>    [v16,1/7] dt-bindings: soc: mediatek: add mtk svs dt-bindings
+>    [v16,2/7] arm64: dts: mt8183: add svs device information
+>    [v16,3/7] soc: mediatek: SVS: introduce MTK SVS engine
+>    [v16,4/7] soc: mediatek: SVS: add debug commands
+>    [v16,5/7] dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
+>    [v16,6/7] arm64: dts: mt8192: add svs device information
+>    [v16,7/7] soc: mediatek: SVS: add mt8192 SVS GPU driver
+> 
+>   .../bindings/soc/mediatek/mtk-svs.yaml        |   92 +
+>   arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   18 +
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi      |   34 +
+>   drivers/soc/mediatek/Kconfig                  |   10 +
+>   drivers/soc/mediatek/Makefile                 |    1 +
+>   drivers/soc/mediatek/mtk-svs.c                | 2524 +++++++++++++++++
+>   6 files changed, 2679 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+>   create mode 100644 drivers/soc/mediatek/mtk-svs.c
+> 
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
+> 

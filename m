@@ -2,126 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A27A748184F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC80E48185D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234327AbhL3CAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 21:00:54 -0500
-Received: from mga14.intel.com ([192.55.52.115]:24757 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230043AbhL3CAx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 21:00:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640829653; x=1672365653;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Udnw99HBsy0KbtlGgwoErMwND1kwq1XS+ZN01+qHvXU=;
-  b=Zd2L8Xd4d/V4bW3W+ds2XvcOJ3ZfD3xKwDOPSJoEgcFWO92pLc8eipTD
-   iPzUy1v4WhBebZNtpcD8/FR9sBG9CEOvmVq6QZVtQ/ibM4As0+AoMgruI
-   Gk6C39CD0TVrbTNZBLopUL35+OA1ZBMg43/idcAKn2vOqIWHqp7AyxF7q
-   WXy+IHnkAjKoi8icvBaAff3zKFNEZqCCv1PvpMSLk/GRSIfZkvQvX1o9e
-   elbhS2z7glBWsHR0wUjWlwvyEF/GSCBOJI8VUWzZITDbM2ilEO3QJKBsx
-   2eY1Z49FeIb/j4lWfsAuG7vOUb2F50iGjCM0AISxBG+zRy+PJa/O6EVey
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="241809896"
-X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
-   d="scan'208";a="241809896"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 18:00:53 -0800
-X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
-   d="scan'208";a="619238323"
-Received: from xsang-optiplex-9020.sh.intel.com (HELO xsang-OptiPlex-9020) ([10.239.159.143])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 18:00:51 -0800
-Date:   Thu, 30 Dec 2021 10:00:44 +0800
-From:   Oliver Sang <oliver.sang@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        lkp@lists.01.org, lkp@intel.com
-Subject: Re: [rcutorture]  82e310033d:
- WARNING:possible_recursive_locking_detected
-Message-ID: <20211230020044.GA17043@xsang-OptiPlex-9020>
-References: <20211228151135.GB31268@xsang-OptiPlex-9020>
- <20211229000609.GY4109570@paulmck-ThinkPad-P17-Gen-1>
- <20211229140121.GA10390@xsang-OptiPlex-9020>
- <20211229172441.GA4109570@paulmck-ThinkPad-P17-Gen-1>
+        id S234397AbhL3CHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 21:07:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45934 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232768AbhL3CHT (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 21:07:19 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C22C061574;
+        Wed, 29 Dec 2021 18:07:19 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id bm14so92560111edb.5;
+        Wed, 29 Dec 2021 18:07:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eziAz//rm+zZdRMe0WOS4XNDD8RYDjBI6BCQOt1ypTk=;
+        b=hyudJDCbc80wPdgkm/SfS1OM+A0WKzuFaNGytS4b7WM3XABpQgK0Mhql4bzvoP8V6h
+         nP3pF996IDP1yYRpOcEi+OeEr5OGOOUBjT6BJrSXYgQjdca/kYZ4mm8sqDc/HAu9leaa
+         GFXj2QStD32fPQGyEpCgqnGiNCznoQNhPNjujanokAzCqZaKvEs6PEuqWiJrkWEl4DnY
+         fmFk4fdkbX2YcazMT6A7Q44AdRseVaKIQzMehKEjGjfOG6UN4fcizMzUfCykCUQD/rjl
+         VG9czivxN2NUi2LxJzrejxRDeLOFWOiUyaEFZ25vBCJq6mIuWDawkKM/u9Wy/4DpofcK
+         dsSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eziAz//rm+zZdRMe0WOS4XNDD8RYDjBI6BCQOt1ypTk=;
+        b=6yFK5dzT+NYEaeLdO+c4Tp4tEYxbx0Yt0Q31Zch+j4qDP/XufffZb/xnWbap6UEvf9
+         rYRjx9wGyHAucbIGOmEdDhDhMrZXLrg8FOwwklh7c8lsFTVqSdgFN5HOO9BG7Lwwxzks
+         rHjACtDx2r651DfkukDwZtaiTaxh2dpMbxqaMFkOdTSRPS+vJP4tHeVAO/bq0QEcnmox
+         PL0OP5/eJGsToh1Eje41/RZb/FU0isFllU1zSBnH2qU/vKHQz6yZzOxlqHOxvpu2DdSw
+         TgZBqKh30q2Vfc6eqln6+6wpiTjoKXGnaejf6hbcasWiJADrJJLsvPX+u4cYxep9BKoc
+         wf7g==
+X-Gm-Message-State: AOAM533Seg5TAPBeOGNB2L20ghGOZyrcaW6Q8/GO5RUFcexZQIGljlEk
+        lx5107d8O28HMcolgThQKEmabLQc/Sx4SZDL/c4=
+X-Google-Smtp-Source: ABdhPJw8+6Pp2hwBakFvTsIDO39nr/VX1akYVyLw1MK4MQdVxtjlkcOksCyYbGXStTKVcWdp6gKbDA6CeCQQA/Xs7fc=
+X-Received: by 2002:a17:906:c156:: with SMTP id dp22mr24106682ejc.109.1640830037878;
+ Wed, 29 Dec 2021 18:07:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211229172441.GA4109570@paulmck-ThinkPad-P17-Gen-1>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20211229113256.299024-1-imagedong@tencent.com> <CAADnVQLY2i+2YTj+Oi7+70e98sRC-t6rr536sc=3WYghpki+ug@mail.gmail.com>
+In-Reply-To: <CAADnVQLY2i+2YTj+Oi7+70e98sRC-t6rr536sc=3WYghpki+ug@mail.gmail.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Thu, 30 Dec 2021 10:04:08 +0800
+Message-ID: <CADxym3Ya-=_zknyJmrQZ-fBKTK_PfPX1Njd=3pqYZR0_B8erJg@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: bpf: add hook for close of tcp timewait sock
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi Paul,
+On Thu, Dec 30, 2021 at 12:46 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Dec 29, 2021 at 3:33 AM <menglong8.dong@gmail.com> wrote:
+> >
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > The cgroup eBPF attach type 'CGROUP_SOCK_OPS' is able to monitor the
+> > state change of a tcp connect with 'BPF_SOCK_OPS_STATE_CB' ops.
+> >
+> > However, it can't trace the whole state change of a tcp connect. While
+> > a connect becomes 'TCP_TIME_WAIT' state, this sock will be release and
+> > a tw sock will be created. While tcp sock release, 'TCP_CLOSE' state
+> > change will be passed to eBPF program. Howeven, the real state of this
+> > connect is 'TCP_TIME_WAIT'.
+> >
+> > To make eBPF get the real state change of a tcp connect, add
+> > 'CGROUP_TWSK_CLOSE' cgroup attach type, which will be called when
+> > tw sock release and tcp connect become CLOSE.
+>
+> The use case is not explained.
 
-On Wed, Dec 29, 2021 at 09:24:41AM -0800, Paul E. McKenney wrote:
-> On Wed, Dec 29, 2021 at 10:01:21PM +0800, Oliver Sang wrote:
-> > hi Paul,
-> > 
-> > we applied below patch upon next-20211224,
-> > confirmed no "WARNING:possible_recursive_locking_detected" after patch.
-> > 
-> 
-> Good to hear!  May I add your Tested-by?
+Sorry for the absence of use cases and selftests. In my case, it is for NAT of
+a docker container.
 
-sure (:
+Simply speaking, I'll add an element to a hash map during sys_connect() with
+'BPF_SOCK_OPS_TCP_CONNECT_CB' ops of 'BPF_CGROUP_SOCK_OPS'
+cgroup attach type. Therefore, the received packet of the host can do DNAT
+according to the hash map.
 
-Tested-by: Oliver Sang <oliver.sang@intel.com>
+I need to release the element in the hashmap when the connection closes.
+With the help of 'BPF_SOCK_OPS_STATE_CB', I can monitor the TCP_CLOSE
+of the connection. However, as I mentioned above, it doesn't work well when
+it comes to tw sock. When the connect become 'FIN_WAIT2' or 'TIME_WAIT',
+the state of the tcp sock becomes 'TCP_CLOSE', which doesn't match the connect
+state. Therefore, the 'fin' packet that the host received can't be DNAT, as the
+element is already removed.
 
-> 
-> Many of the remainder appear to be due to memory exhaustion, FWIW.
+In this patch, BPF_SOCK_OPS_TW_CLOSE_FLAG is introduced, which is used
+make 'BPF_SOCK_OPS_STATE_CB' not called when this sock becomes
+TCP_CLOSE if it is being replaced with a tw sock.
 
-thanks for information
+> Why bpf tracing cannot be used to achieve the same?
 
-> 
-> 							Thanx, Paul
-> 
-> > > ------------------------------------------------------------------------
-> > > 
-> > > commit dd47cbdcc2f72ba3df1248fb7fe210acca18d09c
-> > > Author: Paul E. McKenney <paulmck@kernel.org>
-> > > Date:   Tue Dec 28 15:59:38 2021 -0800
-> > > 
-> > >     rcutorture: Fix rcu_fwd_mutex deadlock
-> > >     
-> > >     The rcu_torture_fwd_cb_hist() function acquires rcu_fwd_mutex, but is
-> > >     invoked from rcutorture_oom_notify() function, which hold this same
-> > >     mutex across this call.  This commit fixes the resulting deadlock.
-> > >     
-> > >     Reported-by: kernel test robot <oliver.sang@intel.com>
-> > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > > 
-> > > diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-> > > index 918a2ea34ba13..9190dce686208 100644
-> > > --- a/kernel/rcu/rcutorture.c
-> > > +++ b/kernel/rcu/rcutorture.c
-> > > @@ -2184,7 +2184,6 @@ static void rcu_torture_fwd_cb_hist(struct rcu_fwd *rfp)
-> > >  	for (i = ARRAY_SIZE(rfp->n_launders_hist) - 1; i > 0; i--)
-> > >  		if (rfp->n_launders_hist[i].n_launders > 0)
-> > >  			break;
-> > > -	mutex_lock(&rcu_fwd_mutex); // Serialize histograms.
-> > >  	pr_alert("%s: Callback-invocation histogram %d (duration %lu jiffies):",
-> > >  		 __func__, rfp->rcu_fwd_id, jiffies - rfp->rcu_fwd_startat);
-> > >  	gps_old = rfp->rcu_launder_gp_seq_start;
-> > > @@ -2197,7 +2196,6 @@ static void rcu_torture_fwd_cb_hist(struct rcu_fwd *rfp)
-> > >  		gps_old = gps;
-> > >  	}
-> > >  	pr_cont("\n");
-> > > -	mutex_unlock(&rcu_fwd_mutex);
-> > >  }
-> > >  
-> > >  /* Callback function for continuous-flood RCU callbacks. */
-> > > @@ -2435,7 +2433,9 @@ static void rcu_torture_fwd_prog_cr(struct rcu_fwd *rfp)
-> > >  			 n_launders, n_launders_sa,
-> > >  			 n_max_gps, n_max_cbs, cver, gps);
-> > >  		atomic_long_add(n_max_cbs, &rcu_fwd_max_cbs);
-> > > +		mutex_lock(&rcu_fwd_mutex); // Serialize histograms.
-> > >  		rcu_torture_fwd_cb_hist(rfp);
-> > > +		mutex_unlock(&rcu_fwd_mutex);
-> > >  	}
-> > >  	schedule_timeout_uninterruptible(HZ); /* Let CBs drain. */
-> > >  	tick_dep_clear_task(current, TICK_DEP_BIT_RCU);
+En...do you mean kprobe based eBPF trace? It can work, but I don't think it's
+high-performance, especially for network NAT. Strictly speaking, attach types,
+such as 'CGROUP_INET_SOCK_RELEASE', can be replaced by bpf tracing, but
+they exist out of performance.
+
+Thanks!
+Menglong Dong
+
+>
+> Also there are no selftests.

@@ -2,115 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8303481EA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 18:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C20481EC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 18:50:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240372AbhL3RgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 12:36:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
+        id S241488AbhL3Ruq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 12:50:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbhL3RgX (ORCPT
+        with ESMTP id S229914AbhL3Rup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 12:36:23 -0500
-Received: from a3.inai.de (a3.inai.de [IPv6:2a01:4f8:10b:45d8::f5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE677C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 09:36:22 -0800 (PST)
-Received: by a3.inai.de (Postfix, from userid 25121)
-        id 19DF358726E3A; Thu, 30 Dec 2021 18:36:21 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by a3.inai.de (Postfix) with ESMTP id 0434C60BF8381;
-        Thu, 30 Dec 2021 18:36:21 +0100 (CET)
-Date:   Thu, 30 Dec 2021 18:36:20 +0100 (CET)
-From:   Jan Engelhardt <jengelh@inai.de>
-To:     Greg KH <gregkh@linuxfoundation.org>
-cc:     linux-kernel@vger.kernel.org, tkjos@android.com
-Subject: Re: [PATCH] android: use "menuconfig" menu entry type for
- CONFIG_ANDROID
-In-Reply-To: <Yc3lLpYKXl0MAEoO@kroah.com>
-Message-ID: <o0173nqs-17o2-s745-s2p-8q1q371r36r0@vanv.qr>
-References: <20211230145002.7120-1-jengelh@inai.de> <Yc3lLpYKXl0MAEoO@kroah.com>
-User-Agent: Alpine 2.25 (LSU 592 2021-09-18)
+        Thu, 30 Dec 2021 12:50:45 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E29C061574;
+        Thu, 30 Dec 2021 09:50:45 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id b22so21904483pfb.5;
+        Thu, 30 Dec 2021 09:50:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XD1PBLWCU+Wd5wgLSL4PPf6wiHtTvn/c3ckq8ac1Qlo=;
+        b=iZcBNzqqZEPdGcPvtFpJW1L763zW4VB2am4IknSlJpiW4SDwYbEGbgyfSVAFiFc+Ij
+         Pna+3VXxavyn6t28BGKwHaS62q5ekLcF6zQZVTxSoEK0bJr0+W1Pu4+mNTZ9/BWl80oL
+         R/a0Pa2Beobu8zOk/RHvywQBGJf4sG0ZDtbao6iWeT4uyLnR7AfV7ic3TyqtyazRRmeI
+         44Nk5XfEWItfDBSef5B6dNeH1UNMA4JRHMOzSO0+PkfLNohqtezZKFrXScvRQoRTRCCk
+         dZM6UCdwaiBn7TQOqzzW+6OqesV9WC4YmJ0IgXXQmvQl7WohaGxz32VRbrVV7JsmLAwI
+         uj2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XD1PBLWCU+Wd5wgLSL4PPf6wiHtTvn/c3ckq8ac1Qlo=;
+        b=o0XXgpzgykVHXcAOeCRJYaCy/413CtoPQ21zrkTNcXIFWA+fIne15IJ0kKUJ7SLsfe
+         ftC6MlxKPOhkK2Ie1LplxC+ihJV72Kbt0Lua7wL/zxY1XRLiNCXMPQx3Vi0linAzMnF6
+         bBuj5BrPXDc6nhYnMwiQ1LwTI9CZZgE6Ni2bNbDaMph1O3gT13mT+8gwk1EEgf7Fe6zb
+         I3Z0sC/8EH+dp89EBop9401Mv0IT2h7oVi6XN1MAtiOD+svYXH2P+JG6zyeOWGYQn6w5
+         RVyXcjDe3ihEYfCtvDBoFIckUZoMjuS7cSNirDjQ7lRyy55pIxksSYg66EikNmEoshY1
+         0nPQ==
+X-Gm-Message-State: AOAM532oKIkd8um1m9oCHwBIpbUsZTiiQSjVXYy/HT6z2NwDb+6oQQkD
+        KgRbh6DaSl9rHwYulPbVvLk=
+X-Google-Smtp-Source: ABdhPJxmUXSCIaytsRADgXQo1VF1eD7leC83pLPvYJ6+CAc5oCVzJZ0wmSppKXiZEO3+vSCpQtUVkA==
+X-Received: by 2002:a63:b34c:: with SMTP id x12mr17059473pgt.541.1640886644567;
+        Thu, 30 Dec 2021 09:50:44 -0800 (PST)
+Received: from integral2.. ([180.254.126.2])
+        by smtp.gmail.com with ESMTPSA id s34sm29980811pfg.198.2021.12.30.09.50.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Dec 2021 09:50:44 -0800 (PST)
+From:   Ammar Faizi <ammarfaizi2@gmail.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     io-uring Mailing List <io-uring@vger.kernel.org>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ammar Faizi <ammarfaizi2@gmail.com>,
+        Nugra <richiisei@gmail.com>
+Subject: [RFC PATCH liburing v1 0/5] liburing: Add sendto(2) and recvfrom(2) support
+Date:   Fri, 31 Dec 2021 00:50:14 +0700
+Message-Id: <20211230174548.178641-1-ammar.faizi@intel.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On Thursday 2021-12-30 17:58, Greg KH wrote:
->On Thu, Dec 30, 2021 at 03:50:02PM +0100, Jan Engelhardt wrote:
->> Allow disabling the Android driver section from within the Device
->> Drivers submenu, without having to descend into the Android drivers
->> submenu first.
+I submitted an RFC patchset to add sendto(2) and recvfrom(2) support
+for io_uring. This RFC patchset adds the support for the liburing.
 
->> -config ANDROID
->> +menuconfig ANDROID
->
->But, when you do this, you loose these lines from the .config file,
->resulting in this diff in the file:
->
->-#
->-# Android
->-#
-> CONFIG_ANDROID=y
-> CONFIG_ANDROID_BINDER_IPC=y
-> CONFIG_ANDROID_BINDERFS=y
-> CONFIG_ANDROID_BINDER_DEVICES="binder"
-> CONFIG_ANDROID_BINDER_IPC_SELFTEST=y
->-# end of Android
->-
->
->Is that really a good idea?
+There are 5 patches in this series. 4 from me. 1 from Nugra.
+
+For PATCH 1/5, it is just a .gitignore clean up.
+
+## Changes Summary
+ - Update io_uring.h header (sync with the kernel).
+
+ - Add `io_uring_prep_{sendto,sendto}` functions.
+
+ - Add test program for `IORING_OP_SENDTO` and `IORING_OP_RECVFROM`.
+
+ - Add documentation for `io_uring_prep_{sendto,sendto}` functions.
 
 
-Humour me - what information did "# Android" convey
-that CONFIG_ANDROID= didn't already?
+## How to test
+
+This patchset is based on branch "xattr-getdents64" commit:
+
+  18d71076f6c97e1b25aa0e3b0e12a913ec4717fa ("src/include/liburing.h: style cleanups")
 
 
->What's the default these days?
+Signed-off-by: Nugra <richiisei@gmail.com>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gmail.com>
+---
 
-There isn't really a default. When someone edits a Kconfig file to
-add options for a new knob, they have to decide for one or the other.
-At worst, they'll just copy from some other Kconfig file or the
-documentation without making a conscious decision.
+Ammar Faizi (4):
+  .gitignore: Add `/test/xattr` and `/test/getdents`
+  io_uring.h: Add `IORING_OP_SENDTO` and `IORING_OP_RECVFROM`
+  liburing.h: Add `io_uring_prep_{sendto,sendto}` helper
+  test: Add sendto_recvfrom test program
 
-As you can see in the Device Drivers menu when running the `make 
-menuconfig` command, it's a mix, but with a clear tendency to go with 
-the menuconfig type. We used to have much less menuconfig-type options 
-in the olden days of 2.4.x or so. I would therefore make the case that, 
-on the whole, menuconfig-typed options are/should be used whenever 
-possible.
+Nugra (1):
+  man: Add `io_uring_prep_{sendto,recvfrom}` docs
 
-
-  -*- PPS support  --->
-      PTP clock support  --->
-  [ ] Pin controllers  ----
-  [ ] GPIO Support  ----
-  < > Dallas's 1-wire support  ----
-  [ ] Board level reset or power off  ----
-  -*- Power supply class support  --->
-  -*- Hardware Monitoring support  --->
-  -*- Thermal drivers  --->
-  [*] Watchdog Timer Support  --->
-  < > Sonics Silicon Backplane support  ----
-  < > Broadcom specific AMBA  ----
-      Multifunction device drivers  --->
-  [ ] Voltage and Current Regulator Support  ----
-  < > Remote Controller support  ----
-      CEC support  --->
-  < > Multimedia support  ----
-      Graphics support  --->
-  <*> Sound card support  --->
-
-There's just no GPIO, W1 or SSB in most contemporary desktop and
-laptop x86s for example, and servers generally come without sound, so
-it's nice to just hit {N DOWN}*.. quickly rather than having to
-{ENTER N RIGHT ENTER DOWN}* to disable driver categories.
+ .gitignore                      |   3 +
+ man/io_uring_prep_recvfrom.3    |  33 +++
+ man/io_uring_prep_sendto.3      |  34 +++
+ src/include/liburing.h          |  22 ++
+ src/include/liburing/io_uring.h |   2 +
+ test/Makefile                   |   2 +
+ test/sendto_recvfrom.c          | 384 ++++++++++++++++++++++++++++++++
+ 7 files changed, 480 insertions(+)
+ create mode 100644 man/io_uring_prep_recvfrom.3
+ create mode 100644 man/io_uring_prep_sendto.3
+ create mode 100644 test/sendto_recvfrom.c
 
 
->Also, to be pedantic, this is a [v2] patch, right?  :)
+base-commit: 18d71076f6c97e1b25aa0e3b0e12a913ec4717fa
+-- 
+2.32.0
 
-Sorry, I have been working too long with sites like github et al
-where diff -p0/p1 does not play a role (since one is sending commits
-not diffs), nor version markers are needed (an update will simply be
-appended to the end of a ticket/PR).

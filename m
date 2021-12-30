@@ -2,73 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A599481BF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 13:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B2F481BFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 13:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239163AbhL3MS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 07:18:56 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40190 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbhL3MSz (ORCPT
+        id S239200AbhL3MTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 07:19:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229463AbhL3MTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 07:18:55 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 30 Dec 2021 07:19:32 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38D7C061574;
+        Thu, 30 Dec 2021 04:19:31 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA2BB61696;
-        Thu, 30 Dec 2021 12:18:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7932BC36AEA;
-        Thu, 30 Dec 2021 12:18:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640866733;
-        bh=ZmhNNEovTSCg7JZmbQ+oNEu/8HfxroskblP4ABJoAi0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C678eFJzgcBh8duCr707xJdUo1E70QEyS66Zrvk2RR5z8mCcDJVbzg9fkU5rnf9Kp
-         gUeSHcSEXLBQnYif8qUdi5YK8tuY+YbF5bmTfDxe9i4fbRR9u/Lw5mnHD/7s4gKw8y
-         CD7DOJJHstykreXXRTe18ab9HfB2StCj+HpxA5Bs=
-Date:   Thu, 30 Dec 2021 13:18:50 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     hammer hsieh <hammerh0314@gmail.com>
-Cc:     robh+dt@kernel.org, linux-serial@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jirislaby@kernel.org, p.zabel@pengutronix.de, wells.lu@sunplus.com,
-        Hammer Hsieh <hammer.hsieh@sunplus.com>
-Subject: Re: [PATCH v5 2/2] serial:sunplus-uart:Add Sunplus SoC UART Driver
-Message-ID: <Yc2jqlV8LDR56oxy@kroah.com>
-References: <1639379407-28607-1-git-send-email-hammer.hsieh@sunplus.com>
- <1639379407-28607-3-git-send-email-hammer.hsieh@sunplus.com>
- <YcCmaJkeKy+R0mhF@kroah.com>
- <CAOX-t54j9=7eLMAx4n-ngiNdM=Ab=YcK-zdxRW88e41cPS=46Q@mail.gmail.com>
- <YcGOmzKSHOoycZNC@kroah.com>
- <CAOX-t55fBM7u3qZm7ubLANDnWNFhCiBXB29v00racWd-gy3OgA@mail.gmail.com>
- <YcWL4c0e02mzETMp@kroah.com>
- <CAOX-t557bRfBk0+ixH_zXkxpt54cf96vNc1Fq7yNejVLOrc--g@mail.gmail.com>
- <CAOX-t55bGWY99r0=SYcMgUBpSCHRznHk3KFrtScq9X_J+8boyw@mail.gmail.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C26D81EC052C;
+        Thu, 30 Dec 2021 13:19:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640866765;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=APH2/iSNCeAsFpqhV/dxY2RAhEU+c1m9FWSAYTvjChY=;
+        b=f7yWN15jxBzcx63Nm8aosfVRatqvTarqGLJIf/jooaBZfJnFsZHlCCHAgUBoNO0y/Safju
+        hhpgIms02bEXS/dMZjW2k4O8vui+SjAvGGlgSgHHFpq4akczJjcdZ3jGmmfTJM5M9KqIZT
+        EthJW3Ptis4tIl9mTFVv4d7q+xHtSkY=
+Date:   Thu, 30 Dec 2021 13:19:24 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v8 17/40] KVM: SVM: Create a separate mapping for the
+ SEV-ES save area
+Message-ID: <Yc2jzOunYej4vwSc@zn.tnic>
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-18-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAOX-t55bGWY99r0=SYcMgUBpSCHRznHk3KFrtScq9X_J+8boyw@mail.gmail.com>
+In-Reply-To: <20211210154332.11526-18-brijesh.singh@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 24, 2021 at 05:21:27PM +0800, hammer hsieh wrote:
-> Hi, Greg KH:
-> 
-> I am still not really understand why you said the driver looks like 8250.
-> SP7021 SoC have our own register define.
-> That's why we submit a new serial driver.
-> 
-> Refer to:
-> https://sunplus.atlassian.net/wiki/spaces/doc/pages/1873412290/13.+Universal+Asynchronous+Receiver+Transmitter+UART
+On Fri, Dec 10, 2021 at 09:43:09AM -0600, Brijesh Singh wrote:
+> +/* Save area definition for SEV-ES and SEV-SNP guests */
+> +struct sev_es_save_area {
 
-Odd, ok, I thought this was an 8250-like uart, why did they go and
-redesign all of the register values for something as well-known as a
-UART?
+I'd still call it sev_save_area for simplicity. And
+EXPECTED_SEV_SAVE_AREA_SIZE and so on.
 
-Anyway, I think you are right, please fix up the other issues and resend
-the driver and we will be glad to review it again.
+-- 
+Regards/Gruss,
+    Boris.
 
-thanks,
-
-greg k-h
+https://people.kernel.org/tglx/notes-about-netiquette

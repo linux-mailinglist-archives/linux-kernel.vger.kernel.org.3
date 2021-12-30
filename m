@@ -2,86 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9700E481E15
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:30:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E95481E18
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:31:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241278AbhL3Q3q convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Dec 2021 11:29:46 -0500
-Received: from mail-qk1-f174.google.com ([209.85.222.174]:33449 "EHLO
+        id S241289AbhL3QbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 11:31:01 -0500
+Received: from mail-qk1-f174.google.com ([209.85.222.174]:38712 "EHLO
         mail-qk1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239850AbhL3Q3p (ORCPT
+        with ESMTP id S239850AbhL3QbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 11:29:45 -0500
-Received: by mail-qk1-f174.google.com with SMTP id de30so23165074qkb.0;
-        Thu, 30 Dec 2021 08:29:44 -0800 (PST)
+        Thu, 30 Dec 2021 11:31:00 -0500
+Received: by mail-qk1-f174.google.com with SMTP id i187so20969837qkf.5;
+        Thu, 30 Dec 2021 08:31:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rIE0hD6v5+o3+ccVAghnpo8R1EgVOu3GGzhoi4/HkIo=;
-        b=HBRW/3ydmtof9tu1K6HDAatJkzfifYHtt0yEVF/SfJmV2Ox4ziC+ygzWC24/adycXI
-         MAorFZAG7rB1mapcg0juY9QQJJHXxasWW6JI0C1uvwTUEMGmzK+cpZUZ0lNNgMy2r7bU
-         OUgWgomTawJLHpryHLoRK06MDP50oVtP52h67Df+xfk7JVKuFocwGJxHlbKz8/y7FD7X
-         0IMzE94A/lR+n4YF8twD5uNrZHVs9lt82wViXaCox7wiftJlYIIm40tZTmjc6dCs1jYq
-         73LQPSI3wyWoVauYGC/0U5Smls9HsozhGG3mWCeWLU3OMsofDZ+ASg6la4k/YZc/3jMZ
-         4L1g==
-X-Gm-Message-State: AOAM532pnK/n/jc3ArYaYA0be9955z5URY7l2CZe3vZE7qF/Ts+L3zIA
-        FDTp1dcHJge4B3Bc0/caPKejD/y8kx8+RdHbRU4=
-X-Google-Smtp-Source: ABdhPJxdzkS1bQFm0Pe0d0VEkepbe2qMDW95s63oUGlvrYCMDpFeBVzMoZXxdCzPfU0KgR4hP6SJHWOOKX4yG1jypUY=
-X-Received: by 2002:a37:b702:: with SMTP id h2mr22394075qkf.135.1640881784332;
- Thu, 30 Dec 2021 08:29:44 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=9LlQF8MrlSTCG8lhWUSBO1XvMJHfGDeoUE+4aAQrtQA=;
+        b=rORK2AxMzpp5Nd9QuFl/7myTTA2GzMl9XiKq6DB7DlBLRE5mSGJH3aassDl5YHKp57
+         98Wwtl5sFm/+JSGJXjQp+EC7Y/yN0D+AE4vAGrPHIpmH/gQ16JyKwgs2Vb8itwSuxtZB
+         WcECdi+hQwVOR97znMpzA2fO7uDyF0e1HHZlDBqxscaAHVyo75S/YVrsjtJVuZMojBtb
+         0TtpxmEV+qHgA1oL/smaX7uPsQXi1aVh96BcNhxLZ6Ud8wzhYSumKWik0JOsNdGQnosB
+         Q1H9bLRkyxcZqCIyi4dI+qyT5JWv0cY8ftADBUQ0H/57YJputv5Y2LQeKMlTJ+hhJ8qB
+         FG9w==
+X-Gm-Message-State: AOAM530bb1MM/uMl9xI4fF7vrwgUxf6wprgSBA101XGVJfy6mL6w1DYD
+        o7TTs7j5WSm8plt3yEE3u7AYeoRW18aHVN6NoCAe5SKZPrc=
+X-Google-Smtp-Source: ABdhPJwZPzCkL7MZH2MxAuFHP7hcaxGDZlNeR97Vr+vof5HsOVtkbRnoKbJ+gekALjs8/TanT8I5JJOjGq25l1T2mrs=
+X-Received: by 2002:a05:620a:2001:: with SMTP id c1mr21983180qka.374.1640881859812;
+ Thu, 30 Dec 2021 08:30:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20211222212014.66971-1-linux@weissschuh.net> <31a528b8-8318-dc09-3a06-80f76771744a@redhat.com>
-In-Reply-To: <31a528b8-8318-dc09-3a06-80f76771744a@redhat.com>
+References: <20211224091458.693093-1-yinxiujiang@kylinos.cn>
+In-Reply-To: <20211224091458.693093-1-yinxiujiang@kylinos.cn>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 30 Dec 2021 17:29:33 +0100
-Message-ID: <CAJZ5v0jdJNh4QB=-=TCKPZNYnvREPKor+mMyyUZZP8GBMn-ZFQ@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: battery: Add the ThinkPad "Not Charging" quirk
-To:     Hans de Goede <hdegoede@redhat.com>,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+Date:   Thu, 30 Dec 2021 17:30:48 +0100
+Message-ID: <CAJZ5v0j1+p8E+BF_Ekmenpp+9WG7b3k5Y7YjyJzi7e+K1Nv2NQ@mail.gmail.com>
+Subject: Re: [PATCH] ACPICA: Remove initialization of static variables to 0
+To:     Yin Xiujiang <yinxiujiang@kylinos.cn>
+Cc:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
         Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ibm-acpi-devel@lists.sourceforge.net,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Mark Pearson <markpearson@lenovo.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Ognjen Galic <smclt30p@gmail.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Bastien Nocera <hadess@hadess.net>,
-        David Zeuthen <davidz@redhat.com>,
-        Richard Hughes <richard@hughsie.com>
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 5:36 PM Hans de Goede <hdegoede@redhat.com> wrote:
+On Fri, Dec 24, 2021 at 10:15 AM Yin Xiujiang <yinxiujiang@kylinos.cn> wrote:
 >
-> Hi Thomas,
+> Remove the initialization of three static variables to 0 which is
+> pointless
 >
-> On 12/22/21 22:20, Thomas Weißschuh wrote:
-> > The EC/ACPI firmware on Lenovo ThinkPads used to report a status
-> > of "Unknown" when the battery is between the charge start and
-> > charge stop thresholds. On Windows, it reports "Not Charging"
-> > so the quirk has been added to also report correctly.
-> >
-> > Now the "status" attribute returns "Not Charging" when the
-> > battery on ThinkPads is not physicaly charging.
-> >
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> Signed-off-by: Yin Xiujiang <yinxiujiang@kylinos.cn>
+> ---
+>  drivers/acpi/acpica/dbhistry.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >
-> Thanks, patch looks good to me.
+> diff --git a/drivers/acpi/acpica/dbhistry.c b/drivers/acpi/acpica/dbhistry.c
+> index fd813c5d3952..60b77b11c0f2 100644
+> --- a/drivers/acpi/acpica/dbhistry.c
+> +++ b/drivers/acpi/acpica/dbhistry.c
+> @@ -24,9 +24,9 @@ typedef struct history_info {
+>  } HISTORY_INFO;
 >
-> As for the userspace issues in dealing with the
-> POWER_SUPPLY_STATUS_NOT_CHARGING status, those indeed
-> have long been fixed and this status is already returned
-> acpi//battery.c from the acpi_battery_handle_discharging()
-> function for a while no; and we have had no complaints
-> about that:
+>  static HISTORY_INFO acpi_gbl_history_buffer[HISTORY_SIZE];
+> -static u16 acpi_gbl_lo_history = 0;
+> -static u16 acpi_gbl_num_history = 0;
+> -static u16 acpi_gbl_next_history_index = 0;
+> +static u16 acpi_gbl_lo_history;
+> +static u16 acpi_gbl_num_history;
+> +static u16 acpi_gbl_next_history_index;
 >
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+>  /*******************************************************************************
+>   *
+> --
 
-Applied as 5.17 material, thanks!
+This is ACPICA material, so please submit it to the upstream ACPICA
+project via https://github.com/acpica/acpica/
+
+Thanks!

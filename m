@@ -2,77 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F20481863
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:12:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9953481866
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:12:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234401AbhL3CMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 21:12:02 -0500
-Received: from smtp23.cstnet.cn ([159.226.251.23]:50512 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232758AbhL3CMB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 21:12:01 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowAA3UJJaFc1hMUHlBA--.8478S2;
-        Thu, 30 Dec 2021 10:11:39 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     yokota@netlab.is.tsukuba.ac.jp, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] scsi: nsp_cs: Check of ioremap return value
-Date:   Thu, 30 Dec 2021 10:11:37 +0800
-Message-Id: <20211230021137.1823352-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S234435AbhL3CM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 21:12:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232758AbhL3CM1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 21:12:27 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773EBC061574;
+        Wed, 29 Dec 2021 18:12:27 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so21330681pjf.3;
+        Wed, 29 Dec 2021 18:12:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=P7pjKssQQLwhAkIor5tG8npn/57O5TDUpvN25CBe8Ds=;
+        b=DG+L6db+rogMzNUe1DGlz2X7K5Lmp9Hmx5UQ/WSKS65sf6fIRLpzUQ2VpWwAjRO07y
+         ahnHkKmUmR10trSUjE49cKU7zrUpbymStqJ772CSzXxn9QRBpj+1mT9k81XEX9LNecmd
+         kpYzW5mW+FNCqmk41s+x9OJ6yxfs5zOmK6rDa100TAIrnDxYq1PNXzrQ1rWrt/wdjN8/
+         44euohhpCNcN6Nn7i5YX2tI4wzKFN3u0yVE1d2WkWPPbxGlf8Ef87Mh/qd+0/vZBSOw3
+         FRcIVUVDwr+KOAiZHSzhEDQjup6+oGBY+2yM0qWgsavtB9ehbAvwvQf/5N4FCRwO/AEg
+         y4bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=P7pjKssQQLwhAkIor5tG8npn/57O5TDUpvN25CBe8Ds=;
+        b=XfkUEY73XXpIsBzouoZgp1+LU0ZYgd75ysX2fdtmSboPWnQDtFrddFttJ2/wikbIvs
+         xqNj3of9HYbmj4MqbHS56UMx3Gf8O0jGDtF2WrXF94sHOfSpPQBIuGMTAZ8Puj0pdlGr
+         bLhXht7vFPfQSWhHvnKodXAXa1++Pv5qMOpAJomrdDUfEBDzCbNrPxxrDPmD2iwKklno
+         2F/alS0NU884crjjXhTKC6s+7sDn4E9KEgaFfSz6lUxI08csxa00HMvH91HfQjCyPKxR
+         wYq+DrAW8/SLpOAUN6KnPNl654pKxzRrm5TKjkSFcX8xzHXSYD/bAXgwXWpv983Hgvkt
+         VycQ==
+X-Gm-Message-State: AOAM532Mq/m2MNxGbm+13BA0SPjDiH4poOFlgvfq2M6ADEIJv0zuxkNn
+        8260lYHOsaEnI+mn/8+3GuUOFgBH6GNqkNOyr7/nk7I+
+X-Google-Smtp-Source: ABdhPJwSKttGjrXE/JJj9gbIMHr8nf9eadTeXoh+6rS7zqsFe+rdEa5+t3933jq5DEd3KhGhr4hbe6yuJ9OGbLqHfXc=
+X-Received: by 2002:a17:902:c443:b0:148:f689:d924 with SMTP id
+ m3-20020a170902c44300b00148f689d924mr29114288plm.78.1640830346345; Wed, 29
+ Dec 2021 18:12:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowAA3UJJaFc1hMUHlBA--.8478S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7GF47JF1rZFyfJryDWF17Wrg_yoWDJrb_ua
-        yj9347JrZxWr10kw17Jr4SkryYyFZ8ZF1q9FyrKFyY939rZF1UCF18Xwn8Wwnru398Ja4D
-        WwsFqF1rAw13AjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb48FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
-        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4U
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbYhF7UUUU
-        U==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+References: <20211229113256.299024-1-imagedong@tencent.com>
+ <CAADnVQLY2i+2YTj+Oi7+70e98sRC-t6rr536sc=3WYghpki+ug@mail.gmail.com> <CADxym3Ya-=_zknyJmrQZ-fBKTK_PfPX1Njd=3pqYZR0_B8erJg@mail.gmail.com>
+In-Reply-To: <CADxym3Ya-=_zknyJmrQZ-fBKTK_PfPX1Njd=3pqYZR0_B8erJg@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 29 Dec 2021 18:12:15 -0800
+Message-ID: <CAADnVQK6FTp1wACyhH0bNztT73DDr_wbCMbj7GorLRrOOQB2SA@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: bpf: add hook for close of tcp timewait sock
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the possible failure of the ioremap(), the 'data->MmioAddress' could
-be NULL.
-Therefore it should be better to check it in order to transfer the
-error.
+On Wed, Dec 29, 2021 at 6:07 PM Menglong Dong <menglong8.dong@gmail.com> wrote:
+>
+> On Thu, Dec 30, 2021 at 12:46 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Wed, Dec 29, 2021 at 3:33 AM <menglong8.dong@gmail.com> wrote:
+> > >
+> > > From: Menglong Dong <imagedong@tencent.com>
+> > >
+> > > The cgroup eBPF attach type 'CGROUP_SOCK_OPS' is able to monitor the
+> > > state change of a tcp connect with 'BPF_SOCK_OPS_STATE_CB' ops.
+> > >
+> > > However, it can't trace the whole state change of a tcp connect. While
+> > > a connect becomes 'TCP_TIME_WAIT' state, this sock will be release and
+> > > a tw sock will be created. While tcp sock release, 'TCP_CLOSE' state
+> > > change will be passed to eBPF program. Howeven, the real state of this
+> > > connect is 'TCP_TIME_WAIT'.
+> > >
+> > > To make eBPF get the real state change of a tcp connect, add
+> > > 'CGROUP_TWSK_CLOSE' cgroup attach type, which will be called when
+> > > tw sock release and tcp connect become CLOSE.
+> >
+> > The use case is not explained.
+>
+> Sorry for the absence of use cases and selftests. In my case, it is for NAT of
+> a docker container.
+>
+> Simply speaking, I'll add an element to a hash map during sys_connect() with
+> 'BPF_SOCK_OPS_TCP_CONNECT_CB' ops of 'BPF_CGROUP_SOCK_OPS'
+> cgroup attach type. Therefore, the received packet of the host can do DNAT
+> according to the hash map.
+>
+> I need to release the element in the hashmap when the connection closes.
+> With the help of 'BPF_SOCK_OPS_STATE_CB', I can monitor the TCP_CLOSE
+> of the connection. However, as I mentioned above, it doesn't work well when
+> it comes to tw sock. When the connect become 'FIN_WAIT2' or 'TIME_WAIT',
+> the state of the tcp sock becomes 'TCP_CLOSE', which doesn't match the connect
+> state. Therefore, the 'fin' packet that the host received can't be DNAT, as the
+> element is already removed.
+>
+> In this patch, BPF_SOCK_OPS_TW_CLOSE_FLAG is introduced, which is used
+> make 'BPF_SOCK_OPS_STATE_CB' not called when this sock becomes
+> TCP_CLOSE if it is being replaced with a tw sock.
+>
+> > Why bpf tracing cannot be used to achieve the same?
+>
+> En...do you mean kprobe based eBPF trace? It can work, but I don't think it's
+> high-performance, especially for network NAT. Strictly speaking, attach types,
+> such as 'CGROUP_INET_SOCK_RELEASE', can be replaced by bpf tracing, but
+> they exist out of performance.
 
-Fixes: 0e6f9d270840 ("pcmcia: use pcmcia_loop_config in scsi pcmcia drivers")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/scsi/pcmcia/nsp_cs.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/scsi/pcmcia/nsp_cs.c b/drivers/scsi/pcmcia/nsp_cs.c
-index ac89002646a3..bcd61439ca3f 100644
---- a/drivers/scsi/pcmcia/nsp_cs.c
-+++ b/drivers/scsi/pcmcia/nsp_cs.c
-@@ -1560,6 +1560,9 @@ static int nsp_cs_config_check(struct pcmcia_device *p_dev, void *priv_data)
- 		data->MmioAddress = (unsigned long)
- 			ioremap(p_dev->resource[2]->start,
- 					resource_size(p_dev->resource[2]));
-+		if (!data->MmioAddress)
-+			goto next_entry;
-+
- 		data->MmioLength  = resource_size(p_dev->resource[2]);
- 	}
- 	/* If we got this far, we're cool! */
--- 
-2.25.1
-
+kprobe at the entry is pretty fast.
+fentry is even faster. It's actually faster than cgroup based hook.
+Give it a shot.

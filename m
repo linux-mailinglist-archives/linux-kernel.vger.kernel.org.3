@@ -2,104 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81707481DA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE9E481DA5
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:14:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237896AbhL3PNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 10:13:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
+        id S236602AbhL3POs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 10:14:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235850AbhL3PNO (ORCPT
+        with ESMTP id S238268AbhL3POg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 10:13:14 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBE2C061574;
-        Thu, 30 Dec 2021 07:13:14 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso13478988wme.1;
-        Thu, 30 Dec 2021 07:13:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=BrOBt56bIUGwhax4+hkiSfB9eBwZpxmU8jWPncxv4xY=;
-        b=mdcO0u7q512tAOfsTZd7cVP+9FoqU2UTTHPO+Yo/IGSV0jpo3V6ocoJcpfqVC+FqVq
-         Y/R2IMnisigM9OZSRq5m8cMI7UyxCzpEuwJlZjzD5I47qKBijMd0cTgW8YdmGvwqGIgG
-         LwR00rdl+w0+6VoEoFxks9NrghoH8gzJl2c9Dh3417RDCUfH9BARG/IJnJfzaTAntEg/
-         CYUuZhMWbhoQqgpxKCsVWyAdkttIQD7uzWMV74baJmOu3o7+kEPwlbuTYOZNTQcs/XG3
-         ICfmjodf46LaSnfOU3e9lZLYnTXzYhDprLDPs755K6R3tRfUNrteJoBN+1Tea/4Qukih
-         upXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BrOBt56bIUGwhax4+hkiSfB9eBwZpxmU8jWPncxv4xY=;
-        b=tsQ47yVVoRPoGF44vIIAr0q2FRgdCOWQ9LY8wnIOfFcT5AfQ3QR4qyVrRNHjy76s59
-         8YOoiU57MXOh5JubV4o7JhsZBnnLkpZUG3kJ/gVFgL59NQgKTLZp7dAg2OFiIQfmJyw2
-         VqUYzc++V+DQqKjNVRbVPsLiMQgzMZiMrklMOftN+rhXZGYQGLNMswXQwYtIYUSEeD+1
-         aW/+WPcVsu0H0AMrLNhzAB1tOlpAW2X0fpO8/R1dF6Rl9JpA8HIbK1L0+pbESmhzlrOl
-         JygDhNd+2tzpm/QqakARpwMgda+dW9lENOAX8ndfke5yTHLunxHoXCjuq+JZqYfFUMUZ
-         P8vg==
-X-Gm-Message-State: AOAM533ILkJTFWHgOK1OaVUKCqzbbMPkXt1vvz8G7cjPrbVyZ1JwORC9
-        o8jYQ2R8NNSASH/X6RrDGvg=
-X-Google-Smtp-Source: ABdhPJz6Ivr54shp46pcRY+QQqmJl5qUd/LY3TzF+V+pjZDP3U8afmIJ+avvhxp005UdEO/5axkTJw==
-X-Received: by 2002:a1c:20c2:: with SMTP id g185mr26301905wmg.115.1640877192898;
-        Thu, 30 Dec 2021 07:13:12 -0800 (PST)
-Received: from [192.168.1.145] ([207.188.161.251])
-        by smtp.gmail.com with ESMTPSA id bg19sm2589127wmb.47.2021.12.30.07.13.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Dec 2021 07:13:12 -0800 (PST)
-Message-ID: <fff75b65-51ab-cafd-a55f-137c0b7c2dc6@gmail.com>
-Date:   Thu, 30 Dec 2021 16:13:10 +0100
+        Thu, 30 Dec 2021 10:14:36 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECE2C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 07:14:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 16D8CCE1B46
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 15:14:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5416C36AE9;
+        Thu, 30 Dec 2021 15:14:31 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LF4M46wN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1640877270;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zdbA0Hsu5ryhLBoli668XmIwiPO+05SUxB0kHmOmCZk=;
+        b=LF4M46wN+worctF6fW47I7Ip5bTj/DQHGoInxO1aoVpwGQMgZ55W07JwkCMwhy9DsXHDeW
+        qVGmjwr6SopoR/7CRufuvnEKG/SO4iTlkX80KBCky0JYVnefJyzRtqb1SGzlLKo+uxLT5W
+        vm9ABG8gM4jdNC+oUXpKeDA7LmxK6D8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 21538bc9 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 30 Dec 2021 15:14:30 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Dominik Brodowski <linux@dominikbrodowski.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH] random: use IS_ENABLED(CONFIG_NUMA) instead of ifdefs
+Date:   Thu, 30 Dec 2021 16:14:10 +0100
+Message-Id: <20211230151410.618383-1-Jason@zx2c4.com>
+In-Reply-To: <CAHmME9ppDKOSMeMFjMr1XAt8_8kSSUpUWS1vL2yeZjb27=ePhw@mail.gmail.com>
+References: <CAHmME9ppDKOSMeMFjMr1XAt8_8kSSUpUWS1vL2yeZjb27=ePhw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v20 0/7] soc: mediatek: SVS: introduce MTK SVS engine
-Content-Language: en-US
-To:     Roger Lu <roger.lu@mediatek.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Guenter Roeck <linux@roeck-us.net>
-References: <20210721070904.15636-1-roger.lu@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20210721070904.15636-1-roger.lu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger,
+Rather than an awkward combination of ifdefs and __maybe_unused, we can
+ensure more source gets parsed, regardless of the configuration, by
+using IS_ENABLED for the CONFIG_NUMA conditional code. This makes things
+cleaner and easier to follow.
 
-On 21/07/2021 09:08, Roger Lu wrote:
-> 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
-> 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
-> After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
-> 3. SVS dts refers to reset controller [4] to help reset SVS HW.
-> 
-> #mt8183 SVS related patches
-> [1] https://patchwork.kernel.org/patch/11193513/
-> [2] https://patchwork.kernel.org/project/linux-mediatek/patch/20201013102358.22588-2-michael.kao@mediatek.com/
-> [3] https://patchwork.kernel.org/project/linux-mediatek/patch/20200306041345.259332-3-drinkcat@chromium.org/
-> 
+I've confirmed that on !CONFIG_NUMA, we don't wind up with excess code
+by accident; the generated object file is the same.
 
-Comments made in v16 actually also hold for v20, so please take them into account :)
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c | 30 +++++++++++-------------------
+ 1 file changed, 11 insertions(+), 19 deletions(-)
 
-Regards,
-Matthias
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 9b5eb6cf82ce..54086e9da05b 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -759,7 +759,6 @@ static int credit_entropy_bits_safe(struct entropy_store *r, int nbits)
+ 
+ static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
+ 
+-#ifdef CONFIG_NUMA
+ /*
+  * Hack to deal with crazy userspace progams when they are all trying
+  * to access /dev/urandom in parallel.  The programs are almost
+@@ -767,7 +766,6 @@ static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
+  * their brain damage.
+  */
+ static struct crng_state **crng_node_pool __read_mostly;
+-#endif
+ 
+ static void invalidate_batched_entropy(void);
+ static void numa_crng_init(void);
+@@ -815,7 +813,7 @@ static bool __init crng_init_try_arch_early(struct crng_state *crng)
+ 	return arch_init;
+ }
+ 
+-static void __maybe_unused crng_initialize_secondary(struct crng_state *crng)
++static void crng_initialize_secondary(struct crng_state *crng)
+ {
+ 	chacha_init_consts(crng->state);
+ 	_get_random_bytes(&crng->state[4], sizeof(__u32) * 12);
+@@ -866,7 +864,6 @@ static void crng_finalize_init(struct crng_state *crng)
+ 	}
+ }
+ 
+-#ifdef CONFIG_NUMA
+ static void do_numa_crng_init(struct work_struct *work)
+ {
+ 	int i;
+@@ -893,29 +890,24 @@ static DECLARE_WORK(numa_crng_init_work, do_numa_crng_init);
+ 
+ static void numa_crng_init(void)
+ {
+-	schedule_work(&numa_crng_init_work);
++	if (IS_ENABLED(CONFIG_NUMA))
++		schedule_work(&numa_crng_init_work);
+ }
+ 
+ static struct crng_state *select_crng(void)
+ {
+-	struct crng_state **pool;
+-	int nid = numa_node_id();
+-
+-	/* pairs with cmpxchg_release() in do_numa_crng_init() */
+-	pool = READ_ONCE(crng_node_pool);
+-	if (pool && pool[nid])
+-		return pool[nid];
++	if (IS_ENABLED(CONFIG_NUMA)) {
++		struct crng_state **pool;
++		int nid = numa_node_id();
+ 
+-	return &primary_crng;
+-}
+-#else
+-static void numa_crng_init(void) {}
++		/* pairs with cmpxchg_release() in do_numa_crng_init() */
++		pool = READ_ONCE(crng_node_pool);
++		if (pool && pool[nid])
++			return pool[nid];
++	}
+ 
+-static struct crng_state *select_crng(void)
+-{
+ 	return &primary_crng;
+ }
+-#endif
+ 
+ /*
+  * crng_fast_load() can be called by code in the interrupt service
+-- 
+2.34.1
+

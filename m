@@ -2,99 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19397481A20
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 08:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 213DD481A24
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 08:14:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236700AbhL3HJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 02:09:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236041AbhL3HJv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 02:09:51 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124F3C061574;
-        Wed, 29 Dec 2021 23:09:51 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so21903152pjf.3;
-        Wed, 29 Dec 2021 23:09:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=ZDP2T3kEdA2Z/HSfJU3quwQVcpsj6OKL669wXFyJOLM=;
-        b=ewFBGrrBkM1b1Tm+9/Tfx0/jdnhhjHUmqN2gPCUfoaIQiudnZP/aHzudqr0wsCP8aQ
-         rormtM95j8BEp56u+2L+GF4D3FjPjcn1CSbQzU9UcbEXBZ/Po2MLBtH8STz9EiTk6vmn
-         ozXz9s1afuD1u/5C9jV+0eiG5+aqTim261vL0eh2HAdfDULaO5th6A6024sSxM6o97Aa
-         LJbiRLmRMETO6TQMR7imF/w7tgASINZQOXVtJ2VMQHjHafd+HpGPLT93RdWgc04k1udX
-         sL53h+kRamfZtJ9pSSKuzzzCa2P96TKD/393I4LXYaULqtE6RGMpE44hI8TGAmxNkuS+
-         Kh4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=ZDP2T3kEdA2Z/HSfJU3quwQVcpsj6OKL669wXFyJOLM=;
-        b=h2fj3S9Ls9QhCMGDSHMMS70xiTsUtOYNgiPv3sVsVpbiXeOMoV5eJnUcJH2DxvCkuM
-         HjbdnZH4l+O1eWkzP+ve8xkFqXDDZQ+lSxwxXvkszWxai+/aUtOhDgeraAI8InUfJRda
-         Y0fkpuASADG8Y2tEN2PtyMwnJOiyKOkQWGEdAgNph8mgYhdZb95Zm/EVLrSC7hh/FhpB
-         hvrjmU/zqXoCr50kbt78VE3/MtnKh2S0F7W0JcORt5X5dibeI1FbV1vS8CzXe3UPCbbF
-         zrgM44hFQQxiJtTFkNUH0VcMzA3o0lOrnFmFaTZ97km1xhJlPi9bbxw5DbeNpuioRQZP
-         GrTg==
-X-Gm-Message-State: AOAM530ZVMQMIT7zn6BQeyPdpz09qUHASSe5hjgG1dgO9UtSZi4J3AYf
-        swGPW33O2pMu1pzJTCQ7Hnc=
-X-Google-Smtp-Source: ABdhPJx3W4rYV1Sq+P6R0r+0aSLlg1TI58NlfVsAeHyTkdba/dBdZqLjrK02fPkqUSdPeo9VzcuRNA==
-X-Received: by 2002:a17:902:c94f:b0:148:d23a:c88e with SMTP id i15-20020a170902c94f00b00148d23ac88emr31023765pla.26.1640848190523;
-        Wed, 29 Dec 2021 23:09:50 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id x2sm21640486pgo.2.2021.12.29.23.09.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 23:09:50 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Hai Li <hali@codeaurora.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        id S236840AbhL3HOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 02:14:46 -0500
+Received: from mga03.intel.com ([134.134.136.65]:42479 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236741AbhL3HOo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 02:14:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640848484; x=1672384484;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3iCjkqny1bw9QGjKT/Pra5Z2ikgjU4Kl6PkVp/L7hg4=;
+  b=AQEOBYfj4N7GmfCEtd30ooVTWky83eu40SFcFVpCPgypCrY3c0mA3b9g
+   5BaeBwt7BU6wQeefaOJBjlg3MUaaPHceFe48g5usL3vO6JUHW6RYIuVDx
+   DjP+NL8I2sTxAjYeL12LGm7V4VaCWybFEaYxJqGamlICHAG15+rfrkQZs
+   c/DZrXPaslNV2wQ2CRAAIijkNsnuGiqybEg7WemhLif6lzw20WsRI7O0T
+   lB2/UuM03hD2dE4kqRymLhFBqPyqy2QDfZjcm7q8spAnhVAhhEbL4fTn0
+   GXXcb0/mPtBcPIgjD5HwnMSF864wE5DGB+KDn1QigkuAjtwGHfuRncX2O
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="241585749"
+X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
+   d="scan'208";a="241585749"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 23:14:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
+   d="scan'208";a="687136315"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 29 Dec 2021 23:14:42 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n2pe5-0009sB-If; Thu, 30 Dec 2021 07:14:41 +0000
+Date:   Thu, 30 Dec 2021 15:13:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/msm/dsi: Fix missing put_device() call in dsi_get_phy
-Date:   Thu, 30 Dec 2021 07:09:40 +0000
-Message-Id: <20211230070943.18116-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+Subject: [nathan:wip/llvm-objdump-posttest 1/1]
+ arch/x86/tools/insn_decoder_test: error: malformed line 7230868:
+Message-ID: <202112301509.DL4ccRU2-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If of_find_device_by_node() succeeds, dsi_get_phy() doesn't
-a corresponding put_device(). Thus add put_device() to fix the exception
-handling.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git wip/llvm-objdump-posttest
+head:   2f137c324b21f1c21b8830d8896cb9957009f969
+commit: 2f137c324b21f1c21b8830d8896cb9957009f969 [1/1] x86/tools: Remove chkobjdump.awk
+config: i386-randconfig-a015-20211228 (https://download.01.org/0day-ci/archive/20211230/202112301509.DL4ccRU2-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project cd284b7ac0615afc6e0f1a30da2777e361de27a3)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git/commit/?id=2f137c324b21f1c21b8830d8896cb9957009f969
+        git remote add nathan https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git
+        git fetch --no-tags nathan wip/llvm-objdump-posttest
+        git checkout 2f137c324b21f1c21b8830d8896cb9957009f969
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Fixes: ec31abf ("drm/msm/dsi: Separate PHY to another platform device")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cb1: 84 db                        	testb	%bl, %bl
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cb3: 8b 48 04                     	movl	4(%eax), %ecx
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cb6: 8b 50 08                     	movl	8(%eax), %edx
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cb9: 8b 58 0c                     	movl	12(%eax), %ebx
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cbc: 8b 68 14                     	movl	20(%eax), %ebp
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cbf: 8b 70 18                     	movl	24(%eax), %esi
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cc2: 8b 78 1c                     	movl	28(%eax), %edi
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cc5: 8b 00                        	movl	(%eax), %eax
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cc7: e8 b4 ff ff ff               	calll	0xc2841c80 <vmx_vmenter>
+   arch/x86/tools/insn_decoder_test: warning: objdump says 1 bytes, but insn_get_length() says 3
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841ccc: 76 2f                        	jbe	0xc2841cfd <__vmx_vcpu_run+0x61>
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cce: 50                           	pushl	%eax
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841ccf: 8b 44 24 04                  	movl	4(%esp), %eax
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cd3: 8f 00                        	popl	(%eax)
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cd5: 89 48 04                     	movl	%ecx, 4(%eax)
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cd8: 89 50 08                     	movl	%edx, 8(%eax)
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cdb: 89 58 0c                     	movl	%ebx, 12(%eax)
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cde: 89 68 14                     	movl	%ebp, 20(%eax)
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841ce1: 89 70 18                     	movl	%esi, 24(%eax)
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841ce4: 89 78 1c                     	movl	%edi, 28(%eax)
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841ce7: 31 c0                        	xorl	%eax, %eax
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841ce9: 31 c9                        	xorl	%ecx, %ecx
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841ceb: 31 d2                        	xorl	%edx, %edx
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841ced: 31 db                        	xorl	%ebx, %ebx
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cef: 31 ed                        	xorl	%ebp, %ebp
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cf1: 31 f6                        	xorl	%esi, %esi
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cf3: 31 ff                        	xorl	%edi, %edi
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cf5: 83 c4 04                     	addl	$4, %esp
+   arch/x86/tools/insn_decoder_test: warning: objdump says 1 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cf8: 5b                           	popl	%ebx
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cf9: 5e                           	popl	%esi
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cfa: 5f                           	popl	%edi
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cfb: 5d                           	poplretl	%ebp
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841cfd: b8 01 00 00 00               	movl	$1, %eax
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+   arch/x86/tools/insn_decoder_test: warning: c2841d02: eb e5                        	jmppushfl	0xc2841ce9 <__vmx_vcpu_run+0x4d>
+   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
+>> arch/x86/tools/insn_decoder_test: error: malformed line 7230868:
+   c2841d05: 58                           	poplretlint3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int
+
 ---
- drivers/gpu/drm/msm/dsi/dsi.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/msm/dsi/dsi.c b/drivers/gpu/drm/msm/dsi/dsi.c
-index 75ae3008b68f..35be526e907a 100644
---- a/drivers/gpu/drm/msm/dsi/dsi.c
-+++ b/drivers/gpu/drm/msm/dsi/dsi.c
-@@ -40,7 +40,12 @@ static int dsi_get_phy(struct msm_dsi *msm_dsi)
- 
- 	of_node_put(phy_node);
- 
--	if (!phy_pdev || !msm_dsi->phy) {
-+	if (!phy_pdev) {
-+		DRM_DEV_ERROR(&pdev->dev, "%s: phy driver is not ready\n", __func__);
-+		return -EPROBE_DEFER;
-+	}
-+	if (!msm_dsi->phy) {
-+		put_device(&phy_pdev->dev);
- 		DRM_DEV_ERROR(&pdev->dev, "%s: phy driver is not ready\n", __func__);
- 		return -EPROBE_DEFER;
- 	}
--- 
-2.17.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

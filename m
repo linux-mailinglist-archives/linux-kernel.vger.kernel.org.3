@@ -2,67 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAF7481E08
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE84481E0F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:23:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241216AbhL3QTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 11:19:24 -0500
-Received: from ms.lwn.net ([45.79.88.28]:51044 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241226AbhL3QTX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 11:19:23 -0500
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 2650B4FA;
-        Thu, 30 Dec 2021 16:19:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 2650B4FA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1640881162; bh=5fkNZwcPwkX/k+UpJY6BR4GKe9HLM6dwHni88myZJHo=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=i0mlkRDfXE6554+exm8Xocq0w+7pAlXEnebo+MdEQMIYXfX9LkxYb5ycYwXy54p+X
-         PRqwARI+7MsVMvTWTsQhVTN1kmDCcT3cRzGHt4wLdPkzw7oiPT6docAATgxs1SANsh
-         Jk28fQgUb7PbMlQ4DrfD+JL9cLrxYsogtpLTg0+M+4hxFEwjgYRYUYjtfAyKHF69y+
-         tYh+DMPutsc9FuGafgS+GZTKLF6bQ476qNy9hFnwfZoaMEDmzsabebbSX9w3dPATSx
-         wUDdmclBvti1rRgRXdOPUVFV6qFwBRceWiqSz+Xo/03Af6F+GgX+fOnjIHkG/ZlYJf
-         4QQ2q8y9r3mRg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "elana.copperman@mobileye.com" <elana.copperman@mobileye.com>
-Subject: Re: Removing the deprecated htmldocs for good?
-In-Reply-To: <CAKXUXMw-Tg7WcfVHaWZ-sK+WFnedL+S-jA_UnsdTR=HFwxAXSw@mail.gmail.com>
-References: <CAKXUXMw-Tg7WcfVHaWZ-sK+WFnedL+S-jA_UnsdTR=HFwxAXSw@mail.gmail.com>
-Date:   Thu, 30 Dec 2021 09:19:21 -0700
-Message-ID: <87wnjm9iba.fsf@meer.lwn.net>
+        id S240284AbhL3QXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 11:23:25 -0500
+Received: from mail-qv1-f41.google.com ([209.85.219.41]:33625 "EHLO
+        mail-qv1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239850AbhL3QXY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 11:23:24 -0500
+Received: by mail-qv1-f41.google.com with SMTP id kk22so22550025qvb.0;
+        Thu, 30 Dec 2021 08:23:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Qeblw1m9b1lBZnq56cGE3LlH8ljA2Kqb7IdC+pWcyJo=;
+        b=ay8mOfUG/vh2e3ifneSu+X/ntxD6DEUMwNVKU7ZutA6sKgTyqPjXSbY7ChbVM/5Mun
+         rj43lUf/bkV5dVtCC3rMqVWICXrtjoMRNMo2VWPtIAOQzdodVOZFzRlOv+wfENFvUlvS
+         k4ruuiyyZAQ63fPsynooikuOdCPKVRs6pLYAEbcpG4XLSCiLeu/arubkmkbquxFhDq6k
+         cbSY8ut+QYI9+UItScGkhLjWzCgQ3pgMINQ74TlBIWpLuuHnTdQf6HgeU+T0pBTndZ45
+         rQe0UTiGwpT3NScYAFiaVGwWkbUyAAUCB2fBe3vGvc0MN9Ta8dMYUmHyznqJ+Y+85IM7
+         OS7Q==
+X-Gm-Message-State: AOAM5337TmYn5GtDqj6fGbjFEPEIXdSgZrbj5fmhDAWQlmS2DLMz8NMN
+        lkSy5xH1CNK7jH5tAowPai5FT+jedWjA+9TvSuc=
+X-Google-Smtp-Source: ABdhPJxCW9LoTGevH6Tb21On6CNI5HU3B20jNAR6zTBdM5kRKtjktxDkmh0EyBzZ4t/fi7OZ3z0LdI+r0wEdGB2yeEg=
+X-Received: by 2002:ad4:5c8b:: with SMTP id o11mr27548806qvh.130.1640881403809;
+ Thu, 30 Dec 2021 08:23:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20211222191411.13805-1-manfred@colorfullife.com>
+In-Reply-To: <20211222191411.13805-1-manfred@colorfullife.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 30 Dec 2021 17:23:13 +0100
+Message-ID: <CAJZ5v0jJr=-O0UdXKj=nHtDv5oJwKWd_5het80QJZ5PBmzitPw@mail.gmail.com>
+Subject: Re: drivers/acpi/processor_thermal.c: avoid cpufreq_get_policy()
+To:     Manfred Spraul <manfred@colorfullife.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
+        1vier1@web.de
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lukas Bulwahn <lukas.bulwahn@gmail.com> writes:
-
-> Hi Jonathan, hi Konstantin,
+On Wed, Dec 22, 2021 at 8:14 PM Manfred Spraul <manfred@colorfullife.com> wrote:
 >
-> While scanning through the internet for kernel documentation, I
-> stumbled upon the old deprecated htmldocs under
-> https://www.kernel.org/doc/htmldocs/. I see that on
-> https://www.kernel.org/doc/, we already point out that 'htmldocs -
-> Kernel Documentation in docbook format (deprecated).' is deprecated.
-> If I am not mistaken, all the content from htmldocs has now been
-> transformed into .rst and has potentially evolved further and hence
-> all relevant information should also already be available somewhere in
-> https://www.kernel.org/doc/html/latest/.
+> cpu_has_cpufreq() stores a 'struct cpufreq_policy' on the stack.
+> Unfortunately, with debugging options enabled, the structure can be
+> larger than 1024 bytes, which causes a compiler warning/error.
 >
-> Is it now time to delete the content under
-> https://www.kernel.org/doc/htmldocs/ for good?
+> (actually observed: 1184 bytes).
+>
+> Therefore: Switch to cpufreq_cpu_get().
+>
+> Signed-off-by: Manfred Spraul <manfred@colorfullife.com>
+>
+> ---
+>  drivers/acpi/processor_thermal.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/acpi/processor_thermal.c b/drivers/acpi/processor_thermal.c
+> index a3d34e3f9f94..74210d63f62c 100644
+> --- a/drivers/acpi/processor_thermal.c
+> +++ b/drivers/acpi/processor_thermal.c
+> @@ -53,10 +53,19 @@ static int phys_package_first_cpu(int cpu)
+>
+>  static int cpu_has_cpufreq(unsigned int cpu)
+>  {
+> -       struct cpufreq_policy policy;
+> -       if (!acpi_processor_cpufreq_init || cpufreq_get_policy(&policy, cpu))
+> +       struct cpufreq_policy *policy;
+> +       int retval;
 
-I think that time may have come, yes; perhaps just have it redirect to
-https://www.kernel.org/doc/html/latest/ instead?
+Why is this needed?
 
-Thanks,
+> +
+> +       if (!acpi_processor_cpufreq_init)
+>                 return 0;
+> -       return 1;
+> +
+> +       retval = 0;
+> +       policy = cpufreq_cpu_get(cpu);
+> +       if (policy) {
+> +               cpufreq_cpu_put(policy);
 
-jon
+return 1;
+
+> +               retval = 1;
+> +       }
+> +       return retval;
+
+return 0;
+
+>  }
+>
+>  static int cpufreq_get_max_state(unsigned int cpu)
+> --
+> 2.33.1
+>

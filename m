@@ -2,177 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6E7481D95
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58341481D99
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234127AbhL3PIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 10:08:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
+        id S234936AbhL3PJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 10:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233586AbhL3PIl (ORCPT
+        with ESMTP id S233976AbhL3PJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 10:08:41 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB1EC061401
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 07:08:41 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n2x2e-0002NA-4e; Thu, 30 Dec 2021 16:08:32 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n2x2b-007VMX-5P; Thu, 30 Dec 2021 16:08:28 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n2x2a-00081Q-4e; Thu, 30 Dec 2021 16:08:28 +0100
-Date:   Thu, 30 Dec 2021 16:08:28 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Kamel Bouhara <kamel.bouhara@bootlin.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        David Lechner <david@lechnology.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-iio@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        kernel@pengutronix.de,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Syed Nayyar Waris <syednwaris@gmail.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Patrick Havelange <patrick.havelange@essensium.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 00/23] counter: cleanups and device lifetime fixes
-Message-ID: <20211230150828.iy7julxbvlcupazx@pengutronix.de>
-References: <20211229154441.38045-1-u.kleine-koenig@pengutronix.de>
- <20211230085351.pywngltvdam25emx@pengutronix.de>
- <20211230145826.7f23becb@jic23-huawei>
+        Thu, 30 Dec 2021 10:09:06 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429A4C06173E;
+        Thu, 30 Dec 2021 07:09:06 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id a203-20020a1c7fd4000000b003457874263aso16196203wmd.2;
+        Thu, 30 Dec 2021 07:09:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sf/3KqcCBGZ0jjyoE9sxhd/PuBCJYLVQgneAgtveI+Q=;
+        b=VrLKSJJHDL2DA29VZEX7N3edD3i7J1oADh0QdE+Ge+67lM+yQkAOci75Oz2ljErixb
+         JGWYKOGDUm81Gr6QLvLWyvaiEWCS9H7/kchC8IP3E52+Wsm5Wniu2I9z3T0LgHkPWT2k
+         CYbmpkhZXP1xP/aGCwh0RRl768aTvEWeyotCQfaHpj2oDihdO8fPQ9qywBgnMO0sNP5L
+         XJwkIpZihkbNfjsPPljHiv2BHjV70T1/6IY/dbtMMokE9kEBKsSbFUEWmzn8jmfUZma0
+         N4hvkcBYVHlX834+yXrVnuS5yY+0RPM/ffnmu46nSi/88lDqu2Pwg6o/D6hbY4Dkqt4j
+         ZLNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sf/3KqcCBGZ0jjyoE9sxhd/PuBCJYLVQgneAgtveI+Q=;
+        b=vdpApFK2VaaSvv/LCImS07IOeSIzA0U2hJZjlBLVAU7FFN7p5aLGrvznRrb10jRhp4
+         1chXtF9i86f8fu00/gZ+Gbg4MHrdJjnZ+oIW+kI1c+V9xKERfHw2yHhZOmna1BmsahbD
+         +6+FHoVouprmUEWwM9D6qFiHaZF8foHCeDMSFRZQ33tyK3p6IWzpR7Ha2x5KzxxjIIQi
+         v6bVBQ2jzcT6GOe0gA5JhcqHRD+gPG5TqgjPfHMxvDY/9EL+Hz7okvaFYCGz/2vGyorQ
+         uBlj3fHnp93A0zRbeMWNWnQPu0l5lxZGUnIAKjQJz4yt5DnXrwgMsEAvrzzl5FDZExWa
+         8NgA==
+X-Gm-Message-State: AOAM5311Ba5oqChdLBtVqB/mtCoHmfnAnHreKWr4K7voMiR6s1cBZVWg
+        Wso/IG+UbcX2vtONwxnZQLB1WG7bt0H95aKh
+X-Google-Smtp-Source: ABdhPJwkiMs/OeTQoco6BR7K7opw58ewBVj+GETPXIuGVQyoCDEIJ0BNvZTdWtwtYsATV6WazqvGwg==
+X-Received: by 2002:a1c:3b86:: with SMTP id i128mr26609703wma.50.1640876944798;
+        Thu, 30 Dec 2021 07:09:04 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id l4sm27466631wry.85.2021.12.30.07.09.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Dec 2021 07:09:04 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Cc:     kernel-janitors@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] lib/oid_registry.c: remove redundant assignment to variable num
+Date:   Thu, 30 Dec 2021 15:09:03 +0000
+Message-Id: <20211230150903.190860-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7547pgm5uqxs232y"
-Content-Disposition: inline
-In-Reply-To: <20211230145826.7f23becb@jic23-huawei>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The variable num is being assigned a value that is never read, it
+is being re-assigned a value in both paths of the following if
+statement. The assignment is redundant and can be removed.
 
---7547pgm5uqxs232y
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Cleans up clang-scan warning:
+lib/oid_registry.c:149:3: warning: Value stored to 'num' is never
+read [deadcode.DeadStores]
+                num = 0;
 
-On Thu, Dec 30, 2021 at 02:58:26PM +0000, Jonathan Cameron wrote:
-> On Thu, 30 Dec 2021 09:53:51 +0100
-> Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de> wrote:
->=20
-> > Hello,
-> >=20
-> > On Wed, Dec 29, 2021 at 04:44:18PM +0100, Uwe Kleine-K=F6nig wrote:
-> > > this is v3 of my series to fix device lifetime issues in the counter
-> > > framework. This hopefully addresses all things pointed out for v2.
-> > >=20
-> > > Note this depends on 60f07e74f86b (which is in next) now. Full diffst=
-at
-> > > below.
-> > >=20
-> > > Things that could be further improved:
-> > >=20
-> > > [...]
-> > >=20
-> > > Uwe Kleine-K=F6nig (23):
-> > >   counter: Use container_of instead of drvdata to track counter_device
-> > >   counter: ftm-quaddec: Drop unused platform_set_drvdata()
-> > >   counter: microchip-tcb-capture: Drop unused platform_set_drvdata()
-> > >   counter: Provide a wrapper to access device private data
-> > >   counter: 104-quad-8: Convert to counter_priv() wrapper
-> > >   counter: interrupt-cnt: Convert to counter_priv() wrapper
-> > >   counter: microchip-tcb-capture: Convert to counter_priv() wrapper
-> > >   counter: intel-qep: Convert to counter_priv() wrapper
-> > >   counter: ftm-quaddec: Convert to counter_priv() wrapper
-> > >   counter: ti-eqep: Convert to counter_priv() wrapper
-> > >   counter: stm32-lptimer-cnt: Convert to counter_priv() wrapper
-> > >   counter: stm32-timer-cnt: Convert to counter_priv() wrapper
-> > >   counter: Provide alternative counter registration functions
-> > >   counter: Update documentation for new counter registration functions
-> > >   counter: 104-quad-8: Convert to new counter registration
-> > >   counter: interrupt-cnt: Convert to new counter registration
-> > >   counter: intel-qep: Convert to new counter registration
-> > >   counter: ftm-quaddec: Convert to new counter registration
-> > >   counter: microchip-tcb-capture: Convert to new counter registration
-> > >   counter: stm32-timer-cnt: Convert to new counter registration
-> > >   counter: stm32-lptimer-cnt: Convert to new counter registration
-> > >   counter: ti-eqep: Convert to new counter registration
-> > >   counter: remove old and now unused registration API
-> > >=20
-> > >  Documentation/driver-api/generic-counter.rst |  10 +-
-> > >  drivers/counter/104-quad-8.c                 |  93 +++++-----
-> > >  drivers/counter/counter-core.c               | 186 ++++++++++++++---=
---
-> > >  drivers/counter/ftm-quaddec.c                |  36 ++--
-> > >  drivers/counter/intel-qep.c                  |  46 ++---
-> > >  drivers/counter/interrupt-cnt.c              |  38 ++--
-> > >  drivers/counter/microchip-tcb-capture.c      |  44 ++---
-> > >  drivers/counter/stm32-lptimer-cnt.c          |  51 ++---
-> > >  drivers/counter/stm32-timer-cnt.c            |  48 ++---
-> > >  drivers/counter/ti-eqep.c                    |  31 ++--
-> > >  include/linux/counter.h                      |  15 +-
-> > >  11 files changed, 356 insertions(+), 242 deletions(-)
-> > >=20
-> > > Range-diff against v2:
-> > > [...]
-> > >=20
-> > > base-commit: a7904a538933c525096ca2ccde1e60d0ee62c08e
-> > > prerequisite-patch-id: 9459ad8bc78190558df9123f8bebe28ca1c396ea =20
-> >=20
-> > All patches have a blessing by at least one of William and Jonathan.
->=20
-> For future reference (may be fine this time) William has final say on cou=
-nter
-> stuff as the maintainer so treat my input as just another set of eyes.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ lib/oid_registry.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Yeah, right. William only didn't ack patch 13 but wrote in reply it in v2:
+diff --git a/lib/oid_registry.c b/lib/oid_registry.c
+index e592d48b1974..fe6705cfd780 100644
+--- a/lib/oid_registry.c
++++ b/lib/oid_registry.c
+@@ -146,7 +146,6 @@ int sprint_oid(const void *data, size_t datasize, char *buffer, size_t bufsize)
+ 	bufsize -= count;
+ 
+ 	while (v < end) {
+-		num = 0;
+ 		n = *v++;
+ 		if (!(n & 0x80)) {
+ 			num = n;
+-- 
+2.33.1
 
-	I agree with the approach taken in this patch, and I don't have much to
-	add after the suggestions Lars-Peter and Jonathan have already given. So
-	assuming those are addressed in the next version I expect to Ack this
-	patch as well.
-
-So I assume it's just that William didn't have the time yet to look into
-v3 (or v4 that I just sent out) yet.
-
-Best regards and thanks to all who gave feedback to improve this patch
-set,
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---7547pgm5uqxs232y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHNy2gACgkQwfwUeK3K
-7AkVxgf/YEpJYjM3bn0tJoCZm5z1+9HEyxBcCdYvZkrR/r1W76x+QjoTmtqoUkOw
-W2dJAKUIPtSZrkPAqUudrsQPnWo7wIBGKtC1tW6E38jCe9o7A/SFFopedwIF9clI
-X28pk3rY9kFj9l6WK4yef2abY7hGAyi3eYyorm8QJzkdQF3HuiR2BEFevGKcEGMr
-HRvP6V5NZ06+pYkNI4arg0hqFAlJZb9h+LdrhcQjFxYW4HROL+pe4iy1xkEGKVQO
-mwbVNjhEfNaLwKUm58fyNr77vebIPhNrTuiRDM/f+gKcu07zThgxiaS/CLH5Tqkw
-OoVyfyqM6/6thSXjoor4nmGo/xH2Ew==
-=Y3X/
------END PGP SIGNATURE-----
-
---7547pgm5uqxs232y--

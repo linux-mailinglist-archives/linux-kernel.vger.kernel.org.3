@@ -2,124 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5064817FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 02:01:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3733A481808
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 02:18:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233831AbhL3BAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 20:00:46 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:47832
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233783AbhL3BAo (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 20:00:44 -0500
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C704D3F1BA
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 01:00:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1640826043;
-        bh=uoZ4j3DJAFFGqNYQHJEg8ZOm+0DP9sQ76r9xPfmb/n8=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=Q5vXY2rnWzmN4UhpmM4EvxkVIOtSAoQ0dKUvuQMz9++z0TDlqA4NHm0nh05GlQgbN
-         XXKwbYY/5H71KqCeVsSiOrVrZo5+3F38WAHTyp6tAV0uBSQTmZ+yaUAyH5H2idWauJ
-         f1sW3+FfKYKv6PUbUE+grZjikHNj0iduAQOU9vxaKvz37jvfvbx4kKldDXkIJEIn1S
-         q1tOCZdYxW1FnpI85IkL+AsPuy1DmCbcarHFy5bob2zEAYYlUvjfyF49hdhjdwh8+O
-         LweK+j0wIOX9BCNOXzWeihRtISckoUEheJ977GU8wrH7wd8X7goqM04PcJjL7fvhxM
-         5lxjngHiXLG8g==
-Received: by mail-ot1-f69.google.com with SMTP id y35-20020a9d22a6000000b0058f1cced940so7140894ota.1
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 17:00:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uoZ4j3DJAFFGqNYQHJEg8ZOm+0DP9sQ76r9xPfmb/n8=;
-        b=AlxKp85Am3D/135FeR5K3+jUUyIEs65TD6p3qPNSFzG7nZ28Pv5KMt8a4x5be/yOuZ
-         Z2hWEdpHEj97XZ7jY0OHQEnS/f59dg+FZUQuodrOIVFn0lgFal2AaiH5ixYu5mwSyXJY
-         X709rKmUQgal5Ps6NZkZTYFfyXyPopCwMrHHDl1yXrlDoM5F54GD7ixAXZID0A+6JPuW
-         Uw6Ehhy8J+TPuiMKNkPDoVfvlmtMkuZ5wyKjzsRhmZuvEUJMIQRhi0hUm7MwCAge4rOE
-         rQ5uNwDxObXDik5m5aApZNXkTA8NcX/F5AWf4Tv5ZOViEq49eqmjCiK+VJsi6VP2lNOh
-         i9Lw==
-X-Gm-Message-State: AOAM533Aojc8ePOY0VjmT46wL+AwaRp/JBI+JdC9pNq1SJaopkqGmund
-        VCNHFGEgTcMLQhq3NkuBS56ldefWBYltKks7d2vlPEsdnrzRxFybKxpS7hK5ygLH4waBocVNiuG
-        +MXcI02yYmLruXa0pHDbONjhF/kAmvr+k9fnSEaqt4PxraSd/W00C+vtAVw==
-X-Received: by 2002:a9d:24e4:: with SMTP id z91mr20131509ota.11.1640826042557;
-        Wed, 29 Dec 2021 17:00:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwAdp50c/5EObs0tj1fNIcnnRPPx3ss2Ad4obTPVF8kRFOvNAW6kNtQ60X8aCLALrxPfVtjUBNOOVyzgjPgjoE=
-X-Received: by 2002:a9d:24e4:: with SMTP id z91mr20131496ota.11.1640826042302;
- Wed, 29 Dec 2021 17:00:42 -0800 (PST)
+        id S233901AbhL3BS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 20:18:29 -0500
+Received: from mga17.intel.com ([192.55.52.151]:12448 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233845AbhL3BS2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 20:18:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640827108; x=1672363108;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pLvsmuDIczuRhtLhRDT0LsVQJJCF1zlJ/bT1QUBHxqY=;
+  b=OYNhoz8FYTGE1gc/Q+wfqAIJSjAPKekFtOn242rPaz7/7MdNIFYKZ0xy
+   U9wNlmCGeWZpzhzX1fWyamIYiMTFqL0fsC5AckzCeRhmnHcsGaNJUJA9G
+   RNUIz0tI7rlHSwkI1fQ7vOB4gGc7HC86Gi202S931VwgIeWOKVpgjJMSq
+   SAJ0iJvm+mXV+gK7MEZBIIzwcGzksyOt2KB4aZxBYmzJezbZZCVBhILUq
+   awXx3hAel4rvqye9LhBTFc5mmUqywrBRg3zTUDfBRfnDi25UHjbGbo0uy
+   +Xm0c3F6SVkMEEKSdOiBipXfOsBYAp36UCsjQFF7X+dVhNnq0cWRCOzvH
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="222267369"
+X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
+   d="scan'208";a="222267369"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 17:18:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
+   d="scan'208";a="687065076"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 29 Dec 2021 17:18:26 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n2k5J-0009XQ-FK; Thu, 30 Dec 2021 01:18:25 +0000
+Date:   Thu, 30 Dec 2021 09:17:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tianyu Lan <Tianyu.Lan@microsoft.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Wei Liu <wei.liu@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: [hyperv:hyperv-next 1/7] swiotlb.c:undefined reference to `memremap'
+Message-ID: <202112300919.vfQIU5rt-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211224081914.345292-2-kai.heng.feng@canonical.com> <20211229201814.GA1699315@bhelgaas>
-In-Reply-To: <20211229201814.GA1699315@bhelgaas>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Thu, 30 Dec 2021 09:00:30 +0800
-Message-ID: <CAAd53p74bHYmQJzKuriDrRWpJwXivfYCfNCsUjC47d1WKUZ=gQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] net: wwan: iosm: Keep device at D0 for s2idle case
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     m.chetan.kumar@intel.com, linuxwwan@intel.com,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 4:18 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> [+cc Rafael, Vaibhav]
->
-> On Fri, Dec 24, 2021 at 04:19:14PM +0800, Kai-Heng Feng wrote:
-> > We are seeing spurious wakeup caused by Intel 7560 WWAN on AMD laptops.
-> > This prevent those laptops to stay in s2idle state.
-> >
-> > From what I can understand, the intention of ipc_pcie_suspend() is to
-> > put the device to D3cold, and ipc_pcie_suspend_s2idle() is to keep the
-> > device at D0. However, the device can still be put to D3hot/D3cold by
-> > PCI core.
-> >
-> > So explicitly let PCI core know this device should stay at D0, to solve
-> > the spurious wakeup.
-> >
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > ---
-> >  drivers/net/wwan/iosm/iosm_ipc_pcie.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/net/wwan/iosm/iosm_ipc_pcie.c b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
-> > index d73894e2a84ed..af1d0e837fe99 100644
-> > --- a/drivers/net/wwan/iosm/iosm_ipc_pcie.c
-> > +++ b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
-> > @@ -340,6 +340,9 @@ static int __maybe_unused ipc_pcie_suspend_s2idle(struct iosm_pcie *ipc_pcie)
-> >
-> >       ipc_imem_pm_s2idle_sleep(ipc_pcie->imem, true);
-> >
-> > +     /* Let PCI core know this device should stay at D0 */
-> > +     pci_save_state(ipc_pcie->pci);
->
-> This is a weird and non-obvious way to say "this device should stay at
-> D0".  It's also fairly expensive since pci_save_state() does a lot of
-> slow PCI config reads.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git hyperv-next
+head:   e1878402ab2dca12d1426f2fea39757943f3332c
+commit: 1a5e91d8375fc8369207cc0b9894a324f2bbf1d9 [1/7] swiotlb: Add swiotlb bounce buffer remap function for HV IVM
+config: s390-randconfig-r014-20211230 (https://download.01.org/0day-ci/archive/20211230/202112300919.vfQIU5rt-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git/commit/?id=1a5e91d8375fc8369207cc0b9894a324f2bbf1d9
+        git remote add hyperv https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git
+        git fetch --no-tags hyperv hyperv-next
+        git checkout 1a5e91d8375fc8369207cc0b9894a324f2bbf1d9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Yes, so I was waiting for feedback from IOSM devs what's the expected
-PCI state for the s2idle case.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Dave, can you drop it from netdev until IOSM devs confirm this patch is correct?
+All errors (new ones prefixed by >>):
 
-Kai-Heng
+   s390-linux-ld: kernel/dma/swiotlb.o: in function `swiotlb_update_mem_attributes':
+>> swiotlb.c:(.init.text+0x314): undefined reference to `memremap'
 
->
-> >       return 0;
-> >  }
-> >
-> > --
-> > 2.33.1
-> >
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

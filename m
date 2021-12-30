@@ -2,89 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79521482005
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AB1482007
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242014AbhL3Tsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 14:48:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54032 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239877AbhL3Tsx (ORCPT
+        id S239877AbhL3TuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 14:50:23 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:40571 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S235478AbhL3TuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 14:48:53 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56161C061574;
-        Thu, 30 Dec 2021 11:48:53 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id v11so52331202wrw.10;
-        Thu, 30 Dec 2021 11:48:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8IdNS7T3UcLg0e/sYRv7oAlgpubQqWF3kQNzPbkd3yU=;
-        b=IFh9PlCWbpYVBu1k+wv2lvyXvynXGAOo1vnM4wXNujh85PmS3Gb0j8oNAJRSII6Td3
-         fQgt+lgmGKN1dCrnmTmqFoGOyglnF353JUTQkhI9XoGLeMfI6MqB36U1PKq6iwm234Wf
-         dyUg/zSEyBZ7f52me6GGdVa7uHGdF46gyLhOxFbdMHf6pnv1HzCLACCNzFas8n7rZFTE
-         Ld8w771NfBmnyts6AW3qn0JtVtg0qKOVpzIRnd2QKh85d9fO3Z71wFxnO6RWmxOWKfeR
-         7555C2PMAFO3P12bO7oxlsvrrif+PTBhfQxKh6TBiCPZDrVE/ibbIRP1LheUTMMGFPWB
-         H7bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8IdNS7T3UcLg0e/sYRv7oAlgpubQqWF3kQNzPbkd3yU=;
-        b=ZitJlFNAf37APc8n5NCTF9aqZla6KD/HfAim5apjtRAEuwKbt2ep1jVB8PgXz0+DmB
-         9pX0IDglQxgG69DodovQeDl20gDJP1CqtqwngVQWQsJfPuGTIAvgSFS3dYnbNSC9DNNl
-         23QhsAzyxK8qVaDPoCiZokVp4KPSnmyS3iRMjNYw2wh1R55LnreqY1vpClILHkY2EC8E
-         uXcxkyKZLQWKeYy5hDXSQUEZ80vnMOgxDUUXuVY414ixQOIPf1LIHnQtA4BsaBqawWRX
-         7aEXpNZsv31jEosdtPAznYe6eHqFl4N+7WjxxS0zSs+IC34hOHfPwQhybfJqRv9Ki0j9
-         yEzQ==
-X-Gm-Message-State: AOAM530NsTklYOsoRMtutftAx7BIcTju7R4SoItzMhxUrfnBS3r2VuxS
-        y8kbSWL1aVSWpwnbw9K8YCAyx5dviDrWt6HEwf4+KG5u
-X-Google-Smtp-Source: ABdhPJzMcm/8iii5owGOe5SeDzBS6uWKT1g4Q0FHlV+E7kWxOVk+1/dvdjuP5P0m85lPN0Q7ulZdjTYjigxkF2NsZa8=
-X-Received: by 2002:a05:6000:186e:: with SMTP id d14mr27344766wri.205.1640893731942;
- Thu, 30 Dec 2021 11:48:51 -0800 (PST)
+        Thu, 30 Dec 2021 14:50:22 -0500
+Received: (qmail 1117220 invoked by uid 1000); 30 Dec 2021 14:50:21 -0500
+Date:   Thu, 30 Dec 2021 14:50:21 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, axboe@kernel.dk,
+        jj251510319013@gmail.com, dan.carpenter@oracle.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] usb: gadget: clear related members when goto fail
+Message-ID: <Yc4NfWuIxJOVZail@rowland.harvard.edu>
+References: <20211230051132.21056-1-hbh25y@gmail.com>
+ <20211230051132.21056-3-hbh25y@gmail.com>
+ <Yc4MeIt6JygZ6CrY@rowland.harvard.edu>
 MIME-Version: 1.0
-References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
- <20211222155743.256280-18-miquel.raynal@bootlin.com> <CAB_54W7o5b7a-2Gg5ZnzPj3o4Yw9FOAxJfykrA=LtpVf9naAng@mail.gmail.com>
- <SN6PR08MB4464D7124FCB5D0801D26B94E0459@SN6PR08MB4464.namprd08.prod.outlook.com>
-In-Reply-To: <SN6PR08MB4464D7124FCB5D0801D26B94E0459@SN6PR08MB4464.namprd08.prod.outlook.com>
-From:   Alexander Aring <alex.aring@gmail.com>
-Date:   Thu, 30 Dec 2021 14:48:41 -0500
-Message-ID: <CAB_54W6ikdGe=ZYqOsMgBdb9KBtfAphkBeu4LLp6S4R47ZDHgA@mail.gmail.com>
-Subject: Re: [net-next 17/18] net: mac802154: Let drivers provide their own
- beacons implementation
-To:     David Girault <David.Girault@qorvo.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        linux-wpan - ML <linux-wpan@vger.kernel.org>,
-        Romuald Despres <Romuald.Despres@qorvo.com>,
-        Frederic Blain <Frederic.Blain@qorvo.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kernel list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yc4MeIt6JygZ6CrY@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Dec 30, 2021 at 02:46:00PM -0500, Alan Stern wrote:
+> On Thu, Dec 30, 2021 at 01:11:32PM +0800, Hangyu Hua wrote:
+> > dev->config and dev->hs_config and dev->dev need to be cleaned if
+> > dev_config fails to avoid UAF.
 
-On Thu, 30 Dec 2021 at 12:00, David Girault <David.Girault@qorvo.com> wrote:
->
-> Hi Alexander,
->
-> At Qorvo, we have developped a SoftMAC driver for our DW3000 chip that will benefit such API.
->
-Do you want to bring this driver upstream as well? Currently those
-callbacks will be introduced but no user is there.
+> > @@ -1875,6 +1875,9 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
+> >  
+> >  	value = usb_gadget_probe_driver(&gadgetfs_driver);
+> >  	if (value != 0) {
+> > +		dev->dev = NULL;
+> > +		dev->hs_config = NULL;
+> > +		dev->config = NULL;
+> >  		kfree (dev->buf);
+> >  		dev->buf = NULL;
+> 
+> Why not just grep the lock and goto fail?
 
-> To be short, beacon sending is controller by our driver to be synchronized chip clock or delayed until
-> other operation in progress (a ranging for example).
->
+Wrong word: I meant to write "grab", not "grep".
 
-ok.
-
-- Alex
+Alan Stern

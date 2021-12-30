@@ -2,19 +2,15 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A79481F9C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9FAA481F99
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241928AbhL3TNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 14:13:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45886 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241910AbhL3TNm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 14:13:42 -0500
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D1EC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:13:42 -0800 (PST)
+        id S241882AbhL3TNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 14:13:49 -0500
+Received: from out0.migadu.com ([94.23.1.103]:58039 "EHLO out0.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241920AbhL3TNn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 14:13:43 -0500
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
         t=1640891621;
@@ -22,10 +18,10 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Kp+2Q3QLxWnCUmTGCUqJeVTafIKYNKQMJyZMylxx2h8=;
-        b=Fdr1CYMBvtePxKkbsUTaaA8g5VeJvZovcMZtFSDwjjRps7/VvTpe2f+HTIYgIzZ7qiRpKQ
-        /MRO3AZz/Ti4DI1FYDScOtT1OxRtf2Yz7c42XlPYMoUopr/e/nJafl9LFAsSexCJTZAXG4
-        qCyx0dC5VEPIbQ5jjfmLThK7YCoxQ5Y=
+        bh=5F662mQuyZrkqe4hrthBRUYJbZYsnvhmVcSPgqbXtac=;
+        b=WlMFm6Wh5ULSRIJ7fCfzx6uE9lKaxRY9oEmJ8VxrPY69laY27k3eONBEoTev4aeM+XIPdK
+        ApFCGFjR0e6Fj3AbfvmcdZVWsSjelBE3oBY18rs7Dcy/R2lKo7VwWeUX0oc5quvZNzJmri
+        rIGnn8p7T+MJDpeZ3T3EelP4q5d+ROc=
 From:   andrey.konovalov@linux.dev
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
@@ -43,9 +39,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v5 16/39] kasan: define KASAN_VMALLOC_INVALID for SW_TAGS
-Date:   Thu, 30 Dec 2021 20:12:18 +0100
-Message-Id: <cc2b1a31579bbeb125a7868369501ad8edb629f1.1640891329.git.andreyknvl@google.com>
+Subject: [PATCH mm v5 17/39] kasan, x86, arm64, s390: rename functions for modules shadow
+Date:   Thu, 30 Dec 2021 20:12:19 +0100
+Message-Id: <7c9eaa4a3afd5874727e69ea799cecf53b4bc2c0.1640891329.git.andreyknvl@google.com>
 In-Reply-To: <cover.1640891329.git.andreyknvl@google.com>
 References: <cover.1640891329.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -58,43 +54,129 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-In preparation for adding vmalloc support to SW_TAGS KASAN,
-provide a KASAN_VMALLOC_INVALID definition for it.
+Rename kasan_free_shadow to kasan_free_module_shadow and
+kasan_module_alloc to kasan_alloc_module_shadow.
 
-HW_TAGS KASAN won't be using this value, as it falls back onto
-page_alloc for poisoning freed vmalloc() memory.
+These functions are used to allocate/free shadow memory for kernel
+modules when KASAN_VMALLOC is not enabled. The new names better
+reflect their purpose.
+
+Also reword the comment next to their declaration to improve clarity.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 ---
- mm/kasan/kasan.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/arm64/kernel/module.c |  2 +-
+ arch/s390/kernel/module.c  |  2 +-
+ arch/x86/kernel/module.c   |  2 +-
+ include/linux/kasan.h      | 14 +++++++-------
+ mm/kasan/shadow.c          |  4 ++--
+ mm/vmalloc.c               |  2 +-
+ 6 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-index 952cd6f9ca46..020f3e57a03f 100644
---- a/mm/kasan/kasan.h
-+++ b/mm/kasan/kasan.h
-@@ -71,18 +71,19 @@ static inline bool kasan_sync_fault_possible(void)
- #define KASAN_PAGE_REDZONE      0xFE  /* redzone for kmalloc_large allocations */
- #define KASAN_KMALLOC_REDZONE   0xFC  /* redzone inside slub object */
- #define KASAN_KMALLOC_FREE      0xFB  /* object was freed (kmem_cache_free/kfree) */
-+#define KASAN_VMALLOC_INVALID   0xF8  /* unallocated space in vmapped page */
- #else
- #define KASAN_FREE_PAGE         KASAN_TAG_INVALID
- #define KASAN_PAGE_REDZONE      KASAN_TAG_INVALID
- #define KASAN_KMALLOC_REDZONE   KASAN_TAG_INVALID
- #define KASAN_KMALLOC_FREE      KASAN_TAG_INVALID
-+#define KASAN_VMALLOC_INVALID   KASAN_TAG_INVALID /* only for SW_TAGS */
- #endif
+diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
+index 309a27553c87..d3a1fa818348 100644
+--- a/arch/arm64/kernel/module.c
++++ b/arch/arm64/kernel/module.c
+@@ -58,7 +58,7 @@ void *module_alloc(unsigned long size)
+ 				PAGE_KERNEL, 0, NUMA_NO_NODE,
+ 				__builtin_return_address(0));
  
- #ifdef CONFIG_KASAN_GENERIC
- 
- #define KASAN_KMALLOC_FREETRACK 0xFA  /* object was freed and has free track set */
- #define KASAN_GLOBAL_REDZONE    0xF9  /* redzone for global variable */
--#define KASAN_VMALLOC_INVALID   0xF8  /* unallocated space in vmapped page */
+-	if (p && (kasan_module_alloc(p, size, gfp_mask) < 0)) {
++	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
+ 		vfree(p);
+ 		return NULL;
+ 	}
+diff --git a/arch/s390/kernel/module.c b/arch/s390/kernel/module.c
+index d52d85367bf7..b16bebd9a8b9 100644
+--- a/arch/s390/kernel/module.c
++++ b/arch/s390/kernel/module.c
+@@ -45,7 +45,7 @@ void *module_alloc(unsigned long size)
+ 	p = __vmalloc_node_range(size, MODULE_ALIGN, MODULES_VADDR, MODULES_END,
+ 				 gfp_mask, PAGE_KERNEL_EXEC, VM_DEFER_KMEMLEAK, NUMA_NO_NODE,
+ 				 __builtin_return_address(0));
+-	if (p && (kasan_module_alloc(p, size, gfp_mask) < 0)) {
++	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
+ 		vfree(p);
+ 		return NULL;
+ 	}
+diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
+index 95fa745e310a..c9eb8aa3b7b8 100644
+--- a/arch/x86/kernel/module.c
++++ b/arch/x86/kernel/module.c
+@@ -78,7 +78,7 @@ void *module_alloc(unsigned long size)
+ 				    MODULES_END, gfp_mask,
+ 				    PAGE_KERNEL, VM_DEFER_KMEMLEAK, NUMA_NO_NODE,
+ 				    __builtin_return_address(0));
+-	if (p && (kasan_module_alloc(p, size, gfp_mask) < 0)) {
++	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
+ 		vfree(p);
+ 		return NULL;
+ 	}
+diff --git a/include/linux/kasan.h b/include/linux/kasan.h
+index b88ca6b97ba3..55f1d4edf6b5 100644
+--- a/include/linux/kasan.h
++++ b/include/linux/kasan.h
+@@ -454,17 +454,17 @@ static inline void kasan_populate_early_vm_area_shadow(void *start,
+ 		!defined(CONFIG_KASAN_VMALLOC)
  
  /*
-  * Stack redzone shadow values
+- * These functions provide a special case to support backing module
+- * allocations with real shadow memory. With KASAN vmalloc, the special
+- * case is unnecessary, as the work is handled in the generic case.
++ * These functions allocate and free shadow memory for kernel modules.
++ * They are only required when KASAN_VMALLOC is not supported, as otherwise
++ * shadow memory is allocated by the generic vmalloc handlers.
+  */
+-int kasan_module_alloc(void *addr, size_t size, gfp_t gfp_mask);
+-void kasan_free_shadow(const struct vm_struct *vm);
++int kasan_alloc_module_shadow(void *addr, size_t size, gfp_t gfp_mask);
++void kasan_free_module_shadow(const struct vm_struct *vm);
+ 
+ #else /* (CONFIG_KASAN_GENERIC || CONFIG_KASAN_SW_TAGS) && !CONFIG_KASAN_VMALLOC */
+ 
+-static inline int kasan_module_alloc(void *addr, size_t size, gfp_t gfp_mask) { return 0; }
+-static inline void kasan_free_shadow(const struct vm_struct *vm) {}
++static inline int kasan_alloc_module_shadow(void *addr, size_t size, gfp_t gfp_mask) { return 0; }
++static inline void kasan_free_module_shadow(const struct vm_struct *vm) {}
+ 
+ #endif /* (CONFIG_KASAN_GENERIC || CONFIG_KASAN_SW_TAGS) && !CONFIG_KASAN_VMALLOC */
+ 
+diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
+index 94136f84b449..e5c4393eb861 100644
+--- a/mm/kasan/shadow.c
++++ b/mm/kasan/shadow.c
+@@ -498,7 +498,7 @@ void kasan_release_vmalloc(unsigned long start, unsigned long end,
+ 
+ #else /* CONFIG_KASAN_VMALLOC */
+ 
+-int kasan_module_alloc(void *addr, size_t size, gfp_t gfp_mask)
++int kasan_alloc_module_shadow(void *addr, size_t size, gfp_t gfp_mask)
+ {
+ 	void *ret;
+ 	size_t scaled_size;
+@@ -534,7 +534,7 @@ int kasan_module_alloc(void *addr, size_t size, gfp_t gfp_mask)
+ 	return -ENOMEM;
+ }
+ 
+-void kasan_free_shadow(const struct vm_struct *vm)
++void kasan_free_module_shadow(const struct vm_struct *vm)
+ {
+ 	if (vm->flags & VM_KASAN)
+ 		vfree(kasan_mem_to_shadow(vm->addr));
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 9bf838817a47..f3c729d4e130 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -2526,7 +2526,7 @@ struct vm_struct *remove_vm_area(const void *addr)
+ 		va->vm = NULL;
+ 		spin_unlock(&vmap_area_lock);
+ 
+-		kasan_free_shadow(vm);
++		kasan_free_module_shadow(vm);
+ 		free_unmap_vmap_area(va);
+ 
+ 		return vm;
 -- 
 2.25.1
 

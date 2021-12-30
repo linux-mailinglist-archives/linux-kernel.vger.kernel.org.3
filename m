@@ -2,103 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E1B4820B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 23:48:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BE04820B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 23:50:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242301AbhL3Wr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 17:47:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234264AbhL3Wr4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 17:47:56 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87AF5C061574;
-        Thu, 30 Dec 2021 14:47:55 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id u22so42667293lju.7;
-        Thu, 30 Dec 2021 14:47:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SbcC2v/0NBjsVE5jCKkZ0+SK3mSOCyHq2tcLGlMmR80=;
-        b=B5m5ZVorjFzP6y4P5ERWZjQ53JVAuTUkkZHpFs+35AQjZB4j/LKMB1DReCLoIYHlAi
-         ya6r+D93y8Qq6jEEbZWHuRbt6ZjOoZY54N03uJwiVywuuDwIbXTFfDpjtF+3EZBJeHnJ
-         2JoK0jnrlgnbqu7k376dFKOyIN7txMno/VsPNAIVL+yqI0s4sBPWQtfiTJkVSAmqxRr4
-         GGbHFid+C+/CeOi8WxPsXJhJpH8+l/tGVEOopwksO3pj0QagmHxdqjHisQgy5PpaWFoz
-         StyPi3kl2Pgyes5+Q6MMfKTad6tow61KrC+a6MRdJschahQugi4TaLWuurat/06IfGyg
-         7afg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SbcC2v/0NBjsVE5jCKkZ0+SK3mSOCyHq2tcLGlMmR80=;
-        b=2pCTzDhBijvOcYk2qUpOnE01JI36Bst9Z4Ibx4uELbjf1ThLMs4hcJQr3EJA1ruacp
-         m+lmYFT+Fg0vzAWskXp254R3MXZHKdP2qsu4LbprOwc/+nes0cRvFnUN7T8XLGI49uVa
-         6DSM9zfKucjN2miojJN+47/L35D/8SgNs/kujgNxATAt8ljSqkia7nodTs/YiFKh4wHC
-         0PfSdTh1ROBN/NQ+GwIccDp70bi/v92pIa94r1XFKNQk4ollgOEE8qufIFknsjuUFZIT
-         8XUFzeaDU7OF3GO7AvUpYfN8OQW2Bwa3CwcLw+bkkefbI9V/BB1iFOD33QNq4N1zkjlB
-         JwNQ==
-X-Gm-Message-State: AOAM532rZV1S2Zr1L0bB2RoCBh0oGHLQh6RwiTntB+DGb+ktnPObVQMM
-        tjPS1i9eKEXJ9J5gRJRA4dc=
-X-Google-Smtp-Source: ABdhPJwNeW0YwcCVn+OHHPX+JuvMnHH01IsqbEcDr6vwOaEVYzqQ32sKgI8Lse82P6L5m5MglW8Ahw==
-X-Received: by 2002:a2e:b90d:: with SMTP id b13mr27747608ljb.253.1640904473760;
-        Thu, 30 Dec 2021 14:47:53 -0800 (PST)
-Received: from localhost.localdomain ([94.103.235.97])
-        by smtp.gmail.com with ESMTPSA id z20sm1436888lji.122.2021.12.30.14.47.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 14:47:53 -0800 (PST)
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     wsa@kernel.org, viro@zeniv.linux.org.uk
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        syzbot+e417648b303855b91d8a@syzkaller.appspotmail.com
-Subject: [PATCH v3] i2c: validate user data in compat ioctl
-Date:   Fri, 31 Dec 2021 01:47:50 +0300
-Message-Id: <20211230224750.15380-1-paskripkin@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <Yc4wkyr7QTs8ao5x@kunai>
-References: <Yc4wkyr7QTs8ao5x@kunai>
+        id S242313AbhL3Wui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 17:50:38 -0500
+Received: from mga01.intel.com ([192.55.52.88]:14522 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237492AbhL3Wuh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 17:50:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640904636; x=1672440636;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Xf5Kl/wdtk5xovpWbkikpID0dE3m9N1GHAN9BXCevtA=;
+  b=a3L++qvntuNhpG1Tjf1j0VfGrj2C9L66mwnkL44QBnlxdFR1KWw0ttLM
+   P6f36gN8Wi7yWQ98TeZ8LzN1xopOz+gQJpAJlzft7Qg5Whu4lIURy4oIx
+   a62ada8aU6dMYv6ipCSOd2i0+hawnAep1EvdsqdGZcen3ourFI0keu9Fo
+   pHQx+/7lTdNXFG6vCEFYZ8EVR+BobtE1hACBITa7ZjeDjPpbS+avUD7FO
+   goemdcHpPsPG6S0tR0CPTMjv9H4cmndFvKouOdBMB4sJP0VNo0a+sxRek
+   xjaFet58eJDQBN/2gj353NoqyxNsvLFWwnp69/pWlBUwLHER/CcILb7En
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="265989765"
+X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
+   d="scan'208";a="265989765"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 14:50:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
+   d="scan'208";a="610019439"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 30 Dec 2021 14:50:34 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n34Fl-000Agz-IT; Thu, 30 Dec 2021 22:50:33 +0000
+Date:   Fri, 31 Dec 2021 06:49:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Axtens <dja@axtens.net>
+Subject: [linux-stable-rc:queue/5.4 3030/9999]
+ arch/powerpc/kernel/setup_64.c:913:6: error: no previous prototype for
+ 'entry_flush_enable'
+Message-ID: <202112310631.xDknJR1R-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wrong user data may cause warning in i2c_transfer(), ex: zero msgs.
-Userspace should not be able to trigger warnings, so this patch adds
-validation checks for user data in compact ioctl to prevent reported
-warnings
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.4
+head:   8119581dca11ec464922e85b5eaa28ed6558d619
+commit: b65458b6be8032c5179d4f562038575d7b3a6be3 [3030/9999] powerpc/64s: flush L1D on kernel entry
+config: powerpc64-randconfig-r011-20211230 (https://download.01.org/0day-ci/archive/20211231/202112310631.xDknJR1R-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=b65458b6be8032c5179d4f562038575d7b3a6be3
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.4
+        git checkout b65458b6be8032c5179d4f562038575d7b3a6be3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
 
-Reported-and-tested-by: syzbot+e417648b303855b91d8a@syzkaller.appspotmail.com
-Fixes: 7d5cb45655f2 ("i2c compat ioctls: move to ->compat_ioctl()")
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+Note: the linux-stable-rc/queue/5.4 HEAD 8119581dca11ec464922e85b5eaa28ed6558d619 builds fine.
+      It only hurts bisectability.
+
+All errors (new ones prefixed by >>):
+
+   arch/powerpc/kernel/setup_64.c:262:13: error: no previous prototype for 'record_spr_defaults' [-Werror=missing-prototypes]
+     262 | void __init record_spr_defaults(void)
+         |             ^~~~~~~~~~~~~~~~~~~
+   arch/powerpc/kernel/setup_64.c:287:32: error: no previous prototype for 'early_setup' [-Werror=missing-prototypes]
+     287 | void __init __nostackprotector early_setup(unsigned long dt_ptr)
+         |                                ^~~~~~~~~~~
+   arch/powerpc/kernel/setup_64.c:399:6: error: no previous prototype for 'early_setup_secondary' [-Werror=missing-prototypes]
+     399 | void early_setup_secondary(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/kernel/setup_64.c:420:6: error: no previous prototype for 'panic_smp_self_stop' [-Werror=missing-prototypes]
+     420 | void panic_smp_self_stop(void)
+         |      ^~~~~~~~~~~~~~~~~~~
+   arch/powerpc/kernel/setup_64.c: In function 'initialize_cache_info':
+   arch/powerpc/kernel/setup_64.c:599:70: error: suggest braces around empty body in an 'if' statement [-Werror=empty-body]
+     599 |                         DBG("Argh, can't find dcache properties !\n");
+         |                                                                      ^
+   arch/powerpc/kernel/setup_64.c:602:70: error: suggest braces around empty body in an 'if' statement [-Werror=empty-body]
+     602 |                         DBG("Argh, can't find icache properties !\n");
+         |                                                                      ^
+   arch/powerpc/kernel/setup_64.c: At top level:
+>> arch/powerpc/kernel/setup_64.c:913:6: error: no previous prototype for 'entry_flush_enable' [-Werror=missing-prototypes]
+     913 | void entry_flush_enable(bool enable)
+         |      ^~~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+
+
+vim +/entry_flush_enable +913 arch/powerpc/kernel/setup_64.c
+
+   912	
+ > 913	void entry_flush_enable(bool enable)
+   914	{
+   915		if (enable) {
+   916			do_entry_flush_fixups(enabled_flush_types);
+   917			on_each_cpu(do_nothing, NULL, 1);
+   918		} else {
+   919			do_entry_flush_fixups(L1D_FLUSH_NONE);
+   920		}
+   921	
+   922		entry_flush = enable;
+   923	}
+   924	
+
 ---
-
-Changes in v3
-	- Add rdwr_arg.nmsgs == 0 check as Wolfram suggested
-
-Changes in v2:
-	- Fixed typos in commit message
-
----
- drivers/i2c/i2c-dev.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
-index bce0e8bb7852..cf5d049342ea 100644
---- a/drivers/i2c/i2c-dev.c
-+++ b/drivers/i2c/i2c-dev.c
-@@ -535,6 +535,9 @@ static long compat_i2cdev_ioctl(struct file *file, unsigned int cmd, unsigned lo
- 				   sizeof(rdwr_arg)))
- 			return -EFAULT;
- 
-+		if (!rdwr_arg.msgs || rdwr_arg.nmsgs == 0)
-+			return -EINVAL;
-+
- 		if (rdwr_arg.nmsgs > I2C_RDWR_IOCTL_MAX_MSGS)
- 			return -EINVAL;
- 
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

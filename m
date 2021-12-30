@@ -2,115 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CFFA481FF7
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E181A481FFD
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:46:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240671AbhL3TmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 14:42:05 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:33518
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240410AbhL3TmE (ORCPT
+        id S241858AbhL3TqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 14:46:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241778AbhL3TqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 14:42:04 -0500
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 635803F179
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 19:42:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1640893323;
-        bh=7AmioCkJUoaV5KEZ7nDRZ+lrq8M0NvYRcknuM8019yg=;
-        h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-         In-Reply-To:Content-Type;
-        b=JwyRT8pyJzZNwc2TF/1yxiLe9U7FH20x+17FOzIfd6Auvt9rhcTlIcDHVzwOVXyLw
-         AHdHvEg6QCi45+A9o/lzkCeooHNkad9/zGx/1uIJZaiLZVsUWN4TChDTB85glfoZ33
-         8d3JGZQRr6ffL/QhDCPyPd9ssoiiXK0tDqAulmC9lMZuKm5MsN2ZapSWHu2v0KjAJK
-         h+yYj6SvbGUpZQQrYCj5vqVka32gI1tC3JXiVKVnpuL5gniUqtolOsX9fDLoJmlo8w
-         3Lk7wn8b84QnCtBWbshoRT2UNt4q1o15Uu6Eow9i3nelcAAFmDPHJtk8Qifo4gynlu
-         g4NjvOYawCtsQ==
-Received: by mail-lj1-f197.google.com with SMTP id bd7-20020a05651c168700b0022d71e1839bso8485521ljb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:42:03 -0800 (PST)
+        Thu, 30 Dec 2021 14:46:01 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D19FC06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:46:01 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id m15so22199336pgu.11
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:46:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SSv7+eW+5rb6ctufcvm45xC/oNc4xjIbljO0x/RtzOU=;
+        b=gN3IhbGgjqJ1Z7FKEniA+ftsJK2fXR/ZfOh1xON8D8zybp6rVWmXnz4KpuggFQIG9y
+         5Kmhl0UEGLQxEbS6yMCud6PJZR0VV9zsF/Exo+eo1Qjlk5tKIVn8eiw/wEcQ97pgCp/7
+         uf1eSNUh4K2hQfNsa4CU5tS1RcaaG6U8j9K2cuD6QFyEa8IdtYRL7dtZ34C05+Q3PVfr
+         DMLw7q4o6sVNmZbSCHE2TdyjTJC5QoF7KOfwYaOB5W7+iSbXVH5ANYfA8vDNTNSfKQkk
+         Dozb7nN1VPjHFTsJV8LbT0PPrvUXHqrrMB7G1BK7KIFQaoZhDiWZvGDYbaOkcMrtg8+0
+         5wQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=7AmioCkJUoaV5KEZ7nDRZ+lrq8M0NvYRcknuM8019yg=;
-        b=LoIVrqq6Y19OSmCHcwIWOnJHWlpxkChyv7N/ipFZN98hkY2DSFr8Djt49624HtiHCg
-         RhCF7IaAIpQMXVsOOJocXUnXIxWltFtnXKTa3uu4w0R6MRnr9e+KYmaiy7ozXc3IFACp
-         8kIoVCmrezYPYcUy7JCAAZqo4sajm8WVg3ynZwd1JJfW6tCl+Z+R7MI7S/IYlGTdS3gn
-         zDUtRPeotJR06GttcJZtFccwY5oaS1Fs+wS4txB8A/p+8DgZipSNmjfllTfxiz//uZp7
-         mq0dJSBmc+FaG7utLpgPj4mLkpkWJCx7G/48dZHmvlWoH+AfzGbMyDAosGLvZWPG2TNf
-         94bw==
-X-Gm-Message-State: AOAM531skWGv175NaZrKq5Z0VbnC6i4qSCC+UtCNCaAttwbTPuo0RcET
-        /98IQ9dkecbzF3Nd+cNb4zPtvz+fKBawp06BOOyoojizKyQxxmsQKNqWDZqn/oICFkp2xLm2g3x
-        TocyBPOjY4nKbQfNVgjGZpNrcjfQw6pT91m0JPV1JiA==
-X-Received: by 2002:a05:6512:220f:: with SMTP id h15mr28544191lfu.137.1640893322832;
-        Thu, 30 Dec 2021 11:42:02 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwikFBFCGTECtglqH5hREBXZdnSFKZjK3Dcp9RQIDLCjyKmXNp7Ggu0IP0SiZ3FzyPJRyuzCQ==
-X-Received: by 2002:a05:6512:220f:: with SMTP id h15mr28544179lfu.137.1640893322677;
-        Thu, 30 Dec 2021 11:42:02 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id y11sm2565604lfe.252.2021.12.30.11.42.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Dec 2021 11:42:02 -0800 (PST)
-Message-ID: <88e6c551-b6ef-4676-ff85-6bc725d7d767@canonical.com>
-Date:   Thu, 30 Dec 2021 20:42:01 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SSv7+eW+5rb6ctufcvm45xC/oNc4xjIbljO0x/RtzOU=;
+        b=OyZfpPSjyAe9lEMpgbxrJfozGi9TK+ve8d2229n7dTbnAMgKDI3gc/hWPo9uQtM+WX
+         eRlVHNY7lG7/iEMSnjfGEYLr4pQVbAHug6RJByRMjTdKlGWtQ7kR1o9IAUv8ABWWBtrD
+         MKetGwNJNgwTHPZjDvrxVw7CfzFAEVUBINHe25lTJ3GyYH9T0n3JHCFbjTd6pC87BSfV
+         QzeEBOSB+eHYkccELapE22M3EBrme5sD5S3jH7Fx/1ptSO64m0Txvv6RmNAwAP1yEo+G
+         EU2ZVnsCDn+HF2Tvi0Fe/MJAZkornk0HVdq2g7bo/ZO/U7trfLXwVLo2uAEJpke7qHYQ
+         fxkA==
+X-Gm-Message-State: AOAM530lXL51wx7yof1kvoJu53KEEMoSs5hTWRILFqVccDjdv7QTukVl
+        YKOTdlyKePBPkMua8H1le/pO2w==
+X-Google-Smtp-Source: ABdhPJzzclyRHQDfHvRvsZwsyUuzImkT7Z6KSZUcIcPdvMc0Stk+mbpQag6OFzQJCD9h2IBLQyVEEQ==
+X-Received: by 2002:a63:8342:: with SMTP id h63mr29243410pge.443.1640893560420;
+        Thu, 30 Dec 2021 11:46:00 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id x25sm25440480pfu.113.2021.12.30.11.45.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Dec 2021 11:45:59 -0800 (PST)
+Date:   Thu, 30 Dec 2021 19:45:56 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     Marc Zyngier <maz@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v5 3/4] KVM: arm64/mmu: use gfn_to_pfn_page
+Message-ID: <Yc4MdFREYW98mzMs@google.com>
+References: <20211129034317.2964790-1-stevensd@google.com>
+ <20211129034317.2964790-4-stevensd@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: Exynos850 and ExynosAuto v9 pinctrl wakeup muxed interrupt
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Chanho Park <chanho61.park@samsung.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>
-References: <3c0087a9-5c3b-d665-136e-6110a0482775@canonical.com>
-In-Reply-To: <3c0087a9-5c3b-d665-136e-6110a0482775@canonical.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211129034317.2964790-4-stevensd@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/12/2021 20:34, Krzysztof Kozlowski wrote:
-> Hi Chanho and Sam,
-> 
-> I am slowly finishing dtschema for Samsung pinctrl drivers [1] and I
-> noticed that Exynos850 and Auto v9 do not define interrupt in pinctrl
-> node with: wakeup-interrupt-controller. This is an interrupt muxing
-> several external wakeup interrupts, e.g. EINT16 - EINT31.
-> 
-> For Exynos5433 this looks like:
-> https://elixir.bootlin.com/linux/latest/source/arch/arm64/boot/dts/exynos/exynos5433.dtsi#L857
-> 
-> Missing muxed interrupt for Exynos850 and Autov9 might be fine, although
-> you should see in dmesg error log like:
->     "irq number for muxed EINTs not found"
-> 
-> Can you check that your wakeup-interrupt-controller is properly defined
-> in DTSI? If yes, I will need to include such differences in the dtschema.
-> 
+On Mon, Nov 29, 2021, David Stevens wrote:
+> @@ -1142,14 +1146,17 @@ static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
+>  
+>  	/* Mark the page dirty only if the fault is handled successfully */
+>  	if (writable && !ret) {
+> -		kvm_set_pfn_dirty(pfn);
+> +		if (page)
+> +			kvm_set_pfn_dirty(pfn);
 
-Exynos850 DTSI additionally defines 32 interrupts for ALIVE pinctrl and
-8 for CMGP. This looks suspicious - driver does not support multiple
-interupts and how would they even work? What would be the source? It
-seems that Exynos850 should move these interrupts to wakeup pinctrl
-banks (actually - they are defined there!).
+If kvm_set_page_dirty() is changed to be less dumb:
 
-I'll send a patch for this.
+		if (page)
+			kvm_set_page_dirty(page);
 
-> [1] https://github.com/krzk/linux/tree/n/dt-bindings-samsung-pinctrl-schema
-> 
-> Best regards,
-> Krzysztof
-> 
+>  		mark_page_dirty_in_slot(kvm, memslot, gfn);
+>  	}
+>  
+>  out_unlock:
+>  	spin_unlock(&kvm->mmu_lock);
+> -	kvm_set_pfn_accessed(pfn);
+> -	kvm_release_pfn_clean(pfn);
+> +	if (page) {
+> +		kvm_set_pfn_accessed(pfn);
+> +		put_page(page);
+
+Oof, KVM's helpers are stupid.  Take a page, convert it to a pfn, then convert it
+back to a page, just to mark it dirty or put a ref.  Can you fold the below 
+(completely untested) patch in before the x86/arm64 patches?  That way this code
+can be:
+
+	if (page)
+		kvm_release_page_accessed(page);
+
+and x86 can do:
+
+	if (fault->page)
+		kvm_release_page_clean(page);
+
+instead of open-coding put_page().
 
 
-Best regards,
-Krzysztof
+From a8af0c60d7f6e77bbc7310d898211c43ae075cf8 Mon Sep 17 00:00:00 2001
+From: Sean Christopherson <seanjc@google.com>
+Date: Thu, 30 Dec 2021 11:40:58 -0800
+Subject: [PATCH] KVM: Clean up and enhance helpers for releasing pages/pfns
+
+Tweak kvm_release_page_clean() and kvm_release_page_dirty() to avoid
+pointlessly converting to a pfn and back to a page, and add an "accessed"
+variant that will be used in a future arm64 patch.
+
+No functional change intended.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ virt/kvm/kvm_main.c | 20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 8eb0f762a82c..f75129f641e9 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -2876,29 +2876,37 @@ void kvm_release_page_clean(struct page *page)
+ {
+ 	WARN_ON(is_error_page(page));
+
+-	kvm_release_pfn_clean(page_to_pfn(page));
++	put_page(page);
+ }
+ EXPORT_SYMBOL_GPL(kvm_release_page_clean);
+
+ void kvm_release_pfn_clean(kvm_pfn_t pfn)
+ {
+ 	if (!is_error_noslot_pfn(pfn) && !kvm_is_reserved_pfn(pfn))
+-		put_page(pfn_to_page(pfn));
++		kvm_release_page_clean(page);
+ }
+ EXPORT_SYMBOL_GPL(kvm_release_pfn_clean);
+
++void kvm_release_page_accessed(struct page *page)
++{
++	mark_page_accessed(page);
++
++	kvm_release_page_clean(page);
++}
++EXPORT_SYMBOL_GPL(kvm_release_page_accessed);
++
+ void kvm_release_page_dirty(struct page *page)
+ {
+-	WARN_ON(is_error_page(page));
++	SetPageDirty(page);
+
+-	kvm_release_pfn_dirty(page_to_pfn(page));
++	kvm_release_page_clean(page);
+ }
+ EXPORT_SYMBOL_GPL(kvm_release_page_dirty);
+
+ void kvm_release_pfn_dirty(kvm_pfn_t pfn)
+ {
+-	kvm_set_pfn_dirty(pfn);
+-	kvm_release_pfn_clean(pfn);
++	if (!kvm_is_reserved_pfn(pfn) && !kvm_is_zone_device_pfn(pfn))
++		kvm_release_page_dirty(pfn_to_page(pfn));
+ }
+ EXPORT_SYMBOL_GPL(kvm_release_pfn_dirty);
+
+--
+2.34.1.448.ga2b2bfdf31-goog

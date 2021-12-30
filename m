@@ -2,145 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4EA481868
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:14:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC6448186A
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234450AbhL3COE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 21:14:04 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:41614 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231612AbhL3COC (ORCPT
+        id S231612AbhL3CPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 21:15:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229456AbhL3CPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 21:14:02 -0500
-X-UUID: cfc0a5edf5ac4842a1d131375155a352-20211230
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=x6GiD9JJ4B1knkLkeZo2l7UgESkmJYdMXsAzklAKuuQ=;
-        b=Qg4F1qYwMCtyrkbGjOSO86EVcnkGnAg8MaoALcUdT9dEGiZJ+uBoVtWdKevLnZ1gqkYPTAiHN+vtmBCXD0OwOsDYNUhLkgFOdELjZLmoaGR9r2oLZhQfBRrUxjRzwJ83XVSc0x+tCwquZqD7ZJ2CrtIOb1q28ZoY9Zfh94GXIsw=;
-X-UUID: cfc0a5edf5ac4842a1d131375155a352-20211230
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 861019317; Thu, 30 Dec 2021 10:13:58 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 30 Dec 2021 10:13:57 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 30 Dec
- 2021 10:13:57 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 30 Dec 2021 10:13:56 +0800
-Message-ID: <e7e25a6bce17a4f488e49dfc6d17aa77f0603645.camel@mediatek.com>
-Subject: Re: [PATCH v2 2/5] phy: phy-mtk-tphy: add support efuse setting
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Vinod Koul <vkoul@kernel.org>
-CC:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Date:   Thu, 30 Dec 2021 10:13:56 +0800
-In-Reply-To: <bc841baa-e025-b0b8-8dbd-f438fd6981f7@collabora.com>
-References: <20211218082802.5256-1-chunfeng.yun@mediatek.com>
-         <20211218082802.5256-2-chunfeng.yun@mediatek.com>
-         <bc841baa-e025-b0b8-8dbd-f438fd6981f7@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 29 Dec 2021 21:15:14 -0500
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4BBC061574;
+        Wed, 29 Dec 2021 18:15:13 -0800 (PST)
+Received: by mail-pg1-x542.google.com with SMTP id i8so11674015pgt.13;
+        Wed, 29 Dec 2021 18:15:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=xpvE1IguZ73rofYZc01aCygHY7BN+tTWzJIv0Gtd82E=;
+        b=GrI9HoeRHdZp8AdKRUqZP+QPD7/9avC3/bRchOOjd9BgCllh5mbfmP0haO2l0EE5jv
+         GIBXKlwoDj5cahZqFPuMD/rrLIl9tx45qMh3e+5740qDCQWTpMkE1/McbDkH0nZGyH5L
+         1YWof/gEbyz90jz8iXjWBiB8UyH+kD0phY9FYqBPZiU4VM6n+yAE+D4ZsSqIEgMce/af
+         OKNV+FRYaR3oK867yoCfKNLuJ84CGDHvi7zCxxaVDCwlbmpQYvQ9NAi41LHEL5Fjp65j
+         s4dHV/I1c9/CcXQ8WkpHU0UgMeWclPcVl2IAJY3OJYHq/bSfItABzuNKfzX7nupNH/cf
+         Yxyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xpvE1IguZ73rofYZc01aCygHY7BN+tTWzJIv0Gtd82E=;
+        b=YX2UQLzY7tDu6YbUFGMW68234onBMrPv0Y5Bz1w157C9mt4KJ4ELoOhhdVRhEqmZam
+         lN65kmAiqaes2ap+jcaqxFotsR26jH2pkvLLCz84L/isH95Up5Rp9sp1EgcEV5iKsO1c
+         D7iUO8pEwLoc2KYZTucEmivNrMunyGNJDcpVLn5AfFY8/vDNmlIeNRxR7yu4oeAShIcI
+         4Yy592lkrmaymwt3+N2RfVeJxXc+cckbGAWhLTHqd1GLauP8Dd/WSYV7xOwA0wa9F1U4
+         NY/p6p1tnAqoo/p/1fGRQ2QF6XVPCm7KzCK2rtcGflbd/jXUTf+xdCOX7A4XpKjcBsjo
+         fPQw==
+X-Gm-Message-State: AOAM531hFXE0ADIhfTtGwu/Bv+0IMq5tZ4o9LroG+z33fGhZ4k75cKiz
+        vnMYv8PwKWD7pAF5zXRIWFRMUKK/s0m3Fze9/4E=
+X-Google-Smtp-Source: ABdhPJzVrSBoQSYWKWynnfHjgdsdnTVrUhoKk15ZISolD0ziaZdbCtqCRXlUIR7nilGABbcZYZcUzw==
+X-Received: by 2002:aa7:910e:0:b0:4bb:8470:249b with SMTP id 14-20020aa7910e000000b004bb8470249bmr28316802pfh.23.1640830513315;
+        Wed, 29 Dec 2021 18:15:13 -0800 (PST)
+Received: from [0.0.0.0] (ec2-54-176-189-104.us-west-1.compute.amazonaws.com. [54.176.189.104])
+        by smtp.gmail.com with ESMTPSA id x33sm26609030pfh.212.2021.12.29.18.15.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Dec 2021 18:15:13 -0800 (PST)
+Subject: Re: [PATCH] usb: gadget: use after free in dev_config
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, axboe@kernel.dk,
+        dan.carpenter@oracle.com, jj251510319013@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211228092126.29510-1-hbh25y@gmail.com>
+ <YczPGL/1Er/vh+X6@rowland.harvard.edu>
+From:   Hangyu Hua <hbh25y@gmail.com>
+Message-ID: <dc9d169f-deae-e0a1-4509-a105898f45c0@gmail.com>
+Date:   Thu, 30 Dec 2021 10:15:02 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <YczPGL/1Er/vh+X6@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIxLTEyLTI0IGF0IDExOjAzICswMTAwLCBBbmdlbG9HaW9hY2NoaW5vIERlbCBS
-ZWdubyB3cm90ZToNCj4gSWwgMTgvMTIvMjEgMDk6MjcsIENodW5mZW5nIFl1biBoYSBzY3JpdHRv
-Og0KPiA+IER1ZSB0byBzb21lIFNvQ3MgaGF2ZSBhIGJpdCBzaGlmdCBpc3N1ZSB0aGF0IHdpbGwg
-ZHJvcCBhIGJpdCBmb3INCj4gPiB1c2IzDQo+ID4gcGh5IG9yIHBjaWUgcGh5LCBmaXggaXQgYnkg
-YWRkaW5nIHNvZnR3YXJlIGVmdXNlIHJlYWRpbmcgYW5kDQo+ID4gc2V0dGluZywNCj4gPiBidXQg
-b25seSBzdXBwb3J0IGl0IG9wdGlvbmFsbHkgZm9yIHZlcnNpb24gMi8zLg0KPiA+IA0KPiA+IFNp
-Z25lZC1vZmYtYnk6IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCj4g
-PiAtLS0NCj4gPiB2MjogY2hhbmdlcyBzdWdnZXN0ZWQgYnkgVmlub2QNCj4gPiAgICAgIDEuIGZp
-eCB0eXBvIG9mIHZlcnNpb24gaW4gY29tbWl0IG1lc3NhZ2UNCj4gPiAgICAgIDIuIHVzZSBkZXZf
-ZGJnKCkgaW5zdGVhZCBvZiBkZXZfaW5mbygpDQo+ID4gLS0tDQo+ID4gICBkcml2ZXJzL3BoeS9t
-ZWRpYXRlay9waHktbXRrLXRwaHkuYyB8IDE2Mg0KPiA+ICsrKysrKysrKysrKysrKysrKysrKysr
-KysrKysNCj4gPiAgIDEgZmlsZSBjaGFuZ2VkLCAxNjIgaW5zZXJ0aW9ucygrKQ0KPiA+IA0KPiAN
-Cj4gSGVsbG8gQ2h1bmZlbmcsIHRoYW5rcyBmb3IgdGhlIHBhdGNoIQ0KPiBIb3dldmVyLCB0aGVy
-ZSBhcmUgYSBmZXcgdGhpbmdzIHRvIGltcHJvdmUuLi4NCj4gDQo+ID4gZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvcGh5L21lZGlhdGVrL3BoeS1tdGstdHBoeS5jDQo+ID4gYi9kcml2ZXJzL3BoeS9tZWRp
-YXRlay9waHktbXRrLXRwaHkuYw0KPiA+IGluZGV4IGNkY2VmODY1ZmU5ZS4uOThhOTQyYzYwN2E2
-IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvcGh5L21lZGlhdGVrL3BoeS1tdGstdHBoeS5jDQo+
-ID4gKysrIGIvZHJpdmVycy9waHkvbWVkaWF0ZWsvcGh5LW10ay10cGh5LmMNCj4gPiBAQCAtMTIs
-NiArMTIsNyBAQA0KPiA+ICAgI2luY2x1ZGUgPGxpbnV4L2lvcG9sbC5oPg0KPiA+ICAgI2luY2x1
-ZGUgPGxpbnV4L21mZC9zeXNjb24uaD4NCj4gPiAgICNpbmNsdWRlIDxsaW51eC9tb2R1bGUuaD4N
-Cj4gPiArI2luY2x1ZGUgPGxpbnV4L252bWVtLWNvbnN1bWVyLmg+DQo+ID4gICAjaW5jbHVkZSA8
-bGludXgvb2ZfYWRkcmVzcy5oPg0KPiA+ICAgI2luY2x1ZGUgPGxpbnV4L29mX2RldmljZS5oPg0K
-PiA+ICAgI2luY2x1ZGUgPGxpbnV4L3BoeS9waHkuaD4NCj4gPiBAQCAtNDEsNiArNDIsOSBAQA0K
-PiA+ICAgI2RlZmluZSBTU1VTQl9TSUZTTFZfVjJfVTNQSFlECQkweDIwMA0KPiA+ICAgI2RlZmlu
-ZSBTU1VTQl9TSUZTTFZfVjJfVTNQSFlBCQkweDQwMA0KPiA+ICAgDQo+ID4gKyNkZWZpbmUgVTNQ
-X01JU0NfUkVHMQkJMHgwNA0KPiA+ICsjZGVmaW5lIE1SMV9FRlVTRV9BVVRPX0xPQURfRElTCQlC
-SVQoNikNCj4gPiArDQo+ID4gICAjZGVmaW5lIFUzUF9VU0JQSFlBQ1IwCQkweDAwMA0KPiA+ICAg
-I2RlZmluZSBQQTBfUkdfVTJQTExfRk9SQ0VfT04JCUJJVCgxNSkNCj4gPiAgICNkZWZpbmUgUEEw
-X1VTQjIwX1BMTF9QUkVESVYJCUdFTk1BU0soNywgNikNCj4gPiBAQCAtMTMzLDYgKzEzNyw4IEBA
-DQo+ID4gICAjZGVmaW5lIFAzQ19SR19TV1JTVF9VM19QSFlEX0ZPUkNFX0VOCUJJVCgyNCkNCj4g
-PiAgIA0KPiA+ICAgI2RlZmluZSBVM1BfVTNfUEhZQV9SRUcwCTB4MDAwDQo+ID4gKyNkZWZpbmUg
-UDNBX1JHX0lFWFRfSU5UUgkJR0VOTUFTSygxNSwgMTApDQo+ID4gKyNkZWZpbmUgUDNBX1JHX0lF
-WFRfSU5UUl9WQUwoeCkJCSgoMHgzZiAmICh4KSkgPDwgMTApDQo+ID4gICAjZGVmaW5lIFAzQV9S
-R19DTEtEUlZfT0ZGCQlHRU5NQVNLKDMsIDIpDQo+ID4gICAjZGVmaW5lIFAzQV9SR19DTEtEUlZf
-T0ZGX1ZBTCh4KQkoKDB4MyAmICh4KSkgPDwgMikNCj4gPiAgIA0KPiA+IEBAIC0xODcsNiArMTkz
-LDE5IEBADQo+ID4gICAjZGVmaW5lIFAzRF9SR19GV0FLRV9USAkJR0VOTUFTSygyMSwgMTYpDQo+
-ID4gICAjZGVmaW5lIFAzRF9SR19GV0FLRV9USF9WQUwoeCkJKCgweDNmICYgKHgpKSA8PCAxNikN
-Cj4gPiAgIA0KPiA+ICsjZGVmaW5lIFUzUF9VM19QSFlEX0lNUENBTDAJCTB4MDEwDQo+ID4gKyNk
-ZWZpbmUgUDNEX1JHX0ZPUkNFX1RYX0lNUEVMCQlCSVQoMzEpDQo+ID4gKyNkZWZpbmUgUDNEX1JH
-X1RYX0lNUEVMCQkJR0VOTUFTSygyOCwgMjQpDQo+ID4gKyNkZWZpbmUgUDNEX1JHX1RYX0lNUEVM
-X1ZBTCh4KQkJKCgweDFmICYgKHgpKSA8PCAyNCkNCj4gPiArDQo+ID4gKyNkZWZpbmUgVTNQX1Uz
-X1BIWURfSU1QQ0FMMQkJMHgwMTQNCj4gPiArI2RlZmluZSBQM0RfUkdfRk9SQ0VfUlhfSU1QRUwJ
-CUJJVCgzMSkNCj4gPiArI2RlZmluZSBQM0RfUkdfUlhfSU1QRUwJCQlHRU5NQVNLKDI4LCAyNCkN
-Cj4gPiArI2RlZmluZSBQM0RfUkdfUlhfSU1QRUxfVkFMKHgpCQkoKDB4MWYgJiAoeCkpIDw8IDI0
-KQ0KPiA+ICsNCj4gPiArI2RlZmluZSBVM1BfVTNfUEhZRF9SU1YJCQkweDA1NA0KPiA+ICsjZGVm
-aW5lIFAzRF9SR19FRlVTRV9BVVRPX0xPQURfRElTCUJJVCgxMikNCj4gPiArDQo+ID4gICAjZGVm
-aW5lIFUzUF9VM19QSFlEX0NEUjEJCTB4MDVjDQo+ID4gICAjZGVmaW5lIFAzRF9SR19DRFJfQklS
-X0xURDEJCUdFTk1BU0soMjgsIDI0KQ0KPiA+ICAgI2RlZmluZSBQM0RfUkdfQ0RSX0JJUl9MVEQx
-X1ZBTCh4KQkoKDB4MWYgJiAoeCkpIDw8IDI0KQ0KPiA+IEBAIC0zMDcsNiArMzI2LDExIEBAIHN0
-cnVjdCBtdGtfcGh5X3BkYXRhIHsNCj4gPiAgIAkgKiA0OE0gUExMLCBmaXggaXQgYnkgc3dpdGNo
-aW5nIFBMTCB0byAyNk0gZnJvbSBkZWZhdWx0IDQ4TQ0KPiA+ICAgCSAqLw0KPiA+ICAgCWJvb2wg
-c3dfcGxsXzQ4bV90b18yNm07DQo+ID4gKwkvKg0KPiA+ICsJICogU29tZSBTb0NzIChlLmcuIG10
-ODE5NSkgZHJvcCBhIGJpdCB3aGVuIHVzZSBhdXRvIGxvYWQgZWZ1c2UsDQo+ID4gKwkgKiBzdXBw
-b3J0IHN3IHdheSwgYWxzbyBzdXBwb3J0IGl0IGZvciB2Mi92MyBvcHRpb25hbGx5Lg0KPiA+ICsJ
-ICovDQo+ID4gKwlib29sIHN3X2VmdXNlX3N1cHBvcnRlZDsNCj4gPiAgIAllbnVtIG10a19waHlf
-dmVyc2lvbiB2ZXJzaW9uOw0KPiA+ICAgfTsNCj4gPiAgIA0KPiA+IEBAIC0zMzYsNiArMzYwLDEw
-IEBAIHN0cnVjdCBtdGtfcGh5X2luc3RhbmNlIHsNCj4gPiAgIAlzdHJ1Y3QgcmVnbWFwICp0eXBl
-X3N3Ow0KPiA+ICAgCXUzMiB0eXBlX3N3X3JlZzsNCj4gPiAgIAl1MzIgdHlwZV9zd19pbmRleDsN
-Cj4gPiArCXUzMiBlZnVzZV9zd19lbjsNCj4gPiArCXUzMiBlZnVzZV9pbnRyOw0KPiA+ICsJdTMy
-IGVmdXNlX3R4X2ltcDsNCj4gPiArCXUzMiBlZnVzZV9yeF9pbXA7DQo+ID4gICAJaW50IGV5ZV9z
-cmM7DQo+ID4gICAJaW50IGV5ZV92cnQ7DQo+ID4gICAJaW50IGV5ZV90ZXJtOw0KPiA+IEBAIC0x
-MDQwLDYgKzEwNjgsMTMwIEBAIHN0YXRpYyBpbnQgcGh5X3R5cGVfc2V0KHN0cnVjdA0KPiA+IG10
-a19waHlfaW5zdGFuY2UgKmluc3RhbmNlKQ0KPiA+ICAgCXJldHVybiAwOw0KPiA+ICAgfQ0KPiA+
-ICAgDQo+ID4gK3N0YXRpYyBpbnQgcGh5X2VmdXNlX2dldChzdHJ1Y3QgbXRrX3RwaHkgKnRwaHks
-IHN0cnVjdA0KPiA+IG10a19waHlfaW5zdGFuY2UgKmluc3RhbmNlKQ0KPiA+ICt7DQo+ID4gKwlz
-dHJ1Y3QgZGV2aWNlICpkZXYgPSAmaW5zdGFuY2UtPnBoeS0+ZGV2Ow0KPiA+ICsJaW50IHJldCA9
-IDA7DQo+ID4gKw0KPiA+ICsJLyogdHBoeSB2MSBkb2Vzbid0IHN1cHBvcnQgc3cgZWZ1c2UsIHNr
-aXAgaXQgKi8NCj4gPiArCWlmICghdHBoeS0+cGRhdGEtPnN3X2VmdXNlX3N1cHBvcnRlZCkgew0K
-PiA+ICsJCWluc3RhbmNlLT5lZnVzZV9zd19lbiA9IDA7DQo+ID4gKwkJcmV0dXJuIDA7DQo+ID4g
-Kwl9DQo+ID4gKw0KPiA+IA0KPiA+IFsuLi5dDQo+ID4gDQo+ID4gKw0KPiA+ICsJCWRldl9kYmco
-ZGV2LCAidTMgZWZ1c2UgLSBpbnRyICV4LCByeF9pbXAgJXgsIHR4X2ltcA0KPiA+ICV4XG4iLA0K
-PiA+ICsJCQlpbnN0YW5jZS0+ZWZ1c2VfaW50ciwgaW5zdGFuY2UtDQo+ID4gPmVmdXNlX3J4X2lt
-cCxpbnN0YW5jZS0+ZWZ1c2VfdHhfaW1wKTsNCj4gPiArCQlicmVhazsNCj4gPiArCWRlZmF1bHQ6
-DQo+ID4gKwkJZGV2X2VycihkZXYsICJubyBzdyBlZnVzZSBmb3IgdHlwZSAlZFxuIiwgaW5zdGFu
-Y2UtDQo+ID4gPnR5cGUpOw0KPiA+ICsJCXJldCA9IC1FSU5WQUw7DQo+ID4gKwl9DQo+ID4gKw0K
-PiA+ICsJcmV0dXJuIHJldDsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIHZvaWQgcGh5X2Vm
-dXNlX3NldChzdHJ1Y3QgbXRrX3BoeV9pbnN0YW5jZSAqaW5zdGFuY2UpDQo+IA0KPiBUaGUgbmFt
-ZSBmb3IgdGhpcyBmdW5jdGlvbiBpcyBhIGJpdCBtaXNsZWFkaW5nIGFuZCBvbmUgbWF5IHRoaW5r
-IHRoYXQNCj4gdGhpcw0KPiBpcyB3cml0aW5nIGVmdXNlcyAoYWthIGJsb3dpbmcgYSBmdXNlIGFy
-cmF5KSwgDQpUaGUgaGFyZHdhcmUgZWZ1c2VzIG9uIE1lZGlhVGVrIHBsYXRmb3JtIG9ubHkgc3Vw
-cG9ydCBSZWFkLU9ubHkuDQoNCj4gd2hpY2ggZG9lc24ndCBsb29rIGxpa2UgYmVpbmcNCj4gdGhl
-IGNhc2UgYXQgYWxsLg0KPiANCj4gV2hhdCBhYm91dCBjaGFuZ2luZyBpdCB0byBwaHlfc2V0X3N3
-X2VmdXNlX3BhcmFtcygpLCBvciBzb21ldGhpbmcNCj4gc2ltaWxhcj8NCkl0IHNlZW1zIGJldHRl
-ciwgSSdsbCBwcmVwYXJlIGEgbmV3IHBhdGNoLg0KPiANCj4gDQo+IFRoYW5rIHlvdSwNCj4gLSBB
-bmdlbG8NCg==
+Thank for your suggesions. I will break this up into two separate 
+patches later. And i think it's necessary to clear up dev->config and
+dev->hs_config and dev->dev. For example, dev->hs_config is used in
+ep0_read() which may lead a UAF.
 
+Thanks.
+
+On 2021/12/30 上午5:11, Alan Stern wrote:
+> On Tue, Dec 28, 2021 at 05:21:26PM +0800, Hangyu Hua wrote:
+>> There are two bugs:
+> 
+> You should break this up into two separate patches, one for each bug.
+> 
+>> dev->buf does not need to be released if it already exists before
+>> executing dev_config.
+> 
+> That's right.  The call to dev_config should fail without changing any
+> of the stored values.
+> 
+>> dev->config and dev->hs_config and dev->dev need to be cleaned if
+>> dev_config fails to avoid UAF.
+> 
+> Do they really need to be cleared?  I think if dev_config fails then
+> those pointers never get used, so it doesn't matter what they contain.
+> 
+> Of course, clearing them doesn't hurt, but it would be best to clear
+> all of them in the "fail:" part of the routine.  And then you would
+> want to change the pathway where usb_gadget_probe_driver fails, to make
+> it go to "fail:" also.
+> 
+> Alan Stern
+> 

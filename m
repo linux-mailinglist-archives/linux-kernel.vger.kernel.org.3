@@ -2,94 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4487E481DEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28CCB481DF2
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:08:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240632AbhL3QGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 11:06:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
+        id S240785AbhL3QIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 11:08:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238908AbhL3QG3 (ORCPT
+        with ESMTP id S238908AbhL3QIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 11:06:29 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB03C061574;
-        Thu, 30 Dec 2021 08:06:28 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id v11so51316177wrw.10;
-        Thu, 30 Dec 2021 08:06:28 -0800 (PST)
+        Thu, 30 Dec 2021 11:08:38 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27E7C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 08:08:37 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id d201so49682865ybc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 08:08:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=x0Z4VfhJECgT1/vs4niZzj7+Z6gvqhAPOkKcI0mAqoc=;
-        b=ipzs2Z2aIE/u3K6VQ0AbCXqJ8wzmf1CopsYvKY+Qnn/ypMJrQW++LKWeEAwsV267tf
-         t/OWBLVKSyFw0wHISAQYQ/sekslWFw+GrVzFpI2MXI+UUgXxYiJnRgyfaUcgYLs5Nbc5
-         OU4JWJ+vwyVDzJbMgAD/7iEZaV+serEDsV9EO6Q+mLPRybz+otJsAr9upP8DSB9ux1y7
-         C3ZIYUS+20ZWs3XKnn++HN1OxbYZrd/hWqjy0MeN+9OO5294IDMdhtAUM/m7bOuNEj09
-         R2c0HsgYjT3+g57nvb2HtHm56oclfA62XnLRfylNZNz+mv1MqDvvyoM3JLoj+slwMRF2
-         HwjQ==
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=KpVasdcvO2084v9jKVAkwMz4o0Bdb19/FCor2U/5oeM=;
+        b=g8o2h2RQcqNo/F+3DYQfaJEsouH/CqW+llScFI+0y/YK9gshPwoSnBA7u+fxrgE5mE
+         LIYxPuNLOS4V24zLsyUSlMBWaltD8K88+j8rjh1OGXrTk+5yCckAdxE40dkz3ZA2qjDf
+         pP74lReWCH0oiCqFf+mX4H2HIK/WMnUXAMGrRwmNhufvLVo9G0TSAZ00+bI/hhN0Qw6f
+         ibdw6+bmk9rS8/AmIRqdp0QRTTdDwRjLtTvAxrPlODMeab9dKj/aH2uIgJm3UNRp8xRq
+         OSteVQSFB/SB2W41XfTndznnl5PcD/nAK09nfV/srz8zHZtOtsf+cG0lBc00bjWBOVF6
+         6YaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=x0Z4VfhJECgT1/vs4niZzj7+Z6gvqhAPOkKcI0mAqoc=;
-        b=f4x8gtobQecwUVp9tnKQ1itwB9jRS47fc0xsb3g9qkVjvGdjRfIJR1i55ExwU0rd25
-         YWD6efBhXHo305qa0xnlRE5VGYFjm7jkulFVd9V5mj7SHaLC9dLtxgc8SJaOQJMz72Jc
-         H9PXL2qxYjKnEVAO/NhTCpFFdUnB+e2IhvHH1uNPQmY845E88+GeC/m+lEwH/EZ3kqfn
-         X3ZEJ4dZYlCRgQkgOrFXjXrGvX0pTK9ToggDBvCExBziYNS8xKYJ5W88Ot8AV3ska5bk
-         d74saj+/tUeKpkBl2tyraYezh6ajdCwVsdQbxt8wF5HtGUi2BLG9wmfQL8Kx0hqex2zN
-         QHIA==
-X-Gm-Message-State: AOAM533++NehMkajvWCGrSXM6cl8LLdgyb6AGo7oWCnoZeKmY3MzeZ2l
-        oou5pgpCl5lbFIjq/HDtVSWGyC0Zmpe8e4gi
-X-Google-Smtp-Source: ABdhPJwh/LJEO882P8Cm7xI3bzxI9mqZ37vTY5joIviEvK7W3BI5qy21cL58BLPI6V+WVVtkmMpCMA==
-X-Received: by 2002:a05:6000:1241:: with SMTP id j1mr27249409wrx.601.1640880387487;
-        Thu, 30 Dec 2021 08:06:27 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id r7sm23477675wrt.77.2021.12.30.08.06.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 08:06:27 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH] video: fbdev: s3c-fb: remove redundant initialization of pointer bufs
-Date:   Thu, 30 Dec 2021 16:06:26 +0000
-Message-Id: <20211230160626.404072-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=KpVasdcvO2084v9jKVAkwMz4o0Bdb19/FCor2U/5oeM=;
+        b=G/zcNpPOWp5lZ/FX1SPuM+FIcBWDhcj5Gr2MC63A8lRWSJN6cwfoHm7Kzwxg2H73LO
+         JQ8LkWO/himtHtXeA5RLV+7OiPxqpsV3Nk0kdkBYNdBZ49XYpkd3D1X/4UfJ5Y6Q95Qb
+         5D1sP2DWMYNNZZuQnN3m4Qns0RgpZqCYMluxv23MHEGmKFVw1vzHzxHGRZ7kNoDTGgFK
+         KWWUih4ZCbsjl+kc6lXw8eTKZHvKJ2boLSI8QkG91R3LoMTBzf6KH7JRHNUVETLwc/a8
+         uHjocOUxQYTwbyj2hw/AUuHCYI+tpU8T6DV8i/UhuK9nR1bu5UXK/REtJzVtH6vePpF3
+         5Q2w==
+X-Gm-Message-State: AOAM53240hOJCCaih12luNuXmkNkmnXr8GD7PH4SWDUsTG/NjyJksBoU
+        zTPvj6ahiKOJXClWR9I+DmqsxFlwITLMpghv/A==
+X-Google-Smtp-Source: ABdhPJwuSjN7xfoyLu1r1dQt30WYWXddHE0I+3dzQKxwPhzuycpakWPgAPiRrrYt6R9lB0Z+hLKjWp3HLc3CnoYu6Ig=
+X-Received: by 2002:a25:cec6:: with SMTP id x189mr30595254ybe.470.1640880516931;
+ Thu, 30 Dec 2021 08:08:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Sender: anera.lenneh@gmail.com
+Received: by 2002:a05:7110:4b09:b0:11e:f454:286b with HTTP; Thu, 30 Dec 2021
+ 08:08:36 -0800 (PST)
+From:   Mrs Aisha Gaddafi <aishagarddaff@gmail.com>
+Date:   Thu, 30 Dec 2021 08:08:36 -0800
+X-Google-Sender-Auth: 7y8Zq0ZzNomh2WVyIrjYFGYVx2Q
+Message-ID: <CAKsGGvO9_2GzH0HZ-OhHRhj1gj+ku_UTm3-=WH_r0OwgE-2pZg@mail.gmail.com>
+Subject: Urgent Message From Mrs Aisha Gaddafi.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pointer bufs is being initialized with a value that is never read, it
-is being re-assigned with a different value later on. The assignment
-is redundant and can be removed. Cleans up clang-scan warning:
+Dear Friend,
+Greetings and Nice Day.
+Assalamu Alaikum
 
-drivers/video/fbdev/s3c-fb.c:492:16: warning: Value stored to 'buf'
-during its initialization is never read [deadcode.DeadStores]
-        void __iomem *buf = regs;
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/video/fbdev/s3c-fb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+May i  use this medium to open a mutual communication with you seeking
+your acceptance towards investing in your country under your
+management as my partner, My name is Aisha  Gaddafi and presently
+living in Oman, i am a Widow and single Mother with three Children,
+the only biological Daughter of late Libyan President (Late Colonel
+Muammar Gaddafi) and presently i am under political asylum protection
+by the Omani Government.
 
-diff --git a/drivers/video/fbdev/s3c-fb.c b/drivers/video/fbdev/s3c-fb.c
-index 3b134e1bbc38..68408c499627 100644
---- a/drivers/video/fbdev/s3c-fb.c
-+++ b/drivers/video/fbdev/s3c-fb.c
-@@ -489,7 +489,7 @@ static int s3c_fb_set_par(struct fb_info *info)
- 	struct s3c_fb_win *win = info->par;
- 	struct s3c_fb *sfb = win->parent;
- 	void __iomem *regs = sfb->regs;
--	void __iomem *buf = regs;
-+	void __iomem *buf;
- 	int win_no = win->index;
- 	u32 alpha = 0;
- 	u32 data;
--- 
-2.33.1
+I have funds worth "EIGHT Million Five Hundred Thousand United State
+Dollars" -$8.500.000.00 US Dollars which i want to entrust on you for
+investment project in your country.If you are willing to handle this
+project on my behalf, kindly reply urgent to enable me provide you
+more details to start the transfer process.
+I shall appreciate your urgent response through my email address.
 
+Best Regards
+Mrs Aisha Gaddafi

@@ -2,143 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E2348196E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 05:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88677481966
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 05:43:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236043AbhL3EtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 23:49:00 -0500
-Received: from mail.djicorp.com ([14.21.64.4]:56524 "EHLO mail.djicorp.com"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229834AbhL3Es7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 23:48:59 -0500
-X-Greylist: delayed 429 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 Dec 2021 23:48:59 EST
-IronPort-SDR: SglpbcEdGTc+D8YOF6PPVLj+bX24cqC6eqRcLW+zvFKj6+sj+gb2r+K4AyCaQhzfHCDnJeVy6w
- 4ec5R+aMCNBg==
-X-IronPort-AV: E=Sophos;i="5.88,247,1635177600"; 
-   d="scan'208";a="12547668"
-From:   wigin zeng <wigin.zeng@dji.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        First Light <xiaoguang.chen@dji.com>
-Subject: =?utf-8?B?562U5aSNOiDnrZTlpI06IOetlOWkjTog562U5aSNOiDnrZTlpI06IOetlA==?=
- =?utf-8?B?5aSNOiBbUEFUQ0hdIHNlcmlhbDogODI1MDogYWRkIGxvY2sgZm9yIGRtYSBy?=
- =?utf-8?Q?x?=
-Thread-Topic: =?utf-8?B?562U5aSNOiDnrZTlpI06IOetlOWkjTog562U5aSNOiDnrZTlpI06IFtQQVRD?=
- =?utf-8?Q?H]_serial:_8250:_add_lock_for_dma_rx?=
-Thread-Index: AQHX7M8cgUf9QibCHEeycmxSNUOEd6wpP9YAgACLx/D//4YHgIAAiJFw//+PM4CAEXtykP//udeAABInGiD//4DlgP//eQnwgACSc4D/8Cl5MA==
-Date:   Thu, 30 Dec 2021 04:41:47 +0000
-Message-ID: <893a2e55bef04d5dbb9ffa99efdbb023@MAIL-MBX-cwP12.dji.com>
-References: <YbGygPtkz6ihyW51@kroah.com>
- <674707a0388c4a3a9bb25676c61e1737@MAIL-MBX-cwP12.dji.com>
- <YbHBb2uB9JRP0tWc@kroah.com>
- <f2150f8a7b7242b48227e30e5550da0b@MAIL-MBX-cwP12.dji.com>
- <YbHVXwdCUCvmZrbS@kroah.com>
- <62dd5f2fedbb4332a4d04dea4970a347@MAIL-MBX-cwP12.dji.com>
- <YcBEy9zi2G7UYErE@kroah.com>
- <c35df81a176f418eb90e18563170de67@MAIL-MBX-cwP12.dji.com>
- <YcBT/Vf41PWUYdxT@kroah.com>
- <b9cdf44fe8064c6bb14d5e7aaec3d33a@MAIL-MBX-cwP12.dji.com>
- <YcBdnzfUceNqdVHb@kroah.com>
-In-Reply-To: <YcBdnzfUceNqdVHb@kroah.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [58.34.188.114]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S236043AbhL3EnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 23:43:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232488AbhL3EnV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 23:43:21 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6A3C061574;
+        Wed, 29 Dec 2021 20:43:21 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 80E232A5;
+        Thu, 30 Dec 2021 05:43:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1640839399;
+        bh=DmHO+h9mJ2dJG6j/F2oIihCMxLi9bE+uijkdatGdISE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oHNGsDa/KAgbDDj5WMDc+G09/Yk2qortD0wfcIOpGyYHuu2UUEV+QjlHQCSEAG12F
+         72guB7LhFaYelRATX6RtbPrCAXZGrXwDQmK1mwcAqTXBFQARmXyCi1VQSPlIYKLAlQ
+         58GeHpix51yt+blHwNuhcKhOFHL1nn4eqXycWN+0=
+Date:   Thu, 30 Dec 2021 06:43:17 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Nikhil Devshatwar <nikhil.nd@ti.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Benoit Parrot <bparrot@ti.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v5 04/14] media: cadence: csi2rx: Add external DPHY
+ support
+Message-ID: <Yc045RRqhDQK2dsW@pendragon.ideasonboard.com>
+References: <20211223191615.17803-1-p.yadav@ti.com>
+ <20211223191615.17803-5-p.yadav@ti.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211223191615.17803-5-p.yadav@ti.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pj4gT24gb3VyIHBsYXRmb3JtLCBVQVJUIGNvbm5lY3RlZCB0byBhIE1DVSB3aGljaCB3aWxsIHNl
-bmQgZGF0YSBvZiB2YXJpYWJsZSBsZW5ndGggZnJvbSB0aW1lIHRvIHRpbWUuIFRoZXJlIGlzIG5v
-IGRlZmluaXRpb24gb2YgYSBtYXhpbXVtIHRyYW5zbWlzc2lvbiBsZW5ndGguDQo+ID5XZSBjb25m
-aWd1cmVkIERNQSBibG9jayBzaXplIGlzIDQwOTZieXRlcywgaG93ZXZlciwgdGhlcmUgYXJlIG1v
-cmUgDQo+ID50aGFuIDQxMDAgYnl0ZXMgaW5wdXQsIERNQSBqdXN0IGhhbmRsZWQgNDA5NmJ5dGVz
-IGFuZCBsZWZ0IGJ5dGVzIGluIEZJRk8gY2Fubm90IHRyaWdnZXIgbmV4dCBETUEgVHJhbnNmZXIg
-ZG9uZSBpbnRlcnJ1cHQobGVmdCBieXRlcyBudW1iZXIgPCBETUEgYmxvY2sgc2l6ZSApLCBzbyB0
-aGVzZSBkYXRhIHNob3VsZCBiZSBwcm9jZXNzZWQgYnkgVUFSVCBJUlEuDQoNCj5UaGF0IGlzIGEg
-YnJva2VuIGhhcmR3YXJlIGRlc2lnbiBhbmQgd2lsbCBub3Qgd29yayB3aXRoIGFueSBvcGVyYXRp
-bmcgc3lzdGVtLg0KDQpEbyB5b3UgbWVhbiB0aGUgZGF0YSBzaXplIG9mIFVBUlQgaW5wdXQgbXVz
-dCBiZSBzbWFsbGVyIHRoYW4gRE1BIGNvbmZpZ3VyZWQgUlggYmxvY2sgc2l6ZT8gSWYgbm90LCB0
-aGVyZSBpcyByaXNrIHRvIGNhdXNlIHBhbmljIHdpdGggY3VycmVudCBkcml2ZXIuDQpXZSBjYW5u
-b3QgbGltaXQgdGhlIGxlbmd0aCBvZiBkYXRhIHNlbnQgYnkgYW4gZXh0ZXJuYWwgZGV2aWNlIGF0
-IGEgdGltZS4gTm8gbWF0dGVyIGhvdyBtdWNoIGRhdGEgaW5wdXQgZXh0ZXJuYWxseSwgd2Ugc2hv
-dWxkIGVuc3VyZSBzeXN0ZW0gbm90IGNyYXNoLCB0aGlzIHBhdGNoIGFjaGlldmVzIHRoaXMgZ29h
-bC4NCg0KQlJzDQpXZWlqdW4NCi0tLS0t6YKu5Lu25Y6f5Lu2LS0tLS0NCuWPkeS7tuS6ujogR3Jl
-ZyBLSCBbbWFpbHRvOmdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnXSANCuWPkemAgeaXtumXtDog
-MjAyMeW5tDEy5pyIMjDml6UgMTg6NDENCuaUtuS7tuS6ujogd2lnaW4gemVuZyA8d2lnaW4uemVu
-Z0BkamkuY29tPg0K5oqE6YCBOiBqaXJpc2xhYnlAa2VybmVsLm9yZzsgbGludXgtc2VyaWFsQHZn
-ZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgRmlyc3QgTGlnaHQg
-PHhpYW9ndWFuZy5jaGVuQGRqaS5jb20+DQrkuLvpopg6IFJlOiDnrZTlpI06IOetlOWkjTog562U
-5aSNOiDnrZTlpI06IOetlOWkjTogW1BBVENIXSBzZXJpYWw6IDgyNTA6IGFkZCBsb2NrIGZvciBk
-bWEgcngNCg0K44CQRVhURVJOQUwgRU1BSUzjgJEgRE8gTk9UIENMSUNLIGFueSBsaW5rcyBvciBh
-dHRhY2htZW50cyB1bmxlc3MgeW91IGNhbiBtYWtlIHN1cmUgYm90aCB0aGUgc2VuZGVyIGFuZCB0
-aGUgY29udGVudCBhcmUgdHJ1c3R3b3J0aHkuDQoNCg0K44CQ5aSW6YOo6YKu5Lu25o+Q6YaS44CR
-5Lul5LiL6YKu5Lu25p2l5rqQ5LqO5YWs5Y+45aSW6YOo77yM6K+35Yu/54K55Ye76ZO+5o6l5oiW
-6ZmE5Lu277yM6Zmk6Z2e5oKo56Gu6K6k6YKu5Lu25Y+R5Lu25Lq65ZKM5YaF5a655Y+v5L+h44CC
-DQoNCg0KDQpPbiBNb24sIERlYyAyMCwgMjAyMSBhdCAxMDoyNTo1MUFNICswMDAwLCB3aWdpbiB6
-ZW5nIHdyb3RlOg0KPiBPbiBNb24sIERlYyAyMCwgMjAyMSBhdCAwOTo0NDowNEFNICswMDAwLCB3
-aWdpbiB6ZW5nIHdyb3RlOg0KPiA+ID4gPlRoYXQgbWFrZXMgbm8gc2Vuc2UsIGFzIHdoYXQgb3Jk
-ZXJzIHRoZSBkYXRhIGNvbWluZyBpbj8gIFRoZSAyIGJ5dGVzIGNvdWxkIGJlIGFkZGVkIHRvIHRo
-ZSB0dHkgYnVmZmVyIGJlZm9yZSB0aGUgNTEyIGJ5dGVzLCBvciB0aGUgb3RoZXIgd2F5IGFyb3Vu
-ZC4NCj4gPg0KPiA+ID4gPldoYXQgaGFyZHdhcmUgYXJlIHlvdSB1c2luZyB0aGF0IGlzIG1peGlu
-ZyBkbWEgYW5kIGlycSBkYXRhIGxpa2UgdGhpcz8NCj4gPiA+ID5UaGF0IGZlZWxzIHZlcnkgd3Jv
-bmcuDQo+ID4NCj4gPiA+SXQgaXMgbm90IG5vcm1hbCBjYXNlLCBub3JtYWxseSwgdGhlIGlucHV0
-IHNpemUgc2hvdWxkIHNtYWxsZXIgdGhhbiBETUEgYmxvY2sgc2l6ZSBhbmQgRE1BIGNvbXBsZXRl
-IHRoZSB3aG9sZSBjb3B5Lg0KPiA+ID5Ib3dldmVyLCB0aGVyZSBhcmUgc29tZSBhYm5vcm1hbCBz
-aXR1YXRpb25zLiBUaGUgZXh0ZXJuYWwgaW5wdXQgaXMgdW5leHBlY3RlZGx5IGxhcmdlciB0aGFu
-IHRoZSBkYXRhIGxlbmd0aCBvZiB0aGUgRE1BIGNvbmZpZ3VyYXRpb24uIFRoaXMgc2l0dWF0aW9u
-IGluIG15IGV4YW1wbGUgd2lsbCBhcHBlYXIsIGFuZCBpdCBtYXkgY2F1c2UgdGhlIGtlcm5lbCB0
-byBwYW5pYy4NCj4NCj4gPllvdSBkaWQgbm90IGFuc3dlciBteSBxdWVzdGlvbiBhYm91dCBoYXJk
-d2FyZSB0eXBlIDooDQo+DQo+ID5BbmQgYWdhaW4sIGhvdyBpcyB0aGlzIGhhcHBlbmluZz8gIElm
-IHlvdSB1c2UgRE1BLCBhbGwgZGF0YSBzaG91bGQgYmUgY29taW5nIHRocm91Z2ggRE1BIGFuZCBu
-b3QgdGhlIGlycS4gIE90aGVyd2lzZSBjcmF6eSBzdHVmZiBsaWtlIHRoaXMgd2lsbCBoYXBwZW4g
-aW4gYW55IHR5cGUgb2YgZHJpdmVyLCB5b3VyIGhhcmR3YXJlIGNhbiBub3QgbWl4IHRoaXMgdHlw
-ZSBvZiBzdHVmZiB1cC4NCj4NCj4gT24gb3VyIHBsYXRmb3JtLCBVQVJUIGNvbm5lY3RlZCB0byBh
-IE1DVSB3aGljaCB3aWxsIHNlbmQgZGF0YSBvZiB2YXJpYWJsZSBsZW5ndGggZnJvbSB0aW1lIHRv
-IHRpbWUuIFRoZXJlIGlzIG5vIGRlZmluaXRpb24gb2YgYSBtYXhpbXVtIHRyYW5zbWlzc2lvbiBs
-ZW5ndGguDQo+IFdlIGNvbmZpZ3VyZWQgRE1BIGJsb2NrIHNpemUgaXMgNDA5NmJ5dGVzLCBob3dl
-dmVyLCB0aGVyZSBhcmUgbW9yZSANCj4gdGhhbiA0MTAwIGJ5dGVzIGlucHV0LCBETUEganVzdCBo
-YW5kbGVkIDQwOTZieXRlcyBhbmQgbGVmdCBieXRlcyBpbiBGSUZPIGNhbm5vdCB0cmlnZ2VyIG5l
-eHQgRE1BIFRyYW5zZmVyIGRvbmUgaW50ZXJydXB0KGxlZnQgYnl0ZXMgbnVtYmVyIDwgRE1BIGJs
-b2NrIHNpemUgKSwgc28gdGhlc2UgZGF0YSBzaG91bGQgYmUgcHJvY2Vzc2VkIGJ5IFVBUlQgSVJR
-Lg0KDQpUaGF0IGlzIGEgYnJva2VuIGhhcmR3YXJlIGRlc2lnbiBhbmQgd2lsbCBub3Qgd29yayB3
-aXRoIGFueSBvcGVyYXRpbmcgc3lzdGVtLg0KDQo+IEluIG90aGVyIHdvcmQsIGlmIHRoZSBleHRl
-cm5hbCB1c2UgVUFSVCAidnVsbmVyYWJpbGl0eSIgdG8gYXR0YWNrIHRoZSBzeXN0ZW0sIHdlIG5l
-ZWQgdG8gZW5zdXJlIHRoYXQgdGhlIHN5c3RlbSBub3QgY3Jhc2ggYXQgbGVhc3QsIHJpZ2h0Pw0K
-DQpTbyB5b3UgYXJlIHNheWluZyB0aGF0IExpbnV4IG5vdyB0cmVhdCBhbGwgaGFyZHdhcmUgdGhh
-dCBoYXMgRE1BIGZ1bmN0aW9uYWxpdHkgYXMgYSBwb3RlbnRpYWwgdGhyZWF0PyAgVGhhdCBpcyBu
-b3QgYSBtb2RlbCB0aGF0IExpbnV4LCBvciBhbnkgb3RoZXIgb3BlcmF0aW5nIHN5c3RlbSwgaGFz
-IGV2ZXIgaGFkIHRvIHN1cHBvcnQgYmVmb3JlLCBwbGVhc2UgZG8gbm90IG1ha2UgdXAgbmV3IHJ1
-bGVzIGhlcmUgYW5kIGV4cGVjdCBMaW51eCB0byBhdXRvbWF0aWNhbGx5IHN1cHBvcnQgdGhlbSB3
-aXRob3V0IGEgbG90IG9mIHJlZGVzaWduIGFuZCB3b3JrLg0KDQpJZiB5b3Ugd2lzaCB0byBwcm90
-ZWN0IExpbnV4IGZyb20gdGhpcyB0eXBlIG9mIHVudHJ1c3RlZCBoYXJkd2FyZSwgcGxlYXNlIGRv
-IHRoZSB3b3JrIHRvIGRvIHNvLiAgVGhpcyBwYXRjaCBpcyBub3QgdGhhdCB3b3JrLg0KDQo+ID5I
-b3cgY2FuIGZsb3cgY29udHJvbCBoYW5kbGUgdGhpcyBhdCBhbGw/ICBGbG93IGNvbnRyb2wgaXMg
-YXQgdGhlIHNlcmlhbCBkYXRhIHN0cmVhbSBsZXZlbC4gIFRoaXMgaXMgY29uZnVzaW5nIHRoZSBQ
-Q0kgZGF0YSBzdHJlYW0gb3JkZXIuDQo+DQo+IEkganVzdCB0aGluayBtb3JlIGxvZ2ljIGlzIG5l
-ZWRlZCB0byBjb250cm9sIHRoZSBvcmRlciBvZiBkYXRhIHByb2Nlc3NpbmcgYnkgRE1BIGFuZCBV
-QVJUIElSUSB0byBrZWVwIHRoZSBpbnRlZ3JpdHkgb2Ygc2VyaWFsIGRhdGEuDQo+IEJ1dCB0aGUg
-c3BlY2lmaWMgZGVzaWduLCBJIGhhdmVuJ3QgY29uc2lkZXJlZCB5ZXQsIHRoZSBmaXJzdCBnb2Fs
-IGlzIHRoZSBrZWVwIHRoZSBzeXN0ZW0gYWxpdmUuDQoNCkFnYWluLCB0aGlzIGlzIGEgYnJva2Vu
-IGhhcmR3YXJlIGRlc2lnbiwgcGxlYXNlIGZpeCB0aGF0IGZpcnN0Lg0KDQp0aGFua3MsDQoNCmdy
-ZWcgay1oDQpUaGlzIGVtYWlsIGFuZCBhbnkgYXR0YWNobWVudHMgdGhlcmV0byBtYXkgY29udGFp
-biBwcml2YXRlLCBjb25maWRlbnRpYWwsIGFuZCBwcml2aWxlZ2VkIG1hdGVyaWFsIGZvciB0aGUg
-c29sZSB1c2Ugb2YgdGhlIGludGVuZGVkIHJlY2lwaWVudC4gQW55IHJldmlldywgY29weWluZywg
-b3IgZGlzdHJpYnV0aW9uIG9mIHRoaXMgZW1haWwgKG9yIGFueSBhdHRhY2htZW50cyB0aGVyZXRv
-KSBieSBvdGhlcnMgaXMgc3RyaWN0bHkgcHJvaGliaXRlZC4gSWYgeW91IGFyZSBub3QgdGhlIGlu
-dGVuZGVkIHJlY2lwaWVudCwgcGxlYXNlIGNvbnRhY3QgdGhlIHNlbmRlciBpbW1lZGlhdGVseSBh
-bmQgcGVybWFuZW50bHkgZGVsZXRlIHRoZSBvcmlnaW5hbCBhbmQgYW55IGNvcGllcyBvZiB0aGlz
-IGVtYWlsIGFuZCBhbnkgYXR0YWNobWVudHMgdGhlcmV0by4NCg0K5q2k55S15a2Q6YKu5Lu25Y+K
-6ZmE5Lu25omA5YyF5ZCr5YaF5a655YW35pyJ5py65a+G5oCn77yM5LiU5LuF6ZmQ5LqO5o6l5pS2
-5Lq65L2/55So44CC5pyq57uP5YWB6K6477yM56aB5q2i56ys5LiJ5Lq66ZiF6K+744CB5aSN5Yi2
-5oiW5Lyg5pKt6K+l55S15a2Q6YKu5Lu25Lit55qE5Lu75L2V5L+h5oGv44CC5aaC5p6c5oKo5LiN
-5bGe5LqO5Lul5LiK55S15a2Q6YKu5Lu255qE55uu5qCH5o6l5pS26ICF77yM6K+35oKo56uL5Y2z
-6YCa55+l5Y+R6YCB5Lq65bm25Yig6Zmk5Y6f55S15a2Q6YKu5Lu25Y+K5YW255u45YWz55qE6ZmE
-5Lu244CCDQo=
+On Fri, Dec 24, 2021 at 12:46:05AM +0530, Pratyush Yadav wrote:
+> Some platforms like TI's J721E can have the CSI2RX paired with an
+> external DPHY. Add support to enable and configure the DPHY using the
+> generic PHY framework.
+> 
+> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+> 
+> ---
+> 
+> Changes in v5:
+> - Only error out when phy_pm_runtime_get_sync() returns a negative
+>   value. A positive value can be returned if the phy was already
+>   resumed.
+> - Do not query the source subdev for format. Use the newly added
+>   internal format instead.
+> 
+> Changes in v4:
+> - Drop the call to set PHY submode. It is now being done via compatible
+>   on the DPHY side.
+> 
+> Changes in v3:
+> - Use v4l2_get_link_freq() to calculate pixel clock.
+> 
+> Changes in v2:
+> - Use phy_pm_runtime_get_sync() and phy_pm_runtime_put() before making
+>   calls to set PHY mode, etc. to make sure it is ready.
+> 
+>  drivers/media/platform/cadence/cdns-csi2rx.c | 98 ++++++++++++++++++--
+>  1 file changed, 88 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
+> index 4a2a5a9d019b..afd4a0da8235 100644
+> --- a/drivers/media/platform/cadence/cdns-csi2rx.c
+> +++ b/drivers/media/platform/cadence/cdns-csi2rx.c
+> @@ -30,6 +30,12 @@
+>  #define CSI2RX_STATIC_CFG_DLANE_MAP(llane, plane)	((plane) << (16 + (llane) * 4))
+>  #define CSI2RX_STATIC_CFG_LANES_MASK			GENMASK(11, 8)
+>  
+> +#define CSI2RX_DPHY_LANE_CTRL_REG		0x40
+> +#define CSI2RX_DPHY_CL_RST			BIT(16)
+> +#define CSI2RX_DPHY_DL_RST(i)			BIT((i) + 12)
+> +#define CSI2RX_DPHY_CL_EN			BIT(4)
+> +#define CSI2RX_DPHY_DL_EN(i)			BIT(i)
+> +
+>  #define CSI2RX_STREAM_BASE(n)		(((n) + 1) * 0x100)
+>  
+>  #define CSI2RX_STREAM_CTRL_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x000)
+> @@ -137,6 +143,57 @@ static void csi2rx_reset(struct csi2rx_priv *csi2rx)
+>  	writel(0, csi2rx->base + CSI2RX_SOFT_RESET_REG);
+>  }
+>  
+> +static int csi2rx_configure_external_dphy(struct csi2rx_priv *csi2rx)
+> +{
+> +	union phy_configure_opts opts = { };
+> +	struct phy_configure_opts_mipi_dphy *cfg = &opts.mipi_dphy;
+> +	const struct csi2rx_fmt *fmt;
+> +	s64 pixel_clock;
+> +	int ret;
+> +	u8 bpp;
+> +	bool got_pm = true;
+> +
+> +	fmt = csi2rx_get_fmt_by_code(csi2rx->fmt.code);
+> +	bpp = fmt->bpp;
+> +
+> +	/*
+> +	 * Do not divide by the number of lanes here. That will be done by
+> +	 * phy_mipi_dphy_get_default_config().
+> +	 */
+> +	pixel_clock = v4l2_get_link_freq(csi2rx->source_subdev->ctrl_handler,
+> +					 1, 2);
+> +	if (pixel_clock < 0)
+> +		return pixel_clock;
+> +
+> +	ret = phy_mipi_dphy_get_default_config(pixel_clock, bpp,
+
+You could use fmt->bpp here and drop the bpp variable.
+
+> +					       csi2rx->num_lanes, cfg);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = phy_pm_runtime_get_sync(csi2rx->dphy);
+> +	if (ret == -ENOTSUPP)
+> +		got_pm = false;
+
+phy_pm_runtime_put() returns -ENOTSUPP when runtime PM isn't enabled,
+without calling pm_runtime_put(). I think you could write here
+
+	ret = phy_pm_runtime_get_sync(csi2rx->dphy);
+	if (ret < 0 && ret != -ENOTSUPP)
+		return ret;
+
+then drop the got_pm variable, and call phy_pm_runtime_put()
+unconditionally below.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> +	else if (ret < 0)
+> +		return ret;
+> +
+> +	ret = phy_power_on(csi2rx->dphy);
+> +	if (ret)
+> +		goto out;
+> +
+> +	ret = phy_configure(csi2rx->dphy, &opts);
+> +	if (ret) {
+> +		/* Can't do anything if it fails. Ignore the return value. */
+> +		phy_power_off(csi2rx->dphy);
+> +		goto out;
+> +	}
+> +
+> +out:
+> +	if (got_pm)
+> +		phy_pm_runtime_put(csi2rx->dphy);
+> +
+> +	return ret;
+> +}
+> +
+>  static int csi2rx_start(struct csi2rx_priv *csi2rx)
+>  {
+>  	unsigned int i;
+> @@ -175,6 +232,17 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+>  	if (ret)
+>  		goto err_disable_pclk;
+>  
+> +	/* Enable DPHY clk and data lanes. */
+> +	if (csi2rx->dphy) {
+> +		reg = CSI2RX_DPHY_CL_EN | CSI2RX_DPHY_CL_RST;
+> +		for (i = 0; i < csi2rx->num_lanes; i++) {
+> +			reg |= CSI2RX_DPHY_DL_EN(csi2rx->lanes[i] - 1);
+> +			reg |= CSI2RX_DPHY_DL_RST(csi2rx->lanes[i] - 1);
+> +		}
+> +
+> +		writel(reg, csi2rx->base + CSI2RX_DPHY_LANE_CTRL_REG);
+> +	}
+> +
+>  	/*
+>  	 * Create a static mapping between the CSI virtual channels
+>  	 * and the output stream.
+> @@ -205,10 +273,21 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+>  	if (ret)
+>  		goto err_disable_pixclk;
+>  
+> +	if (csi2rx->dphy) {
+> +		ret = csi2rx_configure_external_dphy(csi2rx);
+> +		if (ret) {
+> +			dev_err(csi2rx->dev,
+> +				"Failed to configure external DPHY: %d\n", ret);
+> +			goto err_disable_sysclk;
+> +		}
+> +	}
+> +
+>  	clk_disable_unprepare(csi2rx->p_clk);
+>  
+>  	return 0;
+>  
+> +err_disable_sysclk:
+> +	clk_disable_unprepare(csi2rx->sys_clk);
+>  err_disable_pixclk:
+>  	for (; i > 0; i--)
+>  		clk_disable_unprepare(csi2rx->pixel_clk[i - 1]);
+> @@ -236,6 +315,13 @@ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
+>  
+>  	if (v4l2_subdev_call(csi2rx->source_subdev, video, s_stream, false))
+>  		dev_warn(csi2rx->dev, "Couldn't disable our subdev\n");
+> +
+> +	if (csi2rx->dphy) {
+> +		writel(0, csi2rx->base + CSI2RX_DPHY_LANE_CTRL_REG);
+> +
+> +		if (phy_power_off(csi2rx->dphy))
+> +			dev_warn(csi2rx->dev, "Couldn't power off DPHY\n");
+> +	}
+>  }
+>  
+>  static int csi2rx_s_stream(struct v4l2_subdev *subdev, int enable)
+> @@ -438,15 +524,6 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
+>  		return PTR_ERR(csi2rx->dphy);
+>  	}
+>  
+> -	/*
+> -	 * FIXME: Once we'll have external D-PHY support, the check
+> -	 * will need to be removed.
+> -	 */
+> -	if (csi2rx->dphy) {
+> -		dev_err(&pdev->dev, "External D-PHY not supported yet\n");
+> -		return -EINVAL;
+> -	}
+> -
+>  	ret = clk_prepare_enable(csi2rx->p_clk);
+>  	if (ret) {
+>  		dev_err(&pdev->dev, "Couldn't prepare and enable P clock\n");
+> @@ -476,7 +553,7 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
+>  	 * FIXME: Once we'll have internal D-PHY support, the check
+>  	 * will need to be removed.
+>  	 */
+> -	if (csi2rx->has_internal_dphy) {
+> +	if (!csi2rx->dphy && csi2rx->has_internal_dphy) {
+>  		dev_err(&pdev->dev, "Internal D-PHY not supported yet\n");
+>  		return -EINVAL;
+>  	}
+> @@ -601,6 +678,7 @@ static int csi2rx_probe(struct platform_device *pdev)
+>  	dev_info(&pdev->dev,
+>  		 "Probed CSI2RX with %u/%u lanes, %u streams, %s D-PHY\n",
+>  		 csi2rx->num_lanes, csi2rx->max_lanes, csi2rx->max_streams,
+> +		 csi2rx->dphy ? "external" :
+>  		 csi2rx->has_internal_dphy ? "internal" : "no");
+>  
+>  	return 0;
+
+-- 
+Regards,
+
+Laurent Pinchart

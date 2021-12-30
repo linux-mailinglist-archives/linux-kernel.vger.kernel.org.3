@@ -2,92 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A00481A13
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 07:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 561BD481A14
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 07:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236731AbhL3G5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 01:57:13 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:57948 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229514AbhL3G5M (ORCPT
+        id S236753AbhL3G55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 01:57:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52642 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236711AbhL3G54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 01:57:12 -0500
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 1BU6un75028402
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Dec 2021 01:56:50 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 488E515C33A3; Thu, 30 Dec 2021 01:56:49 -0500 (EST)
-Date:   Thu, 30 Dec 2021 01:56:49 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Lukas Czerner <lczerner@redhat.com>, Jan Kara <jack@suse.cz>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
-Subject: Re: [PATCH v2] ext4: set csum seed in tmp inode while migrating to
- extents
-Message-ID: <Yc1YMUryayqc8fUk@mit.edu>
-References: <20211214175058.19511-1-lhenriques@suse.de>
- <20211215004945.GD69182@magnolia>
- <20211215112852.GM14044@quack2.suse.cz>
- <20211215141237.lrymhbebgjunh4n2@work>
- <YbuGLsQy6TSM2xOl@mit.edu>
- <20211217093534.2ug6e5cm37md2c3u@work>
- <20211228224017.GA2242@duo.ucw.cz>
+        Thu, 30 Dec 2021 01:57:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311F0C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 22:57:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3B4AB81AA9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 06:57:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18B6EC36AEA;
+        Thu, 30 Dec 2021 06:57:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640847473;
+        bh=7yCEFaye12lacfWq1rQcm1e7Rwy/HamcbeXfDiIxuWs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eiZT5HF8ubExAG2r5jkflnbBWl86tM2NRdqcH23aCeQYlVxNRcWdnXdiLVQAVZwYJ
+         0mZdD/ghl/4DfuZdNpTg8SB4Pl8Fb4u5E8ziRS0dp/LfYoepeZ6M6pelF4INc7LHHK
+         CfxLRJP47hs/WWfPAmjBRZy0koLPG1ctDEtEpcY8=
+Date:   Thu, 30 Dec 2021 07:57:50 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ryan Cai <ycaibb@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org
+Subject: Re: [Resource Leak] Missing closing files
+Message-ID: <Yc1YbthVqjBIAOyC@kroah.com>
+References: <5C277DBF-B1EF-4193-9983-63105E5BC053@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20211228224017.GA2242@duo.ucw.cz>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5C277DBF-B1EF-4193-9983-63105E5BC053@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 11:40:17PM +0100, Pavel Machek wrote:
-> > Our rationale behind not supporting the migration was always the fact
-> > that we felt that backup was absolutely necessary before operation like
-> > this. When you already have up-to-date backup available you might as
-> > well create a fresh ext4 file system with all the advantages it brings
-> > and recover data from said backup. I think this is still a very
-> > reasonable approach.
-> 
-> Umm. Not really?
-> 
-> First... full backup/restore will take a _long_ time.
+On Thu, Dec 30, 2021 at 11:04:58AM +0800, Ryan Cai wrote:
+> Dear Kernel maintainers,
+>  
+>            In linux/drivers/zorro/gen-devlist.c, the file opened at Line 39 may not closed when going to Line 65. 
+>  
+>           I think, return 1 at Line 65 should be goto error. Should it be a bug? I can send a patch.
+>  
+> Location: https://github.com/torvalds/linux/blob/5bfc75d92efd494db37f5c4c173d3639d4772966/drivers/zorro/gen-devlist.c#L39-L65
 
-How big is an ext3 file system going to be, though?  Ext4 was
-available in RHEL 5, and was fully supported in RHEL 6 --- which was
-released in the year 2000.  Back in 2000, the biggest Seagate
-Barracuda drive you could get was 30GB.  The biggest disk available at
-that time was the IBM Deskstar 75GXP, which was 75GB.
+Do you use this program / file?
 
-So a 5 disk RAID array from the era where you might have still been
-using ext3 *might* have been as large as 300GB.
+If so, and you can duplicate the problem, sure, send a patch after
+testing it.
 
-> Second... if you do online migration, you have filesystem you are
-> quite unlikely to corrupt, and backup you are unlikely to use. If you
-> do backup/restore, you have to be _way_ more careful that backup media
-> is reliable etc.
+thanks,
 
-21 years later, those IDE disks are probably not even functioning any
-more.  Every 4-7 years, depending on how careful you want to be, you'd
-would be well-advised to buy new hard drives, since back then disk
-drive capacities were doubling every 18-24 months.  And so the sane
-thing to do would be to do a disk-to-disk transfer.  That is, you buy
-a new computer, with brand new hard drives, install the latest distro
-(many companies would only upgrade distros when they upgraded their
-hardware), and so you'd format new hard drives with the latest file
-system, and do a disk-to-disk transfer from the old system to the new
-system.
-
-Quite frankly, if you aren't willing to copy the data from your
-ancient spinning rust platters (and back then, they probably *were*
-actually iron oxide :-), your largest risk would be the HDD
-self-destructing from extreme old age.  :-)
-
-							- Ted
-
+greg k-h

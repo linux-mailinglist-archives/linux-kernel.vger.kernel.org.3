@@ -2,70 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3CDB481E59
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:50:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D12481E5B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241374AbhL3Qum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 11:50:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42486 "EHLO
+        id S241384AbhL3QvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 11:51:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240222AbhL3Qul (ORCPT
+        with ESMTP id S240222AbhL3QvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 11:50:41 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F59C061574;
-        Thu, 30 Dec 2021 08:50:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=KCIuKfYCj4UNj6Bbz3o+wzTEwkTdr3miPJh0cjsBii0=; b=PyDcTfTYoXlY89XosfCrZV15Xb
-        4dgELtnkGLeUg+RtHdl+gCYTyGRsOzt3e/nu7+NApB97KfCyumzwt/OlrIpGKf7XixRZWN1HbZO76
-        636OoDykHk+6GyV+WhdCb6kBaTs7A6QRzZui2+wdwYuRu9cKIO89Dc9bFR4jz8yD/CRGPyZzCHQzu
-        4z2Lzol2f8mu1JdijQULmc5K9KNjSMDdZzwFzKTglrp+AlciaElI1PbnvNzPVxjtICLwX0ndfefWx
-        9G2/N9gMHBfd6h/yIV2nrL8rOKvB2829tOM1dMkRwHVaGiJS/cGq9V6ugSpk6qS5K/dwUNDczBZXV
-        jIpmn+0Q==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n2ydQ-009vPU-Ri; Thu, 30 Dec 2021 16:50:37 +0000
-Message-ID: <1e32a809-013d-fea5-2f9c-eee382afc3cc@infradead.org>
-Date:   Thu, 30 Dec 2021 08:50:32 -0800
+        Thu, 30 Dec 2021 11:51:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC80CC061574;
+        Thu, 30 Dec 2021 08:51:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E498DB81C6E;
+        Thu, 30 Dec 2021 16:51:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26B4CC36AE9;
+        Thu, 30 Dec 2021 16:51:01 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LbXlV06V"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1640883059;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=NItrL/aIHsIgAZesBZH/PKbW+5wd31K/1C4cnt9PMXQ=;
+        b=LbXlV06V12wjOT5pyEuwFAuWcN8DVcHH+TLaaqmMFdgOMbWXv3P/nHNy+TeX0hUeZp4B7A
+        gOKeLQ0Kjzy6SoRlLGeuC9PVN/RYJvSyvLCGmZLBrXwM0TKqWFWB3KHvGJ3IdzYw3XUk6A
+        HxLz+dYQTcarYS/X7gSb3deAPqhxkks=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ed670bdc (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 30 Dec 2021 16:50:59 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, tytso@mit.edu,
+        linux-crypto@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH] random: avoid superfluous call to RDRAND in CRNG extraction
+Date:   Thu, 30 Dec 2021 17:50:52 +0100
+Message-Id: <20211230165052.2698-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [RFC PATCH] PCI: Add "pci=reassign_all_bus" boot parameter
-Content-Language: en-US
-To:     Yao Hongbo <yaohongbo@linux.alibaba.com>, bhelgaas@google.com
-Cc:     zhangliguang@linux.alibaba.com,
-        alikernel-developer@linux.alibaba.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1640856613-101412-1-git-send-email-yaohongbo@linux.alibaba.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <1640856613-101412-1-git-send-email-yaohongbo@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+RDRAND is not fast. RDRAND is actually quite slow. We've known this for
+a while, which is why functions like get_random_u{32,64} were converted
+to use batching of our ChaCha-based CRNG instead.
 
-On 12/30/21 01:30, Yao Hongbo wrote:
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 2fba824..c83a2e5 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -4084,6 +4084,7 @@
->  		nomio		[S390] Do not use MIO instructions.
->  		norid		[S390] ignore the RID field and force use of
->  				one PCI domain per PCI function
-> +		reassign_all_bus	The OS fully configure the PCI bus.
+Yet CRNG extraction still includes a call to RDRAND, in the hot path of
+every call to get_random_bytes(), /dev/urandom, and getrandom(2).
 
-		                                     configures
->  
->  	pcie_aspm=	[PCIE] Forcibly enable or disable PCIe Active State Power
->  			Management.
+This call to RDRAND here seems quite superfluous. CRNG is already
+extracting things based on a 256-bit key, based on good entropy, which
+is then reseeded periodically, updated, backtrack-mutated, and so
+forth. The CRNG extraction construction is something that we're already
+relying on to be secure and solid. If it's not, that's a serious
+problem, and it's unlikely that mixing in a measly 32 bits from RDRAND
+is going to alleviate things.
 
-thanks.
+There is one place, though, where such last-ditch moves might be
+quasi-sensible, and that's before the CRNG is actually ready. In that case,
+we're already very much operating from a position of trying to get
+whatever we can, so we might as well throw in the RDRAND call because
+why not.
+
+But once the CRNG is actually up, it's simply not sensible. Removing the
+call there improves performance on an i7-11850H by 370%. In other words,
+the vast majority of the work done by extract_crng() prior to this commit
+was devoted to fetching 32 bits of RDRAND.
+
+This commit fixes the issue by only making that call to RDRAND when the
+CRNG is not yet ready.
+
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 54086e9da05b..239b1455b1a8 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1030,7 +1030,7 @@ static void _extract_crng(struct crng_state *crng,
+ 				    &input_pool : NULL);
+ 	}
+ 	spin_lock_irqsave(&crng->lock, flags);
+-	if (arch_get_random_long(&v))
++	if (unlikely(!crng_ready()) && arch_get_random_long(&v))
+ 		crng->state[14] ^= v;
+ 	chacha20_block(&crng->state[0], out);
+ 	if (crng->state[12] == 0)
 -- 
-~Randy
+2.34.1
+

@@ -2,97 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DB2481B7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 11:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85AF2481B83
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 11:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238724AbhL3Kxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 05:53:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48138 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238714AbhL3Kxe (ORCPT
+        id S238754AbhL3Kxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 05:53:43 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:54272
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238730AbhL3Kxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 05:53:34 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C136CC06173E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 02:53:33 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id o12so53776492lfk.1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 02:53:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/uQ7mlPCwSiqEuD6zV7KjSAepcnZeDwAcxDuZ2+VvkY=;
-        b=t6D7CgGki5jRd0hDoY8BbNIoQJRe49ikJBDA+l+2XBIlA7sGK7FRS8auHThctyI+Hy
-         SNKJQ9SCOPAhRF3z0bq9drftCDCrEviSIbBpmQZ+UAfkCNUOeD7rY8LkYw59BD7pEjr2
-         Wqp9hF90+W+TN4/QzQCrdU23Gti3Vvwp+6MlViWmtBTZa/at5dKwwzGoHzusLX6/GLD5
-         uHmLJ7eq7ALLS3sBA98A3BG0gsUwNVrl6snNDsxjkLVVr7Ju40oaPJo+fFY/lmx5Whon
-         DxRbTt1d/+3Ufg5zl03Q8uipxwG+MHpkzLpjs9KNkTSaSrblQdbAiIbtEJc2+tfPT1Jc
-         xxyA==
+        Thu, 30 Dec 2021 05:53:40 -0500
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 691D93F179
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 10:53:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640861619;
+        bh=xYZejbhFSF4xwglRpwhIzdBP63mw8AEIBR2gKWeRi5A=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=NjaeV4dvjeUcYm/clWTVK4LbDm74B4hrMVhFCmq7/JJrED2Bcgz9tFrjSXnsghEgm
+         02HxkACJ5lVAEKfhCrnmg4VnbBzNGMcNrVQNiozvHxneMZTFaArpTCBL93b5+LfI+J
+         WVQkZQWala2ZY766qZN0EapkYAmCE4rm7q82Qei168qpQP7l+3a32p4rXrt5dB/Tj0
+         u2tltRliJEgvopGm/ta4fwyrZfvMJR0nsI/jkSkTPPLyw31XsQQMCH5pKutbBd3tPu
+         +g91BV4aYb3USSp6eTWcEevdmttvW4NZnC1zJjuv6SF9QLlS6/ujJ5VYw4HEDP2pE7
+         kfPP25DRR36OQ==
+Received: by mail-lf1-f72.google.com with SMTP id z23-20020a0565120c1700b004258a35caf2so4803429lfu.13
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 02:53:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=/uQ7mlPCwSiqEuD6zV7KjSAepcnZeDwAcxDuZ2+VvkY=;
-        b=PrWyQqbjEkc0X9/9IU8jbIwOTKscLeYNGJKssgtmNISf0EVr8N5a9HKUXKe5525b5F
-         L9LSC2ufhfu6KBf5LGDhyOQwSGmuL9tg70iJVrDirlz/YTCoHeTOQ3w2nGCMczaK9jKS
-         hxiTFp0n5uMmbEsihW4ewLPuR4GnFxLfOF76K1QphGr2ke7u37V/0bBdtCcyNT7xKXK1
-         iNeFtFcK/b1sRQMl7K2ONextaQbGyyd8Qiy4aBeYA7fCfK0G2qiaMtuLBbUsBEcrRoKj
-         owq6VbKO7vEp3me3hf5l2QJMFZGbb1MNW+VhtkkW78rUPuhhQNR/4ehveljsM4WbU2xw
-         4A7g==
-X-Gm-Message-State: AOAM533j5NxhT0ceNF+YZhkb+sRhTis68tzANtT0dkjx9WbI72KDVfWE
-        TjfSdQsIB4l32S4P0NN6yhI2JHzb4sMB3uk1EGA=
-X-Google-Smtp-Source: ABdhPJw0Apz3JIJeEBDtMs9Y5vEAfNTei6l+6aip3zHthxK7kmyyRUU0T///hsuE2VcvxGW/yYgPXA==
-X-Received: by 2002:a05:6512:39d1:: with SMTP id k17mr27672364lfu.303.1640861611772;
-        Thu, 30 Dec 2021 02:53:31 -0800 (PST)
-Received: from [192.168.112.17] (nikaet.starlink.ru. [94.141.168.29])
-        by smtp.gmail.com with ESMTPSA id l17sm2460981lfp.82.2021.12.30.02.53.31
+        bh=xYZejbhFSF4xwglRpwhIzdBP63mw8AEIBR2gKWeRi5A=;
+        b=vKL0fUTO6Q9f1tEzlfDQblB9sujAigf41rQCz/618gXwAfXyaJ9N9Tl+ahshrQkxVi
+         wlPcQzf+i6iyw8LjHMv0BxnL5uOQNqnyvNORhclMqkaGr7lotk6ljfIQcf+8ZikubnEO
+         5IzLS82SqA6gNXk8RivCUeXWfbMqBOA8YCAk7rw74WSHlJbUO37TOUya65VVOxjxlruE
+         PacsG5nVN0iCYdnfJvrcCSM5BtGNyyDfqwh1MgEo7CI5Czm+IoMWvj9b0kDEuhd5MNuA
+         vSEf5r13KdyKb9V1rUgG3xRmFY61EFQwyW8pdQGi1LEl0Ae2rJUA8/hMRp2OFz8TvkUM
+         OwLw==
+X-Gm-Message-State: AOAM532ZLknJnYaEnDBVesLerYAO9XzA0qvZzW1D/DwJXMP/6wJuXZbE
+        Alm7UIH4FnHCfYKfeHg0LvS/4lH1te3tjLGNrbin5JPuOMyku1El9K2QydFdRGZxRxwfWZSwGjC
+        4SsShtmD0hsW1ETOQb0I+92wjwdklbYLgV3Gv6T6Ajw==
+X-Received: by 2002:a05:6512:39c7:: with SMTP id k7mr24100703lfu.619.1640861618727;
+        Thu, 30 Dec 2021 02:53:38 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyerqRnK1+XWImhdPq1FQz+KmsRHbdUCEsRHH6fubnWEVc0pW5KHWs9+wMlLjJM1Dyfo3fJjQ==
+X-Received: by 2002:a05:6512:39c7:: with SMTP id k7mr24100682lfu.619.1640861618556;
+        Thu, 30 Dec 2021 02:53:38 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id v12sm1528591lfa.143.2021.12.30.02.53.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Dec 2021 02:53:31 -0800 (PST)
-Subject: Re: [PATCH/RFC] drivers/irqchip: add irq-inverter
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211228165642.2514766-1-nikita.yoush@cogentembedded.com>
- <87h7aszj70.wl-maz@kernel.org>
- <b5e0ff57-885a-051b-4c4c-a02b005fa1f1@cogentembedded.com>
- <87fsqbznc2.wl-maz@kernel.org>
- <37db485e-b832-9ff1-4d21-606eeeba871c@cogentembedded.com>
- <87ee5uz8hk.wl-maz@kernel.org>
-From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Message-ID: <9df5e85b-79e6-b796-e5ce-bc47d2cbed67@cogentembedded.com>
-Date:   Thu, 30 Dec 2021 13:53:30 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 30 Dec 2021 02:53:38 -0800 (PST)
+Message-ID: <bedc4126-7536-a7f9-b833-d06f383ec15d@canonical.com>
+Date:   Thu, 30 Dec 2021 11:53:37 +0100
 MIME-Version: 1.0
-In-Reply-To: <87ee5uz8hk.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 1/4] dt-bindings: leds: maxim,max77693: convert to
+ dtschema
 Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
+References: <20211228163930.35524-1-krzysztof.kozlowski@canonical.com>
+ <20211228163930.35524-2-krzysztof.kozlowski@canonical.com>
+ <1640799296.482933.824019.nullmailer@robh.at.kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <1640799296.482933.824019.nullmailer@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>>> The right way to do it is to use the existing API by exposing the
->>>>> inverter (there are existing examples in the tree, using the
->>>>> hierarchical model)...
->>>
->>> A much simpler version can be written in a few minutes, see below...
+On 29/12/2021 18:34, Rob Herring wrote:
+> On Tue, 28 Dec 2021 17:39:27 +0100, Krzysztof Kozlowski wrote:
+>> Convert the LEDs bindings of Maxim MAX77693 MUIC to DT schema format.
+>> The existing bindings were defined in ../bindings/mfd/max77693.txt.
 >>
->> Can something like that be used if the parent domain is not
->> hierarchical (i.e. does not provide alloc(), but provides map()
->> instead)?
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> ---
+>>  .../bindings/leds/maxim,max77693.yaml         | 105 ++++++++++++++++++
+>>  1 file changed, 105 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/leds/maxim,max77693.yaml
+>>
 > 
-> No. This definitely relies on the parent being hierarchical, as that's
-> exactly what it was designed for the first place.
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/common.example.dt.yaml: led-controller@0: 'reg' does not match any of the regexes: '^([a-z]+-)?led[01]?$', 'pinctrl-[0-9]+'
+> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/maxim,max77693.yaml
+> 
+> doc reference errors (make refcheckdocs):
+> Documentation/devicetree/bindings/leds/maxim,max77693.yaml: Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
+> 
+> See https://patchwork.ozlabs.org/patch/1573762
+> 
+> This check can fail if there are any dependencies. The base for a patch
+> series is generally the most recent rc1.
+> 
 
-Is supporting hierarchical API now mandatory for kernel irqchips?
+I updated my yamllint and dtschema, run with DT_CHECKER_FLAGS=-m but
+still cannot reproduce it. Probably because I based on linux-next, so
+maybe this was a fixed issue in leds/common.yaml.
 
-If yes, then perhaps you can at least document it somewhere?
-E.g. declare irq_domain.map() as deprecated?
-
-If no, then I'd like to discuss a solution for irq_inverter that can work for non-hierarchical case.
-
-Nikita
+Best regards,
+Krzysztof

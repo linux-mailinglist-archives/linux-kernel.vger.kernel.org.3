@@ -2,90 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC795481DC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:39:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE2B481DC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238826AbhL3PjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 10:39:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
+        id S239034AbhL3PlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 10:41:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbhL3PjD (ORCPT
+        with ESMTP id S232051AbhL3PlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 10:39:03 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF55CC061574;
-        Thu, 30 Dec 2021 07:39:02 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id e5so15438550wmq.1;
-        Thu, 30 Dec 2021 07:39:02 -0800 (PST)
+        Thu, 30 Dec 2021 10:41:16 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7214C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 07:41:15 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id o12so55331161lfk.1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 07:41:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=I9AZkgxt3oFSjtraDfx1nRfiDkrhrG6Pm0tqqpcNvhc=;
-        b=bqflPPc6wCUWpZKMBhJUPA2bKbVNizdp9h9CqGwu1nvA9ojekEPyDZSSjipxZagjKW
-         p8tBUpKebeCpx2sr/TH9TFEllj2Urz4QcUSrbtptbXu/FucCajlXEZZDeXnFXiu+CuhU
-         riz6tBfZ8qCq87gTQPmmslOujbVrwAwM7p+lf75XVmb0RAAZeCsMElvvUspAW23pQB28
-         vE3iiKqls5JrNK0ZHxgEHXRtKW/GW2pMdH9O0utp6stUWlOBR59ffP8f9r0jYRc4PQsv
-         qu2ysjxnGCIRL6G25bLzpBR9yA7ZvZmJT0VED+fSu6DgAP2AsXyhSVnPhmEFZX+opzgH
-         351A==
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5yloS7rSwkTECVbYQowLjBgomSbGlwmJqy4i1hH8YmM=;
+        b=58BtMlgIMMjeqpE5muZGJ34GPobTxV9veOVjqA5tSaAM9eahSaS/SDxCsSL2v8UkMb
+         RFCUhGaY2II1+YXvxj11w3tWDDI1MheCYiYmn4qEYev4EbXYG8yq/HgNkklweSgrbpCI
+         /SvlSaAmz9mSBBHHv+GrGqnKx25ZVj06sfOchXOzcMoBCLzZuOkkwSH1cVrhbUgVT7SQ
+         MKVMpqlBA6d4hQ1/jBaoSPCliN2VWBhj3DHpQGY1r3+/pU7DQwm71sIaMJNhlv3QDpVl
+         5uSt5S7uBSFxNFLZOD5ueDD96/5PJieq7/1oZllYcZouPHWQQtI2zNyWJ4FShSZoY3xd
+         edoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=I9AZkgxt3oFSjtraDfx1nRfiDkrhrG6Pm0tqqpcNvhc=;
-        b=WbxJEpqP+ymVnIjP+nKkS/n3HXJrw3+Vm18irG4st0T4f05OdTF/Ieww7HdH0waFLo
-         igpAy9ARpjbaG8HN2yL1KRLUL9WqBqZE1KKBLfuogDdP5rfkBVAEWds2WUrRPYehW4iM
-         mSsPuuhNjsqrLshVh3Wb94h5hB6Ou4RfDPzU6gah7E6ZfRx4OCcpCScvzcUCYujIBd5Y
-         uJwy9CVR5LvCUEIGkw3KjUylTpiMC091S35HBUcA8TRndHrb+K7T6t1iWEhtbyWkjBoy
-         rWnO7UGgrJj2J+xaSxeGbh7ie3ygpyoP1GQE6HyyHrozDBikQ+M/pUB/uU5XgekwZix6
-         9iwg==
-X-Gm-Message-State: AOAM5306409FXcxIp58TlPZ587hXmS/oSjOPUcbFWZLTTpxFi7NOkh9O
-        ENgcxZJHtpcq8HpJbmCVAhW01ljKuO6M4IJm
-X-Google-Smtp-Source: ABdhPJwqcNkIbynb98xsLnxKmoiJ0xLF5vj/higGzJ5TgPDJZWn7rWwXX/VzeccMBY/5BOugHCIh/w==
-X-Received: by 2002:a05:600c:4e11:: with SMTP id b17mr26171361wmq.66.1640878741390;
-        Thu, 30 Dec 2021 07:39:01 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id h19sm23297518wmm.13.2021.12.30.07.39.00
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5yloS7rSwkTECVbYQowLjBgomSbGlwmJqy4i1hH8YmM=;
+        b=30wEHrbgKVBzOA/p3W9b1CTJCZ6F6M3C7KwSrAsMHarD2HQnzvRonWrgpktUfqtu/k
+         U8r1CMAMkzwRppcxr+vZvx84guGnI4UanIsKrDkHh/Xrja5fdsRflPTV8NuboVEiSfxI
+         VzdO9aThBpyvS5SgoqYM+9e0bTeg0mxHM/gOpHRELLe2L0cfJcz4OJX7sSXmJJqlL9Zc
+         YJzgJwO/Sf6UnywQCMfeBS54tyZDZmBdRREbNI5wJ0L7xHU2cTo7FiOcgc65UmM3+vGL
+         vg19yCRXo/jByXVG/gXvGR3OEhw8AlFpN2BKbwsPLzkXH9aR+jJVNIv7xaNJD702oapR
+         2q0g==
+X-Gm-Message-State: AOAM533hXpBoPBlKhmNsewIx4YzHRzi/FFuds0GJkAExxJpk0NqVcg8M
+        qWRnVk096a1uiEVM4vDMjNvozQ==
+X-Google-Smtp-Source: ABdhPJwhe2WvcoXkAw8rcsW73CYVK4NPpYq5Z96qy8HUerjq5ho/3hLoymlv1luPt+vAo+KXZdqkzw==
+X-Received: by 2002:a19:501a:: with SMTP id e26mr5655655lfb.15.1640878873869;
+        Thu, 30 Dec 2021 07:41:13 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id l7sm1989700lfg.89.2021.12.30.07.41.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 07:39:01 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Karsten Graul <kgraul@linux.ibm.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net/smc: remove redundant re-assignment of pointer link
-Date:   Thu, 30 Dec 2021 15:39:00 +0000
-Message-Id: <20211230153900.274049-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Thu, 30 Dec 2021 07:41:13 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 66FD4103C43; Thu, 30 Dec 2021 18:41:27 +0300 (+03)
+Date:   Thu, 30 Dec 2021 18:41:27 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Subject: Re: [PATCH 04/26] x86/traps: Add #VE support for TDX guest
+Message-ID: <20211230154127.tf2rc4yu2v7uorv5@box.shutemov.name>
+References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
+ <20211214150304.62613-5-kirill.shutemov@linux.intel.com>
+ <YcTR5HnkHi7CjVyx@zn.tnic>
+ <20211228233112.cpycmdv55edxhvbv@black.fi.intel.com>
+ <YcxGrw6Ymqs8NPjY@zn.tnic>
+ <20211230080500.cmc6x2nbykprlyy2@box.shutemov.name>
+ <Yc2Ps9npROL3znOi@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yc2Ps9npROL3znOi@zn.tnic>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pointer link is being re-assigned the same value that it was
-initialized with in the previous declaration statement. The
-re-assignment is redundant and can be removed.
+On Thu, Dec 30, 2021 at 11:53:39AM +0100, Borislav Petkov wrote:
+> On Thu, Dec 30, 2021 at 11:05:00AM +0300, Kirill A. Shutemov wrote:
+> > Hm. Two sentance above the one you quoted describes (maybe badly? I donno)
+> > why #VE doesn't happen in entry paths. Maybe it's not clear it covers NMI
+> > entry path too.
+> > 
+> > What if I replace the paragraph with these two:
+> > 
+> > 	Kernel avoids #VEs during syscall gap and NMI entry code.
+> 
+> because? Explain why here.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- net/smc/smc_clc.c | 1 -
- 1 file changed, 1 deletion(-)
+Okay.
 
-diff --git a/net/smc/smc_clc.c b/net/smc/smc_clc.c
-index 8409ab71a5e4..6be95a2a7b25 100644
---- a/net/smc/smc_clc.c
-+++ b/net/smc/smc_clc.c
-@@ -1021,7 +1021,6 @@ static int smc_clc_send_confirm_accept(struct smc_sock *smc,
- 		struct smc_link *link = conn->lnk;
- 
- 		/* SMC-R specific settings */
--		link = conn->lnk;
- 		memcpy(clc->hdr.eyecatcher, SMC_EYECATCHER,
- 		       sizeof(SMC_EYECATCHER));
- 		clc->hdr.typev1 = SMC_TYPE_R;
+> 
+> >	Entry code
+> > 	paths do not access TD-shared memory, MMIO regions, use #VE triggering
+> > 	MSRs, instructions, or CPUID leaves that might generate #VE. Similarly,
+> > 	to page faults and breakpoints, #VEs are allowed in NMI handlers once
+> > 	kernel is ready to deal with nested NMIs.
+> > 
+> > 	During #VE delivery, all interrupts, including NMIs, are blocked until
+> > 	TDGETVEINFO is called. It prevents #VE nesting until kernel reads the VE
+> > 	info.
+> 
+> This alludes somewhat to the why above.
+
+It addresses the apparent issue with nested #VEs. I consider it to be
+separate from the issue of exceptions in the entry code.
+
+> Now, I hear that TDX doesn't generate #VE anymore for the case where the
+> HV might have unmapped/made non-private the page which contains the NMI
+> entry code.
+> 
+> Explain that here too pls.
+
+Okay.
+
+> And then stick that text over exc_virtualization_exception() so that it
+> is clear what's going on and that it can be easily found.
+
+Will do.
+
+> 
+> And then you still need to deal with
+> 
+> "(and should eventually be a panic, as it is expected panic_on_oops is
+> set to 1 for TDX guests)."
+
+I will drop this. Forcing panic_on_oops is out of scope for the patch.
+
+The updated commit message is below. Let me know if something is unclear.
+
+----------------------------8<-------------------------------------------
+
+Virtualization Exceptions (#VE) are delivered to TDX guests due to
+specific guest actions which may happen in either user space or the
+kernel:
+
+ * Specific instructions (WBINVD, for example)
+ * Specific MSR accesses
+ * Specific CPUID leaf accesses
+ * Access to unmapped pages (EPT violation)
+
+In the settings that Linux will run in, virtual exceptions are never
+generated on accesses to normal, TD-private memory that has been
+accepted.
+
+Syscall entry code has a critical window where the kernel stack is not
+yet set up. Any exception in this window leads to hard to debug issues
+and can be exploited for privilege escalation. Exceptions in the NMI
+entry code also cause issues. IRET from the exception handle will
+re-enable NMIs and nested NMI will corrupt the NMI stack.
+
+For these reasons, the kernel avoids #VEs during the syscall gap and
+the NMI entry code. Entry code paths do not access TD-shared memory,
+MMIO regions, use #VE triggering MSRs, instructions, or CPUID leaves
+that might generate #VE. VMM can remove memory from TD at any point,
+but access to unaccepted (or missing) private memory leads to VM
+termination, not to #VE.
+
+Similarly, to page faults and breakpoints, #VEs are allowed in NMI
+handlers once the kernel is ready to deal with nested NMIs.
+
+During #VE delivery, all interrupts, including NMIs, are blocked until
+TDGETVEINFO is called. It prevents #VE nesting until the kernel reads
+the VE info.
+
+If a guest kernel action which would normally cause a #VE occurs in
+the interrupt-disabled region before TDGETVEINFO, a #DF (fault
+exception) is delivered to the guest which will result in an oops.
+
+Add basic infrastructure to handle any #VE which occurs in the kernel
+or userspace. Later patches will add handling for specific #VE
+scenarios.
+
+For now, convert unhandled #VE's (everything, until later in this
+series) so that they appear just like a #GP by calling the
+ve_raise_fault() directly. The ve_raise_fault() function is similar
+to #GP handler and is responsible for sending SIGSEGV to userspace
+and CPU die and notifying debuggers and other die chain users.
+
 -- 
-2.33.1
-
+ Kirill A. Shutemov

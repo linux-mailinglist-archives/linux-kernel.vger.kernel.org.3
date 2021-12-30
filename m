@@ -2,95 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7150481F5F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:06:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF43481F60
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241763AbhL3TG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 14:06:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240323AbhL3TG2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 14:06:28 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A374C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:06:27 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id h21so30093881ljh.3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:06:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2njUeTmOSXQ9oVKtPT8JUEx/StHcUEgojYN5cLkfSjY=;
-        b=ZM8WvwPrv4jn2BKTcGXKjPqPB+DwjejlfUGS3gZPS0W045tepA4ylYeFNNBI6V11UJ
-         6EktwV7UeyEAGvNGtCRPMr2pPJ/yvgsH1xe3LQotuffsxB4VUEQk5Ei3UdXJVOYrduA+
-         FmMTkFTDkD9ywNpH7F9FOKxsKNpll/9EzdIJ5nnHsWxUSaJ8nrMNaGne8jLR2LzJg633
-         3vLlrPfI09PKm0sM16Iddw3gYA2hw8qnO9KI7KrumUEnIS1WWem9n5x5yq5e3PkL09iz
-         zdx6PIAKhBhQIWo7meuPwLi//37SGfjzGIvxEeJ/zFuogwzztB0tQNlaK0OgN6CIwvW0
-         ZPTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2njUeTmOSXQ9oVKtPT8JUEx/StHcUEgojYN5cLkfSjY=;
-        b=rmaXX71wyL2lBs0NPZdJn/33hJQ/TNbBKqbHvHZFYl9Xxb1Ki+HZ/EMesfg33iBVlH
-         IlUoBnXSy/lIazyjU1YtUAilVxxTl91TIZLJEaljE/AckRRpA0NlCZ/j7+/0+fCZ3YVx
-         7WxmIuyUxGGFgFPHZqpXRe7yRQR2iOkCaRvYIj6Uyge3tZHnvvmjfJKq/9Gf74DBqy3K
-         JkpXjBYyrMwE4pdM1Ijn3EZJ0+n1UcHi8KrrslJ4C1FEfYOYMrkba3K0t2fEkVPmKHgo
-         aeS08Nrgi6K3OGAQUwCjZscRGUWYx698aN9Kf5GFZlTz+RX4stDrv1b+yVO9XI83ruFt
-         wYow==
-X-Gm-Message-State: AOAM530YYmA97G52Fe1lcRj3QI3VkM7BCiq7MvstC2mT19RE0m4VSlrN
-        BOW9fH9K6gc5Uq8SKIoZMcSbbmSK3Zfjp5+TQb6nYtoywTs=
-X-Google-Smtp-Source: ABdhPJyRHsAS7y1biDeCD6kEm0K80HkFw5MoFDckjlmT1t4EDPGqsr5bzllsf+UL1XEhQQFGG61Zd1FJTe4e27CO1js=
-X-Received: by 2002:a05:651c:1790:: with SMTP id bn16mr27944310ljb.475.1640891185477;
- Thu, 30 Dec 2021 11:06:25 -0800 (PST)
+        id S241765AbhL3THa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 14:07:30 -0500
+Received: from mga14.intel.com ([192.55.52.115]:33423 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236868AbhL3TH3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 14:07:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640891249; x=1672427249;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=plzyb7P6LvkhTHaWFdb294o5NTiUFa5HwsZ4WXcuZcc=;
+  b=hXEjB+lpYEclHw7dOiNOC+7+vFNHa67so1SXM/UfqCQOczEhj8D43RYA
+   iRI9cBPy40QXhdc5QXXwfR+7AB1VFjOp0bTplVToldd5Uj7x6R5shLWzp
+   UeTd1Ju4JQ52KpZdsMARWokpv8YfvM3PZTuilQsUyoFFx0BUhBvmXMdcA
+   WvqXk29gkCu+XuwUkd4h7l6ceYYMWfhYzdPT/tRxmCqrT4omBndrFNVFK
+   A9xCkeitnQJDNFk7F9rG/qOeyo5pLY0RKvy6VHVf75OHabBGtEJB0vatg
+   pVKhzdAySJ6/HUDWZAy2Twlg5DcdzNBu8kq3nTQNxhcr5LP2l4UjXZ9VP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="241929596"
+X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
+   d="scan'208";a="241929596"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 11:07:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
+   d="scan'208";a="510979530"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 30 Dec 2021 11:07:28 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n30lr-000AWB-CQ; Thu, 30 Dec 2021 19:07:27 +0000
+Date:   Fri, 31 Dec 2021 03:06:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: xillybus_of.c:undefined reference to `devm_platform_ioremap_resource'
+Message-ID: <202112310309.OXZb8wIC-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211222052457.1960701-1-shakeelb@google.com> <YcmaA9BS/DSB/iER@dhcp22.suse.cz>
-In-Reply-To: <YcmaA9BS/DSB/iER@dhcp22.suse.cz>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 30 Dec 2021 11:06:14 -0800
-Message-ID: <CALvZod5ORV1y02TcATpRAQVObEPYNv0y0t49bS0f0NTvT6WRSQ@mail.gmail.com>
-Subject: Re: [PATCH v2] memcg: add per-memcg vmalloc stat
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>, Roman Gushchin <guro@fb.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal,
+Hi Herbert,
 
-On Mon, Dec 27, 2021 at 2:48 AM Michal Hocko <mhocko@suse.com> wrote:
->
-[...]
-> >       atomic_long_add(area->nr_pages, &nr_vmalloc_pages);
-> > +     mod_memcg_page_state(area->pages[0], MEMCG_VMALLOC, area->nr_pages);
-> >
-> >       /*
-> >        * If not enough pages were obtained to accomplish an
->
-> Is it safe to assume that the whole area is always charged to the same
-> memcg? I am not really deeply familiar with vmalloc internals but is it
-> possible that an area could get resized/partially reused with a
-> different charging context?
+FYI, the error/warning still remains.
 
-From what I understand, vmalloc areas are not resized or partially
-reused at the moment. There is some ongoing discussion on caching it
-but caching would also require updating the accounting part as well.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   eec4df26e24e978e49ccf9bcf49ca0f2ccdaeffe
+commit: a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a hwrng: ks-sa - Add dependency on IOMEM and OF
+date:   1 year, 1 month ago
+config: s390-randconfig-r044-20211230 (https://download.01.org/0day-ci/archive/20211231/202112310309.OXZb8wIC-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Regarding the whole area charged to the same memcg, the only way it
-may get charged to different memcgs is if the process in which the
-allocations are happening is migrated to a different memcg. We can
-resolve this by traversing the pages in area->pages array (and use
-lruvec based stats instead).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I did contemplate on making this a lruvec stat but decided to start
-simple and if we ever need per-node stat then we can easily move to
-lruvec based stats. Let me know what you think.
+All errors (new ones prefixed by >>):
 
-thanks,
-Shakeel
+   s390-linux-ld: kernel/dma/coherent.o: in function `dma_init_coherent_memory':
+   coherent.c:(.text+0x4d4): undefined reference to `memremap'
+   s390-linux-ld: coherent.c:(.text+0x5ee): undefined reference to `memunmap'
+   s390-linux-ld: kernel/dma/coherent.o: in function `dma_declare_coherent_memory':
+   coherent.c:(.text+0x862): undefined reference to `memunmap'
+   s390-linux-ld: drivers/irqchip/irq-imx-intmux.o: in function `imx_intmux_probe':
+   irq-imx-intmux.c:(.text+0x3b8): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/phy/marvell/phy-mvebu-a3700-utmi.o: in function `mvebu_a3700_utmi_phy_probe':
+   phy-mvebu-a3700-utmi.c:(.text+0x14a): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/clk/clk-fixed-mmio.o: in function `fixed_mmio_clk_setup':
+   clk-fixed-mmio.c:(.text+0x86): undefined reference to `of_iomap'
+   s390-linux-ld: clk-fixed-mmio.c:(.text+0xaa): undefined reference to `iounmap'
+   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_console_close':
+   dpaa2-console.c:(.text+0x7c): undefined reference to `iounmap'
+   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_console_probe':
+   dpaa2-console.c:(.text+0xda): undefined reference to `of_address_to_resource'
+   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_generic_console_open.constprop.0':
+   dpaa2-console.c:(.text+0x20e): undefined reference to `ioremap'
+   s390-linux-ld: dpaa2-console.c:(.text+0x25c): undefined reference to `iounmap'
+   s390-linux-ld: dpaa2-console.c:(.text+0x284): undefined reference to `ioremap'
+   s390-linux-ld: dpaa2-console.c:(.text+0x472): undefined reference to `iounmap'
+   s390-linux-ld: drivers/char/hw_random/exynos-trng.o: in function `exynos_trng_probe':
+   exynos-trng.c:(.text+0x398): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/meson-rng.o: in function `meson_rng_probe':
+   meson-rng.c:(.text+0xea): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/mtk-rng.o: in function `mtk_rng_probe':
+   mtk-rng.c:(.text+0x332): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/npcm-rng.o: in function `npcm_rng_probe':
+   npcm-rng.c:(.text+0x2c2): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/xillybus/xillybus_of.o: in function `xilly_drv_probe':
+>> xillybus_of.c:(.text+0x1ec): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/mfd/sun6i-prcm.o: in function `sun6i_prcm_probe':
+   sun6i-prcm.c:(.text+0xae): undefined reference to `mfd_add_devices'
+   s390-linux-ld: drivers/watchdog/sirfsoc_wdt.o: in function `sirfsoc_wdt_probe':
+   sirfsoc_wdt.c:(.text+0x19c): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/clocksource/timer-of.o: in function `timer_of_init':
+   timer-of.c:(.init.text+0xce): undefined reference to `of_iomap'
+   s390-linux-ld: timer-of.c:(.init.text+0x4ee): undefined reference to `iounmap'
+   s390-linux-ld: drivers/clocksource/timer-of.o: in function `timer_of_cleanup':
+   timer-of.c:(.init.text+0x5ca): undefined reference to `iounmap'
+   s390-linux-ld: drivers/clocksource/timer-microchip-pit64b.o: in function `mchp_pit64b_dt_init_timer':
+   timer-microchip-pit64b.c:(.init.text+0x154): undefined reference to `of_iomap'
+   s390-linux-ld: timer-microchip-pit64b.c:(.init.text+0x66e): undefined reference to `iounmap'
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MFD_SUN6I_PRCM
+   Depends on HAS_IOMEM && (ARCH_SUNXI || COMPILE_TEST
+   Selected by
+   - CLK_SUNXI_PRCM_SUN6I && COMMON_CLK && CLK_SUNXI
+   - CLK_SUNXI_PRCM_SUN8I && COMMON_CLK && CLK_SUNXI
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

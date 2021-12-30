@@ -2,130 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2A1481F1A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C05F5481F20
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241666AbhL3SQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 13:16:24 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:54908 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237082AbhL3SQX (ORCPT
+        id S241673AbhL3ST0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 13:19:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47438 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237082AbhL3STZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 13:16:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1640888183; x=1672424183;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=RiMVmQ9LOmrelT64K7hBp62RSOIjUTvB8SLq8zRYLEE=;
-  b=s0l3JoG3OL8aODXxZtbx97pYOENrwR10XvEQ3Z+GIzbuc0EwN4FHzA3m
-   9RbWxS0nmZV2LBqqDbVENeDYOfPOQdbrehCqy9qU64B+d9L9LEQHTQSs0
-   gqpx1lD7w3SyuEfm96cem78JF7j092JX6C6YeVqUDUXEClVUsF4YkB23P
-   E=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 30 Dec 2021 10:16:23 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 10:16:22 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 30 Dec 2021 10:16:22 -0800
-Received: from [10.216.59.167] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 30 Dec
- 2021 10:16:17 -0800
-Message-ID: <0294025e-6579-f8af-278b-e4a2d2688ec1@quicinc.com>
-Date:   Thu, 30 Dec 2021 23:46:12 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v2] thermal/core: Clear all mitigation when thermal zone
- is disabled
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <1640761407-2028-1-git-send-email-quic_manafm@quicinc.com>
- <CAJZ5v0hApA+fnuRmT_xDdJiqmkGfrfku=8rNG7G_YohGYZm5nw@mail.gmail.com>
-From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-In-Reply-To: <CAJZ5v0hApA+fnuRmT_xDdJiqmkGfrfku=8rNG7G_YohGYZm5nw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
+        Thu, 30 Dec 2021 13:19:25 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 02AAEB81CFF
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 18:19:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F841C36AE7;
+        Thu, 30 Dec 2021 18:19:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640888362;
+        bh=I+qYjQfgp/7m3hB0C+5hI7/SeHNjWlHH9sG11CI7NCY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:From;
+        b=Ou8auxsi5iPzEmMDGnuGqAHBGhaBmtmqapOjRRk04PoDwwm4oxXH7PeaTwgEOezRt
+         T9WER1gAdGmLfJUKw487679lP8S4cacDw61iHx7E7FE26uwIlE/4hdG3MDfMKHL2sE
+         yufPtt3D53wGJtviwPaxaTU9Nu2yT95dbejmyZ0rDKuzA6qXmiBIVxDMFYxt34/6qn
+         SOZiapgWOqn/ZXlInnTzSQMhpvSAhY7W/+pACM7zfwVvnPVVsXtH8f1Yn3z2ZS9+Yq
+         yZvuo5wWZDXLb5LFpsdWvQ2c7ZuSCJ0uG3BwWfieTNQ1s1GJhuBDJV8HZUk/wXVcIB
+         CUsmdgChAoPrw==
+From:   SeongJae Park <sj@kernel.org>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     sj@kernel.org, akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] mm/damon: Add access checking for hugetlb pages
+Date:   Thu, 30 Dec 2021 18:19:19 +0000
+Message-Id: <20211230181919.1588-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <486927ecaaaecf2e3a7fbe0378ec6e1c58b50747.1640852276.git.baolin.wang@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 30 Dec 2021 16:20:28 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
 
-On 12/30/2021 9:39 PM, Rafael J. Wysocki wrote:
-> On Wed, Dec 29, 2021 at 8:03 AM Manaf Meethalavalappu Pallikunhi
-> <quic_manafm@quicinc.com> wrote:
->> Whenever a thermal zone is in trip violated state, there is a chance
->> that the same thermal zone mode can be disabled either via thermal
->> core API or via thermal zone sysfs. Once it is disabled, the framework
->> bails out any re-evaluation of thermal zone. It leads to a case where
->> if it is already in mitigation state, it will stay the same state
->> until it is re-enabled.
-> You seem to be arguing that disabling a thermal zone should prevent it
-> from throttling anything, which is reasonable, but I'm not sure if the
-> change below is sufficient for that.
->
->> To avoid above mentioned issue, on thermal zone disable request
->> reset thermal zone and clear mitigation for each trip explicitly.
->>
->> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
->> ---
->>   drivers/thermal/thermal_core.c | 9 ++++++++-
->>   1 file changed, 8 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
->> index 51374f4..5f4e35b 100644
->> --- a/drivers/thermal/thermal_core.c
->> +++ b/drivers/thermal/thermal_core.c
->> @@ -427,6 +427,7 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
->>                                          enum thermal_device_mode mode)
->>   {
->>          int ret = 0;
->> +       int trip;
-> This can be declared in the block in which it is used.
-Sure, will update in next patch version
->
->>          mutex_lock(&tz->lock);
->>
->> @@ -449,8 +450,14 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
->>
->>          if (mode == THERMAL_DEVICE_ENABLED)
-> The coding style asks for braces here if they are used after the else.
-Sure will update in next version
->>                  thermal_notify_tz_enable(tz->id);
->> -       else
->> +       else {
->> +               /* make sure all previous throttlings are cleared */
->> +               thermal_zone_device_init(tz);
->> +               for (trip = 0; trip < tz->trips; trip++)
->> +                       handle_thermal_trip(tz, trip);
-> So I'm not sure if this makes the throttling go away in all cases (eg.
-> what if the current temperature is still above the given trip at this
-> point?).
+> The process's VMAs can be mapped by hugetlb page, but now the DAMON
+> did not implement the access checking for hugetlb pte, so we can not
+> get the actual access count like below if a process VMAs were mapped
+> by hugetlb.
+> 
+> damon_aggregated: target_id=18446614368406014464 nr_regions=12 4194304-5476352: 0 545
+> damon_aggregated: target_id=18446614368406014464 nr_regions=12 140662370467840-140662372970496: 0 545
+> damon_aggregated: target_id=18446614368406014464 nr_regions=12 140662372970496-140662375460864: 0 545
+> damon_aggregated: target_id=18446614368406014464 nr_regions=12 140662375460864-140662377951232: 0 545
+> damon_aggregated: target_id=18446614368406014464 nr_regions=12 140662377951232-140662380449792: 0 545
+> damon_aggregated: target_id=18446614368406014464 nr_regions=12 140662380449792-140662382944256: 0 545
+> ......
+> 
+> Thus this patch adds hugetlb access checking support, with this patch
+> we can see below VMA mapped by hugetlb access count.
+> 
+> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296486649856-140296489914368: 1 3
+> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296489914368-140296492978176: 1 3
+> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296492978176-140296495439872: 1 3
+> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296495439872-140296498311168: 1 3
+> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296498311168-140296501198848: 1 3
+> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296501198848-140296504320000: 1 3
+> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296504320000-140296507568128: 1 2
+> ......
+> 
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
-The thermal_zone_device_init() will reset current temperature with THERMAL_TEMP_INVALID. Then the following API
-thandle_thermal_trip() doesn't call get_temp to sensor driver again instead it will use this reset temperature
-value for each trip re-evaluation. Hence  for above mentioned case, I think it will clear the throttling
-irrespective of what is the actual current temperature at that instant. Otherwise please correct me
+In addition to unwrapping program outputs in commit message, I personally
+prefer indenting those with 4 spaces[1], but I wouldn't bother you for such a
+trivial thing.  Thank you for this patch!
 
-May I know is there any other possible cases where throttling will not go away completely ?
+Reviewed-by: SeongJae Park <sj@kernel.org>
 
->> +
->>                  thermal_notify_tz_disable(tz->id);
->> +       }
->>
->>          return ret;
->>   }
->>
+[1] https://lore.kernel.org/linux-mm/17421c73-2124-63c2-1925-dcea5c976711@linux.alibaba.com/
+
+
+Thanks,
+SJ
+
+> ---
+> Changes from v2:
+>  - Change commit messages to be more readable
+>  - Add comments for config macro.
+>  - Fix unused variable compiling warning.
+> 
+> Changes from v1:
+>  - Move damon_hugetlb_mkold() to vaddr.c file.
+>  - Move some assignments in the variables definitions.
+> ---
+>  mm/damon/vaddr.c | 96 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 96 insertions(+)
+> 
+> diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
+> index a10df3f..ee465b3 100644
+> --- a/mm/damon/vaddr.c
+> +++ b/mm/damon/vaddr.c
+> @@ -388,8 +388,65 @@ static int damon_mkold_pmd_entry(pmd_t *pmd, unsigned long addr,
+>  	return 0;
+>  }
+>  
+> +#ifdef CONFIG_HUGETLB_PAGE
+> +static void damon_hugetlb_mkold(pte_t *pte, struct mm_struct *mm,
+> +				struct vm_area_struct *vma, unsigned long addr)
+> +{
+> +	bool referenced = false;
+> +	pte_t entry = huge_ptep_get(pte);
+> +	struct page *page = pte_page(entry);
+> +
+> +	if (!page)
+> +		return;
+> +
+> +	get_page(page);
+> +
+> +	if (pte_young(entry)) {
+> +		referenced = true;
+> +		entry = pte_mkold(entry);
+> +		huge_ptep_set_access_flags(vma, addr, pte, entry,
+> +					   vma->vm_flags & VM_WRITE);
+> +	}
+> +
+> +#ifdef CONFIG_MMU_NOTIFIER
+> +	if (mmu_notifier_clear_young(mm, addr,
+> +				     addr + huge_page_size(hstate_vma(vma))))
+> +		referenced = true;
+> +#endif /* CONFIG_MMU_NOTIFIER */
+> +
+> +	if (referenced)
+> +		set_page_young(page);
+> +
+> +	set_page_idle(page);
+> +	put_page(page);
+> +}
+> +
+> +static int damon_mkold_hugetlb_entry(pte_t *pte, unsigned long hmask,
+> +				     unsigned long addr, unsigned long end,
+> +				     struct mm_walk *walk)
+> +{
+> +	struct hstate *h = hstate_vma(walk->vma);
+> +	spinlock_t *ptl;
+> +	pte_t entry;
+> +
+> +	ptl = huge_pte_lock(h, walk->mm, pte);
+> +	entry = huge_ptep_get(pte);
+> +	if (!pte_present(entry))
+> +		goto out;
+> +
+> +	damon_hugetlb_mkold(pte, walk->mm, walk->vma, addr);
+> +
+> +out:
+> +	spin_unlock(ptl);
+> +	return 0;
+> +}
+> +#else
+> +#define damon_mkold_hugetlb_entry NULL
+> +#endif /* CONFIG_HUGETLB_PAGE */
+> +
+>  static const struct mm_walk_ops damon_mkold_ops = {
+>  	.pmd_entry = damon_mkold_pmd_entry,
+> +	.hugetlb_entry = damon_mkold_hugetlb_entry,
+>  };
+>  
+>  static void damon_va_mkold(struct mm_struct *mm, unsigned long addr)
+> @@ -484,8 +541,47 @@ static int damon_young_pmd_entry(pmd_t *pmd, unsigned long addr,
+>  	return 0;
+>  }
+>  
+> +#ifdef CONFIG_HUGETLB_PAGE
+> +static int damon_young_hugetlb_entry(pte_t *pte, unsigned long hmask,
+> +				     unsigned long addr, unsigned long end,
+> +				     struct mm_walk *walk)
+> +{
+> +	struct damon_young_walk_private *priv = walk->private;
+> +	struct hstate *h = hstate_vma(walk->vma);
+> +	struct page *page;
+> +	spinlock_t *ptl;
+> +	pte_t entry;
+> +
+> +	ptl = huge_pte_lock(h, walk->mm, pte);
+> +	entry = huge_ptep_get(pte);
+> +	if (!pte_present(entry))
+> +		goto out;
+> +
+> +	page = pte_page(entry);
+> +	if (!page)
+> +		goto out;
+> +
+> +	get_page(page);
+> +
+> +	if (pte_young(entry) || !page_is_idle(page) ||
+> +	    mmu_notifier_test_young(walk->mm, addr)) {
+> +		*priv->page_sz = huge_page_size(h);
+> +		priv->young = true;
+> +	}
+> +
+> +	put_page(page);
+> +
+> +out:
+> +	spin_unlock(ptl);
+> +	return 0;
+> +}
+> +#else
+> +#define damon_young_hugetlb_entry NULL
+> +#endif /* CONFIG_HUGETLB_PAGE */
+> +
+>  static const struct mm_walk_ops damon_young_ops = {
+>  	.pmd_entry = damon_young_pmd_entry,
+> +	.hugetlb_entry = damon_young_hugetlb_entry,
+>  };
+>  
+>  static bool damon_va_young(struct mm_struct *mm, unsigned long addr,
+> -- 
+> 1.8.3.1
+> 
+> 
+> 

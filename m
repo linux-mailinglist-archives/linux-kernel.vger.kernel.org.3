@@ -2,90 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84370481BC2
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 12:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17812481BC5
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 12:42:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238929AbhL3Lgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 06:36:48 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:57882 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235195AbhL3Lgr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 06:36:47 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 436E51EC04FB;
-        Thu, 30 Dec 2021 12:36:42 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640864202;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=AVrysX5wSe1p4jfVYyywrt1X33OJViyHDBCWQ71sm6E=;
-        b=sPkBnDbB411OC5zaCV34PbPt58vHOA4yIQ9+JL7+notweJCeXFZ8D+H3zBsYJLswxqN7eY
-        OiFnpupneTNGz7IMQ5xqA0E2m8FndT1gzxeDigbg6cdcXQoF1TKxUdohKhhCYeJVCeFtyD
-        yUkZXexBsvyiywJ3xJ7E1eTJbWmWDd4=
-Date:   Thu, 30 Dec 2021 12:36:44 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rric@kernel.org, Smita.KoralahalliChannabasappa@amd.com,
-        william.roche@oracle.com
-Subject: Re: [PATCH v2 1/2] EDAC/amd64: Check register values from all UMCs
-Message-ID: <Yc2ZzMT+Mg5xCvjI@zn.tnic>
-References: <20211215155309.2711917-1-yazen.ghannam@amd.com>
- <20211215155309.2711917-2-yazen.ghannam@amd.com>
- <YbotciKVDsH1Fl1H@zn.tnic>
- <YbtkcppejpW8gHqY@yaz-ubuntu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YbtkcppejpW8gHqY@yaz-ubuntu>
+        id S238912AbhL3LmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 06:42:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235195AbhL3LmJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 06:42:09 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B328C061574;
+        Thu, 30 Dec 2021 03:42:09 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id u16so18064622plg.9;
+        Thu, 30 Dec 2021 03:42:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=/2GJveFYsVaUlKyHZdp6crFhqF80gEKGhbqZmnuCaPw=;
+        b=ejmeQXi5v7W71useZlfjfwzFxkxvM1kP7DwvtcTupW3abw6ntYvZSeCDvTvBfDr6rD
+         J7n569pNY4TVJauADBeMO0a58S/TwG1GBs3ffyk+e8m5ZgE5CixUEZpdIzqFlXPG+bAH
+         nk32QjcaPju2vdFe/OIih0/wNBavRPTrwWeFQljYboic3cktf0/Dtu0lrzIY2mvOobaa
+         I6hLRhU+bYCGPvtw1Q6uTKBwp1d4MgqfDj0c3Q58aoPE6aMq4zFx3EnVJAmSaKTSX7Q6
+         oHi+xCN/AsMQfPSADLHdrX6QRhAWTl5Vrm22Qr3ZwSUeafN/ENvg74hWt7qs/YjPUSwp
+         ZFYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=/2GJveFYsVaUlKyHZdp6crFhqF80gEKGhbqZmnuCaPw=;
+        b=nKz8xnhDF3VLuc3JF54ozUrT41sLORTHSh1mBRujIUihX4rUM32qI08IWxric7sAfS
+         Hub1uoCLwlshlrWa+p1v/tgHAR72QCKJosLHeQZMwsO0K801r7xYqgd6VssXxm55fSun
+         mdLhCQao+ST7LwcTbOiHYMDKcaqerp/wqCA5lI956u1n7c1jHv+6a26JwajfJn7ukpeK
+         8VSKRgt3qWP5sQTxq1Wmh8Q99bvHxeOcja+3W9Bh0VMczltrAdAidBPO+BpRsXwHVJ+W
+         Jsx+vYfBBGeBcUSZahZbf7BWGXQorDDUGs9NTNKu3EIbXniWXu1deJcth3eq86fEpdZX
+         tAZg==
+X-Gm-Message-State: AOAM531aNNy599FDtVZZ/caUXmMrFjeMoy9dlEvlHD8OdqtuE0P9fkdt
+        x/po9kk9VcAqSulSJC/JWB8Mxb2/AttiKmPXCtw=
+X-Google-Smtp-Source: ABdhPJz6MwEuYN2+6s3o7RaQLmfYGH7X11lcFjXo8ZW4cYY7etouGrgDssFxE12vtlb+FIrJSDflOg==
+X-Received: by 2002:a17:902:ea0f:b0:149:3fdd:1090 with SMTP id s15-20020a170902ea0f00b001493fdd1090mr30038430plg.43.1640864528698;
+        Thu, 30 Dec 2021 03:42:08 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id c9sm22932631pfc.61.2021.12.30.03.42.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Dec 2021 03:42:08 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] cpuidle: qcom_spm: Fix missing put_device() call in spm_cpuidle_register
+Date:   Thu, 30 Dec 2021 11:42:03 +0000
+Message-Id: <20211230114203.13467-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 04:08:18PM +0000, Yazen Ghannam wrote:
-> No, that's a good question. And actually the assumption is incorrect. It is
-> allowed to have different DIMM types in a system though all DIMMs on a single
-> UMC must match.
+The reference taken by 'of_find_device_by_node()' must be released when
+not needed anymore.
+Add the corresponding 'put_device()' in the error handling paths.
 
-Oh fun, really?!
+Fixes: 60f3692 ("cpuidle: qcom_spm: Detach state machine from main SPM handling")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/cpuidle/cpuidle-qcom-spm.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-So a single system can have DDR4 *and* DDR5 on the same board?!
-
-So then that
-
-	pvt->dram_type
-
-is insufficient to store the DIMM type for a pvt. If you have multiple
-UMCs on a pvt and all have different type DIMMs, then you need the
-relevant DIMM type when you dump it in sysfs...
-
-Which then means, you need ->dram_type to be per UMC...
-
-And also, I'm assuming the hw already enforces that DIMMs on a single
-UMC must match - it simply won't boot if they don't so you don't have to
-enforce that, at least.
-
-> Do you recommend a follow up patch or should this one be reworked?
-
-This one is insufficient, I'm afraid.
-
-One way to address this is, you could use pvt->umc at the places where
-dram_type is used and assign directly to the dimm->mtype thing. But then
-you'd need a way to map each struct dimm_info *dimm to the UMC so that
-you can determine the correct DIMM type.
-
-Which would make pvt->dram_type redundant and can be removed.
-
-Or you might have a better idea...
-
-HTH.
-
+diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
+index 01e77913a414..6638c1de90c3 100644
+--- a/drivers/cpuidle/cpuidle-qcom-spm.c
++++ b/drivers/cpuidle/cpuidle-qcom-spm.c
+@@ -107,12 +107,16 @@ static int spm_cpuidle_register(struct device *cpuidle_dev, int cpu)
+ 		return -ENODEV;
+ 
+ 	data = devm_kzalloc(cpuidle_dev, sizeof(*data), GFP_KERNEL);
+-	if (!data)
++	if (!data) {
++		put_device(&pdev->dev);
+ 		return -ENOMEM;
++	}
+ 
+ 	data->spm = dev_get_drvdata(&pdev->dev);
+-	if (!data->spm)
++	if (!data->spm) {
++		put_device(&pdev->dev);
+ 		return -EINVAL;
++	}
+ 
+ 	data->cpuidle_driver = qcom_spm_idle_driver;
+ 	data->cpuidle_driver.cpumask = (struct cpumask *)cpumask_of(cpu);
 -- 
-Regards/Gruss,
-    Boris.
+2.17.1
 
-https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,143 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E2B4818BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:39:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C654818C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233833AbhL3Cj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 21:39:28 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:30193 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbhL3Cj1 (ORCPT
+        id S235029AbhL3Cmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 21:42:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233482AbhL3Cme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 21:39:27 -0500
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JPXV02Y7Yz8w5m;
-        Thu, 30 Dec 2021 10:36:56 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 30 Dec 2021 10:39:24 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 30 Dec 2021 10:39:23 +0800
-Subject: Re: [PATCH v19 02/13] x86/setup: Use parse_crashkernel_high_low() to
- simplify code
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Dave Young <dyoung@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Chen Zhou" <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>
-References: <20211228132612.1860-1-thunder.leizhen@huawei.com>
- <20211228132612.1860-3-thunder.leizhen@huawei.com> <Ycs3kpZD/vpoo1AX@zn.tnic>
- <b017a8ea-989b-c251-f5c8-a8a7940877cf@huawei.com>
- <YcwN9Mfwsh/lPbbd@dhcp-128-65.nay.redhat.com> <YcwyZRDJUMniSaY9@zn.tnic>
- <Ycw8n2BvJzH9wJKG@dhcp-128-65.nay.redhat.com>
- <21736ba2-883d-1037-dbe8-299e40f7ad13@huawei.com> <YcySEdyhXysDSKn/@zn.tnic>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <933554c7-1fc6-8e7a-9569-9f8441e50ddf@huawei.com>
-Date:   Thu, 30 Dec 2021 10:39:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <YcySEdyhXysDSKn/@zn.tnic>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+        Wed, 29 Dec 2021 21:42:34 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAD6C061574;
+        Wed, 29 Dec 2021 18:42:33 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id i6so11235521pla.0;
+        Wed, 29 Dec 2021 18:42:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:date:subject:from:to:cc:message-id:thread-topic
+         :references:in-reply-to:mime-version:content-transfer-encoding;
+        bh=CkdisBqkP9QY6O7Qm1g7pZN4sah5N8XlOzMRgORCtHs=;
+        b=DbePz3/YgWOuiEOsju2kgkSDgaQl1GHn5vZeb6v8971Fvc5xFnVIF4nBBHZ85I0x2j
+         a8ckQuFXHcyx9OJitWCzCycUnqTeP/vrr0gVixHrWvrLgI2apyxMz1ZT1+LiB0Ut6dfA
+         mu0Zjk7TEV5OGniOHqGiBix4ZtkamaQmk0/AtSc7OSxp+ojtyj1iCLFx1xNrSYO7uWjm
+         56GnOZBwJ//oT/XDlGLQGcLD/qLMkUuq6vz3AXEY5LYgVyQswHbMX4I0z40kC6Mn/ipy
+         Nj49Lyncvp1WX0JBS0EHhEXtP4kZCdd67m8//Grr4q78cFP/10lczX5U/ISdFeoPJj7Q
+         G0eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:user-agent:date:subject:from:to:cc:message-id
+         :thread-topic:references:in-reply-to:mime-version
+         :content-transfer-encoding;
+        bh=CkdisBqkP9QY6O7Qm1g7pZN4sah5N8XlOzMRgORCtHs=;
+        b=x93LP9JtdNqnePYNMQsZEE4GAKu8GsRfSzVgDl5Eh2Oo6Ool/CrbMi5YWuOauRMBKs
+         ucNMrJH8fqSGy21mYGG/tsj4zBhdX7z+QbMCDf57aFF+Mf5MiZ67ibpChCvEwOTm8Tqb
+         e5CAkUepLjBfVdF4MqxNXW6zJTHZrDKl1mQzF6CHNHAPc1OrAja9PhH/GWoKQh+Q/kcv
+         ef7j4zvhmXqy2WvCx5iESGS5chLnhhD4nvOpuAQhL3qp7Jd0ZEGpsCet7/rcrSPIn4O0
+         aGToKJcsB060IoPyDfMn0gi9girqBdvBJ+eJR6cgrgoBgTQngKvtcuenP8NqrCMtiHda
+         DjRQ==
+X-Gm-Message-State: AOAM530GNcl/G0l1DXdKo344zITyZJ6j69lcYCWccI/j2taB4Og3C8Cr
+        MyRTlSNFe7nzKsni3WlhZ2Xt3M94NiSvOwxv
+X-Google-Smtp-Source: ABdhPJzMi8uqiy41c9i26WynsPiKdkTLCnnat0lx1z0+RE3WG7/p4H1KJqOsnA3zykg7OaD5fXHHRA==
+X-Received: by 2002:a17:902:dac8:b0:149:2d42:2f81 with SMTP id q8-20020a170902dac800b001492d422f81mr29481094plx.78.1640832153416;
+        Wed, 29 Dec 2021 18:42:33 -0800 (PST)
+Received: from [30.135.82.251] ([23.98.35.75])
+        by smtp.gmail.com with ESMTPSA id ds24sm26049552pjb.36.2021.12.29.18.42.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 29 Dec 2021 18:42:33 -0800 (PST)
+User-Agent: Microsoft-MacOutlook/16.56.21121100
+Date:   Thu, 30 Dec 2021 10:42:28 +0800
+Subject: Re: Lock problems in linux/tools/perf/util/dso.c
+From:   Ryan Cai <ycaibb@gmail.com>
+To:     Namhyung Kim <namhyung@kernel.org>
+CC:     Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Message-ID: <64E36F38-E037-4561-8E0C-B288674A5BD9@gmail.com>
+Thread-Topic: Lock problems in linux/tools/perf/util/dso.c
+References: <4C0186FE-729D-4F77-947D-11933BA38818@gmail.com>
+ <CAM9d7ciroZswudPXAAs9Zo3_veFMugJJZ4XZWhGSKHdFPcDOjQ@mail.gmail.com>
+In-Reply-To: <CAM9d7ciroZswudPXAAs9Zo3_veFMugJJZ4XZWhGSKHdFPcDOjQ@mail.gmail.com>
+Mime-version: 1.0
+Content-type: text/plain;
+        charset="UTF-8"
+Content-transfer-encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Namhyung,
+
+1. Indeed, I got wrong here.
+2. Yes, the branch should be if (pthread_mutex_lock(&dso__data_open_lock))=20
+instead of if (pthread_mutex_lock(&dso__data_open_lock) < 0).
+
+Could I send a patch?
+
+Best,
+Ryan
+
+=EF=BB=BFOn 30/12/2021, 3:08 AM, "Namhyung Kim" <namhyung@kernel.org> wrote:
+
+    Hello,
+
+    On Wed, Dec 22, 2021 at 3:33 AM Ryan Cai <ycaibb@gmail.com> wrote:
+    >
+    > Hi, I found a potential lock problem in dso_data_get_fd. Because the =
+inconsistent branch conditions of pthread_mutex_lock(&dso__data_open_lock) a=
+nd pthread_mutex_unlock(&dso__data_open_lock), it is possible that the lock =
+dso__data_open_lock is not released in the dso_data_get_fd. Also, I have a q=
+uestion on why the branch condition of pthread_mutex_lock(&dso__data_open_lo=
+ck) is <0. I think that the branch condition should be !=3D0, because pthread_=
+mutex_lock would return 0 when succeeding. Looking forward to further discus=
+sion. One this bug is confirmed, I can send a patch.
+
+    Please fix your mail client to wrap around 80 characters.
+
+    1. dso__data_get_fd() should be paired with dso__data_put_fd()
+       when it returns non-negative.  It'd unlock the mutex.
+
+    2. I've checked the man page and it seems you're right.
+       It just says that it'd return an error number or zero.
+
+       https://linux.die.net/man/3/pthread_mutex_lock
+
+    Thanks,
+    Namhyung
 
 
-On 2021/12/30 0:51, Borislav Petkov wrote:
-> On Wed, Dec 29, 2021 at 11:04:21PM +0800, Leizhen (ThunderTown) wrote:
->> Chen Zhou and I tried to share the code because of a suggestion. After so many
->> attempts, it doesn't seem to fit to make generic. Or maybe I haven't figured
->> out a good solution yet.
-> 
-> Well, you learned a very important lesson and the many attempts are not
-> in vain: code sharing does not make sense in every case.
-> 
->> I will put the patches that make arm64 support crashkernel...high,low to
->> the front, then the parse_crashkernel() unification patches. Even if the
->> second half of the patches is not ready for v5.18, the first half of the
->> patches is ready.
-> 
-> I think you should concentrate on the arm64 side which is, AFAICT, what
-> you're trying to achieve.
+    >
+    >
+    >
+    > https://github.com/torvalds/linux/blob/e851dfae4371d3c751f1e18e8eb5eb=
+a993de1467/tools/perf/util/dso.c#L708-L722
+    >
+    >
+    >
+    > Best,
+    >
+    > Ryan
+    >
+    >
+    >
+    >
 
-Right, a patchset should focus on just one thing.
 
-> 
-> The "parse_crashkernel() unification" needs more thought because, as I
-> said already, that doesn't make a whole lot of sense to me.
-
-Yes, because it's not a functional improvement, it's not a performance optimization,
-it's also not a fix for a known bug, it's just a programmer's artistic pursuit.
-
-> 
-> If you want to enforce the fact that "low" makes sense only when "high"
-> is supplied, parse_crashkernel_high_low() is not the right thing to do.
-> You need to have a *single* function which does all the parsing where
-> you can decide what to do: "if high, parse low", "if no high supplied,
-> ignore low" and so on.
-
-I understand your proposal, but parse_crashkernel_high_low() is a cost-effective
-and profitable change, it makes the current code a little clearer, and avoid passing
-unnecessary parameters "system_ram" and "crash_base" when other architectures use
-parse_crashkernel_{high|low}().
-
-I actually followed your advice in the beginning to do "parse_crashkernel() and
-parse_crashkernel_{high|low}() unification". But I found it's difficult and the
-end result may not be as good as expected. So I introduced parse_crashkernel_high_low().
-
-The parameter "system_ram" and "crash_base" of parse_crashkernel() is not need by
-"crashkernel=X,[high,low]". And parameter "low_size" of parse_crashkernel_high_low()
-is not need by "crashkernel=X[@offset]". The "parse_crashkernel() unification"
-complicates things. For example, the parameter "crash_size" means "low or high" memory
-size for "crashkernel=X[@offset]", but only means "high" memory size for "crashkernel=X,high".
-So we'd better give it two names with union.
-
-> 
-> And if those are supported on certain architectures only, you can do
-> ifdeffery...
-
-I don't think so. These __init functions are small and architecture-independent, and do not
-affect compilation of other architectures. There may be other architectures that use
-it in the future, such as the current arm64.
-
-> 
-> But I think I already stated that I don't like such unifications which
-> introduce unnecessary dependencies between architectures. Therefore, I
-> won't accept them into x86 unless there's a strong compelling reason.
-> Which I don't see ATM.
-
-OK.
-
-> 
-> Thx.
-> 
-
--- 
-Regards,
-  Zhen Lei

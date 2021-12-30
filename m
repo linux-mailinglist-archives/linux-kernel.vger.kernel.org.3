@@ -2,235 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2208C4820E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 00:38:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D960B4820EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 00:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240897AbhL3Xil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 18:38:41 -0500
-Received: from mga14.intel.com ([192.55.52.115]:46687 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240737AbhL3Xij (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 18:38:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640907519; x=1672443519;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3yY439yXfoQZ4kekA93dhwUu45G0YSK7uQTTdzEitAs=;
-  b=QNZ5iDa9q2gFuJiVlZHIcs8Gb5D6qJE6va9FKjcb08VLApqRdO+RrymU
-   1SLXPcIbmsvfWws4bp88u+kZpFIKZBa5JBTkCk4rFBOhQrEqRhhCYj/6J
-   eUXTkVPRT0ai3RhCOgbwdMEBN5zDIUqIt0dKPjk29Xd6FuMwPz8+An8Bh
-   bEK8OJCjnzUImaea4+RrkT3YNE4Dh202AZQPTmdDdRwwnWIqkt1QiyMgY
-   TbMGqGSjHmoCPH2RpNGIV8miGuGyuQjLFPb3Dqn3sZay8dHhuAJboLRAn
-   GpC+XFkBBxUWEYzWiFp1q14vo4XsDAWbw27zIN8drVZkuJN3DNeD8yG5X
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="241954852"
-X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
-   d="scan'208";a="241954852"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 15:38:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
-   d="scan'208";a="554916037"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 30 Dec 2021 15:38:37 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n350G-000AlU-HV; Thu, 30 Dec 2021 23:38:36 +0000
-Date:   Fri, 31 Dec 2021 07:37:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 2ad9a070f0d50bbb03200c1554bb2c9749987d97
-Message-ID: <61ce42c8.TejpZLJbdRhBYZqJ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S240931AbhL3X4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 18:56:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240737AbhL3X4Q (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 18:56:16 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67E5C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 15:56:15 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id a203-20020a1c7fd4000000b003457874263aso16782123wmd.2
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 15:56:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=06S3zd2orIESj72FE3tHED43xQdHxTUMkfYYwe00wX0=;
+        b=UN21p9i/HQBP5bIxdvrBzde1OUPTWPyofyKLJHtskKd+VUJIo4+fasBiQ1BZ38DGu2
+         BS/OMU2bTo3CS0WrOgL+TfNYbfORze+G2kHzWVXQo1brPYoYmdoqoMr9juida9Pdr6lw
+         2pYpTeV94yVc+jaaKNAgeSTYahZDSDK8IJfuSh8J2aiYFW3RwNabA0UgsSsA8BhLuoFn
+         1Ofre4miz4RWoHxDkv9Wd3FKO7YKr18SHgt15sL4Ln4PJGuYO2UXTwzmey2tnGkeOJ2E
+         dc7bWiOthsHX1JbCeT2A6N7eDF3aWYYMU9I1WXUleIAqcDKph89Ib54Rno3dzG59AX3d
+         QfPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=06S3zd2orIESj72FE3tHED43xQdHxTUMkfYYwe00wX0=;
+        b=TdYRBrrodo3pI6jzUkyE4boWL67dGZEhVWYPPHBfD+YP0NDAajv6ZuTSqLN5UcgvqI
+         26ZbVJ87GOtNh8lIJplKkO0/heEo7/G6/xw+JPHqwJ2KEg7L/fOtLVxEj5Cb/VIB8sMH
+         enC4PHhouyNiCAfeJs3DUd+CUO4M0KYYzhCGUcteudbE9wkZZ0ExlY4zPlHvMG+MwO9u
+         YQfBjYZ1z8o407LrMGWf6TtHNFS8JXm7ZJgfvegA6CnbHRF6nXiAAHbKcA9CqBSxHnyR
+         tdyNotXRggraqAArmbYI5AK5gcnxTWfKflFUVOPKGlkxJy9N2bZ6GBz647Pib9KEVMOF
+         1R3g==
+X-Gm-Message-State: AOAM530QzvXNKNgiVTz2vcvEBt/fhvamCxDntp5vNuV2k8xluXU4u9qs
+        l0JZN7N6BL3yD34OOcvpUJo=
+X-Google-Smtp-Source: ABdhPJzgh/ofqaEUf89LPraq5gBtOMLdMCVoLABcXbmXGl/gXmAtu34+N2JtT7fliiicXAQ/+OwVlw==
+X-Received: by 2002:a05:600c:1c18:: with SMTP id j24mr28248546wms.189.1640908574243;
+        Thu, 30 Dec 2021 15:56:14 -0800 (PST)
+Received: from localhost.localdomain (dynamic-2a01-0c23-c015-2400-f22f-74ff-fe21-0725.c23.pool.telefonica.de. [2a01:c23:c015:2400:f22f:74ff:fe21:725])
+        by smtp.googlemail.com with ESMTPSA id f16sm35137581wmg.27.2021.12.30.15.56.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Dec 2021 15:56:13 -0800 (PST)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     linux-amlogic@lists.infradead.org
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        narmstrong@baylibre.com,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH 0/2] drm/meson: Error handling fix when AFBCD is used
+Date:   Fri, 31 Dec 2021 00:55:13 +0100
+Message-Id: <20211230235515.1627522-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 2ad9a070f0d50bbb03200c1554bb2c9749987d97  Merge branch into tip/master: 'x86/build'
+Hi Neil,
 
-elapsed time: 722m
+this series consists of a small cleanup patch and a fix for the error
+handling in meson_drv_bind_master() when AFBCD is used.
+The patches are based on drm-misc to not conflict with your previous
+driver rework. Since the problem has not been observed in the wild I
+decided not to Cc linux-stable.
 
-configs tested: 164
-configs skipped: 4
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Best regards,
+Martin
 
-gcc tested configs:
-arm                                 defconfig
-arm64                               defconfig
-arm                              allmodconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-i386                 randconfig-c001-20211230
-i386                 randconfig-c001-20211228
-arm                            hisi_defconfig
-riscv                             allnoconfig
-mips                       lemote2f_defconfig
-powerpc                     ppa8548_defconfig
-powerpc                      makalu_defconfig
-sh                           se7780_defconfig
-arm                         at91_dt_defconfig
-powerpc                 mpc832x_rdb_defconfig
-sh                          sdk7780_defconfig
-powerpc                    mvme5100_defconfig
-ia64                        generic_defconfig
-powerpc                 mpc8313_rdb_defconfig
-sh                         apsh4a3a_defconfig
-arm                       multi_v4t_defconfig
-sh                   rts7751r2dplus_defconfig
-sh                           se7721_defconfig
-powerpc                     tqm8541_defconfig
-powerpc                   bluestone_defconfig
-sh                          landisk_defconfig
-arm                          moxart_defconfig
-arm                       imx_v6_v7_defconfig
-alpha                               defconfig
-mips                malta_qemu_32r6_defconfig
-arm                            pleb_defconfig
-powerpc                     pseries_defconfig
-arm                           sama7_defconfig
-mips                        vocore2_defconfig
-arm                      jornada720_defconfig
-mips                          rm200_defconfig
-powerpc                      pmac32_defconfig
-powerpc                     kilauea_defconfig
-sh                          lboxre2_defconfig
-mips                     loongson2k_defconfig
-openrisc                         alldefconfig
-mips                        bcm63xx_defconfig
-h8300                       h8s-sim_defconfig
-powerpc                          g5_defconfig
-arm                           spitz_defconfig
-powerpc                mpc7448_hpc2_defconfig
-arm                          pxa168_defconfig
-i386                             alldefconfig
-arm                            qcom_defconfig
-sh                             sh03_defconfig
-powerpc                    klondike_defconfig
-m68k                                defconfig
-powerpc                 mpc834x_itx_defconfig
-powerpc                       eiger_defconfig
-xtensa                          iss_defconfig
-ia64                            zx1_defconfig
-arm                       spear13xx_defconfig
-mips                   sb1250_swarm_defconfig
-sh                                  defconfig
-um                               alldefconfig
-mips                            gpr_defconfig
-m68k                           sun3_defconfig
-powerpc                 mpc836x_mds_defconfig
-powerpc                    ge_imp3a_defconfig
-mips                           mtx1_defconfig
-sh                ecovec24-romimage_defconfig
-arm                        mini2440_defconfig
-xtensa                           alldefconfig
-sh                            migor_defconfig
-arc                          axs101_defconfig
-nios2                         10m50_defconfig
-arm                           sama5_defconfig
-mips                            ar7_defconfig
-xtensa                       common_defconfig
-arc                              allyesconfig
-arm                        spear6xx_defconfig
-arc                         haps_hs_defconfig
-powerpc                     ep8248e_defconfig
-sh                        sh7785lcr_defconfig
-sh                           se7750_defconfig
-m68k                       m5475evb_defconfig
-sh                          sdk7786_defconfig
-parisc                generic-64bit_defconfig
-riscv                            allmodconfig
-arm                  randconfig-c002-20211230
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-sparc                               defconfig
-i386                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                              debian-10.3
-i386                   debian-10.3-kselftests
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a013-20211230
-x86_64               randconfig-a015-20211230
-x86_64               randconfig-a012-20211230
-x86_64               randconfig-a011-20211230
-x86_64               randconfig-a016-20211230
-x86_64               randconfig-a014-20211230
-i386                 randconfig-a011-20211230
-i386                 randconfig-a012-20211230
-i386                 randconfig-a013-20211230
-i386                 randconfig-a014-20211230
-i386                 randconfig-a015-20211230
-i386                 randconfig-a016-20211230
-arc                  randconfig-r043-20211230
-riscv                randconfig-r042-20211230
-s390                 randconfig-r044-20211230
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
 
-clang tested configs:
-x86_64               randconfig-a002-20211230
-x86_64               randconfig-a001-20211230
-x86_64               randconfig-a003-20211230
-x86_64               randconfig-a006-20211230
-x86_64               randconfig-a004-20211230
-x86_64               randconfig-a005-20211230
-i386                 randconfig-a001-20211230
-i386                 randconfig-a005-20211230
-i386                 randconfig-a004-20211230
-i386                 randconfig-a002-20211230
-i386                 randconfig-a006-20211230
-i386                 randconfig-a003-20211230
-x86_64               randconfig-a015-20211228
-x86_64               randconfig-a014-20211228
-x86_64               randconfig-a013-20211228
-x86_64               randconfig-a012-20211228
-x86_64               randconfig-a011-20211228
-x86_64               randconfig-a016-20211228
-hexagon              randconfig-r041-20211230
-hexagon              randconfig-r045-20211230
+Martin Blumenstingl (2):
+  drm/meson: osd_afbcd: Add an exit callback to struct meson_afbcd_ops
+  drm/meson: Fix error handling when afbcd.ops->init fails
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/gpu/drm/meson/meson_drv.c       | 25 +++++++--------
+ drivers/gpu/drm/meson/meson_osd_afbcd.c | 41 ++++++++++++++++---------
+ drivers/gpu/drm/meson/meson_osd_afbcd.h |  1 +
+ 3 files changed, 41 insertions(+), 26 deletions(-)
+
+-- 
+2.34.1
+

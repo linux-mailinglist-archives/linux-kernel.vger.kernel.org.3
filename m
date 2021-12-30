@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F792481F98
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:13:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A79481F9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240507AbhL3TNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 14:13:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
+        id S241928AbhL3TNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 14:13:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241787AbhL3TNV (ORCPT
+        with ESMTP id S241910AbhL3TNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 14:13:21 -0500
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671E3C061747
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:13:21 -0800 (PST)
+        Thu, 30 Dec 2021 14:13:42 -0500
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D1EC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:13:42 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1640891599;
+        t=1640891621;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=28nrHGgMyGK55v/Rjfsypuf+W8Mz9cvlkAPr7bWxb48=;
-        b=B8CmrXMFGTZ14KYbZE5VOFOTEJVe1BrXYWiZx18I2GmN80kDHHtVCQlwOo3jS0iNE2piOh
-        LspM5YFD/tlrujiNgPvKwvB6CdNR0gGIS/Aer9tK4xM5d3HHteW0Yk3fAgmJlOETXO1pkh
-        +aArFeBgz9EBagAn5HQbfrU8ZtAlmNo=
+        bh=Kp+2Q3QLxWnCUmTGCUqJeVTafIKYNKQMJyZMylxx2h8=;
+        b=Fdr1CYMBvtePxKkbsUTaaA8g5VeJvZovcMZtFSDwjjRps7/VvTpe2f+HTIYgIzZ7qiRpKQ
+        /MRO3AZz/Ti4DI1FYDScOtT1OxRtf2Yz7c42XlPYMoUopr/e/nJafl9LFAsSexCJTZAXG4
+        qCyx0dC5VEPIbQ5jjfmLThK7YCoxQ5Y=
 From:   andrey.konovalov@linux.dev
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
@@ -43,9 +43,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v5 15/39] kasan: clean up metadata byte definitions
-Date:   Thu, 30 Dec 2021 20:12:17 +0100
-Message-Id: <9549503f54d610083da80559cda1587afb35ee2b.1640891329.git.andreyknvl@google.com>
+Subject: [PATCH mm v5 16/39] kasan: define KASAN_VMALLOC_INVALID for SW_TAGS
+Date:   Thu, 30 Dec 2021 20:12:18 +0100
+Message-Id: <cc2b1a31579bbeb125a7868369501ad8edb629f1.1640891329.git.andreyknvl@google.com>
 In-Reply-To: <cover.1640891329.git.andreyknvl@google.com>
 References: <cover.1640891329.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -58,50 +58,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Most of the metadata byte values are only used for Generic KASAN.
+In preparation for adding vmalloc support to SW_TAGS KASAN,
+provide a KASAN_VMALLOC_INVALID definition for it.
 
-Remove KASAN_KMALLOC_FREETRACK definition for !CONFIG_KASAN_GENERIC
-case, and put it along with other metadata values for the Generic
-mode under a corresponding ifdef.
+HW_TAGS KASAN won't be using this value, as it falls back onto
+page_alloc for poisoning freed vmalloc() memory.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 Reviewed-by: Alexander Potapenko <glider@google.com>
 ---
- mm/kasan/kasan.h | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ mm/kasan/kasan.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-index c17fa8d26ffe..952cd6f9ca46 100644
+index 952cd6f9ca46..020f3e57a03f 100644
 --- a/mm/kasan/kasan.h
 +++ b/mm/kasan/kasan.h
-@@ -71,15 +71,16 @@ static inline bool kasan_sync_fault_possible(void)
+@@ -71,18 +71,19 @@ static inline bool kasan_sync_fault_possible(void)
  #define KASAN_PAGE_REDZONE      0xFE  /* redzone for kmalloc_large allocations */
  #define KASAN_KMALLOC_REDZONE   0xFC  /* redzone inside slub object */
  #define KASAN_KMALLOC_FREE      0xFB  /* object was freed (kmem_cache_free/kfree) */
--#define KASAN_KMALLOC_FREETRACK 0xFA  /* object was freed and has free track set */
++#define KASAN_VMALLOC_INVALID   0xF8  /* unallocated space in vmapped page */
  #else
  #define KASAN_FREE_PAGE         KASAN_TAG_INVALID
  #define KASAN_PAGE_REDZONE      KASAN_TAG_INVALID
  #define KASAN_KMALLOC_REDZONE   KASAN_TAG_INVALID
  #define KASAN_KMALLOC_FREE      KASAN_TAG_INVALID
--#define KASAN_KMALLOC_FREETRACK KASAN_TAG_INVALID
++#define KASAN_VMALLOC_INVALID   KASAN_TAG_INVALID /* only for SW_TAGS */
  #endif
  
-+#ifdef CONFIG_KASAN_GENERIC
-+
-+#define KASAN_KMALLOC_FREETRACK 0xFA  /* object was freed and has free track set */
+ #ifdef CONFIG_KASAN_GENERIC
+ 
+ #define KASAN_KMALLOC_FREETRACK 0xFA  /* object was freed and has free track set */
  #define KASAN_GLOBAL_REDZONE    0xF9  /* redzone for global variable */
- #define KASAN_VMALLOC_INVALID   0xF8  /* unallocated space in vmapped page */
+-#define KASAN_VMALLOC_INVALID   0xF8  /* unallocated space in vmapped page */
  
-@@ -110,6 +111,8 @@ static inline bool kasan_sync_fault_possible(void)
- #define KASAN_ABI_VERSION 1
- #endif
- 
-+#endif /* CONFIG_KASAN_GENERIC */
-+
- /* Metadata layout customization. */
- #define META_BYTES_PER_BLOCK 1
- #define META_BLOCKS_PER_ROW 16
+ /*
+  * Stack redzone shadow values
 -- 
 2.25.1
 

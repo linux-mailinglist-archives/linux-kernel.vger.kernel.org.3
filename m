@@ -2,119 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0A3481EDE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 18:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91277481EE0
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 18:55:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236803AbhL3RyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 12:54:04 -0500
-Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:15922
-        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229554AbhL3RyD (ORCPT
+        id S237236AbhL3RzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 12:55:14 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:52912 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237146AbhL3RzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 12:54:03 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3AcVkA460evgjJ89z4GfbD5cVwkn2cJEfYwER7XOP?=
- =?us-ascii?q?LsXnJ3D50hjBTzWQWDDuBbvzYYWemKN0gaonk9BxUvcLcytQ2QQE+nZ1PZyIT+?=
- =?us-ascii?q?JCdXbx1DW+pYnjMdpWbJK5fAnR3huDodKjYdVeB4Ef9WlTdhSMkj/jRHOGkULS?=
- =?us-ascii?q?s1h1ZHmeIdg9w0HqPpMZp2uaEsfDha++8kYuaT//3YDdJ6BYoWo4g0J9vnTs01?=
- =?us-ascii?q?BjEVJz0iXRlDRxDlAe2e3D4l/vzL4npR5fzatE88uJX24/+IL+FEmPxp3/BC/u?=
- =?us-ascii?q?lm7rhc0AMKlLQFVjTzCQGHfH4214b+XdaPqUTbZLwbW9VljGIlpZ1wcpEsZiYS?=
- =?us-ascii?q?AEzP6SKlv51vxxwSnsgbPUWp9crJlD666R/1XbuaXLiyvhqJEI7J4sV/qBwG24?=
- =?us-ascii?q?m3fcFMioKbB2ZivCe2rOgR/R0wMIuMKHDJ5kevHB+xCqfFf8gTYreXazG7Pdc3?=
- =?us-ascii?q?TEtloZPG+rTY4wSbj8HRBDNZRdnOVoNDp862uCyiRHXbTxCpUmV46kq5mHJ5Ah?=
- =?us-ascii?q?w1rH3N5zSYNPibcFUmFuI43rD13r2DwtcN9GFzzeBtHW2iYfnmSL9RZJXF7Ci8?=
- =?us-ascii?q?PNuqEOcy3ZVCxAMU1a/5/6jhSaWXtNZJEs84CciraEuskesS7HVRxCkrWSWlh8?=
- =?us-ascii?q?aVcBZH+Az5EeK0KW8ywSEHGlCSjNFbN0OrsI6RTU2kFSOmrvBGz1pu7CTVTSS6?=
- =?us-ascii?q?7aIsTSuESwUK2YYYmkDVwRt3jVJiOnflTqWEY0lSfTsyIOlX2GthSqHsm4lia9?=
- =?us-ascii?q?Vi8MXv5hXNGvv21qEzqUlhCZsjukPYl+Y0w=3D=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A9HVvxqPF9w6/o8BcTl6jsMiBIKoaSvp037BK?=
- =?us-ascii?q?7S1MoHtuHfBw9vrBoB1/73TJYVUqKRIdcLK7WJVoKEm0nfRICO8qTNWftWLdyR?=
- =?us-ascii?q?KVxdFZgbfK8nnYAGnV24dmpNpdWpk7Mca1IRxRoK/BkXaFOudl+cLC0I3Av5al?=
- =?us-ascii?q?815dCThwL5olxSoRMHfmLmRGADBcQad8Prf03Ls4m9N+QwVuUixrbkN1JNQv7u?=
- =?us-ascii?q?e7864Px3M9dnoawRSJ5AnI1Fe/KWn84j4OFy5Cxa4m+XXI1xHo/6nLiYDc9iPh?=
-X-IronPort-AV: E=Sophos;i="5.88,248,1635199200"; 
-   d="scan'208";a="1269087"
-Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 18:54:01 +0100
-Date:   Thu, 30 Dec 2021 18:54:01 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-cc:     Francisco Jerez <currojerez@riseup.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-In-Reply-To: <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2112301840360.15550@hadrien>
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com> <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net> <alpine.DEB.2.22.394.2112172258480.2968@hadrien>
- <87fsqqu6by.fsf@riseup.net> <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net> <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net> <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net>
- <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com> <878rwdse9o.fsf@riseup.net> <alpine.DEB.2.22.394.2112281745240.24929@hadrien> <CAJZ5v0i4xnesG=vfx7Y-wyeaGvjDeGcsaOVqhRLnV8YXk-m2gA@mail.gmail.com> <alpine.DEB.2.22.394.2112281845180.24929@hadrien>
- <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com> <alpine.DEB.2.22.394.2112291012030.24929@hadrien> <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Thu, 30 Dec 2021 12:55:13 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A0546173D;
+        Thu, 30 Dec 2021 17:55:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 83E30C36AE9;
+        Thu, 30 Dec 2021 17:55:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640886912;
+        bh=40C0mjquxthFKfYAe6IKTrPEJG1KRvBZkHtr8bHNwmI=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Pd1tRNrhnDac1giRTodsFXrwMkG63U1a2fwG+JdbNL8REz1PhtVvkGwJklDsZgRYx
+         hr90t0GrgymW1ZylPsfbLXi3cFMcC4DZWFGWwQriyESFG3Y6pR7H1AUCSvd7Xb7JKp
+         VOX0fUquFRn7RcKtZNNmV1KXmsugE1BX970lAqKImxNxKKFd+LIVtQ4rb7aoTnp6tG
+         VXkGKKZ58St7KWx7j8ur4JQWDZkkcp1uUi5hhYEve7ZGE3tNRt8BXek2LPo79Dr7OO
+         1RjoWnDUGbg0hNecdJGug4hPVIKbU/pHFPhgKxz6PovEa0QpzZaoVrejRnWBBftm9L
+         va03YpvD/rOtg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 732B3C395DE;
+        Thu, 30 Dec 2021 17:55:12 +0000 (UTC)
+Subject: Re: [GIT PULL] USB fixes for 5.16-final
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Yc3jxXB0JoKOrxb9@kroah.com>
+References: <Yc3jxXB0JoKOrxb9@kroah.com>
+X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Yc3jxXB0JoKOrxb9@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16
+X-PR-Tracked-Commit-Id: 3f345e907a8e7c56fdebf7231cd67afc85d02aaa
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 2d40060bb51fb3b571b57aa9d823ab7fe55b4280
+Message-Id: <164088691246.28006.2638978274095196930.pr-tracker-bot@kernel.org>
+Date:   Thu, 30 Dec 2021 17:55:12 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > The effect is the same.  But that approach is indeed simpler than patching
-> > the kernel.
->
-> It is also applicable when intel_pstate runs in the active mode.
->
-> As for the results that you have reported, it looks like the package
-> power on these systems is dominated by package voltage and going from
-> P-state 20 to P-state 21 causes that voltage to increase significantly
-> (the observed RAM energy usage pattern is consistent with that).  This
-> means that running at P-states above 20 is only really justified if
-> there is a strict performance requirement that can't be met otherwise.
->
-> Can you please check what value is there in the base_frequency sysfs
-> attribute under cpuX/cpufreq/?
+The pull request you sent on Thu, 30 Dec 2021 17:52:21 +0100:
 
-2100000, which should be pstate 21
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16
 
->
-> I'm guessing that the package voltage level for P-states 10 and 20 is
-> the same, so the power difference between them is not significant
-> relative to the difference between P-state 20 and 21 and if increasing
-> the P-state causes some extra idle time to appear in the workload
-> (even though there is not enough of it to prevent to overall
-> utilization from increasing), then the overall power draw when running
-> at P-state 10 may be greater that for P-state 20.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/2d40060bb51fb3b571b57aa9d823ab7fe55b4280
 
-My impression is that the package voltage level for P-states 10 to 20 is
-high enough that increasing the frequency has little impact.  But the code
-runs twice as fast, which reduces the execution time a lot, saving energy.
+Thank you!
 
-My first experiment had only one running thread.  I also tried running 32
-spinning threads for 10 seconds, ie using up one package and leaving the
-other idle.  In this case, instead of staying around 600J for pstates
-10-20, the pstate rises from 743 to 946.  But there is still a gap between
-20 and 21, with 21 being 1392J.
-
-> You can check if there is any C-state residency difference between
-> these two cases by running the workload under turbostat in each of
-> them.
-
-The C1 and C6 cases (CPU%c1 and CPU%c6) are about the same between 20 and
-21, whether with 1 thread or with 32 thread.
-
-> Anyway, this is a configuration in which the HWP scaling algorithm
-> used when intel_pstate runs in the active mode is likely to work
-> better, because it should take the processor design into account.
-> That's why it is the default configuration of intel_pstate on systems
-> with HWP.  There are cases in which schedutil helps, but that's mostly
-> when HWP without it tends to run the workload too fast, because it
-> lacks the utilization history provided by PELT.
-
-OK, I'll look into that case a bit more.
-
-thanks,
-julia
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

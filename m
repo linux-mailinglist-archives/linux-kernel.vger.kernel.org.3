@@ -2,421 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF5F481AA5
+	by mail.lfdr.de (Postfix) with ESMTP id 73B88481AA6
 	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 09:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237527AbhL3IDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 03:03:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237360AbhL3IDi (ORCPT
+        id S237493AbhL3IDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 03:03:44 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35338 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237497AbhL3IDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 03:03:38 -0500
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECC5C061574;
-        Thu, 30 Dec 2021 00:03:38 -0800 (PST)
-Received: by mail-pl1-x643.google.com with SMTP id n16so17760490plc.2;
-        Thu, 30 Dec 2021 00:03:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tjEyxmzWv+vv0x7VIz02gdNHRKgdP8+rFV7YB5P7KbE=;
-        b=GcWUi7g5rfRYK1oQKbcAluHznNCgZfmjudxoyH5Savd1i2y5ld2yR+K4cx53tyqDzv
-         xeTbRpdV3fTZLzM6UkhH0ppAF+e8jVIHp6TwcNAN4ObaP43F7WlFN7EurzKqrHMbp918
-         TlRp7j4wy9Z8pxtpbiox5ayQdviU+Yc4dzgAT7MfXDErkK9yOkA4LeBC8V4Aut3QeOF9
-         aAYZfEpFrw1UaZ38q5JXikAO2gbOl3L/ClLzSRhYUZwadVTFUygcPKMW0oNuD6OegSK/
-         lu3Di+EEMKuBQ619J2oR3xv20hJH+jk5aRPnFtKM9/fs6oysOyS2NJnXs3LLKBQq2/Vx
-         Eq8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tjEyxmzWv+vv0x7VIz02gdNHRKgdP8+rFV7YB5P7KbE=;
-        b=qLXA+usHnWl4ZxX1mQyOqfCGyBqPY+VNHDU6EUI527QE8Ku3Sekzk86PqqgJbiX9E1
-         h9vz8nAfs2rHiUT73U7dp6iz/AE1Y5QILNiGyAgqSRubomDek1LW0MY9ttMEGlRoLehT
-         +nLuiuW4n0hbf1+3TwiXvB+gp3n+zvJ4upwJU7hslDohfYyCSr1UQNfBuvsaqpVlFP5D
-         0t/gGOtjyESqWQ6Ag1+zWYral2hczga2yQWCvpENUhIVCJqaRngoKXDJfnysSCjB/r3T
-         yuo9znamk/CcXuCz/ORzop2uWPUzfesg7buA1jK2RWSfAJBuaSdTQvzH0R8J2AGSf82f
-         UVCw==
-X-Gm-Message-State: AOAM531qJrPfYpQVINTwkDeTw7V1qAsikRp/uMLYskhLVNeDj6I7JDQV
-        Lp2nygyRP6Idq905LqRS4Pg=
-X-Google-Smtp-Source: ABdhPJxcm84RSNSFKQdlqCf8ryGaH4fWUE+yOcPCNoDzUin2LV5fvSxonoGMoR44qHhXOtXishw5hQ==
-X-Received: by 2002:a17:902:7442:b0:149:7a3f:3899 with SMTP id e2-20020a170902744200b001497a3f3899mr19943935plt.90.1640851417592;
-        Thu, 30 Dec 2021 00:03:37 -0800 (PST)
-Received: from localhost.localdomain ([43.132.141.9])
-        by smtp.gmail.com with ESMTPSA id 13sm26606987pfm.161.2021.12.30.00.03.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 00:03:37 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     kuba@kernel.org
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        edumazet@google.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
-Subject: [PATCH net-next 2/2] bpf: selftests: add bind retry for post_bind{4, 6}
-Date:   Thu, 30 Dec 2021 16:03:05 +0800
-Message-Id: <20211230080305.1068950-3-imagedong@tencent.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20211230080305.1068950-1-imagedong@tencent.com>
-References: <20211230080305.1068950-1-imagedong@tencent.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 30 Dec 2021 03:03:42 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F0A9B81AD0
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 08:03:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B84E4C36AEA;
+        Thu, 30 Dec 2021 08:03:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640851418;
+        bh=tzgIVF2CNSJC4pepifvjTO/VaEIgs0cwRYpn05lBbcg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:From;
+        b=j7Ve8KaEsCDOOUHgaeIHtLuoFBkgaJxpCw9HpC9fQZS4uBGj44zs0YXopOh3IHlSR
+         N9ldHihFu3Fusdkp6uS/fytauoWxA5AZmdia71kT5lcvygC7cIlgnYu5r1bc2lqowX
+         3XxfirLLvvDAG2OhmyMrlS7KKoCKlYp4TbncgbvvFUkoj2QIT7kwjyP777gYhormhy
+         ghM0fLEeWCxk5U4Kiy1T2WTEAGaP+65Bxg7qkWr992EumhKI9FJ9EFzd9joBtVTguJ
+         TE3q8aj4UIaeff+8cCGBdG0+Tj+I0K0P3DPZFN4ivfDYLe9+P1rGKMIYNT2pkO0Bf1
+         +Axt6a4W36r/Q==
+From:   SeongJae Park <sj@kernel.org>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     SeongJae Park <sj@kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        akpm@linux-foundation.org, dave.hansen@linux.intel.com,
+        ziy@nvidia.com, shy828301@gmail.com,
+        zhongjiang-ali@linux.alibaba.com, xlpang@linux.alibaba.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Minchan Kim <minchan@kernel.org>
+Subject: Re: [PATCH v2 0/2] Add a new scheme to support demotion on tiered memory system
+Date:   Thu, 30 Dec 2021 08:03:35 +0000
+Message-Id: <20211230080335.24320-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <87tueq6av4.fsf@yhuang6-desk2.ccr.corp.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+On Thu, 30 Dec 2021 11:16:15 +0800 "Huang, Ying" <ying.huang@intel.com> wrote:
 
-With previous patch, kernel is able to 'put_port' after sys_bind()
-fails. Add the test for that case: rebind another port after
-sys_bind() fails. If the bind success, it means previous bind
-operation is already undoed.
+> SeongJae Park <sj@kernel.org> writes:
+> 
+> > On Wed, 29 Dec 2021 09:33:56 +0800 "Huang, Ying" <ying.huang@intel.com> wrote:
+> >
+> >> SeongJae Park <sj@kernel.org> writes:
+> >> 
+> >> > Hello,
+> >> >
+> >> > On Mon, 27 Dec 2021 11:09:56 +0800 "Huang, Ying" <ying.huang@intel.com> wrote:
+> >> >
+> >> >> Hi, SeongJae,
+> >> >> 
+> >> >> SeongJae Park <sj@kernel.org> writes:
+> >> >> 
+> >> >> > Hi,
+> >> >> >
+> >> >> > On Thu, 23 Dec 2021 15:51:18 +0800 "Huang, Ying" <ying.huang@intel.com> wrote:
+> >> >> 
+> >> >> [snip]
+> >> >> 
+> >> >> >> It's good to avoid to change the source code of an application to apply
+> >> >> >> some memory management optimization (for example, use DAMON +
+> >> >> >> madvise()).  But it's much easier to run a user space daemon to optimize
+> >> >> >> for the application.  (for example, use DAMON + other information +
+> >> >> >> process_madvise()).
+> >> >> >> 
+> >> >> >> And this kind of per-application optimization is kind of application
+> >> >> >> specific policy.  This kind of policy may be too complex and flexible to
+> >> >> >> be put in the kernel directly.  For example, in addition to DAMON, some
+> >> >> >> other application specific or system knowledge may be helpful too, so we
+> >> >> >> have process_madvise() for that before DAMON.  Some more complex
+> >> >> >> algorithm may be needed for some applications.
+> >> >> >> 
+> >> >> >> And this kind of application specific policy usually need complex
+> >> >> >> configuration.  It's hard to export all these policy parameters to the
+> >> >> >> user space as the kernel ABI.  Now, DAMON schemes parameters are
+> >> >> >> exported in debugfs so they are not considered ABI.  So they may be
+> >> >> >> changed at any time.  But applications need some stable and
+> >> >> >> well-maintained ABI.
+> >> >> >> 
+> >> >> >> All in all, IMHO, what we need is a user space per-application policy
+> >> >> >> daemon with the information from DAMON and other sources.
+> >> >> >
+> >> >> > I basically agree to Ying, as I also noted in the coverletter of DAMOS
+> >> >> > patchset[1]:
+> >> >> >
+> >> >> >     DAMON[1] can be used as a primitive for data access aware memory
+> >> >> >     management optimizations.  For that, users who want such optimizations
+> >> >> >     should run DAMON, read the monitoring results, analyze it, plan a new
+> >> >> >     memory management scheme, and apply the new scheme by themselves.  Such
+> >> >> >     efforts will be inevitable for some complicated optimizations.
+> >> >> >
+> >> >> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fda504fade7f124858d7022341dc46ff35b45274
+> >> >> >
+> >> >> > That is, I believe some programs and big companies would definitely have their
+> >> >> > own information and want such kind of complicated optimizations.  But, such
+> >> >> > optimizations would depend on characteristics of each program and require
+> >> >> > investment of some amount of resources.  Some other programs and users wouldn't
+> >> >> > have such special information, and/or resource to invest for such
+> >> >> > optimizations.  For them, some amount of benefit would be helpful enough even
+> >> >> > though its sub-optimal.
+> >> >> >
+> >> >> > I think we should help both groups, and DAMOS could be useful for the second
+> >> >> > group.  And I don't think DAMOS is useless for the first group.  They could use
+> >> >> > their information-based policy in prallel to DAMOS in some cases.  E.g., if
+> >> >> > they have a way to predict the data access pattern of specific memory region
+> >> >> > even without help from DAMON, they can use their own policy for the region but
+> >> >> > DAMOS for other regions.
+> >> >> >
+> >> >> > Someone could ask why not implement a user-space implementation for the second
+> >> >> > group, then.  First of all, DAMOS is not only for the user-space driven virtual
+> >> >> > memory management optimization, but also for kernel-space programs and any
+> >> >> > DAMOS-supportable address spaces including the physical address space.  And,
+> >> >> > another important goal of DAMOS for user space driven use case in addition to
+> >> >> > reducing the redundant code is minimizing the user-kernel context switch
+> >> >> > overhead for passing the monitoring results information and memory management
+> >> >> > action requests.
+> >> >> >
+> >> >> > In summary, I agree the user space per-application policy daemon will be useful
+> >> >> > for the specialized ultimate optimizations, but we also need DAMOS for another
+> >> >> > common group of cases.
+> >> >> >
+> >> >> > If I'm missing something, please feel free to let me know.
+> >> >> 
+> >> >> I guess that most end-users and quite some system administrators of
+> >> >> small companies have no enough capability to take advantage of the
+> >> >> per-application optimizations.  How do they know the appropriate region
+> >> >> number and proactive reclaim threshold?
+> >> >> 
+> >> >> So per my understanding, Linux kernel
+> >> >> need provide,
+> >> >> 
+> >> >> 1. An in-kernel general policy that is obviously correct and benefits
+> >> >>    almost all users and applications, at least no regression.  No
+> >> >>    complex configuration or deep knowledge is needed to take advantage
+> >> >>    of it.
+> >> >> 
+> >> >> 2. Some way to inspect and control system and application behavior, so
+> >> >>    that some advanced and customized user space policy daemons can be
+> >> >>    built to satisfy some advanced users who have the enough knowledge
+> >> >>    for the applications and systems, for example, oomd.
+> >> >
+> >> > Agreed, and I think that's the approach that DAMON is currently taking.  In
+> >> > specific, we provide DAMON debugfs interface for users who want to inspect and
+> >> > control their system and application behavior.  Using it, we also made a PoC
+> >> > level user space policy daemon[1].
+> >> >
+> >> > For the in-kernel policies, we are developing DAMON-based kernel components one
+> >> > by one, for specific usages.  DAMON-based proactive reclamation module
+> >> > (DAMON_RECLAIM) is one such example.  Such DAMON-based components will remove
+> >> > complex tunables that necessary for the general inspection and control of the
+> >> > system but unnecessary for their specific purpose (e.g., proactive reclamation)
+> >> > to allow users use it in a simple manner.  Also, those will use conservative
+> >> > default configs to not incur visible regression.  For example, DAMON_RECLAIM
+> >> > uses only up to 1% of single CPU time for the reclamation by default.
+> >> 
+> >> I don't think DAMON schemes are the in-kernel general policy I mentioned
+> >> above (1.).  For example, NUMA balancing is a general policy to optimize
+> >> performance.  It tries to provide a general policy that works for all
+> >> users with as few as possible tunables.  If some tunables are needed,
+> >> they will be provided as ABI.
+> >
+> > Exactly.  What I'm saying is, DAMON schemes that exposed to user space via the
+> > debugfs interface is for inspection of system and development of user space
+> > daemon (2.).  It requires some level of tuning and doesn't provide stable ABI
+> > but the debugfs interface.  Meanwhile, DAMON-based kernel components like
+> > DAMON_RECLAIM can be used for the in-kernel general policy (1.).  For example,
+> > DAMON_RECLAIM also tries to be beneficial or at least incur no regression for
+> > almost every users, provides as few as possible tunables, and provides those
+> > via its ABI (module parameters), not debugfs.
+> 
+> Thanks for your detailed explanation.
+> 
+> Per my understanding, DAMON schemes are kind of building blocks of some
+> kernel feature such as DAMON_RECLAIM.
 
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
- tools/testing/selftests/bpf/test_sock.c | 166 +++++++++++++++++++++---
- 1 file changed, 146 insertions(+), 20 deletions(-)
+I pretty sure you're perfectly understanding my point.
 
-diff --git a/tools/testing/selftests/bpf/test_sock.c b/tools/testing/selftests/bpf/test_sock.c
-index e8edd3dd3ec2..68525d68d4e5 100644
---- a/tools/testing/selftests/bpf/test_sock.c
-+++ b/tools/testing/selftests/bpf/test_sock.c
-@@ -35,12 +35,15 @@ struct sock_test {
- 	/* Endpoint to bind() to */
- 	const char *ip;
- 	unsigned short port;
-+	unsigned short port_retry;
- 	/* Expected test result */
- 	enum {
- 		LOAD_REJECT,
- 		ATTACH_REJECT,
- 		BIND_REJECT,
- 		SUCCESS,
-+		RETRY_SUCCESS,
-+		RETRY_REJECT
- 	} result;
- };
- 
-@@ -60,6 +63,7 @@ static struct sock_test tests[] = {
- 		0,
- 		NULL,
- 		0,
-+		0,
- 		LOAD_REJECT,
- 	},
- 	{
-@@ -77,6 +81,7 @@ static struct sock_test tests[] = {
- 		0,
- 		NULL,
- 		0,
-+		0,
- 		LOAD_REJECT,
- 	},
- 	{
-@@ -94,6 +99,7 @@ static struct sock_test tests[] = {
- 		0,
- 		NULL,
- 		0,
-+		0,
- 		LOAD_REJECT,
- 	},
- 	{
-@@ -111,6 +117,7 @@ static struct sock_test tests[] = {
- 		0,
- 		NULL,
- 		0,
-+		0,
- 		LOAD_REJECT,
- 	},
- 	{
-@@ -125,6 +132,7 @@ static struct sock_test tests[] = {
- 		SOCK_STREAM,
- 		"127.0.0.1",
- 		8097,
-+		0,
- 		SUCCESS,
- 	},
- 	{
-@@ -139,6 +147,7 @@ static struct sock_test tests[] = {
- 		SOCK_STREAM,
- 		"127.0.0.1",
- 		8097,
-+		0,
- 		SUCCESS,
- 	},
- 	{
-@@ -153,6 +162,7 @@ static struct sock_test tests[] = {
- 		0,
- 		NULL,
- 		0,
-+		0,
- 		ATTACH_REJECT,
- 	},
- 	{
-@@ -167,6 +177,7 @@ static struct sock_test tests[] = {
- 		0,
- 		NULL,
- 		0,
-+		0,
- 		ATTACH_REJECT,
- 	},
- 	{
-@@ -181,6 +192,7 @@ static struct sock_test tests[] = {
- 		0,
- 		NULL,
- 		0,
-+		0,
- 		ATTACH_REJECT,
- 	},
- 	{
-@@ -195,6 +207,7 @@ static struct sock_test tests[] = {
- 		0,
- 		NULL,
- 		0,
-+		0,
- 		ATTACH_REJECT,
- 	},
- 	{
-@@ -209,6 +222,7 @@ static struct sock_test tests[] = {
- 		SOCK_STREAM,
- 		"0.0.0.0",
- 		0,
-+		0,
- 		BIND_REJECT,
- 	},
- 	{
-@@ -223,6 +237,7 @@ static struct sock_test tests[] = {
- 		SOCK_STREAM,
- 		"::",
- 		0,
-+		0,
- 		BIND_REJECT,
- 	},
- 	{
-@@ -253,6 +268,7 @@ static struct sock_test tests[] = {
- 		SOCK_STREAM,
- 		"::1",
- 		8193,
-+		0,
- 		BIND_REJECT,
- 	},
- 	{
-@@ -283,8 +299,102 @@ static struct sock_test tests[] = {
- 		SOCK_STREAM,
- 		"127.0.0.1",
- 		4098,
-+		0,
- 		SUCCESS,
- 	},
-+	{
-+		"bind4 deny specific IP & port of TCP, and retry",
-+		.insns = {
-+			BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
-+
-+			/* if (ip == expected && port == expected) */
-+			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
-+				    offsetof(struct bpf_sock, src_ip4)),
-+			BPF_JMP_IMM(BPF_JNE, BPF_REG_7,
-+				    __bpf_constant_ntohl(0x7F000001), 4),
-+			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
-+				    offsetof(struct bpf_sock, src_port)),
-+			BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0x1002, 2),
-+
-+			/* return DENY; */
-+			BPF_MOV64_IMM(BPF_REG_0, 0),
-+			BPF_JMP_A(1),
-+
-+			/* else return ALLOW; */
-+			BPF_MOV64_IMM(BPF_REG_0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		BPF_CGROUP_INET4_POST_BIND,
-+		BPF_CGROUP_INET4_POST_BIND,
-+		AF_INET,
-+		SOCK_STREAM,
-+		"127.0.0.1",
-+		4098,
-+		5000,
-+		RETRY_SUCCESS,
-+	},
-+	{
-+		"bind4 deny specific IP & port of UDP, and retry",
-+		.insns = {
-+			BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
-+
-+			/* if (ip == expected && port == expected) */
-+			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
-+				    offsetof(struct bpf_sock, src_ip4)),
-+			BPF_JMP_IMM(BPF_JNE, BPF_REG_7,
-+				    __bpf_constant_ntohl(0x7F000001), 4),
-+			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
-+				    offsetof(struct bpf_sock, src_port)),
-+			BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0x1002, 2),
-+
-+			/* return DENY; */
-+			BPF_MOV64_IMM(BPF_REG_0, 0),
-+			BPF_JMP_A(1),
-+
-+			/* else return ALLOW; */
-+			BPF_MOV64_IMM(BPF_REG_0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		BPF_CGROUP_INET4_POST_BIND,
-+		BPF_CGROUP_INET4_POST_BIND,
-+		AF_INET,
-+		SOCK_DGRAM,
-+		"127.0.0.1",
-+		4098,
-+		5000,
-+		RETRY_SUCCESS,
-+	},
-+	{
-+		"bind6 deny specific IP & port, and retry",
-+		.insns = {
-+			BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
-+
-+			/* if (ip == expected && port == expected) */
-+			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
-+				    offsetof(struct bpf_sock, src_ip6[3])),
-+			BPF_JMP_IMM(BPF_JNE, BPF_REG_7,
-+				    __bpf_constant_ntohl(0x00000001), 4),
-+			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
-+				    offsetof(struct bpf_sock, src_port)),
-+			BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0x2001, 2),
-+
-+			/* return DENY; */
-+			BPF_MOV64_IMM(BPF_REG_0, 0),
-+			BPF_JMP_A(1),
-+
-+			/* else return ALLOW; */
-+			BPF_MOV64_IMM(BPF_REG_0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		BPF_CGROUP_INET6_POST_BIND,
-+		BPF_CGROUP_INET6_POST_BIND,
-+		AF_INET6,
-+		SOCK_STREAM,
-+		"::1",
-+		8193,
-+		9000,
-+		RETRY_SUCCESS,
-+	},
- 	{
- 		"bind4 allow all",
- 		.insns = {
-@@ -297,6 +407,7 @@ static struct sock_test tests[] = {
- 		SOCK_STREAM,
- 		"0.0.0.0",
- 		0,
-+		0,
- 		SUCCESS,
- 	},
- 	{
-@@ -311,6 +422,7 @@ static struct sock_test tests[] = {
- 		SOCK_STREAM,
- 		"::",
- 		0,
-+		0,
- 		SUCCESS,
- 	},
- };
-@@ -351,14 +463,15 @@ static int attach_sock_prog(int cgfd, int progfd,
- 	return bpf_prog_attach(progfd, cgfd, attach_type, BPF_F_ALLOW_OVERRIDE);
- }
- 
--static int bind_sock(int domain, int type, const char *ip, unsigned short port)
-+static int bind_sock(int domain, int type, const char *ip,
-+		     unsigned short port, unsigned short port_retry)
- {
- 	struct sockaddr_storage addr;
- 	struct sockaddr_in6 *addr6;
- 	struct sockaddr_in *addr4;
- 	int sockfd = -1;
- 	socklen_t len;
--	int err = 0;
-+	int res = SUCCESS;
- 
- 	sockfd = socket(domain, type, 0);
- 	if (sockfd < 0)
-@@ -384,21 +497,44 @@ static int bind_sock(int domain, int type, const char *ip, unsigned short port)
- 		goto err;
- 	}
- 
--	if (bind(sockfd, (const struct sockaddr *)&addr, len) == -1)
--		goto err;
-+	if (bind(sockfd, (const struct sockaddr *)&addr, len) == -1) {
-+		/* sys_bind() may fail for different reasons, errno has to be
-+		 * checked to confirm that BPF program rejected it.
-+		 */
-+		if (errno != EPERM)
-+			goto err;
-+		if (port_retry)
-+			goto retry;
-+		res = BIND_REJECT;
-+		goto out;
-+	}
- 
-+	goto out;
-+retry:
-+	if (domain == AF_INET)
-+		addr4->sin_port = htons(port_retry);
-+	else
-+		addr6->sin6_port = htons(port_retry);
-+	if (bind(sockfd, (const struct sockaddr *)&addr, len) == -1) {
-+		if (errno != EPERM)
-+			goto err;
-+		res = RETRY_REJECT;
-+	} else {
-+		res = RETRY_SUCCESS;
-+	}
- 	goto out;
- err:
--	err = -1;
-+	res = -1;
- out:
- 	close(sockfd);
--	return err;
-+	return res;
- }
- 
- static int run_test_case(int cgfd, const struct sock_test *test)
- {
- 	int progfd = -1;
- 	int err = 0;
-+	int res;
- 
- 	printf("Test case: %s .. ", test->descr);
- 	progfd = load_sock_prog(test->insns, test->expected_attach_type);
-@@ -416,21 +552,11 @@ static int run_test_case(int cgfd, const struct sock_test *test)
- 			goto err;
- 	}
- 
--	if (bind_sock(test->domain, test->type, test->ip, test->port) == -1) {
--		/* sys_bind() may fail for different reasons, errno has to be
--		 * checked to confirm that BPF program rejected it.
--		 */
--		if (test->result == BIND_REJECT && errno == EPERM)
--			goto out;
--		else
--			goto err;
--	}
--
-+	res = bind_sock(test->domain, test->type, test->ip, test->port,
-+			test->port_retry);
-+	if (res > 0 && test->result == res)
-+		goto out;
- 
--	if (test->result != SUCCESS)
--		goto err;
--
--	goto out;
- err:
- 	err = -1;
- out:
--- 
-2.30.2
+> Whether do we need a new scheme depends on whether it's useful as part of
+> some kernel feature.  Do you agree?
 
+Yes, agreed.
+
+
+Thanks,
+SJ
+
+> 
+> Best Regards,
+> Huang, Ying
+> 
+> > Thanks,
+> > SJ
+> >
+> >> 
+> >> Best Regards,
+> >> Huang, Ying
+> >> 
+> >> > In short, I think we're on the same page, and adding DEMOTION scheme action
+> >> > could be helpful for the users who want to efficiently inspect and control the
+> >> > system/application behavior for their tiered memory systems.  It's unclear how
+> >> > much benefit this could give to users, though.  I assume Baolin would come back
+> >> > with some sort of numbers in the next spin.  Nevertheless, I personally don't
+> >> > think that's a critical blocker, as this patch is essentially just adding a way
+> >> > for using the pre-existing primitive, namely move_pages(), in a little bit more
+> >> > efficient manner, for the access pattern-based use cases. 
+> >> >
+> >> > If I'm missing something, please feel free to let me know.
+> >> >
+> >> > [1] https://github.com/awslabs/damoos
+> >> >
+> >> >
+> >> > Thanks,
+> >> > SJ
+> >> >
+> >> >> 
+> >> >> Best Regards,
+> >> >> Huang, Ying
+> >> 

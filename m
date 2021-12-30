@@ -2,149 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A85481E6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 18:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 612A5481E71
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 18:11:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241416AbhL3RDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 12:03:47 -0500
-Received: from mail-qk1-f182.google.com ([209.85.222.182]:46738 "EHLO
-        mail-qk1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240162AbhL3RDp (ORCPT
+        id S241419AbhL3RLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 12:11:15 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:52428 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240162AbhL3RLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 12:03:45 -0500
-Received: by mail-qk1-f182.google.com with SMTP id 202so19446759qkg.13;
-        Thu, 30 Dec 2021 09:03:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZJ1d4DWjDI379And7hXBvRjc241CBOgGxTAOgcshwlw=;
-        b=39cUWkMdAl+upGvBnUGVGyFdH201dMZ46LU5Q0zj1h8bdZ883DraO8QAho44PamKcJ
-         1v96mX/aALAGukGYWXEZED7RHJNDo5PtxF6Wt4u0RsDG94bQtLhi+M5o0kvL7h3IqddZ
-         jar1tP6/jqU/AoLGT0lIeXjzTenQoJnIESTP9/lHtGuuEZgDEo3iwOhKHefKRhNTYlUW
-         8Iqm2i0TFN8lt+bNP2ksTzyGw30MRMOIE0Eo3JfLONVjTveca1XKufGPNNvsg0t71YiK
-         FRSUWevxHEsCX1CkajWI7Sx03iaGFLMzxxHHGiSoSJ8Z+Cfgi5j+c5Hr3Mg0XcI3muOJ
-         STqw==
-X-Gm-Message-State: AOAM531j0CthoOdQk7UK02NK93/0PupITItRXXGYbQtT8rf9p9CPz56V
-        FdzpzFlhRTOByBUWiNc5hda9J4whsfbdR2WMedhZmkU7
-X-Google-Smtp-Source: ABdhPJwTBurn5u3bpPRJz28yFhGiA/HCBiw3VAfvYFU/qOgzyomP2bAnZ+cMc1Y/hJjK6KzHox5345z2EWCSzmKZVC4=
-X-Received: by 2002:a37:b702:: with SMTP id h2mr22500092qkf.135.1640883824394;
- Thu, 30 Dec 2021 09:03:44 -0800 (PST)
+        Thu, 30 Dec 2021 12:11:14 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 24D212A5;
+        Thu, 30 Dec 2021 18:11:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1640884272;
+        bh=2i0Xf3+MqKuDzJ3qo4MKmI3c87rR/zqriiPRHez0XuM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aiVqldI2TWABX/6mPYzPYKzI1nF3DUmu6OnLSODulyBRABjHGL+RZI2ywnWal4Y+Q
+         pJnpuxSdGCefFpuWqOa1he6/StifB5lD0qONkkCYN36WDL0Abzl4QsrWtPNEm7HBtM
+         /+A2USHDKLGLBwt2lratcXZ2/fjlBbyuABHzfMQE=
+Date:   Thu, 30 Dec 2021 19:11:11 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] arm64: dts: renesas: r8a77961: Add lvds0 device node
+Message-ID: <Yc3oL5lrUTObye7A@pendragon.ideasonboard.com>
+References: <20211224052309.1997096-1-nikita.yoush@cogentembedded.com>
+ <20211224052309.1997096-3-nikita.yoush@cogentembedded.com>
+ <YcyTV4fJqMHIeyYB@pendragon.ideasonboard.com>
+ <87626d61-ada0-c220-bea5-5330f5256629@cogentembedded.com>
+ <YcyXQxW3kRqQ2Yv0@pendragon.ideasonboard.com>
+ <39f70781-831e-c86a-ec5f-68f2b4bd3d62@cogentembedded.com>
+ <Ycy4AMAT53Uzf+K7@pendragon.ideasonboard.com>
+ <bb6ef732-7cd2-5ba9-0eef-caf2fbfbf829@cogentembedded.com>
+ <Ycze8wzD3Qi8YVAa@pendragon.ideasonboard.com>
+ <123e3993-cb71-b6dc-e4f4-4cad1eb51b00@cogentembedded.com>
 MIME-Version: 1.0
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>
- <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com>
- <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112172258480.2968@hadrien> <87fsqqu6by.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net>
- <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com>
- <878rwdse9o.fsf@riseup.net> <alpine.DEB.2.22.394.2112281745240.24929@hadrien>
- <CAJZ5v0i4xnesG=vfx7Y-wyeaGvjDeGcsaOVqhRLnV8YXk-m2gA@mail.gmail.com>
- <alpine.DEB.2.22.394.2112281845180.24929@hadrien> <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
- <alpine.DEB.2.22.394.2112291012030.24929@hadrien>
-In-Reply-To: <alpine.DEB.2.22.394.2112291012030.24929@hadrien>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 30 Dec 2021 18:03:33 +0100
-Message-ID: <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Francisco Jerez <currojerez@riseup.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <123e3993-cb71-b6dc-e4f4-4cad1eb51b00@cogentembedded.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 10:13 AM Julia Lawall <julia.lawall@inria.fr> wrote:
->
->
->
-> On Tue, 28 Dec 2021, Rafael J. Wysocki wrote:
->
-> > On Tue, Dec 28, 2021 at 6:46 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> > >
-> > >
-> > >
-> > > On Tue, 28 Dec 2021, Rafael J. Wysocki wrote:
-> > >
-> > > > On Tue, Dec 28, 2021 at 5:58 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> > > > >
-> > > > > I looked a bit more into why pstate 20 is always using the least energy. I
-> > > > > have just one thread spinning for 10 seconds, I use a fixed value for the
-> > > > > pstate, and I measure the energy usage with turbostat.
-> > > >
-> > > > How exactly do you fix the pstate?
-> > >
-> > > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > > index e7af18857371..19440b15454c 100644
-> > > --- a/kernel/sched/cpufreq_schedutil.c
-> > > +++ b/kernel/sched/cpufreq_schedutil.c
-> > > @@ -400,7 +402,7 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
-> > >                 sg_cpu->util = prev_util;
-> > >
-> > >         cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
-> > > -                                  map_util_perf(sg_cpu->util), sg_cpu->max);
-> > > +                                  sysctl_sched_fixedfreq, sg_cpu->max);
-> >
-> > This is just changing the "target" hint given to the processor which
-> > may very well ignore it, though.
-> >
-> > >
-> > >         sg_cpu->sg_policy->last_freq_update_time = time;
-> > >  }
-> > >
-> > > ------------------------------
-> > >
-> > > sysctl_sched_fixedfreq is a variable that I added to sysfs.
-> >
-> > If I were trying to fix a pstate, I would set scaling_max_freq and
-> > scaling_min_freq in sysfs for all CPUs to the same value.
-> >
-> > That would cause intel_pstate to set HWP min and max to the same value
-> > which should really cause the pstate to be fixed, at least outside the
-> > turbo range of pstates.
->
-> The effect is the same.  But that approach is indeed simpler than patching
-> the kernel.
+Hi Nikita,
 
-It is also applicable when intel_pstate runs in the active mode.
+On Thu, Dec 30, 2021 at 08:30:43AM +0300, Nikita Yushchenko wrote:
+> >> I'd prefer to make each DT fragment to use only either entities defined in that fragment itself, or
+> >> defined "interface entities" between this and "neighbor" DT fragment.
+> >>
+> >> Such as:
+> >> - SoC's DT fragment defines a named port/endpoint to export video stream at
+> >> - board's DT fragment defines a named panel node corresponding to panel plugged into board's physical
+> >> connector, and connects endpoints with SoC's video export,
+> >> - panel's DT fragment extends the panel node from board with video mode information for this particular
+> >> panel.
+> >> ...
+>  >
+> > I agree it's annoying, but we'll have a similar problem, just the other
+> > way around, with an endpoint defined in the SoC dtsi. Many R-Car SoCs
+> > have two LVDS encoders, and you can attach a panel to either of them.
+> > Some boards use LVDS0, some boards use LVDS1, and some boards could even
+> > use both.
+> 
+> The case of "some boards use LVDS0, some boards use LVDS1" is directly addressed by what I'm trying to 
+> suggest. The per-board DT fragment can completely hide board's connection details, without a need for 
+> any new concept.
 
-As for the results that you have reported, it looks like the package
-power on these systems is dominated by package voltage and going from
-P-state 20 to P-state 21 causes that voltage to increase significantly
-(the observed RAM energy usage pattern is consistent with that).  This
-means that running at P-states above 20 is only really justified if
-there is a strict performance requirement that can't be met otherwise.
+We could do this by adding a label to the port instead of the endpoint
+in the SoC .dtsi.
 
-Can you please check what value is there in the base_frequency sysfs
-attribute under cpuX/cpufreq/?
+lvds0: lvds@.... {
+	...
 
-I'm guessing that the package voltage level for P-states 10 and 20 is
-the same, so the power difference between them is not significant
-relative to the difference between P-state 20 and 21 and if increasing
-the P-state causes some extra idle time to appear in the workload
-(even though there is not enough of it to prevent to overall
-utilization from increasing), then the overall power draw when running
-at P-state 10 may be greater that for P-state 20.
+	ports {
+		port@0 {
+			lvds0_in: endpoint {
+				remote-endpoint = <&du_out_lvds0>;
+			};
+		};
 
-You can check if there is any C-state residency difference between
-these two cases by running the workload under turbostat in each of
-them.
+		lvds_out_panel_port: port@1 {
+		};
+};
 
-Anyway, this is a configuration in which the HWP scaling algorithm
-used when intel_pstate runs in the active mode is likely to work
-better, because it should take the processor design into account.
-That's why it is the default configuration of intel_pstate on systems
-with HWP.  There are cases in which schedutil helps, but that's mostly
-when HWP without it tends to run the workload too fast, because it
-lacks the utilization history provided by PELT.
+It would however likely be better do add the label to port@1 in the
+board .dts though, as usage of a particular LVDS output is a board
+property, not an SoC property.
+
+Then, in the overlay,
+
+panel {
+	port {
+		panel_in: endpoint {
+			remote_endpoint <&lvds_out_panel>;
+		};
+	};
+};
+
+&lvds_out_panel_port {
+	lvds_out_panel: endpoint {
+		remote-endpoint = <&panel_in>;
+	};
+};
+
+There's one caveat though: The LVDS DT nodes are disabled in the SoC
+.dtsi, so the overlay would need to have
+
+&lvds0 {
+	status = "okay";
+};
+
+and that would need to reference the correct lvds node. Without
+parameterized overlays, I don't think we can solve this issue neatly
+(especially given that panels will often have control GPIOs, or
+GPIO-controlled regulators, that could be wired to different SoC GPIOs
+on different boards).
+
+> The case of "some boards could even use both" indeed needs a some way to parametrize panel's DT 
+> fragment, and perhaps load two instances of it with different parameters. To some extent this is doable 
+> via preprocessor magic and multiple includes, although this approach has obvious disadvantages.
+> 
+> > A real solution for this problem will require a new concept. The "DT
+> > connector" proposal is related to this problem space. There's also a
+> > proprietary implementation in the Rapsberry Pi boot loader of a
+> > mechanism to support parametrized overlays ([2] and [3], or [4] for an
+> > example of how a panel reset or backlight GPIO can be parametrized).
+> 
+> So the problem is already recognized for years...  what stops from
+> wider adoption of this or similar solutions?
+
+Someone to continue working on it I suppose :-)
+
+> And - if/while that is not being done - can't we at least try to
+> follow more portable DT coding pattern while staying within existing
+> concepts?
+
+We could use a label for the port node as shown above. It's not a
+complete solution, but it may help. I'm not sure how to solve the
+enabling of the lvds encoder DT node though.
+
+-- 
+Regards,
+
+Laurent Pinchart

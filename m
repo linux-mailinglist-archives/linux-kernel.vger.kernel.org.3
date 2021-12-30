@@ -2,112 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2827A48187E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE47481887
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234683AbhL3C2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 21:28:35 -0500
-Received: from rap-us.hgst.com ([199.255.44.250]:43105 "EHLO
-        usg-ed-osssrv.wdc.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233070AbhL3C2d (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 21:28:33 -0500
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JPXJJ5szMz1RvlV
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 18:28:32 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1640831312; x=1643423313; bh=Kr7L88VPkC+kLwXhuVnFqsMu3F4AU4CQPbs
-        zTpzNGxM=; b=CtGXYfwCe2nVF0poLJ9LgREcsKqsQAHoHt2NBYCYfKblE7aoKNi
-        bJIivQzvgN6piZU3EBkvRmlzj1gqqRuBhY2N06cgz3RhdEzEa8DoH8NTIug6pD2C
-        PpsfOgpCEjXYCLXmwGzA3JnJzL/pCDlzKhAB3GIaFqLlK6nYS210XRGtdCqUpNaw
-        g9WFhWmraYzYw9UC50JUEhAm0JEm/T9enO/cSpmPfuLmqCoSgBNNcoEXLiOYkitk
-        U74CobODbSmBbPxoqsqTR+b4nRnHq7iXrTXIY7loDNWtmG3NWs0B6P3Slpc0I1dv
-        rsWzvUVaMnFVjiz33hXBBBkUVUvGFqdS63Q==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id a2nngnrN9408 for <linux-kernel@vger.kernel.org>;
-        Wed, 29 Dec 2021 18:28:32 -0800 (PST)
-Received: from [10.225.163.41] (unknown [10.225.163.41])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JPXJG2kp0z1RtVG;
-        Wed, 29 Dec 2021 18:28:30 -0800 (PST)
-Message-ID: <c60a1750-ccbb-1f7a-12be-ac331393be80@opensource.wdc.com>
-Date:   Thu, 30 Dec 2021 11:28:28 +0900
+        id S234776AbhL3C3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 21:29:51 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:53478 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233070AbhL3C3t (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 21:29:49 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowACnrlqHGc1hLmPlBA--.17413S2;
+        Thu, 30 Dec 2021 10:29:27 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     kvalo@codeaurora.org, davem@davemloft.net, kuba@kernel.org
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] net/wireless/ray_cs: Check of ioremap return value
+Date:   Thu, 30 Dec 2021 10:29:26 +0800
+Message-Id: <20211230022926.1846757-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] null_blk: Use bitmap_zalloc() when applicable
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        axboe@kernel.dk, chaitanya.kulkarni@wdc.com, damien.lemoal@wdc.com,
-        ming.lei@redhat.com, Johannes.Thumshirn@wdc.com,
-        shinichiro.kawasaki@wdc.com, jiangguoqing@kylinos.cn
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <3e68598defed010efb864ea55887d88ed0da02cc.1640296433.git.christophe.jaillet@wanadoo.fr>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <3e68598defed010efb864ea55887d88ed0da02cc.1640296433.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowACnrlqHGc1hLmPlBA--.17413S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cry3Zry5Gw4UCr4DuryUJrb_yoW8Wr1kpw
+        4fAFWYgrW8X3WDuanrJr1kuF4kZan3tF4xG34ay345Jwnxt3sIyryvgFyUXr1qgrWDKF1r
+        tFW0k34fZFyDAFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4U
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbpwZ7UUUU
+        U==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/24/21 06:55, Christophe JAILLET wrote:
-> 'nq->tag_map' is a bitmap. So use bitmap_zalloc() to simplify code and
-> improve the semantic.
-> 
-> Also change the corresponding kfree() into bitmap_free() to keep
-> consistency.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/block/null_blk/main.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/block/null_blk/main.c b/drivers/block/null_blk/main.c
-> index 6be6ccd4a28f..9e058e0aa668 100644
-> --- a/drivers/block/null_blk/main.c
-> +++ b/drivers/block/null_blk/main.c
-> @@ -1661,7 +1661,7 @@ static blk_status_t null_queue_rq(struct blk_mq_hw_ctx *hctx,
->  
->  static void cleanup_queue(struct nullb_queue *nq)
->  {
-> -	kfree(nq->tag_map);
-> +	bitmap_free(nq->tag_map);
->  	kfree(nq->cmds);
->  }
->  
-> @@ -1790,14 +1790,13 @@ static const struct block_device_operations null_rq_ops = {
->  static int setup_commands(struct nullb_queue *nq)
->  {
->  	struct nullb_cmd *cmd;
-> -	int i, tag_size;
-> +	int i;
->  
->  	nq->cmds = kcalloc(nq->queue_depth, sizeof(*cmd), GFP_KERNEL);
->  	if (!nq->cmds)
->  		return -ENOMEM;
->  
-> -	tag_size = ALIGN(nq->queue_depth, BITS_PER_LONG) / BITS_PER_LONG;
-> -	nq->tag_map = kcalloc(tag_size, sizeof(unsigned long), GFP_KERNEL);
-> +	nq->tag_map = bitmap_zalloc(nq->queue_depth, GFP_KERNEL);
->  	if (!nq->tag_map) {
->  		kfree(nq->cmds);
->  		return -ENOMEM;
+As the possible failure of the ioremap(), the 'local->sram' and other
+two could be NULL.
+Therefore it should be better to check it in order to avoid the later
+dev_dbg.
 
-Before this patch, tag_size would always be a multiple of BITS_PER_LONG.
-Using bitmap_zalloc(), that alignment goes away, but I think this is OK.
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/net/wireless/ray_cs.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-
+diff --git a/drivers/net/wireless/ray_cs.c b/drivers/net/wireless/ray_cs.c
+index 590bd974d94f..556b9713e99c 100644
+--- a/drivers/net/wireless/ray_cs.c
++++ b/drivers/net/wireless/ray_cs.c
+@@ -382,6 +382,8 @@ static int ray_config(struct pcmcia_device *link)
+ 		goto failed;
+ 	local->sram = ioremap(link->resource[2]->start,
+ 			resource_size(link->resource[2]));
++	if (!local->sram)
++		goto failed;
+ 
+ /*** Set up 16k window for shared memory (receive buffer) ***************/
+ 	link->resource[3]->flags |=
+@@ -396,6 +398,8 @@ static int ray_config(struct pcmcia_device *link)
+ 		goto failed;
+ 	local->rmem = ioremap(link->resource[3]->start,
+ 			resource_size(link->resource[3]));
++	if (!local->rmem)
++		goto failed;
+ 
+ /*** Set up window for attribute memory ***********************************/
+ 	link->resource[4]->flags |=
+@@ -410,6 +414,8 @@ static int ray_config(struct pcmcia_device *link)
+ 		goto failed;
+ 	local->amem = ioremap(link->resource[4]->start,
+ 			resource_size(link->resource[4]));
++	if (!local->amem)
++		goto failed;
+ 
+ 	dev_dbg(&link->dev, "ray_config sram=%p\n", local->sram);
+ 	dev_dbg(&link->dev, "ray_config rmem=%p\n", local->rmem);
 -- 
-Damien Le Moal
-Western Digital Research
+2.25.1
+

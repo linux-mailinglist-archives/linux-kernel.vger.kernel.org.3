@@ -2,103 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2987481F0F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 872D4481F12
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:11:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237098AbhL3SKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 13:10:44 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58722 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbhL3SKo (ORCPT
+        id S241632AbhL3SLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 13:11:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237218AbhL3SL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 13:10:44 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 30 Dec 2021 13:11:29 -0500
+Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765C3C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 10:11:29 -0800 (PST)
+Received: from [IPv6:2a02:a03f:eafe:c901:a9e6:6f2a:78f1:2f3] (unknown [IPv6:2a02:a03f:eafe:c901:a9e6:6f2a:78f1:2f3])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8739661705;
-        Thu, 30 Dec 2021 18:10:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04439C36AE9;
-        Thu, 30 Dec 2021 18:10:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640887842;
-        bh=wl13idcBH22Q98gEtmxIacxmyis+T8ZRvfxttNaeonI=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=qm0aWo61gjrsc6uZGJHbroRrWXDZG2l+ccokx6g7SL/wTs5B6cBWKsbKI+xFxjmnJ
-         F6lBANDMVUaLvBjCSlW5ORtXSYuPXNvj9oLMr2DX/w2OwCFR91mg0xnlXisD/p2Atp
-         /kKgschEwantvmMUyPNvDhZ04RR2f4v41Ymp4I4MA9KWx2P6oX0nREMeRv3GbxTk+8
-         rjeEeH+RtY6qrU7HrGpL79CFHQ1ivZsjtsByWT7g2VjiwqBzyMIptD8HlLTNUSJCdB
-         8j/EA+2YFmgjsULkgR++mtGYnniek6k7to7UMc3CY2kvNNM6qkP6Ni0oV2JqKTAOlB
-         7BzUFKIrGhbwA==
-Subject: Re: [PATCH] clk: socfpga: remove redundant assignment after a mask
- operation
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-clk@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20211230150321.167576-1-colin.i.king@gmail.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-Message-ID: <7f5f8143-3eae-424f-b857-b57f66c96f65@kernel.org>
-Date:   Thu, 30 Dec 2021 12:10:40 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id EF56C28A0EF;
+        Thu, 30 Dec 2021 19:11:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1640887888;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1LlsOc0XKHSOXOCSgkqOLv7yx0nbdOQV6NO9Werr8Us=;
+        b=Dt6EYNk+PTJoMPt5z+epeIbHLEwvNKsgFFgmTH057U0yJ3l5T4fDMggccJApkkEcK+BAUT
+        x3W7fVY3jzeP24Kt3SeRIZprcSh38+m5uMWTc+hQG2Lr58Bk2D5Hhbr47uxc9/QwwXPl3/
+        CkGn5orMIFDtMpl+OPI2/AUV28rRBVIjNf4cvlrXO/IQP1a60XawXhOLkRghtUXEtKbNzV
+        i5H1UeEakLmyMCLnwCl6luXtRNnLX7JxRlkOPnRycBnRfTfx7PmMeZ9+WZ4a2fxQyA/M21
+        xCRJyE7zAk07CPD+1A4a10gD4QnMlAGJX7T9gv8N8BXJDe3g2CMx+juzPRIYog==
+Message-ID: <6c2b8578215a5a5354a544d558a1ac45ec1577da.camel@svanheule.net>
+Subject: Re: [RFC PATCH v1 1/3] dt-bindings: power: reset: Convert
+ gpio-restart binding to schema
+From:   Sander Vanheule <sander@svanheule.net>
+To:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
+Date:   Thu, 30 Dec 2021 19:11:26 +0100
+In-Reply-To: <c47705dbf6e9e287332f3ccb91578e81dbb81625.1640887456.git.sander@svanheule.net>
+References: <cover.1640887456.git.sander@svanheule.net>
+         <c47705dbf6e9e287332f3ccb91578e81dbb81625.1640887456.git.sander@svanheule.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
 MIME-Version: 1.0
-In-Reply-To: <20211230150321.167576-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2021-12-30 at 19:06 +0100, Sander Vanheule wrote:
+> Convert the gpio-restart binding from plain text format to a schema
+> binding, maintaining the original content and updating formatting where
+> required.
+> 
+> Signed-off-by: Sander Vanheule <sander@svanheule.net>
 
+I had these patches set aside since a few weeks already, but apparently this conversion
+was merged last week. This patch can be disregarded, sorry for the noise.
 
-On 12/30/21 9:03 AM, Colin Ian King wrote:
-> The assignment operation after a & mask operation is redundant, the
-> variables being assigned are not used afterwards. Replace the &=
-> operator with just & operator.
-> 
-> Cleans up two clang-scan warnings:
-> drivers/clk/socfpga/clk-gate.c:37:10: warning: Although the value stored
-> to 'l4_src' is used in the enclosing expression, the value is never
-> actually read from 'l4_src' [deadcode.DeadStores]
->                  return l4_src &= 0x1;
->                         ^         ~~~
-> drivers/clk/socfpga/clk-gate.c:46:10: warning: Although the value stored
-> to 'perpll_src' is used in the enclosing expression, the value is never
-> actually read from 'perpll_src' [deadcode.DeadStores]
->                  return perpll_src &= 0x3;
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->   drivers/clk/socfpga/clk-gate.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/clk/socfpga/clk-gate.c b/drivers/clk/socfpga/clk-gate.c
-> index 1ec9678d8cd3..53d6e3ec4309 100644
-> --- a/drivers/clk/socfpga/clk-gate.c
-> +++ b/drivers/clk/socfpga/clk-gate.c
-> @@ -34,7 +34,7 @@ static u8 socfpga_clk_get_parent(struct clk_hw *hwclk)
->   
->   	if (streq(name, SOCFPGA_L4_MP_CLK)) {
->   		l4_src = readl(clk_mgr_base_addr + CLKMGR_L4SRC);
-> -		return l4_src &= 0x1;
-> +		return l4_src & 0x1;
->   	}
->   	if (streq(name, SOCFPGA_L4_SP_CLK)) {
->   		l4_src = readl(clk_mgr_base_addr + CLKMGR_L4SRC);
-> @@ -43,7 +43,7 @@ static u8 socfpga_clk_get_parent(struct clk_hw *hwclk)
->   
->   	perpll_src = readl(clk_mgr_base_addr + CLKMGR_PERPLL_SRC);
->   	if (streq(name, SOCFPGA_MMC_CLK))
-> -		return perpll_src &= 0x3;
-> +		return perpll_src & 0x3;
->   	if (streq(name, SOCFPGA_NAND_CLK) ||
->   	    streq(name, SOCFPGA_NAND_X_CLK))
->   		return (perpll_src >> 2) & 3;
-> 
+Best,
+Sander
 
-Acked-by: Dinh Nguyen <dinguyen@kernel.org>

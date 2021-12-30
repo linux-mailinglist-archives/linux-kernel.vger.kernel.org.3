@@ -2,34 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E052481C09
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 13:27:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF216481C0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 13:28:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239254AbhL3M1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 07:27:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239221AbhL3M1u (ORCPT
+        id S239270AbhL3M2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 07:28:07 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44020 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239260AbhL3M2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 07:27:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CBAC061574;
-        Thu, 30 Dec 2021 04:27:50 -0800 (PST)
+        Thu, 30 Dec 2021 07:28:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F3B76168D;
-        Thu, 30 Dec 2021 12:27:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B1D8C36AEA;
-        Thu, 30 Dec 2021 12:27:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 714DF616C0;
+        Thu, 30 Dec 2021 12:28:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01BE6C36AEA;
+        Thu, 30 Dec 2021 12:28:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640867268;
-        bh=VJ282ssHcoqNUg3SeZeEklixHEqnQib91Mu2AwIeAE0=;
+        s=korg; t=1640867283;
+        bh=q08v2xMnzhH1M5Hlg4JEoffzO4GwcuQDHUieT0yNTrw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y0nqmz/a2HzM9e3A3QG2PlphqUhNNmc5AL0O0DEnBL5sQF+Zm/bKkS8m/USVjIrC7
-         Tz+Dvm9qA5VFSpW62bE9pN141JENaVqGDY4JOnBxMBFbpxvMcnBFrYEVJAWuMt4SM6
-         sgrx4LGTsHGPlWH3stjiRs2BZYnmHRaR7uYdPIxg=
-Date:   Thu, 30 Dec 2021 13:27:46 +0100
+        b=H9FzBOz8i87TrcUN8k5pMrfSe+nrNoS/4KYb1LB5lrRNyLXdRgGbIy5wZAn+NelGg
+         WtUD0TviyU0Dl6Q73l1vWePMlkgYpodI5kJXPrXTSFXD4cHMqU77mAjqV4maC5eM6a
+         gb3Asc84rE/f3Q4VHxj1W3dnGDKJOHI5zf0U7Vgs=
+Date:   Thu, 30 Dec 2021 13:28:01 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Yu Tu <yu.tu@amlogic.com>
 Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -40,29 +37,30 @@ Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Kevin Hilman <khilman@baylibre.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH V3 4/6] tty: serial: meson: The UART baud rate
- calculation is described using the common clock code. Also added S4 chip
- uart Compatible.
-Message-ID: <Yc2lwhYKQ03pGho3@kroah.com>
+Subject: Re: [PATCH V3 3/6] dt-bindings: serial: meson: Support S4 SoC uart.
+ Also Drop compatible = amlogic,meson-gx-uart.
+Message-ID: <Yc2l0Rp3lrfYr6PP@kroah.com>
 References: <20211230102110.3861-1-yu.tu@amlogic.com>
- <20211230102110.3861-5-yu.tu@amlogic.com>
+ <20211230102110.3861-4-yu.tu@amlogic.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211230102110.3861-5-yu.tu@amlogic.com>
+In-Reply-To: <20211230102110.3861-4-yu.tu@amlogic.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 06:21:08PM +0800, Yu Tu wrote:
-> Using the common Clock code to describe the UART baud rate clock makes
-> it easier for the UART driver to be compatible with the baud rate
-> requirements of the UART IP on different meson chips
+On Thu, Dec 30, 2021 at 06:21:07PM +0800, Yu Tu wrote:
+> Deprecated, don't use anymore because compatible = amlogic,meson-gx-uart
+> don't differentiate between GXBB and GXL which have different
+> revisions of the UART IP. So it's split into GXBB and GXL.
 > 
 > Signed-off-by: Yu Tu <yu.tu@amlogic.com>
 > ---
+>  .../devicetree/bindings/serial/amlogic,meson-uart.yaml | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 
-Your subject line is very odd, please fix up.
+Again, your subject line is way too long.
 
 thanks,
 

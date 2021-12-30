@@ -2,90 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 862C3481D0C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 15:29:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09745481D0F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 15:30:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240046AbhL3O3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 09:29:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239963AbhL3O3x (ORCPT
+        id S240090AbhL3O37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 09:29:59 -0500
+Received: from relay06.th.seeweb.it ([5.144.164.167]:54017 "EHLO
+        relay06.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240067AbhL3O35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 09:29:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F361DC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 06:29:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 30 Dec 2021 09:29:57 -0500
+Received: from [192.168.1.101] (83.6.168.106.neoplus.adsl.tpnet.pl [83.6.168.106])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89D7E61693
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 14:29:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8794BC36AE7;
-        Thu, 30 Dec 2021 14:29:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640874591;
-        bh=3jzZNKtf2goG38YqCOhXGjbSkJOVNdC9TjNp3SYA4LQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bTeUWbvAhBdM3EssgXZQgdaWzJAhIZzB4gsrD71Uj5xHiKjCUdd6FlZCWVKVRuN3a
-         qJZ1t08UCU7MUJI9vfrYKZUYn15PdpnMpFPGALLxmWPcKWYLZQvoahvO3h/y7aNj46
-         LweAg2LEf+HUi2peSIc4wn85jXSqMonYEg7nSdOY=
-Date:   Thu, 30 Dec 2021 15:29:49 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jan Engelhardt <jengelh@inai.de>
-Cc:     tkjos@android.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] android: use "menuconfig" menu entry type for
- CONFIG_ANDROID
-Message-ID: <Yc3CXep5zS0u96m9@kroah.com>
-References: <20211228200634.18968-1-jengelh@inai.de>
- <Yc2wsGmEe7lefB9h@kroah.com>
- <5po21q10-20p8-5593-2npn-7n5718qsnq73@vanv.qr>
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 638393F3F5;
+        Thu, 30 Dec 2021 15:29:55 +0100 (CET)
+Message-ID: <5543bdad-3518-fe20-d755-69ebac4ddd69@somainline.org>
+Date:   Thu, 30 Dec 2021 15:29:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5po21q10-20p8-5593-2npn-7n5718qsnq73@vanv.qr>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH] clk: qcom: gcc-msm8994: Remove NoC clocks
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211230023101.1122588-1-konrad.dybcio@somainline.org>
+ <CAA8EJprR_eNiRTXOLnHzztbdH_RYj-+Po99b=7c2Asxvop+jtQ@mail.gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <CAA8EJprR_eNiRTXOLnHzztbdH_RYj-+Po99b=7c2Asxvop+jtQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 03:14:26PM +0100, Jan Engelhardt wrote:
-> 
-> On Thursday 2021-12-30 14:14, Greg KH wrote:
-> >On Tue, Dec 28, 2021 at 09:06:34PM +0100, Jan Engelhardt wrote:
-> >> Allow disabling the Android driver section from within the Device
-> >> Drivers submenu, without having to descend into the Android drivers
-> >> submenu first.
-> >> 
-> >> Signed-off-by: Jan Engelhardt <jengelh@inai.de>
-> >> ---
-> >>  drivers/android/Kconfig | 6 +-----
-> >>  1 file changed, 1 insertion(+), 5 deletions(-)
-> >> 
-> >> diff --git drivers/android/Kconfig drivers/android/Kconfig
-> >> index 53b22e26266c..dc0a373ab879 100644
-> >> --- drivers/android/Kconfig
-> >> +++ drivers/android/Kconfig
-> >
-> >You made this patch at one level too deep, it should look like:
-> >
-> >--- a/drivers/android/Kconfig
-> >+++ b/drivers/android/Kconfig
-> >
-> >As-is, this will not apply.
-> >
-> >A normal git diff will output the correct patch file, as will 'git
-> >format-patch', how did you create this?
-> 
-> Uh, I once again ran afoul of my default "diff.noprefix=true" in 
-> ~/.gitconfig. Unless there is a magical barrier, `git am -p0`
-> should momentarily work for you as I edit my ~/linux/.git/config to 
-> set diff.noprefix=false.
 
-I use the tool 'b4' to apply patches, which sucks it out of the public
-archive and then uses 'git am' to apply the patch.  So I can't apply
-your patch as-is, sorry.
+> You don't have to init array entries with NULL values (if it's not for
+> the documentation purposes). Uninitialized entries will get NULL value
+> anyway.
+>
+Forgot to address this in my previous message, but I think it may be a
 
-Please resend.
+good indicator for the next person that decides this would be a good idea
 
-thanks,
+that they should probably stay away from it.. If it's really bad, then sure, I
 
-greg k-h
+can remove it..
+
+
+Konrad
+

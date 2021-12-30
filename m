@@ -2,77 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F614481E5E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD44A481E61
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241396AbhL3Qwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 11:52:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42960 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241400AbhL3Qwp (ORCPT
+        id S241407AbhL3QzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 11:55:07 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:33908 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240224AbhL3QzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 11:52:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B48BC06173F
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 08:52:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 30 Dec 2021 11:55:05 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B660E61712
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 16:52:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 837B9C36AEB;
-        Thu, 30 Dec 2021 16:52:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640883164;
-        bh=8IYPpJ1QL5bFSVRzKh1UXaep4jv/ir2KWjN7kKy/klE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=lq7dlAFFaPsRL58+1zKv9RL+Ppyruwb1MjdF4ymZYKhiCgZ7n37uJU+oZJFsB5sGS
-         CVvGTD0gyah76NfML8eqcBL/whQ3doz8An9ZhT55DTxVbPs82JwntJTZxbJLgRtYq2
-         nbkR7QUFYzoDnmnjknPllGM7DtmHsBDYqhxYoRWQ=
-Date:   Thu, 30 Dec 2021 17:52:41 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Char/Misc driver fixes for 5.16-final
-Message-ID: <Yc3j2TMxxSCeuRWw@kroah.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3248C1F37D;
+        Thu, 30 Dec 2021 16:55:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1640883304; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+4dCuCPa0ZYPYoQqfFtxCOaA2HE9+JrhrlVbla/OFt4=;
+        b=zbz7H9R+J7sLEqOWG4iYbGZmI3GuzR29h6NfAV+Z/r3xJ6mpgW7S6kEWdPLsEU2Dq82NQx
+        VuSRlQk1AZyYbg6Ob6FMeJIcvBRofzrT+xblQ1xORP0S9YohhyMc3exGbHDxqNKMEbNfWy
+        N1Kq6fEapg4JOYilASseXlYMclUJTrc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1640883304;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+4dCuCPa0ZYPYoQqfFtxCOaA2HE9+JrhrlVbla/OFt4=;
+        b=49vo+Bcyc6blkS2qdV3TRt1uRZq7SnJ6HVqBe5d4pFbYTF2DFyUVBoD6z/CRGkm2rQGgJ+
+        Cv0TG4xcpES2lPDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 106B413C0B;
+        Thu, 30 Dec 2021 16:55:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KeaDA2jkzWHyfgAAMHmgww
+        (envelope-from <bp@suse.de>); Thu, 30 Dec 2021 16:55:04 +0000
+Date:   Thu, 30 Dec 2021 17:55:10 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Huang Rui <ray.huang@amd.com>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Steven Rostedt <rostedt@goodmis.org>, linux-pm@vger.kernel.org,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Steven Noonan <steven@valvesoftware.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v7 02/14] x86/msr: Add AMD CPPC MSR definitions
+Message-ID: <Yc3kbiZWeLBcCrw9@zn.tnic>
+References: <20211224010508.110159-1-ray.huang@amd.com>
+ <20211224010508.110159-3-ray.huang@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211224010508.110159-3-ray.huang@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 2585cf9dfaaddf00b069673f27bb3f8530e2039c:
+On Fri, Dec 24, 2021 at 09:04:56AM +0800, Huang Rui wrote:
+> AMD CPPC (Collaborative Processor Performance Control) function uses MSR
+> registers to manage the performance hints. So add the MSR register macro
+> here.
+> 
+> Signed-off-by: Huang Rui <ray.huang@amd.com>
+> ---
+>  arch/x86/include/asm/msr-index.h | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
 
-  Linux 5.16-rc5 (2021-12-12 14:53:01 -0800)
+Acked-by: Borislav Petkov <bp@suse.de>
 
-are available in the Git repository at:
+-- 
+Regards/Gruss,
+    Boris.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-5.16
-
-for you to fetch changes up to 3a0152b219523227c2a62a0a122cf99608287176:
-
-  nitro_enclaves: Use get_user_pages_unlocked() call to handle mmap assert (2021-12-21 11:08:19 +0100)
-
-----------------------------------------------------------------
-Char/Misc fixes for 5.16-final
-
-Here are two misc driver fixes for 5.16-final:
-  - binder accounting fix to resolve reported problem
-  - nitro_enclaves fix for mmap assert warning output
-
-Both of these have been for over a week with no reported issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Andra Paraschiv (1):
-      nitro_enclaves: Use get_user_pages_unlocked() call to handle mmap assert
-
-Todd Kjos (1):
-      binder: fix async_free_space accounting for empty parcels
-
- drivers/android/binder_alloc.c            | 2 +-
- drivers/virt/nitro_enclaves/ne_misc_dev.c | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

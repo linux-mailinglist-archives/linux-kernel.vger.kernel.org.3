@@ -2,220 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C05F5481F20
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:19:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 812C0481F26
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:21:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241673AbhL3ST0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 13:19:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47438 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237082AbhL3STZ (ORCPT
+        id S241681AbhL3SU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 13:20:59 -0500
+Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:18261
+        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233228AbhL3SU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 13:19:25 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 02AAEB81CFF
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 18:19:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F841C36AE7;
-        Thu, 30 Dec 2021 18:19:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640888362;
-        bh=I+qYjQfgp/7m3hB0C+5hI7/SeHNjWlHH9sG11CI7NCY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=Ou8auxsi5iPzEmMDGnuGqAHBGhaBmtmqapOjRRk04PoDwwm4oxXH7PeaTwgEOezRt
-         T9WER1gAdGmLfJUKw487679lP8S4cacDw61iHx7E7FE26uwIlE/4hdG3MDfMKHL2sE
-         yufPtt3D53wGJtviwPaxaTU9Nu2yT95dbejmyZ0rDKuzA6qXmiBIVxDMFYxt34/6qn
-         SOZiapgWOqn/ZXlInnTzSQMhpvSAhY7W/+pACM7zfwVvnPVVsXtH8f1Yn3z2ZS9+Yq
-         yZvuo5wWZDXLb5LFpsdWvQ2c7ZuSCJ0uG3BwWfieTNQ1s1GJhuBDJV8HZUk/wXVcIB
-         CUsmdgChAoPrw==
-From:   SeongJae Park <sj@kernel.org>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     sj@kernel.org, akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] mm/damon: Add access checking for hugetlb pages
-Date:   Thu, 30 Dec 2021 18:19:19 +0000
-Message-Id: <20211230181919.1588-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <486927ecaaaecf2e3a7fbe0378ec6e1c58b50747.1640852276.git.baolin.wang@linux.alibaba.com>
+        Thu, 30 Dec 2021 13:20:58 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3A4xYr+K30IRHhY3Lit/bD5cVwkn2cJEfYwER7XOP?=
+ =?us-ascii?q?LsXnJgWwrhmBUmmJNCzrQb6mOYTbye9tya4nk8k4Eu5+Bxtc2QQE+nZ1PZyIT+?=
+ =?us-ascii?q?JCdXbx1DW+pYnjMdpWbJK5fAnR3huDodKjYdVeB4Ef9WlTdhSMkj/jRHOGkULW?=
+ =?us-ascii?q?s1h1ZHmeIdg9w0HqPpMZp2uaEsfDha++8kYuaT//3YDdJ6BYoWo4g0J9vnTs01?=
+ =?us-ascii?q?BjEVJz0iXRlDRxDlAe2e3D4l/vzL4npR5fzatE88uJX24/+IL+FEmPxp3/BC/u?=
+ =?us-ascii?q?lm7rhc0AMKlLQFVjTzCQGHfH4214b+XdaPqUTbZLwbW9VljGIlpZ1wcpEsZiYS?=
+ =?us-ascii?q?AEzP6SKlv51vxxwSnshZfEap9crJlD666R/1XbuaXLiyvhqJEI7J4sV/qBwG24?=
+ =?us-ascii?q?m3fcFMioKbB2ZivCe2rOgR/R0wMIuMKHDJ5kevHB+xCqfFf8gTYreXazG7Pdc3?=
+ =?us-ascii?q?TEtloZPG+rTY4wSbj8HRBDNZRdnOVoNDp862uCyiRHXbTxCpUmV46kq5mHJ5Ah?=
+ =?us-ascii?q?w1rH3N5zSYNPibcFUmFuI43rD13r2DwtcN9GFzzeBtHW2iYfnmSL9RZJXF7Ci8?=
+ =?us-ascii?q?PNuqEOcy3ZVCxAMU1a/5/6jhSaWXtNZJEs84CciraEuskesS7HVRxCkrWSWlh8?=
+ =?us-ascii?q?aVcBZH+Az5EeK0KW8ywSEHGlCSjNFbN0OrsI6RTU2kFSOmrvBGz1pu7CTVTSS6?=
+ =?us-ascii?q?7aIsTSuESwUK2YYYmkDVwRt3jVJiOnflTqWEY0lSfTsyIOlX2GthSqHsm4lia9?=
+ =?us-ascii?q?Vi8MXv5hXNGvv21qEzqUlhCZvjukPYl+Y0w=3D=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Aih3VWKP06LnfF8BcTsajsMiBIKoaSvp037BL?=
+ =?us-ascii?q?7TEUdfU7SKelfqyV9sjzkCWUtN9zYgBEpTnjAsm9qBrnnPZICMsqTNSftWLd1l?=
+ =?us-ascii?q?dAQrsP0WKv+UyDJwTOst8Y76tmfqRkYeecMXFxh6/BjzWFLw=3D=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,248,1635199200"; 
+   d="scan'208";a="1270447"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 19:20:47 +0100
+Date:   Thu, 30 Dec 2021 19:20:46 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+cc:     Francisco Jerez <currojerez@riseup.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
+In-Reply-To: <CAJZ5v0h38jh3gyTp9W0ws0yXyfK=F+TQ7VYRVx4aGXhNeSObEg@mail.gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2112301919240.15550@hadrien>
+References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <87r1abt1d2.fsf@riseup.net> <alpine.DEB.2.22.394.2112172258480.2968@hadrien> <87fsqqu6by.fsf@riseup.net> <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net> <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net> <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com> <878rwdse9o.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112281745240.24929@hadrien> <CAJZ5v0i4xnesG=vfx7Y-wyeaGvjDeGcsaOVqhRLnV8YXk-m2gA@mail.gmail.com> <alpine.DEB.2.22.394.2112281845180.24929@hadrien> <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
+ <alpine.DEB.2.22.394.2112291012030.24929@hadrien> <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com> <alpine.DEB.2.22.394.2112301840360.15550@hadrien> <CAJZ5v0h38jh3gyTp9W0ws0yXyfK=F+TQ7VYRVx4aGXhNeSObEg@mail.gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Dec 2021 16:20:28 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
-
-> The process's VMAs can be mapped by hugetlb page, but now the DAMON
-> did not implement the access checking for hugetlb pte, so we can not
-> get the actual access count like below if a process VMAs were mapped
-> by hugetlb.
-> 
-> damon_aggregated: target_id=18446614368406014464 nr_regions=12 4194304-5476352: 0 545
-> damon_aggregated: target_id=18446614368406014464 nr_regions=12 140662370467840-140662372970496: 0 545
-> damon_aggregated: target_id=18446614368406014464 nr_regions=12 140662372970496-140662375460864: 0 545
-> damon_aggregated: target_id=18446614368406014464 nr_regions=12 140662375460864-140662377951232: 0 545
-> damon_aggregated: target_id=18446614368406014464 nr_regions=12 140662377951232-140662380449792: 0 545
-> damon_aggregated: target_id=18446614368406014464 nr_regions=12 140662380449792-140662382944256: 0 545
-> ......
-> 
-> Thus this patch adds hugetlb access checking support, with this patch
-> we can see below VMA mapped by hugetlb access count.
-> 
-> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296486649856-140296489914368: 1 3
-> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296489914368-140296492978176: 1 3
-> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296492978176-140296495439872: 1 3
-> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296495439872-140296498311168: 1 3
-> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296498311168-140296501198848: 1 3
-> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296501198848-140296504320000: 1 3
-> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296504320000-140296507568128: 1 2
-> ......
-> 
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-
-In addition to unwrapping program outputs in commit message, I personally
-prefer indenting those with 4 spaces[1], but I wouldn't bother you for such a
-trivial thing.  Thank you for this patch!
-
-Reviewed-by: SeongJae Park <sj@kernel.org>
-
-[1] https://lore.kernel.org/linux-mm/17421c73-2124-63c2-1925-dcea5c976711@linux.alibaba.com/
 
 
-Thanks,
-SJ
+On Thu, 30 Dec 2021, Rafael J. Wysocki wrote:
 
-> ---
-> Changes from v2:
->  - Change commit messages to be more readable
->  - Add comments for config macro.
->  - Fix unused variable compiling warning.
-> 
-> Changes from v1:
->  - Move damon_hugetlb_mkold() to vaddr.c file.
->  - Move some assignments in the variables definitions.
-> ---
->  mm/damon/vaddr.c | 96 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 96 insertions(+)
-> 
-> diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
-> index a10df3f..ee465b3 100644
-> --- a/mm/damon/vaddr.c
-> +++ b/mm/damon/vaddr.c
-> @@ -388,8 +388,65 @@ static int damon_mkold_pmd_entry(pmd_t *pmd, unsigned long addr,
->  	return 0;
->  }
->  
-> +#ifdef CONFIG_HUGETLB_PAGE
-> +static void damon_hugetlb_mkold(pte_t *pte, struct mm_struct *mm,
-> +				struct vm_area_struct *vma, unsigned long addr)
-> +{
-> +	bool referenced = false;
-> +	pte_t entry = huge_ptep_get(pte);
-> +	struct page *page = pte_page(entry);
-> +
-> +	if (!page)
-> +		return;
-> +
-> +	get_page(page);
-> +
-> +	if (pte_young(entry)) {
-> +		referenced = true;
-> +		entry = pte_mkold(entry);
-> +		huge_ptep_set_access_flags(vma, addr, pte, entry,
-> +					   vma->vm_flags & VM_WRITE);
-> +	}
-> +
-> +#ifdef CONFIG_MMU_NOTIFIER
-> +	if (mmu_notifier_clear_young(mm, addr,
-> +				     addr + huge_page_size(hstate_vma(vma))))
-> +		referenced = true;
-> +#endif /* CONFIG_MMU_NOTIFIER */
-> +
-> +	if (referenced)
-> +		set_page_young(page);
-> +
-> +	set_page_idle(page);
-> +	put_page(page);
-> +}
-> +
-> +static int damon_mkold_hugetlb_entry(pte_t *pte, unsigned long hmask,
-> +				     unsigned long addr, unsigned long end,
-> +				     struct mm_walk *walk)
-> +{
-> +	struct hstate *h = hstate_vma(walk->vma);
-> +	spinlock_t *ptl;
-> +	pte_t entry;
-> +
-> +	ptl = huge_pte_lock(h, walk->mm, pte);
-> +	entry = huge_ptep_get(pte);
-> +	if (!pte_present(entry))
-> +		goto out;
-> +
-> +	damon_hugetlb_mkold(pte, walk->mm, walk->vma, addr);
-> +
-> +out:
-> +	spin_unlock(ptl);
-> +	return 0;
-> +}
-> +#else
-> +#define damon_mkold_hugetlb_entry NULL
-> +#endif /* CONFIG_HUGETLB_PAGE */
-> +
->  static const struct mm_walk_ops damon_mkold_ops = {
->  	.pmd_entry = damon_mkold_pmd_entry,
-> +	.hugetlb_entry = damon_mkold_hugetlb_entry,
->  };
->  
->  static void damon_va_mkold(struct mm_struct *mm, unsigned long addr)
-> @@ -484,8 +541,47 @@ static int damon_young_pmd_entry(pmd_t *pmd, unsigned long addr,
->  	return 0;
->  }
->  
-> +#ifdef CONFIG_HUGETLB_PAGE
-> +static int damon_young_hugetlb_entry(pte_t *pte, unsigned long hmask,
-> +				     unsigned long addr, unsigned long end,
-> +				     struct mm_walk *walk)
-> +{
-> +	struct damon_young_walk_private *priv = walk->private;
-> +	struct hstate *h = hstate_vma(walk->vma);
-> +	struct page *page;
-> +	spinlock_t *ptl;
-> +	pte_t entry;
-> +
-> +	ptl = huge_pte_lock(h, walk->mm, pte);
-> +	entry = huge_ptep_get(pte);
-> +	if (!pte_present(entry))
-> +		goto out;
-> +
-> +	page = pte_page(entry);
-> +	if (!page)
-> +		goto out;
-> +
-> +	get_page(page);
-> +
-> +	if (pte_young(entry) || !page_is_idle(page) ||
-> +	    mmu_notifier_test_young(walk->mm, addr)) {
-> +		*priv->page_sz = huge_page_size(h);
-> +		priv->young = true;
-> +	}
-> +
-> +	put_page(page);
-> +
-> +out:
-> +	spin_unlock(ptl);
-> +	return 0;
-> +}
-> +#else
-> +#define damon_young_hugetlb_entry NULL
-> +#endif /* CONFIG_HUGETLB_PAGE */
-> +
->  static const struct mm_walk_ops damon_young_ops = {
->  	.pmd_entry = damon_young_pmd_entry,
-> +	.hugetlb_entry = damon_young_hugetlb_entry,
->  };
->  
->  static bool damon_va_young(struct mm_struct *mm, unsigned long addr,
-> -- 
-> 1.8.3.1
-> 
-> 
-> 
+> On Thu, Dec 30, 2021 at 6:54 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+> >
+> > > > The effect is the same.  But that approach is indeed simpler than patching
+> > > > the kernel.
+> > >
+> > > It is also applicable when intel_pstate runs in the active mode.
+> > >
+> > > As for the results that you have reported, it looks like the package
+> > > power on these systems is dominated by package voltage and going from
+> > > P-state 20 to P-state 21 causes that voltage to increase significantly
+> > > (the observed RAM energy usage pattern is consistent with that).  This
+> > > means that running at P-states above 20 is only really justified if
+> > > there is a strict performance requirement that can't be met otherwise.
+> > >
+> > > Can you please check what value is there in the base_frequency sysfs
+> > > attribute under cpuX/cpufreq/?
+> >
+> > 2100000, which should be pstate 21
+> >
+> > >
+> > > I'm guessing that the package voltage level for P-states 10 and 20 is
+> > > the same, so the power difference between them is not significant
+> > > relative to the difference between P-state 20 and 21 and if increasing
+> > > the P-state causes some extra idle time to appear in the workload
+> > > (even though there is not enough of it to prevent to overall
+> > > utilization from increasing), then the overall power draw when running
+> > > at P-state 10 may be greater that for P-state 20.
+> >
+> > My impression is that the package voltage level for P-states 10 to 20 is
+> > high enough that increasing the frequency has little impact.  But the code
+> > runs twice as fast, which reduces the execution time a lot, saving energy.
+> >
+> > My first experiment had only one running thread.  I also tried running 32
+> > spinning threads for 10 seconds, ie using up one package and leaving the
+> > other idle.  In this case, instead of staying around 600J for pstates
+> > 10-20, the pstate rises from 743 to 946.  But there is still a gap between
+> > 20 and 21, with 21 being 1392J.
+> >
+> > > You can check if there is any C-state residency difference between
+> > > these two cases by running the workload under turbostat in each of
+> > > them.
+> >
+> > The C1 and C6 cases (CPU%c1 and CPU%c6) are about the same between 20 and
+> > 21, whether with 1 thread or with 32 thread.
+>
+> I meant to compare P-state 10 and P-state 20.
+>
+> 20 and 21 are really close as far as the performance is concerned, so
+> I wouldn't expect to see any significant C-state residency difference
+> between them.
+
+There's also no difference between 10 and 20.  This seems normal, because
+the same cores are either fully used or fully idle in both cases.  The
+idle ones are almost always in C6.
+
+julia

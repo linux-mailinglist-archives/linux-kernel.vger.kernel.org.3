@@ -2,91 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A83AD481B3B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 11:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17828481B44
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 11:14:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238386AbhL3KEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 05:04:30 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:56756 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238256AbhL3KE3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 05:04:29 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowACHjwMWhM1hULpQBQ--.24591S2;
-        Thu, 30 Dec 2021 18:04:06 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     pavel@denx.de, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        habetsm.xilinx@gmail.com, kuba@kernel.org, sashal@kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: Re: [PATCH 5.10 26/76] sfc: Check null pointer of rx_queue->page_ring
-Date:   Thu, 30 Dec 2021 18:04:05 +0800
-Message-Id: <20211230100405.1846844-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowACHjwMWhM1hULpQBQ--.24591S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kr13JFWxCF43uFy3Cr1fCrg_yoW8Xw4rpa
-        yxKa47ua1kJa9xGFyjkrn7uF9ayw15tFW7Wr1fG34Fv345AF9rZr9xK3ZF9r4qyr4DJF42
-        vr4DJa1qyanxX37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8twCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbGQ6JUUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+        id S238443AbhL3KOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 05:14:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238424AbhL3KOr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 05:14:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC948C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 02:14:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A508615B0
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 10:14:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A472C36AE9;
+        Thu, 30 Dec 2021 10:14:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640859285;
+        bh=nQhsx3NefR1s0VrbzOivpVKLa6kobr744dEgSMnpo7g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MnidE3HrIlypk1hZDwBi+8BPitqPgjqqMmhEvXc4ieaQC6j03Vv8gfvZEI0sjAQX4
+         iN5LXdEnQmv+bFR+Xo+edmabGRPIQzON3nJMPWH/HeVkmFrVD2zaBAEBs0k8rieREv
+         8h2xPz7fMHhkc0W8k8TpPKxuxqdGAp6RPPwaSR/2Omu/bJW3M81cEWiMLEsrHPI1M/
+         k5SFZ/sTxCQ1eh3kCp3PrdNz/VdZxYr3NgggrxcLkSz1tDSoSZgoz5N/t7y80kPh51
+         nNFD1HekbkNmud1ZgmNkwFKT8TEagpQxyQbh0u8IXsV8T+emHSZc1HOFSc9cKJpoVc
+         GSAZwoMmd2l/g==
+From:   SeongJae Park <sj@kernel.org>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        SeongJae Park <sj@kernel.org>
+Subject: [PATCH 0/4] Remove the type-unclear target id concept
+Date:   Thu, 30 Dec 2021 10:07:19 +0000
+Message-Id: <20211230100723.2238-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Dec 2021 19:17:30 +0800, Pavel Machek wrote:
-> So we have !rx_queue->page_ring. But in efx_reuse_page, we do
->
->       index = rx_queue->page_remove & rx_queue->page_ptr_mask;
-> 	page = rx_queue->page_ring[index];
->
-> So index is now zero, but we'll derefernce null pointer
-> anyway.
+DAMON asks each monitoring target ('struct damon_target') to have one
+'unsigned long' integer called 'id', which should be unique among the
+targets of same monitoring context.  Meaning of it is, however, totally
+up to the monitoring primitives that registered to the monitoring
+context.  For example, the virtual address spaces monitoring primitives
+treats the id as a 'struct pid' pointer.
 
-Thanks for your reply.
-I am so sorry to submit the wrong patch and cause the trouble.
-Now there are two ways to fix it.
-One is to directly return error when fails and finally cause the failure
-of the efx_start_all().
-But I notice that efx_start_channels() -> efx_init_rx_queue() ->
-efx_init_rx_recycle_ring(), and efx_start_channels() starts many
-channels.
-Maybe the last channel fails without the enough memory, but the other
-are success and can work regularly.
-To work more efficiently, I think the second way is better that we just
-check every where using rx_queue->page_ring.
-In this way, we don't need to alloc and free the channels frequently and
-finish most of the job.
-The patch is something that likes as follow.
+This makes the code flexible but ugly, not well-documented, and
+type-unsafe[1].  Also, identification of each target can be done via its
+index.  For the reason, this patchset removes the concept and uses clear
+type definition.
 
-diff --git a/drivers/net/ethernet/sfc/rx_common.c
-b/drivers/net/ethernet/sfc/rx_common.c
-index 68fc7d317693..7172b5fcc104 100644
---- a/drivers/net/ethernet/sfc/rx_common.c
-+++ b/drivers/net/ethernet/sfc/rx_common.c
-@@ -45,6 +45,9 @@ static struct page *efx_reuse_page(struct efx_rx_queue
-*rx_queue)
-        unsigned int index;
-	struct page *page;
+[1] https://lore.kernel.org/linux-mm/20211013154535.4aaeaaf9d0182922e405dd1e@linux-foundation.org/
 
-+       if (!rx_queue->page_ring)
-+               return NULL;
-+
-	index = rx_queue->page_remove &
-	rx_queue->page_ptr_mask;
-	page = rx_queue->page_ring[index];
-	if (page == NULL)
+SeongJae Park (4):
+  mm/damon/dbgfs/init_regions: Use target index instead of target id
+  Docs/admin-guide/mm/damon/usage: Update for changed initail_regions
+    file input
+  mm/damon/core: Move damon_set_targets() into dbgfs
+  mm/damon: Remove the target id concept
+
+ Documentation/admin-guide/mm/damon/usage.rst |  24 ++-
+ include/linux/damon.h                        |  13 +-
+ mm/damon/core-test.h                         |  21 +-
+ mm/damon/core.c                              |  36 +---
+ mm/damon/dbgfs-test.h                        |  83 +++-----
+ mm/damon/dbgfs.c                             | 202 ++++++++++++-------
+ mm/damon/reclaim.c                           |   3 +-
+ mm/damon/vaddr-test.h                        |   6 +-
+ mm/damon/vaddr.c                             |   4 +-
+ 9 files changed, 199 insertions(+), 193 deletions(-)
+
+-- 
+2.17.1
 

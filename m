@@ -2,91 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9E34818DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 04:13:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A154818D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 04:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235191AbhL3DNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 22:13:42 -0500
-Received: from m13101.mail.163.com ([220.181.13.101]:50223 "EHLO
-        m13101.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbhL3DNl (ORCPT
+        id S235120AbhL3DFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 22:05:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58652 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231751AbhL3DFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 22:13:41 -0500
-X-Greylist: delayed 917 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 Dec 2021 22:13:40 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=58oDQ
-        PwwMWq3ppqtb+/VkPCahMAprOiUFqSt4oBRFuk=; b=dT14diZn4lDQrMOyk/QX4
-        /X5racvcSiYUwHOX09VdKXO02p+J4AiYAcPLIchHpGkVXz5dpK3iDm6wVNxNB2xx
-        9PkTJYDYB+TL3ase2LsgT6xl45U0m/upMyloZ7hjIlGxwsr3REQDJwRt8bZ4jruB
-        KlNaCAFGAlfThsLC4eVyHc=
-Received: from slark_xiao$163.com ( [112.97.50.214] ) by
- ajax-webmail-wmsvr101 (Coremail) ; Thu, 30 Dec 2021 10:57:35 +0800 (CST)
-X-Originating-IP: [112.97.50.214]
-Date:   Thu, 30 Dec 2021 10:57:35 +0800 (CST)
-From:   "Slark Xiao" <slark_xiao@163.com>
-To:     "Bjorn Helgaas" <helgaas@kernel.org>
-Cc:     bjorn@helgaas.com, linux-pci@vger.kernel.org,
-        "Loic Poulain" <loic.poulain@linaro.org>,
-        "Sergey Ryazanov" <ryazanov.s.a@gmail.com>,
-        "Johannes Berg" <johannes@sipsolutions.net>,
-        "Manivannan Sadhasivam" <mani@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re:Re: [Bug 215433] New: data connection lost on Qualcomm SDX55
- PCIe device
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
- Copyright (c) 2002-2021 www.mailtech.cn 163com
-In-Reply-To: <20211229174605.GA1689297@bhelgaas>
-References: <20211229174605.GA1689297@bhelgaas>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
-MIME-Version: 1.0
-Message-ID: <7d8532a3.2314.17e09457a76.Coremail.slark_xiao@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: ZcGowABXFWggIM1hjUgQAA--.8508W
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbBAxd5ZGB0IXjwmwAAsv
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+        Wed, 29 Dec 2021 22:05:02 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0658AC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 19:05:02 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id z3so17280153plg.8
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 19:05:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:date:subject:from:to:cc:message-id:thread-topic
+         :mime-version:content-transfer-encoding;
+        bh=HCfAlaMSnvj/DFkWkfTZyPmms6cxrAZFM9yr8MI4h0g=;
+        b=orU3//Aqyh3NX4ouVn1NMsWTBEQmnZZVvXbgPVju2+uAZDOEb51avmwXBF8rN1RaE1
+         BwtO99nYcKpvIHZiTTIQlVdLFiLmgQvCVXx1fb5Fv/JExyXsquCQ80Rwvk3I8GSOsmnE
+         b4SP2Nv01TFo6e1UnONNcJXqyFD0dYcLIqKvTpfSSrRAFy6RAIdZbu2L2/Cvl4xA/nzG
+         Uly6iuwGlqzGD52y+xuuRNqE838H0nSyUUaj2dJANEcfLSs7REvOYjdMYbYuJexLAUCg
+         WRwVR8W4iZQzjnhvb9ltWAnpPuXO7Xc9skNFz24pVI97BDr0jIZkFmKVQMcNnP8/LjTo
+         bBTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:user-agent:date:subject:from:to:cc:message-id
+         :thread-topic:mime-version:content-transfer-encoding;
+        bh=HCfAlaMSnvj/DFkWkfTZyPmms6cxrAZFM9yr8MI4h0g=;
+        b=Hrxe+xk+vJ5VJPguugTDY/bbOwxJxvcQOG7ZyWaQ0acVGjHZ6ZiQyTENnMSeN2/YfH
+         4FR6mu9Ls3u4tHPoAnH54GQngMGNv5KasFOrG1b9Fy4IpGZqhlf6Q9JFNbU/P0gOLfUX
+         oRoTwQG6J9drYMsMc5TqSCrcrrP8WiqF04GxJKVHzBwFMe5APkpJFkb1/ttvFhDJoTMz
+         LrENX7ULLRAgnjLwsQlcDE8ZAEAQ6mEH7u2eTn2uvaAxmdXCF8uVvrPsE1gcp7E8gaCo
+         UEWfB3fGmWUQlE734ZlP22Xx8wu7G3DCrx58PCx5tApZhfkRq2wUfQz6DnCLb6vTB//+
+         lB9A==
+X-Gm-Message-State: AOAM531SGof7qRAaFXHi09+lr6nkVFC5GrcH34UkYs7IvuBHrY9GQmfE
+        spwP4cKFwQl5u0tJ7qpthizR/9VrReGAnuk8
+X-Google-Smtp-Source: ABdhPJzxJDtWcvuTpn1CK+S66A9+rQU5T//Z8yghimRfZ2yj4faYVPbAohuKVLNZ3g6JH1wWzLMMVA==
+X-Received: by 2002:a17:90b:3e8c:: with SMTP id rj12mr28208190pjb.184.1640833501548;
+        Wed, 29 Dec 2021 19:05:01 -0800 (PST)
+Received: from [30.135.82.251] ([23.98.35.75])
+        by smtp.gmail.com with ESMTPSA id l186sm20827387pga.24.2021.12.29.19.05.00
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 29 Dec 2021 19:05:01 -0800 (PST)
+User-Agent: Microsoft-MacOutlook/16.56.21121100
+Date:   Thu, 30 Dec 2021 11:04:58 +0800
+Subject: [Resource Leak] Missing closing files
+From:   Ryan Cai <ycaibb@gmail.com>
+To:     <greg@kroah.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-m68k@lists.linux-m68k.org>
+Message-ID: <5C277DBF-B1EF-4193-9983-63105E5BC053@gmail.com>
+Thread-Topic: [Resource Leak] Missing closing files
+Mime-version: 1.0
+Content-type: text/plain;
+        charset="UTF-8"
+Content-transfer-encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKCgoKCgoKCgoKCgoKCkF0IDIwMjEtMTItMzAgMDE6NDY6MDUsICJCam9ybiBIZWxnYWFzIiA8
-aGVsZ2Fhc0BrZXJuZWwub3JnPiB3cm90ZToKPlsrY2MgTUhJIGZvbGtzXQo+Cj5PbiBUdWUsIERl
-YyAyOCwgMjAyMSBhdCAxMToyNjowMkFNICswMDAwLCBidWd6aWxsYS1kYWVtb25AYnVnemlsbGEu
-a2VybmVsLm9yZyB3cm90ZToKPj4gaHR0cHM6Ly9idWd6aWxsYS5rZXJuZWwub3JnL3Nob3dfYnVn
-LmNnaT9pZD0yMTU0MzMKPj4gCj4+ICAgICAgICAgICAgU3VtbWFyeTogZGF0YSBjb25uZWN0aW9u
-IGxvc3Qgb24gUXVhbGNvbW0gU0RYNTUgUENJZSBkZXZpY2UKPj4gICAgIEtlcm5lbCBWZXJzaW9u
-OiA1LjEzLjAsNS4xNS4wCj4+IC4uLgo+Cj4+IEZvciBRdWFsY29tbSBiYXNlZCBtb2RlbSBkZXZp
-Y2VzLCB3aXRoIFBDSUUgaW50ZXJmYWNlLCBhbmQgbWhpIGRyaXZlciBiYXNlZCBvbgo+PiBrZXJu
-ZWwgNS4xMy4wLCBpdCB3aWxsIGxvc2UgZGF0YSBjb25uZWN0aW9uLiBEZXRhaWxzIGFzIGJlbG93
-Ogo+PiAKPj4gICAgIFBoZW5vbWVub246Cj4+ICAgICAgICAgMSkgQ2FuIE5PVCBjb25uZWN0IHRv
-IEludGVybmV0Cj4+ICAgICAgICAgMikgL2Rldi93d2FuMHAxUUNETSwgL2Rldi93d2FuMHAyTUJJ
-TSwgL2Rldi93d2FuMHAzQVQgTk9UIHJlc3BvbnNlCj4+IAo+PiAgICAgUmVwcm9kdWNlIHN0ZXBz
-Cj4+ICAgICAgICAgMSkgQ29ubmVjdCBJbnRlcm5ldCB2aWEgY2VsbHVsYXIKPj4gICAgICAgICAy
-KSBEbyBzcGVlZHRlc3QoaHR0cHM6Ly93d3cuc3BlZWR0ZXN0Lm5ldC8pIG9yIGRvd25sb2FkIGEg
-MUdCIGZpbGUKPj4gKGlwdjQuZG93bmxvYWQudGhpbmticm9hZGJhbmQuY29tLzFHQi56aXApCj4+
-IAo+PiAgICAgUmVjb3ZlcnkgbWV0aG9kCj4+ICAgICAgICAgT25seSBjYW4gYmUgcmVjb3ZlcmVk
-IGJ5IHJlYm9vdCBob3N0Cj4+IAo+PiAgICAgT3RoZXJzCj4+ICAgICAgICAgSXQgY2FuIE5PVCBi
-ZSByZXByb2R1Y2VkIGluIFdpbmRvd3MgMTAvMTEuCj4KPlRoYW5rcyB2ZXJ5IG11Y2ggZm9yIHRo
-ZSByZXBvcnQuICBJJ20gbm90IGZhbWlsaWFyIHdpdGggdGhlIG1oaQo+ZHJpdmVyLCBzbyBJIGFk
-ZGVkIHNvbWUgZm9sa3Mgd2hvIG1pZ2h0IGJlLgo+Cj5DYW4geW91IHBsZWFzZSBjb2xsZWN0IHRo
-ZSBjb21wbGV0ZSBkbWVzZyBsb2cgYW5kIG91dHB1dCBvZgo+InN1ZG8gbHNwY2kgLXZ2IiBhbmQg
-YXR0YWNoIGJvdGggdG8gdGhlIGJ1Z3ppbGxhPwo+Cj5Eb2VzIHRoZSBuZXR3b3JrIGNvbm5lY3Rp
-b24gd29yayBmb3IgYSB3aGlsZSwgdGhlbiBzdG9wIHdvcmtpbmc/ICBJZgo+c28sIGlzIHRoZXJl
-IGFueXRoaW5nIGxvZ2dlZCBpbiB0aGUgZG1lc2cgbG9nIHdoZW4gaXQgc3RvcHMgd29ya2luZz8K
-Pgo+RG8geW91IGtub3cgb2YgYW55IExpbnV4IHZlcnNpb25zIHRoYXQgZG8gbm90IGhhdmUgdGhp
-cyBwcm9ibGVtPyAgSWYKPml0IHVzZWQgdG8gd29yayBidXQgaXQgZ290IGJyb2tlbiwgdGhhdCB3
-b3VsZCBoZWxwIG5hcnJvdyB0aGluZ3MgZG93bi4KPgo+VGhhbmtzLAo+ICBCam9ybgoKSGkgQmpv
-cm4sCiAgIFJlbGF0ZWQgbG9nIGhhcyBiZWVuIHVwbG9hZGVkLgogICAKICAgWWVzLCB0aGUgdGlt
-ZSBiZWZvcmUgc3RvcCB3b3JraW5nIG1heSBsZXNzIHRoYW4gMSBtaW51dGVzLCBvciBtb3JlIHRo
-YW4gMTUgbWludXRlcy4gRmluYWxseSwgaXQgd291bGQgc3RvcCB3b3JraW5nLgogVGhlcmUgaXMg
-bm8gbWVzc2FnZSB3b3VsZCBiZSByZXBvcnRlZCBpbiBkbWVzZyBsb2cgd2l0aCBkZWZhdWx0IGxv
-ZyBsZXZlbC4gU28gSSB0aGluayB0aGlzIGlzIGEgc2l0dWF0aW9uIHRoYXQgd2UgYWxsIG1heSBt
-aXNzIGl0LgpXZSBhbHNvIHRyaWVkIHRvIGFkZCBzb21lIGRlYnVnIGxvZy4gQnV0IG5vIGZpbmRp
-bmdzLgogICBBcyB3ZSBhZGQgc3VwcG9ydCBvdXIgZGV2aWNlIGluIHY1LjEyKG1vcmUgb3IgbGVz
-cyksIHNvIHdlIGRpZG4ndCB0ZXN0IGl0IHdpdGggcHJldmlvdXMgdmVyc2lvbi4gCkFjdHVhbGx5
-IHRoaXMgaXNzdWUgaXMgZm91bmQgaW4gYm90aCB2NS4xMyBhbmQgdjUuMTUgb2ZmaWNpYWwgcmVs
-ZWFzZS4KICAgCiAgIEJUVywgdGhlcmUgaXMgc29tZSBvdGhlciB2ZW5kb3IgYWxzbyByZXBvcnQg
-dGhpcyBpc3N1ZSwgbGlrZSBRdWVjdGVsIFNEWDI0IG1vZHVsZS4gClNvIEkgYmVsaWV2ZSB0aGlz
-IGlzIGEgY29tbW9uIGlzc3VlIGZvciBhbGwgbWhpIGRldmljZS4KIApUaGFua3MKIFNsYXJrCg==
+Dear Kernel maintainers,
+=C2=A0
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 In=C2=A0linux/drivers/zorro/gen-devlist.c, the file opened=
+ at Line 39 may not closed when going to Line 65.=C2=A0
+=C2=A0
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 I think, return 1 at Line 65 should be goto error. Shoul=
+d it be a bug? I can send a patch.
+=C2=A0
+Location:=C2=A0https://github.com/torvalds/linux/blob/5bfc75d92efd494db37f5c4c1=
+73d3639d4772966/drivers/zorro/gen-devlist.c#L39-L65
+=C2=A0
+=C2=A0
+=C2=A0
+Best,
+Ryan
+=C2=A0
+
+
 

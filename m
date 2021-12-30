@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91785481CE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 15:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79132481CE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 15:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239877AbhL3OOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 09:14:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35990 "EHLO
+        id S239892AbhL3OOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 09:14:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbhL3OOR (ORCPT
+        with ESMTP id S232584AbhL3OO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 09:14:17 -0500
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CECC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 06:14:17 -0800 (PST)
-Received: by mail-pj1-x1041.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so22853437pjf.3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 06:14:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=5K6umBYYk5MuEu0C1+YbFQclZ4U2heUyJMDa7+dcbog=;
-        b=dCNMlLAbmjU6YtqotQ73fWhhDDBHOMS4ZBoNgebLrmxIZu7qHqdnrpy972jnBF/579
-         BAg8bGWVvS/fc1we206NrnITG/hdVdkE7wRLIMb44D/3IL1eBQfM9zIRMFbvAkjtLUta
-         PRYdvn2q+I+/VxHCQJ4xVcqE1GnzgreIqujm21pMkjMWrmxAr3+VnlFvBir8D2UMWPm0
-         oPm+b2p1wD4ZRJMlsgzqHCoHDrpfFok6jgE2jlSWJpbb3sj2STvnnr2cwyz/cy+M1Hzb
-         7eBH2QOWeKVCYYTUXEOJ+ZubG5hYTrK3HDemT1CNjCAMyjB5tI3IsvMACsIa7Zvwctph
-         iJmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=5K6umBYYk5MuEu0C1+YbFQclZ4U2heUyJMDa7+dcbog=;
-        b=spplVja5ozFTywjqZ2mOafsxE6fM5N+jqu5nlYof/91sF3DIV1ifA7POcEmVHZ2MMl
-         jj4X49e7+9168Jjwsr2ZSa6JcLh/Ui5SOrEx2q5IvrCFF0CSoQPJbgDpaJAqlemcOaY9
-         5lgS5etyyMx8wUjY2/tMiMeukSsof8JhzYyH2Z3LTBI19BYUaLtMmWCaJ2M1TaBNWq87
-         fXCmpOy+LN2efBBlIzFmtpah66HVrT21zSH7Hg9/Cii3YTyp61QcA8G3x+wuXdFRGmLx
-         nBwfphYOJpJTRxCvruqsRGA5LiKUtrcp9QnH2iaq6DTeSf+SHXp/wT02/UHMxyuK6k7O
-         qwOQ==
-X-Gm-Message-State: AOAM5300or1/NnH86y6h54WYYNsmCsrPdkXG3mF1dvxLu4KatRCJh7HY
-        xI+dSxzNw+I2kbApD15tGtQVJlVIUHdgEKWXxDY=
-X-Google-Smtp-Source: ABdhPJytf6+CwVTUBFo71OBBf0XsubC6F9T+bdNbGCTqZJqphWKRPQPhGWWbDghl99alK5hvy9LtuKZuy5RmDapHRVw=
-X-Received: by 2002:a17:902:82c3:b0:149:9715:21c4 with SMTP id
- u3-20020a17090282c300b00149971521c4mr10952787plz.157.1640873656911; Thu, 30
- Dec 2021 06:14:16 -0800 (PST)
+        Thu, 30 Dec 2021 09:14:29 -0500
+Received: from a3.inai.de (a3.inai.de [IPv6:2a01:4f8:10b:45d8::f5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FF0C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 06:14:29 -0800 (PST)
+Received: by a3.inai.de (Postfix, from userid 25121)
+        id 6AEA758723348; Thu, 30 Dec 2021 15:14:26 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by a3.inai.de (Postfix) with ESMTP id 5B24D60C26F18;
+        Thu, 30 Dec 2021 15:14:26 +0100 (CET)
+Date:   Thu, 30 Dec 2021 15:14:26 +0100 (CET)
+From:   Jan Engelhardt <jengelh@inai.de>
+To:     Greg KH <gregkh@linuxfoundation.org>
+cc:     tkjos@android.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] android: use "menuconfig" menu entry type for
+ CONFIG_ANDROID
+In-Reply-To: <Yc2wsGmEe7lefB9h@kroah.com>
+Message-ID: <5po21q10-20p8-5593-2npn-7n5718qsnq73@vanv.qr>
+References: <20211228200634.18968-1-jengelh@inai.de> <Yc2wsGmEe7lefB9h@kroah.com>
+User-Agent: Alpine 2.25 (LSU 592 2021-09-18)
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:17cf:0:0:0:0 with HTTP; Thu, 30 Dec 2021 06:14:16
- -0800 (PST)
-Reply-To: mrsaishaalqaddafi23@gmail.com
-From:   "Mrs Aisha Al-Qaddafi." <drfazlqparray@gmail.com>
-Date:   Thu, 30 Dec 2021 14:14:16 +0000
-Message-ID: <CAGoVpqUHp6nsJgx9bwFqwDrbN42UPp8FJhneejt50zU2g3NVtw@mail.gmail.com>
-Subject: Dear Partner,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Partner,
 
-I came across your contact during my private search Mrs Aisha Al-Qaddafi is
-my name, the only daughter of late Libyan president, I have funds the sum
-of $27.5 million USD for investment, I am interested in you for investment
-project assistance in your country, i shall compensate you 30% of the total
-sum after the funds are transfer into your account, Reply me urgent for
-more details. Please kindly respond quickly for further details through my
-private e_mail address:mrsaishaalqaddafi23@gmail.com
+On Thursday 2021-12-30 14:14, Greg KH wrote:
+>On Tue, Dec 28, 2021 at 09:06:34PM +0100, Jan Engelhardt wrote:
+>> Allow disabling the Android driver section from within the Device
+>> Drivers submenu, without having to descend into the Android drivers
+>> submenu first.
+>> 
+>> Signed-off-by: Jan Engelhardt <jengelh@inai.de>
+>> ---
+>>  drivers/android/Kconfig | 6 +-----
+>>  1 file changed, 1 insertion(+), 5 deletions(-)
+>> 
+>> diff --git drivers/android/Kconfig drivers/android/Kconfig
+>> index 53b22e26266c..dc0a373ab879 100644
+>> --- drivers/android/Kconfig
+>> +++ drivers/android/Kconfig
+>
+>You made this patch at one level too deep, it should look like:
+>
+>--- a/drivers/android/Kconfig
+>+++ b/drivers/android/Kconfig
+>
+>As-is, this will not apply.
+>
+>A normal git diff will output the correct patch file, as will 'git
+>format-patch', how did you create this?
 
+Uh, I once again ran afoul of my default "diff.noprefix=true" in 
+~/.gitconfig. Unless there is a magical barrier, `git am -p0`
+should momentarily work for you as I edit my ~/linux/.git/config to 
+set diff.noprefix=false.
 
-Mrs Aisha Al-Qaddafi.
+(which of course breaks part of my workflow just like xkcd.com/1172 
+predicts, but alas... -- I've already conveyed to the git list it's 
+suboptimal for me,
+https://lore.kernel.org/all/xmqqr1auvs7m.fsf@gitster.g/ )

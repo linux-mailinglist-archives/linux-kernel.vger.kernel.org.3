@@ -2,104 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBD2E4820A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 23:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5974820AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 23:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242272AbhL3Wez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 17:34:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
+        id S242284AbhL3WgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 17:36:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242253AbhL3Wey (ORCPT
+        with ESMTP id S242253AbhL3WgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 17:34:54 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3769C061574;
-        Thu, 30 Dec 2021 14:34:53 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id j21so102825632edt.9;
-        Thu, 30 Dec 2021 14:34:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=keDpfpmYkXFiVgktyndmnfL9DTHJGo7630SMho0JAeE=;
-        b=ai6bQPVEAVEI84Hr676QSSliE+FR4kHYNtcIKRXGqvO0ZFSSntFZrdJGBovV7M2b8d
-         p2CRo0K5/4qPORmzar5tSkOD19nOcQHG8T01qunC12cBe/fjgsvFXdSdtU5B4jfmuyLq
-         AVLIM5tab73qpz3JSJ5WbJ7S9wE6eu00OJbybBCG2A72CwOsGoiiec3uorb7kiOsOmkw
-         t4FsZpo32HpTTzn9N2DIE0LDn9l1TQA5nY3LlixgsZWZLfEsjZ6u7M/F0zA9p7cbT/Qo
-         dfZbj3t6uqZLqrHVWO/TfQkS6xiRBdNO0eVecXvuVQ7oRFohDMw9alrxsjyQunudjRw1
-         Nzlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=keDpfpmYkXFiVgktyndmnfL9DTHJGo7630SMho0JAeE=;
-        b=y5lm3OX8zROthuYyBgeyWIwwRxfdhnQq64dASrSmkld7QWsFrzQnY82XWCFwYlx9ej
-         kaad+f+JBOpMWxJRchTwv2KWq/vUt9WraoABYX4qN5GBrnlJ1OATs5HQs8ukbl0krT2C
-         p71m6ZOScKVJFw2wGWGBdY/qPTDcV/spdpts9CerqyzlNzMllhcCMItI41xnYpOBch33
-         eMbIq4pOGrCNhHvSQCDuAK2LIbH0m8zhnsbvGO1rsD+KC0RzpfTKMEbCBsB3ZOnxHcQ0
-         qRvs1SXZdsQWzC3/0W1YA9AYFYu+mYhO0csalN8MlQJ3KSBDTd6BuwbiYaD1zK6uaDx4
-         2ubA==
-X-Gm-Message-State: AOAM532Qe1ZMhI/9IOO2rR+MncJVtU4r6pmAI6GBKnfm0/E59w2GDUgX
-        tCn404kHBXOrWpL1CiNNHEWNjgC8C2NYirdclh0=
-X-Google-Smtp-Source: ABdhPJy06stqBtrzO3pPH2Sb6S4wUoQroR8A11+Jus2e4clCR7PxO5IkHtNeOhstYloGzN2BG15vOFzp8x/xl7qa0w4=
-X-Received: by 2002:a17:907:75dc:: with SMTP id jl28mr26131756ejc.13.1640903692114;
- Thu, 30 Dec 2021 14:34:52 -0800 (PST)
+        Thu, 30 Dec 2021 17:36:04 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFF3C061574;
+        Thu, 30 Dec 2021 14:36:04 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7F75A1EC047E;
+        Thu, 30 Dec 2021 23:35:58 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640903758;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=+KKK4IGlu+3zrarQbibZbQT1tUBU7oUm6HKnQkbdmKE=;
+        b=oPfknaqMGvn+62MYRbhhvqwCuLoSX5p58SSeK+N4oF9aZ7sLgUjP1n1DDIVFgf4UX6SjD4
+        BtjJXy4Yp4keYM2xcOguHwNaMZcxUdIa08dtUo7yvrKUQnGgdp8B3NQYFmeSY4AG9kn321
+        5gYDtf918vXXIlR8BZolIn+c0jp1L1w=
+Date:   Thu, 30 Dec 2021 23:36:00 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v9 03/15] kallsyms: Hide layout
+Message-ID: <Yc40UKmylVh38vl5@zn.tnic>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+ <20211223002209.1092165-4-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-References: <20211230102110.3861-1-yu.tu@amlogic.com> <20211230102110.3861-4-yu.tu@amlogic.com>
-In-Reply-To: <20211230102110.3861-4-yu.tu@amlogic.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Thu, 30 Dec 2021 23:34:41 +0100
-Message-ID: <CAFBinCB0RTfOLbV3ZC+9dJEiw2_y41V+JvNP9GOPaQcCLB7UdA@mail.gmail.com>
-Subject: Re: [PATCH V3 3/6] dt-bindings: serial: meson: Support S4 SoC uart.
- Also Drop compatible = amlogic,meson-gx-uart.
-To:     Yu Tu <yu.tu@amlogic.com>
-Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Vyacheslav <adeep@lexina.in>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211223002209.1092165-4-alexandr.lobakin@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Dec 23, 2021 at 01:21:57AM +0100, Alexander Lobakin wrote:
+> Subject: Re: [PATCH v9 03/15] kallsyms: Hide layout
 
-as Greg already mentioned the $subject line is very long.
+That title is kinda laconic...
 
-On Thu, Dec 30, 2021 at 11:21 AM Yu Tu <yu.tu@amlogic.com> wrote:
-> Deprecated, don't use anymore because compatible = amlogic,meson-gx-uart
-> don't differentiate between GXBB and GXL which have different
-> revisions of the UART IP. So it's split into GXBB and GXL.
-actually it's split into GXBB, GXL and G12A
+> From: Kristen Carlson Accardi <kristen@linux.intel.com>
+> 
+> This patch makes /proc/kallsyms display in a random order, rather
 
-[...]
-> -              - amlogic,meson-gx-uart
-> +              - amlogic,meson-gxbb-uart
-> +              - amlogic,meson-gxl-uart
-> +              - amlogic,meson-g12a-uart
-> +              - amlogic,meson-s4-uart
-In addition to Greg's comment I suggest splitting this into two patches:
-- one where the "amlogic,meson-gx-uart" compatible is marked as
-deprecated (Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
-has an example for deprecated entries) and GXBB, GXL and G12A
-compatible strings are added instead
-- another one where the new S4 compatible string is added
+Avoid having "This patch" or "This commit" in the commit message. It is
+tautologically useless.
 
-The idea here is to have "one logical change per patch".
-Deprecating and replacing "amlogic,meson-gx-uart" is one logical change.
-Adding a new compatible string is another logical change.
-I am hoping that this will also make it easier to find a shorter
-$subject line (which according to the patch submission guide [0]
-should be 70-75 characters: "the summary must be no more than 70-75
-characters")
+Also, do
 
+$ git grep 'This patch' Documentation/process
 
-Best regards,
-Martin
+for more details.
 
+> than sorted by address in order to hide the newly randomized address
+> layout.
 
-[0] https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#the-canonical-patch-format
+Sorted by address?
+
+My /proc/kallsyms says
+
+$ awk '{ print $1 }' /proc/kallsyms | uniq -c
+ 119086 0000000000000000
+
+so all the addresses are 0. Aha, and when I list them as root, only then
+I see non-null addresses.
+
+So why do we that patch at all?
+
+> alobakin:
+> Don't depend FG-KASLR and always do that for unpriviledged accesses
+
+Unknown word [unpriviledged] in commit message, suggestions:
+        ['unprivileged', 'underprivileged', 'privileged']
+
+> as suggested by several folks.
+> Also, introduce and use a shuffle_array() macro which shuffles an
+> array using Fisher-Yates.
+
+Fisher-Yates what?
+
+/me goes and looks at the wikipedia article.
+
+Aha, a Fisher-Yates shuffle algoithm.
+
+Don't be afraid to explain more in your commit messages and make them
+more reader-friendly.
+
+> We'll make use of it several more times
+> later on.
+
+Not important for this commit.
+
+...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,107 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E243481F17
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:13:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C2A1481F1A
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241661AbhL3SNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 13:13:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60938 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237218AbhL3SNp (ORCPT
+        id S241666AbhL3SQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 13:16:24 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:54908 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237082AbhL3SQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 13:13:45 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98642C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 10:13:45 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so23855784pjp.0
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 10:13:45 -0800 (PST)
+        Thu, 30 Dec 2021 13:16:23 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LVIepjUeywWQTwzqZkmOLGHlr0Rs5KUDVzAJo/3VPTw=;
-        b=IhQHIH3fbtS7YKyPalKqhcrTm7Jcj2EaHZk3PYD1UcoA0hsNvhc/QmMTTGNXXjwpwk
-         eISCewL26nXu5t7Y9G7mUOG/cMWioCd3KRI6dJNBAceykAy3So2n5HRYCa58nLT3O0vx
-         ArAQv9qbYDifZI+3BlnT3Zsbs59LJgs6hc/sIfBB+Gqz0L7jBlVE6EHXYZy/qEvySMsd
-         Wh7z2BhT4JbD4sJ7gseI03bxCIg5ObxNeHnjXsxiCqICL4ynA90b+gOo/FJqCqAPcKxw
-         E8KlKg3WxmD6bMBZJMUBx+oOiPOwTj2EHDN7UwssQVXIQNi1nXhIj/LinGATAvXi+QX0
-         782g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LVIepjUeywWQTwzqZkmOLGHlr0Rs5KUDVzAJo/3VPTw=;
-        b=SQ1FWcjlYT4bWsiql+pGJzqC2Ep653gI00/MSVjZt5RSIOzctqbFMnCcpEanUqdauv
-         y0IG133O1m+8IE66fwtaqfZOLMf3kSz5M0E03zWDMId6xWpfdcfkH68KczyoZwiUF0/v
-         1EltBeLtK5r8yXIq+IWTqLHeyPGj/fqkylO9Ks79bl0j8W6F/I+wNNktyKMOQSRBN7Vs
-         6KCEzOHzdVDbUrn/fDuducQI+L19ImNufV2lrs7QIdDOf5qRRuWSQt6IP3CdeVx+mc1t
-         c8REBEaoOJkyz2XAeU6lBp5PesZiT7/towSr6WqtT8tvnYVu60too6tusgAPmwTifDVu
-         WCFg==
-X-Gm-Message-State: AOAM5302BsNOVxY/IUr5ngU4wgrHxPC1lexk8rCtL58aE//x+PchUa3Z
-        j233PJvQOi4Y7Vo6kaMZTiqinQ==
-X-Google-Smtp-Source: ABdhPJym+aBZbvt0f4f//4rqrmh4++sTtxZMOZit7++cTuaDxGY+Ip1EabqlzDVIs+aUw77l8Mh6IQ==
-X-Received: by 2002:a17:902:9894:b0:149:9b36:7c9c with SMTP id s20-20020a170902989400b001499b367c9cmr9763679plp.61.1640888025029;
-        Thu, 30 Dec 2021 10:13:45 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id g14sm23365549pgp.76.2021.12.30.10.13.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 10:13:44 -0800 (PST)
-Date:   Thu, 30 Dec 2021 18:13:41 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Like Xu <likexu@tencent.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 01/17] perf/x86/intel: Add EPT-Friendly PEBS for Ice
- Lake Server
-Message-ID: <Yc321e9o16luwFK+@google.com>
-References: <20211210133525.46465-1-likexu@tencent.com>
- <20211210133525.46465-2-likexu@tencent.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1640888183; x=1672424183;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=RiMVmQ9LOmrelT64K7hBp62RSOIjUTvB8SLq8zRYLEE=;
+  b=s0l3JoG3OL8aODXxZtbx97pYOENrwR10XvEQ3Z+GIzbuc0EwN4FHzA3m
+   9RbWxS0nmZV2LBqqDbVENeDYOfPOQdbrehCqy9qU64B+d9L9LEQHTQSs0
+   gqpx1lD7w3SyuEfm96cem78JF7j092JX6C6YeVqUDUXEClVUsF4YkB23P
+   E=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 30 Dec 2021 10:16:23 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 10:16:22 -0800
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 30 Dec 2021 10:16:22 -0800
+Received: from [10.216.59.167] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 30 Dec
+ 2021 10:16:17 -0800
+Message-ID: <0294025e-6579-f8af-278b-e4a2d2688ec1@quicinc.com>
+Date:   Thu, 30 Dec 2021 23:46:12 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211210133525.46465-2-likexu@tencent.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v2] thermal/core: Clear all mitigation when thermal zone
+ is disabled
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <1640761407-2028-1-git-send-email-quic_manafm@quicinc.com>
+ <CAJZ5v0hApA+fnuRmT_xDdJiqmkGfrfku=8rNG7G_YohGYZm5nw@mail.gmail.com>
+From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+In-Reply-To: <CAJZ5v0hApA+fnuRmT_xDdJiqmkGfrfku=8rNG7G_YohGYZm5nw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021, Like Xu wrote:
-> From: Like Xu <like.xu@linux.intel.com>
-> 
-> From: Like Xu <like.xu@linux.intel.com>
 
-Did one of these get handcoded?
+On 12/30/2021 9:39 PM, Rafael J. Wysocki wrote:
+> On Wed, Dec 29, 2021 at 8:03 AM Manaf Meethalavalappu Pallikunhi
+> <quic_manafm@quicinc.com> wrote:
+>> Whenever a thermal zone is in trip violated state, there is a chance
+>> that the same thermal zone mode can be disabled either via thermal
+>> core API or via thermal zone sysfs. Once it is disabled, the framework
+>> bails out any re-evaluation of thermal zone. It leads to a case where
+>> if it is already in mitigation state, it will stay the same state
+>> until it is re-enabled.
+> You seem to be arguing that disabling a thermal zone should prevent it
+> from throttling anything, which is reasonable, but I'm not sure if the
+> change below is sufficient for that.
+>
+>> To avoid above mentioned issue, on thermal zone disable request
+>> reset thermal zone and clear mitigation for each trip explicitly.
+>>
+>> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+>> ---
+>>   drivers/thermal/thermal_core.c | 9 ++++++++-
+>>   1 file changed, 8 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+>> index 51374f4..5f4e35b 100644
+>> --- a/drivers/thermal/thermal_core.c
+>> +++ b/drivers/thermal/thermal_core.c
+>> @@ -427,6 +427,7 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
+>>                                          enum thermal_device_mode mode)
+>>   {
+>>          int ret = 0;
+>> +       int trip;
+> This can be declared in the block in which it is used.
+Sure, will update in next patch version
+>
+>>          mutex_lock(&tz->lock);
+>>
+>> @@ -449,8 +450,14 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
+>>
+>>          if (mode == THERMAL_DEVICE_ENABLED)
+> The coding style asks for braces here if they are used after the else.
+Sure will update in next version
+>>                  thermal_notify_tz_enable(tz->id);
+>> -       else
+>> +       else {
+>> +               /* make sure all previous throttlings are cleared */
+>> +               thermal_zone_device_init(tz);
+>> +               for (trip = 0; trip < tz->trips; trip++)
+>> +                       handle_thermal_trip(tz, trip);
+> So I'm not sure if this makes the throttling go away in all cases (eg.
+> what if the current temperature is still above the given trip at this
+> point?).
 
-> The new hardware facility supporting guest PEBS is only available on
-> Intel Ice Lake Server platforms for now. KVM will check this field
-> through perf_get_x86_pmu_capability() instead of hard coding the cpu
-> models in the KVM code. If it is supported, the guest PEBS capability
-> will be exposed to the guest.
+The thermal_zone_device_init() will reset current temperature with THERMAL_TEMP_INVALID. Then the following API
+thandle_thermal_trip() doesn't call get_temp to sensor driver again instead it will use this reset temperature
+value for each trip re-evaluation. Hence  for above mentioned case, I think it will clear the throttling
+irrespective of what is the actual current temperature at that instant. Otherwise please correct me
 
-So what exactly is this new feature?  I've speed read the cover letter and a few
-changelogs and didn't find anything that actually explained when this feature does.
+May I know is there any other possible cases where throttling will not go away completely ?
 
-Based on the shortlog, I assume the feature handles translating linear addresses
-via EPT?  If that's correct, then x86_pmu.pebs_vmx should be named something like
-x86_pmu.pebs_ept.
-
-That also raises the question of what will happen if EPT is disabled.  Presumably
-things will Just Work since no additional translation is needed, but if that's the
-case then arguably vmx_pebs_supported() should be:
-
-	return boot_cpu_has(X86_FEATURE_PEBS) &&
-	       (!tdp_enabled || kvm_pmu_cap.pebs_vmx);
-
-I'm guessing no one actually cares about supporting PEBS on older CPUs using shadow
-paging, but the changelog should at least call out that PEBS is allowed if and only
-if "pebs_vmx" is supported for simplicity, even though it would actually work if EPT
-is disabled.  And if for some reason it _doesn't_ work when EPT is disabled, then
-vmx_pebs_supported() and friends need to actually check tdp_enabled.
-
-Regardless, this changelog really, really needs an explanation of the feature.
+>> +
+>>                  thermal_notify_tz_disable(tz->id);
+>> +       }
+>>
+>>          return ret;
+>>   }
+>>

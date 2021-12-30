@@ -2,90 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B9F481C9F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 14:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E871A481CA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 14:48:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239699AbhL3NqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 08:46:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235880AbhL3NqA (ORCPT
+        id S239728AbhL3Ns2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 08:48:28 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:57395 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235821AbhL3Ns1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 08:46:00 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E950C061574;
-        Thu, 30 Dec 2021 05:46:00 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id n14-20020a7bcbce000000b00332f4abf43fso7962222wmi.0;
-        Thu, 30 Dec 2021 05:46:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+nrSWP5T7g/6Hd2Mwif6iAnRqHbuh0AXAUD99jJuYV8=;
-        b=QOKn4DPLbDQCeqgwYjCebkywo1hkdJFJbdL70xP8l8aFPPufYrIedF5pN5qjirz2HP
-         WRt6N86lkVsQBxccR7usmq/A/qu4pe/1+/PyUlzXQva/h2e6CPPs+j7qX3mBcbyG9mh9
-         NI3cV7owIubZm+mAoTNqyIIL8nTZ7gwMuewzhNRQj0C8zHpx7q9lv5m7BzNRPfPygVdU
-         BN0zj0qcfZ775mNY+MKiDz18KVcSYu+PEh+dILz0ZzVZJ3621P9PfPlY7oS7cg1XYQta
-         jJRbxv6JjJLeVrs0cdjXKKx9ZfcbBXy5FjC+1K6VwbRRCOr9GjaZax0NF22xB3kbE9tY
-         ImLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+nrSWP5T7g/6Hd2Mwif6iAnRqHbuh0AXAUD99jJuYV8=;
-        b=l4FPl2xmp1GgGwLwRmIfvx1fPyN25AleFhy8LdCAj//CNbhkOnyfqjdiFP5VZNRvOL
-         8man4avR0F24kFbKadUQhFxqbJRQxM8idFMdC32b39rDCPmOFtznsLOVVpip/nvpLBei
-         47vqeDMrWfJa2ule1JBu+twE8t6+hUhc5xGdPkn7HBN+z+lFWgZuXWCRgbpDp+tu4CIa
-         7PokvirAtkc0UD6Jkzzk+XnonWSAwv8L6epjZcag1uPwvtgXemIce+Z/yYPnGrQ3aVoV
-         OKOezhdbqMV/uX2Ilt/EV6IQenZZ9KR4Um1AMBpis7HnCv9GQY2phVYOJoKGBPh9fFAX
-         mTfA==
-X-Gm-Message-State: AOAM5308LzaZzs0Ra+VgYeChMR3WzPn52oknw9+deMbyjk0BdKgdA5RS
-        Hf6gpJ6Gi0VJvB3AACQOE7M=
-X-Google-Smtp-Source: ABdhPJxrmn7Q+cEPjWO+mscNaLzrNCKtccUzYI+KO/u0EWRycxr6EDGdfPC22v1/O+iAzAgHMEcJ5w==
-X-Received: by 2002:a1c:7f57:: with SMTP id a84mr7480295wmd.115.1640871958712;
-        Thu, 30 Dec 2021 05:45:58 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id n12sm17371136wmq.30.2021.12.30.05.45.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 05:45:58 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] lib: remove redundant assignment to variable ret
-Date:   Thu, 30 Dec 2021 13:45:57 +0000
-Message-Id: <20211230134557.83633-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Thu, 30 Dec 2021 08:48:27 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id B18E55803AD;
+        Thu, 30 Dec 2021 08:48:26 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 30 Dec 2021 08:48:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=r5nxOi
+        syFTtm3Lt210TuCZFrjiI0ZSYmX8dE32zPpw8=; b=AWw3JK/M3koYuH0ByXnmGm
+        cL+kBFzuaLWpr0Fh9usE8semlLoiXpUed1/QP9NefTtfSkhIgDKbORZn43OP2pEJ
+        spqf4FJ4ClRQVLumYPXeyUYYqMCM20Z/clpzCho0Yj1aQGlf8xENJTYxeE3pBfmt
+        wy0OVQqHrkHu2WY/exMBbej8wfIKQm1VhQjewS91JozysT5poBAo/k7YyLUqw5i3
+        w6/gS/kx/e3F+Hh7rX1XVt7k0cJfrI07H7bxaZaG2UCNX/xtPnL2h1IlBF0XsCHa
+        E8QKxibKNvko4e09v8POk9RJN4bbfzZVAATpbF5QwijMNsJnOyzIrjF815nF5/AA
+        ==
+X-ME-Sender: <xms:qrjNYbRacaVIKXABNVPNYUvQw3elwZtDqGZ6IgD1v9vNwzPfaoAaoA>
+    <xme:qrjNYcxyp0ajpOp7Mw5jPdpfr6mAFN6xcQb8qnJivRWT-VpIxQi0CoXeHhm7PzXtV
+    s2buxnhyL99hqY>
+X-ME-Received: <xmr:qrjNYQ2B3znPDH0__J1zTL6cR85-Ox7-9beNGYp_h__WlglwkbTIHVjpIkXQAoUIaeaSmQdEL-jEkdTyR0h86byWlP38kA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddruddvfedgheeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
+    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
+    gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
+    teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
+    hoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:qrjNYbAM-_QZyBdfEFUuWPxn2wRkPzTacOuyvucaclZ1m39rNvdpPQ>
+    <xmx:qrjNYUhLzmr0m5ahE1O0NzfYnsyLkqGa6EF_IAFC74G70hSqFQcSGg>
+    <xmx:qrjNYfpZvyihOVrxjwAhjQpU5Laz_HVB1c2m1s57TBwqlagCV05zKg>
+    <xmx:qrjNYZY__mdKNZclg_DkhfSxj0Gp_ggtn9UindjAa-TxIVRbHF5_IA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 30 Dec 2021 08:48:25 -0500 (EST)
+Date:   Thu, 30 Dec 2021 15:48:22 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Yevhen Orlov <yevhen.orlov@plvision.eu>
+Cc:     netdev@vger.kernel.org, stephen@networkplumber.org, andrew@lunn.ch,
+        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
+        Taras Chornyi <taras.chornyi@plvision.eu>,
+        Mickey Rachamim <mickeyr@marvell.com>,
+        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 3/6] net: marvell: prestera: Add prestera
+ router infra
+Message-ID: <Yc24pow5B9PaFWP2@shredder>
+References: <20211227215233.31220-1-yevhen.orlov@plvision.eu>
+ <20211227215233.31220-4-yevhen.orlov@plvision.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211227215233.31220-4-yevhen.orlov@plvision.eu>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable ret is being assigned a value that is never read. If the
-for-loop is entered then ret is immediately re-assigned a new
-value. If the for-loop is not executed ret is never read. The
-assignment is redundant and can be removed.
+On Mon, Dec 27, 2021 at 11:52:28PM +0200, Yevhen Orlov wrote:
+> Add prestera_router.c, which contains code to subscribe/unsubscribe on
+> kernel notifiers for router. This handle kernel notifications,
+> parse structures to make key to manipulate prestera_router_hw's objects.
+> 
+> Also prestera_router is container for router's objects database.
+> 
+> Co-developed-by: Taras Chornyi <tchornyi@marvell.com>
+> Signed-off-by: Taras Chornyi <tchornyi@marvell.com>
+> Co-developed-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+> Signed-off-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+> Signed-off-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
+> ---
+> v1-->v2
+> * No changes
+> ---
+>  .../net/ethernet/marvell/prestera/Makefile    |  3 +-
+>  .../net/ethernet/marvell/prestera/prestera.h  | 11 ++++++++
+>  .../ethernet/marvell/prestera/prestera_main.c |  6 ++++
+>  .../marvell/prestera/prestera_router.c        | 28 +++++++++++++++++++
+>  4 files changed, 47 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/net/ethernet/marvell/prestera/prestera_router.c
+> 
+> diff --git a/drivers/net/ethernet/marvell/prestera/Makefile b/drivers/net/ethernet/marvell/prestera/Makefile
+> index 48dbcb2baf8f..ec69fc564a9f 100644
+> --- a/drivers/net/ethernet/marvell/prestera/Makefile
+> +++ b/drivers/net/ethernet/marvell/prestera/Makefile
+> @@ -3,6 +3,7 @@ obj-$(CONFIG_PRESTERA)	+= prestera.o
+>  prestera-objs		:= prestera_main.o prestera_hw.o prestera_dsa.o \
+>  			   prestera_rxtx.o prestera_devlink.o prestera_ethtool.o \
+>  			   prestera_switchdev.o prestera_acl.o prestera_flow.o \
+> -			   prestera_flower.o prestera_span.o prestera_counter.o
+> +			   prestera_flower.o prestera_span.o prestera_counter.o \
+> +			   prestera_router.o
+>  
+>  obj-$(CONFIG_PRESTERA_PCI)	+= prestera_pci.o
+> diff --git a/drivers/net/ethernet/marvell/prestera/prestera.h b/drivers/net/ethernet/marvell/prestera/prestera.h
+> index 636caf492531..7160da678457 100644
+> --- a/drivers/net/ethernet/marvell/prestera/prestera.h
+> +++ b/drivers/net/ethernet/marvell/prestera/prestera.h
+> @@ -270,12 +270,20 @@ struct prestera_switch {
+>  	u32 mtu_min;
+>  	u32 mtu_max;
+>  	u8 id;
+> +	struct prestera_router *router;
+>  	struct prestera_lag *lags;
+>  	struct prestera_counter *counter;
+>  	u8 lag_member_max;
+>  	u8 lag_max;
+>  };
+>  
+> +struct prestera_router {
+> +	struct prestera_switch *sw;
+> +	struct list_head vr_list;
+> +	struct list_head rif_entry_list;
+> +	bool aborted;
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- lib/asn1_encoder.c | 2 --
- 1 file changed, 2 deletions(-)
+Never used
 
-diff --git a/lib/asn1_encoder.c b/lib/asn1_encoder.c
-index 27bbe891714f..0fd3c454a468 100644
---- a/lib/asn1_encoder.c
-+++ b/lib/asn1_encoder.c
-@@ -164,8 +164,6 @@ asn1_encode_oid(unsigned char *data, const unsigned char *end_data,
- 
- 	data_len -= 3;
- 
--	ret = 0;
--
- 	for (i = 2; i < oid_len; i++) {
- 		ret = asn1_encode_oid_digit(&d, &data_len, oid[i]);
- 		if (ret < 0)
--- 
-2.33.1
+> +};
+> +
+>  struct prestera_rxtx_params {
+>  	bool use_sdma;
+>  	u32 map_addr;
+> @@ -303,6 +311,9 @@ struct prestera_port *prestera_port_find_by_hwid(struct prestera_switch *sw,
+>  
+>  int prestera_port_autoneg_set(struct prestera_port *port, u64 link_modes);
+>  
+> +int prestera_router_init(struct prestera_switch *sw);
+> +void prestera_router_fini(struct prestera_switch *sw);
+> +
+>  struct prestera_port *prestera_find_port(struct prestera_switch *sw, u32 id);
+>  
+>  int prestera_port_cfg_mac_read(struct prestera_port *port,
+> diff --git a/drivers/net/ethernet/marvell/prestera/prestera_main.c b/drivers/net/ethernet/marvell/prestera/prestera_main.c
+> index a0dbad5cb88d..242904fcd866 100644
+> --- a/drivers/net/ethernet/marvell/prestera/prestera_main.c
+> +++ b/drivers/net/ethernet/marvell/prestera/prestera_main.c
+> @@ -893,6 +893,10 @@ static int prestera_switch_init(struct prestera_switch *sw)
+>  	if (err)
+>  		return err;
+>  
+> +	err = prestera_router_init(sw);
+> +	if (err)
+> +		goto err_router_init;
+> +
+>  	err = prestera_switchdev_init(sw);
+>  	if (err)
+>  		goto err_swdev_register;
+> @@ -949,6 +953,8 @@ static int prestera_switch_init(struct prestera_switch *sw)
+>  err_rxtx_register:
+>  	prestera_switchdev_fini(sw);
+>  err_swdev_register:
+> +	prestera_router_fini(sw);
 
+Missing a call in prestera_switch_fini(). Most likely visible with
+kmemleak enabled
+
+> +err_router_init:
+>  	prestera_netdev_event_handler_unregister(sw);
+>  	prestera_hw_switch_fini(sw);
+>  
+> diff --git a/drivers/net/ethernet/marvell/prestera/prestera_router.c b/drivers/net/ethernet/marvell/prestera/prestera_router.c
+> new file mode 100644
+> index 000000000000..f3980d10eb29
+> --- /dev/null
+> +++ b/drivers/net/ethernet/marvell/prestera/prestera_router.c
+> @@ -0,0 +1,28 @@
+> +// SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0
+> +/* Copyright (c) 2019-2021 Marvell International Ltd. All rights reserved */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/types.h>
+> +
+> +#include "prestera.h"
+> +
+> +int prestera_router_init(struct prestera_switch *sw)
+> +{
+> +	struct prestera_router *router;
+> +
+> +	router = kzalloc(sizeof(*sw->router), GFP_KERNEL);
+> +	if (!router)
+> +		return -ENOMEM;
+> +
+> +	sw->router = router;
+> +	router->sw = sw;
+> +
+> +	return 0;
+> +}
+> +
+> +void prestera_router_fini(struct prestera_switch *sw)
+> +{
+> +	kfree(sw->router);
+> +	sw->router = NULL;
+> +}
+> +
+> -- 
+> 2.17.1
+> 

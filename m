@@ -2,123 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 866C14817ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 01:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7266D4817F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 01:57:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233744AbhL3Aq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 19:46:28 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34234 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233673AbhL3Aq1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 19:46:27 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B961C615B8;
-        Thu, 30 Dec 2021 00:46:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BE7FC36AE9;
-        Thu, 30 Dec 2021 00:46:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1640825186;
-        bh=98eWbz1Wy4ptLli6ALaKAlJq7kZ1urcdjW/mQtAR0Fs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=1ZXE06RWOW18UExJ+S0kOGfu1G9EqNsU/Yf3gcwogRqJ2BnpUQOwDqCd3iMadQlGG
-         emQGn1dXiVKQu9NsGMnVts/3aevxQnigpCD4kIgiLKteO/UTtcdkwbNNZ3/JGz0P7y
-         Vs8AgCDpwWUB/U7beM+8Xawf5LsAEPFE8KI79JE0=
-Date:   Wed, 29 Dec 2021 16:46:24 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        viro@zeniv.linux.org.uk, keescook@chromium.org, yzaikin@google.com,
-        nixiaoming@huawei.com, ebiederm@xmission.com, steve@sk2.org,
-        andriy.shevchenko@linux.intel.com, jlayton@kernel.org,
-        bfields@fieldses.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/9] sysctl: move maxolduid as a sysctl specific const
-Message-Id: <20211229164624.bbf08e1ed4350e97282344e2@linux-foundation.org>
-In-Reply-To: <YcDYtcJG+ON1bowf@bombadil.infradead.org>
-References: <20211129205548.605569-1-mcgrof@kernel.org>
-        <20211129205548.605569-5-mcgrof@kernel.org>
-        <d20861d0-8432-76d7-bcda-1b80401e0a22@digikod.net>
-        <YcDYtcJG+ON1bowf@bombadil.infradead.org>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+        id S233777AbhL3A52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 19:57:28 -0500
+Received: from mga11.intel.com ([192.55.52.93]:38955 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233486AbhL3A52 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 19:57:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640825848; x=1672361848;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yUAaGvj07WX09Kl9tz+Gl5gyV2UvBq6FTtkC+ImHrDY=;
+  b=kKIHwqBVcfGWpfz26daOhqCsvfemfeprcej2SWyhljJX5UxH2QuwkNTn
+   F5tbCbUtOI9OfHJba1tFHslUl7+8emhtpuTB9taylnsTN3yTsd+1fLQKB
+   aLQkqHSHQrOstQ1abtpRnhlCGl5qBhjJhrWzOX3qibTZUalNlZ5l8k1D5
+   z9/utE/TwIxe5WfxxOAbhI/H21vcTrMcMsmXj7y5I9+LY0EdJOn6o72Dj
+   O6NWMjO6Mb5ZL0CoHun8p2IvDsBNMtzKXwc1YfqhYnrymdymEuI+yMB/c
+   mPjc8QMy6A+CUDeBJHCTjKw2ZJdOLSiMtInAJQl3H1Hy36Hnb9Z3ejRTn
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="239137504"
+X-IronPort-AV: E=Sophos;i="5.88,246,1635231600"; 
+   d="scan'208";a="239137504"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 16:57:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,246,1635231600"; 
+   d="scan'208";a="468662675"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 29 Dec 2021 16:57:25 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n2jkz-0009Wl-3G; Thu, 30 Dec 2021 00:57:25 +0000
+Date:   Thu, 30 Dec 2021 08:57:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <anup.patel@wdc.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Alexander Graf <graf@amazon.com>
+Subject: ERROR: modpost: "boot_cpu_hartid" [arch/riscv/kvm/kvm.ko] undefined!
+Message-ID: <202112300843.UUqHyQYw-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Dec 2021 11:25:41 -0800 Luis Chamberlain <mcgrof@kernel.org> wro=
-te:
+Hi Anup,
 
-> On Fri, Dec 17, 2021 at 05:15:01PM +0100, Micka=EBl Sala=FCn wrote:
-> > > diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-> > > index 7dec3d5a9ed4..675b625fa898 100644
-> > > --- a/fs/proc/proc_sysctl.c
-> > > +++ b/fs/proc/proc_sysctl.c
-> > > @@ -26,7 +26,7 @@ static const struct file_operations proc_sys_dir_fi=
-le_operations;
-> > >   static const struct inode_operations proc_sys_dir_operations;
-> > >   /* shared constants to be used in various sysctls */
-> > > -const int sysctl_vals[] =3D { -1, 0, 1, 2, 4, 100, 200, 1000, 3000, =
-INT_MAX };
-> > > +const int sysctl_vals[] =3D { -1, 0, 1, 2, 4, 100, 200, 1000, 65535,=
- INT_MAX };
-> >=20
-> > The new SYSCTL_MAXOLDUID uses the index 10 of sysctl_vals[] but the same
-> > commit replaces index 8 (SYSCTL_THREE_THOUSAND used by
-> > vm.watermark_scale_factor) instead of adding a new entry.
-> >=20
-> > It should be:
-> > +const int sysctl_vals[] =3D { -1, 0, 1, 2, 4, 100, 200, 1000, 3000, IN=
-T_MAX,
-> > 65535 };
->=20
-> Can you send a proper patch which properly fixes this and identifies
-> the commit name with a Fixes tag. Since thi sis on Andrew's tree no
-> commit ID is required given that they are ephemeral.
+FYI, the error/warning still remains.
 
-I did this:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   eec4df26e24e978e49ccf9bcf49ca0f2ccdaeffe
+commit: fd7bb4a251dfc1da3496bf59a4793937c13e8c1f RISC-V: KVM: Implement VMID allocator
+date:   3 months ago
+config: riscv-randconfig-r035-20211230 (https://download.01.org/0day-ci/archive/20211230/202112300843.UUqHyQYw-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project cd284b7ac0615afc6e0f1a30da2777e361de27a3)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fd7bb4a251dfc1da3496bf59a4793937c13e8c1f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout fd7bb4a251dfc1da3496bf59a4793937c13e8c1f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-From: Andrew Morton <akpm@linux-foundation.org>
-Subject: sysctl-move-maxolduid-as-a-sysctl-specific-const-fix
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-fix sysctl_vals[], per Micka=EBl.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-Cc: Micka=EBl Sala=FCn <mic@digikonet>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Antti Palosaari <crope@iki.fi>
-Cc: Eric Biederman <ebiederm@xmission.com>
-Cc: Iurii Zaikin <yzaikin@google.com>
-Cc: "J. Bruce Fields" <bfields@fieldses.org>
-Cc: Jeff Layton <jlayton@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Lukas Middendorf <kernel@tuxforce.de>
-Cc: Stephen Kitt <steve@sk2.org>
-Cc: Xiaoming Ni <nixiaoming@huawei.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+>> ERROR: modpost: "boot_cpu_hartid" [arch/riscv/kvm/kvm.ko] undefined!
+
 ---
-
- fs/proc/proc_sysctl.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/fs/proc/proc_sysctl.c~sysctl-move-maxolduid-as-a-sysctl-specific-cons=
-t-fix
-+++ a/fs/proc/proc_sysctl.c
-@@ -26,7 +26,7 @@ static const struct file_operations proc
- static const struct inode_operations proc_sys_dir_operations;
-=20
- /* shared constants to be used in various sysctls */
--const int sysctl_vals[] =3D { -1, 0, 1, 2, 4, 100, 200, 1000, 65535, INT_M=
-AX };
-+const int sysctl_vals[] =3D { -1, 0, 1, 2, 4, 100, 200, 1000, 3000, INT_MA=
-X, 65535 };
- EXPORT_SYMBOL(sysctl_vals);
-=20
- const unsigned long sysctl_long_vals[] =3D { 0, 1, LONG_MAX };
-_
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

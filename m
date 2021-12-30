@@ -2,165 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4340E4818F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 04:33:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE1A4818FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 04:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235271AbhL3Dde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 22:33:34 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:30374 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231751AbhL3Ddd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 22:33:33 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BU1gZjK032632;
-        Thu, 30 Dec 2021 03:33:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=OHLEHEuvQsUOBNtNyJQmOyXSioS+90Zvl0tvlsDoTU0=;
- b=RllvalWBpM0OEw9Lw53QcKM68/wy52D2UVTBHwewgtGPARokjxC0Nwha/kru19E40Cb6
- vk00AKqTu6RQxY+bD4iw+SXY+8jmdO4lkqfsXZVasVjPwNLXftLrE3osdrDe12BnSpR1
- pFWmV5+0ncOxZPWFHfJ7O/OlhGRhfTtO9eIiaw2wQtnY/QcsMbP7fn0TVqpf+9XPILjn
- XYlSSQ4/rT+7Ia66TM3DqWmR2DB8ZXwlmY1FotXxBxbZHbJ0KHsWO/NhDITFm422dEnC
- /xHd3mKiSbpq81c2F2YG2Pof4XZiAUZMIYd2PH4HxIaIm52qS4hHiJmnbdAEI1uTrbiN qA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3d84jm7rnx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Dec 2021 03:33:31 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BU3TAZp028118;
-        Thu, 30 Dec 2021 03:33:31 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3d84jm7rnm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Dec 2021 03:33:31 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BU3RmC2005025;
-        Thu, 30 Dec 2021 03:33:29 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma05fra.de.ibm.com with ESMTP id 3d5tx9f0c9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Dec 2021 03:33:29 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BU3XQuv45941026
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 Dec 2021 03:33:26 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EF2AC4C05C;
-        Thu, 30 Dec 2021 03:33:25 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4AF724C040;
-        Thu, 30 Dec 2021 03:33:25 +0000 (GMT)
-Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.80.242])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Thu, 30 Dec 2021 03:33:25 +0000 (GMT)
-Date:   Thu, 30 Dec 2021 04:33:22 +0100
-From:   Halil Pasic <pasic@linux.ibm.com>
-To:     Tony Krowiak <akrowiak@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, jjherne@linux.ibm.com, freude@linux.ibm.com,
-        borntraeger@de.ibm.com, cohuck@redhat.com, mjrosato@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com, Halil Pasic <pasic@linux.ibm.com>
-Subject: Re: [PATCH v17 08/15] s390/vfio-ap: keep track of active guests
-Message-ID: <20211230043322.2ba19bbd.pasic@linux.ibm.com>
-In-Reply-To: <20211021152332.70455-9-akrowiak@linux.ibm.com>
-References: <20211021152332.70455-1-akrowiak@linux.ibm.com>
-        <20211021152332.70455-9-akrowiak@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S235374AbhL3Dkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 22:40:36 -0500
+Received: from mga09.intel.com ([134.134.136.24]:11299 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229861AbhL3Dkf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 22:40:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640835635; x=1672371635;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=G9bhw6lK69v9UqzRrTa+rxQYOccgG+9CcWUhlVJGeoo=;
+  b=bCH7DM/P7X7uqmRo5q7HI8eVGPqXD21WnIZIe/le5LINPrLQBvctUKXo
+   xoIq4FyaI5KtDbSwsBpxMHOcKlj/i6KCX9VcFrwcZaEX0rKat5mlGXNPr
+   F9z9RYVL5UbrUpn+UcNqo2+A8PDunXOt/c4cRLEBBV4tdHmveXPtNEEsf
+   4ogFWCKkBepSBqYJp1Teu5+uIwj6y0OllOLOziEi4havNgwCjVQWoXKqE
+   IJ/qRx8IJwqX2NyoCpvC8XjRQnq+Gp7z8jfRj5rxXoHJM9aIYiE0N5mb0
+   68K5r6/PDCQgndS2bB3MASXRrW04jrjDHYZ9hW+kbRN5+CQa9nyUd4/WX
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="241410922"
+X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
+   d="scan'208";a="241410922"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 19:40:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
+   d="scan'208";a="470528513"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 29 Dec 2021 19:40:33 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n2mIr-0009hU-1j; Thu, 30 Dec 2021 03:40:33 +0000
+Date:   Thu, 30 Dec 2021 11:40:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Goldwyn Rodrigues <rgoldwyn@suse.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [goldwynr:iomap 4/33] fs/erofs/data.c:291:16: error: too few
+ arguments to function 'iomap_readpage'
+Message-ID: <202112301130.El4IhQ3g-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ZqUoopOEfZB5AT4ANfgbYC8bGqj_COhY
-X-Proofpoint-ORIG-GUID: 64LDbmE7XijYeAVbRy85Qnc3eVZAZjlw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-30_01,2021-12-29_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- suspectscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015 phishscore=0
- spamscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112300015
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Oct 2021 11:23:25 -0400
-Tony Krowiak <akrowiak@linux.ibm.com> wrote:
+tree:   https://github.com/goldwynr/linux iomap
+head:   30c74a8c201365178cae26d0d7aefa120c3245ab
+commit: 0a74a7494220c731edd0f327149f56a4da3419c4 [4/33] iomap: Introduce iomap_readpage_ops
+config: sparc64-buildonly-randconfig-r002-20211230 (https://download.01.org/0day-ci/archive/20211230/202112301130.El4IhQ3g-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/goldwynr/linux/commit/0a74a7494220c731edd0f327149f56a4da3419c4
+        git remote add goldwynr https://github.com/goldwynr/linux
+        git fetch --no-tags goldwynr iomap
+        git checkout 0a74a7494220c731edd0f327149f56a4da3419c4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc64 SHELL=/bin/bash fs/erofs/
 
-> The vfio_ap device driver registers for notification when the pointer to
-> the KVM object for a guest is set. Let's store the KVM pointer as well as
-> the pointer to the mediated device when the KVM pointer is set.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-[..]
+All errors (new ones prefixed by >>):
+
+   fs/erofs/data.c: In function 'erofs_readpage':
+>> fs/erofs/data.c:291:16: error: too few arguments to function 'iomap_readpage'
+     291 |         return iomap_readpage(page, &erofs_iomap_ops);
+         |                ^~~~~~~~~~~~~~
+   In file included from fs/erofs/internal.h:19,
+                    from fs/erofs/data.c:7:
+   include/linux/iomap.h:235:5: note: declared here
+     235 | int iomap_readpage(struct page *page, const struct iomap_ops *ops,
+         |     ^~~~~~~~~~~~~~
+   fs/erofs/data.c: In function 'erofs_readahead':
+>> fs/erofs/data.c:296:16: error: too few arguments to function 'iomap_readahead'
+     296 |         return iomap_readahead(rac, &erofs_iomap_ops);
+         |                ^~~~~~~~~~~~~~~
+   In file included from fs/erofs/internal.h:19,
+                    from fs/erofs/data.c:7:
+   include/linux/iomap.h:237:6: note: declared here
+     237 | void iomap_readahead(struct readahead_control *, const struct iomap_ops *ops,
+         |      ^~~~~~~~~~~~~~~
+   fs/erofs/data.c:296:16: error: 'return' with a value, in function returning void [-Werror=return-type]
+     296 |         return iomap_readahead(rac, &erofs_iomap_ops);
+         |                ^~~~~~~~~~~~~~~
+   fs/erofs/data.c:294:13: note: declared here
+     294 | static void erofs_readahead(struct readahead_control *rac)
+         |             ^~~~~~~~~~~~~~~
+   fs/erofs/data.c: In function 'erofs_readpage':
+   fs/erofs/data.c:292:1: error: control reaches end of non-void function [-Werror=return-type]
+     292 | }
+         | ^
+   cc1: some warnings being treated as errors
 
 
-> struct ap_matrix_dev {
->         ...
->         struct rw_semaphore guests_lock;
->         struct list_head guests;
->        ...
-> }
-> 
-> The 'guests_lock' field is a r/w semaphore to control access to the
-> 'guests' field. The 'guests' field is a list of ap_guest
-> structures containing the KVM and matrix_mdev pointers for each active
-> guest. An ap_guest structure will be stored into the list whenever the
-> vfio_ap device driver is notified that the KVM pointer has been set and
-> removed when notified that the KVM pointer has been cleared.
-> 
+vim +/iomap_readpage +291 fs/erofs/data.c
 
-Is this about the field or about the list including all the nodes? This
-reads lie guests_lock only protects the head element, which makes no
-sense to me. Because of how these lists work.
+eadcd6b5a1eb39 Gao Xiang 2021-08-13  284  
+771c994ea51f57 Gao Xiang 2021-08-05  285  /*
+771c994ea51f57 Gao Xiang 2021-08-05  286   * since we dont have write or truncate flows, so no inode
+771c994ea51f57 Gao Xiang 2021-08-05  287   * locking needs to be held at the moment.
+771c994ea51f57 Gao Xiang 2021-08-05  288   */
+771c994ea51f57 Gao Xiang 2021-08-05  289  static int erofs_readpage(struct file *file, struct page *page)
+771c994ea51f57 Gao Xiang 2021-08-05  290  {
+771c994ea51f57 Gao Xiang 2021-08-05 @291  	return iomap_readpage(page, &erofs_iomap_ops);
+771c994ea51f57 Gao Xiang 2021-08-05  292  }
+771c994ea51f57 Gao Xiang 2021-08-05  293  
+771c994ea51f57 Gao Xiang 2021-08-05  294  static void erofs_readahead(struct readahead_control *rac)
+771c994ea51f57 Gao Xiang 2021-08-05  295  {
+771c994ea51f57 Gao Xiang 2021-08-05 @296  	return iomap_readahead(rac, &erofs_iomap_ops);
+771c994ea51f57 Gao Xiang 2021-08-05  297  }
+771c994ea51f57 Gao Xiang 2021-08-05  298  
 
-The narrowest scope that could make sense is all the list_head stuff
-in the entire list. I.e. one would only need the lock to traverse or
-manipulate the list, while the payload would still be subject to
-the matrix_dev->lock mutex.
+:::::: The code at line 291 was first introduced by commit
+:::::: 771c994ea51f572539ca3961c6a7706862b147e2 erofs: convert all uncompressed cases to iomap
 
-[..]
+:::::: TO: Gao Xiang <hsiangkao@linux.alibaba.com>
+:::::: CC: Gao Xiang <hsiangkao@linux.alibaba.com>
 
-> +struct ap_guest {
-> +	struct kvm *kvm;
-> +	struct list_head node;
-> +};
-> +
->  /**
->   * struct ap_matrix_dev - Contains the data for the matrix device.
->   *
-> @@ -39,6 +44,9 @@
->   *		single ap_matrix_mdev device. It's quite coarse but we don't
->   *		expect much contention.
->   * @vfio_ap_drv: the vfio_ap device driver
-> + * @guests_lock: r/w semaphore for protecting access to @guests
-> + * @guests:	list of guests (struct ap_guest) using AP devices bound to the
-> + *		vfio_ap device driver.
-
-Please compare the above. Also if it is only about the access to the
-list, then you could drop the lock right after create, and not keep it
-till the very end of vfio_ap_mdev_set_kvm(). Right?
-
-In any case I'm skeptical about this whole struct ap_guest business. To
-me, it looks like something that just makes things more obscure and
-complicated without any real benefit.
-
-Regards,
-Halil
-
->   */
->  struct ap_matrix_dev {
->  	struct device device;
-> @@ -47,6 +55,8 @@ struct ap_matrix_dev {
->  	struct list_head mdev_list;
->  	struct mutex lock;
->  	struct ap_driver  *vfio_ap_drv;
-> +	struct rw_semaphore guests_lock;
-> +	struct list_head guests;
->  };
->  
->  extern struct ap_matrix_dev *matrix_dev;
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

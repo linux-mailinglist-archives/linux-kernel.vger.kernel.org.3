@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC68481AF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 10:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E42C481AFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 10:05:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238065AbhL3JFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 04:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
+        id S238093AbhL3JFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 04:05:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbhL3JFB (ORCPT
+        with ESMTP id S237961AbhL3JFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 04:05:01 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C1FC061574;
-        Thu, 30 Dec 2021 01:05:00 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id k27so39619796ljc.4;
-        Thu, 30 Dec 2021 01:05:00 -0800 (PST)
+        Thu, 30 Dec 2021 04:05:03 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A436EC06173E;
+        Thu, 30 Dec 2021 01:05:02 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id by39so39690396ljb.2;
+        Thu, 30 Dec 2021 01:05:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lmbFZL+w3ae5fA8Ekugn4kVFo17QFX/FP2wMDhmpXOY=;
-        b=fZ3Ev8jtzPAShYqCKYkyXWe3FmPDZnj7vyEXvF+vYDVGRaGPvO77jfdto7S1XqUswj
-         QcBtyL7Odns/FjPcn8i77XfX8uw3nXXOGgdqXjzNk3AGHTFy1eKQrBNNXtXOkeffgeZ1
-         c8W0gijcymflJTG3xsh5uzF7CxXxIttJODsgU9IWH2NtJOEHcEr0ijiCjDxkSp5wXfvh
-         l9qeaNv8Q9RtT2J02jglo9sUQbcmether37dSrKBTif8nLY2wQTPlFpMMKHtQMWtjsUw
-         53J06f4RK0v4LZzNhjOE/Pioen5R87IXCZOqs1saTiC2qdfMz3c3a7odQZAmwjgZFPaB
-         /LtA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qJD186S2XKoNzVu+mbYMaAb2EZdG5LnCBd09sDF2R4A=;
+        b=EjsU93qpYeMUtOLkHpD9TpRJWXawGtQX0ncW3Vln7DOBOb7pG/PC0LD5+gzmqz90S9
+         URcbwRjLdqjwJBaL7HSbo9/3PUQVOkDubtkcz9taFMWidue0KtRxqI0bUVGn6Hcl1jA9
+         8fT3ql0Ud0mZZ1WbfeEoZDHHPnoRC1JbUzLy6siGSjcHMeq1+VIaOXZV8n+j1yl41gk5
+         nb7aHBixuMDx8HxA7ttJaOKjLCnDcU2y64afbH2lwD1NJ7V93sDw+6RmMpvEaPd+t5BB
+         qolpaWTgW4ZJTiJEvqvUNUeUdNGnYH0sVJopNWS9yiG3K5KRahFhPoVkxs+Su6/gVOHN
+         j4HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lmbFZL+w3ae5fA8Ekugn4kVFo17QFX/FP2wMDhmpXOY=;
-        b=rqy2D1tmDqKSMn+uYC/PR4AVlnV7vtlVKXTL5w3ZTN+dGtFz2IlJEHKPh3HuO8Q1Lb
-         rPdJy1Mg9VBr3OpeAjK7DkSSSuCD0FrH+zqSMaRCKSgcAsH5IHLEObLDeIB3TobvtEwJ
-         GsrLhvPEoNRVsEHLn2Cwc41wPQu+wXs2zBeSyCBGynwQdYWyaQ3D9/XB13pvCYPxMzIu
-         Q63+VxcJaNiww7AwDMD1JQ6b8Bdvz96MS6Tjd0EouvUcFM1jNjZso1iM+B2BBlbx/cJ5
-         1kp2NAIofWaMxD0BljzK1TUHVxtX+ttgFeugwIoux7DS8B/HV1C0Vomk12w0iHOhZ4TZ
-         qutQ==
-X-Gm-Message-State: AOAM530GWasw8qE6g/tCYughzRgNEViFRw1GiVYScj8WEYo9z/DLAp22
-        Qocv6FEL3PudKJh/coXublk=
-X-Google-Smtp-Source: ABdhPJwaT7mr00o0HB88uX9XEw8ZrPCDI/+I5R7gN/sb04GsaTBMK3qqUB2tX4Pv9zVp4pLr/qvGMQ==
-X-Received: by 2002:a2e:1602:: with SMTP id w2mr26247986ljd.517.1640855099102;
-        Thu, 30 Dec 2021 01:04:59 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qJD186S2XKoNzVu+mbYMaAb2EZdG5LnCBd09sDF2R4A=;
+        b=dbFTIXR9Y3B5dKb7u9m8di+HyJDmC+9rfbSVfDoPWdgGOHJmJkmlX+S7C1zw3pW5xU
+         hUQORt8qCww2LX6y5yU+dInAk+E4ZP4kFWuIHBHDQowMZNHWHxev0oIlo6O5KetbXWmN
+         /ZOv26fSIjZlmNu1DR9DCCnwHcXWsO9HIZT/7a+7dikpS/uwJvYppFv6gGQcPXDc1bpn
+         w3K38ooFlgZSf3IkX5cjzLicLhHZjHZe0U12RHBBXjp9BhgnuD6cgRjpzQ6EZ3naXNKL
+         72N4q2X+Vyt80TUTtZaa7I6T3+bbppuLDk/RKehHrod4Be3k+v37B89RAz3To+uFPuF5
+         mvRA==
+X-Gm-Message-State: AOAM530GUoY2W5Cfvn3G1N6K/jnzaaCKwg9GTDA4M4HRkxQQ2Exqlff/
+        /9Ysa8mcL9gpEwOtyi56oqE=
+X-Google-Smtp-Source: ABdhPJyMA2lF2DxYBvC1Nmxh8j3AMK1fbdok3UDzKj9earMnqtEk+Y1E7m/n3LlrJwGuzNL4/pGq8g==
+X-Received: by 2002:a2e:9901:: with SMTP id v1mr26250906lji.61.1640855100917;
+        Thu, 30 Dec 2021 01:05:00 -0800 (PST)
 Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id d5sm2440007lfl.242.2021.12.30.01.04.57
+        by smtp.gmail.com with ESMTPSA id d5sm2440007lfl.242.2021.12.30.01.04.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 01:04:58 -0800 (PST)
+        Thu, 30 Dec 2021 01:05:00 -0800 (PST)
 From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -57,10 +57,12 @@ To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mtd@lists.infradead.org,
         =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V2 1/3] mtd: core: call devm_of_platform_populate() for MTD devices
-Date:   Thu, 30 Dec 2021 10:04:47 +0100
-Message-Id: <20211230090449.11808-1-zajec5@gmail.com>
+Subject: [PATCH V2 2/3] dt-bindings: nvmem: add U-Boot environment variables binding
+Date:   Thu, 30 Dec 2021 10:04:48 +0100
+Message-Id: <20211230090449.11808-2-zajec5@gmail.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20211230090449.11808-1-zajec5@gmail.com>
+References: <20211230090449.11808-1-zajec5@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -70,42 +72,98 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rafał Miłecki <rafal@milecki.pl>
 
-This adds support for bindings present in MTD devices (applies to
-partitions too) nodes. The purpose of this change is to allow drivers
-handle MTD device (partition) data. Some partitions may contain info
-that requires parsing & processing.
-
-An example can be U-Boot partition that contains block with environment
-variables somehwere in a middle. That block should be described in DT
-and parsed by a specific driver.
+This binding allows describing a (part of) MTD device (partition) that
+contains a block with environment variables. Operating system usually
+needs to parse that block to read variables values that may affect
+booting process & device configuration.
 
 Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 ---
- drivers/mtd/mtdcore.c | 4 ++++
- 1 file changed, 4 insertions(+)
+V2: s/u,boot/u-boot/
+---
+ .../devicetree/bindings/nvmem/u-boot,env.yaml | 56 +++++++++++++++++++
+ MAINTAINERS                                   |  5 ++
+ 2 files changed, 61 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
 
-diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
-index 70f492dce158..07b75e6ca111 100644
---- a/drivers/mtd/mtdcore.c
-+++ b/drivers/mtd/mtdcore.c
-@@ -19,6 +19,7 @@
- #include <linux/ioctl.h>
- #include <linux/init.h>
- #include <linux/of.h>
-+#include <linux/of_platform.h>
- #include <linux/proc_fs.h>
- #include <linux/idr.h>
- #include <linux/backing-dev.h>
-@@ -690,6 +691,9 @@ int add_mtd_device(struct mtd_info *mtd)
- 		not->add(mtd);
+diff --git a/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
+new file mode 100644
+index 000000000000..e3296e005ffd
+--- /dev/null
++++ b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
+@@ -0,0 +1,56 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/nvmem/u-boot,env.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: U-Boot environment variables
++
++description: |
++  U-Boot uses environment variables to store device parameters and
++  configuration. They may be used for booting process, setup or keeping end user
++  interesting info.
++
++  Data is stored on flash partition in a U-Boot specific format (CRC32 and NUL
++  separated key-value pairs).
++
++  This binding allows specifying data location and format (default one or vendor
++  specific).
++
++maintainers:
++  - Rafał Miłecki <rafal@milecki.pl>
++
++allOf:
++  - $ref: nvmem.yaml#
++
++properties:
++  compatible:
++    enum:
++      - u-boot,env
++      - brcm,env
++
++  reg:
++    maxItems: 1
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    partitions {
++        compatible = "fixed-partitions";
++        #address-cells = <1>;
++        #size-cells = <1>;
++
++        partition@0 {
++            label = "uboot";
++            reg = <0x0 0x100000>;
++
++            #address-cells = <1>;
++            #size-cells = <1>;
++
++            nvmem@10000 {
++                compatible = "u-boot,env";
++                reg = <0x10000 0x10000>;
++            };
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 67558097bb66..271c29c84c7d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19624,6 +19624,11 @@ W:	http://linuxtv.org
+ T:	git git://linuxtv.org/media_tree.git
+ F:	drivers/media/pci/tw686x/
  
- 	mutex_unlock(&mtd_table_mutex);
++U-BOOT ENVIRONMENT VARIABLES
++M:	Rafał Miłecki <rafal@milecki.pl>
++S:	Maintained
++F:	Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
 +
-+	devm_of_platform_populate(&mtd->dev);
-+
- 	/* We _know_ we aren't being removed, because
- 	   our caller is still holding us here. So none
- 	   of this try_ nonsense, and no bitching about it
+ UACCE ACCELERATOR FRAMEWORK
+ M:	Zhangfei Gao <zhangfei.gao@linaro.org>
+ M:	Zhou Wang <wangzhou1@hisilicon.com>
 -- 
 2.31.1
 

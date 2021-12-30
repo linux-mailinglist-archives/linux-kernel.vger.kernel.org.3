@@ -2,93 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61483481A96
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 09:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9229481A9F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 09:03:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237270AbhL3IAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 03:00:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
+        id S237306AbhL3ID3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 03:03:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbhL3IAn (ORCPT
+        with ESMTP id S231345AbhL3ID2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 03:00:43 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD26CC061574;
-        Thu, 30 Dec 2021 00:00:42 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id r5so20840472pgi.6;
-        Thu, 30 Dec 2021 00:00:42 -0800 (PST)
+        Thu, 30 Dec 2021 03:03:28 -0500
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F147C061574;
+        Thu, 30 Dec 2021 00:03:28 -0800 (PST)
+Received: by mail-pj1-x1043.google.com with SMTP id a11-20020a17090a854b00b001b11aae38d6so22448456pjw.2;
+        Thu, 30 Dec 2021 00:03:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=4uA7esXhcDSHJbZ7Mjo7PojXGD+W2Pww5KfPM/kIPPM=;
-        b=ahUsvOxb+3Za/20OSG9KaukpQMgGmhNZR8IHwPHqa+ugUa7cUKcyWNLPF/XmVTPv00
-         9LOfQcIuBZqOMrG7kLrrFQ86jwh3RoYtpfQsniAZSZ8C/ZWDxho8jl4KhI7vnJih12rE
-         U4jYEpWyuSIyCEQrlAON8IhTxF24J6AsW8Y3aX3mI9lFr+f64Dm98jyffPUCkfPIIa7b
-         jFe54gltc/jdGoUn8xvjn5vxTbWQItlGJBGOck+rSDvYSm4IE1rd03JSrctKzSgUHsYK
-         A5/BN4QXrIkdEq7Vhm8FgvulwwkO//R+zgyVYmHyjrOc+I9Rzhh6+844rnc/ogxVeK67
-         0nhw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Bw8QPyeMNO0bT9eJ6U67Ytz/lRIpuevXgnltLrWQ09A=;
+        b=qJDEbmOdqd0Usp82bPsUMAjRiBYW1kS7js4TrkkWUqYEUE89Mn5syio4yqk3cS2cqY
+         Nps7Z7ha5A5V0/bSMxpzHFGot1BSA0F5yQOlnFEzy16Klcl7LoC/TgX4Lc2GlKdQzAdb
+         q3wgmpArR+KsSkBQE2DWjFcAq2aRt5ypLBJPa/VgGu8hMvmycnH4pxwbKQlMQc6VzwxN
+         WThlqKDl6fmH719Z/lQls5ffvMHd5TqZmwfR1MiQEaNgMPhKI8POEkQp4GnewBAw/93R
+         ZQzOfOoPdy80E7+Vhy7DlS4CFyAzQoLMbuTFmQTchbtGdvwdOvBDSAt5Gwy0j0fQAnMD
+         /pNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=4uA7esXhcDSHJbZ7Mjo7PojXGD+W2Pww5KfPM/kIPPM=;
-        b=ybiAW/uNqfVFAehVVwVDZdjDPWerVxDyWanzE8DmEWQ6W5kIOhmdo192Gb3bbs4rsk
-         PuvIfWvRaxI8qG0FW5Ksb4VlO23ytIORRevWcOHG9aZI+V4fGDKedu7QCfvIx8SqqaUN
-         av7AL7gVUcSyMpjmI9jevRaW+Gi82/YOZDCjK2uB6FI4YoFLNtBfkwMtAch3N5rfWohQ
-         uAyqvZu5KJx2wmHhIZd3ntkiTDgE0V39cx4d4JNixllHr3GGfcufQScQBr4JzuhV9beG
-         X4FDF+HFmHcibG26QibTPJqMY6a9zpvnLI3MsctBExxfilcnOijV5yqNLX4pKg1EAxYP
-         pasg==
-X-Gm-Message-State: AOAM532HpmYYiyNLJ0bbaWGfv3cJeHCw37OcUwndsYQ0OUeL6cpEimPs
-        c46wRzh9Tfc6URe+fZBUT1huYHTXhXfbNoynS5g=
-X-Google-Smtp-Source: ABdhPJx760XrjH+HZrZC2Z2gnCQ76KWUvwcQX+asvmcEtoedQg1YwqeLV6jhb+13GWRJXgZUZos6vw==
-X-Received: by 2002:a63:62c6:: with SMTP id w189mr25916919pgb.343.1640851242351;
-        Thu, 30 Dec 2021 00:00:42 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id k23sm4051598pji.3.2021.12.30.00.00.39
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Bw8QPyeMNO0bT9eJ6U67Ytz/lRIpuevXgnltLrWQ09A=;
+        b=ia8F6KqLZM5vB3AdD/23hulSESArmstl/WTVGG6c4SxVV30dRxB4b/E26bwy0nbssW
+         X8eno7ejY8UywkTcrDGGCF+2j7XH7TZyzuNi+MKP9+B7AcOHzZL5TqZXx2SuPYASt5VY
+         WxURBjEuQ6x6RSGQJ3z5rIfVltSIDFUKEKMZaVNKy2JsRkGnxj1CHCUovp5zO90Pekfe
+         17ncUbgbozH6HG0tMmXEfzRC8DCEMUYe3rfT0ykVXn8ufCpeQ8X1eVtmnGjxYfD/Y+GB
+         rrJ59dEx7lfR3w49npAeAysj+bEYqOaJzXmp4938ZKHOgq2gedLkOcOQQM/V6sNnzi5T
+         eojA==
+X-Gm-Message-State: AOAM5317VIF8BTJ2LSVZ/Bd11pofrk0sVQMr6b3BI2+FUUa5nR1jbyHW
+        w6PnpCDmtR1AIN1ctpvwnQI=
+X-Google-Smtp-Source: ABdhPJzHWc1941Wuram8IQMOmxvPuxtOruQV3EE9d6RBVEi8+69k158wpZ97bUn+WpR1VFNxuJroIw==
+X-Received: by 2002:a17:90b:88e:: with SMTP id bj14mr36598592pjb.183.1640851408069;
+        Thu, 30 Dec 2021 00:03:28 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.9])
+        by smtp.gmail.com with ESMTPSA id 13sm26606987pfm.161.2021.12.30.00.03.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 00:00:42 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, JC Kuo <jckuo@nvidia.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] phy: tegra: xusb: Fix missing put_device() in tegra210_xusb_padctl_probe
-Date:   Thu, 30 Dec 2021 08:00:31 +0000
-Message-Id: <20211230080031.26952-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        Thu, 30 Dec 2021 00:03:27 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     kuba@kernel.org
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        edumazet@google.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH v2 net-next 0/2] net: bpf: handle return value of post_bind{4,6} and add selftests for it
+Date:   Thu, 30 Dec 2021 16:03:03 +0800
+Message-Id: <20211230080305.1068950-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If of_find_device_by_node() succeeds, tegra210_xusb_padctl_probe()
-doesn't have a corresponding put_device(). Thus add put_device() to
-fix the exception handling.
+From: Menglong Dong <imagedong@tencent.com>
 
-Fixes: 2d10214 ("phy: tegra: xusb: Add wake/sleepwalk for Tegra210")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/phy/tegra/xusb-tegra210.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+The return value of BPF_CGROUP_RUN_PROG_INET{4,6}_POST_BIND() in
+__inet_bind() is not handled properly. While the return value
+is non-zero, it will set inet_saddr and inet_rcv_saddr to 0 and
+exit:
+exit:
 
-diff --git a/drivers/phy/tegra/xusb-tegra210.c b/drivers/phy/tegra/xusb-tegra210.c
-index eedfc7c2cc05..05a0800af0e8 100644
---- a/drivers/phy/tegra/xusb-tegra210.c
-+++ b/drivers/phy/tegra/xusb-tegra210.c
-@@ -3170,8 +3170,10 @@ tegra210_xusb_padctl_probe(struct device *dev,
- 		goto out;
- 	}
- 
--	if (!platform_get_drvdata(pdev))
-+	if (!platform_get_drvdata(pdev)) {
-+		put_device(&pdev->dev);
- 		return ERR_PTR(-EPROBE_DEFER);
-+	}
- 
- 	padctl->regmap = dev_get_regmap(&pdev->dev, "usb_sleepwalk");
- 	if (!padctl->regmap)
+        err = BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk);
+        if (err) {
+                inet->inet_saddr = inet->inet_rcv_saddr = 0;
+                goto out_release_sock;
+        }
+
+Let's take UDP for example and see what will happen. For UDP
+socket, it will be added to 'udp_prot.h.udp_table->hash' and
+'udp_prot.h.udp_table->hash2' after the sk->sk_prot->get_port()
+called success. If 'inet->inet_rcv_saddr' is specified here,
+then 'sk' will be in the 'hslot2' of 'hash2' that it don't belong
+to (because inet_saddr is changed to 0), and UDP packet received
+will not be passed to this sock. If 'inet->inet_rcv_saddr' is not
+specified here, the sock will work fine, as it can receive packet
+properly, which is wired, as the 'bind()' is already failed.
+
+To undo the get_port() operation, introduce the 'put_port' field
+for 'struct proto'. For TCP proto, it is inet_put_port(); For UDP
+proto, it is udp_lib_unhash(); For icmp proto, it is
+ping_unhash().
+
+Therefore, after sys_bind() fail caused by
+BPF_CGROUP_RUN_PROG_INET4_POST_BIND(), it will be unbinded, which
+means that it can try to be binded to another port.
+
+The second patch is the selftests for this modification.
+
+Changes since v1:
+- introduce 'put_port' field for 'struct proto'
+- add selftests for it
+
+
+Menglong Dong (2):
+  net: bpf: handle return value of 
+    BPF_CGROUP_RUN_PROG_INET{4,6}_POST_BIND()
+  bpf: selftests: add bind retry for post_bind{4, 6}
+
+ include/net/sock.h                      |   1 +
+ net/ipv4/af_inet.c                      |   2 +
+ net/ipv4/ping.c                         |   1 +
+ net/ipv4/tcp_ipv4.c                     |   1 +
+ net/ipv4/udp.c                          |   1 +
+ net/ipv6/af_inet6.c                     |   2 +
+ net/ipv6/ping.c                         |   1 +
+ net/ipv6/tcp_ipv6.c                     |   1 +
+ net/ipv6/udp.c                          |   1 +
+ tools/testing/selftests/bpf/test_sock.c | 166 +++++++++++++++++++++---
+ 10 files changed, 157 insertions(+), 20 deletions(-)
+
 -- 
-2.17.1
+2.27.0
 

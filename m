@@ -2,146 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DCFA4818D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 04:09:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D194818DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 04:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235149AbhL3DJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 22:09:18 -0500
-Received: from mga09.intel.com ([134.134.136.24]:50521 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231751AbhL3DJR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 22:09:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640833757; x=1672369757;
-  h=cc:subject:to:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=tZZPHf2DyOK7p1G3x3mXivjDw99X+Vp50x10gR49ETg=;
-  b=NEUoU+YpHGQLmjw0B4D0Ar3KloLrfHZ8CgY4/TEbRKmhDcv+2z4NIiZE
-   SYGNO9X6oiTj4AfmGphBTFEObVI7pz6Z2teM+Q5bZ0w0jCxVPtDU0sspo
-   0Cz68yVPeb6btosLB82OpOJJhyA+w6+O6NaJ0qtU/rVyMWx+ZOiDQ+RHp
-   tUBYBkJY7PQFZkhrUz50NAShZE9PDyDI/IkGpixATao883wCanWgbdu9t
-   +LqnGckF1QG/CS0nVvBeSQaGu5PtN2rb6xTJMpyt881t6BT6ii7fpd2CE
-   CjCqF+TpivH9+GxclItiN7w123tT+aggaO5XvqgGXWDA5XyTW006m4IMC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="241408063"
-X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
-   d="scan'208";a="241408063"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 19:09:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
-   d="scan'208";a="524229955"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga008.jf.intel.com with ESMTP; 29 Dec 2021 19:09:14 -0800
-Cc:     baolu.lu@linux.intel.com, "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kay Sievers <kay.sievers@novell.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/1] driver core: Fix driver_sysfs_remove() order in
- really_probe()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20211229045159.1731943-1-baolu.lu@linux.intel.com>
- <YcwyyXuqJ3QVevYW@kroah.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <5d844360-60f1-731a-257f-ec6b0c6b1c4b@linux.intel.com>
-Date:   Thu, 30 Dec 2021 11:08:43 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <YcwyyXuqJ3QVevYW@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S235173AbhL3DLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 22:11:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231751AbhL3DLh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 22:11:37 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FECC061574;
+        Wed, 29 Dec 2021 19:11:37 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id rj2-20020a17090b3e8200b001b1944bad25so21880449pjb.5;
+        Wed, 29 Dec 2021 19:11:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:date:subject:from:to:cc:message-id:thread-topic
+         :mime-version:content-transfer-encoding;
+        bh=7Nem74KuuHseAPVfu0c2z21Jh9upLuJ739RMkcYrDuI=;
+        b=m1hlT5NXkg7Q8ztFBHfeXU+BIUXPLiEbuQSEpD+tQKsyAQVw+hONr8MBie7VxG7NTw
+         sliMIIank2mko3YrM3o6xy1JjX4x3c8wtHO/UK7FYVwsXMs48N4pvQorj4dHKdMNcLX7
+         x+NtUr5b5+fQfeGV54CigUj0QXIwmjAIMmERox858v9L+TSLPfhQ1ikWQUsnEVHS1b2q
+         XbX2CvUVYLMLxOv8HXO+LOAXraPBQNM7uWqc4AZewDSsvlZGlGJbClme1nz0VVRAtccp
+         WWxE8YVrBAnSLm5hUUnceIDP4Jo43Xr6ZW6kT+UKiXmBo9tFrxcyILYcPUClz893GZmd
+         B8Tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:user-agent:date:subject:from:to:cc:message-id
+         :thread-topic:mime-version:content-transfer-encoding;
+        bh=7Nem74KuuHseAPVfu0c2z21Jh9upLuJ739RMkcYrDuI=;
+        b=KfPK3BXD2hhiXl51KO8ayVfMXnPWxg9Q8tPaL5uFapVrCfMuffiZfesr3JM7BgNppw
+         80iKscPQ+FnOPsm0LgR4wY0P7VY5pRBW2YWRn8kxt57Pqnw6JsZ9KJgvKSPxJb8vAysE
+         n1vO2wlZt0bjJJqBwJAAuXho2WnK45lrK5wPwMWgWA3k/mtgmh4nCCnAj8yLtnekE390
+         O6Lk6ev0hxrVSnA4ECu0ZDU2ellfdYVuWMuGffCpYhtO0jK3IKRhfHRk7tRwTRCHKVK8
+         g4KbZonG4tidX+kiMQ57sGXQZkxGSDlKPgc+j6cnNK1qHkP5VAIVZiP6R1vT+lRrF0VH
+         dIWQ==
+X-Gm-Message-State: AOAM531JeS0ctrAHO/gq/J5GVlrNWkUSLRFZ6kQcO4jIqTabUWckeVz6
+        yENWmuHxSsRSIAJE8ymOd3XX8lvi1HZ8jghq
+X-Google-Smtp-Source: ABdhPJy7nO/NEQDTzk7fINXBvC7u0Bl4YumSta1Nsck7xoPQgGu87mRm4OevzDtWH7jmTe+apLttkg==
+X-Received: by 2002:a17:902:a404:b0:148:b897:c658 with SMTP id p4-20020a170902a40400b00148b897c658mr29322287plq.71.1640833896223;
+        Wed, 29 Dec 2021 19:11:36 -0800 (PST)
+Received: from [30.135.82.251] ([23.98.35.75])
+        by smtp.gmail.com with ESMTPSA id b21sm23720026pfv.74.2021.12.29.19.11.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 29 Dec 2021 19:11:35 -0800 (PST)
+User-Agent: Microsoft-MacOutlook/16.56.21121100
+Date:   Thu, 30 Dec 2021 11:11:33 +0800
+Subject: Missing closing files in linux/scripts/kconfig/confdata.c
+From:   Ryan Cai <ycaibb@gmail.com>
+To:     <masahiroy@kernel.org>
+CC:     <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Message-ID: <1B559478-D266-4D77-B9D5-F6F21D9EFB83@gmail.com>
+Thread-Topic: Missing closing files in linux/scripts/kconfig/confdata.c
+Mime-version: 1.0
+Content-type: text/plain;
+        charset="UTF-8"
+Content-transfer-encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Dear Kernel maintainers,
 
-On 12/29/21 6:04 PM, Greg Kroah-Hartman wrote:
-> On Wed, Dec 29, 2021 at 12:51:59PM +0800, Lu Baolu wrote:
->> The driver_sysfs_remove() should always be called after successful
->> driver_sysfs_add(). Otherwise, NULL pointers will be passed to the
->> sysfs_remove_link(), where it is decoded as searching sysfs root.
-> 
-> What null pointer is being sent to sysfs_remove_link()?  For which link?
+          1. In linux/scripts/kconfig/confdata.c (conf_write_autoconf_cmd), the file opened at Line 946 may not closed when going to Line 981.
+          Location: https://github.com/torvalds/linux/blob/e851dfae4371d3c751f1e18e8eb5eba993de1467/scripts/kconfig/confdata.c#L964-L981
+         
+         2. In linux/scripts/kconfig/confdata.c (__conf_write_autoconf), the file opened at Line1081 may not closed when going to Line 1095,
+           Location: https://github.com/torvalds/linux/blob/e851dfae4371d3c751f1e18e8eb5eba993de1467/scripts/kconfig/confdata.c#L1081-L1095
 
-Oh, my fault. Thank you for pointing this out.
+           I think, the fix is inserting fclose before the returning. Should it be a bug? I can send a patch for these.
 
-The device and driver sysfs nodes have already been created, so there's
-no null pointers. The out-of-order call of driver_sysfs_remove() just
-tries to remove some nonexistent nodes under the device and driver sysfs
-nodes. It is allowed by the sysfs layer.
 
-> 
-> How are you triggering this failure path and how was it tested?
+Best,
+Ryan
 
-I hacked the a driver to return failure in dma_configure() callback. I
-didn't see any failure. But I mistakenly thought that
-driver_sysfs_remove() could possibly delete some sysfs entries by
-mistake. That's not true. Sorry for the noise.
 
-> 
->>
->> Fixes: 1901fb2604fbc ("Driver core: fix "driver" symlink timing")
->> Cc: stable@vger.kernel.org
-
-This patch only improves the readability of really_probe() and it does
-not fix any bugs. I will remove above tags and resent a version if you
-think this improvement is valuable.
-
->> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->> ---
->>   drivers/base/dd.c | 7 ++++---
->>   1 file changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
->> index 68ea1f949daa..9eaaff2f556c 100644
->> --- a/drivers/base/dd.c
->> +++ b/drivers/base/dd.c
->> @@ -577,14 +577,14 @@ static int really_probe(struct device *dev, struct device_driver *drv)
->>   	if (dev->bus->dma_configure) {
->>   		ret = dev->bus->dma_configure(dev);
->>   		if (ret)
->> -			goto probe_failed;
->> +			goto pinctrl_bind_failed;
-> 
-> Why not call the notifier chain here?  Did you verify that this change
-> still works properly?
-
-The BUS_NOTIFY_DRIVER_NOT_BOUND event is listened in two places in the
-tree.
-
-$ git grep BUS_NOTIFY_DRIVER_NOT_BOUND -- :^drivers/base/dd.c :^include
-drivers/acpi/acpi_lpss.c:       case BUS_NOTIFY_DRIVER_NOT_BOUND:
-drivers/base/power/clock_ops.c: case BUS_NOTIFY_DRIVER_NOT_BOUND:
-
-The usage pattern is setting up something in BUS_NOTIFY_BIND_DRIVER and
-doing the cleanup in BUS_NOTIFY_DRIVER_NOT_BOUND or
-BUS_NOTIFY_UNBIND_DRIVER. The right order of these events should be
-
-  [failure case]
-  - BUS_NOTIFY_BIND_DRIVER: driver is about to be bound
-  - BUS_NOTIFY_DRIVER_NOT_BOUND: driver failed to be bound
-
-or
-
-  [successful case]
-  - BUS_NOTIFY_BIND_DRIVER: driver is about to be bound
-  - BUS_NOTIFY_BOUND_DRIVER: driver bound to device
-  - BUS_NOTIFY_UNBIND_DRIVER: driver is about to be unbound
-  - BUS_NOTIFY_UNBOUND_DRIVER: driver is unbound from the device
-
-Without above change, when dma_configure() returns failure, the listener 
-could get a BUS_NOTIFY_DRIVER_NOT_BOUND without BUS_NOTIFY_BIND_DRIVER.
-
-Please guide me if my understanding is wrong.
-
-> 
-> thanks,
-> 
-> greg k-h
-> 
-
-Best regards,
-baolu

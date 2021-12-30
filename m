@@ -2,292 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8F9481D21
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 15:34:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C60F2481D2B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 15:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240339AbhL3Oet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 09:34:49 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:34805 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236320AbhL3Oes (ORCPT
+        id S235784AbhL3OjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 09:39:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235595AbhL3OjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 09:34:48 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 8EDFE58022D;
-        Thu, 30 Dec 2021 09:34:47 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 30 Dec 2021 09:34:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=yzlgB8
-        XIOvQXiHtWWQJs75kHAHk6VoEHY/ppAUEJ+o8=; b=g/Vw3DIK2mDMn9+0umfE0p
-        UkvdAzZl6NGoFtihiBo825vbM50CPaiX6dlHVbFFk9gLwaVviNgJekLWZmrGJuXo
-        uneE269GyNISGDgpGD8HrncaYyqWz4+O+rPrlOeFHac0zPtbfee/nmD7xMf5iMSC
-        8jg44a9NkjU6edhGzv3v41iMIrTICU/CXSrsXY+wTePINj3NfnAh79JM1pvwtDfp
-        SQuXo6YzHBMoexXYjbSJieIsXmUXccZyTX6e33o1BpL6IvkVQvZneovBkTcdpMe3
-        1NXu9jkgQJOoPYwAZEWyXLgEdDtN5wLxO+hd/mDs+dc4N3UWSCLNga8XNLVKwsDA
-        ==
-X-ME-Sender: <xms:h8PNYSZkfED9gPpLp3m7BtiiS3Ia93OnzcU3I1mey5FE54teNLyqlQ>
-    <xme:h8PNYVbk7sWS-i_D2q_zGTSpEGz4buI2RAjmqE74Aus5rMh3mDLlITezLR5E-eTTR
-    VMFVOZfp7xDIoc>
-X-ME-Received: <xmr:h8PNYc_UhPIBO72fCM13a8ojyTB0l9BFwPXV-gyHtnbLxu2o6lE5XQH-rBLIQ7E0ghh3tL8sjNqZ4f0ZZrZwrYDzqHQECg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddruddvfedgieejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
-    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
-    gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
-    teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
-    hoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:h8PNYUoCeI8snbNt6KAFYuljT2KuRkPA3FtOVJpfKUHRxjdqLdlZMA>
-    <xmx:h8PNYdo5o2zgWMhciV2vtDLjyWAVzXdD9kdlU7eAZXYhnG6IPIDCnQ>
-    <xmx:h8PNYSQaWMl6sn1RY84A0vlXwHpsmocOhnBiix1ZhmOzRKv7ANGV5A>
-    <xmx:h8PNYaj2E2MjHWo6nKvcTlJApfV2k1_drrBchKp94qwUM1A1jv5qzA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 30 Dec 2021 09:34:46 -0500 (EST)
-Date:   Thu, 30 Dec 2021 16:34:42 +0200
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Yevhen Orlov <yevhen.orlov@plvision.eu>
-Cc:     netdev@vger.kernel.org, stephen@networkplumber.org, andrew@lunn.ch,
-        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
-        Taras Chornyi <taras.chornyi@plvision.eu>,
-        Mickey Rachamim <mickeyr@marvell.com>,
-        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 5/6] net: marvell: prestera: Register
- inetaddr stub notifiers
-Message-ID: <Yc3DgqvTqHANUQcp@shredder>
-References: <20211227215233.31220-1-yevhen.orlov@plvision.eu>
- <20211227215233.31220-6-yevhen.orlov@plvision.eu>
+        Thu, 30 Dec 2021 09:39:18 -0500
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA6BC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 06:39:18 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id q3so22236134qvc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 06:39:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=G0B9RCzYTD5p5QYT/V6idHkZvememEkC25wsfErG3Ys=;
+        b=ZeLySVdogZXugMYqE4tZOvYTjbsjphmOmPFIhHojmX/Hsw2sAevJXjRe00nHfUnOAx
+         SAePQ5LAMAeBmocn6SAs69pAbRCHqqc3iW6NLtqfpmumqX4VylShxE3qyxzkVK/XXpt3
+         2kQAFai5AZs2SuJSteKEODk2NRQFEbR6kk5f75qT3IV/QUo7VU5ekErY0J8cSlgVTEAq
+         tngnIP7L5xhop3NmyQw7lDYA47qI4J7Tx6Vvxr5S/y3aranndryf8SZy3cFo+G24j++9
+         aBhxvAyUCo6hT/J7NYFZRw6BwtqFgpaKpgZZZs961xP/51Qv4kDLVZYslbQ1Djagzgu7
+         I9LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=G0B9RCzYTD5p5QYT/V6idHkZvememEkC25wsfErG3Ys=;
+        b=DEHSZbkMR1qL9lJ9rNrB1f/4BnF5oZunWmIxC/avpxRYsZyWPfm92aXWjuTmTUPUAJ
+         UBi8f3mI2UBbI0WyniywO++NVMDLHYZ9qr0EuWHuEQM55l2BvTZR0yYRZlJliQ4DmLpA
+         dm32XPV6Tk88tYcxUYfizdzNVl7MqIMa+GWdLk4bi1wAashmIThdDpF5SYyf8v+4a0fQ
+         tB1r54fCaE7rc3e5N4Xl2AX9Ot/6JE/BVZde2VMTSlpVXkg0CYkidnUIzHhMmvF3c/Rx
+         pYxOpT7nNs3S2yZME9GSUuUW+Z3u79bOvewP5gK5C1sE9J5BBuiLztuooVOTviXVjsc3
+         9MVA==
+X-Gm-Message-State: AOAM5302pS2p6dMCzCrfZrkVxI0btysicr//IRs0YUJznrhwD0rGhON0
+        zOGATwX6+deTE/bJWH70EBdCUIuJPSTEiPyzDzG4yQ==
+X-Google-Smtp-Source: ABdhPJwwGDcVnGl/rkCsQT7nRVuS09hT+IJhFcHTY6DImK7HfIYdQbWUMXAtzghjJ8gL6UfuN0ko5SYUzK2ZW3aFLeo=
+X-Received: by 2002:a05:6214:226e:: with SMTP id gs14mr28958130qvb.119.1640875157181;
+ Thu, 30 Dec 2021 06:39:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227215233.31220-6-yevhen.orlov@plvision.eu>
+References: <1640856276-14697-1-git-send-email-quic_rajeevny@quicinc.com> <1640856276-14697-3-git-send-email-quic_rajeevny@quicinc.com>
+In-Reply-To: <1640856276-14697-3-git-send-email-quic_rajeevny@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 30 Dec 2021 17:39:06 +0300
+Message-ID: <CAA8EJprqQGnAcO5Jo6q9PfcJaVoNsZmx3ZiUU8eNBX4w2YS32w@mail.gmail.com>
+Subject: Re: [v1 2/2] drm/msm/dsi: Add 10nm dsi phy tuning configuration support
+To:     Rajeev Nandan <quic_rajeevny@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sean@poorly.run, robdclark@gmail.com,
+        robh+dt@kernel.org, robh@kernel.org, quic_abhinavk@quicinc.com,
+        quic_kalyant@quicinc.com, quic_mkrishn@quicinc.com,
+        jonathan@marek.ca, airlied@linux.ie, daniel@ffwll.ch,
+        swboyd@chromium.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 11:52:30PM +0200, Yevhen Orlov wrote:
-> Initial implementation of notification handlers. For now this is just
-> stub.
-> So that we can move forward and add prestera_router_hw's objects
-> manipulations.
-> 
-> We support several addresses on interface. We just have nothing to do for
-> second address, because rif is already enabled on this interface, after
-> first one.
-> 
-> Co-developed-by: Taras Chornyi <tchornyi@marvell.com>
-> Signed-off-by: Taras Chornyi <tchornyi@marvell.com>
-> Co-developed-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
-> Signed-off-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
-> Signed-off-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
+On Thu, 30 Dec 2021 at 12:25, Rajeev Nandan <quic_rajeevny@quicinc.com> wrote:
+>
+> In most cases the default values of DSI PHY tuning registers
+> should be sufficient as they are fully optimized. However, in
+> some cases (for example, where extreme board parasitics cause
+> the eye shape to degrade), the override bits can be used to
+> improve the signal quality.
+>
+> As per the MSM DSI PHY (10nm) tuning guideline, the drive strength
+> can be adjusted using DSIPHY_RESCODE_OFFSET_TOP & DSIPHY_RESCODE_OFFSET_BOT
+> registers, and the drive level can be adjusted using DSIPHY_CMN_VREG_CTRL
+> register.
+>
+> Add DSI PHY tuning support for 10nm PHY. This can be extended to other
+> DSI PHY versions if needed.
+
+Could you please split this patch into generic code and 10nm-specific part?
+
+>
+> Signed-off-by: Rajeev Nandan <quic_rajeevny@quicinc.com>
 > ---
-> v1-->v2
-> * Update commit message: explanation about addresses on rif
-> ---
->  .../net/ethernet/marvell/prestera/prestera.h  |   4 +
->  .../ethernet/marvell/prestera/prestera_main.c |   2 +-
->  .../marvell/prestera/prestera_router.c        | 105 ++++++++++++++++++
->  3 files changed, 110 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/marvell/prestera/prestera.h b/drivers/net/ethernet/marvell/prestera/prestera.h
-> index 7160da678457..a0a5a8e6bd8c 100644
-> --- a/drivers/net/ethernet/marvell/prestera/prestera.h
-> +++ b/drivers/net/ethernet/marvell/prestera/prestera.h
-> @@ -281,6 +281,8 @@ struct prestera_router {
->  	struct prestera_switch *sw;
->  	struct list_head vr_list;
->  	struct list_head rif_entry_list;
-> +	struct notifier_block inetaddr_nb;
-> +	struct notifier_block inetaddr_valid_nb;
->  	bool aborted;
+>  drivers/gpu/drm/msm/dsi/phy/dsi_phy.c      | 55 ++++++++++++++++++++++++++++++
+>  drivers/gpu/drm/msm/dsi/phy/dsi_phy.h      | 23 +++++++++++++
+>  drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c | 31 +++++++++++++----
+>  3 files changed, 103 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+> index 8c65ef6..bf630b7 100644
+> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+> @@ -669,10 +669,42 @@ static int dsi_phy_get_id(struct msm_dsi_phy *phy)
+>         return -EINVAL;
+>  }
+>
+> +static int dsi_phy_parse_dt_per_lane_cfgs(struct platform_device *pdev,
+> +                                         struct dsi_phy_per_lane_cfgs *cfg,
+> +                                         char *property)
+> +{
+> +       int i = 0, j = 0;
+> +       const u8 *data;
+> +       u32 len = 0;
+> +
+> +       data = of_get_property(pdev->dev.of_node, property, &len);
+> +       if (!data) {
+> +               DRM_DEV_ERROR(&pdev->dev, "couldn't find %s property\n", property);
+> +               return -EINVAL;
+> +       }
+> +
+> +       if (len != DSI_LANE_MAX * cfg->count_per_lane) {
+> +               DRM_DEV_ERROR(&pdev->dev, "incorrect phy %s settings, exp=%d, act=%d\n",
+> +                      property, (DSI_LANE_MAX * cfg->count_per_lane), len);
+> +               return -EINVAL;
+> +       }
+> +
+> +       for (i = 0; i < DSI_LANE_MAX; i++) {
+> +               for (j = 0; j < cfg->count_per_lane; j++) {
+> +                       cfg->val[i][j] = *data;
+> +                       data++;
+> +               }
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  static int dsi_phy_driver_probe(struct platform_device *pdev)
+>  {
+>         struct msm_dsi_phy *phy;
+>         struct device *dev = &pdev->dev;
+> +       struct dsi_phy_per_lane_cfgs *strength;
+> +       struct dsi_phy_per_lane_cfgs *level;
+>         u32 phy_type;
+>         int ret;
+>
+> @@ -707,6 +739,29 @@ static int dsi_phy_driver_probe(struct platform_device *pdev)
+>         if (!of_property_read_u32(dev->of_node, "phy-type", &phy_type))
+>                 phy->cphy_mode = (phy_type == PHY_TYPE_CPHY);
+>
+> +       /* dsi phy tuning configurations */
+> +       if (phy->cfg->drive_strength_cfg_count) {
+> +               strength = &phy->tuning_cfg.drive_strength;
+> +               strength->count_per_lane = phy->cfg->drive_strength_cfg_count;
+> +               ret = dsi_phy_parse_dt_per_lane_cfgs(pdev, strength,
+> +                                               "phy-drive-strength-cfg");
+> +               if (ret) {
+> +                       DRM_DEV_ERROR(dev, "failed to parse PHY drive strength cfg, %d\n", ret);
+> +                       goto fail;
+> +               }
+> +       }
+> +
+> +       if (phy->cfg->drive_level_cfg_count) {
+> +               level = &phy->tuning_cfg.drive_level;
+> +               level->count_per_lane = phy->cfg->drive_level_cfg_count;
+> +               ret = dsi_phy_parse_dt_per_lane_cfgs(pdev, level,
+> +                                               "phy-drive-level-cfg");
+> +               if (ret) {
+> +                       DRM_DEV_ERROR(dev, "failed to parse PHY drive level cfg, %d\n", ret);
+> +                       goto fail;
+> +               }
+> +       }
+
+After reading the code (and the way you use those values later), I'd
+suggest adding the parse_dt hook instead of parsing it from the
+generic code and putting the values into phy-specific data instead.
+This way in the parse_dt you can read, validate and prepare register
+values that are going to be written into the hardware. Then in the
+phy_enable you can write those values directly, without any ifs.
+
+> +
+>         phy->base = msm_ioremap_size(pdev, "dsi_phy", "DSI_PHY", &phy->base_size);
+>         if (IS_ERR(phy->base)) {
+>                 DRM_DEV_ERROR(dev, "%s: failed to map phy base\n", __func__);
+> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
+> index b91303a..9ff733a 100644
+> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
+> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
+> @@ -39,6 +39,10 @@ struct msm_dsi_phy_cfg {
+>         const int quirks;
+>         bool has_phy_regulator;
+>         bool has_phy_lane;
+> +
+> +       /* phy tuning config counts per lane */
+> +       u32 drive_strength_cfg_count;
+> +       u32 drive_level_cfg_count;
 >  };
->  
-> @@ -328,6 +330,8 @@ int prestera_port_pvid_set(struct prestera_port *port, u16 vid);
->  
->  bool prestera_netdev_check(const struct net_device *dev);
->  
-> +int prestera_is_valid_mac_addr(struct prestera_port *port, const u8 *addr);
+>
+>  extern const struct msm_dsi_phy_cfg dsi_phy_28nm_hpm_cfgs;
+> @@ -81,6 +85,24 @@ struct msm_dsi_dphy_timing {
+>  #define DSI_PIXEL_PLL_CLK              1
+>  #define NUM_PROVIDED_CLKS              2
+>
+> +#define DSI_LANE_MAX                   5
+> +#define DSI_MAX_SETTINGS               8
 > +
->  bool prestera_port_is_lag_member(const struct prestera_port *port);
->  
->  struct prestera_lag *prestera_lag_by_id(struct prestera_switch *sw, u16 id);
-> diff --git a/drivers/net/ethernet/marvell/prestera/prestera_main.c b/drivers/net/ethernet/marvell/prestera/prestera_main.c
-> index 242904fcd866..5e45a4cda8cc 100644
-> --- a/drivers/net/ethernet/marvell/prestera/prestera_main.c
-> +++ b/drivers/net/ethernet/marvell/prestera/prestera_main.c
-> @@ -159,7 +159,7 @@ static netdev_tx_t prestera_port_xmit(struct sk_buff *skb,
->  	return prestera_rxtx_xmit(netdev_priv(dev), skb);
->  }
->  
-> -static int prestera_is_valid_mac_addr(struct prestera_port *port, u8 *addr)
-> +int prestera_is_valid_mac_addr(struct prestera_port *port, const u8 *addr)
->  {
->  	if (!is_valid_ether_addr(addr))
->  		return -EADDRNOTAVAIL;
-> diff --git a/drivers/net/ethernet/marvell/prestera/prestera_router.c b/drivers/net/ethernet/marvell/prestera/prestera_router.c
-> index 2a32831df40f..0eb5f5e00e4e 100644
-> --- a/drivers/net/ethernet/marvell/prestera/prestera_router.c
-> +++ b/drivers/net/ethernet/marvell/prestera/prestera_router.c
-> @@ -3,10 +3,98 @@
->  
->  #include <linux/kernel.h>
->  #include <linux/types.h>
-> +#include <linux/inetdevice.h>
->  
->  #include "prestera.h"
->  #include "prestera_router_hw.h"
->  
-> +static int __prestera_inetaddr_port_event(struct net_device *port_dev,
-> +					  unsigned long event,
-> +					  struct netlink_ext_ack *extack)
-> +{
-> +	struct prestera_port *port = netdev_priv(port_dev);
-> +	int err;
+> +/**
+> + * struct dsi_phy_per_lane_cfgs - Holds register values for PHY parameters
+> + * @val: Register values for all lanes
+> + * @count_per_lane: Number of values per lane.
+> + */
+> +struct dsi_phy_per_lane_cfgs {
+> +       u8 val[DSI_LANE_MAX][DSI_MAX_SETTINGS];
+> +       u32 count_per_lane;
+> +};
 > +
-> +	err = prestera_is_valid_mac_addr(port, port_dev->dev_addr);
-> +	if (err) {
-> +		NL_SET_ERR_MSG_MOD(extack, "RIF MAC must have the same prefix");
-> +		return err;
-> +	}
+> +struct msm_dsi_phy_tuning_cfg {
+> +       struct dsi_phy_per_lane_cfgs drive_strength;
+> +       struct dsi_phy_per_lane_cfgs drive_level;
+> +};
 > +
-> +	switch (event) {
-> +	case NETDEV_UP:
-> +	case NETDEV_DOWN:
-> +		break;
-> +	}
+>  struct msm_dsi_phy {
+>         struct platform_device *pdev;
+>         void __iomem *base;
+> @@ -98,6 +120,7 @@ struct msm_dsi_phy {
+>
+>         struct msm_dsi_dphy_timing timing;
+>         const struct msm_dsi_phy_cfg *cfg;
+> +       struct msm_dsi_phy_tuning_cfg tuning_cfg;
+>
+>         enum msm_dsi_phy_usecase usecase;
+>         bool regulator_ldo_mode;
+> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
+> index d8128f5..ac974c06 100644
+> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
+> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
+> @@ -775,10 +775,20 @@ static void dsi_phy_hw_v3_0_lane_settings(struct msm_dsi_phy *phy)
+>                 dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_CFG2(i), 0x0);
+>                 dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_CFG3(i),
+>                               i == 4 ? 0x80 : 0x0);
+> -               dsi_phy_write(lane_base +
+> -                             REG_DSI_10nm_PHY_LN_OFFSET_TOP_CTRL(i), 0x0);
+> -               dsi_phy_write(lane_base +
+> -                             REG_DSI_10nm_PHY_LN_OFFSET_BOT_CTRL(i), 0x0);
+> +
+> +               /* platform specific dsi phy drive strength adjustment */
+> +               if (phy->cfg->drive_strength_cfg_count) {
 
-If you are only implementing these in the next patch, then add these
-then
+Something is not correct here. You are checking the
+phy->cfg->drive_strength_cfg_count (which should be always set for 10
+nm), but then you are writing the values without checking if they were
+provided or not.
 
+> +                       dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_OFFSET_TOP_CTRL(i),
+> +                               phy->tuning_cfg.drive_strength.val[i][0]);
+> +                       dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_OFFSET_BOT_CTRL(i),
+> +                               phy->tuning_cfg.drive_strength.val[i][1]);
+> +               } else {
+> +                       dsi_phy_write(lane_base +
+> +                                     REG_DSI_10nm_PHY_LN_OFFSET_TOP_CTRL(i), 0x0);
+> +                       dsi_phy_write(lane_base +
+> +                                     REG_DSI_10nm_PHY_LN_OFFSET_BOT_CTRL(i), 0x0);
+> +               }
 > +
-> +	return 0;
-> +}
-> +
-> +static int __prestera_inetaddr_event(struct prestera_switch *sw,
-> +				     struct net_device *dev,
-> +				     unsigned long event,
-> +				     struct netlink_ext_ack *extack)
-> +{
-> +	if (prestera_netdev_check(dev) && !netif_is_bridge_port(dev) &&
-> +	    !netif_is_lag_port(dev) && !netif_is_ovs_port(dev))
+>                 dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_TX_DCTRL(i),
+>                               tx_dctrl[i]);
+>         }
+> @@ -834,8 +844,13 @@ static int dsi_10nm_phy_enable(struct msm_dsi_phy *phy,
+>         /* Select MS1 byte-clk */
+>         dsi_phy_write(base + REG_DSI_10nm_PHY_CMN_GLBL_CTRL, 0x10);
+>
+> -       /* Enable LDO */
+> -       dsi_phy_write(base + REG_DSI_10nm_PHY_CMN_VREG_CTRL, 0x59);
+> +       /* Enable LDO with platform specific drive level/amplitude adjustment */
+> +       if (phy->cfg->drive_level_cfg_count) {
+> +               dsi_phy_write(base + REG_DSI_10nm_PHY_CMN_VREG_CTRL,
+> +                       phy->tuning_cfg.drive_level.val[0][0]);
+> +       } else {
+> +               dsi_phy_write(base + REG_DSI_10nm_PHY_CMN_VREG_CTRL, 0x59);
+> +       }
 
-Your netdev notifier doesn't allow linking to an OVS bridge, so I'm not
-sure what is the purpose of this check
+And this is even worse. If the drive_level_cfg_count is set, but the
+values were not provided in the DTS, you end up writing zero to the
+register, thus breaking backwards compatibility.
 
-Also, better use early return
+>
+>         /* Configure PHY lane swap (TODO: we need to calculate this) */
+>         dsi_phy_write(base + REG_DSI_10nm_PHY_CMN_LANE_CFG0, 0x21);
+> @@ -941,6 +956,8 @@ const struct msm_dsi_phy_cfg dsi_phy_10nm_cfgs = {
+>         .max_pll_rate = 3500000000UL,
+>         .io_start = { 0xae94400, 0xae96400 },
+>         .num_dsi_phy = 2,
+> +       .drive_strength_cfg_count = 2,
+> +       .drive_level_cfg_count = 1,
+>  };
+>
+>  const struct msm_dsi_phy_cfg dsi_phy_10nm_8998_cfgs = {
+> @@ -963,4 +980,6 @@ const struct msm_dsi_phy_cfg dsi_phy_10nm_8998_cfgs = {
+>         .io_start = { 0xc994400, 0xc996400 },
+>         .num_dsi_phy = 2,
+>         .quirks = DSI_PHY_10NM_QUIRK_OLD_TIMINGS,
+> +       .drive_strength_cfg_count = 2,
+> +       .drive_level_cfg_count = 1,
+>  };
+> --
+> 2.7.4
+>
 
-What happens to that RIF when the port is linked to a bridge or unlinked
-from one?
 
-> +		return __prestera_inetaddr_port_event(dev, event, extack);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __prestera_inetaddr_cb(struct notifier_block *nb,
-> +				  unsigned long event, void *ptr)
-> +{
-> +	struct in_ifaddr *ifa = (struct in_ifaddr *)ptr;
-> +	struct net_device *dev = ifa->ifa_dev->dev;
-> +	struct prestera_router *router = container_of(nb,
-> +						      struct prestera_router,
-> +						      inetaddr_nb);
-> +	struct in_device *idev;
-> +	int err = 0;
-> +
-> +	if (event != NETDEV_DOWN)
-> +		goto out;
-> +
-> +	/* Ignore if this is not latest address */
-> +	idev = __in_dev_get_rtnl(dev);
-> +	if (idev && idev->ifa_list)
-> +		goto out;
-> +
-> +	err = __prestera_inetaddr_event(router->sw, dev, event, NULL);
-> +out:
-> +	return notifier_from_errno(err);
-> +}
-> +
-> +static int __prestera_inetaddr_valid_cb(struct notifier_block *nb,
-> +					unsigned long event, void *ptr)
-> +{
-> +	struct in_validator_info *ivi = (struct in_validator_info *)ptr;
-> +	struct net_device *dev = ivi->ivi_dev->dev;
-> +	struct prestera_router *router = container_of(nb,
-> +						      struct prestera_router,
-> +						      inetaddr_valid_nb);
-> +	struct in_device *idev;
-> +	int err = 0;
-> +
-> +	if (event != NETDEV_UP)
-> +		goto out;
-> +
-> +	/* Ignore if this is not first address */
-> +	idev = __in_dev_get_rtnl(dev);
-> +	if (idev && idev->ifa_list)
-> +		goto out;
-> +
-> +	if (ipv4_is_multicast(ivi->ivi_addr)) {
-> +		err = -EINVAL;
+--
+With best wishes
 
-Use extack
-
-> +		goto out;
-> +	}
-> +
-> +	err = __prestera_inetaddr_event(router->sw, dev, event, ivi->extack);
-> +out:
-> +	return notifier_from_errno(err);
-> +}
-> +
->  int prestera_router_init(struct prestera_switch *sw)
->  {
->  	struct prestera_router *router;
-> @@ -23,8 +111,22 @@ int prestera_router_init(struct prestera_switch *sw)
->  	if (err)
->  		goto err_router_lib_init;
->  
-> +	router->inetaddr_valid_nb.notifier_call = __prestera_inetaddr_valid_cb;
-> +	err = register_inetaddr_validator_notifier(&router->inetaddr_valid_nb);
-> +	if (err)
-> +		goto err_register_inetaddr_validator_notifier;
-> +
-> +	router->inetaddr_nb.notifier_call = __prestera_inetaddr_cb;
-> +	err = register_inetaddr_notifier(&router->inetaddr_nb);
-> +	if (err)
-> +		goto err_register_inetaddr_notifier;
-> +
->  	return 0;
->  
-> +err_register_inetaddr_notifier:
-> +	unregister_inetaddr_validator_notifier(&router->inetaddr_valid_nb);
-> +err_register_inetaddr_validator_notifier:
-> +	/* prestera_router_hw_fini */
-
-Just create this function
-
->  err_router_lib_init:
->  	kfree(sw->router);
->  	return err;
-> @@ -32,6 +134,9 @@ int prestera_router_init(struct prestera_switch *sw)
->  
->  void prestera_router_fini(struct prestera_switch *sw)
->  {
-> +	unregister_inetaddr_notifier(&sw->router->inetaddr_nb);
-> +	unregister_inetaddr_validator_notifier(&sw->router->inetaddr_valid_nb);
-> +	/* router_hw_fini */
-
-Likewise
-
->  	kfree(sw->router);
->  	sw->router = NULL;
->  }
-> -- 
-> 2.17.1
-> 
+Dmitry

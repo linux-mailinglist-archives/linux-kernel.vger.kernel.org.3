@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 363B8481DE8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:59:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4487E481DEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:06:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240531AbhL3P74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 10:59:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
+        id S240632AbhL3QGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 11:06:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236262AbhL3P7y (ORCPT
+        with ESMTP id S238908AbhL3QG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 10:59:54 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819DAC061574;
-        Thu, 30 Dec 2021 07:59:54 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id f134-20020a1c1f8c000000b00345c05bc12dso13545811wmf.3;
-        Thu, 30 Dec 2021 07:59:54 -0800 (PST)
+        Thu, 30 Dec 2021 11:06:29 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB03C061574;
+        Thu, 30 Dec 2021 08:06:28 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id v11so51316177wrw.10;
+        Thu, 30 Dec 2021 08:06:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=8ElIR6SV1fiPS3Db/Lzyt+T8zyl4XcGvw2nOq8Z4FEE=;
-        b=NQlx2zcOwB4ZlmjL8sh8qtALR9ZAIL7hqYDT012U86kTOdj2R7cb2rY/RR3nCj+19G
-         dscWE1hNfj7ypnj4wqHsgHxT9nS1x0Jzt9rxEFTuD1Dgl/SLa0UJdsuPqIZAiRO3J2ew
-         Rhqdg5uKBDhFwpZ2I3irFWdI3AIQSRCfvHPcA5M7wzqEQZRbANWDfJjYoeCeopfuaRqk
-         yULVdN7mK6LMkOfWZ8VfZo4omTmLH0haX/fCracCKeBDxC4mwcwxNQk0/Lx8ZIfcrrPv
-         xJmLNAuqbg1VY6TRv06psO8PXtdB3nwT6JK+6ccRMZeLukBUYlw+du50lMkaGTBiUkwL
-         NeJw==
+        bh=x0Z4VfhJECgT1/vs4niZzj7+Z6gvqhAPOkKcI0mAqoc=;
+        b=ipzs2Z2aIE/u3K6VQ0AbCXqJ8wzmf1CopsYvKY+Qnn/ypMJrQW++LKWeEAwsV267tf
+         t/OWBLVKSyFw0wHISAQYQ/sekslWFw+GrVzFpI2MXI+UUgXxYiJnRgyfaUcgYLs5Nbc5
+         OU4JWJ+vwyVDzJbMgAD/7iEZaV+serEDsV9EO6Q+mLPRybz+otJsAr9upP8DSB9ux1y7
+         C3ZIYUS+20ZWs3XKnn++HN1OxbYZrd/hWqjy0MeN+9OO5294IDMdhtAUM/m7bOuNEj09
+         R2c0HsgYjT3+g57nvb2HtHm56oclfA62XnLRfylNZNz+mv1MqDvvyoM3JLoj+slwMRF2
+         HwjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=8ElIR6SV1fiPS3Db/Lzyt+T8zyl4XcGvw2nOq8Z4FEE=;
-        b=g0wOItTvjnhWn1mWg78v6uxBdny8tVkbXLN1qAw2U2AJQCSjjvkfVWk/8P7c/UsJ7P
-         AexuJG5dOtViqSAd3HnaOoq3eSSijzhD/NA854RT4tj1uzVqaenZXxvFTIK53YPH6act
-         3UGfAyk7QyeE8IkZUPxRIGl/h0YHLzglwn+dLe55EKWnULBXPeYR7x1A6ddNN2jBTDQ3
-         1s1TrqNqF6FmJozorJOHEr1OM/ztJIqWs/wygxzGXBhWM+l7wbI0a9I7D5uvCmol2Pn8
-         v5bSDxKYG2dJRtS8Wgc6vldoi3GqaUWb+MvGQnlANuY4j3JjAtA3FnFd8OJmuNVuHciz
-         IqGg==
-X-Gm-Message-State: AOAM533rJtvMPn6Zw8lcwhdWZT06yd6yY2iYL4Ny338cpDWgBeyzLww3
-        X+oDWWgs9/cBatO/PiWkfROXBZeTmnUwQr9p
-X-Google-Smtp-Source: ABdhPJwlVTezB17og28kivWq3KhIcT1izqy5mOu9TzI+W/ETJQFvP+0PwaMlPC0ejKF9v5U4hlBUdA==
-X-Received: by 2002:a05:600c:1c9f:: with SMTP id k31mr26653681wms.170.1640879993149;
-        Thu, 30 Dec 2021 07:59:53 -0800 (PST)
+        bh=x0Z4VfhJECgT1/vs4niZzj7+Z6gvqhAPOkKcI0mAqoc=;
+        b=f4x8gtobQecwUVp9tnKQ1itwB9jRS47fc0xsb3g9qkVjvGdjRfIJR1i55ExwU0rd25
+         YWD6efBhXHo305qa0xnlRE5VGYFjm7jkulFVd9V5mj7SHaLC9dLtxgc8SJaOQJMz72Jc
+         H9PXL2qxYjKnEVAO/NhTCpFFdUnB+e2IhvHH1uNPQmY845E88+GeC/m+lEwH/EZ3kqfn
+         X3ZEJ4dZYlCRgQkgOrFXjXrGvX0pTK9ToggDBvCExBziYNS8xKYJ5W88Ot8AV3ska5bk
+         d74saj+/tUeKpkBl2tyraYezh6ajdCwVsdQbxt8wF5HtGUi2BLG9wmfQL8Kx0hqex2zN
+         QHIA==
+X-Gm-Message-State: AOAM533++NehMkajvWCGrSXM6cl8LLdgyb6AGo7oWCnoZeKmY3MzeZ2l
+        oou5pgpCl5lbFIjq/HDtVSWGyC0Zmpe8e4gi
+X-Google-Smtp-Source: ABdhPJwh/LJEO882P8Cm7xI3bzxI9mqZ37vTY5joIviEvK7W3BI5qy21cL58BLPI6V+WVVtkmMpCMA==
+X-Received: by 2002:a05:6000:1241:: with SMTP id j1mr27249409wrx.601.1640880387487;
+        Thu, 30 Dec 2021 08:06:27 -0800 (PST)
 Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id m17sm28645320wms.25.2021.12.30.07.59.52
+        by smtp.gmail.com with ESMTPSA id r7sm23477675wrt.77.2021.12.30.08.06.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 07:59:52 -0800 (PST)
+        Thu, 30 Dec 2021 08:06:27 -0800 (PST)
 From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        ntfs3@lists.linux.dev
+To:     Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH] fs/ntfs3: remove redundant assignment to variable frame
-Date:   Thu, 30 Dec 2021 15:59:52 +0000
-Message-Id: <20211230155952.379721-1-colin.i.king@gmail.com>
+Subject: [PATCH] video: fbdev: s3c-fb: remove redundant initialization of pointer bufs
+Date:   Thu, 30 Dec 2021 16:06:26 +0000
+Message-Id: <20211230160626.404072-1-colin.i.king@gmail.com>
 X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -64,31 +64,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable frame is assigned a value that is never read. The
-assignment is redundant and can be removed. Cleans up the
-clang-scan build warning:
+Pointer bufs is being initialized with a value that is never read, it
+is being re-assigned with a different value later on. The assignment
+is redundant and can be removed. Cleans up clang-scan warning:
 
-fs/ntfs3/file.c:995:3: warning: Value stored to 'frame' is
-never read [deadcode.DeadStores]
-                frame = pos >> frame_bits;
+drivers/video/fbdev/s3c-fb.c:492:16: warning: Value stored to 'buf'
+during its initialization is never read [deadcode.DeadStores]
+        void __iomem *buf = regs;
 
 Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- fs/ntfs3/file.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/video/fbdev/s3c-fb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/ntfs3/file.c b/fs/ntfs3/file.c
-index 3bae76930e68..27c32692513c 100644
---- a/fs/ntfs3/file.c
-+++ b/fs/ntfs3/file.c
-@@ -992,7 +992,6 @@ static ssize_t ntfs_compress_write(struct kiocb *iocb, struct iov_iter *from)
- 		if (bytes > count)
- 			bytes = count;
- 
--		frame = pos >> frame_bits;
- 		frame_vbo = pos & ~(frame_size - 1);
- 		index = frame_vbo >> PAGE_SHIFT;
- 
+diff --git a/drivers/video/fbdev/s3c-fb.c b/drivers/video/fbdev/s3c-fb.c
+index 3b134e1bbc38..68408c499627 100644
+--- a/drivers/video/fbdev/s3c-fb.c
++++ b/drivers/video/fbdev/s3c-fb.c
+@@ -489,7 +489,7 @@ static int s3c_fb_set_par(struct fb_info *info)
+ 	struct s3c_fb_win *win = info->par;
+ 	struct s3c_fb *sfb = win->parent;
+ 	void __iomem *regs = sfb->regs;
+-	void __iomem *buf = regs;
++	void __iomem *buf;
+ 	int win_no = win->index;
+ 	u32 alpha = 0;
+ 	u32 data;
 -- 
 2.33.1
 

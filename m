@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30035481A40
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 08:22:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B41481A4A
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 08:23:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237802AbhL3HWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 02:22:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
+        id S238176AbhL3HW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 02:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237798AbhL3HVs (ORCPT
+        with ESMTP id S237858AbhL3HWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 02:21:48 -0500
+        Thu, 30 Dec 2021 02:22:01 -0500
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49942C0613B4
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 23:21:41 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id i65-20020a252244000000b0060b2e5fd54cso27648266ybi.13
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 23:21:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9DCC06175A
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 23:21:43 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id u130-20020a254788000000b0060a9645f781so30254927yba.19
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 23:21:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=MyX41obsfTbklj5mP7URo6KOdoHhcEiYJDRkMl7AGdI=;
-        b=LObQmT9LTPmbnq9p8gFeTKDRdvi+Xxhm9mKW2yrrqr1LRU3ZF6WGa7V0yeYNIS4Zry
-         NUTNYXdHzrCU3oIbpmoNuJHFNr8Ng0dX7xOg93LGT7MCK6h/96Cb/j9IY+PIU9aRHKqG
-         Vd4GwDaAeVv5FiPnEQdwhSoi6xjxrVFv8uMNcl8/J7FTXqfpE5FmcRHU8FN5OHHDM+4P
-         G7UD8KHB8IRx7wC/Yfq+TYH84JU57Qn7AuwtwCkL0ZGonCLpbr3xAHaLNus6twfEffHk
-         7tADUxWwhCVTT2OFimaZSXicJDYt8hRNHsXofd8Bv5vB7CCTcsobzpPmZ5N4uwLbrsZF
-         sP8g==
+        bh=2sPeS5hD6XhbS/KjXnNo0OQBT3AjJJ8ohyesk40XqcA=;
+        b=tJn/3vBsNja0qeXl883/xxbHELrwxgKo1sNalJX4VKGqHdMaQAmQO/shvgknHoc20k
+         Wy1h3O8ZkUEHFeaMx+GRIgsVrhVg3yzTjiRwQN15CqIvWj5r4hIiGXcXYqvmCDPH7YRa
+         H/7PFZClYW2AgkrSUm7TwyNEOcb5qMG05dElb/aPW+0zYDh0IQ5dBH79SjlQQlQ6O2RU
+         HU/GGDRaz5cfQxdixtftY16QfhgaiWR4rs4hW6qsHHCHReWoLBa6f0J15X0NSTVnOfZM
+         mWvweMatEKnK385MFfoXm4IqO7ZV+yVGamaWCXo2jWQ4NjUmtjf5+g81KRofdroW2HOp
+         8mOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=MyX41obsfTbklj5mP7URo6KOdoHhcEiYJDRkMl7AGdI=;
-        b=F6mBUBYcaGo7YGh7VSRA511lSicnpJSzxdbN5BhuwvvJBVqCuuNtmR0HLz7YvTy80M
-         KfC6oSJ6l9a9xlEcV99YBTPcOFoiJyS2lRXIqAOSD/dAkOpxXcHI/IMY1MQ4nwrH8nmo
-         0FWzSRC26/ZCw4RQoB+bv/lbrzrikdM5av+wmK2Lf3MurHV2jIFAYN6SV7uL75T9mX0j
-         +0OhUO8+d4/Iiy64nlQ1ShMxccxU73SRBnpZkE0934qu0wx4mjd8ykdqSIooRu/ZvFui
-         5y1ugv4iFHh9w9nF9dOiDgZ7m0RwLbgpwMfZE/iryhKjeaZARsrLJ8GLpetMuFc/gvzX
-         EYow==
-X-Gm-Message-State: AOAM531X5TZ+PruFgHqh5EyIWwLWvGiHBRvKmtxM97S18N9xULFp9Z/i
-        ee3uV1JJV7+HNwf5igvLtsnFQ3Z2Z+QP
-X-Google-Smtp-Source: ABdhPJxRg4qJJebeV7CpE9vROn1liGtbz9yh2zMu7YKeoig64yqoc+FZQDgbYrhwZMJdAyp1bR9sXlKR/2Ee
+        bh=2sPeS5hD6XhbS/KjXnNo0OQBT3AjJJ8ohyesk40XqcA=;
+        b=kb1yJC/vA0JmwdhVZF+d/4vtA9CQ9HoEiC/zaOtXSF7qsRR69wluNkJ5WDluQaSYke
+         m8rWUfND5fSop/ci+FO31vW4JE1RaAt3VQ0WlIM6nZVdu8vR6RyYW9ORUAKYQSGXfv+s
+         84erYG15BpGKWodcJLlxneUe9c0kdandqMuc9fGujr9NjM355H8Wtmnwx8rN1MS1Dc7k
+         DIQkO+madyofjY1M4r4IpSrDgdqxNqRGT9hqzFP7H8POXmr9ugPsZmuplMrOUIcwQqOy
+         TtGDsqBcknf9BLfTftmmXrAXQqWJvVYqTKAeLyyGY0HDJMHN7LZOZQFIS0KsSYyOkQFT
+         A6Kw==
+X-Gm-Message-State: AOAM530R3KR4tM1CL8fgjGqObNLMHh4kyKFqEYd7d2gOkK34TiBkjLb3
+        aXfbPSAE8rc4pzb4rzRunzf/GWGdBYKX
+X-Google-Smtp-Source: ABdhPJxIJGv5f32bbnWDxoBjOZ4z6bbGu5gRAbrpbKMmKOETGNeJLi2vdjFJ5lE/6B3uh3efUR3ZLq/xtbT7
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:31c4:9539:dba1:a82b])
- (user=irogers job=sendgmr) by 2002:a25:7dc2:: with SMTP id
- y185mr35577232ybc.352.1640848900528; Wed, 29 Dec 2021 23:21:40 -0800 (PST)
-Date:   Wed, 29 Dec 2021 23:20:07 -0800
+ (user=irogers job=sendgmr) by 2002:a25:9b02:: with SMTP id
+ y2mr1548457ybn.210.1640848903013; Wed, 29 Dec 2021 23:21:43 -0800 (PST)
+Date:   Wed, 29 Dec 2021 23:20:08 -0800
 In-Reply-To: <20211230072030.302559-1-irogers@google.com>
-Message-Id: <20211230072030.302559-27-irogers@google.com>
+Message-Id: <20211230072030.302559-28-irogers@google.com>
 Mime-Version: 1.0
 References: <20211230072030.302559-1-irogers@google.com>
 X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
-Subject: [PATCH v3 25/48] perf stat-display: Avoid use of core for CPU.
+Subject: [PATCH v3 26/48] perf evsel: Derive CPUs and threads in alloc_counts
 From:   Ian Rogers <irogers@google.com>
 To:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
@@ -79,109 +79,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct use of cpumap index in print_no_aggr_metric.
+Passing the number of CPUs and threads allows for an evsel's counts to
+be mismatched to its cpu map. To avoid this always derive the counts
+size from the cpu map. Change openat-syscall-all-cpus to set the cpus
+to allow for this to work.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/stat-display.c | 45 +++++++++++++++++-----------------
- 1 file changed, 22 insertions(+), 23 deletions(-)
+ tools/perf/tests/openat-syscall-all-cpus.c | 10 +---------
+ tools/perf/util/counts.c                   |  8 ++++++--
+ tools/perf/util/counts.h                   |  2 +-
+ tools/perf/util/evsel.c                    |  2 +-
+ tools/perf/util/stat.c                     | 13 ++++++-------
+ 5 files changed, 15 insertions(+), 20 deletions(-)
 
-diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index 870b1db71fbc..f48d1678861c 100644
---- a/tools/perf/util/stat-display.c
-+++ b/tools/perf/util/stat-display.c
-@@ -120,11 +120,10 @@ static void aggr_printout(struct perf_stat_config *config,
- 				id.die,
- 				config->csv_output ? 0 : -3,
- 				id.core, config->csv_sep);
--		} else if (id.core > -1) {
-+		} else if (id.cpu > -1) {
- 			fprintf(config->output, "CPU%*d%s",
- 				config->csv_output ? 0 : -7,
--				evsel__cpus(evsel)->map[id.core],
--				config->csv_sep);
-+				id.cpu, config->csv_sep);
- 		}
- 		break;
- 	case AGGR_THREAD:
-@@ -334,7 +333,7 @@ static int first_shadow_cpu(struct perf_stat_config *config,
- 	int cpu, idx;
+diff --git a/tools/perf/tests/openat-syscall-all-cpus.c b/tools/perf/tests/openat-syscall-all-cpus.c
+index cd3dd463783f..544db0839b3b 100644
+--- a/tools/perf/tests/openat-syscall-all-cpus.c
++++ b/tools/perf/tests/openat-syscall-all-cpus.c
+@@ -85,15 +85,7 @@ static int test__openat_syscall_event_on_all_cpus(struct test_suite *test __mayb
+ 		CPU_CLR(cpus->map[cpu], &cpu_set);
+ 	}
  
- 	if (config->aggr_mode == AGGR_NONE)
--		return id->core;
-+		return id->cpu;
- 
- 	if (!config->aggr_get_id)
- 		return 0;
-@@ -697,10 +696,9 @@ static void print_counter_aggrdata(struct perf_stat_config *config,
- 		fprintf(output, "%s", prefix);
- 
- 	uval = val * counter->scale;
--	if (cpu != -1) {
--		id = aggr_cpu_id__empty();
--		id.core = cpu;
+-	/*
+-	 * Here we need to explicitly preallocate the counts, as if
+-	 * we use the auto allocation it will allocate just for 1 cpu,
+-	 * as we start by cpu 0.
+-	 */
+-	if (evsel__alloc_counts(evsel, cpus->nr, 1) < 0) {
+-		pr_debug("evsel__alloc_counts(ncpus=%d)\n", cpus->nr);
+-		goto out_close_fd;
 -	}
-+	if (cpu != -1)
-+		id = aggr_cpu_id__cpu(cpu, /*data=*/NULL);
-+
- 	printout(config, id, nr, counter, uval,
- 		 prefix, run, ena, 1.0, &rt_stat);
- 	if (!metric_only)
-@@ -911,8 +909,7 @@ static void print_counter(struct perf_stat_config *config,
- 			fprintf(output, "%s", prefix);
++	evsel->core.cpus = perf_cpu_map__get(cpus);
  
- 		uval = val * counter->scale;
--		id = aggr_cpu_id__empty();
--		id.core = cpu;
-+		id = aggr_cpu_id__cpu(cpu, /*data=*/NULL);
- 		printout(config, id, 0, counter, uval, prefix,
- 			 run, ena, 1.0, &rt_stat);
+ 	err = 0;
  
-@@ -924,29 +921,31 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
- 				 struct evlist *evlist,
- 				 char *prefix)
+diff --git a/tools/perf/util/counts.c b/tools/perf/util/counts.c
+index 582f3aeaf5e4..2b81707b9dba 100644
+--- a/tools/perf/util/counts.c
++++ b/tools/perf/util/counts.c
+@@ -4,6 +4,7 @@
+ #include <string.h>
+ #include "evsel.h"
+ #include "counts.h"
++#include <perf/threadmap.h>
+ #include <linux/zalloc.h>
+ 
+ struct perf_counts *perf_counts__new(int ncpus, int nthreads)
+@@ -55,9 +56,12 @@ void evsel__reset_counts(struct evsel *evsel)
+ 	perf_counts__reset(evsel->counts);
+ }
+ 
+-int evsel__alloc_counts(struct evsel *evsel, int ncpus, int nthreads)
++int evsel__alloc_counts(struct evsel *evsel)
  {
--	int cpu;
--	int nrcpus = 0;
--	struct evsel *counter;
--	u64 ena, run, val;
--	double uval;
--	struct aggr_cpu_id id;
-+	int all_idx, cpu;
- 
--	nrcpus = evlist->core.cpus->nr;
--	for (cpu = 0; cpu < nrcpus; cpu++) {
-+	perf_cpu_map__for_each_cpu(cpu, all_idx, evlist->core.cpus) {
-+		struct evsel *counter;
- 		bool first = true;
- 
- 		if (prefix)
- 			fputs(prefix, config->output);
- 		evlist__for_each_entry(evlist, counter) {
--			id = aggr_cpu_id__empty();
--			id.core = cpu;
-+			u64 ena, run, val;
-+			double uval;
-+			struct aggr_cpu_id id;
-+			int counter_idx = perf_cpu_map__idx(evsel__cpus(counter), cpu);
+-	evsel->counts = perf_counts__new(ncpus, nthreads);
++	struct perf_cpu_map *cpus = evsel__cpus(evsel);
++	int nthreads = perf_thread_map__nr(evsel->core.threads);
 +
-+			if (counter_idx < 0)
-+				continue;
-+
-+			id = aggr_cpu_id__cpu(cpu, /*data=*/NULL);
- 			if (first) {
- 				aggr_printout(config, counter, id, 0);
- 				first = false;
- 			}
--			val = perf_counts(counter->counts, cpu, 0)->val;
--			ena = perf_counts(counter->counts, cpu, 0)->ena;
--			run = perf_counts(counter->counts, cpu, 0)->run;
-+			val = perf_counts(counter->counts, counter_idx, 0)->val;
-+			ena = perf_counts(counter->counts, counter_idx, 0)->ena;
-+			run = perf_counts(counter->counts, counter_idx, 0)->run;
++	evsel->counts = perf_counts__new(cpus ? cpus->nr : 1, nthreads);
+ 	return evsel->counts != NULL ? 0 : -ENOMEM;
+ }
  
- 			uval = val * counter->scale;
- 			printout(config, id, 0, counter, uval, prefix,
+diff --git a/tools/perf/util/counts.h b/tools/perf/util/counts.h
+index 7ff36bf6d644..3e275e9c60d1 100644
+--- a/tools/perf/util/counts.h
++++ b/tools/perf/util/counts.h
+@@ -40,7 +40,7 @@ void perf_counts__delete(struct perf_counts *counts);
+ void perf_counts__reset(struct perf_counts *counts);
+ 
+ void evsel__reset_counts(struct evsel *evsel);
+-int evsel__alloc_counts(struct evsel *evsel, int ncpus, int nthreads);
++int evsel__alloc_counts(struct evsel *evsel);
+ void evsel__free_counts(struct evsel *evsel);
+ 
+ #endif /* __PERF_COUNTS_H */
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index 656c30b988ce..6c9af21776e6 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -1578,7 +1578,7 @@ int __evsel__read_on_cpu(struct evsel *evsel, int cpu, int thread, bool scale)
+ 	if (FD(evsel, cpu, thread) < 0)
+ 		return -EINVAL;
+ 
+-	if (evsel->counts == NULL && evsel__alloc_counts(evsel, cpu + 1, thread + 1) < 0)
++	if (evsel->counts == NULL && evsel__alloc_counts(evsel) < 0)
+ 		return -ENOMEM;
+ 
+ 	if (readn(FD(evsel, cpu, thread), &count, nv * sizeof(u64)) <= 0)
+diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
+index c69b221f5e3e..995cb5003133 100644
+--- a/tools/perf/util/stat.c
++++ b/tools/perf/util/stat.c
+@@ -152,11 +152,13 @@ static void evsel__free_stat_priv(struct evsel *evsel)
+ 	zfree(&evsel->stats);
+ }
+ 
+-static int evsel__alloc_prev_raw_counts(struct evsel *evsel, int ncpus, int nthreads)
++static int evsel__alloc_prev_raw_counts(struct evsel *evsel)
+ {
++	int cpu_map_nr = evsel__nr_cpus(evsel);
++	int nthreads = perf_thread_map__nr(evsel->core.threads);
+ 	struct perf_counts *counts;
+ 
+-	counts = perf_counts__new(ncpus, nthreads);
++	counts = perf_counts__new(cpu_map_nr, nthreads);
+ 	if (counts)
+ 		evsel->prev_raw_counts = counts;
+ 
+@@ -177,12 +179,9 @@ static void evsel__reset_prev_raw_counts(struct evsel *evsel)
+ 
+ static int evsel__alloc_stats(struct evsel *evsel, bool alloc_raw)
+ {
+-	int ncpus = evsel__nr_cpus(evsel);
+-	int nthreads = perf_thread_map__nr(evsel->core.threads);
+-
+ 	if (evsel__alloc_stat_priv(evsel) < 0 ||
+-	    evsel__alloc_counts(evsel, ncpus, nthreads) < 0 ||
+-	    (alloc_raw && evsel__alloc_prev_raw_counts(evsel, ncpus, nthreads) < 0))
++	    evsel__alloc_counts(evsel) < 0 ||
++	    (alloc_raw && evsel__alloc_prev_raw_counts(evsel) < 0))
+ 		return -ENOMEM;
+ 
+ 	return 0;
 -- 
 2.34.1.448.ga2b2bfdf31-goog
 

@@ -2,289 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 010A2481F30
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5BF481F36
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:31:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241652AbhL3S3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 13:29:11 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50252 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233228AbhL3S3K (ORCPT
+        id S241711AbhL3Sbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 13:31:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241699AbhL3Sbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 13:29:10 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75FA1B81BBD;
-        Thu, 30 Dec 2021 18:29:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FF3FC36AE9;
-        Thu, 30 Dec 2021 18:29:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640888948;
-        bh=pQwav04b5UvrnEq93z3Zw0lsYaSH49b4fpW7r0eu6rQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=sZHSNEzmyS6mRpr2c0KQkTgfBmInqT5vUFaJiUvSjjsC7Dib5CfxhRcHqcCzD2jMR
-         JtmE0ey4/vNhU9tmQHWaOOmdx5e7xcsDXHJfw2Ita/fuJXTd7zrROs6ifpMVk6HkUj
-         u7nNexIR78rVPPBTcIA+dnZZBZN7JgbH6X/IBpFm/QBYd1EsLfcPcoN1Qi8QkenWIA
-         0shbxzSgUt2z3k2LpFW15Tc9ZRMGSYPffLpw90UdN31Vc57aVlYCJuvPG54rlh/Dy8
-         OCMnqWTahkK2B2n1Ag7rQSWoGmUdBziaecCYi5OiEoQSnPMq8UVcGM2rKy/U2Ao1Zh
-         phWwW0zBTqFVA==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Networking for 5.16-rc8
-Date:   Thu, 30 Dec 2021 10:29:07 -0800
-Message-Id: <20211230182907.1190933-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.26.2
+        Thu, 30 Dec 2021 13:31:40 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D73C061401
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 10:31:39 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id d1so54034717ybh.6
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 10:31:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JP5kiPGw0N0oi5xSZm+ISguC0oX5vc7WiKHH8sRb6Bk=;
+        b=PDOo4NGA+JWALhHknpcOO+4JAgLgYO13CeQB3gQa/gjVoUYjKJ6o09cp7s2qABTIXt
+         kmo2zbQjSCl93GSBoQQvgqrZZjVONwg1DqnMmlcUFrcyhy1s+Zssb4zOhmWrc9y0HqSp
+         HSwJViWXz1iaunrmIdbPOBKG1UCeQCUFTJfb1YCp4UoTzx/aDSqJ90c/JQHbbPW2+pB6
+         /01tAa36sPtmfeo+OaWiC8vLE/xkj1F2G5V5eXZLkKKJL2nx+cyu4eWdl5JflDddcc5Z
+         ChXHcbHulpVmYI55zRdTNEhYVrGPy4EgZLgEPgli0o2fgCU+eT5h6BPQFtfut1eLkloD
+         B2Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JP5kiPGw0N0oi5xSZm+ISguC0oX5vc7WiKHH8sRb6Bk=;
+        b=JZj1fMerFx+SPCUrYuofrnkn25r3Plref0HmY6xNTRNM2kohJQ1lreDG8Nn4I64BXE
+         j7oMRVVoEicR1+VTifxeTRWXvXtHDXt0Mmpj0VQtnj7uMjYXo+qno8avHyp5liug8Uej
+         iPMgZQw0OGShZn9ccpA5HCUFGsUbbohxOiFJXNtcY5Ibme7L4154qqN8WJS+q83V+90A
+         wfGKOoDdS+hQBahP0k/YlRTAsGOY7xGoC4xDUanTQAlnkYIrRi7+zUDePr0P6DRHr4tp
+         bUkFfFNo8+NeTjhuL1M8j5e6XD8tk2FBfWuQLVapj6b5tfIWD7iFmrkpez3DbA02sZ44
+         hyyQ==
+X-Gm-Message-State: AOAM531EIV0YPZ8O/K8CPtsESwTJq7jKk9lK+Kyl/ALXev6XKTeR7sLq
+        fNibXcvosBs5klj46CzwOygU/4ej7+SbCsOdJk0sdg==
+X-Google-Smtp-Source: ABdhPJy1mifAcHASiq5T0VrQGF0UUuFWmc9T30vsJuNoN6G21ys/G/ibBLAo4HPnkKhC2ktRgJEaxHdror0bkuziioM=
+X-Received: by 2002:a25:98c4:: with SMTP id m4mr39483356ybo.613.1640889098887;
+ Thu, 30 Dec 2021 10:31:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+ <20211223002209.1092165-3-alexandr.lobakin@intel.com> <Yc2Tqc69W9ukKDI1@zn.tnic>
+In-Reply-To: <Yc2Tqc69W9ukKDI1@zn.tnic>
+From:   =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
+Date:   Thu, 30 Dec 2021 10:31:27 -0800
+Message-ID: <CAFP8O3K1mkiCGMTEeuSifZtr2piHsKTjP5TOA25nqpv2SrbzYQ@mail.gmail.com>
+Subject: Re: [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available
+ to nuke pos-based search
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>, linux-hardening@vger.kernel.org,
+        x86@kernel.org, Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus!
+On Thu, Dec 30, 2021 at 3:11 AM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Thu, Dec 23, 2021 at 01:21:56AM +0100, Alexander Lobakin wrote:
+> > [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
+>
+> nuke?
+>
+> I think you wanna say something about avoiding position-based search if
+> toolchain supports -z ...
+>
+> > Position-based search, which means that if we have several symbols
+> > with the same name, we additionally need to provide an "index" of
+> > the desired symbol, is fragile. Par exemple, it breaks when two
+>                                   ^^^^^^^^^^^^
+>
+> We already have hard time with the English in commit messages, let's
+> avoid the French pls.
+>
+> > symbols with the same name are located in different sections.
+> >
+> > Since a while, LD has a flag `-z unique-symbol` which appends
+> > numeric suffixes to the functions with the same name (in symtab
+> > and strtab).
+> > Check for its availability and always prefer when the livepatching
+> > is on.
+>
+> Why only then?
+>
+> It looks to me like we want this unconditionally, no?
+>
+> > This needs a little adjustment to the modpost to make it
+> > strip suffixes before adding exports.
+> >
+> > depmod needs some treatment as well, tho its false-positibe warnings
+>
+> Unknown word [false-positibe] in commit message, suggestions:
+>         ['false-positive', 'false-positioned', 'prepositional']
+>
+> Please introduce a spellchecker into your patch creation workflow.
+>
+> > about unknown symbols are harmless and don't alter the return code.
+> > And there is a bunch more livepatch code to optimize-out after
+> > introducing this, but let's leave it for later.
+>
+> ...
+>
+> > @@ -171,17 +173,21 @@ static int klp_find_object_symbol(const char *objname, const char *name,
+> >
+> >       /*
+> >        * Ensure an address was found. If sympos is 0, ensure symbol is unique;
+> > -      * otherwise ensure the symbol position count matches sympos.
+> > +      * otherwise ensure the symbol position count matches sympos. If the LD
+> > +      * `-z unique` flag is enabled, sympos checks are not relevant.
+>            ^^^^^^^^^^^
+>
+> -z unique-symbol
+>
+> >        */
+> > -     if (args.addr == 0)
+> > +     if (args.addr == 0) {
+> >               pr_err("symbol '%s' not found in symbol table\n", name);
+> > -     else if (args.count > 1 && sympos == 0) {
+> > +     } else if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL)) {
+> > +             goto out_ok;
+>
+> This is silly - just do it all here.
+>
+> > +     } else if (args.count > 1 && sympos == 0) {
+> >               pr_err("unresolvable ambiguity for symbol '%s' in object '%s'\n",
+> >                      name, objname);
+> >       } else if (sympos != args.count && sympos > 0) {
+> >               pr_err("symbol position %lu for symbol '%s' in object '%s' not found\n",
+> >                      sympos, name, objname ? objname : "vmlinux");
+> >       } else {
+> > +out_ok:
+> >               *addr = args.addr;
+> >               return 0;
+> >       }
+>
+> Looks straight-forward otherwise but I'm no livepatcher so I'd prefer if
+> they have a look too.
+>
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
+>
 
-No regressions on our radar at this point. The igc problem fixed here
-was the last one I was tracking but it was broken in previous releases,
-anyway. Mostly driver fixes and a couple of largish SMC fixes.
+Apologies since I haven't read the patch series.
 
-The following changes since commit 95b40115a97bda99485267ca2b3b7566f965b5b4:
+The option does not exist in ld.lld and I am a bit concerning about
+its semantics: https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
 
-  Merge tag 'drm-fixes-2021-12-24' of git://anongit.freedesktop.org/drm/drm (2021-12-23 15:43:25 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.16-rc8
-
-for you to fetch changes up to bf2b09fedc17248b315f80fb249087b7d28a69a6:
-
-  fsl/fman: Fix missing put_device() call in fman_port_probe (2021-12-30 13:34:06 +0000)
-
-----------------------------------------------------------------
-Networking fixes for 5.16-rc8, including fixes from.. Santa?
-
-Current release - regressions:
-
- - xsk: initialise xskb free_list_node, fixup for a -rc7 fix
-
-Current release - new code bugs:
-
- - mlx5: handful of minor fixes:
-   - use first online CPU instead of hard coded CPU
-   - fix some error handling paths in 'mlx5e_tc_add_fdb_flow()'
-   - fix skb memory leak when TC classifier action offloads are
-     disabled
-   - fix memory leak with rules with internal OvS port
-
-Previous releases - regressions:
-
- - igc: do not enable crosstimestamping for i225-V models
-
-Previous releases - always broken:
-
- - udp: use datalen to cap ipv6 udp max gso segments
-
- - fix use-after-free in tw_timer_handler due to early free of stats
-
- - smc: fix kernel panic caused by race of smc_sock
-
- - smc: don't send CDC/LLC message if link not ready, avoid timeouts
-
- - sctp: use call_rcu to free endpoint, avoid UAF in sock diag
-
- - bridge: mcast: add and enforce query interval minimum
-
- - usb: pegasus: do not drop long Ethernet frames
-
- - mlx5e: fix ICOSQ recovery flow for XSK
-
- - nfc: uapi: use kernel size_t to fix user-space builds
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-
-----------------------------------------------------------------
-Aleksander Jan Bajkowski (1):
-      net: lantiq_xrx200: fix statistics of received bytes
-
-Amir Tzin (1):
-      net/mlx5e: Wrap the tx reporter dump callback to extract the sq
-
-Chris Mi (2):
-      net/mlx5: Fix tc max supported prio for nic mode
-      net/mlx5e: Delete forward rule for ct or sample action
-
-Christophe JAILLET (3):
-      net/mlx5: Fix some error handling paths in 'mlx5e_tc_add_fdb_flow()'
-      net: ag71xx: Fix a potential double free in error handling paths
-      ionic: Initialize the 'lif->dbid_inuse' bitmap
-
-Ciara Loftus (1):
-      xsk: Initialise xskb free_list_node
-
-Coco Li (2):
-      udp: using datalen to cap ipv6 udp max gso segments
-      selftests: Calculate udpgso segment count without header adjustment
-
-David S. Miller (1):
-      Merge branch 'smc-fixes'
-
-Dmitry V. Levin (1):
-      uapi: fix linux/nfc.h userspace compilation errors
-
-Dust Li (2):
-      net/smc: don't send CDC/LLC message if link not ready
-      net/smc: fix kernel panic caused by race of smc_sock
-
-Gal Pressman (2):
-      net/mlx5e: Fix skb memory leak when TC classifier action offloads are disabled
-      net/mlx5e: Fix wrong features assignment in case of error
-
-Jakub Kicinski (4):
-      Merge tag 'mlx5-fixes-2021-12-22' of git://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux
-      Merge branch '1GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue
-      Merge branch 'net-bridge-mcast-add-and-enforce-query-interval-minimum'
-      Merge tag 'mlx5-fixes-2021-12-28' of git://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux
-
-James McLaughlin (1):
-      igc: Fix TX timestamp support for non-MSI-X platforms
-
-Jianguo Wu (2):
-      selftests: net: Fix a typo in udpgro_fwd.sh
-      selftests: net: using ping6 for IPv6 in udpgro_fwd.sh
-
-Jiasheng Jiang (1):
-      net/ncsi: check for error return from call to nla_put_u32
-
-Karsten Graul (1):
-      net/smc: fix using of uninitialized completions
-
-Krzysztof Kozlowski (1):
-      nfc: uapi: use kernel size_t to fix user-space builds
-
-Ma Xinjian (1):
-      selftests: mptcp: Remove the deprecated config NFT_COUNTER
-
-Matthias-Christian Ott (1):
-      net: usb: pegasus: Do not drop long Ethernet frames
-
-Maxim Mikityanskiy (2):
-      net/mlx5e: Fix interoperability between XSK and ICOSQ recovery flow
-      net/mlx5e: Fix ICOSQ recovery flow for XSK
-
-Miaoqian Lin (3):
-      net/mlx5: DR, Fix NULL vs IS_ERR checking in dr_domain_init_resources
-      net: phy: fixed_phy: Fix NULL vs IS_ERR() checking in __fixed_phy_register
-      fsl/fman: Fix missing put_device() call in fman_port_probe
-
-Moshe Shemesh (1):
-      net/mlx5: Fix SF health recovery flow
-
-Muchun Song (1):
-      net: fix use-after-free in tw_timer_handler
-
-Nikolay Aleksandrov (3):
-      net: bridge: mcast: add and enforce query interval minimum
-      net: bridge: mcast: add and enforce startup query interval minimum
-      net: bridge: mcast: fix br_multicast_ctx_vlan_global_disabled helper
-
-Roi Dayan (1):
-      net/mlx5e: TC, Fix memory leak with rules with internal port
-
-Shay Drory (2):
-      net/mlx5: Use first online CPU instead of hard coded CPU
-      net/mlx5: Fix error print in case of IRQ request failed
-
-Tamir Duberstein (1):
-      ipv6: raw: check passed optlen before reading
-
-Vinicius Costa Gomes (1):
-      igc: Do not enable crosstimestamping for i225-V models
-
-Wei Yongjun (1):
-      NFC: st21nfca: Fix memory leak in device probe and remove
-
-William Zhao (1):
-      ip6_vti: initialize __ip6_tnl_parm struct in vti6_siocdevprivate
-
-Xin Long (1):
-      sctp: use call_rcu to free endpoint
-
-Yevgeny Kliteynik (1):
-      net/mlx5: DR, Fix querying eswitch manager vport for ECPF
-
-Zekun Shen (1):
-      atlantic: Fix buff_ring OOB in aq_ring_rx_clean
-
-wolfgang huang (1):
-      mISDN: change function names to avoid conflicts
-
-wujianguo (1):
-      selftests/net: udpgso_bench_tx: fix dst ip argument
-
-xu xin (1):
-      Documentation: fix outdated interpretation of ip_no_pmtu_disc
-
-yangxingwu (1):
-      net: udp: fix alignment problem in udp4_seq_show()
-
- Documentation/networking/ip-sysctl.rst             |  6 ++-
- drivers/isdn/mISDN/core.c                          |  6 +--
- drivers/isdn/mISDN/core.h                          |  4 +-
- drivers/isdn/mISDN/layer1.c                        |  4 +-
- drivers/net/ethernet/aquantia/atlantic/aq_ring.c   |  8 ++++
- drivers/net/ethernet/atheros/ag71xx.c              | 23 ++++------
- drivers/net/ethernet/freescale/fman/fman_port.c    | 12 ++---
- drivers/net/ethernet/intel/igc/igc_main.c          |  6 +++
- drivers/net/ethernet/intel/igc/igc_ptp.c           | 15 ++++++-
- drivers/net/ethernet/lantiq_xrx200.c               |  2 +-
- drivers/net/ethernet/mellanox/mlx5/core/en.h       |  5 +--
- .../net/ethernet/mellanox/mlx5/core/en/health.h    |  2 +
- .../net/ethernet/mellanox/mlx5/core/en/rep/tc.h    |  2 +-
- .../ethernet/mellanox/mlx5/core/en/reporter_rx.c   | 35 ++++++++++++++-
- .../ethernet/mellanox/mlx5/core/en/reporter_tx.c   | 10 ++++-
- .../net/ethernet/mellanox/mlx5/core/en/xsk/setup.c | 16 ++++++-
- drivers/net/ethernet/mellanox/mlx5/core/en_main.c  | 48 +++++++++++++-------
- drivers/net/ethernet/mellanox/mlx5/core/en_tc.c    | 33 +++++++-------
- .../ethernet/mellanox/mlx5/core/lib/fs_chains.c    |  3 ++
- drivers/net/ethernet/mellanox/mlx5/core/main.c     | 11 ++---
- drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c  |  6 +--
- .../mellanox/mlx5/core/steering/dr_domain.c        |  9 ++--
- drivers/net/ethernet/pensando/ionic/ionic_lif.c    |  2 +-
- drivers/net/phy/fixed_phy.c                        |  4 +-
- drivers/net/usb/pegasus.c                          |  4 +-
- drivers/nfc/st21nfca/i2c.c                         | 29 ++++++++----
- include/net/sctp/sctp.h                            |  6 +--
- include/net/sctp/structs.h                         |  3 +-
- include/uapi/linux/nfc.h                           |  6 +--
- net/bridge/br_multicast.c                          | 32 +++++++++++++
- net/bridge/br_netlink.c                            |  4 +-
- net/bridge/br_private.h                            | 12 +++--
- net/bridge/br_sysfs_br.c                           |  4 +-
- net/bridge/br_vlan_options.c                       |  4 +-
- net/ipv4/af_inet.c                                 | 10 ++---
- net/ipv4/udp.c                                     |  2 +-
- net/ipv6/ip6_vti.c                                 |  2 +
- net/ipv6/raw.c                                     |  3 ++
- net/ipv6/udp.c                                     |  2 +-
- net/ncsi/ncsi-netlink.c                            |  6 ++-
- net/sctp/diag.c                                    | 12 ++---
- net/sctp/endpointola.c                             | 23 ++++++----
- net/sctp/socket.c                                  | 23 ++++++----
- net/smc/smc.h                                      |  5 +++
- net/smc/smc_cdc.c                                  | 52 ++++++++++------------
- net/smc/smc_cdc.h                                  |  2 +-
- net/smc/smc_core.c                                 | 27 ++++++++---
- net/smc/smc_core.h                                 |  6 +++
- net/smc/smc_ib.c                                   |  4 +-
- net/smc/smc_ib.h                                   |  1 +
- net/smc/smc_llc.c                                  |  2 +-
- net/smc/smc_wr.c                                   | 51 ++++-----------------
- net/smc/smc_wr.h                                   |  5 +--
- net/xdp/xsk_buff_pool.c                            |  1 +
- tools/testing/selftests/net/mptcp/config           |  1 -
- tools/testing/selftests/net/udpgro_fwd.sh          |  6 ++-
- tools/testing/selftests/net/udpgso.c               | 12 ++---
- tools/testing/selftests/net/udpgso_bench_tx.c      |  8 +++-
- 58 files changed, 405 insertions(+), 237 deletions(-)
+I thought that someone forwarded my comments (originally posted months
+on a feature request ago) here but seems not.
+(I am a ld.lld maintainer.)

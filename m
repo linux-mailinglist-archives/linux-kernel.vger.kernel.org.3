@@ -2,151 +2,396 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D31AE482013
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56988482016
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242040AbhL3Txm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 14:53:42 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:36124
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242028AbhL3Txj (ORCPT
+        id S242026AbhL3Tzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 14:55:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237051AbhL3Tzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 14:53:39 -0500
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 6D86640710
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 19:53:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1640894018;
-        bh=8uEPws7WapP8rUIPMK6UFetuvdb1C3w9FuCMI36coi0=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=MmvXfGOxbyaGvtXJH+Sm/7l6oHMOp9Nm421qB0UqutaS4GlO7Ci3kqa/NGfzEJMom
-         tmsjDD/WeN2wdMmcs7jXeBUsay14cA9Ce7QyGoEH1RHMGxKW1gbtcnXUdHZreZ2iZn
-         AdloX+fMtQqTDVW6lIqQACRSHun8Sxb490csBkNUBbbIdJ3a3pvJoJYww3AccrLBka
-         UCemlxD675XkbQ1U7O9fklIA+cxWRO8y51KrbOJdB1cgLCjgVGHHUb7v0dl5DdkRvG
-         zw5x3mhdAE9avfITYKjrS8kjtnhJKEM44r0As1YeCsHyvD6sfa3NFIRUUEhh0V29Sd
-         7tihllKzX1OvQ==
-Received: by mail-lj1-f198.google.com with SMTP id j15-20020a2e6e0f000000b0022db2724332so6165176ljc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:53:38 -0800 (PST)
+        Thu, 30 Dec 2021 14:55:53 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A08C061574;
+        Thu, 30 Dec 2021 11:55:52 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id h2so45896606lfv.9;
+        Thu, 30 Dec 2021 11:55:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wf118paxagDJe0BrTL1UFbWHYfGXmH7eOtC5eeaiIgI=;
+        b=d+xP+k03ZvWgl5IMd5D2vhU1nsZndGBUloMtFMtDSEpWz2dGXzcwJts3k5j7FdaVM7
+         VVHBHpn6SgXXI8+1O+A/OjYLPceom8Akg2angU5/TTQRKpLV3VFIKUHi9ujnGLHYARIz
+         Pt7I6fFsrWU2mHMFlMZm0UBWglKYA7kUBI/V5mAujkKiTL0IchOMZgWNeoun8FSqEKcE
+         6qqxELTDO29zHwBWYUYvf28K+VUX5VnD8Z1P0fJpxoIZ4Bc/B8keVCx4esqtwEzEMDbs
+         3uDkEybpjc2+jxcLns1E5EyCtC8V5haHtLv9Owr4N40XJcq+87DFS+vtIv2xobn5BqTc
+         PfVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8uEPws7WapP8rUIPMK6UFetuvdb1C3w9FuCMI36coi0=;
-        b=MTqAjGUBbxXYqxswkyYxuh+81BwRH3+gHTYKD9hcdgZDbY72rtmU5Q9oItYLf6NGlq
-         HV96SbbboDBR1dTTl307vqcPvnJl/ADnMDKuC+zmJc0x8YdjVMpshNwR6mws0V8tfHnB
-         vGJvD4PQASxFro1Tg+BlkbFRgkQoNE5f3D81AuBPe+738+6EyFgwziX4yjIOWrsyABm1
-         9M9xEVRTBUTcSfITI2z0lA6EReCLBJ2RLFilfLdLylxrgETk1AF5IbIOeeN78MsMapsU
-         WxfWinifhj133SMZpR1SGUU8X+SaAw/ONo+c1b+Xm4oz7lOxbmBHKxrC1gZCrM/vG+cV
-         JIHg==
-X-Gm-Message-State: AOAM5319cU+LBLM5TpUOBqdXgGiFf7Zf3l0tQ7S90mSfKUCFMN8/xGaJ
-        +50j/xhlmWNiYb0xrLFTS6s+K9G3RtHVWlrO2PkCaTkZ4bjbnOojldaAPN/wrJxHQbyaKl8YSmR
-        l1cjp8c1gGqkS2XOO2AqBqbSoHChOeJQX04H2NLeSKQ==
-X-Received: by 2002:a2e:a288:: with SMTP id k8mr14085916lja.204.1640894017918;
-        Thu, 30 Dec 2021 11:53:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyNHCKwtJ5UoHGrJtzXyOc5ie5RkA53X5zCoUxVYllNPxSfugxzeS6pBP++ALCmFSmUMlifTA==
-X-Received: by 2002:a2e:a288:: with SMTP id k8mr14085902lja.204.1640894017764;
-        Thu, 30 Dec 2021 11:53:37 -0800 (PST)
-Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id v9sm2454505lja.109.2021.12.30.11.53.36
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wf118paxagDJe0BrTL1UFbWHYfGXmH7eOtC5eeaiIgI=;
+        b=AP1iW/197CqMuInComDt+zu8r1lLggUyWE+UzPKqR1mgRWl+/y49lVnk2I4VgNdjjA
+         ox8hy+/uWXW70btlB65fWFmO+yv0FwUwUxLTJphsL0qxW5Dl0c6NExusRLRuRmbYsaBz
+         3E5Sb5zFJEgYQlTYYHV7XCIFkf4WX2Bo2uZTqf3qUSePi6riFxZCbp6mZhmyLrSnENUj
+         z+ep4TKTUQr7iOvGu3EzI5pbUqTsE2j/Q2Tp3daDkZyoa8p7yFtOnodfNveVHSy1ir8u
+         2x3PqAEK3VBrDYPGodELncq6fh2VD02fnuFpbHyorSzpKVbyGrQesUBWUMC4QYUgVDVW
+         rgBA==
+X-Gm-Message-State: AOAM533wiWeUlqiyxyFFGuADIL3IqHK/j7En1n2XZADscaLUEien6YyQ
+        9D1i5Z9ZxVdYTNNuQWV/Pxs=
+X-Google-Smtp-Source: ABdhPJwIOPSrQ/q1lNA3B+Zx9QbSUn8ZPpEzm+qUl8XrQcWtL8SrM5JoVd7A0t62XpgQDP8vyAdnzA==
+X-Received: by 2002:ac2:5458:: with SMTP id d24mr28898253lfn.38.1640894151047;
+        Thu, 30 Dec 2021 11:55:51 -0800 (PST)
+Received: from localhost.localdomain ([94.103.235.97])
+        by smtp.gmail.com with ESMTPSA id v2sm2553914ljg.46.2021.12.30.11.55.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 11:53:37 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Sylwester Nawrocki <snawrocki@kernel.org>
-Subject: [RFT][PATCH 3/3] arm64: dts: exynos: drop incorrectly placed wakeup interrupts in Exynos850
-Date:   Thu, 30 Dec 2021 20:53:25 +0100
-Message-Id: <20211230195325.328220-3-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211230195325.328220-1-krzysztof.kozlowski@canonical.com>
-References: <20211230195325.328220-1-krzysztof.kozlowski@canonical.com>
+        Thu, 30 Dec 2021 11:55:50 -0800 (PST)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     johannes@sipsolutions.net, davem@davemloft.net, kuba@kernel.org,
+        me@bobcopeland.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+860268315ba86ea6b96b@syzkaller.appspotmail.com
+Subject: [PATCH] mac80211: mesh: embedd mesh_paths and mpp_paths into ieee80211_if_mesh
+Date:   Thu, 30 Dec 2021 22:55:47 +0300
+Message-Id: <20211230195547.23977-1-paskripkin@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pin controller device node is expected to have one (optional)
-interrupt.  Its pin banks capable of external interrupts, should define
-interrupts for each pin, unless a muxed interrupt is used.
+Syzbot hit NULL deref in rhashtable_free_and_destroy(). The problem was
+in mesh_paths and mpp_paths being NULL.
 
-Exynos850 defined the second part - interrupt for each pin in wake-up
-pin controller - but also added these interrupts in main device node,
-which is not correct.
+mesh_pathtbl_init() could fail in case of memory allocation failure, but
+nobody cared, since ieee80211_mesh_init_sdata() returns void. It led to
+leaving 2 pointers as NULL. Syzbot has found null deref on exit path,
+but it could happen anywhere else, because code assumes these pointers are
+valid.
 
-Fixes: e3493220fd3e ("arm64: dts: exynos: Add initial Exynos850 SoC support")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Since all ieee80211_*_setup_sdata functions are void and do not fail,
+let's embedd mesh_paths and mpp_paths into parent struct to avoid
+adding error handling on higher levels and follow the pattern of others
+setup_sdata functions
+
+Fixes: 60854fd94573 ("mac80211: mesh: convert path table to rhashtable")
+Reported-and-tested-by: syzbot+860268315ba86ea6b96b@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
 ---
- arch/arm64/boot/dts/exynos/exynos850.dtsi | 40 -----------------------
- 1 file changed, 40 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/exynos/exynos850.dtsi b/arch/arm64/boot/dts/exynos/exynos850.dtsi
-index 2abbb972b610..4f0a40de5e67 100644
---- a/arch/arm64/boot/dts/exynos/exynos850.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynos850.dtsi
-@@ -344,38 +344,6 @@ cmu_hsi: clock-controller@13400000 {
- 		pinctrl_alive: pinctrl@11850000 {
- 			compatible = "samsung,exynos850-pinctrl";
- 			reg = <0x11850000 0x1000>;
--			interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 29 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
+Happy New Year and Merry Christmas! :)
+
+
+With regards,
+Pavel Skripkin
+
+---
+ net/mac80211/ieee80211_i.h  | 24 +++++++++-
+ net/mac80211/mesh.h         | 22 +--------
+ net/mac80211/mesh_pathtbl.c | 89 +++++++++++++------------------------
+ 3 files changed, 54 insertions(+), 81 deletions(-)
+
+diff --git a/net/mac80211/ieee80211_i.h b/net/mac80211/ieee80211_i.h
+index 5666bbb8860b..482c98ede19b 100644
+--- a/net/mac80211/ieee80211_i.h
++++ b/net/mac80211/ieee80211_i.h
+@@ -647,6 +647,26 @@ struct mesh_csa_settings {
+ 	struct cfg80211_csa_settings settings;
+ };
  
- 			wakeup-interrupt-controller {
- 				compatible = "samsung,exynos7-wakeup-eint";
-@@ -385,14 +353,6 @@ wakeup-interrupt-controller {
- 		pinctrl_cmgp: pinctrl@11c30000 {
- 			compatible = "samsung,exynos850-pinctrl";
- 			reg = <0x11c30000 0x1000>;
--			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 46 IRQ_TYPE_LEVEL_HIGH>;
++/**
++ * struct mesh_table
++ *
++ * @known_gates: list of known mesh gates and their mpaths by the station. The
++ * gate's mpath may or may not be resolved and active.
++ * @gates_lock: protects updates to known_gates
++ * @rhead: the rhashtable containing struct mesh_paths, keyed by dest addr
++ * @walk_head: linked list containing all mesh_path objects
++ * @walk_lock: lock protecting walk_head
++ * @entries: number of entries in the table
++ */
++struct mesh_table {
++	struct hlist_head known_gates;
++	spinlock_t gates_lock;
++	struct rhashtable rhead;
++	struct hlist_head walk_head;
++	spinlock_t walk_lock;
++	atomic_t entries;		/* Up to MAX_MESH_NEIGHBOURS */
++};
++
+ struct ieee80211_if_mesh {
+ 	struct timer_list housekeeping_timer;
+ 	struct timer_list mesh_path_timer;
+@@ -721,8 +741,8 @@ struct ieee80211_if_mesh {
+ 	/* offset from skb->data while building IE */
+ 	int meshconf_offset;
  
- 			wakeup-interrupt-controller {
- 				compatible = "samsung,exynos7-wakeup-eint";
+-	struct mesh_table *mesh_paths;
+-	struct mesh_table *mpp_paths; /* Store paths for MPP&MAP */
++	struct mesh_table mesh_paths;
++	struct mesh_table mpp_paths; /* Store paths for MPP&MAP */
+ 	int mesh_paths_generation;
+ 	int mpp_paths_generation;
+ };
+diff --git a/net/mac80211/mesh.h b/net/mac80211/mesh.h
+index 77080b4f87b8..b2b717a78114 100644
+--- a/net/mac80211/mesh.h
++++ b/net/mac80211/mesh.h
+@@ -127,26 +127,6 @@ struct mesh_path {
+ 	u32 path_change_count;
+ };
+ 
+-/**
+- * struct mesh_table
+- *
+- * @known_gates: list of known mesh gates and their mpaths by the station. The
+- * gate's mpath may or may not be resolved and active.
+- * @gates_lock: protects updates to known_gates
+- * @rhead: the rhashtable containing struct mesh_paths, keyed by dest addr
+- * @walk_head: linked list containing all mesh_path objects
+- * @walk_lock: lock protecting walk_head
+- * @entries: number of entries in the table
+- */
+-struct mesh_table {
+-	struct hlist_head known_gates;
+-	spinlock_t gates_lock;
+-	struct rhashtable rhead;
+-	struct hlist_head walk_head;
+-	spinlock_t walk_lock;
+-	atomic_t entries;		/* Up to MAX_MESH_NEIGHBOURS */
+-};
+-
+ /* Recent multicast cache */
+ /* RMC_BUCKETS must be a power of 2, maximum 256 */
+ #define RMC_BUCKETS		256
+@@ -308,7 +288,7 @@ int mesh_path_error_tx(struct ieee80211_sub_if_data *sdata,
+ void mesh_path_assign_nexthop(struct mesh_path *mpath, struct sta_info *sta);
+ void mesh_path_flush_pending(struct mesh_path *mpath);
+ void mesh_path_tx_pending(struct mesh_path *mpath);
+-int mesh_pathtbl_init(struct ieee80211_sub_if_data *sdata);
++void mesh_pathtbl_init(struct ieee80211_sub_if_data *sdata);
+ void mesh_pathtbl_unregister(struct ieee80211_sub_if_data *sdata);
+ int mesh_path_del(struct ieee80211_sub_if_data *sdata, const u8 *addr);
+ void mesh_path_timer(struct timer_list *t);
+diff --git a/net/mac80211/mesh_pathtbl.c b/net/mac80211/mesh_pathtbl.c
+index 7cab1cf09bf1..acc1c299f1ae 100644
+--- a/net/mac80211/mesh_pathtbl.c
++++ b/net/mac80211/mesh_pathtbl.c
+@@ -47,32 +47,24 @@ static void mesh_path_rht_free(void *ptr, void *tblptr)
+ 	mesh_path_free_rcu(tbl, mpath);
+ }
+ 
+-static struct mesh_table *mesh_table_alloc(void)
++static void mesh_table_init(struct mesh_table *tbl)
+ {
+-	struct mesh_table *newtbl;
++	INIT_HLIST_HEAD(&tbl->known_gates);
++	INIT_HLIST_HEAD(&tbl->walk_head);
++	atomic_set(&tbl->entries,  0);
++	spin_lock_init(&tbl->gates_lock);
++	spin_lock_init(&tbl->walk_lock);
+ 
+-	newtbl = kmalloc(sizeof(struct mesh_table), GFP_ATOMIC);
+-	if (!newtbl)
+-		return NULL;
+-
+-	INIT_HLIST_HEAD(&newtbl->known_gates);
+-	INIT_HLIST_HEAD(&newtbl->walk_head);
+-	atomic_set(&newtbl->entries,  0);
+-	spin_lock_init(&newtbl->gates_lock);
+-	spin_lock_init(&newtbl->walk_lock);
+-	if (rhashtable_init(&newtbl->rhead, &mesh_rht_params)) {
+-		kfree(newtbl);
+-		return NULL;
+-	}
+-
+-	return newtbl;
++	/* rhashtable_init() may fail only in case of wrong
++	 * mesh_rht_params
++	 */
++	WARN_ON(rhashtable_init(&tbl->rhead, &mesh_rht_params));
+ }
+ 
+ static void mesh_table_free(struct mesh_table *tbl)
+ {
+ 	rhashtable_free_and_destroy(&tbl->rhead,
+ 				    mesh_path_rht_free, tbl);
+-	kfree(tbl);
+ }
+ 
+ /**
+@@ -238,13 +230,13 @@ static struct mesh_path *mpath_lookup(struct mesh_table *tbl, const u8 *dst,
+ struct mesh_path *
+ mesh_path_lookup(struct ieee80211_sub_if_data *sdata, const u8 *dst)
+ {
+-	return mpath_lookup(sdata->u.mesh.mesh_paths, dst, sdata);
++	return mpath_lookup(&sdata->u.mesh.mesh_paths, dst, sdata);
+ }
+ 
+ struct mesh_path *
+ mpp_path_lookup(struct ieee80211_sub_if_data *sdata, const u8 *dst)
+ {
+-	return mpath_lookup(sdata->u.mesh.mpp_paths, dst, sdata);
++	return mpath_lookup(&sdata->u.mesh.mpp_paths, dst, sdata);
+ }
+ 
+ static struct mesh_path *
+@@ -281,7 +273,7 @@ __mesh_path_lookup_by_idx(struct mesh_table *tbl, int idx)
+ struct mesh_path *
+ mesh_path_lookup_by_idx(struct ieee80211_sub_if_data *sdata, int idx)
+ {
+-	return __mesh_path_lookup_by_idx(sdata->u.mesh.mesh_paths, idx);
++	return __mesh_path_lookup_by_idx(&sdata->u.mesh.mesh_paths, idx);
+ }
+ 
+ /**
+@@ -296,7 +288,7 @@ mesh_path_lookup_by_idx(struct ieee80211_sub_if_data *sdata, int idx)
+ struct mesh_path *
+ mpp_path_lookup_by_idx(struct ieee80211_sub_if_data *sdata, int idx)
+ {
+-	return __mesh_path_lookup_by_idx(sdata->u.mesh.mpp_paths, idx);
++	return __mesh_path_lookup_by_idx(&sdata->u.mesh.mpp_paths, idx);
+ }
+ 
+ /**
+@@ -309,7 +301,7 @@ int mesh_path_add_gate(struct mesh_path *mpath)
+ 	int err;
+ 
+ 	rcu_read_lock();
+-	tbl = mpath->sdata->u.mesh.mesh_paths;
++	tbl = &mpath->sdata->u.mesh.mesh_paths;
+ 
+ 	spin_lock_bh(&mpath->state_lock);
+ 	if (mpath->is_gate) {
+@@ -418,7 +410,7 @@ struct mesh_path *mesh_path_add(struct ieee80211_sub_if_data *sdata,
+ 	if (!new_mpath)
+ 		return ERR_PTR(-ENOMEM);
+ 
+-	tbl = sdata->u.mesh.mesh_paths;
++	tbl = &sdata->u.mesh.mesh_paths;
+ 	spin_lock_bh(&tbl->walk_lock);
+ 	mpath = rhashtable_lookup_get_insert_fast(&tbl->rhead,
+ 						  &new_mpath->rhash,
+@@ -460,7 +452,7 @@ int mpp_path_add(struct ieee80211_sub_if_data *sdata,
+ 		return -ENOMEM;
+ 
+ 	memcpy(new_mpath->mpp, mpp, ETH_ALEN);
+-	tbl = sdata->u.mesh.mpp_paths;
++	tbl = &sdata->u.mesh.mpp_paths;
+ 
+ 	spin_lock_bh(&tbl->walk_lock);
+ 	ret = rhashtable_lookup_insert_fast(&tbl->rhead,
+@@ -489,7 +481,7 @@ int mpp_path_add(struct ieee80211_sub_if_data *sdata,
+ void mesh_plink_broken(struct sta_info *sta)
+ {
+ 	struct ieee80211_sub_if_data *sdata = sta->sdata;
+-	struct mesh_table *tbl = sdata->u.mesh.mesh_paths;
++	struct mesh_table *tbl = &sdata->u.mesh.mesh_paths;
+ 	static const u8 bcast[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+ 	struct mesh_path *mpath;
+ 
+@@ -548,7 +540,7 @@ static void __mesh_path_del(struct mesh_table *tbl, struct mesh_path *mpath)
+ void mesh_path_flush_by_nexthop(struct sta_info *sta)
+ {
+ 	struct ieee80211_sub_if_data *sdata = sta->sdata;
+-	struct mesh_table *tbl = sdata->u.mesh.mesh_paths;
++	struct mesh_table *tbl = &sdata->u.mesh.mesh_paths;
+ 	struct mesh_path *mpath;
+ 	struct hlist_node *n;
+ 
+@@ -563,7 +555,7 @@ void mesh_path_flush_by_nexthop(struct sta_info *sta)
+ static void mpp_flush_by_proxy(struct ieee80211_sub_if_data *sdata,
+ 			       const u8 *proxy)
+ {
+-	struct mesh_table *tbl = sdata->u.mesh.mpp_paths;
++	struct mesh_table *tbl = &sdata->u.mesh.mpp_paths;
+ 	struct mesh_path *mpath;
+ 	struct hlist_node *n;
+ 
+@@ -597,8 +589,8 @@ static void table_flush_by_iface(struct mesh_table *tbl)
+  */
+ void mesh_path_flush_by_iface(struct ieee80211_sub_if_data *sdata)
+ {
+-	table_flush_by_iface(sdata->u.mesh.mesh_paths);
+-	table_flush_by_iface(sdata->u.mesh.mpp_paths);
++	table_flush_by_iface(&sdata->u.mesh.mesh_paths);
++	table_flush_by_iface(&sdata->u.mesh.mpp_paths);
+ }
+ 
+ /**
+@@ -644,7 +636,7 @@ int mesh_path_del(struct ieee80211_sub_if_data *sdata, const u8 *addr)
+ 	/* flush relevant mpp entries first */
+ 	mpp_flush_by_proxy(sdata, addr);
+ 
+-	err = table_path_del(sdata->u.mesh.mesh_paths, sdata, addr);
++	err = table_path_del(&sdata->u.mesh.mesh_paths, sdata, addr);
+ 	sdata->u.mesh.mesh_paths_generation++;
+ 	return err;
+ }
+@@ -682,7 +674,7 @@ int mesh_path_send_to_gates(struct mesh_path *mpath)
+ 	struct mesh_path *gate;
+ 	bool copy = false;
+ 
+-	tbl = sdata->u.mesh.mesh_paths;
++	tbl = &sdata->u.mesh.mesh_paths;
+ 
+ 	rcu_read_lock();
+ 	hlist_for_each_entry_rcu(gate, &tbl->known_gates, gate_list) {
+@@ -762,29 +754,10 @@ void mesh_path_fix_nexthop(struct mesh_path *mpath, struct sta_info *next_hop)
+ 	mesh_path_tx_pending(mpath);
+ }
+ 
+-int mesh_pathtbl_init(struct ieee80211_sub_if_data *sdata)
++void mesh_pathtbl_init(struct ieee80211_sub_if_data *sdata)
+ {
+-	struct mesh_table *tbl_path, *tbl_mpp;
+-	int ret;
+-
+-	tbl_path = mesh_table_alloc();
+-	if (!tbl_path)
+-		return -ENOMEM;
+-
+-	tbl_mpp = mesh_table_alloc();
+-	if (!tbl_mpp) {
+-		ret = -ENOMEM;
+-		goto free_path;
+-	}
+-
+-	sdata->u.mesh.mesh_paths = tbl_path;
+-	sdata->u.mesh.mpp_paths = tbl_mpp;
+-
+-	return 0;
+-
+-free_path:
+-	mesh_table_free(tbl_path);
+-	return ret;
++	mesh_table_init(&sdata->u.mesh.mesh_paths);
++	mesh_table_init(&sdata->u.mesh.mpp_paths);
+ }
+ 
+ static
+@@ -806,12 +779,12 @@ void mesh_path_tbl_expire(struct ieee80211_sub_if_data *sdata,
+ 
+ void mesh_path_expire(struct ieee80211_sub_if_data *sdata)
+ {
+-	mesh_path_tbl_expire(sdata, sdata->u.mesh.mesh_paths);
+-	mesh_path_tbl_expire(sdata, sdata->u.mesh.mpp_paths);
++	mesh_path_tbl_expire(sdata, &sdata->u.mesh.mesh_paths);
++	mesh_path_tbl_expire(sdata, &sdata->u.mesh.mpp_paths);
+ }
+ 
+ void mesh_pathtbl_unregister(struct ieee80211_sub_if_data *sdata)
+ {
+-	mesh_table_free(sdata->u.mesh.mesh_paths);
+-	mesh_table_free(sdata->u.mesh.mpp_paths);
++	mesh_table_free(&sdata->u.mesh.mesh_paths);
++	mesh_table_free(&sdata->u.mesh.mpp_paths);
+ }
 -- 
-2.32.0
+2.34.1
 

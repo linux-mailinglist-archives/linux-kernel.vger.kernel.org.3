@@ -2,92 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C30C848203F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 21:21:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9CF482047
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 21:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242082AbhL3UVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 15:21:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242065AbhL3UVp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 15:21:45 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F145FC06173E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 12:21:44 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id h7so11991919lfu.4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 12:21:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1M8/pTBgCNgjw7luW/ryskM/W2c2sEhJd4G0NuDPzic=;
-        b=uEWW7EVWI310VES8xhKfslDh5Cp3e8UmjZaE4B4JX1PlZQxbbh2WKTiuK+R4hVf9lq
-         ZAJZ60ki/0unTuVTuV0SgraOfDuL17Kk/WZ4U6I7vJGrPtw0f2aff3NK6YaBYfA/MKUp
-         78tlfZQJqWA2HKp5fw5iF1A0Qx3Z1tl9x+MoJrlPxUWnGeA+2bBdRWv530c3kiWZTkLA
-         3dB9CvbQw87bDwUTzBRnFWrI6u+LoihHWpldM0QU89gVXMKNhJcLb54qHAKMwU/koCB9
-         lR+wm8O32VOdpo4zZFqF0osyYiZFU5metIpcCcQkNuGZYSAR8NdF7nXF7FHt0E4ChgWi
-         mayg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1M8/pTBgCNgjw7luW/ryskM/W2c2sEhJd4G0NuDPzic=;
-        b=sHf+6qUT5TrnCYOAB5foVwYXMD+i2+7kXFKddpGDTO6Ge+ROevAdfmQQZKZEp4SFx9
-         EzywazPnZYk3nmFqhTvPGXQlIdZoznj4E0kbyH01rur3TUZU49Av4abheXXdDeB795xZ
-         iPUaWCf+JfOlXyW5C+HOfkngV9jVgnh4wG/PSKpnNByhW8CuI25O6O0JxEH4U0zacxp7
-         hS1/K7RErC2DclkLLsjmPiEf/httDfX7dk7Yrp9Vpwjxg5SPi8hqB5amoKntg33+ben4
-         BQDtzF0TeAbw5xEHpT6el34StWuEmLjnb9Mlkp31vyHo6HRElX+aNGhyzwVbfoTPoOIt
-         UBSw==
-X-Gm-Message-State: AOAM531QNCjZ53AG9kWQr+pB2+FbeT3nn4Erom51vudhaViH3JDhZRRW
-        DQx5Hiv3NU+lsvzBbcyZMEAFN9Ag3cI/FeuoKDg=
-X-Google-Smtp-Source: ABdhPJzENm5qQ8Ns7IwaTB5kH4JuYy5gGwHSWr9o0LIB82dnjwMsqW87ieTydkDAPvVCk6bHVFU04g==
-X-Received: by 2002:ac2:490f:: with SMTP id n15mr12551770lfi.141.1640895702792;
-        Thu, 30 Dec 2021 12:21:42 -0800 (PST)
-Received: from [192.168.112.17] (nikaet.starlink.ru. [94.141.168.29])
-        by smtp.gmail.com with ESMTPSA id p27sm2566749lfa.295.2021.12.30.12.21.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Dec 2021 12:21:42 -0800 (PST)
-Subject: Re: [PATCH] iio: stm: don't always auto-enable I2C and SPI interface
- drivers
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20211229072916.2567155-1-nikita.yoush@cogentembedded.com>
- <CAHp75VfKcKyc8fdu0XnaYYnY2UP+27=8hKJMtzwH5755Cw=sww@mail.gmail.com>
-From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Message-ID: <4d8e2b87-3196-0cf4-6096-885b446b3aa7@cogentembedded.com>
-Date:   Thu, 30 Dec 2021 23:21:41 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S242112AbhL3Uic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 15:38:32 -0500
+Received: from mga04.intel.com ([192.55.52.120]:45394 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242088AbhL3Uib (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 15:38:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640896711; x=1672432711;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gHdXfN1jkxy00D9dvyWw6ANnxvJHm9ol2k2+g3ilFyI=;
+  b=SytwXUeyQwZzXCX1KAcYQevL613fmJY5kKNQBftG65ilA8F68ErwE9xt
+   CBHMRYtiT0yNRa5ETLVstUQB81AZDkcHVLfquwN+TLvVOMqW6bywsF2Tj
+   EdocTbfawavMVVOB5YTxJcchKPPczOaTAZqkjK38ujukhCJ6Rg9i/hfgA
+   eJkYwRTcR2lOH6GJZvJ/wJIncHCNR/jg4bVexKyAppgHcvAd1lcA0E4P4
+   RiIzBwKzg61fr9p8AGZZA/hrt5sLIad610DGTTNm+SdK5RVUaVCgd9h+f
+   pKknVEpi7TNu6mwLSUk/cwg18WMRoLguSh9nEl3g92PhJXCexvKuUZVdH
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="240515315"
+X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
+   d="scan'208";a="240515315"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 12:38:30 -0800
+X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
+   d="scan'208";a="524508614"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 12:38:30 -0800
+Date:   Thu, 30 Dec 2021 12:38:29 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     vishal.l.verma@intel.com, dan.j.williams@intel.com,
+        dave.jiang@intel.com, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH -next] nvdimm/btt: Fix btt_init() kernel-doc comment
+Message-ID: <20211230203829.GA95811@iweiny-DESK2.sc.intel.com>
+Mail-Followup-To: Yang Li <yang.lee@linux.alibaba.com>,
+        vishal.l.verma@intel.com, dan.j.williams@intel.com,
+        dave.jiang@intel.com, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+References: <20211230092520.115275-1-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-In-Reply-To: <CAHp75VfKcKyc8fdu0XnaYYnY2UP+27=8hKJMtzwH5755Cw=sww@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211230092520.115275-1-yang.lee@linux.alibaba.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-      This patch makes I2C and SPI interface drivers for STMicroelectronics
->     sensor chips individually selectable via Kconfig.
+On Thu, Dec 30, 2021 at 05:25:20PM +0800, Yang Li wrote:
+> Add the description of @nd_region and remove @maxlane in
+> btt_init() kernel-doc comment to remove warnings found
+> by running scripts/kernel-doc, which is caused by using 'make W=1'.
+> drivers/nvdimm/btt.c:1584: warning: Function parameter or member
+> 'nd_region' not described in 'btt_init'
+> drivers/nvdimm/btt.c:1584: warning: Excess function parameter 'maxlane'
+> description in 'btt_init'
 > 
->     The default is kept unchanged - I2C and SPI interface drivers are still
->     selected by default if the corresponding bus support is available.
-> 
->     However, the patch makes it is possible to explicitly disable drivers
->     that are not needed for particular 
-> 
-> NAK if users need now manually update their .config / defconfigs.
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-No they don't need to update anything.
-And 'make oldconfig' will be old.
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 
-The config will only change after a manual action.
+> ---
+>  drivers/nvdimm/btt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/nvdimm/btt.c b/drivers/nvdimm/btt.c
+> index da3f007a1211..293b8c107817 100644
+> --- a/drivers/nvdimm/btt.c
+> +++ b/drivers/nvdimm/btt.c
+> @@ -1567,7 +1567,7 @@ static void btt_blk_cleanup(struct btt *btt)
+>   * @rawsize:	raw size in bytes of the backing device
+>   * @lbasize:	lba size of the backing device
+>   * @uuid:	A uuid for the backing device - this is stored on media
+> - * @maxlane:	maximum number of parallel requests the device can handle
+> + * @nd_region:  region id and number of lanes possible
+>   *
+>   * Initialize a Block Translation Table on a backing device to provide
+>   * single sector power fail atomicity.
+> -- 
+> 2.20.1.7.g153144c
+> 

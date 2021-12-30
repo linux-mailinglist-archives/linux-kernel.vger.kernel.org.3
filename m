@@ -2,93 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C73A4819CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 06:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5D84819CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 06:30:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236213AbhL3F2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 00:28:32 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:57782
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229455AbhL3F2b (ORCPT
+        id S236241AbhL3Far (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 00:30:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236222AbhL3Faq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 00:28:31 -0500
-Received: from localhost.localdomain (1-171-85-107.dynamic-ip.hinet.net [1.171.85.107])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id EC7733FFD7;
-        Thu, 30 Dec 2021 05:28:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1640842104;
-        bh=ilWOacWy3+wmYfMNTytyTjyd0g6hoKp0sIxy7P57r1s=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=PgljTcaJPg8iG27azKH0Ur8OZoKxxG+/5JjV4n7LTft8ow2ZhVESN77XK+uYnrTSb
-         3ZEoc5TGmM96ac3bqXJgHhJhFYNaC/7IEQhJhn/VNjAIkEZnOkJDEK2m6nrTxEVR5M
-         O41sDa43n+X3CEz7HqhUx3VoqFTE4IwDM/l6dR3vKnkYquAQi6Zmj3htRQwxtLzdlN
-         teCjeadZSSFn81JdK2qL73Mkff4e5Vui7dWvs8clLudtmBmgKuk0N0XNU+xhyHWFhn
-         sUqpHwYbQvmV8oueE1RYi3SB868AHRslCjanaqLFyFCsyA5EyV0v9+WM2mQP5ZMtad
-         hdpxikTcGTIxg==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     gregkh@linuxfoundation.org
-Cc:     stern@rowland.harvard.edu, mathias.nyman@linux.intel.com,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Bixuan Cui <cuibixuan@huawei.com>,
-        Rajat Jain <rajatja@google.com>, Andrew Lunn <andrew@lunn.ch>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] usb: core: Bail out when port is stuck in reset loop
-Date:   Thu, 30 Dec 2021 13:28:09 +0800
-Message-Id: <20211230052811.650191-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.33.1
+        Thu, 30 Dec 2021 00:30:46 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC58C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 21:30:46 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id k21so52317973lfu.0
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 21:30:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=yC/MCLvkq0jgOYQF3ZLeqKHc/yJkw5VXAMTxeSh1jqE=;
+        b=ZoTqRmVBr0o49x1iDBiM8xs/ZclzbacaJHsNDbh1g9dUWgx8YAn+zZPTDk/HGEi5Oe
+         kilDaUYzUPEnwjr0a2zytYPHxzEO8SZRb9/HnO9ZCc71UICoWwS/WSmHamOmf795sOoe
+         sFNa0AYVx0INxfw+axXR8NpCb4gD6WWHjHvTsxDPUH/rNYO/vdygw1cKOnDnQ7XlEgto
+         3PU7l1PJZFF8m8TabMACd3LKd3s8D5CQ/TZrBXn1ER24FBzJSXcXE2OyYyPjV2mKSBML
+         YMtPmTaidqv/8UopDt4+HDiUIJHBc4Dbmk2+k6Tv6B8V2O6+OG3DgpSkq6hm9q7D1Zzh
+         enQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=yC/MCLvkq0jgOYQF3ZLeqKHc/yJkw5VXAMTxeSh1jqE=;
+        b=P3Jch09Wfi4o4ybvYFTq7AaibwmqTRYC9Kvo4t2qzGxCVLdUflnItyEaaia7P9c2HF
+         yBPgaAMRzvRAA/EdIN0bAA/PC973p7ohC+tzZnFmRsKUw8+hnV3lxsDhE/Gk0EnirC7C
+         /q2hQ8zDGjCZQpBJn/LvC3oYDBfLPmZke2dN2EOtkt+r8PoRZaTmNSU11rX1EpB9SUIB
+         lBt0uQ1mOS+bm64dhZh/xgm/xZeB+BYBFPdrySoGHYBudx+PoCPVodYlwq6tP39LowVt
+         5WfSHAV2uKTcwAJ0vWOj4FyImkmG7Yj5UlKDczG7bID+sWUrWgFh9jhnlnh3IhKNQjYe
+         Mleg==
+X-Gm-Message-State: AOAM531QblMt543dHuAfwNsMLHhUKH3MKTDJLdXcxpjNAfqUq8WFFF9V
+        Kv8AqSvQXi9l8fGAFZIzMHuu6h3+s1PZ3n/0
+X-Google-Smtp-Source: ABdhPJwftSqfhSWtrRZJq1uTh5ApQT9aUecw59km9lfdL/IUeC2ineVEfRUPlcGDp30Eoz+kWiXerg==
+X-Received: by 2002:a19:f806:: with SMTP id a6mr25845836lff.642.1640842244234;
+        Wed, 29 Dec 2021 21:30:44 -0800 (PST)
+Received: from [192.168.112.17] (nikaet.starlink.ru. [94.141.168.29])
+        by smtp.gmail.com with ESMTPSA id m2sm2380803lfu.254.2021.12.29.21.30.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Dec 2021 21:30:43 -0800 (PST)
+Subject: Re: [PATCH 2/3] arm64: dts: renesas: r8a77961: Add lvds0 device node
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211224052309.1997096-1-nikita.yoush@cogentembedded.com>
+ <20211224052309.1997096-3-nikita.yoush@cogentembedded.com>
+ <YcyTV4fJqMHIeyYB@pendragon.ideasonboard.com>
+ <87626d61-ada0-c220-bea5-5330f5256629@cogentembedded.com>
+ <YcyXQxW3kRqQ2Yv0@pendragon.ideasonboard.com>
+ <39f70781-831e-c86a-ec5f-68f2b4bd3d62@cogentembedded.com>
+ <Ycy4AMAT53Uzf+K7@pendragon.ideasonboard.com>
+ <bb6ef732-7cd2-5ba9-0eef-caf2fbfbf829@cogentembedded.com>
+ <Ycze8wzD3Qi8YVAa@pendragon.ideasonboard.com>
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Message-ID: <123e3993-cb71-b6dc-e4f4-4cad1eb51b00@cogentembedded.com>
+Date:   Thu, 30 Dec 2021 08:30:43 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <Ycze8wzD3Qi8YVAa@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unplugging USB device may cause an incorrect warm reset loop and the
-port can no longer be used:
-[  143.039019] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x4202c0
-[  143.039025] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
-[  143.039051] hub 2-0:1.0: state 7 ports 10 chg 0000 evt 0008
-[  143.039058] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x4202c0, return 0x4102c0
-[  143.039092] xhci_hcd 0000:00:14.0: clear port3 connect change, portsc: 0x4002c0
-[  143.039096] usb usb2-port3: link state change
-[  143.039099] xhci_hcd 0000:00:14.0: clear port3 link state change, portsc: 0x2c0
-[  143.039101] usb usb2-port3: do warm reset
-[  143.096736] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2b0, return 0x2b0
-[  143.096751] usb usb2-port3: not warm reset yet, waiting 50ms
-[  143.131500] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link inactive
-[  143.138260] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x2802a0
-[  143.138263] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
-[  143.160756] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2802a0, return 0x3002a0
-[  143.160798] usb usb2-port3: not warm reset yet, waiting 200ms
+>> I'd prefer to make each DT fragment to use only either entities defined in that fragment itself, or
+>> defined "interface entities" between this and "neighbor" DT fragment.
+>>
+>> Such as:
+>> - SoC's DT fragment defines a named port/endpoint to export video stream at
+>> - board's DT fragment defines a named panel node corresponding to panel plugged into board's physical
+>> connector, and connects endpoints with SoC's video export,
+>> - panel's DT fragment extends the panel node from board with video mode information for this particular
+>> panel.
+>> ...
+ >
+> I agree it's annoying, but we'll have a similar problem, just the other
+> way around, with an endpoint defined in the SoC dtsi. Many R-Car SoCs
+> have two LVDS encoders, and you can attach a panel to either of them.
+> Some boards use LVDS0, some boards use LVDS1, and some boards could even
+> use both.
 
-The port status is PP=1, CCS=0, PED=0, PLS=Inactive, which is Error
-state per "USB3 Root Hub Port State Machine". It's reasonable to perform
-warm reset several times, but if the port is still not enabled after
-many attempts, consider it's gone and treat it as disconnected.
+The case of "some boards use LVDS0, some boards use LVDS1" is directly addressed by what I'm trying to 
+suggest. The per-board DT fragment can completely hide board's connection details, without a need for 
+any new concept.
 
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
- drivers/usb/core/hub.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+The case of "some boards could even use both" indeed needs a some way to parametrize panel's DT 
+fragment, and perhaps load two instances of it with different parameters. To some extent this is doable 
+via preprocessor magic and multiple includes, although this approach has obvious disadvantages.
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 00070a8a65079..f618d86d526d1 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -2979,7 +2979,8 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
- 		}
- 
- 		/* Check for disconnect or reset */
--		if (status == 0 || status == -ENOTCONN || status == -ENODEV) {
-+		if (status == 0 || status == -ENOTCONN || status == -ENODEV ||
-+		    (status == -EBUSY && i == PORT_RESET_TRIES - 1)) {
- 			usb_clear_port_feature(hub->hdev, port1,
- 					USB_PORT_FEAT_C_RESET);
- 
--- 
-2.33.1
+> A real solution for this problem will require a new concept. The "DT
+> connector" proposal is related to this problem space. There's also a
+> proprietary implementation in the Rapsberry Pi boot loader of a
+> mechanism to support parametrized overlays ([2] and [3], or [4] for an
+> example of how a panel reset or backlight GPIO can be parametrized).
 
+So the problem is already recognized for years...  what stops from wider adoption of this or similar 
+solutions?
+
+And - if/while that is not being done - can't we at least try to follow more portable DT coding pattern 
+while staying within existing concepts?
+
+Nikita

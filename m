@@ -2,127 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC80E48185D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B19481854
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234397AbhL3CHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 21:07:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232768AbhL3CHT (ORCPT
+        id S234336AbhL3CEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 21:04:30 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:15572 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230043AbhL3CE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 21:07:19 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C22C061574;
-        Wed, 29 Dec 2021 18:07:19 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id bm14so92560111edb.5;
-        Wed, 29 Dec 2021 18:07:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eziAz//rm+zZdRMe0WOS4XNDD8RYDjBI6BCQOt1ypTk=;
-        b=hyudJDCbc80wPdgkm/SfS1OM+A0WKzuFaNGytS4b7WM3XABpQgK0Mhql4bzvoP8V6h
-         nP3pF996IDP1yYRpOcEi+OeEr5OGOOUBjT6BJrSXYgQjdca/kYZ4mm8sqDc/HAu9leaa
-         GFXj2QStD32fPQGyEpCgqnGiNCznoQNhPNjujanokAzCqZaKvEs6PEuqWiJrkWEl4DnY
-         fmFk4fdkbX2YcazMT6A7Q44AdRseVaKIQzMehKEjGjfOG6UN4fcizMzUfCykCUQD/rjl
-         VG9czivxN2NUi2LxJzrejxRDeLOFWOiUyaEFZ25vBCJq6mIuWDawkKM/u9Wy/4DpofcK
-         dsSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eziAz//rm+zZdRMe0WOS4XNDD8RYDjBI6BCQOt1ypTk=;
-        b=6yFK5dzT+NYEaeLdO+c4Tp4tEYxbx0Yt0Q31Zch+j4qDP/XufffZb/xnWbap6UEvf9
-         rYRjx9wGyHAucbIGOmEdDhDhMrZXLrg8FOwwklh7c8lsFTVqSdgFN5HOO9BG7Lwwxzks
-         rHjACtDx2r651DfkukDwZtaiTaxh2dpMbxqaMFkOdTSRPS+vJP4tHeVAO/bq0QEcnmox
-         PL0OP5/eJGsToh1Eje41/RZb/FU0isFllU1zSBnH2qU/vKHQz6yZzOxlqHOxvpu2DdSw
-         TgZBqKh30q2Vfc6eqln6+6wpiTjoKXGnaejf6hbcasWiJADrJJLsvPX+u4cYxep9BKoc
-         wf7g==
-X-Gm-Message-State: AOAM533Seg5TAPBeOGNB2L20ghGOZyrcaW6Q8/GO5RUFcexZQIGljlEk
-        lx5107d8O28HMcolgThQKEmabLQc/Sx4SZDL/c4=
-X-Google-Smtp-Source: ABdhPJw8+6Pp2hwBakFvTsIDO39nr/VX1akYVyLw1MK4MQdVxtjlkcOksCyYbGXStTKVcWdp6gKbDA6CeCQQA/Xs7fc=
-X-Received: by 2002:a17:906:c156:: with SMTP id dp22mr24106682ejc.109.1640830037878;
- Wed, 29 Dec 2021 18:07:17 -0800 (PST)
+        Wed, 29 Dec 2021 21:04:29 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BU1dvH4011546;
+        Thu, 30 Dec 2021 02:04:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=lHE1RB2R9/RlgxwtpoTDHyyYbEarMLCUwPUBx1uJ5Xg=;
+ b=RQC9fciUnBZl0N2sESxaKRTOZSpaz52ZVjAxgKxJFiSWvMMxOb4HbadTSaW0xB/ZpnuW
+ CP3MSAYnzCupQgENPczMjiXqS8AuXqD2IPfjj9wgtfAWZ7k2+ZFlDLo1/xNlpC1f666s
+ dn6P04iEK5WuqsERUY+LuzHJSx8m+7cw9WlILpaOLPEbp8AvbFJ1k1+B571sL65jP9NX
+ R/VYjmspel9iNgIGm6R85bkmFxfHy+qWzH08zd+YmPPBLbljoHhzVsS8C+bFeA92cLAl
+ eGy9Ksm0b8vBgjrvWrn1nPWji8kzwidT3CCo5VHUSTUjQAAAfYk0ja0Qwjb9LVlI8k+Z Eg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d82th90px-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Dec 2021 02:04:28 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BU24Rpt018868;
+        Thu, 30 Dec 2021 02:04:27 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d82th90pb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Dec 2021 02:04:27 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BU23HEb023340;
+        Thu, 30 Dec 2021 02:04:25 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03fra.de.ibm.com with ESMTP id 3d5tx9rmtq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Dec 2021 02:04:25 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BU24L7D45875464
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Dec 2021 02:04:21 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C71724C04E;
+        Thu, 30 Dec 2021 02:04:21 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 226E44C040;
+        Thu, 30 Dec 2021 02:04:21 +0000 (GMT)
+Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.80.242])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Thu, 30 Dec 2021 02:04:21 +0000 (GMT)
+Date:   Thu, 30 Dec 2021 03:04:19 +0100
+From:   Halil Pasic <pasic@linux.ibm.com>
+To:     Tony Krowiak <akrowiak@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, jjherne@linux.ibm.com, freude@linux.ibm.com,
+        borntraeger@de.ibm.com, cohuck@redhat.com, mjrosato@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com, Halil Pasic <pasic@linux.ibm.com>
+Subject: Re: [PATCH v17 08/15] s390/vfio-ap: keep track of active guests
+Message-ID: <20211230030419.2f3e5bda.pasic@linux.ibm.com>
+In-Reply-To: <20211021152332.70455-9-akrowiak@linux.ibm.com>
+References: <20211021152332.70455-1-akrowiak@linux.ibm.com>
+        <20211021152332.70455-9-akrowiak@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20211229113256.299024-1-imagedong@tencent.com> <CAADnVQLY2i+2YTj+Oi7+70e98sRC-t6rr536sc=3WYghpki+ug@mail.gmail.com>
-In-Reply-To: <CAADnVQLY2i+2YTj+Oi7+70e98sRC-t6rr536sc=3WYghpki+ug@mail.gmail.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Thu, 30 Dec 2021 10:04:08 +0800
-Message-ID: <CADxym3Ya-=_zknyJmrQZ-fBKTK_PfPX1Njd=3pqYZR0_B8erJg@mail.gmail.com>
-Subject: Re: [PATCH net-next] net: bpf: add hook for close of tcp timewait sock
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Menglong Dong <imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: pgTrHNRkLvxIdTZ4r9c0h6lRd0oYQyw6
+X-Proofpoint-ORIG-GUID: X4uAX6bHd6Z9a4fSrK5naWFAH0D6jWcY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-29_07,2021-12-29_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 impostorscore=0 malwarescore=0 phishscore=0
+ adultscore=0 mlxscore=0 mlxlogscore=999 priorityscore=1501 bulkscore=0
+ suspectscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2112300007
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 12:46 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Dec 29, 2021 at 3:33 AM <menglong8.dong@gmail.com> wrote:
-> >
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > The cgroup eBPF attach type 'CGROUP_SOCK_OPS' is able to monitor the
-> > state change of a tcp connect with 'BPF_SOCK_OPS_STATE_CB' ops.
-> >
-> > However, it can't trace the whole state change of a tcp connect. While
-> > a connect becomes 'TCP_TIME_WAIT' state, this sock will be release and
-> > a tw sock will be created. While tcp sock release, 'TCP_CLOSE' state
-> > change will be passed to eBPF program. Howeven, the real state of this
-> > connect is 'TCP_TIME_WAIT'.
-> >
-> > To make eBPF get the real state change of a tcp connect, add
-> > 'CGROUP_TWSK_CLOSE' cgroup attach type, which will be called when
-> > tw sock release and tcp connect become CLOSE.
->
-> The use case is not explained.
+On Thu, 21 Oct 2021 11:23:25 -0400
+Tony Krowiak <akrowiak@linux.ibm.com> wrote:
 
-Sorry for the absence of use cases and selftests. In my case, it is for NAT of
-a docker container.
+> The reason a lockdep splat can occur has to do with the fact that the
+> kvm->lock has to be taken before the vcpu->lock; so, for example, when a
+> secure execution guest is started, you may end up with the following
+> scenario:
+> 
+>         Interception of PQAP(AQIC) instruction executed on the guest:
+>         ------------------------------------------------------------
+>         handle_pqap:                    matrix_dev->lock                
+>         kvm_vcpu_ioctl:                 vcpu_mutex                      
+> 
+>         Start of secure execution guest:
+>         -------------------------------
+>         kvm_s390_cpus_to_pv:            vcpu->mutex                     
+>         kvm_arch_vm_ioctl:              kvm->lock                    
+> 
+>         Queue is unbound from vfio_ap device driver:
+>         -------------------------------------------
+>                                         kvm->lock
+>         vfio_ap_mdev_remove_queue:      matrix_dev->lock
 
-Simply speaking, I'll add an element to a hash map during sys_connect() with
-'BPF_SOCK_OPS_TCP_CONNECT_CB' ops of 'BPF_CGROUP_SOCK_OPS'
-cgroup attach type. Therefore, the received packet of the host can do DNAT
-according to the hash map.
+The way you describe your scenario is a little ambiguous. It
+seems you choose a stack-trace like description, in a sense that for
+example for PQAP: first vcpu->mutex is taken and then matrix_dev->lock
+but you write the latter first and the former second. I think it is more
+usual to describe such stuff a a sequence of event in a sense that
+if A precedes B in the text (from the top towards the bottom), then
+execution of a A precedes the execution of B in time.
 
-I need to release the element in the hashmap when the connection closes.
-With the help of 'BPF_SOCK_OPS_STATE_CB', I can monitor the TCP_CLOSE
-of the connection. However, as I mentioned above, it doesn't work well when
-it comes to tw sock. When the connect become 'FIN_WAIT2' or 'TIME_WAIT',
-the state of the tcp sock becomes 'TCP_CLOSE', which doesn't match the connect
-state. Therefore, the 'fin' packet that the host received can't be DNAT, as the
-element is already removed.
+Also you are inconsistent with vcpu_mutex vs vcpu->mutex.
 
-In this patch, BPF_SOCK_OPS_TW_CLOSE_FLAG is introduced, which is used
-make 'BPF_SOCK_OPS_STATE_CB' not called when this sock becomes
-TCP_CLOSE if it is being replaced with a tw sock.
+I can't say I understand the need for this yet. I have been starring
+at the end result for a while. Let me see if I can come up with an
+alternate proposal for some things.
 
-> Why bpf tracing cannot be used to achieve the same?
+Regards,
+Halil
 
-En...do you mean kprobe based eBPF trace? It can work, but I don't think it's
-high-performance, especially for network NAT. Strictly speaking, attach types,
-such as 'CGROUP_INET_SOCK_RELEASE', can be replaced by bpf tracing, but
-they exist out of performance.
 
-Thanks!
-Menglong Dong
-
->
-> Also there are no selftests.

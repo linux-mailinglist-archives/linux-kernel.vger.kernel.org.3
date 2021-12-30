@@ -2,131 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD74481E75
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 18:16:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4AB481E94
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 18:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241438AbhL3RQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 12:16:19 -0500
-Received: from mga02.intel.com ([134.134.136.20]:14127 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240162AbhL3RQS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 12:16:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640884578; x=1672420578;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5tdcQoNQZMQ0wWWXBUkR4c9HCuzvM7wGUfcSiXnCCZc=;
-  b=V5pNWS07fCan72Gq+TS/NOC2rc5dwnxBf3C1uPKtuDfnQv7FO693/B8N
-   X7I8WBJJIsqhdufqs4g5Se0zEzavwsFteUEIFTMk+SmhxFPcdD6k9G4YN
-   8WIZMJV8eNr4IhcF3/4lJN9+IR4EwY2CrZBqUBswkiZhnxthW0VqXH5Py
-   utU7hYENLoQrdnynm3anWD/RnGAO6sEsefS34COaeG+0VTMWIfQbDfXVW
-   D28Hl+vG5H4pwRYV+NZKBOqCMeA8dvd/6JYmHMmzWTY5NeTitW2KKJgyf
-   7ppDUdVznMLYKUbecg6ghu1uZqvyo8THEyAhnso0snFR1DcqD/nmQw/Fr
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="229021041"
-X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
-   d="scan'208";a="229021041"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 09:16:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
-   d="scan'208";a="510955104"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 30 Dec 2021 09:16:16 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n2z2F-000AQb-Nu; Thu, 30 Dec 2021 17:16:15 +0000
-Date:   Fri, 31 Dec 2021 01:15:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: include/linux/compiler_types.h:338:45: error: call to
- '__compiletime_assert_268' declared with attribute error: BUILD_BUG_ON
- failed: IS_ENABLED(CONFIG_32BIT) && (_PFN_SHIFT > PAGE_SHIFT)
-Message-ID: <202112310155.JyoyeRR2-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S241446AbhL3RUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 12:20:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236737AbhL3RUF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 12:20:05 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39581C061574;
+        Thu, 30 Dec 2021 09:20:05 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id v7so51567643wrv.12;
+        Thu, 30 Dec 2021 09:20:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=n/qQDXJk2QbH2NGsjvFVJ3ub2PnKBdYzofoYgc2mPZM=;
+        b=XrPlU1tx5TWNnHIjx83NHVcOfK6mlpBbpa6/8BUJlN94o4v8Y0mSY0zGWEf/hGvZ9L
+         DtR0hvQ63iuj7i0ayJrqmb+dj1HaPslKmm795bNWjD7ajEfs4yLRZSdKoGr/Lklc+wA/
+         hKQOvcEIw8ryMt+CytyyTcPTsXoMeJW8QbdN6zhq7XW7v2/eLicw3a+RobJCX4ayad90
+         dctaa8htJdCK+U74RtDAlXV29k531+mjLHI88wdd09vc4jWFU3rUZC+EyJKOqBiyDl4g
+         /ksAJG5UnfZGR2ybxW+YzobTlY1thsuJX02rNtDadTQcQZDm2asOTq+Ao1fXlvgFCc3L
+         F6TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=n/qQDXJk2QbH2NGsjvFVJ3ub2PnKBdYzofoYgc2mPZM=;
+        b=dCgEpLazT4ol3l6cQZCtnFYSTsBOO+QY7cyF/GzK2si21CuJQRxQmxU90Yn7kVXazT
+         saOHmF2rNeXCEbGBGvDd1tB+Yz55cVB5AlEr6HQkU1lBBFnEGVarESra91jz/Wz0+13s
+         5b+bxa9D5WEsIR7G7bJiuPr/l7PaXtuzccYR0+DzHcJvpX5tzasBRH46HF66JnKOGPvP
+         Af8Rol6ulUDAH8HkwQsoSW2ljEmHGZKU5RURnmO7Fdw5tZwYJfpvTqjpRyJek+97eHb7
+         MJCZXkI2i5gVk/l3th8EMPl75/yr4DSA288haITeZi0Z6jM6oOUESoBb6v0cV8fgacz9
+         5vnA==
+X-Gm-Message-State: AOAM53377+JEqXV48R/DdLGPy6HW39JHpBKCgdh4QZhvqWQ9CQvhfeVp
+        t2+0flV4BbGplwpYW5SzRDAVwlnMtWQ=
+X-Google-Smtp-Source: ABdhPJz7pk+TZP3KIA3Wu6oebLD35Y7oBH4hmjvWmB6lCBLzTaBGLJqkAUgaOh9+sgYOQjuXLiFIXg==
+X-Received: by 2002:a5d:448f:: with SMTP id j15mr26833990wrq.603.1640884803135;
+        Thu, 30 Dec 2021 09:20:03 -0800 (PST)
+Received: from felia.fritz.box ([2001:16b8:2657:9600:789b:54e9:fc28:95aa])
+        by smtp.gmail.com with ESMTPSA id z5sm23709975wru.87.2021.12.30.09.20.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Dec 2021 09:20:02 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Andi Kleen <ak@linux.intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] Documentation: refer to config RANDOMIZE_BASE for kernel address-space randomization
+Date:   Thu, 30 Dec 2021 18:19:40 +0100
+Message-Id: <20211230171940.27558-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Will,
+The config RANDOMIZE_SLAB does not exist, the authors probably intended to
+refer to the config RANDOMIZE_BASE, which provides kernel address-space
+randomization. They probably just confused SLAB with BASE (these two
+four-letter words coincidentally share three common letters), as they also
+point out the config SLAB_FREELIST_RANDOM as further randomization within
+the same sentence.
 
-FYI, the error/warning still remains.
+Fix the reference of the config for kernel address-space randomization to
+the config that provides that.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   eec4df26e24e978e49ccf9bcf49ca0f2ccdaeffe
-commit: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
-date:   1 year, 5 months ago
-config: mips-randconfig-r002-20211124 (https://download.01.org/0day-ci/archive/20211231/202112310155.JyoyeRR2-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   arch/mips/mm/init.c:61:6: warning: no previous prototype for 'setup_zero_pages' [-Wmissing-prototypes]
-      61 | void setup_zero_pages(void)
-         |      ^~~~~~~~~~~~~~~~
-   In file included from <command-line>:
-   arch/mips/mm/init.c: In function 'mem_init':
->> include/linux/compiler_types.h:338:45: error: call to '__compiletime_assert_268' declared with attribute error: BUILD_BUG_ON failed: IS_ENABLED(CONFIG_32BIT) && (_PFN_SHIFT > PAGE_SHIFT)
-     338 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:319:25: note: in definition of macro '__compiletime_assert'
-     319 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:338:9: note: in expansion of macro '_compiletime_assert'
-     338 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^~~~~~~~~~~~~~~~
-   arch/mips/mm/init.c:458:9: note: in expansion of macro 'BUILD_BUG_ON'
-     458 |         BUILD_BUG_ON(IS_ENABLED(CONFIG_32BIT) && (_PFN_SHIFT > PAGE_SHIFT));
-         |         ^~~~~~~~~~~~
-   {standard input}: Assembler messages:
-   {standard input}:555: Error: found '(', expected: ')'
-   {standard input}:555: Error: found '(', expected: ')'
-   {standard input}:555: Error: non-constant expression in ".if" statement
-   {standard input}:555: Error: junk at end of line, first unrecognized character is `('
-
-
-vim +/__compiletime_assert_268 +338 include/linux/compiler_types.h
-
-   324	
-   325	#define _compiletime_assert(condition, msg, prefix, suffix) \
-   326		__compiletime_assert(condition, msg, prefix, suffix)
-   327	
-   328	/**
-   329	 * compiletime_assert - break build and emit msg if condition is false
-   330	 * @condition: a compile-time constant condition to check
-   331	 * @msg:       a message to emit if condition is false
-   332	 *
-   333	 * In tradition of POSIX assert, this macro will break the build if the
-   334	 * supplied condition is *false*, emitting the supplied error message if the
-   335	 * compiler has support to do so.
-   336	 */
-   337	#define compiletime_assert(condition, msg) \
- > 338		_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-   339	
-
+Fixes: 6e88559470f5 ("Documentation: Add section about CPU vulnerabilities for Spectre")
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ Documentation/admin-guide/hw-vuln/spectre.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/admin-guide/hw-vuln/spectre.rst b/Documentation/admin-guide/hw-vuln/spectre.rst
+index ab7d402c1677..a2b22d5640ec 100644
+--- a/Documentation/admin-guide/hw-vuln/spectre.rst
++++ b/Documentation/admin-guide/hw-vuln/spectre.rst
+@@ -468,7 +468,7 @@ Spectre variant 2
+    before invoking any firmware code to prevent Spectre variant 2 exploits
+    using the firmware.
+ 
+-   Using kernel address space randomization (CONFIG_RANDOMIZE_SLAB=y
++   Using kernel address space randomization (CONFIG_RANDOMIZE_BASE=y
+    and CONFIG_SLAB_FREELIST_RANDOM=y in the kernel configuration) makes
+    attacks on the kernel generally more difficult.
+ 
+-- 
+2.17.1
+

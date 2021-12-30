@@ -2,72 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C9A481B1E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 10:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89404481B20
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 10:30:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238250AbhL3J3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 04:29:41 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41028 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238232AbhL3J3l (ORCPT
+        id S238256AbhL3JaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 04:30:25 -0500
+Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:59009 "EHLO
+        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238157AbhL3JaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 04:29:41 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB639B81B07;
-        Thu, 30 Dec 2021 09:29:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF786C36AEA;
-        Thu, 30 Dec 2021 09:29:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640856578;
-        bh=8keFIgM9gG/JfDdWdR91uJTuOB2XraXPViDwP7Bjytk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Dt/6BqZqWOtMRkJTjPRDNlTtecG9ROdkLTzGq/pPNJfgJDE0Zb6mA5UGioecHE/uX
-         gwNUORLP9VqWaWG3n5PLngR4f4ySZ+6JkOaKesBcTs8ggoj02SoM2fbdZPFth7xvZq
-         5h/H2rGx4KviapEFLh+rq8OScQwuOut/dDMXXc08=
-Date:   Thu, 30 Dec 2021 10:29:34 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, kernel-janitors@vger.kernel.org,
+        Thu, 30 Dec 2021 04:30:23 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R871e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=yaohongbo@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V0Kk1AW_1640856613;
+Received: from localhost(mailfrom:yaohongbo@linux.alibaba.com fp:SMTPD_---0V0Kk1AW_1640856613)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 30 Dec 2021 17:30:21 +0800
+From:   Yao Hongbo <yaohongbo@linux.alibaba.com>
+To:     bhelgaas@google.com
+Cc:     yaohongbo@linux.alibaba.com, zhangliguang@linux.alibaba.com,
+        alikernel-developer@linux.alibaba.com, linux-pci@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/build: use the proper name CONFIG_FW_LOADER
-Message-ID: <Yc17/mHjtoqpilqm@kroah.com>
-References: <20211229111553.5846-1-lukas.bulwahn@gmail.com>
- <Ycy4q2OhwTdLl+2S@zn.tnic>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ycy4q2OhwTdLl+2S@zn.tnic>
+Subject: [RFC PATCH] PCI: Add "pci=reassign_all_bus" boot parameter
+Date:   Thu, 30 Dec 2021 17:30:13 +0800
+Message-Id: <1640856613-101412-1-git-send-email-yaohongbo@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 08:36:11PM +0100, Borislav Petkov wrote:
-> On Wed, Dec 29, 2021 at 12:15:53PM +0100, Lukas Bulwahn wrote:
-> > Commit c8dcf655ec81 ("x86/build: Tuck away built-in firmware under
-> > FW_LOADER") intends to add the expression regex only when FW_LOADER is
-> > built-in, not a module or disabled.
-> > 
-> > The config is called CONFIG_FW_LOADER when it is built-in; and
-> > CONFIG_FW_LOADER_MODULE when it is a module.
-> 
-> $ git grep FW_LOADER_MODULE
-> include/linux/firmware.h:37:#if defined(CONFIG_FW_LOADER) || (defined(CONFIG_FW_LOADER_MODULE) && defined(MODULE))
-> 
-> So either I'm not grepping right or that FW_LOADER_MODULE thing belongs
-> to the past...
-> 
-> Greg, Luis, what's up?
+PCI bridges may be misconfigured by te system BIOS, and then the OS
+scan the bridges that need to be reconfigured.
+However, the PCI bus topology configured by the bios may be wrong:
 
-Looks like a pre-git thing, it is obviously not a valid config option,
-so it can be removed.  I'll go make a patch for it...
+[   19.376273] pci 0000:40:00.0: bridge configuration invalid ([bus
+00-00]), reconfiguring
+[   19.384443] pci_bus 0000:47: busn_res: can not insert [bus 47-46]
+under [bus 40-46] (conflicts with (null) [bus 40-46])
 
-thanks,
+The primary bus number and subordinate bus number written by the bios
+were wrong, and the OS continues to add bridges on the wrong bus
+topology.
 
-greg k-h
+In order to avoid such problems, a kernel cmdline needs to be
+added to support the os to fully configure the pci bus.
+
+Signed-off-by: Yao Hongbo <yaohongbo@linux.alibaba.com>
+---
+ Documentation/admin-guide/kernel-parameters.txt | 1 +
+ drivers/acpi/pci_root.c                         | 3 +++
+ drivers/pci/pci.c                               | 5 +++++
+ include/linux/pci.h                             | 2 ++
+ 4 files changed, 11 insertions(+)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 2fba824..c83a2e5 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -4084,6 +4084,7 @@
+ 		nomio		[S390] Do not use MIO instructions.
+ 		norid		[S390] ignore the RID field and force use of
+ 				one PCI domain per PCI function
++		reassign_all_bus	The OS fully configure the PCI bus.
+ 
+ 	pcie_aspm=	[PCIE] Forcibly enable or disable PCIe Active State Power
+ 			Management.
+diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
+index ab2f7df..e21ac25 100644
+--- a/drivers/acpi/pci_root.c
++++ b/drivers/acpi/pci_root.c
+@@ -592,6 +592,9 @@ static int acpi_pci_root_add(struct acpi_device *device,
+ 	is_pcie = strcmp(acpi_device_hid(device), "PNP0A08") == 0;
+ 	negotiate_os_control(root, &no_aspm, is_pcie);
+ 
++	if (pci_reassign_all_bus)
++		pci_add_flags(PCI_REASSIGN_ALL_BUS);
++
+ 	/*
+ 	 * TBD: Need PCI interface for enumeration/configuration of roots.
+ 	 */
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index 3d2fb39..5746e88 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -142,6 +142,9 @@ bool pci_reset_supported(struct pci_dev *dev)
+ /* If set, the PCI config space of each device is printed during boot. */
+ bool pci_early_dump;
+ 
++/* If set, the pci will reassign resources*/
++bool pci_reassign_all_bus;
++
+ bool pci_ats_disabled(void)
+ {
+ 	return pcie_ats_disabled;
+@@ -6846,6 +6849,8 @@ static int __init pci_setup(char *str)
+ 				pci_add_flags(PCI_SCAN_ALL_PCIE_DEVS);
+ 			} else if (!strncmp(str, "disable_acs_redir=", 18)) {
+ 				disable_acs_redir_param = str + 18;
++			} else if (!strncmp(str, "reassign_all_bus", 16)) {
++				pci_reassign_all_bus = true;
+ 			} else {
+ 				pr_err("PCI: Unknown option `%s'\n", str);
+ 			}
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 18a75c8e..ad0e3e9 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -2119,6 +2119,8 @@ int pcim_iomap_regions_request_all(struct pci_dev *pdev, int mask,
+ extern u8 pci_dfl_cache_line_size;
+ extern u8 pci_cache_line_size;
+ 
++extern bool pci_reassign_all_bus;
++
+ /* Architecture-specific versions may override these (weak) */
+ void pcibios_disable_device(struct pci_dev *dev);
+ void pcibios_set_master(struct pci_dev *dev);
+-- 
+1.8.3.1
+

@@ -2,107 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D05481D01
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 15:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8C8481D05
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 15:26:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239985AbhL3O0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 09:26:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38734 "EHLO
+        id S240014AbhL3O04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 09:26:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239967AbhL3O0w (ORCPT
+        with ESMTP id S239988AbhL3O0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 09:26:52 -0500
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A69AC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 06:26:52 -0800 (PST)
-Received: from [192.168.1.101] (83.6.168.106.neoplus.adsl.tpnet.pl [83.6.168.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id C2D1B3F725;
-        Thu, 30 Dec 2021 15:26:49 +0100 (CET)
-Message-ID: <e6ac0b79-368b-41af-f20d-f58ddc02f05e@somainline.org>
-Date:   Thu, 30 Dec 2021 15:26:48 +0100
+        Thu, 30 Dec 2021 09:26:54 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0D2C061574;
+        Thu, 30 Dec 2021 06:26:54 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id h7so10222170lfu.4;
+        Thu, 30 Dec 2021 06:26:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+tf4nBFZgti+nl0o1bJRk3qvXgnYx/HTJhgteUE1QXw=;
+        b=gH9FQ3nysBpaf6G5Z0BPfhrqQtpn+qTmTd9UB7DUm+POlRm9S/SWcJhtT6sWg8x5VG
+         5wF/wNm7rAkcswm9tYQ+CR7jZhIoTCyvDYLB7k3A7y1VmhocDh4hpQHOMgOns1Zs2jEp
+         a8xCGzZH9LvUYy31L0ngkPTIni39sm99s1tDL2lPqEJYEMz/R72swz7s82+NAfYC3Y2n
+         ZwN8MwlCkUqzY6M3n5PPQRrVfnVFwAL180ELTGvhAOdIpyXLvNDrhQN8zc6co8nNtpIC
+         3HzPMQFQk6TgJ+rS48DAfXKP2meFfw6HhUdjPeaS2dPj9EChx7KhfBUwex5IrnrVLfyx
+         UFsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+tf4nBFZgti+nl0o1bJRk3qvXgnYx/HTJhgteUE1QXw=;
+        b=yYBJ9nwuCtOI3D27mvCuXbVH49RTT21amLxGzKi0JprPsoZ+aSB8pDbGr4ZOhC7Zad
+         xHxjOLNyl8YrnoEqfZ7j/4he1kc51mxIKvrzog8kUumNj8x4LqYH4hmZ2LLpulwMynoq
+         6omXtDqUETRjD42Dj7QAx+vh9Mh9VAsq2ltoub3I66Xw9KQwOcAdbla8RQJdUwsNzS0m
+         /PhJCXbafDQ2TE3O9ofsLCqb38glL7q0HK2URq4AGyfzllc27y2xIlURwDlDzIXwN+aK
+         aZhEr3wsOdPs+mrP7EqklQDSZ5VyEnj1ceyJqwqwQqPTN85t4gprXSEIbiwkuMJVTnw1
+         8RMQ==
+X-Gm-Message-State: AOAM530XCBXzGtFvHrrVcuocxLm/VA58+7q4bPRcqU5e6qyigYrpuMrT
+        Y1p52dqHvnS2VNRDe/+KagQ=
+X-Google-Smtp-Source: ABdhPJxxcwPDUWvaddgiXQGl/eGIsXz0jw20BcLQgPCKVg4rWRtMVdGV8LZ3Vvbkd2/qzkOSH5LouA==
+X-Received: by 2002:ac2:52a3:: with SMTP id r3mr28192890lfm.580.1640874412548;
+        Thu, 30 Dec 2021 06:26:52 -0800 (PST)
+Received: from localhost.localdomain ([94.103.235.97])
+        by smtp.gmail.com with ESMTPSA id v27sm2510259lfo.97.2021.12.30.06.26.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Dec 2021 06:26:52 -0800 (PST)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     kraxel@redhat.com, sumit.semwal@linaro.org,
+        christian.koenig@amd.com, daniel.vetter@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+2c56b725ec547fa9cb29@syzkaller.appspotmail.com
+Subject: [PATCH] udmabuf: validate ubuf->pagecount
+Date:   Thu, 30 Dec 2021 17:26:49 +0300
+Message-Id: <20211230142649.23022-1-paskripkin@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] clk: qcom: gcc-msm8994: Remove NoC clocks
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211230023101.1122588-1-konrad.dybcio@somainline.org>
- <CAA8EJprR_eNiRTXOLnHzztbdH_RYj-+Po99b=7c2Asxvop+jtQ@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <CAA8EJprR_eNiRTXOLnHzztbdH_RYj-+Po99b=7c2Asxvop+jtQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Syzbot has reported GPF in sg_alloc_append_table_from_pages(). The
+problem was in ubuf->pages == ZERO_PTR.
 
-On 30.12.2021 15:06, Dmitry Baryshkov wrote:
-> On Thu, 30 Dec 2021 at 05:31, Konrad Dybcio
-> <konrad.dybcio@somainline.org> wrote:
->> Just like in commit 05cf3ec00d460b50088d421fb878a0f83f57e262
->> ("clk: qcom: gcc-msm8996: Drop (again) gcc_aggre1_pnoc_ahb_clk")
->> adding NoC clocks turned out to be a huge mistake, as they cause a lot of
->> issues at little benefit (basically only letting Linux know about their
->> children's frequencies), especially when mishandled or misconfigured.
-> I'm not against this patch, but it manifests another question to me:
-> should the NoC driver set these frequencies (as demanded), or are they
-> set by the hardware/RPM/etc and so are read-only to us?
+ubuf->pagecount is calculated from arguments passed from user-space. If
+user creates udmabuf with list.size == 0 then ubuf->pagecount will be
+also equal to zero; it causes kmalloc_array() to return ZERO_PTR.
 
-The downstream driver [1] only seems to vote for 19.2 MHz on
+Fix it by validating ubuf->pagecount before passing it to
+kmalloc_array().
 
-p(c)noc_keepalive_a_clk and 40MHz on mmssnoc_ahb_a_clk and
+Fixes: fbb0de795078 ("Add udmabuf misc device")
+Reported-and-tested-by: syzbot+2c56b725ec547fa9cb29@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+---
 
-not really care much about them otherwise in the (msm_)clk framework.
+Happy New Year and Merry Christmas! :)
 
 
-Interestingly, the voting-at-probe also seems to be true for 8916 [2],
+With regards,
+Pavel Skripkin
 
-and even more so for 8974 [3] which votes for CXO too, and I don't
+---
+ drivers/dma-buf/udmabuf.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-think we handle it upstream.. Is it unnecessary, or did things always
-
-work by miracle? Should we perhaps set it with assigned-clocks under
-
-rpmcc in DT?
-
-
-Otherwise, they seem to be handled by msm_bus's voter clocks, so in
-
-our case that'll be interconnect's job. I had an old WIP driver somewhere,
-
-but it had issues with some (well, many) paths.. I'll rebase it and try debugging
-
-that.
-
-
-Decoding ancient msm-3.10 code is not for the faint of heart, but I don't think
-
-8994 or 8974 (which are similar in many ways) ever got a newer kernel release..
-
-
-[..]
-
-
-Konrad
-
-
-[1] https://github.com/sonyxperiadev/kernel/blob/aosp/LA.BR.1.3.3_rb2.14/drivers/clk/qcom/clock-rpm-8994.c#L292
-
-
-[2] https://github.com/sonyxperiadev/kernel/blob/aosp/LA.BR.1.3.3_rb2.14/drivers/clk/qcom/clock-rpm-8916.c#L168
-
-
-[3] https://github.com/sonyxperiadev/kernel/blob/aosp/LA.BR.1.3.3_rb2.14/arch/arm/mach-msm/clock-rpm-8974.c
+diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
+index c57a609db75b..e7330684d3b8 100644
+--- a/drivers/dma-buf/udmabuf.c
++++ b/drivers/dma-buf/udmabuf.c
+@@ -190,6 +190,10 @@ static long udmabuf_create(struct miscdevice *device,
+ 		if (ubuf->pagecount > pglimit)
+ 			goto err;
+ 	}
++
++	if (!ubuf->pagecount)
++		goto err;
++
+ 	ubuf->pages = kmalloc_array(ubuf->pagecount, sizeof(*ubuf->pages),
+ 				    GFP_KERNEL);
+ 	if (!ubuf->pages) {
+-- 
+2.34.1
 

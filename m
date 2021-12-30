@@ -2,130 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6DE481988
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 06:12:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D90481996
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 06:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236117AbhL3FMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 00:12:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbhL3FLz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 00:11:55 -0500
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15ACC061574;
-        Wed, 29 Dec 2021 21:11:54 -0800 (PST)
-Received: by mail-pj1-x1041.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so22155689pjp.0;
-        Wed, 29 Dec 2021 21:11:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=2qrH/Q7lBhgBs5n1zVO/B/67KzCmyY6Nm+oaWRXQUfQ=;
-        b=HlD8egyoFHZ/+jS6QxT0P/ByOaMcnWZq/oyv7wctNgWnUTtPjFcSgGSoN65LtS2YJb
-         FDPq147Eee2GpuoCuws+6HCODa8oi8MdSnJGXm++KDopoM6CKYK/3tsDHAzrWowAo0cO
-         TCDbaQt+Ij6L9t8laCrvJLoLUsq3xIusWJ5VrbDaQtHr2Oln+lUKDDP8P3CsU5nEb4W3
-         u2K+fXrkXDhHgIIoe22yvxPJmvqP4E8Jmj07yiF99ejYQgwS7n47U1Y6Vo39MR+yJud7
-         evwVQmazSi+/KHtRBcPWMKkbBD6db8TqI+mSqLG2KX4UXDq2or2q+dkWfrDZsmaJJSso
-         2PoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2qrH/Q7lBhgBs5n1zVO/B/67KzCmyY6Nm+oaWRXQUfQ=;
-        b=wE51ZOX3xp+dq8M/egmwJxVX0/lLIsdFLsVa86umI47RkCE6o/OiOVj/4NAjWOX1HY
-         8jY1/5RqFKoP7oQohONHcsm8kj/d2ZBg5+olqlH+y3pT7RNlH5M4Dila1UGF771yDrOw
-         UEeLmu9qdTsVkqLet3SPHx4Q/5iuitYj2K3XIpQWrVFM9DSnDjNn2QvNd/m+92fY3n21
-         F5/Vm2zxfbkbi4KkgXXmhYRDs3ch8dQE0swnzjgY0bqInNlZYJPk+P9NCv6vtG1RsSHw
-         xGRC1hUf4h9kabv2ou3N/pl9Z0EXMEdO9kezmxqZ2hcl8NJ/jWM+QDP3rpxVq2C7gH6l
-         qU/Q==
-X-Gm-Message-State: AOAM530DM/wd8F5eCvNrfXiGxiSrwJ/k4yiAp/Mms8XGl8GGKwxOt8cK
-        8MrudNUGo8uC1Y9pgivsV/w=
-X-Google-Smtp-Source: ABdhPJxtAwmczCvw5kzAiXwk4Avbf6mtvcOWKCOoVnJb5N/Ob2UW/+MTdAD8OznFSZbZcieKZRcm9Q==
-X-Received: by 2002:a17:903:4094:b0:149:8070:1c1b with SMTP id z20-20020a170903409400b0014980701c1bmr17099176plc.152.1640841114381;
-        Wed, 29 Dec 2021 21:11:54 -0800 (PST)
-Received: from slim.das-security.cn ([103.84.139.54])
-        by smtp.gmail.com with ESMTPSA id e21sm10365925pjr.4.2021.12.29.21.11.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 21:11:54 -0800 (PST)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org, axboe@kernel.dk,
-        stern@rowland.harvard.edu, jj251510319013@gmail.com,
-        dan.carpenter@oracle.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH v3 2/2] usb: gadget: clear related members when goto fail
-Date:   Thu, 30 Dec 2021 13:11:32 +0800
-Message-Id: <20211230051132.21056-3-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211230051132.21056-1-hbh25y@gmail.com>
-References: <20211230051132.21056-1-hbh25y@gmail.com>
+        id S236115AbhL3FWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 00:22:41 -0500
+Received: from mga12.intel.com ([192.55.52.136]:3300 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231228AbhL3FWk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 00:22:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640841760; x=1672377760;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+KVsdUaRTKUTFwWrgJc7th2tV0XogMeKC8uZEP+TLIw=;
+  b=QX1vnrtqNsMWFZP+NgCa06Md82uGy8xCnjECdEAoXc0ZMdJKzC36dHjS
+   lfsT+kXfLb7cmHDTNGD220+lWtjCKCPOlQHazFJBnWuf+52p6aq2fpFph
+   /+Vf1fgSPzChdpZrBu5gR6cGz/HPnhp2i6imOVSQ+jEidGWYwlWwI9Fw3
+   lK9BY4Ene6lrBbMCaBfNenCjWhvmieDLBJZmfq4rUo8iEIJ6fQGDmRI+d
+   qyLfR+N8Cb9crAJeNy26CTiXl1xdAJGsas7+W5/FduAomd31/RGDqwNxd
+   rC0NN2YaOQaZCsCMsFyKyV3APHbM52OEeXpQAl/2KM8N/EVzsz5qDoe47
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="221614753"
+X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
+   d="scan'208";a="221614753"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 21:22:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
+   d="scan'208";a="470548891"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 29 Dec 2021 21:22:38 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n2ntd-0009mt-O6; Thu, 30 Dec 2021 05:22:37 +0000
+Date:   Thu, 30 Dec 2021 13:21:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Goldwyn Rodrigues <rgoldwyn@suse.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [goldwynr:iomap 33/33] fs/btrfs/volumes.c:6893:23: warning: format
+ specifies type 'unsigned long' but the argument has type 'size_t' (aka
+ 'unsigned int')
+Message-ID: <202112301331.RT7JMows-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dev->config and dev->hs_config and dev->dev need to be cleaned if
-dev_config fails to avoid UAF.
+tree:   https://github.com/goldwynr/linux iomap
+head:   30c74a8c201365178cae26d0d7aefa120c3245ab
+commit: 30c74a8c201365178cae26d0d7aefa120c3245ab [33/33] btrfs: debug patch
+config: hexagon-randconfig-r013-20211230 (https://download.01.org/0day-ci/archive/20211230/202112301331.RT7JMows-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project cd284b7ac0615afc6e0f1a30da2777e361de27a3)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/goldwynr/linux/commit/30c74a8c201365178cae26d0d7aefa120c3245ab
+        git remote add goldwynr https://github.com/goldwynr/linux
+        git fetch --no-tags goldwynr iomap
+        git checkout 30c74a8c201365178cae26d0d7aefa120c3245ab
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/btrfs/
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/btrfs/volumes.c:6893:23: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                                   ioend->io_offset, ioend->io_size);
+                                                     ^~~~~~~~~~~~~~
+   include/linux/printk.h:523:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   fs/btrfs/volumes.c:6904:24: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                                           ioend->io_offset, ioend->io_size);
+                                                             ^~~~~~~~~~~~~~
+   include/linux/printk.h:523:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   fs/btrfs/volumes.c:6910:24: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                                           ioend->io_offset, ioend->io_size);
+                                                             ^~~~~~~~~~~~~~
+   include/linux/printk.h:523:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   fs/btrfs/volumes.c:6941:23: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                                   ioend->io_offset, ioend->io_size);
+                                                     ^~~~~~~~~~~~~~
+   include/linux/printk.h:523:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   4 warnings generated.
+
+
+vim +6893 fs/btrfs/volumes.c
+
+  6878	
+  6879	blk_status_t btrfs_map_bio(struct btrfs_fs_info *fs_info, struct bio *bio,
+  6880				   int mirror_num)
+  6881	{
+  6882		const u64 orig_logical = bio->bi_iter.bi_sector << SECTOR_SHIFT;
+  6883		const unsigned int orig_length = bio->bi_iter.bi_size;
+  6884		const enum btrfs_map_op op = btrfs_op(bio);
+  6885		u64 cur_logical = orig_logical;
+  6886		int ret;
+  6887		struct iomap_ioend *ioend = bio->bi_private;
+  6888	
+  6889		if (ioend)
+  6890			pr_info("%s: %d ioend: %lx inode %lu %llu/%lu",
+  6891					__func__, __LINE__,
+  6892					(unsigned long)ioend, ioend->io_inode->i_ino,
+> 6893					ioend->io_offset, ioend->io_size);
+  6894	
+  6895		while (cur_logical < orig_logical + orig_length) {
+  6896			u64 map_length = orig_logical + orig_length - cur_logical;
+  6897			struct btrfs_io_context *bioc = NULL;
+  6898			struct bio *cur_bio;
+  6899	
+  6900			if (ioend)
+  6901				pr_info("%s: %d ioend: %lx inode %lu %llu/%lu",
+  6902						__func__, __LINE__,
+  6903						(unsigned long)ioend, ioend->io_inode->i_ino,
+  6904						ioend->io_offset, ioend->io_size);
+  6905			btrfs_bio_save_iter(btrfs_bio(bio));
+  6906			if (ioend)
+  6907				pr_info("%s: %d ioend: %lx inode %lu %llu/%lu",
+  6908						__func__, __LINE__,
+  6909						(unsigned long)ioend, ioend->io_inode->i_ino,
+  6910						ioend->io_offset, ioend->io_size);
+  6911			ret = __btrfs_map_block(fs_info, op, cur_logical, &map_length,
+  6912						&bioc, mirror_num, 1);
+  6913			if (ret)
+  6914				return errno_to_blk_status(ret);
+  6915	
+  6916			if (cur_logical + map_length < orig_logical + orig_length) {
+  6917				/*
+  6918				 * For now zoned write should never cross stripe
+  6919				 * boundary
+  6920				 */
+  6921				ASSERT(bio_op(bio) != REQ_OP_ZONE_APPEND);
+  6922	
+  6923				/* Split the bio */
+  6924				cur_bio = btrfs_bio_split(fs_info, bio, map_length);
+  6925			} else {
+  6926				/* Use the existing bio directly */
+  6927				cur_bio = bio;
+  6928			}
+  6929			btrfs_bio_counter_inc_blocked(fs_info);
+  6930			ret = submit_one_mapped_range(fs_info, cur_bio, bioc,
+  6931						      map_length, mirror_num);
+  6932			btrfs_bio_counter_dec(fs_info);
+  6933			if (ret < 0)
+  6934				return errno_to_blk_status(ret);
+  6935			cur_logical += map_length;
+  6936		}
+  6937		if (ioend)
+  6938			pr_info("%s: %d ioend: %lx inode %lu %llu/%lu",
+  6939					__func__, __LINE__,
+  6940					(unsigned long)ioend, ioend->io_inode->i_ino,
+  6941					ioend->io_offset, ioend->io_size);
+  6942		return BLK_STS_OK;
+  6943	}
+  6944	
+
 ---
- drivers/usb/gadget/legacy/inode.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-index eaad03c0252f..d2e88f3b9131 100644
---- a/drivers/usb/gadget/legacy/inode.c
-+++ b/drivers/usb/gadget/legacy/inode.c
-@@ -1847,7 +1847,7 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 		total = le16_to_cpu(dev->hs_config->wTotalLength);
- 		if (!is_valid_config(dev->hs_config, total) ||
- 				total > length - USB_DT_DEVICE_SIZE)
--			goto fail;
-+			goto fail1;
- 		kbuf += total;
- 		length -= total;
- 	} else {
-@@ -1858,12 +1858,12 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 
- 	/* device descriptor (tweaked for paranoia) */
- 	if (length != USB_DT_DEVICE_SIZE)
--		goto fail;
-+		goto fail1;
- 	dev->dev = (void *)kbuf;
- 	if (dev->dev->bLength != USB_DT_DEVICE_SIZE
- 			|| dev->dev->bDescriptorType != USB_DT_DEVICE
- 			|| dev->dev->bNumConfigurations != 1)
--		goto fail;
-+		goto fail2;
- 	dev->dev->bcdUSB = cpu_to_le16 (0x0200);
- 
- 	/* triggers gadgetfs_bind(); then we can enumerate. */
-@@ -1875,6 +1875,9 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 
- 	value = usb_gadget_probe_driver(&gadgetfs_driver);
- 	if (value != 0) {
-+		dev->dev = NULL;
-+		dev->hs_config = NULL;
-+		dev->config = NULL;
- 		kfree (dev->buf);
- 		dev->buf = NULL;
- 	} else {
-@@ -1892,7 +1895,12 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 	}
- 	return value;
- 
-+fail2:
-+	dev->dev = NULL;
-+fail1:
-+	dev->hs_config = NULL;
- fail:
-+	dev->config = NULL;
- 	spin_unlock_irq (&dev->lock);
- 	pr_debug ("%s: %s fail %zd, %p\n", shortname, __func__, value, dev);
- 	kfree (dev->buf);
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

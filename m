@@ -2,86 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E2348192E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 05:00:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B65BE481930
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 05:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235714AbhL3EAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 23:00:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
+        id S235408AbhL3EBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 23:01:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235692AbhL3EAs (ORCPT
+        with ESMTP id S235262AbhL3EBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 23:00:48 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C53EC061574;
-        Wed, 29 Dec 2021 20:00:48 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id h1so14136235pls.11;
-        Wed, 29 Dec 2021 20:00:48 -0800 (PST)
+        Wed, 29 Dec 2021 23:01:35 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB26C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 20:01:35 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id w16so93326518edc.11
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 20:01:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=aulNbFPCcjXwCXZwEfInFO0zkigoTVrqB4tOC/J40PY=;
-        b=I6VFi5bBovASXleoCsxW2hMexWoAPvtGac+HfZRpC/AgPmPrxdoGGrMtfSaJmMPznt
-         pYyiU1MfsynufUQrHGEY+cYYPyXaPa7BjQJxVfdj74uLTUDNDq1WT0QWNnjf3dx1Vh0K
-         PfUTwglfxTb7/zNcBXpMIUR2vLJ8jIPZBS1RNDTH0S+vyoeVVO1BtAyXEPXh4nMf3tEi
-         O1R/0FQM1pK166ETicrNGSGV1GUyi7Wqz9b2x2LPo/mDV9sgFA7dBr5lnBkqh2JpcCQF
-         kS0xRaQkS1uBCxiB0+Ug8VD2GQ8P2zoBCzmuC8DCoUH8PQdMO0lue/zsS/zkVQ8suqgi
-         vxAg==
+        bh=+5onrs9lSEaHmvYpP7Y+ZzwiLXT0++XAWXsdC8ftsfM=;
+        b=eW8aWt+e/Eht2JXn+QcRsIlGQtn13L3SfDZa2aeBH8mDWXtdnt2EgOaMcRpNeTwfGM
+         yCUCa+G1GvDUVT4PVoj1pGmKAVJoo5l90f6aXco45+KpucB0PH+REvGR2xN1Sv8/Ea3R
+         qQ09TbK7wJZlfB1OZiVe3hgujFPHps6dHCuK1JGj6lwffiLoUmk76/jC8cpWrRyq5Xdq
+         wsju7O1itCrafDBBgLymyovaQhoHmuIja931eeS0Mz9431kFwhXpUefcP37ekmp5rIRy
+         7q2+7/BRfLJCseYWogIM9zKab3izoKfvSUlFTPKo4xXgdZWboqOR56J+zabEc51fXwuO
+         +YoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aulNbFPCcjXwCXZwEfInFO0zkigoTVrqB4tOC/J40PY=;
-        b=5jFl1C7AqLGz2V6raXDBIUkNhDbecbALMevhX8JKDS8mS2s8QiPctXpjU4bIPLNhCJ
-         KpinogqhWYAQgfcBPp8R3EukF0Pz9wa66Z0a5dg70tU/0+jLtGU1nNlcafRZNVjqMPr0
-         r2QxqTUXrmdSEqE0St6OMoKyjtPS7ErAf5F6AAakOCoTQIi8nFqt02ErXHYWwJESwfZ2
-         pMoPBgoF8q7dz1ciHEfMCm6Dh1gTdpFTq0YF8a7ULcmrMlenHRxEbVrJx2SFVjV/cWKA
-         NWBsPBK6mSFInlYSmcK+V/iyOKM3txmO/40MXYl51R/Kpui0BBc4A9Eu85WbQmULIPwE
-         A0SA==
-X-Gm-Message-State: AOAM533GHzGIyGgUayiIou7rD3QGd7wRXv8IJvTca395AmoXnNXLh6ML
-        dhQx//03Cy4zDLomtI2fOo5GSIRrLHyqJwDt04YGYBpd
-X-Google-Smtp-Source: ABdhPJwXqLwtF3TmVOnQxiCm8I7Zcoupa6hvU0jLBVqISMQNeVhd82MG6ZztSOOW9N0TZBcW97T+7GNzzZ7voTMyhIE=
-X-Received: by 2002:a17:902:c443:b0:148:f689:d924 with SMTP id
- m3-20020a170902c44300b00148f689d924mr29428656plm.78.1640836847380; Wed, 29
- Dec 2021 20:00:47 -0800 (PST)
+        bh=+5onrs9lSEaHmvYpP7Y+ZzwiLXT0++XAWXsdC8ftsfM=;
+        b=sC90gQ0+a+20vm9m5xeggQ6aiklOa0rR8BF3VmRfABaWc9En77hmyTRijKZGm3yNrG
+         xRgmD9CchURTEIbaJ2uGpNMnkxYjy7G+fwzIhjIEBT6gzopUSiE1xFeHoMJ1bWXsZrl7
+         TM5EHn2JqF07yVVgbtnuIHpjb7OwU4JX08u4cXtmrsafyQQVDsbgn2pIxVnWHzQR9ru3
+         Ufw4Fc+laHTyDpyXS3Y33DI46RBKeTN+wGtC0rsd5jBxUdtIJ9W88FKxHFjTE9MPDMPi
+         rJ3oOCSdO+8XdAKMTUkxI4ILglfrOwpX+Lqk2q82HaKz6Av2QF+zi+DkIkP1uYTSOzph
+         zlRg==
+X-Gm-Message-State: AOAM531rzFumenqoO2HqKErP71wvfvnXktxJayRSof3Q6lyiPM8uzfg6
+        6u3sUoolcxbpkV+6FIYH3MJyUb92pHe4OHEkk4DJ
+X-Google-Smtp-Source: ABdhPJwwN4Iso2fFaoeNHAASddkpjxDEcW4ydhjnGSeZ7ramQSBfNRtaYA2Ye43/a6HNM5+6L9P2K7DemHTdE1iYWZo=
+X-Received: by 2002:a17:907:1c9c:: with SMTP id nb28mr25007879ejc.452.1640836893881;
+ Wed, 29 Dec 2021 20:01:33 -0800 (PST)
 MIME-Version: 1.0
-References: <CAFcO6XMpbL4OsWy1Pmsnvf8zut7wFXdvY_KofR-m0WK1Bgutpg@mail.gmail.com>
- <CAADnVQJK5mPOB7B4KBa6q1NRYVQx1Eya5mtNb6=L0p-BaCxX=w@mail.gmail.com> <CAFcO6XMxZqQo4_C7s0T2dv3JRn4Vq4RDFqJO6ZQFr6kZzsnx9g@mail.gmail.com>
-In-Reply-To: <CAFcO6XMxZqQo4_C7s0T2dv3JRn4Vq4RDFqJO6ZQFr6kZzsnx9g@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 29 Dec 2021 20:00:36 -0800
-Message-ID: <CAADnVQ+HJnZOqGjXKXut51BUqi=+na4cj=PFaE35u9QwZDgeVQ@mail.gmail.com>
-Subject: Re: A slab-out-of-bounds Read bug in __htab_map_lookup_and_delete_batch
-To:     butt3rflyh4ck <butterflyhuangxx@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20211227091241.103-1-xieyongji@bytedance.com> <Ycycda8w/zHWGw9c@infradead.org>
+In-Reply-To: <Ycycda8w/zHWGw9c@infradead.org>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Thu, 30 Dec 2021 12:01:23 +0800
+Message-ID: <CACycT3usfTdzmK=gOsBf3=-0e8HZ3_0ZiBJqkWb_r7nki7xzYA@mail.gmail.com>
+Subject: Re: [PATCH v2] nbd: Don't use workqueue to handle recv work
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-block@vger.kernel.org, nbd@other.debian.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 7:24 PM butt3rflyh4ck
-<butterflyhuangxx@gmail.com> wrote:
+On Thu, Dec 30, 2021 at 1:35 AM Christoph Hellwig <hch@infradead.org> wrote:
 >
-> Hi, the attachment is a reproducer. Enjoy it.
+> On Mon, Dec 27, 2021 at 05:12:41PM +0800, Xie Yongji wrote:
+> > The rescuer thread might take over the works queued on
+> > the workqueue when the worker thread creation timed out.
+> > If this happens, we have no chance to create multiple
+> > recv threads which causes I/O hung on this nbd device.
+>
+> If a workqueue is used there aren't really 'receive threads'.
+> What is the deadlock here?
 
-Please do not top-post.
-Forwarding a syzbot reproducer with zero effort to analyze
-what's going on is kinda lame.
-Maybe try harder and come up with a fix?
-Or at least try git bisect and based on a commit find and
-cc an author so it can be fixed (assuming issue still exists
-in bpf-next) ?
+We might have multiple recv works, and those recv works won't quit
+unless the socket is closed. If the rescuer thread takes over those
+works, only the first recv work can run. The I/O needed to be handled
+in other recv works would be hung since no thread can handle them.
 
-> Regards,
->    butt3rflyh4ck.
+In that case, we can see below stacks in rescuer thread:
 
-Better stay humble.
+__schedule
+  schedule
+    scheule_timeout
+      unix_stream_read_generic
+        unix_stream_recvmsg
+          sock_xmit
+            nbd_read_stat
+              recv_work
+                process_one_work
+                  rescuer_thread
+                    kthread
+                      ret_from_fork
+
+Thanks,
+Yongji

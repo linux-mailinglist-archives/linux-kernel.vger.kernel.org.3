@@ -2,58 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E871481F6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:11:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC42B481F6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:11:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240217AbhL3TLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 14:11:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
+        id S241776AbhL3TLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 14:11:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236848AbhL3TLh (ORCPT
+        with ESMTP id S240273AbhL3TLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 14:11:37 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09777C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:11:37 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id p65so30684875iof.3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:11:37 -0800 (PST)
+        Thu, 30 Dec 2021 14:11:40 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B54CC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:11:40 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id u8so30639821iol.5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:11:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=HzwQpdJfvXsIjvjm8A0dpq6ENpHszfKPhEy/ULrVWJ4=;
-        b=iom+1/8VmJ76MSkm1gBmvL6xy5Ymq0fjqRaj3NQK4PJBCxS7CIAleK7ritCCUVbiQT
-         8weXhQEzqspioYExHn0+s1VViizWSOWQb26AWFwOEJoRPTiw1Ds2CBJUTNcsMuuR0kHg
-         KSBWGgRsWvhk8dTcs7hu8cOEv5OtoZ2FaTy6fLcZy960ry/YqbJb7UNeixLzUDHmIrmP
-         kpxVj+5Mu6+4L8gBYFyHFGebCWUiQYeppachhBECvmhai84hev27ysYy1HlY3SDPfEkv
-         M5x02Ycd66APnQJovkSbJiUpjTCbauPHkDHLJaoBkSmwWnjE3qI5D4YZ+OvBFIDChWqf
-         OTjg==
+        bh=GPu8b1zm5l26lxQv3Kupma6jp1vzEvVrzyOVnWiH1iE=;
+        b=DYv3/L8m1C+//6z+gGBtZ/Gw6/jDkpDfeubB94WOXRybqSfTsUPpy5xIbr5IkDJ456
+         JFEINKg4J05U2tkD/QrPPlwFN+A7cQYH9E1BaXLUmK9J51tWxFid53hemXZN2ghKiy+X
+         l0BCjUhBRNJFw/5xQU+n5iWpc7X05leuU7BVHLqtypKkSsYf2xmT9I1QSRpHgzTOJCI0
+         h5cfLuhqd47B9NjWP6vUfu0cUb6tgQ/cZ3Bhp4LzTqlpjPsfR0QRPdzkffYHgpEG6sp+
+         89RT6aqi+aLmDulYeixtBoavmr8y8/Kcch00iAa4e2BQFPr9MpND5oxOXGVMaruY6eTL
+         ec1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HzwQpdJfvXsIjvjm8A0dpq6ENpHszfKPhEy/ULrVWJ4=;
-        b=a7dmS04LLdP8yUSRr+6ci0pGXlfKvQl3f/DQ/D3gK2Bj7LIqqbRpAQKvyjFOvCSmJH
-         3sL7fOSNiQTeaA+UWKHnPOpBFwf+JVYD7/uL/OKAK01GJBhLUzXLuUKmB4iCsunvu6Vr
-         45N9H+6/wt9flWHIIgMKwY4wmL6rx7vaH9vT1R1ijExzXBwymF+1T9UVkrsZSNlMSs1C
-         peiwE0Gbx1JP+Ic2wH9pu6oDXCI77xOZ4QDytnvISpncTKNd9fKtfLqhEM33WxTdFVRZ
-         9FozLk7ZMBNKCb3h8rxfmDigVpRnt1gOe8LgHOADVs9dkzuqR+rYJirhIwW5UtnMRkPH
-         9v3w==
-X-Gm-Message-State: AOAM532gLIsR6wggoqW0IawwSlBVbDWS3YoF052Y0rFE21/56rxlUeN0
-        cwWNs+Sm1Z3JN8zv4wWfe/wGqwqAeCk6Pt/gKxw=
-X-Google-Smtp-Source: ABdhPJzywR0tUS/YbXABKXiDtcZoK0y/MajMtL10XrFJoxpViErAv/2h3+/uaPrtRuKXehdRb33ESdy0D7IPiYNF5oc=
-X-Received: by 2002:a02:b11a:: with SMTP id r26mr14612485jah.22.1640891496450;
- Thu, 30 Dec 2021 11:11:36 -0800 (PST)
+        bh=GPu8b1zm5l26lxQv3Kupma6jp1vzEvVrzyOVnWiH1iE=;
+        b=EiVM23KngH7+FKPZPRPJuAQHLAAD1BZV4vLkpeX9ddp72dWb9GZuJFA0Sgf1q5zPcs
+         o8h2/MTMaRnI6X0gKM27JnshkVtHHGP4HT/nT6FZSlNPDfysFUlQmBpX4yTqwR6TTRot
+         s418F0Xj36imVL4rOVkpKBqVEECnfwtn0TdzwGxKYSSDqv3CeMEfuUNDBCAlzXx+EtR0
+         56RC+NY8fNNenzSw2T7/C9nW0EcOE+f4Jc2waNU8TiQhwrMFsPNZj9xAFMmWwxasSVuY
+         TRpzaQaQrgg0kWIXwApe4eXMfOqmIkT3VO/MRW+F/m3/CDIdvSTTJJiMOjtqgyYj9KFd
+         QDQw==
+X-Gm-Message-State: AOAM5306RRFmB+HxrJ7rLgn7XXI5oNHpChCo4xUw4DxWIhzst8N/E5Mn
+        2nIffXQgSSyWWOqwBf9QZkohG4rV9ZSeYOcPPA4=
+X-Google-Smtp-Source: ABdhPJyWzqTL/fogtFxden0UIQV4GZQcWfMzs9KPHNVuo+ldoHL4+1vn/FYeyBb2TQf6AkWo5N4E5H1RNdasgZpp5e0=
+X-Received: by 2002:a05:6602:26d0:: with SMTP id g16mr8170007ioo.56.1640891499870;
+ Thu, 30 Dec 2021 11:11:39 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1640036051.git.andreyknvl@google.com> <92f3029f3647ab355450ed5c8252bad8cfae1e09.1640036051.git.andreyknvl@google.com>
- <CAG_fn=XcPT=e6zmm-B4KQPLujpuC9D+hTbJEsua31onzopDT5g@mail.gmail.com>
-In-Reply-To: <CAG_fn=XcPT=e6zmm-B4KQPLujpuC9D+hTbJEsua31onzopDT5g@mail.gmail.com>
+References: <cover.1640036051.git.andreyknvl@google.com> <73a0b47ec72a9c29e0efc18a9941237b3b3ad736.1640036051.git.andreyknvl@google.com>
+ <YcHC5c9ssDrcnORl@elver.google.com>
+In-Reply-To: <YcHC5c9ssDrcnORl@elver.google.com>
 From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Thu, 30 Dec 2021 20:11:25 +0100
-Message-ID: <CA+fCnZeGDeWFHvkMSQQeG=+DLokssfTjp5hq_QOXrZC0YVd0Zg@mail.gmail.com>
-Subject: Re: [PATCH mm v4 07/39] mm: clarify __GFP_ZEROTAGS comment
-To:     Alexander Potapenko <glider@google.com>
-Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
+Date:   Thu, 30 Dec 2021 20:11:29 +0100
+Message-ID: <CA+fCnZdFJ3r8bcpqhMz5fLn63DoecE1kJY1fvcmpP7zg+Q2Fig@mail.gmail.com>
+Subject: Re: [PATCH mm v4 28/39] kasan, page_alloc: allow skipping unpoisoning
+ for HW_TAGS
+To:     Marco Elver <elver@google.com>
+Cc:     andrey.konovalov@linux.dev,
+        Alexander Potapenko <glider@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Dmitry Vyukov <dvyukov@google.com>,
         Andrey Ryabinin <ryabinin.a.a@gmail.com>,
@@ -73,19 +75,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 10:17 AM Alexander Potapenko <glider@google.com> wrote:
+On Tue, Dec 21, 2021 at 1:05 PM Marco Elver <elver@google.com> wrote:
 >
-> On Mon, Dec 20, 2021 at 10:59 PM <andrey.konovalov@linux.dev> wrote:
-> >
-> > From: Andrey Konovalov <andreyknvl@google.com>
+> On Mon, Dec 20, 2021 at 11:02PM +0100, andrey.konovalov@linux.dev wrote:
+> [...]
+> >  #ifdef CONFIG_KASAN_HW_TAGS
+> >  #define __def_gfpflag_names_kasan                                          \
+> > -     , {(unsigned long)__GFP_SKIP_KASAN_POISON, "__GFP_SKIP_KASAN_POISON"}
+> > +     , {(unsigned long)__GFP_SKIP_KASAN_POISON, "__GFP_SKIP_KASAN_POISON"} \
+> > +     , {(unsigned long)__GFP_SKIP_KASAN_UNPOISON,                          \
+> > +                                             "__GFP_SKIP_KASAN_UNPOISON"}
+> >  #else
+> >  #define __def_gfpflag_names_kasan
+> >  #endif
 >
-> Reviewed-by: Alexander Potapenko <glider@google.com>
+> Adhering to 80 cols here makes the above less readable. If you do a v5,
+> my suggestion is:
 >
-> >
-> > __GFP_ZEROTAGS is intended as an optimization: if memory is zeroed during
-> > allocation, it's possible to set memory tags at the same time with little
-> > performance impact.
-> Perhaps you could mention this intention explicitly in the comment?
-> Right now it still doesn't reference performance.
+> diff --git a/include/trace/events/mmflags.h b/include/trace/events/mmflags.h
+> index f18eeb5fdde2..f9f0ae3a4b6b 100644
+> --- a/include/trace/events/mmflags.h
+> +++ b/include/trace/events/mmflags.h
+> @@ -51,11 +51,10 @@
+>         {(unsigned long)__GFP_ZEROTAGS,         "__GFP_ZEROTAGS"}       \
+>
+>  #ifdef CONFIG_KASAN_HW_TAGS
+> -#define __def_gfpflag_names_kasan                                            \
+> -       , {(unsigned long)__GFP_SKIP_ZERO, "__GFP_SKIP_ZERO"}                 \
+> -       , {(unsigned long)__GFP_SKIP_KASAN_POISON, "__GFP_SKIP_KASAN_POISON"} \
+> -       , {(unsigned long)__GFP_SKIP_KASAN_UNPOISON,                          \
+> -                                               "__GFP_SKIP_KASAN_UNPOISON"}
+> +#define __def_gfpflag_names_kasan ,                                                    \
+> +       {(unsigned long)__GFP_SKIP_ZERO,                "__GFP_SKIP_ZERO"},             \
+> +       {(unsigned long)__GFP_SKIP_KASAN_POISON,        "__GFP_SKIP_KASAN_POISON"},     \
+> +       {(unsigned long)__GFP_SKIP_KASAN_UNPOISON,      "__GFP_SKIP_KASAN_UNPOISON"}
+>  #else
+>  #define __def_gfpflag_names_kasan
+>  #endif
 
-Sure, will do in v5. Thanks!
+Will do in v5, thanks!

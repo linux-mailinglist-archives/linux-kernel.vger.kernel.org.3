@@ -2,161 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F02481DE1
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:56:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBEC1481DE4
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:58:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240130AbhL3P4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 10:56:22 -0500
-Received: from mail-qt1-f175.google.com ([209.85.160.175]:45745 "EHLO
-        mail-qt1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236262AbhL3P4U (ORCPT
+        id S240435AbhL3P6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 10:58:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236262AbhL3P6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 10:56:20 -0500
-Received: by mail-qt1-f175.google.com with SMTP id p19so22004860qtw.12;
-        Thu, 30 Dec 2021 07:56:19 -0800 (PST)
+        Thu, 30 Dec 2021 10:58:03 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9084EC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 07:58:02 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id m18so21615057qtk.3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 07:58:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JS+FiKSeT5f12gRyVzfSR3kPguW23wtXqyvRjIMFpqI=;
+        b=mY4GeSgx7uJKI8pLh6VENQs/UsOw59UxMLfMIP92SxOTvBd3AtvzG84MJMmKy8rQPM
+         l6uOY/iTCJ5208cHc8x/gVcl2Sfw0BXV1It7s/zUrRFRlmpQUba1zuur1jHWnHymD7OZ
+         MBFDUhLa5hsEr2NPIoX0oYa6bhi4Wkf+qVCA07asQzJIxyXbsNut3qw0GqiCJcH5NHaj
+         Ifb0GyPQq06hi9W5IygEOWdFg+ojHEM61XH9WWkShFe+ePHNwnjGJ9euNw23bsJ+mpO6
+         9S04byKVRDWja/EJY9/dDdbIQSpWLz4Evr7ATnRNG6sDycKG1IYtWzvLuo1DSrXyfN3W
+         qr0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Uyd2lmYIj+aDxIiI6zxbrO3VhujHcAJmwQIoF2owoAA=;
-        b=yn5o9HDLUh0kEm09aHx2hCsDwR2g4KFr5n35sRuylQ18g3qgCHIrZTRoxi46yEELk3
-         gYrSrIROKYFiBpJqE1rpvvnzc/algZHdBwlMxSud5PNKD1vDPWCGWXY9uwvRA/LwAlRW
-         wQlTj14EVDmbpTVvC/B9Ix9cWUz8BnetFrXNexONvT0cHcjnXiiPalbaCvs7wGJ0LvVE
-         hqYmhP82fWVmUgMK3X/clBGnUEVTW1pOorOmqGMNcC8JPcePwoqZsHqIJwMbSQPnJPU8
-         F3a7nmMDRKVevZlIgxvcY2sypUUsmaI3/S5lrewJ2GBmoVBHHfXLquBC8RwM444oVn2N
-         dV0Q==
-X-Gm-Message-State: AOAM53261JYJQ6K0gk61uOiDWKNg+Va7KUXvG7UAbgNovfIyMcWXQ8JT
-        iK2Ton2jWQgBBVcOSjhM71NyjAHsLRaKgDDaBU8=
-X-Google-Smtp-Source: ABdhPJz3+9w28sbI5DJJd57BV0iux6VYMlM3ZP1Hd7W5M/VmCNwFkRHOdUA/ovA2i96bz33JeTcJe7o2W8vYTvwOeH0=
-X-Received: by 2002:a05:622a:1113:: with SMTP id e19mr23739654qty.612.1640879779270;
- Thu, 30 Dec 2021 07:56:19 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JS+FiKSeT5f12gRyVzfSR3kPguW23wtXqyvRjIMFpqI=;
+        b=UDib1v7FOtlZueZmQU1GNDd+zFj26vOZxld4AqAuHx/qvtRqTVn4JG0KTPO/wEw12T
+         BIq1GpmlympPKYpwhUr4yDw4R0oVK8Pq4fsKh10b+HPyVtJq5KJnsYImthYWKPzu6or0
+         w5UHimG0z37pak1ZHZhWq1lhMAQOWgaUOppv59eIR+gjyMKidFgkks3px6GH8POeiPXI
+         ul+aBtPFvCq76JNjmdt6uC2WKTULL1ib7hFn6fpfoe61DubdmRp70kx3L0Zv50vw9Vmo
+         3X79flrAjF9k0/2hpaN7MqGkmCDWaRgnizmL3dCXzt+oEu7pujQ9H1mWe0bsHVnELr0e
+         +u9w==
+X-Gm-Message-State: AOAM530Pj4Eyqo0FcTicRkzhmIaP98NFbwLVJDcHPRlqlHuFrN/kPMf/
+        qEdsKygtWtPLw4aLSsr0Jr0=
+X-Google-Smtp-Source: ABdhPJxcBEOdjQ+MgEJANgHQuPK0IPhBHynueDf+BM9DEl4Um31/Zb9ZnZS3E2MR8vMZpjZjYhXWqg==
+X-Received: by 2002:a05:622a:3d1:: with SMTP id k17mr23980588qtx.335.1640879881789;
+        Thu, 30 Dec 2021 07:58:01 -0800 (PST)
+Received: from localhost.localdomain (071-085-241-167.res.spectrum.com. [71.85.241.167])
+        by smtp.gmail.com with ESMTPSA id k9sm20495402qta.48.2021.12.30.07.58.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Dec 2021 07:58:01 -0800 (PST)
+From:   hasheddan <georgedanielmangum@gmail.com>
+Cc:     georgedanielmangum@gmail.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Tong Tiangen <tongtiangen@huawei.com>,
+        Guo Ren <guoren@kernel.org>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Atish Patra <atish.patra@wdc.com>,
+        Andreas Schwab <schwab@suse.de>, Zihao Yu <yuzihao@ict.ac.cn>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] riscv/entry: fix misspelling of instruction
+Date:   Thu, 30 Dec 2021 10:57:11 -0500
+Message-Id: <20211230155714.1019859-1-georgedanielmangum@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211224010508.110159-1-ray.huang@amd.com>
-In-Reply-To: <20211224010508.110159-1-ray.huang@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 30 Dec 2021 16:56:08 +0100
-Message-ID: <CAJZ5v0i3xufGJi5+8zH7aG3vgjQpGuU_YVG=cBMxi0aGY1aP3A@mail.gmail.com>
-Subject: Re: [PATCH v7 00/14] cpufreq: Introduce a new AMD CPU frequency
- control mechanism
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Borislav Petkov <bp@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Steven Noonan <steven@valvesoftware.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 24, 2021 at 2:05 AM Huang Rui <ray.huang@amd.com> wrote:
->
-> Hi all,
->
-> Merry Christmas & Happy New Year!
->
-> We would like to introduce a new AMD CPU frequency control mechanism as the
-> AMD P-State driver for modern AMD Zen based CPU series in Linux Kernel.
-> The new mechanism is based on Collaborative processor performance control
-> (CPPC) which is finer grain frequency management than legacy ACPI hardware
-> P-States. Current AMD CPU platforms are using the ACPI P-states driver to
-> manage CPU frequency and clocks with switching only in 3 P-states. AMD
-> P-State is to replace the ACPI P-states controls, allows a flexible,
-> low-latency interface for the Linux kernel to directly communicate the
-> performance hints to hardware.
->
-> AMD P-State leverages the Linux kernel governors such as *schedutil*,
-> *ondemand*, etc. to manage the performance hints which are provided by CPPC
-> hardware functionality. The first version for AMD P-State is to support one
-> of the Zen3 processors, and we will support more in future after we verify
-> the hardware and SBIOS functionalities.
->
-> There are two types of hardware implementations for AMD P-State: one is full
-> MSR support and another is shared memory support. It can use
-> X86_FEATURE_CPPC feature flag to distinguish the different types.
->
-> Using the new AMD P-State method + kernel governors (*schedutil*,
-> *ondemand*, ...) to manage the frequency update is the most appropriate
-> bridge between AMD Zen based hardware processor and Linux kernel, the
-> processor is able to adjust to the most efficiency frequency according to
-> the kernel scheduler loading.
->
+Changes spelling from instruciton to instruction in comment in entry.S.
 
-[cut]
+Signed-off-by: hasheddan <georgedanielmangum@gmail.com>
+---
+ arch/riscv/kernel/entry.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Actually, the AMD P-State driver doesn't change the physical maximum
-> frequency capacity in the processor. But it's able to provide the finer
-> grain performance control range instead of legacy 3 P-States. It has a
-> better performance and power efficiency than before. We will continue
-> optimize AMD P-State function on kernel governors to support different types
-> of processors such as mobile latop, performance desktop, and etc.
->
+diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+index ed29e9c8f660..728c521dcc85 100644
+--- a/arch/riscv/kernel/entry.S
++++ b/arch/riscv/kernel/entry.S
+@@ -568,7 +568,7 @@ ENTRY(excp_vect_table)
+ 	RISCV_PTR do_trap_ecall_s
+ 	RISCV_PTR do_trap_unknown
+ 	RISCV_PTR do_trap_ecall_m
+-	/* instruciton page fault */
++	/* instruction page fault */
+ 	ALT_PAGE_FAULT(RISCV_PTR do_page_fault)
+ 	RISCV_PTR do_page_fault   /* load page fault */
+ 	RISCV_PTR do_trap_unknown
+-- 
+2.25.1
 
-[cut]
-
->
->
-> Huang Rui (11):
->   x86/cpufeatures: Add AMD Collaborative Processor Performance Control
->     feature flag
->   x86/msr: Add AMD CPPC MSR definitions
->   cpufreq: amd-pstate: Introduce a new AMD P-State driver to support
->     future processors
->   cpufreq: amd-pstate: Add fast switch function for AMD P-State
->   cpufreq: amd-pstate: Introduce the support for the processors with
->     shared memory solution
->   cpufreq: amd-pstate: Add trace for AMD P-State module
->   cpufreq: amd-pstate: Add boost mode support for AMD P-State
->   cpufreq: amd-pstate: Add AMD P-State frequencies attributes
->   cpufreq: amd-pstate: Add AMD P-State performance attributes
->   Documentation: amd-pstate: Add AMD P-State driver introduction
->   MAINTAINERS: Add AMD P-State driver maintainer entry
->
-> Jinzhou Su (1):
->   ACPI: CPPC: Add CPPC enable register function
->
-> Mario Limonciello (1):
->   ACPI: CPPC: Check present CPUs for determining _CPC is valid
->
-> Steven Noonan (1):
->   ACPI: CPPC: Implement support for SystemIO registers
->
->  Documentation/admin-guide/acpi/cppc_sysfs.rst |   2 +
->  Documentation/admin-guide/pm/amd-pstate.rst   | 383 +++++++++++
->  .../admin-guide/pm/working-state.rst          |   1 +
->  MAINTAINERS                                   |   7 +
->  arch/x86/include/asm/cpufeatures.h            |   1 +
->  arch/x86/include/asm/msr-index.h              |  17 +
->  drivers/acpi/cppc_acpi.c                      |  99 ++-
->  drivers/cpufreq/Kconfig.x86                   |  17 +
->  drivers/cpufreq/Makefile                      |   5 +
->  drivers/cpufreq/amd-pstate-trace.c            |   2 +
->  drivers/cpufreq/amd-pstate-trace.h            |  77 +++
->  drivers/cpufreq/amd-pstate.c                  | 643 ++++++++++++++++++
->  include/acpi/cppc_acpi.h                      |   5 +
->  13 files changed, 1255 insertions(+), 4 deletions(-)
->  create mode 100644 Documentation/admin-guide/pm/amd-pstate.rst
->  create mode 100644 drivers/cpufreq/amd-pstate-trace.c
->  create mode 100644 drivers/cpufreq/amd-pstate-trace.h
->  create mode 100644 drivers/cpufreq/amd-pstate.c
->
-> --
-
-I'm queuing up this series for 5.17 with the assumption that all of
-the comments on patch 2 have been addressed and that Steve will not
-hate patch 9.
-
-Thanks!

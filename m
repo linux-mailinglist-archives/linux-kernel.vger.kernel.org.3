@@ -2,136 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE923481AF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 09:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF916481AF7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 10:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237961AbhL3I7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 03:59:16 -0500
-Received: from isilmar-4.linta.de ([136.243.71.142]:60846 "EHLO
-        isilmar-4.linta.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbhL3I7L (ORCPT
+        id S238044AbhL3JA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 04:00:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229567AbhL3JA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 03:59:11 -0500
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
-        by isilmar-4.linta.de (Postfix) with ESMTPSA id 2574320140C;
-        Thu, 30 Dec 2021 08:59:10 +0000 (UTC)
-Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
-        id 6720C8067E; Thu, 30 Dec 2021 09:59:05 +0100 (CET)
-Date:   Thu, 30 Dec 2021 09:59:05 +0100
-From:   Dominik Brodowski <linux@dominikbrodowski.net>
-To:     "Jason A . Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        "Ivan T . Ivanov" <iivanov@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
-Subject: [PATCH v8.1 7/7] random: move NUMA-related code to CONFIG_NUMA
- section
-Message-ID: <Yc102b3gCiIjC88e@owl.dominikbrodowski.net>
-References: <20211228153826.448805-1-Jason@zx2c4.com>
- <20211229211009.108091-1-linux@dominikbrodowski.net>
- <20211229211009.108091-7-linux@dominikbrodowski.net>
+        Thu, 30 Dec 2021 04:00:28 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BC2C061574;
+        Thu, 30 Dec 2021 01:00:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=vFgwQFGnP1+nZeL5xidq9k2TiaD3WdltS2FPFb0c2qA=; b=hSaUvXVYJLH2XhksKFosQF2YHU
+        dGP5innnv/tBj7GGtJdnhhYyL6mWSDOrz1NIx6rv4mYjbHi7dEyC4CPSPe4JlCgVOyo9rYxQdsD8q
+        EQ8XSLZ5mZRJVuVC5qyz5p9S2SzO0De2a5XnNwxaI0dz1ksfOmZ0YqcwaYGQfKRR1FaxYxnIktniK
+        LSsuBJ9c8O5Bw+3/8Fo5/U5wkfG0lR9oDKlVz9GxIjrQhq2DOKWmaIivzRsc+z3/wCSt2kSTNgWaS
+        SnJjoKqTvyOarGUHx025oaka8eR1wQ0Cxieh8IWOHBM+LfioMEXHdnMqa3mKdC8jNPLJLi0q63zpo
+        LCfE3baA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n2rIM-0046EG-3y; Thu, 30 Dec 2021 09:00:22 +0000
+Date:   Thu, 30 Dec 2021 01:00:22 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v9 00/15] Function Granular KASLR
+Message-ID: <Yc11JrelnWJgV7KX@infradead.org>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+ <YcVq1pMHWvPFHH5g@infradead.org>
+ <20211227183318.1447690-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211229211009.108091-7-linux@dominikbrodowski.net>
+In-Reply-To: <20211227183318.1447690-1-alexandr.lobakin@intel.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By moving crng_initialize_secondary() and crng_init_try_arch() a few
-lines lower to the CONFIG_NUMA ifdef section, we can remove the
-__maybe_unused attribute from the first function, and reduce the
-footprint for !CONFIG_NUMA.
+On Mon, Dec 27, 2021 at 07:33:18PM +0100, Alexander Lobakin wrote:
+> From: Christoph Hellwig <hch@infradead.org>
+> Date: Thu, 23 Dec 2021 22:38:14 -0800
+> 
+> > On Thu, Dec 23, 2021 at 01:21:54AM +0100, Alexander Lobakin wrote:
+> > > This is a massive rework and a respin of Kristen Accardi's marvellous
+> > > FG-KASLR series (v5).
+> > 
+> > Here would be the place to explain what this series actually does and
+> > why it is marvellous.
+> 
+> As I took this project over from another developer/team, I decided
+> to preserve the original cover letter and append it to the end of
+> mine, as well as to keep most of the original code in the separate
+> commits from mine.
+> For sure I could redo this if needed, is it really so?
 
-Suggested-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
----
- drivers/char/random.c |   52 +++++++++++++++++++++++++-------------------------
- 1 file changed, 26 insertions(+), 26 deletions(-)
-
-v8->v8.1:
-crng_init_try_arch() isn't used elsewhere, therefore it needed to be
-moved to CONFIG_NUMA as well.
-
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index a5bf662578cb..181b61104948 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -783,24 +783,6 @@ static int __init parse_trust_cpu(char *arg)
- }
- early_param("random.trust_cpu", parse_trust_cpu);
- 
--static bool crng_init_try_arch(struct crng_state *crng)
--{
--	int		i;
--	bool		arch_init = true;
--	unsigned long	rv;
--
--	for (i = 4; i < 16; i++) {
--		if (!arch_get_random_seed_long(&rv) &&
--		    !arch_get_random_long(&rv)) {
--			rv = random_get_entropy();
--			arch_init = false;
--		}
--		crng->state[i] ^= rv;
--	}
--
--	return arch_init;
--}
--
- static bool __init crng_init_try_arch_early(struct crng_state *crng)
- {
- 	int		i;
-@@ -819,14 +801,6 @@ static bool __init crng_init_try_arch_early(struct crng_state *crng)
- 	return arch_init;
- }
- 
--static void __maybe_unused crng_initialize_secondary(struct crng_state *crng)
--{
--	chacha_init_consts(crng->state);
--	_get_random_bytes(&crng->state[4], sizeof(__u32) * 12);
--	crng_init_try_arch(crng);
--	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
--}
--
- static void __init crng_initialize_primary(void)
- {
- 	struct crng_state *crng = &primary_crng;
-@@ -871,6 +845,32 @@ static void crng_finalize_init(struct crng_state *crng)
- }
- 
- #ifdef CONFIG_NUMA
-+static bool crng_init_try_arch(struct crng_state *crng)
-+{
-+	int		i;
-+	bool		arch_init = true;
-+	unsigned long	rv;
-+
-+	for (i = 4; i < 16; i++) {
-+		if (!arch_get_random_seed_long(&rv) &&
-+		    !arch_get_random_long(&rv)) {
-+			rv = random_get_entropy();
-+			arch_init = false;
-+		}
-+		crng->state[i] ^= rv;
-+	}
-+
-+	return arch_init;
-+}
-+
-+static void crng_initialize_secondary(struct crng_state *crng)
-+{
-+	chacha_init_consts(crng->state);
-+	_get_random_bytes(&crng->state[4], sizeof(__u32) * 12);
-+	crng_init_try_arch(crng);
-+	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
-+}
-+
- static void do_numa_crng_init(struct work_struct *work)
- {
- 	int i;
+A cover letter needs to explain what you're doing for the reader.
+No one is going to page forever to look for that.

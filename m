@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0D6481B4E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 11:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C8B481B50
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 11:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238537AbhL3KVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 05:21:40 -0500
+        id S238555AbhL3KVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 05:21:44 -0500
 Received: from mail-sh.amlogic.com ([58.32.228.43]:34421 "EHLO
         mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbhL3KVk (ORCPT
+        with ESMTP id S238519AbhL3KVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 05:21:40 -0500
+        Thu, 30 Dec 2021 05:21:41 -0500
 Received: from droid06.amlogic.com (10.18.11.248) by mail-sh.amlogic.com
  (10.18.11.5) with Microsoft SMTP Server id 15.1.2176.14; Thu, 30 Dec 2021
- 18:21:38 +0800
+ 18:21:40 +0800
 From:   Yu Tu <yu.tu@amlogic.com>
 To:     <linux-serial@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
@@ -27,10 +27,12 @@ CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jerome Brunet <jbrunet@baylibre.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Yu Tu <yu.tu@amlogic.com>
-Subject: [PATCH V3 0/6] the UART driver compatible with the Amlogic Meson
-Date:   Thu, 30 Dec 2021 18:21:04 +0800
-Message-ID: <20211230102110.3861-1-yu.tu@amlogic.com>
+Subject: [PATCH V3 1/6] tty: serial: meson: Drop the legacy compatible strings and clock code
+Date:   Thu, 30 Dec 2021 18:21:05 +0800
+Message-ID: <20211230102110.3861-2-yu.tu@amlogic.com>
 X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211230102110.3861-1-yu.tu@amlogic.com>
+References: <20211230102110.3861-1-yu.tu@amlogic.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -39,38 +41,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1.Using the common Clock code to describe the UART baud rate clock makes it
-easier for the UART driver to be compatible with the baud rate requirements
-of the UART IP on different meson chips. Add Meson S4 SoC compatible.
+All mainline .dts files have been using the stable UART since Linux
+4.16. Drop the legacy compatible strings and related clock code.
 
-2.Fix some omissions
+Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+---
+ drivers/tty/serial/meson_uart.c | 34 ++-------------------------------
+ 1 file changed, 2 insertions(+), 32 deletions(-)
 
-3.An interrupt error occurs when the user opens (/dev/ttyAML0) twice
-in a row
-
-Yu Tu (6):
-  tty: serial: meson: Drop the legacy compatible strings and clock code
-  tty: serial: meson: Request the register region in meson_uart_probe()
-  dt-bindings: serial: meson: Support S4 SoC uart. Also Drop compatible
-    = amlogic,meson-gx-uart.
-  tty: serial: meson: The UART baud rate calculation is described using
-    the common clock code. Also added S4 chip uart Compatible.
-  tty: serial: meson: meson_uart_shutdown omit clear AML_UART_TX_EN bit
-  tty: serial: meson: Change request_irq to devm_request_irq and move
-    devm_request_irq to meson_uart_probe()
-
-V1 -> V2: Use CCF to describe the UART baud rate clock.Make some changes as
-discussed in the email
-V2 -> V3: add compatible = "amlogic,meson-gx-uart". Because it must change
-the DTS before it can be deleted
-
-Link:https://lore.kernel.org/linux-amlogic/20211221071634.25980-2-yu.tu@amlogic.com/
-
- .../bindings/serial/amlogic,meson-uart.yaml   |  10 +-
- drivers/tty/serial/Kconfig                    |   1 +
- drivers/tty/serial/meson_uart.c               | 367 +++++++++++++-----
- 3 files changed, 273 insertions(+), 105 deletions(-)
-
+diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
+index d2c08b760f83..c9a37602ffd0 100644
+--- a/drivers/tty/serial/meson_uart.c
++++ b/drivers/tty/serial/meson_uart.c
+@@ -625,10 +625,7 @@ meson_serial_early_console_setup(struct earlycon_device *device, const char *opt
+ 	device->con->write = meson_serial_early_console_write;
+ 	return 0;
+ }
+-/* Legacy bindings, should be removed when no more used */
+-OF_EARLYCON_DECLARE(meson, "amlogic,meson-uart",
+-		    meson_serial_early_console_setup);
+-/* Stable bindings */
++
+ OF_EARLYCON_DECLARE(meson, "amlogic,meson-ao-uart",
+ 		    meson_serial_early_console_setup);
+ 
+@@ -668,25 +665,6 @@ static inline struct clk *meson_uart_probe_clock(struct device *dev,
+ 	return clk;
+ }
+ 
+-/*
+- * This function gets clocks in the legacy non-stable DT bindings.
+- * This code will be remove once all the platforms switch to the
+- * new DT bindings.
+- */
+-static int meson_uart_probe_clocks_legacy(struct platform_device *pdev,
+-					  struct uart_port *port)
+-{
+-	struct clk *clk = NULL;
+-
+-	clk = meson_uart_probe_clock(&pdev->dev, NULL);
+-	if (IS_ERR(clk))
+-		return PTR_ERR(clk);
+-
+-	port->uartclk = clk_get_rate(clk);
+-
+-	return 0;
+-}
+-
+ static int meson_uart_probe_clocks(struct platform_device *pdev,
+ 				   struct uart_port *port)
+ {
+@@ -750,12 +728,7 @@ static int meson_uart_probe(struct platform_device *pdev)
+ 	if (!port)
+ 		return -ENOMEM;
+ 
+-	/* Use legacy way until all platforms switch to new bindings */
+-	if (of_device_is_compatible(pdev->dev.of_node, "amlogic,meson-uart"))
+-		ret = meson_uart_probe_clocks_legacy(pdev, port);
+-	else
+-		ret = meson_uart_probe_clocks(pdev, port);
+-
++	ret = meson_uart_probe_clocks(pdev, port);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -800,9 +773,6 @@ static int meson_uart_remove(struct platform_device *pdev)
+ }
+ 
+ static const struct of_device_id meson_uart_dt_match[] = {
+-	/* Legacy bindings, should be removed when no more used */
+-	{ .compatible = "amlogic,meson-uart" },
+-	/* Stable bindings */
+ 	{ .compatible = "amlogic,meson6-uart" },
+ 	{ .compatible = "amlogic,meson8-uart" },
+ 	{ .compatible = "amlogic,meson8b-uart" },
 -- 
 2.33.1
 

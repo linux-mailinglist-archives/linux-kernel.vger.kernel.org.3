@@ -2,25 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4AD3481F0B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:06:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B3D481F0A
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:06:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241614AbhL3SG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 13:06:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241615AbhL3SGT (ORCPT
+        id S241641AbhL3SGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 13:06:24 -0500
+Received: from polaris.svanheule.net ([84.16.241.116]:33396 "EHLO
+        polaris.svanheule.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241614AbhL3SGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 30 Dec 2021 13:06:19 -0500
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052B8C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 10:06:18 -0800 (PST)
 Received: from terra.local.svanheule.net (unknown [IPv6:2a02:a03f:eafe:c901:a9e6:6f2a:78f1:2f3])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 226EA28A0E8;
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 8F1E028A0E9;
         Thu, 30 Dec 2021 19:06:17 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
         s=mail1707; t=1640887577;
@@ -28,20 +25,20 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DiLz8h07bXCPmngkalpDxgI0CnnZbPU7/fGeU0TGX7s=;
-        b=LnXKpvGw4bBLeOhVoFx0sQzmVAKFE9qRD34m7KZ5fdWb0VvaPoHCqPUjbxltyQ/iDXlk0s
-        6ChnqQJoaxdbohF2d/9yiT4DQwuBSQQ1wvdSXjODyqihGZkkvGS2RbwzCFNt2WWBijKH1a
-        6fIITHhN4d2dzOydGCtt5nvyfWWLciN5xIGb4Z/EBUhODXZF3kDXXDL5PK3FfWJkvTPvaR
-        Y0CgjvKO0KdEUWL69UeL0G+3jKjI+Fg5xeYMPNhUjDWPqRLTpvPM3WTQjvk5WBCePsHZBX
-        0UXcfwUqQ0ulYrifwreSoWo3DU2yMYXS1bOHiPtMtWWoo3qzDbxKF30AVpXHAg==
+        bh=Yr6gchtCX9936GGbILXch7LDeMKywbeBcvVtA1dQaLg=;
+        b=ZmOoK1hplli8SCAj11Sf+f/nZyOTivmEzODVVtcbuUuuutqiVqPuvudXLjUtEB7Iu9DVUE
+        9WielxOWPJC31EHGuLuqJbetjriY30xPFc3JvjlDEB0g05I4lQseHLuFSrMiMO6f3NnLxr
+        3Ll2oB/4BJvlVVsJ9mGMCX1X9RkaGIsdH8ntC9fYmXLcDqFTyeiflgXbtkl4hdsCwmoNFL
+        9e+7NMnTLU5tRVggG/5GczCQFoIOBaCfkufzvvwQB/28qdV8jwlyONQ+n2sY0Wjc3p/3zC
+        uWot4PMWMJk0RaJqQvk+NGLbjJ8L8eNaRtouqghEJfimbrYDoR/gB6wRvsgTDg==
 From:   Sander Vanheule <sander@svanheule.net>
 To:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
         Sander Vanheule <sander@svanheule.net>
-Subject: [RFC PATCH v1 2/3] dt-bindings: power: reset: gpio-restart: Add -ms suffix to delays
-Date:   Thu, 30 Dec 2021 19:06:02 +0100
-Message-Id: <35e4da34fb7e18ea7e3af2405db4c5a2a7ba2dfe.1640887456.git.sander@svanheule.net>
+Subject: [RFC PATCH v1 3/3] dt-bindings: power: reset: gpio-restart: Correct default priority
+Date:   Thu, 30 Dec 2021 19:06:03 +0100
+Message-Id: <cfcd00257daba5aa30b8d20a62ba542be1a6914c.1640887456.git.sander@svanheule.net>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1640887456.git.sander@svanheule.net>
 References: <cover.1640887456.git.sander@svanheule.net>
@@ -51,63 +48,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The delay properties are expressed in milliseconds, so the property
-names should have a -ms suffix. Add the suffix, and deprecate the
-original properties.
+Commit bcd56fe1aa97 ("power: reset: gpio-restart: increase priority
+slightly") changed the default restart priority 129, but did not update
+the documentation. Correct this, so the driver and documentation have
+the same default value.
 
 Signed-off-by: Sander Vanheule <sander@svanheule.net>
 ---
- .../bindings/power/reset/gpio-restart.yaml    | 27 ++++++++++++-------
- 1 file changed, 18 insertions(+), 9 deletions(-)
+ Documentation/devicetree/bindings/power/reset/gpio-restart.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml b/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
-index 6a1f4aeebf49..13827fe7b395 100644
+index 13827fe7b395..ab26af93cb39 100644
 --- a/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
 +++ b/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
-@@ -62,17 +62,26 @@ properties:
-             restart handlers
- 
-   active-delay:
--    $ref: /schemas/types.yaml#/definitions/uint32
--    description: Delay (default 100) to wait after driving gpio active [ms]
-+    $ref: '#/properties/active-delay-ms'
-+    deprecated: true
- 
-   inactive-delay:
--    $ref: /schemas/types.yaml#/definitions/uint32
--    description: Delay (default 100) to wait after driving gpio inactive [ms]
-+    $ref: '#/properties/inactive-delay-ms'
-+    deprecated: true
- 
-   wait-delay:
--    $ref: /schemas/types.yaml#/definitions/uint32
-+    $ref: '#/properties/wait-delay-ms'
-+    deprecated: true
-+
-+  active-delay-ms:
-+    description: Delay (default 100 ms) to wait after driving gpio active
-+
-+  inactive-delay-ms:
-+    description: Delay (default 100 ms) to wait after driving gpio inactive
-+
-+  wait-delay-ms:
-     description:
--      Delay (default 3000) to wait after completing restart sequence [ms]
-+      Delay (default 3000 ms) to wait after completing restart sequence
- 
- required:
-   - compatible
-@@ -86,7 +95,7 @@ examples:
-       compatible = "gpio-restart";
-       gpios = <&gpio 4 0>;
-       priority = <128>;
--      active-delay = <100>;
--      inactive-delay = <100>;
--      wait-delay = <3000>;
-+      active-delay-ms = <100>;
-+      inactive-delay-ms = <100>;
-+      wait-delay-ms = <3000>;
-     };
+@@ -51,7 +51,7 @@ properties:
+   priority:
+     $ref: /schemas/types.yaml#/definitions/uint32
+     description: |
+-      A priority ranging from 0 to 255 (default 128) according to the following
++      A priority ranging from 0 to 255 (default 129) according to the following
+       guidelines:
+       0:    Restart handler of last resort, with limited restart
+             capabilities
 -- 
 2.33.1
 

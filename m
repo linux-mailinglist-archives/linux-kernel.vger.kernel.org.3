@@ -2,150 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F5148202F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 21:08:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B700E482030
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 21:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237299AbhL3UIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 15:08:18 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:45259 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S236161AbhL3UIR (ORCPT
+        id S237455AbhL3ULP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 15:11:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231890AbhL3ULP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 15:08:17 -0500
-Received: (qmail 1117556 invoked by uid 1000); 30 Dec 2021 15:08:16 -0500
-Date:   Thu, 30 Dec 2021 15:08:16 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, andreyknvl@google.com,
-        dvyukov@google.com, gregkh@linuxfoundation.org,
-        gustavoars@kernel.org, jun.li@nxp.com, keescook@chromium.org,
-        kishon@ti.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, m.szyprowski@samsung.com,
-        noring@nocrew.org, pastor.winkley@holytabernacleint.org,
-        peter.chen@nxp.com, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in
- usb_hcd_poll_rh_status (2)
-Message-ID: <Yc4RsFnaFfbCUeRy@rowland.harvard.edu>
-References: <000000000000bbbbcf05aec86741@google.com>
- <00000000000026712705d45ef8a7@google.com>
+        Thu, 30 Dec 2021 15:11:15 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D80C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 12:11:14 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id g26so56463956lfv.11
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 12:11:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=D5OpIvSfY687ZPsc4rtmiNJ18f7af4DJBRMrvJ8i7c8=;
+        b=lBwV1MKOGArwVuJreNpk69P1xSjDiao+JLSeG8U2SC+re7P3K0WzovMoulqaHXAliu
+         AQ8hRATVRxj7jTKVQa7efRJQlTdKLhQiIHiDzSnqQv6nAbKXSssHc3cb60l169z6C7Hc
+         OIDH0xG2kYhSnPsO30XBOo6ECec0TEFjPVcG6XWkH3L7uyLwo15UuNqhdty6JqaaULgQ
+         keKFVnY7H4H4pSdZ6vXkqF0rg9A3bfKTP+cfuewlt7hIp+a25iq2J7K+bRIrmwyx+vpb
+         /0CuZvhQitlDHDlIQI+sW39WNgxax95weJ6It+Sviw3e0lF96TIYRMfZqV6MpjCcMfJd
+         qMZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=D5OpIvSfY687ZPsc4rtmiNJ18f7af4DJBRMrvJ8i7c8=;
+        b=dHp8du/EGJ8DHpXgIrG6+tc8ps7F6zPCR6F2r7QR7m0b+R0HZ6dvvFbZo8ySN5ndea
+         HpVu3EUH83icD9Vav5PyhtN+O9GijBfYE1BgBS04StuRpPLYiTwWG0ZReV5J4qcystcn
+         Hj9Qo3rniHPPkdzUTRPXhAAx6GbVNul/L5VVVb+5L0i2awym7m+ORMf2zJYg2Y+gpfQ/
+         RikMoRCVlFAg/H3IToJHSb9QI6fCb5KJnaVsJbsA7wAVLmmW3dT3NpQXTTR2nUUGZYkA
+         O8sD4poO1eTV9gNhMDJ3i6qFLdNdixGOU8O5unnq58b5IhYEnfFnrYk/zpiUF81nv48W
+         +y8Q==
+X-Gm-Message-State: AOAM531N4vJajy+2mJ4fDIOqBVc3faCtOqyAyu6+wFdDwqcv17DfUdDD
+        KxkOHOtDvoM+Re6bkwOOb3hbj4abzxo=
+X-Google-Smtp-Source: ABdhPJyxAQTnaDZ8/NtfWRTmPBqi8ZcRtkAX6434doC+Gj827J4c4344J+F0Aq7bHdqy4fQ/h/ORZQ==
+X-Received: by 2002:ac2:5547:: with SMTP id l7mr29125759lfk.324.1640895072475;
+        Thu, 30 Dec 2021 12:11:12 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.235.97])
+        by smtp.gmail.com with ESMTPSA id n11sm914635ljj.70.2021.12.30.12.11.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Dec 2021 12:11:12 -0800 (PST)
+Message-ID: <2838d56e-9618-1582-4127-9dc3d56ff311@gmail.com>
+Date:   Thu, 30 Dec 2021 23:11:10 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000026712705d45ef8a7@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 6/7] staging: r8188eu: IntArray and C2hArray are set but
+ never used
+Content-Language: en-US
+To:     Michael Straube <straube.linux@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20211230200059.13406-1-straube.linux@gmail.com>
+ <20211230200059.13406-7-straube.linux@gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20211230200059.13406-7-straube.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 07:47:18AM -0800, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
+On 12/30/21 23:00, Michael Straube wrote:
+> The fields IntArray and C2hArray of struct hal_data_8188e are set but
+> never used. Remove them.
 > 
-> HEAD commit:    eec4df26e24e Merge tag 's390-5.16-6' of git://git.kernel.o..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1696bbfbb00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=2ebd4b29568807bc
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3ae6a2b06f131ab9849f
-> compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11b14c1bb00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12ab99edb00000
+> While at it, remove the unsed defines USB_INTR_CONTENT_CPWM1_OFFSET
+> and USB_INTR_CONTENT_CPWM2_OFFSET as well.
 > 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com
-> 
-> ==================================================================
-> BUG: KASAN: slab-out-of-bounds in usb_hcd_poll_rh_status+0x243/0x530 drivers/usb/core/hcd.c:774
-> Write of size 2 at addr ffff88801dd0d780 by task syz-executor046/3607
-> 
-> CPU: 1 PID: 3607 Comm: syz-executor046 Not tainted 5.16.0-rc7-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Call Trace:
->  <IRQ>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0x1dc/0x2d8 lib/dump_stack.c:106
->  print_address_description+0x65/0x380 mm/kasan/report.c:247
->  __kasan_report mm/kasan/report.c:433 [inline]
->  kasan_report+0x19a/0x1f0 mm/kasan/report.c:450
->  kasan_check_range+0x2b5/0x2f0 mm/kasan/generic.c:189
->  memcpy+0x3c/0x60 mm/kasan/shadow.c:66
->  usb_hcd_poll_rh_status+0x243/0x530 drivers/usb/core/hcd.c:774
->  call_timer_fn+0xf6/0x210 kernel/time/timer.c:1421
->  expire_timers kernel/time/timer.c:1466 [inline]
->  __run_timers+0x71a/0x910 kernel/time/timer.c:1734
->  run_timer_softirq+0x63/0xf0 kernel/time/timer.c:1747
->  __do_softirq+0x392/0x7a3 kernel/softirq.c:558
->  __irq_exit_rcu+0xec/0x170 kernel/softirq.c:637
->  irq_exit_rcu+0x5/0x20 kernel/softirq.c:649
->  sysvec_apic_timer_interrupt+0x91/0xb0 arch/x86/kernel/apic/apic.c:1097
->  </IRQ>
->  <TASK>
->  asm_sysvec_apic_timer_interrupt+0x12/0x20
-> RIP: 0010:console_unlock+0xc88/0xe90 kernel/printk/printk.c:2716
-> Code: 00 e9 71 fa ff ff e8 a7 70 1a 00 e8 62 4b a0 08 48 83 7c 24 38 00 74 dd 66 2e 0f 1f 84 00 00 00 00 00 e8 8b 70 1a 00 fb 31 ff <44> 89 f6 e8 90 74 1a 00 31 db 45 85 f6 0f 95 c0 89 c1 0a 4c 24 0f
-> RSP: 0018:ffffc90001a8f0e0 EFLAGS: 00000246
-> RAX: ffffffff816a0d85 RBX: 0000000000000000 RCX: ffff888018638000
-> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-> RBP: ffffc90001a8f2f0 R08: ffffffff816a0d3c R09: fffffbfff1bfd566
-> R10: fffffbfff1bfd566 R11: 0000000000000000 R12: ffffffff8d3ec5e8
-> R13: ffffffff8d3ec5b0 R14: 0000000000000001 R15: ffffc90001a8f160
->  vprintk_emit+0xba/0x140 kernel/printk/printk.c:2245
->  dev_vprintk_emit+0x2e4/0x35d drivers/base/core.c:4594
->  dev_printk_emit+0xd9/0x118 drivers/base/core.c:4605
->  _dev_warn+0x11e/0x165 drivers/base/core.c:4661
->  checkintf drivers/usb/core/devio.c:826 [inline]
->  do_proc_bulk+0x81c/0x15d0 drivers/usb/core/devio.c:1268
->  proc_bulk drivers/usb/core/devio.c:1351 [inline]
->  usbdev_do_ioctl drivers/usb/core/devio.c:2625 [inline]
->  usbdev_ioctl+0x36b7/0x6d00 drivers/usb/core/devio.c:2791
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:874 [inline]
->  __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:860
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7fc8c54137a9
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffe10cef0c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> RAX: ffffffffffffffda RBX: 00007fc8c54570b0 RCX: 00007fc8c54137a9
-> RDX: 0000000020000240 RSI: 00000000c0185502 RDI: 0000000000000006
-> RBP: 00007ffe10cef0f0 R08: 00007ffe10ceeb40 R09: 0000000000000000
-> R10: 000000000000ffff R11: 0000000000000246 R12: 00007fc8c53d2780
-> R13: 0000000000000000 R14: 00007ffe10cef0f0 R15: 00007ffe10cef0e0
->  </TASK>
-> 
-> Allocated by task 3616:
->  kasan_save_stack mm/kasan/common.c:38 [inline]
->  kasan_set_track mm/kasan/common.c:46 [inline]
->  set_alloc_info mm/kasan/common.c:434 [inline]
->  ____kasan_kmalloc+0xdc/0x110 mm/kasan/common.c:513
->  kasan_kmalloc include/linux/kasan.h:269 [inline]
->  __kmalloc+0x253/0x380 mm/slub.c:4423
->  kmalloc include/linux/slab.h:595 [inline]
->  do_proc_bulk+0x858/0x15d0 drivers/usb/core/devio.c:1292
->  proc_bulk drivers/usb/core/devio.c:1351 [inline]
->  usbdev_do_ioctl drivers/usb/core/devio.c:2625 [inline]
->  usbdev_ioctl+0x36b7/0x6d00 drivers/usb/core/devio.c:2791
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:874 [inline]
->  __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:860
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> Signed-off-by: Michael Straube <straube.linux@gmail.com>
+> ---
 
-Diagnostic patch.
+Hi Michael,
 
-Alan Stern
+thanks for your clean ups!
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ eec4df26e24e
+>   drivers/staging/r8188eu/hal/usb_ops_linux.c     | 10 ----------
+>   drivers/staging/r8188eu/include/rtl8188e_hal.h  |  3 ---
+>   drivers/staging/r8188eu/include/rtl8188e_spec.h |  7 -------
+>   3 files changed, 20 deletions(-)
+> 
+> diff --git a/drivers/staging/r8188eu/hal/usb_ops_linux.c b/drivers/staging/r8188eu/hal/usb_ops_linux.c
+> index 9ec55a77dccd..85bcde5ee79a 100644
+> --- a/drivers/staging/r8188eu/hal/usb_ops_linux.c
+> +++ b/drivers/staging/r8188eu/hal/usb_ops_linux.c
+> @@ -185,20 +185,10 @@ int rtw_writeN(struct adapter *adapter, u32 addr, u32 length, u8 *data)
+>   
+>   static void interrupt_handler_8188eu(struct adapter *adapt, u16 pkt_len, u8 *pbuf)
+>   {
+> -	struct hal_data_8188e *haldata = &adapt->haldata;
+> -
+>   	if (pkt_len != INTERRUPT_MSG_FORMAT_LEN) {
+>   		DBG_88E("%s Invalid interrupt content length (%d)!\n", __func__, pkt_len);
+>   		return;
+>   	}
+> -
+> -	/*  HISR */
+> -	memcpy(&haldata->IntArray[0], &pbuf[USB_INTR_CONTENT_HISR_OFFSET], 4);
+> -	memcpy(&haldata->IntArray[1], &pbuf[USB_INTR_CONTENT_HISRE_OFFSET], 4);
+> -
+> -	/*  C2H Event */
+> -	if (pbuf[0] != 0)
+> -		memcpy(&haldata->C2hArray[0], &pbuf[USB_INTR_CONTENT_C2H_OFFSET], 16);
+>   }
+>   
 
-Index: usb-devel/drivers/usb/core/devio.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/devio.c
-+++ usb-devel/drivers/usb/core/devio.c
-@@ -109,7 +109,7 @@ struct async {
- 	u8 bulk_status;
- };
- 
--static bool usbfs_snoop;
-+static bool usbfs_snoop = true;
- module_param(usbfs_snoop, bool, S_IRUGO | S_IWUSR);
- MODULE_PARM_DESC(usbfs_snoop, "true to log all usbfs traffic");
- 
+This function can be removed totally then, since it does nothing. Not 
+sure if function removal fits this patch, but why not :)
+
+
+
+With regards,
+Pavel Skripkin

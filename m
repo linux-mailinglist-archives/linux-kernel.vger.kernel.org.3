@@ -2,71 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A014481845
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 02:56:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D70A248184E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234236AbhL3B4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 20:56:15 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:59624 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230455AbhL3B4N (ORCPT
+        id S234325AbhL3CAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 21:00:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234299AbhL3CAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 20:56:13 -0500
-X-UUID: 35eccb63286540c1a4ce3c8ba61de529-20211230
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=HYqS7d+eiPmGytyx8HRz1poJJR6kp79sEhVu1clfAK8=;
-        b=e/mQkyJB35YWGcso6cQkDKbtzAlDZ6IU/LwTLXiohgLdGDkpFhktMp7Y759NzlSamGle3PGj3fouwiIfm3xFtxIjxlr2Do6FIY+dxur7LQnRjJQQSP5o+ZZEzRK7mb/ixQMrPbxhTxN1noSSr0FIEe6bQO9CTvP3hU0Io+pxSAU=;
-X-UUID: 35eccb63286540c1a4ce3c8ba61de529-20211230
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1994099198; Thu, 30 Dec 2021 09:56:09 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 30 Dec 2021 09:56:07 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 30 Dec 2021 09:56:07 +0800
-Message-ID: <33cd21877853d3f602a7403f37a30d68e9fa3e4a.camel@mediatek.com>
-Subject: Re: [PATCH] phy: mediatek: Fix missing check in mtk_mipi_tx_probe
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        "Vinod Koul" <vkoul@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Date:   Thu, 30 Dec 2021 09:56:07 +0800
-In-Reply-To: <20211224082103.7658-1-linmq006@gmail.com>
-References: <20211224082103.7658-1-linmq006@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 29 Dec 2021 21:00:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EECDC061574;
+        Wed, 29 Dec 2021 18:00:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 168FCB81A79;
+        Thu, 30 Dec 2021 02:00:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BE20CC36AF3;
+        Thu, 30 Dec 2021 02:00:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640829611;
+        bh=ujXPO7dE+EgUmc9vdO7f3CV8GivQkt/bE9MHChveU5I=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=gGqaTnR+m69xj0CSgP45SyJ4JJC0KXi0qrYgT6ZBngAzgwG2NAiDGqSZ25p8tj/ci
+         52ZnmUVsUG+gkUGdnFQXJr845p0uVD4CPnn5no2UnzbOHVmajdE+ORqq0iY3PgD4nd
+         hItrwg28+W9MIOnIpYC+0j9JpL3DvJ+JPQfIN19FS2F2jg0GOl+7cO73N+fp8clLG4
+         zGqsm0vsttWp0KWeXhx/AlCn8pYZiJVd96HZ7WTEtadi2antX27K+Wmn07QjGnxxPD
+         fETO4qCCjUpCNELMG+6dMbH+NxwABUaUJgjqH9TYE9KyCjGJbSGhE1L2lp1uwPev8z
+         2uFrsa2qW9/iQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AAE8DC395E2;
+        Thu, 30 Dec 2021 02:00:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v6] sun4i-emac.c: add dma support
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164082961168.30206.13406661054070190413.git-patchwork-notify@kernel.org>
+Date:   Thu, 30 Dec 2021 02:00:11 +0000
+References: <tencent_DE05ADA53D5B084D4605BE6CB11E49EF7408@qq.com>
+In-Reply-To: <tencent_DE05ADA53D5B084D4605BE6CB11E49EF7408@qq.com>
+To:     None <conleylee@foxmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, mripard@kernel.org,
+        wens@csie.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIxLTEyLTI0IGF0IDA4OjIxICswMDAwLCBNaWFvcWlhbiBMaW4gd3JvdGU6DQo+
-IFRoZSBvZl9kZXZpY2VfZ2V0X21hdGNoX2RhdGEoKSBmdW5jdGlvbiBtYXkgcmV0dXJuIE5VTEwu
-DQo+IEFkZCBjaGVjayB0byBwcmV2ZW50IHBvdGVudGlhbCBudWxsIGRlcmVmZXJlbmNlLg0KPiAN
-Cj4gU2lnbmVkLW9mZi1ieTogTWlhb3FpYW4gTGluIDxsaW5tcTAwNkBnbWFpbC5jb20+DQo+IC0t
-LQ0KPiAgZHJpdmVycy9waHkvbWVkaWF0ZWsvcGh5LW10ay1taXBpLWRzaS5jIHwgMiArKw0KPiAg
-MSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvcGh5L21lZGlhdGVrL3BoeS1tdGstbWlwaS1kc2kuYw0KPiBiL2RyaXZlcnMvcGh5L21lZGlh
-dGVrL3BoeS1tdGstbWlwaS1kc2kuYw0KPiBpbmRleCAyOGFkOTQwM2M0NDEuLjY3YjAwNWQ1Yjll
-MyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9waHkvbWVkaWF0ZWsvcGh5LW10ay1taXBpLWRzaS5j
-DQo+ICsrKyBiL2RyaXZlcnMvcGh5L21lZGlhdGVrL3BoeS1tdGstbWlwaS1kc2kuYw0KPiBAQCAt
-MTQ2LDYgKzE0Niw4IEBAIHN0YXRpYyBpbnQgbXRrX21pcGlfdHhfcHJvYmUoc3RydWN0DQo+IHBs
-YXRmb3JtX2RldmljZSAqcGRldikNCj4gIAkJcmV0dXJuIC1FTk9NRU07DQo+ICANCj4gIAltaXBp
-X3R4LT5kcml2ZXJfZGF0YSA9IG9mX2RldmljZV9nZXRfbWF0Y2hfZGF0YShkZXYpOw0KPiArCWlm
-ICghbWlwaV90eC0+ZHJpdmVyX2RhdGEpDQo+ICsJCXJldHVybiAtRU5PREVWOw0KPiAgDQo+ICAJ
-bWlwaV90eC0+cmVncyA9IGRldm1fcGxhdGZvcm1faW9yZW1hcF9yZXNvdXJjZShwZGV2LCAwKTsN
-Cj4gIAlpZiAoSVNfRVJSKG1pcGlfdHgtPnJlZ3MpKQ0KDQpBY2tlZC1ieTogQ2h1bmZlbmcgWXVu
-IDxjaHVuZmVuZy55dW5AbWVkaWF0ZWsuY29tPg0KDQpUaGFua3MNCg==
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed, 29 Dec 2021 09:43:51 +0800 you wrote:
+> From: Conley Lee <conleylee@foxmail.com>
+> 
+> Thanks for your review. Here is the new version for this patch.
+> 
+> This patch adds support for the emac rx dma present on sun4i. The emac
+> is able to move packets from rx fifo to RAM by using dma.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v6] sun4i-emac.c: add dma support
+    https://git.kernel.org/netdev/net-next/c/47869e82c8b8
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

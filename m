@@ -2,86 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7266D4817F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 01:57:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1904817F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 01:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233777AbhL3A52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 19:57:28 -0500
-Received: from mga11.intel.com ([192.55.52.93]:38955 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233486AbhL3A52 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 19:57:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640825848; x=1672361848;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yUAaGvj07WX09Kl9tz+Gl5gyV2UvBq6FTtkC+ImHrDY=;
-  b=kKIHwqBVcfGWpfz26daOhqCsvfemfeprcej2SWyhljJX5UxH2QuwkNTn
-   F5tbCbUtOI9OfHJba1tFHslUl7+8emhtpuTB9taylnsTN3yTsd+1fLQKB
-   aLQkqHSHQrOstQ1abtpRnhlCGl5qBhjJhrWzOX3qibTZUalNlZ5l8k1D5
-   z9/utE/TwIxe5WfxxOAbhI/H21vcTrMcMsmXj7y5I9+LY0EdJOn6o72Dj
-   O6NWMjO6Mb5ZL0CoHun8p2IvDsBNMtzKXwc1YfqhYnrymdymEuI+yMB/c
-   mPjc8QMy6A+CUDeBJHCTjKw2ZJdOLSiMtInAJQl3H1Hy36Hnb9Z3ejRTn
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="239137504"
-X-IronPort-AV: E=Sophos;i="5.88,246,1635231600"; 
-   d="scan'208";a="239137504"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 16:57:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,246,1635231600"; 
-   d="scan'208";a="468662675"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 29 Dec 2021 16:57:25 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n2jkz-0009Wl-3G; Thu, 30 Dec 2021 00:57:25 +0000
-Date:   Thu, 30 Dec 2021 08:57:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <anup.patel@wdc.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Alexander Graf <graf@amazon.com>
-Subject: ERROR: modpost: "boot_cpu_hartid" [arch/riscv/kvm/kvm.ko] undefined!
-Message-ID: <202112300843.UUqHyQYw-lkp@intel.com>
+        id S233808AbhL3A56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 19:57:58 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:45992
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233783AbhL3A55 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 19:57:57 -0500
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 827483F1F2
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 00:57:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640825876;
+        bh=9Hwlmcj0whxK49ykZw434uUikfx+0hXzEWWfpG3itis=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=tITYeT6KcBWIVEN2XOBh+4Y+l4Yf8zDaTEO+PnPyl3uzRwyxDyiNjwOjJGZIDLpzV
+         CuO54i6BhsW0f5eEzqfZEQfvBXfuhyrB9eK2NFuPGj8WMX3ue8mgnAyN6IKB7a53uz
+         TP3lgEC1lQ18adV0z9C8hpGk6pVUryxp9uU2IPDdxew5xskvnb85v2nACQyhRrutVx
+         JPM5I0Abz2Krd/FQZjhTLbN9VJ0EXTTzYMgbk6jwWe55/O7DC1z2kDulb2fw38zR1J
+         jINBzByB0S9u1Xho6IKh+ETsZftpLMHuOIqw5M+ILheji3cn3r97AxQBkQjlC3hp+S
+         IQ9PFmczyHpDQ==
+Received: by mail-ot1-f70.google.com with SMTP id t17-20020a0568301e3100b0055c78bc02a2so7161336otr.19
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 16:57:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9Hwlmcj0whxK49ykZw434uUikfx+0hXzEWWfpG3itis=;
+        b=ZsvlngoAoi3dx1KNIgqKqUWsVT4I5wnr90yLhnjiv+nYet5S1+Pndksq5cCXaJ0wjS
+         VkSKegA2GW2XChVbSKZ3/uruKNoFxPri4B2S1UwzB1w3eAHslMTTvJ3zaeXPOWEoPsZ+
+         UpXiTA8Fu/+yfo5Dwf+A0+hoNaj2zUab/C0pRzQJL52Vt1lHJWBJwF/66fVJk4kom3XF
+         khdCb2EIsIAp3O+Ehnxg506NEiiHVkY3Qb/WkGf2rDoTWZXZTfexoOA4AWIeLUwxlx5s
+         dsD4Nne69x8v/7+yKru0OQ1kgGn38tH4UkI3Ht1wMEj9jjQ31uEQr38dXYQBlAm3QotS
+         cU3A==
+X-Gm-Message-State: AOAM5320WfEak3o9V44luM9Nomazl5wh3WRkih7CqO6T7rcDkg+66C3R
+        4biglix9z+L5tcey6wmiMg3qZHfSkE8KKza7BNxdFRByYb6Dc+ea6ZGvLNBeuEFfhgg30H8SSUO
+        l23oOlxb1zreiuN+nhis55df/Er0yYGR7Wp+hfl78RhL1oWG+JTuXRG54lQ==
+X-Received: by 2002:a4a:9406:: with SMTP id h6mr17864661ooi.80.1640825875120;
+        Wed, 29 Dec 2021 16:57:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwCOxmVFWE0YLjVd6KBaomVjMm7A0pPvlpZY/iwXtxTaHI020iaE+lbr1yOC/2PkujCMzC8WJeCzYUhLg1b854=
+X-Received: by 2002:a4a:9406:: with SMTP id h6mr17864647ooi.80.1640825874776;
+ Wed, 29 Dec 2021 16:57:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211224081914.345292-1-kai.heng.feng@canonical.com> <20211229201229.GA1698801@bhelgaas>
+In-Reply-To: <20211229201229.GA1698801@bhelgaas>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Thu, 30 Dec 2021 08:57:42 +0800
+Message-ID: <CAAd53p5GJRqRUvNSqNBLq2yTjjvJnSq5hFPSJYv08wuSLExx_w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] net: wwan: iosm: Let PCI core handle PCI power transition
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     m.chetan.kumar@intel.com, linuxwwan@intel.com,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anup,
+On Thu, Dec 30, 2021 at 4:12 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> [+cc Rafael, in case you have insight about the PCI_D0 question below;
+> Vaibhav, since this is related to your generic PM conversions]
+>
+> On Fri, Dec 24, 2021 at 04:19:13PM +0800, Kai-Heng Feng wrote:
+> > pci_pm_suspend_noirq() and pci_pm_resume_noirq() already handle power
+> > transition for system-wide suspend and resume, so it's not necessary to
+> > do it in the driver.
+>
+> I see DaveM has already applied this, but it looks good to me, thanks
+> for doing this!
+>
+> One minor question below...
+>
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ---
+> >  drivers/net/wwan/iosm/iosm_ipc_pcie.c | 49 ++-------------------------
+> >  1 file changed, 2 insertions(+), 47 deletions(-)
+> >
+> > diff --git a/drivers/net/wwan/iosm/iosm_ipc_pcie.c b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+> > index 2fe88b8be3481..d73894e2a84ed 100644
+> > --- a/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+> > +++ b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+> > @@ -363,67 +363,22 @@ static int __maybe_unused ipc_pcie_resume_s2idle(struct iosm_pcie *ipc_pcie)
+> >
+> >  int __maybe_unused ipc_pcie_suspend(struct iosm_pcie *ipc_pcie)
+> >  {
+> > -     struct pci_dev *pdev;
+> > -     int ret;
+> > -
+> > -     pdev = ipc_pcie->pci;
+> > -
+> > -     /* Execute D3 one time. */
+> > -     if (pdev->current_state != PCI_D0) {
+> > -             dev_dbg(ipc_pcie->dev, "done for PM=%d", pdev->current_state);
+> > -             return 0;
+> > -     }
+>
+> I don't understand the intent of this early exit, and it's not obvious
+> to me that pci_pm_suspend_noirq() bails out early when
+> (pdev->current_state != PCI_D0).
 
-FYI, the error/warning still remains.
+Yes, I think this can be removed too. Please let me send v2.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   eec4df26e24e978e49ccf9bcf49ca0f2ccdaeffe
-commit: fd7bb4a251dfc1da3496bf59a4793937c13e8c1f RISC-V: KVM: Implement VMID allocator
-date:   3 months ago
-config: riscv-randconfig-r035-20211230 (https://download.01.org/0day-ci/archive/20211230/202112300843.UUqHyQYw-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project cd284b7ac0615afc6e0f1a30da2777e361de27a3)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fd7bb4a251dfc1da3496bf59a4793937c13e8c1f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout fd7bb4a251dfc1da3496bf59a4793937c13e8c1f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Kai-Heng
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "boot_cpu_hartid" [arch/riscv/kvm/kvm.ko] undefined!
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>
+> >       /* The HAL shall ask the shared memory layer whether D3 is allowed. */
+> >       ipc_imem_pm_suspend(ipc_pcie->imem);
+> >
+> > -     /* Save the PCI configuration space of a device before suspending. */
+> > -     ret = pci_save_state(pdev);
+> > -
+> > -     if (ret) {
+> > -             dev_err(ipc_pcie->dev, "pci_save_state error=%d", ret);
+> > -             return ret;
+> > -     }
+> > -
+> > -     /* Set the power state of a PCI device.
+> > -      * Transition a device to a new power state, using the device's PCI PM
+> > -      * registers.
+> > -      */
+> > -     ret = pci_set_power_state(pdev, PCI_D3cold);
+> > -
+> > -     if (ret) {
+> > -             dev_err(ipc_pcie->dev, "pci_set_power_state error=%d", ret);
+> > -             return ret;
+> > -     }
+> > -
+> >       dev_dbg(ipc_pcie->dev, "SUSPEND done");
+> > -     return ret;
+> > +     return 0;
+> >  }
+> >
+> >  int __maybe_unused ipc_pcie_resume(struct iosm_pcie *ipc_pcie)
+> >  {
+> > -     int ret;
+> > -
+> > -     /* Set the power state of a PCI device.
+> > -      * Transition a device to a new power state, using the device's PCI PM
+> > -      * registers.
+> > -      */
+> > -     ret = pci_set_power_state(ipc_pcie->pci, PCI_D0);
+> > -
+> > -     if (ret) {
+> > -             dev_err(ipc_pcie->dev, "pci_set_power_state error=%d", ret);
+> > -             return ret;
+> > -     }
+> > -
+> > -     pci_restore_state(ipc_pcie->pci);
+> > -
+> >       /* The HAL shall inform the shared memory layer that the device is
+> >        * active.
+> >        */
+> >       ipc_imem_pm_resume(ipc_pcie->imem);
+> >
+> >       dev_dbg(ipc_pcie->dev, "RESUME done");
+> > -     return ret;
+> > +     return 0;
+> >  }
+> >
+> >  static int __maybe_unused ipc_pcie_suspend_cb(struct device *dev)
+> > --
+> > 2.33.1
+> >

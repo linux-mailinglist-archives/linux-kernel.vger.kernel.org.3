@@ -2,279 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 811AC481873
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A63348187C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234519AbhL3CTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 21:19:13 -0500
-Received: from rap-us.hgst.com ([199.255.44.250]:1600 "EHLO
-        usg-ed-osssrv.wdc.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234483AbhL3CTL (ORCPT
+        id S234586AbhL3CXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 21:23:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229513AbhL3CXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 21:19:11 -0500
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JPX5V6pKpz1RvTj
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 18:19:10 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1640830750; x=1643422751; bh=BPpWkccSKIgrcf0cDlidapfuRegV9CyAihl
-        qz4L387U=; b=RZV3y/TDyS/TX/l15rFF6QqlrfjNT5Xq4gbYn6DpuOHXPbPhwiW
-        mx/Ft+mJg5c1R1oj2Exf6xyzJJNmn5+RRZmaNK0MQNV/4nFh+DG31FRMhPlFXBem
-        H3HvQuTLVMPT+ksWRLHFDWjXRn6FP5rWVxC93tecqFPsi4WcwNsM8/wLhZ00meEE
-        N1pOMQ738HI3YOZZgxAtS03lyKSUMb9FXsTFFUdrHxs4FswaSSMDZE4AZM8pQifn
-        MxPm1rU0Fzoj6c0oXUUEaheKy20p9XKZcHr7zsR61ONLX/msttHU6pRZDAACRs2N
-        z9x0zoLNfQ+dQD0GFGyNRNOJGMlarpBDB6Q==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 9yfYWhFzTMGO for <linux-kernel@vger.kernel.org>;
-        Wed, 29 Dec 2021 18:19:10 -0800 (PST)
-Received: from [10.225.163.41] (unknown [10.225.163.41])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JPX5T3SrZz1RtVG;
-        Wed, 29 Dec 2021 18:19:09 -0800 (PST)
-Message-ID: <5c333718-eaa5-b41c-e8ea-59d6e01254aa@opensource.wdc.com>
-Date:   Thu, 30 Dec 2021 11:19:08 +0900
+        Wed, 29 Dec 2021 21:23:32 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBB2C061574;
+        Wed, 29 Dec 2021 18:23:31 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id z3so17213741plg.8;
+        Wed, 29 Dec 2021 18:23:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lEWqHLR4IbqmlBub+ds0nLFhZFaT8QHa3CHLgWRdNYQ=;
+        b=IRZEbk/DyfJWRqe1VSMQp73XOpSGUbcWUbGFdem/qkvNp1kRZ/Xh1q33wCDL7zYNxP
+         OqoJJo7C1hZMOW4VrYjljZ89OBfVit06BNK96VhQZhz7OaQaJS/iN0dZBgV0ZrdKsUJr
+         VRF3ll/LgPu8Qna/wABxvr0xgowFOFa6syuGNDoUZp4uV7Bit2l7j3WvWQXRWty06HGf
+         m13xflQtmT7B79KS/3KM6q+BLJEuzSD1XncZMA5VuSxLuCHcddRnpe2DO96c3K8enGHC
+         Fp6O15fcMdGw1bmGJ5WSjHAjluJLrjT+9e+ynwD3vEC0ND/cw0DN3qRqT8MIwnQUclZF
+         sINg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lEWqHLR4IbqmlBub+ds0nLFhZFaT8QHa3CHLgWRdNYQ=;
+        b=oXwp8At3DVgweN4/DnO+8MmJ7qjVklb3GZFZo0P5QB2NwPsQ9169/2Nv67bIBtQ5et
+         RAIebGxnik1rRpKDV0FOPrmPKTf7JpHe6KO4EHD76vfIGEqOtDeq49snX4UOypTbUUcx
+         OKkS6iKAMfr0a6X408ZQEVcHCEZ6aMCG0Gn7MMgFPpmpwoRk2JjKR/ScpP354DuEG1S7
+         Yx8/dJWeFCvqNBYfu0/SQT04MCHjMEnSwrhl9i3FJG+8cB5VmYq/gNgf3qb5a3p0EUu6
+         B1wvq1HRy6Jo041jH/8RNXsVIDduxDQjAk8r80VSetmdS3hvr/kS0w073t0bwnAtapsT
+         xcXg==
+X-Gm-Message-State: AOAM5320yB/R4g5f7zYGgM7ZVTxS+ZgceGhZo2Yxjs3AY+nvTP+uiEPm
+        PG6hF52oF5Hz7fSvu6m78IdrFtih40rMrNgp7wo3BBy3
+X-Google-Smtp-Source: ABdhPJyHOpWlkk7qZxz67djBEUddHIaDK483V/PDfCyokLdVZ6UjTrykwApssiW+KlWfsis6k9iFsbivlvIqF86sh4s=
+X-Received: by 2002:a17:90b:798:: with SMTP id l24mr35496747pjz.122.1640831011288;
+ Wed, 29 Dec 2021 18:23:31 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v3 3/3] ahci: AMD A85 FCH (Hudson D4): Skip 200 ms
- debounce delay in `sata_link_resume()`
-Content-Language: en-US
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     linux-ide@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-kernel@vger.kernel.org
-References: <20211229161119.1006-1-pmenzel@molgen.mpg.de>
- <20211229161119.1006-3-pmenzel@molgen.mpg.de>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20211229161119.1006-3-pmenzel@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+References: <CAFcO6XMpbL4OsWy1Pmsnvf8zut7wFXdvY_KofR-m0WK1Bgutpg@mail.gmail.com>
+In-Reply-To: <CAFcO6XMpbL4OsWy1Pmsnvf8zut7wFXdvY_KofR-m0WK1Bgutpg@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 29 Dec 2021 18:23:20 -0800
+Message-ID: <CAADnVQJK5mPOB7B4KBa6q1NRYVQx1Eya5mtNb6=L0p-BaCxX=w@mail.gmail.com>
+Subject: Re: A slab-out-of-bounds Read bug in __htab_map_lookup_and_delete_batch
+To:     butt3rflyh4ck <butterflyhuangxx@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/30/21 01:11, Paul Menzel wrote:
-> Since the first commit 1da177e4c3 (Linux-2.6.12-rc2) in the Linux git
-> repository, `sata_link_resume()` contains a 200 ms delay with the comme=
-nt
-> below.
->=20
->>    /*
->>     * Some PHYs react badly if SStatus is pounded
->>     * immediately after resuming.  Delay 200ms before
->>     * debouncing.
->>     */
+On Wed, Dec 29, 2021 at 2:10 AM butt3rflyh4ck
+<butterflyhuangxx@gmail.com> wrote:
+>
+> Hi, there is a slab-out-bounds Read bug in
+> __htab_map_lookup_and_delete_batch in kernel/bpf/hashtab.c
+> and I reproduce it in linux-5.16.rc7(upstream) and latest linux-5.15.11.
+>
+> #carsh log
+> [  166.945208][ T6897]
+> ==================================================================
+> [  166.947075][ T6897] BUG: KASAN: slab-out-of-bounds in _copy_to_user+0x87/0xb0
+> [  166.948612][ T6897] Read of size 49 at addr ffff88801913f800 by
+> task __htab_map_look/6897
+> [  166.950406][ T6897]
+> [  166.950890][ T6897] CPU: 1 PID: 6897 Comm: __htab_map_look Not
+> tainted 5.16.0-rc7+ #30
+> [  166.952521][ T6897] Hardware name: QEMU Standard PC (i440FX + PIIX,
+> 1996), BIOS 1.13.0-1ubuntu1 04/01/2014
+> [  166.954562][ T6897] Call Trace:
+> [  166.955268][ T6897]  <TASK>
+> [  166.955918][ T6897]  dump_stack_lvl+0x57/0x7d
+> [  166.956875][ T6897]  print_address_description.constprop.0.cold+0x93/0x347
+> [  166.958411][ T6897]  ? _copy_to_user+0x87/0xb0
+> [  166.959356][ T6897]  ? _copy_to_user+0x87/0xb0
+> [  166.960272][ T6897]  kasan_report.cold+0x83/0xdf
+> [  166.961196][ T6897]  ? _copy_to_user+0x87/0xb0
+> [  166.962053][ T6897]  kasan_check_range+0x13b/0x190
+> [  166.962978][ T6897]  _copy_to_user+0x87/0xb0
+> [  166.964340][ T6897]  __htab_map_lookup_and_delete_batch+0xdc2/0x1590
+> [  166.965619][ T6897]  ? htab_lru_map_update_elem+0xe70/0xe70
+> [  166.966732][ T6897]  bpf_map_do_batch+0x1fa/0x460
+> [  166.967619][ T6897]  __sys_bpf+0x99a/0x3860
+> [  166.968443][ T6897]  ? bpf_link_get_from_fd+0xd0/0xd0
+> [  166.969393][ T6897]  ? rcu_read_lock_sched_held+0x9c/0xd0
+> [  166.970425][ T6897]  ? lock_acquire+0x1ab/0x520
+> [  166.971284][ T6897]  ? find_held_lock+0x2d/0x110
+> [  166.972208][ T6897]  ? rcu_read_lock_sched_held+0x9c/0xd0
+> [  166.973139][ T6897]  ? rcu_read_lock_bh_held+0xb0/0xb0
+> [  166.974096][ T6897]  __x64_sys_bpf+0x70/0xb0
+> [  166.974903][ T6897]  ? syscall_enter_from_user_mode+0x21/0x70
+> [  166.976077][ T6897]  do_syscall_64+0x35/0xb0
+> [  166.976889][ T6897]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [  166.978027][ T6897] RIP: 0033:0x450f0d
+>
+>
+> In hashtable, if the elements' keys have the same jhash() value, the
+> elements will be put into the same bucket.
+> By putting a lot of elements into a single bucket, the value of
+> bucket_size can be increased to overflow.
+>  but also we can increase bucket_cnt to out of bound Read.
 
-This is code comment so no need to "quote" this in the commit message
-(line starting with '>'). Seeing the patch in an email client, it looks
-weird :)
+Can you be more specific?
+If you can send a patch with a fix it would be even better.
 
->=20
-> A lot of PHYs do not have that problem though, so delaying 200 ms incre=
-ases
-> the boot time by 30 percent unnecessarily for a lot of systems, making
-> =E2=80=9Cinstant booting=E2=80=9D quite hard.
->=20
-> As it=E2=80=99s unknown for what PHY the delay was added, create a new =
-board
-> `board_ahci_nodbdelay` with the link flag `ATA_LFLAG_NO_DB_DELAY,`, and=
-,
-> for now, configure the AMD A85 FCH (Hudson D4) to use it.
->=20
-> On the ASUS F2A85-M PRO it reduces the Linux kernel boot time by the
-> expected 200 ms from 787 ms to 585 ms.
->=20
-> Tested on ASUS F2A85-M PRO:
->=20
-> Without patch, i. e., with 200 ms debounce delay:
->=20
->     [=E2=80=A6]
->     [    0.000000] DMI: ASUS F2A85-M_PRO/F2A85-M_PRO, BIOS 4.15-671-g7b=
-043ef855 12/27/2021
->     [=E2=80=A6]
->     [    0.404885] ahci 0000:00:11.0: version 3.0
->     [    0.405466] ahci 0000:00:11.0: AHCI 0001.0300 32 slots 8 ports 6=
- Gbps 0x40 impl SATA mode
->     [    0.405470] ahci 0000:00:11.0: flags: 64bit ncq sntf ilck led cl=
-o pio
->     [    0.408036] scsi host0: ahci
->     [    0.408537] scsi host1: ahci
->     [    0.408932] scsi host2: ahci
->     [    0.409444] scsi host3: ahci
->     [    0.409841] scsi host4: ahci
->     [    0.410266] scsi host5: ahci
->     [    0.410661] scsi host6: ahci
->     [    0.411052] scsi host7: ahci
->     [    0.411284] ata1: DUMMY
->     [    0.411286] ata2: DUMMY
->     [    0.411286] ata3: DUMMY
->     [    0.411287] ata4: DUMMY
->     [    0.411288] ata5: DUMMY
->     [    0.411289] ata6: DUMMY
->     [    0.411291] ata7: SATA max UDMA/133 abar m2048@0xf01cc000 port 0=
-xf01cc400 irq 19
->     [    0.411292] ata8: DUMMY
->     [=E2=80=A6]
->     [    0.422362] Key type encrypted registered
->     [    0.424903] PM:   Magic number: 1:28:636
->     [    0.723979] ata7: SATA link up 6.0 Gbps (SStatus 133 SControl 30=
-0)
->     [    0.724268] ata7.00: ATA-9: SanDisk SDSSDP064G, 2.0.0, max UDMA/=
-133
->     [    0.724271] ata7.00: 125045424 sectors, multi 1: LBA48 NCQ (dept=
-h 32)
->     [    0.725537] ata7.00: configured for UDMA/133
->     [    0.725898] scsi 6:0:0:0: Direct-Access     ATA      SanDisk SDS=
-SDP06 0    PQ: 0 ANSI: 5
->     [    0.726428] sd 6:0:0:0: [sda] 125045424 512-byte logical blocks:=
- (64.0 GB/59.6 GiB)
->     [    0.726442] sd 6:0:0:0: [sda] Write Protect is off
->     [    0.726446] sd 6:0:0:0: [sda] Mode Sense: 00 3a 00 00
->     [    0.726464] sd 6:0:0:0: [sda] Write cache: enabled, read cache: =
-enabled, doesn't support DPO or FUA
->     [    0.727985]  sda: sda1 sda2 sda3
->     [    0.728588] sd 6:0:0:0: [sda] Attached SCSI disk
->     [    0.738495] EXT4-fs (sda3): mounted filesystem with ordered data=
- mode. Opts: (null). Quota mode: none.
->     [=E2=80=A6]
->     [    0.786812] Run /sbin/init as init process
->=20
-> With patch, i. e., skipping the debounce delay saves 200 ms from the bo=
-ot
-> as expected.
->=20
->     [=E2=80=A6]
->     [    0.000000] DMI: ASUS F2A85-M_PRO/F2A85-M_PRO, BIOS 4.15-671-g7b=
-043ef855 12/27/2021
->     [=E2=80=A6]
->     [    0.407372] ahci 0000:00:11.0: version 3.0
->     [    0.407909] ahci 0000:00:11.0: AHCI 0001.0300 32 slots 8 ports 6=
- Gbps 0x40 impl SATA mode
->     [    0.407913] ahci 0000:00:11.0: flags: 64bit ncq sntf ilck led cl=
-o pio
->     [    0.410520] scsi host0: ahci
->     [    0.411017] scsi host1: ahci
->     [    0.411418] scsi host2: ahci
->     [    0.411810] scsi host3: ahci
->     [    0.412225] scsi host4: ahci
->     [    0.412614] scsi host5: ahci
->     [    0.413005] scsi host6: ahci
->     [    0.413488] scsi host7: ahci
->     [    0.413713] ata1: DUMMY
->     [    0.413715] ata2: DUMMY
->     [    0.413716] ata3: DUMMY
->     [    0.413716] ata4: DUMMY
->     [    0.413717] ata5: DUMMY
->     [    0.413718] ata6: DUMMY
->     [    0.413720] ata7: SATA max UDMA/133 abar m2048@0xf01cc000 port 0=
-xf01cc400 irq 19
->     [    0.413722] ata8: DUMMY
->     [=E2=80=A6]
->     [    0.425414] Key type encrypted registered
->     [    0.427873] PM:   Magic number: 1:234:838
->     [    0.522131] ata7: SATA link up 6.0 Gbps (SStatus 133 SControl 30=
-0)
->     [    0.522415] ata7.00: ATA-9: SanDisk SDSSDP064G, 2.0.0, max UDMA/=
-133
->     [    0.522418] ata7.00: 125045424 sectors, multi 1: LBA48 NCQ (dept=
-h 32)
->     [    0.523636] ata7.00: configured for UDMA/133
->     [    0.523993] scsi 6:0:0:0: Direct-Access     ATA      SanDisk SDS=
-SDP06 0    PQ: 0 ANSI: 5
->     [    0.524497] sd 6:0:0:0: [sda] 125045424 512-byte logical blocks:=
- (64.0 GB/59.6 GiB)
->     [    0.524511] sd 6:0:0:0: [sda] Write Protect is off
->     [    0.524515] sd 6:0:0:0: [sda] Mode Sense: 00 3a 00 00
->     [    0.524534] sd 6:0:0:0: [sda] Write cache: enabled, read cache: =
-enabled, doesn't support DPO or FUA
->     [    0.525953]  sda: sda1 sda2 sda3
->     [    0.526541] sd 6:0:0:0: [sda] Attached SCSI disk
->     [    0.536245] EXT4-fs (sda3): mounted filesystem with ordered data=
- mode. Opts: (null). Quota mode: none.
->     [=E2=80=A6]
->     [    0.585327] Run /sbin/init as init process
->=20
-> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Guenter Roeck <groeck@chromium.org>
->=20
-> ---
->=20
-> Add the two Chromium OS developers Dmitry and Guenter to Cc, as to my
-> knowledge Chromium/Chrome OS also tries to boot very fast, and the Chro=
-mium
-> project has some CI infrastructure.
-> ---
->  drivers/ata/ahci.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->=20
-> diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
-> index 6a2432e4adda..4f3e0603864d 100644
-> --- a/drivers/ata/ahci.c
-> +++ b/drivers/ata/ahci.c
-> @@ -51,6 +51,7 @@ enum board_ids {
->  	board_ahci,
->  	board_ahci_ign_iferr,
->  	board_ahci_mobile,
-> +	board_ahci_nodbdelay,
-
-The "nodb" naming is not super clear...
-Maybe change the name to:
-
-board_ahci_no_debounce_delay
-
-or
-
-board_ahci_no_resume_delay
-
-?
-
-Longer, but clearer.
-
->  	board_ahci_nomsi,
->  	board_ahci_noncq,
->  	board_ahci_nosntf,
-> @@ -141,6 +142,13 @@ static const struct ata_port_info ahci_port_info[]=
- =3D {
->  		.udma_mask	=3D ATA_UDMA6,
->  		.port_ops	=3D &ahci_ops,
->  	},
-> +	[board_ahci_nodbdelay] =3D {
-> +		.flags		=3D AHCI_FLAG_COMMON,
-> +		.link_flags	=3D ATA_LFLAG_NO_DB_DELAY,
-> +		.pio_mask	=3D ATA_PIO4,
-> +		.udma_mask	=3D ATA_UDMA6,
-> +		.port_ops	=3D &ahci_ops,
-> +	},
->  	[board_ahci_nomsi] =3D {
->  		AHCI_HFLAGS	(AHCI_HFLAG_NO_MSI),
->  		.flags		=3D AHCI_FLAG_COMMON,
-> @@ -437,6 +445,7 @@ static const struct pci_device_id ahci_pci_tbl[] =3D=
- {
->  		board_ahci_al },
->  	/* AMD */
->  	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_HUDSON2_SATA_IDE), board_ahci },
-> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_HUDSON2_SATA_AHCI), board_ahci_n=
-odbdelay },
-
-Patch 1 introduces this macro in pci_ids.h, but it is used only here. So
-to keep with the current style in this structure, drop the macro (so
-drop patch 1).
-
->  	{ PCI_VDEVICE(AMD, 0x7900), board_ahci }, /* AMD CZ */
->  	{ PCI_VDEVICE(AMD, 0x7901), board_ahci_mobile }, /* AMD Green Sardine=
- */
->  	/* AMD is using RAID class only for ahci controllers */
-
-
---=20
-Damien Le Moal
-Western Digital Research
+> the out of bound Read in  __htab_map_lookup_and_delete_batch code:
+> ```
+> ...
+> if (bucket_cnt && (copy_to_user(ukeys + total * key_size, keys,
+> key_size * bucket_cnt) ||
+>     copy_to_user(uvalues + total * value_size, values,
+>     value_size * bucket_cnt))) {
+> ret = -EFAULT;
+> goto after_loop;
+> }
+> ...
+> ```
+>
+> Regards,
+>  butt3rflyh4ck.
+>
+>
+> --
+> Active Defense Lab of Venustech

@@ -2,99 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D12481E5B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15D4D481E5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241384AbhL3QvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 11:51:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
+        id S241389AbhL3Qw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 11:52:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240222AbhL3QvF (ORCPT
+        with ESMTP id S235870AbhL3Qw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 11:51:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC80CC061574;
-        Thu, 30 Dec 2021 08:51:04 -0800 (PST)
+        Thu, 30 Dec 2021 11:52:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EEBC061574;
+        Thu, 30 Dec 2021 08:52:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E498DB81C6E;
-        Thu, 30 Dec 2021 16:51:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26B4CC36AE9;
-        Thu, 30 Dec 2021 16:51:01 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LbXlV06V"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1640883059;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=NItrL/aIHsIgAZesBZH/PKbW+5wd31K/1C4cnt9PMXQ=;
-        b=LbXlV06V12wjOT5pyEuwFAuWcN8DVcHH+TLaaqmMFdgOMbWXv3P/nHNy+TeX0hUeZp4B7A
-        gOKeLQ0Kjzy6SoRlLGeuC9PVN/RYJvSyvLCGmZLBrXwM0TKqWFWB3KHvGJ3IdzYw3XUk6A
-        HxLz+dYQTcarYS/X7gSb3deAPqhxkks=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ed670bdc (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 30 Dec 2021 16:50:59 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, tytso@mit.edu,
-        linux-crypto@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH] random: avoid superfluous call to RDRAND in CRNG extraction
-Date:   Thu, 30 Dec 2021 17:50:52 +0100
-Message-Id: <20211230165052.2698-1-Jason@zx2c4.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D87D61712;
+        Thu, 30 Dec 2021 16:52:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF073C36AE9;
+        Thu, 30 Dec 2021 16:52:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640883144;
+        bh=o/Yzw84CMO1RRStlTxHpA82o1M7bIJG1uP0eVld3PP8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=yHx/sGcC7dyTUsNg5yxHamebPKE7vcn33z4D1bOnp1hx0wVu5vFzUlm1ugFba0Nw9
+         BAyUFpU+KKTiUMIggI/CgiEZvNGQqSnxD42rnmWEqiwZRMwIxsT3DMPiiHo4cr7fDV
+         0sZd10Z0dpTnvyFnYL6N2XGa2Na+2tCg3FqgQesc=
+Date:   Thu, 30 Dec 2021 17:52:21 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB fixes for 5.16-final
+Message-ID: <Yc3jxXB0JoKOrxb9@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RDRAND is not fast. RDRAND is actually quite slow. We've known this for
-a while, which is why functions like get_random_u{32,64} were converted
-to use batching of our ChaCha-based CRNG instead.
+The following changes since commit a7904a538933c525096ca2ccde1e60d0ee62c08e:
 
-Yet CRNG extraction still includes a call to RDRAND, in the hot path of
-every call to get_random_bytes(), /dev/urandom, and getrandom(2).
+  Linux 5.16-rc6 (2021-12-19 14:14:33 -0800)
 
-This call to RDRAND here seems quite superfluous. CRNG is already
-extracting things based on a 256-bit key, based on good entropy, which
-is then reseeded periodically, updated, backtrack-mutated, and so
-forth. The CRNG extraction construction is something that we're already
-relying on to be secure and solid. If it's not, that's a serious
-problem, and it's unlikely that mixing in a measly 32 bits from RDRAND
-is going to alleviate things.
+are available in the Git repository at:
 
-There is one place, though, where such last-ditch moves might be
-quasi-sensible, and that's before the CRNG is actually ready. In that case,
-we're already very much operating from a position of trying to get
-whatever we can, so we might as well throw in the RDRAND call because
-why not.
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16
 
-But once the CRNG is actually up, it's simply not sensible. Removing the
-call there improves performance on an i7-11850H by 370%. In other words,
-the vast majority of the work done by extract_crng() prior to this commit
-was devoted to fetching 32 bits of RDRAND.
+for you to fetch changes up to 3f345e907a8e7c56fdebf7231cd67afc85d02aaa:
 
-This commit fixes the issue by only making that call to RDRAND when the
-CRNG is not yet ready.
+  usb: typec: ucsi: Only check the contract if there is a connection (2021-12-21 16:30:53 +0100)
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+----------------------------------------------------------------
+USB fixes for 5.16-final
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 54086e9da05b..239b1455b1a8 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1030,7 +1030,7 @@ static void _extract_crng(struct crng_state *crng,
- 				    &input_pool : NULL);
- 	}
- 	spin_lock_irqsave(&crng->lock, flags);
--	if (arch_get_random_long(&v))
-+	if (unlikely(!crng_ready()) && arch_get_random_long(&v))
- 		crng->state[14] ^= v;
- 	chacha20_block(&crng->state[0], out);
- 	if (crng->state[12] == 0)
--- 
-2.34.1
+Here are some small USB driver fixes for 5.16 to resolve some reported
+problems:
+	- mtu3 driver fixes
+	- typec ucsi driver fix
+	- xhci driver quirk added
+	- usb gadget f_fs fix for reported crash
 
+All of these have been in linux-next for a while with no reported
+problems.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Chunfeng Yun (4):
+      usb: mtu3: fix interval value for intr and isoc
+      usb: mtu3: add memory barrier before set GPD's HWO
+      usb: mtu3: fix list_head check warning
+      usb: mtu3: set interval of FS intr and isoc endpoint
+
+Heikki Krogerus (1):
+      usb: typec: ucsi: Only check the contract if there is a connection
+
+Mathias Nyman (1):
+      xhci: Fresco FL1100 controller should not have BROKEN_MSI quirk set.
+
+Vincent Pelletier (1):
+      usb: gadget: f_fs: Clear ffs_eventfd in ffs_data_clear.
+
+ drivers/usb/gadget/function/f_fs.c |  9 ++++++---
+ drivers/usb/host/xhci-pci.c        |  5 ++++-
+ drivers/usb/mtu3/mtu3_gadget.c     | 12 ++++++++++--
+ drivers/usb/mtu3/mtu3_qmu.c        |  7 ++++++-
+ drivers/usb/typec/ucsi/ucsi.c      |  4 +++-
+ 5 files changed, 29 insertions(+), 8 deletions(-)

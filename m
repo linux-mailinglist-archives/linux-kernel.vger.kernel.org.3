@@ -2,67 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 919EB481A11
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 07:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A00481A13
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 07:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236699AbhL3G4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 01:56:25 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:33000 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229514AbhL3G4Y (ORCPT
+        id S236731AbhL3G5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 01:57:13 -0500
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:57948 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229514AbhL3G5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 01:56:24 -0500
-X-UUID: 31f773133e554b5c8a08136659f39100-20211230
-X-UUID: 31f773133e554b5c8a08136659f39100-20211230
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1895940659; Thu, 30 Dec 2021 14:56:20 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 30 Dec 2021 14:56:18 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 30 Dec 2021 14:56:18 +0800
-From:   <miles.chen@mediatek.com>
-To:     <matthias.bgg@gmail.com>
-CC:     <airlied@linux.ie>, <chunkuang.hu@kernel.org>, <daniel@ffwll.ch>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <miles.chen@mediatek.com>,
-        <p.zabel@pengutronix.de>
-Subject: Re: [PATCH] drm/mediatek: Fix unused-but-set variable warning
-Date:   Thu, 30 Dec 2021 14:56:16 +0800
-Message-ID: <20211230065616.32308-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <fcaccc97-e920-08eb-ec3f-4c4b11ea8925@gmail.com>
-References: <fcaccc97-e920-08eb-ec3f-4c4b11ea8925@gmail.com>
+        Thu, 30 Dec 2021 01:57:12 -0500
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 1BU6un75028402
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Dec 2021 01:56:50 -0500
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 488E515C33A3; Thu, 30 Dec 2021 01:56:49 -0500 (EST)
+Date:   Thu, 30 Dec 2021 01:56:49 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Lukas Czerner <lczerner@redhat.com>, Jan Kara <jack@suse.cz>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
+Subject: Re: [PATCH v2] ext4: set csum seed in tmp inode while migrating to
+ extents
+Message-ID: <Yc1YMUryayqc8fUk@mit.edu>
+References: <20211214175058.19511-1-lhenriques@suse.de>
+ <20211215004945.GD69182@magnolia>
+ <20211215112852.GM14044@quack2.suse.cz>
+ <20211215141237.lrymhbebgjunh4n2@work>
+ <YbuGLsQy6TSM2xOl@mit.edu>
+ <20211217093534.2ug6e5cm37md2c3u@work>
+ <20211228224017.GA2242@duo.ucw.cz>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211228224017.GA2242@duo.ucw.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->You are right, in both cases the bit is set, but the funciton does not do what 
->it is supposed to do.
->Will just clear all bits of the mask.
->
->Without your patch, we will just write the val to the register and don't care 
->what the register value was before that.
->
->We should somehow mention that in the commit message, as it's not only about a 
->not used variable, it actually has an influence on the value we write(-back) to 
->the register.
+On Tue, Dec 28, 2021 at 11:40:17PM +0100, Pavel Machek wrote:
+> > Our rationale behind not supporting the migration was always the fact
+> > that we felt that backup was absolutely necessary before operation like
+> > this. When you already have up-to-date backup available you might as
+> > well create a fresh ext4 file system with all the advantages it brings
+> > and recover data from said backup. I think this is still a very
+> > reasonable approach.
+> 
+> Umm. Not really?
+> 
+> First... full backup/restore will take a _long_ time.
 
-thanks for the comment. I understand that it's not only about a not used
-variable. I talked to our hdmi experts and they think mtk_cec_mask() should
-write tmp instead of write val to the register.
+How big is an ext3 file system going to be, though?  Ext4 was
+available in RHEL 5, and was fully supported in RHEL 6 --- which was
+released in the year 2000.  Back in 2000, the biggest Seagate
+Barracuda drive you could get was 30GB.  The biggest disk available at
+that time was the IBM Deskstar 75GXP, which was 75GB.
 
-I will mention this in the commit message and submit next patch.
+So a 5 disk RAID array from the era where you might have still been
+using ext3 *might* have been as large as 300GB.
 
-Happy new year!
+> Second... if you do online migration, you have filesystem you are
+> quite unlikely to corrupt, and backup you are unlikely to use. If you
+> do backup/restore, you have to be _way_ more careful that backup media
+> is reliable etc.
 
-Miles
+21 years later, those IDE disks are probably not even functioning any
+more.  Every 4-7 years, depending on how careful you want to be, you'd
+would be well-advised to buy new hard drives, since back then disk
+drive capacities were doubling every 18-24 months.  And so the sane
+thing to do would be to do a disk-to-disk transfer.  That is, you buy
+a new computer, with brand new hard drives, install the latest distro
+(many companies would only upgrade distros when they upgraded their
+hardware), and so you'd format new hard drives with the latest file
+system, and do a disk-to-disk transfer from the old system to the new
+system.
+
+Quite frankly, if you aren't willing to copy the data from your
+ancient spinning rust platters (and back then, they probably *were*
+actually iron oxide :-), your largest risk would be the HDD
+self-destructing from extreme old age.  :-)
+
+							- Ted
+

@@ -2,180 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 213DD481A24
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 08:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78D94481A27
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 08:21:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236840AbhL3HOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 02:14:46 -0500
-Received: from mga03.intel.com ([134.134.136.65]:42479 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236741AbhL3HOo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 02:14:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640848484; x=1672384484;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3iCjkqny1bw9QGjKT/Pra5Z2ikgjU4Kl6PkVp/L7hg4=;
-  b=AQEOBYfj4N7GmfCEtd30ooVTWky83eu40SFcFVpCPgypCrY3c0mA3b9g
-   5BaeBwt7BU6wQeefaOJBjlg3MUaaPHceFe48g5usL3vO6JUHW6RYIuVDx
-   DjP+NL8I2sTxAjYeL12LGm7V4VaCWybFEaYxJqGamlICHAG15+rfrkQZs
-   c/DZrXPaslNV2wQ2CRAAIijkNsnuGiqybEg7WemhLif6lzw20WsRI7O0T
-   lB2/UuM03hD2dE4kqRymLhFBqPyqy2QDfZjcm7q8spAnhVAhhEbL4fTn0
-   GXXcb0/mPtBcPIgjD5HwnMSF864wE5DGB+KDn1QigkuAjtwGHfuRncX2O
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="241585749"
-X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
-   d="scan'208";a="241585749"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 23:14:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
-   d="scan'208";a="687136315"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 29 Dec 2021 23:14:42 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n2pe5-0009sB-If; Thu, 30 Dec 2021 07:14:41 +0000
-Date:   Thu, 30 Dec 2021 15:13:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [nathan:wip/llvm-objdump-posttest 1/1]
- arch/x86/tools/insn_decoder_test: error: malformed line 7230868:
-Message-ID: <202112301509.DL4ccRU2-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S236878AbhL3HUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 02:20:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57528 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236741AbhL3HUh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 02:20:37 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC8FC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 23:20:36 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id j18-20020a258152000000b006000d292a42so42354134ybm.0
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 23:20:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=V0pq/SW2J85hDS+DwC0KI/Vw7c1WWgn1iSK93YnvM/k=;
+        b=kF39lToh4gGXQ9Wvef6Oh7e4BNmzcWw6lOnMFyr+LMtdwPTOUNWF0Vu7Oem0wZA9a4
+         rQfHVMjq3VPn8X3aMI33yAzW3YZOu8/8UARkyLFuUnVxmkr4OYYFOpNlmLdPiF/tYY5A
+         mihg3k7WWAamGRCMllXkgAy74an8PeFU4fPr3roA3sWRTCb+eLO1iWIFQbykSOxi60+3
+         UKOfgv0rXbCjLZIupiIXQMkC7v374YPlg8QmJeoZiCBVWX9roQpqoeSy1jjMhME31E59
+         DiNLiyNh4E2NeyvBmfNCkyapVJCE4MdY7echKGCyUqChlAWjmmKlaifCCgcKj/Ixc8Ff
+         wh8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=V0pq/SW2J85hDS+DwC0KI/Vw7c1WWgn1iSK93YnvM/k=;
+        b=FVLmgpngTC+gKCXJ9mL/EyHDpwayLnJ1BIy3NIQU1YN6teOjO8WWcduhwV63H6TQ18
+         gTq+pIibEGWQfGnUxW0P3GhEUfwFSqOoTqp/y5Lcb1NTQHAvm0DErkdLNhbo6r31rIVr
+         NWb7Caxev2UNkmfbIvoDNPQJrxp8KV4dxDhaG/f5jLs8AZxm9atTiNhcmQH51YfVntRD
+         /rk4FwvNszZOy04q8lSf+ykiHsj/Bc+/U0fcpJGklO4CHilaS44mWfHG1TTU6OYCAoPu
+         yOMm3J8TEyY5qTG8DD7wa3XDlFDTuE1APoYmc3FH0O9BwBrod3n7nB0+UPRCGQ5xIB9t
+         Pkrw==
+X-Gm-Message-State: AOAM532uVn9yb7LHrLSOU38PDDa1wiGI69U1QbLyFXpH6kdFrTFSID8F
+        ckUC78l6zh6+4JPiQhaQhoAHAB+o6/Dj
+X-Google-Smtp-Source: ABdhPJzGyz/QxzTGSuqr3bFyyEC2xwto/Uzb440yRbsxqtgq0zoxtbTyVcshWY7RwZs7JlNyCXpw5py41XmE
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:31c4:9539:dba1:a82b])
+ (user=irogers job=sendgmr) by 2002:a25:3496:: with SMTP id
+ b144mr25093094yba.177.1640848836103; Wed, 29 Dec 2021 23:20:36 -0800 (PST)
+Date:   Wed, 29 Dec 2021 23:19:41 -0800
+Message-Id: <20211230072030.302559-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
+Subject: [PATCH v3 00/48] Refactor perf cpumap
+From:   Ian Rogers <irogers@google.com>
+To:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vineet Singh <vineet.singh@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, zhengjun.xing@intel.com
+Cc:     eranian@google.com, Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git wip/llvm-objdump-posttest
-head:   2f137c324b21f1c21b8830d8896cb9957009f969
-commit: 2f137c324b21f1c21b8830d8896cb9957009f969 [1/1] x86/tools: Remove chkobjdump.awk
-config: i386-randconfig-a015-20211228 (https://download.01.org/0day-ci/archive/20211230/202112301509.DL4ccRU2-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project cd284b7ac0615afc6e0f1a30da2777e361de27a3)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git/commit/?id=2f137c324b21f1c21b8830d8896cb9957009f969
-        git remote add nathan https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git
-        git fetch --no-tags nathan wip/llvm-objdump-posttest
-        git checkout 2f137c324b21f1c21b8830d8896cb9957009f969
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Perf cpu map has various functions where a cpumap and index are passed
+in order to load the cpu. A problem with this is that the wrong index
+may be passed for the cpumap, causing problems like aggregation on the
+wrong CPU:
+https://lore.kernel.org/lkml/20211204023409.969668-1-irogers@google.com/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This patch set refactors the cpu map API, reducing it and explicitly
+passing the cpu (rather than the pair) to functions that need
+it. Comments are added at the same time. Changes modify the same
+file/function more than once as refactoring and fixes are broken apart
+for the sake of bisection.
 
-All errors (new ones prefixed by >>):
+v2. Incorproates fixes suggested Jiri Olsa, rewrites the evlist CPU
+    iterator in part in a way suggested by Riccardo Mancini. The new
+    fixes start at patch 23. The final change was suggested by John
+    Garry to make the CPUs have their own struct wrapper.
 
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cb1: 84 db                        	testb	%bl, %bl
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cb3: 8b 48 04                     	movl	4(%eax), %ecx
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cb6: 8b 50 08                     	movl	8(%eax), %edx
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cb9: 8b 58 0c                     	movl	12(%eax), %ebx
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cbc: 8b 68 14                     	movl	20(%eax), %ebp
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cbf: 8b 70 18                     	movl	24(%eax), %esi
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cc2: 8b 78 1c                     	movl	28(%eax), %edi
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cc5: 8b 00                        	movl	(%eax), %eax
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cc7: e8 b4 ff ff ff               	calll	0xc2841c80 <vmx_vmenter>
-   arch/x86/tools/insn_decoder_test: warning: objdump says 1 bytes, but insn_get_length() says 3
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841ccc: 76 2f                        	jbe	0xc2841cfd <__vmx_vcpu_run+0x61>
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cce: 50                           	pushl	%eax
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841ccf: 8b 44 24 04                  	movl	4(%esp), %eax
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cd3: 8f 00                        	popl	(%eax)
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cd5: 89 48 04                     	movl	%ecx, 4(%eax)
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cd8: 89 50 08                     	movl	%edx, 8(%eax)
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cdb: 89 58 0c                     	movl	%ebx, 12(%eax)
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cde: 89 68 14                     	movl	%ebp, 20(%eax)
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841ce1: 89 70 18                     	movl	%esi, 24(%eax)
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841ce4: 89 78 1c                     	movl	%edi, 28(%eax)
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841ce7: 31 c0                        	xorl	%eax, %eax
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841ce9: 31 c9                        	xorl	%ecx, %ecx
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841ceb: 31 d2                        	xorl	%edx, %edx
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841ced: 31 db                        	xorl	%ebx, %ebx
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cef: 31 ed                        	xorl	%ebp, %ebp
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cf1: 31 f6                        	xorl	%esi, %esi
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cf3: 31 ff                        	xorl	%edi, %edi
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cf5: 83 c4 04                     	addl	$4, %esp
-   arch/x86/tools/insn_decoder_test: warning: objdump says 1 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cf8: 5b                           	popl	%ebx
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cf9: 5e                           	popl	%esi
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cfa: 5f                           	popl	%edi
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cfb: 5d                           	poplretl	%ebp
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841cfd: b8 01 00 00 00               	movl	$1, %eax
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
-   arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-   arch/x86/tools/insn_decoder_test: warning: c2841d02: eb e5                        	jmppushfl	0xc2841ce9 <__vmx_vcpu_run+0x4d>
-   arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but insn_get_length() says 2
->> arch/x86/tools/insn_decoder_test: error: malformed line 7230868:
-   c2841d05: 58                           	poplretlint3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int3int
+v3. Incorporates fixes suggested by Namhyung Kim.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Ian Rogers (48):
+  libperf: Add comments to perf_cpu_map.
+  perf stat: Add aggr creators that are passed a cpu.
+  perf stat: Correct aggregation CPU map
+  perf stat: Switch aggregation to use for_each loop
+  perf stat: Switch to cpu version of cpu_map__get
+  perf cpumap: Switch cpu_map__build_map to cpu function
+  perf cpumap: Remove map+index get_socket
+  perf cpumap: Remove map+index get_die
+  perf cpumap: Remove map+index get_core
+  perf cpumap: Remove map+index get_node
+  perf cpumap: Add comments to aggr_cpu_id
+  perf cpumap: Remove unused cpu_map__socket
+  perf cpumap: Simplify equal function name.
+  perf cpumap: Rename empty functions.
+  perf cpumap: Document cpu__get_node and remove redundant function
+  perf cpumap: Remove map from function names that don't use a map.
+  perf cpumap: Remove cpu_map__cpu, use libperf function.
+  perf cpumap: Refactor cpu_map__build_map
+  perf cpumap: Rename cpu_map__get_X_aggr_by_cpu functions
+  perf cpumap: Move 'has' function to libperf
+  perf cpumap: Add some comments to cpu_aggr_map
+  perf cpumap: Trim the cpu_aggr_map
+  perf stat: Fix memory leak in check_per_pkg
+  perf cpumap: Add CPU to aggr_cpu_id
+  perf stat-display: Avoid use of core for CPU.
+  perf evsel: Derive CPUs and threads in alloc_counts
+  libperf: Switch cpu to more accurate cpu_map_idx
+  libperf: Use cpu not index for evsel mmap
+  perf counts: Switch name cpu to cpu_map_idx
+  perf stat: Rename aggr_data cpu to imply it's an index
+  perf stat: Use perf_cpu_map__for_each_cpu
+  perf script: Use for each cpu to aid readability
+  libperf: Allow NULL in perf_cpu_map__idx
+  perf evlist: Refactor evlist__for_each_cpu.
+  perf evsel: Pass cpu not cpu map index to synthesize
+  perf stat: Correct variable name for read counter
+  perf evsel: Rename CPU around get_group_fd
+  perf evsel: Reduce scope of evsel__ignore_missing_thread
+  perf evsel: Rename variable cpu to index
+  perf test: Use perf_cpu_map__for_each_cpu
+  perf stat: Correct check_per_pkg cpu
+  perf stat: Swap variable name cpu to index
+  libperf: Sync evsel documentation
+  perf bpf: Rename cpu to cpu_map_idx
+  perf c2c: Use more intention revealing iterator
+  perf script: Fix flipped index and cpu
+  perf stat: Correct first_shadow_cpu to return index
+  perf cpumap: Give CPUs their own type.
+
+ tools/lib/perf/Documentation/libperf.txt      |  11 +-
+ tools/lib/perf/cpumap.c                       | 131 +++--
+ tools/lib/perf/evlist.c                       |   4 +-
+ tools/lib/perf/evsel.c                        |  92 ++--
+ tools/lib/perf/include/internal/cpumap.h      |  18 +-
+ tools/lib/perf/include/internal/evlist.h      |   3 +-
+ tools/lib/perf/include/internal/evsel.h       |   4 +-
+ tools/lib/perf/include/internal/mmap.h        |   5 +-
+ tools/lib/perf/include/perf/cpumap.h          |   8 +-
+ tools/lib/perf/include/perf/evsel.h           |  10 +-
+ tools/lib/perf/libperf.map                    |   1 +
+ tools/lib/perf/mmap.c                         |   2 +-
+ tools/perf/arch/arm/util/cs-etm.c             |  16 +-
+ tools/perf/bench/epoll-ctl.c                  |   2 +-
+ tools/perf/bench/epoll-wait.c                 |   2 +-
+ tools/perf/bench/futex-hash.c                 |   2 +-
+ tools/perf/bench/futex-lock-pi.c              |   2 +-
+ tools/perf/bench/futex-requeue.c              |   2 +-
+ tools/perf/bench/futex-wake-parallel.c        |   2 +-
+ tools/perf/bench/futex-wake.c                 |   2 +-
+ tools/perf/builtin-c2c.c                      |  15 +-
+ tools/perf/builtin-ftrace.c                   |   2 +-
+ tools/perf/builtin-kmem.c                     |   2 +-
+ tools/perf/builtin-record.c                   |   2 +-
+ tools/perf/builtin-sched.c                    |  71 +--
+ tools/perf/builtin-script.c                   |  10 +-
+ tools/perf/builtin-stat.c                     | 516 +++++++++---------
+ tools/perf/tests/attr.c                       |   6 +-
+ tools/perf/tests/bitmap.c                     |   2 +-
+ tools/perf/tests/cpumap.c                     |   6 +-
+ tools/perf/tests/event_update.c               |   6 +-
+ tools/perf/tests/mem2node.c                   |   2 +-
+ tools/perf/tests/mmap-basic.c                 |   4 +-
+ tools/perf/tests/openat-syscall-all-cpus.c    |  39 +-
+ tools/perf/tests/stat.c                       |   3 +-
+ tools/perf/tests/topology.c                   |  43 +-
+ tools/perf/util/affinity.c                    |   2 +-
+ tools/perf/util/auxtrace.c                    |  12 +-
+ tools/perf/util/auxtrace.h                    |   5 +-
+ tools/perf/util/bpf_counter.c                 |  16 +-
+ tools/perf/util/bpf_counter.h                 |   4 +-
+ tools/perf/util/counts.c                      |   8 +-
+ tools/perf/util/counts.h                      |  14 +-
+ tools/perf/util/cpumap.c                      | 253 ++++-----
+ tools/perf/util/cpumap.h                      | 116 ++--
+ tools/perf/util/cputopo.c                     |   6 +-
+ tools/perf/util/env.c                         |  29 +-
+ tools/perf/util/env.h                         |   3 +-
+ tools/perf/util/evlist.c                      | 148 ++---
+ tools/perf/util/evlist.h                      |  50 +-
+ tools/perf/util/evsel.c                       | 143 ++---
+ tools/perf/util/evsel.h                       |  27 +-
+ tools/perf/util/expr.c                        |   2 +-
+ tools/perf/util/header.c                      |   6 +-
+ tools/perf/util/mmap.c                        |  19 +-
+ tools/perf/util/mmap.h                        |   3 +-
+ tools/perf/util/perf_api_probe.c              |  15 +-
+ tools/perf/util/python.c                      |   4 +-
+ tools/perf/util/record.c                      |  11 +-
+ .../scripting-engines/trace-event-python.c    |   6 +-
+ tools/perf/util/session.c                     |  10 +-
+ tools/perf/util/stat-display.c                | 138 ++---
+ tools/perf/util/stat-shadow.c                 | 308 +++++------
+ tools/perf/util/stat.c                        |  47 +-
+ tools/perf/util/stat.h                        |   9 +-
+ tools/perf/util/svghelper.c                   |   6 +-
+ tools/perf/util/synthetic-events.c            |  12 +-
+ tools/perf/util/synthetic-events.h            |   3 +-
+ tools/perf/util/util.h                        |   5 +-
+ 69 files changed, 1333 insertions(+), 1155 deletions(-)
+
+-- 
+2.34.1.448.ga2b2bfdf31-goog
+

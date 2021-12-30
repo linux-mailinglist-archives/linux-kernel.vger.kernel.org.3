@@ -2,131 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF43481F60
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 566F4481F63
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241765AbhL3THa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 14:07:30 -0500
-Received: from mga14.intel.com ([192.55.52.115]:33423 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236868AbhL3TH3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 14:07:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640891249; x=1672427249;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=plzyb7P6LvkhTHaWFdb294o5NTiUFa5HwsZ4WXcuZcc=;
-  b=hXEjB+lpYEclHw7dOiNOC+7+vFNHa67so1SXM/UfqCQOczEhj8D43RYA
-   iRI9cBPy40QXhdc5QXXwfR+7AB1VFjOp0bTplVToldd5Uj7x6R5shLWzp
-   UeTd1Ju4JQ52KpZdsMARWokpv8YfvM3PZTuilQsUyoFFx0BUhBvmXMdcA
-   WvqXk29gkCu+XuwUkd4h7l6ceYYMWfhYzdPT/tRxmCqrT4omBndrFNVFK
-   A9xCkeitnQJDNFk7F9rG/qOeyo5pLY0RKvy6VHVf75OHabBGtEJB0vatg
-   pVKhzdAySJ6/HUDWZAy2Twlg5DcdzNBu8kq3nTQNxhcr5LP2l4UjXZ9VP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="241929596"
-X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
-   d="scan'208";a="241929596"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 11:07:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
-   d="scan'208";a="510979530"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 30 Dec 2021 11:07:28 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n30lr-000AWB-CQ; Thu, 30 Dec 2021 19:07:27 +0000
-Date:   Fri, 31 Dec 2021 03:06:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: xillybus_of.c:undefined reference to `devm_platform_ioremap_resource'
-Message-ID: <202112310309.OXZb8wIC-lkp@intel.com>
+        id S241772AbhL3TI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 14:08:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236868AbhL3TI0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 14:08:26 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537EAC06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:08:25 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id q8so26330714ljp.9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:08:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kgyj97ctTErwJCIhgzUX8EMyaDF/bLUdCmbEuAYlHjw=;
+        b=YOZVOBHDDpfH3Ql5u1ocW3n2/vJn9YZp1eV0ovKa0V9oHZEI4tHDNs5y3oqOeRyYLB
+         uhnnc1xa7T/vkBCfrT26Kw5tter/RZgpklftKQ2G/60d+OvlMPJnDW9APlJzmOKHwKU1
+         /yamItDqCuyQ0HpIcSy2xYO8EVL9rVcrw1yOWj8N8IffziJ8mVAdX/e8AKwBGLunsly4
+         YFpEdTZEZIcfafjeNPCPssBDelxxIrw4qI0pc6PtHVJdUTqfKBsJLPlUnC8ko5hhqeMB
+         vJB8dEryxS3tfVB+qYDZX8erLuN9Vaebet1OIINCgn7RSLNWAmkZzMWzStggjp3N0KFg
+         6WkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kgyj97ctTErwJCIhgzUX8EMyaDF/bLUdCmbEuAYlHjw=;
+        b=RfQLilwfL5m6yG9nbh4NHZu6FUgiR71Bcle9yenW4xtOTssKWaK01O+9asI4OP13h8
+         okvtmni0lk5RNppndjVdUOcOE4U/rzLAfi/BucsRWUT+rPmSosoZ//pLPYFLp6wPFe5W
+         LAcTmXX5QBYH9V+eslM5yaGe2cPy/EpIULjmB3L0zGLf/c64QqS2LyZG2r6SyvSrUMMZ
+         ZSbKuiMC66kjP9Ht/QIfnDAfJY/I0zp+tofV+R97u0C4Ow9IvdWz40/V4QtXgukZlW49
+         KAtpGNisPK0ot2k/UqoEj4pKy4mJiZdrNXu4H8bvA7p6sWs97oyrxnuX9wVlfVNT0tHT
+         NyXA==
+X-Gm-Message-State: AOAM5331T/Eu2fAt1F0O5g7hrn4Q88j3zzK8BSVokVhV3G2/AwRIE9Y3
+        gZ3QcJlKxuKAqaNiBxszhhPwJbjzz458dvUDG4eKVg==
+X-Google-Smtp-Source: ABdhPJwRuz90LSenncg3Ir0RuESemN0QoyVzJiasaGluR94kNn7uQB+PloeHXS2750u1IXJBq7bTmvMkM0LB6KJDmp8=
+X-Received: by 2002:a2e:8854:: with SMTP id z20mr20464394ljj.202.1640891303360;
+ Thu, 30 Dec 2021 11:08:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <00000000000049f33f05d4535526@google.com> <Yc1zbYqVO/6b6Uhf@dhcp22.suse.cz>
+In-Reply-To: <Yc1zbYqVO/6b6Uhf@dhcp22.suse.cz>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Thu, 30 Dec 2021 11:08:12 -0800
+Message-ID: <CALvZod6S+zLw=mRw6F7g4+WSnCVaj+jHs7rjAoyDfFK92wq9jw@mail.gmail.com>
+Subject: Re: [syzbot] general protection fault in mod_memcg_page_state
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     syzbot <syzbot+864849a13d44b22de04d@syzkaller.appspotmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        changbin.du@intel.com, Daniel Borkmann <daniel@iogearbox.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        hkallweit1@gmail.com, John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>, kpsingh@kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        yajun.deng@linux.dev, Yonghong Song <yhs@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herbert,
+On Thu, Dec 30, 2021 at 12:53 AM Michal Hocko <mhocko@suse.com> wrote:
+[...]
+>
+> This might have something to do with http://lkml.kernel.org/r/20211222052457.1960701-1-shakeelb@google.com
+> which has added the accounting which is blowing up. The problem happens
+> when a memcg is retrieved from the allocated page. This should be NULL
+> as the reported commit doesn't really add any __GFP_ACCOUNT user AFAICS.
+> Anyway vm_area_alloc_pages can fail the allocation if the current
+> context has fatal signals pending. array->pages array is allocated with
+> __GFP_ZERO so the failed allocation should have kept the pages[0] NULL.
+> I haven't followed the page->memcg path to double check whether that
+> could lead to 0xdffffc0000000001 in the end.
+>
+> I believe we need something like
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 9bf838817a47..d2e392cac909 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -2627,7 +2627,8 @@ static void __vunmap(const void *addr, int deallocate_pages)
+>                 unsigned int page_order = vm_area_page_order(area);
+>                 int i;
+>
+> -               mod_memcg_page_state(area->pages[0], MEMCG_VMALLOC,
+> +               if (area->pages[0])
+> +                       mod_memcg_page_state(area->pages[0], MEMCG_VMALLOC,
+>                                      -area->nr_pages);
+>
+>                 for (i = 0; i < area->nr_pages; i += 1U << page_order) {
+> @@ -2968,7 +2969,8 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
+>                 page_order, nr_small_pages, area->pages);
+>
+>         atomic_long_add(area->nr_pages, &nr_vmalloc_pages);
+> -       mod_memcg_page_state(area->pages[0], MEMCG_VMALLOC, area->nr_pages);
+> +       if (area->pages[0])
+> +               mod_memcg_page_state(area->pages[0], MEMCG_VMALLOC, area->nr_pages);
+>
+>         /*
+>          * If not enough pages were obtained to accomplish an
+>
+> Or to account each page separately so that we do not have to rely on
+> pages[0].
+>
 
-FYI, the error/warning still remains.
+Thanks Michal for the CC. I will add these checks in the next version
+(or convert to account each page separately based on discussion on the
+other thread).
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   eec4df26e24e978e49ccf9bcf49ca0f2ccdaeffe
-commit: a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a hwrng: ks-sa - Add dependency on IOMEM and OF
-date:   1 year, 1 month ago
-config: s390-randconfig-r044-20211230 (https://download.01.org/0day-ci/archive/20211231/202112310309.OXZb8wIC-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   s390-linux-ld: kernel/dma/coherent.o: in function `dma_init_coherent_memory':
-   coherent.c:(.text+0x4d4): undefined reference to `memremap'
-   s390-linux-ld: coherent.c:(.text+0x5ee): undefined reference to `memunmap'
-   s390-linux-ld: kernel/dma/coherent.o: in function `dma_declare_coherent_memory':
-   coherent.c:(.text+0x862): undefined reference to `memunmap'
-   s390-linux-ld: drivers/irqchip/irq-imx-intmux.o: in function `imx_intmux_probe':
-   irq-imx-intmux.c:(.text+0x3b8): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/phy/marvell/phy-mvebu-a3700-utmi.o: in function `mvebu_a3700_utmi_phy_probe':
-   phy-mvebu-a3700-utmi.c:(.text+0x14a): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/clk/clk-fixed-mmio.o: in function `fixed_mmio_clk_setup':
-   clk-fixed-mmio.c:(.text+0x86): undefined reference to `of_iomap'
-   s390-linux-ld: clk-fixed-mmio.c:(.text+0xaa): undefined reference to `iounmap'
-   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_console_close':
-   dpaa2-console.c:(.text+0x7c): undefined reference to `iounmap'
-   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_console_probe':
-   dpaa2-console.c:(.text+0xda): undefined reference to `of_address_to_resource'
-   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_generic_console_open.constprop.0':
-   dpaa2-console.c:(.text+0x20e): undefined reference to `ioremap'
-   s390-linux-ld: dpaa2-console.c:(.text+0x25c): undefined reference to `iounmap'
-   s390-linux-ld: dpaa2-console.c:(.text+0x284): undefined reference to `ioremap'
-   s390-linux-ld: dpaa2-console.c:(.text+0x472): undefined reference to `iounmap'
-   s390-linux-ld: drivers/char/hw_random/exynos-trng.o: in function `exynos_trng_probe':
-   exynos-trng.c:(.text+0x398): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/meson-rng.o: in function `meson_rng_probe':
-   meson-rng.c:(.text+0xea): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/mtk-rng.o: in function `mtk_rng_probe':
-   mtk-rng.c:(.text+0x332): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/npcm-rng.o: in function `npcm_rng_probe':
-   npcm-rng.c:(.text+0x2c2): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/xillybus/xillybus_of.o: in function `xilly_drv_probe':
->> xillybus_of.c:(.text+0x1ec): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/mfd/sun6i-prcm.o: in function `sun6i_prcm_probe':
-   sun6i-prcm.c:(.text+0xae): undefined reference to `mfd_add_devices'
-   s390-linux-ld: drivers/watchdog/sirfsoc_wdt.o: in function `sirfsoc_wdt_probe':
-   sirfsoc_wdt.c:(.text+0x19c): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/clocksource/timer-of.o: in function `timer_of_init':
-   timer-of.c:(.init.text+0xce): undefined reference to `of_iomap'
-   s390-linux-ld: timer-of.c:(.init.text+0x4ee): undefined reference to `iounmap'
-   s390-linux-ld: drivers/clocksource/timer-of.o: in function `timer_of_cleanup':
-   timer-of.c:(.init.text+0x5ca): undefined reference to `iounmap'
-   s390-linux-ld: drivers/clocksource/timer-microchip-pit64b.o: in function `mchp_pit64b_dt_init_timer':
-   timer-microchip-pit64b.c:(.init.text+0x154): undefined reference to `of_iomap'
-   s390-linux-ld: timer-microchip-pit64b.c:(.init.text+0x66e): undefined reference to `iounmap'
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MFD_SUN6I_PRCM
-   Depends on HAS_IOMEM && (ARCH_SUNXI || COMPILE_TEST
-   Selected by
-   - CLK_SUNXI_PRCM_SUN6I && COMMON_CLK && CLK_SUNXI
-   - CLK_SUNXI_PRCM_SUN8I && COMMON_CLK && CLK_SUNXI
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Shakeel

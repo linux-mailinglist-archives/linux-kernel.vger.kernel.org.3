@@ -2,175 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE035481D2E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 15:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 308F2481D31
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 15:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240047AbhL3Oj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 09:39:28 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:46937 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235691AbhL3Oj1 (ORCPT
+        id S240050AbhL3OkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 09:40:23 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52020 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232891AbhL3OkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 09:39:27 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id A27C95800BC;
-        Thu, 30 Dec 2021 09:39:26 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 30 Dec 2021 09:39:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=q2R4bf
-        eWpVftxMmuZnfMxIctzZld7yNvMq7VilwNzDE=; b=gbpssR+Rpr0Lw3g3ByqvJJ
-        RU0331/rriNCirksVqeJBZosBG2SQjXyR0OQtz5u/cAyYikiZjOcyzk0o2iQcpS3
-        0Mxn1vZYnbUfBTmpJbcqMut5gdrpqf1iPkmzoqLOfmeczOF2/7nTEMn9lGWkffLJ
-        fs70fx80hbCrSCPjKOj8ExuMnC9ZGIfzuEIEDdFBMoH3SfN27bC+/rLtv4wfKYcm
-        zzSftfekFf/WeWjb7skRso1fC/+rfszMhivFxYUoox61LSvZ16x+UHCIXoPY9zTV
-        W/YstDWv0B0s9TR8Lue/meWEq2mYrV2+obGIDUIlQ7Fauahj+YLyHX+BazaoX2HQ
-        ==
-X-ME-Sender: <xms:nsTNYYJvLFTTaUJVlkcTyCs2TzZk1H8oDwImUNexGghqTgBANEeFfA>
-    <xme:nsTNYYJi6JILa4fc8SVtAp35_JXU_oNYSM1dRxjhrNXkXpK6KuMEFeJi9JDn5YIgi
-    xJjy13LT3YXGbk>
-X-ME-Received: <xmr:nsTNYYsVq9h30aoxcXArBV7OKKe6JvvDTv_kA8OuJbzQP1oI-QJFAq_2893buwYEbb7y0L00XzgF1sLQ4cZ21PO7bjxaBQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddruddvfedgieejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
-    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
-    gvrhhnpeeilefghfehvdehjeevhefhvefggeeflefghfdtgffhfeejgfevhefggfejteek
-    feenucffohhmrghinhepihhfrggtvgdruggvvhenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehiughoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:nsTNYVZ6OqEwWGolt8MVMC56mhyNpQP9QybGqY30Sp0bF_3wR8C-sg>
-    <xmx:nsTNYfYeW8cdBaazWK_9QUBiMsR5UEECThVuGjEOHGAVKKZ1NQ8dgg>
-    <xmx:nsTNYRDPSx9Y31L63xvc-9CsV4Td5mEobhGWUiEtLDQogfLc2NM_Ag>
-    <xmx:nsTNYcRaPywX4hCace5aF9haPcZXDOqwMFRH7zttF8IuzBeOuiMKDg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 30 Dec 2021 09:39:25 -0500 (EST)
-Date:   Thu, 30 Dec 2021 16:39:23 +0200
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Yevhen Orlov <yevhen.orlov@plvision.eu>
-Cc:     netdev@vger.kernel.org, stephen@networkplumber.org, andrew@lunn.ch,
-        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
-        Taras Chornyi <taras.chornyi@plvision.eu>,
-        Mickey Rachamim <mickeyr@marvell.com>,
-        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 6/6] net: marvell: prestera: Implement
- initial inetaddr notifiers
-Message-ID: <Yc3EmyltW1BVQv2n@shredder>
-References: <20211227215233.31220-1-yevhen.orlov@plvision.eu>
- <20211227215233.31220-7-yevhen.orlov@plvision.eu>
+        Thu, 30 Dec 2021 09:40:22 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E315CB81C5C;
+        Thu, 30 Dec 2021 14:40:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34DB6C36AED;
+        Thu, 30 Dec 2021 14:40:19 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="RXdHN0Op"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1640875216;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MzNV7SQ7psPPB0GDu1mCaoJSBE2Rx6BV8EzIdyhHHbo=;
+        b=RXdHN0OpqdXtqrgKPj43w7+KIohJuyRSEA5zOuJ+789Q9v49Kvepfw3jZ6KfCbsohzt/Cd
+        u5OEHKU6ZLaVDu/CMrAw6t6IV5jzfy1dH1UswkRlQntbluWLCmIEAUAQJ/EF8Bg4Qho/0H
+        6XDsHQJlSxy7LiBYDuxfeyMJJRCjDYs=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6b9a65e8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 30 Dec 2021 14:40:16 +0000 (UTC)
+Received: by mail-yb1-f173.google.com with SMTP id k69so57172106ybf.1;
+        Thu, 30 Dec 2021 06:40:16 -0800 (PST)
+X-Gm-Message-State: AOAM533TbF/7uVeyvCcYoGkYApdsNXHrW/MXIHrihO/zM39MgeHtL8yi
+        QA1Aj6wad2z9aqOn7j2JkFKedPY9Qlb8CwYTAA0=
+X-Google-Smtp-Source: ABdhPJzwdlHoqaLQBHQkuTcxpjumUC+xuzhYpIYHtzMxpcoXfxLfkW8ChrnxIONsU3LPMTO8QxdgFQBq8hygbJHAtR4=
+X-Received: by 2002:a25:854f:: with SMTP id f15mr29103630ybn.121.1640875215633;
+ Thu, 30 Dec 2021 06:40:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227215233.31220-7-yevhen.orlov@plvision.eu>
+References: <20211228153826.448805-1-Jason@zx2c4.com> <20211229211009.108091-1-linux@dominikbrodowski.net>
+ <20211229211009.108091-6-linux@dominikbrodowski.net>
+In-Reply-To: <20211229211009.108091-6-linux@dominikbrodowski.net>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Thu, 30 Dec 2021 15:40:04 +0100
+X-Gmail-Original-Message-ID: <CAHmME9ogFn8deTmVMfKLjQ727kgGzuWRgaNaDW2PF+KwyQw0uQ@mail.gmail.com>
+Message-ID: <CAHmME9ogFn8deTmVMfKLjQ727kgGzuWRgaNaDW2PF+KwyQw0uQ@mail.gmail.com>
+Subject: Re: [PATCH v8 6/7] random: early initialization of ChaCha constants
+To:     Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        "Ivan T . Ivanov" <iivanov@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 11:52:31PM +0200, Yevhen Orlov wrote:
-> Add inetaddr notifiers to support add/del IPv4 address on switchdev
-> port. We create TRAP on first address, added on port and delete TRAP,
-> when last address removed.
-> Currently, driver supports only regular port to became routed.
-> Other port type support will be added later
-> 
-> Co-developed-by: Taras Chornyi <tchornyi@marvell.com>
-> Signed-off-by: Taras Chornyi <tchornyi@marvell.com>
-> Co-developed-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
-> Signed-off-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
-> Signed-off-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
-> ---
-> v1-->v2
-> * Remove useless assigment in prestera_fix_tb_id
-> ---
->  .../marvell/prestera/prestera_router.c        | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/marvell/prestera/prestera_router.c b/drivers/net/ethernet/marvell/prestera/prestera_router.c
-> index 0eb5f5e00e4e..483f0ba45ce0 100644
-> --- a/drivers/net/ethernet/marvell/prestera/prestera_router.c
-> +++ b/drivers/net/ethernet/marvell/prestera/prestera_router.c
-> @@ -4,16 +4,31 @@
->  #include <linux/kernel.h>
->  #include <linux/types.h>
->  #include <linux/inetdevice.h>
-> +#include <net/switchdev.h>
->  
->  #include "prestera.h"
->  #include "prestera_router_hw.h"
->  
-> +/* This util to be used, to convert kernel rules for default vr in hw_vr */
-> +static u32 prestera_fix_tb_id(u32 tb_id)
-> +{
-> +	if (tb_id == RT_TABLE_UNSPEC ||
-> +	    tb_id == RT_TABLE_LOCAL ||
-> +	    tb_id == RT_TABLE_DEFAULT)
-> +		tb_id = RT_TABLE_MAIN;
-> +
-> +	return tb_id;
-> +}
-> +
->  static int __prestera_inetaddr_port_event(struct net_device *port_dev,
->  					  unsigned long event,
->  					  struct netlink_ext_ack *extack)
+Thanks for the patch. Comments are inline below.
+
+On Wed, Dec 29, 2021 at 10:13 PM Dominik Brodowski
+<linux@dominikbrodowski.net> wrote:
+>  drivers/char/random.c   | 10 +++++++---
+>  include/crypto/chacha.h | 15 +++++++++++----
+
+For the next submission of this (which you can do standalone and call
+a v2), please Cc linux-crypto and Herbert as part of the commit body.
+I still intend to take this through the random tree, since that's the
+purpose of it, but because it touches the lib/crypto code, they should
+be in the loop.
+
+>  static struct crng_state primary_crng = {
+>         .lock = __SPIN_LOCK_UNLOCKED(primary_crng.lock),
+> +       .state[0] = CHACHA_CONSTANT_EXPA, /* "expa" */
+> +       .state[1] = CHACHA_CONSTANT_ND_3, /* "nd 3" */
+> +       .state[2] = CHACHA_CONSTANT_2_BY, /* "2-by" */
+> +       .state[3] = CHACHA_CONSTANT_TE_K, /* "te k" */
+>  };
+
+I don't think you need the comments here, since the constant is
+already descriptive.
+
+>
+>  /*
+> @@ -823,9 +827,9 @@ static void __maybe_unused crng_initialize_secondary(struct crng_state *crng)
+>         crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
+>  }
+>
+> -static void __init crng_initialize_primary(struct crng_state *crng)
+> +static void __init crng_initialize_primary(void)
 >  {
->  	struct prestera_port *port = netdev_priv(port_dev);
->  	int err;
-> +	struct prestera_rif_entry *re;
-> +	struct prestera_rif_entry_key re_key = {};
-> +	u32 kern_tb_id;
+> +       struct crng_state *crng = &primary_crng;
+> -       crng_initialize_primary(&primary_crng);
+> +       crng_initialize_primary();
 
-Reverse xmas tree
+There are a bunch of places where we're passing around globals when we
+could collapse them down. It probably makes sense to do that in a
+separate cleanup series (please feel free!), rather than here, since
+the init-time constants issue doesn't really change anything with
+regards to this function signature.
 
->  
->  	err = prestera_is_valid_mac_addr(port, port_dev->dev_addr);
->  	if (err) {
-> @@ -21,9 +36,34 @@ static int __prestera_inetaddr_port_event(struct net_device *port_dev,
->  		return err;
->  	}
->  
-> +	kern_tb_id = l3mdev_fib_table(port_dev);
-> +	re_key.iface.type = PRESTERA_IF_PORT_E;
-> +	re_key.iface.dev_port.hw_dev_num  = port->dev_id;
-> +	re_key.iface.dev_port.port_num  = port->hw_id;
-> +	re = prestera_rif_entry_find(port->sw, &re_key);
-> +
->  	switch (event) {
->  	case NETDEV_UP:
-> +		if (re) {
-> +			NL_SET_ERR_MSG_MOD(extack, "rif_entry already exist");
+>  static inline void chacha_init_consts(u32 *state)
+>  {
+> -       state[0]  = 0x61707865; /* "expa" */
+> -       state[1]  = 0x3320646e; /* "nd 3" */
+> -       state[2]  = 0x79622d32; /* "2-by" */
+> -       state[3]  = 0x6b206574; /* "te k" */
+> +       state[0]  = CHACHA_CONSTANT_EXPA; /* "expa" */
+> +       state[1]  = CHACHA_CONSTANT_ND_3; /* "nd 3" */
+> +       state[2]  = CHACHA_CONSTANT_2_BY; /* "2-by" */
+> +       state[3]  = CHACHA_CONSTANT_TE_K; /* "te k" */
+>  }
 
-These messages are communicated to user space so use a message that is
-more user friendly / informative
-
-> +			return -EEXIST;
-> +		}
-> +		re = prestera_rif_entry_create(port->sw, &re_key,
-> +					       prestera_fix_tb_id(kern_tb_id),
-> +					       port_dev->dev_addr);
-> +		if (!re) {
-> +			NL_SET_ERR_MSG_MOD(extack, "Can't create rif_entry");
-> +			return -EINVAL;
-> +		}
-> +		dev_hold(port_dev);
-
-What is the purpose of this dev_hold()?
-
-> +		break;
->  	case NETDEV_DOWN:
-> +		if (!re) {
-> +			NL_SET_ERR_MSG_MOD(extack, "rif_entry not exist");
-> +			return -EEXIST;
-> +		}
-> +		prestera_rif_entry_destroy(port->sw, re);
-> +		dev_put(port_dev);
->  		break;
->  	}
->  
-> -- 
-> 2.17.1
-> 
+I don't think you need the comments here, since the constant is
+already descriptive.

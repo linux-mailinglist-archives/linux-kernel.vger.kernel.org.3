@@ -2,104 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE84481E0F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D51481E11
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:28:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240284AbhL3QXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 11:23:25 -0500
-Received: from mail-qv1-f41.google.com ([209.85.219.41]:33625 "EHLO
-        mail-qv1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239850AbhL3QXY (ORCPT
+        id S241264AbhL3Q25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 11:28:57 -0500
+Received: from mail-qt1-f180.google.com ([209.85.160.180]:38755 "EHLO
+        mail-qt1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239850AbhL3Q24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 11:23:24 -0500
-Received: by mail-qv1-f41.google.com with SMTP id kk22so22550025qvb.0;
-        Thu, 30 Dec 2021 08:23:24 -0800 (PST)
+        Thu, 30 Dec 2021 11:28:56 -0500
+Received: by mail-qt1-f180.google.com with SMTP id 8so22141378qtx.5;
+        Thu, 30 Dec 2021 08:28:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Qeblw1m9b1lBZnq56cGE3LlH8ljA2Kqb7IdC+pWcyJo=;
-        b=ay8mOfUG/vh2e3ifneSu+X/ntxD6DEUMwNVKU7ZutA6sKgTyqPjXSbY7ChbVM/5Mun
-         rj43lUf/bkV5dVtCC3rMqVWICXrtjoMRNMo2VWPtIAOQzdodVOZFzRlOv+wfENFvUlvS
-         k4ruuiyyZAQ63fPsynooikuOdCPKVRs6pLYAEbcpG4XLSCiLeu/arubkmkbquxFhDq6k
-         cbSY8ut+QYI9+UItScGkhLjWzCgQ3pgMINQ74TlBIWpLuuHnTdQf6HgeU+T0pBTndZ45
-         rQe0UTiGwpT3NScYAFiaVGwWkbUyAAUCB2fBe3vGvc0MN9Ta8dMYUmHyznqJ+Y+85IM7
-         OS7Q==
-X-Gm-Message-State: AOAM5337TmYn5GtDqj6fGbjFEPEIXdSgZrbj5fmhDAWQlmS2DLMz8NMN
-        lkSy5xH1CNK7jH5tAowPai5FT+jedWjA+9TvSuc=
-X-Google-Smtp-Source: ABdhPJxCW9LoTGevH6Tb21On6CNI5HU3B20jNAR6zTBdM5kRKtjktxDkmh0EyBzZ4t/fi7OZ3z0LdI+r0wEdGB2yeEg=
-X-Received: by 2002:ad4:5c8b:: with SMTP id o11mr27548806qvh.130.1640881403809;
- Thu, 30 Dec 2021 08:23:23 -0800 (PST)
+        bh=594xPajnx1lQ2Gq+QQhoW7EPw32DH5yt64jS4MfoP8Q=;
+        b=X2DgoHHdh4uWuiFTWgrYzyNYwpnnEoDiNVX7kC76tHs6Dyzx+zbHgKiGhTBZQqJimX
+         RIHQKKg80/i58M1Bsy4qnywxdl3tt1IKptd7DKTg3R1ITqXEuhWgvOYT8fMg5kU9EFeg
+         nrgK37chFklaFOITZayQRISMhv+//q8grxKGZdGu4ji9H47HjB9HVb1HTZ7nj9/8esDq
+         49yaW5lgBXd2VbE4iiJRAyiAIXVoTxVsNaNvsRdPo7THApo4gbo9dorMMfayICulQWZL
+         5Dnd0HI+CsTk7xEYiwi1HK3EaON5O7taH00B27vSgxUwwFGLcFm1tUEcQOTFSZwrHcH5
+         flsQ==
+X-Gm-Message-State: AOAM530NT5q8QQrqSqUDcJL1Iz1po1hLvkx/3J2gvcSzwjdirqnkWFwq
+        /7DWQoYEXw6ysjaGYY+Bs0OY3U4b56xWKE3Nk5Jf7FSJ
+X-Google-Smtp-Source: ABdhPJx1pG/geFzyTx2rrs7JE51T0xN/ij5gLcEYrADz0jW4p2FFp+l9lNnuSXYW2NeaAY/EUHQlXZnmTcqzKqbNpe8=
+X-Received: by 2002:ac8:5f4e:: with SMTP id y14mr26831737qta.305.1640881725489;
+ Thu, 30 Dec 2021 08:28:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20211222191411.13805-1-manfred@colorfullife.com>
-In-Reply-To: <20211222191411.13805-1-manfred@colorfullife.com>
+References: <20211223022856.27822-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <20211223022856.27822-1-yang.lee@linux.alibaba.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 30 Dec 2021 17:23:13 +0100
-Message-ID: <CAJZ5v0jJr=-O0UdXKj=nHtDv5oJwKWd_5het80QJZ5PBmzitPw@mail.gmail.com>
-Subject: Re: drivers/acpi/processor_thermal.c: avoid cpufreq_get_policy()
-To:     Manfred Spraul <manfred@colorfullife.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
+Date:   Thu, 30 Dec 2021 17:28:34 +0100
+Message-ID: <CAJZ5v0h4u6+4N5ZBSu6CRKn4GCBPgPHC_5-crzULozhzCTCh6w@mail.gmail.com>
+Subject: Re: [PATCH -next] PCI/ACPI: Fix acpi_pci_osc_control_set() kernel-doc comment
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Joerg Roedel <jroedel@suse.de>,
+        Linux PCI <linux-pci@vger.kernel.org>,
         ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
-        1vier1@web.de
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Abaci Robot <abaci@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 8:14 PM Manfred Spraul <manfred@colorfullife.com> wrote:
+On Thu, Dec 23, 2021 at 3:29 AM Yang Li <yang.lee@linux.alibaba.com> wrote:
 >
-> cpu_has_cpufreq() stores a 'struct cpufreq_policy' on the stack.
-> Unfortunately, with debugging options enabled, the structure can be
-> larger than 1024 bytes, which causes a compiler warning/error.
+> Add the description of @support and remove @req in
+> acpi_pci_osc_control_set() kernel-doc comment to remove warnings found
+> by running scripts/kernel-doc, which is caused by using 'make W=1'.
 >
-> (actually observed: 1184 bytes).
+> drivers/acpi/pci_root.c:337: warning: Excess function parameter 'req'
+> description in 'acpi_pci_osc_control_set'
+> drivers/acpi/pci_root.c:337: warning: Function parameter or member
+> 'support' not described in 'acpi_pci_osc_control_set'
 >
-> Therefore: Switch to cpufreq_cpu_get().
->
-> Signed-off-by: Manfred Spraul <manfred@colorfullife.com>
->
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Fixes: 6bc779ee05d4 ("PCI/ACPI: Check for _OSC support in acpi_pci_osc_control_set()")
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 > ---
->  drivers/acpi/processor_thermal.c | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
+>  drivers/acpi/pci_root.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/acpi/processor_thermal.c b/drivers/acpi/processor_thermal.c
-> index a3d34e3f9f94..74210d63f62c 100644
-> --- a/drivers/acpi/processor_thermal.c
-> +++ b/drivers/acpi/processor_thermal.c
-> @@ -53,10 +53,19 @@ static int phys_package_first_cpu(int cpu)
->
->  static int cpu_has_cpufreq(unsigned int cpu)
->  {
-> -       struct cpufreq_policy policy;
-> -       if (!acpi_processor_cpufreq_init || cpufreq_get_policy(&policy, cpu))
-> +       struct cpufreq_policy *policy;
-> +       int retval;
-
-Why is this needed?
-
-> +
-> +       if (!acpi_processor_cpufreq_init)
->                 return 0;
-> -       return 1;
-> +
-> +       retval = 0;
-> +       policy = cpufreq_cpu_get(cpu);
-> +       if (policy) {
-> +               cpufreq_cpu_put(policy);
-
-return 1;
-
-> +               retval = 1;
-> +       }
-> +       return retval;
-
-return 0;
-
->  }
->
->  static int cpufreq_get_max_state(unsigned int cpu)
+> diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
+> index 41a8fef06534..084916604f3c 100644
+> --- a/drivers/acpi/pci_root.c
+> +++ b/drivers/acpi/pci_root.c
+> @@ -322,7 +322,7 @@ EXPORT_SYMBOL_GPL(acpi_get_pci_dev);
+>   * acpi_pci_osc_control_set - Request control of PCI root _OSC features.
+>   * @handle: ACPI handle of a PCI root bridge (or PCIe Root Complex).
+>   * @mask: Mask of _OSC bits to request control of, place to store control mask.
+> - * @req: Mask of _OSC bits the control of is essential to the caller.
+> + * @support: _OSC supported capability.
+>   *
+>   * Run _OSC query for @mask and if that is successful, compare the returned
+>   * mask of control bits with @req.  If all of the @req bits are set in the
 > --
-> 2.33.1
->
+
+Applied as 5.17 material, thanks!

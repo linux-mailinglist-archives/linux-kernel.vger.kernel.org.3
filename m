@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 091AD481917
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 04:51:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CAB548192B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 05:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235573AbhL3Dvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 22:51:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235538AbhL3Dvl (ORCPT
+        id S235681AbhL3EA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 23:00:26 -0500
+Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:44413 "EHLO
+        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229558AbhL3EAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 22:51:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E4DC061574;
-        Wed, 29 Dec 2021 19:51:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 38C37B81A71;
-        Thu, 30 Dec 2021 03:51:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1020C36AE7;
-        Thu, 30 Dec 2021 03:51:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1640836298;
-        bh=6iM3TbYQjPiJGvmGiMsr01LD0T/mxawhZBX2nGQf1VE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KQeEpUIB4mWIryweMs8qNcZQw55aoYzboRGBsojth6PBbhtKiJcs7DP/3PKEGzirx
-         1xzkSIoMtu9WCJZB+W0nfBEyiO/oWcQJajiPzaFq5i4/l0RfcXcDZOArWAhIdZDmqo
-         HitRcb5t2UG/R5pQ1QeN56kKXOfmW5m32S7B2+bA=
-Date:   Wed, 29 Dec 2021 19:51:35 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Ryan Cai <ycaibb@gmail.com>
-Cc:     <shuah@kernel.org>, <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [Resource Leak] Missing closing files in
- testing/selftests/vm/mlock2
-Message-Id: <20211229195135.959b3730c54652de497e932b@linux-foundation.org>
-In-Reply-To: <C8980E43-5BED-45C6-B3F8-7BC3D58DF21A@gmail.com>
-References: <C8980E43-5BED-45C6-B3F8-7BC3D58DF21A@gmail.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+        Wed, 29 Dec 2021 23:00:25 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R901e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=dust.li@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V0Ii-rQ_1640836822;
+Received: from localhost(mailfrom:dust.li@linux.alibaba.com fp:SMTPD_---0V0Ii-rQ_1640836822)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 30 Dec 2021 12:00:23 +0800
+Date:   Thu, 30 Dec 2021 12:00:22 +0800
+From:   "dust.li" <dust.li@linux.alibaba.com>
+To:     Karsten Graul <kgraul@linux.ibm.com>,
+        Wen Gu <guwen@linux.alibaba.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tonylu@linux.alibaba.com
+Subject: Re: [RFC PATCH net v2 2/2] net/smc: Resolve the race between SMC-R
+ link access and clear
+Message-ID: <20211230040022.GC55356@linux.alibaba.com>
+Reply-To: dust.li@linux.alibaba.com
+References: <1640704432-76825-1-git-send-email-guwen@linux.alibaba.com>
+ <1640704432-76825-3-git-send-email-guwen@linux.alibaba.com>
+ <7311029c-2c56-d9c7-9ed5-87bc6a36511f@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7311029c-2c56-d9c7-9ed5-87bc6a36511f@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Dec 2021 11:17:37 +0800 Ryan Cai <ycaibb@gmail.com> wrote:
+On Wed, Dec 29, 2021 at 01:51:27PM +0100, Karsten Graul wrote:
+>On 28/12/2021 16:13, Wen Gu wrote:
+>> We encountered some crashes caused by the race between SMC-R
+>> link access and link clear triggered by link group termination
+>> in abnormal case, like port error.
+>
+>Without to dig deeper into this, there is already a refcount for links, see smc_wr_tx_link_hold().
+>In smc_wr_free_link() there are waits for the refcounts to become zero.
+>
+>Why do you need to introduce another refcounting instead of using the existing?
+>And if you have a good reason, do we still need the existing refcounting with your new
+>implementation?
+>
+>Maybe its enough to use the existing refcounting in the other functions like smc_llc_flow_initiate()?
+>
+>Btw: it is interesting what kind of crashes you see, we never met them in our setup.
 
-> Dear Kernel maintainers,
->              =A01. In testing/selftests/vm/mlock2, the file opened at Lin=
-e 39 may not closed when going to Line 65.
->               Location: https://github.com/torvalds/linux/blob/5bfc75d92e=
-fd494db37f5c4c173d3639d4772966/tools/testing/selftests/vm/mlock2.h#L37-L49
+We are trying to using SMC + RDMA to boost application performance,
+we now have a product in the cloud called ERDMA which can be used
+in the virtual machine.
 
-That's what exit() does.  I don't think we really care unless the leak
-is inside a loop.
+We are testing SMC with link down/up with short flow cases since
+in the cloud environment the RDMA device may be plugged in/out
+frequently, and there are many different applications, some of them
+may have pretty much short flows.
 
-That being said, it's untidy and is setting a poor example so I guess
-we should fix it.
+>Its great to see you evaluating SMC in a cloud environment!
 
->               Can I send I a patch?
-
-It would be better to just send the patch rather than preceding it
-with "can I send a patch".  Everyone can send a patch and they are
-encouraged to do so!
+Thanks! We are trying to use SMC to boost performance for cloud
+applications, and we hope SMC can be more generic and widely used.
 
